@@ -67,8 +67,8 @@ bool brad_estimate_airlight(vil_image_view<float> const& radiance,
     avg_img.set_size(ni, nj);
     avg_img.fill(0.0f);
     for (unsigned int & vis_band : vis_bands)
-      for (int j = 0; j < nj; j++)
-        for (int i = 0; i < ni; i++) {
+      for (size_t j = 0; j < nj; j++)
+        for (size_t i = 0; i < ni; i++) {
           const float pixel_val = radiance(i, j, vis_band);
           avg_img(i,j) += pixel_val;
         }
@@ -89,8 +89,8 @@ bool brad_estimate_airlight(vil_image_view<float> const& radiance,
       double airlight_sum = 0.0;
       int count = 0;
       //compute airlight for this plane
-      for (int j = 0; j < nj; j++) {
-        for (int i = 0; i < ni; i++) {
+      for (size_t j = 0; j < nj; j++) {
+        for (size_t i = 0; i < ni; i++) {
           if (avg_img(i, j) < airlight_avg) {
             airlight_sum += (double)img(i, j);
             count++;
@@ -356,8 +356,8 @@ bool brad_estimate_reflectance_image_multi(
   vil_image_view<float> ave_im;
   ave_im.set_size(ni, nj);
   ave_im.fill(0.0);
-  for (int j = 0; j < nj; j++) {
-    for (int i = 0; i < ni; i++) {
+  for (size_t j = 0; j < nj; j++) {
+    for (size_t i = 0; i < ni; i++) {
       for (int p = min_norm_band; p < max_norm_band + 1; p++) {//for (int p = 0; p < np; p++) {
         ave_im(i, j) += radiance(i, j, p);
       }
@@ -383,8 +383,8 @@ bool brad_estimate_reflectance_image_multi(
     double airlight_sum = 0.0;
     int count = 0;
     //compute airlight for this plane
-    for (int j = 0; j < nj; j++) {
-      for (int i = 0; i < ni; i++) {
+    for (size_t j = 0; j < nj; j++) {
+      for (size_t i = 0; i < ni; i++) {
         if (ave_im(i, j) < airlight_ave) {
           airlight_sum += (float)img(i, j);
           count++;
@@ -399,8 +399,8 @@ bool brad_estimate_reflectance_image_multi(
   for (int p = min_norm_band; p < max_norm_band + 1; p++) {
     vil_image_view<float> cur_plane = vil_plane(radiance, p);
     double plane_ave = 0;
-    for (int j = 0; j < cur_plane.nj(); j++) {
-      for (int i = 0; i < cur_plane.ni(); i++) {
+    for (size_t j = 0; j < cur_plane.nj(); j++) {
+      for (size_t i = 0; i < cur_plane.ni(); i++) {
         plane_ave += double(cur_plane(i, j));
       }
     }
@@ -414,9 +414,9 @@ bool brad_estimate_reflectance_image_multi(
   cal_img.set_size(ni, nj, np);
   cal_img.fill(0.0);
   // apply image correction
-  for (int p = 0; p < radiance.nplanes(); p++) {
-    for (int j = 0; j < radiance.nj(); j++) {
-      for (int i = 0; i < radiance.ni(); i++) {
+  for (size_t p = 0; p < radiance.nplanes(); p++) {
+    for (size_t j = 0; j < radiance.nj(); j++) {
+      for (size_t i = 0; i < radiance.ni(); i++) {
         double normalized = (double(radiance(i, j, p)) - airlight[p]) * norm_factor;
         cal_img(i, j, p) = std::max(0.0f, float(normalized));
       }

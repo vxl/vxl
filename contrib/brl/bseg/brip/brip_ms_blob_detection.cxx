@@ -87,8 +87,8 @@ void brip_blob_connect_comp_bb(
   thresh_byte.fill(0);
 
   float blob_thresh = 0.035f;
-  for (int j = 0; j < image.nj(); j++) {
-    for (int i = 0; i < image.ni(); i++) {
+  for (size_t j = 0; j < image.nj(); j++) {
+    for (size_t i = 0; i < image.ni(); i++) {
       if (blob(i, j) > blob_thresh) thresh(i, j) = true;
       if (blob(i, j) > blob_thresh) thresh_byte(i, j) = 255;
     }
@@ -99,8 +99,8 @@ void brip_blob_connect_comp_bb(
   vil_blob_connectivity conn = vil_blob_4_conn;
   vil_blob_labels(thresh, conn, label);
   unsigned max_label = 0;
-  for (int j = 0; j < label.nj(); j++) {
-    for (int i = 0; i < label.ni(); i++) {
+  for (size_t j = 0; j < label.nj(); j++) {
+    for (size_t i = 0; i < label.ni(); i++) {
       if (label(i, j) > max_label) max_label = label(i, j);
     }
   }
@@ -111,8 +111,8 @@ void brip_blob_connect_comp_bb(
   std::vector<unsigned> i_max_full(max_label - 1, 0);
   std::vector<unsigned> j_max_full(max_label - 1, 0);
   for (unsigned lab = 1; lab <= max_label; lab++) {
-    for (int j = 0; j < label.nj(); j++) {
-      for (int i = 0; i < label.ni(); i++) {
+    for (size_t j = 0; j < label.nj(); j++) {
+      for (size_t i = 0; i < label.ni(); i++) {
         if (label(i, j) != lab) continue;
         if (i_min_full[lab - 1] > i) i_min_full[lab - 1] = i;
         if (j_min_full[lab - 1] > j) j_min_full[lab - 1] = j;

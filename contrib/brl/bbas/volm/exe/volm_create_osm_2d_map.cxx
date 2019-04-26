@@ -285,7 +285,7 @@ int main(int argc, char** argv)
       for (it.reset(); it.next();  ) {
         int y = it.scany();
         for (int x = it.startx(); x <= it.endx(); ++x) {
-          if (x >= 0 && y >= 0 && x < out_img.ni() && y < out_img.nj()) {
+          if (x >= 0 && y >= 0 && x < static_cast<int>(out_img.ni()) && y < static_cast<int>(out_img.nj())) {
             if (curr_level > level_img(x, y))
             {  out_img(x,y) = curr_id;  level_img(x, y) = curr_level;  }
           }
@@ -367,7 +367,7 @@ int main(int argc, char** argv)
       for (it.reset(); it.next();  ) {
         int y = it.scany();
         for (int x = it.startx(); x <= it.endx(); ++x) {
-          if ( x >= 0 && y >= 0 && x < out_img.ni() && y < out_img.nj()) {
+          if ( x >= 0 && y >= 0 && x < static_cast<int>(out_img.ni()) && y < static_cast<int>(out_img.nj())) {
             if (curr_level > level_img(x, y)) {
               level_img(x,y) = curr_level;   out_img(x,y) = curr_id;
             }
@@ -408,7 +408,7 @@ int main(int argc, char** argv)
         int cy = (int)std::floor(cross_pts[c_idx].y() + 0.5);
         for (int ii = cx-radius; ii < cx+radius; ii++)
           for (int jj = cy-radius; jj <cy+radius; jj++)
-            if (ii >=0 && jj>=0 && ii <out_img.ni() && jj < out_img.nj())
+            if (ii >=0 && jj>=0 && ii < static_cast<int>(out_img.ni()) && jj < static_cast<int>(out_img.nj()))
               if (curr_level >= level_img(ii,jj) && out_img(ii,jj) != volm_osm_category_io::volm_land_table_name["building"].id_) {
                 out_img(ii,jj)   = curr_id;
                 level_img(ii,jj) = curr_level;
@@ -434,7 +434,7 @@ int main(int argc, char** argv)
       lvcs->global_to_local(pt.x(), pt.y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
       double i = lx - leaf_bbox.min_x();  double j = leaf_bbox.max_y() - ly;
       int x = (int)i;  int y = (int)j;
-      if (x >= 0 && y >= 0 && x < out_img.ni() && y < out_img.nj())
+      if (x >= 0 && y >= 0 && x < static_cast<int>(out_img.ni()) && y < static_cast<int>(out_img.nj()))
         if (curr_level >= level_img(x,y))
         {  out_img(x, y) = curr_id;  level_img(x,y) = curr_level;  cnt++;}
     }
@@ -454,7 +454,7 @@ int main(int argc, char** argv)
       cnt++;
       for (int ii = x-fort_rad; ii < x+fort_rad; ii++)
         for (int jj = y-fort_rad; jj < y+fort_rad; jj++)
-          if (ii >= 0 && jj >= 0 && ii < out_img.ni() && jj < out_img.nj() && level_img(ii,jj) == 0) {
+          if (ii >= 0 && jj >= 0 && ii < static_cast<int>(out_img.ni()) && jj < static_cast<int>(out_img.nj()) && level_img(ii,jj) == 0) {
             out_img(ii,jj) = volm_osm_category_io::volm_land_table_name["forts"].id_;
             cnt++;
           }
@@ -484,7 +484,7 @@ int main(int argc, char** argv)
         lvcs->global_to_local(build_polys[ii].first[0][jj].x(), build_polys[ii].first[0][jj].y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
         double i = lx - leaf_bbox.min_x();  double j = leaf_bbox.max_y() - ly;
         int x = (int)i;  int y = (int)j;
-        if (x>=0 && y>=0 && x<out_img.ni() && y<out_img.nj())
+        if (x>=0 && y>=0 && x< static_cast<int>(out_img.ni()) && y< static_cast<int>(out_img.nj()))
           img_poly[0].push_back(vgl_point_2d<double>(i,j));
       }
 
@@ -495,7 +495,7 @@ int main(int argc, char** argv)
         for (int x = psi.startx(); x <= psi.endx(); ++x) {
           for (int yy = y-5; yy < y+5; yy++) {
             for (int xx = x-5; xx < x+5; xx++) {
-              if (xx>=0 && yy>=0 && xx<out_img.ni() && yy<out_img.nj()
+              if (xx>=0 && yy>=0 && xx< static_cast<int>(out_img.ni()) && yy< static_cast<int>(out_img.nj())
                   && out_img(xx,yy) != volm_osm_category_io::volm_land_table_name["restaurant"].id_
                   && out_img(xx,yy) != volm_osm_category_io::volm_land_table_name["piers"].id_)
               {  out_img(xx,yy) = curr_id;  cnt++;  }
@@ -517,8 +517,8 @@ int main(int argc, char** argv)
     std::cout << pier_pixels.size() << " piers exist in leaf " << l_idx << std::endl;
     for (auto & pier_pixel : pier_pixels) {
       unsigned i = pier_pixel.first;  unsigned j = pier_pixel.second;
-      for (int x=i-8; x<i+8; x++)
-        for (int y=j-8; y<j+8; y++)
+      for (size_t x=i-8; x<i+8; x++)
+        for (size_t y=j-8; y<j+8; y++)
           if (x>=0 && y>=0 && x<ni && y<nj) {
             out_img(x,y) = volm_osm_category_io::volm_land_table_name["piers"].id_;
           }

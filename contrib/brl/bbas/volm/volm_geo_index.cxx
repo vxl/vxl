@@ -452,8 +452,6 @@ bool volm_geo_index::exists(const volm_geo_index_node_sptr& root, double lat, do
 {
   if (!root)
     return false;
-
-  vgl_point_3d<double> h;
   if (root->hyps_) {
     unsigned id;
     if (root->hyps_->exist(lat, lon, inc_in_sec_rad, id))

@@ -2012,9 +2012,6 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
   // extract global parameters
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
 
-  // the appearance model processor
-  typename bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
-
   // compute homographies from voxel planes to image coordinates and vise-versa.
   std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
   std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;

@@ -28,7 +28,7 @@ set(bvxm_sources
     bvxm_world_params.h             bvxm_world_params.cxx
     bvxm_voxel_traits.h
     bvxm_voxel_world.h              bvxm_voxel_world.cxx
-    bvxm_image_metadata.h           bvxm_image_metadata.cxx
+    bvxm_image_metadata.h           bvxm_image_metadata.hxx
     bvxm_util.h                     bvxm_util.cxx
     bvxm_edge_ray_processor.h       bvxm_edge_ray_processor.cxx
     bvxm_von_mises_tangent_processor.h     bvxm_von_mises_tangent_processor.hxx

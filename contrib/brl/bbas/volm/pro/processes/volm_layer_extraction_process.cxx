@@ -718,6 +718,8 @@ bool volm_detection_rate_roc_process(bprb_func_process& pro)
     // convert detection map to binary image
     vil_image_view<bool> pos_img(ni, nj);
     vil_threshold_above(*detection_map, pos_img, thresholds[t_idx]);
+    int nio = static_cast<int>(ni);
+    int njo = static_cast<int>(nj);
     for (unsigned pos_idx = 0; pos_idx < n_pos_condition; pos_idx++) {
       vgl_box_2d<int> bbox = pos_bbox[pos_idx];
       vgl_polygon<double> poly = pos_img_poly[pos_idx];
@@ -727,7 +729,7 @@ bool volm_detection_rate_roc_process(bprb_func_process& pro)
       bool found = false;
       for (int i = min_i; ( i <= max_i && !found); i++) {
         for (int j = min_j; ( j <= max_j && !found); j++) {
-          if ( i < 0 || i >= ni || j < 0 || j >= nj)
+          if ( i < 0 || i >= nio || j < 0 || j >= njo)
             continue;
           if (pos_img(i,j) && poly.contains(i,j)) {  // there is a positive pixel inside the positive polygon region -- true positive
             found = true;
@@ -747,7 +749,7 @@ bool volm_detection_rate_roc_process(bprb_func_process& pro)
       bool found = false;
       for (int i = min_i; ( i <= max_i && !found); i++) {
         for (int j = min_j; ( j <= max_j && !found); j++) {
-          if ( i < 0 || i >= ni || j < 0 || j >= nj)
+          if ( i < 0 || i >= nio || j < 0 || j >= njo)
             continue;
           if (pos_img(i,j) && poly.contains(i,j)) {  // there is a positive pixel inside the negative polygon region -- false positive
             found = true;

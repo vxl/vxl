@@ -207,7 +207,7 @@ bool volm_conf_buffer<T>::read_to_buffer()
     }
     global_current_id_ += prev_length_;
     // read data into buffer
-    for (unsigned i = 0; i < prev_length_; i++) {
+    for (int i = 0; i < prev_length_; i++) {
       T obj;
       vsl_b_read(*ifs_ptr_, obj);
       active_buffer_[idx++] = obj;

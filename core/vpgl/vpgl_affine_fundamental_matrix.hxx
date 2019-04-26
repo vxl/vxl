@@ -40,6 +40,20 @@ vpgl_affine_fundamental_matrix<T>::vpgl_affine_fundamental_matrix(
   set_matrix(fm.get_matrix());
 }
 
+//: Convert matrix to double (needed in constructor for float case)
+inline vnl_matrix_fixed<double, 3, 4> vpgl_to_double(const vnl_matrix_fixed<double, 3, 4>& M)
+{
+  return M;
+}
+
+//: Convert matrix to double (needed in constructor for float case)
+inline vnl_matrix_fixed<double, 3, 4> vpgl_to_double(const vnl_matrix_fixed<float, 3, 4>& Mf)
+{
+  vnl_matrix_fixed<double, 3, 4> M;
+  for (unsigned i=0;i<12;++i) M.data_block()[i]=double(Mf.data_block()[i]);
+  return M;
+}
+
 //---------------------------------
 template <class T>
 vpgl_affine_fundamental_matrix<T>::vpgl_affine_fundamental_matrix( const vpgl_affine_camera<T>& Ar, const vpgl_affine_camera<T>& Al)
@@ -47,7 +61,8 @@ vpgl_affine_fundamental_matrix<T>::vpgl_affine_fundamental_matrix( const vpgl_af
 
   // note H&Z use prime ' to indicate quantities in the Al cam.
   // that is x'. ( F x)  = 0 .  So here p == '
-  vnl_matrix_fixed<double, 3, 4> M = Ar.get_matrix(), Mp = Al.get_matrix();
+  vnl_matrix_fixed<double, 3, 4> M  = vpgl_to_double(Ar.get_matrix());
+  vnl_matrix_fixed<double, 3, 4> Mp = vpgl_to_double(Al.get_matrix());
 
   //
   // M = |a00 a01 a02 a03| = |A0 a03|

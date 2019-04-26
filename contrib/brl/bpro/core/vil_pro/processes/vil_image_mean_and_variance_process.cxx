@@ -120,8 +120,8 @@ bool vil_mean_and_variance_image_process(bprb_func_process& pro)
 
     double mean = 0.0, var = 0.0;
 
-    for (int i = n_half; i < fview.ni()-n_half; i++)
-      for (int j = n_half; j < fview.nj()-n_half; j++) {
+    for (int i = n_half; i < static_cast<int>(fview.ni())-n_half; i++)
+      for (int j = n_half; j < static_cast<int>(fview.nj())-n_half; j++) {
         mean = 0.0;
         var = 0.0;
         unsigned cnt = 0;

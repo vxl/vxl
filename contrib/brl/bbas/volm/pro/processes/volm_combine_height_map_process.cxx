@@ -198,9 +198,11 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
     int r_idx = 1;
     int nbrs8_delta[8][2] = { { r_idx, 0}, { r_idx,-r_idx}, { 0,-r_idx}, {-r_idx,-r_idx},
                               {-r_idx, 0}, {-r_idx, r_idx}, { 0, r_idx}, { r_idx, r_idx} };
-    for (unsigned i = 0; i < ni; i++) {
+	int nio = static_cast<int>(ni);
+	int njo = static_cast<int>(nj);
+    for (int i = 0; i < nio; i++) {
       if (i%200==0) std::cout << '.' << std::flush;
-      for (unsigned j = 0; j < nj; j++) {
+      for (int j = 0; j < njo; j++) {
         if (out_img(i,j) > 0)
           continue;
         float neigh_values = 0;
@@ -208,7 +210,7 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
         for (unsigned c = 0; c < num_nbrs; c++) {
           int nbr_i = i + nbrs8_delta[c][0];
           int nbr_j = j + nbrs8_delta[c][1];
-          if (nbr_i > 0 && nbr_j > 0 && nbr_i < ni && nbr_j < nj) {
+          if (nbr_i > 0 && nbr_j > 0 && nbr_i < nio && nbr_j < njo) {
             if (out_img(nbr_i, nbr_j) > 0) {
               neigh_values += out_img(nbr_i,nbr_j);
               cnt++;

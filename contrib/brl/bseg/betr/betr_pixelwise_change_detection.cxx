@@ -155,14 +155,14 @@ bool betr_pixelwise_change_detection::process() {
   }
   change_img_ = vil_new_image_resource_of_view(vis);
   // find region of highest probability
-  int eventHeight = cd_params->pw_params_.event_height;
-  int eventWidth = cd_params->pw_params_.event_width;
+  size_t eventHeight = cd_params->pw_params_.event_height;
+  size_t eventWidth = cd_params->pw_params_.event_width;
   if (eventHeight > evt_change_prob.nj()) eventHeight = evt_change_prob.nj();
   if (eventWidth > evt_change_prob.ni())eventWidth = evt_change_prob.ni();
   avg_prob_ = 0.0;
   bool valid_event = false;
-  for (int x = 0; x < evt_change_prob.ni() - eventWidth + 1; x++) {
-    for (int y = 0; y < evt_change_prob.nj() - eventHeight + 1; y++) {
+  for (size_t x = 0; x < evt_change_prob.ni() - eventWidth + 1; x++) {
+    for (size_t y = 0; y < evt_change_prob.nj() - eventHeight + 1; y++) {
       if ((integral_im_poly(x, y) + integral_im_poly(x + eventWidth, y + eventHeight) - integral_im_poly(x, y + eventHeight) - integral_im_poly(x + eventWidth, y)) == (eventHeight*eventWidth)) {
         float cur_average = (integral_im(x, y) + integral_im(x + eventWidth, y + eventHeight) - integral_im(x, y + eventHeight) - integral_im(x + eventWidth, y)) /
           (eventHeight*eventWidth);

@@ -197,7 +197,7 @@ int main(int argc, char** argv)
         for (it.reset(); it.next();  ) {
         int y = it.scany();
         for (int x = it.startx(); x <= it.endx(); ++x) {
-          if ( x >= 0 && y >= 0 && x < output_img.ni() && y < output_img.nj()) {
+          if ( x >= 0 && y >= 0 && x < static_cast<int>(output_img.ni()) && y < static_cast<int>(output_img.nj())) {
             output_img2(x,y) = vil_rgb<vxl_byte>(255,255,255);
           }
         }
@@ -208,20 +208,20 @@ int main(int argc, char** argv)
     }
   }
   if (margin() > 0) {  // mark the margin as "not water"
-    for (int i = 0; i < margin(); i++)
-      for (int j = 0; j < output_img2.nj(); j++)
+    for (size_t i = 0; i < margin(); i++)
+      for (size_t j = 0; j < output_img2.nj(); j++)
         output_img2(i,j) = vil_rgb<vxl_byte>(0,0,0);
 
-    for (int i = output_img2.ni()-margin(); i < output_img2.ni(); i++)
-      for (int j = 0; j < output_img2.nj(); j++)
+    for (size_t i = output_img2.ni()-margin(); i < output_img2.ni(); i++)
+      for (size_t j = 0; j < output_img2.nj(); j++)
         output_img2(i,j) = vil_rgb<vxl_byte>(0,0,0);
 
-    for (int j = 0; j < margin(); j++)
-      for (int i = 0; i < output_img2.ni(); i++)
+    for (size_t j = 0; j < margin(); j++)
+      for (size_t i = 0; i < output_img2.ni(); i++)
         output_img2(i,j) = vil_rgb<vxl_byte>(0,0,0);
 
-    for (int j = output_img2.nj()-margin(); j < output_img2.nj(); j++)
-      for (int i = 0; i < output_img2.ni(); i++)
+    for (size_t j = output_img2.nj()-margin(); j < output_img2.nj(); j++)
+      for (size_t i = 0; i < output_img2.ni(); i++)
         output_img2(i,j) = vil_rgb<vxl_byte>(0,0,0);
 
   }

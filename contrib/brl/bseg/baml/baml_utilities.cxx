@@ -139,8 +139,8 @@ bool baml_correct_gain_offset_tiled(
       double sumw = 0, sumI1 = 0, sumI2 = 0;
       double sumI1I2 = 0, sumI2Sq = 0;
 
-      for (int y = 0; y < tar_crop.nj(); y++) {
-        for (int x = 0; x < tar_crop.ni(); x++) {
+      for (size_t y = 0; y < tar_crop.nj(); y++) {
+        for (size_t x = 0; x < tar_crop.ni(); x++) {
           if (!valid_ref_crop(x, y)) continue;
           float i1 = tar_crop(x, y) / 255.0f;
           float i2 = ref_crop(x, y) / 255.0f;
@@ -177,7 +177,7 @@ bool baml_correct_gain_offset_tiled(
   gain_pad.set_size(gain.ni() + pad_size*2, gain.nj() + pad_size*2);
   vil_image_view<float> offset_pad;
   offset_pad.set_size(offset.ni() + pad_size*2, offset.nj() + pad_size*2);
-  for (int x = pad_size; x < gain_pad.ni() - pad_size; x++) {
+  for (size_t x = pad_size; x < gain_pad.ni() - pad_size; x++) {
     for (int p = 0; p < pad_size; p++) {
       gain_pad(p, x) = gain(0, x - pad_size);
       gain_pad(gain_pad.ni() - 1 - p, x) = gain(gain.ni() - 1, x - pad_size);
@@ -189,7 +189,7 @@ bool baml_correct_gain_offset_tiled(
       offset_pad(x, p) = offset(x - pad_size, 0);
       offset_pad(x, offset_pad.nj() - 1 - p) = offset(x - pad_size, offset.nj() - 1);
     }
-    for (int y = pad_size; y < gain_pad.nj() - pad_size; y++) {
+    for (size_t y = pad_size; y < gain_pad.nj() - pad_size; y++) {
       gain_pad(x, y) = gain(x - pad_size, y - pad_size);
       offset_pad(x, y) = offset(x - pad_size, y - pad_size);
 

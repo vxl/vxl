@@ -505,7 +505,6 @@ void
 boxm2_vecf_orbit_scene
 ::paint_pupil()
 {
-  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
   params_.app_[0]=params_.pupil_intensity_;
   auto np = static_cast<unsigned>(pupil_cell_data_index_.size());
   for(unsigned i = 0; i<np; ++i){
@@ -1220,9 +1219,7 @@ boxm2_vecf_orbit_scene
                                             std::vector<bool> const& valid)
 {
 
-   vul_timer t;
-  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
-
+  vul_timer t;
   vnl_vector_fixed<unsigned char,8> color = random_color();
   int n = static_cast<unsigned>(box_cell_centers_.size());
     if(n==0)
@@ -1265,7 +1262,6 @@ boxm2_vecf_orbit_scene
 
   vul_timer t;
   vnl_vector_fixed<unsigned char,8> color = random_color();
-  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
   int n = static_cast<unsigned>(box_cell_centers_.size());
 
   if(n==0)

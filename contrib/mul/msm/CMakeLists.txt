@@ -29,6 +29,7 @@ set(msm_sources
   msm_subset_aligner.h        msm_subset_aligner.cxx
 
   msm_curve.h                 msm_curve.cxx
+  msm_split_curves.h          msm_split_curves.cxx
 
   msm_param_limiter.h         msm_param_limiter.cxx
   msm_no_limiter.h            msm_no_limiter.cxx

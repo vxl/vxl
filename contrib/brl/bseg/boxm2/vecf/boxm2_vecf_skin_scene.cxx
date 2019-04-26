@@ -472,7 +472,6 @@ void boxm2_vecf_skin_scene::export_point_cloud(std::ostream& ostr) const{
 }
 
 void boxm2_vecf_skin_scene::export_point_cloud_with_appearance(std::ostream& ostr) const{
-  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
   auto n = static_cast<unsigned>(skin_cell_centers_.size());
   for(unsigned i = 0; i<n; ++i){
     const vgl_point_3d<double>& p = skin_cell_centers_[i];

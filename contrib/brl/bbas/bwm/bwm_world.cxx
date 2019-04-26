@@ -71,9 +71,6 @@ void bwm_world::set_lvcs(double lat, double lon, double elev)
 
 bool bwm_world::get_lvcs(vpgl_lvcs &lvcs)
 {
-  vgl_point_3d<double> center;
-
-
   // if lvcs is set get that
   if (lvcs_valid_) {
     lvcs = lvcs_;

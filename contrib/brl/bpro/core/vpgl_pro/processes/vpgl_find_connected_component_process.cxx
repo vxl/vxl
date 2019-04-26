@@ -74,8 +74,8 @@ bool vpgl_find_connected_component_process(bprb_func_process& pro)
 
   // collect pixels that larger than the given threshold
   std::vector<vgl_point_2d<int> > pixels;
-  for (int i = 0; i < in_img.ni(); i++) {
-    for (int j = 0; j < in_img.nj(); j++) {
+  for (size_t i = 0; i < in_img.ni(); i++) {
+    for (size_t j = 0; j < in_img.nj(); j++) {
       if (is_above) {
         if (in_img(i,j) >= threshold)
           pixels.emplace_back(i,j);
@@ -130,7 +130,7 @@ bool vpgl_find_connected_component_process(bprb_func_process& pro)
     for (it.reset(); it.next();  ) {
       int y = it.scany();
       for (int x = it.startx(); x <= it.endx(); ++x) {
-        if (x >= 0 && y >= 0 && x < out_img->ni() && y < out_img->nj()) {
+        if (x >= 0 && y >= 0 && x < static_cast<int>(out_img->ni()) && y < static_cast<int>(out_img->nj())) {
           (*out_img)(x,y) = 255;
           n_pixel++;
           total_h += in_img(x, y);

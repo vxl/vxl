@@ -26,8 +26,8 @@ vil_image_view<float> bpgl_3d_from_disparity(vpgl_affine_camera<double> const& c
   const unsigned int ni = disparity.ni();
   const unsigned int nj = disparity.nj();
   vil_image_view<float> img3d(ni, nj, 3);
-  for (int j=0; j<nj; ++j) {
-    for (int i=0; i<ni; ++i) {
+  for (size_t j=0; j<nj; ++j) {
+    for (size_t i=0; i<ni; ++i) {
       double i2 = i - disparity(i,j);
       vnl_vector_fixed<double,3> x(NAN);
 

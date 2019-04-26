@@ -181,7 +181,7 @@ bool volm_map_osm_process(bprb_func_process& pro)
       for (poly_it.reset(); poly_it.next(); ) {
         int y = poly_it.scany();
         for (int x = poly_it.startx(); x <= poly_it.endx(); ++x) {
-          if ( x >= 0 && y >= 0 && x < img_sptr->ni() && y < img_sptr->nj() )
+          if ( x >= 0 && y >= 0 && x < static_cast<int>(img_sptr->ni()) && y < static_cast<int>(img_sptr->nj()) )
             out_img(x, y).r = 255;
         }
       }
@@ -1137,7 +1137,7 @@ bool volm_map_osm_onto_image_process3(bprb_func_process& pro)
       geo_cam->global_to_img(pt.x(), pt.y(), 0, u, v);
       int uu = (int)std::floor(u + 0.5f);
       int vv = (int)std::floor(v + 0.5f);
-      if (uu >= 0 && vv >= 0 && uu < img_sptr->ni() && vv < img_sptr->nj()) {
+      if (uu >= 0 && vv >= 0 && uu < static_cast<int>(img_sptr->ni()) && vv < static_cast<int>(img_sptr->nj())) {
         img_poly.emplace_back(uu,vv);
         vsol_pts.push_back(new vsol_point_2d(uu, vv));
         hit = true;
@@ -1168,7 +1168,7 @@ bool volm_map_osm_onto_image_process3(bprb_func_process& pro)
       geo_cam->global_to_img(pt.x(), pt.y(), 0, u, v);
       int uu = (int)std::floor(u + 0.5f);
       int vv = (int)std::floor(v + 0.5f);
-      if (uu >= 0 && vv >= 0 && uu < img_sptr->ni() && vv < img_sptr->nj()) {
+      if (uu >= 0 && vv >= 0 && uu < static_cast<int>(img_sptr->ni()) && vv < static_cast<int>(img_sptr->nj())) {
         img_line.emplace_back(uu,vv);
         vsol_pts.push_back(new vsol_point_2d(uu, vv));
         hit = true;
@@ -1199,7 +1199,7 @@ bool volm_map_osm_onto_image_process3(bprb_func_process& pro)
       geo_cam->global_to_img(pt.x(), pt.y(), 0, u, v);
       int uu = (int)std::floor(u + 0.5f);
       int vv = (int)std::floor(v + 0.5f);
-      if (uu >= 0 && vv >= 0 && uu < img_sptr->ni() && vv < img_sptr->nj()) {
+      if (uu >= 0 && vv >= 0 && uu < static_cast<int>(img_sptr->ni()) && vv < static_cast<int>(img_sptr->nj())) {
         hit = true;
         // make it a 2x2 region with this point at the center
         std::vector<vsol_point_2d_sptr> vsol_pts;
@@ -1345,13 +1345,15 @@ bool volm_render_kml_polygon_mask_process(bprb_func_process& pro)
   }
 
   // fill the image
+  int nio = static_cast<int>(ni);
+  int njo = static_cast<int>(nj);
   for (const auto & ii : img_poly)
   {
     vgl_polygon_scan_iterator<double> psi(ii);
     for (psi.reset(); psi.next(); ) {
       int j = psi.scany();
       for (int i = psi.startx(); i <= psi.endx(); i++) {
-        if (i < 0 || j < 0 || i >= ni || j >= nj)
+        if (i < 0 || j < 0 || i >= nio || j >= njo)
           continue;
         (*image)(i,j) = (unsigned char)(mask_value);
       }

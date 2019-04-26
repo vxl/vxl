@@ -22,6 +22,8 @@ space_tree_b *bstm_multi_block::get_space_data(int level) {
     return reinterpret_cast<space_tree_b *>(this->get_data(level));
   case STE_TIME:
     throw tree_type_exception(STE_SPACE);
+  default:
+	throw tree_type_exception(STE_SPACE);
   }
 }
 
@@ -31,6 +33,8 @@ time_tree_b *bstm_multi_block::get_time_data(int level) {
     throw tree_type_exception(STE_TIME);
   case STE_TIME:
     return reinterpret_cast<time_tree_b *>(this->get_data(level));
+  default:
+	throw tree_type_exception(STE_TIME);
   }
 }
 
@@ -41,6 +45,8 @@ space_tree_b *bstm_multi_block::get_space_data(int level, std::nothrow_t) {
     return reinterpret_cast<space_tree_b *>(this->get_data(level));
   case STE_TIME:
     return nullptr;
+  default:
+	return nullptr;
   }
 }
 
@@ -50,6 +56,8 @@ time_tree_b *bstm_multi_block::get_time_data(int level, std::nothrow_t) {
     return nullptr;
   case STE_TIME:
     return reinterpret_cast<time_tree_b *>(this->get_data(level));
+  default:
+	return nullptr;
   }
 }
 

@@ -121,7 +121,6 @@ int main(int argc,  char** argv)
 
   // look for the location and camera which provides max_score
   vgl_point_3d<double> max_score_loc;
-  unsigned max_score_cam_id;
   float max_score = 0.0f;
 
   std::string geo_folders[1]={geo_hypo_folder()};

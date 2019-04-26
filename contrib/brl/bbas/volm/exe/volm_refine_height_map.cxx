@@ -389,7 +389,6 @@ int main(int argc, char** argv)
   std::cout << "\nStart to refine ground elevation";
   for (unsigned w_idx_i = 0; w_idx_i < num_w_i; w_idx_i++)
   {
-    unsigned start_ni, end_ni;
     for (unsigned w_idx_j = 0; w_idx_j < num_w_j; w_idx_j++)
     {
       std::cout << '.';

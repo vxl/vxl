@@ -17,6 +17,8 @@ std::string ste_as_string(space_time_enum ste) {
     return "space";
   case STE_TIME:
     return "time";
+  default:
+	return "STE not defined";
   }
 }
 
@@ -34,7 +36,7 @@ bool ste_from_string(const std::string &s, space_time_enum &ste) {
 std::vector<space_time_enum> parse_subdivisions(const std::string &s) {
   std::vector<space_time_enum> result;
   std::stringstream ss(s);
-  while (ss.good() > 0) {
+  while (ss.good()) {
     std::string substr;
     space_time_enum ste;
     std::getline(ss, substr, ',');
@@ -65,6 +67,8 @@ std::size_t tree_size(space_time_enum ste) {
     return sizeof(space_tree_b);
   case STE_TIME:
     return sizeof(time_tree_b);
+  default:
+	return 0;
   }
 }
 
@@ -190,6 +194,8 @@ index_4d generic_tree::dimensions() const {
     return index_4d(8, 8, 8, 1);
   case STE_TIME:
     return index_4d(1, 1, 1, 32);
+  default:
+	return index_4d(0, 0, 0, 0);
   }
 }
 
@@ -217,6 +223,8 @@ index_4d generic_tree::local_voxel_coords(int index) const {
       index = time_tree_.child_index(index);
     }
     return index_4d(0, 0, 0, index - 31);
+  default:
+	return index_4d(0, 0, 0, 0);
   }
 }
 

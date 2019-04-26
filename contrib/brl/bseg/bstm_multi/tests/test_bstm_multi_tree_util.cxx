@@ -52,7 +52,7 @@ void test_generic_tree() {
     bool ok = true;
     try {
       boct_bit_tree space_tree2 = space_gen.space_tree();
-    } catch (const tree_type_exception &e) {
+    } catch (const tree_type_exception) {
       ok = false;
     }
     TEST("space tree get space tree", ok, true);
@@ -60,7 +60,7 @@ void test_generic_tree() {
     ok = false;
     try {
       bstm_time_tree space_tree2 = space_gen.time_tree();
-    } catch (const tree_type_exception &e) {
+    } catch (const tree_type_exception) {
       ok = true;
     }
     TEST("space tree get time tree", ok, true);
@@ -70,10 +70,10 @@ void test_generic_tree() {
 
     // bit manip
     space_tree.set_bit_at(0, true);
-    TEST("space gen tree root bit", space_tree.bit_at(0), space_gen.root_bit());
+    TEST("space gen tree root bit", space_tree.bit_at(0)>'\0', space_gen.root_bit());
 
     space_gen.set_bit_at(17, true);
-    TEST("space gen tree set_bit_at", space_tree.bit_at(17), true);
+    TEST("space gen tree set_bit_at", space_tree.bit_at(17)>'\0', true);
     TEST("space gen tree bit_at", space_gen.bit_at(17), true);
 
     space_tree.set_data_ptr(5000);
@@ -126,7 +126,7 @@ void test_generic_tree() {
     bool ok = true;
     try {
       bstm_time_tree time_tree2 = time_gen.time_tree();
-    } catch (const tree_type_exception &e) {
+    } catch (const tree_type_exception) {
       ok = false;
     }
     TEST("time tree get time tree", ok, true);
@@ -134,7 +134,7 @@ void test_generic_tree() {
     ok = false;
     try {
       boct_bit_tree time_tree2 = time_gen.space_tree();
-    } catch (const tree_type_exception &e) {
+    } catch (const tree_type_exception) {	  
       ok = true;
     }
     TEST("time tree get space tree", ok, true);
@@ -144,10 +144,10 @@ void test_generic_tree() {
 
     // bit manip
     time_tree.set_bit_at(0, true);
-    TEST("time gen tree root bit", time_tree.bit_at(0), time_gen.root_bit());
+    TEST("time gen tree root bit", time_tree.bit_at(0)>'\0', time_gen.root_bit());
 
     time_gen.set_bit_at(17, true);
-    TEST("time gen tree set_bit_at", time_tree.bit_at(17), true);
+    TEST("time gen tree set_bit_at", time_tree.bit_at(17)>'\0', true);
     TEST("time gen tree bit_at", time_gen.bit_at(17), true);
 
     time_tree.set_data_ptr(5000);

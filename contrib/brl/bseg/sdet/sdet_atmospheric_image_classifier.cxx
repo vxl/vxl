@@ -182,9 +182,9 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<fl
 
   for (auto & iter : cat_id_map)
     cat_percentage_map[iter.first] = 0.0f;
-
-  int max_j = margin > block_size_ ? nj-margin : nj-block_size_;
-  int max_i = margin > block_size_ ? ni-margin : ni-block_size_;
+  int block_size_o_ = static_cast<int>(block_size_);
+  int max_j = margin > block_size_o_ ? nj-margin : nj-block_size_o_;
+  int max_i = margin > block_size_o_ ? ni-margin : ni-block_size_o_;
   unsigned nh = texton_index_.size();
   unsigned pix_count = 0;
   std::cout << "ni: " << ni << ", nj: " << nj << std::endl;
@@ -320,7 +320,6 @@ classify_image_blocks_expected(vil_image_view<float> const& image,
       float b_good = pr - 0.5f*u;
       if (b_good< 0.0f) b_good = 0.0f;
       float b_bad = 1.0f - u - b_good;
-      vnl_vector_fixed<float, 3> color;
       //colorize output according to probabilities of each category
       for (unsigned r = 0; r<block_size_; ++r)
         for (unsigned c = 0; c<block_size_; ++c) {
