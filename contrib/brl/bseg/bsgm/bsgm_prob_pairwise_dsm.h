@@ -19,7 +19,20 @@
 // disparities.  A probability is applied to each forward 3-d point based on the 3-d distance
 // between a forward point and the closest point from the reverse reconstruction
 //
+// There can be different conventions concerning the sign of disparity values
+// In the case of bsgm_disparity_estimator, disparity is defined as the horizontal translation
+// required to move from a pixel in the reference image to the corresponding pixel in the
+// target image.
 
+//In more detail, consider the following call to the multi-scale estimator:
+//
+// bsgm_multiscale_disparity_estimator mde(params_.de_params_, ni_, nj_, num_disparities(), num_active_disparities());
+// mde.compute(rect_bview0_, rect_bview1_, invalid_map_, min_disparity_,
+//             invalid_disp, params_.multi_scale_mode_, disp_r_);
+//
+// given a pixel (1182, 897) in rect_bview0 and the dispairity value at that location in the dispairity image,
+// disp_r_, of -15.0, the corresponding pixel in rect_bview1 is (1167, 897)
+//
 #include <iostream>
 #include <fstream>
 #include <string>

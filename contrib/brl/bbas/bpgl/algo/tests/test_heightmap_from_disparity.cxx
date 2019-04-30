@@ -51,7 +51,7 @@ static void test_heightmap_from_disparity_affine()
       double u2,v2;
       cam2.project(img3d_truth(i,j,0),img3d_truth(i,j,1),img3d_truth(i,j,2),u2,v2);
       std::cout << "i,j: " << i << "," << j << "  u1,v1: " << u1 << "," << v1 << " u2,v2: " << u2 << "," << v2 << std::endl;
-      disparity(i,j) = u1 - u2;
+      disparity(i,j) = u2 - u1; // jlm changed to be consistent with bsgm_disparity_estimator
     }
   }
 
