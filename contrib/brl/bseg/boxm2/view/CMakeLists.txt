@@ -1,8 +1,5 @@
 # boxm opencl opengl display
-include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
-if(OPENCL_FOUND)
-  add_definitions(-DHAS_OPENCL=1)
-  include_directories( ${OPENCL_INCLUDE_PATH} )
+if(OpenCL_FOUND)
   include( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 if(GLEW_FOUND)
   add_definitions(-DHAS_GLEW=1)
@@ -35,7 +32,7 @@ if(VGUI_FOUND)
 
   #install the .h .hxx and libs
 
-  target_link_libraries(boxm2_view bocl boxm2_pro boxm2_ocl_pro boxm2_cpp boxm2_cpp_pro ${VXL_LIB_PREFIX}vgui bprb ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vpgl vsph ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
+  target_link_libraries(boxm2_view bocl boxm2_pro boxm2_ocl_pro boxm2_cpp boxm2_cpp_pro ${VXL_LIB_PREFIX}vgui bprb ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vpgl vsph ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${GLEW_LIBRARY} ${OpenCL_LIBRARIES} )
 
   #pro
   add_subdirectory(pro)

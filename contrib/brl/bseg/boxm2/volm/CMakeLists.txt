@@ -3,12 +3,6 @@
 include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 if(EXPAT_FOUND)
   if(EXPATPP_FOUND)
-    #depends on OPENCL being found...
-    include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
-    if(OPENCL_FOUND)
-    add_definitions(-DHAS_OPENCL=1)
-    include_directories( ${OPENCL_INCLUDE_PATH} )
-    endif()
 
     # contrib/brl/bseg/boxm2/volm/CMakeLists.txt
     include_directories( ${GEL_INCLUDE_DIR} )
@@ -25,7 +19,7 @@ if(EXPAT_FOUND)
         boxm2_volm_matcher_p0.h         boxm2_volm_matcher_p0.cxx
        )
 
-    if(OPENCL_FOUND)
+    if(OpenCL_FOUND)
     set(boxm2_volm_sources ${boxm2_volm_sources}
         boxm2_volm_matcher_p1.h         boxm2_volm_matcher_p1.cxx
        )
@@ -35,7 +29,7 @@ if(EXPAT_FOUND)
 
     vxl_add_library(LIBRARY_NAME boxm2_volm LIBRARY_SOURCES ${boxm2_volm_sources})
     target_link_libraries(boxm2_volm boxm2 boxm2_io brip baio ${VXL_LIB_PREFIX}vpgl volm ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl depth_map)
-    if(OPENCL_FOUND)
+    if(OpenCL_FOUND)
     target_link_libraries(boxm2_volm bocl)
     endif()
 

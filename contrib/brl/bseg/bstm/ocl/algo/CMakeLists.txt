@@ -1,5 +1,4 @@
 #depends on OPENCL being found...
-include_directories( ${OPENCL_INCLUDE_PATH} )
 include_directories( ${BRL_INCLUDE_DIR}/bbas )
 include_directories( ${BRL_INCLUDE_DIR} )
 set(bstm_ocl_algo_sources
