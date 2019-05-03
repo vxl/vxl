@@ -3,7 +3,6 @@ if (HAS_GEOTIFF)
 project( boxm2_batch )
 
 include( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
-include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
 include( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 include( ${BRL_CMAKE_DIR}/FindHadoop.cmake )
 include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
@@ -21,9 +20,6 @@ if( PYTHON_FOUND )
     include_directories( ${BRL_INCLUDE_DIR}/bseg )
     include_directories( ${BRL_INCLUDE_DIR}/bbas)
 
-    if(OPENCL_FOUND)
-      include_directories( ${OPENCL_INCLUDE_PATH} )
-    endif()
 
      set(boxm2_batch_sources
          reg_boxm2.h   reg_boxm2.cxx
@@ -45,13 +41,12 @@ if( PYTHON_FOUND )
         add_definitions(-DUSE_VOLM=1)
         target_link_libraries(boxm2_batch volm_pro)
       endif()
-      if(GLEW_FOUND AND HAS_VGUI AND OPENCL_FOUND)
+      if(GLEW_FOUND AND HAS_VGUI AND OpenCL_FOUND)
         add_definitions(-DHAS_GLEW=1)
         target_link_libraries(boxm2_batch boxm2_view_pro )
       endif()
 
-      if(OPENCL_FOUND)
-        add_definitions(-DHAS_OPENCL=1)
+      if(OpenCL_FOUND)
         target_link_libraries(boxm2_batch bocl_pro  boxm2_ocl_pro boxm2_multi_pro boxm2_vecf_ocl_pro)
         if(VXL_BOXM2_USE_VOLM)
              target_link_libraries(boxm2_batch boxm2_volm_pro boxm2_volm_io )

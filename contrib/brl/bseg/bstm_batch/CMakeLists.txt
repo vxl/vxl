@@ -3,7 +3,6 @@ if (HAS_GEOTIFF)
 project( bstm_batch )
 
 include( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
-include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
 include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 include( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
@@ -42,8 +41,7 @@ if( PYTHON_FOUND )
 
       target_link_libraries(bstm_batch bstm_pro bstm_cpp_pro bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro ihog_pro brip_pro bsvg_pro bvrml_pro bbgm_pro sdet_pro brad_pro brad_io brdb icam_pro bvpl_kernels_pro)
 
-      if(OPENCL_FOUND)
-        add_definitions(-DHAS_OPENCL=1)
+      if(OpenCL_FOUND)
         target_link_libraries(bstm_batch bocl_pro bstm_ocl bstm_ocl_pro boxm2_ocl_pro)
       endif()
 

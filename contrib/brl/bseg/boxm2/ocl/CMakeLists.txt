@@ -11,10 +11,7 @@ include_directories( ${PROJECT_BINARY_DIR}/bseg/boxm2/ocl/ )
 
 
 #depends on OPENCL being found...
-include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
-if(OPENCL_FOUND)
-  add_definitions(-DHAS_OPENCL=1)
-  include_directories( ${OPENCL_INCLUDE_PATH} )
+if(OpenCL_FOUND)
   include_directories( ${BRL_INCLUDE_DIR}/bbas )
 
   set(boxm2_ocl_sources

@@ -45,7 +45,7 @@ target_link_libraries( boxm2_volm_get_best_matcher_from_cand_list boxm2_volm ${V
 add_executable( boxm2_volumetric_pinpoint boxm2_volumetric_pinpoint.cxx )
 target_link_libraries( boxm2_volumetric_pinpoint boxm2_volm ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl volm ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpgl bkml )
 
-if(OPENCL_FOUND)
+if(OpenCL_FOUND)
 
 add_executable( boxm2_volumetric_matcher_p0 boxm2_volumetric_matcher_p0.cxx)
 target_link_libraries( boxm2_volumetric_matcher_p0 boxm2_volm ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl volm depth_map bvrml)

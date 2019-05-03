@@ -1,7 +1,3 @@
-##- depends on OPENCL being found...
-##- include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
-##- if(OPENCL_FOUND)
-
 add_executable( boxm2_vecf_test_all
   test_driver.cxx
   test_eye.cxx

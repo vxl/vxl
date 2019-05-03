@@ -32,6 +32,26 @@ if (VXL_USE_GEOTIFF)
   endif()
 endif()
 
+# several BRL modules use OpenCL
+find_package(OpenCL)
+if(OpenCL_FOUND)
+
+  # targeted OpenCL version
+  if (VXL_TARGET_OPENCL_VERSION)
+    set(CL_TARGET_OPENCL_VERSION ${VXL_TARGET_OPENCL_VERSION})
+  else()
+    set(CL_TARGET_OPENCL_VERSION "${OpenCL_VERSION_MAJOR}${OpenCL_VERSION_MINOR}0")
+  endif()
+  message(STATUS "BRL targeting OpenCL v${CL_TARGET_OPENCL_VERSION}")
+
+  # compiler definitions & include
+  add_definitions( -DHAS_OPENCL=1 )
+  add_definitions( -DCL_TARGET_OPENCL_VERSION=${CL_TARGET_OPENCL_VERSION} )
+  include_directories( ${OpenCL_INCLUDE_DIRS} )
+
+endif()
+
+
 # Location of brl's private FindXXX.cmake CMake modules.
 set( BRL_CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR}/bmods )
 # This is identical to BRL_CMAKE_DIR.  Perhaps we should eliminate BRL_MODULE_PATH?
