@@ -88,8 +88,8 @@ bool bbas_camera_angles_process(bprb_func_process& pro)
   vgl_point_3d<double> focus_pt_low(pt_x, pt_y, z_low);
   vgl_plane_3d<double> plane_high(0.0, 0.0, 1.0, -z_high);
   vgl_plane_3d<double> plane_low(0.0, 0.0, 1.0, -z_low);
-  vpgl_backproject::bproj_plane(camera.ptr(), img_pt, plane_high, focus_pt_high, focus_pt_high);
-  vpgl_backproject::bproj_plane(camera.ptr(), img_pt, plane_low, focus_pt_low, focus_pt_low);
+  vpgl_backproject::bproj_plane(*camera, img_pt, plane_high, focus_pt_high, focus_pt_high);
+  vpgl_backproject::bproj_plane(*camera, img_pt, plane_low, focus_pt_low, focus_pt_low);
 
   // camera direction is vector from point_low to point_high (assuming camera is far above focus_pt with up ==  +z)
   vgl_vector_3d<double> cam_direction = focus_pt_high - focus_pt_low;

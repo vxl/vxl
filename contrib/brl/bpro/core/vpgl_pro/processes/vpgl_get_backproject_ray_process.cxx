@@ -128,7 +128,7 @@ bool vpgl_get_rpc_backproject_ray_process(bprb_func_process& pro)
 
   vgl_point_3d<double> point;
 
-  vpgl_backproject::bproj_plane(cam,
+  vpgl_backproject::bproj_plane(*cam,
                                 vgl_point_2d<double>(u,v),
                                 vgl_plane_3d<double>(0, 0, 1, -altitude),
                                 vgl_point_3d<double>(x0, y0, z0),

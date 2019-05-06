@@ -685,13 +685,13 @@ static bool ray_tol(vpgl_local_rational_camera<double> const& rat_cam,
 {
   vgl_point_2d<double> ip(mid_u,mid_v);
   vgl_point_3d<double> high_pt, low_pt, low_pt_pix;
-  if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, high_guess, high_pt))
+  if (!vpgl_backproject::bproj_plane(rat_cam, ip, high, high_guess, high_pt))
     return false;
-  if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, low_guess, low_pt))
+  if (!vpgl_backproject::bproj_plane(rat_cam, ip, low, low_guess, low_pt))
     return false;
   //move 1 pixel
   ip.set(mid_u+1.0, mid_v+1.0);
-  if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, low_pt, low_pt_pix))
+  if (!vpgl_backproject::bproj_plane(rat_cam, ip, low, low_pt, low_pt_pix))
     return false;
   // Ground Sampling Distance
   double gsd = (low_pt-low_pt_pix).length();
@@ -1030,9 +1030,9 @@ bool vpgl_generic_camera_convert::pyramid_est(vpgl_local_rational_camera<double>
                   prev_endpt = prev_org + (prev_dir * ray_len);
               }
               constexpr double error_tol = 0.5; // allow projection error of 0.25 pixel
-              if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, prev_org, org, error_tol))
+              if (!vpgl_backproject::bproj_plane(rat_cam, ip, high, prev_org, org, error_tol))
                   return false;
-              if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, prev_endpt, endpt, error_tol))
+              if (!vpgl_backproject::bproj_plane(rat_cam, ip, low, prev_endpt, endpt, error_tol))
                   return false;
               vgl_vector_3d<double> dir = endpt-org;
               ray_pyr[lev][j][i].set(org, dir);
@@ -1208,9 +1208,9 @@ convert_bruteforce( vpgl_local_rational_camera<double> const& rat_cam,
       {
           vgl_point_2d<double> ip(i,j);
           constexpr double error_tol = 0.5; // allow projection error of 0.25 pixel
-          if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, org, org, error_tol))
+          if (!vpgl_backproject::bproj_plane(rat_cam, ip, high, org, org, error_tol))
               return false;
-          if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, endpt, endpt, error_tol))
+          if (!vpgl_backproject::bproj_plane(rat_cam, ip, low, endpt, endpt, error_tol))
               return false;
           vgl_vector_3d<double> dir = endpt-org;
           finalrays[j][i].set(org, dir);

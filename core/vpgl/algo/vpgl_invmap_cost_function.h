@@ -12,10 +12,10 @@ class vpgl_invmap_cost_function: public vnl_cost_function
   //: Which parameterization to use for the plane
   enum plane_param{X_Y=0, X_Z, Y_Z};
  public:
-  //: Constructor - rcam pointer is not deleted by this class
+  //: Constructor
   vpgl_invmap_cost_function(vnl_vector_fixed<double, 2> const& image_point,
                             vnl_vector_fixed<double, 4> const& plane,
-                            const vpgl_camera<double>* rcam);
+                            vpgl_camera<double> const& cam);
   ~vpgl_invmap_cost_function() override = default;
   //: The cost function. x is a vector holding the two plane parameters
   double f(vnl_vector<double> const& x) override;
@@ -36,7 +36,7 @@ class vpgl_invmap_cost_function: public vnl_cost_function
   //: plane coefficients
   vnl_vector_fixed<double, 4> plane_;
   //: rational camera
-  const vpgl_camera<double>* cam_ptr_;
+  const vpgl_camera<double> &cam_;
   //: the well-conditioned parameterization
   plane_param pp_;
 };
