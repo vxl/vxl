@@ -52,6 +52,15 @@ class vpgl_backproject
                           double error_tol = 0.05,
                           double relative_diameter = 1.0);
 
+  //:Backproject an image point onto a plane, start with initial_guess
+  static bool bproj_plane(vpgl_proj_camera<double> const& cam,
+                          vnl_double_2 const& image_point,
+                          vnl_double_4 const& plane,
+                          vnl_double_3 const& initial_guess,
+                          vnl_double_3& world_point,
+                          double error_tol = 0.05,
+                          double relative_diameter = 1.0);
+
 
        // ==== vgl interface ===
 
