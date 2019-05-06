@@ -34,8 +34,7 @@ static void test_camera_homographies()
   std::cout << "img_pt_act_scene" << pact << std::endl;
   vgl_point_3d<double> p3d_act;
   vgl_plane_3d<double> gpl(vgl_vector_3d<double>(0, 0, 1), vgl_point_3d<double>(0, 0, 0));
-  vpgl_camera<double>* c_ptr = dynamic_cast<vpgl_camera<double>*>(&c);
-  bool good = vpgl_backproject::bproj_plane(c_ptr, pact, gpl, vgl_point_3d<double>(0,0,0), p3d_act);
+  bool good = vpgl_backproject::bproj_plane(c, pact, gpl, vgl_point_3d<double>(0,0,0), p3d_act);
   if(good){
     std::cout << "Actual world point " << p3d_act << std::endl;
   }

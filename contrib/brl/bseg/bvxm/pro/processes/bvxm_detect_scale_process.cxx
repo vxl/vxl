@@ -82,7 +82,7 @@ bool bvxm_detect_scale_process(bprb_func_process& pro)
   vgl_point_2d<double> ul(0,0), lr(ni,nj);
   vgl_point_3d<double> wul, wlr;
 
-  bool success = vpgl_backproject::bproj_plane(camera.ptr(), ul,
+  bool success = vpgl_backproject::bproj_plane(*camera, ul,
                                                world_plane,
                                                world_point,
                                                wul);
@@ -91,7 +91,7 @@ bool bvxm_detect_scale_process(bprb_func_process& pro)
 
   if (!success)
     return false;
-  success = vpgl_backproject::bproj_plane(camera.ptr(), lr,
+  success = vpgl_backproject::bproj_plane(*camera, lr,
                                           world_plane,
                                           world_point,
                                           wlr);

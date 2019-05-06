@@ -101,7 +101,7 @@ bool vpgl_rational_cam_img_to_global_process(bprb_func_process& pro)
   vgl_point_3d<double> world_pt(0.0, 0.0, 0.0);
   vgl_plane_3d<double> pl(0, 0, 1, -pl_elev);
   vgl_point_3d<double> initial_pt(init_lon, init_lat, init_elev);
-  if (!vpgl_backproject::bproj_plane(rat_cam, image_pt, pl, initial_pt, world_pt, error_tol)) {
+  if (!vpgl_backproject::bproj_plane(*rat_cam, image_pt, pl, initial_pt, world_pt, error_tol)) {
     std::cerr << pro.name() << ": back projection failed at given error initial gauss and error tolerance: " << error_tol << std::endl;
     return false;
   }

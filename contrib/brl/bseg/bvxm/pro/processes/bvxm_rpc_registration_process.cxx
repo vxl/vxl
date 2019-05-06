@@ -197,7 +197,7 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
     vgl_plane_3d<double> curr_plane(0.0,0.0,1.0,-0.001);
     vgl_point_3d<double> init_point(0.0,0.0,0.001);
     vgl_point_3d<double> world_point;
-    vpgl_backproject::bproj_plane(cam_input_temp,origin_2d,curr_plane,init_point,world_point);
+    vpgl_backproject::bproj_plane(*cam_input_temp,origin_2d,curr_plane,init_point,world_point);
 
     vgl_vector_3d<double> motion_plane_normal = world_point - origin_3d;
     motion_plane_normal = normalize(motion_plane_normal);
@@ -206,7 +206,7 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
     init_point.set(origin_3d.x(),origin_3d.y(),origin_3d.z());
     vgl_point_3d<double> moved_origin;
     vgl_point_2d<double> origin_2d_shift(origin_2d.x()+best_offset_u,origin_2d.y()+best_offset_v);
-    vpgl_backproject::bproj_plane(cam_input_temp,origin_2d_shift,motion_plane,init_point,moved_origin);
+    vpgl_backproject::bproj_plane(*cam_input_temp,origin_2d_shift,motion_plane,init_point,moved_origin);
 
     vgl_vector_3d<double> motion = moved_origin - origin_3d;
 

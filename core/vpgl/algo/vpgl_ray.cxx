@@ -42,7 +42,7 @@ bool vpgl_ray::ray(const vpgl_camera<double>* cam,
   //backproject onto the shifted plane
   vnl_double_3 shifted_point;
 
-  if (!vpgl_backproject::bproj_plane(cam, image_point, plane, point_3d,
+  if (!vpgl_backproject::bproj_plane(*cam, image_point, plane, point_3d,
                                      shifted_point))
     return false;
   //The ray direction is just the difference
@@ -93,9 +93,9 @@ bool vpgl_ray::ray(const vpgl_camera<double>*  cam,
   vgl_point_3d<double> initial_origin_guess(initial_guess.x(), initial_guess.y(), origin_z);
   vgl_point_3d<double> initial_tip_guess(initial_guess.x(), initial_guess.y(), (origin_z-dz));
   vgl_point_3d<double> origin, ray_tip;
-  if (!vpgl_backproject::bproj_plane(cam, image_pt, origin_plane, initial_origin_guess, origin))
+  if (!vpgl_backproject::bproj_plane(*cam, image_pt, origin_plane, initial_origin_guess, origin))
     return false;
-  if (!vpgl_backproject::bproj_plane(cam, image_pt, tip_plane, initial_tip_guess, ray_tip))
+  if (!vpgl_backproject::bproj_plane(*cam, image_pt, tip_plane, initial_tip_guess, ray_tip))
     return false;
   ray = vgl_ray_3d<double>(origin, ray_tip);
   return true;
@@ -150,10 +150,8 @@ bool vpgl_ray::ray(vpgl_local_rational_camera<double> const& lrcam,
   vgl_plane_3d<double> top_plane(0.0, 0.0, 1.0, -zmax);
   vgl_point_2d<double> image_point(u, v);
   vgl_point_3d<double> initial_guess(0.0, 0.0, zmax);
-  auto* lrcam_ptr =
-    const_cast<vpgl_local_rational_camera<double>*>(&lrcam);
-  auto* cam = static_cast<vpgl_camera<double>*>(lrcam_ptr);
-  if (!vpgl_backproject::bproj_plane(cam, image_point, top_plane,
+
+  if (!vpgl_backproject::bproj_plane(lrcam, image_point, top_plane,
                                      initial_guess, origin))
     return false;
 
@@ -162,7 +160,7 @@ bool vpgl_ray::ray(vpgl_local_rational_camera<double> const& lrcam,
   //
   vgl_plane_3d<double> mid_plane(0.0, 0.0, 1.0, -z_off);
   vgl_point_3d<double> mid_initial_guess(0.0, 0.0, z_off), mid_point;
-  if (!vpgl_backproject::bproj_plane(cam, image_point, mid_plane,
+  if (!vpgl_backproject::bproj_plane(lrcam, image_point, mid_plane,
                                      mid_initial_guess, mid_point))
     return false;
 
@@ -201,13 +199,11 @@ bool vpgl_ray::plane_ray(vpgl_local_rational_camera<double> const& lrcam,
   //vgl_point_2d<double> image_point(u, v);
   vgl_point_3d<double> initial_guess(0.0, 0.0, zmax);
   vgl_point_3d<double> point1,point2;
-  auto* lrcam_ptr =
-    const_cast<vpgl_local_rational_camera<double>*>(&lrcam);
-  auto* cam = static_cast<vpgl_camera<double>*>(lrcam_ptr);
-  if (!vpgl_backproject::bproj_plane(cam, image_point1, top_plane,
+
+  if (!vpgl_backproject::bproj_plane(lrcam, image_point1, top_plane,
                                      initial_guess, point1))
     return false;
-  if (!vpgl_backproject::bproj_plane(cam, image_point2, top_plane,
+  if (!vpgl_backproject::bproj_plane(lrcam, image_point2, top_plane,
                                      initial_guess, point2))
     return false;
 
@@ -216,7 +212,7 @@ bool vpgl_ray::plane_ray(vpgl_local_rational_camera<double> const& lrcam,
   //
   vgl_plane_3d<double> mid_plane(0.0, 0.0, 1.0, -z_off);
   vgl_point_3d<double> mid_initial_guess(0.0, 0.0, z_off), mid_point1;
-  if (!vpgl_backproject::bproj_plane(cam, image_point1, mid_plane,
+  if (!vpgl_backproject::bproj_plane(lrcam, image_point1, mid_plane,
                                      mid_initial_guess, mid_point1))
     return false;
 
