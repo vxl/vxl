@@ -460,7 +460,8 @@ acal_match_graph::valid_tree(std::shared_ptr<acal_match_tree> const& mtree)
 }
 
 
-void acal_match_graph::validate_match_trees_and_set_metric()
+void
+acal_match_graph::validate_match_trees_and_set_metric()
 {
   size_t ncc = conn_comps_.size();
   match_tree_metric_.clear();
@@ -488,7 +489,7 @@ void acal_match_graph::validate_match_trees_and_set_metric()
 // the predicate that orders based on number of cameras in the tree
 static bool
 tree_size_greater(std::pair<size_t, std::shared_ptr<acal_match_tree> > const a,
-                   std::pair<size_t, std::shared_ptr<acal_match_tree> > const b)
+                  std::pair<size_t, std::shared_ptr<acal_match_tree> > const b)
 {
   return a.second->n_ > b.second->n_;
 }
@@ -586,6 +587,7 @@ acal_match_graph::print_focus_tracks()
     std::cout << std::endl;
   }
 }
+
 
 void
 acal_match_graph::adjust_affine_cams(std::map<size_t, vgl_vector_2d<double> >& cam_translations)
@@ -762,5 +764,19 @@ acal_match_graph::image_names()
     temp = vul_file::strip_extension(temp);
     ret[iit] = temp;
   }
+  return ret;
+}
+
+
+std::vector<std::shared_ptr<acal_match_tree> >
+acal_match_graph::trees(size_t conn_comp_index)
+{
+  std::vector<std::shared_ptr<acal_match_tree> > ret;
+  //      focus cam id               tree
+  std::map<size_t, std::shared_ptr<acal_match_tree> > trees = match_trees_[conn_comp_index];
+
+  for(std::map<size_t, std::shared_ptr<acal_match_tree> >::iterator mit = trees.begin();
+      mit != trees.end(); ++mit)
+    ret.push_back(mit->second);
   return ret;
 }
