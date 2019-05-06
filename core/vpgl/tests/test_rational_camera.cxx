@@ -238,6 +238,10 @@ test_rational_camera()
           choice_str = "RPC00B";
           break;
         }
+        case vpgl_rational_order::RPC00A : {
+          choice_str = "RPC00A";
+          break;
+        }
         default: {
           throw std::invalid_argument("vpgl_rational_order not recognized");
         }

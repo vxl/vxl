@@ -59,6 +59,31 @@ vpgl_rational_order_func::to_vector(vpgl_rational_order choice)
       break;
     }
 
+    // order[VXL_INDEX] = RPC00A_INDEX
+    case vpgl_rational_order::RPC00A : {
+      order[0]  = 11; // xxx
+      order[1]  = 12; // xxy
+      order[2]  = 13; // xxz
+      order[3]  =  8; // xx
+      order[4]  = 14; // xyy
+      order[5]  =  7; // xyz
+      order[6]  =  4; // xy
+      order[7]  = 17; // xzz
+      order[8]  =  5; // xz
+      order[9]  =  1; // x
+      order[10] = 15; // yyy
+      order[11] = 16; // yyz
+      order[12] =  9; // yy
+      order[13] = 18; // yzz
+      order[14] =  6; // yz
+      order[15] =  2; // y
+      order[16] = 19; // zzz
+      order[17] = 10; // zz
+      order[18] =  3; // z
+      order[19] =  0; // 1
+      break;
+    }
+
     default: {
       throw std::invalid_argument("vpgl_rational_order not recognized");
     }
@@ -76,6 +101,8 @@ vpgl_rational_order_func::to_string(vpgl_rational_order choice)
       return "VXL";
     case vpgl_rational_order::RPC00B:
       return "RPC00B";
+    case vpgl_rational_order::RPC00A :
+      return "RPC00A";
     default:
       throw std::invalid_argument("vpgl_rational_order not recognized");
   }
@@ -89,9 +116,11 @@ vpgl_rational_order_func::from_string(std::string const & buf)
     return vpgl_rational_order::VXL;
   else if (buf.find("RPC00B") != std::string::npos)
     return vpgl_rational_order::RPC00B;
+  else if (buf.find("RPC00A") != std::string::npos)
+    return vpgl_rational_order::RPC00A;
   else
     throw std::invalid_argument("string not recognized as vpgl_rational_order");
 }
 
 // define vpgl_rational_order_func static initializer_list in namespace
-constexpr std::array<vpgl_rational_order, 2> vpgl_rational_order_func::initializer_list;
+constexpr std::array<vpgl_rational_order, 3> vpgl_rational_order_func::initializer_list;

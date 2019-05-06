@@ -50,33 +50,40 @@
 //  currently supported ordering schemas are:
 //    VXL: VXL internal ordering
 //    RPC00B
+//    RPC00A
+//
+//  RPC00A ordering is defined in the public domain document
+//    "RPC00A vs RPC00B White Paper.docx"
+//  Available at the following links:
+//    https://github.com/ngageoint/Rational-Polynomial-Coefficients-Mapper/raw/master/RPC00A%20vs%20RPC00B%20White%20Paper.docx
+//    http://www.gwg.nga.mil/ntb/baseline/docs/RPC/RPC00A%20vs%20RPC00B%20White%20Paper.docx
 //
 //  conversion between ordering schema
 //    x = longitude, L
 //    y = latitude, P
 //    z = elevation, H
 //
-//         VXL  RPC00B
-//    xxx    0      11
-//    xxy    1      14
-//    xxz    2      17
-//    xx     3       7
-//    xyy    4      12
-//    xyz    5      10
-//    xy     6       4
-//    xzz    7      13
-//    xz     8       5
-//    x      9       1
-//    yyy   10      15
-//    yyz   11      18
-//    yy    12       8
-//    yzz   13      16
-//    yz    14       6
-//    y     15       2
-//    zzz   16      19
-//    zz    17       9
-//    z     18       3
-//    1     19       0
+//         VXL  RPC00B  RPC00A
+//    xxx    0      11      11
+//    xxy    1      14      12
+//    xxz    2      17      13
+//    xx     3       7       8
+//    xyy    4      12      14
+//    xyz    5      10       7
+//    xy     6       4       4
+//    xzz    7      13      17
+//    xz     8       5       5
+//    x      9       1       1
+//    yyy   10      15      15
+//    yyz   11      18      16
+//    yy    12       8       9
+//    yzz   13      16      18
+//    yz    14       6       6
+//    y     15       2       2
+//    zzz   16      19      19
+//    zz    17       9      10
+//    z     18       3       3
+//    1     19       0       0
 //
 #include <iostream>
 #include <string>
@@ -99,6 +106,7 @@
 enum class vpgl_rational_order {
   VXL,
   RPC00B,
+  RPC00A,
 };
 
 // conversion to other forms (see vpgl_rational_camera.cxx)
@@ -110,9 +118,10 @@ class vpgl_rational_order_func {
 
   // initializer_list for iteration
   // e.g. "for (auto item : vpgl_rational_order_func::initializer_list) {...}"
-  static constexpr std::array<vpgl_rational_order,2> initializer_list{{
+  static constexpr std::array<vpgl_rational_order,3> initializer_list{{
       vpgl_rational_order::VXL,
-      vpgl_rational_order::RPC00B
+      vpgl_rational_order::RPC00B,
+      vpgl_rational_order::RPC00A
   }};
 
  private:
