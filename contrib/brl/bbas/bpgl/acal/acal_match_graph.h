@@ -70,7 +70,8 @@ class match_edge
   match_edge(): id_(-1) {}
   match_edge(std::shared_ptr<match_vertex> v0,
              std::shared_ptr<match_vertex> v1,
-             std::vector<acal_match_pair> const& matches, size_t id = 0):
+             std::vector<acal_match_pair> const& matches,
+             size_t id = 0):
     v0_(v0), v1_(v1), matches_(matches), id_(id) {}
 
   size_t id_;
@@ -109,11 +110,12 @@ class acal_match_graph
   bool valid_tree(std::shared_ptr<acal_match_tree> const& mtree);
   void validate_match_trees_and_set_metric();
   std::shared_ptr<acal_match_tree> largest_tree(size_t conn_comp_index);
+  std::vector<std::shared_ptr<acal_match_tree> > trees(size_t conn_comp_index);
 
   std::shared_ptr<match_vertex> vert(size_t index){return match_vertices_[index];}
   std::map<size_t, std::shared_ptr<match_vertex> >& vertices(){return match_vertices_;}
 
-    std::map<size_t, std::vector< std::map<size_t, vgl_point_2d<double> > > > & focus_tracks(size_t connected_comp_idx){
+  std::map<size_t, std::vector< std::map<size_t, vgl_point_2d<double> > > > & focus_tracks(size_t connected_comp_idx){
     return focus_tracks_[connected_comp_idx];
   }
   std::vector<std::shared_ptr<match_vertex> > ccomp_verts(size_t ccomp_index){

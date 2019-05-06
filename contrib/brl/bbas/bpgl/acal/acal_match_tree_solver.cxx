@@ -246,7 +246,7 @@ acal_match_tree_solver::solve_least_squares_problem()
     sq_eps_u /= n_tracks;
     sq_eps_v /= n_tracks;
 
-    sol_errors_[cidx] = solution_error(min_eps_u, min_eps_v, max_eps_u, max_eps_v, sqrt(sq_eps_u), sqrt(sq_eps_v));
+    sol_errors_[cidx] = acal_solution_error(min_eps_u, min_eps_v, max_eps_u, max_eps_v, sqrt(sq_eps_u), sqrt(sq_eps_v));
   }
 
   return !fail;

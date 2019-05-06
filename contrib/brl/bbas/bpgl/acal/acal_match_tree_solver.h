@@ -28,30 +28,7 @@
 #include <vnl/vnl_least_squares_function.h>
 #include "acal_match_tree.h"
 #include "acal_match_graph.h"
-
-
-class solution_error
-{
- public:
-  solution_error():min_eps_u_(0.0), min_eps_v_(0.0), max_eps_u_(0.0), max_eps_v_(0.0), rms_err_u_(0.0),rms_err_v_(0.0){}
-  solution_error(double min_eps_u, double min_eps_v, double max_eps_u, double max_eps_v,  double rms_err_u,  double rms_err_v):
-  min_eps_u_( min_eps_u), min_eps_v_(min_eps_v), max_eps_u_(max_eps_u), max_eps_v_(max_eps_v), rms_err_u_(rms_err_u),rms_err_v_(rms_err_v){}
-  double min_eps_u_;
-  double min_eps_v_;
-  double max_eps_u_;
-  double max_eps_v_;
-  double rms_err_u_;
-  double rms_err_v_;
-  void print(){
-    std::cout << "min (" << min_eps_u_ << ' ' << min_eps_v_ << ")" << std::endl;
-    std::cout << "max (" << max_eps_u_ << ' ' << max_eps_v_ << ")" << std::endl;
-    std::cout << "rms (" << rms_err_u_ << ' ' << rms_err_v_ << ")" << std::endl;
-  }
-  double max_err() {return max_eps_u_ > max_eps_v_ ? max_eps_u_ : max_eps_v_;}
-  double min_err() {return min_eps_u_ < min_eps_v_ ? min_eps_u_ : min_eps_v_;}
-  double total_rms() {return rms_err_u_ + rms_err_v_;}
-};
-
+#include "acal_solution_error.h"
 
 class acal_match_tree_lsqr : public vnl_least_squares_function
 {
@@ -135,7 +112,7 @@ public:
   //      track idx     triangulated pt
   std::map<size_t, vgl_point_3d<double> >  track_3d_points(){return track_3d_points_;}
 
-  std::map<size_t, solution_error>  solution_errors(){return sol_errors_;}
+  std::map<size_t, acal_solution_error>  solution_errors(){return sol_errors_;}
 
   std::shared_ptr<acal_match_tree> match_tree(){return match_tree_;}
 
@@ -160,7 +137,7 @@ public:
   size_t n_residuals_;
   //    track idx    triangulated pt
   std::map<size_t, vgl_point_3d<double> >  track_3d_points_;
-  std::map<size_t, solution_error> sol_errors_;
+  std::map<size_t, acal_solution_error> sol_errors_;
 };
 
 #endif
