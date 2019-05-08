@@ -12,8 +12,7 @@
 //    Yi Dong  Jun-2015   added relative diameter as one argument, with default value 1.0 (same as before)
 // \endverbatim
 
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_generic_camera.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vgl/vgl_fwd.h>
@@ -39,6 +38,17 @@ class vpgl_backproject
                           vnl_double_3& world_point,
                           double error_tol = 0.05,
                           double relative_diameter = 1.0);
+
+
+  //: wrapper function to keep backwards-compatibility with previous API
+  static bool bproj_plane(const vpgl_camera<double> *cam,
+                          vnl_double_2 const& image_point,
+                          vnl_double_4 const& plane,
+                          vnl_double_3 const& initial_guess,
+                          vnl_double_3& world_point,
+                          double error_tol = 0.05,
+                          double relative_diameter = 1.0)
+  { return bproj_plane(*cam, image_point, plane, initial_guess, world_point, error_tol, relative_diameter); }
 
 
             // +++ concrete camera interfaces +++
@@ -73,6 +83,17 @@ class vpgl_backproject
                           vgl_point_3d<double>& world_point,
                           double error_tol = 0.05,
                           double relative_diameter = 1.0);
+
+
+  //: wrapper function to keep backwards compatibility with the previous API
+  static bool bproj_plane(const vpgl_camera<double> *cam,
+                          vgl_point_2d<double> const& image_point,
+                          vgl_plane_3d<double> const& plane,
+                          vgl_point_3d<double> const& initial_guess,
+                          vgl_point_3d<double>& world_point,
+                          double error_tol = 0.05,
+                          double relative_diameter = 1.0)
+  { return bproj_plane(*cam, image_point, plane, initial_guess, world_point, error_tol, relative_diameter); }
 
   //:Backproject a point with associated direction vector in the image to a plane in 3-d, passing through the center of projection and containing the point and vector.
   //  ** Defined only for a projective camera **
