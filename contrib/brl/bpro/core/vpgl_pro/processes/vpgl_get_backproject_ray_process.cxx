@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <bprb/bprb_func_process.h>
+#include <vpgl/vpgl_rational_camera.h>
 //:
 // \file
 
