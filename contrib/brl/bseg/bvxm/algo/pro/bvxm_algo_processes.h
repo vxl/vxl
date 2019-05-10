@@ -5,6 +5,8 @@
 #include <bprb/bprb_macros.h>
 
 //algo
+DECLARE_FUNC_CONS(bvxm_create_scene_xml_process);
+DECLARE_FUNC_CONS(bvxm_create_scene_xml_large_scale_process);
 DECLARE_FUNC_CONS(bvxm_merge_mog_process);
 DECLARE_FUNC_CONS(bvxm_mog_to_mpm_process);
 DECLARE_FUNC_CONS(bvxm_mog_l2_distance);

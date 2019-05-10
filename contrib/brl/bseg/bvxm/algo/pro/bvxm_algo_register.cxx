@@ -16,6 +16,8 @@ void bvxm_algo_register::register_process()
 {
 
   // Algo Processes
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_scene_xml_process, "bvxmCreateSceneXmlProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_scene_xml_large_scale_process, "bvxmCreateSceneXmlLargeScaleProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_merge_mog_process, "bvxmMergeMogProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_mog_to_mpm_process, "bvxmMogToMpmProcess");
  // REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_mog_l2_process, "bvxmMogL2Process");
