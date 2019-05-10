@@ -1,4 +1,4 @@
-// This is brl/bseg/bvxm/pro/processes/bvxm_create_scene_xml_process.h
+// This is brl/bseg/bvxm/algo/pro/processes/bvxm_create_scene_xml_process.h
 #ifndef bvxm_create_scene_xml_process_h_
 #define bvxm_create_scene_xml_process_h_
 //:
@@ -34,8 +34,6 @@ namespace bvxm_create_scene_xml_large_scale_process_globals
 {
   constexpr unsigned n_inputs_  = 10;
   constexpr unsigned n_outputs_ = 1;
-
-  vgl_box_2d<double> enlarge_region_by_meter(vgl_box_2d<double> const& box_ori, double const& extension);
 }
 //: set input and output types
 bool bvxm_create_scene_xml_large_scale_process_cons(bprb_func_process& pro);

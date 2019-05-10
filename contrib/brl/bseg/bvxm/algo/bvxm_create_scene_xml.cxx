@@ -1,83 +1,36 @@
-// This is brl/bseg/bvxm/pro/processes/bvxm_create_scene_xml_process.cxx
+#include "bvxm_create_scene_xml.h"
+
 #include <iostream>
 #include <string>
-#include "bvxm_create_scene_xml_process.h"
-//:
-// \file
-#include <bvxm/bvxm_world_params.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
-#endif
-#include <vul/vul_file.h>
 
-#include <bvgl/algo/bvgl_2d_geo_index.h>
-#include <bvgl/algo/bvgl_2d_geo_index_sptr.h>
 #include <bkml/bkml_parser.h>
 #include <bkml/bkml_write.h>
+#include <bvgl/algo/bvgl_2d_geo_index.h>
+#include <bvgl/algo/bvgl_2d_geo_index_sptr.h>
+#include <bvxm/bvxm_world_params.h>
 #include <vgl/vgl_intersection.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_polygon.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vil/vil_image_view.h>
 #include <volm/volm_io_tools.h>
+#include <vpgl/vpgl_lvcs.h>
+#include <vul/vul_file.h>
 
-// set up input types
-bool bvxm_create_scene_xml_process_cons(bprb_func_process& pro)
-{
-  using namespace bvxm_create_scene_xml_process_globals;
-  std::vector<std::string> input_types_(n_inputs_);
-  input_types_[0]  = "vcl_string";      // scene xml output file
-  input_types_[1]  = "vcl_string";      // scene world directory
-  input_types_[2]  = "float";           // scene corner x coordinate
-  input_types_[3]  = "float";           // scene corner y coordinate
-  input_types_[4]  = "float";           // scene corner z coordinate
-  input_types_[5]  = "unsigned";        // scene dimension in x direction
-  input_types_[6]  = "unsigned";        // scene dimension in y direction
-  input_types_[7]  = "unsigned";        // scene dimension in z direction
-  input_types_[8]  = "float";           // scene voxel size
-  input_types_[9]  = "vpgl_lvcs_sptr";  // scene lvcs
-  input_types_[10]  = "vcl_string";     // scene lvcs file path
-  input_types_[11] = "float";           // scene minimum occupancy probability
-  input_types_[12] = "float";           // scene maximum occupancy probability
-  input_types_[13] = "unsigned";        // scene maximum scale
-  std::vector<std::string> output_types_(n_outputs_);
-
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-}
 
 // execution
-bool bvxm_create_scene_xml_process(bprb_func_process& pro)
+void bvxm_create_scene_xml(std::string const& scene_xml, std::string const& world_dir,
+                           float corner_x, float corner_y, float corner_z,
+                           unsigned int dim_x, unsigned int dim_y, unsigned int dim_z,
+                           float voxel_size,
+                           vpgl_lvcs lvcs, std::string const& lvcs_file,
+                           float min_ocp_prob, float max_ocp_prob, unsigned int max_scale)
 {
-  using namespace bvxm_create_scene_xml_process_globals;
-  // sanity check
-  if (!pro.verify_inputs()) {
-    std::cerr << pro.name() << ": Wrong inputs!!\n";
-    return false;
-  }
-
-  // get input
-  unsigned in_i = 0;
-  std::string  scene_xml = pro.get_input<std::string>(in_i++);
-  std::string  world_dir = pro.get_input<std::string>(in_i++);
-  auto       corner_x  = pro.get_input<float>(in_i++);
-  auto       corner_y  = pro.get_input<float>(in_i++);
-  auto       corner_z  = pro.get_input<float>(in_i++);
-  auto       dim_x  = pro.get_input<unsigned>(in_i++);
-  auto       dim_y  = pro.get_input<unsigned>(in_i++);
-  auto       dim_z  = pro.get_input<unsigned>(in_i++);
-  auto     voxel_size  = pro.get_input<float>(in_i++);
-  vpgl_lvcs_sptr  lvcs  = pro.get_input<vpgl_lvcs_sptr>(in_i++);
-  std::string lvcs_file  = pro.get_input<std::string>(in_i++);
-  auto   min_ocp_prob  = pro.get_input<float>(in_i++);
-  auto   max_ocp_prob  = pro.get_input<float>(in_i++);
-  auto   max_scale  = pro.get_input<unsigned>(in_i++);
-
-  if (!lvcs) {
-    std::cerr << pro.name() << ": input scene lvcs is empty!!\n";
-    return false;
-  }
   if (!vul_file::exists(lvcs_file)) {
-    std::cerr << pro.name() << ": can not find lvcs file - " << lvcs_file << "!!\n";
-    return false;
+    std::ostringstream buffer;
+    buffer << "bvxm_create_scene_xml_large_scale: can not find lvcs file - " << lvcs_file << "!!\n";
+    throw std::invalid_argument(buffer.str());
   }
 
   // create scene parameter
@@ -85,14 +38,13 @@ bool bvxm_create_scene_xml_process(bprb_func_process& pro)
   vgl_vector_3d<unsigned> num_voxels(dim_x, dim_y, dim_z);
 
   bvxm_world_params params;
-  params.set_params(world_dir, corner, num_voxels, voxel_size, lvcs, min_ocp_prob, max_ocp_prob, max_scale);
+  vpgl_lvcs_sptr lvcs_sptr = new vpgl_lvcs(lvcs);
+  params.set_params(world_dir, corner, num_voxels, voxel_size, lvcs_sptr, min_ocp_prob, max_ocp_prob, max_scale);
   params.write_xml(scene_xml, lvcs_file);
-
-  return true;
 }
 
-vgl_box_2d<double> bvxm_create_scene_xml_large_scale_process_globals::
-enlarge_region_by_meter(vgl_box_2d<double> const& box_ori, double const& extension)
+
+vgl_box_2d<double> enlarge_region_by_meter(vgl_box_2d<double> const& box_ori, double const& extension)
 {
   double abs_ext = std::fabs(extension);
   // create a local lvcs that convert degree to meter
@@ -110,55 +62,24 @@ enlarge_region_by_meter(vgl_box_2d<double> const& box_ori, double const& extensi
   return out_box;
 }
 
-// process to generate scenes that are arranged by a quad-tree structure to cover a large scale region
-// Note that the scene may have a land mask ratio to quantify the scene urban coverage, if land masks are available.  (-1.0 is unknown)
-bool bvxm_create_scene_xml_large_scale_process_cons(bprb_func_process& pro)
+
+unsigned int bvxm_create_scene_xml_large_scale(std::string const& roi_kml,
+                                               std::string const& scene_root,
+                                               std::string const& world_dir,
+                                               std::string const& dem_folder,
+                                               float world_size_in,
+                                               float voxel_size,
+                                               float height,
+                                               float height_sub,
+                                               double extension,
+                                               std::string const& land_folder)
 {
-  using namespace bvxm_create_scene_xml_large_scale_process_globals;
-  std::vector<std::string> input_types_(n_inputs_);
-  input_types_[0] = "vcl_string";    // region where scenes will cover, defined in kml file
-  input_types_[1] = "vcl_string";    // folder where scene xml files will reside
-  input_types_[2] = "vcl_string";    // folder where scene world directories will reside
-  input_types_[3] = "vcl_string";    // height map folder to retrieve elevation value
-  input_types_[4] = "vcl_string";    // land mask folder
-  input_types_[5] = "float";         // scene size
-  input_types_[6] = "float";         // scene voxel size
-  input_types_[7] = "float";         // the amount to be added on top of the terrain height (large enough to cover highest building)
-  input_types_[8] = "float";         // the amount to be subtracted on bottom of the terrain height (to overcome the height map inaccuracy)
-  input_types_[9] = "float";         // outline extension in meter
-  std::vector<std::string> output_types_(n_outputs_);
-  output_types_[0] = "unsigned";     // number of scenes created
-
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-}
-
-bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
-{
-  using namespace bvxm_create_scene_xml_large_scale_process_globals;
-  // sanity check
-  if (!pro.verify_inputs()) {
-    std::cerr << pro.name() << ": Wrong inputs!\n";
-    return false;
-  }
-  // get inputs
-  unsigned in_i = 0;
-  std::string roi_kml     = pro.get_input<std::string>(in_i++);
-  std::string scene_root  = pro.get_input<std::string>(in_i++);
-  std::string world_dir   = pro.get_input<std::string>(in_i++);
-  std::string dem_folder  = pro.get_input<std::string>(in_i++);
-  std::string land_folder = pro.get_input<std::string>(in_i++);
-  auto world_size_in = pro.get_input<float>(in_i++);
-  auto voxel_size    = pro.get_input<float>(in_i++);
-  auto height        = pro.get_input<float>(in_i++);
-  auto height_sub    = pro.get_input<float>(in_i++);
-  auto en_in         = pro.get_input<float>(in_i++);
-
-  double extension = static_cast<double>(en_in);
   // find the bounding box from the given region
   vgl_polygon<double> poly = bkml_parser::parse_polygon(roi_kml);
   if (poly[0].size() == 0) {
-    std::cerr << pro.name() << ": can not get region from input kml: " << roi_kml << "!\n";
-    return false;
+    std::ostringstream buffer;
+    buffer << "bvxm_create_scene_xml_large_scale: can not get region from input kml: " << roi_kml << "!\n";
+    throw std::invalid_argument(buffer.str());
   }
 
   vgl_box_2d<double> bbox_rect_ori;
@@ -173,7 +94,7 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   vgl_box_2d<double> bbox(bbox_rect.min_point(), square_size, square_size, vgl_box_2d<double>::min_pos);
 
   // truncate the world size from given voxel size
-  double world_size = (unsigned)std::ceil(world_size_in / voxel_size)*(double)voxel_size;
+  double world_size = (unsigned)std::ceil(world_size_in / voxel_size) * (double)voxel_size;
   // from truncated world size, calculate the min_size of the geoindex
   vgl_point_2d<double> ll(bbox_rect.min_x(), bbox_rect.min_y());
   vgl_point_2d<double> ur(bbox_rect.max_x(), bbox_rect.max_y());
@@ -219,8 +140,9 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   std::vector<volm_img_info> dem_infos;
   volm_io_tools::load_aster_dem_imgs(dem_folder, dem_infos);
   if (dem_infos.empty()) {
-    std::cerr << pro.name() << ": can not load any height map from: " << dem_folder << "!\n";
-    return false;
+    std::ostringstream buffer;
+    buffer  << "bvxm_create_scene_xml_large_scale: can not load any height map from: " << dem_folder << "!\n";
+    throw std::invalid_argument(buffer.str());
   }
 
   // load land masks
@@ -236,8 +158,9 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   std::string lvcs_folder = scene_root + "/lvcs";
   if (!(vul_file::exists(lvcs_folder) && vul_file::is_directory(lvcs_folder)))
     if (!vul_file::make_directory(lvcs_folder)) {
-      std::cerr << pro.name() << ": creating lvcs folder " << lvcs_folder << " failed!\n";
-      return false;
+      std::ostringstream buffer;
+      buffer << "bvxm_create_scene_xml_large_scale: creating lvcs folder " << lvcs_folder << " failed!\n";
+      throw std::invalid_argument(buffer.str());
     }
   std::cout << "pre-defined world size: " << world_size_in << ", voxel size: " << voxel_size << ", truncated world size: " << world_size << std::endl;
   std::cout << "bounding box for input region: " << bbox_rect << " expending to square: " << bbox << std::endl;
@@ -258,8 +181,9 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
     // find the evaluation information
     double min = 10000.0, max = -10000.0;
     if (!volm_io_tools::find_min_max_height(lower_left, upper_right, dem_infos, min, max)) {
-      std::cerr << pro.name() << ": can not find height info for leave " << i << ", lower left: " << lower_left << ", upper right: " << upper_right << "!\n";
-      return false;
+      std::ostringstream buffer;
+      buffer << "bvxm_create_scene_xml_large_scale: can not find height info for leave " << i << ", lower left: " << lower_left << ", upper right: " << upper_right << "!\n";
+      throw std::invalid_argument(buffer.str());
     }
     double h_diff = max-min;
     if (h_diff > height_dif_max)
@@ -278,8 +202,9 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
     scene_world << world_dir << "/scene_" << i;
     if (!(vul_file::exists(scene_world.str()) && vul_file::is_directory(scene_world.str())))
       if (!vul_file::make_directory(scene_world.str())) {
-        std::cerr << pro.name() << ": creating scene world folder " << scene_world.str() << " failed!\n";
-        return false;
+        std::ostringstream buffer;
+        buffer << "bvxm_create_scene_xml_large_scale: creating scene world folder " << scene_world.str() << " failed!\n";
+        throw std::invalid_argument(buffer.str());
       }
     bvxm_world_params params;
     params.set_params(scene_world.str(), corner, num_voxels, voxel_size, lvcs);
@@ -289,8 +214,9 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
     std::stringstream lvcs_file;   lvcs_file  << lvcs_folder << "/scene_" << i << ".lvcs";
     std::ofstream ofs(lvcs_file.str().c_str());
     if (!ofs) {
-      std::cerr << pro.name() << ": can not open file: " << lvcs_file.str() << "!\n";
-      return false;
+      std::ostringstream buffer;
+      buffer << "bvxm_create_scene_xml_large_scale: can not open file: " << lvcs_file.str() << "!\n";
+      throw std::invalid_argument(buffer.str());
     }
     lvcs->write(ofs);
     ofs.close();
@@ -361,6 +287,6 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   std::cout << "\nDONE!!! largest height difference in the entire region is: " << height_dif_max << std::endl;
 
   // generate output
-  pro.set_output_val<unsigned>(0, leaves.size());
-  return true;
+  return leaves.size();
 }
+

@@ -89,7 +89,6 @@ if(EXPAT_FOUND)
     processes/bvxm_orthorectify_process.h             processes/bvxm_orthorectify_process.cxx
     processes/bvxm_dem_to_xyz_process.h               processes/bvxm_dem_to_xyz_process.cxx
     processes/bvxm_create_land_map_process.h          processes/bvxm_create_land_map_process.cxx
-    processes/bvxm_create_scene_xml_process.h         processes/bvxm_create_scene_xml_process.cxx
   )
 
   vxl_add_library(LIBRARY_NAME bvxm_pro LIBRARY_SOURCES ${bvxm_pro_sources})
