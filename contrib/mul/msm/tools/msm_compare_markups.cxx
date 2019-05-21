@@ -85,6 +85,10 @@ output_summary_path: image+pts_sum.eps
 // Name given by output_for_one_base_path+key_text[i].eps
 output_for_one_base_path: image+pts_
 
+// When defined, draw all points on each image and save to this directory
+// Images called image_name[i].eps
+out_image_dir: -
+
 //: When defined, only display listed points
 points_to_show: { 3 7 12 15 }
 
@@ -154,6 +158,8 @@ struct tool_params
   // Name given by output_for_one_base_path+key_text[i].eps
   std::string output_for_one_base_path;
 
+  //: When defined, draw all points on each image and save to this directory
+  std::string out_image_dir;
 
   //: List of image names
   std::vector<std::string> image_names;
@@ -242,6 +248,9 @@ void tool_params::read_from_file(const std::string& path)
     std::stringstream ss(aligner_str);
     aligner = msm_aligner::create_from_stream(ss);
   }
+
+  out_image_dir=props.get_optional_property("out_image_dir");
+  if (out_image_dir=="-") out_image_dir="";
 
   mbl_parse_colon_pairs_list(props.get_required_property("images"),
                              points_names,image_names);
@@ -338,6 +347,7 @@ class mbm_covar_stats_2d
   double var11() const { return sum11/n-mean_x()*mean_x(); }
   double var12() const { return sum12/n-mean_x()*mean_y(); }
   double var22() const { return sum22/n-mean_y()*mean_y(); }
+  double total_var() const { return var11()+var22(); }
 
   //: Calculate eigenvalues of the covariance matrix and angle of evector 1
   void eigen_values(double& eval1, double& eval2, double& A) const
@@ -540,6 +550,59 @@ void compute_stats(const std::vector<std::vector<vgl_point_2d<double> > >& p,
 }
 
 
+//: Plot all points on each image.
+//  Use separate colour for each annotator.
+//  Resulting eps files are saved to directory: params.out_image_dir
+//  with name params.image_names[i].eps
+void plot_all_points(const tool_params& params,
+                     const std::vector<std::vector<msm_points> >& points)
+{
+  unsigned n_colours=params.point_colour.size();
+  unsigned n_sets=points.size();
+  unsigned n_pts=points[0][0].size();
+
+  for (unsigned j=0;j<points[0].size();++j)
+  {
+    vimt_image_2d_of<vxl_byte> image;
+    std::string image_path = params.image_dir+"/"+params.image_names[j];
+    vimt_load_to_byte(image_path.c_str(), image, 1000.0f);
+
+    vimt_transform_2d i2w=image.world2im().inverse();
+    double pixel_width_i = (i2w(1,0)-i2w(0,0)).length();
+    double pixel_width_j = (i2w(0,1)-i2w(0,0)).length();
+
+    double region_width=pixel_width_i*image.image().ni();
+    double region_height=pixel_width_j*image.image().nj();
+
+    std::string out_path = params.out_image_dir+"/"+params.image_names[j]+".eps";
+    mbl_eps_writer writer(out_path.c_str(),region_width,region_height);
+
+    writer.draw_image(image.image(),0,0, pixel_width_i,pixel_width_j);
+
+    for (unsigned k=0;k<n_sets;++k)  // Draw for annotator k
+    {
+      writer.set_colour(params.point_colour[k%n_colours]);
+
+      if (params.points_to_show.size()>0)
+      {
+        for (unsigned i=0;i<params.points_to_show.size();++i)
+        {
+          unsigned i0=params.points_to_show[i];
+          writer.draw_disk(points[k][j][i0],params.point_radius);
+        }
+      }
+      else
+      {
+        for (unsigned i=0;i<n_pts;++i)
+          writer.draw_disk(points[k][j][i],params.point_radius);
+      }
+    }
+    writer.close();
+  }
+  std::cout<<"Saved images with all points to directory "<<params.out_image_dir<<std::endl;
+}
+
+
 int main(int argc, char** argv)
 {
   vul_arg<std::string> param_path("-p","Parameter filename");
@@ -576,6 +639,9 @@ int main(int argc, char** argv)
   for (unsigned i=0;i<n_sets;++i)
     load_shapes(params.points_dir[i],params.points_names,points[i]);
 
+  if (params.out_image_dir!="")
+    plot_all_points(params,points);
+
   // Compute mean of points on first image to use as a reference.
   msm_points ref_shape=mean_shape(points,0);
 
@@ -591,10 +657,12 @@ int main(int argc, char** argv)
       params.aligner->apply_transform(points[i][j],pose,points[i][j]);
   }
 
+  // Set up variables to hold statistics
   unsigned n_pts = points[0][0].size();
   std::vector<std::vector<mbm_covar_stats_2d> > pt_stats(n_sets);
   std::vector<mbm_covar_stats_2d> pt_stats_all(n_pts);  // For all annotations
   std::vector<std::vector<mbl_sample_stats_1d> > d_stats(n_sets);  // Dist. to mean.
+  std::vector<mbm_covar_stats_2d> per_image_stats(n_egs); // Overal covar per image
   for (unsigned i=0;i<pt_stats.size();++i)
   {
     pt_stats[i].resize(n_pts);
@@ -614,6 +682,7 @@ int main(int argc, char** argv)
         pt_stats_all[k].obs(dpoints[k]);  // Record deviation for all markers
         double d2=dpoints[k].x()*dpoints[k].x() + dpoints[k].y()*dpoints[k].y();
         d_stats[i][k].add_sample(std::sqrt(d2));
+        per_image_stats[j].obs(dpoints[k]);  // Collect variance over image
       }
     }
   }
@@ -644,6 +713,20 @@ int main(int argc, char** argv)
         pt_stats[i][k]=stats[i];
       ref_shape.set_point(k,true_p[0]);
     }
+  }
+
+  // Save total variance for each image
+  std::ofstream ofs1("var_per_image.txt");
+  if (!ofs1)
+    std::cout<<"Failed to open var_per_image.txt for writing."<<std::endl;
+  else
+  {
+    for (unsigned i=0;i<n_egs;++i)
+    {
+      ofs1<<params.image_names[i]<<" "<<per_image_stats[i].total_var()<<std::endl;
+    }
+    ofs1.close();
+    std::cout<<"Saved total variance (over all points) for each image to var_per_image.txt"<<std::endl;
   }
 
   // Create an image with mean point positions overlayed
