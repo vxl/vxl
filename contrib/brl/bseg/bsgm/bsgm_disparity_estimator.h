@@ -97,6 +97,8 @@ struct bsgm_disparity_estimator_params
 
 };
 
+// output parameters
+std::ostream& operator<<(std::ostream& os, const bsgm_disparity_estimator_params& params);
 
 
 class bsgm_disparity_estimator

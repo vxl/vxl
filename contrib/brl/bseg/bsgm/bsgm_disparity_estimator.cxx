@@ -780,3 +780,27 @@ bsgm_disparity_estimator::print_time(
 }
 
 
+
+//-----------------------------------------------------------------------
+// output parameters
+std::ostream& operator<<(std::ostream& os, const bsgm_disparity_estimator_params& params)
+{
+  os << "BSGM Disparity Estimator Parameters:" << std::endl
+     << "use_16_directions:               " << params.use_16_directions << std::endl
+     << "p1_scale:                        " << params.p1_scale << std::endl
+     << "p2_scale:                        " << params.p2_scale << std::endl
+     << "use_gradient_weighted_smoothing: " << params.use_gradient_weighted_smoothing << std::endl
+     << "max_grad:                        " << params.max_grad << std::endl
+     << "perform_quadratic_interp:        " << params.perform_quadratic_interp << std::endl
+     << "error_check_mode:                " << params.error_check_mode << std::endl
+     << "shadow_thresh:                   " << static_cast<unsigned>(params.shadow_thresh) << std::endl
+     << "bias_weight:                     " << params.bias_weight << std::endl
+     << "bias_dir:                        " << params.bias_dir << std::endl
+     << "census_weight:                   " << params.census_weight << std::endl
+     << "xgrad_weight:                    " << params.xgrad_weight << std::endl
+     << "census_tol:                      " << params.census_tol << std::endl
+     << "census_rad:                      " << params.census_rad << std::endl
+     << "print_timing:                    " << params.print_timing << std::endl
+     ;
+  return os;
+}
