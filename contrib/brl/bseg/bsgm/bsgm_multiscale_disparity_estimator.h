@@ -77,6 +77,16 @@ class bsgm_multiscale_disparity_estimator
     vil_image_view<float>& disp_ref,
     vgl_vector_2d<float> bias_dir = vgl_vector_2d<float>(0.0f, 0.0f));
 
+  //: Write out the appearance or total cost volume as a set of images for
+  // debugging
+  void write_cost_debug_imgs(
+    const std::string& out_dir,
+    bool write_total_cost = false )
+  {
+    fine_de_->write_cost_debug_imgs(out_dir, write_total_cost);
+  }
+
+
  protected:
 
   //: Size of image

@@ -164,9 +164,16 @@ bsgm_disparity_estimator::write_cost_debug_imgs(
   const std::string& out_dir,
   bool write_total_cost )
 {
-  float total_cost_scale = 0.25f;
-
   if( active_app_cost_->size() == 0 ) return;
+
+  // total cost maximum
+  float total_cost_scale = 1.0f;
+  if (write_total_cost) {
+    auto max_total_cost = *std::max_element(total_cost_data_.begin(), total_cost_data_.end());
+    total_cost_scale = 255.0f / float(max_total_cost);
+    // std::cout << "MAX TOTAL COST " << max_total_cost << std::endl
+    //           << "TOTAL COST SCALE " << total_cost_scale << std::endl;
+  }
 
   vil_image_view<vxl_byte> vis_img( w_, h_ );
 
