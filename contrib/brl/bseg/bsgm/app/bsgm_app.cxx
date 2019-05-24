@@ -35,6 +35,9 @@ int main(int argc,char * argv[])
   // params.bias_dir = vgl_vector_2d<float>(-0.2f, -1.0f);//550
   // params.bias_weight = 1.0f;
 
+  // report parameters
+  std::cout << params << std::endl;
+
   // Usage information
   if( argc != 8 && argc != 9 ){
     std::cout << "Usage : bsgm_app.exe target_img ref_img disp_img "

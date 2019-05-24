@@ -105,6 +105,9 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
   params.error_check_mode = error_check_mode;
   params.shadow_thresh = static_cast<vxl_byte>(shadow_thresh);
 
+  // report parameters
+  // std::cout << params << std::endl;
+
   // compute invalid map
   vil_image_view<bool> invalid_right;
   bsgm_compute_invalid_map( img_right, img_left,
