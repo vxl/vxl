@@ -22,7 +22,7 @@
 //: Take two rectified images, generate their disparity map calculated using semi-global matching stereo algorithm
 namespace bsgm_matching_stereo_process_globals
 {
-  constexpr unsigned n_inputs_ = 10;
+  constexpr unsigned n_inputs_ = 12;
   constexpr unsigned n_outputs_ = 2;
 }
 
@@ -45,6 +45,8 @@ bool bsgm_matching_stereo_process_cons(bprb_func_process& pro)
   input_types_[7] = "vcl_string";                // output text file to store the matched disparities per pixel
   input_types_[8] = "unsigned";                  // threshold that treats pixel as shadow pixels
   input_types_[9] = "bool";                      // print timing parameters
+  input_types_[10] = "vcl_string";               // optional directory for active cost volume
+  input_types_[11] = "vcl_string";               // optional directory for total cost volume
 
   // process outputs
   std::vector<std::string> output_types_(n_outputs_);
@@ -74,6 +76,8 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
   std::string out_disparity_txt = pro.get_input<std::string>(in_i++);
   auto shadow_thresh = pro.get_input<unsigned>(in_i++);
   auto print_timing = pro.get_input<bool>(in_i++);
+  auto out_dir_active_cost = pro.get_input<std::string>(in_i++);
+  auto out_dir_total_cost = pro.get_input<std::string>(in_i++);
 
   // load image
   auto* img_ref = dynamic_cast<vil_image_view<vxl_byte>*>(img_ref_sptr.ptr());
@@ -129,6 +133,12 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
       std::cerr << pro.name() << ": single-scale SGM failed!!\n";
       return false;
     }
+
+    // debugging output
+    if (!out_dir_active_cost.empty())
+      sgm.write_cost_debug_imgs(out_dir_active_cost, false);
+    if (!out_dir_total_cost.empty())
+      sgm.write_cost_debug_imgs(out_dir_total_cost, true);
   }
   else // otherwise run multi-scale to find the valid disparity range
   {
@@ -144,6 +154,12 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
       std::cerr << pro.name() << ": multi-scale SGM failed!!\n";
       return false;
     }
+
+    // debugging output
+    if (!out_dir_active_cost.empty())
+      sgm.write_cost_debug_imgs(out_dir_active_cost, false);
+    if (!out_dir_total_cost.empty())
+      sgm.write_cost_debug_imgs(out_dir_total_cost, true);
   }
 
   // Flip the sign of the disparities to match OpenCV implementation.
