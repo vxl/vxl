@@ -53,11 +53,12 @@ struct bsgm_disparity_estimator_params
   // when error_check_mode > 0
   vxl_byte shadow_thresh;
 
-  //: Set between 0.0 and 1.0 to bias the SGM directional average against the
-  // the "bias_dir" argument to "compute".  Use this if smoothing from certain
+  //: Set "bias_weight" to the range (0.0,1.0] to bias the SGM directional average
+  // against the "bias_dir" parameter.  Use this if smoothing from certain
   // directions (i.e. sun angle for satellite imagery) is unreliable.  Set to
   // 0 to disable biasing.
-  float directional_bias;
+  float bias_weight;
+  vgl_vector_2d<float> bias_dir;
 
   //: Appearance costs computed by different algorithms are statically fused
   // using these weights. Set any to <= 0 to prevent computation.
@@ -86,7 +87,8 @@ struct bsgm_disparity_estimator_params
     perform_quadratic_interp(true),
     error_check_mode(1),
     shadow_thresh(0),
-    directional_bias(0.0f),
+    bias_weight(0.0f),
+    bias_dir(1.0f,0.0f),
     census_weight(0.3f),
     xgrad_weight(0.7f),
     census_tol(2),
@@ -94,6 +96,7 @@ struct bsgm_disparity_estimator_params
     print_timing(false){}
 
 };
+
 
 
 class bsgm_disparity_estimator
@@ -122,7 +125,6 @@ class bsgm_disparity_estimator
     const vil_image_view<int>& min_disparity,
     float invalid_disparity,
     vil_image_view<float>& disp_target,
-    vgl_vector_2d<float> bias_dir = vgl_vector_2d<float>(0.0f, 0.0f),
     bool skip_error_check = false);
 
   //: Write out the appearance or total cost volume as a set of images for
@@ -202,8 +204,7 @@ class bsgm_disparity_estimator
     const vil_image_view<bool>& invalid_target,
     const vil_image_view<float>& grad_x,
     const vil_image_view<float>& grad_y,
-    const vil_image_view<int>& min_disparity,
-    vgl_vector_2d<float> bias_dir);
+    const vil_image_view<int>& min_disparity);
 
   //: Pixel-wise directional cost
   inline void compute_dir_cost(
