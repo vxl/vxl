@@ -118,7 +118,6 @@ bsgm_multiscale_disparity_estimator::compute(
   float invalid_disp,
   int const& multi_scale_mode,
   vil_image_view<float>& disp_tar,
-  vgl_vector_2d<float> bias_dir,
   bool skip_error_check)
 {
   //int multi_scale_mode = 1;
@@ -235,7 +234,7 @@ bsgm_multiscale_disparity_estimator::compute(
 
   // Run fine-scale SGM
   if( !fine_de_->compute( img_tar, img_ref, invalid_tar,
-      min_disp_img_fine, invalid_disp, disp_tar, bias_dir, skip_error_check ) )
+      min_disp_img_fine, invalid_disp, disp_tar, skip_error_check ) )
     return false;
 
   //fine_de_->write_cost_debug_imgs( std::string("C:/data/results"), true );
@@ -255,15 +254,14 @@ bsgm_multiscale_disparity_estimator::compute_both(
   float invalid_disparity,
   int const& multi_scale_mode,
   vil_image_view<float>& disp_tar,
-  vil_image_view<float>& disp_ref,
-  vgl_vector_2d<float> bias_dir)
+  vil_image_view<float>& disp_ref)
 {
   // Compute disparity maps for both images
   compute(img_tar, img_ref, invalid_tar, min_disparity,
-    invalid_disparity, multi_scale_mode, disp_tar, bias_dir, true);
+    invalid_disparity, multi_scale_mode, disp_tar, true);
   compute(img_ref, img_tar, invalid_ref,
     (-num_fine_disparities_-min_disparity+1),
-    invalid_disparity, multi_scale_mode, disp_ref, bias_dir, true);
+    invalid_disparity, multi_scale_mode, disp_ref, true);
 
   // Compute error maps
   vil_image_view<bool> error_tar, error_ref;

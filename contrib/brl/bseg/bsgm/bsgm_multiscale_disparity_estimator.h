@@ -59,7 +59,6 @@ class bsgm_multiscale_disparity_estimator
     float invalid_disparity,
     int const& multi_scale_mode,
     vil_image_view<float>& disp_target,
-    vgl_vector_2d<float> bias_dir = vgl_vector_2d<float>(0.0f, 0.0f),
     bool skip_error_check = false);
 
   //: Same as above, except compute disparity maps for both images and use a
@@ -74,8 +73,7 @@ class bsgm_multiscale_disparity_estimator
     float invalid_disparity,
     int const& multi_scale_mode,
     vil_image_view<float>& disp_target,
-    vil_image_view<float>& disp_ref,
-    vgl_vector_2d<float> bias_dir = vgl_vector_2d<float>(0.0f, 0.0f));
+    vil_image_view<float>& disp_ref);
 
   //: Write out the appearance or total cost volume as a set of images for
   // debugging

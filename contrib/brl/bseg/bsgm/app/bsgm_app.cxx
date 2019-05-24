@@ -28,13 +28,12 @@ int main(int argc,char * argv[])
   params.print_timing = true;
   params.shadow_thresh = 0;
 
-  // Optionally set a sun direction here
-  vgl_vector_2d<float> bias_dir(0.0, 0.0);
-  //bias_dir = vgl_vector_2d<float>(-0.0f, -1.0f);//8
-  //bias_dir = vgl_vector_2d<float>(-2.0f, -1.0f);//135
-  //bias_dir = vgl_vector_2d<float>(-3.0f, -2.0f);//177
-  //bias_dir = vgl_vector_2d<float>(-0.2f, -1.0f);//550
-  //params.directional_bias = 1.0f;
+  // optional sun direction
+  // params.bias_dir = vgl_vector_2d<float>(-0.0f, -1.0f);//8
+  // params.bias_dir = vgl_vector_2d<float>(-2.0f, -1.0f);//135
+  // params.bias_dir = vgl_vector_2d<float>(-3.0f, -2.0f);//177
+  // params.bias_dir = vgl_vector_2d<float>(-0.2f, -1.0f);//550
+  // params.bias_weight = 1.0f;
 
   // Usage information
   if( argc != 8 && argc != 9 ){
@@ -92,7 +91,7 @@ int main(int argc,char * argv[])
     min_disp_img.fill( min_disparity_inv );
 
     if( !sgm.compute( img_right, img_left, invalid_right,
-        min_disp_img, invalid_disp_inv, disp_right, bias_dir ) ){
+        min_disp_img, invalid_disp_inv, disp_right ) ){
       std::cerr << "SGM failed\n";
       return 1;
     }
@@ -107,8 +106,8 @@ int main(int argc,char * argv[])
       params, img_width, img_height, num_disparities, num_active_disparities );
 
     if (!sgm.compute_both(img_right, img_left, invalid_right, invalid_left,
-      min_disparity_inv, invalid_disp_inv, multi_scale_mode, 
-      disp_right, disp_left, bias_dir)) {
+      min_disparity_inv, invalid_disp_inv, multi_scale_mode,
+      disp_right, disp_left)) {
     //if( !sgm.compute( img_right, img_left, invalid_right,
     //    min_disparity_inv, invalid_disp_inv, multi_scale_mode, disp_right ) ){
       std::cerr << "SGM failed\n";
