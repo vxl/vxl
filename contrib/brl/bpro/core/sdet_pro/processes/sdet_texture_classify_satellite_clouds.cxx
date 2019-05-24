@@ -10,7 +10,7 @@
 #include <brdb/brdb_value.h>
 #include <sdet/sdet_atmospheric_image_classifier.h>
 #include <sdet/sdet_texture_classifier_params.h>
-#include <sdet/algo/sdet_classify_clouds.h>
+#include <sdet/algo/sdet_classify.h>
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_random.h>
 #ifdef _MSC_VER
@@ -36,13 +36,7 @@ bool sdet_texture_classify_satellite_clouds_process_cons(bprb_func_process& pro)
   // process takes 11 inputs:
   std::vector<std::string> input_types;
   input_types.emplace_back("sdet_texture_classifier_sptr"); //texton classifier
-  input_types.emplace_back("vcl_string"); // path to dictionary
-  input_types.emplace_back("vil_image_resource_sptr"); //input image resouce
-  input_types.emplace_back("unsigned");   // i
-  input_types.emplace_back("unsigned");   // j (i,j) is the upper left pixel coordinate for ROI in the image resource
-  input_types.emplace_back("unsigned");   // ni
-  input_types.emplace_back("unsigned");   // nj (ni, nj) is the size of the ROI in terms of pixels
-  input_types.emplace_back("unsigned");   //texture block size
+  input_types.emplace_back("vil_image_view_base_sptr"); //input image
   input_types.emplace_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
   input_types.emplace_back("vcl_string");  // the category whose percentage of pixels among all classified pixel will be returned
   input_types.emplace_back("float"); // scale_factor  (pixel_graylevel*scale_factor should be on the range [0,1])
@@ -67,21 +61,32 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
   }
 
   // get inputs
-  sdet_texture_classifier_sptr tcptr = pro.get_input<sdet_texture_classifier_sptr>(0);
-  std::string texton_dict_path = pro.get_input<std::string>(1);
-  vil_image_resource_sptr image = pro.get_input<vil_image_resource_sptr>(2);
-  auto i = pro.get_input<unsigned>(3);
-  auto j = pro.get_input<unsigned>(4);
-  auto ni = pro.get_input<unsigned>(5);
-  auto nj = pro.get_input<unsigned>(6);
-  auto block_size = pro.get_input<unsigned>(7);
-  std::string first_category = pro.get_input<std::string>(8);
-  std::string cat_ids_file = pro.get_input<std::string>(9);
-  float scale_factor  = pro.get_input<float>(10);
+  sdet_texture_classifier_sptr tc_sptr = pro.get_input<sdet_texture_classifier_sptr>(0);
+  vil_image_view_base_sptr image_sptr = pro.get_input<vil_image_view_base_sptr>(1);
+  std::string first_category = pro.get_input<std::string>(2);
+  std::string cat_ids_file = pro.get_input<std::string>(3);
+  float scale_factor  = pro.get_input<float>(4);
+
+  // Cast texture classifier to atmospheric image classifier
+  auto* tc_ptr = dynamic_cast<sdet_atmospheric_image_classifier*> (tc_sptr.as_pointer());
+  if (!tc_ptr) {
+    std::cerr << pro.name() << " :-- input texture classifier is not sdet_atmospheric_image_classifier" << std::endl;
+    return false;
+  }
+
+  // Cast image view base to image view <float>
+  auto* image_ptr = dynamic_cast<vil_image_view<float>*> (image_sptr.as_pointer());
+  if (!image_ptr) {
+    std::cerr << pro.name() << " :-- input image is not vil_image_view<float>" << std::endl;
+    return false;
+  } else if (image_ptr->nplanes() != 1) {
+    std::cerr << pro.name() << " :-- input image is not single band" << std::endl;
+    return false;
+  }
 
   try {
     std::tuple<vil_image_view<float>, vil_image_view<vxl_byte>, vil_image_view<vil_rgb<vxl_byte> >, float>
-      ret = sdet_classify_clouds(*tcptr, texton_dict_path, image, i, j, ni, nj, block_size, first_category, cat_ids_file, scale_factor);
+      ret = sdet_classify(*tc_ptr, *image_ptr, first_category, cat_ids_file, scale_factor);
 
     vil_image_view_base_sptr img_ptr = new vil_image_view<float>(std::get<0>(ret));
     pro.set_output_val<vil_image_view_base_sptr>(0, img_ptr);
