@@ -475,8 +475,18 @@ bool vpgl_affine_f_matrix_process(bprb_func_process& pro)
 
 // input the disparity map given by stereo matching of rectified image pairs, disparity map is for H1 warped image1
 // output an ortograhic height map using the input bounding box
+namespace vpgl_construct_height_map_process_globals
+{
+  unsigned n_inputs_  = 16;
+  unsigned n_outputs_ = 2;
+}
+
+
+
 bool vpgl_construct_height_map_process_cons(bprb_func_process& pro)
 {
+  using namespace vpgl_construct_height_map_process_globals;
+
   std::vector<std::string> input_types;
   input_types.emplace_back("vil_image_view_base_sptr");  // image1
   input_types.emplace_back("vpgl_camera_double_sptr");  // camera1 local rational
@@ -493,6 +503,7 @@ bool vpgl_construct_height_map_process_cons(bprb_func_process& pro)
   input_types.emplace_back("double");    // voxel size (e.g. 1 m for a geo-registered ortho map with GSD 1 meter
   input_types.emplace_back("vcl_string"); // input path to read H1
   input_types.emplace_back("vcl_string"); // input path to read H2
+  input_types.emplace_back("double");    // z_offset
   std::vector<std::string> output_types;
   output_types.emplace_back("vil_image_view_base_sptr"); // orthographic height map
   output_types.emplace_back("vil_image_view_base_sptr");  // disparity map for image1, print the txt input as an image
@@ -506,8 +517,11 @@ bool vpgl_construct_height_map_process_cons(bprb_func_process& pro)
 //: Execute the process
 bool vpgl_construct_height_map_process(bprb_func_process& pro)
 {
-  if (pro.n_inputs() < 14) {
-    std::cout << "vpgl_affine_rectify_images_process: The number of inputs should be 11" << std::endl;
+  using namespace vpgl_construct_height_map_process_globals;
+
+  // sanity check
+  if (!pro.verify_inputs()) {
+    std::cerr << pro.name() << ": wrong inputs!!!\n";
     return false;
   }
 
@@ -528,6 +542,7 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
   auto voxel_size = pro.get_input<double>(i++);
   std::string path_H1 = pro.get_input<std::string>(i++);
   std::string path_H2 = pro.get_input<std::string>(i++);
+  auto z_offset = pro.get_input<double>(i++);
 
   vnl_matrix_fixed<double, 3, 3> H1, H2;
   std::ifstream ifs(path_H1.c_str());
@@ -541,14 +556,17 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
   vil_image_view<float> img1 = *vil_convert_cast(float(), img1_sptr);
   vil_image_view<float> img1_disp = *vil_convert_cast(float(), img1_disp_sptr);
   vil_image_view<float> img2 = *vil_convert_cast(float(), img2_sptr);
-  
+
   double width = max_x-min_x;
   double depth = max_y-min_y;
   double height = max_z - min_z;
+
+  double invalid_z = -9999.0;
+
   auto img_size_x = (unsigned)std::ceil(width/voxel_size);
   auto img_size_y = (unsigned)std::ceil(depth/voxel_size);
   vil_image_view<float> out_map(img_size_x, img_size_y);
-  out_map.fill((float)min_z);
+  out_map.fill((float)invalid_z);
   double dz = voxel_size;
   if (voxel_size >= 1.0)
     dz = voxel_size / 2.0;
@@ -571,7 +589,7 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
       double y = yi * voxel_size;
       // try each height
       double min_dif = 2.0;  // 2 pixels error in projection
-      double best_z = min_z;
+      double best_z = invalid_z;
       for (double z = min_z; z < height; z += dz)
       {
         // project this x,y,z using the camera onto the images
@@ -616,6 +634,15 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
       if (xx < img_size_x && yy < img_size_y)
       {
         out_map(xx,yy) = (float)best_z;
+      }
+    }
+  }
+
+  // add offset to elevation estimates
+  for (size_t j=0; j<out_map.nj(); ++j) {
+    for (size_t i=0; i<out_map.ni(); ++i) {
+      if (out_map(i,j) >= invalid_z + 0.1) {
+        out_map(i,j) += (float)z_offset;
       }
     }
   }

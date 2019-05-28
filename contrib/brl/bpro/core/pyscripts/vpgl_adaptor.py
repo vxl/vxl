@@ -1093,7 +1093,8 @@ def affine_f_matrix(affine_cam1, affine_cam2, output_path):
 
 
 def construct_height_map_from_disparity(img1, img1_disp, min_disparity, local_rational_cam1, img2, local_rational_cam2,
-                                        min_x, min_y, min_z, max_x, max_y, max_z, path_H1, path_H2, voxel_size):
+                                        min_x, min_y, min_z, max_x, max_y, max_z, path_H1, path_H2, voxel_size,
+                                        z_offset = 0.0):
     batch.init_process("vpglConstructHeightMapProcess")
     batch.set_input_from_db(0, img1)
     batch.set_input_from_db(1, local_rational_cam1)
@@ -1110,6 +1111,7 @@ def construct_height_map_from_disparity(img1, img1_disp, min_disparity, local_ra
     batch.set_input_double(12, voxel_size)
     batch.set_input_string(13, path_H1)
     batch.set_input_string(14, path_H2)
+    batch.set_input_double(15, z_offset)
     status = batch.run_process()
     if status:
         (id, type) = batch.commit_output(0)
