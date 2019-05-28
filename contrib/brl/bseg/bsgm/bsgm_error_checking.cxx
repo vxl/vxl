@@ -248,7 +248,7 @@ bsgm_interpolate_errors(
     for( int x = 0; x < w; x++, sample_itr += num_sample_dirs ){
       if (invalid(x, y)) continue;
 
-      // Require half of the directions return valid samples, which prevents 
+      // Require half of the directions return valid samples, which prevents
       // bogus interpolation on the boundary of the disparity map
       if( sample_count(x,y) <= 4 ) continue;
 

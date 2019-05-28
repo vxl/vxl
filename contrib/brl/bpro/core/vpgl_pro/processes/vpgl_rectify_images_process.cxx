@@ -603,8 +603,8 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
         int u2w = (int)std::floor((p2w[0]/p2w[2])+0.5);
         int v2w = (int)std::floor((p2w[1]/p2w[2])+0.5);
 
-        // check if with disparity the warped pixels are exactly the same, i.e. (u1w-d,v1w) = (u2w,v2w)
-        double dif = std::sqrt((u1w-disp-u2w)*(u1w-disp-u2w) + (v1w-v2w)*(v1w-v2w));
+        // check if with disparity the warped pixels are exactly the same, i.e. (u1w+d,v1w) = (u2w,v2w)
+        double dif = std::sqrt((u1w+disp-u2w)*(u1w+disp-u2w) + (v1w-v2w)*(v1w-v2w));
         if (dif < min_dif)
         {
           min_dif = dif;
