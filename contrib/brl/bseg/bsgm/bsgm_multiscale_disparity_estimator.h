@@ -84,7 +84,6 @@ class bsgm_multiscale_disparity_estimator
     fine_de_->write_cost_debug_imgs(out_dir, write_total_cost);
   }
 
-
  protected:
 
   //: Size of image

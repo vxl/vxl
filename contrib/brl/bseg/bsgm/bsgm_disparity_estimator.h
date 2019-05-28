@@ -209,7 +209,7 @@ class bsgm_disparity_estimator
     const vil_image_view<bool>& invalid_target,
     const vil_image_view<float>& grad_x,
     const vil_image_view<float>& grad_y,
-    const vil_image_view<int>& min_disparity);
+    const vil_image_view<int>& min_disparity );
 
   //: Pixel-wise directional cost
   inline void compute_dir_cost(

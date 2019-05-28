@@ -7,7 +7,18 @@
 //:
 // \file
 //      Process to run semi-global matching stereo algorithm for two rectified images
-
+//
+// It is assumed that the images are rectified such that img1(i,j) <--> img2(i + disparity(i,j), j)
+// for example, given the pixel location (100, 200) in image1 and a disparity value of -20 at that location
+// in the disparity image then the corresponding pixel location in image2 is (80, 200).
+//
+// The "min_disparity" and "num_disparity" input arguments are based on this assumption.
+//
+// A disparity image output from this process may be passed directly to either
+// "bpgl_heightmap_from_disparity_process" or "vpgl_construct_height_map_process"
+//
+// Note sign convention is opposite of the OpenCV implementation
+//
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view.h>
@@ -113,13 +124,8 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
   bsgm_compute_invalid_map( img_right, img_left,
     invalid_right, min_disparity, num_disparity );
 
-  //vil_save(invalid_right, "D:/temp/sgm/mountain_pair/invalid_right.tif");
-  // Flip the sign of the disparities to match OpenCV implementation. Set the
-  // invalid disparity to one less than the min value, before and after flip.
+  // Set invalid disparity to one less than the min value
   float invalid_disp = min_disparity - 1.0f;
-  float min_disparity_inv =  -( min_disparity + num_disparity - 1 );
-  float invalid_disp_inv = min_disparity_inv - 1.0f;
-  //vil_image_view<float> disp_right;
 
   // execute
   vil_image_view<float> disp_r;
@@ -129,10 +135,10 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
       params, img_width, img_height, num_disparity );
 
     vil_image_view<int> min_disp_img( img_width, img_height );
-    min_disp_img.fill( min_disparity_inv );
+    min_disp_img.fill( min_disparity );
 
     if (!sgm.compute( img_right, img_left, invalid_right,
-        min_disp_img, invalid_disp_inv, disp_r ) ) {
+        min_disp_img, invalid_disp, disp_r ) ) {
       std::cerr << pro.name() << ": single-scale SGM failed!!\n";
       return false;
     }
@@ -153,7 +159,7 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
     }
     std::cout << "Multi-scale SGM matching with mode " << multi_scale_mode << std::endl;
     if (!sgm.compute( img_right, img_left, invalid_right,
-        min_disparity_inv, invalid_disp_inv, multi_scale_mode, disp_r ) ){
+        min_disparity, invalid_disp, multi_scale_mode, disp_r ) ){
       std::cerr << pro.name() << ": multi-scale SGM failed!!\n";
       return false;
     }
@@ -165,13 +171,10 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
       sgm.write_cost_debug_imgs(out_dir_total_cost, true);
   }
 
-  // Flip the sign of the disparities to match OpenCV implementation.
-  bsgm_invert_disparities( disp_r, invalid_disp_inv, invalid_disp );
-
   // check that ANY value is valid
   float min_value, max_value;
   vil_math_value_range(disp_r, min_value, max_value);
-  if (max_value <= invalid_disp_inv) {
+  if (max_value <= invalid_disp) {
     std::cerr << pro.name() << ": no valid disparity value" << std::endl;
     return false;
   }

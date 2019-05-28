@@ -373,7 +373,7 @@ bsgm_disparity_estimator::run_multi_dp(
   const vil_image_view<bool>& invalid_tar,
   const vil_image_view<float>& grad_x,
   const vil_image_view<float>& grad_y,
-  const vil_image_view<int>& min_disparity)
+  const vil_image_view<int>& min_disparity )
 {
   int volume_size = w_*h_*num_disparities_;
   int row_size = w_*num_disparities_;
