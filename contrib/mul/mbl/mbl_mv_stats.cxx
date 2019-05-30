@@ -161,9 +161,9 @@ void mbl_mv_stats::get_eigen(vnl_matrix<double>& EVecs, vnl_vector<double>& eval
     // Flip each row
     double *PV = P_data[i]-1;
     double *EV = EV_data[i];
-    for (unsigned j=0;j<n_modes;++j) EV[j]=PV[n-j];
+    for (int j=0;j<n_modes;++j) EV[j]=PV[n-j];
   }
-  for (unsigned j=0;j<n_modes;++j)
+  for (int j=0;j<n_modes;++j)
     evals[j]=e[j];
 
 }

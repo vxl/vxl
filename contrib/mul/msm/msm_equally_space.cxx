@@ -31,7 +31,7 @@ void msm_equally_space(msm_points& points,
   }
 
   // Replace the points on the curve with pts
-  for (unsigned i=1;i<last_index;++i)
+  for (int i=1;i<last_index;++i)
   {
     points.set_point(curve[i],new_pts[i]);
   }

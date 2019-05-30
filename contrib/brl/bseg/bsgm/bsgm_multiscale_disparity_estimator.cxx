@@ -269,12 +269,12 @@ bsgm_multiscale_disparity_estimator::compute_both(
   bsgm_check_leftright(disp_ref, disp_tar, invalid_ref, invalid_tar, error_ref);
 
   // Set bad pixels to invalid
-  for (int y = 0; y < img_tar.nj(); y++)
-    for (int x = 0; x < img_tar.ni(); x++)
+  for (size_t y = 0; y < img_tar.nj(); y++)
+    for (size_t x = 0; x < img_tar.ni(); x++)
       if (error_tar(x, y)) disp_tar(x, y) = invalid_disparity;
 
-  for (int y = 0; y < img_ref.nj(); y++)
-    for (int x = 0; x < img_ref.ni(); x++)
+  for (size_t y = 0; y < img_ref.nj(); y++)
+    for (size_t x = 0; x < img_ref.ni(); x++)
       if (error_ref(x, y)) disp_ref(x, y) = invalid_disparity;
 
   // Interpolate
