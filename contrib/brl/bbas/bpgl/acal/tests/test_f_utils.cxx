@@ -136,7 +136,7 @@ static void test_f_utils()
   }
 
   // actual F
-  vnl_matrix_fixed<double, 3, 3> Fa(0.0), Fa_adj;
+  vnl_matrix_fixed<double, 3, 3> Fa(0.0);
   Fa[0][2] = -0.138048; Fa[1][2] = 0.224528;
   Fa[2][0]= 0.117889; Fa[2][1] = -0.241421; Fa[2][2] =   6.93955;
 

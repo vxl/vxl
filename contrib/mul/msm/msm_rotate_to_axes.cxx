@@ -35,7 +35,7 @@ void msm_rotate_to_axes(msm_points& points, double A, int ref_pt)
 
   // evec1 has arbitrary direction.
   // If ref_pt defined, then arrange that points[ref_pt].x()>=0
-  if (ref_pt>=0 && ref_pt<points.size())
+  if (ref_pt>=0 && ref_pt<static_cast<int>(points.size()))
   {
     vgl_point_2d<double> p = points[ref_pt];
     if (p.x()*evec1.x()+p.y()*evec1.y()<0) evec1 *=-1.0;

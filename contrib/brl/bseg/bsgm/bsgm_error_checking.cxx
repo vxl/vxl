@@ -98,13 +98,13 @@ void bsgm_check_leftright(
   error1.fill(true);
 
   // Iterate through first image
-  for (int y = 0; y < disp1.nj(); y++) {
-    for (int x = 0; x < disp1.ni(); x++) {
+  for (int y = 0; y < static_cast<int>(disp1.nj()); y++) {
+    for (int x = 0; x < static_cast<int>(disp1.ni()); x++) {
       if (invalid1(x, y)) continue;
 
       // Project each pixel into the second image
       int x2 = x + (int)(disp1(x, y) + 0.5f);
-      if (x2 < 0 || x2 >= disp2.ni()) continue;
+      if (x2 < 0 || x2 >= static_cast<int>(disp2.ni())) continue;
       if (invalid2(x2, y)) continue;
 
       // Project back into first image and compute distance
