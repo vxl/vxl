@@ -149,10 +149,8 @@ class vpgl_lvcs : public vbl_ref_count
   void compute_scale();
   void local_transform(double& x, double& y) const;
   void inverse_local_transform(double& x, double& y) const;
-  void set_angle_conversions(AngUnits ang_unit, double& to_radians,
-                             double& to_degrees) const;
-  void set_length_conversions(LenUnits len_unit, double& to_meters,
-                              double& to_feet) const;
+  void get_angle_conversions(double& to_radians, double& to_degrees) const;
+  void get_length_conversions(double& to_meters, double& to_feet) const;
  private:
 
   // Data Members--------------------------------------------------------------
