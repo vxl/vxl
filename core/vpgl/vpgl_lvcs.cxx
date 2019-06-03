@@ -24,7 +24,7 @@ vpgl_lvcs::cs_names vpgl_lvcs::str_to_enum(const char* s)
 }
 
 void vpgl_lvcs::set_angle_conversions(AngUnits ang_unit, double& to_radians,
-                                      double& to_degrees)
+                                      double& to_degrees) const
 {
   to_radians=1.0;
   to_degrees=1.0;
@@ -35,7 +35,7 @@ void vpgl_lvcs::set_angle_conversions(AngUnits ang_unit, double& to_radians,
 }
 
 void vpgl_lvcs::set_length_conversions(LenUnits len_unit, double& to_meters,
-                                       double& to_feet)
+                                       double& to_feet) const
 {
   to_meters = 1.0;
   to_feet = 1.0;
@@ -204,19 +204,19 @@ vpgl_lvcs::vpgl_lvcs(double lat_low, double lon_low,
   this->compute_scale();
 }
 
-double vpgl_lvcs::radians_to_degrees(const double val)
+double vpgl_lvcs::radians_to_degrees(const double val) const
 {
   return val*RADIANS_TO_DEGREES;
 }
 
-void  vpgl_lvcs::radians_to_degrees(double& x, double& y, double& z)
+void  vpgl_lvcs::radians_to_degrees(double& x, double& y, double& z) const
 {
   x = x * RADIANS_TO_DEGREES;
   y = y * RADIANS_TO_DEGREES;
   z = z * RADIANS_TO_DEGREES;
 }
 
-void vpgl_lvcs::degrees_to_dms(double geoval, int& degrees, int& minutes, double& seconds)
+void vpgl_lvcs::degrees_to_dms(double geoval, int& degrees, int& minutes, double& seconds) const
 {
   double fmin = std::fabs(geoval - (int)geoval)*60.0;
   int isec = (int) ((fmin - (int)fmin)*60.0 + .5);
@@ -367,7 +367,7 @@ void vpgl_lvcs::local_to_global(const double pointin_x,
                                 double& pointout_z,
                                 AngUnits output_ang_unit,
                                 LenUnits output_len_unit
-                               )
+                               ) const
 {
   double local_to_meters, local_to_feet, local_to_radians, local_to_degrees;
   this->set_angle_conversions(geo_angle_unit_, local_to_radians,
@@ -571,7 +571,8 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
                                 double& pointout_y,
                                 double& pointout_z,
                                 AngUnits input_ang_unit,
-                                LenUnits input_len_unit)
+                                LenUnits input_len_unit
+                               ) const
 {
   double local_to_meters, local_to_feet, local_to_radians, local_to_degrees;
   this->set_angle_conversions(geo_angle_unit_, local_to_radians,
@@ -898,7 +899,7 @@ void vpgl_lvcs::write(std::ostream& strm)  // write just "read" would read
 
 //------------------------------------------------------------
 //: Transform from local co-ordinates to north=y,east=x.
-void vpgl_lvcs::local_transform(double& x, double& y)
+void vpgl_lvcs::local_transform(double& x, double& y) const
 {
   double theta=theta_;
   if (geo_angle_unit_ == DEG)
@@ -926,7 +927,7 @@ void vpgl_lvcs::local_transform(double& x, double& y)
 
 //------------------------------------------------------------
 //: Transform from north=y,east=x aligned axes to local co-ordinates.
-void vpgl_lvcs::inverse_local_transform(double& x, double& y)
+void vpgl_lvcs::inverse_local_transform(double& x, double& y) const
 {
   double theta=theta_;
   if (geo_angle_unit_ == DEG)
