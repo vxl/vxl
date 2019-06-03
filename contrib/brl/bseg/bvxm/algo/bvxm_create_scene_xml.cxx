@@ -24,7 +24,7 @@ void bvxm_create_scene_xml(std::string const& scene_xml, std::string const& worl
                            float corner_x, float corner_y, float corner_z,
                            unsigned int dim_x, unsigned int dim_y, unsigned int dim_z,
                            float voxel_size,
-                           vpgl_lvcs lvcs, std::string const& lvcs_file,
+                           vpgl_lvcs const& lvcs, std::string const& lvcs_file,
                            float min_ocp_prob, float max_ocp_prob, unsigned int max_scale)
 {
   if (!vul_file::exists(lvcs_file)) {
