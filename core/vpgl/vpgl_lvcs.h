@@ -91,27 +91,28 @@ class vpgl_lvcs : public vbl_ref_count
                        cs_names cs_name,        // this is output global cs
                        double& lon, double& lat, double& gz,
                        AngUnits output_ang_unit=DEG,
-                       LenUnits output_len_unit=METERS);
+                       LenUnits output_len_unit=METERS) const;
 
   void global_to_local(const double lon, const double lat, const double gz,
                        cs_names cs_name,        // this is input global cs
                        double& lx, double& ly, double& lz,
                        AngUnits output_ang_unit=DEG,
-                       LenUnits output_len_unit=METERS);
+                       LenUnits output_len_unit=METERS) const;
 
-  void radians_to_degrees(double& lon, double& lat, double& z);
-  double radians_to_degrees(const double val);
-  void degrees_to_dms(double, int& degrees, int& minutes, double& seconds);
-  void radians_to_dms(double, int& degrees, int& minutes, double& seconds);
+  void radians_to_degrees(double& lon, double& lat, double& z) const;
+  double radians_to_degrees(const double val) const;
+  void degrees_to_dms(double, int& degrees, int& minutes, double& seconds) const;
+  void radians_to_dms(double, int& degrees, int& minutes, double& seconds) const;
   // uses the units defined for *this lvcs, e.g. deg and meters. computes cartesian vector (p1 - p0)
   void angle_diff_to_cartesian_vector(const double lon0, const double lat0, const double lon1, const double lat1,
-                                                 double& cart_dx, double& cart_dy) {
-  double l0x, l0y, l0z, l1x, l1y, l1z;
-  this->global_to_local(lon0, lat0, 0.0, local_cs_name_, l0x, l0y, l0z);
-  this->global_to_local(lon1, lat1, 0.0, local_cs_name_, l1x, l1y, l1z);
-  cart_dx = l1x-l0x;
-  cart_dy = l1y-l0y;
-}
+                                      double& cart_dx, double& cart_dy) const
+  {
+    double l0x, l0y, l0z, l1x, l1y, l1z;
+    this->global_to_local(lon0, lat0, 0.0, local_cs_name_, l0x, l0y, l0z);
+    this->global_to_local(lon1, lat1, 0.0, local_cs_name_, l1x, l1y, l1z);
+    cart_dx = l1x-l0x;
+    cart_dy = l1y-l0y;
+  }
 
   // accessors
   void get_origin(double& lat, double& lon, double& elev) const;
@@ -146,12 +147,12 @@ class vpgl_lvcs : public vbl_ref_count
 
  protected:
   void compute_scale();
-  void local_transform(double& x, double& y);
-  void inverse_local_transform(double& x, double& y);
+  void local_transform(double& x, double& y) const;
+  void inverse_local_transform(double& x, double& y) const;
   void set_angle_conversions(AngUnits ang_unit, double& to_radians,
-                             double& to_degrees);
+                             double& to_degrees) const;
   void set_length_conversions(LenUnits len_unit, double& to_meters,
-                              double& to_feet);
+                              double& to_feet) const;
  private:
 
   // Data Members--------------------------------------------------------------
@@ -230,7 +231,7 @@ inline void vpgl_lvcs::set_origin(const double lon, const double lat, const doub
     localCSOriginElev_ = elev;
 }
 
-inline void vpgl_lvcs::radians_to_dms(double rad, int& degrees, int& minutes, double& seconds)
+inline void vpgl_lvcs::radians_to_dms(double rad, int& degrees, int& minutes, double& seconds) const
 {
   degrees_to_dms(radians_to_degrees(rad), degrees,  minutes, seconds);
 }
