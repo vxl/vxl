@@ -77,8 +77,7 @@ void vpgl_local_rational_camera<T>::project(
 {
   // first, convert to global geographic coordinates
   double lon, lat, gz;
-  vpgl_lvcs& non_const_lvcs = const_cast<vpgl_lvcs&>(lvcs_);
-  non_const_lvcs.local_to_global(x, y, z, vpgl_lvcs::wgs84, lon, lat, gz);
+  lvcs_.local_to_global(x, y, z, vpgl_lvcs::wgs84, lon, lat, gz);
 
   // then, project global to 2D
   vpgl_rational_camera<T>::project((T)lon, (T)lat, (T)gz, u, v);
