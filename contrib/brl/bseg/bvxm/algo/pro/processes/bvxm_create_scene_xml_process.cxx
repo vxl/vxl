@@ -62,13 +62,13 @@ bool bvxm_create_scene_xml_process(bprb_func_process& pro)
   auto       dim_y  = pro.get_input<unsigned>(in_i++);
   auto       dim_z  = pro.get_input<unsigned>(in_i++);
   auto     voxel_size  = pro.get_input<float>(in_i++);
-  vpgl_lvcs_sptr  lvcs  = pro.get_input<vpgl_lvcs_sptr>(in_i++);
+  vpgl_lvcs_sptr  lvcs_sptr = pro.get_input<vpgl_lvcs_sptr>(in_i++);
   std::string lvcs_file  = pro.get_input<std::string>(in_i++);
   auto   min_ocp_prob  = pro.get_input<float>(in_i++);
   auto   max_ocp_prob  = pro.get_input<float>(in_i++);
   auto   max_scale  = pro.get_input<unsigned>(in_i++);
 
-  if (!lvcs) {
+  if (!lvcs_sptr) {
     std::cerr << pro.name() << ": input scene lvcs is empty!!\n";
     return false;
   }
@@ -82,7 +82,7 @@ bool bvxm_create_scene_xml_process(bprb_func_process& pro)
                         corner_x, corner_y, corner_z,
                         dim_x, dim_y, dim_z,
                         voxel_size,
-                        *lvcs, lvcs_file,
+                        *lvcs_sptr, lvcs_file,
                         min_ocp_prob, max_ocp_prob, max_scale);
 
   return true;
