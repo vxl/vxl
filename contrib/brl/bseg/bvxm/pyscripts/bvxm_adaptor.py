@@ -227,7 +227,7 @@ def rpc_registration(world, cropped_cam, cropped_edge_image, uncertainty, shift_
     batch.set_input_from_db(2, cropped_edge_image)
     batch.set_input_bool(3, shift_3d_flag)
     if is_uncertainty_float == 1:
-        print "uncertainty = ", uncertainty
+        print("uncertainty = ", uncertainty)
         batch.set_input_float(4, uncertainty)
     else:
         batch.set_input_from_db(4, uncertainty)

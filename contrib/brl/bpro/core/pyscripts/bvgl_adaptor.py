@@ -128,7 +128,7 @@ def geo_index_extents(geo_index_txt):
     batch.remove_data(id)
 
     n_scene = len(extents_flat)/4
-    extents = [extents_flat[4*i : 4*i+4] for i in xrange(n_scene)]
+    extents = [extents_flat[4*i : 4*i+4] for i in range(n_scene)]
     return extents
   else:
     return None
