@@ -1,7 +1,7 @@
 # contrib/brl/bseg/bpro_batch/CMakeLists.txt
 project(bpro_batch C)
-include( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
-if( PYTHON_FOUND )
+
+if( PYTHONLIBS_FOUND )
   include_directories( ${PYTHON_INCLUDE_DIRS} )
   include_directories( ${BRL_INCLUDE_DIR}/bpro )
   include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
@@ -11,7 +11,7 @@ if( PYTHON_FOUND )
   )
 
   vxl_add_library(LIBRARY_NAME bpro_batch LIBRARY_SOURCES  ${bpro_batch_sources})
-  target_link_libraries(bpro_batch bprb brdb bbas_pro ${PYTHON_LIBRARY})
+  target_link_libraries(bpro_batch bprb brdb bbas_pro ${PYTHON_LIBRARIES})
 
   if( BUILD_TESTING )
     add_subdirectory(tests)

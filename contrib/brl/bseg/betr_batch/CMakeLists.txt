@@ -1,9 +1,7 @@
 # contrib/brl/bseg/betr_batch/CMakeLists.txt
 project( betr_batch )
 
-include( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
-
-if( PYTHON_FOUND )
+if( PYTHONLIBS_FOUND )
   include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
   if( EXPAT_FOUND )
     include_directories( ${PYTHON_INCLUDE_DIRS} )
@@ -36,11 +34,11 @@ if( PYTHON_FOUND )
       target_link_libraries(betr_batch betr_pro vpgl_pro vil_pro brip_pro sdet_pro brad_pro brad_io bprb brdb bpro_batch)
 
       if(PYTHON_DEBUG_LIBRARIES)
-        target_link_libraries( betr_batch debug ${PYTHON_DEBUG_LIBRARY})
+        target_link_libraries( betr_batch debug ${PYTHON_DEBUG_LIBRARIES})
       endif()
 
       if(PYTHON_LIBRARIES)
-        target_link_libraries( betr_batch optimized ${PYTHON_LIBRARY})
+        target_link_libraries( betr_batch optimized ${PYTHON_LIBRARIES})
       endif()
 
 

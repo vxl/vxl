@@ -2,12 +2,11 @@
 if (HAS_GEOTIFF)
 project( boxm2_batch )
 
-include( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
 include( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 include( ${BRL_CMAKE_DIR}/FindHadoop.cmake )
 include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
-if( PYTHON_FOUND )
+if( PYTHONLIBS_FOUND )
   include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
   if( EXPAT_FOUND )
     include_directories( ${PYTHON_INCLUDE_DIRS} )
@@ -60,11 +59,11 @@ if( PYTHON_FOUND )
       endif()
 
       if(PYTHON_DEBUG_LIBRARIES)
-        target_link_libraries( boxm2_batch debug ${PYTHON_DEBUG_LIBRARY})
+        target_link_libraries( boxm2_batch debug ${PYTHON_DEBUG_LIBRARIES})
       endif()
 
       if(PYTHON_LIBRARIES)
-        target_link_libraries( boxm2_batch optimized ${PYTHON_LIBRARY})
+        target_link_libraries( boxm2_batch optimized ${PYTHON_LIBRARIES})
       endif()
 
 

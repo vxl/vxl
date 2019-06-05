@@ -51,6 +51,10 @@ if(OpenCL_FOUND)
 
 endif()
 
+# discover python libraries if requested
+if(VXL_BUILD_BRL_PYTHON)
+  find_package(PythonLibs)
+endif()
 
 # Location of brl's private FindXXX.cmake CMake modules.
 set( BRL_CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR}/bmods )
