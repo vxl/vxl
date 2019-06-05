@@ -40,8 +40,7 @@ register_datatypes(PyObject *self, PyObject *args)
   return Py_None;
 }
 
-PyMODINIT_FUNC
-initbetr_batch(void)
+void init_betr_batch_methods(void)
 {
   PyMethodDef reg_pro;
   reg_pro.ml_name = "register_processes";
@@ -61,6 +60,31 @@ initbetr_batch(void)
   for (int i=0; i<METHOD_NUM; ++i) {
     betr_batch_methods[i+2]=batch_methods[i];
   }
+}
 
+// python3
+#if PY_MAJOR_VERSION >= 3
+PyMODINIT_FUNC
+PyInit_betr_batch(void)
+{
+  init_betr_batch_methods();
+  static struct PyModuleDef betr_batch_def = {
+      PyModuleDef_HEAD_INIT,
+      "betr_batch",        // m_name
+      "betr_batch module", // m_doc
+      -1,                  // m_size
+      betr_batch_methods,  // m_methods
+    };
+  return PyModule_Create(&betr_batch_def);
+}
+
+// python2
+#else
+PyMODINIT_FUNC
+initbetr_batch(void)
+{
+  init_betr_batch_methods();
   Py_InitModule("betr_batch", betr_batch_methods);
 }
+
+#endif

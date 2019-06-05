@@ -2,6 +2,24 @@
 #include <iostream>
 #include "bpro_batch.h"
 
+// python3 compatability
+#if PY_MAJOR_VERSION >= 3
+
+#  define PyIntObject PyLongObject
+#  define PyInt_Type PyLong_Type
+#  define PyInt_Check PyLong_Check
+#  define PyInt_FromLong PyLong_FromLong
+#  define PyInt_AsLong PyLong_AsLong
+
+#  define PyString_InternFromString PyUnicode_InternFromString
+#  define PyString_FromFormat PyUnicode_FromFormat
+#  define PyString_Check PyUnicode_Check
+#  define PyString_FromString PyUnicode_FromString
+#  define PyString_FromStringAndSize PyUnicode_FromStringAndSize
+#  define PyString_AsString PyUnicode_AsUTF8
+
+#endif
+
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_macros.h>
 
