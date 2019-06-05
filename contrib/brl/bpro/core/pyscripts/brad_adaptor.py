@@ -410,9 +410,9 @@ def get_image_footprint(mdata):
         # reshape output vertices
         verts_out = []
         idx = 0
-        for i in xrange(nsheets):
+        for i in range(nsheets):
             verts_out.append([])
-            for j in xrange(nverts[i]):
+            for j in range(nverts[i]):
                 x = verts[idx]; idx += 1
                 y = verts[idx]; idx += 1
                 verts_out[i].append((x,y))

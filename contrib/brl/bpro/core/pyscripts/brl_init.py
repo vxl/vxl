@@ -34,7 +34,7 @@ class MetaFinder(object):
             # clear and useful debug message in case the adaptor has an error
             code = compile(code, pathname, "exec", dont_inherit=True)
             module = imp.new_module(fullname)
-            exec code in module.__dict__
+            exec(code, module.__dict__)
         except:
             __import__(adaptor + '_adaptor')
             return None
@@ -67,29 +67,32 @@ sys.meta_path.append(MetaFinder())
 class DummyBatch(object):
 
     def __getattr__(self, *args, **kwargs):
-        print 'Core adaptors MUST be imported differently. Your must specify'
-        print 'what batch to use. For example:'
-        print
-        print '>> import brl_init'
-        print '>> import vil_adaptor_boxm2_batch'
-        print
-        print 'To import vil_adaptor against boxm2_batch'
-        print
-        print
-        print 'Non-core adaptors must have the following lines at the'
-        print 'beginning of each file:'
-        print '  import brl_init'
-        print '  import {Some}_batch'
-        print '  batch = {Some}_batch'
-        print '  dbvalue = brl_init.dbvalue_factory(batch)'
-        print
-        print 'Where {Some} is the batch for that non-core adaptor, such as'
-        print 'bvxm, boxm2, etc..'
-        print
-        print 'Contrib (non-core) adaptors are imported like normal, for'
-        print 'example:'
-        print
-        print '>> import boxm2_adaptor'
+        buf = '\n'.join([
+            'Core adaptors MUST be imported differently. Your must specify',
+            'what batch to use. For example:',
+            '',
+            '>> import brl_init',
+            '>> import vil_adaptor_boxm2_batch',
+            '',
+            'To import vil_adaptor against boxm2_batch',
+            '',
+            '',
+            'Non-core adaptors must have the following lines at the',
+            'beginning of each file:',
+            '  import brl_init',
+            '  import {Some}_batch',
+            '  batch = {Some}_batch',
+            '  dbvalue = brl_init.dbvalue_factory(batch)',
+            '',
+            'Where {Some} is the batch for that non-core adaptor, such as',
+            'bvxm, boxm2, etc..',
+            '',
+            'Contrib (non-core) adaptors are imported like normal, for',
+            'example:',
+            '',
+            '>> import boxm2_adaptor',
+          ])
+        print(buf)
 
         raise Exception('Batch not registered')
 
@@ -154,7 +157,7 @@ class dbvalue(object):
 
 def remove_data(id):
     if set_smart_register.value:
-        print 'Warning: remove_data disabled when using smart_register'
+        print('Warning: remove_data disabled when using smart_register')
     else:
         boxm2_batch.remove_data(id)
 
