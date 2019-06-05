@@ -18,6 +18,7 @@
 #include <bsgm/pro/bsgm_register.h>
 #include <vcon/pro/vcon_register.h>
 #include <bbas_pro/bbas_register.h>
+
 PyObject *
 register_processes(PyObject *self, PyObject *args)
 {
@@ -63,15 +64,13 @@ register_datatypes(PyObject *self, PyObject *args)
   return Py_None;
 }
 
-PyMODINIT_FUNC
-initbvxm_batch(void)
+void init_bvxm_batch_methods(void)
 {
   PyMethodDef reg_pro;
   reg_pro.ml_name = "register_processes";
   reg_pro.ml_meth = register_processes;
   reg_pro.ml_doc = "register_processes() create instances of each defined process";
   reg_pro.ml_flags = METH_VARARGS;
-
 
   PyMethodDef reg_data;
   reg_data.ml_name = "register_datatypes";
@@ -85,6 +84,31 @@ initbvxm_batch(void)
   for (int i=0; i<METHOD_NUM; ++i) {
     bvxm_batch_methods[i+2]=batch_methods[i];
   }
+}
 
+// python3
+#if PY_MAJOR_VERSION >= 3
+PyMODINIT_FUNC
+PyInit_bvxm_batch(void)
+{
+  init_bvxm_batch_methods();
+  static struct PyModuleDef bvxm_batch_def = {
+      PyModuleDef_HEAD_INIT,
+      "bvxm_batch",        // m_name
+      "bvxm_batch module", // m_doc
+      -1,                  // m_size
+      bvxm_batch_methods,  // m_methods
+    };
+  return PyModule_Create(&bvxm_batch_def);
+}
+
+// python2
+#else
+PyMODINIT_FUNC
+initbvxm_batch(void)
+{
+  init_bvxm_batch_methods();
   Py_InitModule("bvxm_batch", bvxm_batch_methods);
 }
+
+#endif

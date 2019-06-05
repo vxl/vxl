@@ -105,9 +105,7 @@ register_datatypes(PyObject *self, PyObject *args)
   return Py_None;
 }
 
-
-PyMODINIT_FUNC
-initbstm_batch(void)
+void init_bstm_batch_methods(void)
 {
   PyMethodDef reg_pro;
   reg_pro.ml_name = "register_processes";
@@ -127,6 +125,31 @@ initbstm_batch(void)
   for (int i=0; i<METHOD_NUM; ++i) {
     bstm_batch_methods[i+2]=batch_methods[i];
   }
+}
 
+// python3
+#if PY_MAJOR_VERSION >= 3
+PyMODINIT_FUNC
+PyInit_bstm_batch(void)
+{
+  init_bstm_batch_methods();
+  static struct PyModuleDef bstm_batch_def = {
+      PyModuleDef_HEAD_INIT,
+      "bstm_batch",        // m_name
+      "bstm_batch module", // m_doc
+      -1,                  // m_size
+      bstm_batch_methods,  // m_methods
+    };
+  return PyModule_Create(&bstm_batch_def);
+}
+
+// python2
+#else
+PyMODINIT_FUNC
+initbstm_batch(void)
+{
+  init_bstm_batch_methods();
   Py_InitModule("bstm_batch", bstm_batch_methods);
 }
+
+#endif

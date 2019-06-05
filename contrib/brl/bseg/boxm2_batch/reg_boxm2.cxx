@@ -40,8 +40,9 @@
 #include <volm/pro/volm_register.h>
 #include <boxm2/volm/pro/boxm2_volm_register.h>
 #endif
+
 PyObject *
-    register_processes(PyObject *self, PyObject *args)
+register_processes(PyObject *self, PyObject *args)
 {
     boxm2_register::register_process();
     boxm2_cpp_register::register_process();
@@ -84,7 +85,7 @@ PyObject *
 
 
 PyObject *
-    register_datatypes(PyObject *self, PyObject *args)
+register_datatypes(PyObject *self, PyObject *args)
 {
     register_basic_datatypes();
 
@@ -138,8 +139,7 @@ void release_ocl_contexts()
 }
 #endif
 
-PyMODINIT_FUNC
-    initboxm2_batch(void)
+void init_boxm2_batch_methods(void)
 {
     PyMethodDef reg_pro;
     reg_pro.ml_name = "register_processes";
@@ -159,9 +159,37 @@ PyMODINIT_FUNC
     for (int i=0; i<METHOD_NUM; ++i) {
         boxm2_batch_methods[i+2]=batch_methods[i];
     }
+}
 
+// python3
+#if PY_MAJOR_VERSION >= 3
+PyMODINIT_FUNC
+PyInit_boxm2_batch(void)
+{
 #if defined(HAS_OPENCL) && HAS_OPENCL
     Py_AtExit(release_ocl_contexts);
 #endif
+    init_boxm2_batch_methods();
+    static struct PyModuleDef boxm2_batch_def = {
+        PyModuleDef_HEAD_INIT,
+        "boxm2_batch",        // m_name
+        "boxm2_batch module", // m_doc
+        -1,                   // m_size
+        boxm2_batch_methods,  // m_methods
+      };
+    return PyModule_Create(&boxm2_batch_def);
+}
+
+// python2
+#else
+PyMODINIT_FUNC
+initboxm2_batch(void)
+{
+#if defined(HAS_OPENCL) && HAS_OPENCL
+    Py_AtExit(release_ocl_contexts);
+#endif
+    init_boxm2_batch_methods();
     Py_InitModule("boxm2_batch", boxm2_batch_methods);
 }
+
+#endif
