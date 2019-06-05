@@ -1,7 +1,7 @@
 # contrib/brl/bseg/bvxm_batch/CMakeLists.txt
 if(HAS_GEOTIFF)
-include( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
-if( PYTHON_FOUND )
+
+if( PYTHONLIBS_FOUND )
   include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
   if( EXPAT_FOUND )
     include_directories( ${PYTHON_INCLUDE_DIRS} )
@@ -32,11 +32,11 @@ if( PYTHON_FOUND )
       target_link_libraries(bvxm_batch bprb brdb bpro_batch ${VXL_LIB_PREFIX}vbl bvxm bvxm_pro bvxm_io bvxm_grid_io bvxm_grid_pro ${VXL_LIB_PREFIX}vpgl_io vpgl_pro ${VXL_LIB_PREFIX}vil_io vil_pro sdet_pro brad_pro brad_io bvrml_pro volm_pro brip_pro bapl_pro bvgl_pro bsgm_pro vcon_pro ihog_pro)
 
       if(PYTHON_DEBUG_LIBRARIES)
-        target_link_libraries( bvxm_batch debug ${PYTHON_DEBUG_LIBRARY})
+        target_link_libraries( bvxm_batch debug ${PYTHON_DEBUG_LIBRARIES})
       endif()
 
       if(PYTHON_LIBRARIES)
-        target_link_libraries( bvxm_batch optimized ${PYTHON_LIBRARY})
+        target_link_libraries( bvxm_batch optimized ${PYTHON_LIBRARIES})
       endif()
 
       if( BUILD_TESTING )

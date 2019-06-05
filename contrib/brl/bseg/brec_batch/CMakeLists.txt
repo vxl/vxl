@@ -1,6 +1,6 @@
 # contrib/brl/bseg/brec_batch/CMakeLists.txt
-include( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
-if( PYTHON_FOUND )
+
+if( PYTHONLIBS_FOUND )
   include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
   if( EXPAT_FOUND )
     include_directories( ${PYTHON_INCLUDE_DIRS} )
@@ -27,11 +27,11 @@ if( PYTHON_FOUND )
       target_link_libraries(brec_batch bprb brdb bpro_batch bmdl_pro bvxm_pro bvxm_io bvxm_grid_io brec_pro bbgm_pro bvgl_pro brip_pro bsvg_pro ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vpgl_io vidl_pro vpgl_pro ${VXL_LIB_PREFIX}vil_io vil_pro)
 
       if(PYTHON_DEBUG_LIBRARIES)
-        target_link_libraries( brec_batch debug ${PYTHON_DEBUG_LIBRARY})
+        target_link_libraries( brec_batch debug ${PYTHON_DEBUG_LIBRARIES})
       endif()
 
       if(PYTHON_LIBRARIES)
-        target_link_libraries( brec_batch optimized ${PYTHON_LIBRARY})
+        target_link_libraries( brec_batch optimized ${PYTHON_LIBRARIES})
       endif()
 
       if( BUILD_TESTING )

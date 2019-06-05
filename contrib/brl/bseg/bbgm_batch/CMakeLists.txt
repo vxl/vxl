@@ -1,6 +1,6 @@
 # contrib/brl/bseg/bbgm_batch/CMakeLists.txt
-include( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
-if( PYTHON_FOUND )
+
+if( PYTHONLIBS_FOUND )
   include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
   if( EXPAT_FOUND )
     if(EXPATPP_FOUND)
@@ -45,11 +45,11 @@ if( PYTHON_FOUND )
             vbl vil_io vil_io expat expatpp)
 
           if(PYTHON_DEBUG_LIBRARIES)
-            target_link_libraries( bbgm_batch debug ${PYTHON_DEBUG_LIBRARY})
+            target_link_libraries( bbgm_batch debug ${PYTHON_DEBUG_LIBRARIES})
           endif()
 
           if(PYTHON_LIBRARIES)
-            target_link_libraries( bbgm_batch optimized ${PYTHON_LIBRARY})
+            target_link_libraries( bbgm_batch optimized ${PYTHON_LIBRARIES})
           endif()
 
           if( BUILD_TESTING )
