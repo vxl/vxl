@@ -1,21 +1,25 @@
 # basic radiometery library
 
+  # Install resource files
+  vxl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/brad_sat_img_calibration_table.txt)
+  vxl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/brad_sat_img_sun_irradiance_table.txt)
+
   # Set up brad_where_brl_lib_dir.h to have a macro set to $CMAKE_LIBRARY_OUTPUT_DIRECTORY
-  vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/brad_where_brl_lib_dir.h.in
-    ${CMAKE_CURRENT_BINARY_DIR}/brad_where_brl_lib_dir.h include/vxl/bbas/brad
-  )
+  # vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/brad_where_brl_lib_dir.h.in
+  #   ${CMAKE_CURRENT_BINARY_DIR}/brad_where_brl_lib_dir.h include/vxl/bbas/brad
+  # )
 
   # Copy the Eulerspiral lookup-table file to the BRL library folder
-  if(CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-    vxl_configure_file_copyonly( ${CMAKE_CURRENT_SOURCE_DIR}/brad_sat_img_calibration_table.txt
-      ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/brad_sat_img_calibration_table.txt ${CMAKE_INSTALL_DATAROOTDIR}/vxl/bbas/brad
-    )
-    vxl_configure_file_copyonly( ${CMAKE_CURRENT_SOURCE_DIR}/brad_sat_img_sun_irradiance_table.txt
-      ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/brad_sat_img_sun_irradiance_table.txt ${CMAKE_INSTALL_DATAROOTDIR}/vxl/bbas/brad
-    )
-  endif()
+  # if(CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+  #   vxl_configure_file_copyonly( ${CMAKE_CURRENT_SOURCE_DIR}/brad_sat_img_calibration_table.txt
+  #     ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/brad_sat_img_calibration_table.txt ${CMAKE_INSTALL_DATAROOTDIR}/vxl/bbas/brad
+  #   )
+  #   vxl_configure_file_copyonly( ${CMAKE_CURRENT_SOURCE_DIR}/brad_sat_img_sun_irradiance_table.txt
+  #     ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/brad_sat_img_sun_irradiance_table.txt ${CMAKE_INSTALL_DATAROOTDIR}/vxl/bbas/brad
+  #   )
+  # endif()
 
-  add_definitions(-DBRAD_WHERE_BRL_LIB_DIR_H_EXISTS)
+  # add_definitions(-DBRAD_WHERE_BRL_LIB_DIR_H_EXISTS)
   include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 
   include_directories( ${BRL_INCLUDE_DIR}/bbas )
@@ -49,7 +53,7 @@
   aux_source_directory(Templates brad_sources)
   vxl_add_library(LIBRARY_NAME brad LIBRARY_SOURCES ${brad_sources} )
 
-  target_link_libraries(brad bsta bsta_algo ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul )
+  target_link_libraries(brad bres bsta bsta_algo ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul )
 
   add_subdirectory(io)
 

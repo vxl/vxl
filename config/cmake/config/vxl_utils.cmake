@@ -52,6 +52,17 @@ macro(vxl_configure_file_copyonly infile outfile installprefix)
       COMPONENT Development )
 endmacro()
 
+##
+#
+# A macro to install resource files
+#
+macro(vxl_resource_file infile)
+  install(FILES ${infile}
+      DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}
+      PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
+      COMPONENT Resource )
+endmacro()
+
 #
 # A macro to configure where libraries are to be installed for
 # vxl for adding a library, setting it's properties, and

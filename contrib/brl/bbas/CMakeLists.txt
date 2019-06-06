@@ -2,6 +2,9 @@
 # main package for basic operations common to all libraries
 # All libraries are mutually independent, except for bxml <-- bdgl
 
+# internal resource locating
+add_subdirectory(bres)
+
 # xml<->vxl conversion
 add_subdirectory(bxml)
 
