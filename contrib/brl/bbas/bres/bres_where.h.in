@@ -1,0 +1,23 @@
+//:
+// \file
+// \author Noah Johnson
+// \brief Lets CMake define where source and install directories are
+
+// Note: The make system (e.g. CMake) should generate a file - bres_where.h - from
+// this, in which the macro is set correctly.
+// For non-CMake systems this might cause a problem.  In particular if there is
+// no brad_where.h, some other stuff might not compile.
+// If we supply a default brad_where.h, it would be changed by CMake, and
+// may get checked back into the repository by accident.
+
+/* #ifndef BRES_LIB_DIR // file guard */
+/* #define BRES_LIB_DIR "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@" */
+/* #endif */
+
+#ifndef BRES_SOURCE_DIR // file guard
+#define BRES_SOURCE_DIR "@VXL_SOURCE_DIR@"
+#endif
+
+#ifndef BRES_INSTALL_DIR // file guard
+#define BRES_INSTALL_DIR "@CMAKE_INSTALL_FULL_DATAROOTDIR@"
+#endif

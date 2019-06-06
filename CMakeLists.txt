@@ -78,7 +78,7 @@ SET(VXL_LIBRARY_PROPERTIES ${VXL_LIBRARY_PROPERTIES} VERSION "${VXL_VERSION}"
 include(CMakeDependentOption)
 include(${CMAKE_CURRENT_SOURCE_DIR}/config/cmake/VXLInitializeBuildType.cmake)
 
-#Disable overzealous compiler warning.  If the definition is truely missing a link error will be created.
+#Disable overzealous compiler warning.  If the definition is truly missing a link error will be created.
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG(-Wno-undefined-var-template HAS_NO_UNDEFINED_VAR_TEMPLATE)
 if( HAS_NO_UNDEFINED_VAR_TEMPLATE )
