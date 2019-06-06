@@ -37,12 +37,12 @@ std::string bres_find::locate(std::string const& resource_name)
   }
 
   // Load CMake paths
-  const std::string source_dir("");
-  const std::string install_dir("");
+  std::string source_dir("");
+  std::string install_dir("");
   #ifdef BRES_WHERE_H_EXISTS
     #include "bres_where.h"
-    const std::string source_dir = std::string(BRES_SOURCE_DIR);
-    const std::string install_dir = std::string(BRES_INSTALL_DIR);
+    source_dir = std::string(BRES_SOURCE_DIR);
+    install_dir = std::string(BRES_INSTALL_DIR);
   #endif
 
   // check source dir

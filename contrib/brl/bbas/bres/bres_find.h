@@ -13,10 +13,6 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-#ifndef BRES_INSTALL_DIR // file guard
-#define BRES_INSTALL_DIR "@CMAKE_INSTALL_FULL_DATAROOTDIR@"
-#endif
-
 class bres_find
 {
  public:
