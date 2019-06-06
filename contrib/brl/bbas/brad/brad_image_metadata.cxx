@@ -158,16 +158,6 @@ std::istream&  operator>>(std::istream& s, brad_image_metadata& md)
 bool brad_image_metadata::read_band_dependent_gain_offset()
 {
   // Locate the full resource path
-  /* std::string file_path = this->calibration_build_dir + std::string("/") + this->gain_offset_file_name; */
-  /* std::ifstream ifs(file_path.c_str()); */
-  /* if (!ifs.good()) { */
-  /*   file_path = this->calibration_install_dir + std::string("/") + this->gain_offset_file_name; */
-  /*   ifs.open(file_path); */
-  /*   if (!ifs.good()) { */
-  /*     std::cerr << "Error opening band dependent calibration factor file: " << file_path << std::endl; */
-  /*     return false; */
-  /*   } */
-  /* } */
   std::string file_path = bres_find::locate(this->gain_offset_file_name);
   std::ifstream ifs(file_path.c_str());
 
@@ -271,16 +261,6 @@ bool brad_image_metadata::read_band_dependent_gain_offset()
 bool brad_image_metadata::read_band_dependent_solar_irradiance()
 {
   // Locate the full resource path
-  /* std::string file_path = this->calibration_build_dir + std::string("/") + this->sun_irradiance_file_name; */
-  /* std::ifstream ifs(file_path.c_str()); */
-  /* if (!ifs.good()) { */
-  /*   file_path = this->calibration_install_dir + std::string("/") + this->sun_irradiance_file_name; */
-  /*   ifs.open(file_path); */
-  /*   if (!ifs.good()) { */
-  /*     std::cerr << "Error opening band dependent solar exoatmospheric irradiance file: " << file_path << std::endl; */
-  /*     return false; */
-  /*   } */
-  /* } */
   std::string file_path = bres_find::locate(this->sun_irradiance_file_name);
   std::ifstream ifs(file_path.c_str());
 

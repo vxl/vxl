@@ -15,7 +15,7 @@
 /* #endif */
 
 #ifndef BRES_SOURCE_DIR // file guard
-#define BRES_SOURCE_DIR "@VXL_SOURCE_DIR@"
+#define BRES_SOURCE_DIR "@VXL_ROOT_SOURCE_DIR@"
 #endif
 
 #ifndef BRES_INSTALL_DIR // file guard
