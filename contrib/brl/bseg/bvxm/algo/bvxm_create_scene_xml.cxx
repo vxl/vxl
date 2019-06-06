@@ -29,7 +29,7 @@ void bvxm_create_scene_xml(std::string const& scene_xml, std::string const& worl
 {
   if (!vul_file::exists(lvcs_file)) {
     std::ostringstream buffer;
-    buffer << "bvxm_create_scene_xml_large_scale: can not find lvcs file - " << lvcs_file << "!!\n";
+    buffer << "bvxm_create_scene_xml: can not find lvcs file - " << lvcs_file << "!!\n";
     throw std::invalid_argument(buffer.str());
   }
 
