@@ -150,7 +150,6 @@ bool brad_image_metadata::read_band_dependent_gain_offset()
 {
   // Locate the full resource path
   std::string file_path = bres_find::locate(this->gain_offset_file_name);
-  std::cout << "read_band_dependent_gain_offset: file_path = <" << file_path << ">" << std::endl;
   std::ifstream ifs(file_path.c_str());
 
   // read the file, starting by ignore header comments
@@ -254,7 +253,6 @@ bool brad_image_metadata::read_band_dependent_solar_irradiance()
 {
   // Locate the full resource path
   std::string file_path = bres_find::locate(this->sun_irradiance_file_name);
-  std::cout << "read_band_dependent_solar_irradiance: file_path = <" << file_path << ">" << std::endl;
   std::ifstream ifs(file_path.c_str());
 
   // read the file, starting by ignore header comments

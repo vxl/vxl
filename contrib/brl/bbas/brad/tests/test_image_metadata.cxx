@@ -63,9 +63,7 @@ static void test_image_metadata()
      succeed = (std::fabs(md.effect_band_width_[i] - md2.effect_band_width_[i]) <= tol);
    }
    TEST("i/o test: effectBandWidth", succeed, true);
-   std::cout << "READING GAIN OFFSET" << std::endl;
    md.read_band_dependent_gain_offset();
-   std::cout << "READING SOLAR IRRADIANCE" << std::endl;
    md.read_band_dependent_solar_irradiance();
 
    md.print_out_radiometric_parameter();
