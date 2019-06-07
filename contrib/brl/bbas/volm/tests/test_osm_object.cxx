@@ -1,4 +1,5 @@
 #include <testlib/testlib_test.h>
+#include <bres/bres_find.h>
 #include <volm/volm_osm_object_point.h>
 #include <volm/volm_osm_object_line.h>
 #include <volm/volm_osm_object_polygon.h>
@@ -76,7 +77,7 @@ static void test_osm_object_polygon()
 static void test_load_osm(std::string const& osm_file)
 {
 
-  std::string osm_to_volm_file = volm_osm_category_io::category_dir + std::string("/") + volm_osm_category_io::osm_to_volm_labels_txt;
+  std::string osm_to_volm_file = bres_find::locate(volm_osm_category_io::osm_to_volm_labels_txt);
   // create a volm_osm_objects
   volm_osm_objects objs(osm_file, osm_to_volm_file);
   std::cout << " parsing osm file: " << osm_file << std::endl;

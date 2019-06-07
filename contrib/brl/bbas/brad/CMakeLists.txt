@@ -4,8 +4,6 @@
   vxl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/brad_sat_img_calibration_table.txt)
   vxl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/brad_sat_img_sun_irradiance_table.txt)
 
-  include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
-
   include_directories( ${BRL_INCLUDE_DIR}/bbas )
   include_directories(${GEL_INCLUDE_DIR})
 

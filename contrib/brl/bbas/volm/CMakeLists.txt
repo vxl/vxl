@@ -9,29 +9,13 @@ if(HAS_GEOTIFF)
 include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 if(EXPAT_FOUND)
   if(EXPATPP_FOUND)
-    # Set up volm_where_brl_lib_dir.h to have a macro set to $CMAKE_LIBRARY_OUTPUT_DIRECTORY
-    vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/volm_where_brl_lib_dir.h.in
-      ${CMAKE_CURRENT_BINARY_DIR}/volm_where_brl_lib_dir.h include/vxl/bbas/volm
-    )
-    # copy the necessary text table files to the BRL library folder
-    if(CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-      vxl_configure_file_copyonly(${CMAKE_CURRENT_SOURCE_DIR}/osm_to_volm_labels.txt
-       ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/osm_to_volm_labels.txt include/vxl/bbas/volm
-      )
-      vxl_configure_file_copyonly(${CMAKE_CURRENT_SOURCE_DIR}/fallback_category.txt
-       ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/fallback_category.txt include/vxl/bbas/volm
-      )
-      vxl_configure_file_copyonly(${CMAKE_CURRENT_SOURCE_DIR}/bae_tag_to_volm_labels.txt
-       ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/bae_tag_to_volm_labels.txt include/vxl/bbas/volm
-      )
-      vxl_configure_file_copyonly(${CMAKE_CURRENT_SOURCE_DIR}/road_junction_category.txt
-       ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/road_junction_category.txt include/vxl/bbas/volm
-      )
-    endif()
-    
-    add_definitions(-DVOLM_WHERE_BRL_LIB_DIR_H_EXISTS)
-    include_directories(${CMAKE_CURRENT_BINARY_DIR})
-  
+
+    # Install resource files
+    vxl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/osm_to_volm_labels.txt)
+    vxl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/fallback_category.txt)
+    vxl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/bae_tag_to_volm_labels.txt)
+    vxl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/road_junction_category.txt)
+
     include_directories( ${BRL_INCLUDE_DIR} )
     include_directories( ${BRL_INCLUDE_DIR}/bbas/bpgl )
     include_directories( ${GEL_INCLUDE_DIR} )

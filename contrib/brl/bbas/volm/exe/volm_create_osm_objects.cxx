@@ -11,6 +11,7 @@
 //
 #include <iostream>
 #include <utility>
+#include <bres/bres_find.h>
 #include <volm/volm_tile.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
@@ -60,7 +61,7 @@ int main(int argc, char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   // check the osm_to_volm file
-  std::string osm_to_volm_txt = volm_osm_category_io::category_dir + std::string("/") + volm_osm_category_io::osm_to_volm_labels_txt;
+  std::string osm_to_volm_txt = bres_find::locate(volm_osm_category_io::osm_to_volm_labels_txt);
   if (!vul_file::exists(osm_to_volm_txt)) {
     log << "ERROR: can not find osm_to_volm txt file: " << osm_to_volm_txt << '\n';
     error_report(err_log_file.str(), log.str());

@@ -13,6 +13,7 @@
 
 #include <algorithm>
 #include <bkml/bkml_write.h>
+#include <bres/bres_find.h>
 #include <iostream>
 #include <utility>
 #include <vcl_where_root_dir.h>
@@ -84,7 +85,7 @@ int main(int argc, char** argv)
   }
 
   // load osm_to_volm table
-  std::string osm_to_volm_txt = volm_osm_category_io::category_dir + std::string("/") + volm_osm_category_io::osm_to_volm_labels_txt;
+  std::string osm_to_volm_txt = bres_find::locate(volm_osm_category_io::osm_to_volm_labels_txt);
   if (!vul_file::exists(osm_to_volm_txt)) {
     log << "ERROR: can not find osm_to_volm txt file: " << osm_to_volm_txt << '\n';
     error(log_file, log.str());

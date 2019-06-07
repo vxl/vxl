@@ -1,16 +1,10 @@
 #include "volm_category_io.h"
 //:
 // \file
+#include <bres/bres_find.h>
 #include <vul/vul_file.h>
 #include <vcl_where_root_dir.h>
 #include "volm_utils.h"
-
-#ifdef VOLM_WHERE_BRL_LIB_DIR_H_EXISTS
-  #include <volm_where_brl_lib_dir.h>
-  const std::string volm_osm_category_io::category_dir = std::string(BRL_LIB_DIR);
-#else
-  const std::string volm_osm_category_io::category_dir = std::string();
-#endif
 
 const std::string volm_osm_category_io::osm_to_volm_labels_txt = std::string("osm_to_volm_labels.txt");
 const std::string volm_osm_category_io::user_to_volm_labels_txt = std::string("bae_tag_to_volm_labels.txt");
@@ -158,7 +152,7 @@ bool volm_osm_category_io::load_road_junction_table(std::string const& filename,
 std::map<std::pair<int, int>, volm_land_layer> load_osm_road_junction_table()
 {
   std::map<std::pair<int, int>, volm_land_layer> m;
-  std::string txt_file = volm_osm_category_io::category_dir + std::string("/") + volm_osm_category_io::road_junction_labels_txt;
+  std::string txt_file = bres_find::locate(volm_osm_category_io::road_junction_labels_txt);
   std::ifstream ifs(txt_file.c_str());
   if (!ifs.is_open()) {
     std::cerr << " cannot open: " << txt_file << '\n';
@@ -184,7 +178,7 @@ std::map<std::pair<int, int>, volm_land_layer> load_osm_road_junction_table()
 std::map<std::string, volm_land_layer> load_tag_to_volm_land_table()
 {
   std::map<std::string, volm_land_layer> m;
-  std::string txt_file = volm_osm_category_io::category_dir + std::string("/") + volm_osm_category_io::user_to_volm_labels_txt;
+  std::string txt_file = bres_find::locate(volm_osm_category_io::user_to_volm_labels_txt);
   std::ifstream ifs(txt_file.c_str());
   if (!ifs.is_open()) {
     std::cerr << " cannot open: " << txt_file << '\n';
@@ -210,7 +204,7 @@ std::map<unsigned, volm_land_layer> create_volm_land_table()
   std::map<std::pair<std::string, std::string>, volm_land_layer> osm_land_table;
   std::map<std::pair<int, int>, volm_land_layer> road_junction_table = load_osm_road_junction_table();
 
-  std::string osm_to_volm_txt = volm_osm_category_io::category_dir + std::string("/") + volm_osm_category_io::osm_to_volm_labels_txt;
+  std::string osm_to_volm_txt = bres_find::locate(volm_osm_category_io::osm_to_volm_labels_txt);
   volm_osm_category_io::load_category_table(osm_to_volm_txt, osm_land_table);
 
   for (auto & mit : nlcd_table)

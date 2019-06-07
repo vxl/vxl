@@ -6,6 +6,7 @@
 #include <bkml/bkml_parser.h>
 #include <bkml/bkml_write.h>
 #include <bpgl/bpgl_camera_utils.h>
+#include <bres/bres_find.h>
 #include <bvgl/bvgl_labelme_parser.h>
 #include <depth_map/depth_map_region_sptr.h>
 #include <vgl/vgl_vector_3d.h>
@@ -22,13 +23,6 @@
 #include <utility>
 #include <vsl/vsl_vector_io.h>
 #include <volm/volm_category_io.h>
-
-#ifdef VOLM_WHERE_BRL_LIB_DIR_H_EXISTS
-  #include <volm_where_brl_lib_dir.h>
-  const std::string volm_io::category_dir = std::string(BRL_LIB_DIR);
-#else
-  const std::string volm_io::category_dir = std::string();
-#endif
 
 const std::string volm_io::fallback_category_txt = std::string("fallback_category.txt");
 
@@ -151,7 +145,7 @@ std::map<unsigned char, std::vector<unsigned char> > create_fallback_label()
   std::map<unsigned char, std::vector<unsigned char> > m;
   std::vector<unsigned char> f(4,0);
   // load the text file
-  std::string txt_file = volm_io::category_dir + std::string("/") + volm_io::fallback_category_txt;
+  std::string txt_file = bres_find::locate(volm_io::fallback_category_txt);
   std::ifstream ifs(txt_file.c_str());
   if (!ifs.is_open()) {
     std::cerr << " cannot open: " << txt_file << '\n';
@@ -180,7 +174,7 @@ std::map<unsigned char, std::vector<float> > create_fallback_weight()
 {
   std::map<unsigned char, std::vector<float> > m;
   std::vector<float> w(4,0.0f);
-  std::string txt_file = volm_io::category_dir + std::string("/") + volm_io::fallback_category_txt;
+  std::string txt_file = bres_find::locate(volm_io::fallback_category_txt);
   std::ifstream ifs(txt_file.c_str());
   if (!ifs.is_open()) {
     std::cerr << " cannot open: " << txt_file << '\n';
