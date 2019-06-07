@@ -24,7 +24,7 @@
 #include <vsl/vsl_vector_io.h>
 #include <volm/volm_category_io.h>
 
-const std::string volm_io::fallback_category_txt = std::string("fallback_category.txt");
+const std::string volm_io::fallback_category_txt = std::string("contrib/brl/bbas/volm/fallback_category.txt");
 
 
 std::map<std::string, depth_map_region::orientation> create_orient_map()

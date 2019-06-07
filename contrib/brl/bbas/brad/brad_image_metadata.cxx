@@ -32,8 +32,8 @@
 
 #include <bbas/bres/bres_find.h>
 
-const std::string brad_image_metadata::gain_offset_file_name = std::string("brad_sat_img_calibration_table.txt");
-const std::string brad_image_metadata::sun_irradiance_file_name = std::string("brad_sat_img_sun_irradiance_table.txt");
+const std::string brad_image_metadata::gain_offset_file_name = std::string("contrib/brl/bbas/brad/brad_sat_img_calibration_table.txt");
+const std::string brad_image_metadata::sun_irradiance_file_name = std::string("contrib/brl/bbas/brad/brad_sat_img_sun_irradiance_table.txt");
 
 // Construct using nitf and metadata file
 brad_image_metadata::brad_image_metadata(std::string const& nitf_filename, std::string const& meta_folder)

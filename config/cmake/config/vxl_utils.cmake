@@ -56,9 +56,9 @@ endmacro()
 #
 # A macro to install resource files
 #
-macro(vxl_resource_file infile)
+macro(vxl_resource_file infile installprefix)
   install(FILES ${infile}
-      DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}
+      DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${installprefix}
       PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
       COMPONENT Resource )
 endmacro()
