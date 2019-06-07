@@ -6,9 +6,9 @@
 #include <vcl_where_root_dir.h>
 #include "volm_utils.h"
 
-const std::string volm_osm_category_io::osm_to_volm_labels_txt = std::string("osm_to_volm_labels.txt");
-const std::string volm_osm_category_io::user_to_volm_labels_txt = std::string("bae_tag_to_volm_labels.txt");
-const std::string volm_osm_category_io::road_junction_labels_txt = std::string("road_junction_category.txt");
+const std::string volm_osm_category_io::osm_to_volm_labels_txt = std::string("contrib/brl/bbas/volm/osm_to_volm_labels.txt");
+const std::string volm_osm_category_io::user_to_volm_labels_txt = std::string("contrib/brl/bbas/volm/bae_tag_to_volm_labels.txt");
+const std::string volm_osm_category_io::road_junction_labels_txt = std::string("contrib/brl/bbas/volm/road_junction_category.txt");
 
 
 vil_rgb<vxl_byte> color(unsigned char id)
