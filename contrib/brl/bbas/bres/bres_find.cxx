@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <utility>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
