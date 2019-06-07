@@ -1,4 +1,5 @@
 #include <testlib/testlib_test.h>
+#include <bres/bres_find.h>
 #include <volm/volm_category_io.h>
 #include <vcl_where_root_dir.h>
 
@@ -62,7 +63,7 @@ static void test_category_io()
   // test the method of loading land category
   std::string osm_to_volm_file;
 
-  osm_to_volm_file = volm_osm_category_io::category_dir + std::string("/") + volm_osm_category_io::osm_to_volm_labels_txt;
+  osm_to_volm_file = bres_find::locate(volm_osm_category_io::osm_to_volm_labels_txt);
   std::cout << osm_to_volm_file << std::endl;
   test_category_io_read_land_category(osm_to_volm_file);
 

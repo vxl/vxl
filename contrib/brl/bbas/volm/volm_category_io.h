@@ -21,6 +21,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
+#include <bres/bres_find.h>
 #include <vil/vil_rgb.h>
 #include <vxl_config.h>
 #include <bvrml/bvrml_write.h>
@@ -118,7 +119,6 @@ public:
   static volm_EXPORT_DATA std::map<std::string, volm_land_layer> tag_to_volm_land_table;
 
   //: location of table files
-  static const std::string category_dir;                // (VXL_LIB_DIR)
   static const std::string osm_to_volm_labels_txt;      // ("osm_to_volm_labels.txt")
   static const std::string user_to_volm_labels_txt;     // user defined land category converting to volm land category
   static const std::string road_junction_labels_txt;    // road junction category
