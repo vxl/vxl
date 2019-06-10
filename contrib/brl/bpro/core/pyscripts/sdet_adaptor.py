@@ -171,13 +171,19 @@ def test_classifier_unsupervised(tclsf):
     else:
         return None
 
-def test_classifier_clouds(tclsf, image, percent_cat_name, category_id_file="", scale_factor=1.0 / 2048.0):
+def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, ni, nj, block_size, percent_cat_name, category_id_file="", scale_factor=1.0 / 2048.0):
     batch.init_process("sdetTextureClassifySatelliteCloudsProcess")
     batch.set_input_from_db(0, tclsf)
-    batch.set_input_from_db(1, image)
-    batch.set_input_string(2, percent_cat_name)
-    batch.set_input_string(3, category_id_file)
-    batch.set_input_float(4, scale_factor)
+    batch.set_input_string(1, dictionary_name)
+    batch.set_input_from_db(2, image_resource)
+    batch.set_input_unsigned(3, i)
+    batch.set_input_unsigned(4, j)
+    batch.set_input_unsigned(5, ni)
+    batch.set_input_unsigned(6, nj)
+    batch.set_input_unsigned(7, block_size)
+    batch.set_input_string(8, percent_cat_name)
+    batch.set_input_string(9, category_id_file)
+    batch.set_input_float(10, scale_factor)
     status = batch.run_process()
     if status:
         (out_id, out_type) = batch.commit_output(0)
