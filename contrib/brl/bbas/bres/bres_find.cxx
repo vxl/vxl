@@ -68,7 +68,7 @@ std::string bres_find::locate(std::string const& resource_name)
     }
   }
 
-  // TODO: Raise exception instead?
+  // Raise exception if this function has failed
   std::ostringstream buffer;
   buffer << "bres_find::locate: Can't find resource <" << resource_name << ">!" << std::endl;
   throw std::runtime_error(buffer.str());
