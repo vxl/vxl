@@ -4,6 +4,7 @@
 
 #include <string>
 
+#include <vgl/vgl_box_2d.h>
 #include <vpgl/vpgl_lvcs.h>
 
 void bvxm_create_scene_xml(std::string const& scene_xml, std::string const& world_dir,
@@ -13,7 +14,7 @@ void bvxm_create_scene_xml(std::string const& scene_xml, std::string const& worl
                            vpgl_lvcs const& lvcs, std::string const& lvcs_file,
                            float min_ocp_prob, float max_ocp_prob, unsigned int max_scale);
 
-unsigned int bvxm_create_scene_xml_large_scale(std::string const& roi_kml,
+unsigned int bvxm_create_scene_xml_large_scale(vgl_box_2d<double> const& bbox_rect_input,
                                                std::string const& scene_root,
                                                std::string const& world_dir,
                                                std::string const& dem_folder,

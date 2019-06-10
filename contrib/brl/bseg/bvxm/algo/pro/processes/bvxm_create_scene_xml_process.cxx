@@ -4,9 +4,12 @@
 #include <string>
 //:
 // \file
+#include <bkml/bkml_parser.h>
 #include <bvxm/algo/bvxm_create_scene_xml.h>
 #include <bvxm/bvxm_world_params.h>
+#include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_polygon.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vul/vul_file.h>
@@ -134,8 +137,19 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
 
   double extension = static_cast<double>(en_in);
 
+  // find the bounding box from the given KML region
+  vgl_polygon<double> poly = bkml_parser::parse_polygon(roi_kml);
+  if (poly[0].size() == 0) {
+    std::cerr << pro.name() << ": can not get region from input kml: " << roi_kml << "!\n";
+    return false;
+  }
+
+  vgl_box_2d<double> bbox_rect;
+  for (auto i : poly[0])
+    bbox_rect.add(i);
+
   // Call wrapped function
-  unsigned int leaves_size = bvxm_create_scene_xml_large_scale(roi_kml,
+  unsigned int leaves_size = bvxm_create_scene_xml_large_scale(bbox_rect,
                                                                scene_root,
                                                                world_dir,
                                                                dem_folder,

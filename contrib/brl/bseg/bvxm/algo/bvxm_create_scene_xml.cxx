@@ -63,7 +63,7 @@ vgl_box_2d<double> enlarge_region_by_meter(vgl_box_2d<double> const& box_ori, do
 }
 
 
-unsigned int bvxm_create_scene_xml_large_scale(std::string const& roi_kml,
+unsigned int bvxm_create_scene_xml_large_scale(vgl_box_2d<double> const& bbox_rect_input,
                                                std::string const& scene_root,
                                                std::string const& world_dir,
                                                std::string const& dem_folder,
@@ -74,20 +74,8 @@ unsigned int bvxm_create_scene_xml_large_scale(std::string const& roi_kml,
                                                double extension,
                                                std::string const& land_folder)
 {
-  // find the bounding box from the given region
-  vgl_polygon<double> poly = bkml_parser::parse_polygon(roi_kml);
-  if (poly[0].size() == 0) {
-    std::ostringstream buffer;
-    buffer << "bvxm_create_scene_xml_large_scale: can not get region from input kml: " << roi_kml << "!\n";
-    throw std::invalid_argument(buffer.str());
-  }
-
-  vgl_box_2d<double> bbox_rect_ori;
-  for (auto i : poly[0])
-    bbox_rect_ori.add(i);
-
   // enlarge the input box in meters unit
-  vgl_box_2d<double> bbox_rect = enlarge_region_by_meter(bbox_rect_ori, extension);
+  vgl_box_2d<double> bbox_rect = enlarge_region_by_meter(bbox_rect_input, extension);
 
   // generate square box to ensure scene coverage
   double square_size = (bbox_rect.width() >= bbox_rect.height()) ? bbox_rect.width() : bbox_rect.height();
