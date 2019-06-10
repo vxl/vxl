@@ -35,10 +35,16 @@ bool sdet_texture_classify_satellite_clouds_process_cons(bprb_func_process& pro)
 {
   // process takes 11 inputs:
   std::vector<std::string> input_types;
-  input_types.emplace_back("sdet_texture_classifier_sptr"); //texton classifier
-  input_types.emplace_back("vil_image_view_base_sptr"); //input image
-  input_types.emplace_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
+  input_types.emplace_back("sdet_texture_classifier_sptr"); // texton classifier
+  input_types.emplace_back("vcl_string"); // path to dictionary
+  input_types.emplace_back("vil_image_resource_sptr"); // input image resouce
+  input_types.emplace_back("unsigned");   // i
+  input_types.emplace_back("unsigned");   // j (i,j) is the upper left pixel coordinate for ROI in the image resource
+  input_types.emplace_back("unsigned");   // ni
+  input_types.emplace_back("unsigned");   // nj (ni, nj) is the size of the ROI in terms of pixels
+  input_types.emplace_back("unsigned");   // texture block size
   input_types.emplace_back("vcl_string");  // the category whose percentage of pixels among all classified pixel will be returned
+  input_types.emplace_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
   input_types.emplace_back("float"); // scale_factor  (pixel_graylevel*scale_factor should be on the range [0,1])
   if (!pro.set_input_types(input_types))
     return false;
@@ -62,31 +68,58 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
 
   // get inputs
   sdet_texture_classifier_sptr tc_sptr = pro.get_input<sdet_texture_classifier_sptr>(0);
-  vil_image_view_base_sptr image_sptr = pro.get_input<vil_image_view_base_sptr>(1);
-  std::string first_category = pro.get_input<std::string>(2);
-  std::string cat_ids_file = pro.get_input<std::string>(3);
-  float scale_factor  = pro.get_input<float>(4);
+  auto* tcp = static_cast<sdet_texture_classifier_params*>(tc_sptr.ptr());
+  sdet_atmospheric_image_classifier tc(*tcp);
+  std::string texton_dict_path = pro.get_input<std::string>(1);
+  tc.load_dictionary(texton_dict_path);
 
-  // Cast texture classifier to atmospheric image classifier
-  auto* tc_ptr = dynamic_cast<sdet_atmospheric_image_classifier*> (tc_sptr.as_pointer());
-  if (!tc_ptr) {
-    std::cerr << pro.name() << " :-- input texture classifier is not sdet_atmospheric_image_classifier" << std::endl;
+  vil_image_resource_sptr image_sptr = pro.get_input<vil_image_resource_sptr>(2);
+  if (!image_sptr) {
+    std::cout << "problems with the input image resource handle!\n";
     return false;
   }
 
-  // Cast image view base to image view <float>
-  auto* image_ptr = dynamic_cast<vil_image_view<float>*> (image_sptr.as_pointer());
-  if (!image_ptr) {
-    std::cerr << pro.name() << " :-- input image is not vil_image_view<float>" << std::endl;
-    return false;
-  } else if (image_ptr->nplanes() != 1) {
-    std::cerr << pro.name() << " :-- input image is not single band" << std::endl;
+  auto i = pro.get_input<unsigned>(3);
+  auto j = pro.get_input<unsigned>(4);
+  auto ni = pro.get_input<unsigned>(5);
+  auto nj = pro.get_input<unsigned>(6);
+
+  tc.block_size_ = pro.get_input<unsigned>(7);
+  std::string first_category = pro.get_input<std::string>(8);
+  std::string cat_ids_file = pro.get_input<std::string>(9);
+  float scale_factor  = pro.get_input<float>(10);
+
+  // Padding set to the radius of the largest filter
+  int padding = tc.max_filter_radius();
+
+  // padded crop bounds
+  unsigned nii = ni + (2 * padding);
+  unsigned njj = nj + (2 * padding);
+  int ii = i - padding;
+  int jj = j - padding;
+
+  // crop via get_copy_view (try blocked_image_resource for speed)
+  vil_image_view_base_sptr roi;
+  vil_blocked_image_resource_sptr bir = blocked_image_resource(image_sptr);
+  if (!bir) {
+    roi = image_sptr->get_copy_view(ii, nii, jj, njj);
+  } else {
+    roi = bir->get_copy_view(ii, nii, jj, njj);
+  }
+
+  // check for valid roi
+  if (!roi) {
+    std::cerr << "Could not crop from image with size (" << image_sptr->ni() << "," << image_sptr->nj()
+      << ") at position (" << i << "," << j << ") of size (" << ni << ", " << nj << ") with margin: " << padding << std::endl;
     return false;
   }
+
+  // cast roi to float
+  vil_image_view<float> roi_float = *vil_convert_cast(float(), roi);
 
   try {
     std::tuple<vil_image_view<float>, vil_image_view<vxl_byte>, vil_image_view<vil_rgb<vxl_byte> >, float>
-      ret = sdet_classify(*tc_ptr, *image_ptr, first_category, cat_ids_file, scale_factor);
+      ret = sdet_classify(tc, roi_float, first_category, cat_ids_file, scale_factor);
 
     vil_image_view_base_sptr img_ptr = new vil_image_view<float>(std::get<0>(ret));
     pro.set_output_val<vil_image_view_base_sptr>(0, img_ptr);
