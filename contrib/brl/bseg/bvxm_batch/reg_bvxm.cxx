@@ -8,6 +8,7 @@
 #include <vpgl_pro/vpgl_register.h>
 #include <ihog_pro/ihog_register.h>
 #include <bvxm/pro/bvxm_register.h>
+#include <bvxm/algo/pro/bvxm_algo_register.h>
 #include <bvxm/grid/pro/bvxm_grid_register.h>
 #include <sdet_pro/sdet_register.h>
 #include <brad_pro/brad_register.h>
@@ -27,6 +28,7 @@ register_processes(PyObject *self, PyObject *args)
   vpgl_register::register_process();
   ihog_register::register_process();
   bvxm_register::register_process();
+  bvxm_algo_register::register_process();
   bvxm_grid_register::register_process();
   sdet_register::register_process();
   brad_register::register_process();
@@ -50,6 +52,7 @@ register_datatypes(PyObject *self, PyObject *args)
   vpgl_register::register_datatype();
   ihog_register::register_datatype();
   bvxm_register::register_datatype();
+  bvxm_algo_register::register_datatype();
   bvxm_grid_register::register_datatype();
   sdet_register::register_datatype();
   brad_register::register_datatype();
