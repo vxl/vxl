@@ -9,8 +9,8 @@ jobs:
 
       - restore_cache:
           keys:
-            - vxl_bin-{{ .Branch }}
-            - vxl_bin
+            - vxl_bin-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}
+            - vxl_bin-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: Fix times on source
           command: |
@@ -47,7 +47,7 @@ jobs:
           working_directory: /build
           command: ninja
       - save_cache:
-          key: vxl_bin-{{ .Branch }}-{{ epoch }}
+          key: vxl_bin-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ epoch }}
           paths:
             - /build
       - run:
