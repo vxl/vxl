@@ -94,13 +94,13 @@ vil_image_view<float> brad_nitf_abs_radiometric_calibrate(vil_image_view<unsigne
   vil_math_value_range(img, min_after, max_after);
 
   // report calibration results
-  std::cout << std::endl
-            << "-----C++ CALIBRATION-----" << std::endl
-            << "BEFORE CALIBRATION: min/max = "
-            << min_before << "/" << max_before << std::endl
-            << "AFTER CALIBRATION: min/max = "
-            << std::setprecision(8)
-            << min_after << "/" << max_after << std::endl;
+  /* std::cout << std::endl */
+  /*           << "-----C++ CALIBRATION-----" << std::endl */
+  /*           << "BEFORE CALIBRATION: min/max = " */
+  /*           << min_before << "/" << max_before << std::endl */
+  /*           << "AFTER CALIBRATION: min/max = " */
+  /*           << std::setprecision(8) */
+  /*           << min_after << "/" << max_after << std::endl; */
 
   // return new view
   return img;
