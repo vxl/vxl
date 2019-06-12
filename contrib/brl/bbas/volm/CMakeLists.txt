@@ -11,10 +11,10 @@ if(EXPAT_FOUND)
   if(EXPATPP_FOUND)
 
     # Install resource files
-    vxl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/osm_to_volm_labels.txt contrib/brl/bbas/volm)
-    vxl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/fallback_category.txt contrib/brl/bbas/volm)
-    vxl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/bae_tag_to_volm_labels.txt contrib/brl/bbas/volm)
-    vxl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/road_junction_category.txt contrib/brl/bbas/volm)
+    brl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/osm_to_volm_labels.txt contrib/brl/bbas/volm)
+    brl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/fallback_category.txt contrib/brl/bbas/volm)
+    brl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/bae_tag_to_volm_labels.txt contrib/brl/bbas/volm)
+    brl_resource_file(${CMAKE_CURRENT_SOURCE_DIR}/road_junction_category.txt contrib/brl/bbas/volm)
 
     include_directories( ${BRL_INCLUDE_DIR} )
     include_directories( ${BRL_INCLUDE_DIR}/bbas/bpgl )
