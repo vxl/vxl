@@ -3,6 +3,19 @@
 
 project( brl )
 
+##
+#
+# A macro to install resource files
+#
+macro(brl_resource_file infile installprefix)
+  install(FILES ${infile}
+      DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${installprefix}
+      PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
+      COMPONENT Resource )
+endmacro()
+
+include(GNUInstallDirs)
+
 doxygen_add_package(contrib/brl "Brown University Libraries")
 
 if (NOT VXL_BUILD_CORE_VIDEO)
