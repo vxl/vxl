@@ -160,14 +160,10 @@ class bsgm_disparity_estimator
   //: Raw storage for the cost volumes
   // Element x,y,d is at location y*w_*num_disparities + x*num_disparities + d
   std::vector<unsigned short> total_cost_data_;
-  std::vector<unsigned char> census_cost_data_;
-  std::vector<unsigned char> xgrad_cost_data_;
   std::vector<unsigned char> fused_cost_data_;
 
   //: Convenience image of pointers into the cost volumes
   std::vector< std::vector< unsigned short* > > total_cost_;
-  std::vector< std::vector< unsigned char* > > census_cost_;
-  std::vector< std::vector< unsigned char* > > xgrad_cost_;
   std::vector< std::vector< unsigned char* > > fused_cost_;
 
   std::vector< std::vector< unsigned char* > >* active_app_cost_;

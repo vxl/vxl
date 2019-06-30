@@ -32,12 +32,7 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
     p2_max_base_( 8.0f )
 {
   // Setup any necessary cost volumes
-  if( params_.census_weight > 0.0f )
-    setup_cost_volume( census_cost_data_, census_cost_, num_disparities );
-  if( params_.xgrad_weight > 0.0f )
-    setup_cost_volume( xgrad_cost_data_, xgrad_cost_, num_disparities );
-  if( params_.census_weight > 0.0f && params_.xgrad_weight > 0.0f )
-    setup_cost_volume( fused_cost_data_, fused_cost_, num_disparities );
+  setup_cost_volume( fused_cost_data_, fused_cost_, num_disparities );
   setup_cost_volume( total_cost_data_, total_cost_, num_disparities );
 }
 
@@ -83,35 +78,20 @@ bsgm_disparity_estimator::compute(
 
   // Compute appearance cost volume data.
   if( params_.census_weight > 0.0f ){
-    active_app_cost_ = &census_cost_;
-
     compute_census_data( img_tar, img_ref,
-      invalid_tar, census_cost_, min_disp );
+      invalid_tar, fused_cost_, min_disp );
   }
-  if( params_.xgrad_weight > 0.0f ){
-    active_app_cost_ = &xgrad_cost_;
 
+  if( params_.xgrad_weight > 0.0f ){
     vil_sobel_3x3<vxl_byte,float>( img_ref, grad_x_ref, grad_y_ref );
     compute_xgrad_data( grad_x_tar, grad_x_ref,
-      invalid_tar, xgrad_cost_, min_disp );
+      invalid_tar, fused_cost_, min_disp );
   }
+
+  active_app_cost_ = &fused_cost_;
 
   if( params_.print_timing )
     print_time( "Appearance cost computation", timer );
-
-  // Fuse appearance volumes if necessary.
-  if( params_.census_weight > 0.0f && params_.xgrad_weight > 0.0f ){
-    active_app_cost_ = &fused_cost_;
-
-    for( int v = 0; v < num_voxels; v++ ){
-      float fc = params_.census_weight*census_cost_data_[v] +
-        params_.xgrad_weight*xgrad_cost_data_[v];
-      fused_cost_data_[v] = (unsigned char)( fc < 255.0f ? fc : 255.0f );
-    }
-
-    if( params_.print_timing )
-      print_time( "Appearance fusion", timer );
-  }
 
   // Run the multi-directional dynamic programming to obtain a total cost
   // volume incorporating appearance + smoothing.
@@ -312,7 +292,8 @@ bsgm_disparity_estimator::compute_census_data(
             bsgm_compute_hamming_lut( cen_diff, bit_set_table, only_32_bits );
 
           float ham_norm = census_norm*ham;
-          *ac = (unsigned char)( ham_norm > 255.0f ? 255.0f : ham_norm );
+          float ac_new = (float)(*ac) + params_.census_weight*ham_norm;
+          *ac = (unsigned char)( ac_new > 255.0f ? 255.0f : ac_new );
         }
 
       } //d
@@ -356,7 +337,8 @@ bsgm_disparity_estimator::compute_xgrad_data(
         // Compare gradient intensities
         else {
           float g = grad_norm*fabs( grad_x_tar(x,y) - grad_x_ref(x2,y) );
-          *ac = (unsigned char)( g < 255.0f ? g : 255.0f );
+          float ac_new = (float)(*ac) + params_.xgrad_weight*g;
+          *ac = (unsigned char)( ac_new > 255.0f ? 255.0f : ac_new );
         }
       } //d
     } //j
