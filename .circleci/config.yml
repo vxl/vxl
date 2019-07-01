@@ -68,7 +68,3 @@ jobs:
           name: Install
           working_directory: /build
           command: ninja install
-      - run:
-          name: InstallResources
-          working_directory: /build
-          command: cmake -DCOMPONENT="Resource" -P cmake_install.cmake
