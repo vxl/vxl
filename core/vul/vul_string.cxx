@@ -216,12 +216,32 @@ std::string& vul_string_right_trim(std::string& sr, const char* rem)
 
 int vul_string_atoi(std::string const& s)
 {
-  return std::stoi(s.c_str());
+  int return_value = 0; //Default value in case of failed conversion
+  try
+  {
+    return_value = std::stoi(s.c_str());
+  }
+  catch ( const std::invalid_argument & )
+  {
+    //DO NOTHING 
+    //std::cerr << "Argument is invalid\n";
+  }
+  return return_value;
 }
 
 double vul_string_atof(std::string const& s)
 {
-  return std::stod(s.c_str());
+  double return_value = 0.0;
+  try
+  {
+    return_value = std::stod(s.c_str());
+  }
+  catch ( const std::invalid_argument & )
+  {
+    //DO NOTHING 
+    //std::cerr << "Argument is invalid\n";
+  }
+  return return_value;
 }
 
 
