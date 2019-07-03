@@ -138,7 +138,7 @@ vil1_stream_url::vil1_stream_url(char const *url)
   if (host.size() > 0)
   for (unsigned int i=(unsigned int)(host.size()-1); i>0; --i)
     if (host[i] == ':') {
-      port = std::atoi(host.c_str() + i + 1);
+      port = std::stoi(host.c_str() + i + 1);
       host = std::string(host.c_str(), host.c_str() + i);
       break;
     }

@@ -102,13 +102,13 @@ void vul_sequence_filename_map::parse()
       temp.erase(re.start(0));
 
       if (match_start.length() > 0)
-        start_ = std::atoi(match_start.c_str());
+        start_ = std::stoi(match_start.c_str());
 
       if (match_step.length() > 0)
-        step_ = std::atoi(match_step.c_str()+1);
+        step_ = std::stoi(match_step.c_str()+1);
 
       if (match_end.length() > 0)
-        end_ = std::atoi(match_end.c_str());
+        end_ = std::stoi(match_end.c_str());
     }
   }
   // Search for image extension
@@ -345,7 +345,7 @@ int vul_sequence_filename_map::extract_index(char const* name_string)
 {
   std::string name_str(name_string);
   std::string index_str = name_str.substr(basename_.size(), name_str.size() - image_extension_.size());
-  return std::atoi(index_str.c_str());
+  return std::stoi(index_str.c_str());
 }
 
 std::ostream& operator<<(std::ostream &os, const vul_sequence_filename_map& s)

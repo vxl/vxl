@@ -53,7 +53,7 @@ main(int argc, char** argv)
   int ys = in.nj();
 
   // The threshold value:
-  vxl_byte threshold = (argc < 4) ? 10 : vxl_byte(std::atoi(argv[3]));
+  vxl_byte threshold = (argc < 4) ? 10 : vxl_byte(std::stoi(argv[3]));
 
   img_type src(xs,ys); // in-memory 2D vnl_matrix<vxl_byte>
 

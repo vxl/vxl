@@ -52,7 +52,7 @@ bool load_index(const char* path, size_t n_points, std::vector<int>& index)
       continue;
     }
 
-    int i = atoi(s.c_str());
+    int i = std::stoi(s.c_str());
 
     if (i<0 || i>=n_points)
     {

@@ -35,7 +35,7 @@ int main(int argc, char** argv)
           <<" from "<<argv[1]<<std::endl;
 
 
-  double theta = std::atof(argv[3]);
+  double theta = std::stod(argv[3]);
 
   // rotate the image
   vil_image_view<vxl_byte> dest_im;

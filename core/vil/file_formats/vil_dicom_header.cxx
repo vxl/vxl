@@ -624,7 +624,7 @@ void vil_dicom_header_format::readAcquisitionElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.imager_spacing_x_ = (float) std::atof(data_p);
+      last_read_.imager_spacing_x_ = (float) std::stod(data_p);
 
       // The y size should come after a '\'
       // If only a 0 is found, ysize = xsize
@@ -636,7 +636,7 @@ void vil_dicom_header_format::readAcquisitionElements(short element,
           data_p[i] = data_p[i+1];
       }
       if (gone == '\\')
-        last_read_.imager_spacing_y_ = (float) std::atof(data_p);
+        last_read_.imager_spacing_y_ = (float) std::stod(data_p);
       else
         last_read_.imager_spacing_y_ = (float) last_read_.imager_spacing_x_;
     }
@@ -717,7 +717,7 @@ void vil_dicom_header_format::readImageElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.spacing_x_ = (float) std::atof(data_p);
+      last_read_.spacing_x_ = (float) std::stod(data_p);
 
       // The y size should come after a '\'
       // If only a 0 is found, ysize = xsize
@@ -729,7 +729,7 @@ void vil_dicom_header_format::readImageElements(short element,
           data_p[i] = data_p[i+1];
       }
       if (gone == '\\')
-        last_read_.spacing_y_ = (float) std::atof(data_p);
+        last_read_.spacing_y_ = (float) std::stod(data_p);
       else
         last_read_.spacing_y_ = (float) last_read_.spacing_x_;
     }

@@ -57,7 +57,7 @@ main(int argc, char** argv) {
   int ys = in.nj();
 
   // The radius: (default is 3+3 cross)
-  float radius = (argc < 4) ? 1.0f : (float)std::atof(argv[3]);
+  float radius = (argc < 4) ? 1.0f : (float)std::stod(argv[3]);
 
   img_type src(xs,ys); // in-memory 2D images
   img_type dst(xs,ys);

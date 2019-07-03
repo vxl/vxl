@@ -90,7 +90,7 @@ int main(int argc,char * argv[])
       std::string image_indir(argv[1]);
       std::string image_outdir(argv[2]);
 
-      unsigned nlevels = std::atoi(argv[3]);
+      unsigned nlevels = std::stoi(argv[3]);
       std::cout << image_indir << std::endl
                << image_outdir << std::endl
                << nlevels << std::endl;
@@ -101,7 +101,7 @@ int main(int argc,char * argv[])
       }
       unsigned blocksize = 0;
       if (argc==5)
-        blocksize = std::atoi(argv[4]);
+        blocksize = std::stoi(argv[4]);
       if (!generate_pyramids(image_indir, image_outdir, nlevels, blocksize))
       {
         std::cout << "Generate Pyramids failed\n";

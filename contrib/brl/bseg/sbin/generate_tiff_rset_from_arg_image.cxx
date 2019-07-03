@@ -138,10 +138,10 @@ int main(int argc,char * argv[])
     {
       std::string base_image_path(argv[1]);
       std::string pyramids_dir(argv[2]);
-      unsigned nlevels = std::atoi(argv[3]);
+      unsigned nlevels = std::stoi(argv[3]);
       unsigned greyscale = 0;
       if(argc==5)
-        greyscale = std::atoi(argv[4]);
+        greyscale = std::stoi(argv[4]);
       std::cout << base_image_path << std::endl
                <<  pyramids_dir << std::endl
                 << nlevels << std::endl << greyscale << std::endl;

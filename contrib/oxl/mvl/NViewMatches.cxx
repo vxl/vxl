@@ -142,7 +142,7 @@ bool NViewMatches::load(std::istream& s)
       if (cp[0] == '*')
         v[j] = NViewMatch::nomatch;
       else
-        v[j] = atoi(cp);
+        v[j] = std::stoi(cp);
     }
     push_back(v);
   }

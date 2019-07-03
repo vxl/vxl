@@ -19,8 +19,8 @@ int main (int argc, char** argv)
     std::abort();
   }
 
-  double scale = std::atof(argv[1]);
-  double shift = std::atof(argv[2]);
+  double scale = std::stod(argv[1]);
+  double shift = std::stod(argv[2]);
 
   vil1_image in = vil1_load(argv[3]);
 

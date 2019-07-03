@@ -236,7 +236,7 @@ class OFStandard
 
     /** converts a floating-point number from an ASCII
      *  decimal representation to internal double-precision format.
-     *  Unlike the atof() function defined in Posix, this implementation
+     *  Unlike the std::stod() function defined in Posix, this implementation
      *  is not affected by a locale setting, the radix character is always
      *  assumed to be '.'
      *  This implementation does not set errno if the input cannot be parsed
@@ -268,7 +268,7 @@ class OFStandard
      *    If a terminating character is found before any floating-point
      *    digits, then zero is returned.
      */
-     static double atof(const char *s,
+     static double std::stod(const char *s,
                         OFBool *success = NULL);
 
      /** formats a floating-point number into an ASCII string.

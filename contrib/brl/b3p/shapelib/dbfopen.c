@@ -109,13 +109,13 @@
  * Avoid crashing if field or record are out of range in dbfread*attribute().
  *
  * Revision 1.22  1999/12/15 13:47:24  warmerda
- * Added stdlib.h to ensure that atof() is prototyped.
+ * Added stdlib.h to ensure that std::stod() is prototyped.
  *
  * Revision 1.21  1999/12/13 17:25:46  warmerda
  * Added support for upper case .DBF extention.
  *
  * Revision 1.20  1999/11/30 16:32:11  warmerda
- * Use atof() instead of sscanf().
+ * Use std::stod() instead of sscanf().
  *
  * Revision 1.19  1999/11/05 14:12:04  warmerda
  * updated license terms
@@ -743,7 +743,7 @@ static void *DBFReadAttribute(DBFHandle psDBF, int hEntity, int iField,
 /* -------------------------------------------------------------------- */
     if ( chReqType == 'N' )
     {
-        dDoubleField = atof(pszStringField);
+        dDoubleField = std::stod(pszStringField);
 
         pReturnField = &dDoubleField;
     }

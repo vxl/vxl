@@ -328,7 +328,7 @@ bool vgui_listmanager2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, v
   {
     char text[1];
     text[0] = key;
-    int num = atoi(text);
+    int num = std::stoi(text);
 
     bool isactive = this->is_active(num-1);
     bool isvisible = this->is_visible(num-1);

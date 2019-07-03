@@ -36,7 +36,7 @@ main(int argc, char** argv)
   if (!in) { std::cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The threshold value:
-  vxl_byte threshold = (argc < 4) ? 128 : vxl_byte(std::atoi(argv[3]));
+  vxl_byte threshold = (argc < 4) ? 128 : vxl_byte(std::stoi(argv[3]));
 
   // perform thresholding:
   vil_image_resource_sptr out = vepl_threshold(in,threshold,0,255);

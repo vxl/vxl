@@ -18,8 +18,8 @@ int main (int argc, char** argv)
     std::abort();
   }
 
-  double low  = std::atof(argv[1]);
-  double high = std::atof(argv[2]);
+  double low  = std::stod(argv[1]);
+  double high = std::stod(argv[2]);
 
   vil1_image in = vil1_load(argv[3]);
   if (vil1_pixel_format(in) == VIL1_BYTE)

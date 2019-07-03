@@ -167,7 +167,7 @@ int main(int argc, char*argv[])
     if (std::string("-b") == argv[1])
     {
       if (argc == 2) usage(progname);
-      background = std::atof(argv[2]);
+      background = std::stod(argv[2]);
       argv += 2;
       argc -= 2;
     }
@@ -175,7 +175,7 @@ int main(int argc, char*argv[])
     if (std::string("-m") == argv[1])
     {
       if (argc == 2) usage(progname);
-      margin = std::atoi(argv[2]);
+      margin = std::stoi(argv[2]);
       argv += 2;
       argc -= 2;
     }

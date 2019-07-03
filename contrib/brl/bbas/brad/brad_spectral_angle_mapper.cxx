@@ -412,7 +412,7 @@ bool brad_spectral_angle_mapper::parse_aster_file(
     if (awk.NF() < 2) break;
 
     // Prune duplicate values
-    float new_w = atof(awk[0]);
+    float new_w = std::stod(awk[0]);
     if (wavelengths.size() > 0)
       if (fabs(new_w - wavelengths.back()) < tol) {
         std::cerr << "Duplicate wavelength value removed\n";

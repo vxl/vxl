@@ -67,7 +67,7 @@ int main(int argc,char * argv[])
   {
     std::string base_dir(argv[1]);
     std::string base_image_extension(argv[2]);
-    unsigned nlevels = std::atoi(argv[3]);
+    unsigned nlevels = std::stoi(argv[3]);
 
     std::cout << base_dir << std::endl
              << base_image_extension << std::endl

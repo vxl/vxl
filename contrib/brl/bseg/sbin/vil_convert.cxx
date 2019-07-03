@@ -98,7 +98,7 @@ int main(int argc,char * argv[])
 
       unsigned blocksize = 0;
       if (argc==4)
-        blocksize = std::atoi(argv[3]);
+        blocksize = std::stoi(argv[3]);
       std::string basename = "";
       if (argc==5)
         basename = argv[4];

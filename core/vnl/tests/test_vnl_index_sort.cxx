@@ -56,10 +56,10 @@ int main( int argc, char *argv[] )
               showUsage(argv[0]);
               return 0;
           case 'n':
-              numelrows = atoi(optarg);
+              numelrows = std::stoi(optarg);
               break;
           case 'm':
-              numelcols = atoi(optarg);
+              numelcols = std::stoi(optarg);
               break;
           default:
               if (c > 0) { showUsage(argv[0]); return 0; }

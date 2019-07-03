@@ -612,7 +612,7 @@ double OFStandard::atof(const char *s, OFBool *success)
 
 #else
 
-// --- definitions and constants for atof() ---
+// --- definitions and constants for std::stod() ---
 
 /* Largest possible base 10 exponent.  Any exponent larger than this will
  * already produce underflow or overflow, so there's no need to worry

@@ -367,7 +367,7 @@ bool vil3d_meta_image_header::check_next_header_line(const std::string &nxt_line
   }
   else if (nxt_line.find("NDims")!= std::string::npos)
   {
-    unsigned int nd = std::atoi(val.c_str());
+    unsigned int nd = std::stoi(val.c_str());
     if (nd != 3)
     {
       std::cerr << "Loader only handles 3D Images.\n";
@@ -475,7 +475,7 @@ bool vil3d_meta_image_header::set_header_offset(const std::string &offs)
     return false;
   }
 
-  offset_i_=std::atof(offs.substr(0,epos).c_str());
+  offset_i_=std::stod(offs.substr(0,epos).c_str());
   pos=offs.find_first_not_of(' ',epos);
   epos=offs.find_first_of(' ',pos);
   if (pos==std::string::npos || epos==std::string::npos)
@@ -484,14 +484,14 @@ bool vil3d_meta_image_header::set_header_offset(const std::string &offs)
     return false;
   }
 
-  offset_j_=std::atof(offs.substr(pos,epos).c_str());
+  offset_j_=std::stod(offs.substr(pos,epos).c_str());
   pos=offs.find_first_not_of(' ',epos);
   if (pos==std::string::npos)
   {
     std::cerr << "Offset does not contain three values.\n";
     return false;
   }
-  offset_k_=std::atof(offs.substr(pos).c_str());
+  offset_k_=std::stod(offs.substr(pos).c_str());
   epos = offs.find_first_of(' ',pos);
   pos=offs.find_first_not_of(' ',epos);
   if (pos != std::string::npos)
@@ -515,7 +515,7 @@ bool vil3d_meta_image_header::set_header_dim_size(const std::string &dims)
     std::cerr << "Dim Size does not contain three values.\n";
     return false;
   }
-  dim_size_i_=std::atoi(dims.substr(0,epos).c_str());
+  dim_size_i_=std::stoi(dims.substr(0,epos).c_str());
   pos=dims.find_first_not_of(' ',epos);
   epos=dims.find_first_of(' ',pos);
   if (pos==std::string::npos || epos==std::string::npos)
@@ -523,14 +523,14 @@ bool vil3d_meta_image_header::set_header_dim_size(const std::string &dims)
     std::cerr << "Dim Size does not contain three values.\n";
     return false;
   }
-  dim_size_j_=std::atoi(dims.substr(pos,epos).c_str());
+  dim_size_j_=std::stoi(dims.substr(pos,epos).c_str());
   pos=dims.find_first_not_of(' ',epos);
   if (pos==std::string::npos)
   {
     std::cerr << "Dim Size does not contain three values.\n";
     return false;
   }
-  dim_size_k_=std::atoi(dims.substr(pos).c_str());
+  dim_size_k_=std::stoi(dims.substr(pos).c_str());
   epos = dims.find_first_of(' ',pos);
   pos=dims.find_first_not_of(' ',epos);
   if (pos != std::string::npos)
@@ -556,7 +556,7 @@ bool vil3d_meta_image_header::set_header_voxel_size(const std::string &vsize)
     std::cerr << "Element Spacing/Size does not contain three values.\n";
     return false;
   }
-  vox_size_i_=std::atof(vsize.substr(0,epos).c_str());
+  vox_size_i_=std::stod(vsize.substr(0,epos).c_str());
   pos=vsize.find_first_not_of(' ',epos);
   epos=vsize.find_first_of(' ',pos);
   if (pos==std::string::npos || epos==std::string::npos)
@@ -564,14 +564,14 @@ bool vil3d_meta_image_header::set_header_voxel_size(const std::string &vsize)
     std::cerr << "Element Spacing/Size does not contain three values.\n";
     return false;
   }
-  vox_size_j_=std::atof(vsize.substr(pos,epos).c_str());
+  vox_size_j_=std::stod(vsize.substr(pos,epos).c_str());
   pos=vsize.find_first_not_of(' ',epos);
   if (pos==std::string::npos)
   {
     std::cerr << "Element Spacing/Size does not contain three values.\n";
     return false;
   }
-  vox_size_k_=std::atof(vsize.substr(pos).c_str());
+  vox_size_k_=std::stod(vsize.substr(pos).c_str());
   epos = vsize.find_first_of(' ',pos);
   pos=vsize.find_first_not_of(' ',epos);
   if (pos != std::string::npos)
