@@ -291,7 +291,7 @@ static void test_compute_affine()
 	  for (size_t c = 0; c < 2; ++c) {
 		  er0 += fabs(Mgt[r][c] - Mfitted[r][c]);
 	  }
-  good = good && er0 < 1,0e-6;
+  good = good && er0 < 1.0e-6;
   TEST("compute affine camera from pts", good, true);
 }
 
