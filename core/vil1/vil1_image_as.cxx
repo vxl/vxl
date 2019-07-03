@@ -22,7 +22,7 @@
 template <class T>
 struct vil1_image_as_impl : public vil1_image_impl, public vil1_memory_image_of_format<T>
 {
-  typedef vil1_memory_image_of_format<T> format;
+  using format = vil1_memory_image_of_format<T>;
   vil1_image image;
   vil1_image_as_impl(vil1_image const &underlying) : image(underlying) { }
   int planes() const override { return 1; }
@@ -256,7 +256,7 @@ template bool convert_rgba_to_rgb( const vil1_image&, void*, int, int, int, int,
 template <> // specialize for byte.
 bool vil1_image_as_impl<vxl_byte>::get_section(void *buf, int x0, int y0, int width, int height) const
 {
-  typedef vxl_byte Outtype;
+  using Outtype = vxl_byte;
 
   switch ( vil1_pixel_format(image) )
   {
@@ -319,7 +319,7 @@ vil1_image vil1_image_as(vil1_image const &image, vxl_byte*)
 template <> // specialize for vxl_uint_16.
 bool vil1_image_as_impl<vxl_uint_16>::get_section(void *buf, int x0, int y0, int width, int height) const
 {
-  typedef vxl_uint_16 Outtype;
+  using Outtype = vxl_uint_16;
 
   switch ( vil1_pixel_format(image) )
   {
@@ -381,7 +381,7 @@ vil1_image vil1_image_as(vil1_image const &image, vxl_uint_16*)
 template <> // specialize for int.
 bool vil1_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, int height) const
 {
-  typedef int Outtype;
+  using Outtype = int;
 
   switch ( vil1_pixel_format(image) )
   {
@@ -442,7 +442,7 @@ vil1_image vil1_image_as(vil1_image const &image, int*)
 template <> // specialize for float.
 bool vil1_image_as_impl<float>::get_section(void *buf, int x0, int y0, int width, int height) const
 {
-  typedef float Outtype;
+  using Outtype = float;
 
   switch ( vil1_pixel_format(image) )
   {
@@ -503,7 +503,7 @@ vil1_image vil1_image_as(vil1_image const &image, float*)
 template <> // specialize for double.
 bool vil1_image_as_impl<double>::get_section(void *buf, int x0, int y0, int width, int height) const
 {
-  typedef double Outtype;
+  using Outtype = double;
 
   switch ( vil1_pixel_format(image) )
   {
@@ -566,7 +566,7 @@ bool vil1_image_as_impl<vil1_rgb<unsigned char> >::get_section(void *buf,
                                                                int x0, int y0,
                                                                int width, int height) const
 {
-  typedef unsigned char Outtype;
+  using Outtype = unsigned char;
 
   switch ( vil1_pixel_format(image) )
   {
@@ -631,7 +631,7 @@ bool vil1_image_as_impl<vil1_rgb<float> >::get_section(void *buf,
                                                        int x0, int y0,
                                                        int width, int height) const
 {
-  typedef float Outtype;
+  using Outtype = float;
 
   switch ( vil1_pixel_format(image) )
   {
@@ -697,7 +697,7 @@ bool vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::get_section(void *buf,
                                                              int x0, int y0,
                                                              int width, int height) const
 {
-  typedef vxl_uint_16 Outtype;
+  using Outtype = vxl_uint_16;
 
   switch ( vil1_pixel_format(image) )
   {

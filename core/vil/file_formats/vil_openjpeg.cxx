@@ -38,7 +38,7 @@ extern "C" {
 #include "vil_openjpeg.h"
 
 
-typedef vbl_smart_ptr<vil_stream> vil_stream_sptr;
+using vil_stream_sptr = vbl_smart_ptr<vil_stream>;
 
 //------------------------------------------------------------------------------
 // Taken from

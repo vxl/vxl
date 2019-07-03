@@ -30,7 +30,7 @@
 // Adapted by fsm from the FILE * version in jdatasrc.c
 
 #define vil_jpeg_INPUT_BUF_SIZE  4096 // choose an efficiently fread'able size
-typedef vil_jpeg_stream_source_mgr *vil_jpeg_srcptr;
+using vil_jpeg_srcptr = vil_jpeg_stream_source_mgr *;
 
 
 // * Initialize source --- called by jpeg_read_header

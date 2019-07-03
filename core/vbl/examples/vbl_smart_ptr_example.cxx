@@ -40,7 +40,7 @@ class example_sp : public vbl_ref_count
   }
 };
 
-typedef vbl_smart_ptr<example_sp> example_sp_sptr;
+using example_sp_sptr = vbl_smart_ptr<example_sp>;
 
 //== end of example_sp.h ==//
 

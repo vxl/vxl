@@ -6,6 +6,6 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 #include <vsl/vsl_map_io.hxx>
-typedef std::vector<unsigned long> vec_ulong;
-typedef std::less<std::string> comp;
+using vec_ulong = std::vector<unsigned long>;
+using comp = std::less<std::string>;
 VSL_MAP_IO_INSTANTIATE(std::string, vec_ulong, comp);

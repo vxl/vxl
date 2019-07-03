@@ -16,7 +16,7 @@ VBL_SMART_PTR_INSTANTIATE(impl);
 VBL_IO_SMART_PTR_INSTANTIATE(impl);
 
 
-typedef vbl_smart_ptr<impl> base_sptr;
+using base_sptr = vbl_smart_ptr<impl>;
 
 // Remember, the template instances must be in
 // Templates, but they use these classes, so the class
