@@ -27,13 +27,13 @@ int main(int argc, char *argv[])
     switch (opt)
     {
      case 'x':
-      width = std::atoi(optarg);
+      width = std::stoi(optarg);
       break;
      case 'y':
-      height = std::atoi(optarg);
+      height = std::stoi(optarg);
       break;
      case 'n':
-      num_to_grab = std::atoi(optarg);
+      num_to_grab = std::stoi(optarg);
       break;
      case 'c':
       camera_name = new char[std::strlen(optarg)+1];

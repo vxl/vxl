@@ -77,7 +77,7 @@ bool mvl2_image_format_plugin::get_frame_number_and_filename(
 
   std::string frame_string=path.substr(frame_sep_pos+1,path.length()-5-frame_sep_pos);
 
-  frame_number=std::atoi(frame_string.c_str());
+  frame_number=std::stoi(frame_string.c_str());
   filename=path.substr(0,frame_sep_pos)+extension;
 
   if (!vul_file::exists(filename))

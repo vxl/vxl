@@ -216,12 +216,12 @@ std::string& vul_string_right_trim(std::string& sr, const char* rem)
 
 int vul_string_atoi(std::string const& s)
 {
-  return std::atoi(s.c_str());
+  return std::stoi(s.c_str());
 }
 
 double vul_string_atof(std::string const& s)
 {
-  return std::atof(s.c_str());
+  return std::stod(s.c_str());
 }
 
 

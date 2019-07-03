@@ -88,7 +88,7 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
     if (length>14) return 0;
 
     std::strncpy(temp,in_string-length,length);
-    if ( (fsec = (float)std::atof(temp)) >= 60.0f || fsec<0.0f)
+    if ( (fsec = (float)std::stod(temp)) >= 60.0f || fsec<0.0f)
       return 0;
     delete [] temp;
 
@@ -146,7 +146,7 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
     if (length>14) return 0;
 
     std::strncpy(temp,in_string-length,length);
-    if ( (fsec = (float)std::atof(temp)) >= 60.0f || fsec<0.0f)
+    if ( (fsec = (float)std::stod(temp)) >= 60.0f || fsec<0.0f)
       return 0;
     delete [] temp;
 
@@ -190,7 +190,7 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
 
     //calculate value of float
     std::strncpy(temp,in_string-length,length);
-    *val = std::atof(temp);
+    *val = std::stod(temp);
     if (std::fabs(*val)>float(maxval)) return 0;
     delete [] temp;
 

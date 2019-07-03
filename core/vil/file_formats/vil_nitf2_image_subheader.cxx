@@ -384,10 +384,10 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min)
     }
   if (!found)
     return false;
-  day  = std::atoi(s_day.c_str());
-  hour = std::atoi(s_hour.c_str());
-  min =  std::atoi(s_min.c_str());
-  year = std::atoi(s_year_suff.c_str());
+  day  = std::stoi(s_day.c_str());
+  hour = std::stoi(s_hour.c_str());
+  min =  std::stoi(s_min.c_str());
+  year = std::stoi(s_year_suff.c_str());
   year += 2000;//good until the next millenium
   return true;
 }
@@ -435,13 +435,13 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min, int& sec)
     s_hour  = date_time.substr(8,2);
     s_min   = date_time.substr(10,2);
     s_sec   = date_time.substr(12,2);
-    month   = std::atoi(s_month.c_str());
+    month   = std::stoi(s_month.c_str());
   }
-  day  = std::atoi(s_day.c_str());
-  hour = std::atoi(s_hour.c_str());
-  min =  std::atoi(s_min.c_str());
-  sec =  std::atoi(s_sec.c_str());
-  year = std::atoi(s_year.c_str());
+  day  = std::stoi(s_day.c_str());
+  hour = std::stoi(s_hour.c_str());
+  min =  std::stoi(s_min.c_str());
+  sec =  std::stoi(s_sec.c_str());
+  year = std::stoi(s_year.c_str());
   if (year < 100)
     year += 2000;//good until the next millenium
   return true;

@@ -378,7 +378,7 @@ bool mbl_table::read(std::istream& is)
         if (read_delimited_string(is, str, eol, eof))
         {
           // Convert string to double (NB sets to 0 if string is non-numeric)
-          double val = std::atof(str.c_str());
+          double val = std::stod(str.c_str());
 
           // Add this double value to the current column vector
           columns_[col].push_back(val);

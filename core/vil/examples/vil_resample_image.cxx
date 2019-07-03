@@ -33,8 +33,8 @@ int main(int argc, char** argv)
 
   std::cout<<"Loaded image of size "<<src_im.ni()<<" x "<<src_im.nj()<<std::endl;
 
-  int n1= std::atoi(argv[3]);
-  int n2= std::atoi(argv[4]);
+  int n1= std::stoi(argv[3]);
+  int n2= std::stoi(argv[4]);
 
   // resample the image
   vil_image_view<vxl_byte> dest_im;

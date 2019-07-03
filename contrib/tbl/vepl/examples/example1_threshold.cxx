@@ -29,7 +29,7 @@ main(int argc, char** argv)
   if (!in) return 2;
 
   // The threshold value:
-  vxl_byte threshold = (argc < 4) ? 127 : vxl_byte(std::atoi(argv[3]));
+  vxl_byte threshold = (argc < 4) ? 127 : vxl_byte(std::stoi(argv[3]));
 
   // The filter:
   vil_image_resource_sptr out = vepl_threshold(in,threshold,0);

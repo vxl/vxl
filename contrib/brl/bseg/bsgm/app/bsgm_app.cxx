@@ -50,11 +50,11 @@ int main(int argc,char * argv[])
   std::string right_name(argv[1]);
   std::string left_name(argv[2]);
   std::string disp_name(argv[3]);
-  int min_disparity = atoi(argv[4]);
-  int num_disparities = atoi(argv[5]);
-  int num_active_disparities = atoi(argv[6]);
-  int multi_scale_mode = atoi(argv[7]);
-  params.error_check_mode = (argc==8) ? 1 : atoi(argv[8]);
+  int min_disparity = std::stoi(argv[4]);
+  int num_disparities = std::stoi(argv[5]);
+  int num_active_disparities = std::stoi(argv[6]);
+  int multi_scale_mode = std::stoi(argv[7]);
+  params.error_check_mode = (argc==8) ? 1 : std::stoi(argv[8]);
 
   // Load images
   vil_image_view<vxl_byte> img_right =

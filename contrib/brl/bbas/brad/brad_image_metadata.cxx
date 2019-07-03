@@ -669,12 +669,12 @@ bool brad_image_metadata::parse_from_imd_only(std::string const& filename)
       std::string s_year, s_month, s_date, s_hour, s_minute, s_second;
       s_year = time_str.substr(0,4);    s_month = time_str.substr(5,2);     s_date = time_str.substr(8,2);
       s_hour = time_str.substr(11,2);  s_minute = time_str.substr(14,2);  s_second = time_str.substr(17,2);
-      t_.year  = std::atoi(s_year.c_str());
-      t_.month = std::atoi(s_month.c_str());
-      t_.day   = std::atoi(s_date.c_str());
-      t_.hour  = std::atoi(s_hour.c_str());
-      t_.min   = std::atoi(s_minute.c_str());
-      t_.sec   = std::atoi(s_second.c_str());
+      t_.year  = std::stoi(s_year.c_str());
+      t_.month = std::stoi(s_month.c_str());
+      t_.day   = std::stoi(s_date.c_str());
+      t_.hour  = std::stoi(s_hour.c_str());
+      t_.min   = std::stoi(s_minute.c_str());
+      t_.sec   = std::stoi(s_second.c_str());
       continue;
     }
   }
@@ -872,12 +872,12 @@ bool brad_image_metadata::parse_from_pvl_only(std::string const& filename)
       std::string s_year, s_month, s_date, s_hour, s_minute, s_second;
       s_year = time_str.substr(0,4);    s_month = time_str.substr(5,2);     s_date = time_str.substr(8,2);
       s_hour = time_str.substr(11,2);  s_minute = time_str.substr(14,2);  s_second = time_str.substr(17,2);
-      t_.year  = std::atoi(s_year.c_str());
-      t_.month = std::atoi(s_month.c_str());
-      t_.day   = std::atoi(s_date.c_str());
-      t_.hour  = std::atoi(s_hour.c_str());
-      t_.min   = std::atoi(s_minute.c_str());
-      t_.sec   = std::atoi(s_second.c_str());
+      t_.year  = std::stoi(s_year.c_str());
+      t_.month = std::stoi(s_month.c_str());
+      t_.day   = std::stoi(s_date.c_str());
+      t_.hour  = std::stoi(s_hour.c_str());
+      t_.min   = std::stoi(s_minute.c_str());
+      t_.sec   = std::stoi(s_second.c_str());
     }
   }
   // set the camera offset

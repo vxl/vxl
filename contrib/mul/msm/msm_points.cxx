@@ -268,7 +268,7 @@ bool msm_points::read_text_file(const std::string& path)
   if (label != "version:")
   {
     // Attempt to load in old format
-    int n = std::atoi(label.c_str());
+    int n = std::stoi(label.c_str());
     if (n>0)
     {
       return read_points(afs, v_, n);

@@ -43,7 +43,7 @@ main(int argc, char** argv)
   vil_image_view<vxl_byte>* dst = &out;
 
   // The threshold value:
-  vxl_byte threshold = (argc < 4) ? 127 : vxl_byte(std::atoi(argv[3]));
+  vxl_byte threshold = (argc < 4) ? 127 : vxl_byte(std::stoi(argv[3]));
 
   // The filter:
   vipl_threshold<vil_image_view<vxl_byte>,vil_image_view<vxl_byte>,vxl_byte,vxl_byte> op(threshold,0);

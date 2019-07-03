@@ -71,7 +71,7 @@ std::istream * vul_http_open(char const *url)
   if (host.size() > 0L)
   for (unsigned int i=(unsigned int)(host.size()-1); i>0; --i)
     if (host[i] == ':') {
-      port = std::atoi(host.c_str() + i + 1);
+      port = std::stoi(host.c_str() + i + 1);
       host = std::string(host.c_str(), host.c_str() + i);
       break;
     }
@@ -275,7 +275,7 @@ bool vul_http_exists(char const *url)
   // port?
   for (unsigned int i=0; i<host.size(); ++i)
     if (host[i] == ':') {
-      port = std::atoi(host.c_str() + i + 1);
+      port = std::stoi(host.c_str() + i + 1);
       host = std::string(host.c_str(), host.c_str() + i);
       break;
     }

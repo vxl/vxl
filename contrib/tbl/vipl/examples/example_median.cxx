@@ -56,7 +56,7 @@ main(int argc, char** argv)
   int ys = in.nj();
 
   // The radius: (default is 3x3 square)
-  float radius = (argc < 4) ? 1.5f : (float)std::atof(argv[3]);
+  float radius = (argc < 4) ? 1.5f : (float)std::stod(argv[3]);
 
   img_type src(xs,ys);
   img_type dst(xs,ys);

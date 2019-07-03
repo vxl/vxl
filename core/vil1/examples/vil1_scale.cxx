@@ -20,8 +20,8 @@ int main(int argc, char ** argv)
     std::cerr << "usage: vil1_scale w h in out format\n";
     return -1;
   }
-  int w = std::atoi(argv[1]);
-  int h = std::atoi(argv[2]);
+  int w = std::stoi(argv[1]);
+  int h = std::stoi(argv[2]);
   char const* input_filename = argv[3];
   char const* output_filename = argv[4];
   char const* output_format = argv[5];

@@ -556,7 +556,7 @@ namespace
           std::cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
         }
         else {
-          value = static_cast<float>( std::atof( str.c_str() ) );
+          value = static_cast<float>( std::stod( str.c_str() ) );
         }
       }
     }
@@ -571,7 +571,7 @@ namespace
             std::cerr << "Warning: value of ("<<group<<','<<element<<") at " << pos << " is not string\n";
           }
           else {
-            value.push_back( static_cast<float>( std::atof( str.c_str() ) ) );
+            value.push_back( static_cast<float>( std::stod( str.c_str() ) ) );
           }
         }
       }
@@ -708,7 +708,7 @@ namespace
           std::cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
         }
         else {
-          value = static_cast<float>( std::atof( str.c_str() ) );
+          value = static_cast<float>( std::stod( str.c_str() ) );
         }
       }
     }

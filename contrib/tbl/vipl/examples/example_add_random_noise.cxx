@@ -42,7 +42,7 @@ main(int argc, char** argv)
   vil_image_view<vxl_byte> out(in.ni(),in.nj(),in.nplanes());
 
   // The noise `width':
-  double sigma = (argc < 4) ? 5.0 : std::atof(argv[3]);
+  double sigma = (argc < 4) ? 5.0 : std::stod(argv[3]);
   auto s = (vxl_byte)(sigma+0.5); // round to integer
 
   // The filter:

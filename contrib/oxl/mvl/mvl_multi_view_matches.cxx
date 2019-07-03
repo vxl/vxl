@@ -254,9 +254,9 @@ std::istream& mvl_multi_view_matches::read(std::istream& s)
   int max_track = 0;
   for (; awk; ++awk) {
     if (awk.NF() != 3) std::abort();
-    int track = atoi(awk[0]);
-    int frame = atoi(awk[1]);
-    int corner = atoi(awk[2]);
+    int track = std::stoi(awk[0]);
+    int frame = std::stoi(awk[1]);
+    int corner = std::stoi(awk[2]);
     tracks_[track][frame] = corner;
     if (track > max_track) max_track = track;
   }

@@ -37,7 +37,7 @@ main(int argc, char** argv) {
   if (!in) { std::cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The radius: (default is 3+3 cross)
-  float radius = (argc < 4) ? 1.0f : (float)std::atof(argv[3]);
+  float radius = (argc < 4) ? 1.0f : (float)std::stod(argv[3]);
 
   // The filter:
   vil_image_resource_sptr out = vepl_dilate_disk(in,radius);

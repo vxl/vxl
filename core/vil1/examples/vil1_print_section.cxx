@@ -34,10 +34,10 @@ int main(int argc, char **argv)
   assert(argc == 6);
 
   vil1_image I = vil1_load(argv[1]); assert(I);
-  int x0 = std::atoi(argv[2]);
-  int y0 = std::atoi(argv[3]);
-  unsigned w = std::atoi(argv[4]);
-  unsigned h = std::atoi(argv[5]);
+  int x0 = std::stoi(argv[2]);
+  int y0 = std::stoi(argv[3]);
+  unsigned w = std::stoi(argv[4]);
+  unsigned h = std::stoi(argv[5]);
 
   std::cerr << "image is " << I.width() << 'x' << I.height() << std::endl;
   assert(0<=x0 && 0<=y0 && x0+int(w)<=I.width() && y0+int(h)<=I.height());

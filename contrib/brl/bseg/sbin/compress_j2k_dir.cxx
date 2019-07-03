@@ -71,7 +71,7 @@ int main(int argc,char * argv[])
   {
     std::string in_image_dir(argv[1]);
     std::string out_image_dir(argv[2]);
-    unsigned compression_ratio = std::atoi(argv[3]);
+    unsigned compression_ratio = std::stoi(argv[3]);
     std::cout << "in dir = " << in_image_dir << std::endl
              << "out_dir =" << out_image_dir << std::endl
              << "target compression ratio " << compression_ratio << std::endl;

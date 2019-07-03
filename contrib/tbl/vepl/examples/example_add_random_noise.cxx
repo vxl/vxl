@@ -28,7 +28,7 @@ main(int argc, char** argv) {
   if (!in) { std::cerr << "Cannot read image from "<<argv[1]<<'\n'; return 2; }
 
   // The noise `width':
-  double sigma = (argc < 4) ? 5 : std::atof(argv[3]);
+  double sigma = (argc < 4) ? 5 : std::stod(argv[3]);
 
   // The filter:
   vil_image_resource_sptr out = vepl_add_random_noise(in,sigma);

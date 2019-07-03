@@ -56,7 +56,7 @@ main(int argc, char** argv)
   int ys = in.nj();
 
   // The value of sigma: (default is 5)
-  float sigma = (argc < 4) ? 5.0f : (float)std::atof(argv[3]);
+  float sigma = (argc < 4) ? 5.0f : (float)std::stod(argv[3]);
 
   img_type src(ys,xs);
   img_type dst(ys,xs);
