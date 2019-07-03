@@ -64,7 +64,7 @@ void cantshift(const std::string& arg)
   std::exit (-1);
 }
 
-typedef vnl_matrix<double> Matrix;
+using Matrix = vnl_matrix<double>;
 
 template class mystack<Matrix>;
 

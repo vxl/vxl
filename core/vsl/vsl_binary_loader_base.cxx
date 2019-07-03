@@ -14,7 +14,7 @@
 static std::vector<vsl_binary_loader_base*> *loader_list_ = nullptr;
 
 
-typedef void (*clear_func_ptr) ();
+using clear_func_ptr = void (*)();
 // List of all extra loaders clear funcs registered()'ed
 // Create on heap so that it can be cleaned up itself
 static std::vector<clear_func_ptr> *extra_loader_clear_list_ = nullptr;

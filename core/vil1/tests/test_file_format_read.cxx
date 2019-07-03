@@ -25,7 +25,7 @@
 static std::string image_base;
 
 // Set to "double", which is the only type that can (roughly) represent all data types
-typedef double TruePixelType;
+using TruePixelType = double;
 
 class CheckPixel
 {

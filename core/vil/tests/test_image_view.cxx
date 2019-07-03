@@ -463,7 +463,7 @@ static void test_image_view_assignment_operator()
 
   testlib_test_begin( "Assignment operator" );
 
-  typedef vil_image_view<vxl_byte> byte_view;
+  using byte_view = vil_image_view<vxl_byte>;
 
   // Construct two views with non-zero reference counts
   //

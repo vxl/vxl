@@ -7,8 +7,8 @@
 #include <vil1/vil1_stream.h>
 #include <vxl_config.h>
 
-typedef vxl_uint_8  word8;
-typedef vxl_uint_16 word16;
+using word8 = vxl_uint_8;
+using word16 = vxl_uint_16;
 
 unsigned vil1_16bit_read_big_endian(vil1_stream *s)
 {

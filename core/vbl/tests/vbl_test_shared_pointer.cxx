@@ -19,7 +19,7 @@ struct some_class
 
 static void test_int()
 {
-  typedef vbl_shared_pointer<int> pi;
+  using pi = vbl_shared_pointer<int>;
 
   pi a(new int(13));
   pi b(new int(24));
@@ -39,7 +39,7 @@ static void test_int()
 
 static void test_class()
 {
-  typedef vbl_shared_pointer<some_class> sp;
+  using sp = vbl_shared_pointer<some_class>;
 
   sp a(new some_class);
   sp b((some_class*)nullptr);
@@ -89,9 +89,9 @@ int derv_class2::cnt = 0;
 
 static void test_derived_class()
 {
-  typedef vbl_shared_pointer<derv_class1> d1p;
-  typedef vbl_shared_pointer<derv_class2> d2p;
-  typedef vbl_shared_pointer<base_class> bp;
+  using d1p = vbl_shared_pointer<derv_class1>;
+  using d2p = vbl_shared_pointer<derv_class2>;
+  using bp = vbl_shared_pointer<base_class>;
 
   {
     std::cout << "Construct with raw derived pointer\n";

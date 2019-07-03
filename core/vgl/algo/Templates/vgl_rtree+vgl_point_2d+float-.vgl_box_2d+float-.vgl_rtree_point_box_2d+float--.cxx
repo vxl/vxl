@@ -3,8 +3,8 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/algo/vgl_rtree_c.h>
 
-typedef vgl_point_2d<float> pt;
-typedef vgl_box_2d<float> box;
-typedef vgl_rtree_point_box_2d<float> c;
+using pt = vgl_point_2d<float>;
+using box = vgl_box_2d<float>;
+using c = vgl_rtree_point_box_2d<float>;
 
 VGL_RTREE_INSTANTIATE(pt, box, c);

@@ -29,7 +29,7 @@
 // Adapted by fsm from the FILE * version in jdatadst.c
 
 #define vil_jpeg_OUTPUT_BUF_SIZE  4096 // choose an efficiently fwrite'able size
-typedef vil_jpeg_stream_destination_mgr *vil_jpeg_dstptr;
+using vil_jpeg_dstptr = vil_jpeg_stream_destination_mgr *;
 
 
 //  * Initialize destination --- called by jpeg_start_compress

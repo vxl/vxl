@@ -17,8 +17,8 @@ namespace
   // although no code was copied.
   class disjoint_sets
   {
-    typedef unsigned LABEL;
-    typedef unsigned LEN;
+    using LABEL = unsigned int;
+    using LEN = unsigned int;
     struct node
     {
       LABEL parent;

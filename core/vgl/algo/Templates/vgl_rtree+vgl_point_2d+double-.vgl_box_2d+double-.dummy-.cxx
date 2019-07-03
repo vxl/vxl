@@ -5,8 +5,8 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/algo/vgl_rtree.hxx>
 
-typedef vgl_point_2d<double> V;
-typedef vgl_box_2d<double>   B;
+using V = vgl_point_2d<double>;
+using B = vgl_box_2d<double>;
 
 struct dummy // dummy "namespace", used by some of the rtree methods
 {

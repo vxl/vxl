@@ -22,7 +22,7 @@ void test_update_mog_type(T epsilon, const std::string& type_name, T inf)
   data.push_back(vnl_vector_fixed<T,3>(-10,5,0));
 
   typedef vpdt_gaussian<vnl_vector_fixed<T,3>,T> gauss3_t;
-  typedef vpdt_mixture_of<gauss3_t> mog_t;
+  using mog_t = vpdt_mixture_of<gauss3_t>;
 
   vpdt_mog_sg_updater<mog_t> mog_updater(gauss3_t(vnl_vector_fixed<T,3>(0.0),1));
 

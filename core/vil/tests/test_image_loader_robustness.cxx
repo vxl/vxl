@@ -10,7 +10,7 @@
 #include <vil/vil_stream.h>
 #include <testlib/testlib_test.h>
 
-typedef vil_smart_ptr<vil_stream> vil_stream_sptr;
+using vil_stream_sptr = vil_smart_ptr<vil_stream>;
 
 static unsigned long rand_next;
 

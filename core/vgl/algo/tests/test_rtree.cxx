@@ -21,9 +21,9 @@ static void test_point_box()
   // C a helper class that determines bounding predicates so that
   //   V and B can remain unassociated.
   //
-  typedef vgl_rtree_point_box_2d<float> C_; // the helper class
-  typedef C_::v_type V_; // the contained object type
-  typedef C_::b_type B_; // the bounding object type
+  using C_ = vgl_rtree_point_box_2d<float>; // the helper class
+  using V_ = C_::v_type; // the contained object type
+  using B_ = C_::b_type; // the bounding object type
   std::cout << "\n<<<<<<<   test point_box tree >>>>>>>>>>>>>>\n";
   vgl_rtree<V_, B_, C_> tr; // the rtree
 
@@ -104,9 +104,9 @@ static void test_box_box()
   // C a helper class that determines bounding predicates so that
   //   V and B can remain unassociated.
   //
-  typedef vgl_rtree_box_box_2d<float> C_; // the helper class
-  typedef C_::v_type V_; // the contained object type
-  typedef C_::b_type B_; // the bounding object type
+  using C_ = vgl_rtree_box_box_2d<float>; // the helper class
+  using V_ = C_::v_type; // the contained object type
+  using B_ = C_::b_type; // the bounding object type
   std::cout << "\n<<<<<<<   test box_box tree >>>>>>>>>>>>>>\n";
   vgl_rtree<V_, B_, C_> tr; // the rtree
 

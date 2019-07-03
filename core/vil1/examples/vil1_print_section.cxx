@@ -42,7 +42,7 @@ int main(int argc, char **argv)
   std::cerr << "image is " << I.width() << 'x' << I.height() << std::endl;
   assert(0<=x0 && 0<=y0 && x0+int(w)<=I.width() && y0+int(h)<=I.height());
 
-  typedef unsigned char byte;
+  using byte = unsigned char;
   if (I.planes()==1 && I.components()==3 && I.bits_per_component()==8)
   {
     std::vector<byte> buf(3*w*h);
