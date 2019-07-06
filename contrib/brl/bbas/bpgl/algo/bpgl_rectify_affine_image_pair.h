@@ -15,10 +15,11 @@
 #include <vnl/vnl_matrix_fixed.h>
 
 struct rectify_params{
-  rectify_params(): min_disparity_z_(NAN), n_points_(1000), upsample_scale_(1.0){}
+  rectify_params(): min_disparity_z_(NAN), n_points_(1000), upsample_scale_(1.0), invalid_pixel_val_(0.0f){}
   double min_disparity_z_; // horizontal plane where disparity at each pixel is minimum
   size_t n_points_;            // number of points used to create correspondences
   double upsample_scale_;      // scale factor to upsample rectified images
+  float invalid_pixel_val_;
 };
 
 //
@@ -50,10 +51,12 @@ class bpgl_rectify_affine_image_pair
   }
 
   //: set parameter values
-  void set_param_values(double min_disparity_z = NAN, size_t n_points = 1000, double upsample_scale =1.0){
+  void set_param_values(double min_disparity_z = NAN, size_t n_points = 1000,
+                        double upsample_scale =1.0, float invalid_pixel_val = 0.0f){
     params_.min_disparity_z_ = min_disparity_z;
     params_.n_points_ = n_points;
     params_.upsample_scale_ = upsample_scale;
+    params_.invalid_pixel_val_ = invalid_pixel_val;
   }
 
   //: set images & cameras
@@ -103,10 +106,10 @@ class bpgl_rectify_affine_image_pair
   // protected utility methods
   bool compute_rectification(vgl_box_3d<double> const& scene_box);
   void compute_warp_dimensions_offsets();
-  static void warp_image(vil_image_view<float> fview,
-                         vnl_matrix_fixed<double, 3, 3> const& H,
-                         vil_image_view<float>& fwarp,
-                         size_t out_ni, size_t out_nj);
+  void warp_image(vil_image_view<float> fview,
+                  vnl_matrix_fixed<double, 3, 3> const& H,
+                  vil_image_view<float>& fwarp,
+                  size_t out_ni, size_t out_nj);
   void warp_pair();
 
  private:

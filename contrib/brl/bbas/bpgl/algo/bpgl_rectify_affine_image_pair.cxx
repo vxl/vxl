@@ -269,7 +269,8 @@ compute_rectification(vgl_box_3d<double>const& scene_box)
   return true;
 }
 
-
+// provide the possibility of NAN as an invalid pixel value. Useful for subsequent
+// processing to avoid the invalid warp regions in the rectified image.
 void bpgl_rectify_affine_image_pair::
 warp_image(vil_image_view<float> fview,
            vnl_matrix_fixed<double, 3, 3> const& H,
@@ -280,7 +281,7 @@ warp_image(vil_image_view<float> fview,
   double dni = static_cast<double>(ni);
   double dnj = static_cast<double>(nj);
   fwarp.set_size(out_ni, out_nj);
-  fwarp.fill(0.0f);
+  fwarp.fill(params_.invalid_pixel_val_);
   vnl_matrix_fixed<double, 3, 3> Hinv = vnl_inverse(H);
   for(size_t j =0; j<out_nj; ++j)
     for(size_t i =0; i<out_ni; ++i){
