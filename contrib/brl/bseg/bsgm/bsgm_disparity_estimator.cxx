@@ -250,48 +250,44 @@ bsgm_disparity_estimator::compute_census_data(
   for( int y = 0; y < h_; y++ ){
     for( int x = 0; x < w_; x++ ){
 
+      unsigned char* ac = app_cost[y][x];
+
       // If invalid pixel, fill with 255
       if( invalid_tar(x,y) ){
-        for( int d = 0; d < num_disparities_; d++ )
-          app_cost[y][x][d] = 255;
+        for( int d = 0; d < num_disparities_; d++, ac++ )
+          *ac = 255;
         continue;
       }
 
-      // Start iterating through disparities
-      int d = 0;
-      int x2 = x + min_disparity(x,y);
-
-      // Pixels off left-side of image set to 255
-      unsigned char* ac = &app_cost[y][x][0];
-      for( ; x2 < 0; d++, x2++, ac++ )
-        *ac = 255;
-
-      // This needed in rare case that min_disparity > 0
-      for( ; x2 >= w_ && d < num_disparities_; d++, x2++, ac++ )
-        *ac = 255;
-
-      // Compute census costs for all valid disparities
+      // Target census values
       vxl_uint_64 cen_t = census_tar(x,y);
-      vxl_uint_64* cen_r = &census_ref(x2,y);
       vxl_uint_64 conf_t = census_conf_tar(x,y);
-      vxl_uint_64* conf_r = &census_conf_ref(x2,y);
 
-      for( ; d < num_disparities_; d++, x2++, ac++, cen_r++, conf_r++ ){
+      // Compute all costs
+      int x2 = x + min_disparity(x,y);
+      for ( int d = 0; d < num_disparities_; d++, x2++, ac++ ) {
 
         // Check valid match pixel
-        if( x2 >= w_ )
+        if( x2 < 0 || x2 >= w_ )
           *ac = 255;
 
-        // Compare census images using hamming distance
+        // Compare census values using hamming distance
         else {
 
+          // reference census values
+          vxl_uint_64 cen_r = census_ref(x2,y);
+          vxl_uint_64 conf_r = census_conf_ref(x2,y);
+
+          // census comparison
           unsigned long long int cen_diff =
-            bsgm_compute_diff_string( cen_t, *cen_r, conf_t, *conf_r );
+            bsgm_compute_diff_string( cen_t, cen_r, conf_t, conf_r );
 
           unsigned char ham =
             bsgm_compute_hamming_lut( cen_diff, bit_set_table, only_32_bits );
 
           float ham_norm = census_norm*ham;
+
+          // weighted update of appearance cost
           float ac_new = (float)(*ac) + params_.census_weight*ham_norm;
           *ac = (unsigned char)( ac_new > 255.0f ? 255.0f : ac_new );
         }
@@ -336,10 +332,15 @@ bsgm_disparity_estimator::compute_xgrad_data(
 
         // Compare gradient intensities
         else {
+
+          // gradient comparison
           float g = grad_norm*fabs( grad_x_tar(x,y) - grad_x_ref(x2,y) );
+
+          // weighted update of appearance cost
           float ac_new = (float)(*ac) + params_.xgrad_weight*g;
           *ac = (unsigned char)( ac_new > 255.0f ? 255.0f : ac_new );
         }
+
       } //d
     } //j
   } //i
