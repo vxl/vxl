@@ -91,7 +91,7 @@ int main( int nArgc, char ** papszArgv )
                                                sizeof(int) * nColumns);
 
             for( j = 0; j < nColumns; j++ )
-                panColumnList[j] = std::stoi(papszList[j]);
+                panColumnList[j] = atoi(papszList[j]);
 
             CSLDestroy( papszList );
         }
@@ -193,17 +193,17 @@ CSV2HTML( const char * pszFilename, int nColumns, int * panColumns,
         {
             if( EQUALN(papszOptions[i],"CODE=",5) )
             {
-                if( std::stoi(papszOptions[i]+5) != std::stoi(papszFields[0]) )
+                if( atoi(papszOptions[i]+5) != atoi(papszFields[0]) )
                     bDisplay = FALSE;
             }
             else if( EQUALN(papszOptions[i],"CODE<",5) )
             {
-                if( std::stoi(papszOptions[i]+5) <= std::stoi(papszFields[0]) )
+                if( atoi(papszOptions[i]+5) <= atoi(papszFields[0]) )
                     bDisplay = FALSE;
             }
             else if( EQUALN(papszOptions[i],"CODE>",5) )
             {
-                if( std::stoi(papszOptions[i]+5) >= std::stoi(papszFields[0]) )
+                if( atoi(papszOptions[i]+5) >= atoi(papszFields[0]) )
                     bDisplay = FALSE;
             }
             else if( EQUALN(papszOptions[i],"NAMEKEY=",8) )
