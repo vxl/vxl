@@ -66,8 +66,8 @@ bool local_minima(vbl_array_2d<T> const& in, vbl_array_2d<T>& minima, T thresh)
   T ll,  lm, lr;
   T dmin;
   //general case
-  if (nr>2&&nc>2)
-    for (unsigned r = 1; r<nr-1; ++r)
+  if (nr>2&&nc>2) {
+    for (unsigned r = 1; r<nr-1; ++r) {
       for (unsigned c = 1; c<nc-1; ++c) {
         // xxxxxxxxxxxxxxxxxxxxxxx
         // xxxx   ul um  ur  xxxxx
@@ -83,19 +83,37 @@ bool local_minima(vbl_array_2d<T> const& in, vbl_array_2d<T>& minima, T thresh)
         lm = in[r+1][c]   - in[r][c];
         lr = in[r+1][c+1] - in[r][c];
         dmin = mval;
-        if (ul<=thresh) continue; if (ul<dmin) dmin = ul;
-        if (um<=thresh) continue; if (um<dmin) dmin = um;
-        if (ur<=thresh) continue; if (ur<dmin) dmin = ur;
-        if (lf<=thresh) continue; if (lf<dmin) dmin = lf;
-        if (ri<=thresh) continue; if (ri<dmin) dmin = ri;
-        if (ll<=thresh) continue; if (ll<dmin) dmin = ll;
-        if (lm<=thresh) continue; if (lm<dmin) dmin = lm;
-        if (lr<=thresh) continue; if (lr<dmin) dmin = lr;
+        if (ul<=thresh) continue;
+        if (ul<dmin) { dmin = ul; }
+
+        if (um<=thresh) continue;
+        if (um<dmin) { dmin = um; }
+
+        if (ur<=thresh) continue;
+        if (ur<dmin) { dmin = ur; }
+
+        if (lf<=thresh) continue;
+        if (lf<dmin) { dmin = lf; }
+
+        if (ri<=thresh) continue;
+        if (ri<dmin) { dmin = ri; }
+
+        if (ll<=thresh) continue;
+        if (ll<dmin) { dmin = ll; }
+
+        if (lm<=thresh) continue;
+        if (lm<dmin) { dmin = lm; }
+
+        if (lr<=thresh) continue;
+        if (lr<dmin) { dmin = lr; }
+
         if (dmin>thresh) {
           minima[r][c] = dmin;
           minima_found = true;
         }
       }
+    }
+  }
 
   // special cases at the borders
   if (nc>2) {
@@ -110,11 +128,20 @@ bool local_minima(vbl_array_2d<T> const& in, vbl_array_2d<T>& minima, T thresh)
       lm = in[1][c]     - in[0][c];
       lr = in[1][c+1]   - in[0][c];
       dmin = mval;
-      if (lf<=thresh) continue; if (lf<dmin) dmin = lf;
-      if (ri<=thresh) continue; if (ri<dmin) dmin = ri;
-      if (ll<=thresh) continue; if (ll<dmin) dmin = ll;
-      if (lm<=thresh) continue; if (lm<dmin) dmin = lm;
-      if (lr<=thresh) continue; if (lr<dmin) dmin = lr;
+      if (lf<=thresh) continue;
+      if (lf<dmin) { dmin = lf; }
+
+      if (ri<=thresh) continue;
+      if (ri<dmin) { dmin = ri; }
+
+      if (ll<=thresh) continue;
+      if (ll<dmin) { dmin = ll; }
+
+      if (lm<=thresh) continue;
+      if (lm<dmin) { dmin = lm; }
+
+      if (lr<=thresh) continue;
+      if (lr<dmin) { dmin = lr; }
       if (dmin>thresh) {
         minima[0][c] = dmin;
         minima_found = true;
@@ -131,11 +158,16 @@ bool local_minima(vbl_array_2d<T> const& in, vbl_array_2d<T>& minima, T thresh)
       lf = in[nr-1][c-1] - in[nr-1][c];
       ri = in[nr-1][c+1] - in[nr-1][c];
       dmin = mval;
-      if (ul<=thresh) continue; if (ul<dmin) dmin = ul;
-      if (um<=thresh) continue; if (um<dmin) dmin = um;
-      if (ur<=thresh) continue; if (ur<dmin) dmin = ur;
-      if (lf<=thresh) continue; if (lf<dmin) dmin = lf;
-      if (ri<=thresh) continue; if (ri<dmin) dmin = ri;
+      if (ul<=thresh) continue;
+      if (ul<dmin) { dmin = ul; }
+      if (um<=thresh) continue;
+      if (um<dmin) { dmin = um; }
+      if (ur<=thresh) continue;
+      if (ur<dmin) { dmin = ur; }
+      if (lf<=thresh) continue;
+      if (lf<dmin) { dmin = lf; }
+      if (ri<=thresh) continue;
+      if (ri<dmin) { dmin = ri; }
       if (dmin>thresh) {
         minima[nr-1][c] = dmin;
         minima_found = true;
@@ -154,11 +186,21 @@ bool local_minima(vbl_array_2d<T> const& in, vbl_array_2d<T>& minima, T thresh)
       lm = in[r+1][0] - in[r][0];
       lr = in[r+1][1] - in[r][0];
       dmin = mval;
-      if (um<=thresh) continue; if (um<dmin) dmin = um;
-      if (ur<=thresh) continue; if (ur<dmin) dmin = ur;
-      if (ri<=thresh) continue; if (ri<dmin) dmin = ri;
-      if (lm<=thresh) continue; if (lm<dmin) dmin = lm;
-      if (lr<=thresh) continue; if (lr<dmin) dmin = lr;
+      if (um<=thresh) continue;
+      if (um<dmin) { dmin = um; }
+
+      if (ur<=thresh) continue;
+      if (ur<dmin) { dmin = ur; }
+
+      if (ri<=thresh) continue;
+      if (ri<dmin) { dmin = ri; }
+
+      if (lm<=thresh) continue;
+      if (lm<dmin) { dmin = lm; }
+
+      if (lr<=thresh) continue;
+      if (lr<dmin) { dmin = lr; }
+
       if (dmin>thresh) {
         minima[r][0] = dmin;
         minima_found = true;
@@ -175,11 +217,21 @@ bool local_minima(vbl_array_2d<T> const& in, vbl_array_2d<T>& minima, T thresh)
       ll = in[r+1][nc-2] - in[r][nc-1];
       lm = in[r+1][nc-1] - in[r][nc-1];
       dmin = mval;
-      if (ul<=thresh) continue; if (ul<dmin) dmin = ul;
-      if (um<=thresh) continue; if (um<dmin) dmin = um;
-      if (lf<=thresh) continue; if (lf<dmin) dmin = lf;
-      if (ll<=thresh) continue; if (ll<dmin) dmin = ll;
-      if (lm<=thresh) continue; if (lm<dmin) dmin = lm;
+      if (ul<=thresh) continue;
+      if (ul<dmin) { dmin = ul; }
+    
+      if (um<=thresh) continue;
+      if (um<dmin) { dmin = um; }
+    
+      if (lf<=thresh) continue;
+      if (lf<dmin) { dmin = lf; }
+    
+      if (ll<=thresh) continue;
+      if (ll<dmin) { dmin = ll; }
+    
+      if (lm<=thresh) continue;
+      if (lm<dmin) { dmin = lm; }
+    
       if (dmin>thresh) {
         minima[r][nc-1] = dmin;
         minima_found = true;
@@ -195,9 +247,15 @@ bool local_minima(vbl_array_2d<T> const& in, vbl_array_2d<T>& minima, T thresh)
   lm = in[1][0] - in[0][0];
   lr = in[1][1] - in[0][0];
   dmin = mval;
-  if (ri<=thresh) fail = true; if (ri<dmin) dmin = ri;
-  if (lm<=thresh) fail = true; if (lm<dmin) dmin = lm;
-  if (lr<=thresh) fail = true; if (lr<dmin) dmin = lr;
+  if (ri<=thresh) fail = true;
+  if (ri<dmin) { dmin = ri; }
+
+  if (lm<=thresh) fail = true;
+  if (lm<dmin) { dmin = lm; }
+
+  if (lr<=thresh) fail = true;
+  if (lr<dmin) { dmin = lr; }
+
   if (!fail) {
     minima[0][0] = dmin;
     minima_found = true;
@@ -210,9 +268,15 @@ bool local_minima(vbl_array_2d<T> const& in, vbl_array_2d<T>& minima, T thresh)
   lm = in[1][nc-1] - in[0][nc-1];
   ll = in[1][nc-2] - in[0][nc-1];
   dmin = mval;
-  if (lf<=thresh) fail = true; if (lf<dmin) dmin = lf;
-  if (lm<=thresh) fail = true; if (lm<dmin) dmin = lm;
-  if (ll<=thresh) fail = true; if (ll<dmin) dmin = ll;
+  if (lf<=thresh) { fail = true; }
+  if (lf<dmin) { dmin = lf; }
+
+  if (lm<=thresh) { fail = true; }
+  if (lm<dmin) { dmin = lm; }
+
+  if (ll<=thresh) { fail = true; }
+  if (ll<dmin) { dmin = ll; }
+
   if (!fail) {
     minima[0][nc-1] = dmin;
     minima_found = true;
@@ -225,9 +289,15 @@ bool local_minima(vbl_array_2d<T> const& in, vbl_array_2d<T>& minima, T thresh)
   um = in[nr-2][nc-1] - in[nr-1][nc-1];
   lf = in[nr-1][nc-2] - in[nr-1][nc-1];
   dmin = mval;
-  if (ul<=thresh) fail = true; if (ul<dmin) dmin = ul;
-  if (um<=thresh) fail = true; if (um<dmin) dmin = um;
-  if (lf<=thresh) fail = true; if (lf<dmin) dmin = lf;
+  if (ul<=thresh) { fail = true; }
+  if (ul<dmin) { dmin = ul; }
+
+  if (um<=thresh) { fail = true; }
+  if (um<dmin) { dmin = um; }
+
+  if (lf<=thresh) { fail = true; }
+  if (lf<dmin) { dmin = lf; }
+
   if (!fail) {
     minima[nr-1][nc-1] = dmin;
     minima_found = true;
@@ -240,9 +310,15 @@ bool local_minima(vbl_array_2d<T> const& in, vbl_array_2d<T>& minima, T thresh)
   um = in[nr-2][0] - in[nr-1][0];
   ri = in[nr-1][1] - in[nr-1][0];
   dmin = mval;
-  if (ur<=thresh) fail = true; if (ur<dmin) dmin = ur;
-  if (um<=thresh) fail = true; if (um<dmin) dmin = um;
-  if (ri<=thresh) fail = true; if (ri<dmin) dmin = ri;
+  if (ur<=thresh) { fail = true; }
+  if (ur<dmin) { dmin = ur; }
+
+  if (um<=thresh) { fail = true; }
+  if (um<dmin) { dmin = um; }
+
+  if (ri<=thresh) { fail = true; }
+  if (ri<dmin) { dmin = ri; }
+
   if (!fail) {
     minima[nr-1][0] = dmin;
     minima_found = true;
