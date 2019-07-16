@@ -549,7 +549,9 @@ char * GTIFGetProj4Defn( GTIFDefn * psDefn )
 
     strcat( szProjection, szUnits );
 
-    return( strdup( szProjection ) );
+    char * return_string=malloc( strlen(szProjection) + 1  );
+    strcpy( return_string, szProjection );
+    return( return_string );
 }
 
 #if !defined(HAVE_LIBPROJ) || !defined(HAVE_PROJECTS_H)
