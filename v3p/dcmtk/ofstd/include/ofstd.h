@@ -268,7 +268,7 @@ class OFStandard
      *    If a terminating character is found before any floating-point
      *    digits, then zero is returned.
      */
-     static double std::stod(const char *s,
+     static double atof(const char *s,
                         OFBool *success = NULL);
 
      /** formats a floating-point number into an ASCII string.
