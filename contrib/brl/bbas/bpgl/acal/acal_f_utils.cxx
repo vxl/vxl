@@ -412,27 +412,54 @@ bool acal_f_utils::read_affine_cameras(
     std::string affine_cam_path,
     std::map<size_t, vpgl_affine_camera<double> >& acams)
 {
+  // Open affine_cam_path for reading
   std::ifstream istr(affine_cam_path.c_str());
-  if(!istr){
-    std::cout << "Can't open " << affine_cam_path << " to read affine cameras" << std::endl;
+  if(!istr) {
+    std::cerr << "Can't open " << affine_cam_path << " to read affine cameras" << std::endl;
     return false;
   }
+
+  // Read the first line, which should be the number of cameras
   size_t ncams, cam_idx;
   istr >> ncams;
-  if(ncams == 0){
-    std::cout << "no cameras to read" << std::endl;
+  if(ncams == 0) {
+    std::cerr << "no cameras to read" << std::endl;
     return false;
   }
-  for(size_t i = 0; i<ncams; ++i){
+
+  // For each camera
+  for(size_t i = 0; i<ncams; ++i) {
+
+    // Read in the camera ID
     istr >> cam_idx;
+
+    // Read in the viewing distance
+    double vd;
+    istr >> vd;
+
+    // Create an affine camera
     vpgl_affine_camera<double> acam;
-	double vd;
-	istr >> vd;
+
+    // Read in the 3x4 affine camera matrix
     istr >> acam;
+
+    // Store the viewing distance in the camera
     acam.set_viewing_distance(vd);
-    acams[cam_idx]=acam;
+
+    // Save camera into input map
+    acams[cam_idx] = acam;
+
+    if (!istr.good()) {
+      // An error state flag was set for the input stream, so something went wrong
+      std::cerr << "Can't open " << affine_cam_path << " to read affine cameras" << std::endl;
+      return false;
+    }
   }
+
+  // Close affine_cam_path
   istr.close();
+
+  // Return success
   return true;
 }
 
