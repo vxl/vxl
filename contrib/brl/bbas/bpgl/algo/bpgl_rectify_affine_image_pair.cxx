@@ -189,14 +189,14 @@ compute_rectification(vgl_box_3d<double>const& scene_box)
     double y = rng.drand64()*height + min_y;
     double u, v;
     acam0_.project(x,y,z0,u,v);
-  if(u>=0 || u<ni0||v>=0||v<nj0)
+    if(u>=0 && u<ni0 && v>=0 && v<nj0)
      img_pts0.emplace_back(u,v,1);
-  acam1_.project(x, y, z0, u, v);
-  if (u >= 0 || u<ni1 || v >= 0 || v<nj1)
+    acam1_.project(x, y, z0, u, v);
+    if (u >= 0 && u<ni1 && v >= 0 && v<nj1)
      img_pts1.emplace_back(u,v,1);
   }
 
-  // santity check
+  // sanity check
   bool epi_constraint = true;
   for (size_t k = 0; k < img_pts0.size(); ++k) {
     vnl_vector_fixed<double, 3> pr = img_pts0[0], line_l, pl = img_pts1[0];
