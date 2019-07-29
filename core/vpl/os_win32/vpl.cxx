@@ -74,5 +74,5 @@ int vpl_gethostname(char *name, std::size_t len)
     WSAStartup(MAKEWORD(2,2), &wsaData);
   }
 #endif
-  return gethostname(name, len);
+  return gethostname(name, static_cast<int>(len));
 }
