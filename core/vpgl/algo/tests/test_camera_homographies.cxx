@@ -54,7 +54,6 @@ static void test_camera_homographies()
 
   std::cout << "\n ===== vertical plane actual camera ======" << std::endl;
   vgl_plane_3d<double> vert_pl(vgl_vector_3d<double>(-1/sqrt(2), -1/sqrt(2), 0.0), p3d_act);
-  vgl_point_3d<double> vert_act_pt_3d;
   vgl_ray_3d<double> ray = c.backproject_ray(h_pact);
   vgl_point_3d<double> pint;
   good = vgl_intersection(ray, vert_pl, pint);

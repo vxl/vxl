@@ -17,8 +17,8 @@ vgui_win32_statusbar::vgui_win32_statusbar(HWND hwndParent, int numPanes)
          WS_CHILD|WS_BORDER|WS_VISIBLE,            // styles
          -100, -100, 10, 10,                       // x, y, cx, cy
          hwndParent,                               // parent window
-         (HMENU)statusBarID,                       // window ID
-         (HINSTANCE)GetWindowLong(hwndParent, GWLP_HINSTANCE), // instance
+         (HMENU)(__int64(statusBarID)),                       // window ID
+         (HINSTANCE)(__int64(GetWindowLong(hwndParent, GWLP_HINSTANCE))), // instance
          NULL);                                    // window data
   if ( hwnd_ == NULL )
     MessageBox(NULL, TEXT("Fail to create status bar"), TEXT("Error"),

@@ -26,7 +26,21 @@ vgui_win32_dialog_impl::vgui_win32_dialog_impl(const char* name, HWND hWnd)
   callback_controls.clear();
 }
 
-struct vgui_win32_dialog_pushbutton;
+struct vgui_win32_dialog_pushbutton
+{
+    // TODO: the destructor is not executed in Visual Studio debugger.
+    ~vgui_win32_dialog_pushbutton()
+    {
+        if (hBitmap != NULL) DeleteObject(hBitmap);
+    }
+
+    unsigned short ctrl_id;
+    std::string label;
+    HANDLE     hBitmap;
+    unsigned   width, height;
+};
+
+// struct vgui_win32_dialog_pushbutton;
 
 vgui_win32_dialog_impl::~vgui_win32_dialog_impl()
 {
@@ -78,19 +92,6 @@ void* vgui_win32_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
   tab_data->width =  width;
   return (void*)tab_data;
 }
-
-
-struct vgui_win32_dialog_pushbutton
-{
-  // TODO: the destructor is not executed in Visual Studio debugger.
-  ~vgui_win32_dialog_pushbutton()
-  { if ( hBitmap!=NULL ) DeleteObject(hBitmap); }
-
-  unsigned short ctrl_id;
-  std::string label;
-  HANDLE     hBitmap;
-  unsigned   width, height;
-};
 
 void* vgui_win32_dialog_impl::pushbutton_field_widget(const char *label, const void *icon)
 {
@@ -321,7 +322,7 @@ bool vgui_win32_dialog_impl::ask()
                  width_sep, height_sep, button_length, edit_length, browser_length);
 
 #ifdef _WIN64
-  HINSTANCE hInstance = (HINSTANCE)GetWindowLong(hWndParent, GWLP_HINSTANCE);
+  HINSTANCE hInstance = (HINSTANCE)(__int64(GetWindowLong(hWndParent, GWLP_HINSTANCE)));
 #else
   HINSTANCE hInstance = (HINSTANCE)GetWindowLong(hWndParent, GWL_HINSTANCE);
 #endif //_WIN64

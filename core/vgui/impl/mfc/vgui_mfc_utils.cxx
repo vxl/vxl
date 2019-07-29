@@ -111,7 +111,7 @@ HMENU vgui_mfc_utils::add_submenu(const vgui_menu& menu)
     }
     else if (menu[i].is_submenu()) {
       if (debug) std::cerr << " <submenu>\n";
-      popdown_menu->AppendMenu(MF_POPUP,(UINT)add_submenu(*menu[i].menu),menu[i].name.c_str());
+      popdown_menu->AppendMenu(MF_POPUP,(UINT_PTR)add_submenu(*menu[i].menu),menu[i].name.c_str());
     }
   }
   return popdown_menu->GetSafeHmenu();
@@ -157,7 +157,7 @@ void vgui_mfc_utils::set_menu(const vgui_menu& menu)
     else if (menu[i].is_submenu())
     {
       if (debug) std::cerr << " <submenu> " << menu[i].name << std::endl;
-      menu_bar->AppendMenu(MF_POPUP,(UINT)add_submenu(*menu[i].menu),menu[i].name.c_str());
+      menu_bar->AppendMenu(MF_POPUP,(UINT_PTR)add_submenu(*menu[i].menu),menu[i].name.c_str());
     }
   }
   if (accels.size() > 0)
@@ -211,7 +211,7 @@ CMenu *vgui_mfc_utils::set_popup_menu(const vgui_menu &menu)
     else if (menu[i].is_submenu())
     {
       if (debug) std::cerr << " <submenu>\n";
-        pop_up->AppendMenu(MF_POPUP,(UINT)add_submenu(*menu[i].menu),menu[i].name.c_str());
+        pop_up->AppendMenu(MF_POPUP,(UINT_PTR)add_submenu(*menu[i].menu),menu[i].name.c_str());
     }
   }
   return pop_up;

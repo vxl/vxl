@@ -73,7 +73,7 @@ static void test_equi_rectification()
   pts1.emplace_back(510.49270359363777, 901.38726023140657, 1.0);
 
   vpgl_affine_fundamental_matrix<double>  aF(acam0, acam1);
-  vnl_matrix_fixed<double, 3, 3> H0,  H1, test_H0, test_H1;
+  vnl_matrix_fixed<double, 3, 3> H0,  H1;
   bool good = vpgl_equi_rectification::rectify_pair(aF, pts0, pts1, H0, H1);
   TEST("Run on a real example", good, true);
 

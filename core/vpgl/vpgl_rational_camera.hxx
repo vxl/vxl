@@ -507,6 +507,7 @@ bool vpgl_rational_camera<T>::read_pvl(std::istream& istr)
         input_order = vpgl_rational_order_func::from_string(input);
       } catch (const std::exception& err) {
         std::cerr << "<" << input << "> unrecognized as vpgl_rational_order" << std::endl;
+        std::cerr << err.what() << std::endl;
         return false;
       }
     }
