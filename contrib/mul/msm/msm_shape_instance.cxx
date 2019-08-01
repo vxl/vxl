@@ -177,7 +177,7 @@ void msm_shape_instance::fit_to_points_wt(const msm_points& pts,
     {
       // Need to scale the weights into the reference frame
       double s = model().aligner().scale(pose_);
-      ref_wts=wts/(s*s);
+      ref_wts=wts*(s*s);  // Variance scaled by 1/(s*s) when mapped to ref.
       ref_shape_.fit_to_points_wt(tmp_points_,ref_wts);
     }
     else
