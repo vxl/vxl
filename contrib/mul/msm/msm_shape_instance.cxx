@@ -224,9 +224,6 @@ void msm_shape_instance::fit_to_points_wt_mat(const msm_points& pts,
     model().aligner().apply_transform(pts,pose_inv,tmp_points_);
 
     // Transform the weight matrices to the model frame
-    // If A is 2x2 scale/rot component, then in model frame
-    // error is (A*dx)'*W*(A*dx), thus:
-    // wt_mat2[i] = A'*wt_mat[i]*A
     std::vector<msm_wt_mat_2d> wt_mat2(n);
     model().aligner().transform_wt_mat(wt_mat,pose_inv,wt_mat2);
 

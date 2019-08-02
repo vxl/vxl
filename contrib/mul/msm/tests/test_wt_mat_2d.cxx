@@ -45,9 +45,42 @@ void test_wt_mat_2d()
   R(1,0)=b; R(1,1)= a;
   M(0,0)=W2.m11(); M(0,1)=W2.m12();
   M(1,0)=W2.m21(); M(1,1)=W2.m22();
-  RtMR=R.transpose()*M*R;
+  RtMR=R*M*R.transpose()/(a*a+b*b);
   msm_wt_mat_2d W3=W2.transform_by(a,b);
   TEST("Rt*W*R",W3==msm_wt_mat_2d(RtMR(0,0),RtMR(0,1),RtMR(1,1)),true);
+
+  // Rotation by 30 degrees
+  double u1=std::cos(3.14152857/6);
+  double u2=std::sin(3.14152857/6);
+
+  // Test calculation of eigenvector.
+  W3.set_axes(u1,u2,2,1);
+  vgl_vector_2d<double> evec1;
+  W3.eigen_vector(evec1,ev1,ev2);
+  std::cout<<"EVec: "<<evec1<<std::endl;
+  std::cout<<"Evals: "<<ev1<<", "<<ev2<<std::endl;
+
+  TEST_NEAR("Eigenvector (x)",evec1.x(),u1, 1e-4);
+  TEST_NEAR("Eigenvector (y)",evec1.y(),u2, 1e-4);
+
+  // Check the inverse
+  W3.inverse().eigen_vector(evec1,ev1,ev2);
+  TEST_NEAR("EVal1 of inverse",ev1,1, 1e-4);
+  TEST_NEAR("EVal2 of inverse",ev2,0.5, 1e-4);
+  TEST_NEAR("EVec of inverse at right angles",u1*evec1.x()+u2*evec1.y(),0, 1e-4);
+
+  // Test rotation
+  W3.set_axes(1,0,2,1);  // Variance 2 along x axis
+
+  std::cout<<"Test rotation by 30 degrees"<<std::endl;
+  msm_wt_mat_2d W4=W3.transform_by(u1,u2);
+
+  W4.eigen_vector(evec1,ev1,ev2);
+  TEST_NEAR("Eigenvector (x)",evec1.x(),u1, 1e-4);
+  TEST_NEAR("Eigenvector (y)",evec1.y(),u2, 1e-4);
+  TEST_NEAR("EVal1",ev1,2, 1e-4);
+  TEST_NEAR("EVal2",ev2,1, 1e-4);
+
 
 }
 

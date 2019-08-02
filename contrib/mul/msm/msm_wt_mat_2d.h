@@ -58,7 +58,11 @@ class msm_wt_mat_2d
   //  Other evec given by (-evec1.y(),evec1.x())
   void eigen_vector(vgl_vector_2d<double>& evec1, double& eval1, double& eval2);
 
-  //: Calculates W2=T'WT where T is 2x2 matrix (a,-b;b,a)
+  //: Calculates effect of applying rotation/scale to space
+  // W2=TWT'/(a*a+b*b) where T is 2x2 matrix (a,-b;b,a)
+  // This rotates the eigenvectors the the rotational
+  // component of T. Scaling is inverted because weights
+  // inverse of variance, and variance scales with world scale.
   msm_wt_mat_2d transform_by(double a, double b) const;
 
   //: Compute (x y)W(x y)'

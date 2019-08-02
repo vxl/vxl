@@ -67,13 +67,14 @@ void msm_wt_mat_2d::eigen_vector(vgl_vector_2d<double>& evec1, double& eval1, do
 }
 
 
-//: Calculates W2=T'WT where T is 2x2 matrix (a,-b;b,a)
+//: Calculates W2=TWT' where T is 2x2 matrix (a,-b;b,a)
 msm_wt_mat_2d msm_wt_mat_2d::transform_by(double a, double b) const
 {
   double a2=a*a,ab=a*b,b2=b*b;
-  return msm_wt_mat_2d(a2*m11_+2*ab*m12_+b2*m22_,
-                       (a2-b2)*m12_+ab*(m22_-m11_),
-                       a2*m22_-2*ab*m12_+b2*m11_);
+  double s2=a2+b2;
+  return msm_wt_mat_2d((a2*m11_-2*ab*m12_+b2*m22_)/s2,
+                       ((a2-b2)*m12_-ab*(m22_-m11_))/s2,
+                       (a2*m22_+2*ab*m12_+b2*m11_)/s2);
 }
 
 //: Post multiply by W
