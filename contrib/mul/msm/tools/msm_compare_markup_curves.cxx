@@ -27,6 +27,7 @@
 #include <mbl/mbl_stats_nd.h>
 #include <mbl/mbl_sample_stats_1d.h>
 #include <msm/utils/msm_dist_to_curves.h>
+#include <msm/utils/msm_closest_pt.h>
 
 /*
 Points from different annotators are assumed to have the same filenames, but
@@ -48,6 +49,8 @@ key_text: { Marker1 Marker2 Marker3}
 //: Path for image+ellipses, one ellipse per point summarising all sets.
 output_summary_path: results.txt
 
+//: Path for details of consistency calculations
+output_consistency_path: consistency_results.txt
 
 //: When defined, only display listed points
 points_to_show: { 3 7 12 15 }
@@ -88,8 +91,12 @@ struct tool_params
   //: Text for key
   std::vector<std::string> key_text;
 
-  //: Path for image+ellipses, one ellipse per point summarising all sets.
+  //: Path for summary results
   std::string output_summary_path;
+
+  //: Path for details of consistency calculations
+  std::string output_consistency_path;
+
 
   std::string curves_path;
 
@@ -120,6 +127,8 @@ void tool_params::read_from_file(const std::string& path)
   output_summary_path=props.get_optional_property("output_summary_path",
                                                   "results_summary.txt");
 
+  output_consistency_path=props.get_optional_property("output_consistency_path",
+                                                  "results_consistency.txt");
 
   std::string points_dirs_str=props.get_optional_property("points_dirs","");
   if (points_dirs_str!="")
@@ -216,6 +225,57 @@ void compare_two_sets(const std::vector<msm_points>& points0,
   }
 }
 
+
+//: Examine consistency of point placement along curves.
+// Find position along curve through points0[i] of closest point
+// to points1[i][pt_index].  Represent as t, where int(t)=index
+// of first point on line segment, t-int(t)= relative distance
+// along the segment.
+// If there is a consistent placement, t will have small variance.
+void analyze_pt_pos(const std::vector<msm_points>& points0,
+                      const std::vector<msm_points>& points1,
+                      const msm_curve& curve,
+                      unsigned pt_index,
+                      mbl_stats_1d& t_stats)
+{
+  t_stats.clear();
+  unsigned n=points0.size();
+  unsigned n_pts=points0[0].size();
+  msm_line_seg_pt seg;
+  double d2;
+  for (unsigned i=0;i<n;++i)
+  {
+    seg = msm_closest_seg_pt_on_curve(points0[i],curve,
+                                      points1[i][pt_index],d2);
+    t_stats.obs(seg.i0 + seg.alpha);
+  }
+}
+
+void test_revised_pt_pos(const std::vector<msm_points>& points0,
+                      const std::vector<msm_points>& points1,
+                      const msm_curve& curve,
+                      unsigned pt_index, double new_pt_pos,
+                      mbl_stats_1d& d_stats0, mbl_stats_1d& d_stats1)
+{
+  unsigned n=points0.size();
+  unsigned n_pts=points0[0].size();
+  unsigned i0=int(new_pt_pos);
+  msm_line_seg_pt seg(i0,i0+1,new_pt_pos-i0);
+  std::vector<vgl_point_2d<double> > pts;
+  vgl_vector_2d<double> dp;
+  for (unsigned i=0;i<n;++i)
+  {
+    // Distance between equivalent points on two curves.
+    dp=points0[i][pt_index]-points1[i][pt_index];
+    d_stats0.obs(dp.length());
+
+    // Get interpolated point on points0
+    points0[i].get_points(pts);
+    dp=seg.point(pts)-points1[i][pt_index];
+    d_stats1.obs(dp.length());
+  }
+}
+
 //: Display stats for a given quantity
 inline void print_summary(std::ostream& os, const mbl_sample_stats_1d& stats)
 {
@@ -223,6 +283,14 @@ inline void print_summary(std::ostream& os, const mbl_sample_stats_1d& stats)
       <<" med: "<<stats.median()
       <<" 90%: "<<stats.quantile(0.90)
       <<" 95%: "<<stats.quantile(0.95)<<std::endl;
+}
+
+//: Display stats for a given quantity
+inline void print_summary(std::ostream& os, const mbl_stats_1d& stats)
+{
+    os<<"mean: "<<std::setprecision(2)<<std::fixed<<stats.mean()
+      <<" sd: "<<stats.sd()
+      <<" ["<<stats.min()<<","<<stats.max()<<"]"<<std::endl;
 }
 
 void print_summaries(std::ostream& os, std::string key,
@@ -256,6 +324,41 @@ void print_summaries(std::ostream& os, std::string key,
     }
   }
 
+}
+
+//: Compares how consistently two sets of points are placed along curves.
+// For instance, in one set point 33 might be placed at the position half-way
+// between 33 and 34 as marked by the second annotator.
+// Evaluates this position, then evaluates the Pt-Pt error if the points were
+// slid along to match.
+void test_consistency_along_curves(const std::vector<msm_points>& points0,
+                      const std::vector<msm_points>& points1,
+                      const msm_curve& curve,
+                      const std::vector<unsigned>& pt_index,
+                      std::ostream& os)
+{
+  mbl_stats_1d t_stats;
+  mbl_stats_1d d_stats0_all,d_stats1_all;  // Pt-Pt distance before and after correction.
+
+  for (unsigned i=0;i<pt_index.size();++i)
+  {
+    analyze_pt_pos(points0,points1,curve,pt_index[i],t_stats);
+    os<<pt_index[i]<<" t_stats (Pt"<<pt_index[i]<<"): ";
+    print_summary(os,t_stats);
+
+    mbl_stats_1d d_stats0,d_stats1;  // Pt-Pt distance before and after correction.
+    test_revised_pt_pos(points0,points1,curve,pt_index[i],
+                          t_stats.mean(),d_stats0,d_stats1);
+    os<<pt_index[i]<<" Pt-Pt: "<<d_stats0.mean()
+      <<" Revised Pt-Pt: "<<d_stats1.mean()<<std::endl;
+
+    d_stats0_all+=d_stats0;
+    d_stats1_all+=d_stats1;
+  }
+  os<<std::endl;
+  os<<"Overall Pt-Pt before: "<<d_stats0_all.mean()
+    <<"  corrected: "<<d_stats1_all.mean()<<std::endl;
+  os<<std::endl;
 }
 
 int main(int argc, char** argv)
@@ -313,6 +416,11 @@ int main(int argc, char** argv)
     std::cout<<"Failed to open "
              <<params.output_summary_path<<" for writing."<<std::endl;
 
+  std::ofstream ofs2(params.output_consistency_path.c_str());
+  if (!ofs2)
+    std::cout<<"Failed to open "
+             <<params.output_consistency_path<<" for writing."<<std::endl;
+
   std::vector<mbl_sample_stats_1d> total_p2p_stats(n_pts),total_p2c_stats(n_pts);
 
   for (unsigned i0=0;i0+1<n_sets;++i0)
@@ -330,10 +438,19 @@ int main(int argc, char** argv)
       compare_two_sets(points[i0],points[i1],curves,
                        p2p_stats,all_p2p_stats,
                        p2c_stats,all_p2c_stats);
+
       std::cout<<"  Pt-Pt  distance error: ";
       print_summary(std::cout,all_p2p_stats);
       std::cout<<"  Pt-Crv distance error: ";
       print_summary(std::cout,all_p2c_stats);
+
+      if (params.key_text.size()>i1)
+        ofs2<<"=== Comparing "<<params.key_text[i0]
+                 <<" with "<<params.key_text[i1]<<" ==="<<std::endl;
+      else
+        ofs2<<"=== Comparing set "<<i0<<" with "<<i1<<" ==="<<std::endl;
+      test_consistency_along_curves(points[i0],points[i1],curves[0],params.points_to_show,ofs2);
+
 
       for (unsigned j=0;j<n_pts;++j)
       {
@@ -368,5 +485,8 @@ int main(int argc, char** argv)
 
   ofs1.close();
   std::cout<<"Results saved to "<<params.output_summary_path<<std::endl;
+
+  ofs2.close();
+  std::cout<<"Results (consistency) saved to "<<params.output_consistency_path<<std::endl;
   return 0;
 }
