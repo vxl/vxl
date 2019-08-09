@@ -118,7 +118,7 @@ void msm_shape_instance::fit_to_points(const msm_points& pts,
   model().aligner().apply_transform(pts,pose_inv,tmp_points_);
 
   double s = model().aligner().scale(pose_);
-  double rv=res_var/(s*s);  // Scale variance into ref frame.
+  double rv=res_var*(s*s);  // Scale variance into ref frame.
 
   ref_shape_.fit_to_points(tmp_points_,rv);
   points_valid_=false;
