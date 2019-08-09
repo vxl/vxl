@@ -877,10 +877,10 @@ int main(int argc, char** argv)
     {
       for (unsigned k=0;k<n_pts;++k)
       {
-        ofs<<i<<" "<<k<<" "<<d_stats[0][k].mean()
-          <<" "<<d_stats[0][k].sd()
-          <<" "<<d_stats[0][k].median()
-          <<" "<<d_stats[0][k].quantile(0.95)<<std::endl;
+        ofs<<i<<" "<<k<<" "<<d_stats[i][k].mean()
+          <<" "<<d_stats[i][k].sd()
+          <<" "<<d_stats[i][k].median()
+          <<" "<<d_stats[i][k].quantile(0.95)<<std::endl;
       }
     }
     ofs.close();
