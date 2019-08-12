@@ -91,7 +91,7 @@ int bwm_process::StopBackgroundTask(int nTimeOut)
       if (::PeekMessage(&msg, NULL, NULL, NULL, PM_NOREMOVE) != 0) {
         if (AfxGetThread()->PumpMessage() == FALSE) {
           ::TerminateThread(lpBackgroundThread->m_hThread, 0);
-          ::PostQuitMessage(msg.wParam);
+          ::PostQuitMessage(static_cast<unsigned int>(msg.wParam));
           break;
         }
       }

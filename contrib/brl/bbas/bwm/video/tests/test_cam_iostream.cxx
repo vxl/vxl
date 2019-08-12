@@ -71,7 +71,9 @@ static void test_cam_iostream()
       }
     }
     TEST("read input camera stream", read, true);
-    vpl_unlink(dir.c_str());
+    std::string dir_path = "./" + dir + "/";
+    vul_file::delete_file_glob(dir_path + "*");
+    vpl_rmdir(dir_path.c_str());
 }
 
 TESTMAIN(test_cam_iostream);
