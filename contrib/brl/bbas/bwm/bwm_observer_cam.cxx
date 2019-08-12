@@ -71,7 +71,7 @@ bool bwm_observer_cam::geo_position(double u, double v,
   vgl_point_2d<double> pt(u, v);
   vgl_point_3d<double> init_world_pt = bwm_world::instance()->world_pt();
   vgl_point_3d<double> world_pt;
-  bool good = vpgl_backproject::bproj_plane(camera_, pt, plane, init_world_pt,
+  bool good = vpgl_backproject::bproj_plane(*camera_, pt, plane, init_world_pt,
                                             world_pt);
   if (!good)
     return false;
