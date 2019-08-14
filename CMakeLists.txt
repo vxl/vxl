@@ -60,6 +60,7 @@ foreach(p
     ##----- Policies Introduced by CMake 3.10
     CMP0071  #: Let AUTOMOC and AUTOUIC process GENERATED files.
     CMP0070  #: Define file(GENERATE) behavior for relative paths.
+    CMP0083  #: Add PIE options when linking executable.
     )
   if(POLICY ${p})
     cmake_policy(SET ${p} NEW)
@@ -83,6 +84,10 @@ include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG(-Wno-undefined-var-template HAS_NO_UNDEFINED_VAR_TEMPLATE)
 if( HAS_NO_UNDEFINED_VAR_TEMPLATE )
   add_definitions( -Wno-undefined-var-template )
+endif()
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.14.0)
+  include(CheckPIESupported)
+  check_pie_supported()
 endif()
 
 find_program( MEMORYCHECK_COMMAND valgrind )
