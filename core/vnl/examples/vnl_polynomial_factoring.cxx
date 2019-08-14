@@ -10,6 +10,7 @@
 #include <iostream>
 #include <vector>
 #include <vnl/vnl_polynomial.h>
+#include <string>
 
 int main(int argc, char* argv[])
 {
