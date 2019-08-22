@@ -1,6 +1,8 @@
 #include <iostream>
 #include <iomanip>
 #include <complex>
+#include <limits>
+#include <sstream>
 #include <vnl/vnl_rational.h>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
@@ -231,6 +233,30 @@ static void test_zero_one()
   TEST("one", u, 1L);
 }
 
+static void test_powers_of_two()
+{
+  // Test conversion from double to vnl_rational for any power of two
+  // that can be stored in the numerator of a vnl_rational.
+  using int_type = decltype(vnl_rational{}.numerator());
+
+  for (unsigned exponent{};
+    exponent < std::numeric_limits<int_type>::digits; ++exponent)
+  {
+    const auto power_of_two = static_cast<int_type>(1ULL << exponent);
+
+    // Use the vnl_rational(double) constructor.
+    const vnl_rational rat = static_cast<double>(power_of_two);
+
+    // The same result is expected when using the vnl_rational(int_type) constructor.
+    const vnl_rational expected = power_of_two;
+
+    std::ostringstream message;
+    message << "test_powers_of_two: vnl_rational(2^" << exponent << ") = " << rat << "; expected: " << expected;
+    TEST(message.str().c_str(), rat, expected);
+  }
+
+}
+
 void test_rational()
 {
   test_operators();
@@ -240,6 +266,7 @@ void test_rational()
   test_determinant();
   test_sqrt();
   test_zero_one();
+  test_powers_of_two();
 
 #if VXL_INT_64_IS_LONG
   test_long_64();
