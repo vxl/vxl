@@ -12,7 +12,6 @@
 template<class T>
 void test_vil_rgb(T)
 {
-  std::cout << "limits of bool " << std::numeric_limits<bool>::infinity() << std::endl;
   T v = 7.0;
   vil_rgb<T> J0(v);
   TEST("Construct a vil_rgb value. ", J0, vil_rgb<T>(7.0, 7.0, 7.0));
@@ -34,7 +33,7 @@ void test_vil_rgb(T)
 
   TEST("average ", average(B0, B1), vil_rgb<T>(20.0, 30.0, 45.0));
   if (type_name != "struct vil_rgb<signed char>")
-    std::cout << "average of B0 and B1 should be [20 35 45], is " << average(B0, B1) << std::endl;
+    std::cout << "average of B0 and B1 should be [20 30 45], is " << average(B0, B1) << std::endl;
   TEST("add vil_rgb + vil_rgb ", operator+(B0, B1), vil_rgb<T>(40.0, 60.0, 90.0));
   TEST("multipy vil_rgb * vil_rgb ", operator*(B0, B1), vil_rgb<T>(375.0, 875.0, 2025.0));
 
@@ -50,20 +49,21 @@ void test_vil_rgb(T)
   if (type_name != "struct vil_rgb<signed char>")
     std::cout << "double * " << type_name << " should be [75.0 105.0 135.0], is " << operator*(d, B0) << std::endl;
 
-  T r = 1.0, g = 2.0, b = 3.0;
-  vil_rgb<T> A(6.0, 9.0, 12.0);
-  TEST("operator+ ", A.operator+(A), vil_rgb<T>(12.0, 18.0, 24.0));
-  TEST("operator- ", A.operator-(A), vil_rgb<T>(0.0, 0.0, 0.0));
-  TEST("operator/ ", A.operator/(A), vil_rgb<T>(1.0, 1.0, 1.0));
-  TEST("operator/ ", A.operator/(A) == vil_rgb<T>(0.0, 1.0, 0.0), false);
+  vil_rgb<T> A(6.0, 8.0, 12.0);
+  vil_rgb<T> A0(1.0, 2.0, 3.0);
+  
+  TEST("operator+ ", A.operator+(A0), vil_rgb<T>(7.0, 10.0, 15.0));
+  TEST("operator- ", A.operator-(A0), vil_rgb<T>(5.0, 6.0, 9.0));
+  TEST("operator/ ", A.operator/(A0), vil_rgb<T>(6.0, 4.0, 4.0));
+  TEST("operator/ ", A.operator/(A0) == vil_rgb<T>(0.0, 1.0, 0.0), false);
   if (type_name != "struct vil_rgb<signed char>")
-    std::cout << "operator/ should be false. " << A.operator/(A) << " != " << vil_rgb<T>(0.0, 1.0, 0.0) << std::endl;
+    std::cout << "operator/ should be false. " << A.operator/(A0) << " != " << vil_rgb<T>(0.0, 1.0, 0.0) << std::endl;
 
-  TEST("operator+= ", A.operator+=(A), vil_rgb<T>(12.0, 18.0, 24.0));
-  TEST("operator-= ", A.operator-=(A), vil_rgb<T>(0.0, 0.0, 0.0));
-  TEST("operator-= ", A.operator-=(A) == vil_rgb<T>(1.0, 0.0, 1.0), false);
+  TEST("operator+= ", A.operator+=(A0), vil_rgb<T>(7.0, 10.0, 15.0));
+  TEST("operator-= ", A.operator-=(A0), vil_rgb<T>(6.0, 8.0, 12.0));
+  TEST("operator-= ", A.operator-=(A0) == vil_rgb<T>(1.0, 0.0, 1.0), false);
   if (type_name != "struct vil_rgb<signed char>")
-    std::cout << "operator-= should be false. " << A.operator-=(A) << " != " << vil_rgb<T>(1.0, 0.0, 1.0) << std::endl;
+    std::cout << "operator-= should be false. " << A << " != " << vil_rgb<T>(1.0, 0.0, 1.0) << std::endl;
 
   A.r = 2.0, A.g = 4.0, A.b = 6.0;
   TEST("operator* ", A.operator*(2.0), vil_rgb<T>(4.0, 8.0, 12.0));
@@ -76,7 +76,7 @@ void test_vil_rgb(T)
   TEST("operator*= ", A.operator*=(4.0), vil_rgb<T>(16.0, 32.0, 48.0));
   TEST("operator/= ", A.operator/=(8.0), vil_rgb<T>(2.0, 4.0, 6.0));
   if (type_name != "struct vil_rgb<signed char>")
-    std::cout << "operator/= should be [1.0 2.0 3.0], is " << A.operator/=(2.0) << std::endl;
+    std::cout << "operator/= should be [2.0 4.0 6.0], is " << A << std::endl;
 }
 
 static void test_vil_rgb_bool()
@@ -110,7 +110,7 @@ static void test_vil_rgb_bool()
     vil_rgb<bool> A1(1, 1, 0);
     TEST("operator != ", operator!=(A0, A1), true);
     TEST("average ", average(A0, A1), vil_rgb<bool>(1, 0, 0));
-    std::cout << average(A0, A1) << std::endl;
+    std::cout << "The average of vil_rgb<bool> " << A0 << " and vil_rgb<bool> " << A1 << " is: " << average(A0, A1) << std::endl;
     TEST("add vil_rgb + vil_rgb ", operator+(A0, A1), vil_rgb<bool>(1, 1, 1));
     TEST("multipy vil_rgb * vil_rgb ", operator*(A0, A1), vil_rgb<bool>(1, 0, 0));
 
@@ -121,7 +121,7 @@ static void test_vil_rgb_bool()
     TEST("operator- ", A.operator-(A), vil_rgb<bool>(1, 1, 1));
     TEST("operator/ ", A.operator/(A), vil_rgb<bool>(0, 0, 0));
     TEST("operator/ ", A.operator/(A) == vil_rgb<bool>(0, 1, 0), false);
-    std::cout << "operator/ should be false, is " << (A.operator/(A) == vil_rgb<bool>(0, 1, 0)) << std::endl;
+    std::cout << "operator/ should be false, is " << (A.operator/(A) == vil_rgb<bool>(0, 1, 0)) << " since " << A << " / " << A << " is false." << std::endl;
 
     TEST("operator+= ", A.operator+=(A), vil_rgb<bool>(0, 0, 1));
     TEST("operator-= ", A.operator-=(A), vil_rgb<bool>(1, 1, 1));
