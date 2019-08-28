@@ -2,6 +2,7 @@
 
 #include <iomanip>
 #include <algorithm>
+#include <cmath>
 
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
@@ -36,9 +37,13 @@ int bsgm_compute_median_of_image(
   long int hist_count = 0;
   for( int y = start_y; y < end_y; y++ ){
     for( int x = start_x; x < end_x; x++ ){
-      if( (img(x,y) == invalid_disparity) || invalid(x,y) ) continue;
+      if (isnan(invalid_disparity)) {
+        if (isnan(img(x, y)))
+          continue;
+      }
+      else if( (img(x,y) == invalid_disparity) || invalid(x,y) ) continue;
 
-      int sample = (int)( img(x,y) - min_img_val );
+      int sample = static_cast<int>(( img(x,y) - min_img_val ));
       if( sample < 0 || sample >= num_img_vals ) continue;
       hist[ sample ]++;
       hist_count++;
