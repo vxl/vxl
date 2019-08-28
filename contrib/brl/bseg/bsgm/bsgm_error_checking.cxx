@@ -3,6 +3,7 @@
 //#include <iomanip>
 #include <algorithm>
 #include <vector>
+#include <cmath>
 
 //#include <vil/vil_save.h>
 //#include <vil/vil_convert.h>
@@ -39,10 +40,18 @@ bsgm_check_nonunique(
     // Construct the inverse disparity map
     for( int x = 0; x < w; x++ ){
 
-      if( disp_img(x,y) == invalid_disparity ) continue;
+      if (isnan(invalid_disparity)) {
+        if (isnan(disp_img(x, y)))
+          continue;
+      }
+      else if( disp_img(x,y) == invalid_disparity ) continue;
 
       // Get an integer disparity and location in reference image
-      int d = (int)( disp_img(x,y)+0.5f );
+	  int d;
+      if (signbit(disp_img(x, y)))
+        d = static_cast<int>(std::round( disp_img(x, y) - 0.5f ));
+      else
+        d = static_cast<int>(std::round( disp_img(x, y) + 0.5f ));
       int x_l = x + d;
 
       if( x_l < 0 || x_l >= w ) continue;
@@ -57,7 +66,11 @@ bsgm_check_nonunique(
     // Check the uniqueness of each disparity.
     for( int x = 0; x < w; x++ ){
 
-      if( disp_img(x,y) == invalid_disparity ) continue;
+      if (isnan(invalid_disparity)) {
+        if (isnan(disp_img(x, y)))
+          continue;
+      }
+      else if( disp_img(x,y) == invalid_disparity ) continue;
 
       // Label dark pixels as invalid, if thresh=0 nothing happens
       if (img(x, y) < shadow_thresh) {
@@ -66,8 +79,8 @@ bsgm_check_nonunique(
       }
 
       // Compute the floor and ceiling of each disparity
-      int d_floor = (int)floor(disp_img(x,y));
-      int d_ceil = (int)ceil(disp_img(x,y));
+      int d_floor = static_cast<int>(floor(disp_img(x,y)));
+      int d_ceil = static_cast<int>(ceil(disp_img(x,y)));
       int x_floor = x + d_floor, x_ceil = x + d_ceil;
 
       if( x_floor < 0 || x_ceil < 0 || x_floor >= w || x_ceil >= w )
@@ -103,7 +116,11 @@ void bsgm_check_leftright(
       if (invalid1(x, y)) continue;
 
       // Project each pixel into the second image
-      int x2 = x + (int)(disp1(x, y) + 0.5f);
+      int x2;
+      if (signbit(disp1(x, y)))
+        x2 = x + static_cast<int>(std::round(disp1(x, y) - 0.5f));
+      else
+        x2 = x + static_cast<int>(std::round(disp1(x, y) + 0.5f));
       if (x2 < 0 || x2 >= static_cast<int>(disp2.ni())) continue;
       if (invalid2(x2, y)) continue;
 
@@ -215,7 +232,11 @@ bsgm_interpolate_errors(
       for( int x = x_start; x != x_end + x_inc; x += x_inc ){
 
         // If good sample at this pixel, record it
-        if( disp_img(x,y) != invalid_disparity ){
+        if (isnan(invalid_disparity)) {
+          if (isnan(disp_img(x, y)))
+            continue;
+        }
+        else if( disp_img(x,y) != invalid_disparity ){
           dir_sample_cur[x] = disp_img(x,y);
 
         } else {
@@ -227,6 +248,10 @@ bsgm_interpolate_errors(
             dir_sample_cur[x] = dir_sample_prev[x+dx];
 
           // And add sample to this pixel's sample set
+		  if (isnan(invalid_disparity)) {
+            if (isnan(disp_img(x, y)))
+              continue;
+		  }
           if( dir_sample_cur[x] != invalid_disparity ){
             sample_vol[ num_sample_dirs*(y*w + x) + sample_count(x,y) ] =
               dir_sample_cur[x];
@@ -258,9 +283,9 @@ bsgm_interpolate_errors(
 
       // Choose a sample index depending on whether pixel is shadow or not
       if (img(x, y) < shadow_thresh)
-        interp_idx = (int)(shadow_sample_percentile*sample_count(x, y));
+        interp_idx = static_cast<int>((shadow_sample_percentile*sample_count(x, y)));
       else
-        interp_idx = (int)(sample_percentile*sample_count(x, y));
+        interp_idx = static_cast<int>((sample_percentile*sample_count(x, y)));
 
       disp_img(x,y) = *( sample_itr + interp_idx );
     }
@@ -349,7 +374,7 @@ bsgm_invert_disparities(
   int old_invalid,
   int new_invalid )
 {
-  for( int y = 0; y < (int)disp_img.nj(); y++ )
-    for( int x = 0; x < (int)disp_img.ni(); x++ )
+  for( int y = 0; y < static_cast<int>(disp_img.nj()); y++ )
+    for( int x = 0; x < static_cast<int>(disp_img.ni()); x++ )
       disp_img(x,y) = disp_img(x,y) == old_invalid ? new_invalid : -disp_img(x,y);
 }
