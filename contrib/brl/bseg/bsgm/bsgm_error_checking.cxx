@@ -47,11 +47,7 @@ bsgm_check_nonunique(
       else if( disp_img(x,y) == invalid_disparity ) continue;
 
       // Get an integer disparity and location in reference image
-	  int d;
-      if (signbit(disp_img(x, y)))
-        d = static_cast<int>(std::round( disp_img(x, y) - 0.5f ));
-      else
-        d = static_cast<int>(std::round( disp_img(x, y) + 0.5f ));
+      int d = static_cast<int>(std::round( disp_img(x, y) ));
       int x_l = x + d;
 
       if( x_l < 0 || x_l >= w ) continue;
@@ -79,8 +75,8 @@ bsgm_check_nonunique(
       }
 
       // Compute the floor and ceiling of each disparity
-      int d_floor = static_cast<int>(floor(disp_img(x,y)));
-      int d_ceil = static_cast<int>(ceil(disp_img(x,y)));
+      int d_floor = static_cast<int>(std::floor(disp_img(x,y)));
+      int d_ceil = static_cast<int>(std::ceil(disp_img(x,y)));
       int x_floor = x + d_floor, x_ceil = x + d_ceil;
 
       if( x_floor < 0 || x_ceil < 0 || x_floor >= w || x_ceil >= w )
@@ -116,11 +112,7 @@ void bsgm_check_leftright(
       if (invalid1(x, y)) continue;
 
       // Project each pixel into the second image
-      int x2;
-      if (signbit(disp1(x, y)))
-        x2 = x + static_cast<int>(std::round(disp1(x, y) - 0.5f));
-      else
-        x2 = x + static_cast<int>(std::round(disp1(x, y) + 0.5f));
+      int x2 = x + static_cast<int>(std::round(disp1(x, y) ));
       if (x2 < 0 || x2 >= static_cast<int>(disp2.ni())) continue;
       if (invalid2(x2, y)) continue;
 
