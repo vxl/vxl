@@ -48,6 +48,6 @@ script:
   - ${TOOLS_DIR}/cmake/bin/ctest -D ExperimentalStart
   - ${TOOLS_DIR}/cmake/bin/ctest -D ExperimentalConfigure
   - ${TOOLS_DIR}/cmake/bin/ctest -D ExperimentalBuild -j2
-  - ${TOOLS_DIR}/cmake/bin/ctest -D ExperimentalTest --schedule-random -j2
+  - ${TOOLS_DIR}/cmake/bin/ctest -D ExperimentalTest --schedule-random -j2 --output-on-failure
   - ${TOOLS_DIR}/cmake/bin/ctest -D ExperimentalSubmit
   - make install
