@@ -26,6 +26,7 @@ add_executable( vil_test_all
   test_deep_copy_3_plane.cxx
   test_image_view_maths.cxx
   test_convert.cxx
+  test_rgb.cxx
   test_rotate_image.cxx
   test_warp.cxx
 
@@ -71,6 +72,7 @@ add_test( NAME vil_test_4_plane_tiff COMMAND $<TARGET_FILE:vil_test_all> test_4_
 add_test( NAME vil_test_deep_copy_3_plane COMMAND $<TARGET_FILE:vil_test_all> test_deep_copy_3_plane )
 add_test( NAME vil_test_image_view_maths COMMAND $<TARGET_FILE:vil_test_all> test_image_view_maths)
 add_test( NAME vil_test_convert COMMAND $<TARGET_FILE:vil_test_all> test_convert ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
+add_test( NAME vil_test_rgb COMMAND $<TARGET_FILE:vil_test_all> test_rgb)
 add_test( NAME vil_test_rotate_image COMMAND $<TARGET_FILE:vil_test_all> test_rotate_image)
 add_test( NAME vil_test_warp COMMAND $<TARGET_FILE:vil_test_all> test_warp)
 

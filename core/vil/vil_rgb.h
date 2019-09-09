@@ -156,6 +156,52 @@ vil_rgb<double> operator/(vil_rgb<T> const& a, double b)
 {
   return vil_rgb<double>(a.r / b, a.g / b, a.b / b);
 }
+#if 0
+template<>
+inline
+vil_rgb<double> operator*(vil_rgb<bool> const&a, double b)
+{
+    return vil_rgb<double>((double)a.r * b, double(a.g) * b, double(a.b) * b);
+}
+#endif
+template<>
+inline
+vil_rgb<double> operator/(vil_rgb<bool> const&a, double b)
+{
+    return vil_rgb<double>(((double)a.r ) / b, ((double)a.g) / b, ((double)a.b) / b);
+}
+
+//Template Specialization Bool Operators
+template <>
+inline
+vil_rgb <bool> vil_rgb<bool>::operator+ (vil_rgb<bool> const& A) const { return vil_rgb<bool>(r || A.r, g || A.g, b || A.b); }
+//vil_rgb <bool> vil_rgb<bool>::operator+ (vil_rgb<bool> const& A) const { return vil_rgb<bool>(r ^ A.r, g ^ A.g, b ^ A.b); }
+template <>
+inline
+vil_rgb <bool> vil_rgb<bool>::operator- (vil_rgb<bool> const& A) const { return vil_rgb<bool>(r || !A.r, g || !A.g, b || !A.b); }
+template <>
+inline
+vil_rgb <bool> vil_rgb<bool>::operator/ (vil_rgb<bool> const& A) const { return vil_rgb<bool>(r && !A.r, g && !A.g, b && !A.b); }
+template <>
+inline
+vil_rgb <bool>& vil_rgb<bool>::operator+= (vil_rgb<bool> const& A) { r = r || A.r, g = g || A.g, b = b || A.b; return *this; }
+template <>
+inline
+vil_rgb <bool>& vil_rgb<bool>::operator-= (vil_rgb<bool> const& A) { r = r || !A.r, g =  g || !A.g, b = b || !A.b; return *this; }
+template <>
+inline
+vil_rgb <bool> vil_rgb<bool>::operator* (bool A) const { return vil_rgb<bool>(r && A, g && A, b && A); }
+template <>
+inline
+vil_rgb <bool> vil_rgb<bool>::operator/ (bool A) const { return vil_rgb<bool>(r && !A, g && !A, b && !A); }
+template <>
+inline
+vil_rgb<bool>& vil_rgb<bool>::operator*= (bool A) { r = r && A, g = g && A, b = b && A; return *this; }
+#if 1
+template <>
+inline
+vil_rgb<bool>& vil_rgb<bool>::operator/= (bool A) { r = r && !A, g = g && !A, b = b && !A; return *this; }
+#endif
 
 #define VIL_RGB_INSTANTIATE(T) \
 extern "you must include vil/vil_rgb.hxx first."

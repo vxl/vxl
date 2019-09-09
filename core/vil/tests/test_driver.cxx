@@ -33,6 +33,7 @@ DECLARE( test_math_median );
 DECLARE( test_round );
 DECLARE( test_pyramid_image_view );
 DECLARE( test_na );
+DECLARE( test_rgb );
 
 void
 register_tests()
@@ -70,6 +71,7 @@ register_tests()
   REGISTER( test_round );
   REGISTER( test_pyramid_image_view );
   REGISTER( test_na );
+  REGISTER( test_rgb );
 }
 
 DEFINE_MAIN;
