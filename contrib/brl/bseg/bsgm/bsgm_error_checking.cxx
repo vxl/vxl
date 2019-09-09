@@ -40,8 +40,8 @@ bsgm_check_nonunique(
     // Construct the inverse disparity map
     for( int x = 0; x < w; x++ ){
 
-      if (isnan(invalid_disparity)) {
-        if (isnan(disp_img(x, y)))
+      if (std::isnan(invalid_disparity)) {
+        if (std::isnan(disp_img(x, y)))
           continue;
       }
       else if( disp_img(x,y) == invalid_disparity ) continue;
@@ -62,8 +62,8 @@ bsgm_check_nonunique(
     // Check the uniqueness of each disparity.
     for( int x = 0; x < w; x++ ){
 
-      if (isnan(invalid_disparity)) {
-        if (isnan(disp_img(x, y)))
+      if (std::isnan(invalid_disparity)) {
+        if (std::isnan(disp_img(x, y)))
           continue;
       }
       else if( disp_img(x,y) == invalid_disparity ) continue;
@@ -224,8 +224,8 @@ bsgm_interpolate_errors(
       for( int x = x_start; x != x_end + x_inc; x += x_inc ){
 
         // If good sample at this pixel, record it
-        if (isnan(invalid_disparity)) {
-          if (isnan(disp_img(x, y)))
+        if (std::isnan(invalid_disparity)) {
+          if (std::isnan(disp_img(x, y)))
             continue;
         }
         else if( disp_img(x,y) != invalid_disparity ){
@@ -240,8 +240,8 @@ bsgm_interpolate_errors(
             dir_sample_cur[x] = dir_sample_prev[x+dx];
 
           // And add sample to this pixel's sample set
-		  if (isnan(invalid_disparity)) {
-            if (isnan(disp_img(x, y)))
+          if (std::isnan(invalid_disparity)) {
+            if (std::isnan(disp_img(x, y)))
               continue;
 		  }
           if( dir_sample_cur[x] != invalid_disparity ){
