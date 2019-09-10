@@ -185,8 +185,6 @@ void vgui_range_map<Type>::init()
         init_map_domain(Type(min_X_), Type(max_X_), ratio_X_);
 }
 
-
-#if 1
 template<>
 inline
 void vgui_range_map<bool>::init_map_domain(const bool min, const bool max,
@@ -194,29 +192,25 @@ void vgui_range_map<bool>::init_map_domain(const bool min, const bool max,
 {
     assert(max >= min);
     assert(!std::numeric_limits<bool>::has_infinity ||
-        (min != std::numeric_limits<bool>::infinity() &&
-            max != std::numeric_limits<bool>::infinity()));
+      (min != std::numeric_limits<bool>::infinity() &&
+       max != std::numeric_limits<bool>::infinity()));
     ratio = 1.0;
 }
-#endif
 
-#if 1
 template <class Type>
 inline
 void vgui_range_map<Type>::init_map_domain(const Type min, const Type max,
     long double& ratio)
 {
     assert(max >= min);
-      assert(!std::numeric_limits<Type>::has_infinity ||
+    assert(!std::numeric_limits<Type>::has_infinity ||
       (-min != std::numeric_limits<Type>::infinity() &&
         max != std::numeric_limits<Type>::infinity()));
     ratio = 1.0;
     if (max != min)
         ratio = 1.0 / (max - min);
 }
-#endif
 
-#if 1
 template<>
 inline
 void vgui_range_map<unsigned long>::init_map_domain(const unsigned long min, const unsigned long max,
@@ -224,8 +218,8 @@ void vgui_range_map<unsigned long>::init_map_domain(const unsigned long min, con
 {
     assert(max >= min);
     assert(!std::numeric_limits<unsigned long>::has_infinity ||
-        (min != std::numeric_limits<unsigned long>::infinity() &&
-            max != std::numeric_limits<unsigned long>::infinity()));
+      (min != std::numeric_limits<unsigned long>::infinity() &&
+       max != std::numeric_limits<unsigned long>::infinity()));
     ratio = 1.0;
     if (max != min)
         ratio = 1.0 / (max - min);
@@ -238,13 +232,12 @@ void vgui_range_map<unsigned int>::init_map_domain(const unsigned int min, const
 {
     assert(max >= min);
     assert(!std::numeric_limits<unsigned int>::has_infinity ||
-        (min != std::numeric_limits<unsigned int>::infinity() &&
-            max != std::numeric_limits<unsigned int>::infinity()));
+      (min != std::numeric_limits<unsigned int>::infinity() &&
+       max != std::numeric_limits<unsigned int>::infinity()));
     ratio = 1.0;
     if (max != min)
         ratio = 1.0 / (max - min);
 }
-#endif
 
 //Compute the float mapping.  Used for types that are table mappable
 template <class Type>
@@ -317,7 +310,7 @@ map_pixel_byte(const Type pix, const Type min, const Type max,
     // if gamma >0 && !=1 make the gamma correction
     if (gamma > 0 && gamma != 1)
         y = std::pow((long double)y, (long double)1 / gamma);
-    return static_cast<vxl_byte>((y*255.0) + 0.5);//round to nearest byte
+    return static_cast<vxl_byte>((y*255.0) + 0.5);//round to nearest bytegith
 }
 
 template <class Type>
@@ -383,6 +376,6 @@ vgui_range_map<Type>::~vgui_range_map()
 }
 
 
-#define VGUI_RANGE_MAP_INSTANTIATE(T) extern "please include vgui/vgui_range_map.hxx first"
+//#define VGUI_RANGE_MAP_INSTANTIATE(T) extern "please include vgui/vgui_range_map.hxx first"
 
 #endif //vgui_range_map_h
