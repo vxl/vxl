@@ -128,7 +128,7 @@ bool boxm2_ocl_update_max_vis::update_max_vis(const boxm2_scene_sptr& scene,
                   int count4 = count*4;
                   double full_i = min_i + i + 0.25;
                   double full_j = min_j + j + 0.25;
-                  double lat,lon, x, y, z_first, z_last;
+                  double lat,lon, x, y, z_first;
                   double el_first = 0;
                   geocam->img_to_global(full_i, full_j,  lon, lat);
                   lvcs->global_to_local(lon,lat,el_first, vpgl_lvcs::wgs84, x, y, z_first);
@@ -486,7 +486,7 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(const boxm2_scene_sptr& 
                   int count4 = count*4;
                   double full_i = min_i + i + 0.25;
                   double full_j = min_j + j + 0.25;
-                  double lat,lon, x, y, z_first, z_last;
+                  double lat,lon, x, y, z_first;
                   double el_first = 0;
                   geocam->img_to_global(full_i, full_j,  lon, lat);
                   lvcs->global_to_local(lon,lat,el_first, vpgl_lvcs::wgs84, x, y, z_first);
@@ -839,7 +839,7 @@ bool boxm2_ocl_update_surface_density::update_surface_density(const boxm2_scene_
                   int count4 = count*4;
                   double full_i = min_i + i + 0.25;
                   double full_j = min_j + j + 0.25;
-                  double lat,lon, x, y, z_first, z_last;
+                  double lat,lon, x, y, z_first;
                   double el_first = 0;
                   geocam->img_to_global(full_i, full_j,  lon, lat);
                   lvcs->global_to_local(lon,lat,el_first, vpgl_lvcs::wgs84, x, y, z_first);

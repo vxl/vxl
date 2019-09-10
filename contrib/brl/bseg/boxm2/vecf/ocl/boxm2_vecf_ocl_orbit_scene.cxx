@@ -113,7 +113,6 @@ void boxm2_vecf_ocl_orbit_scene::extract_block_data(){
   auto iter_blk = blocks.begin();
   blk_ = boxm2_cache::instance()->get_block(base_model_, *iter_blk);
   sigma_ = blk_->sub_block_dim().x();
-  int status;
 
   //  target_pts_ = opencl_cache_->get_data(base_model_,*iter_blk,boxm2_data_traits<BOXM2_POINT>::prefix("source"));
 
@@ -475,7 +474,6 @@ void boxm2_vecf_ocl_orbit_scene::paint_iris(){
 //run through all the pupil points and paint them
 //with the specified intensity
 void boxm2_vecf_ocl_orbit_scene::paint_pupil(){
-  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
   params_.app_[0]=params_.pupil_intensity_;
   auto np = static_cast<unsigned>(pupil_cell_data_index_.size());
   for(unsigned i = 0; i<np; ++i){
@@ -1087,8 +1085,7 @@ void boxm2_vecf_ocl_orbit_scene::apply_eyelid_vector_field_to_target(std::vector
 void boxm2_vecf_ocl_orbit_scene::apply_lower_eyelid_vector_field_to_target(std::vector<vgl_vector_3d<double> > const&  /*vf*/,
                                                                        std::vector<bool> const& valid){
 
-   vul_timer t;
-  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
+  vul_timer t;
 
   vnl_vector_fixed<unsigned char,8> color = random_color();
   int n = static_cast<unsigned>(box_cell_centers_.size());
@@ -1127,9 +1124,8 @@ void boxm2_vecf_ocl_orbit_scene::apply_lower_eyelid_vector_field_to_target(std::
 void boxm2_vecf_ocl_orbit_scene::apply_eyelid_crease_vector_field_to_target(std::vector<vgl_vector_3d<double> > const&  /*vf*/,
                                                                        std::vector<bool> const& valid){
 
-   vul_timer t;
+  vul_timer t;
   vnl_vector_fixed<unsigned char,8> color = random_color();
-  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
   int n = static_cast<unsigned>(box_cell_centers_.size());
 
   if(n==0)

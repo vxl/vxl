@@ -117,7 +117,7 @@ bool bstm_ocl_render_expected_change_process(bprb_func_process& pro)
 
   //get scene data type and appTypeSize
   std::string data_type,label_data_type;
-  int apptypesize,label_apptypesize;
+  int apptypesize;
   std::vector<std::string> valid_types;
 
   data_type = bstm_data_traits<BSTM_CHANGE>::prefix();
