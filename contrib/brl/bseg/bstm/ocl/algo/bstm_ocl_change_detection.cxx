@@ -62,7 +62,7 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
 
     //---- get scene info -----
     std::string data_type,label_data_type;
-    int apptypesize,label_apptypesize;
+    int apptypesize;
     std::vector<std::string> valid_types;
     valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
     valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
@@ -439,7 +439,7 @@ bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_im
 
     //---- get scene info -----
     std::string data_type,label_data_type;
-    int apptypesize,label_apptypesize;
+    int apptypesize;
     std::vector<std::string> valid_types;
     valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
     valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
@@ -848,7 +848,7 @@ bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
 
     //---- get scene info -----
     std::string data_type,label_data_type;
-    int apptypesize,label_apptypesize;
+    int apptypesize;
     std::vector<std::string> valid_types;
     valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
     valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());

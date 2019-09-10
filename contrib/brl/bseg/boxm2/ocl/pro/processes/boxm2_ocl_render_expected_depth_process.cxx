@@ -223,7 +223,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
                   int count4 = count*4;
                   double full_i = min_i + i + 0.25;
                   double full_j = min_j + j + 0.25;
-                  double lat,lon, x, y, z_first, z_last;
+                  double lat,lon, x, y, z_first;
                   double el_first = 0;
                   geocam->img_to_global(full_i, full_j,  lon, lat);
                   lvcs->global_to_local(lon,lat,el_first, vpgl_lvcs::wgs84, x, y, z_first);
