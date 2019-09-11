@@ -220,7 +220,7 @@ std::ostream& operator <<(std::ostream &s, bocl_device_info& info)
 {
   unsigned size = sizeof(std::size_t);
   s  << " Device Description: \n"
-     << " Device ID : " << (long) (*info.device_) << '\n'
+     << " Device ID : " << (size_t) (*info.device_) << '\n'
      << " Device Name : " << info.device_name_ << '\n'
      << " Device Vendor: " << info.device_vendor_ << '\n'
      << " Device Platform: " << info.platform_name_ << '\n'
