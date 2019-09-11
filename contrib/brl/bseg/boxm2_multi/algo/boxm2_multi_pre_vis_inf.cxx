@@ -191,8 +191,8 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   vil_image_view<float> nimg(ni,nj), vimg(ni,nj), pimg(ni,nj);
   int c=0;
 
-  for (unsigned int j=0; j<cl_nj; ++j)
-    for (unsigned int i=0; i<cl_ni; ++i)
+  for (size_t j=0; j<cl_nj; ++j)
+    for (size_t i=0; i<cl_ni; ++i)
       {
       if ( i < ni && j < nj )
         {

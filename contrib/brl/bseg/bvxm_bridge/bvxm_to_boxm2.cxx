@@ -97,17 +97,17 @@ void initialize_regular_world_scene(boxm2_scene_sptr new_scene, const boxm2_cach
     {
       alpha_data[i] = empty_prob_alpha;
     }
-    int Nx = trees.get_row1_count();
-    int Ny = trees.get_row2_count();
-    int Nz = trees.get_row3_count();
+    size_t Nx = trees.get_row1_count();
+    size_t Ny = trees.get_row2_count();
+    size_t Nz = trees.get_row3_count();
     //iterate through each tree
     bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();  // starts from z = 0 which is the top most slice in bvxm world
-    for (unsigned int z = 0; z < Nz; ++z, ++ocp_slab_it) {
+    for (size_t z = 0; z < Nz; ++z, ++ocp_slab_it) {
 
       bvxm_voxel_slab<ocp_datatype> const &slab = *ocp_slab_it;
 
-      for (unsigned int x = 0; x < Nx; ++x) {
-        for (unsigned int y = 0; y < Ny; ++y) {
+      for (size_t x = 0; x < Nx; ++x) {
+        for (size_t y = 0; y < Ny; ++y) {
 
          // retrieve the corresponding prob value from bvxm world
          //float occ_prob = 1.0;

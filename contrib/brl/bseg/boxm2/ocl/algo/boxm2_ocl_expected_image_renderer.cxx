@@ -52,7 +52,7 @@ boxm2_ocl_expected_image_renderer
   int num_valid_appearances_grey = sizeof(valid_appearance_types_grey) / sizeof(valid_appearance_types_grey[0]);
 
   for (const auto & app : apps) {
-    for (unsigned v = 0; v < num_valid_appearances_grey; ++v) {
+    for (size_t v = 0; v < num_valid_appearances_grey; ++v) {
       boxm2_data_type valid_apm_type = valid_appearance_types_grey[v];
       std::string valid_apm_prefix = boxm2_data_info::prefix(valid_apm_type, ident);
       if ( app == valid_apm_prefix )
@@ -69,7 +69,7 @@ boxm2_ocl_expected_image_renderer
   }
   int num_valid_appearances_rgb = sizeof(valid_appearance_types_rgb) / sizeof(valid_appearance_types_rgb[0]);
   for (const auto & app : apps) {
-    for (unsigned v = 0; v < num_valid_appearances_rgb; ++v) {
+    for (size_t v = 0; v < num_valid_appearances_rgb; ++v) {
       boxm2_data_type valid_apm_type = valid_appearance_types_rgb[v];
       std::string valid_apm_prefix = boxm2_data_info::prefix(valid_apm_type, ident);
       if ( app == valid_apm_prefix )
@@ -261,7 +261,7 @@ boxm2_ocl_expected_image_renderer
   vis_img_.set_size(ni,nj);
   for (unsigned r=0;r<nj;++r) {
       for (unsigned c=0;c<ni;++c) {
-        for (unsigned p=0; p<num_planes_; ++p) {
+        for (size_t p=0; p<num_planes_; ++p) {
         expected_img_(c,r,p)=img_buff_[r*cl_ni*num_planes_ + c*num_planes_ + p];
         vis_img_(c,r)=vis_buff_[r*cl_ni+c];
       }

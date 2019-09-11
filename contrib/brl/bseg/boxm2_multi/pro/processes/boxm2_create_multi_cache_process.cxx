@@ -63,7 +63,7 @@ bool boxm2_create_multi_cache_process(bprb_func_process& pro)
     }
     //grab the number of devices specified
     std::vector<bocl_device_sptr> gpus;
-    for (unsigned int i=0; i< numGPU; ++i)
+    for (size_t i=0; i< numGPU; ++i)
         gpus.push_back(mgr.gpus_[i]);
     boxm2_multi_cache_sptr  mcache = new boxm2_multi_cache(scene, gpus);
     i=0;

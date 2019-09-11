@@ -897,7 +897,7 @@ compute_smooth_heightmap_pdata(boxm2_scene_sptr         scene,
                         else
                             aux1_ph_smooth[currIdx] = 0.0;
                         //: iterate over neighbors
-                        for (unsigned k = 0; k < numsamples; k++)
+                        for (size_t k = 0; k < numsamples; k++)
                         {
                             vgl_point_3d<double> neighbor_pt(px + pts[2 * k] * mdata.sub_block_dim_.x(),
                                                              py + pts[2 * k + 1] * mdata.sub_block_dim_.y(), pz);

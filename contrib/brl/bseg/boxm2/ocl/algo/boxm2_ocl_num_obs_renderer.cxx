@@ -49,9 +49,9 @@ boxm2_ocl_num_obs_renderer
 
   int num_valid_nobs_types = sizeof(valid_nobs_types) / sizeof(valid_nobs_types[0]);
 
-  for (unsigned int i=0; i<apps.size(); ++i) {
+  for (size_t i=0; i<apps.size(); ++i) {
     std::cout << "app["<<i<<"] = " << apps[i] << std::endl;
-    for (unsigned v = 0; v < num_valid_nobs_types; ++v) {
+    for (size_t v = 0; v < num_valid_nobs_types; ++v) {
       boxm2_data_type valid_nobs_type = valid_nobs_types[v];
       std::string valid_nobs_prefix = boxm2_data_info::prefix(valid_nobs_type, ident);
       std::cout << "     valid_nobs_prefix = " << boxm2_data_info::prefix(valid_nobs_type, ident) << std::endl;

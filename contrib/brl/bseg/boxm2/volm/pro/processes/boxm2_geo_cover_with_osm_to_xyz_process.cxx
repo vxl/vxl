@@ -216,7 +216,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
     {
       int y = it.scany();
       for (int x = it.startx(); x <= it.endx(); ++x) {
-        if ( x >= 0 && y >= 0 && x < out_img_label->ni() && y < out_img_label->nj()) {
+        if ( x >= 0 && y >= 0 && x < static_cast<int>(out_img_label->ni()) && y < static_cast<int>(out_img_label->nj())) {
           if (curr_level > (*level_img)(x, y)) {
             (*level_img)(x,y) = curr_level;
             (*out_img_label)(x,y) = curr_id;
@@ -297,7 +297,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
     for (it.reset(); it.next();  ) {
       int y = it.scany();
       for (int x = it.startx(); x <= it.endx(); ++x) {
-        if ( x >= 0 && y >= 0 && x < out_img_label->ni() && y < out_img_label->nj()) {
+        if ( x >= 0 && y >= 0 && x < static_cast<int>(out_img_label->ni()) && y < static_cast<int>(out_img_label->nj())) {
           if (curr_level > (*level_img)(x, y)) {
             (*level_img)(x,y) = curr_level;
             (*out_img_label)(x,y) = curr_id;

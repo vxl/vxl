@@ -37,7 +37,7 @@ bstm_ocl_particle_filter::bstm_ocl_particle_filter(const bocl_device_sptr& devic
 
   std::vector< std::map<bstm_block_id, std::vector<bstm_block_id> > > empty_blk_map;
   std::vector< double > initial_mi;
-  for(unsigned i = 0; i < num_particles_;i++) {
+  for(size_t i = 0; i < num_particles_;i++) {
     initial_bbs.emplace_back(initial_bb );
     initial_mi.push_back(1.0f);
     empty_t.emplace_back(0,0,0 );
@@ -84,7 +84,7 @@ std::vector<double> bstm_ocl_particle_filter::compute_mi_from_hist()
 {
   std::vector<double> all_mi;
 
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
   {
 
     /*
@@ -126,7 +126,7 @@ std::vector<double> bstm_ocl_particle_filter::compute_mi_from_hist()
     for(unsigned view_dir_num = 0; view_dir_num < app_view_dir_num_; view_dir_num++)
     {
       cl_float sum_app_joint_hist = 0.0f;
-      for(int i = 0; i < app_nbins_* app_nbins_; i++) {
+      for(size_t i = 0; i < app_nbins_* app_nbins_; i++) {
         sum_app_joint_hist += app_joint_histogram_buff_[ app_view_dir_num_ *app_nbins_*app_nbins_* particle_no + (app_nbins_* app_nbins_*view_dir_num) + i];
       }
       //if the num is below a threshold, no apps here.
@@ -134,41 +134,41 @@ std::vector<double> bstm_ocl_particle_filter::compute_mi_from_hist()
         continue;
 
 
-      for(int i = 0; i < app_nbins_* app_nbins_; i++)
+      for(size_t i = 0; i < app_nbins_* app_nbins_; i++)
         app_hist_[(app_nbins_* app_nbins_*view_dir_num) + i] =  app_joint_histogram_buff_[app_view_dir_num_ *app_nbins_*app_nbins_* particle_no +(app_nbins_* app_nbins_*view_dir_num) + i] / sum_app_joint_hist;
 
 
-      for (int k = 0; k<app_nbins_; k++)
+      for (size_t k = 0; k<app_nbins_; k++)
       {
         app_histA_[k] = 0.0;
         app_histB_[k] = 0.0;
       }
 
-      for (int k = 0; k < app_nbins_; k++) {
-        for (int l = 0; l < app_nbins_; l++) {
+      for (size_t k = 0; k < app_nbins_; k++) {
+        for (size_t l = 0; l < app_nbins_; l++) {
           app_histA_[k]+=app_hist_[(app_nbins_* app_nbins_*view_dir_num) + k*app_nbins_+l];
         }
       }
-      for (int k = 0; k < app_nbins_; k++) {
-        for (int l = 0; l < app_nbins_; l++) {
+      for (size_t k = 0; k < app_nbins_; k++) {
+        for (size_t l = 0; l < app_nbins_; l++) {
           app_histB_[k]+=app_hist_[(app_nbins_* app_nbins_*view_dir_num) + l*app_nbins_+k];
         }
       }
 
       float app_entropyA = 0;
-      for (int k = 0; k < app_nbins_; k++) {
+      for (size_t k = 0; k < app_nbins_; k++) {
         app_entropyA += -(app_histA_[k]?app_histA_[k]*std::log(app_histA_[k]):0); // if prob=0 this value is defined as 0
       }
 
 
       float app_entropyB = 0;
-      for (int l = 0; l < app_nbins_; l++) {
+      for (size_t l = 0; l < app_nbins_; l++) {
         app_entropyB += -(app_histB_[l]?app_histB_[l]*std::log(app_histB_[l]):0); // if prob=0 this value is defined as 0
       }
 
       float app_entropyAB =  0.0; ;
-      for (int k = 0; k < app_nbins_; k++) {
-        for (int l = 0; l < app_nbins_; l++) {
+      for (size_t k = 0; k < app_nbins_; k++) {
+        for (size_t l = 0; l < app_nbins_; l++) {
           float val = app_hist_[(app_nbins_* app_nbins_*view_dir_num) + k*app_nbins_+l];
           app_entropyAB += -(val?val*std::log(val):0);
         }
@@ -189,10 +189,10 @@ std::vector<double> bstm_ocl_particle_filter::compute_mi_from_hist()
 void bstm_ocl_particle_filter::normalize_mi_score(unsigned t)
 {
   double sum = 0;
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
     sum += mi_[t - start_t_][particle_no];
 
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
     mi_[t - start_t_][particle_no] = num_particles_ * mi_[t - start_t_][particle_no] / sum;
 }
 
@@ -230,7 +230,7 @@ void bstm_ocl_particle_filter::propagate_particles(unsigned prev_time, unsigned 
   std::vector< vgl_vector_3d<double> > new_inft;
 
   std::vector< std::map<bstm_block_id, std::vector<bstm_block_id> > > new_blk_map;
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
   {
     //sample infinitesimal R and T
     vnl_vector_fixed<double,3> t( rand_.drand32(-t_sigma_, t_sigma_),rand_.drand32(-t_sigma_, t_sigma_),rand_.drand32(-t_sigma_, t_sigma_) );
@@ -324,7 +324,7 @@ void bstm_ocl_particle_filter::write_particle_ocl_info(unsigned prev_time,unsign
   std::vector<cl_float> rotations;
   std::vector<cl_float> bbs;
 
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
   {
     //get its AABB, R and T and blk mapping
     vgl_rotation_3d<double> R = R_[cur_time - start_t_][particle_no];
@@ -430,7 +430,7 @@ void bstm_ocl_particle_filter::resample(unsigned  /*prev_time*/, unsigned cur_ti
   double sum = 0.0f;
   cdf.push_back(sum);
 
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
   {
     cdf.push_back( cdf.back() + mi_[cur_time - start_t_][particle_no]);
     sum += mi_[cur_time - start_t_][particle_no];
@@ -439,7 +439,7 @@ void bstm_ocl_particle_filter::resample(unsigned  /*prev_time*/, unsigned cur_ti
   float u = rand_.drand32();
   int j = 1;
   //resample
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
   {
     float u_i = (u + particle_no) / num_particles_;
 
@@ -479,7 +479,7 @@ double bstm_ocl_particle_filter::survival_diagnostic(unsigned cur_time)
 {
   double sum_weights = 0;
   double sum_weights_sq = 0;
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
   {
     if(mi_[cur_time - start_t_][particle_no] > 0.0f)
     {
@@ -496,7 +496,7 @@ vgl_box_3d<double> bstm_ocl_particle_filter::w_mean_bb( std::vector<vgl_orient_b
 {
   vgl_point_3d<double> min_pt,max_pt;
   float sum_weights = 0;
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
   {
     min_pt.x() += bb[particle_no].corners()[0].x() * weights[particle_no];
     min_pt.y() += bb[particle_no].corners()[0].y() * weights[particle_no];
@@ -532,7 +532,7 @@ vgl_vector_3d<double> bstm_ocl_particle_filter::velocity_estimate(unsigned  /*pr
 
   vgl_vector_3d<double> sum_inft;
   float sum_weights = 0;
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
   {
     sum_inft  += inft_[prev_time - start_t_][particle_no] * mi_[prev_time - start_t_][particle_no];
     sum_weights +=  mi_[prev_time - start_t_][particle_no];
@@ -640,7 +640,7 @@ std::vector<double> bstm_ocl_particle_filter::eval_mi(unsigned  /*prev_time*/, u
 
     //opencl mem operations are done. begin kernel launches...
 
-    for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+    for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
     {
       //first check if the particle needs this blk pair
       std::vector<bstm_block_id> particle_target_blks = blk_map_[cur_time  - start_t_][particle_no][relevant_blk_id] ;
@@ -750,7 +750,7 @@ void bstm_ocl_particle_filter::init_ocl_minfo()
   scene_sub_block_len_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
 
   //particle_no
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
   {
     particle_nos_[particle_no ] = particle_no;
     particle_no_mems_.push_back ( new bocl_mem(device_->context(), &(particle_nos_[particle_no ]), sizeof(cl_uint), " particle number" ) );
@@ -801,7 +801,7 @@ vgl_orient_box_3d<double> bstm_ocl_particle_filter::best_bb( std::vector<vgl_ori
   vgl_orient_box_3d<double> best_bb;
   vgl_rotation_3d<double> best_r;
   vgl_vector_3d<double> best_t;
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
   {
     if(weights[particle_no] >= best_score) {
       best_score = weights[particle_no];
@@ -820,7 +820,7 @@ vgl_rotation_3d<double> bstm_ocl_particle_filter::mean_rot( std::vector< vgl_rot
 
   vnl_matrix_fixed<double,3,3> avg_rot;
   avg_rot.fill(0);
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
     avg_rot += rot[particle_no].as_matrix() * weights[particle_no];
 
   vnl_svd<double> svd(avg_rot);
@@ -845,7 +845,7 @@ void bstm_ocl_particle_filter::mean_state( unsigned t, vgl_vector_3d<double> & m
 
   mean_T = vgl_vector_3d<double>(0,0,0);
   double sum_weights =0;
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
   {
     mean_T += T_[t- start_t_][particle_no] * mi_[t - start_t_][particle_no];
     sum_weights +=  mi_[t- start_t_][particle_no];

@@ -35,7 +35,7 @@ boxm2_ocl_refine_scene_around_geometry
 {
 
         if (!refine_gpu_)
-                for (unsigned i=0;i<num_times_;i++){
+                for (size_t i=0;i<num_times_;i++){
                         this->label_cells_for_refinement();
                         if (!this->refine_cpp()){
                                 std::cout<<"refinement failed in pass "<<i<<std::endl;
