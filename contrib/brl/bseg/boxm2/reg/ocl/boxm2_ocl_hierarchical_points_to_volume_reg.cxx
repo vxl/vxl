@@ -38,7 +38,7 @@ bool boxm2_ocl_hierarchical_points_to_volume_reg::exhaustive()
     std::map<double,vnl_vector<double> > samples_sorted;
     vnl_vector<double> cov = cov_;
     samples_sorted[mu_cost_] =mu_;
-    for (unsigned int level = 0; level <nlevels; level++)
+    for (size_t level = 0; level <nlevels; level++)
     {
         std::cout<<"Level #"<<level<<std::endl;
         mis.clear();
@@ -51,11 +51,11 @@ bool boxm2_ocl_hierarchical_points_to_volume_reg::exhaustive()
             int searchwidth = numsamples_search_width[level];
             vnl_vector<double> best_sample = iter->second;
             int numsamples_per_best_particle = (int) std::pow((float)searchwidth,(float)params_to_vary);
-            for(unsigned int sampleno = 0 ; sampleno < numsamples_per_best_particle; sampleno++)
+            for(size_t sampleno = 0 ; sampleno < numsamples_per_best_particle; sampleno++)
             {
                 int cont=sampleno;
                 vnl_vector<double> curr_sample = best_sample;
-                for(unsigned k = 0; k <params_to_vary; k++)
+                for(size_t k = 0; k <params_to_vary; k++)
                 {
                     int t = params_to_vary - k - 1;
                     unsigned int var = cont/(unsigned int)std::pow((float)searchwidth,(float)t); // quotient

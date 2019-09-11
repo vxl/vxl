@@ -70,7 +70,7 @@ void bstm_ocl_annealed_particle_filter::dump_particles(unsigned cur_time, unsign
   std::ofstream myfile(filename.str().c_str());
 
   std::vector<vgl_orient_box_3d<double> > bb = bb_[cur_time - start_t_];
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
   {
 #ifndef DUMP_BOX
     myfile << bb[particle_no].centroid().x() << " " << bb[particle_no].centroid().y() << " "<< bb[particle_no].centroid().z() << " " <<  mi_[cur_time - start_t_][particle_no] << std::endl;
@@ -103,7 +103,7 @@ void bstm_ocl_annealed_particle_filter::perturb_particles(unsigned  /*prev_time*
 
   std::vector< std::map<bstm_block_id, std::vector<bstm_block_id> > > new_blk_map = blk_map_[cur_time - start_t_];
 
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
   {
     //sample infinitesimal R and T
     //vnl_vector_fixed<double,3> t = translation_sampler_.sample(rand_);
@@ -161,7 +161,7 @@ float bstm_ocl_annealed_particle_filter::survival_diagnostic(unsigned cur_time, 
 {
   double sum_weights = 0;
   double sum_weights_sq = 0;
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
   {
     if(mi_[cur_time - start_t_][particle_no] > 0.0f)
     {
@@ -188,7 +188,7 @@ float bstm_ocl_annealed_particle_filter::scale_obs_density(unsigned cur_time, do
       cur_beta += (survival_diagnostic(cur_time, cur_beta) - ALPHA) > 0 ? grad_step : -grad_step;
   }
 
-  for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
+  for(size_t particle_no = 0; particle_no < num_particles_;particle_no++)
     if(mi_[cur_time - start_t_][particle_no] > 0.0f)
       mi_[cur_time - start_t_][particle_no] = std::pow(mi_[cur_time - start_t_][particle_no],cur_beta);
 

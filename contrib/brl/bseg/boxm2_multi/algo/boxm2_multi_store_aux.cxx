@@ -59,8 +59,8 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
   else {
     inImg = new float[cl_ni*cl_nj];
     int c = 0;
-    for (int j=0; j<cl_nj; ++j)
-      for (int i=0; i<cl_ni; ++i)
+    for (size_t j=0; j<cl_nj; ++j)
+      for (size_t i=0; i<cl_ni; ++i)
     if( i <ni && j <nj )
       inImg[c++] = img(i,j);
     else
