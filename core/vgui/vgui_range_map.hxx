@@ -10,19 +10,6 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-template <class Type>
-void vgui_range_map<Type>::init_map_domain(const Type min, const Type max,
-                                           long double& ratio)
-{
-  assert(max>=min);
-  assert(!std::numeric_limits<Type>::has_infinity ||
-         (-min != std::numeric_limits<Type>::infinity() &&
-           max != std::numeric_limits<Type>::infinity()));
-  ratio = 1.0;
-  if (max!=min)
-    ratio = 1.0/(max - min);
-}
-
 //Initialize the internal mapping scale factors
 template <class Type>
 void vgui_range_map<Type>::init()
@@ -37,6 +24,72 @@ void vgui_range_map<Type>::init()
   }
   if (n_components_==4)
     init_map_domain(Type(min_X_), Type(max_X_), ratio_X_);
+}
+template <class Type>
+void vgui_range_map<Type>::init_map_domain(const Type min, const Type max,
+                                           long double& ratio)
+{
+  assert(max >= min);
+  assert(!std::numeric_limits<Type>::has_infinity ||
+         (-min != std::numeric_limits<Type>::infinity() &&
+          max != std::numeric_limits<Type>::infinity()));
+  ratio = 1.0;
+  if (max != min)
+    ratio = 1.0 / (max - min);
+}
+
+template<>
+inline
+void vgui_range_map<bool>::init_map_domain(const bool min, const bool max,
+                                           long double& ratio)
+{
+  assert(max >= min);
+  assert(!std::numeric_limits<bool>::has_infinity ||
+         (min != std::numeric_limits<bool>::infinity() &&
+          max != std::numeric_limits<bool>::infinity()));
+  ratio = 1.0;
+}
+
+template<>
+inline
+void vgui_range_map<unsigned int>::init_map_domain(const unsigned int min, const unsigned int max,
+                                                   long double& ratio)
+{
+  assert(max >= min);
+  assert(!std::numeric_limits<unsigned int>::has_infinity ||
+         (min != std::numeric_limits<unsigned int>::infinity() &&
+          max != std::numeric_limits<unsigned int>::infinity()));
+  ratio = 1.0;
+  if (max != min)
+    ratio = 1.0 / (max - min);
+}
+
+template<>
+inline
+void vgui_range_map<unsigned short>::init_map_domain(const unsigned short min, const unsigned short max,
+                                                     long double& ratio)
+{
+  assert(max >= min);
+  assert(!std::numeric_limits<unsigned short>::has_infinity ||
+         (min != std::numeric_limits<unsigned short>::infinity() &&
+          max != std::numeric_limits<unsigned short>::infinity()));
+  ratio = 1.0;
+  if (max != min)
+    ratio = 1.0 / (max - min);
+}
+
+template<>
+inline
+void vgui_range_map<unsigned long>::init_map_domain(const unsigned long min, const unsigned long max,
+                                                    long double& ratio)
+{
+  assert(max >= min);
+  assert(!std::numeric_limits<unsigned long>::has_infinity ||
+         (min != std::numeric_limits<unsigned long>::infinity() &&
+          max != std::numeric_limits<unsigned long>::infinity()));
+  ratio = 1.0;
+  if (max != min)
+    ratio = 1.0 / (max - min);
 }
 
 //Compute the pixel byte mapping.  Used for types that aren't table mappable
