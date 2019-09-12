@@ -15,7 +15,8 @@
 #include <vnl/vnl_matrix_fixed.h>
 
 struct rectify_params{
-  rectify_params(): min_disparity_z_(NAN), n_points_(1000), upsample_scale_(1.0), invalid_pixel_val_(0.0f){}
+  rectify_params(): min_disparity_z_(NAN), n_points_(1000), upsample_scale_(1.0), invalid_pixel_val_(0.0f) {}
+
   double min_disparity_z_; // horizontal plane where disparity at each pixel is minimum
   size_t n_points_;            // number of points used to create correspondences
   double upsample_scale_;      // scale factor to upsample rectified images
@@ -24,13 +25,13 @@ struct rectify_params{
 
 //
 // requires two images and associated affine cameras. Class can load the data from files if needed.
-// the output is a pair of images that have common epiplolar lines along image rows. The difference in
+// the output is a pair of images that have common epipolar lines along image rows. The difference in
 // column coordinates of corresponding points is minimized.
 //
 class bpgl_rectify_affine_image_pair
 {
  public:
-  bpgl_rectify_affine_image_pair(){}
+  bpgl_rectify_affine_image_pair() {}
 
   bpgl_rectify_affine_image_pair(vil_image_view_base_sptr const& view0, vpgl_affine_camera<double> const& acam0,
                                  vil_image_view_base_sptr const& view1, vpgl_affine_camera<double> const& acam1)
@@ -91,7 +92,7 @@ class bpgl_rectify_affine_image_pair
   bool process(vgl_box_3d<double>const& scene_box)
   {
     // if min_disparity_z_ is NAN then 1/2 the midpoint of scene_box z is used
-    if(!compute_rectification(scene_box))
+    if(!compute_rectification(scene_box, params_.n_points_, params_.min_disparity_z_))
       return false;
     warp_pair();
     return true;
@@ -104,7 +105,7 @@ class bpgl_rectify_affine_image_pair
  protected:
 
   // protected utility methods
-  bool compute_rectification(vgl_box_3d<double> const& scene_box);
+  bool compute_rectification(vgl_box_3d<double> const& scene_box, size_t n_points = 1000, double average_z = NAN);
   void compute_warp_dimensions_offsets();
   void warp_image(vil_image_view<float> fview,
                   vnl_matrix_fixed<double, 3, 3> const& H,

@@ -35,7 +35,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //: if scale tag is false be sure that trans_matrix[0][0] and trans_matrix[1][1] is 1.0 otherwise set it to true
   vpgl_geo_camera(vnl_matrix<double> trans_matrix,
                   vpgl_lvcs_sptr lvcs)
-    : trans_matrix_(trans_matrix), is_utm(false), scale_tag_(false) {if(lvcs) this->set_lvcs(lvcs); }
+    : trans_matrix_(trans_matrix), is_utm_(false), scale_tag_(false) {if(lvcs) this->set_lvcs(lvcs); }
 
   // copy constructor
   vpgl_geo_camera(vpgl_geo_camera const& rhs);
@@ -75,7 +75,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
   std::string type_name() const override { return "vpgl_geo_camera"; }
 
   //northing=0 means North, 1 is south
-  void set_utm(int utm_zone, unsigned northing) { is_utm=true, utm_zone_=utm_zone; northing_=northing; }
+  void set_utm(int utm_zone, unsigned northing) { is_utm_=true, utm_zone_=utm_zone; northing_=northing; }
 
   void set_lvcs(vpgl_lvcs_sptr lvcs) {lvcs_ = new vpgl_lvcs(*lvcs); }
 
@@ -103,6 +103,8 @@ class vpgl_geo_camera : public vpgl_camera<double>
                                 std::vector<std::vector<double> > tiepoints,
                                 vnl_matrix<double>& trans_matrix,
                                 bool scale_tag = false);
+
+  bool is_utm() const {return is_utm_;}
 
   //: Return a platform independent string identifying the class
   virtual std::string is_a() const { return std::string("vpgl_geo_camera"); }
@@ -144,6 +146,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
   void local_to_utm(const double x, const double y, const double z, double& e, double& n, int& utm_zone);
 
   int utm_zone() { return utm_zone_; }
+  int utm_northing() { return northing_; }
 
   bool img_four_corners_in_utm(const unsigned ni, const unsigned nj, double elev, double& e1, double& n1, double& e2, double& n2);
 
@@ -173,7 +176,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
   vnl_matrix<double> trans_matrix_;           // 4x4 matrix
   //: lvcs of world parameters
   vpgl_lvcs_sptr lvcs_;
-  bool is_utm;
+  bool is_utm_;
   int utm_zone_;
   int northing_; //0 North, 1 South
   bool scale_tag_;

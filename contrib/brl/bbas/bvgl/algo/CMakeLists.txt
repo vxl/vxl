@@ -27,6 +27,7 @@ set( bvgl_algo_sources
   bvgl_biarc.cxx               bvgl_biarc.h
   bvgl_eulerspiral.cxx         bvgl_eulerspiral.h
   bvgl_eulerspiral_base.hxx    bvgl_eulerspiral_base.h
+  bvgl_register_ptsets_3d_rigid.hxx bvgl_register_ptsets_3d_rigid.h
 )
 aux_source_directory(Templates bvgl_algo_sources)
 

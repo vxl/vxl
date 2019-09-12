@@ -10,7 +10,8 @@
 //
 // \verbatim
 //  Modifications
-//   <none yet>
+//   Sept. 3, 2019
+//   JLM - added additional probability factor based on the rate of change in z with respect to disparity
 // \endverbatim
 // uses the SGM algorithm to compute a pair of disparity images, normal and reverse.
 // the reverse disparity image is computed by simply flipping the order of the
@@ -51,11 +52,20 @@
 
 
 struct pairwise_params{
-  pairwise_params():active_disparity_factor_(0.5),downscale_exponent_(2), multi_scale_mode_(0),//1
-    point_sample_dist_(0.3f), upsample_scale_factor_(1.0f), std_dev_(3.75*point_sample_dist_), num_nearest_nbrs_(5), shadow_thresh_(20){
-    set_shadow_thresh(shadow_thresh_);//default
+  pairwise_params():
+    active_disparity_factor_(0.5), downscale_exponent_(2), multi_scale_mode_(0),  //1
+    point_sample_dist_(0.3f), upsample_scale_factor_(1.0f),
+    std_dev_(3.75*point_sample_dist_), num_nearest_nbrs_(5), shadow_thresh_(20),
+    use_z_vs_d_prob_(false), min_z_vs_d_scale_(1.0f), z_vs_d_std_dev_(1.0f),
+    quad_interp_(false)
+  {
+    set_shadow_thresh(shadow_thresh_);  //default
+    set_quad_interp(quad_interp_);
   }
   void set_shadow_thresh(float thresh){ de_params_.shadow_thresh = thresh; shadow_thresh_ = thresh;}
+  void set_quad_interp(bool interp) {
+    de_params_.perform_quadratic_interp=interp; quad_interp_ = interp;
+  }
   bsgm_disparity_estimator_params de_params_; // internal disparity estimator params
   float active_disparity_factor_; // what fraction of full disparity range is used for fine search
   int downscale_exponent_;   // in coarse to fine disparity, what is the downsample ratio as 2^exponent
@@ -63,26 +73,30 @@ struct pairwise_params{
   float point_sample_dist_;  // the height map grid spacing, also relates to consistent distance tolerance
   float upsample_scale_factor_; // upsample the rectified images by scale factor
   float std_dev_;            // the standard deviation of consistent disparity point distances
+  bool use_z_vs_d_prob_;     // multiply height probabilty with additional z vs d scale probability factor
+  float min_z_vs_d_scale_;   // the lowest z vs d scale factor that is typically obtained in meters/pixel
+  float z_vs_d_std_dev_;     // the standard deviation for the z vs d Gaussian distribution
   size_t num_nearest_nbrs_;  // number of nearest neighbors in the pointset to find closest and to interpolate
   size_t shadow_thresh_;     // intensity level out of 255 below which is considered to be in shadow, thus invalid
+  bool quad_interp_;         // if true, perform quadratic interpolation of disparity with respect to cost
 };
 
 
 class bsgm_prob_pairwise_dsm
 {
  public:
-  bsgm_prob_pairwise_dsm(): mid_z_(NAN) {}
+  bsgm_prob_pairwise_dsm(): mid_z_(NAN), z_vs_disp_scale_(1.0) {}
 
   bsgm_prob_pairwise_dsm(vil_image_resource_sptr const& resc0, vpgl_affine_camera<double> const& acam0,
                          vil_image_resource_sptr const& resc1, vpgl_affine_camera<double> const& acam1):
-    mid_z_(NAN)
+    mid_z_(NAN), z_vs_disp_scale_(1.0)
   {
     rip_.set_images_and_cams(resc0, acam0, resc1, acam1);
   }
 
   bsgm_prob_pairwise_dsm(vil_image_view<unsigned char> const& view0, vpgl_affine_camera<double> const& acam0,
                          vil_image_view<unsigned char> const& view1, vpgl_affine_camera<double> const& acam1):
-  mid_z_(NAN)
+    mid_z_(NAN),z_vs_disp_scale_(1.0)
   {
     rip_.set_images_and_cams(vil_new_image_resource_of_view(view0), acam0, vil_new_image_resource_of_view(view1), acam1);
   }
@@ -121,7 +135,6 @@ class bsgm_prob_pairwise_dsm
   bool compute_pointset_prob();
   void prob_heightmap(vgl_box_3d<double> const& scene_box);
   bool compute_dsm_and_ptset_prob(vgl_box_3d<double> const& scene_box);
-
   bool rect(vgl_box_3d<double> const& scene_box)
   {
     bool good = rip_.process(scene_box);
@@ -194,6 +207,7 @@ class bsgm_prob_pairwise_dsm
 
  private:
   void compute_byte();
+  bool z_vs_disparity_scale(double& scale) const;
   pairwise_params params_;
   bpgl_rectify_affine_image_pair rip_;
   size_t ni_;
@@ -205,10 +219,13 @@ class bsgm_prob_pairwise_dsm
   vil_image_view<vxl_byte> rect_bview1_;
   vil_image_view<bool> invalid_map_;
   vil_image_view<bool> invalid_map_reverse_;
+  vil_image_view<float> tri_image_3d_;
   vil_image_view<float> disp_r_;
+  vil_image_view<float> tri_image_3d_reverse_;
   vil_image_view<float> disp_r_reverse_;
   vil_image_view<float> height_map_;
   vil_image_view<float> height_map_reverse_;
+  double z_vs_disp_scale_;
   vil_image_view<float> prob_height_map_z_;
   vil_image_view<float> prob_height_map_prob_;
   vgl_pointset_3d<float> ptset_;

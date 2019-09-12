@@ -64,7 +64,7 @@ class bprb_func_process: public bprb_process_ext
         return 0;
       }
     }
-    brdb_value_t<T>* input = static_cast<brdb_value_t<T>* >(input_data_[i].ptr());
+    brdb_value_t<T>* input = static_cast<brdb_value_t<T>* >(input_data_.at(i).ptr());
     T val = input->value();
     return val;
   }
