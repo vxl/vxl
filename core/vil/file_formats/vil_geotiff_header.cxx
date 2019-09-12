@@ -258,7 +258,6 @@ bool vil_geotiff_header::get_key_value(geokey_t key, void** value,
   // check if it is a valid key id
   if (length == 0) {
     // key is not defined
-    std::cerr << "KeyID=" << (short int)key << " is not valid\n";
     return false;
   }
   else {

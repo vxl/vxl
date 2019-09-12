@@ -25,7 +25,7 @@ vpgl_geo_camera::vpgl_geo_camera()
   trans_matrix_.set_size(4,4);
   trans_matrix_.fill(0);
   trans_matrix_.fill_diagonal(1);
-  is_utm = false;
+  is_utm_ = false;
   scale_tag_ = false;
 }
 
@@ -33,7 +33,7 @@ vpgl_geo_camera::vpgl_geo_camera(vpgl_geo_camera const& rhs)
 : vpgl_camera<double>(rhs),
   trans_matrix_(rhs.trans_matrix_),
   lvcs_(new vpgl_lvcs(*(rhs.lvcs_))),
-  is_utm(rhs.is_utm),
+  is_utm_(rhs.is_utm_),
   utm_zone_(rhs.utm_zone_),
   scale_tag_(rhs.scale_tag_)
 {}
@@ -301,7 +301,7 @@ void vpgl_geo_camera::project(const double x, const double y, const double z,
 
   if (lvcs_) {
     if (lvcs_->get_cs_name() == vpgl_lvcs::utm) {
-      if (is_utm) {  // geo cam is also utm so keep using utm
+      if (is_utm_) {  // geo cam is also utm so keep using utm
         double gx, gy;
         lvcs_->local_to_global(x, y, z, vpgl_lvcs::utm, gx, gy, gz);
         this->global_utm_to_img(gx, gy, utm_zone_, gz, u, v);
@@ -316,8 +316,9 @@ void vpgl_geo_camera::project(const double x, const double y, const double z,
       this->global_to_img(lon, lat, gz, u, v);
     }
   }
-  else // if there is no lvcs, then we assume global coords are given in wgs84, i.e. x is lon and y is lat
+  else {  // if there is no lvcs, then we assume global coords are given in wgs84, i.e. x is lon and y is lat
     this->global_to_img(x, y, z, u, v);
+  }
 }
 
 //: backprojects an image point into local coordinates (based on lvcs_)
@@ -338,7 +339,7 @@ void vpgl_geo_camera::backproject(const double u, const double v,
   //std::cout << '\n' << vec << std::endl;
 
   double lat, lon, elev;
-  if (is_utm) {
+  if (is_utm_) {
     if (lvcs_) {
       if (lvcs_->get_cs_name() == vpgl_lvcs::utm) { // the local cs of lvcs is also utm, so use it directly
         lvcs_->global_to_local(vec[0], vec[1], vec[2], vpgl_lvcs::utm, x, y, z);
@@ -389,9 +390,11 @@ void vpgl_geo_camera::img_to_global(const double i, const double j,
   }
   v[2] = 0;
   v[3] = 1;
-  if (is_utm) {
-    vpgl_utm utm; double dummy;
-    utm.transform(utm_zone_, v[0], v[1], v[2], lat, lon, dummy);
+  if (is_utm_) {
+    vpgl_utm utm;
+    double elev = 0.0;
+    bool south_flag = northing_ > 0;
+    utm.transform(utm_zone_, v[0], v[1], v[2], lat, lon,elev, south_flag);
   }
   else {
     //lon = v[0]; lat = v[1]; elev = v[2];
@@ -406,7 +409,7 @@ void vpgl_geo_camera::global_to_img(const double lon, const double lat, const do
 {
   vnl_vector<double> vec(4), res(4);
   double x1=lon, y1=lat, z1=gz;
-  if (is_utm) {
+  if (is_utm_) {
     vpgl_utm utm;
     int utm_zone;
     utm.transform(lat, lon, x1, y1, utm_zone);
@@ -449,7 +452,7 @@ void vpgl_geo_camera::img_to_global_utm(const double i, const double j, double& 
   }
   v[2] = 0;
   v[3] = 1;
-  if (is_utm) {
+  if (is_utm_) {
     x = v[0];
     y = v[1];
   }
@@ -464,7 +467,7 @@ void vpgl_geo_camera::img_to_global_utm(const double i, const double j, double& 
 void vpgl_geo_camera::global_utm_to_img(const double x, const double y, int zone, double elev, double& u, double& v) const
 {
   vnl_vector<double> vec(4), res(4);
-  if (is_utm) {
+  if (is_utm_) {
     vec[0] = x;
     vec[1] = y;
     vec[2] = elev;
@@ -521,7 +524,7 @@ void vpgl_geo_camera::save_as_tfw(std::string const& tfw_filename)
 
 bool vpgl_geo_camera::img_four_corners_in_utm(const unsigned ni, const unsigned nj, double  /*elev*/, double& e1, double& n1, double& e2, double& n2)
 {
-  if (!is_utm) {
+  if (!is_utm_) {
     std::cerr << "In vpgl_geo_camera::img_four_corners_in_utm() -- UTM hasn't been set!\n";
     return false;
   }
@@ -545,10 +548,13 @@ bool vpgl_geo_camera::operator==(vpgl_geo_camera const& rhs) const
 std::ostream&  operator<<(std::ostream& s,
                          vpgl_geo_camera const& p)
 {
-  if(p.lvcs_) s << p.trans_matrix_ << '\n'<< *(p.lvcs_) << '\n';
+  if (!p.is_utm_) s << "geocam is using wgs_84 deg/meters" << '\n';
+  if (p.lvcs_) s << p.trans_matrix_ << '\n'<< *(p.lvcs_) << '\n';
   else s << p.trans_matrix_ << '\n';
-  if (p.is_utm) {
+  if (p.is_utm_) {
     s << "geocam is using UTM with zone: " << p.utm_zone_ << '\n';
+    if (p.northing_) s << "southern zone" << std::endl;
+    else s << "northern zone" << std::endl;
   }
 
   return s ;
@@ -631,7 +637,7 @@ void vpgl_geo_camera::b_write(vsl_b_ostream& os) const
       vsl_b_write(os, trans_matrix_[i][j]);
 
   lvcs_->b_write(os);
-  vsl_b_write(os, is_utm);
+  vsl_b_write(os, is_utm_);
   vsl_b_write(os, utm_zone_);
   vsl_b_write(os, northing_);
   vsl_b_write(os, scale_tag_);
@@ -657,7 +663,7 @@ void vpgl_geo_camera::b_read(vsl_b_istream& is)
 
      vpgl_lvcs_sptr lvcs_ = new vpgl_lvcs(0,0,0);
      lvcs_->b_read(is);
-     vsl_b_read(is, is_utm);
+     vsl_b_read(is, is_utm_);
      vsl_b_read(is, utm_zone_);
      vsl_b_read(is, northing_);
      vsl_b_read(is, scale_tag_);

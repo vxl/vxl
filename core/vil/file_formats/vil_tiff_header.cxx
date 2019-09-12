@@ -104,39 +104,39 @@ bool vil_tiff_header::read_header()
 #endif
   //====
   //Determine the endian state of the file and machine
-  file_is_big_endian_ = TIFFIsByteSwapped(tif_)>0;
+  file_is_big_endian_ = TIFFIsByteSwapped(tif_) > 0;
 
   //also need machine endian
 #if VXL_BIG_ENDIAN
-    machine_is_big_endian_ = true;
+  machine_is_big_endian_ = true;
 #else
-    machine_is_big_endian_ = false;
+  machine_is_big_endian_ = false;
 #endif
   //the following group must be read first since they
   //dictate subsequent tag structures
   ///-----------------------------------------------///
-  read_short_tag(tif_,TIFFTAG_PHOTOMETRIC, photometric);
-  read_short_tag(tif_,TIFFTAG_PLANARCONFIG, planar_config, 1);
-  read_short_tag(tif_,TIFFTAG_SAMPLESPERPIXEL, samples_per_pixel, 1);
-  read_short_tag(tif_,TIFFTAG_BITSPERSAMPLE, bits_per_sample, 8);
-  is_tiled_flag = TIFFIsTiled(tif_)>0;
+  read_short_tag(tif_, TIFFTAG_PHOTOMETRIC, photometric);
+  read_short_tag(tif_, TIFFTAG_PLANARCONFIG, planar_config, 1);
+  read_short_tag(tif_, TIFFTAG_SAMPLESPERPIXEL, samples_per_pixel, 1);
+  read_short_tag(tif_, TIFFTAG_BITSPERSAMPLE, bits_per_sample, 8);
+  is_tiled_flag = TIFFIsTiled(tif_) > 0;
   ///-----------------------------------------------///
-  read_string(tif_,TIFFTAG_ARTIST , artist);
-  read_short_tag(tif_,TIFFTAG_CELLLENGTH, cell_length);
-  read_short_tag(tif_,TIFFTAG_CELLWIDTH, cell_width);
+  read_string(tif_, TIFFTAG_ARTIST, artist);
+  read_short_tag(tif_, TIFFTAG_CELLLENGTH, cell_length);
+  read_short_tag(tif_, TIFFTAG_CELLWIDTH, cell_width);
   color_map_valid = false;
   if (bits_per_sample.valid &&
       photometric.valid &&
       photometric.val == PHOTOMETRIC_PALETTE)
   {
     vxl_uint_16* cm[3];
-    TIFFGetField(tif_,TIFFTAG_COLORMAP, &cm[0], &cm[1], &cm[2]);
-    unsigned size = 1<<bits_per_sample.val;
+    TIFFGetField(tif_, TIFFTAG_COLORMAP, &cm[0], &cm[1], &cm[2]);
+    unsigned size = 1 << bits_per_sample.val;
     color_map.resize(size);
-    for (unsigned i = 0; i<size; ++i)
+    for (unsigned i = 0; i < size; ++i)
     {
       std::vector<vxl_uint_16> rgb(3);
-      rgb[0]=cm[0][i];  rgb[1]=cm[1][i];  rgb[2]=cm[2][i];
+      rgb[0] = cm[0][i]; rgb[1] = cm[1][i]; rgb[2] = cm[2][i];
       color_map[i] = rgb;
 #ifdef DEBUG
       std::cout << "RGB[" << i << "]=(" << rgb[0] << ' ' << rgb[1] << ' ' << rgb[2] << ")\n";
@@ -144,46 +144,46 @@ bool vil_tiff_header::read_header()
     }
     color_map_valid = true;
   }
-  read_short_tag(tif_,TIFFTAG_COMPRESSION, compression);
-  read_string(tif_,TIFFTAG_COPYRIGHT, copyright);
-  read_string(tif_,TIFFTAG_DATETIME,date_time);
+  read_short_tag(tif_, TIFFTAG_COMPRESSION, compression);
+  read_string(tif_, TIFFTAG_COPYRIGHT, copyright);
+  read_string(tif_, TIFFTAG_DATETIME, date_time);
 
   // EXTRASAMPLES tag requires two input arguments, which is different
   // from other 16bit values.
-  vxl_uint_16* sample_info=nullptr;
-  extra_samples.val=0;
+  vxl_uint_16* sample_info = nullptr;
+  extra_samples.val = 0;
   extra_samples.valid = false;
   int const ret_extrasamples = TIFFGetField(tif_, TIFFTAG_EXTRASAMPLES, &extra_samples.val, &sample_info);
   if (ret_extrasamples && extra_samples.val > 0)
     extra_samples.valid = true;
 
-  read_short_tag(tif_,TIFFTAG_FILLORDER, fill_order);
-  vxl_uint_16* gc=nullptr;
-  TIFFGetField(tif_,TIFFTAG_GRAYRESPONSECURVE, &gc);
-  read_short_tag(tif_,TIFFTAG_GRAYRESPONSEUNIT, gray_response_unit);
-  read_string(tif_,TIFFTAG_HOSTCOMPUTER, host_computer);
-  read_string(tif_,TIFFTAG_IMAGEDESCRIPTION, image_description);
-  read_long_tag(tif_,TIFFTAG_IMAGELENGTH, image_length);
-  read_long_tag(tif_,TIFFTAG_IMAGEWIDTH, image_width);
-  read_string(tif_,TIFFTAG_MAKE, make);
-  read_short_tag(tif_,TIFFTAG_MAXSAMPLEVALUE, max_sample_value, 255);
-  read_short_tag(tif_,TIFFTAG_MINSAMPLEVALUE, min_sample_value, 0);
-  read_string(tif_,TIFFTAG_MODEL, model);
-  read_short_tag(tif_,TIFFTAG_SUBFILETYPE, subfile_type);
-  read_short_tag(tif_,TIFFTAG_ORIENTATION, orientation, 1);
-  read_short_tag(tif_,TIFFTAG_RESOLUTIONUNIT, resolution_unit);
-  read_long_tag(tif_,TIFFTAG_ROWSPERSTRIP, rows_per_strip);
-  read_string(tif_,TIFFTAG_SOFTWARE, software);
-  read_short_tag(tif_,TIFFTAG_SAMPLEFORMAT, sample_format, 1);
+  read_short_tag(tif_, TIFFTAG_FILLORDER, fill_order);
+  vxl_uint_16* gc = nullptr;
+  TIFFGetField(tif_, TIFFTAG_GRAYRESPONSECURVE, &gc);
+  read_short_tag(tif_, TIFFTAG_GRAYRESPONSEUNIT, gray_response_unit);
+  read_string(tif_, TIFFTAG_HOSTCOMPUTER, host_computer);
+  read_string(tif_, TIFFTAG_IMAGEDESCRIPTION, image_description);
+  read_long_tag(tif_, TIFFTAG_IMAGELENGTH, image_length);
+  read_long_tag(tif_, TIFFTAG_IMAGEWIDTH, image_width);
+  read_string(tif_, TIFFTAG_MAKE, make);
+  read_short_tag(tif_, TIFFTAG_MAXSAMPLEVALUE, max_sample_value, 255);
+  read_short_tag(tif_, TIFFTAG_MINSAMPLEVALUE, min_sample_value, 0);
+  read_string(tif_, TIFFTAG_MODEL, model);
+  read_short_tag(tif_, TIFFTAG_SUBFILETYPE, subfile_type);
+  read_short_tag(tif_, TIFFTAG_ORIENTATION, orientation, 1);
+  read_short_tag(tif_, TIFFTAG_RESOLUTIONUNIT, resolution_unit);
+  read_long_tag(tif_, TIFFTAG_ROWSPERSTRIP, rows_per_strip);
+  read_string(tif_, TIFFTAG_SOFTWARE, software);
+  read_short_tag(tif_, TIFFTAG_SAMPLEFORMAT, sample_format, 1);
   strip_byte_counts_valid = false;
   if (rows_per_strip.valid)
   {
     strip_byte_counts_valid =
-      TIFFGetField(tif_,TIFFTAG_STRIPBYTECOUNTS , &strip_byte_counts)>0;
+      TIFFGetField(tif_, TIFFTAG_STRIPBYTECOUNTS, &strip_byte_counts) > 0;
 #ifdef DEBUG
-    //      vxl_uint_32 size = strips_per_image()*samples_per_pixel.val;
+    // vxl_uint_32 size = strips_per_image()*samples_per_pixel.val;
     vxl_uint_32 size = strips_per_image();
-    for (vxl_uint_32 i = 0; i<size; ++i)
+    for (vxl_uint_32 i = 0; i < size; ++i)
       std::cout << "SBC[" << i << "]=" << strip_byte_counts[i] << '\n';
 #endif
   }
@@ -193,14 +193,14 @@ bool vil_tiff_header::read_header()
   if (rows_per_strip.valid)
   {
     strip_offsets_valid =
-      TIFFGetField(tif_, TIFFTAG_STRIPOFFSETS, &strip_offsets)>0;
+      TIFFGetField(tif_, TIFFTAG_STRIPOFFSETS, &strip_offsets) > 0;
     //      vxl_uint_32 size = strips_per_image()*samples_per_pixel.val;
     vxl_uint_32 size = strips_per_image();
-      for (vxl_uint_32 i = 0; i<size; ++i)
+    for (vxl_uint_32 i = 0; i < size; ++i)
       std::cout << "SOFF[" << i << "]=" << strip_offsets[i] << '\n';
   }
 #endif
-  read_short_tag(tif_,TIFFTAG_THRESHHOLDING, thresholding);
+  read_short_tag(tif_, TIFFTAG_THRESHHOLDING, thresholding);
 
   read_float_tag(tif_, TIFFTAG_XRESOLUTION, x_resolution, x_resolution_valid);
   read_float_tag(tif_, TIFFTAG_YRESOLUTION, y_resolution, y_resolution_valid);
@@ -211,29 +211,37 @@ bool vil_tiff_header::read_header()
   tile_offsets_valid = false;
 
 #ifdef DEBUG
-  if (tile_width.valid&&tile_length.valid)
+  if (tile_width.valid && tile_length.valid)
   {
     tile_offsets_valid =
-      TIFFGetField(tif_, TIFFTAG_TILEOFFSETS, &tile_offsets)>0;
-    //      vxl_uint_32 size = tiles_per_image()*samples_per_pixel.val;
+      TIFFGetField(tif_, TIFFTAG_TILEOFFSETS, &tile_offsets) > 0;
+    // vxl_uint_32 size = tiles_per_image()*samples_per_pixel.val;
     vxl_uint_32 size = tiles_per_image();
-    for (vxl_uint_32 i = 0; i<size; ++i)
+    for (vxl_uint_32 i = 0; i < size; ++i)
       std::cout << "TOFF[" << i << "]=" << tile_offsets[i] << '\n';
   }
 #endif
 
   tile_byte_counts_valid = false;
 #ifdef DEBUG
-  if (tile_width.valid&&tile_length.valid)
+  if (tile_width.valid && tile_length.valid)
   {
     tile_byte_counts_valid =
-     TIFFGetField(tif_, TIFFTAG_TILEBYTECOUNTS, &tile_byte_counts)>0;
-    //      vxl_uint_32 size = tiles_per_image()*samples_per_pixel.val;
+      TIFFGetField(tif_, TIFFTAG_TILEBYTECOUNTS, &tile_byte_counts) > 0;
+    // vxl_uint_32 size = tiles_per_image()*samples_per_pixel.val;
     vxl_uint_32 size = tiles_per_image();
-    for (vxl_uint_32 i = 0; i<size; ++i)
+    for (vxl_uint_32 i = 0; i < size; ++i)
       std::cout << "TBC[" << i << "]=" << tile_byte_counts[i] << '\n';
   }
 #endif
+  uint32  count, f;
+  char* data;
+  f = TIFFGetField(tif_, 42113, &count, &data);
+  if (f) {
+    for (uint32 i = 0; i < count; ++i)
+      no_data_value_.push_back(data[i]);
+  }
+
   return this->compute_pixel_format();
   // int success = TIFFReadDirectory(tif_);
 }

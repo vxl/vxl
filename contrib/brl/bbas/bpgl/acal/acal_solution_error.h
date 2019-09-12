@@ -21,16 +21,14 @@ class acal_solution_error
   acal_solution_error():
     min_eps_u_(0.0), min_eps_v_(0.0),
     max_eps_u_(0.0), max_eps_v_(0.0),
-    rms_err_u_(0.0), rms_err_v_(0.0)
-  {}
+    rms_err_u_(0.0),rms_err_v_(0.0) {}
 
   acal_solution_error(double min_eps_u, double min_eps_v,
                       double max_eps_u, double max_eps_v,
-                      double rms_err_u, double rms_err_v):
+                      double rms_err_u,  double rms_err_v):
     min_eps_u_(min_eps_u), min_eps_v_(min_eps_v),
     max_eps_u_(max_eps_u), max_eps_v_(max_eps_v),
-    rms_err_u_(rms_err_u), rms_err_v_(rms_err_v)
-  {}
+    rms_err_u_(rms_err_u),rms_err_v_(rms_err_v) {}
 
   double min_eps_u_;
   double min_eps_v_;
@@ -39,7 +37,7 @@ class acal_solution_error
   double rms_err_u_;
   double rms_err_v_;
 
-  void print(){
+  void print() {
     std::cout << "min (" << min_eps_u_ << ' ' << min_eps_v_ << ")" << std::endl;
     std::cout << "max (" << max_eps_u_ << ' ' << max_eps_v_ << ")" << std::endl;
     std::cout << "rms (" << rms_err_u_ << ' ' << rms_err_v_ << ")" << std::endl;

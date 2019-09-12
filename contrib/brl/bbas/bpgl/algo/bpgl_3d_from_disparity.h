@@ -18,5 +18,10 @@ vil_image_view<float> bpgl_3d_from_disparity(vpgl_affine_camera<double> const& c
                                               vpgl_affine_camera<double> const& cam2,
                                               vil_image_view<DISP_T> const& disparity);
 
+template<typename DISP_T>
+vil_image_view<float> bpgl_3d_from_disparity_with_scalar(vpgl_affine_camera<double> const& cam1,
+                                                         vpgl_affine_camera<double> const& cam2,
+                                                         vil_image_view<DISP_T> const& disparity,
+                                                         vil_image_view<DISP_T> const& scalar);
 
 #endif

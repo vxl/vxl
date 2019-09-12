@@ -29,10 +29,10 @@ struct match_params;
 class match_vertex;
 class match_edge;
 
-
 struct match_params
 {
-  match_params():min_n_tracks_(3), min_n_cams_(3), max_proj_error_(1.0), max_uncal_proj_error_(20.0) {}
+  match_params() : min_n_tracks_(3), min_n_cams_(3), max_proj_error_(1.0), max_uncal_proj_error_(20.0) {}
+
   size_t min_n_tracks_;
   size_t min_n_cams_;
   double max_proj_error_;
@@ -42,13 +42,13 @@ struct match_params
 class match_vertex
 {
  public:
-  match_vertex(): cam_id_(-1), mark_(false){}
-  match_vertex(size_t cam_id): cam_id_(cam_id), mark_(false){}
+  match_vertex(): cam_id_(-1), mark_(false) {}
+  match_vertex(size_t cam_id): cam_id_(cam_id), mark_(false) {}
 
-  void add_edge(match_edge* edge){
+  void add_edge(match_edge* edge) {
     std::vector<match_edge* >::iterator eit;
-    eit = std::find( edges_.begin(), edges_.end(), edge);
-    if(eit == edges_.end())
+    eit = std::find(edges_.begin(), edges_.end(), edge);
+    if (eit == edges_.end())
       edges_.push_back(edge);
   }
 
@@ -84,8 +84,7 @@ class match_edge
 class acal_match_graph
 {
  public:
-  acal_match_graph(){}
-
+  acal_match_graph() {}
   //                         cam id i         cam id j            matches i -> j
   acal_match_graph(std::map<size_t, std::map<size_t, std::vector<acal_match_pair> > >const& incidence_matrix);
   void set_params(match_params const& params){params_ = params;}

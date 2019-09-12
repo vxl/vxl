@@ -244,6 +244,9 @@ class vil_tiff_header
 
   //: the number of images in the file
   vxl_uint_16  n_images();
+
+  //:: a non_standard tag due to gdal. Null string means not defined
+  std::string no_data_value() {return no_data_value_;}
  private:
   TIFF* tif_;
   //: read/write mode true for read.
@@ -260,6 +263,7 @@ class vil_tiff_header
   bool parse_pixel_format(vil_pixel_format const& fmt);
   bool file_is_big_endian_;
   bool machine_is_big_endian_;
+  std::string no_data_value_;
 };
 
 #endif //vil_tiff_header_h_
