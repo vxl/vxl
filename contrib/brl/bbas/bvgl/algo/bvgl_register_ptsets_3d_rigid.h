@@ -66,15 +66,18 @@ public:
   void set_outlier_thresh(T outlier_thresh){outlier_thresh_ = outlier_thresh;}
   void set_transform_fraction(T fraction){transform_fraction_ = fraction;}
   void set_min_n_pts(size_t n) { min_n_pts_ = n; }
+  vgl_vector_3d<T> search_range() const {return t_range_;}
+  vgl_vector_3d<T> search_increment() const {return t_inc_;}
+  T outlier_thresh() const { return outlier_thresh_;}
+  T transform_fraction() const {return transform_fraction_;}
+  size_t min_n_pts() const {return min_n_pts_;}
+  bool closest_point(vgl_point_3d<T> const& probe, vgl_point_3d<T>& closest){return knn_fixed_.closest_point(probe, closest);}
   T error(vgl_vector_3d<T> const& t);
   bool minimize();
-  void sort_tranformed_distances();
   vgl_vector_3d<T> t()const {return t_;}
   T min_error() const {return min_error_;}
-  std::vector<std::pair<T, vgl_point_3d<T> > > sorted_distance() const {return sorted_distance_;}
 
  private:
-  static bool dless(std::pair<T, vgl_point_3d<T> > const& a, std::pair<T, vgl_point_3d<T> > const& b);
   T outlier_thresh_;
   vgl_pointset_3d<T> fixed_;
   bvgl_k_nearest_neighbors_3d<T> knn_fixed_;
@@ -86,7 +89,6 @@ public:
   vgl_vector_3d<T> t_range_;
   vgl_vector_3d<T> t_inc_;
   T min_error_;
-  std::vector<std::pair<T, vgl_point_3d<T> > > sorted_distance_;
 };
 
 
