@@ -7,11 +7,6 @@
 #include <algorithm>
 #include <vgl/vgl_distance.h>
 
-template <class T>
-bool bvgl_register_ptsets_3d_rigid<T>::dless(std::pair<T, vgl_point_3d<T> > const& a, std::pair<T, vgl_point_3d<T> > const& b)
-{
-  return a.first < b.first;
-}
 
 // rotate then translate
 template <class T>
@@ -71,27 +66,6 @@ bool bvgl_register_ptsets_3d_rigid<T>::minimize()
   return true;
 }
 
-template <class T>
-void bvgl_register_ptsets_3d_rigid<T>::sort_tranformed_distances()
-{
-  size_t n = movable_.npts();
-  for (size_t i = 0; i<n; ++i)
-  {
-    const vgl_point_3d<T>& p = movable_.p(i);
-    vgl_point_3d<T> tp = p + t_;
-    vgl_point_3d<T> cp;
-    if (!knn_fixed_.closest_point(tp, cp)) {
-      std::cout << "KNN index failed to find neighbors" << std::endl;
-      return;
-    }
-    T d = vgl_distance<T>(tp, cp);
-    if (d > outlier_thresh_)
-      continue;
-    std::pair<T, vgl_point_3d<T> > pr(d, tp);
-    sorted_distance_.push_back(pr);
-  }
-  std::sort(sorted_distance_.begin(), sorted_distance_.end(), dless);
-}
 
 template <class T>
 bool bvgl_register_ptsets_3d_rigid<T>::read_fixed_ptset(std::string const& fixed_path)
