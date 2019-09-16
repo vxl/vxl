@@ -129,6 +129,10 @@ sdet_classify(sdet_atmospheric_image_classifier tc,
   int ni_valid = image_grey.ni() - (2 * edge_buffer);
   int nj_valid = image_grey.nj() - (2 * edge_buffer);
 
+  if (ni_valid <= 0 || nj_valid <= 0) {
+    throw std::invalid_argument("Filter radius larger than image dimensions!\n");
+  }
+
   // Crop the inner valid pixels which can be classified
   // i.e. this is the region of the input image which will be classified
   vil_image_view<float> outf = vil_crop(image_grey, edge_buffer, ni_valid, edge_buffer, nj_valid);
