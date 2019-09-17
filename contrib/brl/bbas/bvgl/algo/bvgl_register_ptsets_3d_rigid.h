@@ -24,6 +24,7 @@
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <bvgl/bvgl_k_nearest_neighbors_3d.h>
+#include <vnl/vnl_random.h>
 
 template <class T>
 class bvgl_register_ptsets_3d_rigid

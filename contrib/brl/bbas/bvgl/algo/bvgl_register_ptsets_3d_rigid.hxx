@@ -6,7 +6,6 @@
 #include <fstream>
 #include <algorithm>
 #include <vgl/vgl_distance.h>
-#include <vnl/vnl_random.h>
 
 template <class T>
 bool bvgl_register_ptsets_3d_rigid<T>::dless(std::pair<T, vgl_point_3d<T> > const& a, std::pair<T, vgl_point_3d<T> > const& b)
