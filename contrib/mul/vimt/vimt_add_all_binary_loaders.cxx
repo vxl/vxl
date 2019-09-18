@@ -21,5 +21,6 @@ void vimt_add_all_binary_loaders()
   vsl_add_to_binary_loader(vimt_image_2d_of<float>());
   vsl_add_to_binary_loader(vimt_image_2d_of<vxl_uint_16>());
 
-  vil_file_format::add_file_format(new vimt_vil_v2i_format);
+//  This doesn't work properly, and is almost never used.
+//  vil_file_format::add_file_format(new vimt_vil_v2i_format);
 }
