@@ -460,6 +460,7 @@ void msdi_marked_images_from_files::set_from_props(mbl_read_props_type& props)
 {
   image_dir_=props.get_optional_property("image_dir","./");
   points_dir_=props.get_optional_property("points_dir","./");
+  load_as_float_=vul_string_to_bool(props.get_optional_property("load_as_float","false"));
 
   mbl_parse_colon_pairs_list(props.get_required_property("images"),
                              points_name_,image_name_);
