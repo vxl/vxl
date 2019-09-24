@@ -34,7 +34,7 @@ add_test( NAME vimt_test_find_troughs COMMAND $<TARGET_FILE:vimt_test_all> test_
 add_test( NAME vimt_test_correlate_2d COMMAND $<TARGET_FILE:vimt_test_all> test_correlate_2d )
 add_test( NAME vimt_test_resample_bilin COMMAND $<TARGET_FILE:vimt_test_all> test_resample_bilin )
 add_test( NAME vimt_test_image_bounds_and_centre_2d COMMAND $<TARGET_FILE:vimt_test_all> test_image_bounds_and_centre_2d )
-add_test( NAME vimt_test_v2i COMMAND $<TARGET_FILE:vimt_test_all> test_v2i )
+# add_test( NAME vimt_test_v2i COMMAND $<TARGET_FILE:vimt_test_all> test_v2i )
 add_test( NAME vimt_test_reflect COMMAND $<TARGET_FILE:vimt_test_all> test_reflect )
 
 add_executable( vimt_test_include test_include.cxx )
