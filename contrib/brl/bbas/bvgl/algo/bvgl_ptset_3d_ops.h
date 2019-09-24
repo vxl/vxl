@@ -40,6 +40,7 @@ public:
  }
  void compute_roughness(T radius, size_t n_nbrs);
  const vgl_pointset_3d<T>& scalar_result() const {return ptset_with_scalar_result_;}
+ const bvgl_k_nearest_neighbors_3d<T>& knn(){return knn_;}
  private:
   size_t n_nbrs_;
   vgl_pointset_3d<T> ptset_;

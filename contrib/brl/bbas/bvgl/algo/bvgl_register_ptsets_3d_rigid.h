@@ -76,7 +76,8 @@ public:
   bool minimize();
   vgl_vector_3d<T> t()const {return t_;}
   T min_error() const {return min_error_;}
-
+  const bvgl_k_nearest_neighbors_3d<T>& knn_fixed() const {return knn_fixed_;}
+  bool valid_instance() const {return (fixed_.size()>0 && movable_.size()>0);}
  private:
   T outlier_thresh_;
   vgl_pointset_3d<T> fixed_;
