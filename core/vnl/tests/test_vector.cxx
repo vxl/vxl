@@ -9,6 +9,9 @@
 #include <vnl/vnl_cross.h>
 #include <testlib/testlib_test.h>
 
+#include <numeric> // For iota.
+#include <utility> // For move.
+
 void vnl_vector_test_int()
 {
 
@@ -585,6 +588,57 @@ void vnl_vector_test_matrix()
         (v.size()==2 && v(0)==1 && v(1)==4)), true);
 }
 
+
+void vnl_vector_test_move_construct()
+{
+  const std::size_t len{ 3 };
+  using vector_type = vnl_vector<int>;
+
+  // As an example, use original_vector = { 1, 2, 3 };
+  vector_type original_vector(len);
+  std::iota(original_vector.begin(), original_vector.end(), 1);
+
+  const vector_type copy_of_vector(original_vector);
+
+  static_assert(noexcept(vector_type(std::move(original_vector))),
+    "The move-constructor must be noexcept");
+
+  const vector_type move_constructed_vector(std::move(original_vector));
+
+  TEST("A move-constructed vector is equal to a copy",
+    move_constructed_vector, copy_of_vector);
+
+  TEST("A moved-from vector (rhs of move-construct) is empty",
+    original_vector.empty(), true);
+}
+
+
+void vnl_vector_test_move_assign()
+{
+  const std::size_t len{ 3 };
+  using vector_type = vnl_vector<int>;
+
+  // As an example, use original_vector = { 1, 2, 3 };
+  vector_type original_vector(len);
+  std::iota(original_vector.begin(), original_vector.end(), 1);
+
+  const vector_type copy_of_vector(original_vector);
+
+  vector_type move_assign_target;
+
+  static_assert(noexcept(move_assign_target = std::move(original_vector)),
+    "The move-assignment must be noexcept");
+
+  move_assign_target = std::move(original_vector);
+
+  TEST("A move-constructed vector is equal to a copy",
+    move_assign_target, copy_of_vector);
+
+  TEST("A moved-from vector (rhs of move-assignment) is empty",
+    original_vector.empty(), true);
+}
+
+
 void vnl_vector_test_conversion()
 {
   bool check;
@@ -759,6 +813,8 @@ void test_vector()
   vnl_vector_test_int();
   vnl_vector_test_float();
   vnl_vector_test_matrix();
+  vnl_vector_test_move_construct();
+  vnl_vector_test_move_assign();
   vnl_vector_test_conversion();
   vnl_vector_test_io();
 #if TIMING
