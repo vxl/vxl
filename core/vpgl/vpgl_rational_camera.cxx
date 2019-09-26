@@ -1,7 +1,6 @@
 // This is core/vpgl/vpgl_rational_camera.cxx
 #include "vpgl_rational_camera.h"
 
-
 // std::vector from vpgl_rational_order
 std::vector<unsigned>
 vpgl_rational_order_func::to_vector(vpgl_rational_order choice) {
@@ -90,3 +89,7 @@ vpgl_rational_order_func::from_string(std::string const& buf)
   else
     throw std::invalid_argument("string not recognized as vpgl_rational_order");
 }
+
+// define vpgl_rational_order_func static initializer_list in namespace
+constexpr std::initializer_list<vpgl_rational_order>
+vpgl_rational_order_func::initializer_list;
