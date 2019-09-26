@@ -96,6 +96,9 @@ class VNL_EXPORT vnl_vector
   //: Copy constructor.
   vnl_vector(vnl_vector<T> const&);
 
+  //: Move-constructor.
+  vnl_vector(vnl_vector<T> &&) noexcept;
+
 #ifndef VXL_DOXYGEN_SHOULD_SKIP_THIS
 // <internal>
   // These constructors are here so that operator* etc can take
@@ -175,6 +178,9 @@ class VNL_EXPORT vnl_vector
 
   //: Copy operator
   vnl_vector<T>& operator=(vnl_vector<T> const& rhs);
+
+  //: Move-assignment operator
+  vnl_vector<T>& operator=(vnl_vector<T>&& rhs) noexcept;
 
   //: Add scalar value to all elements
   vnl_vector<T>& operator+=(T );
@@ -340,7 +346,7 @@ class VNL_EXPORT vnl_vector
   vnl_vector& roll_inplace(const int &shift);
 
   //: Set this to that and that to this
-  void swap(vnl_vector<T> & that);
+  void swap(vnl_vector<T> & that) noexcept;
 
   //: Check that size()==sz if not, abort();
   // This function does or tests nothing if NDEBUG is defined
