@@ -83,6 +83,7 @@
 #include <utility>
 #include <vector>
 #include <stdexcept>
+#include <initializer_list>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -104,6 +105,14 @@ class vpgl_rational_order_func {
   static std::vector<unsigned> to_vector(vpgl_rational_order choice);
   static std::string to_string(vpgl_rational_order choice);
   static vpgl_rational_order from_string(std::string const& buf);
+
+  // initializer_list for iteration
+  // e.g. "for (auto item : vpgl_rational_order_func::initializer_list) {...}"
+  static constexpr std::initializer_list<vpgl_rational_order> initializer_list = {
+    vpgl_rational_order::VXL,
+    vpgl_rational_order::RPC00B
+  };
+
  private:
   vpgl_rational_order_func() = delete;
 };
