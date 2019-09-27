@@ -199,6 +199,43 @@ static void test_rational_camera()
   good = good && sv == rcam.scale(vpgl_rational_camera<double>::V_INDX);
   good = good && ov == rcam.offset(vpgl_rational_camera<double>::V_INDX);
   TEST("test getting scale and offset values", good, true);
+
+  // test vpgl_rational_order
+  // iterate through vpgl_rational_order enumeration checking related functionality
+  // try/catch for general failure (e.g., invalid std::initializer_list)
+  try {
+    std::cout << "testing vpgl_rational_order" << std::endl;
+
+    for (auto choice : vpgl_rational_order_func::initializer_list) {
+      std::string choice_str;
+
+      switch (choice) {
+        case vpgl_rational_order::VXL : {
+          choice_str = "VXL";
+          break;
+        }
+        case vpgl_rational_order::RPC00B : {
+          choice_str = "RPC00B";
+          break;
+        }
+        default: {
+          throw std::invalid_argument("vpgl_rational_order not recognized");
+        }
+      }
+
+      TEST(("vpgl_rational_order::" + choice_str + " to_string").c_str(),
+           vpgl_rational_order_func::to_string(choice),
+           choice_str);
+      TEST(("vpgl_rational_order::" + choice_str + " from_string").c_str(),
+           vpgl_rational_order_func::from_string(choice_str),
+           choice);
+    }
+
+  } catch (const std::exception& e) {
+    std::cerr << "vpgl_rational_order general failure: " << e.what();
+    TEST("vpgl_rational_order general", false, true);
+  }
+
 }
 
 TESTMAIN(test_rational_camera);
