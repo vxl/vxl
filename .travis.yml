@@ -12,9 +12,9 @@ compiler:
 # environment variables
 env:
   global:
-    - VXL_SOURCE_DIR=$TRAVIS_BUILD_DIR
-    - VXL_BUILD_DIR=${HOME}/build
-    - VXL_INSTALL_DIR=${HOME}/install
+    - PROJ_SOURCE_DIR=${TRAVIS_BUILD_DIR}
+    - PROJ_BUILD_DIR=${HOME}/build
+    - PROJ_INSTALL_DIR=${HOME}/install
 
 # https://docs.travis-ci.com/user/customizing-the-build/
 git:
@@ -24,7 +24,7 @@ git:
 cache:
   timeout: 1000
   directories:
-  - ${VXL_BUILD_DIR}
+  - ${PROJ_BUILD_DIR}
 
 # general dependencies
 addons:
@@ -59,23 +59,23 @@ install:
 before_script:
 
   # create build & install directories if they do not exist
-  - mkdir -p ${VXL_BUILD_DIR} ${VXL_INSTALL_DIR}
+  - mkdir -p ${PROJ_BUILD_DIR} ${PROJ_INSTALL_DIR}
 
   # fix times on source
   - |
-    MD5_FILE=${VXL_BUILD_DIR}/vxl.md5
-    export OLDEST_DATE=$(find ${VXL_BUILD_DIR} -type f -printf '%TD %TT\n' | sort | head -1)
+    MD5_FILE=${PROJ_BUILD_DIR}/build_cache.md5
+    export OLDEST_DATE=$(find ${PROJ_BUILD_DIR} -type f -printf '%TD %TT\n' | sort | head -1)
     if [ -f ${MD5_FILE} ]; then
       (md5sum -c ${MD5_FILE} 2>/dev/null || :) | awk '{if ($NF == "OK") print substr($0, 1, length($0)-4)}' | xargs touch -d "${OLDEST_DATE}"
     fi
-    find ${VXL_SOURCE_DIR} \( -type d -name .git \) -prune -o -type f -print0 | xargs -0 md5sum > ${MD5_FILE}
+    find ${PROJ_SOURCE_DIR} \( -type d -name .git \) -prune -o -type f -print0 | xargs -0 md5sum > ${MD5_FILE}
 
 # main script
 script:
-  - cd ${VXL_BUILD_DIR}
+  - cd ${PROJ_BUILD_DIR}
   - cmake
           -G Ninja
-          -DCMAKE_INSTALL_PREFIX:PATH=${VXL_INSTALL_DIR}
+          -DCMAKE_INSTALL_PREFIX:PATH=${PROJ_INSTALL_DIR}
           -DCMAKE_CXX_STANDARD:STRING=11
           -DVXL_BUILD_BRL:BOOL=OFF
           -DCMAKE_BUILD_TYPE:STRING=Release
@@ -91,7 +91,7 @@ script:
           -DVXL_FORCE_V3P_PNG:BOOL=ON
           -DVXL_FORCE_V3P_TIFF:BOOL=ON
           -DVXL_FORCE_V3P_ZLIB:BOOL=ON
-          ${VXL_SOURCE_DIR}
+          ${PROJ_SOURCE_DIR}
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalConfigure
   - ctest -D ExperimentalBuild -j2
