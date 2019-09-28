@@ -30,6 +30,8 @@
 
 #include "bzlib_private.h"
 
+#include <stdio.h> //needed for fdopen
+
 
 /*---------------------------------------------------*/
 /*--- Compression stuff                           ---*/
