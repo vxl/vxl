@@ -34,10 +34,10 @@ static void test_register()
     test_ptset.add_point(tp);
   }
   bvgl_register_ptsets_3d_rigid<float> reg(gt_ptset, test_ptset);
-  bool good = reg.minimize();
+  bool good = reg.minimize_exhaustive();
   TEST("registration success", good, true);
-  std::cout << "msq_error " << reg.min_error() << " trans at min "<< reg.t() << std::endl;
-  vgl_vector_3d<float> tmin = reg.t();
+  std::cout << "msq_error " << reg.min_exhaustive_error() << " trans at min "<< reg.exhaustive_t() << std::endl;
+  vgl_vector_3d<float> tmin = reg.exhaustive_t();
   vgl_vector_3d<float> dif = t+tmin;
   float er = dif.length();
   TEST_NEAR("solve for translation", er, 0.0f, 0.5f);
