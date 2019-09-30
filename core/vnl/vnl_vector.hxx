@@ -122,18 +122,6 @@ vnl_vector<T>::vnl_vector (vnl_vector<T> const& v)
   }
 }
 
-
-//: Move-constructs a vector. O(1).
-template<class T>
-vnl_vector<T>::vnl_vector(vnl_vector<T>&& v) noexcept
-  :
-  data{ v.data },
-  num_elmts{ v.num_elmts }
-{
-  v.data = nullptr;
-  v.num_elmts = 0;
-}
-
 //: Creates a vector from a block array of data, stored row-wise.
 // Values in datablck are copied. O(n).
 
@@ -369,21 +357,6 @@ vnl_vector<T>& vnl_vector<T>::operator= (vnl_vector<T> const& rhs)
   }
   return *this;
 }
-
-
-//: Move-assigns rhs vector into lhs vector. O(1).
-template<class T>
-vnl_vector<T>& vnl_vector<T>::operator=(vnl_vector<T>&& rhs) noexcept
-{
-  vnl_vector temp(std::move(rhs));
-
-  static_assert(noexcept(this->swap(temp)),
-    "swap should be noexcept, to ensure that move-assign never fails");
-  this->swap(temp);
-
-  return *this;
-}
-
 
 //: Increments all elements of vector with value. O(n).
 
@@ -703,7 +676,7 @@ vnl_vector<T>::roll_inplace(const int &shift)
 }
 
 template <class T>
-void vnl_vector<T>::swap(vnl_vector<T> &that) noexcept
+void vnl_vector<T>::swap(vnl_vector<T> &that)
 {
   std::swap(this->num_elmts, that.num_elmts);
   std::swap(this->data, that.data);
