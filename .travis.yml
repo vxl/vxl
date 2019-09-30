@@ -20,11 +20,11 @@ env:
 git:
   depth: 3
 
-# cache the build dir
-cache:
-  timeout: 1000
-  directories:
-  - ${PROJ_BUILD_DIR}
+# # cache the build dir
+# cache:
+#   timeout: 1000
+#   directories:
+#   - ${PROJ_BUILD_DIR}
 
 # general dependencies
 addons:
