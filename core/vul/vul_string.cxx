@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <sstream>
 #include <cmath>
+#include <stdexcept>
 #include "vul_string.h"
 //:
 // \file
