@@ -83,7 +83,8 @@
 #include <utility>
 #include <vector>
 #include <stdexcept>
-#include <initializer_list>
+#include <array>
+
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -91,6 +92,7 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vpgl/vpgl_camera.h>
+
 
 // ----------------------------------------
 // rational camera order for input/output operations
@@ -108,14 +110,16 @@ class vpgl_rational_order_func {
 
   // initializer_list for iteration
   // e.g. "for (auto item : vpgl_rational_order_func::initializer_list) {...}"
-  static constexpr std::initializer_list<vpgl_rational_order> initializer_list = {
-    vpgl_rational_order::VXL,
-    vpgl_rational_order::RPC00B
+  static constexpr std::array<vpgl_rational_order,2> initializer_list{
+      vpgl_rational_order::VXL,
+      vpgl_rational_order::RPC00B
   };
 
  private:
   vpgl_rational_order_func() = delete;
 };
+
+
 
 
 // ----------------------------------------

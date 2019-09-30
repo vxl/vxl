@@ -91,5 +91,4 @@ vpgl_rational_order_func::from_string(std::string const& buf)
 }
 
 // define vpgl_rational_order_func static initializer_list in namespace
-constexpr std::initializer_list<vpgl_rational_order>
-vpgl_rational_order_func::initializer_list;
+constexpr std::array<vpgl_rational_order,2> vpgl_rational_order_func::initializer_list;
