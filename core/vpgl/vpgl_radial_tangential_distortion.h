@@ -62,24 +62,24 @@ class vpgl_radial_tangential_distortion : public vpgl_lens_distortion<T>
 
   //: Distort a projected point on the image plane
   //  Calls the pure virtual radial distortion function
-  virtual vgl_homg_point_2d<T> distort( const vgl_homg_point_2d<T>& point ) const override;
+  vgl_homg_point_2d<T> distort( const vgl_homg_point_2d<T>& point ) const override;
 
   //: Return the original point that was distorted to this location (inverse of distort)
   // \param init is an initial guess at the solution for the iterative solver
   // if \p init is NULL then \p point is used as the initial guess
   // calls the radial undistortion function
-  virtual vgl_homg_point_2d<T> undistort( const vgl_homg_point_2d<T>& point,
+  vgl_homg_point_2d<T> undistort( const vgl_homg_point_2d<T>& point,
                                           const vgl_homg_point_2d<T>* init=nullptr) const override;
 
   //: implementation of distortion in the pixel coordinate system
-  virtual vgl_homg_point_2d<T> distort_pixel(const vgl_homg_point_2d<T>& pixel, const vpgl_calibration_matrix<T>& K) const{
+  vgl_homg_point_2d<T> distort_pixel(const vgl_homg_point_2d<T>& pixel, const vpgl_calibration_matrix<T>& K) const override {
     vgl_homg_point_2d<T> cen_pixel(pixel.x()-center_.x(), pixel.y()-center_.y());
     vgl_homg_point_2d<T> ret = vpgl_lens_distortion<T>::distort_pixel(cen_pixel, K);
     return ret;
   }
 
   //: implementation of undistortion in the pixel coordinate system
-  virtual vgl_homg_point_2d<T> undistort_pixel(const vgl_homg_point_2d<T>& distorted_pixel, const vpgl_calibration_matrix<T>& K) const{
+  vgl_homg_point_2d<T> undistort_pixel(const vgl_homg_point_2d<T>& distorted_pixel, const vpgl_calibration_matrix<T>& K) const override {
     vgl_homg_point_2d<T> ret = vpgl_lens_distortion<T>::undistort_pixel(distorted_pixel, K);
     ret.set(ret.x()+center_.x(), ret.y() + center_.y());
     return ret;
