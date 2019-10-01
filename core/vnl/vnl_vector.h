@@ -19,7 +19,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vnl/vnl_tag.h>
+
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_config.h>
 #include <vnl/vnl_error.h>
@@ -33,6 +33,8 @@
 # define VNL_CONFIG_CHECK_BOUNDS 0
 # undef ERROR_CHECKING
 #endif
+#include <vnl/vnl_sse.h>
+#include <algorithm>
 
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
@@ -95,24 +97,6 @@ class VNL_EXPORT vnl_vector
 
   //: Copy constructor.
   vnl_vector(vnl_vector<T> const&);
-
-#ifndef VXL_DOXYGEN_SHOULD_SKIP_THIS
-// <internal>
-  // These constructors are here so that operator* etc can take
-  // advantage of the C++ return value optimization.
-  vnl_vector(vnl_vector<T> const &, vnl_vector<T> const &, vnl_tag_add); // v + v
-  vnl_vector(vnl_vector<T> const &, vnl_vector<T> const &, vnl_tag_sub); // v - v
-  vnl_vector(vnl_vector<T> const &, T,                     vnl_tag_mul); // v * s
-  vnl_vector(vnl_vector<T> const &, T,                     vnl_tag_div); // v / s
-  vnl_vector(vnl_vector<T> const &, T,                     vnl_tag_add); // v + s
-  vnl_vector(vnl_vector<T> const &, T,                     vnl_tag_sub); // v - s
-  vnl_vector(vnl_matrix<T> const &, vnl_vector<T> const &, vnl_tag_mul); // M * v
-  vnl_vector(vnl_vector<T> const &, vnl_matrix<T> const &, vnl_tag_mul); // v * M
-  vnl_vector(vnl_vector<T> &that, vnl_tag_grab)
-    : num_elmts(that.num_elmts), data(that.data)
-  { that.num_elmts=0; that.data=nullptr; } // "*this" now uses "that"'s data.
-// </internal>
-#endif
 
   //: Destructor
 #ifdef __INTEL_COMPILER
@@ -214,14 +198,65 @@ class VNL_EXPORT vnl_vector
   // Return new vector = -1*(*this)
   vnl_vector<T> operator-() const;
 
-  vnl_vector<T> operator+(T v) const { return vnl_vector<T>(*this, v, vnl_tag_add()); }
-  vnl_vector<T> operator-(T v) const { return vnl_vector<T>(*this, v, vnl_tag_sub()); }
-  vnl_vector<T> operator*(T v) const { return vnl_vector<T>(*this, v, vnl_tag_mul()); }
-  vnl_vector<T> operator/(T v) const { return vnl_vector<T>(*this, v, vnl_tag_div()); }
+  vnl_vector<T> operator+(T v) const {
+    vnl_vector<T> result(this->size());
+    std::transform(this->begin(), this->end(), result.begin(),
+                   [v](T d) -> T { return d + v; });
+    return result;
+  }
+  vnl_vector<T> operator-(T v) const {
+    vnl_vector<T> result(this->size());
+    std::transform(this->begin(), this->end(), result.begin(),
+                   [v](T d) -> T { return d - v; });
+    return result;
+  }
+  vnl_vector<T> operator*(T v) const {
+    vnl_vector<T> result(this->size());
+    std::transform(this->begin(), this->end(), result.begin(),
+                   [v](T d) -> T { return d * v; });
+    return result;
+  }
+  vnl_vector<T> operator/(T v) const {
+    vnl_vector<T> result(this->size());
+    std::transform(this->begin(), this->end(), result.begin(),
+                   [v](T d) -> T { return d / v; });
+    return result;
+  }
 
-  vnl_vector<T> operator+(vnl_vector<T> const& v) const { return vnl_vector<T>(*this, v, vnl_tag_add()); }
-  vnl_vector<T> operator-(vnl_vector<T> const& v) const { return vnl_vector<T>(*this, v, vnl_tag_sub()); }
-  vnl_vector<T> operator*(vnl_matrix<T> const& M) const { return vnl_vector<T>(*this, M, vnl_tag_mul()); }
+  vnl_vector<T> operator+(vnl_vector<T> const &v) const {
+    vnl_vector<T> result(this->size());
+#ifndef NDEBUG
+    if (this->size() != v.size())
+      vnl_error_vector_dimension("vnl_vector<>::operator+()", this->size(),
+                                 v.size());
+#endif
+    std::transform(this->begin(), this->end(), v.begin(), result.begin(),
+                   std::plus<T>());
+    return result;
+  }
+  vnl_vector<T> operator-(vnl_vector<T> const &v) const {
+    vnl_vector<T> result(this->size());
+#ifndef NDEBUG
+    if (this->size() != v.size())
+      vnl_error_vector_dimension("vnl_vector<>::operator-()", this->size(),
+                                 v.size());
+#endif
+    std::transform(this->begin(), this->end(), v.begin(), result.begin(),
+                   std::minus<T>());
+    return result;
+  }
+
+  vnl_vector<T> operator*(vnl_matrix<T> const &M) const {
+    vnl_vector<T> result(M.cols());
+#ifndef NDEBUG
+    if (this->size() != M.rows())
+      vnl_error_vector_dimension("vnl_vector<>::operator*(M)", this->size(),
+                                 M.rows());
+#endif
+    vnl_sse<T>::vector_x_matrix(this->begin(), M.begin(), result.begin(),
+                                M.rows(), M.cols());
+    return result;
+  }
 
   //--------------------------------------------------------------------------------
 
@@ -439,9 +474,15 @@ inline void vnl_vector<T>
 // \relatesalso vnl_vector
 // \relatesalso vnl_matrix
 template<class T>
-inline vnl_vector<T> operator*(vnl_matrix<T> const& m, vnl_vector<T> const& v)
+inline vnl_vector<T> operator*(vnl_matrix<T> const& M, vnl_vector<T> const& v)
 {
-  return vnl_vector<T>(m, v, vnl_tag_mul());
+  vnl_vector<T> result(M.rows());
+#ifndef NDEBUG
+  if (M.cols() != v.size())
+    vnl_error_vector_dimension ("vnl_vector<>::operator*(M, v)", M.cols(), v.size());
+#endif
+  vnl_sse<T>::matrix_x_vector(M.begin(), v.begin(), result.begin(), M.rows(), M.cols());
+  return result;
 }
 
 //: add scalar and vector. O(n).
@@ -449,7 +490,7 @@ inline vnl_vector<T> operator*(vnl_matrix<T> const& m, vnl_vector<T> const& v)
 template<class T>
 inline vnl_vector<T> operator+(T s, vnl_vector<T> const& v)
 {
-  return vnl_vector<T>(v, s, vnl_tag_add());
+  return v.operator+(s);
 }
 
 //: subtract vector from scalar. O(n).
@@ -457,7 +498,10 @@ inline vnl_vector<T> operator+(T s, vnl_vector<T> const& v)
 template<class T>
 inline vnl_vector<T> operator-(T s, vnl_vector<T> const& v)
 {
-  return vnl_vector<T>(-v, s, vnl_tag_add());
+  vnl_vector<T> result(v.size());
+  for(size_t i=0; i< result.size(); ++i)
+    result[i]= s - v[i];
+  return result;
 }
 
 //: multiply scalar and vector. O(n).
@@ -465,7 +509,7 @@ inline vnl_vector<T> operator-(T s, vnl_vector<T> const& v)
 template<class T>
 inline vnl_vector<T> operator*(T s, vnl_vector<T> const& v)
 {
-  return vnl_vector<T>(v, s, vnl_tag_mul());
+  return v*s;
 }
 
 //: Interchange the two vectors
