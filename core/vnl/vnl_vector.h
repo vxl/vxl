@@ -108,12 +108,9 @@ class VNL_EXPORT vnl_vector
   vnl_vector<T>& operator=(vnl_vector<T>&& rhs);
 
   //: Destructor
-#ifdef __INTEL_COMPILER
-#pragma warning disable 444 //destructor for base class "itk::Array<>" is not virtual
-#endif
-  /** This destructor is not virtual for performance reasons. However, this
-   * means that subclasses cannot allocate memory. */
-  ~vnl_vector();
+  /** This destructor *must* be virtual to ensure that the vnl_vector_ref subclass destructor
+   * is called and memory is not accidently de-allocated. */
+  virtual ~vnl_vector();
 
   //: Return the length, number of elements, dimension of this vector.
   size_t size() const { return this->num_elmts; }
