@@ -51,8 +51,6 @@
 
 #include <vnl/vnl_c_vector.h>
 
-#include <vnl/vnl_sse.h>
-
 //--------------------------------------------------------------------------------
 // This macro allocates the dynamic storage used by a vnl_vector.
 #define vnl_vector_alloc_blah(size) \
@@ -123,85 +121,6 @@ vnl_vector<T>::vnl_vector (T const* datablck, size_t len)
 }
 
 //------------------------------------------------------------
-
-template<class T>
-vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, vnl_vector<T> const &v, vnl_tag_add)
-{
-  vnl_vector_alloc_blah(u.num_elmts);
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
-  if (u.size() != v.size())
-    vnl_error_vector_dimension ("vnl_vector<>::vnl_vector(v, v, vnl_vector_add_tag)", u.size(), v.size());
-#endif
-  for (size_t i=0; i<num_elmts; ++i)
-    data[i] = u[i] + v[i];
-}
-
-template<class T>
-vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, vnl_vector<T> const &v, vnl_tag_sub)
-{
-  vnl_vector_alloc_blah(u.num_elmts);
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
-  if (u.size() != v.size())
-    vnl_error_vector_dimension ("vnl_vector<>::vnl_vector(v, v, vnl_vector_sub_tag)", u.size(), v.size());
-#endif
-  for (size_t i=0; i<num_elmts; ++i)
-    data[i] = u[i] - v[i];
-}
-
-template<class T>
-vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, T s, vnl_tag_mul)
-{
-  vnl_vector_alloc_blah(u.num_elmts);
-  for (size_t i=0; i<num_elmts; ++i)
-    data[i] = u[i] * s;
-}
-
-template<class T>
-vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, T s, vnl_tag_div)
-{
-  vnl_vector_alloc_blah(u.num_elmts);
-  for (size_t i=0; i<num_elmts; ++i)
-    data[i] = u[i] / s;
-}
-
-template<class T>
-vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, T s, vnl_tag_add)
-{
-  vnl_vector_alloc_blah(u.num_elmts);
-  for (size_t i=0; i<num_elmts; ++i)
-    data[i] = u[i] + s;
-}
-
-template<class T>
-vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, T s, vnl_tag_sub)
-{
-  vnl_vector_alloc_blah(u.num_elmts);
-  for (size_t i=0; i<num_elmts; ++i)
-    data[i] = u[i] - s;
-}
-
-template<class T>
-vnl_vector<T>::vnl_vector (vnl_matrix<T> const &M, vnl_vector<T> const &v, vnl_tag_mul)
-{
-  vnl_vector_alloc_blah(M.rows());
-
-#ifndef NDEBUG
-  if (M.cols() != v.size())
-    vnl_error_vector_dimension ("vnl_vector<>::vnl_vector(M, v, vnl_vector_mul_tag)", M.cols(), v.size());
-#endif
-  vnl_sse<T>::matrix_x_vector(M.begin(), v.begin(), this->begin(), M.rows(), M.cols());
-}
-
-template<class T>
-vnl_vector<T>::vnl_vector (vnl_vector<T> const &v, vnl_matrix<T> const &M, vnl_tag_mul)
-{
-  vnl_vector_alloc_blah(M.cols());
-#ifndef NDEBUG
-  if (v.size() != M.rows())
-    vnl_error_vector_dimension ("vnl_vector<>::vnl_vector(v, M, vnl_vector_mul_tag)", v.size(), M.rows());
-#endif
-  vnl_sse<T>::vector_x_matrix(v.begin(), M.begin(), this->begin(),  M.rows(), M.cols());
-}
 
 template<class T>
 vnl_vector<T>::~vnl_vector()
