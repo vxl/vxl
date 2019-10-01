@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_matrix.h
 #ifndef vnl_matrix_h_
 #define vnl_matrix_h_
-#ifdef __INTEL_COMPILER
-#pragma warning disable 444
-#endif
 //:
 // \file
 // \brief An ordinary mathematical matrix
@@ -153,7 +150,7 @@ class VNL_EXPORT vnl_matrix
   vnl_matrix<T>& operator=(vnl_matrix<T>&& rhs);
 
   //: Matrix destructor
-  ~vnl_matrix();
+  virtual ~vnl_matrix();
 
 // Basic 2D-Array functionality-------------------------------------------
 
