@@ -28,7 +28,7 @@ class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
 
   //: Constructor
   // Do \e not call anything else than the default constructor of vnl_vector<T>
-  vnl_vector_ref(unsigned n, T *space);
+  vnl_vector_ref(size_t n, T *space);
 
   //: Copy constructor
   // Do \e not call anything else than the default constructor of vnl_vector<T>

@@ -14,7 +14,7 @@
 
 //------------------------------------------------------------
 template <typename T>
-vnl_vector_ref<T>::vnl_vector_ref(unsigned n, T *space) : vnl_vector<T>()
+vnl_vector_ref<T>::vnl_vector_ref(size_t n, T * space) : vnl_vector<T>()
 {
   Base::data = space;
   Base::num_elmts = n;
