@@ -1404,7 +1404,7 @@ vnl_matrix<T> vnl_matrix<T>::read(std::istream& s)
 }
 
 template <class T>
-void vnl_matrix<T>::swap(vnl_matrix<T> &that)
+void vnl_matrix<T>::swap(vnl_matrix<T> &that) noexcept
 {
   std::swap(this->num_rows, that.num_rows);
   std::swap(this->num_cols, that.num_cols);
