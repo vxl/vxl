@@ -39,25 +39,26 @@ class VNL_EXPORT vnl_matrix_ref : public vnl_matrix<T>
 
  public:
   // Constructors/Destructors--------------------------------------------------
-  vnl_matrix_ref(unsigned int m, unsigned int n, T *datablck) {
-    Base::data = vnl_c_vector<T>::allocate_Tptr(m);
-    for (unsigned int i = 0; i < m; ++i)
-      Base::data[i] = datablck + i * n;
-    Base::num_rows = m;
-    Base::num_cols = n;
+  vnl_matrix_ref(unsigned int row, unsigned int col, T *datablck) {
+    constexpr bool superclass_manages_memory_deletion = false;
+    Base::force_set_values(row,col,datablck,superclass_manages_memory_deletion);
   }
 
   vnl_matrix_ref(vnl_matrix_ref<T> const & other) : vnl_matrix<T>() {
-    Base::data = vnl_c_vector<T>::allocate_Tptr(other.rows());
-    for (unsigned int i = 0; i < other.rows(); ++i)
-      Base::data[i] = const_cast<T*>(other.data_block()) + i * other.cols();
-    Base::num_rows = other.rows();
-    Base::num_cols = other.cols();
+    constexpr bool superclass_manages_memory_deletion = false;
+    Base::force_set_values(other.rows(),other.cols(),
+        const_cast<T*>(other.data_block()), superclass_manages_memory_deletion);
   }
 
-  ~vnl_matrix_ref() {
-    Base::data[0] = nullptr; // Prevent base dtor from releasing our memory
-  }
+  ~vnl_matrix_ref() = default;
+
+  //: Default constructor is disallowed
+  //  because it does not define external memory to be managed.
+  vnl_matrix_ref() = delete;
+
+  //: Copy constructor from vnl_matrix<T> is disallowed
+  // (because it would create a non-const alias to the matrix)
+  vnl_matrix_ref(vnl_matrix<T> const &) =delete;
 
   //: Reference to self to make non-const temporaries.
   // This is intended for passing vnl_matrix_fixed objects to
@@ -83,9 +84,6 @@ class VNL_EXPORT vnl_matrix_ref : public vnl_matrix<T>
   //: Resizing is disallowed
   bool set_size (unsigned int, unsigned int) { return false; }
 
-  //: Copy constructor from vnl_matrix<T> is disallowed
-  // (because it would create a non-const alias to the matrix)
-  vnl_matrix_ref(vnl_matrix<T> const &) {}
 };
 
 #endif // vnl_matrix_ref_h_

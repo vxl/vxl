@@ -16,21 +16,15 @@
 template <typename T>
 vnl_vector_ref<T>::vnl_vector_ref(size_t n, T * space) : vnl_vector<T>()
 {
-  Base::data = space;
-  Base::num_elmts = n;
+  constexpr bool superclass_manages_memory_deletion = false;
+  Base::force_set_values(n, space, superclass_manages_memory_deletion);
 }
 
 template <typename T>
 vnl_vector_ref<T>::vnl_vector_ref(vnl_vector_ref<T> const& v) : vnl_vector<T>()
 {
-  Base::data = const_cast<T*>(v.data_block()); // const incorrect!
-  Base::num_elmts = v.size();
-}
-
-template <typename T>
-vnl_vector_ref<T>::~vnl_vector_ref()
-{
-  Base::data = nullptr;
+  constexpr bool superclass_manages_memory_deletion = false;
+  Base::force_set_values(v.size(), const_cast<T*>(v.data_block() ), superclass_manages_memory_deletion);
 }
 
 template <typename T>
