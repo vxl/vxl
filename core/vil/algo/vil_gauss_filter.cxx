@@ -123,7 +123,7 @@ void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
 
   // normalise the result
   assert(sum >= 0.0);
-  double norm = 1.0 / sum;
+  const double norm = 1.0 / sum;
   std::transform(filter.begin(), filter.end(), filter.begin(),
-                std::bind2nd(std::multiplies<double>(), norm));
+                 [norm] (double x) { return norm * x; } );
 }

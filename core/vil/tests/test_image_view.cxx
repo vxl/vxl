@@ -57,7 +57,7 @@ void test_image_view_rgba(vil_image_view<vxl_byte> &image2, vil_image_view<float
 
   image2 = vil_plane(vil_view_as_planes(image6),1);
   vil_transform(vil_plane(vil_view_as_planes(image6),1), image2,
-                std::bind2nd(std::plus<vxl_byte>(),1));
+                [](const vxl_byte x) -> vxl_byte { return x + 1;});
 
   vil_print_all(std::cout, image6);
   image7.clear();
@@ -100,7 +100,7 @@ void test_image_view_rgba(vil_image_view<float> &image2, vil_image_view<double> 
 
   image2 = vil_plane(vil_view_as_planes(image6),1);
   vil_transform(vil_plane(vil_view_as_planes(image6),1), image2,
-                std::bind2nd(std::plus<float>(),1));
+                [](const float x) -> float { return x + 1; });
 
   vil_print_all(std::cout, image6);
   image7.clear();
@@ -245,7 +245,7 @@ void test_image_view(S /*d1*/, const std::string& s_name, T /*d2*/)
 
   vil_convert_cast(image2, image7);
   vil_print_all(std::cout, image7);
-  vil_transform(image7, image7, std::bind2nd(std::plus<T>(), 0.6f));
+  vil_transform(image7, image7, [] ( T x ) -> T { return x + 0.6f; } ) ;
   vil_convert_cast(image7, image2);
   vil_print_all(std::cout, image2);
 
