@@ -170,9 +170,9 @@ class VNL_EXPORT vnl_sym_matrix
 //: Set up the index array
   void setup_index();
 
-  T* data_;
-  T** index_;
-  unsigned nn_;
+  T* data_{nullptr};
+  T** index_{nullptr};
+  unsigned nn_{0};
 };
 
 //:

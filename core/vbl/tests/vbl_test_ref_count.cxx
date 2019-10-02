@@ -9,9 +9,9 @@ class myclass_test1 : public vbl_ref_count
 
 class myclass_test2 : public vbl_ref_count
 {
-  int value;
+  int value{4};
  public:
-  myclass_test2() : value(4) {}
+  myclass_test2()  {}
   myclass_test2(myclass_test2 const& o) : vbl_ref_count(), value(o.value) {}
 };
 

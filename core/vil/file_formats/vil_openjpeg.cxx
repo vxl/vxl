@@ -149,20 +149,19 @@ struct vil_openjpeg_image_impl
 {
   // OpenJPEG data structures
   opj_cparameters_t encode_params_;
-  opj_codec_t *encode_codec_;
-  opj_image_t *image_;
+  opj_codec_t *encode_codec_{nullptr};
+  opj_image_t *image_{nullptr};
   opj_header header_;
   OPJ_CODEC_FORMAT opj_codec_format_;
 
   // Fields needed for the vil implementation
   vil_stream_sptr vstream_;
-  vil_streampos vstream_start_;
-  bool is_valid_;
-  bool error_;
+  vil_streampos vstream_start_{0};
+  bool is_valid_{false};
+  bool error_{false};
 
   vil_openjpeg_image_impl(void)
-  : encode_codec_(nullptr), image_(nullptr), vstream_(nullptr), vstream_start_(0),
-    is_valid_(false), error_(false)
+  :  vstream_(nullptr) 
   {
     std::memset(&this->encode_params_, 0, sizeof(opj_cparameters_t));
     std::memset(&this->header_, 0, sizeof(opj_header));

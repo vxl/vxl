@@ -77,7 +77,7 @@ class VNL_EXPORT vnl_vector
   friend class vnl_matrix<T>;
 
   //: Creates an empty vector. O(1).
-  vnl_vector() : num_elmts(0) , data(nullptr) {}
+  vnl_vector() {}
 
   //: Creates a vector containing n uninitialized elements.
   explicit vnl_vector(size_t len);
@@ -394,8 +394,8 @@ class VNL_EXPORT vnl_vector
   static vnl_vector<T> read(std::istream& s);
 
  protected:
-  size_t num_elmts;           // Number of elements (length)
-  T* data;                      // Pointer to the actual data
+  size_t num_elmts{0};   // Number of elements (length)
+  T* data{nullptr};      // Pointer to the actual data
 
   void assert_size_internal(size_t sz) const;
   void assert_finite_internal() const;

@@ -541,9 +541,9 @@ TESTMAIN(test_image_view);
 
 class my_int
 {
-  int a;
+  int a{0};
  public:
-  my_int(): a(0) {};
+  my_int() {};
   my_int(const my_int& i) = default;;
   explicit my_int(int i): a(i) {};
   my_int operator +(const my_int& rhs) const
