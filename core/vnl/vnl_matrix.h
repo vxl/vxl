@@ -729,9 +729,22 @@ class VNL_EXPORT vnl_matrix
 //--------------------------------------------------------------------------------
 
  protected:
+  void force_set_values( unsigned num_rows, unsigned num_cols,
+      T * continuous_external_memory_block, bool manage_own_memory )
+  {
+    this->num_rows = num_rows;
+    this->num_cols = num_cols;
+
+    this->data = vnl_c_vector<T>::allocate_Tptr(num_rows);
+    for (unsigned int i = 0; i < num_rows; ++i)
+      this->data[i] = continuous_external_memory_block + i * num_cols;
+    this->m_manage_own_memory = manage_own_memory;
+  }
+ private:
   unsigned num_rows{0};   // Number of rows
   unsigned num_cols{0};   // Number of columns
   T** data{nullptr};      // Pointer to the vnl_matrix
+  bool m_manage_own_memory{true};
 
   void assert_size_internal(unsigned r, unsigned c) const;
   void assert_finite_internal() const;

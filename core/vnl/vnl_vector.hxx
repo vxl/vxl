@@ -60,10 +60,19 @@
   } while(false)
 
 // This macro deallocates the dynamic storage used by a vnl_vector.
-#define vnl_vector_free_blah \
+#define vnl_vector_free_blah                                        \
   do { /* Macro needs to be a single statement to allow semicolon at macro end */ \
-    if (this->data) { \
-       vnl_c_vector<T>::deallocate(this->data, this->num_elmts); \
+    if ( this->m_manage_own_memory )                                \
+    {                                                               \
+      if (this->data)                                               \
+      {                                                             \
+      vnl_c_vector<T>::deallocate(this->data, this->num_elmts);     \
+      }                                                             \
+    }                                                               \
+    else                                                            \
+    {                                                               \
+      this->data = nullptr;                                         \
+      this->num_elmts = 0;                                          \
     } \
   } while(false)
 

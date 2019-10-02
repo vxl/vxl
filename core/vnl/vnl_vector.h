@@ -429,8 +429,16 @@ class VNL_EXPORT vnl_vector
   static vnl_vector<T> read(std::istream& s);
 
  protected:
+  void force_set_values( size_t num_elmts, T * data, bool manage_own_memory )
+  {
+    this->num_elmts = num_elmts;
+    this->data = data;
+    this->m_manage_own_memory = manage_own_memory;
+  }
+ private:
   size_t num_elmts{0};   // Number of elements (length)
   T* data{nullptr};      // Pointer to the actual data
+  bool m_manage_own_memory{true};
 
   void assert_size_internal(size_t sz) const;
   void assert_finite_internal() const;
