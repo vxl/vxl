@@ -55,7 +55,7 @@ template <class T> VNL_EXPORT v      operator*(v const&, m const&);
 template <class T> VNL_EXPORT v      element_product(v const&,v const&);
 template <class T> VNL_EXPORT v      element_quotient(v const&,v const&);
 template <class T> VNL_EXPORT T      vnl_vector_ssd(v const&, v const&);
-template <class T> VNL_EXPORT void   swap(v &, v &);
+template <class T> VNL_EXPORT void   swap(v &, v &) noexcept;
 #undef v
 #undef m
 
@@ -340,7 +340,7 @@ class VNL_EXPORT vnl_vector
   vnl_vector& roll_inplace(const int &shift);
 
   //: Set this to that and that to this
-  void swap(vnl_vector<T> & that);
+  void swap(vnl_vector<T> & that) noexcept;
 
   //: Check that size()==sz if not, abort();
   // This function does or tests nothing if NDEBUG is defined
@@ -471,7 +471,7 @@ inline vnl_vector<T> operator*(T s, vnl_vector<T> const& v)
 //: Interchange the two vectors
 // \relatesalso vnl_vector
 template<class T>
-inline void swap(vnl_vector<T> &a, vnl_vector<T> &b) { a.swap(b); }
+inline void swap(vnl_vector<T> &a, vnl_vector<T> &b) noexcept { a.swap(b); }
 
 //: Euclidean Distance between two vectors.
 // Sum of Differences squared.

@@ -651,7 +651,7 @@ vnl_vector<T>::roll_inplace(const int &shift)
 }
 
 template <class T>
-void vnl_vector<T>::swap(vnl_vector<T> &that)
+void vnl_vector<T>::swap(vnl_vector<T> &that) noexcept
 {
   std::swap(this->num_elmts, that.num_elmts);
   std::swap(this->data, that.data);

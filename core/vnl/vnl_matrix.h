@@ -488,7 +488,7 @@ class VNL_EXPORT vnl_matrix
   vnl_matrix& scale_column(unsigned col, T value);
 
   //: Swap this matrix with that matrix
-  void swap(vnl_matrix<T> & that);
+  void swap(vnl_matrix<T> & that) noexcept;
 
   //: Type def for norms.
   typedef typename vnl_c_vector<T>::abs_t abs_t;
@@ -725,7 +725,7 @@ inline vnl_matrix<T> operator+(T const& value, vnl_matrix<T> const& m)
 //: Swap two matrices
 // \relatesalso vnl_matrix
 template<class T>
-inline void swap(vnl_matrix<T> &A, vnl_matrix<T> &B) { A.swap(B); }
+inline void swap(vnl_matrix<T> &A, vnl_matrix<T> &B) noexcept { A.swap(B); }
 
 
 #endif // vnl_matrix_h_
