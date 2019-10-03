@@ -143,6 +143,15 @@ class VNL_EXPORT vnl_matrix
   // Complexity $O(r.c)$
   vnl_matrix(vnl_matrix<T> const&);    // from another matrix.
 
+  // NOTE: move-assignment must be allowed to throw an exception, because we need to maintain
+  //       backwards compatibility and the move-construction & move-aasignment
+  //       operators fall back to the copy-assignment operator behavior in
+  //       cases when the memory is externally managed.
+  //: Move-constructor.
+  vnl_matrix(vnl_matrix<T> &&);
+  //: Move-assignment operator
+  vnl_matrix<T>& operator=(vnl_matrix<T>&& rhs);
+
   //: Matrix destructor
   ~vnl_matrix();
 

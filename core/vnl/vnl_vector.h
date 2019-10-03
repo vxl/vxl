@@ -98,6 +98,15 @@ class VNL_EXPORT vnl_vector
   //: Copy constructor.
   vnl_vector(vnl_vector<T> const&);
 
+  // NOTE: move-assignment must be allowed to throw an exception, because we need to maintain
+  //       backwards compatibility and the move-construction & move-aasignment
+  //       operators fall back to the copy-assignment operator behavior in
+  //       cases when the memory is externally managed.
+  //: Move-constructor.
+  vnl_vector(vnl_vector<T> &&);
+  //: Move-assignment operator
+  vnl_vector<T>& operator=(vnl_vector<T>&& rhs);
+
   //: Destructor
 #ifdef __INTEL_COMPILER
 #pragma warning disable 444 //destructor for base class "itk::Array<>" is not virtual

@@ -114,10 +114,15 @@ class VNL_EXPORT vnl_matrix_fixed
   //: Construct an m*n Matrix and copy rhs into it.
   //  Abort if rhs is not the same size.
   vnl_matrix_fixed(const vnl_matrix_fixed& rhs) = default;
-  vnl_matrix_fixed(vnl_matrix_fixed&& other) noexcept = default;
   //: Copy another vnl_matrix_fixed<T,m,n> into this.
   vnl_matrix_fixed& operator=(const vnl_matrix_fixed& rhs) = default;
-  vnl_matrix_fixed& operator=(vnl_matrix_fixed&& rhs) noexcept = default;
+
+  // NOTE: move-assignment must be allowed to throw an exception, because we need to maintain
+  //       backwards compatibility and the move-construction & move-aasignment
+  //       operators fall back to the copy-assignment operator behavior in
+  //       cases when the memory is externally managed.
+  vnl_matrix_fixed(vnl_matrix_fixed&& other) = default;
+  vnl_matrix_fixed& operator=(vnl_matrix_fixed&& rhs) = default;
   ~vnl_matrix_fixed() = default;
 
 
