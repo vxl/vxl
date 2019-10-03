@@ -152,6 +152,13 @@ set( HAS_TIFF 0 )
 set( HAS_GEOTIFF 0 )
 include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 if(TIFF_FOUND)
+
+  if( VXL_USING_NATIVE_TIFF )
+    message("-- Found Tiff (native library)")
+  else()
+    message("-- Found Tiff (v3p library)")
+  endif()
+
   include_directories(${TIFF_INCLUDE_DIR})
   set( HAS_TIFF 1 )
   set( vil_ff_sources ${vil_ff_sources}
