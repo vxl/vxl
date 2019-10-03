@@ -114,10 +114,10 @@ class VNL_EXPORT vnl_matrix_fixed
   //: Construct an m*n Matrix and copy rhs into it.
   //  Abort if rhs is not the same size.
   vnl_matrix_fixed(const vnl_matrix_fixed& rhs) = default;
-  vnl_matrix_fixed(vnl_matrix_fixed&& other) = default;
+  vnl_matrix_fixed(vnl_matrix_fixed&& other) noexcept = default;
   //: Copy another vnl_matrix_fixed<T,m,n> into this.
   vnl_matrix_fixed& operator=(const vnl_matrix_fixed& rhs) = default;
-  vnl_matrix_fixed& operator=(vnl_matrix_fixed&& rhs) = default;
+  vnl_matrix_fixed& operator=(vnl_matrix_fixed&& rhs) noexcept = default;
   ~vnl_matrix_fixed() = default;
 
 
