@@ -99,45 +99,46 @@
 
 // This macro allocates and initializes the dynamic storage used by a vnl_matrix.
 #define vnl_matrix_alloc_blah() \
-  do { /* Macro needs to be a single statement to allow semicolon at macro end */ \
-    if (this->num_rows && this->num_cols) { \
-      /* Allocate memory to hold the row pointers */ \
-      this->data = vnl_c_vector<T>::allocate_Tptr(this->num_rows); \
-      /* Allocate memory to hold the elements of the matrix */ \
-      T* elmns = vnl_c_vector<T>::allocate_T(this->num_rows * this->num_cols); \
-      /* Fill in the array of row pointers */ \
-      for (unsigned int i = 0; i < this->num_rows; ++ i) \
-        this->data[i] = elmns + i*this->num_cols; \
-    } \
-    else { \
-     /* This is to make sure .begin() and .end() work for 0xN matrices: */ \
-     this->data = vnl_c_vector<T>::allocate_Tptr(1);\
-     this->data[0] = nullptr; \
-    } \
-  } while(false)
+do { /* Macro needs to be a single statement to allow semicolon at macro end */ \
+  assert(this->m_manage_own_memory); /*Resizing memory requires management rights */ \
+  if (this->num_rows && this->num_cols) { \
+    /* Allocate memory to hold the row pointers */ \
+    this->data = vnl_c_vector<T>::allocate_Tptr(this->num_rows); \
+    /* Allocate memory to hold the elements of the matrix */ \
+    T* elmns = vnl_c_vector<T>::allocate_T(this->num_rows * this->num_cols); \
+    /* Fill in the array of row pointers */ \
+    for (unsigned int i = 0; i < this->num_rows; ++ i) \
+      this->data[i] = elmns + i*this->num_cols; \
+  } \
+  else { \
+   /* This is to make sure .begin() and .end() work for 0xN matrices: */ \
+   this->data = vnl_c_vector<T>::allocate_Tptr(1);\
+   this->data[0] = nullptr; \
+  } \
+} while(false)
 
 // This macro releases the dynamic storage used by a vnl_matrix.
 #define vnl_matrix_free_blah \
-  do { /* Macro needs to be a single statement to allow semicolon at macro end */ \
-    if (this->data) { \
-      if (this->num_cols && this->num_rows) { \
-          if (this->m_manage_own_memory ) { \
-            /*Only delete contiguous memory if we are managing it*/ \
-            vnl_c_vector<T>::deallocate(this->data[0], this->num_cols * this->num_rows); \
-          } \
-          else \
-          { \
-            this->data[0] = nullptr; \
-            this->num_cols = 0; \
-            this->num_rows = 0; \
-          } \
-        /* Always delete row pointer table */ \
-        vnl_c_vector<T>::deallocate(this->data, this->num_rows); \
-      } else { \
-        vnl_c_vector<T>::deallocate(this->data, 1); \
-      } \
+do { /* Macro needs to be a single statement to allow semicolon at macro end */ \
+  if (this->data) { \
+    if (this->num_cols && this->num_rows) { \
+        if (this->m_manage_own_memory ) { \
+          /*Only delete contiguous memory if we are managing it*/ \
+          vnl_c_vector<T>::deallocate(this->data[0], this->num_cols * this->num_rows); \
+        } \
+        else \
+        { /* not manage own data, i.e. is a vnl_matrix_ref */ \
+          this->data[0] = nullptr; \
+          this->num_cols = 0; \
+          this->num_rows = 0; \
+        } \
+      /* Always delete row pointer table */ \
+      vnl_c_vector<T>::deallocate(this->data, this->num_rows); \
+    } else { \
+      vnl_c_vector<T>::deallocate(this->data, 1); \
     } \
-  } while(false)
+  } \
+} while(false)
 
 //: Default constructor creates an empty matrix of size 0,0.
 template< class T >
@@ -228,6 +229,58 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const& from)
     num_cols = 0;
     data = nullptr;
   }
+}
+
+//: Move-constructs a vector. O(1).
+template<class T>
+vnl_matrix<T>::vnl_matrix(vnl_matrix<T>&& rhs)
+{
+  // Copy the data pointer and its length from the source object.
+  this->operator=(std::move(rhs));
+}
+
+//: Move-assigns rhs vector into lhs vector. O(1).
+template<class T>
+vnl_matrix<T>& vnl_matrix<T>::operator=(vnl_matrix<T>&& rhs)
+{
+  // Self-assignment detection
+  if (&rhs != this)
+  {
+    if(!rhs.m_manage_own_memory)
+    {
+      this->operator=(rhs); // Call non-move assignment operator.
+      return *this;
+    }
+    else if(!this->m_manage_own_memory)
+    {
+      /* If `this` is managing own memory, then you are not allowed
+       * to replace the data pointer
+       * This code only works when the object is an vnl_matrix_ref correctly sized.
+       * Undefined behavior if this->m_manage_own_memory==false,
+       * and rows,cols are not the same between `this` and rhs. */
+      assert( (rhs.num_rows == this->num_rows )
+           && ( rhs.num_cols == this->num_cols ) );
+      std::copy( rhs.begin(), rhs.end(), this->begin() );
+    }
+    else
+    {
+      // Release any resource we're previously holding
+      if(this->data)
+      {
+        vnl_c_vector<T>::deallocate(this->data[0], this->num_rows*this->num_cols);
+      }
+      // Transfer ownership and invalidate old value
+      data = rhs.data;
+      num_rows = rhs.num_rows;
+      num_cols = rhs.num_cols;
+      m_manage_own_memory = rhs.m_manage_own_memory;
+      rhs.data = nullptr;
+      rhs.num_rows = 0;
+      rhs.num_cols = 0;
+      rhs.m_manage_own_memory = false;
+    }
+  }
+  return *this;
 }
 
 //------------------------------------------------------------
