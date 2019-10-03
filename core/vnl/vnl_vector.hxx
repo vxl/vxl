@@ -96,10 +96,9 @@ template<class T>
 vnl_vector<T>::vnl_vector (size_t len, size_t n, T const values[])
 {
   vnl_vector_alloc_blah(len);
-  if (n > 0) {                                  // If user specified values
-    for (size_t i = 0; i < len && n; i++, n--)        // Initialize first n elements
-      this->data[i] = values[i];                // with values
-  }
+  // If user specified values, initialize first n elements with values
+  const size_t copy_num{std::min(len,n) };
+  std::copy(values, values + copy_num, data);
 }
 
 
