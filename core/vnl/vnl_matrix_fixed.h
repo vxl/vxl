@@ -440,10 +440,10 @@ class VNL_EXPORT vnl_matrix_fixed
   vnl_vector_fixed<T,num_rows> get_column(unsigned col) const;
 
   //: Get a matrix composed of rows from the indices specified in the supplied vector.
-  vnl_matrix<T> get_rows(vnl_vector<unsigned int> i) const;
+  vnl_matrix<T> get_rows(const vnl_vector<unsigned int> &i) const;
 
   //: Get a matrix composed of columns from the indices specified in the supplied vector.
-  vnl_matrix<T> get_columns(vnl_vector<unsigned int> i) const;
+  vnl_matrix<T> get_columns(const vnl_vector<unsigned int> &i) const;
 
   //: Get n rows beginning at rowstart
   vnl_matrix<T> get_n_rows   (unsigned rowstart, unsigned n) const;

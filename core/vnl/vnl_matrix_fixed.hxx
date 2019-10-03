@@ -504,7 +504,7 @@ vnl_vector_fixed<T,nrows> vnl_matrix_fixed<T,nrows,ncols>::get_column(unsigned c
 template <class T, unsigned int nrows, unsigned int ncols>
 vnl_matrix<T>
 vnl_matrix_fixed<T,nrows,ncols>
-::get_rows(vnl_vector<unsigned int> i) const
+::get_rows(const vnl_vector<unsigned int> &i) const
 {
   vnl_matrix<T> m(i.size(), this->cols());
   for (unsigned int j = 0; j < i.size(); ++j)
@@ -516,7 +516,7 @@ vnl_matrix_fixed<T,nrows,ncols>
 template <class T, unsigned int nrows, unsigned int ncols>
 vnl_matrix<T>
 vnl_matrix_fixed<T,nrows,ncols>
-::get_columns(vnl_vector<unsigned int> i) const
+::get_columns(const vnl_vector<unsigned int> & i) const
 {
   vnl_matrix<T> m(this->rows(), i.size());
   for (unsigned int j = 0; j < i.size(); ++j)
