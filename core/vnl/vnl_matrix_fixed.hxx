@@ -287,6 +287,24 @@ vnl_matrix_fixed<T,nrows,ncols>::update (vnl_matrix<T> const& m,
   return *this;
 }
 
+template<class T, unsigned nrows, unsigned ncols>
+vnl_matrix_fixed<T,nrows,ncols>&
+vnl_matrix_fixed<T,nrows,ncols>::update (vnl_matrix_fixed<T,nrows,ncols> const& m,
+    unsigned top, unsigned left)
+{
+  const unsigned int bottom = top + m.rows();
+  const unsigned int right = left + m.cols();
+#ifndef NDEBUG
+  if (nrows < bottom || ncols < right)
+    vnl_error_matrix_dimension ("update",
+                                bottom, right, m.rows(), m.cols());
+#endif
+  for (unsigned int i = top; i < bottom; ++i)
+    for (unsigned int j = left; j < right; ++j)
+      this->data_[i][j] = m(i-top,j-left);
+  return *this;
+}
+
 
 template<class T, unsigned nrows, unsigned ncols>
 vnl_matrix<T>
