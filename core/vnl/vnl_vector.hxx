@@ -56,11 +56,18 @@
 //--------------------------------------------------------------------------------
 // This macro allocates the dynamic storage used by a vnl_vector.
 #define vnl_vector_alloc_blah(size) \
-  this->num_elmts = (size); \
-  this->data = (size) ? vnl_c_vector<T>::allocate_T(size) : nullptr;
+  do { /* Macro needs to be a single statement to allow semicolon at macro end */ \
+    this->num_elmts = (size); \
+    this->data = (size) ? vnl_c_vector<T>::allocate_T(size) : nullptr; \
+  } while(false)
+
 // This macro deallocates the dynamic storage used by a vnl_vector.
 #define vnl_vector_free_blah \
-  if (this->data) vnl_c_vector<T>::deallocate(this->data, this->num_elmts);
+  do { /* Macro needs to be a single statement to allow semicolon at macro end */ \
+    if (this->data) { \
+       vnl_c_vector<T>::deallocate(this->data, this->num_elmts); \
+    } \
+  } while(false)
 
 //: Creates a vector with specified length. O(n).
 // Elements are not initialized.
