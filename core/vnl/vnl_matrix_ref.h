@@ -54,13 +54,14 @@ class VNL_EXPORT vnl_matrix_ref : public vnl_matrix<T>
 
   ~vnl_matrix_ref() = default;
 
-  //: Default constructor is disallowed
+  //: Copy and move constructor from vnl_matrix_ref<T> is disallowed by default
+  // due to other constructor definitions.
+  //: assignment and move-assignment is disallowed
   //  because it does not define external memory to be managed.
-  vnl_matrix_ref() = delete;
+  vnl_matrix_ref & operator=( vnl_matrix_ref<T> const& ) = delete;
+  vnl_matrix_ref & operator=( vnl_matrix_ref<T> && ) = delete;
 
-  //: Copy constructor from vnl_matrix<T> is disallowed
-  // (because it would create a non-const alias to the matrix)
-  vnl_matrix_ref(vnl_matrix<T> const &) =delete;
+  explicit operator vnl_matrix<T>() const { return vnl_matrix<T>{*this}; };
 
   //: Reference to self to make non-const temporaries.
   // This is intended for passing vnl_matrix_fixed objects to
