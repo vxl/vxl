@@ -393,6 +393,11 @@ class VNL_EXPORT vnl_matrix_fixed
   //: Set values of this matrix to those of M, starting at [top,left]
   vnl_matrix_fixed& update(vnl_matrix<T> const&, unsigned top=0, unsigned left=0);
 
+  //: Set values of this matrix to those of M, starting at [top,left]
+  vnl_matrix_fixed<T,num_rows,num_cols>& update(
+      vnl_matrix_fixed<T,num_rows,num_cols> const& m,
+      unsigned top=0, unsigned left=0);
+
   //: Set the elements of the i'th column to v[i]  (No bounds checking)
   vnl_matrix_fixed& set_column(unsigned i, T const * v);
 
