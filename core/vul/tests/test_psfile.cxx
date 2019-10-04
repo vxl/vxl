@@ -243,4 +243,4 @@ static void test_psfile()
   test_psfile_combined();
 }
 
-TEST_MAIN(test_psfile);
+TEST_MAIN(test_psfile)

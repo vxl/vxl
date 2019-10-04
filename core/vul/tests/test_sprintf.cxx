@@ -18,4 +18,4 @@ void test_sprintf(void)
   TEST("buf1 == [awf]", buf1, "[awf]");
 }
 
-TEST_MAIN(test_sprintf);
+TEST_MAIN(test_sprintf)

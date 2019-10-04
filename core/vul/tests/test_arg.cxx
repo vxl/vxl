@@ -110,4 +110,4 @@ void test_arg()
   }
 }
 
-TEST_MAIN(test_arg);
+TEST_MAIN(test_arg)

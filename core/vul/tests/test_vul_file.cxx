@@ -92,4 +92,4 @@ void test_vul_file()
 #endif // defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 }
 
-TEST_MAIN(test_vul_file);
+TEST_MAIN(test_vul_file)

@@ -96,4 +96,4 @@ static void test_debug()
   }
 }
 
-TEST_MAIN(test_debug);
+TEST_MAIN(test_debug)

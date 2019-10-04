@@ -51,4 +51,4 @@ static void test_temp_filename()
   test_second();
 }
 
-TEST_MAIN(test_temp_filename);
+TEST_MAIN(test_temp_filename)
