@@ -688,7 +688,7 @@ static void vnl_vector_test_io()
 
 #if TIMING
 #include <vul/vul_timer.h>
-void vnl_vector_test_two_nrm2_timing(unsigned size, unsigned long num)
+static void vnl_vector_test_two_nrm2_timing(unsigned size, unsigned long num)
 {
   vnl_vector<double> a(size);
   for (unsigned i= 0; i < size; i++)
@@ -703,7 +703,7 @@ void vnl_vector_test_two_nrm2_timing(unsigned size, unsigned long num)
            <<"-D vectors " << num << "times  = " << time / 1000.0 << "s.\n";
 }
 
-void vnl_vector_test_euclid_dist_sq_timing(unsigned size, unsigned long num)
+static void vnl_vector_test_euclid_dist_sq_timing(unsigned size, unsigned long num)
 {
   vnl_vector<double> a(size);
   vnl_vector<double> b(size);
@@ -728,7 +728,7 @@ void vnl_vector_test_euclid_dist_sq_timing(unsigned size, unsigned long num)
            <<"-D vectors " << num << "times  = " << time / 1000.0 << "s.\n";
 }
 
-void vnl_vector_test_timing()
+static void vnl_vector_test_timing()
 {
   vnl_vector_test_two_nrm2_timing(20000,20000ul);
   vnl_vector_test_two_nrm2_timing(1000,400000ul);
@@ -741,20 +741,23 @@ void vnl_vector_test_timing()
 }
 #endif
 
-void vnl_vector_test_leak()           // use top4.1 to watch for memory.
+#if LEAK
+static void vnl_vector_test_leak()           // use top4.1 to watch for memory.
 {                                     // remember to kill process.
+
   while (true) {
     vnl_vector_test_int();
     vnl_vector_test_matrix();
     vnl_vector_test_conversion();
   }
 }
+#endif
 
 #ifndef LEAK
 #define LEAK 0
 #endif
 
-void test_vector()
+static void test_vector()
 {
   vnl_vector_test_int();
   vnl_vector_test_float();
