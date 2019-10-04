@@ -55,9 +55,14 @@ class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
   // you'll be left with undefined behaviour.
   vnl_vector_ref& non_const();
 
-  //: Copy and move constructor from vnl_vector<T> is disallowed:
-  vnl_vector_ref(vnl_vector<T> const&) = delete;
-  vnl_vector_ref(vnl_vector<T> && ) = delete;
+  //: Copy and move constructor from vnl_matrix_ref<T> is disallowed by default
+  // due to other constructor definitions.
+  //: assignment and move-assignment is disallowed
+  //  because it does not define external memory to be managed.
+  vnl_vector_ref & operator=( vnl_vector_ref<T> const& ) = delete;
+  vnl_vector_ref & operator=( vnl_vector_ref<T> && ) = delete;
+
+  explicit operator vnl_vector<T>() const { return vnl_vector<T>{*this}; };
 };
 
 //: Create a reference vector with part of an existing vector.
