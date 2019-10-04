@@ -16,4 +16,4 @@ static void test_get_time_as_string()
   std::cout << "vul_get_time_as_string(" << (int)vul_numeric_msf << "): \"" << str1 << '"' << std::endl;
 }
 
-TEST_MAIN(test_get_time_as_string);
+TEST_MAIN(test_get_time_as_string)

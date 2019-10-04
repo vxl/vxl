@@ -101,4 +101,4 @@ void test_checksum()
   TEST("vul_checksum_crc32", checksum, 0x2639f4cb); // Golden value is byte swapped version from Boost test suite
 }
 
-TEST_MAIN(test_checksum);
+TEST_MAIN(test_checksum)

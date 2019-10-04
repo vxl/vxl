@@ -53,4 +53,4 @@ void test_ios_state()
   TEST("Restored version is not different", s1 == s3, true);
 }
 
-TEST_MAIN(test_ios_state);
+TEST_MAIN(test_ios_state)

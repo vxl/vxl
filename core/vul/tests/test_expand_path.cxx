@@ -18,4 +18,4 @@ void test_expand_path()
 #endif
 }
 
-TEST_MAIN(test_expand_path);
+TEST_MAIN(test_expand_path)

@@ -135,4 +135,4 @@ void test_string()
   }
 }
 
-TEST_MAIN(test_string);
+TEST_MAIN(test_string)

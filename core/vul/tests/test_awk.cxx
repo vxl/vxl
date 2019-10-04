@@ -108,4 +108,4 @@ void test_awk()
   }
 }
 
-TEST_MAIN(test_awk);
+TEST_MAIN(test_awk)

@@ -98,4 +98,4 @@ void test_url()
   }
 }
 
-TEST_MAIN(test_url);
+TEST_MAIN(test_url)

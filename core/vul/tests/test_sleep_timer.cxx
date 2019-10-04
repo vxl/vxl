@@ -18,4 +18,4 @@ void test_sleep_timer()
   TEST_NEAR_REL("Sleep for between 0.4 and 2.5 seconds", t, 1.0, 0.6);
 }
 
-TEST_MAIN(test_sleep_timer);
+TEST_MAIN(test_sleep_timer)

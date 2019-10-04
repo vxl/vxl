@@ -320,4 +320,4 @@ static void test_file_iterator()
   TEST( "Iterator is empty", bool(f), false );
 }
 
-TEST_MAIN(test_file_iterator);
+TEST_MAIN(test_file_iterator)

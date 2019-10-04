@@ -256,4 +256,4 @@ void test_regexp()
   TEST("rxp.match(2) == \"\"", rxp.match(2), "");
 }
 
-TEST_MAIN(test_regexp);
+TEST_MAIN(test_regexp)
