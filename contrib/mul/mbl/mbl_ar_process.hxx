@@ -213,8 +213,8 @@ void mbl_ar_process<T>::learn(std::vector<vnl_vector<T> >& data)
   vnl_matrix<T> t1A2=ti1A2*Rp12;
   vnl_matrix_inverse<double> ti2A2(Rp22-Rp21*t1A2);
 
-  A_2=(Rp02-Rp01*t1A2)*ti2A2;
-  A_1=(Rp01-A_2*Rp21)*ti1A2;
+  A_2=(Rp02-Rp01*t1A2)*ti2A2.as_matrix();
+  A_1=(Rp01-A_2*Rp21)*ti1A2.as_matrix();
 
   vnl_vector<T> D=coef*(R0-A_2*R2-A_1*R1);
   vnl_matrix<T> C=coef*(R00-A_2*R20-A_1*R10-outer_product(D,R0));

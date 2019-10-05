@@ -23,7 +23,7 @@ void
 test_feature_caster()
 {
   vnl_double_2 loc2d(5.0, -4.0);
-  rgrl_feature_point* pf2d = new rgrl_feature_point( loc2d );
+  rgrl_feature_point* pf2d = new rgrl_feature_point( loc2d.as_vector() );
   rgrl_feature_sptr fsptr = pf2d;
   TEST("feature sptr cast to 2D point feature", rgrl_feature_caster<rgrl_feature_point>(fsptr), pf2d);
 }
@@ -38,19 +38,19 @@ test_feature_point()
   vnl_double_3 loc3d(5.0, -4.0,  2.0);
   vnl_double_4 loc4d(2.0,  7.0, -1.0, 3.0);
 
-  rgrl_feature_sptr pf2d = new rgrl_feature_point( loc2d );
+  rgrl_feature_sptr pf2d = new rgrl_feature_point( loc2d.as_vector() );
   TEST("2D point feature",
        pf2d->is_type( rgrl_feature_point::type_id() ) &&
        pf2d->location() == loc2d &&
        pf2d->error_projector().is_identity(), true);
 
-  rgrl_feature_sptr pf3d = new rgrl_feature_point( loc3d );
+  rgrl_feature_sptr pf3d = new rgrl_feature_point( loc3d.as_vector() );
   TEST("3D point feature",
        pf3d->is_type( rgrl_feature_point::type_id() ) &&
        pf3d->location() == loc3d &&
        pf3d->error_projector().is_identity(), true);
 
-  rgrl_feature_sptr pf4d = new rgrl_feature_point( loc4d );
+  rgrl_feature_sptr pf4d = new rgrl_feature_point( loc4d.as_vector() );
   TEST("4D point feature",
        pf4d->is_type( rgrl_feature_point::type_id() ) &&
        pf4d->location() == loc4d &&
@@ -62,15 +62,15 @@ test_feature_point()
     vnl_double_2 t(-3.0, 5.0);
     vnl_matrix_fixed<double,6,6> covar;
 
-    rgrl_trans_affine xform( A, t, covar );
+    rgrl_trans_affine xform( A.as_ref(), t.as_ref(), covar.as_ref() );
     rgrl_feature_sptr result = pf2d->transform( xform );
     TEST("Transform 2D point feature (point location remains unchanged)", pf2d->location(), loc2d );
     TEST("Transform 2D point feature (feature is of point type)", result->is_type( rgrl_feature_point::type_id() ), true );
-    TEST("Transform 2D point feature (mapped feature has location same as mapping location only)", result->location(), xform.map_location( loc2d ) );
+    TEST("Transform 2D point feature (mapped feature has location same as mapping location only)", result->location(), xform.map_location( loc2d.as_vector() ) );
     // std::cout << "Error projector: " << result->error_projector() << std::endl;
     vnl_double_2x2 true_error_projector(0.0);
     true_error_projector.fill_diagonal(1.0/result->scale()/result->scale());
-    TEST("Transform 2D point feature (Error projector is identity matrix)", result->error_projector(), true_error_projector );
+    TEST("Transform 2D point feature (Error projector is identity matrix)", result->error_projector(), true_error_projector.as_ref() );
   }
 }
 
@@ -88,7 +88,7 @@ test_feature_trace_pt()
   vnl_double_4 dir4d(-2.0, 4.0,-1.5, 1.0);
   vnl_double_4 err4d( 2.0,-1.0, 3.0,-8.0);
 
-  rgrl_feature_sptr pf2d = new rgrl_feature_trace_pt( loc2d, dir2d );
+  rgrl_feature_sptr pf2d = new rgrl_feature_trace_pt( loc2d.as_ref(), dir2d.as_ref() );
   rgrl_feature_caster<rgrl_feature_trace_pt> trace_ptr( pf2d );
 
   TEST("2D trace point",
@@ -98,7 +98,7 @@ test_feature_trace_pt()
        ((rgrl_feature_trace_pt*) trace_ptr) -> length() == 0 &&
        ((rgrl_feature_trace_pt*) trace_ptr) -> radius() == 0, true);
 
-  rgrl_feature_sptr pf4d = new rgrl_feature_trace_pt( loc4d, dir4d );
+  rgrl_feature_sptr pf4d = new rgrl_feature_trace_pt( loc4d.as_ref(), dir4d.as_ref() );
   TEST("4D trace point feature",
        pf4d->is_type( rgrl_feature_trace_pt::type_id() ) &&
        pf4d->location() == loc4d &&
@@ -113,21 +113,21 @@ test_feature_trace_pt()
     vnl_double_2 t(-3.0, 5.0);
     vnl_matrix_fixed<double,6,6> covar;
 
-    rgrl_trans_affine xform( A, t, covar );
+    rgrl_trans_affine xform( A.as_ref(), t.as_ref(), covar.as_ref() );
     rgrl_feature_sptr result = pf2d->transform( xform );
     TEST("Transform 2D trace point, location",
          pf2d->location() == loc2d &&
          result->is_type( rgrl_feature_trace_pt::type_id() ) &&
-         result->location() == xform.map_location( loc2d ) &&
+         result->location() == xform.map_location( loc2d.as_ref() ) &&
          !result->error_projector().is_identity(), true);
 
-    // affine transforms do not preseve angles, calculate the
+    // affine transforms do not preserve angles, calculate the
     // transformed normal by transforming the tangent and re-computing
     // the normal.
 
     dir2d.normalize();
     vnl_vector<double> x_dir;
-    xform.map_direction( loc2d, dir2d, x_dir );
+    xform.map_direction( loc2d.as_ref(), dir2d.as_ref(), x_dir );
     vnl_double_2 x_nor(-x_dir[1], x_dir[0]);
 
     TEST_NEAR( "                        , error projector",
@@ -145,7 +145,7 @@ test_feature_face()
   vnl_double_2 loc2d(3.0,-2.0);
   vnl_double_2 nor2d(3.0, 1.0); nor2d.normalize();
 
-  rgrl_feature_sptr pf2d = new rgrl_feature_face_pt( loc2d, nor2d );
+  rgrl_feature_sptr pf2d = new rgrl_feature_face_pt( loc2d.as_ref(), nor2d.as_ref() );
   rgrl_feature_face_pt* face_ptr = rgrl_feature_caster<rgrl_feature_face_pt>( pf2d );
 
   //  Basic constructor, type and normal first
@@ -178,12 +178,12 @@ test_feature_face()
     vnl_double_2 t(-3.0, 5.0);
     vnl_matrix_fixed<double,6,6> covar; covar.set_identity();
 
-    rgrl_trans_affine xform( A, t, covar );
+    rgrl_trans_affine xform( A.as_ref(), t.as_ref(), covar.as_ref() );
     rgrl_feature_sptr result = pf2d->transform( xform );
     TEST("Transform 2D face point, location",
          pf2d->location() == loc2d &&
          result->is_type( rgrl_feature_face_pt::type_id() ) &&
-         result->location() == xform.map_location( loc2d ) &&
+         result->location() == xform.map_location( loc2d.as_ref() ) &&
          !result->error_projector().is_identity(), true);
 
     // This matrix convert normal to tangent
@@ -191,7 +191,7 @@ test_feature_face()
     vnl_double_2x2 B(b);
 
     // mapping tangent is easy:  A*tangent
-    vnl_double_2x2 C = vnl_transpose(B)*A*B;
+    vnl_double_2x2 C{ vnl_transpose(B.as_ref()).as_matrix()*A*B };
 
     // affine transforms do not preseve angles, calculate the
     // transformed normal by transforming the tangent and re-computing
