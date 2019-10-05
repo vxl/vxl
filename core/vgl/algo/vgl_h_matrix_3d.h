@@ -58,6 +58,8 @@ class vgl_h_matrix_3d
   vgl_h_matrix_3d(std::vector<vgl_homg_point_3d<T> > const& points1,
                   std::vector<vgl_homg_point_3d<T> > const& points2);
 
+  inline explicit operator vnl_matrix<T>() const { return this->t12_matrix_.as_matrix(); };
+
   // Operations----------------------------------------------------------------
 
   //: Return the transformed point given by $q = {\tt H} p$
