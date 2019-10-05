@@ -38,17 +38,19 @@ class VNL_EXPORT vnl_matrix_ref : public vnl_matrix<T>
   typedef vnl_matrix<T> Base;
 
  public:
-  // Constructors/Destructors--------------------------------------------------
-  vnl_matrix_ref(unsigned int row, unsigned int col, T *datablck) {
-    constexpr bool superclass_manages_memory_deletion = false;
-    Base::force_set_values(row,col,datablck,superclass_manages_memory_deletion);
-  }
 
-  vnl_matrix_ref(vnl_matrix_ref<T> const & other) : vnl_matrix<T>() {
-    constexpr bool superclass_manages_memory_deletion = false;
-    Base::force_set_values(other.rows(),other.cols(),
-        const_cast<T*>(other.data_block()), superclass_manages_memory_deletion);
-  }
+  // Constructors/Destructors--------------------------------------------------
+  vnl_matrix_ref(unsigned int row, unsigned int col, const T *datablck)
+    : vnl_matrix<T>(row, col, const_cast<T *>(datablck), false)
+  { }
+
+  vnl_matrix_ref(const vnl_matrix_ref<T> & other)
+  : vnl_matrix<T>(other.rows(), other.cols(),
+      const_cast<T *>(other.data_block()), false)
+  { }
+
+  //vnl_matrix base class is not no_except, so derived class can not be either
+  vnl_matrix_ref(vnl_matrix_ref<T> && rhs) = default;
 
   ~vnl_matrix_ref() = default;
 

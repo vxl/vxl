@@ -14,18 +14,14 @@
 
 //------------------------------------------------------------
 template <typename T>
-vnl_vector_ref<T>::vnl_vector_ref(size_t n, T * space) : vnl_vector<T>()
-{
-  constexpr bool superclass_manages_memory_deletion = false;
-  Base::force_set_values(n, space, superclass_manages_memory_deletion);
-}
+vnl_vector_ref<T>::vnl_vector_ref(size_t n, const T * space)
+ : vnl_vector<T>(n, const_cast<T *>(space), false)
+{}
 
 template <typename T>
-vnl_vector_ref<T>::vnl_vector_ref(vnl_vector_ref<T> const& v) : vnl_vector<T>()
-{
-  constexpr bool superclass_manages_memory_deletion = false;
-  Base::force_set_values(v.size(), const_cast<T*>(v.data_block() ), superclass_manages_memory_deletion);
-}
+vnl_vector_ref<T>::vnl_vector_ref(const vnl_vector_ref<T> & v)
+  : vnl_vector<T>(v.size(), const_cast<T *>(v.data_block()),false)
+{}
 
 template <typename T>
 vnl_vector_ref<T>& vnl_vector_ref<T>::non_const()

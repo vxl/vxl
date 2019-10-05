@@ -429,12 +429,12 @@ class VNL_EXPORT vnl_vector
   static vnl_vector<T> read(std::istream& s);
 
  protected:
-  void force_set_values( size_t num_elmts, T * data, bool manage_own_memory )
-  {
-    this->num_elmts = num_elmts;
-    this->data = data;
-    this->m_manage_own_memory = manage_own_memory;
-  }
+  vnl_vector<T>( size_t ext_num_elmts, T * extdata, bool manage_own_memory )
+    : num_elmts{ ext_num_elmts }
+    , data{ extdata }
+    , m_manage_own_memory{ manage_own_memory }
+  {  }
+
  private:
   size_t num_elmts{0};   // Number of elements (length)
   T* data{nullptr};      // Pointer to the actual data
