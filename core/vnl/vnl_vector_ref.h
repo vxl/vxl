@@ -28,12 +28,17 @@ class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
 
   //: Constructor
   // Do \e not call anything else than the default constructor of vnl_vector<T>
+  // NOTE:  The vnl_vector_ref always has write access to the data!
+  //        and can only be used on data in a read/write senses.
+  //        There is no way to pass 'const T *' in a way that vnl_vector_ref
+  //        can preserve memory access.
   vnl_vector_ref(size_t n, T *space);
 
   //: Copy constructor
   // Do \e not call anything else than the default constructor of vnl_vector<T>
   // (That is why the default copy constructor is \e not good.)
-  vnl_vector_ref(vnl_vector_ref<T> const& v);
+  // NOTE: This interface breaks const correctness,
+  vnl_vector_ref(const vnl_vector_ref<T>& v);
 
   //: Destructor
   // Prevents base destructor from releasing memory we don't own
@@ -62,7 +67,16 @@ class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
   vnl_vector_ref & operator=( vnl_vector_ref<T> const& ) = delete;
   vnl_vector_ref & operator=( vnl_vector_ref<T> && ) = delete;
 
-  explicit operator vnl_vector<T>() const { return vnl_vector<T>{*this}; };
+  //: Explicit conversion to a vnl_vector_ref or vnl_vector.
+  // This is a cheap conversion for those functions that have an interface
+  // for vnl_vector but not for vnl_vector_fixed. There is also a
+  // conversion operator that should work most of the time.
+  // \sa vnl_vector_ref::non_const
+  vnl_vector_ref<T> as_ref() { return *this; }
+  const vnl_vector_ref<T> as_ref() const { return *this; }
+  vnl_vector<T> as_vector() const { return vnl_vector<T>(this->data_block(), this->size()); }
+
+  explicit operator vnl_vector<T>() const { return this->as_vector(); }
 };
 
 //: Create a reference vector with part of an existing vector.

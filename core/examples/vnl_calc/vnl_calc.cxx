@@ -120,7 +120,7 @@ int main(int argc, char ** argv)
       Matrix a = stack.pop();
       vnl_svd<double> svd(a);
       stack.push(svd.U());
-      stack.push(svd.W().asMatrix());
+      stack.push(svd.W().as_matrix());
       stack.push(svd.V());
     }
     else if (arg == "X" || arg == "allx") {
