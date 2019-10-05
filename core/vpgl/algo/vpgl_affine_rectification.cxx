@@ -49,7 +49,7 @@ bool vpgl_affine_rectification::compute_affine_f(const vpgl_affine_camera<double
   e2M[2][0] = -e2[1]; e2M[2][1] = e2[0]; e2M[2][2] = 0;
 
   // find pseudo inverse of the first camera
-  vnl_svd<double> temp(M1*M1.transpose()); // use svd to find inverse of M1*M1.transpose()
+  vnl_svd<double> temp{(M1*M1.transpose()).as_ref()}; // use svd to find inverse of M1*M1.transpose()
   vnl_matrix_fixed<double, 4,3> M1inv = M1.transpose()*temp.inverse();
 
   vnl_matrix_fixed<double,3,3> FAM;

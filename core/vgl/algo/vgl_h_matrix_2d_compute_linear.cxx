@@ -323,7 +323,7 @@ solve_weighted_least_squares(std::vector<vgl_homg_line_2d<double> > const& l1,
     D(row, 8) = -l1[i].c() * l2[i].b();
     ++row;
   }
-  M = vnl_transpose(D)*W*D;
+  M = vnl_transpose(D).as_matrix()*W*D;
   D.normalize_rows();
   vnl_svd<double> svd(D);
 

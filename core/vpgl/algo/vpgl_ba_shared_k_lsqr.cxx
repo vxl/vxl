@@ -148,7 +148,7 @@ vpgl_ba_shared_k_lsqr::param_to_cam_matrix(int  /*i*/,
   const vnl_vector_ref<double> r(3,const_cast<double*>(ai));
   vnl_double_3x3 M = Km_*rod_to_matrix(r);
   vnl_double_3x4 P;
-  P.update(M);
+  P.update(M.as_ref());
   const vnl_vector_ref<double> center(3,const_cast<double*>(ai+3));
   P.set_column(3,-(M*center));
   return P;
@@ -176,7 +176,7 @@ create_param_vector(const std::vector<vpgl_perspective_camera<double> >& cameras
     c[0] += K.focal_length() * K.x_scale();
 
     // compute the Rodrigues vector from the rotation
-    vnl_vector<double> w = R.as_rodrigues();
+    vnl_vector<double> w{ R.as_rodrigues().as_vector() };
 
     double* ai = a.data_block() + i*6;
     ai[0]=w[0];   ai[1]=w[1];   ai[2]=w[2];
