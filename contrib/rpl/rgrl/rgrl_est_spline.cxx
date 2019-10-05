@@ -428,7 +428,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     vnl_matrix<double> covar;
     // get the covariance
     if ( use_thin_plate_ ) {
-      vnl_matrix<double> X1 = g.transpose() * wgt.asMatrix();
+      vnl_matrix<double> X1 = g.transpose() * wgt.as_matrix();
       vnl_matrix<double> X3;
       // covariance = sigma^2 * (G^T * W * G + \lambda * K)^{-1} * G^T * W^2 * G * (G^T *  W * G + \lambda * K)^{-T}
       {
@@ -442,7 +442,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       covar = X0 * X1.transpose() * X3.transpose();
     }
     else {
-      vnl_matrix<double> X1 = g.transpose() * wgt.asMatrix();
+      vnl_matrix<double> X1 = g.transpose() * wgt.as_matrix();
       vnl_matrix<double> X3;
       // covariance = sigma^2 * (G^T * W * G)^{-1} * G^T * W^2 * G * (G^T *  W * G)^{-T}
       {

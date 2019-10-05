@@ -14,8 +14,8 @@
 
 //------------------------------------------------------------
 template <typename T>
-vnl_vector_ref<T>::vnl_vector_ref(size_t n, const T * space)
- : vnl_vector<T>(n, const_cast<T *>(space), false)
+vnl_vector_ref<T>::vnl_vector_ref(size_t n, T * space)
+ : vnl_vector<T>(n, space, false)
 {}
 
 template <typename T>

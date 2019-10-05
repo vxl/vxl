@@ -34,7 +34,14 @@ struct vnl_matrix_inverse : public vnl_svd<T>
   vnl_matrix_inverse(vnl_matrix<T> const & M): vnl_svd<T>(M) { }
   ~vnl_matrix_inverse() override = default;
 
-  operator vnl_matrix<T> () const { return this->inverse(); }
+  vnl_matrix<T> as_matrix() const { return this->inverse(); }
+
+#if VXL_LEGACY_FUTURE_REMOVE
+  explicit operator vnl_matrix<T>() const { return this->inverse(); }
+#else
+  //VXL_DEPRECATED_MSG("Implicit cast conversion is dangerous.\nUSE: .as_vector() or .as_ref() member function for clarity.")
+  operator vnl_matrix<T>() const { return this->inverse(); }
+#endif
 };
 
 template <class T>
