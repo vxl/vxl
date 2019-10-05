@@ -298,7 +298,7 @@ template <class T>
 vgl_h_matrix_3d<T> get_canonical_h(const vpgl_affine_camera<T>& camera ){
 
   vnl_matrix_fixed<T, 3,4> A = camera.get_matrix();
-  vnl_svd<T> temp(A);
+  vnl_svd<T> temp(A.as_ref());
   vnl_matrix_fixed<T, 4,3> Ainv = temp.pinverse();
   vnl_matrix_fixed<T, 4, 4> Hinv(0.0), Hp(0.0);
   for(size_t r = 0; r<4; ++r){

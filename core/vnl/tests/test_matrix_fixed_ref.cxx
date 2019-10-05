@@ -107,7 +107,7 @@ void test_matrix_fixed_ref()
     TEST("set_col", new_col, col_copy);
   }
   //   set diagonal
-  ref.set_diagonal(vnl_vector_fixed<double,3>(16,7,9));
+  ref.set_diagonal(vnl_vector_fixed<double,3>(16,7,9).as_ref());
   TEST("set_diagonal(7,9,16))",ref(0,0)==16 && ref(1,1)==7 && ref(2,2)==9, true);
 
   //    assign from mat

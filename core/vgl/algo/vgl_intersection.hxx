@@ -313,13 +313,13 @@ bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& 
     q += temp2*norg_i;
   }
   R/=T(n); q/=T(n);
-  vnl_svd<T> svd(R);
+  vnl_svd<T> svd(R.as_ref());
   size_t rank = svd.rank();
   if(rank < 3){
    std::cout << "insufficient svd rank " << rank << " to compute intersection" << std::endl;
     return false;
   } 
-  vnl_matrix<T> p = svd.solve(q);
+  vnl_matrix<T> p = svd.solve(q.as_ref());
   inter_pt.set(p[0][0], p[1][0], p[2][0]);
   return true;
 }

@@ -1307,7 +1307,7 @@ convert( vpgl_affine_camera<double> const& aff_cam, int ni, int nj,
   A(2,2) = plane.c();
 
   // invA maps (u-u0, v-v0, -d) to X,Y,Z on the principal plane
-  vnl_matrix_fixed<double,3,3> invA = vnl_svd<double>(A).inverse();
+  vnl_matrix_fixed<double,3,3> invA{ vnl_svd<double>(A.as_ref()).inverse() };
 
   // construct the array of camera rays
   vgl_point_3d<double> org;;

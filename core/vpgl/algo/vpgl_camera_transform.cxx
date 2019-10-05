@@ -667,7 +667,7 @@ bool vpgl_camera_transform::compute_initial_transformation_t(const std::vector<v
 
 bool vpgl_camera_transform::normalize_to_rotation_matrix(const vnl_matrix_fixed<double, 3, 3>& R, vnl_matrix_fixed<double, 3, 3>& R_norm)
 {
-  vnl_matrix<double> temp = R.transpose()*R;  // this is symmetric
+  vnl_matrix<double> temp{ (R.transpose()*R).as_matrix() };  // this is symmetric
 
   vnl_matrix<double> Dreal(3,3,0.0), Vreal(3,3,0.0);
   vnl_vector<double> D(3, 0.0);
@@ -971,11 +971,11 @@ bool vpgl_camera_transform::compute_covariance(unsigned cam_i, unsigned cam_j, c
     vnl_matrix_fixed<double, 3, 3> bb = outer_product(b, b);
     std::cout << " \t bb: \n" << bb << std::endl;
 
-    vnl_vector<double> term11 = vnl_cross_3d(hv, temp);
+    vnl_vector<double> term11{vnl_cross_3d(hv, temp).as_vector()};
     vnl_vector<double> term12 = cam_i_pts_cov[i]*term11;
     double t1 = dot_product(term11, term12);
 
-    vnl_vector<double> term21 = vnl_cross_3d(hv, cam_i_pts[i]);
+    vnl_vector<double> term21{ vnl_cross_3d(hv, cam_i_pts[i]).as_vector() };
     vnl_matrix_fixed<double, 3, 3> term22_temp = cam_j_pts_cov[i]*Rm.transpose();
     vnl_matrix_fixed<double, 3, 3> term22_m = Rm*term22_temp;
     vnl_vector<double> term22 = term22_m*term21;

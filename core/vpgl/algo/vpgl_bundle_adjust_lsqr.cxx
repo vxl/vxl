@@ -255,7 +255,7 @@ void vpgl_bundle_adjust_lsqr::jac_camera_center(vnl_double_3x3 const& M,
   // compute by swapping the role of the camera center and point position
   // then reused the jac_inhomg_3d_point code
   vnl_double_3x4 P;
-  P.update(M);
+  P.update( M.as_ref() );
   P.set_column(3,-(M*pt));
   jac_inhomg_3d_point(P,C,J);
 }

@@ -526,7 +526,7 @@ vnl_matrix_fixed<T,nrows,ncols>
 {
   vnl_matrix<T> m(i.size(), this->cols());
   for (unsigned int j = 0; j < i.size(); ++j)
-    m.set_row(j, this->get_row(i.get(j)));
+    m.set_row(j, this->get_row(i.get(j)).as_ref());
   return m;
 }
 
@@ -538,7 +538,7 @@ vnl_matrix_fixed<T,nrows,ncols>
 {
   vnl_matrix<T> m(this->rows(), i.size());
   for (unsigned int j = 0; j < i.size(); ++j)
-    m.set_column(j, this->get_column(i.get(j)));
+    m.set_column(j, this->get_column(i.get(j)).as_ref());
   return m;
 }
 

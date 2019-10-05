@@ -121,7 +121,7 @@ T vgl_fit_quadric_3d<T>::fit_linear_Taubin(std::ostream* errstream)
   for(size_t r = 0; r<4; ++r)
     for(size_t c = 0; c<4; ++c)
       Q[r][c] = qq[r][c];
-  vnl_matrix<T> Tr = norm.get_matrix();
+  vnl_matrix<T> Tr{ norm.get_matrix().as_matrix()};
   vnl_matrix<T> Qorig(4, 4);
   Qorig = Tr.transpose() * Q * Tr;
   for(size_t r = 0; r<4; ++r)
@@ -255,7 +255,7 @@ T vgl_fit_quadric_3d<T>::fit_ellipsoid_linear_Allaire(std::ostream* errstream){
   for(size_t r = 0; r<4; ++r)
     for(size_t c = 0; c<4; ++c)
       Q[r][c] = qq[r][c];
-  vnl_matrix<T> Tr = norm.get_matrix();
+  vnl_matrix<T> Tr{ norm.get_matrix().as_matrix() };
   vnl_matrix<T> Qorig(4, 4);
   Qorig = Tr.transpose() * Q * Tr;
   for(size_t r = 0; r<4; ++r)
@@ -377,7 +377,7 @@ T vgl_fit_quadric_3d<T>::fit_saddle_shaped_quadric_linear_Allaire(std::ostream* 
   for(size_t r = 0; r<4; ++r)
     for(size_t c = 0; c<4; ++c)
       Q[r][c] = qq[r][c];
-  vnl_matrix<T> Tr = norm.get_matrix();
+  vnl_matrix<T> Tr{ norm.get_matrix().as_matrix() };
   vnl_matrix<T> Qorig(4, 4);
   Qorig = Tr.transpose() * Q * Tr;
   for(size_t r = 0; r<4; ++r)

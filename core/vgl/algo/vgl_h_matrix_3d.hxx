@@ -463,10 +463,10 @@ vgl_h_matrix_3d<T>::get_upper_3x3_matrix() const
 template <class T>
 void vgl_h_matrix_3d<T>::polar_decomposition(vnl_matrix_fixed<T, 3, 3>& S, vnl_matrix_fixed<T, 3, 3>& R) const{
   vnl_matrix_fixed<T, 3, 3> up = this->get_upper_3x3_matrix();
-  vnl_matrix<T> M(up);
+  vnl_matrix<T> M{up.as_matrix()};
   vnl_svd<T> svd(M);
   vnl_matrix<T> U = svd.U();
-  vnl_matrix<T> W = svd.W();
+  vnl_matrix<T> W{ svd.W().as_matrix() };
   vnl_matrix<T> V = svd.V();
   R = vnl_matrix_fixed<T, 3, 3> ( U*V.transpose());
   S = vnl_matrix_fixed<T, 3, 3> (V*W*V.transpose());

@@ -411,10 +411,10 @@ static void test_affine_tensor_transfer()
   vF13.get_epipoles(ve13r, ve13l);
 
   vnl_matrix_fixed<double, 3,3> F12m = aF12.get_matrix(), F13m = aF13.get_matrix();
-  vnl_svd<double> svd2(F12m);
+  vnl_svd<double> svd2{F12m.as_ref()};
   vnl_vector_fixed<double, 3> e12m = svd2.nullvector();
   double r12 = e12m[0] / e12m[1];
-  vnl_svd<double> svd3(F13m);
+  vnl_svd<double> svd3{F13m.as_ref()};
   vnl_vector_fixed<double, 3> e13m = svd3.nullvector();
   double r13 = e13m[0] / e13m[1];
 
