@@ -100,7 +100,7 @@
 // This macro allocates and initializes the dynamic storage used by a vnl_matrix.
 #define vnl_matrix_alloc_blah() \
 do { /* Macro needs to be a single statement to allow semicolon at macro end */ \
-  assert(this->m_manage_own_memory); /*Resizing memory requires management rights */ \
+  assert(this->m_LetArrayManageMemory); /*Resizing memory requires management rights */ \
   if (this->num_rows && this->num_cols) { \
     /* Allocate memory to hold the row pointers */ \
     this->data = vnl_c_vector<T>::allocate_Tptr(this->num_rows); \
@@ -122,7 +122,7 @@ do { /* Macro needs to be a single statement to allow semicolon at macro end */ 
 do { /* Macro needs to be a single statement to allow semicolon at macro end */ \
   if (this->data) { \
     if (this->num_cols && this->num_rows) { \
-        if (this->m_manage_own_memory ) { \
+        if (this->m_LetArrayManageMemory ) { \
           /*Only delete contiguous memory if we are managing it*/ \
           vnl_c_vector<T>::deallocate(this->data[0], this->num_cols * this->num_rows); \
         } \
@@ -246,17 +246,17 @@ vnl_matrix<T>& vnl_matrix<T>::operator=(vnl_matrix<T>&& rhs)
   // Self-assignment detection
   if (&rhs != this)
   {
-    if(!rhs.m_manage_own_memory)
+    if(!rhs.m_LetArrayManageMemory)
     {
       this->operator=(rhs); // Call non-move assignment operator.
       return *this;
     }
-    else if(!this->m_manage_own_memory)
+    else if(!this->m_LetArrayManageMemory)
     {
       /* If `this` is managing own memory, then you are not allowed
        * to replace the data pointer
        * This code only works when the object is an vnl_matrix_ref correctly sized.
-       * Undefined behavior if this->m_manage_own_memory==false,
+       * Undefined behavior if this->m_LetArrayManageMemory==false,
        * and rows,cols are not the same between `this` and rhs. */
       assert( (rhs.num_rows == this->num_rows )
            && ( rhs.num_cols == this->num_cols ) );
@@ -273,11 +273,11 @@ vnl_matrix<T>& vnl_matrix<T>::operator=(vnl_matrix<T>&& rhs)
       data = rhs.data;
       num_rows = rhs.num_rows;
       num_cols = rhs.num_cols;
-      m_manage_own_memory = rhs.m_manage_own_memory;
+      m_LetArrayManageMemory = rhs.m_LetArrayManageMemory;
       rhs.data = nullptr;
       rhs.num_rows = 0;
       rhs.num_cols = 0;
-      rhs.m_manage_own_memory = false;
+      rhs.m_LetArrayManageMemory = false;
     }
   }
   return *this;
