@@ -99,10 +99,12 @@ class VNL_EXPORT vnl_vector_fixed_ref_const
   // use this user-defined conversion. For those cases, use the
   // explicit as_ref() method instead.
   explicit operator vnl_vector_ref<T>() { return this->as_ref(); }
-#if VXL_LEGACY_FUTURE_REMOVE
+#if ! VXL_USE_HISTORICAL_IMPLICIT_CONVERSIONS
   explicit operator const vnl_vector_ref<T>() const { return vnl_vector_ref<T>( n, const_cast<T*>(data_) ); }
 #else
-  //VXL_DEPRECATED_MSG("Implicit cast conversion is dangerous.\nUSE: .as_vector() or .as_ref() member function for clarity.")
+#if VXL_LEGACY_FUTURE_REMOVE
+  VXL_DEPRECATED_MSG("Implicit cast conversion is dangerous.\nUSE: .as_vector() or .as_ref() member function for clarity.")
+#endif
   operator const vnl_vector_ref<T>() const { return vnl_vector_ref<T>( n, const_cast<T*>(data_) ); } //Implicit for backwards compatibility
 #endif
   explicit operator vnl_vector<T>() const { return this->as_vector(); }

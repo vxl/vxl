@@ -742,23 +742,26 @@ class VNL_EXPORT vnl_matrix
       T * continuous_external_memory_block, bool manage_own_memory )
   : num_rows{ ext_num_rows}
   , num_cols{ ext_num_cols}
-  , m_manage_own_memory{ manage_own_memory }
+  , m_LetArrayManageMemory{ manage_own_memory }
   {
     this->data = vnl_c_vector<T>::allocate_Tptr(num_rows);
     for (unsigned int i = 0; i < num_rows; ++i)
       this->data[i] = continuous_external_memory_block + i * num_cols;
   }
- private:
-  unsigned num_rows{0};   // Number of rows
-  unsigned num_cols{0};   // Number of columns
-  T** data{nullptr};      // Pointer to the vnl_matrix
-  bool m_manage_own_memory{true};
 
   void assert_size_internal(unsigned r, unsigned c) const;
   void assert_finite_internal() const;
 
   //: Delete data
   void destroy();
+
+#if ! VXL_USE_HISTORICAL_PROTECTED_IVARS
+ private:
+#endif
+  unsigned num_rows{0};   // Number of rows
+  unsigned num_cols{0};   // Number of columns
+  T** data{nullptr};      // Pointer to the vnl_matrix
+  bool m_LetArrayManageMemory{true};
 };
 
 

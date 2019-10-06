@@ -437,22 +437,51 @@ class VNL_EXPORT vnl_vector
   //: Read from text stream
   static vnl_vector<T> read(std::istream& s);
 
+  //: Support external memory
+  void set_data(T * datain, size_t sz, bool LetArrayManageMemory)
+  {
+    if (m_LetArrayManageMemory)
+    {
+      vnl_vector<T>::destroy();
+    }
+    vnl_vector<T>::protected_set_data( datain, sz, m_LetArrayManageMemory );
+    m_LetArrayManageMemory = LetArrayManageMemory;
+  }
+  void set_data_same_size(T * datain, bool LetArrayManageMemory)
+  {
+    set_data(datain, this->size(), LetArrayManageMemory);
+  }
  protected:
   vnl_vector<T>( size_t ext_num_elmts, T * extdata, bool manage_own_memory )
     : num_elmts{ ext_num_elmts }
     , data{ extdata }
-    , m_manage_own_memory{ manage_own_memory }
+    , m_LetArrayManageMemory{ manage_own_memory }
   {  }
-
- private:
-  size_t num_elmts{0};   // Number of elements (length)
-  T* data{nullptr};      // Pointer to the actual data
-  bool m_manage_own_memory{true};
+  
+//#if !VXL_LEGACY_FUTURE_REMOVE
+  /*
+   * This function is a work around for transitioning to data members
+   * being private
+  */
+  void protected_set_data(T * indata, size_t nelmts, bool manage_own_memory)
+  {
+  this->data= indata ;
+  this->num_elmts = nelmts;
+  this->m_LetArrayManageMemory = manage_own_memory;
+  };
+//#endif
 
   void assert_size_internal(size_t sz) const;
   void assert_finite_internal() const;
-
   void destroy();
+
+#if ! VXL_USE_HISTORICAL_PROTECTED_IVARS
+ private:
+#endif
+  size_t num_elmts{0};   // Number of elements (length)
+  T* data{nullptr};      // Pointer to the actual data
+  bool m_LetArrayManageMemory{true};
+
 };
 
 

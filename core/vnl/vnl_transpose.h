@@ -46,10 +46,12 @@ class VNL_EXPORT vnl_transpose
   //: Noisily convert a vnl_transpose to a matrix
 
 
-#if VXL_LEGACY_FUTURE_REMOVE
+#if ! VXL_USE_HISTORICAL_IMPLICIT_CONVERSIONS
   explicit operator vnl_matrix<double> () const { return M_.transpose(); }
 #else
-  //VXL_DEPRECATED_MSG("Implicit cast conversion is dangerous.\nUSE: .as_vector() or .as_ref() member function for clarity.")
+#if VXL_LEGACY_FUTURE_REMOVE
+  VXL_DEPRECATED_MSG("Implicit cast conversion is dangerous.\nUSE: .as_vector() or .as_ref() member function for clarity.")
+#endif
   operator vnl_matrix<double> () const {
     std::cerr << "vnl_transpose being converted to matrix -- help! I don't wanna go!\n";
     return M_.transpose();

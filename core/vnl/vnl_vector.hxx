@@ -55,7 +55,7 @@
 // This macro allocates the dynamic storage used by a vnl_vector.
 #define vnl_vector_alloc_blah(size) \
 do { /* Macro needs to be a single statement to allow semicolon at macro end */ \
-  assert(this->m_manage_own_memory); /*Resizing memory requires management rights */ \
+  assert(this->m_LetArrayManageMemory); /*Resizing memory requires management rights */ \
   this->num_elmts = (size); \
   this->data = (size) ? vnl_c_vector<T>::allocate_T(size) : nullptr; \
 } while(false)
@@ -63,7 +63,7 @@ do { /* Macro needs to be a single statement to allow semicolon at macro end */ 
 // This macro deallocates the dynamic storage used by a vnl_vector.
 #define vnl_vector_free_blah                                      \
 do { /* Macro needs to be a single statement to allow semicolon at macro end */ \
-  if ( this->m_manage_own_memory )                                \
+  if ( this->m_LetArrayManageMemory )                                \
   {                                                               \
     if (this->data)                                               \
     {                                                             \
@@ -136,17 +136,17 @@ vnl_vector<T>& vnl_vector<T>::operator=(vnl_vector<T>&& rhs)
   // Self-assignment detection
   if (&rhs != this)
   {
-    if(!rhs.m_manage_own_memory)
+    if(!rhs.m_LetArrayManageMemory)
     {
       this->operator=(rhs); // Call non-move assignment operator.
       return *this;
     }
-    else if(!this->m_manage_own_memory)
+    else if(!this->m_LetArrayManageMemory)
     {
       /* If `this` is managing own memory, then you are not allowed
        * to replace the data pointer
        * This code only works when the object is an vnl_matrix_ref correctly sized.
-       * Undefined behavior if this->m_manage_own_memory==false,
+       * Undefined behavior if this->m_LetArrayManageMemory==false,
        * and rows,cols are not the same between `this` and rhs. */
       assert(rhs.num_elmts == this->num_elmts );
       std::copy( rhs.begin(), rhs.end(), this->begin() );
@@ -161,7 +161,7 @@ vnl_vector<T>& vnl_vector<T>::operator=(vnl_vector<T>&& rhs)
       // Transfer ownership and invalidate old value
       data = rhs.data;
       num_elmts = rhs.num_elmts;
-      m_manage_own_memory = rhs.m_manage_own_memory;
+      m_LetArrayManageMemory = rhs.m_LetArrayManageMemory;
       rhs.data = nullptr;
       rhs.num_elmts = 0;
     }
