@@ -164,6 +164,7 @@ vnl_vector<T>& vnl_vector<T>::operator=(vnl_vector<T>&& rhs)
       m_LetArrayManageMemory = rhs.m_LetArrayManageMemory;
       rhs.data = nullptr;
       rhs.num_elmts = 0;
+      rhs.m_LetArrayManageMemory = true;
     }
   }
   return *this;
