@@ -40,11 +40,9 @@ public:
   //: constructor with pointsets
   bvgl_register_ptsets_3d_rigid(vgl_pointset_3d<T> const& fixed, vgl_pointset_3d<T> const& movable) :
     fixed_(fixed),
-    movable_(movable)
+    movable_(movable),
+    knn_fixed_(fixed)
   {
-    // initialize knn index with fixed pointset
-    knn_fixed_ = bvgl_k_nearest_neighbors_3d<T>(fixed);
-
     // reduce the size of the movable pointset to reduce computation
     unsigned n = movable_.npts();
     size_t nf = static_cast<size_t>(transform_fraction_ * n);
