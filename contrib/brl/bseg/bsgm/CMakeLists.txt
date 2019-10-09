@@ -9,6 +9,7 @@ set(bsgm_sources
     bsgm_prob_pairwise_dsm.h               bsgm_prob_pairwise_dsm.cxx
     bsgm_error_checking.h                  bsgm_error_checking.cxx
     bsgm_pair_selector.h                   bsgm_pair_selector.cxx
+    bsgm_remove_spikes.h                   bsgm_remove_spikes.cxx
 )
 
 aux_source_directory(Templates bsgm_sources)
