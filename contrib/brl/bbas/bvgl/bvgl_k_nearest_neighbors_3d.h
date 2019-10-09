@@ -23,24 +23,33 @@ class bvgl_k_nearest_neighbors_3d
 {
  public:
   //: default constructor
- bvgl_k_nearest_neighbors_3d():tolerance_(Type(0)), search_tree_(nullptr){}
+  bvgl_k_nearest_neighbors_3d() = default;
+
   //: Construct from a vgl_pointset
-  bvgl_k_nearest_neighbors_3d(vgl_pointset_3d<Type>  const &ptset, Type tolerance = Type(0));
+  bvgl_k_nearest_neighbors_3d(vgl_pointset_3d<Type> const &ptset, Type tolerance = Type(0)) :
+    tolerance_(tolerance),
+    ptset_(std::move(ptset))
+  {
+    create();
+  }
+
   //: destructor
   ~bvgl_k_nearest_neighbors_3d(){
     if(search_tree_)
       delete search_tree_;
     search_tree_ = nullptr;
   }
+
   //: copy constructor
   bvgl_k_nearest_neighbors_3d(bvgl_k_nearest_neighbors_3d const& other) :
-    tolerance_(other.tolerance_), ptset_(other.ptset_),
-    search_tree_(nullptr)
+    tolerance_(other.tolerance_),
+    ptset_(other.ptset_)
   {
     // create handles init of M_ and search_tree_, and flags_
     create();
   }
-  //: assignment operator
+
+  //: assignment operator (copy-and-swap idiom)
   bvgl_k_nearest_neighbors_3d& operator = (bvgl_k_nearest_neighbors_3d rhs)
   {
     this->swap(rhs);
@@ -86,15 +95,15 @@ class bvgl_k_nearest_neighbors_3d
     swap(this->search_tree_, other.search_tree_);
   }
 
-  protected:
+ protected:
   //: util function for finding the k closest neighbors and indices
   inline bool knn_util(vgl_point_3d<Type> const& p, unsigned k, vgl_pointset_3d<Type>& neighbors, vnl_vector<int> &indices) const;
 
-  Type tolerance_;
-  Nabo::NearestNeighbourSearch<Type>* search_tree_;
+  Type tolerance_ = Type(0);
+  Nabo::NearestNeighbourSearch<Type>* search_tree_ = nullptr;
   vnl_matrix<Type> M_;//a matrix form(3 x n) of the pointset used by nabo
   vgl_pointset_3d<Type> ptset_;
-  unsigned flags_;//control various actions during queries
+  unsigned flags_ = 0;//control various actions during queries
 };
 
 template<class Type>
@@ -124,13 +133,6 @@ bool bvgl_k_nearest_neighbors_3d<Type>::create(){
   }
   search_tree_ = Nabo::NearestNeighbourSearch<Type>::createKDTreeLinearHeap(M_, dim);
   return true;
-}
-template <class Type>
-bvgl_k_nearest_neighbors_3d<Type>::bvgl_k_nearest_neighbors_3d(vgl_pointset_3d<Type> const& ptset, Type tolerance):
-tolerance_(tolerance),
-search_tree_(nullptr),
-ptset_(std::move(ptset)){
-  create();
 }
 
 template <class Type>
