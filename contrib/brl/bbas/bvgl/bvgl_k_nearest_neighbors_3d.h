@@ -78,11 +78,12 @@ class bvgl_k_nearest_neighbors_3d
   //: swap the two objects (used as part of "copy and swap" idiom)
   void swap(bvgl_k_nearest_neighbors_3d<Type>& other)
   {
-    std::swap(this->tolerance_, other.tolerance_);
-    std::swap(this->M_, other.M_);
-    std::swap(this->ptset_, other.ptset_);
-    std::swap(this->flags_, other.flags_);
-    std::swap(this->search_tree_, other.search_tree_);
+    using std::swap;
+    swap(this->tolerance_, other.tolerance_);
+    swap(this->M_, other.M_);
+    swap(this->ptset_, other.ptset_);
+    swap(this->flags_, other.flags_);
+    swap(this->search_tree_, other.search_tree_);
   }
 
   protected:
