@@ -32,7 +32,8 @@ T bvgl_register_ptsets_3d_rigid<T>::error(vgl_vector_3d<T> const& t)
   error /= cnt;
   return sqrt(error);
 }
-// distr_error is defined as below. Ideally the distance distribution reaches 100% of the population 
+
+// distr_error is defined as below. Ideally the distance distribution reaches 100% of the population
 // in zero distance to the nearest points in the fixed population
 //     |
 //     |             /--------------
@@ -66,7 +67,6 @@ T bvgl_register_ptsets_3d_rigid<T>::distr_error(vgl_vector_3d<T> const& t){
   return (dists[nd/2] + dists[nd/4] + dists[(3*nd)/4])/T(3);
 }
 
-
 template <class T>
 bool bvgl_register_ptsets_3d_rigid<T>::minimize_exhaustive()
 {
@@ -99,6 +99,7 @@ bool bvgl_register_ptsets_3d_rigid<T>::minimize_exhaustive()
   exhaustive_t_ = vgl_vector_3d<T>(x_at_min, y_at_min, z_at_min);
   return true;
 }
+
 template <class T>
 bool bvgl_register_ptsets_3d_rigid<T>::minimize_ransac(vgl_vector_3d<T> const& initial_t){
   // select a random point from the test set
@@ -113,7 +114,7 @@ bool bvgl_register_ptsets_3d_rigid<T>::minimize_ransac(vgl_vector_3d<T> const& i
     if (!knn_fixed_.closest_point(tp, cp)) {
       std::cout << "KNN index failed to find neighbors" << std::endl;
       return false;
-    }    
+    }
     vgl_vector_3d<T> t = cp-tp;
     vgl_vector_3d<T> tt = t+initial_t;
     T er = distr_error(tt);
