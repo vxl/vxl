@@ -17,7 +17,7 @@
 // movable pointset coordinate system to the fixed pointset is determined. Two methods are currently implmented:
 // exhausitve search over a space of translations and a simple form of RANSAC. The fixed pointset is stored in a
 // k-d tree to efficiently retrieve the nearest neighbor to a given point from the movable pointset.
-// 
+//
 #include <iostream>
 #include <ostream>
 #ifdef _MSC_VER
@@ -35,22 +35,15 @@ class bvgl_register_ptsets_3d_rigid
 
 public:
   //: Constructor - default
- bvgl_register_ptsets_3d_rigid():
-  t_range_(vgl_vector_3d<T>(2.5, 2.5, 2.5)),
-    t_inc_(vgl_vector_3d<T>(0.5, 0.5, 0.5)),
-    outlier_thresh_(5.0), transform_fraction_(0.25),
-    min_n_pts_(1000), n_hypos_(100), min_exhaustive_error_(std::numeric_limits<T>::max()),
-    min_ransac_error_(std::numeric_limits<T>::max()), exhaustive_t_(vgl_vector_3d<T>(T(0),T(0),T(0))) {}
+  bvgl_register_ptsets_3d_rigid() = default;
+
   //: constructor with pointsets
- bvgl_register_ptsets_3d_rigid(vgl_pointset_3d<T> const& fixed, vgl_pointset_3d<T> const& movable):
-  t_range_(vgl_vector_3d<T>(2.5, 2.5, 2.5)),
-    t_inc_(vgl_vector_3d<T>(0.5, 0.5, 0.5)),
-    outlier_thresh_(5.0), transform_fraction_(0.25),
-    min_n_pts_(1000), n_hypos_(100), min_exhaustive_error_(std::numeric_limits<T>::max()),
-    min_ransac_error_(std::numeric_limits<T>::max()),exhaustive_t_(vgl_vector_3d<T>(T(0),T(0),T(0)))
+  bvgl_register_ptsets_3d_rigid(vgl_pointset_3d<T> const& fixed, vgl_pointset_3d<T> const& movable) :
+    fixed_(fixed),
+    movable_(movable)
   {
     // initialize knn index with fixed pointset
-    fixed_ = fixed; movable_ = movable; knn_fixed_ = bvgl_k_nearest_neighbors_3d<T>(fixed);
+    knn_fixed_ = bvgl_k_nearest_neighbors_3d<T>(fixed);
 
     // reduce the size of the movable pointset to reduce computation
     unsigned n = movable_.npts();
@@ -66,6 +59,7 @@ public:
       frac_trans_.add_point(p);
     }
   }
+
   //: load the fixed pointset (use with default constructor)
   bool read_fixed_ptset(std::string const& fixed_path);
 
@@ -123,21 +117,24 @@ public:
 
   //: does this instance have valid pointsets
   bool valid_instance() const {return (fixed_.size()>0 && movable_.size()>0);}
+
  private:
-  T outlier_thresh_;
+  vgl_vector_3d<T> t_range_ = vgl_vector_3d<T>(T(2.5), T(2.5), T(2.5));
+  vgl_vector_3d<T> t_inc_ = vgl_vector_3d<T>(T(0.5), T(0.5), T(0.5));
+  T outlier_thresh_ = T(5.0);
+  double transform_fraction_ = 0.25;
+  size_t min_n_pts_ = 1000;
+  size_t n_hypos_ = 100;
+  T min_exhaustive_error_ = std::numeric_limits<T>::max();
+  T min_ransac_error_ = std::numeric_limits<T>::max();
+  vgl_vector_3d<T> exhaustive_t_ = vgl_vector_3d<T>(T(0),T(0),T(0));
+
   vgl_pointset_3d<T> fixed_;
   bvgl_k_nearest_neighbors_3d<T> knn_fixed_;
   vgl_pointset_3d<T> movable_;
-  double transform_fraction_;
-  size_t min_n_pts_;
-  size_t n_hypos_;
   vgl_pointset_3d<T> frac_trans_;
   vgl_vector_3d<T> best_ransac_t_;
-  vgl_vector_3d<T> exhaustive_t_;
-  vgl_vector_3d<T> t_range_;
-  vgl_vector_3d<T> t_inc_;
-  T min_exhaustive_error_;
-  T min_ransac_error_;
+
 };
 
 
