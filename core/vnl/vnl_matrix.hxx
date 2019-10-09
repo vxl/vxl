@@ -277,7 +277,7 @@ vnl_matrix<T>& vnl_matrix<T>::operator=(vnl_matrix<T>&& rhs)
       rhs.data = nullptr;
       rhs.num_rows = 0;
       rhs.num_cols = 0;
-      rhs.m_LetArrayManageMemory = false;
+      rhs.m_LetArrayManageMemory = true;
     }
   }
   return *this;
