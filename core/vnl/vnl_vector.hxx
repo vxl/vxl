@@ -642,6 +642,7 @@ void vnl_vector<T>::swap(vnl_vector<T> &that) noexcept
 {
   std::swap(this->num_elmts, that.num_elmts);
   std::swap(this->data, that.data);
+  std::swap(this->m_LetArrayManageMemory, that.m_LetArrayManageMemory);
 }
 
 //--------------------------------------------------------------------------------
