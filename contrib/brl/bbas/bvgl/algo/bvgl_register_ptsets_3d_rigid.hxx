@@ -138,7 +138,7 @@ bool bvgl_register_ptsets_3d_rigid<T>::read_fixed_ptset(std::string const& fixed
     return false;
   }
   istr >> fixed_;
-  knn_fixed_ = bvgl_k_nearest_neighbors_3d<T>(fixed_);
+  knn_fixed_.set_pointset(fixed_);
   return true;
 }
 
