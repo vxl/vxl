@@ -1352,6 +1352,7 @@ void vnl_matrix<T>::swap(vnl_matrix<T> &that) noexcept
   std::swap(this->num_rows, that.num_rows);
   std::swap(this->num_cols, that.num_cols);
   std::swap(this->data, that.data);
+  std::swap(this->m_LetArrayManageMemory, that.m_LetArrayManageMemory);
 }
 
 //: Reverse order of rows.  Name is from Matlab, meaning "flip upside down".
