@@ -115,7 +115,7 @@ bool bsgm_remove_spikes::replace_spikes_with_local_z(bool smooth){
 }
 // expand the input image using nearest neighbor values to fill in a border of width nbrhd_radius
 bool bsgm_remove_spikes::expand_input_img(){
-  size_t r = params_.nbrhd_radius_;
+  int r = params_.nbrhd_radius_;
   size_t dim_expand = 2*r;
   int ni = input_img_.ni(), nj = input_img_.nj();
   if(ni == 0 || nj == 0){

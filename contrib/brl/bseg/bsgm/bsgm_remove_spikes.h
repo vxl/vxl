@@ -31,6 +31,10 @@ class bsgm_remove_spikes{
   
   void set_params(remove_spikes_params const& params) {params_ = params;}
 
+  //: a finite float value considered to be invalid data. Needed if NAN is not available in image formats
+  void set_invalid_z(float z){invalid_z_ = z;}
+  float invalid_z(){return invalid_z_;}
+
   //: apply k-means to z values in a 2r+1 x 2r+1 neigborhood (r = nbrhd_radius)
  //  return number of values assocated with each cluster mean z
  std::vector<std::pair<size_t, float> > cluster_centers(std::vector<float> zvals, size_t max_k);
