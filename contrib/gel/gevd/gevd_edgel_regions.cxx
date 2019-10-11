@@ -1528,7 +1528,9 @@ void gevd_edgel_regions::repair_failed_insertions(std::vector<vtol_edge_2d_sptr>
 {
   std::vector<vtol_vertex_sptr> temp1, temp2;
   for (auto & bad_vert : bad_verts)
+  {
     for (auto & failed_insertion : *failed_insertions_)
+    {
       if (bad_vert==failed_insertion->v1())
       {
         edges.push_back(failed_insertion);
@@ -1541,6 +1543,8 @@ void gevd_edgel_regions::repair_failed_insertions(std::vector<vtol_edge_2d_sptr>
         temp1.push_back(bad_vert);
         temp2.push_back(failed_insertion->v1());
       }
+    }
+  }
   for (auto wit = temp1.begin();
        wit != temp1.end(); wit++)
     bad_verts.erase(wit);
