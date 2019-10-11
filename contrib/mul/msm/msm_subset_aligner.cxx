@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cstddef>
 #include <sstream>
+#include <iterator>
 #include "msm_subset_aligner.h"
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_loader.h>
