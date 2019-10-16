@@ -15,12 +15,15 @@
 #include <vnl/vnl_matrix_fixed.h>
 
 struct rectify_params{
-  rectify_params(): min_disparity_z_(NAN), n_points_(1000), upsample_scale_(1.0), invalid_pixel_val_(0.0f) {}
+  rectify_params():
+    min_disparity_z_(NAN), n_points_(1000), upsample_scale_(1.0),
+    invalid_pixel_val_(0.0f), min_overlap_fraction_(0.25) {}
 
-  double min_disparity_z_; // horizontal plane where disparity at each pixel is minimum
-  size_t n_points_;            // number of points used to create correspondences
-  double upsample_scale_;      // scale factor to upsample rectified images
+  double min_disparity_z_;       // horizontal plane where disparity at each pixel is minimum
+  size_t n_points_;              // number of points used to create correspondences
+  double upsample_scale_;        // scale factor to upsample rectified images
   float invalid_pixel_val_;
+  double min_overlap_fraction_;  // minimum fraction of points in overlap with tile in both images
 };
 
 //

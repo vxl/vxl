@@ -184,20 +184,33 @@ compute_rectification(vgl_box_3d<double>const& scene_box, size_t n_points, doubl
   if (vnl_math::isfinite(average_z))
     z0 = average_z;
   std::vector< vnl_vector_fixed<double, 3> > img_pts0, img_pts1;
+  double inside_pts = 0.0;
   for (unsigned i = 0; i < n_points; i++) {
     double x = rng.drand64()*width + min_x;  // sample in local coords
     double y = rng.drand64()*height + min_y;
-    double u, v;
+    double u0, v0, u1, v1;
 
-    acam0_.project(x,y,z0,u,v);
-    if (u >= 0 && u < ni0 && v >= 0 && v < nj0)
-      img_pts0.emplace_back(u,v,1);
+    acam0_.project(x,y,z0,u0,v0);
+    bool proj_0_good = (u0 >= 0 && u0 < ni0 && v0 >= 0 && v0 < nj0);
 
-    acam1_.project(x, y, z0, u, v);
-    if (u >= 0 && u < ni1 && v >= 0 && v < nj1)
-      img_pts1.emplace_back(u,v,1);
+    acam1_.project(x, y, z0, u1, v1);
+    bool proj_1_good = (u1 >= 0 && u1 < ni1 && v1 >= 0 && v1 < nj1);
+
+    // store points regardless of if they project into each image
+    img_pts0.emplace_back(u0,v0,1);
+    img_pts1.emplace_back(u1,v1,1);
+
+    // but accumulate the points that intersect each image
+    if (proj_0_good && proj_1_good)
+      inside_pts += 1.0;
   }
-
+  // if too few points have both images in common - problem
+  double overlap_fraction = double(inside_pts) / double(n_points);
+  if (overlap_fraction < params_.min_overlap_fraction_) {
+    std::cout << "Fatal - an insufficient fraction of zero disparity plane points project into both images "
+              << overlap_fraction << " < " << params_.min_overlap_fraction_<< std::endl;
+    return false;
+  }
   // sanity check
   bool epi_constraint = true;
   for (size_t k = 0; k < img_pts0.size(); ++k) {
