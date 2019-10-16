@@ -31,7 +31,7 @@
 
 namespace bpgl_rectify_affine_image_pair_process_globals
 {
-  unsigned n_inputs_  = 13;
+  unsigned n_inputs_  = 14;
   unsigned n_outputs_ = 4;
 }
 
@@ -51,6 +51,7 @@ bool bpgl_rectify_affine_image_pair_process_cons(bprb_func_process& pro)
   input_types_.emplace_back("double");     // max point x (e.g. upper right corner of a scene bbox)
   input_types_.emplace_back("double");     // max point y
   input_types_.emplace_back("double");     // max point z
+  input_types_.emplace_back("double");     // rectification z
   input_types_.emplace_back("unsigned");   // n_points -- randomly sample this many points form the voxel volume, e.g. 100
   input_types_.emplace_back("vcl_string"); // output file for H0 rectification
   input_types_.emplace_back("vcl_string"); // output file for H1 rectification
@@ -91,10 +92,18 @@ bool bpgl_rectify_affine_image_pair_process(bprb_func_process& pro)
   auto max_x        = pro.get_input<double>(i++);
   auto max_y        = pro.get_input<double>(i++);
   auto max_z        = pro.get_input<double>(i++);
+  auto rectify_z    = pro.get_input<double>(i++);
   auto n_points     = pro.get_input<unsigned>(i++);
   auto file_H0      = pro.get_input<std::string>(i++);
   auto file_H1      = pro.get_input<std::string>(i++);
 
+  // populate rectification parameters
+  rectify_params rp;
+  rp.n_points_ = n_points;
+  if ((min_z <= rectify_z) && (rectify_z <= max_z)) {
+    rp.min_disparity_z_ = rectify_z;
+  }
+  // std::cout << rp << std::endl;
 
   // convert cameras
   auto* camera0_ptr = dynamic_cast<vpgl_affine_camera<double>*> (camera0_sptr.as_pointer());
@@ -120,8 +129,7 @@ bool bpgl_rectify_affine_image_pair_process(bprb_func_process& pro)
     std::cerr << pro.name() << " :-- set_images_and_cams failed" << std::endl;
     return false;
   }
-  rectify_params rp;
-  rp.n_points_ = n_points;
+
   rectify_object.set_params(rp);
   success = rectify_object.process(scene_box);
   if (!success) {
