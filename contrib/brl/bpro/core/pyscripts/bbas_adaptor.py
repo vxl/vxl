@@ -401,7 +401,7 @@ def heightmap_from_disparity(camera1, camera2, disparity,
 
 def rectify_affine_image_pair(image0, affine_camera0, image1, affine_camera1,
                               min_x, min_y, min_z, max_x, max_y, max_z,
-                              n_points = 1000,
+                              rectify_z = None, n_points = 1000,
                               file_H0=None, file_H1=None):
 
     batch.init_process("bpglRectifyAffineImagePairProcess")
@@ -417,12 +417,14 @@ def rectify_affine_image_pair(image0, affine_camera0, image1, affine_camera1,
     batch.set_input_double(8, max_y)
     batch.set_input_double(9, max_z)
 
-    batch.set_input_unsigned(10, n_points)
+    if rectify_z is None: rectify_z = min_z - 1.0
+    batch.set_input_double(10, rectify_z)
+    batch.set_input_unsigned(11, n_points)
 
     if not file_H0: file_H0 = ""
     if not file_H1: file_H1 = ""
-    batch.set_input_string(11, file_H0)
-    batch.set_input_string(12, file_H1)
+    batch.set_input_string(12, file_H0)
+    batch.set_input_string(13, file_H1)
 
     if batch.run_process():
         (id, type) = batch.commit_output(0)
