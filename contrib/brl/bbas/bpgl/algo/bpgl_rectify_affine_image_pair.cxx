@@ -16,6 +16,20 @@
 #include "bpgl_rectify_affine_image_pair.h"
 
 
+// print rectification parameters
+std::ostream& operator<<(std::ostream &os, const rectify_params& p)
+{
+  os << "BPGL affine rectification parameters:\n"
+     << "  min_disparity_z ......... " << p.min_disparity_z_ << '\n'
+     << "  n_points ................ " << p.n_points_ << '\n'
+     << "  upsample_scale .......... " << p.upsample_scale_ << '\n'
+     << "  invalid_pixel_val ....... " << p.invalid_pixel_val_ << '\n'
+     << "  min_overlap_fraction .... " << p.min_overlap_fraction_ << std::endl
+     ;
+  return os;
+}
+
+
 bool bpgl_rectify_affine_image_pair::
 set_images_and_cams(vil_image_view_base_sptr const& view0, vpgl_affine_camera<double> const& acam0,
                     vil_image_view_base_sptr const& view1, vpgl_affine_camera<double> const& acam1)
