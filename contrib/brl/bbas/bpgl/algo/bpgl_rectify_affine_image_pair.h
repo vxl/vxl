@@ -26,6 +26,8 @@ struct rectify_params{
   double min_overlap_fraction_;  // minimum fraction of points in overlap with tile in both images
 };
 
+std::ostream& operator<<(std::ostream &os, const rectify_params& p);
+
 //
 // requires two images and associated affine cameras. Class can load the data from files if needed.
 // the output is a pair of images that have common epipolar lines along image rows. The difference in
