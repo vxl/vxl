@@ -216,7 +216,7 @@ void acal_intertile_graph_solver::print_cam_residuals(std::vector<std::pair<doub
 // the main process function. Two passes are executed. Later may apply more passes
 bool acal_intertile_graph_solver::solve_least_squares_problem() {
   
-  std::cout << "\n=====> Solve for cam translation(s)<=====" << std::endl;
+  if(verbose_)std::cout << "\n=====> Solve for cam translation(s)<=====" << std::endl;
   std::set<size_t> unique_cams;
   std::vector<size_t> tile_indices;
   size_t n_unknowns = initialize_lsqr(tile_indices, unique_cams);
@@ -240,13 +240,13 @@ bool acal_intertile_graph_solver::solve_least_squares_problem() {
   gc_lsq.f(translations, residuals);// final set of residuals and translations
 
   size_t n_non_seed = trans_indx_to_cam_id_.size();
-  std::cout << "Total number of cameras " << unique_cams.size() << " n_seed "<< seed_cam_ids_.size() << " n_non_seed " << n_non_seed << std::endl;
+  if(verbose_) std::cout << "Total number of cameras " << unique_cams.size() << " n_seed "<< seed_cam_ids_.size() << " n_non_seed " << n_non_seed << std::endl;
   std::vector<std::pair<double, std::pair<size_t, std::set<size_t> > > >residual_cams;
   residual_cams = cam_residuals(residuals);
   std::sort(residual_cams.begin(), residual_cams.end(), residual_less);
   std::set<size_t> unique_res_cams = find_minimum_residual_set(residual_cams, tile_indices);
   if(verbose_) print_cam_residuals(residual_cams);
-  std::cout << "FIRST PASS TRANSLATIONS" << std::endl;
+  if(verbose_) std::cout << "FIRST PASS TRANSLATIONS" << std::endl;
   double sanity_thresh = 30.0;
   bool first_pass_fail = false;
   for(std::map<size_t, size_t>::iterator trit = trans_indx_to_cam_id_.begin();
@@ -261,7 +261,7 @@ bool acal_intertile_graph_solver::solve_least_squares_problem() {
     }
     vgl_vector_2d<double> trans(tu, tv);
     translations_[cam_idx] = trans;
-    if(true) std::cout << cam_idx << ' ' << tu << ' ' << tv << std::endl;
+    if(verbose_) std::cout << cam_idx << ' ' << tu << ' ' << tv << std::endl;
   }
   //
   // 2nd pass after weeding out tiles with large residuals
@@ -331,9 +331,6 @@ bool acal_intertile_graph_solver::solve_least_squares_problem() {
     for(std::map<size_t, std::map<size_t, size_t> >::iterator trit = trks.begin();
         trit != trks.end(); ++trit){
       std::map<size_t, size_t>& trk = trit->second;
-      if (cam_id == 37) {
-          std::cout << "37 track " << trk.size() << std::endl;
-      }
       if(trk.count(cam_id)>0){
         n_res += 1.0;
         size_t res_indx = trk[cam_id];
