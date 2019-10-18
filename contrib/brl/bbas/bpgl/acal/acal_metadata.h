@@ -16,6 +16,7 @@
 #include <iostream>
 #include <vcl_compiler.h>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
 #include <map>
@@ -25,7 +26,7 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vpgl/vpgl_lvcs.h>
-
+#include <vul/vul_file.h>
 
 struct image_metadata
 {
@@ -51,12 +52,19 @@ struct tile_metadata
   vgl_box_3d<double> local_bb_;
 };
 
+struct tile_image_metadata
+{
+  size_t image_id_;
+  std::string image_name_;
+};
+
 struct geo_corr_metadata
 {
   size_t image_id_;
   std::string image_name_;
   vgl_vector_2d<double> translation_;
   double rms_proj_err_;
+  bool seed_camera_;
 };
 
 struct pair_selection_metadata
@@ -142,7 +150,27 @@ class acal_metadata
      tile_meta_.push_back(tm);
    }
  }
-
+void deserialize_tile_image_meta( Json::Value& root)
+ {
+   const Json::Value img_list = root;
+   Json::Value::Members image_ids = root.getMemberNames();
+   size_t n = image_ids.size();
+   for(size_t i  = 0; i<n; ++i)
+     {
+       std::string key = image_ids[i];
+       std::string image_path = root.get(key, "").asString();
+       std::string base_name = vul_file::strip_directory(image_path);
+       base_name = vul_file::strip_extension(base_name);
+       tile_image_metadata tim;
+       std::stringstream ss;
+       ss << key;
+       size_t id = -1;
+       ss >> id;
+       tim.image_id_ = id;
+       tim.image_name_ = base_name;
+       tile_image_meta_.push_back(tim);
+     }
+ }
  void serialize_geo_corr_meta( Json::Value& root)
  {
    Json::Value geo_corr_list;
@@ -159,6 +187,7 @@ class acal_metadata
      geo_corr["samp_trans"] = geo_corr_meta_[i].translation_.x();
      geo_corr["line_trans"] = geo_corr_meta_[i].translation_.y();
      geo_corr["rms_proj_err"] = geo_corr_meta_[i].rms_proj_err_;
+     geo_corr["seed_camera"] = geo_corr_meta_[i].seed_camera_;
      Json::Value::ArrayIndex ai = static_cast<Json::Value::ArrayIndex>(i);
      geo_corr_list[ai] = geo_corr;
    }
@@ -176,6 +205,7 @@ class acal_metadata
      gm.image_id_     = (*glit).get("image_id", -1).asUInt();
      gm.image_name_   = (*glit).get("iname", "").asString();
      gm.rms_proj_err_ = (*glit).get("rms_proj_err", 0.0).asDouble();
+     gm.seed_camera_  = (*glit).get("seed_camera", false).asBool();
      double tu = 0.0, tv = 0.0;
      tu = (*glit).get("samp_trans", 0.0).asDouble();
      tv = (*glit).get("line_trans", 0.0).asDouble();
@@ -209,6 +239,7 @@ class acal_metadata
  // metadata elements
  std::vector<image_metadata> img_meta_;
  std::vector<tile_metadata> tile_meta_;
+ std::vector<tile_image_metadata> tile_image_meta_;
  std::vector<geo_corr_metadata> geo_corr_meta_;
  std::vector<pair_selection_metadata> pair_meta_;
 };
