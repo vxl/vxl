@@ -443,7 +443,7 @@ acal_match_graph::valid_tree(std::shared_ptr<acal_match_tree> const& mtree)
   }
   //std::cout << max_proj_error << ' ';
   if (max_proj_error > params_.max_uncal_proj_error_) {
-    std::cout << max_proj_error << " error exceeds limit for cam " << max_cam_id << " on track " << max_track << std::endl;
+    //std::cout << max_proj_error << " error exceeds limit for cam " << max_cam_id << " on track " << max_track << std::endl;
     return false;
   }
   return true;
