@@ -69,10 +69,12 @@ struct geo_corr_metadata
 
 struct pair_selection_metadata
 {
-  size_t i_;
-  size_t j_;
-  std::string iname_i_;
-  std::string iname_j_;
+  size_t pair_index_;
+  size_t image1_id_;
+  size_t image2_id_;
+  double gsd_cost_;
+  double sun_angle_cost_;
+  double view_angle_cost_;
   double cost_;
 };
 
@@ -225,15 +227,35 @@ void deserialize_tile_image_meta( Json::Value& root)
    for(size_t i = 0; i<n; ++i)
    {
      Json::Value pair;
-     pair["i"] = pair_meta_[i].i_;
-     pair["j"] = pair_meta_[i].j_;
-     pair["iname_i"] = pair_meta_[i].iname_i_;
-     pair["iname_j"] = pair_meta_[i].iname_j_;
-     pair["cost"] = pair_meta_[i].cost_;
+     pair["pair_index"] = pair_meta_[i].pair_index_;
+     pair["image1_id"] = pair_meta_[i].image1_id_;
+     pair["image2_id"] = pair_meta_[i].image2_id_;
+     pair["gsd_cost"] = pair_meta_[i].gsd_cost_;
+     pair["sun_angle_cost"] = pair_meta_[i].sun_angle_cost_;
+     pair["view_angle_cost"] = pair_meta_[i].view_angle_cost_;
+     pair["total_cost"] = pair_meta_[i].cost_;
      Json::Value::ArrayIndex ai = static_cast<Json::Value::ArrayIndex>(i);
      pair_list[ai] = pair;
    }
    root = pair_list;
+ }
+  void deserialize_pair_selection_meta( Json::Value& root)
+ {
+   pair_meta_.clear();
+   const Json::Value pair_list = root;
+   for(Json::Value::const_iterator prit = pair_list.begin();
+       prit != pair_list.end(); ++prit)
+   {
+     pair_selection_metadata pm;
+     pm.pair_index_       = (*prit).get("pair_index", -1).asUInt();
+     pm.image1_id_       = (*prit).get("image1_id", -1).asUInt();
+     pm.image2_id_       = (*prit).get("image2_id", -1).asUInt();
+     pm.gsd_cost_         = (*prit).get("gsd_cost", 0.0).asDouble();
+     pm.sun_angle_cost_   = (*prit).get("sun_angle_cost", 0.0).asDouble();
+     pm.view_angle_cost_  = (*prit).get("view_angle_cost", 0.0).asDouble();
+     pm.cost_             = (*prit).get("total_cost", 0.0).asDouble();
+     pair_meta_.push_back(pm);
+   }
  }
 
  // metadata elements
