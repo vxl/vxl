@@ -66,6 +66,7 @@ static void test_metadata()
   gc1.image_id_ = 1;
   gc1.translation_.set(-5.0, 15.0);
   gc1.rms_proj_err_ = 0.3;
+  gc1.seed_camera_ = true;
   geo_meta.geo_corr_meta_.push_back(gc0);
   geo_meta.geo_corr_meta_.push_back(gc1);
   Json::Value geo_root;
@@ -75,7 +76,7 @@ static void test_metadata()
   std::string geo_test = writer.write(geo_root);
   std::cout << geo_test << std::endl;
   size_t ngeo = geo_test.size();
-  good = good && ngeo == 321;
+  good = good && ngeo == 377;
   TEST("serialize geo corr", good, true);
 }
 
