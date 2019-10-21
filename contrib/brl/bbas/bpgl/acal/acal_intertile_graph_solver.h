@@ -120,8 +120,8 @@ class acal_intertile_solver_lsqr : public vnl_least_squares_function
 //
 class acal_intertile_graph_solver{
 public:
- acal_intertile_graph_solver(): verbose_(false), cam_trans_penalty_(0.05),
-	 levmarq_(vnl_levenberg_marquardt(acal_intertile_solver_lsqr())) {}
+ acal_intertile_graph_solver(): verbose_(false), cam_trans_penalty_(0.05){}
+
   //                                tile_id          cam_id       camera
  acal_intertile_graph_solver(std::map<size_t, std::map<size_t, vpgl_affine_camera<double> > >tile_acams,
                            //       tile_id       track            cam_id        image corr
@@ -135,8 +135,7 @@ public:
                            // max rms projection error for a tile
                            double max_tile_residual = 0.5):
   tile_acams_(tile_acams), tracks_(tracks),seed_cam_ids_(seed_cam_ids), nonseed_cam_ids_(nonseed_cam_ids), cam_inames_(cam_inames),
-    cam_trans_penalty_(cam_trans_penalty), verbose_(false), max_tile_residual_(max_tile_residual),
-    levmarq_(vnl_levenberg_marquardt(acal_intertile_solver_lsqr())){}
+    cam_trans_penalty_(cam_trans_penalty), verbose_(false), max_tile_residual_(max_tile_residual){}
 
   void set_verbose(bool verbose) { verbose_ = verbose; }
   bool solve_least_squares_problem();
