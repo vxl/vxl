@@ -131,17 +131,18 @@ size_t acal_intertile_graph_solver::initialize_lsqr(std::vector<size_t> const& t
 }
 // construct the levenberg_marquardt solver using the least squares cost function
 // hard-coded solution parameters for now. Most values are the same as defaults of the vnl algorithm
-void acal_intertile_graph_solver::construct_levmarq(acal_intertile_solver_lsqr& gc_lsq){
-  levmarq_ = vnl_levenberg_marquardt(gc_lsq);
-  levmarq_.set_verbose(true);
+vnl_levenberg_marquardt acal_intertile_graph_solver::construct_levmarq(acal_intertile_solver_lsqr& gc_lsq){
+  vnl_levenberg_marquardt levmarq = vnl_levenberg_marquardt(gc_lsq);
+  levmarq.set_verbose(true);
   // Set the x-tolerance.  Minimization terminates when the length of the steps taken in X (variables) are less than input x-tolerance
-  levmarq_.set_x_tolerance(1e-13);
+  levmarq.set_x_tolerance(1e-13);
   // Set the epsilon-function.  This is the step length for FD Jacobian
-  levmarq_.set_epsilon_function(0.01);
+  levmarq.set_epsilon_function(0.01);
   // Set the f-tolerance.  Minimization terminates when the successive RSM errors are less then this
-  levmarq_.set_f_tolerance(1e-15);
+  levmarq.set_f_tolerance(1e-15);
   // Set the maximum number of iterations
-  levmarq_.set_max_function_evals(500);
+  levmarq.set_max_function_evals(500);
+  return levmarq;
 }
 // extract the rms residual for each tile,  residuals are for non-seed cameras
 //                  rms error          tile         cam_ids
@@ -233,7 +234,7 @@ bool acal_intertile_graph_solver::solve_least_squares_problem() {
   if (gc_lsq.track_intersect_failed())
     return false;
 
-  construct_levmarq(gc_lsq);
+  vnl_levenberg_marquardt levmarq_ =  construct_levmarq(gc_lsq);
   // Minimize the error and get the best intersection point
   levmarq_.minimize(translations);
   levmarq_.diagnose_outcome();
