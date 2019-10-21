@@ -152,7 +152,7 @@ public:
  private:
  // internal functions
  size_t initialize_lsqr(std::vector<size_t> const& tile_indices, std::set<size_t>& unique_cams);
- void construct_levmarq(acal_intertile_solver_lsqr& gc_lsq);
+ vnl_levenberg_marquardt construct_levmarq(acal_intertile_solver_lsqr& gc_lsq);
  std::vector<std::pair<double, std::pair<size_t, std::set<size_t> > > > cam_residuals(vnl_vector<double> const& residuals);
  std::set<size_t> find_minimum_residual_set(std::vector<std::pair<double, std::pair<size_t, std::set<size_t> > > >& residual_cams,
                                             std::vector<size_t>& tile_indices);
@@ -160,7 +160,7 @@ public:
   bool verbose_;
   double cam_trans_penalty_;
   double max_tile_residual_;
-  vnl_levenberg_marquardt levmarq_;
+  //vnl_levenberg_marquardt levmarq_;
 
   size_t start_indx_cam_trans_residuals_;
 
