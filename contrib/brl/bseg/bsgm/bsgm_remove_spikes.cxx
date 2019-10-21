@@ -62,51 +62,85 @@ bool bsgm_remove_spikes::replace_spikes_with_local_z(bool smooth){
   size_t fi = 0, fj = 0; //filtered image pixel location
   for(int j = r; j<(nj-r);++j){
     fi = 0;
-    for(int i = r; i<(ni-r);++i){
-      float center_z = expanded_input_img_(i, j);
-      zvals.clear();
-      if(prt_&& i==id_ && j == jd_)
-        std::cout << "peak neighbors c = " << center_z << std::endl;
-      std::vector<float> dists;
-      for(int jj = -r; jj<=r; ++jj)
-        for(int ii = -r; ii<=r; ++ii){
-          float v = expanded_input_img_(i + ii, j + jj);
-          if (v!=invalid_z_&&vnl_math::isfinite(v)) {
-            zvals.push_back(v);
-            if (prt_&& i==id_ && j == jd_)
-              std::cout << ii << ' ' << jj << ' ' << v << std::endl;
-          }
+    for (int i = r; i < (ni - r);++i) {
+        float center_z = expanded_input_img_(i, j);
+        zvals.clear();
+        if (prt_ && i == id_ && j == jd_)
+            std::cout << "peak neighbors c = " << center_z << std::endl;
+        std::vector<float> dists;
+        for (int jj = -r; jj <= r; ++jj)
+            for (int ii = -r; ii <= r; ++ii) {
+                float v = expanded_input_img_(i + ii, j + jj);
+                if (v != invalid_z_ && vnl_math::isfinite(v)) {
+                    zvals.push_back(v);
+                    if (prt_ && i == id_ && j == jd_)
+                        std::cout << ii << ' ' << jj << ' ' << v << std::endl;
+                }
+            }
+        std::vector<std::pair<size_t, float> > cluster_cent = this->cluster_centers(zvals, params_.max_k_);
+        n_k_(i, j) = 100.0f * cluster_cent.size();//for display purposes
+        size_t nk = cluster_cent.size();
+        if (prt_ && i == id_ && j == jd_)
+            std::cout << "k clusters " << std::endl;
+        size_t max_n_cent = 0;
+        float max_c = 0.0f;
+        size_t secnd_n_cent = 0;
+        float secnd_c = 0.0f;
+#if 0
+        for (size_t q = 0; q < nk; ++q) {
+            if (cluster_cent[q].first > max_n_cent) {
+                max_n_cent = cluster_cent[q].first;
+                max_c = cluster_cent[q].second;
+            }
         }
-      std::vector<std::pair<size_t, float> > cluster_cent = this->cluster_centers(zvals, params_.max_k_);
-      n_k_(i,j) = 100.0f*cluster_cent.size();
-      size_t nk = cluster_cent.size();
-      if (prt_ && i == id_ && j == jd_)
-       std::cout << "k clusters " << std::endl;
-      size_t max_n_cent = 0;
-      float max_c = 0.0f;
-      for (size_t q = 0; q < nk; ++q) {
-          if (cluster_cent[q].first > max_n_cent) {
-              max_n_cent = cluster_cent[q].first;
-              max_c = cluster_cent[q].second;
-          }
-          if (prt_ && i == id_ && j == jd_) 
-              std::cout << cluster_cent[q].second << ' '<< cluster_cent[q].first << std::endl;
+#endif
+        std::sort(cluster_cent.begin(), cluster_cent.end(), clust_greater());
+        if (cluster_cent.size() > 0) {
+            max_n_cent = cluster_cent[0].first;
+            max_c = cluster_cent[0].second;
+        }
+        if (cluster_cent.size() > 1) {
+            secnd_n_cent = cluster_cent[1].first;
+            secnd_c = cluster_cent[1].second;
+        }
+        double frst_secnd_pop = double(max_n_cent + secnd_n_cent);
+        double frst_secnd_pop_frac = frst_secnd_pop / double(zvals.size());
+        double secnd_vs_frst_pop_frac = double(secnd_n_cent) / double(max_n_cent);
+        bool compare_frst_and_secnd = frst_secnd_pop_frac >= 0.8;
+        compare_frst_and_secnd = compare_frst_and_secnd && secnd_vs_frst_pop_frac > 0.2;
+      if (prt_ && i == id_ && j == jd_){
+        for (size_t q = 0; q < nk; ++q)
+          std::cout << cluster_cent[q].second << ' '<< cluster_cent[q].first << std::endl;
       }
-      float d = 0.0f;
+      float d1 = std::numeric_limits<float>::max(), d = d1;
       if (center_z!=invalid_z_&&vnl_math::isfinite(center_z) && max_n_cent > 1) {
-        if(smooth) // always replace z with max_c
-          filtered_img_(fi,fj) = max_c;
-        else{// set z  max_c only if not close to largest cluster mean (i.e. a spike)
-          d = fabs(center_z - max_c);
+        if(smooth){ // always replace z with largest or second largest cluster mean
+          d = fabs(center_z - max_c);//distance to largest cluster mean
+          filtered_img_(fi, fj) = max_c;
+          if (compare_frst_and_secnd) {
+            d1 = fabs(center_z - secnd_c);// distance to second largest cluster mean
+            if (d1 < d)
+              filtered_img_(fi,fj) = secnd_c;//apply second mean
+          }
+        }else{// set z = max_c only if center is not close
+              //to largest or second largest cluster mean (i.e. a spike)
+          float closest_mean = max_c;
+          d = fabs(center_z - max_c); //largest cluster center distance
+          if (compare_frst_and_secnd) {
+              d1 = fabs(center_z - secnd_c);// second largest cluster center distance
+              if (d1 < d) {
+                  d = d1; //use second largest
+                  closest_mean = secnd_c;
+              }
+          }
           if (d < params_.cluster_tol_)
               filtered_img_(fi, fj) = center_z;
           else 
-              filtered_img_(fi, fj) = max_c;
+              filtered_img_(fi, fj) = closest_mean;
+          }
         }
-      }
       if (prt_ && i == id_ && j == jd_)
         std::cout << "max result " << max_c << ' ' << max_n_cent << ' '<< d<< std::endl;
-      
       fi++;
     }
     fj++;
