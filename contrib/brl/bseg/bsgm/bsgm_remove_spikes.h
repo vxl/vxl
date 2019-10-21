@@ -25,6 +25,14 @@ remove_spikes_params():nbrhd_radius_(3), max_k_(5), cluster_tol_(1.0f){}
   //: tolerance in z to belong to a cluster
   float cluster_tol_;
 };
+class clust_greater{
+ public:
+  clust_greater(){}
+  bool operator () (std::pair<size_t, float> const& a, std::pair<size_t, float> const& b)
+  {
+    return a.first > b.first;
+  }
+};
 class bsgm_remove_spikes{
  public:
  bsgm_remove_spikes(vil_image_view<float> const& input_img): input_img_(input_img), invalid_z_(0.0f), prt_(false), id_(0), jd_(0) {}
