@@ -17,7 +17,7 @@ set(ACAL_SOURCES
   acal_match_tree.cxx             acal_match_tree.h
   acal_match_graph.cxx            acal_match_graph.h
   acal_match_tree_solver.cxx      acal_match_tree_solver.h
-  acal_intertile_graph_solver.cxx acal_intertile_graph_solver.h      
+  acal_intertile_graph_solver.cxx acal_intertile_graph_solver.h
   acal_solution_error.h
   acal_metadata.h
   acal_planar_feature_matcher.h   acal_planar_feature_matcher.cxx
