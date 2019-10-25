@@ -83,16 +83,14 @@ public:
     for (unsigned i=0; i<num_neighbors; ++i) {
       vgl_point_2d<T> const& neighbor_loc(neighbor_locs[i]);
       T dist = (neighbor_locs[i] - loc).length();
-      if (dist > max_dist_) {
-        dist = 0;
-      }
-      else {
+      T weight = 0;
+      if (dist <= max_dist_) {
+        if (dist < eps) {
+          dist = eps;
+        }
+        weight = 1.0 / dist;
         ++num_valid_neighbors;
       }
-      if (dist < eps) {
-        dist = eps;
-      }
-      T weight = 1.0 / dist;
       A[i][0] = weight * neighbor_loc.x();
       A[i][1] = weight * neighbor_loc.y();
       A[i][2] = weight;
@@ -101,7 +99,14 @@ public:
     if (num_valid_neighbors < 3) {
       return invalid_val_;
     }
-    vnl_vector<T> f = vnl_matrix_inverse<T>(A) * b;
+    // employ Tikhonov Regularization to cope with degenerate point configurations
+    vnl_matrix<T> R(3, 3, 0);
+    const T reg_const = 1e-3;
+    for (int d=0; d<3; ++d) {
+      R[d][d] = reg_const;
+    }
+    vnl_matrix<T> A_transpose = A.transpose();
+    vnl_vector<T> f = vnl_matrix_inverse<T>(A_transpose*A + R.transpose()*R)*A_transpose * b;
     DATA_T value = f[0]*loc.x() + f[1]*loc.y() + f[2];
     return value;
   }
