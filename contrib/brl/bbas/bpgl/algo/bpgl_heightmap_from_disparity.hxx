@@ -3,7 +3,6 @@
 #define bpgl_heightmap_from_disparity_hxx_
 
 #include "bpgl_3d_from_disparity.h"
-
 #include "bpgl_heightmap_from_disparity.h"
 #include "bpgl_gridding.h"
 
@@ -11,234 +10,239 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_box_2d.h>
 
-//: compute the heightmap given that triangulated 3-d data is available
-template<class CAM_T>
-vil_image_view<float>
-bpgl_heightmap_from_tri_image(CAM_T const& cam1, CAM_T const& cam2, vil_image_view<float> const& tri_image_3d,
-                              vgl_box_3d<double> heightmap_bounds,
-                              double ground_sample_distance)
+// main convenience function - transform disparity to heightmap
+template<class T, class CAM_T>
+vil_image_view<T> bpgl_heightmap_from_disparity(
+    CAM_T const& cam1,
+    CAM_T const& cam2,
+    vil_image_view<T> const& disparity,
+    vgl_box_3d<T> heightmap_bounds,
+    T ground_sample_distance)
 {
-  // put triangulated points into a vector
-  std::vector<vgl_point_2d<double>> triangulated_xy;
-  std::vector<float> height_vals;
+  // triangulated image
+  vil_image_view<T> tri_3d = bpgl_3d_from_disparity(cam1, cam2, disparity);
 
-  const float min_z = heightmap_bounds.min_z();
-  const float max_z = heightmap_bounds.max_z();
+  // convert triangulated image to heightmap
+  bpgl_heightmap<T> bh(heightmap_bounds, ground_sample_distance);
+  vil_image_view<T> heightmap_output;
+  bh.heightmap_from_tri(tri_3d, heightmap_output);
 
-  for (size_t j=0; j<tri_image_3d.nj(); ++j) {
-    for (size_t i=0; i<tri_image_3d.ni(); ++i) {
-      if (vnl_math::isfinite(tri_image_3d(i,j,0)) &&
-          vnl_math::isfinite(tri_image_3d(i,j,1)) &&
-          vnl_math::isfinite(tri_image_3d(i,j,2)) ) {
-        const float z = tri_image_3d(i,j,2);
-        if ((z < min_z) || (z > max_z)) {
+  // cleanup
+  return heightmap_output;
+}
+
+
+// ----------
+// 3D pointset from triangulated input
+// compute 3D pointset using disparity to triangulate 3D data
+// ----------
+
+// no scalar added to pointset
+template<class T>
+void bpgl_heightmap<T>::pointset_from_tri(
+    const vil_image_view<T>& tri_3d,
+    vgl_pointset_3d<T>& ptset_output)
+{
+  vil_image_view<T> empty_scalar;
+  this->_pointset_from_tri(
+      tri_3d, empty_scalar, ptset_output, true);
+}
+
+// add scalar to pointset
+template<class T>
+void bpgl_heightmap<T>::pointset_from_tri(
+    const vil_image_view<T>& tri_3d,
+    const vil_image_view<T>& scalar,
+    vgl_pointset_3d<T>& ptset_output)
+{
+  this->_pointset_from_tri(
+      tri_3d, scalar, ptset_output, false);
+}
+
+// private function, scalar usage controlled by "ignore_scalar"
+template<class T>
+void bpgl_heightmap<T>::_pointset_from_tri(
+    const vil_image_view<T>& tri_3d,
+    const vil_image_view<T>& scalar,
+    vgl_pointset_3d<T>& ptset_output,
+    bool ignore_scalar)
+{
+  // add triangulated points to pointset
+  for (size_t j=0; j < tri_3d.nj(); ++j) {
+    for (size_t i=0; i < tri_3d.ni(); ++i) {
+      if (vnl_math::isfinite(tri_3d(i,j,0)) &&
+          vnl_math::isfinite(tri_3d(i,j,1)) &&
+          vnl_math::isfinite(tri_3d(i,j,2)) )
+      {
+        // confirm 3D point is within bounds
+        vgl_point_3d<T> point(tri_3d(i,j,0), tri_3d(i,j,1), tri_3d(i,j,2));
+        if(!_heightmap_bounds.contains(point))
           continue;
+
+        // add point/scalar to pointset
+        if (ignore_scalar) {
+          ptset_output.add_point(point);
+        } else {
+          T value = scalar(i,j);
+          ptset_output.add_point_with_scalar(point, value);
         }
-        // x,y goes in ground samples
-        triangulated_xy.emplace_back(tri_image_3d(i,j,0),
-                                     tri_image_3d(i,j,1));
-        // z coordinates are what we want to grid
-        height_vals.push_back(z);
       }
     }
   }
 
-  vgl_point_2d<double> upper_left(heightmap_bounds.min_x(), heightmap_bounds.max_y());
+}
 
-  // set ni,nj such that image contains all samples within bounds, inclusive
-  size_t ni = static_cast<unsigned>(std::floor(heightmap_bounds.width() / ground_sample_distance + 1));
-  size_t nj = static_cast<unsigned>(std::floor(heightmap_bounds.height() / ground_sample_distance + 1));
-  unsigned num_neighbors = 3;
 
-  // grid the 3D points into a DSM
-  bpgl_gridding::linear_interp<double, float> interp_fun(ground_sample_distance*3, NAN);
-  vil_image_view<float> hmap = bpgl_gridding::grid_data_2d(triangulated_xy, height_vals,
-                                                           upper_left, ni, nj, ground_sample_distance,
-                                                           interp_fun, num_neighbors);
+// ----------
+// Heightmap from 3D pointset
+// Transform 3D pointset to 2D heightmap
+// ----------
 
-  // final bounds check to remove outliers
+// without scalar output
+template<class T>
+void bpgl_heightmap<T>::heightmap_from_pointset(
+    const vgl_pointset_3d<T>& ptset,
+    vil_image_view<T>& heightmap_output)
+{
+  vil_image_view<T> empty_scalar_output;
+  this->_heightmap_from_pointset(
+      ptset, heightmap_output, empty_scalar_output, true);
+}
+
+// with scalar output
+template<class T>
+void bpgl_heightmap<T>::heightmap_from_pointset(
+    const vgl_pointset_3d<T>& ptset,
+    vil_image_view<T>& heightmap_output,
+    vil_image_view<T>& scalar_output)
+{
+  this->_heightmap_from_pointset(
+      ptset, heightmap_output, scalar_output, false);
+}
+
+// private function, scalar usage controlled by "ignore_scalar"
+template<class T>
+void bpgl_heightmap<T>::_heightmap_from_pointset(
+    const vgl_pointset_3d<T>& ptset,
+    vil_image_view<T>& heightmap_output,
+    vil_image_view<T>& scalar_output,
+    bool ignore_scalar)
+{
+  // pointset as vectors
+  std::vector<vgl_point_2d<T> > triangulated_xy;
+  std::vector<T> height_vals;
+
+  for (const auto& point_3d : ptset.points()) {
+    vgl_point_2d<T> point_2d(point_3d.x(), point_3d.y());
+    triangulated_xy.emplace_back(point_2d);
+    height_vals.emplace_back(point_3d.z());
+  }
+
+  // image upper left & size
+  // image must contain all samples within bounds, inclusive
+  vgl_point_2d<T> upper_left(_heightmap_bounds.min_x(), _heightmap_bounds.max_y());
+  size_t ni = static_cast<size_t>(std::floor(_heightmap_bounds.width() / _ground_sample_distance + 1));
+  size_t nj = static_cast<size_t>(std::floor(_heightmap_bounds.height() / _ground_sample_distance + 1));
+
+  // gridding arguments
+  unsigned num_neighbors = 5;
+  T max_dist = 3.0 * _ground_sample_distance;
+  bpgl_gridding::linear_interp<T, T> interp_fun(max_dist, NAN);
+
+  // heightmap gridding
+  heightmap_output = bpgl_gridding::grid_data_2d(
+      triangulated_xy, height_vals,
+      upper_left, ni, nj, _ground_sample_distance,
+      interp_fun, num_neighbors);
+
+  // bounds check to remove outliers
+  T min_z = _heightmap_bounds.min_z();
+  T max_z = _heightmap_bounds.max_z();
+
   for (int j=0; j<nj; ++j) {
     for (int i=0; i<ni; ++i) {
-      if ((hmap(i,j) < min_z) || (hmap(i,j) > max_z)) {
-        hmap(i,j) = NAN;
+      if ((heightmap_output(i,j) < min_z) || (heightmap_output(i,j) > max_z)) {
+        heightmap_output(i,j) = NAN;
       }
     }
   }
 
-  return hmap;
-}
+  // scalar interpolation
+  if (!ignore_scalar) {
 
-//: compute the heightmap using dispairity to compute the triangulated 3-d data
-template<class CAM_T>
-vil_image_view<float>
-bpgl_heightmap_from_disparity(CAM_T const& cam1, CAM_T const& cam2,
-                              vil_image_view<float> const& disparity, vgl_box_3d<double> heightmap_bounds,
-                              double ground_sample_distance)
-{
-  // convert disparity to set of 3D points
-  vil_image_view<float> triangulated = bpgl_3d_from_disparity(cam1, cam2, disparity);
-  return bpgl_heightmap_from_tri_image(cam1, cam2, triangulated, heightmap_bounds, ground_sample_distance);
-}
+    // get scalar values
+    std::vector<T> scalar_vals;
+    for (size_t i; i<ptset.npts(); i++) {
+      scalar_vals.emplace_back(ptset.sc(i));
+    }
 
-//: compute the heightmap and scalar map given that triangulated 3-d data is available
-template<class CAM_T>
-void bpgl_heightmap_with_scalar_from_tri_image(CAM_T const& cam1, CAM_T const& cam2,
-                                               vil_image_view<float> const& tri_image_3d, vil_image_view<float> scalar,
-                                               vgl_box_3d<double> heightmap_bounds, double ground_sample_distance,
-                                               vil_image_view<float>& heightmap, vil_image_view<float>& scalar_map)
-{
-  // put triangulated points into a vector
-  std::vector<vgl_point_2d<double>> triangulated_xy;
-  std::vector<float> height_vals, scalar_vals;
+    // scalar gridding
+    scalar_output = bpgl_gridding::grid_data_2d(
+        triangulated_xy, scalar_vals,
+        upper_left, ni, nj, _ground_sample_distance,
+        interp_fun, num_neighbors);
 
-  const float min_z = heightmap_bounds.min_z();
-  const float max_z = heightmap_bounds.max_z();
-  for (size_t j=0; j<tri_image_3d.nj(); ++j) {
-    for (size_t i=0; i<tri_image_3d.ni(); ++i) {
-      if (vnl_math::isfinite(tri_image_3d(i,j,0)) &&
-          vnl_math::isfinite(tri_image_3d(i,j,1)) &&
-          vnl_math::isfinite(tri_image_3d(i,j,2)) &&
-          vnl_math::isfinite(tri_image_3d(i,j,3))
-          ) {
-        const float z = tri_image_3d(i,j,2);
-        const float s = tri_image_3d(i,j,3);
-        if ((z < min_z) || (z > max_z)) {
-          continue;
+    // remove scalar without corresponding height
+    for (int j=0; j<nj; ++j) {
+      for (int i=0; i<ni; ++i) {
+        if (!vnl_math::isfinite(heightmap_output(i,j))) {
+          scalar_output(i,j) = NAN;
         }
-        // x,y goes in ground samples
-        triangulated_xy.emplace_back(tri_image_3d(i,j,0),
-                                     tri_image_3d(i,j,1));
-        // z coordinates are what we want to grid
-        height_vals.push_back(z);
-        scalar_vals.push_back(s);
       }
     }
-  }
-  vgl_point_2d<double> upper_left(heightmap_bounds.min_x(), heightmap_bounds.max_y());
 
-  // set ni,nj such that image contains all samples within bounds, inclusive
-  size_t ni = static_cast<unsigned>(std::floor(heightmap_bounds.width() / ground_sample_distance + 1));
-  size_t nj = static_cast<unsigned>(std::floor(heightmap_bounds.height() / ground_sample_distance + 1));
-  unsigned num_neighbors = 5; //need more smoothing for prob values (compare to 3 for z vals)
+  } // end scalar interpolation
 
-  // grid the 3D points into a DSM
-  bpgl_gridding::linear_interp<double, float> interp_fun(ground_sample_distance*3, NAN);
-
-  heightmap = bpgl_gridding::grid_data_2d(triangulated_xy, height_vals,
-                                          upper_left, ni, nj, ground_sample_distance,
-                                          interp_fun, num_neighbors);
-
-  // final bounds check to remove outliers
-  for (int j=0; j<nj; ++j) {
-    for (int i=0; i<ni; ++i) {
-      if ((heightmap(i,j) < min_z) || (heightmap(i,j) > max_z)) {
-        heightmap(i,j) = NAN;
-      }
-    }
-  }
-  scalar_map = bpgl_gridding::grid_data_2d(triangulated_xy, scalar_vals,
-                                           upper_left, ni, nj, ground_sample_distance,
-                                           interp_fun, num_neighbors);
 }
 
-//: compute the heightmap and scalar map using disparity to compute triangulated 3-d data
-template<class CAM_T>
-void bpgl_heightmap_with_scalar_from_disparity(CAM_T const& cam1, CAM_T const& cam2,
-                                               vil_image_view<float> const& disparity, vil_image_view<float> scalar,
-                                               vgl_box_3d<double> heightmap_bounds, double ground_sample_distance,
-                                               vil_image_view<float>& heightmap, vil_image_view<float>& scalar_map)
+
+// ----------
+// Heightmap from triangulated input
+// Convert triangulated input directly to heigtmap
+// ----------
+
+// without scalar output
+template<class T>
+void bpgl_heightmap<T>::heightmap_from_tri(
+    const vil_image_view<T>& tri_3d,
+    vil_image_view<T>& heightmap_output)
 {
-  // convert disparity to set of 3D points
-  vil_image_view<float> triangulated = bpgl_3d_from_disparity_with_scalar(cam1, cam2, disparity, scalar);
-  bpgl_heightmap_with_scalar_from_tri_image(cam1, cam2, triangulated, scalar, heightmap_bounds, ground_sample_distance,
-                                            heightmap, scalar_map);
+  vgl_pointset_3d<T> ptset;
+  this->pointset_from_tri(
+      tri_3d, ptset);
+  this->heightmap_from_pointset(
+      ptset, heightmap_output);
 }
 
-//:compute the 3-d pointset given that triangulated 3-d data is available
-template<class pointT, class CAM_T>
-void bpgl_pointset_from_tri_image(CAM_T const& cam1, CAM_T const& cam2,
-                                  vil_image_view<float> const& tri_image_3d,
-                                  vgl_box_3d<pointT> heightmap_bounds,
-                                  std::vector<vgl_point_3d<pointT> >& ptset)
+// with scalar output
+template<class T>
+void bpgl_heightmap<T>::heightmap_from_tri(
+    const vil_image_view<T>& tri_3d,
+    const vil_image_view<T>& scalar,
+    vil_image_view<T>& heightmap_output,
+    vil_image_view<T>& scalar_output)
 {
-  ptset.clear();
-  vgl_box_2d<pointT> bounds_2d;
-  vgl_point_2d<pointT> pmin(heightmap_bounds.min_x(), heightmap_bounds.min_y());
-  vgl_point_2d<pointT> pmax(heightmap_bounds.max_x(), heightmap_bounds.max_y());
-  bounds_2d.add(pmin);   bounds_2d.add(pmax);
-
-  // put triangulated points into a vector
-  std::vector<vgl_point_2d<float> > triangulated_xy;
-  std::vector<float> height_vals;
-
-  const float min_z = heightmap_bounds.min_z();
-  const float max_z = heightmap_bounds.max_z();
-
-  for (size_t j=0; j<tri_image_3d.nj(); ++j) {
-    for (size_t i=0; i<tri_image_3d.ni(); ++i) {
-      if (vnl_math::isfinite(tri_image_3d(i,j,0)) &&
-          vnl_math::isfinite(tri_image_3d(i,j,1)) &&
-          vnl_math::isfinite(tri_image_3d(i,j,2)) ) {
-        const float z = tri_image_3d(i,j,2);
-        if ((z < min_z) || (z > max_z)) {
-          continue;
-        }
-        pointT x = static_cast<pointT>(tri_image_3d(i, j, 0));
-        pointT y = static_cast<pointT>(tri_image_3d(i, j, 1));
-        vgl_point_2d<pointT> pxy(x, y);
-        if(!bounds_2d.contains(pxy))
-          continue;
-        ptset.emplace_back(x, y, z);
-      }
-    }
-  }
+  vgl_pointset_3d<T> ptset;
+  this->pointset_from_tri(
+      tri_3d, scalar, ptset);
+  this->heightmap_from_pointset(
+      ptset, heightmap_output, scalar_output);
 }
 
-//: compute the 3-d pointset using disparity to compute triangulated 3-d data
-template<class pointT, class CAM_T>
-void bpgl_pointset_from_disparity(CAM_T const& cam1, CAM_T const& cam2,
-                                  vil_image_view<float> const& disparity,
-                                  vgl_box_3d<pointT> heightmap_bounds,
-                                  std::vector<vgl_point_3d<pointT> >& ptset)
-{
-  ptset.clear();
-  vgl_box_2d<pointT> bounds_2d;
-  vgl_point_2d<pointT> pmin(heightmap_bounds.min_x(), heightmap_bounds.min_y());
-  vgl_point_2d<pointT> pmax(heightmap_bounds.max_x(), heightmap_bounds.max_y());
-  bounds_2d.add(pmin);   bounds_2d.add(pmax);
-  // convert disparity to set of 3D points
-  vil_image_view<float> triangulated = bpgl_3d_from_disparity(cam1, cam2, disparity);
-  bpgl_pointset_from_tri_image(cam1, cam2, triangulated, heightmap_bounds, ptset);
-}
 
-#define BPGL_HEIGHTMAP_FROM_DISPARITY_INSTANIATE(CAM_T) \
-template vil_image_view<float>                                          \
-bpgl_heightmap_from_tri_image<CAM_T>(CAM_T const& cam1, CAM_T const& cam2, \
-                                     vil_image_view<float> const& tri_image, \
-                                     vgl_box_3d<double> heightmap_bounds, \
-                                     double ground_sample_distance);    \
-template vil_image_view<float>                                          \
-bpgl_heightmap_from_disparity<CAM_T>(CAM_T const& cam1, CAM_T const& cam2, \
-                                     vil_image_view<float> const& disparity, \
-                                     vgl_box_3d<double> heightmap_bounds, \
-                                     double ground_sample_distance);    \
-template void bpgl_heightmap_with_scalar_from_tri_image<CAM_T>(CAM_T const& cam1, CAM_T const& cam2, \
-                                               vil_image_view<float> const& tri_image, vil_image_view<float> scalar,\
-                                               vgl_box_3d<double> heightmap_bounds, double ground_sample_distance,\
-                                               vil_image_view<float>& heightmap, vil_image_view<float>& scalar_map); \
-template void bpgl_heightmap_with_scalar_from_disparity<CAM_T>(CAM_T const& cam1, CAM_T const& cam2, \
-                                               vil_image_view<float> const& disparity, vil_image_view<float> scalar,\
-                                               vgl_box_3d<double> heightmap_bounds, double ground_sample_distance,\
-                                               vil_image_view<float>& heightmap, vil_image_view<float>& scalar_map)
+// ----------
+// CLEANUP
+// ----------
 
+// macro for Templates usage
+#undef BPGL_HEIGHTMAP_FROM_DISPARITY_INSTANIATE
+#define BPGL_HEIGHTMAP_FROM_DISPARITY_INSTANIATE(T, CAM_T) \
+template vil_image_view<T> bpgl_heightmap_from_disparity<T, CAM_T>( \
+    CAM_T const& cam1, \
+    CAM_T const& cam2, \
+    vil_image_view<T> const& disparity, \
+    vgl_box_3d<T> heightmap_bounds, \
+    T ground_sample_distance); \
+template class bpgl_heightmap<T>
 
-#define BPGL_POINTSET_FROM_DISPARITY_INSTANIATE(CAM_T, pointT)          \
-template void bpgl_pointset_from_tri_image(CAM_T const& cam1, CAM_T const& cam2, \
-                                           vil_image_view<float> const& tri_image_3d, \
-                                           vgl_box_3d<pointT> heightmap_bounds, \
-                                           std::vector<vgl_point_3d<pointT> >& ); \
-template void bpgl_pointset_from_disparity(CAM_T const& cam1, CAM_T const& cam2, \
-                                           vil_image_view<float> const& disparity, \
-                                           vgl_box_3d<pointT> heightmap_bounds, \
-                                           std::vector<vgl_point_3d<pointT> >& )
 #endif
