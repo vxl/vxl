@@ -41,15 +41,15 @@ bool bpgl_heightmap_from_disparity_process_cons(bprb_func_process& pro)
   input_types_.emplace_back("vpgl_camera_double_sptr"); // vpgl_affine_camera<double> camera 1
   input_types_.emplace_back("vpgl_camera_double_sptr"); // vpgl_affine_camera<double> camera 2
   input_types_.emplace_back("vil_image_view_base_sptr"); // vil_image_view<float> disparity
-  input_types_.emplace_back("double"); // min point x (e.g. lower left corner of a scene bbox)
-  input_types_.emplace_back("double"); // min point y
-  input_types_.emplace_back("double"); // min point z
-  input_types_.emplace_back("double"); // max point x (e.g. upper right corner of a scene bbox)
-  input_types_.emplace_back("double"); // max point y
-  input_types_.emplace_back("double"); // max point z
-  input_types_.emplace_back("double"); // ground sample distance
-  input_types_.emplace_back("double"); // minimum disparity
-  input_types_.emplace_back("double"); // z-offset
+  input_types_.emplace_back("float"); // min point x (e.g. lower left corner of a scene bbox)
+  input_types_.emplace_back("float"); // min point y
+  input_types_.emplace_back("float"); // min point z
+  input_types_.emplace_back("float"); // max point x (e.g. upper right corner of a scene bbox)
+  input_types_.emplace_back("float"); // max point y
+  input_types_.emplace_back("float"); // max point z
+  input_types_.emplace_back("float"); // ground sample distance
+  input_types_.emplace_back("float"); // minimum disparity
+  input_types_.emplace_back("float"); // z-offset
 
   std::vector<std::string> output_types_;
   output_types_.emplace_back("vil_image_view_base_sptr"); // vil_image_view<float> heightmap
@@ -73,15 +73,15 @@ bool bpgl_heightmap_from_disparity_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera1_sptr = pro.get_input<vpgl_camera_double_sptr>(i++);
   vpgl_camera_double_sptr camera2_sptr = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr disparity_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  auto min_x = pro.get_input<double>(i++);
-  auto min_y = pro.get_input<double>(i++);
-  auto min_z = pro.get_input<double>(i++);
-  auto max_x = pro.get_input<double>(i++);
-  auto max_y = pro.get_input<double>(i++);
-  auto max_z = pro.get_input<double>(i++);
-  auto gsd = pro.get_input<double>(i++);
-  auto min_disparity = pro.get_input<double>(i++);
-  auto z_offset = pro.get_input<double>(i++);
+  auto min_x = pro.get_input<float>(i++);
+  auto min_y = pro.get_input<float>(i++);
+  auto min_z = pro.get_input<float>(i++);
+  auto max_x = pro.get_input<float>(i++);
+  auto max_y = pro.get_input<float>(i++);
+  auto max_z = pro.get_input<float>(i++);
+  auto gsd = pro.get_input<float>(i++);
+  auto min_disparity = pro.get_input<float>(i++);
+  auto z_offset = pro.get_input<float>(i++);
 
   // convert cameras
   auto* camera1_ptr = dynamic_cast<vpgl_affine_camera<double>*> (camera1_sptr.as_pointer());
@@ -120,7 +120,7 @@ bool bpgl_heightmap_from_disparity_process(bprb_func_process& pro)
   }
 
   // bounding box
-  vgl_box_3d<double> heightmap_bounds(min_x,min_y,min_z, max_x,max_y,max_z);
+  vgl_box_3d<float> heightmap_bounds(min_x,min_y,min_z, max_x,max_y,max_z);
 
   // process
   vil_image_view<float> heightmap;
@@ -140,7 +140,7 @@ bool bpgl_heightmap_from_disparity_process(bprb_func_process& pro)
       if (!vnl_math::isfinite(heightmap(i,j))) {
         heightmap(i,j) = -9999.0;
       } else {
-        heightmap(i,j) += (float)z_offset;
+        heightmap(i,j) += z_offset;
       }
     }
   }
