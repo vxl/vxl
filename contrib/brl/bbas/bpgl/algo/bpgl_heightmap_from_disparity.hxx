@@ -233,7 +233,11 @@ void bpgl_heightmap<T>::heightmap_from_tri(
 // CLEANUP
 // ----------
 
-// macro for Templates usage
+// macros for Templates
+#undef BPGL_HEIGHTMAP_INSTANIATE
+#define BPGL_HEIGHTMAP_INSTANIATE(T) \
+template class bpgl_heightmap<T>
+
 #undef BPGL_HEIGHTMAP_FROM_DISPARITY_INSTANIATE
 #define BPGL_HEIGHTMAP_FROM_DISPARITY_INSTANIATE(T, CAM_T) \
 template vil_image_view<T> bpgl_heightmap_from_disparity<T, CAM_T>( \
@@ -241,7 +245,6 @@ template vil_image_view<T> bpgl_heightmap_from_disparity<T, CAM_T>( \
     CAM_T const& cam2, \
     vil_image_view<T> const& disparity, \
     vgl_box_3d<T> heightmap_bounds, \
-    T ground_sample_distance); \
-template class bpgl_heightmap<T>
+    T ground_sample_distance)
 
 #endif
