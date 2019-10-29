@@ -8,7 +8,6 @@
 
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_box_2d.h>
 
 // main convenience function - transform disparity to heightmap
 template<class T, class CAM_T>
@@ -67,6 +66,11 @@ void bpgl_heightmap<T>::_pointset_from_tri(
     vgl_pointset_3d<T>& ptset_output,
     bool ignore_scalar)
 {
+  // bounds with tolerance (avoid any floating point error in comparison)
+  T tol = 1e-3;
+  auto bounds_with_tolerance = _heightmap_bounds;
+  bounds_with_tolerance.expand_about_centroid(tol);
+
   // add triangulated points to pointset
   for (size_t j=0; j < tri_3d.nj(); ++j) {
     for (size_t i=0; i < tri_3d.ni(); ++i) {
@@ -76,7 +80,7 @@ void bpgl_heightmap<T>::_pointset_from_tri(
       {
         // confirm 3D point is within bounds
         vgl_point_3d<T> point(tri_3d(i,j,0), tri_3d(i,j,1), tri_3d(i,j,2));
-        if(!_heightmap_bounds.contains(point))
+        if(!bounds_with_tolerance.contains(point))
           continue;
 
         // add point/scalar to pointset
