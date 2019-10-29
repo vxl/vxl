@@ -60,8 +60,18 @@ class bpgl_heightmap
     }
 
     vgl_box_3d<T> heightmap_bounds() const { return _heightmap_bounds; }
-    void set_heightmap_bounds(vgl_box_3d<T> hb) {
-      _heightmap_bounds = hb;
+    void set_heightmap_bounds(vgl_box_3d<T> heightmap_bounds) {
+      _heightmap_bounds = heightmap_bounds;
+    }
+
+    T neighbor_dist_factor() const { return _neighbor_dist_factor; }
+    void set_neighbor_dist_factor(T neighbor_dist_factor) {
+      _neighbor_dist_factor = neighbor_dist_factor;
+    }
+
+    unsigned num_neighbors() const { return _num_neighbors; }
+    void set_num_neighbors(unsigned num_neighbors) {
+      _num_neighbors = num_neighbors;
     }
 
     //: compute pointset from triangulated image
@@ -119,6 +129,10 @@ class bpgl_heightmap
     // parameters
     vgl_box_3d<T> _heightmap_bounds;
     T _ground_sample_distance;
+
+    // gridding parameters
+    T _neighbor_dist_factor = 3.0;
+    unsigned _num_neighbors = 3;
 
 };
 
