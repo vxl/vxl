@@ -6,10 +6,11 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 
-template<typename DISP_T>
-vil_image_view<float> bpgl_3d_from_disparity(vpgl_affine_camera<double> const& cam1,
-                                             vpgl_affine_camera<double> const& cam2,
-                                             vil_image_view<DISP_T> const& disparity)
+template<typename T>
+vil_image_view<T> bpgl_3d_from_disparity(
+    vpgl_affine_camera<double> const& cam1,
+    vpgl_affine_camera<double> const& cam2,
+    vil_image_view<T> const& disparity)
 {
   // create matrix inverse of stacked affine projection matrices
   vnl_matrix_fixed<double,3,4> P1(cam1.get_matrix());
@@ -25,7 +26,7 @@ vil_image_view<float> bpgl_3d_from_disparity(vpgl_affine_camera<double> const& c
 
   const unsigned int ni = disparity.ni();
   const unsigned int nj = disparity.nj();
-  vil_image_view<float> img3d(ni, nj, 3);
+  vil_image_view<T> img3d(ni, nj, 3);
   for (size_t j=0; j<nj; ++j) {
     for (size_t i=0; i<ni; ++i) {
       //4-30-2019 jlm changed i - disparity to i + disparity to be consistent with
@@ -44,17 +45,19 @@ vil_image_view<float> bpgl_3d_from_disparity(vpgl_affine_camera<double> const& c
         x = invA * b;
       }
       for (int d=0; d<3; ++d) {
-        img3d(i,j,d) = x[d];
+        img3d(i,j,d) = T(x[d]);
       }
     }
   }
   return img3d;
 }
-template<typename DISP_T>
-vil_image_view<float> bpgl_3d_from_disparity_with_scalar(vpgl_affine_camera<double> const& cam1,
-                                                         vpgl_affine_camera<double> const& cam2,
-                                                         vil_image_view<DISP_T> const& disparity,
-                                                         vil_image_view<DISP_T> const& scalar)
+
+template<typename T>
+vil_image_view<T> bpgl_3d_from_disparity_with_scalar(
+    vpgl_affine_camera<double> const& cam1,
+    vpgl_affine_camera<double> const& cam2,
+    vil_image_view<T> const& disparity,
+    vil_image_view<T> const& scalar)
 {
   // create matrix inverse of stacked affine projection matrices
   vnl_matrix_fixed<double,3,4> P1(cam1.get_matrix());
@@ -70,7 +73,7 @@ vil_image_view<float> bpgl_3d_from_disparity_with_scalar(vpgl_affine_camera<doub
 
   const unsigned int ni = disparity.ni();
   const unsigned int nj = disparity.nj();
-  vil_image_view<float> img3d(ni, nj, 4);
+  vil_image_view<T> img3d(ni, nj, 4);
   for (size_t j=0; j<nj; ++j) {
     for (size_t i=0; i<ni; ++i) {
       //4-30-2019 jlm changed i - disparity to i + disparity to be consistent with
@@ -89,22 +92,26 @@ vil_image_view<float> bpgl_3d_from_disparity_with_scalar(vpgl_affine_camera<doub
         x = invA * b;
       }
       for (int d=0; d<3; ++d) {
-        img3d(i,j,d) = x[d];
+        img3d(i,j,d) = T(x[d]);
       }
       img3d(i,j,3) = scalar(i,j);
     }
   }
   return img3d;
 }
+
 // explicit template instantiations macro
-#define BPGL_3D_FROM_DISPARITY_INSTANIATE(DISP_T) \
-template vil_image_view<float> \
-bpgl_3d_from_disparity<DISP_T>(vpgl_affine_camera<double> const& cam1, \
-                               vpgl_affine_camera<double> const& cam2, \
-                               vil_image_view<DISP_T> const& disparity);\
-template vil_image_view<float> \
- bpgl_3d_from_disparity_with_scalar<DISP_T>(vpgl_affine_camera<double> const& cam1,\
-                                            vpgl_affine_camera<double> const& cam2,\
-                                            vil_image_view<DISP_T> const& disparity,\
-                                            vil_image_view<DISP_T> const& scalar)
+#define BPGL_3D_FROM_DISPARITY_INSTANIATE(T) \
+template vil_image_view<T> \
+bpgl_3d_from_disparity<T>( \
+    vpgl_affine_camera<double> const& cam1, \
+    vpgl_affine_camera<double> const& cam2, \
+    vil_image_view<T> const& disparity);\
+template vil_image_view<T> \
+bpgl_3d_from_disparity_with_scalar<T>( \
+    vpgl_affine_camera<double> const& cam1,\
+    vpgl_affine_camera<double> const& cam2,\
+    vil_image_view<T> const& disparity,\
+    vil_image_view<T> const& scalar)
+
 #endif

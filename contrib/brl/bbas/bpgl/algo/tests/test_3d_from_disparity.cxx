@@ -10,6 +10,8 @@
 #include <vpgl/vpgl_affine_camera.h>
 #include <bpgl/algo/bpgl_3d_from_disparity.h>
 
+
+template<typename T>
 static void test_3d_from_disparity_affine()
 {
   double theta = vnl_math::pi_over_180 * 45.0;
@@ -29,13 +31,13 @@ static void test_3d_from_disparity_affine()
   P2[2][3] = 1;
   vpgl_affine_camera<double> cam2(P2);
 
-  vil_image_view<float> img3d_truth(2,2,3);
-  img3d_truth(0,0,0) = 0.0f; img3d_truth(0,0,1) = 0.0f; img3d_truth(0,0,2) = 4.0;
-  img3d_truth(0,1,0) = 0.0f; img3d_truth(0,1,1) = 1.0f; img3d_truth(0,1,2) = 3.0;
-  img3d_truth(1,0,0) = 1.0f; img3d_truth(1,0,1) = 0.0f; img3d_truth(1,0,2) = -1.0;
-  img3d_truth(1,1,0) = 1.0f; img3d_truth(1,1,1) = 1.0f; img3d_truth(1,1,2) = 5.0;
+  vil_image_view<T> img3d_truth(2,2,3);
+  img3d_truth(0,0,0) = T(0.0f); img3d_truth(0,0,1) = T(0.0f); img3d_truth(0,0,2) = T(4.0);
+  img3d_truth(0,1,0) = T(0.0f); img3d_truth(0,1,1) = T(1.0f); img3d_truth(0,1,2) = T(3.0);
+  img3d_truth(1,0,0) = T(1.0f); img3d_truth(1,0,1) = T(0.0f); img3d_truth(1,0,2) = T(-1.0);
+  img3d_truth(1,1,0) = T(1.0f); img3d_truth(1,1,1) = T(1.0f); img3d_truth(1,1,2) = T(5.0);
 
-  vil_image_view<float> disparity(2,2);
+  vil_image_view<T> disparity(2,2);
   for (int j=0; j<2; ++j) {
     for(int i=0; i<2; ++i) {
       double u1,v1;
@@ -43,11 +45,11 @@ static void test_3d_from_disparity_affine()
       double u2,v2;
       cam2.project(img3d_truth(i,j,0),img3d_truth(i,j,1),img3d_truth(i,j,2),u2,v2);
       std::cout << "i,j: " << i << "," << j << "  u1,v1: " << u1 << "," << v1 << " u2,v2: " << u2 << "," << v2 << std::endl;
-      disparity(i,j) = u2 - u1; // jlm changed to be consistent with bsgm_disparity_estimator
+      disparity(i,j) = T(u2 - u1); // jlm changed to be consistent with bsgm_disparity_estimator
     }
   }
 
-  vil_image_view<float> img3d_pred = bpgl_3d_from_disparity(cam1, cam2, disparity);
+  vil_image_view<T> img3d_pred = bpgl_3d_from_disparity(cam1, cam2, disparity);
 
   bool all_good = true;
   for (int j=0; j<2; ++j) {
@@ -55,17 +57,21 @@ static void test_3d_from_disparity_affine()
       std::cout << "i,j: " << i << "," << j << "  truth: " << img3d_truth(i,j,0) << "," << img3d_truth(i,j,1) << "," << img3d_truth(i,j,2);
       std::cout << "   pred: " << img3d_pred(i,j,0) << "," << img3d_pred(i,j,1) << "," << img3d_pred(i,j,2) << std::endl;
       for (int d=0; d<3; ++d) {
-        float diff = img3d_pred(i,j,d) - img3d_truth(i,j,d);
+        double diff = img3d_pred(i,j,d) - img3d_truth(i,j,d);
         all_good &= std::fabs(diff) < 1e-4;
       }
     }
   }
+
   TEST("predicted 3D matches truth", all_good, true);
 }
 
 static void test_3d_from_disparity()
 {
-  test_3d_from_disparity_affine();
+  std::cout << "bpgl_3d_from_disparity for template<float>" << std::endl;
+  test_3d_from_disparity_affine<float>();
+  std::cout << "bpgl_3d_from_disparity for template<double>" << std::endl;
+  test_3d_from_disparity_affine<double>();
 }
 
 TESTMAIN(test_3d_from_disparity);

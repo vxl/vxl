@@ -85,114 +85,123 @@ struct pairwise_params{
 class bsgm_prob_pairwise_dsm
 {
  public:
-  bsgm_prob_pairwise_dsm(): mid_z_(NAN), z_vs_disp_scale_(1.0) {}
+  bsgm_prob_pairwise_dsm() = default;
 
   bsgm_prob_pairwise_dsm(vil_image_resource_sptr const& resc0, vpgl_affine_camera<double> const& acam0,
-                         vil_image_resource_sptr const& resc1, vpgl_affine_camera<double> const& acam1):
-    mid_z_(NAN), z_vs_disp_scale_(1.0)
+                         vil_image_resource_sptr const& resc1, vpgl_affine_camera<double> const& acam1)
   {
     rip_.set_images_and_cams(resc0, acam0, resc1, acam1);
   }
 
   bsgm_prob_pairwise_dsm(vil_image_view<unsigned char> const& view0, vpgl_affine_camera<double> const& acam0,
-                         vil_image_view<unsigned char> const& view1, vpgl_affine_camera<double> const& acam1):
-    mid_z_(NAN),z_vs_disp_scale_(1.0)
+                         vil_image_view<unsigned char> const& view1, vpgl_affine_camera<double> const& acam1)
   {
     rip_.set_images_and_cams(vil_new_image_resource_of_view(view0), acam0, vil_new_image_resource_of_view(view1), acam1);
   }
 
+
+  // ACCESSORS-----
+
+  //: parameters
+  void set_params(pairwise_params const& params) {params_ = params;}
+  pairwise_params params() const {return params_;}
+
   //: minimum dispartity to start search along an epipolar line
-  void set_min_disparity(int min_disparity){min_disparity_ = min_disparity;}
+  void set_min_disparity(int min_disparity) {min_disparity_ = min_disparity;}
+  int min_disparity() const {return min_disparity_;}
 
   //: maximum dispartity to end search along an epipolar line
-  void set_max_disparity(int max_disparity){max_disparity_ = max_disparity;}
-
-  int min_disparity() const{return min_disparity_;}
+  void set_max_disparity(int max_disparity) {max_disparity_ = max_disparity;}
   int max_disparity() const{return max_disparity_;}
-  int num_disparities() { return (max_disparity_-min_disparity_); }
+
+  //: number of disparities
+  int num_disparities() { return (max_disparity_ - min_disparity_); }
 
   //: how many disparity values are searched around the coarse search result
   int num_active_disparities() {
-    return static_cast<int>(num_disparities()*params_.active_disparity_factor_); }
-
-  //: set parameters
-  void set_params(pairwise_params const& params){params_ = params;}
-
-  //: retrieve current parameters
-  pairwise_params params(){return params_;}
-
-  //: set the plane elevation for minimum least squares disparity
-  void set_midpoint_z(double mid_z){mid_z_ = mid_z;}
-  //: estimate the forward disparities(arg order rectified image0:image1)
-  bool compute_disparity();
-  //: estimate the reverse disparities(arg order rectified image1:image0)
-  bool compute_rev_disparity();
-
-  //: compute height map and pointset, forward order only
-  void compute_dsm_and_ptset(vgl_box_3d<double> const& scene_box);
-
-  //: comptute forward and reverse heightmaps, pointsets and consistency filtered results
-  bool compute_pointset_prob();
-  void prob_heightmap(vgl_box_3d<double> const& scene_box);
-  bool compute_dsm_and_ptset_prob(vgl_box_3d<double> const& scene_box);
-  bool rect(vgl_box_3d<double> const& scene_box)
-  {
-    bool good = rip_.process(scene_box);
-    if (good) {
-      this->compute_byte();
-    }
-    return good;
+    return static_cast<int>(num_disparities()*params_.active_disparity_factor_);
   }
 
-  //: main process method
-  bool process(vgl_box_3d<double> const& scene_box, bool with_consistency_check = true)
-  {
-    rectify_params rp;
-    rp.min_disparity_z_ = mid_z_;
-    rp.upsample_scale_ = params_.upsample_scale_factor_;
-    rip_.set_params(rp);
-    if(!rip_.process(scene_box))
-      return false;
-    this->compute_byte();
-    if(with_consistency_check){
-      if(!compute_disparity())
-        return false;
-      if(!compute_rev_disparity())
-        return false;
-      if(!compute_dsm_and_ptset_prob(scene_box))
-        return false;
-      this->prob_heightmap(scene_box);
-    }else{
-      if(!compute_disparity())
-        return false;
-      compute_dsm_and_ptset(scene_box);
-    }
-    return true;
-  }
+  //: plane elevation for minimum least squares disparity
+  void set_midpoint_z(double mid_z) {mid_z_ = mid_z;}
+  void midpoint_z(double mid_z) {mid_z_ = mid_z;}
+
+  //: scene box for analysis
+  void set_scene_box(vgl_box_3d<double> scene_box) { scene_box_ = scene_box; }
+  vgl_box_3d<double> scene_box() const { return scene_box_; }
 
   //: rectified images and cams
-  const vil_image_view<vxl_byte>& rectified_bview0()const  {return rect_bview0_;}
-  const vil_image_view<vxl_byte>& rectified_bview1()const  {return rect_bview1_;}
-  const vpgl_affine_camera<double>& rectified_acam0()const {return rip_.rect_acam0();}
-  const vpgl_affine_camera<double>& rectified_acam1()const {return rip_.rect_acam1();}
+  const vil_image_view<vxl_byte>& rectified_bview0() const  {return rect_bview0_;}
+  const vil_image_view<vxl_byte>& rectified_bview1() const  {return rect_bview1_;}
+  const vpgl_affine_camera<double>& rectified_acam0() const {return rip_.rect_acam0();}
+  const vpgl_affine_camera<double>& rectified_acam1() const {return rip_.rect_acam1();}
 
   //: disparity results
-  vil_image_view<vxl_byte> invalid_map() const;
-  vil_image_view<vxl_byte> rev_invalid_map() const;
-  const vil_image_view<float>& disparity()const {return disp_r_;}
-  const vil_image_view<float>& rev_disparity()const {return disp_r_reverse_;}
+  vil_image_view<vxl_byte> invalid_map_fwd() const { return bool_to_byte(invalid_map_fwd_); }
+  vil_image_view<vxl_byte> invalid_map_rev() const { return bool_to_byte(invalid_map_rev_); }
+  const vil_image_view<float>& disparity_fwd() const {return disparity_fwd_;}
+  const vil_image_view<float>& disparity_rev() const {return disparity_rev_;}
 
   //: triangulation results
   // uses rectified cams to reconstruct 3-d scene geometry
   // produces a 3-d pointset and a z(x,y) heightmap
-  const vil_image_view<float>& heightmap()const {return height_map_;}
-  const vil_image_view<float>& rev_heightmap()const {return height_map_reverse_;}
-  const vil_image_view<float>& prob_heightmap_z()const {return prob_height_map_z_;}
-  const vil_image_view<float>& prob_heightmap_prob()const { return prob_height_map_prob_; }
-  const vgl_pointset_3d<float> ptset() const {return ptset_;}
-  const vgl_pointset_3d<float> rev_ptset() const {return ptset_reverse_;}
+  const vil_image_view<float>& tri_3d_fwd() const {return tri_3d_fwd_;}
+  const vil_image_view<float>& tri_3d_rev() const {return tri_3d_rev_;}
+
+  const vil_image_view<float>& heightmap_fwd() const {return heightmap_fwd_;}
+  const vil_image_view<float>& heightmap_rev() const {return heightmap_rev_;}
+
+  const vgl_pointset_3d<float> ptset_fwd() const {return ptset_fwd_;}
+  const vgl_pointset_3d<float> ptset_rev() const {return ptset_rev_;}
+
+  //: probablistic results
   const vgl_pointset_3d<float> prob_ptset() const {return prob_ptset_;}
   bsta_histogram<float> prob_pdf() const {return prob_distr_;}
+
+  const vil_image_view<float>& prob_heightmap() const {return prob_heightmap_z_;}
+  const vil_image_view<float>& prob_confidence() const { return prob_heightmap_prob_; }
+
+
+  // PROCESS-----
+
+  //: image rectification
+  void rectify();
+
+  //: compute disparities
+  // fwd: arg order rectified image0:image1
+  // rev: arg order rectified image1:image0
+  void compute_disparity_fwd();
+  void compute_disparity_rev();
+
+  //: compute height data (tri_3d, ptset, heightmap)
+  void compute_height_fwd();
+  void compute_height_rev();
+
+  //: comptute probablistic height
+  bool compute_prob();
+
+  //: main process method
+  bool process(bool with_consistency_check = true)
+  {
+    // rectification
+    this->rectify();
+
+    // compute foward disparity & height
+    this->compute_disparity_fwd();
+    this->compute_height_fwd();
+
+    // consistency check & probablistic analysis
+    if (with_consistency_check) {
+      this->compute_disparity_rev();
+      this->compute_height_rev();
+
+      if (!compute_prob())
+        return false;
+    }
+    return true;
+  }
+
+  // MISC-----
 
   //: apply a color map to the probabilty values and
   //  output a color point cloud as ascii
@@ -205,33 +214,75 @@ class bsgm_prob_pairwise_dsm
     return rip_.load_images_and_cams(image0_path, cam0_path, image1_path, cam1_path);
   }
 
- private:
-  void compute_byte();
+
+ protected:
+
+  // compute disparity for generic inputs
+  void compute_disparity(
+      const vil_image_view<vxl_byte>& img,
+      const vil_image_view<vxl_byte>& img_reference,
+      vil_image_view<bool>& invalid,
+      vil_image_view<float>& disparity);
+
+  // compute height for generic inputs
+  void compute_height(
+    const vpgl_affine_camera<double>& cam,
+    const vpgl_affine_camera<double>& cam_reference,
+    const vil_image_view<float>& disparity,
+    vil_image_view<float>& tri_3d,
+    vgl_pointset_3d<float>& ptset,
+    vil_image_view<float>& heightmap);
+
+  // z vs disparity scale
   bool z_vs_disparity_scale(double& scale) const;
+
+  // boolean to byte image conversion
+  vil_image_view<vxl_byte> bool_to_byte(const vil_image_view<bool>& img) const;
+
+  // scene box as float
+  vgl_box_3d<float> scene_box_as_float() const;
+
+ private:
+
   pairwise_params params_;
   bpgl_rectify_affine_image_pair rip_;
   size_t ni_;
   size_t nj_;
   int min_disparity_;
   int max_disparity_;
-  double mid_z_;
+
+  double mid_z_ = NAN;
+  double z_vs_disp_scale_ = 1.0;
+
+  vgl_box_3d<double> scene_box_;
+
   vil_image_view<vxl_byte> rect_bview0_;
   vil_image_view<vxl_byte> rect_bview1_;
-  vil_image_view<bool> invalid_map_;
-  vil_image_view<bool> invalid_map_reverse_;
-  vil_image_view<float> tri_image_3d_;
-  vil_image_view<float> disp_r_;
-  vil_image_view<float> tri_image_3d_reverse_;
-  vil_image_view<float> disp_r_reverse_;
-  vil_image_view<float> height_map_;
-  vil_image_view<float> height_map_reverse_;
-  double z_vs_disp_scale_;
-  vil_image_view<float> prob_height_map_z_;
-  vil_image_view<float> prob_height_map_prob_;
-  vgl_pointset_3d<float> ptset_;
-  vgl_pointset_3d<float> ptset_reverse_;
-  bsta_histogram<float> prob_distr_;
+
+  // disparity data
+  vil_image_view<bool> invalid_map_fwd_;
+  vil_image_view<bool> invalid_map_rev_;
+  vil_image_view<float> disparity_fwd_;
+  vil_image_view<float> disparity_rev_;
+
+  // triangulated data
+  vil_image_view<float> tri_3d_fwd_;
+  vil_image_view<float> tri_3d_rev_;
+
+  // height data
+  vgl_pointset_3d<float> ptset_fwd_;
+  vgl_pointset_3d<float> ptset_rev_;
+
+  vil_image_view<float> heightmap_fwd_;
+  vil_image_view<float> heightmap_rev_;
+
+  // probablistic data
   vgl_pointset_3d<float> prob_ptset_;
+  bsta_histogram<float> prob_distr_;
+
+  vil_image_view<float> prob_heightmap_z_;
+  vil_image_view<float> prob_heightmap_prob_;
+
 };
 
 #endif // bsgm_prob_pairwise_dsm_h_

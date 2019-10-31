@@ -13,15 +13,17 @@
  * for example, given the pixel location (100, 200) in image1 and a disparity value of -20 at that location
  * in the disparity image then the corresponding pixel location in image2 is (80, 200).
 **/
-template<typename DISP_T>
-vil_image_view<float> bpgl_3d_from_disparity(vpgl_affine_camera<double> const& cam1,
-                                              vpgl_affine_camera<double> const& cam2,
-                                              vil_image_view<DISP_T> const& disparity);
+template<typename T>
+vil_image_view<T> bpgl_3d_from_disparity(
+    vpgl_affine_camera<double> const& cam1,
+    vpgl_affine_camera<double> const& cam2,
+    vil_image_view<T> const& disparity);
 
-template<typename DISP_T>
-vil_image_view<float> bpgl_3d_from_disparity_with_scalar(vpgl_affine_camera<double> const& cam1,
-                                                         vpgl_affine_camera<double> const& cam2,
-                                                         vil_image_view<DISP_T> const& disparity,
-                                                         vil_image_view<DISP_T> const& scalar);
+template<typename T>
+vil_image_view<T> bpgl_3d_from_disparity_with_scalar(
+    vpgl_affine_camera<double> const& cam1,
+    vpgl_affine_camera<double> const& cam2,
+    vil_image_view<T> const& disparity,
+    vil_image_view<T> const& scalar);
 
 #endif
