@@ -18,7 +18,7 @@
 
 #include <vgui/vgui_statusbar.h>
 #include <vgui/vgui_statusbuf.h>
-
+#include <iostream>
 #include <windows.h>
 
 #define NUMSECTION 255 // A status bar can have a maximum of 255 sections.
