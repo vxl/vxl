@@ -235,7 +235,7 @@ class fless
  public:
   fless() = default;
   bool operator ()(bbgm_mask_pair_feature const& fa,
-                   bbgm_mask_pair_feature const& fb) {
+                   bbgm_mask_pair_feature const& fb) const {
     unsigned short ica, jca, icb, jcb;
     fa.center(ica, jca);
     fb.center(icb, jcb);
