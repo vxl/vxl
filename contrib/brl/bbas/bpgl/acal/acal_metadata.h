@@ -47,8 +47,14 @@ struct image_metadata
 
 struct tile_metadata
 {
-  vgl_point_3d<double> lower_left_;
-  vgl_point_3d<double> upper_right_;
+  size_t tile_id_;
+  double dsm_resolution_;
+  double aster_mean_;
+  vgl_point_3d<double> global_lower_left_;
+  vgl_point_3d<double> global_upper_right_;
+  vgl_box_3d<double> global_bb_;
+  vgl_point_3d<double> local_lower_left_;
+  vgl_point_3d<double> local_upper_right_;
   vgl_box_3d<double> local_bb_;
 };
 
@@ -125,28 +131,46 @@ class acal_metadata
 
  void deserialize_tile_meta( Json::Value& root)
  {
-   const Json::Value tile_list = root;
-   for(Json::Value::const_iterator tlit = tile_list.begin();
-       tlit != tile_list.end(); ++tlit)
-   {
-     tile_metadata tm;
-     const Json::Value ll = (*tlit)["lower_left"];
-     if(ll != Json::nullValue){
-       Json::Value::const_iterator vit = ll.begin();
-       double lon = (*vit++).asDouble(), lat = (*vit++).asDouble(), elev = (*vit++).asDouble();
-       tm.lower_left_.set(lon, lat, elev);
-     }
-     const Json::Value ur = (*tlit)["upper_right"];
-     if(ur != Json::nullValue){
-       Json::Value::const_iterator vit = ur.begin();
-       double lon = (*vit++).asDouble(), lat = (*vit++).asDouble(), elev = (*vit++).asDouble();
-       tm.upper_right_.set(lon, lat, elev);
-     }
-     vpgl_lvcs lvcs(tm.lower_left_.y(), tm.lower_left_.x(), tm.lower_left_.z(), vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
-     double lx, ly, lz;
-     lvcs.global_to_local(tm.upper_right_.x(), tm.upper_right_.y(), tm.upper_right_.z(), vpgl_lvcs::wgs84, lx, ly, lz);
-     vgl_box_3d<double> bb(0.0, 0.0, 0.0, lx, ly, lz);
-     tm.local_bb_ = bb;
+   const Json::Value img_list = root;
+   Json::Value::Members tile_ids = root.getMemberNames();
+   size_t n = tile_ids.size();
+   for(size_t i  = 0; i<n; ++i)
+     {
+       tile_metadata tm;
+       std::string key = tile_ids[i];
+       const Json::Value tile_info = root.get(key, "");
+       tm.tile_id_ = std::stoi(key);
+       tm.aster_mean_ = tile_info["aster_mean"].asDouble();
+       tm.dsm_resolution_ = tile_info["dsm_resolution"].asDouble();
+       const Json::Value local = tile_info["local"];
+       const Json::Value ll = local["lower_left"];
+       if(ll != Json::nullValue){
+        Json::Value::const_iterator vit = ll.begin();
+        double lon = (*vit++).asDouble(), lat = (*vit++).asDouble(), elev = (*vit++).asDouble();
+        tm.local_lower_left_.set(lon, lat, elev);
+       }
+       const Json::Value ur = local["upper_right"];
+       if (ur != Json::nullValue) {
+          Json::Value::const_iterator vit = ur.begin();
+          double lon = (*vit++).asDouble(), lat = (*vit++).asDouble(), elev = (*vit++).asDouble();
+          tm.local_upper_right_.set(lon, lat, elev);
+       }
+       tm.local_bb_ = vgl_box_3d<double>(tm.local_lower_left_, tm.local_upper_right_);
+       const Json::Value global = tile_info["global"];
+       const Json::Value gll = global["lower_left"];
+       if (gll != Json::nullValue) {
+           Json::Value::const_iterator vit = gll.begin();
+           double lon = (*vit++).asDouble(), lat = (*vit++).asDouble(), elev = (*vit++).asDouble();
+           tm.global_lower_left_.set(lon, lat, elev);
+       }
+       const Json::Value gur = global["upper_right"];
+       if (gur != Json::nullValue) {
+           Json::Value::const_iterator vit = gur.begin();
+           double lon = (*vit++).asDouble(), lat = (*vit++).asDouble(), elev = (*vit++).asDouble();
+           tm.global_upper_right_.set(lon, lat, elev);
+       }
+       tm.global_bb_ = vgl_box_3d<double>(tm.global_lower_left_, tm.global_upper_right_);
+         
      tile_meta_.push_back(tm);
    }
  }
