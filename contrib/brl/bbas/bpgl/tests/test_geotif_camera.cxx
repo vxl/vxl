@@ -133,8 +133,7 @@ static void test_geotif_camera()
   float mu, mv;
   bpgl_geotif_camera<float> gcam3;
   vpgl_lvcs_sptr null_ptr;
-  bool bgood = gcam3.construct_from_matrix(mrcam, tm, null_ptr, false, northing, utm_zone);
-  //gcam3.set_elevation_offset(23.7482891083);
+  bool bgood = gcam3.construct_from_matrix(mrcam, tm, false, null_ptr, northing, utm_zone);
   gcam3.project(mx, my, mz, mu, mv);
   std::cout << "MATRIX_UTM(u, v) " << mu << ' ' << mv << std::endl;
   gcam3.project_gtif_to_image(mtifu, mtifv, mtifz, mu, mv);
