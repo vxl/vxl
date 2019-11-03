@@ -42,6 +42,9 @@ class vpgl_camera : public vbl_ref_count
 
   //: The generic camera interface. u represents image column, v image row.
   virtual void project(const T x, const T y, const T z, T& u, T& v) const = 0;
+
+  //: clone *this* polymorphically
+  virtual vpgl_camera<T>* clone(void) const = 0;
 };
 
 // convenience typedefs for smart pointers to abstract cameras

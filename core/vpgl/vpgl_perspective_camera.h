@@ -83,8 +83,8 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   std::string type_name() const override { return "vpgl_perspective_camera"; }
 
   //: Clone `this': creation of a new object and initialization
-  //  See Prototype pattern
-  vpgl_proj_camera<T>* clone(void) const override;
+  // legal C++ because the return type is covariant with vpgl_camera<T>*
+  virtual vpgl_proj_camera<T>* clone(void) const override;
 
   //: Finite backprojection.
   // This is a virtual function from the parent class vpgl_proj_camera<T>
