@@ -11,6 +11,7 @@ bpgl_rolling_shutter_camera.h
 bpgl_segmented_rolling_shutter_camera.h bpgl_segmented_rolling_shutter_camera.hxx
 bpgl_camera_estimator.h bpgl_camera_estimator.hxx bpgl_camera_estimator_amoeba.h
 bpgl_camera_utils.h bpgl_camera_utils.cxx
+bpgl_geotif_camera.h bpgl_geotif_camera.hxx
    )
 
 aux_source_directory(Templates bpgl_sources)
