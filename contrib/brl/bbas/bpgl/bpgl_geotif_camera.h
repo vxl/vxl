@@ -35,7 +35,7 @@ class bpgl_geotif_camera : vpgl_camera<T>
 {
  public:
   //: default constructor - may want a container of cameras
- bpgl_geotif_camera():has_lvcs_(false), gcam_has_wgs84_cs_(false), elev_offset_(T(0)){}
+ bpgl_geotif_camera():has_lvcs_(false), gcam_has_wgs84_cs_(false), elev_org_at_zero_(false){}
   
   virtual ~bpgl_geotif_camera() = default;
   
@@ -44,11 +44,11 @@ class bpgl_geotif_camera : vpgl_camera<T>
   // if the lvcs is not defined then the general camera must be a rational camera with WGS84 CS,
   // or a local rational camera with an internal lvcs that defines the local Cartesian CS 
   // Notes: 1) input points may have been generated with CS elevation origin = 0. In this case
-  //           it is necessary to set elevation offset to compensate, e.g. offset = -(lvcs elevation origin)
+  //           the local rational camera lvcs elevation origin is correct. Otherwise and adjustment required
   //        2) the lvcs CS may not match the GEOTIFF header CS so extra internal conversion may be necessary,
   //           e.g., the lvcs CS is WGS84 and the GEOTIFF header CS is UTM
   //
-  bool construct_from_geotif(vpgl_camera<T> const& general_cam, vil_image_resource_sptr resc,
+  bool construct_from_geotif(vpgl_camera<T> const& general_cam, vil_image_resource_sptr resc, bool elev_org_at_zero = false,
                              vpgl_lvcs_sptr lvcs_ptr = nullptr);
 
   //: construct from a 4x4 transform matrix.
@@ -56,11 +56,7 @@ class bpgl_geotif_camera : vpgl_camera<T>
   //the UTM CS case is indicated by northing being either 0 - Northern Hemisphere or 1 - Southern Hemisphere
   //when the lvcs_ptr is null, UTM coordinates must be converted to WGS84 before projecting through the camera
   bool construct_from_matrix(vpgl_camera<T> const& general_cam, vnl_matrix<double> const& geo_transform_matrix,
-                             vpgl_lvcs_sptr lvcs_ptr = nullptr,int northing = -1, int zone = 0);
-
-  //: set elevation offset the offset
-  //  needed if input 3-d points are a local elevation reference
-  void set_elevation_offset(T offset){elev_offset_ = offset;}
+                             bool elev_org_at_zero = false, vpgl_lvcs_sptr lvcs_ptr = nullptr,int northing = -1, int zone = 0);
 
   //: project from local or global 3-d coordinates, to an image location (u, v)
   // coordinates are local only if the lvcs was defined
@@ -75,11 +71,10 @@ class bpgl_geotif_camera : vpgl_camera<T>
   //: legal C++ because the return type is covariant with vpgl_camera<T>*
   virtual bpgl_geotif_camera<T>* clone(void) const {return new bpgl_geotif_camera<T>(*this);}
  protected:
-  // in case of different lvcs origins defined for a local rational camera
-  // and the input lvcs that defines the origin for points to be projected
-  // e.g., points can be in a CS with origin z = 0 and the global elevation
-  // has to be added before projection
-  T elev_offset_;
+
+  //: the DSM is constructed with a zero elevation origin, i.e. local Cartesian elevation
+  bool elev_org_at_zero_;
+
   //: the points to be projected are in a local CS
   bool has_lvcs_;
 
