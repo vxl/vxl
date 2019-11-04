@@ -12,7 +12,6 @@
 #include <vgl/vgl_pointset_3d.h>
 #include <vil/vil_image_view.h>
 
-
 /**
  * Main convenience function
  * Given cameras for a stereo pair and a disparity map, return a 3-plane (x,y,z)
@@ -46,33 +45,28 @@ class bpgl_heightmap
     bpgl_heightmap(
         vgl_box_3d<T> heightmap_bounds,
         T ground_sample_distance) :
-      _heightmap_bounds(heightmap_bounds),
-      _ground_sample_distance(ground_sample_distance)
+      heightmap_bounds_(heightmap_bounds),
+      ground_sample_distance_(ground_sample_distance)
     {}
 
     //: destructor
     ~bpgl_heightmap() = default;
 
     // Accessors
-    T ground_sample_distance() const { return _ground_sample_distance; }
-    void set_ground_sample_distance(T ground_sample_distance) {
-      _ground_sample_distance = ground_sample_distance;
-    }
+    T ground_sample_distance() const { return ground_sample_distance_; }
+    void ground_sample_distance(T x) { ground_sample_distance_ = x; }
 
-    vgl_box_3d<T> heightmap_bounds() const { return _heightmap_bounds; }
-    void set_heightmap_bounds(vgl_box_3d<T> heightmap_bounds) {
-      _heightmap_bounds = heightmap_bounds;
-    }
+    vgl_box_3d<T> heightmap_bounds() const { return heightmap_bounds_; }
+    void heightmap_bounds(vgl_box_3d<T> x) { heightmap_bounds_ = x; }
 
-    T neighbor_dist_factor() const { return _neighbor_dist_factor; }
-    void set_neighbor_dist_factor(T neighbor_dist_factor) {
-      _neighbor_dist_factor = neighbor_dist_factor;
-    }
+    T neighbor_dist_factor() const { return neighbor_dist_factor_; }
+    void neighbor_dist_factor(T x) { neighbor_dist_factor_ = x; }
 
-    unsigned num_neighbors() const { return _num_neighbors; }
-    void set_num_neighbors(unsigned num_neighbors) {
-      _num_neighbors = num_neighbors;
-    }
+    unsigned min_neighbors() const { return min_neighbors_; }
+    void min_neighbors(unsigned x) { min_neighbors_ = x; }
+
+    unsigned max_neighbors() const { return max_neighbors_; }
+    void max_neighbors(unsigned x) { max_neighbors_ = x; }
 
     //: compute pointset from triangulated image
     void pointset_from_tri(
@@ -127,13 +121,15 @@ class bpgl_heightmap
         bool ignore_scalar);
 
     // parameters
-    vgl_box_3d<T> _heightmap_bounds;
-    T _ground_sample_distance;
+    vgl_box_3d<T> heightmap_bounds_;
+    T ground_sample_distance_;
 
-    // gridding parameters
-    T _neighbor_dist_factor = 3.0;
-    unsigned _num_neighbors = 3;
-
+    // pointset->heightmap gridding paramters:
+    // expected number of neighbors (between min/max neighbors) within some distance
+    // (neighbor_dist_factor_ * ground_sample_distance_) of each heightmap pixel
+    unsigned min_neighbors_ = 3;
+    unsigned max_neighbors_ = 5;
+    T neighbor_dist_factor_ = 3.0;
 };
 
 #endif
