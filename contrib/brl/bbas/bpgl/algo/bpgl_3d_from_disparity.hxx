@@ -22,7 +22,7 @@ vil_image_view<T> bpgl_3d_from_disparity(
       A[r+2][c] = P2[r][c];
     }
   }
-  vnl_matrix_inverse<double> invA(A);
+  vnl_matrix_inverse<double> invA(A.as_ref());
 
   const unsigned int ni = disparity.ni();
   const unsigned int nj = disparity.nj();
@@ -69,7 +69,7 @@ vil_image_view<T> bpgl_3d_from_disparity_with_scalar(
       A[r+2][c] = P2[r][c];
     }
   }
-  vnl_matrix_inverse<double> invA(A);
+  vnl_matrix_inverse<double> invA(A.as_ref());
 
   const unsigned int ni = disparity.ni();
   const unsigned int nj = disparity.nj();
