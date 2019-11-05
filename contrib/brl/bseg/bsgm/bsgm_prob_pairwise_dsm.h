@@ -47,38 +47,76 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_new.h>
 #include <bpgl/algo/bpgl_rectify_affine_image_pair.h>
+#include <bpgl/algo/bpgl_heightmap_from_disparity.h>
+#include <bpgl/algo/bpgl_gridding.h>
 #include <bsta/bsta_histogram.h>
 #include "bsgm_disparity_estimator.h" // for disparity_estimator_params
 
 
-struct pairwise_params{
-  pairwise_params():
-    active_disparity_factor_(0.5), downscale_exponent_(2), multi_scale_mode_(0),  //1
-    point_sample_dist_(0.3f), upsample_scale_factor_(1.0f),
-    std_dev_(3.75*point_sample_dist_), num_nearest_nbrs_(5), shadow_thresh_(20),
-    use_z_vs_d_prob_(false), min_z_vs_d_scale_(1.0f), z_vs_d_std_dev_(1.0f),
-    quad_interp_(false)
+struct pairwise_params
+{
+
+  // constructor
+  pairwise_params()
   {
-    set_shadow_thresh(shadow_thresh_);  //default
-    set_quad_interp(quad_interp_);
+    shadow_thresh(shadow_thresh_);
+    quad_interp(quad_interp_);
   }
-  void set_shadow_thresh(float thresh){ de_params_.shadow_thresh = thresh; shadow_thresh_ = thresh;}
-  void set_quad_interp(bool interp) {
-    de_params_.perform_quadratic_interp=interp; quad_interp_ = interp;
+
+  // accesors
+  void shadow_thresh(float thresh) {
+    de_params_.shadow_thresh = thresh;
+    shadow_thresh_ = thresh;
   }
-  bsgm_disparity_estimator_params de_params_; // internal disparity estimator params
-  float active_disparity_factor_; // what fraction of full disparity range is used for fine search
-  int downscale_exponent_;   // in coarse to fine disparity, what is the downsample ratio as 2^exponent
-  int multi_scale_mode_;     // see disparity_estimator
-  float point_sample_dist_;  // the height map grid spacing, also relates to consistent distance tolerance
-  float upsample_scale_factor_; // upsample the rectified images by scale factor
-  float std_dev_;            // the standard deviation of consistent disparity point distances
-  bool use_z_vs_d_prob_;     // multiply height probabilty with additional z vs d scale probability factor
-  float min_z_vs_d_scale_;   // the lowest z vs d scale factor that is typically obtained in meters/pixel
-  float z_vs_d_std_dev_;     // the standard deviation for the z vs d Gaussian distribution
-  size_t num_nearest_nbrs_;  // number of nearest neighbors in the pointset to find closest and to interpolate
-  size_t shadow_thresh_;     // intensity level out of 255 below which is considered to be in shadow, thus invalid
-  bool quad_interp_;         // if true, perform quadratic interpolation of disparity with respect to cost
+
+  void quad_interp(bool interp) {
+    de_params_.perform_quadratic_interp = interp;
+    quad_interp_ = interp;
+  }
+
+  // internal disparity estimator params
+  bsgm_disparity_estimator_params de_params_;
+
+  // intensity level out of 255 below which is considered to be in shadow, thus invalid
+  size_t shadow_thresh_ = 20;
+
+  // if true, perform quadratic interpolation of disparity with respect to cost
+  bool quad_interp_ = false;
+
+  // see disparity_estimator
+  int multi_scale_mode_ = 0;
+
+  // what fraction of full disparity range is used for fine search
+  float active_disparity_factor_ = 0.5f;
+
+   // in coarse to fine disparity, what is the downsample ratio as 2^exponent
+  int downscale_exponent_ = 2;
+
+  // the height map grid spacing, also relates to consistent distance tolerance
+  float ground_sample_dist_ = 0.3f;
+
+  // upsample the rectified images by scale factor
+  float upsample_scale_factor_ = 1.0f;
+
+  // the standard deviation of consistent disparity point distances
+  float std_dev_ = 3.75*ground_sample_dist_;
+
+  // multiply height probabilty with additional z vs d scale probability factor
+  bool use_z_vs_d_prob_ = false;
+
+  // the lowest z vs d scale factor that is typically obtained in meters/pixel
+  float min_z_vs_d_scale_ = 1.0f;
+
+  // the standard deviation for the z vs d Gaussian distribution
+  float z_vs_d_std_dev_ = 1.0f;
+
+  // pointset->heightmap gridding paramters:
+  // expected number of neighbors (between min/max neighbors) within some distance
+  // (_neighbor_dist_factor * _ground_sample_distance) of each heightmap pixel
+  unsigned min_neighbors_ = 3;
+  unsigned max_neighbors_ = 5;
+  float neighbor_dist_factor_ = 3.0;
+
 };
 
 
@@ -103,15 +141,15 @@ class bsgm_prob_pairwise_dsm
   // ACCESSORS-----
 
   //: parameters
-  void set_params(pairwise_params const& params) {params_ = params;}
+  void params(pairwise_params const& params) {params_ = params;}
   pairwise_params params() const {return params_;}
 
   //: minimum dispartity to start search along an epipolar line
-  void set_min_disparity(int min_disparity) {min_disparity_ = min_disparity;}
+  void min_disparity(int min_disparity) {min_disparity_ = min_disparity;}
   int min_disparity() const {return min_disparity_;}
 
   //: maximum dispartity to end search along an epipolar line
-  void set_max_disparity(int max_disparity) {max_disparity_ = max_disparity;}
+  void max_disparity(int max_disparity) {max_disparity_ = max_disparity;}
   int max_disparity() const{return max_disparity_;}
 
   //: number of disparities
@@ -123,11 +161,11 @@ class bsgm_prob_pairwise_dsm
   }
 
   //: plane elevation for minimum least squares disparity
-  void set_midpoint_z(double mid_z) {mid_z_ = mid_z;}
   void midpoint_z(double mid_z) {mid_z_ = mid_z;}
+  double midpoint_z() {return mid_z_;}
 
   //: scene box for analysis
-  void set_scene_box(vgl_box_3d<double> scene_box) { scene_box_ = scene_box; }
+  void scene_box(vgl_box_3d<double> scene_box) { scene_box_ = scene_box; }
   vgl_box_3d<double> scene_box() const { return scene_box_; }
 
   //: rectified images and cams
@@ -239,8 +277,8 @@ class bsgm_prob_pairwise_dsm
   // boolean to byte image conversion
   vil_image_view<vxl_byte> bool_to_byte(const vil_image_view<bool>& img) const;
 
-  // scene box as float
-  vgl_box_3d<float> scene_box_as_float() const;
+  // get bpgl_heightmap instance
+  bpgl_heightmap<float> get_bpgl_heightmap() const;
 
  private:
 
