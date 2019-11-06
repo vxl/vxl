@@ -41,10 +41,12 @@ class bpgl_geotif_camera : vpgl_camera<T>
   
   //: factory methods to allow for failure conditions
 
-  // if the lvcs is not defined then the general camera must be a rational camera with WGS84 CS,
+  // if the lvcs is not defined (null) then the general camera must be a rational camera with WGS84 CS,
   // or a local rational camera with an internal lvcs that defines the local Cartesian CS 
-  // Notes: 1) input points may have been generated with CS elevation origin = 0. In this case
-  //           the local rational camera lvcs elevation origin is correct. Otherwise and adjustment required
+  // Notes: 1) input points may have been generated with local CS elevation origin = 0. In this case
+  //           the local rational camera lvcs elevation origin is correct, and is used by default.
+  //           If the elevation origin is global due to post processing, elev_org_at_zero = false and
+  //           the necessary adjustment to elevation values is made.
   //        2) the lvcs CS may not match the GEOTIFF header CS so extra internal conversion may be necessary,
   //           e.g., the lvcs CS is WGS84 and the GEOTIFF header CS is UTM
   //
