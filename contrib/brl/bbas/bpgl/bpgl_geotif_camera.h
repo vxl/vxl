@@ -35,7 +35,8 @@ class bpgl_geotif_camera : vpgl_camera<T>
 {
  public:
   //: default constructor - may want a container of cameras
- bpgl_geotif_camera():has_lvcs_(false), gcam_has_wgs84_cs_(false), elev_org_at_zero_(false){}
+  //  the default member values represent the most common case, e.g. a local_rational_camera
+ bpgl_geotif_camera():has_lvcs_(true), gcam_has_wgs84_cs_(true), elev_org_at_zero_(true), is_utm_(false), project_local_points_(true){}
   
   virtual ~bpgl_geotif_camera() = default;
   
@@ -55,24 +56,43 @@ class bpgl_geotif_camera : vpgl_camera<T>
 
   //: construct from a 4x4 transform matrix.
   //if the lvcs is not defined then the camera must be a RPC camera in the WGS84 CS
-  //the UTM CS case is indicated by northing being either 0 - Northern Hemisphere or 1 - Southern Hemisphere
+  //the UTM CS case is indicated by hemisphere flag being either 0 - Northern Hemisphere or 1 - Southern Hemisphere
   //when the lvcs_ptr is null, UTM coordinates must be converted to WGS84 before projecting through the camera
-  bool construct_from_matrix(vpgl_camera<T> const& general_cam, vnl_matrix<double> const& geo_transform_matrix,
-                             bool elev_org_at_zero = false, vpgl_lvcs_sptr lvcs_ptr = nullptr,int northing = -1, int zone = 0);
+  bool construct_from_matrix(vpgl_camera<T> const& general_cam, vnl_matrix<T> const& geo_transform_matrix,
+                             bool elev_org_at_zero = false, vpgl_lvcs_sptr lvcs_ptr = nullptr,int hemisphere_flag = -1, int zone = 0);
+
+  //: are the input points in a local CS
+  bool project_local_points() const {return project_local_points_;}
 
   //: project from local or global 3-d coordinates, to an image location (u, v)
-  // coordinates are local only if the lvcs was defined
-  // otherwise the global coordinates are in the CS of the GEOTIFF metadata
+  // if project_local_points() == true, coordinates are in a local CS otherwise in a global CS 
   virtual void project(const T x, const T y, const T z, T& u, T& v) const;
 
   //: project from an image location in the GEOTIFF image to an image location (u, v),
-  // as projected by the general camera.
-  // tifz is the height value of the GEOTIFF image at (tifu, tifv)
+  // as projected by the general camera. tifz is the height value of the GEOTIFF image at (tifu, tifv)
   void project_gtif_to_image(const T tifu, const T tifv, const T tifz , T& u, T& v) const;
 
   //: legal C++ because the return type is covariant with vpgl_camera<T>*
   virtual bpgl_geotif_camera<T>* clone(void) const {return new bpgl_geotif_camera<T>(*this);}
+
+  //: accessors
+  bool elevation_origin_at_zero() const {return elev_org_at_zero_;}
+  bool is_utm() const {return is_utm_;}
+  bool has_lvcs() const {return has_lvcs_;}
+  bool general_cam_has_wgs84_cs() const {return gcam_has_wgs84_cs_;}
+  std::shared_ptr<vpgl_camera<T> > general_camera() const {return general_cam_;}
+  vpgl_lvcs_sptr lvcs_ptr() {return lvcs_ptr_;}
+  vnl_matrix<T> matrix() const {return matrix_;}
  protected:
+  bool construct_matrix(T sx, T sy, T sz, std::vector<std::vector<T> > tiepoints);
+  bool init_from_geotif(vil_image_resource_sptr const& resc);
+  bool local_to_global(T lx, T ly, T lz, T& gx, T& gy, T& gz) const;
+  bool global_to_local(T gx, T gy, T gz, T& lx, T& ly, T& lz) const;
+  void image_to_global(T i, T j, T& gx, T& gy) const;
+  T elevation_origin() const;
+
+  //: if true, the input points are in a local CS, or if false in a global CS
+  bool project_local_points_;
 
   //: the DSM is constructed with a zero elevation origin, i.e. local Cartesian elevation
   bool elev_org_at_zero_;
@@ -87,21 +107,14 @@ class bpgl_geotif_camera : vpgl_camera<T>
   bool gcam_has_wgs84_cs_;
 
   //: the local vertical CS to convert local to global
-  vpgl_lvcs_sptr lvcs_;
-  //: internal class to manage geographic coordinate transforms
-  // and assist in projection from a DSM image to general cam image coordinates
-  std::shared_ptr<vpgl_geo_camera> geo_cam_;
+  vpgl_lvcs_sptr lvcs_ptr_;
+
+  vnl_matrix<T> matrix_;
+  bool scale_defined_;
+  bool is_utm_;
+  int utm_zone_;
+  int hemisphere_flag_; //0 North, 1 South
 };
-
-//: Write to stream
-// \relatesalso bpgl_geotif_camera
-template <class T>
-std::ostream& operator<<(std::ostream& s, const bpgl_geotif_camera<T>& p);
-
-//: Read from stream
-// \relatesalso bpgl_geotif_camera
-template <class T>
-std::istream& operator>>(std::istream& is, bpgl_geotif_camera<T>& p);
 
 #define BPGL_GEOTIF_CAMERA_INSTANTIATE(T) extern "please include vgl/bpgl_geotif_camera.txx first"
 
