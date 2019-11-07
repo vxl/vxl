@@ -15,6 +15,8 @@
 #include <bpgl/bpgl_geotif_camera.h>
 static void test_geotif_camera()
 {
+  // RPC camera is from opensource Buenos Aires DSM challenge dataset
+  // https://spacenetchallenge.github.io/  
     std::string rpb = "satId = \"????\";\n";
     rpb += "bandId = \"RGB\" \n";
     rpb += "SpecId = \"RPC00B\" \n";
@@ -120,16 +122,17 @@ static void test_geotif_camera()
     rpb += "-34.49092225 \n";
     rpb += "-23.7482891083 \n";
     std::stringstream ss(rpb);
+
   // UTM example onstruct from a matrix no external files needed
   vpgl_local_rational_camera<float> mrcam;
   ss >> mrcam;
-  vnl_matrix<double> tm(4,4,0.0);
-  tm[0][0] = 0.3;   tm[1][1] = -0.3; tm[0][3] = 354407.24936;
-  tm[1][3] = 6182480.621208; tm[3][3]=1.0;
+  vnl_matrix<float> tm(4,4,0.0f);
+  tm[0][0] = 0.3f;   tm[1][1] = -0.3f; tm[0][3] = 354407.24936f;
+  tm[1][3] = 6182480.621208f; tm[3][3]=1.0f;
   int utm_zone = 21;
   int northing = 1;
-  float mx = 170.7, my= 103.5, mz = 53.1;
-  float mtifu = 575, mtifv = 365, mtifz = 52.83;
+  float mx = 170.7f, my= 103.5f, mz = 53.1f;
+  float mtifu = 575.0f, mtifv = 365.0f, mtifz = 52.83f;
   float mu, mv;
   bpgl_geotif_camera<float> gcam3;
   vpgl_lvcs_sptr null_ptr;
@@ -140,5 +143,10 @@ static void test_geotif_camera()
   std::cout << "MATRIX_DSM_UTM(u, v) " << mu << ' ' << mv << std::endl;
   bgood = bgood && fabs(mu - 137.3) < 0.1;
   TEST("geotiff camera projection", bgood, true);
+  bool is_utm = gcam3.is_utm();
+  bool eorg_at_zero= gcam3.elevation_origin_at_zero();
+  bool has_lvcs = gcam3.has_lvcs();
+  bool proj_local = gcam3.project_local_points();
+  TEST("bool accessors", is_utm&&!eorg_at_zero&&has_lvcs&& proj_local, true);
 }
 TESTMAIN(test_geotif_camera);

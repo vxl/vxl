@@ -164,6 +164,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   vnl_matrix<double>  trans_matrix(){return trans_matrix_; }
 
+  //: since vpgl_geo_camera is not templated only vpgl_camera<double>* is covariant with vpgl_camera<T>*
   virtual vpgl_camera<double>* clone(void) const {return new vpgl_geo_camera(*this);}
 #if 0
   //: returns the corresponding pixel position (i,j) for a given geographical coordinate (lon, lat)
