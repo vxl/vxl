@@ -183,16 +183,10 @@ void bpgl_heightmap<T>::_heightmap_from_pointset(
   // scalar interpolation
   if (!ignore_scalar) {
 
-    // get scalar values
-    std::vector<T> scalar_vals;
-    for (size_t i; i<ptset.npts(); i++) {
-      scalar_vals.emplace_back(ptset.sc(i));
-    }
-
     // scalar gridding
     scalar_output = bpgl_gridding::grid_data_2d(
         interp_fun,
-        triangulated_xy, scalar_vals,
+        triangulated_xy, ptset.scalars(),
         upper_left, ni, nj, ground_sample_distance_,
         min_neighbors_, max_neighbors_, max_dist);
 
