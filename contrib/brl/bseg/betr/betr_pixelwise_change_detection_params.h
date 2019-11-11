@@ -48,8 +48,8 @@ class betr_pixelwise_change_detection_params : public betr_params
     root["num_tiles"] = pw_params_.num_tiles;
     root["registration_rad"] = pw_params_.registration_refinement_rad;
     root["pChange"] = pw_params_.pChange;
-    root["event_width"] = pw_params_.event_width;
-    root["event_height"] = pw_params_.event_height;
+    root["event_width"] = static_cast<Json::LargestUInt>(pw_params_.event_width);
+    root["event_height"] = static_cast<Json::LargestUInt>(pw_params_.event_height);
     root["bt_rad"] = pw_params_.bt_rad;
     root["census_tol"] = pw_params_.census_tol;
     root["census_rad"] = pw_params_.census_rad;

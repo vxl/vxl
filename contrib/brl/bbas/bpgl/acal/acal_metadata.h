@@ -185,7 +185,7 @@ void deserialize_tile_image_meta( Json::Value& root)
    {
      Json::Value geo_corr;
      geo_corr["iname"] = geo_corr_meta_[i].image_name_;
-     geo_corr["image_id"] = geo_corr_meta_[i].image_id_;
+     geo_corr["image_id"] = static_cast<Json::LargestUInt>(geo_corr_meta_[i].image_id_);
      geo_corr["samp_trans"] = geo_corr_meta_[i].translation_.x();
      geo_corr["line_trans"] = geo_corr_meta_[i].translation_.y();
      geo_corr["rms_proj_err"] = geo_corr_meta_[i].rms_proj_err_;
@@ -227,9 +227,9 @@ void deserialize_tile_image_meta( Json::Value& root)
    for(size_t i = 0; i<n; ++i)
    {
      Json::Value pair;
-     pair["pair_index"] = pair_meta_[i].pair_index_;
-     pair["image1_id"] = pair_meta_[i].image1_id_;
-     pair["image2_id"] = pair_meta_[i].image2_id_;
+     pair["pair_index"] = static_cast<Json::LargestUInt>(pair_meta_[i].pair_index_);
+     pair["image1_id"] = static_cast<Json::LargestUInt>(pair_meta_[i].image1_id_);
+     pair["image2_id"] = static_cast<Json::LargestUInt>(pair_meta_[i].image2_id_);
      pair["gsd_cost"] = pair_meta_[i].gsd_cost_;
      pair["sun_angle_cost"] = pair_meta_[i].sun_angle_cost_;
      pair["view_angle_cost"] = pair_meta_[i].view_angle_cost_;

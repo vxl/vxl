@@ -63,7 +63,7 @@ namespace Nabo
       //! create a new entry
       Entry(const IT index, const VT value): index(index), value(value) {}
       //! return true if e0 is of lower value than e1, false otherwise
-      bool operator<(const Entry& e) { return value < e.value; }
+      bool operator<(const Entry& e) const { return value < e.value; }
     };
     //! balanced-tree implementation of heap
   /** It uses a binary heap, which provides replacement in O(log(n)),

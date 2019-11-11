@@ -109,10 +109,11 @@ public:
   //: Find the transformation that minimizes rms error by exhaustive search
   bool minimize_exhaustive();
 
-  //: Find the transformation by a fixed number of RANSAC trials. Uses distr_error
-  // by default use as an intial transform the exhaustive result
-  bool minimize_ransac(vgl_vector_3d<T> const& initial_t = exhaustive_t());
+  //: Find the transformation by a fixed number of RANSAC trials.
+  bool minimize_ransac(vgl_vector_3d<T> const& initial_t);
 
+  //: Find the transformation by a fixed number of RANSAC trails, using the exhaustive result as an initial transform.
+  bool minimize_ransac() { return minimize_ransac(exhaustive_t()); }
   //: does this instance have valid pointsets
   bool valid_instance() const {return (fixed_.size()>0 && movable_.size()>0);}
 
