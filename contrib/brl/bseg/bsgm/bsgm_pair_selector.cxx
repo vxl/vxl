@@ -302,12 +302,13 @@ bool bsgm_pair_selector::save_ordered_pairs()
   for (size_t i = 0; i<n; ++i) {
     const std::pair<size_t, size_t>& pr = ordered_pairs_[i];
     pair_selection_metadata psm;
-    psm.i_ = pr.first;
-    psm.j_ = pr.second;
+    psm.pair_index_ = i;
+    psm.image1_id_ = pr.first;
+    psm.image2_id_ = pr.second;
     std::string iname_no_corr = remove_crop_postfix(inames_[pr.first]);
     std::string jname_no_corr = remove_crop_postfix(inames_[pr.second]);
-    psm.iname_i_ = iname_no_corr;
-    psm.iname_j_ = jname_no_corr;
+    //psm.iname_i_ = iname_no_corr;
+    //psm.iname_j_ = jname_no_corr;
     psm.cost_ = ordered_pair_info_[i].cost_;
     meta.pair_meta_.push_back(psm);
   }
@@ -335,12 +336,13 @@ bool bsgm_pair_selector::save_all_ordered_pairs()
   for (size_t i = 0; i<n; ++i) {
     const std::pair<size_t, size_t>& pr = ordered_pairs_[i];
     pair_selection_metadata psm;
-    psm.i_ = pr.first;
-    psm.j_ = pr.second;
+    psm.pair_index_ = i;
+    psm.image1_id_ = pr.first;
+    psm.image2_id_= pr.second;
     std::string iname_no_corr = remove_crop_postfix(inames_[pr.first]);
     std::string jname_no_corr = remove_crop_postfix(inames_[pr.second]);
-    psm.iname_i_ = iname_no_corr;
-    psm.iname_j_ = jname_no_corr;
+    //psm.iname_i_ = iname_no_corr;
+    //psm.iname_j_ = jname_no_corr;
     psm.cost_ = ordered_pair_info_[i].cost_;
     meta.pair_meta_.push_back(psm);
   }
