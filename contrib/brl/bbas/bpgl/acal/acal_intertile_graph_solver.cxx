@@ -244,10 +244,10 @@ bool acal_intertile_graph_solver::solve_least_squares_problem() {
   if (gc_lsq.track_intersect_failed())
     return false;
 
-  vnl_levenberg_marquardt levmarq_ = construct_levmarq(gc_lsq);
+  vnl_levenberg_marquardt levmarq = construct_levmarq(gc_lsq);
   // Minimize the error and get the best intersection point
-  levmarq_.minimize(translations);
-  levmarq_.diagnose_outcome();
+  levmarq.minimize(translations);
+  levmarq.diagnose_outcome();
   gc_lsq.f(translations, residuals);// final set of residuals and translations
 
   size_t n_non_seed = trans_indx_to_cam_id_.size();
@@ -292,9 +292,9 @@ bool acal_intertile_graph_solver::solve_least_squares_problem() {
   if (gc_lsq2.track_intersect_failed())
     return false;
   // Minimize the projection errors
-  construct_levmarq(gc_lsq2);
-  levmarq_.minimize(translations);
-  levmarq_.diagnose_outcome();
+  vnl_levenberg_marquardt levmarq2 = construct_levmarq(gc_lsq2);
+  levmarq2.minimize(translations);
+  levmarq2.diagnose_outcome();
   gc_lsq2.f(translations, residuals);// final set of residuals and translations
   residual_cams = cam_residuals(residuals);
   unique_res_cams = find_minimum_residual_set(residual_cams, tile_indices);
