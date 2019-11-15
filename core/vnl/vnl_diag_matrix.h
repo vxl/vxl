@@ -43,10 +43,10 @@ class VNL_EXPORT vnl_diag_matrix
 
  public:
   vnl_diag_matrix() = default;
-  vnl_diag_matrix(const vnl_diag_matrix<T> & that)  = default;
-  vnl_diag_matrix(vnl_diag_matrix<T> && that)  = default;
-  vnl_diag_matrix& operator=(const vnl_diag_matrix<T> & that)  = default;
-  vnl_diag_matrix& operator=(vnl_diag_matrix<T> && that)  = default;
+  vnl_diag_matrix(const vnl_diag_matrix<T> &)  = default;
+  vnl_diag_matrix(vnl_diag_matrix<T> &&)  = default;
+  vnl_diag_matrix& operator=(const vnl_diag_matrix<T> &)  = default;
+  vnl_diag_matrix& operator=(vnl_diag_matrix<T> &&)  = default;
   ~vnl_diag_matrix() = default;
 
   //: Construct an empty diagonal matrix.

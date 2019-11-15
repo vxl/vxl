@@ -84,7 +84,8 @@ static void project(const double x, const double y, const double z, double& u, d
 
 static void test_fit_rational_cubic()
 {
-  vnl_random rng;
+  // deterministic random generator
+  vnl_random rng(9667566);
 
   // Rational polynomial coefficients (RPCs)
   vnl_vector_fixed<double,20> neu_u, den_u, neu_v, den_v;
