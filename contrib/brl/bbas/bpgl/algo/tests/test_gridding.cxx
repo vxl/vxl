@@ -34,30 +34,24 @@ void test_simple()
   vgl_point_2d<T> upper_left(0.0f, 0.0f);
   size_t ni = 8, nj = 8;
   T step_size = 1.0;
-  unsigned num_neighbors = 4;
-  T maxdist = 15.0f;
+  unsigned min_neighbors = 3;
+  unsigned max_neighbors = 5;
+  T max_dist = 15.0f;
 
-  bpgl_gridding::linear_interp<T, float> interp_fun(maxdist, NAN);
+  bpgl_gridding::linear_interp<T, float> interp_fun;
 
   vil_image_view<float> gridded =
-    bpgl_gridding::grid_data_2d(sample_locs, sample_vals,
+    bpgl_gridding::grid_data_2d(interp_fun, sample_locs, sample_vals,
                                 upper_left, ni, nj, step_size,
-                                interp_fun,
-                                num_neighbors);
-  bool print_grid = false;
-  if (print_grid) {
-    for (int j=0; j<nj; ++j) {
-      for (int i=0; i<ni; ++i) {
-        std::cout << std::fixed << std::setprecision(3) << gridded(i,j) << " ";
-      }
-      std::cout << std::endl;
-    }
-  }
+                                min_neighbors, max_neighbors, max_dist);
 
   bool all_good = true;
   for (int j=0; j<nj; ++j) {
     for (int i=0; i<ni; ++i) {
       // "truth" is f(x,y) = x
+      std::cout << "i,j: " << i << "," << j << "  "
+                << "expected: " << i << "  "
+                << "f(i,j): " << gridded(i,j) << "\n";
       double err = gridded(i,j) - i;
       all_good &= std::fabs(err) < 0.25;
     }
@@ -87,30 +81,24 @@ void test_degenerate()
   vgl_point_2d<T> upper_left(0.0f, 0.0f);
   size_t ni = 6, nj = 6;
   T step_size = 1.0;
-  unsigned num_neighbors = 3;
-  T maxdist = 15.0f;
+  unsigned min_neighbors = 3;
+  unsigned max_neighbors = 5;
+  T max_dist = 15.0f;
 
-  bpgl_gridding::linear_interp<T, float> interp_fun(maxdist, NAN);
+  bpgl_gridding::linear_interp<T, float> interp_fun;
 
   vil_image_view<float> gridded =
-    bpgl_gridding::grid_data_2d(sample_locs, sample_vals,
+    bpgl_gridding::grid_data_2d(interp_fun, sample_locs, sample_vals,
                                 upper_left, ni, nj, step_size,
-                                interp_fun,
-                                num_neighbors);
-  bool print_grid = false;
-  if (print_grid) {
-    for (int j=0; j<nj; ++j) {
-      for (int i=0; i<ni; ++i) {
-        std::cout << std::fixed << std::setprecision(3) << gridded(i,j) << " ";
-      }
-      std::cout << std::endl;
-    }
-  }
+                                min_neighbors, max_neighbors, max_dist);
 
   bool all_good = true;
   for (int j=0; j<nj; ++j) {
     for (int i=0; i<ni; ++i) {
       // "truth" is f(x,y) = x
+      std::cout << "i,j: " << i << "," << j << "  "
+                << "expected: " << i << "  "
+                << "f(i,j): " << gridded(i,j) << "\n";
       double err = gridded(i,j) - i;
       all_good &= std::fabs(err) < 0.25;
     }
@@ -118,8 +106,9 @@ void test_degenerate()
   TEST("gridded values correct", all_good, true);
 }
 
+
 void test_interp_real()
-{ 
+{
   // A test case derived from a real example giving unexpected results
   std::vector<vgl_point_2d<double>> ctrl_pts;
   ctrl_pts.emplace_back(9.35039, 151.517);
@@ -128,19 +117,82 @@ void test_interp_real()
 
   std::vector<double> values = { 47.7940, 46.3976, 47.7940 };
 
- bpgl_gridding::linear_interp<double, double> interp;
+  bpgl_gridding::linear_interp<double, double> interp_fun;
 
   vgl_point_2d<double> test_point(9, 151.999);
-  double value = interp(test_point, ctrl_pts, values);
-
+  double value = interp_fun(test_point, ctrl_pts, values);
   TEST_NEAR("interpolated value in correct range", value, 47.0, 1.0);
 }
+
+
+void test_interp_real_origin()
+{
+  // A test case derived from a real example giving unexpected results
+  // interpolation points centered near origin
+  std::vector<vgl_point_2d<double>> ctrl_pts;
+  ctrl_pts.emplace_back(1.35039, 0.517);
+  ctrl_pts.emplace_back(0.93042, 0.390);
+  ctrl_pts.emplace_back(0.57767, 0.285);
+
+  std::vector<double> values = { 47.7940, 46.3976, 47.7940 };
+
+  bpgl_gridding::linear_interp<double, double> interp_fun;
+
+  vgl_point_2d<double> test_point(1, 0.999);
+  double value = interp_fun(test_point, ctrl_pts, values);
+  TEST_NEAR("interpolated value in correct range", value, 47.0, 1.0);
+}
+
+
+#ifndef BPGL_TIMING
+#define BPGL_TIMING 0
+#endif
+
+#if BPGL_TIMING
+#include <vul/vul_timer.h>
+
+void test_interp_timing(unsigned long num_iter)
+{
+  double value = 0.0;
+  vul_timer timer;
+
+  std::vector<vgl_point_2d<double>> ctrl_pts;
+  ctrl_pts.emplace_back(9.35039, 151.517);
+  ctrl_pts.emplace_back(8.93042, 151.390);
+  ctrl_pts.emplace_back(8.57767, 151.285);
+
+  std::vector<double> values = { 47.7940, 46.3976, 47.7940 };
+
+  bpgl_gridding::linear_interp<double, double> interp_fun;
+
+  vgl_point_2d<double> test_point(9, 151.999);
+
+  timer.mark();
+  for (unsigned i = 0; i < num_iter; i++)
+    value = interp_fun(test_point, ctrl_pts, values);
+  double operator_sec = timer.real() / 1000.0;
+
+  std::cout << "---Timing report---\n"
+            << "Interpolate " << ctrl_pts.size() << " points for " << num_iter << " iterations\n"
+            << "operator()\n"
+            << "  total time = " << operator_sec << " sec.\n"
+            << "  per-operation time = " << operator_sec / double(num_iter) << " sec.\n"
+            ;
+}
+#endif
+
 
 static void test_gridding()
 {
   test_simple();
   test_degenerate();
   test_interp_real();
+  test_interp_real_origin();
+
+  // timing report
+#if BPGL_TIMING
+  test_interp_timing(1000000);
+#endif
 }
 
 TESTMAIN(test_gridding);

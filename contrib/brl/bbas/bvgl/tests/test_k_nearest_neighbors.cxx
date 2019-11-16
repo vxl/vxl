@@ -101,6 +101,8 @@ static void test_k_nearest_neighbors_3d()
 
 static void test_k_nearest_neighbors_2d()
 {
+  bool good = true;
+
   vgl_point_2d<double> p0(1.5, 3.0);
   vgl_point_2d<double> p1(4.0, 0.0);
   vgl_point_2d<double> p2(-3.0, -2.0);
@@ -109,10 +111,15 @@ static void test_k_nearest_neighbors_2d()
   std::vector<vgl_point_2d<double>> ptset {p0, p1, p2, p3, p4};
 
   bvgl_k_nearest_neighbors_2d<double> knn2d(ptset);
+  good = knn2d.is_valid();
+  TEST("knn2d valid", good, true);
+  if (!good) {
+    return;
+  }
 
   unsigned index=0;
   vgl_point_2d<double> q1(0.5, 0.5);
-  bool good = knn2d.closest_index(q1, index);
+  good = knn2d.closest_index(q1, index);
   TEST("closest_index success", good, true);
   TEST("closest_index correct index", index, 3);
 

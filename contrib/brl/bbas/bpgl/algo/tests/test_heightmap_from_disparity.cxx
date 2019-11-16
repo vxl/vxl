@@ -71,7 +71,7 @@ static void test_heightmap_from_disparity_affine()
     for (int i=0; i<2; ++i) {
       std::cout << "i,j: " << i << "," << j << "  truth: " << hmap_truth(i,j) << "   pred: " << hmap_pred(i,j) << std::endl;
       double diff = hmap_pred(i,j) - hmap_truth(i,j);
-      all_good &= std::fabs(diff) < 1e-4;
+      all_good &= std::fabs(diff) < 1e-2; // i.e., accurate to a cm (0.01 meters)
     }
   }
   TEST("predicted heights match truth", all_good, true);
