@@ -185,6 +185,7 @@ bool bpgl_geotif_camera<T>::construct_from_geotif(vpgl_camera<T> const& general_
 template <class T>
 bool bpgl_geotif_camera<T>::construct_from_matrix(vpgl_camera<T> const& general_cam, vnl_matrix<T> const& geo_transform_matrix, bool elev_org_at_zero, vpgl_lvcs_sptr lvcs_ptr, int hemisphere_flag , int zone)
   {
+   scale_defined_ = true;
    elev_org_at_zero_ = elev_org_at_zero;
    lvcs_ptr_ = lvcs_ptr;
   if(general_cam.is_a() == "vpgl_rational_camera"&& !lvcs_ptr){
