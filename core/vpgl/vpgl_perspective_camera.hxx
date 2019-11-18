@@ -78,7 +78,7 @@ vpgl_perspective_camera<T>::vpgl_perspective_camera( const vpgl_perspective_came
 
 //-------------------------------------------
 template <class T>
-vpgl_proj_camera<T>* vpgl_perspective_camera<T>::clone(void) const
+vpgl_perspective_camera<T>* vpgl_perspective_camera<T>::clone(void) const
 {
   return new vpgl_perspective_camera<T>(*this);
 }

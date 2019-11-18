@@ -88,7 +88,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const& geotiff_img
     std::cout << "vpgl_geo_camera::init_geo_camera comp_trans_matrix -- Transform matrix cannot be formed..\n";
     return false;
   }
-
+  
   // create the camera
   camera = new vpgl_geo_camera(trans_matrix, lvcs);
   camera->set_scale_format(scale_tag);
@@ -291,28 +291,78 @@ bool vpgl_geo_camera::init_geo_camera(const std::string& tfw_name, const vpgl_lv
   ifs.close();
   return true;
 }
+//: transforms a given local 3d world point to global geo coordinates 
+void vpgl_geo_camera::local_to_global(double lx, double ly, double lz, double& gx, double& gy, double& gz) const{
+  if (lvcs_) {
+    if (lvcs_->get_cs_name() == vpgl_lvcs::utm) {
+      if (is_utm_) {  // geo cam is also utm so keep using utm
+        lvcs_->local_to_global(lx, ly, lz, vpgl_lvcs::utm, gx, gy, gz);
+      }
+      else {  // geo cam is not utm, convert to wgs84 as global
+        lvcs_->local_to_global(lx, ly, lz, vpgl_lvcs::wgs84, gx, gy, gz);
+      }
+    }
+    else {
+      lvcs_->local_to_global(lx, ly, lz, vpgl_lvcs::wgs84, gx, gy, gz);
+    }
+  }
+  else {  // if there is no lvcs, then we assume global coords are given in wgs84, i.e. x is lon and y is lat
+    gx = lx;
+    gy = ly;
+    gz = lz;
+  }
+}
+bool vpgl_geo_camera::global_to_local(double gx, double gy, double gz, double& lx, double& ly, double& lz){
+  if(!lvcs_){
+    std::cout << "No local vertical CS defined - can't map local to global" << std::endl;
+    return false;
+  }
+  if(lvcs_->get_cs_name() == vpgl_lvcs::utm){
+    lvcs_->global_to_local(gx, gy, gz, vpgl_lvcs::utm, lx, ly, lz);
+    return true;
+  }
+  if(lvcs_->get_cs_name() == vpgl_lvcs::wgs84){
+    lvcs_->global_to_local(gx, gy, gz, vpgl_lvcs::wgs84, lx, ly, lz);
+    return true;
+  }
+  std::cout << "lvcs name " << lvcs_->get_cs_name() << " not handled " << std::endl;
+  return false;
+}
 
+double vpgl_geo_camera::lvcs_elev_origin(){
+  if (!lvcs_)
+    return 0.0;
+  double ox, oy, oz;
+  int zone;
+  if(lvcs_->get_cs_name() == vpgl_lvcs::utm){
+      lvcs_->get_utm_origin(ox, oy, oz, zone);
+    return oz;
+  }
+  if(lvcs_->get_cs_name() == vpgl_lvcs::wgs84){
+      lvcs_->get_origin(oy, ox, oz);
+    return oz;
+  }
+  return 0.0;
+}
 //: transforms a given local 3d world point to image plane
 void vpgl_geo_camera::project(const double x, const double y, const double z,
                               double& u, double& v) const
 {
-  vnl_vector<double> vec(4), res(4);
   double lat, lon, gz;
-
   if (lvcs_) {
     if (lvcs_->get_cs_name() == vpgl_lvcs::utm) {
       if (is_utm_) {  // geo cam is also utm so keep using utm
         double gx, gy;
-        lvcs_->local_to_global(x, y, z, vpgl_lvcs::utm, gx, gy, gz);
+        this->local_to_global(x, y, z, gx, gy, gz);
         this->global_utm_to_img(gx, gy, utm_zone_, gz, u, v);
       }
       else {  // geo cam is not utm, convert to wgs84 as global
-        lvcs_->local_to_global(x, y, z, vpgl_lvcs::wgs84, lon, lat, gz);
+        this->local_to_global(x, y, z, lon, lat, gz);
         this->global_to_img(lon, lat, gz, u, v);
       }
     }
     else {
-      lvcs_->local_to_global(x, y, z, vpgl_lvcs::wgs84, lon, lat, gz);
+      this->local_to_global(x, y, z, lon, lat, gz);
       this->global_to_img(lon, lat, gz, u, v);
     }
   }

@@ -83,6 +83,14 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   vpgl_lvcs_sptr const lvcs() {return lvcs_;}
 
+  double lvcs_elev_origin();
+
+    //: convert local coordinates to global coordinates in the geo_camera CS
+  void local_to_global(double lx, double ly, double lz, double& gx, double& gy, double& gz) const;
+
+  //: convert global coordinates in the geo_camera CS to local coordinates 
+  bool global_to_local(double gx, double gy, double gz, double& lx, double& ly, double& lz);
+
   //: Implementing the generic camera interface of vpgl_camera.
   //  x,y,z are in local coordinates, u represents image column, v image row
   void project(const double x, const double y, const double z, double& u, double& v) const override;
@@ -156,6 +164,8 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   vnl_matrix<double>  trans_matrix(){return trans_matrix_; }
 
+  //: since vpgl_geo_camera is not templated only vpgl_camera<double>* is covariant with vpgl_camera<T>*
+  virtual vpgl_geo_camera* clone(void) const {return new vpgl_geo_camera(*this);}
 #if 0
   //: returns the corresponding pixel position (i,j) for a given geographical coordinate (lon, lat)
   void wgs_to_img(double lon, double lat,

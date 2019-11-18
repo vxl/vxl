@@ -85,6 +85,9 @@ class vpgl_generic_camera : public vpgl_camera<T>
   //: visualization
   void print_to_vrml(int level, std::ostream& os);
 
+  //: legal C++ because the return type is covariant with vpgl_camera<T>*
+  virtual vpgl_generic_camera<T>* clone(void) const {return new vpgl_generic_camera(*this);}
+
  protected:
   void nearest_ray_to_point(vgl_point_3d<T> const& p,
                             int& nearest_r, int& nearest_c) const;

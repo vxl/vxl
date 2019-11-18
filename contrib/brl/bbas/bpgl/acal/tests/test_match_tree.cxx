@@ -76,13 +76,13 @@ static void test_match_tree()
   acal_match_node* parent = child->parent_;
   size_t sc = parent->self_to_child_matches_.size();
   bool good = sc == 3;
-  good == good && parent->self_to_child_matches_[0].size() == 2;
+  good = good && parent->self_to_child_matches_[0].size() == 2;
   TEST("add nodes to tree", good, true);
 
   std::map<size_t, std::vector<vgl_point_2d<double> > > corrs;
   mt.collect_correspondences(mt.root_, corrs);
   vgl_point_2d<double> p = corrs[12][0];
-  good == good && p == c41.pt_;
+  good = good && p == c41.pt_;
   TEST("collect correspondences", good, true);
 }
 

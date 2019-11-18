@@ -64,6 +64,7 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
   void set_rows( const vnl_vector_fixed<T,4>& row1,
                  const vnl_vector_fixed<T,4>& row2 );
 
+  
   // === The following virtual functions require special treatment for the affine camera ===
 
   //: set a finite viewing distance to allow the methods below to return finite objects
@@ -94,7 +95,8 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
    vgl_homg_plane_3d<T> principal_plane() const override;
 
   //: Clone `this': creation of a new object and initialization
-  vpgl_affine_camera<T>* clone(void) const override;
+  // legal C++ because the return type is covariant with vpgl_camera<T>*
+  virtual vpgl_affine_camera<T>* clone(void) const override;
 
   //: the direction of all affine camera rays
   vgl_vector_3d<T> ray_dir() const {return ray_dir_;}

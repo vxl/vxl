@@ -11,7 +11,20 @@ bpgl_rolling_shutter_camera.h
 bpgl_segmented_rolling_shutter_camera.h bpgl_segmented_rolling_shutter_camera.hxx
 bpgl_camera_estimator.h bpgl_camera_estimator.hxx bpgl_camera_estimator_amoeba.h
 bpgl_camera_utils.h bpgl_camera_utils.cxx
+#bpgl_geotif_camera.h bpgl_geotif_camera.hxx
    )
+include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
+if(TIFF_FOUND)
+  include_directories(${TIFF_INCLUDE_DIR})
+  include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+  if(GEOTIFF_FOUND)
+    include_directories(${GEOTIFF_INCLUDE_DIR})
+
+    set( bpgl_sources ${bpgl_sources}
+         bpgl_geotif_camera.h         bpgl_geotif_camera.hxx)
+         
+  endif()
+endif()
 
 aux_source_directory(Templates bpgl_sources)
 
