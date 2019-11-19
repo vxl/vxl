@@ -14,18 +14,18 @@
 //          (1 + k1*r^2 + k2*r^4 + k3*r^6)
 //   x' = x ------------------------------  + 2p1(x*y) + p2(r^2 + 2x^2)
 //          (1 + k4*r^2 + k5*r*6 + k6*r*6)
-//   
+//
 //
 //          (1 + k1*r^2 + k2*r^4 + k3*r^6)
-//   y' = y ------------------------------  + p1(r^2 + 2y^2) 2p2(x*y) + 
+//   y' = y ------------------------------  + p1(r^2 + 2y^2) 2p2(x*y) +
 //          (1 + k4*r^2 + k5*r*6 + k6*r*6)
-//   
+//
 //  note that (x, y) are focal plane coordinates and (x', y') are distorted focal plane coordinates.
-//  
+//
 //     u        x'
 //     v   = K  y' , where K is the calibration matrix
-//     1        1 
-//  
+//     1        1
+//
 //                                      wx             X
 // To apply lens distortion,    compute wy = [ R | t ] Y
 //                                      w              Z
@@ -35,15 +35,15 @@
 // To undistort an image, apply the inverse of the calibration matrix to compute x' and y'
 // non-linearly solve the distortion equations for x and y (the undistorted projection onto the image plane)
 // Determine undistorted (u, v) from (x, y) as,
-// 
+//
 //     u        x
 //     v   = K  y , where K is the calibration matrix
-//     1        1 
-// Note that in other vpgl lens distortion implementations, e.g. vpgl_poly_radial_distortion only k coeficients are specified and in terms of image 
+//     1        1
+// Note that in other vpgl lens distortion implementations, e.g. vpgl_poly_radial_distortion only k coeficients are specified and in terms of image
 // coordinates not focal plane coordinates, as assumed in the standard definition. However, by
 // by specifying a center of distortion the correction can work similarly, but with modified coefficients.
 //
-#include "vpgl_lens_distortion.h"                 
+#include "vpgl_lens_distortion.h"
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -56,7 +56,7 @@ class vpgl_radial_tangential_distortion : public vpgl_lens_distortion<T>
   //: Constructor
  vpgl_radial_tangential_distortion(const std::vector<T> k, T p1, T p2)
    : center_(vgl_point_2d<T>(T(0),T(0))), k_(k), p1_(p1), p2_(p2) {}
-  
+
  vpgl_radial_tangential_distortion(vgl_point_2d<T> const& center, std::vector<T> k, T p1, T p2)
    : center_(center), k_(k), p1_(p1), p2_(p2){}
 
@@ -84,8 +84,8 @@ class vpgl_radial_tangential_distortion : public vpgl_lens_distortion<T>
     ret.set(ret.x()+center_.x(), ret.y() + center_.y());
     return ret;
   }
-  
-  //: do nothing 
+
+  //: do nothing
   //: Set a translation to apply before of after distortion
   // This is needed when distorting an image to translate the resulting image
   // such that all points have positive indices

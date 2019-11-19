@@ -52,7 +52,7 @@ void test_vil_rgb(T)
 
   vil_rgb<T> A(6.0, 8.0, 12.0);
   vil_rgb<T> A0(1.0, 2.0, 3.0);
-  
+
   TEST("operator+ ", A.operator+(A0), vil_rgb<T>(7.0, 10.0, 15.0));
   TEST("operator- ", A.operator-(A0), vil_rgb<T>(5.0, 6.0, 9.0));
   TEST("operator/ ", A.operator/(A0), vil_rgb<T>(6.0, 4.0, 4.0));

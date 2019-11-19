@@ -224,7 +224,7 @@ int vul_string_atoi(std::string const& s)
   }
   catch ( const std::invalid_argument & )
   {
-    //DO NOTHING 
+    //DO NOTHING
     //std::cerr << "Argument is invalid\n";
   }
   return return_value;
@@ -239,7 +239,7 @@ double vul_string_atof(std::string const& s)
   }
   catch ( const std::invalid_argument & )
   {
-    //DO NOTHING 
+    //DO NOTHING
     //std::cerr << "Argument is invalid\n";
   }
   return return_value;

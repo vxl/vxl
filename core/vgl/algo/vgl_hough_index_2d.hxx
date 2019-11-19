@@ -58,7 +58,7 @@ vgl_hough_index_2d<T>::vgl_hough_index_2d(const T x0,
                                        const T y0,
                                        const T xsize,
                                        const T ysize,
-                                       const T angle_increment): xo_(x0), yo_(y0), xsize_(xsize), ysize_(ysize), 
+                                       const T angle_increment): xo_(x0), yo_(y0), xsize_(xsize), ysize_(ysize),
                                                                  angle_range_(T(180)),angle_increment_(angle_increment)
 {
 
@@ -74,7 +74,7 @@ vgl_hough_index_2d<T>::
 vgl_hough_index_2d(vgl_box_2d<T> const& box,
                    const T angle_increment):angle_range_(T(180)), angle_increment_(angle_increment)
 {
-  
+
   xo_ = box.min_x();  yo_ = box.min_y();
   xsize_ = box.max_x()-xo_;
   ysize_ = box.max_y()-yo_;
@@ -112,14 +112,14 @@ void vgl_hough_index_2d<T>::array_loc(vgl_line_segment_2d<T> const& line,
     std::cout << "Warning - vgl_hough_index_2d angle outside of range!\n";
     return;
   }
- 
+
   theta = angle;
 
   T angrad = vnl_math::pi_over_180*angle;
 
   //Compute distance indices
   vgl_point_2d<T> mid = line.mid_point();
-  
+
   T midx = T(mid.x()-xo_);
   T midy = T(mid.y()-yo_);
   T xs2 = xsize_/T(2);
@@ -217,7 +217,7 @@ bool vgl_hough_index_2d<T>::insert_new(vgl_line_segment_2d<T> const& line)
   this->array_loc(line, r, theta);
   if (!(r < r_dim_)||!(theta < th_dim_))
     return false;
-  
+
   const std::vector<size_t>& line_ids = index_[r][theta];
   size_t n = line_ids.size();
   if(n == 0){
@@ -417,7 +417,7 @@ lines_in_interval(vgl_line_segment_2d<T> const & l,
   int angle_radius = static_cast<int>(std::ceil(theta_dist/angle_increment_));
   int r_radius = static_cast<int>(std::ceil(r_dist));
   size_t th_dim_m1 = th_dim_ - 1;
-  
+
   for (int i = -angle_radius; i<=angle_radius; i++)
   {
     //The angle space is circular
@@ -518,7 +518,7 @@ void vgl_hough_index_2d<T>::line_indices_in_interval(const size_t r_index, const
 
   for (int i = -angle_radius; i<=angle_radius; i++)
   {
-    
+
     //The angle space is circular
     int t_indx = (theta_index + i) % (th_dim_);
     if (t_indx<0)
@@ -527,9 +527,9 @@ void vgl_hough_index_2d<T>::line_indices_in_interval(const size_t r_index, const
     for (int j = -r_radius; j<=r_radius; j++)
     {
       if (i==0 && j == 0) continue;//skip center query bin
-	  
+
       int r_indx = r_index + j;
-	  
+
       if ((r_indx<0)||(r_indx>=static_cast<int>(r_dim_)))
         continue;
       std::vector<vgl_line_segment_2d<T> > temp;
@@ -682,7 +682,7 @@ vgl_hough_index_2d<T>::parallel_lines(vgl_line_segment_2d<T> const &l,
                                       std::vector<vgl_line_segment_2d<T> >& lines)
 {
   lines.clear();
-  
+
   T angle = tangent_angle(l);
   this->parallel_lines(angle, angle_dist, lines);
 }
@@ -698,7 +698,7 @@ vgl_hough_index_2d<T>::parallel_lines(vgl_line_segment_2d<T> const &l,
                                       const T angle_dist)
 {
   std::vector<vgl_line_segment_2d<T> > out;
-  
+
   this->parallel_lines(l, angle_dist, out);
   return out;
 }

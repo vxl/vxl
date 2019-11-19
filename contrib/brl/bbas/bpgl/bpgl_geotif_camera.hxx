@@ -61,7 +61,7 @@ bool bpgl_geotif_camera<T>::construct_matrix(T sx, T sy, T sz, std::vector<std::
   matrix_[2][3] = Tz;
   return true;
 }
-                                             
+
 template <class T>
 bool bpgl_geotif_camera<T>::init_from_geotif(vil_image_resource_sptr const& resc){
   // check if the image is GEOTIFF
@@ -93,7 +93,7 @@ bool bpgl_geotif_camera<T>::init_from_geotif(vil_image_resource_sptr const& resc
   double* matrix_dvalues;
   double dsx = 1.0, dsy = 1.0, dsz = 1.0;
   scale_defined_ = false;
-  if (gtif->gtif_trans_matrix(matrix_dvalues)) { 
+  if (gtif->gtif_trans_matrix(matrix_dvalues)) {
     std::cout << "Transfer matrix is given, using that...." << std::endl;
     T vals[16];
     for (size_t i = 0; i < 16; ++i)
@@ -119,7 +119,7 @@ bool bpgl_geotif_camera<T>::init_from_geotif(vil_image_resource_sptr const& resc
     std::cout << "Transform matrix cannot be formed..\n";
     return false;
   }
-  
+
   // check if the model type is geographic and also the units
   if (gtif->GCS_WGS84_MET_DEG()) {
     is_utm_ = false;
@@ -271,7 +271,7 @@ bool bpgl_geotif_camera<T>::global_to_local(T gx, T gy, T gz, T& lx, T& ly, T& l
   double dgx = static_cast<double>(gx);
   double dgy = static_cast<double>(gy);
   double dgz = static_cast<double>(gz);
-  double dlx, dly, dlz; 
+  double dlx, dly, dlz;
   bool good = false;
   if(lvcs_ptr_->get_cs_name() == vpgl_lvcs::utm){
     lvcs_ptr_->global_to_local(dgx, dgy, dgz, vpgl_lvcs::utm, dlx, dly, dlz);
@@ -373,7 +373,7 @@ void bpgl_geotif_camera<T>::project_gtif_to_image(const T tifu, const T tifv, co
     general_cam_->project(T(lon), T(lat), zadj, u, v);
     return;
   }
-  // geotiff is in UTM so conversion is required before projecting 
+  // geotiff is in UTM so conversion is required before projecting
   // through the WGS84 camera
   if (has_lvcs_ && gcam_has_wgs84_cs_ && is_utm_) {
       T east = 0.0, north = 0.0;

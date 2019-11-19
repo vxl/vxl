@@ -219,19 +219,19 @@ bool local_minima(vbl_array_2d<T> const& in, vbl_array_2d<T>& minima, T thresh)
       dmin = mval;
       if (ul<=thresh) continue;
       if (ul<dmin) { dmin = ul; }
-    
+
       if (um<=thresh) continue;
       if (um<dmin) { dmin = um; }
-    
+
       if (lf<=thresh) continue;
       if (lf<dmin) { dmin = lf; }
-    
+
       if (ll<=thresh) continue;
       if (ll<dmin) { dmin = ll; }
-    
+
       if (lm<=thresh) continue;
       if (lm<dmin) { dmin = lm; }
-    
+
       if (dmin>thresh) {
         minima[r][nc-1] = dmin;
         minima_found = true;

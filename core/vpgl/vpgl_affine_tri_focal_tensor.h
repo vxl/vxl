@@ -14,7 +14,7 @@
 //
 // \author  J.L. Mundy
 // \date April 3, 2018
-//         
+//
 // \verbatim
 //  Modifications:
 // \endverbatim
@@ -98,13 +98,13 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
 
   //: Construct from three cameras
   vpgl_affine_tri_focal_tensor(const vpgl_affine_camera<Type>& c1,const vpgl_affine_camera<Type>& c2,const vpgl_affine_camera<Type>& c3){
-    this->init_img_transforms(); this->set(c1, c2, c3); 
+    this->init_img_transforms(); this->set(c1, c2, c3);
   }
   //: Construct from three cameras with scaling transforms
   vpgl_affine_tri_focal_tensor(const vpgl_affine_camera<Type>& c1,const vpgl_affine_camera<Type>& c2,const vpgl_affine_camera<Type>& c3,
                                std::vector<vgl_h_matrix_2d<Type> > const& img_pt_transforms):
   img_pt_transforms_(img_pt_transforms){
-	
+
     vpgl_affine_camera<Type> pre_c1 = premultiply_a(c1, img_pt_transforms_[0]);
     vpgl_affine_camera<Type> pre_c2 = premultiply_a(c2, img_pt_transforms_[1]);
     vpgl_affine_camera<Type> pre_c3 = premultiply_a(c3, img_pt_transforms_[2]);
@@ -112,7 +112,7 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
     vpgl_affine_camera<Type> pre_post_c1 = postmultiply_a(pre_c1, H);
     vpgl_affine_camera<Type> pre_post_c2 = postmultiply_a(pre_c2, H);
     vpgl_affine_camera<Type> pre_post_c3 = postmultiply_a(pre_c3, H);
-    this->set(pre_post_c1, pre_post_c2, pre_post_c3); 
+    this->set(pre_post_c1, pre_post_c2, pre_post_c3);
   }
   //: Construct from three cameras with image dimensions
   vpgl_affine_tri_focal_tensor(const vpgl_affine_camera<Type>& c1,const vpgl_affine_camera<Type>& c2,const vpgl_affine_camera<Type>& c3,
@@ -156,7 +156,7 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   vnl_matrix_fixed<Type, 3,3> point_constraint_3x3(vgl_homg_point_2d<Type> const& point1,
                                                    vgl_homg_point_2d<Type> const& point2,
                                                    vgl_homg_point_2d<Type> const& point3){
-    
+
     vgl_homg_point_2d<Type> p1t = img_pt_transforms_[0]*point1;
     vgl_homg_point_2d<Type> p2t = img_pt_transforms_[1]*point2;
     vgl_homg_point_2d<Type> p3t = img_pt_transforms_[2]*point3;
@@ -253,7 +253,7 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
     }
     return good;
   }
- 
+
   virtual vgl_homg_point_2d<Type> epipole_12(){
     vgl_homg_point_2d<Type> temp = vpgl_tri_focal_tensor<Type>::epipole_12();
     return img_pt_transforms_[1].preimage(temp);
@@ -263,7 +263,7 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
     return img_pt_transforms_[2].preimage(temp);
   }
 
-  
+
 bool fmatrix_12(vpgl_affine_fundamental_matrix<Type>& f_12){
     if(!vpgl_tri_focal_tensor<Type>::f_matrices_1213_valid_) vpgl_tri_focal_tensor<Type>::compute_f_matrices();
     vpgl_affine_fundamental_matrix<Type> temp;
@@ -272,7 +272,7 @@ bool fmatrix_12(vpgl_affine_fundamental_matrix<Type>& f_12){
       vnl_matrix_fixed<Type, 3, 3> F = temp.get_matrix();
       vnl_matrix_fixed<Type, 3, 3> K1 = img_pt_transforms_[0].get_matrix();
       vnl_matrix_fixed<Type, 3, 3> K2 = img_pt_transforms_[1].get_matrix();
-      K2.inplace_transpose(); 
+      K2.inplace_transpose();
       vnl_matrix_fixed<Type, 3, 3> ret = K2*F*K1;
       Type fbn = ret.frobenius_norm();
       if(fbn < vgl_tolerance<Type>::position)
@@ -290,7 +290,7 @@ bool fmatrix_12(vpgl_affine_fundamental_matrix<Type>& f_12){
       vnl_matrix_fixed<Type, 3, 3> F = temp.get_matrix();
       vnl_matrix_fixed<Type, 3, 3> K1 = img_pt_transforms_[0].get_matrix();
       vnl_matrix_fixed<Type, 3, 3> K3 = img_pt_transforms_[2].get_matrix();
-      K3.inplace_transpose(); 
+      K3.inplace_transpose();
       vnl_matrix_fixed<Type, 3, 3> ret = K3*F*K1;
       Type fbn = ret.frobenius_norm();
       if(fbn < vgl_tolerance<Type>::position)
@@ -308,7 +308,7 @@ bool fmatrix_12(vpgl_affine_fundamental_matrix<Type>& f_12){
       vnl_matrix_fixed<Type, 3, 3> F = temp.get_matrix();
       vnl_matrix_fixed<Type, 3, 3> K2 = img_pt_transforms_[1].get_matrix();
       vnl_matrix_fixed<Type, 3, 3> K3 = img_pt_transforms_[2].get_matrix();
-      K3.inplace_transpose(); 
+      K3.inplace_transpose();
       vnl_matrix_fixed<Type, 3, 3> ret = K3*F*K2;
       Type fbn = ret.frobenius_norm();
       if(fbn < vgl_tolerance<Type>::position)
@@ -334,7 +334,7 @@ bool fmatrix_12(vpgl_affine_fundamental_matrix<Type>& f_12){
     vpgl_affine_camera<Type> ac;
     return affine(vpgl_tri_focal_tensor<Type>::c3_, c3);
   }
- 
+
   // INTERNALS---------------------------------------------------------------
   private:
   static vpgl_affine_fundamental_matrix<Type> null_F(){

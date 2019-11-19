@@ -27,7 +27,7 @@ void vil_2nd_deriv_3x3(const vil_image_view<srcT>& src,
 		d2I_dij.top_left_ptr()+2*p*d2I_dij.planestep(),
 		d2I_dij.istep(), d2I_dij.jstep(),
 		d2I_dij.top_left_ptr()+(2*p+1)*d2I_dij.planestep(),
-		d2I_dij.istep(), d2I_dij.jstep(), 
+		d2I_dij.istep(), d2I_dij.jstep(),
 		d2I_dij.top_left_ptr() + (2*p + 2)*d2I_dij.planestep(),
 		d2I_dij.istep(), d2I_dij.jstep(), ni,nj);
   }
@@ -153,7 +153,7 @@ void vil_2nd_deriv_3x3_1plane(srcT* const src,
       //      to ensure conversion to destT before addition
       *d2i =
           k125*static_cast<destT>(s[o1])   - k25*static_cast<destT>(s[o2]) + k125*static_cast<destT>(s[o3])
-        + k25*static_cast<destT>(s[o4])    - k5 *static_cast<destT>(s[o0]) + k25 *static_cast<destT>(s[o5]) 
+        + k25*static_cast<destT>(s[o4])    - k5 *static_cast<destT>(s[o0]) + k25 *static_cast<destT>(s[o5])
         + k125*static_cast<destT>(s[o6])   - k25*static_cast<destT>(s[o7]) + k125*static_cast<destT>(s[o8]);
 
       // Compute 2nd derivative rt. j
@@ -163,7 +163,7 @@ void vil_2nd_deriv_3x3_1plane(srcT* const src,
       //
       *d2j =
           k125*static_cast<destT>(s[o1])   + k25*static_cast<destT>(s[o2]) + k125*static_cast<destT>(s[o3])
-         -k25*static_cast<destT>(s[o4])    - k5 *static_cast<destT>(s[o0]) - k25 *static_cast<destT>(s[o5]) 
+         -k25*static_cast<destT>(s[o4])    - k5 *static_cast<destT>(s[o0]) - k25 *static_cast<destT>(s[o5])
         + k125*static_cast<destT>(s[o6])   + k25*static_cast<destT>(s[o7]) + k125*static_cast<destT>(s[o8]);
 
       // Compute 2nd derivative rt. i and j
@@ -172,7 +172,7 @@ void vil_2nd_deriv_3x3_1plane(srcT* const src,
       //           | -k25  0  k25|
       //
       *d2ij =
-          k25*static_cast<destT>(s[o1]) - k25*static_cast<destT>(s[o3]) 
+          k25*static_cast<destT>(s[o1]) - k25*static_cast<destT>(s[o3])
         - k25*static_cast<destT>(s[o6]) + k25*static_cast<destT>(s[o8]);
 
       s+=s_istep;
@@ -218,7 +218,7 @@ template void vil_2nd_deriv_3x3(const vil_image_view< srcT >& src,      \
 template void vil_2nd_deriv_3x3(const vil_image_view< srcT >& src, \
                                 vil_image_view<destT>& d2I_di2,  \
                                 vil_image_view<destT>& d2I_dj2,  \
-                                vil_image_view<destT>& d2I_didj) 
-                         
+                                vil_image_view<destT>& d2I_didj)
+
 
 #endif // vil_2nd_deriv_3x3_hxx_

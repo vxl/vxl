@@ -108,7 +108,7 @@ void vpgl_tri_focal_tensor<Type>::set(const vpgl_proj_camera<Type>& c1, const vp
     c3.decompose(M3, p3);
     c1_ = c1; c2_ = c2; c3_ =c3;
   }else{
-	  
+
     vgl_h_matrix_3d<Type> hc = get_canonical_h(c1);
     vpgl_proj_camera<Type> c1_can(c1.get_matrix()*hc.get_matrix());
     vpgl_proj_camera<Type> c2_can(c2.get_matrix()*hc.get_matrix());
@@ -224,7 +224,7 @@ point_constraint_3x3(vgl_homg_point_2d<Type> const& point1,
 
             for(size_t k = 0;k < 3; ++k)
               sum_k += xpp[k]*epsilon(k,q,s);
-                
+
             sum_rs += x[i]*sum_j*sum_k*T_(i,p,q);
             n += Type(1);
           }
@@ -1054,18 +1054,18 @@ bool vpgl_tri_focal_tensor<Type>::compute_epipoles(){
   vnl_matrix_fixed<Type,3,3> T3 = dot1(vnl_vector_fixed<Type,3>(0,0,1).as_ref());
 
   vnl_svd<Type> svd1(T1.as_ref());
-  
+
   vnl_vector_fixed<Type,3> u1 = svd1.nullvector();
   vnl_vector_fixed<Type,3> v1 = svd1.left_nullvector();
 
   vnl_svd<Type> svd2(T2.as_ref());
   vnl_vector_fixed<Type,3> u2 = svd2.nullvector();
   vnl_vector_fixed<Type,3> v2 = svd2.left_nullvector();
- 
+
   vnl_svd<Type> svd3(T3.as_ref());
   vnl_vector_fixed<Type,3> u3 = svd3.nullvector();
   vnl_vector_fixed<Type,3> v3 = svd3.left_nullvector();
-  
+
   vnl_matrix_fixed<Type,3,3> V;
   V(0,0) = v1[0];   V(0,1) = v2[0];  V(0,2) = v3[0];
   V(1,0) = v1[1];   V(1,1) = v2[1];  V(1,2) = v3[1];
@@ -1106,7 +1106,7 @@ bool vpgl_tri_focal_tensor<Type>::compute_f_matrices(){
     std::cout << "Can't compute f matrices - epipoles not valid" << std::endl;
     return false;
   }
-  
+
   vnl_vector_fixed<Type,3> ev12(e12_.x(), e12_.y(), e12_.w()), ev13(e13_.x(), e13_.y(), e13_.w());
 
   // bit of a pain since cross product matrix isn't defined for a generic type
@@ -1126,14 +1126,14 @@ bool vpgl_tri_focal_tensor<Type>::compute_f_matrices(){
       temp12_d[r][c] = temp12[c][r];//transpose
       temp13_d[r][c] = temp13[c][r];//transpose
     }
-  cp12 = e12x*temp12_d;   cp13 = e13x*temp13_d; 
+  cp12 = e12x*temp12_d;   cp13 = e13x*temp13_d;
   for(size_t r = 0; r<3; ++r)
     for(size_t c = 0; c<3; ++c){
       F12_t[r][c] = cp12[r][c];
       F13_t[r][c] = cp13[r][c];
     }
   f12_.set_matrix(F12_t);
-  f13_.set_matrix(F13_t);  
+  f13_.set_matrix(F13_t);
   f_matrices_1213_valid_ = true;
   return true;
 }

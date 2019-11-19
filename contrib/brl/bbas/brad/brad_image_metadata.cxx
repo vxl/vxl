@@ -1066,7 +1066,7 @@ bool brad_image_metadata::parse_from_txt(std::string const& filename)
   }
   n_bands_ = 0;
 
-  vgl_point_3d<double> lower_left_local(181, 91, 10000);  // x is lon, y is lat 
+  vgl_point_3d<double> lower_left_local(181, 91, 10000);  // x is lon, y is lat
   vgl_point_3d<double> upper_right_local(-181,-91, -10000);
   bool parsed_llx = false, parsed_lly = false, parsed_llz = false;
   bool parsed_urx = false, parsed_ury = false, parsed_urz = false;

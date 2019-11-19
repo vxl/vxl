@@ -22,7 +22,7 @@ if(TIFF_FOUND)
 
     set( bpgl_sources ${bpgl_sources}
          bpgl_geotif_camera.h         bpgl_geotif_camera.hxx)
-         
+
   endif()
 endif()
 
