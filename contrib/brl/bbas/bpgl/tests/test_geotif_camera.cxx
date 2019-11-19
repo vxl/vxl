@@ -16,7 +16,7 @@
 static void test_geotif_camera()
 {
   // RPC camera is from opensource Buenos Aires DSM challenge dataset
-  // https://spacenetchallenge.github.io/  
+  // https://spacenetchallenge.github.io/
     std::string rpb = "satId = \"????\";\n";
     rpb += "bandId = \"RGB\" \n";
     rpb += "SpecId = \"RPC00B\" \n";

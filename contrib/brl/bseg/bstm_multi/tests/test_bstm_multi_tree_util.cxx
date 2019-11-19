@@ -134,7 +134,7 @@ void test_generic_tree() {
     ok = false;
     try {
       boct_bit_tree time_tree2 = time_gen.space_tree();
-    } catch (const tree_type_exception) {	  
+    } catch (const tree_type_exception) {
       ok = true;
     }
     TEST("time tree get space tree", ok, true);

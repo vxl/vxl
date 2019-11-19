@@ -172,7 +172,7 @@ class acal_metadata
            tm.global_upper_right_.set(lon, lat, elev);
        }
        tm.global_bb_ = vgl_box_3d<double>(tm.global_lower_left_, tm.global_upper_right_);
-         
+
      tile_meta_.push_back(tm);
    }
  }

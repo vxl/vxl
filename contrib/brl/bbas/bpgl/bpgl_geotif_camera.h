@@ -15,7 +15,7 @@
 //
 //  the geotif header defines the mapping from geotif image coordinates to 2-d geographic coordinates,
 //  and the image values define the global elevation at each 2-d location, i.e., z(x,y)
-// 
+//
 //  for the point cloud, a lvcs is required to relate the point coordinates to geographic coordinates, not necessarily
 //  in the same as the geographic coordinate system as the geotif image.
 //
@@ -38,13 +38,13 @@ class bpgl_geotif_camera : vpgl_camera<T>
   //  the default member values represent the most common case, e.g. a local_rational_camera
  bpgl_geotif_camera():has_lvcs_(true), gcam_has_wgs84_cs_(true),
     elev_org_at_zero_(true), is_utm_(false), project_local_points_(true),scale_defined_(false){}
-  
+
   virtual ~bpgl_geotif_camera() = default;
-  
+
   //: factory methods to allow for failure conditions
 
   // if the lvcs is not defined (null) then the general camera must be a rational camera with WGS84 CS,
-  // or a local rational camera with an internal lvcs that defines the local Cartesian CS 
+  // or a local rational camera with an internal lvcs that defines the local Cartesian CS
   // Notes: 1) input points may have been generated with local CS elevation origin = 0. In this case
   //           the local rational camera lvcs elevation origin is correct, and is used by default.
   //           If the elevation origin is global due to post processing, elev_org_at_zero = false and
@@ -66,7 +66,7 @@ class bpgl_geotif_camera : vpgl_camera<T>
   bool project_local_points() const {return project_local_points_;}
 
   //: project from local or global 3-d coordinates, to an image location (u, v)
-  // if project_local_points() == true, coordinates are in a local CS otherwise in a global CS 
+  // if project_local_points() == true, coordinates are in a local CS otherwise in a global CS
   virtual void project(const T x, const T y, const T z, T& u, T& v) const;
 
   //: project from an image location in the GEOTIFF image to an image location (u, v),
