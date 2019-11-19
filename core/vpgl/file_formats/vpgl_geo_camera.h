@@ -88,7 +88,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
     //: convert local coordinates to global coordinates in the geo_camera CS
   void local_to_global(double lx, double ly, double lz, double& gx, double& gy, double& gz) const;
 
-  //: convert global coordinates in the geo_camera CS to local coordinates 
+  //: convert global coordinates in the geo_camera CS to local coordinates
   bool global_to_local(double gx, double gy, double gz, double& lx, double& ly, double& lz);
 
   //: Implementing the generic camera interface of vpgl_camera.

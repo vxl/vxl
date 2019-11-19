@@ -64,7 +64,7 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
   void set_rows( const vnl_vector_fixed<T,4>& row1,
                  const vnl_vector_fixed<T,4>& row2 );
 
-  
+
   // === The following virtual functions require special treatment for the affine camera ===
 
   //: set a finite viewing distance to allow the methods below to return finite objects

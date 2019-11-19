@@ -161,7 +161,7 @@ struct vil_openjpeg_image_impl
   bool error_{false};
 
   vil_openjpeg_image_impl(void)
-  :  vstream_(nullptr) 
+  :  vstream_(nullptr)
   {
     std::memset(&this->encode_params_, 0, sizeof(opj_cparameters_t));
     std::memset(&this->header_, 0, sizeof(opj_header));

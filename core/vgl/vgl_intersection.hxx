@@ -519,7 +519,7 @@ bool vgl_intersection(vgl_line_segment_2d<T> const& line1,
   // check if the intersection point lies inside the
   // segment boundaries, including the endpoints
   // require a tolerance due to the inaccuracy of intersection
-  
+
   T mag_s1 = vs1.length(), mag_s2 = vs2.length();
   T mag_p1 = vp1.length(), mag_p2 = vp2.length();
   T v1 = mag_p1 - mag_s1;

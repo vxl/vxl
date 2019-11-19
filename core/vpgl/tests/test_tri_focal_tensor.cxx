@@ -41,7 +41,7 @@ static void test_tri_focal_tensor()
   vgl_homg_point_2d<double> x2 = c2.project(X), x20 = c2.project(X0);
 
   // move one unit along y
-  M[0][3] = 0.0;   M[1][3] = -1.0; 
+  M[0][3] = 0.0;   M[1][3] = -1.0;
   vpgl_proj_camera<double> c3(M);
   vgl_homg_point_2d<double> x3 = c3.project(X), x30 = c3.project(X0);
 
@@ -121,7 +121,7 @@ static void test_tri_focal_tensor()
 
   // test with perturbed points
   double d = 1.5;
-  vgl_homg_point_2d<double> x2p((x2.x()/x2.w())+d, (x2.y()/x2.w())+d);  
+  vgl_homg_point_2d<double> x2p((x2.x()/x2.w())+d, (x2.y()/x2.w())+d);
   vnl_matrix_fixed<double,3,3> zero_3x3_p = T.point_constraint_3x3(x1,x2p,x3);
   std::cout << "zero 3x3 perturbed\n" << zero_3x3_p << std::endl;
   double fbp = zero_3x3_p.frobenius_norm();

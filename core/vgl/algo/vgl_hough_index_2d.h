@@ -90,7 +90,7 @@
 #include <vgl/vgl_box_2d.h>
 
 template <class T>
-class vgl_hough_index_2d 
+class vgl_hough_index_2d
 {
   // PUBLIC INTERFACE----------------------------------------------------------
 
@@ -111,7 +111,7 @@ class vgl_hough_index_2d
       xsize_(i.xsize_), ysize_(i.ysize_),
       angle_range_(i.angle_range_), angle_increment_(i.angle_increment_),
       r_dim_(i.r_dim_), th_dim_(i.th_dim_), index_(i.index_) {}
-  
+
   ~vgl_hough_index_2d(){}
 
   // Data Access---------------------------------------------------------------
@@ -154,7 +154,7 @@ class vgl_hough_index_2d
 
   std::vector<size_t> line_indices_at_index(const size_t r,
                                             const size_t theta);
-  
+
   //: Lines in a line index bin at r and theta bin indices.
   void lines_at_index(const size_t r, const size_t theta,
                       std::vector<vgl_line_segment_2d<T> >& lines);
@@ -220,7 +220,7 @@ class vgl_hough_index_2d
   //: Angle histogram - projection of hough space onto theta axis
   std::vector<size_t> angle_histogram();
 
-  //: Dominant line directions found by non-maximum suppression 
+  //: Dominant line directions found by non-maximum suppression
   // that is peaks with count less than thresh are also suppressed
   size_t dominant_directions(const size_t thresh, const T angle_tol,
                              std::vector<size_t>& dirs);
@@ -276,7 +276,7 @@ class vgl_hough_index_2d
   size_t   r_dim_;  //!< The dimensions of the index space
   size_t   th_dim_;
 
-  //: The array of lines. 
+  //: The array of lines.
   //  This array index is stored in the hough array
   std::vector<vgl_line_segment_2d<T> > lines_;
 
