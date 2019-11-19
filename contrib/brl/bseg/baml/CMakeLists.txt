@@ -7,7 +7,7 @@ set(baml_sources
     baml_utilities.h                 baml_utilities.cxx
     baml_warp.h                      baml_warp.cxx
    )
-   
+
 aux_source_directory(Templates baml_sources)
 
 vxl_add_library(LIBRARY_NAME baml LIBRARY_SOURCES ${baml_sources})
