@@ -49,7 +49,7 @@ static void test_hough_index_2d()
   TEST("...", non_parallel.size(), 0);
   // test search involving the 180 cut
   vgl_hough_index_2d<double> h_cut(0.0, 0.0, 512.0, 512.0, 5.0);
-  // two lines one on each side of the cut. 
+  // two lines one on each side of the cut.
   vgl_point_2d<double> p0_cut(256,256);
   vgl_point_2d<double> p1_cut(356,(256-1.74550));
   vgl_point_2d<double> p2_cut(356,(256+1.74550));
@@ -57,7 +57,7 @@ static void test_hough_index_2d()
   vgl_line_segment_2d<double> l0_cut(p0_cut, p1_cut);
   vgl_line_segment_2d<double> l1_cut(p0_cut, p2_cut);
   h_cut.insert(l0_cut);
-  h_cut.insert(l1_cut); 
+  h_cut.insert(l1_cut);
   std::vector<vgl_line_segment_2d<double> > lines_cut;
   h_cut.lines_in_interval(l0_cut, 1, 3.0, lines_cut);
   TEST("lines near cut", lines_cut.size(), 2);

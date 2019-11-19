@@ -435,7 +435,7 @@ if(GTK2_FOUND)
       # If a GTK library is installed on a non-standard path, this will fail.
       # One can either work on the cmake dev list to improve PkgConfig,
       # or else use a function to append a full path to each library as
-      # provided by a patch in the original Mantis issue for 
+      # provided by a patch in the original Mantis issue for
       # https://gitlab.kitware.com/cmake/cmake/issues/15804
     endif()
   endif()

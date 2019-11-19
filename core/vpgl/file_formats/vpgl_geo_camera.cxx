@@ -88,7 +88,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const& geotiff_img
     std::cout << "vpgl_geo_camera::init_geo_camera comp_trans_matrix -- Transform matrix cannot be formed..\n";
     return false;
   }
-  
+
   // create the camera
   camera = new vpgl_geo_camera(trans_matrix, lvcs);
   camera->set_scale_format(scale_tag);
@@ -291,7 +291,7 @@ bool vpgl_geo_camera::init_geo_camera(const std::string& tfw_name, const vpgl_lv
   ifs.close();
   return true;
 }
-//: transforms a given local 3d world point to global geo coordinates 
+//: transforms a given local 3d world point to global geo coordinates
 void vpgl_geo_camera::local_to_global(double lx, double ly, double lz, double& gx, double& gy, double& gz) const{
   if (lvcs_) {
     if (lvcs_->get_cs_name() == vpgl_lvcs::utm) {

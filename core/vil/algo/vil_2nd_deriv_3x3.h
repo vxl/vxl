@@ -33,12 +33,12 @@ void vil_2nd_deriv_3x3(const vil_image_view<srcT>& src,
 //  Computes 2nd derivatives with repect to i, j  and ij on a ni x nj plane of data
 //  1 pixel border around 2nd derivative images is set to zero
 template<class srcT, class destT>
-void vil_2nd_deriv_3x3_1plane(srcT* const src, 
-                              std::ptrdiff_t s_istep, std::ptrdiff_t s_jstep, 
-                              destT* d2Idi, std::ptrdiff_t d2Idi_istep, std::ptrdiff_t d2Idi_jstep, 
-                              destT* d2Idj, std::ptrdiff_t d2Idj_istep, std::ptrdiff_t d2Idj_jstep, 
-                              destT* d2I_didj, std::ptrdiff_t d2I_didj_istep, std::ptrdiff_t d2I_didj_jstep, 
-                              unsigned ni, unsigned nj); 
+void vil_2nd_deriv_3x3_1plane(srcT* const src,
+                              std::ptrdiff_t s_istep, std::ptrdiff_t s_jstep,
+                              destT* d2Idi, std::ptrdiff_t d2Idi_istep, std::ptrdiff_t d2Idi_jstep,
+                              destT* d2Idj, std::ptrdiff_t d2Idj_istep, std::ptrdiff_t d2Idj_jstep,
+                              destT* d2I_didj, std::ptrdiff_t d2I_didj_istep, std::ptrdiff_t d2I_didj_jstep,
+                              unsigned ni, unsigned nj);
 
 
 #endif // vil_2nd_deriv_3x3_h_

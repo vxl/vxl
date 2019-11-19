@@ -156,7 +156,7 @@ void test_rational_camera_approx_affine()
   TEST("vpgl_affine_camera_convert success", success, true);
 
   // project center and corners of volume into image
-  
+
   std::vector<vgl_point_3d<double> > test_points {roi_center, roi_min, roi_max};
   for (vgl_point_3d<double> const& test_pt : test_points) {
     vgl_point_2d<double> img_pt1 = loc_rat_cam.project(test_pt);

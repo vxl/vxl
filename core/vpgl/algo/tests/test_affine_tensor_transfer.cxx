@@ -345,7 +345,7 @@ static void rat_cameras(vpgl_local_rational_camera<double>& cam0, vpgl_local_rat
 
   std::istringstream istr2(ss2.str());
   vpgl_local_rational_camera<double>* cam2_ptr = read_local_rational_camera<double>(istr2);
-  cam0 = *cam0_ptr;   cam1 = *cam1_ptr;   cam2 = *cam2_ptr; 
+  cam0 = *cam0_ptr;   cam1 = *cam1_ptr;   cam2 = *cam2_ptr;
 }
 
 static void test_affine_tensor_transfer()

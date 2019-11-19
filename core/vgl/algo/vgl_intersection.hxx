@@ -287,7 +287,7 @@ bool vgl_intersection(vgl_box_3d<T> const& b, std::list<vgl_point_3d<T> >& poly)
 // the linear least squares equation to solve is given by, Rp = q, where p is the unknown intersection point
 // the 3x3 matrix R is Sum_i [ I - dir_i dir_i^T ], where dir_i is the unit direction vector of the ray.
 // the 3x1 vector q is given by, Sum_i [ I - dir_i dir_i^T ]org_i, where org_i is the ray origin point.
-// 
+//
 template <class T>
 bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& inter_pt){
   size_t n = rays.size();
@@ -318,7 +318,7 @@ bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& 
   if(rank < 3){
    std::cout << "insufficient svd rank " << rank << " to compute intersection" << std::endl;
     return false;
-  } 
+  }
   vnl_matrix<T> p = svd.solve(q.as_ref());
   inter_pt.set(p[0][0], p[1][0], p[2][0]);
   return true;

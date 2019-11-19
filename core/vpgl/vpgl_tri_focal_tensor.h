@@ -156,7 +156,7 @@ protected:
                                                     vgl_homg_point_2d<Type> const& point2,
                                                     vgl_homg_point_2d<Type> const& point3);
 
-  
+
   //:tri focal tensor scalar point constraint (should == 0 if points correspond)
   Type point_constraint(vgl_homg_point_2d<Type> const& point1,
                         vgl_homg_point_2d<Type> const& point2,
@@ -166,7 +166,7 @@ protected:
   vnl_vector_fixed<Type, 3> line_constraint_3(vgl_homg_line_2d<Type> const& line1,
                                               vgl_homg_line_2d<Type> const& line2,
                                               vgl_homg_line_2d<Type> const& line3);
-  //: point transfer 
+  //: point transfer
   //  point in image 1 corresponding to points in images 2 and 3 and etc.
   virtual vgl_homg_point_2d<Type> image1_transfer(vgl_homg_point_2d<Type> const& point2,
                                           vgl_homg_point_2d<Type> const& point3) const;
@@ -191,7 +191,7 @@ protected:
   virtual bool get_epipoles(vgl_homg_point_2d<Type>& e12, vgl_homg_point_2d<Type>& e13)  {
     if (!epipoles_valid_) compute_epipoles(); e12 = e12_; e13 = e13_; return epipoles_valid_;
   }
- 
+
   bool compute_epipoles();
 
   virtual vgl_homg_point_2d<Type> epipole_12() {if(!epipoles_valid_) compute_epipoles(); return e12_;}
@@ -253,7 +253,7 @@ protected:
   vpgl_tri_focal_tensor<Type> premultiply1(const vnl_matrix<Type>& M) const;
   vpgl_tri_focal_tensor<Type> premultiply2(const vnl_matrix<Type>& M) const;
   vpgl_tri_focal_tensor<Type> premultiply3(const vnl_matrix<Type>& M) const;
-    
+
   // contractions involving vectors
   //: ${\tt M}_{jk} = T_{ijk} v_i$
   vnl_matrix_fixed<Type,3,3> dot1(const vnl_vector_fixed<Type,3>& v) const;

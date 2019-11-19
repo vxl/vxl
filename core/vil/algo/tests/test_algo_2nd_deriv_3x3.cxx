@@ -31,7 +31,7 @@ static void test_algo_2nd_deriv_3x3()
 
   image_d2I_didj(i-1,j+1)=v;  image_d2I_didj(i-1,j-1)=m;
   image_d2I_didj(i+1,j+1)=m;  image_d2I_didj(i+1,j-1)=v;
-  
+
 
 
   vil_image_view<double> d2Idi, d2Idj, d2I_didj;
