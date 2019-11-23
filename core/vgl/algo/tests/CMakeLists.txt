@@ -2,7 +2,8 @@
 
 add_executable( vgl_algo_test_all
   test_driver.cxx
-  test_compute_similarity_3d.cxx
+  test_compute_cremona_2d.cxx
+  test_compute_similarity_3d.cxx  
   test_compute_rigid_3d.cxx
   test_conic.cxx
   test_convex_hull_2d.cxx
@@ -43,6 +44,7 @@ add_test( NAME vgl_test_p_matrix COMMAND $<TARGET_FILE:vgl_algo_test_all> test_p
 add_test( NAME vgl_test_rotation_3d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_rotation_3d)
 add_test( NAME vgl_test_rtree COMMAND $<TARGET_FILE:vgl_algo_test_all> test_rtree)
 add_test( NAME vgl_test_hough_index_2d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_hough_index_2d)
+add_test( NAME vgl_test_compute_cremona_2d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_compute_cremona_2d)
 
 add_executable( vgl_algo_test_include test_include.cxx )
 target_link_libraries( vgl_algo_test_include ${VXL_LIB_PREFIX}vgl_algo)
