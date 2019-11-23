@@ -1,6 +1,7 @@
 #include <testlib/testlib_register.h>
 
 DECLARE( test_compute_similarity_3d );
+DECLARE( test_compute_cremona_2d );
 DECLARE( test_compute_rigid_3d );
 DECLARE( test_conic );
 DECLARE( test_convex_hull_2d );
@@ -24,6 +25,7 @@ void
 register_tests()
 {
   REGISTER( test_compute_similarity_3d );
+  REGISTER( test_compute_cremona_2d );
   REGISTER( test_compute_rigid_3d );
   REGISTER( test_conic );
   REGISTER( test_convex_hull_2d );
