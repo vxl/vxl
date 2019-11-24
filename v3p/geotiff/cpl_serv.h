@@ -41,7 +41,7 @@
 #ifdef HAVE_STRING_H
 #  include <string.h>
 #endif
-#if defined(HAVE_STRINGS_H) && !defined(HAVE_STRING_H)
+#if defined(HAVE_STRINGS_H)
 #  include <strings.h>
 #endif
 #ifdef HAVE_STDLIB_H
