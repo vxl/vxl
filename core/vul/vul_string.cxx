@@ -444,7 +444,10 @@ bool vul_string_expand_var(std::string &str)
         break;
       }
       else // or this is the first letter of the variable, in which case go through
+      {
         state=in_var;
+      }
+      [[fallthrough]]; // Keep backward compatible fall through 2019-11-24
      case in_var:  // in a non-bracketed variable
       assert(var_begin+1 < str.size());
       assert(i > var_begin);
