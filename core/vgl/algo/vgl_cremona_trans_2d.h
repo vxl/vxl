@@ -11,10 +11,17 @@
 // \endverbatim
 //
 // A cremona tranform is a generalization of the 2-d projective transformation
-// where the map to Euclidian coordinates is defined by ratios of polynomials.
-// In the case where the highest degree is one, the Cremona transformation is
-// equivalent to the projective transformation.
+// where the map (X,Y) -> (x, y) in Euclidian coordinates is defined by ratios of polynomials.
 // 
+//       P(X, Y)       R(X, Y)
+//   x = -------   y = ------
+//       Q(X, Y)       S(X, Y)
+//
+//   P, Q, R, S are polynomials of degree deg.
+//
+// In the case where the highest degree is one, the Cremona transformation with
+// a common denominator is equivalent to the projective transformation.
+
 #include <vector>
 #include <iosfwd>
 #include <vnl/vnl_fwd.h> // for vnl_vector_fixed<T,2>

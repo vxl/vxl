@@ -11,11 +11,23 @@
 // \endverbatim
 //
 // A cremona tranform is a generalization of the 2-d projective transformation
-// where the map to Euclidian coordinates is defined by ratios of polynomials.
-// In the case where the highest degree is one, the Cremona transformation is
-// equivalent to the projective transformation.
+// where the map (X,Y) -> (x, y) in Euclidian coordinates is defined by ratios of polynomials.
 // 
-
+//       P(X, Y)       R(X, Y)
+//   x = -------   y = ------
+//       Q(X, Y)       S(X, Y)
+//
+//   P, Q, R, S are polynomials of degree deg.
+//
+// In the case where the highest degree is one, the Cremona transformation with
+// a common denominator is equivalent to the projective transformation.
+// 
+// Various constraints on the generality of the transformation are available:
+//
+// BI_RATIONAL - full generality
+// COMMON_DENOMINATOR - the maps to x and to y have the same bi-rational denominator
+// UNITY_DENOMINATOR  - both denominators are 1 - so not a rational form (analogous to affine)
+//
 #include <iosfwd>
 #include <vgl_norm_trans_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -29,15 +41,16 @@ template <class T, size_t deg>
 class vgl_compute_cremona_2d
 {
  public:
-
+     enum constraint_t  {BI_RATIONAL, COMMON_DENOMINATOR, UNITY_DENOMINATOR, UNKNOWN};
   // Constructors/Initializers/Destructors-------------------------------------
 
- vgl_compute_cremona_2d(): linear_solved_(false) {}
+ vgl_compute_cremona_2d(): linear_solved_(false), constr_type_(BI_RATIONAL) {}
   ~vgl_compute_cremona_2d() {};
 
   // Operations----------------------------------------------------------------
   
-  bool compute_linear(std::vector<vgl_homg_point_2d<T> > const& from_pts, std::vector<vgl_homg_point_2d<T> > const& to_pts);
+  bool compute_linear(std::vector<vgl_homg_point_2d<T> > const& from_pts, 
+      std::vector<vgl_homg_point_2d<T> > const& to_pts, constraint_t ctype = BI_RATIONAL);
  bool project_linear(T X, T Y, T& x, T& y) const;
  T linear_error() {return linear_error_;}
 
@@ -53,6 +66,7 @@ class vgl_compute_cremona_2d
  protected :
  bool normalize();
  bool compute_linear_solution_error();
+ constraint_t constr_type_;
  std::vector<vgl_homg_point_2d<T> > from_pts_;
  std::vector<vgl_homg_point_2d<T> > to_pts_;
  vgl_norm_trans_2d<T> tr_from_;

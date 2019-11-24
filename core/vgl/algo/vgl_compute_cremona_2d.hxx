@@ -25,35 +25,101 @@ bool vgl_compute_cremona_2d<T, deg>::normalize(){
 }
 template <class T, size_t deg>
 bool vgl_compute_cremona_2d<T, deg>::
-compute_linear(std::vector<vgl_homg_point_2d<T> > const& from_pts, std::vector<vgl_homg_point_2d<T> > const& to_pts){
+compute_linear(std::vector<vgl_homg_point_2d<T> > const& from_pts, std::vector<vgl_homg_point_2d<T> > const& to_pts,
+               constraint_t ctype){
+  constr_type_ = ctype;
   linear_solved_ = false;
   from_pts_ = from_pts;
   to_pts_ = to_pts;
   this->normalize();
   size_t n = from_pts_.size();
   size_t nc = vgl_cremona_trans_2d<T,deg>::n_coeff();
-  vnl_matrix<T> A(2*n, 4*nc);
-  A.fill(T(0));
-  for(size_t k = 0; k<n; ++k){
-    vgl_point_2d<T> pf(norm_from_pts_[k]), pt(norm_to_pts_[k]);
-    T X = pf.x(), Y = pf.y(), x = pt.x(), y = pt.y();
-    //std::cout << X << ' ' << Y << ' ' << x << ' ' << y << std::endl;
-    vnl_vector<T> pv = vgl_cremona_trans_2d<T,deg>::power_vector(X, Y);
-    for(size_t i = 0; i<nc; ++i){
-      A[2*k][i]          = pv[i];
-      A[2*k][i+nc]       = -x*pv[i];
-      A[2*k+1][i+2*nc]   = pv[i];
-      A[2*k+1][i+3*nc]   = -y*pv[i];
+  if(constr_type_ == BI_RATIONAL){
+    vnl_matrix<T> A(2*n, 4*nc);
+    A.fill(T(0));
+    for(size_t k = 0; k<n; ++k){
+      vgl_point_2d<T> pf(norm_from_pts_[k]), pt(norm_to_pts_[k]);
+      T X = pf.x(), Y = pf.y(), x = pt.x(), y = pt.y();
+      vnl_vector<T> pv = vgl_cremona_trans_2d<T,deg>::power_vector(X, Y);
+      for(size_t i = 0; i<nc; ++i){
+        A[2*k][i]          = pv[i];
+        A[2*k][i+nc]       = -x*pv[i];
+        A[2*k+1][i+2*nc]   = pv[i];
+        A[2*k+1][i+3*nc]   = -y*pv[i];
+      }
     }
-  }
-  vnl_svd<T> svd(A);
-  size_t r = svd.rank();
-  if(r < 4*nc){
-    std::cout << "insufficent rank " << r << " for linear solution of Cremona coefficients" << std::endl;
+    vnl_svd<T> svd(A);
+    size_t r = svd.rank();
+    if(r < 4*nc){
+      std::cout << "insufficent rank " << r << " for linear solution of Cremona coefficients" << std::endl;
+      return false;
+    }
+    linear_coeff_ = svd.nullvector();
+  }else if(constr_type_ == COMMON_DENOMINATOR){
+    vnl_matrix<T> A(2*n, 3*nc);
+    A.fill(T(0));
+    for(size_t k = 0; k<n; ++k){
+      vgl_point_2d<T> pf(norm_from_pts_[k]), pt(norm_to_pts_[k]);
+      T X = pf.x(), Y = pf.y(), x = pt.x(), y = pt.y();
+      vnl_vector<T> pv = vgl_cremona_trans_2d<T,deg>::power_vector(X, Y);
+      for(size_t i = 0; i<nc; ++i){
+        A[2*k][i]          = pv[i];
+        A[2*k][i+nc]       = -x*pv[i];
+        A[2*k+1][i+nc]     = -y*pv[i];
+        A[2*k+1][i+2*nc]   = pv[i];
+      }
+    }
+    vnl_svd<T> svd(A);
+    size_t r = svd.rank();
+    if(r < 3*nc){
+      std::cerr << "insufficent rank " << r << " for linear solution of Cremona coefficients" << std::endl;
+      return false;
+    }
+    vnl_vector<T> temp = svd.nullvector();
+    vnl_vector<T> neu_x = temp.extract(nc, 0);
+    vnl_vector<T> den = temp.extract(nc, nc);
+    vnl_vector<T> neu_y = temp.extract(nc, 2*nc);
+    linear_coeff_.set_size(4*nc);
+    linear_coeff_.update(neu_x,  0);
+    linear_coeff_.update(den, nc);
+    linear_coeff_.update(neu_y, 2*nc);
+    linear_coeff_.update(den,  3*nc);
+  }else if(constr_type_ == UNITY_DENOMINATOR){
+    vnl_matrix<T> A(2*n, 2*nc);
+    vnl_vector<T> b(2*n);
+    A.fill(T(0));
+    for(size_t k = 0; k<n; ++k){
+      vgl_point_2d<T> pf(norm_from_pts_[k]), pt(norm_to_pts_[k]);
+      T X = pf.x(), Y = pf.y(), x = pt.x(), y = pt.y();
+      vnl_vector<T> pv = vgl_cremona_trans_2d<T,deg>::power_vector(X, Y);
+      for(size_t i = 0; i<nc; ++i){
+        A[2*k][i]          = pv[i];
+        A[2*k+1][i+nc]     = pv[i];
+        b[2*k] = x;
+        b[2*k+1] = y;
+      }
+    }
+    vnl_svd<T> svd(A);
+    size_t r = svd.rank();
+    if(r < 2*nc){
+      std::cerr << "insufficent rank " << r << " for linear solution of Cremona coefficients" << std::endl;
+      return false;
+    }
+    vnl_vector<T> solutn = svd.solve(b);
+    vnl_vector<T> neu_x = solutn.extract(nc, 0);
+    vnl_vector<T> neu_y = solutn.extract(nc, nc);
+    vnl_vector<T> den(nc,0.0);    den[0]=T(1);
+    linear_coeff_.set_size(4*nc);
+    linear_coeff_.update(neu_x,  0);
+    linear_coeff_.update(den, nc);
+    linear_coeff_.update(neu_y, 2*nc);
+    linear_coeff_.update(den,  3*nc);
+  }else{
+    std::cerr << "Unknown constraint type" << std::endl;
     return false;
   }
-  linear_coeff_ = svd.nullvector();
-#if 0
+     
+#if 1
   for (size_t k = 0; k < 4; ++k) {
       for (size_t i = 0; i < nc; ++i)
           std::cout << linear_coeff_[i+ k*nc] << ' ';
