@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vdgl/vdgl_fit_lines_params.h>
 #include <vifa/vifa_int_face_attr_factory.h>

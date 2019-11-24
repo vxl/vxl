@@ -4,9 +4,9 @@
 //:
 // \file
 
-#include <vbl/vbl_array_2d.h>
+#include "vbl/vbl_array_2d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bil_cedt::bil_cedt()

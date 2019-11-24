@@ -1,5 +1,5 @@
 // This is gel/vtol/tests/vtol_test_refcounting.cxx
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 //  Verify correct refcounting of superiors/inferiors in a topology chain

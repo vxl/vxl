@@ -12,7 +12,7 @@
 #include "vil_nitf2_compound_field_value.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vil_nitf2_field::field_tree*

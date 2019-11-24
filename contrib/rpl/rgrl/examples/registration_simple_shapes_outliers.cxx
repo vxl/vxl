@@ -20,12 +20,12 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_random.h"
 
 #include <rrel/rrel_muset_obj.h>
 #include <rrel/rrel_tukey_obj.h>
@@ -47,7 +47,7 @@
 #include <rgrl/rgrl_mask.h>
 #include <rgrl/rgrl_cast.h>
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
 // vnl_vector_fixed is a fixed-length, stack storage

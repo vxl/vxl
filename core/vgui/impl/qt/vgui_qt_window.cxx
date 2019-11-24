@@ -1,7 +1,7 @@
 #include "vgui_qt_window.h"
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_menu.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_menu.h"
 
 #include "vgui_qt_adaptor.h"
 #include "vgui_qt_menu.h"

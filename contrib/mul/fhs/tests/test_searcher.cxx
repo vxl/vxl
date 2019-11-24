@@ -1,12 +1,12 @@
 // This is mul/fhs/tests/test_searcher.cxx
 #include <iostream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <fhs/fhs_searcher.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 
 void test_searcher1()
 {

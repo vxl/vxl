@@ -1,5 +1,5 @@
 #include "boxm2_vecf_skull_scene.h"
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 boxm2_vecf_skull_scene::boxm2_vecf_skull_scene( std::string const& base_scene_path, std::string const& mandible_geo_path)
   : boxm2_vecf_articulated_scene(), target_data_extracted_(false)
 {

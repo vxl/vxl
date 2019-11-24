@@ -18,21 +18,21 @@
 #include <bwm/bwm_world.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vgui/vgui.h>
-#include <vnl/vnl_math.h>
+#include "vgui/vgui.h"
+#include "vnl/vnl_math.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
-#include <vgl/vgl_closest_point.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_closest_point.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_point_3d.h"
 #include <vgl/xio/vgl_xio_point_3d.h>
 #include <vgl/xio/vgl_xio_vector_3d.h>
-#include <vgl/vgl_homg_plane_3d.h>
+#include "vgl/vgl_homg_plane_3d.h"
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vpgl/algo/vpgl_ray.h>
 #include <vpgl/algo/vpgl_backproject.h>
@@ -46,9 +46,9 @@
 #include <vsol/vsol_line_3d.h>
 #include <vsol/vsol_line_2d.h>
 
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_dialog_extensions.h>
-#include <vgui/vgui_projection_inspector.h>
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_dialog_extensions.h"
+#include "vgui/vgui_projection_inspector.h"
 #include <bgui/bgui_vsol_soview2D.h>
 
 
@@ -56,7 +56,7 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_scene_parser.h>
 #endif
-#include <vsl/vsl_basic_xml_element.h>
+#include "vsl/vsl_basic_xml_element.h"
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <bpgl/bpgl_camera_utils.h>
 bool bwm_observer_cam::geo_position(double u, double v,

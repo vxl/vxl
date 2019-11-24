@@ -1,10 +1,10 @@
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <brad/brad_belief_prop_utils.h>
-#include <vil/vil_load.h>
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vil/vil_load.h"
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
 
 static void test_belief_prop_utils()
 {

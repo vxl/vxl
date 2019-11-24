@@ -4,11 +4,11 @@
 #include <iostream>
 #include <sstream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
-#include <vgl/vgl_infinite_line_3d.h>
-#include <vgl/vgl_distance.h>
+#include "testlib/testlib_test.h"
+#include "vgl/vgl_infinite_line_3d.h"
+#include "vgl/vgl_distance.h"
 
 
 static void test_constructor()

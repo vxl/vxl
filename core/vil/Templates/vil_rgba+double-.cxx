@@ -1,2 +1,2 @@
-#include <vil/vil_rgba.hxx>
+#include "vil/vil_rgba.hxx"
 VIL_RGBA_INSTANTIATE(double);

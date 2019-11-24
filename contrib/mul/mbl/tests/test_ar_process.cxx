@@ -1,13 +1,13 @@
 // This is mul/mbl/tests/test_ar_process.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_ar_process.h>
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_matrix.h>
-#include <testlib/testlib_test.h>
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_matrix.h"
+#include "testlib/testlib_test.h"
 
 vnl_vector<double> arp_mean(const std::vector<vnl_vector<double> >& v)
 {

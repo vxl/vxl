@@ -4,10 +4,10 @@
 // \brief Computes log prob based on output of a linear classifier
 // \author Tim Cootes
 
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <vnl/io/vnl_io_vector.h>

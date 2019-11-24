@@ -4,11 +4,11 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_numeric_traits.h>
-#include <vgl/vgl_homg_line_2d.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_numeric_traits.h"
+#include "vgl/vgl_homg_line_2d.h"
 #include <vsol/vsol_line_2d.h>
 
 //: Constructors

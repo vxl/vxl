@@ -3,11 +3,11 @@
 // Give two image filenames on the command line.
 
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_poly_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_poly_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 
 int main(int argc,char **argv)
 {

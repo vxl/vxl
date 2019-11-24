@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_create_tree );
 DECLARE( test_locate_point );

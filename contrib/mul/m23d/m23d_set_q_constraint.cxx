@@ -7,7 +7,7 @@
 // \brief Functions to construct linear constraints as rows in a matrix
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

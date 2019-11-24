@@ -30,7 +30,7 @@
 
 #include <brip/brip_roi.h>
 
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vpgl/vpgl_local_rational_camera.h"
 
 #include <bprb/bprb_parameters.h>
 

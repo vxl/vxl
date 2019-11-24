@@ -2,7 +2,7 @@
 #include "bvxm_display_edge_tangent_world_vrml_process.h"
 //:
 // \file
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <bprb/bprb_func_process.h>
 
 #include <bvxm/bvxm_voxel_world.h>

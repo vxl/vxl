@@ -3,14 +3,14 @@
 #include <iostream>
 #include <cstdlib>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vil/vil_load.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_new.h>
+#include "vpl/vpl.h"
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
+#include "vil/vil_load.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_new.h"
 
 static void filenames_from_directory(std::string const& dirname,
                                      std::vector<std::string>& filenames)

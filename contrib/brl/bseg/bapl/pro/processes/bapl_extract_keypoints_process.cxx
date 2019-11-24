@@ -22,9 +22,9 @@
 #include <bapl/bapl_keypoint_set_sptr.h>
 #include <ipts/ipts_draw.h>
 
-#include <vil/vil_new.h>
-#include <vil/vil_convert.h>
-#include <vul/vul_timer.h>
+#include "vil/vil_new.h"
+#include "vil/vil_convert.h"
+#include "vul/vul_timer.h"
 
 //: Constructor
 bool bapl_extract_keypoints_process_cons(bprb_func_process& pro)

@@ -13,7 +13,7 @@
 #include <brdb/brdb_value.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <bvxm/algo/bvxm_merge_mog.h>

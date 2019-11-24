@@ -20,14 +20,14 @@
 #include <stdexcept>
 #include <limits>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vil/vil_stream.h>
-#include <vbl/vbl_smart_ptr.h>
-#include <vbl/vbl_smart_ptr.hxx>
-#include <vil/vil_image_view.hxx>
+#include "vil/vil_stream.h"
+#include "vbl/vbl_smart_ptr.h"
+#include "vbl/vbl_smart_ptr.hxx"
+#include "vil/vil_image_view.hxx"
 
 // TODO: How can we avoid using the "deprecated" functions?
 #define USE_OPJ_DEPRECATED

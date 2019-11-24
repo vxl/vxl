@@ -8,10 +8,10 @@
 #include <iostream>
 #include "vgui_loader_tableau.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_matrix_fixed.h>
-#include <vgui/vgui_gl.h>
+#include "vnl/vnl_matrix_fixed.h"
+#include "vgui/vgui_gl.h"
 
 std::string vgui_loader_tableau::type_name() const
 {

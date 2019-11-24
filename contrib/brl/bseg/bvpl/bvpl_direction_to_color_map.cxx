@@ -3,15 +3,15 @@
 #include "bvpl_direction_to_color_map.h"
 //:
 // \file
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_float_4.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_line_3d_2_points.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_closest_point.h>
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_float_4.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_line_3d_2_points.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_closest_point.h"
 #include <vil/algo/vil_colour_space.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: project a unit radius sphere onto the cube circumscribing it using gnomonic projection

@@ -17,7 +17,7 @@
 #include <bvpl/util/bvpl_bundler_features_2d.h>
 #include <bvpl/util/io/bvpl_bundler_features_2d_io.h>
 
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
 
 namespace bvpl_bundler_features_2d_read_bin_process_globals

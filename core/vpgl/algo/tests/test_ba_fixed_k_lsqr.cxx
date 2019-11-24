@@ -1,6 +1,6 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vpgl/algo/vpgl_ba_fixed_k_lsqr.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 
 namespace {
 

@@ -7,10 +7,10 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h>
-#include <vnl/vnl_math.h> // for sqrt(2)
+#include "vxl_config.h"
+#include "vnl/vnl_math.h" // for sqrt(2)
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
@@ -19,7 +19,7 @@
 #include <vtol/vtol_edge_2d.h>
 #include <gevd/gevd_pixel.h>
 #ifdef DEBUG
-# include <vul/vul_timer.h>
+# include "vul/vul_timer.h"
 #endif
 
 const int INVALID = -1;

@@ -14,7 +14,7 @@
 #include "vgui_mfc_dialog_impl.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <vgui/internals/vgui_dialog_field.h>

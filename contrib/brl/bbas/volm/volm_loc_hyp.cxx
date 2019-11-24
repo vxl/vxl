@@ -4,14 +4,14 @@
 #include "volm_loc_hyp.h"
 //:
 // \file
-#include <vbl/vbl_array_2d.h>
-#include <vgl/vgl_polygon.h>
+#include "vbl/vbl_array_2d.h"
+#include "vgl/vgl_polygon.h"
 #include <bkml/bkml_write.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <cassert>
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_distance.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: construct using a single dem file

@@ -4,14 +4,14 @@
 #include <utility>
 #include "rrel_homography2d_est.h"
 
-#include <vgl/vgl_homg_point_2d.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_math.h>
+#include "vgl/vgl_homg_point_2d.h"
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_math.h"
 #include <vnl/algo/vnl_svd.h>
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 rrel_homography2d_est :: rrel_homography2d_est( const std::vector< vgl_homg_point_2d<double> > & from_pts,

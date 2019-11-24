@@ -9,9 +9,9 @@
 #include "vrml_out.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_printf.h>
+#include "vul/vul_printf.h"
 
 // Default ctor
 vrml_out::vrml_out()

@@ -6,7 +6,7 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_2d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //***************************************************************************

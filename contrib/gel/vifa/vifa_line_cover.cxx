@@ -6,10 +6,10 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 
 //-----------------------------------------------------------
 //: Constructors

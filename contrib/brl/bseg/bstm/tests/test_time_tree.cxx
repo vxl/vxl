@@ -7,14 +7,14 @@
 #include <vector>
 #include <map>
 #include <algorithm>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 
 #include <bstm/bstm_time_tree.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "vnl/vnl_vector_fixed.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

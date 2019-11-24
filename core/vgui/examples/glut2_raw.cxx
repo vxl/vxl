@@ -1,14 +1,14 @@
 #include <cmath>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_glut.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_glut.h"
 
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_loader_tableau.h>
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_loader_tableau.h"
 
 vgui_image_tableau_new   image;
 vgui_loader_tableau_new  load(image);

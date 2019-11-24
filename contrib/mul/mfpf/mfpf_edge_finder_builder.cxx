@@ -7,16 +7,16 @@
 // \author Tim Cootes
 
 #include <mfpf/mfpf_edge_finder.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 
 //=======================================================================
 // Dflt ctor

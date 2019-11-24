@@ -8,20 +8,20 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 /* xml includes */
-#include <vsl/vsl_basic_xml_element.h>
+#include "vsl/vsl_basic_xml_element.h"
 #include <vgl/xio/vgl_xio_point_3d.h>
 #include <vgl/xio/vgl_xio_vector_3d.h>
 #include <bstm/bstm_scene_parser.h>
 #include <vpgl/xio/vpgl_xio_lvcs.h>
 
 //vgl includes
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_intersection.h"
 
 //vsph include
 #include <vsph/vsph_camera_bounds.h>

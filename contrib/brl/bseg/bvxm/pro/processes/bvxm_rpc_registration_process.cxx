@@ -12,20 +12,20 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
 
 #include <brip/brip_vil_float_ops.h>
 
 #include <vpgl/algo/vpgl_backproject.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_plane_3d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_plane_3d.h"
 #include <bvxm/bvxm_edge_ray_processor.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: set input and output types

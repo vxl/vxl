@@ -7,12 +7,12 @@
 // \author Tim Cootes
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vxl_config.h> // for vxl_byte
-#include <vnl/vnl_erf.h>
-#include <vnl/vnl_math.h>
+#include "vxl_config.h" // for vxl_byte
+#include "vnl/vnl_erf.h"
+#include "vnl/vnl_math.h"
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples

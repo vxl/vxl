@@ -21,7 +21,7 @@
 #include "bmsh3d_face.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: warning: this vertex may be different than the he->edge's sV

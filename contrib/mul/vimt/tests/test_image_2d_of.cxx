@@ -1,11 +1,11 @@
 // This is mul/vimt/tests/test_image_2d_of.cxx
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
-#include <vxl_config.h> // for vxl_byte
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vxl_config.h" // for vxl_byte
+#include "vpl/vpl.h" // vpl_unlink()
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_crop.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0

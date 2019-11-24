@@ -5,7 +5,7 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bprb/bprb_parameters.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
+#include "vpgl/vpgl_lvcs_sptr.h"
 
 // set input and output types
 bool bvxm_scene_lvcs_process_cons(bprb_func_process& pro)

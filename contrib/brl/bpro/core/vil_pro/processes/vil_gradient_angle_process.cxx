@@ -5,12 +5,12 @@
 //:
 // \file
 
-#include <vil/vil_convert.h>
+#include "vil/vil_convert.h"
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view_base.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vil/vil_image_view_base.h"
+#include "vgl/vgl_vector_2d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Constructor

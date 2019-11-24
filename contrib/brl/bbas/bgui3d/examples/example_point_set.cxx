@@ -1,15 +1,15 @@
 #include <iostream>
 #include <cstdio>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_math.h> // for pi_over_2
+#include "vnl/vnl_math.h" // for pi_over_2
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_window.h>
-#include <vgui/vgui_adaptor.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_window.h"
+#include "vgui/vgui_adaptor.h"
 
 #include <bgui3d/bgui3d_tableau.h>
 #include <bgui3d/bgui3d_examiner_tableau.h>

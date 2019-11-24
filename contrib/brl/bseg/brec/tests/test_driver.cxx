@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_brec_densities );
 DECLARE( test_param_estimation );

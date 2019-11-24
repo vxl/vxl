@@ -1,11 +1,11 @@
 // This is brl/bbas/bdgl/tests/test_region_algs.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vdgl/vdgl_digital_region.h>
 #include <bdgl/bdgl_region_algs.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 static void test_region_algs()
 {

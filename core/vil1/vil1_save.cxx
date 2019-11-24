@@ -7,19 +7,19 @@
 #include "vil1_save.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_new.h>
-#include <vil1/vil1_open.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_copy.h>
-#include <vil1/vil1_property.h>
-#include <vil1/vil1_flipud.h>
-#include <vil1/vil1_flip_components.h>
+#include "vil1/vil1_new.h"
+#include "vil1/vil1_open.h"
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_copy.h"
+#include "vil1/vil1_property.h"
+#include "vil1/vil1_flipud.h"
+#include "vil1/vil1_flip_components.h"
 
-#include <vil1/vil1_rgb.h>
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1/vil1_rgb.h"
+#include "vil1/vil1_memory_image_of.h"
 
 //: Send vil1_image to disk.
 bool vil1_save(vil1_image i, char const* filename, char const* file_format)

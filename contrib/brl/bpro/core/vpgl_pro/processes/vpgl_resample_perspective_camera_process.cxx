@@ -7,12 +7,12 @@
 // this process is the companion to vil_resample_image_process and
 // adjusts the calibration matrix to correspond to the resampled image
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
-#include <vsl/vsl_binary_io.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_calibration_matrix.h"
+#include "vsl/vsl_binary_io.h"
 
 //: Init function
 bool vpgl_resample_perspective_camera_process_cons(bprb_func_process& pro)

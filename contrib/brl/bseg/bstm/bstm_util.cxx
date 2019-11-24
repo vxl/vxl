@@ -3,8 +3,8 @@
 //:
 // \file
 
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_image_view.h"
 
 #include <boct/boct_bit_tree.h>
 #include <boxm2/boxm2_util.h>

@@ -6,13 +6,13 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_clip.h>
-#include <vgl/vgl_area.h>
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_clip.h"
+#include "vgl/vgl_area.h"
 
 #include "sdet_sel_utils.h"
 #include <bvgl/algo/bvgl_eulerspiral.h>

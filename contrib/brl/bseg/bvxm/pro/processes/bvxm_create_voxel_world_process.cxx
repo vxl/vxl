@@ -15,13 +15,13 @@
 #include <brdb/brdb_value.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 //:sets input and output types
 bool bvxm_create_voxel_world_process_cons(bprb_func_process& pro)

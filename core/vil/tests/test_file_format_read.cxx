@@ -4,23 +4,23 @@
 #include <vector>
 #include <cmath>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
-#include <vxl_config.h> // for vxl_uint_16 etc.
+#include "vul/vul_file.h"
+#include "vxl_config.h" // for vxl_uint_16 etc.
 
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 
-#include <vil/vil_file_format.h>
-#include <vil/vil_rgb.h>
-#include <vil/vil_load.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_print.h>
+#include "vil/vil_file_format.h"
+#include "vil/vil_rgb.h"
+#include "vil/vil_load.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_print.h"
 #include <vil/vil_config.h>
 
 // For testing specific file formats
-#include <vil/vil_stream_fstream.h>
+#include "vil/vil_stream_fstream.h"
 
 // For indication whether BigTIFF is available (libtiff version >= 4.0)
 #include <tiff.h>

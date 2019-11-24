@@ -6,15 +6,15 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_math.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vnl/vnl_numeric_traits.h"
+#include "vnl/vnl_math.h"
+#include "vgui/vgui.h"
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 
 void bgui_graph_tableau::init()
 {

@@ -14,14 +14,14 @@
 // \endverbatim
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvpl/kernels/bvpl_kernel_factory.h>
 #include <bvpl/bvpl_direction_to_color_map.h>
-#include <vnl/vnl_float_4.h>
+#include "vnl/vnl_float_4.h"
 namespace bvpl_convert_direction_to_hue_process_globals
 {
   constexpr unsigned n_inputs_ = 5;

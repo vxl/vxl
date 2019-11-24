@@ -10,14 +10,14 @@
 #include <m23d/m23d_scaled_ortho_projection.h>
 #include <m23d/m23d_set_q_constraint.h>
 
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_inverse.h"
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_vector_3d.h"
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Reconstruct structure from set of 2d pts

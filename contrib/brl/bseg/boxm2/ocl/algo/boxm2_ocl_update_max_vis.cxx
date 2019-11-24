@@ -11,7 +11,7 @@
 // \date Nov 11, 2013
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -20,17 +20,17 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
-#include <vil/vil_image_view.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
+#include "vil/vil_image_view.h"
+#include "vpgl/vpgl_lvcs_sptr.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 
 //directory utility
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <vnl/vnl_numeric_traits.h>
-#include <vil/vil_save.h>
+#include "vnl/vnl_numeric_traits.h"
+#include "vil/vil_save.h"
 
 //: Map of kernels should persist between process executions
 std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_max_vis::kernels_;

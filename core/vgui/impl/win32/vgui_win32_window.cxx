@@ -2,8 +2,8 @@
 
 #include "vgui_win32_window.h"
 #include "vgui_win32_utils.h"
-#include <vgui/vgui.h>
-#include <vgui/vgui_command.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_command.h"
 
 BEGIN_MESSAGE_MAP(vgui_win32_window, vgui_win32_cmdtarget)
 END_MESSAGE_MAP()

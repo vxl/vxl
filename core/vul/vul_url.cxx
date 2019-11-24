@@ -16,10 +16,10 @@
 #include <iostream>
 #include "vul_url.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 #if defined (_WIN32) && !defined(__CYGWIN__)
 # include <winsock2.h>

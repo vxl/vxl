@@ -6,14 +6,14 @@
 // \brief Base for objects which generate regions from sets of points
 // \author Tim Cootes
 
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_loader.h"
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_cloneables_factory.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //=======================================================================

@@ -5,11 +5,11 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_load.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_print.h>
+#include "vil/vil_load.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_print.h"
 
 int main(int argc, char** argv)
 {

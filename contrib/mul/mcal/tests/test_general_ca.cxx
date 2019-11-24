@@ -8,16 +8,16 @@
 #include <sstream>
 #include <cmath>
 #include <algorithm>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief test mcal_general_ca
 
-#include <vsl/vsl_binary_loader.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_random.h>
+#include "vsl/vsl_binary_loader.h"
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_random.h"
 #include <mbl/mbl_cloneables_factory.h>
 #include <mcal/mcal_add_all_loaders.h>
 #include <mcal/mcal_general_ca.h>
@@ -26,7 +26,7 @@
 #include <mcal/mcal_sparse_basis_cost.h>
 #include <mcal/mcal_var_basis_cost.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //=======================================================================

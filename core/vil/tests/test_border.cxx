@@ -1,13 +1,13 @@
 // This is core/vil/tests/test_border.cxx
 #include <iostream>
 #include <sstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 // not used? #include <vcl_compiler.h>
 // not used? #include <functional>
-#include <vxl_config.h> // for vxl_byte
-#include <vil/vil_image_view.h>
-#include <vil/vil_border.h>
-#include <vil/vil_fill.h>
+#include "vxl_config.h" // for vxl_byte
+#include "vil/vil_image_view.h"
+#include "vil/vil_border.h"
+#include "vil/vil_fill.h"
 
 static void test_border_constant_byte()
 {

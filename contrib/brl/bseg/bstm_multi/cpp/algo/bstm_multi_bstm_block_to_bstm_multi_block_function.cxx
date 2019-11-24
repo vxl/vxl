@@ -6,7 +6,7 @@
 #include "bstm_multi_bstm_block_to_bstm_multi_block_function.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <vnl_vector_fixed.h>

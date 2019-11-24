@@ -1,9 +1,9 @@
 // This is mul/mmn/tests/test_make_tri_tree.cxx
 #include <iostream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mmn/mmn_make_tri_tree.h>
 

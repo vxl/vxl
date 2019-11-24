@@ -7,7 +7,7 @@
 #include <boxm2_multi_util.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
@@ -19,7 +19,7 @@
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 std::map<std::string, bocl_kernel*> boxm2_multi_refine::refine_tree_kernels_;
 std::map<std::string, bocl_kernel*> boxm2_multi_refine::refine_data_kernels_;

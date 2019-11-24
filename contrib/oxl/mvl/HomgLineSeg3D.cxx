@@ -7,7 +7,7 @@
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgOperator3D.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //--------------------------------------------------------------

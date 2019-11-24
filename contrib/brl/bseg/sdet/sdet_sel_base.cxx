@@ -8,13 +8,13 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 //#include <mbl/mbl_stats_1d.h>
 
 #include "sdet_edgemap.h"
 // remove dependency on mul
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_vector.h"
 static void calc_mean_var(double& mean, double& var,
                           const double* d, int n){
     double sum=0;

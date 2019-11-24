@@ -5,7 +5,7 @@
 // \author VGG, Oxford University
 // \brief  See vgui_error_dialog.h for a description of this file.
 
-#include <vgui/vgui_dialog.h>
+#include "vgui/vgui_dialog.h"
 
 void vgui_error_dialog(char const* msg)
 {

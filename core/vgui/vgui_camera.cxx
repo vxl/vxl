@@ -6,8 +6,8 @@
 // \brief  See vgui_camera.h for a description of this file.
 
 #include "vgui_camera.h"
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_matrix_fixed.h"
 
 //----------------------------------------------------------------------------
 //: Plug this matrix into a vgui_loader_tableau.

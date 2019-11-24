@@ -12,7 +12,7 @@
 #include "rgrl_trans_spline.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/algo/vnl_conjugate_gradient.h>
@@ -20,11 +20,11 @@
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_powell.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_cost_function.h>
-#include <vnl/vnl_least_squares_function.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_vector.h>
-#include <vul/vul_timer.h>
+#include "vnl/vnl_cost_function.h"
+#include "vnl/vnl_least_squares_function.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_vector.h"
+#include "vul/vul_timer.h"
 
 namespace{
   // for Levenberg Marquardt

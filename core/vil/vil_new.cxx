@@ -8,17 +8,17 @@
 #include "vil_new.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vil/vil_save.h>
-#include <vil/vil_file_format.h>
-#include <vil/vil_stream_fstream.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_memory_image.h>
-#include <vil/vil_blocked_image_facade.h>
-#include <vil/vil_cached_image_resource.h>
-#include <vil/vil_pyramid_image_resource.h>
+#include "vil/vil_save.h"
+#include "vil/vil_file_format.h"
+#include "vil/vil_stream_fstream.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_memory_image.h"
+#include "vil/vil_blocked_image_facade.h"
+#include "vil/vil_cached_image_resource.h"
+#include "vil/vil_pyramid_image_resource.h"
 #include <vil/file_formats/vil_pyramid_image_list.h>
 // The first two functions really should be upgraded to create an image in
 // a temporary file on disk if the sizes are large. - TODO

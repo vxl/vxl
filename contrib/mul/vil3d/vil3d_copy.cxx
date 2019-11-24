@@ -9,7 +9,7 @@
 #include <algorithm>
 #include "vil3d_copy.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/vil3d_property.h>

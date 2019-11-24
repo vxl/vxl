@@ -5,7 +5,7 @@
 // \brief  See vgui_back_project.h for a description of this file.
 
 #include "vgui_back_project.h"
-#include <vgui/vgui_gl.h>
+#include "vgui/vgui_gl.h"
 #include "vgui_transpose_4x4.h"
 #include "vgui_multiply_4x4.h"
 

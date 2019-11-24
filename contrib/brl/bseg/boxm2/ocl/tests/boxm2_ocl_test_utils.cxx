@@ -8,12 +8,12 @@
 #include <boct/boct_bit_tree.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vpl/vpl.h>
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
+#include "vpl/vpl.h"
 
 typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 

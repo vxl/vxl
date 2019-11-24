@@ -3,11 +3,11 @@
 #include <cstddef>
 #include "boxm2_class_generate_samples.h"
 #include <bvgl/bvgl_labelme_parser.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
 #include <boxm2/boxm2_util.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

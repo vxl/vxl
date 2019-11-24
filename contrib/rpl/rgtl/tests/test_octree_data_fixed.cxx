@@ -5,7 +5,7 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <rgtl/rgtl_compact_tree.hxx>
 #include <rgtl/rgtl_octree_data_fixed.hxx>

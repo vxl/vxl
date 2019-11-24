@@ -6,22 +6,22 @@
 #include <rgrl/rgrl_match_set.h>
 #include <rgrl/rgrl_internal_util.h>
 
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_det.h>
-#include <vnl/vnl_fastops.h>
-#include <vnl/vnl_transpose.h>
-#include <vnl/vnl_least_squares_function.h>
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_det.h"
+#include "vnl/vnl_fastops.h"
+#include "vnl/vnl_transpose.h"
+#include "vnl/vnl_least_squares_function.h"
 #include <vnl/algo/vnl_orthogonal_complement.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_svd.h>
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static

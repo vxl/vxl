@@ -6,7 +6,7 @@
 
 #include <sstream>
 #include <msm/msm_points.h>
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 
 void print_usage()
 {

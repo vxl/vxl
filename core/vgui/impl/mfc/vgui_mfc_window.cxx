@@ -17,8 +17,8 @@
 #include "vgui_mfc.h"
 #include "vgui_mfc_utils.h"
 #include "vgui_mfc_statusbar.h"
-#include <vgui/vgui.h>
-#include <vgui/vgui_gl.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_gl.h"
 
 static bool first_window = true;
 

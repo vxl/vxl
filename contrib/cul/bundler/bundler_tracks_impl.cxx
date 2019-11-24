@@ -5,7 +5,7 @@
 //
 #include <bundler/bundler_inters.h>
 
-#include <vpgl/vpgl_fundamental_matrix.h>
+#include "vpgl/vpgl_fundamental_matrix.h"
 #include <bpgl/algo/bpgl_fm_compute_ransac.h>
 
 #include <bapl/bapl_lowe_keypoint_sptr.h>
@@ -17,7 +17,7 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static const double TOL = .01;

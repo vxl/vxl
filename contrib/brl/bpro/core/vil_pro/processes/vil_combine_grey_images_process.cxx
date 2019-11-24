@@ -4,8 +4,8 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_load.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_load.h"
+#include "vil/vil_image_view.h"
 
 //: Constructor
 bool vil_combine_grey_images_process_cons(bprb_func_process& pro)

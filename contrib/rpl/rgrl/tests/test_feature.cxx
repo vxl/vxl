@@ -1,19 +1,19 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_2x2.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_4.h>
-#include <vnl/vnl_transpose.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_double_2x2.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_4.h"
+#include "vnl/vnl_transpose.h"
 #include <rgrl/rgrl_feature.h>
 #include <rgrl/rgrl_feature_point.h>
 #include <rgrl/rgrl_feature_trace_pt.h>
 #include <rgrl/rgrl_feature_face_pt.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <rgrl/rgrl_trans_affine.h>

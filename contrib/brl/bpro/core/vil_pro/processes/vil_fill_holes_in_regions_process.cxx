@@ -5,12 +5,12 @@
 //:
 // \file
 
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/algo/vil_blob.h>
 #include <vil/algo/vil_binary_closing.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Constructor

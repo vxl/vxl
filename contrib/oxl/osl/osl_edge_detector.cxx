@@ -10,7 +10,7 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <osl/osl_canny_base.h>
@@ -19,7 +19,7 @@
 #include <osl/osl_canny_gradient.h>
 #include <osl/osl_chamfer.h>
 #include <osl/internals/osl_reorder_chain.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 const float DUMMYTHETA = 10000.0f;
 const float ALPHA = 0.9f;

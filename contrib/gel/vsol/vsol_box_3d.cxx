@@ -6,7 +6,7 @@
 #include <vbl/io/vbl_io_bounding_box.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 double vsol_box_3d::get_min_x() const

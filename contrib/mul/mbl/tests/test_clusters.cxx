@@ -1,12 +1,12 @@
 // This is mul/mbl/tests/test_clusters.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 #include <mbl/mbl_clusters.h>
 #include <mbl/mbl_clusters.hxx>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Distance class

@@ -1,10 +1,10 @@
 // This is core/vsl/tests/test_indent.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_indent.h>
-#include <testlib/testlib_test.h>
+#include "vsl/vsl_indent.h"
+#include "testlib/testlib_test.h"
 
 static void test_indent1(int t)
 {

@@ -4,15 +4,15 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vbl/vbl_bool_ostream.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vbl/vbl_bool_ostream.h"
+#include "vgui/vgui.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 
 // Make a vgui.dialog:
 static void test_dialog()

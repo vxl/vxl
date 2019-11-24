@@ -12,12 +12,12 @@
 #include "mbl_lda.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_vector_io.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_vector_io.h"
+#include "vsl/vsl_binary_io.h"
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>

@@ -13,7 +13,7 @@
 #include "bstm_ocl_change_detection.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
@@ -22,11 +22,11 @@
 #include <bstm/ocl/bstm_ocl_util.h>
 #include <bstm/bstm_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <vil/algo/vil_median.h>
 
 //directory utility
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>

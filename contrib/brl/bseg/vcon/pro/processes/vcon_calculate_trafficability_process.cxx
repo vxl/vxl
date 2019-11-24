@@ -17,17 +17,17 @@
 // \endverbatim
 //
 
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vil/vil_image_view.h>
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vil/vil_image_view.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
-#include <vgl/vgl_point_2d.h>
+#include "vpgl/vpgl_lvcs_sptr.h"
+#include "vgl/vgl_point_2d.h"
 #include <bbas_pro/bbas_1d_array_float.h>
 #include <volm/volm_io_tools.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
-#include <vul/vul_file.h>
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
+#include "vul/vul_file.h"
 #include <vil_save.h>
 #include <vil_load.h>
 

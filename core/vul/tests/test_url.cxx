@@ -13,13 +13,13 @@
 #include <algorithm>
 #include <utility>
 #include <cstring>
-#include <vul/vul_url.h>
+#include "vul/vul_url.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 
 //=======================================================================

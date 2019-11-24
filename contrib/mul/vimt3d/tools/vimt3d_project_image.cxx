@@ -8,18 +8,18 @@
 // Need to resample image to cubic voxels before projection to keep aspect ratios.
 
 #include <iostream>
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vimt3d/vimt3d_load.h>
 #include <vil3d/vil3d_slice.h>
 #include <vil3d/vil3d_resample_trilinear.h>
-#include <vil/vil_save.h>
+#include "vil/vil_save.h"
 #include <vil3d/vil3d_save.h>
 #include <vil3d/vil3d_math.h>
-#include <vnl/vnl_math.h>
-#include <vxl_config.h> // For vxl_byte
+#include "vnl/vnl_math.h"
+#include "vxl_config.h" // For vxl_byte
 #include <vimt3d/vimt3d_add_all_loaders.h>
 #include <vimt3d/vimt3d_save.h>
 

@@ -2,9 +2,9 @@
 #include <iostream>
 #include <cmath>
 #include "test_driver.h"
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 DECLARE( vipl_test_histogram );

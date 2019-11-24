@@ -10,12 +10,12 @@
 #include <algorithm>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
-#include <vul/vul_arg.h>
-#include <vul/vul_string.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_string.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_quick_file.h>
+#include "vsl/vsl_quick_file.h"
 
 #include <msm/msm_shape_model.h>
 #include <msm/msm_shape_instance.h>

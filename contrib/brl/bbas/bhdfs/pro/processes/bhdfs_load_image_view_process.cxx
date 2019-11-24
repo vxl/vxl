@@ -7,7 +7,7 @@
 
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bhdfs/bhdfs_vil_load.h>
 

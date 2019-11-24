@@ -25,11 +25,11 @@
 #include <algorithm>
 #include "image_database.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // for vpl_mkdir
-#include <vil1/vil1_load.h>
-#include <vil1/vil1_save.h>
+#include "vpl/vpl.h" // for vpl_mkdir
+#include "vil1/vil1_load.h"
+#include "vil1/vil1_save.h"
 
 //----------------------------------------------------------------------
 //: destructor

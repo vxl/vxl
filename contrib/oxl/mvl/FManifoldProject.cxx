@@ -5,22 +5,22 @@
 #include <iostream>
 #include "FManifoldProject.h"
 
-#include <vnl/vnl_double_2x2.h>
-#include <vnl/vnl_double_4.h>
+#include "vnl/vnl_double_2x2.h"
+#include "vnl/vnl_double_4.h"
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
-#include <vnl/vnl_real_polynomial.h>
+#include "vnl/vnl_real_polynomial.h"
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_diag_matrix.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_homg_point_2d.h>
+#include "vnl/vnl_diag_matrix.h"
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_homg_point_2d.h"
 
 #include <mvl/HomgPoint2D.h>
 #include <mvl/FMatrix.h>
 #include <mvl/HomgOperator2D.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Construct an FManifoldProject object which will use the given F to correct point pairs.

@@ -1,13 +1,13 @@
 // This is core/vgl/io/tests/test_homg_line_3d_2_points_io.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_indent.h>
-#include <vgl/vgl_homg_point_3d.h>
+#include "vsl/vsl_indent.h"
+#include "vgl/vgl_homg_point_3d.h"
 #include <vgl/io/vgl_io_homg_line_3d_2_points.h>
-#include <testlib/testlib_test.h>
-#include <vpl/vpl.h>
+#include "testlib/testlib_test.h"
+#include "vpl/vpl.h"
 
 void test_homg_line_3d_2_points_double_io()
 {

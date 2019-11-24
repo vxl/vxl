@@ -4,19 +4,19 @@
 #include <fstream>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vpl/vpl.h" // vpl_unlink()
 
 #include <mbl/mbl_lda.h>
 #include <mbl/mbl_log.h>
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matlab_print.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_matlab_print.h"
+#include "vnl/vnl_random.h"
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0

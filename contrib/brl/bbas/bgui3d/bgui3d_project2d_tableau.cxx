@@ -5,21 +5,21 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_glu.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_command.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3x4.h>
-#include <vnl/vnl_double_4x4.h>
-#include <vnl/vnl_det.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_glu.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_command.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_double_3x4.h"
+#include "vnl/vnl_double_4x4.h"
+#include "vnl/vnl_det.h"
+#include "vgl/vgl_point_3d.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 #include "bgui3d_algo.h"
 
 #include <Inventor/actions/SoGetBoundingBoxAction.h>

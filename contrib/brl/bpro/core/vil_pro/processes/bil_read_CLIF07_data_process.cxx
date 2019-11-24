@@ -8,12 +8,12 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_save.h"
+#include "vil/vil_image_view.h"
 
 #include <bil/bil_raw_image_istream.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Constructor

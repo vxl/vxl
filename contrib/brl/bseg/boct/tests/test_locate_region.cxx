@@ -1,7 +1,7 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <boct/boct_tree.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_box_3d.h"
 
 
 static void test_locate_region()

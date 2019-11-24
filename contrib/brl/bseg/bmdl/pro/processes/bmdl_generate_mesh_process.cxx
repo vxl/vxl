@@ -9,18 +9,18 @@
 #include <bprb/bprb_func_process.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vgl/vgl_polygon.h>
+#include "vgl/vgl_polygon.h"
 #include <vgl/io/vgl_io_polygon.h>
 
-#include <vpl/vpl.h>
+#include "vpl/vpl.h"
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_pixel_format.h"
+#include "vil/vil_convert.h"
 
 #include <bmdl/bmdl_mesh.h>
 
@@ -30,11 +30,11 @@
 #include <imesh/imesh_operations.h>
 #include <imesh/algo/imesh_operations.h>
 
-#include <vpgl/vpgl_camera.h>
+#include "vpgl/vpgl_camera.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
-#include <vpgl/vpgl_lvcs.h>
-#include <vul/vul_file.h>
+#include "vpgl/vpgl_lvcs_sptr.h"
+#include "vpgl/vpgl_lvcs.h"
+#include "vul/vul_file.h"
 
 #if HAS_ZLIB
 #include <minizip/zip.h>

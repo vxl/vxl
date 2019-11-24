@@ -5,8 +5,8 @@
 // \brief Non-templated base class for mbl_data_collector_base
 
 #include "mbl_data_collector_base.h"
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_loader.h"
 
 //=======================================================================
 

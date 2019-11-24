@@ -20,13 +20,13 @@
 //-------------------------------------------------------------------------
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vul/vul_file.h>
-#include <vul/vul_string.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vul/vul_file.h"
+#include "vul/vul_string.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 
 // #################################################################
 //    POINT CLOUD FILE I/O

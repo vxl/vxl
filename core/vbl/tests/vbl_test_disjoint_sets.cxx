@@ -1,10 +1,10 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
-#include <vbl/vbl_disjoint_sets.h>
-#include <vbl/vbl_edge.h>
-#include <vbl/vbl_graph_partition.h>
+#include "testlib/testlib_test.h"
+#include "vbl/vbl_disjoint_sets.h"
+#include "vbl/vbl_edge.h"
+#include "vbl/vbl_graph_partition.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void print_element_sets(const vbl_disjoint_sets & s)

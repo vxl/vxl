@@ -4,13 +4,13 @@
 #include <cstdlib>
 #include "mcal_single_basis_cost.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <mbl/mbl_parse_block.h>
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_loader.h"
 
 //=======================================================================
 

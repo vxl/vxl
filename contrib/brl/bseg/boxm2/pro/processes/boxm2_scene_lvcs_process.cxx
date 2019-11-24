@@ -9,7 +9,7 @@
 #include <bprb/bprb_func_process.h>
 
 #include <boxm2/boxm2_scene.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
+#include "vpgl/vpgl_lvcs_sptr.h"
 
 namespace boxm2_scene_lvcs_process_globals
 {

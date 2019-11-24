@@ -4,8 +4,8 @@
 #include <iostream>
 #include <limits>
 // not used? #include <vcl_compiler.h>
-#include <testlib/testlib_test.h>
-#include <vgl/vgl_line_segment_3d.h>
+#include "testlib/testlib_test.h"
+#include "vgl/vgl_line_segment_3d.h"
 
 
 static void test_direction_vector()

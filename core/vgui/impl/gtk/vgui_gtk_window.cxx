@@ -7,8 +7,8 @@
 
 #include "vgui_gtk_window.h"
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_menu.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_menu.h"
 
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>
@@ -18,7 +18,7 @@
 #include "vgui_gtk_statusbar.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static bool debug = false;

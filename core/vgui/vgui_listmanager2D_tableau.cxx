@@ -11,19 +11,19 @@
 #include "vgui_listmanager2D_tableau.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_parent_child_link.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_matrix_state.h>
-#include <vgui/vgui_projection_inspector.h>
-#include <vgui/vgui_utils.h>
-#include <vgui/vgui_soview.h>
-#include <vgui/vgui_soview2D.h>
-#include <vgui/vgui_displaylist2D_tableau.h>
-#include <vgui/vgui_style.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_parent_child_link.h"
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_matrix_state.h"
+#include "vgui/vgui_projection_inspector.h"
+#include "vgui/vgui_utils.h"
+#include "vgui/vgui_soview.h"
+#include "vgui/vgui_soview2D.h"
+#include "vgui/vgui_displaylist2D_tableau.h"
+#include "vgui/vgui_style.h"
 
 
 vgui_listmanager2D_tableau::vgui_listmanager2D_tableau():

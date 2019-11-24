@@ -1,20 +1,20 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera_double_sptr.h>
-#include <vpgl/vpgl_proj_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_affine_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vpgl/vpgl_camera_double_sptr.h"
+#include "vpgl/vpgl_proj_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_affine_camera.h"
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
 #include <vpgl/io/vpgl_io_camera.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x4.h>
-#include <vpl/vpl.h>
-#include <vsl/vsl_binary_io.h>
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_3x4.h"
+#include "vpl/vpl.h"
+#include "vsl/vsl_binary_io.h"
 static double camera_diff_norm(vpgl_perspective_camera<double> const& C0,
                                vpgl_perspective_camera<double> const& C1)
 {

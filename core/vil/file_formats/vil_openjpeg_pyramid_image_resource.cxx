@@ -7,7 +7,7 @@
 // DISTAR Case 14074
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // By definition, each level is a factor of 2 reduced in scale

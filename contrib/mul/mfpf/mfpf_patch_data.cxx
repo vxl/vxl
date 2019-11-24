@@ -6,15 +6,15 @@
 // \author Tim Cootes
 // \brief Defines region size, shape, and form of model to use
 
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_loader.h"
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
-#include <vul/vul_string.h>
+#include "vul/vul_string.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //=======================================================================

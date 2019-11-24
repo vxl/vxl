@@ -2,10 +2,10 @@
 #include "bvxm_create_land_map_process.h"
 //:
 // \file
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_resource.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_resource.h"
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
 
 // set input and output type
 bool bvxm_create_land_map_process_cons(bprb_func_process& pro)

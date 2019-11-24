@@ -1,7 +1,7 @@
 #include "icam_utils.h"
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
 
 void icam_utils::image_bounds(unsigned source_ni, unsigned source_nj,
                               icam_transform_2d const& t, unsigned& dest_ni,

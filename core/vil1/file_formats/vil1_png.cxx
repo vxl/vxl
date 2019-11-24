@@ -10,20 +10,20 @@
 
 #include <cassert>
 
-#include <vil1/vil1_stream.h>
-#include <vil1/vil1_image_impl.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_property.h>
+#include "vil1/vil1_stream.h"
+#include "vil1/vil1_image_impl.h"
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_property.h"
 
 #include <png.h>
 #if (PNG_LIBPNG_VER_MAJOR == 0)
 extern "You need a later libpng. You should rerun CMake, after setting VXL_FORCE_V3P_PNG to ON."
 #endif
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vxl_config.h>
+#include "vxl_config.h"
 
 // Constants
 #define SIG_CHECK_SIZE 4

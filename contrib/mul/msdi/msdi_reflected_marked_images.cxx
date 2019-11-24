@@ -9,12 +9,12 @@
 #include <utility>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include "msdi_reflected_marked_images.h"
 #include <vimt/vimt_image_2d_of.h>
-#include <vil/vil_flip.h>
+#include "vil/vil_flip.h"
 #include <msm/msm_reflect_shape.h>
 
 //: Construct with external vectors of images and points

@@ -3,7 +3,7 @@
 #include "boxm2_nn_cache.h"
 #include <boxm2/boxm2_block_metadata.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 //:
 // \file

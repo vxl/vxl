@@ -3,12 +3,12 @@
 #include <cmath>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_view.h>
-#include <vil/vil_print.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_print.h"
 #include <vil/algo/vil_cartesian_differential_invariants.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 static void test_algo_cartesian_differential_invariants()
 {

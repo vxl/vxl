@@ -10,10 +10,10 @@
 // \date Mar 15, 2011
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/boxm2_scene.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 namespace boxm2_write_scene_xml_process_globals
 {

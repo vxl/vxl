@@ -13,9 +13,9 @@
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_bufferxy.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 void
 test_gevd_float_operators()

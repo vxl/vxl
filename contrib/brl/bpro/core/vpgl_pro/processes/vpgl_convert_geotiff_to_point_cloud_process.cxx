@@ -6,13 +6,13 @@
 //:
 // \file
 //   Process to convert WGS84 based geotiff to a ASCII xyz point cloud given a WGS84 based LVCS conversion
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 #include <bprb/bprb_parameters.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
+#include "vpgl/vpgl_lvcs_sptr.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_view.h"
 
 // Initialization
 bool vpgl_convert_geotiff_to_point_cloud_process_cons(bprb_func_process& pro)

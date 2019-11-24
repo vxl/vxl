@@ -14,15 +14,15 @@
 // \endverbatim
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_opinion.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
-#include <vnl/vnl_float_4.h>
+#include "vnl/vnl_float_4.h"
 
 namespace bvpl_crop_grid_process_globals
 {

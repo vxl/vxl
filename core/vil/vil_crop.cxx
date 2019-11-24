@@ -8,9 +8,9 @@
 #include "vil_crop.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_exception.h>
+#include "vil/vil_exception.h"
 
 
 vil_image_resource_sptr vil_crop(const vil_image_resource_sptr &src, unsigned i0,

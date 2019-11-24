@@ -1,17 +1,17 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <imesh/algo/imesh_imls_surface.h>
 #include "test_share.h"
 #include <imesh/algo/imesh_transform.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <imesh/imesh_fileio.h>
 #include <imesh/imesh_operations.h>
-#include <vnl/vnl_matlab_filewrite.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_matlab_filewrite.h"
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_math.h"
 
 double approx_deriv(const imesh_imls_surface& f,
                     const vgl_point_3d<double>& p,

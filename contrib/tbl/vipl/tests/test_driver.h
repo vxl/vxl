@@ -3,12 +3,12 @@
 
 #include <string>
 #include <iostream>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
-#include <vxl_config.h> // for vxl_byte
+#include "testlib/testlib_test.h"
+#include "vxl_config.h" // for vxl_byte
 
 // create an 8 bit test image
 vil_image_view<vxl_byte> CreateTest8bitImage (int wd, int ht);

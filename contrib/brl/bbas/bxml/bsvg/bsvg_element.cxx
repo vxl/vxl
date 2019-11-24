@@ -8,7 +8,7 @@
 // \date   April 21, 2009
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void bsvg_element::set_transformation(float trans_x, float trans_y, float rot)

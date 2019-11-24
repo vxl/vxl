@@ -1,9 +1,9 @@
 // This is core/vil/tests/test_rgb.cxx
-#include <testlib/testlib_test.h>
-#include <vil/vil_open.h>
-#include <vil/vil_stream.h>
-#include <vil/vil_new.h>
-#include <vil/vil_rgb.h>
+#include "testlib/testlib_test.h"
+#include "vil/vil_open.h"
+#include "vil/vil_stream.h"
+#include "vil/vil_new.h"
+#include "vil/vil_rgb.h"
 #include <iostream>
 #include <typeinfo>
 #include <cmath>

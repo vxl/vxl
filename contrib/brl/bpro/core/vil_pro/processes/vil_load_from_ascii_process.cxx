@@ -4,10 +4,10 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_save.h"
+#include "vil/vil_image_view.h"
 
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_matrix.h"
 
 //: Constructor
 // this process takes 2 inputs:

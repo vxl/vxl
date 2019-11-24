@@ -1,5 +1,5 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <imesh/algo/imesh_kd_tree.h>
 #include <imesh/imesh_mesh.h>
 #include <imesh/algo/imesh_intersect.h>
@@ -7,9 +7,9 @@
 #include "test_share.h"
 #include <imesh/algo/imesh_transform.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 void test_closest_point(const imesh_mesh& mesh, const std::vector<vgl_point_3d<double> >& pts)
 {

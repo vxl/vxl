@@ -9,7 +9,7 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 rrel_wgted_ran_sam_search::~rrel_wgted_ran_sam_search( )

@@ -8,12 +8,12 @@
 #include <iostream>
 #include <cstdlib>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgui/vgui.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 
 //-----------------------------------------------------------------------------
 // A tableau that displays the mouse position when left mouse button is pressed.

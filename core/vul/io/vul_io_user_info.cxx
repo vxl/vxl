@@ -3,7 +3,7 @@
 // \file
 #include <iostream>
 #include "vul_io_user_info.h"
-#include <vul/vul_user_info.h>
+#include "vul/vul_user_info.h"
 
 //=========================================================================
 //: Binary save self to stream.

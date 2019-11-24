@@ -25,14 +25,14 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vcsl/vcsl_cartesian_3d.h>
-#include <vcsl/vcsl_displacement.h>
-#include <vcsl/vcsl_translation.h>
-#include <vcsl/vcsl_graph.h>
-#include <vnl/vnl_math.h> // for pi
+#include "vcsl/vcsl_cartesian_3d.h"
+#include "vcsl/vcsl_displacement.h"
+#include "vcsl/vcsl_translation.h"
+#include "vcsl/vcsl_graph.h"
+#include "vnl/vnl_math.h" // for pi
 
 //-----------------------------------------------------------------------------
 //: Entry point of the example program

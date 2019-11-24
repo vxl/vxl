@@ -7,7 +7,7 @@
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_edge_ray_processor.h>
 #include <brip/brip_vil_float_ops.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 bool bvxm_edgemap_ortho_process_cons(bprb_func_process& pro)
 {

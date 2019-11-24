@@ -1,11 +1,11 @@
 #include <iostream>
 #include <cstring>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_shell_tableau.h"
 
 #include <bgui3d/bgui3d_examiner_tableau.h>
 #include <bgui3d/bgui3d.h>

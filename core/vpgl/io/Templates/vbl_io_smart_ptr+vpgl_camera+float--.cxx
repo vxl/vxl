@@ -1,4 +1,4 @@
-#include <vpgl/vpgl_camera.h>
+#include "vpgl/vpgl_camera.h"
 #include <vpgl/io/vpgl_io_camera.h>
 #include <vbl/io/vbl_io_smart_ptr.hxx>
 

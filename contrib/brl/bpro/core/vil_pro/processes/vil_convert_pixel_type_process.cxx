@@ -8,11 +8,11 @@
 
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_math.h"
+#include "vil/vil_convert.h"
 
 //: Constructor
 bool vil_convert_pixel_type_process_cons(bprb_func_process& pro)

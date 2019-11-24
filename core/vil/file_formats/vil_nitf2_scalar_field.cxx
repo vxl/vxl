@@ -8,9 +8,9 @@
 #include "vil_nitf2.h"
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_field_formatter.h"
-#include <vil/vil_stream_core.h>
+#include "vil/vil_stream_core.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vil_nitf2_scalar_field*

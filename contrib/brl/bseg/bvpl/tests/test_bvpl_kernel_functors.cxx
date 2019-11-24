@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iomanip>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <bvpl/kernels/bvpl_edge2d_kernel_factory.h>
 #include <bvpl/kernels/bvpl_edge3d_kernel_factory.h>
@@ -17,12 +17,12 @@
 #include <bvxm/grid/bvxm_opinion.h>
 #include <bsta/bsta_gauss_sf1.h>
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_random.h>
-#include <vbl/vbl_array_3d.h>
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_random.h"
+#include "vbl/vbl_array_3d.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 template<class data_type>
@@ -330,5 +330,5 @@ MAIN(test_bvpl_kernel_functors)
 }
 
 // Template instantiation, only used in this test file:
-#include <vbl/vbl_array_3d.hxx>
+#include "vbl/vbl_array_3d.hxx"
 VBL_ARRAY_3D_INSTANTIATE(bvxm_opinion);

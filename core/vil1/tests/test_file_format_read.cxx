@@ -3,18 +3,18 @@
 #include <fstream>
 #include <vector>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
-#include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_rgb.h>
-#include <vil1/vil1_load.h>
+#include "vil1/vil1_memory_image_of.h"
+#include "vil1/vil1_rgb.h"
+#include "vil1/vil1_load.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vxl_config.h> // for vxl_uint_16 etc.
+#include "vxl_config.h" // for vxl_uint_16 etc.
 
 // Amitha Perera
 // Apr 2002

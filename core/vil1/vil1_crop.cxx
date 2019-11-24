@@ -8,8 +8,8 @@
 
 #include "vil1_crop.h"
 
-#include <vil1/vil1_crop_image_impl.h>
-#include <vil1/vil1_image.h>
+#include "vil1/vil1_crop_image_impl.h"
+#include "vil1/vil1_image.h"
 
 vil1_image vil1_crop(const vil1_image& SRC, int x0, int y0, int w, int h)
 {

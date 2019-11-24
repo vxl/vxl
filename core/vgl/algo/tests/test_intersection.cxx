@@ -4,19 +4,19 @@
 #include <limits>
 #include <list>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_line_2d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_line_3d_2_points.h>
-#include <vgl/vgl_line_segment_3d.h>
-#include <vgl/vgl_ray_3d.h>
+#include "testlib/testlib_test.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_line_2d.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_line_3d_2_points.h"
+#include "vgl/vgl_line_segment_3d.h"
+#include "vgl/vgl_ray_3d.h"
 #include <vgl/algo/vgl_intersection.h>
 
 static void test_plane_intersection()

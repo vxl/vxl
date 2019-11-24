@@ -15,9 +15,9 @@
 //   27-DEC-2004 J.L Mundy     -- Added range mapping to control image display
 // \endverbatim
 
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_section_buffer.h>
-#include <vgui/vgui_range_map_params.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_section_buffer.h"
+#include "vgui/vgui_range_map_params.h"
 
 //-----------------------------------------------------------------------------
 //: Constructor - create an empty image renderer.

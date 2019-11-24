@@ -7,12 +7,12 @@
 
 #include <vnl/algo/vnl_svd.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vnl/algo/vnl_lsqr.h>
-#include <vnl/vnl_sparse_matrix_linear_system.h>
+#include "vnl/vnl_sparse_matrix_linear_system.h"
 #include <vpgl/algo/vpgl_camera_compute.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_box_3d.h"
 
 vpgl_affine_camera<double>* vpgl_affine_rectification::compute_affine_cam(const std::vector< vgl_point_2d<double> >& image_pts,
                                                                           const std::vector< vgl_point_3d<double> >& world_pts)

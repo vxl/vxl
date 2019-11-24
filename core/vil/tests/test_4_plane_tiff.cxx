@@ -1,13 +1,13 @@
 // This is core/vil/tests/test_4_plane_tiff.cxx
-#include <testlib/testlib_test.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_pyramid_image_resource.h>
-#include <vil/vil_open.h>
-#include <vil/vil_stream.h>
-#include <vil/vil_new.h>
-#include <vil/vil_load.h>
-#include <vpl/vpl.h> // vpl_unlink()
+#include "testlib/testlib_test.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_blocked_image_resource.h"
+#include "vil/vil_pyramid_image_resource.h"
+#include "vil/vil_open.h"
+#include "vil/vil_stream.h"
+#include "vil/vil_new.h"
+#include "vil/vil_load.h"
+#include "vpl/vpl.h" // vpl_unlink()
 
 static void test_4_plane_tiff()
 {

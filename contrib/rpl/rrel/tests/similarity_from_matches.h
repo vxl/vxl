@@ -7,10 +7,10 @@
 #include <iostream>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_matrix.h"
 #include <rrel/rrel_estimation_problem.h>
 #include <rrel/rrel_wls_obj.h>
 

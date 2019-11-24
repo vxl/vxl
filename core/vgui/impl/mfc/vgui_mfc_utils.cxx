@@ -15,9 +15,9 @@
 
 #include <iostream>
 #include "vgui_mfc_utils.h"
-#include <vgui/vgui_command.h>
+#include "vgui/vgui_command.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 static bool debug = false;
 

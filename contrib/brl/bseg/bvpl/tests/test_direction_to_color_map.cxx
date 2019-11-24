@@ -1,10 +1,10 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <bvpl/bvpl_direction_to_color_map.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // Test changes

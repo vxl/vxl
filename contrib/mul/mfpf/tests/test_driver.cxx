@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_edge_finder );
 DECLARE( test_norm_corr1d );

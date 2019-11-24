@@ -25,15 +25,15 @@
 //\endverbatim
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <gevd/gevd_noise.h>
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_pixel.h>
 #include <gevd/gevd_bufferxy.h>
 #ifdef DEBUG
-# include <vul/vul_timer.h>
+# include "vul/vul_timer.h"
 #endif
 
 const unsigned char TWOPI = 8, FULLPI = 4, HALFPI = 2;

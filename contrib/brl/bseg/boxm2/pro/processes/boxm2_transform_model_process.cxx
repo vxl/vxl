@@ -11,16 +11,16 @@
 #include <fstream>
 #include <bprb/bprb_func_process.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_block_metadata.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vpgl/vpgl_lvcs.h"
 
 namespace boxm2_transform_model_process_globals
 {

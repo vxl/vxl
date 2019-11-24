@@ -5,7 +5,7 @@
 
 #include "boxm2_ocl_test_utils.h"
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <bocl/bocl_manager.h>
 #include <boct/boct_bit_tree.h>

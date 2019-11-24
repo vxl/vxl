@@ -7,9 +7,9 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_indent.h>
+#include "vsl/vsl_indent.h"
 #include <vimt/vimt_image.h>
 
 //=======================================================================

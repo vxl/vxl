@@ -10,20 +10,20 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
 #include <vsol/vsol_box_2d.h>
 
 #include <vil/vil_config.h>
-#include <vil/vil_load.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_pixel_format.h>
+#include "vil/vil_load.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_pixel_format.h"
 #include <vil/file_formats/vil_tiff.h>
 
 #include <brip/brip_roi.h>

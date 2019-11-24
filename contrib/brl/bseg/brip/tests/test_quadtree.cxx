@@ -1,14 +1,14 @@
 #include <iostream>
 #include <iomanip>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <brip/brip_quadtree_node.h>
 #include <brip/brip_quadtree_utils.h>
 #include <brip/brip_quadtree_node_base_sptr.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vbl/vbl_array_2d.h>
+#include "vbl/vbl_array_2d.h"
 static void test_quadtree()
 {
   brip_quadtree_node_base_sptr qnb

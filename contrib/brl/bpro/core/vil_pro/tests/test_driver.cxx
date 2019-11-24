@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_vil_convert_to_n_planes_process );
 DECLARE( test_vil_crop_image_process );

@@ -4,9 +4,9 @@
 #include <boct/boct_bit_tree.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_block.h>
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 boxm2_ocl_kernel_vector_filter::

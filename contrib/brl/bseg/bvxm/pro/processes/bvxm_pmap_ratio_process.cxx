@@ -3,14 +3,14 @@
 //:
 // \file
 #include <bprb/bprb_func_process.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_new.h>
-#include <vil/vil_image_view_base.h>
-#include <vnl/vnl_math.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_new.h"
+#include "vil/vil_image_view_base.h"
+#include "vnl/vnl_math.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: set input and output types

@@ -1,15 +1,15 @@
 // This is mul/vimt/tests/test_sample_profile_bilin.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 #include <vimt/vimt_sample_profile_bilin.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_matrix.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 
 static void test_sample_profile_bilin_byte_affine()
 {

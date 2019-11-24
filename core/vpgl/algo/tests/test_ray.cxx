@@ -1,16 +1,16 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_closest_point.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_affine_camera.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_closest_point.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_affine_camera.h"
+#include "vpgl/vpgl_lvcs.h"
 #include <vpgl/algo/vpgl_ray.h>
 
 static void test_ray()

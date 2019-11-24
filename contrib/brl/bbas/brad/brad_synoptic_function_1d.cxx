@@ -5,13 +5,13 @@
 #include "brad_synoptic_function_1d.h"
 //
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_4.h>
-#include <vnl/vnl_double_4x4.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_4.h"
+#include "vnl/vnl_double_4x4.h"
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_inverse.h"
 #include <vnl/algo/vnl_svd.h>
 #include <bsta/bsta_gauss_sd1.h>
 

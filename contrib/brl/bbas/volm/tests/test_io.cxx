@@ -1,13 +1,13 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <utility>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h>
+#include "vpl/vpl.h"
 #include <depth_map/depth_map_scene.h>
 #include <depth_map/depth_map_region_sptr.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 #include <bbas/volm/volm_tile.h>
 #include <bbas/volm/volm_geo_index.h>
 #include <bbas/volm/volm_io.h>
@@ -15,7 +15,7 @@
 #include <bkml/bkml_parser.h>
 #include <vcl_where_root_dir.h>
 #if 0 // used in commented-out part
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #endif
 
 #include <bsol/bsol_algs.h>

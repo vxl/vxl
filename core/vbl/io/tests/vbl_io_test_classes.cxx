@@ -2,14 +2,14 @@
 #define vbl_io_test_classes_cxx_
 
 #include "vbl_io_test_classes.h"
-#include <vbl/vbl_smart_ptr.h>
+#include "vbl/vbl_smart_ptr.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
 
 //:
 // \file
 // \brief Contains some stuff for testing smart ptr IO
 
-#include <vbl/vbl_smart_ptr.hxx>
+#include "vbl/vbl_smart_ptr.hxx"
 VBL_SMART_PTR_INSTANTIATE(impl);
 
 #include <vbl/io/vbl_io_smart_ptr.hxx>

@@ -4,7 +4,7 @@
 //  Copyright: (C) 2010 The University of Manchester
 //
 //=======================================================================
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Tim Cootes

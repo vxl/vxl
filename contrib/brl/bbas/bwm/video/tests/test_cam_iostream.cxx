@@ -1,17 +1,17 @@
 #include <iostream>
 #include <string>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
-#include <vul/vul_file.h>
-#include <vpl/vpl.h> // vpl_unlink()
-#include <vpgl/vpgl_perspective_camera.h>
+#include "testlib/testlib_test.h"
+#include "vul/vul_file.h"
+#include "vpl/vpl.h" // vpl_unlink()
+#include "vpgl/vpgl_perspective_camera.h"
 
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vgl/vgl_homg_point_3d.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vgl/vgl_homg_point_3d.h"
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 

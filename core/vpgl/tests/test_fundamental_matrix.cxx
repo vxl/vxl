@@ -1,21 +1,21 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vpgl/vpgl_fundamental_matrix.h>
+#include "vpgl/vpgl_fundamental_matrix.h"
 
-#include <vnl/vnl_fwd.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_line_2d.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vpgl/vpgl_calibration_matrix.h>
-#include <vpgl/vpgl_essential_matrix.h>
+#include "vnl/vnl_fwd.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_homg_line_2d.h"
+#include "vgl/vgl_homg_point_3d.h"
+#include "vgl/vgl_distance.h"
+#include "vpgl/vpgl_calibration_matrix.h"
+#include "vpgl/vpgl_essential_matrix.h"
 
 static vnl_double_3x3
 skew_symmetric(const double tx, const double ty, const double tz)

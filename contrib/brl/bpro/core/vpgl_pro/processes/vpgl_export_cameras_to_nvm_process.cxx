@@ -6,11 +6,11 @@
 // \brief A process to KRT cameras to a NVM file ( input for Viosual SFM)
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vnl/vnl_quaternion.h>
-#include <vul/vul_file_iterator.h>
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vnl/vnl_quaternion.h"
+#include "vul/vul_file_iterator.h"
 #include <bpgl/bpgl_camera_utils.h>
 //: Init function
 bool vpgl_export_cameras_to_nvm_process_cons(bprb_func_process& pro)

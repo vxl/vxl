@@ -11,7 +11,7 @@ extern "C" {
 #include <sys/types.h>
 #include <sys/stat.h>
 }
-#include <vxl_config.h> // for VXL_UNISTD_*
+#include "vxl_config.h" // for VXL_UNISTD_*
 
 char *
 vpl_getcwd( char *buf, std::size_t buf_size )

@@ -5,10 +5,10 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_numeric_traits.h>
-#include <vil1/vil1_memory_image_of.h>
+#include "vnl/vnl_numeric_traits.h"
+#include "vil1/vil1_memory_image_of.h"
 #include <vsol/vsol_box_2d.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <brip/brip_roi.h>

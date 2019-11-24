@@ -6,20 +6,20 @@
 #include <bpgl/bpgl_camera_utils.h>
 #include <volm/volm_spherical_container.h>
 #include <bsol/bsol_algs.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_rgb.h>
-#include <vil/vil_save.h>
-#include <vsl/vsl_binary_io.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_rgb.h"
+#include "vil/vil_save.h"
+#include "vsl/vsl_binary_io.h"
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <volm/volm_spherical_layers.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 #include <volm/volm_camera_space.h>
-#include <vsl/vsl_vector_io.h>
-#include <vsl/vsl_set_io.h>
+#include "vsl/vsl_vector_io.h"
+#include "vsl/vsl_set_io.h"
 
 #define TOL -1E-8
 

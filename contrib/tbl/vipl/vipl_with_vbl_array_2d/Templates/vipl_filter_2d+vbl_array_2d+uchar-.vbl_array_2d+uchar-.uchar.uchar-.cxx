@@ -1,5 +1,5 @@
 #ifndef INSTANTIATE_TEMPLATES
-#include <vbl/vbl_array_2d.h>
+#include "vbl/vbl_array_2d.h"
 
 // this must be here for filter-2d to work
 #include "../vipl_filterable_section_container_generator_vbl_array_2d.hxx"

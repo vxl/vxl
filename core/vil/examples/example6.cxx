@@ -5,13 +5,13 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vxl_config.h> // for vxl_byte
-#include <vil/vil_rgb.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_print.h>
+#include "vxl_config.h" // for vxl_byte
+#include "vil/vil_rgb.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_print.h"
 
 //: Example function to return a 3-plane view of an RGB image
 vil_image_view<vxl_byte> view_as_planes(const vil_image_view<vil_rgb<vxl_byte> >& v)

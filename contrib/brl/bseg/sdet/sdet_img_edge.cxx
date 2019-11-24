@@ -18,17 +18,17 @@
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vtol/vtol_edge_2d.h>
 #include <bil/algo/bil_edt.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_convert.h"
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vnl/algo/vnl_chi_squared.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vil/vil_new.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vil/vil_new.h"
+#include "vnl/vnl_math.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vgl/vgl_line_2d.h>
+#include "vgl/vgl_line_2d.h"
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d.h>

@@ -1,10 +1,10 @@
 // This is core/vbl/tests/vbl_test_batch_compact_multimap.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vbl/vbl_batch_compact_multimap.h>
+#include "vbl/vbl_batch_compact_multimap.h"
 
 namespace
 {

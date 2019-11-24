@@ -7,13 +7,13 @@
 
 #include <sstream>
 #include "vgui_clear_tableau.h"
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_command.h>
-#include <vgui/vgui_dialog.h>
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_command.h"
+#include "vgui/vgui_dialog.h"
 #include <vgui/internals/vgui_accelerate.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //-----------------------------------------------------------------------------

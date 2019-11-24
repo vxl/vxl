@@ -1,15 +1,15 @@
 // This is prip/vdtop/tests/vdtop_veinerization_test.cxx
-#include <vxl_config.h>
+#include "vxl_config.h"
 
 #include <vmap/vmap_2_tmap.h>
 #include <vdtop/vil_canny_deriche_grad_filter.h>
 #include <vdtop/vdtop_well_composed_lower_leveling_kernel.h>
 #include <vdtop/vdtop_set_4_veinerization_structure.h>
 
-#include <vil/vil_convert.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_clamp.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_clamp.h"
 
 typedef vmap_2_tmap<> my_map_type ;
 

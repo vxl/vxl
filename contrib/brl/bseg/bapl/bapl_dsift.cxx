@@ -3,10 +3,10 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil/algo/vil_orientations.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 bapl_dsift::bapl_dsift( vil_image_view<float> const& img )
 : grad_valid_(true)

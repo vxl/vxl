@@ -1,18 +1,18 @@
 #include <iostream>
 #include <cstdlib>
-#include <testlib/testlib_test.h>
-#include <vul/vul_file.h>
-#include <vpl/vpl.h>
+#include "testlib/testlib_test.h"
+#include "vul/vul_file.h"
+#include "vpl/vpl.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_infinite_line_3d.h>
-#include <vgl/vgl_line_2d.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_infinite_line_3d.h"
+#include "vgl/vgl_line_2d.h"
+#include "vgl/vgl_intersection.h"
 #include <vgl/algo/vgl_intersection.h>
-#include <vgl/vgl_closest_point.h>
+#include "vgl/vgl_closest_point.h"
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_voxel_traits.h>
 #include <bvxm/bvxm_world_params.h>
@@ -20,9 +20,9 @@
 #include <bvxm/grid/bvxm_voxel_slab.h>
 #include <bvxm/grid/bvxm_voxel_slab_iterator.h>
 #include <bvxm/bvxm_edge_ray_processor.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vil/vil_image_view.h>
-#include <vnl/vnl_math.h>
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vil/vil_image_view.h"
+#include "vnl/vnl_math.h"
 
 static double ran()
 {

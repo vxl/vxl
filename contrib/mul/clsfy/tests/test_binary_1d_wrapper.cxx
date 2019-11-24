@@ -2,7 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \brief Tests the clsfy_binary_1d_wrapper class
@@ -10,11 +10,11 @@
 // Test construction, IO etc
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
-#include <vsl/vsl_binary_loader.h>
-#include <vsl/vsl_vector_io.h>
+#include "vpl/vpl.h" // vpl_unlink()
+#include "vsl/vsl_binary_loader.h"
+#include "vsl/vsl_vector_io.h"
 #include <mbl/mbl_data_collector_list.h>
 #include <mbl/mbl_test.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>

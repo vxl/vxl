@@ -3,9 +3,9 @@
 #include <cstring>
 #include "vgui_win32.h"
 
-#include <vgui/vgui_gl.h> // for glFlush()
+#include "vgui/vgui_gl.h" // for glFlush()
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>// for assert
 #include "vgui_win32_window.h"

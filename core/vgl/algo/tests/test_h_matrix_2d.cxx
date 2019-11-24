@@ -9,13 +9,13 @@
 // \endverbatim
 
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_homg_point_2d.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include "vgl/vgl_homg_point_2d.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_matrix_fixed.h"
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/algo/vgl_norm_trans_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>

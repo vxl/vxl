@@ -1,8 +1,8 @@
 #ifndef rgrl_test_util_h_
 #define rgrl_test_util_h_
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_matrix.h"
 #include <rgrl/rgrl_feature_sptr.h>
 
 bool

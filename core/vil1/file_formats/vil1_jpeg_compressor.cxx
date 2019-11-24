@@ -6,9 +6,9 @@
 #include <iostream>
 #include "vil1_jpeg_compressor.h"
 #include "vil1_jpeg_destination_mgr.h"
-#include <vil1/vil1_stream.h>
+#include "vil1/vil1_stream.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vil1_jpeg_compressor::vil1_jpeg_compressor(vil1_stream *s)

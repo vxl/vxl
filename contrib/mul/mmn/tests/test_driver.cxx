@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_graph_rep1 );
 DECLARE( test_dp_solver );

@@ -3,14 +3,14 @@
 #include <cmath>
 #include "boxm2_vecf_lid_base.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_sphere_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_sphere_3d.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vnl/vnl_vector_fixed.h"
 // the rotated x position, xp, is input and a 2nd order approximation to the margin or crease polynomials is used to
 // recover the polynomial sweeping parameter, beta.
 double boxm2_vecf_lid_base::beta(double xp, double a0, double a1, double a2) const{

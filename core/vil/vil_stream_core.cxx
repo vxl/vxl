@@ -8,7 +8,7 @@
 #include "vil_stream_core.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vil_stream_core::vil_stream_core(unsigned block_size)

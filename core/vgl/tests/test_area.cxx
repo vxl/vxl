@@ -1,7 +1,7 @@
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_area.h>
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_area.h"
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 static void test_simple1()
 {

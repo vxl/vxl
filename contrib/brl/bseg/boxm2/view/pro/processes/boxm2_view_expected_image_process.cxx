@@ -8,11 +8,11 @@
 //
 // \author Vishal Jain
 // \date Mar 10, 2011
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 #include <boxm2/view/boxm2_include_glew.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -30,13 +30,13 @@
 
 #include <boxm2/view/boxm2_ocl_render_tableau.h>
 #include <boxm2/view/boxm2_view_utils.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_window.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_clear_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_window.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_clear_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
 
 namespace boxm2_view_expected_image_process_globals
 {

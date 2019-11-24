@@ -6,15 +6,15 @@
 // \file
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_stream_fstream.h>
-#include <vil/vil_image_list.h>
-#include <vil/vil_blocked_image_facade.h>
-#include <vil/vil_cached_image_resource.h>
-#include <vil/vil_new.h>
-#include <vil/vil_load.h>
-#include <vil/vil_copy.h>
+#include "vil/vil_stream_fstream.h"
+#include "vil/vil_image_list.h"
+#include "vil/vil_blocked_image_facade.h"
+#include "vil/vil_cached_image_resource.h"
+#include "vil/vil_new.h"
+#include "vil/vil_load.h"
+#include "vil/vil_copy.h"
 
 //:Load a pyramid image.  The path should correspond to a directory.
 //If not, return a null resource.

@@ -4,7 +4,7 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>

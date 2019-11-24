@@ -4,7 +4,7 @@
 #include <iostream>
 #include <utility>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <boxm2/ocl/algo/boxm2_ocl_render_expected_image_function.h>

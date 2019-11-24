@@ -3,11 +3,11 @@
 #include <sstream>
 #include <ctime>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_explicit_io.h>
-#include <testlib/testlib_test.h>
-#include <vpl/vpl.h>
+#include "vsl/vsl_binary_explicit_io.h"
+#include "testlib/testlib_test.h"
+#include "vpl/vpl.h"
 
 void test_arbitrary_length_int_conversion_int()
 {

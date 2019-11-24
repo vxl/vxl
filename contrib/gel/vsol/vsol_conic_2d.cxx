@@ -5,16 +5,16 @@
 //:
 // \file
 
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_line_2d.h>
+#include "vgl/vgl_vector_2d.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_homg_line_2d.h"
 #include <vgl/io/vgl_io_conic.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

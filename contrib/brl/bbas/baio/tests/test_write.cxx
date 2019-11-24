@@ -1,14 +1,14 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #include <baio/baio.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_random.h>
-#include <vpl/vpl.h>
+#include "vnl/vnl_random.h"
+#include "vpl/vpl.h"
 
 static void test_write()
 {

@@ -13,7 +13,7 @@
 // \endverbatim
 
 #include <boxm2/boxm2_scene.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 class boxm2_ocl_test_utils
 {
 

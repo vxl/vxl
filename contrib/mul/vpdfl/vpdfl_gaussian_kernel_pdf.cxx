@@ -12,10 +12,10 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <vpdfl/vpdfl_gaussian_kernel_pdf_sampler.h>
 #include <vpdfl/vpdfl_sampler_base.h>
 

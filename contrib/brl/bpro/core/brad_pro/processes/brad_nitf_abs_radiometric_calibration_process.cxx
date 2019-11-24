@@ -17,7 +17,7 @@
 #include <vector>
 #include <bprb/bprb_func_process.h>
 
-#include <vil/vil_convert.h>
+#include "vil/vil_convert.h"
 
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_calibration.h>

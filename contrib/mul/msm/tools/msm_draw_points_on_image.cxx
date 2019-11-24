@@ -6,14 +6,14 @@
 #include <mbl/mbl_eps_writer.h>
 #include <msm/msm_points.h>
 #include <msm/utils/msm_draw_shape_to_eps.h>
-#include <vil/vil_resample_bilin.h>
+#include "vil/vil_resample_bilin.h"
 #include <vil/algo/vil_gauss_filter.h>
 #include <msm/msm_curve.h>
-#include <vgl/vgl_point_2d.h>
-#include <vul/vul_arg.h>
-#include <vil/vil_load.h>
-#include <vnl/vnl_math.h>
-#include <vil/vil_crop.h>
+#include "vgl/vgl_point_2d.h"
+#include "vul/vul_arg.h"
+#include "vil/vil_load.h"
+#include "vnl/vnl_math.h"
+#include "vil/vil_crop.h"
 #include <vimt/vimt_load.h>
 
 // Note: Currently doesn't quite deal with images correctly - need a

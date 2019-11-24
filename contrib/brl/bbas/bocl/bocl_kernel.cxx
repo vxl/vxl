@@ -9,7 +9,7 @@
 #include "bocl_device_info.h"
 #include "bocl_mem.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bool bocl_kernel::create_kernel(cl_context* context,

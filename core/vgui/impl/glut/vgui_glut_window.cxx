@@ -1,7 +1,7 @@
 // \author fsm
 #include "vgui_glut_window.h"
 #include "vgui_glut_adaptor.h"
-#include <vgui/vgui_glut.h>
+#include "vgui/vgui_glut.h"
 
 vgui_glut_window::vgui_glut_window(char const *title,
                                    unsigned w, unsigned h,

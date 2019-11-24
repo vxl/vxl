@@ -1,22 +1,22 @@
 #include <iostream>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h>
+#include "vpl/vpl.h"
 
 #include <bpgl/bpgl_segmented_rolling_shutter_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 
-#include <vnl/vnl_fwd.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_double_3.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_line_3d_2_points.h>
+#include "vnl/vnl_fwd.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_double_3.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_homg_point_3d.h"
+#include "vgl/vgl_line_3d_2_points.h"
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 

@@ -6,9 +6,9 @@
 // \brief A process to convert perspective camera to rational camera.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_generic_camera.h>
+#include "vpgl/vpgl_generic_camera.h"
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
 

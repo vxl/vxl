@@ -4,9 +4,9 @@
 //:
 // \file   given a blob image with each image having a unique different color, fit an oriented box to each blob and return 4 corners of it
 
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bbas_pro/bbas_1d_array_float.h>
 #include <sdet/sdet_region.h>

@@ -7,10 +7,10 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_timer.h>
-#include <vgl/vgl_point_2d.h>
+#include "vul/vul_timer.h"
+#include "vgl/vgl_point_2d.h"
 #include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_digital_curve.h>

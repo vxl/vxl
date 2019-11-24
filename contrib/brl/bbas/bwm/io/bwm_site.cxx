@@ -6,10 +6,10 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vsl/vsl_basic_xml_element.h>
+#include "vsl/vsl_basic_xml_element.h"
 #include <vsol/vsol_point_2d.h>
 //: destructor
 bwm_site::~bwm_site()

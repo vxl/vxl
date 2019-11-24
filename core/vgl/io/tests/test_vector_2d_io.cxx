@@ -1,14 +1,14 @@
 // This is core/vgl/io/tests/test_vector_2d_io.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_vector_2d.h>
+#include "vgl/vgl_vector_2d.h"
 #include <vgl/io/vgl_io_vector_2d.h>
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_io.h>
-#include <testlib/testlib_test.h>
-#include <vpl/vpl.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_io.h"
+#include "testlib/testlib_test.h"
+#include "vpl/vpl.h"
 
 void test_vector_2d_double_io()
 {

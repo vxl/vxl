@@ -4,17 +4,17 @@
 #include <string>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_random.h>
-#include <vul/vul_file.h>
-#include <vul/vul_arg.h>
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_vector_io.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vnl/vnl_random.h"
+#include "vul/vul_file.h"
+#include "vul/vul_arg.h"
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_vector_io.h"
+#include "vsl/vsl_binary_loader.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_spatial_object_2d_sptr.h>

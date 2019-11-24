@@ -11,11 +11,11 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_vector_io.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_vector_io.h"
+#include "vsl/vsl_binary_loader.h"
 #include <pdf1d/pdf1d_mixture.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>

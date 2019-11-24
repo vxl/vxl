@@ -6,7 +6,7 @@
 #include <bpro/core/bbas_pro/bbas_1d_array_double.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 //:
 // \file
@@ -14,7 +14,7 @@
 //
 
 #include <betr/betr_event_trigger.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 
 namespace betr_execute_event_trigger_multi_process_globals
 {

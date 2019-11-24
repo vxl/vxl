@@ -5,21 +5,21 @@
 // \file
 
 
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vpgl/vpgl_utm.h>
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
+#include "vpgl/vpgl_utm.h"
 #include <bkml/bkml_write.h>
-#include <vil/vil_load.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_crop.h>
-#include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
+#include "vil/vil_load.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_crop.h"
+#include "vpgl/vpgl_lvcs.h"
+#include "vpgl/vpgl_lvcs_sptr.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vgl/algo/vgl_fit_lines_2d.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_line_segment_3d.h>
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_line_segment_3d.h"
 
 
 unsigned int volm_io_tools::northing = 0;  // WARNING: north hard-coded

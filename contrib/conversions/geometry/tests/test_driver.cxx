@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_osl_to_vdgl );
 DECLARE( test_DigitalCurve_to_vdgl );

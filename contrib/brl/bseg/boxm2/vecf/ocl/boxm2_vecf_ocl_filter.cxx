@@ -4,10 +4,10 @@
 //:
 // \file
 #include <bocl/bocl_cl.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_vector_3d.h"
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_intersection.h"
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_block_metadata.h>
 #include <boxm2/boxm2_block.h>
@@ -19,7 +19,7 @@
 #include <bocl/bocl_kernel.h>
 #include <vcl_where_root_dir.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 typedef vnl_vector_fixed<unsigned char,16> uchar16;

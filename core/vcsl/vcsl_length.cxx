@@ -1,6 +1,6 @@
 // This is core/vcsl/vcsl_length.cxx
 #include "vcsl_length.h"
-#include <vcsl/vcsl_meter.h>
+#include "vcsl/vcsl_meter.h"
 
 //---------------------------------------------------------------------------
 // Is `new_unit' a compatible unit for the dimension ?

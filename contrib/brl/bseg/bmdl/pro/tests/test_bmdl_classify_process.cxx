@@ -1,10 +1,10 @@
 #include <iostream>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include "../bmdl_processes.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brdb/brdb_value.h>
@@ -15,9 +15,9 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_image_view_base.h"
 
 bool get_image(unsigned int id, vil_image_view_base_sptr& image)
 {

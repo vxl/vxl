@@ -18,16 +18,16 @@
 #include <boxm2/boxm2_scene.h>
 
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vpgl/vpgl_generic_camera.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_load.h>
+#include "vpgl/vpgl_generic_camera.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_load.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-//#include <vil/vil_resample_bilin.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_new.h>
+//#include "vil/vil_resample_bilin.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_new.h"
 
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_box_2d.h>

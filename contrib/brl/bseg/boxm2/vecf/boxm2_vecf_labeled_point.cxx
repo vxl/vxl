@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include "boxm2_vecf_labeled_point.h"
 //

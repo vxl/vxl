@@ -6,18 +6,18 @@
 #include "algo/bwm_utils.h"
 #include "bwm_world.h"
 #include "bwm_3d_corr.h"
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_plane_3d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_plane_3d.h"
 #include <vpgl/algo/vpgl_rational_adjust_onept.h>
-#include <vsl/vsl_basic_xml_element.h>
+#include "vsl/vsl_basic_xml_element.h"
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_polygon_3d.h>
-#include <vgui/vgui_soview.h>
-#include <vgui/vgui_dialog.h>
+#include "vgui/vgui_soview.h"
+#include "vgui/vgui_dialog.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bwm_observer_cam* bwm_observer_mgr::BWM_MASTER_OBSERVER = nullptr;

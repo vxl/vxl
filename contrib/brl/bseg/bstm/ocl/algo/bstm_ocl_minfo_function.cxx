@@ -3,10 +3,10 @@
 
 #include <vcl_where_root_dir.h>
 #include <boct/boct_bit_tree.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_intersection.h"
 #include <vgl/algo/vgl_orient_box_3d.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 
 bstm_ocl_minfo_function::bstm_ocl_minfo_function(const bocl_device_sptr& device, const bstm_scene_sptr& scene, const bstm_opencl_cache_sptr& opencl_cache,

@@ -19,8 +19,8 @@
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvrml/bvrml_write.h>
 
-#include <vul/vul_file.h>
-#include <vpl/vpl.h>
+#include "vul/vul_file.h"
+#include "vpl/vpl.h"
 #include <vil/algo/vil_colour_space.h>
 
 namespace bvpl_visualize_corner_pairs_process_globals

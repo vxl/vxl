@@ -11,7 +11,7 @@
 #include "osl_load_topology.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void osl_load_topology(char const *f, std::list<osl_edge*> &e, std::list<osl_vertex*> &v)

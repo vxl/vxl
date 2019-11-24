@@ -1,7 +1,7 @@
 #include "bwm_observer.h"
 #include "bwm_observable.h"
 
-#include <vgui/vgui_message.h>
+#include "vgui/vgui_message.h"
 
 void bwm_observer::update(vgui_message const& msg)
 {

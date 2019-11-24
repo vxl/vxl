@@ -1,14 +1,14 @@
 #include <fstream>
 
-#include <vgl/vgl_box_3d.h>
-#include <vil/vil_load.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_bilin_interp.h>
-#include <vil/vil_bicub_interp.h>
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_det.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_inverse.h>
+#include "vgl/vgl_box_3d.h"
+#include "vil/vil_load.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_bilin_interp.h"
+#include "vil/vil_bicub_interp.h"
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_det.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_inverse.h"
 
 #include <vpgl/algo/vpgl_camera_convert.h>
 #include <vpgl/algo/vpgl_equi_rectification.h>

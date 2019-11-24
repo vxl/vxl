@@ -2,10 +2,10 @@
 #include <cmath>
 #include <volm/volm_vrml_io.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vsph/vsph_unit_sphere.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 
 void volm_vrml_io::display_spherical_region_by_attrbute(std::ostream& str ,
                                                         volm_spherical_region & region,

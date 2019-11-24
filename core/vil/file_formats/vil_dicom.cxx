@@ -14,18 +14,18 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vxl_config.h> // for vxl_byte and such
+#include "vxl_config.h" // for vxl_byte and such
 
-#include <vil/vil_property.h>
-#include <vil/vil_stream.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_new.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_exception.h>
+#include "vil/vil_property.h"
+#include "vil/vil_stream.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_new.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_pixel_format.h"
+#include "vil/vil_exception.h"
 
 #include <dcfilefo.h>
 #include <dcmetinf.h>

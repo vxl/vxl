@@ -2,11 +2,11 @@
 #include <iostream>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_jarque_bera.h>
-#include <vnl/vnl_random.h>
-#include <testlib/testlib_test.h>
+#include "vnl/vnl_random.h"
+#include "testlib/testlib_test.h"
 
 void test_jarque_bera()
 {

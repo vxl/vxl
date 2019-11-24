@@ -4,11 +4,11 @@
 // \file
 #include "bwm_observer_cam.h"
 #include "io/bwm_io_structs.h"
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_distance.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_basic_xml_element.h>
+#include "vsl/vsl_basic_xml_element.h"
 #include <vsol/vsol_point_2d.h>
 
 bool bwm_corr::match(bwm_observer_cam* obs, vgl_point_2d<double> &pt)

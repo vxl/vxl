@@ -8,18 +8,18 @@
 #include <fstream>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
-#include <vul/vul_timer.h>
+#include "testlib/testlib_test.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
+#include "vul/vul_timer.h"
 #include <bocl/bocl_manager.h>
 #include <boct/boct_bit_tree.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_util.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include "../boxm2_vecf_ocl_filter.h"
 
 typedef vnl_vector_fixed<unsigned char, 16> uchar16;

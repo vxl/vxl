@@ -3,10 +3,10 @@
 #include <iomanip>
 #include <iterator>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
-#include <vul/vul_checksum.h>
+#include "testlib/testlib_test.h"
+#include "vul/vul_checksum.h"
 
 
 void test_checksum()

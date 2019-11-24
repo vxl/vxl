@@ -3,12 +3,12 @@
 #include <iostream>
 #include <sstream>
 
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 
 #include <bsgm/bsgm_disparity_estimator.h>
 #include <bsgm/bsgm_error_checking.h>

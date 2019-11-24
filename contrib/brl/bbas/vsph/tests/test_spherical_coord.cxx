@@ -1,9 +1,9 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <vsph/vsph_view_sphere.h>
 #include <vsph/vsph_spherical_coord.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_distance.h>
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_distance.h"
 
 static void test_spherical_coord()
 {

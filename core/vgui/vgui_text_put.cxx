@@ -7,11 +7,11 @@
 
 
 #include "vgui_text_put.h"
-#include <vgui/vgui_gl.h>
+#include "vgui/vgui_gl.h"
 #include <vgui/vgui_config.h>
 
 #if defined(HAS_GLUT) && defined(VGUI_USE_GLUT)
-#include <vgui/vgui_glut.h>
+#include "vgui/vgui_glut.h"
 
 // This ugliness is used to make sure we don't try to initialize GLUT
 // multiple times if glut is used as the toolkit too.
@@ -99,7 +99,7 @@ int vgui_char_width(unsigned char c, unsigned size){
   return 0;
 }
 #else
-#include <vgui/vgui_font_bitmap.h>
+#include "vgui/vgui_font_bitmap.h"
 void vgui_text_put(char const *str, unsigned int size)
 {
   vgui_font_bitmap font(vgui_font_bitmap::BITMAP_FONT_8_13);

@@ -8,11 +8,11 @@
 // \brief Shapiro & Brady's point correspondence algorithm
 // \author Tim Cootes
 
-#include <vgl/vgl_distance.h>
-#include <vnl/vnl_math.h>
+#include "vgl/vgl_distance.h"
+#include "vnl/vnl_math.h"
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //=======================================================================

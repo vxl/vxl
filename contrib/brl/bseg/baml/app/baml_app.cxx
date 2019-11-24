@@ -3,20 +3,20 @@
 #include <iostream>
 #include <sstream>
 
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_crop.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 #include <vil/algo/vil_gauss_filter.h>
 
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_intersection.h"
 
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_rational_camera.h>
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vpgl/vpgl_lvcs.h"
+#include "vpgl/vpgl_rational_camera.h"
 
 #include <bil/bil_convert_to_grey.h>
 

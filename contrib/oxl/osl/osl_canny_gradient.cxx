@@ -7,7 +7,7 @@
 #include <cmath>
 #include "osl_canny_gradient.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // smooth_  is the (smoothed, presumably) input image.

@@ -5,16 +5,16 @@
 #include "vil_viff.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static char const* vil_viff_format_tag = "viff";
 
 
-#include <vil/vil_stream.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_exception.h>
+#include "vil/vil_stream.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_exception.h"
 
 static inline void swap(void* p,int length)
 {

@@ -1,7 +1,7 @@
 #include "boxm2_vecf_ocl_appearance_extractor.h"
 #include <boct/boct_bit_tree.h>
 #include "../boxm2_vecf_composite_head_parameters.h"
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <vcl_where_root_dir.h>
 void boxm2_vecf_ocl_appearance_extractor::compile_kernels(){
   std::string options;

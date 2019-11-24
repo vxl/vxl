@@ -11,15 +11,15 @@
 #include "vgui.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_window.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_tag.h>
-#include <vgui/vgui_toolkit.h>
+#include "vgui/vgui_macro.h"
+#include "vgui/vgui_window.h"
+#include "vgui/vgui_tableau.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_tag.h"
+#include "vgui/vgui_toolkit.h"
 #include <vgui/internals/vgui_accelerate.h>
 #include <vgui/internals/vgui_dialog_impl.h>
 #include <vgui/internals/vgui_dialog_extensions_impl.h>

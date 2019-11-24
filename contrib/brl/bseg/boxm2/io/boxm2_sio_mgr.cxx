@@ -2,7 +2,7 @@
 #include <fstream>
 #include "boxm2_sio_mgr.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <sys/stat.h>  //for getting file sizes
 

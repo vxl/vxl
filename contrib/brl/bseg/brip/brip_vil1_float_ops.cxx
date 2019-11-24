@@ -5,17 +5,17 @@
 //:
 // \file
 
-#include <vul/vul_timer.h>
-#include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_math.h>
+#include "vul/vul_timer.h"
+#include "vnl/vnl_numeric_traits.h"
+#include "vnl/vnl_math.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vbl/vbl_array_1d.h>
+#include "vbl/vbl_array_1d.h"
 #include <vnl/algo/vnl_fft_prime_factors.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_inverse.h>
-#include <vil1/vil1_smooth.h>
+#include "vnl/vnl_inverse.h"
+#include "vil1/vil1_smooth.h"
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_2d.h>

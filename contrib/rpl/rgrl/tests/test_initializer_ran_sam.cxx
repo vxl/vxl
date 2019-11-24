@@ -1,15 +1,15 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_double_2.h>
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_double_2.h"
 
 #include <rrel/rrel_muset_obj.h>
 #include <rgrl/rgrl_feature_point.h>

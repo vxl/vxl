@@ -2,10 +2,10 @@
 // \file
 #include <iostream>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvgl/bvgl_ray_pyramid.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Test changes

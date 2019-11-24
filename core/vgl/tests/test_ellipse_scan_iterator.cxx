@@ -1,6 +1,6 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
-#include <vgl/vgl_ellipse_scan_iterator.h>
+#include "vgl/vgl_ellipse_scan_iterator.h"
 
 static void test_circle()
 {

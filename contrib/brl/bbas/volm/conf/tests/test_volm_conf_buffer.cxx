@@ -1,11 +1,11 @@
 #include <iostream>
 #include <algorithm>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <volm/conf/volm_conf_object.h>
 #include <volm/conf/volm_conf_buffer.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_volm_conf_buffer()

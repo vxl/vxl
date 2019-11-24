@@ -9,10 +9,10 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1/vil1_memory_image_of.h"
 
 #include <mvl/HomgInterestPoint.h>
 #include <mvl/ImageMetric.h>

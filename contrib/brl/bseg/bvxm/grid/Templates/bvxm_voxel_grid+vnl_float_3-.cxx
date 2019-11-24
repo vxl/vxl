@@ -3,7 +3,7 @@
 #include <bvxm/grid/bvxm_voxel_storage_mem.hxx>
 #include <bvxm/grid/bvxm_voxel_storage_slab_mem.hxx>
 #include <bvxm/grid/bvxm_voxel_storage_disk_cached.hxx>
-#include <vnl/vnl_float_3.h>
+#include "vnl/vnl_float_3.h"
 
 BVXM_VOXEL_GRID_INSTANTIATE(vnl_float_3);
 BVXM_VOXEL_STORAGE_DISK_INSTANTIATE(vnl_float_3);

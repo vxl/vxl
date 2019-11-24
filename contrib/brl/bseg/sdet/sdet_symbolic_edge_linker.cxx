@@ -12,10 +12,10 @@
 #include <sdet/sdet_curve_model.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_timer.h>
-#include <vil/vil_image_resource.h>
+#include "vul/vul_timer.h"
+#include "vil/vil_image_resource.h"
 
 void sdet_symbolic_edge_linker::apply(const sdet_edgemap_sptr& edgemap) {
 

@@ -1,7 +1,7 @@
 #include "boxm2_block.h"
 #include <boct/boct_bit_tree.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_distance.h"
 //:
 // \file
 #include <boxm2/boxm2_util.h>

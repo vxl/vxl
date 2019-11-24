@@ -1,11 +1,11 @@
 #include <vector>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vcl_compiler.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_area.h>
-#include <vgl/vgl_oriented_box_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_area.h"
+#include "vgl/vgl_oriented_box_2d.h"
 #include <vgl/algo/vgl_hough_index_2d.h>
 
 static void test_hough_index_2d()

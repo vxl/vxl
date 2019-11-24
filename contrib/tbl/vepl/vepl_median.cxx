@@ -2,15 +2,15 @@
 #include <iostream>
 #include "vepl_median.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vepl/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_median.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_plane.h>
-#include <vil/vil_new.h>
-#include <vxl_config.h> // for vxl_byte
+#include "vil/vil_image_view.h"
+#include "vil/vil_pixel_format.h"
+#include "vil/vil_plane.h"
+#include "vil/vil_new.h"
+#include "vxl_config.h" // for vxl_byte
 
 vil_image_resource_sptr vepl_median(const vil_image_resource_sptr& image, float radius)
 {

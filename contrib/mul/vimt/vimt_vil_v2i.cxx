@@ -9,22 +9,22 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
+#include "vxl_config.h" // for VXL_BIG_ENDIAN and vxl_byte
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
-#include <vil/vil_exception.h>
-#include <vil/vil_property.h>
-#include <vil/vil_copy.h>
-#include <vil/vil_stream.h>
-#include <vil/vil_stream_fstream.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
+#include "vil/vil_exception.h"
+#include "vil/vil_property.h"
+#include "vil/vil_copy.h"
+#include "vil/vil_stream.h"
+#include "vil/vil_stream_fstream.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_view.h"
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_binary_loader.h"
 #include <vimt/vimt_image_2d_of.h>
 
 // v2i magic number

@@ -1,9 +1,9 @@
 // This is mul/vil3d/tests/test_analyze_format.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil3d/file_formats/vil3d_analyze_format.h>
 #include <vil3d/vil3d_math.h>

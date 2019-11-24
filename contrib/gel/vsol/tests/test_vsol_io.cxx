@@ -14,15 +14,15 @@
 #include <iostream>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h>
-#include <vsl/vsl_binary_io.h>
+#include "vpl/vpl.h"
+#include "vsl/vsl_binary_io.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
-#include <vsl/vsl_vector_io.h>
-#include <testlib/testlib_test.h>
+#include "vsl/vsl_vector_io.h"
+#include "testlib/testlib_test.h"
 
-#include <vgl/vgl_conic.h>
+#include "vgl/vgl_conic.h"
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>
@@ -43,7 +43,7 @@
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d.h>
 
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 void test_vsol_io()
 {

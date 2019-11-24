@@ -1,8 +1,8 @@
 #include "basic_menus.h"
 #include "basic_manager.h"
-#include <vgui/vgui.h>
-#include <vgui/vgui_key.h>
-#include <vgui/vgui_menu.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_key.h"
+#include "vgui/vgui_menu.h"
 
 // Static menu callback functions
 

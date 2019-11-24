@@ -6,9 +6,9 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_matrix.h"
 #include <vdgl/vdgl_digital_region.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_curve_2d_sptr.h>

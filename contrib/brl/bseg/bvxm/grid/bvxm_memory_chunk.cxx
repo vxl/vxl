@@ -8,9 +8,9 @@
 // \author Dan Crispell
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vbl/vbl_smart_ptr.hxx>
+#include "vbl/vbl_smart_ptr.hxx"
 
 //: Default constructor
 bvxm_memory_chunk::bvxm_memory_chunk() : data_(nullptr), size_(0) {}

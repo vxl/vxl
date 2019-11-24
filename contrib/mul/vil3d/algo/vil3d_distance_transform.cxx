@@ -10,10 +10,10 @@
 #include <vil3d/algo/vil3d_fill_boundary.h>
 #include <vil3d/algo/vil3d_threshold.h>
 #include <vil3d/vil3d_slice.h>
-#include <vil/vil_fill.h>
+#include "vil/vil_fill.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Compute signed distance transform in 3d from zeros in original image.

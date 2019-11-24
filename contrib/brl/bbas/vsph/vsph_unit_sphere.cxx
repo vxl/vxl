@@ -4,12 +4,12 @@
 #include "vsph_unit_sphere.h"
 //
 #include "vsph_sph_point_2d.h"
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_vector_io.h"
 #include "vsph_utils.h"
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_line_segment_3d.h>
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_line_segment_3d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <bvrml/bvrml_write.h>

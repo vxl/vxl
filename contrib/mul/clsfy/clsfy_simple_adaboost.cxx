@@ -12,11 +12,11 @@
 #include "clsfy_simple_adaboost.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_binary_loader.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_binary_loader.h"
+#include "vsl/vsl_vector_io.h"
 #include <vnl/io/vnl_io_matrix.h>
 #include <vnl/io/vnl_io_vector.h>
 

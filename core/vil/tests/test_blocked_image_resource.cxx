@@ -1,19 +1,19 @@
 // This is core/vil/tests/test_blocked_image_resource.cxx
 #include <iostream>
 #include <string>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_new.h>
-#include <vil/vil_load.h>
-#include <vil/vil_property.h>
-#include <vpl/vpl.h> // vpl_unlink()
-#include <vil/vil_image_view.h>
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_block_cache.h>
-#include <vul/vul_file.h>
+#include "vil/vil_new.h"
+#include "vil/vil_load.h"
+#include "vil/vil_property.h"
+#include "vpl/vpl.h" // vpl_unlink()
+#include "vil/vil_image_view.h"
+#include "vil/vil_blocked_image_resource.h"
+#include "vil/vil_block_cache.h"
+#include "vul/vul_file.h"
 
 static std::string image_file;
 static bool exists;

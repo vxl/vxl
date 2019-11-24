@@ -1,11 +1,11 @@
 // This example displays a line in an OpenGL area in the window:
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_slider_tableau.h>
-#include <vgui/vgui_poly_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_soview2D.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_slider_tableau.h"
+#include "vgui/vgui_poly_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_soview2D.h"
 
 // This callback will change one of the coordinates of the line. The
 // appropriate coordinate is specified in the data tag associated with

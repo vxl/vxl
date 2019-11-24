@@ -1,7 +1,7 @@
 // This is core/vul/tests/test_regexp.cxx
 #include <iostream>
-#include <vul/vul_reg_exp.h>
-#include <testlib/testlib_test.h>
+#include "vul/vul_reg_exp.h"
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \brief  Thorough testing of class vul_reg_exp (regular expression matching)
@@ -11,7 +11,7 @@
 //          but with lots of tests added.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void test_regexp()

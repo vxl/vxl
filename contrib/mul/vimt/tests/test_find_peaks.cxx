@@ -1,13 +1,13 @@
 // This is mul/vimt/tests/test_find_peaks.cxx
 #include <iostream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 #include <vimt/algo/vimt_find_peaks.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 
 static void test_find_peaks_byte()
 {

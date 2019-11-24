@@ -15,10 +15,10 @@
 #include <volm/volm_geo_index2.h>
 #include <volm/volm_geo_index2_sptr.h>
 #include <volm/volm_osm_objects.h>
-#include <vpgl/vpgl_utm.h>
-#include <vul/vul_file.h>
-#include <vul/vul_arg.h>
-#include <vgl/vgl_intersection.h>
+#include "vpgl/vpgl_utm.h"
+#include "vul/vul_file.h"
+#include "vul/vul_arg.h"
+#include "vgl/vgl_intersection.h"
 #include <bkml/bkml_parser.h>
 
 #include <utility>

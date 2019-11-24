@@ -1,5 +1,5 @@
 // This is gel/vifa/tests/test_driver.cxx
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE(test_coll_lines_params);
 DECLARE(test_group_pgram_params);

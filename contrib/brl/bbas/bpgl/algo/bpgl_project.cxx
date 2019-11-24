@@ -2,9 +2,9 @@
 //:
 // \file
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_point_3d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_homg_point_3d.h"
 
 #include <utility>
 

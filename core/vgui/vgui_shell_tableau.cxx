@@ -3,14 +3,14 @@
 #include <iostream>
 #include "vgui_shell_tableau.h"
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_clear_tableau.h>
-#include <vgui/vgui_tview_launcher_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_clear_tableau.h"
+#include "vgui/vgui_tview_launcher_tableau.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vgui_event_condition vgui_shell_tableau_bindings::default_quit  = vgui_event_condition( vgui_key('q'), vgui_ALT );
@@ -74,7 +74,7 @@ vgui_shell_tableau::~vgui_shell_tableau()
 
 //--------------------------------------------------------------------------------
 
-#include <vgui/vgui_text_graph.h>
+#include "vgui/vgui_text_graph.h"
 
 bool vgui_shell_tableau::handle(vgui_event const &e)
 {

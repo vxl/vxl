@@ -4,12 +4,12 @@
 // \file
 #include <sys/stat.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_resource.h>
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_pyramid_image_resource.h>
-#include <vil/vil_load.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_blocked_image_resource.h"
+#include "vil/vil_pyramid_image_resource.h"
+#include "vil/vil_load.h"
 
 static bool il_verbose = false;
 bool vil_image_list::vil_is_directory(char const* fn)

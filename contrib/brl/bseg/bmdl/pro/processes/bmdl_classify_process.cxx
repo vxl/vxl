@@ -2,8 +2,8 @@
 //:
 // \file
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_pixel_format.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_pixel_format.h"
 #include <bprb/bprb_parameters.h>
 #include <bmdl/bmdl_classify.h>
 

@@ -8,8 +8,8 @@
 // \endverbatim
 
 #include "vil_stream_write.h"
-#include <vil/vil_stream.h>
-#include <vxl_config.h>
+#include "vil/vil_stream.h"
+#include "vxl_config.h"
 
 void vil_stream_write_big_endian_uint_16(vil_stream *s, vxl_uint_16 w)
 {

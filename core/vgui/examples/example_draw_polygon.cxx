@@ -9,20 +9,20 @@
 #include <vector>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
 
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_projection_inspector.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_projection_inspector.h"
 
 #define hypot(x,y) std::sqrt((x)*(x)+(y)*(y)) // hypot is not in C++98, and therefore not in vcl.
 

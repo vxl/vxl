@@ -1,13 +1,13 @@
 #include <iostream>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_lvcs.h>
+#include "vpgl/vpgl_lvcs.h"
 #include <vpgl/io/vpgl_io_lvcs.h>
-#include <vpl/vpl.h>
-#include <vsl/vsl_binary_io.h>
+#include "vpl/vpl.h"
+#include "vsl/vsl_binary_io.h"
 
 static void test_lvcs_io()
 {

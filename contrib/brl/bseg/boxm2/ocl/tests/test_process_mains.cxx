@@ -4,11 +4,11 @@
 // \date 26-Oct-2010
 #include <iostream>
 #include <algorithm>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #include <vcl_where_root_dir.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
@@ -24,10 +24,10 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_save.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vnl/vnl_random.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_save.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vnl/vnl_random.h"
 
 
 void test_process_mains()

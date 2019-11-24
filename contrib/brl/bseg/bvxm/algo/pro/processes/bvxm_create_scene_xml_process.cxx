@@ -7,15 +7,15 @@
 #include <bkml/bkml_parser.h>
 #include <bvxm/algo/bvxm_create_scene_xml.h>
 #include <bvxm/bvxm_world_params.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vpgl/vpgl_lvcs.h>
-#include <vul/vul_file.h>
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vpgl/vpgl_lvcs.h"
+#include "vul/vul_file.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

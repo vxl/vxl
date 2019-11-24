@@ -1,10 +1,10 @@
 // This example displays a point with 3 lines radiating from it in different
 // non-coplanar directions (along the X, Y and Z axes).
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_easy3D_tableau.h>
-#include <vgui/vgui_viewer3D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_easy3D_tableau.h"
+#include "vgui/vgui_viewer3D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 
 int main(int argc, char **argv)
 {

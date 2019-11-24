@@ -19,10 +19,10 @@
 #include <vipl/accessors/vipl_accessors_vil_image_view.h>
 #include <vipl/vipl_erode_disk.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include "test_driver.h"
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 
 #define ALL_TESTS(x,m,p) \
   ONE_TEST(x,p,byte_img,byte_ori,vil_image_view<vxl_byte>,vxl_byte,76567,m+"_byte"); \

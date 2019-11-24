@@ -6,22 +6,22 @@
 // \date June 19, 2013
 //
 
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 
 #include <volm/volm_io.h>
 #include <volm/volm_io_tools.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
-#include <vul/vul_file_iterator.h>
-#include <vpgl/vpgl_utm.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_area.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
-#include <vgl/vgl_distance.h>
-#include <vnl/vnl_random.h>
-#include <vul/vul_file.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
+#include "vul/vul_file_iterator.h"
+#include "vpgl/vpgl_utm.h"
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_area.h"
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
+#include "vgl/vgl_distance.h"
+#include "vnl/vnl_random.h"
+#include "vul/vul_file.h"
 
 vil_rgb<vxl_byte> pier_color = vil_rgb<vxl_byte>(0, 105, 101);
 

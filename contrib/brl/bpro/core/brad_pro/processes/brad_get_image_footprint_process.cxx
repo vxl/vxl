@@ -6,7 +6,7 @@
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_image_metadata.h>
 
-#include <vgl/vgl_polygon.h>
+#include "vgl/vgl_polygon.h"
 #include <bpro/core/bbas_pro/bbas_1d_array_unsigned.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_double.h>
 

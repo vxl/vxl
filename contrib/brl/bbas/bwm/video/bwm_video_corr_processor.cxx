@@ -7,31 +7,31 @@
 // \file
 #include <bwm/video/bwm_video_site_io.h>
 #include <bwm/video/bwm_video_corr.h>
-#include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_double_3.h>
+#include "vnl/vnl_numeric_traits.h"
+#include "vnl/vnl_double_3.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_amoeba.h>
-#include <vul/vul_file.h>
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vul/vul_file.h"
+#include "vpl/vpl.h" // vpl_unlink()
 #include <bpgl/algo/bpgl_interpolate.h>
 #include <vpgl/algo/vpgl_bundle_adjust.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_homg_point_3d.h"
+#include "vgl/vgl_distance.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 
 #include <bsta/bsta_histogram.h>
 #include <brip/brip_vil_float_ops.h>
 #include <bwm/video/bwm_video_cam_istream.h>
 #include <bwm/video/bwm_video_cam_ostream.h>
-#include <vidl/vidl_frame.h>
-#include <vidl/vidl_convert.h>
-#include <vidl/vidl_image_list_istream.h>
+#include "vidl/vidl_frame.h"
+#include "vidl/vidl_convert.h"
+#include "vidl/vidl_image_list_istream.h"
 
-#include <vpgl/vpgl_lvcs.h>
+#include "vpgl/vpgl_lvcs.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //Minimum number of correspondences on a frame to compute cameras

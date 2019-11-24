@@ -4,12 +4,12 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_point_2d.h>
-#include <vil1/vil1_rgb.h>
+#include "vnl/vnl_numeric_traits.h"
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_point_2d.h"
+#include "vil1/vil1_rgb.h"
 #include "brip_vil1_float_ops.h"
 
 //Define 8-connected neighbors

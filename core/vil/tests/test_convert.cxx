@@ -1,19 +1,19 @@
 // This is core/vil/tests/test_convert.cxx
 #define VXL_LEGACY_ERROR_REPORTING // REQUIRED FOR PASSING TESTS 2018-11-02
 #include <iostream>
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_print.h>
-#include <vil/vil_load.h>
-#include <vil/vil_math.h>
-#include <vil/vil_exception.h>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "vul/vul_file.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_print.h"
+#include "vil/vil_load.h"
+#include "vil/vil_math.h"
+#include "vil/vil_exception.h"
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 static void test_convert1(const char * golden_data_dir)
 {
   std::cout << "*******************************************\n"

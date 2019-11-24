@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include "mbl_gamma.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 constexpr int MAX_ITS = 200;

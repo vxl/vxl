@@ -1,7 +1,7 @@
 // This is mul/clsfy/tests/test_direct_boost.cxx
 #include <iostream>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \brief Tests the clsfy_direct_boost and clsfy_direct_boost_builder classes
@@ -9,16 +9,16 @@
 // Test construction, IO etc.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vpl/vpl.h" // vpl_unlink()
 #include <clsfy/clsfy_direct_boost.h>
 #include <clsfy/clsfy_direct_boost_builder.h>
 #include <clsfy/clsfy_mean_square_1d_builder.h>
 #include <clsfy/clsfy_mean_square_1d.h>
 
-#include <vsl/vsl_binary_loader.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_binary_loader.h"
+#include "vsl/vsl_vector_io.h"
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>

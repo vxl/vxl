@@ -14,10 +14,10 @@
 #include <wx/scrolwin.h>
 #include <wx/msgdlg.h>
 
-#include <vgui/vgui_tableau_sptr.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui_tableau_sptr.h"
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------

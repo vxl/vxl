@@ -10,25 +10,25 @@
 
 #include "brec_part_gaussian_sptr.h"
 
-#include <vil/vil_convert.h>
-#include <vil/vil_save.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_save.h"
 #include <vil/algo/vil_threshold.h>
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 #include <brip/brip_vil_float_ops.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 #include <bxml/bxml_find.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_gamma.h>
+#include "vnl/vnl_gamma.h"
 
 #include <bsta/algo/bsta_fit_weibull.h>
 #include <bsta/bsta_histogram.h>
 #include <bsta/bsta_gauss_sf1.h>
 
-#include <vul/vul_file.h>
-#include <vul/vul_psfile.h>
+#include "vul/vul_file.h"
+#include "vul/vul_psfile.h"
 
 //: strength_threshold in [0,1] - min strength to declare the part as detected
 bool extract_gaussian_primitives(const vil_image_resource_sptr& img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, std::vector<brec_part_instance_sptr>& parts)

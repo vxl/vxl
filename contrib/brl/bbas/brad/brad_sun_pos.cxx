@@ -5,11 +5,11 @@
 #include "brad_sun_pos.h"
 //:
 // \file
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_cost_function.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_cost_function.h"
 #include <vnl/algo/vnl_brent_minimizer.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // Declaration of some constants

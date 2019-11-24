@@ -1,5 +1,5 @@
 // This is core/vil/algo/tests/test_algo_histogram_equalise.cxx
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vil/algo/vil_histogram_equalise.h>
 
 static void test_histogram_equalise_byte()

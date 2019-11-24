@@ -1,12 +1,12 @@
 #include "boxm2_volm_locations.h"
 //:
 // \file
-#include <vbl/vbl_array_2d.h>
-#include <vgl/vgl_box_3d.h>
+#include "vbl/vbl_array_2d.h"
+#include "vgl/vgl_box_3d.h"
 #include <bkml/bkml_write.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: construct the locs_ and pixels_ vectors by generating a hypothesis according to interval amounts in given the tile.

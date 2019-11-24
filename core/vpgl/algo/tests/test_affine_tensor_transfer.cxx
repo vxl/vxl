@@ -1,18 +1,18 @@
 #include <limits>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <vnl/algo/vnl_svd.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_distance.h"
 #include <vgl/algo/vgl_h_matrix_2d.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vpgl/vpgl_affine_camera.h>
-#include <vpgl/vpgl_affine_tri_focal_tensor.h>
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vpgl/vpgl_affine_camera.h"
+#include "vpgl/vpgl_affine_tri_focal_tensor.h"
 #include <vpgl/algo/vpgl_affine_rectification.h>
 #include <vpgl/algo/vpgl_ray_intersect.h>
 #include <vpgl/algo/vpgl_camera_convert.h>

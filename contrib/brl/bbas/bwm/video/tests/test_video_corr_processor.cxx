@@ -2,14 +2,14 @@
 #include <iostream>
 #include <cmath>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "testlib/testlib_test.h"
+#include "vpgl/vpgl_perspective_camera.h"
 #include <bpgl/algo/bpgl_interpolate.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vnl/vnl_double_3x3.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
 #include <bwm/video/bwm_video_corr.h>
 #include <bwm/video/bwm_video_corr_processor.h>
 

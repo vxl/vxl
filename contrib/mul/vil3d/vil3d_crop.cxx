@@ -8,7 +8,7 @@
 #include "vil3d_crop.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vil3d_image_resource_sptr vil3d_crop(

@@ -1,12 +1,12 @@
 #include <string>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brdb/brdb_value.h>
@@ -17,9 +17,9 @@
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
 
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <bvxm/pro/processes/bvxm_create_synth_lidar_data_process.h>
 #include <bvxm/pro/processes/bvxm_create_voxel_world_process.h>
 #include <bvxm/pro/processes/bvxm_update_lidar_process.h>

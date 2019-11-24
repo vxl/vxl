@@ -1,10 +1,10 @@
 // This is mul/vimt3d/tests/test_from_image_2d.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h>
+#include "vxl_config.h"
 #include <vimt3d/vimt3d_from_image_2d.h>
 
 

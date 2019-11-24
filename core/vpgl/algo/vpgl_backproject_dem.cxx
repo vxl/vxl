@@ -4,14 +4,14 @@
 #include "vpgl_backproject.h"
 #include "vpgl_backproject_dem.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_ray_3d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_ray_3d.h"
 #include <vpgl/algo/vpgl_ray.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_math.h>
-#include <vnl/vnl_cost_function.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_math.h"
+#include "vnl/vnl_cost_function.h"
 #include <vnl/algo/vnl_brent_minimizer.h>
 class dem_bproj_cost_function : public vnl_cost_function{
 public:

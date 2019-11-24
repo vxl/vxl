@@ -4,7 +4,7 @@
 // \author fsm
 
 #include "vgui_draw_line.h"
-#include <vgui/vgui_gl.h>
+#include "vgui/vgui_gl.h"
 #include <vgui/internals/vgui_multiply_4x4.h>
 #include <vgui/internals/vgui_transpose_4x4.h>
 

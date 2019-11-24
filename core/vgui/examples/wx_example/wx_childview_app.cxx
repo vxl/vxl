@@ -10,7 +10,7 @@
 #include "wx_childview_app.h"
 #include "wx_childview_frame.h"
 
-#include <vgui/vgui.h>
+#include "vgui/vgui.h"
 
 //: Give wxWidgets the means to create a wx_childview_app object.
 IMPLEMENT_APP(wx_childview_app)

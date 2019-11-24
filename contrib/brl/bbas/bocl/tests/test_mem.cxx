@@ -1,8 +1,8 @@
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_manager.h>
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 bool test_fill_kernel()
 {

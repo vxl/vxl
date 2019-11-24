@@ -10,7 +10,7 @@
 #include <utility>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>

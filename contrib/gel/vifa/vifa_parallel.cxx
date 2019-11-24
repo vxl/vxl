@@ -4,7 +4,7 @@
 #include "vifa_parallel.h"
 //:
 // \file
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <vdgl/vdgl_digital_curve.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vtol/vtol_edge_2d.h>
@@ -13,9 +13,9 @@
 #include "vifa_gaussian.h"
 
 #ifdef DUMP
-#include <vul/vul_sprintf.h>
+#include "vul/vul_sprintf.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static int pass = 0;

@@ -11,14 +11,14 @@
 #include "boxm2_ocl_depth_renderer.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 //brdb stuff
 
 //directory utility
@@ -27,7 +27,7 @@
 #include <bocl/bocl_kernel.h>
 #include "boxm2_ocl_camera_converter.h"
 #include "boxm2_ocl_render_expected_image_function.h"
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 boxm2_ocl_depth_renderer
 ::boxm2_ocl_depth_renderer(const boxm2_scene_sptr& scene,

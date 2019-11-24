@@ -3,10 +3,10 @@
 #include "mbl_minimum_spanning_tree.h"
 //:
 // \file
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h> // for vnl_matrix<double>::get_row()
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_vector.h" // for vnl_matrix<double>::get_row()
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Select the smallest pair s.t. first is in \param a, second in \param b

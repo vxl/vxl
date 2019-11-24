@@ -12,7 +12,7 @@
 #include "vul_sprintf.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #undef vsprintf // this works around a bug in libintl.h
 

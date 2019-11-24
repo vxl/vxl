@@ -1,16 +1,16 @@
 #include <iostream>
 #include <sstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <bvxm/grid/io/bvxm_grid_to_image_stack.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vil/vil_load.h>
-#include <vpl/vpl.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
+#include "vil/vil_load.h"
+#include "vpl/vpl.h"
+#include "vnl/vnl_vector_fixed.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 template<class T>

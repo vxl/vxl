@@ -10,13 +10,13 @@
 
 #ifdef DEBUG
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #endif
 
 #include <brdb/brdb_value.h>
 #include <bsl/bsl_opinion.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 //: sets input and output types
 bool bsl_fusion_process_cons(bprb_func_process& pro)

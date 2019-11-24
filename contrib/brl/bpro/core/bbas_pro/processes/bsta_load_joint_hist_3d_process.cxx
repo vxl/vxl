@@ -2,7 +2,7 @@
 #include <bprb/bprb_func_process.h>
 #include <bsta/bsta_joint_histogram_3d.h>
 #include <bsta/io/bsta_io_histogram.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 //:
 // \file
 

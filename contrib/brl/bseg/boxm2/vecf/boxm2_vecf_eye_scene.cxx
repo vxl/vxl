@@ -2,16 +2,16 @@
 #include <algorithm>
 #include <limits>
 #include "boxm2_vecf_eye_scene.h"
-#include <vnl/vnl_vector_fixed.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_box_3d.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_sphere_3d.h>
-#include <vgl/vgl_closest_point.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_box_3d.h"
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_sphere_3d.h"
+#include "vgl/vgl_closest_point.h"
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 static double gauss(double d, double sigma){
   return std::exp((-0.5*d*d)/(sigma*sigma));

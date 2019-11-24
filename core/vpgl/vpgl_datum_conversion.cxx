@@ -26,9 +26,9 @@
 //         elev(NAD27) = elev(WGS84)-d_H
 //
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 #define degree_to_rad   (vnl_math::pi_over_180)      // Degree to rad conv.
 #define dcos(x)         std::cos((x)*vnl_math::pi_over_180)

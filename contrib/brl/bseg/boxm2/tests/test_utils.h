@@ -5,12 +5,12 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
-#include <testlib/testlib_test.h>
-#include <vpgl/vpgl_camera_double_sptr.h>
+#include "testlib/testlib_test.h"
+#include "vpgl/vpgl_camera_double_sptr.h"
 #include <boxm2/boxm2_scene.h>
 
 class boxm2_test_utils

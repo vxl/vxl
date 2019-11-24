@@ -5,13 +5,13 @@
 #include <tuple>
 
 #include <sdet/sdet_atmospheric_image_classifier.h>
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_blocked_image_resource_sptr.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_resource_sptr.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_blocked_image_resource.h"
+#include "vil/vil_blocked_image_resource_sptr.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_crop.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_resource_sptr.h"
+#include "vil/vil_image_view.h"
 
 std::tuple<vil_image_view<float>, vil_image_view<vxl_byte>, vil_image_view<vil_rgb<vxl_byte> >, float>
 sdet_classify(sdet_atmospheric_image_classifier tc,

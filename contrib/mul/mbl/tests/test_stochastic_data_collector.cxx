@@ -1,19 +1,19 @@
 // This is mul/mbl/tests/test_stochastic_data_collector.cxx
 #include <iostream>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Ian Scott
 // \brief test vpdfl_pc_gaussian, building, sampling, saving etc.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
-#include <vsl/vsl_binary_loader.h>
+#include "vpl/vpl.h" // vpl_unlink()
+#include "vsl/vsl_binary_loader.h"
 #include <vnl/io/vnl_io_vector.h>
-#include <vul/vul_printf.h>
+#include "vul/vul_printf.h"
 #include <mbl/mbl_stochastic_data_collector.h>
 
 #ifndef LEAVE_FILES_BEHIND

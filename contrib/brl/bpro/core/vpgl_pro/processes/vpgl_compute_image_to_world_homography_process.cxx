@@ -9,9 +9,9 @@
 #include <brdb/brdb_value.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vpgl/algo/vpgl_camera_homographies.h>
-#include <vgl/vgl_plane_3d.h>
+#include "vgl/vgl_plane_3d.h"
 #include <vgl/algo/vgl_h_matrix_2d.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 bool vpgl_compute_image_to_world_homography_process_cons(bprb_func_process& pro)
 {

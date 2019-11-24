@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <vcl_where_root_dir.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vnl/algo/vnl_cholesky.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_kernel.h>
@@ -11,14 +11,14 @@
 
 #include <brad/brad_phongs_model_est.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_identity_3x3.h>
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_identity_3x3.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 static void create_test_data(vnl_vector<double> & samples,
                              vnl_vector<double> & samples_weights,

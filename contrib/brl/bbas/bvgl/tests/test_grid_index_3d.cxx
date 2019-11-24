@@ -1,15 +1,15 @@
 //:
 // \file
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvgl/bvgl_cross_section.h>
 #include <bvgl/bvgl_grid_index_3d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_pointset_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_pointset_3d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 #define TEST_GRID_INDEX 1
 //: Test changes
 static void test_grid_index_3d()

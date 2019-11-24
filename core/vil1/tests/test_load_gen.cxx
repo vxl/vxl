@@ -1,13 +1,13 @@
 // This is core/vil1/tests/test_load_gen.cxx
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h>
-#include <vil1/vil1_load.h>
-#include <vil1/vil1_rgb.h>
-#include <vil1/vil1_image_impl.h>
-#include <testlib/testlib_test.h>
+#include "vxl_config.h"
+#include "vil1/vil1_load.h"
+#include "vil1/vil1_rgb.h"
+#include "vil1/vil1_image_impl.h"
+#include "testlib/testlib_test.h"
 
 static void test_rgb(char const *name, int w, int h,
                      unsigned r, unsigned g, unsigned b)

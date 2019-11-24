@@ -10,12 +10,12 @@
 // \author Ian Scott - Manchester
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vil/vil_load.h>
-#include <vil/vil_copy.h>
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
+#include "vil/vil_load.h"
+#include "vil/vil_copy.h"
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_slice.h>
 #include <vil3d/file_formats/vil3d_dicom.h>

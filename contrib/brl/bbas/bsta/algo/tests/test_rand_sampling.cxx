@@ -1,7 +1,7 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gaussian_indep.h>
@@ -9,9 +9,9 @@
 #include <bsta/algo/bsta_fit_gaussian.h>
 
 #include <bsta/bsta_histogram.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 MAIN( test_rand_sampling)

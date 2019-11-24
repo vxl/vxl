@@ -9,10 +9,10 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vul/vul_awk.h>
+#include "vul/vul_awk.h"
 
 mvl_multi_view_matches::mvl_multi_view_matches(char const* filename)
 {

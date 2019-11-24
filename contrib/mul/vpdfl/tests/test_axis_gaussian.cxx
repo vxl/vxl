@@ -1,22 +1,22 @@
 // This is mul/vpdfl/tests/test_axis_gaussian.cxx
 #include <iostream>
 #include <sstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief test vpdfl_axis_gaussian, building, sampling, saving, etc.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <vpdfl/vpdfl_add_all_binary_loaders.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vsl/vsl_binary_loader.h>
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vsl/vsl_binary_loader.h"
+#include "vpl/vpl.h" // vpl_unlink()
 
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0

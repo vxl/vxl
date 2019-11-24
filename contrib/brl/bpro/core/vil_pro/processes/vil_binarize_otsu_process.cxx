@@ -5,9 +5,9 @@
 // \file
 // \brief Binarize an image using Otsu Thresholding (a threshold computed from the appearance distribution of the image)
 
-#include <vil/vil_math.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_math.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
 #include <bsta/bsta_otsu_threshold.h>
 
 //: Constructor

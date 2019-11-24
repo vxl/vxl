@@ -4,9 +4,9 @@
 // \author fsm
 
 #include "vgui_rasterpos.h"
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vgui/vgui_matrix_state.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vgui/vgui_matrix_state.h"
 
 // Purpose : a RasterPos() routine which sets the raster position,
 // even if GL thinks it is invalid.

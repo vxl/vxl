@@ -14,34 +14,34 @@
 #include <vector>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h>
+#include "vxl_config.h"
 
-#include <vbl/vbl_array_2d.h>
-#include <vbl/vbl_sparse_array_1d.h>
+#include "vbl/vbl_array_2d.h"
+#include "vbl/vbl_sparse_array_1d.h"
 
-#include <vul/vul_arg.h>
-#include <vul/vul_sprintf.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_sprintf.h"
 
-#include <vnl/vnl_int_3.h>
-#include <vnl/vnl_double_3.h>
+#include "vnl/vnl_int_3.h"
+#include "vnl/vnl_double_3.h"
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
 
-#include <vil1/vil1_load.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1/vil1_load.h"
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_memory_image_of.h"
 
 #include <mvl/PMatrix.h>
 
 #include "ConvexHull.h"
 #include "VoxmapImagePoints.h"
 #include "Voxel.h"
-#include <vbl/vbl_bit_array_3d.h>
+#include "vbl/vbl_bit_array_3d.h"
 
 
 #define MAXIMAGES 500

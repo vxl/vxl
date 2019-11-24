@@ -3,15 +3,15 @@
 #include <fstream>
 #include <map>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h>
-#include <vul/vul_temp_filename.h>
+#include "vpl/vpl.h"
+#include "vul/vul_temp_filename.h"
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 // file iter
-#include <vul/vul_file_iterator.h>
+#include "vul/vul_file_iterator.h"
 
 static void touch(char const* fn)
 {

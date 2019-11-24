@@ -1,8 +1,8 @@
 // This is mul/tools/reflect_image_2d.cxx
 
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vil/vil_flip.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
+#include "vil/vil_flip.h"
 #include <vimt/vimt_add_all_binary_loaders.h>
 #include <vimt/vimt_transform_2d.h>
 #include <vimt/vimt_load.h>

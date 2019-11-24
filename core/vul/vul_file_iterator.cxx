@@ -3,12 +3,12 @@
 #include <string>
 #include "vul_file_iterator.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vul/vul_file.h>
-#include <vul/vul_reg_exp.h>
+#include "vul/vul_file.h"
+#include "vul/vul_reg_exp.h"
 //:
 // \file
 // \verbatim

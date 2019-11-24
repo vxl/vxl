@@ -4,14 +4,14 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-#include <vpl/vpl.h>
-#include <vsl/vsl_binary_io.h>
-#include <vil/vil_image_view.h>
+#include "vpl/vpl.h"
+#include "vsl/vsl_binary_io.h"
+#include "vil/vil_image_view.h"
 #include <brad/brad_hist_prob_feature_vector.h>
 #include <brad/brad_eigenspace.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_feature_pca()

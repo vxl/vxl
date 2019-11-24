@@ -10,11 +10,11 @@
 // \date Mar 10, 2011
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/view/boxm2_trajectory.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 //brdb stuff
 #include <brdb/brdb_value.h>

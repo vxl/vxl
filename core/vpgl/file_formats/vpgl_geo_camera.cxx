@@ -5,16 +5,16 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_inverse.h"
 
-#include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_utm.h>
-#include <vul/vul_file.h>
+#include "vpgl/vpgl_lvcs.h"
+#include "vpgl/vpgl_utm.h"
+#include "vul/vul_file.h"
 
 #include <vil/file_formats/vil_geotiff_header.h>
 #include <vil/file_formats/vil_tiff.h>

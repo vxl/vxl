@@ -83,7 +83,7 @@ void osl_edge::SetEndY(float v) { v2->y = v; }
 //--------------------------------------------------------------------------------
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(std::list<osl_edge*>);
 OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(std::vector<osl_edge*>);

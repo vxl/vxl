@@ -1,12 +1,12 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
 
-#include <vul/vul_file.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vul/vul_file.h"
+#include "vgl/vgl_vector_2d.h"
 #include <bjson/bjson.h>
 
 #include <bpgl/acal/acal_metadata.h>

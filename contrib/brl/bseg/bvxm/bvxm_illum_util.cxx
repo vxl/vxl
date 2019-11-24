@@ -3,7 +3,7 @@
 #include "bvxm_illum_util.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 #include <vnl/algo/vnl_svd.h>

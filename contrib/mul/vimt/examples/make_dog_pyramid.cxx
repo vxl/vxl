@@ -2,10 +2,10 @@
 
 #include <vimt/vimt_dog_pyramid_builder_2d.h>
 #include <vimt/vimt_image_pyramid.h>
-#include <vil/vil_convert.h>
-#include <vul/vul_arg.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vil/vil_convert.h"
+#include "vul/vul_arg.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 
 void print_usage()
 {

@@ -1,20 +1,20 @@
 // This is mul/pdf1d/tests/test_gaussian.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief test pdf1d_gaussian, building, sampling, saving etc.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vpl/vpl.h" // vpl_unlink()
 
 #include <pdf1d/pdf1d_gaussian.h>
 #include <pdf1d/pdf1d_gaussian_builder.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0

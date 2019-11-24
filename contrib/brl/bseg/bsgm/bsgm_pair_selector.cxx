@@ -1,5 +1,5 @@
 #include "bsgm_pair_selector.h"
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <bjson/bjson.h>
 #include <algorithm>
 #include <fstream>

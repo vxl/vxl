@@ -1,12 +1,12 @@
 #include <iostream>
 #include <cmath>
-#include <vgui/vgui.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_shell_tableau.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_vector_3d.h"
 
 #include <bgui3d/bgui3d_examiner_tableau.h>
 #include <bgui3d/bgui3d.h>

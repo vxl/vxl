@@ -8,9 +8,9 @@
 #include "mvl_five_point_camera_pencil.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_double_3.h>
+#include "vnl/vnl_double_3.h"
 #include <vnl/algo/vnl_svd.h>
 
 bool mvl_five_point_camera_pencil(double const xs[5],

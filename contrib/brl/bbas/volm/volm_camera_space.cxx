@@ -6,10 +6,10 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bpgl/bpgl_camera_utils.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_vector_io.h"
 #include <vsph/vsph_utils.h>
   //it is possible for radius and increment to be inconsistent
   //that is, the radius is not a multiple of the increment

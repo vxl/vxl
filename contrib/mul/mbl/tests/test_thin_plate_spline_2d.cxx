@@ -1,13 +1,13 @@
 // This is mul/mbl/tests/test_thin_plate_spline_2d.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_thin_plate_spline_2d.h>
-#include <vnl/vnl_random.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_distance.h>
-#include <testlib/testlib_test.h>
+#include "vnl/vnl_random.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_distance.h"
+#include "testlib/testlib_test.h"
 
 void test_tps_at_fixed_points(int n_points)
 {

@@ -2,11 +2,11 @@
 #include "vepl_x_gradient.h"
 #include <vepl/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_x_gradient.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_plane.h>
-#include <vil/vil_new.h>
-#include <vxl_config.h> // for vxl_byte
+#include "vil/vil_image_view.h"
+#include "vil/vil_pixel_format.h"
+#include "vil/vil_plane.h"
+#include "vil/vil_new.h"
+#include "vxl_config.h" // for vxl_byte
 
 vil_image_resource_sptr vepl_x_gradient(const vil_image_resource_sptr& image, double scale, double shift)
 {

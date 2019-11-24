@@ -7,8 +7,8 @@
 //
 // \author Yi Dong
 // \date March 18, 2015
-#include <vul/vul_file.h>
-#include <vgl/vgl_polygon.h>
+#include "vul/vul_file.h"
+#include "vgl/vgl_polygon.h"
 #include <bkml/bkml_parser.h>
 
 namespace boxm2_location_pin_point_ranking_process_globals

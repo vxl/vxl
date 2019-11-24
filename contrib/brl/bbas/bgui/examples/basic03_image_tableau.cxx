@@ -7,18 +7,18 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_load.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_dialog.h>
+#include "vil/vil_load.h"
+#include "vgui/vgui.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_dialog.h"
 #include <bgui/bgui_image_tableau.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_range_map.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_clear_tableau.h>
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_range_map.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_clear_tableau.h"
 
 //global pointer to the rubberband tableau
 static vgui_easy2D_tableau_sptr easy = nullptr;

@@ -2,7 +2,7 @@
 #include <sstream>
 #include "bocl_utils.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 std::size_t RoundUp(int global_size,int group_size)

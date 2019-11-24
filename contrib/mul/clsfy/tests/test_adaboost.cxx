@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \brief Tests the clsfy_adaboost_trainer class
@@ -10,16 +10,16 @@
 // Test construction, IO etc.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vpl/vpl.h" // vpl_unlink()
 #include <clsfy/clsfy_simple_adaboost.h>
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
 #include <clsfy/clsfy_adaboost_trainer.h>
 #include <clsfy/clsfy_adaboost_sorted_builder.h>
-#include <vsl/vsl_binary_loader.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_binary_loader.h"
+#include "vsl/vsl_vector_io.h"
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>

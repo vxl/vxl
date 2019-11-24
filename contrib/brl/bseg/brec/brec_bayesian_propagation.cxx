@@ -12,11 +12,11 @@
 
 #include <iostream>
 #include "brec_bayesian_propagation.h"
-#include <vil/vil_image_view.h>
-#include <vil/vil_copy.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_copy.h"
 #include <bsta/bsta_joint_histogram.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bool helper_function(double p_b_current, double p_f_current,

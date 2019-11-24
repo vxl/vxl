@@ -1,5 +1,5 @@
-#include <testlib/testlib_test.h>
-#include <vil/vil_print.h>
+#include "testlib/testlib_test.h"
+#include "vil/vil_print.h"
 #include <bil/algo/bil_finite_differences.h>
 #include <bil/algo/bil_finite_second_differences.h>
 

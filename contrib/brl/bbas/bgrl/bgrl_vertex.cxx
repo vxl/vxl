@@ -4,9 +4,9 @@
 // \file
 
 #include "bgrl_edge.h"
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_binary_loader.h>
-#include <vsl/vsl_set_io.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_binary_loader.h"
+#include "vsl/vsl_set_io.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
 
 //: Constructor

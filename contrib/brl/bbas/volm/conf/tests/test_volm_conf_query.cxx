@@ -1,12 +1,12 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <volm/volm_io.h>
 #include <volm/conf/volm_conf_query.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <vsph/vsph_spherical_coord.h>
 #include <vsph/vsph_sph_point_3d.h>
 #include <bpgl/bpgl_camera_utils.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <bpgl/depth_map/depth_map_region.h>

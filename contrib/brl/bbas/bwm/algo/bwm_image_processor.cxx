@@ -3,10 +3,10 @@
 #include "bwm_image_processor.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vgui/vgui_range_map_params.h>
+#include "vgui/vgui_range_map_params.h"
 #include <bgui/bgui_graph_tableau.h>
 #include <bsta/bsta_histogram.h>
 #include <bgui/bgui_image_utils.h>
@@ -22,7 +22,7 @@
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 
-#include <vil/vil_image_resource.h>
+#include "vil/vil_image_resource.h"
 
 void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img,
                                     vsol_polygon_2d_sptr p)

@@ -7,23 +7,23 @@
 //:
 // \file
 
-#include <vnl/vnl_inverse.h>
-#include <vnl/vnl_numeric_traits.h>
-#include <vbl/vbl_local_minima.h>
-#include <vbl/vbl_array_3d.h>
+#include "vnl/vnl_inverse.h"
+#include "vnl/vnl_numeric_traits.h"
+#include "vbl/vbl_local_minima.h"
+#include "vbl/vbl_array_3d.h"
 #include <vil/algo/vil_gauss_filter.h>
 #include <vnl/algo/vnl_powell.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "vnl/vnl_vector_fixed.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <icam/icam_depth_trans_pyramid.h>
 #include <icam/icam_sample.h>
 #include <vpgl/algo/vpgl_ray.h>
 
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 static bool smallest_local_minima(vbl_array_3d<double> const& in,
                                   double min_thresh,

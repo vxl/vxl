@@ -8,7 +8,7 @@
 // \brief Probability used in Kolmogorov-Smirnov test
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 constexpr double f1 = 0.001;

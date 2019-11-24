@@ -1,9 +1,9 @@
 //:
 // \file
-#include <testlib/testlib_test.h>
-#include <vsl/vsl_binary_io.h>
+#include "testlib/testlib_test.h"
+#include "vsl/vsl_binary_io.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
-#include <vpl/vpl.h>
+#include "vpl/vpl.h"
 
 #include <bgrl/bgrl_vertex.h>
 #include <bgrl/bgrl_edge.h>

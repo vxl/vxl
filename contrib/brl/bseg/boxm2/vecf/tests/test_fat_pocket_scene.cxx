@@ -6,12 +6,12 @@
 
 #include <fstream>
 #include <string>
-#include <testlib/testlib_test.h>
-#include <vul/vul_timer.h>
+#include "testlib/testlib_test.h"
+#include "vul/vul_timer.h"
 #include "../boxm2_vecf_middle_fat_pocket_params.h"
 #include "../boxm2_vecf_middle_fat_pocket_scene.h"
 #include "../boxm2_vecf_middle_fat_pocket.h"
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
 

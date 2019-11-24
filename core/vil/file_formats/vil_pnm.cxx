@@ -10,21 +10,21 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 
-#include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
+#include "vxl_config.h" // for VXL_BIG_ENDIAN and vxl_byte
 
-#include <vil/vil_property.h>
-#include <vil/vil_stream.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_memory_chunk.h>
-#include <vil/vil_exception.h>
+#include "vil/vil_property.h"
+#include "vil/vil_stream.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_memory_chunk.h"
+#include "vil/vil_exception.h"
 
 #if 0 // see comment below
-# include <vil/vil_rgb.h>
+# include "vil/vil_rgb.h"
 #endif
 
 char const* vil_pnm_format_tag = "pnm";

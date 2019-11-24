@@ -1,6 +1,6 @@
 // This is core/vcsl/vcsl_angle.cxx
 #include "vcsl_angle.h"
-#include <vcsl/vcsl_radian.h>
+#include "vcsl/vcsl_radian.h"
 
 //---------------------------------------------------------------------------
 // Is `new_unit' a compatible unit for the dimension ?

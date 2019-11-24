@@ -6,14 +6,14 @@
 //:
 // \file
 
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_matrix.h"
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_point_2d.h"
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

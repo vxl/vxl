@@ -3,13 +3,13 @@
 #include <cstdlib>
 #include "sdet_denoise_mrf.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vil/vil_new.h>
-#include <vnl/vnl_numeric_traits.h>
+#include "vnl/vnl_math.h"
+#include "vil/vil_new.h"
+#include "vnl/vnl_numeric_traits.h"
 #include <vnl/algo/vnl_sparse_lu.h>
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_line_generator.h>
 

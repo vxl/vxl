@@ -4,16 +4,16 @@
 // \author Lianqing Yu
 // \date   January 2011
 
-#include <vgui/vgui_wrapper_tableau.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_window.h>
+#include "vgui/vgui_wrapper_tableau.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_window.h"
 
-#include <vgui/vgui_gl.h>
+#include "vgui/vgui_gl.h"
 
 class basic_manager : public vgui_wrapper_tableau
 {

@@ -1,17 +1,17 @@
 // This is brl/bbas/bdgl/tests/test_curve_algs.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_digital_curve.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_line_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_line_2d.h"
 #include <vsol/vsol_point_2d.h>
 #include <bdgl/bdgl_curve_algs.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 static void test_curve_algs()
 {

@@ -10,7 +10,7 @@
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 constexpr int TM_UNKNOWNS_COUNT = 9;

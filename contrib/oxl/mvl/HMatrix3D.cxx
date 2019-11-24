@@ -5,14 +5,14 @@
 #include "HMatrix3D.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vnl/vnl_matlab_print.h>
-#include <vnl/vnl_inverse.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3.h>
+#include "vnl/vnl_matlab_print.h"
+#include "vnl/vnl_inverse.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_double_3.h"
 
 #include <mvl/HomgPrettyPrint.h>
 #include <mvl/HomgLine3D.h>

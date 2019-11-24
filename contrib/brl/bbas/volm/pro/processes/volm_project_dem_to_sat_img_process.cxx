@@ -17,23 +17,23 @@
 //
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_view_base.h>
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_view_base.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
-#include <vul/vul_file.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_load.h>
-#include <vil/vil_convert.h>
-#include <vnl/vnl_int_2.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_intersection.h>
+#include "vpgl/vpgl_lvcs.h"
+#include "vpgl/vpgl_lvcs_sptr.h"
+#include "vul/vul_file.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_load.h"
+#include "vil/vil_convert.h"
+#include "vnl/vnl_int_2.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_intersection.h"
 
 // process to project/crop single ASTER DEM image to the given satellite viewpoint
 //: global variables and functions

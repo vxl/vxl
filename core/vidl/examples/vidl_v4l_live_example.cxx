@@ -1,10 +1,10 @@
 #include <iostream>
-#include <vidl/vidl_v4l_istream.h>
-#include <vidl/vidl_image_list_ostream.h>
+#include "vidl/vidl_v4l_istream.h"
+#include "vidl/vidl_image_list_ostream.h"
 
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 int main()

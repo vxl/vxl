@@ -1,16 +1,16 @@
 #include <sstream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_event_condition.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_composite_tableau.h>
-#include <vgui/vgui_text_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_event_condition.h"
+#include "vgui/vgui_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_composite_tableau.h"
+#include "vgui/vgui_text_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 
 class idle_tableau : public vgui_tableau
 {

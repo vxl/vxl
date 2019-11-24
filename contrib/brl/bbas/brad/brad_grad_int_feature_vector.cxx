@@ -1,11 +1,11 @@
 #include "brad_grad_int_feature_vector.h"
 //
 #include <bsta/bsta_histogram.h>
-#include <vil/vil_image_view.h>
-#include <vnl/vnl_math.h>
+#include "vil/vil_image_view.h"
+#include "vnl/vnl_math.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vnl_vector<double> brad_grad_int_feature_vector::

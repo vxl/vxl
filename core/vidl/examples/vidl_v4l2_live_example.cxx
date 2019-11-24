@@ -1,12 +1,12 @@
 // This is core/vidl/examples/vidl_v4l2_live_example.cxx
 
 #include <iostream>
-#include <vidl/vidl_v4l2_devices.h>
-#include <vidl/vidl_v4l2_istream.h>
-#include <vidl/vidl_image_list_ostream.h>
-#include <vul/vul_timer.h>
+#include "vidl/vidl_v4l2_devices.h"
+#include "vidl/vidl_v4l2_istream.h"
+#include "vidl/vidl_image_list_ostream.h"
+#include "vul/vul_timer.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 int select_device(vidl_v4l2_devices& devs)

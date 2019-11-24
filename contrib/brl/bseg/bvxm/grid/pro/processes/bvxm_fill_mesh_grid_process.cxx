@@ -20,15 +20,15 @@
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_file.h>
-#include <vul/vul_string.h>
+#include "vul/vul_file_iterator.h"
+#include "vul/vul_file.h"
+#include "vul/vul_string.h"
 
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_fileio.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 namespace bvxm_fill_mesh_grid_process_globals

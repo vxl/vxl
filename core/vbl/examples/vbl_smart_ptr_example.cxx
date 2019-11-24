@@ -6,10 +6,10 @@
 #include <iostream>
 #include <list>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vbl/vbl_ref_count.h>
-#include <vbl/vbl_smart_ptr.h>
+#include "vbl/vbl_ref_count.h"
+#include "vbl/vbl_smart_ptr.h"
 
 // The code parts below are normally put into several files, as indicated by
 // the "start of" and "end of" lines.  Here, for this example, everything is

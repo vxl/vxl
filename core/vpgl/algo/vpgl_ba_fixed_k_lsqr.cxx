@@ -4,7 +4,7 @@
 //:
 // \file
 
-#include <vnl/vnl_vector_ref.h>
+#include "vnl/vnl_vector_ref.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 
 

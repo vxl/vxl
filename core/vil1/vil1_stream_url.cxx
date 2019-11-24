@@ -13,9 +13,9 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil1/vil1_stream_core.h>
+#include "vil1/vil1_stream_core.h"
 #undef sprintf // This works around a bug in libintl.h
 
 #if defined (_WIN32) && !defined(__CYGWIN__)

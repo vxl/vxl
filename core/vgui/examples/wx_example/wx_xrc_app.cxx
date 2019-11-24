@@ -12,7 +12,7 @@
 
 #include <vgui/wx/vgui_wx.h>
 #include <wx/xrc/xmlres.h>
-#include <vgui/vgui.h>
+#include "vgui/vgui.h"
 
 
 extern void InitXmlResource(); // defined in generated file

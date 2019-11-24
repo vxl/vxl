@@ -7,9 +7,9 @@
 #include <cmath>
 #include "osl_canny_nms.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 //: returns number of edgels found [?]
 unsigned int osl_canny_nms(int xsize_, int ysize_,

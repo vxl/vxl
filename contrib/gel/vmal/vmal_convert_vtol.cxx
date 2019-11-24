@@ -6,8 +6,8 @@
 #include "vmal_convert_vtol.h"
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
-#include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_image_as.h>
+#include "vil1/vil1_memory_image_of.h"
+#include "vil1/vil1_image_as.h"
 
 void convert_lines_double_3(std::vector<vtol_edge_2d_sptr> in,
                             vnl_double_3 * &outp,

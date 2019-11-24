@@ -1,22 +1,22 @@
 // This is mul/vpdfl/tests/test_pc_gaussian.cxx
 #include <iostream>
 #include <ctime>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Ian Scott
 // \brief test vpdfl_pc_gaussian, building, sampling, saving etc.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vpl/vpl.h" // vpl_unlink()
 
 #include <vpdfl/vpdfl_pc_gaussian.h>
 #include <vpdfl/vpdfl_pc_gaussian_builder.h>
 #include <vpdfl/vpdfl_sampler_base.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0

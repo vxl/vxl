@@ -2,7 +2,7 @@
 #include <set>
 #include "bstm_merge_tt_function.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bool bstm_merge_tt_function::init_data(bstm_time_block* blk_t, bstm_block* blk, std::vector<bstm_data_base*> & datas, float prob_thresh)

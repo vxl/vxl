@@ -1,8 +1,8 @@
 // This is core/vgui/tests/test_range_map.cxx
-#include <testlib/testlib_test.h>
-#include <vxl_config.h>
-#include <vgui/vgui_range_map.h>
-#include <vbl/vbl_array_1d.h>
+#include "testlib/testlib_test.h"
+#include "vxl_config.h"
+#include "vgui/vgui_range_map.h"
+#include "vbl/vbl_array_1d.h"
 
 #define INCLUDE_LONG_DOUBLE_TESTS 1
 #if defined INCLUDE_LONG_DOUBLE_TESTS

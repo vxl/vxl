@@ -11,8 +11,8 @@
 //=========================================================================
 
 #include "vgui_wx_menu.h"
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_popup_params.h>
+#include "vgui/vgui_macro.h"
+#include "vgui/vgui_popup_params.h"
 
 #include <wx/log.h>
 

@@ -1,16 +1,16 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 
 
-#include <vpgl/vpgl_affine_camera.h>
+#include "vpgl/vpgl_affine_camera.h"
 #include <vpgl/io/vpgl_io_affine_camera.h>
-#include <vnl/vnl_double_3x4.h>
-#include <vpl/vpl.h>
-#include <vsl/vsl_binary_io.h>
+#include "vnl/vnl_double_3x4.h"
+#include "vpl/vpl.h"
+#include "vsl/vsl_binary_io.h"
 
 static void test_affine_camera_io()
 {

@@ -2,14 +2,14 @@
 #include <cmath>
 #include "boxm2_vecf_mandible.h"
 #include <bvrml/bvrml_write.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_bounding_box.h>
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_bounding_box.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_quaternion.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_quaternion.h"
 
 //==========================================
 //: mandible class member implementations

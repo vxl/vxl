@@ -3,12 +3,12 @@
 #include <vector>
 #include "rrel_linear_regression.h"
 
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_vector.h"
 #include <vnl/algo/vnl_svd.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

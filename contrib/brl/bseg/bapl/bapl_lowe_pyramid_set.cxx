@@ -7,18 +7,18 @@
 #include <sstream>
 #include "bapl_lowe_pyramid_set.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_resample_bilin.h>
-#include <vil/vil_math.h>
-#include <vil/vil_decimate.h>
+#include "vnl/vnl_math.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_resample_bilin.h"
+#include "vil/vil_math.h"
+#include "vil/vil_decimate.h"
 #include <vil/algo/vil_orientations.h>
 #include <brip/brip_vil_ops.h>
 #include <bapl/bapl_lowe_keypoint.h>
 
-#include <vil/vil_copy.h>
+#include "vil/vil_copy.h"
 #include <cassert>
 
 //: Constructor

@@ -5,7 +5,7 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
  DECLARE( test_compact_tree_data_fixed );
  DECLARE( test_octree_data_fixed );

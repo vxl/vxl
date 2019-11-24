@@ -7,20 +7,20 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include "bgui3d_algo.h"
-#include <vgui/vgui_gl.h>
-#include <vnl/vnl_quaternion.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3x4.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_det.h>
+#include "vgui/vgui_gl.h"
+#include "vnl/vnl_quaternion.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_double_3x4.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_det.h"
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 
 #include <Inventor/nodes/SoOrthographicCamera.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>

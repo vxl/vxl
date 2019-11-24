@@ -10,11 +10,11 @@
 #include <iostream>
 #include <list>
 #include <algorithm>
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 char const * my_argv_1[] =
 {

@@ -1,23 +1,23 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
-#include <vpgl/vpgl_proj_camera.h>
-#include <vnl/vnl_fwd.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_homg_line_2d.h>
-#include <vgl/vgl_line_segment_2d.h>
-#include <vgl/vgl_line_segment_3d.h>
-#include <vgl/vgl_homg_line_3d_2_points.h>
-#include <vgl/vgl_homg_plane_3d.h>
+#include "vpgl/vpgl_proj_camera.h"
+#include "vnl/vnl_fwd.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_homg_point_3d.h"
+#include "vgl/vgl_homg_line_2d.h"
+#include "vgl/vgl_line_segment_2d.h"
+#include "vgl/vgl_line_segment_3d.h"
+#include "vgl/vgl_homg_line_3d_2_points.h"
+#include "vgl/vgl_homg_plane_3d.h"
 #include <vgl/algo/vgl_h_matrix_3d.h>
-#include <vgl/vgl_ray_3d.h>
+#include "vgl/vgl_ray_3d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_proj_camera()

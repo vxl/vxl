@@ -1,6 +1,6 @@
 #include "bpgl_camera_from_box.h"
 #include "bpgl_project.h"
-#include <vpgl/vpgl_calibration_matrix.h>
+#include "vpgl/vpgl_calibration_matrix.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 
 vpgl_perspective_camera<double> bpgl_camera_from_box::

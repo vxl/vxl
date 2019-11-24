@@ -13,8 +13,8 @@
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <mbl/mbl_parse_int_list.h>
-#include <vul/vul_arg.h>
-#include <vul/vul_string.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_string.h"
 
 #include <msm/msm_add_all_loaders.h>
 #include <msm/msm_similarity_aligner.h>

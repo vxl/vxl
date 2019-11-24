@@ -8,10 +8,10 @@
 // \author Tim Cootes
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_vector_io.h"
 
 mbl_wt_histogram::mbl_wt_histogram()
 {

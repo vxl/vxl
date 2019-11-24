@@ -7,12 +7,12 @@
 #include <cstddef>
 #include <iomanip>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_vector_io.h>
-#include <vsl/vsl_string_io.h>
+#include "vsl/vsl_vector_io.h"
+#include "vsl/vsl_string_io.h"
 #include <mbl/mbl_log.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 
 namespace

@@ -12,12 +12,12 @@
 #include <utility>
 #include "vul_sequence_filename_map.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vul/vul_sprintf.h>
-#include <vul/vul_reg_exp.h>
-#include <vul/vul_file_iterator.h>
+#include "vul/vul_sprintf.h"
+#include "vul/vul_reg_exp.h"
+#include "vul/vul_file_iterator.h"
 
 constexpr bool debug = false;
 

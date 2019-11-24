@@ -9,8 +9,8 @@
 // \endverbatim
 
 #include <brip/brip_mutual_info.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_image_view_base.h"
 
 //: global variables
 namespace brip_image_mutual_info_process_globals

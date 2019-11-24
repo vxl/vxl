@@ -4,15 +4,15 @@
 #include "brad_illum_util.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_quaternion.h>
+#include "vgl/vgl_vector_3d.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_quaternion.h"
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_brent_minimizer.h>
-#include <vnl/vnl_cross.h>
+#include "vnl/vnl_cross.h"
 #include <brad/brad_illum_cost_function.h>
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_atmospheric_parameters.h>

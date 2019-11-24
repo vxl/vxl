@@ -10,14 +10,14 @@
 #include "vgui_toolkit.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vul/vul_trace.h>
+#include "vul/vul_trace.h"
 
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_window.h>
+#include "vgui/vgui_macro.h"
+#include "vgui/vgui_window.h"
 
 std::vector<vgui_toolkit*> *vgui_toolkit::registry()
 {

@@ -1,9 +1,9 @@
 // This is core/vidl/examples/vidl_player_menus.cxx
 #include "vidl_player_menus.h"
 #include "vidl_player_manager.h"
-#include <vgui/vgui.h>
-#include <vgui/vgui_key.h>
-#include <vgui/vgui_menu.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_key.h"
+#include "vgui/vgui_menu.h"
 
 
 //----- Static menu callback functions -----

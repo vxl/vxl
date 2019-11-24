@@ -15,7 +15,7 @@
 #include <iostream>
 #include "vgui_mfc.h"
 
-#include <vgui/vgui_adaptor.h>
+#include "vgui/vgui_adaptor.h"
 #include "vgui_mfc_window.h"
 #include "vgui_mfc_dialog_impl.h"
 #include "vgui_mfc_dialog_extensions_impl.h"
@@ -35,9 +35,9 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgui/vgui_gl.h>
+#include "vgui/vgui_gl.h"
 
 static bool debug = false;
 

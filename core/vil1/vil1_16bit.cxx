@@ -4,8 +4,8 @@
 // \author fsm
 
 #include "vil1_16bit.h"
-#include <vil1/vil1_stream.h>
-#include <vxl_config.h>
+#include "vil1/vil1_stream.h"
+#include "vxl_config.h"
 
 using word8 = vxl_uint_8;
 using word16 = vxl_uint_16;

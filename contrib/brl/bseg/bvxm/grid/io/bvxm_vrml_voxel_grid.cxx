@@ -1,5 +1,5 @@
 #include "bvxm_vrml_voxel_grid.h"
-#include <vnl/vnl_float_4.h>
+#include "vnl/vnl_float_4.h"
 
 void bvxm_vrml_voxel_grid::write_vrml_grid(std::ofstream& str, bvxm_voxel_grid<float> *grid, float threshold)
 {

@@ -11,7 +11,7 @@
 // \date Aug 28, 2014
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2_multi/boxm2_multi_cache.h>
 #include <boxm2_multi/algo/boxm2_multi_render.h>
@@ -20,7 +20,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 //brdb stuff
 #include <brdb/brdb_value.h>
 
@@ -28,7 +28,7 @@
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 
 namespace boxm2_multi_render_process_globals

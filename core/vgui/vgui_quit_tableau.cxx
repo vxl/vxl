@@ -6,11 +6,11 @@
 // \author  fsm
 // \brief   See vgui_quit_tableau.h for a description of this file.
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_adaptor.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_adaptor.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bool vgui_quit_tableau::handle(vgui_event const &e)

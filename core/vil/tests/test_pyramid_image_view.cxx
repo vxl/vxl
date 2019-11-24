@@ -1,7 +1,7 @@
 // This is core/vil/tests/test_pyramid_image_view.cxx
-#include <testlib/testlib_test.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_pyramid_image_view.h>
+#include "testlib/testlib_test.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_pyramid_image_view.h"
 
 
 static void test_pyramid_image_view()

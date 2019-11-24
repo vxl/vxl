@@ -2,10 +2,10 @@
 #include "sdet_third_order_edge_det.h"
 //:
 // \file
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_convert.h"
 
 #include <bil/algo/bil_color_conversions.h>
 #include <sdet/sdet_edgemap_sptr.h>

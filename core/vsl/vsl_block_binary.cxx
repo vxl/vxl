@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include "vsl_block_binary.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

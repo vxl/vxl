@@ -10,11 +10,11 @@
 #include <vector>
 #include <iostream>
 #include <ctime>
-#include <testlib/testlib_root_dir.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_root_dir.h"
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <bocl/bocl_manager.h>

@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE(test_bstm_multi_block_metadata);
 DECLARE(test_bstm_multi_tree_util);

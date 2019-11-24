@@ -41,12 +41,12 @@
 #include <iostream>
 #include <fstream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_vector_fixed.h>
+#include "vnl/vnl_vector_fixed.h"
 
-#include <vil/vil_load.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_load.h"
+#include "vil/vil_image_view.h"
 
 #include <rrel/rrel_lms_obj.h>
 #include <rrel/rrel_tukey_obj.h>
@@ -80,7 +80,7 @@
 #include <rgrl/rgrl_event.h>
 #include <rgrl/rgrl_command.h>
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
 typedef std::vector< rgrl_feature_sptr >  feature_vector;

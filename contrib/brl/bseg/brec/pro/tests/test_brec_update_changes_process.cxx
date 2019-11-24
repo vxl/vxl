@@ -6,7 +6,7 @@
 //
 #include <string>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
@@ -23,24 +23,24 @@
 #include <bprb/bprb_parameters.h>
 
 #include <brip/brip_vil_float_ops.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_rational_camera.h"
 
 #include <brec/brec_bg_pair_density.h>
 #include <brec/pro/brec_processes.h>
 #include <brec/pro/brec_register.h>
 
-#include <vil/vil_image_view.h>
-#include <vnl/vnl_double_3x4.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vul/vul_file.h>
+#include "vil/vil_image_view.h"
+#include "vnl/vnl_double_3x4.h"
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_box_3d.h"
+#include "vul/vul_file.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //:

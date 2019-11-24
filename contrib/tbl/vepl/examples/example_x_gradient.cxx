@@ -13,14 +13,14 @@
 #include <vepl/vepl_x_gradient.h>
 
 // for I/O:
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil/vil_rgb.h>
-#include <vxl_config.h> // for vxl_byte
+#include "vil/vil_rgb.h"
+#include "vxl_config.h" // for vxl_byte
 typedef vil_rgb<vxl_byte> rgbcell;
 
 int

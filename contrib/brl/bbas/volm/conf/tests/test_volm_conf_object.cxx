@@ -1,14 +1,14 @@
 #include <iostream>
 #include <cmath>
 #include <limits>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <volm/conf/volm_conf_object.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_point_2d.h>
-#include <vul/vul_file.h>
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_point_2d.h"
+#include "vul/vul_file.h"
 
 static void test_volm_conf_object()
 {

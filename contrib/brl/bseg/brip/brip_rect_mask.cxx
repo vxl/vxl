@@ -2,7 +2,7 @@
 #include "brip_rect_mask.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 std::map<brip_rect_mask::ang_id, std::string > brip_rect_mask::names_=std::map<brip_rect_mask::ang_id, std::string >();

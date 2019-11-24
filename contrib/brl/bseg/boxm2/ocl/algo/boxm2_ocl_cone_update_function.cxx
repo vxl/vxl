@@ -1,14 +1,14 @@
 #include "boxm2_ocl_cone_update_function.h"
 //
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vsph/vsph_camera_bounds.h>
-#include <vgl/vgl_ray_3d.h>
+#include "vgl/vgl_ray_3d.h"
 #include <boct/boct_bit_tree.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
 
 
 //render_cone_expected_image - pretty much the same as above but one of the local

@@ -13,7 +13,7 @@
 
 #ifdef DEBUG
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #endif
 

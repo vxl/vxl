@@ -21,12 +21,12 @@
 #include <bapl/bapl_keypoint_set.h>
 #include <bapl/bapl_keypoint_set_sptr.h>
 
-#include <vil/vil_plane.h>
-#include <vnl/vnl_random.h>
+#include "vil/vil_plane.h"
+#include "vnl/vnl_random.h"
 
 #include <ipts/ipts_draw.h>
 
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 //: Constructor
 bool bapl_match_keypoints_process_cons(bprb_func_process& pro)

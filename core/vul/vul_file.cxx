@@ -18,7 +18,7 @@
 
 #include <sys/stat.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
@@ -27,7 +27,7 @@
 #include <unistd.h>
 #endif
 
-#include <vul/vul_user_info.h>
+#include "vul/vul_user_info.h"
 
 std::string vul_file::get_cwd()
 {

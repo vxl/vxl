@@ -5,7 +5,7 @@
 //  \author Tim Cootes
 
 #include <vil/algo/vil_histogram.h>
-#include <vil/vil_math.h>
+#include "vil/vil_math.h"
 
 
 //: Apply histogram equalisation to given byte image

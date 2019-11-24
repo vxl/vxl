@@ -1,14 +1,14 @@
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_polygon.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_polygon.h"
 #include <vgl/algo/vgl_rtree.h>
 #include <vgl/algo/vgl_rtree_c.h>
-#include <vnl/vnl_random.h>
-#include <testlib/testlib_test.h>
+#include "vnl/vnl_random.h"
+#include "testlib/testlib_test.h"
 
 
 static void test_point_box()

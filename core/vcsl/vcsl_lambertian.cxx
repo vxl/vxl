@@ -1,6 +1,6 @@
 // This is core/vcsl/vcsl_lambertian.cxx
 #include "vcsl_lambertian.h"
-#include <vcsl/vcsl_axis.h>
+#include "vcsl/vcsl_axis.h"
 
 //---------------------------------------------------------------------------
 // Default constructor

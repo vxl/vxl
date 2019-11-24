@@ -7,19 +7,19 @@
 #include <boxm2/cpp/algo/boxm2_refine_block_multi_data.h>
 #include <boxm2/cpp/algo/boxm2_surface_distance_refine.h>
 #include <boct/boct_bit_tree.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_quaternion.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_box_3d.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_quaternion.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_box_3d.h"
 #include <vgl/algo/vgl_orient_box_3d.h>
-#include <vgl/vgl_intersection.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_sphere_3d.h>
-#include <vgl/vgl_closest_point.h>
+#include "vgl/vgl_intersection.h"
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_sphere_3d.h"
+#include "vgl/vgl_closest_point.h"
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_lru_cache.h>
-#include <vnl/vnl_random.h>
-#include <vul/vul_timer.h>
+#include "vnl/vnl_random.h"
+#include "vul/vul_timer.h"
 typedef boxm2_data_traits<BOXM2_PIXEL>::datatype pixtype;
 
 void boxm2_vecf_mandible_scene::extract_block_data(){

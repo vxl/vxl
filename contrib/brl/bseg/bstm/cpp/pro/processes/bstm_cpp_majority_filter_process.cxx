@@ -10,14 +10,14 @@
 // \date June 25, 2013
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_util.h>
 #include <bstm/io/bstm_cache.h>
 #include <bstm/bstm_data_traits.h>
 #include <boct/boct_bit_tree.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "vnl/vnl_vector_fixed.h"
 #include <bstm/cpp/algo/bstm_majority_filter.h>
 
 namespace bstm_cpp_majority_filter_process_globals

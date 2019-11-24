@@ -2,10 +2,10 @@
 #include <iostream>
 #include <ostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h>
-#include <testlib/testlib_test.h>
+#include "vxl_config.h"
+#include "testlib/testlib_test.h"
 #include <sdet/sdet_detector_params.h>
 #include <vdgl/vdgl_fit_lines_params.h>
 #include <sdet/sdet_region_proc.h>
@@ -13,12 +13,12 @@
 #include <vifa/vifa_int_faces_attr.h>
 #include <vifa/vifa_typedefs.h>
 #include "test_ifa_factory.h"
-#include <vil/vil_image_view.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_image_as.h>
-#include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_load.h>
-#include <vil1/vil1_vil.h>
+#include "vil/vil_image_view.h"
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_image_as.h"
+#include "vil1/vil1_memory_image_of.h"
+#include "vil1/vil1_load.h"
+#include "vil1/vil1_vil.h"
 
 
 static void test_int_faces_attr(int argc, char* argv[])

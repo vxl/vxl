@@ -9,18 +9,18 @@
 #include "vgui_soview2D.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgl/vgl_distance.h>
-#include <vnl/vnl_math.h> // for twopi
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_new.h>
-#include <vil1/vil1_image.h>
-#include <vgui/vgui_range_map_params.h>
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_style.h>
-#include <vgui/vgui_section_buffer.h>
+#include "vgl/vgl_distance.h"
+#include "vnl/vnl_math.h" // for twopi
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_new.h"
+#include "vil1/vil1_image.h"
+#include "vgui/vgui_range_map_params.h"
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_style.h"
+#include "vgui/vgui_section_buffer.h"
 #include <vgui/internals/vgui_draw_line.h>
 
 //--------------------------------------------------------------------------//

@@ -1,5 +1,5 @@
 // This is gel/vifa/tests/test_group_pgram_params.cxx
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vifa/vifa_group_pgram_params.h>
 
 

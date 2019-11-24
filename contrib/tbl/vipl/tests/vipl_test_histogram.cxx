@@ -18,12 +18,12 @@
 #include <vipl/accessors/vipl_accessors_vcl_vector.h>
 #include <vipl/vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.h>
 #include <vipl/vipl_histogram.h>
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_vector.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include "test_driver.h"
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 
 //create and image containing no 0s, one 1, two 2s, three 3s, etc.
 vil_image_view<vxl_byte> vipl_test_histogram_CreateTest8bitImage(int wd, int ht)

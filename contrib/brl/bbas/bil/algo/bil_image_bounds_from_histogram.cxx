@@ -1,11 +1,11 @@
 #include <cstdlib>
 #include "bil_image_bounds_from_histogram.h"
-#include <vil/vil_new.h>
-#include <vil/vil_property.h>
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_pyramid_image_resource.h>
-#include <vul/vul_timer.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vil/vil_new.h"
+#include "vil/vil_property.h"
+#include "vil/vil_blocked_image_resource.h"
+#include "vil/vil_pyramid_image_resource.h"
+#include "vul/vul_timer.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
 void bil_image_bounds_from_histogram::init(){
   if(!imgr_)
     return;

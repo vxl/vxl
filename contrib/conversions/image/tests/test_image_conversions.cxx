@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cstring>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef HAS_NO_IMAGE
 
@@ -16,11 +16,11 @@ void test_image_conversions()
 #include <image/vil1_to_Image.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // for vpl_unlink()
-#include <vul/vul_temp_filename.h>
-#include <vil1/vil1_load.h>
+#include "vpl/vpl.h" // for vpl_unlink()
+#include "vul/vul_temp_filename.h"
+#include "vil1/vil1_load.h"
 
 static void create_image(const char* name)
 {

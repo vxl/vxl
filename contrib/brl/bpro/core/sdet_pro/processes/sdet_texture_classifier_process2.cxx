@@ -9,10 +9,10 @@
 #include <brdb/brdb_value.h>
 #include <sdet/sdet_atmospheric_image_classifier.h>
 #include <sdet/sdet_texture_classifier_params.h>
-#include <vil/vil_image_view.h>
-#include <vnl/vnl_random.h>
+#include "vil/vil_image_view.h"
+#include "vnl/vnl_random.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // no need to check cause get data checks it anyway

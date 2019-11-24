@@ -4,9 +4,9 @@
 // we wanted to make it more complicated (eg. sliders, buttons) this would
 // not be possible in VGUI.
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
 #include <vgui/impl/gtk/vgui_gtk_adaptor.h>
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>

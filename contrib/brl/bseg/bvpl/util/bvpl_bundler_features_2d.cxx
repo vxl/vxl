@@ -8,7 +8,7 @@
 #include <vnl/io/vnl_io_vector.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void bvpl_bundler_features_2d::write_feature_txt( std::string const& filename ) const

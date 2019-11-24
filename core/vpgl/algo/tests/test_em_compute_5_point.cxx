@@ -1,19 +1,19 @@
 #include <vector>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 
-#include <vpgl/vpgl_essential_matrix.h>
+#include "vpgl/vpgl_essential_matrix.h"
 #include <vpgl/algo/vpgl_em_compute_5_point.h>
 
 #include <vnl/algo/vnl_determinant.h>
-#include <vnl/vnl_trace.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_trace.h"
+#include "vnl/vnl_inverse.h"
 
 static const double TOL = .001;
 

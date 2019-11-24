@@ -2,8 +2,8 @@
 //:
 // \file
 #include "bwm_video_site_io_defs.h"
-#include <vsl/vsl_basic_xml_element.h>
-#include <vnl/vnl_numeric_traits.h>
+#include "vsl/vsl_basic_xml_element.h"
+#include "vnl/vnl_numeric_traits.h"
 unsigned bwm_video_corr::unique_id_ = 0;
 
 bool bwm_video_corr::match(unsigned frame, vgl_point_2d<double> &pt)

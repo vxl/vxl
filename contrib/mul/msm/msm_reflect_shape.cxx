@@ -9,7 +9,7 @@
 #include "msm_reflect_shape.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Reflect points in the line x=ax, then re-number

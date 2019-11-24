@@ -6,14 +6,14 @@
 // \file  Mask all ids except the given one in an image using another id image (should be exactly same size)
 
 #include "../vil_math_functors.h"
-#include <vil/vil_convert.h>
+#include "vil/vil_convert.h"
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_transform.h>
-#include <vil/vil_math.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_transform.h"
+#include "vil/vil_math.h"
 
 //: Constructor
 bool vil_mask_image_using_ids_process_cons(bprb_func_process& pro)

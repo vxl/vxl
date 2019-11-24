@@ -7,7 +7,7 @@
 #include <mbl/mbl_matxvec.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 m23d_correction_matrix_error::m23d_correction_matrix_error(const vnl_matrix<double>& A,

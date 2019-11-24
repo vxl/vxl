@@ -5,18 +5,18 @@
 //
 //=======================================================================
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Test msdi_marked_images_from_files
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <msdi/msdi_marked_images_from_files.h>
 #include <vimt/vimt_image_2d_of.h>
-#include <vil/vil_save.h>
+#include "vil/vil_save.h"
 
 //=======================================================================
 

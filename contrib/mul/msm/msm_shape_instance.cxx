@@ -7,14 +7,14 @@
 // \author Tim Cootes
 
 #include <msm/msm_shape_model.h>
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_io.h"
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <vnl/algo/vnl_svd.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

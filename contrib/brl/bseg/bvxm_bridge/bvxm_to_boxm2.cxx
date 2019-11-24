@@ -4,14 +4,14 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //executable args
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_box_3d.h"
 
 //boct files
 #include <boct/boct_tree.h>

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "vbl_test_classes.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // Remember, the template instances must be in
@@ -46,7 +46,7 @@ bool base_impl::checkcount ( int count )
   }
 }
 
-#include <vbl/vbl_smart_ptr.hxx>
+#include "vbl/vbl_smart_ptr.hxx"
 
 VBL_SMART_PTR_INSTANTIATE(base_impl);
 VBL_SMART_PTR_INSTANTIATE(derived_impl);

@@ -1,10 +1,10 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_test_util.h>
-#include <vgl/vgl_point_3d.h>
-#include <vpl/vpl.h>
+#include "vgl/vgl_point_3d.h"
+#include "vpl/vpl.h"
 
 static void test_binary_io()
 {

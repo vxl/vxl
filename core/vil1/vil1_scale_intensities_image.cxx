@@ -1,9 +1,9 @@
 // This is core/vil1/vil1_scale_intensities_image.cxx
 
 #include "vil1_scale_intensities_image.h"
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_rgb.h>
-#include <vxl_config.h>
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_rgb.h"
+#include "vxl_config.h"
 
 template <class T>
 bool vil1_scale_intensities_image(vil1_image const& base, double scale, double shift,

@@ -10,8 +10,8 @@
 // 1.1     |2002/11/13| Peter Vanroose           |converted to use TESTMAIN
 //*****************************************************************************
 
-#include <testlib/testlib_test.h>
-#include <vcsl/vcsl_meter.h>
+#include "testlib/testlib_test.h"
+#include "vcsl/vcsl_meter.h"
 
 static void test_meter()
 {

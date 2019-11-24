@@ -1,6 +1,6 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 
 #include <bapl/bapl_keypoint_extractor.h>
 #include <bapl/bapl_keypoint_sptr.h>
@@ -8,14 +8,14 @@
 #include <bapl/bapl_lowe_keypoint_sptr.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_load.h>
-#include <vil/vil_new.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_load.h"
+#include "vil/vil_new.h"
 
-#include<vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 static void test_dense_sift()
 {

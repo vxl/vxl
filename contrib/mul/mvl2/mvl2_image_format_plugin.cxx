@@ -14,13 +14,13 @@
 #include <cstdlib>
 #include "mvl2_image_format_plugin.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <mvl2/mvl2_video_from_avi.h>
 #include <mvl2/mvl2_video_from_sequence.h>
-#include <vil/vil_copy.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_copy.h"
+#include "vil/vil_image_view.h"
 
 //=======================================================================
 

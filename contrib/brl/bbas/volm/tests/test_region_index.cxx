@@ -1,6 +1,6 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <volm/volm_spherical_region_index.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 static void test_region_index()
 {

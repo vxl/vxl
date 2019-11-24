@@ -3,13 +3,13 @@
 #include <cstring>
 #include <cstddef>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_quick_file.h>
-#include <testlib/testlib_root_dir.h>
-#include <testlib/testlib_test.h>
-#include <vpl/vpl.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_quick_file.h"
+#include "testlib/testlib_root_dir.h"
+#include "testlib/testlib_test.h"
+#include "vpl/vpl.h"
 
 void test_binary_io()
 {

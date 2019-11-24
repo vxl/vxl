@@ -2,21 +2,21 @@
 #include <sstream>
 #include <bocl/bocl_cl.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 #include <vsph/vsph_view_sphere.h>
 #include <vsph/vsph_view_point.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
 
 //executable args
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 
 //vbl
-#include <vbl/vbl_array_2d.h>
+#include "vbl/vbl_array_2d.h"
 
 //boxm2 scene stuff
 #include <boxm2/io/boxm2_lru_cache.h>

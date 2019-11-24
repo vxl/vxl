@@ -1,12 +1,12 @@
 // This is mul/mbl/tests/test_dyn_prog.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_dyn_prog.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <mbl/mbl_combination.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 
 static inline int mbl_abs(int i) { return i>=0 ? i : -i; }
 

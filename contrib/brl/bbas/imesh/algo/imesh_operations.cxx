@@ -5,17 +5,17 @@
 //:
 // \file
 
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_area.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_triangle_test.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_double_3.h>
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_area.h"
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_triangle_test.h"
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_double_3.h"
 #include <vnl/algo/vnl_svd.h>
 #include <cassert>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

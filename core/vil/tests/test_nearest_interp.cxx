@@ -1,12 +1,12 @@
 // This is core/vil/tests/test_nearest_interp.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
-#include <vil/vil_image_view.h>
-#include <vil/vil_nearest_interp.h>
+#include "vxl_config.h" // for vxl_byte
+#include "vil/vil_image_view.h"
+#include "vil/vil_nearest_interp.h"
 
 static void test_nearest_interp_byte()
 {

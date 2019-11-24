@@ -2,12 +2,12 @@
 #include <iostream>
 #include <cstdlib>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
-#include <vil/vil_load.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_new.h>
+#include "vul/vul_file.h"
+#include "vil/vil_load.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_new.h"
 
 //assumes that the base image is in the dir and the dir is
 //named for the image without the extension.

@@ -1,7 +1,7 @@
 #include "boxm2_export_oriented_point_cloud.h"
 
 #include <boxm2/cpp/algo/boxm2_export_oriented_point_cloud_function.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_intersection.h"
 
 bool boxm2_export_oriented_point_cloud::
 export_oriented_point_cloud(boxm2_scene_sptr scene, const boxm2_cache_sptr& cache,

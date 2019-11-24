@@ -2,7 +2,7 @@
 #include <container/vcl_vector_to_vcl_list.h>
 #include <container/vcl_vector_to_vnl_vector.h>
 #include <container/vnl_vector_to_vcl_vector.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 void test_container()
 {

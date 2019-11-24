@@ -15,8 +15,8 @@
 #include <iomanip>
 #include <iostream>
 #include <utility>
-#include <vgl/vgl_intersection.h>
-#include <vil/vil_load.h>
+#include "vgl/vgl_intersection.h"
+#include "vil/vil_load.h"
 #include <volm/volm_camera_space.h>
 #include <volm/volm_camera_space_sptr.h>
 #include <volm/volm_geo_index.h>
@@ -25,10 +25,10 @@
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_loc_hyp_sptr.h>
 #include <volm/volm_tile.h>
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void error_report(std::string error_file, const std::string& error_msg)

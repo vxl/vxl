@@ -4,14 +4,14 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_deck_tableau.h>
+#include "vnl/vnl_math.h"
+#include "vgui/vgui.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_deck_tableau.h"
 
 int main(int argc, char **argv)
 {

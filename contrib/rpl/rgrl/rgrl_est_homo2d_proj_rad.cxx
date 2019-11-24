@@ -10,8 +10,8 @@
 #include <rgrl/rgrl_match_set.h>
 #include <rgrl/rgrl_internal_util.h>
 
-#include <vnl/vnl_double_2.h>
-#include <vul/vul_sprintf.h>
+#include "vnl/vnl_double_2.h"
+#include "vul/vul_sprintf.h"
 
 // --------------------------------------------------------------------
 

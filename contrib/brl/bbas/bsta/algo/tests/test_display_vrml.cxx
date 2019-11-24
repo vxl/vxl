@@ -1,12 +1,12 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bsta/bsta_gaussian_full.h>
 #include <bsta/algo/bsta_display_vrml.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 static void test_display_vrml()
 {

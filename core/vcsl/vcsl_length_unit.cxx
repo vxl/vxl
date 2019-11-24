@@ -1,6 +1,6 @@
 // This is core/vcsl/vcsl_length_unit.cxx
 #include "vcsl_length_unit.h"
-#include <vcsl/vcsl_meter.h>
+#include "vcsl/vcsl_meter.h"
 
 //---------------------------------------------------------------------------
 // Are `this' and `other' compatible units ? (Are they associated to the

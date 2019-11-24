@@ -1,5 +1,5 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <limits>
 #include <string>
 #include <map>
@@ -8,7 +8,7 @@
 #include <sstream>
 #include <algorithm>
 
-#include <vnl/vnl_matrix_fixed.h>
+#include "vnl/vnl_matrix_fixed.h"
 #include <bpgl/acal/acal_f_utils.h>
 
 

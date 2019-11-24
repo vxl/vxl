@@ -6,11 +6,11 @@
 
 #include <fstream>
 #include <string>
-#include <testlib/testlib_test.h>
-#include <vul/vul_timer.h>
+#include "testlib/testlib_test.h"
+#include "vul/vul_timer.h"
 #include "../boxm2_vecf_composite_face_params.h"
 #include "../boxm2_vecf_fit_face.h"
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>

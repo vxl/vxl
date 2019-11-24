@@ -2,9 +2,9 @@
 #include "vgui_qt_adaptor.h"
 #include "vgui_qt_menu.h"
 
-#include <vgui/vgui_popup_params.h>
+#include "vgui/vgui_popup_params.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <QMenu>

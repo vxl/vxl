@@ -8,18 +8,18 @@
 
 #include <bwm/video/bwm_video_cam_istream.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_timer.h>
-#include <vul/vul_file.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include "vul/vul_timer.h"
+#include "vul/vul_file.h"
+#include "vnl/vnl_matrix_fixed.h"
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vpgl/algo/vpgl_camera_homographies.h>
 #include <brip/brip_vil_float_ops.h>
-#include <vidl/vidl_frame.h>
-#include <vidl/vidl_convert.h>
-#include <vidl/vidl_istream.h>
-#include <vidl/vidl_ostream.h>
+#include "vidl/vidl_frame.h"
+#include "vidl/vidl_convert.h"
+#include "vidl/vidl_istream.h"
+#include "vidl/vidl_ostream.h"
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <bsol/bsol_algs.h>

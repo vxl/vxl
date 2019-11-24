@@ -8,10 +8,10 @@
 // \author Tim Cootes
 
 #include <mfpf/mfpf_region_pdf.h>
-#include <vsl/vsl_binary_loader.h>
-#include <vul/vul_string.h>
+#include "vsl/vsl_binary_loader.h"
+#include "vul/vul_string.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
@@ -19,12 +19,12 @@
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 
-#include <vil/vil_resample_bilin.h>
-#include <vsl/vsl_vector_io.h>
-#include <vsl/vsl_indent.h>
+#include "vil/vil_resample_bilin.h"
+#include "vsl/vsl_vector_io.h"
+#include "vsl/vsl_indent.h"
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 #include <mfpf/mfpf_sample_region.h>
 #include <mfpf/mfpf_norm_vec.h>
 #include <mbl/mbl_data_array_wrapper.h>

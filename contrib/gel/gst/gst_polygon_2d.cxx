@@ -7,7 +7,7 @@
 #include "gst_polygon_2d.h"
 #include "gst_vertex_2d_sptr.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bool gst_polygon_2d::check_validity() const

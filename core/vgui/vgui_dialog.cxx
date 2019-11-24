@@ -6,9 +6,9 @@
 // \brief  See vgui_dialog.h for a description of this file.
 
 #include "vgui_dialog.h"
-#include <vgui/vgui.h>
-#include <vgui/vgui_tableau_sptr.h>
-#include <vgui/vgui_command.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_tableau_sptr.h"
+#include "vgui/vgui_command.h"
 #include <vgui/internals/vgui_dialog_impl.h>
 
 //-----------------------------------------------------------------------------

@@ -1,14 +1,14 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <bundler/bundler.h>
 
 
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

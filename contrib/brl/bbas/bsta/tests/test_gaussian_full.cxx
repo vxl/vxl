@@ -1,12 +1,12 @@
 #include <string>
 #include <limits>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bsta/bsta_gaussian_full.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_inverse.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 template <class T>

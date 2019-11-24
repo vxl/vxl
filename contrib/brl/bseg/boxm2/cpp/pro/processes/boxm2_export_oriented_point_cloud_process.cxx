@@ -14,14 +14,14 @@
 // \date Oct 25, 2011
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/cpp/algo/boxm2_export_oriented_point_cloud.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_intersection.h"
 
 
 namespace boxm2_export_oriented_point_cloud_process_globals

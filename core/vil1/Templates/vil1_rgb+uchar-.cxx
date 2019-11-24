@@ -1,4 +1,4 @@
-#include <vil1/vil1_rgb.hxx>
+#include "vil1/vil1_rgb.hxx"
 
 template <>
 std::ostream& operator<<(std::ostream& s, const vil1_rgb<unsigned char>& rgb)

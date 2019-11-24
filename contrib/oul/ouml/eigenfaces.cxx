@@ -9,9 +9,9 @@
 // \file
 
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vil1/vil1_save.h>
+#include "vil1/vil1_save.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

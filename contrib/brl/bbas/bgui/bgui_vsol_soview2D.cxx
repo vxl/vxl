@@ -4,14 +4,14 @@
 #include "bgui_vsol_soview2D.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_soview2D.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_soview2D.h"
 
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_distance.h"
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>

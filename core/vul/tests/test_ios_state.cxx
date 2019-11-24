@@ -2,10 +2,10 @@
 #include <iostream>
 #include <sstream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
-#include <vul/vul_ios_state.h>
+#include "testlib/testlib_test.h"
+#include "vul/vul_ios_state.h"
 
 
 void output_guff(std::ostream &os)

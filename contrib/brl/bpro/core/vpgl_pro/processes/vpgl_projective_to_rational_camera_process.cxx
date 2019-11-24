@@ -7,11 +7,11 @@
 // \brief A process to convert perspective camera to rational camera.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_proj_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_proj_camera.h"
+#include "vpgl/vpgl_rational_camera.h"
 
 vpgl_rational_camera<double>
 projective_to_rational(vpgl_proj_camera<double>& cam_pers);

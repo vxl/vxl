@@ -1,15 +1,15 @@
 #include <iostream>
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1/vil1_memory_image_of.h"
 
-#include <vil1/vil1_load.h>
-#include <vil1/vil1_copy.h>
+#include "vil1/vil1_load.h"
+#include "vil1/vil1_copy.h"
 
-#include <vxl_config.h>
+#include "vxl_config.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 static char default_filename[] = "square.pgm";
 

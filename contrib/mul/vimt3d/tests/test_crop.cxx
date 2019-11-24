@@ -2,13 +2,13 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_box_3d.h"
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vimt3d/vimt3d_crop.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 
 static void test_crop()

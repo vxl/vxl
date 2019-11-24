@@ -1,23 +1,23 @@
 #include <iostream>
 #include <limits>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <depth_map/depth_map_scene.h>
 #include <depth_map/depth_map_region.h>
 #include <depth_map/depth_map_region_sptr.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 #include <bpgl/bpgl_camera_utils.h>
-#include <vil/vil_save.h>
-#include <vsl/vsl_binary_io.h>
-#include <vpl/vpl.h>
+#include "vil/vil_save.h"
+#include "vsl/vsl_binary_io.h"
+#include "vpl/vpl.h"
 
 static void test_depth_map()
 {

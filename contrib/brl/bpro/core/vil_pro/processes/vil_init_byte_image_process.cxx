@@ -7,10 +7,10 @@
 
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_view_base.h"
 
 //: Constructor
 bool vil_init_byte_image_process_cons(bprb_func_process& pro)

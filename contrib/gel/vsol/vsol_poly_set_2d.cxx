@@ -4,10 +4,10 @@
 #include "vsol_poly_set_2d.h"
 //:
 // \file
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_vector_io.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vsol/vsol_polygon_2d.h>
 

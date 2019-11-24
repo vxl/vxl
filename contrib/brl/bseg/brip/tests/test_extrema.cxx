@@ -2,11 +2,11 @@
 
 #include <iostream>
 #include <iomanip>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <brip/brip_vil_float_ops.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_extrema()

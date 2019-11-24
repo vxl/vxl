@@ -8,12 +8,12 @@
 #include <iostream>
 #include <cstddef>
 #include "msm_rigid_aligner.h"
-#include <vnl/vnl_vector.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vnl/vnl_vector.h"
+#include "vsl/vsl_binary_loader.h"
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_cholesky.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

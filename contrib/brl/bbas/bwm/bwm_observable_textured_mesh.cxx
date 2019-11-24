@@ -2,10 +2,10 @@
 #include "bwm_observable_textured_mesh.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
-#include <vgl/vgl_point_2d.h>
+#include "vul/vul_file.h"
+#include "vgl/vgl_point_2d.h"
 
 void bwm_observable_textured_mesh::save_gml(std::ostream& os, int obj_count, vpgl_lvcs* lvcs)
 {

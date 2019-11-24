@@ -21,11 +21,11 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vul/vul_printf.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_distance.h"
+#include "vul/vul_printf.h"
 
 #include "bmsh3d_he_mesh.h"
 

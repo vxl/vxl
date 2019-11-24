@@ -10,7 +10,7 @@
 #include <mbl/mbl_random_n_from_m.h>
 #include <vnl/algo/vnl_svd.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Select a subset most suitable for use as a basis set

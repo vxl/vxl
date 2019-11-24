@@ -13,11 +13,11 @@
 #include "vpdfl_pdf_base.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_loader.h"
 
 #include <vpdfl/vpdfl_sampler_base.h>
 

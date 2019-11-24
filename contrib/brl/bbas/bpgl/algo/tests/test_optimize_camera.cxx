@@ -1,18 +1,18 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_point_3d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_homg_point_3d.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_optimize_camera.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_math.h> // for pi
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_math.h" // for pi
 
 static void test_optimize_camera()
 {

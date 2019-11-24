@@ -1,12 +1,12 @@
 //:
 // \file
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvgl/bvgl_volume_of_intersection.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 //: Test changes
 static void test_bvgl_volume_of_intersection()

@@ -11,10 +11,10 @@
 #include <string>
 #include <vepl/vepl_gradient_dir.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include "test_driver.h"
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 
 int vepl_test_gradient_dir() {
   std::cout << "Starting vepl_gradient_dir tests\n"

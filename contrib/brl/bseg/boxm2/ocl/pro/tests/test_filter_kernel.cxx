@@ -8,8 +8,8 @@
 #include <vector>
 #include <map>
 #include <algorithm>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #include <vcl_where_root_dir.h>
 
 #include <boct/boct_bit_tree.h>
@@ -30,10 +30,10 @@
 #include <boxm2/io/boxm2_sio_mgr.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_vector_fixed.h>
+#include "vnl/vnl_vector_fixed.h"
 #include <brdb/brdb_value.h>
 
 

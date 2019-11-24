@@ -4,7 +4,7 @@
 // \author Tim Cootes
 // \brief Generate pure 3 x 3 rotation matrix from 2 x 3 projection matrix
 
-#include <vnl/vnl_cross.h>
+#include "vnl/vnl_cross.h"
 #include <m23d/m23d_pure_ortho_projection.h>
 
 //: Generate pure 3 x 3 rotation matrix from 2 x 3 projection matrix

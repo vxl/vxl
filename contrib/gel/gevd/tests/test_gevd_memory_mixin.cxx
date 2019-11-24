@@ -11,9 +11,9 @@
 #include <iostream>
 #include <cstring>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <gevd/gevd_memory_mixin.h>
 
 void

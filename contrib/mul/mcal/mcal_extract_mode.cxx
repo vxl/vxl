@@ -8,7 +8,7 @@
 #include "mcal_extract_mode.h"
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mcal/mcal_pca.h>

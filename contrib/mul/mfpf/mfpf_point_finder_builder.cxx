@@ -7,18 +7,18 @@
 // \brief Base for classes which build mfpf_point_finder objects.
 // \author Tim Cootes
 
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_loader.h"
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_cloneables_factory.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <mfpf/mfpf_point_finder.h>
-#include <vul/vul_string.h>
+#include "vul/vul_string.h"
 
 //=======================================================================
 // Dflt ctor

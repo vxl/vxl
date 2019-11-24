@@ -1,9 +1,9 @@
 #include <iostream>
-#include <vidl/vidl_dshow_file_istream.h>
-#include <vidl/vidl_image_list_ostream.h>
+#include "vidl/vidl_dshow_file_istream.h"
+#include "vidl/vidl_image_list_ostream.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 int main()

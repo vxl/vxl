@@ -2,12 +2,12 @@
 //:
 // \file
 
-#include <vil/vil_load.h>
-#include <vil/vil_stream.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_resource_plugin.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_exception.h>
+#include "vil/vil_load.h"
+#include "vil/vil_stream.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_resource_plugin.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_exception.h"
 
 #include "bhdfs_vil_load.h"
 #include "bhdfs_vil_stream.h"

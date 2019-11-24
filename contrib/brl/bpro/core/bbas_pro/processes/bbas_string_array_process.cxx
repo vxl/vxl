@@ -7,7 +7,7 @@
 
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 namespace bbas_core_string_array

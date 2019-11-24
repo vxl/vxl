@@ -2,9 +2,9 @@
 #include <map>
 #include "boxm2_vecf_skin.h"
 #include <bvrml/bvrml_write.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_bounding_box.h>
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_bounding_box.h"
 
 boxm2_vecf_skin::boxm2_vecf_skin(std::string const& geometry_file, unsigned nbins): nbins_(nbins),has_appearance_(false){
   std::ifstream istr(geometry_file.c_str());

@@ -4,9 +4,9 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 double
 rsdl_dist_sq( const rsdl_point& p, const rsdl_point& q )

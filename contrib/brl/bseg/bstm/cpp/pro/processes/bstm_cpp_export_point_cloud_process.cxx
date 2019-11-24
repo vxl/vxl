@@ -8,7 +8,7 @@
 
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_util.h>

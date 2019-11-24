@@ -6,14 +6,14 @@
 //=======================================================================
 #include <iostream>
 #include <sstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief test mfpf_patch_data
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mfpf/mfpf_patch_data.h>
 #include <mfpf/mfpf_add_all_loaders.h>

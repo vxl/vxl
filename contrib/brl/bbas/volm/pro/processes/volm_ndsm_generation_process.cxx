@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <complex>
 #include <bprb/bprb_func_process.h>
-#include <vgl/vgl_area.h>
+#include "vgl/vgl_area.h"
 //:
 // \file
 //     process to generate a normalized height image for given input land cover image from series of height image tiles
@@ -20,18 +20,18 @@
 // \endverbatim
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_resource.h>
-#include <vgl/vgl_intersection.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_image_resource.h"
+#include "vgl/vgl_intersection.h"
 #include <bvgl/algo/bvgl_2d_geo_index.h>
 #include <bvgl/algo/bvgl_2d_geo_index_sptr.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
 #include <volm/volm_io_tools.h>
 #include <mbl/mbl_thin_plate_spline_3d.h>
 

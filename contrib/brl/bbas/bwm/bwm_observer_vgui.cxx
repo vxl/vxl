@@ -9,8 +9,8 @@
 
 #include "bwm_tableau_mgr.h"
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_3d.h"
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polygon_2d.h>
@@ -22,10 +22,10 @@
 #include <vsol/vsol_group_2d.h>
 #include <vsol/vsol_poly_set_2d.h>
 
-#include <vgui/vgui_projection_inspector.h>
-#include <vgui/vgui_message.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_range_map_params.h>
+#include "vgui/vgui_projection_inspector.h"
+#include "vgui/vgui_message.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_range_map_params.h"
 
 #include <bgui/bgui_image_utils.h>
 #include <bgui/bgui_image_tableau.h>

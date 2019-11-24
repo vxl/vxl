@@ -8,18 +8,18 @@
 
 #include <brdb/brdb_value.h>
 
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_image_view.h"
 
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <bvxm/bvxm_image_metadata.h>
 
 #if 0
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 #endif
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //:sets input and output types for  bvxm_change_detection_display_process

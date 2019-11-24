@@ -4,9 +4,9 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_new.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_crop.h"
+#include "vil/vil_new.h"
 
 //: Constructor
 bool vil_crop_image_process_cons(bprb_func_process& pro)

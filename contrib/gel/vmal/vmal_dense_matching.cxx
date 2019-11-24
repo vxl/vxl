@@ -4,15 +4,15 @@
 #include <vtol/vtol_edge_2d.h>
 #include <vmal/vmal_convert_vtol.h>
 #include <vmal/vmal_operators.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_int_3.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_inverse.h>
-#include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_save.h>
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_int_3.h"
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_inverse.h"
+#include "vil1/vil1_memory_image_of.h"
+#include "vil1/vil1_save.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vmal_dense_matching::vmal_dense_matching(const vnl_double_3x3 & H0,

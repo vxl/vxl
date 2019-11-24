@@ -6,8 +6,8 @@
 //:
 // \file
 // process to generate distance of leaves to given geolocation
-#include <vul/vul_file.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vul/vul_file.h"
+#include "vpgl/vpgl_lvcs.h"
 #include <bvgl/algo/bvgl_2d_geo_index.h>
 #include <bvgl/algo/bvgl_2d_geo_index_sptr.h>
 #include <vcl_compiler.h>

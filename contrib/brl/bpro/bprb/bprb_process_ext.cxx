@@ -6,7 +6,7 @@
 
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bprb_process_ext::bprb_process_ext()

@@ -2,9 +2,9 @@
 #include <cmath>
 #include <vector>
 #include <cstdlib>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vsph/vsph_unit_sphere.h>
 #include <vsph/vsph_sph_point_2d.h>
@@ -12,7 +12,7 @@
 #include <vsph/vsph_utils.h>
 #include <vsph/vsph_segment_sphere.h>
 #include <bpgl/bpgl_camera_utils.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 //
 // USED ONLY FOR EXPERIMENTS - NOT A ROUTINE TEST
 //

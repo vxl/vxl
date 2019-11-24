@@ -1,11 +1,11 @@
 #include <iostream>
-#include <vxl_config.h>
+#include "vxl_config.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vil/algo/vil_find_4con_boundary.h>
-#include <vil/vil_crop.h>
+#include "vil/vil_crop.h"
 
 static void show_boundary(const std::vector<int>& bi,const std::vector<int>& bj)
 {

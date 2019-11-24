@@ -14,12 +14,12 @@
 #include <algorithm>
 #include <iostream>
 #include <utility>
-#include <vgl/vgl_intersection.h>
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
+#include "vgl/vgl_intersection.h"
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <volm/volm_io.h>
 #include <volm/volm_io_tools.h>

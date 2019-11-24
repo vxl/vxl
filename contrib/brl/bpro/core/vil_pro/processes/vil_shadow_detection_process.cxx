@@ -4,8 +4,8 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_view_base.h"
 #include <vil/algo/vil_binary_closing.h>
 #include <vil/algo/vil_binary_opening.h>
 #include <vil/algo/vil_blob.h>

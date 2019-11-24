@@ -2,9 +2,9 @@
 #include "boxm2_phongs_model_processor.h"
 //
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 float boxm2_phongs_model_processor::expected_color(brad_phongs_model & pmodel,

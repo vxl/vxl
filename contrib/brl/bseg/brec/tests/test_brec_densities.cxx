@@ -1,11 +1,11 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <brec/brec_fg_pair_density.h>
 #include <brec/brec_fg_bg_pair_density.h>
 
-#include <vil/vil_save.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_save.h"
+#include "vil/vil_math.h"
+#include "vil/vil_convert.h"
 
 static void test_brec_densities()
 {

@@ -3,12 +3,12 @@
 #include "volm_desc_indexer.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_buffered_index.h>
 

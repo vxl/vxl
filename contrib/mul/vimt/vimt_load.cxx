@@ -9,8 +9,8 @@
 #define DCM_PreambleLen                 128
 
 #include "vimt_load.h"
-#include <vil/vil_property.h>
-#include <vil/vil_open.h>
+#include "vil/vil_property.h"
+#include "vil/vil_open.h"
 #include "vimt_convert.h"
 
 #ifdef _BUILD_DCMTK

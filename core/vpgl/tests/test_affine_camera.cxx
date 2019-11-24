@@ -1,11 +1,11 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
-#include <vpgl/vpgl_affine_camera.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_ray_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vnl/vnl_math.h>
+#include "vpgl/vpgl_affine_camera.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_ray_3d.h"
+#include "vgl/vgl_distance.h"
+#include "vnl/vnl_math.h"
 
 
 static void test_affine_camera()

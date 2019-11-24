@@ -8,13 +8,13 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_rubberband_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_rubberband_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 
 struct pick_client
   : public vgui_rubberband_client

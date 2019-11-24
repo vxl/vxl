@@ -4,12 +4,12 @@
 //:
 // \file
 
-#include <vul/vul_file.h>
-#include <vidl/vidl_image_list_ostream.h>
-#include <vidl/vidl_ostream_sptr.h>
+#include "vul/vul_file.h"
+#include "vidl/vidl_image_list_ostream.h"
+#include "vidl/vidl_ostream_sptr.h"
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Constructor

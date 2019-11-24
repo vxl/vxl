@@ -8,18 +8,18 @@
 //:
 // \file
 
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
 #include <vpgl/algo/vpgl_ray.h>
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_quaternion.h>
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_quaternion.h"
 #include <vgl/algo/vgl_p_matrix.h>
 #include <bsta/bsta_random_wrapper.h>
 #if 0
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #endif
 

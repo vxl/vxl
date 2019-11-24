@@ -6,17 +6,17 @@
 #include "ImageMetric.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_line_2d.h>
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_homg_line_2d.h"
 #include <vgl/algo/vgl_homg_operators_2d.h>
-#include <vgl/vgl_line_segment_2d.h>
+#include "vgl/vgl_line_segment_2d.h"
 
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLineSeg2D.h>
@@ -284,7 +284,7 @@ bool ImageMetric::is_linear() const
   return false;
 }
 
-#include <vnl/vnl_identity_3x3.h>
+#include "vnl/vnl_identity_3x3.h"
 
 //: Return conditioning matrix C that converts homogeneous image points to homogeneous conditioned points.
 //  If the ImageMetric used is nonlinear, then we'll have to make other arrangements...

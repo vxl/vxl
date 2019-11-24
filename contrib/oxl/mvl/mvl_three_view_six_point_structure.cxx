@@ -8,7 +8,7 @@
 #include "mvl_three_view_six_point_structure.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <vnl/algo/vnl_svd.h>

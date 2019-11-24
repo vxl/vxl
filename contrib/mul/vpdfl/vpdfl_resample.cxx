@@ -5,7 +5,7 @@
 // \author Tim Cootes
 // \brief Select random sample of data with replacement.
 
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 
 // Object used to do sampling
 static vnl_random vpdfl_resample_mz_random;

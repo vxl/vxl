@@ -6,7 +6,7 @@
 //
 // \author  Andrew Fitzgibbon
 
-#include <vgui/vgui_menu.h>
+#include "vgui/vgui_menu.h"
 
 //-----------------------------------------------------------------------------
 //: Creates a menu containing all the functions in xcv_multiview

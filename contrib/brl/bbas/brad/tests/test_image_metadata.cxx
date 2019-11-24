@@ -4,13 +4,13 @@
 #include <cmath>
 #include <sstream>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <brad/brad_image_metadata.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_io.h>
-#include <vnl/vnl_random.h>
+#include "vsl/vsl_binary_io.h"
+#include "vnl/vnl_random.h"
 
 
 //: Test the image_metadata class

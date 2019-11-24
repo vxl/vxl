@@ -8,12 +8,12 @@
 #include <iterator>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include "msdi_marked_images_from_files.h"
-#include <vil/vil_load.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_load.h"
+#include "vil/vil_convert.h"
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_load.h>
 #include <vimt/vimt_convert.h>

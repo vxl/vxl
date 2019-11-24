@@ -14,13 +14,13 @@
 // \endverbatim
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvpl/kernels/bvpl_kernel.h>
 #include <bvpl/util/bvpl_corner_pair_finder.h>
-#include <vnl/vnl_float_4.h>
+#include "vnl/vnl_float_4.h"
 
 namespace bvpl_convert_pair_to_hue_process_globals
 {

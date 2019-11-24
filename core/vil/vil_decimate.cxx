@@ -13,11 +13,11 @@
 #include "vil_decimate.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_copy.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_exception.h>
+#include "vil/vil_copy.h"
+#include "vil/vil_crop.h"
+#include "vil/vil_exception.h"
 
 static const unsigned long large_image_limit = 1024ul * 1024ul * 8ul; //8M Pixels
 

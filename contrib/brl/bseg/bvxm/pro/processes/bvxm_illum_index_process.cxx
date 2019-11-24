@@ -6,12 +6,12 @@
 //:
 // \file
 
-#include <vil/vil_image_resource.h>
-#include <vil/vil_load.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_load.h"
 #include <vil/file_formats/vil_nitf2_image.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: set input and output types

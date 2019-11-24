@@ -5,12 +5,12 @@
 // \brief A class for adjusting sample standard deviation values such that the probability of underestimation of the true std. dev. is fixed.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_gamma.h>
-#include <vnl/vnl_least_squares_function.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_gamma.h"
+#include "vnl/vnl_least_squares_function.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
 bsta_sigma_normalizer::bsta_sigma_normalizer(float under_estimation_probability, unsigned int N_PRECOMPUTED) : N_PRECOMPUTED_(N_PRECOMPUTED), unbias_const_(N_PRECOMPUTED+1, 0.0f)

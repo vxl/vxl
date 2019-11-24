@@ -1,5 +1,5 @@
 #include "bnl_legendre_polynomial.h"
-#include <vnl/vnl_real_polynomial.h>
+#include "vnl/vnl_real_polynomial.h"
 
 vnl_real_polynomial bnl_legendre_polynomial(int n)
 {

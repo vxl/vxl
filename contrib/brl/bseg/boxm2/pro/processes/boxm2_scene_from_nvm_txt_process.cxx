@@ -13,12 +13,12 @@
 #include <boxm2/boxm2_util.h>
 #include <boxm2/util/boxm2_convert_nvm_txt.h>
 #include <boxm2/util/boxm2_cams_and_box_to_scene.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

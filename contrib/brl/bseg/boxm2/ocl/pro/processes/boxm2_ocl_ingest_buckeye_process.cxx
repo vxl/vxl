@@ -12,7 +12,7 @@
 // \date November 8, 2011
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boct/boct_bit_tree.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -21,20 +21,20 @@
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/cpp/algo/boxm2_data_serial_iterator.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_load.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_load.h"
 //brdb stuff
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_box_2d.h>
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_box_2d.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 
 

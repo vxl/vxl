@@ -16,7 +16,7 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vil_nitf2_field_definitions* vil_nitf2_image_subheader::s_field_definitions_21 = nullptr;

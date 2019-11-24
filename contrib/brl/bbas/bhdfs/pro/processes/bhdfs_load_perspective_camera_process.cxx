@@ -16,12 +16,12 @@
 // \endverbatim
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera_double_sptr.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_camera_double_sptr.h"
+#include "vpgl/vpgl_perspective_camera.h"
 #include <vpgl/io/vpgl_io_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
+#include "vpgl/vpgl_calibration_matrix.h"
 
 #include <bhdfs/bhdfs_manager.h>
 #include <bhdfs/bhdfs_fstream.h>

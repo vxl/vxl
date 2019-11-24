@@ -1,16 +1,16 @@
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vpl/vpl.h>
+#include "vpl/vpl.h"
 
-#include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_save.h>
-#include <vil1/vil1_rgb.h>
+#include "vil1/vil1_memory_image_of.h"
+#include "vil1/vil1_save.h"
+#include "vil1/vil1_rgb.h"
 
-#include <testlib/testlib_test.h>
-#include <vul/vul_temp_filename.h>
+#include "testlib/testlib_test.h"
+#include "vul/vul_temp_filename.h"
 
 constexpr int W = 768;
 constexpr int H = 256;

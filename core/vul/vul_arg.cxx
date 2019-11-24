@@ -27,13 +27,13 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vul/vul_sprintf.h>
-#include <vul/vul_string.h>
-#include <vul/vul_reg_exp.h>
-#include <vul/vul_printf.h>
+#include "vul/vul_sprintf.h"
+#include "vul/vul_string.h"
+#include "vul/vul_reg_exp.h"
+#include "vul/vul_printf.h"
 
 //------------------------------------------------------------------------------
 

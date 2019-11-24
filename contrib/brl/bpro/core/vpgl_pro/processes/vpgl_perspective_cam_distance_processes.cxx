@@ -6,10 +6,10 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
 
 // compute the distance between two distance cameras as the angle between their principle axis vectors
 namespace vpgl_persp_cam_distance_process_globals

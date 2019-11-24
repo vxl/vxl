@@ -9,7 +9,7 @@
 // \endverbatim
 
 #include <brip/brip_vil_nitf_ops.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_image_view_base.h"
 
 
 

@@ -9,15 +9,15 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vpgl/vpgl_calibration_matrix.h>
+#include "vpgl/vpgl_calibration_matrix.h"
 #include <vpgl/algo/vpgl_em_compute_5_point.h>
 #include <vpgl/algo/vpgl_bundle_adjust.h>
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
 
 
 //------------------------------------------------------------------------

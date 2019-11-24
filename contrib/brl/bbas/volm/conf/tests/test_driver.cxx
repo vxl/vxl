@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_volm_conf_object );
 DECLARE( test_volm_conf_query  );

@@ -14,15 +14,15 @@
 #include "brec_param_estimation.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_amoeba.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_convert.h"
 #include <bvgl/bvgl_changes.h>
 #include <bvgl/bvgl_change_obj.h>
 #include <bsta/bsta_joint_histogram.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vgl/vgl_polygon_scan_iterator.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: estimate the initial value as the real variation in the data

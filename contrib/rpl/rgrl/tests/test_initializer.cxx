@@ -1,8 +1,8 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_vector_fixed.h"
 
 #include <rgrl/rgrl_initializer_prior.h>
 #include <rgrl/rgrl_trans_affine.h>
@@ -17,7 +17,7 @@
 #include <rgrl/rgrl_cast.h>
 #include <rgrl/rgrl_invariant_match.h>
 
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 
 namespace {
 

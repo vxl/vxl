@@ -7,17 +7,17 @@
 
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vul/vul_file.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
+#include "vul/vul_file.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
 #include <ihog/ihog_transform_2d.h>
 
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_matrix_fixed.h"
 
 ihog_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
 {

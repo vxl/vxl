@@ -6,12 +6,12 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
-#include <vgl/vgl_clip.h>
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
+#include "vgl/vgl_clip.h"
 
 #ifndef DEGTORAD
 #define DEGTORAD  (vnl_math::pi_over_180)

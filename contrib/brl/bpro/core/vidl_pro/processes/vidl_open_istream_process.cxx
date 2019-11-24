@@ -3,16 +3,16 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-#include <vul/vul_file.h>
-#include <vidl/vidl_image_list_istream.h>
+#include "vul/vul_file.h"
+#include "vidl/vidl_image_list_istream.h"
 #include <vidl/vidl_config.h>
 #if VIDL_HAS_DSHOW
-#include <vidl/vidl_dshow_file_istream.h>
+#include "vidl/vidl_dshow_file_istream.h"
 #endif
-#include <vidl/vidl_istream_sptr.h>
+#include "vidl/vidl_istream_sptr.h"
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Constructor

@@ -5,7 +5,7 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_util.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 #include <bprb/bprb_parameters.h>
 
 //: set input and output types

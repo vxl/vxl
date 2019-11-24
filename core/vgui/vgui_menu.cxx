@@ -7,9 +7,9 @@
 // \brief  See vgui_menu.h for a description of this file.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgui/vgui_command.h>
+#include "vgui/vgui_command.h"
 
 //--------------------------------------------------------------------------------
 

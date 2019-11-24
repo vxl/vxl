@@ -5,11 +5,11 @@
 #include <vector>
 #include <cstdlib>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <sdet/sdet_curve_model.h>
 #include <sdet/sdet_sel.h>
 

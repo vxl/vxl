@@ -5,7 +5,7 @@
 // \file
 
 #include <vil/algo/vil_gauss_filter.h>
-#include <vil/vil_math.h>
+#include "vil/vil_math.h"
 
 
 //: Constructor

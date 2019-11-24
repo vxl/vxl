@@ -4,11 +4,11 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
 #include <bil/bil_convert_to_grey.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <betr/betr_geo_box_3d.h>
 #include <betr/betr_geo_object_3d.h>
 #include <vsol/vsol_spatial_object_3d.h>
@@ -18,13 +18,13 @@
 #include <betr/vsol_mesh_3d.h>
 #include <betr/vsol_mesh_3d_sptr.h>
 #include <vsol/vsol_point_3d.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vpgl/vpgl_lvcs.h"
 #include <betr/betr_kml_utils.h>
 #include <betr/betr_event_trigger.h>
 #include <betr/betr_edgel_change_detection.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vpgl/vpgl_camera_double_sptr.h>
-#include <vpgl/vpgl_camera.h>
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vpgl/vpgl_camera_double_sptr.h"
+#include "vpgl/vpgl_camera.h"
 #define chile 0
 #define rajaei 0
 #define kandahar 0

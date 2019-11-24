@@ -10,9 +10,9 @@
 
 #include <brad/brad_eigenspace.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 namespace bbas_core_brad_train_hist

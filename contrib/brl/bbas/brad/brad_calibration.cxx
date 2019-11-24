@@ -8,12 +8,12 @@
 #include <sstream>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brad/brad_image_metadata.h>
-#include <vil/vil_convert.h>
-#include <vnl/vnl_math.h>
+#include "vil/vil_convert.h"
+#include "vnl/vnl_math.h"
 
 
 vil_image_view<float> brad_nitf_abs_radiometric_calibrate(vil_image_view<unsigned short> const& input_img, brad_image_metadata const& md)

@@ -1,15 +1,15 @@
 // This is mul/vimt/tests/test_gaussian_pyramid_builder_2d_general.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vpl/vpl.h" // vpl_unlink()
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d_general.h>
 #include <vimt/vimt_image_pyramid.h>
-#include <vsl/vsl_binary_loader.h>
-#include <testlib/testlib_test.h>
-#include <vil/vil_plane.h>
+#include "vsl/vsl_binary_loader.h"
+#include "testlib/testlib_test.h"
+#include "vil/vil_plane.h"
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0
 #endif

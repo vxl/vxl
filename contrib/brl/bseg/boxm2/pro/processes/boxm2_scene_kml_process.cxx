@@ -10,8 +10,8 @@
 
 #include <boxm2/boxm2_scene.h>
 #include <bkml/bkml_write.h>
-#include <vpgl/vpgl_lvcs.h>
-#include <vgl/vgl_box_3d.h>
+#include "vpgl/vpgl_lvcs.h"
+#include "vgl/vgl_box_3d.h"
 
 namespace boxm2_scene_kml_process_globals
 {

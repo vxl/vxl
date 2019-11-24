@@ -1,10 +1,10 @@
 #include "rgrl_rotation.h"
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_math.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void rgrl_rotation_3d_to_matrix(double const theta, double const alpha, double const phi,

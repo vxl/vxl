@@ -2,10 +2,10 @@
 // \file
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <rgrl/rgrl_transformation.h>
 #include <rgrl/rgrl_trans_affine.h>
@@ -15,11 +15,11 @@
 #include <rgrl/rgrl_trans_spline.h>
 #include <rgrl/rgrl_trans_rigid.h>
 
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_vector.h"
 #include <vnl/algo/vnl_determinant.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_random.h"
 
 #include "test_util.h"
 

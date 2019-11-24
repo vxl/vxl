@@ -1,7 +1,7 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bundler/bundler_tracks_impl.h>
 
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 
 static const char* IMG1_PATH =
     "contrib/cul/bundler/tests/test_data/kermit000.jpg";

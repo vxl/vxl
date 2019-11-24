@@ -1,11 +1,11 @@
 // This is core/vul/tests/test_vul_file.cxx
 #include <fstream>
-#include <vpl/vpl.h>
-#include <vul/vul_file.h>
+#include "vpl/vpl.h"
+#include "vul/vul_file.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 
 void test_vul_file()

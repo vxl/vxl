@@ -1,6 +1,6 @@
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <rsdl/rsdl_bounding_box.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 static inline bool close( double x, double y ) { return vnl_math::abs(x-y) < 1.0e-6; }
 

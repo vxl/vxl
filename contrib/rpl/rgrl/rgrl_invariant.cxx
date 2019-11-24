@@ -2,7 +2,7 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vnl_vector<double> rgrl_invariant::zero_vec = vnl_vector<double>(0);

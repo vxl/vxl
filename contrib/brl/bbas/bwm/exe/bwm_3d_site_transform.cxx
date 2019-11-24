@@ -10,15 +10,15 @@
 #include <bwm/bwm_3d_corr_sptr.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 
 // the resulting similarity maps from the coordinate frame of pts1

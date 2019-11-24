@@ -7,12 +7,12 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_command.h>
-#include <vgui/vgui_gl.h>
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_command.h"
+#include "vgui/vgui_gl.h"
 
 #include <Inventor/actions/SoSearchAction.h>
 #include <Inventor/projectors/SbSphereSheetProjector.h>

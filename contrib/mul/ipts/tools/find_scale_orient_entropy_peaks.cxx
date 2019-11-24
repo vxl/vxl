@@ -3,11 +3,11 @@
 #include <ipts/ipts_entropy_pyramid.h>
 #include <ipts/ipts_orientation_pyramid.h>
 #include <vimt/vimt_scale_pyramid_builder_2d.h>
-#include <vil/vil_convert.h>
-#include <vul/vul_arg.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vgl/vgl_point_3d.h>
+#include "vil/vil_convert.h"
+#include "vul/vul_arg.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vgl/vgl_point_3d.h"
 #include <ipts/ipts_scale_space_peaks.h>
 #include <ipts/ipts_draw.h>
 

@@ -25,15 +25,15 @@
 
 #include <vipl/vipl_threshold.h>
 
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 typedef section<vxl_byte,2> img_type;
 
 // for I/O:
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 int

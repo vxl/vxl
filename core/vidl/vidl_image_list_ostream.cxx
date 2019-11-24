@@ -8,11 +8,11 @@
 
 #include "vidl_image_list_ostream.h"
 #include "vidl_convert.h"
-#include <vul/vul_file.h>
-#include <vul/vul_sprintf.h>
-#include <vil/vil_file_format.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
+#include "vul/vul_file.h"
+#include "vul/vul_sprintf.h"
+#include "vil/vil_file_format.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
 
 //------------------------------------------------------------------------------
 

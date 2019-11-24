@@ -7,9 +7,9 @@
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 #include <vimt/vimt_image_2d_of.h>
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 int main()

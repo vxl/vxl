@@ -9,18 +9,18 @@
 #include "vgui_blender_tableau.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil/vil_load.h>
-#include <vil/vil_new.h>
+#include "vil/vil_load.h"
+#include "vil/vil_new.h"
 
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_glu.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_matrix_state.h>
-#include <vgui/vgui_image_renderer.h>
-#include <vgui/vgui_vil_image_renderer.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_glu.h"
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_matrix_state.h"
+#include "vgui/vgui_image_renderer.h"
+#include "vgui/vgui_vil_image_renderer.h"
 
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_blender_tableau_new.

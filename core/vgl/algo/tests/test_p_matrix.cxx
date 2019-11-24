@@ -12,20 +12,20 @@
 #include <cmath>
 #include <iostream>
 #include <sstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vgl/algo/vgl_p_matrix.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_4.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3x4.h>
-#include <vnl/vnl_matrix.h>
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_homg_point_3d.h"
+#include "vgl/vgl_distance.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_4.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_double_3x4.h"
+#include "vnl/vnl_matrix.h"
 
 static double d(double x0, double x1, double y0, double y1)
 {

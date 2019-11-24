@@ -3,13 +3,13 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvgl/bvgl_poly_region_3d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 #define TEST_POLY_REGION 0
 //: Test changes
 static void test_poly_region()

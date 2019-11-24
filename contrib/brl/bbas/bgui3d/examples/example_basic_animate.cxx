@@ -1,7 +1,7 @@
-#include <vgui/vgui.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_window.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_window.h"
+#include "vgui/vgui_shell_tableau.h"
 
 #include <bgui3d/bgui3d.h>
 #include <bgui3d/bgui3d_tableau.h>

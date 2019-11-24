@@ -19,10 +19,10 @@
 
 #include <bmsh3d/bmsh3d_vertex.h>
 #include <bmsh3d/bmsh3d_edge.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bmsh3d_textured_face_mc::bmsh3d_textured_face_mc(const bmsh3d_face* face, std::string tex_map_uri)

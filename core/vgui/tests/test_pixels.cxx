@@ -2,13 +2,13 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_sprintf.h>
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_pixel.h>
+#include "vul/vul_sprintf.h"
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_pixel.h"
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #if 0 // two unused "static" functions
 static

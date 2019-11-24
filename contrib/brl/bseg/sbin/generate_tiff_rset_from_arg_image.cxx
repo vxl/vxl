@@ -1,16 +1,16 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
-#include <vpl/vpl.h>
+#include "vpl/vpl.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
-#include <vil/vil_load.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_new.h>
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_pyramid_image_resource.h>
+#include "vul/vul_file.h"
+#include "vil/vil_load.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_new.h"
+#include "vil/vil_pixel_format.h"
+#include "vil/vil_pyramid_image_resource.h"
 static bool convert_to_greyscale(vil_image_resource_sptr const& imgr, vil_image_resource_sptr& resc){
   vil_pixel_format fmt = imgr->pixel_format();
   unsigned ni = imgr->ni(), nj = imgr->nj();

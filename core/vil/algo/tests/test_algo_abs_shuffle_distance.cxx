@@ -1,17 +1,17 @@
 // This is core/vil/algo/tests/test_algo_abs_shuffle_distance.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Tim Cootes
 // \date   23 Feb 2005
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 #include <vil/algo/vil_abs_shuffle_distance.h>
-#include <vil/vil_crop.h>
+#include "vil/vil_crop.h"
 
 static void asd_fill_image(vil_image_view<vxl_byte>& image)
 {

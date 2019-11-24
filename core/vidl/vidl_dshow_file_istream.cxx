@@ -9,8 +9,8 @@
 //
 //=========================================================================
 
-#include <vidl/vidl_dshow.h>
-#include <vidl/vidl_frame.h>
+#include "vidl/vidl_dshow.h"
+#include "vidl/vidl_frame.h"
 
 //-------------------------------------------------------------------------
 // vidl_dshow_file_istream implementation - construction & destruction

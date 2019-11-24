@@ -1,13 +1,13 @@
 // This is brl/bseg/sdet/sdet_image_mesh.cxx
 #include "sdet_image_mesh.h"
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_line_segment_2d.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_new.h>
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_save.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_line_segment_2d.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_math.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_new.h"
+#include "vil/vil_pixel_format.h"
+#include "vil/vil_save.h"
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vsol/vsol_line_2d.h>
 #include <vtol/vtol_edge_2d.h>

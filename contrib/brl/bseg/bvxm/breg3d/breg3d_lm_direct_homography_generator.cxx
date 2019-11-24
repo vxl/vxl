@@ -1,7 +1,7 @@
 #include "breg3d_lm_direct_homography_generator.h"
 
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_2x3.h>
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_double_2x3.h"
 
 #include <ihog/ihog_transform_2d.h>
 #include <ihog/ihog_image.h>

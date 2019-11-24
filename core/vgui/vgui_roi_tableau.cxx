@@ -8,16 +8,16 @@
 #include <string>
 #include "vgui_roi_tableau.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_load.h>
-#include <vil1/vil1_crop.h>
+#include "vil1/vil1_load.h"
+#include "vil1/vil1_crop.h"
 
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_matrix_state.h>
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_glu.h>
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_matrix_state.h"
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_glu.h"
 
 //------------------------------------------------------------------------------
 

@@ -6,8 +6,8 @@
 
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
 #include <volm/volm_loc_hyp.h>
@@ -22,12 +22,12 @@
 #include <volm/volm_spherical_container_sptr.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
 #include <bkml/bkml_write.h>
 #include <bkml/bkml_parser.h>
-#include <vpgl/vpgl_utm.h>
-#include <vnl/vnl_math.h>
+#include "vpgl/vpgl_utm.h"
+#include "vnl/vnl_math.h"
 
 
 int main(int argc, char** argv)

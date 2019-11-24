@@ -3,10 +3,10 @@
 #include "boxm2_ocl_render_tableau.h"
 //:
 // \file
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vgui/vgui_modifier.h>
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vgui/vgui_modifier.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/view/boxm2_view_utils.h>

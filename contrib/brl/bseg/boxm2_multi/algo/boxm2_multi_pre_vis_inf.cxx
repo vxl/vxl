@@ -6,7 +6,7 @@
 #include <boxm2_multi_util.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
@@ -24,10 +24,10 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
-#include <vpgl/vpgl_camera_double_sptr.h>
-#include <vul/vul_timer.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
+#include "vpgl/vpgl_camera_double_sptr.h"
+#include "vul/vul_timer.h"
 
 std::map<std::string, std::vector<bocl_kernel*> > boxm2_multi_pre_vis_inf::kernels_;
 

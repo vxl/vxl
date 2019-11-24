@@ -5,17 +5,17 @@
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel.h>
 #include <brip/brip_vil_float_ops.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
-#include <vil/vil_new.h>
-#include <vil/vil_resample_bicub.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
+#include "vil/vil_new.h"
+#include "vil/vil_resample_bicub.h"
 #include <bsol/bsol_algs.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_point_2d.h>
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_vector_io.h"
 
 bool betr_edgel_factory::add_image(std::string const& iname, vil_image_resource_sptr const& imgr){
   if (!imgr||!imgr->ni()||!imgr->nj())

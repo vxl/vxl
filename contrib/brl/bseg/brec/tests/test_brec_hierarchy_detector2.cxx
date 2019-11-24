@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <brec/brec_part_base.h>
 #include <brec/brec_part_base_sptr.h>
@@ -14,18 +14,18 @@
 #include <brec/brec_part_hierarchy_detector_sptr.h>
 #include <brec/brec_part_gaussian.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_load.h"
+#include "vil/vil_math.h"
+#include "vil/vil_convert.h"
 #include <vil/io/vil_io_image_view_base.h>
 
 #include <brip/brip_vil_float_ops.h>
 #include <bsta/algo/bsta_gaussian_updater.h>
 #include <bsta/bsta_histogram.h>
 
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_brec_hierarchy_detector2_simple()

@@ -1,7 +1,7 @@
 #include <fstream>
 #include <string>
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
 #include "../boxm2_vecf_fit_face.h"
 int main(int argc, char ** argv)
 {

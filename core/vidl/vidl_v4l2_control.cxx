@@ -13,7 +13,7 @@
 #include <iostream>
 #include "vidl_v4l2_control.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 extern "C" {

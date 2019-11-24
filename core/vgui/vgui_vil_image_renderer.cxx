@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include "vgui_vil_image_renderer.h"
-#include <vil/vil_new.h>
+#include "vil/vil_new.h"
 //:
 // \file
 // \author Amitha Perera
@@ -11,14 +11,14 @@
 // Cut-n-paste and modify from vil1_image_renderer.cxx
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_timer.h>
-#include <vil/vil_property.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_pyramid_image_resource.h>
-#include <vil/vil_image_view.h>
-#include <vgui/vgui_section_render.h>
+#include "vul/vul_timer.h"
+#include "vil/vil_property.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_pyramid_image_resource.h"
+#include "vil/vil_image_view.h"
+#include "vgui/vgui_section_render.h"
 #include "vgui_gl.h"
 #include "vgui_macro.h"
 #include "vgui_section_buffer.h"

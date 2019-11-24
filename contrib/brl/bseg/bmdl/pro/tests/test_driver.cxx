@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_bmdl_classify_process );
 DECLARE( test_bmdl_trace_boundaries_process );

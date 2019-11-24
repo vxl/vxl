@@ -1,14 +1,14 @@
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 
-#include <vil/vil_load.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_load.h"
+#include "vil/vil_image_view.h"
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_soview2D.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_soview2D.h"
 
 vgui_event_condition left_event( vgui_key('h') );
 vgui_event_condition right_event( vgui_key('l') );

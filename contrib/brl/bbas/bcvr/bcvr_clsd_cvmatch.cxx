@@ -5,7 +5,7 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vsol/vsol_polygon_2d.h>

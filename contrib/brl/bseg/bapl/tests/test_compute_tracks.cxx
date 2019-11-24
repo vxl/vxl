@@ -1,6 +1,6 @@
 #include <iostream>
 #include <sstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bapl/bapl_connectivity.h>
 #include <bapl/bapl_connectivity_sptr.h>
 #include <bapl/bapl_lowe_keypoint_sptr.h>
@@ -8,9 +8,9 @@
 #include <bapl/bapl_keypoint_sptr.h>
 #include <bapl/bapl_keypoint_set.h>
 
-#include <vul/vul_awk.h>
+#include "vul/vul_awk.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_compute_tracks(int argc, char* argv[])

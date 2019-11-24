@@ -1,13 +1,13 @@
 #include <iostream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_view.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_point_2d.h>
-#include <vpgl/vpgl_affine_camera.h>
+#include "vil/vil_image_view.h"
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_point_2d.h"
+#include "vpgl/vpgl_affine_camera.h"
 #include <bpgl/algo/bpgl_3d_from_disparity.h>
 
 

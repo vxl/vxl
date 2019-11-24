@@ -5,10 +5,10 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vsol/vsol_box_3d.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 
 const float vsol_spatial_object_3d::eps=1.0e-3f;
 //int vsol_spatial_object_3d::tagcount_=0;

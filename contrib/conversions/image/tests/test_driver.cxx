@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_vil1_vbl_conversions );
 DECLARE( test_image_conversions );

@@ -18,15 +18,15 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 
-#include <vpgl/vpgl_camera.h>
+#include "vpgl/vpgl_camera.h"
 
 #include <sdet/sdet_img_edge.h>
 
 #include <brip/brip_vil_float_ops.h>
 
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: set input and output types

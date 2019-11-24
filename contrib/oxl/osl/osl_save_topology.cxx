@@ -7,7 +7,7 @@
 #include <fstream>
 #include "osl_save_topology.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void osl_save_topology(std::ostream &f, std::list<osl_edge*> const &es, std::list<osl_vertex*> const &vs)

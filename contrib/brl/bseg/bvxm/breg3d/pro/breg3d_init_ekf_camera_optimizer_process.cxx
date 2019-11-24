@@ -3,8 +3,8 @@
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
 
 #include <breg3d/breg3d_ekf_camera_optimizer_state.h>
 

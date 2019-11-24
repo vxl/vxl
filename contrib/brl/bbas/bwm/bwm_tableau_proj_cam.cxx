@@ -1,12 +1,12 @@
 #include <iostream>
 #include <sstream>
 #include "bwm_tableau_proj_cam.h"
-#include <vpgl/vpgl_proj_camera.h>
+#include "vpgl/vpgl_proj_camera.h"
 #include "bwm_observer_mgr.h"
 #include "algo/bwm_utils.h"
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

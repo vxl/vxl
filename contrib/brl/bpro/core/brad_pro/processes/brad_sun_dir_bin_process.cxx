@@ -5,9 +5,9 @@
 //:
 // \file
 #include <brad/brad_sun_dir_index.h>
-#include <vnl/vnl_double_3.h>
+#include "vnl/vnl_double_3.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <brad/brad_image_metadata.h>
 

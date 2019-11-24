@@ -14,23 +14,23 @@
 
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil/vil_image_view_base.h>
-#include <vil1/vil1_load.h>
-#include <vil/vil_load.h>
-#include <vil/vil_new.h>
+#include "vil/vil_image_view_base.h"
+#include "vil1/vil1_load.h"
+#include "vil/vil_load.h"
+#include "vil/vil_new.h"
 
-#include <vgui/vgui_image_renderer.h>
-#include <vgui/vgui_vil_image_renderer.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_command.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_glu.h>
-#include <vgui/vgui_range_map_params.h>
+#include "vgui/vgui_image_renderer.h"
+#include "vgui/vgui_vil_image_renderer.h"
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_command.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_glu.h"
+#include "vgui/vgui_range_map_params.h"
 
 //-----------------------------------------------------------------------------
 

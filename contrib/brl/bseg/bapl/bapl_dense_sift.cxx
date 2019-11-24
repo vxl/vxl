@@ -3,7 +3,7 @@
 #include <vil/algo/vil_orientations.h>
 #include <iomanip>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 unsigned bapl_dense_sift::keypoint_id_ = 0;

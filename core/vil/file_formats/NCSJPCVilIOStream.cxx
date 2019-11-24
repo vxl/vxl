@@ -2,9 +2,9 @@
 #include <string>
 #include <limits>
 #include "NCSJPCVilIOStream.h"
-#include <vil/vil_stream.h>
+#include "vil/vil_stream.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #undef max
 #undef min

@@ -3,7 +3,7 @@
 #include <string>
 #include <numeric>
 #include <algorithm>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \brief Tests the clsfy_binary_threshold_1d class
@@ -11,15 +11,15 @@
 // Test construction, IO etc
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vnl/vnl_math.h"
+#include "vpl/vpl.h" // vpl_unlink()
 #include <clsfy/clsfy_random_forest.h>
 #include <clsfy/clsfy_random_forest_builder.h>
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>
-#include <vsl/vsl_binary_loader.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_binary_loader.h"
+#include "vsl/vsl_vector_io.h"
 #include <pdf1d/pdf1d_gaussian.h>
 #include <pdf1d/pdf1d_sampler.h>
 #include <pdf1d/pdf1d_flat.h>
@@ -27,7 +27,7 @@
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vimt/vimt_transform_2d.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0

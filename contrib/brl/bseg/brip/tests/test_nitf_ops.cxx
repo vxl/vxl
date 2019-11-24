@@ -1,13 +1,13 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #include <brip/brip_vil_nitf_ops.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vul/vul_file.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vul/vul_file.h"
 
 
 static void test_nitf_ops( int argc, char* argv[] )

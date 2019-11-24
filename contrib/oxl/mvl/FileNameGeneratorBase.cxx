@@ -4,7 +4,7 @@
 
 #include "FileNameGeneratorBase.h"
 
-#include <vnl/vnl_identity.h>
+#include "vnl/vnl_identity.h"
 
 //: Construct by copying the supplied indexer
 FileNameGeneratorBase::FileNameGeneratorBase()

@@ -4,8 +4,8 @@
 //  \author Tim Cootes
 
 #include "vimt_image_2d.h"
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 
 //: Return vector indicating size of image in pixels
 //  2D image is v[0] x v[1],  3D image is v[0] x v[1] x v[2]

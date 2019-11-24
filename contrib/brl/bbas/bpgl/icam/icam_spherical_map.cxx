@@ -1,11 +1,11 @@
 #include "icam_spherical_map.h"
-#include <vil/vil_convert.h>
-#include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_closest_point.h>
-#include <vpgl/vpgl_proj_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
+#include "vil/vil_convert.h"
+#include "vnl/vnl_numeric_traits.h"
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_closest_point.h"
+#include "vpgl/vpgl_proj_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_calibration_matrix.h"
 bool icam_spherical_map::closest_camera(vgl_ray_3d<double> const& sph_ray,
                                        vgl_point_3d<double> const& p,
                                         unsigned& cam_index, double& dot_prod,

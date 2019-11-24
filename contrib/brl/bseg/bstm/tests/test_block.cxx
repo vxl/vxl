@@ -7,8 +7,8 @@
 #include <vector>
 #include <map>
 #include <algorithm>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 
 #include <bstm/basic/bstm_block_id.h>
 #include <bstm/bstm_block.h>
@@ -16,7 +16,7 @@
 #include <bstm/bstm_time_block.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void test_block_id()

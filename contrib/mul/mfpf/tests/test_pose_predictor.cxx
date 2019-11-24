@@ -1,6 +1,6 @@
 // This is mul/mfpf/tests/test_pose_predictor.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Tim Cootes
@@ -12,13 +12,13 @@
 //=======================================================================
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_pose_predictor.h>
 #include <mfpf/mfpf_pose_predictor_builder.h>
-#include <vil/vil_crop.h>
+#include "vil/vil_crop.h"
 #include <vil/algo/vil_gauss_filter.h>
 
 //=======================================================================

@@ -3,11 +3,11 @@
 // \author Vishal Jain
 // \date 26-Jan-2011
 
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
-#include <vgl/vgl_point_3d.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vil/vil_image_view.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
+#include "vgl/vgl_point_3d.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vil/vil_image_view.h"
 
 #include <boct/boct_bit_tree.h>
 
@@ -18,7 +18,7 @@
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <boxm2/cpp/algo/boxm2_update_functions.h>
 #include <boxm2/cpp/algo/boxm2_render_functions.h>
-#include <vil/vil_transform.h>
+#include "vil/vil_transform.h"
 
 vpgl_camera_double_sptr test_camera_cone()
 {

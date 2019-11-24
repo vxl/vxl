@@ -6,15 +6,15 @@
 // but does not reverse the kernel.
 
 #include <iostream>
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vimt/algo/vimt_find_peaks.h>
 #include <vimt/algo/vimt_correlate_2d.h>
 #include <vimt/vimt_resample_bilin.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 
 int main()
 {

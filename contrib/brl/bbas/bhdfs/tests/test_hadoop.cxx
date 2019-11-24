@@ -14,9 +14,9 @@
 //  ${HADOOP_HOME}/bin/hadoop dfs -cat ${USER_HOME_ON_HADOOP}/testfile.txt  --> should see Hello, World!
 
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include "hdfs.h"

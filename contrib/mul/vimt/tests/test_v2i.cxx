@@ -1,21 +1,21 @@
 // This is mul/vimt/tests/test_v2i.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h>
-#include <vnl/vnl_matrix.h> // for frobenius_norm()
-#include <vul/vul_temp_filename.h>
+#include "vpl/vpl.h"
+#include "vnl/vnl_matrix.h" // for frobenius_norm()
+#include "vul/vul_temp_filename.h"
 #include <mbl/mbl_stl.h>
 #include <vimt/vimt_load.h>
-#include <testlib/testlib_test.h>
-#include <vsl/vsl_quick_file.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
-#include <vil/vil_new.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_property.h>
+#include "testlib/testlib_test.h"
+#include "vsl/vsl_quick_file.h"
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
+#include "vil/vil_new.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_property.h"
 #include <vimt/vimt_vil_v2i.h>
 #include <vimt/vimt_transform_2d.h>
 #include <vimt/vimt_image_2d_of.h>

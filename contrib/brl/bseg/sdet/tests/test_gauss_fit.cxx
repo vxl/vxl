@@ -1,15 +1,15 @@
 // This is brl/bseg/sdet/tests/test_gauss_fit.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #if 0 // commented out: see below
 #include <sdet/sdet_gauss_fit.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_matrix.h"
 #include <vnl/algo/vnl_determinant.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #endif // 0
 
