@@ -12,7 +12,7 @@
 //   None
 // \endverbatim
 
-#include <vpdl/vpdl_distribution.h>
+#include "vpdl_distribution.h"
 
 //: The base class for all multiple component probability distributions.
 template<class T, unsigned int n=0>

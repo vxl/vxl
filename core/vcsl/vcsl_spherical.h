@@ -12,8 +12,8 @@
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcsl/vcsl_spatial.h>
-#include <vcsl/vcsl_spherical_sptr.h>
+#include "vcsl_spatial.h"
+#include "vcsl_spherical_sptr.h"
 
 //: 3D coordinate system specified by distance rho, angles theta and phi.
 class vcsl_spherical

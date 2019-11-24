@@ -7,7 +7,7 @@
 // \date   10 Sep 00
 // \brief  Smart-pointer to a vgui_rubberband_tableau tableau.
 
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui_tableau_sptr.h"
 
 class vgui_rubberband_tableau;
 typedef vgui_tableau_sptr_t<vgui_rubberband_tableau> vgui_rubberband_tableau_sptr;

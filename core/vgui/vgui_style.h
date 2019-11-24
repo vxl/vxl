@@ -19,7 +19,7 @@
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
-#include <vgui/vgui_style_sptr.h>
+#include "vgui_style_sptr.h"
 
 //: Style (colour, line width, point radius) of a geometric object.
 // vgui_style objects are dynamic only and should be accessed via smart pointer only.

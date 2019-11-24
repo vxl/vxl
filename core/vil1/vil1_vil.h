@@ -6,9 +6,9 @@
 // \brief Provide inline vil wrappers of vil1 and vice-versa.
 
 #include <iostream>
-#include <vil1/vil1_fwd.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1_fwd.h"
+#include "vil1_image.h"
+#include "vil1_memory_image_of.h"
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #ifdef _MSC_VER

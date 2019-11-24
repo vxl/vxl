@@ -6,7 +6,7 @@
 // \brief Functions to convolve a vil1_image with a smoothing kernel
 // \author fsm
 
-#include <vil1/vil1_image.h>
+#include "vil1_image.h"
 
 //: Convolve a vil1_image with a separable symmetric kernel.
 // The 1-D half-kernel is supplied.

@@ -18,8 +18,8 @@
 //   10-SEP-2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_drag_mixin.h>
+#include "vgui_tableau.h"
+#include "vgui_drag_mixin.h"
 
 //: A bare tableau which uses the vgui_drag_mixin
 //
@@ -45,7 +45,7 @@ class vgui_drag_tableau : public vgui_tableau, public vgui_drag_mixin
   }
 };
 
-#include <vgui/vgui_drag_tableau_sptr.h>
+#include "vgui_drag_tableau_sptr.h"
 
 //: Creates a smart-pointer to a vgui_drag_tableau.
 struct vgui_drag_tableau_new : public vgui_drag_tableau_sptr

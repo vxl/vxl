@@ -20,8 +20,8 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //\endverbatim
 
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_memory_image.h>
+#include "vil1_image.h"
+#include "vil1_memory_image.h"
 
 //: Image stored entirely in RAM
 //

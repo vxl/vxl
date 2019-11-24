@@ -5,8 +5,8 @@
 // \file
 // \author Ian Scott.
 
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
+#include "vil_image_resource.h"
+#include "vil_image_view.h"
 
 
 //: Create a reflected view in which i -> ni-1-i.

@@ -13,7 +13,7 @@
 // \endverbatim
 
 #include <vector>
-#include <vgui/vgui_gl.h>
+#include "vgui_gl.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

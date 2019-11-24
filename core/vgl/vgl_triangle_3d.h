@@ -13,8 +13,8 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-#include <vgl/vgl_line_segment_3d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl_line_segment_3d.h"
+#include "vgl_point_3d.h"
 
 enum vgl_triangle_3d_intersection_t
 {

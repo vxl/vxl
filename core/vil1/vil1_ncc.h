@@ -6,7 +6,7 @@
 // \brief Routines to compute normalized cross-correlation between two images
 // \author capes@robots.ox.ac.uk
 
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1_memory_image_of.h"
 
 //: Normalized cross correlation for in-core images.
 // -  I1: input pixel type 1

@@ -16,7 +16,7 @@
 // \endverbatim
 
 #include "vgui_debug_tableau_sptr.h"
-#include <vgui/vgui_wrapper_tableau.h>
+#include "vgui_wrapper_tableau.h"
 
 //: Event-printing "tee" tableau.
 //

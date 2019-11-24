@@ -30,7 +30,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vil1/vil1_clamp.h>
+#include "vil1_clamp.h"
 
 //: This is the appropriate pixel type for 24-bit colour images.
 //

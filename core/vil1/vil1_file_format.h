@@ -6,8 +6,8 @@
 // \brief Base class for image formats
 // \author awf
 
-#include <vil1/vil1_fwd.h>
-#include <vil1/vil1_image_impl.h>
+#include "vil1_fwd.h"
+#include "vil1_image_impl.h"
 
 //: Base class for image formats.
 //  There is one derived class for each handled file format in the

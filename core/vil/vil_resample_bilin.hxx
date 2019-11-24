@@ -13,7 +13,7 @@
 // the same change.
 
 #include "vil_resample_bilin.h"
-#include <vil/vil_bilin_interp.h>
+#include "vil_bilin_interp.h"
 
 //: This function should not be the same in bicub and bilin
 inline bool vil_resample_bilin_corner_in_image(double x0, double y0,

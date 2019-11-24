@@ -10,7 +10,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vil1/vil1_stream.h>
+#include "vil1_stream.h"
 
 //: An in-core vil1_stream implementation.
 // This is an infinite stream - reads past the last point

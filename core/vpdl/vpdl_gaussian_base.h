@@ -12,7 +12,7 @@
 //   None
 // \endverbatim
 
-#include <vpdl/vpdl_distribution.h>
+#include "vpdl_distribution.h"
 
 
 //: The abstract base class for Gaussian distributions

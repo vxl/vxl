@@ -10,8 +10,8 @@
 //   06 May 2004 Jocelyn Marchadier - added vil_clamp_below
 // \endverbatim
 
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
+#include "vil_image_resource.h"
+#include "vil_image_view.h"
 #include <cassert>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>

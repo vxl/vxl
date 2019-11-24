@@ -66,7 +66,7 @@
 // program vil_color_tables.cxx.  This executable will produce a color image
 // for each of these tables representing a ramp from 0 to 255.
 
-#include <vil/vil_rgb.h>
+#include "vil_rgb.h"
 #include <vxl_config.h> // for vxl_byte
 
 enum color_theme {BWLIN1=0, BWLIN2, GRBW, REDTEMP, BGRY, GAMMA_II, PRISM, RED_PURPLE,

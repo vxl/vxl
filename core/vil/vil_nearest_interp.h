@@ -17,7 +17,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vil/vil_fwd.h>
+#include "vil_fwd.h"
 
 //: Compute nearest neighbour interpolation at (x,y), no bound checks. Requires -0.5<x<ni-0.5, -0.5<y<nj-0.5
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]

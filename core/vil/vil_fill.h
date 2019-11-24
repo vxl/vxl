@@ -8,7 +8,7 @@
 
 #include <algorithm>
 #include <cassert>
-#include <vil/vil_image_view.h>
+#include "vil_image_view.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

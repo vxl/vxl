@@ -82,7 +82,7 @@ template void vil1_convolve_simple(I1 const * const *, unsigned, unsigned, \
 
 //----------------------------------------------------------------------
 
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1_memory_image_of.h"
 
 template <class I1, class I2, class AC, class O>
 void vil1_convolve_simple(vil1_memory_image_of<I1> const &input1,    // input 1

@@ -14,7 +14,7 @@
 // \endverbatim
 
 #include "vgui_quit_tableau_sptr.h"
-#include <vgui/vgui_tableau.h>
+#include "vgui_tableau.h"
 
 //: A tableau which quits the application on receiving 'q' or ESC
 //

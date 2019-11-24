@@ -7,7 +7,7 @@
 //
 // this is a generated file.
 
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui_tableau_sptr.h"
 
 class vgui_displaybase_tableau;
 typedef vgui_tableau_sptr_t<vgui_displaybase_tableau> vgui_displaybase_tableau_sptr;

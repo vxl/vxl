@@ -52,11 +52,11 @@
 #include <vgl/vgl_tolerance.h>
 #include <vgl/algo/vgl_algo_fwd.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
-#include <vpgl/vpgl_proj_camera.h>
-#include <vpgl/vpgl_affine_camera.h>
-#include <vpgl/vpgl_fundamental_matrix.h>
-#include <vpgl/vpgl_affine_fundamental_matrix.h>
-#include <vpgl/vpgl_tri_focal_tensor.h>
+#include "vpgl_proj_camera.h"
+#include "vpgl_affine_camera.h"
+#include "vpgl_fundamental_matrix.h"
+#include "vpgl_affine_fundamental_matrix.h"
+#include "vpgl_tri_focal_tensor.h"
 template <class Type>
 class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
 {

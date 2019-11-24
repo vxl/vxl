@@ -9,7 +9,7 @@
 // Note hat resampling will happen only at the point when get_section()
 // is called on the returned image, and only on that (sub)section of the image.
 
-#include <vil1/vil1_image.h>
+#include "vil1_image.h"
 
 //:
 vil1_image vil1_resample(vil1_image const &, int new_width, int new_height);

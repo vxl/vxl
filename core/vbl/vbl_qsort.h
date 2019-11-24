@@ -22,7 +22,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vbl/vbl_sort.h>
+#include "vbl_sort.h"
 
 #define vbl_qsort_double_ascending  vbl_sort_double_ascending
 #define vbl_qsort_double_descending vbl_sort_double_descending

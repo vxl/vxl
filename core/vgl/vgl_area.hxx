@@ -5,10 +5,10 @@
 #include "vgl_area.h"
 //:
 // \file
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_oriented_box_2d.h>
+#include "vgl_polygon.h"
+#include "vgl_point_2d.h"
+#include "vgl_box_2d.h"
+#include "vgl_oriented_box_2d.h"
 
 template <class T>
 T vgl_area_signed(vgl_polygon<T> const& poly)

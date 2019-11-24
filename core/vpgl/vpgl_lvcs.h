@@ -42,7 +42,7 @@
 #endif
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_ref_count.h>
-//#include <vpgl/vpgl_dll.h>
+//#include "vpgl_dll.h"
 #include <vpgl/vpgl_export.h>
 
 class vpgl_lvcs : public vbl_ref_count

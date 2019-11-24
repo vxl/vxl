@@ -6,7 +6,7 @@
 // \author fsm
 
 #include <string>
-#include <vil1/vil1_image.h>
+#include "vil1_image.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

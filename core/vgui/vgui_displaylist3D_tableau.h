@@ -14,9 +14,9 @@
 //   02-OCT-2002 K.Y.McGaul - Added vgui_displaylist3D_tableau_new.
 // \endverbatim
 
-#include <vgui/vgui_displaybase_tableau.h>
-#include <vgui/vgui_displaylist3D_tableau_sptr.h>
-#include <vgui/vgui_drag_mixin.h>
+#include "vgui_displaybase_tableau.h"
+#include "vgui_displaylist3D_tableau_sptr.h"
+#include "vgui_drag_mixin.h"
 
 class vgui_soview3D;
 

@@ -23,7 +23,7 @@
 #endif
 
 #include <vil1/vil1_image.h>
-#include <vgui/vgui_gl.h>
+#include "vgui_gl.h"
 
 //: Provides support for caching of large images.
 class vgui_cache_wizard

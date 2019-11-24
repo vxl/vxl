@@ -24,7 +24,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vbl/vbl_sparse_array_base.h>
+#include "vbl_sparse_array_base.h"
 
 //: Sparse 2D array allowing space efficient access of the form  s(300,700) =2
 template <class T>

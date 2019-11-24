@@ -11,7 +11,7 @@
 
 #include <cmath>
 #include "vil_rotate.h"
-#include <vil/vil_resample_bilin.h>
+#include "vil_resample_bilin.h"
 #include <cassert>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>

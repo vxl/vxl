@@ -29,8 +29,8 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_exception.h>
+#include "vil_pixel_format.h"
+#include "vil_exception.h"
 
 //=======================================================================
 

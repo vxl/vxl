@@ -12,9 +12,9 @@
 //   2004/09/17 Peter Vanroose  do not pass vcsl_unit objects; use vcsl_unit_sptr instead
 // \endverbatim
 
-#include <vcsl/vcsl_unit.h>
-#include <vcsl/vcsl_angle_unit_sptr.h>
-#include <vcsl/vcsl_unit_sptr.h>
+#include "vcsl_unit.h"
+#include "vcsl_angle_unit_sptr.h"
+#include "vcsl_unit_sptr.h"
 
 //: Abstract unit associated to the angle dimension
 class vcsl_angle_unit

@@ -12,7 +12,7 @@
 // corresponding bicub/bilin file that would likely also benefit from
 // the same change.
 
-#include <vil/vil_image_view.h>
+#include "vil_image_view.h"
 
 //: Sample grid of points in one image and place in another, using nearest neighbour interpolation.
 //  dest_image(i,j,p) is sampled from the src_image at

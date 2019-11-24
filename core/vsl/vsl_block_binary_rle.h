@@ -11,8 +11,8 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_binary_explicit_io.h>
+#include "vsl_binary_io.h"
+#include "vsl_binary_explicit_io.h"
 
 //: Write a block of values to a vsl_b_ostream, as (value count) pairs.
 template <class T>

@@ -9,7 +9,7 @@
 // Implementation
 
 #include "vsl_pair_io.h"
-#include <vsl/vsl_binary_io.h>
+#include "vsl_binary_io.h"
 
 //====================================================================================
 //: Write pair to binary stream

@@ -16,8 +16,8 @@
 
 #include "vil1_warp.h"
 
-#include <vil1/vil1_interpolate.h>
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1_interpolate.h"
+#include "vil1_memory_image_of.h"
 
 static inline bool
 vil1_warp_inrange_window(vil1_image const& in, int x, int y, int window_size)

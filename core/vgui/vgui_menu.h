@@ -23,9 +23,9 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgui/vgui_key.h>
-#include <vgui/vgui_modifier.h>
-#include <vgui/vgui_command_sptr.h>
+#include "vgui_key.h"
+#include "vgui_modifier.h"
+#include "vgui_command_sptr.h"
 
 class vgui_menu;
 

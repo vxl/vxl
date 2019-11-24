@@ -14,7 +14,7 @@
 //\endverbatim
 
 #include <vxl_config.h>
-#include <vil1/vil1_rgb.h>
+#include "vil1_rgb.h"
 
 typedef vil1_rgb<vxl_byte> vil1_rgb_byte;
 

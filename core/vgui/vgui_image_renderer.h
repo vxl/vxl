@@ -7,7 +7,7 @@
 // \author fsm
 
 #include <vil1/vil1_image.h>
-#include <vgui/vgui_range_map_params_sptr.h>
+#include "vgui_range_map_params_sptr.h"
 class vgui_section_buffer;
 
 //: OpenGL utility to render a vil1_image.

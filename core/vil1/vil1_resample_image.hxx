@@ -10,7 +10,7 @@
 #endif
 #include <cassert>
 
-#include <vil1/vil1_image.h>
+#include "vil1_image.h"
 
 template <class T, class A>
 bool vil1_resample_image(vil1_image const &base, unsigned new_width, unsigned new_height,

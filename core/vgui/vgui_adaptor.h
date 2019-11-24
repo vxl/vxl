@@ -27,8 +27,8 @@
 // \endverbatim
 
 #include "dll.h"
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_event.h>
+#include "vgui_menu.h"
+#include "vgui_event.h"
 class vgui_window;
 class vgui_tableau;
 struct vgui_tableau_sptr;

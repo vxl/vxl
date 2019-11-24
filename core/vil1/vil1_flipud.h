@@ -6,7 +6,7 @@
 // \brief Turn an image upside-down.
 // \author fsm
 
-#include <vil1/vil1_image.h>
+#include "vil1_image.h"
 
 //: Turn an image upside-down
 vil1_image vil1_flipud(vil1_image const &);

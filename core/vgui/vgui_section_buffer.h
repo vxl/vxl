@@ -14,10 +14,10 @@
 // \endverbatim
 // Contains classes:  vgui_section_buffer
 //
-#include <vgui/vgui_gl.h>
+#include "vgui_gl.h"
 class vil1_image;
 #include <vil/vil_fwd.h>
-#include <vgui/vgui_range_map_params_sptr.h>
+#include "vgui_range_map_params_sptr.h"
 
 //: Holds a section of a GL image with given OpenGL buffer format and types.
 //

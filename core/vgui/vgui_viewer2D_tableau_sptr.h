@@ -7,7 +7,7 @@
 // \date   10 Sep 00
 // \brief  Smart-pointer to a vgui_viewer2D_tableau tableau.
 
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui_tableau_sptr.h"
 
 class vgui_viewer2D_tableau;
 typedef vgui_tableau_sptr_t<vgui_viewer2D_tableau> vgui_viewer2D_tableau_sptr;

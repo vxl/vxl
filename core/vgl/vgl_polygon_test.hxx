@@ -6,7 +6,7 @@
 // \author fsm
 
 #include "vgl_polygon_test.h"
-#include <vgl/vgl_lineseg_test.h>
+#include "vgl_lineseg_test.h"
 
 template <class T>
 bool vgl_polygon_test_inside(T const *xs, T const *ys, unsigned n, T x, T y)

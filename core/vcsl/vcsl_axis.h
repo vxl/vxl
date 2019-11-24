@@ -17,9 +17,9 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vcsl/vcsl_axis_sptr.h>
-#include <vcsl/vcsl_dimension_sptr.h>
-#include <vcsl/vcsl_unit_sptr.h>
+#include "vcsl_axis_sptr.h"
+#include "vcsl_dimension_sptr.h"
+#include "vcsl_unit_sptr.h"
 
 //: Axis descriptor: a dimension, a unit, a label
 class vcsl_axis

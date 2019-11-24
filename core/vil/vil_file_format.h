@@ -7,10 +7,10 @@
 // \author awf
 
 #include <list>
-#include <vil/vil_fwd.h> // for vil_stream
-#include <vil/vil_image_resource.h>
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_pyramid_image_resource.h>
+#include "vil_fwd.h" // for vil_stream
+#include "vil_image_resource.h"
+#include "vil_blocked_image_resource.h"
+#include "vil_pyramid_image_resource.h"
 
 //: Base class for image formats.
 //  There is one derived class for each handled file format in the

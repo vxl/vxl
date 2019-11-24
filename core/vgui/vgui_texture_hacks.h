@@ -6,7 +6,7 @@
 // \author fsm
 // \brief  Ask fsm about these hacks.
 
-#include <vgui/vgui_gl.h>
+#include "vgui_gl.h"
 
 // ask fsm about these hacks.
 #if defined(__sun__) && defined(__gl_h_)

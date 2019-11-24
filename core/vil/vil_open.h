@@ -7,7 +7,7 @@
 //
 // \author fsm
 
-#include <vil/vil_stream.h>
+#include "vil_stream.h"
 #include <vxl_config.h>
 
 //: make a vil_stream from a filename, an URL, etc.

@@ -5,7 +5,7 @@
 // \file
 // \brief  Smart-pointer to a vgui_quit_tableau.
 
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui_tableau_sptr.h"
 
 class vgui_quit_tableau;
 typedef vgui_tableau_sptr_t<vgui_quit_tableau> vgui_quit_tableau_sptr;

@@ -13,8 +13,8 @@
 // \endverbatim
 //=========================================================================
 
-#include <vgui/vgui_font.h>
-#include <vgui/vgui_gl.h>
+#include "vgui_font.h"
+#include "vgui_gl.h"
 template <typename T> class vil_image_view;
 
 //-------------------------------------------------------------------------

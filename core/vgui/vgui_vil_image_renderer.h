@@ -13,7 +13,7 @@
 // \endverbatim
 #include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_memory_chunk.h>
-#include <vgui/vgui_range_map_params_sptr.h>
+#include "vgui_range_map_params_sptr.h"
 
 class vgui_section_buffer;
 

@@ -16,9 +16,9 @@
 //   01-OCT-2002 K.Y.McGaul - Moved vgui_enhance to vgui_enhance_tableau.
 // \endverbatim
 
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_parent_child_link.h>
-#include <vgui/vgui_enhance_tableau_sptr.h>
+#include "vgui_tableau.h"
+#include "vgui_parent_child_link.h"
+#include "vgui_enhance_tableau_sptr.h"
 
 class vgui_event;
 

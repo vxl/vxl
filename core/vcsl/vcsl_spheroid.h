@@ -13,7 +13,7 @@
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
-#include <vcsl/vcsl_spheroid_sptr.h>
+#include "vcsl_spheroid_sptr.h"
 
 //: Reference sphere or ellipse for a geographic coordinate system
 // The default value for a reference ellipsoid is the Clarke 1866 model, but

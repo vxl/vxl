@@ -3,11 +3,11 @@
 
 #include <iostream>
 #include <cmath>
-#include <vgl/vgl_frustum_3d.h>
-#include <vgl/vgl_ray_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_tolerance.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl_frustum_3d.h"
+#include "vgl_ray_3d.h"
+#include "vgl_plane_3d.h"
+#include "vgl_tolerance.h"
+#include "vgl_intersection.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -14,10 +14,10 @@
 //                around Angus Johnson's Clipper library)
 // \endverbatim
 
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_line_2d.h>
-#include <vgl/vgl_line_segment_2d.h>
-#include <vgl/vgl_polygon.h>
+#include "vgl_box_2d.h"
+#include "vgl_line_2d.h"
+#include "vgl_line_segment_2d.h"
+#include "vgl_polygon.h"
 
 //: Type of polygon "clip" operations.
 enum vgl_clip_type

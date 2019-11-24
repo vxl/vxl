@@ -17,15 +17,15 @@
 // \endverbatim
 
 #include <vector>
-#include <vgl/vgl_fwd.h> // forward declare various vgl classes
-#include <vgl/vgl_box_2d.h> // method "contains()"
-#include <vgl/vgl_box_3d.h> // method "contains()"
-#include <vgl/vgl_point_2d.h> // method "operator==()"
-#include <vgl/vgl_point_3d.h> // method "operator==()"
-#include <vgl/vgl_line_3d_2_points.h>
-#include <vgl/vgl_line_segment_3d.h>
-#include <vgl/vgl_infinite_line_3d.h>
-#include <vgl/vgl_pointset_3d.h>
+#include "vgl_fwd.h" // forward declare various vgl classes
+#include "vgl_box_2d.h" // method "contains()"
+#include "vgl_box_3d.h" // method "contains()"
+#include "vgl_point_2d.h" // method "operator==()"
+#include "vgl_point_3d.h" // method "operator==()"
+#include "vgl_line_3d_2_points.h"
+#include "vgl_line_segment_3d.h"
+#include "vgl_infinite_line_3d.h"
+#include "vgl_pointset_3d.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -13,7 +13,7 @@
 //   2004/09/17 Peter Vanroose  do not pass vcsl_unit objects; use vcsl_unit_sptr instead
 // \endverbatim
 
-#include <vcsl/vcsl_unit_sptr.h>
+#include "vcsl_unit_sptr.h"
 #include <vbl/vbl_ref_count.h>
 
 class vcsl_acceleration_unit;

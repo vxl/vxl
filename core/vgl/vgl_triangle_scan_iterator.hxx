@@ -47,7 +47,7 @@ void min_n_max(T a, T b, T c, T *min, T *max)
 }
 
 #if use_polygon_scan_iterator
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vgl_polygon_scan_iterator.h"
 template <class T>
 struct vgl_triangle_scan_iterator<T>::data_t : public vgl_polygon_scan_iterator<T>
 {

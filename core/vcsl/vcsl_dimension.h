@@ -13,8 +13,8 @@
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
-#include <vcsl/vcsl_dimension_sptr.h>
-#include <vcsl/vcsl_unit_sptr.h>
+#include "vcsl_dimension_sptr.h"
+#include "vcsl_unit_sptr.h"
 
 //: Abstract dimension
 // A dimension is a type of quantity to be measured

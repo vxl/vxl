@@ -17,7 +17,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 class vil1_stream;
-#include <vil1/vil1_image.h>
+#include "vil1_image.h"
 
 //: Send vil1_image to disk, deducing format from filename
 bool vil1_save(vil1_image const&, char const* filename);

@@ -67,7 +67,7 @@
 // \endverbatim
 #include <vxl_config.h>
 #include <vbl/vbl_array_1d.h>
-#include <vgui/vgui_range_map_params.h>
+#include "vgui_range_map_params.h"
 
 template <class Type>
 class vgui_range_map : public vgui_range_map_params
