@@ -8,10 +8,10 @@
 #include <mvl/HomgOperator2D.h>
 #include <mvl/HomgInterestPointSet.h>
 #include <mvl/FMatrixCompute7Point.h>
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3x3.h>
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_double_3x3.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 FMatrixComputeRobust::FMatrixComputeRobust() = default;

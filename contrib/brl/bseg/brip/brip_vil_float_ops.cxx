@@ -8,28 +8,28 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
-#include <vul/vul_timer.h>
-#include <vbl/vbl_array_1d.h>
-#include <vbl/vbl_array_2d.h>
-#include <vbl/vbl_bounding_box.h>
-#include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_double_2x3.h>
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
+#include "vul/vul_timer.h"
+#include "vbl/vbl_array_1d.h"
+#include "vbl/vbl_array_2d.h"
+#include "vbl/vbl_bounding_box.h"
+#include "vnl/vnl_numeric_traits.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_double_2x3.h"
 #include <vnl/algo/vnl_fft_prime_factors.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_transpose.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_save.h>
-#include <vil/vil_new.h>
-#include <vil/vil_math.h>
+#include "vil/vil_pixel_format.h"
+#include "vil/vil_transpose.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_save.h"
+#include "vil/vil_new.h"
+#include "vil/vil_math.h"
 #include <vil/algo/vil_convolve_1d.h>
 
 #include <vsol/vsol_box_2d.h>

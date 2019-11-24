@@ -1,15 +1,15 @@
 #include <algorithm>
 #include <limits>
 #include "boxm2_vecf_middle_fat_pocket_scene.h"
-#include <vnl/vnl_vector_fixed.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_box_3d.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_sphere_3d.h>
-#include <vgl/vgl_closest_point.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_box_3d.h"
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_sphere_3d.h"
+#include "vgl/vgl_closest_point.h"
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_lru_cache.h>
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <boxm2/cpp/algo/boxm2_surface_distance_refine.h>
 #include <boxm2/cpp/algo/boxm2_refine_block_multi_data.h>
 typedef vnl_vector_fixed<unsigned char, 16> uchar16;

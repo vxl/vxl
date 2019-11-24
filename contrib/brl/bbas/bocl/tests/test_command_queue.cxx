@@ -1,5 +1,5 @@
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #include "bocl_command_queue_mgr.h"
 
 static void test_command_queue()

@@ -13,22 +13,22 @@
 #include <algorithm>
 #include <iostream>
 #include <sstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_closest_point.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_4x4.h>
-#include <vnl/vnl_math.h>
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_closest_point.h"
+#include "vgl/vgl_homg_point_3d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_4x4.h"
+#include "vnl/vnl_math.h"
 #include <vgl/algo/vgl_h_matrix_3d_compute_linear.h>
 #include <vgl/algo/vgl_h_matrix_3d_compute_affine.h>
-#include <vnl/vnl_det.h>
+#include "vnl/vnl_det.h"
 
 static bool equals(const double x[16], const double y[16])
 {

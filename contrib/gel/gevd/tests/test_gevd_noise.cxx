@@ -10,10 +10,10 @@
 
 #include <iostream>
 #include <gevd/gevd_noise.h>
-#include <testlib/testlib_test.h>
-#include <vnl/vnl_sample.h>
+#include "testlib/testlib_test.h"
+#include "vnl/vnl_sample.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void

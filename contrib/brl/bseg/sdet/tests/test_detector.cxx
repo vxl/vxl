@@ -3,16 +3,16 @@
 #include <string>
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_resource.h>
-#include <vil/vil_load.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_load.h"
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 
 static void test_detector(int argc, char * argv[])
 {

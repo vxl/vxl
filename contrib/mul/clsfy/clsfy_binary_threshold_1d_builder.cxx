@@ -9,12 +9,12 @@
 // \date   Tue Mar  5 01:11:31 2002
 
 #include <cassert>
-#include <vsl/vsl_binary_loader.h>
-#include <vnl/vnl_double_2.h>
+#include "vsl/vsl_binary_loader.h"
+#include "vnl/vnl_double_2.h"
 #include <clsfy/clsfy_builder_1d.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //=======================================================================

@@ -1,13 +1,13 @@
 // This is mul/vimt3d/tests/test_v3i.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h>
-#include <vul/vul_temp_filename.h>
+#include "vpl/vpl.h"
+#include "vul/vul_temp_filename.h"
 #include <mbl/mbl_stl.h>
 #include <vimt3d/vimt3d_load.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vil3d/vil3d_save.h>
 #include <vil3d/vil3d_load.h>
 #include <vil3d/vil3d_new.h>

@@ -1,6 +1,6 @@
 // This is core/vcsl/vcsl_angle_unit.cxx
 #include "vcsl_angle_unit.h"
-#include <vcsl/vcsl_radian.h>
+#include "vcsl/vcsl_radian.h"
 
 //---------------------------------------------------------------------------
 // Are `this' and `other' compatible units ? (Are they associated to the

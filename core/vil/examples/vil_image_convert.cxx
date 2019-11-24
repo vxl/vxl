@@ -6,12 +6,12 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_resource_sptr.h>
-#include <vil/vil_image_resource.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_image_resource_sptr.h"
+#include "vil/vil_image_resource.h"
 
 int main(int argc, char** argv)
 {

@@ -1,8 +1,8 @@
 #include "brip_gain_offset_solver.h"
 //:
 // \file
-#include <vil/vil_image_view.h>
-#include <vnl/vnl_matrix.h>
+#include "vil/vil_image_view.h"
+#include "vnl/vnl_matrix.h"
 #include <vnl/algo/vnl_svd.h>
 
 //: compute the number of valid corresponding pixels in the case of masks

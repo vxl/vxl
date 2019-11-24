@@ -1,5 +1,5 @@
 #include "vgui_qt.h"
-#include <vgui/vgui_gl.h>
+#include "vgui/vgui_gl.h"
 #include "vgui_qt_window.h"
 #include "vgui_qt_dialog_impl.h"
 

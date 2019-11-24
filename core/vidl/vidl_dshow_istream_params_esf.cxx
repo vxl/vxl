@@ -13,13 +13,13 @@
 //
 //=========================================================================
 
-#include <vidl/vidl_dshow.h>
+#include "vidl/vidl_dshow.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vbl/vbl_triple.h>
+#include "vbl/vbl_triple.h"
 
 //-------------------------------------------------------------------------
 // Private helpers.

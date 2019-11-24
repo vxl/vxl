@@ -6,12 +6,12 @@
 
 #include <iostream>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_timer.h>
-#include <vbl/vbl_array_3d.h>
+#include "vul/vul_timer.h"
+#include "vbl/vbl_array_3d.h"
 #include <boxm2/cpp/algo/boxm2_surface_distance_refine.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>

@@ -5,14 +5,14 @@
 #include "boxm2_vecf_fit_margins.h"
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_matrix.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_closest_point.h>
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_closest_point.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vnl/vnl_least_squares_function.h>
+#include "vnl/vnl_least_squares_function.h"
 #include "boxm2_vecf_eyelid.h"
 #include "boxm2_vecf_eyelid_crease.h"
 class margin_residual_function : public vnl_least_squares_function{

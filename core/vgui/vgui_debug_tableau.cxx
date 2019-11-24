@@ -8,9 +8,9 @@
 #include <iostream>
 #include "vgui_debug_tableau.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgui/vgui_event.h>
+#include "vgui/vgui_event.h"
 
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_debug_tableau_new.

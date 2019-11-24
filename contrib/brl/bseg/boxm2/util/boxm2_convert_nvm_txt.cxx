@@ -5,15 +5,15 @@
 #include <cassert>
 #include <utility>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_quaternion.h>
+#include "vgl/vgl_box_3d.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_quaternion.h"
 #include <vsph/vsph_camera_bounds.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 //: Main boxm2_convert_nvm_txt function
 //  Takes in bundle.out file and image directory that created img_dir

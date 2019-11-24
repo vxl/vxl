@@ -4,15 +4,15 @@
 #include "vil1_load.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_open.h>
-#include <vil1/vil1_file_format.h>
-#include <vil1/vil1_stream.h>
-#include <vil1/vil1_property.h>
-#include <vil1/vil1_flipud.h>
-#include <vil1/vil1_flip_components.h>
+#include "vil1/vil1_open.h"
+#include "vil1/vil1_file_format.h"
+#include "vil1/vil1_stream.h"
+#include "vil1/vil1_property.h"
+#include "vil1/vil1_flipud.h"
+#include "vil1/vil1_flip_components.h"
 
 vil1_image vil1_load_raw(vil1_stream *is)
 {

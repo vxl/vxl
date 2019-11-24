@@ -6,10 +6,10 @@
 // \brief Class to generate simple EPS files containing images and lines
 // \author Tim Cootes
 
-#include <vil/vil_plane.h>
-#include <vil/vil_crop.h>
+#include "vil/vil_plane.h"
+#include "vil/vil_crop.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

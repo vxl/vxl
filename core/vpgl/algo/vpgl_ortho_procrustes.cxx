@@ -1,11 +1,11 @@
 #include "vpgl_ortho_procrustes.h"
 //:
 // \file
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_trace.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_det.h>
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_trace.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_det.h"
 #include <vnl/algo/vnl_svd.h>
 
 //: only one constructor. X and Y must have dimensions 3 x N

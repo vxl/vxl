@@ -19,12 +19,12 @@
 #include <mbl/mbl_parse_int_list.h>
 #include <mbl/mbl_parse_string_list.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
-#include <vul/vul_arg.h>
-#include <vul/vul_string.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_string.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_quick_file.h>
+#include "vsl/vsl_quick_file.h"
 
 #include <msm/msm_aligner.h>
 #include <msm/msm_add_all_loaders.h>
@@ -33,8 +33,8 @@
 #include <msm/utils/msm_draw_shape_to_eps.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_load.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_inverse.h"
 
 /*
 Points from different annotators are assumed to have the same filenames, but

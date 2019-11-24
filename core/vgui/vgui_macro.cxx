@@ -9,11 +9,11 @@
 #include "vgui_macro.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_glu.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_glu.h"
 
 extern bool vgui_glerrors_are_bad;
 

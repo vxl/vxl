@@ -1,5 +1,5 @@
-#include <testlib/testlib_test.h>
-#include <vgl/vgl_window_scan_iterator.h>
+#include "testlib/testlib_test.h"
+#include "vgl/vgl_window_scan_iterator.h"
 
 static void test_window_scan_iterator()
 {

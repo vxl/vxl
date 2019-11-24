@@ -7,7 +7,7 @@
 #include "gmvl_database.h"
 #include <gmvl/gmvl_tag_node.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // specific node references

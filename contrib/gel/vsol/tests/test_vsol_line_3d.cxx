@@ -9,11 +9,11 @@
 // 1.0     |2000/05/08| Francois BERTEL          |Creation
 // 1.1     |2003/01/08| Peter Vanroose           |Now using testlib macros
 //*****************************************************************************
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_vector_3d.h"
 #include <vsol/vsol_line_3d.h>
 #include <vsol/vsol_line_3d_sptr.h>
 #include <vsol/vsol_point_3d.h>

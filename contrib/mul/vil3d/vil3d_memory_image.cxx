@@ -8,12 +8,12 @@
 #include "vil3d_memory_image.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_uint_32 etc.
+#include "vxl_config.h" // for vxl_uint_32 etc.
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_copy.h>
-#include <vil/vil_pixel_format.h>
+#include "vil/vil_pixel_format.h"
 
 class vil3d_image_view_base;
 

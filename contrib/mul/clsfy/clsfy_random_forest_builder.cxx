@@ -10,12 +10,12 @@
 #include <numeric>
 #include <iterator>
 #include "clsfy_random_forest_builder.h"
-#include <vxl_config.h>
+#include "vxl_config.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 #include <mbl/mbl_stl.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <clsfy/clsfy_binary_tree_builder.h>

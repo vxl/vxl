@@ -15,12 +15,12 @@
 //
 //=========================================================================
 
-#include <vidl/vidl_exception.h>
-#include <vidl/vidl_pixel_format.h>
+#include "vidl/vidl_exception.h"
+#include "vidl/vidl_pixel_format.h"
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //-------------------------------------------------------------------------

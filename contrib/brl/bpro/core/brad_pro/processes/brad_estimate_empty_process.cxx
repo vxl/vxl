@@ -5,10 +5,10 @@
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <brad/brad_phongs_model_est.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 //:
 // \file
 namespace brad_estimate_empty_process_globals

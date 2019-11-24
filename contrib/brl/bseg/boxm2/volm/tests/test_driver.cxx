@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_volm_wr3db_ind );
 DECLARE( test_volm_locations );

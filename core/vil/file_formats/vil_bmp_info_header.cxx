@@ -7,12 +7,12 @@
 #include "vil_bmp_info_header.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil/vil_stream.h>
-#include <vil/vil_stream_read.h>
-#include <vil/vil_stream_write.h>
+#include "vil/vil_stream.h"
+#include "vil/vil_stream_read.h"
+#include "vil/vil_stream_write.h"
 
 vil_bmp_info_header::vil_bmp_info_header()
 {

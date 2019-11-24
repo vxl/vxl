@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_matrix_conversions );
 DECLARE( test_CoolMatrix_conversions );

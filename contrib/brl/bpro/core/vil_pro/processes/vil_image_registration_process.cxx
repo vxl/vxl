@@ -12,8 +12,8 @@
 //  Yi Dong Dec, 2015 -- add option that uses mask image to mask out the invalid pixels
 // \endverbatim
 //
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
 
 
 namespace vil_image_registration_process_globals

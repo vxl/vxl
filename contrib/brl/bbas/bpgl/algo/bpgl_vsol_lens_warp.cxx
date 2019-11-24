@@ -5,16 +5,16 @@
 //:
 // \file
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_distance.h"
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

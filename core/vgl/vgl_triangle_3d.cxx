@@ -6,15 +6,15 @@
 // \author Kieran O'Mahony
 // \date 21 June 2007
 
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_line_3d_2_points.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_closest_point.h>
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_line_3d_2_points.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_closest_point.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

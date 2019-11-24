@@ -9,7 +9,7 @@
 #include "boxm2_bounding_box_parser.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // --------------

@@ -1,12 +1,12 @@
 // This is core/vil/algo/tests/test_algo_2nd_deriv.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Peter Vanroose
 // \date   26 Aug. 2004
 #include <vcl_compiler.h>
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 #include <vil/algo/vil_2nd_deriv_3x3.h>
 
 static void test_algo_2nd_deriv_3x3()

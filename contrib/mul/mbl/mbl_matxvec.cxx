@@ -19,11 +19,11 @@
 // IMS    started conversion to VXL 18 April 2001
 // \endverbatim
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_matrix.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

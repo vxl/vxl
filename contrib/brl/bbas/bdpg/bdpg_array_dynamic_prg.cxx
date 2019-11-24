@@ -2,9 +2,9 @@
 #include "bdpg_array_dynamic_prg.h"
 //:
 // \file
-#include <vnl/vnl_numeric_traits.h>
+#include "vnl/vnl_numeric_traits.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bdpg_array_dynamic_prg::bdpg_array_dynamic_prg(const unsigned rows, const unsigned cols)

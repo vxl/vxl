@@ -5,10 +5,10 @@
 #include <sdet/sdet_graph_img_seg.h>
 #include <sdet/sdet_region.h>
 #include <sdet/sdet_region_sptr.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
-#include <testlib/testlib_test.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
+#include "testlib/testlib_test.h"
 static void test_segmentation(int argc, char * argv[])
 {
   vil_image_view<vxl_byte> img(4,4);

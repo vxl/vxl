@@ -8,15 +8,15 @@
 #include <bvgl/algo/bvgl_2d_geo_index.h>
 #include <bvgl/algo/bvgl_2d_geo_index_sptr.h>
 #include <bvxm/bvxm_world_params.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vil/vil_image_view.h>
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vil/vil_image_view.h"
 #include <volm/volm_io_tools.h>
-#include <vpgl/vpgl_lvcs.h>
-#include <vul/vul_file.h>
+#include "vpgl/vpgl_lvcs.h"
+#include "vul/vul_file.h"
 
 
 // execution

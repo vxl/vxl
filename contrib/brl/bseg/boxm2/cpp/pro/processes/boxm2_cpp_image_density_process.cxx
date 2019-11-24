@@ -10,18 +10,18 @@
 // \date July 07, 2011
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 //brdb stuff
 #include <brdb/brdb_value.h>
 #include <boxm2/cpp/algo/boxm2_image_density_functor.h>
 
-#include <vil/vil_save.h>
+#include "vil/vil_save.h"
 #include <bsta/bsta_gauss_sf1.h>
 
 //directory utility

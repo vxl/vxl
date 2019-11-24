@@ -1,6 +1,6 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bapl/bapl_affine_transform.h>
-#include <vnl/vnl_double_2.h>
+#include "vnl/vnl_double_2.h"
 
 MAIN( test_transform )
 {

@@ -10,11 +10,11 @@
 #include "bapl_lowe_keypoint_sptr.h"
 #include "bapl_keypoint_sptr.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgl/vgl_point_2d.h>
-#include <vpgl/vpgl_fundamental_matrix.h>
+#include "vgl/vgl_point_2d.h"
+#include "vpgl/vpgl_fundamental_matrix.h"
 #include <bpgl/algo/bpgl_fm_compute_ransac.h>
 #include <vgl/algo/vgl_h_matrix_2d_optimize_lmq.h>
 

@@ -3,12 +3,12 @@
 //:
 // \file
 
-#include <vbl/vbl_array_1d.h>
+#include "vbl/vbl_array_1d.h"
 #include <icam/icam_sample.h>
-#include <vnl/vnl_numeric_traits.h>
+#include "vnl/vnl_numeric_traits.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Constructor

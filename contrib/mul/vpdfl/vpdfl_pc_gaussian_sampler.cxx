@@ -12,7 +12,7 @@
 #include "vpdfl_pc_gaussian_sampler.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //=======================================================================

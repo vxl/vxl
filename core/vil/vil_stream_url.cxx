@@ -10,12 +10,12 @@
 #include <iostream>
 #include <fstream>
 #include "vil_stream_url.h"
-#include <vil/vil_stream_core.h>
+#include "vil/vil_stream_core.h"
 
 #include <cassert>
 #undef sprintf
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #if defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)

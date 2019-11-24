@@ -2,12 +2,12 @@
 
 #include <iomanip>
 #include <algorithm>
-#include <vnl/vnl_math.h>//for more portable isinf
+#include "vnl/vnl_math.h"//for more portable isinf
 
-#include <vnl/vnl_inverse.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_crop.h>
+#include "vnl/vnl_inverse.h"
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_crop.h"
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/algo/vil_sobel_3x3.h>
 #include <vil/algo/vil_median.h>
@@ -19,8 +19,8 @@
 #include "baml_utilities.h"
 #include "bsta/bsta_histogram.h"
 
-#include <vul/vul_file_iterator.h>
-#include <vil/vil_load.h>
+#include "vul/vul_file_iterator.h"
+#include "vil/vil_load.h"
 
 //--------------------------SINGLE IMAGE CHANGE DETECTION----------------------------------
 bool baml_change_detection::detect(

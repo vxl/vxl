@@ -12,8 +12,8 @@
 
 #include "vgui_active_tableau.h"
 
-#include <vgui/vgui_command.h>
-#include <vgui/vgui_menu.h>
+#include "vgui/vgui_command.h"
+#include "vgui/vgui_menu.h"
 
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_active_tableau_new

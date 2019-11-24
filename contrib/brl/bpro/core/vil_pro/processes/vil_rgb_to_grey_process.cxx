@@ -4,8 +4,8 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_image_view_base.h"
 
 //:global variables
 namespace vil_rgb_to_grey_process_globals

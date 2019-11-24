@@ -1,9 +1,9 @@
 #include "bvxm_world_params.h"
 //:
 // \file
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_vector_3d.h"
 #include <vpgl/io/vpgl_io_lvcs.h>
 
 //---------------------------------------------------

@@ -10,10 +10,10 @@
 #include <imesh/imesh_operations.h>
 #include <bvgl/bvgl_intersection.h>
 #include <bvgl/bvgl_triangle_3d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_point_3d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: constructor - populates list of AABBs

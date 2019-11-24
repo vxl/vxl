@@ -3,13 +3,13 @@
 */
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgui/vgui_gl.h>
+#include "vgui/vgui_gl.h"
 #include "vgui_accelerate.h"
 #include "vgui_accelerate_x11.h"
-#include <vgui/vgui_tag.h>
-#include <vul/vul_trace.h>
+#include "vgui/vgui_tag.h"
+#include "vul/vul_trace.h"
 
 #if VGUI_MESA
 vgui_tag(accelerate_x11) {

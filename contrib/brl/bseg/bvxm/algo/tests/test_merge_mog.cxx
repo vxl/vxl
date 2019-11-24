@@ -1,9 +1,9 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include "../bvxm_merge_mog.h"
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_merge_mog()

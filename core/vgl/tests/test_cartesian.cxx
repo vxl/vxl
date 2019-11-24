@@ -1,7 +1,7 @@
 // This is core/vgl/tests/test_cartesian.cxx
 #include <iostream>
 #include <sstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Peter Vanroose, ESAT, KULeuven.
@@ -13,25 +13,25 @@
 //   PVr - 21 May 2009 - added more tests for operator>>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_tolerance.h>
-#include <vgl/vgl_point_2d.hxx>
-#include <vgl/vgl_point_3d.hxx>
-#include <vgl/vgl_line_2d.hxx>
-#include <vgl/vgl_line_segment_2d.hxx>
-#include <vgl/vgl_line_3d_2_points.hxx>
-#include <vgl/vgl_line_segment_3d.hxx>
-#include <vgl/vgl_plane_3d.hxx>
-#include <vgl/vgl_vector_2d.hxx>
-#include <vgl/vgl_vector_3d.hxx>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_clip.hxx>
-#include <vgl/vgl_distance.hxx>
-#include <vgl/vgl_lineseg_test.hxx>
-#include <vgl/vgl_1d_basis.h>
-#include <vgl/vgl_intersection.hxx>
+#include "vgl/vgl_tolerance.h"
+#include "vgl/vgl_point_2d.hxx"
+#include "vgl/vgl_point_3d.hxx"
+#include "vgl/vgl_line_2d.hxx"
+#include "vgl/vgl_line_segment_2d.hxx"
+#include "vgl/vgl_line_3d_2_points.hxx"
+#include "vgl/vgl_line_segment_3d.hxx"
+#include "vgl/vgl_plane_3d.hxx"
+#include "vgl/vgl_vector_2d.hxx"
+#include "vgl/vgl_vector_3d.hxx"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_clip.hxx"
+#include "vgl/vgl_distance.hxx"
+#include "vgl/vgl_lineseg_test.hxx"
+#include "vgl/vgl_1d_basis.h"
+#include "vgl/vgl_intersection.hxx"
 
 static void test_vector_2d()
 {
@@ -1139,7 +1139,7 @@ static void test_cartesian()
 
 TESTMAIN(test_cartesian);
 
-#include <vgl/vgl_1d_basis.hxx>
+#include "vgl/vgl_1d_basis.hxx"
 VGL_1D_BASIS_INSTANTIATE(float);
 VGL_1D_BASIS_INSTANTIATE(vgl_point_2d<int>);
 VGL_1D_BASIS_INSTANTIATE(vgl_line_2d<int>);

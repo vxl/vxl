@@ -1,11 +1,11 @@
 #include <vector>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <imesh/algo/imesh_generate_mesh.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_line_segment_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_line_segment_2d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_generate_mesh()

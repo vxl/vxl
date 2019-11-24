@@ -6,11 +6,11 @@
 // \data Sept. 7, 2019
 
 #include <iostream>
-#include <testlib/testlib_test.h>
-#include <vnl/vnl_random.h>
+#include "testlib/testlib_test.h"
+#include "vnl/vnl_random.h"
 #include <bvgl/algo/bvgl_register_ptsets_3d_rigid.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_register()

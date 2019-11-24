@@ -8,7 +8,7 @@
 #include "pdf1d_compare_to_pdf.h"
 #include <pdf1d/pdf1d_pdf.h>
 #include <pdf1d/pdf1d_resample.h>
-#include <vsl/vsl_indent.h>
+#include "vsl/vsl_indent.h"
 #include <pdf1d/pdf1d_calc_mean_var.h>
 
 //=======================================================================

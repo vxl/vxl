@@ -4,8 +4,8 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_new.h"
 #include <brip/brip_vil_float_ops.h>
 
 //: Constructor

@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_marked_images_from_files );
 DECLARE( test_reflected_marked_images );

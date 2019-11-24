@@ -6,10 +6,10 @@
 #include <cstdlib>
 #include "vil_nitf2_data_mask_table.h"
 
-#include <vil/vil_stream.h>
+#include "vil/vil_stream.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vil_nitf2_data_mask_table::vil_nitf2_data_mask_table(

@@ -6,13 +6,13 @@
 #include <algorithm>
 
 
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_image_view.h"
 
-#include <vil/vil_crop.h>
-#include <vil/vil_save.h>
-#include <vil/vil_rotate.h>
-#include <vnl/vnl_math.h>
+#include "vil/vil_crop.h"
+#include "vil/vil_save.h"
+#include "vil/vil_rotate.h"
+#include "vnl/vnl_math.h"
 
 #include "brad_sam_template_match.h"
 #include "brad_multispectral_functions.h"

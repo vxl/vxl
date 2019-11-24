@@ -6,11 +6,11 @@
 //
 #include <string>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvxm/bvxm_voxel_world.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brdb/brdb_value.h>
@@ -21,16 +21,16 @@
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_image_view_base.h"
 
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <vcl_where_root_dir.h>
 
 static void test_bvxm_rpc_registration_process()

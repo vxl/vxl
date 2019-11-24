@@ -2,8 +2,8 @@
 //:
 // \file
 #include <bocl/bocl_utils.h> //for check_val and error_to_string
-#include <vnl/vnl_quaternion.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vnl/vnl_quaternion.h"
+#include "vpgl/vpgl_perspective_camera.h"
 
 //: Helper method to create a shared cl-gl context on a device
 cl_context boxm2_view_utils::create_clgl_context(cl_device_id& device)

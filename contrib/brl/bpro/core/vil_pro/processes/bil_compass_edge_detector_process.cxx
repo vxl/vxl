@@ -4,8 +4,8 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_image_view_base.h"
 #include <bil/algo/bil_compass_edge_detector.h>
 
 //: Constructor

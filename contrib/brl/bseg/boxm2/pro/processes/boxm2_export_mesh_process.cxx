@@ -10,19 +10,19 @@
 // \date Mar 15, 2011
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 
 //vil includes
-#include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
-#include <vil/vil_math.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_new.h"
+#include "vil/vil_math.h"
 
 //vgl
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 #include <bvgl/bvgl_triangle_interpolation_iterator.h>
 
 //det and imesh includes

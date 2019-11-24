@@ -1,9 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brec/brec_part_base.h>
@@ -15,22 +15,22 @@
 #include <brec/brec_part_hierarchy_builder.h>
 #include <brec/brec_part_hierarchy_detector.h>
 
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
+#include "vil/vil_math.h"
+#include "vil/vil_convert.h"
 
 #include <brip/brip_vil_float_ops.h>
 
 #include <brec/brec_part_gaussian.h>
 #include <bsta/algo/bsta_gaussian_updater.h>
 
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_quaternion.h>
-#include <vnl/vnl_float_2.h>
-#include <vnl/vnl_float_3.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_cross_product_matrix.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_quaternion.h"
+#include "vnl/vnl_float_2.h"
+#include "vnl/vnl_float_3.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_cross_product_matrix.h"
 
 static void test_brec_hierarchy_detector()
 {

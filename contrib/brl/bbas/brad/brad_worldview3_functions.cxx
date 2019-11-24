@@ -4,18 +4,18 @@
 #include <sstream>
 #include <fstream>
 
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_load.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_resample_bilin.h>
-#include <vil/vil_save.h>
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_load.h"
+#include "vil/vil_crop.h"
+#include "vil/vil_resample_bilin.h"
+#include "vil/vil_save.h"
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_inverse.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_inverse.h"
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vpgl/vpgl_lvcs.h"
 
 #include "brad_worldview3_functions.h"
 #include "brad_image_atmospherics_est.h"

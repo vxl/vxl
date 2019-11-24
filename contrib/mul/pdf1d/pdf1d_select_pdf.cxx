@@ -7,9 +7,9 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_vector.h"
 
 //: Use the comparator to decide which pdf the data is most like
 //  Returns index of the chosen pdf.

@@ -19,26 +19,26 @@
 
 #include <iostream>
 #include <algorithm>
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt/vimt_crop.h>
 #include <mbl/mbl_read_props.h>
-#include <vil/vil_load.h>
-#include <vul/vul_string.h>
+#include "vil/vil_load.h"
+#include "vul/vul_string.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_save.h>
-#include <vil/vil_fill.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_resample_bilin.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vil/vil_save.h"
+#include "vil/vil_fill.h"
+#include "vil/vil_crop.h"
+#include "vil/vil_math.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_resample_bilin.h"
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 #include <fhs/fhs_searcher.h>
 #include <vimt/algo/vimt_normalised_correlation_2d.h>
 #include <mbl/mbl_draw_line.h>

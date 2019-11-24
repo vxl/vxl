@@ -6,10 +6,10 @@
 #include <cmath>
 #include <cstdlib>
 #include "vdgl_edgel_chain.h"
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_distance.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vdgl_edgel_chain::vdgl_edgel_chain( const double x0, const double y0,

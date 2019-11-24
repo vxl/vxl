@@ -14,10 +14,10 @@
 #include <bsta/bsta_mixture.h>
 #include <brdb/brdb_value.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_math.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_math.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void eigenvalues(double B, double C, double E, double& la,

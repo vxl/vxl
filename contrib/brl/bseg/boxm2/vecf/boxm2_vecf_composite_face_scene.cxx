@@ -3,11 +3,11 @@
 #include <map>
 #include <string>
 #include "boxm2_vecf_composite_face_scene.h"
-#include <vul/vul_file.h>
-#include <vul/vul_timer.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_pointset_3d.h>
-#include <vgl/vgl_bounding_box.h>
+#include "vul/vul_file.h"
+#include "vul/vul_timer.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_pointset_3d.h"
+#include "vgl/vgl_bounding_box.h"
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <boxm2/cpp/algo/boxm2_refine_block_multi_data.h>
 boxm2_vecf_composite_face_scene::boxm2_vecf_composite_face_scene(std::string const& face_scene_paths){

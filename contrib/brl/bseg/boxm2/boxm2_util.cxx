@@ -14,29 +14,29 @@
 #include <boct/boct_bit_tree.h>
 
 //vgl includes
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vil/vil_convert.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_homg_point_3d.h"
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_box_2d.h"
+#include "vil/vil_convert.h"
 
 //vnl includes
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 #include <vnl/algo/vnl_svd.h>
 
 //vil includes
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
-#include <vil/vil_resample_nearest.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
+#include "vil/vil_resample_nearest.h"
 
 //vcl io stuff
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //vul file includes
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
 
 #include <bkml/bkml_write.h>
 

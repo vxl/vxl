@@ -1,12 +1,12 @@
 #include "sdet_mrf_bp.h"
 #include <sdet/sdet_mrf_site_bp.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_math.h>
-#include <vil/vil_new.h>
-#include <vnl/vnl_numeric_traits.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_math.h"
+#include "vil/vil_new.h"
+#include "vnl/vnl_numeric_traits.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 //
 // index for relative image position of neighbors

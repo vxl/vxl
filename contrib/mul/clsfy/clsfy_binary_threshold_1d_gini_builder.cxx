@@ -8,12 +8,12 @@
 // \author Martin Roberts
 
 #include <cassert>
-#include <vsl/vsl_binary_loader.h>
-#include <vnl/vnl_double_2.h>
+#include "vsl/vsl_binary_loader.h"
+#include "vnl/vnl_double_2.h"
 #include <clsfy/clsfy_builder_1d.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // Note this is used by clsfy_binary_tree_builder

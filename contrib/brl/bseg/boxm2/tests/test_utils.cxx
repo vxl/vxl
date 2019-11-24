@@ -1,11 +1,11 @@
 // test utils to produce test blocks, data, scene, etc.
 #include "test_utils.h"
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 #include <boxm2/io/boxm2_sio_mgr.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <boxm2/boxm2_scene.h>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 const int boxm2_test_utils::nums_[] = {64,64,64,0};
 const double boxm2_test_utils::dims_[] = {0.5,0.5,0.5,0};
 

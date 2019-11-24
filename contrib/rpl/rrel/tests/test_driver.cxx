@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cmath>
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 
 DECLARE( test_similarity_from_matches );
@@ -35,9 +35,9 @@ register_tests()
 
 DEFINE_MAIN;
 
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 double noise( double sigma )

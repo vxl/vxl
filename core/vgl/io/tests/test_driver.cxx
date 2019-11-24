@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( golden_test_vgl_io );
 DECLARE( test_box_2d_io );

@@ -7,20 +7,20 @@
 #include <cstdlib>
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_load.h>
-#include <vil/vil_image_view.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_text_tableau.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_window.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_statusbar.h>
-#include <vgui/vgui_text_graph.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_tableau.h>
+#include "vil/vil_load.h"
+#include "vil/vil_image_view.h"
+#include "vgui/vgui.h"
+#include "vgui/vgui_text_tableau.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_window.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_statusbar.h"
+#include "vgui/vgui_text_graph.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_tableau.h"
 
 // Make a test tableau which catches the vgui_DESTROY event.
 

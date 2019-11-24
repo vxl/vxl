@@ -5,7 +5,7 @@
 
 #include "vgui_slider_tableau.h"
 
-#include <vgui/vgui_gl.h>
+#include "vgui/vgui_gl.h"
 
 vgui_slider_tableau::vgui_slider_tableau( slider_type type )
   : loc_( 0.0f ),

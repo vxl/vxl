@@ -12,9 +12,9 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgui/vgui_message.h>
+#include "vgui/vgui_message.h"
 
 
 IMPLEMENT_DYNAMIC_CLASS( wxSliderPanel, wxScrolledWindow )

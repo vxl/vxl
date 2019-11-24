@@ -13,7 +13,7 @@
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <vsol/vsol_curve_2d_sptr.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_point_2d.h>

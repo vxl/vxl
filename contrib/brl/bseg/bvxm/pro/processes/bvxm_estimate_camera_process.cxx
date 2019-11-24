@@ -15,16 +15,16 @@
 #include <brip/brip_vil_float_ops.h>
 
 #include <vnl/algo/vnl_amoeba.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 #include <bvxm/bvxm_edge_ray_processor.h>
 
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 #include <bpgl/bpgl_camera_estimator.h>
 #include <bpgl/bpgl_camera_estimator_amoeba.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

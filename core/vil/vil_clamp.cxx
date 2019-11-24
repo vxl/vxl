@@ -13,11 +13,11 @@
 #include <cstring>
 #include "vil_clamp.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vil/vil_property.h>
-#include <vil/vil_exception.h>
+#include "vil/vil_property.h"
+#include "vil/vil_exception.h"
 
 
 vil_image_resource_sptr vil_clamp(const vil_image_resource_sptr &src, double lo, double hi)

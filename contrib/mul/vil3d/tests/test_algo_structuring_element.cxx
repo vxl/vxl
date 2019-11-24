@@ -1,8 +1,8 @@
 // This is mul/vil3d/tests/test_algo_structuring_element.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil3d/algo/vil3d_structuring_element.h>
 

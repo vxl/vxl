@@ -18,9 +18,9 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_printf.h>
+#include "vul/vul_printf.h"
 
 bool bmsh3d_bnd_chain::is_V_incident_via_HE (const bmsh3d_vertex* V)
 {

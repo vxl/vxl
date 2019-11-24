@@ -11,8 +11,8 @@
 
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_image_utils.h>
-#include <vgui/vgui_section_render.h>
-#include <vgui/vgui_projection_inspector.h>
+#include "vgui/vgui_section_render.h"
+#include "vgui/vgui_projection_inspector.h"
 
 #include <bsol/bsol_algs.h>
 #include <vsol/vsol_point_2d.h>
@@ -22,14 +22,14 @@
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_line_2d.h>
 
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_polygon.h>
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_polygon.h"
 
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <vil/file_formats/vil_nitf2_image.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bwm_observer_img::bwm_observer_img(bgui_image_tableau_sptr const& img, std::string name, std::string image_path, bool display_image_path)

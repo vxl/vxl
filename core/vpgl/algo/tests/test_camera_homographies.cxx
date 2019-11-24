@@ -1,20 +1,20 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_fwd.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_fwd.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_inverse.h"
 #include <vnl/algo/vnl_svd.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_intersection.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
-#include <vpgl/vpgl_proj_camera.h>
+#include "vpgl/vpgl_proj_camera.h"
 #include <vpgl/algo/vpgl_backproject.h>
 
 #include <vpgl/algo/vpgl_camera_homographies.h>

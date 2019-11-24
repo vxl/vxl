@@ -1,8 +1,8 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_intersection.h"
 
 #include <boct/boct_tree.h>
 #include <boct/boct_test_util.h>

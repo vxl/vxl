@@ -7,17 +7,17 @@
 // \brief Searches for rectangular region using HOG features
 // \author Tim Cootes
 
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 #include <cassert>
 
-#include <vil/vil_resample_bilin.h>
+#include "vil/vil_resample_bilin.h"
 #include <vil/io/vil_io_image_view.h>
-#include <vsl/vsl_vector_io.h>
-#include <vsl/vsl_indent.h>
+#include "vsl/vsl_vector_io.h"
+#include "vsl/vsl_indent.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 #include <mipa/mipa_orientation_histogram.h>
 #include <mipa/mipa_sample_histo_boxes.h>

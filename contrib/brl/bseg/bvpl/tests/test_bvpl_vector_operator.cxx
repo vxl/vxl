@@ -1,7 +1,7 @@
 #include <sstream>
 #include <iostream>
 #include <iomanip>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <bvpl/kernels/bvpl_edge2d_kernel_factory.h>
 #include <bvpl/kernels/bvpl_edge3d_kernel_factory.h>
@@ -18,10 +18,10 @@
 #include <bvxm/grid/bvxm_voxel_grid_opinion_basic_ops.h>
 #include <bvxm/grid/io/bvxm_io_voxel_grid.h>
 
-#include <vnl/vnl_float_3.h>
-#include <vul/vul_file.h>
+#include "vnl/vnl_float_3.h"
+#include "vul/vul_file.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void create_grid(const std::string& grid_filename)

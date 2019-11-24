@@ -6,11 +6,11 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 #include <iostream>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <rgtl/rgtl_sqt_base.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static double const test_directions[100][3] =

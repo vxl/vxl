@@ -11,17 +11,17 @@
 #include <mfpf/mfpf_mr_point_finder.h>
 
 #include <vimt/vimt_image_pyramid.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_loader.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_loader.h"
+#include "vsl/vsl_vector_io.h"
 
 //=======================================================================
 // Constructors

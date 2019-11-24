@@ -7,7 +7,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <boxm2/vecf/boxm2_vecf_orbicularis_oris_params.h>
 #include <boxm2/vecf/boxm2_vecf_orbicularis_oris.h>
 

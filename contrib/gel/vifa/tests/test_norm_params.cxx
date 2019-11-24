@@ -1,5 +1,5 @@
 // This is gel/vifa/tests/test_norm_params.cxx
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vifa/vifa_norm_params.h>
 
 

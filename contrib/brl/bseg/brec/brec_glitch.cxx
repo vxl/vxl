@@ -8,9 +8,9 @@
 // \date October 16, 2008
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_save.h>
+#include "vil/vil_save.h"
 
 vil_image_view<vxl_byte>
 brec_glitch::square_glitch_mask_img(int c_size)

@@ -2,7 +2,7 @@
 //:
 // \file
 #include <vgl/io/vgl_io_cylinder.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_vector_3d.h"
 
 //: Return true iff the point p is inside (or on) this cylinder
 bool vsol_cylinder::contains(vgl_point_3d<double> const& p)

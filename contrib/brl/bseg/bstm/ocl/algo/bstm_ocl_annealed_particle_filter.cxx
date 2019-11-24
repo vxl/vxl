@@ -4,7 +4,7 @@
 #include "bstm_ocl_annealed_particle_filter.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #define ALPHA 0.5
 #define MAX_BETA 15

@@ -1,17 +1,17 @@
 #include <iostream>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <vsph/vsph_view_sphere.h>
 #include <vsph/vsph_spherical_coord.h>
 #include <vsph/vsph_view_point.h>
 
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vsph_view_point<double> create_view_point(const vsph_spherical_coord_sptr& coord, double theta, double phi, double* data)

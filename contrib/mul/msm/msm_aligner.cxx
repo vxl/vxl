@@ -4,8 +4,8 @@
 // \author Tim Cootes
 // \brief Base for functions which calculate and apply 2D transformations
 
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_loader.h"
 #include <mbl/mbl_cloneables_factory.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>

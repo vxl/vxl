@@ -1,7 +1,7 @@
 // This is core/vpgl/xio/vpgl_xio_lvcs.cxx
 #include "vpgl_xio_lvcs.h"
-#include <vpgl/vpgl_lvcs.h>
-#include <vsl/vsl_basic_xml_element.h>
+#include "vpgl/vpgl_lvcs.h"
+#include "vsl/vsl_basic_xml_element.h"
 
 #include <utility>
 

@@ -5,9 +5,9 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 
 //: Analyse an image file without reading the pixels.
 int main(int argc, char** argv)

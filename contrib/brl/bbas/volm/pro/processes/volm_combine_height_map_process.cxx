@@ -7,21 +7,21 @@
 //          combine height maps having small size to larger height maps
 //
 //
-#include <vil/vil_image_view.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
+#include "vil/vil_image_view.h"
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
 #include <volm/volm_geo_index2.h>
 #include <volm/volm_loc_hyp_sptr.h>
 #include <volm/volm_io_tools.h>
-#include <vgl/vgl_intersection.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
+#include "vgl/vgl_intersection.h"
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
 #include <bkml/bkml_write.h>
 #include <bkml/bkml_parser.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_area.h>
+#include "vgl/vgl_area.h"
 
 namespace volm_combine_height_map_process_globals
 {

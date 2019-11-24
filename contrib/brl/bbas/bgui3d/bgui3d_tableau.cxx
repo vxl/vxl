@@ -4,8 +4,8 @@
 // \file
 
 #include "bgui3d_translate_event.h"
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_macro.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_macro.h"
 
 #include <Inventor/SbColor.h>
 #include <Inventor/SoDB.h>

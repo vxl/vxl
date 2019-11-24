@@ -7,25 +7,25 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_awk.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
+#include "vul/vul_awk.h"
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
 #include <cassert>
 
-#include <vil/vil_image_resource.h>
-#include <vil/vil_load.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_load.h"
 #include <vil/file_formats/vil_nitf2_image.h>
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vpgl/vpgl_lvcs.h"
 #include <vpgl/algo/vpgl_backproject.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_area.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_area.h"
+#include "vgl/vgl_intersection.h"
 #include <vgl/io/vgl_io_polygon.h>
 
 #include <brad/brad_sun_pos.h>

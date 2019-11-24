@@ -1,14 +1,14 @@
 // This is mul/vimt3d/tests/test_image_bounds_and_centre_3d.cxx
 
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_box_3d.h"
 
 static void test_world_bounding_box()
 {

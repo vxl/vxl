@@ -10,8 +10,8 @@
 #include <boxm2/boxm2_data.h>
 
 #include "boxm2/boxm2_util.h"
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
 
 void boxm2_export_stack_images_function::export_opacity_stack_images(const boxm2_scene_sptr& scene, boxm2_cache_sptr & cache, const std::string& outdir)
 {

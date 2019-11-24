@@ -5,12 +5,12 @@
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vul/vul_awk.h>
+#include "vul/vul_awk.h"
 
-#include <vgl/vgl_polygon.h>
+#include "vgl/vgl_polygon.h"
 
 bool bpgl_nitf_camera_coverage::coverage_list(std::vector<vgl_point_2d<double> > geo_pts,
                                               const std::string& img_list,

@@ -1,17 +1,17 @@
-#include <testlib/testlib_test.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_quaternion.h>
+#include "testlib/testlib_test.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_quaternion.h"
 #include <vgl/algo/vgl_h_matrix_2d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_distance.h"
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vpgl/vpgl_proj_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_proj_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
 #include <bpgl/algo/bpgl_camera_homographies.h>
 
 static void test_camera_homographies()

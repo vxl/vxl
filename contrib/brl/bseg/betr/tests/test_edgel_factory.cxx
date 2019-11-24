@@ -1,9 +1,9 @@
 // This is brl/bseg/betr/tests/test_edgel_factory.cxx
 #include <iostream>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <betr/betr_edgel_factory.h>
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 #include <bsta/bsta_histogram.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polygon_2d.h>

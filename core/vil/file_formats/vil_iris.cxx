@@ -18,14 +18,14 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil/vil_stream.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_exception.h>
+#include "vil/vil_stream.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_exception.h"
 
-#include <vxl_config.h> // for vxl_byte, vxl_uint_32, ...
+#include "vxl_config.h" // for vxl_byte, vxl_uint_32, ...
 
 static vxl_sint_16 get_short(vil_stream* file, int location = -1); // default -1 means: read at current position
 static vxl_uint_16 get_ushort(vil_stream* file, int location = -1);

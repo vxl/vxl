@@ -1,15 +1,15 @@
 // Example using GTK to make a user-interface and vidl_vil1 to load a movie.
 
-#include <vul/vul_sprintf.h>
-#include <vgui/vgui.h>
+#include "vul/vul_sprintf.h"
+#include "vgui/vgui.h"
 
-#include <vgui/vgui_loader_tableau.h>
-#include <vgui/vgui_image_tableau.h>
+#include "vgui/vgui_loader_tableau.h"
+#include "vgui/vgui_image_tableau.h"
 #include <vgui/impl/gtk/vgui_gtk_adaptor.h>
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>
 
-#include <vil1/vil1_image.h>
+#include "vil1/vil1_image.h"
 #include <vidl_vil1/vidl_vil1_io.h>
 #include <vidl_vil1/vidl_vil1_frame.h>
 #include <vidl_vil1/vidl_vil1_movie.h>

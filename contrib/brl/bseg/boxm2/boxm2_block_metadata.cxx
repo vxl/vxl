@@ -2,8 +2,8 @@
 //:
 // \file
 #include <boxm2/boxm2_data_traits.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_point_3d.h"
 
 vgl_box_3d<double> boxm2_block_metadata::bbox() const {
   // max point

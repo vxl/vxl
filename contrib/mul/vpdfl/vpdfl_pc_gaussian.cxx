@@ -15,12 +15,12 @@
 #include <cstdlib>
 #include "vpdfl_pc_gaussian.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vsl/vsl_binary_loader.h>
-#include <vsl/vsl_indent.h>
-#include <vnl/vnl_math.h>
+#include "vsl/vsl_binary_loader.h"
+#include "vsl/vsl_indent.h"
+#include "vnl/vnl_math.h"
 #include <mbl/mbl_matxvec.h>
 #include <vpdfl/vpdfl_pc_gaussian_builder.h>
 #include <vpdfl/vpdfl_gaussian_sampler.h>

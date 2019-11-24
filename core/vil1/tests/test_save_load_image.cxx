@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Peter Vanroose, ESAT, KULeuven.
@@ -27,17 +27,17 @@
 // \endverbatim
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vul/vul_temp_filename.h>
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vul/vul_temp_filename.h"
+#include "vpl/vpl.h" // vpl_unlink()
 
-#include <vil1/vil1_rgb.h>
-#include <vil1/vil1_load.h>
-#include <vil1/vil1_save.h>
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1/vil1_rgb.h"
+#include "vil1/vil1_load.h"
+#include "vil1/vil1_save.h"
+#include "vil1/vil1_memory_image_of.h"
 
 #ifndef LEAVE_IMAGES_BEHIND
 #define LEAVE_IMAGES_BEHIND 0

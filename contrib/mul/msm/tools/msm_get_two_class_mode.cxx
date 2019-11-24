@@ -5,8 +5,8 @@
 
 #include <iostream>
 #include <cstdlib>
-#include <vul/vul_arg.h>
-#include <vsl/vsl_quick_file.h>
+#include "vul/vul_arg.h"
+#include "vsl/vsl_quick_file.h"
 #include <msm/msm_shape_model.h>
 #include <msm/msm_shape_instance.h>
 #include <msm/msm_add_all_loaders.h>

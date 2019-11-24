@@ -8,13 +8,13 @@
 #include <string>
 #include "bvgl_eulerspiral.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_vector_io.h"
 
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_least_squares_function.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_least_squares_function.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
 #include <bnl/algo/bnl_fresnel.h>

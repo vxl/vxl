@@ -6,21 +6,21 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_view.h>
-#include <vul/vul_file.h>
+#include "vil/vil_image_view.h"
+#include "vul/vul_file.h"
 #include <vil/algo/vil_region_finder.h>
 #include <bil/algo/bil_blob_finder.h>
 #include <vil/algo/vil_binary_dilate.h>
 #include <vil/algo/vil_binary_erode.h>
 #include <bkml/bkml_write.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 
 // for debug
 #if 0
-#include <vil/vil_save.h>
+#include "vil/vil_save.h"
 #endif
 
 namespace volm_refine_bvxm_height_map_process_globals

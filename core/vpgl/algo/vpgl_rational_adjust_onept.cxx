@@ -5,15 +5,15 @@
 //:
 // \file
 #include <cassert>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vnl/vnl_numeric_traits.h>
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vnl/vnl_numeric_traits.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/algo/vpgl_ray_intersect.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //#define TRANS_ONE_DEBUG

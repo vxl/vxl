@@ -6,12 +6,12 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_least_squares_function.h>
+#include "vnl/vnl_least_squares_function.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vnl/vnl_double_2x2.h>
+#include "vnl/vnl_double_2x2.h"
 
 //********************************************************************************
 //

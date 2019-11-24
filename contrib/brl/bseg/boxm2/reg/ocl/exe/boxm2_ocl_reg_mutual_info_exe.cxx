@@ -14,23 +14,23 @@
 #include <boxm2/io/boxm2_lru_cache.h>
 
 
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vul/vul_arg.h>
-#include <vul/vul_timer.h>
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_box_3d.h"
+#include "vul/vul_arg.h"
+#include "vul/vul_timer.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_device.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_vector.h"
 #include <vnl/algo/vnl_powell.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
 
 
 struct ltstr

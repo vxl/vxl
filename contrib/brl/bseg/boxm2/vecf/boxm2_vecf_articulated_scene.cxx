@@ -4,9 +4,9 @@
 #include <boxm2/cpp/algo/boxm2_refine_block_multi_data.h>
 #include <boxm2/cpp/algo/boxm2_surface_distance_refine.h>
 #include <boct/boct_bit_tree.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vul/vul_timer.h>
-#include <vbl/vbl_array_3d.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vul/vul_timer.h"
+#include "vbl/vbl_array_3d.h"
 double boxm2_vecf_articulated_scene::gauss(double d, double sigma){
   return std::exp((-0.5*d*d)/(sigma*sigma));
 }

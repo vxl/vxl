@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_transform_3d );
 DECLARE( test_sample_grid_trilin );

@@ -7,11 +7,11 @@
 
 #include <brdb/brdb_value.h>
 
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_math.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_math.h"
 #include <vil/algo/vil_threshold.h>
 
-#include <vpgl/vpgl_camera_double_sptr.h>
+#include "vpgl/vpgl_camera_double_sptr.h"
 
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>

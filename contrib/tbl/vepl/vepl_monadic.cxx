@@ -4,12 +4,12 @@
 #include "vepl_monadic.h"
 #include <vepl/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_monadic.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_new.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 
 vxl_sbyte abs_byte(vxl_sbyte const& a) { return (a<0) ? -a : a; }
 vxl_int_16 abs_short(vxl_int_16 const& a) { return (a<0) ? -a : a; }

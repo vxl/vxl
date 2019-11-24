@@ -9,7 +9,7 @@
 #include <fstream>
 #include "mvl2_video_reader.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 mvl2_video_reader::mvl2_video_reader() = default;

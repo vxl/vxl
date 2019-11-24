@@ -4,14 +4,14 @@
 #include <iomanip>
 #include "boxm2_vecf_labeled_point.h"
 #include "boxm2_vecf_fit_face.h"
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_ray_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_pointset_3d.h>
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_ray_3d.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_pointset_3d.h"
 #include <vgl/algo/vgl_h_matrix_3d_compute_affine.h>
 #include <bvrml/bvrml_write.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include "vnl/vnl_matrix_fixed.h"
 void boxm2_vecf_fit_face::fill_smid_map(){
   smid_map_["left_lateral_canthus"]=LEFT_LATERAL_CANTHUS;
   smid_map_["right_lateral_canthus"]=RIGHT_LATERAL_CANTHUS;

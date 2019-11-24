@@ -1,9 +1,9 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bapl/bapl_affine_transform.h>
 #include <bapl/bapl_affine_roi.h>
 #include <bapl/bapl_mi_matcher.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 
 
 MAIN( test_matcher )

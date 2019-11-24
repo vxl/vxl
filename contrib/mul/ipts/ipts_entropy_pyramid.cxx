@@ -9,7 +9,7 @@
 #include <vimt/vimt_scale_pyramid_builder_2d.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Compute local entropy at each level of a scale space pyramid

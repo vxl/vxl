@@ -5,11 +5,11 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil1/vil1_memory_image_of.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
+#include "vil1/vil1_memory_image_of.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
 #include <vil/algo/vil_corners.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <brip/brip_vil_float_ops.h>

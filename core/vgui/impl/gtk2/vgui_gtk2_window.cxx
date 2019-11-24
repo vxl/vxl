@@ -8,8 +8,8 @@
 #include <iostream>
 #include "vgui_gtk2_window.h"
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_menu.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_menu.h"
 
 #include <gtk/gtk.h>
 

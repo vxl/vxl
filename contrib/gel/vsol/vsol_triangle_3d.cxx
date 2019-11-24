@@ -5,11 +5,11 @@
 // \file
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vsol/vsol_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vnl/vnl_math.h>
+#include "vgl/vgl_vector_3d.h"
+#include "vnl/vnl_math.h"
 
 //***************************************************************************
 // Initialization

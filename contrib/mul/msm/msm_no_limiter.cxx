@@ -5,7 +5,7 @@
 
 #include "msm_no_limiter.h"
 #include <vnl/io/vnl_io_vector.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 
 //=======================================================================
 msm_no_limiter::msm_no_limiter() = default;

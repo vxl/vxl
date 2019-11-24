@@ -1,7 +1,7 @@
 #include <iostream>
 #include "osl_fit_lines_params.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 //:
 // \file

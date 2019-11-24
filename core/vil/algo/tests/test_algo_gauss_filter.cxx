@@ -5,14 +5,14 @@
 #include <cstdlib>
 #include <cmath>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_print.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_print.h"
 #include <vil/algo/vil_gauss_filter.h>
-#include <vxl_config.h>
-#include <testlib/testlib_test.h>
+#include "vxl_config.h"
+#include "testlib/testlib_test.h"
 
 static void test_algo_gaussian_filter_5tap_byte_float()
 {

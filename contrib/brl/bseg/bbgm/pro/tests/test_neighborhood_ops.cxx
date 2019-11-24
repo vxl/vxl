@@ -1,12 +1,12 @@
 #include <iostream>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bbgm/bbgm_image_of.h>
 #include <bsta/bsta_gauss_sf1.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <bbgm/pro/bbgm_neighborhood_functors.h>
 
 static void test_neighborhood_ops()

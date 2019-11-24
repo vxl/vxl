@@ -17,26 +17,26 @@
 //
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h>
+#include "vxl_config.h"
 
-#include <vul/vul_sprintf.h>
-#include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_image_as.h>
-#include <vnl/vnl_math.h>
+#include "vul/vul_sprintf.h"
+#include "vil1/vil1_memory_image_of.h"
+#include "vil1/vil1_image_as.h"
+#include "vnl/vnl_math.h"
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_enhance_tableau.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_composite_tableau.h>
-#include <vgui/vgui_rubberband_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_event_server.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_tableau.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_enhance_tableau.h"
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_composite_tableau.h"
+#include "vgui/vgui_rubberband_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_event_server.h"
 
 #include <xcv/xcv_image_tableau.h>
 #include <xcv/xcv_picker_tableau.h>

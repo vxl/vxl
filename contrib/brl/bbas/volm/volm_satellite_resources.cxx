@@ -5,27 +5,27 @@
 #include <utility>
 #include "volm_satellite_resources.h"
 
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 #include <vil/file_formats/vil_nitf2_image.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
 #include <vil/algo/vil_threshold.h>
 #include <vil/algo/vil_binary_erode.h>
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/algo/vil_region_finder.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file_iterator.h"
+#include "vul/vul_file.h"
 #include <volm/volm_tile.h>
 #include <volm/volm_geo_index2.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
-#include <vgl/vgl_area.h>
-#include <vgl/vgl_clip.h>
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
+#include "vgl/vgl_area.h"
+#include "vgl/vgl_clip.h"
 #include <vgl/algo/vgl_convex_hull_2d.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vpgl/vpgl_lvcs.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bkml/bkml_parser.h>
 

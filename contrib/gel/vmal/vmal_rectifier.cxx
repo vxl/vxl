@@ -7,19 +7,19 @@
 
 #include <vmal/vmal_convert_vtol.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vbl/vbl_bounding_box.h>
+#include "vbl/vbl_bounding_box.h"
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_inverse.h"
 #include <vnl/algo/vnl_determinant.h>
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_vector.h"
 #include <mvl/FMatrix.h>
 #include <mvl/FMatrixComputeLinear.h>
 #include <mvl/FMatrixComputeRANSAC.h>
 #include <mvl/FMatrixComputeMLESAC.h>
 #include <mvl/FMatrixComputeRobust.h>
-#include <vil/vil_bilin_interp.h>
+#include "vil/vil_bilin_interp.h"
 
 vmal_rectifier::vmal_rectifier()
 {

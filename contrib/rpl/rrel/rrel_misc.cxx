@@ -2,9 +2,9 @@
 #include <cmath>
 #include "rrel_misc.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 // Chebychev approximation to erfc --- the complement of the error
 // function.  Taken from Numerical Recipes in C.

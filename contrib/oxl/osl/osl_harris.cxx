@@ -10,12 +10,12 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_image_as.h>
-#include <vil1/vil1_copy.h>
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1/vil1_image_as.h"
+#include "vil1/vil1_copy.h"
+#include "vil1/vil1_memory_image_of.h"
 
 #include <osl/osl_roi_window.h>
 #include <osl/osl_convolve.h>

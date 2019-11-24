@@ -1,11 +1,11 @@
 #include <limits>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <imesh/algo/imesh_intersect.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_triangle_3d.h>
+#include "vgl/vgl_triangle_3d.h"
 
 
 namespace {

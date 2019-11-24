@@ -7,11 +7,11 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_memory_image_impl.h>
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_memory_image_impl.h"
 
 // macro to pull down data fields from the impl structure.
 #define cache_from_impl \

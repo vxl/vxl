@@ -1,7 +1,7 @@
 // This is mul/mfpf/tests/test_norm_corr1d.cxx
 #include <iostream>
 #include <sstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Tim Cootes
@@ -13,15 +13,15 @@
 //=======================================================================
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_norm_corr1d.h>
 #include <mfpf/mfpf_norm_corr1d_builder.h>
-#include <vil/vil_bilin_interp.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vil/vil_bilin_interp.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 
 //=======================================================================
 

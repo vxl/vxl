@@ -2,16 +2,16 @@
 #include <cmath>
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_save.h>
-#include <vil1/vil1_load.h>
-#include <vil1/vil1_convolve_simple.h>
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_memory_image_of.h"
+#include "vil1/vil1_save.h"
+#include "vil1/vil1_load.h"
+#include "vil1/vil1_convolve_simple.h"
 
 double mask_diff[1][3] = {
   {-1, 0, 1},

@@ -8,12 +8,12 @@
 // \date May 03, 2005.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_vector_3d.h"
 
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoBaseColor.h>

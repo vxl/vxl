@@ -1,13 +1,13 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <rgrl/rgrl_spline.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_math.h> // for vnl_math::isnan()
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_math.h" // for vnl_math::isnan()
 
 static vnl_random random_;
 

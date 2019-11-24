@@ -1,12 +1,12 @@
 // This is mul/mbl/tests/test_data_wrapper_mixer.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_data_wrapper_mixer.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vnl/vnl_vector.h>
-#include <testlib/testlib_test.h>
+#include "vnl/vnl_vector.h"
+#include "testlib/testlib_test.h"
 
 void test_data_wrapper_pair_mixer(unsigned n1, unsigned n2)
 {

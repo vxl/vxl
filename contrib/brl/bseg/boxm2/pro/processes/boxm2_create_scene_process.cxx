@@ -13,31 +13,31 @@
 // \author Vishal Jain
 // \date Mar 15, 2011
 
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <boxm2/boxm2_scene.h>
-#include <vpgl/vpgl_utm.h>
-#include <vgl/vgl_distance.h>
+#include "vpgl/vpgl_utm.h"
+#include "vgl/vgl_distance.h"
 
 #include <bkml/bkml_parser.h>
 #include <bpgl/bpgl_camera_utils.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_intersection.h"
 
 #include <boxm2/io/boxm2_cache.h>
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_resource_sptr.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_image_resource_sptr.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file_iterator.h>
-#include <vil/vil_load.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_crop.h>
-#include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
+#include "vul/vul_file_iterator.h"
+#include "vil/vil_load.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_crop.h"
+#include "vpgl/vpgl_lvcs.h"
+#include "vpgl/vpgl_lvcs_sptr.h"
 
 namespace boxm2_create_scene_process_globals
 {

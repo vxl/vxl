@@ -7,18 +7,18 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vil/vil_image_resource.h>
+#include "vil/vil_image_resource.h"
 #include <bapl/bapl_lowe_keypoint.h>
 #include <bapl/bapl_lowe_pyramid_set_sptr.h>
 #include <bapl/bapl_lowe_pyramid_set.h>
 
-#include <vgl/vgl_point_3d.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_math.h>
+#include "vgl/vgl_point_3d.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_math.h"
 #include <vnl/algo/vnl_svd.h>
 
 

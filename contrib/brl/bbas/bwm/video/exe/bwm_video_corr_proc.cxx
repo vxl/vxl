@@ -1,14 +1,14 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vul/vul_file.h>
-#include <vul/vul_arg.h>
+#include "vul/vul_file.h"
+#include "vul/vul_arg.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_double_3x3.h>
-#include <vpl/vpl.h> // vpl_unlink()
-#include <vpgl/vpgl_calibration_matrix.h>
+#include "vnl/vnl_double_3x3.h"
+#include "vpl/vpl.h" // vpl_unlink()
+#include "vpgl/vpgl_calibration_matrix.h"
 #include <bwm/video/bwm_video_corr_processor.h>
 #include <bwm/video/bwm_video_site_io.h>
 

@@ -12,16 +12,16 @@
 // \brief  See vgui_selector_tableau.h for a description of this file.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_command.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_popup_params.h>
-#include <vgui/vgui_matrix_state.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_command.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_popup_params.h"
+#include "vgui/vgui_matrix_state.h"
 
 
 //----------------------------------------------------------------------------

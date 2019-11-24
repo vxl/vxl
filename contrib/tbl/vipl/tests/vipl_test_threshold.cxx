@@ -17,7 +17,7 @@
 #include <vipl/accessors/vipl_accessors_vil_image_view.h>
 #include <vipl/vipl_threshold.h>
 #include "test_driver.h"
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 
 #define ALL_TESTS(x,m,p) \
   ONE_TEST(x,p,byte_img,byte_ori,vil_image_view<vxl_byte>,vxl_byte,1298,m+"_byte"); \

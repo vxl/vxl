@@ -1,5 +1,5 @@
 #include <vgl/algo/vgl_rtree.hxx>
-#include <vgl/vgl_polygon.h>
+#include "vgl/vgl_polygon.h"
 #include <vgl/algo/vgl_rtree_c.h>
 #include <brec/brec_part_base_sptr.h>
 #include <brec/brec_part_hierarchy_detector.h>

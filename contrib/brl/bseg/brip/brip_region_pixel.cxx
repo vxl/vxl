@@ -1,7 +1,7 @@
 #include <iostream>
 #include "brip_region_pixel.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 std::ostream& operator<<(std::ostream& s, brip_region_pixel const& sd)

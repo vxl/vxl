@@ -8,8 +8,8 @@
 #include <vector>
 #include <map>
 #include <algorithm>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #include <vcl_where_root_dir.h>
 
 #include <boxm2/boxm2_scene.h>
@@ -22,7 +22,7 @@
 #include <boxm2/ocl/pro/boxm2_opencl_processor.h> // beware: does not exist anymore
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #endif
 

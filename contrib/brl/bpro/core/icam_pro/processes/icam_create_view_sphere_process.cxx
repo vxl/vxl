@@ -19,9 +19,9 @@
 
 #include <brdb/brdb_value.h>
 
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <icam/icam_view_sphere.h>

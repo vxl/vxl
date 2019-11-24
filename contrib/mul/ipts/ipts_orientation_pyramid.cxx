@@ -9,7 +9,7 @@
 #include <vimt/vimt_image_2d_of.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Compute edge orientations at each level of a scale space pyramid.

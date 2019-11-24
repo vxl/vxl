@@ -1,8 +1,8 @@
 // This is core/vil/algo/tests/test_algo_flood_fill.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil/algo/vil_flood_fill.h>
 

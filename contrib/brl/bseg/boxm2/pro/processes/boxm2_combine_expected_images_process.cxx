@@ -7,7 +7,7 @@
 // \author Gamze D. Tunali
 // \date   June 28, 2012
 
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 namespace boxm2_combine_expected_images_process_globals
 {

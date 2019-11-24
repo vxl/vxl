@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 //DECLARE( test_batch_update );
 DECLARE( test_filter_kernel );

@@ -12,11 +12,11 @@
 #include <sstream>
 #include <bprb/bprb_func_process.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_util.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 //brdb stuff
 #include <brdb/brdb_value.h>

@@ -2,9 +2,9 @@
 #include <cmath>
 #include "utils.h"
 //
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static const double TOL = 480 * .2;

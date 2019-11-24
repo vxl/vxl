@@ -4,14 +4,14 @@
 // \date 26-Oct-2010
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <boxm2/basic/boxm2_array_2d.h>
 #include <boxm2/basic/boxm2_array_3d.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "vnl/vnl_vector_fixed.h"
 
 static void test_one_d()
 {

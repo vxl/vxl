@@ -11,12 +11,12 @@
 #include "vgui_gtk2_dialog_impl.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_sprintf.h>
+#include "vul/vul_sprintf.h"
 
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_command.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_command.h"
 #include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>
 #include <vgui/internals/vgui_button_field.h>

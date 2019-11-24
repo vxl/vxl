@@ -14,19 +14,19 @@
 #include <boxm2/boxm2_scene.h>
 
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vpgl/vpgl_utm.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
+#include "vpgl/vpgl_utm.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_load.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_box_2d.h>
 
 #include <brip/brip_roi.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_area.h>
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_area.h"
 
 namespace boxm2_lidar_to_xyz_process_globals
 {

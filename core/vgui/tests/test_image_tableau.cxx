@@ -1,9 +1,9 @@
-#include <vgui/vgui_image_tableau.h>
+#include "vgui/vgui_image_tableau.h"
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_load.h>
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_load.h"
 
 static void test_image_tableau(int argc, char* argv[])
 {

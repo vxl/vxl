@@ -14,7 +14,7 @@
 #include <iostream>
 #include <string>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bprb/bprb_func_process.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>

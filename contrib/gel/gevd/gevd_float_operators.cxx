@@ -9,19 +9,19 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vnl/vnl_math.h> // for pi_over_2
-#include <vnl/vnl_float_3.h>
-#include <vnl/vnl_cross.h>
+#include "vnl/vnl_math.h" // for pi_over_2
+#include "vnl/vnl_float_3.h"
+#include "vnl/vnl_cross.h"
 
 
 #include "gevd_pixel.h"
 #include "gevd_xpixel.h"
 #include "gevd_bufferxy.h"
 #ifdef DEBUG
-# include <vul/vul_timer.h>
+# include "vul/vul_timer.h"
 #endif
 
 #if defined(_MSC_VER)

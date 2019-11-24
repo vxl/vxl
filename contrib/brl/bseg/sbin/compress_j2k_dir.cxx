@@ -1,13 +1,13 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
-#include <vul/vul_file.h>
-#include <vul/vul_timer.h>
-#include <vul/vul_file_iterator.h>
-#include <vil/vil_load.h>
+#include "vul/vul_file.h"
+#include "vul/vul_timer.h"
+#include "vul/vul_file_iterator.h"
+#include "vil/vil_load.h"
 #include <vil/file_formats/vil_j2k_image.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //assumes that the base image is in the dir and the dir is

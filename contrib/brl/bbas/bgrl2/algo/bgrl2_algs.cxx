@@ -6,7 +6,7 @@
 #include <bgrl2/bgrl2_edge.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: return the euler tour of the graph starting from the given edge and in the direction towards the given node

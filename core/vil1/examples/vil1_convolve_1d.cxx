@@ -1,18 +1,18 @@
 // @author fsm
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vul/vul_sprintf.h>
+#include "vul/vul_sprintf.h"
 
-#include <vxl_config.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_load.h>
-#include <vil1/vil1_save.h>
-#include <vil1/vil1_image_as.h>
-#include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_convolve.h>
+#include "vxl_config.h"
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_load.h"
+#include "vil1/vil1_save.h"
+#include "vil1/vil1_image_as.h"
+#include "vil1/vil1_memory_image_of.h"
+#include "vil1/vil1_convolve.h"
 
 int main(int argc, char **argv)
 {

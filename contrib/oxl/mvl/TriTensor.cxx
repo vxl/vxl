@@ -8,23 +8,23 @@
 #include "TriTensor.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vul/vul_printf.h>
+#include "vul/vul_printf.h"
 
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matlab_print.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_identity_3x3.h>
-#include <vnl/vnl_cross_product_matrix.h>
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_matlab_print.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_identity_3x3.h"
+#include "vnl/vnl_cross_product_matrix.h"
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_inverse.h"
 
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_line_2d.h>
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_homg_line_2d.h"
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 

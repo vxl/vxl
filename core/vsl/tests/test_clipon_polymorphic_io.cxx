@@ -5,13 +5,13 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_clipon_binary_loader.h>
-#include <vsl/vsl_clipon_binary_loader.hxx>
-#include <testlib/testlib_test.h>
-#include <vpl/vpl.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_clipon_binary_loader.h"
+#include "vsl/vsl_clipon_binary_loader.hxx"
+#include "testlib/testlib_test.h"
+#include "vpl/vpl.h"
 
 //: Base class to test polymorphic loading
 class test2_base_class

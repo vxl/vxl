@@ -6,17 +6,17 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_vector_3d.h"
 
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x3.h>
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_3x3.h"
 #include <vnl/algo/vnl_svd.h>
 
 

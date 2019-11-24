@@ -6,9 +6,9 @@
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_compiler.h>
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
 
 //: initialization
 bool vpgl_print_rational_camera_process_cons(bprb_func_process& pro)

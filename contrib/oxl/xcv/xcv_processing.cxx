@@ -4,12 +4,12 @@
 // \file
 // See xcv_processing.h for a description of this file.
 
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_smooth.h>
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_smooth.h"
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_dialog.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_dialog.h"
 
 #include <xcv/xcv_image_tableau.h>
 

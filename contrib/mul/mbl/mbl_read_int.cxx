@@ -29,7 +29,7 @@
 #include <cstdio>
 #include "mbl_read_int.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 constexpr int MAX_LEN = 20;

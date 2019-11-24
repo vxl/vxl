@@ -5,16 +5,16 @@
 #include <iostream>
 #include "vil_load.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_open.h>
-#include <vil/vil_new.h>
-#include <vil/vil_file_format.h>
-#include <vil/vil_stream.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_resource_plugin.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_exception.h>
+#include "vil/vil_open.h"
+#include "vil/vil_new.h"
+#include "vil/vil_file_format.h"
+#include "vil/vil_stream.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_resource_plugin.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_exception.h"
 
 vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *is,
                                                     bool verbose)

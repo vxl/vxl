@@ -18,13 +18,13 @@
 #include <bbas/volm/volm_spherical_shell_container_sptr.h>
 #include <bbas/volm/volm_loc_hyp.h>
 #include <bbas/volm/volm_geo_index.h>
-#include <vul/vul_timer.h>
-#include <vul/vul_file.h>
-#include <vil/vil_save.h>
+#include "vul/vul_timer.h"
+#include "vul/vul_file.h"
+#include "vil/vil_save.h"
 #include <bkml/bkml_write.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_block.h>

@@ -4,10 +4,10 @@
 // \file
 
 #include "bgui3d_file_io.h"
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_command.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_popup_params.h>
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_command.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_popup_params.h"
 
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/SoDB.h>
@@ -20,7 +20,7 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Constructor

@@ -6,7 +6,7 @@
 #include <vmap/tests/my_map_functions.hxx>
 #include <vmap/vmap_types.h> // for vmap_vertex_index & vmap_face_index
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 template <class P>

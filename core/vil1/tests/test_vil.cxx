@@ -1,14 +1,14 @@
 // This is core/vil1/tests/test_vil.cxx
 #include <iostream>
-#include <vil1/vil1_vil.h>
-#include <vxl_config.h> // for vxl_byte
+#include "vil1/vil1_vil.h"
+#include "vxl_config.h" // for vxl_byte
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
-#include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_load.h>
-#include <vil/vil_load.h>
+#include "testlib/testlib_test.h"
+#include "vil1/vil1_memory_image_of.h"
+#include "vil1/vil1_load.h"
+#include "vil/vil_load.h"
 
 
 static void test_vil(int argc, char* argv[])

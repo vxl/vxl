@@ -7,10 +7,10 @@
 #include "vil1_pyramid.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil1/vil1_resample.h>
-#include <vil1/vil1_memory_image.h>
+#include "vil1/vil1_resample.h"
+#include "vil1/vil1_memory_image.h"
 
 vil1_pyramid::vil1_pyramid(vil1_image const &I, cache_strategy cs_)
 {

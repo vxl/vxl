@@ -6,10 +6,10 @@
 // \brief   See vgui_grid_tableau.h for a description of this file.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_clear_tableau.h>
+#include "vgui/vgui_macro.h"
+#include "vgui/vgui_clear_tableau.h"
 
 bool operator==(vgui_grid_tableau_data const &a,
                 vgui_grid_tableau_data const &b)

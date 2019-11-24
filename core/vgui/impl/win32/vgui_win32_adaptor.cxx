@@ -6,16 +6,16 @@
 #include "vgui_win32_utils.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_find.h> // for vgui_find_below_by_type_name
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_popup_params.h>
-#include <vgui/vgui_command.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_macro.h"
+#include "vgui/vgui_find.h" // for vgui_find_below_by_type_name
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_popup_params.h"
+#include "vgui/vgui_command.h"
 
 vgui_menu vgui_win32_adaptor::last_popup;
 

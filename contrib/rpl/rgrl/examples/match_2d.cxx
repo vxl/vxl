@@ -10,10 +10,10 @@
 #include <algorithm>
 #include <cstdlib>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_double_2.h>
+#include "vnl/vnl_double_2.h"
 
 #include <rrel/rrel_muset_obj.h>
 #include <rrel/rrel_m_est_obj.h>
@@ -45,12 +45,12 @@
 #include <rgrl/rgrl_converge_status.h>
 #include <rgrl/rgrl_convergence_on_weighted_error.h>
 #include <rgrl/rgrl_feature_based_registration.h>
-#include <vul/vul_arg.h>
-#include <vbl/vbl_bounding_box.h>
+#include "vul/vul_arg.h"
+#include "vbl/vbl_bounding_box.h"
 
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
 typedef vxl_byte pixel_type;

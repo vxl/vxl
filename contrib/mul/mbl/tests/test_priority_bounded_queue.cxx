@@ -3,10 +3,10 @@
 #include <iostream>
 #include <deque>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_priority_bounded_queue.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 void test_priority_bounded_queue()
 {

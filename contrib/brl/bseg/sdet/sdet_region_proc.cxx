@@ -2,9 +2,9 @@
 #include "sdet_region_proc.h"
 //:
 // \file
-#include <vnl/vnl_numeric_traits.h>
-#include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_vil.h>
+#include "vnl/vnl_numeric_traits.h"
+#include "vil1/vil1_memory_image_of.h"
+#include "vil1/vil1_vil.h"
 #include <brip/brip_roi.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <sdet/sdet_edgel_regions.h>

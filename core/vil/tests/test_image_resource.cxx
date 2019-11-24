@@ -1,10 +1,10 @@
 // This is core/vil/tests/test_image_resource.cxx
 #include <complex>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // These are "dummy" operator< for complex<T>.  These functions are never
@@ -15,15 +15,15 @@ static inline bool operator< (std::complex<double>const&, std::complex<double>co
 static inline bool operator> (std::complex<float> const&, std::complex<float> const&) { return false; }
 static inline bool operator> (std::complex<double>const&, std::complex<double>const&) { return false; }
 
-#include <vil/vil_image_resource.h>
-#include <vil/vil_math.h>
-#include <vil/vil_new.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_clamp.h>
-#include <vil/vil_transpose.h>
-#include <vil/vil_flip.h>
-#include <vil/vil_print.h>
-#include <vil/vil_decimate.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_math.h"
+#include "vil/vil_new.h"
+#include "vil/vil_crop.h"
+#include "vil/vil_clamp.h"
+#include "vil/vil_transpose.h"
+#include "vil/vil_flip.h"
+#include "vil/vil_print.h"
+#include "vil/vil_decimate.h"
 
 template <class T>
 void test_image_resource(const std::string& type, vil_pixel_format format, T /*dummy*/)

@@ -3,18 +3,18 @@
 #include <iostream>
 #include <cstdio>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vbl/vbl_bounding_box.h>
-#include <vul/vul_sprintf.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vnl/vnl_matrix.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
+#include "vbl/vbl_bounding_box.h"
+#include "vul/vul_sprintf.h"
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
+#include "vnl/vnl_matrix.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
 #include <ihog/ihog_minimizer.h>
 #include <ihog/ihog_world_roi.h>
 #include <ihog/ihog_transform_2d.h>

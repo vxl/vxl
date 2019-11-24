@@ -7,10 +7,10 @@
 #include <cstdlib>
 #include <msm/msm_points.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <msm/msm_reflect_shape.h>
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 
 void print_usage()
 {

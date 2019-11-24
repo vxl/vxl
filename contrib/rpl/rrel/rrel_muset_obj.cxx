@@ -6,10 +6,10 @@
 #include "rrel_muset_obj.h"
 //
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <rrel/rrel_muse_table.h>
 
 rrel_muset_obj::rrel_muset_obj( int max_n,

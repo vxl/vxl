@@ -3,11 +3,11 @@
 #include "rgrl_feature_face_pt.h"
 #include <rgrl/rgrl_transformation.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <rgrl/rgrl_util.h>
 #include <rgrl/rgrl_cast.h>

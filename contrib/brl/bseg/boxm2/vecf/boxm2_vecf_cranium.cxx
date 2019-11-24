@@ -2,11 +2,11 @@
 #include <map>
 #include "boxm2_vecf_cranium.h"
 #include <bvrml/bvrml_write.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_bounding_box.h>
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_bounding_box.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 boxm2_vecf_cranium::boxm2_vecf_cranium(std::string const& geometry_file, unsigned nbins): nbins_(nbins){

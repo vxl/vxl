@@ -7,7 +7,7 @@
 // \brief Link between one node and another
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
     //: Write to binary stream

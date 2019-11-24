@@ -6,9 +6,9 @@
 #include "bvxm_util.h"
 #include "bvxm_world_params.h"
 
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
@@ -17,16 +17,16 @@
 #include <sdet/sdet_detector.h>
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vnl/algo/vnl_chi_squared.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3x1.h>
-#include <vil/vil_resample_bilin.h>
-#include <vil/vil_math.h>
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_double_3x1.h"
+#include "vil/vil_resample_bilin.h"
+#include "vil/vil_math.h"
 #include <bil/algo/bil_edt.h>
 
 #include "grid/bvxm_voxel_slab.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bool bvxm_util::read_cameras(const std::string& filename, std::vector<vnl_double_3x3> &Ks, std::vector<vnl_double_3x3> &Rs, std::vector<vnl_double_3x1> &Ts)

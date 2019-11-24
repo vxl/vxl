@@ -9,10 +9,10 @@
 
 #include <pdf1d/pdf1d_sampler.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_math.h"
 
 //: Estimate Bhattacharyya overlap between two pdfs
 //  If use_analytic is true and an analytic form exists, it will be used.

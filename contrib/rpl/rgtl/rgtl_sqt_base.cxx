@@ -6,7 +6,7 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 // Define a constant for pi.
 #define RGTL_SQT_PI vnl_math::pi
 

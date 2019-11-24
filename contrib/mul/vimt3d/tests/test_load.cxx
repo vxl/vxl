@@ -1,12 +1,12 @@
 // This is mul/vimt3d/tests/test_load.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 #include <vil3d/vil3d_load.h>
 #include <vimt3d/vimt3d_load.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 static void test_load(int argc, char* argv[])
 {

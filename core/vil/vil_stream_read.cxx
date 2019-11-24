@@ -19,11 +19,11 @@
 #include "vil_stream_read.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil/vil_stream.h>
-#include <vxl_config.h>
+#include "vil/vil_stream.h"
+#include "vxl_config.h"
 
 vxl_uint_16 vil_stream_read_big_endian_uint_16(vil_stream *s)
 {

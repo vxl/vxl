@@ -14,14 +14,14 @@
 #include <bres/bres_find.h>
 #include <volm/volm_tile.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <volm/volm_osm_objects.h>
 #include <volm/volm_geo_index2.h>
 #include <volm/volm_geo_index2_sptr.h>
 #include <volm/volm_io.h>
-#include <vul/vul_file.h>
-#include <vul/vul_arg.h>
+#include "vul/vul_file.h"
+#include "vul/vul_arg.h"
 #include <vcl_where_root_dir.h>
 
 static void error_report(std::string error_file, const std::string& error_msg)

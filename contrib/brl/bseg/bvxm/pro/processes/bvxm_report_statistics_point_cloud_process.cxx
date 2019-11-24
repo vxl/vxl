@@ -5,7 +5,7 @@
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>

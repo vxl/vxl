@@ -14,10 +14,10 @@
 #include <boxm2/ocl/algo/boxm2_ocl_update_color.h>
 #include <bocl/bocl_device.h>
 #include <brdb/brdb_value.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_new.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_new.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 namespace boxm2_ocl_update_color_process_globals

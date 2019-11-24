@@ -6,13 +6,13 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <climits>
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_copy.h>
-#include <vil/vil_math.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_copy.h"
+#include "vil/vil_math.h"
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/algo/vil_sobel_3x3.h>
 

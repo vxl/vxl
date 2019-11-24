@@ -3,12 +3,12 @@
 #include <fstream>
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_eigenspace.h>
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 //:
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 namespace bbas_core_brad_classify_image
 {

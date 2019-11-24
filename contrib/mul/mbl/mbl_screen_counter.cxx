@@ -7,7 +7,7 @@
 // \author Ian Scott
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 mbl_screen_counter::mbl_screen_counter(std::ostream & os):

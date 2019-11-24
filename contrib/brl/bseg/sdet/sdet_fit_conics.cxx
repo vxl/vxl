@@ -3,8 +3,8 @@
 //:
 // \file
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_conic_segment_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_conic_segment_2d.h"
 #include <vsol/vsol_conic_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vdgl/vdgl_digital_curve.h>

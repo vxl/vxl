@@ -5,9 +5,9 @@
 //:
 // \file
 
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vgl/io/vgl_io_polygon.h>
 #include <volm/volm_utils.h>

@@ -4,7 +4,7 @@
 // \file
 
 #include <bvxm/bvxm_voxel_world.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vpgl/vpgl_local_rational_camera.h"
 
 //: initialize input and output types
 bool bvxm_create_local_rpc_process_cons(bprb_func_process& pro)

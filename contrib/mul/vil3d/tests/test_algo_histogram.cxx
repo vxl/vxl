@@ -1,5 +1,5 @@
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vil3d/algo/vil3d_histogram.h>
 
 static void test_histogram_byte()

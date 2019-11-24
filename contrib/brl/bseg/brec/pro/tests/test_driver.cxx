@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_brec_update_changes_process );
 DECLARE( test_brec_create_mog_image_process );

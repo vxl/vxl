@@ -1,10 +1,10 @@
 //:
 // \file
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvpl/bvpl_subgrid_iterator.h>
 #include <bvpl/bvpl_voxel_subgrid.h>
 
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 //: Test changes
 static void test_subgrid()

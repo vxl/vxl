@@ -3,23 +3,23 @@
 #include <iterator>
 #include <algorithm>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_vector.h"
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_2x2.h>
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_double_2x2.h"
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_math.h"
 
 #include <rgrl/rgrl_feature_point.h>
 #include <rgrl/rgrl_feature_trace_pt.h>

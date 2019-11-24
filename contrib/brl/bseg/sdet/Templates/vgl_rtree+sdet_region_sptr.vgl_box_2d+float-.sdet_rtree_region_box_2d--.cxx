@@ -1,5 +1,5 @@
 #include <vgl/algo/vgl_rtree.hxx>
-#include <vgl/vgl_polygon.h>
+#include "vgl/vgl_polygon.h"
 #include <vgl/algo/vgl_rtree_c.h>
 #include <sdet/sdet_region.h>
 #include <sdet/sdet_region_classifier.h>

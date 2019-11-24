@@ -4,11 +4,11 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_file.h>
-#include <vsl/vsl_binary_io.h>
+#include "vul/vul_file_iterator.h"
+#include "vul/vul_file.h"
+#include "vsl/vsl_binary_io.h"
 #include <vpgl/io/vpgl_io_perspective_camera.h>
 
 //: The initial camera index

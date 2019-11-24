@@ -6,13 +6,13 @@
 #include <iostream>
 #include <limits>
 #include <utility>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_sphere_3d.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_sphere_3d.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_vector_fixed.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 boxm2_vecf_ocl_head_model::boxm2_vecf_ocl_head_model(std::string const& scene_file,const bocl_device_sptr& device,const boxm2_opencl_cache_sptr& opencl_cache,bool optimize, std::string color_apm_ident):

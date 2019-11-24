@@ -1,11 +1,11 @@
 // This is core/vul/tests/test_string.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
-#include <vul/vul_string.h>
-#include <vpl/vpl.h>
+#include "testlib/testlib_test.h"
+#include "vul/vul_string.h"
+#include "vpl/vpl.h"
 
 void test_string()
 {

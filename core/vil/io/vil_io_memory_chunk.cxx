@@ -9,8 +9,8 @@
 //   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
 // \endverbatim
 
-#include <vsl/vsl_block_binary.h>
-#include <vsl/vsl_complex_io.h>
+#include "vsl/vsl_block_binary.h"
+#include "vsl/vsl_complex_io.h"
 
 #define write_case_macro(T)\
 vsl_b_write(os,unsigned(chunk.size()/sizeof(T ))); \

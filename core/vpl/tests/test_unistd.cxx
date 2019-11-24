@@ -9,15 +9,15 @@
 #include <cerrno>
 #include <algorithm>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
-#include <vul/vul_string.h>
-#include <vpl/vpl.h>
-#include <vpl/vpl_fileno.h>
-#include <vpl/vpl_fdopen.h>
+#include "vul/vul_string.h"
+#include "vpl/vpl.h"
+#include "vpl/vpl_fileno.h"
+#include "vpl/vpl_fdopen.h"
 #if defined(_MSC_VER)
   #include <winsock2.h>
 #endif

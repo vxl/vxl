@@ -3,13 +3,13 @@
 #include "../boxm2_vecf_orbit_tableau.h"
 //executable args
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_window.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
+#include "vgui/vgui.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_window.h"
 int main(int argc, char ** argv)
 {
 #ifdef WIN32

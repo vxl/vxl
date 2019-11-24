@@ -3,12 +3,12 @@
 #include <iostream>
 #include <algorithm>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vxl_config.h> // for vxl_uint_16 etc.
+#include "vxl_config.h" // for vxl_uint_16 etc.
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <vil3d/vil3d_load.h>
 #include <vil3d/vil3d_image_view.h>

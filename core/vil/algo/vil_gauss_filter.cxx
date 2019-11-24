@@ -9,12 +9,12 @@
 // \author Ian Scott
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vnl/vnl_erf.h>
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_real_polynomial.h>
+#include "vnl/vnl_erf.h"
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_real_polynomial.h"
 
 vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double val_sigma)
 {

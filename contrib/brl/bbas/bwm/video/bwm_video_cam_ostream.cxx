@@ -1,9 +1,9 @@
 #include "bwm_video_cam_ostream.h"
 //:
 // \file
-#include <vul/vul_file.h>
-#include <vul/vul_sprintf.h>
-#include <vsl/vsl_binary_io.h>
+#include "vul/vul_file.h"
+#include "vul/vul_sprintf.h"
+#include "vsl/vsl_binary_io.h"
 #include <vpgl/io/vpgl_io_proj_camera.h>
 #include <vpgl/io/vpgl_io_perspective_camera.h>
 

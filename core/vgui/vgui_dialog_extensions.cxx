@@ -6,7 +6,7 @@
 // \brief  See vgui_dialog_extensions.h for a description of this file.
 
 #include "vgui_dialog_extensions.h"
-#include <vgui/vgui.h>
+#include "vgui/vgui.h"
 #include <vgui/internals/vgui_dialog_extensions_impl.h>
 
 //-----------------------------------------------------------------------------

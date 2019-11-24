@@ -9,17 +9,17 @@
 // \brief  See vgui_utils.h for a description of this file.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vil1/vil1_rgba.h>
-#include <vil1/vil1_save.h>
+#include "vil1/vil1_rgba.h"
+#include "vil1/vil1_save.h"
 
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_glu.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_glu.h"
 
-#include <vil/vil_rgba.h>
+#include "vil/vil_rgba.h"
 
 //------------------------------------------------------------------------------
 // copy the buffer into a memory image

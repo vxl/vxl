@@ -2,14 +2,14 @@
 #include <vector>
 #include "rrel_orthogonal_regression.h"
 
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_vector.h"
 #include <vnl/algo/vnl_svd.h>
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 rrel_orthogonal_regression::rrel_orthogonal_regression( const vnl_matrix<double>& pts )

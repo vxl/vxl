@@ -1,8 +1,8 @@
 #include <volm/conf/volm_conf_indexer.h>
 //:
 // \file
-#include <vul/vul_file.h>
-#include <vgl/vgl_point_3d.h>
+#include "vul/vul_file.h"
+#include "vgl/vgl_point_3d.h"
 
 bool volm_conf_indexer::write_params_file()
 {

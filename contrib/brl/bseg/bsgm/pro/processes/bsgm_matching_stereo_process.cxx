@@ -20,12 +20,12 @@
 // Note sign convention is opposite of the OpenCV implementation
 //
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_math.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_math.h"
 #include <bsgm/bsgm_error_checking.h>
 #include <bsgm/bsgm_disparity_estimator.h>
 #include <bsgm/bsgm_multiscale_disparity_estimator.h>

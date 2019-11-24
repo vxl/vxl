@@ -3,12 +3,12 @@
 // \file
 
 #include <bstm/bstm_block_metadata.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
 #include <vsph/vsph_camera_bounds.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 //~ //: takes in a list of cameras and a bounding box, creates
 //  an update scene and a render scene

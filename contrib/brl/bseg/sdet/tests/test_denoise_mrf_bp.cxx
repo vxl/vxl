@@ -5,12 +5,12 @@
 #include <fstream>
 #include <sdet/sdet_denoise_mrf_bp.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_resource.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <testlib/testlib_test.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "testlib/testlib_test.h"
 
 static void test_denoise_mrf_bp()
 {

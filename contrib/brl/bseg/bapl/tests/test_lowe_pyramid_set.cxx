@@ -1,14 +1,14 @@
 #include <iostream>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bapl/bapl_lowe_pyramid_set.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_new.h"
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
 
 
 MAIN( test_lowe_pyramid_set )

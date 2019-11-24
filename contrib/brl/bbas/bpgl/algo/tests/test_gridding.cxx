@@ -1,14 +1,14 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 #include <bpgl/algo/bpgl_gridding.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_random.h"
 
 void test_simple()
 {
@@ -149,7 +149,7 @@ void test_interp_real_origin()
 #endif
 
 #if BPGL_TIMING
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 void test_interp_timing(unsigned long num_iter)
 {

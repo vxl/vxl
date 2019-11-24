@@ -6,13 +6,13 @@
 
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_resource.h>
-#include <vil/vil_load.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_load.h"
 #include <vil/file_formats/vil_nitf2_image.h>
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <bkml/bkml_write.h>
 #include <brad/brad_image_metadata.h>
 

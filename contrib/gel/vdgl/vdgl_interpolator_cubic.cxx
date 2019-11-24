@@ -7,14 +7,14 @@
 #include "vdgl_interpolator_cubic.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_inverse.h>
-#include <vgl/vgl_point_2d.h>
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_numeric_traits.h"
+#include "vnl/vnl_inverse.h"
+#include "vgl/vgl_point_2d.h"
 #include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>

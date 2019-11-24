@@ -9,7 +9,7 @@
 // See vgui_wx_menu.h for details.
 //=========================================================================
 
-#include <vgui/vgui_command.h>
+#include "vgui/vgui_command.h"
 
 #include <wx/menu.h>
 
@@ -19,7 +19,7 @@
 #endif
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

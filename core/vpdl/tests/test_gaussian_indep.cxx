@@ -1,11 +1,11 @@
 #include <string>
 #include <limits>
 #include <iostream>
-#include <testlib/testlib_test.h>
-#include <vpdl/vpdl_gaussian_indep.h>
-#include <vnl/vnl_math.h> // for twopi
+#include "testlib/testlib_test.h"
+#include "vpdl/vpdl_gaussian_indep.h"
+#include "vnl/vnl_math.h" // for twopi
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

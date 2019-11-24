@@ -9,7 +9,7 @@
 #include "vul_get_timestamp.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
@@ -21,7 +21,7 @@
 #include <vcl_sys/time.h> // for gettimeofday()
 
 // for vul_get_time_string()
-#include <vul/vul_string.h>
+#include "vul/vul_string.h"
 //
 
 #if !defined(_WIN32) || defined(__CYGWIN__)

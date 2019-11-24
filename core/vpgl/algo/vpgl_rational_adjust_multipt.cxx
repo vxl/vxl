@@ -5,15 +5,15 @@
 //:
 // \file
 #include <cassert>
-#include <vgl/vgl_point_3d.h>
-#include <vnl/vnl_numeric_traits.h>
+#include "vgl/vgl_point_3d.h"
+#include "vnl/vnl_numeric_traits.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/algo/vpgl_ray_intersect.h>
 #include <vpgl/algo/vpgl_rational_adjust_onept.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 double compute_projection_error(std::vector<vpgl_rational_camera<double> > const& cams,

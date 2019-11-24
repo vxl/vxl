@@ -12,14 +12,14 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <pdf1d/pdf1d_gaussian_sampler.h>
 #include <pdf1d/pdf1d_sampler.h>
 #include <pdf1d/pdf1d_prob_chi2.h>
-#include <vnl/vnl_erf.h>
+#include "vnl/vnl_erf.h"
 
 
 //=======================================================================

@@ -5,9 +5,9 @@
 #include <vector>
 #include "vsl_binary_loader_base.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_indent.h>
+#include "vsl/vsl_indent.h"
 
 // List of all loaders register_this()'ed
 // Create on heap so that it can be cleaned up itself

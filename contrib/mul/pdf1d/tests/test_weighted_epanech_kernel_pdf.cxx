@@ -1,7 +1,7 @@
 // This is mul/pdf1d/tests/test_weighted_epanech_kernel_pdf.cxx
 #include <iostream>
 #include <algorithm>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Ian Scott
@@ -11,11 +11,11 @@
 #include <pdf1d/pdf1d_epanech_kernel_pdf_builder.h>
 #include <pdf1d/pdf1d_weighted_epanech_kernel_sampler.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
-#include <vsl/vsl_binary_loader.h>
-#include <vnl/vnl_math.h>
+#include "vpl/vpl.h" // vpl_unlink()
+#include "vsl/vsl_binary_loader.h"
+#include "vnl/vnl_math.h"
 #include <mbl/mbl_data_array_wrapper.h>
 #include <pdf1d/pdf1d_gaussian.h>
 

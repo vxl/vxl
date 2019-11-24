@@ -1,18 +1,18 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_2d.h>
-#include <vpgl/vpgl_poly_radial_distortion.h>
+#include "vgl/vgl_point_2d.h"
+#include "vpgl/vpgl_poly_radial_distortion.h"
 #include <vpgl_radial_tangential_distortion.h>
 #include <vpgl/algo/vpgl_lens_warp_mapper.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
-#include <vil/vil_bilin_interp.h>
-#include <vil/vil_math.h>
-#include <vul/vul_timer.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
+#include "vil/vil_bilin_interp.h"
+#include "vil/vil_math.h"
+#include "vul/vul_timer.h"
 
 static
 vil_image_view<vxl_byte>

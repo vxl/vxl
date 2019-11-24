@@ -5,11 +5,11 @@
 #include <fstream>
 #include <sstream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_vector_io.h>
-#include <vsl/vsl_binary_io.h>
-#include <testlib/testlib_test.h>
+#include "vsl/vsl_vector_io.h"
+#include "vsl/vsl_binary_io.h"
+#include "testlib/testlib_test.h"
 #include <mbl/mbl_mask.h>
 
 unsigned mask4_to_number(const mbl_mask & r)

@@ -1,18 +1,18 @@
 // This is mul/vpdfl/tests/test_gaussian.cxx
 #include <iostream>
 #include <sstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Ian Scott
 // \brief test vpdfl_gaussian, building, sampling, saving etc.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vpl/vpl.h" // vpl_unlink()
 
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 #include <vpdfl/vpdfl_gaussian.h>
 #include <vpdfl/vpdfl_gaussian_builder.h>
 #include <vpdfl/vpdfl_sampler_base.h>

@@ -7,9 +7,9 @@
 #include <iostream>
 
 #include "vil_sgi_file_header.h"
-#include <vil/vil_stream.h>
-#include <vil/vil_stream_write.h>
-#include <vil/vil_stream_read.h>
+#include "vil/vil_stream.h"
+#include "vil/vil_stream_write.h"
+#include "vil/vil_stream_read.h"
 
 // The magic number for SGI images
 #define SGI_SIGNATURE_BYTE_0 0x01

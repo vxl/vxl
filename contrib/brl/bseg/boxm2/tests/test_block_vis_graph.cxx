@@ -3,17 +3,17 @@
 #include <vector>
 #include <map>
 #include <algorithm>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #include "test_utils.h"
 
 #include <boxm2/boxm2_block.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_blocks_vis_graph.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vpgl/vpgl_generic_camera.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vpgl/vpgl_generic_camera.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 void create_scene(boxm2_scene_sptr & scene)
 {

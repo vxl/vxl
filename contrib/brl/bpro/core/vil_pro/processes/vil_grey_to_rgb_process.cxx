@@ -12,10 +12,10 @@
 // \author Yi Dong
 // \date Sep 05, 2013
 
-#include <vul/vul_file.h>
-#include <vil/vil_load.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
+#include "vul/vul_file.h"
+#include "vil/vil_load.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
 
 // global variables
 namespace vil_grey_to_rgb_process_globals

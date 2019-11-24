@@ -1,5 +1,5 @@
 // This is mul/mmn/tests/test_order_cost.cxx
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <mmn/mmn_order_cost.h>
 
 void test_get_order()

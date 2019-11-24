@@ -11,14 +11,14 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_clip.h>
-#include <vnl/vnl_math.h> // for twopi
+#include "vgl/vgl_clip.h"
+#include "vnl/vnl_math.h" // for twopi
 
-#include <vgui/vgui_matrix_state.h>
-#include <vgui/vgui_projection_inspector.h>
-#include <vgui/vgui_adaptor.h>
+#include "vgui/vgui_matrix_state.h"
+#include "vgui/vgui_projection_inspector.h"
+#include "vgui/vgui_adaptor.h"
 
 vgui_rubberband_tableau::object_type vgui_rubberband_tableau::obj_type = none_enum;
 

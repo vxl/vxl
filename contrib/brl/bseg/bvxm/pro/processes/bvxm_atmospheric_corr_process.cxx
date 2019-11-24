@@ -7,13 +7,13 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bsta/bsta_histogram.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
 
 #ifdef DEBUG
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #endif
 

@@ -4,11 +4,11 @@
 // \author Tim Cootes
 
 #include "ihog_sample_grid_bilin.h"
-#include <vil/vil_sample_grid_bilin.h>
-#include <vil/vil_bilin_interp.h>
-#include <vnl/vnl_vector.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vil/vil_sample_grid_bilin.h"
+#include "vil/vil_bilin_interp.h"
+#include "vnl/vnl_vector.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 
 inline bool ihog_grid_corner_in_image(const vgl_point_2d<double>& p,
                                       const vil_image_view_base& image)

@@ -17,10 +17,10 @@
 #include <iostream>
 #include <fstream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_vector_fixed.h>
-#include <testlib/testlib_test.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "testlib/testlib_test.h"
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
 // BeginCodeSnippet

@@ -5,7 +5,7 @@
 // \author Tim Cootes
 
 #include <mbl/mbl_draw_line.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 
 //: Draw oriented cross onto image, centred on pose.p()
 //  Orientation defined by pose.u(), size by (ru,rv)

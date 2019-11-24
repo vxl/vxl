@@ -5,12 +5,12 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_math.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_math.h"
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
 #include <sdet/sdet_selective_search.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vgl/vgl_polygon_scan_iterator.h"
 #include <volm/volm_io_tools.h>
 
 using namespace std;

@@ -7,8 +7,8 @@
 // \endverbatim
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_math.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_math.h"
 
 //: Constructor
 bool vil_scale_and_offset_values_process_cons(bprb_func_process& pro)

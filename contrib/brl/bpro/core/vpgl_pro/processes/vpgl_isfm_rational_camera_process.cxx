@@ -20,18 +20,18 @@
 //
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vul/vul_file.h>
-#include <vul/vul_awk.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vul/vul_file.h"
+#include "vul/vul_awk.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
 #include <vpgl/algo/vpgl_rational_adjust_onept.h>
-#include <vul/vul_file_iterator.h>
-#include <vil/vil_load.h>
-#include <vgl/vgl_distance.h>
+#include "vul/vul_file_iterator.h"
+#include "vil/vil_load.h"
+#include "vgl/vgl_distance.h"
 //:
 //  Take a list of rational cameras and a list of 2D image correspondences of the same 3D point location,
 //  find that 3D location,

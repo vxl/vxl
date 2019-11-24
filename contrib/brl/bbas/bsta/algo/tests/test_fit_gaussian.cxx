@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gaussian_indep.h>
@@ -8,10 +8,10 @@
 #include <bsta/algo/bsta_fit_gaussian.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 
 
 MAIN( test_fit_gaussian)

@@ -6,7 +6,7 @@
 
 
 #include "vgui_pixel.h"
-#include <vgui/vgui_gl.h>
+#include "vgui/vgui_gl.h"
 
 //------------------------------------------------------------------------------
 

@@ -4,9 +4,9 @@
 // \file
 // processes to operate intersection operation available in vgl core
 
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_intersection.h"
 #include <bsol/bsol_algs.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <bkml/bkml_parser.h>
 #include <bkml/bkml_write.h>
 

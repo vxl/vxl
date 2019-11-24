@@ -1,8 +1,8 @@
 // This is mul/ipts/tests/test_scale_space_peaks.cxx
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <ipts/ipts_scale_space_peaks.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 
 static void test_scale_space_peaks_float()
 {

@@ -183,7 +183,7 @@ std::wstring vul_expand_path(std::wstring path)
 #else // #if defined(_WIN32)
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <sys/types.h>
 #include <sys/stat.h>

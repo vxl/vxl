@@ -6,7 +6,7 @@
 #include "vil_stream_fstream.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static std::ios::openmode modeflags(char const* mode)

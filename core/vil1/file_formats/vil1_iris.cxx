@@ -11,13 +11,13 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_stream.h>
-#include <vil1/vil1_image_impl.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_property.h>
+#include "vil1/vil1_stream.h"
+#include "vil1/vil1_image_impl.h"
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_property.h"
 
 static short get_short(vil1_stream* file, int location = -1); // default -1 means: read at current position
 static unsigned short get_ushort(vil1_stream* file, int location = -1);

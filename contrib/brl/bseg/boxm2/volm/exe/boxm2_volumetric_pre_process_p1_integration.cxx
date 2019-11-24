@@ -4,7 +4,7 @@
 // \author Yi Dong
 // \date Apr 03, 2013
 
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 #include <volm/volm_spherical_container.h>
 #include <volm/volm_spherical_container_sptr.h>
 #include <volm/volm_spherical_shell_container.h>
@@ -14,7 +14,7 @@
 #include <volm/volm_camera_space_sptr.h>
 #include <volm/volm_query.h>
 #include <volm/volm_query_sptr.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 int main(int argc, char** argv)
 {

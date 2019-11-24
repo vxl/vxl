@@ -1,17 +1,17 @@
 // This is core/vsl/tests/test_polymorphic_io.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_binary_loader.h>
-#include <vsl/vsl_binary_loader.hxx>
-#include <vpl/vpl.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_binary_loader.h"
+#include "vsl/vsl_binary_loader.hxx"
+#include "vpl/vpl.h"
 
 //: Base class to test polymorphic loading
 class test_base_class

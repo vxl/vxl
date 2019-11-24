@@ -1,10 +1,10 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <brad/brad_synoptic_function_1d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_synoptic_function()

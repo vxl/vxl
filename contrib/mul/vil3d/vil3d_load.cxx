@@ -6,10 +6,10 @@
 // \brief Functions to read an image from a file
 // \author Ian Scott
 
-#include <vil/vil_exception.h>
+#include "vil/vil_exception.h"
 #include <vil3d/vil3d_file_format.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vil3d_image_resource_sptr vil3d_load_image_resource(char const* filename)

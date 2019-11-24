@@ -2,7 +2,7 @@
 //:
 // \file
 #include <vnl/io/vnl_io_vector_fixed.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <brip/brip_line_generator.h>
 

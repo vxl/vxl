@@ -2,13 +2,13 @@
 //:
 // \file
 #include <vpgl/algo/vpgl_invmap_cost_function.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_plane_3d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_plane_3d.h"
 #include <vnl/algo/vnl_amoeba.h>
-#include <vgl/vgl_intersection.h>
-#include <vpgl/vpgl_generic_camera.h>
-#include <vnl/vnl_random.h>
+#include "vgl/vgl_intersection.h"
+#include "vpgl/vpgl_generic_camera.h"
+#include "vnl/vnl_random.h"
 
 bool vpgl_backproject::bproj_plane(vpgl_generic_camera<double> const& gcam,
                                    vnl_double_2 const& image_point,

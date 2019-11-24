@@ -1,13 +1,13 @@
 // This is brl/bseg/brip/tests/test_homography.cxx
 #define DEBUG
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1/vil1_memory_image_of.h"
 #ifdef DEBUG
-#include <vil1/vil1_save.h>
+#include "vil1/vil1_save.h"
 #endif
 #include <brip/brip_vil1_float_ops.h>
-#include <testlib/testlib_test.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "testlib/testlib_test.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_vector_fixed.h"
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vnl/algo/vnl_svd.h>
 static void test_homography()

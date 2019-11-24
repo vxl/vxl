@@ -10,14 +10,14 @@
 
 #include <vcl_where_root_dir.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //executable args
-#include <vul/vul_arg.h>
-#include <vul/vul_timer.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_save.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_timer.h"
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_save.h"
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>

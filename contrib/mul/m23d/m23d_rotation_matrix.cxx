@@ -7,7 +7,7 @@
 // \brief Generate pure 3x3 rotation matrices
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Generate 3x3 matrix which applies a rotation about the x axis

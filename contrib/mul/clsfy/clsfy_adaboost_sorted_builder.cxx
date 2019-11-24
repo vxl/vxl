@@ -22,10 +22,10 @@
 #include "clsfy_builder_1d.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vbl/vbl_triple.h>
+#include "vbl/vbl_triple.h"
 #include <mbl/mbl_file_data_collector.h>
 #include <mbl/mbl_data_collector_list.h>
 

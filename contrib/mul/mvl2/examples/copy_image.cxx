@@ -1,6 +1,6 @@
 #include <mvl2/mvl2_image_format_plugin.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 
 int main(int argc, char **argv)
 {

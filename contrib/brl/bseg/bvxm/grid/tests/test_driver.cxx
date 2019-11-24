@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_voxel_storage_mem );
 DECLARE( test_voxel_storage_slab_mem );

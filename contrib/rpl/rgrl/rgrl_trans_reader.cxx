@@ -20,7 +20,7 @@
 #include <rgrl/rgrl_trans_spline.h>
 #include <rgrl/rgrl_util.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // initialize the static variables

@@ -1,15 +1,15 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vpl/vpl.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_random.h>
+#include "vpl/vpl.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_random.h"
 #include <vpgl/algo/vpgl_fit_rational_cubic.h>
 
 static vnl_vector_fixed<double, 20> power_vector(double x, double y, double z){

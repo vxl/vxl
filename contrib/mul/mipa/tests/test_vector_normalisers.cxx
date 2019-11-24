@@ -6,13 +6,13 @@
 #include <algorithm>
 #include <iterator>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
-#include <vsl/vsl_binary_loader.h>
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_vector_ref.h>
+#include "testlib/testlib_test.h"
+#include "vsl/vsl_binary_loader.h"
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_vector_ref.h"
 #include <mbl/mbl_read_props.h>
 #include <mipa/mipa_l2norm_vector_normaliser.h>
 #include <mipa/mipa_identity_normaliser.h>

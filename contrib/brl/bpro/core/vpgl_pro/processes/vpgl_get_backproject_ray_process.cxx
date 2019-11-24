@@ -2,16 +2,16 @@
 #include <iostream>
 #include <fstream>
 #include <bprb/bprb_func_process.h>
-#include <vpgl/vpgl_rational_camera.h>
+#include "vpgl/vpgl_rational_camera.h"
 //:
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vsl/vsl_binary_io.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vsl/vsl_binary_io.h"
 #include <vpgl/algo/vpgl_backproject.h>
 
 namespace vpgl_get_backproject_ray_process_globals

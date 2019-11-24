@@ -6,11 +6,11 @@
 #include <vector>
 #include <cstdlib>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_block_binary.h>
-#include <testlib/testlib_test.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_block_binary.h"
+#include "testlib/testlib_test.h"
 
 void free_blocks(std::vector<void *> &blocks)
 {

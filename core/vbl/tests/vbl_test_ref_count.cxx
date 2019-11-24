@@ -1,7 +1,7 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 // not used? #include <vcl_compiler.h>
-#include <vbl/vbl_ref_count.h>
+#include "vbl/vbl_ref_count.h"
 
 class myclass_test1 : public vbl_ref_count
 {

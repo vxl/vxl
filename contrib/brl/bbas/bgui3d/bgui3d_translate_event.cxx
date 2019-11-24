@@ -7,7 +7,7 @@
 #include <Inventor/events/SoMouseButtonEvent.h>
 #include <Inventor/events/SoLocation2Event.h>
 
-#include <vul/vul_get_timestamp.h>
+#include "vul/vul_get_timestamp.h"
 
 //: Translate a \p vgui_event to an \p SoEvent*
 SoEvent*

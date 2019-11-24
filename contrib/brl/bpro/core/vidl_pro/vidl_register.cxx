@@ -1,8 +1,8 @@
 #include "vidl_register.h"
 #include "vidl_processes.h"
 
-#include <vidl/vidl_istream_sptr.h>
-#include <vidl/vidl_ostream_sptr.h>
+#include "vidl/vidl_istream_sptr.h"
+#include "vidl/vidl_ostream_sptr.h"
 
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>

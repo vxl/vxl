@@ -1,7 +1,7 @@
 // This is mul/vil3d/tests/test_save_load_image.cxx
 #include <string>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Peter Vanroose, Ian Scott
@@ -9,20 +9,20 @@
 //
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 
-#include <vul/vul_temp_filename.h>
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vul/vul_temp_filename.h"
+#include "vpl/vpl.h" // vpl_unlink()
 
 #include <vil3d/vil3d_save.h>
 #include <vil3d/vil3d_load.h>
 #include <vil3d/vil3d_print.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_image_resource.h>
-#include <vil/vil_print.h>
+#include "vil/vil_print.h"
 #include <vil3d/vil3d_property.h>
 
 #ifndef LEAVE_IMAGES_BEHIND

@@ -1,6 +1,6 @@
 // First define testmain
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #undef TESTLIB_DEFINE_MAIN
 #define TESTLIB_DEFINE_MAIN(x)
 

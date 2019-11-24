@@ -1,5 +1,5 @@
-#include <vil1/vil1_ssd.h>
-#include <vil1/vil1_ssd.hxx>
+#include "vil1/vil1_ssd.h"
+#include "vil1/vil1_ssd.hxx"
 
 using byte = unsigned char;
 

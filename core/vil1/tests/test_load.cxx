@@ -6,16 +6,16 @@
 #include <fstream>
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vpl/vpl.h>
-#include <vul/vul_temp_filename.h>
+#include "vpl/vpl.h"
+#include "vul/vul_temp_filename.h"
 
-#include <vil1/vil1_load.h>
-#include <vil1/vil1_image.h>
+#include "vil1/vil1_load.h"
+#include "vil1/vil1_image.h"
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 static void test(char const* magic, int comps, int bits, int maxval)
 {

@@ -2,12 +2,12 @@
 #include <iostream>
 #include <string>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_set_io.h>
-#include <testlib/testlib_test.h>
-#include <vpl/vpl.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_set_io.h"
+#include "testlib/testlib_test.h"
+#include "vpl/vpl.h"
 
 void test_set_io()
 {

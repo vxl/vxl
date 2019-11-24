@@ -17,22 +17,22 @@
 #include "video/bwm_video_site_io.h"
 #include "video/bwm_video_corr.h"
 #include "video/bwm_video_cam_istream.h"
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 #include <bpgl/algo/bpgl_project.h>
 #include <depth_map/depth_map_scene.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_box_3d.h"
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_quaternion.h>
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_quaternion.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vul/vul_file.h>
-#include <vul/vul_string.h>
-#include <vgui/vgui_tableau_sptr.h>
+#include "vul/vul_file.h"
+#include "vul/vul_string.h"
+#include "vgui/vgui_tableau_sptr.h"
 
 #ifdef WIN32
  #define _LIB

@@ -3,15 +3,15 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
-#include <testlib/testlib_test.h>
-#include <vgl/vgl_cubic_spline_3d.h>
-#include <vgl/vgl_cubic_spline_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_point_2d.h>
+#include "testlib/testlib_test.h"
+#include "vgl/vgl_cubic_spline_3d.h"
+#include "vgl/vgl_cubic_spline_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_point_2d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h>
+#include "vpl/vpl.h"
 
 static void test_spline()
 {

@@ -4,8 +4,8 @@
 // \brief Normalise the sampled vector by its overall L2 norm
 
 #include "mipa_l2norm_vector_normaliser.h"
-#include <vnl/vnl_vector.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vnl/vnl_vector.h"
+#include "vsl/vsl_binary_loader.h"
 
 //=======================================================================
 

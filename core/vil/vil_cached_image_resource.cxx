@@ -1,7 +1,7 @@
 // This is core/vil/vil_cached_image_resource.cxx
 
 #include "vil_cached_image_resource.h"
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_image_view_base.h"
 
 // Get a view that is the size of a block.
 // Uses the cache to retrieve frequently used blocks

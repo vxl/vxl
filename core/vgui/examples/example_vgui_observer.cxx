@@ -5,18 +5,18 @@
 // images (using PageUp and PageDown), the observer changes the window
 // title to the name of the appropriate image file.
 
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_deck_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_deck_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 
-#include <vgui/vgui_observer.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_window.h>
-#include <vgui/vgui_macro.h>
+#include "vgui/vgui_observer.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_window.h"
+#include "vgui/vgui_macro.h"
 
 struct example_window_title_setter : public vgui_observer
 {

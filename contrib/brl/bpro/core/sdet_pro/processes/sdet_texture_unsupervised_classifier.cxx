@@ -7,8 +7,8 @@
 #include <brdb/brdb_value.h>
 #include <sdet/sdet_atmospheric_image_classifier.h>
 #include <sdet/sdet_texture_classifier_params.h>
-#include <vil/vil_image_view.h>
-#include <vnl/vnl_random.h>
+#include "vil/vil_image_view.h"
+#include "vnl/vnl_random.h"
 
 //: initialize input and output types
 bool sdet_texture_unsupervised_classifier_process_cons(bprb_func_process& pro)

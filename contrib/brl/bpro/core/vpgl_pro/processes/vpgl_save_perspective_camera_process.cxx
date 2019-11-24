@@ -7,14 +7,14 @@
 
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_proj_camera.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_proj_camera.h"
 #include <vpgl/io/vpgl_io_perspective_camera.h>
-#include <vsl/vsl_binary_io.h>
-#include <vul/vul_file.h>
+#include "vsl/vsl_binary_io.h"
+#include "vul/vul_file.h"
 
 //: initialization
 bool vpgl_save_perspective_camera_process_cons(bprb_func_process& pro)

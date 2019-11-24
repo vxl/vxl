@@ -3,10 +3,10 @@
 #include <iostream>
 #include <exception>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
 #include <vil3d/vil3d_reflect.h>
 #include <vimt3d/vimt3d_add_all_loaders.h>
 #include <vimt3d/vimt3d_transform_3d.h>

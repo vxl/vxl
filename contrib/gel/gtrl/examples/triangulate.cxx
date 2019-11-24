@@ -7,7 +7,7 @@
 #include <iostream>
 #include <gtrl/gtrl_triangulation.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 inline std::ostream& operator<<(std::ostream& os, gtrl_vertex const& v)

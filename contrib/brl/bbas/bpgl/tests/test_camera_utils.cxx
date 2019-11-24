@@ -1,12 +1,12 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <bpgl/bpgl_camera_utils.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_polygon.h>
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_polygon.h"
 static void test_camera_utils()
 {
   // =============  test kml camera constructor========================

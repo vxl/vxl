@@ -6,13 +6,13 @@
 //
 #include <string>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/pro/processes/bvxm_normalization_util.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brdb/brdb_value.h>
@@ -21,7 +21,7 @@
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
-#include <vil/vil_math.h>
+#include "vil/vil_math.h"
 
 #include <brip/brip_vil_float_ops.h>
 

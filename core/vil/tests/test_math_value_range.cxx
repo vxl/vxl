@@ -1,11 +1,11 @@
 // This is core/vil/tests/test_math_value_range.cxx
 
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_math.h>
+#include "vil/vil_math.h"
 
 
 static void test_math_value_range()

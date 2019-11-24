@@ -5,10 +5,10 @@
 #include "bvgl_biarc.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_vector_2d.h"
 
 #define bvgl_biarc_e_angle 0.0001   //Epsilon for angles
 #define bvgl_biarc_e_k 0.00001   //Epsilon for curvature  0.0001

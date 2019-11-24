@@ -1,8 +1,8 @@
 #include "icam_depth_trans_pyramid.h"
 //
-#include <vil/vil_pyramid_image_view.h>
+#include "vil/vil_pyramid_image_view.h"
 #include <vil/algo/vil_gauss_filter.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_inverse.h"
 
 unsigned icam_depth_trans_pyramid::
 required_levels(unsigned ni,unsigned nj,unsigned min_size)

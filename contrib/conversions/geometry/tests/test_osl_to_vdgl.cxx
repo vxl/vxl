@@ -1,4 +1,4 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #if defined(HAS_OSL) && defined(HAS_VDGL)
 #include <geometry/osl_to_vdgl.h>

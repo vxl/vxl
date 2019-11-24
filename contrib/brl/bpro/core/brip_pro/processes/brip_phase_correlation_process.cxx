@@ -9,9 +9,9 @@
 // \endverbatim
 
 #include <brip/brip_phase_correlation.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_save.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_save.h"
 //: global variables
 namespace brip_phase_correlation_process_globals
 {

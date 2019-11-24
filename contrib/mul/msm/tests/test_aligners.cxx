@@ -6,7 +6,7 @@
 //=======================================================================
 #include <iostream>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Tim Cootes
@@ -17,9 +17,9 @@
 #include <msm/msm_rigid_aligner.h>
 #include <msm/msm_similarity_aligner.h>
 #include <msm/msm_affine_aligner.h>
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_vector.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void test_generic_aligner(const msm_aligner& aligner)

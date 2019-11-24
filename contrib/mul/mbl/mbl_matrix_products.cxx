@@ -7,11 +7,11 @@
 #include <iostream>
 #include <cstdlib>
 #include "mbl_matrix_products.h"
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_matrix.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //=======================================================================

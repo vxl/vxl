@@ -12,11 +12,11 @@
 // \author Martin Roberts
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_vector_io.h"
 #include <vnl/io/vnl_io_vector.h>
 #include <mbl/mbl_stl.h>
 

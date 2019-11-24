@@ -4,7 +4,7 @@
 // \author Peter Vanroose
 // \date 17 March 2004
 //-----------------------------------------------------------------------------
-#include <vul/vul_psfile.h>
+#include "vul/vul_psfile.h"
 
 int main()
 {

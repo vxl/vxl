@@ -14,12 +14,12 @@
 #include <cmath>
 #include "pdf1d_pdf.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_loader.h>
-#include <vnl/vnl_math.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_loader.h"
+#include "vnl/vnl_math.h"
 #include <mbl/mbl_priority_bounded_queue.h>
 #include <pdf1d/pdf1d_sampler.h>
 

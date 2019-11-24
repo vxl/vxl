@@ -1,11 +1,11 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vsph/vsph_unit_sphere.h>
 #include <vsph/vsph_sph_point_2d.h>
 #include <vsph/vsph_sph_box_2d.h>
 #include <vsph/vsph_utils.h>
-#include <vgl/vgl_polygon.h>
+#include "vgl/vgl_polygon.h"
 #include <bpgl/bpgl_camera_utils.h>
-#include <vpl/vpl.h>
+#include "vpl/vpl.h"
 
 
 static void test_utils()

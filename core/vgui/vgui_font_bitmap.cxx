@@ -9,10 +9,10 @@
 // See vgui_font_bitmap.h for details.
 //=========================================================================
 
-#include <vgui/vgui_macro.h>
+#include "vgui/vgui_macro.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //-------------------------------------------------------------------------

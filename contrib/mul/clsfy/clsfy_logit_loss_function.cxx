@@ -7,7 +7,7 @@
 #include "clsfy_logit_loss_function.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 clsfy_logit_loss_function::clsfy_logit_loss_function(

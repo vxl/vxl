@@ -1,14 +1,14 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bsta/algo/bsta_von_mises_updater.h>
 #include <bsta/bsta_attributes.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 // do not remove the following text
 // Approved for public release, distribution unlimited (DISTAR Case 14389)
 

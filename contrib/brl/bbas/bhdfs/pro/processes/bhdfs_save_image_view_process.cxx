@@ -7,10 +7,10 @@
 
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bhdfs/bhdfs_vil_save.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_image_view_base.h"
 
 //: Constructor
 bool bhdfs_save_image_view_process_cons(bprb_func_process& pro)

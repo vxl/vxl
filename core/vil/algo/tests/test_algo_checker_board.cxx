@@ -1,10 +1,10 @@
 // This is core/vil/algo/tests/test_algo_checker_board.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 // not used? #include <vcl_compiler.h>
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 #include <vil/algo/vil_checker_board.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 static void test_algo_checker_board()
 {

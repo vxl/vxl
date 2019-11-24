@@ -11,9 +11,9 @@
 #include <algorithm>
 #include <exception>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 #include <mbl/mbl_mask.h>
 #include <mbl/mbl_exception.h>
 

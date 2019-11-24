@@ -1,7 +1,7 @@
 #include "icam_sample.h"
 //:
 // \file
-#include <vil/vil_bilin_interp.h>
+#include "vil/vil_bilin_interp.h"
 
 void icam_sample::sample( unsigned int ni_dest,  unsigned int nj_dest,
                           vil_image_view<float> const& source,

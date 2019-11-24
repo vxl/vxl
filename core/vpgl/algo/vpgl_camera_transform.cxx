@@ -7,18 +7,18 @@
 
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vpgl/algo/vpgl_camera_compute.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_box_3d.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vnl/vnl_sparse_matrix_linear_system.h>
+#include "vnl/vnl_sparse_matrix_linear_system.h"
 #include <vnl/algo/vnl_lsqr.h>
 #include <vnl/algo/vnl_qr.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vnl/vnl_inverse.h>
-#include <vnl/vnl_quaternion.h>
-#include <vnl/vnl_trace.h>
+#include "vnl/vnl_inverse.h"
+#include "vnl/vnl_quaternion.h"
+#include "vnl/vnl_trace.h"
 
 
 vpgl_camera_transform_f::vpgl_camera_transform_f(unsigned cnt_residuals, unsigned n_unknowns,

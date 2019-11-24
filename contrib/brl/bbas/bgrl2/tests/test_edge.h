@@ -10,7 +10,7 @@
 #include <iostream>
 #include <bgrl2/bgrl2_edge.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include "test_node.h"

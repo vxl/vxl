@@ -7,10 +7,10 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_box_3d.h"
 
 //Constructor from file
 bvxm_world_param_parser::bvxm_world_param_parser(std::string& filename)

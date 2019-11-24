@@ -1,9 +1,9 @@
 //:
 // \file
 #include <bprb/bprb_func_process.h>
-#include <vgl/vgl_polygon.h>
+#include "vgl/vgl_polygon.h"
 #include <vgl/io/vgl_io_polygon.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 #include <bmdl/bmdl_mesh.h>
 

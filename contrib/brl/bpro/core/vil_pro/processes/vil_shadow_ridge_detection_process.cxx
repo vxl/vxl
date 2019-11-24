@@ -6,12 +6,12 @@
 // Shadow ridges are occluding contours from sun's viewpoint.
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_view_base.h"
 #include <vil/algo/vil_binary_closing.h>
 #include <vil/algo/vil_binary_opening.h>
 #include <vil/algo/vil_blob.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 namespace vil_shadow_ridge_detection_process_globals
 {

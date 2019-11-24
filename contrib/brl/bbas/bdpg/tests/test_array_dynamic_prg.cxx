@@ -2,11 +2,11 @@
 #include <cstdlib>
 #include <iostream>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h> //for vnl_math::pi
+#include "vnl/vnl_math.h" //for vnl_math::pi
 #include <bdpg/bdpg_node.h>
 #include <bdpg/bdpg_array_dynamic_prg.h>
 

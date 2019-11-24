@@ -15,11 +15,11 @@
 #include "rgtl_sqt_cell_geometry.h"
 #include "rgtl_sqt_cell_location.h"
 
-#include <vnl/vnl_float_3.h>
-#include <vnl/vnl_double_3.h>
+#include "vnl/vnl_float_3.h"
+#include "vnl/vnl_double_3.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

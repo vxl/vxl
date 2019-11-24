@@ -2,12 +2,12 @@
 
 #include <iostream>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
-#include <vul/vul_temp_filename.h>
-#include <vpl/vpl.h>  // for vpl_unlink and vpl_sleep
+#include "vul/vul_temp_filename.h"
+#include "vpl/vpl.h"  // for vpl_unlink and vpl_sleep
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_first()

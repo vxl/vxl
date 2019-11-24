@@ -1,8 +1,8 @@
 // This is prip/vdtop/vdtop_8_neighborhood_mask.cxx
 #include "vdtop_8_neighborhood_mask.h"
 
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_image_view.hxx>
+#include "vil/vil_pixel_format.h"
+#include "vil/vil_image_view.hxx"
 
 template <>
 inline vil_pixel_format vil_pixel_format_of(vdtop_8_neighborhood_mask ) { return VIL_PIXEL_FORMAT_BYTE; }

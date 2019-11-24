@@ -4,9 +4,9 @@
 #include "rgrl_match_set.h"
 
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_det.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_det.h"
 
 
 rgrl_est_homography2d::

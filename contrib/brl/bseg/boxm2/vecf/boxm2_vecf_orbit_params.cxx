@@ -1,7 +1,7 @@
 #include <iostream>
 #include "boxm2_vecf_orbit_params.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 double
 boxm2_vecf_orbit_params

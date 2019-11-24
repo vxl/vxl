@@ -6,12 +6,12 @@
 // \brief A process to convert a local_rational_camera to a perspective_camera, using user-defined min and max z planes.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_box_3d.h"
 
 //: Init function
 bool vpgl_convert_local_rational_to_perspective_process_cons(bprb_func_process& pro)

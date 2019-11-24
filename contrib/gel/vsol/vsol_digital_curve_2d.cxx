@@ -6,11 +6,11 @@
 //:
 // \file
 #include <vsol/vsol_point_2d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_closest_point.h>
-#include <vsl/vsl_vector_io.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_closest_point.h"
+#include "vsl/vsl_vector_io.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

@@ -2,13 +2,13 @@
 #include <cstdlib>
 #include <cstring>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil1/vil1_memory_image.h>
-#include <vil1/vil1_save.h>
+#include "vil1/vil1_memory_image.h"
+#include "vil1/vil1_save.h"
 #include <oufgl/frame_grabber_v4l.h>
 #include <getopt.h>
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 int main(int argc, char *argv[])
 {

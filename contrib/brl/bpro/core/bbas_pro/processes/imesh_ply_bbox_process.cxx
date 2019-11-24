@@ -10,10 +10,10 @@
 // \date jan 26, 2011
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <imesh/imesh_fileio.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_box_3d.h"
 
 namespace imesh_ply_bbox_process_globals
 {

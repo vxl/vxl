@@ -1,4 +1,4 @@
-#include <vbl/vbl_smart_ptr.hxx>
+#include "vbl/vbl_smart_ptr.hxx"
 #include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_box_2d.h>

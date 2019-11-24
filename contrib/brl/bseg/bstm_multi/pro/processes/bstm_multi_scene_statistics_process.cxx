@@ -14,9 +14,9 @@
 #include <string>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_intersection.h"
 
 #include <boct/boct_bit_tree.h>
 #include <boxm2/basic/boxm2_array_3d.h>

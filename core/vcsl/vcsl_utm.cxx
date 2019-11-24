@@ -1,6 +1,6 @@
 // This is core/vcsl/vcsl_utm.cxx
 #include "vcsl_utm.h"
-#include <vcsl/vcsl_axis.h>
+#include "vcsl/vcsl_axis.h"
 
 //--------------------------------------------------------------------------
 // Default constructor

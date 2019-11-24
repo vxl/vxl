@@ -19,11 +19,11 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <brdb/brdb_value.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
 
 //: Constructor
 bool brec_prob_map_roc_compute_process_cons(bprb_func_process& pro)

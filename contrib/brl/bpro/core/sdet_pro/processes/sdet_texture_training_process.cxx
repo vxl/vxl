@@ -7,11 +7,11 @@
 #include <brdb/brdb_value.h>
 #include <sdet/sdet_texture_classifier.h>
 #include <sdet/sdet_texture_classifier_params.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <bbas_pro/bbas_1d_array_string.h>
 #include <bbas_pro/bbas_1d_array_string_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 
 //: initialize input and output types
 bool sdet_texture_training_process_cons(bprb_func_process& pro)

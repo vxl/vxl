@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_make_ortho_projection );
 DECLARE( test_rotation_from_ortho_projection );

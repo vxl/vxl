@@ -1,16 +1,16 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 
 #include <volm/volm_satellite_resources.h>
 #include <volm/volm_satellite_resources_sptr.h>
 #include <volm/volm_geo_index2.h>
 
 #include <bkml/bkml_write.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <vcl_where_root_dir.h>
 
 static volm_satellite_resources_sptr create_test_sat_res()

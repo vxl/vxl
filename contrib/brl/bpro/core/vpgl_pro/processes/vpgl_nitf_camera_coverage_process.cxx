@@ -6,7 +6,7 @@
 
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bpgl/algo/bpgl_nitf_camera_coverage.h>
 

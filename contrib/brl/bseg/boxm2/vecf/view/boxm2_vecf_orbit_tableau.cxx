@@ -1,11 +1,11 @@
 #include "boxm2_vecf_orbit_tableau.h"
 #include "../boxm2_vecf_plot_orbit.h"
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polyline_2d.h>
-#include <vgui/vgui_style.h>
-#include <vil/vil_load.h>
+#include "vgui/vgui_style.h"
+#include "vil/vil_load.h"
 #include "../boxm2_vecf_orbit_exporter.h"
 //: Set up the tableaux
 void boxm2_vecf_orbit_tableau::init()

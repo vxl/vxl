@@ -14,14 +14,14 @@
 #include <iostream>
 #include <string>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_opinion.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 #include <bsta/bsta_distribution.h>
 #include <bsta/bsta_gauss_sf1.h>

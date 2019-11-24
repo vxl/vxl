@@ -1,8 +1,8 @@
 // This is brl/bseg/baml/baml_warp.cxx
 
-#include <vnl/vnl_inverse.h>
-#include <vil/vil_warp.h>
-#include <vil/vil_bilin_interp.h>
+#include "vnl/vnl_inverse.h"
+#include "vil/vil_warp.h"
+#include "vil/vil_bilin_interp.h"
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
 
 #include "baml_warp.h"

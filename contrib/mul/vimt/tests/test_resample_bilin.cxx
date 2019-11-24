@@ -1,22 +1,22 @@
 // This is mul/vimt/tests/test_resample_bilin.cxx
 #include <iostream>
 #include <iomanip>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil/vil_math.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_print.h>
-#include <vil/vil_decimate.h>
-#include <vil/vil_transpose.h>
+#include "vil/vil_math.h"
+#include "vil/vil_crop.h"
+#include "vil/vil_print.h"
+#include "vil/vil_decimate.h"
+#include "vil/vil_transpose.h"
 #include <vimt/vimt_transform_2d.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_resample_bilin.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 
 static void test_resample_bilin()
 {

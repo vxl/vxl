@@ -5,9 +5,9 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_double_3x4.h>
+#include "vnl/vnl_double_3x4.h"
 #include <mvl/PMatrix.h>
 #include <mvl/PMatrixDecompCR.h>
 

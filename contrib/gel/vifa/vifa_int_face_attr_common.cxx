@@ -7,12 +7,12 @@
 
 #include <vdgl/vdgl_fit_lines.h>
 #include <vtol/vtol_intensity_face.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 #include <vsol/vsol_line_2d.h>
 #include <vtol/vtol_vertex_sptr.h>
 #include <vifa/vifa_group_pgram.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vifa_int_face_attr_common::

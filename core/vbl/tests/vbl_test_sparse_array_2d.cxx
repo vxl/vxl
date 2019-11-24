@@ -1,5 +1,5 @@
-#include <testlib/testlib_test.h>
-#include <vbl/vbl_sparse_array_2d.h>
+#include "testlib/testlib_test.h"
+#include "vbl/vbl_sparse_array_2d.h"
 
 static void vbl_test_sparse_array_2d()
 {

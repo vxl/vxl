@@ -11,12 +11,12 @@
 #include <sstream>
 #include "bil_arf_image_istream.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_file.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_memory_chunk.h>
+#include "vul/vul_file_iterator.h"
+#include "vul/vul_file.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_memory_chunk.h"
 
 //--------------------------------------------------------------------------------
 void endian_swap(unsigned int& x)

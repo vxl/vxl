@@ -2,13 +2,13 @@
 // \file
 #include <iostream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bsta/bsta_kent.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vnl/vnl_inverse.h>
+#include "vgl/vgl_plane_3d.h"
+#include "vnl/vnl_inverse.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Test bsta kent distribution

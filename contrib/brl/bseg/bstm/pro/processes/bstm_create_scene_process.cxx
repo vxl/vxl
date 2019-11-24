@@ -8,9 +8,9 @@
 //
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <bstm/bstm_scene.h>
 
 namespace bstm_create_scene_process_globals

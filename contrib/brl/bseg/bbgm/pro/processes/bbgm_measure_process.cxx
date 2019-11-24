@@ -21,14 +21,14 @@
 #include <bsta/algo/bsta_adaptive_updater.h>
 #include <brdb/brdb_value.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_math.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_math.h"
 #include <bsta/bsta_histogram.h>
 #include <bbgm/bbgm_measure.h>
 #include <brip/brip_vil_float_ops.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bool bbgm_measure_process_cons(bprb_func_process& pro)

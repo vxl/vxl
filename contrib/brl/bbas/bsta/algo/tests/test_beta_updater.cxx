@@ -1,7 +1,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_beta.h>
@@ -9,7 +9,7 @@
 #include <bsta/algo/bsta_adaptive_updater.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void load_samples(const std::string& file, std::vector<float>& samples)

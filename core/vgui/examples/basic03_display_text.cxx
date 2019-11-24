@@ -4,10 +4,10 @@
 // Note2, this tableau will not display text unless CMake can find GLUT
 // on your system.
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_text_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_text_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 
 int main(int argc, char **argv)
 {

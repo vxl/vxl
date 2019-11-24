@@ -12,10 +12,10 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_reg_exp.h>
-#include <vul/vul_sprintf.h>
+#include "vul/vul_reg_exp.h"
+#include "vul/vul_sprintf.h"
 
 #ifndef END_OF_STRING                           // If END_OF_STRING not defined
 #define END_OF_STRING (0)

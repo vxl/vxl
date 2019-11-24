@@ -4,8 +4,8 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_image_view_base.h"
 
 //: Constructor
 bool vil_convert_to_n_planes_process_cons(bprb_func_process& pro)

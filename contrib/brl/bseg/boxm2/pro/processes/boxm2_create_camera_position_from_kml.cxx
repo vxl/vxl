@@ -15,15 +15,15 @@
 //   <none yet>
 // \endverbatim
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <boxm2/boxm2_scene.h>
 #include <bkml/bkml_parser.h>
 #include <bpgl/bpgl_camera_utils.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_line_2d.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_line_2d.h"
+#include "vpgl/vpgl_lvcs_sptr.h"
 
 namespace boxm2_create_camera_from_kml_path_process_globals
 {

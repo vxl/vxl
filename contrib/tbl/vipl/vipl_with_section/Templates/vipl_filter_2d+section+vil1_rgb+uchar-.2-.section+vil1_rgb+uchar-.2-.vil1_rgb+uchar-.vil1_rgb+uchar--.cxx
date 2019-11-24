@@ -1,6 +1,6 @@
 #ifndef INSTANTIATE_TEMPLATES
 #include <section/section.h>
-#include <vil/vil_rgb.h>
+#include "vil/vil_rgb.h"
 typedef vil_rgb<unsigned char> rgbcell;
 
 // this must be here for filter-2d to work

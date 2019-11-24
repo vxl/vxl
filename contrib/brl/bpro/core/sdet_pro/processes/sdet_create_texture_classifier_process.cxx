@@ -10,7 +10,7 @@
 #include <bbas_pro/bbas_1d_array_string.h>
 #include <bbas_pro/bbas_1d_array_string_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 
 //: initialize input and output types
 bool sdet_create_texture_classifier_process_cons(bprb_func_process& pro)

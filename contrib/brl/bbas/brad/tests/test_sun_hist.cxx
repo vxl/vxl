@@ -1,13 +1,13 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <brad/brad_illum_util.h>
 #include <brad/brad_sun_pos.h>
 #include <bsta/bsta_spherical_histogram.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #ifdef DEBUG

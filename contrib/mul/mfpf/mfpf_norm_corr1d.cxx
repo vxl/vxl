@@ -7,16 +7,16 @@
 // \brief Searches along a profile using normalised correlation
 // \author Tim Cootes
 
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vnl/io/vnl_io_vector.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 
 //=======================================================================
 // Dflt ctor

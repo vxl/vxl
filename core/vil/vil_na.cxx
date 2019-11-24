@@ -6,9 +6,9 @@
 #include <istream>
 #include <ios>
 #include "vil_na.h"
-#include <vxl_config.h>
+#include "vxl_config.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: A particular qNaN to indicate not available.

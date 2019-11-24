@@ -6,7 +6,7 @@
 #include <msm/msm_points.h>
 #include <mbl/mbl_thin_plate_spline_2d.h>
 
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 
 void print_usage()
 {

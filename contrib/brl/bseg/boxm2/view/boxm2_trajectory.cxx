@@ -3,9 +3,9 @@
 #include "boxm2_trajectory.h"
 //:
 // \file
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/boxm2_util.h>
 #include <bpgl/bpgl_camera_utils.h>

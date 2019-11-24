@@ -1,13 +1,13 @@
 #include <iostream>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include "../bmdl_processes.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgl/vgl_polygon.h>
+#include "vgl/vgl_polygon.h"
 #include <vgl/io/vgl_io_polygon.h>
 
 #include <brdb/brdb_value.h>
@@ -18,7 +18,7 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 
 static void test_bmdl_trace_boundaries_process(int argc, char* argv[])
 {

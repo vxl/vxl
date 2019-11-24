@@ -6,10 +6,10 @@
 
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera.h>
-#include <vil/vil_image_resource_sptr.h>
+#include "vpgl/vpgl_camera.h"
+#include "vil/vil_image_resource_sptr.h"
 #include "../vpgl_dem_manager.h"
 //: initialization
 bool vpgl_create_dem_manager_process_cons(bprb_func_process& pro)

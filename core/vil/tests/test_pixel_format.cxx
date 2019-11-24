@@ -1,12 +1,12 @@
 // This is core/vil/tests/test_pixel_format.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
-#include <vil/vil_rgb.h>
-#include <vil/vil_pixel_format.h>
+#include "vxl_config.h" // for vxl_byte
+#include "vil/vil_rgb.h"
+#include "vil/vil_pixel_format.h"
 
 static void test_pixel_format()
 {

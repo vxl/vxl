@@ -1,6 +1,6 @@
 // fsm
-#include <testlib/testlib_test.h>
-#include <vbl/vbl_scoped_ptr.h>
+#include "testlib/testlib_test.h"
+#include "vbl/vbl_scoped_ptr.h"
 
 struct some_class
 {

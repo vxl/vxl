@@ -11,9 +11,9 @@
 #include <limits>
 #include "bwm_utm_lat_lon.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #define DBLLONG 4.61168601e18
 #define EPSLN   1.0e-10
 #define D2R     1.745329251994328e-2

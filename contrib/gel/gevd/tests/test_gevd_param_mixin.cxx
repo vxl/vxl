@@ -9,7 +9,7 @@
 //*****************************************************************************
 
 #include <gevd/gevd_param_mixin.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 void
 test_gevd_param_mixin()

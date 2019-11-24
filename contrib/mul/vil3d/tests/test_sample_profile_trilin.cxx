@@ -1,9 +1,9 @@
 // This is mul/vil3d/tests/test_sample_profile_trilin.cxx
 #include <iostream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_sample_profile_trilin.h>

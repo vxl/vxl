@@ -1,12 +1,12 @@
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_memory_image.h>
-#include <vil1/vil1_flipud.h>
+#include "vil1/vil1_memory_image.h"
+#include "vil1/vil1_flipud.h"
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 static void p(vil1_image const& m)
 {

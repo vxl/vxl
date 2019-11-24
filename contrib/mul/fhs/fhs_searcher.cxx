@@ -9,12 +9,12 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
-#include <vil/vil_bilin_interp.h>
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
+#include "vil/vil_bilin_interp.h"
 #include <vil/algo/vil_quad_distance_function.h>
 #include <vimt/vimt_bilin_interp.h>
 

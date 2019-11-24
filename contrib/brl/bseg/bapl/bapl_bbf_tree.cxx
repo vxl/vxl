@@ -8,11 +8,11 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_vector.h"
 
 #include <bapl/bapl_keypoint.h>
 

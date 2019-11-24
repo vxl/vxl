@@ -7,15 +7,15 @@
 #include <iostream>
 #include <cstdlib>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_arg.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vul/vul_arg.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 #include <mbl/mbl_log.h>
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 #include <vimt/vimt_transform_2d.h>
 #include <vimt/vimt_load.h>
 #include <vimt/vimt_add_all_binary_loaders.h>

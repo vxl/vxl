@@ -8,12 +8,12 @@
 #include "vil1_smooth.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vxl_config.h>
-#include <vil1/vil1_convolve.h>
-#include <vil1/vil1_convolve.hxx>
+#include "vxl_config.h"
+#include "vil1/vil1_convolve.h"
+#include "vil1/vil1_convolve.hxx"
 
 vil1_image vil1_smooth_gaussian(vil1_image const & in, double sigma)
 {

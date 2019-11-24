@@ -5,10 +5,10 @@
 // \file
 
 #include <vsol/vsol_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vsl/vsl_vector_io.h>
+#include "vgl/vgl_vector_3d.h"
+#include "vsl/vsl_vector_io.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

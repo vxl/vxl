@@ -10,7 +10,7 @@
 #include "vpdfl_gaussian_sampler.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vpdfl/vpdfl_gaussian.h>
 #include <mbl/mbl_matxvec.h>

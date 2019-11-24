@@ -3,7 +3,7 @@
 #include "bstm_multi_block_metadata.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <bstm_multi/bstm_multi_tree_util.h>

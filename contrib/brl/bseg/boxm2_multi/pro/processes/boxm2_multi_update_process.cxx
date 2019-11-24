@@ -11,7 +11,7 @@
 // \date Aug 28, 2014
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2_multi/boxm2_multi_cache.h>
 #include <boxm2_multi/algo/boxm2_multi_render.h>
@@ -21,10 +21,10 @@
 #include <vcl_where_root_dir.h>
 
 //executable args
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_save.h>
-#include <vul/vul_timer.h>
-#include <vul/vul_arg.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_save.h"
+#include "vul/vul_timer.h"
+#include "vul/vul_arg.h"
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>

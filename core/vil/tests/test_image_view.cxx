@@ -3,22 +3,22 @@
 #include <iostream>
 #include <sstream>
 #include <functional>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
-#include <vil/vil_crop.h>
-#include <vil/vil_copy.h>
-#include <vil/vil_print.h>
-#include <vil/vil_plane.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_transpose.h>
-#include <vil/vil_view_as.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
-#include <vil/vil_fill.h>
-#include <vil/vil_exception.h>
+#include "vxl_config.h" // for vxl_byte
+#include "vil/vil_crop.h"
+#include "vil/vil_copy.h"
+#include "vil/vil_print.h"
+#include "vil/vil_plane.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_transpose.h"
+#include "vil/vil_view_as.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_new.h"
+#include "vil/vil_fill.h"
+#include "vil/vil_exception.h"
 
 template <class S, class T>
 void test_image_view_rgba(vil_image_view<S> & /*image2*/, vil_image_view<T> & /*image7*/)
@@ -537,7 +537,7 @@ static void test_image_view()
 TESTMAIN(test_image_view);
 
 
-#include <vil/vil_image_view.hxx>
+#include "vil/vil_image_view.hxx"
 
 class my_int
 {

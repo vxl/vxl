@@ -3,26 +3,26 @@
 #include "depth_map_defs.h"
 //:
 // \file
-#include <vgl/vgl_plane_3d.h>
+#include "vgl/vgl_plane_3d.h"
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
-#include <vgl/vgl_tolerance.h>
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
+#include "vgl/vgl_tolerance.h"
 #include <vgl/io/vgl_io_plane_3d.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
-#include <vgl/vgl_closest_point.h>
+#include "vgl/vgl_closest_point.h"
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_basic_xml_element.h>
+#include "vsl/vsl_basic_xml_element.h"
 #include <vpgl/algo/vpgl_ray.h>
 #include <bpgl/bpgl_camera_utils.h>
 

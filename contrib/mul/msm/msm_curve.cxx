@@ -8,7 +8,7 @@
 // \author Tim Cootes
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 #include <mbl/mbl_parse_block.h>
@@ -16,10 +16,10 @@
 #include <mbl/mbl_parse_keyword_list.h>
 #include <mbl/mbl_read_props.h>
 #include <utility>
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_vector_io.h>
-#include <vul/vul_string.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_vector_io.h"
+#include "vul/vul_string.h"
 
 // Default Constructor
 msm_curve::msm_curve() = default;

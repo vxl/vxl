@@ -1,2 +1,2 @@
-#include <vil/vil_rgb.hxx>
+#include "vil/vil_rgb.hxx"
 VIL_RGB_INSTANTIATE(float);

@@ -3,10 +3,10 @@
 #include "bstm_ocl_multi_render_tableau.h"
 //:
 // \file
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vgui/vgui_modifier.h>
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vgui/vgui_modifier.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <bocl/bocl_device.h>

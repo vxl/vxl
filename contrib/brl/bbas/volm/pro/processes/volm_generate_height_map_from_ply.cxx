@@ -8,20 +8,20 @@
 //
 //
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <volm/volm_category_io.h>
 #include <volm/volm_io_tools.h>
-#include <vul/vul_file_iterator.h>
+#include "vul/vul_file_iterator.h"
 #include <rply.h>   //.ply parser
 
 #include <bmsh3d/bmsh3d_mesh.h>
 #include <bmsh3d/algo/bmsh3d_fileio.h>
 #include <bmsh3d/bmsh3d_mesh_mc.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vgl/vgl_polygon_scan_iterator.h"
 #include <core/bbas_pro/bbas_1d_array_float.h>
-#include <vil/vil_math.h>
+#include "vil/vil_math.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //:

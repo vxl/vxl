@@ -19,13 +19,13 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_random.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vul/vul_printf.h>
+#include "vnl/vnl_random.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_box_3d.h"
+#include "vul/vul_printf.h"
 
 void bmsh3d_pt_set::reset_vertices_ids ()
 {

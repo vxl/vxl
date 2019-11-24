@@ -6,7 +6,7 @@
 #include <iostream>
 #include "gmvl_node.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 std::ostream &operator<<( std::ostream &os, gmvl_node &node)

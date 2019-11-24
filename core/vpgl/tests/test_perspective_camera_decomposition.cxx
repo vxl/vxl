@@ -1,5 +1,5 @@
-#include <testlib/testlib_test.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "testlib/testlib_test.h"
+#include "vpgl/vpgl_perspective_camera.h"
 
 static void test_perspective_camera_decomposition()
 {

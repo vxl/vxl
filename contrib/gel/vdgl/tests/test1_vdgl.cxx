@@ -5,7 +5,7 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vdgl/vdgl_edgel.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 static void test1_vdgl()
 {

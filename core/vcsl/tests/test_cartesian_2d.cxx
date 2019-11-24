@@ -10,8 +10,8 @@
 // 1.1     |2002/11/13| Peter Vanroose           |converted to use TESTMAIN
 //*****************************************************************************
 
-#include <testlib/testlib_test.h>
-#include <vcsl/vcsl_cartesian_2d.h>
+#include "testlib/testlib_test.h"
+#include "vcsl/vcsl_cartesian_2d.h"
 
 static void test_cartesian_2d()
 {

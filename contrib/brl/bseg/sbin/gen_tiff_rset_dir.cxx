@@ -4,14 +4,14 @@
 #include <iostream>
 #include <cstdlib>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
-#include <vil/vil_load.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_new.h>
+#include "vul/vul_file.h"
+#include "vil/vil_load.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_new.h"
 
-#include <vul/vul_file_iterator.h>
+#include "vul/vul_file_iterator.h"
 
 // A new utility to make rset directories containing rsets of all the base images
 //   in this directory

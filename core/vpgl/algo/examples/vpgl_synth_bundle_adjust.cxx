@@ -1,14 +1,14 @@
-#include <vul/vul_arg.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_point_3d.h>
+#include "vul/vul_arg.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_homg_point_3d.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_bundle_adjust.h>
-#include <vnl/vnl_crs_index.h>
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_double_3.h>
+#include "vnl/vnl_crs_index.h"
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_double_3.h"
 
 
 // The Main Function

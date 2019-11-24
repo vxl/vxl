@@ -8,11 +8,11 @@
 //  \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include "vnl/vnl_matrix_fixed.h"
 
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgPoint3D.h>

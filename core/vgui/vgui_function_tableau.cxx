@@ -6,7 +6,7 @@
 // \brief  See vgui_function_tableau.h for a description of this file.
 
 #include "vgui_function_tableau.h"
-#include <vgui/vgui_event.h>
+#include "vgui/vgui_event.h"
 
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_function_tableau_new.

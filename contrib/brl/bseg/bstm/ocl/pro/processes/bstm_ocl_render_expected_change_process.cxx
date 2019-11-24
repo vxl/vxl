@@ -10,7 +10,7 @@
 #include <utility>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
@@ -20,7 +20,7 @@
 #include <bstm/ocl/bstm_ocl_util.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 //directory utility
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>

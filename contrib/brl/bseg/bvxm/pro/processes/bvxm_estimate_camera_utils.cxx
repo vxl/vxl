@@ -1,10 +1,10 @@
 #include "bvxm_estimate_camera_utils.h"
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vgl/algo/vgl_homg_operators_3d.h>
-#include <vnl/vnl_double_3.h>
+#include "vnl/vnl_double_3.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // Default constructor

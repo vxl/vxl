@@ -2,10 +2,10 @@
 #include "vepl_dyadic.h"
 #include <vepl/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_dyadic.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_rgb.h>
-#include <vxl_config.h> // for vxl_byte
+#include "vil/vil_image_view.h"
+#include "vil/vil_pixel_format.h"
+#include "vil/vil_rgb.h"
+#include "vxl_config.h" // for vxl_byte
 
 #define r_g_b vil_rgb<vxl_byte> // cannot use typedef since that may cause ambiguous overload problems
 void sum_ubyte(vxl_byte& a, vxl_byte const& b) { a += b; }

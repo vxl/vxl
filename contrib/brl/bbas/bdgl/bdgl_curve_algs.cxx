@@ -5,18 +5,18 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_math.h> // for pi
-#include <vgl/vgl_line_2d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_intersection.h>
+#include "vnl/vnl_numeric_traits.h"
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_math.h" // for pi
+#include "vgl/vgl_line_2d.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_intersection.h"
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vsol/vsol_box_2d.h>
 #include <vdgl/vdgl_edgel_chain.h>

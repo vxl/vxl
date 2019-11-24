@@ -1,7 +1,7 @@
 // This is brl/bpro/core/brad_pro/processes/brad_eigenimage_pixel_process.cxx
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_eigenspace.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_convert.h"
 //:
 // \file
 

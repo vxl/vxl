@@ -2,15 +2,15 @@
 #include "sdet_region.h"
 //:
 // \file
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_area.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_area.h"
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vdgl/vdgl_digital_region.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <bsol/bsol_algs.h>
-#include <vnl/vnl_float_2.h>
+#include "vnl/vnl_float_2.h"
 sdet_region::sdet_region()
 {
   boundary_ = nullptr;

@@ -13,18 +13,18 @@
 #include <bocl/bocl_kernel.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
-#include <vpgl/vpgl_camera.h>
+#include "vpgl/vpgl_camera.h"
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
-#include <vul/vul_timer.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
+#include "vul/vul_timer.h"
 
 std::map<std::string, bocl_kernel*> boxm2_multi_store_aux::kernels_;
 

@@ -6,9 +6,9 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_transpose.h>
+#include "vnl/vnl_transpose.h"
 
 //******************** mask using an oriented box ***********************
 

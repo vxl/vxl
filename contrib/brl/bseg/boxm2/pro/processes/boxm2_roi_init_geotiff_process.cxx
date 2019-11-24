@@ -18,14 +18,14 @@
 
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_resource.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_resource.h"
 #include <vil/file_formats/vil_geotiff_header.h>
 #include <vil/file_formats/vil_tiff.h>
-#include <vil/vil_resample_bilin.h>
-#include <vil/vil_load.h>
+#include "vil/vil_resample_bilin.h"
+#include "vil/vil_load.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 namespace boxm2_roi_init_geotiff_process_globals

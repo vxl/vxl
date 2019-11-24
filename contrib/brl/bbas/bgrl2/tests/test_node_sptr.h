@@ -1,7 +1,7 @@
 #ifndef test_node_sptr_h_
 #define test_node_sptr_h_
 
-#include <vbl/vbl_smart_ptr.h>
+#include "vbl/vbl_smart_ptr.h"
 
 class test_node;
 

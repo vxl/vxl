@@ -1,7 +1,7 @@
 // This is brl/bpro/core/bbas_pro/processes/bsta_joint_hist_3d_vrml_process.cxx
 #include <bprb/bprb_func_process.h>
 #include <bsta/bsta_joint_histogram_3d.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 //:
 // \file
 

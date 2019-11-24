@@ -1,14 +1,14 @@
 #include <iostream>
 #include <exception>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vpgl/vpgl_radial_tangential_distortion.h>
-#include <vpgl/vpgl_calibration_matrix.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_homg_point_2d.h>
+#include "vpgl/vpgl_radial_tangential_distortion.h"
+#include "vpgl/vpgl_calibration_matrix.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_homg_point_2d.h"
 
 static void test_rad_tan_distortion()
 {

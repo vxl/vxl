@@ -4,9 +4,9 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil1/vil1_rgb.h>
+#include "vil1/vil1_rgb.h"
 using vil1_rgb_cell = vil1_rgb<unsigned char>;
 
 static char* as_hex(vil1_rgb_cell const&);

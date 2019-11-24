@@ -3,17 +3,17 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
-#include <vnl/vnl_math.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_camera_double_sptr.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
+#include "vnl/vnl_math.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_camera_double_sptr.h"
 #include <icam/icam_spherical_map.h>
 static void test_spherical_map()
 {

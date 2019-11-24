@@ -9,29 +9,29 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 /* xml includes */
-#include <vsl/vsl_basic_xml_element.h>
+#include "vsl/vsl_basic_xml_element.h"
 #include <vgl/xio/vgl_xio_point_3d.h>
 #include <vgl/xio/vgl_xio_vector_3d.h>
 #include <boxm2/boxm2_scene_parser.h>
 #include <vpgl/xio/vpgl_xio_lvcs.h>
 
 //vgl includes
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_point_3d.h"
 
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_intersection.h"
 
 //vsph include
 #include <vsph/vsph_camera_bounds.h>
 
 //vul include
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 
 boxm2_scene::boxm2_scene(std::string const& data_path, vgl_point_3d<double> const& origin, int version)

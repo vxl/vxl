@@ -16,7 +16,7 @@
 #include <iostream>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
@@ -29,7 +29,7 @@
 #include <vtol/vtol_face_sptr.h>
 #include <vtol/vtol_block.h>
 #include <vtol/vtol_block_sptr.h>
-#include <vbl/vbl_smart_ptr.h>
+#include "vbl/vbl_smart_ptr.h"
 
 class example_vertex_3d; // forward declaration
 

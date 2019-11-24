@@ -10,7 +10,7 @@
 // \date May 12, 2011
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <boxm2/io/boxm2_cache.h>
@@ -26,10 +26,10 @@
 #include <boxm2/cpp/algo/boxm2_batch_opt2_functors.h>
 #include <boxm2/cpp/algo/boxm2_data_serial_iterator.h>
 
-#include <vil/vil_math.h>
+#include "vil/vil_math.h"
 #include <bsta/bsta_gauss_sf1.h>
 
-#include <vil/vil_save.h>
+#include "vil/vil_save.h"
 
 //: create a normalized intensity value in each cell using the segment lengths of all the rays that intersect the cell
 namespace boxm2_cpp_create_aux_data_opt2_process_globals

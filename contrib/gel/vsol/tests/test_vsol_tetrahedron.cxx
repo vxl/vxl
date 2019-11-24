@@ -9,7 +9,7 @@
 // 1.0     |2001/06/06| Peter Vanroose           |Creation
 // 1.1     |2003/01/08| Peter Vanroose           |Now using testlib macros
 //*****************************************************************************
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <vsol/vsol_tetrahedron.h>
 #include <vsol/vsol_tetrahedron_sptr.h>

@@ -6,11 +6,11 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_float_3.h>
+#include "vnl/vnl_float_3.h"
 
 #ifndef MAX_ROUNDOFF
 #define MAX_ROUNDOFF .000025

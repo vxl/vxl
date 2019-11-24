@@ -6,7 +6,7 @@
 #include <iostream>
 #include "gst_edge_2d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // output

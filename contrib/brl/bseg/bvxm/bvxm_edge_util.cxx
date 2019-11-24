@@ -8,24 +8,24 @@
 #include "bvxm_util.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3x1.h>
+#include "vpgl/vpgl_camera.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_double_3x1.h"
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
-#include <vil/vil_resample_bilin.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vil/vil_resample_bilin.h"
+#include "vpgl/vpgl_local_rational_camera.h"
 #include <sdet/sdet_detector.h>
 #include <vtol/vtol_edge_2d.h>
-#include <vil/vil_new.h>
+#include "vil/vil_new.h"
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <bil/algo/bil_edt.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_box_3d.h"
 #include <vnl/algo/vnl_chi_squared.h>
 #include <bsta/bsta_gaussian_sphere.h>
 #include <brip/brip_vil_float_ops.h>

@@ -5,20 +5,20 @@
 // Slices may be cropped, and range is stretched linearly
 
 #include <iostream>
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil3d/vil3d_property.h>
 #include <vil3d/vil3d_load.h>
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/vil3d_slice.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_save.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_resample_bilin.h>
-#include <vnl/vnl_math.h>
-#include <vxl_config.h> // For vxl_byte
+#include "vil/vil_convert.h"
+#include "vil/vil_save.h"
+#include "vil/vil_crop.h"
+#include "vil/vil_resample_bilin.h"
+#include "vnl/vnl_math.h"
+#include "vxl_config.h" // For vxl_byte
 
 void print_usage()
 {

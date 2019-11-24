@@ -7,14 +7,14 @@
 // \file
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vul/vul_file.h>
-#include <vul/vul_awk.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vul/vul_file.h"
+#include "vul/vul_awk.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
 #include <vpgl/algo/vpgl_rational_adjust_onept.h>
 
 //:

@@ -12,10 +12,10 @@
 // \endverbatim
 //
 
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vul/vul_timer.h>
-#include <vgl/vgl_intersection.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
+#include "vul/vul_timer.h"
+#include "vgl/vgl_intersection.h"
 #include <vgl/io/vgl_io_polygon.h>
 #include <bpgl/depth_map/depth_map_scene_sptr.h>
 #include <bpgl/depth_map/depth_map_scene.h>

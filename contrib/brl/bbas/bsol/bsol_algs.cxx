@@ -3,10 +3,10 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_numeric_traits.h>
+#include "vnl/vnl_numeric_traits.h"
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
@@ -15,10 +15,10 @@
 #include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_intersection.h"
 #include <vgl/algo/vgl_convex_hull_2d.h>
 
 // Destructor

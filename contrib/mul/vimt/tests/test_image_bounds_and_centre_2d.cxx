@@ -1,14 +1,14 @@
 // This is mul/vimt/tests/test_image_bounds_and_centre_2d.cxx
 
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vimt/vimt_transform_2d.h>
 #include <vimt/vimt_image_2d_of.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_box_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_box_2d.h"
 
 static void test_world_bounding_box()
 {

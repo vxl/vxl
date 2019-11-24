@@ -8,11 +8,11 @@
 // \author Tim Cootes
 
 #include <mfpf/mfpf_sad_vec_cost.h>
-#include <vsl/vsl_binary_loader.h>
-#include <vul/vul_string.h>
+#include "vsl/vsl_binary_loader.h"
+#include "vul/vul_string.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <mbl/mbl_parse_block.h>
@@ -20,7 +20,7 @@
 #include <mbl/mbl_stats_1d.h>
 
 #include <vnl/io/vnl_io_vector.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_vector_io.h"
 
 //=======================================================================
 // Dflt ctor

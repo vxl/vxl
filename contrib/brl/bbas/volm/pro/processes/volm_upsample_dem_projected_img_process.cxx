@@ -13,14 +13,14 @@
 //   <none yet>
 // \endverbatim
 //
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <rsdl/rsdl_bins_2d.h>
-#include <vnl/vnl_float_4.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "vnl/vnl_float_4.h"
+#include "vnl/vnl_vector_fixed.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 
 //: global variable and functions

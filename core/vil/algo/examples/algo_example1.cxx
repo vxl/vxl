@@ -5,11 +5,11 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
-#include <vil/vil_image_view.h>
-#include <vil/vil_print.h>
+#include "vxl_config.h" // for vxl_byte
+#include "vil/vil_image_view.h"
+#include "vil/vil_print.h"
 #include <vil/algo/vil_sobel_3x3.h>
 
 int main()

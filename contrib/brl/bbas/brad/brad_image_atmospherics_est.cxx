@@ -1,13 +1,13 @@
 #include <fstream>
 #include "brad_image_atmospherics_est.h"
 //
-#include <vil/vil_image_view.h>
-#include <vil/vil_math.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_math.h"
 #include <bsta/bsta_histogram.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
-#include <vil/vil_save.h> // temp
-#include <vil/vil_convert.h>
+#include "vil/vil_save.h" // temp
+#include "vil/vil_convert.h"
 
 bool brad_get_visible_band_id(vil_image_view<float> const& radiance,
                               brad_image_metadata const& mdata,

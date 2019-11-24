@@ -3,11 +3,11 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui_satellite_tableau.h>
-#include <vgui/vgui_satellite_tableau.hxx>
+#include "vgui/vgui_satellite_tableau.h"
+#include "vgui/vgui_satellite_tableau.hxx"
 
 struct example_object
 {
@@ -34,8 +34,8 @@ struct example_object
 VGUI_SATELLITE_INSTANTIATE(example_object);
 VGUI_SATELLITE_T_INSTANTIATE(example_object, int);
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_deck_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_deck_tableau.h"
 
 int main(int argc, char **argv)
 {

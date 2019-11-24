@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_bounded_image_view );
 DECLARE( test_raw_image_istream );

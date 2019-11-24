@@ -15,7 +15,7 @@
 #include <sdet/sdet_img_edge.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: set input and output types

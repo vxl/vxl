@@ -11,14 +11,14 @@
 // \date June 08, 2014
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_loc_hyp_sptr.h>
 #include <bkml/bkml_parser.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 namespace boxm2_load_score_binary_process_globals

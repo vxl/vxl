@@ -10,16 +10,16 @@
 #include "depth_map_region.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_plane_3d.h>
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_plane_3d.h"
 #include <vsol/vsol_polygon_3d.h>
-#include <vsl/vsl_map_io.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_map_io.h"
+#include "vsl/vsl_vector_io.h"
 #include <vpgl/io/vpgl_io_perspective_camera.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
 
 depth_map_scene::
 depth_map_scene(unsigned ni, unsigned nj,

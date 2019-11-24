@@ -1,12 +1,12 @@
 #include <iostream>
 #include <cstdlib>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvxm/bvxm_illum_util.h>
 #include <bsta/bsta_histogram.h>
 #include <bsta/io/bsta_io_histogram.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_illum()

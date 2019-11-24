@@ -1,4 +1,4 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bapl/bapl_bbf_tree.h>
 #include <bapl/bapl_lowe_keypoint_sptr.h>
 #include <bapl/bapl_lowe_keypoint.h>
@@ -6,11 +6,11 @@
 #include <bapl/bapl_keypoint_set.h>
 #include <bapl/bapl_keypoint_set_sptr.h>
 
-#include <vil/vil_plane.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_plane.h"
+#include "vil/vil_image_view.h"
 #include <ipts/ipts_draw.h>
 
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <bpgl/algo/bpgl_fm_compute_ransac.h>
 
 void draw_keypoint(vil_image_view<vxl_byte>& img, const bapl_keypoint_sptr& k)

@@ -10,12 +10,12 @@
 #include "bcvr_cv_cor.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <cassert>
 
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 //: return value in (-Pi,Pi]
 double curve_fixAngleMPiPi (double a)

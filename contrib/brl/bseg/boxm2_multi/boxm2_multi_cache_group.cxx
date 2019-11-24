@@ -3,9 +3,9 @@
 #include "boxm2_multi_cache_group.h"
 //:
 // \file
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_distance.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Returns indices in visibility order (for group's blocks)

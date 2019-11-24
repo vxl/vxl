@@ -11,15 +11,15 @@
 // \date Mar 28, 2012
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
 
 //vil includes
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_slice.h>
 #include <vil3d/vil3d_save.h>

@@ -1,3 +1,3 @@
-#include <vsl/vsl_vector_io.hxx>
+#include "vsl/vsl_vector_io.hxx"
 VSL_VECTOR_IO_INSTANTIATE(int);
 VSL_VECTOR_IO_INSTANTIATE(std::vector<int>);

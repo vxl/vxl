@@ -4,27 +4,27 @@
 #include <fstream>
 #include <sstream>
 #include <cmath>
-#include <vil/vil_save.h>
+#include "vil/vil_save.h"
 #include <boxm2/cpp/algo/boxm2_import_triangle_mesh.h>
 #include <boxm2/cpp/algo/boxm2_render_functions.h>
-#include <vpgl/vpgl_affine_camera.h>
+#include "vpgl/vpgl_affine_camera.h"
 #include <vpgl/algo/vpgl_camera_convert.h>
 #include "boxm2_vecf_shuttle_scene.h"
-#include <vnl/vnl_vector_fixed.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_box_3d.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_sphere_3d.h>
-#include <vgl/vgl_closest_point.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_box_3d.h"
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_sphere_3d.h"
+#include "vgl/vgl_closest_point.h"
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_fileio.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_matrix.h"
 static double gauss(double d, double sigma){
   return std::exp((-0.5*d*d)/(sigma*sigma));
 }

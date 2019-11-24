@@ -1,7 +1,7 @@
 #include "icam_view_sphere.h"
 //:
 // \file
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 #include <vsph/vsph_camera_bounds.h>
 
 icam_view_sphere::icam_view_sphere(vgl_box_3d<double> bb, double radius)

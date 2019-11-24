@@ -11,14 +11,14 @@
 //    none yet
 // \endverbatim
 
-#include <vil/vil_math.h>
+#include "vil/vil_math.h"
 #include <bsta/bsta_histogram.h>
 #include <mbl/mbl_thin_plate_spline_3d.h>
-#include <vil/vil_image_view.h>
-#include <vgl/vgl_point_3d.h>
-#include <vnl/vnl_math.h>
+#include "vil/vil_image_view.h"
+#include "vgl/vgl_point_3d.h"
+#include "vnl/vnl_math.h"
 #include <vgl/algo/vgl_line_2d_regression.h>
-#include <vil/vil_save.h>
+#include "vil/vil_save.h"
 
 namespace volm_dsm_ground_plane_estimation_process_globals
 {

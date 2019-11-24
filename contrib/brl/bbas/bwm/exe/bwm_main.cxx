@@ -6,16 +6,16 @@
 #include <bwm/bwm_macros.h>
 #include <bwm/bwm_load_commands.h>
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_window.h>
-#include <vgui/vgui_adaptor.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_window.h"
+#include "vgui/vgui_adaptor.h"
 
-#include <vgui/vgui_grid_tableau.h>
-#include <vgui/vgui_composite_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
+#include "vgui/vgui_grid_tableau.h"
+#include "vgui/vgui_composite_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
 
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d.h>

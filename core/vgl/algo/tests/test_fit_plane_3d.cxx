@@ -2,11 +2,11 @@
 // Gamze Tunali, Dec 18, 2006.
 #include <iostream>
 #include <cstdlib>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vgl/algo/vgl_fit_plane_3d.h>
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_distance.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // creates points on the z=0 plane

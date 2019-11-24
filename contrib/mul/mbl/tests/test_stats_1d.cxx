@@ -1,11 +1,11 @@
 // This is mul/mbl/tests/test_stats_1d.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_stats_1d.h>
-#include <testlib/testlib_test.h>
-#include <vnl/vnl_math.h>
+#include "testlib/testlib_test.h"
+#include "vnl/vnl_math.h"
 
 void test_stats_1d()
 {

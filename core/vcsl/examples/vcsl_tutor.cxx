@@ -11,13 +11,13 @@
 // Required libraries: vcl, vbl, vnl, vcsl
 
 #include <iostream>
-#include <vcsl/vcsl_cartesian_3d.h>
-#include <vcsl/vcsl_rotation.h>
-#include <vnl/vnl_math.h>
-#include <vcsl/vcsl_graph.h>
+#include "vcsl/vcsl_cartesian_3d.h"
+#include "vcsl/vcsl_rotation.h"
+#include "vnl/vnl_math.h"
+#include "vcsl/vcsl_graph.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 int main()

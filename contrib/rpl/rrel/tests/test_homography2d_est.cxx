@@ -1,14 +1,14 @@
 #include <iostream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_math.h"
 #include <rrel/rrel_homography2d_est.h>
 
 static void test_homography2d_est()

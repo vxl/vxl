@@ -11,10 +11,10 @@
 // \date May 26, 2011
 
 #include <boxm2/util/boxm2_detect_change_blobs.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 namespace boxm2_blob_change_detection_process_globals

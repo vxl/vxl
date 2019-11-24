@@ -3,17 +3,17 @@
 #include <iomanip>
 #include <algorithm>
 
-#include <vnl/vnl_inverse.h>
-#include <vnl/vnl_math.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_crop.h>
+#include "vnl/vnl_inverse.h"
+#include "vnl/vnl_math.h"
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_crop.h"
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/algo/vil_sobel_3x3.h>
 #include <vil/algo/vil_median.h>
 #include <vil/algo/vil_gauss_filter.h>
-#include <vil/vil_resample_bicub.h>
-#include <vil/vil_resample_bilin.h>
+#include "vil/vil_resample_bicub.h"
+#include "vil/vil_resample_bilin.h"
 
 #include "baml_utilities.h"
 

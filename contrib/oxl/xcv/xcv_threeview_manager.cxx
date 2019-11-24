@@ -8,11 +8,11 @@
 // \author K.Y.McGaul
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_projection_inspector.h>
-#include <vgui/vgui_find.h>
+#include "vgui/vgui_macro.h"
+#include "vgui/vgui_projection_inspector.h"
+#include "vgui/vgui_find.h"
 
 //static bool debug = true;
 static bool dragging = false;

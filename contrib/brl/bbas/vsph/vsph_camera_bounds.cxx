@@ -4,13 +4,13 @@
 #include <bpgl/algo/bpgl_project.h>
 #include <vpgl/algo/vpgl_ray.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vgl/vgl_closest_point.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_closest_point.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_intersection.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 principal_ray_scan::principal_ray_scan(double cone_half_angle,
                                        unsigned& n_samples)

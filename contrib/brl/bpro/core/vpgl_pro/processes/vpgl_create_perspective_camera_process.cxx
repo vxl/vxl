@@ -6,14 +6,14 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
-#include <vgl/vgl_point_3d.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_calibration_matrix.h"
+#include "vgl/vgl_point_3d.h"
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 #include <bpgl/bpgl_camera_utils.h>
 #include <bpgl/algo/bpgl_transform_camera.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_double.h>

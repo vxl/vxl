@@ -6,14 +6,14 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
 #include <brip/brip_vil_float_ops.h>
 #include <bkml/bkml_write.h>
-#include <vpgl/vpgl_utm.h>
-#include <vul/vul_file.h>
+#include "vpgl/vpgl_utm.h"
+#include "vul/vul_file.h"
 
 //: specify lat lon in positive numbers but specify hemisphere ('N' or 'S') and direction ('W' or 'E')
 volm_tile::volm_tile(float lat, float lon, char hemisphere, char direction, float scale_i, float scale_j, unsigned ni, unsigned nj) :

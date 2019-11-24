@@ -7,14 +7,14 @@
 #include <brdb/brdb_value.h>
 #include <sdet/sdet_texture_classifier_params.h>
 #include <sdet/sdet_texture_classifier.h>
-#include <vil/vil_image_view.h>
-#include <vnl/vnl_random.h>
-#include <vil/vil_math.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_plane.h>
-#include <vil/vil_resample_bilin.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view.h"
+#include "vnl/vnl_random.h"
+#include "vil/vil_math.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_plane.h"
+#include "vil/vil_resample_bilin.h"
+#include "vil/vil_convert.h"
 
 //: this process extracts the filter bank of an image (assumes a float image in the range [0, 1])
 //  and saves it in the filter_bank object of the passed texture_classifier instance

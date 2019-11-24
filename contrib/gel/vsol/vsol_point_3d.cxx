@@ -2,7 +2,7 @@
 #include "vsol_point_3d.h"
 //:
 // \file
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_distance.h"
 
 //***************************************************************************
 // Initialization

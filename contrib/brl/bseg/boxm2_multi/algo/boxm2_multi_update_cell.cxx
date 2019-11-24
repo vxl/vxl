@@ -4,7 +4,7 @@
 #include <boxm2_multi_util.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
@@ -12,13 +12,13 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
-#include <vpgl/vpgl_camera.h>
+#include "vpgl/vpgl_camera.h"
 
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <vil/vil_image_view.h>
-#include <vul/vul_timer.h>
+#include "vil/vil_image_view.h"
+#include "vul/vul_timer.h"
 
 
 std::map<std::string, std::vector<bocl_kernel*> > boxm2_multi_update_cell::kernels_;

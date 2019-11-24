@@ -18,11 +18,11 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vsl/vsl_indent.h>
-#include <vnl/vnl_math.h>
+#include "vsl/vsl_indent.h"
+#include "vnl/vnl_math.h"
 #include <mbl/mbl_matxvec.h>
 #include <mbl/mbl_matrix_products.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>

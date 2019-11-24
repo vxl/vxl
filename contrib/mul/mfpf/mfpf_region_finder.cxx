@@ -6,23 +6,23 @@
 // \brief Searches for an arbitrary shaped region
 // \author Tim Cootes
 
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vil/vil_resample_bilin.h>
+#include "vil/vil_resample_bilin.h"
 #include <vil/io/vil_io_image_view.h>
-#include <vsl/vsl_vector_io.h>
-#include <vsl/vsl_indent.h>
+#include "vsl/vsl_vector_io.h"
+#include "vsl/vsl_indent.h"
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 #include <mfpf/mfpf_sample_region.h>
 #include <mfpf/mfpf_norm_vec.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_c_vector.h>
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_c_vector.h"
 
 //=======================================================================
 // Dflt ctor

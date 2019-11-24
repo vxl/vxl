@@ -7,12 +7,12 @@
 #include "vil1_bmp_core_header.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_stream.h>
-#include <vil1/vil1_16bit.h>
-#include <vil1/vil1_32bit.h>
+#include "vil1/vil1_stream.h"
+#include "vil1/vil1_16bit.h"
+#include "vil1/vil1_32bit.h"
 
 vil1_bmp_core_header::vil1_bmp_core_header()
 {

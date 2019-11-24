@@ -1,9 +1,9 @@
 // This is core/vul/examples/vul_sequence_filename_example.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_sequence_filename_map.h>
+#include "vul/vul_sequence_filename_map.h"
 
 int main (int argc, char** argv)
 {

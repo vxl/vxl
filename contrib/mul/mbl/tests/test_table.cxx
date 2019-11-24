@@ -7,10 +7,10 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_table.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 //========================================================================
 // Test the piecemeal construction of a table

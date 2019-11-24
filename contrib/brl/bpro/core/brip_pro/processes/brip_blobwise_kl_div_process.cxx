@@ -7,9 +7,9 @@
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_blobwise_mutual_info.h>
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_math.h"
+#include "vil/vil_convert.h"
 #include <vil/algo/vil_binary_dilate.h>
 #include <vil/algo/vil_binary_erode.h>
 

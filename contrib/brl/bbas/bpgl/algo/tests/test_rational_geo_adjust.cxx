@@ -1,11 +1,11 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vpgl/vpgl_rational_camera.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vpgl/vpgl_rational_camera.h"
 #include <vpgl/algo/vpgl_rational_geo_adjust.h>
 
 static void test_rational_geo_adjust()

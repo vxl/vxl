@@ -12,29 +12,29 @@
 #endif
 // include for project points menu option
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_timer.h>
-#include <vbl/vbl_array_2d.h>
-#include <vnl/vnl_math.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_pyramid_image_resource.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_new.h>
-#include <vil/vil_copy.h>
-#include <vil/vil_property.h>
-#include <vil/vil_flip.h>
-#include <vil/vil_resample_bicub.h>
-#include <vil/vil_convert.h>
+#include "vul/vul_timer.h"
+#include "vbl/vbl_array_2d.h"
+#include "vnl/vnl_math.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_blocked_image_resource.h"
+#include "vil/vil_pyramid_image_resource.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_new.h"
+#include "vil/vil_copy.h"
+#include "vil/vil_property.h"
+#include "vil/vil_flip.h"
+#include "vil/vil_resample_bicub.h"
+#include "vil/vil_convert.h"
 #include <vil/vil_config.h>
 #if HAS_J2K
 #include <vil/file_formats/vil_j2k_nitf2_pyramid_image_resource.h>
 #include <vil/file_formats/vil_j2k_pyramid_image_resource.h>
 #endif // HAS_J2K
 #include <vil/algo/vil_sobel_1x3.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vgl/vgl_vector_2d.h"
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
 #include <sdet/sdet_harris_detector_params.h>
@@ -46,16 +46,16 @@
 #include <sdet/sdet_fit_conics.h>
 #include <sdet/sdet_grid_finder_params.h>
 #include <sdet/sdet_grid_finder.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_find.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_style_sptr.h>
-#include <vgui/vgui_style.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_grid_tableau.h>
-#include <vgui/vgui_range_map_params.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_find.h"
+#include "vgui/vgui_tableau.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_style_sptr.h"
+#include "vgui/vgui_style.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_grid_tableau.h"
+#include "vgui/vgui_range_map_params.h"
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vtol2D_tableau.h>
 #include <bgui/bgui_picker_tableau.h>

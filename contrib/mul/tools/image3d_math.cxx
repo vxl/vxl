@@ -21,16 +21,16 @@
 #include <cstdlib>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vsl/vsl_deque_io.hxx>
-#include <vsl/vsl_map_io.hxx>
-#include <vsl/vsl_stream.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_na.h>
-#include <vul/vul_string.h>
+#include "vsl/vsl_deque_io.hxx"
+#include "vsl/vsl_map_io.hxx"
+#include "vsl/vsl_stream.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_na.h"
+#include "vul/vul_string.h"
 #include <mbl/mbl_log.h>
 #include <mbl/mbl_exception.h>
 #include <vil3d/file_formats/vil3d_gen_synthetic.h>
@@ -50,11 +50,11 @@
 #include <vimt3d/vimt3d_save.h>
 #include <vimt3d/vimt3d_add_all_loaders.h>
 #include <vimt3d/vimt3d_resample_trilinear.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vul/vul_reg_exp.h>
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_box_3d.h"
+#include "vul/vul_reg_exp.h"
 
 //=========================================================================
 // Static function to create a static logger when first required

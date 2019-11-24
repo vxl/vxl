@@ -5,21 +5,21 @@
 #include <bocl/bocl_cl.h>
 #include <vcl_where_root_dir.h>
 
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_generic_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_generic_camera.h"
 #include <vpgl/algo/vpgl_camera_convert.h>
 #include <vsph/vsph_view_sphere.h>
 #include <vsph/vsph_view_point.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
 
 //vul args
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
 
 //vbl
-#include <vbl/vbl_array_2d.h>
+#include "vbl/vbl_array_2d.h"
 
 //boxm2 scene stuff
 #include <boxm2/io/boxm2_lru_cache.h>
@@ -42,10 +42,10 @@
 #include <bprb/bprb_func_process.h>
 #include <brip/brip_vil_float_ops.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil/file_formats/vil_jpeg.h>
-#include <vil/vil_open.h>
+#include "vil/vil_open.h"
 // Boxm2_Export_Scene executable will create a small, portable, pre rendered
 // scene that can be viewed on many devices.  Currently the output is a folder
 // with the following structure

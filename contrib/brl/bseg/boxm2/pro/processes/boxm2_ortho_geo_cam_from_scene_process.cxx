@@ -12,7 +12,7 @@
 #include <boxm2/boxm2_scene.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 namespace boxm2_ortho_geo_cam_from_scene_process_globals

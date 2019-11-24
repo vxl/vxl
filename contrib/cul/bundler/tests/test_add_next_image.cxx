@@ -1,16 +1,16 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <bundler/bundler.h>
 #include <bundler/bundler_sfm_impl.h>
 
 #include <bundler/tests/utils.h>
 
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static const double FOCAL_LENGTH_MM = 5.4;

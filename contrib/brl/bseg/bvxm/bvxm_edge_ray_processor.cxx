@@ -14,12 +14,12 @@
 #include <bvxm/bvxm_util.h>
 #include <bsta/bsta_histogram.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vgl/vgl_homg_line_2d.h>
-#include <vgl/vgl_closest_point.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_quaternion.h>
+#include "vgl/vgl_homg_line_2d.h"
+#include "vgl/vgl_closest_point.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_quaternion.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static const bool edge_debug = false;

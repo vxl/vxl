@@ -2,10 +2,10 @@
 #include <iostream>
 #include <cmath>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_stats_nd.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 void test_stats_nd()
 {

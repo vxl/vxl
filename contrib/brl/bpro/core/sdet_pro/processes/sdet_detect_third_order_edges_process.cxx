@@ -6,9 +6,9 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_math.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_math.h"
 
 #include <sdet/sdet_third_order_edge_det_params.h>
 #include <sdet/sdet_third_order_edge_det.h>

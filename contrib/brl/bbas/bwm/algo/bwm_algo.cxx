@@ -3,9 +3,9 @@
 #include "bwm_algo.h"
 //:
 // \file
-#include <vgl/vgl_closest_point.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_homg_plane_3d.h>
+#include "vgl/vgl_closest_point.h"
+#include "vgl/vgl_homg_point_3d.h"
+#include "vgl/vgl_homg_plane_3d.h"
 #include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
 
@@ -17,11 +17,11 @@
 
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 #include <vnl/algo/vnl_svd.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // The well-known square function

@@ -8,7 +8,7 @@
 
 #include <msm/msm_curve.h>
 
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 
 void print_usage()
 {

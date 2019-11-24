@@ -3,15 +3,15 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <brad/brad_phongs_model_est.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_identity_3x3.h>
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_identity_3x3.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
 //: Test the sun_pos class

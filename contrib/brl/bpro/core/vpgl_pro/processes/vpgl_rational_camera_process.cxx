@@ -14,17 +14,17 @@
 //
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
 
 //: Process to backproject an image point to a world point (wgs84 coords), using vpgl_backproject algo
 //  Note that if initial gauss is not given, process will use camera offset as initial gauss
 #include <vpgl/algo/vpgl_backproject.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_vector_2d.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_vector_2d.h"
+#include "vpgl/vpgl_lvcs.h"
 //: global variables and functions
 namespace vpgl_rational_cam_img_to_global_process_globals
 {

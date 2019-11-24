@@ -20,11 +20,11 @@
 
 #include <brdb/brdb_value.h>
 
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_save.h"
 #include <icam/icam_minimizer.h>
 #include <vpgl/algo/vpgl_ray.h>
 

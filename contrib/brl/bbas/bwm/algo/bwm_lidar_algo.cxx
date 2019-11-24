@@ -2,11 +2,11 @@
 #include <cmath>
 #include "bwm_lidar_algo.h"
 
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <vil/algo/vil_histogram.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,

@@ -10,29 +10,29 @@
 #include <vil/vil_config.h>
 #if HAS_GEOTIFF
 
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
 #include <bprb/bprb_func_process.h>
 #include <brip/brip_roi.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
-#include <vil/vil_image_resource_sptr.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_load.h>
-#include <vpgl/vpgl_camera_double_sptr.h>
-#include <vpgl/vpgl_rational_camera.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_box_3d.h"
+#include "vpgl/vpgl_lvcs.h"
+#include "vpgl/vpgl_lvcs_sptr.h"
+#include "vil/vil_image_resource_sptr.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_crop.h"
+#include "vil/vil_load.h"
+#include "vpgl/vpgl_camera_double_sptr.h"
+#include "vpgl/vpgl_rational_camera.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vpgl/vpgl_local_rational_camera.h"
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_box_2d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

@@ -1,11 +1,11 @@
 #include <string>
 #include <limits>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bsta/bsta_sampler.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void test_sampler_helper(void)

@@ -2,8 +2,8 @@
 //
 #include <brad/brad_sun_pos.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_math.h"
 
 brad_sun_dir_index::brad_sun_dir_index(double longitude_deg, double latitude_deg,
                                        int obs_year_start, int obs_hour,

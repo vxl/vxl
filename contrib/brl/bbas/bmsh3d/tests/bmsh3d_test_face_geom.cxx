@@ -1,5 +1,5 @@
 // This is brl/bbas/bmsh3d/tests/bmsh3d_test_face_geom.cxx
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Ming-Ching Chang
@@ -7,8 +7,8 @@
 //  To debug in Visual studio, put argument
 //  all D:/Projects/vxl/brl/bbas/bmsh3d/tests/data
 
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_distance.h>
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_distance.h"
 
 #include <bmsh3d/bmsh3d_mesh.h>
 

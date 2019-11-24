@@ -6,8 +6,8 @@
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
-#include <vil/vil_image_view_base.h>
-#include <vpgl/vpgl_camera_double_sptr.h>
+#include "vil/vil_image_view_base.h"
+#include "vpgl/vpgl_camera_double_sptr.h"
 
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>

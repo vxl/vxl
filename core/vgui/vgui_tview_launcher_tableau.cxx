@@ -15,13 +15,13 @@
 #include <iostream>
 #include "vgui_tview_launcher_tableau.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgui/vgui.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_tview_tableau.h>
-#include <vgui/vgui_dialog.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_tview_tableau.h"
+#include "vgui/vgui_dialog.h"
 
 vgui_tview_launcher_tableau::vgui_tview_launcher_tableau()
   : c_graph(vgui_key('g'), vgui_SHIFT) { }

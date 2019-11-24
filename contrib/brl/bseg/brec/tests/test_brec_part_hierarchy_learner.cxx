@@ -1,21 +1,21 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil/vil_load.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_load.h"
+#include "vil/vil_math.h"
+#include "vil/vil_convert.h"
 #include <vil/io/vil_io_image_view_base.h>
 
 #include <brec/brec_part_hierarchy_learner.h>
 #include <brec/brec_part_hierarchy_learner_sptr.h>
 
-#include <vul/vul_timer.h>
-#include <vnl/vnl_random.h>
+#include "vul/vul_timer.h"
+#include "vnl/vnl_random.h"
 
 static void test_brec_part_hierarchy_learner()
 {

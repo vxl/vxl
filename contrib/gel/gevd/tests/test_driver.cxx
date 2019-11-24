@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE(test_gevd_bufferxy);
 DECLARE(test_gevd_float_operators);

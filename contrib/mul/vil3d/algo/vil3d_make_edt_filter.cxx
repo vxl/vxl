@@ -8,7 +8,7 @@
 #include "vil3d_make_edt_filter.h"
 #include "vil3d_make_distance_filter.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Compute filter for an exp. distance transform.

@@ -1,18 +1,18 @@
 #include <limits>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vpgl/algo/vpgl_equi_rectification.h>
 #include <vpgl/algo/vpgl_fm_compute_8_point.h>
-#include <vpgl/vpgl_affine_camera.h>
-#include <vpgl/vpgl_proj_camera.h>
-#include <vpgl/vpgl_fundamental_matrix.h>
-#include <vpgl/vpgl_affine_fundamental_matrix.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_point_3d.h>
+#include "vpgl/vpgl_affine_camera.h"
+#include "vpgl/vpgl_proj_camera.h"
+#include "vpgl/vpgl_fundamental_matrix.h"
+#include "vpgl/vpgl_affine_fundamental_matrix.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_homg_point_3d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_equi_rectification()

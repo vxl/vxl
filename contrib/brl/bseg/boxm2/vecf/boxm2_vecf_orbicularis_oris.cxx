@@ -4,9 +4,9 @@
 #include "boxm2_vecf_orbicularis_oris.h"
 //
 // \file
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_line_3d_2_points.h>
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_line_3d_2_points.h"
 
 void boxm2_vecf_orbicularis_oris::fill_boundary_map()
 {

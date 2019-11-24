@@ -9,13 +9,13 @@
 // \author Ian Scott.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #if 0 // should be #ifdef _MSC_VER, but it doesn't work yet - I can't get it to link
 #pragma comment(lib, "user32")
 #pragma comment (lib, "dbghelp")
-#include <vxl_config.h>
+#include "vxl_config.h"
 #define AFX_STACK_DUMP_TARGET_CLIPBOARD 0x0002
 #define CF_OEMTEXT          7
 #define AFXAPI __stdcall

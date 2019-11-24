@@ -1,12 +1,12 @@
 // This is mul/vil3d/tests/test_tricub_interp.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_tricub_interp.h>
-#include <vxl_config.h>
+#include "vxl_config.h"
 
 
 static void test_tricub_interp_float()

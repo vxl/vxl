@@ -5,26 +5,26 @@
 
 #include <iostream>
 #include <sstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgl/vgl_homg_point_1d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_homg_line_2d.h>
-#include <vgl/vgl_homg_line_3d_2_points.h>
-#include <vgl/vgl_homg_plane_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_1d_basis.h>
+#include "vgl/vgl_homg_point_1d.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_homg_point_3d.h"
+#include "vgl/vgl_homg_line_2d.h"
+#include "vgl/vgl_homg_line_3d_2_points.h"
+#include "vgl/vgl_homg_plane_3d.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_1d_basis.h"
 #include <vgl/algo/vgl_homg_operators_1d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vgl/algo/vgl_homg_operators_3d.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_float_2x2.h>
-#include <vnl/vnl_double_3x3.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_float_2x2.h"
+#include "vnl/vnl_double_3x3.h"
 
 static void test_homg_point_1d()
 {
@@ -637,7 +637,7 @@ static void test_homg()
 
 TESTMAIN(test_homg);
 
-#include <vgl/vgl_1d_basis.hxx>
+#include "vgl/vgl_1d_basis.hxx"
 VGL_1D_BASIS_INSTANTIATE(vgl_homg_point_1d<float>);
 VGL_1D_BASIS_INSTANTIATE(vgl_homg_point_2d<int>);
 VGL_1D_BASIS_INSTANTIATE(vgl_homg_line_2d<int>);

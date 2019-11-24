@@ -7,17 +7,17 @@
 #include <iostream>
 #include <sstream>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief test mcal_pca
 
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <mbl/mbl_cloneables_factory.h>
 #include <mcal/mcal_add_all_loaders.h>
 #include <mcal/mcal_pca.h>

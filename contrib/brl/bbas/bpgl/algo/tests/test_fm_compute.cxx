@@ -1,21 +1,21 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <vpgl/algo/vpgl_fm_compute_8_point.h>
 #include <vpgl/algo/vpgl_fm_compute_2_point.h>
 #include <bpgl/algo/bpgl_fm_compute_ransac.h>
 #include <bpgl/bpgl_reg_fundamental_matrix.h>
-#include <vpgl/vpgl_fundamental_matrix.h>
+#include "vpgl/vpgl_fundamental_matrix.h"
 #include <bpgl/algo/bpgl_fm_compute_affine_ransac.h>
-#include <vnl/vnl_fwd.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_homg_point_3d.h>
+#include "vnl/vnl_fwd.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_homg_point_3d.h"
 
 static void test_fm_compute()
 {

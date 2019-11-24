@@ -1,15 +1,15 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 #include <vpgl/io/vpgl_io_perspective_camera.h>
-#include <vnl/vnl_double_3.h>
-#include <vpl/vpl.h>
-#include <vsl/vsl_binary_io.h>
+#include "vnl/vnl_double_3.h"
+#include "vpl/vpl.h"
+#include "vsl/vsl_binary_io.h"
 #include <vgl/io/vgl_io_point_3d.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include "vnl/vnl_matrix_fixed.h"
 static double camera_diff_norm(vpgl_perspective_camera<double> const& C0,
                                vpgl_perspective_camera<double> const& C1)
 {

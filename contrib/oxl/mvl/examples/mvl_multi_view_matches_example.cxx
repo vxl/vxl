@@ -1,12 +1,12 @@
 #include <iostream>
 #include <cstdlib>
-#include <vxl_config.h>
+#include "vxl_config.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <mvl/mvl_multi_view_matches.h>
-#include <vnl/vnl_sample.h>
+#include "vnl/vnl_sample.h"
 
 static const int W = -1;
 

@@ -7,8 +7,8 @@
 
 #include "vpdfl_builder_base.h"
 
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_loader.h"
 
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
 #include <vpdfl/vpdfl_gaussian_kernel_pdf_builder.h>

@@ -6,10 +6,10 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_float_3.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_float_3.h"
 
 // Default Constructor
 bvpl_gauss3d_xx_kernel_factory::bvpl_gauss3d_xx_kernel_factory()

@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_bvxm_roi_init_process );
 DECLARE( test_bvxm_illum_index_process );

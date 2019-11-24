@@ -11,11 +11,11 @@
 #include <string>
 #include "vpdfl_axis_gaussian.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <cassert>
-#include <vsl/vsl_indent.h>
+#include "vsl/vsl_indent.h"
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <vpdfl/vpdfl_sampler_base.h>
 #include <vpdfl/vpdfl_prob_chi2.h>

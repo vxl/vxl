@@ -10,13 +10,13 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_tableau_sptr.h>
-#include <vgui/vgui_macro.h>
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_tableau.h"
+#include "vgui/vgui_tableau_sptr.h"
+#include "vgui/vgui_macro.h"
 
 // For efficiency (e.g. when posting redraws), the parents of a tableau
 // may be cached in the vgui_parent_child_link_data baseclass of vgui_tableau.

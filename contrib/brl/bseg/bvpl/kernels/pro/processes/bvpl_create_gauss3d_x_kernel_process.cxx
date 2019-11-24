@@ -8,7 +8,7 @@
 
 #include <brdb/brdb_value.h>
 
-#include <vnl/vnl_float_3.h>
+#include "vnl/vnl_float_3.h"
 #include <bvpl/kernels/bvpl_gauss3d_x_kernel_factory.h>
 
 //: global variables

@@ -7,10 +7,10 @@
 
 #include "vpdfl_sampler_base.h"
 #include <vpdfl/vpdfl_pdf_base.h>
-#include <vsl/vsl_indent.h>
+#include "vsl/vsl_indent.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //=======================================================================

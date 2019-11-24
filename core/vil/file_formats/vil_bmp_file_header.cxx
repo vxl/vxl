@@ -7,11 +7,11 @@
 #include <iostream>
 #include "vil_bmp_file_header.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_stream.h>
-#include <vil/vil_stream_write.h>
-#include <vil/vil_stream_read.h>
+#include "vil/vil_stream.h"
+#include "vil/vil_stream_write.h"
+#include "vil/vil_stream_read.h"
 
 // The signature consists of the two bytes 42, 4D in that order.
 // It is not supposed to be read as a 16-bit integer.

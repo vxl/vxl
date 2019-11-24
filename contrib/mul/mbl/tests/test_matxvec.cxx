@@ -1,12 +1,12 @@
 // This is mul/mbl/tests/test_matxvec.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_matrix.h"
 #include <mbl/mbl_matxvec.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 
 void test1()

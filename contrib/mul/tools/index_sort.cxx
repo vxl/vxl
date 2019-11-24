@@ -8,10 +8,10 @@
 #include <exception>
 #include <iterator>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
 #include <mbl/mbl_log.h>
 #include <mbl/mbl_index_sort.h>
 

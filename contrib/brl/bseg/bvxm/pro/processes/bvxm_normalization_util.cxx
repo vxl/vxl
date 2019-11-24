@@ -6,7 +6,7 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Float specialized function to normalize and image given a,b where new_I = a*I +b;

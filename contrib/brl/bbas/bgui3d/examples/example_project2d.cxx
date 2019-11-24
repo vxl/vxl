@@ -1,21 +1,21 @@
-#include <vgui/vgui.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_composite_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_composite_tableau.h"
 
 #include <bgui3d/bgui3d.h>
 #include <bgui3d/bgui3d_project2d_tableau.h>
 
-#include <vnl/vnl_math.h> // for pi_over_4
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x4.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_rotation_matrix.h>
+#include "vnl/vnl_math.h" // for pi_over_4
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_3x4.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_rotation_matrix.h"
 
-#include <vil/vil_image_resource_sptr.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
+#include "vil/vil_image_resource_sptr.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_new.h"
 
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoCone.h>
@@ -26,7 +26,7 @@
 #include <Inventor/nodes/SoIndexedLineSet.h>
 #include <Inventor/nodes/SoVertexProperty.h>
 #include <bgui3d/bgui3d_examiner_tableau.h>
-#include <vgui/vgui_deck_tableau.h>
+#include "vgui/vgui_deck_tableau.h"
 
 // This is a very simple example of how to use the
 // basic bgui3d_project2d_tableau to render an Open Inventor

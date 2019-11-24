@@ -15,12 +15,12 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui_glut.h>
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_popup_params.h>
+#include "vgui/vgui_glut.h"
+#include "vgui/vgui_macro.h"
+#include "vgui/vgui_popup_params.h"
 #include <vgui/internals/vgui_overlay_helper.h>
 
 //--------------------------------------------------------------------------------
@@ -726,11 +726,11 @@ implement_static_callback(special_up,(int key,int x,int y),(key,x,y));
 //--------------------------------------------------------------------------------
 
 #ifdef DUMP_FRAME
-#include <vul/vul_sprintf.h>
-#include <vil1/vil1_save.h>
-#include <vil1/vil1_rgb.h>
-#include <vil1/vil1_rgba.h>
-#include <vil1/vil1_memory_image_of.h>
+#include "vul/vul_sprintf.h"
+#include "vil1/vil1_save.h"
+#include "vil1/vil1_rgb.h"
+#include "vil1/vil1_rgba.h"
+#include "vil1/vil1_memory_image_of.h"
 static
 void fsm_dump(char const *file)
 {

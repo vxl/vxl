@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Peter Vanroose, ESAT, KULeuven.
@@ -30,24 +30,24 @@
 // \endverbatim
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 #include <vil/vil_config.h> // for HAS_JPEG
 
-#include <vul/vul_temp_filename.h>
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vul/vul_temp_filename.h"
+#include "vpl/vpl.h" // vpl_unlink()
 
-#include <vil/vil_new.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_print.h>
-#include <vil/vil_plane.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_pixel_format.h>
+#include "vil/vil_new.h"
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
+#include "vil/vil_crop.h"
+#include "vil/vil_print.h"
+#include "vil/vil_plane.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_pixel_format.h"
 
 #ifndef LEAVE_IMAGES_BEHIND
 #define LEAVE_IMAGES_BEHIND 0

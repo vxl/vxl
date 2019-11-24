@@ -5,14 +5,14 @@
 //
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_vil_ops.h>
-#include <vil/vil_resample_bicub.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
+#include "vil/vil_resample_bicub.h"
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 // cutoff ratio determines Gaussian values that are assumed negligible
 static int gauss_radius(float sigma, float cutoff_ratio)

@@ -5,13 +5,13 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <pdf1d/pdf1d_compare_to_pdf_ks.h>
 #include <pdf1d/pdf1d_gaussian.h>
 #include <pdf1d/pdf1d_sampler.h>
 #include <pdf1d/pdf1d_calc_mean_var.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <pdf1d/pdf1d_prob_ks.h>
 
 //=======================================================================

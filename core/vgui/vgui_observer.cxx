@@ -6,7 +6,7 @@
 // \brief  See vgui_observer.h for a description of this file.
 
 #include "vgui_observer.h"
-#include <vgui/vgui_message.h>
+#include "vgui/vgui_message.h"
 
 void vgui_observer::update()
 {

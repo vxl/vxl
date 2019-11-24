@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_bil_wshed2d );
 DECLARE( test_bil_scale_image );

@@ -1,5 +1,5 @@
 // This is gel/vtol/tests/test_zero_chain.cxx
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_zero_chain_sptr.h>
 #include <vtol/vtol_zero_chain.h>

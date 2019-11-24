@@ -12,16 +12,16 @@
 
 #include <ctime>
 #include <cstdlib>
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_glut.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_glut.h"
 
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_loader_tableau.h>
-#include <vgui/vgui_deck_tableau.h>
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_loader_tableau.h"
+#include "vgui/vgui_deck_tableau.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vgui_deck_tableau_new   deck;

@@ -1,6 +1,6 @@
 #include <set>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #if HAS_OPENCL
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
@@ -22,13 +22,13 @@
 #include <bbas/bocl/bocl_manager.h>
 #include <bbas/bocl/bocl_device.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_point_2d.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 #include <volm/volm_category_io.h>
 
 static void test_volm_matcher_p1()

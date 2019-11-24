@@ -4,11 +4,11 @@
 //:
 // \file
 
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_area.h>
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_area.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Copy Constructor

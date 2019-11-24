@@ -6,17 +6,17 @@
 #include <iostream>
 #include <exception>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 #include <mbl/mbl_log.h>
 #include <vimt/vimt_add_all_binary_loaders.h>
 #include <vimt/vimt_load.h>
 #include <vimt/vimt_save.h>
-#include <vil/vil_new.h>
-#include <vul/vul_file.h>
-#include <vul/vul_string.h>
-#include <vgl/vgl_point_2d.h>
+#include "vil/vil_new.h"
+#include "vul/vul_file.h"
+#include "vul/vul_string.h"
+#include "vgl/vgl_point_2d.h"
 
 
 //=========================================================================

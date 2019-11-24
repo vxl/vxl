@@ -7,15 +7,15 @@
 
 
 #include <vnl/algo/vnl_sparse_lm.h>
-#include <vnl/vnl_double_3.h>
+#include "vnl/vnl_double_3.h"
 
-#include <vgl/vgl_plane_3d.h>
+#include "vgl/vgl_plane_3d.h"
 #include <vpgl/algo/vpgl_ba_fixed_k_lsqr.h>
 #include <vpgl/algo/vpgl_ba_shared_k_lsqr.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

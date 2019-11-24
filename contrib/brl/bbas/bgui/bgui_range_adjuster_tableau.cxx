@@ -9,21 +9,21 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_vil.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
+#include "vil1/vil1_memory_image_of.h"
+#include "vil1/vil1_vil.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_view.h"
 #include <vil/algo/vil_histogram.h>
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_find.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_range_map_params.h>
-#include <vgui/vgui_projection_inspector.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_find.h"
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_range_map_params.h"
+#include "vgui/vgui_projection_inspector.h"
 
 void bgui_range_adjuster_tableau::draw_box()
 {

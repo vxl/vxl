@@ -4,8 +4,8 @@
 // \file
 
 #include <brip/brip_gain_offset_solver.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_image_view.h"
 
 //: Constructor
 bool brip_solve_gain_offset_process_cons(bprb_func_process& pro)

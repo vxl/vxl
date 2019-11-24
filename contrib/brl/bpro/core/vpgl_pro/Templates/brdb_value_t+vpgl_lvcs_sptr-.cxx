@@ -1,4 +1,4 @@
-#include <vpgl/vpgl_lvcs_sptr.h>
+#include "vpgl/vpgl_lvcs_sptr.h"
 #include <vpgl/io/vpgl_io_lvcs.h>
 #include <brdb/brdb_value.hxx>
 

@@ -7,9 +7,9 @@
 // \file
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_vector.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
 namespace brad_estimate_phongs_model_process_globals

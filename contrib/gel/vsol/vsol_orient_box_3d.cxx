@@ -5,10 +5,10 @@
 
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_box_3d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vsol_orient_box_3d::vsol_orient_box_3d(vgl_orient_box_3d<double> const& orient_box)

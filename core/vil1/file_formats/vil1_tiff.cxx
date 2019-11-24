@@ -17,14 +17,14 @@
 #include <cassert>
 #if 0 // commented out
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #endif
 
-#include <vil1/vil1_stream.h>
-#include <vil1/vil1_image_impl.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_property.h>
+#include "vil1/vil1_stream.h"
+#include "vil1/vil1_image_impl.h"
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_property.h"
 
 #include <tiffio.h>
 

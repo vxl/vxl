@@ -7,10 +7,10 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil1/vil1_stream.h>
-#include <vil1/vil1_property.h>
+#include "vil1/vil1_stream.h"
+#include "vil1/vil1_property.h"
 
 #define where (std::cerr << __FILE__ ":" << __LINE__ << " : ")
 

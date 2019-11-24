@@ -14,7 +14,7 @@
 #include <string>
 #include "RawPMatrixStore.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mvl/PMatrix.h>
 

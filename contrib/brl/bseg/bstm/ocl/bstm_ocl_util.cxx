@@ -3,14 +3,14 @@
 #include <bstm/bstm_data_traits.h>
 //:
 // \file
-#include <vgl/vgl_point_3d.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
+#include "vgl/vgl_point_3d.h"
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_matrix.h"
 #include <vnl/algo/vnl_svd.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_math.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_math.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_calibration_matrix.h"
 #include <bsta/bsta_histogram.h>
 
 // fills a float buffer (should be 16*3 floats) with a perspective cam to be sent

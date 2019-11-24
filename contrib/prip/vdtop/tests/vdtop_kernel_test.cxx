@@ -1,15 +1,15 @@
 // This is prip/vdtop/tests/vdtop_kernel_test.cxx
 
-#include <vxl_config.h>
+#include "vxl_config.h"
 
 #include <vdtop/vdtop_8_lower_leveling_kernel.h>
 #include <vdtop/vdtop_4_lower_homotopic_kernel.h>
 #include <vdtop/vdtop_replace_quasi_8_minima.h>
 #include <vdtop/vil_canny_deriche_grad_filter.h>
 
-#include <vil/vil_convert.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 
 int main(int argc, char* argv[])
 {

@@ -4,21 +4,21 @@
 #include "bgui_image_utils.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil/vil_new.h>
-#include <vil/vil_property.h>
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_pyramid_image_resource.h>
-#include <vgui/vgui_range_map_params.h>
-#include <vul/vul_timer.h>
-#include <vnl/vnl_numeric_traits.h>
+#include "vil/vil_new.h"
+#include "vil/vil_property.h"
+#include "vil/vil_blocked_image_resource.h"
+#include "vil/vil_pyramid_image_resource.h"
+#include "vgui/vgui_range_map_params.h"
+#include "vul/vul_timer.h"
+#include "vnl/vnl_numeric_traits.h"
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
 
 bgui_image_utils::bgui_image_utils():
   hist_valid_(false), percent_limit_(0.0002), bin_limit_(1000),

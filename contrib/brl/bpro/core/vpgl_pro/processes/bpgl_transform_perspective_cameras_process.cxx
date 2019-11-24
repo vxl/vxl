@@ -10,11 +10,11 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 #include <bpgl/algo/bpgl_transform_camera.h>
 
 namespace bpgl_transform_perspective_cameras_process_globals
@@ -136,7 +136,7 @@ bool bpgl_transform_perspective_cameras_process(bprb_func_process& pro)
 #include <core/bbas_pro/bbas_1d_array_double.h>
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_box_3d.h"
 
 static vpgl_perspective_camera<double>
 vpgl_transform_space_process_transform_camera(vpgl_perspective_camera<double> const& cam,

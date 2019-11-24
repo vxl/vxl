@@ -6,8 +6,8 @@
 #include <rgrl/rgrl_trans_affine.h>
 #include <rgrl/rgrl_trans_homography2d.h>
 
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_vector.h"
 
 
 // CAUTION: NO boundary check for the purpose of efficiency

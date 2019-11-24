@@ -6,7 +6,7 @@
 // \brief  See vgui_gtk2.h for a description of this file.
 
 #include "vgui_gtk2.h"
-#include <vgui/vgui_gl.h> // glFlush()
+#include "vgui/vgui_gl.h" // glFlush()
 #include <gtk/gtk.h>
 #include "vgui_gtk2_window.h"
 #include "vgui_gtk2_dialog_impl.h"

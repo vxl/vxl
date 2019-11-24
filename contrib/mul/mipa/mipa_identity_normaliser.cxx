@@ -4,8 +4,8 @@
 // \brief Do nowt
 
 #include "mipa_identity_normaliser.h"
-#include <vnl/vnl_vector.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vnl/vnl_vector.h"
+#include "vsl/vsl_binary_loader.h"
 
 //=======================================================================
 

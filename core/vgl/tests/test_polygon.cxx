@@ -2,10 +2,10 @@
 // Amitha Perera, Sep 2001.
 #include <iostream>
 #include <fstream>
-#include <testlib/testlib_test.h>
-#include <vgl/vgl_polygon.h>
+#include "testlib/testlib_test.h"
+#include "vgl/vgl_polygon.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_simple_polygon()

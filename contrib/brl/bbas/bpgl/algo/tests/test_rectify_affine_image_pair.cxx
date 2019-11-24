@@ -1,19 +1,19 @@
 #include <iostream>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vpgl/vpgl_affine_camera.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vpgl/vpgl_affine_camera.h"
+#include "vpgl/vpgl_lvcs.h"
 #include <bpgl/algo/bpgl_project.h>
 #include <bpgl/algo/bpgl_rectify_affine_image_pair.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vpl/vpl.h>
-#include <vil/vil_save.h>
-#include <vil/vil_new.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vpl/vpl.h"
+#include "vil/vil_save.h"
+#include "vil/vil_new.h"
 
 static void test_rectify_affine_image_pair() {
 

@@ -66,13 +66,13 @@
 #include <iostream>
 #include <fstream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_vector_fixed.h"
 
-#include <vil/vil_load.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_load.h"
+#include "vil/vil_image_view.h"
 
 #include <rgrl/rgrl_feature_based_registration.h>
 #include <rgrl/rgrl_feature_set_location_masked.h>
@@ -91,7 +91,7 @@
 #include <rgrl/rgrl_converge_status.h>
 #include <rgrl/rgrl_data_manager.h>
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
 typedef std::vector< rgrl_feature_sptr >  feature_vector;

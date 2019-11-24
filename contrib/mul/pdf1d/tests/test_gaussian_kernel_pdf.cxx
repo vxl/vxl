@@ -1,16 +1,16 @@
 // This is mul/pdf1d/tests/test_gaussian_kernel_pdf.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Ian Scott
 // \brief test pdf1d_gaussian_kernel_pdf, building, sampling, saving etc.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
-#include <vsl/vsl_binary_loader.h>
+#include "vpl/vpl.h" // vpl_unlink()
+#include "vsl/vsl_binary_loader.h"
 #include <mbl/mbl_data_array_wrapper.h>
 #include <pdf1d/pdf1d_gaussian_kernel_pdf.h>
 #include <pdf1d/pdf1d_gaussian_kernel_pdf_builder.h>

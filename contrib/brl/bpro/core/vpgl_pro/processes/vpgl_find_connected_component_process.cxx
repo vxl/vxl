@@ -6,13 +6,13 @@
 // \file
 //    find the connected component of a geotiff image and visualize it in KML
 #include <bprb/bprb_func_process.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_area.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_area.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vil/algo/vil_find_4con_boundary.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_image_view.h"
 #include <bkml/bkml_write.h>
 
 namespace vpgl_find_connected_component_process_globals

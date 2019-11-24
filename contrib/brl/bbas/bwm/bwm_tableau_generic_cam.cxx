@@ -1,14 +1,14 @@
 #include <iostream>
 #include <sstream>
 #include "bwm_tableau_generic_cam.h"
-#include <vpgl/vpgl_generic_camera.h>
+#include "vpgl/vpgl_generic_camera.h"
 #include "bwm_observer_mgr.h"
 #include "algo/bwm_utils.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgui/vgui_dialog.h>
-#include <vil/vil_save.h>
+#include "vgui/vgui_dialog.h"
+#include "vil/vil_save.h"
 
 bool bwm_tableau_generic_cam::handle(const vgui_event &e)
 {

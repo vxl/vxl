@@ -1,10 +1,10 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h>
-#include <vsl/vsl_binary_io.h>
+#include "vpl/vpl.h"
+#include "vsl/vsl_binary_io.h"
 #include <bbas/volm/volm_spherical_container.h>
 
 static void test_spherical_container()

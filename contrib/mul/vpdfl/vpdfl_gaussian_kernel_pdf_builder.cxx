@@ -5,7 +5,7 @@
 #include "vpdfl_gaussian_kernel_pdf_builder.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <vpdfl/vpdfl_gaussian_kernel_pdf.h>

@@ -1,12 +1,12 @@
 #include <string>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bundler/bundler_tracks_impl.h>
 
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // TODO: Save an image with the location of all the features.

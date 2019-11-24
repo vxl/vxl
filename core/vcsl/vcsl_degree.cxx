@@ -1,6 +1,6 @@
 // This is core/vcsl/vcsl_degree.cxx
 #include "vcsl_degree.h"
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 //---------------------------------------------------------------------------
 // Returns the number of units of `this' equal of the standard_unit for

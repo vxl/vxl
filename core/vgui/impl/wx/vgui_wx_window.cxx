@@ -12,14 +12,14 @@
 #include "vgui_wx_menu.h"
 #include "vgui_wx_statusbar.h"
 
-#include <vgui/vgui.h>
+#include "vgui/vgui.h"
 
 #include <wx/frame.h>
 #include <wx/statusbr.h>
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //-------------------------------------------------------------------------

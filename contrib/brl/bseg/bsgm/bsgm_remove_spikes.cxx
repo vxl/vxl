@@ -1,7 +1,7 @@
 #include "bsgm_remove_spikes.h"
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 #include <math.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <algorithm>
 
 

@@ -5,7 +5,7 @@
 #include "bstm_multi/bstm_multi_tree_util.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <boct/boct_bit_tree.h>

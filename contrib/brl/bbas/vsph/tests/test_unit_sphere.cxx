@@ -1,12 +1,12 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <vsph/vsph_unit_sphere.h>
 #include <vsph/vsph_sph_point_2d.h>
 #include <vsph/vsph_sph_box_2d.h>
 #include <vsph/vsph_utils.h>
-#include <vnl/vnl_math.h>
-#include <vsl/vsl_binary_io.h>
-#include <vpl/vpl.h>
+#include "vnl/vnl_math.h"
+#include "vsl/vsl_binary_io.h"
+#include "vpl/vpl.h"
 
 
 static void test_unit_sphere()

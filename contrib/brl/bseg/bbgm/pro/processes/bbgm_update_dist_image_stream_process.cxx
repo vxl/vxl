@@ -13,13 +13,13 @@
 #include <bsta/algo/bsta_adaptive_updater.h>
 #include <brdb/brdb_value.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
-#include <vidl/vidl_istream_sptr.h>
-#include <vidl/vidl_frame.h>
-#include <vidl/vidl_convert.h>
+#include "vil/vil_math.h"
+#include "vil/vil_convert.h"
+#include "vidl/vidl_istream_sptr.h"
+#include "vidl/vidl_frame.h"
+#include "vidl/vidl_convert.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 namespace {

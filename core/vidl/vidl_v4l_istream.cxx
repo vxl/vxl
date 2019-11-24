@@ -12,7 +12,7 @@
 #include "vidl_pixel_format.h"
 #include "vidl_frame.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Destructor

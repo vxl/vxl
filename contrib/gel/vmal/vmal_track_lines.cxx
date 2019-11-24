@@ -3,13 +3,13 @@
 #include <algorithm>
 #include "vmal_track_lines.h"
 
-#include <vnl/vnl_math.h> // for pi
-#include <vnl/vnl_double_2.h>
+#include "vnl/vnl_math.h" // for pi
+#include "vnl/vnl_double_2.h"
 
 #include <vtol/vtol_edge_2d.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <vmal/vmal_lines_correlation.h>

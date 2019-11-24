@@ -4,7 +4,7 @@
 #include "rgrl_convergence_on_median_error.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

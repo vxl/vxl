@@ -6,9 +6,9 @@
 // \brief Compute distance function
 // \author Tim Cootes
 
-#include <vil/vil_fill.h>
+#include "vil/vil_fill.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

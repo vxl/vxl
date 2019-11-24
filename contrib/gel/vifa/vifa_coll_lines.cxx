@@ -3,9 +3,9 @@
 #include <cmath>
 #include "vifa_coll_lines.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_face.h>
 

@@ -2,11 +2,11 @@
 #include "icam_transform_2d.h"
 //:
 // \file
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_inverse.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vgl_point_2d<double> icam_transform_2d::origin() const

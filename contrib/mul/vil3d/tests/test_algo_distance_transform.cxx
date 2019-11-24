@@ -2,16 +2,16 @@
 #include <algorithm>
 #include <limits>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil3d/algo/vil3d_distance_transform.h>
 #include <vil3d/vil3d_print.h>
-#include <vil/vil_rgb.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_distance.h>
+#include "vil/vil_rgb.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_distance.h"
 
 void test_signed_distance_transform()
 {

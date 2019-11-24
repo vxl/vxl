@@ -11,9 +11,9 @@
 // Based on ITK, Testing/Code/Common/itkSystemInformationTest.cxx
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 // Construct the name of the notes file.
 #define vxl_BUILD_INFO_NOTES \

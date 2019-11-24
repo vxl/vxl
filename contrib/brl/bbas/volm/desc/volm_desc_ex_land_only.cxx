@@ -3,9 +3,9 @@
 #include "volm_desc_ex_land_only.h"
 //:
 // \file
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_vector_io.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 unsigned volm_desc_ex_land_only::locate_idx(double const& target, std::vector<double> const& arr) const

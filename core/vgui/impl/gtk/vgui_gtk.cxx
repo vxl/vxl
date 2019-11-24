@@ -7,7 +7,7 @@
 
 
 #include "vgui_gtk.h"
-#include <vgui/vgui_gl.h> // glFlush()
+#include "vgui/vgui_gl.h" // glFlush()
 #include <gtk/gtk.h>
 #include "vgui_gtk_window.h"
 #include "vgui_gtk_dialog_impl.h"

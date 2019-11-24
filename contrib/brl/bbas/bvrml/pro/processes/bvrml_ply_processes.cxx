@@ -10,15 +10,15 @@
 #include <cassert>
 #ifdef DEBUG
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #endif
 
 #include <brdb/brdb_value.h>
 #include <bvrml/bvrml_write.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_sphere_3d.h>
-#include <vul/vul_awk.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_sphere_3d.h"
+#include "vul/vul_awk.h"
 
 #include <rply.h>   //.ply parser
 

@@ -6,12 +6,12 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera_double_sptr.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_camera_double_sptr.h"
+#include "vpgl/vpgl_perspective_camera.h"
 #include <vpgl/io/vpgl_io_perspective_camera.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 
 //: Init function
 bool vpgl_get_perspective_cam_center_process_cons(bprb_func_process& pro)

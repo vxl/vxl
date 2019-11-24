@@ -5,9 +5,9 @@
 
 #include "../vil_math_functors.h"
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_math.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_math.h"
 
 //: Constructor
 bool vil_truncate_image_process_cons(bprb_func_process& pro)

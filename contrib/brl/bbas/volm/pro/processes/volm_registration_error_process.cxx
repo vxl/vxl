@@ -15,11 +15,11 @@
 //
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_vector_io.h>
+#include "vul/vul_file.h"
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_vector_io.h"
 #include <vsol/vsol_spatial_object.h>
 #include <vsol/vsol_spatial_object_2d_sptr.h>
 #include <vsol/vsol_curve_2d.h>
@@ -29,8 +29,8 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <bsol/bsol_algs.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_closest_point.h>
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_closest_point.h"
 
 //: Take pre-created projection geometry (vsol binary file) to compute the deviation from ground truth
 namespace volm_registration_error_process_globals

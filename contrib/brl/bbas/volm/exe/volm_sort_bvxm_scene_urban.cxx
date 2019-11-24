@@ -13,20 +13,20 @@
 #include <ios>
 #include <iostream>
 #include <utility>
-#include <vgl/vgl_intersection.h>
-#include <vil/vil_save.h>
+#include "vgl/vgl_intersection.h"
+#include "vil/vil_save.h"
 #include <volm/volm_geo_index2.h>
 #include <volm/volm_geo_index2_sptr.h>
 #include <volm/volm_io.h>
 #include <volm/volm_io_tools.h>
 #include <volm/volm_loc_hyp_sptr.h>
-#include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
+#include "vpgl/vpgl_lvcs.h"
+#include "vpgl/vpgl_lvcs_sptr.h"
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

@@ -1,11 +1,11 @@
 // This is mul/vil3d/tests/test_algo_anisotropic_filter.cxx
 
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_vector_3d.h"
 #include <vil3d/algo/vil3d_anisotropic_filter.h>
 #include <vil3d/vil3d_print.h>
 #include <vil3d/vil3d_math.h>

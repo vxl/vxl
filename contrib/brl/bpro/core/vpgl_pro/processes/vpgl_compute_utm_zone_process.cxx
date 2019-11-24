@@ -9,9 +9,9 @@
 // \date April 14, 2014
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_utm.h>
+#include "vpgl/vpgl_utm.h"
 
 // global variables and functions
 namespace vpgl_compute_utm_zone_process_globals

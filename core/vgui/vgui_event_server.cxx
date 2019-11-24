@@ -7,8 +7,8 @@
 
 #include "vgui_event_server.h"
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_wrapper_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_wrapper_tableau.h"
 
 // the default is 'false'. don't check in 'true'.
 //static bool debug = false;

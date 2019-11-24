@@ -20,14 +20,14 @@
 #include <bwm/bwm_3d_corr_sptr.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_arg.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_file.h>
-#include <vul/vul_timer.h>
-#include <vgl/vgl_point_3d.h>
-#include <vnl/vnl_trace.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file_iterator.h"
+#include "vul/vul_file.h"
+#include "vul/vul_timer.h"
+#include "vgl/vgl_point_3d.h"
+#include "vnl/vnl_trace.h"
 #include <vnl/algo/vnl_real_eigensystem.h>
 
 #include <bwm/video/bwm_video_corr_processor.h>

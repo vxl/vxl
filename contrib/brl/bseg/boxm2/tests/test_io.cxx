@@ -9,12 +9,12 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
 #include <boxm2/io/boxm2_asio_mgr.h>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #include "test_utils.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void test_asio_data()

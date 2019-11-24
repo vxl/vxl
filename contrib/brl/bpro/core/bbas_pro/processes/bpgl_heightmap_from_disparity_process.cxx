@@ -5,16 +5,16 @@
 #include <bprb/bprb_parameters.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vpgl/vpgl_camera_double_sptr.h>
-#include <vpgl/vpgl_affine_camera.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
-#include <vgl/vgl_box_3d.h>
-#include <vnl/vnl_math.h>
+#include "vpgl/vpgl_camera_double_sptr.h"
+#include "vpgl/vpgl_affine_camera.h"
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
+#include "vgl/vgl_box_3d.h"
+#include "vnl/vnl_math.h"
 
 #include <bpgl/algo/bpgl_heightmap_from_disparity.h>
 

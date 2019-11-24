@@ -3,12 +3,12 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vcsl/vcsl_dimension.h>
-#include <vcsl/vcsl_length.h>
-#include <vcsl/vcsl_meter.h>
+#include "vcsl/vcsl_dimension.h"
+#include "vcsl/vcsl_length.h"
+#include "vcsl/vcsl_meter.h"
 
 //---------------------------------------------------------------------------
 // Default constructor. Axis with length in meters and an empty label

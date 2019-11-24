@@ -1,17 +1,17 @@
 #include "volm_spherical_shell_container.h"
 //:
 // \file
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_sphere_3d.h>
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_sphere_3d.h"
 #include <bvrml/bvrml_write.h>
 #include <volm/volm_io.h>
 #include <volm/volm_category_io.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_vector_io.h"
 
 // constructor
 volm_spherical_shell_container::volm_spherical_shell_container(double  /*radius*/, float  /*cap_angle*/, float point_angle, float top_angle, float bottom_angle)

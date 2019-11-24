@@ -2,17 +2,17 @@
 // \file
 #include <iostream>
 #include <limits>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvpl/bvpl_subgrid_iterator.h>
 #include <bvpl/bvpl_voxel_subgrid.h>
 #include <bvpl/kernels/bvpl_edge2d_kernel_factory.h>
 #include <bvpl/functors/bvpl_edge2d_functor.h>
 #include <bvpl/bvpl_neighb_operator.h>
 
-#include <vul/vul_file.h>
-#include <vnl/vnl_math.h>
+#include "vul/vul_file.h"
+#include "vnl/vnl_math.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bool save_occupancy_raw(const std::string& filename, bvxm_voxel_grid<float>* grid)

@@ -7,7 +7,7 @@
 #include <ios>
 #include <algorithm>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \brief Test clsfy_random_classifier, clsfy_k_nearest_neighbour and clsfy_rbf_parzen_window
@@ -15,9 +15,9 @@
 // Test construction, IO etc.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vpl/vpl.h" // vpl_unlink()
 
 #include <clsfy/clsfy_add_all_loaders.h>
 #include <clsfy/clsfy_knn_builder.h>
@@ -25,8 +25,8 @@
 #include <clsfy/clsfy_rbf_parzen.h>
 #include <clsfy/clsfy_random_builder.h>
 #include <clsfy/clsfy_random_classifier.h>
-#include <vnl/vnl_random.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vnl/vnl_random.h"
+#include "vsl/vsl_binary_loader.h"
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mbl/mbl_test.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>

@@ -1,7 +1,7 @@
 // This is core/vcsl/vcsl_spherical.cxx
 #include "vcsl_spherical.h"
-#include <vcsl/vcsl_axis.h>
-#include <vcsl/vcsl_angle.h>
+#include "vcsl/vcsl_axis.h"
+#include "vcsl/vcsl_angle.h"
 
 //---------------------------------------------------------------------------
 // Default constructor.

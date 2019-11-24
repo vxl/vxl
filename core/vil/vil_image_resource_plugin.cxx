@@ -9,7 +9,7 @@
 #include <vector>
 #include "vil_image_resource_plugin.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //=======================================================================

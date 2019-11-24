@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <ios>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \brief Tests clsfy_rbf_svm and clsfy_rbf_svm_smo_1_builder
@@ -13,7 +13,7 @@
 // Test construction, IO etc.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <clsfy/clsfy_rbf_svm.h>
 #include <clsfy/clsfy_rbf_svm_smo_1_builder.h>
@@ -21,11 +21,11 @@
 #include <clsfy/clsfy_rbf_parzen.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
-#include <vnl/vnl_random.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vnl/vnl_random.h"
+#include "vsl/vsl_binary_loader.h"
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vul/vul_timer.h>
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vul/vul_timer.h"
+#include "vpl/vpl.h" // vpl_unlink()
 
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0

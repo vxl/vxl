@@ -8,11 +8,11 @@
 #include <bpro/core/bbas_pro/bbas_1d_array_byte.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_int.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 #include <vsol/vsol_point_3d.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 //:
 // \file
 // \brief  A process for executing an event_trigger (process change)
@@ -22,7 +22,7 @@
 // For a 3-d mesh object the base is the lowest face of the mesh.
 //
 #include <betr/betr_event_trigger.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 
 namespace betr_execute_etr_multi_chimg_evt_poly_process_globals
 {

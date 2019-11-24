@@ -12,11 +12,11 @@
 #include "brec_part_gaussian.h"
 #include "brec_part_hierarchy.h"
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_resource.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_resource.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 brec_part_hierarchy_detector::~brec_part_hierarchy_detector()

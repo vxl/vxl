@@ -1,18 +1,18 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include <testlib/testlib_test.h>
-#include <vpl/vpl.h>
+#include "testlib/testlib_test.h"
+#include "vpl/vpl.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vpgl/vpgl_local_rational_camera.h"
 #include <vpgl/io/vpgl_io_local_rational_camera.h>
-#include <vpgl/vpgl_lvcs.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vpgl/vpgl_lvcs.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
 
 
 //a rational camera from a commercial satellite image

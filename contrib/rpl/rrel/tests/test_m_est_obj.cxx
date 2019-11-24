@@ -2,10 +2,10 @@
 #include <iostream>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
-#include <vnl/vnl_math.h>
+#include "testlib/testlib_test.h"
+#include "vnl/vnl_math.h"
 
 #include <rrel/rrel_tukey_obj.h>
 #include <rrel/rrel_cauchy_obj.h>

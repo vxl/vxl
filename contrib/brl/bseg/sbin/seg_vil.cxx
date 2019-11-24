@@ -1,13 +1,13 @@
 #include <string>
 #include <iostream>
 #include <cstring>
-#include <vgui/vgui.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_window.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_window.h"
 #include <segv/segv_vil_menus.h>
 #include <segv/segv_vil_segmentation_manager.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 int main(int argc, char* argv[])

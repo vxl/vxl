@@ -3,8 +3,8 @@
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
-#include <vgl/vgl_point_3d.h>
-#include <vnl/vnl_math.h>
+#include "vgl/vgl_point_3d.h"
+#include "vnl/vnl_math.h"
 
 #include <bvxm/bvxm_voxel_world.h>
 

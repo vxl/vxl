@@ -2,9 +2,9 @@
 #include "bvxm_scene_kml_process.h"
 //:
 // \file
-#include <vgl/vgl_box_3d.h>
-#include <vul/vul_file.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_box_3d.h"
+#include "vul/vul_file.h"
+#include "vgl/vgl_intersection.h"
 
 // set input and output type
 bool bvxm_scene_kml_process_cons(bprb_func_process& pro)

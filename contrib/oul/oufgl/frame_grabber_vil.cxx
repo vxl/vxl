@@ -4,7 +4,7 @@
 #include <cerrno>
 #include "frame_grabber_vil.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // Constructor
