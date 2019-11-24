@@ -65,11 +65,55 @@ static void test_compute_cremona_2d() {
     from_pts.emplace_back(X, Y);
     to_pts.emplace_back(x, y);
   }
-  std::cout << "\ntest compute cremona with deg = 2" << std::endl;
+  std::cout << "\ntest compute bi-rational cremona with deg = 2" << std::endl;
   vgl_compute_cremona_2d<double, 2> cc2;
   good = cc2.compute_linear(from_pts, to_pts);
   TEST("linear computation deg = 2 ", good, true);
   TEST_NEAR("linear solution error deg = 2", cc2.linear_error(), 0.0, 1.0e-6);
+
+
+  std::cout << "\ntest compute common_denominator cremona with deg = 2" << std::endl;
+  from_pts.clear();
+  to_pts.clear();
+  x_neu2.fill(0.0); x_den2.fill(0.0); y_neu2.fill(0.0); 
+  x_neu2[0]=5.0;  x_neu2[1]=2.0; x_neu2[2] = 1.0;
+  x_den2[0]=2.0;   x_den2[1]=5.0;  x_den2[3] = 1.5;
+  y_neu2[0]=1.1;  y_neu2[5]=3.0; y_neu2[3] = 3.0;
+  for(size_t i = 0; i<npts; ++i){
+    double X = rand.drand32(-r, r);
+    double Y = rand.drand32(-r, r);
+    vnl_vector<double> pv3 = vgl_cremona_trans_2d<double, 2>::power_vector(X, Y);
+    double x = dot_product(x_neu2,pv3)/ dot_product(x_den2,pv3);
+    double y = dot_product(y_neu2,pv3)/ dot_product(x_den2,pv3);
+    from_pts.emplace_back(X, Y);
+    to_pts.emplace_back(x, y);
+  }
+  vgl_compute_cremona_2d<double, 2> cc3;
+  good = cc3.compute_linear(from_pts, to_pts, vgl_compute_cremona_2d<double, 2>::COMMON_DENOMINATOR);
+  TEST("linear computation common_denominator deg = 2 ", good, true);
+  TEST_NEAR("linear solution common_denominator error deg = 2", cc3.linear_error(), 0.0, 1.0e-6);
+
+  std::cout << "\ntest compute unity_denominator cremona with deg = 2" << std::endl;
+  from_pts.clear();
+  to_pts.clear();
+  x_neu2.fill(0.0); x_den2.fill(0.0); y_neu2.fill(0.0); 
+  x_neu2[0]=5.0;  x_neu2[1]=2.0; x_neu2[2] = 1.0;
+  x_den2[0]=1.0;
+  y_neu2[0]=1.1;  y_neu2[5]=3.0; y_neu2[3] = 3.0;
+  for(size_t i = 0; i<npts; ++i){
+    double X = rand.drand32(-r, r);
+    double Y = rand.drand32(-r, r);
+    vnl_vector<double> pv3 = vgl_cremona_trans_2d<double, 2>::power_vector(X, Y);
+    double x = dot_product(x_neu2,pv3)/ dot_product(x_den2,pv3);
+    double y = dot_product(y_neu2,pv3)/ dot_product(x_den2,pv3);
+    from_pts.emplace_back(X, Y);
+    to_pts.emplace_back(x, y);
+  }
+  vgl_compute_cremona_2d<double, 2> cc4;
+  good = cc4.compute_linear(from_pts, to_pts, vgl_compute_cremona_2d<double, 2>::UNITY_DENOMINATOR);
+  TEST("linear computation unity_denominator deg = 2 ", good, true);
+  TEST_NEAR("linear solution unity_denominator error deg = 2", cc4.linear_error(), 0.0, 1.0e-6);
+  
 }
 
 TESTMAIN(test_compute_cremona_2d);
