@@ -37,6 +37,7 @@ compute_linear(std::vector<vgl_homg_point_2d<T> > const& from_pts, std::vector<v
   for(size_t k = 0; k<n; ++k){
     vgl_point_2d<T> pf(norm_from_pts_[k]), pt(norm_to_pts_[k]);
     T X = pf.x(), Y = pf.y(), x = pt.x(), y = pt.y();
+    //std::cout << X << ' ' << Y << ' ' << x << ' ' << y << std::endl;
     vnl_vector<T> pv = vgl_cremona_trans_2d<T,deg>::power_vector(X, Y);
     for(size_t i = 0; i<nc; ++i){
       A[2*k][i]          = pv[i];
@@ -52,6 +53,13 @@ compute_linear(std::vector<vgl_homg_point_2d<T> > const& from_pts, std::vector<v
     return false;
   }
   linear_coeff_ = svd.nullvector();
+#if 0
+  for (size_t k = 0; k < 4; ++k) {
+      for (size_t i = 0; i < nc; ++i)
+          std::cout << linear_coeff_[i+ k*nc] << ' ';
+      std::cout << std::endl;
+  }
+#endif
   linear_solved_ = true;
   this->compute_linear_solution_error();
   return true;

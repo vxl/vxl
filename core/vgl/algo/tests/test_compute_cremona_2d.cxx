@@ -22,7 +22,7 @@ static void test_compute_cremona_2d() {
   x_neu[1]=10;  x_neu[4]=20; x_neu[9]=1;
   x_den[0]=5;   x_den[3]=1;  x_den[5]=1;
   y_neu[1]=10.1;  y_neu[4]=20.1; y_neu[9]=1.1;
-  y_den[0]=5.1;   y_den[3]=1.1;  y_den[5]=1.1;                                      
+  y_den[0]=5.1;   y_den[3]=1.1;  y_den[5]=1.1;
   size_t npts = 1000;
   std::vector<vgl_homg_point_2d<double> > from_pts, to_pts;
   double r = 1.0;
@@ -39,24 +39,37 @@ static void test_compute_cremona_2d() {
   vnl_vector<double> lin_coeff = cc.linear_coeff();
   
   TEST("linear computation deg = 3", good, true);
-
-  std::cout << "Solution error deg = 3" << cc.linear_error() << std::endl;
   TEST_NEAR("linear solution error deg = 3", cc.linear_error(), 0.0, 1.0e-6);
 
   vgl_cremona_trans_2d<double, 3> ct = cc.linear_trans();
   x = 0.0; y = 0.0;
   ct.project(from_pts[0].x(), from_pts[0].y(), x, y);
   double ter = fabs(to_pts[0].x()-x) + fabs(to_pts[0].y()-y);
-  std::cout << "cremona_trans err deg = 3 " << ter << std::endl;
   TEST_NEAR("cremona_trans class constructor deg = 3 ", ter,0.0,1.0e-6);
   
   // TEST the second order transform //
-  std::cout << "\ntest cremona with deg = 2" << std::endl;
+  from_pts.clear();
+  to_pts.clear();
+  size_t nc2 = vgl_cremona_trans_2d<double, 2>::n_coeff();
+  vnl_vector<double> x_neu2(nc2, 0.0), x_den2(nc2,0.0), y_neu2(nc2,0.0), y_den2(nc2,0.0);  
+  x_neu2[0]=100.0;  x_neu2[1]=10.0; x_neu2[2] = 1.0;
+  x_den2[0]=10.0;   x_den2[1]=5.0;  x_neu2[4] = 1.5;
+  y_neu2[0]=10.0;  y_neu2[5]=20.0; y_neu2[3] = 3.0;
+  y_den2[0]=5.0;    y_den2[1]=3.0;  y_neu2[2] =2.5;
+  for(size_t i = 0; i<npts; ++i){
+    double X = rand.drand32(-r, r);
+    double Y = rand.drand32(-r, r);
+    vnl_vector<double> pv2 = vgl_cremona_trans_2d<double, 2>::power_vector(X, Y);
+    double x = dot_product(x_neu2,pv2)/ dot_product(x_den2,pv2);
+    double y = dot_product(y_neu2,pv2)/ dot_product(y_den2,pv2);
+    from_pts.emplace_back(X, Y);
+    to_pts.emplace_back(x, y);
+  }
+  std::cout << "\ntest compute cremona with deg = 2" << std::endl;
   vgl_compute_cremona_2d<double, 2> cc2;
   good = cc2.compute_linear(from_pts, to_pts);
   TEST("linear computation deg = 2 ", good, true);
-  std::cout << "Solution error deg = 2 " << cc2.linear_error() << std::endl;
-  TEST_NEAR("linear solution error deg = 2", cc2.linear_error(), 0.0, 0.2);
+  TEST_NEAR("linear solution error deg = 2", cc2.linear_error(), 0.0, 1.0e-6);
 }
 
 TESTMAIN(test_compute_cremona_2d);
