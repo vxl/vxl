@@ -20,11 +20,11 @@
 //   30 Mar 2007 Peter Vanroose- Removed deprecated vil_new_image_view_j_i_plane
 // \endverbatim
 
-#include <vil/vil_fwd.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_pyramid_image_resource.h>
-#include <vil/vil_image_view.h>
+#include "vil_fwd.h"
+#include "vil_image_resource.h"
+#include "vil_blocked_image_resource.h"
+#include "vil_pyramid_image_resource.h"
+#include "vil_image_view.h"
 #include <vxl_config.h>
 #include <vcl_compiler_detection.h>
 

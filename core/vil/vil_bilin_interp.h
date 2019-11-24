@@ -17,8 +17,8 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vil/vil_image_view.h>
-#include <vil/vil_na.h>
+#include "vil_image_view.h"
+#include "vil_na.h"
 
 //: Compute bilinear interpolation at (x,y), no bound checks. Requires 0<x<ni-2, 0<y<nj-2
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]

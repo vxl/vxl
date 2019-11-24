@@ -18,8 +18,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <vidl/vidl_exception.h>
-#include <vidl/vidl_pixel_format.h>
+#include "vidl_exception.h"
+#include "vidl_pixel_format.h"
 
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>

@@ -22,7 +22,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgui/vgui_wrapper_tableau.h>
+#include "vgui_wrapper_tableau.h"
 
 //: Tableau displaying a tableau tree.
 class vgui_tview_tableau : public vgui_wrapper_tableau

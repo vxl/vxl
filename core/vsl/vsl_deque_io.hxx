@@ -13,8 +13,8 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_indent.h>
+#include "vsl_binary_io.h"
+#include "vsl_indent.h"
 
 //====================================================================================
 //: Write deque to binary stream

@@ -91,10 +91,10 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_c_vector.h>
-#include <vnl/vnl_numeric_traits.h>
+#include "vnl_math.h"
+#include "vnl_vector.h"
+#include "vnl_c_vector.h"
+#include "vnl_numeric_traits.h"
 //--------------------------------------------------------------------------------
 
 // This macro allocates and initializes the dynamic storage used by a vnl_matrix.

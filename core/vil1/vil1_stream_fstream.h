@@ -11,7 +11,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vil1/vil1_stream.h>
+#include "vil1_stream.h"
 
 //: A vil1_stream implementation using std::fstream
 class vil1_stream_fstream : public vil1_stream

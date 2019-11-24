@@ -13,7 +13,7 @@
 // \endverbatim
 
 #include <limits>
-#include <vpdl/vpdl_gaussian_base.h>
+#include "vpdl_gaussian_base.h"
 #include <vpdl/vpdt/vpdt_gaussian.h>
 #include <vpdl/vpdt/vpdt_probability.h>
 #include <vpdl/vpdt/vpdt_log_probability.h>

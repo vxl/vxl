@@ -12,7 +12,7 @@
 //   02-OCT-2002 K.Y.McGaul - Initial version.
 // \endverbatim
 
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui_tableau_sptr.h"
 
 class vgui_drag_tableau;
 typedef vgui_tableau_sptr_t<vgui_drag_tableau> vgui_drag_tableau_sptr;

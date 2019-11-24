@@ -18,8 +18,8 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgl/vgl_fwd.h> // declare vgl_homg_point_2d and vgl_line_2d
-#include <vgl/vgl_vector_2d.h>
+#include "vgl_fwd.h" // declare vgl_homg_point_2d and vgl_line_2d
+#include "vgl_vector_2d.h"
 #include <cassert>
 
 //: Represents a cartesian 2D point

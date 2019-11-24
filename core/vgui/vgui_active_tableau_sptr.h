@@ -5,7 +5,7 @@
 // \file
 // \brief  Smart-pointer to a vgui_active_tableau tableau.
 
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui_tableau_sptr.h"
 
 class vgui_active_tableau;
 

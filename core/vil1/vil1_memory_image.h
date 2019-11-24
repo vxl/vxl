@@ -14,8 +14,8 @@
 //            destruction.
 //\endverbatim
 
-#include <vil1/vil1_pixel.h>
-#include <vil1/vil1_image.h>
+#include "vil1_pixel.h"
+#include "vil1_image.h"
 
 //: Description of image format in memory
 struct vil1_memory_image_format

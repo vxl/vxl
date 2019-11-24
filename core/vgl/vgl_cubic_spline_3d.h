@@ -27,9 +27,9 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl_plane_3d.h"
+#include "vgl_point_3d.h"
+#include "vgl_vector_3d.h"
 
 template <class Type>
 class vgl_cubic_spline_3d

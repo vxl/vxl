@@ -11,9 +11,9 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_closest_point.h>
-#include <vgl/vgl_line_3d_2_points.h>
+#include "vgl_point_3d.h"
+#include "vgl_closest_point.h"
+#include "vgl_line_3d_2_points.h"
 
 
 //: Return true iff the point p is inside (or on) this sphere

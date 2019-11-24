@@ -16,12 +16,12 @@
 //   01-OCT-2002 K.Y.McGaul - Moved listmanager2D to listmanager2D_tableau.
 // \endverbatim
 
-#include <vgui/vgui_observable.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_parent_child_link.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_displaylist2D_tableau.h>
-#include <vgui/vgui_listmanager2D_tableau_sptr.h>
+#include "vgui_observable.h"
+#include "vgui_tableau.h"
+#include "vgui_parent_child_link.h"
+#include "vgui_event.h"
+#include "vgui_displaylist2D_tableau.h"
+#include "vgui_listmanager2D_tableau_sptr.h"
 
 class vgui_event;
 class vgui_displaylist2D_tableau;

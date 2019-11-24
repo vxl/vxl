@@ -24,8 +24,8 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 #include <cassert>
-#include <vgl/vgl_fwd.h> // forward declare vgl_point_2d and vgl_homg_line_2d
-#include <vgl/vgl_vector_2d.h>
+#include "vgl_fwd.h" // forward declare vgl_point_2d and vgl_homg_line_2d
+#include "vgl_vector_2d.h"
 
 //: Represents a Euclidean 2D line
 // An interface for the line coefficients, [a,b,c], is provided in terms of the

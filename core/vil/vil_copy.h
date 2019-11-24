@@ -7,7 +7,7 @@
 // \author Ian Scott - Manchester
 // \date 4 Oct 2002
 
-#include <vil/vil_fwd.h>
+#include "vil_fwd.h"
 
 
 //: Copy src to dest, without changing dest's view parameters.

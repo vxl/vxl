@@ -35,8 +35,8 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_fwd.h>
 #include <vgl/algo/vgl_algo_fwd.h>
-#include <vpgl/vpgl_proj_camera.h>
-#include <vpgl/vpgl_fundamental_matrix.h>
+#include "vpgl_proj_camera.h"
+#include "vpgl_fundamental_matrix.h"
 
 template <class Type>
 class vpgl_tri_focal_tensor

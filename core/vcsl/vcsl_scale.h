@@ -15,8 +15,8 @@
 //   2004/09/17 Peter Vanroose - made scale() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim
 
-#include <vcsl/vcsl_spatial_transformation.h>
-#include <vcsl/vcsl_scale_sptr.h>
+#include "vcsl_spatial_transformation.h"
+#include "vcsl_scale_sptr.h"
 
 //: Scale transformation
 class vcsl_scale

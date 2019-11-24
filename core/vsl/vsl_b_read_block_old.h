@@ -17,8 +17,8 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_binary_explicit_io.h>
+#include "vsl_binary_io.h"
+#include "vsl_binary_explicit_io.h"
 
 // Whilst this file should not be used by users, it will likely never be deleted,
 // and will remain in use by a number of files in vsl and vnl/io to provide
@@ -33,7 +33,7 @@
 
 //: Read a block of values from a vsl_b_istream
 // If you want to output a block of fundamental data types very efficiently,
-// then just #include <vsl_binary_explicit_io.h>
+// then just #include "vsl_binary_explicit_io.h"
 // \deprecated in favour of vsl_block_binary_read
 template <class T>
 inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, std::size_t nelems)

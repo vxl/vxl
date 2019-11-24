@@ -15,7 +15,7 @@
 // \endverbatim
 
 #include "vgui_displaybase_tableau.h"
-#include <vgui/vgui_displaylist2D_tableau_sptr.h>
+#include "vgui_displaylist2D_tableau_sptr.h"
 
 //: Displaying two-dimensional geometric objects.
 class vgui_displaylist2D_tableau : public vgui_displaybase_tableau

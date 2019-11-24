@@ -24,11 +24,11 @@
 
 #include <utility>
 #include <limits>
-#include <vgl/vgl_fwd.h> // forward declare various vgl classes
+#include "vgl_fwd.h" // forward declare various vgl classes
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgl/vgl_infinite_line_3d.h>
+#include "vgl_infinite_line_3d.h"
 //: Closest point to \a (x,y) on the line segment \a (x1,y1)-(x2,y2)
 template <class T>
 void vgl_closest_point_to_linesegment(T& ret_x, T& ret_y,

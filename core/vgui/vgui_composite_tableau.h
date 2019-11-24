@@ -21,11 +21,11 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-#include <vgui/vgui_composite_tableau_sptr.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_parent_child_link.h>
-#include <vgui/vgui_event_condition.h>
-#include <vgui/vgui_observable.h>
+#include "vgui_composite_tableau_sptr.h"
+#include "vgui_tableau.h"
+#include "vgui_parent_child_link.h"
+#include "vgui_event_condition.h"
+#include "vgui_observable.h"
 
 class vgui_event;
 

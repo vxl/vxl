@@ -5,9 +5,9 @@
 // \file
 // \author Ian Scott.
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_plane.h>
+#include "vil_image_view.h"
+#include "vil_crop.h"
+#include "vil_plane.h"
 
 
 //: Rearrange multiple planes into a multiple tiles of a single-plane image.

@@ -5,7 +5,7 @@
 // \file
 // \author fsm
 
-#include <vgui/vgui_gl.h>
+#include "vgui_gl.h"
 #include <vbl/vbl_array_1d.h>
 //: Get the required image view given the state of the viewport and scale
 bool pixel_view(unsigned& i0, unsigned& ni, unsigned& j0, unsigned& nj,

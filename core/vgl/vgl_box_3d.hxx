@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <cmath>
 #include "vgl_box_3d.h"
-#include <vgl/vgl_point_3d.h>
+#include "vgl_point_3d.h"
 #include <cassert>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>

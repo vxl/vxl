@@ -11,7 +11,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vsl/vsl_fwd.h>
+#include "vsl_fwd.h"
 
 //: Write vector to binary stream
 template <class T>

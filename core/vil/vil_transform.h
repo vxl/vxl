@@ -10,7 +10,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vil/vil_image_view.h>
+#include "vil_image_view.h"
 
 //: Apply a unary operation to each pixel in image.
 // \param functor should take a value of type T and return same type

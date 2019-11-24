@@ -6,7 +6,7 @@
 // \brief make a section of a vil1_stream behave like a vil1_stream
 // \author  fsm
 
-#include <vil1/vil1_stream.h>
+#include "vil1_stream.h"
 
 //: make a section of a vil1_stream behave like a vil1_stream.
 //

@@ -11,8 +11,8 @@
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcsl/vcsl_coordinate_system.h>
-#include <vcsl/vcsl_cartesian_sptr.h>
+#include "vcsl_coordinate_system.h"
+#include "vcsl_cartesian_sptr.h"
 
 //: Cartesian coordinate system
 // The axes of a cartesian coordinate system are orthogonal and normally right

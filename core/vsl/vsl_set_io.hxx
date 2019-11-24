@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include "vsl_set_io.h"
-#include <vsl/vsl_binary_io.h>
+#include "vsl_binary_io.h"
 
 //====================================================================================
 //: Write set to binary stream

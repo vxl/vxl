@@ -11,8 +11,8 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 #include <cassert>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_line_2d.h>
+#include "vgl_homg_point_2d.h"
+#include "vgl_line_2d.h"
 
 template <class Type>
 vgl_homg_line_2d<Type>::vgl_homg_line_2d (vgl_line_2d<Type> const& l)

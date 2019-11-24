@@ -9,7 +9,7 @@
 // \date 23 Mar 2007
 
 #include <vil/vil_smart_ptr.h>
-#include <vidl/vidl_istream.h>
+#include "vidl_istream.h"
 
 //: A smart pointer to an input stream
 typedef vil_smart_ptr<vidl_istream> vidl_istream_sptr;

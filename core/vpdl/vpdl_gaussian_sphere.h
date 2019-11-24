@@ -13,7 +13,7 @@
 // \endverbatim
 
 #include <limits>
-#include <vpdl/vpdl_gaussian_base.h>
+#include "vpdl_gaussian_base.h"
 #include <vnl/vnl_erf.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>

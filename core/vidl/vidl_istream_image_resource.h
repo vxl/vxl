@@ -13,7 +13,7 @@
 
 #include <vil/vil_image_resource.h>
 #include <vil/vil_pixel_format.h>
-#include <vidl/vidl_istream_sptr.h>
+#include "vidl_istream_sptr.h"
 
 
 //: A vil_image_resource to a frame of a vidl_istream

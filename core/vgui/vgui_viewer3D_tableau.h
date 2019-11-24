@@ -17,9 +17,9 @@
 // \endverbatim
 
 #include "vgui_viewer3D_tableau_sptr.h"
-#include <vgui/vgui_wrapper_tableau.h>
-#include <vgui/vgui_drag_mixin.h>
-#include <vgui/vgui_event_condition.h>
+#include "vgui_wrapper_tableau.h"
+#include "vgui_drag_mixin.h"
+#include "vgui_event_condition.h"
 #include "dll.h"
 
 struct vgui_viewer3D_tableau_spin;

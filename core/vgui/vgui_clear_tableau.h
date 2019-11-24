@@ -16,8 +16,8 @@
 // \endverbatim
 
 #include "vgui_clear_tableau_sptr.h"
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_tableau.h>
+#include "vgui_gl.h"
+#include "vgui_tableau.h"
 class vgui_menu;
 
 //: Tableau performing OpenGL clearing.

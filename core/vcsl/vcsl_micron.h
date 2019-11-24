@@ -2,7 +2,7 @@
 #define vcsl_micron_h_
 //:
 // \file
-#include <vcsl/vcsl_length_unit.h>
+#include "vcsl_length_unit.h"
 #include "vcsl_micron_sptr.h"
 
 //: Standard unit associated to the length dimension

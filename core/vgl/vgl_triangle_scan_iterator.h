@@ -10,7 +10,7 @@
 //   Nov.2003 - Peter Vanroose - made class vgl_triangle_scan_iterator templated
 // \endverbatim
 
-#include <vgl/vgl_region_scan_iterator.h>
+#include "vgl_region_scan_iterator.h"
 
 #define use_polygon_scan_iterator 0
 

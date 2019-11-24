@@ -18,8 +18,8 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_parent_child_link.h>
+#include "vgui_tableau.h"
+#include "vgui_parent_child_link.h"
 class vgui_event;
 
 #include "vgui_selector_tableau_sptr.h"

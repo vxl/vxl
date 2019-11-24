@@ -11,9 +11,9 @@
 //   Oct 7, 2010 - Peter Vanroose - Added the median
 // \endverbatim
 
-#include <vbl/vbl_array_1d.h>
-#include <vbl/vbl_array_2d.h>
-#include <vbl/vbl_array_3d.h>
+#include "vbl_array_1d.h"
+#include "vbl_array_2d.h"
+#include "vbl_array_3d.h"
 
 //: minimum element value
 template <class T>

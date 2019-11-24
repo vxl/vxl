@@ -17,10 +17,10 @@
 
 #include "vgui_shell_tableau_sptr.h"
 
-#include <vgui/vgui_composite_tableau.h>
-#include <vgui/vgui_clear_tableau_sptr.h>
-#include <vgui/vgui_tview_launcher_tableau_sptr.h>
-#include <vgui/vgui_event_condition.h>
+#include "vgui_composite_tableau.h"
+#include "vgui_clear_tableau_sptr.h"
+#include "vgui_tview_launcher_tableau_sptr.h"
+#include "vgui_event_condition.h"
 
 
 //: Key bindings for vgui_shell_tableau

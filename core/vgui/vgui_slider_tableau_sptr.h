@@ -6,7 +6,7 @@
 // \date   Feb 2005
 // \brief  Smart-pointer to a vgui_slider_tableau tableau.
 
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui_tableau_sptr.h"
 
 class vgui_slider_tableau;
 typedef vgui_tableau_sptr_t<vgui_slider_tableau> vgui_slider_tableau_sptr;

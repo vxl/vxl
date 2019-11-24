@@ -18,7 +18,7 @@
 // \endverbatim
 
 #include <vector>
-#include <vcsl/vcsl_spatial_transformation_sptr.h>
+#include "vcsl_spatial_transformation_sptr.h"
 
 #include <vbl/vbl_ref_count.h>
 #ifdef _MSC_VER

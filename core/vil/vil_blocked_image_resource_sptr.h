@@ -6,7 +6,7 @@
 // \file
 // \brief Smart pointer to an image resource.
 
-#include <vil/vil_smart_ptr.h>
+#include "vil_smart_ptr.h"
 
 class vil_blocked_image_resource;
 

@@ -16,10 +16,10 @@
 // \endverbatim
 
 #include <vector>
-#include <vcsl/vcsl_coordinate_system.h>
-#include <vcsl/vcsl_spatial_sptr.h>
-#include <vcsl/vcsl_spatial_transformation_sptr.h>
-#include <vcsl/vcsl_graph_sptr.h>
+#include "vcsl_coordinate_system.h"
+#include "vcsl_spatial_sptr.h"
+#include "vcsl_spatial_transformation_sptr.h"
+#include "vcsl_graph_sptr.h"
 #include <vnl/vnl_vector.h>
 class vcsl_cartesian_2d;
 class vcsl_polar;

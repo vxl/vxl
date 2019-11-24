@@ -4,7 +4,7 @@
 // Since GL/glu.h will #include GL/gl.h, which is broken, we cannot
 // #include GL/glu.h directly either -- fsm.
 
-#include <vgui/vgui_gl.h>
+#include "vgui_gl.h"
 #ifdef __APPLE__
 # include <OpenGL/glu.h>
 #else

@@ -13,9 +13,9 @@
 //   2004/09/17 Peter Vanroose  do not pass vcsl_spheroid objects; use vcsl_spheroid_sptr instead
 // \endverbatim
 
-#include <vcsl/vcsl_spatial.h>
-#include <vcsl/vcsl_geographic_sptr.h>
-#include <vcsl/vcsl_spheroid_sptr.h>
+#include "vcsl_spatial.h"
+#include "vcsl_geographic_sptr.h"
+#include "vcsl_spheroid_sptr.h"
 
 //: Represent a location relative to the earth
 // 3D coordinate system that is intended to represent a location relative to

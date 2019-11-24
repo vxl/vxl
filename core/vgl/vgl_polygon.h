@@ -21,7 +21,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgl/vgl_point_2d.h> // needed for std::vector instantiations
+#include "vgl_point_2d.h" // needed for std::vector instantiations
 
 //: Store a polygon.
 // May have holes or multiple sections.  The polygon is stored as a list

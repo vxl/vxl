@@ -22,9 +22,9 @@
 //     24 Sep 2002 Ian Scott - converted to vil
 //\endverbatim
 
-#include <vil/vil_fwd.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_pyramid_image_resource.h>
+#include "vil_fwd.h"
+#include "vil_image_resource.h"
+#include "vil_pyramid_image_resource.h"
 #include <vxl_config.h>
 
 //: Load an image resource object from a file.

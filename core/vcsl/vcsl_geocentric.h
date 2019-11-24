@@ -11,8 +11,8 @@
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
-#include <vcsl/vcsl_geographic.h>
-#include <vcsl/vcsl_geocentric_sptr.h>
+#include "vcsl_geographic.h"
+#include "vcsl_geocentric_sptr.h"
 
 //: A specific geographic coordinate system
 // Intended to represent a location relative to the earth

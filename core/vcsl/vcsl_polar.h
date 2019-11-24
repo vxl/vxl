@@ -12,8 +12,8 @@
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcsl/vcsl_spatial.h>
-#include <vcsl/vcsl_polar_sptr.h>
+#include "vcsl_spatial.h"
+#include "vcsl_polar_sptr.h"
 
 //: Planar coordinate system specified by the parameters rho and theta
 class vcsl_polar

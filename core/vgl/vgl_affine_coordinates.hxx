@@ -3,10 +3,10 @@
 #define vgl_affine_coordinates_hxx_
 #include <cassert>
 #include <cmath>
-#include <vgl/vgl_affine_coordinates.h>
-#include <vgl/vgl_vector_2d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_tolerance.h>
+#include "vgl_affine_coordinates.h"
+#include "vgl_vector_2d.h"
+#include "vgl_vector_3d.h"
+#include "vgl_tolerance.h"
 // Points are all coplanar. The first three points in pts are the basis, pts[0] is the origin
 template <class T>
 void vgl_affine_coordinates_2d(std::vector<vgl_point_2d<T> > const& pts, std::vector<vgl_point_2d<T> >& affine_pts)

@@ -12,8 +12,8 @@
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcsl/vcsl_geographic.h>
-#include <vcsl/vcsl_geodetic_sptr.h>
+#include "vcsl_geographic.h"
+#include "vcsl_geodetic_sptr.h"
 
 //: 3D coordinate system intended to represent a location relative to the earth.
 // Although its use is not restricted to earthbound coordinate systems.

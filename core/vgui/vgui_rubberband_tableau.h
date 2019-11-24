@@ -23,9 +23,9 @@
 // \endverbatim
 
 
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_event_condition.h>
+#include "vgui_tableau.h"
+#include "vgui_easy2D_tableau.h"
+#include "vgui_event_condition.h"
 
 //-----------------------------------------------------------------------------
 //: Receives the parameters captured by vgui_rubberband_tableau.

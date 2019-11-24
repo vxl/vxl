@@ -14,8 +14,8 @@
 //   2004/09/17 Peter Vanroose - made point() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim
 
-#include <vcsl/vcsl_rotation.h>
-#include <vcsl/vcsl_displacement_sptr.h>
+#include "vcsl_rotation.h"
+#include "vcsl_displacement_sptr.h"
 
 //: Affine rotation
 // A displacement rotates a point with a given angle around an axis defined by

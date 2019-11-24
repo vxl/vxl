@@ -47,7 +47,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
-#include <vpgl/vpgl_calibration_matrix.h>
+#include "vpgl_calibration_matrix.h"
 
 template <class T>
 class vpgl_radial_tangential_distortion : public vpgl_lens_distortion<T>

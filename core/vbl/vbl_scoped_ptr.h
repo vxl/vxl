@@ -20,7 +20,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vbl/vbl_checked_delete.h>
+#include "vbl_checked_delete.h"
 
 //:
 //  vbl_scoped_ptr mimics a built-in pointer except that it guarantees

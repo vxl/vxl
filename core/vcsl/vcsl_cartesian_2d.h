@@ -11,8 +11,8 @@
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcsl/vcsl_spatial.h>
-#include <vcsl/vcsl_cartesian_2d_sptr.h>
+#include "vcsl_spatial.h"
+#include "vcsl_cartesian_2d_sptr.h"
 
 //: 2D Cartesian coordinate system
 class vcsl_cartesian_2d

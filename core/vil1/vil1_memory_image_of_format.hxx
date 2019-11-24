@@ -14,9 +14,9 @@
 #include <complex>
 #include <climits>
 
-#include <vil1/vil1_memory_image.h>
-#include <vil1/vil1_rgb.h>
-#include <vil1/vil1_rgba.h>
+#include "vil1_memory_image.h"
+#include "vil1_rgb.h"
+#include "vil1_rgba.h"
 
 #include <vxl_config.h>
 

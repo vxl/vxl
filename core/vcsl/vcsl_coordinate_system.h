@@ -16,8 +16,8 @@
 
 #include <vector>
 #include <vbl/vbl_ref_count.h>
-#include <vcsl/vcsl_coordinate_system_sptr.h>
-#include <vcsl/vcsl_axis_sptr.h>
+#include "vcsl_coordinate_system_sptr.h"
+#include "vcsl_axis_sptr.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

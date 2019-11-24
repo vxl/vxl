@@ -84,11 +84,11 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vil/vil_transform.h>
-#include <vil/vil_math.h>
-#include <vil/vil_plane.h>
-#include <vil/vil_copy.h>
-#include <vil/vil_exception.h>
+#include "vil_transform.h"
+#include "vil_math.h"
+#include "vil_plane.h"
+#include "vil_copy.h"
+#include "vil_exception.h"
 
 
 //: Performs conversion between different pixel types.

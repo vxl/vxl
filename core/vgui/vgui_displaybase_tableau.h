@@ -24,9 +24,9 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_style_sptr.h>
+#include "vgui_gl.h"
+#include "vgui_tableau.h"
+#include "vgui_style_sptr.h"
 
 class vgui_soview;
 class vgui_event;

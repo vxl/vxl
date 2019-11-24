@@ -6,7 +6,7 @@
 // \brief open an URL
 // \author  fsm
 
-#include <vil1/vil1_stream.h>
+#include "vil1_stream.h"
 
 //: open an URL
 

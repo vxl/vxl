@@ -11,25 +11,25 @@
 // \author Peter Vanroose, KULeuven, ESAT/PSI
 
 #include "vgl_closest_point.h"
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_line_2d.h>
-#include <vgl/vgl_homg_line_2d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_sphere_3d.h>
-#include <vgl/vgl_homg_plane_3d.h>
-#include <vgl/vgl_homg_line_3d_2_points.h>
-#include <vgl/vgl_line_3d_2_points.h>
-#include <vgl/vgl_line_segment_2d.h>
-#include <vgl/vgl_line_segment_3d.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_ray_3d.h>
-#include <vgl/vgl_pointset_3d.h>
-#include <vgl/vgl_cubic_spline_3d.h>
+#include "vgl_distance.h"
+#include "vgl_line_2d.h"
+#include "vgl_homg_line_2d.h"
+#include "vgl_point_2d.h"
+#include "vgl_point_3d.h"
+#include "vgl_vector_3d.h"
+#include "vgl_homg_point_2d.h"
+#include "vgl_homg_point_3d.h"
+#include "vgl_plane_3d.h"
+#include "vgl_sphere_3d.h"
+#include "vgl_homg_plane_3d.h"
+#include "vgl_homg_line_3d_2_points.h"
+#include "vgl_line_3d_2_points.h"
+#include "vgl_line_segment_2d.h"
+#include "vgl_line_segment_3d.h"
+#include "vgl_polygon.h"
+#include "vgl_ray_3d.h"
+#include "vgl_pointset_3d.h"
+#include "vgl_cubic_spline_3d.h"
 #include <cassert>
 
 template <class T>

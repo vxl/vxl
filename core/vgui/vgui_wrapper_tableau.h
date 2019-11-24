@@ -9,8 +9,8 @@
 //  Contains classes: vgui_wrapper_tableau  vgui_wrapper_tableau_new
 
 #include "vgui_wrapper_tableau_sptr.h"
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_parent_child_link.h>
+#include "vgui_tableau.h"
+#include "vgui_parent_child_link.h"
 
 //: Base class tableau for tableau who want only a single child.
 //

@@ -19,7 +19,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgui/vgui_gl.h>
+#include "vgui_gl.h"
 #include <vnl/vnl_fwd.h>
 
 //: Stores and retrieves the current projection and modelview matrices.

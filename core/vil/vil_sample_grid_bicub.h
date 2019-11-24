@@ -11,7 +11,7 @@
 // corresponding bilin file that would likely also benefit from
 // the same change.
 
-#include <vil/vil_image_view.h>
+#include "vil_image_view.h"
 
 //: Sample grid from image, using bicubic interpolation
 //  Grid points are (x0+i.dx1+j.dx2,y0+i.dy1+j.dy2), where i=[0..n1-1], j=[0..n2-1]

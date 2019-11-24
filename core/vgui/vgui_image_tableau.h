@@ -16,9 +16,9 @@
 //   27-DEC-2004 J.L. Mundy - Added range mapping support
 // \endverbatim
 
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_image_tableau_sptr.h>
-#include <vgui/vgui_range_map_params_sptr.h>
+#include "vgui_tableau.h"
+#include "vgui_image_tableau_sptr.h"
+#include "vgui_range_map_params_sptr.h"
 class vgui_image_renderer;
 class vil1_image;
 #include <vil/vil_image_resource_sptr.h>

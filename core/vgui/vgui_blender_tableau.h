@@ -16,9 +16,9 @@
 //                          - Moved vgui_image_blender to vgui_blender_tableau.
 // \endverbatim
 
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_blender_tableau_sptr.h>
-#include <vgui/vgui_range_map_params_sptr.h>
+#include "vgui_tableau.h"
+#include "vgui_blender_tableau_sptr.h"
+#include "vgui_range_map_params_sptr.h"
 #include <vil/vil_fwd.h>
 
 class vgui_image_renderer;

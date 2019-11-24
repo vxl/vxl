@@ -21,8 +21,8 @@
 #endif
 #include <vnl/vnl_math.h>
 
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl_homg_point_3d.h"
+#include "vgl_point_3d.h"
 // the implicit equation for a quadric surface is:
 // 1) ax^2 + by^2 + cz^2 + dxy + exz + fyz + gxw +hyw +izw +jw^2 = 0
 // w is the homogeneous scale factor.

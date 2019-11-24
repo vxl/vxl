@@ -6,7 +6,7 @@
 // \author  fsm
 // \brief   Smart-pointer to a vgui_shell_tableau.
 
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui_tableau_sptr.h"
 
 class vgui_shell_tableau;
 typedef vgui_tableau_sptr_t<vgui_shell_tableau> vgui_shell_tableau_sptr;

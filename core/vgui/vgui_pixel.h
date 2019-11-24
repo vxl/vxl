@@ -12,7 +12,7 @@
 //             The vil1 and vil functionality could probably be coalesced for a cleaner design.
 // \endverbatim
 
-#include <vgui/vgui_gl.h>
+#include "vgui_gl.h"
 #include <vxl_config.h>
 
 //: Now we define a bunch of pixel-type structs

@@ -2,8 +2,8 @@
 #define vil_pyramid_image_view_hxx_
 
 #include "vil_pyramid_image_view.h"
-#include <vil/vil_image_view.h>
-#include <vil/vil_resample_bilin.h>
+#include "vil_image_view.h"
+#include "vil_resample_bilin.h"
 
 template <class T>
 vil_pyramid_image_view<T>::vil_pyramid_image_view(unsigned levels, unsigned ni,

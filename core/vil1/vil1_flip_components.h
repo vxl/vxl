@@ -6,7 +6,7 @@
 // \brief swap the "R" and "B" colour components of an image
 // \author Peter Vanroose, ESAT, KULeuven.
 
-#include <vil1/vil1_image.h>
+#include "vil1_image.h"
 
 //: swap the "R" and "B" colour components of an image
 vil1_image vil1_flip_components(vil1_image const &);

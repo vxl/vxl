@@ -21,8 +21,8 @@
 // \endverbatim
 
 #include <vnl/vnl_fwd.h>
-#include <vgui/vgui_loader_tableau_sptr.h>
-#include <vgui/vgui_wrapper_tableau.h>
+#include "vgui_loader_tableau_sptr.h"
+#include "vgui_wrapper_tableau.h"
 
 //: Tableau where the user can set the projection and modelview matrices.
 //

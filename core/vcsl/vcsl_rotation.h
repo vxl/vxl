@@ -15,8 +15,8 @@
 //   2004/09/17 Peter Vanroose - made angle() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim
 
-#include <vcsl/vcsl_spatial_transformation.h>
-#include <vcsl/vcsl_rotation_sptr.h>
+#include "vcsl_spatial_transformation.h"
+#include "vcsl_rotation_sptr.h"
 #include <vnl/vnl_quaternion.h>
 
 //: Rotation transformation (either 2D or 3D).

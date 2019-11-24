@@ -11,8 +11,8 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_polygon.h>
+#include "vgl_point_2d.h"
+#include "vgl_polygon.h"
 
 //: Return a single-sheet polygon which is the smallest one containing all given points
 // \relatesalso vgl_polygon

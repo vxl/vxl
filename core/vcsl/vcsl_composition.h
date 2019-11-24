@@ -15,8 +15,8 @@
 // \endverbatim
 
 #include <vector>
-#include <vcsl/vcsl_spatial_transformation.h>
-#include <vcsl/vcsl_composition_sptr.h>
+#include "vcsl_spatial_transformation.h"
+#include "vcsl_composition_sptr.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

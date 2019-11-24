@@ -31,7 +31,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgl/vgl_fwd.h> // forward declare vgl_point_3d
+#include "vgl_fwd.h" // forward declare vgl_point_3d
 
 //: Represents a cartesian 3D box
 //  A 3d box with sides aligned with \a x, \a y and \a z axes. Supports operations

@@ -6,8 +6,8 @@
 // \brief A cached and blocked representation of the image_resource
 // \author J. L. Mundy
 
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_block_cache.h>
+#include "vil_blocked_image_resource.h"
+#include "vil_block_cache.h"
 
 class vil_cached_image_resource : public vil_blocked_image_resource
 {

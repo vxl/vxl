@@ -11,8 +11,8 @@
 //   2004/09/17 Peter Vanroose  made "instance_" a local static variable of method instance()
 // \endverbatim
 
-#include <vcsl/vcsl_angle_unit.h>
-#include <vcsl/vcsl_degree_sptr.h>
+#include "vcsl_angle_unit.h"
+#include "vcsl_degree_sptr.h"
 
 //: A unit associated to the angle dimension
 //  See also \b vcsl_radian

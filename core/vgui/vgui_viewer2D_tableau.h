@@ -18,9 +18,9 @@
 //                             and centering.
 // \endverbatim
 
-#include <vgui/vgui_drag_mixin.h>
-#include <vgui/vgui_wrapper_tableau.h>
-#include <vgui/vgui_viewer2D_tableau_sptr.h>
+#include "vgui_drag_mixin.h"
+#include "vgui_wrapper_tableau.h"
+#include "vgui_viewer2D_tableau_sptr.h"
 
 #include "dll.h"
 
