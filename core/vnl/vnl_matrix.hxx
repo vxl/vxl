@@ -265,10 +265,8 @@ vnl_matrix<T>& vnl_matrix<T>::operator=(vnl_matrix<T>&& rhs)
     else
     {
       // Release any resource we're previously holding
-      if(this->data)
-      {
-        vnl_c_vector<T>::deallocate(this->data[0], this->num_rows*this->num_cols);
-      }
+      vnl_matrix_free_blah;
+
       // Transfer ownership and invalidate old value
       data = rhs.data;
       num_rows = rhs.num_rows;
