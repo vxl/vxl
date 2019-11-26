@@ -29,6 +29,8 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vil/vil_image_resource.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_polygon.h>
 // templated since may want to project <float> points
 template <class T>
 class bpgl_geotif_camera : vpgl_camera<T>
@@ -84,12 +86,16 @@ class bpgl_geotif_camera : vpgl_camera<T>
   std::shared_ptr<vpgl_camera<T> > general_camera() const {return general_cam_;}
   vpgl_lvcs_sptr lvcs_ptr() {return lvcs_ptr_;}
   vnl_matrix<T> matrix() const {return matrix_;}
+  //: if not empty then defines the region of validity of the camera
+  vgl_box_2d<T> geo_bb() const {return geo_bb_;}
+  vgl_polygon<T> geo_boundary() const {return geo_boundary_;}
+  //: convert dsm image location to global geo X-Y coordinates
+  void image_to_global(T i, T j, T& gx, T& gy) const;
  protected:
   bool construct_matrix(T sx, T sy, T sz, std::vector<std::vector<T> > tiepoints);
   bool init_from_geotif(vil_image_resource_sptr const& resc);
   bool local_to_global(T lx, T ly, T lz, T& gx, T& gy, T& gz) const;
   bool global_to_local(T gx, T gy, T gz, T& lx, T& ly, T& lz) const;
-  void image_to_global(T i, T j, T& gx, T& gy) const;
   T elevation_origin() const;
 
   //: if true, the input points are in a local CS, or if false in a global CS
@@ -115,6 +121,8 @@ class bpgl_geotif_camera : vpgl_camera<T>
   bool is_utm_;
   int utm_zone_;
   int hemisphere_flag_; //0 North, 1 South
+  vgl_box_2d<T> geo_bb_;
+  vgl_polygon<T> geo_boundary_;
 };
 
 #define BPGL_GEOTIF_CAMERA_INSTANTIATE(T) extern "please include vgl/bpgl_geotif_camera.txx first"

@@ -5,6 +5,7 @@ add_executable( bpgl_test_all
   test_segmented_rolling_shutter_camera.cxx
   test_camera_utils.cxx
   test_geotif_camera.cxx
+  test_lon_lat_camera.cxx
 )
 
 target_link_libraries( bpgl_test_all bpgl ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vnl)
@@ -12,6 +13,7 @@ target_link_libraries( bpgl_test_all bpgl ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PRE
 add_test( NAME vpgl_test_segmented_rolling_shutter_camera COMMAND $<TARGET_FILE:bpgl_test_all> test_segmented_rolling_shutter_camera)
 add_test( NAME vpgl_test_camera_utils COMMAND $<TARGET_FILE:bpgl_test_all> test_camera_utils)
 add_test( NAME vpgl_test_geotif_camera COMMAND $<TARGET_FILE:bpgl_test_all> test_geotif_camera)
+add_test( NAME vpgl_test_lon_lat_camera COMMAND $<TARGET_FILE:bpgl_test_all> test_lon_lat_camera)
 
 add_executable( bpgl_test_include test_include.cxx )
 target_link_libraries( bpgl_test_include bpgl)
