@@ -13,6 +13,7 @@
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vil/file_formats/vil_geotiff_header.h>
 #include <vil/file_formats/vil_tiff.h>
+#include "bpgl_lon_lat_camera.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -147,10 +148,16 @@ bool bpgl_geotif_camera<T>::construct_from_geotif(vpgl_camera<T> const& general_
 
   //case I - a camera which projects global geo coordinates - no local CS
   // TO DO - there might exist a UTM camera in the future
-  if(general_cam.is_a() == "vpgl_rational_camera"&& !lvcs_ptr){
+  if(general_cam.type_name() == "vpgl_rational_camera"||general_cam.type_name() == "bpgl_lon_lat_camera"&& !lvcs_ptr){
     general_cam_ = std::shared_ptr<vpgl_camera<T> >(general_cam.clone());
     gcam_has_wgs84_cs_= true;
     project_local_points_ = false;
+    bpgl_lon_lat_camera<T>* lon_lat_ptr = dynamic_cast<bpgl_lon_lat_camera<T>*>(general_cam_.get());
+    if (lon_lat_ptr) {
+      geo_bb_ = lon_lat_ptr->geo_bb();
+      geo_boundary_ = lon_lat_ptr->geo_boundary();
+    }
+    //TODO get geo bounds from rational camera
     this->init_from_geotif(resc);
     return true;
   }
@@ -362,8 +369,23 @@ T bpgl_geotif_camera<T>::elevation_origin() const{
 
 template <class T>
 void bpgl_geotif_camera<T>::project_gtif_to_image(const T tifu, const T tifv, const T tifz, T& u, T& v) const {
+  // normal situation, wgs84 cs and lvcs
   if (has_lvcs_ && gcam_has_wgs84_cs_ && !is_utm_) {
     T lat = 0.0, lon = 0.0;
+    // map dsm image coordinates to lon lat
+    this->image_to_global(tifu, tifv, lon, lat);
+    T zadj = tifz;
+    if(elev_org_at_zero_){
+      T elev_org = this->elevation_origin();
+      zadj = static_cast<T>(zadj + elev_org);
+    }
+    general_cam_->project(T(lon), T(lat), zadj, u, v);
+    return;
+  }
+  //  wgs84 cs and no lvcs, i.e. a global camera
+  if (!has_lvcs_ && gcam_has_wgs84_cs_ && !is_utm_) {
+    T lat = 0.0, lon = 0.0;
+    // map dsm image coordinates to lon lat
     this->image_to_global(tifu, tifv, lon, lat);
     T zadj = tifz;
     if(elev_org_at_zero_){
@@ -374,7 +396,7 @@ void bpgl_geotif_camera<T>::project_gtif_to_image(const T tifu, const T tifv, co
     return;
   }
   // geotiff is in UTM so conversion is required before projecting
-  // through the WGS84 camera
+  // through the WGS84 local camera
   if (has_lvcs_ && gcam_has_wgs84_cs_ && is_utm_) {
       T east = 0.0, north = 0.0;
       this->image_to_global(tifu, tifv, east, north);
@@ -393,7 +415,7 @@ void bpgl_geotif_camera<T>::project_gtif_to_image(const T tifu, const T tifv, co
       utm.transform(utm_zone_, deast, dnorth, dzadj, dlat, dlon, delev, south_flag);
       general_cam_->project(T(dlon), T(dlat), T(delev), u, v);
       return;
-  }
+  }// TO DO geotiff in UTM but wgs84 global camera with no lvcs
   std::cout << "improper camera or geographic CS to project DSM points" << std::endl;
 }
 
