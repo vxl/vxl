@@ -19,10 +19,10 @@
 #include <vcl_where_root_dir.h>
 #include <volm/volm_io.h>
 #include <volm/volm_osm_parser.h>
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void error(std::string error_file, const std::string& error_msg)

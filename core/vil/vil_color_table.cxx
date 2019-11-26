@@ -1,4 +1,4 @@
-#include <vil/vil_color_table.h>
+#include "vil/vil_color_table.h"
 
 vil_rgb<vxl_byte> color_value(int theme, int color_index)
 {

@@ -3,7 +3,7 @@
 #include "boxm2_render_depth_of_max_prob_functor.h"
 #include "boxm2_cast_cone_ray_function.h"
 #include "boxm2_render_silhouette_functor.h"
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 void boxm2_render_expected_image( boxm2_scene_info * linfo,
                                   boxm2_block * blk_sptr,

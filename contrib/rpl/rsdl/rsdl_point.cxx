@@ -6,9 +6,9 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_vector.h"
 
 rsdl_point::rsdl_point( )
   : Nc_(0), Na_(0), data_(nullptr)

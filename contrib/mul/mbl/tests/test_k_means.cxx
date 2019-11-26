@@ -3,19 +3,19 @@
 #include <cmath>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 #include <mbl/mbl_k_means.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vbl/vbl_array_3d.h>
-#include <vbl/vbl_array_2d.h>
-#include <vbl/vbl_bounding_box.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_vector.h>
-#include <testlib/testlib_test.h>
+#include "vbl/vbl_array_3d.h"
+#include "vbl/vbl_array_2d.h"
+#include "vbl/vbl_bounding_box.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_vector.h"
+#include "testlib/testlib_test.h"
 
 void test_k_means()
 {

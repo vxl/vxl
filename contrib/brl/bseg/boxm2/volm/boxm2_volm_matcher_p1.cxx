@@ -4,10 +4,10 @@
 #include <iomanip>
 #include <utility>
 #include "boxm2_volm_matcher_p1.h"
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <vcl_where_root_dir.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #define GBYTE 1073741824

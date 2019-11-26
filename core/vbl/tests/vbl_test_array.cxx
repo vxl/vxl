@@ -1,12 +1,12 @@
 // This is core/vbl/tests/vbl_test_array.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vbl/vbl_array_1d.h>
-#include <vbl/vbl_array_2d.h>
-#include <vbl/vbl_array_3d.h>
+#include "vbl/vbl_array_1d.h"
+#include "vbl/vbl_array_2d.h"
+#include "vbl/vbl_array_3d.h"
 
 #include "vbl_test_array_x.h"
 

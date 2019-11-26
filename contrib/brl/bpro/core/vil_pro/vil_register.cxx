@@ -5,10 +5,10 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_batch_process_manager.h>
 
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_image_view_base.h"
 #include <bil/bil_raw_image_istream.h>
 #include <bil/bil_arf_image_istream.h>
-#include <vil/vil_image_resource.h>
+#include "vil/vil_image_resource.h"
 
 void vil_register::register_datatype()
 {

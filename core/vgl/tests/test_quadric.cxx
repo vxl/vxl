@@ -2,10 +2,10 @@
 // J.L. Mundy, June 2017.
 #include <iostream>
 #include <sstream>
-#include <testlib/testlib_test.h>
-#include <vgl/vgl_quadric_3d.h>
+#include "testlib/testlib_test.h"
+#include "vgl/vgl_quadric_3d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vgl_tolerance.h>
 // multiply square matrices

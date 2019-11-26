@@ -6,11 +6,11 @@
 //:
 // \file
 #include <cassert>
-#include <vnl/vnl_math.h>
-#include <vbl/vbl_graph_partition.h>
-#include <vbl/vbl_edge.h>
+#include "vnl/vnl_math.h"
+#include "vbl/vbl_graph_partition.h"
+#include "vbl/vbl_edge.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void random_rgb(float& r, float&g, float& b)

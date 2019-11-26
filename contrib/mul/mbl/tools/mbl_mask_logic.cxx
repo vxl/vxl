@@ -7,9 +7,9 @@
 #include <iostream>
 #include <exception>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 #include <mbl/mbl_mask.h>
 
 int main(int argc, char **argv)

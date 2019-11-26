@@ -10,12 +10,12 @@
 #include <imesh/algo/imesh_intersect.h>
 #include <imesh/algo/imesh_kd_tree.hxx>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_double_3.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_double_3.h"
 
 
 //: Constructor

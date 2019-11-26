@@ -8,18 +8,18 @@
 //  a process to remove margin existed in satellite imagery, assuming the margin is a rectangular region and have zero pixel value in all the bands
 //
 
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_resource_sptr.h>
-#include <vil/vil_new.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_blocked_image_resource_sptr.h>
-#include <vil/vil_crop.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_resource_sptr.h"
+#include "vil/vil_new.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_blocked_image_resource.h"
+#include "vil/vil_blocked_image_resource_sptr.h"
+#include "vil/vil_crop.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_save.h>
-#include <vil/vil_plane.h>
+#include "vil/vil_save.h"
+#include "vil/vil_plane.h"
 
 //: set the input and output type
 bool vil_nitf_remove_margin_process_cons(bprb_func_process& pro)

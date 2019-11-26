@@ -19,11 +19,11 @@
 //
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_data_wrapper.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_c_vector.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_c_vector.h"
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vpdfl/vpdfl_gaussian_builder.h>
 #include <vpdfl/vpdfl_pdf_base.h>
@@ -31,7 +31,7 @@
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
-#include <vul/vul_string.h>
+#include "vul/vul_string.h"
 
 //=======================================================================
 

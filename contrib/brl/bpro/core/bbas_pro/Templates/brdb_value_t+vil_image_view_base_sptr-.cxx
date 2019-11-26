@@ -1,5 +1,5 @@
 #include <brdb/brdb_value.hxx>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_image_view_base.h"
 #include <vil/io/vil_io_smart_ptr.h>
 #include <vil/io/vil_io_image_view_base.h>
 

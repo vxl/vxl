@@ -24,11 +24,11 @@
 #include <iostream>
 #include <cstdlib>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_indent.h>
-#include <testlib/testlib_root_dir.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_indent.h"
+#include "testlib/testlib_root_dir.h"
 
 #include <vgl/io/vgl_io_box_2d.h>
 #include <vgl/io/vgl_io_box_3d.h>
@@ -50,7 +50,7 @@ void golden_test_vgl_io(bool save_file=false);
 // This nasty macro stuff is to allow the program to be compiled either as
 // a stand alone program or as part of a larger test program.
 #ifndef MAIN
-  #include <testlib/testlib_test.h>
+  #include "testlib/testlib_test.h"
   MAIN_ARGS( golden_test_vgl_io )
   {
     START("golden_test_all_vgl_io");
@@ -58,7 +58,7 @@ void golden_test_vgl_io(bool save_file=false);
     SUMMARY();
   }
 #else
-  #include <testlib/testlib_test.h>
+  #include "testlib/testlib_test.h"
 #endif
 
 inline float epsilon(float) { return 1e-5f; }

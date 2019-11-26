@@ -3,16 +3,16 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_vector.h>
-#include <vil/vil_na.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vnl/vnl_vector.h"
+#include "vil/vil_na.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 #include <vimt3d/vimt3d_sample_grid_trilin.h>
 #include <vimt3d/vimt3d_reconstruct_from_grid.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 void compare_images(const vimt3d_image_3d_of<vxl_int_32> &image1,
                     const vimt3d_image_3d_of<vxl_int_32> &image2)

@@ -6,10 +6,10 @@
 
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
+#include "vpgl/vpgl_lvcs.h"
+#include "vpgl/vpgl_lvcs_sptr.h"
 #include <bpro/core/bbas_pro/bbas_1d_array_double.h>
 //: initialization
 bool vpgl_convert_local_to_global_coordinates_array_process_cons(bprb_func_process& pro)

@@ -15,9 +15,9 @@
 //                          - Moved vgui_polytab to vgui_poly_tableau.
 // \endverbatim
 
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_parent_child_link.h>
+#include "vgui_gl.h"
+#include "vgui_tableau.h"
+#include "vgui_parent_child_link.h"
 
 #include "vgui_poly_tableau_sptr.h"
 

@@ -5,9 +5,9 @@
 
 #include "vgui_un_project.h"
 
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_inverse.h"
 
 bool vgui_un_project(double const * const *H,
                      double const X[4],

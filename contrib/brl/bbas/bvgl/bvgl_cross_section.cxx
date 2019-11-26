@@ -1,8 +1,8 @@
 #include "bvgl_cross_section.h"
 #include <bvrml/bvrml_write.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_closest_point.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_closest_point.h"
+#include "vgl/vgl_box_3d.h"
 
 // motion vector is projected onto the plane in case it isn't already coplanar
 bvgl_cross_section bvgl_cross_section::apply_vector( vgl_vector_3d<double> const& v) const{

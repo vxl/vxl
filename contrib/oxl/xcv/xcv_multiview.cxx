@@ -19,23 +19,23 @@
 #include "xcv_segmentation.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil1/vil1_image.h>
+#include "vil1/vil1_image.h"
 
 #include <mvl/HomgInterestPointSet.h>
 #include <mvl/TripleMatchSetCorner.h>
 #include <mvl/SimilarityMetric.h>
 #include <mvl/TriTensor.h>
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_find.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_rubberband_tableau.h>
-#include <vgui/vgui_parent_child_link.h>
-#include <vgui/vgui_soview.h>
-#include <vgui/vgui_soview2D.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_find.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_rubberband_tableau.h"
+#include "vgui/vgui_parent_child_link.h"
+#include "vgui/vgui_soview.h"
+#include "vgui/vgui_soview2D.h"
 
 std::vector<xcv_twoview_manager*> xcv_multiview::twoview_mgrs;
 std::vector<vgui_rubberband_tableau_sptr> xcv_multiview::twoview_rubber0;

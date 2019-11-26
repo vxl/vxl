@@ -1,15 +1,15 @@
 #include <vector>
 #include <iostream>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vpl/vpl.h" // vpl_unlink()
 #include <bwm/video/bwm_video_site_io.h>
 #include <bwm/video/bwm_video_corr.h>
 #include <bwm/video/bwm_video_corr_sptr.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 
 static void test_video_site_io()
 {

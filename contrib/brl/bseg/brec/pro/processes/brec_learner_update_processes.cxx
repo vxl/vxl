@@ -18,8 +18,8 @@
 #include <brec/brec_part_hierarchy_learner_sptr.h>
 #include <brec/brec_part_hierarchy_learner.h>
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
 
 //: Constructor
 bool brec_learner_layer0_update_stats_process_cons(bprb_func_process& pro)

@@ -3,10 +3,10 @@
 //:
 // \file
 #include <bkml/bkml_write.h>
-#include <vgl/vgl_intersection.h>
-#include <vpgl/vpgl_utm.h>
+#include "vgl/vgl_intersection.h"
+#include "vpgl/vpgl_utm.h"
 #include "volm_io.h"
-#include <vgl/vgl_area.h>
+#include "vgl/vgl_area.h"
 
 #include <utility>
 

@@ -6,22 +6,22 @@
 #include <vector>
 #include <cmath>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_arg.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
+#include "vul/vul_arg.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_math.h"
+#include "vil/vil_convert.h"
 #include <vsol/vsol_box_2d.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vgl/vgl_polygon_scan_iterator.h"
 #ifdef BWM_HAS_PROJECT_MESHES
   #include <bwm/bwm_observer_cam.h>
 #endif
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 
 float avg_intensity(vil_image_view<float> & img, int rx, int ry, int u, int v)
 {

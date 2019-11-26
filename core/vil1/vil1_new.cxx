@@ -11,15 +11,15 @@
 #include "vil1_new.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vil1/vil1_file_format.h>
-#include <vil1/vil1_stream_fstream.h>
-#include <vil1/vil1_image_impl.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1/vil1_file_format.h"
+#include "vil1/vil1_stream_fstream.h"
+#include "vil1/vil1_image_impl.h"
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_memory_image_of.h"
 
 vil1_image vil1_new(int width, int height, vil1_image const& prototype)
 {

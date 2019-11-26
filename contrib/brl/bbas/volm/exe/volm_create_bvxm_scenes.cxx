@@ -12,21 +12,21 @@
 #include <iostream>
 #include <volm/volm_tile.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <volm/volm_osm_objects.h>
 #include <volm/volm_geo_index2.h>
 #include <volm/volm_io.h>
 #include <volm/volm_io_tools.h>
-#include <vul/vul_file.h>
-#include <vul/vul_arg.h>
+#include "vul/vul_file.h"
+#include "vul/vul_arg.h"
 #include <vcl_where_root_dir.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vpgl/vpgl_lvcs.h"
 #include <bkml/bkml_parser.h>
 #include <volm/volm_loc_hyp_sptr.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bkml/bkml_write.h>
-#include <vpgl/vpgl_utm.h>
+#include "vpgl/vpgl_utm.h"
 
 
 int main(int argc, char** argv)

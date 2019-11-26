@@ -7,9 +7,9 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 bool
 boxm2_ocl_update_vis_score

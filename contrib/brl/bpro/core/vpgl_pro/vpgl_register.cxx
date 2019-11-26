@@ -1,7 +1,7 @@
 #include "vpgl_register.h"
 #include "vpgl_processes.h"
-#include <vpgl/vpgl_camera_double_sptr.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
+#include "vpgl/vpgl_camera_double_sptr.h"
+#include "vpgl/vpgl_lvcs_sptr.h"
 
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>

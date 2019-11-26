@@ -5,7 +5,7 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bsta/bsta_histogram.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_vector_3d.h"
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 

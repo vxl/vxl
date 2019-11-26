@@ -1,28 +1,28 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #if 0
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_root_dir.h"
 #endif
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_fwd.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_random.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_distance.h>
+#include "vnl/vnl_fwd.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_random.h"
+#include "vgl/vgl_homg_point_3d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_distance.h"
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vpgl/algo/vpgl_calibration_matrix_compute.h>
 #include <vpgl/algo/vpgl_ray.h>
-#include <vpgl/vpgl_proj_camera.h>
-#include <vpgl/vpgl_affine_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
+#include "vpgl/vpgl_proj_camera.h"
+#include "vpgl/vpgl_affine_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_calibration_matrix.h"
 
 static void test_camera_compute_setup()
 {

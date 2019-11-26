@@ -1,9 +1,9 @@
 // This is core/vidl/examples/vidl_player_main.cxx
 #include "vidl_player_menus.h"
 #include "vidl_player_manager.h"
-#include <vgui/vgui.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_window.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_window.h"
 
 int main(int argc, char** argv)
 {

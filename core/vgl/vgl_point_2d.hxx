@@ -8,9 +8,9 @@
 #include <iomanip>
 #include <string>
 #include "vgl_point_2d.h"
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_line_2d.h>
-#include <vgl/vgl_homg_line_2d.h>
+#include "vgl_homg_point_2d.h"
+#include "vgl_line_2d.h"
+#include "vgl_homg_line_2d.h"
 
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>

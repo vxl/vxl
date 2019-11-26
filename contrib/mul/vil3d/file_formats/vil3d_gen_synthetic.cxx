@@ -7,13 +7,13 @@
 #include "vil3d_gen_synthetic.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_new.h>
-#include <vil/vil_pixel_format.h>
-#include <vul/vul_reg_exp.h>
-#include <vul/vul_string.h>
+#include "vil/vil_pixel_format.h"
+#include "vul/vul_reg_exp.h"
+#include "vul/vul_string.h"
 
 
 vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_input_image(const char *filename) const

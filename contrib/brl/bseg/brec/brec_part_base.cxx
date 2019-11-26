@@ -7,7 +7,7 @@
 #include "brec_hierarchy_edge.h"
 
 #include <bxml/bxml_find.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 
 //: we assume that the part that is added first as the outgoing part is the central part
 brec_part_base_sptr

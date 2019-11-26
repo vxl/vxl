@@ -7,11 +7,11 @@
 #include "boxm2_vecf_eyelid.h"
 #include "boxm2_vecf_eyelid_crease.h"
 #include "boxm2_vecf_plot_orbit.h"
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_vector_3d.h"
 #include <vgl/algo/vgl_fit_sphere_3d.h>
 #include <bvrml/bvrml_write.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 # define USE_SPHERE 0
 # define SET_CREASE_T 0

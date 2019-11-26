@@ -3,7 +3,7 @@
 // Created by Isabel Restrepo on 8/26/09.
 //
 //
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvpl/kernels/bvpl_create_directions.h>
 #include <bvpl/kernels/bvpl_edge3d_kernel_factory.h>
 

@@ -2,11 +2,11 @@
 #include <map>
 #include "boxm2_import_triangle_mesh.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_vector_fixed.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/basic/boxm2_array_3d.h>

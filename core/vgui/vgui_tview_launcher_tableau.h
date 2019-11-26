@@ -18,8 +18,8 @@
 
 
 #include "vgui_tview_launcher_tableau_sptr.h"
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_event_condition.h>
+#include "vgui_tableau.h"
+#include "vgui_event_condition.h"
 
 
 //: Tableau which pops up tableau tree (tview) on Shift-G

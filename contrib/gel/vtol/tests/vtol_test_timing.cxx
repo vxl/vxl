@@ -1,6 +1,6 @@
 // This is gel/vtol/tests/vtol_test_timing.cxx
-#include <testlib/testlib_test.h>
-#include <vul/vul_timer.h>
+#include "testlib/testlib_test.h"
+#include "vul/vul_timer.h"
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>

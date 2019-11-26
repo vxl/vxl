@@ -1,15 +1,15 @@
 #include <iostream>
 #include <cstdlib>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <bil/algo/bil_edt.h>
 
-#include <vil/vil_print.h>
-#include <vil/vil_copy.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_print.h"
+#include "vil/vil_copy.h"
+#include "vil/vil_image_view.h"
 
 
 void bil_edt_test(vil_image_view<vxl_uint_32> &im, bool print, bool three_d=false);

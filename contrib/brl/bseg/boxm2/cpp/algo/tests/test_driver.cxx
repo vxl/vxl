@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_merge_mixtures );
 DECLARE( test_cone_ray_trace );

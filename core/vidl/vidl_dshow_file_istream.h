@@ -26,9 +26,9 @@
 
 #include <string>
 #include <vector>
-#include <vidl/vidl_istream.h>
-#include <vidl/vidl_frame_sptr.h>
-#include <vidl/vidl_pixel_format.h>
+#include "vidl_istream.h"
+#include "vidl_frame_sptr.h"
+#include "vidl_pixel_format.h"
 
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>

@@ -14,10 +14,10 @@
 #include <string>
 #include "pdf1d_kernel_pdf.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <vnl/io/vnl_io_vector.h>
 #include <mbl/mbl_index_sort.h>
 #include <pdf1d/pdf1d_calc_mean_var.h>

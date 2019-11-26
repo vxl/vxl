@@ -3,7 +3,7 @@
 // \file
 #include <vsol/vsol_box_2d.h>
 #if 0 // later
-#include <vgl/vgl_box_2d.h>
+#include "vgl/vgl_box_2d.h"
 #endif
 
 brip_roi::brip_roi(const unsigned n_image_cols, const unsigned n_image_rows)

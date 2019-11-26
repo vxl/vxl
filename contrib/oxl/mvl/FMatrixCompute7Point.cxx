@@ -10,11 +10,11 @@
 //-----------------------------------------------------------------------------
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_math.h"
 #include <vnl/algo/vnl_svd.h>
 
 #include <mvl/HomgMetric.h>

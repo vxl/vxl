@@ -4,15 +4,15 @@
 #include <cstdlib>
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_window.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_command.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_window.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_tableau.h"
+#include "vgui/vgui_command.h"
 
 // example of a tableau which has an associated menu :
 struct joe_tab : public vgui_tableau

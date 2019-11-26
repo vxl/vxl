@@ -3,15 +3,15 @@
 #include <volm/conf/volm_conf_land_map_indexer.h>
 //:
 // \file
-#include <vil/vil_crop.h>
-#include <vil/vil_new.h>
+#include "vil/vil_crop.h"
+#include "vil/vil_new.h"
 #include <vsol/vsol_box_2d.h>
 #include <brip/brip_roi.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
 #include <vil/algo/vil_threshold.h>
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/algo/vil_binary_closing.h>
@@ -27,12 +27,12 @@
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vdgl/vdgl_edgel_chain.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vgl/vgl_vector_2d.h"
 #include <cassert>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <volm/volm_io_tools.h>
 #include <bil/algo/bil_blob_finder.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_intersection.h"
 
 static void convert_bbox(vgl_box_2d<float> const& box_float, vgl_box_2d<double>& box_double)
 {

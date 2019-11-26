@@ -6,7 +6,7 @@
 
 #include "bsta_gauss.h" // for gausian parzan window filter
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // constructor

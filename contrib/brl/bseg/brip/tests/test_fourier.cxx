@@ -1,13 +1,13 @@
 // This is brl/bseg/brip/tests/test_fourier.cxx
 #include <iostream>
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1/vil1_memory_image_of.h"
 #ifdef DEBUG
-#include <vil1/vil1_save.h>
+#include "vil1/vil1_save.h"
 #endif
 #include <brip/brip_vil1_float_ops.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_fourier()

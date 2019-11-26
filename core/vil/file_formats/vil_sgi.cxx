@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_exception.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_exception.h"
 #include "vil_sgi.h"
 
 #define where (std::cerr << __FILE__ " : " << __LINE__ << " : ")

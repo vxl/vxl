@@ -18,10 +18,10 @@
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_image_view_base.h"
 #include <vil/io/vil_io_image_view.h>
-#include <vil/vil_convert.h>
-#include <vul/vul_timer.h>
+#include "vil/vil_convert.h"
+#include "vul/vul_timer.h"
 
 #include <brec/brec_bg_pair_density.h>
 #include <brec/brec_fg_pair_density.h>

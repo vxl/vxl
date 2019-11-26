@@ -11,7 +11,7 @@
 #include <mmn/mmn_graph_rep1.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <mbl/mbl_parse_block.h>

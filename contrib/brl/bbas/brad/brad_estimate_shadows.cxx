@@ -1,9 +1,9 @@
 #include <iostream>
 #include <cmath>
-#include <vil/vil_image_view.h>
-#include <vnl/vnl_math.h>
+#include "vil/vil_image_view.h"
+#include "vnl/vnl_math.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include "brad_image_metadata.h"

@@ -3,11 +3,11 @@
 #include <algorithm>
 #include <utility>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_random.h>
-#include <testlib/testlib_test.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_random.h"
+#include "testlib/testlib_test.h"
 
 #include <rsdl/rsdl_kd_tree.h>
 #include <rsdl/rsdl_dist.h>

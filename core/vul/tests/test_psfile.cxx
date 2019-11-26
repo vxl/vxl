@@ -9,11 +9,11 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
-#include <vul/vul_psfile.h>
-#include <vul/vul_temp_filename.h>
-#include <vpl/vpl.h> // for unlink()
+#include "vul/vul_psfile.h"
+#include "vul/vul_temp_filename.h"
+#include "vpl/vpl.h" // for unlink()
 
 const int wd = 171, ht = 323;
 

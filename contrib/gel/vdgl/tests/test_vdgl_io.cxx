@@ -1,19 +1,19 @@
 #include <iostream>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h>
-#include <vsl/vsl_binary_io.h>
+#include "vpl/vpl.h"
+#include "vsl/vsl_binary_io.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_vector_io.h"
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_interpolator_cubic.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 static void test_vdgl_io()
 {

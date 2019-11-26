@@ -11,17 +11,17 @@
 
 #ifdef DEBUG
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #endif
 
 #include <brdb/brdb_value.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_sphere_3d.h>
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_sphere_3d.h"
 #include <bvrml/bvrml_write.h>
 
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 //: sets input and output types
 bool bvrml_image_to_points_process_cons(bprb_func_process& pro)

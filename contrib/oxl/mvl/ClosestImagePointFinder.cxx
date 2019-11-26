@@ -9,12 +9,12 @@
 #include <utility>
 #include "ClosestImagePointFinder.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vnl/vnl_math.h>
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vnl/vnl_math.h"
 
 #include <mvl/HomgInterestPointSet.h>
 

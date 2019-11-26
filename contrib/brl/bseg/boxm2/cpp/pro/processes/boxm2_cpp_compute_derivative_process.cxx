@@ -15,7 +15,7 @@
 // \date Oct 06, 2011
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>

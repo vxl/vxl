@@ -9,7 +9,7 @@
 #include "mvl_psi.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
@@ -197,7 +197,7 @@ void mvl_psi_invert_direct(U const abcde[5], U XYZT[4])
     assert(false); // did you get here? probably a round-off problem...
 }
 
-#include <vnl/vnl_matrix_ref.h>
+#include "vnl/vnl_matrix_ref.h"
 #include <vnl/algo/vnl_svd_economy.h>
 
 template <mvl_typename U>

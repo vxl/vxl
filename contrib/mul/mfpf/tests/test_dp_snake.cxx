@@ -5,18 +5,18 @@
 //
 //=======================================================================
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief test mfpf_dp_snake
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mfpf/mfpf_dp_snake.h>
 #include <mfpf/mfpf_edge_finder.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 #include <vil/algo/vil_gauss_filter.h>
 
 void test_dp_snake()

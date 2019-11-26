@@ -2,11 +2,11 @@
 #include "vgui_qt_adaptor.h"
 #include "vgui_qt_menu.h"
 
-#include <vgui/vgui_popup_params.h>
+#include "vgui/vgui_popup_params.h"
 
 #include <qgl.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent, const char* name)

@@ -8,15 +8,15 @@
 
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3.h>
+#include "vgl/vgl_box_3d.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_double_3.h"
 #include <imesh/algo/imesh_project.h>
 #include <imesh/algo/imesh_render.h>
 #include <imesh/imesh_operations.h>

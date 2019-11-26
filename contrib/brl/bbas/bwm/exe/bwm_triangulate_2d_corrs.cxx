@@ -9,10 +9,10 @@
 #include <bwm/bwm_3d_corr_sptr.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_arg.h>
-#include <vgl/vgl_point_3d.h>
+#include "vul/vul_arg.h"
+#include "vgl/vgl_point_3d.h"
 
 #include <bwm/video/bwm_video_corr_processor.h>
 #include <bwm/video/bwm_video_site_io.h>

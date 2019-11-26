@@ -13,9 +13,9 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vil/vil_image_view.h>
-#include <vil/vil_rgb.h>
-#include <vil/vil_rgba.h>
+#include "vil_image_view.h"
+#include "vil_rgb.h"
+#include "vil_rgba.h"
 
 //: Return a 3-plane view of an RGB image, or a 4-plane view of an RGBA, or a 2-plane view of a complex image.
 // Class T must be a compound pixel type.

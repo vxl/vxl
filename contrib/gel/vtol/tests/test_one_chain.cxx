@@ -1,5 +1,5 @@
 // This is gel/vtol/tests/test_one_chain.cxx
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vtol/vtol_vertex_2d_sptr.h>

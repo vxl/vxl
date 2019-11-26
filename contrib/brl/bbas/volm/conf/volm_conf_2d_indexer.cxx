@@ -1,11 +1,11 @@
 #include <volm/conf/volm_conf_2d_indexer.h>
 //:
 // \file
-#include <vgl/vgl_closest_point.h>
-#include <vul/vul_file.h>
+#include "vgl/vgl_closest_point.h"
+#include "vul/vul_file.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <volm/volm_buffered_index.h>             // for parameter class
 #include <bkml/bkml_write.h>

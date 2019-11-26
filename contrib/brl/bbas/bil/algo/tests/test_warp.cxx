@@ -1,17 +1,17 @@
 #include <iostream>
 #include <cmath>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bil/algo/bil_warp.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_new.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vnl/vnl_matrix_fixed.h"
 
 static void test_warp()
 {

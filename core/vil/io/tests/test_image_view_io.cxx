@@ -1,18 +1,18 @@
 // This is core/vil/io/tests/test_image_view_io.cxx
 #include <iostream>
 #include <complex>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h>
-#include <vpl/vpl.h> // vpl_unlink()
-#include <vil/vil_image_view.h>
+#include "vxl_config.h"
+#include "vpl/vpl.h" // vpl_unlink()
+#include "vil/vil_image_view.h"
 #include <vil/io/vil_io_image_view.h>
-#include <vil/vil_plane.h>
-#include <vil/vil_view_as.h>
-#include <vsl/vsl_stream.h>
+#include "vil/vil_plane.h"
+#include "vil/vil_view_as.h"
+#include "vsl/vsl_stream.h"
 
 
 #ifndef LEAVE_FILES_BEHIND

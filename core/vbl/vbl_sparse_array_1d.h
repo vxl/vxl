@@ -14,7 +14,7 @@
 //---------------------------------------------------------------------------
 
 #include <iostream>
-#include <vbl/vbl_sparse_array_base.h>
+#include "vbl_sparse_array_base.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

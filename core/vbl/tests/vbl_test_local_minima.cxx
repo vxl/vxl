@@ -1,13 +1,13 @@
 // This is core/vbl/tests/vbl_test_local_minima.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vbl/vbl_array_1d.h>
-#include <vbl/vbl_array_2d.h>
-#include <vbl/vbl_array_3d.h>
-#include <vbl/vbl_local_minima.h>
+#include "vbl/vbl_array_1d.h"
+#include "vbl/vbl_array_2d.h"
+#include "vbl/vbl_array_3d.h"
+#include "vbl/vbl_local_minima.h"
 static void vbl_test_local_minima_1d()
 {
   std::cout << "\n Testing vbl_local_minima 1d\n+++++++++++++++++++++++++\n\n";

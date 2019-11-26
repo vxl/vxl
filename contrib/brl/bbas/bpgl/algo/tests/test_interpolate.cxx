@@ -1,16 +1,16 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_homg_point_3d.h"
+#include "vgl/vgl_distance.h"
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 #include <bpgl/algo/bpgl_interpolate.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_math.h"
 static void test_interpolate()
 {
   //========= preliminary tests ====================

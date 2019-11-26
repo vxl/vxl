@@ -6,11 +6,11 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vnl/vnl_inverse.h>
-#include <vnl/vnl_transpose.h>
+#include "vnl/vnl_inverse.h"
+#include "vnl/vnl_transpose.h"
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/algo/vgl_norm_trans_2d.h>
 

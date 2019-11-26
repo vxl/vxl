@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 #include <vil/vil_config.h>
 DECLARE( test_fm_compute );
 DECLARE( test_camera_compute );

@@ -1,8 +1,8 @@
 #include <vector>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <bbgm/bbgm_image_of.h>
@@ -14,9 +14,9 @@
 
 #include <bbgm/bbgm_update.h>
 #include <bsta/bsta_gaussian_indep.h>
-#include <vil/vil_image_view.h>
-#include <vul/vul_timer.h>
-#include <vnl/vnl_random.h>
+#include "vil/vil_image_view.h"
+#include "vul/vul_timer.h"
+#include "vnl/vnl_random.h"
 
 namespace{
 

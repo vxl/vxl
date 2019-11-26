@@ -1,7 +1,7 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 // The following test is to determine if there are platform differences in
 // roc calculations. The reference counts are obtained on

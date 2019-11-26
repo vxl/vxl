@@ -6,7 +6,7 @@
 #include <iostream>
 #include "gmvl_connection.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 gmvl_connection::gmvl_connection( const gmvl_node_sptr& node1, const gmvl_node_sptr& node2)

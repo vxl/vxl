@@ -8,10 +8,10 @@
 
 #include "pdf1d_sampler.h"
 #include <pdf1d/pdf1d_pdf.h>
-#include <vsl/vsl_indent.h>
+#include "vsl/vsl_indent.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //=======================================================================

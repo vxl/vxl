@@ -14,10 +14,10 @@
 #include <cmath>
 #include "brec_fg_bg_pair_density.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_erf.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_erf.h"
 
 double brec_fg_bg_pair_density::operator()(const double y0, const double y1)
 {

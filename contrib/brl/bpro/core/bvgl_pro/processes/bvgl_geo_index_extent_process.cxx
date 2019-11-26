@@ -6,7 +6,7 @@
 //:
 // \file
 // process to get geospatial extents of geo index leaves
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <bvgl/algo/bvgl_2d_geo_index.h>
 #include <bvgl/algo/bvgl_2d_geo_index_sptr.h>
 #include <vcl_compiler.h>

@@ -14,17 +14,17 @@
 //
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_loader.h>
-#include <vsl/vsl_block_binary.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vsl/vsl_binary_loader.h"
+#include "vsl/vsl_block_binary.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_copy.h>
 #include <vil3d/vil3d_property.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
-#include <vil/vil_exception.h>
+#include "vil/vil_exception.h"
 
 //: The magic number to identify a vsl stream as a v3i image.
 // You can create/read a v3i image using vsl by opening the stream,

@@ -7,13 +7,13 @@
 #include <iostream>
 #include "vpgl_fm_compute_2_point.h"
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_matrix_fixed.h"
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/algo/vgl_norm_trans_2d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

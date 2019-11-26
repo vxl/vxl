@@ -23,8 +23,8 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_text_tableau_sptr.h>
+#include "vgui_tableau.h"
+#include "vgui_text_tableau_sptr.h"
 
 //: Tableau for rendering text.
 //

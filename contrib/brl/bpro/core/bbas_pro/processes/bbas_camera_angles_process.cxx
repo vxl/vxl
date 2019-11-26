@@ -5,16 +5,16 @@
 #include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
 #include <vpgl/algo/vpgl_backproject.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: set input and output types

@@ -1,13 +1,13 @@
 #include <iostream>
 #include <limits>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include "boxm2_export_oriented_point_cloud_function.h"
 //:
 // \file
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 

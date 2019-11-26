@@ -10,11 +10,11 @@
 #include <iostream>
 #include "vgui_matrix_state.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_matlab_print.h>
-#include <vgui/vgui_gl.h>
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_matlab_print.h"
+#include "vgui/vgui_gl.h"
 
 //: Construct a vgui_matrix_state, and save now.
 vgui_matrix_state::vgui_matrix_state(bool save_now_restore_on_destroy)

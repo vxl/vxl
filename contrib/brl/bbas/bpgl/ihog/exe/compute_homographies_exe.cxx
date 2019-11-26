@@ -3,17 +3,17 @@
 #include <iostream>
 #include <cstdio>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_2x3.h>
-#include <vil/vil_load.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view.h>
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
+#include "vul/vul_timer.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_double_2x3.h"
+#include "vil/vil_load.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_image_view.h"
 #include <ihog/ihog_minimizer.h>
 #include <ihog/ihog_world_roi.h>
 #include <ihog/ihog_transform_2d.h>

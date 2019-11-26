@@ -6,20 +6,20 @@
 // \brief Base for classes which locate feature points
 // \author Tim Cootes
 
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_loader.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vimt/algo/vimt_find_troughs.h>
 #include <vimt/vimt_image_pyramid.h>
-#include <vnl/vnl_cost_function.h>
+#include "vnl/vnl_cost_function.h"
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/algo/vnl_powell.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_point_2d.h>
-#include <vil/vil_print.h>
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_point_2d.h"
+#include "vil/vil_print.h"
 
 //=======================================================================
 //=== Utility functions for optimisation

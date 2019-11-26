@@ -1,13 +1,13 @@
 // This is core/vbl/io/tests/test_triple_io.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vbl/io/vbl_io_triple.h>
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_indent.h>
-#include <testlib/testlib_test.h>
-#include <vpl/vpl.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_indent.h"
+#include "testlib/testlib_test.h"
+#include "vpl/vpl.h"
 
 void test_triple_io()
 {

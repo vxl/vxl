@@ -9,9 +9,9 @@
 
 #include "wx_docview_doc.h"
 
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------

@@ -11,8 +11,8 @@
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
-#include <vcsl/vcsl_geographic.h>
-#include <vcsl/vcsl_utm_sptr.h>
+#include "vcsl_geographic.h"
+#include "vcsl_utm_sptr.h"
 
 //: Universal Transverse Mercator projection
 // Coordinate system in which a point is specified by a grid zone designation,

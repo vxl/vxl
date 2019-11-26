@@ -1,5 +1,5 @@
 //  This is brl/bseg/bvxm/grid/tests/test_bvxm_vrml.cxx
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 //  \brief  Tests from vrml functions defined for voxel grid

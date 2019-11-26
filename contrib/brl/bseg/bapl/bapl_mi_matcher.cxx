@@ -9,13 +9,13 @@
 #include <bapl/bapl_affine_roi.h>
 #include <bapl/bapl_affine_transform.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <brip/brip_histogram.h>
 #include <brip/brip_mutual_info.h>
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_2x2.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_double_2x2.h"
+#include "vnl/vnl_math.h"
 
 
 //: Constructor

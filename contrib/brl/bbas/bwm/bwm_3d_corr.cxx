@@ -2,9 +2,9 @@
 #include "bwm_3d_corr.h"
 //:
 // \file
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_distance.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bool bwm_3d_corr::match(std::string const& site, vgl_point_3d<double> &pt) const

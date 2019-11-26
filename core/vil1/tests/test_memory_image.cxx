@@ -1,13 +1,13 @@
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vpl/vpl.h>
-#include <vul/vul_temp_filename.h>
+#include "vpl/vpl.h"
+#include "vul/vul_temp_filename.h"
 
-#include <vil1/vil1_memory_image.h>
-#include <vil1/vil1_save.h>
+#include "vil1/vil1_memory_image.h"
+#include "vil1/vil1_save.h"
 
 static
 void p(vil1_image const& m)

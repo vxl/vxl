@@ -4,8 +4,8 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_rgb.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_rgb.h"
 #include<bil/algo/bil_debayer_image.h>
 //: Constructor
 // this process takes 1 input:

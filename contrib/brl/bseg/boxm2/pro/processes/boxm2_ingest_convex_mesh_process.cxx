@@ -10,16 +10,16 @@
 // \date Aug 22, 2012
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boct/boct_bit_tree.h>
 
 //vgl
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 #include <bvgl/bvgl_triangle_interpolation_iterator.h>
 
 //imesh stuff
@@ -31,7 +31,7 @@
 #include <bmsh3d/bmsh3d_mesh.h>
 #include <bmsh3d/algo/bmsh3d_fileio.h>
 #include <bmsh3d/bmsh3d_mesh_mc.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_intersection.h"
 #include <expatpplib.h>
 #include <boxm2/boxm2_bounding_box_parser.h>
 

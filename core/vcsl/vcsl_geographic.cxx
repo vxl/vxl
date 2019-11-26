@@ -1,6 +1,6 @@
 // This is core/vcsl/vcsl_geographic.cxx
 #include "vcsl_geographic.h"
-#include <vcsl/vcsl_spheroid.h>
+#include "vcsl/vcsl_spheroid.h"
 
 //---------------------------------------------------------------------------
 // Default constructor

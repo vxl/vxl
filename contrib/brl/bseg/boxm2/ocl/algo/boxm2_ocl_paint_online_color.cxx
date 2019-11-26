@@ -21,13 +21,13 @@
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
+#include "vil/vil_pixel_format.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
 
 //: Declare kernels
 std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_paint_online_color::kernels_;

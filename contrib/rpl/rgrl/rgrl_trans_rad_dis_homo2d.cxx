@@ -5,14 +5,14 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_2x2.h>
-#include <vnl/vnl_transpose.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_2x2.h"
+#include "vnl/vnl_transpose.h"
 
 #include "rgrl_util.h"
 

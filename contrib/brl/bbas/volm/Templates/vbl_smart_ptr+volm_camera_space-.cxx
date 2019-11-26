@@ -1,4 +1,4 @@
-#include <vbl/vbl_smart_ptr.hxx>
+#include "vbl/vbl_smart_ptr.hxx"
 #include <volm/volm_camera_space.h>
 #include <volm/volm_io.h>
 #include <vsol/vsol_polygon_2d.h>

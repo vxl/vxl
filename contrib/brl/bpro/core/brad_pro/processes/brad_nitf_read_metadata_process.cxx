@@ -10,7 +10,7 @@
 #include <bprb/bprb_func_process.h>
 
 #include <brad/brad_image_metadata.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 //: set input and output types
 bool brad_nitf_read_metadata_process_cons(bprb_func_process& pro)
 {

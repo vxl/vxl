@@ -5,7 +5,7 @@
 // \file
 #include <boxm2/boxm2_block_metadata.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: PUBLIC create method, for creating singleton instance of boxm2_cache1

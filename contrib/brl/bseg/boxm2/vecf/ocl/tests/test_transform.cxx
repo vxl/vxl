@@ -6,25 +6,25 @@
 
 #include <iostream>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
-#include <vul/vul_timer.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
+#include "vul/vul_timer.h"
 #include <bocl/bocl_manager.h>
 #include <boct/boct_bit_tree.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_util.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include "../boxm2_vecf_ocl_transform_scene.h"
 #include "../boxm2_vecf_ocl_transform_minimizer.h"
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vgl/vgl_vector_3d.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vpgl/vpgl_perspective_camera.h"
 typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
 void test_transform()

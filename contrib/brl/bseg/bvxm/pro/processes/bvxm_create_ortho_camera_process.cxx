@@ -7,8 +7,8 @@
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_edge_ray_processor.h>
 #include <brip/brip_vil_float_ops.h>
-#include <vil/vil_image_view.h>
-#include <vpgl/vpgl_utm.h>
+#include "vil/vil_image_view.h"
+#include "vpgl/vpgl_utm.h"
 
 bool bvxm_create_ortho_camera_process_cons(bprb_func_process& pro)
 {

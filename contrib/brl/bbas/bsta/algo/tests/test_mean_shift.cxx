@@ -1,13 +1,13 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bsta/algo/bsta_mean_shift.h>
 #include <bsta/algo/bsta_sample_set.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/bsta_gaussian_full.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vnl_random rng;

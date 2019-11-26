@@ -5,10 +5,10 @@
 #include <iostream>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil1/vil1_interpolate.h>
-#include <testlib/testlib_test.h>
+#include "vil1/vil1_interpolate.h"
+#include "testlib/testlib_test.h"
 
 static double const avg[5] = { 0.8709, 1.25178114, 1.0130145969, 1.0978098765, 1.0605102418 };
 

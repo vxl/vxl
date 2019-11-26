@@ -1,14 +1,14 @@
 #include <iostream>
 #include "sdet_atmospheric_image_classifier.h"
 //
-#include <vnl/vnl_numeric_traits.h>
-#include <vul/vul_timer.h>
+#include "vnl/vnl_numeric_traits.h"
+#include "vul/vul_timer.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 // test if a given texture category is an atmospheric effect
 bool sdet_atmospheric_image_classifier::atmos_cat(std::string const& cat)
 {

@@ -6,10 +6,10 @@
 #include <iostream>
 #include <cstddef>
 #include "msm_zoom_aligner.h"
-#include <vnl/vnl_vector.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vnl/vnl_vector.h"
+#include "vsl/vsl_binary_loader.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

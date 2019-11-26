@@ -1,8 +1,8 @@
 #include <utility>
 #include "icam_view_metadata.h"
 
-#include <vgl/vgl_box_3d.h>
-#include <vil/vil_load.h>
+#include "vgl/vgl_box_3d.h"
+#include "vil/vil_load.h"
 
 
 

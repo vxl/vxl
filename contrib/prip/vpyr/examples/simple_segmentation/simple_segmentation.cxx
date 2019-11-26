@@ -1,6 +1,6 @@
 #include "simple_segmentation_builder.h"
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 
 int main()
 {

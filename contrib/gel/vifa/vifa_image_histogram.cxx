@@ -3,7 +3,7 @@
 //:
 // \file
 
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 vifa_image_histogram::
 vifa_image_histogram(const vil_image_view_base_sptr&  image,

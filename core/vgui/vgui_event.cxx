@@ -13,9 +13,9 @@
 #include <iostream>
 #include "vgui_event.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_get_timestamp.h>
+#include "vul/vul_get_timestamp.h"
 
 //----------------------------------------------------------------------------
 //: Initialise default event.

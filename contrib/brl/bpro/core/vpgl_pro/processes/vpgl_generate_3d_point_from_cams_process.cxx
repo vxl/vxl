@@ -11,12 +11,12 @@
 #include <bprb/bprb_macros.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
 #include <vpgl/algo/vpgl_triangulate_points.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 #include <bpro/core/bbas_pro/bbas_1d_array_int.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_unsigned.h>
 

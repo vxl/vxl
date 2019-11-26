@@ -13,9 +13,9 @@
 //   2004/09/17 Peter Vanroose  do not pass vcsl_unit objects; use vcsl_unit_sptr instead
 // \endverbatim
 
-#include <vcsl/vcsl_unit.h>
-#include <vcsl/vcsl_length_unit_sptr.h>
-#include <vcsl/vcsl_unit_sptr.h>
+#include "vcsl_unit.h"
+#include "vcsl_length_unit_sptr.h"
+#include "vcsl_unit_sptr.h"
 
 //: Abstract unit associated to the length dimension
 class vcsl_length_unit

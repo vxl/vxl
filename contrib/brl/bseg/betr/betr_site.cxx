@@ -5,7 +5,7 @@
 #include <bmsh3d/bmsh3d_mesh.h>
 #include <bmsh3d/bmsh3d_mesh_mc.h>
 #include <bmsh3d/algo/bmsh3d_fileio.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vpgl/vpgl_lvcs.h"
 #include <vsol/vsol_spatial_object_3d.h>
 
 #include <utility>

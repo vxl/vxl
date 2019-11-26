@@ -14,10 +14,10 @@
 #include <osl/osl_canny_nms.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 //#define proddy(n) { delete [] new char [n]; }
 //#define prod_heap { for (int n=1; n <= 0x100000; n *= 2) proddy(n); }

@@ -13,8 +13,8 @@
 //   2004/09/17 Peter Vanroose - made "instance_" a local static variable of method instance()
 // \endverbatim
 
-#include <vcsl/vcsl_spatial_transformation.h>
-#include <vcsl/vcsl_cylindrical_to_cartesian_3d_sptr.h>
+#include "vcsl_spatial_transformation.h"
+#include "vcsl_cylindrical_to_cartesian_3d_sptr.h"
 
 //: Convert 3D cartesian coordinates to cylindrical coordinates
 class vcsl_cylindrical_to_cartesian_3d

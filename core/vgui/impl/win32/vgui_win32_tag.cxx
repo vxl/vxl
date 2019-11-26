@@ -3,8 +3,8 @@
 // author: Lianqing Yu
 
 #include "vgui_win32.h"
-#include <vgui/vgui_tag.h>
-#include <vul/vul_trace.h>
+#include "vgui/vgui_tag.h"
+#include "vul/vul_trace.h"
 
 // According to vgui_tag.h, the macro vgui_tag(win32) is expanded as:
 // int vgui_win32_tag_function();

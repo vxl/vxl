@@ -3,9 +3,9 @@
 #include <iostream>
 #include "boxm2_volm_io.h"
 #include "boxm2_volm_locations.h";
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Binary save to stream

@@ -3,14 +3,14 @@
 #include <fstream>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vxl_config.h> // for vxl_uint_16 etc.
+#include "vxl_config.h" // for vxl_uint_16 etc.
 
-#include <testlib/testlib_test.h>
-#include <vpl/vpl.h>
+#include "testlib/testlib_test.h"
+#include "vpl/vpl.h"
 #include <vil/vil_config.h>
 
 #include <vil3d/vil3d_load.h>

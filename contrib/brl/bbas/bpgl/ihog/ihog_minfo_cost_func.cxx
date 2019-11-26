@@ -5,8 +5,8 @@
 // \file
 
 #include <vil/algo/vil_gauss_filter.h>
-#include <vbl/vbl_array_2d.h>
-#include <vbl/vbl_array_1d.h>
+#include "vbl/vbl_array_2d.h"
+#include "vbl/vbl_array_1d.h"
 
 
 //: Constructor

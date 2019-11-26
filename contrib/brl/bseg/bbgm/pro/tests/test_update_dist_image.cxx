@@ -1,4 +1,4 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
 #include <bsta/bsta_attributes.h>
@@ -9,8 +9,8 @@
 
 #include <bbgm/bbgm_update.h>
 #include <bsta/bsta_gaussian_indep.h>
-#include <vil/vil_image_view.h>
-#include <vnl/vnl_random.h>
+#include "vil/vil_image_view.h"
+#include "vnl/vnl_random.h"
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_value_sptr.h>
 #include <bpro/bprb/bprb_process_sptr.h>

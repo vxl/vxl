@@ -8,15 +8,15 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_stream.h>
-#include <vil1/vil1_image_impl.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_property.h>
+#include "vil1/vil1_stream.h"
+#include "vil1/vil1_image_impl.h"
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_property.h"
 
-#include <vxl_config.h>
+#include "vxl_config.h"
 
 char const* vil1_ras_format_tag = "ras";
 

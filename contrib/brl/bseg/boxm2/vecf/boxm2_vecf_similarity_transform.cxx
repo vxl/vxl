@@ -5,7 +5,7 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <boct/boct_bit_tree.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 
 
 // instantiate the template code in the .txx file

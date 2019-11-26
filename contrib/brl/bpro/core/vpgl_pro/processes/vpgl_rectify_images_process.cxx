@@ -9,16 +9,16 @@
 //
 //
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view.h>
-#include <vpgl/vpgl_camera_double_sptr.h>
+#include "vil/vil_image_view.h"
+#include "vpgl/vpgl_camera_double_sptr.h"
 #include <vpgl/algo/vpgl_affine_rectification.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_random.h>
-#include <vil/vil_convert.h>
+#include "vnl/vnl_random.h"
+#include "vil/vil_convert.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 //:
 bool vpgl_affine_rectify_images_process_cons(bprb_func_process& pro)
@@ -511,8 +511,8 @@ bool vpgl_construct_height_map_process_cons(bprb_func_process& pro)
       && pro.set_output_types(output_types);
 }
 
-#include <vil/vil_math.h>
-#include <vil/vil_save.h>
+#include "vil/vil_math.h"
+#include "vil/vil_save.h"
 
 //: Execute the process
 bool vpgl_construct_height_map_process(bprb_func_process& pro)
@@ -654,8 +654,8 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
 }
 
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
 
 // input a height map for an ortho scene with min, max 3D points, construct a disparity map for image1
 // output an ortograhic height map using the input bounding box

@@ -13,7 +13,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 #include <stdexcept>
-#include <vil/vil_pixel_format.h>
+#include "vil_pixel_format.h"
 
 
 //: Throw an exception indicating a definite problem.

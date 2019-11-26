@@ -10,10 +10,10 @@
 #include <bprb/bprb_func_process.h>
 #include <bvrml/bvrml_write.h>
 #include <boxm2/boxm2_scene.h>
-#include <vpgl/vpgl_lvcs.h>
-#include <vgl/vgl_box_3d.h>
+#include "vpgl/vpgl_lvcs.h"
+#include "vgl/vgl_box_3d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 namespace boxm2_scene_vrml_process_globals

@@ -11,31 +11,31 @@
 #include <bwm/video/bwm_video_site_io.h>
 
 #include <cassert>
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
 #include <vgl/algo/vgl_fit_plane_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_box_3d.h"
 #include <vgl/algo/vgl_orient_box_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_quaternion.h>
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_quaternion.h"
 #include <vnl/algo/vnl_cholesky.h>
 #include <vnl/algo/vnl_svd_fixed.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_calibration_matrix.h"
 #include <vsph/vsph_camera_bounds.h>
 
-#include <vidl/vidl_image_list_istream.h>
-#include <vidl/vidl_convert.h>
+#include "vidl/vidl_image_list_istream.h"
+#include "vidl/vidl_convert.h"
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bwm/bwm_site_mgr.h>
 

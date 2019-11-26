@@ -19,13 +19,13 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // vxl_byte
+#include "vxl_config.h" // vxl_byte
 
-#include <vil/vil_stream.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_exception.h>
+#include "vil/vil_stream.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_exception.h"
 
 //: the file probe, as a C function.
 bool vil_jpeg_file_probe(vil_stream *vs)

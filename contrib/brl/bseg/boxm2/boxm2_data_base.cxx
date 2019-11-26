@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "boxm2_data_base.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 //:
 // \file

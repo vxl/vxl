@@ -13,7 +13,7 @@
 //     000217 JS  components*planes because get_section returns RGBRGB
 // \endverbatim
 
-#include <vil1/vil1_fwd.h>
+#include "vil1_fwd.h"
 
 //: Copy SRC to DST.
 // Images must be exactly the same dimensions, but datatype isn't matched

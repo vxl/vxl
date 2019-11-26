@@ -5,13 +5,13 @@
 
 #include <iostream>
 #include "vil1_resample_image_impl.h"
-#include <vil1/vil1_resample_image.h>
-#include <vil1/vil1_rgb.h>
-#include <vil1/vil1_pixel.h>
-#include <vxl_config.h>
+#include "vil1/vil1_resample_image.h"
+#include "vil1/vil1_rgb.h"
+#include "vil1/vil1_pixel.h"
+#include "vxl_config.h"
 #include <climits>// CHAR_BIT
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

@@ -2,7 +2,7 @@
 #include <iostream>
 #include "vul_trace.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void vul_trace_function(char const *file, int line)

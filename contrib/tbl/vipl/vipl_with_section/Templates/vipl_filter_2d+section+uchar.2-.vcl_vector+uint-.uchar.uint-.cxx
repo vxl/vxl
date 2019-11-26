@@ -3,7 +3,7 @@
 #include <vector>
 #include <section/section.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // this must be here for filter-2d to work

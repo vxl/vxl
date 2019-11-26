@@ -26,11 +26,11 @@
 #include <vector>
 #include <cstdio>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #undef sprintf // works around a bug in libintl.h
 
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_matrix.h"
 #include <vnl/algo/vnl_svd.h>
 
 template <class T>

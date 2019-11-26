@@ -3,10 +3,10 @@
 #include <cmath>
 #include "rrel_muse_table.h"
 #include <rrel/rrel_misc.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

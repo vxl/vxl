@@ -9,14 +9,14 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <vtol/vtol_intensity_face.h>
 
-#include <vxl_config.h>
-#include <vil1/vil1_memory_image_of.h>
-#include <vul/vul_timer.h>
+#include "vxl_config.h"
+#include "vil1/vil1_memory_image_of.h"
+#include "vul/vul_timer.h"
 
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_2d_sptr.h>

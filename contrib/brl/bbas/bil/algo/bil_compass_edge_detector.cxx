@@ -9,10 +9,10 @@
 #include <bil/algo/bil_nms.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h> // for vnl_math::pi
-#include <vil/vil_convert.h>
+#include "vnl/vnl_math.h" // for vnl_math::pi
+#include "vil/vil_convert.h"
 
 #define MAX_VAL 255.0
 

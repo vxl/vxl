@@ -11,8 +11,8 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vil/vil_smart_ptr.h>
-#include <vil/vil_pixel_format.h>
+#include "vil_smart_ptr.h"
+#include "vil_pixel_format.h"
 
 //: Ref. counted block of data on the heap.
 //  Image data block used by vil_image_view<T>.

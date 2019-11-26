@@ -10,8 +10,8 @@
 // (i.e. save a class by its base-class pointer.)
 
 #include <vector>
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_binary_loader_base.h>
+#include "vsl_binary_io.h"
+#include "vsl_binary_loader_base.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

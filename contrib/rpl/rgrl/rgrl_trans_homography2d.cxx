@@ -3,15 +3,15 @@
 // \file
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_inverse.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3.h>
+#include "vnl/vnl_inverse.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_double_3.h"
 
 #include <rgrl/rgrl_util.h>
 

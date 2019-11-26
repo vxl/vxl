@@ -13,16 +13,16 @@
 static char const* vil_mit_format_tag = "mit";
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vil/vil_stream.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_stream_read.h>
-#include <vil/vil_stream_write.h>
-#include <vil/vil_exception.h>
+#include "vil/vil_stream.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_stream_read.h"
+#include "vil/vil_stream_write.h"
+#include "vil/vil_exception.h"
 
 #define MIT_UNSIGNED    0x0001
 #define MIT_RGB         0x0002

@@ -3,18 +3,18 @@
 #include "vpgl_optimize_camera.h"
 //:
 // \file
-#include <vnl/vnl_rotation_matrix.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x3.h>
+#include "vnl/vnl_rotation_matrix.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_3x3.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vgl/vgl_homg_point_2d.h>
+#include "vgl/vgl_homg_point_2d.h"
 #if 0
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #endif
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

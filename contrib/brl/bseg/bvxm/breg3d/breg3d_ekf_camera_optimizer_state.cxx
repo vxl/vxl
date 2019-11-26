@@ -4,7 +4,7 @@
 
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 
 
 void breg3d_ekf_camera_optimizer_state::set_error_covariance(double center_var, double rot_var)

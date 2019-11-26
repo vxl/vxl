@@ -3,14 +3,14 @@
 #include <algorithm>
 #include "rrel_quad_est.h"
 
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_vector.h"
 #include <vnl/algo/vnl_svd.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 rrel_quad_est::

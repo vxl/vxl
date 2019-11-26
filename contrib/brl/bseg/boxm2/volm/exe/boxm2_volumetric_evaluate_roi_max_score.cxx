@@ -11,12 +11,12 @@
 #include <ios>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bvrml/bvrml_write.h>
 

@@ -4,14 +4,14 @@
 // \author Tim Cootes - Manchester
 
 #include <iostream>
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vimt/vimt_rotate.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vul/vul_arg.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vul/vul_arg.h"
 
 void print_usage()
 {

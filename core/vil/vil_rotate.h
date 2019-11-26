@@ -9,7 +9,7 @@
 // A front end to the resampling functions that allows
 // an image to be rotated by any angle theta
 
-#include <vil/vil_image_view.h>
+#include "vil_image_view.h"
 
 //: Rotate image by angle theta
 //  \relatesalso vil_image_view

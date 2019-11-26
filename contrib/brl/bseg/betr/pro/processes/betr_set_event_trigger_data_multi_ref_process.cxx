@@ -9,17 +9,17 @@
 #include <string>
 #include <bprb/bprb_func_process.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_load.h>
-#include <vpgl/vpgl_rational_camera.h>
+#include "vil/vil_load.h"
+#include "vpgl/vpgl_rational_camera.h"
 #include <core/bbas_pro/bbas_1d_array_string.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vpgl/vpgl_lvcs.h"
 
 #include <betr/betr_event_trigger.h>
-#include <vpgl/vpgl_camera_double_sptr.h>
-#include <vpgl/vpgl_camera.h>
+#include "vpgl/vpgl_camera_double_sptr.h"
+#include "vpgl/vpgl_camera.h"
 
 
 namespace betr_set_event_trigger_data_multi_ref_process_globals

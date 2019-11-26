@@ -3,9 +3,9 @@
 //:
 // \file
 // \author  Joe Mundy
-#include <vgui/vgui.h>
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_easy2D_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_easy2D_tableau.h"
 
 //========================================================================
 //: Constructor

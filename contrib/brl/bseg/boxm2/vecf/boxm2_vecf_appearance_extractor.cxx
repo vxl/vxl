@@ -2,7 +2,7 @@
 #include "boxm2_vecf_appearance_extractor.h"
 #include <boct/boct_bit_tree.h>
 #include "boxm2_vecf_composite_head_parameters.h"
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 void boxm2_vecf_appearance_extractor::reset(bool is_right){
   boxm2_vecf_orbit_scene orbit = is_right ? head_model_.right_orbit_ : head_model_.left_orbit_;
   boxm2_scene_sptr scene = orbit.scene();

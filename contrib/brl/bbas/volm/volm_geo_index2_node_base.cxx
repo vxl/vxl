@@ -3,7 +3,7 @@
 #include <iomanip>
 #include "volm_geo_index2_node_base.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 std::string volm_geo_index2_node_base::get_string() const

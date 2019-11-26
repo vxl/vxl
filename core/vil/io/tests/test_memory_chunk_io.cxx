@@ -1,16 +1,16 @@
 // This is core/vil/io/tests/test_memory_chunk_io.cxx
 #include <iostream>
 #include <cstring>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
-#include <vil/vil_memory_chunk.h>
+#include "vil/vil_memory_chunk.h"
 #include <vil/io/vil_io_memory_chunk.h>
 #include <vil/io/vil_io_smart_ptr.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h>
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vxl_config.h"
+#include "vpl/vpl.h" // vpl_unlink()
 
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0

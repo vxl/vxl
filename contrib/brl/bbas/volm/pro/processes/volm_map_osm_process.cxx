@@ -6,17 +6,17 @@
 //
 //
 #include <bprb/bprb_parameters.h>
-#include <vgl/vgl_polygon.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_save.h>
+#include "vgl/vgl_polygon.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_save.h"
 #include <volm/volm_osm_objects.h>
-#include <vpgl/vpgl_camera_double_sptr.h>
+#include "vpgl/vpgl_camera_double_sptr.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vpgl/vpgl_local_rational_camera.h"
 #include <volm/volm_io_tools.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
-#include <vul/vul_file.h>
+#include "vgl/vgl_polygon_scan_iterator.h"
+#include "vul/vul_file.h"
 #include <vsol/vsol_spatial_object_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
@@ -24,8 +24,8 @@
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_point_2d.h>
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_vector_io.h"
 #include <bsol/bsol_algs.h>
 #include <bkml/bkml_write.h>
 #include <bkml/bkml_parser.h>

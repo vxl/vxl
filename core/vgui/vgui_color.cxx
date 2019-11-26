@@ -5,8 +5,8 @@
 // \brief   See vgui_color.h for a description of this file.
 
 #include "vgui_color.h"
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_macro.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_macro.h"
 
 // This assumes someone has set up the color map so that the
 // first 8 indices (viewed as binary) correspond to rgb.

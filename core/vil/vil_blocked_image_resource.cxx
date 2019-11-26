@@ -3,12 +3,12 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_property.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_copy.h>
+#include "vil/vil_property.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_crop.h"
+#include "vil/vil_copy.h"
 
 
 vil_blocked_image_resource::vil_blocked_image_resource() = default;

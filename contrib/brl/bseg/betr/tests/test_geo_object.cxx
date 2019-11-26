@@ -1,7 +1,7 @@
 // This is brl/bseg/betr/tests/test_geo_object.cxx
 #include <iostream>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <betr/betr_geo_box_3d.h>
 #include <betr/betr_geo_object_3d.h>
 #include <vsol/vsol_spatial_object_3d.h>
@@ -10,7 +10,7 @@
 #include <betr/vsol_mesh_3d.h>
 #include <betr/vsol_mesh_3d_sptr.h>
 #include <vsol/vsol_point_3d.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vpgl/vpgl_lvcs.h"
 #include <betr/betr_kml_utils.h>
 void test_geo_object()
 {

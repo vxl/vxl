@@ -1,10 +1,10 @@
 #include "bwm_tableau_video.h"
 #include "bwm_popup_menu.h"
 #include <vsol/vsol_point_2d.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_dialog_extensions.h>
-#include <vnl/vnl_double_4.h>
-#include <vsl/vsl_binary_io.h>
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_dialog_extensions.h"
+#include "vnl/vnl_double_4.h"
+#include "vsl/vsl_binary_io.h"
 #include <bsta/io/bsta_io_histogram.h>
 
 bool bwm_tableau_video::handle(const vgui_event &e)

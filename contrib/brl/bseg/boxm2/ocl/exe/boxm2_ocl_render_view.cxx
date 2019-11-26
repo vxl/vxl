@@ -6,11 +6,11 @@
 #include <bocl/bocl_cl.h>
 
 //vil and camera includes
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 
 //executable args
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
 
 //boxm2 scene stuff
 #include <boxm2/io/boxm2_dumb_cache.h>
@@ -22,15 +22,15 @@
 #include <boxm2/view/boxm2_ocl_change_tableau.h>
 #include <boxm2/view/boxm2_view_utils.h>
 #include <boxm2/boxm2_util.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_window.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_clear_tableau.h>
-#include <vgui/vgui_easy3D_tableau.h>
-#include <vgui/vgui_viewer3D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_window.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_clear_tableau.h"
+#include "vgui/vgui_easy3D_tableau.h"
+#include "vgui/vgui_viewer3D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
 
 
 int main(int argc, char ** argv)

@@ -5,12 +5,12 @@
 #include "bsgm_multiscale_disparity_estimator.h"
 #include <limits>
 #include <stdexcept>
-#include <vil/vil_convert.h>
-#include <vil/vil_save.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_distance.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_save.h"
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_distance.h"
 #include <bvrml/bvrml_write.h> // for custom color map
 #include <bvgl/bvgl_k_nearest_neighbors_3d.h>
 #include <bpgl/algo/bpgl_3d_from_disparity.h>

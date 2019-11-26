@@ -5,7 +5,7 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bool vdgl_fit_lines_params::SanityCheck()

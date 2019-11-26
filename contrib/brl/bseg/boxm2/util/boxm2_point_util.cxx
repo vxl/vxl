@@ -3,11 +3,11 @@
 #include "boxm2_point_util.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_quaternion.h>
+#include "vgl/vgl_distance.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_quaternion.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

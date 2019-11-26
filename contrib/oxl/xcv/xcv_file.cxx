@@ -14,18 +14,18 @@
 //
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_save.h>
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_save.h"
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_utils.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_rubberband_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_utils.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_rubberband_tableau.h"
 
 #include <xcv/xcv_image_tableau.h>
 

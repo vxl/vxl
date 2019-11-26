@@ -6,14 +6,14 @@
 #include "FMatrixComputeNonLinear.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_matrix.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3.h>
-#include <vgl/vgl_homg_line_2d.h>
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_double_3.h"
+#include "vgl/vgl_homg_line_2d.h"
 #include <mvl/HomgNorm2D.h>
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>

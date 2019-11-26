@@ -1,11 +1,11 @@
 #include "vpgl_camera_homographies.h"
 //:
 // \file
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_vector_3d.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_matrix_fixed.h"
 static vgl_h_matrix_3d<double> plane_trans(vgl_plane_3d<double> const& plane,
                                            vgl_point_3d<double> const& ref_pt)
 {

@@ -3,10 +3,10 @@
 #include <string>
 #include <rsdl/rsdl_borgefors.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_vector_fixed.h>
-#include <testlib/testlib_test.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "testlib/testlib_test.h"
 
 static inline
 void TEST_NEAR_vec(const std::string& msg,

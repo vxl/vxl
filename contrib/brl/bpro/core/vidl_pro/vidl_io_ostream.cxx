@@ -2,10 +2,10 @@
 #include "vidl_io_ostream.h"
 //:
 // \file
-#include <vsl/vsl_binary_io.h>
-#include <vidl/vidl_ostream.h>
+#include "vsl/vsl_binary_io.h"
+#include "vidl/vidl_ostream.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Binary write vidl ostream to stream

@@ -8,11 +8,11 @@
 // \author Tim Cootes
 
 #include <mfpf/mfpf_norm_corr1d.h>
-#include <vsl/vsl_binary_loader.h>
-#include <vul/vul_string.h>
+#include "vsl/vsl_binary_loader.h"
+#include "vul/vul_string.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <mbl/mbl_parse_block.h>
@@ -20,8 +20,8 @@
 
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vnl/io/vnl_io_vector.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 
 //=======================================================================
 // Dflt ctor

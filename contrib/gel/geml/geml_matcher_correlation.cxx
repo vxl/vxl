@@ -11,12 +11,12 @@
 //-----------------------------------------------------------------------------
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_matrix.h"
 
-#include <vil1/vil1_memory_image_window.h>
+#include "vil1/vil1_memory_image_window.h"
 
 #define MAX_CORNER_ERROR 1
 #define CORRELATION_KERNEL 3

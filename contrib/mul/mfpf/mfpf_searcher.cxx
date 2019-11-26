@@ -4,8 +4,8 @@
 // \brief Algorithms to perform global search for multiple matches
 // \author Tim Cootes
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 
 mfpf_searcher::mfpf_searcher()
 {

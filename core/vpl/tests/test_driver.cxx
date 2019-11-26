@@ -1,5 +1,5 @@
 // This is core/vpl/tests/test_driver.cxx
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_unistd );
 

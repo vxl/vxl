@@ -8,11 +8,11 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_property.h>
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_property.h"
 
 vil1_memory_image_impl::vil1_memory_image_impl(int planes, int w, int h,
                                                vil1_memory_image_format

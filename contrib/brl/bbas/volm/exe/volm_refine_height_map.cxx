@@ -15,20 +15,20 @@
 #include <iostream>
 #include <utility>
 #include <vil/algo/vil_region_finder.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 #include <volm/volm_category_io.h>
 #include <volm/volm_geo_index2.h>
 #include <volm/volm_io.h>
 #include <volm/volm_io_tools.h>
 #include <volm/volm_osm_objects.h>
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file_iterator.h>
+#include "vul/vul_file_iterator.h"
 
 
 static void error(std::string log_file, const std::string& msg)

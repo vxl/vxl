@@ -4,7 +4,7 @@
 // \file
 #include <bprb/bprb_func_process.h>
 #include <bvxm/bvxm_voxel_world.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 bool bvxm_heightmap_ortho_process_cons(bprb_func_process& pro)
 {

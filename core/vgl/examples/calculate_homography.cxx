@@ -4,14 +4,14 @@
 // \author  Gaston Araguas UTN Cordoba, Argentina
 // \date    3 March, 2008
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgl/vgl_homg_point_2d.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgl/vgl_homg_point_2d.h"
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 int main(int argc, char **argv)
 {

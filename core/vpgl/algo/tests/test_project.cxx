@@ -1,15 +1,15 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_homg_point_3d.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_box_3d.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_project.h>
-#include <vpgl/vpgl_calibration_matrix.h>
+#include "vpgl/vpgl_calibration_matrix.h"
 
 static void test_project()
 {

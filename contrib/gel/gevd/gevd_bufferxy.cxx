@@ -7,13 +7,13 @@
 //:
 // \file
 
-#include <vcl_compiler_detection.h>
+#include "vcl_compiler_detection.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_math.h>
+#include "vil/vil_pixel_format.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_math.h"
 
 #if defined(_MSC_VER) || defined(__GNUC__) || defined(__INTEL_COMPILER)
 #define iostream_char char

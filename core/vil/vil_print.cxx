@@ -11,12 +11,12 @@
 //   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
 // \endverbatim
 
-#include <vxl_config.h> // for vxl_uint_32 etc.
+#include "vxl_config.h" // for vxl_uint_32 etc.
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_rgb.h>
-#include <vil/vil_rgba.h>
+#include "vil/vil_rgb.h"
+#include "vil/vil_rgba.h"
 
 //: Explicit overload for bool
 template <>

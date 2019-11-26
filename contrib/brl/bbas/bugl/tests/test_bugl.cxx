@@ -4,10 +4,10 @@
 #include <bugl/bugl_normal_point_2d_sptr.h>
 #include <bugl/bugl_normal_point_3d.h>
 #include <bugl/bugl_normal_point_3d_sptr.h>
-#include <vnl/vnl_double_2x2.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vgl/vgl_point_3d.h>
-#include <testlib/testlib_test.h>
+#include "vnl/vnl_double_2x2.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vgl/vgl_point_3d.h"
+#include "testlib/testlib_test.h"
 
 void test_bugl()
 {

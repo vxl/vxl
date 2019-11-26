@@ -1,5 +1,5 @@
-#include <testlib/testlib_test.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "testlib/testlib_test.h"
+#include "vpgl/vpgl_perspective_camera.h"
 #include <boxm2/view/boxm2_view_utils.h>
 
 static void test_camera_to_vrml()

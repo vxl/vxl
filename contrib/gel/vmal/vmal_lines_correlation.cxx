@@ -4,10 +4,10 @@
 #include <cstdlib>
 #include "vmal_lines_correlation.h"
 
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3x3.h>
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_double_3x3.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vmal_lines_correlation::vmal_lines_correlation():

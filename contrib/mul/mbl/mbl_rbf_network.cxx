@@ -25,15 +25,15 @@
 //  definition. I'll check one day.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vsl/vsl_indent.h>
+#include "vsl/vsl_indent.h"
 #include <mbl/mbl_stats_1d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <mbl/mbl_matxvec.h>
 #include <vnl/io/vnl_io_vector.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_vector_io.h"
 
 //=======================================================================
 // Dflt ctor

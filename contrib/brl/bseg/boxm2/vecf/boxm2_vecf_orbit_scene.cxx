@@ -3,18 +3,18 @@
 #include <limits>
 #include <set>
 #include "boxm2_vecf_orbit_scene.h"
-#include <vnl/vnl_vector_fixed.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_box_3d.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_sphere_3d.h>
-#include <vgl/vgl_closest_point.h>
+#include "vnl/vnl_vector_fixed.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_box_3d.h"
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_sphere_3d.h"
+#include "vgl/vgl_closest_point.h"
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 typedef boxm2_data_traits<BOXM2_PIXEL>::datatype pixtype;
 // fill the background alpha and intensity values to be slightly dark

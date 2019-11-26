@@ -3,13 +3,13 @@
 #include "vil_blocked_image_facade.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vil/vil_property.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_copy.h>
+#include "vil/vil_property.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_crop.h"
+#include "vil/vil_copy.h"
 
 //#define DEBUG
 

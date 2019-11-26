@@ -90,9 +90,9 @@
 // \endverbatim
 
 #include <iosfwd>
-#include <vgl/vgl_homg_point_2d.h> // data member of this class
-#include <vgl/vgl_conic.h>         // data member of this class
-#include <vgl/vgl_point_2d.h>      // return type of some methods
+#include "vgl_homg_point_2d.h" // data member of this class
+#include "vgl_conic.h"         // data member of this class
+#include "vgl_point_2d.h"      // return type of some methods
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

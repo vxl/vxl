@@ -9,12 +9,12 @@
 #include <sstream>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include "msdi_array_of_marked_images.h"
 #include <vimt/vimt_image_2d_of.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_convert.h"
 
 msdi_array_of_marked_images::msdi_array_of_marked_images()
   : grey_only_(true),image_pyr_ok_(false),index_(0)

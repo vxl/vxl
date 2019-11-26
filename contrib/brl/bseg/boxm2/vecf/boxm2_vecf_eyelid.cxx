@@ -2,14 +2,14 @@
 #include <cmath>
 #include "boxm2_vecf_eyelid.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_sphere_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_sphere_3d.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vnl/vnl_vector_fixed.h"
 
 void boxm2_vecf_eyelid::blended_2nd_order_coefs(double t, double& a0, double& a1, double& a2) const{
   vnl_vector_fixed<double, 5> c0 = opr_.eyelid_coefs_t0();

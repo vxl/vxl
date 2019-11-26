@@ -5,10 +5,10 @@
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <bsta/bsta_histogram.h>
 #include <boxm2/boxm2_data_traits.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vnl/vnl_math.h>
+#include "vgl/vgl_vector_3d.h"
+#include "vnl/vnl_math.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vnl/algo/vnl_brent_minimizer.h>
 

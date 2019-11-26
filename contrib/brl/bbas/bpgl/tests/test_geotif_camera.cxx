@@ -1,17 +1,17 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vpgl/vpgl_affine_camera.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_polygon.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_load.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vpgl/vpgl_affine_camera.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_polygon.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_load.h"
+#include "vpgl/vpgl_local_rational_camera.h"
 #include <bpgl/bpgl_geotif_camera.h>
 static void test_geotif_camera()
 {

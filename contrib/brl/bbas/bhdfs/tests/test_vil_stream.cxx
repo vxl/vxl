@@ -1,11 +1,11 @@
 //:
 // \file
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bhdfs/bhdfs_manager.h>
 #include <bhdfs/bhdfs_vil_stream.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Test bhdfs vil stream

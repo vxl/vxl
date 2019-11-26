@@ -3,14 +3,14 @@
 #include <iostream>
 #include <sstream>
 #include <cmath>
-#include <testlib/testlib_test.h>
-#include <vgl/vgl_oriented_box_2d.h>
-#include <vgl/vgl_area.h>
-#include <vgl/vgl_box_2d.h>
+#include "testlib/testlib_test.h"
+#include "vgl/vgl_oriented_box_2d.h"
+#include "vgl/vgl_area.h"
+#include "vgl/vgl_box_2d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_fit_oriented_box_2d.h>
+#include "vgl/vgl_fit_oriented_box_2d.h"
 
 static void test_oriented_box_2d()
 {

@@ -1,7 +1,7 @@
 #include "ihog_transform_2d.h"
 //:
 // \file
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_inverse.h"
 #include <vgl/io/vgl_io_h_matrix_2d.h>
 
 void ihog_transform_2d::b_write(vsl_b_ostream& bfs) const

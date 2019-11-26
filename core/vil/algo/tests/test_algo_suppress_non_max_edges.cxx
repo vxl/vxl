@@ -1,14 +1,14 @@
 // This is core/vil/algo/tests/test_algo_suppress_non_max_edges.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Tim Cootes
 // \date   15 June 2005
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 #include <vil/algo/vil_suppress_non_max_edges.h>
 #include <vil/algo/vil_sobel_3x3.h>
 

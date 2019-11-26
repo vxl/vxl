@@ -22,11 +22,11 @@
 #include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
 
-#include <vgui/vgui_tableau_sptr.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_grid_tableau.h>
+#include "vgui/vgui_tableau_sptr.h"
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_grid_tableau.h"
 #include <vgui/impl/wx/vgui_wx_menu.h>
 
 constexpr int ID_TOOLBAR = 500;

@@ -6,11 +6,11 @@
 // It would not be possible to write this example using VGUI because VGUI
 // does not have buttons.
 
-#include <vgui/vgui_deck_tableau.h>
-#include <vgui/vgui.h>
+#include "vgui/vgui_deck_tableau.h"
+#include "vgui/vgui.h"
 
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
 #include <vgui/impl/gtk/vgui_gtk_adaptor.h>
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>

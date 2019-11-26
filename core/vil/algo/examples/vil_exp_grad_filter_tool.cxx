@@ -5,14 +5,14 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
+#include "vxl_config.h" // for vxl_byte
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_image_view.h"
 #include <vil/algo/vil_exp_grad_filter_1d.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_convert.h"
 
 int main(int argc, char** argv)
 {

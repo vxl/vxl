@@ -45,8 +45,8 @@
 *
 * Here is an example using VGUI to display an image in a window:
 * \verbatim
-* #include <vgui/vgui.h>
-* #include <vgui/vgui_image_tableau.h>
+* #include "vgui.h"
+* #include "vgui_image_tableau.h"
 * #include <vgui/vgui_viewer2D.h>
 * int main(int argc, char **argv)
 * {

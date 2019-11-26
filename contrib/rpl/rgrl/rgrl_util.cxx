@@ -9,12 +9,12 @@
 #include "rgrl_util.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_vector.h"
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 #include <rgrl/rgrl_converge_status.h>
 #include <rgrl/rgrl_converge_status_sptr.h>

@@ -4,9 +4,9 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boct/boct_bit_tree.h>
 #include <vcl_where_root_dir.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 boxm2_ocl_hierarchical_reg::boxm2_ocl_hierarchical_reg( boxm2_opencl_cache_sptr  & cache,
                                                    boxm2_scene_sptr sceneA,

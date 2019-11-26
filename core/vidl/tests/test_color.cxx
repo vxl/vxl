@@ -1,12 +1,12 @@
 // This is core/vidl/tests/test_color.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vidl/vidl_color.h>
+#include "vidl/vidl_color.h"
 #include <cassert>
 
 //: Define the function pointer for pixel format conversion functions

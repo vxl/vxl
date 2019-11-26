@@ -11,10 +11,10 @@
 #include "pdf1d_compare_to_pdf_ks.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vbl/vbl_qsort.h>
-#include <vnl/vnl_vector.h>
+#include "vbl/vbl_qsort.h"
+#include "vnl/vnl_vector.h"
 
 #include <pdf1d/pdf1d_prob_ks.h>
 

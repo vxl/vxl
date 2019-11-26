@@ -14,15 +14,15 @@
 #include "vgui_enhance_tableau.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_matrix_fixed.h>
+#include "vnl/vnl_matrix_fixed.h"
 
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_matrix_state.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_tableau.h"
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_matrix_state.h"
 
 
 vgui_enhance_tableau::vgui_enhance_tableau()

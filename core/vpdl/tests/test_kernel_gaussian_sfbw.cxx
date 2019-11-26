@@ -2,11 +2,11 @@
 #include <limits>
 #include <iostream>
 #include <cmath>
-#include <testlib/testlib_test.h>
-#include <vpdl/vpdl_kernel_gaussian_sfbw.h>
-#include <vpdl/vpdl_gaussian_sphere.h>
+#include "testlib/testlib_test.h"
+#include "vpdl/vpdl_kernel_gaussian_sfbw.h"
+#include "vpdl/vpdl_gaussian_sphere.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 template <class T>

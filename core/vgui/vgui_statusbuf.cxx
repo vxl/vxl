@@ -6,7 +6,7 @@
 // \brief  See vgui_statusbuf.h for a description of this file.
 
 #include "vgui_statusbuf.h"
-#include <vgui/vgui_statusbar.h>
+#include "vgui/vgui_statusbar.h"
 
 int vgui_statusbuf::sync()
 {

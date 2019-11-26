@@ -1,9 +1,9 @@
 #include <string>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brdb/brdb_value.h>
@@ -13,9 +13,9 @@
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
 
-#include <vil/vil_save.h>
-#include <vil/vil_image_view_base.h>
-#include <vpgl/vpgl_camera_double_sptr.h>
+#include "vil/vil_save.h"
+#include "vil/vil_image_view_base.h"
+#include "vpgl/vpgl_camera_double_sptr.h"
 
 #include <bvxm/pro/processes/bvxm_synth_world_generator.h>
 

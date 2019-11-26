@@ -8,7 +8,7 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brdb/brdb_value.h>
@@ -16,11 +16,11 @@
 #include <volm/volm_satellite_resources.h>
 #include <volm/volm_satellite_resources_sptr.h>
 
-#include <vgl/vgl_polygon.h>
+#include "vgl/vgl_polygon.h"
 #include <bkml/bkml_parser.h>
 
-#include <vul/vul_file.h>
-#include <vgl/vgl_area.h>
+#include "vul/vul_file.h"
+#include "vgl/vgl_area.h"
 
 //: sets input and output types
 bool volm_create_satellite_resources_process_cons(bprb_func_process& pro)
@@ -722,7 +722,7 @@ bool volm_find_satellite_pairs_poly_process(bprb_func_process& pro)
   return out;
 }
 
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_intersection.h"
 // a simple process to return the area of the region where to satellite images intersect
 bool volm_satellite_pair_intersection_process_cons(bprb_func_process& pro)
 {

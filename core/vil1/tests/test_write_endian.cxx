@@ -1,13 +1,13 @@
 /*
   fsm
 */
-#include <vpl/vpl.h>
-#include <vul/vul_temp_filename.h>
+#include "vpl/vpl.h"
+#include "vul/vul_temp_filename.h"
 
-#include <vil1/vil1_16bit.h>
-#include <vil1/vil1_stream_fstream.h>
+#include "vil1/vil1_16bit.h"
+#include "vil1/vil1_stream_fstream.h"
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 static void test_write_endian()
 {

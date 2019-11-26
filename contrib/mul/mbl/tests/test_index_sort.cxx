@@ -1,10 +1,10 @@
 // This is mul/mbl/tests/test_index_sort.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_index_sort.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 void test_index_sort()
 {

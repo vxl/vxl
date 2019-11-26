@@ -1,7 +1,7 @@
 // This is gel/vdgl/vdgl_fit_line.cxx
 
 #include "vdgl_fit_line.h"
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_vector.h"
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vdgl/vdgl_edgel.h>

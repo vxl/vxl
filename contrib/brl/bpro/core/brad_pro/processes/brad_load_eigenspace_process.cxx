@@ -3,12 +3,12 @@
 #include <fstream>
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_eigenspace.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 //:
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Constructor

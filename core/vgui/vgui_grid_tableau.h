@@ -21,8 +21,8 @@
 #endif
 #include <vbl/vbl_array_2d.h>
 #include "vgui_grid_tableau_sptr.h"
-#include <vgui/vgui_poly_tableau.h>
-#include <vgui/vgui_event_condition.h>
+#include "vgui_poly_tableau.h"
+#include "vgui_event_condition.h"
 
 //: Data required by each rectangle in the grid of vgui_grid_tableau.
 struct vgui_grid_tableau_data

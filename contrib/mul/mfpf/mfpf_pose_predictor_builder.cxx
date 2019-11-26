@@ -7,14 +7,14 @@
 // \brief Trains regressor in an mfpf_pose_predictor
 // \author Tim Cootes
 
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vsl/vsl_indent.h>
+#include "vsl/vsl_indent.h"
 
 //=======================================================================
 // Dflt ctor

@@ -4,7 +4,7 @@
 #include "pdf1d_prob_chi2.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_gamma.h>
 

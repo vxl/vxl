@@ -21,7 +21,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 #include <algorithm>
-#include <vgl/vgl_point_3d.h>
+#include "vgl_point_3d.h"
 template <class Type>
 class vgl_pointset_3d
 {

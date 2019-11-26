@@ -4,13 +4,13 @@
 // \file
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_homg_line_3d_2_points.h>
-#include <vgl/vgl_homg_point_3d.h>
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_homg_line_3d_2_points.h"
+#include "vgl/vgl_homg_point_3d.h"
 
 //***************************************************************************
 // Initialization

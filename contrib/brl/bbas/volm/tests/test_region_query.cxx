@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vsph/vsph_unit_sphere.h>
 #include <vsph/vsph_sph_point_3d.h>

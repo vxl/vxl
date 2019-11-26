@@ -1,7 +1,7 @@
 #include <iostream>
 #include "bocl_buffer_mgr.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bocl_buffer_mgr* bocl_buffer_mgr::instance_=NULL;

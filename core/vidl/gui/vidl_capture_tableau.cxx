@@ -6,10 +6,10 @@
 // \date   21 Nov 2008
 
 #include "vidl_capture_tableau.h"
-#include <vil/vil_image_view.h>
-#include <vgui/vgui_utils.h>
-#include <vgui/vgui_gl.h>
-#include <vidl/vidl_convert.h>
+#include "vil/vil_image_view.h"
+#include "vgui/vgui_utils.h"
+#include "vgui/vgui_gl.h"
+#include "vidl/vidl_convert.h"
 #include <vidl/gui/vidl_gui_param_dialog.h>
 
 

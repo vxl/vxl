@@ -10,7 +10,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui_tableau_sptr.h"
 
 //: Sends a text description of the whole tableau hierarchy to the given stream.
 void vgui_text_graph(std::ostream &);

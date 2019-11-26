@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE(test_kml_parser);
 DECLARE(test_site_obj_reader);

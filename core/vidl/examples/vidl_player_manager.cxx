@@ -7,19 +7,19 @@
 // \author Matt Leotta
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_timer.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_error_dialog.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vil/vil_image_view.h>
+#include "vul/vul_timer.h"
+#include "vgui/vgui.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_error_dialog.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vil/vil_image_view.h"
 
-#include <vidl/vidl_frame.h>
-#include <vidl/vidl_convert.h>
+#include "vidl/vidl_frame.h"
+#include "vidl/vidl_convert.h"
 #include <vidl/gui/vidl_gui_param_dialog.h>
 
 

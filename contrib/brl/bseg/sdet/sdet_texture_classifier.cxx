@@ -6,17 +6,17 @@
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_filter_bank.h>
 #include <bsta/bsta_k_means.h>
-#include <vsl/vsl_map_io.h>
-#include <vsl/vsl_vector_io.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_map_io.h"
+#include "vsl/vsl_vector_io.h"
+#include "vsl/vsl_binary_io.h"
 #include <vnl/io/vnl_io_vector.h>
-#include <vnl/vnl_numeric_traits.h>
-#include <vul/vul_timer.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
-#include <vil/vil_math.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_crop.h>
+#include "vnl/vnl_numeric_traits.h"
+#include "vul/vul_timer.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
+#include "vil/vil_math.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_crop.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
@@ -25,13 +25,13 @@
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_2d_sptr.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vul/vul_file_iterator.h>
+#include "vul/vul_file_iterator.h"
 
-#include <vil/vil_convert.h>
-#include <vul/vul_file.h>
+#include "vil/vil_convert.h"
+#include "vul/vul_file.h"
 
 std::vector<vgl_polygon<double> > sdet_texture_classifier::load_polys(std::string const& poly_path)
 {

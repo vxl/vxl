@@ -4,12 +4,12 @@
 #include <iostream>
 #include <cstdlib>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_save.h>
-#include <vil1/vil1_load.h>
-#include <vil1/vil1_crop.h>
+#include "vil1/vil1_save.h"
+#include "vil1/vil1_load.h"
+#include "vil1/vil1_crop.h"
 
 int main(int argc, char ** argv)
 {

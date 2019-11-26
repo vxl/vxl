@@ -9,9 +9,9 @@
 #include <mfpf/mfpf_point_finder.h>
 #include <mfpf/mfpf_draw_pose_lines.h>
 #include <mfpf/mfpf_pose_set.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vimt/vimt_convert.h>
 

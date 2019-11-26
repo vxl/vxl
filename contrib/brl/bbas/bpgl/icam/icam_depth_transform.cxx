@@ -1,9 +1,9 @@
 #include <utility>
 #include "icam_depth_transform.h"
 //
-#include <vnl/vnl_inverse.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_numeric_traits.h>
+#include "vnl/vnl_inverse.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_numeric_traits.h"
 
 
 void icam_depth_transform::cache_k()

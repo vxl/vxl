@@ -17,28 +17,28 @@
 #include <iostream>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_load.h>
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_load.h"
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_window.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_find.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_rubberband_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_grid_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_window.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_tableau.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_macro.h"
+#include "vgui/vgui_find.h"
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_rubberband_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_grid_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 
 #include "xcv_file.h"
 #include "xcv_display.h"

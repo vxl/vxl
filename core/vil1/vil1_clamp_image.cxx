@@ -1,9 +1,9 @@
 // This is core/vil1/vil1_clamp_image.cxx
 
 #include "vil1_clamp_image.h"
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_rgb.h>
-#include <vxl_config.h>
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_rgb.h"
+#include "vxl_config.h"
 
 #undef VIL1_CLAMP_IMAGE_THRESHOLD
 #define VIL1_CLAMP_IMAGE_THRESHOLD(V, L, H) \

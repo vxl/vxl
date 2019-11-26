@@ -1,15 +1,15 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <volm/volm_geo_index2.h>
 #include <volm/volm_geo_index2_sptr.h>
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_loc_hyp_sptr.h>
 #include <volm/volm_tile.h>
-#include <vgl/vgl_point_2d.h>
-#include <vpgl/vpgl_utm.h>
+#include "vgl/vgl_point_2d.h"
+#include "vpgl/vpgl_utm.h"
 #include <bkml/bkml_parser.h>
 
 static void test_geo_index2()

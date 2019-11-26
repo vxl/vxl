@@ -3,16 +3,16 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vgl/algo/vgl_fit_quadric_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_pointset_3d.h>
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_pointset_3d.h"
+#include "vgl/vgl_distance.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_matrix.h"
 #include <vnl/algo/vnl_generalized_eigensystem.h>
 #include <vnl/algo/vnl_svd.h>
 //

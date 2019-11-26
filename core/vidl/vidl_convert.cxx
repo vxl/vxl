@@ -15,7 +15,7 @@
 #include <iostream>
 #include <memory>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include "vidl_convert.h"
 #include "vidl_frame.h"
@@ -28,9 +28,9 @@
 #include "vidl_ffmpeg_convert.h"
 #endif
 
-#include <vil/vil_convert.h>
-#include <vil/vil_new.h>
-#include <vil/vil_memory_chunk.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_new.h"
+#include "vil/vil_memory_chunk.h"
 #include <cassert>
 
 //--------------------------------------------------------------------------------

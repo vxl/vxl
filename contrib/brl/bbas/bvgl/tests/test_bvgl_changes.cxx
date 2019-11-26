@@ -1,11 +1,11 @@
 //:
 // \file
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvgl/bvgl_changes.h>
 #include <bvgl/bvgl_changes_sptr.h>
 #include <bvgl/bvgl_change_obj.h>
 #include <bvgl/bvgl_change_obj_sptr.h>
-#include <vgl/vgl_polygon.h>
+#include "vgl/vgl_polygon.h"
 
 //: Test changes
 static void test_bvgl_changes()

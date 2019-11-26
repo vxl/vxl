@@ -9,15 +9,15 @@
 // \author Tim Cootes
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_vector_io.h>
-#include <vnl/vnl_math.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_vector_io.h"
+#include "vnl/vnl_math.h"
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_vector_3d.h"
 #include <vgl/io/vgl_io_point_3d.h>
 #include <mbl/mbl_matxvec.h>
 

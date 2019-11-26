@@ -7,15 +7,15 @@
 //
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_rubberband_tableau.h>
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_text_graph.h>
-#include <vgui/vgui_projection_inspector.h>
-#include <vgui/vgui_find.h>
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_rubberband_tableau.h"
+#include "vgui/vgui_macro.h"
+#include "vgui/vgui_text_graph.h"
+#include "vgui/vgui_projection_inspector.h"
+#include "vgui/vgui_find.h"
 #include <mvl/HomgInterestPointSet.h>
 #include <mvl/HomgInterestPoint.h>
 

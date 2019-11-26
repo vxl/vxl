@@ -27,23 +27,23 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include<vgl/vgl_point_2d.h>
-#include<vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
 
-#include<vnl/vnl_matrix_fixed.h>
-#include<vnl/vnl_vector_fixed.h>
-#include<vnl/vnl_vector.h>
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_vector.h"
 
-#include <vidl/vidl_image_list_istream.h>
-#include <vidl/vidl_convert.h>
+#include "vidl/vidl_image_list_istream.h"
+#include "vidl/vidl_convert.h"
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
 
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 class coord_compare_2d
 {

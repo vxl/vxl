@@ -14,8 +14,8 @@
 
 #include <iosfwd>
 #include <complex>
-#include <vil/vil_rgb.h>
-#include <vil/vil_rgba.h>
+#include "vil_rgb.h"
+#include "vil_rgba.h"
 #include <vxl_config.h> // for vxl_uint_32 etc.
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>

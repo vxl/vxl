@@ -1,13 +1,13 @@
 #include <iostream>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include "sample_database.h"
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_tuple.h>
 #include <brdb/brdb_relation.h>
 #include <brdb/brdb_database.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_database()

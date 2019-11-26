@@ -1,13 +1,13 @@
 #include <iostream>
 #include <exception>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vpgl/vpgl_poly_radial_distortion.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_homg_point_2d.h>
+#include "vpgl/vpgl_poly_radial_distortion.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_homg_point_2d.h"
 
 static void test_poly_radial_distortion_constructors()
 {

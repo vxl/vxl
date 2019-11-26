@@ -1,14 +1,14 @@
 // This is core/vgl/io/tests/test_homg_plane_3d_io.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_homg_plane_3d.h>
+#include "vgl/vgl_homg_plane_3d.h"
 #include <vgl/io/vgl_io_homg_plane_3d.h>
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_indent.h>
-#include <testlib/testlib_test.h>
-#include <vpl/vpl.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_indent.h"
+#include "testlib/testlib_test.h"
+#include "vpl/vpl.h"
 
 void test_homg_plane_3d_double_io()
 {

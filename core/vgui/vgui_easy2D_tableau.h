@@ -20,11 +20,11 @@
 //                           - Added functions clear, remove, get_all.
 // \endverbatim
 
-#include <vgui/vgui_displaylist2D_tableau.h>
-#include <vgui/vgui_parent_child_link.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_easy2D_tableau_sptr.h>
-#include <vgui/vgui_style_sptr.h>
+#include "vgui_displaylist2D_tableau.h"
+#include "vgui_parent_child_link.h"
+#include "vgui_image_tableau.h"
+#include "vgui_easy2D_tableau_sptr.h"
+#include "vgui_style_sptr.h"
 
 class vgui_soview2D;
 class vgui_soview2D_point;

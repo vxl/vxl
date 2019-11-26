@@ -5,22 +5,22 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vil/algo/vil_corners.h>
 #include <vil/algo/vil_find_peaks.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_fill.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_fill.h"
+#include "vil/vil_crop.h"
+#include "vil/vil_math.h"
+#include "vil/vil_convert.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 #include <mbl/mbl_index_sort.h>
 #include <fhs/fhs_searcher.h>
 #include <vimt/algo/vimt_normalised_correlation_2d.h>

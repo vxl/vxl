@@ -3,7 +3,7 @@
 #include "bwm_tableau_text.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void bwm_tableau_text::set_text(std::string filename)

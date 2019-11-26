@@ -1,6 +1,6 @@
 #include "vsol_mesh_3d.h"
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_homg_plane_3d.h>
+#include "vgl/vgl_homg_point_3d.h"
+#include "vgl/vgl_homg_plane_3d.h"
 #include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
 #include <vnl/algo/vnl_svd.h>
@@ -8,9 +8,9 @@
 #include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_line_3d.h>
 #include <vsol/vsol_point_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_closest_point.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_closest_point.h"
+#include "vgl/vgl_intersection.h"
 
 
 static vsol_polygon_3d_sptr move_poly_points_to_plane(const vsol_polygon_3d_sptr& polygon)

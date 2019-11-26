@@ -8,7 +8,7 @@
 #include <cmath>
 #include "vil1_memory_image_window.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vil1_memory_image_window::vil1_memory_image_window(

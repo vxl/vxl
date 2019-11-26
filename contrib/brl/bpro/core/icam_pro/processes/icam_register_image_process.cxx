@@ -19,17 +19,17 @@
 
 #include <brdb/brdb_value.h>
 
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <icam/icam_view_sphere.h>
 #include <icam/icam_view_metadata.h>
 #include <icam/icam_minimizer_params.h>
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_load.h"
 
 // global variables
 namespace icam_register_image_process_globals

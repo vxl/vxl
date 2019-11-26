@@ -6,16 +6,16 @@
 #include <iostream>
 #include "vgui_cache_wizard.h"
 
-#include <vil1/vil1_crop.h>
-#include <vil1/vil1_pixel.h>
+#include "vil1/vil1_crop.h"
+#include "vil1/vil1_pixel.h"
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui_pixel.h>
-#include <vgui/vgui_macro.h>
+#include "vgui/vgui_pixel.h"
+#include "vgui/vgui_macro.h"
 #include <vgui/internals/vgui_accelerate.h>
 
 #define DEFAULT_QUADRANT_WIDTH  256

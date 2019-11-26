@@ -7,7 +7,7 @@
 //
 // this is a generated file.
 
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui_tableau_sptr.h"
 
 class vgui_blackbox_tableau;
 typedef vgui_tableau_sptr_t<vgui_blackbox_tableau> vgui_blackbox_tableau_sptr;

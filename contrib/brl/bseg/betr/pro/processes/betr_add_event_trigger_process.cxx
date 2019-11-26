@@ -3,7 +3,7 @@
 #include <fstream>
 #include <string>
 #include <bprb/bprb_func_process.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vpgl/vpgl_lvcs.h"
 //:
 // \file
 // \brief  A process for adding a betr_event_trigger to a site
@@ -11,10 +11,10 @@
 
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <betr/betr_event_trigger.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 #include <betr/betr_site.h>
 
 namespace betr_add_event_trigger_process_globals

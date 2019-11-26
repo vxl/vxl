@@ -4,10 +4,10 @@
 #include <fstream>
 #include <string>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvgl/bvgl_spline_region_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 #define TEST_SPLINE_REGION 0
 //: Test changes
 static void test_spline_region()

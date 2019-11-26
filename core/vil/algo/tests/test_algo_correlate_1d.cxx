@@ -1,13 +1,13 @@
 // This is core/vil/algo/tests/test_algo_correlate_1d.cxx
 #include <vector>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
-#include <vil/vil_new.h>
-#include <vil/vil_crop.h>
+#include "vxl_config.h" // for vxl_byte
+#include "vil/vil_new.h"
+#include "vil/vil_crop.h"
 #include <vil/algo/vil_correlate_1d.h>
 
 static void test_algo_correlate_1d_double()

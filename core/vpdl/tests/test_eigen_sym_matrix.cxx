@@ -1,10 +1,10 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vpdl/vpdt/vpdt_eigen_sym_matrix.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_matrix_fixed.h>
+#include "vnl/vnl_matrix_fixed.h"
 
 template <class T>
 void test_matrix_type(T epsilon, const std::string& type_name)

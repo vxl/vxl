@@ -8,16 +8,16 @@
 #include <bprb/bprb_parameters.h>
 #include <bvxm/pro/processes/bvxm_normalization_util.h>
 
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
 
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_voxel_world.h>
 
 #ifdef DEBUG
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #endif
 

@@ -1,18 +1,18 @@
 // This is core/vidl/tests/test_convert.cxx
 #include <iostream>
 #include <cstring>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_view.h>
-#include <vil/vil_crop.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_crop.h"
 #include <vidl/vidl_config.h>
-#include <vidl/vidl_convert.h>
-#include <vul/vul_timer.h>
+#include "vidl/vidl_convert.h"
+#include "vul/vul_timer.h"
 
 #if VIDL_HAS_FFMPEG
-#include <vidl/vidl_ffmpeg_convert.h>
+#include "vidl/vidl_ffmpeg_convert.h"
 #endif
 
 

@@ -3,11 +3,11 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_io.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
+#include "vsl/vsl_binary_io.h"
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_image_view.h"
 #include <vil/io/vil_io_image_view.h>
 
 //: Binary write image view base to stream

@@ -2,11 +2,11 @@
 #include <iostream>
 #include <vpgl/algo/vpgl_calibration_matrix_compute.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_det.h>
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_det.h"
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vgl/algo/vgl_h_matrix_2d_optimize_lmq.h>
 

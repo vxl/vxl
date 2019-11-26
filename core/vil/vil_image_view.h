@@ -17,9 +17,9 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 #include <cassert>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_memory_chunk.h>
-#include <vil/vil_pixel_format.h>
+#include "vil_image_view_base.h"
+#include "vil_memory_chunk.h"
+#include "vil_pixel_format.h"
 
 
 //: Concrete view of image data of type T held in memory

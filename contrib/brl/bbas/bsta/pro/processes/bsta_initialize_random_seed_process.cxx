@@ -10,7 +10,7 @@
 #include <bprb/bprb_parameters.h>
 #include <bsta/bsta_random_wrapper.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <brdb/brdb_value.h>
 

@@ -3,17 +3,17 @@
 #include <string>
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_resource.h>
-#include <vil/vil_load.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_load.h"
 #include <vtol/vtol_intensity_face.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 static void test_region_proc(int argc, char * argv[])
 {
   std::string root = testlib_root_dir();

@@ -6,7 +6,7 @@
 // \brief Set of vil1_image_as functions
 // \author fsm
 
-#include <vil1/vil1_image.h>
+#include "vil1_image.h"
 
 //: \brief Converts to a different pixel type.
 //

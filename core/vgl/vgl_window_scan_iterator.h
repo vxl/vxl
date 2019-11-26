@@ -15,7 +15,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgl/vgl_region_scan_iterator.h>
+#include "vgl_region_scan_iterator.h"
 
 //: Iterator to scan rectangular windows
 //  This class is completely inlined.

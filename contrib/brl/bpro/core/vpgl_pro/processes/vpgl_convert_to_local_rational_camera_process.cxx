@@ -4,10 +4,10 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vpgl/vpgl_lvcs_sptr.h"
 
 //: initialization
 bool vpgl_convert_to_local_rational_camera_process_cons(bprb_func_process& pro)

@@ -1,5 +1,5 @@
 #ifndef INSTANTIATE_TEMPLATES
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_matrix.h"
 
 // this must be here for filter-2d to work
 #include "../vipl_filterable_section_container_generator_vnl_matrix.hxx"

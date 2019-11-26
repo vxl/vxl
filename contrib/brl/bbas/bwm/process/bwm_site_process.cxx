@@ -8,12 +8,12 @@
 #include <bwm/io/bwm_site.h>
 #include <bwm/io/bwm_io_structs.h>
 
-#include <vul/vul_file.h>
-#include <vil/vil_image_list.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vgui/vgui_error_dialog.h>
+#include "vul/vul_file.h"
+#include "vil/vil_image_list.h"
+#include "vpgl/vpgl_rational_camera.h"
+#include "vgui/vgui_error_dialog.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 double bwm_site_process::version_num = 0;

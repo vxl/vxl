@@ -11,12 +11,12 @@
 #include <bwm/reg/bwm_reg_processor.h>
 #include <bwm/algo/bwm_utils.h>
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_plane_3d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_plane_3d.h"
 #if 0
-#include <vgl/vgl_box_2d.h>
+#include "vgl/vgl_box_2d.h"
 #endif
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
@@ -25,23 +25,23 @@
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_digital_curve_3d.h>
 #include <vdgl/vdgl_digital_curve.h>
-#include <vgui/vgui_message.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_projection_inspector.h>
-#include <vgui/vgui_style.h>
+#include "vgui/vgui_message.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_projection_inspector.h"
+#include "vgui/vgui_style.h"
 
 #include <bgui/bgui_vsol_soview2D.h>
 
 #include <vpgl/algo/vpgl_backproject.h>
 
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vpgl/vpgl_local_rational_camera.h"
 
 vpgl_camera<double>* bwm_observer_rat_cam::read_camera(std::string cam_path,
                                                        bool& local)

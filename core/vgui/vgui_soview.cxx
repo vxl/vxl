@@ -14,12 +14,12 @@
 #include "vgui_soview.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_observer.h>
-#include <vgui/vgui_style.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_observer.h"
+#include "vgui/vgui_style.h"
 
 #define VGUI_STATIC_OBJECT(T, var) \
 static T& var () { \

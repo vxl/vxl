@@ -3,12 +3,12 @@
 #include <cmath>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 #include <rrel/rrel_util.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 inline bool is_sorted( std::vector<double>::iterator first, std::vector<double>::iterator last )
 {

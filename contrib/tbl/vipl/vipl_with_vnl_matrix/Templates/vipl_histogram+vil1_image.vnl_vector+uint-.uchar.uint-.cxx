@@ -1,7 +1,7 @@
 #ifndef INSTANTIATE_TEMPLATES
 // for vipl_threshold<...> instantiation:
-#include <vnl/vnl_vector.h>
-#include <vil1/vil1_image.h>
+#include "vnl/vnl_vector.h"
+#include "vil1/vil1_image.h"
 #include <vipl/accessors/vipl_accessors_vil1_image.hxx>
 #include "../accessors/vipl_accessors_vnl_vector.h"
 #include <vipl/vipl_histogram.hxx>

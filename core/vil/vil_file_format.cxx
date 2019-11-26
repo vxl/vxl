@@ -7,10 +7,10 @@
 vil_file_format::~vil_file_format() = default;
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil/vil_config.h> // for list of configured file formats
-#include <vil/vil_exception.h>
+#include "vil/vil_exception.h"
 
 #if HAS_PNM
 #include <vil/file_formats/vil_pnm.h>

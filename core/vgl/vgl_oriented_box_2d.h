@@ -5,10 +5,10 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include <vgl/vgl_line_segment_2d.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_tolerance.h>
+#include "vgl_line_segment_2d.h"
+#include "vgl_polygon.h"
+#include "vgl_point_2d.h"
+#include "vgl_tolerance.h"
 //:
 // \file
 // \brief An orienteded box in 2-d

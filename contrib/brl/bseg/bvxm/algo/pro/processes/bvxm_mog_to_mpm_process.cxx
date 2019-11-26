@@ -21,7 +21,7 @@
 #include <bsta/bsta_gauss_sf1.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: set input and output types

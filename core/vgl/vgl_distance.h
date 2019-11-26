@@ -22,7 +22,7 @@
 //   25 Sept 2004 Peter Vanroose added 3D vgl_distance_to_*_polygon()
 // \endverbatim
 
-#include <vgl/vgl_fwd.h> // forward declare various vgl classes
+#include "vgl_fwd.h" // forward declare various vgl classes
 
 //: Squared distance between point \a (x,y) and closest point on line segment \a (x1,y1)-(x2,y2)
 template <class T>

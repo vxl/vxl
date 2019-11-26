@@ -5,7 +5,7 @@
 
 #include <bprb/bprb_parameters.h>
 #include <bil/bil_convert_to_grey.h>
-#include <vil/vil_image_resource.h>
+#include "vil/vil_image_resource.h"
 
 //: Constructor
 bool vil_multi_plane_view_to_grey_process_cons(bprb_func_process& pro)

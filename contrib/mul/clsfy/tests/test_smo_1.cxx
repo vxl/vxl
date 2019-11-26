@@ -10,7 +10,7 @@
 #include <ios>
 #include <iomanip>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <clsfy/clsfy_smo_1.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
@@ -18,9 +18,9 @@
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <testlib/testlib_test.h>
-#include <vnl/vnl_random.h>
-#include <vul/vul_timer.h>
+#include "testlib/testlib_test.h"
+#include "vnl/vnl_random.h"
+#include "vul/vul_timer.h"
 
 //=======================================================================
 

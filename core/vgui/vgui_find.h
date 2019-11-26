@@ -10,7 +10,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui_tableau_sptr.h"
 
 //: Search for a tableau by type in the hierarchy.
 //  If direction_down is true, it will search below param

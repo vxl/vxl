@@ -2,10 +2,10 @@
 #include "vcsl_coordinate_system.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vcsl/vcsl_axis.h>
-#include <vcsl/vcsl_unit.h> // for method vcsl_axis::unit()
+#include "vcsl/vcsl_axis.h"
+#include "vcsl/vcsl_unit.h" // for method vcsl_axis::unit()
 
 //---------------------------------------------------------------------------
 // Return the axis `i'

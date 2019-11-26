@@ -9,10 +9,10 @@
 #include <algorithm>
 #include "msm_shape_mode_view.h"
 #include <msm/msm_ref_shape_model.h>
-#include <vsl/vsl_indent.h>
+#include "vsl/vsl_indent.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //=======================================================================

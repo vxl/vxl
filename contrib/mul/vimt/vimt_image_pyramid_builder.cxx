@@ -5,8 +5,8 @@
 // \brief Class to load and save images from named files
 // \author Tim Cootes
 
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_loader.h"
 
 //=======================================================================
 

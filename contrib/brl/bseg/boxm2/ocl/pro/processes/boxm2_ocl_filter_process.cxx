@@ -10,7 +10,7 @@
 // \date Mar 10, 2011
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -21,7 +21,7 @@
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <boct/boct_bit_tree.h>
 
 void boxm2_ocl_filter_process_globals::compile_filter_kernel(const bocl_device_sptr& device,bocl_kernel * refine_data_kernel)

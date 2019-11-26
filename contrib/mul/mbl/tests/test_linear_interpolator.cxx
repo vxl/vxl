@@ -1,11 +1,11 @@
 // This is mul/mbl/tests/test_linear_interpolator.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <mbl/mbl_linear_interpolator.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 double func(double x)
 {

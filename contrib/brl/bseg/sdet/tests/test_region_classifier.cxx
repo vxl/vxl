@@ -7,11 +7,11 @@
 #include <sdet/sdet_region_classifier.h>
 #include <sdet/sdet_region.h>
 #include <sdet/sdet_region_sptr.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
-#include <vgl/vgl_area.h>
-#include <testlib/testlib_test.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
+#include "vgl/vgl_area.h"
+#include "testlib/testlib_test.h"
 
 static void test_region_classifier(int argc, char * argv[])
 {

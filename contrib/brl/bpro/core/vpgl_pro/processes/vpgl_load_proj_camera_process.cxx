@@ -8,13 +8,13 @@
 
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_proj_camera.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_proj_camera.h"
 #include <vpgl/io/vpgl_io_proj_camera.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vul/vul_file.h>
+#include "vnl/vnl_matrix_fixed.h"
+#include "vul/vul_file.h"
 
 //: Constructor
 bool vpgl_load_proj_camera_process_cons(bprb_func_process& pro)

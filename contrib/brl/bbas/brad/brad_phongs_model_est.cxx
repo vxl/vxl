@@ -1,12 +1,12 @@
 #include <iostream>
 #include "brad_phongs_model_est.h"
 //
-#include <vnl/vnl_identity_3x3.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_least_squares_function.h>
+#include "vnl/vnl_identity_3x3.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_least_squares_function.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 brad_phongs_model::brad_phongs_model(float kd, float ks, float gamma, float normal_elev, float normal_azim)

@@ -10,7 +10,7 @@
 // \date Jan 28, 2013
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bstm/io/bstm_cache.h>
 #include <bstm/io/bstm_lru_cache.h>
@@ -20,8 +20,8 @@
 //brdb stuff
 #include <brdb/brdb_value.h>
 
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_intersection.h"
 
 #include <bstm/bstm_util.h>
 #include <bstm/cpp/algo/bstm_label_bb_function.h>

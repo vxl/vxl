@@ -2,14 +2,14 @@
 #include <iostream>
 #include <cmath>
 #include <algorithm>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <m23d/m23d_make_ortho_projection.h>
 #include <m23d/m23d_ortho_flexible_builder.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_vector.h>
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_vector.h"
 #include <m23d/m23d_rotation_matrix.h>
 
 void test_projection_matrix1(const vnl_matrix<double>& P)

@@ -2,12 +2,12 @@
   fsm
 */
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vbl/vbl_shared_pointer.h>
+#include "vbl/vbl_shared_pointer.h"
 
 #define print std::cout
 

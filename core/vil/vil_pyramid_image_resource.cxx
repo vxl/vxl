@@ -6,15 +6,15 @@
 // \file
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_property.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_blocked_image_facade.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
-#include <vil/vil_load.h>
+#include "vil/vil_property.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_blocked_image_resource.h"
+#include "vil/vil_blocked_image_facade.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_new.h"
+#include "vil/vil_load.h"
 
 
 vil_pyramid_image_resource::vil_pyramid_image_resource() = default;

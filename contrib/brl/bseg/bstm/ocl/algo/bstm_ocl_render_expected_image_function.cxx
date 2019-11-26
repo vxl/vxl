@@ -1,10 +1,10 @@
 #include "bstm_ocl_render_expected_image_function.h"
 //
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <bstm/ocl/bstm_ocl_util.h>
 #include <vsph/vsph_camera_bounds.h>
-#include <vgl/vgl_ray_3d.h>
+#include "vgl/vgl_ray_3d.h"
 #include <boct/boct_bit_tree.h>
 
 

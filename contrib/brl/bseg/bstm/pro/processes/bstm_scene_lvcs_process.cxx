@@ -9,7 +9,7 @@
 #include <bprb/bprb_func_process.h>
 
 #include <bstm/bstm_scene.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
+#include "vpgl/vpgl_lvcs_sptr.h"
 
 namespace bstm_scene_lvcs_process_globals
 {

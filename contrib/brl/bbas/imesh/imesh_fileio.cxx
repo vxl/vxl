@@ -8,10 +8,10 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
-#include <vgl/vgl_point_2d.h>
+#include "vul/vul_file.h"
+#include "vgl/vgl_point_2d.h"
 
 
 //: Read a mesh from a file, determine type from extension

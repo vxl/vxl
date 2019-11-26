@@ -7,13 +7,13 @@ extern "C" {
 #include <triangle.h>
 }
 #include <cassert>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_line_segment_2d.h>
-#include <vgl/vgl_box_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_line_segment_2d.h"
+#include "vgl/vgl_box_2d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #define GRID_SIZE 1000 // defined by the tolerance for equal vertices
 
 // a grid index to find coincident vertices

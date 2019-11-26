@@ -5,23 +5,23 @@
 #include <sstream>
 #include <imesh/imesh_fileio.h>
 #include <imesh/imesh_mesh.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_polygon.h>
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_polygon.h"
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 #include <vil/algo/vil_sobel_3x3.h>
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
 #include <vpgl/algo/vpgl_backproject_dem.h>
 #include <baml/baml_census.h>
 #include <baml/baml_warp.h>

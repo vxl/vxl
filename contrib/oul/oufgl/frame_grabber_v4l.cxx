@@ -24,7 +24,7 @@
 #include <cstdio>
 #include "frame_grabber_v4l.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 FrameGrabberV4lGrey::FrameGrabberV4lGrey(int width_, int height_,

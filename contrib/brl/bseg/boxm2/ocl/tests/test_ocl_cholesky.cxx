@@ -1,13 +1,13 @@
 #include <iostream>
 #include <vcl_where_root_dir.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_matrix.h"
 #include <vnl/algo/vnl_cholesky.h>
-#include <vnl/vnl_inverse.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_inverse.h"
+#include "vnl/vnl_random.h"
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>

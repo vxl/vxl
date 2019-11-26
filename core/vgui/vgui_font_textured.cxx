@@ -8,17 +8,17 @@
 // See vgui_font_textured.h for details.
 //=========================================================================
 
-#include <vgui/vgui_macro.h>
+#include "vgui/vgui_macro.h"
 
-#include <vil/vil_load.h>
-#include <vil/vil_copy.h>
-#include <vil/vil_plane.h>
-#include <vil/vil_stream_fstream.h>
-#include <vil/vil_stream_section.h>
+#include "vil/vil_load.h"
+#include "vil/vil_copy.h"
+#include "vil/vil_plane.h"
+#include "vil/vil_stream_fstream.h"
+#include "vil/vil_stream_section.h"
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //-------------------------------------------------------------------------

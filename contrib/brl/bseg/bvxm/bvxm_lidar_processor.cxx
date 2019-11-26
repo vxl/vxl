@@ -6,12 +6,12 @@
 #ifdef OPTION2 // currently FALSE
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #endif
 
-#include <vgl/vgl_box_2d.h>
-#include <vil/vil_image_view.h>
+#include "vgl/vgl_box_2d.h"
+#include "vil/vil_image_view.h"
 
 //: Return probability density of observing pixel values
 bvxm_voxel_slab<float>

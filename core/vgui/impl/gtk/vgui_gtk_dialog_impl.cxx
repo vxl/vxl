@@ -11,15 +11,15 @@
 #include "vgui_gtk_dialog_impl.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_sprintf.h>
+#include "vul/vul_sprintf.h"
 
-#include <vgui/vgui_gl.h>
+#include "vgui/vgui_gl.h"
 #include <vgui/impl/gtk/vgui_gtk_adaptor.h>
 #include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui/vgui_tableau_sptr.h"
 #include <gtk/gtkfilesel.h>
 
 static bool debug = false;

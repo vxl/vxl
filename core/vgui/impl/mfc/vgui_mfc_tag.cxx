@@ -4,8 +4,8 @@
 // \file
 // \author  awf@robots.ox.ac.uk
 
-#include <vgui/vgui_tag.h>
-#include <vul/vul_trace.h>
+#include "vgui/vgui_tag.h"
+#include "vul/vul_trace.h"
 
 vgui_tag(mfc) {
   vul_trace;

@@ -3,12 +3,12 @@
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vgl/vgl_plane_3d.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vgl/vgl_plane_3d.h"
 
 #include <bvxm/bvxm_voxel_world.h>
 

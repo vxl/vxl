@@ -14,11 +14,11 @@
 #include <bkml/bkml_write.h>
 #include <iostream>
 #include <utility>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 #include <volm/volm_category_io.h>
 #include <volm/volm_geo_index2.h>
 #include <volm/volm_io.h>
@@ -26,13 +26,13 @@
 #include <volm/volm_osm_object_line.h>
 #include <volm/volm_osm_objects.h>
 #include <volm/volm_tile.h>
-#include <vpgl/vpgl_utm.h>
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
+#include "vpgl/vpgl_utm.h"
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <vcl_where_root_dir.h>
 
 void error(std::string log_file, const std::string& msg)

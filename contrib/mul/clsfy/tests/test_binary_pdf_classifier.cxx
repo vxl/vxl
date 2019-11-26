@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <ios>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \brief Tests the clsfy_binary_pdf_classifier class
@@ -12,10 +12,10 @@
 // Test construction, IO etc.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
-#include <vsl/vsl_binary_loader.h>
+#include "vpl/vpl.h" // vpl_unlink()
+#include "vsl/vsl_binary_loader.h"
 
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <clsfy/clsfy_binary_pdf_classifier.h>

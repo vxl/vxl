@@ -9,26 +9,26 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_box_2d.h>
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_box_2d.h"
 
 #include <vgl/algo/vgl_h_matrix_2d.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
-#include <vpgl/vpgl_camera.h>
-#include <vul/vul_file.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_image_view.h"
+#include "vpgl/vpgl_camera.h"
+#include "vul/vul_file.h"
 
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
-#include <vgl/vgl_homg_point_2d.h>
+#include "vgl/vgl_homg_point_2d.h"
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 
 #include <vil/algo/vil_median.h>
 #include <vil/algo/vil_structuring_element.h>
-#include <vil/vil_math.h>
+#include "vil/vil_math.h"
 #include <vil/algo/vil_threshold.h>
 #include <vil/algo/vil_gauss_filter.h>
 

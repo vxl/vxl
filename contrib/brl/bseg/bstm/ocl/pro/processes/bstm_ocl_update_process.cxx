@@ -11,7 +11,7 @@
 // \date May 10, 2013
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
@@ -19,10 +19,10 @@
 #include <bstm/bstm_data_base.h>
 #include <bstm/ocl/bstm_ocl_util.h>
 #include <bstm/bstm_util.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
-#include <vil/vil_new.h>
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vil/vil_new.h"
+#include "vpl/vpl.h" // vpl_unlink()
 
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <bstm/ocl/algo/bstm_ocl_update.h>

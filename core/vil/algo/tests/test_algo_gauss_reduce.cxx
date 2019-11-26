@@ -1,13 +1,13 @@
 // This is core/vil/algo/tests/test_algo_gauss_reduce.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
-#include <vnl/vnl_math.h>
-#include <vil/vil_print.h>
-#include <vil/vil_image_view.h>
+#include "vxl_config.h" // for vxl_byte
+#include "vnl/vnl_math.h"
+#include "vil/vil_print.h"
+#include "vil/vil_image_view.h"
 #include <vil/algo/vil_gauss_reduce.h>
 
 template <class T>

@@ -26,25 +26,25 @@
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 
-#include <vul/vul_arg.h>
-#include <vul/vul_string.h>
-#include <vsl/vsl_quick_file.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_string.h"
+#include "vsl/vsl_quick_file.h"
+#include "vsl/vsl_binary_loader.h"
 
 #include <mfpf/mfpf_point_finder.h>
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 
 #include <msm/msm_points.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

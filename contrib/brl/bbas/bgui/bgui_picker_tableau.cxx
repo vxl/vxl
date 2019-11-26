@@ -10,9 +10,9 @@
 //   K.Y.McGaul - 26-APR-2001 - Initial version.
 // \endverbatim
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_projection_inspector.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_projection_inspector.h"
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polyline_2d.h>

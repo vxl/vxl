@@ -1,6 +1,6 @@
 #include <iostream>
 #include <ctime>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \verbatim
@@ -9,13 +9,13 @@
 // \endverbatim
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vgl/vgl_triangle_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_line_segment_3d.h>
+#include "vgl/vgl_triangle_3d.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_line_segment_3d.h"
 
 //==============================================================================
 inline void test_non_intersecting()

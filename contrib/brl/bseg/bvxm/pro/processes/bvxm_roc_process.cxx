@@ -9,16 +9,16 @@
 #include <bprb/bprb_func_process.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_image_view.h"
 
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
 
 
 bool bvxm_roc_process_cons(bprb_func_process& pro)

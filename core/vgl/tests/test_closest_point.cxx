@@ -2,27 +2,27 @@
 // Peter Vanroose, 5 June 2003
 #include <iostream>
 #include <cmath>
-#include <testlib/testlib_test.h>
-#include <vgl/vgl_closest_point.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_line_2d.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_homg_plane_3d.h>
-#include <vgl/vgl_homg_line_3d_2_points.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_line_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_line_3d_2_points.h>
-#include <vgl/vgl_line_segment_2d.h>
-#include <vgl/vgl_line_segment_3d.h>
-#include <vgl/vgl_infinite_line_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_sphere_3d.h>
+#include "testlib/testlib_test.h"
+#include "vgl/vgl_closest_point.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_homg_line_2d.h"
+#include "vgl/vgl_homg_point_3d.h"
+#include "vgl/vgl_homg_plane_3d.h"
+#include "vgl/vgl_homg_line_3d_2_points.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_line_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_line_3d_2_points.h"
+#include "vgl/vgl_line_segment_2d.h"
+#include "vgl/vgl_line_segment_3d.h"
+#include "vgl/vgl_infinite_line_3d.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_sphere_3d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_cubic_spline_3d.h>
+#include "vgl/vgl_cubic_spline_3d.h"
 
 static void testHomgLine2DClosestPoint()
 {

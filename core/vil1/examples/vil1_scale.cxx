@@ -5,12 +5,12 @@
 #include <cmath>
 #include <cstdlib>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_new.h>
-#include <vil1/vil1_load.h>
-#include <vil1/vil1_rgb.h>
+#include "vil1/vil1_new.h"
+#include "vil1/vil1_load.h"
+#include "vil1/vil1_rgb.h"
 
 void vil1_scale(const vil1_image& in, int newxsize, int newysize, const vil1_image& out);
 

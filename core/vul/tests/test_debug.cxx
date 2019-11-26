@@ -2,7 +2,7 @@
 #include <iostream>
 #include <new>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \brief Tests core dumping etc.
@@ -10,12 +10,12 @@
 //
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_debug.h>
-#include <vul/vul_file.h>
-#include <vul/vul_sprintf.h>
-#include <vpl/vpl.h>
+#include "vul/vul_debug.h"
+#include "vul/vul_file.h"
+#include "vul/vul_sprintf.h"
+#include "vpl/vpl.h"
 
 //=======================================================================
 static void test_debug()

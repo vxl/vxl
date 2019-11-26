@@ -15,10 +15,10 @@
 //   26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
 // \endverbatim
 
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui_event.h"
+#include "vgui_menu.h"
+#include "vgui_tableau.h"
+#include "vgui_tableau_sptr.h"
 class vgui_event_server_interpose_tableau;
 
 //: Procedural event grabbing from a tableau

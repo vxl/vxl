@@ -1,10 +1,10 @@
 #include <iostream>
 #include <fstream>
 #include "../boxm2_vecf_estimate_camera_from_canthus.h"
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 int main(int argc , char** argv){
   boxm2_vecf_estimate_camera_from_canthus estimator;

@@ -24,25 +24,25 @@
 //
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vul/vul_file.h>
-#include <vul/vul_awk.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_intersection.h>
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vul/vul_file.h"
+#include "vul/vul_awk.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_intersection.h"
 #include <vpgl/algo/vpgl_rational_adjust_onept.h>
-#include <vul/vul_file_iterator.h>
+#include "vul/vul_file_iterator.h"
 #include <volm/volm_satellite_resources.h>
 #include <volm/volm_satellite_resources_sptr.h>
 #include <volm/volm_io_tools.h>
-#include <vil/vil_load.h>
+#include "vil/vil_load.h"
 #include <vil/file_formats/vil_nitf2_image.h>
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_distance.h"
 #include <vpgl/algo/vpgl_rational_adjust_multipt.h>
 
 namespace volm_correct_rational_cameras_ransac_with_initial_process_globals

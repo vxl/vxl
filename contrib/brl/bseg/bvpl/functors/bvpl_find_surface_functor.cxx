@@ -6,7 +6,7 @@
 #include "bvpl_find_surface_functor.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 // Default constructor
 bvpl_find_surface_functor::bvpl_find_surface_functor()

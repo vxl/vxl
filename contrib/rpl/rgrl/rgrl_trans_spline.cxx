@@ -10,7 +10,7 @@
 #include <rgrl/rgrl_util.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 rgrl_trans_spline::

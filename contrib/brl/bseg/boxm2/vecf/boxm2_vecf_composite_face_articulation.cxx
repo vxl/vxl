@@ -1,5 +1,5 @@
 #include "boxm2_vecf_composite_face_articulation.h"
-#include <vgui/vgui_key.h>
+#include "vgui/vgui_key.h"
 
 
  bool boxm2_vecf_composite_face_articulation::handle(vgui_event const &e){

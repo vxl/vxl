@@ -11,7 +11,7 @@
 //   1.1     |2003/01/08| Peter Vanroose           |Now using testlib macros
 // \endverbatim
 //*****************************************************************************
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vsol/vsol_group_3d.h>
 #include <vsol/vsol_group_3d_sptr.h>
 #include <vsol/vsol_point_3d.h>

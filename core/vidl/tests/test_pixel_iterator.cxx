@@ -2,13 +2,13 @@
 #include <iostream>
 #include <memory>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
-#include <vidl/vidl_frame.h>
-#include <vidl/vidl_frame_sptr.h>
-#include <vidl/vidl_pixel_iterator.h>
-#include <vidl/vidl_pixel_iterator.hxx>
+#include "testlib/testlib_test.h"
+#include "vidl/vidl_frame.h"
+#include "vidl/vidl_frame_sptr.h"
+#include "vidl/vidl_pixel_iterator.h"
+#include "vidl/vidl_pixel_iterator.hxx"
 
 
 static void test_pixel_iterator()

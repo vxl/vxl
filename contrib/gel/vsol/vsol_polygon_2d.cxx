@@ -4,13 +4,13 @@
 #include "vsol_polygon_2d.h"
 //:
 // \file
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_vector_io.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vsol/vsol_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vgl/vgl_vector_2d.h"
 
 //***************************************************************************
 // Initialization

@@ -25,30 +25,30 @@
 
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_load.h"
 #include <vil/file_formats/vil_nitf2_image.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_image_view_base.h"
 
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
 
 #include <boxm2/boxm2_scene.h>
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_point_3d.h"
 
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_box_2d.h>
 
 #include <brip/brip_roi.h>
 
-#include <vpgl/vpgl_lvcs_sptr.h>
+#include "vpgl/vpgl_lvcs_sptr.h"
 
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 

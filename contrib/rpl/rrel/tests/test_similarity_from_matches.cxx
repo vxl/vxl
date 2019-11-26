@@ -1,12 +1,12 @@
 #include <iostream>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <testlib/testlib_test.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "testlib/testlib_test.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_vector_fixed.h"
 
 #include "similarity_from_matches.h"
 

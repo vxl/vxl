@@ -5,7 +5,7 @@
 // \author Ozge C. Ozcanli (Brown)
 // \date   April 22, 2009
 //
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bsta/vis/bsta_svg_tools.h>
 
 static void test_vis_svg()

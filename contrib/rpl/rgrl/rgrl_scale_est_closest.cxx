@@ -6,14 +6,14 @@
 #include "rgrl_scale_est_closest.h"
 
 #include <rrel/rrel_objective.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 #include "rgrl_scale.h"
 #include "rgrl_match_set.h"
 #include "rgrl_util.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

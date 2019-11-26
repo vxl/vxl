@@ -9,7 +9,7 @@
 #include "volm_candidate_region_parser.h"
 //
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 template <typename T>

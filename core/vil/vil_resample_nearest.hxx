@@ -13,7 +13,7 @@
 // the same change.
 
 #include "vil_resample_nearest.h"
-#include <vil/vil_nearest_interp.h>
+#include "vil_nearest_interp.h"
 
 
 #ifdef _MSC_VER

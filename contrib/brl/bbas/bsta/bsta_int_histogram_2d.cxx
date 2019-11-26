@@ -6,7 +6,7 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 // for gausian parzan window filter
 #include "bsta_gauss.h"

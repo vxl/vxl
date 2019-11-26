@@ -3,25 +3,25 @@
 #include "bwm_utils.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil/vil_config.h>
 
-#include <vgui/vgui_dialog.h>
+#include "vgui/vgui_dialog.h"
 #include <bgui/bgui_image_utils.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_property.h>
-#include <vil/vil_pyramid_image_resource.h>
+#include "vil/vil_load.h"
+#include "vil/vil_property.h"
+#include "vil/vil_pyramid_image_resource.h"
 #include <vil/file_formats/vil_nitf2_image.h>
 #if HAS_J2K
 #include <vil/file_formats/vil_j2k_nitf2_pyramid_image_resource.h>
 #include <vil/file_formats/vil_j2k_pyramid_image_resource.h>
 #endif //HAS_J2K
 
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #if 0 // ony used inside commented-out section
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 #endif
 
 std::string bwm_utils::select_file()

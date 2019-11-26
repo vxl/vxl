@@ -7,7 +7,7 @@
 // \date   April 21, 2009
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bsvg_document::bsvg_document(float w, float h) : w_(w), h_(h)

@@ -8,10 +8,10 @@
 // \date   Sept 2003
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 static double g( int a1, int a2, int m );
 static double g_prime( int a1, int a2, int m );

@@ -1,9 +1,9 @@
 #include <vector>
 #include <iostream>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include "boxm2_feature_vector.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 std::ostream& operator<<(std::ostream &s, boxm2_feature_vector& f)

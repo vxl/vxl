@@ -5,17 +5,17 @@
 //:
 // \file
 
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_lineseg_test.h>
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_lineseg_test.h"
 #include <vgl/algo/vgl_fit_lines_2d.h>
-#include <vgl/vgl_area.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_line_2d.h>
-#include <vgl/vgl_distance.h>
-#include <vil/vil_bilin_interp.h>
+#include "vgl/vgl_area.h"
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_line_2d.h"
+#include "vgl/vgl_distance.h"
+#include "vil/vil_bilin_interp.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: find the next trace point and direction

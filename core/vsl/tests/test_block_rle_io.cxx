@@ -3,16 +3,16 @@
 #include <vector>
 #include <algorithm>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_block_binary_rle.h>
-#include <vsl/vsl_block_binary.h>
-#include <vsl/vsl_vector_io.h>
-#include <vsl/vsl_deque_io.h>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
-#include <vpl/vpl.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_block_binary_rle.h"
+#include "vsl/vsl_block_binary.h"
+#include "vsl/vsl_vector_io.h"
+#include "vsl/vsl_deque_io.h"
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
+#include "vpl/vpl.h"
 
 void test_block_rle_io()
 {

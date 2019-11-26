@@ -3,9 +3,9 @@
 */
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_expand_path.h>
+#include "vul/vul_expand_path.h"
 
 int main(int argc, char **argv)
 {

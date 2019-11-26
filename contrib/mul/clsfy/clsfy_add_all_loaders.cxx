@@ -1,6 +1,6 @@
 
 #include "clsfy_add_all_loaders.h"
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 #include <mbl/mbl_cloneables_factory.h>
 #include <clsfy/clsfy_classifier_base.h>
 #include <clsfy/clsfy_builder_base.h>

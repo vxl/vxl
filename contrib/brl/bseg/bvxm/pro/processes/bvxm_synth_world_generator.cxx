@@ -2,9 +2,9 @@
 #include <sstream>
 #include "bvxm_synth_world_generator.h"
 //
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

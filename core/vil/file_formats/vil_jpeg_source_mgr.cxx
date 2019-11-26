@@ -12,9 +12,9 @@
 #include "vil_jpeg_source_mgr.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_stream.h>
+#include "vil/vil_stream.h"
 
 #define STATIC /*static*/
 

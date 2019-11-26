@@ -7,11 +7,11 @@
 #include "vgui_glut_popup_impl.h"
 #include "vgui_glut_adaptor.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_command.h>
-#include <vgui/vgui_glut.h>
+#include "vgui/vgui_macro.h"
+#include "vgui/vgui_command.h"
+#include "vgui/vgui_glut.h"
 
 vgui_glut_popup_impl::vgui_glut_popup_impl()
 {

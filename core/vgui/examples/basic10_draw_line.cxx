@@ -2,14 +2,14 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgui/vgui.h>
-#include <vgui/vgui_projection_inspector.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_projection_inspector.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 
 //----------------------------------------------------------------------------
 struct example_tableau : public vgui_easy2D_tableau

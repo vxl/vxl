@@ -8,7 +8,7 @@
 // \date   Sep 2003
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
@@ -20,7 +20,7 @@
 #include "rgrl_view.h"
 #include "rgrl_util.h"
 
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 
 // Random number generator. This will be shared by all ran_sam instances.
 static vnl_random global_generator_;

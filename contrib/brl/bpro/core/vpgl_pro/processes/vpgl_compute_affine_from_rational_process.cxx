@@ -15,9 +15,9 @@
 #include <brdb/brdb_value.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
 #include <vpgl/algo/vpgl_affine_rectification.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vnl/vnl_random.h>
-#include <vgl/vgl_box_3d.h>
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vnl/vnl_random.h"
+#include "vgl/vgl_box_3d.h"
 
 bool vpgl_compute_affine_from_rat_process_cons(bprb_func_process& pro)
 {

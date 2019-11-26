@@ -5,7 +5,7 @@
 // \brief  See vgui_find.h for a description of this file.
 
 #include "vgui_find.h"
-#include <vgui/vgui_tableau.h>
+#include "vgui/vgui_tableau.h"
 
 // Does a depth-first search for the first tableau whose type_name()
 // method returns the given std::string. Returns 0 if no tableau is found.

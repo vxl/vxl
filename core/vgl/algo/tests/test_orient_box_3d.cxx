@@ -4,13 +4,13 @@
 #include <iostream>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_quaternion.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_math.h> // for pi
-#include <testlib/testlib_test.h>
-#include <vgl/vgl_box_3d.h>
+#include "vnl/vnl_quaternion.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_math.h" // for pi
+#include "testlib/testlib_test.h"
+#include "vgl/vgl_box_3d.h"
 #include <vgl/algo/vgl_orient_box_3d.h>
 
 

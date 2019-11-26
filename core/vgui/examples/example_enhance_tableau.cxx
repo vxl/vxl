@@ -8,10 +8,10 @@
 // If only one image tableau is given then that image will be magnified in a
 // region around the mouse pointer.
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_enhance_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_enhance_tableau.h"
 
 int main(int argc, char ** argv)
 {

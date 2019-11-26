@@ -5,9 +5,9 @@
 // \author Ian Scott, Kevin de Souza
 // \note Adapted from vimt3d_save
 
-#include <vil/vil_image_resource.h>
-#include <vil/vil_new.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_new.h"
+#include "vil/vil_save.h"
 #include <vimt/vimt_transform_2d.h>
 #include <vimt/vimt_image_2d.h>
 #include <vimt/vimt_vil_v2i.h>

@@ -17,7 +17,7 @@
 //   14-OCT-2003 P.Vanroose - Added implementation for 5 missing tableau virtuals
 // \endverbatim
 
-#include <vgui/vgui_tableau.h>
+#include "vgui_tableau.h"
 #include "vgui_function_tableau_sptr.h"
 #include "dll.h"
 

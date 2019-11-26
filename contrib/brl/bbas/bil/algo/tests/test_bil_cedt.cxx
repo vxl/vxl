@@ -2,19 +2,19 @@
 #include <cmath>
 #include <iostream>
 #include <algorithm>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
 #include <bil/algo/bil_cedt.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_print.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_print.h"
 
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_math.h"
 
 void bil_cedt_test(vil_image_view<unsigned char> &im, bool print);
 vil_image_view<float> bil_cedt_brute_force(vil_image_view<unsigned char> &im);

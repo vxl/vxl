@@ -6,10 +6,10 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_math.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_math.h"
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
 #include <sdet/sdet_graph_img_seg.h>
 
 bool sdet_segment_image_process_cons(bprb_func_process& pro)

@@ -4,13 +4,13 @@
 // \author Tim Cootes
 
 #include "vil_corners.h"
-#include <vil/vil_fill.h>
+#include "vil/vil_fill.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil/algo/vil_gauss_filter.h>
-#include <vil/vil_math.h>
+#include "vil/vil_math.h"
 
 //: Compute Forstner/Harris corner strength function given gradient images.
 //  grad_i and grad_j are assumed to be the i and j gradient images (single

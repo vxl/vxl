@@ -11,7 +11,7 @@
 //   031201 IMS Convert to vil2. Used templates to simplify interface and code.
 // \endverbatim
 
-#include <vil/vil_fwd.h>
+#include "vil_fwd.h"
 #include <cassert>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>

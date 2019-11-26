@@ -5,7 +5,7 @@
 // \author Ozge C. Ozcanli (Brown)
 // \date   April 21, 2009
 //
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bxml/bsvg/bsvg_document.h>
 #include <bxml/bsvg/bsvg_element.h>
 #include <bxml/bsvg/bsvg_plot.h>

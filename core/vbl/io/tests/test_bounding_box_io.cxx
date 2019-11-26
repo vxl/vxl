@@ -1,14 +1,14 @@
 // This is core/vbl/io/tests/test_bounding_box_io.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vbl/vbl_bounding_box.h>
+#include "vbl/vbl_bounding_box.h"
 #include <vbl/io/vbl_io_bounding_box.h>
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_indent.h>
-#include <testlib/testlib_test.h>
-#include <vpl/vpl.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_indent.h"
+#include "testlib/testlib_test.h"
+#include "vpl/vpl.h"
 
 void test_bounding_box_double_io()
 {

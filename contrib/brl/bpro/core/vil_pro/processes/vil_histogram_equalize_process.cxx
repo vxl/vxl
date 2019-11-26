@@ -4,7 +4,7 @@
 // \file  -- only works for byte images for now
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <vil/algo/vil_histogram_equalise.h>
 
 //: Constructor

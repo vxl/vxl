@@ -1,5 +1,5 @@
 // This is brl/bbas/bwm/reg/tests/test_matcher.cxx
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bwm/reg/bwm_reg_matcher.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>

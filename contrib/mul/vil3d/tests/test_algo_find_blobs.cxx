@@ -3,13 +3,13 @@
 #include <iostream>
 #include <map>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vil3d/algo/vil3d_find_blobs.h>
 #include <vil3d/vil3d_crop.h>
 #include <vil3d/vil3d_print.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 
 
 //========================================================================

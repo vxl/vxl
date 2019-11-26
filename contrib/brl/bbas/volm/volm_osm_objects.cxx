@@ -3,10 +3,10 @@
 #include "volm_osm_objects.h"
 //:
 // \file
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #include <bkml/bkml_write.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // create volm_osm_objects from open street map xml file

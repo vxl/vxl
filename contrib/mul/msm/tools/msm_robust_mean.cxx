@@ -16,17 +16,17 @@
 #include <mbl/mbl_parse_int_list.h>
 #include <mbl/mbl_parse_string_list.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
-#include <vul/vul_arg.h>
-#include <vul/vul_string.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_string.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_quick_file.h>
+#include "vsl/vsl_quick_file.h"
 
 #include <msm/msm_points.h>
 #include <mbl/mbl_stats_nd.h>
 #include <mbl/mbl_sample_stats_1d.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 /*
 Points from different annotators are assumed to have the same filenames, but

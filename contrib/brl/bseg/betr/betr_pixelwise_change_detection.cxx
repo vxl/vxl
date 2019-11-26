@@ -2,8 +2,8 @@
 #include <vil_image_view.h>
 #include <vil_save.h>
 #include <vil_convert.h>
-#include <vil/vil_new.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_new.h"
+#include "vil/vil_image_view.h"
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
 #include <vsol/vsol_point_2d.h>

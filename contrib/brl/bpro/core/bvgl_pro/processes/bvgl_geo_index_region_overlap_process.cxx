@@ -5,9 +5,9 @@
 //:
 // \file
 // process to generate overlap of leaves to a given region
-#include <vul/vul_file.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_area.h>
+#include "vul/vul_file.h"
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_area.h"
 #include <bvgl/algo/bvgl_2d_geo_index.h>
 #include <bvgl/algo/bvgl_2d_geo_index_sptr.h>
 #include <vcl_compiler.h>

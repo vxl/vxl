@@ -1,18 +1,18 @@
 // Test vgl_rotate_3d
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_homg_line_3d_2_points.h>
-#include <vgl/vgl_line_3d_2_points.h>
-#include <vgl/vgl_line_segment_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_rational.h>
-#include <vnl/vnl_rational_traits.h>
-#include <vnl/vnl_math.h> // for sqrt2 and pi/2
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_homg_line_3d_2_points.h"
+#include "vgl/vgl_line_3d_2_points.h"
+#include "vgl/vgl_line_segment_3d.h"
+#include "vgl/vgl_distance.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_rational.h"
+#include "vnl/vnl_rational_traits.h"
+#include "vnl/vnl_math.h" // for sqrt2 and pi/2
 
 static const double epsilon = 1e-11;
 

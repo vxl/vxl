@@ -3,17 +3,17 @@
 #include <fstream>
 #include <iomanip>
 
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_cross.h>
-#include <vnl/vnl_det.h>
-#include <vnl/vnl_inverse.h>
-#include <vgl/vgl_homg_point_2d.h>
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_cross.h"
+#include "vnl/vnl_det.h"
+#include "vnl/vnl_inverse.h"
+#include "vgl/vgl_homg_point_2d.h"
 #include <vgl/algo/vgl_intersection.h>
-#include <vgl/vgl_ray_3d.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include "vgl/vgl_ray_3d.h"
+#include "vil/vil_save.h"
+#include "vil/vil_image_view.h"
+#include "vpgl/vpgl_local_rational_camera.h"
 
 #include "acal_f_utils.h"
 

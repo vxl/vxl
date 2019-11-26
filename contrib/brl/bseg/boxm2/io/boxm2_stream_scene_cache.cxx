@@ -4,9 +4,9 @@
 #include "boxm2_stream_scene_cache.h"
 //:
 // \file
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_box_3d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 boxm2_stream_scene_cache::boxm2_stream_scene_cache(const boxm2_scene_sptr& scene,

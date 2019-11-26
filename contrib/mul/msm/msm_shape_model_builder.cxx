@@ -6,12 +6,12 @@
 // \brief Object to build a msm_shape_model
 // \author Tim Cootes
 
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_io.h"
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mcal/mcal_pca.h>
@@ -19,7 +19,7 @@
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_parse_block.h>
-#include <vul/vul_string.h>
+#include "vul/vul_string.h"
 
 //=======================================================================
 // Dflt ctor

@@ -6,9 +6,9 @@
 #include <vdgl/vdgl_fit_line.h>
 #include <vsol/vsol_line_2d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 static void test_vdgl()
 {

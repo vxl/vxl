@@ -1,12 +1,12 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgl/vgl_triangle_scan_iterator.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vgl/vgl_triangle_scan_iterator.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
 
 static void test_triangle_scan_iterator()
 {

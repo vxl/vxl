@@ -9,8 +9,8 @@
 // \author Tim Cootes
 
 #include <mfpf/mfpf_hog_box_finder.h>
-#include <vsl/vsl_binary_loader.h>
-#include <vul/vul_string.h>
+#include "vsl/vsl_binary_loader.h"
+#include "vul/vul_string.h"
 #include <cassert>
 
 #include <mbl/mbl_parse_block.h>
@@ -19,12 +19,12 @@
 #include <mbl/mbl_exception.h>
 #endif
 
-#include <vil/vil_resample_bilin.h>
-#include <vil/vil_image_view.h>
-#include <vsl/vsl_vector_io.h>
-#include <vsl/vsl_indent.h>
+#include "vil/vil_resample_bilin.h"
+#include "vil/vil_image_view.h"
+#include "vsl/vsl_vector_io.h"
+#include "vsl/vsl_indent.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <mipa/mipa_orientation_histogram.h>

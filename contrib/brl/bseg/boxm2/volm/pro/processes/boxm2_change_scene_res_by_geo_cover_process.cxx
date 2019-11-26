@@ -9,13 +9,13 @@
 // \author Yi Dong
 // \date August 17, 2013
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_load.h"
 #include <volm/volm_tile.h>
 #include <volm/volm_category_io.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_intersection.h"
 #include <bseg/boxm2/boxm2_block_metadata.h>
 #include <bseg/boxm2/boxm2_scene.h>
 

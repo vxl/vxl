@@ -4,8 +4,8 @@
 
 #include<bbas_pro/bbas_1d_array_float.h>
 
-#include<vil/vil_image_view.h>
-#include<vil/vil_image_view_base.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_view_base.h"
 
 namespace vil_set_float_image_pixel_process_globals
 {

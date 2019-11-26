@@ -6,10 +6,10 @@
 #include <iostream>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_arg.h>
-#include <vil1/vil1_load.h>
+#include "vul/vul_arg.h"
+#include "vil1/vil1_load.h"
 
 #include <osl/osl_easy_canny.h>
 #include <osl/osl_save_topology.h>

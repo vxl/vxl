@@ -1,13 +1,13 @@
 #include <iostream>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bil/algo/bil_scale_image.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
 
 
 static void save_and_display(const vil_image_view<float>& img,

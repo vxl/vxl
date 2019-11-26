@@ -1,6 +1,6 @@
 #include "boxm2_vecf_skull_params.h"
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_ray_3d.h>
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_ray_3d.h"
 
 void boxm2_vecf_skull_params::compute_auxillary_pts(){
   // midpoint of line joining the left and right canthus

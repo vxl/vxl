@@ -12,10 +12,10 @@
 #include <vepl/vepl_gradient_mag.h>
 
 // for I/O:
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 int

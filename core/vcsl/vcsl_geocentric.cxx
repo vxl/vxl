@@ -1,7 +1,7 @@
 // This is core/vcsl/vcsl_geocentric.cxx
 #include "vcsl_geocentric.h"
-#include <vcsl/vcsl_axis.h>
-#include <vcsl/vcsl_angle.h>
+#include "vcsl/vcsl_axis.h"
+#include "vcsl/vcsl_angle.h"
 
 //---------------------------------------------------------------------------
 // Default constructor.

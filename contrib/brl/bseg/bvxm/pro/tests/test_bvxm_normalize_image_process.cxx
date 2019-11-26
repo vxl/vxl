@@ -6,13 +6,13 @@
 //
 #include <string>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/pro/processes/bvxm_normalization_util.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brdb/brdb_value.h>
@@ -23,15 +23,15 @@
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
 
-#include <vil/vil_save.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vil/vil_save.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 
 #include <brip/brip_vil_float_ops.h>
-#include <vul/vul_file.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vul/vul_file.h"
+#include "vpgl/vpgl_perspective_camera.h"
 
 
 //: create a synthetic slab to fill layers with

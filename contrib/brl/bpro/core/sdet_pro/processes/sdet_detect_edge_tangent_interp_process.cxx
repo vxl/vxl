@@ -10,8 +10,8 @@
 #include <brdb/brdb_value.h>
 #include <sdet/sdet_detector.h>
 #include <sdet/sdet_fit_lines.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
 
 //: initialize input and output types
 bool sdet_detect_edge_tangent_interp_process_cons(bprb_func_process& pro)

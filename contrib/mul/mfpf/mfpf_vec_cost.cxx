@@ -4,8 +4,8 @@
 // \brief Cost functions to evaluate vector of pixel samples
 // \author Tim Cootes
 
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_loader.h"
 
 //=======================================================================
 // Dflt ctor

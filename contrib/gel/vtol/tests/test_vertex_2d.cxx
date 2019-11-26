@@ -2,11 +2,11 @@
 #include <iostream>
 #include <algorithm>
 #include <list>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_double_2.h>
+#include "vnl/vnl_double_2.h"
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vsol/vsol_point_2d.h>

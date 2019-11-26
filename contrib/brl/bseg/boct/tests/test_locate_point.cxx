@@ -1,8 +1,8 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <boct/boct_tree.h>
 #include <boct/boct_test_util.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 
 boct_tree_cell<short,vgl_point_3d<double> >* brute_force_locate_point(std::vector<boct_tree_cell<short,vgl_point_3d<double> >*> leafcells,
                                                                       vgl_point_3d<double> p,

@@ -11,15 +11,15 @@
 #include <mfpf/mfpf_prune_overlaps.h>
 
 #include <vimt/vimt_image_pyramid.h>
-#include <vil/vil_save.h>
+#include "vil/vil_save.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_loader.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_loader.h"
+#include "vsl/vsl_vector_io.h"
 
 //=======================================================================
 // Dflt ctor

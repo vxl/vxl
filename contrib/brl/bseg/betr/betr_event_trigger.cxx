@@ -1,7 +1,7 @@
 #include <sstream>
 #include <utility>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include "betr_event_trigger.h"
 #include "betr_geo_object_3d.h"
@@ -15,19 +15,19 @@
 #include <bmsh3d/bmsh3d_mesh.h>
 #include <bmsh3d/bmsh3d_mesh_mc.h>
 #include <bmsh3d/algo/bmsh3d_fileio.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vpgl/vpgl_lvcs.h"
 #include <vsol/vsol_spatial_object_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_vector_3d.h"
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include "betr_edgel_change_detection.h"
 #include "betr_edgel_reference_cd.h"
 #include "betr_pixelwise_change_detection.h"
 #include "betr_algorithm.h"
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_vector_io.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_local_rational_camera.h"
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_vector_io.h"
 #include <bil/bil_convert_to_grey.h>
 unsigned betr_event_trigger::process_counter_ = 0;
 

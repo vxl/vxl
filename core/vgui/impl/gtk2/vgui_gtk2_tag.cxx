@@ -2,8 +2,8 @@
   fsm
 */
 #include "vgui_gtk2.h"
-#include <vgui/vgui_tag.h>
-#include <vul/vul_trace.h>
+#include "vgui/vgui_tag.h"
+#include "vul/vul_trace.h"
 
 vgui_tag(gtk2) {
   vul_trace;

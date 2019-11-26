@@ -1,19 +1,19 @@
 #include <iostream>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <vsph/vsph_view_sphere.h>
 #include <vsph/vsph_sph_point_2d.h>
 #include <vsph/vsph_sph_box_2d.h>
 #include <vsph/vsph_utils.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vul/vul_timer.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_intersection.h>
+#include "vnl/vnl_math.h"
+#include "vul/vul_timer.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_intersection.h"
 
 static void test_sph_geom()
 {

@@ -12,12 +12,12 @@
 #include "vil_memory_image.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_uint_32 etc.
-#include <vil/vil_image_view.h>
-#include <vil/vil_copy.h>
-#include <vil/vil_pixel_format.h>
+#include "vxl_config.h" // for vxl_uint_32 etc.
+#include "vil/vil_image_view.h"
+#include "vil/vil_copy.h"
+#include "vil/vil_pixel_format.h"
 
 class vil_image_view_base;
 

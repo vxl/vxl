@@ -6,9 +6,9 @@
 #include <string>
 #include "vil1_image_proxy.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil1/vil1_load.h>
+#include "vil1/vil1_load.h"
 
 struct vil1_image_proxy_impl : public vil1_image_impl
 {

@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_image_2d_of );
 DECLARE( test_sample_profile_bilin );

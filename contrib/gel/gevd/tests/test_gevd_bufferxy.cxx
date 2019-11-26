@@ -4,13 +4,13 @@
 #include <iostream>
 #include <cstring>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h>
-#include <testlib/testlib_test.h>
+#include "vpl/vpl.h"
+#include "testlib/testlib_test.h"
 #include <gevd/gevd_bufferxy.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_new.h"
 
 void
 test_gevd_bufferxy()

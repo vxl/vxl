@@ -21,8 +21,8 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vbl/vbl_disjoint_sets.h>
-#include <vbl/vbl_edge.h>
+#include "vbl_disjoint_sets.h"
+#include "vbl_edge.h"
 #include <vil/vil_image_view.h>
 
 //:

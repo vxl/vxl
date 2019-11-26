@@ -1,12 +1,12 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_proj_camera.h>
+#include "vpgl/vpgl_proj_camera.h"
 #include <vpgl/io/vpgl_io_proj_camera.h>
-#include <vpl/vpl.h>
-#include <vsl/vsl_binary_io.h>
+#include "vpl/vpl.h"
+#include "vsl/vsl_binary_io.h"
 
 static void test_proj_camera_io()
 {

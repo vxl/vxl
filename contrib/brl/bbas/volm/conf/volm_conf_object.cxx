@@ -5,10 +5,10 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vnl/vnl_math.h"
+#include "vpgl/vpgl_lvcs.h"
 #include <bkml/bkml_write.h>
 #include <volm/volm_category_io.h>
 

@@ -6,13 +6,13 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_generic_camera.h>
-#include <vsl/vsl_binary_io.h>
-#include <vil/vil_image_view.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_generic_camera.h"
+#include "vsl/vsl_binary_io.h"
+#include "vil/vil_image_view.h"
 
 namespace vpgl_generate_xyz_from_depth_image_process_globals
 {

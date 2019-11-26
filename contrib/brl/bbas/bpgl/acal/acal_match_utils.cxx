@@ -1,7 +1,7 @@
 #include <cmath>
 
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_save.h"
+#include "vil/vil_image_view.h"
 #include <vil/algo/vil_sobel_3x3.h>
 
 #include "acal_match_utils.h"

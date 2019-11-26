@@ -4,18 +4,18 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_load.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_pyramid.h>
+#include "vil1/vil1_load.h"
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_pyramid.h"
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_image_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_image_tableau.h"
 
 struct example_pyramid_tableau : public vgui_tableau
 {

@@ -6,12 +6,12 @@
 //
 #include <string>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvxm/pro/processes/bvxm_create_local_rpc_process.h>
 #include <bvxm/bvxm_voxel_world.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brdb/brdb_value.h>
@@ -22,14 +22,14 @@
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
 
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_lvcs.h"
 
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 static void test_bvxm_create_local_rpc_process()
 {

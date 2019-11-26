@@ -1,11 +1,11 @@
 #include <cmath>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_clip.h>
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_clip.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 template <class T> inline static bool is_vertex(vgl_polygon<T> const& poly, T x, T y)
 {

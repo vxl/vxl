@@ -8,15 +8,15 @@
 #include <cstdlib>
 #include "osl_canny_smooth.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h>
-#include <vil1/vil1_rgb.h>
-#include <vil1/vil1_pixel.h>
-#include <vil1/vil1_memory_image_of.h>
+#include "vxl_config.h"
+#include "vil1/vil1_rgb.h"
+#include "vil1/vil1_pixel.h"
+#include "vil1/vil1_memory_image_of.h"
 
 #if 0
-#include <vil1/vil1_save.h>
+#include "vil1/vil1_save.h"
 void debug_save(float const * const *image_out, int w, int h, char const *file) {
   vil1_memory_image_of<unsigned char> debug(w, h);
   for (unsigned i=0; i<h; ++i)

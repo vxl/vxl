@@ -2,18 +2,18 @@
 #include <iostream>
 #include <cstdlib>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_distance.h>
+#include "vpl/vpl.h" // vpl_unlink()
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_matrix.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_distance.h"
 #include <mbl/mbl_test.h>
 #include <vimt3d/vimt3d_transform_3d.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifndef LEAVE_IMAGES_BEHIND
 #define LEAVE_IMAGES_BEHIND 0

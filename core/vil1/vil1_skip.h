@@ -6,7 +6,7 @@
 // \brief a function
 // \author fsm
 
-#include <vil1/vil1_image.h>
+#include "vil1_image.h"
 
 vil1_image vil1_skip(vil1_image const &, unsigned, unsigned);
 

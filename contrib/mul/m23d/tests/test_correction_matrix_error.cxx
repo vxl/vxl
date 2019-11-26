@@ -1,13 +1,13 @@
 // This is mul/m23d/tests/test_correction_matrix_error.cxx
 #include <iostream>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <m23d/m23d_correction_matrix_error.h>
 #include <m23d/m23d_make_ortho_projection.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_random.h"
 #include <m23d/m23d_rotation_matrix.h>
 #include <m23d/m23d_set_q_constraint.h>
 #include <vnl/algo/vnl_svd.h>

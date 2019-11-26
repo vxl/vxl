@@ -205,6 +205,6 @@ class vgui_range_map_params : public vbl_ref_count
   }
 };
 
-#include <vgui/vgui_range_map_params_sptr.h>
+#include "vgui_range_map_params_sptr.h"
 
 #endif // vgui_range_map_params_h_

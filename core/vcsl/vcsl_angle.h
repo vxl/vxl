@@ -11,9 +11,9 @@
 //   2004/09/17 Peter Vanroose  do not pass vcsl_unit objects; use vcsl_unit_sptr instead
 // \endverbatim
 
-#include <vcsl/vcsl_dimension.h>
-#include <vcsl/vcsl_angle_sptr.h>
-#include <vcsl/vcsl_unit_sptr.h>
+#include "vcsl_dimension.h"
+#include "vcsl_angle_sptr.h"
+#include "vcsl_unit_sptr.h"
 
 //: Angle dimension
 class vcsl_angle

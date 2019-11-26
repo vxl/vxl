@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 DECLARE( test_read );
 DECLARE( test_write );
 

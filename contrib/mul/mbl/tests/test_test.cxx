@@ -5,13 +5,13 @@
 #include <cstring>
 #include <algorithm>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
-#include <vpl/vpl.h>
-#include <vsl/vsl_binary_io.h>
+#include "vul/vul_file.h"
+#include "vpl/vpl.h"
+#include "vsl/vsl_binary_io.h"
 #include <mbl/mbl_test.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 void test_test()
 {

@@ -13,14 +13,14 @@
 #endif
 
 #include <cassert>
-#include <vgui/vgui_message.h>
+#include "vgui/vgui_message.h"
 #include "bitmaps/prev.xpm"
 #include "bitmaps/play.xpm"
 #include "bitmaps/pause.xpm"
 #include "bitmaps/next.xpm"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

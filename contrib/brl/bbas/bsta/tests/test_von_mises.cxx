@@ -1,11 +1,11 @@
 #include <iostream>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bsta/bsta_von_mises.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h> // for pi
+#include "vnl/vnl_math.h" // for pi
 
 // do not remove the following text
 // Approved for public release, distribution unlimited (DISTAR Case 14389)

@@ -13,9 +13,9 @@
 //   Apr.2004 - Peter Vanroose - corrected an earlier with_boundary fix in next()
 // \endverbatim
 
-#include <vgl/vgl_region_scan_iterator.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_box_2d.h>
+#include "vgl_region_scan_iterator.h"
+#include "vgl_polygon.h"
+#include "vgl_box_2d.h"
 
 //: Fill a polygonal face with interior scan lines
 //  This class provides an iterator-style interface to polygon scan

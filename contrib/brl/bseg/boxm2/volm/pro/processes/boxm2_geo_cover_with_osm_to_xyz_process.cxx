@@ -9,24 +9,24 @@
 // \author Yi Dong
 // \date August 17, 2013
 
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <volm/volm_osm_objects.h>
 #include <volm/volm_io.h>
 #include <volm/volm_category_io.h>
 #include <volm/volm_tile.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_area.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_intersection.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_area.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_intersection.h"
 #include <boxm2/boxm2_scene.h>
-#include <vpgl/vpgl_utm.h>
+#include "vpgl/vpgl_utm.h"
 #include <volm/volm_io_tools.h>
 
 namespace boxm2_geo_cover_with_osm_to_xyz_process_globals

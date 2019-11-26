@@ -1,11 +1,11 @@
 #include <string>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brdb/brdb_value.h>
@@ -15,7 +15,7 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 
 static void test_bvxm_change_detection_display_process()

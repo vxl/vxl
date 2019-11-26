@@ -10,26 +10,26 @@
 // \date Mar 15, 2011
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
-#include <vul/vul_timer.h>
-#include <vnl/vnl_random.h>
+#include "vul/vul_file.h"
+#include "vul/vul_timer.h"
+#include "vnl/vnl_random.h"
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 
 //vil includes
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
 #include <vil/algo/vil_gauss_filter.h>
 
 //vgl
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_triangle_scan_iterator.h>
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_triangle_scan_iterator.h"
 #include <bvgl/bvgl_triangle_interpolation_iterator.h>
 
 //vpgl camera stuff
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 // for loading cameras from directory
 #include <bpgl/bpgl_camera_utils.h>
 

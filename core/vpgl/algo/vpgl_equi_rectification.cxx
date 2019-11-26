@@ -1,9 +1,9 @@
 #include "vpgl_equi_rectification.h"
 #include <vnl/algo/vnl_lsqr.h>
-#include <vnl/vnl_sparse_matrix_linear_system.h>
+#include "vnl/vnl_sparse_matrix_linear_system.h"
 #include <vpgl/algo/vpgl_camera_compute.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_tolerance.h>
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_tolerance.h"
 #include <math.h>
 #include <vnl_det.h>
 #include <vnl_inverse.h>

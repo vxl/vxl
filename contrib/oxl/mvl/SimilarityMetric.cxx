@@ -6,15 +6,15 @@
 #include "SimilarityMetric.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
-#include <vnl/vnl_double_2.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_line_2d.h>
-#include <vgl/vgl_line_segment_2d.h>
+#include "vnl/vnl_double_2.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_homg_line_2d.h"
+#include "vgl/vgl_line_segment_2d.h"
 #include <vgl/algo/vgl_homg_operators_2d.h>
 
 #include <mvl/HomgPoint2D.h>

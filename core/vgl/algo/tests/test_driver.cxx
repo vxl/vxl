@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_compute_similarity_3d );
 DECLARE( test_compute_cremona_2d );

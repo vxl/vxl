@@ -2,8 +2,8 @@
 //:
 // \file
 #include <bgui/bgui_vsol_soview2D.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_style.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_style.h"
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
@@ -13,7 +13,7 @@
 #include <vdgl/vdgl_digital_curve.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bgui_vsol2D_tableau::bgui_vsol2D_tableau(const char* n) :

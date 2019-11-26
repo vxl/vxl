@@ -10,18 +10,18 @@
 #include <iostream>
 #include <vector>
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
-#include <vgl/vgl_triangle_3d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
+#include "vgl/vgl_triangle_3d.h"
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_inverse.h"
 #include <vnl/algo/vnl_svd.h>
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_transpose.h>
-#include <vxl_config.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_transpose.h"
+#include "vxl_config.h"
 #include <vil/algo/vil_histogram.h>
 
 

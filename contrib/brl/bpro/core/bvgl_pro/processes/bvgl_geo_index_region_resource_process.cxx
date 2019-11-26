@@ -5,13 +5,13 @@
 //:
 // \file
 // processes to generate list of leaves that intersect with given region
-#include <vul/vul_file.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_area.h>
+#include "vul/vul_file.h"
+#include "vgl/vgl_intersection.h"
+#include "vgl/vgl_area.h"
 #include <bvgl/algo/bvgl_2d_geo_index.h>
 #include <bvgl/algo/bvgl_2d_geo_index_sptr.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bkml/bkml_parser.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_unsigned.h>

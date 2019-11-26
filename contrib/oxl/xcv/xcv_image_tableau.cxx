@@ -16,16 +16,16 @@
 // \endverbatim
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_crop.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_rgba.h>
+#include "vil1/vil1_crop.h"
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_rgba.h"
 
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_projection_inspector.h>
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_projection_inspector.h"
 
 extern void post_to_status_bar(const char*);
 

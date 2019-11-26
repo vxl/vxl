@@ -7,9 +7,9 @@
 #include <algorithm>
 #include "bapl_lowe_cluster.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 #include <bapl/bapl_lowe_keypoint.h>
 #include <bapl/bapl_affine2d_est.h>

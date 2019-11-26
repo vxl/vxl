@@ -6,12 +6,12 @@
 
 #include <string>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brdb/brdb_value.h>
@@ -22,10 +22,10 @@
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
 
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 static void test_bvxm_create_voxel_world_process()
 {

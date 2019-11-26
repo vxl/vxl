@@ -2,13 +2,13 @@
 #include <cstddef>
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_load.h>
-#include <vil/vil_stream_core.h>
-#include <vil/vil_stream_section.h>
-#include <vil/vil_stream.h>
-#include <testlib/testlib_test.h>
+#include "vil/vil_load.h"
+#include "vil/vil_stream_core.h"
+#include "vil/vil_stream_section.h"
+#include "vil/vil_stream.h"
+#include "testlib/testlib_test.h"
 
 using vil_stream_sptr = vil_smart_ptr<vil_stream>;
 

@@ -1,16 +1,16 @@
 // This is brl/bseg/brip/tests/test_filter_bank.cxx
 
 #include <iostream>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <brip/brip_filter_bank.h>
 #include <brip/brip_vil_float_ops.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vnl/vnl_math.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vnl/vnl_math.h"
 static void test_filter_bank()
 {
   unsigned ni = 500, nj = 500;

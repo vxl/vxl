@@ -12,7 +12,7 @@
 //  Initial version August 30, 2015
 // \endverbatim
 
-#include <vgl/vgl_fwd.h> // forward declare various vgl classes
+#include "vgl_fwd.h" // forward declare various vgl classes
 
 
 //: Bounding box for a sphere

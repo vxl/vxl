@@ -29,7 +29,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgl/vgl_fwd.h> // forward declare vgl_point_2d
+#include "vgl_fwd.h" // forward declare vgl_point_2d
 
 //: Represents a cartesian 2D box
 //  A 2d box with sides aligned with the \a x and \a y axes.

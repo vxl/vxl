@@ -4,7 +4,7 @@
 // \author fsm
 
 #include "vil1_resample.h"
-#include <vil1/vil1_resample_image_impl.h>
+#include "vil1/vil1_resample_image_impl.h"
 
 vil1_image vil1_resample(vil1_image const &image, int new_width, int new_height)
 {

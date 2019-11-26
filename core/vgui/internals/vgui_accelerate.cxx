@@ -12,7 +12,7 @@ extern CDC *vgui_mfc_adaptor_global_dc;
 
 #include "vgui_accelerate.h"
 
-#include <vgui/vgui_gl.h>
+#include "vgui/vgui_gl.h"
 
 bool vgui_accelerate::vgui_no_acceleration = false;
 bool vgui_accelerate::vgui_mfc_acceleration = false;

@@ -4,7 +4,7 @@
 
 #include <fstream>
 #ifdef VIL_USE_FSTREAM64
-#include <vil/vil_stream_fstream64.h>
+#include "vil_stream_fstream64.h"
 #endif //VIL_USE_FSTREAM64
 
 //:
@@ -16,7 +16,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vil/vil_stream.h>
+#include "vil_stream.h"
 #include <vxl_config.h>
 
 //: A vil_stream implementation using std::fstream

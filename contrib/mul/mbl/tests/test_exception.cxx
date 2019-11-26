@@ -2,11 +2,11 @@
 #include <iostream>
 #include <typeinfo>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mbl/mbl_exception.h>
-#include <testlib/testlib_test.h>
-#include <vul/vul_file.h>
+#include "testlib/testlib_test.h"
+#include "vul/vul_file.h"
 
 
 void test_exception()

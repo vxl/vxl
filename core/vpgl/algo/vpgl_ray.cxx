@@ -2,17 +2,17 @@
 #include "vpgl_ray.h"
 //:
 // \file
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_4.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_tolerance.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_intersection.h>
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_4.h"
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_tolerance.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_intersection.h"
 #include <vpgl/algo/vpgl_invmap_cost_function.h>
 #include "vpgl_backproject.h"
 

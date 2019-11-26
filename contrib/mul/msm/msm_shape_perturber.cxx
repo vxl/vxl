@@ -1,7 +1,7 @@
 #include "msm_shape_perturber.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 msm_shape_perturber::msm_shape_perturber()

@@ -10,11 +10,11 @@
 #include <iostream>
 #include "vil_jpeg_decompressor.h"
 #include "vil_jpeg_source_mgr.h"
-#include <vil/vil_stream.h>
+#include "vil/vil_stream.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h>
+#include "vxl_config.h"
 
 #define trace if (true) { } else std::cerr
 

@@ -13,11 +13,11 @@
 #include "FMatrixComputeLinear.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <vnl/algo/vnl_svd.h>
-#include <vgl/vgl_homg_point_2d.h>
+#include "vgl/vgl_homg_point_2d.h"
 
 #include <mvl/HomgMetric.h>
 #include <mvl/PairMatchSetCorner.h>

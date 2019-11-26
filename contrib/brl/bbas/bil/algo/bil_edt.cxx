@@ -6,7 +6,7 @@
 #include <vector>
 #include "bil_edt.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 //:
 // \file

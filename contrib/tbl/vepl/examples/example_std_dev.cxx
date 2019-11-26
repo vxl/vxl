@@ -18,12 +18,12 @@
 #include <vepl/vepl_dyadic.h>
 
 // for I/O:
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 
 int
 main(int argc, char** argv)

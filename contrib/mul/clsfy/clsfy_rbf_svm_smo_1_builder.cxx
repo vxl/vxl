@@ -15,10 +15,10 @@
 //=======================================================================
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vul/vul_string.h>
+#include "vul/vul_string.h"
 
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_parse_block.h>

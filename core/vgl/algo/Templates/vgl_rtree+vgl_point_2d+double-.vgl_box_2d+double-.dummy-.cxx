@@ -1,8 +1,8 @@
 // Instantiation of vgl_rtree<vgl_point_2d<double>, vgl_box_2d<double>, dummy>
 // Treat this template instantiation as a "dummy" instantiation, for purposes of
 // testing the vgl_rtree implementation on potential compile errors or warnings.
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_box_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_box_2d.h"
 #include <vgl/algo/vgl_rtree.hxx>
 
 using V = vgl_point_2d<double>;

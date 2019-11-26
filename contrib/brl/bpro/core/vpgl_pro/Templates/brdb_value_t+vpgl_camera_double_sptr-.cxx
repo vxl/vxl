@@ -1,4 +1,4 @@
-#include <vpgl/vpgl_camera_double_sptr.h>
+#include "vpgl/vpgl_camera_double_sptr.h"
 #include <vpgl/io/vpgl_io_camera.h>
 #include <brdb/brdb_value.hxx>
 

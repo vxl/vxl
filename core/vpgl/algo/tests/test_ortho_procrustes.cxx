@@ -1,11 +1,11 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_matrix_fixed.h"
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 
 static void test_ortho_procrustes()

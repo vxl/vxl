@@ -6,11 +6,11 @@
 #include <iostream>
 #include <cstddef>
 #include "msm_translation_aligner.h"
-#include <vnl/vnl_vector.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vnl/vnl_vector.h"
+#include "vsl/vsl_binary_loader.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //=======================================================================

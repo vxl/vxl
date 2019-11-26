@@ -1,7 +1,7 @@
 #include "vsph_grid_index_2d.h"
 #include "vsph_utils.h"
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vnl/vnl_math.h"
+#include "vgl/vgl_vector_3d.h"
 
 double vsph_grid_index_2d::pye() const
 {

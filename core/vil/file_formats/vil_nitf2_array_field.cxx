@@ -10,9 +10,9 @@
 #include "vil_nitf2_index_vector.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_stream_core.h>
+#include "vil/vil_stream_core.h"
 
 int vil_nitf2_array_field::num_dimensions() const
 {

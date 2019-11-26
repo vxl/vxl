@@ -5,15 +5,15 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
+#include "vxl_config.h" // for vxl_byte
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_image_view.h"
 #include <mipa/mipa_orientation_histogram.h>
-#include <vil/vil_convert.h>
-#include <vul/vul_arg.h>
+#include "vil/vil_convert.h"
+#include "vul/vul_arg.h"
 
 void print_usage()
 {

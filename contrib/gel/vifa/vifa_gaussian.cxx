@@ -4,9 +4,9 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 // From GeneralUtility/Stat/stat_constants.h in TargetJr
 #define  StatEPSILON 1e-8

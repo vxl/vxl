@@ -9,19 +9,19 @@
 #include <bres/bres_find.h>
 #include <bvgl/bvgl_labelme_parser.h>
 #include <depth_map/depth_map_region_sptr.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_polygon.h>
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_polygon.h"
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <bsol/bsol_algs.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include "volm_utils.h"
 #include <cassert>
 #include <utility>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_vector_io.h"
 #include <volm/volm_category_io.h>
 
 const std::string volm_io::fallback_category_txt = std::string("contrib/brl/bbas/volm/fallback_category.txt");

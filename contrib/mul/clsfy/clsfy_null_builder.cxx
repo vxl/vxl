@@ -12,10 +12,10 @@
 #include "clsfy_null_builder.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_loader.h>
-#include <vul/vul_string.h>
+#include "vsl/vsl_binary_loader.h"
+#include "vul/vul_string.h"
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <clsfy/clsfy_null_classifier.h>

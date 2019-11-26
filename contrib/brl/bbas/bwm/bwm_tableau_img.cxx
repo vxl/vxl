@@ -4,22 +4,22 @@
 #include "bwm_observer_mgr.h"
 #include "bwm_tableau_mgr.h"
 #include "bwm_popup_menu.h"
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_vector_io.h>
-#include <vil/vil_save.h>
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_vector_io.h"
+#include "vil/vil_save.h"
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_polygon_2d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_oriented_box_2d.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_style.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_command.h>
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_oriented_box_2d.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_style.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_command.h"
 
 
 void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu)

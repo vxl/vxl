@@ -3,9 +3,9 @@
 //:
 // \file
 // Scale and offset image to have zero mean and unit variance
-#include<vil/vil_convert.h>
-#include<vil/vil_image_view.h>
-#include<vil/vil_math.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_math.h"
 
 namespace vil_image_normalise_process_globals
 {

@@ -7,7 +7,7 @@
 // \brief   Smart-pointer to a vgui_loader_tableau tableau.
 
 
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui_tableau_sptr.h"
 
 class vgui_loader_tableau;
 typedef vgui_tableau_sptr_t<vgui_loader_tableau> vgui_loader_tableau_sptr;

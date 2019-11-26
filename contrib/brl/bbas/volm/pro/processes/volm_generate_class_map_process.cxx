@@ -6,9 +6,9 @@
 //
 //
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <volm/volm_category_io.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 //:
 //  Take a colored segmentation output and map it to volm labels

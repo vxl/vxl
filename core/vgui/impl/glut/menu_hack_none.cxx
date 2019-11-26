@@ -3,7 +3,7 @@
 */
 #include "menu_hack.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // without X11, I don't know how to do this.

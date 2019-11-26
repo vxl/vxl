@@ -1,7 +1,7 @@
 #include "brad_belief_prop_utils.h"
-#include <vpgl/vpgl_camera.h>
+#include "vpgl/vpgl_camera.h"
 #include <bsta/algo/bsta_mog3_grey.h>
-#include <vil/vil_save.h>
+#include "vil/vil_save.h"
 #define BRAD_INIT_SIGMA 0.1f
 #define BRAD_MIN_SIGMA 0.05f
 #define BRAD_FIXED_SIGMA 0.02f

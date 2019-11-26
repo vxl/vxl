@@ -8,10 +8,10 @@
 #include <cstring>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
-#include <vbl/vbl_array_3d.hxx>
+#include "vul/vul_file.h"
+#include "vbl/vbl_array_3d.hxx"
 #include <vil3d/vil3d_property.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/vil3d_image_view.h>

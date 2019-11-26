@@ -5,7 +5,7 @@
 // \author Tim Cootes
 
 #include <mbl/mbl_draw_line.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 
 //: Draw an open polygon by jointing pose(ref_pts[i]) to pose(ref_pts[i+1])
 void mfpf_draw_pose_lines(vimt_image_2d_of<vxl_byte>& image,

@@ -1,8 +1,8 @@
 #include "bil_detect_ridges.h"
 #include "bil_perform_tensor_decomposition.h"
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_bilin_interp.h>
+#include "vil/vil_math.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_bilin_interp.h"
 
 void bil_detect_ridges(const vil_image_view<float>& Ix,
                        const vil_image_view<float>& Iy,

@@ -3,13 +3,13 @@
 #include <sstream>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <mbl/mbl_parse_sequence.h>
-#include <vsl/vsl_vector_io.h>
+#include "vsl/vsl_vector_io.h"
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 
 

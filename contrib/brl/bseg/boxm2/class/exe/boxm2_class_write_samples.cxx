@@ -3,8 +3,8 @@
 #include <boxm2/class/boxm2_class_generate_samples.h>
 
 //executable args
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
 
 //boxm2 scene stuff
 #include <boxm2/io/boxm2_dumb_cache.h>
@@ -12,7 +12,7 @@
 #include <boxm2/boxm2_util.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //check dirs, exit if not exist

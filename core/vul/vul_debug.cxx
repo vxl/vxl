@@ -9,9 +9,9 @@
 //  \brief Get debug related information like core dumps, and stack traces
 //  \author Ian Scott
 
-#include <vxl_config.h>
+#include "vxl_config.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #ifdef _WIN32
@@ -179,7 +179,7 @@ void vul_debug_set_coredump_and_throw_on_windows_se(const char * )
 #ifdef VXL_UNISTD_HAS_GETPID
 # include <unistd.h>
 #endif
-#include <vul/vul_sprintf.h>
+#include "vul/vul_sprintf.h"
 
 bool vul_debug_core_dump(const char * filename)
 {

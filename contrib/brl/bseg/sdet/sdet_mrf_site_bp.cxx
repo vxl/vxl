@@ -5,9 +5,9 @@
 //:
 // \file
 
-#include <vnl/vnl_numeric_traits.h>
+#include "vnl/vnl_numeric_traits.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 sdet_mrf_site_bp::sdet_mrf_site_bp(unsigned n_labels, float lambda, float truncation_cost)

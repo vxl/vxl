@@ -1,4 +1,4 @@
-#include <vxl_config.h>
+#include "vxl_config.h"
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_image_pyramid.hxx>
 

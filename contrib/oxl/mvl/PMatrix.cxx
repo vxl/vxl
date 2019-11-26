@@ -8,16 +8,16 @@
 #include "PMatrix.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matlab_print.h>
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_matlab_print.h"
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_determinant.h>
-#include <vgl/vgl_homg_plane_3d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_homg_plane_3d.h"
+#include "vgl/vgl_point_3d.h"
 
 #include <mvl/HomgPrettyPrint.h>
 #include <mvl/HomgLine2D.h>

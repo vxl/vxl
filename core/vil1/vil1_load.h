@@ -23,8 +23,8 @@
 //     011002 Peter Vanroose - vil1_load now respects top-is-first; vil1_load_raw not
 //\endverbatim
 
-#include <vil1/vil1_fwd.h>
-#include <vil1/vil1_image.h>
+#include "vil1_fwd.h"
+#include "vil1_image.h"
 
 //: Load an image from a file, possibly performing expected conversions.
 vil1_image vil1_load(char const* filename);

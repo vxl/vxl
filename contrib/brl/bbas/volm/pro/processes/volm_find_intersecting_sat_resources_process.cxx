@@ -12,13 +12,13 @@
 //
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
-#include <vul/vul_file.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_load.h>
+#include "vpgl/vpgl_lvcs.h"
+#include "vpgl/vpgl_lvcs_sptr.h"
+#include "vul/vul_file.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_load.h"
 #include <volm/volm_satellite_resources.h>
 #include <volm/volm_satellite_resources_sptr.h>
 #include <bkml/bkml_write.h>

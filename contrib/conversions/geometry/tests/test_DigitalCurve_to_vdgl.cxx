@@ -1,4 +1,4 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #if !defined(HAS_VDGL)
 void test_DigitalCurve_to_vdgl() { TEST("vdgl was not built",true,true); }

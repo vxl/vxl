@@ -10,29 +10,29 @@
 // \file
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_det.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_random.h>
+#include "vnl/vnl_numeric_traits.h"
+#include "vnl/vnl_det.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_random.h"
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_qr.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
-#include <vgl/vgl_homg_point_3d.h>
+#include "vgl/vgl_homg_point_3d.h"
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 #include <vpgl/algo/vpgl_optimize_camera.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_ray_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vbl/vbl_array_2d.h>
-#include <vpgl/vpgl_lvcs.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_homg_point_2d.h"
+#include "vgl/vgl_ray_3d.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vbl/vbl_array_2d.h"
+#include "vpgl/vpgl_lvcs.h"
 #include <vpgl/algo/vpgl_backproject.h>
 
 

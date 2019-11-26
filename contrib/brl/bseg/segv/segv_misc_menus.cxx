@@ -1,9 +1,9 @@
 #include "segv_misc_menus.h"
 //:
 // \file
-#include <vgui/vgui.h>
-#include <vgui/vgui_key.h>
-#include <vgui/vgui_menu.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_key.h"
+#include "vgui/vgui_menu.h"
 #include "segv_misc_manager.h"
 
 // Static menu callback functions

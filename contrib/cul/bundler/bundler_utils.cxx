@@ -8,12 +8,12 @@
 #include <vpgl/algo/vpgl_camera_compute.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_homg_point_2d.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_homg_point_2d.h"
 #include <vgl/algo/vgl_h_matrix_2d.h>
 
 // Generally useful function used for RANSAC.

@@ -5,25 +5,25 @@
 //
 #include <iostream>
 #include <string>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil/vil_config.h>
-#include <vil/vil_open.h>
-#include <vil/vil_save.h>
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
-#include <vil/vil_load.h>
-#include <vpl/vpl.h> // vpl_unlink()
-#include <vil/vil_pyramid_image_resource.h>
-#include <vil/vil_blocked_image_facade.h>
+#include "vil/vil_open.h"
+#include "vil/vil_save.h"
+#include "vil/vil_pixel_format.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_new.h"
+#include "vil/vil_load.h"
+#include "vpl/vpl.h" // vpl_unlink()
+#include "vil/vil_pyramid_image_resource.h"
+#include "vil/vil_blocked_image_facade.h"
 #include <vil/file_formats/vil_pyramid_image_list.h>
 #include <vil/file_formats/vil_tiff.h>
-#include <vil/vil_image_list.h>
-#include <vul/vul_file.h>
+#include "vil/vil_image_list.h"
+#include "vul/vul_file.h"
 #if HAS_J2K
 #include <vil/file_formats/vil_j2k_nitf2_pyramid_image_resource.h>
 #include <vil/file_formats/vil_j2k_image.h>

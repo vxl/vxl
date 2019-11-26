@@ -18,8 +18,8 @@
 #endif
 #include <cassert>
 #include <vcl_atomic_count.h>
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_smart_ptr.h>
+#include "vil_pixel_format.h"
+#include "vil_smart_ptr.h"
 
 //: An abstract base class of smart pointers to actual image data in memory.
 // If you want an actual image, try instantiating vil_image_view<T>.

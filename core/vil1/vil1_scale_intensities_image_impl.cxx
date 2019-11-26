@@ -3,10 +3,10 @@
 // \file
 
 #include "vil1_scale_intensities_image_impl.h"
-#include <vil1/vil1_scale_intensities_image.h>
-#include <vil1/vil1_pixel.h>
-#include <vil1/vil1_rgb.h>
-#include <vxl_config.h>
+#include "vil1/vil1_scale_intensities_image.h"
+#include "vil1/vil1_pixel.h"
+#include "vil1/vil1_rgb.h"
+#include "vxl_config.h"
 
 vil1_image vil1_scale_intensities_image_impl::get_plane(unsigned int p) const
 {

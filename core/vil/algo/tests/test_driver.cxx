@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE( test_algo_gauss_reduce );
 DECLARE( test_algo_colour_space );

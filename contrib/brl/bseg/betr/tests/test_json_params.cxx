@@ -2,8 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <vpl/vpl.h>
-#include <testlib/testlib_test.h>
+#include "vpl/vpl.h"
+#include "testlib/testlib_test.h"
 #include <bjson/bjson.h>
 #include "../betr_params.h"
 #include "../betr_edgel_change_detection_params.h"

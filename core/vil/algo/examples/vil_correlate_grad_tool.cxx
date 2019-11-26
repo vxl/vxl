@@ -5,16 +5,16 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
-#include <vul/vul_arg.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
+#include "vxl_config.h" // for vxl_byte
+#include "vul/vul_arg.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_image_view.h"
 #include <vil/algo/vil_normalised_correlation_2d.h>
 #include <vil/algo/vil_sobel_3x3.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_convert.h"
 #include <vil/algo/vil_suppress_non_max.h>
 
 void print_usage()

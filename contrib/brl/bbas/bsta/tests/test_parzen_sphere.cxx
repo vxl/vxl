@@ -1,11 +1,11 @@
 #include <string>
 #include <limits>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bsta/bsta_parzen_sphere.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include "vnl/vnl_matrix_fixed.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 // Do not remove the following statement
 // Approved for Public Release, Distribution Unlimited (DISTAR Case 12529)

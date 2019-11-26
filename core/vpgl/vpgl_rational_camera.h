@@ -91,7 +91,7 @@
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vpgl/vpgl_camera.h>
+#include "vpgl_camera.h"
 
 
 // ----------------------------------------

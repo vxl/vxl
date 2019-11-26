@@ -3,8 +3,8 @@
 
 #include "bvgl_changes.h"
 #include "bvgl_change_obj.h"
-#include <vil/vil_image_view.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vil/vil_image_view.h"
+#include "vgl/vgl_polygon_scan_iterator.h"
 
 vil_image_view_base_sptr
 bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj, const std::string& change_type)

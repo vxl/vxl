@@ -13,7 +13,7 @@
 #include "algo/bwm_utils.h"
 
 #include <bgui/bgui_image_utils.h>
-#include <vgui/vgui_dialog.h>
+#include "vgui/vgui_dialog.h"
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance_ = nullptr;
 std::map<std::string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;

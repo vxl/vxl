@@ -1,8 +1,8 @@
 #include "bwm_reg_image.h"
 #include "bwm_reg_utils.h"
-#include <vil/vil_image_resource.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_point_2d.h>
+#include "vil/vil_image_resource.h"
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_point_2d.h"
 #include <vpgl/algo/vpgl_backproject.h>
 #include <sdet/sdet_detector.h>
 

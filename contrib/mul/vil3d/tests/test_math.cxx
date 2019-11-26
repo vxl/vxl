@@ -1,7 +1,7 @@
 // This is mul/vil3d/tests/test_math.cxx
 #include <iostream>
 #include <iomanip>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 // not used? #include <vcl_compiler.h>
 #include <vil3d/vil3d_math.h>
 

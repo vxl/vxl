@@ -1,15 +1,15 @@
 // This is core/vil/tests/test_stream.cxx
 #include <string>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
-#include <vil/vil_stream_fstream.h>
-#include <vxl_config.h>
+#include "vil/vil_stream_fstream.h"
+#include "vxl_config.h"
 
 #if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 # include <windows.h>

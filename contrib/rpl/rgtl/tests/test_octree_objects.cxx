@@ -7,15 +7,15 @@
 
 #include <iostream>
 #include <cmath>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <rgtl/rgtl_octree_objects.h>
 #include <rgtl/rgtl_object_array_points.h>
 #include <rgtl/rgtl_octree_cell_bounds.h>
-#include <vnl/vnl_random.h>
-#include <vul/vul_timer.h>
+#include "vnl/vnl_random.h"
+#include "vul/vul_timer.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_octree_objects()

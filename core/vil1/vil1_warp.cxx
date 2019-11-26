@@ -5,11 +5,11 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_rgb.h>
-#include <vil1/vil1_pixel.h>
+#include "vil1/vil1_rgb.h"
+#include "vil1/vil1_pixel.h"
 
 VIL1_WARP_INSTANTIATE(unsigned char, vil1_warp_mapping);
 VIL1_WARP_INSTANTIATE(vil1_rgb<unsigned char>, vil1_warp_mapping);

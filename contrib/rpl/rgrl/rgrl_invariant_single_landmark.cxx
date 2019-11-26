@@ -7,16 +7,16 @@
 #include "rgrl_cast.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_inverse.h>
-#include <vnl/vnl_double_4.h>
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_inverse.h"
+#include "vnl/vnl_double_4.h"
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_matrix_fixed.h"
 
 rgrl_invariant_single_landmark::
 rgrl_invariant_single_landmark(const vnl_vector<double>& location,

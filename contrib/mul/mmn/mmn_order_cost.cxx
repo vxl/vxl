@@ -7,7 +7,7 @@
 #include <vector>
 #include "mmn_order_cost.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: (i0,i1,i2) gives ordering of v0,v1,v2

@@ -4,9 +4,9 @@
 //:
 // \file
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_numeric_traits.h>
+#include "vnl/vnl_numeric_traits.h"
 
 bdpg_node::bdpg_node() :
   previous_row_(-1),   previous_col_(-1), prior_prob_(0),

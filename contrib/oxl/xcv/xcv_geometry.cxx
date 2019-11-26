@@ -10,23 +10,23 @@
 // \author K.Y.McGaul
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_clip.h>
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_clip.h"
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_rubberband_tableau.h>
-#include <vgui/vgui_color_text.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_soview2D.h>
-#include <vgui/vgui_style_sptr.h>
-#include <vgui/vgui_style.h>
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_error_dialog.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_rubberband_tableau.h"
+#include "vgui/vgui_color_text.h"
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_soview2D.h"
+#include "vgui/vgui_style_sptr.h"
+#include "vgui/vgui_style.h"
+#include "vgui/vgui_macro.h"
+#include "vgui/vgui_error_dialog.h"
 
 //static bool debug = true;
 extern void get_current(unsigned*, unsigned*);

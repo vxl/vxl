@@ -8,13 +8,13 @@
 #include <iostream>
 #include <string>
 #include "vgl_plane_3d.h"
-#include <vgl/vgl_homg_plane_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_ray_3d.h>
-#include <vgl/vgl_closest_point.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_tolerance.h>
+#include "vgl_homg_plane_3d.h"
+#include "vgl_point_3d.h"
+#include "vgl_point_2d.h"
+#include "vgl_ray_3d.h"
+#include "vgl_closest_point.h"
+#include "vgl_distance.h"
+#include "vgl_tolerance.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

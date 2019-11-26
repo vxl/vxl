@@ -1,13 +1,13 @@
 // This is rpl/rrel/tests/test_ran_sam_search.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_4.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_4.h"
+#include "vnl/vnl_math.h"
 
 #include <rrel/rrel_linear_regression.h>
 #include <rrel/rrel_lms_obj.h>
@@ -16,7 +16,7 @@
 
 #include "similarity_from_matches.h"
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 double noise( double sigma );
 

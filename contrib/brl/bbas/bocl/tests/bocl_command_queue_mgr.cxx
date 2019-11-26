@@ -1,6 +1,6 @@
 #include "bocl_command_queue_mgr.h"
 #include <vcl_where_root_dir.h>
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 bool bocl_command_queue_mgr::init_kernel()
 {

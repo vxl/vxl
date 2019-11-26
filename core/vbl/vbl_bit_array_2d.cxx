@@ -7,7 +7,7 @@
 #include "vbl_bit_array_2d.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <climits>// for CHAR_BIT
 #include <cassert>

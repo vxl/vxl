@@ -1,8 +1,8 @@
 // This is core/vul/tests/test_awk.cxx
 #include <sstream>
 #include <iostream>
-#include <vul/vul_awk.h>
-#include <testlib/testlib_test.h>
+#include "vul/vul_awk.h"
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \brief  Rudimentary testing of the vul_awk class
@@ -11,7 +11,7 @@
 // History: built upon the shell of test_regexp, but has no tests in common
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void test_awk()

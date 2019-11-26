@@ -1,14 +1,14 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <brip/brip_max_scale_response.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_resample_bilin.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_resample_bilin.h"
 
 #ifdef DEBUG // I/O only for debugging output
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #endif
 

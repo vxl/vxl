@@ -1,9 +1,9 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <bundler/bundler.h>
 #include <bundler/bundler_sfm_impl.h>
 
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 
 static const int IMAGE_WIDTH = 320;
 static const int IMAGE_HEIGHT = 640;

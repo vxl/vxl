@@ -6,9 +6,9 @@
 #include <complex>
 #include "bnl_fresnel.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 // Fresnel Integral computation adapted from Numerical recipes in C
 // eps   is the relative error;

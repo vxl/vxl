@@ -1,9 +1,9 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brec/brec_part_base.h>
@@ -14,10 +14,10 @@
 #include <brec/brec_hierarchy_edge_sptr.h>
 #include <brec/brec_part_hierarchy_builder.h>
 
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
+#include "vil/vil_math.h"
+#include "vil/vil_convert.h"
 
 #include <brip/brip_vil_float_ops.h>
 

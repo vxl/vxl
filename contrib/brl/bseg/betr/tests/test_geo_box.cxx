@@ -1,6 +1,6 @@
 // This is brl/bseg/betr/tests/test_geo_box.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <betr/betr_geo_box_3d.h>
 
 void test_geo_box()

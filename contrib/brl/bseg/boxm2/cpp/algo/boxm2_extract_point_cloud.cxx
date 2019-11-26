@@ -2,7 +2,7 @@
 #include <map>
 #include "boxm2_extract_point_cloud.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/basic/boxm2_array_3d.h>

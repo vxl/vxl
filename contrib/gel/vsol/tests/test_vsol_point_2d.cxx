@@ -9,7 +9,7 @@
 // 1.0     |2000/05/02| Francois BERTEL          |Creation
 // 1.1     |2003/01/08| Peter Vanroose           |Now using testlib macros
 //*****************************************************************************
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 

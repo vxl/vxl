@@ -7,18 +7,18 @@
 #include "HMatrix2DAffineCompute.h"
 //
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_matrix.h"
 #include <mvl/HMatrix2D.h>
 #include <mvl/HomgPoint2D.h>
-#include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_2x2.h>
-#include <vnl/vnl_double_3x3.h>
+#include "vnl/vnl_matops.h" // use vnl_matlab_print.h for pretty printing
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_double_2x2.h"
+#include "vnl/vnl_double_3x3.h"
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_inverse.h"
 
 #include <mvl/PairMatchSetCorner.h>
 

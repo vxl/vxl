@@ -13,7 +13,7 @@
 #include <bpgl/algo/bpgl_camera_from_box.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 namespace boxm2_compute_sun_affine_camera_process_globals
 {

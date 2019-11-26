@@ -8,14 +8,14 @@
 
 #include <iostream>
 #include "vsl_vector_io.h"
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_block_binary.h>
-#include <vsl/vsl_b_read_block_old.h>
+#include "vsl_binary_io.h"
+#include "vsl_block_binary.h"
+#include "vsl_b_read_block_old.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
 #include <cassert>
-#include <vsl/vsl_indent.h>
+#include "vsl_indent.h"
 
 //====================================================================================
 //: Write vector to binary stream

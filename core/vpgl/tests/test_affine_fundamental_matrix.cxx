@@ -1,8 +1,8 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
-#include <vpgl/vpgl_affine_camera.h>
-#include <vpgl/vpgl_affine_fundamental_matrix.h>
-#include <vnl/vnl_math.h>
+#include "vpgl/vpgl_affine_camera.h"
+#include "vpgl/vpgl_affine_fundamental_matrix.h"
+#include "vnl/vnl_math.h"
 
 static void test_affine_fundamental_matrix_double()
 {

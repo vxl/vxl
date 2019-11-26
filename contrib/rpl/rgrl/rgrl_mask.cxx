@@ -5,7 +5,7 @@
 // \file
 #include <cassert>
 // not used? #include <vcl_compiler.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 rgrl_mask_box
 rgrl_mask::

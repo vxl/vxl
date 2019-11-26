@@ -1,6 +1,6 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vil/algo/vil_region_finder.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 void
 test_algo_region_finder()

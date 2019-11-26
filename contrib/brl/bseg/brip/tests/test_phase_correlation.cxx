@@ -2,23 +2,23 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 //#define DEBUG
 #ifdef DEBUG
-#include <vil/vil_save.h>
+#include "vil/vil_save.h"
 #endif
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_phase_correlation.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_load.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_load.h"
+#include "vil/vil_convert.h"
 #include <vnl/algo/vnl_fft.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_distance.h"
 static void test_phase_correlation_ortho()
 {
 #ifdef DEBUG // form your own paths to test data

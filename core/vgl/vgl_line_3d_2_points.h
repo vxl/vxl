@@ -17,8 +17,8 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 #include <cassert>
-#include <vgl/vgl_point_3d.h> // data member of this class
-#include <vgl/vgl_vector_3d.h>
+#include "vgl_point_3d.h" // data member of this class
+#include "vgl_vector_3d.h"
 
 //: A class to hold a non-homogeneous representation of a 3D line.
 // The line is stored as a pair of non-homogeneous 3D points.

@@ -6,12 +6,12 @@
 #include <iostream>
 #include <cmath>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_transpose.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_transpose.h"
 #include <vil/algo/vil_convolve_1d.h>
 
 

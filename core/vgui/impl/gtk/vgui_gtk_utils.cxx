@@ -10,16 +10,16 @@
 #include "vgui_gtk_utils.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui_gl.h>
+#include "vgui/vgui_gl.h"
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>
 
-#include <vgui/vgui_command.h>
-#include <vgui/vgui_menu.h>
+#include "vgui/vgui_command.h"
+#include "vgui/vgui_menu.h"
 
 static bool debug = false;
 GtkAccelGroup *vgui_gtk_utils::accel_group = NULL;

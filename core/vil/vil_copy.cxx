@@ -7,12 +7,12 @@
 // \date   21 Aug 2003
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_property.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_new.h>
+#include "vil/vil_property.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_blocked_image_resource.h"
+#include "vil/vil_new.h"
 
 //: Copy images in blocks of roughly this size
 static const unsigned long large_image_limit_ = 1024ul * 1024ul * 8ul; //8M Pixels

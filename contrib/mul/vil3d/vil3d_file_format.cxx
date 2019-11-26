@@ -8,9 +8,9 @@
 #include <vector>
 #include "vil3d_file_format.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_open.h>
+#include "vil/vil_open.h"
 #include <vil3d/file_formats/vil3d_analyze_format.h>
 #include <vil3d/file_formats/vil3d_gipl_format.h>
 #include <vil3d/file_formats/vil3d_slice_list.h>

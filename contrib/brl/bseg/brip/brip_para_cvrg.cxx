@@ -5,9 +5,9 @@
 //:
 // \file
 
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 #include "brip_vil_float_ops.h"

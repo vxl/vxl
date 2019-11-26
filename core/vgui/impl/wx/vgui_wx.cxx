@@ -13,10 +13,10 @@
 #include "vgui_wx.h"
 #include "vgui_wx_window.h"
 #include "vgui_wx_dialog_impl.h"
-#include <vgui/vgui_gl.h>
+#include "vgui/vgui_gl.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

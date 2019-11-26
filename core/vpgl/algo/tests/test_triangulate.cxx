@@ -1,7 +1,7 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <vpgl/algo/vpgl_triangulate_points.h>
-#include <vpgl/vpgl_calibration_matrix.h>
+#include "vpgl/vpgl_calibration_matrix.h"
 
 static const vgl_point_3d<double> GOAL(1.0, 1.0, 1.0);
 static const double TOL = .001;

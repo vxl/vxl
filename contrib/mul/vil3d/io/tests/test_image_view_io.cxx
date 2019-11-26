@@ -1,12 +1,12 @@
 // This is mul/vil3d/io/tests/test_image_view_io.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h>
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vxl_config.h"
+#include "vpl/vpl.h" // vpl_unlink()
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/io/vil3d_io_image_view.h>
 

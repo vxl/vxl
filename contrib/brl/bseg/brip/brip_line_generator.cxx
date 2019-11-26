@@ -3,7 +3,7 @@
 #include "brip_line_generator.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 bool brip_line_generator::generate(bool& init, float xs, float ys,

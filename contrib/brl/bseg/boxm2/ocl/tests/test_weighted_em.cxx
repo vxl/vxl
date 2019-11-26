@@ -9,15 +9,15 @@
 #include <map>
 #include <algorithm>
 #include <cmath>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <bsta/algo/bsta_sigma_normalizer.h>

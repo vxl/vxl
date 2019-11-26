@@ -1,8 +1,8 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <vsph/vsph_sph_box_2d.h>
 #include <volm/volm_spherical_region.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 static void test_spherical_region()
 {

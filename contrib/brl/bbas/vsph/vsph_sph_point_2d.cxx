@@ -1,9 +1,9 @@
 // This is bbas/vsph/vsph_sph_point_2d.cxx
 #include "vsph_sph_point_2d.h"
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 vsph_sph_point_2d::vsph_sph_point_2d(double theta, double phi, bool in_radians)

@@ -5,9 +5,9 @@
 #include <iostream>
 #include <cmath>
 #include "HomgPoint2D.h"
-#include <vnl/vnl_double_2.h>
+#include "vnl/vnl_double_2.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //--------------------------------------------------------------

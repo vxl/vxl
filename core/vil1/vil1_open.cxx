@@ -8,12 +8,12 @@
 #include "vil1_open.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vil1/vil1_stream_fstream.h>
-#include <vil1/vil1_stream_core.h>
-#include <vil1/vil1_stream_url.h>
+#include "vil1/vil1_stream_fstream.h"
+#include "vil1/vil1_stream_core.h"
+#include "vil1/vil1_stream_url.h"
 
 vil1_stream *vil1_open(char const* what, char const* how)
 {

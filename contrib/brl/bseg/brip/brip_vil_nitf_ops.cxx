@@ -1,6 +1,6 @@
 #include "brip_vil_nitf_ops.h"
-#include <vil/vil_plane.h>
-#include <vil/vil_math.h>
+#include "vil/vil_plane.h"
+#include "vil/vil_math.h"
 #include <bsta/bsta_histogram.h>
 //:
 // \file

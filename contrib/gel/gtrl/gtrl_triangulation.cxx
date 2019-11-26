@@ -6,7 +6,7 @@
 #include <utility>
 #include "gtrl_triangulation.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // UNIX specific timer close

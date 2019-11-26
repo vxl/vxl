@@ -1,7 +1,7 @@
 #include "brad_hist_prob_feature_vector.h"
 //
 #include <bsta/bsta_histogram.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 
 vnl_vector<double> brad_hist_prob_feature_vector::

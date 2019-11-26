@@ -3,12 +3,12 @@
 #include "brip_phase_correlation.h"
 #include "brip_vil_float_ops.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vil/vil_math.h>
-#include <vnl/vnl_random.h>
-#include <vil/vil_resample_bicub.h>
+#include "vnl/vnl_math.h"
+#include "vil/vil_math.h"
+#include "vnl/vnl_random.h"
+#include "vil/vil_resample_bicub.h"
 #include <bsta/bsta_histogram.h>
 #include <bsta/bsta_otsu_threshold.h>
 static bool peak_greater(const peak& pa, const peak& pb){

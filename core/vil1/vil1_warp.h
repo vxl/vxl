@@ -6,8 +6,8 @@
 // \author awf@robots.ox.ac.uk
 // \date 04 Dec 00
 
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1_image.h"
+#include "vil1_memory_image_of.h"
 
 //: Class to encapsulate 2d-2d mapping.
 class vil1_warp_mapping

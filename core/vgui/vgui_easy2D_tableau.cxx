@@ -16,29 +16,29 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 
-#include <vul/vul_psfile.h>
-#include <vnl/vnl_math.h>
+#include "vul/vul_psfile.h"
+#include "vnl/vnl_math.h"
 
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_pixel.h>
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_pixel.h"
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_resource.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_resource.h"
 
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_soview2D.h>
-#include <vgui/vgui_displaylist2D_tableau.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_style.h>
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_macro.h"
+#include "vgui/vgui_soview2D.h"
+#include "vgui/vgui_displaylist2D_tableau.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_style.h"
 
 #ifdef DEBUG
-#include <vil/vil_save.h>
+#include "vil/vil_save.h"
 #endif
 
 static bool debug = false;

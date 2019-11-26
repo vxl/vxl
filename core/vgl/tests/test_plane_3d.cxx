@@ -4,15 +4,15 @@
 #include <iostream>
 #include <sstream>
 #include <cmath>
-#include <testlib/testlib_test.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_ray_3d.h>
-#include <vgl/vgl_closest_point.h>
+#include "testlib/testlib_test.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_ray_3d.h"
+#include "vgl/vgl_closest_point.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 static void test_constructor()
 {

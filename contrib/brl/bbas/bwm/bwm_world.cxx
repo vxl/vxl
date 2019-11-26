@@ -7,12 +7,12 @@
 #include "algo/bwm_utils.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vul/vul_file.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgui/vgui_dialog.h>
+#include "vul/vul_file.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgui/vgui_dialog.h"
 
 #include "bwm_observable.h"
 #include "bwm_observable_textured_mesh.h"

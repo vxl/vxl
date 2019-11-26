@@ -18,8 +18,8 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_point_3d.h> // forward declare vgl datatypes
+#include "vgl_plane_3d.h"
+#include "vgl_point_3d.h" // forward declare vgl datatypes
 
 //: A 3D frustum is the portion of a solid (normally a cone or pyramid)
 // that lies between two parallel planes cutting it.

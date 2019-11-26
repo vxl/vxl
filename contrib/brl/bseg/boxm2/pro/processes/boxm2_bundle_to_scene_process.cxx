@@ -10,17 +10,17 @@
 // \author Andy Miller
 // \date Sep 16, 2011
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/util/boxm2_convert_bundle.h>
 #include <boxm2/util/boxm2_convert_nvm.h>
 #include <boxm2/util/boxm2_cams_and_box_to_scene.h>
-#include <vgl/vgl_box_3d.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
+#include "vgl/vgl_box_3d.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vul/vul_file.h"
+#include "vul/vul_file_iterator.h"
 
 namespace boxm2_bundle_to_scene_process_globals
 {

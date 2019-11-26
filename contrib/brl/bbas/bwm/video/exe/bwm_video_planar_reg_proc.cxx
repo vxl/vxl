@@ -1,18 +1,18 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vul/vul_file.h>
-#include <vul/vul_arg.h>
+#include "vul/vul_file.h"
+#include "vul/vul_arg.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_double_4.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_plane_3d.h>
+#include "vnl/vnl_double_4.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_plane_3d.h"
 #include <bwm/video/bwm_video_registration.h>
-#include <vidl/vidl_image_list_istream.h>
-#include <vidl/vidl_image_list_ostream.h>
-#include <vidl/vidl_frame.h>
+#include "vidl/vidl_image_list_istream.h"
+#include "vidl/vidl_image_list_ostream.h"
+#include "vidl/vidl_frame.h"
 #include <bwm/video/bwm_video_cam_istream.h>
 
 static bool planar_reg(std::string const& video_input_glob,

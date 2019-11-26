@@ -15,7 +15,7 @@
 #include <avm_default.h>
 #include <avm_fourcc.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 mvl2_video_from_avi::mvl2_video_from_avi()

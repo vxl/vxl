@@ -1,20 +1,20 @@
 #include <iostream>
 #include <cmath>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
 #include <bil/algo/bil_detect_ridges.h>
 
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
 #include <vil/algo/vil_sobel_3x3.h>
 #include <vil/algo/vil_gauss_filter.h>
 

@@ -7,16 +7,16 @@
 #include <cmath>
 #include "brec_hierarchy_edge.h"
 #include <bsta/algo/bsta_gaussian_updater.h>
-#include <vgl/vgl_point_2d.h>
-#include <vnl/vnl_quaternion.h>
+#include "vgl/vgl_point_2d.h"
+#include "vnl/vnl_quaternion.h"
 
 #include <bxml/bxml_find.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_cross_product_matrix.h>
-#include <vnl/vnl_double_3.h>
+#include "vnl/vnl_cross_product_matrix.h"
+#include "vnl/vnl_double_3.h"
 
 double
 //brec_hierarchy_edge::prob_density(const vnl_vector_fixed<float,2>& pt)

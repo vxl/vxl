@@ -1,10 +1,10 @@
 #include <string>
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h>
+#include "vpl/vpl.h"
 //For backwards compatibility
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
@@ -20,8 +20,8 @@
 #include <bbgm/pro/bbgm_processes.h>
 #include <bbgm/pro/bbgm_register.h>
 #include <bsta/bsta_gaussian_indep.h>
-#include <vil/vil_image_view.h>
-#include <vnl/vnl_random.h>
+#include "vil/vil_image_view.h"
+#include "vnl/vnl_random.h"
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_value_sptr.h>
 #include <bprb/bprb_func_process.h>

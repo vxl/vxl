@@ -1,10 +1,10 @@
 // This is core/vul/tests/test_get_time_as_string.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_get_timestamp.h>
-#include <testlib/testlib_test.h>
+#include "vul/vul_get_timestamp.h"
+#include "testlib/testlib_test.h"
 
 
 static void test_get_time_as_string()

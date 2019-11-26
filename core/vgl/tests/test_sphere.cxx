@@ -1,11 +1,11 @@
 // Some tests for vgl_sphere_3d
 // Ian Scott, Aug 2005.
 #include <iostream>
-#include <testlib/testlib_test.h>
-#include <vgl/vgl_sphere_3d.h>
-#include <vgl/vgl_line_3d_2_points.h>
+#include "testlib/testlib_test.h"
+#include "vgl/vgl_sphere_3d.h"
+#include "vgl/vgl_line_3d_2_points.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_sphere()

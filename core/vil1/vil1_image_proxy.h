@@ -5,7 +5,7 @@
 // \file
 // \author fsm
 
-#include <vil1/vil1_image.h>
+#include "vil1_image.h"
 
 //: Proxy for an image
 struct vil1_image_proxy : public vil1_image

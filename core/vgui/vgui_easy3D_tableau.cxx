@@ -7,9 +7,9 @@
 
 #include "vgui_easy3D_tableau.h"
 
-#include <vgui/vgui_soview3D.h>
-#include <vgui/vgui_displaylist3D_tableau.h>
-#include <vgui/vgui_style.h>
+#include "vgui/vgui_soview3D.h"
+#include "vgui/vgui_displaylist3D_tableau.h"
+#include "vgui/vgui_style.h"
 
 vgui_easy3D_tableau::
 vgui_easy3D_tableau() : style_(vgui_style::new_style())

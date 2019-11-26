@@ -19,7 +19,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vpdl/vpdl_multi_cmp_dist.h>
+#include "vpdl_multi_cmp_dist.h"
 #include <vpdl/vpdt/vpdt_access.h>
 #include <cassert>
 

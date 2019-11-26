@@ -10,9 +10,9 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_binary_explicit_io.h>
+#include "vsl/vsl_binary_explicit_io.h"
 
 template <typename TYPE>
 void  local_vsl_b_write(vsl_b_ostream& os, const TYPE n)

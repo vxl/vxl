@@ -1,7 +1,7 @@
 #include <iostream>
 #include "vgui_qt_menu.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //---------------------------------------------------------------------------

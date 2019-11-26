@@ -1,22 +1,22 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vul/vul_file.h>
-#include <vul/vul_arg.h>
+#include "vul/vul_file.h"
+#include "vul/vul_arg.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vpgl/vpgl_calibration_matrix.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vpgl/vpgl_calibration_matrix.h"
+#include "vpgl/vpgl_perspective_camera.h"
 #include <vpgl/algo/vpgl_camera_homographies.h>
 #include <bwm/video/bwm_video_corr_processor.h>
 #include <bwm/video/bwm_video_site_io.h>
 #include <bwm/video/bwm_video_cam_istream.h>
 #include <bwm/video/bwm_video_cam_ostream.h>
 
-#include <vpgl/vpgl_lvcs.h>
+#include "vpgl/vpgl_lvcs.h"
 #include <vgl/algo/vgl_h_matrix_3d_compute_linear.h>
 
 static bool process_camera_from_photo_overlay(std::string const& params_path, std::string const& output_cam_path)

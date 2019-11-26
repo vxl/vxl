@@ -2,14 +2,14 @@
 #include <cstdlib>
 #include "basic_manager.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil1/vil1_load.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_image_tableau.h>
+#include "vil1/vil1_load.h"
+#include "vgui/vgui.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_image_tableau.h"
 
 basic_manager *basic_manager::instance()
 {

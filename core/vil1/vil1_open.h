@@ -11,7 +11,7 @@
 //  Modifications
 //\endverbatim
 
-#include <vil1/vil1_stream.h>
+#include "vil1_stream.h"
 
 vil1_stream *vil1_open(char const* what, char const* how = "r");
 

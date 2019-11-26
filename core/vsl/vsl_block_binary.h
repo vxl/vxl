@@ -6,8 +6,8 @@
 // \brief Set of functions to do binary IO on a block of values.
 // \author Ian Scott, ISBE Manchester, Feb 2003
 
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_binary_explicit_io.h>
+#include "vsl_binary_io.h"
+#include "vsl_binary_explicit_io.h"
 
 //: Error checking.
 void vsl_block_binary_read_confirm_specialisation(vsl_b_istream &is, bool specialised);
@@ -315,7 +315,7 @@ inline void vsl_block_binary_read(vsl_b_istream &is, signed char* begin, std::si
 
 //: Write a block of values to a vsl_b_ostream
 // If you want to output a block of fundamental data types very efficiently,
-// then just #include <vsl_binary_explicit_io.h>
+// then just #include "vsl_binary_explicit_io.h"
 template <class T>
 inline void vsl_block_binary_write(vsl_b_ostream &os, const T* begin, std::size_t nelems)
 {
@@ -326,7 +326,7 @@ inline void vsl_block_binary_write(vsl_b_ostream &os, const T* begin, std::size_
 
 //: Read a block of values from a vsl_b_istream
 // If you want to output a block of fundamental data types very efficiently,
-// then just #include <vsl_binary_explicit_io.h>
+// then just #include "vsl_binary_explicit_io.h"
 template <class T>
 inline void vsl_block_binary_read(vsl_b_istream &is, T* begin, std::size_t nelems)
 {

@@ -7,13 +7,13 @@
 // \brief A process that performs edge detection on a grey image and returns the corresponding edge map
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <sdet/sdet_detector.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_new.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_new.h"
 #include <vtol/vtol_edge_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel.h>

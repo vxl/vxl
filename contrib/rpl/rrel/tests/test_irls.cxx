@@ -2,18 +2,18 @@
 #include <cmath>
 #include <vector>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_4.h>
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_4.h"
+#include "vnl/vnl_matrix.h"
 
 #include <rrel/rrel_tukey_obj.h>
 #include <rrel/rrel_linear_regression.h>
 #include <rrel/rrel_irls.h>
 
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include "similarity_from_matches.h"
 

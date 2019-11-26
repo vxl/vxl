@@ -5,16 +5,16 @@
 //
 //=======================================================================
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief test msm_wt_mat_2d
 
 #include <msm/msm_wt_mat_2d.h>
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_matrix.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //=======================================================================

@@ -1,12 +1,12 @@
 #include "boxm2_cam_tableau.h"
 //:
 // \file
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_glu.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_glu.h"
 #include <vgui/internals/trackball.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_event.h>
-#include <vgl/vgl_distance.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_event.h"
+#include "vgl/vgl_distance.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 

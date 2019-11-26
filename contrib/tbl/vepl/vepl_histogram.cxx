@@ -2,13 +2,13 @@
 #include <iostream>
 #include "vepl_histogram.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vipl/accessors/vipl_accessors_vcl_vector.h>
 #include <vepl/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_histogram.h>
-#include <vil/vil_pixel_format.h>
-#include <vxl_config.h> // for vxl_byte
+#include "vil/vil_pixel_format.h"
+#include "vxl_config.h" // for vxl_byte
 
 std::vector<unsigned int> vepl_histogram(const vil_image_resource_sptr& image)
 {

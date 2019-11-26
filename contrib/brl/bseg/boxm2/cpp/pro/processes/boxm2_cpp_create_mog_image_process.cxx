@@ -10,21 +10,21 @@
 // \date July 07, 2011
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
-//#include <vil/vil_image_view.h>
-//#include <vil/vil_transform.h>
+//#include "vil/vil_image_view.h"
+//#include "vil/vil_transform.h"
 //brdb stuff
 #include <brdb/brdb_value.h>
 #include <boxm2/cpp/algo/boxm2_create_mog_image_functor.h>
 
-//#include <vil/vil_math.h>
-//#include <vil/vil_save.h>
-//#include <vil/vil_convert.h>
+//#include "vil/vil_math.h"
+//#include "vil/vil_save.h"
+//#include "vil/vil_convert.h"
 #include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_mixture.h>

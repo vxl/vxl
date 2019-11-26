@@ -8,15 +8,15 @@
 
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
+#include "vpgl/vpgl_lvcs_sptr.h"
 #include <bkml/bkml_write.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_load.h>
-#include <vul/vul_file.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_load.h"
+#include "vul/vul_file.h"
 
 
 //: process to create a geo camera given its lower left corner and image size

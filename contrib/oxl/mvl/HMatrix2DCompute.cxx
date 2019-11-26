@@ -4,7 +4,7 @@
 #include "HMatrix2DCompute.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <mvl/HMatrix2D.h>

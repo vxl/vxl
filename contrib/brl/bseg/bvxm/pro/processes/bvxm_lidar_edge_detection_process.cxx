@@ -4,9 +4,9 @@
 // \file
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_pixel_format.h"
+#include "vil/vil_convert.h"
 
 //: set input and output types
 bool bvxm_lidar_edge_detection_process_cons(bprb_func_process& pro)

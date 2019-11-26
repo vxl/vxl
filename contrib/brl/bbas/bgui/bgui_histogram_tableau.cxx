@@ -4,13 +4,13 @@
 // \file
 // \author  Matt Leotta
 
-#include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_vil.h>
-#include <vil/vil_image_resource.h>
+#include "vil1/vil1_memory_image_of.h"
+#include "vil1/vil1_vil.h"
+#include "vil/vil_image_resource.h"
 #include <vil/algo/vil_histogram.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_easy2D_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_easy2D_tableau.h"
 
 //========================================================================
 //: Constructor

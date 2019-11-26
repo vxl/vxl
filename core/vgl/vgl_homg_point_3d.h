@@ -17,8 +17,8 @@
 // \endverbatim
 
 #include <iosfwd>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_fwd.h> // forward declare vgl_homg_plane_3d
+#include "vgl_point_3d.h"
+#include "vgl_fwd.h" // forward declare vgl_homg_plane_3d
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

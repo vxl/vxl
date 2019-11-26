@@ -14,7 +14,7 @@
 // \endverbatim
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>

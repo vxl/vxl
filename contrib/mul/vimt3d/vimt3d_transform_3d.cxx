@@ -10,15 +10,15 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vsl/vsl_indent.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_vector.h>
+#include "vsl/vsl_indent.h"
+#include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_vector.h"
 #include <vnl/algo/vnl_determinant.h>
-#include <vnl/vnl_math.h>
-#include <vul/vul_string.h>
-#include <vul/vul_sprintf.h>
+#include "vnl/vnl_math.h"
+#include "vul/vul_string.h"
+#include "vul/vul_sprintf.h"
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_sequence.h>

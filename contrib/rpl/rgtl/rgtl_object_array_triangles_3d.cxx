@@ -23,13 +23,13 @@
 #include "rgtl_serialize_ostream.h"
 
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_cross.h>
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_cross.h"
 
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

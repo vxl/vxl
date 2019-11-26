@@ -1,6 +1,6 @@
 #ifndef INSTANTIATE_TEMPLATES
-#include <vil1/vil1_image.h>
-#include <vnl/vnl_vector.h>
+#include "vil1/vil1_image.h"
+#include "vnl/vnl_vector.h"
 
 // this must be here for filter-2d to work
 #include <vipl/section/vipl_filterable_section_container_generator_vil1_image.hxx>

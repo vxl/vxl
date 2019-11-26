@@ -6,7 +6,7 @@
 
 #include<vil/algo/vil_structuring_element.h>
 #include<vil/algo/vil_binary_dilate.h>
-#include<vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 namespace vil_image_dilate_disk_process_globals
 {

@@ -7,8 +7,8 @@
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_load.h"
+#include "vil/vil_image_view_base.h"
 #include <bsta/bsta_histogram.h>
 
 //: set input and output types

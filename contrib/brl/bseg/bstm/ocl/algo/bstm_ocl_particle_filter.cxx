@@ -5,17 +5,17 @@
 
 #include <vcl_where_root_dir.h>
 #include <boct/boct_bit_tree.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_intersection.h"
 
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <bstm/cpp/algo/bstm_label_bb_function.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_sphere_3d.h>
+#include "vgl/vgl_sphere_3d.h"
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_det.h>
+#include "vnl/vnl_det.h"
 
 #define ENABLE_ROT
 

@@ -1,6 +1,6 @@
 // This is core/vbl/io/tests/golden_test_vbl_io.cxx
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \brief Read in a golden data file, and check the values are correct.
@@ -11,7 +11,7 @@
 // golden_test_vnl_io create
 // \endverbatim
 
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_binary_io.h"
 
 #include <vbl/io/vbl_io_array_1d.h>
 #include <vbl/io/vbl_io_array_2d.h>
@@ -25,9 +25,9 @@
 #include <vbl/io/vbl_io_bounding_box.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_root_dir.h"
 
 static void golden_test_vbl_io(bool save_file)
 {

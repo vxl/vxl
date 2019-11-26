@@ -6,12 +6,12 @@
 // \brief A process to register two images by finding the best translational mapping.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <ihog/ihog_minimizer.h>
 #include <ihog/ihog_world_roi.h>
 #include <ihog/ihog_minfo_cost_func.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_convert.h"
 
 
 //: Init function

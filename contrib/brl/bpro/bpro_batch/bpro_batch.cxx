@@ -35,7 +35,7 @@
 #include <bpro/core/bbas_pro/bbas_1d_array_byte.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static PyObject *init_process(PyObject *self, PyObject *args);

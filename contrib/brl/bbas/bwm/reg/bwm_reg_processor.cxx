@@ -1,8 +1,8 @@
 // This is brl/bbas/bwm/reg/bwm_reg_processor.cxx
 #include "bwm_reg_processor.h"
 //
-#include <vnl/vnl_numeric_traits.h>
-#include <vil/vil_image_resource.h>
+#include "vnl/vnl_numeric_traits.h"
+#include "vil/vil_image_resource.h"
 #include <vsol/vsol_point_2d.h>
 #include <sdet/sdet_detector.h>
 #include <brip/brip_roi.h>

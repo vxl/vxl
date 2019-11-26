@@ -2,12 +2,12 @@
 // written by Peter Vanroose, ESAT, K.U.Leuven, Belgium, 5 October 2001.
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vgl/vgl_conic.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_homg_point_2d.h>
+#include "vgl/vgl_conic.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_homg_point_2d.h"
 #include <vgl/algo/vgl_homg_operators_2d.h>
 
 int main()

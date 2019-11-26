@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <brec/brec_part_base.h>
 #include <brec/brec_part_base_sptr.h>
@@ -15,7 +15,7 @@
 #include <bsta/algo/bsta_gaussian_updater.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_brec_hierarchy_edge()

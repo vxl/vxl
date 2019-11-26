@@ -9,21 +9,21 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_box_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_box_3d.h"
 #include <vgl/algo/vgl_h_matrix_3d.h>
-#include <vgl/vgl_closest_point.h>
-#include <vgl/vgl_line_3d_2_points.h>
-#include <vgl/vgl_homg_point_3d.h>
+#include "vgl/vgl_closest_point.h"
+#include "vgl/vgl_line_3d_2_points.h"
+#include "vgl/vgl_homg_point_3d.h"
 #include <vgl/algo/vgl_fit_plane_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_intersection.h"
 
 #include <vpgl/algo/vpgl_ray.h>
 #include <vpgl/algo/vpgl_backproject.h>

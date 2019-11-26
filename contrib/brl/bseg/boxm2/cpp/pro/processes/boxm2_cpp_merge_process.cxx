@@ -10,7 +10,7 @@
 // \date Mar 10, 2011
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -22,7 +22,7 @@
 
 //directory utility
 #include <vcl_where_root_dir.h>
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 namespace boxm2_cpp_merge_process_globals
 {

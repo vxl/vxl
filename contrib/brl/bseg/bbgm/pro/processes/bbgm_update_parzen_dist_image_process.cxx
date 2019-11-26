@@ -5,7 +5,7 @@
 #include <iostream>
 #include <bprb/bprb_func_process.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
@@ -15,9 +15,9 @@
 #include <bsta/algo/bsta_parzen_updater.h>
 #include <brdb/brdb_value.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_math.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_math.h"
 
 //: Constructor
 bool bbgm_update_parzen_dist_image_process_cons(bprb_func_process& pro)

@@ -8,19 +8,19 @@
 #include <bprb/bprb_parameters.h>
 #include <bvxm/pro/processes/bvxm_normalization_util.h>
 
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_image_view.h"
 
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_voxel_world.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brdb/brdb_value.h>
 #include <brip/brip_vil_float_ops.h>
-#include <vpgl/vpgl_camera_double_sptr.h>
+#include "vpgl/vpgl_camera_double_sptr.h"
 
 bool bvxm_create_mog_image_process_cons(bprb_func_process& pro)
 {

@@ -31,8 +31,8 @@
 #include <brec/brec_part_gaussian_sptr.h>
 #include <brec/brec_part_gaussian.h>
 
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
 #include <vil/algo/vil_threshold.h>
 
 //: Constructor

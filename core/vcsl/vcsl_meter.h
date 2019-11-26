@@ -12,8 +12,8 @@
 //   2004/09/17 Peter Vanroose  made "instance_" a local static variable of method instance()
 // \endverbatim
 
-#include <vcsl/vcsl_length_unit.h>
-#include <vcsl/vcsl_meter_sptr.h>
+#include "vcsl_length_unit.h"
+#include "vcsl_meter_sptr.h"
 
 //: Standard unit associated to the length dimension
 class vcsl_meter

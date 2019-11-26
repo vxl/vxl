@@ -9,12 +9,12 @@
 #include <bpgl/depth_map/depth_map_scene.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brdb/brdb_value.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
 
 //:sets input and output types
 bool bpgl_generate_depth_maps_process_cons(bprb_func_process& pro)

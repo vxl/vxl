@@ -7,13 +7,13 @@
 #include <iostream>
 #include <fstream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_arg.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_new.h>
+#include "vul/vul_arg.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_new.h"
 #include <bapl/bapl_lowe_keypoint.h>
 #include <bapl/bapl_keypoint.h>
 #include <bapl/bapl_keypoint_extractor.h>

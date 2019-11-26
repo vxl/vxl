@@ -19,16 +19,16 @@
 #include <cstddef>
 #include "vil3d_analyze_format.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_stream_fstream.h>
+#include "vil/vil_stream_fstream.h"
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_new.h>
 #include <vil3d/vil3d_copy.h>
 #include <vil3d/vil3d_property.h>
 #include <vil3d/vil3d_image_resource.h>
-#include <vsl/vsl_binary_explicit_io.h>
-#include <vsl/vsl_indent.h>
+#include "vsl/vsl_binary_explicit_io.h"
+#include "vsl/vsl_indent.h"
 
 // ---- Utility functions for dealing with byte ordering ----
 // (Note: The use of this is currently guessed - need to check format)

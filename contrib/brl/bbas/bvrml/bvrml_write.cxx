@@ -2,7 +2,7 @@
 #include <cmath>
 #include "bvrml_write.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 unsigned bvrml_color::heatmap_classic_size = 256;

@@ -5,10 +5,10 @@
 
 #include <iostream>
 #include <exception>
-#include <vul/vul_arg.h>
-#include <vul/vul_reg_exp.h>
-#include <vul/vul_sprintf.h>
-#include <vnl/vnl_math.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_reg_exp.h"
+#include "vul/vul_sprintf.h"
+#include "vnl/vnl_math.h"
 #include <mbl/mbl_log.h>
 #include <vimt3d/vimt3d_add_all_loaders.h>
 #include <vimt3d/vimt3d_load.h>
@@ -17,9 +17,9 @@
 #include <vil3d/vil3d_save.h>
 #include <vil3d/vil3d_new.h>
 #include <vil3d/vil3d_crop.h>
-#include <vul/vul_string.h>
+#include "vul/vul_string.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //=========================================================================

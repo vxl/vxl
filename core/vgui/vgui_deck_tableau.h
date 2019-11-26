@@ -17,9 +17,9 @@
 
 #include <string>
 #include "vgui_deck_tableau_sptr.h"
-#include <vgui/vgui_observable.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_parent_child_link.h>
+#include "vgui_observable.h"
+#include "vgui_tableau.h"
+#include "vgui_parent_child_link.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

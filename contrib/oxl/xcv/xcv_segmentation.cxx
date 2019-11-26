@@ -8,9 +8,9 @@
 //
 // \author K.Y.McGaul
 
-#include <vil1/vil1_image.h>
+#include "vil1/vil1_image.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <osl/osl_harris_params.h>
@@ -20,12 +20,12 @@
 #include <osl/osl_break_edge.h>
 #include <osl/osl_ortho_regress.h>
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_soview.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_macro.h"
+#include "vgui/vgui_easy2D_tableau.h"
+#include "vgui/vgui_soview.h"
 
 #include <xcv/xcv_image_tableau.h>
 

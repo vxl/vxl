@@ -14,10 +14,10 @@
 #include <clsfy/clsfy_binary_threshold_1d_gini_builder.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 #include <mbl/mbl_stl.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
 

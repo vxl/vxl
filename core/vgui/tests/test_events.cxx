@@ -1,7 +1,7 @@
 // \author fsm
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_debug_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_debug_tableau.h"
 
 int main(int argc,char **argv)
 {

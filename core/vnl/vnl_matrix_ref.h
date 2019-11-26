@@ -15,7 +15,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_matrix.h>
+#include "vnl_matrix.h"
 #include "vnl/vnl_export.h"
 
 //: vnl_matrix reference to user-supplied storage
@@ -50,7 +50,7 @@ class VNL_EXPORT vnl_matrix_ref : public vnl_matrix<T>
   { }
 
   //vnl_matrix base class is not no_except, so derived class can not be either
-  vnl_matrix_ref(vnl_matrix_ref<T> && rhs) = default;
+  vnl_matrix_ref(vnl_matrix_ref<T> &&) = default;
 
   ~vnl_matrix_ref() = default;
 

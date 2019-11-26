@@ -7,8 +7,8 @@
 #include <vector>
 #include <map>
 #include <algorithm>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #include <vcl_where_root_dir.h>
 
 #include <bocl/bocl_manager.h>
@@ -24,10 +24,10 @@
 
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "vnl/vnl_vector_fixed.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <brdb/brdb_value.h>

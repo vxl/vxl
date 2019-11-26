@@ -7,9 +7,9 @@
 #include <iostream>
 #include "vgui_adaptor_tableau.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgui/vgui_adaptor.h>
+#include "vgui/vgui_adaptor.h"
 
 //:
 // The sole raison d'etre of the adaptor_tableau is to propagate

@@ -1,12 +1,12 @@
 // This is core/vil/algo/tests/test_algo_fft.cxx
 #include <complex>
 #include <ctime>
-#include <testlib/testlib_test.h>
-#include <vil/vil_math.h>
-#include <vil/vil_image_view.h>
+#include "testlib/testlib_test.h"
+#include "vil/vil_math.h"
+#include "vil/vil_image_view.h"
 #include <vil/algo/vil_fft.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_algo_fft()

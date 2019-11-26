@@ -14,7 +14,7 @@
 #include <bprb/bprb_func_process.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
@@ -30,10 +30,10 @@
 #include <bocl/bocl_device.h>
 
 #include <bocl/bocl_kernel.h>
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vsph/vsph_camera_bounds.h>
-#include <vgl/vgl_ray_3d.h>
+#include "vgl/vgl_ray_3d.h"
 #include <boct/boct_bit_tree.h>
 
 

@@ -7,7 +7,7 @@
 // \author awf@robots.ox.ac.uk
 // \date 02 Apr 00
 
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1_memory_image_of.h"
 
 //: Return nearest neighbour
 template <class T, class U>

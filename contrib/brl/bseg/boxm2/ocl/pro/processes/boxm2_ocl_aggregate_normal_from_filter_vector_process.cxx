@@ -33,9 +33,9 @@
 
 //utilities
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 namespace boxm2_ocl_aggregate_normal_from_filter_vector_process_globals
 {

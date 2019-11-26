@@ -7,11 +7,11 @@
 #include <iostream>
 #include "vpgl_fm_compute_7_point.h"
 //
-#include <vnl/vnl_fwd.h>
-#include <vnl/vnl_math.h> // for twopi
+#include "vnl/vnl_fwd.h"
+#include "vnl/vnl_math.h" // for twopi
 #include <vgl/algo/vgl_norm_trans_2d.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //-------------------------------------------

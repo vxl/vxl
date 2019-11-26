@@ -16,9 +16,9 @@
 #include <fstream>
 #include <bprb/bprb_func_process.h>
 #include <bvxm/grid/io/bvxm_vrml_voxel_grid.h>
-#include <vnl/vnl_float_4.h>
+#include "vnl/vnl_float_4.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 namespace bvxm_save_rgba_grid_vrml_process_globals

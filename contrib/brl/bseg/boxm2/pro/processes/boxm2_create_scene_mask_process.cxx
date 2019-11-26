@@ -4,13 +4,13 @@
 //:
 // \file
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_view_base.h"
 
 #include <boxm2/boxm2_scene.h>
 
-#include <vgl/vgl_polygon_scan_iterator.h>
-#include <vgl/vgl_convex.h>
+#include "vgl/vgl_polygon_scan_iterator.h"
+#include "vgl/vgl_convex.h"
 
 
 

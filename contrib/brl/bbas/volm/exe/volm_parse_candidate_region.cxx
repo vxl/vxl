@@ -10,9 +10,9 @@
 //  Modifications
 // \endverbatim
 //
-#include <vul/vul_file.h>
-#include <vul/vul_arg.h>
-#include <vgl/vgl_intersection.h>
+#include "vul/vul_file.h"
+#include "vul/vul_arg.h"
+#include "vgl/vgl_intersection.h"
 #include <vgl/io/vgl_io_polygon.h>
 #include <bkml/bkml_write.h>
 #include <bkml/bkml_parser.h>

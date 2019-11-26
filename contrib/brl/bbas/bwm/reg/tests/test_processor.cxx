@@ -1,20 +1,20 @@
 // This is brl/bbas/bwm/reg/tests/test_processor.cxx
 #include <iostream>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_numeric_traits.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_plane_3d.h>
+#include "vnl/vnl_numeric_traits.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_plane_3d.h"
 #include <bwm/reg/bwm_reg_processor.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
-#include <vil/vil_load.h>
-#include <vpgl/vpgl_rational_camera.h>
+#include "vil/vil_load.h"
+#include "vpgl/vpgl_rational_camera.h"
 
 #if 0 // unused!!
 static void print_edges(std::vector<vsol_digital_curve_2d_sptr> const& edges)

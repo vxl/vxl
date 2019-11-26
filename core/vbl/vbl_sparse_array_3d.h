@@ -24,8 +24,8 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vbl/vbl_sparse_array_base.h>
-#include <vbl/vbl_triple.h>
+#include "vbl_sparse_array_base.h"
+#include "vbl_triple.h"
 
 
 //: Sparse 3d array allowing space efficient access

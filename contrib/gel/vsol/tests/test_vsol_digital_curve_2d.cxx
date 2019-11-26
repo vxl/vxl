@@ -10,15 +10,15 @@
 //*****************************************************************************
 #include <iostream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>

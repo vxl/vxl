@@ -1,14 +1,14 @@
 #include <cmath>
 #include <iostream>
 #include <algorithm>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <volm/conf/volm_conf_score.h>
 #include <volm/conf/volm_conf_buffer.h>
 #include <volm/conf/volm_conf_object.h>
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_math.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #define EPISLON 1E-5

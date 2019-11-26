@@ -18,7 +18,7 @@
 // \endverbatim
 
 
-#include <vgui/vgui_tableau.h>
+#include "vgui_tableau.h"
 #include <vil1/vil1_image.h>
 class vil1_crop_image_impl;
 class vil1_image;

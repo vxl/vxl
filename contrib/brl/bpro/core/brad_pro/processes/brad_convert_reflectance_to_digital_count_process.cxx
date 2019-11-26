@@ -7,13 +7,13 @@
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_math.h>
-#include <vnl/vnl_math.h>
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_math.h"
+#include "vnl/vnl_math.h"
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_atmospheric_parameters.h>
 #include <brad/brad_image_atmospherics_est.h>

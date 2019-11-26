@@ -9,15 +9,15 @@
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #include "test_utils.h"
 
 // for stats
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <vcl_sys/time.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 //#include <unistd.h>
 

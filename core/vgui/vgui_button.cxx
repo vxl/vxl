@@ -6,7 +6,7 @@
 #include <iostream>
 #include "vgui_button.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 std::ostream& operator<<(std::ostream& s, vgui_button b)

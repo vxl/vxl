@@ -7,7 +7,7 @@
 // \author K.Y.McGaul
 
 #include "vsl_string_io.h"
-#include <vsl/vsl_binary_io.h>
+#include "vsl_binary_io.h"
 
 //====================================================================================
 //: Write basic_string to binary stream

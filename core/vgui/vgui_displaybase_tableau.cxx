@@ -13,15 +13,15 @@
 #include "vgui_macro.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_glu.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_message.h>
-#include <vgui/vgui_style.h>
-#include <vgui/vgui_soview.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_glu.h"
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_message.h"
+#include "vgui/vgui_style.h"
+#include "vgui/vgui_soview.h"
 
 bool vgui_displaybase_tableau_selection_callback::select(unsigned)
 {

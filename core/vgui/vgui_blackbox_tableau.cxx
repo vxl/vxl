@@ -16,13 +16,13 @@
 #include "vgui_blackbox_tableau.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vpl/vpl.h>
+#include "vpl/vpl.h"
 
-#include <vgui/vgui.h>
-#include <vgui/vgui_utils.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_utils.h"
 
 vgui_blackbox_tableau::vgui_blackbox_tableau(vgui_tableau_sptr const& t) :
   vgui_wrapper_tableau(t),

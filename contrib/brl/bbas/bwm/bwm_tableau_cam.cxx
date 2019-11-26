@@ -15,23 +15,23 @@
 #include <bwm/algo/bwm_utils.h>
 #include <bwm/algo/bwm_algo.h>
 
-#include <vgl/vgl_homg_plane_3d.h>
+#include "vgl/vgl_homg_plane_3d.h"
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 
-#include <vgui/vgui_dialog.h>
-#include <vgui/vgui_dialog_extensions.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui_dialog.h"
+#include "vgui/vgui_dialog_extensions.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 
 
 #include <volm/volm_category_io.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 #define NUM_CIRCL_SEC 12
 

@@ -2,7 +2,7 @@
 #include <iostream>
 #include "bapl_io_dsift.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void vsl_b_read(vsl_b_istream &is, bapl_dsift &dsift)

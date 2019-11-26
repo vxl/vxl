@@ -15,8 +15,8 @@
 //   2004/09/17 Peter Vanroose - made vector() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim
 
-#include <vcsl/vcsl_spatial_transformation.h>
-#include <vcsl/vcsl_translation_sptr.h>
+#include "vcsl_spatial_transformation.h"
+#include "vcsl_translation_sptr.h"
 #include <vnl/vnl_vector.h>
 
 //: Translation transformation

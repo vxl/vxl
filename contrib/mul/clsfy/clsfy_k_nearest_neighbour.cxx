@@ -9,13 +9,13 @@
 #include "clsfy_k_nearest_neighbour.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 
-#include <vnl/vnl_math.h>
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_vector_io.h>
+#include "vnl/vnl_math.h"
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_vector_io.h"
 
 #include <mbl/mbl_priority_bounded_queue.h>
 

@@ -3,11 +3,11 @@
 //:
 // \file
 
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_math.h"
+#include "vil/vil_convert.h"
 #include <vil/algo/vil_gauss_filter.h>
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_image_view_base.h"
 
 //: Constructor
 bool vil_gaussian_process_cons(bprb_func_process& pro)

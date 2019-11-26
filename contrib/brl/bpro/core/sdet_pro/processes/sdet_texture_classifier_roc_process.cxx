@@ -7,14 +7,14 @@
 #include <brdb/brdb_value.h>
 #include <sdet/sdet_atmospheric_image_classifier.h>
 #include <sdet/sdet_texture_classifier_params.h>
-#include <vil/vil_image_view.h>
-#include <vnl/vnl_random.h>
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_vector_io.h>
+#include "vil/vil_image_view.h"
+#include "vnl/vnl_random.h"
+#include "vsl/vsl_binary_io.h"
+#include "vsl/vsl_vector_io.h"
 #include <bbas_pro/bbas_1d_array_float.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
-#include <vul/vul_file.h>
-#include <vil/vil_math.h>
+#include "vgl/vgl_polygon_scan_iterator.h"
+#include "vul/vul_file.h"
+#include "vil/vil_math.h"
 
 //: initialize input and output types
 bool sdet_texture_classifier_roc_process_cons(bprb_func_process& pro)

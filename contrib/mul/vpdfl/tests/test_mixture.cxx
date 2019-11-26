@@ -7,23 +7,23 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Ian Scott
 // \brief test vpdfl_gaussian, building, sampling, saving etc.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpl/vpl.h> // vpl_unlink()
+#include "vpl/vpl.h" // vpl_unlink()
 #include <vpdfl/vpdfl_mixture.h>
 #include <vpdfl/vpdfl_mixture_builder.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
 #include <vpdfl/vpdfl_sampler_base.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 #include <vpdfl/vpdfl_add_all_binary_loaders.h>
 
 #ifndef LEAVE_FILES_BEHIND

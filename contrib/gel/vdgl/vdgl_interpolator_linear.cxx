@@ -7,12 +7,12 @@
 #include "vdgl_interpolator_linear.h"
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vsol/vsol_point_2d.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_numeric_traits.h"
+#include "vnl/vnl_math.h"
 #include <cassert>
 
 

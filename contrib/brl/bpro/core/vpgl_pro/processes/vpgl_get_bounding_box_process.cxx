@@ -7,17 +7,17 @@
 
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_plane_3d.h"
+#include "vgl/vgl_intersection.h"
 #include <vsph/vsph_camera_bounds.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_box_2d.h>
-#include <vsl/vsl_binary_io.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
+#include "vgl/vgl_polygon_scan_iterator.h"
+#include "vgl/vgl_polygon.h"
+#include "vgl/vgl_box_2d.h"
+#include "vsl/vsl_binary_io.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_save.h"
 
 //: initialization
 bool vpgl_get_bounding_box_process_cons(bprb_func_process& pro)

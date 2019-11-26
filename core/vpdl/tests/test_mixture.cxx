@@ -1,14 +1,14 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <testlib/testlib_test.h>
-#include <vpdl/vpdl_mixture.h>
-#include <vpdl/vpdl_gaussian.h>
-#include <vpdl/vpdl_gaussian_sphere.h>
-#include <vpdl/vpdl_gaussian_indep.h>
-#include <vnl/vnl_random.h>
+#include "testlib/testlib_test.h"
+#include "vpdl/vpdl_mixture.h"
+#include "vpdl/vpdl_gaussian.h"
+#include "vpdl/vpdl_gaussian_sphere.h"
+#include "vpdl/vpdl_gaussian_indep.h"
+#include "vnl/vnl_random.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

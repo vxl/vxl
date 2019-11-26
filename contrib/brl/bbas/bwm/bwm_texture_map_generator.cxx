@@ -1,21 +1,21 @@
 #include "bwm_texture_map_generator.h"
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_copy.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_copy.h"
+#include "vil/vil_crop.h"
+#include "vil/vil_save.h"
 #include <vsol/vsol_box_2d.h>
 
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_point_2d.h"
 
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
 #include <bmsh3d/bmsh3d_face_mc.h>
 #include <bmsh3d/bmsh3d_textured_face_mc.h>
 #include <bmsh3d/bmsh3d_vertex.h>
 
-#include <vpgl/vpgl_lvcs.h>
+#include "vpgl/vpgl_lvcs.h"
 
 
 bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr obj,

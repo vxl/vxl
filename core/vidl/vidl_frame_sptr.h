@@ -9,7 +9,7 @@
 // \date 13 Jan 2006
 
 #include <vil/vil_smart_ptr.h>
-#include <vidl/vidl_frame.h>
+#include "vidl_frame.h"
 
 //: A smart pointer to a video frame
 typedef vil_smart_ptr<vidl_frame> vidl_frame_sptr;

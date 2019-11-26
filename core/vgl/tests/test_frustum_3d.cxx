@@ -3,12 +3,12 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <testlib/testlib_test.h>
-#include <vgl/vgl_frustum_3d.h>
-#include <vgl/vgl_ray_3d.h>
-#include <vgl/vgl_box_3d.h>
+#include "testlib/testlib_test.h"
+#include "vgl/vgl_frustum_3d.h"
+#include "vgl/vgl_ray_3d.h"
+#include "vgl/vgl_box_3d.h"
 
 
 static void test_all()

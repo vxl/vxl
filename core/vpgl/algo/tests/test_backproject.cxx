@@ -1,16 +1,16 @@
 #include <iostream>
 #include <algorithm>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <vpgl/algo/vpgl_backproject.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_4.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_plane_3d.h>
+#include "vpgl/vpgl_rational_camera.h"
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_4.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_plane_3d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 static void test_backproject()

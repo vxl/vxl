@@ -9,12 +9,12 @@
 #include <bwm/bwm_3d_corr_sptr.h>
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_arg.h>
-#include <vgl/vgl_point_3d.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
+#include "vul/vul_arg.h"
+#include "vgl/vgl_point_3d.h"
+#include "vil/vil_save.h"
+#include "vil/vil_convert.h"
 
 #include <bwm/video/bwm_video_corr_processor.h>
 #include <bwm/video/bwm_video_site_io.h>
@@ -22,10 +22,10 @@
 
 #include <vpgl/algo/vpgl_triangulate_points.h>
 
-#include <vidl/vidl_istream_sptr.h>
-#include <vidl/vidl_image_list_istream.h>
+#include "vidl/vidl_istream_sptr.h"
+#include "vidl/vidl_image_list_istream.h"
 
-#include <vpgl/vpgl_fundamental_matrix.h>
+#include "vpgl/vpgl_fundamental_matrix.h"
 #include <vgl/algo/vgl_homg_operators_2d.h>
 
 #include <ipts/ipts_draw.h>
@@ -38,7 +38,7 @@
 unsigned fg_plane = 0; // draw onto red plane
 unsigned bg_plane = 2; // draw onto blue plane
 
-#include <vil/vil_view_as.h>
+#include "vil/vil_view_as.h"
 
 void compute_FM_constraint(std::vector<bwm_video_corr_sptr>& corrs,
                            std::vector<vpgl_perspective_camera<double> >& cams,

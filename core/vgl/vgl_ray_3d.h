@@ -15,10 +15,10 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_line_segment_3d.h>
-#include <vgl/vgl_line_3d_2_points.h>
+#include "vgl_vector_3d.h"
+#include "vgl_point_3d.h"
+#include "vgl_line_segment_3d.h"
+#include "vgl_line_3d_2_points.h"
 
 //: Represents a 3-d ray
 //  The ray origin is p0 and the direction is t_.

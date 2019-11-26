@@ -6,10 +6,10 @@
 // \brief Represents 2x2 symmetric matrix, used as weight matrix
 // \author Tim Cootes
 
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_io.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Sets axis (eigenvector) of matrix and var along each

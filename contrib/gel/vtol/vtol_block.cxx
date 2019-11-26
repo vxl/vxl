@@ -10,7 +10,7 @@
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

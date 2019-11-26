@@ -2,7 +2,7 @@
 #include "vmal_refine_lines.h"
 
 #include <vmal/vmal_operators.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_inverse.h"
 
 vmal_refine_lines::vmal_refine_lines() = default;
 

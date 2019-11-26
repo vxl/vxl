@@ -7,30 +7,30 @@
 // \author Matt Leotta
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_file_format.h>
-#include <vgui/vgui_error_dialog.h>
-#include <vgui/vgui_dialog.h>
+#include "vil/vil_file_format.h"
+#include "vgui/vgui_error_dialog.h"
+#include "vgui/vgui_dialog.h"
 
 
 #include <vidl/vidl_config.h>
-#include <vidl/vidl_image_list_istream.h>
-#include <vidl/vidl_image_list_ostream.h>
+#include "vidl/vidl_image_list_istream.h"
+#include "vidl/vidl_image_list_ostream.h"
 
 #if VIDL_HAS_FFMPEG
-#include <vidl/vidl_ffmpeg_istream.h>
-#include <vidl/vidl_ffmpeg_ostream.h>
-#include <vidl/vidl_ffmpeg_ostream_params.h>
+#include "vidl/vidl_ffmpeg_istream.h"
+#include "vidl/vidl_ffmpeg_ostream.h"
+#include "vidl/vidl_ffmpeg_ostream_params.h"
 #endif
 
 #if VIDL_HAS_DC1394
-#include <vidl/vidl_dc1394_istream.h>
+#include "vidl/vidl_dc1394_istream.h"
 #endif
 
 #if VIDL_HAS_VIDEODEV2
-#include <vidl/vidl_v4l2_devices.h>
-#include <vidl/vidl_v4l2_istream.h>
+#include "vidl/vidl_v4l2_devices.h"
+#include "vidl/vidl_v4l2_istream.h"
 #endif
 
 //: Use vgui dialogs to prompt the user for parameters and open an istream

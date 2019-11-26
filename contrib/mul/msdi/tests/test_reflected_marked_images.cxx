@@ -5,14 +5,14 @@
 //
 //=======================================================================
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief test msdi_reflected_marked_images
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <msdi/msdi_reflected_marked_images.h>
 #include <msdi/msdi_array_of_marked_images.h>

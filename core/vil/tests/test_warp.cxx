@@ -1,9 +1,9 @@
 // This is core/vil/tests/test_warp.cxx
-#include <testlib/testlib_test.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_nearest_interp.h>
-#include <vil/vil_warp.h>
-#include <vil/vil_print.h>
+#include "testlib/testlib_test.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_nearest_interp.h"
+#include "vil/vil_warp.h"
+#include "vil/vil_print.h"
 
 static vxl_byte interpolator(vil_image_view<vxl_byte> const& view,
                              double x, double y, unsigned p)

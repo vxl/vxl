@@ -1,9 +1,9 @@
 // This is gel/vtol/tests/test_cycle_processor.cxx
 #include <iostream>
 #include <algorithm>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>

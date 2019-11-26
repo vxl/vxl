@@ -11,23 +11,23 @@
 #include <volm/volm_tile.h>
 #include <volm/volm_camera_space.h>
 #include <volm/volm_camera_space_sptr.h>
-#include <vul/vul_file.h>
-#include <vul/vul_arg.h>
+#include "vul/vul_file.h"
+#include "vul/vul_arg.h"
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_loc_hyp_sptr.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bkml/bkml_write.h>
 #include <bkml/bkml_parser.h>
-#include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
-#include <vnl/vnl_math.h>
+#include "vpgl/vpgl_lvcs.h"
+#include "vpgl/vpgl_lvcs_sptr.h"
+#include "vnl/vnl_math.h"
 #include <volm/volm_candidate_list.h>
-#include <vil/vil_load.h>
-#include <vil/vil_image_resource.h>
+#include "vil/vil_load.h"
+#include "vil/vil_image_resource.h"
 
 static void error_report(std::string const& error_file, std::string const& error_msg)
 {

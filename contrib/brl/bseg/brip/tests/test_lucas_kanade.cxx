@@ -2,12 +2,12 @@
 #include <iostream>
 #include <iomanip>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_math.h>
-#include <vil1/vil1_memory_image_of.h>
+#include "vnl/vnl_math.h"
+#include "vil1/vil1_memory_image_of.h"
 #include <brip/brip_vil1_float_ops.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 static void test_lucas_kanade()
 {

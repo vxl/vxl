@@ -8,16 +8,16 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vul/vul_printf.h>
+#include "vul/vul_printf.h"
 
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_cross_product_matrix.h>
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_cross_product_matrix.h"
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>

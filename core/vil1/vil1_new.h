@@ -18,8 +18,8 @@
 //     000216 AWF Initial version.
 //\endverbatim
 
-#include <vil1/vil1_fwd.h>
-#include <vil1/vil1_image.h>
+#include "vil1_fwd.h"
+#include "vil1_image.h"
 
 //: Make a new image.
 vil1_image vil1_new(int width, int height, vil1_image const& prototype);

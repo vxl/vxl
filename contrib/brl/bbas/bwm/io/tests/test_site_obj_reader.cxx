@@ -2,13 +2,13 @@
 #include <iostream>
 #include <sstream>
 #include <cstdio>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include "../bwm_site.h"
-#include <vul/vul_file.h>
-#include <vpl/vpl.h>
+#include "vul/vul_file.h"
+#include "vpl/vpl.h"
 void test_site_obj_reader()
 {
   // test obj file

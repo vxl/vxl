@@ -1,10 +1,10 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #include <rgrl/rgrl_feature_point_region.h>
 #include <rgrl/rgrl_feature_region.h>
-#include <vil/vil_image_view.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_int_2.h>
+#include "vil/vil_image_view.h"
+#include "vnl/vnl_vector_fixed.h"
+#include "vnl/vnl_int_2.h"
 #include "test_util.h"
 
 typedef vnl_vector_fixed<double,2> vector_2d;

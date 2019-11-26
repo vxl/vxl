@@ -6,7 +6,7 @@
 // \brief Routines to compute sum of squared differences between two images
 // \author  fsm
 
-#include <vil1/vil1_memory_image_of.h>
+#include "vil1_memory_image_of.h"
 
 //: sum of squared differences for in-core images.
 // \verbatim

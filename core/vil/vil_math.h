@@ -12,11 +12,11 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_view_as.h>
-#include <vil/vil_plane.h>
-#include <vil/vil_transform.h>
+#include "vil_image_view.h"
+#include "vil_image_resource.h"
+#include "vil_view_as.h"
+#include "vil_plane.h"
+#include "vil_transform.h"
 #include <vil/vil_config.h>
 
 #ifdef VXL_HAS_SSE2_HARDWARE_SUPPORT

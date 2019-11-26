@@ -6,7 +6,7 @@
 // \author Francois BERTEL
 
 #include <vector>
-#include <vcsl/vcsl_matrix_param_sptr.h>
+#include "vcsl_matrix_param_sptr.h"
 #include <vbl/vbl_ref_count.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>

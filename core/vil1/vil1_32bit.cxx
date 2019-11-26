@@ -5,8 +5,8 @@
 
 
 #include "vil1_32bit.h"
-#include <vil1/vil1_stream.h>
-#include <vxl_config.h>
+#include "vil1/vil1_stream.h"
+#include "vxl_config.h"
 
 using word8 = vxl_uint_8;
 using word32 = vxl_uint_32;

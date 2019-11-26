@@ -4,8 +4,8 @@
 //  \author Tim Cootes
 
 #include "vimt3d_image_3d.h"
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
 
 //: Return vector indicating size of image in pixels
 //  3D image is v[0] x v[1] x v[2]

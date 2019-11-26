@@ -7,11 +7,11 @@
 
 #include <bprb/bprb_parameters.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vsl/vsl_binary_io.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vsl/vsl_binary_io.h"
 
 //: initialization
 bool vpgl_save_perspective_camera_vrml_process_cons(bprb_func_process& pro)

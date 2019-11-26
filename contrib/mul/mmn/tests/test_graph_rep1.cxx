@@ -1,9 +1,9 @@
 // This is mul/mmn/tests/test_graph_rep1.cxx
 #include <iostream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <mmn/mmn_graph_rep1.h>
 

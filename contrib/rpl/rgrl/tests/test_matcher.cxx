@@ -2,14 +2,14 @@
 #include <algorithm>
 #include <vector>
 #include <string>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_sprintf.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_double_2.h>
+#include "vul/vul_sprintf.h"
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_double_2.h"
 
 #include <rgrl/rgrl_matcher_k_nearest.h>
 #include <rgrl/rgrl_matcher_k_nearest_pick_one.h>

@@ -18,8 +18,8 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_view_base.h>
+#include "vil_image_view.h"
+#include "vil_image_view_base.h"
 
 template <class T>
 class vil_pyramid_image_view

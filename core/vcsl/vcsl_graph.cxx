@@ -2,9 +2,9 @@
 #include "vcsl_graph.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vcsl/vcsl_spatial.h>
+#include "vcsl/vcsl_spatial.h"
 
 //---------------------------------------------------------------------------
 // Has `this' `cs' as node ?

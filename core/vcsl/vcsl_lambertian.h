@@ -11,8 +11,8 @@
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
-#include <vcsl/vcsl_geographic.h>
-#include <vcsl/vcsl_lambertian_sptr.h>
+#include "vcsl_geographic.h"
+#include "vcsl_lambertian_sptr.h"
 
 //: Lambert Conformal Conic Projection
 // Coordinate system in which shapes are preserved while scale is nonuniform.

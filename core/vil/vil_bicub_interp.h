@@ -16,7 +16,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vil/vil_image_view.h>
+#include "vil_image_view.h"
 
 //: Compute bicubic interpolation at (x,y), no bound checks. Requires 1<x<ni-3, 1<y<nj-3
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]

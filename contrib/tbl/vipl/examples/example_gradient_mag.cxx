@@ -17,20 +17,20 @@
 //
 #include <iostream>
 #include <cstring>
-#include <vbl/vbl_array_2d.h>
+#include "vbl/vbl_array_2d.h"
 
 #include <vipl/vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.h>
 #include <vipl/vipl_gradient_mag.h>
 
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 typedef vbl_array_2d<vxl_byte> img_type;
 
 // for I/O:
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 int

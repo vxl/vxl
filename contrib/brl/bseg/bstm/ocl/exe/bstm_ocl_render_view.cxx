@@ -6,10 +6,10 @@
 #include <bocl/bocl_cl.h>
 
 //vil and camera includes
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_perspective_camera.h"
 
 //executable args
-#include <vul/vul_arg.h>
+#include "vul/vul_arg.h"
 
 //bstm scene stuff
 #include <bstm/ocl/bstm_opencl_cache.h>
@@ -19,18 +19,18 @@
 
 //vgui stuff
 #include <bstm/view/bstm_ocl_render_tableau.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_window.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_clear_tableau.h>
-#include <vgui/vgui_easy3D_tableau.h>
-#include <vgui/vgui_viewer3D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_window.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_clear_tableau.h"
+#include "vgui/vgui_easy3D_tableau.h"
+#include "vgui/vgui_viewer3D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
 
-#include <vgui/vgui_slider_tableau.h>
-#include <vgui/vgui_poly_tableau.h>
+#include "vgui/vgui_slider_tableau.h"
+#include "vgui/vgui_poly_tableau.h"
 
 void slide_time( vgui_slider_tableau* tab, void* data )
 {

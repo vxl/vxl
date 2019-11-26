@@ -5,7 +5,7 @@
 #include "bbgm_viewer.h"
 #include "bbgm_view_maker.h"
 #include "bbgm_apply.h"
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 
 //: Probe to see if this viewer can handle this image type

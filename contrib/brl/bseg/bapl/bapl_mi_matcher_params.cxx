@@ -5,7 +5,7 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #define BAPL_MIN_SCALE 1.0

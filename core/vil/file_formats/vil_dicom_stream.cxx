@@ -3,12 +3,12 @@
 #if HAS_DCMTK
 
 #include "vil_dicom_stream.h"
-#include <vil/vil_stream.h>
+#include "vil/vil_stream.h"
 #include <dcerror.h>
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 // ===========================================================================

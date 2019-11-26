@@ -17,20 +17,20 @@
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
 #include <volm/volm_candidate_list.h>
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
-#include <vgl/vgl_polygon.h>
+#include "vul/vul_arg.h"
+#include "vul/vul_file.h"
+#include "vil/vil_save.h"
+#include "vil/vil_load.h"
+#include "vgl/vgl_polygon.h"
 #include <vil/algo/vil_find_4con_boundary.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bvrml/bvrml_write.h>
-#include <vil/vil_crop.h>
+#include "vil/vil_crop.h"
 #include <bkml/bkml_parser.h>
 #include <bkml/bkml_write.h>
-#include <vpgl/vpgl_utm.h>
+#include "vpgl/vpgl_utm.h"
 
 
 bool get_top_cameras(unsigned const& tile_idx, std::string const& cam_bin,

@@ -10,7 +10,7 @@
 // \date Mar 5, 2012
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <boxm2/view/boxm2_trajectory.h>
 

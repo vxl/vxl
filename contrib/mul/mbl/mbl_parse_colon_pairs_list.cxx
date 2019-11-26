@@ -7,9 +7,9 @@
 // \author Tim Cootes
 
 #include <mbl/mbl_exception.h>
-#include <vsl/vsl_indent.h>
+#include "vsl/vsl_indent.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

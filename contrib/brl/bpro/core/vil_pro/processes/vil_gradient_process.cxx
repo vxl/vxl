@@ -3,10 +3,10 @@
 //:
 // \file
 
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
+#include "vil/vil_math.h"
+#include "vil/vil_convert.h"
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_image_view_base.h"
 
 //: Constructor
 bool vil_gradient_process_cons(bprb_func_process& pro)

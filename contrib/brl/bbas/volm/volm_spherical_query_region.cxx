@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "volm_spherical_query_region.h"
-#include <vgl/vgl_polygon.h>
+#include "vgl/vgl_polygon.h"
 #include <bsol/bsol_algs.h>
 #include <bpgl/bpgl_camera_utils.h>
 #include <vsph/vsph_utils.h>
@@ -9,7 +9,7 @@
 #include "volm_char_codes.h"
 #include <bpgl/depth_map/depth_map_region.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 void volm_spherical_query_region::

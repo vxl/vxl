@@ -9,11 +9,11 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   26 april 2002
 
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <vipl/accessors/vipl_accessors_vil_image_view.h>
 #include <vipl/vipl_gaussian_convolution.h>
 #include "test_driver.h"
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 
 #define ALL_TESTS(x,m,p) \
   ONE_TEST(x,p,byte_img,byte_ori,vil_image_view<vxl_byte>,vxl_byte,10705,m+"_byte"); \

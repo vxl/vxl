@@ -10,7 +10,7 @@
 // \date Mar 10, 2011
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bstm/io/bstm_cache.h>
 #include <bstm/io/bstm_lru_cache.h>

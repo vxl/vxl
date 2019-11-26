@@ -18,15 +18,15 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_parent_child_link.h>
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_popup_params.h>
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui/vgui_macro.h"
+#include "vgui/vgui_event.h"
+#include "vgui/vgui_parent_child_link.h"
+#include "vgui/vgui_menu.h"
+#include "vgui/vgui_popup_params.h"
+#include "vgui/vgui_tableau_sptr.h"
 
 // static data
 //------------

@@ -9,18 +9,18 @@
 
 #ifdef DEBUG
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #endif
 
 #include <brdb/brdb_value.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_sphere_3d.h>
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_sphere_3d.h"
 #include <bvrml/bvrml_write.h>
 
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
 
 //: sets input and output types
 bool bvrml_write_box_process_cons(bprb_func_process& pro)

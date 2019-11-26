@@ -3,8 +3,8 @@
 // \author Vishal Jain
 // \date 26-Jan-2011
 
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
+#include "testlib/testlib_test.h"
+#include "testlib/testlib_root_dir.h"
 #include <brdb/brdb_value.h>
 
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>

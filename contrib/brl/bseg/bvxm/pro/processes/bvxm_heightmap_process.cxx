@@ -4,7 +4,7 @@
 // \file
 #include <bprb/bprb_func_process.h>
 #include <bvxm/bvxm_voxel_world.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 //: set input and output types
 bool bvxm_heightmap_process_cons(bprb_func_process& pro)

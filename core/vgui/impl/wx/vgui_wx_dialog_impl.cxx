@@ -15,7 +15,7 @@
 
 #include "vgui_wx_adaptor.h"
 
-#include <vgui/vgui_color_text.h>
+#include "vgui/vgui_color_text.h"
 #include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>
 
@@ -43,7 +43,7 @@
 #endif
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 

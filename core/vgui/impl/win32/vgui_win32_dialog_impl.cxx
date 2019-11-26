@@ -7,7 +7,7 @@
 #include "vgui_win32_dialog_impl.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vgui/internals/vgui_simple_field.h>
 #include <vgui/internals/vgui_file_field.h>

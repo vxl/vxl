@@ -1,12 +1,12 @@
 // This is core/vil/algo/tests/test_median.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 #include <vil/algo/vil_median.h>
-#include <vil/vil_print.h>
+#include "vil/vil_print.h"
 
 static void test_median_byte()
 {

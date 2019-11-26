@@ -6,13 +6,13 @@
 #include <vector>
 #include "ProjectiveBasis2D.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3x4.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_double_3.h"
+#include "vnl/vnl_double_3x3.h"
+#include "vnl/vnl_double_3x4.h"
+#include "vnl/vnl_inverse.h"
 #include <vnl/algo/vnl_svd.h>
 
 static const int warn_ = false;

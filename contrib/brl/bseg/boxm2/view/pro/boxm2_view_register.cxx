@@ -7,7 +7,7 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/view/boxm2_trajectory.h>
-#include <vpgl/vpgl_camera.h>
+#include "vpgl/vpgl_camera.h"
 
 #include "boxm2_view_processes.h"
 

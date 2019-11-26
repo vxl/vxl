@@ -11,7 +11,7 @@
 #include <bprb/bprb_func_process.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bstm/bstm_scene.h>
 #include <bstm/io/bstm_cache.h>
@@ -20,7 +20,7 @@
 
 #include <boxm2/basic/boxm2_array_3d.h>
 #include <boct/boct_bit_tree.h>
-#include <vgl/vgl_intersection.h>
+#include "vgl/vgl_intersection.h"
 namespace bstm_scene_statistics_process_globals
 {
   constexpr unsigned n_inputs_ = 8;

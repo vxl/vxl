@@ -6,9 +6,9 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
 // declare bocl_kernel* maps
 std::map<std::string, bocl_kernel *> boxm2_ocl_refine::tree_kernels_;

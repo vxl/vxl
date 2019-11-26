@@ -17,15 +17,15 @@
 #include <iostream>
 #include "vgui_gtk2_adaptor.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtkgl.h>
 #include <gdk/gdkgl.h>
 
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_popup_params.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_popup_params.h"
 #include <vgui/internals/vgui_overlay_helper.h>
 #include "vgui_gtk2_utils.h"
 #include "vgui_gtk2_window.h"

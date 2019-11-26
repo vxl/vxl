@@ -2,8 +2,8 @@
 //:
 // \file
 #include <bgui/bgui_vtol_soview2D.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_style.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_style.h"
 #include <vtol/vtol_face_2d.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>

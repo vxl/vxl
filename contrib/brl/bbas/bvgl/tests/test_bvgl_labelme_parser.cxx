@@ -1,15 +1,15 @@
 //This is brl/bbas/bvgl/tests/test_bvgl_labelme_parser.cxx
 #include <iostream>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 //:
 // \file
 
 #include <bvgl/bvgl_labelme_parser.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 static std::string test_xml_file()
 {

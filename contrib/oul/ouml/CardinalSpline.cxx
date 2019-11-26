@@ -1,10 +1,10 @@
 #include "CardinalSpline.h"
 //:
 // \file
-#include <vsl/vsl_vector_io.hxx>
+#include "vsl/vsl_vector_io.hxx"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Return a list of points on the boundary of the curve.

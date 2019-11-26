@@ -1,14 +1,14 @@
 // This is core/vil/tests/test_image_view_maths.cxx
 #include <iostream>
 #include <sstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
-#include <vil/vil_copy.h>
-#include <vil/vil_math.h>
-#include <vil/vil_print.h>
+#include "vxl_config.h" // for vxl_byte
+#include "vil/vil_copy.h"
+#include "vil/vil_math.h"
+#include "vil/vil_print.h"
 
 template<class T>
 static void test_image_abs_diff(unsigned ni, unsigned nj, T min, T max, T tol)

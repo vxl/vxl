@@ -1,11 +1,11 @@
 #include <iostream>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vgl/vgl_vector_3d.h>
+#include "vgl/vgl_vector_3d.h"
 
 #include "../bvxm_voxel_grid_basic_ops.h"
 

@@ -1,4 +1,4 @@
-#include <testlib/testlib_register.h>
+#include "testlib/testlib_register.h"
 
 DECLARE(vbl_test_bounding_box);
 DECLARE(vbl_test_quadruple);

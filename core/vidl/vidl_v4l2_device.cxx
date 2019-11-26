@@ -22,7 +22,7 @@ extern "C" {
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <fcntl.h>
 #include <unistd.h>

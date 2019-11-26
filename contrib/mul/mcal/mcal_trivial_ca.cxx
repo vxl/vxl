@@ -9,11 +9,11 @@
 // \brief Generates set of axis aligned modes for non-zero elements
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vsl/vsl_binary_io.h>
-#include <vnl/vnl_vector.h>
+#include "vsl/vsl_binary_io.h"
+#include "vnl/vnl_vector.h"
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>

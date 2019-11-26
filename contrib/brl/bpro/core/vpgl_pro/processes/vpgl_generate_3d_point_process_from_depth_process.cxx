@@ -6,12 +6,12 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_generic_camera.h>
-#include <vsl/vsl_binary_io.h>
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_generic_camera.h"
+#include "vsl/vsl_binary_io.h"
 
 namespace vpgl_generate_3d_point_from_depth_process_globals
 {

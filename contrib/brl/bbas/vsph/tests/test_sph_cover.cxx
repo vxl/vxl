@@ -2,9 +2,9 @@
 #include <cmath>
 #include <vector>
 #include <cstdlib>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vsph/vsph_unit_sphere.h>
 #include <vsph/vsph_segment_sphere.h>
@@ -12,7 +12,7 @@
 #include <vsph/vsph_sph_box_2d.h>
 #include <vsph/vsph_sph_cover_2d.h>
 #include <vsph/vsph_utils.h>
-#include <vnl/vnl_math.h>
+#include "vnl/vnl_math.h"
 
 static void test_sph_cover()
 {

@@ -6,9 +6,9 @@
 #include <cmath>
 #include "FMatrixSkew.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_matrix.h>
+#include "vnl/vnl_matrix.h"
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgOperator2D.h>
 #include <mvl/HomgPoint2D.h>

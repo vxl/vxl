@@ -27,9 +27,9 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgui/vgui_key.h>
-#include <vgui/vgui_button.h>
-#include <vgui/vgui_modifier.h>
+#include "vgui_key.h"
+#include "vgui_button.h"
+#include "vgui_modifier.h"
 class vgui_adaptor;
 
 enum vgui_event_type

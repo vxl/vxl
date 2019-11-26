@@ -6,12 +6,12 @@
 // \brief Set of 2D points, stored in a vnl_vector (x0,y0,x1,y1...)
 // \author Tim Cootes
 
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_io.h>
+#include "vsl/vsl_indent.h"
+#include "vsl/vsl_binary_io.h"
 #include <vnl/io/vnl_io_vector.h>
-#include <vgl/vgl_point_2d.h>
+#include "vgl/vgl_point_2d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 

@@ -8,12 +8,12 @@
 #include <bprb/bprb_parameters.h>
 
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_point_3d.h"
 
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //:sets input and output types

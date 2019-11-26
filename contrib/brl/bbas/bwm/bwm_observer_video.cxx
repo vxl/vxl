@@ -10,30 +10,30 @@
 #include "algo/bwm_soview2D_cross.h"
 #include <bsta/bsta_histogram.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_distance.h>
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_distance.h"
 #include <vgl/algo/vgl_homg_operators_3d.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_projection_inspector.h>
-#include <vul/vul_timer.h>
-#include <vul/vul_file.h>
-#include <vnl/vnl_numeric_traits.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
-#include <vil/vil_convert.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_projection_inspector.h"
+#include "vul/vul_timer.h"
+#include "vul/vul_file.h"
+#include "vnl/vnl_numeric_traits.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_load.h"
+#include "vil/vil_convert.h"
 #include <vidl/vidl_config.h>
-#include <vidl/vidl_image_list_istream.h>
-#include <vidl/vidl_image_list_ostream.h>
+#include "vidl/vidl_image_list_istream.h"
+#include "vidl/vidl_image_list_ostream.h"
 #if VIDL_HAS_DSHOW
-#include <vidl/vidl_dshow_file_istream.h>
+#include "vidl/vidl_dshow_file_istream.h"
 #endif
 #include <bwm/video/bwm_video_cam_istream.h>
 #include <bwm/bwm_world.h>
-#include <vidl/vidl_frame.h>
-#include <vidl/vidl_convert.h>
+#include "vidl/vidl_frame.h"
+#include "vidl/vidl_convert.h"
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>

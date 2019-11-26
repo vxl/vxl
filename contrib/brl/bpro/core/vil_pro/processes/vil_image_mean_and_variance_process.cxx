@@ -4,9 +4,9 @@
 // \file
 // Compute the mean and variance of a specific image plane
 // The default plane is 0.
-#include<vil/vil_convert.h>
-#include<vil/vil_image_resource.h>
-#include<vil/vil_math.h>
+#include "vil/vil_convert.h"
+#include "vil/vil_image_resource.h"
+#include "vil/vil_math.h"
 
 
 

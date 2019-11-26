@@ -21,8 +21,8 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vgl/vgl_fwd.h> // forward declare vgl_plane_3d and vgl_homg_point_3d
-#include <vgl/vgl_vector_3d.h>
+#include "vgl_fwd.h" // forward declare vgl_plane_3d and vgl_homg_point_3d
+#include "vgl_vector_3d.h"
 #include <cassert>
 
 //: Represents a homogeneous 3D plane

@@ -18,17 +18,17 @@
 #include <bstm/bstm_data_base.h>
 #include <bstm/ocl/bstm_ocl_util.h>
 #include <bstm/bstm_util.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_image_view.h"
 #include <vil/algo/vil_median.h>
 
 // brdb stuff
 #include <brdb/brdb_value.h>
 
 // directory utility
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 #include <vcl_where_root_dir.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>

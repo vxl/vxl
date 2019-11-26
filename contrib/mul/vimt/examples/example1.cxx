@@ -5,12 +5,12 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
-#include <vnl/vnl_vector.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
+#include "vxl_config.h" // for vxl_byte
+#include "vnl/vnl_vector.h"
+#include "vgl/vgl_point_2d.h"
+#include "vgl/vgl_vector_2d.h"
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_crop.h>
 #include <vimt/vimt_sample_profile_bilin.h>

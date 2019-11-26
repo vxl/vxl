@@ -5,16 +5,16 @@
 #include <algorithm>
 #include <iterator>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_vector_ref.h>
+#include "vnl/vnl_random.h"
+#include "vnl/vnl_matrix.h"
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_vector_ref.h"
 
 #include <mbl/mbl_stepwise_regression.h>
 #include <mbl/mbl_mod_gram_schmidt.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 void test_stepwise_regression()
 {

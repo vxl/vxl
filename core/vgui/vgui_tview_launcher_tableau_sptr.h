@@ -6,7 +6,7 @@
 // \author  fsm
 // \brief   Smart-pointer to vgui_tview_launcher_tableau tableau.
 
-#include <vgui/vgui_tableau_sptr.h>
+#include "vgui_tableau_sptr.h"
 
 class vgui_tview_launcher_tableau;
 typedef vgui_tableau_sptr_t<vgui_tview_launcher_tableau> vgui_tview_launcher_tableau_sptr;

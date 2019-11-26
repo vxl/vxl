@@ -1,12 +1,12 @@
 // This is brl/bseg/sdet/tests/test_denoise_mrf.cxx
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <sdet/sdet_denoise_mrf.h>
 #include <sdet/sdet_denoise_mrf_params.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vil/vil_image_resource.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_new.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 
 void test_denoise_mrf()
 {

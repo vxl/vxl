@@ -8,7 +8,7 @@
 // \author Tim Cootes
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 #include <vnl/io/vnl_io_vector.h>

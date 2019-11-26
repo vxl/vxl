@@ -1,11 +1,11 @@
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <bres/bres_find.h>
 #include <volm/volm_osm_object_point.h>
 #include <volm/volm_osm_object_line.h>
 #include <volm/volm_osm_object_polygon.h>
 #include <volm/volm_osm_objects.h>
 #include <vcl_where_root_dir.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 static void test_osm_object_point()
 {

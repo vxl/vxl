@@ -11,7 +11,7 @@
 #include "vul_printf.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 std::ostream& vul_printf(std::ostream& s, char const * fmt, ...)

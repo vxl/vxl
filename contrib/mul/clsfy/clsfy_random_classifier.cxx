@@ -12,13 +12,13 @@
 #include "clsfy_random_classifier.h"
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-#include <vsl/vsl_binary_loader.h>
+#include "vsl/vsl_binary_loader.h"
 #include <clsfy/clsfy_classifier_base.h>
-#include <vsl/vsl_vector_io.h>
-#include <vnl/vnl_math.h>
+#include "vsl/vsl_vector_io.h"
+#include "vnl/vnl_math.h"
 
 //=======================================================================
 

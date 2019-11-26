@@ -2,15 +2,15 @@
 #include <cmath>
 #include "boxm2_vecf_eyelid_crease.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_sphere_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "vgl/vgl_distance.h"
+#include "vgl/vgl_point_3d.h"
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_sphere_3d.h"
+#include "vgl/vgl_plane_3d.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_vector_fixed.h"
 
 boxm2_vecf_eyelid_crease::boxm2_vecf_eyelid_crease(): boxm2_vecf_lid_base(0.0, 1.0){
   el_ = boxm2_vecf_eyelid(boxm2_vecf_orbit_params());

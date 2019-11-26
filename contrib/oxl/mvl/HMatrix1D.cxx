@@ -5,12 +5,12 @@
 #include <fstream>
 #include "HMatrix1D.h"
 
-#include <vgl/vgl_homg_point_1d.h>
+#include "vgl/vgl_homg_point_1d.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_inverse.h>
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_inverse.h"
 
 //--------------------------------------------------------------
 //

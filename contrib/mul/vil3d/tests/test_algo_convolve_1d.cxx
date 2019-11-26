@@ -1,10 +1,10 @@
 // This is mul/vil3d/tests/test_algo_convolve_1d.cxx
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_switch_axes.h>
 #include <vil3d/vil3d_print.h>

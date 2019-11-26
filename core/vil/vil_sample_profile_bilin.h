@@ -12,7 +12,7 @@
 // corresponding bicub file that would likely also benefit from
 // the same change.
 
-#include <vil/vil_image_view.h>
+#include "vil_image_view.h"
 
 //: Sample along profile, using bilinear interpolation
 //  Profile points are (x0+i.dx,y0+i.dy), where i=[0..n-1].

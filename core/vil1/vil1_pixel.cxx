@@ -4,7 +4,7 @@
 // \author awf@robots.ox.ac.uk
 
 #include "vil1_pixel.h"
-#include <vil1/vil1_image.h>
+#include "vil1/vil1_image.h"
 
 vil1_pixel_format_t vil1_pixel_format(vil1_image const &I)
 {

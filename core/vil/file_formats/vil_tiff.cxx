@@ -19,16 +19,16 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_stream.h>
-#include <vil/vil_property.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_memory_chunk.h>
-#include <vil/vil_copy.h>
-#include <vil/vil_image_list.h>
+#include "vil/vil_stream.h"
+#include "vil/vil_property.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_memory_chunk.h"
+#include "vil/vil_copy.h"
+#include "vil/vil_image_list.h"
 #include "vil_tiff_header.h"
-#include <vil/vil_exception.h>
+#include "vil/vil_exception.h"
 //#define DEBUG
 
 // Constants

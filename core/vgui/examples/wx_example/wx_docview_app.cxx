@@ -12,7 +12,7 @@
 #include "wx_docview_doc.h"
 #include "wx_docview_view.h"
 
-#include <vgui/vgui.h>
+#include "vgui/vgui.h"
 
 //: Give wxWidgets the means to create a wx_docview_app object.
 IMPLEMENT_APP(wx_docview_app)

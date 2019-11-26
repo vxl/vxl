@@ -4,10 +4,10 @@
 // \file
 
 #include "ihog_sample_grid_bilin.h"
-#include <vil/vil_resample_bilin.h>
+#include "vil/vil_resample_bilin.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //: Constructor

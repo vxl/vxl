@@ -1,14 +1,14 @@
 #include <iostream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl/vgl_point_3d.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_affine_camera.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_ray_3d.h>
+#include "vgl/vgl_point_3d.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_affine_camera.h"
+#include "vgl/vgl_box_2d.h"
+#include "vgl/vgl_box_3d.h"
+#include "vgl/vgl_ray_3d.h"
 #include <bpgl/algo/bpgl_project.h>
 #include <bpgl/algo/bpgl_camera_from_box.h>
 

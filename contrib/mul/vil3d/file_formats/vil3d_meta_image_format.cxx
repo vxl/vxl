@@ -21,15 +21,15 @@
 #include <utility>
 #include "vil3d_meta_image_format.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vil/vil_stream_fstream.h>
+#include "vil/vil_stream_fstream.h"
 #include <vil3d/vil3d_copy.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_new.h>
 #include <vil3d/vil3d_property.h>
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
 //
 // Helper functions

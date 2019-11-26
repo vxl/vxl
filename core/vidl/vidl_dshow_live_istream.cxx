@@ -11,10 +11,10 @@
 //=========================================================================
 
 #include <vidl/vidl_config.h>
-#include <vidl/vidl_dshow.h>
+#include "vidl/vidl_dshow.h"
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 //-------------------------------------------------------------------------
@@ -419,10 +419,10 @@ inline void vidl_dshow_live_istream<ParamsObject>::stop(void)
 // 3. put the templates in:
 //      templates/vidl_dshow_istream+vidl_dshow_istream_params-.cxx
 //      templates/vidl_dshow_istream+vidl_dshow_istream_params_esf-.cxx
-#include <vidl/vidl_dshow_istream_params.h>
+#include "vidl/vidl_dshow_istream_params.h"
 template class vidl_dshow_live_istream<vidl_dshow_istream_params>;
 
 #if VIDL_HAS_DSHOW_ESF
-  #include <vidl/vidl_dshow_istream_params_esf.h>
+  #include "vidl/vidl_dshow_istream_params_esf.h"
   template class vidl_dshow_live_istream<vidl_dshow_istream_params_esf>;
 #endif // HAS_EURESYS_ESF

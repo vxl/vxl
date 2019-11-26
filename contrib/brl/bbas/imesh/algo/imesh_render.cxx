@@ -6,12 +6,12 @@
 // \file
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
 #include <imesh/algo/imesh_project.h>
 #include <imesh/imesh_operations.h>
-#include <vil/vil_bilin_interp.h>
+#include "vil/vil_bilin_interp.h"
 
 //: Render a textured triangle defined by its vertices
 // \p v1,v2,v3 are coordinates in the projected image (plus depth)

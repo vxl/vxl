@@ -1,15 +1,15 @@
 // This is core/vgui/tests/test_acceleration.cxx
 #include <iostream>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
-#include <vpl/vpl.h>
+#include "vpl/vpl.h"
 
-#include <vul/vul_timer.h>
+#include "vul/vul_timer.h"
 
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_glx.h>
+#include "vgui/vgui_gl.h"
+#include "vgui/vgui_glx.h"
 #include <vgui/internals/vgui_accelerate.h>
 
 #include <X11/Xlib.h>

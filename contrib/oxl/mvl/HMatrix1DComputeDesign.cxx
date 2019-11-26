@@ -2,11 +2,11 @@
 
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 
 #include <vnl/algo/vnl_svd.h>
-#include <vgl/vgl_homg_point_1d.h>
+#include "vgl/vgl_homg_point_1d.h"
 #include <mvl/HMatrix1D.h>
 
 //********************************************************************************

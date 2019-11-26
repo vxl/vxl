@@ -6,15 +6,15 @@
 // \file
 #include <cassert>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <bpgl/bpgl_camera_utils.h>
-#include <vul/vul_file.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vul/vul_file.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 #include <vsph/vsph_spherical_coord.h>
 #include <vsph/vsph_sph_point_3d.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include "vgl/vgl_polygon_scan_iterator.h"
 
 // default constructor
 volm_conf_query::volm_conf_query()

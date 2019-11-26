@@ -9,15 +9,15 @@
 // \brief  See bgui_image_tableau.h for a description of this file.
 
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vgui/vgui_event.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_projection_inspector.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_rgba.h>
-#include <vil/vil_image_view.h>
-#include <vgui/vgui_range_map_params.h>
+#include "vgui/vgui_event.h"
+#include "vgui/vgui.h"
+#include "vgui/vgui_projection_inspector.h"
+#include "vil1/vil1_image.h"
+#include "vil1/vil1_rgba.h"
+#include "vil/vil_image_view.h"
+#include "vgui/vgui_range_map_params.h"
 
 
 //-----------------------------------------------------------------------------

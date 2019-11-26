@@ -3,24 +3,24 @@
 #include <iomanip>
 #include <string>
 #include <vector>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vul/vul_file.h>
+#include "vul/vul_file.h"
 
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_point_3d.h>
+#include "vgl/vgl_vector_3d.h"
+#include "vgl/vgl_point_3d.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_cross.h>
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_image_view_base.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
+#include "vnl/vnl_math.h"
+#include "vnl/vnl_cross.h"
+#include "vpgl/vpgl_camera.h"
+#include "vpgl/vpgl_perspective_camera.h"
 
 #include "../breg3d_ekf_camera_optimizer.h"
 #include "../breg3d_ekf_camera_optimizer_state.h"

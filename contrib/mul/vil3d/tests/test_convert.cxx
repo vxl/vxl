@@ -1,15 +1,15 @@
 // This is mul/vil3d/tests/test_convert.cxx
 #include <iostream>
-#include <vxl_config.h> // for vxl_byte
+#include "vxl_config.h" // for vxl_byte
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_print.h>
 #include <vil3d/vil3d_load.h>
 #include <vil3d/vil3d_math.h>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 
 
 static void test_convert_diff_types(const char * golden_data_dir)

@@ -1,11 +1,11 @@
 #include <string>
 #include <vector>
 
-#include <vgl/vgl_polygon.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include "vgl/vgl_polygon.h"
+#include "vil/vil_convert.h"
+#include "vil/vil_image_view.h"
+#include "vil/vil_load.h"
+#include "vil/vil_save.h"
 #include <vil/algo/vil_blob.h>
 #include <vil/algo/vil_colour_space.h>
 #include <brad/brad_spectral_angle_mapper.h>

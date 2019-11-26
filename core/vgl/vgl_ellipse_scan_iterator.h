@@ -10,7 +10,7 @@
 //   Nov.2003 - Peter Vanroose - made class vgl_ellipse_scan_iterator templated
 // \endverbatim
 
-#include <vgl/vgl_region_scan_iterator.h>
+#include "vgl_region_scan_iterator.h"
 
 //: Scan convert an ellipse
 //  The ellipse is parameterised by (\a xc, \a yc) (the centre), by \a

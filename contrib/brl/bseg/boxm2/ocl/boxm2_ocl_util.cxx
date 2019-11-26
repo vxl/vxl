@@ -3,14 +3,14 @@
 #include <boxm2/boxm2_data_traits.h>
 //:
 // \file
-#include <vgl/vgl_point_3d.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
+#include "vgl/vgl_point_3d.h"
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_matrix.h"
 #include <vnl/algo/vnl_svd.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_math.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
+#include "vil/vil_image_view.h"
+#include "vil/vil_math.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_calibration_matrix.h"
 #include <bsta/bsta_histogram.h>
 
 //for root dir

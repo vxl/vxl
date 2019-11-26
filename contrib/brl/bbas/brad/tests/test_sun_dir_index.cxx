@@ -1,13 +1,13 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
-#include <testlib/testlib_test.h>
+#include "testlib/testlib_test.h"
 #include <brad/brad_sun_dir_index.h>
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3.h>
+#include "vnl/vnl_double_2.h"
+#include "vnl/vnl_double_3.h"
 
 #if 0 // currently unused
 // illumination directions for longitude = 33.331465, latitude =44.376970 deg

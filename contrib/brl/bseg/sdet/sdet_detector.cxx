@@ -7,17 +7,17 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vil1/vil1_image.h>
+#include "vil1/vil1_image.h"
 #ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
+#  include "vcl_msvc_warnings.h"
 #endif
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_step.h>
 #include <gevd/gevd_fold.h>
 #include <gevd/gevd_bufferxy.h>
 #include <sdet/sdet_contour.h>
-#include <vil/vil_new.h>
-#include <vil/vil_image_view.h>
+#include "vil/vil_new.h"
+#include "vil/vil_image_view.h"
 #include <brip/brip_vil_float_ops.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel_chain.h>

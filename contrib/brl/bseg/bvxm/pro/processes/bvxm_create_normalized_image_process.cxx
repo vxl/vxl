@@ -8,7 +8,7 @@
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
-#include <vil/vil_image_view_base.h>
+#include "vil/vil_image_view_base.h"
 #include <brip/brip_vil_float_ops.h>
 
 #include <bvxm/bvxm_voxel_world.h>
