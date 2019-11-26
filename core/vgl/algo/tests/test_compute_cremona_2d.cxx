@@ -3,6 +3,8 @@
 #include <vgl/algo/vgl_compute_cremona_2d.h>
 #include <vgl/algo/vgl_cremona_trans_2d.h>
 #include <vnl/vnl_vector.h>
+#include <fstream>
+#include <vpl/vpl.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -71,7 +73,33 @@ static void test_compute_cremona_2d() {
   TEST("linear computation deg = 2 ", good, true);
   TEST_NEAR("linear solution error deg = 2", cc2.linear_error(), 0.0, 1.0e-6);
 
-
+  // Test stream operators for previous cremona trans
+  vgl_cremona_trans_2d<double, 2> ctrans_2 = cc2.linear_trans(), in_ctrans_2;
+  std::ofstream ostr("./test_stream.txt");
+  bool ostr_good = false, istr_good = false, strop_good = false;
+  if (ostr) {
+    ostr_good = true;
+    ostr << ctrans_2;
+    ostr.close();
+    std::ifstream istr("./test_stream.txt");
+    if (istr) {
+      istr_good = true;
+      istr >> in_ctrans_2;
+      vnl_vector<double> in_coeffs = in_ctrans_2.coeff();
+      vnl_vector<double> coeffs = ctrans_2.coeff();
+      strop_good = coeffs.size() == in_coeffs.size();
+      if(strop_good){
+        double er = 0.0;
+        size_t n = in_coeffs.size();
+        for(size_t i =0; i<coeffs.size(); ++i)
+          er += fabs(coeffs[i]-in_coeffs[i]);
+        er/=n;
+        strop_good = er < 1.0e-6;
+      }
+    }
+  }
+  TEST("stream operators", ostr_good && istr_good && strop_good, true);
+  vpl_unlink("./test_stream.txt");
   std::cout << "\ntest compute common_denominator cremona with deg = 2" << std::endl;
   from_pts.clear();
   to_pts.clear();
