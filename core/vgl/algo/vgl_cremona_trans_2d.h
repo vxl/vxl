@@ -56,6 +56,8 @@ class vgl_cremona_trans_2d
   vgl_homg_point_2d<T> operator()(vgl_homg_point_2d<T> const& p) const;
   vgl_point_2d<T> operator()(vgl_point_2d<T> const& p) const;
 
+  
+
   // utility functions (static to allow use in other classes)
 
   //: the number of coefficients in a polynomial in X,Y with degree deg
@@ -65,9 +67,9 @@ class vgl_cremona_trans_2d
   static vnl_vector<T> power_vector(T x, T y);
 
   // Data Members--------------------------------------------------------------
-  vgl_norm_trans_2d<T> tr_from() const {return tr_from_;}
-  vgl_norm_trans_2d<T> tr_to() const {return tr_to_;}
-  vnl_vector<T> rational_coeff() const {return coeff_;}
+  vgl_norm_trans_2d<T> tr_from() const { return tr_from_; }
+  vgl_norm_trans_2d<T> tr_to() const { return tr_to_; }
+  vnl_vector<T> coeff() const { return coeff_; }
 
  protected:
   //: normalizing transformations to
@@ -79,6 +81,12 @@ class vgl_cremona_trans_2d
  //[ x_neu | x_den | y_neu | y_den ]
  vnl_vector<T> coeff_;
 };
+//:stream operators
+template <class T, size_t deg>
+  std::ostream&  operator<<(std::ostream& s, vgl_cremona_trans_2d<T, deg> const& t);
+template <class T, size_t deg>
+  std::istream&  operator>>(std::istream& s, vgl_cremona_trans_2d<T, deg>& t);
+
 #define VGL_CREMONA_TRANS_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_cremona_trans_2d.hxx first"
 
 #endif // vgl_cremona_trans_2d_h_

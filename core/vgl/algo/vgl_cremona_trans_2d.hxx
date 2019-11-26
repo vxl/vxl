@@ -1,5 +1,6 @@
 #include "vgl_cremona_trans_2d.h"
 #include <cmath>
+#include <iostream>
 static size_t factorial(size_t n){
   size_t ret = 1;  
   for ( size_t i = 2; i <= n; i++ ) {  
@@ -49,7 +50,52 @@ vgl_point_2d<T> vgl_cremona_trans_2d<T, deg>::operator()(vgl_point_2d<T> const& 
   vgl_homg_point_2d<T> hp(p);
   return vgl_point_2d<T>((*this)(hp));
 }
+template <class T, size_t deg>
+std::ostream&  operator<<(std::ostream& s, vgl_cremona_trans_2d<T, deg> const& t){
+  s << "deg: " << deg << std::endl;
+  vnl_matrix_fixed<T, 3, 3> m_from = t.tr_from().get_matrix();
+  s << m_from;
+  vnl_matrix_fixed<T, 3, 3> m_to =   t.tr_to().get_matrix();
+  s << m_to;
+
+  vnl_vector<T> coeff = t.coeff();
+  size_t n = coeff.size();
+  for(size_t i = 0; i<n; ++i)
+    s << coeff[i] << ' ';
+  s << std::endl;
+  return s;
+}
+
+template <class T, size_t deg>
+std::istream&  operator>>(std::istream& s, vgl_cremona_trans_2d<T, deg>& t){
+  std::string temp;
+  size_t in_deg;
+  s >> temp >> in_deg;
+  if(temp != "deg:"){
+    std::cerr << "invalid format for cremona_trans_2d file" << std::endl;
+    return s;
+  }
+  if(in_deg != deg){
+    std::cerr << "file has cremona degree " << in_deg << " but attempting to construct degree " << deg << std::endl;
+    return s;
+  }
+  vnl_matrix_fixed<T, 3, 3> m_from, m_to;
+  s >> m_from; s >> m_to;
+  size_t n = 4*vgl_cremona_trans_2d<T, deg>::n_coeff();
+  
+  T c;
+  vnl_vector<T> coeffs(n);
+  for(size_t i = 0; i<n; ++i){
+    s >> c;
+    coeffs[i]=c;
+  }
+  vgl_norm_trans_2d<T> tr_from(m_from), tr_to(m_to);
+  t.set(tr_from, tr_to, coeffs);
+  return s;
+}
 
 #undef VGL_CREMONA_TRANS_2D_INSTANTIATE
 #define VGL_CREMONA_TRANS_2D_INSTANTIATE(T, deg) \
-  template class vgl_cremona_trans_2d<T, deg>
+  template class vgl_cremona_trans_2d<T, deg>;   \
+  template std::ostream&  operator<<(std::ostream& s, vgl_cremona_trans_2d<T, deg> const& t); \
+  template std::istream&  operator>>(std::istream& s, vgl_cremona_trans_2d<T, deg>& t)

@@ -23,7 +23,7 @@ add_executable( vgl_algo_test_all
   test_rtree.cxx
   test_hough_index_2d.cxx
 )
-target_link_libraries( vgl_algo_test_all ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}testlib )
+target_link_libraries( vgl_algo_test_all ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME vgl_test_compute_similarity_3d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_compute_similarity_3d )
 add_test( NAME vgl_test_compute_rigid_3d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_compute_rigid_3d )
