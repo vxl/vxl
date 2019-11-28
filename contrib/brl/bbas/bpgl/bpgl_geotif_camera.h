@@ -86,17 +86,33 @@ class bpgl_geotif_camera : vpgl_camera<T>
   std::shared_ptr<vpgl_camera<T> > general_camera() const {return general_cam_;}
   vpgl_lvcs_sptr lvcs_ptr() {return lvcs_ptr_;}
   vnl_matrix<T> matrix() const {return matrix_;}
-  //: if not empty then defines the region of validity of the camera
+  
+  //: spacing between dsm samples in meters
+  T dsm_spacing() const{return dsm_spacing_;} 
+
+  //: if not empty, defines the region of validity of the camera
   vgl_box_2d<T> geo_bb() const {return geo_bb_;}
   vgl_polygon<T> geo_boundary() const {return geo_boundary_;}
-  //: convert dsm image location to global geo X-Y coordinates
-  void image_to_global(T i, T j, T& gx, T& gy) const;
+
+  //: =====Transforms between DSM image and global geo coordinates====
+  // [e.g., (u,v)->(lon, lat) or (lon, lat, elev)->(u,v)]
+
+  //: map dsm image location to global geo X-Y coordinates
+  void dsm_to_global(T i, T j, T& gx, T& gy) const;
+
+  //: map global geo X-Y to dsm u,v (uses GEOTIFF matrix)
+  void global_to_dsm(T gx, T gy, T& i, T& j) const;
+
+  //=====================================================================
  protected:
   bool construct_matrix(T sx, T sy, T sz, std::vector<std::vector<T> > tiepoints);
   bool init_from_geotif(vil_image_resource_sptr const& resc);
   bool local_to_global(T lx, T ly, T lz, T& gx, T& gy, T& gz) const;
   bool global_to_local(T gx, T gy, T gz, T& lx, T& ly, T& lz) const;
   T elevation_origin() const;
+  bool set_spacing_from_wgs_matrix();
+  //: the dsm grid spacing in meters
+  T dsm_spacing_;
 
   //: if true, the input points are in a local CS, or if false in a global CS
   bool project_local_points_;
