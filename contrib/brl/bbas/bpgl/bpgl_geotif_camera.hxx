@@ -14,6 +14,7 @@
 #include <vil/file_formats/vil_geotiff_header.h>
 #include <vil/file_formats/vil_tiff.h>
 #include "bpgl_lon_lat_camera.h"
+#include <vnl/vnl_inverse.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -105,6 +106,7 @@ bool bpgl_geotif_camera<T>::init_from_geotif(vil_image_resource_sptr const& resc
     T sx = static_cast<T>(dsx);
     T sy = static_cast<T>(dsy);
     T sz = static_cast<T>(dsz);
+    if(sz == T(0)) sz = T(1);
     if (dtiepoints.size() == 0) {
         std::cerr << "null tiepoint array - fatal" << std::endl;
         return false;
@@ -124,6 +126,8 @@ bool bpgl_geotif_camera<T>::init_from_geotif(vil_image_resource_sptr const& resc
   // check if the model type is geographic and also the units
   if (gtif->GCS_WGS84_MET_DEG()) {
     is_utm_ = false;
+    if(!this->set_spacing_from_wgs_matrix())
+      return false;
     return true;
   }
 
@@ -132,11 +136,32 @@ bool bpgl_geotif_camera<T>::init_from_geotif(vil_image_resource_sptr const& resc
   {
       hemisphere_flag_ = static_cast<int>(h);
     is_utm_ = true;
+    dsm_spacing_ = matrix_[0][0];
     return true;
   }
   std::cout << "Only PCS_WGS84_UTM , PCS_NAD83_UTM, and GCS_WGS_84 with linear units in meters, "
             << "angular units in degrees are supported" << std::endl;
   return false;
+}
+template <class T>
+bool bpgl_geotif_camera<T>::set_spacing_from_wgs_matrix(){
+  if(is_utm_){
+    std::cerr << "attempting to set dsm_spacing from a utm matrix" << std::endl;
+    return false;
+  }
+  vpgl_lvcs lvcs(matrix_[1][3], matrix_[0][3], double(0),
+                 vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  T lon0, lat0, lon1, lat1;
+  this->dsm_to_global(T(0), T(0), lon0, lat0);
+  this->dsm_to_global(T(100000), T(0), lon1, lat1);
+  double dlx0, dlx1, dly0, dly1, dlz ;
+  lvcs.global_to_local(double(lon0), double(lat0), double(0),
+                       vpgl_lvcs::wgs84, dlx0, dly0, dlz);
+  lvcs.global_to_local(double(lon1), double(lat1), double(0),
+                       vpgl_lvcs::wgs84, dlx1, dly1, dlz);
+  dsm_spacing_ = static_cast<T>(sqrt((dlx1-dlx0)*(dlx1-dlx0) +
+                                     (dly1-dly0) * (dly1-dly0)))/T(100000);
+  return true;
 }
 //--------------------------------------
 // factory constructors
@@ -145,7 +170,7 @@ template <class T>
 bool bpgl_geotif_camera<T>::construct_from_geotif(vpgl_camera<T> const& general_cam, vil_image_resource_sptr resc, bool elev_org_at_zero, vpgl_lvcs_sptr lvcs_ptr) {
   elev_org_at_zero_ = elev_org_at_zero;
   has_lvcs_ = static_cast<bool>(lvcs_ptr);
-
+  dsm_spacing_ = T(1);
   //case I - a camera which projects global geo coordinates - no local CS
   // TO DO - there might exist a UTM camera in the future
   if(general_cam.type_name() == "vpgl_rational_camera"||general_cam.type_name() == "bpgl_lon_lat_camera"&& !lvcs_ptr){
@@ -171,9 +196,9 @@ bool bpgl_geotif_camera<T>::construct_from_geotif(vpgl_camera<T> const& general_
    has_lvcs_ = true;
    project_local_points_ = true;
    const vpgl_rational_camera<T>& rcam = dynamic_cast<const vpgl_rational_camera<T>&>(lrcam);
-    general_cam_ = std::shared_ptr<vpgl_camera<T> >(new vpgl_rational_camera<T>(rcam));
-    this->init_from_geotif(resc);
-    return true;
+   general_cam_ = std::shared_ptr<vpgl_camera<T> >(new vpgl_rational_camera<T>(rcam));
+   this->init_from_geotif(resc);
+   return true;
   }
   // Case III - camera is local and lvcs is specified, input points are in the lvcs global CS
   if(lvcs_ptr){
@@ -191,10 +216,10 @@ bool bpgl_geotif_camera<T>::construct_from_geotif(vpgl_camera<T> const& general_
 }
 template <class T>
 bool bpgl_geotif_camera<T>::construct_from_matrix(vpgl_camera<T> const& general_cam, vnl_matrix<T> const& geo_transform_matrix, bool elev_org_at_zero, vpgl_lvcs_sptr lvcs_ptr, int hemisphere_flag , int zone)
-  {
-   scale_defined_ = true;
-   elev_org_at_zero_ = elev_org_at_zero;
-   lvcs_ptr_ = lvcs_ptr;
+{
+  scale_defined_ = true;
+  elev_org_at_zero_ = elev_org_at_zero;
+  lvcs_ptr_ = lvcs_ptr;
   if(general_cam.is_a() == "vpgl_rational_camera"&& !lvcs_ptr){
     project_local_points_ = false;
     general_cam_ = std::shared_ptr<vpgl_camera<T> >(general_cam.clone());
@@ -204,8 +229,10 @@ bool bpgl_geotif_camera<T>::construct_from_matrix(vpgl_camera<T> const& general_
       is_utm_ = true;
       utm_zone_ = zone;
       hemisphere_flag_ = hemisphere_flag;
+      dsm_spacing_ = geo_transform_matrix[0][0];
+      return true;
     }
-    return true;
+    return set_spacing_from_wgs_matrix();
   }
   // Case II - camera is local rational camera and points are in its local CS
   // possibly with a elevation offset required if points have a z=0 reference elevation
@@ -221,11 +248,13 @@ bool bpgl_geotif_camera<T>::construct_from_matrix(vpgl_camera<T> const& general_
     lvcs_ptr_ = lr_lvcs_ptr;
     matrix_ = geo_transform_matrix;
     if(hemisphere_flag >=0){
-    is_utm_ = true;
+      is_utm_ = true;
       utm_zone_ = zone;
       hemisphere_flag_ = hemisphere_flag;
+      dsm_spacing_ = geo_transform_matrix[0][0];
+      return true;
     }
-    return true;
+    return set_spacing_from_wgs_matrix();
   }
   // Case III - camera is local and lvcs is specified - input points are in a global geographic CS
   if(lvcs_ptr){
@@ -234,13 +263,15 @@ bool bpgl_geotif_camera<T>::construct_from_matrix(vpgl_camera<T> const& general_
     gcam_has_wgs84_cs_= false;
     general_cam_ = std::shared_ptr<vpgl_camera<T> >(general_cam.clone());
     matrix_ = geo_transform_matrix;
+    project_local_points_ = false;
     if(hemisphere_flag >=0){
     is_utm_ = true;
       utm_zone_ = zone;
       hemisphere_flag_ = hemisphere_flag;
+      dsm_spacing_ = geo_transform_matrix[0][0];
+      return true;
     }
-    project_local_points_ = false;
-    return true;
+    return set_spacing_from_wgs_matrix();
   }
   std::cout << "camera is local but no lvcs specified - fatal" << std::endl;
   return false;
@@ -272,7 +303,7 @@ bool bpgl_geotif_camera<T>::local_to_global(T lx, T ly, T lz, T& gx, T& gy, T& g
 template <class T>
 bool bpgl_geotif_camera<T>::global_to_local(T gx, T gy, T gz, T& lx, T& ly, T& lz) const {
   if(!lvcs_ptr_){
-    std::cout << "No local vertical CS defined - can't map local to global" << std::endl;
+    std::cout << "No local vertical CS defined - can't map global to local" << std::endl;
     return false;
   }
   double dgx = static_cast<double>(gx);
@@ -335,7 +366,7 @@ void bpgl_geotif_camera<T>::project(const T x, const T y, const T z, T& u, T& v)
 // use the 4x4 GEOTIFF matrix to transform DSM image coordinates to global coordinates
 // either UTM or WGS84
 template <class T>
-void bpgl_geotif_camera<T>::image_to_global(T i, T j, T& gx, T& gy) const{
+void bpgl_geotif_camera<T>::dsm_to_global(T i, T j, T& gx, T& gy) const{
   vnl_vector<T> v(4), res(4);
    if (scale_defined_) {
     v[0] = matrix_[0][3] + i*matrix_[0][0];
@@ -346,6 +377,37 @@ void bpgl_geotif_camera<T>::image_to_global(T i, T j, T& gx, T& gy) const{
     v[1] = matrix_[1][3] - j;
   }
    gx = v[0]; gy = v[1];
+}
+//
+// use the 4x4 GEOTIFF matrix to transform global coordinates to DSM image coordinates
+// either UTM or WGS84
+template <class T>
+void bpgl_geotif_camera<T>::global_to_dsm(T gx, T gy, T& i, T& j) const{
+  vnl_vector<T> vec(4,T(0)), res(4);
+  T X=gx, Y=gy;
+  if (is_utm_) {
+    double deast = static_cast<double>(X);
+    double dnorth = static_cast<double>(Y);
+    double dlat, dlon, delev;
+    bool south_flag = hemisphere_flag_ > 0;
+    vpgl_utm utm;
+    utm.transform(utm_zone_, deast, dnorth, 0.0, dlat, dlon, delev, south_flag);
+    X = T(dlon); Y = T(dlat);
+  }
+  vec[0] = X;
+  vec[1] = Y;
+  vec[3] = 1;
+
+  if (scale_defined_) {
+    i = (vec[0] - matrix_[0][3])/matrix_[0][0];
+    j = (vec[1] - matrix_[1][3])/matrix_[1][1];
+  }
+  else {//TO DO check this case
+    vnl_matrix<T> matrix_inv = vnl_inverse(matrix_);
+    res = matrix_inv*vec;
+    i = res[0];
+    j = res[1];
+  }
 }
 
 // get the global elevation origin to handle the case where the input points
@@ -373,7 +435,7 @@ void bpgl_geotif_camera<T>::project_gtif_to_image(const T tifu, const T tifv, co
   if (has_lvcs_ && gcam_has_wgs84_cs_ && !is_utm_) {
     T lat = 0.0, lon = 0.0;
     // map dsm image coordinates to lon lat
-    this->image_to_global(tifu, tifv, lon, lat);
+    this->dsm_to_global(tifu, tifv, lon, lat);
     T zadj = tifz;
     if(elev_org_at_zero_){
       T elev_org = this->elevation_origin();
@@ -386,7 +448,7 @@ void bpgl_geotif_camera<T>::project_gtif_to_image(const T tifu, const T tifv, co
   if (!has_lvcs_ && gcam_has_wgs84_cs_ && !is_utm_) {
     T lat = 0.0, lon = 0.0;
     // map dsm image coordinates to lon lat
-    this->image_to_global(tifu, tifv, lon, lat);
+    this->dsm_to_global(tifu, tifv, lon, lat);
     T zadj = tifz;
     if(elev_org_at_zero_){
       T elev_org = this->elevation_origin();
@@ -399,7 +461,7 @@ void bpgl_geotif_camera<T>::project_gtif_to_image(const T tifu, const T tifv, co
   // through the WGS84 local camera
   if (has_lvcs_ && gcam_has_wgs84_cs_ && is_utm_) {
       T east = 0.0, north = 0.0;
-      this->image_to_global(tifu, tifv, east, north);
+      this->dsm_to_global(tifu, tifv, east, north);
       bool south_flag = hemisphere_flag_ > 0;
       T zadj = tifz;
       if (elev_org_at_zero_) {
