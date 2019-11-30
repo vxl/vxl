@@ -17,6 +17,7 @@
 #define COIN3D_TABLEAU_TAG "Coin3DTableau"
 #define PROJ2D_TABLEAU_TAG "Proj2DTableau"
 #define VIDEO_TABLEAU_TAG "Proj2DTableau"
+#define FIDUCIAL_TABLEAU_TAG "FiducialTableau"
 #define IMAGE_PATH_TAG "imagePath"
 #define CAMERA_PATH_TAG "cameraPath"
 #define OBJECTS_TAG "Objects"
@@ -84,6 +85,21 @@ struct bwm_io_tab_config_cam : public bwm_io_tab_config {
   std::string img_path;
   std::string cam_path;
   std::string cam_type;
+};
+
+struct bwm_io_tab_config_fiducial : public bwm_io_tab_config {
+  bwm_io_tab_config_fiducial(std::string name, bool status,
+                        std::string i_path, std::string f_path,
+                        bool /*adj*/=false)
+    : bwm_io_tab_config(FIDUCIAL_TABLEAU_TAG, name, status), image_path(i_path),
+    fid_path(f_path) {}
+
+  bwm_io_tab_config_fiducial(bwm_io_tab_config_fiducial const& t)
+    : bwm_io_tab_config(t), image_path(t.image_path), fid_path(t.fid_path) {}
+
+  bwm_io_tab_config_fiducial* clone() {return new bwm_io_tab_config_fiducial(name, status, image_path, fid_path); }
+  std::string image_path;
+  std::string fid_path;
 };
 
 struct bwm_io_tab_config_coin3d: public bwm_io_tab_config {
