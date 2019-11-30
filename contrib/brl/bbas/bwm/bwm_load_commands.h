@@ -31,14 +31,7 @@ class bwm_load_proj_cam_command: public bwm_command
   virtual std::string name() const {return "bwm_tableau_proj_cam"; }
   virtual void execute() { bwm_site_mgr::instance()->load_cam_tableau(); }
 };
-class bwm_load_geo_cam_command: public bwm_command
-{
- public:
-  bwm_load_geo_cam_command() {}
-  ~bwm_load_geo_cam_command() {}
-  virtual std::string name() const {return "bwm_tableau_geo_cam"; }
-  virtual void execute() { bwm_site_mgr::instance()->load_cam_tableau(); }
-};
+
 class bwm_load_generic_cam_command: public bwm_command
 {
  public:
@@ -56,7 +49,14 @@ class bwm_load_video_command: public bwm_command
   virtual std::string name() const {return "bwm_tableau_video"; }
   virtual void execute() { bwm_site_mgr::instance()->load_video_tableau(); }
 };
-
+class bwm_load_fiducial_command: public bwm_command
+{
+ public:
+  bwm_load_fiducial_command() {}
+  ~bwm_load_fiducial_command() {}
+  virtual std::string name() const {return "bwm_tableau_fiducial"; }
+  virtual void execute() { bwm_site_mgr::instance()->load_fiducial_tableau(); }
+};
 #if 0
 class bwm_load_coin3d_command: public bwm_command
 {

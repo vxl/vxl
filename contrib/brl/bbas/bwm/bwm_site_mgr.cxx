@@ -9,6 +9,7 @@
 #include "bwm_observer_mgr.h"
 #include "bwm_tableau_mgr.h"
 #include "bwm_tableau_video.h"
+#include "bwm_tableau_fiducial.h"
 
 #include "bwm_observable_mesh.h"
 #include "bwm_world.h"
@@ -956,7 +957,6 @@ void bwm_site_mgr::load_cam_tableau()
   types.push_back("projective");
   types.push_back("perspective");
   types.push_back("identity");
-  types.push_back("geo");
   if(tk_name_ == "mfc"){
   vgui_dialog_extensions params ("Camera Tableau");
   params.field("Tableau Name", name);
@@ -1017,6 +1017,35 @@ void bwm_site_mgr::load_cam_tableau()
   bwm_io_tab_config_cam* cam = new bwm_io_tab_config_cam(name, true, img_file, cam_file, cam_str);
   active_tableaus_.push_back(cam);
   bwm_tableau_img*  t = tableau_factory_.create_tableau(cam);
+  bwm_tableau_mgr::instance()->add_tableau(t, name);
+}
+void bwm_site_mgr::load_fiducial_tableau()
+{
+  std::string ext, name, img_file, fid_file, empty="";
+  vgui_dialog params ("Fiducial Tableau");
+    params.field("Tableau Name", name);
+    params.line_break();
+    params.file("Image...", ext, img_file);
+    params.line_break();
+    params.file("Fiducials...", ext, fid_file);
+    params.line_break();
+    if (!params.ask())
+      return;
+  
+  if ((img_file == "") || (fid_file == "" )) {
+    vgui_dialog error ("Error");
+    error.message ("Please specify all fiducial input file paths" );
+    error.ask();
+    return;
+  }
+
+  bwm_io_tab_config_fiducial* fid = new bwm_io_tab_config_fiducial(name, true, img_file, fid_file);
+  active_tableaus_.push_back(fid);
+  bwm_tableau_fiducial*  t = dynamic_cast<bwm_tableau_fiducial*>(tableau_factory_.create_tableau(fid));
+  if (!t) {
+      std::cerr << "factory can't create the fiducial tableau" << std::endl;
+      return;
+  }
   bwm_tableau_mgr::instance()->add_tableau(t, name);
 }
 
