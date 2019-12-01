@@ -50,6 +50,7 @@ class bwm_site_mgr
   //: depth map scene io
   void load_depth_map_scene();
   void save_depth_map_scene();
+  bwm_io_config_parser* site_parser(std::string const& path = "");//user has to delete
  private:
   bwm_site_mgr();
   static bwm_site_mgr* instance_;
@@ -86,6 +87,6 @@ class bwm_site_mgr
                           int *choices,
                           double &lat, double &lon, double &elev);
 
-  bwm_io_config_parser* parse_config();
+  bwm_io_config_parser* parse_config(std::string const& path = "");
 };
 #endif // bwm_site_mgr_h_

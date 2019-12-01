@@ -39,7 +39,10 @@ class bwm_tableau_fiducial : public bwm_tableau_img
 
   void help_pop();
   
-  void delete_corr(){}
+  void save_fiducial_corrs();
+
+  void read_fiducial_corrs();
+
  protected:
   bwm_observer_fiducial* my_observer_;
 };

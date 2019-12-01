@@ -18,6 +18,7 @@
 #define PROJ2D_TABLEAU_TAG "Proj2DTableau"
 #define VIDEO_TABLEAU_TAG "Proj2DTableau"
 #define FIDUCIAL_TABLEAU_TAG "FiducialTableau"
+#define FID_CORR_PATH_TAG "fiducialPath"
 #define IMAGE_PATH_TAG "imagePath"
 #define CAMERA_PATH_TAG "cameraPath"
 #define OBJECTS_TAG "Objects"
@@ -40,6 +41,7 @@
 #define CORRESP_TAG "Correspondence"
 #define CORRESP_ELM_TAG "corr_elm"
 #define CORRESP_PT_TAG "corr_point"
+#define FID_LOC_TAG "img_loc"
 #define CORRESP_WORLD_PT_TAG "corr_world_point"
 #define CORR_CAMERA_TAG "corr_camera_tab"
 

@@ -1022,7 +1022,7 @@ void bwm_site_mgr::load_cam_tableau()
 void bwm_site_mgr::load_fiducial_tableau()
 {
   std::string ext, name, img_file, fid_file, empty="";
-  vgui_dialog params ("Fiducial Tableau");
+  vgui_dialog params ("Fiducial Tableau (fid xor img )");
     params.field("Tableau Name", name);
     params.line_break();
     params.file("Image...", ext, img_file);
@@ -1032,14 +1032,14 @@ void bwm_site_mgr::load_fiducial_tableau()
     if (!params.ask())
       return;
   
-  if ((img_file == "") || (fid_file == "" )) {
-    vgui_dialog error ("Error");
-    error.message ("Please specify all fiducial input file paths" );
-    error.ask();
-    return;
-  }
+    if ((img_file == "" && fid_file == "")||(img_file != "" && fid_file != "")) {
+      vgui_dialog error ("Error");
+      error.message ("only one of img_file and fid file can be entered");
+      error.ask();
+      return;
+    }
 
-  bwm_io_tab_config_fiducial* fid = new bwm_io_tab_config_fiducial(name, true, img_file, fid_file);
+    bwm_io_tab_config_fiducial* fid = new bwm_io_tab_config_fiducial(name, true, img_file, fid_file);
   active_tableaus_.push_back(fid);
   bwm_tableau_fiducial*  t = dynamic_cast<bwm_tableau_fiducial*>(tableau_factory_.create_tableau(fid));
   if (!t) {
@@ -1049,9 +1049,11 @@ void bwm_site_mgr::load_fiducial_tableau()
   bwm_tableau_mgr::instance()->add_tableau(t, name);
 }
 
-bwm_io_config_parser* bwm_site_mgr::parse_config()
+bwm_io_config_parser* bwm_site_mgr::parse_config(std::string const& path)
 {
-  std::string fname = bwm_utils::select_file();
+  std::string fname = path;
+  if(fname == "")
+   fname = bwm_utils::select_file();
 
   if (fname.size() == 0)
     return nullptr;
@@ -1073,7 +1075,10 @@ bwm_io_config_parser* bwm_site_mgr::parse_config()
   std::cout << "finished!" << std::endl;
   return parser;
 }
-
+bwm_io_config_parser*   bwm_site_mgr::site_parser(std::string const& path){
+  return this->parse_config(path);
+}
+  
 static void write_vrml_header(std::ofstream& str)
 {
   str << "#VRML V2.0 utf8\n"
