@@ -117,7 +117,7 @@ else if (t->type_name.compare(FIDUCIAL_TABLEAU_TAG) == 0) {
       new bwm_observer_fiducial(img, fid_io_tab->name,//                   don't show path
                                 fid_io_tab->image_path, fid_io_tab->fid_path, false);
     bwm_tableau_fiducial* tab = new bwm_tableau_fiducial(o);
-    if (t->name == "") t->name = fid_io_tab->fid_path;
+    if (t->name == "") t->name = fid_io_tab->image_path;
     return tab;
  }
   else

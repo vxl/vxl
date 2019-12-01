@@ -67,15 +67,15 @@ bool bwm_observer_vgui::handle(const vgui_event& e)
   if (e.type == vgui_BUTTON_DOWN &&
       e.button == vgui_LEFT &&
       e.modifier == vgui_SHIFT &&
+      bwm_observer_mgr::instance()->corr_mode() != bwm_observer_mgr::FIDUCIAL_IMAGE_LOCATION &&
       bwm_observer_mgr::instance()->in_corr_picking())
   {
-    float x,y;
-    pi.window_to_image_coordinates(e.wx, e.wy, x, y);
-    this->set_corr(x, y);
-    this->correspondence_action();
-    return true;
+      float x, y;
+      pi.window_to_image_coordinates(e.wx, e.wy, x, y);
+      this->set_corr(x, y);
+      this->correspondence_action();
+      return true;
   }
-
   return base::handle(e);
 }
 

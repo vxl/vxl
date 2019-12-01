@@ -553,8 +553,10 @@ if (tab_->type_name().compare("bwm_tableau_fiducial")    == 0){
   bwm_tableau_fiducial* fid_tab = static_cast<bwm_tableau_fiducial* > (tab_.as_pointer());
   menu.separator();
   vgui_menu corr_menu;
-  corr_menu.add( "delete selected corr" ,
-                 new vgui_command_simple<bwm_tableau_fiducial>(fid_tab,&bwm_tableau_fiducial::delete_corr));
-  menu.add( "Image Correspondence", corr_menu);
+  corr_menu.add( "save fiducial corrs" ,
+                 new vgui_command_simple<bwm_tableau_fiducial>(fid_tab,&bwm_tableau_fiducial::save_fiducial_corrs));
+  corr_menu.add( "read fiducial corrs" ,
+                 new vgui_command_simple<bwm_tableau_fiducial>(fid_tab,&bwm_tableau_fiducial::read_fiducial_corrs));
+  menu.add( "Fiducial Correspondence", corr_menu);
  }
 }

@@ -18,7 +18,7 @@
 #include <vgui/vgui_dialog_extensions.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
-
+#include <vul/vul_file.h>
 
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
@@ -46,6 +46,22 @@ void bwm_tableau_fiducial::help_pop()
   vgui_dialog popup("FIDUCIAL TABLEAU HELP");
   popup.inline_tableau(s, 550, 550);
     return;
+}
+
+void bwm_tableau_fiducial::save_fiducial_corrs(){
+    std::string path = "";
+  std::string ext = ".xml";
+  vgui_dialog fid_save_dlg("Save Fiducial Correspondences");
+  fid_save_dlg.file("Fiducial corr file", ext, path);
+  if (!fid_save_dlg.ask())
+    return;
+  std::string ex = vul_file::extension(path);
+  if(ex != ext)
+    path = path + ext;
+  my_observer_->save_fiducial_corrs(path);
+}
+void bwm_tableau_fiducial::read_fiducial_corrs(){
+  my_observer_->read_fiducial_corrs();
 }
 
 bool bwm_tableau_fiducial::handle(const vgui_event& e)
