@@ -48,7 +48,8 @@ class bwm_observer_fiducial : public bwm_observer_vgui
   bool handle(const vgui_event &e);
 
   virtual std::string type_name() const { return "bwm_observer_fiducial"; }
-
+  void start_fid_corrs();
+  void stop_fid_corrs();
   bool save_fiducial_corrs(std::string path);
   bool read_fiducial_corrs();
   bool add_fiducial_corrs(bwm_io_config_parser* parser);

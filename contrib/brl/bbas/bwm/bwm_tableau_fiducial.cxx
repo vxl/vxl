@@ -60,12 +60,17 @@ void bwm_tableau_fiducial::save_fiducial_corrs(){
     path = path + ext;
   my_observer_->save_fiducial_corrs(path);
 }
-void bwm_tableau_fiducial::read_fiducial_corrs(){
-  my_observer_->read_fiducial_corrs();
-}
 
 bool bwm_tableau_fiducial::handle(const vgui_event& e)
 {
  return bwm_tableau_img::handle(e);
+}
+
+void bwm_tableau_fiducial::enable_fid_corrs(){
+    my_observer_->start_fid_corrs();
+}
+
+void bwm_tableau_fiducial::disable_fid_corrs(){
+  my_observer_->stop_fid_corrs();
 }
 

@@ -38,10 +38,12 @@ class bwm_tableau_fiducial : public bwm_tableau_img
   void get_popup(vgui_popup_params const &params, vgui_menu &menu);
 
   void help_pop();
-  
-  void save_fiducial_corrs();
 
-  void read_fiducial_corrs();
+  void enable_fid_corrs();
+
+  void disable_fid_corrs();  
+
+  void save_fiducial_corrs();
 
  protected:
   bwm_observer_fiducial* my_observer_;

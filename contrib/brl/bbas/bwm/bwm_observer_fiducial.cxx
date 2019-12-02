@@ -190,10 +190,12 @@ bool bwm_observer_fiducial::save_fiducial_corrs(std::string path){
   fid_io.x_write(ostr);
   return true;
 }
-bool bwm_observer_fiducial::read_fiducial_corrs(){
-  bwm_io_config_parser* parser = bwm_site_mgr::instance()->site_parser();
-  if (parser == nullptr)
-      return false;
-  // setup the corrs
-  return true;
+void bwm_observer_fiducial::start_fid_corrs(){
+  bwm_observer_mgr::instance()->start_corr();
+  this->post_redraw();
+}
+
+void bwm_observer_fiducial::stop_fid_corrs(){
+  bwm_observer_mgr::instance()->stop_corr();
+  this->post_redraw();
 }
