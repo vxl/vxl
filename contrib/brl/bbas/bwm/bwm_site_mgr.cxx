@@ -1019,6 +1019,7 @@ void bwm_site_mgr::load_cam_tableau()
   bwm_tableau_img*  t = tableau_factory_.create_tableau(cam);
   bwm_tableau_mgr::instance()->add_tableau(t, name);
 }
+// a tableau for specifying the image locations of 3-d fiducial data
 void bwm_site_mgr::load_fiducial_tableau()
 {
   std::string ext, name, img_file, fid_file, empty="";
@@ -1031,7 +1032,10 @@ void bwm_site_mgr::load_fiducial_tableau()
     params.line_break();
     if (!params.ask())
       return;
-  
+    // the fid file contains the data to populate a fiducial tableau (like a site file)
+    // initially just load a composite fiducial placement image and save the resulting
+    // fiducial correspondences to a fid file path defined by the fiducial tableau popup
+    // the state of the tableau is restored by loading the fid file
     if ((img_file == "" && fid_file == "")||(img_file != "" && fid_file != "")) {
       vgui_dialog error ("Error");
       error.message ("only one of img_file and fid file can be entered");
