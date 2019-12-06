@@ -26,65 +26,72 @@
 //-------------------------------------------------------------------------
 namespace
 {
-  void swap32(char *a, unsigned n)
+void
+swap32(char * a, unsigned n)
+{
+  char c;
+  for (unsigned int i = 0; i < n * 4; i += 4)
   {
-    char c;
-    for (unsigned int i = 0; i < n * 4; i += 4)
-    {
-      c = a[i];
-      a[i] = a[i+3];
-      a[i+3] = c;
-      c = a[i+1];
-      a[i+1] = a[i+2];
-      a[i+2] = c;
-    }
+    c = a[i];
+    a[i] = a[i + 3];
+    a[i + 3] = c;
+    c = a[i + 1];
+    a[i + 1] = a[i + 2];
+    a[i + 2] = c;
   }
 }
+} // namespace
 
 //-------------------------------------------------------------------------
 // vgui_font_textured implementation.
 //-------------------------------------------------------------------------
 //: Constructor - from a font file (BMF font file only, for now).
-vgui_font_textured::vgui_font_textured(const std::string& font_file)
+vgui_font_textured::vgui_font_textured(const std::string & font_file)
   : display_list_base_id_(0)
   , texture_id_(0)
 {
   vgui_macro_report_errors;
 
-  if (load_bmf_font(font_file)) { create_display_lists(); }
+  if (load_bmf_font(font_file))
+  {
+    create_display_lists();
+  }
 
   vgui_macro_report_errors;
 }
 
 vgui_font_textured::~vgui_font_textured(void)
 {
-  if (display_list_base_id_) { glDeleteLists(display_list_base_id_, 256); }
-  if (texture_id_) { glDeleteTextures(1, &texture_id_); }
+  if (display_list_base_id_)
+  {
+    glDeleteLists(display_list_base_id_, 256);
+  }
+  if (texture_id_)
+  {
+    glDeleteTextures(1, &texture_id_);
+  }
 }
 
 //: Draw font symbol.
-void vgui_font_textured::gl_draw(unsigned int i) const
+void
+vgui_font_textured::gl_draw(unsigned int i) const
 {
   // The texture coordinates have a positive y-axis pointing up
   // (cartesian coordinate system), while the OpenGL context in vgui
   // has a positive y-axis pointing down (image coordinate system).
   glBegin(GL_QUADS);
 
-    glTexCoord2f(symbol_coords_[i].x,
-                 1.f - symbol_coords_[i].y - symbol_coords_[i].height);
-    glVertex2f(0.f, 0.f);
+  glTexCoord2f(symbol_coords_[i].x, 1.f - symbol_coords_[i].y - symbol_coords_[i].height);
+  glVertex2f(0.f, 0.f);
 
-    glTexCoord2f(symbol_coords_[i].x + symbol_coords_[i].width,
-                 1.f - symbol_coords_[i].y - symbol_coords_[i].height);
-    glVertex2f(symbol_coords_[i].width, 0.f);
+  glTexCoord2f(symbol_coords_[i].x + symbol_coords_[i].width, 1.f - symbol_coords_[i].y - symbol_coords_[i].height);
+  glVertex2f(symbol_coords_[i].width, 0.f);
 
-    glTexCoord2f(symbol_coords_[i].x + symbol_coords_[i].width,
-                 1.f - symbol_coords_[i].y);
-    glVertex2f(symbol_coords_[i].width, symbol_coords_[i].height);
+  glTexCoord2f(symbol_coords_[i].x + symbol_coords_[i].width, 1.f - symbol_coords_[i].y);
+  glVertex2f(symbol_coords_[i].width, symbol_coords_[i].height);
 
-    glTexCoord2f(symbol_coords_[i].x,
-                 1.f - symbol_coords_[i].y);
-    glVertex2f(0.f, symbol_coords_[i].height);
+  glTexCoord2f(symbol_coords_[i].x, 1.f - symbol_coords_[i].y);
+  glVertex2f(0.f, symbol_coords_[i].height);
 
   glEnd();
 
@@ -93,18 +100,22 @@ void vgui_font_textured::gl_draw(unsigned int i) const
 }
 
 //: Draw a string of font symbols.
-void vgui_font_textured::draw(const std::string& str) const
+void
+vgui_font_textured::draw(const std::string & str) const
 {
   draw(str, 24);
 }
 
 //: Draw a string of font symbols.
-void vgui_font_textured::draw(const std::string& str,
-                              unsigned int size) const
+void
+vgui_font_textured::draw(const std::string & str, unsigned int size) const
 {
-  if (!display_list_base_id_) { return; }
+  if (!display_list_base_id_)
+  {
+    return;
+  }
 
-  GLboolean  prev_texture_enabled;
+  GLboolean prev_texture_enabled;
   glGetBooleanv(GL_TEXTURE_2D, &prev_texture_enabled);
 
   glEnable(GL_TEXTURE_2D);
@@ -124,19 +135,21 @@ void vgui_font_textured::draw(const std::string& str,
 
   glPopMatrix();
 
-  if (!prev_texture_enabled) { glDisable(GL_TEXTURE_2D); }
+  if (!prev_texture_enabled)
+  {
+    glDisable(GL_TEXTURE_2D);
+  }
 }
 
 //: Load font from file.
-bool vgui_font_textured::load_bmf_font(const std::string &font_file)
+bool
+vgui_font_textured::load_bmf_font(const std::string & font_file)
 {
   // create and open the file
-  vil_smart_ptr<vil_stream> stream
-    = new vil_stream_fstream(font_file.c_str(), "r");
+  vil_smart_ptr<vil_stream> stream = new vil_stream_fstream(font_file.c_str(), "r");
   if (!stream->ok())
   {
-    std::cerr << __FILE__ ":couldn't open font file:"
-             << font_file << std::endl;
+    std::cerr << __FILE__ ":couldn't open font file:" << font_file << std::endl;
     return false;
   }
 
@@ -167,36 +180,34 @@ bool vgui_font_textured::load_bmf_font(const std::string &font_file)
   float sum = 0.f;
   for (unsigned int i = 0; i < 256; i++)
   {
-    sum += stream->read(&symbol_coords_[i].x,      4);
-    sum += stream->read(&symbol_coords_[i].y,      4);
-    sum += stream->read(&symbol_coords_[i].width,  4);
+    sum += stream->read(&symbol_coords_[i].x, 4);
+    sum += stream->read(&symbol_coords_[i].y, 4);
+    sum += stream->read(&symbol_coords_[i].width, 4);
     sum += stream->read(&symbol_coords_[i].height, 4);
 
 #if VXL_BIG_ENDIAN
     // &symbol_coords_[i] is of type *texture_coord;
     // swap32 expects a char* as its first argument
     // original code:
-#if 0 // this causes a compile error when VXL_BIG_ENDIAN is true
+#  if 0  // this causes a compile error when VXL_BIG_ENDIAN is true
     swap32(&symbol_coords_[i], 4);
-#else // I *think* this is what the original author had in mind:
-    swap32((char *) &symbol_coords_[i].x,      4);
-    swap32((char *) &symbol_coords_[i].y,      4);
-    swap32((char *) &symbol_coords_[i].width,  4);
-    swap32((char *) &symbol_coords_[i].height, 4);
-#endif // 0
-#endif // VXL_BIG_ENDIAN
+#  else  // I *think* this is what the original author had in mind:
+    swap32((char *)&symbol_coords_[i].x, 4);
+    swap32((char *)&symbol_coords_[i].y, 4);
+    swap32((char *)&symbol_coords_[i].width, 4);
+    swap32((char *)&symbol_coords_[i].height, 4);
+#  endif // 0
+#endif   // VXL_BIG_ENDIAN
   }
-  if (sum != 256*4*4) // 256 symbols * 4 floats * 4 bytes
+  if (sum != 256 * 4 * 4) // 256 symbols * 4 floats * 4 bytes
   {
     std::cerr << __FILE__ ":couldn't read symbol info!\n";
     return false;
   }
 
   // read sgi (iris) embedded image
-  vil_smart_ptr<vil_stream> sgi_section
-    = new vil_stream_section(stream.ptr(), 3 + 96 + 256*4*4);
-  vil_image_view<GLubyte> texture_image
-    = vil_load_image_resource_raw(sgi_section.ptr())->get_view();
+  vil_smart_ptr<vil_stream> sgi_section = new vil_stream_section(stream.ptr(), 3 + 96 + 256 * 4 * 4);
+  vil_image_view<GLubyte>   texture_image = vil_load_image_resource_raw(sgi_section.ptr())->get_view();
 
   load_texture(texture_image);
 
@@ -204,7 +215,8 @@ bool vgui_font_textured::load_bmf_font(const std::string &font_file)
 }
 
 //: Load OpenGL texture for all symbols.
-void vgui_font_textured::load_texture(const vil_image_view<GLubyte>& image)
+void
+vgui_font_textured::load_texture(const vil_image_view<GLubyte> & image)
 {
   vgui_macro_report_errors;
 
@@ -218,8 +230,8 @@ void vgui_font_textured::load_texture(const vil_image_view<GLubyte>& image)
   glBindTexture(GL_TEXTURE_2D, texture_id_);
 
   // sets some properties on the target object
-  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -227,21 +239,22 @@ void vgui_font_textured::load_texture(const vil_image_view<GLubyte>& image)
   vil_copy_reformat(vil_plane(image, 1), texture);
 
   // specify the 2D texture image
-  glTexImage2D(GL_TEXTURE_2D,          // texture object
-               0,                      // resolution level
-               GL_RGBA,                // OpenGL internalformat
-               image.ni(),             // width
-               image.nj(),             // height
-               0,                      // add border
-               GL_LUMINANCE,           // pixel format
-               GL_UNSIGNED_BYTE,       // pixel data type
-               texture.memory_chunk()->data());  // pointer to image
+  glTexImage2D(GL_TEXTURE_2D,                   // texture object
+               0,                               // resolution level
+               GL_RGBA,                         // OpenGL internalformat
+               image.ni(),                      // width
+               image.nj(),                      // height
+               0,                               // add border
+               GL_LUMINANCE,                    // pixel format
+               GL_UNSIGNED_BYTE,                // pixel data type
+               texture.memory_chunk()->data()); // pointer to image
 
   vgui_macro_report_errors;
 }
 
 //: Create OpenGL display list for each symbol.
-void vgui_font_textured::create_display_lists(void)
+void
+vgui_font_textured::create_display_lists(void)
 {
   vgui_macro_report_errors;
 

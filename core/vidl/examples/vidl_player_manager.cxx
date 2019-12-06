@@ -24,10 +24,11 @@
 
 
 // static manager instance
-vidl_player_manager *vidl_player_manager::instance_ = nullptr;
+vidl_player_manager * vidl_player_manager::instance_ = nullptr;
 
 // The vidl_player_manager is a singleton class
-vidl_player_manager *vidl_player_manager::instance()
+vidl_player_manager *
+vidl_player_manager::instance()
 {
   if (!instance_)
   {
@@ -38,7 +39,8 @@ vidl_player_manager *vidl_player_manager::instance()
 }
 
 
-void vidl_player_manager::init()
+void
+vidl_player_manager::init()
 {
   // create the image tableau to hold the current frame
   itab_ = vgui_image_tableau_new();
@@ -56,33 +58,32 @@ void vidl_player_manager::init()
 // constructors/destructor
 // start with a single pane
 vidl_player_manager::vidl_player_manager()
-  : vgui_wrapper_tableau(),
-    preload_frames_(false),
-    play_video_(false),
-    time_interval_(0.0f),
-    width_(640),
-    height_(480),
-    istream_(static_cast<vidl_istream *>(nullptr)),
-    ostream_(static_cast<vidl_ostream *>(nullptr)),
-    win_(nullptr)
-{
-}
+  : vgui_wrapper_tableau()
+  , preload_frames_(false)
+  , play_video_(false)
+  , time_interval_(0.0f)
+  , width_(640)
+  , height_(480)
+  , istream_(static_cast<vidl_istream *>(nullptr))
+  , ostream_(static_cast<vidl_ostream *>(nullptr))
+  , win_(nullptr)
+{}
 
-vidl_player_manager::~vidl_player_manager()
-{
-}
+vidl_player_manager::~vidl_player_manager() {}
 
 
 // make an event handler
 // note that we have to get an adaptor and set the tableau to receive events
-bool vidl_player_manager::handle(const vgui_event &e)
+bool
+vidl_player_manager::handle(const vgui_event & e)
 {
   return this->child.handle(e);
 }
 
 
 //: clean up before the program terminates
-void vidl_player_manager::quit()
+void
+vidl_player_manager::quit()
 {
   std::exit(1);
 }
@@ -91,9 +92,10 @@ void vidl_player_manager::quit()
 //-----------------------------------------------------------------------------
 //: open an input video stream
 //-----------------------------------------------------------------------------
-void vidl_player_manager::open_istream()
+void
+vidl_player_manager::open_istream()
 {
-  vidl_istream* try_open = vidl_gui_open_istream_dialog();
+  vidl_istream * try_open = vidl_gui_open_istream_dialog();
   if (!try_open)
     return;
 
@@ -104,7 +106,7 @@ void vidl_player_manager::open_istream()
     height_ = istream_->height();
     width_ = istream_->width();
     if (win_)
-      win_->reshape(width_+10, height_+60);
+      win_->reshape(width_ + 10, height_ + 60);
 
     this->redraw();
   }
@@ -114,7 +116,8 @@ void vidl_player_manager::open_istream()
 //-----------------------------------------------------------------------------
 //: close the input video stream
 //-----------------------------------------------------------------------------
-void vidl_player_manager::close_istream()
+void
+vidl_player_manager::close_istream()
 {
   if (istream_.get())
     istream_->close();
@@ -126,9 +129,10 @@ void vidl_player_manager::close_istream()
 //-----------------------------------------------------------------------------
 //: open an output video stream
 //-----------------------------------------------------------------------------
-void vidl_player_manager::open_ostream()
+void
+vidl_player_manager::open_ostream()
 {
-  vidl_ostream* try_open = vidl_gui_open_ostream_dialog();
+  vidl_ostream * try_open = vidl_gui_open_ostream_dialog();
   if (!try_open)
     return;
 
@@ -139,7 +143,8 @@ void vidl_player_manager::open_ostream()
 //-----------------------------------------------------------------------------
 //: close the output video stream
 //-----------------------------------------------------------------------------
-void vidl_player_manager::close_ostream()
+void
+vidl_player_manager::close_ostream()
 {
   if (ostream_.get())
     ostream_->close();
@@ -149,14 +154,17 @@ void vidl_player_manager::close_ostream()
 //-----------------------------------------------------------------------------
 //: Pipe the input stream into the output stream
 //-----------------------------------------------------------------------------
-void vidl_player_manager::pipe_streams()
+void
+vidl_player_manager::pipe_streams()
 {
-  if (!istream_.get() || !istream_->is_open()) {
+  if (!istream_.get() || !istream_->is_open())
+  {
     vgui_error_dialog("Input stream not open");
     return;
   }
 
-  if (!ostream_.get()) {
+  if (!ostream_.get())
+  {
     vgui_error_dialog("Output stream not open");
     return;
   }
@@ -167,7 +175,7 @@ void vidl_player_manager::pipe_streams()
   description += "Then the output stream will be closed.\n";
   dlg.message(description.c_str());
   static int num_frames = -1;
-  dlg.field("Max number of frames",num_frames);
+  dlg.field("Max number of frames", num_frames);
   if (!dlg.ask())
     return;
 
@@ -176,10 +184,12 @@ void vidl_player_manager::pipe_streams()
     istream_->advance();
 
   vidl_frame_sptr frame;
-  if (num_frames < 0) {
-    std::cout <<"streaming all frames"<<std::endl;
+  if (num_frames < 0)
+  {
+    std::cout << "streaming all frames" << std::endl;
     frame = istream_->current_frame();
-    while (bool(frame)) {
+    while (bool(frame))
+    {
       if (!ostream_->write_frame(frame))
         break;
       if (!istream_->advance())
@@ -187,9 +197,11 @@ void vidl_player_manager::pipe_streams()
       frame = istream_->current_frame();
     }
   }
-  else {
-    std::cout <<"streaming "<<num_frames<<" frames"<<std::endl;
-    for (int i=0; i<num_frames; ++i) {
+  else
+  {
+    std::cout << "streaming " << num_frames << " frames" << std::endl;
+    for (int i = 0; i < num_frames; ++i)
+    {
       frame = istream_->current_frame();
       if (!frame)
         break;
@@ -207,18 +219,20 @@ void vidl_player_manager::pipe_streams()
 }
 
 
-void vidl_player_manager::redraw()
+void
+vidl_player_manager::redraw()
 {
-  if (istream_.get()) {
+  if (istream_.get())
+  {
     unsigned int frame_num = istream_->frame_number();
     if (frame_num == unsigned(-1))
       vgui::out << "invalid frame\n";
     else
     {
-      vgui::out << "frame "<< frame_num+1 ;
+      vgui::out << "frame " << frame_num + 1;
       int num_frames = istream_->num_frames();
-      if (num_frames >=0)
-        vgui::out << " of "<<num_frames<< std::endl;
+      if (num_frames >= 0)
+        vgui::out << " of " << num_frames << std::endl;
       else
         vgui::out << std::endl;
     }
@@ -226,16 +240,18 @@ void vidl_player_manager::redraw()
     vidl_frame_sptr frame = istream_->current_frame();
     if (!frame)
       itab_->set_image_resource(nullptr);
-    else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16) {
+    else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16)
+    {
       static vil_image_view<vxl_uint_16> img;
-      if (vidl_convert_to_view(*frame,img))
+      if (vidl_convert_to_view(*frame, img))
         itab_->set_image_view(img);
       else
         itab_->set_image_resource(nullptr);
     }
-    else {
+    else
+    {
       static vil_image_view<vxl_byte> img;
-      if (vidl_convert_to_view(*frame,img,VIDL_PIXEL_COLOR_RGB))
+      if (vidl_convert_to_view(*frame, img, VIDL_PIXEL_COLOR_RGB))
         itab_->set_image_view(img);
       else
         itab_->set_image_resource(nullptr);
@@ -249,29 +265,32 @@ void vidl_player_manager::redraw()
 
 // Play the video from the current frame until the end
 //  unless paused or stopped first
-void vidl_player_manager::play_video()
+void
+vidl_player_manager::play_video()
 {
   if (play_video_)
     return;
-  if (!istream_.get()) {
+  if (!istream_.get())
+  {
     std::cout << "No movie has been loaded\n";
     return;
   }
 
   play_video_ = true;
-  vul_timer t,t2;
-  int count = 0;
+  vul_timer t, t2;
+  int       count = 0;
 
   while (play_video_ && istream_->is_valid() && istream_->advance())
   {
     this->redraw();
     // Delay until the time interval has passed
-    while (t.all()<time_interval_) ;
+    while (t.all() < time_interval_)
+      ;
     t.mark();
     ++count;
   }
   long time = t2.all();
-  std::cout << "average play time " << double(time)/count << std::endl;
+  std::cout << "average play time " << double(time) / count << std::endl;
 
   // if played to the end, go back to the first frame;
   if (play_video_)
@@ -280,62 +299,72 @@ void vidl_player_manager::play_video()
 
 
 // Stop the video and return to the first frame
-void vidl_player_manager::stop_video()
+void
+vidl_player_manager::stop_video()
 {
   play_video_ = false;
-  if (istream_.get() && istream_->is_seekable()) {
+  if (istream_.get() && istream_->is_seekable())
+  {
     istream_->seek_frame(0);
     this->redraw();
   }
 }
 
 // Stop the video without returning to the first frame
-void vidl_player_manager::pause_video()
+void
+vidl_player_manager::pause_video()
 {
   play_video_ = false;
 }
 
 // If the video is not playing bring up a dialog box
 // and prompt for the frame number to jump to.
-void vidl_player_manager::go_to_frame()
+void
+vidl_player_manager::go_to_frame()
 {
   if (!istream_.get())
     return;
-  if (!istream_->is_seekable()) {
+  if (!istream_->is_seekable())
+  {
     std::cerr << "This stream does not support seeking\n";
     return;
   }
 
   if (play_video_)
     return;
-  static int frame_num = 0;
+  static int  frame_num = 0;
   vgui_dialog go_to_frame_dlg("Go to Frame");
   go_to_frame_dlg.field("Frame Number", frame_num);
   if (!go_to_frame_dlg.ask())
     return;
 
-  if ( istream_->seek_frame(frame_num) ) {
+  if (istream_->seek_frame(frame_num))
+  {
     this->redraw();
   }
 }
 
 // If the video is not playing go to the next frame
-void vidl_player_manager::next_frame()
+void
+vidl_player_manager::next_frame()
 {
   if (play_video_ || !istream_.get())
     return;
-  if (istream_->advance()) {
+  if (istream_->advance())
+  {
     this->redraw();
   }
 }
 
 // If the video is not playing go to the previous frame
-void vidl_player_manager::prev_frame()
+void
+vidl_player_manager::prev_frame()
 {
   if (play_video_ || !istream_.get())
     return;
   int previous_frame = istream_->frame_number() - 1;
-  if (previous_frame >= 0) {
+  if (previous_frame >= 0)
+  {
     istream_->seek_frame(previous_frame);
     this->redraw();
   }

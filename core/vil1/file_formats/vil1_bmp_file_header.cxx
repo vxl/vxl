@@ -28,12 +28,11 @@ vil1_bmp_file_header::vil1_bmp_file_header()
   bitmap_offset = 0;
 }
 
-void vil1_bmp_file_header::print(std::ostream &s) const
+void
+vil1_bmp_file_header::print(std::ostream & s) const
 {
   s << "vil1_bmp_file_header:\n"
-    << "  magic   : " << std::hex
-    << "0x" << unsigned(magic[0]) << ' '
-    << "0x" << unsigned(magic[1]) << std::endl
+    << "  magic   : " << std::hex << "0x" << unsigned(magic[0]) << ' ' << "0x" << unsigned(magic[1]) << std::endl
     << "  filesize: 0x" << file_size << std::endl
     << "  reserved: 0x" << reserved1 << std::endl
     << "  reserved: 0x" << reserved2 << std::endl
@@ -41,16 +40,21 @@ void vil1_bmp_file_header::print(std::ostream &s) const
     << std::dec << std::endl;
 }
 
-void vil1_bmp_file_header::read(vil1_stream *s)
+void
+vil1_bmp_file_header::read(vil1_stream * s)
 {
-  if (s->read(&magic, sizeof(magic)) == 0) {magic[0] = magic[1] = 0;}
+  if (s->read(&magic, sizeof(magic)) == 0)
+  {
+    magic[0] = magic[1] = 0;
+  }
   file_size = vil1_32bit_read_little_endian(s);
   reserved1 = vil1_16bit_read_little_endian(s);
   reserved2 = vil1_16bit_read_little_endian(s);
   bitmap_offset = vil1_32bit_read_little_endian(s);
 }
 
-void vil1_bmp_file_header::write(vil1_stream *s) const
+void
+vil1_bmp_file_header::write(vil1_stream * s) const
 {
   s->write(&magic, sizeof(magic));
   vil1_32bit_write_little_endian(s, file_size);
@@ -59,9 +63,8 @@ void vil1_bmp_file_header::write(vil1_stream *s) const
   vil1_32bit_write_little_endian(s, bitmap_offset);
 }
 
-bool vil1_bmp_file_header::signature_valid() const
+bool
+vil1_bmp_file_header::signature_valid() const
 {
-  return
-    magic[0] == BMP_SIGNATURE_BYTE_0 &&
-    magic[1] == BMP_SIGNATURE_BYTE_1;
+  return magic[0] == BMP_SIGNATURE_BYTE_0 && magic[1] == BMP_SIGNATURE_BYTE_1;
 }

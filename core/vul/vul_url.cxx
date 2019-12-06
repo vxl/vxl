@@ -21,14 +21,14 @@
 #include <cassert>
 #include "vul/vul_file.h"
 
-#if defined (_WIN32) && !defined(__CYGWIN__)
-# include <winsock2.h>
+#if defined(_WIN32) && !defined(__CYGWIN__)
+#  include <winsock2.h>
 #else
-# include <unistd.h>       // read(), write(), close()
-# include <netdb.h>        // gethostbyname(), sockaddr_in()
-# include <sys/socket.h>
-# include <netinet/in.h>   // htons()
-# define SOCKET int
+#  include <unistd.h> // read(), write(), close()
+#  include <netdb.h>  // gethostbyname(), sockaddr_in()
+#  include <sys/socket.h>
+#  include <netinet/in.h> // htons()
+#  define SOCKET int
 #endif // unix
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
@@ -37,47 +37,50 @@ static int called_WSAStartup = 0;
 #endif
 
 //: only call this method with a correctly formatted http URL
-std::istream * vul_http_open(char const *url)
+std::istream *
+vul_http_open(char const * url)
 {
   // split URL into auth, host, path and port number.
   std::string host;
   std::string path;
   std::string auth;
-  int port = 80; // default
+  int         port = 80; // default
 
   // check it is an http URL.
-  assert (std::strncmp(url, "http://", 7) == 0);
+  assert(std::strncmp(url, "http://", 7) == 0);
 
-  char const *p = url + 7;
-  while (*p && *p!='/')
-    ++ p;
-  host = std::string(url+7, p);
+  char const * p = url + 7;
+  while (*p && *p != '/')
+    ++p;
+  host = std::string(url + 7, p);
 
 
   if (*p)
-    path = p+1;
+    path = p + 1;
   else
     path = "";
 
-  //authentication
-  for (unsigned int i=0; i<host.size(); ++i)
-    if (host[i] == '@') {
-      auth = std::string(host.c_str(), host.c_str()+i);
-      host = std::string(host.c_str()+i+1, host.c_str() + host.size());
+  // authentication
+  for (unsigned int i = 0; i < host.size(); ++i)
+    if (host[i] == '@')
+    {
+      auth = std::string(host.c_str(), host.c_str() + i);
+      host = std::string(host.c_str() + i + 1, host.c_str() + host.size());
       break;
     }
 
   // port?
   if (host.size() > 0L)
-  for (unsigned int i=(unsigned int)(host.size()-1); i>0; --i)
-    if (host[i] == ':') {
-      port = std::stoi(host.c_str() + i + 1);
-      host = std::string(host.c_str(), host.c_str() + i);
-      break;
-    }
+    for (unsigned int i = (unsigned int)(host.size() - 1); i > 0; --i)
+      if (host[i] == ':')
+      {
+        port = std::stoi(host.c_str() + i + 1);
+        host = std::string(host.c_str(), host.c_str() + i);
+        break;
+      }
 
   // do character translation
-  unsigned k =0;
+  unsigned k = 0;
   while (k < path.size())
   {
     if (path[k] == ' ')
@@ -90,35 +93,37 @@ std::istream * vul_http_open(char const *url)
   // so far so good.
 #ifdef DEBUG
   std::cerr << "auth = \'" << auth << "\'\n"
-           << "host = \'" << host << "\'\n"
-           << "path = \'" << path << "\'\n"
-           << "port = " << port << std::endl;
+            << "host = \'" << host << "\'\n"
+            << "path = \'" << path << "\'\n"
+            << "port = " << port << std::endl;
 #endif
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
-  if (called_WSAStartup==0)
+  if (called_WSAStartup == 0)
   {
-    WORD wVersionRequested;
+    WORD    wVersionRequested;
     WSADATA wsaData;
 
-    wVersionRequested = MAKEWORD( 2, 2 );
+    wVersionRequested = MAKEWORD(2, 2);
 
-    /* int err = */ WSAStartup( wVersionRequested, &wsaData );
+    /* int err = */ WSAStartup(wVersionRequested, &wsaData);
   }
 #endif
 
   // create socket endpoint.
-  SOCKET tcp_socket = socket(PF_INET,      // IPv4 protocols.
-                             SOCK_STREAM,  // two-way, reliable,
-                                           // connection-based stream socket.
-                             PF_UNSPEC);   // protocol number.
+  SOCKET tcp_socket = socket(PF_INET,     // IPv4 protocols.
+                             SOCK_STREAM, // two-way, reliable,
+                                          // connection-based stream socket.
+                             PF_UNSPEC);  // protocol number.
 #if defined(_WIN32) && !defined(__CYGWIN__)
-  if (tcp_socket == INVALID_SOCKET) {
-# ifndef NDEBUG
+  if (tcp_socket == INVALID_SOCKET)
+  {
+#  ifndef NDEBUG
     std::cerr << __FILE__ "error code : " << WSAGetLastError() << '\n';
-# endif
+#  endif
 #else
-  if (tcp_socket < 0) {
+  if (tcp_socket < 0)
+  {
 #endif
     std::cerr << __FILE__ ": failed to create socket.\n";
     return nullptr;
@@ -129,8 +134,9 @@ std::istream * vul_http_open(char const *url)
 #endif
 
   // get network address of server.
-  hostent *hp = gethostbyname(host.c_str());
-  if (! hp) {
+  hostent * hp = gethostbyname(host.c_str());
+  if (!hp)
+  {
     std::cerr << __FILE__ ": failed to lookup host\n";
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
@@ -150,9 +156,10 @@ std::istream * vul_http_open(char const *url)
   std::memcpy(&my_addr.sin_addr, hp->h_addr_list[0], hp->h_length);
 
   // connect to server.
-  if (connect(tcp_socket , (sockaddr *) &my_addr, sizeof my_addr) < 0) {
+  if (connect(tcp_socket, (sockaddr *)&my_addr, sizeof my_addr) < 0)
+  {
     std::cerr << __FILE__ ": failed to connect to host\n";
-    //perror(__FILE__);
+    // perror(__FILE__);
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
@@ -167,25 +174,30 @@ std::istream * vul_http_open(char const *url)
   char buffer[4096];
 
   // send HTTP 1.1 request.
-  std::snprintf(buffer, 4090-std::strlen(buffer),
-               "GET %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
-               url, host.c_str());
+  std::snprintf(buffer,
+                4090 - std::strlen(buffer),
+                "GET %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
+                url,
+                host.c_str());
 
   if (auth != "")
-    std::snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer),
-                 "Authorization: Basic %s\r\n",
-                 vul_url::encode_base64(auth).c_str());
+    std::snprintf(buffer + std::strlen(buffer),
+                  4090 - std::strlen(buffer),
+                  "Authorization: Basic %s\r\n",
+                  vul_url::encode_base64(auth).c_str());
 
-  if (std::snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer), "\r\n") < 0)
+  if (std::snprintf(buffer + std::strlen(buffer), 4090 - std::strlen(buffer), "\r\n") < 0)
   {
     std::cerr << "ERROR: vul_http_open buffer overflow.";
     std::abort();
   }
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
-  if (send(tcp_socket, buffer, (int)std::strlen(buffer), 0) < 0) {
+  if (send(tcp_socket, buffer, (int)std::strlen(buffer), 0) < 0)
+  {
 #else
-  if (::write(tcp_socket, buffer, std::strlen(buffer)) < 0) {
+  if (::write(tcp_socket, buffer, std::strlen(buffer)) < 0)
+  {
 #endif
     std::cerr << __FILE__ ": error sending HTTP request\n";
 
@@ -203,9 +215,11 @@ std::istream * vul_http_open(char const *url)
   {
     int n;
 #if defined(_WIN32) && !defined(__CYGWIN__)
-    while ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0) {
+    while ((n = recv(tcp_socket, buffer, sizeof buffer, 0)) > 0)
+    {
 #else
-    while ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0) {
+    while ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0)
+    {
 #endif
       contents.append(buffer, n);
 #ifdef DEBUG
@@ -235,7 +249,7 @@ std::istream * vul_http_open(char const *url)
     return nullptr;
   }
 
-  contents.erase(0,n+4);
+  contents.erase(0, n + 4);
 #ifdef DEBUG
   std::cerr << "vul_url::vul_http_open() returns:\n" << contents << '\n';
 #endif
@@ -244,44 +258,47 @@ std::istream * vul_http_open(char const *url)
 
 
 //: only call this method with a correctly formatted http URL
-bool vul_http_exists(char const *url)
+bool
+vul_http_exists(char const * url)
 {
   // split URL into auth, host, path and port number.
   std::string host;
   std::string path;
   std::string auth;
-  int port = 80; // default
-  assert (std::strncmp(url, "http://", 7) == 0);
+  int         port = 80; // default
+  assert(std::strncmp(url, "http://", 7) == 0);
 
-  char const *p = url + 7;
-  while (*p && *p!='/')
-    ++ p;
-  host = std::string(url+7, p);
+  char const * p = url + 7;
+  while (*p && *p != '/')
+    ++p;
+  host = std::string(url + 7, p);
 
 
   if (*p)
-    path = p+1; // may be the empty string, if URL ends in a slash
+    path = p + 1; // may be the empty string, if URL ends in a slash
   else
     path = "";
 
-  //authentication
-  for (unsigned int i=0; i<host.size(); ++i)
-    if (host[i] == '@') {
-      auth = std::string(host.c_str(), host.c_str()+i);
-      host = std::string(host.c_str()+i+1, host.c_str() + host.size());
+  // authentication
+  for (unsigned int i = 0; i < host.size(); ++i)
+    if (host[i] == '@')
+    {
+      auth = std::string(host.c_str(), host.c_str() + i);
+      host = std::string(host.c_str() + i + 1, host.c_str() + host.size());
       break;
     }
 
   // port?
-  for (unsigned int i=0; i<host.size(); ++i)
-    if (host[i] == ':') {
+  for (unsigned int i = 0; i < host.size(); ++i)
+    if (host[i] == ':')
+    {
       port = std::stoi(host.c_str() + i + 1);
       host = std::string(host.c_str(), host.c_str() + i);
       break;
     }
 
   // do character translation
-  unsigned k =0;
+  unsigned k = 0;
   while (k < path.size())
   {
     if (path[k] == ' ')
@@ -294,36 +311,38 @@ bool vul_http_exists(char const *url)
   // so far so good.
 #ifdef DEBUG
   std::cerr << "auth = \'" << auth << "\'\n"
-           << "host = \'" << host << "\'\n"
-           << "path = \'" << path << "\'\n"
-           << "port = " << port << std::endl;
+            << "host = \'" << host << "\'\n"
+            << "path = \'" << path << "\'\n"
+            << "port = " << port << std::endl;
 #endif
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
-  if (called_WSAStartup==0)
+  if (called_WSAStartup == 0)
   {
-    WORD wVersionRequested;
+    WORD    wVersionRequested;
     WSADATA wsaData;
 
-    wVersionRequested = MAKEWORD( 2, 2 );
+    wVersionRequested = MAKEWORD(2, 2);
 
-    /* int err = */ WSAStartup( wVersionRequested, &wsaData );
+    /* int err = */ WSAStartup(wVersionRequested, &wsaData);
   }
 #endif
 
   // create socket endpoint.
-  SOCKET tcp_socket = socket(PF_INET,      // IPv4 protocols.
-                             SOCK_STREAM,  // two-way, reliable,
-                                           // connection-based stream socket.
-                             PF_UNSPEC);   // protocol number.
+  SOCKET tcp_socket = socket(PF_INET,     // IPv4 protocols.
+                             SOCK_STREAM, // two-way, reliable,
+                                          // connection-based stream socket.
+                             PF_UNSPEC);  // protocol number.
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
-  if (tcp_socket == INVALID_SOCKET) {
-# ifndef NDEBUG
+  if (tcp_socket == INVALID_SOCKET)
+  {
+#  ifndef NDEBUG
     std::cerr << "error code : " << WSAGetLastError() << std::endl;
-# endif
+#  endif
 #else
-  if (tcp_socket < 0) {
+  if (tcp_socket < 0)
+  {
 #endif
     std::cerr << __FILE__ ": failed to create socket.\n";
     return false;
@@ -334,8 +353,9 @@ bool vul_http_exists(char const *url)
 #endif
 
   // get network address of server.
-  hostent *hp = gethostbyname(host.c_str());
-  if (! hp) {
+  hostent * hp = gethostbyname(host.c_str());
+  if (!hp)
+  {
     std::cerr << __FILE__ ": failed to lookup host\n";
     return false;
   }
@@ -343,15 +363,15 @@ bool vul_http_exists(char const *url)
   // make socket address.
   sockaddr_in my_addr;
   my_addr.sin_family = AF_INET;
-    // convert port number to network byte order..
+  // convert port number to network byte order..
   my_addr.sin_port = htons(port);
   std::memcpy(&my_addr.sin_addr, hp->h_addr_list[0], hp->h_length);
 
   // connect to server.
-  if (connect(tcp_socket , (sockaddr *) &my_addr, sizeof my_addr) < 0)
+  if (connect(tcp_socket, (sockaddr *)&my_addr, sizeof my_addr) < 0)
   {
     std::cerr << __FILE__ ": failed to connect to host\n";
-    //perror(__FILE__);
+    // perror(__FILE__);
 #if defined(_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
@@ -365,24 +385,26 @@ bool vul_http_exists(char const *url)
   char buffer[4096];
 
   // send HTTP 1.1 request.
-  std::snprintf(buffer, 4090,
-               "HEAD %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
-               url, host.c_str());
+  std::snprintf(
+    buffer, 4090, "HEAD %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n", url, host.c_str());
   if (auth != "")
-    std::snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer),
-                 "Authorization: Basic %s\r\n",
-                 vul_url::encode_base64(auth).c_str() );
+    std::snprintf(buffer + std::strlen(buffer),
+                  4090 - std::strlen(buffer),
+                  "Authorization: Basic %s\r\n",
+                  vul_url::encode_base64(auth).c_str());
 
-  if (std::snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer), "\r\n") < 0)
+  if (std::snprintf(buffer + std::strlen(buffer), 4090 - std::strlen(buffer), "\r\n") < 0)
   {
     std::cerr << "ERROR: vul_http_exists buffer overflow.";
     std::abort();
   }
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
-  if (send(tcp_socket, buffer, (int)std::strlen(buffer), 0) < 0) {
+  if (send(tcp_socket, buffer, (int)std::strlen(buffer), 0) < 0)
+  {
 #else
-  if (::write(tcp_socket, buffer, std::strlen(buffer)) < 0) {
+  if (::write(tcp_socket, buffer, std::strlen(buffer)) < 0)
+  {
 #endif
     std::cerr << __FILE__ ": error sending HTTP request\n";
 
@@ -400,12 +422,14 @@ bool vul_http_exists(char const *url)
   {
     int n;
 #if defined(_WIN32) && !defined(__CYGWIN__)
-    if ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0) {
+    if ((n = recv(tcp_socket, buffer, sizeof buffer, 0)) > 0)
+    {
 #else
-    if ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0) {
+    if ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0)
+    {
 #endif
       contents.append(buffer, n);
-      //std::cerr << n << " bytes\n";
+      // std::cerr << n << " bytes\n";
     }
     else
     {
@@ -433,7 +457,8 @@ bool vul_http_exists(char const *url)
 }
 
 
-std::istream * vul_url::open(const char * url, std::ios::openmode mode)
+std::istream *
+vul_url::open(const char * url, std::ios::openmode mode)
 {
   // check for null pointer or empty strings.
   if (!url || !*url)
@@ -442,7 +467,7 @@ std::istream * vul_url::open(const char * url, std::ios::openmode mode)
 
   // check for filenames beginning "file:".
   if (l > 7 && std::strncmp(url, "file://", 7) == 0)
-    return new std::ifstream(url+7,mode);
+    return new std::ifstream(url + 7, mode);
 
   // maybe it's an http URL?
   if (l > 7 && std::strncmp(url, "http://", 7) == 0)
@@ -451,8 +476,10 @@ std::istream * vul_url::open(const char * url, std::ios::openmode mode)
   // maybe it's an ftp URL?
   if (l > 6 && std::strncmp(url, "ftp://", 6) == 0)
   {
-    std::cerr << __LINE__ << "ERROR:\n vul_read_url(const char * url)\n"
-      "Doesn't support FTP yet, url=" << url << std::endl;
+    std::cerr << __LINE__
+              << "ERROR:\n vul_read_url(const char * url)\n"
+                 "Doesn't support FTP yet, url="
+              << url << std::endl;
     return nullptr;
   }
 
@@ -462,7 +489,8 @@ std::istream * vul_url::open(const char * url, std::ios::openmode mode)
 
 
 //: Does that URL exist
-bool vul_url::exists(const char * url)
+bool
+vul_url::exists(const char * url)
 {
   // check for null pointer or empty strings.
   if (!url || !*url)
@@ -471,7 +499,7 @@ bool vul_url::exists(const char * url)
 
   // check for filenames beginning "file:".
   if (l > 7 && std::strncmp(url, "file://", 7) == 0)
-    return vul_file::exists(url+7);
+    return vul_file::exists(url + 7);
 
   // maybe it's an http URL?
   if (l > 7 && std::strncmp(url, "http://", 7) == 0)
@@ -481,7 +509,8 @@ bool vul_url::exists(const char * url)
   if (l > 6 && std::strncmp(url, "ftp://", 6) == 0)
   {
     std::cerr << "ERROR: vul_read_url(const char * url)\n"
-      "Doesn't support FTP yet, url=" << url << std::endl;
+                 "Doesn't support FTP yet, url="
+              << url << std::endl;
     return false;
   }
 
@@ -490,7 +519,8 @@ bool vul_url::exists(const char * url)
 }
 
 //: Is that a URL
-bool vul_url::is_url(const char * url)
+bool
+vul_url::is_url(const char * url)
 {
   // check for null pointer or empty strings.
   if (!url || !*url)
@@ -518,61 +548,59 @@ bool vul_url::is_url(const char * url)
 
 //=======================================================================
 
-bool vul_url::is_file(const char * fn)
+bool
+vul_url::is_file(const char * fn)
 {
   if (vul_url::is_url(fn))
     return vul_url::exists(fn);
   else
-    return vul_file::exists(fn) && ! vul_file::is_directory(fn);
+    return vul_file::exists(fn) && !vul_file::is_directory(fn);
 }
 
 //=======================================================================
 
-static const
-char base64_encoding[]=
-{
-  'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P',
-  'Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f',
-  'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
-  'w','x','y','z','0','1','2','3','4','5','6','7','8','9','+','/'
+static const char base64_encoding[] = {
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+  'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+  's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'
 };
 
 static char out_buf[4];
 
-static const char * encode_triplet(char data[3], unsigned int n)
+static const char *
+encode_triplet(char data[3], unsigned int n)
 {
-  assert (n>0 && n <4);
+  assert(n > 0 && n < 4);
   out_buf[0] = base64_encoding[(data[0] & 0xFC) >> 2];
-  out_buf[1] = base64_encoding[
-    ((data[0] & 0x3) << 4) + ((data[1] & 0xf0)>>4)];
+  out_buf[1] = base64_encoding[((data[0] & 0x3) << 4) + ((data[1] & 0xf0) >> 4)];
 
-  if (n==1)
+  if (n == 1)
   {
     out_buf[2] = out_buf[3] = '=';
     return out_buf;
   }
 
-  out_buf[2] = base64_encoding[
-    ((data[1] & 0xf) << 2) + ((data[2] & 0xc0)>>6)];
+  out_buf[2] = base64_encoding[((data[1] & 0xf) << 2) + ((data[2] & 0xc0) >> 6)];
 
-  if (n==2)
+  if (n == 2)
   {
     out_buf[3] = '=';
     return out_buf;
   }
 
-  out_buf[3] = base64_encoding[ (data[2] & 0x3f) ];
+  out_buf[3] = base64_encoding[(data[2] & 0x3f)];
   return out_buf;
 }
 
 //=======================================================================
 
-std::string vul_url::encode_base64(const std::string& in)
+std::string
+vul_url::encode_base64(const std::string & in)
 {
-  std::string out;
-  unsigned int i = 0, line_octets = 0;
+  std::string        out;
+  unsigned int       i = 0, line_octets = 0;
   const unsigned int l = (unsigned int)(in.size());
-  char data[3];
+  char               data[3];
   while (i <= l)
   {
     if (i == l)
@@ -586,7 +614,7 @@ std::string vul_url::encode_base64(const std::string& in)
 
     if (i == l)
     {
-      out.append(encode_triplet(data,1),4);
+      out.append(encode_triplet(data, 1), 4);
       return out;
     }
 
@@ -594,17 +622,17 @@ std::string vul_url::encode_base64(const std::string& in)
 
     if (i == l)
     {
-      out.append(encode_triplet(data,2),4);
+      out.append(encode_triplet(data, 2), 4);
       return out;
     }
 
     data[2] = in[i++];
 
-    out.append(encode_triplet(data,3),4);
+    out.append(encode_triplet(data, 3), 4);
 
-    if (line_octets >= 68/4) // print carriage return
+    if (line_octets >= 68 / 4) // print carriage return
     {
-      out.append("\r\n",2);
+      out.append("\r\n", 2);
       line_octets = 0;
     }
     else
@@ -616,7 +644,8 @@ std::string vul_url::encode_base64(const std::string& in)
 
 //=======================================================================
 
-static int get_next_char(const std::string &in, unsigned int *i)
+static int
+get_next_char(const std::string & in, unsigned int * i)
 {
   while (*i < in.size())
   {
@@ -646,36 +675,37 @@ static int get_next_char(const std::string &in, unsigned int *i)
 
 //=======================================================================
 
-std::string vul_url::decode_base64(const std::string& in)
+std::string
+vul_url::decode_base64(const std::string & in)
 {
-  int c;
+  int  c;
   char data[3];
 
-  unsigned int i=0;
+  unsigned int       i = 0;
   const unsigned int l = (unsigned int)(in.size());
-  std::string out;
+  std::string        out;
   while (i < l)
   {
     data[0] = data[1] = data[2] = 0;
 
     // -=- 0 -=-
     // Search next valid char...
-    c = get_next_char(in , &i);
+    c = get_next_char(in, &i);
 
     // treat '=' as end of message
     if (c == 64)
       return out;
-    if (c==-1)
+    if (c == -1)
       return "";
 
     data[0] = char(((c & 0x3f) << 2) | (0x3 & data[0]));
 
     // -=- 1 -=-
     // Search next valid char...
-    c = get_next_char(in , &i);
+    c = get_next_char(in, &i);
 
-      // Error! Second character in octet can't be '='
-    if (c == 64 || c==-1)
+    // Error! Second character in octet can't be '='
+    if (c == 64 || c == -1)
       return "";
 
     data[0] = char(((c & 0x30) >> 4) | (0xfc & data[0]));
@@ -684,14 +714,14 @@ std::string vul_url::decode_base64(const std::string& in)
     // -=- 2 -=-
     // Search next valid char...
 
-    c = get_next_char(in , &i);
+    c = get_next_char(in, &i);
 
-    if (c==-1)
+    if (c == -1)
       return "";
     if (c == 64)
     {
       // should really read next char and check it is '='
-      out.append(data,1);  // write 1 byte to output
+      out.append(data, 1); // write 1 byte to output
       return out;
     }
 
@@ -700,20 +730,20 @@ std::string vul_url::decode_base64(const std::string& in)
 
     // -=- 3 -=-
     // Search next valid char...
-    c = get_next_char(in , &i);
+    c = get_next_char(in, &i);
 
-    if (c==-1)
+    if (c == -1)
       return "";
 
     if (c == 64)
     {
-      out.append(data,2);  // write 2 bytes to output
+      out.append(data, 2); // write 2 bytes to output
       return out;
     }
 
     data[2] = char((c & 0x3f) | (0xc0 & data[2]));
 
-    out.append(data,3);  // write 3 bytes to output
+    out.append(data, 3); // write 3 bytes to output
   }
 
   return out;

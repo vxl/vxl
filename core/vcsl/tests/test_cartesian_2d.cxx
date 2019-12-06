@@ -13,9 +13,10 @@
 #include "testlib/testlib_test.h"
 #include "vcsl/vcsl_cartesian_2d.h"
 
-static void test_cartesian_2d()
+static void
+test_cartesian_2d()
 {
-  vcsl_cartesian_2d_sptr c=new vcsl_cartesian_2d;
+  vcsl_cartesian_2d_sptr c = new vcsl_cartesian_2d;
   TEST("vcsl_cartesian_2d_sptr", bool(c), true);
 }
 

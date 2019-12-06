@@ -21,14 +21,14 @@ vgui_menu_item::vgui_menu_item()
   short_cut.key = vgui_KEY_NULL;
 }
 
-vgui_menu_item::vgui_menu_item(vgui_menu_item const &that)
+vgui_menu_item::vgui_menu_item(vgui_menu_item const & that)
   : name(that.name)
   , cmnd(that.cmnd)
   , menu(that.menu)
   , short_cut(that.short_cut)
 {
   if (menu)
-    menu = new vgui_menu( *menu ); // make a copy.
+    menu = new vgui_menu(*menu); // make a copy.
 }
 
 vgui_menu_item::~vgui_menu_item()
@@ -38,7 +38,8 @@ vgui_menu_item::~vgui_menu_item()
   menu = nullptr;
 }
 
-bool vgui_menu_item::is_toggle_button() const
+bool
+vgui_menu_item::is_toggle_button() const
 {
   // The use of dynamic_cast is forbidden by the VXL
   // guidelines. However, the alternative here is to implement our own
@@ -48,19 +49,21 @@ bool vgui_menu_item::is_toggle_button() const
   // all kinds of things. Let's just use the compiler generated
   // version until we run into a real problem.
   //
-  return name!="" &&  (bool)cmnd && (menu == nullptr) &&  dynamic_cast<vgui_command_toggle*>(cmnd.ptr()) != nullptr;
+  return name != "" && (bool)cmnd && (menu == nullptr) && dynamic_cast<vgui_command_toggle *>(cmnd.ptr()) != nullptr;
 }
 
 //--------------------------------------------------------------------------------
 
-vgui_menu::vgui_menu(vgui_menu const &that)
+vgui_menu::vgui_menu(vgui_menu const & that)
 {
   operator=(that);
 }
 
-vgui_menu& vgui_menu::operator=(vgui_menu const &that)
+vgui_menu &
+vgui_menu::operator=(vgui_menu const & that)
 {
-  if (this != &that) {
+  if (this != &that)
+  {
     clear();
     this->include(that);
   }
@@ -69,12 +72,13 @@ vgui_menu& vgui_menu::operator=(vgui_menu const &that)
 
 //--------------------------------------------------------------------------------
 
-#define im_here do { /* std::cerr << __FILE__ " : " << __LINE__ << std::endl; */ } while (false)
+#define im_here                                                                                                        \
+  do                                                                                                                   \
+  { /* std::cerr << __FILE__ " : " << __LINE__ << std::endl; */                                                        \
+  } while (false)
 
-void vgui_menu::add(std::string const &n,
-                    vgui_command_sptr c,
-                    vgui_key key,
-                    vgui_modifier modifiers)
+void
+vgui_menu::add(std::string const & n, vgui_command_sptr c, vgui_key key, vgui_modifier modifiers)
 {
   im_here;
   vgui_menu_item i;
@@ -85,31 +89,28 @@ void vgui_menu::add(std::string const &n,
   items.push_back(i);
 }
 
-void vgui_menu::add(std::string const &n,
-                    vgui_menu_callback f,
-                    void const* client_data,
-                    vgui_key key,
-                    vgui_modifier modifiers)
+void
+vgui_menu::add(std::string const & n,
+               vgui_menu_callback  f,
+               void const *        client_data,
+               vgui_key            key,
+               vgui_modifier       modifiers)
 {
   im_here;
-  vgui_command* cfunc = new vgui_command_cfunc(f, client_data);
-  add(n, /* (vgui_command*) */cfunc, key, modifiers);
+  vgui_command * cfunc = new vgui_command_cfunc(f, client_data);
+  add(n, /* (vgui_command*) */ cfunc, key, modifiers);
 }
 
-void vgui_menu::add(std::string const &n,
-                    vgui_menu_callback_no_client_data f,
-                    vgui_key key,
-                    vgui_modifier modifiers)
+void
+vgui_menu::add(std::string const & n, vgui_menu_callback_no_client_data f, vgui_key key, vgui_modifier modifiers)
 {
   im_here;
-  vgui_command* cfunc = new vgui_command_cfunc(f);
-  add(n, /* (vgui_command*) */cfunc, key, modifiers);
+  vgui_command * cfunc = new vgui_command_cfunc(f);
+  add(n, /* (vgui_command*) */ cfunc, key, modifiers);
 }
 
-void vgui_menu::add(std::string const &n,
-                    vgui_menu const &m,
-                    vgui_key key,
-                    vgui_modifier modifiers)
+void
+vgui_menu::add(std::string const & n, vgui_menu const & m, vgui_key key, vgui_modifier modifiers)
 {
   im_here;
   vgui_menu_item i;
@@ -120,19 +121,21 @@ void vgui_menu::add(std::string const &n,
   items.push_back(i);
 }
 
-void vgui_menu::separator()
+void
+vgui_menu::separator()
 {
   vgui_menu_item i;
   i.name = "";
   items.push_back(i);
 }
 
-void vgui_menu::include(vgui_menu const &that)
+void
+vgui_menu::include(vgui_menu const & that)
 {
   items.reserve(items.size() + that.items.size());
 
-  for (unsigned i=0; i<that.size(); ++i)
-    items.push_back( that.items[i] );
+  for (unsigned i = 0; i < that.size(); ++i)
+    items.push_back(that.items[i]);
 }
 
 //--------------------------------------------------------------------------------
@@ -142,9 +145,11 @@ void vgui_menu::include(vgui_menu const &that)
 // new line (usually spaces for indentation).
 // This could be a member function, but that would just clutter
 // the interface even more.
-static void dump(vgui_menu const &This, std::ostream &os, std::string const &pre)
+static void
+dump(vgui_menu const & This, std::ostream & os, std::string const & pre)
 {
-  for (unsigned i=0;i<This.size();i++) {
+  for (unsigned i = 0; i < This.size(); i++)
+  {
     // name
     os << pre << " \"" << This[i].name << "\" ";
 
@@ -165,13 +170,15 @@ static void dump(vgui_menu const &This, std::ostream &os, std::string const &pre
 
     // what it does
     if (This[i].is_command())
-      os << "command(" << static_cast<void*>(This[i].cmnd.as_pointer()) << ")\n";
-    else if (This[i].is_submenu()) {
+      os << "command(" << static_cast<void *>(This[i].cmnd.as_pointer()) << ")\n";
+    else if (This[i].is_submenu())
+    {
       os << "submenu:\n";
-      dump(* This[i].menu,os,pre+"  ");
+      dump(*This[i].menu, os, pre + "  ");
     }
-    else if (This[i].is_toggle_button()) {
-      vgui_command_toggle *c = static_cast<vgui_command_toggle*>(This[i].cmnd.as_pointer());
+    else if (This[i].is_toggle_button())
+    {
+      vgui_command_toggle * c = static_cast<vgui_command_toggle *>(This[i].cmnd.as_pointer());
       os << "toggle (" << (c->state ? "on" : "off") << ")\n";
     }
     else if (This[i].is_separator())
@@ -181,7 +188,8 @@ static void dump(vgui_menu const &This, std::ostream &os, std::string const &pre
   }
 }
 
-std::ostream &operator<<(std::ostream &os, vgui_menu const &m)
+std::ostream &
+operator<<(std::ostream & os, vgui_menu const & m)
 {
   dump(m, os, "  ");
   return os;

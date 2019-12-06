@@ -10,4 +10,8 @@
 #include "vsl/vsl_string_io.hxx"
 #include "vsl/vsl_vector_io.hxx"
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

@@ -18,7 +18,8 @@ DECLARE(vbl_test_local_minima);
 DECLARE(vbl_test_attributes);
 DECLARE(vbl_test_disjoint_sets);
 
-void register_tests()
+void
+register_tests()
 {
   REGISTER(vbl_test_bounding_box);
   REGISTER(vbl_test_quadruple);

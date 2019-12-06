@@ -18,13 +18,13 @@
 #include "vgui/vgui_command.h"
 #include "vgui/vgui_popup_params.h"
 
-static bool debug=false;
+static bool debug = false;
 
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_deck_tableau_new.
 //  Make a deck with two children, listed top to bottom.
-vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const& child0,
-                                     vgui_tableau_sptr const& child1) : index_(-1)
+vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const & child0, vgui_tableau_sptr const & child1)
+  : index_(-1)
 {
   add(child0);
   add(child1);
@@ -33,9 +33,10 @@ vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const& child0,
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_deck_tableau_new.
 //  Make a deck with three children, listed top to bottom.
-vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const& child0,
-                                     vgui_tableau_sptr const& child1,
-                                     vgui_tableau_sptr const& child2) : index_(-1)
+vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const & child0,
+                                     vgui_tableau_sptr const & child1,
+                                     vgui_tableau_sptr const & child2)
+  : index_(-1)
 {
   add(child0);
   add(child1);
@@ -48,7 +49,8 @@ vgui_deck_tableau::~vgui_deck_tableau() {}
 
 //----------------------------------------------------------------------------
 //: Handle events by passing to the current child tableau.
-bool vgui_deck_tableau::handle(const vgui_event& event)
+bool
+vgui_deck_tableau::handle(const vgui_event & event)
 {
   // First pass events to the default handle method (this calls key_press, etc).
   if (vgui_tableau::handle(event))
@@ -66,12 +68,13 @@ bool vgui_deck_tableau::handle(const vgui_event& event)
 //: Send info to cerr - called when user presses '?' in the rendering area.
 //  Over-rides function in vgui_tableau.
 //  This function is called by the default handle() function in vgui_tableau.
-bool vgui_deck_tableau::help()
+bool
+vgui_deck_tableau::help()
 {
   std::cerr << "\n-- vgui_deck_tableau ----------------------------\n"
-           << "|     keys                                      |\n"
-           << "| `PageUp' and `PageDown'  switch current child |\n"
-           << "-------------------------------------------------\n\n";
+            << "|     keys                                      |\n"
+            << "| `PageUp' and `PageDown'  switch current child |\n"
+            << "-------------------------------------------------\n\n";
 
   return false;
 }
@@ -80,35 +83,38 @@ bool vgui_deck_tableau::help()
 //: Uses PageUp and PageDown events - called when user presses a key.
 //  Over-rides function in vgui_tableau.
 //  This function is called by the default handle() function in vgui_tableau.
-bool vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier)
+bool
+vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier)
 {
   if (debug)
     std::cerr << "vgui_deck_tableau::key_press " << key << std::endl;
 
   switch (key)
   {
-   case vgui_PAGE_UP:
-    this->next();
-    if (index_ok(index_) && children[index_]) {
-      vgui_event e(vgui_ENTER);
-      e.wx = x;
-      e.wy = y;
-      children[index_]->handle(e);
-    }
-    this->post_redraw();
-    return true;
-   case vgui_PAGE_DOWN:
-    this->prev();
-    if (index_ok(index_) && children[index_]) {
-      vgui_event e(vgui_ENTER);
-      e.wx = x;
-      e.wy = y;
-      children[index_]->handle(e);
-    }
-    this->post_redraw();
-    return true;
-   default:
-    return false;
+    case vgui_PAGE_UP:
+      this->next();
+      if (index_ok(index_) && children[index_])
+      {
+        vgui_event e(vgui_ENTER);
+        e.wx = x;
+        e.wy = y;
+        children[index_]->handle(e);
+      }
+      this->post_redraw();
+      return true;
+    case vgui_PAGE_DOWN:
+      this->prev();
+      if (index_ok(index_) && children[index_])
+      {
+        vgui_event e(vgui_ENTER);
+        e.wx = x;
+        e.wy = y;
+        children[index_]->handle(e);
+      }
+      this->post_redraw();
+      return true;
+    default:
+      return false;
   }
 }
 
@@ -116,10 +122,11 @@ bool vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier)
 //: Add a tableau to the deck.
 //  It is placed on top and made current.
 //  Override virtual base class method.
-bool vgui_deck_tableau::add_child(vgui_tableau_sptr const& t)
+bool
+vgui_deck_tableau::add_child(vgui_tableau_sptr const & t)
 {
-  children.push_back( vgui_parent_child_link(this,t) );
-  index_ = size()-1;
+  children.push_back(vgui_parent_child_link(this, t));
+  index_ = size() - 1;
   observers.notify();
   post_redraw();
   return true;
@@ -127,7 +134,8 @@ bool vgui_deck_tableau::add_child(vgui_tableau_sptr const& t)
 
 //----------------------------------------------------------------------------
 //: Remove the given child tableau from the deck.
-void vgui_deck_tableau::remove(vgui_tableau_sptr const& t)
+void
+vgui_deck_tableau::remove(vgui_tableau_sptr const & t)
 {
   if (!remove_child(t))
     std::cerr << __FILE__ " no such child tableau : " << t << std::endl;
@@ -136,10 +144,12 @@ void vgui_deck_tableau::remove(vgui_tableau_sptr const& t)
 //----------------------------------------------------------------------------
 //: Remove the given child tableau from the deck.
 //  Override virtual base class  method
-bool vgui_deck_tableau::remove_child(vgui_tableau_sptr const& t)
+bool
+vgui_deck_tableau::remove_child(vgui_tableau_sptr const & t)
 {
-  for (std::vector<vgui_parent_child_link>::iterator i = children.begin() ; i!=children.end() ; ++i)
-    if ( (*i) == t ) {
+  for (std::vector<vgui_parent_child_link>::iterator i = children.begin(); i != children.end(); ++i)
+    if ((*i) == t)
+    {
       children.erase(i);
       // Index must be allowed to go to -1 if all are deleted, so don't
       // check for zero
@@ -153,7 +163,8 @@ bool vgui_deck_tableau::remove_child(vgui_tableau_sptr const& t)
 
 //----------------------------------------------------------------------------
 //: Returns the index of the currently active child tableau.
-vgui_tableau_sptr vgui_deck_tableau::current()
+vgui_tableau_sptr
+vgui_deck_tableau::current()
 {
   if (index_ok(index_))
     return children[index_];
@@ -163,7 +174,8 @@ vgui_tableau_sptr vgui_deck_tableau::current()
 
 //----------------------------------------------------------------------------
 //: Returns the tableau at the given index in the list of child tableau.
-vgui_tableau_sptr vgui_deck_tableau::get_tableau_at(int tab_pos)
+vgui_tableau_sptr
+vgui_deck_tableau::get_tableau_at(int tab_pos)
 {
   if (index_ok(tab_pos))
     return children[tab_pos];
@@ -172,16 +184,19 @@ vgui_tableau_sptr vgui_deck_tableau::get_tableau_at(int tab_pos)
 
 //----------------------------------------------------------------------------
 //: Returns the number of child tableaux.
-int vgui_deck_tableau::size()
+int
+vgui_deck_tableau::size()
 {
   return children.size();
 }
 
 //----------------------------------------------------------------------------
 //: Make the child tableau with the given position the active child.
-void vgui_deck_tableau::index(int v)
+void
+vgui_deck_tableau::index(int v)
 {
-  if (index_ok(v)) index_ = v;
+  if (index_ok(v))
+    index_ = v;
   if (debug)
     std::cerr << "vgui_deck_tableau::index " << index_ << std::endl;
   observers.notify();
@@ -189,7 +204,8 @@ void vgui_deck_tableau::index(int v)
 
 //----------------------------------------------------------------------------
 //: Make the top tableau current.
-void vgui_deck_tableau::begin()
+void
+vgui_deck_tableau::begin()
 {
   if (index_ok(0))
     index_ = 0;
@@ -201,17 +217,18 @@ void vgui_deck_tableau::begin()
 
 //----------------------------------------------------------------------------
 //: Make the next tableau down the list current.
-void vgui_deck_tableau::next()
+void
+vgui_deck_tableau::next()
 {
   unsigned int tmp = index_;
 
-  if (tmp+1 >= children.size())
-    tmp=0;
+  if (tmp + 1 >= children.size())
+    tmp = 0;
   else
     ++tmp;
 
   if (index_ok(tmp))
-    index_=tmp;
+    index_ = tmp;
 
   if (debug)
     std::cerr << "vgui_deck_tableau::next " << index_ << std::endl;
@@ -220,17 +237,18 @@ void vgui_deck_tableau::next()
 
 //----------------------------------------------------------------------------
 //: Make the next higher tableau current.
-void vgui_deck_tableau::prev()
+void
+vgui_deck_tableau::prev()
 {
   int tmp = index_;
 
   if (tmp == 0)
-    tmp=children.size()-1;
+    tmp = children.size() - 1;
   else
     --tmp;
 
   if (index_ok(tmp))
-    index_=tmp;
+    index_ = tmp;
 
   if (debug)
     std::cerr << "vgui_deck_tableau::prev " << index_ << std::endl;
@@ -239,20 +257,27 @@ void vgui_deck_tableau::prev()
 
 //----------------------------------------------------------------------------
 //: Returns true if the given integer could be an index to the list of children.
-bool vgui_deck_tableau::index_ok(int v) const
+bool
+vgui_deck_tableau::index_ok(int v) const
 {
   return v >= 0 && v < int(children.size());
 }
 
 //----------------------------------------------------------------------------
 //: Returns the type of this tableau ('vgui_deck_tableau').
-std::string vgui_deck_tableau::type_name() const { return "vgui_deck_tableau"; }
+std::string
+vgui_deck_tableau::type_name() const
+{
+  return "vgui_deck_tableau";
+}
 
 //----------------------------------------------------------------------------
 //: Returns the filename of the currently active child tableau.
-std::string vgui_deck_tableau::file_name() const
+std::string
+vgui_deck_tableau::file_name() const
 {
-  if (index_ok(index_)) {
+  if (index_ok(index_))
+  {
     return children[index_]->file_name();
   }
   return type_name();
@@ -260,10 +285,12 @@ std::string vgui_deck_tableau::file_name() const
 
 //----------------------------------------------------------------------------
 //: Returns a nice version of the name, with info on the currently active child.
-std::string vgui_deck_tableau::pretty_name() const
+std::string
+vgui_deck_tableau::pretty_name() const
 {
   std::string nice_name;
-  if (index_ok(index_)) {
+  if (index_ok(index_))
+  {
     nice_name += "[current = ";
     nice_name += children[index_]->pretty_name();
     nice_name += "]";
@@ -274,30 +301,38 @@ std::string vgui_deck_tableau::pretty_name() const
 //----------------------------------------------------------------------------
 class vgui_deck_switch_command : public vgui_command
 {
- public:
-  vgui_deck_switch_command(vgui_deck_tableau* d, int i) : deck(d), index(i) {}
-  void execute() { deck->index(index); deck->post_redraw(); }
+public:
+  vgui_deck_switch_command(vgui_deck_tableau * d, int i)
+    : deck(d)
+    , index(i)
+  {}
+  void
+  execute()
+  {
+    deck->index(index);
+    deck->post_redraw();
+  }
 
-  vgui_deck_tableau *deck;
-  int index;
+  vgui_deck_tableau * deck;
+  int                 index;
 };
 
 
 //----------------------------------------------------------------------------
 //: Builds a popup menu for the user to select the active child.
-void vgui_deck_tableau::get_popup(const vgui_popup_params& params,
-                                  vgui_menu &menu)
+void
+vgui_deck_tableau::get_popup(const vgui_popup_params & params, vgui_menu & menu)
 {
   vgui_menu submenu;
 
   // build child selection menu
   vgui_menu selections;
 
-  int count = 0;
+  int                                           count = 0;
   std::vector<vgui_parent_child_link>::iterator i = children.begin();
-  for ( ; i!=children.end() ; ++i, ++count) {
-    selections.add((*i)->file_name().c_str(),
-                   new vgui_deck_switch_command(this,count));
+  for (; i != children.end(); ++i, ++count)
+  {
+    selections.add((*i)->file_name().c_str(), new vgui_deck_switch_command(this, count));
   }
 
   submenu.add("Select active child", selections);
@@ -308,15 +343,17 @@ void vgui_deck_tableau::get_popup(const vgui_popup_params& params,
 
     vgui_tableau_sptr c = current();
 
-    if (c && params.defaults) submenu.separator();
+    if (c && params.defaults)
+      submenu.separator();
     c->get_popup(params, submenu);
     menu.add(type_name(), submenu);
   }
   else
   {
-    menu.add(type_name(),submenu);
+    menu.add(type_name(), submenu);
 
-    if (params.recurse) {
+    if (params.recurse)
+    {
       vgui_tableau_sptr c = current();
       if (c)
         c->get_popup(params, menu);

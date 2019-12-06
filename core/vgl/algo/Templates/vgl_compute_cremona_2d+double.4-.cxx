@@ -1,2 +1,2 @@
 #include <vgl/algo/vgl_compute_cremona_2d.hxx>
-VGL_COMPUTE_CREMONA_2D_INSTANTIATE(double,4);
+VGL_COMPUTE_CREMONA_2D_INSTANTIATE(double, 4);

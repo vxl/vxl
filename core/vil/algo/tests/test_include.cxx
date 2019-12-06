@@ -47,4 +47,8 @@
 #include <vil/algo/vil_threshold.h>
 #include <vil/algo/vil_tile_images.h>
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

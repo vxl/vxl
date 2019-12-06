@@ -14,4 +14,8 @@
 #include <vil/algo/vil_suppress_non_max_edges.hxx>
 #include <vil/algo/vil_threshold.hxx>
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

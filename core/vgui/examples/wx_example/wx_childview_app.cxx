@@ -17,21 +17,17 @@ IMPLEMENT_APP(wx_childview_app)
 
 wx_childview_app::wx_childview_app(void)
   : frame_(0)
-{
-}
+{}
 
 //: Initialize the application.
-bool wx_childview_app::OnInit(void)
+bool
+wx_childview_app::OnInit(void)
 {
   // select the vgui_wx toolkit
   vgui::select("wx");
 
-  frame_ = new wx_childview_frame(0,
-                                  wxID_ANY,
-                                  wxT("Childview Example"),
-                                  wxPoint(0, 0),
-                                  wxSize(500, 400),
-                                  wxDEFAULT_FRAME_STYLE);
+  frame_ = new wx_childview_frame(
+    0, wxID_ANY, wxT("Childview Example"), wxPoint(0, 0), wxSize(500, 400), wxDEFAULT_FRAME_STYLE);
   frame_->Centre(wxBOTH);
   frame_->Show(true);
 

@@ -26,20 +26,17 @@
 // vgui_wx_window implementation - construction & destruction.
 //-------------------------------------------------------------------------
 //: Constructor - create a new window.
-vgui_wx_window::vgui_wx_window(int width, int height, const char* title)
-  : frame_(new wxFrame(0, wxID_ANY, wxString(title,wxConvUTF8)))//, wxDefaultPosition, wxSize(width, height)))
+vgui_wx_window::vgui_wx_window(int width, int height, const char * title)
+  : frame_(new wxFrame(0, wxID_ANY, wxString(title, wxConvUTF8))) //, wxDefaultPosition, wxSize(width, height)))
   , menu_(0)
 {
   init_window();
-  frame_->SetClientSize(width+3, height+3);
+  frame_->SetClientSize(width + 3, height + 3);
 }
 
 //: Constructor - create a new window with a menubar.
-vgui_wx_window::vgui_wx_window(int width,
-                               int height,
-                               const vgui_menu& menubar,
-                               const char* title)
-  : frame_(new wxFrame(0, wxID_ANY, wxString(title,wxConvUTF8), wxDefaultPosition, wxSize(width, height)))
+vgui_wx_window::vgui_wx_window(int width, int height, const vgui_menu & menubar, const char * title)
+  : frame_(new wxFrame(0, wxID_ANY, wxString(title, wxConvUTF8), wxDefaultPosition, wxSize(width, height)))
   , menu_(0)
 {
   init_window();
@@ -61,7 +58,8 @@ vgui_wx_window::~vgui_wx_window(void)
 }
 
 //: Catch all constructor.
-void vgui_wx_window::init_window(void)
+void
+vgui_wx_window::init_window(void)
 {
   adaptor_ = new vgui_wx_adaptor(frame_);
 
@@ -79,7 +77,8 @@ void vgui_wx_window::init_window(void)
 //-------------------------------------------------------------------------
 // vgui_wx_window implementation.
 //-------------------------------------------------------------------------
-void vgui_wx_window::set_menubar(const vgui_menu& menubar)
+void
+vgui_wx_window::set_menubar(const vgui_menu & menubar)
 {
   if (menu_)
   {
@@ -96,7 +95,8 @@ void vgui_wx_window::set_menubar(const vgui_menu& menubar)
 }
 
 //: If true, activate the statusbar (if it exists).
-void vgui_wx_window::set_statusbar(bool activate)
+void
+vgui_wx_window::set_statusbar(bool activate)
 {
   activate ? frame_->GetStatusBar()->Show() : frame_->GetStatusBar()->Hide();
 }
@@ -104,10 +104,11 @@ void vgui_wx_window::set_statusbar(bool activate)
 //: Set the default adaptor (if it exists) to the given vgui_adaptor.
 // These refer to the default/current adaptor, if that makes sense. It is
 // not a requirement that it should make sense.
-void vgui_wx_window::set_adaptor(vgui_adaptor* adaptor)
+void
+vgui_wx_window::set_adaptor(vgui_adaptor * adaptor)
 {
   // ***** how do I replace the client canvas? like this?
-  //delete adaptor_;
+  // delete adaptor_;
   frame_->RemoveChild(adaptor_);
   adaptor_ = new vgui_wx_adaptor(frame_);
 
@@ -115,19 +116,22 @@ void vgui_wx_window::set_adaptor(vgui_adaptor* adaptor)
 }
 
 //: Get the default adaptor (if it exists).
-vgui_adaptor* vgui_wx_window::get_adaptor(void)
+vgui_adaptor *
+vgui_wx_window::get_adaptor(void)
 {
   return adaptor_;
 }
 
 //: Get the status bar (if it exists).
-vgui_statusbar* vgui_wx_window::get_statusbar(void)
+vgui_statusbar *
+vgui_wx_window::get_statusbar(void)
 {
   return statusbar_;
 }
 
 //: If true, activate horizontal scrollbar (if it exists).
-void vgui_wx_window::enable_hscrollbar(bool show)
+void
+vgui_wx_window::enable_hscrollbar(bool show)
 {
   if (show)
   {
@@ -141,7 +145,8 @@ void vgui_wx_window::enable_hscrollbar(bool show)
 }
 
 //: If true, activate vertical scrollbar (if it exists).
-void vgui_wx_window::enable_vscrollbar(bool show)
+void
+vgui_wx_window::enable_vscrollbar(bool show)
 {
   if (show)
   {
@@ -155,27 +160,31 @@ void vgui_wx_window::enable_vscrollbar(bool show)
 }
 
 //: Change window shape to new given width and height.
-void vgui_wx_window::reshape(unsigned width, unsigned height)
+void
+vgui_wx_window::reshape(unsigned width, unsigned height)
 {
   // ***** should this resize the window, or the client area?
-  //frame_->SetSize(width, height);
+  // frame_->SetSize(width, height);
   frame_->SetClientSize(width, height);
 }
 
 //: Move the window to the new given x,y position.
-void vgui_wx_window::reposition(int x, int y)
+void
+vgui_wx_window::reposition(int x, int y)
 {
   frame_->SetSize(x, y, -1, -1);
 }
 
 //: Use the given text as the window title (if the window has a title).
-void vgui_wx_window::set_title(std::string const& title)
+void
+vgui_wx_window::set_title(std::string const & title)
 {
-  frame_->SetTitle( wxString(title.c_str(), wxConvUTF8) );
+  frame_->SetTitle(wxString(title.c_str(), wxConvUTF8));
 }
 
 //: Set the position of the horizontal scrollbar, returns old position.
-int vgui_wx_window::set_hscrollbar(int pos)
+int
+vgui_wx_window::set_hscrollbar(int pos)
 {
   int temp = frame_->GetScrollPos(wxHORIZONTAL);
   frame_->SetScrollPos(wxHORIZONTAL, pos);
@@ -183,7 +192,8 @@ int vgui_wx_window::set_hscrollbar(int pos)
 }
 
 //: Set the position of the vertical scrollbar, returns old position.
-int vgui_wx_window::set_vscrollbar(int pos)
+int
+vgui_wx_window::set_vscrollbar(int pos)
 {
   int temp = frame_->GetScrollPos(wxVERTICAL);
   frame_->SetScrollPos(wxVERTICAL, pos);

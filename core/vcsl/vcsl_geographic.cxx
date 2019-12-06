@@ -7,5 +7,4 @@
 //---------------------------------------------------------------------------
 vcsl_geographic::vcsl_geographic()
   : spheroid_(new vcsl_spheroid)
-{
-}
+{}

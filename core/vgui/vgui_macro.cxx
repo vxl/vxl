@@ -17,24 +17,26 @@
 
 extern bool vgui_glerrors_are_bad;
 
-void vgui_macro_error_reporter(char const *FILE, int LINE)
+void
+vgui_macro_error_reporter(char const * FILE, int LINE)
 {
-  static char const *last_file = nullptr;
-  static int last_line = 0;
-  static int numerrors = 0;
+  static char const * last_file = nullptr;
+  static int          last_line = 0;
+  static int          numerrors = 0;
 
   GLenum err = glGetError();
-  if (err != GL_NO_ERROR) {
-    if (last_file) {
+  if (err != GL_NO_ERROR)
+  {
+    if (last_file)
+    {
       std::cerr << "Between " << last_file << ":" << last_line << '\n'
-               << "    and " << FILE << ":" << LINE << " : \""
-               << gluErrorString(err) << "\"\n";
+                << "    and " << FILE << ":" << LINE << " : \"" << gluErrorString(err) << "\"\n";
     }
     else
-      std::cerr << "In " << FILE << " before line " << LINE << " : "
-               << gluErrorString(err) << '\n';
+      std::cerr << "In " << FILE << " before line " << LINE << " : " << gluErrorString(err) << '\n';
 
-    if (++numerrors >= 20 && vgui_glerrors_are_bad) {
+    if (++numerrors >= 20 && vgui_glerrors_are_bad)
+    {
       std::cerr << "too many errors -- calling exit(1);\n";
       std::exit(1);
     }

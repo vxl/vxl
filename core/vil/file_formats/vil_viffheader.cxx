@@ -12,10 +12,10 @@
 // \param nrows - vil_image::nj()
 // \param storage_type - similar to vil_image::pixel_format()
 // \param num_bands - similar to vil_image::n_planes()
-vil_viff_xvimage::vil_viff_xvimage(
-  unsigned ncols, unsigned nrows,
-  vil_viff_data_storage storage_type,
-  unsigned num_bands)
+vil_viff_xvimage::vil_viff_xvimage(unsigned              ncols,
+                                   unsigned              nrows,
+                                   vil_viff_data_storage storage_type,
+                                   unsigned              num_bands)
 {
   const unsigned VIL_VIFF_COMMENT_LENGTH = 512L;
 
@@ -24,10 +24,10 @@ vil_viff_xvimage::vil_viff_xvimage(
   release = XV_IMAGE_REL_NUM;
   version = XV_IMAGE_VER_NUM;
   machine_dep = VFF_DEP_IEEEORDER; /* assume IEEE byte order */
-  memset(  reserve, 0, VIFF_HEADERSIZE-21*sizeof(vxl_sint_32)-520*sizeof(char)-4*sizeof(float));
-  memset(  trash, 0, 3L);
-  memset(  comment, 0, VIL_VIFF_COMMENT_LENGTH);
-  strncpy( comment, "vil_viff image writer output", 28); // must be <= 511 chars
+  memset(reserve, 0, VIFF_HEADERSIZE - 21 * sizeof(vxl_sint_32) - 520 * sizeof(char) - 4 * sizeof(float));
+  memset(trash, 0, 3L);
+  memset(comment, 0, VIL_VIFF_COMMENT_LENGTH);
+  strncpy(comment, "vil_viff image writer output", 28); // must be <= 511 chars
   row_size = ncols;
   col_size = nrows;
   subrow_size = 0; /* Don't care, just avoid uninitialised memory. */
@@ -49,7 +49,7 @@ vil_viff_xvimage::vil_viff_xvimage(
   map_col_size = 0;
   map_subrow_size = 0;
   map_enable = VFF_MAP_OPTIONAL;
-  maps_per_cycle = 0;      /* Don't care */
+  maps_per_cycle = 0; /* Don't care */
   color_space_model = VFF_CM_NONE;
   ispare1 = 0;
   ispare2 = 0;
@@ -61,5 +61,5 @@ vil_viff_xvimage::vil_viff_xvimage(
 
 vil_viff_xvimage::vil_viff_xvimage()
 {
-  memset(this,0, sizeof(vil_viff_xvimage));
+  memset(this, 0, sizeof(vil_viff_xvimage));
 }

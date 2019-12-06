@@ -29,4 +29,8 @@
 #include <vpdl/vpdt/vpdt_update_gaussian.h>
 #include <vpdl/vpdt/vpdt_update_mog.h>
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

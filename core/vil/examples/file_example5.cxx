@@ -10,7 +10,8 @@
 #include "vil/vil_load.h"
 
 //: Analyse an image file without reading the pixels.
-int main(int argc, char** argv)
+int
+main(int argc, char ** argv)
 {
   if (argc < 2)
   {
@@ -18,7 +19,7 @@ int main(int argc, char** argv)
     return 3;
   }
 
-  std::cout<<"Load " << argv[1] << " into an image data object\n";
+  std::cout << "Load " << argv[1] << " into an image data object\n";
 
 
   // This is how we initialise an image resource object.
@@ -27,16 +28,16 @@ int main(int argc, char** argv)
 
   if (!data)
   {
-    std::cerr << "Couldn't load " << argv[1] <<std::endl;
+    std::cerr << "Couldn't load " << argv[1] << std::endl;
     return 3;
   }
 
-  std::cout << "Loaded " << argv[1] <<std::endl;
+  std::cout << "Loaded " << argv[1] << std::endl;
 
-  std::cout<<"Image is:\n"
-          <<" size: " << data->ni() << 'x' << data->nj() << '\n'
-          <<" planes: " << data->nplanes() << '\n'
-          <<" pixel type: " << data->pixel_format() << std::endl;
+  std::cout << "Image is:\n"
+            << " size: " << data->ni() << 'x' << data->nj() << '\n'
+            << " planes: " << data->nplanes() << '\n'
+            << " pixel type: " << data->pixel_format() << std::endl;
 
   return 0;
 }

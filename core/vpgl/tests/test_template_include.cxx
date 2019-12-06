@@ -13,5 +13,8 @@
 #include "vpgl/vpgl_rational_camera.hxx"
 
 
-
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

@@ -9,34 +9,31 @@
 #include "vil/vil_load.h"
 #include "vpl/vpl.h" // vpl_unlink()
 
-static void test_4_plane_tiff()
+static void
+test_4_plane_tiff()
 {
   vil_image_view<unsigned short> v(32, 32, 4);
-  for (unsigned r = 0; r<32; r++)
-    for (unsigned c = 0; c<32; c++)
-      for (unsigned p = 0; p<4; p++)
-        v(c, r, p) = (unsigned short)((r+1)*(c+1)*(p+1));
+  for (unsigned r = 0; r < 32; r++)
+    for (unsigned c = 0; c < 32; c++)
+      for (unsigned p = 0; p < 4; p++)
+        v(c, r, p) = (unsigned short)((r + 1) * (c + 1) * (p + 1));
 
   {
-    vil_stream* os = vil_open("four_plane.tiff", "w");
+    vil_stream *                    os = vil_open("four_plane.tiff", "w");
     vil_blocked_image_resource_sptr out =
-      vil_new_blocked_image_resource(os, 32, 32,4,
-                                     VIL_PIXEL_FORMAT_UINT_16,
-                                     16, 16,
-                                     "tiff");
+      vil_new_blocked_image_resource(os, 32, 32, 4, VIL_PIXEL_FORMAT_UINT_16, 16, 16, "tiff");
     out->put_view(v, 0, 0);
   }
-  vil_image_resource_sptr in = vil_load_image_resource("four_plane.tiff");
+  vil_image_resource_sptr        in = vil_load_image_resource("four_plane.tiff");
   vil_image_view<unsigned short> iv = in->get_view();
 
-  unsigned short v11 = iv(1,1,1);
-  unsigned short v13 = iv(1,1,3);
-  TEST("Four plane image read/write", v11+v13, 24);
-  vil_image_view_base_sptr vb = in->get_view();
+  unsigned short v11 = iv(1, 1, 1);
+  unsigned short v13 = iv(1, 1, 3);
+  TEST("Four plane image read/write", v11 + v13, 24);
+  vil_image_view_base_sptr       vb = in->get_view();
   vil_image_view<unsigned short> cvb = vb;
 
-  vil_image_resource_sptr din =
-    vil_pyramid_image_resource::decimate(in, "dec_four_plane.tiff");
+  vil_image_resource_sptr din = vil_pyramid_image_resource::decimate(in, "dec_four_plane.tiff");
 
   vil_image_view<unsigned short> dv = din->get_view();
 #if 0
@@ -51,10 +48,10 @@ static void test_4_plane_tiff()
     std::cout << '\n';
   }
 #endif
-  unsigned short vp10 = dv(0,0,0);
-  unsigned short vp13 = dv(0,0,3);
+  unsigned short vp10 = dv(0, 0, 0);
+  unsigned short vp13 = dv(0, 0, 3);
 
-  TEST("Four plane pyramid image decimate", vp10==2&&vp13==9, true);
+  TEST("Four plane pyramid image decimate", vp10 == 2 && vp13 == 9, true);
 
   vpl_unlink("four_plane.tiff");
   vpl_unlink("dec_four_plane.tiff");

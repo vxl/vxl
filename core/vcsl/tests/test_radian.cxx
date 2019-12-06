@@ -13,9 +13,10 @@
 #include "testlib/testlib_test.h"
 #include "vcsl/vcsl_radian.h"
 
-static void test_radian()
+static void
+test_radian()
 {
-  vcsl_radian_sptr r=vcsl_radian::instance();
+  vcsl_radian_sptr r = vcsl_radian::instance();
   TEST("test_radian_sptr", bool(r), true);
 }
 

@@ -26,8 +26,8 @@
 #include <vgui/internals/vgui_adaptor_tableau.h>
 
 
-vgui_adaptor *vgui_adaptor::current = nullptr;
-static int adaptor_count = 0;
+vgui_adaptor * vgui_adaptor::current = nullptr;
+static int     adaptor_count = 0;
 
 //-----------------------------------------------------------------------------
 //: Constructor - create a default adaptor.
@@ -56,7 +56,8 @@ vgui_adaptor::~vgui_adaptor()
 
   --adaptor_count;
 
-  if (adaptor_count == 0) {
+  if (adaptor_count == 0)
+  {
     std::cerr << "All adaptors have been deleted -- calling vgui::quit()\n";
     vgui::quit();
   }
@@ -64,21 +65,24 @@ vgui_adaptor::~vgui_adaptor()
 
 //-----------------------------------------------------------------------------#
 //: Get the vgui_tableau associated with this adaptor.
-vgui_tableau_sptr vgui_adaptor::get_tableau() const
+vgui_tableau_sptr
+vgui_adaptor::get_tableau() const
 {
   return the_tableau->get_child();
 }
 
 //-----------------------------------------------------------------------------
 //: Set the vgui_tableau associated with this adaptor.
-void vgui_adaptor::set_tableau(vgui_tableau_sptr const& t)
+void
+vgui_adaptor::set_tableau(vgui_tableau_sptr const & t)
 {
   the_tableau->set_child(t);
 }
 
 //-----------------------------------------------------------------------------
 //: Returns concatenation of the adaptor's menu with the tableau's menu.
-vgui_menu vgui_adaptor::get_total_popup(vgui_popup_params &params) const
+vgui_menu
+vgui_adaptor::get_total_popup(vgui_popup_params & params) const
 {
   // set popup_params members
   params.recurse = true;
@@ -91,7 +95,8 @@ vgui_menu vgui_adaptor::get_total_popup(vgui_popup_params &params) const
     pop.separator();
 
   vgui_tableau_sptr tab = get_tableau();
-  if (tab) {
+  if (tab)
+  {
     vgui_menu tmp;
     tab->get_popup(params, tmp);
     pop.include(tmp);
@@ -102,43 +107,42 @@ vgui_menu vgui_adaptor::get_total_popup(vgui_popup_params &params) const
 
 //-----------------------------------------------------------------------------
 //: Pops up a dialog for changing the popup modifier and button bindings.
-void vgui_adaptor::config_dialog()
+void
+vgui_adaptor::config_dialog()
 {
   // table stores the correspondence between vgui modifiers and pretty names.
-  static struct {
+  static struct
+  {
     vgui_modifier mod;
-    char const *str;
-  } mod_table[]={
-    {vgui_MODIFIER_NULL, "None"},
-    {vgui_CTRL,          "Control"},
-    {vgui_SHIFT,         "Shift"},
-    {vgui_ALT,           "Alt"},
-    {vgui_META,          "Meta"}
-  };
-  const unsigned num_mods = sizeof(mod_table)/sizeof(mod_table[0]);
+    char const *  str;
+  } mod_table[] = { { vgui_MODIFIER_NULL, "None" },
+                    { vgui_CTRL, "Control" },
+                    { vgui_SHIFT, "Shift" },
+                    { vgui_ALT, "Alt" },
+                    { vgui_META, "Meta" } };
+  const unsigned num_mods = sizeof(mod_table) / sizeof(mod_table[0]);
 
   // table stores the correspondence between vgui buttons and pretty names.
-  static struct {
-    vgui_button but;
-    char const *str;
-  } but_table[]={
-    {vgui_BUTTON_NULL,   "None"},
-    {vgui_LEFT,          "Left"},
-    {vgui_MIDDLE,        "Middle"},
-    {vgui_RIGHT,         "Right"}
+  static struct
+  {
+    vgui_button  but;
+    char const * str;
+  } but_table[] = {
+    { vgui_BUTTON_NULL, "None" }, { vgui_LEFT, "Left" }, { vgui_MIDDLE, "Middle" }, { vgui_RIGHT, "Right" }
   };
-  const unsigned num_buts = sizeof(but_table)/sizeof(but_table[0]);
+  const unsigned num_buts = sizeof(but_table) / sizeof(but_table[0]);
 
   // get current bindings :
   vgui_modifier popup_modifier_;
-  vgui_button popup_button_;
+  vgui_button   popup_button_;
   get_popup_bindings(popup_modifier_, popup_button_);
 
   // make choice std::list, using the ordering in the table,
   // and set the initial value of the modifier index.
-  unsigned mod_index = 0;
+  unsigned                 mod_index = 0;
   std::vector<std::string> mod_labels;
-  for (unsigned i=0; i<num_mods; ++i) {
+  for (unsigned i = 0; i < num_mods; ++i)
+  {
     if (mod_table[i].mod == popup_modifier_)
       mod_index = i;
     mod_labels.push_back(mod_table[i].str);
@@ -146,28 +150,29 @@ void vgui_adaptor::config_dialog()
 
   // make choice std::list, using the ordering in the table,
   // and set the initial value of the button index.
-  unsigned but_index = 0;
+  unsigned                 but_index = 0;
   std::vector<std::string> but_labels;
-  for (unsigned i=0; i<num_buts; ++i) {
+  for (unsigned i = 0; i < num_buts; ++i)
+  {
     if (but_table[i].but == popup_button_)
       but_index = i;
     but_labels.push_back(but_table[i].str);
   }
 
 #ifdef DEBUG
-  std::cerr << "mod_index " << mod_index << std::endl
-           << "button_index " << but_index << std::endl;
+  std::cerr << "mod_index " << mod_index << std::endl << "button_index " << but_index << std::endl;
 #endif
 
-  bool nested_popups_val = nested_popups;
-  bool default_items_val = default_items;
+  bool        nested_popups_val = nested_popups;
+  bool        default_items_val = default_items;
   vgui_dialog mydialog("Adaptor Config");
   mydialog.choice("Popup modifier", mod_labels, mod_index);
-  mydialog.choice("Popup button",   but_labels, but_index);
+  mydialog.choice("Popup button", but_labels, but_index);
   mydialog.checkbox("Nested popups", nested_popups_val);
   mydialog.checkbox("Default popup items", default_items_val);
 
-  if (mydialog.ask()) {
+  if (mydialog.ask())
+  {
     assert(mod_index < num_mods);
     assert(but_index < num_buts);
     bind_popups(mod_table[mod_index].mod, but_table[but_index].but);
@@ -182,17 +187,16 @@ void vgui_adaptor::config_dialog()
 //  all tableaux. It is not the responsibility of this method to take care of
 //  overlay handling - the derived class must sort that out.
 //  The derived class must also ensure that the correct draw buffer is set.
-bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e)
+bool
+vgui_adaptor::dispatch_to_tableau(vgui_event const & e)
 {
   vgui_macro_report_errors;
 
   // if the event is DRAW, DRAW_OVERLAY or RESHAPE
   // then set the glViewport
-  if (e.type == vgui_DRAW ||
-      e.type == vgui_DRAW_OVERLAY ||
-      e.type == vgui_RESHAPE) {
+  if (e.type == vgui_DRAW || e.type == vgui_DRAW_OVERLAY || e.type == vgui_RESHAPE)
+  {
     glViewport(0, 0, get_width(), get_height());
-
   }
 
   // set projection matrices to identity
@@ -202,7 +206,7 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e)
 
   // sanity check the 'origin' field :
   if (e.origin == nullptr)
-    const_cast<vgui_event&>(e).origin = this;
+    const_cast<vgui_event &>(e).origin = this;
   else
     assert(e.origin == this);
 
@@ -216,7 +220,8 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e)
 }
 
 //-----------------------------------------------------------------------------
-vgui_window *vgui_adaptor::get_window() const
+vgui_window *
+vgui_adaptor::get_window() const
 {
   vgui_macro_warning << "get_window() not implemented\n";
   return nullptr;
@@ -230,43 +235,50 @@ void vgui_adaptor::bind_popups(vgui_modifier /*m*/, vgui_button /*b*/)
 }
 
 //-----------------------------------------------------------------------------
-void vgui_adaptor::get_popup_bindings(vgui_modifier &, vgui_button &) const
+void
+vgui_adaptor::get_popup_bindings(vgui_modifier &, vgui_button &) const
 {
   vgui_macro_warning << "get_popup_bindings() not implemented\n";
 }
 
 //-----------------------------------------------------------------------------
-void vgui_adaptor::swap_buffers()
+void
+vgui_adaptor::swap_buffers()
 {
   vgui_macro_warning << "swap_buffers() not implemented\n";
 }
 
 //-----------------------------------------------------------------------------
-void vgui_adaptor::post_message(char const *, void const *)
+void
+vgui_adaptor::post_message(char const *, void const *)
 {
   vgui_macro_warning << "post_message() not implemented\n";
 }
 
 //-----------------------------------------------------------------------------
-void vgui_adaptor::make_current()
+void
+vgui_adaptor::make_current()
 {
   vgui_macro_warning << "make_current() not implemented\n";
 }
 
 //-----------------------------------------------------------------------------
-void vgui_adaptor::post_timer(float, int)
+void
+vgui_adaptor::post_timer(float, int)
 {
   vgui_macro_warning << "post_timer(float, int) not implemented\n";
 }
 
 //-----------------------------------------------------------------------------
-void vgui_adaptor::kill_timer(int)
+void
+vgui_adaptor::kill_timer(int)
 {
   vgui_macro_warning << "kill_timer(int) not implemented\n";
 }
 
 //-----------------------------------------------------------------------------
-int  vgui_adaptor::post_timer(float t)
+int
+vgui_adaptor::post_timer(float t)
 {
   static int counter = 0;
   post_timer(t, counter);
@@ -274,12 +286,14 @@ int  vgui_adaptor::post_timer(float t)
 }
 
 //-----------------------------------------------------------------------------
-void vgui_adaptor::post_destroy()
+void
+vgui_adaptor::post_destroy()
 {
   vgui_macro_warning << "post_destroy() not implemented\n";
 }
 
-void vgui_adaptor::post_idle_request()
+void
+vgui_adaptor::post_idle_request()
 {
   // ignore idle processing by default.
 }

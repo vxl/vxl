@@ -16,9 +16,9 @@
 
 #include <cassert>
 #if 0 // commented out
-#ifdef _MSC_VER
-#  include "vcl_msvc_warnings.h"
-#endif
+#  ifdef _MSC_VER
+#    include "vcl_msvc_warnings.h"
+#  endif
 #endif
 
 #include "vil1/vil1_stream.h"
@@ -29,21 +29,28 @@
 #include <tiffio.h>
 
 // Constants
-char const* vil1_tiff_format_tag = "tiff";
+char const * vil1_tiff_format_tag = "tiff";
 
 // Functions
-static bool xxproblem(char const* linefile, char const* msg)
+static bool
+xxproblem(char const * linefile, char const * msg)
 {
-  std::cerr << linefile << "[PROBLEM " <<msg << ']';
+  std::cerr << linefile << "[PROBLEM " << msg << ']';
   return false;
 }
 #define xproblem(x, l) xxproblem(__FILE__ ":" #l ":", x)
 #define yxproblem(x, l) xproblem(x, l)
 #define problem(x) yxproblem(x, __LINE__)
 
-#define trace if (true) { } else std::cerr
+#define trace                                                                                                          \
+  if (true)                                                                                                            \
+  {                                                                                                                    \
+  }                                                                                                                    \
+  else                                                                                                                 \
+    std::cerr
 
-bool vil1_tiff_file_format_probe(vil1_stream* is)
+bool
+vil1_tiff_file_format_probe(vil1_stream * is)
 {
   // The byte ordering in a TIFF image (usually) depends on the byte-order
   // of the writing host. The header is always 4 bytes.
@@ -59,7 +66,7 @@ bool vil1_tiff_file_format_probe(vil1_stream* is)
   if (hdr[1]!=0x002A && hdr[1]!=0x2A00)
     return 0;
 #else
-  char hdr[4];
+  char         hdr[4];
   unsigned int read = is->read(hdr, sizeof hdr);
   if (read < sizeof hdr)
     return false;
@@ -71,16 +78,15 @@ bool vil1_tiff_file_format_probe(vil1_stream* is)
   // and
   //   0x49 0x49 0x00 0x2A
   // are invalid TIFF headers.
-  if      (hdr[0]==0x4D && hdr[1]==0x4D &&
-           hdr[2]==0x00 && hdr[3]==0x2A)
+  if (hdr[0] == 0x4D && hdr[1] == 0x4D && hdr[2] == 0x00 && hdr[3] == 0x2A)
     return true;
 
-  else if (hdr[0]==0x49 && hdr[1]==0x49 &&
-           hdr[2]==0x2A && hdr[3]==0x00)
+  else if (hdr[0] == 0x49 && hdr[1] == 0x49 && hdr[2] == 0x2A && hdr[3] == 0x00)
     return true;
 
-  else if ( ((hdr[0]==0x4D && hdr[1]==0x4D) || (hdr[1]==0x49 && hdr[1]==0x49)) &&
-            ((hdr[2]==0x00 && hdr[3]==0x2A) || (hdr[2]==0x2A && hdr[3]==0x00)) ) {
+  else if (((hdr[0] == 0x4D && hdr[1] == 0x4D) || (hdr[1] == 0x49 && hdr[1] == 0x49)) &&
+           ((hdr[2] == 0x00 && hdr[3] == 0x2A) || (hdr[2] == 0x2A && hdr[3] == 0x00)))
+  {
     std::cerr << __FILE__ ": suspicious TIFF header\n";
     return true; // allow it.
   }
@@ -90,7 +96,8 @@ bool vil1_tiff_file_format_probe(vil1_stream* is)
 #endif
 }
 
-vil1_image_impl* vil1_tiff_file_format::make_input_image(vil1_stream* is)
+vil1_image_impl *
+vil1_tiff_file_format::make_input_image(vil1_stream * is)
 {
   if (!vil1_tiff_file_format_probe(is))
     return nullptr;
@@ -98,42 +105,51 @@ vil1_image_impl* vil1_tiff_file_format::make_input_image(vil1_stream* is)
   return new vil1_tiff_generic_image(is);
 }
 
-vil1_image_impl* vil1_tiff_file_format::make_output_image(vil1_stream* is, int planes,
-                                                          int width,
-                                                          int height,
-                                                          int components,
-                                                          int bits_per_component,
-                                                          vil1_component_format format)
+vil1_image_impl *
+vil1_tiff_file_format::make_output_image(vil1_stream *         is,
+                                         int                   planes,
+                                         int                   width,
+                                         int                   height,
+                                         int                   components,
+                                         int                   bits_per_component,
+                                         vil1_component_format format)
 {
   return new vil1_tiff_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
-char const* vil1_tiff_file_format::tag() const
+char const *
+vil1_tiff_file_format::tag() const
 {
   return vil1_tiff_format_tag;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-struct vil1_tiff_structures {
-  vil1_tiff_structures(vil1_stream *vs_):
-    vs(vs_),
-    filesize(0),
-    buf(nullptr)
-    { if (vs) vs->ref(); }
-  ~vil1_tiff_structures() {
-    delete [] buf;
-    if (vs) vs->unref();
+struct vil1_tiff_structures
+{
+  vil1_tiff_structures(vil1_stream * vs_)
+    : vs(vs_)
+    , filesize(0)
+    , buf(nullptr)
+  {
+    if (vs)
+      vs->ref();
+  }
+  ~vil1_tiff_structures()
+  {
+    delete[] buf;
+    if (vs)
+      vs->unref();
   }
 
-  TIFF* tif;
-  vil1_stream* vs;
-  int filesize;
+  TIFF *        tif;
+  vil1_stream * vs;
+  int           filesize;
 
-  unsigned long tilewidth;
-  unsigned long tileheight;
+  unsigned long  tilewidth;
+  unsigned long  tileheight;
   unsigned short compression;
-  unsigned long rows_per_strip;
+  unsigned long  rows_per_strip;
   unsigned short planar_config;
   unsigned short photometric;
 
@@ -145,7 +161,7 @@ struct vil1_tiff_structures {
   bool compressed;
   bool jumbo_strips;
 
-  unsigned char* buf;
+  unsigned char * buf;
 };
 
 #if 0 // commented out
@@ -162,19 +178,22 @@ TIFF* TIFFClientOpen(const char* filename, const char* mode, thandle_t clientdat
                      TIFFUnmapFileProc unmapproc)
 #endif
 
-static tsize_t vil1_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
+static tsize_t
+vil1_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
 {
-  auto* p = (vil1_tiff_structures*)h;
-  if (n > p->filesize) p->filesize= n;
+  auto * p = (vil1_tiff_structures *)h;
+  if (n > p->filesize)
+    p->filesize = n;
   tsize_t ret = p->vs->read(buf, n);
   trace << "readproc, n = " << n << ", ret = " << ret << '\n';
   return ret;
 }
 
-static tsize_t vil1_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
+static tsize_t
+vil1_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
 {
-  auto* p = (vil1_tiff_structures*)h;
-  tsize_t ret = p->vs->write(buf, n);
+  auto *         p = (vil1_tiff_structures *)h;
+  tsize_t        ret = p->vs->write(buf, n);
   vil1_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
@@ -182,15 +201,21 @@ static tsize_t vil1_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
   return ret;
 }
 
-static toff_t vil1_tiff_seekproc(thandle_t h, toff_t offset, int whence)
+static toff_t
+vil1_tiff_seekproc(thandle_t h, toff_t offset, int whence)
 {
   trace << "seek " << offset << " w = " << whence << std::endl;
-  auto* p = (vil1_tiff_structures*)h;
-  if (whence == SEEK_SET) {
+  auto * p = (vil1_tiff_structures *)h;
+  if (whence == SEEK_SET)
+  {
     p->vs->seek(offset);
-  } else if (whence == SEEK_CUR) {
+  }
+  else if (whence == SEEK_CUR)
+  {
     p->vs->seek(p->vs->tell() + offset);
-  } else if (whence == SEEK_END) {
+  }
+  else if (whence == SEEK_END)
+  {
     p->vs->seek(p->filesize + offset);
   }
   vil1_streampos s = p->vs->tell();
@@ -199,12 +224,14 @@ static toff_t vil1_tiff_seekproc(thandle_t h, toff_t offset, int whence)
   return s;
 }
 
-static int vil1_tiff_closeproc(thandle_t h)
+static int
+vil1_tiff_closeproc(thandle_t h)
 {
   trace << "vil1_tiff_closeproc\n";
-  auto* p = (vil1_tiff_structures*)h;
-  //delete p->vs;
-  if (p->vs) {
+  auto * p = (vil1_tiff_structures *)h;
+  // delete p->vs;
+  if (p->vs)
+  {
     p->vs->unref();
     p->vs = nullptr;
   }
@@ -218,28 +245,28 @@ static toff_t vil1_tiff_sizeproc(thandle_t)
   return (toff_t)(-1); // could be unsigned - avoid compiler warning
 }
 
-static int vil1_tiff_mapfileproc(thandle_t, tdata_t*, toff_t*)
+static int
+vil1_tiff_mapfileproc(thandle_t, tdata_t *, toff_t *)
 {
   // TODO: Add mmap support to vil1_tiff_mapfileproc
   return 0;
 }
 
-static void vil1_tiff_unmapfileproc(thandle_t, tdata_t, toff_t)
-{
-}
+static void vil1_tiff_unmapfileproc(thandle_t, tdata_t, toff_t) {}
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil1_tiff_generic_image::vil1_tiff_generic_image(vil1_stream* is):
-  p(new vil1_tiff_structures(is))
+vil1_tiff_generic_image::vil1_tiff_generic_image(vil1_stream * is)
+  : p(new vil1_tiff_structures(is))
 {
   read_header();
 }
 
-bool vil1_tiff_generic_image::get_property(char const *tag, void *prop) const
+bool
+vil1_tiff_generic_image::get_property(char const * tag, void * prop) const
 {
   unsigned short orientation;
-  int orientation_val_ok = TIFFGetField(p->tif, TIFFTAG_ORIENTATION, &orientation);
+  int            orientation_val_ok = TIFFGetField(p->tif, TIFFTAG_ORIENTATION, &orientation);
   if (orientation_val_ok != 1)
   {
     // kym - apparently most products ignore this orientation tag and use the default
@@ -247,52 +274,51 @@ bool vil1_tiff_generic_image::get_property(char const *tag, void *prop) const
     orientation = 1;
   }
 
-  bool topdown = (orientation==ORIENTATION_TOPLEFT ||
-                  orientation==ORIENTATION_TOPRIGHT ||
-                  orientation==ORIENTATION_LEFTTOP ||
-                  orientation==ORIENTATION_RIGHTTOP);
-  bool leftright=(orientation==ORIENTATION_TOPLEFT ||
-                  orientation==ORIENTATION_BOTLEFT ||
-                  orientation==ORIENTATION_LEFTTOP ||
-                  orientation==ORIENTATION_LEFTBOT);
+  bool topdown = (orientation == ORIENTATION_TOPLEFT || orientation == ORIENTATION_TOPRIGHT ||
+                  orientation == ORIENTATION_LEFTTOP || orientation == ORIENTATION_RIGHTTOP);
+  bool leftright = (orientation == ORIENTATION_TOPLEFT || orientation == ORIENTATION_BOTLEFT ||
+                    orientation == ORIENTATION_LEFTTOP || orientation == ORIENTATION_LEFTBOT);
 
-  if (0==std::strcmp(tag, vil1_property_top_row_first))
-    return prop ? (*(bool*)prop) = topdown, true : true;
+  if (0 == std::strcmp(tag, vil1_property_top_row_first))
+    return prop ? (*(bool *)prop) = topdown, true : true;
 
-  if (0==std::strcmp(tag, vil1_property_left_first))
-    return prop ? (*(bool*)prop) = leftright, true : true;
+  if (0 == std::strcmp(tag, vil1_property_left_first))
+    return prop ? (*(bool *)prop) = leftright, true : true;
 
   return false;
 }
 
-bool vil1_tiff_generic_image::set_property(char const *tag, const void *prop) const
+bool
+vil1_tiff_generic_image::set_property(char const * tag, const void * prop) const
 {
-  bool topdown; get_property(vil1_property_top_row_first, &topdown);
-  bool leftright; get_property(vil1_property_left_first, &leftright);
-  const bool newprop = prop ? (*(const bool*)prop) : true; // default is to set the property
+  bool topdown;
+  get_property(vil1_property_top_row_first, &topdown);
+  bool leftright;
+  get_property(vil1_property_left_first, &leftright);
+  const bool newprop = prop ? (*(const bool *)prop) : true; // default is to set the property
 
-  if (0==std::strcmp(tag, vil1_property_top_row_first))
+  if (0 == std::strcmp(tag, vil1_property_top_row_first))
   {
     if (topdown == newprop) // no change necessary
       return true;
-    unsigned short orientation =
-      ( topdown &&  leftright) ? ORIENTATION_TOPLEFT :
-      (!topdown &&  leftright) ? ORIENTATION_BOTLEFT :
-      ( topdown && !leftright) ? ORIENTATION_TOPRIGHT :
-                                 ORIENTATION_BOTRIGHT;
+    unsigned short orientation = (topdown && leftright)
+                                   ? ORIENTATION_TOPLEFT
+                                   : (!topdown && leftright)
+                                       ? ORIENTATION_BOTLEFT
+                                       : (topdown && !leftright) ? ORIENTATION_TOPRIGHT : ORIENTATION_BOTRIGHT;
     TIFFSetField(p->tif, TIFFTAG_ORIENTATION, orientation);
     return true;
   }
 
-  else if (0==std::strcmp(tag, vil1_property_left_first))
+  else if (0 == std::strcmp(tag, vil1_property_left_first))
   {
     if (leftright == newprop) // no change necessary
       return true;
-    unsigned short orientation =
-      ( topdown &&  leftright) ? ORIENTATION_TOPLEFT :
-      (!topdown &&  leftright) ? ORIENTATION_BOTLEFT :
-      ( topdown && !leftright) ? ORIENTATION_TOPRIGHT :
-                                 ORIENTATION_BOTRIGHT;
+    unsigned short orientation = (topdown && leftright)
+                                   ? ORIENTATION_TOPLEFT
+                                   : (!topdown && leftright)
+                                       ? ORIENTATION_BOTLEFT
+                                       : (topdown && !leftright) ? ORIENTATION_TOPRIGHT : ORIENTATION_BOTRIGHT;
     TIFFSetField(p->tif, TIFFTAG_ORIENTATION, orientation);
     return true;
   }
@@ -301,13 +327,14 @@ bool vil1_tiff_generic_image::set_property(char const *tag, const void *prop) co
     return false;
 }
 
-vil1_tiff_generic_image::vil1_tiff_generic_image(vil1_stream* is, int /*planes*/,
+vil1_tiff_generic_image::vil1_tiff_generic_image(vil1_stream * is,
+                                                 int /*planes*/,
                                                  int width,
                                                  int height,
                                                  int components,
                                                  int bits_per_component,
-                                                 vil1_component_format /*format*/):
-  p(new vil1_tiff_structures(is))
+                                                 vil1_component_format /*format*/)
+  : p(new vil1_tiff_structures(is))
 {
   width_ = width;
   height_ = height;
@@ -324,23 +351,29 @@ vil1_tiff_generic_image::~vil1_tiff_generic_image()
   delete p;
 }
 
-char const* vil1_tiff_generic_image::file_format() const
+char const *
+vil1_tiff_generic_image::file_format() const
 {
   return vil1_tiff_format_tag;
 }
 
-bool vil1_tiff_generic_image::read_header()
+bool
+vil1_tiff_generic_image::read_header()
 {
   p->vs->seek(0L);
   p->tif = TIFFClientOpen("unknown filename",
                           "rC", // read, enable strip chopping
                           (thandle_t)p,
-                          vil1_tiff_readproc, vil1_tiff_writeproc,
-                          vil1_tiff_seekproc, vil1_tiff_closeproc,
+                          vil1_tiff_readproc,
+                          vil1_tiff_writeproc,
+                          vil1_tiff_seekproc,
+                          vil1_tiff_closeproc,
                           vil1_tiff_sizeproc,
-                          vil1_tiff_mapfileproc, vil1_tiff_unmapfileproc);
+                          vil1_tiff_mapfileproc,
+                          vil1_tiff_unmapfileproc);
 
-  if (!p->tif) {
+  if (!p->tif)
+  {
     return problem("TIFFClientOpen");
   }
 
@@ -356,22 +389,23 @@ bool vil1_tiff_generic_image::read_header()
   if (!TIFFGetField(p->tif, TIFFTAG_SAMPLESPERPIXEL, &samplesperpixel))
     samplesperpixel = 1;
 
-  switch (samplesperpixel) {
-  case 1:
-  case 3:
-    this->components_ = samplesperpixel;
-    this->bits_per_component_ = bitspersample;
-    break;
-  case 16256:
-    this->components_ = 1;
-    this->bits_per_component_ = bitspersample;
-    break;
-  default:
+  switch (samplesperpixel)
+  {
+    case 1:
+    case 3:
+      this->components_ = samplesperpixel;
+      this->bits_per_component_ = bitspersample;
+      break;
+    case 16256:
+      this->components_ = 1;
+      this->bits_per_component_ = bitspersample;
+      break;
+    default:
 #ifdef DEBUG
-    std::cerr << "vil1_tiff: Saw " << samplesperpixel << " samples @ " << bitspersample << '\n';
+      std::cerr << "vil1_tiff: Saw " << samplesperpixel << " samples @ " << bitspersample << '\n';
 #endif
-    TIFFError("TIFFImageRH: ", "Can only handle 1-channel gray scale or 3-channel color");
-    return false;
+      TIFFError("TIFFImageRH: ", "Can only handle 1-channel gray scale or 3-channel color");
+      return false;
   }
 
   unsigned long width;
@@ -382,12 +416,14 @@ bool vil1_tiff_generic_image::read_header()
   TIFFGetField(p->tif, TIFFTAG_IMAGELENGTH, &height);
   this->height_ = height;
 
-  if (TIFFIsTiled(p->tif)){
+  if (TIFFIsTiled(p->tif))
+  {
     p->tiled = true;
     TIFFGetField(p->tif, TIFFTAG_TILEWIDTH, &p->tilewidth);
     TIFFGetField(p->tif, TIFFTAG_TILELENGTH, &p->tileheight);
   }
-  else {
+  else
+  {
     p->tiled = false;
     p->tilewidth = 0;
     p->tileheight = 0;
@@ -398,22 +434,23 @@ bool vil1_tiff_generic_image::read_header()
   TIFFGetField(p->tif, TIFFTAG_PHOTOMETRIC, &p->photometric);
   switch (p->photometric)
   {
-   case PHOTOMETRIC_RGB:
-    if (!TIFFIsTiled(p->tif)) {
-      // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
+    case PHOTOMETRIC_RGB:
+      if (!TIFFIsTiled(p->tif))
+      {
+        // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
 #ifdef RIH_DEBUG
-      std::cerr << "vil1_tiff: Treating Tiff image as uncompressed ForeignImage\n";
+        std::cerr << "vil1_tiff: Treating Tiff image as uncompressed ForeignImage\n";
 #endif
-    }
-    break;
-   case PHOTOMETRIC_MINISBLACK:
-    if (!TIFFIsTiled(p->tif))
-    {
-      // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
+      }
+      break;
+    case PHOTOMETRIC_MINISBLACK:
+      if (!TIFFIsTiled(p->tif))
+      {
+        // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
 #ifdef RIH_DEBUG
-      std::cerr << "Treating Tiff image as uncompressed ForeignImage\n";
+        std::cerr << "Treating Tiff image as uncompressed ForeignImage\n";
 #endif
-    }
+      }
 
 #if 0 // commented out
     SetColorNum(0);
@@ -422,8 +459,8 @@ bool vil1_tiff_generic_image::read_header()
     SetBandOrder("GREEN", 0);
     SetBandOrder("BLUE",  0);
 #endif
-    break;
-   case PHOTOMETRIC_MINISWHITE:
+      break;
+    case PHOTOMETRIC_MINISWHITE:
 #if 0 // commented out
      // invert colormap
      int** cm = new int*[3];
@@ -444,8 +481,8 @@ bool vil1_tiff_generic_image::read_header()
      SetBandOrder("GREEN", 0);
      SetBandOrder("BLUE",  0);
 #endif
-    break;
-   case PHOTOMETRIC_PALETTE:
+      break;
+    case PHOTOMETRIC_PALETTE:
 #if 0 // commented out
     int** cm = new int*[3];
     cm[0] = new int[ncolors];
@@ -479,12 +516,10 @@ bool vil1_tiff_generic_image::read_header()
     SetBandOrder("BLUE", 0, map);
     delete map;
 #endif
-    break;
-   default:
-    TIFFError("TIFFImageRH: ",
-              "Can not handle image with PhotometricInterpretation=%d",
-              p->photometric);
-    return false;
+      break;
+    default:
+      TIFFError("TIFFImageRH: ", "Can not handle image with PhotometricInterpretation=%d", p->photometric);
+      return false;
   }
 
   TIFFGetField(p->tif, TIFFTAG_ROWSPERSTRIP, &p->rows_per_strip);
@@ -500,16 +535,24 @@ bool vil1_tiff_generic_image::read_header()
 
 #if defined(RIH_DEBUG)
   std::printf("vil1_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
-             " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
-             this->width(), this->height(), this->components(), this->bits_per_component(),
-             p->tiled, p->compressed, p->rows_per_strip, p->photometric, p->stripsize, p->scanlinesize);
+              " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
+              this->width(),
+              this->height(),
+              this->components(),
+              this->bits_per_component(),
+              p->tiled,
+              p->compressed,
+              p->rows_per_strip,
+              p->photometric,
+              p->stripsize,
+              p->scanlinesize);
 #endif
 
   static const int MB = 1024 * 1024;
   p->jumbo_strips = (!p->compressed && p->stripsize > 2 * MB);
 
   // Allocate tmp buf
-  delete [] p->buf;
+  delete[] p->buf;
   if (p->jumbo_strips)
     // only ever use a scan line
     p->buf = new unsigned char[width_ * components_ * bits_per_component_ / 8];
@@ -519,19 +562,21 @@ bool vil1_tiff_generic_image::read_header()
   return true;
 }
 
-bool vil1_tiff_generic_image::write_header()
+bool
+vil1_tiff_generic_image::write_header()
 {
   p->vs->seek(0L);
   p->filesize = 0;
 
   // TIFF does not support > 8-bit grayscale
-  if (bits_per_component_>8 && components_ == 1){
+  if (bits_per_component_ > 8 && components_ == 1)
+  {
     TIFFError("TIFFImageWH: ", "TIFF6.0 does not support greater than 8-bit grayscale");
     return false;
   }
 
 #if 0 // commented out
-        // Strips or Tiles?
+      // Strips or Tiles?
         if (GetArea()*GetBytesPixel() > MIN_AREA_FOR_TILING &&
             !(GetBlockSizeX() % 8) && !(GetBlockSizeY() % 8)) {
                 // Tiles
@@ -550,10 +595,13 @@ bool vil1_tiff_generic_image::write_header()
   p->tif = TIFFClientOpen("file_formats/vil1_tiff.cxx:374:unknown_filename",
                           "w",
                           (thandle_t)p,
-                          vil1_tiff_readproc, vil1_tiff_writeproc,
-                          vil1_tiff_seekproc, vil1_tiff_closeproc,
+                          vil1_tiff_readproc,
+                          vil1_tiff_writeproc,
+                          vil1_tiff_seekproc,
+                          vil1_tiff_closeproc,
                           vil1_tiff_sizeproc,
-                          vil1_tiff_mapfileproc, vil1_tiff_unmapfileproc);
+                          vil1_tiff_mapfileproc,
+                          vil1_tiff_unmapfileproc);
 
   TIFFSetField(p->tif, TIFFTAG_IMAGEWIDTH, width_);
   TIFFSetField(p->tif, TIFFTAG_IMAGELENGTH, height_);
@@ -632,98 +680,121 @@ bool vil1_tiff_generic_image::write_header()
 #endif
 
   // Allocate tmp buf
-  delete [] p->buf;
+  delete[] p->buf;
   p->buf = new unsigned char[p->stripsize];
 
 #ifdef RIH_DEBUG
   std::printf("vil1_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
-             " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
-             this->width(), this->height(), this->components(), this->bits_per_component(),
-             p->tiled, p->compressed, p->rows_per_strip, p->photometric, p->stripsize, p->scanlinesize);
+              " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
+              this->width(),
+              this->height(),
+              this->components(),
+              this->bits_per_component(),
+              p->tiled,
+              p->compressed,
+              p->rows_per_strip,
+              p->photometric,
+              p->stripsize,
+              p->scanlinesize);
 #endif
 
   return true;
 }
 
-void vil1_tiff_generic_image::get_resolution(float& x_res, float& y_res, unsigned short& units) const
+void
+vil1_tiff_generic_image::get_resolution(float & x_res, float & y_res, unsigned short & units) const
 {
   TIFFGetField(p->tif, TIFFTAG_XRESOLUTION, &x_res);
   TIFFGetField(p->tif, TIFFTAG_YRESOLUTION, &y_res);
   TIFFGetField(p->tif, TIFFTAG_RESOLUTIONUNIT, &units);
 }
 
-void vil1_tiff_generic_image::set_resolution(float x_res, float y_res, unsigned short units)
+void
+vil1_tiff_generic_image::set_resolution(float x_res, float y_res, unsigned short units)
 {
   TIFFSetField(p->tif, TIFFTAG_XRESOLUTION, x_res);
   TIFFSetField(p->tif, TIFFTAG_YRESOLUTION, y_res);
   TIFFSetField(p->tif, TIFFTAG_RESOLUTIONUNIT, units);
 }
 
-bool vil1_tiff_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
+bool
+vil1_tiff_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) const
 {
-  if (!p->jumbo_strips) {
+  if (!p->jumbo_strips)
+  {
     if (p->tiled)
       std::cerr << "vil1_tiff_generic_image: TILED TIFF: may be wrongly read?\n";
 
     // Random access only to strips.
     // Get the nearby strips...
-    int y1 = (y0 + ys - 1);
+    int      y1 = (y0 + ys - 1);
     unsigned strip_min = y0 / p->rows_per_strip;
     unsigned strip_max = y1 / p->rows_per_strip;
     assert(strip_max <= p->numberofstrips);
     // Get each strip
     int pixel_bit_size = components_ * bits_per_component_;
     {
-      for (unsigned long strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
-        TIFFReadEncodedStrip(p->tif, strip_id, p->buf, (tsize_t) -1);
+      for (unsigned long strip_id = strip_min; strip_id <= strip_max; ++strip_id)
+      {
+        TIFFReadEncodedStrip(p->tif, strip_id, p->buf, (tsize_t)-1);
         // Strip contains some rows...
         unsigned long strip_min_row = strip_id * p->rows_per_strip;
         unsigned long strip_max_row = strip_min_row + p->rows_per_strip - 1;
 
         long ymin = (long)strip_min_row;
-        if (ymin < y0) ymin = y0;
+        if (ymin < y0)
+          ymin = y0;
         long ymax = (long)strip_max_row;
-        if (ymax > y1) ymax = y1;
+        if (ymax > y1)
+          ymax = y1;
 
         // printf("reading strip %d, y  = %d .. %d\n", strip_id, ymin, ymax);
-        for (long y = ymin; y <= ymax; ++y) {
-          unsigned char* in_row = p->buf + (y - strip_min_row) * p->scanlinesize;
-          unsigned char* out_row = (unsigned char*)buf + ((y - y0) * xs * pixel_bit_size + 7) / 8;
+        for (long y = ymin; y <= ymax; ++y)
+        {
+          unsigned char * in_row = p->buf + (y - strip_min_row) * p->scanlinesize;
+          unsigned char * out_row = (unsigned char *)buf + ((y - y0) * xs * pixel_bit_size + 7) / 8;
           std::memcpy(out_row, in_row + (x0 * pixel_bit_size + 7) / 8, (xs * pixel_bit_size + 7) / 8);
         }
       }
     }
     return true;
-  } else {
+  }
+  else
+  {
     // not compressed, and jumbo strips. dig it out manually in case ReadScanLine pulls in all the image
     return problem("Jumbo strips, and strip chopping appears to be disabled...");
   }
 }
 
-bool vil1_tiff_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
+bool
+vil1_tiff_generic_image::put_section(void const * buf, int x0, int y0, int xs, int ys)
 {
   // Random access only to strips.
   // Put the nearby strips...
-  int y1 = (y0 + ys - 1);
+  int      y1 = (y0 + ys - 1);
   unsigned strip_min = y0 / p->rows_per_strip;
   unsigned strip_max = y1 / p->rows_per_strip;
   assert(strip_max <= p->numberofstrips);
   // Put each strip
   int pixel_byte_size = components_ * bits_per_component_ / 8;
-  for (unsigned long strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
+  for (unsigned long strip_id = strip_min; strip_id <= strip_max; ++strip_id)
+  {
     // Strip contains some rows...
     unsigned long strip_min_row = strip_id * p->rows_per_strip;
     unsigned long strip_max_row = strip_min_row + p->rows_per_strip - 1;
 
     long ymin = (long)strip_min_row;
-    if (ymin < y0) ymin = y0;
+    if (ymin < y0)
+      ymin = y0;
     long ymax = (long)strip_max_row;
-    if (ymax > y1) ymax = y1;
+    if (ymax > y1)
+      ymax = y1;
 
     // printf("writing strip %d, y  = %d .. %d\n", strip_id, ymin, ymax);
-    for (long y = ymin; y <= ymax; ++y) {
-      unsigned char* file_row = p->buf + (y - strip_min_row) * p->scanlinesize;
-      const unsigned char* mem_row = (const unsigned char*)buf + (y - y0) * xs * pixel_byte_size;
+    for (long y = ymin; y <= ymax; ++y)
+    {
+      unsigned char *       file_row = p->buf + (y - strip_min_row) * p->scanlinesize;
+      const unsigned char * mem_row = (const unsigned char *)buf + (y - y0) * xs * pixel_byte_size;
       std::memcpy(file_row + x0 * pixel_byte_size, mem_row, xs * pixel_byte_size);
     }
 
@@ -732,8 +803,9 @@ bool vil1_tiff_generic_image::put_section(void const* buf, int x0, int y0, int x
   return true;
 }
 
-vil1_image vil1_tiff_generic_image::get_plane(unsigned int plane) const
+vil1_image
+vil1_tiff_generic_image::get_plane(unsigned int plane) const
 {
   assert(plane == 0);
-  return const_cast<vil1_tiff_generic_image*>(this);
+  return const_cast<vil1_tiff_generic_image *>(this);
 }

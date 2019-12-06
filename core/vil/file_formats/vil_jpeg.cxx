@@ -28,13 +28,15 @@
 #include "vil/vil_exception.h"
 
 //: the file probe, as a C function.
-bool vil_jpeg_file_probe(vil_stream *vs)
+bool
+vil_jpeg_file_probe(vil_stream * vs)
 {
   char magic[2];
   vs->seek(0L);
   vil_streampos n = vs->read(magic, sizeof(magic));
 
-  if (n != sizeof(magic)) {
+  if (n != sizeof(magic))
+  {
     std::cerr << __FILE__ << " : vil_stream::read() failed\n";
     return false;
   }
@@ -49,28 +51,30 @@ static char const jpeg_string[] = "jpeg";
 //--------------------------------------------------------------------------------
 // class vil_jpeg_file_format
 
-char const* vil_jpeg_file_format::tag() const
+char const *
+vil_jpeg_file_format::tag() const
 {
   return jpeg_string;
 }
 
 //:
-vil_image_resource_sptr  vil_jpeg_file_format::make_input_image(vil_stream *vs)
+vil_image_resource_sptr
+vil_jpeg_file_format::make_input_image(vil_stream * vs)
 {
   return vil_jpeg_file_probe(vs) ? new vil_jpeg_image(vs) : nullptr;
 }
 
 vil_image_resource_sptr
-  vil_jpeg_file_format::make_output_image(vil_stream* vs,
-                                          unsigned nx,
-                                          unsigned ny,
-                                          unsigned nplanes,
-                                          enum vil_pixel_format format)
+vil_jpeg_file_format::make_output_image(vil_stream *          vs,
+                                        unsigned              nx,
+                                        unsigned              ny,
+                                        unsigned              nplanes,
+                                        enum vil_pixel_format format)
 {
   if (format != VIL_PIXEL_FORMAT_BYTE)
   {
-    std::cout<<"ERROR! vil_jpeg_file_format::make_output_image()\n"
-            <<"Pixel format should be byte, but is "<<format<<" instead.\n";
+    std::cout << "ERROR! vil_jpeg_file_format::make_output_image()\n"
+              << "Pixel format should be byte, but is " << format << " instead.\n";
     return nullptr;
   }
   return new vil_jpeg_image(vs, nx, ny, nplanes, format);
@@ -80,7 +84,7 @@ vil_image_resource_sptr
 
 // class vil_jpeg_image
 
-vil_jpeg_image::vil_jpeg_image(vil_stream *s)
+vil_jpeg_image::vil_jpeg_image(vil_stream * s)
   : jc(nullptr)
   , jd(new vil_jpeg_decompressor(s))
   , stream(s)
@@ -88,23 +92,21 @@ vil_jpeg_image::vil_jpeg_image(vil_stream *s)
   stream->ref();
 }
 
-bool vil_jpeg_image::get_property(char const * /*tag*/, void * /*prop*/) const
+bool
+vil_jpeg_image::get_property(char const * /*tag*/, void * /*prop*/) const
 {
   // This is not an in-memory image type, nor is it read-only:
   return false;
 }
 
-void vil_jpeg_image::set_quality(int quality)
+void
+vil_jpeg_image::set_quality(int quality)
 {
-  if( jc )
+  if (jc)
     jc->set_quality(quality);
 }
 
-vil_jpeg_image::vil_jpeg_image(vil_stream *s,
-                               unsigned nx,
-                               unsigned ny,
-                               unsigned nplanes,
-                               enum vil_pixel_format format)
+vil_jpeg_image::vil_jpeg_image(vil_stream * s, unsigned nx, unsigned ny, unsigned nplanes, enum vil_pixel_format format)
   : jc(new vil_jpeg_compressor(s))
   , jd(nullptr)
   , stream(s)
@@ -143,12 +145,11 @@ vil_jpeg_image::~vil_jpeg_image()
 //--------------------------------------------------------------------------------
 
 //: decompressing from the vil_stream to a section buffer.
-vil_image_view_base_sptr vil_jpeg_image::get_copy_view(unsigned x0,
-                                                       unsigned nx,
-                                                       unsigned y0,
-                                                       unsigned ny) const
+vil_image_view_base_sptr
+vil_jpeg_image::get_copy_view(unsigned x0, unsigned nx, unsigned y0, unsigned ny) const
 {
-  if (!jd) {
+  if (!jd)
+  {
     std::cerr << "attempted get_copy_view() failed -- no jpeg decompressor\n";
     return nullptr;
   }
@@ -161,22 +162,24 @@ vil_image_view_base_sptr vil_jpeg_image::get_copy_view(unsigned x0,
 
   vil_memory_chunk_sptr chunk = new vil_memory_chunk(bpp * nx * ny, pixel_format());
 
-  for (unsigned int i=0; i<ny; ++i) {
-    JSAMPLE const *scanline = jd->read_scanline(y0+i);
+  for (unsigned int i = 0; i < ny; ++i)
+  {
+    JSAMPLE const * scanline = jd->read_scanline(y0 + i);
     if (!scanline)
       return nullptr; // failed
 
-    std::memcpy(reinterpret_cast<char*>(chunk->data()) + i*nx*bpp, &scanline[x0*bpp], nx*bpp);
+    std::memcpy(reinterpret_cast<char *>(chunk->data()) + i * nx * bpp, &scanline[x0 * bpp], nx * bpp);
   }
 
-  return new vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte *>(chunk->data()), nx, ny, bpp, bpp, bpp*nx, 1);
+  return new vil_image_view<vxl_byte>(
+    chunk, reinterpret_cast<vxl_byte *>(chunk->data()), nx, ny, bpp, bpp, bpp * nx, 1);
 }
 
 //--------------------------------------------------------------------------------
 
 //: compressing a section onto the vil_stream.
-bool vil_jpeg_image::put_view(const vil_image_view_base &view,
-                              unsigned x0, unsigned y0)
+bool
+vil_jpeg_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned y0)
 {
 
   if (!view_fits(view, x0, y0))
@@ -185,7 +188,8 @@ bool vil_jpeg_image::put_view(const vil_image_view_base &view,
     return false;
   }
 
-  if (!jc) {
+  if (!jc)
+  {
     std::cerr << "attempted put_view() failed -- no jpeg compressor\n";
     return false;
   }
@@ -196,17 +200,18 @@ bool vil_jpeg_image::put_view(const vil_image_view_base &view,
     return false;
   }
 
-  const auto& view2 =
-    static_cast<const vil_image_view<vxl_byte>&>(view);
+  const auto & view2 = static_cast<const vil_image_view<vxl_byte> &>(view);
 
   // "compression makes no sense unless the section covers the whole image."
   // Relaxed slightly.. awf.
   // It will work if you send entire scan lines sequentially
-  if (x0 != 0 || view2.ni() != jc->jobj.image_width) {
+  if (x0 != 0 || view2.ni() != jc->jobj.image_width)
+  {
     std::cerr << __FILE__ << " : Can only compress complete scanlines\n";
     return false;
   }
-  if (y0 != jc->jobj.next_scanline) {
+  if (y0 != jc->jobj.next_scanline)
+  {
     std::cerr << __FILE__ << " : Scanlines must be sent sequentially\n";
     return false;
   }
@@ -216,26 +221,34 @@ bool vil_jpeg_image::put_view(const vil_image_view_base &view,
   {
     assert(view2.istep() > 0);
     assert(view2.istep() == jc->jobj.input_components); // bytes per pixel in the section
-    for (unsigned int j=0; j<view2.nj(); ++j) {
-      auto const *scanline = (JSAMPLE const*)
-        &view2(0,j);
-      if (!jc->write_scanline(y0+j, scanline))
+    for (unsigned int j = 0; j < view2.nj(); ++j)
+    {
+      auto const * scanline = (JSAMPLE const *)&view2(0, j);
+      if (!jc->write_scanline(y0 + j, scanline))
         return false;
     }
   }
   else
   {
-    vil_memory_chunk_sptr chunk = new vil_memory_chunk(view2.ni()*view2.nplanes(), vil_pixel_format_component_format(vil_pixel_format_of(vxl_byte())));
-    vil_image_view<vxl_byte> line = vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()), view2.ni(), 1, view2.nplanes(), view2.nplanes(), view2.nplanes()*view2.ni(), 1);
-    JSAMPLE *scanline = line.top_left_ptr();
+    vil_memory_chunk_sptr chunk = new vil_memory_chunk(
+      view2.ni() * view2.nplanes(), vil_pixel_format_component_format(vil_pixel_format_of(vxl_byte())));
+    vil_image_view<vxl_byte> line = vil_image_view<vxl_byte>(chunk,
+                                                             reinterpret_cast<vxl_byte *>(chunk->data()),
+                                                             view2.ni(),
+                                                             1,
+                                                             view2.nplanes(),
+                                                             view2.nplanes(),
+                                                             view2.nplanes() * view2.ni(),
+                                                             1);
+    JSAMPLE *                scanline = line.top_left_ptr();
 
-    for (unsigned int j=0; j<view2.nj(); ++j)
+    for (unsigned int j = 0; j < view2.nj(); ++j)
     {
       // arrange data into componentwise form.
       for (unsigned i = 0; i < view2.ni(); ++i)
         for (unsigned p = 0; p < view2.nplanes(); ++p)
-          line(i,0,p) = view2(i,j,p);
-      if (!jc->write_scanline(y0+j, scanline))
+          line(i, 0, p) = view2(i, j, p);
+      if (!jc->write_scanline(y0 + j, scanline))
         return false;
     }
   }
@@ -246,35 +259,46 @@ bool vil_jpeg_image::put_view(const vil_image_view_base &view,
 //--------------------------------------------------------------------------------
 
 
-unsigned vil_jpeg_image::ni() const
+unsigned
+vil_jpeg_image::ni() const
 {
-  if (jd) return jd->jobj.output_width;
-  if (jc) return jc->jobj.image_width;
+  if (jd)
+    return jd->jobj.output_width;
+  if (jc)
+    return jc->jobj.image_width;
   return 0;
 }
 
-unsigned vil_jpeg_image::nj() const
+unsigned
+vil_jpeg_image::nj() const
 {
-  if (jd) return jd->jobj.output_height;
-  if (jc) return jc->jobj.image_height;
+  if (jd)
+    return jd->jobj.output_height;
+  if (jc)
+    return jc->jobj.image_height;
   return 0;
 }
 
-unsigned vil_jpeg_image::nplanes() const
+unsigned
+vil_jpeg_image::nplanes() const
 {
-  if (jd) return jd->jobj.output_components;
-  if (jc) return jc->jobj.input_components;
+  if (jd)
+    return jd->jobj.output_components;
+  if (jc)
+    return jc->jobj.input_components;
   return 0;
 }
 
 
-vil_pixel_format vil_jpeg_image::pixel_format() const
+vil_pixel_format
+vil_jpeg_image::pixel_format() const
 {
   return VIL_PIXEL_FORMAT_BYTE;
 }
 
 
-char const *vil_jpeg_image::file_format() const
+char const *
+vil_jpeg_image::file_format() const
 {
   return jpeg_string;
 }

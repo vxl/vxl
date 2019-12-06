@@ -14,19 +14,18 @@
 
 
 template <class T>
-vgui_simple_field<T>::vgui_simple_field(const char *text,T &variable_to_modify)
+vgui_simple_field<T>::vgui_simple_field(const char * text, T & variable_to_modify)
   : vgui_dialog_field(text)
   , var(variable_to_modify)
-{
-}
+{}
 
 template <class T>
 vgui_simple_field<T>::~vgui_simple_field()
-{
-}
+{}
 
 template <class T>
-std::string vgui_simple_field<T>::current_value() const
+std::string
+vgui_simple_field<T>::current_value() const
 {
   std::stringstream ss;
   ss << T(var) << '\0';
@@ -34,7 +33,8 @@ std::string vgui_simple_field<T>::current_value() const
 }
 
 template <class T>
-bool vgui_simple_field<T>::update_value(const std::string &s)
+bool
+vgui_simple_field<T>::update_value(const std::string & s)
 {
   std::stringstream ss(s);
   ss >> var;

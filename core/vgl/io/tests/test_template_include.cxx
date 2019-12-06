@@ -20,4 +20,8 @@
 #include <vgl/io/vgl_io_vector_2d.hxx>
 #include <vgl/io/vgl_io_vector_3d.hxx>
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

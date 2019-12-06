@@ -13,9 +13,10 @@
 #include "testlib/testlib_test.h"
 #include "vcsl/vcsl_degree.h"
 
-static void test_degree()
+static void
+test_degree()
 {
-  vcsl_degree_sptr r=vcsl_degree::instance();
+  vcsl_degree_sptr r = vcsl_degree::instance();
   TEST("test_degree_sptr", bool(r), true);
 }
 

@@ -26,9 +26,11 @@
 
 class example_flim_tableau : public vgui_tableau
 {
-  bool handle(vgui_event const& e)
+  bool
+  handle(vgui_event const & e)
   {
-    if (e.type == vgui_DESTROY) {
+    if (e.type == vgui_DESTROY)
+    {
       vgui_dialog dialog("Farewell!");
       dialog.message("I am about to die!\nLast chance to save data would go here...");
       dialog.set_modal(true);
@@ -38,7 +40,11 @@ class example_flim_tableau : public vgui_tableau
     else
       return false;
   }
-  std::string type_name() const { return "example_flim_tableau"; }
+  std::string
+  type_name() const
+  {
+    return "example_flim_tableau";
+  }
 };
 
 typedef vgui_tableau_sptr_t<example_flim_tableau> example_flim_tableau_sptr;
@@ -46,38 +52,43 @@ typedef vgui_tableau_sptr_t<example_flim_tableau> example_flim_tableau_sptr;
 struct example_flim_tableau_new : public example_flim_tableau_sptr
 {
   typedef example_flim_tableau_sptr base;
-  example_flim_tableau_new() : base(new example_flim_tableau()) { }
+  example_flim_tableau_new()
+    : base(new example_flim_tableau())
+  {}
 };
 
 // -----------------------------------------------------------------------------
 // Now do some stuff...
-int main (int argc, char** argv)
+int
+main(int argc, char ** argv)
 {
   vgui::init(argc, argv);
 
-  if (argc < 2) {
+  if (argc < 2)
+  {
     std::cerr << __FILE__ " : image_file argument required\n";
     std::abort();
   }
 
   vil_image_view<vxl_byte> img = vil_load(argv[1]);
-  if (!img) {
+  if (!img)
+  {
     std::cerr << __FILE__ " : cannot load image from " << argv[1] << '\n';
     std::abort();
   }
 
   vgui_image_tableau_new img_tab(img);
 
-  int wd=img.ni(), ht=img.nj();
+  int                   wd = img.ni(), ht = img.nj();
   vgui_text_tableau_new text_tab;
-  text_tab->add(wd*0.5f,ht*0.25f,"this is some text");
+  text_tab->add(wd * 0.5f, ht * 0.25f, "this is some text");
 
   example_flim_tableau_new flim_tab;
 
   vgui_shell_tableau_new shell_tab(img_tab, text_tab, flim_tab);
   shell_tab->set_enable_key_bindings(true);
 
-  vgui_window* main_window = vgui::produce_window(wd, ht);
+  vgui_window * main_window = vgui::produce_window(wd, ht);
   main_window->get_adaptor()->set_tableau(shell_tab);
   main_window->show();
 

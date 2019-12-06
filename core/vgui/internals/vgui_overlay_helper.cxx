@@ -17,9 +17,14 @@
 #include "vgui/vgui_adaptor.h"
 #include <vgui/internals/vgui_accelerate.h>
 
-#define trace if (true) { } else std::cerr
+#define trace                                                                                                          \
+  if (true)                                                                                                            \
+  {                                                                                                                    \
+  }                                                                                                                    \
+  else                                                                                                                 \
+    std::cerr
 
-vgui_overlay_helper::vgui_overlay_helper(vgui_adaptor *a)
+vgui_overlay_helper::vgui_overlay_helper(vgui_adaptor * a)
   : adaptor(a)
   //, aux_buffer_is_back_buffer(true)
   , last_draw_was_overlay(false)
@@ -33,21 +38,25 @@ vgui_overlay_helper::vgui_overlay_helper(vgui_adaptor *a)
   {
     GLboolean isdouble = 0;
     glGetBooleanv(GL_DOUBLEBUFFER, &isdouble);
-    if (!isdouble) {
+    if (!isdouble)
+    {
       vgui_macro_warning << "current GL state is not double buffered\n";
       return;
     }
   }
 }
 
-vgui_overlay_helper::~vgui_overlay_helper() {
+vgui_overlay_helper::~vgui_overlay_helper()
+{
   adaptor = nullptr;
 }
 
 //--------------------------------------------------------------------------------
 
 // this could be inlined
-bool vgui_overlay_helper::dispatch(vgui_event const &e) {
+bool
+vgui_overlay_helper::dispatch(vgui_event const & e)
+{
   if (e.type == vgui_DRAW)
     return dispatch_draw(e);
 
@@ -58,8 +67,10 @@ bool vgui_overlay_helper::dispatch(vgui_event const &e) {
     return dispatch_other(e);
 }
 
-bool vgui_overlay_helper::dispatch_draw(vgui_event const &e) {
-  //vgui_macro_warning << "emulation normal redisplay" << endl;
+bool
+vgui_overlay_helper::dispatch_draw(vgui_event const & e)
+{
+  // vgui_macro_warning << "emulation normal redisplay" << endl;
   assert(e.type == vgui_DRAW);
 
   // First perform the normal draw :
@@ -70,7 +81,8 @@ bool vgui_overlay_helper::dispatch_draw(vgui_event const &e) {
   // It is up to tableaux to post overlay redraws when receiving
   // vgui_DRAW events, so if any overlays need to be drawn, we
   // should know at this point.
-  if (overlay_redraw_posted) {
+  if (overlay_redraw_posted)
+  {
     vgui_event oe(vgui_DRAW_OVERLAY);
     f = dispatch_overlay_draw(oe);
   }
@@ -78,15 +90,18 @@ bool vgui_overlay_helper::dispatch_draw(vgui_event const &e) {
   return f;
 }
 
-bool vgui_overlay_helper::dispatch_other(vgui_event const &e) {
-  //vgui_macro_warning << "emulation other dispatch" << endl;
+bool
+vgui_overlay_helper::dispatch_other(vgui_event const & e)
+{
+  // vgui_macro_warning << "emulation other dispatch" << endl;
   assert(e.type != vgui_DRAW && e.type != vgui_DRAW_OVERLAY);
 
   // dispatch
   bool f = adaptor->dispatch_to_tableau(e);
 
   // cf dispatch_draw
-  if (overlay_redraw_posted) {
+  if (overlay_redraw_posted)
+  {
     vgui_event oe(vgui_DRAW_OVERLAY);
     f = dispatch_overlay_draw(oe);
   }
@@ -94,24 +109,29 @@ bool vgui_overlay_helper::dispatch_other(vgui_event const &e) {
   return f;
 }
 
-bool vgui_overlay_helper::dispatch_overlay_draw(vgui_event const &e) {
-  //vgui_macro_warning << "emulation overlay redisplay" << endl;
+bool
+vgui_overlay_helper::dispatch_overlay_draw(vgui_event const & e)
+{
+  // vgui_macro_warning << "emulation overlay redisplay" << endl;
   assert(e.type == vgui_DRAW_OVERLAY);
 
   // If the last draw was a normal draw we need to snapshot the
   // frame buffer before drawing the overlays.
-  if (!last_draw_was_overlay) {
+  if (!last_draw_was_overlay)
+  {
     trace << "snapshot\n";
     if (vgui_accelerate::instance()->vgui_copy_back_to_aux())
       aux_buffer_is_back_buffer = false;
-    else {
+    else
+    {
       vgui_utils::copy_front_to_back();
       aux_buffer_is_back_buffer = true;
     }
   }
   // Else, the last draw was an overlay draw, so we need to repair
   // the damage before drawing the new overlays.
-  else {
+  else
+  {
     trace << "revert\n";
     if (!aux_buffer_is_back_buffer)
       vgui_accelerate::instance()->vgui_copy_aux_to_back();

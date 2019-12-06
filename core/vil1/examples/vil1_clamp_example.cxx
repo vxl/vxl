@@ -11,14 +11,16 @@
 #include "vil1/vil1_image_as.h"
 #include "vil1/vil1_pixel.h"
 
-int main (int argc, char** argv)
+int
+main(int argc, char ** argv)
 {
-  if (argc != 5) {
+  if (argc != 5)
+  {
     std::cerr << __FILE__ " : low_clamp high_clamp in_image out_image\n";
     std::abort();
   }
 
-  double low  = std::stod(argv[1]);
+  double low = std::stod(argv[1]);
   double high = std::stod(argv[2]);
 
   vil1_image in = vil1_load(argv[3]);

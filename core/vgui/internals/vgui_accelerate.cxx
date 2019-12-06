@@ -6,8 +6,8 @@
 // \brief  See vgui_accelerate.h for a description of this file.
 
 #ifdef HAS_MFC
-#include <vgui/impl/mfc/StdAfx.h>
-extern CDC *vgui_mfc_adaptor_global_dc;
+#  include <vgui/impl/mfc/StdAfx.h>
+extern CDC * vgui_mfc_adaptor_global_dc;
 #endif
 
 #include "vgui_accelerate.h"
@@ -18,17 +18,21 @@ bool vgui_accelerate::vgui_no_acceleration = false;
 bool vgui_accelerate::vgui_mfc_acceleration = false;
 bool vgui_accelerate::vgui_doublebuffer = true;
 
-static int accelerator_level = 0;
-static vgui_accelerate* vgui_accelerator = nullptr;
-vgui_accelerate* vgui_accelerate::instance()
+static int               accelerator_level = 0;
+static vgui_accelerate * vgui_accelerator = nullptr;
+vgui_accelerate *
+vgui_accelerate::instance()
 {
-  if (!vgui_accelerator) vgui_accelerator = new vgui_accelerate;
+  if (!vgui_accelerator)
+    vgui_accelerator = new vgui_accelerate;
   return vgui_accelerator;
 }
 
-void vgui_accelerate::register_accelerator(vgui_accelerate* p, int level)
+void
+vgui_accelerate::register_accelerator(vgui_accelerate * p, int level)
 {
-  if (level > accelerator_level) {
+  if (level > accelerator_level)
+  {
     delete vgui_accelerator;
     vgui_accelerator = p;
     accelerator_level = level;
@@ -38,23 +42,23 @@ void vgui_accelerate::register_accelerator(vgui_accelerate* p, int level)
 // Default implementations (return false to indicate that a non-accelerated path was used.)
 
 bool
-vgui_accelerate::vgui_glClear( GLbitfield mask )
+vgui_accelerate::vgui_glClear(GLbitfield mask)
 {
   glClear(mask);
   return false;
 }
 
 bool
-vgui_accelerate::vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels )
+vgui_accelerate::vgui_glDrawPixels(GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid * pixels)
 {
-  glDrawPixels( width, height, format, type, pixels);
+  glDrawPixels(width, height, format, type, pixels);
   return false;
 }
 
 // 32 bit RGBA seems to be acceptable/fast on most platforms.
 // - u97mb RGBA is not acceptable on Mesa(too slow) so we use GL_RGB instead
 bool
-vgui_accelerate::vgui_choose_cache_format( GLenum* format, GLenum* type)
+vgui_accelerate::vgui_choose_cache_format(GLenum * format, GLenum * type)
 {
 #if VGUI_MESA
   (*format) = GL_RGB;
@@ -67,12 +71,14 @@ vgui_accelerate::vgui_choose_cache_format( GLenum* format, GLenum* type)
 
 // These functions are used in X11/Mesa to speed up overlay emulation. They
 // return false to indicate to overlay_biscuit that a default emulation must be used.
-bool vgui_accelerate::vgui_copy_back_to_aux()
+bool
+vgui_accelerate::vgui_copy_back_to_aux()
 {
   return false;
 }
 
-bool vgui_accelerate::vgui_copy_aux_to_back()
+bool
+vgui_accelerate::vgui_copy_aux_to_back()
 {
   return false;
 }

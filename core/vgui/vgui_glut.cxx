@@ -9,8 +9,8 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-extern "C"
-void vgui_glut_exit(int x)
+extern "C" void
+vgui_glut_exit(int x)
 {
   std::exit(x);
 }

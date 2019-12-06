@@ -10,20 +10,21 @@
 #include "testlib/testlib_test.h"
 #include "vpl/vpl.h"
 
-void test_bounding_box_double_io()
+void
+test_bounding_box_double_io()
 {
   std::cout << "***********************************\n"
-           << "Testing vbl_bounding_box<double> io\n"
-           << "***********************************\n";
+            << "Testing vbl_bounding_box<double> io\n"
+            << "***********************************\n";
   //// test constructors, accessors
   vbl_bounding_box<double, 2> p_out, p_in;
-  double X = 1.2;
-  double Y = 3.4;
+  double                      X = 1.2;
+  double                      Y = 3.4;
 
-  p_out.update(X,Y);//Bounding box now has only one point and so no size
+  p_out.update(X, Y); // Bounding box now has only one point and so no size
   X = 5.6;
   Y = 7.8;
-  p_out.update(X,Y); // Second point now defines a bounding box
+  p_out.update(X, Y); // Second point now defines a bounding box
 
   vsl_b_ofstream bfs_out("vbl_bounding_box_test_double_io.bvl.tmp");
   TEST("Created vbl_bounding_box_test_double_io.bvl.tmp for writing", (!bfs_out), false);
@@ -37,7 +38,7 @@ void test_bounding_box_double_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vbl_bounding_box_test_double_io.bvl.tmp");
+  vpl_unlink("vbl_bounding_box_test_double_io.bvl.tmp");
 
   TEST("p_out.empty() == p_in.empty()", p_out.empty(), p_in.empty());
   TEST("p_out.min()[0] == p_in.min()[0]", p_out.min()[0], p_in.min()[0]);
@@ -47,11 +48,12 @@ void test_bounding_box_double_io()
 
   vsl_print_summary(std::cout, p_out);
   std::cout << std::endl;
-  vsl_indent_clear_all_data ();
+  vsl_indent_clear_all_data();
 }
 
 
-void test_bounding_box_io()
+void
+test_bounding_box_io()
 {
   test_bounding_box_double_io();
 }

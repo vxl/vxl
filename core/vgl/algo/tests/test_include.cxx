@@ -37,4 +37,8 @@
 #include <vgl/algo/vgl_rtree.h>
 #include <vgl/algo/vgl_rtree_c.h>
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

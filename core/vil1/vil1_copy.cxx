@@ -20,7 +20,8 @@
 #include "vil1/vil1_image.h"
 #include "vil1/vil1_memory_image.h"
 
-void vil1_copy(vil1_image const& in, vil1_image& out)
+void
+vil1_copy(vil1_image const & in, vil1_image & out)
 {
 #define assert_dimension_equal(dim) assert(in.dim() == out.dim())
   assert_dimension_equal(height);
@@ -29,7 +30,7 @@ void vil1_copy(vil1_image const& in, vil1_image& out)
   assert_dimension_equal(planes);
   assert_dimension_equal(components);
 #undef assert_dimension_equal
-//assert((in.components() * in.planes()) == (out.components() * out.planes()));
+  // assert((in.components() * in.planes()) == (out.components() * out.planes()));
 
   int height = in.height();
   int width = in.width();
@@ -37,7 +38,7 @@ void vil1_copy(vil1_image const& in, vil1_image& out)
   // Simple implementation copies the whole buffer at once
   // This is only valid if planes and components are identical,
   // not just their product.  Hence the assert above.
-  auto* buf = new unsigned char[in.get_size_bytes()];
+  auto * buf = new unsigned char[in.get_size_bytes()];
 #ifdef DEBUG
   std::cerr << "...vil1_copy() doing get_section()\n";
 #endif
@@ -53,10 +54,10 @@ void vil1_copy(vil1_image const& in, vil1_image& out)
 }
 
 vil1_memory_image
-vil1_copy(vil1_image const& src)
+vil1_copy(vil1_image const & src)
 {
-  vil1_memory_image dst( src.planes(), src.width(), src.height(), src.components(),
-                         src.bits_per_component(), src.component_format() );
-  vil1_copy( src, dst );
+  vil1_memory_image dst(
+    src.planes(), src.width(), src.height(), src.components(), src.bits_per_component(), src.component_format());
+  vil1_copy(src, dst);
   return dst;
 }

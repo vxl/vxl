@@ -43,4 +43,8 @@
 #include "vgl/vgl_vector_3d.h"
 #include "vgl/vgl_window_scan_iterator.h"
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

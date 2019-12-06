@@ -12,64 +12,72 @@
 
 constexpr int default_tab = 2;
 
-typedef std::pair<int,int> indent_data_type;
+typedef std::pair<int, int> indent_data_type;
 
 // Get pointer to tab and indent data for os
-indent_data_type* indent_data(std::ostream& os)
+indent_data_type *
+indent_data(std::ostream & os)
 {
-  typedef std::map<void*, indent_data_type, std::less<void*> > maps2i_type;
+  typedef std::map<void *, indent_data_type, std::less<void *>> maps2i_type;
   // Global record of tab information for streams.
   // Allows data to persist beyond the lifetime of the indent object itself,
   // which may be mercifully brief
   static maps2i_type indent_data_map;
 
   auto entry = indent_data_map.find(&os);
-  if (entry==indent_data_map.end())
+  if (entry == indent_data_map.end())
   {
     // Create a new entry
-    indent_data_map[&os]=indent_data_type(0,default_tab);
-  entry = indent_data_map.find(&os);
+    indent_data_map[&os] = indent_data_type(0, default_tab);
+    entry = indent_data_map.find(&os);
   }
 
   return &((*entry).second);
 }
 
 //: Increments current indent for given stream
-void vsl_indent_inc(std::ostream& os)
+void
+vsl_indent_inc(std::ostream & os)
 {
   indent_data(os)->first++;
 }
 
 //: Decrements current indent for given stream
-void vsl_indent_dec(std::ostream& os)
+void
+vsl_indent_dec(std::ostream & os)
 {
   indent_data(os)->first--;
 }
 
 //: Set number of spaces per increment step
-void vsl_indent_set_tab(std::ostream& os, int t)
+void
+vsl_indent_set_tab(std::ostream & os, int t)
 {
   indent_data(os)->second = t;
 }
 
 //: Number of spaces per increment step
-int vsl_indent_tab(std::ostream& os)
+int
+vsl_indent_tab(std::ostream & os)
 {
   return indent_data(os)->second;
 }
 
 //: Set indentation to zero
-void vsl_indent_clear(std::ostream& os)
+void
+vsl_indent_clear(std::ostream & os)
 {
-  indent_data(os)->first =0;
+  indent_data(os)->first = 0;
 }
 
-std::ostream& operator<<(std::ostream& os, const vsl_indent& /*indent*/)
+std::ostream &
+operator<<(std::ostream & os, const vsl_indent & /*indent*/)
 {
-  indent_data_type* data = indent_data(os);
+  indent_data_type * data = indent_data(os);
 
   int n = data->first * data->second;
-  for (int i=0;i<n;i++) os<<' ';
+  for (int i = 0; i < n; i++)
+    os << ' ';
   return os;
 }
 
@@ -82,8 +90,8 @@ std::ostream& operator<<(std::ostream& os, const vsl_indent& /*indent*/)
 //
 //  This should no longer be needed, since that static map was made a static
 //  inside the function indent_data() instead of a global one. - PVr.
-void vsl_indent_clear_all_data()
-{
-}
+void
+vsl_indent_clear_all_data()
+{}
 
 // removed explicit instantiation of map<void*, pair<int, int> > -- fsm.

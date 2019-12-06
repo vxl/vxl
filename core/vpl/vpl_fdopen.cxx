@@ -5,7 +5,8 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-std::FILE *vpl_fdopen(int fd, char const *mode)
+std::FILE *
+vpl_fdopen(int fd, char const * mode)
 {
 #if defined(_WIN32) && !defined(__CYGWIN__)
   return _fdopen(fd, mode);

@@ -11,27 +11,28 @@
 #include "testlib/testlib_test.h"
 #include "vpl/vpl.h"
 
-void test_binary_io()
+void
+test_binary_io()
 {
   std::cout << "*********************\n"
-           << "Testing vsl binary io\n"
-           << "*********************\n";
+            << "Testing vsl binary io\n"
+            << "*********************\n";
 
-  bool b_out = true;
-  char c_out = 'y';
-  signed char sc_out = 'k';
-  unsigned char uc_out = 'q';
-  int i_out = 3;
-  unsigned int ui_out = 37;
-  short short_out = 56;
-  signed ushort_out = -32768;
-  long long_out = -12345678;
-  unsigned long ulong_out = 87654321;
-  float f_out = 1.7f;
-  double d_out = 3.4;
-  std::string string_out = "Hello World!";
-  const char* c_string_out = "A C string";
-  std::size_t size_t_out = 1023;
+  bool           b_out = true;
+  char           c_out = 'y';
+  signed char    sc_out = 'k';
+  unsigned char  uc_out = 'q';
+  int            i_out = 3;
+  unsigned int   ui_out = 37;
+  short          short_out = 56;
+  signed         ushort_out = -32768;
+  long           long_out = -12345678;
+  unsigned long  ulong_out = 87654321;
+  float          f_out = 1.7f;
+  double         d_out = 3.4;
+  std::string    string_out = "Hello World!";
+  const char *   c_string_out = "A C string";
+  std::size_t    size_t_out = 1023;
   std::ptrdiff_t ptrdiff_t_out = 23;
 
   vsl_b_ofstream bfs_out("vsl_binary_io_test.bvl.tmp");
@@ -56,21 +57,21 @@ void test_binary_io()
 
   // Initialise each built in type to something different from
   // what is about to be loaded
-  bool b_in = false;
-  char c_in = '?';
-  signed char sc_in = '?';
-  unsigned char uc_in = '?';
-  int i_in = 99;
-  unsigned int ui_in =99;
-  short short_in = 99;
-  signed ushort_in = 99;
-  long long_in =99;
-  unsigned long ulong_in = 99;
-  float f_in = 99.99f;
-  double d_in = 99.9;
-  std::string string_in;
-  char c_string_in[80];
-  std::size_t size_t_in = 99;
+  bool           b_in = false;
+  char           c_in = '?';
+  signed char    sc_in = '?';
+  unsigned char  uc_in = '?';
+  int            i_in = 99;
+  unsigned int   ui_in = 99;
+  short          short_in = 99;
+  signed         ushort_in = 99;
+  long           long_in = 99;
+  unsigned long  ulong_in = 99;
+  float          f_in = 99.99f;
+  double         d_in = 99.9;
+  std::string    string_in;
+  char           c_string_in[80];
+  std::size_t    size_t_in = 99;
   std::ptrdiff_t ptrdiff_t_in = 99;
 
   // Test the internal consistency - can it load what it just saved?
@@ -144,7 +145,7 @@ void test_binary_io()
   std::cout << std::endl;
 
   vsl_b_read(bfs_in, c_string_in);
-  TEST("C string out == C string in", std::strcmp(c_string_out,c_string_in), 0);
+  TEST("C string out == C string in", std::strcmp(c_string_out, c_string_in), 0);
   vsl_print_summary(std::cout, c_string_out);
   std::cout << std::endl;
 
@@ -161,11 +162,11 @@ void test_binary_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vsl_binary_io_test.bvl.tmp");
+  vpl_unlink("vsl_binary_io_test.bvl.tmp");
 
   std::cout << "****************************\n"
-           << "Testing Golden vsl binary io\n"
-           << "****************************\n";
+            << "Testing Golden vsl binary io\n"
+            << "****************************\n";
 
   // Test global consistancy - can it load the golden binary output file
   // This should be identical what has just been saved, which should
@@ -175,24 +176,24 @@ void test_binary_io()
 
   // Initialise each built in type to something different from
   // what is about to be loaded
-  bool b_in2 = false;
-  char c_in2 = '?';
-  signed char sc_in2 = '?';
-  unsigned char uc_in2 = '?';
-  int i_in2 = 99;
-  unsigned int ui_in2 =99;
-  short short_in2 = 99;
-  short ushort_in2 = 99;
-  long long_in2 =99;
-  unsigned long ulong_in2 = 99;
-  float f_in2 = 99.99f;
-  double d_in2 = 99.9;
-  std::string string_in2;
-  char c_string_in2[80];
-  std::size_t size_t_in2 = 99;
+  bool           b_in2 = false;
+  char           c_in2 = '?';
+  signed char    sc_in2 = '?';
+  unsigned char  uc_in2 = '?';
+  int            i_in2 = 99;
+  unsigned int   ui_in2 = 99;
+  short          short_in2 = 99;
+  short          ushort_in2 = 99;
+  long           long_in2 = 99;
+  unsigned long  ulong_in2 = 99;
+  float          f_in2 = 99.99f;
+  double         d_in2 = 99.9;
+  std::string    string_in2;
+  char           c_string_in2[80];
+  std::size_t    size_t_in2 = 99;
   std::ptrdiff_t ptrdiff_t_in2 = 99;
 
-  std::string gold_path=testlib_root_dir()+"/core/vsl/tests/golden_test_binary_io.bvl";
+  std::string    gold_path = testlib_root_dir() + "/core/vsl/tests/golden_test_binary_io.bvl";
   vsl_b_ifstream bfs_in2(gold_path.c_str());
 
   // If this test fails, it could be due to a missing golden file, or one
@@ -239,8 +240,8 @@ void test_binary_io()
 
 
   std::cout << "****************************\n"
-           << " Testing magic number check\n"
-           << "****************************\n";
+            << " Testing magic number check\n"
+            << "****************************\n";
 
   std::ifstream gold_if(gold_path.c_str());
   TEST("vsl_b_stream_test on golden data", vsl_b_istream_test(gold_if), true);
@@ -256,7 +257,6 @@ void test_binary_io()
   TEST("vsl_b_stream_test on empty file fails", vsl_b_istream_test(none_if), false);
   std::ifstream text_if("vsl_binary_io_test.txt");
   TEST("vsl_b_stream_test on text file fails", vsl_b_istream_test(text_if), false);
-
 }
 
 TESTMAIN(test_binary_io);

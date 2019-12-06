@@ -6,7 +6,8 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-std::ostream& operator<<(std::ostream& s, const vbl_bool_ostream::on_off& proxy)
+std::ostream &
+operator<<(std::ostream & s, const vbl_bool_ostream::on_off & proxy)
 {
   if (*(proxy.truth))
     s << "on";
@@ -15,7 +16,8 @@ std::ostream& operator<<(std::ostream& s, const vbl_bool_ostream::on_off& proxy)
   return s;
 }
 
-std::ostream& operator<<(std::ostream& s, const vbl_bool_ostream::high_low& proxy)
+std::ostream &
+operator<<(std::ostream & s, const vbl_bool_ostream::high_low & proxy)
 {
   if (*(proxy.truth))
     s << "high";
@@ -24,7 +26,8 @@ std::ostream& operator<<(std::ostream& s, const vbl_bool_ostream::high_low& prox
   return s;
 }
 
-std::ostream& operator<<(std::ostream& s, const vbl_bool_ostream::true_false& proxy)
+std::ostream &
+operator<<(std::ostream & s, const vbl_bool_ostream::true_false & proxy)
 {
   if (*(proxy.truth))
     s << "true";

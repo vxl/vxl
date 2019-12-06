@@ -17,7 +17,8 @@
 #define quote0(x) #x
 #define quote(x) quote0((x))
 
-void test_config()
+void
+test_config()
 {
   // This test does not test much.  Mostly, it prints configuration
   // macros so they can be viewed through Dart.  Some sanity checks are
@@ -25,8 +26,8 @@ void test_config()
 
   std::cout << "All macro definitions are shown inside parentheses\n";
 
-   std::cout << "template <> ";
-#ifdef template <>
+  std::cout << "template <> ";
+#ifdef template < >
   std::cout << "is set to " << quote(template <>);
 #else
   std::cout << "is not set";
@@ -621,52 +622,52 @@ void test_config()
 
   // These are types that we expect every machine to have.
 
-  testlib_test_begin( "Size of vxl_byte" );
+  testlib_test_begin("Size of vxl_byte");
 #if VXL_HAS_BYTE
-  testlib_test_perform( sizeof( vxl_byte ) == 1 );
+  testlib_test_perform(sizeof(vxl_byte) == 1);
 #else
   std::cout << "(no vxl_byte)" << std::endl;
-  testlib_test_perform( false );
+  testlib_test_perform(false);
 #endif
 
-  testlib_test_begin( "Size of vxl_uint_8" );
+  testlib_test_begin("Size of vxl_uint_8");
 #if VXL_HAS_INT_8
-  testlib_test_perform( sizeof( vxl_uint_8 ) == 1 );
+  testlib_test_perform(sizeof(vxl_uint_8) == 1);
 #else
   std::cout << "(no vxl_uint_8)" << std::endl;
-  testlib_test_perform( false );
+  testlib_test_perform(false);
 #endif
 
-  testlib_test_begin( "Size of vxl_uint_16" );
+  testlib_test_begin("Size of vxl_uint_16");
 #if VXL_HAS_INT_16
-  testlib_test_perform( sizeof( vxl_uint_16 ) == 2 );
+  testlib_test_perform(sizeof(vxl_uint_16) == 2);
 #else
   std::cout << "(no vxl_uint_16)" << std::endl;
-  testlib_test_perform( false );
+  testlib_test_perform(false);
 #endif
 
-  testlib_test_begin( "Size of vxl_uint_32" );
+  testlib_test_begin("Size of vxl_uint_32");
 #if VXL_HAS_INT_32
-  testlib_test_perform( sizeof( vxl_uint_32 ) == 4 );
+  testlib_test_perform(sizeof(vxl_uint_32) == 4);
 #else
   std::cout << "(no vxl_uint_32)" << std::endl;
-  testlib_test_perform( false );
+  testlib_test_perform(false);
 #endif
 
-  testlib_test_begin( "Size of vxl_ieee_32" );
+  testlib_test_begin("Size of vxl_ieee_32");
 #if VXL_HAS_IEEE_32
-  testlib_test_perform( sizeof( vxl_ieee_32 ) == 4 );
+  testlib_test_perform(sizeof(vxl_ieee_32) == 4);
 #else
   std::cout << "(no vxl_ieee_32)" << std::endl;
-  testlib_test_perform( false );
+  testlib_test_perform(false);
 #endif
 
-  testlib_test_begin( "Size of vxl_ieee_64" );
+  testlib_test_begin("Size of vxl_ieee_64");
 #if VXL_HAS_IEEE_64
-  testlib_test_perform( sizeof( vxl_ieee_64 ) == 8 );
+  testlib_test_perform(sizeof(vxl_ieee_64) == 8);
 #else
   std::cout << "(no vxl_ieee_64)" << std::endl;
-  testlib_test_perform( false );
+  testlib_test_perform(false);
 #endif
 
   std::cout << std::endl;
@@ -675,22 +676,22 @@ void test_config()
   // be of the correct size.
 
 #if VXL_HAS_INT_64
-  testlib_test_begin( "Size of vxl_uint_64" );
-  testlib_test_perform( sizeof( vxl_uint_64 ) == 8 );
+  testlib_test_begin("Size of vxl_uint_64");
+  testlib_test_perform(sizeof(vxl_uint_64) == 8);
 #else
   std::cout << "(no vxl_uint_64)" << std::endl;
 #endif
 
 #if VXL_HAS_IEEE_96
-  testlib_test_begin( "Size of vxl_ieee_96" );
-  testlib_test_perform( sizeof( vxl_ieee_96 ) == 12 );
+  testlib_test_begin("Size of vxl_ieee_96");
+  testlib_test_perform(sizeof(vxl_ieee_96) == 12);
 #else
   std::cout << "(no vxl_ieee_96)" << std::endl;
 #endif
 
 #if VXL_HAS_IEEE_128
-  testlib_test_begin( "Size of vxl_ieee_128" );
-  testlib_test_perform( sizeof( vxl_ieee_128 ) == 16 );
+  testlib_test_begin("Size of vxl_ieee_128");
+  testlib_test_perform(sizeof(vxl_ieee_128) == 16);
 #else
   std::cout << "(no vxl_ieee_128)" << std::endl;
 #endif

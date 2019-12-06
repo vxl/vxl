@@ -11,7 +11,8 @@
 #include "vil/vil_image_view.h"
 #include "vil/vil_print.h"
 
-int main(int argc, char** argv)
+int
+main(int argc, char ** argv)
 {
   if (argc < 2)
   {
@@ -19,7 +20,7 @@ int main(int argc, char** argv)
     return 3;
   }
 
-  std::cout<<"Load " << argv[1] << " into an image data object\n";
+  std::cout << "Load " << argv[1] << " into an image data object\n";
 
 
   // This is how we initialise an image data object.
@@ -28,15 +29,15 @@ int main(int argc, char** argv)
 
   if (!data)
   {
-    std::cerr << "Couldn't load " << argv[1] <<std::endl;
+    std::cerr << "Couldn't load " << argv[1] << std::endl;
     return 3;
   }
 
   // This is how we get some image pixels from it.
 
-  vil_image_view<unsigned char> uc_view = data->get_view(0,data->ni(),0, data->nj());
+  vil_image_view<unsigned char> uc_view = data->get_view(0, data->ni(), 0, data->nj());
 
-  vil_print_all(std::cout,uc_view);
+  vil_print_all(std::cout, uc_view);
 
   return 0;
 }

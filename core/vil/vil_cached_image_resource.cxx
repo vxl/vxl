@@ -6,11 +6,10 @@
 // Get a view that is the size of a block.
 // Uses the cache to retrieve frequently used blocks
 vil_image_view_base_sptr
-vil_cached_image_resource::get_block( unsigned  block_index_i,
-                                      unsigned  block_index_j ) const
+vil_cached_image_resource::get_block(unsigned block_index_i, unsigned block_index_j) const
 {
   // check if the block is already in the buffer
-   vil_image_view_base_sptr blk;
+  vil_image_view_base_sptr blk;
   if (cache_.get_block(block_index_i, block_index_j, blk))
     return blk;
   // no - so get the block from the resource
@@ -18,7 +17,7 @@ vil_cached_image_resource::get_block( unsigned  block_index_i,
   if (!blk)
     return blk; // get block failed
   // put the block in the cache (cast away const since we are just caching)
-  auto* non_const = (vil_cached_image_resource*)this;
+  auto * non_const = (vil_cached_image_resource *)this;
   non_const->cache_.add_block(block_index_i, block_index_j, blk);
   return blk;
 }

@@ -33,20 +33,20 @@ test_without_boundary()
   poly.new_sheet();
   // This is a triangle with 2 sides of length 3 parallel to the axes,
   // at X=2.3 and Y=-0.4 resp.
-  poly.push_back( Point_type(-0.7f,-0.4f) );
-  poly.push_back( Point_type( 2.3f, 2.6f) );
-  poly.push_back( Point_type( 2.3f,-0.4f) );
+  poly.push_back(Point_type(-0.7f, -0.4f));
+  poly.push_back(Point_type(2.3f, 2.6f));
+  poly.push_back(Point_type(2.3f, -0.4f));
 
   // There will be scan lines at y=0, 1 and 2.
   // Since boundary pixels (with their center outside of the triangle) are not
   // to be included, the 6 pixels are (0,0) (1,0) (2,0) (1,1) (2,1) (2,2).
-  unsigned int count=0;
+  unsigned int count = 0;
   Polygon_scan it(poly, false);
-  int y=0;
-  for (it.reset(); it.next(); ++y) {
-    std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany()
-             << ") goes from " << it.fstartx() << " (" << it.startx()
-             << ") to " << it.fendx() << " (" << it.endx() << ")\n";
+  int          y = 0;
+  for (it.reset(); it.next(); ++y)
+  {
+    std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany() << ") goes from " << it.fstartx() << " ("
+              << it.startx() << ") to " << it.fendx() << " (" << it.endx() << ")\n";
     TEST("iteration without boundary: y value", it.scany(), y);
     TEST("iteration without boundary: first x value", it.startx(), y);
     TEST("iteration without boundary: last x value", it.endx(), 2);
@@ -61,20 +61,20 @@ test_with_boundary()
   Polygon_type poly;
   poly.new_sheet();
   // This is a 2x2 square with corner points at non-integer coordinates.
-  poly.push_back( Point_type(10.5f, 20.5f) );
-  poly.push_back( Point_type(12.5f, 20.5f) );
-  poly.push_back( Point_type(12.5f, 22.5f) );
-  poly.push_back( Point_type(10.5f, 22.5f) );
+  poly.push_back(Point_type(10.5f, 20.5f));
+  poly.push_back(Point_type(12.5f, 20.5f));
+  poly.push_back(Point_type(12.5f, 22.5f));
+  poly.push_back(Point_type(10.5f, 22.5f));
 
   // The "boundary" pixels (which only partially overlap the square) should be
   // included, hence there are 3x4=12 pixels "inside" of this square:
-  unsigned int count=0;
+  unsigned int count = 0;
   Polygon_scan it(poly);
-  int y=21;
-  for (it.reset(); it.next(); ++y) {
-    std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany()
-             << ") goes from " << it.fstartx() << " (" << it.startx()
-             << ") to " << it.fendx() << " (" << it.endx() << ")\n";
+  int          y = 21;
+  for (it.reset(); it.next(); ++y)
+  {
+    std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany() << ") goes from " << it.fstartx() << " ("
+              << it.startx() << ") to " << it.fendx() << " (" << it.endx() << ")\n";
     TEST("iteration with boundary: y value", it.scany(), y);
     TEST("iteration with boundary: first x value", it.startx(), 10);
     TEST("iteration with boundary: last x value", it.endx(), 13);
@@ -93,20 +93,20 @@ test_degenerate_polygon()
   poly.new_sheet();
   // This is a triangle with 2 sides of length 29 parallel to the axes,
   // at X=39 and Y=10 resp., and with one duplicate corner point.
-  poly.push_back( Point_type( 10, 10) );
-  poly.push_back( Point_type( 39, 10) );
-  poly.push_back( Point_type( 39, 39) );
-  poly.push_back( Point_type( 10, 10) );
+  poly.push_back(Point_type(10, 10));
+  poly.push_back(Point_type(39, 10));
+  poly.push_back(Point_type(39, 39));
+  poly.push_back(Point_type(10, 10));
 
   // There will be scan lines at y=10 to 39, with x values going from y to 39.
   // Hence the number of integer-valued points is 30+29+...+2+1=30*31/2=465.
-  Polygon_scan it( poly );
-  unsigned int count=0;
-  int y=10;
-  for (it.reset(); it.next(); ++y) {
-    std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany()
-             << ") goes from " << it.fstartx() << " (" << it.startx()
-             << ") to " << it.fendx() << " (" << it.endx() << ")\n";
+  Polygon_scan it(poly);
+  unsigned int count = 0;
+  int          y = 10;
+  for (it.reset(); it.next(); ++y)
+  {
+    std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany() << ") goes from " << it.fstartx() << " ("
+              << it.startx() << ") to " << it.fendx() << " (" << it.endx() << ")\n";
     TEST("zero-length edges: y value", it.scany(), y);
     TEST("zero-length edges: first x value", it.startx(), y);
     TEST("zero-length edges: last x value", it.endx(), 39);
@@ -121,12 +121,12 @@ test_empty_polygon()
   // This is an empty polygon.
   Polygon_type poly;
 
-  Polygon_scan it( poly );
-  unsigned int count=0;
-  for (it.reset(); it.next(); ) {
-    std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany()
-             << ") goes from " << it.fstartx() << " (" << it.startx()
-             << ") to " << it.fendx() << " (" << it.endx() << ")\n";
+  Polygon_scan it(poly);
+  unsigned int count = 0;
+  for (it.reset(); it.next();)
+  {
+    std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany() << ") goes from " << it.fstartx() << " ("
+              << it.startx() << ") to " << it.fendx() << " (" << it.endx() << ")\n";
     count += it.endx() - it.startx() + 1;
   }
   TEST("empty polygon", count, 0);
@@ -137,30 +137,35 @@ test_almost_horizontal()
 {
   Polygon_type poly;
   poly.new_sheet();
-  poly.push_back( Point_type(424.f, 785.99975f) );
-  poly.push_back( Point_type(426.f, 786.00012f) );
-  poly.push_back( Point_type(426.f, 789.91188f) );
-  poly.push_back( Point_type(424.f, 790.06225f) );
+  poly.push_back(Point_type(424.f, 785.99975f));
+  poly.push_back(Point_type(426.f, 786.00012f));
+  poly.push_back(Point_type(426.f, 789.91188f));
+  poly.push_back(Point_type(424.f, 790.06225f));
 
   // There should be scan lines at y=786,787,788,789 and 790.
   // The 3 middle ones are exactly of length 2, containing 3 integer points.
   // The one at y=786 goes from x=424 to x=,
   // while the one at y=490 goes from x=424 to x=.
-  Polygon_scan it(poly,false);
-  int y=786;
-  for (it.reset(); it.next(); ++y) {
-    std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany()
-             << ") goes from " << it.fstartx() << " (" << it.startx()
-             << ") to " << it.fendx() << " (" << it.endx() << ")\n";
+  Polygon_scan it(poly, false);
+  int          y = 786;
+  for (it.reset(); it.next(); ++y)
+  {
+    std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany() << ") goes from " << it.fstartx() << " ("
+              << it.startx() << ") to " << it.fendx() << " (" << it.endx() << ")\n";
     TEST("almost horizontal sides: y value", it.scany(), y);
     TEST("almost horizontal sides: first x value", it.startx(), 424);
-    int x = 426; if (y==790) x-=2; if (y==786) --x;
+    int x = 426;
+    if (y == 790)
+      x -= 2;
+    if (y == 786)
+      --x;
     TEST("almost horizontal sides: last x value", it.endx(), x);
   }
 }
 
 
-static void test_polygon_scan_iterator()
+static void
+test_polygon_scan_iterator()
 {
   test_without_boundary();
   test_with_boundary();

@@ -5,4 +5,8 @@
 #include <vgui/wx/wxVideoControl.h>
 #include <vgui/wx/wxVideoControlXmlHandler.h>
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

@@ -7,22 +7,23 @@
 #include "testlib/testlib_test.h"
 #include "vpl/vpl.h"
 
-void test_smart_ptr_io()
+void
+test_smart_ptr_io()
 {
   std::cout << "**************************\n"
-           << "Testing smart_ptr<impl> io\n"
-           << "**************************\n";
+            << "Testing smart_ptr<impl> io\n"
+            << "**************************\n";
 
   constexpr int n = 50;
 
-  vbl_smart_ptr<impl > sp1_out(new impl(n));
+  vbl_smart_ptr<impl> sp1_out(new impl(n));
   vbl_smart_ptr<impl> sp2_out(sp1_out);
   vbl_smart_ptr<impl> null1_out, null2_out;
-  vbl_smart_ptr<impl > sp1_in, sp2_in;
+  vbl_smart_ptr<impl> sp1_in, sp2_in;
   vbl_smart_ptr<impl> null1_in(new impl(n)), null2_in;
 
-  TEST("sp1_out->get_references() == 2", sp1_out->get_references() ,2);
-  TEST("null1_in!=0", null1_in.ptr()!=nullptr, true);
+  TEST("sp1_out->get_references() == 2", sp1_out->get_references(), 2);
+  TEST("null1_in!=0", null1_in.ptr() != nullptr, true);
   TEST("null2_in==0", null2_in.ptr(), 0);
 
   vsl_b_ofstream bfs_out("vbl_smart_ptr_test_io.bvl.tmp");
@@ -42,13 +43,14 @@ void test_smart_ptr_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vbl_smart_ptr_test_io.bvl.tmp");
+  vpl_unlink("vbl_smart_ptr_test_io.bvl.tmp");
 
   TEST("sp1_in == sp2_in", sp1_in, sp2_in);
   TEST("sp1_in->get_references() == 2", sp1_in->get_references(), 2);
   TEST("null1_in==0", null1_in.ptr(), 0);
   TEST("null2_in==0", null2_in.ptr(), 0);
-  vsl_print_summary(std::cout, sp1_out); std::cout<<std::endl;
+  vsl_print_summary(std::cout, sp1_out);
+  std::cout << std::endl;
 }
 
 TESTMAIN(test_smart_ptr_io);

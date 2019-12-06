@@ -13,9 +13,10 @@
 #include "testlib/testlib_test.h"
 #include "vcsl/vcsl_spherical.h"
 
-static void test_spherical()
+static void
+test_spherical()
 {
-  vcsl_spherical_sptr p=new vcsl_spherical;
+  vcsl_spherical_sptr p = new vcsl_spherical;
   TEST("test_spherical_sptr", bool(p), true);
 }
 

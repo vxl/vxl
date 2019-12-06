@@ -23,12 +23,13 @@
 
 //------------------------------------------------------------------------------
 // copy the buffer into a memory image
-vil1_memory_image_of<vil1_rgb<GLubyte> > vgui_utils::get_image()
+vil1_memory_image_of<vil1_rgb<GLubyte>>
+vgui_utils::get_image()
 {
   // We should grab the pixels off the front buffer, since that is what is visible.
   GLint cur_read_buffer;
-  glGetIntegerv( GL_READ_BUFFER, &cur_read_buffer );
-  glReadBuffer( GL_FRONT );
+  glGetIntegerv(GL_READ_BUFFER, &cur_read_buffer);
+  glReadBuffer(GL_FRONT);
 
   // get viewport size
   GLint vp[4]; // x,y,w,h
@@ -40,60 +41,65 @@ vil1_memory_image_of<vil1_rgb<GLubyte> > vgui_utils::get_image()
 
   // It's easier to get the buffer in vil1_rgba format and then convert to
   // RGB, because that avoids alignment problems with glReadPixels.
-  vil1_rgba<GLubyte> *pixels = new vil1_rgba<GLubyte>[ w * h ];
+  vil1_rgba<GLubyte> * pixels = new vil1_rgba<GLubyte>[w * h];
 
   //
-  glPixelZoom(1,1);
-  glPixelTransferi(GL_MAP_COLOR,0);
-  glPixelTransferi(GL_RED_SCALE,1);   glPixelTransferi(GL_RED_BIAS,0);
-  glPixelTransferi(GL_GREEN_SCALE,1); glPixelTransferi(GL_GREEN_BIAS,0);
-  glPixelTransferi(GL_BLUE_SCALE,1);  glPixelTransferi(GL_BLUE_BIAS,0);
+  glPixelZoom(1, 1);
+  glPixelTransferi(GL_MAP_COLOR, 0);
+  glPixelTransferi(GL_RED_SCALE, 1);
+  glPixelTransferi(GL_RED_BIAS, 0);
+  glPixelTransferi(GL_GREEN_SCALE, 1);
+  glPixelTransferi(GL_GREEN_BIAS, 0);
+  glPixelTransferi(GL_BLUE_SCALE, 1);
+  glPixelTransferi(GL_BLUE_BIAS, 0);
 
   //
-  glPixelStorei(GL_PACK_ALIGNMENT,1);   // byte alignment.
-  glPixelStorei(GL_PACK_ROW_LENGTH,0);  // use default value (the arg to pixel routine).
-  glPixelStorei(GL_PACK_SKIP_PIXELS,0); //
-  glPixelStorei(GL_PACK_SKIP_ROWS,0);   //
+  glPixelStorei(GL_PACK_ALIGNMENT, 1);   // byte alignment.
+  glPixelStorei(GL_PACK_ROW_LENGTH, 0);  // use default value (the arg to pixel routine).
+  glPixelStorei(GL_PACK_SKIP_PIXELS, 0); //
+  glPixelStorei(GL_PACK_SKIP_ROWS, 0);   //
 
   //
-  glReadPixels(x, y,             //
-               w, h,             //
+  glReadPixels(x,
+               y, //
+               w,
+               h,                //
                GL_RGBA,          // format
                GL_UNSIGNED_BYTE, // type
                pixels);
 
-  glReadBuffer( cur_read_buffer );
+  glReadBuffer(cur_read_buffer);
 
   // glReadPixels() reads the pixels from the bottom of the viewport up.
   // Copy them into a vil1_memory_image_of in the other order :
-  vil1_memory_image_of<vil1_rgb<GLubyte> > colour_buffer(w, h);
-  for (unsigned yy=0; yy<h; ++yy)
-    for (unsigned xx=0; xx<w; ++xx) {
-      colour_buffer(xx, h-1-yy).r = pixels[xx + w*yy].r;
-      colour_buffer(xx, h-1-yy).g = pixels[xx + w*yy].g;
-      colour_buffer(xx, h-1-yy).b = pixels[xx + w*yy].b;
+  vil1_memory_image_of<vil1_rgb<GLubyte>> colour_buffer(w, h);
+  for (unsigned yy = 0; yy < h; ++yy)
+    for (unsigned xx = 0; xx < w; ++xx)
+    {
+      colour_buffer(xx, h - 1 - yy).r = pixels[xx + w * yy].r;
+      colour_buffer(xx, h - 1 - yy).g = pixels[xx + w * yy].g;
+      colour_buffer(xx, h - 1 - yy).b = pixels[xx + w * yy].b;
     }
 
   //
-  delete [] pixels;
+  delete[] pixels;
   return colour_buffer;
 }
 
 // return a memory image corresponding to the GL buffer
-vil1_memory_image_of<vil1_rgb<unsigned char> >
+vil1_memory_image_of<vil1_rgb<unsigned char>>
 vgui_utils::colour_buffer_to_image()
 {
-  vil1_memory_image_of<vil1_rgb<GLubyte> > colour_buffer =
-    vgui_utils::get_image();
-  vil1_memory_image_of<vil1_rgb<unsigned char> > temp(colour_buffer);
+  vil1_memory_image_of<vil1_rgb<GLubyte>>       colour_buffer = vgui_utils::get_image();
+  vil1_memory_image_of<vil1_rgb<unsigned char>> temp(colour_buffer);
   return temp;
 }
 
 // write the GL buffer to a file
-void vgui_utils::dump_colour_buffer(char const *file)
+void
+vgui_utils::dump_colour_buffer(char const * file)
 {
-  vil1_memory_image_of<vil1_rgb<GLubyte> > colour_buffer =
-    vgui_utils::get_image();
+  vil1_memory_image_of<vil1_rgb<GLubyte>> colour_buffer = vgui_utils::get_image();
   vil1_save(colour_buffer, file);
 }
 
@@ -112,24 +118,29 @@ vgui_utils::get_view()
 
   // It's easier to get the buffer in vil_rgba format and then convert to
   // RGB, because that avoids alignment problems with glReadPixels.
-  vil_rgba<GLubyte> *pixels = new vil_rgba<GLubyte>[ w * h ];
+  vil_rgba<GLubyte> * pixels = new vil_rgba<GLubyte>[w * h];
 
   //
-  glPixelZoom(1,1);
-  glPixelTransferi(GL_MAP_COLOR,0);
-  glPixelTransferi(GL_RED_SCALE,1);   glPixelTransferi(GL_RED_BIAS,0);
-  glPixelTransferi(GL_GREEN_SCALE,1); glPixelTransferi(GL_GREEN_BIAS,0);
-  glPixelTransferi(GL_BLUE_SCALE,1);  glPixelTransferi(GL_BLUE_BIAS,0);
+  glPixelZoom(1, 1);
+  glPixelTransferi(GL_MAP_COLOR, 0);
+  glPixelTransferi(GL_RED_SCALE, 1);
+  glPixelTransferi(GL_RED_BIAS, 0);
+  glPixelTransferi(GL_GREEN_SCALE, 1);
+  glPixelTransferi(GL_GREEN_BIAS, 0);
+  glPixelTransferi(GL_BLUE_SCALE, 1);
+  glPixelTransferi(GL_BLUE_BIAS, 0);
 
   //
-  glPixelStorei(GL_PACK_ALIGNMENT,1);   // byte alignment.
-  glPixelStorei(GL_PACK_ROW_LENGTH,0);  // use default value (the arg to pixel routine).
-  glPixelStorei(GL_PACK_SKIP_PIXELS,0); //
-  glPixelStorei(GL_PACK_SKIP_ROWS,0);   //
+  glPixelStorei(GL_PACK_ALIGNMENT, 1);   // byte alignment.
+  glPixelStorei(GL_PACK_ROW_LENGTH, 0);  // use default value (the arg to pixel routine).
+  glPixelStorei(GL_PACK_SKIP_PIXELS, 0); //
+  glPixelStorei(GL_PACK_SKIP_ROWS, 0);   //
 
   //
-  glReadPixels(x, y,             //
-               w, h,             //
+  glReadPixels(x,
+               y, //
+               w,
+               h,                //
                GL_RGBA,          // format
                GL_UNSIGNED_BYTE, // type
                pixels);
@@ -137,15 +148,16 @@ vgui_utils::get_view()
   // glReadPixels() reads the pixels from the bottom of the viewport up.
   // Copy them into a vil_image_view in the other order :
   vil_image_view<GLubyte> view(w, h, 1, 3);
-  for (unsigned yy=0; yy<h; ++yy)
-    for (unsigned xx=0; xx<w; ++xx) {
-      view(xx, h-1-yy, 0) = pixels[xx + w*yy].r;
-      view(xx, h-1-yy, 1) = pixels[xx + w*yy].g;
-      view(xx, h-1-yy, 2) = pixels[xx + w*yy].b;
+  for (unsigned yy = 0; yy < h; ++yy)
+    for (unsigned xx = 0; xx < w; ++xx)
+    {
+      view(xx, h - 1 - yy, 0) = pixels[xx + w * yy].r;
+      view(xx, h - 1 - yy, 1) = pixels[xx + w * yy].g;
+      view(xx, h - 1 - yy, 2) = pixels[xx + w * yy].b;
     }
 
   //
-  delete [] pixels;
+  delete[] pixels;
   return view;
 }
 
@@ -154,7 +166,7 @@ vgui_utils::get_view()
 vil_image_view<vxl_byte>
 vgui_utils::colour_buffer_to_view()
 {
-  vil_image_view<GLubyte> buffer = vgui_utils::get_view();
+  vil_image_view<GLubyte>  buffer = vgui_utils::get_view();
   vil_image_view<vxl_byte> temp(buffer);
   return temp;
 }
@@ -164,9 +176,10 @@ vgui_utils::colour_buffer_to_view()
 
 // Copies the contents of the current read colour buffer into the current draw
 // colour buffer.
-void vgui_utils::do_copy()
+void
+vgui_utils::do_copy()
 {
-  //void glCopyPixels( GLint x, GLint y, GLsizei width, GLsizei height, GLenum type )
+  // void glCopyPixels( GLint x, GLint y, GLsizei width, GLsizei height, GLenum type )
 
   GLint vp[4]; // x,y,w,h
   glGetIntegerv(GL_VIEWPORT, vp);
@@ -179,7 +192,7 @@ void vgui_utils::do_copy()
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
-  glOrtho(0,vp[2], 0,vp[3], -1,+1); // near, far
+  glOrtho(0, vp[2], 0, vp[3], -1, +1); // near, far
 
   // set raster position to the bottom left-hand corner.
   glRasterPos2i(0, 0);
@@ -192,23 +205,30 @@ void vgui_utils::do_copy()
   glPopMatrix();
 
   // copy pixels :
-  glPixelZoom(1,1);
-  glPixelTransferi(GL_MAP_COLOR,0);
-  glPixelTransferi(GL_RED_SCALE,1);   glPixelTransferi(GL_RED_BIAS,0);
-  glPixelTransferi(GL_GREEN_SCALE,1); glPixelTransferi(GL_GREEN_BIAS,0);
-  glPixelTransferi(GL_BLUE_SCALE,1);  glPixelTransferi(GL_BLUE_BIAS,0);
-  glPixelTransferi(GL_ALPHA_SCALE,1); glPixelTransferi(GL_ALPHA_BIAS,0);
+  glPixelZoom(1, 1);
+  glPixelTransferi(GL_MAP_COLOR, 0);
+  glPixelTransferi(GL_RED_SCALE, 1);
+  glPixelTransferi(GL_RED_BIAS, 0);
+  glPixelTransferi(GL_GREEN_SCALE, 1);
+  glPixelTransferi(GL_GREEN_BIAS, 0);
+  glPixelTransferi(GL_BLUE_SCALE, 1);
+  glPixelTransferi(GL_BLUE_BIAS, 0);
+  glPixelTransferi(GL_ALPHA_SCALE, 1);
+  glPixelTransferi(GL_ALPHA_BIAS, 0);
   glDisable(GL_DITHER);
-  glCopyPixels(0,0,         // window coordinates of lower left corner
-               vp[2],vp[3], // width and height of region to be copied.
-               GL_COLOR);   // copy colour values.
+  glCopyPixels(0,
+               0, // window coordinates of lower left corner
+               vp[2],
+               vp[3],     // width and height of region to be copied.
+               GL_COLOR); // copy colour values.
 }
 
-void vgui_utils::copy_front_to_back()
+void
+vgui_utils::copy_front_to_back()
 {
-  GLint old_read,old_draw;
-  glGetIntegerv(GL_READ_BUFFER,&old_read);
-  glGetIntegerv(GL_DRAW_BUFFER,&old_draw);
+  GLint old_read, old_draw;
+  glGetIntegerv(GL_READ_BUFFER, &old_read);
+  glGetIntegerv(GL_DRAW_BUFFER, &old_draw);
 
   glReadBuffer(GL_FRONT);
   glDrawBuffer(GL_BACK);
@@ -218,11 +238,12 @@ void vgui_utils::copy_front_to_back()
   glDrawBuffer(GLenum(old_draw));
 }
 
-void vgui_utils::copy_back_to_front()
+void
+vgui_utils::copy_back_to_front()
 {
-  GLint old_read,old_draw;
-  glGetIntegerv(GL_READ_BUFFER,&old_read);
-  glGetIntegerv(GL_DRAW_BUFFER,&old_draw);
+  GLint old_read, old_draw;
+  glGetIntegerv(GL_READ_BUFFER, &old_read);
+  glGetIntegerv(GL_DRAW_BUFFER, &old_draw);
 
   glReadBuffer(GL_BACK);
   glDrawBuffer(GL_FRONT);
@@ -236,16 +257,19 @@ void vgui_utils::copy_back_to_front()
 
 static GLint gl_old_buffer = -1;
 
-void vgui_utils::begin_sw_overlay()
+void
+vgui_utils::begin_sw_overlay()
 {
   glGetIntegerv(GL_DRAW_BUFFER, &gl_old_buffer);
   if (gl_old_buffer != GL_NONE)
     glDrawBuffer(GL_FRONT);
 }
 
-void vgui_utils::end_sw_overlay()
+void
+vgui_utils::end_sw_overlay()
 {
-  if (gl_old_buffer == -1) {
+  if (gl_old_buffer == -1)
+  {
     std::cerr << "WARNING :  end_sw_overlay called before begin_sw_overlay\n";
     return;
   }
@@ -260,17 +284,20 @@ void vgui_utils::end_sw_overlay()
 
 static bool in_pick_mode = false;
 
-GLuint* vgui_utils::enter_pick_mode(float x,float y,float w,float h)
+GLuint *
+vgui_utils::enter_pick_mode(float x, float y, float w, float h)
 {
-  assert(!in_pick_mode); in_pick_mode = true;
+  assert(!in_pick_mode);
+  in_pick_mode = true;
 
-  if (h==0) h=w;
+  if (h == 0)
+    h = w;
 
-  static unsigned const HIT_BUFFER_SIZE=4096;
-  static GLuint buffer[HIT_BUFFER_SIZE];
+  static unsigned const HIT_BUFFER_SIZE = 4096;
+  static GLuint         buffer[HIT_BUFFER_SIZE];
 
   // define hit buffer
-  glSelectBuffer(HIT_BUFFER_SIZE,buffer);
+  glSelectBuffer(HIT_BUFFER_SIZE, buffer);
 
   // get viewport
   GLint viewport[4];
@@ -287,10 +314,10 @@ GLuint* vgui_utils::enter_pick_mode(float x,float y,float w,float h)
   glPushMatrix();
 
   float P[16]; // get current projection matrix
-  glGetFloatv(GL_PROJECTION_MATRIX,P);
+  glGetFloatv(GL_PROJECTION_MATRIX, P);
 
-  glLoadIdentity(); // make a pick matrix
-  gluPickMatrix(x,y,w,h,viewport); // thank heavens for viewport coordinates.
+  glLoadIdentity();                    // make a pick matrix
+  gluPickMatrix(x, y, w, h, viewport); // thank heavens for viewport coordinates.
 
   glMultMatrixf(P); // right multiply the old matrix onto it
 
@@ -298,9 +325,11 @@ GLuint* vgui_utils::enter_pick_mode(float x,float y,float w,float h)
 }
 
 // return number of hits.
-unsigned vgui_utils::leave_pick_mode()
+unsigned
+vgui_utils::leave_pick_mode()
 {
-  assert(in_pick_mode); in_pick_mode = false;
+  assert(in_pick_mode);
+  in_pick_mode = false;
 
   // restore viewing volume and render mode
   glMatrixMode(GL_PROJECTION);
@@ -308,50 +337,53 @@ unsigned vgui_utils::leave_pick_mode()
   return glRenderMode(GL_RENDER);
 }
 
-void vgui_utils::process_hits(int num_hits, GLuint* ptr, std::vector<std::vector<unsigned> >& hits)
+void
+vgui_utils::process_hits(int num_hits, GLuint * ptr, std::vector<std::vector<unsigned>> & hits)
 {
 #ifdef DEBUG
-    std::cerr << "hits = " << num_hits << std::endl;
+  std::cerr << "hits = " << num_hits << std::endl;
 #endif
   // for each hit
-   for (int i = 0; i < num_hits; i++) {
-     GLuint num_names = *ptr;
+  for (int i = 0; i < num_hits; i++)
+  {
+    GLuint num_names = *ptr;
 #ifdef DEBUG
-       std::cerr << "number of names for hit["<< i <<"] = " << num_names << std::endl;
+    std::cerr << "number of names for hit[" << i << "] = " << num_names << std::endl;
 #endif
-     ptr++;
+    ptr++;
 #ifdef DEBUG
-       std::cerr << " z1 is " << *ptr;
+    std::cerr << " z1 is " << *ptr;
 #endif
-     ptr++;
+    ptr++;
 #ifdef DEBUG
-       std::cerr << "; z2 is " << *ptr << std::endl;
+    std::cerr << "; z2 is " << *ptr << std::endl;
 #endif
-     ptr++;
+    ptr++;
 
-     std::vector<unsigned> names;
+    std::vector<unsigned> names;
 #ifdef DEBUG
-       std::cerr << " the name is ";
+    std::cerr << " the name is ";
 #endif
-     // for each name
-     for (unsigned int j = 0; j < num_names; j++) {
-       names.push_back(*ptr);
+    // for each name
+    for (unsigned int j = 0; j < num_names; j++)
+    {
+      names.push_back(*ptr);
 #ifdef DEBUG
-         std::cerr << *ptr << ' ';
+      std::cerr << *ptr << ' ';
 #endif
-       ptr++;
-     }
+      ptr++;
+    }
 #ifdef DEBUG
-       std::cerr << std::endl << "names.size() " << names.size() << std::endl;
+    std::cerr << std::endl << "names.size() " << names.size() << std::endl;
 #endif
-     hits.push_back(names);
+    hits.push_back(names);
 
 #ifdef DEBUG
-       std::cerr << std::endl;
+    std::cerr << std::endl;
 #endif
-   }
+  }
 #ifdef DEBUG
-     std::cerr << "hits.size() " << hits.size() << std::endl;
+  std::cerr << "hits.size() " << hits.size() << std::endl;
 #endif
 }
 
@@ -359,21 +391,23 @@ void vgui_utils::process_hits(int num_hits, GLuint* ptr, std::vector<std::vector
 int
 vgui_utils::bits_per_pixel(GLenum format, GLenum type)
 {
-#define M(f, t, size) if (format == f && type == t) return size;
-  M(GL_RGB,      GL_UNSIGNED_BYTE,          24);
-  M(GL_BGR,      GL_UNSIGNED_BYTE,          24);
-  M(GL_RGBA,     GL_UNSIGNED_BYTE,          32);
+#define M(f, t, size)                                                                                                  \
+  if (format == f && type == t)                                                                                        \
+    return size;
+  M(GL_RGB, GL_UNSIGNED_BYTE, 24);
+  M(GL_BGR, GL_UNSIGNED_BYTE, 24);
+  M(GL_RGBA, GL_UNSIGNED_BYTE, 32);
 #if defined(GL_UNSIGNED_SHORT_5_6_5)
-  M(GL_RGB,      GL_UNSIGNED_SHORT_5_6_5,   16);
+  M(GL_RGB, GL_UNSIGNED_SHORT_5_6_5, 16);
 #endif
 #if defined(GL_UNSIGNED_SHORT_5_5_5_1)
-  M(GL_RGB,      GL_UNSIGNED_SHORT_5_5_5_1, 16);
+  M(GL_RGB, GL_UNSIGNED_SHORT_5_5_5_1, 16);
 #endif
 #if defined(GL_BGRA)
-  M(GL_BGRA,     GL_UNSIGNED_BYTE,          32);
+  M(GL_BGRA, GL_UNSIGNED_BYTE, 32);
 #endif
 #if defined(GL_EXT_abgr) || defined(GL_ABGR_EXT)
-  M(GL_ABGR_EXT, GL_UNSIGNED_BYTE,          32);
+  M(GL_ABGR_EXT, GL_UNSIGNED_BYTE, 32);
 #endif
 #undef M
 

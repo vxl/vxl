@@ -14,7 +14,8 @@
 #include "vil/vil_print.h"
 
 
-int main(int argc, char** argv)
+int
+main(int argc, char ** argv)
 {
   if (argc < 2)
   {
@@ -22,7 +23,7 @@ int main(int argc, char** argv)
     return 3;
   }
 
-  std::cout<<"Load " << argv[1] << " into an image data object\n";
+  std::cout << "Load " << argv[1] << " into an image data object\n";
 
 
   // This is how we quickly load an image view.
@@ -31,7 +32,7 @@ int main(int argc, char** argv)
 
   if (!b_im)
   {
-    std::cerr << "Couldn't load " << argv[1] <<std::endl;
+    std::cerr << "Couldn't load " << argv[1] << std::endl;
     return 3;
   }
 

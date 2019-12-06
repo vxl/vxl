@@ -126,59 +126,64 @@
 
 //: Copies the given regular expression.
 
-vul_reg_exp::vul_reg_exp (vul_reg_exp const& rxp)
+vul_reg_exp::vul_reg_exp(vul_reg_exp const & rxp)
 {
   int ind;
-  this->progsize = rxp.progsize;      // Copy regular expression size
+  this->progsize = rxp.progsize;            // Copy regular expression size
   this->program = new char[this->progsize]; // Allocate storage
-  for (ind=this->progsize; ind-- != 0;)   // Copy regular expression
-  this->program[ind] = rxp.program[ind];
-  this->startp[0] = rxp.startp[0];      // Copy pointers into last
-  this->endp[0] = rxp.endp[0];        // Successful "find" operation
-  this->regmust = rxp.regmust;        // Copy field
-  if (rxp.regmust != nullptr) {
-  char* dum = rxp.program;
-  ind = 0;
-  while (dum != rxp.regmust) {
-    ++dum;
-    ++ind;
+  for (ind = this->progsize; ind-- != 0;)   // Copy regular expression
+    this->program[ind] = rxp.program[ind];
+  this->startp[0] = rxp.startp[0]; // Copy pointers into last
+  this->endp[0] = rxp.endp[0];     // Successful "find" operation
+  this->regmust = rxp.regmust;     // Copy field
+  if (rxp.regmust != nullptr)
+  {
+    char * dum = rxp.program;
+    ind = 0;
+    while (dum != rxp.regmust)
+    {
+      ++dum;
+      ++ind;
+    }
+    this->regmust = this->program + ind;
   }
-  this->regmust = this->program + ind;
-  }
-  this->regstart = rxp.regstart;      // Copy starting index
-  this->reganch = rxp.reganch;        // Copy remaining private data
-  this->regmlen = rxp.regmlen;        // Copy remaining private data
+  this->regstart = rxp.regstart; // Copy starting index
+  this->reganch = rxp.reganch;   // Copy remaining private data
+  this->regmlen = rxp.regmlen;   // Copy remaining private data
 }
 
 
 //: Returns true if two regular expressions have the same compiled program for pattern matching.
 
-bool vul_reg_exp::operator== (vul_reg_exp const& rxp) const
+bool
+vul_reg_exp::operator==(vul_reg_exp const & rxp) const
 {
-  if (this != &rxp) {           // Same address?
-  int ind = this->progsize;     // Get regular expression size
-  if (ind != rxp.progsize)      // If different size regexp
-    return false;               // Return failure
-  while (ind-- != 0)            // Else while still characters
-    if (this->program[ind] != rxp.program[ind])// If regexp are different
-      return false;             // Return failure
+  if (this != &rxp)
+  {                                               // Same address?
+    int ind = this->progsize;                     // Get regular expression size
+    if (ind != rxp.progsize)                      // If different size regexp
+      return false;                               // Return failure
+    while (ind-- != 0)                            // Else while still characters
+      if (this->program[ind] != rxp.program[ind]) // If regexp are different
+        return false;                             // Return failure
   }
-  return true;                  // Else same, return success
+  return true; // Else same, return success
 }
 
 
 //: Returns true if have the same compiled regular expressions and the same start and end pointers.
 
-bool vul_reg_exp::deep_equal (vul_reg_exp const& rxp) const
+bool
+vul_reg_exp::deep_equal(vul_reg_exp const & rxp) const
 {
-  int ind = this->progsize;     // Get regular expression size
-  if (ind != rxp.progsize)      // If different size regexp
-  return false;                 // Return failure
-  while (ind-- != 0)            // Else while still characters
-  if (this->program[ind] != rxp.program[ind]) // If regexp are different
-    return false;               // Return failure
-  return this->startp[0] == rxp.startp[0] &&  // Else if same start/end ptrs,
-       this->endp[0] == rxp.endp[0];    // Return true
+  int ind = this->progsize;                     // Get regular expression size
+  if (ind != rxp.progsize)                      // If different size regexp
+    return false;                               // Return failure
+  while (ind-- != 0)                            // Else while still characters
+    if (this->program[ind] != rxp.program[ind]) // If regexp are different
+      return false;                             // Return failure
+  return this->startp[0] == rxp.startp[0] &&    // Else if same start/end ptrs,
+         this->endp[0] == rxp.endp[0];          // Return true
 }
 
 
@@ -248,21 +253,21 @@ bool vul_reg_exp::deep_equal (vul_reg_exp const& rxp) const
 //
 
 // definition   number  opnd?   meaning
-#define END   0  // no   End of program.
-#define BOL   1  // no   Match "" at beginning of line.
-#define EOL   2  // no   Match "" at end of line.
-#define ANY   3  // no   Match any one character.
-#define ANYOF   4  // str  Match any character in this string.
-#define ANYBUT  5  // str  Match any character not in this string.
-#define BRANCH  6  // node Match this alternative, or the next...
-#define BACK  7  // no   Match "", "next" ptr points backward.
-#define EXACTLY 8  // str  Match this string.
-#define NOTHING 9  // no   Match empty string.
-#define STAR  10   // node Match this (simple) thing 0 or more times.
-#define PLUS  11   // node Match this (simple) thing 1 or more times.
-#define OPEN  20   // no   Mark this point in input as start of #n.
+#define END 0     // no   End of program.
+#define BOL 1     // no   Match "" at beginning of line.
+#define EOL 2     // no   Match "" at end of line.
+#define ANY 3     // no   Match any one character.
+#define ANYOF 4   // str  Match any character in this string.
+#define ANYBUT 5  // str  Match any character not in this string.
+#define BRANCH 6  // node Match this alternative, or the next...
+#define BACK 7    // no   Match "", "next" ptr points backward.
+#define EXACTLY 8 // str  Match this string.
+#define NOTHING 9 // no   Match empty string.
+#define STAR 10   // node Match this (simple) thing 0 or more times.
+#define PLUS 11   // node Match this (simple) thing 1 or more times.
+#define OPEN 20   // no   Mark this point in input as start of #n.
 // OPEN+1 is number 1, etc.
-#define CLOSE   30   // no   Analogous to OPEN.
+#define CLOSE 30 // no   Analogous to OPEN.
 
 //
 // Opcode notes:
@@ -297,34 +302,39 @@ bool vul_reg_exp::deep_equal (vul_reg_exp const& rxp) const
 // but allows patterns to get big without disasters.
 //
 
-#define OP(p)       (*(p))
-#define NEXT(p)     (((*((p)+1)&0377)<<8) + (*((p)+2)&0377))
-#define OPERAND(p)    ((p) + 3)
+#define OP(p) (*(p))
+#define NEXT(p) (((*((p) + 1) & 0377) << 8) + (*((p) + 2) & 0377))
+#define OPERAND(p) ((p) + 3)
 
 constexpr unsigned char MAGIC = 0234;
 
 //
 // Utility definitions.
 //
-#define UCHARAT(p)    ((const unsigned char*)(p))[0]
+#define UCHARAT(p) ((const unsigned char *)(p))[0]
 
-#define FAIL(m) { regerror(m); return NULL; }
-#define ISMULT(c)     ((c) == '*' || (c) == '+' || (c) == '?')
-#define META  "^$.[()|?+*\\"
+#define FAIL(m)                                                                                                        \
+  {                                                                                                                    \
+    regerror(m);                                                                                                       \
+    return NULL;                                                                                                       \
+  }
+#define ISMULT(c) ((c) == '*' || (c) == '+' || (c) == '?')
+#define META "^$.[()|?+*\\"
 
 //
 // Flags to be passed up and down.
 //
-#define HASWIDTH    01    // Known never to match null string.
-#define SIMPLE      02    // Simple enough to be STAR/PLUS operand.
-#define SPSTART     04    // Starts with * or +.
-#define WORST       0     // Worst case.
+#define HASWIDTH 01 // Known never to match null string.
+#define SIMPLE 02   // Simple enough to be STAR/PLUS operand.
+#define SPSTART 04  // Starts with * or +.
+#define WORST 0     // Worst case.
 
 
 //: Return an expression that will match precisely c
 // The returned string is owned by the function, and
 // will be overwritten in subsequent calls.
-const char * vul_reg_exp::protect(char c)
+const char *
+vul_reg_exp::protect(char c)
 {
   //: This should be in thread local storage.
   static char pattern[3];
@@ -354,26 +364,37 @@ const char * vul_reg_exp::protect(char c)
 //
 // Global work variables for compile().
 //
-static const char* regparse; // Input-scan pointer.
-static       int   regnpar; // () count.
-static       char  regdummy;
-static       char* regcode; // Code-emit pointer; &regdummy = don't.
-static       long  regsize; // Code size.
+static const char * regparse; // Input-scan pointer.
+static int          regnpar;  // () count.
+static char         regdummy;
+static char *       regcode; // Code-emit pointer; &regdummy = don't.
+static long         regsize; // Code size.
 
 //
 // Forward declarations for compile()'s friends.
 //
-static       char* reg (int, int*);
-static       char* regbranch (int*);
-static       char* regpiece (int*);
-static       char* regatom (int*);
-static       char* regnode (char);
-static const char* regnext ( const char*);
-static       char* regnext ( char*);
-static void        regc (unsigned char);
-static void        reginsert (char, char*);
-static void        regtail (char*, const char*);
-static void        regoptail (char*, const char*);
+static char *
+reg(int, int *);
+static char *
+regbranch(int *);
+static char *
+regpiece(int *);
+static char *
+regatom(int *);
+static char *
+regnode(char);
+static const char *
+regnext(const char *);
+static char *
+regnext(char *);
+static void
+regc(unsigned char);
+static void
+reginsert(char, char *);
+static void
+regtail(char *, const char *);
+static void
+regoptail(char *, const char *);
 
 
 //
@@ -393,15 +414,17 @@ static void        regoptail (char*, const char*);
 
 //: Compile a regular expression into internal code for later pattern matching.
 
-void vul_reg_exp::compile (char const* exp)
+void
+vul_reg_exp::compile(char const * exp)
 {
-  const char*   scan;
-  const char*   longest;
+  const char *  scan;
+  const char *  longest;
   unsigned long len;
   int           flags;
 
-  if (exp == nullptr) {
-    //RAISE Error, SYM(vul_reg_exp), SYM(No_Expr),
+  if (exp == nullptr)
+  {
+    // RAISE Error, SYM(vul_reg_exp), SYM(No_Expr),
     std::cout << "vul_reg_exp::compile(): No expression supplied.\n";
     return;
   }
@@ -422,20 +445,22 @@ void vul_reg_exp::compile (char const* exp)
   // Small enough for pointer-storage convention?
   if (regsize >= 32767L) // Probably could be 65535L.
   {
-    //RAISE Error, SYM(vul_reg_exp), SYM(Expr_Too_Big),
+    // RAISE Error, SYM(vul_reg_exp), SYM(Expr_Too_Big),
     std::cout << "vul_reg_exp::compile(): Expression too big.\n";
     return;
   }
 
   // Allocate space.
-//#ifndef _WIN32
-  if (this->program != nullptr) delete [] this->program;
-//#endif
+  //#ifndef _WIN32
+  if (this->program != nullptr)
+    delete[] this->program;
+  //#endif
   this->program = new char[regsize];
-  this->progsize = (int) regsize;
+  this->progsize = (int)regsize;
 
-  if (this->program == nullptr) {
-    //RAISE Error, SYM(vul_reg_exp), SYM(Out_Of_Memory),
+  if (this->program == nullptr)
+  {
+    // RAISE Error, SYM(vul_reg_exp), SYM(Out_Of_Memory),
     std::cout << "vul_reg_exp::compile(): Out of memory.\n";
     return;
   }
@@ -452,7 +477,7 @@ void vul_reg_exp::compile (char const* exp)
   this->reganch = 0;
   this->regmust = nullptr;
   this->regmlen = 0;
-  scan = this->program + 1; // First BRANCH.
+  scan = this->program + 1;     // First BRANCH.
   if (OP(regnext(scan)) == END) // Only one top-level choice.
   {
     scan = OPERAND(scan);
@@ -463,19 +488,21 @@ void vul_reg_exp::compile (char const* exp)
     else if (OP(scan) == BOL)
       this->reganch++;
 
-     //
-     // If there's something expensive in the r.e., find the longest
-     // literal string that must appear and make it the regmust.  Resolve
-     // ties in favor of later strings, since the regstart check works
-     // with the beginning of the r.e. and avoiding duplication
-     // strengthens checking.  Not a strong reason, but sufficient in the
-     // absence of others.
-     //
-    if (flags & SPSTART) {
+    //
+    // If there's something expensive in the r.e., find the longest
+    // literal string that must appear and make it the regmust.  Resolve
+    // ties in favor of later strings, since the regstart check works
+    // with the beginning of the r.e. and avoiding duplication
+    // strengthens checking.  Not a strong reason, but sufficient in the
+    // absence of others.
+    //
+    if (flags & SPSTART)
+    {
       longest = nullptr;
       len = 0L;
       for (; scan != nullptr; scan = regnext(scan))
-        if (OP(scan) == EXACTLY && std::strlen(OPERAND(scan)) >= len) {
+        if (OP(scan) == EXACTLY && std::strlen(OPERAND(scan)) >= len)
+        {
           longest = OPERAND(scan);
           len = (unsigned long)std::strlen(OPERAND(scan));
         }
@@ -494,20 +521,23 @@ void vul_reg_exp::compile (char const* exp)
 // is a trifle forced, but the need to tie the tails of the branches to what
 // follows makes it hard to avoid.
 //
-static char* reg (int paren, int *flagp)
+static char *
+reg(int paren, int * flagp)
 {
-  char* ret;
-  char* br;
-  char* ender;
-  int   parno =0;
-           int   flags;
+  char * ret;
+  char * br;
+  char * ender;
+  int    parno = 0;
+  int    flags;
 
   *flagp = HASWIDTH; // Tentatively.
 
   // Make an OPEN node, if parenthesized.
-  if (paren) {
-    if (regnpar >= vul_reg_exp_nsubexp) {
-      //RAISE Error, SYM(vul_reg_exp), SYM(Too_Many_Parens),
+  if (paren)
+  {
+    if (regnpar >= vul_reg_exp_nsubexp)
+    {
+      // RAISE Error, SYM(vul_reg_exp), SYM(Too_Many_Parens),
       std::cout << "vul_reg_exp::compile(): Too many parentheses.\n";
       return nullptr;
     }
@@ -550,19 +580,23 @@ static char* reg (int paren, int *flagp)
     regoptail(br, ender);
 
   // Check for proper termination.
-  if (paren && *regparse++ != ')') {
-    //RAISE Error, SYM(vul_reg_exp), SYM(Unmatched_Parens),
+  if (paren && *regparse++ != ')')
+  {
+    // RAISE Error, SYM(vul_reg_exp), SYM(Unmatched_Parens),
     std::cout << "vul_reg_exp::compile(): Unmatched parentheses.\n";
     return nullptr;
   }
-  else if (!paren && *regparse != '\0') {
-    if (*regparse == ')') {
-      //RAISE Error, SYM(vul_reg_exp), SYM(Unmatched_Parens),
+  else if (!paren && *regparse != '\0')
+  {
+    if (*regparse == ')')
+    {
+      // RAISE Error, SYM(vul_reg_exp), SYM(Unmatched_Parens),
       std::cout << "vul_reg_exp::compile(): Unmatched parentheses.\n";
       return nullptr;
     }
-    else {
-      //RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
+    else
+    {
+      // RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
       std::cout << "vul_reg_exp::compile(): Internal error.\n";
       return nullptr;
     }
@@ -576,12 +610,13 @@ static char* reg (int paren, int *flagp)
 //
 // Implements the concatenation operator.
 //
-static char* regbranch (int *flagp)
+static char *
+regbranch(int * flagp)
 {
-  char* ret;
-  char* chain;
-  char* latest;
-  int            flags;
+  char * ret;
+  char * chain;
+  char * latest;
+  int    flags;
 
   *flagp = WORST; // Tentatively.
 
@@ -615,25 +650,28 @@ static char* regbranch (int *flagp)
 // It might seem that this node could be dispensed with entirely, but the
 // endmarker role is not redundant.
 //
-static char* regpiece (int *flagp)
+static char *
+regpiece(int * flagp)
 {
-  char* ret;
-  char  op;
-  char* next;
-  int            flags;
+  char * ret;
+  char   op;
+  char * next;
+  int    flags;
 
   ret = regatom(&flags);
   if (ret == nullptr)
     return nullptr;
 
   op = *regparse;
-  if (!ISMULT(op)) {
+  if (!ISMULT(op))
+  {
     *flagp = flags;
     return ret;
   }
 
-  if (!(flags & HASWIDTH) && op != '?') {
-    //RAISE Error, SYM(vul_reg_exp), SYM(Empty_Operand),
+  if (!(flags & HASWIDTH) && op != '?')
+  {
+    // RAISE Error, SYM(vul_reg_exp), SYM(Empty_Operand),
     std::cout << "vul_reg_exp::compile() : *+ operand could be empty.\n";
     return nullptr;
   }
@@ -641,35 +679,39 @@ static char* regpiece (int *flagp)
 
   if (op == '*' && (flags & SIMPLE))
     reginsert(STAR, ret);
-  else if (op == '*') {
+  else if (op == '*')
+  {
     // Emit x* as (x&|), where & means "self".
-    reginsert(BRANCH, ret); // Either x
-    regoptail(ret, regnode(BACK)); // and loop
-    regoptail(ret, ret); // back
-    regtail(ret, regnode(BRANCH)); // or
+    reginsert(BRANCH, ret);         // Either x
+    regoptail(ret, regnode(BACK));  // and loop
+    regoptail(ret, ret);            // back
+    regtail(ret, regnode(BRANCH));  // or
     regtail(ret, regnode(NOTHING)); // null.
   }
   else if (op == '+' && (flags & SIMPLE))
     reginsert(PLUS, ret);
-  else if (op == '+') {
+  else if (op == '+')
+  {
     // Emit x+ as x(&|), where & means "self".
     next = regnode(BRANCH); // Either
     regtail(ret, next);
-    regtail(regnode(BACK), ret); // loop back
+    regtail(regnode(BACK), ret);    // loop back
     regtail(next, regnode(BRANCH)); // or
     regtail(ret, regnode(NOTHING)); // null.
   }
-  else if (op == '?') {
+  else if (op == '?')
+  {
     // Emit x? as (x|)
-    reginsert(BRANCH, ret); // Either x
+    reginsert(BRANCH, ret);        // Either x
     regtail(ret, regnode(BRANCH)); // or
-    next = regnode(NOTHING);// null.
+    next = regnode(NOTHING);       // null.
     regtail(ret, next);
     regoptail(ret, next);
   }
   regparse++;
-  if (ISMULT(*regparse)) {
-    //RAISE Error, SYM(vul_reg_exp), SYM(Nested_Operand),
+  if (ISMULT(*regparse))
+  {
+    // RAISE Error, SYM(vul_reg_exp), SYM(Nested_Operand),
     std::cout << "vul_reg_exp::compile(): Nested *?+.\n";
     return nullptr;
   }
@@ -684,126 +726,134 @@ static char* regpiece (int *flagp)
 // faster to run.  Backslashed characters are exceptions, each becoming a
 // separate node; the code is simpler that way and it's not worth fixing.
 //
-static char* regatom (int *flagp)
+static char *
+regatom(int * flagp)
 {
-  char* ret;
-  int   flags;
+  char * ret;
+  int    flags;
 
   *flagp = WORST; // Tentatively.
 
   switch (*regparse++)
   {
-   case '^':
-    ret = regnode(BOL);
-    break;
-   case '$':
-    ret = regnode(EOL);
-    break;
-   case '.':
-    ret = regnode(ANY);
-    *flagp |= HASWIDTH | SIMPLE;
-    break;
-   case '[':
-   {
-    int  rxpclass;
-    int  rxpclassend;
-
-    if (*regparse == '^') { // Complement of range.
-      ret = regnode(ANYBUT);
-      regparse++;
-    }
-    else
-      ret = regnode(ANYOF);
-    if (*regparse == ']' || *regparse == '-')
-      regc(*regparse++);
-    while (*regparse != '\0' && *regparse != ']')
+    case '^':
+      ret = regnode(BOL);
+      break;
+    case '$':
+      ret = regnode(EOL);
+      break;
+    case '.':
+      ret = regnode(ANY);
+      *flagp |= HASWIDTH | SIMPLE;
+      break;
+    case '[':
     {
-      if (*regparse == '-')
-      {
+      int rxpclass;
+      int rxpclassend;
+
+      if (*regparse == '^')
+      { // Complement of range.
+        ret = regnode(ANYBUT);
         regparse++;
-        if (*regparse == ']' || *regparse == '\0')
-          regc('-');
-        else {
-          rxpclass = UCHARAT(regparse - 2) + 1;
-          rxpclassend = UCHARAT(regparse);
-          if (rxpclass > rxpclassend + 1) {
-             //RAISE Error, SYM(vul_reg_exp), SYM(Invalid_Range),
-             std::cout << "vul_reg_exp::compile(): Invalid range in [].\n";
-             return nullptr;
-          }
-          for (; rxpclass <= rxpclassend; rxpclass++)
-            regc(static_cast<unsigned char>(rxpclass));
-          regparse++;
-        }
       }
       else
+        ret = regnode(ANYOF);
+      if (*regparse == ']' || *regparse == '-')
         regc(*regparse++);
+      while (*regparse != '\0' && *regparse != ']')
+      {
+        if (*regparse == '-')
+        {
+          regparse++;
+          if (*regparse == ']' || *regparse == '\0')
+            regc('-');
+          else
+          {
+            rxpclass = UCHARAT(regparse - 2) + 1;
+            rxpclassend = UCHARAT(regparse);
+            if (rxpclass > rxpclassend + 1)
+            {
+              // RAISE Error, SYM(vul_reg_exp), SYM(Invalid_Range),
+              std::cout << "vul_reg_exp::compile(): Invalid range in [].\n";
+              return nullptr;
+            }
+            for (; rxpclass <= rxpclassend; rxpclass++)
+              regc(static_cast<unsigned char>(rxpclass));
+            regparse++;
+          }
+        }
+        else
+          regc(*regparse++);
+      }
+      regc('\0');
+      if (*regparse != ']')
+      {
+        // RAISE Error, SYM(vul_reg_exp), SYM(Unmatched_Bracket),
+        std::cout << "vul_reg_exp::compile(): Unmatched [].\n";
+        return nullptr;
+      }
+      regparse++;
+      *flagp |= HASWIDTH | SIMPLE;
+      break;
     }
-    regc('\0');
-    if (*regparse != ']') {
-      //RAISE Error, SYM(vul_reg_exp), SYM(Unmatched_Bracket),
-      std::cout << "vul_reg_exp::compile(): Unmatched [].\n";
+    case '(':
+      ret = reg(1, &flags);
+      if (ret == nullptr)
+        return nullptr;
+      *flagp |= flags & (HASWIDTH | SPSTART);
+      break;
+    case '\0':
+    case '|':
+    case ')':
+      // RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
+      std::cout << "vul_reg_exp::compile(): Internal error.\n"; // Never here
       return nullptr;
-    }
-    regparse++;
-    *flagp |= HASWIDTH | SIMPLE;
-    break;
-   }
-   case '(':
-    ret = reg(1, &flags);
-    if (ret == nullptr)
+    case '?':
+    case '+':
+    case '*':
+      // RAISE Error, SYM(vul_reg_exp), SYM(No_Operand),
+      std::cout << "vul_reg_exp::compile(): ?+* follows nothing.\n";
       return nullptr;
-    *flagp |= flags & (HASWIDTH | SPSTART);
-    break;
-   case '\0':
-   case '|':
-   case ')':
-    //RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
-    std::cout << "vul_reg_exp::compile(): Internal error.\n"; // Never here
-    return nullptr;
-   case '?':
-   case '+':
-   case '*':
-    //RAISE Error, SYM(vul_reg_exp), SYM(No_Operand),
-    std::cout << "vul_reg_exp::compile(): ?+* follows nothing.\n";
-    return nullptr;
-   case '\\':
-    if (*regparse == '\0') {
-      //RAISE Error, SYM(vul_reg_exp), SYM(Trailing_Backslash),
-      std::cout << "vul_reg_exp::compile(): Trailing backslash.\n";
-      return nullptr;
-    }
-    ret = regnode(EXACTLY);
-    regc(*regparse++);
-    regc('\0');
-    *flagp |= HASWIDTH | SIMPLE;
-    break;
-   default:
-   {
-    int  len;
-    char   ender;
-
-    regparse--;
-    len = (int)std::strcspn(regparse, META);
-    if (len <= 0) {
-      //RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
-      std::cout << "vul_reg_exp::compile(): Internal error.\n";
-      return nullptr;
-    }
-    ender = *(regparse + len);
-    if (len > 1 && ISMULT(ender))
-      len--; // Back off clear of ?+* operand.
-    *flagp |= HASWIDTH;
-    if (len == 1)
-      *flagp |= SIMPLE;
-    ret = regnode(EXACTLY);
-    while (len > 0) {
+    case '\\':
+      if (*regparse == '\0')
+      {
+        // RAISE Error, SYM(vul_reg_exp), SYM(Trailing_Backslash),
+        std::cout << "vul_reg_exp::compile(): Trailing backslash.\n";
+        return nullptr;
+      }
+      ret = regnode(EXACTLY);
       regc(*regparse++);
-      len--;
+      regc('\0');
+      *flagp |= HASWIDTH | SIMPLE;
+      break;
+    default:
+    {
+      int  len;
+      char ender;
+
+      regparse--;
+      len = (int)std::strcspn(regparse, META);
+      if (len <= 0)
+      {
+        // RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
+        std::cout << "vul_reg_exp::compile(): Internal error.\n";
+        return nullptr;
+      }
+      ender = *(regparse + len);
+      if (len > 1 && ISMULT(ender))
+        len--; // Back off clear of ?+* operand.
+      *flagp |= HASWIDTH;
+      if (len == 1)
+        *flagp |= SIMPLE;
+      ret = regnode(EXACTLY);
+      while (len > 0)
+      {
+        regc(*regparse++);
+        len--;
+      }
+      regc('\0');
+      break;
     }
-    regc('\0');
-    break;
-   }
   }
   return ret;
 }
@@ -812,13 +862,15 @@ static char* regatom (int *flagp)
 // emit a node
 // Location.
 //
-static char* regnode (char op)
+static char *
+regnode(char op)
 {
-  char* ret;
-  char* ptr;
+  char * ret;
+  char * ptr;
 
   ret = regcode;
-  if (ret == &regdummy) {
+  if (ret == &regdummy)
+  {
     regsize += 3;
     return ret;
   }
@@ -835,7 +887,8 @@ static char* regnode (char op)
 
 // emit (if appropriate) a byte of code
 //
-static void regc (unsigned char b)
+static void
+regc(unsigned char b)
 {
   if (regcode != &regdummy)
     *regcode++ = b;
@@ -848,13 +901,15 @@ static void regc (unsigned char b)
 //
 // Means relocating the operand.
 //
-static void reginsert (char op, char* opnd)
+static void
+reginsert(char op, char * opnd)
 {
-  char* src;
-  char* dst;
-  char* place;
+  char * src;
+  char * dst;
+  char * place;
 
-  if (regcode == &regdummy) {
+  if (regcode == &regdummy)
+  {
     regsize += 3;
     return;
   }
@@ -868,24 +923,26 @@ static void reginsert (char op, char* opnd)
   place = opnd; // Op node, where operand used to be.
   *place++ = op;
   *place++ = '\0';
-  *place   = '\0';
+  *place = '\0';
 }
 
 
 // set the next-pointer at the end of a node chain
 //
-static void regtail (char* p, const char* val)
+static void
+regtail(char * p, const char * val)
 {
-  char* scan;
-  char* temp;
-  std::ptrdiff_t  offset;
+  char *         scan;
+  char *         temp;
+  std::ptrdiff_t offset;
 
   if (p == &regdummy)
     return;
 
   // Find last node.
   scan = p;
-  for (;;) {
+  for (;;)
+  {
     temp = regnext(scan);
     if (temp == nullptr)
       break;
@@ -893,7 +950,7 @@ static void regtail (char* p, const char* val)
   }
 
   if (OP(scan) == BACK)
-    offset = (const char*)scan - val;
+    offset = (const char *)scan - val;
   else
     offset = val - scan;
   *(scan + 1) = (char)((offset >> 8) & 0377);
@@ -903,7 +960,8 @@ static void regtail (char* p, const char* val)
 
 // regtail on operand of first argument; nop if operandless
 //
-static void regoptail (char* p, const char* val)
+static void
+regoptail(char * p, const char * val)
 {
   // "Operandless" and "op != BRANCH" are synonymous in practice.
   if (p == nullptr || p == &regdummy || OP(p) != BRANCH)
@@ -922,25 +980,31 @@ static void regoptail (char* p, const char* val)
 //
 // Global work variables for find().
 //
-static const char*  reginput; // String-input pointer.
-static const char*  regbol; // Beginning of input, for ^ check.
-static const char* *regstartp; // Pointer to startp array.
-static const char* *regendp; // Ditto for endp.
+static const char *  reginput;  // String-input pointer.
+static const char *  regbol;    // Beginning of input, for ^ check.
+static const char ** regstartp; // Pointer to startp array.
+static const char ** regendp;   // Ditto for endp.
 
 //
 // Forwards.
 //
-static int regtry (const char*, const char* *, const char* *, const char*);
-static int regmatch (const char*);
-static int regrepeat (const char*);
+static int
+regtry(const char *, const char **, const char **, const char *);
+static int
+regmatch(const char *);
+static int
+regrepeat(const char *);
 
 #ifdef DEBUG
-int      regnarrate = 0;
-void     regdump ();
-static char* regprop ();
+int regnarrate = 0;
+void
+regdump();
+static char *
+regprop();
 #endif
 
-bool vul_reg_exp::find (std::string const& s)
+bool
+vul_reg_exp::find(std::string const & s)
 {
   return find(s.c_str());
 }
@@ -949,15 +1013,17 @@ bool vul_reg_exp::find (std::string const& s)
 //: Matches the regular expression to the given string.
 // Returns true if found, and sets start and end indexes accordingly.
 
-bool vul_reg_exp::find (char const* string)
+bool
+vul_reg_exp::find(char const * string)
 {
-  const char* s;
+  const char * s;
 
   this->searchstring = string;
 
-   // Check validity of program.
-  if (!this->program || UCHARAT(this->program) != MAGIC) {
-    //RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
+  // Check validity of program.
+  if (!this->program || UCHARAT(this->program) != MAGIC)
+  {
+    // RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
     std::cout << "vul_reg_exp::find(): Compiled regular expression corrupted.\n";
     return false;
   }
@@ -966,7 +1032,8 @@ bool vul_reg_exp::find (char const* string)
   if (this->regmust != nullptr)
   {
     s = string;
-    while ((s = std::strchr(s, this->regmust[0])) != nullptr) {
+    while ((s = std::strchr(s, this->regmust[0])) != nullptr)
+    {
       if (std::strncmp(s, this->regmust, this->regmlen) == 0)
         break; // Found it.
       s++;
@@ -986,14 +1053,16 @@ bool vul_reg_exp::find (char const* string)
   s = string;
   if (this->regstart != '\0')
     // We know what char it must start with.
-    while ((s = std::strchr(s, this->regstart)) != nullptr) {
+    while ((s = std::strchr(s, this->regstart)) != nullptr)
+    {
       if (regtry(s, this->startp, this->endp, this->program))
         return true;
       s++;
     }
   else
     // We don't - general case.
-    do {
+    do
+    {
       if (regtry(s, this->startp, this->endp, this->program))
         return true;
     } while (*s++ != '\0');
@@ -1006,12 +1075,12 @@ bool vul_reg_exp::find (char const* string)
 // try match at specific point
 // 0 failure, 1 success
 //
-static int regtry(const char* string, const char* *start,
-                  const char* *end, const char* prog)
+static int
+regtry(const char * string, const char ** start, const char ** end, const char * prog)
 {
-  int   i;
-  const char* *sp1;
-  const char* *ep;
+  int           i;
+  const char ** sp1;
+  const char ** ep;
 
   reginput = string;
   regstartp = start;
@@ -1019,11 +1088,13 @@ static int regtry(const char* string, const char* *start,
 
   sp1 = start;
   ep = end;
-  for (i = vul_reg_exp_nsubexp; i > 0; i--) {
+  for (i = vul_reg_exp_nsubexp; i > 0; i--)
+  {
     *sp1++ = nullptr;
     *ep++ = nullptr;
   }
-  if (regmatch(prog + 1)) {
+  if (regmatch(prog + 1))
+  {
     start[0] = string;
     end[0] = reginput;
     return 1;
@@ -1043,10 +1114,11 @@ static int regtry(const char* string, const char* *start,
 // by recursion.
 // 0 failure, 1 success
 //
-static int regmatch(const char* prog)
+static int
+regmatch(const char * prog)
 {
-   const char* scan; // Current node.
-  const char* next; // Next node.
+  const char * scan; // Current node.
+  const char * next; // Next node.
 
   scan = prog;
 
@@ -1056,145 +1128,164 @@ static int regmatch(const char* prog)
 
     switch (OP(scan))
     {
-     case BOL:
-      if (reginput != regbol)
-        return 0;
-      break;
-     case EOL:
-      if (*reginput != '\0')
-        return 0;
-      break;
-     case ANY:
-      if (*reginput == '\0')
-        return 0;
-      reginput++;
-      break;
-     case EXACTLY:
-     {
-      int     len;
-      const char* opnd;
-
-      opnd = OPERAND(scan);
-      // Inline the first character, for speed.
-      if (*opnd != *reginput)
-        return 0;
-      len = (int)std::strlen(opnd);
-      if (len > 1 && std::strncmp(opnd, reginput, len) != 0)
-        return 0;
-      reginput += len;
-      break;
-     }
-     case ANYOF:
-      if (*reginput == '\0' || std::strchr(OPERAND(scan), *reginput) == nullptr)
-        return 0;
-      reginput++;
-      break;
-     case ANYBUT:
-      if (*reginput == '\0' || std::strchr(OPERAND(scan), *reginput) != nullptr)
-        return 0;
-      reginput++;
-      break;
-     case NOTHING:
-      break;
-     case BACK:
-      break;
-     case OPEN+1: case OPEN+2: case OPEN+3: case OPEN+4: case OPEN+5: case OPEN+6: case OPEN+7: case OPEN+8: case OPEN+9:
-     {
-      int no;
-      const char* save;
-
-      no = OP(scan) - OPEN;
-      save = reginput;
-
-      if (regmatch(next))
+      case BOL:
+        if (reginput != regbol)
+          return 0;
+        break;
+      case EOL:
+        if (*reginput != '\0')
+          return 0;
+        break;
+      case ANY:
+        if (*reginput == '\0')
+          return 0;
+        reginput++;
+        break;
+      case EXACTLY:
       {
-        //
-        // Don't set startp if some later invocation of the
-        // same parentheses already has.
-        //
-        if (regstartp[no] == nullptr)
-          regstartp[no] = save;
-        return 1;
+        int          len;
+        const char * opnd;
+
+        opnd = OPERAND(scan);
+        // Inline the first character, for speed.
+        if (*opnd != *reginput)
+          return 0;
+        len = (int)std::strlen(opnd);
+        if (len > 1 && std::strncmp(opnd, reginput, len) != 0)
+          return 0;
+        reginput += len;
+        break;
       }
-      else
-        return 0;
-     }
-     case CLOSE+1: case CLOSE+2: case CLOSE+3: case CLOSE+4: case CLOSE+5: case CLOSE+6: case CLOSE+7: case CLOSE+8: case CLOSE+9:
-     {
-      int  no;
-      const char* save;
-
-      no = OP(scan) - CLOSE;
-      save = reginput;
-
-      if (regmatch(next))
+      case ANYOF:
+        if (*reginput == '\0' || std::strchr(OPERAND(scan), *reginput) == nullptr)
+          return 0;
+        reginput++;
+        break;
+      case ANYBUT:
+        if (*reginput == '\0' || std::strchr(OPERAND(scan), *reginput) != nullptr)
+          return 0;
+        reginput++;
+        break;
+      case NOTHING:
+        break;
+      case BACK:
+        break;
+      case OPEN + 1:
+      case OPEN + 2:
+      case OPEN + 3:
+      case OPEN + 4:
+      case OPEN + 5:
+      case OPEN + 6:
+      case OPEN + 7:
+      case OPEN + 8:
+      case OPEN + 9:
       {
+        int          no;
+        const char * save;
+
+        no = OP(scan) - OPEN;
+        save = reginput;
+
+        if (regmatch(next))
+        {
+          //
+          // Don't set startp if some later invocation of the
+          // same parentheses already has.
+          //
+          if (regstartp[no] == nullptr)
+            regstartp[no] = save;
+          return 1;
+        }
+        else
+          return 0;
+      }
+      case CLOSE + 1:
+      case CLOSE + 2:
+      case CLOSE + 3:
+      case CLOSE + 4:
+      case CLOSE + 5:
+      case CLOSE + 6:
+      case CLOSE + 7:
+      case CLOSE + 8:
+      case CLOSE + 9:
+      {
+        int          no;
+        const char * save;
+
+        no = OP(scan) - CLOSE;
+        save = reginput;
+
+        if (regmatch(next))
+        {
+          //
+          // Don't set endp if some later invocation of the
+          // same parentheses already has.
+          //
+          if (regendp[no] == nullptr)
+            regendp[no] = save;
+          return 1;
+        }
+        else
+          return 0;
+      }
+      case BRANCH:
+      {
+        const char * save;
+
+        if (OP(next) != BRANCH) // No choice.
+          next = OPERAND(scan); // Avoid recursion.
+        else
+        {
+          do
+          {
+            save = reginput;
+            if (regmatch(OPERAND(scan)))
+              return 1;
+            reginput = save;
+            scan = regnext(scan);
+          } while (scan != nullptr && OP(scan) == BRANCH);
+          return 0;
+          // NOTREACHED
+        }
+        break;
+      }
+      case STAR:
+      case PLUS:
+      {
+        char         nextch;
+        int          no;
+        const char * save;
+        int          min_no;
+
         //
-        // Don't set endp if some later invocation of the
-        // same parentheses already has.
+        // Lookahead to avoid useless match attempts when we know
+        // what character comes next.
         //
-        if (regendp[no] == nullptr)
-          regendp[no] = save;
-        return 1;
-      }
-      else
+        nextch = '\0';
+        if (OP(next) == EXACTLY)
+          nextch = *OPERAND(next);
+        min_no = (OP(scan) == STAR) ? 0 : 1;
+        save = reginput;
+        no = regrepeat(OPERAND(scan));
+        while (no >= min_no)
+        {
+          // If it could work, try it.
+          if (nextch == '\0' || *reginput == nextch)
+            if (regmatch(next))
+              return 1;
+          // Couldn't or didn't - back up.
+          no--;
+          reginput = save + no;
+        }
         return 0;
-     }
-     case BRANCH:
-     {
-      const char* save;
+      }
+      case END:
+        return 1; // Success!
 
-      if (OP(next) != BRANCH) // No choice.
-        next = OPERAND(scan); // Avoid recursion.
-      else {
-        do {
-          save = reginput;
-          if (regmatch(OPERAND(scan)))
-            return 1;
-          reginput = save;
-          scan = regnext(scan);
-        } while (scan != nullptr && OP(scan) == BRANCH);
+      default:
+        // RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
+        std::cout << "vul_reg_exp::find(): Internal error -- memory corrupted.\n";
         return 0;
-        // NOTREACHED
-      }
-      break;
-     }
-     case STAR:
-     case PLUS:
-     {
-      char   nextch;
-      int    no;
-      const char* save;
-      int    min_no;
-
-      //
-      // Lookahead to avoid useless match attempts when we know
-      // what character comes next.
-      //
-      nextch = '\0';
-      if (OP(next) == EXACTLY)
-        nextch = *OPERAND(next);
-      min_no = (OP(scan) == STAR) ? 0 : 1;
-      save = reginput;
-      no = regrepeat(OPERAND(scan));
-      while (no >= min_no) {
-        // If it could work, try it.
-        if (nextch == '\0' || *reginput == nextch)
-          if (regmatch(next))
-            return 1;
-        // Couldn't or didn't - back up.
-        no--;
-        reginput = save + no;
-      }
-      return 0;
-     }
-     case END:
-      return 1; // Success!
-
-     default:
-      //RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
-      std::cout << "vul_reg_exp::find(): Internal error -- memory corrupted.\n";
-      return 0;
     }
     scan = next;
   }
@@ -1203,7 +1294,7 @@ static int regmatch(const char* prog)
   //  We get here only if there's trouble - normally "case END" is the
   //  terminating point.
   //
-  //RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
+  // RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
   std::cout << "vul_reg_exp::find(): Internal error -- corrupted pointers.\n";
   return 0;
 }
@@ -1211,42 +1302,46 @@ static int regmatch(const char* prog)
 
 // repeatedly match something simple, report how many
 //
-static int regrepeat(const char* p)
+static int
+regrepeat(const char * p)
 {
-  int     count = 0;
-  const char* scan;
-  const char* opnd;
+  int          count = 0;
+  const char * scan;
+  const char * opnd;
 
   scan = reginput;
   opnd = OPERAND(p);
   switch (OP(p))
   {
-   case ANY:
-    count = (int)std::strlen(scan);
-    scan += count;
-    break;
-   case EXACTLY:
-    while (*opnd == *scan) {
-      count++;
-      scan++;
-    }
-    break;
-   case ANYOF:
-    while (*scan != '\0' && std::strchr(opnd, *scan) != nullptr) {
-      count++;
-      scan++;
-    }
-    break;
-   case ANYBUT:
-    while (*scan != '\0' && std::strchr(opnd, *scan) == nullptr) {
-      count++;
-      scan++;
-    }
-    break;
-   default: // Oh dear.  Called inappropriately.
-    //RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
-    std::cout << "vul_reg_exp::find(): Internal error.\n";
-    return 0;
+    case ANY:
+      count = (int)std::strlen(scan);
+      scan += count;
+      break;
+    case EXACTLY:
+      while (*opnd == *scan)
+      {
+        count++;
+        scan++;
+      }
+      break;
+    case ANYOF:
+      while (*scan != '\0' && std::strchr(opnd, *scan) != nullptr)
+      {
+        count++;
+        scan++;
+      }
+      break;
+    case ANYBUT:
+      while (*scan != '\0' && std::strchr(opnd, *scan) == nullptr)
+      {
+        count++;
+        scan++;
+      }
+      break;
+    default: // Oh dear.  Called inappropriately.
+      // RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
+      std::cout << "vul_reg_exp::find(): Internal error.\n";
+      return 0;
   }
   reginput = scan;
   return count;
@@ -1255,7 +1350,8 @@ static int regrepeat(const char* p)
 
 // dig the "next" pointer out of a node
 //
-static const char* regnext(const char* p)
+static const char *
+regnext(const char * p)
 {
   int offset;
 
@@ -1273,7 +1369,8 @@ static const char* regnext(const char* p)
 }
 
 
-static char* regnext(char* p)
+static char *
+regnext(char * p)
 {
   int offset;
 

@@ -32,43 +32,48 @@ vgui_enhance_tableau::vgui_enhance_tableau()
   , size(50)
   , zoom_factor(1.5)
   , enable_key_bindings(false)
-{
-}
+{}
 
-vgui_enhance_tableau::vgui_enhance_tableau(vgui_tableau_sptr const&t)
-  : slot1(this,t)
+vgui_enhance_tableau::vgui_enhance_tableau(vgui_tableau_sptr const & t)
+  : slot1(this, t)
   , slot2(this)
   , enhancing_(false)
   , size(50)
   , zoom_factor(1.5)
   , enable_key_bindings(false)
-{
-}
+{}
 
-vgui_enhance_tableau::vgui_enhance_tableau(vgui_tableau_sptr const&t1, vgui_tableau_sptr const&t2)
-  : slot1(this,t1)
-  , slot2(this,t2)
+vgui_enhance_tableau::vgui_enhance_tableau(vgui_tableau_sptr const & t1, vgui_tableau_sptr const & t2)
+  : slot1(this, t1)
+  , slot2(this, t2)
   , enhancing_(false)
   , size(50)
   , zoom_factor(1.0)
   , enable_key_bindings(false)
-{
-}
+{}
 
-vgui_enhance_tableau::~vgui_enhance_tableau()
-{
-}
+vgui_enhance_tableau::~vgui_enhance_tableau() {}
 
-void vgui_enhance_tableau::set_child(vgui_tableau_sptr const&t)
+void
+vgui_enhance_tableau::set_child(vgui_tableau_sptr const & t)
 {
   slot1 = vgui_parent_child_link(this, t);
 }
 
-std::string vgui_enhance_tableau::file_name() const {return slot1->file_name();}
-std::string vgui_enhance_tableau::type_name() const {return "vgui_enhance_tableau";}
+std::string
+vgui_enhance_tableau::file_name() const
+{
+  return slot1->file_name();
+}
+std::string
+vgui_enhance_tableau::type_name() const
+{
+  return "vgui_enhance_tableau";
+}
 
 
-bool vgui_enhance_tableau::handle(const vgui_event& e)
+bool
+vgui_enhance_tableau::handle(const vgui_event & e)
 {
   if (!enhancing_ && e.type == vgui_BUTTON_DOWN && e.button == vgui_LEFT)
   {
@@ -98,27 +103,27 @@ bool vgui_enhance_tableau::handle(const vgui_event& e)
   {
     switch (e.key)
     {
-     case '[':
-      size -= 10;
-      size = (size <10) ? 10 : size;
-      post_redraw();
-      return true;
-     case ']':
-      size += 10;
-      post_redraw();
-      return true;
-     case '{':
-      zoom_factor -= 0.1f;
-      std::cerr << "enhance : zoom_factor = " << zoom_factor << std::endl;
-      post_redraw();
-      return true;
-     case '}':
-      zoom_factor += 0.1f;
-      std::cerr << "enhance : zoom_factor = " << zoom_factor << std::endl;
-      post_redraw();
-      return true;
-     default:
-      break; // quell warning
+      case '[':
+        size -= 10;
+        size = (size < 10) ? 10 : size;
+        post_redraw();
+        return true;
+      case ']':
+        size += 10;
+        post_redraw();
+        return true;
+      case '{':
+        zoom_factor -= 0.1f;
+        std::cerr << "enhance : zoom_factor = " << zoom_factor << std::endl;
+        post_redraw();
+        return true;
+      case '}':
+        zoom_factor += 0.1f;
+        std::cerr << "enhance : zoom_factor = " << zoom_factor << std::endl;
+        post_redraw();
+        return true;
+      default:
+        break; // quell warning
     };
   }
 
@@ -130,16 +135,16 @@ bool vgui_enhance_tableau::handle(const vgui_event& e)
     if (enhancing_)
     {
       // get original offsets and scales
-      vgui_matrix_state ms;
-      vnl_matrix_fixed<double,4,4> M = ms.modelview_matrix();
-      float sx = (float)M(0,0);
-      float sy = (float)M(0,0);
-      float ox = (float)M(0,3);
-      float oy = (float)M(1,3);
+      vgui_matrix_state              ms;
+      vnl_matrix_fixed<double, 4, 4> M = ms.modelview_matrix();
+      float                          sx = (float)M(0, 0);
+      float                          sy = (float)M(0, 0);
+      float                          ox = (float)M(0, 3);
+      float                          oy = (float)M(1, 3);
 
       glEnable(GL_SCISSOR_TEST);
-      int size_2 = size+size;
-      glScissor(x-size, y-size, size_2, size_2);
+      int size_2 = size + size;
+      glScissor(x - size, y - size, size_2, size_2);
 
       glMatrixMode(GL_MODELVIEW);
       glPushMatrix();
@@ -149,13 +154,14 @@ bool vgui_enhance_tableau::handle(const vgui_event& e)
       sx *= zoom_factor;
       sy *= zoom_factor;
 
-      GLint vp[4]; glGetIntegerv(GL_VIEWPORT,vp);
-      float dx = (        x) - ox;
-      float dy = (vp[3]-1-y) - oy;
-      float tmpx = zoom_factor*dx - dx;
-      float tmpy = zoom_factor*dy - dy;
+      GLint vp[4];
+      glGetIntegerv(GL_VIEWPORT, vp);
+      float dx = (x)-ox;
+      float dy = (vp[3] - 1 - y) - oy;
+      float tmpx = zoom_factor * dx - dx;
+      float tmpy = zoom_factor * dy - dy;
 
-      glTranslatef(ox-tmpx, oy-tmpy, 0);
+      glTranslatef(ox - tmpx, oy - tmpy, 0);
       glScalef(sx, sy, 1);
 
       if (slot2.child())

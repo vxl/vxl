@@ -3,48 +3,56 @@
 //:
 // \file
 
-void vsl_basic_xml_element::add_attribute_list(std::vector<std::pair<std::string, std::string> > attrs)
+void
+vsl_basic_xml_element::add_attribute_list(std::vector<std::pair<std::string, std::string>> attrs)
 {
-  for (const auto & attr : attrs) {
+  for (const auto & attr : attrs)
+  {
     attrs_.push_back(attr);
   }
 }
 
-void vsl_basic_xml_element::add_attribute(std::string attr_name, std::string value)
+void
+vsl_basic_xml_element::add_attribute(std::string attr_name, std::string value)
 {
   std::pair<std::string, std::string> attr(attr_name, value);
   attrs_.push_back(attr);
 }
 
-void vsl_basic_xml_element::add_attribute(std::string attr_name, double value)
+void
+vsl_basic_xml_element::add_attribute(std::string attr_name, double value)
 {
-  std::string value_str = toString(value);
+  std::string                         value_str = toString(value);
   std::pair<std::string, std::string> attr(attr_name, value_str.data());
   attrs_.push_back(attr);
 }
 
-void vsl_basic_xml_element::add_attribute(std::string attr_name, long value)
+void
+vsl_basic_xml_element::add_attribute(std::string attr_name, long value)
 {
-  std::string value_str = toString(value);
+  std::string                         value_str = toString(value);
   std::pair<std::string, std::string> attr(attr_name, value_str);
   attrs_.push_back(attr);
 }
 
-void vsl_basic_xml_element::append_cdata(const std::string& cdata)
+void
+vsl_basic_xml_element::append_cdata(const std::string & cdata)
 {
   if (cdata_.size() > 0)
     cdata_.append(" ");
   cdata_.append(cdata);
 }
 
-void vsl_basic_xml_element::append_cdata(double cdata)
+void
+vsl_basic_xml_element::append_cdata(double cdata)
 {
   if (cdata_.size() > 0)
     cdata_.append(" ");
   cdata_.append(toString(cdata));
 }
 
-void vsl_basic_xml_element::append_cdata(int cdata)
+void
+vsl_basic_xml_element::append_cdata(int cdata)
 {
   if (cdata_.size() > 0)
     cdata_.append(" ");
@@ -59,7 +67,8 @@ bool vsl_basic_xml_element::delete_attribute(std::string /*attr_name*/)
 }
 #endif
 
-void vsl_basic_xml_element::x_write(std::ostream& ostr)
+void
+vsl_basic_xml_element::x_write(std::ostream & ostr)
 {
   // put the initial bracket with element name and the attribute-value list
   x_write_open(ostr);
@@ -72,17 +81,20 @@ void vsl_basic_xml_element::x_write(std::ostream& ostr)
   x_write_close(ostr);
 }
 
-void vsl_basic_xml_element::x_write_open(std::ostream& ostr)
+void
+vsl_basic_xml_element::x_write_open(std::ostream & ostr)
 {
   ostr << '<' << tag_;
-  for (auto & attr : attrs_) {
+  for (auto & attr : attrs_)
+  {
     ostr << ' ' << attr.first << "=\"" << attr.second << '"';
   }
   ostr << ">\n";
 }
 
 //: writes the closing tag to the stream
-void vsl_basic_xml_element::x_write_close(std::ostream& ostr)
+void
+vsl_basic_xml_element::x_write_close(std::ostream & ostr)
 {
   ostr << "</" << tag_ << ">\n";
 }

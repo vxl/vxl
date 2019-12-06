@@ -32,43 +32,42 @@
 
 vgui_menu vgui_gtk2_adaptor::last_popup;
 
-extern "C" {
+extern "C"
+{
   static gint timeout_callback(gpointer);
 }
 
 //--------------------------------------------------------------------------------
 //: Constructors
-vgui_gtk2_adaptor::vgui_gtk2_adaptor(vgui_gtk2_window* win)
-  : idle_request_posted_(false),
-    widget(0),
-    win_(win),
-    ovl_helper(0),
-    last_mouse_x(0),
-    last_mouse_y(0)
+vgui_gtk2_adaptor::vgui_gtk2_adaptor(vgui_gtk2_window * win)
+  : idle_request_posted_(false)
+  , widget(0)
+  , win_(win)
+  , ovl_helper(0)
+  , last_mouse_x(0)
+  , last_mouse_y(0)
 {
   // Configure OpenGL-capable visual.
 
   // Try double-buffered visual
-  GdkGLConfig* glconfig = gdk_gl_config_new_by_mode (GdkGLConfigMode(GDK_GL_MODE_RGB |
-                                                                     GDK_GL_MODE_DEPTH |
-                                                                     GDK_GL_MODE_DOUBLE));
+  GdkGLConfig * glconfig =
+    gdk_gl_config_new_by_mode(GdkGLConfigMode(GDK_GL_MODE_RGB | GDK_GL_MODE_DEPTH | GDK_GL_MODE_DOUBLE));
   if (glconfig == 0)
   {
-    g_print ("*** Cannot find the double-buffered visual.\n");
-    g_print ("*** Trying single-buffered visual.\n");
+    g_print("*** Cannot find the double-buffered visual.\n");
+    g_print("*** Trying single-buffered visual.\n");
 
     // Try single-buffered visual
-    glconfig = gdk_gl_config_new_by_mode(GdkGLConfigMode(GDK_GL_MODE_RGB |
-                                                         GDK_GL_MODE_DEPTH));
+    glconfig = gdk_gl_config_new_by_mode(GdkGLConfigMode(GDK_GL_MODE_RGB | GDK_GL_MODE_DEPTH));
     if (glconfig == 0)
     {
-      g_print ("*** No appropriate OpenGL-capable visual found.\n");
+      g_print("*** No appropriate OpenGL-capable visual found.\n");
       std::abort();
     }
   }
 
-  widget = gtk_drawing_area_new ();
-  //gtk_widget_set_size_request (drawing_area, 300, 300);
+  widget = gtk_drawing_area_new();
+  // gtk_widget_set_size_request (drawing_area, 300, 300);
 
   if (!widget)
   {
@@ -77,11 +76,7 @@ vgui_gtk2_adaptor::vgui_gtk2_adaptor(vgui_gtk2_window* win)
   }
 
   // Set OpenGL-capability to the widget.
-  if ( !gtk_widget_set_gl_capability(widget,
-                                     glconfig,
-                                     0 /*NULL*/,
-                                     TRUE,
-                                     GDK_GL_RGBA_TYPE) )
+  if (!gtk_widget_set_gl_capability(widget, glconfig, 0 /*NULL*/, TRUE, GDK_GL_RGBA_TYPE))
   {
     std::cerr << __FILE__ << " : Could not set GL capability!\n";
     std::abort();
@@ -90,18 +85,12 @@ vgui_gtk2_adaptor::vgui_gtk2_adaptor(vgui_gtk2_window* win)
   // Since we need to access the widget from time to time (e.g. to
   // make this OpenGL context the current context), we need to keep a
   // reference to the widget.
-  gtk_object_ref( GTK_OBJECT(widget) );
+  gtk_object_ref(GTK_OBJECT(widget));
 
   gtk_widget_set_events(widget,
-                        GDK_EXPOSURE_MASK |
-                        GDK_POINTER_MOTION_MASK |
-                        GDK_POINTER_MOTION_HINT_MASK |
-                        GDK_BUTTON_PRESS_MASK |
-                        GDK_BUTTON_RELEASE_MASK |
-                        GDK_KEY_PRESS_MASK |
-                        GDK_KEY_RELEASE_MASK |
-                        GDK_ENTER_NOTIFY_MASK |
-                        GDK_LEAVE_NOTIFY_MASK);
+                        GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
+                          GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK |
+                          GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
 
 #if 0
   gtk_signal_connect(GTK_OBJECT(widget), "event", GTK_SIGNAL_FUNC(handle), this);
@@ -131,31 +120,35 @@ vgui_gtk2_adaptor::~vgui_gtk2_adaptor()
   ovl_helper = 0;
 
   glFlush();
-  gtk_object_unref( GTK_OBJECT(widget) );
+  gtk_object_unref(GTK_OBJECT(widget));
   widget = 0; // to detect potential bugs
 }
 
 
-vgui_window* vgui_gtk2_adaptor::get_window() const
+vgui_window *
+vgui_gtk2_adaptor::get_window() const
 {
   return win_;
 }
 
-void vgui_gtk2_adaptor::swap_buffers()
+void
+vgui_gtk2_adaptor::swap_buffers()
 {
   make_current();
-  gdk_gl_drawable_swap_buffers (gtk_widget_get_gl_drawable(widget));
+  gdk_gl_drawable_swap_buffers(gtk_widget_get_gl_drawable(widget));
 }
 
-void vgui_gtk2_adaptor::make_current()
+void
+vgui_gtk2_adaptor::make_current()
 {
-  GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
-  GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
-  assert( gldrawable );
+  GdkGLContext *  glcontext = gtk_widget_get_gl_context(widget);
+  GdkGLDrawable * gldrawable = gtk_widget_get_gl_drawable(widget);
+  assert(gldrawable);
   gdk_gl_drawable_make_current(gldrawable, glcontext);
 }
 
-void vgui_gtk2_adaptor::post_redraw()
+void
+vgui_gtk2_adaptor::post_redraw()
 {
   if (!redraw_requested)
   {
@@ -164,16 +157,19 @@ void vgui_gtk2_adaptor::post_redraw()
   }
 }
 
-void vgui_gtk2_adaptor::post_overlay_redraw()
+void
+vgui_gtk2_adaptor::post_overlay_redraw()
 {
   if (!ovl_helper)
     ovl_helper = new vgui_overlay_helper(this);
   ovl_helper->post_overlay_redraw();
 }
 
-void vgui_gtk2_adaptor::post_idle_request()
+void
+vgui_gtk2_adaptor::post_idle_request()
 {
-  if (!idle_request_posted_){
+  if (!idle_request_posted_)
+  {
     idle_request_posted_ = true;
     g_idle_add(idle_callback_for_tableaux, this);
   }
@@ -182,32 +178,31 @@ void vgui_gtk2_adaptor::post_idle_request()
 //: gtk will pass this structure to the timer callback.
 typedef struct
 {
-  vgui_gtk2_adaptor *adapt;
-  int name;
+  vgui_gtk2_adaptor * adapt;
+  int                 name;
 } vgui_gtk2_adaptor_callback_data;
 
 //: timeout is in milliseconds
-void vgui_gtk2_adaptor::post_timer(float timeout, int name)
+void
+vgui_gtk2_adaptor::post_timer(float timeout, int name)
 {
-  vgui_gtk2_adaptor_callback_data *cd = new vgui_gtk2_adaptor_callback_data; // <*> acquire
+  vgui_gtk2_adaptor_callback_data * cd = new vgui_gtk2_adaptor_callback_data; // <*> acquire
   cd->adapt = this;
   cd->name = name;
 
-  gint id = gtk_timeout_add(int(timeout),
-                            timeout_callback,
-                            cd);
+  gint id = gtk_timeout_add(int(timeout), timeout_callback, cd);
 
   // add them to timer map
-  internal_timer i( id, (void*)cd );
-  timers_.insert( std::pair<int, internal_timer>(name, i) );
+  internal_timer i(id, (void *)cd);
+  timers_.insert(std::pair<int, internal_timer>(name, i));
 }
 
 //: timeout is in milliseconds
-void vgui_gtk2_adaptor::kill_timer(int name)
+void
+vgui_gtk2_adaptor::kill_timer(int name)
 {
-  std::map<int, internal_timer>::iterator it
-    = timers_.find( name );
-  if ( it == timers_.end() )  // if such timer does not exist
+  std::map<int, internal_timer>::iterator it = timers_.find(name);
+  if (it == timers_.end()) // if such timer does not exist
     return;
 
   internal_timer timer;
@@ -215,13 +210,14 @@ void vgui_gtk2_adaptor::kill_timer(int name)
   // remove timer
   gtk_timeout_remove(timer.real_id_);
   // remove callback ptr
-  delete  (vgui_gtk2_adaptor_callback_data*)(timer.callback_ptr_);
+  delete (vgui_gtk2_adaptor_callback_data *)(timer.callback_ptr_);
 
   // remove timer from map
   timers_.erase(it);
 }
 
-void vgui_gtk2_adaptor::post_destroy()
+void
+vgui_gtk2_adaptor::post_destroy()
 {
   if (!destroy_requested)
   {
@@ -237,7 +233,8 @@ void vgui_gtk2_adaptor::set_default_popup(vgui_menu)
 #endif
 }
 
-vgui_menu vgui_gtk2_adaptor::get_popup()
+vgui_menu
+vgui_gtk2_adaptor::get_popup()
 {
 #ifdef DEBUG
   std::cerr << "vgui_gtk2_adaptor::get_popup\n";
@@ -245,48 +242,42 @@ vgui_menu vgui_gtk2_adaptor::get_popup()
   return vgui_menu();
 }
 
-gint vgui_gtk2_adaptor::handle_configure(
-                               GtkWidget *widget,
-                               GdkEvent *gev,
-                               gpointer context)
+gint
+vgui_gtk2_adaptor::handle_configure(GtkWidget * widget, GdkEvent * gev, gpointer context)
 {
-  vgui_gtk2_adaptor* adaptor = (vgui_gtk2_adaptor*) context;
+  vgui_gtk2_adaptor * adaptor = (vgui_gtk2_adaptor *)context;
 
   // The following 5 lines are required to make GL context available
   // so that some GL functions (such as glGenLists()) can succeed.
-  GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
-  GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
-  if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
+  GdkGLContext *  glcontext = gtk_widget_get_gl_context(widget);
+  GdkGLDrawable * gldrawable = gtk_widget_get_gl_drawable(widget);
+  if (!gdk_gl_drawable_gl_begin(gldrawable, glcontext))
     return FALSE;
-  gdk_gl_drawable_gl_end (gldrawable);
+  gdk_gl_drawable_gl_end(gldrawable);
 
   adaptor->reshape();
   return TRUE;
 }
 
-gint vgui_gtk2_adaptor::handle_draw(
-                               GtkWidget *widget,
-                               GdkEvent *gev,
-                               gpointer context)
+gint
+vgui_gtk2_adaptor::handle_draw(GtkWidget * widget, GdkEvent * gev, gpointer context)
 {
-  vgui_gtk2_adaptor* adaptor = (vgui_gtk2_adaptor*) context;
+  vgui_gtk2_adaptor * adaptor = (vgui_gtk2_adaptor *)context;
   adaptor->draw();
   return TRUE;
 }
 
-gint vgui_gtk2_adaptor::handle_motion_notify(
-                               GtkWidget *widget,
-                               GdkEvent *gev,
-                               gpointer context)
+gint
+vgui_gtk2_adaptor::handle_motion_notify(GtkWidget * widget, GdkEvent * gev, gpointer context)
 {
-  vgui_gtk2_adaptor* adaptor = (vgui_gtk2_adaptor*) context;
-  vgui_event event;
+  vgui_gtk2_adaptor * adaptor = (vgui_gtk2_adaptor *)context;
+  vgui_event          event;
 
   event.type = vgui_MOTION;
-  GdkEventMotion *e = (GdkEventMotion*)gev;
+  GdkEventMotion * e = (GdkEventMotion *)gev;
   if (e->is_hint)
   {
-    int x,y;
+    int             x, y;
     GdkModifierType state;
     gdk_window_get_pointer(e->window, &x, &y, &state);
     vgui_gtk2_utils::set_modifiers(event, state);
@@ -294,8 +285,8 @@ gint vgui_gtk2_adaptor::handle_motion_notify(
   }
   else
   {
-    vgui_gtk2_utils::set_modifiers(event,e->state);
-    vgui_gtk2_utils::set_coordinates(event,e->x, e->y);
+    vgui_gtk2_utils::set_modifiers(event, e->state);
+    vgui_gtk2_utils::set_coordinates(event, e->x, e->y);
   }
   adaptor->last_mouse_x = event.wx;
   adaptor->last_mouse_y = event.wy;
@@ -304,33 +295,30 @@ gint vgui_gtk2_adaptor::handle_motion_notify(
 }
 
 
-gint vgui_gtk2_adaptor::handle_button(
-                               GtkWidget *widget,
-                               GdkEvent *gev,
-                               gpointer context)
+gint
+vgui_gtk2_adaptor::handle_button(GtkWidget * widget, GdkEvent * gev, gpointer context)
 {
-  vgui_gtk2_adaptor* adaptor = (vgui_gtk2_adaptor*) context;
-  vgui_event event;
-  GdkEventType type = gev->type;
+  vgui_gtk2_adaptor * adaptor = (vgui_gtk2_adaptor *)context;
+  vgui_event          event;
+  GdkEventType        type = gev->type;
 
-  if (type==GDK_BUTTON_PRESS)
+  if (type == GDK_BUTTON_PRESS)
     event.type = vgui_BUTTON_DOWN;
-  else if (type==GDK_BUTTON_RELEASE)
+  else if (type == GDK_BUTTON_RELEASE)
     event.type = vgui_BUTTON_UP;
-  GdkEventButton *e = (GdkEventButton*)gev;
+  GdkEventButton * e = (GdkEventButton *)gev;
   event.button = vgui_gtk2_utils::translate_button(e->button);
-  vgui_gtk2_utils::set_modifiers(event,e->state);
-  vgui_gtk2_utils::set_coordinates(event,e->x, e->y);
+  vgui_gtk2_utils::set_modifiers(event, e->state);
+  vgui_gtk2_utils::set_coordinates(event, e->x, e->y);
   adaptor->last_mouse_x = event.wx;
   adaptor->last_mouse_y = event.wy;
 
-  if (event.type == vgui_BUTTON_DOWN &&
-      event.button == adaptor->popup_button &&
+  if (event.type == vgui_BUTTON_DOWN && event.button == adaptor->popup_button &&
       event.modifier == adaptor->popup_modifier)
   {
-    GdkEventButton *bevent = (GdkEventButton *)gev;
+    GdkEventButton * bevent = (GdkEventButton *)gev;
 
-    GtkWidget *popup_menu = gtk_menu_new ();    /* Don't need to show menus */
+    GtkWidget * popup_menu = gtk_menu_new(); /* Don't need to show menus */
 
     vgui_popup_params params;
     params.x = event.wx;
@@ -341,51 +329,46 @@ gint vgui_gtk2_adaptor::handle_button(
     adaptor->last_popup = adaptor->get_total_popup(params);
 
     vgui_gtk2_utils::set_menu(popup_menu, adaptor->last_popup, false);
-    gtk_menu_popup(GTK_MENU(popup_menu), 0/*NULL*/, 0/*NULL*/, 0/*NULL*/, 0/*NULL*/,
-                   bevent->button, bevent->time);
+    gtk_menu_popup(GTK_MENU(popup_menu), 0 /*NULL*/, 0 /*NULL*/, 0 /*NULL*/, 0 /*NULL*/, bevent->button, bevent->time);
     return TRUE;
   }
 
   return handle(event, widget, gev, context);
 }
 
-gint vgui_gtk2_adaptor::handle_key(
-                               GtkWidget *widget,
-                               GdkEvent *gev,
-                               gpointer context)
+gint
+vgui_gtk2_adaptor::handle_key(GtkWidget * widget, GdkEvent * gev, gpointer context)
 {
-  vgui_gtk2_adaptor* adaptor = (vgui_gtk2_adaptor*) context;
-  vgui_event event;
-  GdkEventType type = gev->type;
+  vgui_gtk2_adaptor * adaptor = (vgui_gtk2_adaptor *)context;
+  vgui_event          event;
+  GdkEventType        type = gev->type;
 
-  if (type==GDK_KEY_PRESS)
+  if (type == GDK_KEY_PRESS)
     event.type = vgui_KEY_PRESS;
-  else if (type==GDK_KEY_RELEASE)
+  else if (type == GDK_KEY_RELEASE)
     event.type = vgui_KEY_RELEASE;
-  GdkEventKey *e = (GdkEventKey*)gev;
-  event.set_key( vgui_gtk2_utils::translate_key(e));
+  GdkEventKey * e = (GdkEventKey *)gev;
+  event.set_key(vgui_gtk2_utils::translate_key(e));
   event.ascii_char = vgui_gtk2_utils::translate_key(e);
-  vgui_gtk2_utils::set_modifiers(event,e->state);
+  vgui_gtk2_utils::set_modifiers(event, e->state);
   event.wx = adaptor->last_mouse_x;
   event.wy = adaptor->last_mouse_y;
 
   return handle(event, widget, gev, context);
 }
 
-gint vgui_gtk2_adaptor::handle_enter_leave(
-                               GtkWidget *widget,
-                               GdkEvent *gev,
-                               gpointer context)
+gint
+vgui_gtk2_adaptor::handle_enter_leave(GtkWidget * widget, GdkEvent * gev, gpointer context)
 {
-  vgui_event event;
+  vgui_event   event;
   GdkEventType type = gev->type;
 
-  if (type==GDK_ENTER_NOTIFY)
+  if (type == GDK_ENTER_NOTIFY)
   {
     event.type = vgui_ENTER;
     gtk_widget_grab_focus(GTK_WIDGET(widget));
   }
-  else if (type==GDK_LEAVE_NOTIFY)
+  else if (type == GDK_LEAVE_NOTIFY)
   {
     event.type = vgui_LEAVE;
   }
@@ -393,12 +376,10 @@ gint vgui_gtk2_adaptor::handle_enter_leave(
   return handle(event, widget, gev, context);
 }
 
-gint vgui_gtk2_adaptor::handle(const vgui_event &event,
-                               GtkWidget *widget,
-                               GdkEvent *gev,
-                               gpointer context)
+gint
+vgui_gtk2_adaptor::handle(const vgui_event & event, GtkWidget * widget, GdkEvent * gev, gpointer context)
 {
-  vgui_gtk2_adaptor* adaptor = (vgui_gtk2_adaptor*) context;
+  vgui_gtk2_adaptor * adaptor = (vgui_gtk2_adaptor *)context;
 
   bool ret_value = TRUE;
   if (vgui_gtk2_utils::is_modifier(gev))
@@ -409,7 +390,7 @@ gint vgui_gtk2_adaptor::handle(const vgui_event &event,
 #endif
   // Only send events to the tableau if the widget is mapped; that is,
   // only when an OpenGL context exists.
-  if ( GTK_WIDGET_MAPPED(widget) )
+  if (GTK_WIDGET_MAPPED(widget))
   {
     if (adaptor->ovl_helper)
       adaptor->ovl_helper->dispatch(event);
@@ -417,21 +398,21 @@ gint vgui_gtk2_adaptor::handle(const vgui_event &event,
       adaptor->dispatch_to_tableau(event);
   }
   else
-    std::cerr << __FILE__ << ": error: event " << event
-             << " while GL area was not mapped\n";
+    std::cerr << __FILE__ << ": error: event " << event << " while GL area was not mapped\n";
 
   return ret_value;
 }
 
 
-void vgui_gtk2_adaptor::reshape()
+void
+vgui_gtk2_adaptor::reshape()
 {
   width = widget->allocation.width;
   height = widget->allocation.height;
 
   // Only send events to the tableau if the widget is mapped; that is,
   // only when an OpenGL context exists.
-  if ( GTK_WIDGET_MAPPED(widget) )
+  if (GTK_WIDGET_MAPPED(widget))
   {
     make_current();
     if (ovl_helper)
@@ -441,21 +422,23 @@ void vgui_gtk2_adaptor::reshape()
   }
 }
 
-bool vgui_gtk2_adaptor::do_idle()
+bool
+vgui_gtk2_adaptor::do_idle()
 {
-  if ( idle_request_posted_ )
-    idle_request_posted_ =  dispatch_to_tableau( vgui_event( vgui_IDLE ) );
+  if (idle_request_posted_)
+    idle_request_posted_ = dispatch_to_tableau(vgui_event(vgui_IDLE));
   return idle_request_posted_;
 }
 
 //--------------------------------------------------------------------------------
 //: This is overriding the gtk draw() method.
-void vgui_gtk2_adaptor::draw()
+void
+vgui_gtk2_adaptor::draw()
 {
 #ifdef DEBUG
   std::cerr << "vgui_gtk2_adaptor::draw\n";
 #endif
-  if ( GTK_WIDGET_MAPPED(widget) )
+  if (GTK_WIDGET_MAPPED(widget))
   {
     make_current();
     glDrawBuffer(GL_BACK);
@@ -470,17 +453,19 @@ void vgui_gtk2_adaptor::draw()
 }
 
 
-gint vgui_gtk2_adaptor::idle_callback_for_tableaux(gpointer data)
+gint
+vgui_gtk2_adaptor::idle_callback_for_tableaux(gpointer data)
 {
-  vgui_gtk2_adaptor *adaptor = static_cast<vgui_gtk2_adaptor*>(data);
+  vgui_gtk2_adaptor * adaptor = static_cast<vgui_gtk2_adaptor *>(data);
 
   return adaptor->do_idle();
 }
 
 
-gint vgui_gtk2_adaptor::idle_callback_for_redraw(gpointer data)
+gint
+vgui_gtk2_adaptor::idle_callback_for_redraw(gpointer data)
 {
-  vgui_gtk2_adaptor *adaptor = static_cast<vgui_gtk2_adaptor*>(data);
+  vgui_gtk2_adaptor * adaptor = static_cast<vgui_gtk2_adaptor *>(data);
 
   adaptor->draw();
 
@@ -492,13 +477,14 @@ gint vgui_gtk2_adaptor::idle_callback_for_redraw(gpointer data)
 
 // Callback setup by post_destroy. First notifies tableau of the impending
 // destruction. Then deletes the adaptor and its associated window.
-gint vgui_gtk2_adaptor::idle_callback_for_destroy(gpointer data)
+gint
+vgui_gtk2_adaptor::idle_callback_for_destroy(gpointer data)
 {
-  vgui_gtk2_adaptor *adaptor = static_cast<vgui_gtk2_adaptor*>(data);
+  vgui_gtk2_adaptor * adaptor = static_cast<vgui_gtk2_adaptor *>(data);
 
   adaptor->dispatch_to_tableau(vgui_DESTROY);
 
-  vgui_window* win = adaptor->get_window();
+  vgui_window * win = adaptor->get_window();
 
   // If we know the parent window then delete it now.
   if (win)
@@ -514,11 +500,13 @@ gint vgui_gtk2_adaptor::idle_callback_for_destroy(gpointer data)
   return FALSE;
 }
 
-extern "C" {
-  gint timeout_callback(gpointer data)
+extern "C"
+{
+  gint
+  timeout_callback(gpointer data)
   {
-    vgui_gtk2_adaptor_callback_data* cd = static_cast<vgui_gtk2_adaptor_callback_data*> (data);
-    vgui_event e(vgui_TIMER);
+    vgui_gtk2_adaptor_callback_data * cd = static_cast<vgui_gtk2_adaptor_callback_data *>(data);
+    vgui_event                        e(vgui_TIMER);
     e.timer_id = cd->name;
     cd->adapt->dispatch_to_tableau(e);
 

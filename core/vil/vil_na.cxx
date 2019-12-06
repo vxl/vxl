@@ -15,38 +15,39 @@
 // This returns the bit pattern 0x7ff00000000007a2, as used by Octave and R
 // Don't assume that any VXL functions will treat the value as NA rather than NaN, unless
 // explicitly documented.
-double vil_na(double)
+double
+vil_na(double)
 {
   double a;
 
 #if VXL_HAS_INT_64
-  *reinterpret_cast<vxl_uint_64*>(&a) = 0x7ff00000000007a2LL;
+  *reinterpret_cast<vxl_uint_64 *>(&a) = 0x7ff00000000007a2LL;
 #else
-# if VXL_BIG_ENDIAN
-#  define hw 0
-#  define lw 1
-# else  // VXL_LITTLE_ENDIAN
-#  define hw 1
-#  define lw 0
-# endif
-  reinterpret_cast<vxl_uint_32*>(&a)[hw]=0x7ff00000;
-  reinterpret_cast<vxl_uint_32*>(&a)[lw]=0x000007a2;
+#  if VXL_BIG_ENDIAN
+#    define hw 0
+#    define lw 1
+#  else // VXL_LITTLE_ENDIAN
+#    define hw 1
+#    define lw 0
+#  endif
+  reinterpret_cast<vxl_uint_32 *>(&a)[hw] = 0x7ff00000;
+  reinterpret_cast<vxl_uint_32 *>(&a)[lw] = 0x000007a2;
 #endif
 
   return a;
 }
 
 
-
 //: A particular qNaN to indicate not available.
 // This returns the bit pattern 0x7f8007a2
 // Don't assume that any VXL functions will treat the value as NA rather than NaN, unless
 // explicitly documented.
-float vil_na(float)
+float
+vil_na(float)
 {
   float a;
 
-  *reinterpret_cast<vxl_uint_32*>(&a) = 0x7f8007a2L;
+  *reinterpret_cast<vxl_uint_32 *>(&a) = 0x7f8007a2L;
 
   return a;
 }
@@ -54,22 +55,24 @@ float vil_na(float)
 
 //: True if parameter is specific NA qNaN.
 // Tests for bit pattern 0x7ff00000000007a2, as used by Octave and R
-bool vil_na_isna(double x)
+bool
+vil_na_isna(double x)
 {
 #if VXL_HAS_INT_64
-  return ((*reinterpret_cast<vxl_uint_64*>(&x))&0xfff7ffffffffffffLL) // ignore signalling bit
-    == 0x7ff00000000007a2LL;
+  return ((*reinterpret_cast<vxl_uint_64 *>(&x)) & 0xfff7ffffffffffffLL) // ignore signalling bit
+         == 0x7ff00000000007a2LL;
 #else
-  return ((reinterpret_cast<vxl_int_32*>(&x)[hw]) & 0xfff7ffff) == 0x7ff00000 &&
-         reinterpret_cast<vxl_int_32*>(&x)[lw] == 0x000007a2;
+  return ((reinterpret_cast<vxl_int_32 *>(&x)[hw]) & 0xfff7ffff) == 0x7ff00000 &&
+         reinterpret_cast<vxl_int_32 *>(&x)[lw] == 0x000007a2;
 #endif
 }
 
 //: True if parameter is specific NA qNaN.
 // Tests for bit pattern 0x7F8007a2
-bool vil_na_isna(float x)
+bool
+vil_na_isna(float x)
 {
-  return ((*reinterpret_cast<vxl_uint_32*>(&x))&0xffbfffffL) // ignore signalling bit
-    == 0x7f8007a2L;
+  return ((*reinterpret_cast<vxl_uint_32 *>(&x)) & 0xffbfffffL) // ignore signalling bit
+         == 0x7f8007a2L;
 }
 //----------------------------------------------------------------------

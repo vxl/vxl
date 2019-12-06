@@ -15,7 +15,7 @@
 // end_       : end of section in the underlying stream. -1 if there is no (explicit) end.
 // current_   : current position (in the underlying stream) of the adapted stream.
 
-vil_stream_section::vil_stream_section(vil_stream *underlying, int begin)
+vil_stream_section::vil_stream_section(vil_stream * underlying, int begin)
   : underlying_(underlying)
   , begin_(begin)
   , end_((vil_streampos)(-1L))
@@ -26,7 +26,7 @@ vil_stream_section::vil_stream_section(vil_stream *underlying, int begin)
   underlying_->ref();
 }
 
-vil_stream_section::vil_stream_section(vil_stream *underlying, int begin, int end)
+vil_stream_section::vil_stream_section(vil_stream * underlying, int begin, int end)
   : underlying_(underlying)
   , begin_(begin)
   , end_(end)
@@ -42,23 +42,24 @@ vil_stream_section::~vil_stream_section()
 {
   // unreffing the underlying stream might cause deletion of *this, so
   // zero out the pointer first.
-  vil_stream *u = underlying_;
+  vil_stream * u = underlying_;
   underlying_ = nullptr;
   u->unref();
 }
 
-vil_streampos vil_stream_section::write(void const* buf, vil_streampos n)
+vil_streampos
+vil_stream_section::write(void const * buf, vil_streampos n)
 {
   assert(n >= 0); // wouldn't you want to be told?
 
   // huh? this should never happen, even if someone else is
   // manipulating the underlying stream too.
-  assert(begin_<=current_);
+  assert(begin_ <= current_);
   if (end_ != -1L)
-    assert(current_<=end_);
+    assert(current_ <= end_);
 
   // shrink given buffer so it fits into our section.
-  if (end_ != -1L  &&  current_ + n > end_)
+  if (end_ != -1L && current_ + n > end_)
     n = end_ - current_;
 
   // seek to where we have been telling the clients we are.
@@ -74,18 +75,19 @@ vil_streampos vil_stream_section::write(void const* buf, vil_streampos n)
   return nb;
 }
 
-vil_streampos vil_stream_section::read(void* buf, vil_streampos n)
+vil_streampos
+vil_stream_section::read(void * buf, vil_streampos n)
 {
   assert(n >= 0); // wouldn't you want to be told?
 
   // huh? this should never happen, even if someone else is
   // manipulating the underlying stream too.
-  assert(begin_<=current_);
+  assert(begin_ <= current_);
   if (end_ != -1L)
-    assert(current_<=end_);
+    assert(current_ <= end_);
 
   // shrink given buffer so it fits into our section.
-  if (end_ != -1L  &&  current_ + n > end_)
+  if (end_ != -1L && current_ + n > end_)
     n = end_ - current_;
 
   // seek to where we have been telling the clients we are.
@@ -101,11 +103,13 @@ vil_streampos vil_stream_section::read(void* buf, vil_streampos n)
   return nb;
 }
 
-void vil_stream_section::seek(vil_streampos position)
+void
+vil_stream_section::seek(vil_streampos position)
 {
   assert(position >= 0); // I would want to be told about this.
 
-  if (end_ != -1L  &&  begin_ + position > end_) {
+  if (end_ != -1L && begin_ + position > end_)
+  {
     std::cerr << __FILE__ << ": attempt to seek past given section (failed).\n";
     return;
   }
@@ -113,7 +117,8 @@ void vil_stream_section::seek(vil_streampos position)
     current_ = begin_ + position;
 }
 
-vil_streampos vil_stream_section::file_size() const
+vil_streampos
+vil_stream_section::file_size() const
 {
   return end_ >= begin_ ? end_ - begin_ : underlying_->file_size() - begin_;
 }

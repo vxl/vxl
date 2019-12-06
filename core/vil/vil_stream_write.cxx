@@ -11,7 +11,8 @@
 #include "vil/vil_stream.h"
 #include "vxl_config.h"
 
-void vil_stream_write_big_endian_uint_16(vil_stream *s, vxl_uint_16 w)
+void
+vil_stream_write_big_endian_uint_16(vil_stream * s, vxl_uint_16 w)
 {
   vxl_uint_8 bytes[2];
   bytes[0] = vxl_uint_8(w >> 8);
@@ -19,7 +20,8 @@ void vil_stream_write_big_endian_uint_16(vil_stream *s, vxl_uint_16 w)
   s->write(bytes, sizeof bytes);
 }
 
-void vil_stream_write_little_endian_uint_16(vil_stream *s, vxl_uint_16 w)
+void
+vil_stream_write_little_endian_uint_16(vil_stream * s, vxl_uint_16 w)
 {
   vxl_uint_8 bytes[2];
   bytes[0] = vxl_uint_8(w & 0xff);
@@ -27,7 +29,8 @@ void vil_stream_write_little_endian_uint_16(vil_stream *s, vxl_uint_16 w)
   s->write(bytes, sizeof bytes);
 }
 
-void vil_stream_write_big_endian_uint_32(vil_stream *s, vxl_uint_32 w)
+void
+vil_stream_write_big_endian_uint_32(vil_stream * s, vxl_uint_32 w)
 {
   vxl_byte bytes[4];
   bytes[0] = w >> 24;
@@ -37,7 +40,8 @@ void vil_stream_write_big_endian_uint_32(vil_stream *s, vxl_uint_32 w)
   s->write(bytes, sizeof bytes);
 }
 
-void vil_stream_write_little_endian_uint_32(vil_stream *s, vxl_uint_32 w)
+void
+vil_stream_write_little_endian_uint_32(vil_stream * s, vxl_uint_32 w)
 {
   vxl_byte bytes[4];
   bytes[0] = w >> 0;
@@ -47,7 +51,8 @@ void vil_stream_write_little_endian_uint_32(vil_stream *s, vxl_uint_32 w)
   s->write(bytes, sizeof bytes);
 }
 
-void vil_stream_write_big_endian_int_32(vil_stream *s, vxl_int_32 w)
+void
+vil_stream_write_big_endian_int_32(vil_stream * s, vxl_int_32 w)
 {
   vxl_byte bytes[4];
   bytes[0] = w >> 24;
@@ -57,7 +62,8 @@ void vil_stream_write_big_endian_int_32(vil_stream *s, vxl_int_32 w)
   s->write(bytes, sizeof bytes);
 }
 
-void vil_stream_write_little_endian_int_32(vil_stream *s, vxl_int_32 w)
+void
+vil_stream_write_little_endian_int_32(vil_stream * s, vxl_int_32 w)
 {
   vxl_byte bytes[4];
   bytes[0] = w >> 0;
@@ -69,7 +75,8 @@ void vil_stream_write_little_endian_int_32(vil_stream *s, vxl_int_32 w)
 
 #if VXL_HAS_INT_64
 
-void vil_stream_write_big_endian_uint_64(vil_stream *s, vxl_uint_64 w)
+void
+vil_stream_write_big_endian_uint_64(vil_stream * s, vxl_uint_64 w)
 {
   vxl_byte bytes[8];
   bytes[0] = static_cast<vxl_byte>(w >> 56);
@@ -83,7 +90,8 @@ void vil_stream_write_big_endian_uint_64(vil_stream *s, vxl_uint_64 w)
   s->write(bytes, sizeof bytes);
 }
 
-void vil_stream_write_little_endian_uint_64(vil_stream *s, vxl_uint_64 w)
+void
+vil_stream_write_little_endian_uint_64(vil_stream * s, vxl_uint_64 w)
 {
   vxl_byte bytes[8];
   bytes[0] = static_cast<vxl_byte>(w >> 0);

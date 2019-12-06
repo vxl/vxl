@@ -14,4 +14,8 @@
 #include "vbl/vbl_sparse_array_base.hxx"
 #include "vbl/vbl_triple.hxx"
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

@@ -73,4 +73,8 @@
 #include "vcsl/vcsl_utm.h"
 #include "vcsl/vcsl_utm_sptr.h"
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

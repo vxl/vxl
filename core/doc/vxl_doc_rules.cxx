@@ -16,6 +16,5 @@ my_class::my_class()
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class some_weird_class_I_do_not_want_documented
-{
-};
+{};
 #endif // DOXYGEN_SHOULD_SKIP_THIS

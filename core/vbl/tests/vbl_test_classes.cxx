@@ -11,37 +11,43 @@
 
 int base_impl::reftotal = 0;
 
-base_impl::base_impl(int nn) : n(nn)
+base_impl::base_impl(int nn)
+  : n(nn)
 {
   reftotal++;
-  std::cout <<  "base_impl ctor : this=" << (void*)this << std::endl;
+  std::cout << "base_impl ctor : this=" << (void *)this << std::endl;
 }
 
-base_impl::base_impl() : n(7)
+base_impl::base_impl()
+  : n(7)
 {
   reftotal++;
-  std::cout <<  "base_impl ctor : this=" << (void*)this << std::endl;
+  std::cout << "base_impl ctor : this=" << (void *)this << std::endl;
 }
 
 base_impl::~base_impl()
 {
   reftotal--;
-  std::cout <<  "base_impl dtor : this=" << (void*)this << std::endl;
+  std::cout << "base_impl dtor : this=" << (void *)this << std::endl;
 }
 
-void base_impl::Print (std::ostream &str)
+void
+base_impl::Print(std::ostream & str)
 {
   str << "base_impl(" << n << ") ";
 }
 
-bool base_impl::checkcount ( int count )
+bool
+base_impl::checkcount(int count)
 {
-  if (reftotal == count) {
+  if (reftotal == count)
+  {
     std::cout << "base_impl : PASSED" << std::endl;
     return true;
-  } else {
-    std::cout << "base_impl : FAILED : count = " << reftotal
-             << " (expecting " << count << ')' << std::endl;
+  }
+  else
+  {
+    std::cout << "base_impl : FAILED : count = " << reftotal << " (expecting " << count << ')' << std::endl;
     return false;
   }
 }

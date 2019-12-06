@@ -20,11 +20,11 @@ IMPLEMENT_APP(wx_docview_app)
 wx_docview_app::wx_docview_app(void)
   : doc_manager_(0)
   , frame_(0)
-{
-}
+{}
 
 //: Initialize the application.
-bool wx_docview_app::OnInit(void)
+bool
+wx_docview_app::OnInit(void)
 {
   // select the vgui_wx toolkit
   vgui::select("wx");
@@ -42,13 +42,8 @@ bool wx_docview_app::OnInit(void)
 
   doc_manager_->SetMaxDocsOpen(1);
 
-  frame_ = new wx_docview_frame(doc_manager_,
-                                0,
-                                wxID_ANY,
-                                wxT("Hello World"),
-                                wxPoint(0, 0),
-                                wxSize(500, 400),
-                                wxDEFAULT_FRAME_STYLE);
+  frame_ = new wx_docview_frame(
+    doc_manager_, 0, wxID_ANY, wxT("Hello World"), wxPoint(0, 0), wxSize(500, 400), wxDEFAULT_FRAME_STYLE);
   frame_->Centre(wxBOTH);
   frame_->Show(true);
   SetTopWindow(frame_);
@@ -61,7 +56,8 @@ bool wx_docview_app::OnInit(void)
 }
 
 //: Initialize the application.
-int wx_docview_app::OnExit(void)
+int
+wx_docview_app::OnExit(void)
 {
   delete doc_manager_;
   return 0;

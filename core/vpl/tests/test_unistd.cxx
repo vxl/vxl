@@ -19,46 +19,48 @@
 #include "vpl/vpl_fileno.h"
 #include "vpl/vpl_fdopen.h"
 #if defined(_MSC_VER)
-  #include <winsock2.h>
+#  include <winsock2.h>
 #endif
 
 
 #ifdef _WIN32
-#define ROOT_PATH "C:/"
+#  define ROOT_PATH "C:/"
 #else
-#define ROOT_PATH "/tmp"
+#  define ROOT_PATH "/tmp"
 #endif
 
 namespace
 {
-  char my_tolower(char c)
-  {
-    return std::tolower(c);
-  }
+char
+my_tolower(char c)
+{
+  return std::tolower(c);
 }
+} // namespace
 
-static void test_unistd(int argc, char *argv[])
+static void
+test_unistd(int argc, char * argv[])
 {
   // Test vpl_gethostname
   TEST("Expecting one cmdline argument", argc, 2);
 
-  if (argc>=2)
+  if (argc >= 2)
   {
     char hostname[256];
-    int retval = vpl_gethostname(hostname, 255);
+    int  retval = vpl_gethostname(hostname, 255);
     if (retval != 0)
     {
       std::cerr << "errno: " << errno
 #if defined(_MSC_VER)
-               << "WSAErr: " << WSAGetLastError()
+                << "WSAErr: " << WSAGetLastError()
 #endif
-               << std::endl;
+                << std::endl;
       std::perror("Failed to run gethostname(): ");
     }
     TEST_NEAR("vpl_gethostname reports no success", retval, 0, 0);
     std::string hostname_cmake = std::string(argv[1]);
     std::string hostname_vpl = std::string(hostname);
-    //can't use vul_string_downcase because vul not built yet
+    // can't use vul_string_downcase because vul not built yet
     std::transform(hostname_cmake.begin(), hostname_cmake.end(), hostname_cmake.begin(), my_tolower);
     std::transform(hostname_vpl.begin(), hostname_vpl.end(), hostname_vpl.begin(), my_tolower);
 
@@ -77,7 +79,7 @@ static void test_unistd(int argc, char *argv[])
   }
   {
     std::ifstream f(ROOT_PATH "/vpltest/file");
-    int s;
+    int           s;
     f >> s;
     TEST("Create file in directory", s, 1234);
   }
@@ -89,34 +91,33 @@ static void test_unistd(int argc, char *argv[])
   {
     // write data to a file
 
-    std::FILE * fp = std::fopen ("file", "w");
+    std::FILE * fp = std::fopen("file", "w");
     TEST("fopen non-NULL FILE", fp != nullptr, true);
-    int data[1] = { 99 };
-    std::size_t n = std::fwrite (data, sizeof(data[0]), 1, fp);
+    int         data[1] = { 99 };
+    std::size_t n = std::fwrite(data, sizeof(data[0]), 1, fp);
     std::cout << "fwrite return value: " << n << std::endl;
     TEST("fwrite return value", n, 1);
-    std::fclose (fp);
+    std::fclose(fp);
   }
   {
     // read data from file after FILE -> fd -> FILE conversion
 
-    std::FILE * fp1 = std::fopen ("file", "r");
+    std::FILE * fp1 = std::fopen("file", "r");
     TEST("fopen non-NULL FILE", fp1 != nullptr, true);
-    int fd = vpl_fileno (fp1);
+    int fd = vpl_fileno(fp1);
     TEST("fileno positive", fd >= 0, true);
     std::cout << "file number: " << fd << std::endl;
-    std::FILE * fp2 = vpl_fdopen (fd, "r");
+    std::FILE * fp2 = vpl_fdopen(fd, "r");
     TEST("fdopen non-NULL FILE", fp2 != nullptr, true);
-    int data[1] = { 0 };
-    std::size_t n = std::fread (data, sizeof(data[0]), 1, fp2);
+    int         data[1] = { 0 };
+    std::size_t n = std::fread(data, sizeof(data[0]), 1, fp2);
     TEST("fread return value", n, 1);
-    std::cout << "fread return value: " << n << std::endl
-             << "data[0]: " << data[0] << std::endl;
+    std::cout << "fread return value: " << n << std::endl << "data[0]: " << data[0] << std::endl;
     TEST("fileno/fdopen", data[0], 99);
     std::fclose(fp2);
     if (std::feof(fp1)) // Visual Studio 8 seems to link the two FILE ptrs and
       std::fclose(fp1); // aborts if fp2 (and hence fp1) is already closed.
-    vpl_unlink ("file");
+    vpl_unlink("file");
   }
 
   vpl_chdir(ROOT_PATH);
@@ -131,7 +132,7 @@ static void test_unistd(int argc, char *argv[])
   std::cout << "sleeping for 2 seconds..." << std::flush;
   vpl_usleep(2000000); // 2 seconds
   std::cout << "\b\b\b, done\n\n"
-           << "Current PID: " << vpl_getpid() << std::endl;
+            << "Current PID: " << vpl_getpid() << std::endl;
 }
 
 TESTMAIN_ARGS(test_unistd);

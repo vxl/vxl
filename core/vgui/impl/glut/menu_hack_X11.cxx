@@ -30,21 +30,21 @@
 // rest of this structure.
 struct GLUTwindow
 {
-  int num;              /* Small integer window id (0-based). */
+  int num; /* Small integer window id (0-based). */
 
   /* Window system related state. */
 #if defined(_WIN32) && !defined(__CYGWIN__)
-  int pf;               /* Pixel format. */
-  HDC hdc;              /* Window's Win32 device context. */
+  int pf;  /* Pixel format. */
+  HDC hdc; /* Window's Win32 device context. */
 #endif
-  Window win;           /* X window for GLUT window */
+  Window win; /* X window for GLUT window */
   // *** there's more, but we don't need it..... ***
 };
 
 // we use these extern global variables in libGLUT to do the trickery :
-extern    Display *__glutDisplay;
-extern GLUTwindow *__glutCurrentWindow;
-extern GLUTwindow *__glutMenuWindow;
+extern Display *    __glutDisplay;
+extern GLUTwindow * __glutCurrentWindow;
+extern GLUTwindow * __glutMenuWindow;
 
 //--------------------------------------------------------------------------------
 
@@ -62,32 +62,34 @@ struct vgui_glut_menu_hack_bind_entry
 };
 
 static vgui_glut_menu_hack_bind_entry default_entries[] = {
-  {GLUT_LEFT_BUTTON  ,0                ,0},
-  {GLUT_LEFT_BUTTON  ,GLUT_ACTIVE_SHIFT,0},
-  {GLUT_LEFT_BUTTON  ,GLUT_ACTIVE_CTRL ,0},
-  {GLUT_LEFT_BUTTON  ,GLUT_ACTIVE_ALT  ,0},
-  {GLUT_MIDDLE_BUTTON,0                ,0},
-  {GLUT_MIDDLE_BUTTON,GLUT_ACTIVE_SHIFT,0},
-  {GLUT_MIDDLE_BUTTON,GLUT_ACTIVE_CTRL ,0},
-  {GLUT_MIDDLE_BUTTON,GLUT_ACTIVE_ALT  ,0},
-  {GLUT_RIGHT_BUTTON ,0                ,0},
-  {GLUT_RIGHT_BUTTON ,GLUT_ACTIVE_SHIFT,0},
-  {GLUT_RIGHT_BUTTON ,GLUT_ACTIVE_CTRL ,0},
-  {GLUT_RIGHT_BUTTON ,GLUT_ACTIVE_ALT  ,0},
+  { GLUT_LEFT_BUTTON, 0, 0 },
+  { GLUT_LEFT_BUTTON, GLUT_ACTIVE_SHIFT, 0 },
+  { GLUT_LEFT_BUTTON, GLUT_ACTIVE_CTRL, 0 },
+  { GLUT_LEFT_BUTTON, GLUT_ACTIVE_ALT, 0 },
+  { GLUT_MIDDLE_BUTTON, 0, 0 },
+  { GLUT_MIDDLE_BUTTON, GLUT_ACTIVE_SHIFT, 0 },
+  { GLUT_MIDDLE_BUTTON, GLUT_ACTIVE_CTRL, 0 },
+  { GLUT_MIDDLE_BUTTON, GLUT_ACTIVE_ALT, 0 },
+  { GLUT_RIGHT_BUTTON, 0, 0 },
+  { GLUT_RIGHT_BUTTON, GLUT_ACTIVE_SHIFT, 0 },
+  { GLUT_RIGHT_BUTTON, GLUT_ACTIVE_CTRL, 0 },
+  { GLUT_RIGHT_BUTTON, GLUT_ACTIVE_ALT, 0 },
 };
 
-const unsigned int table_size = sizeof(default_entries)/sizeof(default_entries[0]);
+const unsigned int table_size = sizeof(default_entries) / sizeof(default_entries[0]);
 
 struct vgui_glut_menu_hack::per_window_record
 {
-  vgui_glut_menu_hack_bind_entry entries[ table_size ];
-  per_window_record() {
-    for (unsigned i=0;i<table_size; ++i)
+  vgui_glut_menu_hack_bind_entry entries[table_size];
+  per_window_record()
+  {
+    for (unsigned i = 0; i < table_size; ++i)
       entries[i] = default_entries[i];
   }
 };
 
-static vgui_glut_menu_hack::per_window_record * get_current_record()
+static vgui_glut_menu_hack::per_window_record *
+get_current_record()
 {
   static std::vector<vgui_glut_menu_hack::per_window_record *> records;
 
@@ -95,9 +97,10 @@ static vgui_glut_menu_hack::per_window_record * get_current_record()
   if (win == 0)
     return nullptr;
   while (win >= records.size())
-    records.push_back( nullptr );
+    records.push_back(nullptr);
 
-  if (records[win] == nullptr) {
+  if (records[win] == nullptr)
+  {
 #ifdef DEBUG
     std::cerr << __FILE__ " : create record for window " << win << std::endl;
 #endif
@@ -109,19 +112,21 @@ static vgui_glut_menu_hack::per_window_record * get_current_record()
 
 //--------------------------------------------------------------------------------
 
-int vgui_glut_menu_hack::find_index(int button, int mods)
+int
+vgui_glut_menu_hack::find_index(int button, int mods)
 {
-  const per_window_record *rec = get_current_record();
+  const per_window_record * rec = get_current_record();
   if (!rec)
     return -1;
-  for (unsigned i=0; i<table_size; i++)
-    if (button==rec->entries[i].button && mods==rec->entries[i].mods)
+  for (unsigned i = 0; i < table_size; i++)
+    if (button == rec->entries[i].button && mods == rec->entries[i].mods)
       return i;
   std::cerr << __FILE__ " : invalid button/modifier combination " << button << ' ' << mods << std::endl;
   return -1;
 }
 
-bool vgui_glut_menu_hack::mouse(int button, int state, int x, int y)
+bool
+vgui_glut_menu_hack::mouse(int button, int state, int x, int y)
 {
   if (state != GLUT_DOWN)
     return false;
@@ -130,14 +135,14 @@ bool vgui_glut_menu_hack::mouse(int button, int state, int x, int y)
 
   int index = find_index(button, mods);
 
-  if (index<0)
+  if (index < 0)
     return false; // invalid modifier combination.
 
-  const per_window_record *rec = get_current_record();
+  const per_window_record * rec = get_current_record();
   if (!rec)
     return false;
 
-  if (rec->entries[index].menu_id==0)
+  if (rec->entries[index].menu_id == 0)
     return false; // no menu bound.
 
   // allow client to change the menu if desired :
@@ -167,9 +172,9 @@ bool vgui_glut_menu_hack::mouse(int button, int state, int x, int y)
     event.xbutton.send_event = 0;
     event.xbutton.display = __glutDisplay;
     event.xbutton.window = __glutCurrentWindow->win;
-    event.xbutton.root = 0; // ?
+    event.xbutton.root = 0;      // ?
     event.xbutton.subwindow = 0; // ?
-    event.xbutton.time = 0; // ?
+    event.xbutton.time = 0;      // ?
     event.xbutton.x = x;
     event.xbutton.y = y;
     event.xbutton.x_root = glutGet(GLenum(GLUT_WINDOW_X)) + x; // ?? but this
@@ -190,9 +195,11 @@ bool vgui_glut_menu_hack::mouse(int button, int state, int x, int y)
   return true;
 }
 
-void vgui_glut_menu_hack::menustatus(int status,int /*x*/,int /*y*/)
+void
+vgui_glut_menu_hack::menustatus(int status, int /*x*/, int /*y*/)
 {
-  if (active  &&  status == GLUT_MENU_NOT_IN_USE) {
+  if (active && status == GLUT_MENU_NOT_IN_USE)
+  {
     glutDetachMenu(glut_button);
 #ifdef DEBUG
     std::cerr << "purged\n";
@@ -203,17 +210,19 @@ void vgui_glut_menu_hack::menustatus(int status,int /*x*/,int /*y*/)
 
 //--------------------------------------------------------------------------------
 
-void vgui_glut_menu_hack::bind  (int button, int mods, int menu_id)
+void
+vgui_glut_menu_hack::bind(int button, int mods, int menu_id)
 {
   int index = find_index(button, mods);
-  if (index<0)
+  if (index < 0)
     return;
-  else {
-    per_window_record *rec = get_current_record();
+  else
+  {
+    per_window_record * rec = get_current_record();
     if (!rec)
       return;
 #ifdef DEBUG
-    std::cerr << "bind : " << glutGetWindow() << ' ' <<  button << ' ' << mods << ' ' << menu_id <<  std::endl;
+    std::cerr << "bind : " << glutGetWindow() << ' ' << button << ' ' << mods << ' ' << menu_id << std::endl;
 #endif
     rec->entries[index].menu_id = menu_id;
   }

@@ -8,15 +8,16 @@
 #include "testlib/testlib_test.h"
 #include "vpl/vpl.h"
 
-void test_deque_io()
+void
+test_deque_io()
 {
   std::cout << "***************************\n"
-           << "Testing std::deque binary io\n"
-           << "***************************\n";
+            << "Testing std::deque binary io\n"
+            << "***************************\n";
 
-  int n = 10;
+  int             n = 10;
   std::deque<int> d_int_out;
-  for (int i=0;i<n;++i)
+  for (int i = 0; i < n; ++i)
     d_int_out.push_back(i);
 
 
@@ -33,20 +34,20 @@ void test_deque_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vsl_deque_io_test.bvl.tmp");
+  vpl_unlink("vsl_deque_io_test.bvl.tmp");
 
   // kym - double equals not defined for deque??
-  //TEST("std::deque<int> out == std::deque<int> in", d_int_out, d_int_in);
+  // TEST("std::deque<int> out == std::deque<int> in", d_int_out, d_int_in);
 
   bool test_result = true;
   if (d_int_out.size() != d_int_in.size())
-    test_result=false;
+    test_result = false;
   else
   {
-    for (unsigned int i=0; i< d_int_out.size(); i++)
+    for (unsigned int i = 0; i < d_int_out.size(); i++)
     {
       if (d_int_out[i] != d_int_in[i])
-        test_result=false;
+        test_result = false;
     }
   }
   TEST("std::deque<int> out == std::deque<int> in", test_result, true);

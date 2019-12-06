@@ -8,17 +8,20 @@
 #include "vgui_observer.h"
 #include "vgui/vgui_message.h"
 
-void vgui_observer::update()
+void
+vgui_observer::update()
 {
   // do nothing
 }
 
-void vgui_observer::update(vgui_message const &)
+void
+vgui_observer::update(vgui_message const &)
 {
   this->update(); // default implementation.
 }
 
-void vgui_observer::update(vgui_observable const *)
+void
+vgui_observer::update(vgui_observable const *)
 {
   this->update(); // default implementation.
 }

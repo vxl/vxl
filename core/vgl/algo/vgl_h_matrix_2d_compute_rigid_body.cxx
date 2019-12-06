@@ -17,46 +17,50 @@
 //: Construct a vgl_h_matrix_2d_compute_rigid_body object.
 vgl_h_matrix_2d_compute_rigid_body::vgl_h_matrix_2d_compute_rigid_body() = default;
 
-constexpr int TM_UNKNOWNS_COUNT = 3;
+constexpr int    TM_UNKNOWNS_COUNT = 3;
 constexpr double DEGENERACY_THRESHOLD = 0.01;
 
 //-----------------------------------------------------------------------------
 //
 //: Compute the rigid body transformation between point sets
 //
-bool vgl_h_matrix_2d_compute_rigid_body::
-solve_rigid_body_problem(int equ_count,
-                         std::vector<vgl_homg_point_2d<double> > const& p1,
-                         std::vector<vgl_homg_point_2d<double> > const& p2,
-                         vgl_h_matrix_2d<double>& H)
+bool
+vgl_h_matrix_2d_compute_rigid_body::solve_rigid_body_problem(int                                            equ_count,
+                                                             std::vector<vgl_homg_point_2d<double>> const & p1,
+                                                             std::vector<vgl_homg_point_2d<double>> const & p2,
+                                                             vgl_h_matrix_2d<double> &                      H)
 {
-  //transform the point sets and fill the design matrix
-  vnl_matrix<double> D(equ_count, TM_UNKNOWNS_COUNT+2);
-  int n = p1.size();
-  int row = 0;
-  for (int i = 0; i < n; i++) {
-    D(row, 0) =  p1[i].x();
-    D(row, 1) =  -p1[i].y();
-    D(row, 2) =  1.0;
-    D(row, 3) =  0.0;
+  // transform the point sets and fill the design matrix
+  vnl_matrix<double> D(equ_count, TM_UNKNOWNS_COUNT + 2);
+  int                n = p1.size();
+  int                row = 0;
+  for (int i = 0; i < n; i++)
+  {
+    D(row, 0) = p1[i].x();
+    D(row, 1) = -p1[i].y();
+    D(row, 2) = 1.0;
+    D(row, 3) = 0.0;
     D(row, 4) = -p2[i].x();
     ++row;
 
     D(row, 0) = p1[i].y();
     D(row, 1) = p1[i].x();
     D(row, 2) = 0;
-    D(row, 3) =  1.0;
-    D(row, 4) =  -p2[i].y();
+    D(row, 3) = 1.0;
+    D(row, 4) = -p2[i].y();
     ++row;
   }
 
   D.normalize_rows();
-  vnl_svd<double> svd(D);
+  vnl_svd<double>    svd(D);
   vnl_vector<double> nullv = svd.nullvector();
-  //last singular value should be zero for ideal data
-  if (svd.W(4)>DEGENERACY_THRESHOLD*svd.W(3)) {
-            std::cout  << "vgl_h_matrix_2d_compute_rigid_body : inaccurate solution probably due to inconsistent point correspondences\n"
-                      << "W\n" << svd.W() << std::endl;
+  // last singular value should be zero for ideal data
+  if (svd.W(4) > DEGENERACY_THRESHOLD * svd.W(3))
+  {
+    std::cout
+      << "vgl_h_matrix_2d_compute_rigid_body : inaccurate solution probably due to inconsistent point correspondences\n"
+      << "W\n"
+      << svd.W() << std::endl;
     return false;
   }
 
@@ -65,42 +69,50 @@ solve_rigid_body_problem(int equ_count,
   double norm = nullv[4];
   nullv /= norm;
   // convert to rotation
-  double y = nullv[1];
-  double x = nullv[0];
-  double angle = std::atan2(y,x);
-  double c = std::cos(angle);
-  double s = std::sin(angle);
-  vnl_matrix_fixed<double, 3,3> M;
-  M[0][0]=c;   M[0][1]= -s; M[0][2] = nullv[2];
-  M[1][0]=s;   M[1][1]= c; M[1][2] = nullv[3];
-  M[2][0]=0;   M[2][1]= 0; M[2][2] = 1;
+  double                         y = nullv[1];
+  double                         x = nullv[0];
+  double                         angle = std::atan2(y, x);
+  double                         c = std::cos(angle);
+  double                         s = std::sin(angle);
+  vnl_matrix_fixed<double, 3, 3> M;
+  M[0][0] = c;
+  M[0][1] = -s;
+  M[0][2] = nullv[2];
+  M[1][0] = s;
+  M[1][1] = c;
+  M[1][2] = nullv[3];
+  M[2][0] = 0;
+  M[2][1] = 0;
+  M[2][2] = 1;
   H.set(M);
   return true;
 }
 
-bool vgl_h_matrix_2d_compute_rigid_body::
-compute_p(std::vector<vgl_homg_point_2d<double> > const& points1,
-          std::vector<vgl_homg_point_2d<double> > const& points2,
-          vgl_h_matrix_2d<double>& H)
+bool
+vgl_h_matrix_2d_compute_rigid_body::compute_p(std::vector<vgl_homg_point_2d<double>> const & points1,
+                                              std::vector<vgl_homg_point_2d<double>> const & points2,
+                                              vgl_h_matrix_2d<double> &                      H)
 {
-  //number of points must be the same
+  // number of points must be the same
   assert(points1.size() == points2.size());
   int n = points1.size();
 
   int equ_count = n * (2);
-  if (n * 2 < TM_UNKNOWNS_COUNT) {
+  if (n * 2 < TM_UNKNOWNS_COUNT)
+  {
     std::cerr << "vgl_h_matrix_2d_compute_rigid_body: Need at least 2 matches.\n";
-    if (n == 0) std::cerr << "Could be std::vector setlength idiosyncrasies!\n";
+    if (n == 0)
+      std::cerr << "Could be std::vector setlength idiosyncrasies!\n";
     return false;
   }
-  //compute the normalizing transforms
+  // compute the normalizing transforms
   vgl_norm_trans_2d<double> tr1, tr2;
   if (!tr1.compute_from_points(points1))
     return false;
   if (!tr2.compute_from_points(points2))
     return false;
-  std::vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
-  for (int i = 0; i<n; i++)
+  std::vector<vgl_homg_point_2d<double>> tpoints1, tpoints2;
+  for (int i = 0; i < n; i++)
   {
     tpoints1.push_back(tr1(points1[i]));
     tpoints2.push_back(tr2(points2[i]));
@@ -117,27 +129,27 @@ compute_p(std::vector<vgl_homg_point_2d<double> > const& points1,
   // (tr2 p2) = hh (tr1 p1)
   //  p2 = (tr2^-1 hh tr1) p1 = H p1
   vgl_h_matrix_2d<double> tr2_inv = tr2.get_inverse();
-  H = tr2_inv*hh*tr1;
+  H = tr2_inv * hh * tr1;
   return true;
 }
 
-bool vgl_h_matrix_2d_compute_rigid_body::
-compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
-          std::vector<vgl_homg_line_2d<double> > const& lines2,
-          vgl_h_matrix_2d<double>& H)
+bool
+vgl_h_matrix_2d_compute_rigid_body::compute_l(std::vector<vgl_homg_line_2d<double>> const & lines1,
+                                              std::vector<vgl_homg_line_2d<double>> const & lines2,
+                                              vgl_h_matrix_2d<double> &                     H)
 {
-  //number of lines must be the same
+  // number of lines must be the same
   assert(lines1.size() == lines2.size());
   int n = lines1.size();
-  int equ_count = 2*n;
-  //compute the normalizing transforms. By convention, these are point
-  //transformations.
+  int equ_count = 2 * n;
+  // compute the normalizing transforms. By convention, these are point
+  // transformations.
   vgl_norm_trans_2d<double> tr1, tr2;
   if (!tr1.compute_from_lines(lines1))
     return false;
   if (!tr2.compute_from_lines(lines2))
     return false;
-  std::vector<vgl_homg_point_2d<double> > tlines1, tlines2;
+  std::vector<vgl_homg_point_2d<double>> tlines1, tlines2;
   for (const auto & lit : lines1)
   {
     // transform the lines according to the normalizing transform
@@ -155,13 +167,13 @@ compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
     tlines2.push_back(p);
   }
 
-  vgl_h_matrix_2d<double> hl,hp,tr2inv;
+  vgl_h_matrix_2d<double> hl, hp, tr2inv;
   if (!solve_rigid_body_problem(equ_count, tlines1, tlines2, hl))
     return false;
   // The result is a transform on lines so we need to convert it to
   // a point transform, i.e., hp = hl^-t.
-  vnl_matrix_fixed<double, 3, 3> const &  Ml = hl.get_matrix();
-  vnl_matrix_fixed<double, 3, 3> Mp = vnl_inverse_transpose(Ml);
+  vnl_matrix_fixed<double, 3, 3> const & Ml = hl.get_matrix();
+  vnl_matrix_fixed<double, 3, 3>         Mp = vnl_inverse_transpose(Ml);
   hp.set(Mp);
   //
   // Next, hp has to be transformed back to the coordinate system of
@@ -172,69 +184,70 @@ compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
   // (tr2 l2) = hh (tr1 l1)
   //  p2 = (tr2^-1 hh tr1) p1 = H p1
   tr2inv = tr2.get_inverse();
-  H = tr2inv*hp*tr1;
+  H = tr2inv * hp * tr1;
   return true;
 }
 
-bool vgl_h_matrix_2d_compute_rigid_body::
-compute_pl(std::vector<vgl_homg_point_2d<double> > const& points1,
-           std::vector<vgl_homg_point_2d<double> > const& points2,
-           std::vector<vgl_homg_line_2d<double> > const& lines1,
-           std::vector<vgl_homg_line_2d<double> > const& lines2,
-           vgl_h_matrix_2d<double>& H)
+bool
+vgl_h_matrix_2d_compute_rigid_body::compute_pl(std::vector<vgl_homg_point_2d<double>> const & points1,
+                                               std::vector<vgl_homg_point_2d<double>> const & points2,
+                                               std::vector<vgl_homg_line_2d<double>> const &  lines1,
+                                               std::vector<vgl_homg_line_2d<double>> const &  lines2,
+                                               vgl_h_matrix_2d<double> &                      H)
 {
-  //number of points must be the same
+  // number of points must be the same
   assert(points1.size() == points2.size());
   int np = points1.size();
-  //number of lines must be the same
+  // number of lines must be the same
   assert(lines1.size() == lines2.size());
   int nl = lines1.size();
 
-  int equ_count = np * 2 + 2*nl;
-  if ((np+nl)*2 < TM_UNKNOWNS_COUNT)
+  int equ_count = np * 2 + 2 * nl;
+  if ((np + nl) * 2 < TM_UNKNOWNS_COUNT)
   {
     std::cerr << "vgl_h_matrix_2d_compute_rigid_body: Need at least 4 matches.\n";
-    if (np+nl == 0) std::cerr << "Could be std::vector setlength idiosyncrasies!\n";
+    if (np + nl == 0)
+      std::cerr << "Could be std::vector setlength idiosyncrasies!\n";
     return false;
   }
-  //compute the normalizing transforms
+  // compute the normalizing transforms
   vgl_norm_trans_2d<double> tr1, tr2;
-  if (!tr1.compute_from_points_and_lines(points1,lines1))
+  if (!tr1.compute_from_points_and_lines(points1, lines1))
     return false;
-  if (!tr2.compute_from_points_and_lines(points2,lines2))
+  if (!tr2.compute_from_points_and_lines(points2, lines2))
     return false;
-  std::vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
-  for (int i = 0; i<np; i++)
+  std::vector<vgl_homg_point_2d<double>> tpoints1, tpoints2;
+  for (int i = 0; i < np; i++)
   {
     tpoints1.push_back(tr1(points1[i]));
     tpoints2.push_back(tr2(points2[i]));
   }
-  for (int i = 0; i<nl; i++)
+  for (int i = 0; i < nl; i++)
   {
-    double a=lines1[i].a(), b=lines1[i].b(), c=lines1[i].c(), d=std::sqrt(a*a+b*b);
-    tpoints1.push_back(tr1(vgl_homg_point_2d<double>(-a*c,-b*c,d)));
-    a=lines2[i].a(), b=lines2[i].b(), c=lines2[i].c(), d = std::sqrt(a*a+b*b);
-    tpoints2.push_back(tr2(vgl_homg_point_2d<double>(-a*c,-b*c,d)));
+    double a = lines1[i].a(), b = lines1[i].b(), c = lines1[i].c(), d = std::sqrt(a * a + b * b);
+    tpoints1.push_back(tr1(vgl_homg_point_2d<double>(-a * c, -b * c, d)));
+    a = lines2[i].a(), b = lines2[i].b(), c = lines2[i].c(), d = std::sqrt(a * a + b * b);
+    tpoints2.push_back(tr2(vgl_homg_point_2d<double>(-a * c, -b * c, d)));
   }
   vgl_h_matrix_2d<double> hh;
   if (!solve_rigid_body_problem(equ_count, tpoints1, tpoints2, hh))
     return false;
 
   vgl_h_matrix_2d<double> tr2_inv = tr2.get_inverse();
-  H = tr2_inv*hh*tr1;
+  H = tr2_inv * hh * tr1;
   return true;
 }
 
-bool vgl_h_matrix_2d_compute_rigid_body::
-compute_l(std::vector<vgl_homg_line_2d<double> > const& /* lines1 */,
-          std::vector<vgl_homg_line_2d<double> > const& /* lines2 */,
-          std::vector<double> const& /* weights */,
-          vgl_h_matrix_2d<double>& /* H */)
+bool
+vgl_h_matrix_2d_compute_rigid_body::compute_l(std::vector<vgl_homg_line_2d<double>> const & /* lines1 */,
+                                              std::vector<vgl_homg_line_2d<double>> const & /* lines2 */,
+                                              std::vector<double> const & /* weights */,
+                                              vgl_h_matrix_2d<double> & /* H */)
 {
   return false;
 }
 
-#if 0 // do later
+#if 0  // do later
 //--------------------------------------------------------
 //:
 //  The solution equations should be weighted by the length of

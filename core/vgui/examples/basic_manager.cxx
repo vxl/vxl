@@ -11,9 +11,10 @@
 #include "vgui/vgui_shell_tableau.h"
 #include "vgui/vgui_image_tableau.h"
 
-basic_manager *basic_manager::instance()
+basic_manager *
+basic_manager::instance()
 {
-  static basic_manager *instance_ = nullptr;
+  static basic_manager * instance_ = nullptr;
   if (!instance_)
   {
     instance_ = new basic_manager();
@@ -22,31 +23,35 @@ basic_manager *basic_manager::instance()
   return instance_;
 }
 
-void basic_manager::init()
+void
+basic_manager::init()
 {
-  itab_ = vgui_image_tableau_new();//keep the image tableau handy
+  itab_ = vgui_image_tableau_new(); // keep the image tableau handy
   vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(itab_);
-  vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(viewer);
+  vgui_shell_tableau_sptr    shell = vgui_shell_tableau_new(viewer);
   this->add_child(shell);
 }
 
-//the event handler
-bool basic_manager::handle(vgui_event const & e)
+// the event handler
+bool
+basic_manager::handle(vgui_event const & e)
 {
   if (e.key == 'b')
     vgui::out << "I saw a 'b'\n";
-  //pass the event to the shell
+  // pass the event to the shell
   return this->child.handle(e);
 }
 
-void basic_manager::quit()
+void
+basic_manager::quit()
 {
   std::exit(1);
 }
 
-void basic_manager::load_image()
+void
+basic_manager::load_image()
 {
-  vgui_dialog load_image_dlg("Load image file");
+  vgui_dialog        load_image_dlg("Load image file");
   static std::string image_filename = "";
   static std::string ext = "*.*";
   load_image_dlg.file("Image Filename:", ext, image_filename);

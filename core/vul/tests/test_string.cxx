@@ -7,53 +7,69 @@
 #include "vul/vul_string.h"
 #include "vpl/vpl.h"
 
-void test_string()
+void
+test_string()
 {
   std::cout << "********************\n"
-           << " Testing vul_string\n"
-           << "********************\n";
+            << " Testing vul_string\n"
+            << "********************\n";
 
-  {char s[] = " 1 trUe False";
-   TEST("vul_string_c_upcase(\" 1 trUe False\")", vul_string_c_upcase(s), std::string(" 1 TRUE FALSE"));
+  {
+    char s[] = " 1 trUe False";
+    TEST("vul_string_c_upcase(\" 1 trUe False\")", vul_string_c_upcase(s), std::string(" 1 TRUE FALSE"));
   }
-  {char s[] = " 1 trUe False";
-   TEST("vul_string_c_downcase(\" 1 trUe False\")", vul_string_c_downcase(s), std::string(" 1 true false"));
+  {
+    char s[] = " 1 trUe False";
+    TEST("vul_string_c_downcase(\" 1 trUe False\")", vul_string_c_downcase(s), std::string(" 1 true false"));
   }
-  {char s[] = " 1 trUe False";
-   TEST("vul_string_c_capitalize(\" 1 trUe False\")", vul_string_c_capitalize(s), std::string(" 1 TrUe False"));
+  {
+    char s[] = " 1 trUe False";
+    TEST("vul_string_c_capitalize(\" 1 trUe False\")", vul_string_c_capitalize(s), std::string(" 1 TrUe False"));
   }
-  {char s[] = " 1 trUe False";
-   TEST("vul_string_c_trim(\" 1 trUe False\",\" \")", vul_string_c_trim(s," "), std::string("1trUeFalse"));
+  {
+    char s[] = " 1 trUe False";
+    TEST("vul_string_c_trim(\" 1 trUe False\",\" \")", vul_string_c_trim(s, " "), std::string("1trUeFalse"));
   }
-  {char s[] = " 1 trUe False";
-   TEST("vul_string_c_left_trim(\" 1 trUe False\",\" \")", vul_string_c_left_trim(s," "), std::string("1 trUe False"));
+  {
+    char s[] = " 1 trUe False";
+    TEST(
+      "vul_string_c_left_trim(\" 1 trUe False\",\" \")", vul_string_c_left_trim(s, " "), std::string("1 trUe False"));
   }
-  {char s[] = " 1 trUe False";
-   TEST("vul_string_c_right_trim(\" 1 trUe False\",\" \")", vul_string_c_right_trim(s," "), std::string(s));
+  {
+    char s[] = " 1 trUe False";
+    TEST("vul_string_c_right_trim(\" 1 trUe False\",\" \")", vul_string_c_right_trim(s, " "), std::string(s));
   }
-  {char s[] = " 1 trUe False";
-   TEST("vul_string_c_reverse(\" 1 trUe False\")", vul_string_c_reverse(s), std::string("eslaF eUrt 1 "));
+  {
+    char s[] = " 1 trUe False";
+    TEST("vul_string_c_reverse(\" 1 trUe False\")", vul_string_c_reverse(s), std::string("eslaF eUrt 1 "));
   }
-  {std::string s = " 1 trUe False";
-   TEST("vul_string_upcase(\" 1 trUe False\")", vul_string_upcase(s), std::string(" 1 TRUE FALSE"));
+  {
+    std::string s = " 1 trUe False";
+    TEST("vul_string_upcase(\" 1 trUe False\")", vul_string_upcase(s), std::string(" 1 TRUE FALSE"));
   }
-  {std::string s = " 1 trUe False";
-   TEST("vul_string_downcase(\" 1 trUe False\")", vul_string_downcase(s), std::string(" 1 true false"));
+  {
+    std::string s = " 1 trUe False";
+    TEST("vul_string_downcase(\" 1 trUe False\")", vul_string_downcase(s), std::string(" 1 true false"));
   }
-  {std::string s = " 1 trUe False";
-   TEST("vul_string_capitalize(\" 1 trUe False\")", vul_string_capitalize(s), std::string(" 1 TrUe False"));
+  {
+    std::string s = " 1 trUe False";
+    TEST("vul_string_capitalize(\" 1 trUe False\")", vul_string_capitalize(s), std::string(" 1 TrUe False"));
   }
-  {std::string s = " 1 trUe False";
-   TEST("vul_string_trim(\" 1 trUe False\",\" \")", vul_string_trim(s," "), std::string("1trUeFalse"));
+  {
+    std::string s = " 1 trUe False";
+    TEST("vul_string_trim(\" 1 trUe False\",\" \")", vul_string_trim(s, " "), std::string("1trUeFalse"));
   }
-  {std::string s = " 1 trUe False";
-   TEST("vul_string_left_trim(\" 1 trUe False\")", vul_string_left_trim(s," "), std::string("1 trUe False"));
+  {
+    std::string s = " 1 trUe False";
+    TEST("vul_string_left_trim(\" 1 trUe False\")", vul_string_left_trim(s, " "), std::string("1 trUe False"));
   }
-  {std::string s = " 1 trUe False";
-   TEST("vul_string_right_trim(\" 1 trUe False\")", vul_string_right_trim(s," "), std::string(s));
+  {
+    std::string s = " 1 trUe False";
+    TEST("vul_string_right_trim(\" 1 trUe False\")", vul_string_right_trim(s, " "), std::string(s));
   }
-  {std::string s = " 1 trUe False";
-   TEST("vul_string_reverse(\" 1 trUe False\")", vul_string_reverse(s), std::string("eslaF eUrt 1 "));
+  {
+    std::string s = " 1 trUe False";
+    TEST("vul_string_reverse(\" 1 trUe False\")", vul_string_reverse(s), std::string("eslaF eUrt 1 "));
   }
 
   TEST("vul_string_atoi(\"123\")", vul_string_atoi("123"), 123);
@@ -82,14 +98,12 @@ void test_string()
   TEST("vul_string_to_bool(Not \"0\")", vul_string_to_bool("0"), false);
   TEST("vul_string_to_bool(Not \"onwibble\")", vul_string_to_bool("onwibble"), false);
 
-  int int_list_data[] = {1,2,10,21,24,-1,-3,-5,-7};
-  std::vector<int> int_list(int_list_data, int_list_data+9);
-  TEST("vul_string_to_int_list(\"1:2,10,21:3:25,-1:-2:-7\")",
-       vul_string_to_int_list("1:2,10,21:3:25,-1:-2:-7"), int_list);
-  TEST("vul_string_to_int_list(\"1:2,10, 21:3:25\")",
-       vul_string_to_int_list("1:2,10, 21:3:25").empty(), true);
-  TEST("vul_string_to_int_list(\"1:2,10,\")",
-       vul_string_to_int_list("1:2,10,").empty(), true);
+  int              int_list_data[] = { 1, 2, 10, 21, 24, -1, -3, -5, -7 };
+  std::vector<int> int_list(int_list_data, int_list_data + 9);
+  TEST(
+    "vul_string_to_int_list(\"1:2,10,21:3:25,-1:-2:-7\")", vul_string_to_int_list("1:2,10,21:3:25,-1:-2:-7"), int_list);
+  TEST("vul_string_to_int_list(\"1:2,10, 21:3:25\")", vul_string_to_int_list("1:2,10, 21:3:25").empty(), true);
+  TEST("vul_string_to_int_list(\"1:2,10,\")", vul_string_to_int_list("1:2,10,").empty(), true);
 
   vpl_putenv("VUL_1=foo");
   vpl_putenv("VUL_2=bar");
@@ -124,14 +138,15 @@ void test_string()
 #endif // 0
   {
     std::string s("I hate mices to pieces");
-    vul_string_replace( s, "hate", "love" );
-    TEST( "vul_string_replace", s== "I love mices to pieces", true);
+    vul_string_replace(s, "hate", "love");
+    TEST("vul_string_replace", s == "I love mices to pieces", true);
   }
 
   {
     std::string s("Too many \r\003\t\v\a\f\x05 control chars.\n");
     TEST("vul_string_escape_dodgy_chars(\"Too many \\r\\003\\t\\v\\a\\f\\x05 control chars.\\n\")",
-         vul_string_escape_ctrl_chars(s), "Too many \\r\\x03\\t\\v\\a\\f\\x05 control chars.\n");
+         vul_string_escape_ctrl_chars(s),
+         "Too many \\r\\x03\\t\\v\\a\\f\\x05 control chars.\n");
   }
 }
 

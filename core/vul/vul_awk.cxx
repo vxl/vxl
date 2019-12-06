@@ -22,9 +22,9 @@
 #endif
 
 //: Construct from input stream
-vul_awk::vul_awk(std::istream& s, ModeFlags mode):
-  fd_(s),
-  mode_(mode)
+vul_awk::vul_awk(std::istream & s, ModeFlags mode)
+  : fd_(s)
+  , mode_(mode)
 {
   done_ = false;
   line_number_ = 0;
@@ -35,12 +35,13 @@ vul_awk::vul_awk(std::istream& s, ModeFlags mode):
 
 vul_awk::~vul_awk()
 {
-  delete [] split_line_;
+  delete[] split_line_;
 }
 
-void vul_awk::next()
+void
+vul_awk::next()
 {
-  bool do_strip_comments = ( ((int)mode_) & ((int)strip_comments) ) != 0;
+  bool do_strip_comments = (((int)mode_) & ((int)strip_comments)) != 0;
 #if 0
   bool do_backslash_continuations = (int(mode_) & int(backslash_continuations)) != 0;
 #endif
@@ -53,9 +54,11 @@ void vul_awk::next()
     // Read line -- should be quite fast after the first one.
     line_.erase();
 
-    while (true) {
+    while (true)
+    {
       int c = fd_.get();
-      if (c == EOF  ||  fd_.eof()) {
+      if (c == EOF || fd_.eof())
+      {
         done_ = true;
         break;
       }
@@ -64,45 +67,56 @@ void vul_awk::next()
       line_ += char(c);
     }
 
-    char const* linep = line_.c_str();
+    char const * linep = line_.c_str();
 
     // copy string
-    delete [] split_line_;
+    delete[] split_line_;
     split_line_ = new char[line_.size() + 1];
     std::strcpy(split_line_, linep);
 
-    //strip comments
-    if (do_strip_comments) {
-      //find the first # character
-      char* comment_char = split_line_;
-      while (*comment_char != '#' && *comment_char != '\0') ++comment_char;
-      //replace the # with a single space and terminate the string.  I
-      //use a single space since that will help the backslash
-      //continuation if it is ever implemented
-      if (*comment_char == '#') {
-        //Replace with a space
-        *comment_char = ' '; ++comment_char;
-        //Terminate the string
-        if (*comment_char != '\0') { *comment_char = '\0'; }
-        if (comment_char - split_line_ == 1) {
-          //The line was only a comment -- don't try to extract
-          //records, just discard the current line and go to the next
+    // strip comments
+    if (do_strip_comments)
+    {
+      // find the first # character
+      char * comment_char = split_line_;
+      while (*comment_char != '#' && *comment_char != '\0')
+        ++comment_char;
+      // replace the # with a single space and terminate the string.  I
+      // use a single space since that will help the backslash
+      // continuation if it is ever implemented
+      if (*comment_char == '#')
+      {
+        // Replace with a space
+        *comment_char = ' ';
+        ++comment_char;
+        // Terminate the string
+        if (*comment_char != '\0')
+        {
+          *comment_char = '\0';
+        }
+        if (comment_char - split_line_ == 1)
+        {
+          // The line was only a comment -- don't try to extract
+          // records, just discard the current line and go to the next
           extract_fields = false;
           discard_current_line = true;
         }
       }
     }
 
-    if (extract_fields) {
+    if (extract_fields)
+    {
       // Chop line up into fields
       fields_.clear();
-      char* cp = split_line_;
+      char * cp = split_line_;
 
-      while (true) {
+      while (true)
+      {
         // Eat white
         while (*cp && std::isspace(*cp))
           ++cp;
-        if (!*cp) break;
+        if (!*cp)
+          break;
 
         // Push
         fields_.push_back(cp);
@@ -110,7 +124,8 @@ void vul_awk::next()
         // Find nonwhite
         while (*cp && !std::isspace(*cp))
           ++cp;
-        if (!*cp) break;
+        if (!*cp)
+          break;
 
         // Zap space
         *cp++ = '\0';
@@ -121,23 +136,27 @@ void vul_awk::next()
   }
 }
 
-char const* vul_awk::line_from(int field_number) const
+char const *
+vul_awk::line_from(int field_number) const
 {
-  char const *p = line_.c_str();
+  char const * p = line_.c_str();
   if (field_number >= NF())
     field_number = NF() - 1;
-  if (field_number < 0) {
-    std::cerr << "vul_awk::line_from("<< field_number <<") -- ZOIKS\n";
+  if (field_number < 0)
+  {
+    std::cerr << "vul_awk::line_from(" << field_number << ") -- ZOIKS\n";
     return line();
   }
 
   return p + (fields_[field_number] - split_line_);
 }
 
-void testvul_awk()
+void
+testvul_awk()
 {
   std::cout << "Start\n";
-  for (vul_awk awk(std::cin); awk; ++awk) {
+  for (vul_awk awk(std::cin); awk; ++awk)
+  {
     std::cout << awk.NF() << ':' << awk[2] << std::endl;
   }
 }

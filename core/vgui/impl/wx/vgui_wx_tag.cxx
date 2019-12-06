@@ -11,7 +11,8 @@
 #include "vgui/vgui_tag.h"
 #include "vul/vul_trace.h"
 
-vgui_tag(wx) {
+vgui_tag(wx)
+{
   vul_trace;
   vgui_wx::instance();
   vul_trace;

@@ -12,57 +12,57 @@
 using namespace QGL;
 using namespace Qt;
 
-vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent)
-//Note: enabling overlays with "HasOverlay" causes a seg fault on Mac OS X 10.4
-   : QGLWidget(QGLFormat(DoubleBuffer|DepthBuffer|Rgba|AlphaChannel|
-                         AccumBuffer|StencilBuffer|NoStereoBuffers|
-                         DirectRendering), parent),
-     ovl_helper(nullptr),
-     use_overlay_helper(true),
-     idle_request_posted_(false)
+vgui_qt_adaptor::vgui_qt_adaptor(QWidget * parent)
+  // Note: enabling overlays with "HasOverlay" causes a seg fault on Mac OS X 10.4
+  : QGLWidget(QGLFormat(DoubleBuffer | DepthBuffer | Rgba | AlphaChannel | AccumBuffer | StencilBuffer |
+                        NoStereoBuffers | DirectRendering),
+              parent)
+  , ovl_helper(nullptr)
+  , use_overlay_helper(true)
+  , idle_request_posted_(false)
 {
-   this->setMouseTracking(true);
-   this->setFocusPolicy(Qt::StrongFocus);
-   this->setAutoBufferSwap(false);
+  this->setMouseTracking(true);
+  this->setFocusPolicy(Qt::StrongFocus);
+  this->setAutoBufferSwap(false);
 
-   // Check the requested GL format
-   QGLFormat format = this-> format ();
+  // Check the requested GL format
+  QGLFormat format = this->format();
 
-   if (!format. doubleBuffer ())
-     std::cerr << "vgui_qt_adaptor: got single buffer\n";
+  if (!format.doubleBuffer())
+    std::cerr << "vgui_qt_adaptor: got single buffer\n";
 
-   if (!format. depth ())
-     std::cerr << "vgui_qt_adaptor: no depth buffer\n";
+  if (!format.depth())
+    std::cerr << "vgui_qt_adaptor: no depth buffer\n";
 
-   if (!format. rgba ())
-     std::cerr << "vgui_qt_adaptor: index color\n";
+  if (!format.rgba())
+    std::cerr << "vgui_qt_adaptor: index color\n";
 
-   if (!format. directRendering ())
-     std::cerr << "vgui_qt_adaptor: no direct rendering\n";
+  if (!format.directRendering())
+    std::cerr << "vgui_qt_adaptor: no direct rendering\n";
 
-   // Set up idle time
-   idle_timer_ = new QTimer (this);
-   idle_timer_-> start (0);
-   connect (idle_timer_, SIGNAL(timeout()), this, SLOT(idle_slot()));
+  // Set up idle time
+  idle_timer_ = new QTimer(this);
+  idle_timer_->start(0);
+  connect(idle_timer_, SIGNAL(timeout()), this, SLOT(idle_slot()));
 }
 
 //------------------------------------------------------------------------------
 vgui_qt_adaptor::~vgui_qt_adaptor()
 {
-   if (ovl_helper)
-     delete ovl_helper;
-   ovl_helper = nullptr;
-   dispatch_to_tableau(vgui_DESTROY);
+  if (ovl_helper)
+    delete ovl_helper;
+  ovl_helper = nullptr;
+  dispatch_to_tableau(vgui_DESTROY);
 
-   for(std::map<int, vgui_qt_internal_timer*>::iterator it = timers_.begin();
-       it != timers_.end(); ++it){
-      delete it->second;
-   }
+  for (std::map<int, vgui_qt_internal_timer *>::iterator it = timers_.begin(); it != timers_.end(); ++it)
+  {
+    delete it->second;
+  }
 }
 
 //------------------------------------------------------------------------------
 bool
-vgui_qt_adaptor::dispatch_to_tableau (const vgui_event &event)
+vgui_qt_adaptor::dispatch_to_tableau(const vgui_event & event)
 {
   if (ovl_helper)
     return ovl_helper->dispatch(event);
@@ -71,203 +71,229 @@ vgui_qt_adaptor::dispatch_to_tableau (const vgui_event &event)
 }
 
 //------------------------------------------------------------------------------
-void vgui_qt_adaptor::paintGL()
+void
+vgui_qt_adaptor::paintGL()
 {
-   if (this->doubleBuffer())
-     glDrawBuffer(GL_BACK);
-   else
-     glDrawBuffer(GL_FRONT);
-   dispatch_to_tableau(vgui_DRAW);
-   swap_buffers ();
+  if (this->doubleBuffer())
+    glDrawBuffer(GL_BACK);
+  else
+    glDrawBuffer(GL_FRONT);
+  dispatch_to_tableau(vgui_DRAW);
+  swap_buffers();
 }
 
-void vgui_qt_adaptor::post_overlay_redraw()
+void
+vgui_qt_adaptor::post_overlay_redraw()
 {
-   if (use_overlay_helper)
-   {
-     if (!ovl_helper)
-       ovl_helper = new vgui_overlay_helper(this);
-     ovl_helper->post_overlay_redraw();
-   }
-   else
-   {
-     updateOverlayGL();
-   }
+  if (use_overlay_helper)
+  {
+    if (!ovl_helper)
+      ovl_helper = new vgui_overlay_helper(this);
+    ovl_helper->post_overlay_redraw();
+  }
+  else
+  {
+    updateOverlayGL();
+  }
 }
 
-void vgui_qt_adaptor::idle_slot ()
+void
+vgui_qt_adaptor::idle_slot()
 {
-   if (idle_request_posted_)
-     idle_request_posted_ =  dispatch_to_tableau( vgui_event( vgui_IDLE ) );
-}
-
-//------------------------------------------------------------------------------
-void vgui_qt_adaptor::post_idle_request()
-{
-   idle_request_posted_ = true;
+  if (idle_request_posted_)
+    idle_request_posted_ = dispatch_to_tableau(vgui_event(vgui_IDLE));
 }
 
 //------------------------------------------------------------------------------
-void vgui_qt_adaptor::post_timer(float timeout, int name)
+void
+vgui_qt_adaptor::post_idle_request()
 {
-   std::map<int, vgui_qt_internal_timer*>::iterator it = timers_.find( name );
-   if( it == timers_.end() )
-     timers_[name] = new vgui_qt_internal_timer(this,name);
-   QTimer::singleShot(static_cast<int>(timeout), timers_[name], SLOT(activate()));
+  idle_request_posted_ = true;
 }
 
 //------------------------------------------------------------------------------
-void vgui_qt_adaptor::kill_timer(int name)
+void
+vgui_qt_adaptor::post_timer(float timeout, int name)
 {
-   std::map<int, vgui_qt_internal_timer*>::iterator it = timers_.find( name );
-   if( it != timers_.end() ){
-      delete it->second;
-      timers_.erase(it);
-   }
+  std::map<int, vgui_qt_internal_timer *>::iterator it = timers_.find(name);
+  if (it == timers_.end())
+    timers_[name] = new vgui_qt_internal_timer(this, name);
+  QTimer::singleShot(static_cast<int>(timeout), timers_[name], SLOT(activate()));
 }
 
 //------------------------------------------------------------------------------
-void vgui_qt_adaptor::paintOverlayGL()
+void
+vgui_qt_adaptor::kill_timer(int name)
 {
-   if (this->doubleBuffer())
-     glDrawBuffer(GL_BACK);
-   else
-     glDrawBuffer(GL_FRONT);
-   dispatch_to_tableau(vgui_DRAW_OVERLAY);
-   swap_buffers ();
+  std::map<int, vgui_qt_internal_timer *>::iterator it = timers_.find(name);
+  if (it != timers_.end())
+  {
+    delete it->second;
+    timers_.erase(it);
+  }
 }
 
 //------------------------------------------------------------------------------
-void vgui_qt_adaptor::resizeGL(int w, int h)
+void
+vgui_qt_adaptor::paintOverlayGL()
 {
-   make_current();
-   vgui_adaptor_mixin::width  = QGLWidget::width();
-   vgui_adaptor_mixin::height = QGLWidget::height();
-
-   dispatch_to_tableau(vgui_RESHAPE);
+  if (this->doubleBuffer())
+    glDrawBuffer(GL_BACK);
+  else
+    glDrawBuffer(GL_FRONT);
+  dispatch_to_tableau(vgui_DRAW_OVERLAY);
+  swap_buffers();
 }
 
 //------------------------------------------------------------------------------
-void vgui_qt_adaptor::mouseMoveEvent   (QMouseEvent* e)
+void
+vgui_qt_adaptor::resizeGL(int w, int h)
 {
-   vgui_event ev = translate(e);
-   ev.type = vgui_MOTION;
-   dispatch_to_tableau(ev);
+  make_current();
+  vgui_adaptor_mixin::width = QGLWidget::width();
+  vgui_adaptor_mixin::height = QGLWidget::height();
+
+  dispatch_to_tableau(vgui_RESHAPE);
 }
 
 //------------------------------------------------------------------------------
-void vgui_qt_adaptor::mousePressEvent  (QMouseEvent* e)
+void
+vgui_qt_adaptor::mouseMoveEvent(QMouseEvent * e)
 {
-   vgui_event ev = translate(e);
-   ev.type = vgui_BUTTON_DOWN;
-
-   // popup
-   if (ev.button   == this->popup_button &&
-       ev.modifier == this->popup_modifier)
-   {
-      vgui_popup_params params;
-      params.x = ev.wx;
-      params.y = ev.wy;
-      QMenu* pm = new vgui_qt_menu(this->get_total_popup(params),this);
-
-      pm->popup(QWidget::mapToGlobal(QPoint(e->x(), e->y())));
-
-      return;
-   }
-
-   dispatch_to_tableau(ev);
+  vgui_event ev = translate(e);
+  ev.type = vgui_MOTION;
+  dispatch_to_tableau(ev);
 }
 
 //------------------------------------------------------------------------------
-void vgui_qt_adaptor::mouseReleaseEvent(QMouseEvent* e)
+void
+vgui_qt_adaptor::mousePressEvent(QMouseEvent * e)
 {
-   vgui_event ev = translate(e);
-   ev.type = vgui_BUTTON_UP;
-   dispatch_to_tableau(ev);
+  vgui_event ev = translate(e);
+  ev.type = vgui_BUTTON_DOWN;
+
+  // popup
+  if (ev.button == this->popup_button && ev.modifier == this->popup_modifier)
+  {
+    vgui_popup_params params;
+    params.x = ev.wx;
+    params.y = ev.wy;
+    QMenu * pm = new vgui_qt_menu(this->get_total_popup(params), this);
+
+    pm->popup(QWidget::mapToGlobal(QPoint(e->x(), e->y())));
+
+    return;
+  }
+
+  dispatch_to_tableau(ev);
 }
 
 //------------------------------------------------------------------------------
-void vgui_qt_adaptor::keyPressEvent   (QKeyEvent* e)
+void
+vgui_qt_adaptor::mouseReleaseEvent(QMouseEvent * e)
 {
-   vgui_event ev = translate(e);
-   ev.type = vgui_KEY_PRESS;
-   dispatch_to_tableau(ev);
-}
-
-void vgui_qt_adaptor::keyReleaseEvent (QKeyEvent* e)
-{
-   vgui_event ev = translate(e);
-   ev.type = vgui_KEY_RELEASE;
-   dispatch_to_tableau(ev);
+  vgui_event ev = translate(e);
+  ev.type = vgui_BUTTON_UP;
+  dispatch_to_tableau(ev);
 }
 
 //------------------------------------------------------------------------------
-void vgui_qt_adaptor::wheelEvent      (QWheelEvent* e)
+void
+vgui_qt_adaptor::keyPressEvent(QKeyEvent * e)
 {
-   vgui_event ev = translate(e);
+  vgui_event ev = translate(e);
+  ev.type = vgui_KEY_PRESS;
+  dispatch_to_tableau(ev);
+}
 
-   if (e->delta() > 0) ev.type = vgui_WHEEL_UP;
-   else                ev.type = vgui_WHEEL_DOWN;
-
-   dispatch_to_tableau(ev);
+void
+vgui_qt_adaptor::keyReleaseEvent(QKeyEvent * e)
+{
+  vgui_event ev = translate(e);
+  ev.type = vgui_KEY_RELEASE;
+  dispatch_to_tableau(ev);
 }
 
 //------------------------------------------------------------------------------
-void vgui_qt_adaptor::windowActivationChange (bool oldActive)
+void
+vgui_qt_adaptor::wheelEvent(QWheelEvent * e)
 {
-   vgui_event ev;
+  vgui_event ev = translate(e);
 
-   if (!oldActive)
+  if (e->delta() > 0)
+    ev.type = vgui_WHEEL_UP;
+  else
+    ev.type = vgui_WHEEL_DOWN;
+
+  dispatch_to_tableau(ev);
+}
+
+//------------------------------------------------------------------------------
+void
+vgui_qt_adaptor::windowActivationChange(bool oldActive)
+{
+  vgui_event ev;
+
+  if (!oldActive)
     ev.type = vgui_FOCUSGAINED;
-   else
+  else
     ev.type = vgui_FOCUSLOST;
-   dispatch_to_tableau(ev);
+  dispatch_to_tableau(ev);
 }
 
 //------------------------------------------------------------------------------
-void vgui_qt_internal_timer::activate()
+void
+vgui_qt_internal_timer::activate()
 {
-   if(adaptor){
-      vgui_event e(vgui_TIMER);
-      e.timer_id = id;
-      adaptor->dispatch_to_tableau(e);
-   }
+  if (adaptor)
+  {
+    vgui_event e(vgui_TIMER);
+    e.timer_id = id;
+    adaptor->dispatch_to_tableau(e);
+  }
 }
 
 //------------------------------------------------------------------------------
-vgui_event vgui_qt_adaptor::translate(QMouseEvent* e)
+vgui_event
+vgui_qt_adaptor::translate(QMouseEvent * e)
 {
-   vgui_event ev;
-   ev. modifier = translate(e->modifiers());
-   ev. button = vgui_BUTTON_NULL;
-   if (e-> button () & Qt::LeftButton) ev. button = vgui_LEFT;
-   if (e-> button () & Qt::RightButton) ev. button = vgui_RIGHT;
-   if (e-> button () & Qt::MidButton) ev. button = vgui_MIDDLE;
+  vgui_event ev;
+  ev.modifier = translate(e->modifiers());
+  ev.button = vgui_BUTTON_NULL;
+  if (e->button() & Qt::LeftButton)
+    ev.button = vgui_LEFT;
+  if (e->button() & Qt::RightButton)
+    ev.button = vgui_RIGHT;
+  if (e->button() & Qt::MidButton)
+    ev.button = vgui_MIDDLE;
 
-   ev. wx = e-> x ();
-   ev. wy = QGLWidget::height() - e-> y ();
-   return ev;
+  ev.wx = e->x();
+  ev.wy = QGLWidget::height() - e->y();
+  return ev;
 }
 
-vgui_event vgui_qt_adaptor::translate(QKeyEvent* e)
+vgui_event
+vgui_qt_adaptor::translate(QKeyEvent * e)
 {
-   vgui_event ev;
-   ev. modifier = translate(e->modifiers());
-   ev.set_key(translate(Qt::Key(e->key())));
+  vgui_event ev;
+  ev.modifier = translate(e->modifiers());
+  ev.set_key(translate(Qt::Key(e->key())));
 
-   return ev;
+  return ev;
 }
 
-vgui_event vgui_qt_adaptor::translate(QWheelEvent* e)
+vgui_event
+vgui_qt_adaptor::translate(QWheelEvent * e)
 {
-   vgui_event ev;
-   ev. modifier = translate(e->modifiers());
-   ev. wx = e-> x ();
-   ev. wy = QGLWidget::height () - e-> y ();
-   return ev;
+  vgui_event ev;
+  ev.modifier = translate(e->modifiers());
+  ev.wx = e->x();
+  ev.wy = QGLWidget::height() - e->y();
+  return ev;
 }
 
-vgui_key vgui_qt_adaptor::translate(Qt::Key k)
+vgui_key
+vgui_qt_adaptor::translate(Qt::Key k)
 {
   switch (k)
   {
@@ -324,24 +350,30 @@ vgui_key vgui_qt_adaptor::translate(Qt::Key k)
     case Qt::Key_Insert:
       return vgui_INSERT;
     default:
-      return vgui_key (static_cast<unsigned char>(k));
+      return vgui_key(static_cast<unsigned char>(k));
   }
 
   return vgui_KEY_NULL;
 }
 
-vgui_modifier vgui_qt_adaptor::translate(Qt::KeyboardModifiers m)
+vgui_modifier
+vgui_qt_adaptor::translate(Qt::KeyboardModifiers m)
 {
   int mod = vgui_MODIFIER_NULL;
-  if(m & Qt::CTRL)   mod |= vgui_CTRL;
-  if(m & Qt::SHIFT)  mod |= vgui_SHIFT;
-  if(m & Qt::META)   mod |= vgui_META;
-  if(m & Qt::ALT)    mod |= vgui_ALT;
+  if (m & Qt::CTRL)
+    mod |= vgui_CTRL;
+  if (m & Qt::SHIFT)
+    mod |= vgui_SHIFT;
+  if (m & Qt::META)
+    mod |= vgui_META;
+  if (m & Qt::ALT)
+    mod |= vgui_ALT;
 
   return vgui_modifier(mod);
 }
 
-Qt::Key vgui_qt_adaptor::translate(vgui_key k)
+Qt::Key
+vgui_qt_adaptor::translate(vgui_key k)
 {
   switch (k)
   {
@@ -404,13 +436,18 @@ Qt::Key vgui_qt_adaptor::translate(vgui_key k)
   return Qt::Key_unknown;
 }
 
-Qt::KeyboardModifiers vgui_qt_adaptor::translate(vgui_modifier m)
+Qt::KeyboardModifiers
+vgui_qt_adaptor::translate(vgui_modifier m)
 {
   Qt::KeyboardModifiers mod = Qt::NoModifier;
-  if(m & vgui_CTRL)   mod |= Qt::ControlModifier;
-  if(m & vgui_SHIFT)  mod |= Qt::ShiftModifier;
-  if(m & vgui_META)   mod |= Qt::MetaModifier;
-  if(m & vgui_ALT)    mod |= Qt::AltModifier;
+  if (m & vgui_CTRL)
+    mod |= Qt::ControlModifier;
+  if (m & vgui_SHIFT)
+    mod |= Qt::ShiftModifier;
+  if (m & vgui_META)
+    mod |= Qt::MetaModifier;
+  if (m & vgui_ALT)
+    mod |= Qt::AltModifier;
 
   return mod;
 }

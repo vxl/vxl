@@ -61,61 +61,80 @@ struct vgui_parent_child_link_impl
   // all is stored as a pointer as it must live longer than any static
   // parent_child_links
   typedef std::set<void *> all_t;
-  static all_t* all;
-  static int all_refs;
+  static all_t *           all;
+  static int               all_refs;
 
-  inline vgui_parent_child_link_impl(vgui_tableau *p_, vgui_tableau *c_);
+  inline vgui_parent_child_link_impl(vgui_tableau * p_, vgui_tableau * c_);
   inline ~vgui_parent_child_link_impl();
 
   // This changes the child, not the parent.
-  inline void assign(vgui_tableau *t);
+  inline void
+  assign(vgui_tableau * t);
 
   // There's nothing tricky here. we just return the raw pointers.
-  vgui_tableau *parent() const { return p; }
-  vgui_tableau *child () const { return c; }
+  vgui_tableau *
+  parent() const
+  {
+    return p;
+  }
+  vgui_tableau *
+  child() const
+  {
+    return c;
+  }
 
   // Reference counting. Deriving from vbl_ref_count would make the
   // methods virtual and hence non-inlineable.
-  inline void acquire();
-  inline void release();
+  inline void
+  acquire();
+  inline void
+  release();
 
- private:
-  vgui_tableau *p; // parent
-  vgui_tableau *c; // child
-  int use_count;   // reference count
+private:
+  vgui_tableau * p;         // parent
+  vgui_tableau * c;         // child
+  int            use_count; // reference count
 
   // Helpers. the purpose of these functions is to perform
   // the double link/unlink required to cache the parent-child
   // relation on tableaux. they are static because they may be
   // invoked when the impl object is in a dubious state.
-  static inline void link  (vgui_tableau *p, vgui_tableau *c);
-  static inline void unlink(vgui_tableau *p, vgui_tableau *c);
+  static inline void
+  link(vgui_tableau * p, vgui_tableau * c);
+  static inline void
+  unlink(vgui_tableau * p, vgui_tableau * c);
 };
 
 // static data for impl class :
-std::set<void*>* vgui_parent_child_link_impl::all = nullptr;
-int vgui_parent_child_link_impl::all_refs = -1;
+std::set<void *> * vgui_parent_child_link_impl::all = nullptr;
+int                vgui_parent_child_link_impl::all_refs = -1;
 
-void vgui_parent_child_link_impl::acquire()
+void
+vgui_parent_child_link_impl::acquire()
 {
-  ++ use_count;
+  ++use_count;
 }
 
-void vgui_parent_child_link_impl::release()
+void
+vgui_parent_child_link_impl::release()
 {
   assert(use_count > 0);
 
-  if (-- use_count == 0)
+  if (--use_count == 0)
     delete this;
 }
 
-void vgui_parent_child_link_impl::unlink(vgui_tableau *p, vgui_tableau *c)
+void
+vgui_parent_child_link_impl::unlink(vgui_tableau * p, vgui_tableau * c)
 {
 #if cache_parents
-  if (c) {
-    std::vector<vgui_tableau*> &vec = c->vgui_parent_child_link_data::parents;
-    for (std::vector<vgui_tableau*>::iterator i=vec.begin(); i!=vec.end(); ++i) {
-      if (*i == p) {
+  if (c)
+  {
+    std::vector<vgui_tableau *> & vec = c->vgui_parent_child_link_data::parents;
+    for (std::vector<vgui_tableau *>::iterator i = vec.begin(); i != vec.end(); ++i)
+    {
+      if (*i == p)
+      {
         vec.erase(i);
         break;
       }
@@ -124,7 +143,8 @@ void vgui_parent_child_link_impl::unlink(vgui_tableau *p, vgui_tableau *c)
 #endif
 }
 
-void vgui_parent_child_link_impl::link(vgui_tableau *p, vgui_tableau *c)
+void
+vgui_parent_child_link_impl::link(vgui_tableau * p, vgui_tableau * c)
 {
 #if cache_parents
   if (c)
@@ -132,12 +152,13 @@ void vgui_parent_child_link_impl::link(vgui_tableau *p, vgui_tableau *c)
 #endif
 }
 
-vgui_parent_child_link_impl::vgui_parent_child_link_impl(vgui_tableau *p_, vgui_tableau *c_)
+vgui_parent_child_link_impl::vgui_parent_child_link_impl(vgui_tableau * p_, vgui_tableau * c_)
   : p(p_)
   , c(c_)
   , use_count(0)
 {
-  if (! p) {
+  if (!p)
+  {
     vgui_macro_warning << "parent is null\n";
     assert(false);
   }
@@ -146,7 +167,8 @@ vgui_parent_child_link_impl::vgui_parent_child_link_impl(vgui_tableau *p_, vgui_
     c->ref();
 
   // register.
-  if (all == nullptr) {
+  if (all == nullptr)
+  {
 #ifdef DEBUG
     std::cerr << __FILE__ " : CREATING parent_child_link cache\n";
 #endif
@@ -157,7 +179,8 @@ vgui_parent_child_link_impl::vgui_parent_child_link_impl(vgui_tableau *p_, vgui_
   all->insert(this);
 
   // parent and child are not allowed to be equal.
-  if (p == c) {
+  if (p == c)
+  {
     vgui_macro_warning << "parent and child are equal\n";
     assert(false);
   }
@@ -173,10 +196,11 @@ vgui_parent_child_link_impl::~vgui_parent_child_link_impl()
     c->unref();
 
   // deregister.
-  std::set<void*>::iterator i = all->find(this);
+  std::set<void *>::iterator i = all->find(this);
   assert(i != all->end());
   all->erase(i);
-  if (--all_refs == 0) {
+  if (--all_refs == 0)
+  {
 #ifdef DEBUG
     std::cerr << __FILE__ " : DELETING parent_child_link cache\n";
 #endif
@@ -185,12 +209,14 @@ vgui_parent_child_link_impl::~vgui_parent_child_link_impl()
   }
 }
 
-void vgui_parent_child_link_impl::assign(vgui_tableau *t)
+void
+vgui_parent_child_link_impl::assign(vgui_tableau * t)
 {
   if (t == c)
     return;
 
-  if (t == p) {
+  if (t == p)
+  {
     vgui_macro_warning << "cannot assign() a parent_child_link\'s parent to its child\n";
     assert(false);
   }
@@ -203,7 +229,7 @@ void vgui_parent_child_link_impl::assign(vgui_tableau *t)
   // remember the old 'c' so that it can be unref()fed below.
   // unreffing it here might cause '*this' to be deleted which
   // would be disastrous because we're about to assign to 'this->c'.
-  vgui_tableau *old_c = c;
+  vgui_tableau * old_c = c;
 
   c = t;
 
@@ -216,20 +242,19 @@ void vgui_parent_child_link_impl::assign(vgui_tableau *t)
 
 //------------------------------------------------------------------------------
 
-vgui_parent_child_link::vgui_parent_child_link(vgui_tableau *p)
+vgui_parent_child_link::vgui_parent_child_link(vgui_tableau * p)
 {
   pimpl = new vgui_parent_child_link_impl(p, nullptr);
   pimpl->acquire();
 }
 
-vgui_parent_child_link::vgui_parent_child_link(vgui_tableau *p,
-                                               vgui_tableau_sptr const &c)
+vgui_parent_child_link::vgui_parent_child_link(vgui_tableau * p, vgui_tableau_sptr const & c)
 {
   pimpl = new vgui_parent_child_link_impl(p, c.operator->());
   pimpl->acquire();
 }
 
-vgui_parent_child_link::vgui_parent_child_link(vgui_parent_child_link const &that)
+vgui_parent_child_link::vgui_parent_child_link(vgui_parent_child_link const & that)
 {
   pimpl = that.pimpl;
 
@@ -245,9 +270,11 @@ vgui_parent_child_link::~vgui_parent_child_link()
   pimpl = nullptr;
 }
 
-vgui_parent_child_link &vgui_parent_child_link::operator=(vgui_parent_child_link const &that)
+vgui_parent_child_link &
+vgui_parent_child_link::operator=(vgui_parent_child_link const & that)
 {
-  if (pimpl != that.pimpl) {
+  if (pimpl != that.pimpl)
+  {
     if (that.pimpl)
       that.pimpl->acquire();
 
@@ -260,22 +287,26 @@ vgui_parent_child_link &vgui_parent_child_link::operator=(vgui_parent_child_link
   return *this;
 }
 
-vgui_tableau_sptr vgui_parent_child_link::parent() const
+vgui_tableau_sptr
+vgui_parent_child_link::parent() const
 {
   return pimpl ? pimpl->parent() : nullptr;
 }
 
-vgui_tableau_sptr vgui_parent_child_link::child()  const
+vgui_tableau_sptr
+vgui_parent_child_link::child() const
 {
-  return pimpl ? pimpl->child () : nullptr;
+  return pimpl ? pimpl->child() : nullptr;
 }
 
-bool vgui_parent_child_link::operator==(vgui_tableau_sptr const &t) const
+bool
+vgui_parent_child_link::operator==(vgui_tableau_sptr const & t) const
 {
   return child() == t;
 }
 
-void vgui_parent_child_link::assign(vgui_tableau_sptr const &t)
+void
+vgui_parent_child_link::assign(vgui_tableau_sptr const & t)
 {
   if (pimpl)
     pimpl->assign(t.operator->());
@@ -287,23 +318,26 @@ void vgui_parent_child_link::assign(vgui_tableau_sptr const &t)
   }
 }
 
-bool vgui_parent_child_link::handle(vgui_event const &e)
+bool
+vgui_parent_child_link::handle(vgui_event const & e)
 {
-  if (!pimpl) return false;
-  vgui_tableau* c = pimpl->child();
-  if (!c) return false;
+  if (!pimpl)
+    return false;
+  vgui_tableau * c = pimpl->child();
+  if (!c)
+    return false;
 
   return c->handle(e);
 }
 
 vgui_parent_child_link::operator bool() const
 {
-  return (pimpl && (pimpl->child() != nullptr))? true : false;
+  return (pimpl && (pimpl->child() != nullptr)) ? true : false;
 }
 
 bool vgui_parent_child_link::operator!() const
 {
-  return (pimpl && (pimpl->child() != nullptr))? false : true;
+  return (pimpl && (pimpl->child() != nullptr)) ? false : true;
 }
 
 vgui_parent_child_link::operator vgui_tableau_sptr() const
@@ -311,86 +345,85 @@ vgui_parent_child_link::operator vgui_tableau_sptr() const
   return pimpl ? pimpl->child() : nullptr;
 }
 
-vgui_tableau *vgui_parent_child_link::operator->() const
+vgui_tableau * vgui_parent_child_link::operator->() const
 {
   return pimpl ? pimpl->child() : nullptr;
 }
 
-std::ostream & operator<<(std::ostream &os, vgui_parent_child_link const &s)
+std::ostream &
+operator<<(std::ostream & os, vgui_parent_child_link const & s)
 {
   // the reason for the flush() is to get as much stuff as
   // possible printed before an eventual segfault.
-  return os << "vgui_parent_child_link("
-            << std::flush
-            << static_cast<void*>( s.parent().operator->() ) << ", "
-            << std::flush
-            << static_cast<void*>( s.child ().operator->() ) << ')'
-            << std::flush;
+  return os << "vgui_parent_child_link(" << std::flush << static_cast<void *>(s.parent().operator->()) << ", "
+            << std::flush << static_cast<void *>(s.child().operator->()) << ')' << std::flush;
 }
 
 //------------------------------------------------------------------------------
 
-void vgui_parent_child_link::get_children_of(vgui_tableau_sptr const& tab,
-                                             std::vector<vgui_tableau_sptr> *children)
+void
+vgui_parent_child_link::get_children_of(vgui_tableau_sptr const & tab, std::vector<vgui_tableau_sptr> * children)
 {
-  for (std::set<void*>::iterator i=vgui_parent_child_link_impl::all->begin();
-       i!=vgui_parent_child_link_impl::all->end(); ++i)
+  for (std::set<void *>::iterator i = vgui_parent_child_link_impl::all->begin();
+       i != vgui_parent_child_link_impl::all->end();
+       ++i)
   {
-    vgui_parent_child_link_impl *ptr = static_cast<vgui_parent_child_link_impl*>(*i);
-    if ( ptr->parent() == tab.operator->() )
-      children->push_back( ptr->child() );
+    vgui_parent_child_link_impl * ptr = static_cast<vgui_parent_child_link_impl *>(*i);
+    if (ptr->parent() == tab.operator->())
+      children->push_back(ptr->child());
   }
 }
 
-void vgui_parent_child_link::get_parents_of (vgui_tableau_sptr const& tab,
-                                             std::vector<vgui_tableau_sptr> *parents)
+void
+vgui_parent_child_link::get_parents_of(vgui_tableau_sptr const & tab, std::vector<vgui_tableau_sptr> * parents)
 {
 #if cache_parents
-  std::vector<vgui_tableau*> const &vec
-    = tab->vgui_parent_child_link_data::parents;
-  for (unsigned i=0; i<vec.size(); ++i)
+  std::vector<vgui_tableau *> const & vec = tab->vgui_parent_child_link_data::parents;
+  for (unsigned i = 0; i < vec.size(); ++i)
     parents->push_back(vec[i]);
 #else
-  for (std::set<void*>::iterator i=vgui_parent_child_link_impl::all->begin();
-       i!=vgui_parent_child_link_impl::all->end(); ++i)
+  for (std::set<void *>::iterator i = vgui_parent_child_link_impl::all->begin();
+       i != vgui_parent_child_link_impl::all->end();
+       ++i)
   {
-    vgui_parent_child_link_impl *ptr = static_cast<vgui_parent_child_link_impl*>(*i);
-    if ( ptr->child() == tab.operator->() )
-      children->push_back( ptr->parent() );
+    vgui_parent_child_link_impl * ptr = static_cast<vgui_parent_child_link_impl *>(*i);
+    if (ptr->child() == tab.operator->())
+      children->push_back(ptr->parent());
   }
 #endif
 }
 
-void vgui_parent_child_link::replace_child_everywhere(vgui_tableau_sptr const &old_child,
-                                                      vgui_tableau_sptr const &new_child)
+void
+vgui_parent_child_link::replace_child_everywhere(vgui_tableau_sptr const & old_child,
+                                                 vgui_tableau_sptr const & new_child)
 {
 #ifdef DEBUG
   std::cerr << "vgui_parent_child_link::replace_child_everywhere\n"
-           << "  old_child : " << old_child->pretty_name() << '\t'
-           << "  new child : " << new_child->pretty_name() << '\n';
+            << "  old_child : " << old_child->pretty_name() << '\t' << "  new child : " << new_child->pretty_name()
+            << '\n';
 #endif
 
   if (old_child == new_child)
     std::cerr << "vgui_parent_child_link::replace_child_everywhere: old_child == new_child\n";
 
-  for (std::set<void*>::iterator i=vgui_parent_child_link_impl::all->begin();
-       i!=vgui_parent_child_link_impl::all->end(); ++i)
+  for (std::set<void *>::iterator i = vgui_parent_child_link_impl::all->begin();
+       i != vgui_parent_child_link_impl::all->end();
+       ++i)
   {
-    vgui_parent_child_link_impl *ptr
-      = static_cast<vgui_parent_child_link_impl*>(*i);
+    vgui_parent_child_link_impl * ptr = static_cast<vgui_parent_child_link_impl *>(*i);
 
 #ifdef DEBUG
     std::cerr << "  parent_child_link\t"
-             << "parent : " << ptr->parent()->pretty_name()
-             << "\tchild : ";
-    if (! ptr->child())
+              << "parent : " << ptr->parent()->pretty_name() << "\tchild : ";
+    if (!ptr->child())
       std::cerr << "0\n";
     else
       std::cerr << ptr->child()->pretty_name() << '\n';
 #endif
 
-    if ( ptr->child() == old_child.operator->() ) {
-      assert(ptr->parent() != new_child.operator->() );
+    if (ptr->child() == old_child.operator->())
+    {
+      assert(ptr->parent() != new_child.operator->());
 #ifdef DEBUG
       std::cerr << "  replaced by: " << ptr->child() << '\n';
 #endif
