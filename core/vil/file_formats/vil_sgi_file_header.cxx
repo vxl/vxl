@@ -33,12 +33,12 @@ vil_sgi_file_header::vil_sgi_file_header()
   colormap = 0;
 }
 
-void vil_sgi_file_header::print(std::ostream &s) const
+void
+vil_sgi_file_header::print(std::ostream & s) const
 {
   s << "vil_sgi_file_header:\n"
-    << "  magic    : " << std::hex
-    << "0x" << unsigned(magic[0]) << ' '
-    << "0x" << unsigned(magic[1]) << std::dec << std::endl
+    << "  magic    : " << std::hex << "0x" << unsigned(magic[0]) << ' ' << "0x" << unsigned(magic[1]) << std::dec
+    << std::endl
     << "  storage  : " << storage << std::endl
     << "  bpc      : " << bpc << std::endl
     << "  dimension: " << dimension << std::endl
@@ -47,12 +47,17 @@ void vil_sgi_file_header::print(std::ostream &s) const
     << "  zsize    : " << zsize << std::endl
     << "  pixmin   : " << pixmin << std::endl
     << "  pixmax   : " << pixmax << std::endl
-    << "  colormap : " << colormap << std::endl << std::endl;
+    << "  colormap : " << colormap << std::endl
+    << std::endl;
 }
 
-void vil_sgi_file_header::read(vil_stream *s)
+void
+vil_sgi_file_header::read(vil_stream * s)
 {
-  if (s->read(&magic, sizeof(magic)) == 0) {magic[0] = magic[1] = 0;}
+  if (s->read(&magic, sizeof(magic)) == 0)
+  {
+    magic[0] = magic[1] = 0;
+  }
   s->read(&storage, sizeof(storage));
   s->read(&bpc, sizeof(bpc));
   dimension = vil_stream_read_big_endian_uint_16(s);
@@ -67,7 +72,8 @@ void vil_sgi_file_header::read(vil_stream *s)
   s->read(&dummy2, sizeof(dummy2));
 }
 
-void vil_sgi_file_header::write(vil_stream *s) const
+void
+vil_sgi_file_header::write(vil_stream * s) const
 {
   s->write(&magic, sizeof(magic));
   s->write(&storage, sizeof(storage));
@@ -84,9 +90,8 @@ void vil_sgi_file_header::write(vil_stream *s) const
   s->write(&dummy2, sizeof(dummy2));
 }
 
-bool vil_sgi_file_header::signature_valid() const
+bool
+vil_sgi_file_header::signature_valid() const
 {
-  return
-    magic[0] == SGI_SIGNATURE_BYTE_0 &&
-    magic[1] == SGI_SIGNATURE_BYTE_1;
+  return magic[0] == SGI_SIGNATURE_BYTE_0 && magic[1] == SGI_SIGNATURE_BYTE_1;
 }

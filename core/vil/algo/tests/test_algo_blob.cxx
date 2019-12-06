@@ -8,91 +8,92 @@
 #include "vil/vil_print.h"
 
 
-
-static vil_image_view<bool> generate_test_image()
+static vil_image_view<bool>
+generate_test_image()
 {
-  vil_image_view<bool> image(15,25);
+  vil_image_view<bool> image(15, 25);
   image.fill(false);
-  image( 3, 10 ) = true;
-  image( 3, 11 ) = true;
-  image( 3, 12 ) = true;
-  image( 3, 13 ) = true;
-  image( 3, 14 ) = true;
-  image( 3, 15 ) = true;
-  image( 3, 16 ) = true;
-  image( 4, 8 ) = true;
-  image( 4, 9 ) = true;
-  image( 4, 10 ) = true;
-  image( 4, 11 ) = true;
-  image( 4, 12 ) = true;
-  image( 4, 13 ) = true;
-  image( 4, 14 ) = true;
-  image( 4, 15 ) = true;
-  image( 4, 16 ) = true;
-  image( 4, 17 ) = true;
-  image( 4, 18 ) = true;
-  image( 5, 7 ) = true;
-  image( 5, 8 ) = true;
-  image( 5, 9 ) = true;
-  image( 5, 10 ) = true;
-  image( 5, 11 ) = true;
-  image( 5, 12 ) = true;
-  image( 5, 13 ) = true;
-  image( 5, 14 ) = true;
-  image( 5, 15 ) = true;
-  image( 5, 16 ) = true;
-  image( 5, 17 ) = true;
-  image( 5, 18 ) = true;
-  image( 5, 19 ) = true;
-  image( 6, 6 ) = true;
-  image( 6, 7 ) = true;
-  image( 6, 8 ) = true;
-  image( 6, 9 ) = true;
-  image( 6, 10 ) = true;
-  image( 6, 11 ) = true;
-  image( 6, 12 ) = true;
-  image( 6, 13 ) = true;
-  image( 6, 14 ) = true;
-  image( 6, 15 ) = true;
-  image( 6, 16 ) = true;
-  image( 6, 17 ) = true;
-  image( 6, 18 ) = true;
-  image( 6, 19 ) = true;
-  image( 7, 5 ) = true;
-  image( 7, 6 ) = true;
-  image( 7, 7 ) = true;
-  image( 7, 8 ) = true;
-  image( 7, 18 ) = true;
-  image( 7, 19 ) = true;
-  image( 7, 20 ) = true;
-  image( 8, 5 ) = true;
-  image( 8, 6 ) = true;
-  image( 8, 7 ) = true;
-  image( 8, 20 ) = true;
-  image( 8, 21 ) = true;
-  image( 9, 5 ) = true;
-  image( 9, 6 ) = true;
-  image( 9, 21 ) = true;
-  image( 10, 4 ) = true;
-  image( 10, 5 ) = true;
-  image( 11, 4 ) = true;
-  image( 12, 4 ) = true;
+  image(3, 10) = true;
+  image(3, 11) = true;
+  image(3, 12) = true;
+  image(3, 13) = true;
+  image(3, 14) = true;
+  image(3, 15) = true;
+  image(3, 16) = true;
+  image(4, 8) = true;
+  image(4, 9) = true;
+  image(4, 10) = true;
+  image(4, 11) = true;
+  image(4, 12) = true;
+  image(4, 13) = true;
+  image(4, 14) = true;
+  image(4, 15) = true;
+  image(4, 16) = true;
+  image(4, 17) = true;
+  image(4, 18) = true;
+  image(5, 7) = true;
+  image(5, 8) = true;
+  image(5, 9) = true;
+  image(5, 10) = true;
+  image(5, 11) = true;
+  image(5, 12) = true;
+  image(5, 13) = true;
+  image(5, 14) = true;
+  image(5, 15) = true;
+  image(5, 16) = true;
+  image(5, 17) = true;
+  image(5, 18) = true;
+  image(5, 19) = true;
+  image(6, 6) = true;
+  image(6, 7) = true;
+  image(6, 8) = true;
+  image(6, 9) = true;
+  image(6, 10) = true;
+  image(6, 11) = true;
+  image(6, 12) = true;
+  image(6, 13) = true;
+  image(6, 14) = true;
+  image(6, 15) = true;
+  image(6, 16) = true;
+  image(6, 17) = true;
+  image(6, 18) = true;
+  image(6, 19) = true;
+  image(7, 5) = true;
+  image(7, 6) = true;
+  image(7, 7) = true;
+  image(7, 8) = true;
+  image(7, 18) = true;
+  image(7, 19) = true;
+  image(7, 20) = true;
+  image(8, 5) = true;
+  image(8, 6) = true;
+  image(8, 7) = true;
+  image(8, 20) = true;
+  image(8, 21) = true;
+  image(9, 5) = true;
+  image(9, 6) = true;
+  image(9, 21) = true;
+  image(10, 4) = true;
+  image(10, 5) = true;
+  image(11, 4) = true;
+  image(12, 4) = true;
   return image;
 }
 
 
-static void test_algo_blob()
+static void
+test_algo_blob()
 {
-  std::cout<<"=== Testing vil_blob ===\n";
-  vil_image_view<bool> image(10,11);
-  vil_image_view<unsigned> labels;
-  vil_image_view<unsigned> edge_labels;
-  std::vector<vil_blob_region > regions;
-  std::vector<vil_blob_pixel_list > edge_lists;
+  std::cout << "=== Testing vil_blob ===\n";
+  vil_image_view<bool>             image(10, 11);
+  vil_image_view<unsigned>         labels;
+  vil_image_view<unsigned>         edge_labels;
+  std::vector<vil_blob_region>     regions;
+  std::vector<vil_blob_pixel_list> edge_lists;
 
   // Create 3 x 3 square
   image.fill(false);
-  vil_crop(image, 4,3, 5,3).fill(true);
+  vil_crop(image, 4, 3, 5, 3).fill(true);
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
@@ -108,7 +109,7 @@ static void test_algo_blob()
 
   // Create 1 x 5 line
   image.fill(false);
-  vil_crop(image, 5,1, 3,5).fill(true);
+  vil_crop(image, 5, 1, 3, 5).fill(true);
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
@@ -124,7 +125,7 @@ static void test_algo_blob()
 
 
   // Make an L shape
-  image(6,3)=true;
+  image(6, 3) = true;
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
 
@@ -135,8 +136,8 @@ static void test_algo_blob()
 
   // Make a T shape
   image.fill(false);
-  vil_crop(image, 5,1, 3,5).fill(true);
-  image(6,5)=true;
+  vil_crop(image, 5, 1, 3, 5).fill(true);
+  image(6, 5) = true;
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
 
@@ -148,11 +149,11 @@ static void test_algo_blob()
 
   // Make a U shape
   image.fill(false);
-  vil_crop(image, 3,5, 3,5).fill(true);
-  vil_crop(image, 4,3, 3,3).fill(false);
-  image(3,7)=false;
-  image(7,7)=false;
-  image(5,6)=false;
+  vil_crop(image, 3, 5, 3, 5).fill(true);
+  vil_crop(image, 4, 3, 3, 3).fill(false);
+  image(3, 7) = false;
+  image(7, 7) = false;
+  image(5, 6) = false;
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
@@ -162,13 +163,11 @@ static void test_algo_blob()
   TEST("Area (U shape)", vil_area(regions[0]), 13);
 
 
-
-
   // Make a V shape
   image.fill(false);
-  image(6,5)=true;
-  image(5,4)=true;
-  image(7,4)=true;
+  image(6, 5) = true;
+  image(5, 4) = true;
+  image(7, 4) = true;
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
@@ -188,8 +187,8 @@ static void test_algo_blob()
 
   // Make a Cross shape
   image.fill(false);
-  vil_crop(image, 5,1, 3,5).fill(true);
-  vil_crop(image, 3,5, 5,1).fill(true);
+  vil_crop(image, 5, 1, 3, 5).fill(true);
+  vil_crop(image, 3, 5, 5, 1).fill(true);
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
@@ -217,7 +216,7 @@ static void test_algo_blob()
 
   // Line up to edge
   image.fill(false);
-  vil_crop(image, 5,1, 0,10).fill(true);
+  vil_crop(image, 5, 1, 0, 10).fill(true);
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
   vil_print_all(std::cout, labels, 1);
@@ -227,7 +226,7 @@ static void test_algo_blob()
 
   // Line up to edge
   image.fill(false);
-  vil_crop(image, 0,10, 5,1).fill(true);
+  vil_crop(image, 0, 10, 5, 1).fill(true);
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
   vil_print_all(std::cout, labels, 1);
@@ -236,11 +235,11 @@ static void test_algo_blob()
   TEST("Area (Horizontal line)", vil_area(regions[0]), 10);
   TEST("N chords (Horizontal line)", regions[0].size(), 1);
 
-  std::cout<<"Test nested blobs."<<std::endl;
+  std::cout << "Test nested blobs." << std::endl;
   image.fill(false);
-  vil_crop(image, 3,6, 3,6).fill(true);
-  vil_crop(image, 4,4, 4,4).fill(false);
-  vil_crop(image, 5,2, 5,2).fill(true);
+  vil_crop(image, 3, 6, 3, 6).fill(true);
+  vil_crop(image, 4, 4, 4, 4).fill(false);
+  vil_crop(image, 5, 2, 5, 2).fill(true);
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
@@ -263,13 +262,12 @@ static void test_algo_blob()
     vil_print_all(std::cout, labels, 1);
     vil_print_all(std::cout, edge_labels, 1);
 
-    TEST("Number of blobs", regions.size(), 1 );
+    TEST("Number of blobs", regions.size(), 1);
 
-    TEST("Size of blob", vil_area(regions[0]), 64 );
+    TEST("Size of blob", vil_area(regions[0]), 64);
 
-    TEST("Number of blob edge lists", edge_lists.size(), 1 );
-    TEST("Size of blob 8-conn edge ", edge_lists[0].size(), 40 );
-
+    TEST("Number of blob edge lists", edge_lists.size(), 1);
+    TEST("Size of blob 8-conn edge ", edge_lists[0].size(), 40);
   }
 }
 

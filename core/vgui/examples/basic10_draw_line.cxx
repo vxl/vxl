@@ -19,27 +19,28 @@ struct example_tableau : public vgui_easy2D_tableau
   float start_y;
 
   // Constructor
-  example_tableau(vgui_image_tableau_sptr imtab) :
-    vgui_easy2D_tableau(imtab)
-    {
-      start_x = -1;
-      start_y = -1;
-    }
+  example_tableau(vgui_image_tableau_sptr imtab)
+    : vgui_easy2D_tableau(imtab)
+  {
+    start_x = -1;
+    start_y = -1;
+  }
 
   // Destructor
-  ~example_tableau() { }
+  ~example_tableau() {}
 
   // Receives all events passed to this tableau.
   // We are interested in mouse button down events defining the start and
   // end points of the line.
-  bool handle(const vgui_event &e)
+  bool
+  handle(const vgui_event & e)
   {
     if (e.type == vgui_BUTTON_DOWN && e.button == vgui_LEFT && e.modifier == 0)
     {
       // Convert the coordinates from viewport coords to image coords:
       vgui_projection_inspector pi;
-      float ix, iy;
-      pi.window_to_image_coordinates(int(e.wx),int(e.wy), ix,iy);
+      float                     ix, iy;
+      pi.window_to_image_coordinates(int(e.wx), int(e.wy), ix, iy);
 
       if (start_x == -1)
       {
@@ -67,11 +68,14 @@ struct example_tableau : public vgui_easy2D_tableau
 // Make a smart-pointer constructor for our tableau.
 struct example_tableau_new : public vgui_easy2D_tableau_sptr
 {
-  example_tableau_new(vgui_image_tableau_sptr const& i) : vgui_easy2D_tableau_sptr(new example_tableau(i)) { }
+  example_tableau_new(vgui_image_tableau_sptr const & i)
+    : vgui_easy2D_tableau_sptr(new example_tableau(i))
+  {}
 };
 
 //----------------------------------------------------------------------------
-int main(int argc,char **argv)
+int
+main(int argc, char ** argv)
 {
   vgui::init(argc, argv);
   if (argc <= 1)
@@ -86,7 +90,7 @@ int main(int argc,char **argv)
   example_tableau_new example_tab(image);
 
   vgui_viewer2D_tableau_new viewer(example_tab);
-  vgui_shell_tableau_new shell(viewer);
+  vgui_shell_tableau_new    shell(viewer);
 
   return vgui::run(shell, 512, 512);
 }

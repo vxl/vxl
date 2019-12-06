@@ -1,5 +1,5 @@
 #if 0 // this file is no longer needed?
-#include "vil1/vil1_rgb.h"
+#  include "vil1/vil1_rgb.h"
 
 // the following cpp logic mirrors that in vil1_rgb.h :
 

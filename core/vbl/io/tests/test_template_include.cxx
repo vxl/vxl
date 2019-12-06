@@ -7,4 +7,8 @@
 #include <vbl/io/vbl_io_sparse_array_base.hxx>
 #include <vbl/io/vbl_io_triple.hxx>
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

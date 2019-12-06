@@ -16,73 +16,79 @@
 
 //--------------------------------------------------------------------------------
 
-char const* vil1_bmp_format_tag = "bmp";
+char const * vil1_bmp_format_tag = "bmp";
 
-vil1_image_impl* vil1_bmp_file_format::make_input_image(vil1_stream* is)
+vil1_image_impl *
+vil1_bmp_file_format::make_input_image(vil1_stream * is)
 {
   // Attempt to read header
   vil1_bmp_file_header hdr;
   is->seek(0L);
   hdr.read(is);
 
-  if ( hdr.signature_valid() )
+  if (hdr.signature_valid())
     return new vil1_bmp_generic_image(is);
   else
     return nullptr;
 }
 
-vil1_image_impl* vil1_bmp_file_format::make_output_image(vil1_stream* is, int planes,
-                                                         int width,
-                                                         int height,
-                                                         int components,
-                                                         int bits_per_component,
-                                                         vil1_component_format format)
+vil1_image_impl *
+vil1_bmp_file_format::make_output_image(vil1_stream *         is,
+                                        int                   planes,
+                                        int                   width,
+                                        int                   height,
+                                        int                   components,
+                                        int                   bits_per_component,
+                                        vil1_component_format format)
 {
   return new vil1_bmp_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
-char const* vil1_bmp_file_format::tag() const
+char const *
+vil1_bmp_file_format::tag() const
 {
   return vil1_bmp_format_tag;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-char const* vil1_bmp_generic_image::file_format() const
+char const *
+vil1_bmp_generic_image::file_format() const
 {
   return vil1_bmp_format_tag;
 }
 
-vil1_bmp_generic_image::vil1_bmp_generic_image(vil1_stream* is)
+vil1_bmp_generic_image::vil1_bmp_generic_image(vil1_stream * is)
   : is_(is)
   , bit_map_start(-1L)
-  //, freds_colormap(0)
-  //, local_color_map_(0)
+//, freds_colormap(0)
+//, local_color_map_(0)
 {
   is_->ref();
   read_header();
 }
 
-bool vil1_bmp_generic_image::get_property(char const *tag, void *prop) const
+bool
+vil1_bmp_generic_image::get_property(char const * tag, void * prop) const
 {
-  if (0==std::strcmp(tag, vil1_property_top_row_first))
-    return prop ? (*(bool*)prop) = false, true : true;
+  if (0 == std::strcmp(tag, vil1_property_top_row_first))
+    return prop ? (*(bool *)prop) = false, true : true;
 
-  if (0==std::strcmp(tag, vil1_property_left_first))
-    return prop ? (*(bool*)prop) = true : true;
+  if (0 == std::strcmp(tag, vil1_property_left_first))
+    return prop ? (*(bool *)prop) = true : true;
 
-  if (0==std::strcmp(tag, vil1_property_component_order_is_BGR))
-    return prop ? (*(bool*)prop) = true : true;
+  if (0 == std::strcmp(tag, vil1_property_component_order_is_BGR))
+    return prop ? (*(bool *)prop) = true : true;
 
   return false;
 }
 
-vil1_bmp_generic_image::vil1_bmp_generic_image(vil1_stream* is,
-                                               int planes,
-                                               int width,
-                                               int height,
-                                               int components,
-                                               int bits_per_component,
+vil1_bmp_generic_image::vil1_bmp_generic_image(vil1_stream * is,
+                                               int           planes,
+                                               int           width,
+                                               int           height,
+                                               int           components,
+                                               int           bits_per_component,
                                                vil1_component_format /*format*/)
   : is_(is)
   , bit_map_start(-1L)
@@ -125,13 +131,15 @@ vil1_bmp_generic_image::~vil1_bmp_generic_image()
   is_->unref();
 }
 
-bool vil1_bmp_generic_image::read_header()
+bool
+vil1_bmp_generic_image::read_header()
 {
   // seek to beginning and read file header.
   is_->seek(0L);
   file_hdr.read(is_);
-  if ( ! file_hdr.signature_valid() ) {
-    where <<  "File is not a valid BMP file\n";
+  if (!file_hdr.signature_valid())
+  {
+    where << "File is not a valid BMP file\n";
     return false;
   }
 #ifdef DEBUG
@@ -145,28 +153,33 @@ bool vil1_bmp_generic_image::read_header()
 #endif
   // allowed values for bitsperpixel are 1 4 8 16 24 32;
   // currently we only support 8 and 24 - FIXME
-  if ( core_hdr.bitsperpixel != 8 && core_hdr.bitsperpixel != 24 ) {
+  if (core_hdr.bitsperpixel != 8 && core_hdr.bitsperpixel != 24)
+  {
     where << "BMP file has a non-supported pixel size of " << core_hdr.bitsperpixel << " bits\n";
     return false;
   }
 
   // determine whether or not there is an info header from
   // the size field.
-  if (core_hdr.header_size == vil1_bmp_core_header::disk_size) {
+  if (core_hdr.header_size == vil1_bmp_core_header::disk_size)
+  {
     // no info header.
   }
-  else if (core_hdr.header_size == vil1_bmp_core_header::disk_size + vil1_bmp_info_header::disk_size) {
+  else if (core_hdr.header_size == vil1_bmp_core_header::disk_size + vil1_bmp_info_header::disk_size)
+  {
     // probably an info header. read it now.
     info_hdr.read(is_);
 #ifdef DEBUG
     info_hdr.print(std::cerr); // blather
 #endif
-    if (info_hdr.compression) {
+    if (info_hdr.compression)
+    {
       where << "cannot cope with compression at the moment\n";
       return false;
     }
   }
-  else {
+  else
+  {
     // urgh!
     where << "dunno about header_size " << core_hdr.header_size << std::endl;
     return false;
@@ -258,26 +271,26 @@ bool vil1_bmp_generic_image::read_header()
   return true;
 }
 
-bool vil1_bmp_generic_image::write_header()
+bool
+vil1_bmp_generic_image::write_header()
 {
 #ifdef DEBUG
   std::cerr << "Writing BMP header\n"
-           << width() << 'x' << height() << '@'
-           << components() << 'x' << bits_per_component() << '\n';
+            << width() << 'x' << height() << '@' << components() << 'x' << bits_per_component() << '\n';
 #endif
 
   int rowlen = width() * components() * bits_per_component() / 8;
-  rowlen += (3-(rowlen-1)%4); // round up to multiple of 4
+  rowlen += (3 - (rowlen - 1) % 4); // round up to multiple of 4
   int data_size = height() * rowlen;
 
   if (components() == 1)
-    info_hdr.colorcount = info_hdr.colormapsize = 1<<bits_per_component();
+    info_hdr.colorcount = info_hdr.colormapsize = 1 << bits_per_component();
   file_hdr.bitmap_offset = bit_map_start = 54L + 4 * info_hdr.colormapsize;
-  file_hdr.file_size = bit_map_start+data_size;
+  file_hdr.file_size = bit_map_start + data_size;
   core_hdr.header_size = 40;
   core_hdr.width = width();
   core_hdr.height = height();
-  core_hdr.bitsperpixel = components()*bits_per_component();
+  core_hdr.bitsperpixel = components() * bits_per_component();
   info_hdr.bitmap_size = data_size;
 
   is_->seek(0L);
@@ -285,11 +298,11 @@ bool vil1_bmp_generic_image::write_header()
   core_hdr.write(is_);
   info_hdr.write(is_);
   if (components() == 1) // Need to write a colourmap in this case
-    for (int i=0; i<(1<<bits_per_component()); ++i)
-      for (int j=0; j<4; ++j)
+    for (int i = 0; i < (1 << bits_per_component()); ++i)
+      for (int j = 0; j < 4; ++j)
       {
         unsigned char c = i;
-        is_->write(&c,1L);
+        is_->write(&c, 1L);
       }
 
   return true;
@@ -297,10 +310,11 @@ bool vil1_bmp_generic_image::write_header()
 
 //------------------------------------------------------------
 
-bool vil1_bmp_generic_image::get_section(void* ib, int x0, int y0, int w, int h) const
+bool
+vil1_bmp_generic_image::get_section(void * ib, int x0, int y0, int w, int h) const
 {
   assert(ib != nullptr);
-  char *bp = static_cast<char*>(ib);
+  char * bp = static_cast<char *>(ib);
 
   //
   unsigned bytes_per_pixel = core_hdr.bitsperpixel / 8;
@@ -308,37 +322,39 @@ bool vil1_bmp_generic_image::get_section(void* ib, int x0, int y0, int w, int h)
   // FIXME - add support for 1, 4, 16 and 32 bpp
 
   // actual number of bytes per raster in file.
-  unsigned have_bytes_per_raster = ((bytes_per_pixel * core_hdr.width + 3)>>2)<<2;
+  unsigned have_bytes_per_raster = ((bytes_per_pixel * core_hdr.width + 3) >> 2) << 2;
 
   // number of bytes we want per raster.
-  unsigned long want_bytes_per_raster = w*bytes_per_pixel;
+  unsigned long want_bytes_per_raster = w * bytes_per_pixel;
 
   // read each raster in turn. if the client wants the whole image, it may
   // be faster to read() it all in one chunk, so long as the number of bytes
   // per image raster is divisible by four (because the file rasters are
   // padded at the ends).
-  for (int i=0; i<h; ++i) {
-    is_->seek(bit_map_start + have_bytes_per_raster*(i+y0) + x0*bytes_per_pixel);
-    is_->read(bp + want_bytes_per_raster*i, want_bytes_per_raster);
+  for (int i = 0; i < h; ++i)
+  {
+    is_->seek(bit_map_start + have_bytes_per_raster * (i + y0) + x0 * bytes_per_pixel);
+    is_->read(bp + want_bytes_per_raster * i, want_bytes_per_raster);
   }
 
   return true;
 }
 
 
-bool vil1_bmp_generic_image::put_section(void const *ib, int x0, int y0, int xs, int ys)
+bool
+vil1_bmp_generic_image::put_section(void const * ib, int x0, int y0, int xs, int ys)
 {
   assert(ib != nullptr);
-  int bypp = (components() * bits_per_component() +7) / 8;
+  int bypp = (components() * bits_per_component() + 7) / 8;
   int rowlen = width() * bypp;
-  rowlen += (3-(rowlen-1)%4); // round up to a multiple of 4
+  rowlen += (3 - (rowlen - 1) % 4); // round up to a multiple of 4
 
-  int skip_rows = height()-y0-ys;
+  int skip_rows = height() - y0 - ys;
 
-  for (int y=0; y<ys; ++y,++skip_rows)
+  for (int y = 0; y < ys; ++y, ++skip_rows)
   {
-    is_->seek(bit_map_start+skip_rows*rowlen+x0*bypp);
-    is_->write(((char const*)ib)+y*xs*bypp, xs*bypp);
+    is_->seek(bit_map_start + skip_rows * rowlen + x0 * bypp);
+    is_->write(((char const *)ib) + y * xs * bypp, xs * bypp);
   }
 
   return true;

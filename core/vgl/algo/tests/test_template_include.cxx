@@ -19,4 +19,8 @@
 #include <vgl/algo/vgl_p_matrix.hxx>
 #include <vgl/algo/vgl_rtree.hxx>
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

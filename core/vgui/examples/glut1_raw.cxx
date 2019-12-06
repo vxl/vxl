@@ -29,18 +29,21 @@ vgui_loader_tableau_new load(deck);
 vgui_shell_tableau_new  shell(load);
 
 // GLUT keyboard event callback
-void keyboard(unsigned char k, int, int)
+void
+keyboard(unsigned char k, int, int)
 {
-  if (k=='q' || k=='Q' || k==27)
+  if (k == 'q' || k == 'Q' || k == 27)
     std::exit(0);
 }
 
 // GLUT idle callback
-void idle()
+void
+idle()
 {
   static std::time_t last = 0;
-  std::time_t now = time(nullptr);
-  if (now > last) {
+  std::time_t        now = time(nullptr);
+  if (now > last)
+  {
     // Advance the deck
     deck->next();
 
@@ -51,7 +54,8 @@ void idle()
 }
 
 // GLUT display callback
-void display()
+void
+display()
 {
   // This is the point where the vgui tableaux get to do their stuff.
   shell->handle(vgui_DRAW);
@@ -60,12 +64,13 @@ void display()
 }
 
 // usage: give a number of image filenames on command line.
-int main(int argc, char **argv)
+int
+main(int argc, char ** argv)
 {
   // Initialize the tableau, and add any images on the commandline
   // to the deck.  When run, the images will cycle.
   load->set_image(512, 512);
-  for (int i=1; i<argc; ++i)
+  for (int i = 1; i < argc; ++i)
     deck->add(vgui_image_tableau_new(argv[i]));
 
   glutInit(&argc, argv);

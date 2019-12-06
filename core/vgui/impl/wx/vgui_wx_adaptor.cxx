@@ -20,9 +20,8 @@
 #include <wx/timer.h>
 #include <wx/dcclient.h>
 
-#ifndef wxEventHandler               // wxWidgets-2.5.3 doesn't define this
-#define wxEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxEventFunction, &func)
+#ifndef wxEventHandler // wxWidgets-2.5.3 doesn't define this
+#  define wxEventHandler(func) (wxObjectEventFunction) wxStaticCastEvent(wxEventFunction, &func)
 #endif
 
 #include <cassert>
@@ -33,16 +32,22 @@
 //-------------------------------------------------------------------------
 namespace
 {
-  //: Event type for dynamic timer events.
-  const wxEventType wxEVT_VGUI_TIMER = wxNewEventType();
+//: Event type for dynamic timer events.
+const wxEventType wxEVT_VGUI_TIMER = wxNewEventType();
 
-  inline bool is_modifier(int key_code);
-  inline vgui_modifier get_modifiers(const wxMouseEvent& e);
-  inline vgui_modifier get_modifiers(const wxKeyEvent& e);
-  inline vgui_event_type translate_mouse_event_type(const wxMouseEvent& e);
-  inline vgui_button translate_mouse_button(int button);
-  inline vgui_key translate_key(int key_code);
-}
+inline bool
+is_modifier(int key_code);
+inline vgui_modifier
+get_modifiers(const wxMouseEvent & e);
+inline vgui_modifier
+get_modifiers(const wxKeyEvent & e);
+inline vgui_event_type
+translate_mouse_event_type(const wxMouseEvent & e);
+inline vgui_button
+translate_mouse_button(int button);
+inline vgui_key
+translate_key(int key_code);
+} // namespace
 
 //-------------------------------------------------------------------------
 // vgui_wx_adaptor implementation - construction & destruction.
@@ -53,15 +58,14 @@ IMPLEMENT_CLASS(vgui_wx_adaptor, wxGLCanvas)
 vgui_menu vgui_wx_adaptor::last_popup_;
 
 //: Constructor.
-vgui_wx_adaptor::vgui_wx_adaptor(wxWindow* parent,
-                                 wxWindowID id,
-                                 const wxPoint& pos,
-                                 const wxSize& size,
-                                 long style,
-                                 const wxString& name,
-                                 int* attributes)
-  : wxGLCanvas(parent, id, pos, size,
-               style|wxFULL_REPAINT_ON_RESIZE|wxBORDER_SUNKEN, name, attributes)
+vgui_wx_adaptor::vgui_wx_adaptor(wxWindow *       parent,
+                                 wxWindowID       id,
+                                 const wxPoint &  pos,
+                                 const wxSize &   size,
+                                 long             style,
+                                 const wxString & name,
+                                 int *            attributes)
+  : wxGLCanvas(parent, id, pos, size, style | wxFULL_REPAINT_ON_RESIZE | wxBORDER_SUNKEN, name, attributes)
   , view_(0)
   , redraw_posted_(true)
   , overlay_redraw_posted_(true)
@@ -81,7 +85,8 @@ vgui_wx_adaptor::~vgui_wx_adaptor()
 // vgui_wx_adaptor implementation - virtual functions from vgui_adaptor.
 //-------------------------------------------------------------------------
 //: Redraw the rendering area.
-void vgui_wx_adaptor::post_redraw(void)
+void
+vgui_wx_adaptor::post_redraw(void)
 {
   if (!redraw_posted_)
   {
@@ -91,7 +96,8 @@ void vgui_wx_adaptor::post_redraw(void)
 }
 
 //: Redraws overlay buffer.
-void vgui_wx_adaptor::post_overlay_redraw(void)
+void
+vgui_wx_adaptor::post_overlay_redraw(void)
 {
   if (!overlay_redraw_posted_)
   {
@@ -101,7 +107,8 @@ void vgui_wx_adaptor::post_overlay_redraw(void)
 }
 
 //: Flags that a child requests idle processing.
-void vgui_wx_adaptor::post_idle_request(void)
+void
+vgui_wx_adaptor::post_idle_request(void)
 {
   if (!idle_request_posted_)
   {
@@ -112,13 +119,15 @@ void vgui_wx_adaptor::post_idle_request(void)
 
 
 //: ***** What is this for???
-void vgui_wx_adaptor::post_message(char const *, void const *)
+void
+vgui_wx_adaptor::post_message(char const *, void const *)
 {
   assert(false);
 }
 
 //: Schedules destruction of parent vgui_window.
-void vgui_wx_adaptor::post_destroy(void)
+void
+vgui_wx_adaptor::post_destroy(void)
 {
   // ***** forget about any posted redraws
   redraw_posted_ = false;
@@ -132,40 +141,44 @@ void vgui_wx_adaptor::post_destroy(void)
     Close();
   }
 
-  //if (view_)
+  // if (view_)
   //{
   //  view_->GetDocument()->DeleteAllViews();
   //}
-  //else
+  // else
   //{
   //  // ***** or should I call Destroy() ???
   //  GetParent()->Close();
   //}
-  //destroy_posted_ = true;
+  // destroy_posted_ = true;
 
   vgui_macro_report_errors;
 }
 
 //: Sets timer 'id' to dispatch a vgui_TIMER event every 'timeout' ms.
-void vgui_wx_adaptor::post_timer(float timeout, int id)
+void
+vgui_wx_adaptor::post_timer(float timeout, int id)
 {
   Connect(id, wxEVT_VGUI_TIMER, wxEventHandler(vgui_wx_adaptor::on_timer));
 }
 
 //: Stop timer 'id'.
-void vgui_wx_adaptor::kill_timer(int id)
+void
+vgui_wx_adaptor::kill_timer(int id)
 {
   Disconnect(id, wxEVT_VGUI_TIMER);
 }
 
 //: Swap buffers if using double buffering.
-void vgui_wx_adaptor::swap_buffers()
+void
+vgui_wx_adaptor::swap_buffers()
 {
   SwapBuffers();
 }
 
 //: Make this the current GL rendering context.
-void vgui_wx_adaptor::make_current()
+void
+vgui_wx_adaptor::make_current()
 {
   SetCurrent();
 }
@@ -174,19 +187,20 @@ void vgui_wx_adaptor::make_current()
 // vgui_wx_adaptor implementation - event handling.
 //-------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(vgui_wx_adaptor, wxGLCanvas)
-  EVT_SIZE(vgui_wx_adaptor::on_size)
-  EVT_PAINT(vgui_wx_adaptor::on_paint)
-  EVT_ERASE_BACKGROUND(vgui_wx_adaptor::on_erase_background)
-  EVT_KEY_DOWN(vgui_wx_adaptor::on_key_down)
-  EVT_KEY_UP(vgui_wx_adaptor::on_key_up)
-  EVT_CHAR(vgui_wx_adaptor::on_char)
-  EVT_MOUSE_EVENTS(vgui_wx_adaptor::on_mouse_event)
-  EVT_IDLE(vgui_wx_adaptor::on_idle)
-  EVT_CLOSE(vgui_wx_adaptor::on_close)
+EVT_SIZE(vgui_wx_adaptor::on_size)
+EVT_PAINT(vgui_wx_adaptor::on_paint)
+EVT_ERASE_BACKGROUND(vgui_wx_adaptor::on_erase_background)
+EVT_KEY_DOWN(vgui_wx_adaptor::on_key_down)
+EVT_KEY_UP(vgui_wx_adaptor::on_key_up)
+EVT_CHAR(vgui_wx_adaptor::on_char)
+EVT_MOUSE_EVENTS(vgui_wx_adaptor::on_mouse_event)
+EVT_IDLE(vgui_wx_adaptor::on_idle)
+EVT_CLOSE(vgui_wx_adaptor::on_close)
 END_EVENT_TABLE()
 
 //: Called when canvas is resized.
-void vgui_wx_adaptor::on_size(wxSizeEvent& event)
+void
+vgui_wx_adaptor::on_size(wxSizeEvent & event)
 {
   wxGLCanvas::OnSize(event);
   dispatch_to_tableau(vgui_RESHAPE);
@@ -195,14 +209,18 @@ void vgui_wx_adaptor::on_size(wxSizeEvent& event)
 }
 
 //: Called when a window needs to be repainted.
-void vgui_wx_adaptor::on_paint(wxPaintEvent& WXUNUSED(event))
+void
+vgui_wx_adaptor::on_paint(wxPaintEvent & WXUNUSED(event))
 {
   vgui_macro_report_errors;
   // must always be here
   wxPaintDC dc(this);
 
 #ifndef __WXMOTIF__
-  if (!GetContext()) { return; }
+  if (!GetContext())
+  {
+    return;
+  }
 #endif
 
   SetCurrent();
@@ -224,16 +242,18 @@ void vgui_wx_adaptor::on_paint(wxPaintEvent& WXUNUSED(event))
 }
 
 //: Called when the background needs erasing (i.e., before repainting).
-void vgui_wx_adaptor::on_erase_background(wxEraseEvent& WXUNUSED(event))
+void
+vgui_wx_adaptor::on_erase_background(wxEraseEvent & WXUNUSED(event))
 {
   vgui_macro_report_errors;
   // do nothing (avoids flickering in wxMSW)
 }
 
 //: Helper used by on_key_up/down to reduce code duplication.
-void vgui_wx_adaptor::on_key(vgui_event& ve, wxKeyEvent& event)
+void
+vgui_wx_adaptor::on_key(vgui_event & ve, wxKeyEvent & event)
 {
-  ve.origin   = this;
+  ve.origin = this;
 
   ve.ascii_char = translate_key(event.GetKeyCode());
   ve.modifier = get_modifiers(event);
@@ -244,7 +264,10 @@ void vgui_wx_adaptor::on_key(vgui_event& ve, wxKeyEvent& event)
   {
     ve.key = static_cast<vgui_key>(ve.ascii_char + 'a' - 1);
   }
-  else { ve.set_key(ve.ascii_char); }
+  else
+  {
+    ve.set_key(ve.ascii_char);
+  }
 
 #if 0
   if (ve.type == vgui_KEY_PRESS)
@@ -261,12 +284,16 @@ void vgui_wx_adaptor::on_key(vgui_event& ve, wxKeyEvent& event)
   // ***** what exactly goes here??
   ve.timestamp = 0;
 
-  if (!dispatch_to_tableau(ve)) { event.Skip(); }
-  //invalidate_canvas();
+  if (!dispatch_to_tableau(ve))
+  {
+    event.Skip();
+  }
+  // invalidate_canvas();
 }
 
 //: Called when a key is pressed.
-void vgui_wx_adaptor::on_key_down(wxKeyEvent& event)
+void
+vgui_wx_adaptor::on_key_down(wxKeyEvent & event)
 {
   // if it's a modifier event let it propagate
   if (is_modifier(event.GetKeyCode()))
@@ -283,12 +310,13 @@ void vgui_wx_adaptor::on_key_down(wxKeyEvent& event)
   last_key_down_ = event.GetKeyCode();
   event.Skip();
 
-  //vgui_event e(vgui_KEY_PRESS);
-  //on_key(e, event);
+  // vgui_event e(vgui_KEY_PRESS);
+  // on_key(e, event);
 }
 
 //: Called when a key is released.
-void vgui_wx_adaptor::on_key_up(wxKeyEvent& event)
+void
+vgui_wx_adaptor::on_key_up(wxKeyEvent & event)
 {
   if (is_modifier(event.GetKeyCode()))
   {
@@ -313,7 +341,8 @@ void vgui_wx_adaptor::on_key_up(wxKeyEvent& event)
 // To catch this event after a key_down has been caught, call
 // event.skip() from the on_key_down handler. Note that the char event
 // is always generated after the key_down event in wxWidgets.
-void vgui_wx_adaptor::on_char(wxKeyEvent& event)
+void
+vgui_wx_adaptor::on_char(wxKeyEvent & event)
 {
   if (is_modifier(event.GetKeyCode()))
   {
@@ -334,15 +363,16 @@ void vgui_wx_adaptor::on_char(wxKeyEvent& event)
 }
 
 //: Called for all types of mouse events (e.g., button-up, motion, etc.).
-void vgui_wx_adaptor::on_mouse_event(wxMouseEvent& event)
+void
+vgui_wx_adaptor::on_mouse_event(wxMouseEvent & event)
 {
   vgui_macro_report_errors;
   vgui_event e;
 
-  e.origin   = this;
+  e.origin = this;
   e.modifier = get_modifiers(event);
-  e.button   = translate_mouse_button(event.GetButton());
-  e.type     = translate_mouse_event_type(event);
+  e.button = translate_mouse_button(event.GetButton());
+  e.type = translate_mouse_event_type(event);
 
   // ***** what should I return here?? What about if scrolled window??
   e.wx = event.GetX();
@@ -351,32 +381,31 @@ void vgui_wx_adaptor::on_mouse_event(wxMouseEvent& event)
   // ***** what exactly goes here??
   e.timestamp = 0;
 
-  if ( e.modifier == mixin::popup_modifier &&
-       e.button   == mixin::popup_button )
+  if (e.modifier == mixin::popup_modifier && e.button == mixin::popup_button)
   {
-  vgui_macro_report_errors;
+    vgui_macro_report_errors;
     vgui_popup_params params;
     params.x = e.wx;
     params.y = e.wy;
 
-  vgui_macro_report_errors;
+    vgui_macro_report_errors;
     // ***** why can't last_popup be local??
     last_popup_ = get_total_popup(params);
 
-  vgui_macro_report_errors;
+    vgui_macro_report_errors;
     // present the popup menu
     vgui_wx_menu popup;
-    wxMenu* menu = popup.create_wx_menu(last_popup_);
-  vgui_macro_report_errors;
+    wxMenu *     menu = popup.create_wx_menu(last_popup_);
+    vgui_macro_report_errors;
     PushEventHandler(&popup);
     PopupMenu(menu);
     PopEventHandler();
-  vgui_macro_report_errors;
+    vgui_macro_report_errors;
     delete menu;
 
-  vgui_macro_report_errors;
+    vgui_macro_report_errors;
     invalidate_canvas();
-  vgui_macro_report_errors;
+    vgui_macro_report_errors;
     return;
   }
 
@@ -393,20 +422,24 @@ void vgui_wx_adaptor::on_mouse_event(wxMouseEvent& event)
     }
   }
 
-  if (!dispatch_to_tableau(e)) { event.Skip(); }
-  //invalidate_canvas();
+  if (!dispatch_to_tableau(e))
+  {
+    event.Skip();
+  }
+  // invalidate_canvas();
   vgui_macro_report_errors;
 }
 
 //: Called when the system becomes idle.
-void vgui_wx_adaptor::on_idle(wxIdleEvent& event)
+void
+vgui_wx_adaptor::on_idle(wxIdleEvent & event)
 {
   if (idle_request_posted_)
   {
     idle_request_posted_ = dispatch_to_tableau(vgui_IDLE);
     event.RequestMore(idle_request_posted_);
-    //post_redraw();
-    //invalidate_canvas();
+    // post_redraw();
+    // invalidate_canvas();
   }
 
   event.Skip();
@@ -415,19 +448,21 @@ void vgui_wx_adaptor::on_idle(wxIdleEvent& event)
 //: Called when the user tries to close a frame or dialog box.
 // The event can be generated programmatically or when the user tries to
 // close using the window manager (X) or system menu (Windows).
-void vgui_wx_adaptor::on_close(wxCloseEvent& event)
+void
+vgui_wx_adaptor::on_close(wxCloseEvent & event)
 {
   // ***** can't find error with inline_tableaus
   vgui_macro_report_errors;
   dispatch_to_tableau(vgui_DESTROY);
   vgui_macro_report_errors;
   Destroy();
-  //GetParent()->Destroy();
+  // GetParent()->Destroy();
   vgui_macro_report_errors;
 }
 
 //: Called at fixed intervals when using a timer.
-void vgui_wx_adaptor::on_timer(wxEvent& event)
+void
+vgui_wx_adaptor::on_timer(wxEvent & event)
 {
   vgui_event e(vgui_TIMER);
   e.origin = this;
@@ -436,7 +471,8 @@ void vgui_wx_adaptor::on_timer(wxEvent& event)
 }
 
 //: Generates a wxPaintEvent for the window to be repainted.
-void vgui_wx_adaptor::invalidate_canvas(void)
+void
+vgui_wx_adaptor::invalidate_canvas(void)
 {
   Refresh();
 
@@ -454,123 +490,216 @@ void vgui_wx_adaptor::invalidate_canvas(void)
 //-------------------------------------------------------------------------
 namespace
 {
-  inline bool is_modifier(int key_code)
+inline bool
+is_modifier(int key_code)
+{
+  switch (key_code)
   {
-    switch (key_code)
-    {
     case WXK_SHIFT:
     case WXK_ALT:
     case WXK_CONTROL:
-    //case WXK_META: // ***** which one is the meta key??
+      // case WXK_META: // ***** which one is the meta key??
       return true;
     default:
       return false;
-    }
   }
+}
 
-  // ***** check if design allows for multiple modifiers... if so, this needs to change
-  inline vgui_modifier get_modifiers(const wxMouseEvent& e)
+// ***** check if design allows for multiple modifiers... if so, this needs to change
+inline vgui_modifier
+get_modifiers(const wxMouseEvent & e)
+{
+  int mod = 0;
+  if (e.ShiftDown())
   {
-    int mod = 0;
-    if (e.ShiftDown())   { mod |= vgui_SHIFT; }
-    if (e.AltDown())     { mod |= vgui_ALT;   }
+    mod |= vgui_SHIFT;
+  }
+  if (e.AltDown())
+  {
+    mod |= vgui_ALT;
+  }
 #ifdef __WXMAC__
-    // Swap META(CMD) and CTRL on Mac because this is closer to native behavior
-    // and CTRL-Left-Click triggers a Right-Click which interferes with some
-    // built-in vgui controls
-    if (e.MetaDown())     { mod |= vgui_CTRL;  }
-    if (e.ControlDown()) { mod |= vgui_META;  }
-#else
-    if (e.ControlDown()) { mod |= vgui_CTRL;  }
-    if (e.MetaDown())    { mod |= vgui_META;  }
-#endif
-    return static_cast<vgui_modifier>(mod);
-  }
-
-  // ***** check if design allows for multiple modifiers... if so, this needs to change
-  inline vgui_modifier get_modifiers(const wxKeyEvent& e)
+  // Swap META(CMD) and CTRL on Mac because this is closer to native behavior
+  // and CTRL-Left-Click triggers a Right-Click which interferes with some
+  // built-in vgui controls
+  if (e.MetaDown())
   {
-    int mod = 0;
-    if (e.ShiftDown())   { mod |= vgui_SHIFT; }
-    if (e.AltDown())     { mod |= vgui_ALT;   }
+    mod |= vgui_CTRL;
+  }
+  if (e.ControlDown())
+  {
+    mod |= vgui_META;
+  }
+#else
+  if (e.ControlDown())
+  {
+    mod |= vgui_CTRL;
+  }
+  if (e.MetaDown())
+  {
+    mod |= vgui_META;
+  }
+#endif
+  return static_cast<vgui_modifier>(mod);
+}
+
+// ***** check if design allows for multiple modifiers... if so, this needs to change
+inline vgui_modifier
+get_modifiers(const wxKeyEvent & e)
+{
+  int mod = 0;
+  if (e.ShiftDown())
+  {
+    mod |= vgui_SHIFT;
+  }
+  if (e.AltDown())
+  {
+    mod |= vgui_ALT;
+  }
 #ifdef __WXMAC__
-    // Swap META(CMD) and CTRL on Mac because this is closer to native behavior
-    // and CTRL-Left-Click triggers a Right-Click which interferes with some
-    // built-in vgui controls
-    if (e.MetaDown())     { mod |= vgui_CTRL;  }
-    if (e.ControlDown()) { mod |= vgui_META;  }
+  // Swap META(CMD) and CTRL on Mac because this is closer to native behavior
+  // and CTRL-Left-Click triggers a Right-Click which interferes with some
+  // built-in vgui controls
+  if (e.MetaDown())
+  {
+    mod |= vgui_CTRL;
+  }
+  if (e.ControlDown())
+  {
+    mod |= vgui_META;
+  }
 #else
-    if (e.ControlDown()) { mod |= vgui_CTRL;  }
-    if (e.MetaDown())    { mod |= vgui_META;  }
+  if (e.ControlDown())
+  {
+    mod |= vgui_CTRL;
+  }
+  if (e.MetaDown())
+  {
+    mod |= vgui_META;
+  }
 #endif
-    return static_cast<vgui_modifier>(mod);
-  }
+  return static_cast<vgui_modifier>(mod);
+}
 
-  inline vgui_event_type translate_mouse_event_type(const wxMouseEvent& e)
+inline vgui_event_type
+translate_mouse_event_type(const wxMouseEvent & e)
+{
+  if (e.Moving() || e.Dragging())
   {
-    if (e.Moving() || e.Dragging()) { return vgui_MOTION; }
-    else if (e.ButtonDown() || e.ButtonDClick())
-    {
-      return vgui_BUTTON_DOWN;
-    }
-    else if (e.ButtonUp()) { return vgui_BUTTON_UP; }
-    else if (e.Entering()) { return vgui_ENTER;     }
-    else if (e.Leaving ()) { return vgui_LEAVE;     }
-    else if (e.GetEventType() == wxEVT_MOUSEWHEEL)
-    {
-      if (e.GetWheelRotation() > 0) { return vgui_WHEEL_UP; }
-      else { return vgui_WHEEL_DOWN; }
-    }
-    else { return vgui_OTHER; }
+    return vgui_MOTION;
   }
-
-  inline vgui_button translate_mouse_button(int button)
+  else if (e.ButtonDown() || e.ButtonDClick())
   {
-    switch (button)
+    return vgui_BUTTON_DOWN;
+  }
+  else if (e.ButtonUp())
+  {
+    return vgui_BUTTON_UP;
+  }
+  else if (e.Entering())
+  {
+    return vgui_ENTER;
+  }
+  else if (e.Leaving())
+  {
+    return vgui_LEAVE;
+  }
+  else if (e.GetEventType() == wxEVT_MOUSEWHEEL)
+  {
+    if (e.GetWheelRotation() > 0)
     {
-    case wxMOUSE_BTN_NONE   : return vgui_BUTTON_NULL;
-    case wxMOUSE_BTN_LEFT   : return vgui_LEFT;
-    case wxMOUSE_BTN_MIDDLE : return vgui_MIDDLE;
-    case wxMOUSE_BTN_RIGHT  : return vgui_RIGHT;
+      return vgui_WHEEL_UP;
+    }
+    else
+    {
+      return vgui_WHEEL_DOWN;
+    }
+  }
+  else
+  {
+    return vgui_OTHER;
+  }
+}
+
+inline vgui_button
+translate_mouse_button(int button)
+{
+  switch (button)
+  {
+    case wxMOUSE_BTN_NONE:
+      return vgui_BUTTON_NULL;
+    case wxMOUSE_BTN_LEFT:
+      return vgui_LEFT;
+    case wxMOUSE_BTN_MIDDLE:
+      return vgui_MIDDLE;
+    case wxMOUSE_BTN_RIGHT:
+      return vgui_RIGHT;
     default:
       std::cerr << "VGUI wx Error: Unknown button identifier.\n";
       return vgui_BUTTON_NULL;
-    }
   }
+}
 
-  inline vgui_key translate_key(int key_code)
+inline vgui_key
+translate_key(int key_code)
+{
+  switch (key_code)
   {
-    switch (key_code)
-    {
-    case WXK_ESCAPE    : return vgui_ESC;
-    case WXK_TAB       : return vgui_TAB;
-    case WXK_RETURN    : return vgui_RETURN;
-    case '\n'          : return vgui_NEWLINE;
+    case WXK_ESCAPE:
+      return vgui_ESC;
+    case WXK_TAB:
+      return vgui_TAB;
+    case WXK_RETURN:
+      return vgui_RETURN;
+    case '\n':
+      return vgui_NEWLINE;
 
-    case WXK_F1        : return vgui_F1;
-    case WXK_F2        : return vgui_F2;
-    case WXK_F3        : return vgui_F3;
-    case WXK_F4        : return vgui_F4;
-    case WXK_F5        : return vgui_F5;
-    case WXK_F6        : return vgui_F6;
-    case WXK_F7        : return vgui_F7;
-    case WXK_F8        : return vgui_F8;
-    case WXK_F9        : return vgui_F9;
-    case WXK_F10       : return vgui_F10;
-    case WXK_F11       : return vgui_F11;
-    case WXK_F12       : return vgui_F12;
-    case WXK_LEFT      : return vgui_CURSOR_LEFT;
-    case WXK_UP        : return vgui_CURSOR_UP;
-    case WXK_RIGHT     : return vgui_CURSOR_RIGHT;
-    case WXK_DOWN      : return vgui_CURSOR_DOWN;
-    case WXK_PRIOR     : return vgui_PAGE_UP;
-    case WXK_NEXT      : return vgui_PAGE_DOWN;
-    //case WXK_PAGEUP    : return vgui_PAGE_UP;   // ***** ??
-    //case WXK_PAGEDOWN  : return vgui_PAGE_DOWN; // ***** ??
-    case WXK_HOME      : return vgui_HOME;
-    case WXK_END       : return vgui_END;
-    case WXK_DELETE    : return vgui_DELETE;
-    case WXK_INSERT    : return vgui_INSERT;
+    case WXK_F1:
+      return vgui_F1;
+    case WXK_F2:
+      return vgui_F2;
+    case WXK_F3:
+      return vgui_F3;
+    case WXK_F4:
+      return vgui_F4;
+    case WXK_F5:
+      return vgui_F5;
+    case WXK_F6:
+      return vgui_F6;
+    case WXK_F7:
+      return vgui_F7;
+    case WXK_F8:
+      return vgui_F8;
+    case WXK_F9:
+      return vgui_F9;
+    case WXK_F10:
+      return vgui_F10;
+    case WXK_F11:
+      return vgui_F11;
+    case WXK_F12:
+      return vgui_F12;
+    case WXK_LEFT:
+      return vgui_CURSOR_LEFT;
+    case WXK_UP:
+      return vgui_CURSOR_UP;
+    case WXK_RIGHT:
+      return vgui_CURSOR_RIGHT;
+    case WXK_DOWN:
+      return vgui_CURSOR_DOWN;
+    case WXK_PRIOR:
+      return vgui_PAGE_UP;
+    case WXK_NEXT:
+      return vgui_PAGE_DOWN;
+    // case WXK_PAGEUP    : return vgui_PAGE_UP;   // ***** ??
+    // case WXK_PAGEDOWN  : return vgui_PAGE_DOWN; // ***** ??
+    case WXK_HOME:
+      return vgui_HOME;
+    case WXK_END:
+      return vgui_END;
+    case WXK_DELETE:
+      return vgui_DELETE;
+    case WXK_INSERT:
+      return vgui_INSERT;
     default:
       if (0 < key_code && key_code < 256) // it's an ascii code
       {
@@ -583,6 +712,6 @@ namespace
 #endif
         return vgui_KEY_NULL;
       }
-    }
   }
+}
 } // unnamed namespace

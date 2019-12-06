@@ -13,9 +13,10 @@
 #include "testlib/testlib_test.h"
 #include "vcsl/vcsl_polar.h"
 
-static void test_polar()
+static void
+test_polar()
 {
-  vcsl_polar_sptr p=new vcsl_polar;
+  vcsl_polar_sptr p = new vcsl_polar;
   TEST("test_polar_sptr", bool(p), true);
 }
 

@@ -22,4 +22,8 @@
 #include <vpgl/algo/vpgl_ray_intersect.h>
 #include <vpgl/algo/vpgl_triangulate_points.h>
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

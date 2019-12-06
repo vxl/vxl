@@ -14,9 +14,10 @@
 const std::string config_file = "core/vidl/examples/config.dshow.logitech"; // config.euresys.vid1
 #endif
 
-int main()
+int
+main()
 {
-#if 0 // Commented out
+#if 0  // Commented out
   vidl_dshow::print_capture_device_names();
 
   vidl_dshow_istream_params::print_parameter_help("Logitech QuickCam PTZ");
@@ -40,7 +41,7 @@ int main()
   vidl_dshow_live_istream<vidl_dshow_istream_params> test;
 #endif // 0
 
-#if 0 // commented out
+#if 0  // commented out
   vidl_dshow_live_istream<vidl_dshow_istream_params_esf> test2(
     vidl_dshow_istream_params_esf()
     .set_device_name("Euresys PICOLO DILIGENT sn/29 - VID2")
@@ -52,15 +53,15 @@ int main()
     );
 #endif // 0
 
-  vidl_image_list_ostream test_out("./dump","%05d","bmp");
+  vidl_image_list_ostream test_out("./dump", "%05d", "bmp");
 
   vul_timer timer;
-  int i = 150;
-  while ( test.advance()
-          //   test1.advance()
-          //&& test2.advance()
-          //&& test3.advance()
-          && --i)
+  int       i = 150;
+  while (test.advance()
+         //   test1.advance()
+         //&& test2.advance()
+         //&& test3.advance()
+         && --i)
   {
     std::cout << "Grabbing: " << i << std::endl;
     test.current_frame();

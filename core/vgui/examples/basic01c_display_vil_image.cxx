@@ -13,7 +13,8 @@
 #include "vgui/vgui_viewer2D_tableau.h"
 #include "vgui/vgui_shell_tableau.h"
 
-int main(int argc, char **argv)
+int
+main(int argc, char ** argv)
 {
   vgui::init(argc, argv);
   if (argc <= 1)
@@ -32,7 +33,7 @@ int main(int argc, char **argv)
 
   vil_image_resource_sptr im = vil_load_image_resource(argv[1]);
 
-  if ( !im )
+  if (!im)
   {
     std::cerr << "Could not load " << argv[1] << '\n';
     return 1;

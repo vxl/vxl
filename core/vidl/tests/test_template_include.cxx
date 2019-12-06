@@ -5,4 +5,8 @@
 // templated code and are not intended to be included as
 // header files.
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

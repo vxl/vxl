@@ -11,23 +11,31 @@
 #include "vgui/vgui_wrapper_tableau.h"
 
 // the default is 'false'. don't check in 'true'.
-//static bool debug = false;
+// static bool debug = false;
 
 class vgui_event_server_interpose_tableau : public vgui_wrapper_tableau
 {
- public:
-  vgui_event_server* the_server_;
+public:
+  vgui_event_server * the_server_;
 
-  vgui_event_server_interpose_tableau(vgui_event_server* s)
-    : vgui_wrapper_tableau(nullptr), // child to be added later
-      the_server_(s) {}
+  vgui_event_server_interpose_tableau(vgui_event_server * s)
+    : vgui_wrapper_tableau(nullptr)
+    , // child to be added later
+    the_server_(s)
+  {}
 
-  bool handle(const vgui_event& event);
-  std::string type_name() const {return "vgui_event_server";}
+  bool
+  handle(const vgui_event & event);
+  std::string
+  type_name() const
+  {
+    return "vgui_event_server";
+  }
 };
 
 //: Interaction (i.e. mouse/kb) events are saved, and said to be consumed.
-bool vgui_event_server_interpose_tableau::handle(const vgui_event& event)
+bool
+vgui_event_server_interpose_tableau::handle(const vgui_event & event)
 {
   // Pass draw events down -- we're just grabbing the interactions
   if (event.type == vgui_DRAW)
@@ -44,7 +52,7 @@ bool vgui_event_server_interpose_tableau::handle(const vgui_event& event)
 }
 
 //: Construct a vgui_event_server, which grabs all events intended for tableau t
-vgui_event_server::vgui_event_server(vgui_tableau_sptr const& t)
+vgui_event_server::vgui_event_server(vgui_tableau_sptr const & t)
   : grabber_(nullptr)
 {
   use_event_ = false;
@@ -64,11 +72,12 @@ vgui_event_server::~vgui_event_server()
   vgui_parent_child_link::replace_child_everywhere(grabber_, grabber_->child);
 }
 
-void vgui_event_server::reset()
-{
-}
+void
+vgui_event_server::reset()
+{}
 
-bool vgui_event_server::next()
+bool
+vgui_event_server::next()
 {
   use_event_ = false;
   while (!use_event_)

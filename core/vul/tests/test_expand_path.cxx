@@ -8,7 +8,8 @@
 #include "testlib/testlib_test.h"
 
 
-void test_expand_path()
+void
+test_expand_path()
 {
   // vul_expand_path
   TEST("expand path", vul_expand_path("/abc///d/e/../"), "/abc/d");

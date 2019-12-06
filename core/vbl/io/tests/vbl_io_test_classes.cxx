@@ -25,29 +25,34 @@ using base_sptr = vbl_smart_ptr<impl>;
 
 int impl::reftotal = 0;
 
-impl::impl(int nn) : n(nn)
+impl::impl(int nn)
+  : n(nn)
 {
   reftotal++;
-  std::cout <<  "impl ctor : this=" << (void*)this << std::endl;
+  std::cout << "impl ctor : this=" << (void *)this << std::endl;
 }
 
-impl::impl() : n(7)
+impl::impl()
+  : n(7)
 {
   reftotal++;
-  std::cout <<  "impl ctor : this=" << (void*)this << std::endl;
+  std::cout << "impl ctor : this=" << (void *)this << std::endl;
 }
 
-impl::~impl() {
+impl::~impl()
+{
   reftotal--;
-  std::cout <<  "impl dtor : this=" << (void*)this << std::endl;
+  std::cout << "impl dtor : this=" << (void *)this << std::endl;
 }
 
-void impl::Print (std::ostream &str)
+void
+impl::Print(std::ostream & str)
 {
   str << "impl(" << n << ") ";
 }
 
-void impl::checkcount ()
+void
+impl::checkcount()
 {
   if (reftotal == 0)
     std::cout << "impl : PASSED\n";
@@ -55,7 +60,8 @@ void impl::checkcount ()
     std::cout << "impl : FAILED : count = " << reftotal << std::endl;
 }
 
-void vsl_b_write(vsl_b_ostream& os, const impl &p)
+void
+vsl_b_write(vsl_b_ostream & os, const impl & p)
 {
   // write version number
   constexpr short io_version_no = 1;
@@ -64,31 +70,35 @@ void vsl_b_write(vsl_b_ostream& os, const impl &p)
   vsl_b_write(os, p.n);
 }
 
-void vsl_b_read(vsl_b_istream& is, impl &p)
+void
+vsl_b_read(vsl_b_istream & is, impl & p)
 {
-  if (!is) return;
+  if (!is)
+    return;
 
   short ver;
   vsl_b_read(is, ver);
   switch (ver)
   {
-   case 1:
-    vsl_b_read(is, p.n);
-    break;
-   default:
-    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, impl&)\n"
-             << "           Unknown version number "<< ver << '\n';
-    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-    return;
+    case 1:
+      vsl_b_read(is, p.n);
+      break;
+    default:
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, impl&)\n"
+                << "           Unknown version number " << ver << '\n';
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
+      return;
   }
 }
 
-void vsl_print_summary(std::ostream& os, const impl &p)
+void
+vsl_print_summary(std::ostream & os, const impl & p)
 {
   os << p.n;
 }
 
-void vsl_b_read(vsl_b_istream& is, impl * &p)
+void
+vsl_b_read(vsl_b_istream & is, impl *& p)
 {
   delete p;
   bool not_null_ptr;
@@ -102,22 +112,24 @@ void vsl_b_read(vsl_b_istream& is, impl * &p)
     p = nullptr;
 }
 
-void vsl_b_write(vsl_b_ostream& os, const impl *p)
+void
+vsl_b_write(vsl_b_ostream & os, const impl * p)
 {
-  if (p==nullptr)
+  if (p == nullptr)
   {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else
   {
-    vsl_b_write(os,true); // Indicate non-null pointer stored
-    vsl_b_write(os,*p);
+    vsl_b_write(os, true); // Indicate non-null pointer stored
+    vsl_b_write(os, *p);
   }
 }
 
-void vsl_print_summary(std::ostream& os, const impl *p)
+void
+vsl_print_summary(std::ostream & os, const impl * p)
 {
-  if (p==nullptr)
+  if (p == nullptr)
     os << "NULL PTR";
   else
   {

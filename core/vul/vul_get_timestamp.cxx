@@ -13,9 +13,9 @@
 #endif
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
-#include <direct.h>
+#  include <direct.h>
 #else
-#include <unistd.h> // for struct timeval
+#  include <unistd.h> // for struct timeval
 #endif
 
 #include <vcl_sys/time.h> // for gettimeofday()
@@ -26,18 +26,20 @@
 
 #if !defined(_WIN32) || defined(__CYGWIN__)
 // POSIX
-void vul_get_timestamp(int &secs, int &msecs)
+void
+vul_get_timestamp(int & secs, int & msecs)
 {
-  struct timeval  timestamp;
-  struct timezone* dummy = nullptr;
+  struct timeval    timestamp;
+  struct timezone * dummy = nullptr;
   gettimeofday(&timestamp, dummy);
 
   secs = timestamp.tv_sec;
-  msecs = timestamp.tv_usec/1000;
+  msecs = timestamp.tv_usec / 1000;
 }
 #else
 // _WIN32 and not __CYGWIN__
-void vul_get_timestamp(int &secs, int &msecs)
+void
+vul_get_timestamp(int & secs, int & msecs)
 {
   struct _timeb real;
   _ftime(&real);
@@ -49,7 +51,8 @@ void vul_get_timestamp(int &secs, int &msecs)
 
 
 // Get the present time and date as a string, e.g. "Fri Dec 8 14:54:17 2006"
-std::string vul_get_time_as_string(vul_time_style style/*default=vul_asc*/)
+std::string
+vul_get_time_as_string(vul_time_style style /*default=vul_asc*/)
 {
   std::string timestr;
 
@@ -58,7 +61,7 @@ std::string vul_get_time_as_string(vul_time_style style/*default=vul_asc*/)
   std::time(&time_secs);
 
   // Convert time to struct tm form
-  struct std::tm *time;
+  struct std::tm * time;
   time = std::localtime(&time_secs);
 
   switch (style)
@@ -71,11 +74,8 @@ std::string vul_get_time_as_string(vul_time_style style/*default=vul_asc*/)
       // Leading zeros are used for single-digit month,day,hour,min,sec.
       std::ostringstream oss;
       oss.fill('0');
-      oss << std::setw(4) << 1900+time->tm_year << ' '
-          << std::setw(2) << 1 + time->tm_mon << ' '
-          << std::setw(2) << time->tm_mday << ' '
-          << std::setw(2) << time->tm_hour << ' '
-          << std::setw(2) << time->tm_min << ' '
+      oss << std::setw(4) << 1900 + time->tm_year << ' ' << std::setw(2) << 1 + time->tm_mon << ' ' << std::setw(2)
+          << time->tm_mday << ' ' << std::setw(2) << time->tm_hour << ' ' << std::setw(2) << time->tm_min << ' '
           << std::setw(2) << time->tm_sec;
       timestr = oss.str();
     }

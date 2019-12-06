@@ -9,21 +9,22 @@
 #include "testlib/testlib_test.h"
 #include "vpl/vpl.h"
 
-void test_array_2d_io()
+void
+test_array_2d_io()
 {
   std::cout << "******************************\n"
-           << "Testing vbl_array_2d<float> io\n"
-           << "******************************\n";
+            << "Testing vbl_array_2d<float> io\n"
+            << "******************************\n";
 
   //// test constructors, accessors
-  constexpr int array_rows = 8;
-  constexpr int array_cols = 6;
+  constexpr int     array_rows = 8;
+  constexpr int     array_cols = 6;
   vbl_array_2d<int> v_out(array_rows, array_cols), v_in;
 
-  for (int i=0; i<array_rows; i++)
+  for (int i = 0; i < array_rows; i++)
   {
-    for (int j=0; j< array_cols; j++)
-      v_out(i,j) = i*j*j;
+    for (int j = 0; j < array_cols; j++)
+      v_out(i, j) = i * j * j;
   }
 
   vsl_b_ofstream bfs_out("vbl_array_2d_test_io.bvl.tmp");
@@ -37,10 +38,10 @@ void test_array_2d_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vbl_array_2d_test_io.bvl.tmp");
+  vpl_unlink("vbl_array_2d_test_io.bvl.tmp");
 
-  //kym - double = not defined for vbl_array_2d
-  //TEST("v_out == v_in", v_out, v_in);
+  // kym - double = not defined for vbl_array_2d
+  // TEST("v_out == v_in", v_out, v_in);
 
   bool test_result = true;
   if (v_out.rows() != v_in.rows())
@@ -51,10 +52,10 @@ void test_array_2d_io()
   {
     std::size_t array_rows = v_out.rows();
     std::size_t array_cols = v_out.cols();
-    for (std::size_t i=0; i<array_rows; i++)
+    for (std::size_t i = 0; i < array_rows; i++)
     {
-      for (std::size_t j=0; j<array_cols; j++)
-        if (v_out(i,j) != v_in(i,j))
+      for (std::size_t j = 0; j < array_cols; j++)
+        if (v_out(i, j) != v_in(i, j))
           test_result = false;
     }
   }
@@ -62,7 +63,7 @@ void test_array_2d_io()
 
   vsl_print_summary(std::cout, v_in);
   std::cout << std::endl;
-  vsl_indent_clear_all_data ();
+  vsl_indent_clear_all_data();
 }
 
 TESTMAIN(test_array_2d_io);

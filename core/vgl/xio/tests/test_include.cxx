@@ -3,4 +3,8 @@
 #include <vgl/xio/vgl_xio_point_3d.h>
 #include <vgl/xio/vgl_xio_vector_3d.h>
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

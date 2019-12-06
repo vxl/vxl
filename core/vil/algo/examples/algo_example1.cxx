@@ -12,31 +12,32 @@
 #include "vil/vil_print.h"
 #include <vil/algo/vil_sobel_3x3.h>
 
-int main()
+int
+main()
 {
-  unsigned ni=8;
-  unsigned nj=15;
-  unsigned nplanes=1;
-  vil_image_view<vxl_byte> image(ni,nj,nplanes);
+  unsigned                 ni = 8;
+  unsigned                 nj = 15;
+  unsigned                 nplanes = 1;
+  vil_image_view<vxl_byte> image(ni, nj, nplanes);
 
-  for (unsigned p=0;p<nplanes;++p)
-    for (unsigned j=0;j<nj;++j)
-      for (unsigned i=0;i<ni;++i)
-        image(i,j,p) = vxl_byte(i+10*j+100*p);
+  for (unsigned p = 0; p < nplanes; ++p)
+    for (unsigned j = 0; j < nj; ++j)
+      for (unsigned i = 0; i < ni; ++i)
+        image(i, j, p) = vxl_byte(i + 10 * j + 100 * p);
 
-  std::cout<<"Original image:\n";
-  vil_print_all(std::cout,image);
+  std::cout << "Original image:\n";
+  vil_print_all(std::cout, image);
 
-    // Objects to hold gradients
-  vil_image_view<float> grad_i,grad_j;
+  // Objects to hold gradients
+  vil_image_view<float> grad_i, grad_j;
 
-  vil_sobel_3x3(image,grad_i,grad_j);
+  vil_sobel_3x3(image, grad_i, grad_j);
 
-  std::cout<<"\nSobel I Gradient:\n";
-  vil_print_all(std::cout,grad_i);
+  std::cout << "\nSobel I Gradient:\n";
+  vil_print_all(std::cout, grad_i);
 
-  std::cout<<"\nSobel J Gradient:\n";
-  vil_print_all(std::cout,grad_j);
+  std::cout << "\nSobel J Gradient:\n";
+  vil_print_all(std::cout, grad_j);
 
   return 0;
 }

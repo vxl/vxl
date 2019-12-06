@@ -14,7 +14,8 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-std::ostream& vul_printf(std::ostream& s, char const * fmt, ...)
+std::ostream &
+vul_printf(std::ostream & s, char const * fmt, ...)
 {
   char buf[65536];
 

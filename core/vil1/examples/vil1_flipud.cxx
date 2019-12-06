@@ -13,12 +13,16 @@
 
 #include "vil1/vil1_memory_image.h"
 
-int main(int argc, char **argv) {
-  for (int i=1; i<argc; ++i) {
+int
+main(int argc, char ** argv)
+{
+  for (int i = 1; i < argc; ++i)
+  {
     vil1_image I = vil1_load(argv[i]);
     std::cerr << "I : " << I << std::endl;
 
-    if (!I) {
+    if (!I)
+    {
       std::cerr << "ignore " << argv[i] << std::endl;
       continue;
     }

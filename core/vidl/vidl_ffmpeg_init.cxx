@@ -11,20 +11,23 @@
 
 #include "vidl_ffmpeg_init.h"
 #include <vidl/vidl_config.h>
-extern "C" {
+extern "C"
+{
 #if FFMPEG_IN_SEVERAL_DIRECTORIES
-#include <libavformat/avformat.h>
+#  include <libavformat/avformat.h>
 #else
-#include <ffmpeg/avformat.h>
+#  include <ffmpeg/avformat.h>
 #endif
 }
 
 //--------------------------------------------------------------------------------
 
-void vidl_ffmpeg_init()
+void
+vidl_ffmpeg_init()
 {
   static bool initialized = false;
-  if ( ! initialized ) {
+  if (!initialized)
+  {
     av_register_all();
     av_log_set_level(AV_LOG_ERROR);
     initialized = true;

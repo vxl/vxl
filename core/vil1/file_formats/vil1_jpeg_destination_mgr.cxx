@@ -19,12 +19,12 @@
 // std::size_t is defined as long or unsigned long.  To ensure consistent results
 // we always use this SIZEOF() macro in place of using sizeof() directly.
 
-#define SIZEOF(object) ((std::size_t) sizeof(object))
+#define SIZEOF(object) ((std::size_t)sizeof(object))
 
 // Implement a jpeg_destination_manager for vil1_stream *.
 // Adapted by fsm from the FILE * version in jdatadst.c
 
-#define vil1_jpeg_OUTPUT_BUF_SIZE  4096 // choose an efficiently fwrite'able size
+#define vil1_jpeg_OUTPUT_BUF_SIZE 4096 // choose an efficiently fwrite'able size
 using vil1_jpeg_dstptr = vil1_jpeg_stream_destination_mgr *;
 
 
@@ -32,15 +32,13 @@ using vil1_jpeg_dstptr = vil1_jpeg_stream_destination_mgr *;
 //  * before any data is actually written.
 STATIC
 void
-vil1_jpeg_init_destination (j_compress_ptr cinfo)
+vil1_jpeg_init_destination(j_compress_ptr cinfo)
 {
-  auto dest = (vil1_jpeg_dstptr) cinfo->dest; // cast to derived class
+  auto dest = (vil1_jpeg_dstptr)cinfo->dest; // cast to derived class
 
   // Allocate the output buffer --- it will be released when done with image
-  dest->buffer = (JOCTET *)
-    (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo,
-                                JPOOL_IMAGE,
-                                vil1_jpeg_OUTPUT_BUF_SIZE * SIZEOF(JOCTET));
+  dest->buffer =
+    (JOCTET *)(*cinfo->mem->alloc_small)((j_common_ptr)cinfo, JPOOL_IMAGE, vil1_jpeg_OUTPUT_BUF_SIZE * SIZEOF(JOCTET));
 
   dest->base.next_output_byte = dest->buffer;
   dest->base.free_in_buffer = vil1_jpeg_OUTPUT_BUF_SIZE;
@@ -68,11 +66,11 @@ vil1_jpeg_init_destination (j_compress_ptr cinfo)
 //  Data beyond this point will be regenerated after resumption, so do not
 //  write it out when emptying the buffer externally.
 jpeg_boolean
-vil1_jpeg_empty_output_buffer (j_compress_ptr cinfo)
+vil1_jpeg_empty_output_buffer(j_compress_ptr cinfo)
 {
-  auto dest = (vil1_jpeg_dstptr) cinfo->dest; // cast to derived class
+  auto dest = (vil1_jpeg_dstptr)cinfo->dest; // cast to derived class
 
-  if (dest->stream->write(dest->buffer, vil1_jpeg_OUTPUT_BUF_SIZE) != (std::size_t) vil1_jpeg_OUTPUT_BUF_SIZE)
+  if (dest->stream->write(dest->buffer, vil1_jpeg_OUTPUT_BUF_SIZE) != (std::size_t)vil1_jpeg_OUTPUT_BUF_SIZE)
     ERREXIT(cinfo, JERR_FILE_WRITE);
 
   dest->base.next_output_byte = dest->buffer;
@@ -82,19 +80,21 @@ vil1_jpeg_empty_output_buffer (j_compress_ptr cinfo)
 }
 
 
-//: Terminate destination --- called by jpeg_finish_compress after all data has been written.  Usually needs to flush buffer.
+//: Terminate destination --- called by jpeg_finish_compress after all data has been written.  Usually needs to flush
+//buffer.
 //
 //  \note \e not called by jpeg_abort or jpeg_destroy; surrounding
 //  application must deal with any cleanup that should happen even
 //  for error exit.
 void
-vil1_jpeg_term_destination (j_compress_ptr cinfo)
+vil1_jpeg_term_destination(j_compress_ptr cinfo)
 {
-  auto dest = (vil1_jpeg_dstptr) cinfo->dest; // cast to derived class
+  auto        dest = (vil1_jpeg_dstptr)cinfo->dest; // cast to derived class
   std::size_t datacount = vil1_jpeg_OUTPUT_BUF_SIZE - dest->base.free_in_buffer;
 
   // Write any data remaining in the buffer
-  if (datacount > 0) {
+  if (datacount > 0)
+  {
     if (dest->stream->write(dest->buffer, (vil1_streampos)datacount) != (vil1_streampos)datacount)
       ERREXIT(cinfo, JERR_FILE_WRITE);
   }
@@ -105,7 +105,7 @@ vil1_jpeg_term_destination (j_compress_ptr cinfo)
 //  The caller must have already opened the stream, and is responsible
 //  for closing it after finishing compression.
 void
-vil1_jpeg_stream_dst_set (j_compress_ptr cinfo, vil1_stream *vs)
+vil1_jpeg_stream_dst_set(j_compress_ptr cinfo, vil1_stream * vs)
 {
   // The destination object is made permanent so that multiple JPEG images
   // can be written to the same file without re-executing jpeg_stdio_dest.
@@ -113,27 +113,25 @@ vil1_jpeg_stream_dst_set (j_compress_ptr cinfo, vil1_stream *vs)
   // manager serially with the same JPEG object, because their private object
   // sizes may be different.  Caveat programmer.
   //
-  assert(! cinfo->dest); // call this routine only once.
+  assert(!cinfo->dest); // call this routine only once.
 
   // allocate
-  auto dest = (vil1_jpeg_dstptr)
-    (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo,
-                                JPOOL_PERMANENT,
-                                SIZEOF(vil1_jpeg_stream_destination_mgr));
-  cinfo->dest = ( jpeg_destination_mgr *) dest;
+  auto dest = (vil1_jpeg_dstptr)(*cinfo->mem->alloc_small)(
+    (j_common_ptr)cinfo, JPOOL_PERMANENT, SIZEOF(vil1_jpeg_stream_destination_mgr));
+  cinfo->dest = (jpeg_destination_mgr *)dest;
 
   // fill in methods in base
-  dest->base.init_destination    = vil1_jpeg_init_destination;
+  dest->base.init_destination = vil1_jpeg_init_destination;
   dest->base.empty_output_buffer = vil1_jpeg_empty_output_buffer;
-  dest->base.term_destination    = vil1_jpeg_term_destination;
+  dest->base.term_destination = vil1_jpeg_term_destination;
 
   dest->stream = vs;
 }
 
 void
-vil1_jpeg_stream_dst_rewind(j_compress_ptr cinfo, vil1_stream *vs)
+vil1_jpeg_stream_dst_rewind(j_compress_ptr cinfo, vil1_stream * vs)
 {
-  auto dst = ( vil1_jpeg_dstptr )( cinfo->dest );
+  auto dst = (vil1_jpeg_dstptr)(cinfo->dest);
   { // verify
     assert(dst != nullptr);
     assert(dst->stream == vs);

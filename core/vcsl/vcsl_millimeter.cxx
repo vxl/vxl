@@ -4,8 +4,9 @@
 //---------------------------------------------------------------------------
 // Return the reference to the unique vcsl_millimeter object
 //---------------------------------------------------------------------------
-vcsl_millimeter_sptr vcsl_millimeter::instance()
+vcsl_millimeter_sptr
+vcsl_millimeter::instance()
 {
-  static vcsl_millimeter_sptr instance_=new vcsl_millimeter;
+  static vcsl_millimeter_sptr instance_ = new vcsl_millimeter;
   return instance_;
 }

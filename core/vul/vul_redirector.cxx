@@ -15,58 +15,71 @@
 // redirect output from cout, cerr, clog to a CoutWindow class.
 class vul_redirector_streambuf : public std::streambuf
 {
-  vul_redirector_data* p;
- public:
-  vul_redirector_streambuf(vul_redirector_data* p_):p(p_) {}
-  int sync () override;
-  int overflow (int ch) override;
-  int underflow() override{return 0;}
-  std::streamsize xsputn (const char* text, std::streamsize n) override;
+  vul_redirector_data * p;
+
+public:
+  vul_redirector_streambuf(vul_redirector_data * p_)
+    : p(p_)
+  {}
+  int
+  sync() override;
+  int
+  overflow(int ch) override;
+  int
+  underflow() override
+  {
+    return 0;
+  }
+  std::streamsize
+  xsputn(const char * text, std::streamsize n) override;
 };
 
 struct vul_redirector_data
 {
-  vul_redirector* owner;
-  std::streambuf* old_cerrbuf;
-  vul_redirector_streambuf* buf;
-  std::ostream* s;
+  vul_redirector *           owner;
+  std::streambuf *           old_cerrbuf;
+  vul_redirector_streambuf * buf;
+  std::ostream *             s;
 };
 
 /////////////////////////////////////////////////////////////////////////////
 // streambuf stuff
 
-int vul_redirector_streambuf::sync ()
+int
+vul_redirector_streambuf::sync()
 {
-  std::ptrdiff_t n = pptr () - pbase ();
-  return (n && p->owner->putchunk ( pbase (), n) != n) ? EOF : 0;
+  std::ptrdiff_t n = pptr() - pbase();
+  return (n && p->owner->putchunk(pbase(), n) != n) ? EOF : 0;
 }
 
-int vul_redirector_streambuf::overflow (int ch)
+int
+vul_redirector_streambuf::overflow(int ch)
 {
-  int n = static_cast<int>(pptr () - pbase ());
-  if (n && sync ())
+  int n = static_cast<int>(pptr() - pbase());
+  if (n && sync())
     return EOF;
   if (ch != EOF)
   {
     char cbuf[1];
     cbuf[0] = (char)ch;
-    if (p->owner->putchunk ( cbuf, 1) != 1)
+    if (p->owner->putchunk(cbuf, 1) != 1)
       return EOF;
   }
-  pbump (-n);  // Reset pptr().
+  pbump(-n); // Reset pptr().
   return 0;
 }
 
-std::streamsize vul_redirector_streambuf::xsputn (const char* text, std::streamsize n)
+std::streamsize
+vul_redirector_streambuf::xsputn(const char * text, std::streamsize n)
 {
-  return sync () == EOF ? 0 : p->owner->putchunk ( text, n);
+  return sync() == EOF ? 0 : p->owner->putchunk(text, n);
 }
 
 //////////////// Data for debugging
 
 
-vul_redirector::vul_redirector(std::ostream& s):
-  p(new vul_redirector_data)
+vul_redirector::vul_redirector(std::ostream & s)
+  : p(new vul_redirector_data)
 {
   p->owner = this;
   p->buf = new vul_redirector_streambuf(p);
@@ -82,18 +95,21 @@ vul_redirector::~vul_redirector()
   delete p;
 }
 
-int vul_redirector::sync_passthru()
+int
+vul_redirector::sync_passthru()
 {
   return p->old_cerrbuf->pubsync();
 }
 
-std::streamsize vul_redirector::put_passthru(char const* buf, std::streamsize n)
+std::streamsize
+vul_redirector::put_passthru(char const * buf, std::streamsize n)
 {
   return p->old_cerrbuf->sputn(buf, n);
 }
 
 //: Default action is just to pass text on the old stream.
-std::streamsize vul_redirector::putchunk(char const* buf, std::streamsize n)
+std::streamsize
+vul_redirector::putchunk(char const * buf, std::streamsize n)
 {
   return put_passthru(buf, n);
 }

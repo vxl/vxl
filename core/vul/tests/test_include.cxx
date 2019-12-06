@@ -23,4 +23,8 @@
 #include "vul/vul_user_info.h"
 #include "vul/vul_url.h"
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

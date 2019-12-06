@@ -7,7 +7,8 @@
 #include "testlib/testlib_test.h"
 
 
-static void test_get_time_as_string()
+static void
+test_get_time_as_string()
 {
   std::string str0 = vul_get_time_as_string(vul_asc);
   std::cout << "vul_get_time_as_string(" << (int)vul_asc << "): \"" << str0 << '"' << std::endl;

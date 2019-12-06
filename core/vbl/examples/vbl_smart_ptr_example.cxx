@@ -22,20 +22,25 @@
 // and unref(), e.g., because it is derived from vbl_ref_count.
 class example_sp : public vbl_ref_count
 {
- public:
+public:
   example_sp() { std::cout << "example_sp constructor, refcount=" << get_references() << '\n'; }
 
- ~example_sp() override { std::cout << "example_sp destructor, refcount=" << get_references() << '\n'; }
+  ~example_sp() override { std::cout << "example_sp destructor, refcount=" << get_references() << '\n'; }
 
-  example_sp(example_sp const&) : vbl_ref_count()
+  example_sp(example_sp const &)
+    : vbl_ref_count()
   {
     std::cout << "example_sp copy constructor, refcount=" << get_references() << '\n';
   }
 
-  friend std::ostream& operator<<(std::ostream& os, example_sp const& e) {
+  friend std::ostream &
+  operator<<(std::ostream & os, example_sp const & e)
+  {
     int p = e.get_references();
-    if (p < 1000) os << "example_sp, refcount=" << p;
-    else          os << "example_sp, invalid";
+    if (p < 1000)
+      os << "example_sp, refcount=" << p;
+    else
+      os << "example_sp, invalid";
     return os;
   }
 };
@@ -46,12 +51,13 @@ using example_sp_sptr = vbl_smart_ptr<example_sp>;
 
 //== start of first main program ==//
 
-void main1()
+void
+main1()
 {
   std::list<example_sp_sptr> l;
 
   std::cout << "example_sp starts\n";
-  example_sp* ptr;
+  example_sp * ptr;
   {
     example_sp_sptr sp; // refcount not incremented: no assignment yet
     std::cout << "example_sp_sptr created\n";
@@ -89,7 +95,7 @@ void main1()
 
 class bigmatrix_impl : public vbl_ref_count
 {
- public:
+public:
   double data[256][256];
   bigmatrix_impl() { std::cout << "bigmatrix_impl ctor\n"; }
   ~bigmatrix_impl() override { std::cout << "bigmatrix_impl dtor\n"; }
@@ -98,7 +104,8 @@ class bigmatrix_impl : public vbl_ref_count
 class bigmatrix
 {
   vbl_smart_ptr<bigmatrix_impl> impl;
- public:
+
+public:
   double * operator[](unsigned i) { return impl->data[i]; }
 };
 
@@ -106,12 +113,14 @@ class bigmatrix
 
 //== start of second main program ==//
 
-void main2()
+void
+main2()
 {
   bigmatrix A, B, C;
 
   std::cout << "one million swaps..." << std::flush;
-  for (unsigned i=0; i<1000000; ++i) {
+  for (unsigned i = 0; i < 1000000; ++i)
+  {
     C = A;
     A = B;
     B = C;
@@ -123,4 +132,10 @@ void main2()
 
 //--------------------------------------------------------------------------------
 
-int main() { main1(); main2(); return 0; }
+int
+main()
+{
+  main1();
+  main2();
+  return 0;
+}

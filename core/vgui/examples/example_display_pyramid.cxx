@@ -19,27 +19,33 @@
 
 struct example_pyramid_tableau : public vgui_tableau
 {
-  int level;
-  vil1_pyramid pyr;
+  int                    level;
+  vil1_pyramid           pyr;
   vgui_image_tableau_new image_tab;
   vgui_parent_child_link pclink;
 
-  example_pyramid_tableau(vil1_image const &image)
-    : level(0), pyr(image), pclink(this, image_tab) {
+  example_pyramid_tableau(vil1_image const & image)
+    : level(0)
+    , pyr(image)
+    , pclink(this, image_tab)
+  {
     image_tab->set_image(image);
   }
 
-  bool handle(vgui_event const &e) {
+  bool
+  handle(vgui_event const & e)
+  {
     // compensate for size change by scaling by 2^level :
     glMatrixMode(GL_MODELVIEW);
-    for (int i=0; i<level; ++i)
+    for (int i = 0; i < level; ++i)
       glScalef(2, 2, 2);
 
     // Look for PageUp and PageDown events.
     if (e.type == vgui_KEY_PRESS && e.key == vgui_PGUP)
     {
       ++level;
-      if (level <= 5) {
+      if (level <= 5)
+      {
         image_tab->set_image(pyr[level]);
         post_redraw();
         std::cerr << "level " << level << std::endl;
@@ -66,7 +72,8 @@ struct example_pyramid_tableau : public vgui_tableau
   }
 };
 
-int main(int argc, char **argv)
+int
+main(int argc, char ** argv)
 {
   vgui::init(argc, argv);
 
@@ -77,13 +84,14 @@ int main(int argc, char **argv)
   }
 
   vil1_image image = vil1_load(argv[1]);
-  if (!image) {
+  if (!image)
+  {
     std::cerr << "load failed -- invalid image?" << std::endl;
     return 1;
   }
   std::cerr << image << std::endl;
 
-  vgui_tableau_sptr tab(new example_pyramid_tableau(image));
+  vgui_tableau_sptr         tab(new example_pyramid_tableau(image));
   vgui_viewer2D_tableau_new zoom(tab);
   return vgui::run(zoom, image.width(), image.height());
 }

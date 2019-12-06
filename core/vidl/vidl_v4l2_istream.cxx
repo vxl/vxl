@@ -17,9 +17,10 @@
 #include "vidl_v4l2_pixel_format.h"
 
 
-void vidl_v4l2_istream::update_frame()
+void
+vidl_v4l2_istream::update_frame()
 {
-  frame_number_=0;
+  frame_number_ = 0;
 #if 0
   if (!dev) return;
   std::cout << "Nbuf: " << dev->get_number_of_buffers() << std::endl;
@@ -33,34 +34,41 @@ void vidl_v4l2_istream::update_frame()
     std::cout << "No!" << std::endl;
 #endif // 0
   dev.set_number_of_buffers(1);
-  if (dev.ibuffer(0)) {
-    cur_frame_ = new vidl_shared_frame(
-        dev.ibuffer(0), dev.get_width(), dev.get_height(), v4l2_to_vidl(dev.get_v4l2_format()));
+  if (dev.ibuffer(0))
+  {
+    cur_frame_ =
+      new vidl_shared_frame(dev.ibuffer(0), dev.get_width(), dev.get_height(), v4l2_to_vidl(dev.get_v4l2_format()));
   }
-  else {
+  else
+  {
     std::cout << "No Buf!" << std::endl;
-    cur_frame_=0;
+    cur_frame_ = 0;
   }
 }
 
-vidl_v4l2_istream::vidl_v4l2_istream(vidl_v4l2_device& device): dev(device)
+vidl_v4l2_istream::vidl_v4l2_istream(vidl_v4l2_device & device)
+  : dev(device)
 {
   update_frame();
 }
 
-bool vidl_v4l2_istream::advance()
+bool
+vidl_v4l2_istream::advance()
 {
-   if (!dev.is_capturing())
+  if (!dev.is_capturing())
     if (!dev.start_capturing())
-       return false;
-   if (cur_frame_!=0 && dev.read_frame()) {
-     frame_number_++;
-     return true;
-   }
-   else return false;
+      return false;
+  if (cur_frame_ != 0 && dev.read_frame())
+  {
+    frame_number_++;
+    return true;
+  }
+  else
+    return false;
 }
 
-vidl_frame_sptr vidl_v4l2_istream::read_frame()
+vidl_frame_sptr
+vidl_v4l2_istream::read_frame()
 {
   advance();
   return cur_frame_;

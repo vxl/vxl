@@ -16,7 +16,12 @@
 #endif
 #include "vxl_config.h"
 
-#define trace if (true) { } else std::cerr
+#define trace                                                                                                          \
+  if (true)                                                                                                            \
+  {                                                                                                                    \
+  }                                                                                                                    \
+  else                                                                                                                 \
+    std::cerr
 
 //: using jpeg decompressor objects :
 // -# supply an error manager, e.g. with jpeg_std_err().
@@ -32,7 +37,7 @@
 //    some of the data, call jpeg_abort_decompress().
 // -# destruct the object with jpeg_destroy_decompress().
 
-vil_jpeg_decompressor::vil_jpeg_decompressor(vil_stream *s)
+vil_jpeg_decompressor::vil_jpeg_decompressor(vil_stream * s)
   : stream(s)
   , ready(false)
   , valid(false)
@@ -79,13 +84,15 @@ vil_jpeg_decompressor::vil_jpeg_decompressor(vil_stream *s)
 }
 
 // read the given scanline, skipping/rewinding as required.
-JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line)
+JSAMPLE const *
+vil_jpeg_decompressor::read_scanline(unsigned line)
 {
   // if the client tries to read the same scanline again, it should be free.
-  if (valid && line == jobj.output_scanline-1)
+  if (valid && line == jobj.output_scanline - 1)
     return biffer;
 
-  if (ready && line<jobj.output_scanline) {
+  if (ready && line < jobj.output_scanline)
+  {
     trace << "...aborting\n";
     // bah! have to restart
     jpeg_abort_decompress(&jobj);
@@ -95,7 +102,8 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line)
     valid = false;
   }
 
-  if (!ready) {
+  if (!ready)
+  {
     trace << "...restarting\n";
 
     // rewind stream
@@ -113,7 +121,8 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line)
   }
 
   // allocate scanline buffer, if necessary.
-  if (!biffer) {
+  if (!biffer)
+  {
     trace << "...allocate buffer\n";
     unsigned row_size = jobj.output_width * jobj.output_components;
     biffer = new JSAMPLE[row_size];
@@ -127,8 +136,10 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line)
 #endif
 
   // read till we've read the line we want :
-  while (jobj.output_scanline <= line) {
-    if (jpeg_read_scanlines(&jobj, buffer, 1) != 1) {
+  while (jobj.output_scanline <= line)
+  {
+    if (jpeg_read_scanlines(&jobj, buffer, 1) != 1)
+    {
       jpeg_abort_decompress(&jobj);
       ready = false;
       valid = false;
@@ -137,7 +148,8 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line)
   }
 
   // end reached ?
-  if (jobj.output_scanline >= jobj.image_height) {
+  if (jobj.output_scanline >= jobj.image_height)
+  {
     trace << "...reached end\n";
     jpeg_finish_decompress(&jobj); // this will call vil_jpeg_term_source()
     ready = false;
@@ -152,7 +164,7 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line)
 vil_jpeg_decompressor::~vil_jpeg_decompressor()
 {
   // destroy the pool associated with jobj
-  (*jobj.mem->free_pool) ((j_common_ptr) &jobj, JPOOL_IMAGE);
+  (*jobj.mem->free_pool)((j_common_ptr)&jobj, JPOOL_IMAGE);
 
   // destroy the decompression object
   jpeg_destroy_decompress(&jobj);
@@ -163,6 +175,6 @@ vil_jpeg_decompressor::~vil_jpeg_decompressor()
 
   //
   if (biffer)
-    delete [] biffer;
+    delete[] biffer;
   biffer = nullptr;
 }

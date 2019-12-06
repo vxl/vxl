@@ -14,4 +14,8 @@
 #include "vil/vil_sample_profile_bilin.hxx"
 #include "vil/vil_smart_ptr.hxx"
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

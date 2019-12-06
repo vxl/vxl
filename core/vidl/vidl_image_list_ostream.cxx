@@ -18,22 +18,19 @@
 
 
 //: Constructor
-vidl_image_list_ostream::
-vidl_image_list_ostream()
-  : index_(0),
-    dir_(),
-    name_format_(),
-    file_format_()
-{
-}
+vidl_image_list_ostream::vidl_image_list_ostream()
+  : index_(0)
+  , dir_()
+  , name_format_()
+  , file_format_()
+{}
 
 
 //: Constructor - opens a stream
-vidl_image_list_ostream::
-vidl_image_list_ostream(const std::string& directory,
-                        const std::string& name_format,
-                        const std::string& file_format,
-                        const unsigned int init_index)
+vidl_image_list_ostream::vidl_image_list_ostream(const std::string & directory,
+                                                 const std::string & name_format,
+                                                 const std::string & file_format,
+                                                 const unsigned int  init_index)
 {
   open(directory, name_format, file_format, init_index);
 }
@@ -41,33 +38,37 @@ vidl_image_list_ostream(const std::string& directory,
 
 //: Open the stream
 bool
-vidl_image_list_ostream::
-open(const std::string& directory,
-     const std::string& name_format,
-     const std::string& file_format,
-     const unsigned int init_index)
+vidl_image_list_ostream::open(const std::string & directory,
+                              const std::string & name_format,
+                              const std::string & file_format,
+                              const unsigned int  init_index)
 {
-  if (!vul_file::is_directory(directory)) {
+  if (!vul_file::is_directory(directory))
+  {
     close();
-    std::cerr << __FILE__ ": Directory does not exist\n   "<<directory<<std::endl;
+    std::cerr << __FILE__ ": Directory does not exist\n   " << directory << std::endl;
     return false;
   }
 
-  bool valid_file_format = false;
-  std::list<vil_file_format*>& l = vil_file_format::all();
-  for (auto & p : l) {
-    if (file_format == p->tag()) {
+  bool                           valid_file_format = false;
+  std::list<vil_file_format *> & l = vil_file_format::all();
+  for (auto & p : l)
+  {
+    if (file_format == p->tag())
+    {
       valid_file_format = true;
       break;
     }
   }
 
-  if (!valid_file_format) {
+  if (!valid_file_format)
+  {
     close();
-    std::cerr << __FILE__ ": File format \'"<<file_format<<"\' not supported\n"
-             << "   valid formats are: ";
-    std::list<vil_file_format*>& l = vil_file_format::all();
-    for (auto & p : l) {
+    std::cerr << __FILE__ ": File format \'" << file_format << "\' not supported\n"
+              << "   valid formats are: ";
+    std::list<vil_file_format *> & l = vil_file_format::all();
+    for (auto & p : l)
+    {
       std::cerr << " \'" << p->tag() << "\' " << std::flush;
     }
     std::cerr << std::endl;
@@ -84,8 +85,7 @@ open(const std::string& directory,
 
 //: Close the stream
 void
-vidl_image_list_ostream::
-close()
+vidl_image_list_ostream::close()
 {
   dir_ = "";
   name_format_ = "";
@@ -96,8 +96,7 @@ close()
 
 //: Return true if the stream is open for writing
 bool
-vidl_image_list_ostream::
-is_open() const
+vidl_image_list_ostream::is_open() const
 {
   return file_format_ != "";
 }
@@ -105,31 +104,28 @@ is_open() const
 
 //: Return the next file name to be written to
 std::string
-vidl_image_list_ostream::
-next_file_name() const
+vidl_image_list_ostream::next_file_name() const
 {
-  return dir_ + '/' +
-         vul_sprintf(name_format_.c_str(),index_) +
-         '.' + file_format_;
+  return dir_ + '/' + vul_sprintf(name_format_.c_str(), index_) + '.' + file_format_;
 }
 
 
 //: Write and image to the stream
 // \retval false if the image could not be written
 bool
-vidl_image_list_ostream::
-write_frame(const vidl_frame_sptr& frame)
+vidl_image_list_ostream::write_frame(const vidl_frame_sptr & frame)
 {
   std::string file_name = next_file_name();
   ++index_;
   if (!frame)
     return false;
   vil_image_view_base_sptr v = vidl_convert_wrap_in_view(*frame);
-  if (!v){
+  if (!v)
+  {
     vil_image_view<vxl_byte> image;
-    vidl_convert_to_view(*frame,image,VIDL_PIXEL_COLOR_RGB);
-    return vil_save(image,file_name.c_str(),file_format_.c_str());
+    vidl_convert_to_view(*frame, image, VIDL_PIXEL_COLOR_RGB);
+    return vil_save(image, file_name.c_str(), file_format_.c_str());
   }
 
-  return vil_save(*v,file_name.c_str(),file_format_.c_str());
+  return vil_save(*v, file_name.c_str(), file_format_.c_str());
 }

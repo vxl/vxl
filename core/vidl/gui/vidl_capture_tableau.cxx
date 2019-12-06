@@ -13,21 +13,22 @@
 #include <vidl/gui/vidl_gui_param_dialog.h>
 
 
-std::string vidl_capture_tableau::type_name() const
+std::string
+vidl_capture_tableau::type_name() const
 {
   return "vidl_capture_tableau";
 }
 
 
 // Default constructor
-vidl_capture_tableau::vidl_capture_tableau( vgui_tableau_sptr const& child_tableau)
-  : vgui_wrapper_tableau(child_tableau),
-    ostream_(nullptr)
-{
-}
+vidl_capture_tableau::vidl_capture_tableau(vgui_tableau_sptr const & child_tableau)
+  : vgui_wrapper_tableau(child_tableau)
+  , ostream_(nullptr)
+{}
 
 
-bool vidl_capture_tableau::handle( vgui_event const &e)
+bool
+vidl_capture_tableau::handle(vgui_event const & e)
 {
   bool handled = false;
   if (child)
@@ -44,7 +45,7 @@ bool vidl_capture_tableau::handle( vgui_event const &e)
     {
       GLint vp[4]; // x,y,w,h
       glGetIntegerv(GL_VIEWPORT, vp);
-      std::cout << "window size = "<< vp[2] << ", "<<vp[3]<<std::endl;
+      std::cout << "window size = " << vp[2] << ", " << vp[3] << std::endl;
     }
   }
   return handled;
@@ -52,14 +53,16 @@ bool vidl_capture_tableau::handle( vgui_event const &e)
 
 
 //: Prompt the user to set an ostream with a gui dialog
-void vidl_capture_tableau::prompt_for_ostream()
+void
+vidl_capture_tableau::prompt_for_ostream()
 {
   ostream_ = vidl_gui_open_ostream_dialog();
 }
 
 
 //: Stop the video capture and close the ostream
-void vidl_capture_tableau::close_ostream()
+void
+vidl_capture_tableau::close_ostream()
 {
   if (ostream_)
   {

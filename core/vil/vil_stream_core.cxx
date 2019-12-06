@@ -12,93 +12,100 @@
 #endif
 
 vil_stream_core::vil_stream_core(unsigned block_size)
-    : curpos_(0), blocksize_(block_size), tailpos_(0)
-{ }
+  : curpos_(0)
+  , blocksize_(block_size)
+  , tailpos_(0)
+{}
 
 //--------------------------------------------------------------------------------
 
 vil_stream_core::~vil_stream_core()
 {
   for (auto & i : block_)
-    delete [] i;
+    delete[] i;
   block_.clear();
 }
 
 //--------------------------------------------------------------------------------
 
-vil_streampos vil_stream_core::read(void *buf, vil_streampos n)
+vil_streampos
+vil_stream_core::read(void * buf, vil_streampos n)
 {
-  assert(n>=0);
+  assert(n >= 0);
 
-  vil_streampos rv = m_transfer((char*)buf, curpos_, n, true);
+  vil_streampos rv = m_transfer((char *)buf, curpos_, n, true);
   curpos_ += rv;
   return rv;
 }
 
 //--------------------------------------------------------------------------------
 
-vil_streampos vil_stream_core::write(void const *buf, vil_streampos n)
+vil_streampos
+vil_stream_core::write(void const * buf, vil_streampos n)
 {
-  assert(n>=0);
-  vil_streampos rv = m_transfer(static_cast<char*>(const_cast<void *>(buf)), curpos_, n, false);
+  assert(n >= 0);
+  vil_streampos rv = m_transfer(static_cast<char *>(const_cast<void *>(buf)), curpos_, n, false);
   curpos_ += rv;
   return rv;
 }
 
 //--------------------------------------------------------------------------------
 
-vil_streampos vil_stream_core::m_transfer(char *buf, vil_streampos pos, vil_streampos n, bool read_into_buf)
+vil_streampos
+vil_stream_core::m_transfer(char * buf, vil_streampos pos, vil_streampos n, bool read_into_buf)
 {
-  assert(n>=0);
-  assert(pos>=0);
+  assert(n >= 0);
+  assert(pos >= 0);
 
   if (read_into_buf)
   {
-    if (pos+n > tailpos_)
+    if (pos + n > tailpos_)
     {
       if (pos > tailpos_)
         n = 0;
       else
         n = tailpos_ - pos;
     }
-    if (n==0L) return 0;
+    if (n == 0L)
+      return 0;
   }
   else
     // chunk up to the required size :
-    while (blocksize_*block_.size() < (unsigned long)(pos+n))
-      block_.push_back(new char [blocksize_]);
+    while (blocksize_ * block_.size() < (unsigned long)(pos + n))
+      block_.push_back(new char[blocksize_]);
 
   // transfer data
   {
-    char         *tbuf = buf;
+    char *        tbuf = buf;
     vil_streampos tpos = pos;
-    vil_streampos tn   = n;
-    while (tn>0) {
-      vil_streampos bl = tpos/(long)blocksize_;     // which block
-      vil_streampos s = tpos - (long)blocksize_*bl; // start index in block_
-      vil_streampos z = ((tn+s > (long)blocksize_) ? (long)blocksize_-s : tn); // number of bytes to write
+    vil_streampos tn = n;
+    while (tn > 0)
+    {
+      vil_streampos bl = tpos / (long)blocksize_;                                  // which block
+      vil_streampos s = tpos - (long)blocksize_ * bl;                              // start index in block_
+      vil_streampos z = ((tn + s > (long)blocksize_) ? (long)blocksize_ - s : tn); // number of bytes to write
       // it would take a very large in-memory stream for this assert to fail (>2GB).
       // That should not happen.  If it does, then we have to think of plan b.
-      assert( (std::size_t)bl <= std::numeric_limits< std::size_t >::max() );
-      char *tmp = block_[(std::size_t)bl];
+      assert((std::size_t)bl <= std::numeric_limits<std::size_t>::max());
+      char * tmp = block_[(std::size_t)bl];
       if (read_into_buf)
-        for (vil_streampos k=0; k<z; ++k)
-          tbuf[k] = tmp[s+k]; // prefer memcpy ?
+        for (vil_streampos k = 0; k < z; ++k)
+          tbuf[k] = tmp[s + k]; // prefer memcpy ?
       else
       {
-        assert (s+z <= (long)blocksize_);
-        for (vil_streampos k=0; k<z; ++k)
-          tmp[s+k] = tbuf[k]; // prefer memcpy ?
+        assert(s + z <= (long)blocksize_);
+        for (vil_streampos k = 0; k < z; ++k)
+          tmp[s + k] = tbuf[k]; // prefer memcpy ?
       }
       tbuf += z;
-      tn   -= z;
+      tn -= z;
       tpos += z;
     }
   }
 
   // update tailpos_
-  if (tailpos_ < pos+n)
-    tailpos_ = pos+n;
+  if (tailpos_ < pos + n)
+    tailpos_ = pos + n;
 
   // always succeed.
   return n;

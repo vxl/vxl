@@ -12,7 +12,8 @@
 
 //: Initialize all vgui_wx XML Resource Handlers
 // Call this right after you call wxXmlResource::Get()->InitAllHandlers();
-void vgui_wx::InitVguiHandlers()
+void
+vgui_wx::InitVguiHandlers()
 {
   wxXmlResource::Get()->AddHandler(new vgui_wx_adaptorXmlHandler);
   wxXmlResource::Get()->AddHandler(new wxSliderPanelXmlHandler);

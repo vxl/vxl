@@ -9,14 +9,15 @@
 #include "testlib/testlib_test.h"
 #include "vpl/vpl.h"
 
-void test_triple_io()
+void
+test_triple_io()
 {
   std::cout << "*************************************\n"
-           << "Testing vbl_triple<double,int,int> io\n"
-           << "*************************************\n";
+            << "Testing vbl_triple<double,int,int> io\n"
+            << "*************************************\n";
 
   //// test constructors, accessors
-  vbl_triple<double,int,int> v_out(4.0, -1, 5), v_in;
+  vbl_triple<double, int, int> v_out(4.0, -1, 5), v_in;
 
   vsl_b_ofstream bfs_out("vbl_triple_test_io.bvl.tmp");
   TEST("Created vbl_triple_test_io.bvl.tmp for writing", (!bfs_out), false);
@@ -35,7 +36,7 @@ void test_triple_io()
 
   vsl_print_summary(std::cout, v_in);
   std::cout << std::endl;
-  vsl_indent_clear_all_data ();
+  vsl_indent_clear_all_data();
 }
 
 TESTMAIN(test_triple_io);

@@ -16,9 +16,10 @@
 #endif
 #include "vxl_config.h"
 
-vil_jpeg_compressor::vil_jpeg_compressor(vil_stream *s)
+vil_jpeg_compressor::vil_jpeg_compressor(vil_stream * s)
   : stream(s)
-  , ready(false), quality(75)
+  , ready(false)
+  , quality(75)
 {
   stream->ref();
 
@@ -45,9 +46,11 @@ vil_jpeg_compressor::vil_jpeg_compressor(vil_stream *s)
   vil_jpeg_stream_dst_set(&jobj, stream);
 }
 
-bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
+bool
+vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const * scanline)
 {
-  if (!ready) {
+  if (!ready)
+  {
     // rewind the stream
     vil_jpeg_stream_dst_rewind(&jobj, stream);
 
@@ -55,16 +58,17 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
     jobj.next_scanline = 0;
 
     // set colorspace of input image. FIXME.
-    switch (jobj.input_components) {
-     case 1:
-      jobj.in_color_space = JCS_GRAYSCALE;
-      break;
-     case 3:
-      jobj.in_color_space = JCS_RGB;
-      break;
-     default:
-      std::cerr << __FILE__ " : urgh!\n";
-      return false;
+    switch (jobj.input_components)
+    {
+      case 1:
+        jobj.in_color_space = JCS_GRAYSCALE;
+        break;
+      case 3:
+        jobj.in_color_space = JCS_RGB;
+        break;
+      default:
+        std::cerr << __FILE__ " : urgh!\n";
+        return false;
     }
 
     jpeg_set_defaults(&jobj);
@@ -72,24 +76,28 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
 
     // start compression
     jpeg_boolean write_all_tables = TRUE;
-    jpeg_start_compress (&jobj, write_all_tables);
+    jpeg_start_compress(&jobj, write_all_tables);
 
     //
     ready = true;
   }
 
   //
-  if (line != jobj.next_scanline) {
+  if (line != jobj.next_scanline)
+  {
     std::cerr << "scanlines must be written in order\n";
     return false;
   }
 
   // write the scanline
-  { auto *tmp = const_cast<JSAMPLE*>(scanline);
-  jpeg_write_scanlines(&jobj, &tmp, 1); }
+  {
+    auto * tmp = const_cast<JSAMPLE *>(scanline);
+    jpeg_write_scanlines(&jobj, &tmp, 1);
+  }
 
   // finish if the last scanline is written
-  if (line == jobj.image_height - 1) {
+  if (line == jobj.image_height - 1)
+  {
     jpeg_finish_compress(&jobj);
     ready = false;
   }
@@ -111,12 +119,14 @@ vil_jpeg_compressor::~vil_jpeg_compressor()
   stream = nullptr;
 }
 
-void vil_jpeg_compressor::set_quality(int q)
+void
+vil_jpeg_compressor::set_quality(int q)
 {
   quality = q;
 }
 
-int vil_jpeg_compressor::get_quality()
+int
+vil_jpeg_compressor::get_quality()
 {
   return quality;
 }

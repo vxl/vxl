@@ -19,35 +19,38 @@ vcsl_spatial::~vcsl_spatial()
 //---------------------------------------------------------------------------
 // Is `time' between the two time bounds ?
 //---------------------------------------------------------------------------
-bool vcsl_spatial::valid_time(double time) const
+bool
+vcsl_spatial::valid_time(double time) const
 {
-  if (beat_.size()==0)
+  if (beat_.size() == 0)
     return true;
   else
-    return (beat_[0]<=time)&&(time<=beat_[beat_.size()-1]);
+    return (beat_[0] <= time) && (time <= beat_[beat_.size() - 1]);
 }
 
 //---------------------------------------------------------------------------
 // Set the list of parent coordinate system along the time
 //---------------------------------------------------------------------------
-void vcsl_spatial::set_parent(std::vector<vcsl_spatial_sptr> const& new_parent)
+void
+vcsl_spatial::set_parent(std::vector<vcsl_spatial_sptr> const & new_parent)
 {
   std::vector<vcsl_spatial_sptr>::iterator i, j;
 
-  if (parent_!=new_parent)
+  if (parent_ != new_parent)
   {
     // Erase 'this' from the list of the old parents' potential children
-    for (i=parent_.begin();i!=parent_.end();++i)
+    for (i = parent_.begin(); i != parent_.end(); ++i)
     {
-      std::vector<vcsl_spatial_sptr> children=(*i)->potential_children_;
-      for (j=children.begin(); j!=children.end()&&(*j).ptr()!=this; ++j)
+      std::vector<vcsl_spatial_sptr> children = (*i)->potential_children_;
+      for (j = children.begin(); j != children.end() && (*j).ptr() != this; ++j)
         ;
-      if ((*j).ptr()==this) children.erase(j);
+      if ((*j).ptr() == this)
+        children.erase(j);
     }
-    parent_=new_parent;
+    parent_ = new_parent;
 
     // Add 'this' to the list of the new parents' potential children
-    for (i=parent_.begin();i!=parent_.end();++i)
+    for (i = parent_.begin(); i != parent_.end(); ++i)
       if (*i)
         (*i)->potential_children_.emplace_back(this);
   }
@@ -57,11 +60,12 @@ void vcsl_spatial::set_parent(std::vector<vcsl_spatial_sptr> const& new_parent)
 // Set the unique parent and the unique motion
 //---------------------------------------------------------------------------
 void
-vcsl_spatial::set_unique(const vcsl_spatial_sptr &new_parent,
-                         const vcsl_spatial_transformation_sptr &new_motion)
+vcsl_spatial::set_unique(const vcsl_spatial_sptr & new_parent, const vcsl_spatial_transformation_sptr & new_motion)
 {
-  motion_.clear(); motion_.push_back(new_motion);
-  std::vector<vcsl_spatial_sptr> temp_parent; temp_parent.push_back(new_parent);
+  motion_.clear();
+  motion_.push_back(new_motion);
+  std::vector<vcsl_spatial_sptr> temp_parent;
+  temp_parent.push_back(new_parent);
   set_parent(temp_parent);
   beat_.clear();
 }
@@ -71,22 +75,23 @@ vcsl_spatial::set_unique(const vcsl_spatial_sptr &new_parent,
 // REQUIRE: parent().size()!=0
 // REQUIRE: valid_time(time)
 //---------------------------------------------------------------------------
-int vcsl_spatial::matching_interval(double time) const
+int
+vcsl_spatial::matching_interval(double time) const
 {
   // require
-  assert(parent_.size()!=0);
+  assert(parent_.size() != 0);
   assert(valid_time(time));
 
   // Dichotomic research of the index
-  int inf=0;
-  int sup=beat_.size()-1;
-  while (sup-inf>1)
+  int inf = 0;
+  int sup = beat_.size() - 1;
+  while (sup - inf > 1)
   {
-    int mid=(inf+sup)/2;
-    if (beat_[mid]>time)
-      sup=mid;
+    int mid = (inf + sup) / 2;
+    if (beat_[mid] > time)
+      sup = mid;
     else
-      inf=mid;
+      inf = mid;
   }
   return inf;
 }
@@ -94,32 +99,32 @@ int vcsl_spatial::matching_interval(double time) const
 //---------------------------------------------------------------------------
 // Does a path from `this' to `other' exist ?
 //---------------------------------------------------------------------------
-bool vcsl_spatial::path_from_local_to_cs_exists(const vcsl_spatial_sptr &other,
-                                                double time)
+bool
+vcsl_spatial::path_from_local_to_cs_exists(const vcsl_spatial_sptr & other, double time)
 {
   graph_->init_vertices();
 
-  return recursive_path_from_local_to_cs_exists(other,time);
+  return recursive_path_from_local_to_cs_exists(other, time);
 }
 
 //---------------------------------------------------------------------------
 // Does a path from `this' to `other' exist ? Called only by
 // path_to_cs_exists()
 //---------------------------------------------------------------------------
-bool vcsl_spatial::recursive_path_from_local_to_cs_exists(const vcsl_spatial_sptr &other,
-                                                          double time)
+bool
+vcsl_spatial::recursive_path_from_local_to_cs_exists(const vcsl_spatial_sptr & other, double time)
 {
-  bool result;
-  int i = -1; // dummy initialisation to avoid compiler warning
+  bool                                           result;
+  int                                            i = -1; // dummy initialisation to avoid compiler warning
   std::vector<vcsl_spatial_sptr>::const_iterator child;
-  if (parent_.size()!=0) // If 'this' is not absolute
-    i=matching_interval(time);
+  if (parent_.size() != 0) // If 'this' is not absolute
+    i = matching_interval(time);
   set_reached(true);
 
   // Check if parent of 'this' (if it exists) is 'other'
-  result=!is_absolute(time); // true if 'this' has a parent
+  result = !is_absolute(time); // true if 'this' has a parent
   if (result)
-    result=parent_[i]==other; // true if parent is 'other' (the cs sought)
+    result = parent_[i] == other; // true if parent is 'other' (the cs sought)
 
   // If 'this' has no parent or its parent is not 'other':
   if (!result)
@@ -129,29 +134,27 @@ bool vcsl_spatial::recursive_path_from_local_to_cs_exists(const vcsl_spatial_spt
       // If parent has not already been checked
       if (!parent_[i]->reached())
         // Check if 'other' can be reached from it
-        result=parent_[i]->recursive_path_from_local_to_cs_exists(other, time);
+        result = parent_[i]->recursive_path_from_local_to_cs_exists(other, time);
     // If 'other' not found, check if 'other' can be reached through children of 'this'
     if (!result)
     {
-      if (potential_children_.size()!=0)
+      if (potential_children_.size() != 0)
       {
-        for (child=potential_children_.begin();
-             !result && child!=potential_children_.end();
-             ++child)
+        for (child = potential_children_.begin(); !result && child != potential_children_.end(); ++child)
         {
-          result=!(*child)->reached();
+          result = !(*child)->reached();
           if (result)
           {
-            int j=(*child)->matching_interval(time);
-            result=(*child)->parent_[j].ptr()==this;
+            int j = (*child)->matching_interval(time);
+            result = (*child)->parent_[j].ptr() == this;
             if (result)
-              result=(*child)->motion_[j]->is_invertible(time);
+              result = (*child)->motion_[j]->is_invertible(time);
           }
           if (result)
           {
-            result=(*child)==other;
+            result = (*child) == other;
             if (!result)
-              result=(*child)->recursive_path_from_local_to_cs_exists(other, time);
+              result = (*child)->recursive_path_from_local_to_cs_exists(other, time);
           }
         }
       }
@@ -165,20 +168,21 @@ bool vcsl_spatial::recursive_path_from_local_to_cs_exists(const vcsl_spatial_spt
 // REQUIRE: path.size()==0 and sens.size()==0
 // REQUIRE: path_from_local_to_cs_exists(other,time)
 //---------------------------------------------------------------------------
-void vcsl_spatial::path_from_local_to_cs(const vcsl_spatial_sptr &other,
-                                         double time,
-                                         std::vector<vcsl_spatial_transformation_sptr> &path,
-                                         VCSL_SPATIAL_VECTOR_BOOL &sens)
+void
+vcsl_spatial::path_from_local_to_cs(const vcsl_spatial_sptr &                       other,
+                                    double                                          time,
+                                    std::vector<vcsl_spatial_transformation_sptr> & path,
+                                    VCSL_SPATIAL_VECTOR_BOOL &                      sens)
 {
   // require
-  assert(path.size()==0);
-  assert(sens.size()==0);
-  assert(path_from_local_to_cs_exists(other,time));
+  assert(path.size() == 0);
+  assert(sens.size() == 0);
+  assert(path_from_local_to_cs_exists(other, time));
 
-  //unused bool path_exists;
+  // unused bool path_exists;
 
   graph_->init_vertices();
-  /*path_exists=*/ recursive_path_from_local_to_cs(other,time,path,sens);
+  /*path_exists=*/recursive_path_from_local_to_cs(other, time, path, sens);
 }
 
 //---------------------------------------------------------------------------
@@ -186,23 +190,23 @@ void vcsl_spatial::path_from_local_to_cs(const vcsl_spatial_sptr &other,
 // Called only by path_from_local_to_cs()
 //---------------------------------------------------------------------------
 bool
-vcsl_spatial::recursive_path_from_local_to_cs(const vcsl_spatial_sptr &other,
-                                              double time,
-                                              std::vector<vcsl_spatial_transformation_sptr> &path,
-                                              VCSL_SPATIAL_VECTOR_BOOL &sens)
+vcsl_spatial::recursive_path_from_local_to_cs(const vcsl_spatial_sptr &                       other,
+                                              double                                          time,
+                                              std::vector<vcsl_spatial_transformation_sptr> & path,
+                                              VCSL_SPATIAL_VECTOR_BOOL &                      sens)
 {
-  bool result;
-  int i = -1; // dummy initialisation to avoid compiler warning
+  bool                                           result;
+  int                                            i = -1; // dummy initialisation to avoid compiler warning
   std::vector<vcsl_spatial_sptr>::const_iterator child;
 
-  if (parent_.size()!=0)
-    i=matching_interval(time);
+  if (parent_.size() != 0)
+    i = matching_interval(time);
 
   set_reached(true);
 
-  result=!is_absolute(time);
+  result = !is_absolute(time);
   if (result)
-    result=parent_[i]==other;
+    result = parent_[i] == other;
 
   if (result)
   {
@@ -217,7 +221,7 @@ vcsl_spatial::recursive_path_from_local_to_cs(const vcsl_spatial_sptr &other,
       {
         path.push_back(motion_[i]);
         sens.push_back(false);
-        result=parent_[i]->recursive_path_from_local_to_cs(other,time,path,sens);
+        result = parent_[i]->recursive_path_from_local_to_cs(other, time, path, sens);
         if (!result)
         {
           path.pop_back();
@@ -226,28 +230,25 @@ vcsl_spatial::recursive_path_from_local_to_cs(const vcsl_spatial_sptr &other,
       }
     if (!result)
     {
-      if (potential_children_.size()!=0)
+      if (potential_children_.size() != 0)
       {
-        for (child=potential_children_.begin();
-             !result && child!=potential_children_.end();
-             ++child)
+        for (child = potential_children_.begin(); !result && child != potential_children_.end(); ++child)
         {
-          result=!(*child)->reached();
+          result = !(*child)->reached();
           if (result)
           {
-            int j=(*child)->matching_interval(time);
-            result=(*child)->parent_[j].ptr()==this;
+            int j = (*child)->matching_interval(time);
+            result = (*child)->parent_[j].ptr() == this;
             if (result)
-              result=(*child)->motion_[j]->is_invertible(time);
+              result = (*child)->motion_[j]->is_invertible(time);
             if (result)
             {
-              result=(*child)==other;
+              result = (*child) == other;
               path.push_back((*child)->motion_[j]);
               sens.push_back(true);
               if (!result)
               {
-                result=(*child)->recursive_path_from_local_to_cs(other,time,
-                                                                 path,sens);
+                result = (*child)->recursive_path_from_local_to_cs(other, time, path, sens);
                 if (!result)
                 {
                   path.pop_back();
@@ -268,18 +269,19 @@ vcsl_spatial::recursive_path_from_local_to_cs(const vcsl_spatial_sptr &other,
 // Is `this' an absolute spatial coordinate system at time `time'?
 // REQUIRE: valid_time(time)
 //---------------------------------------------------------------------------
-bool vcsl_spatial::is_absolute(double time) const
+bool
+vcsl_spatial::is_absolute(double time) const
 {
   // require
   assert(valid_time(time));
 
   // If list of parents is NULL, 'this' must be absolute
-  if (parent_.size()==0)
+  if (parent_.size() == 0)
     return true;
   else
   {
     // If parent at given interval is NULL, 'this' must be absolute
-    int i=matching_interval(time);
+    int i = matching_interval(time);
     return !parent_[i];
   }
 }
@@ -290,39 +292,39 @@ bool vcsl_spatial::is_absolute(double time) const
 // REQUIRE: path_from_local_to_cs_exists(other,time)
 //---------------------------------------------------------------------------
 vnl_vector<double>
-vcsl_spatial::from_local_to_cs(const vnl_vector<double> &v,
-                               const vcsl_spatial_sptr &other,
-                               double time)
+vcsl_spatial::from_local_to_cs(const vnl_vector<double> & v, const vcsl_spatial_sptr & other, double time)
 {
   // require
-  assert(path_from_local_to_cs_exists(other,time));
+  assert(path_from_local_to_cs_exists(other, time));
 
   std::vector<vcsl_spatial_transformation_sptr> path;
-  VCSL_SPATIAL_VECTOR_BOOL sens;
+  VCSL_SPATIAL_VECTOR_BOOL                      sens;
 
   std::vector<vcsl_spatial_transformation_sptr>::const_iterator i;
+
   VCSL_SPATIAL_VECTOR_BOOL::const_iterator j;
 
-  path_from_local_to_cs(other,time,path,sens);
+  path_from_local_to_cs(other, time, path, sens);
 
-  vnl_vector<double> tmp=from_cs_to_standard_units(v);
+  vnl_vector<double> tmp = from_cs_to_standard_units(v);
 
-  j=sens.begin();
+  j = sens.begin();
 
-  for (i=path.begin();i!=path.end();++i,++j)
+  for (i = path.begin(); i != path.end(); ++i, ++j)
   {
     if (*j)
-      tmp=(*i)->inverse(tmp,time);
+      tmp = (*i)->inverse(tmp, time);
     else
-      tmp=(*i)->execute(tmp,time);
+      tmp = (*i)->execute(tmp, time);
   }
   return other->from_standard_units_to_cs(tmp);
 }
 
-void vcsl_spatial::set_graph(const vcsl_graph_sptr &new_graph)
+void
+vcsl_spatial::set_graph(const vcsl_graph_sptr & new_graph)
 {
   if (graph_)
     graph_->remove(this);
-  graph_=new_graph;
+  graph_ = new_graph;
   graph_->put(this);
 }

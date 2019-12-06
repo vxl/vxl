@@ -29,7 +29,8 @@
 #endif
 #include "testlib/testlib_root_dir.h"
 
-static void golden_test_vbl_io(bool save_file)
+static void
+golden_test_vbl_io(bool save_file)
 {
   //------------------------------------------------------------------------
   // Create objects:
@@ -39,65 +40,65 @@ static void golden_test_vbl_io(bool save_file)
   //------------------------------------------------------------------------
 
   std::cout << "***********************************************************\n"
-           << " Testing a golden data file for cross platform consistency\n"
-           << "***********************************************************\n";
+            << " Testing a golden data file for cross platform consistency\n"
+            << "***********************************************************\n";
 
   // vbl_bounding_box
-  vbl_bounding_box<double,2> b_box_in, b_box_out;
+  vbl_bounding_box<double, 2> b_box_in, b_box_out;
 
   b_box_out.update(1.2, 3.4); // Bounding box now has only one point and therefore no size
   b_box_out.update(5.6, 7.8); // Socond point now defines a bounding box
 
   // 1d Array
-  int n = 50;
+  int                 n = 50;
   vbl_array_1d<float> a1_out, a1_in;
 
-  a1_out.reserve(n+10);
-  for (int i=0; i<n; i++)
-    a1_out.push_back(1.f*i*i);
+  a1_out.reserve(n + 10);
+  for (int i = 0; i < n; i++)
+    a1_out.push_back(1.f * i * i);
 
 
   // 2d Array
-  constexpr int array_rows = 8;
-  constexpr int array_cols = 6;
+  constexpr int     array_rows = 8;
+  constexpr int     array_cols = 6;
   vbl_array_2d<int> a2_out(array_rows, array_cols), a2_in;
 
-  for (int i=0; i<array_rows; i++)
+  for (int i = 0; i < array_rows; i++)
   {
-    for (int j=0; j< array_cols; j++)
-      a2_out(i,j) = i*j*j;
+    for (int j = 0; j < array_cols; j++)
+      a2_out(i, j) = i * j * j;
   }
 
 
   // 3d Array
-  constexpr int array_row1 = 8;
-  constexpr int array_row2 = 7;
-  constexpr int array_row3 = 9;
+  constexpr int     array_row1 = 8;
+  constexpr int     array_row2 = 7;
+  constexpr int     array_row3 = 9;
   vbl_array_3d<int> a3_out(array_row1, array_row2, array_row3), a3_in;
-  for (int i=0; i<array_row1; i++)
-    for (int j=0; j< array_row2; j++)
-      for (int k=0; k<array_row3; k++)
-        a3_out(i,j,k) = i*j*j*k;
+  for (int i = 0; i < array_row1; i++)
+    for (int j = 0; j < array_row2; j++)
+      for (int k = 0; k < array_row3; k++)
+        a3_out(i, j, k) = i * j * j * k;
 
 
   // Sparse Array
   vbl_sparse_array_1d<double> sa_out, sa_in;
-  unsigned int key1=3,key2=4,key3=5;
-  double data1=1.2, data2=3.4, data3=5.6;
+  unsigned int                key1 = 3, key2 = 4, key3 = 5;
+  double                      data1 = 1.2, data2 = 3.4, data3 = 5.6;
 
-  //create a sparse array - more than 5 elements so only first 5 are written out
-  sa_out(key1)=data1;
-  sa_out(key2)=data2;
-  sa_out(key3)=data3;
-  for (unsigned int k=60; k<70; k++)
-    sa_out(k)=data1;
+  // create a sparse array - more than 5 elements so only first 5 are written out
+  sa_out(key1) = data1;
+  sa_out(key2) = data2;
+  sa_out(key3) = data3;
+  for (unsigned int k = 60; k < 70; k++)
+    sa_out(k) = data1;
 
 
   // Smart Pointer
   n = 50;
-  vbl_smart_ptr<impl > sp1_out(new impl(n));
-  const vbl_smart_ptr<impl>& sp2_out(sp1_out);
-  vbl_smart_ptr<impl > sp1_in, sp2_in;
+  vbl_smart_ptr<impl>         sp1_out(new impl(n));
+  const vbl_smart_ptr<impl> & sp2_out(sp1_out);
+  vbl_smart_ptr<impl>         sp1_in, sp2_in;
 
 
   // Save if option set
@@ -105,7 +106,7 @@ static void golden_test_vbl_io(bool save_file)
   {
     std::cout << "Going to create the golden test file\n";
     vsl_b_ofstream bfs_out("golden_test_vbl_io.bvl");
-    TEST("Opened golden_test_vbl_io.bvl for writing ", ! bfs_out, false);
+    TEST("Opened golden_test_vbl_io.bvl for writing ", !bfs_out, false);
 
     vsl_b_write(bfs_out, b_box_out);
     vsl_b_write(bfs_out, a1_out);
@@ -122,10 +123,10 @@ static void golden_test_vbl_io(bool save_file)
 
   std::cout << "Did we get this far ?\n";
 
-  std::string gold_path=testlib_root_dir()+"/core/vbl/io/tests/golden_test_vbl_io.bvl";
+  std::string    gold_path = testlib_root_dir() + "/core/vbl/io/tests/golden_test_vbl_io.bvl";
   vsl_b_ifstream bfs_in(gold_path.c_str());
 
-  TEST("Opened golden_test_vbl_io.bvl for reading ", ! bfs_in, false);
+  TEST("Opened golden_test_vbl_io.bvl for reading ", !bfs_in, false);
 
   vsl_b_read(bfs_in, b_box_in);
   vsl_b_read(bfs_in, a1_in);
@@ -149,7 +150,7 @@ static void golden_test_vbl_io(bool save_file)
   TEST("vbl_bounding_box: b_box_out.max()[1] == b_box_in.max()[1]", b_box_out.max()[1], b_box_in.max()[1]);
 
 
-  //Test 1d array
+  // Test 1d array
   bool test_result1 = true;
   if (a1_out.size() != a1_in.size())
     test_result1 = false;
@@ -158,7 +159,7 @@ static void golden_test_vbl_io(bool save_file)
   else
   {
     auto array_size = (unsigned int)(a1_out.size());
-    for (unsigned int i=0; i<array_size; i++)
+    for (unsigned int i = 0; i < array_size; i++)
     {
       if (a1_out[i] != a1_in[i])
         test_result1 = false;
@@ -177,10 +178,10 @@ static void golden_test_vbl_io(bool save_file)
   {
     auto array_rows = (unsigned int)(a2_out.rows());
     auto array_cols = (unsigned int)(a2_out.cols());
-    for (unsigned int i=0; i<array_rows; ++i)
+    for (unsigned int i = 0; i < array_rows; ++i)
     {
-      for (unsigned int j=0; j<array_cols; ++j)
-        if (a2_out(i,j) != a2_in(i,j))
+      for (unsigned int j = 0; j < array_cols; ++j)
+        if (a2_out(i, j) != a2_in(i, j))
           test_result2 = false;
     }
   }
@@ -200,10 +201,10 @@ static void golden_test_vbl_io(bool save_file)
     auto array_row1 = (unsigned int)(a3_out.get_row1_count());
     auto array_row2 = (unsigned int)(a3_out.get_row2_count());
     auto array_row3 = (unsigned int)(a3_out.get_row3_count());
-    for (unsigned int i=0; i<array_row1; ++i)
-      for (unsigned int j=0; j<array_row2; ++j)
-        for (unsigned int k=0; k<array_row3; ++k)
-          if (a3_out(i,j,k) != a3_in(i,j,k))
+    for (unsigned int i = 0; i < array_row1; ++i)
+      for (unsigned int j = 0; j < array_row2; ++j)
+        for (unsigned int k = 0; k < array_row3; ++k)
+          if (a3_out(i, j, k) != a3_in(i, j, k))
             test_result3 = false;
   }
   TEST("vbl_array_3d: a3_out == a3_in", test_result3, true);
@@ -211,15 +212,18 @@ static void golden_test_vbl_io(bool save_file)
 
   // Test Sparse Array
   bool test_result4 = true;
-  //same number of non zero elements?
+  // same number of non zero elements?
   if (sa_out.count_nonempty() != sa_in.count_nonempty())
-    test_result4=false;
-  else {
-    //check every key/data pair, require same order too.
+    test_result4 = false;
+  else
+  {
+    // check every key/data pair, require same order too.
     auto s = sa_in.begin();
-    //N.B. relies on sensible == operator for <T>
-    for (auto r : sa_out){
-      if (((*s).first != r.first) || ((*s).second != r.second)) test_result4=false;
+    // N.B. relies on sensible == operator for <T>
+    for (auto r : sa_out)
+    {
+      if (((*s).first != r.first) || ((*s).second != r.second))
+        test_result4 = false;
       s++;
     }
   }
@@ -228,13 +232,13 @@ static void golden_test_vbl_io(bool save_file)
 
   // Test Smart Pointer
   TEST("vbl_smart_ptr: sp1_in == sp2_in", sp1_in == sp2_in, true);
-  TEST("vbl_smart_ptr: sp1_in->get_references() == 2",
-       ((sp1_in) && (sp1_in->get_references() ==2)), true);
+  TEST("vbl_smart_ptr: sp1_in->get_references() == 2", ((sp1_in) && (sp1_in->get_references() == 2)), true);
 }
 
-static void golden_test_vbl_io(int argc, char* argv[])
+static void
+golden_test_vbl_io(int argc, char * argv[])
 {
-  golden_test_vbl_io(argc==2 && std::string(argv[1])==std::string("create"));
+  golden_test_vbl_io(argc == 2 && std::string(argv[1]) == std::string("create"));
 }
 
 TESTMAIN_ARGS(golden_test_vbl_io);

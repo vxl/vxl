@@ -8,11 +8,12 @@
 #include "testlib/testlib_test.h"
 #include "vpl/vpl.h"
 
-void test_string_io()
+void
+test_string_io()
 {
   std::cout << "****************************\n"
-           << "Testing std::string binary io\n"
-           << "****************************\n";
+            << "Testing std::string binary io\n"
+            << "****************************\n";
 
   std::string outstring("This is a test");
 
@@ -29,7 +30,7 @@ void test_string_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vsl_string_io_test.bvl.tmp");
+  vpl_unlink("vsl_string_io_test.bvl.tmp");
 
   TEST("std::string<int> out == std::string<int> in", outstring, instring);
 }

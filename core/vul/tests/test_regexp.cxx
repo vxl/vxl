@@ -14,7 +14,8 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-void test_regexp()
+void
+test_regexp()
 {
   std::cout << "\n\tGENERAL TESTS OF MEMBER FUNCTIONS FOR REGEXP CLASS.\n";
 
@@ -42,8 +43,8 @@ void test_regexp()
 
   vul_reg_exp r2(r1);
   TEST("vul_reg_exp r2(r1);", 0, 0);
-  TEST("r1==r2", r1==r2, true);
-  TEST("r2==r1", r2==r1, true);
+  TEST("r1==r2", r1 == r2, true);
+  TEST("r2==r1", r2 == r1, true);
   TEST("r2.deep_equal(r1)", r2.deep_equal(r1), true);
   TEST("r1.deep_equal(r2)", r1.deep_equal(r2), true);
   TEST("r2.find(strng)", r2.find(strng), true);
@@ -56,12 +57,11 @@ void test_regexp()
   TEST("r2==r1", r2, r1);
   TEST("r2.deep_equal(r1)", r2.deep_equal(r1), true);
   TEST("r1.deep_equal(r2)", r1.deep_equal(r2), true);
-  TEST("r2.find(\"Another Test string\tto matchstring.\")",
-       r2.find("Another Test string\tto matchstring."), true);
-  TEST("r1==r2", r1==r2, true);
-  TEST("r2==r1", r2==r1, true);
-  TEST("r1!=r2", r1!=r2, false);
-  TEST("r2!=r1", r2!=r1, false);
+  TEST("r2.find(\"Another Test string\tto matchstring.\")", r2.find("Another Test string\tto matchstring."), true);
+  TEST("r1==r2", r1 == r2, true);
+  TEST("r2==r1", r2 == r1, true);
+  TEST("r1!=r2", r1 != r2, false);
+  TEST("r2!=r1", r2 != r1, false);
   TEST("r2.deep_equal(r1)", r2.deep_equal(r1), false);
   TEST("r1.deep_equal(r2)", r1.deep_equal(r2), false);
 
@@ -74,11 +74,11 @@ void test_regexp()
   TEST("r3.compile(\"hELl\")", 0, 0);
   const char * strng2 = "o, hELlo";
   TEST("r3.find(strng2)", r3.find(strng2), true);
-  TEST("r1==r3", r1==r3, false);
+  TEST("r1==r3", r1 == r3, false);
   TEST("r1.deep_equal(r3)", r1.deep_equal(r3), false);
   TEST("r3.start()", r3.start(), 3);
   TEST("r3.end()", r3.end(), 7);
-  vul_reg_exp r4(r3);
+  vul_reg_exp  r4(r3);
   const char * strng3 = "I don't think it's here";
   TEST("r3.find(strng3)", r3.find(strng3), false);
   TEST("r4==r3", r4, r3);
@@ -88,43 +88,43 @@ void test_regexp()
 
   std::cout << "\n\tTESTS FOR compile AND find WITH VARIOUS REGULAR EXPRESSIONS.\n";
 
-//:
-// A regular expression allows a programmer to specify complex patterns that
-// can be searched for and matched against the character string of a std::string
-// object.  In its simplest case, a regular expression is a sequence of
-// characters with which you can search for exact character matches. That is
-// what was done in the tests above.
-// However, many times you may not know the exact sequence you want to find,
-// or you may only want to find a match at the beginning or end of a string.
-// The vul_reg_exp object allows specification of such patterns by utilizing
-// the following regular expressions:
-//
-// meta-characters:
-//
-// -       ^    Match at beginning of line
-// -       $    Match at end of line
-// -       .    Match any single character
-// -       [ ]  Match any one character inside the brackets
-// -       -    Match any character in range on either side of dash
-// -       *    Match preceding pattern zero or more times
-// -       +    Match preceding pattern one or more times
-// -       ?    Match preceding pattern zero or once only
-// -       ()   Save a matched expression and use it in a further match.
-//
-// Below are tests for the regular expressions using the symbols listed
-// above.  They provide good examples of regular expression use.
-//
-// Other good examples of how regular expressions are used, can be
-// found in documentation for ed, sed, grep, awk and perl.
-//
-// The above symbols can be used together to form complex regular expressions
-// for very unusual matching.  There are a few examples of this type of
-// use in the following tests.
+  //:
+  // A regular expression allows a programmer to specify complex patterns that
+  // can be searched for and matched against the character string of a std::string
+  // object.  In its simplest case, a regular expression is a sequence of
+  // characters with which you can search for exact character matches. That is
+  // what was done in the tests above.
+  // However, many times you may not know the exact sequence you want to find,
+  // or you may only want to find a match at the beginning or end of a string.
+  // The vul_reg_exp object allows specification of such patterns by utilizing
+  // the following regular expressions:
+  //
+  // meta-characters:
+  //
+  // -       ^    Match at beginning of line
+  // -       $    Match at end of line
+  // -       .    Match any single character
+  // -       [ ]  Match any one character inside the brackets
+  // -       -    Match any character in range on either side of dash
+  // -       *    Match preceding pattern zero or more times
+  // -       +    Match preceding pattern one or more times
+  // -       ?    Match preceding pattern zero or once only
+  // -       ()   Save a matched expression and use it in a further match.
+  //
+  // Below are tests for the regular expressions using the symbols listed
+  // above.  They provide good examples of regular expression use.
+  //
+  // Other good examples of how regular expressions are used, can be
+  // found in documentation for ed, sed, grep, awk and perl.
+  //
+  // The above symbols can be used together to form complex regular expressions
+  // for very unusual matching.  There are a few examples of this type of
+  // use in the following tests.
 
   std::cout << "\nTESTS FOR REGULAR EXPRESSIONS WITH ^\n";
 
   const char * s = "str at front";
-  vul_reg_exp rxp("^str");
+  vul_reg_exp  rxp("^str");
   TEST("vul_reg_exp rxp(^str)", 0, 0);
   TEST("rxp.find(\"str at front\")", rxp.find(s), true);
   TEST("rxp.start() == 0", rxp.start(), 0);

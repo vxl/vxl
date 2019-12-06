@@ -21,4 +21,8 @@
 #include <vgl/io/vgl_io_vector_2d.h>
 #include <vgl/io/vgl_io_vector_3d.h>
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

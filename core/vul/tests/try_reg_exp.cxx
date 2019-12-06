@@ -15,13 +15,13 @@
 #include "vul/vul_reg_exp.h"
 
 
-
 //=======================================================================
-int main(int argc, char *argv[])
+int
+main(int argc, char * argv[])
 {
 
   vul_arg<std::string> re_string(nullptr, "Regular expression");
-  vul_arg_parse(argc,argv);
+  vul_arg_parse(argc, argv);
 
   std::string s;
   vul_reg_exp re(re_string().c_str());
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
   {
     if (re.find(s))
     {
-      std::cout << "MATCHED chars " << re.start(0) << " to " << re.end(0) << " (0-start to end+1)"<< std::endl;
+      std::cout << "MATCHED chars " << re.start(0) << " to " << re.end(0) << " (0-start to end+1)" << std::endl;
     }
     else
     {

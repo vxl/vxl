@@ -13,9 +13,10 @@
 #include "testlib/testlib_test.h"
 #include "vcsl/vcsl_meter.h"
 
-static void test_meter()
+static void
+test_meter()
 {
-  vcsl_meter_sptr m=vcsl_meter::instance();
+  vcsl_meter_sptr m = vcsl_meter::instance();
   TEST("test_meter_sptr", bool(m), true);
 }
 

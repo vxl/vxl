@@ -15,18 +15,19 @@
 #include "vil/vil_stream_url.h"
 // not used? #include <vcl_compiler.h>
 
-vil_stream *vil_open(char const* what, char const* how)
+vil_stream *
+vil_open(char const * what, char const * how)
 {
   // check for null pointer or empty strings.
   if (!what || !*what)
     return nullptr;
 
-  // try to open as file first.
+    // try to open as file first.
 #ifdef VIL_USE_FSTREAM64
-  vil_stream *is = new vil_stream_fstream64(what, how);
-#else //VIL_USE_FSTREAM64
-  vil_stream *is = new vil_stream_fstream(what, how);
-#endif //VIL_USE_FSTREAM64
+  vil_stream * is = new vil_stream_fstream64(what, how);
+#else  // VIL_USE_FSTREAM64
+  vil_stream * is = new vil_stream_fstream(what, how);
+#endif // VIL_USE_FSTREAM64
 
 #if 0
   // unfortunately, the following doesn't work because (note typo)
@@ -38,53 +39,63 @@ vil_stream *vil_open(char const* what, char const* how)
   // vil_load() just does a vil_open<() for reading. i do not think people
   // expect "loading an image" to open the disk file for writing by
   // default. -- fsm
-#ifdef VIL_USE_FSTREAM64
+#  ifdef VIL_USE_FSTREAM64
   vil_stream *is = new vil_stream_fstream64(what, "r+");
-#else //VIL_USE_FSTREAM64
+#  else  // VIL_USE_FSTREAM64
   vil_stream *is = new vil_stream_fstream(what, "r+");
-#endif //VIL_USE_FSTREAM64
+#  endif // VIL_USE_FSTREAM64
 #endif
-  if (!is->ok()) {
+  if (!is->ok())
+  {
     // this will delete the stream object.
     is->ref();
     is->unref();
     is = nullptr;
   }
 
-  if (!is) {
+  if (!is)
+  {
     // hacked check for filenames beginning "gen:".
     int l = (int)std::strlen(what);
-    if (l > 4 && std::strncmp(what, "gen:", 4) == 0) {
-      if (std::strcmp(how, "r") == 0) {
+    if (l > 4 && std::strncmp(what, "gen:", 4) == 0)
+    {
+      if (std::strcmp(how, "r") == 0)
+      {
         // Make an in-core stream...
-        auto *cis = new vil_stream_core();
-        cis->write(what, l+1);
+        auto * cis = new vil_stream_core();
+        cis->write(what, l + 1);
         is = cis;
       }
-      else {
+      else
+      {
         std::cerr << __FILE__ ": cannot open gen:* for writing\n";
       }
     }
   }
-  if (is && !is->ok()) {
+  if (is && !is->ok())
+  {
     // this will delete the stream object.
     is->ref();
     is->unref();
     is = nullptr;
   }
 
-  if (!is) {
+  if (!is)
+  {
     // maybe it's a URL?
     int l = (int)std::strlen(what);
-    if (l > 4 && std::strncmp(what, "http://", 7) == 0) {
-      if (std::strcmp(how, "r") == 0) {
+    if (l > 4 && std::strncmp(what, "http://", 7) == 0)
+    {
+      if (std::strcmp(how, "r") == 0)
+      {
         is = new vil_stream_url(what);
       }
       else
         std::cerr << __FILE__ ": cannot open URL for writing (yet)\n";
     }
   }
-  if (is && !is->ok()) {
+  if (is && !is->ok())
+  {
     // this will delete the stream object.
     is->ref();
     is->unref();
@@ -99,27 +110,29 @@ vil_stream *vil_open(char const* what, char const* how)
 //  Windows' wchar_t overloading version
 //
 //
-vil_stream *vil_open(wchar_t const* what, char const* how)
+vil_stream *
+vil_open(wchar_t const * what, char const * how)
 {
   // check for null pointer or empty strings.
   if (!what || !*what)
     return 0;
 
-  // try to open as file first.
-#ifdef VIL_USE_FSTREAM64
-  vil_stream *is = new vil_stream_fstream64(what, how);
-#else //VIL_USE_FSTREAM64
-  vil_stream *is = new vil_stream_fstream(what, how);
-#endif //VIL_USE_FSTREAM64
+    // try to open as file first.
+#  ifdef VIL_USE_FSTREAM64
+  vil_stream * is = new vil_stream_fstream64(what, how);
+#  else  // VIL_USE_FSTREAM64
+  vil_stream * is = new vil_stream_fstream(what, how);
+#  endif // VIL_USE_FSTREAM64
 
-  if (!is->ok()) {
+  if (!is->ok())
+  {
     // this will delete the stream object.
     is->ref();
     is->unref();
     is = 0;
   }
 
-#if 0  // TODO: add wchar_t support in vil_stream_core
+#  if 0 // TODO: add wchar_t support in vil_stream_core
   if (!is) {
     // hacked check for filenames beginning "gen:".
     int l = wcslen(what);
@@ -141,9 +154,9 @@ vil_stream *vil_open(wchar_t const* what, char const* how)
     is->unref();
     is = 0;
   }
-#endif
+#  endif
 
-#if 0  // TODO: add wchar_t support in vil_stream_url
+#  if 0 // TODO: add wchar_t support in vil_stream_url
   if (!is) {
     // maybe it's a URL?
     int l = std::strlen(what);
@@ -161,9 +174,9 @@ vil_stream *vil_open(wchar_t const* what, char const* how)
     is->unref();
     is = 0;
   }
-#endif
+#  endif
 
   return is;
 }
 
-#endif //defined(_WIN32) && VXL_USE_WIN_WCHAR_T
+#endif // defined(_WIN32) && VXL_USE_WIN_WCHAR_T

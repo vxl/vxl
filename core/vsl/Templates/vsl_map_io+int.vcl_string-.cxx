@@ -4,4 +4,4 @@
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
-VSL_MAP_IO_INSTANTIATE(int,std::string, std::less<int>);
+VSL_MAP_IO_INSTANTIATE(int, std::string, std::less<int>);

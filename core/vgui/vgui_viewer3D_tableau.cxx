@@ -27,37 +27,37 @@
 
 struct vgui_viewer3D_tableau_spin
 {
-  vgui_viewer3D_tableau *viewer;
-  float delta_r[4];
-  double delay;
+  vgui_viewer3D_tableau * viewer;
+  float                   delta_r[4];
+  double                  delay;
 };
 
-const void * const vgui_viewer3D_tableau::SPIN_EVENT="x";
+const void * const vgui_viewer3D_tableau::SPIN_EVENT = "x";
 
 //: Constructor - don't use this, use vgui_viewer3D_tableau_new.
-vgui_viewer3D_tableau::vgui_viewer3D_tableau(vgui_tableau_sptr const& s) :
-  vgui_wrapper_tableau(s),
-  c_mouse_rotate(vgui_LEFT),
-  c_mouse_translate(vgui_RIGHT),
-  c_mouse_zoom(vgui_MIDDLE),
-  c_lock_dolly(vgui_key('D'), vgui_MODIFIER_NULL),
-  c_lock_zoom(vgui_key('Z'), vgui_MODIFIER_NULL),
-  c_lighting(vgui_key('l'), vgui_MODIFIER_NULL),
-  c_shading(vgui_key('s'), vgui_MODIFIER_NULL),
-  c_spinning(vgui_key('p'), vgui_MODIFIER_NULL),
-  c_render_mode(vgui_key('r'), vgui_MODIFIER_NULL),
-  c_niceness(vgui_key('n'), vgui_MODIFIER_NULL),
-  c_headlight(vgui_key('h'), vgui_MODIFIER_NULL),
-  c_save_home(vgui_key('>'), vgui_MODIFIER_NULL),
-  c_restore_home(vgui_key('<'), vgui_MODIFIER_NULL),
-  lock_dolly(false),
-  lock_zoom(true),
-  spin_data(nullptr)
+vgui_viewer3D_tableau::vgui_viewer3D_tableau(vgui_tableau_sptr const & s)
+  : vgui_wrapper_tableau(s)
+  , c_mouse_rotate(vgui_LEFT)
+  , c_mouse_translate(vgui_RIGHT)
+  , c_mouse_zoom(vgui_MIDDLE)
+  , c_lock_dolly(vgui_key('D'), vgui_MODIFIER_NULL)
+  , c_lock_zoom(vgui_key('Z'), vgui_MODIFIER_NULL)
+  , c_lighting(vgui_key('l'), vgui_MODIFIER_NULL)
+  , c_shading(vgui_key('s'), vgui_MODIFIER_NULL)
+  , c_spinning(vgui_key('p'), vgui_MODIFIER_NULL)
+  , c_render_mode(vgui_key('r'), vgui_MODIFIER_NULL)
+  , c_niceness(vgui_key('n'), vgui_MODIFIER_NULL)
+  , c_headlight(vgui_key('h'), vgui_MODIFIER_NULL)
+  , c_save_home(vgui_key('>'), vgui_MODIFIER_NULL)
+  , c_restore_home(vgui_key('<'), vgui_MODIFIER_NULL)
+  , lock_dolly(false)
+  , lock_zoom(true)
+  , spin_data(nullptr)
 {
   spinning = false;
   allow_spinning = true;
 
-  trackball(token.quat , 0.0, 0.0, 0.0, 0.0);
+  trackball(token.quat, 0.0, 0.0, 0.0, 0.0);
   token.scale = 1.0;
 
   token.trans[0] = 0;
@@ -73,19 +73,22 @@ vgui_viewer3D_tableau::vgui_viewer3D_tableau(vgui_tableau_sptr const& s) :
   headlight = true;
 }
 
-vgui_viewer3D_tableau::~vgui_viewer3D_tableau()
+vgui_viewer3D_tableau::~vgui_viewer3D_tableau() {}
+
+std::string
+vgui_viewer3D_tableau::type_name() const
 {
+  return "vgui_viewer3D_tableau";
 }
 
-std::string vgui_viewer3D_tableau::type_name() const {return "vgui_viewer3D_tableau";}
-
-static void draw_headlight()
+static void
+draw_headlight()
 {
 #if 0
   glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 #endif // 0
   glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-  GLfloat light0_pos[4]   = {  0.0, 0.0, 1.0, 0.0 };
+  GLfloat light0_pos[4] = { 0.0, 0.0, 1.0, 0.0 };
 #if 0
   GLfloat light0_dir[4]   = {  0.0, 0.0, -1.0, 0.0 };
 #endif // 0
@@ -98,9 +101,9 @@ static void draw_headlight()
   glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light0_dir);
   glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 1080.0);
 #endif // 0
-  glLightfv(GL_LIGHT0, GL_AMBIENT,  light0_amb);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE,  light0_diff);
-  glLightfv(GL_LIGHT0, GL_SPECULAR,  light0_spec);
+  glLightfv(GL_LIGHT0, GL_AMBIENT, light0_amb);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diff);
+  glLightfv(GL_LIGHT0, GL_SPECULAR, light0_spec);
 #if 0
   glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1);
   glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.0);
@@ -111,7 +114,8 @@ static void draw_headlight()
 }
 
 
-void vgui_viewer3D_tableau::setup_gl_matrices()
+void
+vgui_viewer3D_tableau::setup_gl_matrices()
 {
   GLdouble vp[4];
   glGetDoublev(GL_VIEWPORT, vp); // ok
@@ -128,12 +132,12 @@ void vgui_viewer3D_tableau::setup_gl_matrices()
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  glTranslatef(0,0,-10);      // object position
+  glTranslatef(0, 0, -10); // object position
 
   glTranslatef(token.trans[0], token.trans[1], token.trans[2]);
   glScalef(token.scale, token.scale, token.scale);
   GLfloat m[4][4];
-  build_rotmatrix(m,token.quat); // rotation
+  build_rotmatrix(m, token.quat); // rotation
   glMultMatrixf(&m[0][0]);
 
   if (headlight)
@@ -143,7 +147,8 @@ void vgui_viewer3D_tableau::setup_gl_matrices()
 }
 
 
-void vgui_viewer3D_tableau::draw_before_child()
+void
+vgui_viewer3D_tableau::draw_before_child()
 {
 #ifdef DEBUG
   std::cerr << "vgui_viewer3D_tableau::draw_before_child\n";
@@ -174,7 +179,8 @@ void vgui_viewer3D_tableau::draw_before_child()
   else
     glShadeModel(GL_FLAT);
 
-  if (high_quality) {
+  if (high_quality)
+  {
     glEnable(GL_DITHER);
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
@@ -187,7 +193,8 @@ void vgui_viewer3D_tableau::draw_before_child()
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   }
-  else {
+  else
+  {
     glDisable(GL_DITHER);
     glHint(GL_LINE_SMOOTH_HINT, GL_FASTEST);
     glHint(GL_POINT_SMOOTH_HINT, GL_FASTEST);
@@ -205,29 +212,28 @@ void vgui_viewer3D_tableau::draw_before_child()
 }
 
 
-bool vgui_viewer3D_tableau::handle(const vgui_event& e)
+bool
+vgui_viewer3D_tableau::handle(const vgui_event & e)
 {
   if (this->spinning && (c_mouse_rotate(e) || c_mouse_translate(e) || c_mouse_zoom(e)))
     this->spinning = false;
 
   if (this->allow_spinning && this->spinning && event.user == &vgui_viewer3D_tableau::SPIN_EVENT)
   {
-    vgui_viewer3D_tableau_spin const* spindata = (vgui_viewer3D_tableau_spin const*)event.data;
+    vgui_viewer3D_tableau_spin const * spindata = (vgui_viewer3D_tableau_spin const *)event.data;
 
     if (spindata->viewer == this)
     {
 #ifdef DEBUG
       std::cerr << "spinning\n"
-               << "spin_data->delta_r = "
-               << spindata->delta_r[0] << ' '
-               << spindata->delta_r[1] << ' '
-               << spindata->delta_r[2] << ' '
-               << spindata->delta_r[3] << '\n';
+                << "spin_data->delta_r = " << spindata->delta_r[0] << ' ' << spindata->delta_r[1] << ' '
+                << spindata->delta_r[2] << ' ' << spindata->delta_r[3] << '\n';
 #endif
 
       add_quats(spindata->delta_r, lastpos.quat, this->token.quat);
 
-      for (unsigned i=0; i<4; ++i) lastpos.quat[i] = this->token.quat[i];
+      for (unsigned i = 0; i < 4; ++i)
+        lastpos.quat[i] = this->token.quat[i];
 
       this->post_redraw();
 
@@ -245,7 +251,8 @@ bool vgui_viewer3D_tableau::handle(const vgui_event& e)
   if (vgui_tableau::handle(e))
     return true;
 
-  if (e.type == vgui_DRAW) {
+  if (e.type == vgui_DRAW)
+  {
 #ifdef DEBUG
     std::cerr << "vgui_viewer3D_tableau vgui_DRAW\n";
 #endif
@@ -254,7 +261,8 @@ bool vgui_viewer3D_tableau::handle(const vgui_event& e)
     child && child->handle(e);
     return true;
   }
-  else {
+  else
+  {
     setup_gl_matrices();
 
     bool used = child->handle(e);
@@ -262,9 +270,11 @@ bool vgui_viewer3D_tableau::handle(const vgui_event& e)
   }
 }
 
-bool vgui_viewer3D_tableau::mouse_down(int x, int y, vgui_button /*button*/, vgui_modifier /*modifier*/)
+bool
+vgui_viewer3D_tableau::mouse_down(int x, int y, vgui_button /*button*/, vgui_modifier /*modifier*/)
 {
-  if (c_mouse_rotate(event) || c_mouse_translate(event) || c_mouse_zoom(event)) {
+  if (c_mouse_rotate(event) || c_mouse_translate(event) || c_mouse_zoom(event))
+  {
     beginx = x;
     beginy = y;
     lastpos = this->token;
@@ -276,7 +286,8 @@ bool vgui_viewer3D_tableau::mouse_down(int x, int y, vgui_button /*button*/, vgu
   return false;
 }
 
-bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifier modifier)
+bool
+vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifier modifier)
 {
   // SPINNING
   if (c_mouse_rotate(button, modifier))
@@ -287,15 +298,13 @@ bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_mo
 
     GLdouble vp[4];
     glGetDoublev(GL_VIEWPORT, vp); // ok
-    float width  = (float)vp[2];
+    float width = (float)vp[2];
     float height = (float)vp[3];
 
     float wscale = 2.0f / width;
     float hscale = 2.0f / height;
     float delta_r[4];
-    trackball(delta_r,
-              wscale*beginx - 1, hscale*beginy - 1,
-              wscale*x - 1, hscale*y - 1);
+    trackball(delta_r, wscale * beginx - 1, hscale * beginy - 1, wscale * x - 1, hscale * y - 1);
     add_quats(delta_r, lastpos.quat, this->token.quat);
 
     prevx = x;
@@ -328,8 +337,9 @@ bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_mo
 
     // changed to std::pow(5,dy) to std::pow(5.0,dy)
     // the first version is ambiguous when overloads exist for std::pow
-    double zoomfactor = std::pow(5.0,dx);
-    if (!lock_zoom) {
+    double zoomfactor = std::pow(5.0, dx);
+    if (!lock_zoom)
+    {
       this->token.fov = static_cast<float>(lastpos.fov * zoomfactor);
       vgui::out << "viewer3D : fov " << this->token.fov << std::endl;
     }
@@ -338,7 +348,8 @@ bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_mo
   }
 
   // TRANSLATION
-  if (c_mouse_translate(button, modifier)) {
+  if (c_mouse_translate(button, modifier))
+  {
     GLint vp[4];
     glGetIntegerv(GL_VIEWPORT, vp); // ok
     double width = (double)vp[2];
@@ -356,7 +367,8 @@ bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_mo
   return false;
 }
 
-bool vgui_viewer3D_tableau::mouse_up(int x, int y, vgui_button button, vgui_modifier modifier)
+bool
+vgui_viewer3D_tableau::mouse_up(int x, int y, vgui_button button, vgui_modifier modifier)
 {
   // SPINNING
   if (this->allow_spinning && c_mouse_rotate(button, modifier))
@@ -372,10 +384,12 @@ bool vgui_viewer3D_tableau::mouse_up(int x, int y, vgui_button button, vgui_modi
 
     double wscale = 2.0 / width;
     double hscale = 2.0 / height;
-    float delta_r[4];
+    float  delta_r[4];
     trackball(delta_r,
-              static_cast<float>(wscale*beginx - 1), static_cast<float>(hscale*beginy - 1),
-              static_cast<float>(wscale*x - 1), static_cast<float>(hscale*y - 1));
+              static_cast<float>(wscale * beginx - 1),
+              static_cast<float>(hscale * beginy - 1),
+              static_cast<float>(wscale * x - 1),
+              static_cast<float>(hscale * y - 1));
 
     if (beginx != x && beginy != y)
     {
@@ -386,7 +400,7 @@ bool vgui_viewer3D_tableau::mouse_up(int x, int y, vgui_button button, vgui_modi
       spin_data = new vgui_viewer3D_tableau_spin;
       spin_data->viewer = this;
       spin_data->delay = delay;
-      for (int i=0; i<4; ++i)
+      for (int i = 0; i < 4; ++i)
         spin_data->delta_r[i] = delta_r[i];
 
       // Fl::add_timeout(delay,spin_callback,(void*)spin_data);
@@ -397,67 +411,77 @@ bool vgui_viewer3D_tableau::mouse_up(int x, int y, vgui_button button, vgui_modi
   return false;
 }
 
-bool vgui_viewer3D_tableau::help()
+bool
+vgui_viewer3D_tableau::help()
 {
   // awf FIXME these need to come from this->c_*
   std::cerr << "\n-- vgui_viewer3D_tableau ---------\n"
-           << "  rotate:    " << c_mouse_rotate.as_string() << '\n'
-           << "  translate: " << c_mouse_translate.as_string() << '\n'
-           << "  zoom: " << c_mouse_zoom.as_string() << '\n'
-           << "  lock dolly: " << c_lock_dolly.as_string() << '\n'
-           << "  lock zoom: " << c_lock_zoom.as_string() << '\n'
-           << "  lighting: " << c_lighting.as_string() << '\n'
-           << "  shading: " << c_shading.as_string() << '\n'
-           << "  spinning: " << c_spinning.as_string() << '\n'
-           << "  render_mode: " << c_render_mode.as_string() << '\n'
-           << "  niceness: " << c_niceness.as_string() << '\n'
-           << "  headlight: " << c_headlight.as_string() << '\n'
-           << "  save_home: " << c_save_home.as_string() << '\n'
-           << "  restore_home: " << c_restore_home.as_string() << '\n';
+            << "  rotate:    " << c_mouse_rotate.as_string() << '\n'
+            << "  translate: " << c_mouse_translate.as_string() << '\n'
+            << "  zoom: " << c_mouse_zoom.as_string() << '\n'
+            << "  lock dolly: " << c_lock_dolly.as_string() << '\n'
+            << "  lock zoom: " << c_lock_zoom.as_string() << '\n'
+            << "  lighting: " << c_lighting.as_string() << '\n'
+            << "  shading: " << c_shading.as_string() << '\n'
+            << "  spinning: " << c_spinning.as_string() << '\n'
+            << "  render_mode: " << c_render_mode.as_string() << '\n'
+            << "  niceness: " << c_niceness.as_string() << '\n'
+            << "  headlight: " << c_headlight.as_string() << '\n'
+            << "  save_home: " << c_save_home.as_string() << '\n'
+            << "  restore_home: " << c_restore_home.as_string() << '\n';
 
   return false;
 }
 
-bool vgui_viewer3D_tableau::key_press(int, int, vgui_key key, vgui_modifier modifier)
+bool
+vgui_viewer3D_tableau::key_press(int, int, vgui_key key, vgui_modifier modifier)
 {
-  if (c_lock_dolly(key, modifier)) {
+  if (c_lock_dolly(key, modifier))
+  {
     lock_dolly = !lock_dolly;
     vgui::out << "viewer3D : dolly lock " << vbl_bool_ostream::on_off(lock_dolly) << std::endl;
     return true;
   }
 
-  if (c_lock_zoom(key, modifier)) {
+  if (c_lock_zoom(key, modifier))
+  {
     lock_zoom = !lock_zoom;
     vgui::out << "viewer3D : zoom lock " << vbl_bool_ostream::on_off(lock_zoom) << std::endl;
     return true;
   }
 
-  if (c_lighting(key, modifier)) {
+  if (c_lighting(key, modifier))
+  {
     this->lighting = !this->lighting;
     vgui::out << "viewer3D : lighting " << vbl_bool_ostream::on_off(this->lighting) << std::endl;
     this->post_redraw();
     return true;
   }
 
-  if (c_shading(key, modifier)) {
+  if (c_shading(key, modifier))
+  {
     this->smooth_shading = !this->smooth_shading;
     vgui::out << "viewer3D : smooth shading " << vbl_bool_ostream::on_off(this->smooth_shading) << std::endl;
     this->post_redraw();
     return true;
   }
 
-  if (c_spinning(key, modifier)) {
+  if (c_spinning(key, modifier))
+  {
     this->allow_spinning = !this->allow_spinning;
     vgui::out << "viewer3D : allow spinning " << vbl_bool_ostream::on_off(this->allow_spinning) << std::endl;
     return true;
   }
 
-  if (c_render_mode(key, modifier)) {
-    if (this->gl_mode == vgui_viewer3D_tableau::wireframe) {
+  if (c_render_mode(key, modifier))
+  {
+    if (this->gl_mode == vgui_viewer3D_tableau::wireframe)
+    {
       vgui::out << "viewer3D : textured rendering\n";
       this->gl_mode = vgui_viewer3D_tableau::textured;
     }
-    else if (this->gl_mode == vgui_viewer3D_tableau::textured) {
+    else if (this->gl_mode == vgui_viewer3D_tableau::textured)
+    {
       vgui::out << "viewer3D : wireframe rendering\n";
       this->gl_mode = vgui_viewer3D_tableau::wireframe;
     }
@@ -465,27 +489,31 @@ bool vgui_viewer3D_tableau::key_press(int, int, vgui_key key, vgui_modifier modi
     return true;
   }
 
-  if (c_niceness(key, modifier)) {
+  if (c_niceness(key, modifier))
+  {
     this->high_quality = !this->high_quality;
     vgui::out << "viewer3D : " << vbl_bool_ostream::high_low(this->high_quality) << " quality\n";
     this->post_redraw();
     return true;
   }
 
-  if (c_headlight(key, modifier)) {
+  if (c_headlight(key, modifier))
+  {
     this->headlight = !this->headlight;
     vgui::out << "viewer3D : headlight " << vbl_bool_ostream::on_off(this->headlight) << std::endl;
     this->post_redraw();
     return true;
   }
 
-  if (c_save_home(key, modifier)) {
+  if (c_save_home(key, modifier))
+  {
     this->home = this->token;
     vgui::out << "viewer3D : saving position to 'home'\n";
     return true;
   }
 
-  if (c_restore_home(key, modifier)) {
+  if (c_restore_home(key, modifier))
+  {
     vgui::out << "viewer3D : restoring position 'home'\n";
     this->token = this->home;
     this->post_redraw();

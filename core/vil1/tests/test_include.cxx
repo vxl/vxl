@@ -81,4 +81,8 @@
 #include <vil1/file_formats/vil1_viff_support.h>
 #include <vil1/file_formats/vil1_viffheader.h>
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

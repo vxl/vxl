@@ -30,13 +30,15 @@ vgui_matrix_state::~vgui_matrix_state()
     restore();
 }
 
-void vgui_matrix_state::save()
+void
+vgui_matrix_state::save()
 {
-  glGetDoublev(GL_PROJECTION_MATRIX,P);
+  glGetDoublev(GL_PROJECTION_MATRIX, P);
   glGetDoublev(GL_MODELVIEW_MATRIX, M);
 }
 
-void vgui_matrix_state::restore() const
+void
+vgui_matrix_state::restore() const
 {
   glMatrixMode(GL_PROJECTION);
   glLoadMatrixd(P);
@@ -46,17 +48,19 @@ void vgui_matrix_state::restore() const
 }
 
 
-void vgui_matrix_state::print(std::ostream &s)
+void
+vgui_matrix_state::print(std::ostream & s)
 {
   vnl_matlab_print_format_push(vnl_matlab_print_format_long);
   vnl_matlab_print(s, projection_matrix(), "GL_PROJECTION_MATRIX");
-  vnl_matlab_print(s, modelview_matrix (), "GL_MODELVIEW_MATRIX" );
+  vnl_matlab_print(s, modelview_matrix(), "GL_MODELVIEW_MATRIX");
   vnl_matlab_print_format_pop();
   s << std::endl;
 }
 
 
-void vgui_matrix_state::identity_gl_matrices()
+void
+vgui_matrix_state::identity_gl_matrices()
 {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -65,9 +69,10 @@ void vgui_matrix_state::identity_gl_matrices()
   glLoadIdentity();
 }
 
-void vgui_matrix_state::clear_gl_matrices()
+void
+vgui_matrix_state::clear_gl_matrices()
 {
-  vnl_matrix_fixed<double,4,4> empty(0.0);
+  vnl_matrix_fixed<double, 4, 4> empty(0.0);
 
   // set projection matrix :
   glMatrixMode(GL_PROJECTION);
@@ -78,72 +83,78 @@ void vgui_matrix_state::clear_gl_matrices()
   glLoadMatrixd(empty.data_block());
 }
 
-bool vgui_matrix_state::gl_matrices_are_cleared()
+bool
+vgui_matrix_state::gl_matrices_are_cleared()
 {
-  vnl_matrix_fixed<double,4,4> empty(0.0);
-  vnl_matrix_fixed<double,4,4> Pt;
-  vnl_matrix_fixed<double,4,4> Mt;
+  vnl_matrix_fixed<double, 4, 4> empty(0.0);
+  vnl_matrix_fixed<double, 4, 4> Pt;
+  vnl_matrix_fixed<double, 4, 4> Mt;
 
-  glGetDoublev(GL_PROJECTION_MATRIX,Pt.data_block());
-  glGetDoublev(GL_MODELVIEW_MATRIX,Mt.data_block());
+  glGetDoublev(GL_PROJECTION_MATRIX, Pt.data_block());
+  glGetDoublev(GL_MODELVIEW_MATRIX, Mt.data_block());
 
   return Pt == empty && Mt == empty;
 }
 
 
-vnl_matrix_fixed<double,4,4> vgui_matrix_state::projection_matrix()
+vnl_matrix_fixed<double, 4, 4>
+vgui_matrix_state::projection_matrix()
 {
-  vnl_matrix_fixed<double,4,4> P;
-  glGetDoublev(GL_PROJECTION_MATRIX,P.data_block());
+  vnl_matrix_fixed<double, 4, 4> P;
+  glGetDoublev(GL_PROJECTION_MATRIX, P.data_block());
   P.inplace_transpose();
 
   return P;
 }
 
-vnl_matrix_fixed<double,4,4> vgui_matrix_state::modelview_matrix()
+vnl_matrix_fixed<double, 4, 4>
+vgui_matrix_state::modelview_matrix()
 {
-  vnl_matrix_fixed<double,4,4> M;
-  glGetDoublev(GL_MODELVIEW_MATRIX,M.data_block());
+  vnl_matrix_fixed<double, 4, 4> M;
+  glGetDoublev(GL_MODELVIEW_MATRIX, M.data_block());
   M.inplace_transpose();
 
   return M;
 }
 
-vnl_matrix_fixed<double,4,4> vgui_matrix_state::total_transformation()
+vnl_matrix_fixed<double, 4, 4>
+vgui_matrix_state::total_transformation()
 {
-  return projection_matrix()*modelview_matrix();
+  return projection_matrix() * modelview_matrix();
 }
 
 //: this premultiplies the given matrix by M
-void vgui_matrix_state::premultiply(vnl_matrix_fixed<double,4,4> const& M,GLenum matrix)
+void
+vgui_matrix_state::premultiply(vnl_matrix_fixed<double, 4, 4> const & M, GLenum matrix)
 {
   // get current (transposed) projection matrix :
-  vnl_matrix_fixed<double,4,4> P;
-  if      (matrix==GL_PROJECTION || matrix==GL_PROJECTION_MATRIX)
-    glGetDoublev(GL_PROJECTION_MATRIX,P.data_block());
-  else if (matrix==GL_MODELVIEW  || matrix==GL_MODELVIEW_MATRIX )
-    glGetDoublev(GL_MODELVIEW_MATRIX,P.data_block());
+  vnl_matrix_fixed<double, 4, 4> P;
+  if (matrix == GL_PROJECTION || matrix == GL_PROJECTION_MATRIX)
+    glGetDoublev(GL_PROJECTION_MATRIX, P.data_block());
+  else if (matrix == GL_MODELVIEW || matrix == GL_MODELVIEW_MATRIX)
+    glGetDoublev(GL_MODELVIEW_MATRIX, P.data_block());
   else
     std::abort();
   P.inplace_transpose();
 
   // set the matrix :
-  if      (matrix==GL_PROJECTION || matrix==GL_PROJECTION_MATRIX)
+  if (matrix == GL_PROJECTION || matrix == GL_PROJECTION_MATRIX)
     glMatrixMode(GL_PROJECTION);
-  else if (matrix==GL_MODELVIEW  || matrix==GL_MODELVIEW_MATRIX )
+  else if (matrix == GL_MODELVIEW || matrix == GL_MODELVIEW_MATRIX)
     glMatrixMode(GL_MODELVIEW);
-  glLoadMatrixd( (M*P).transpose().data_block() );
+  glLoadMatrixd((M * P).transpose().data_block());
 }
 
 
 //: This postmultiplies the given matrix by M
-void vgui_matrix_state::postmultiply(vnl_matrix_fixed<double,4,4> const& M,GLenum matrix)
+void
+vgui_matrix_state::postmultiply(vnl_matrix_fixed<double, 4, 4> const & M, GLenum matrix)
 {
   // set matrix mode :
-  if      (matrix==GL_PROJECTION || matrix==GL_PROJECTION_MATRIX)
+  if (matrix == GL_PROJECTION || matrix == GL_PROJECTION_MATRIX)
     glMatrixMode(GL_PROJECTION);
-  else if (matrix==GL_MODELVIEW  || matrix==GL_MODELVIEW_MATRIX )
+  else if (matrix == GL_MODELVIEW || matrix == GL_MODELVIEW_MATRIX)
     glMatrixMode(GL_MODELVIEW);
 
-  glMultMatrixd( M.transpose().data_block() );
+  glMultMatrixd(M.transpose().data_block());
 }

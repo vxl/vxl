@@ -12,7 +12,8 @@
 #include "vil/vil_image_view.h"
 #include "vil/vil_print.h"
 
-int main(int argc, char** argv)
+int
+main(int argc, char ** argv)
 {
   if (argc < 3)
   {
@@ -20,16 +21,16 @@ int main(int argc, char** argv)
     return 3;
   }
 
-  std::cout<<"Load " << argv[1] << " into an image data object\n";
+  std::cout << "Load " << argv[1] << " into an image data object\n";
 
 
   // This is how we quickly load an rgb image view.
 
-  vil_image_view<vil_rgb<vxl_byte> > b_im = vil_load(argv[1]);
+  vil_image_view<vil_rgb<vxl_byte>> b_im = vil_load(argv[1]);
 
   if (!b_im)
   {
-    std::cerr << "Couldn't load " << argv[1] <<std::endl;
+    std::cerr << "Couldn't load " << argv[1] << std::endl;
     return 3;
   }
 
@@ -38,7 +39,7 @@ int main(int argc, char** argv)
   // Note that if we try assign an image to a non compatible view type,
   // then the view will be set to empty.
 
-  std::cout<<"\n\n\nTry to load greyscale file " << argv[2] << " into an rgb image object.\nIt should fail.\n";
+  std::cout << "\n\n\nTry to load greyscale file " << argv[2] << " into an rgb image object.\nIt should fail.\n";
 
   b_im = vil_load(argv[2]);
 

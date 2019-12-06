@@ -13,4 +13,8 @@
 #include "vil1/vil1_ssd.hxx"
 #include "vil1/vil1_warp.hxx"
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

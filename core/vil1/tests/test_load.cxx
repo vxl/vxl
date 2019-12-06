@@ -17,23 +17,25 @@
 
 #include "testlib/testlib_test.h"
 
-static void test(char const* magic, int comps, int bits, int maxval)
+static void
+test(char const * magic, int comps, int bits, int maxval)
 {
-  char const* ext = ".pgm";
-  if ( comps == 3 )
+  char const * ext = ".pgm";
+  if (comps == 3)
     ext = ".ppm";
   std::string tmp_nam = vul_temp_filename();
-  if ( tmp_nam == "" )
+  if (tmp_nam == "")
     tmp_nam = "t";
   tmp_nam += ext;
-  char const *file = tmp_nam.c_str();
+  char const * file = tmp_nam.c_str();
   {
     std::ofstream f(file, std::ios::binary);
 #ifdef LEAVE_IMAGES_BEHIND
-      vpl_chmod(file, 0666); // -rw-rw-rw-
+    vpl_chmod(file, 0666); // -rw-rw-rw-
 #endif
     f << magic << "\n2\n3\n";
-    if (maxval > 1) f << maxval << '\n';
+    if (maxval > 1)
+      f << maxval << '\n';
     if (magic[1] > '3')
       // 72 bytes: sufficient for 32bit/component ppm (although the
       // ppm standard, at http://netpbm.sourceforge.net/doc/ppm.html,
@@ -43,15 +45,16 @@ static void test(char const* magic, int comps, int bits, int maxval)
            "ABCDEFGHIJKLMNOPQRSTUVWX"
            "ABCDEFGHIJKLMNOPQRSTUVWX";
     else
-      for (int i=0; i<72; ++i) f << 5+7*i+9*i*i << '\n';
+      for (int i = 0; i < 72; ++i)
+        f << 5 + 7 * i + 9 * i * i << '\n';
   }
 
   vil1_image i = vil1_load(file);
 
-  if (i) {
-    std::cout<< "test vil1_load: size " << i.width() << 'x' << i.height() << ", "
-            << i.components() << " component(s), "
-            << i.bits_per_component() << " bits (magic " << magic << ")\n";
+  if (i)
+  {
+    std::cout << "test vil1_load: size " << i.width() << 'x' << i.height() << ", " << i.components()
+              << " component(s), " << i.bits_per_component() << " bits (magic " << magic << ")\n";
 
     TEST("width", i.width(), 2);
     TEST("height", i.height(), 3);
@@ -67,15 +70,23 @@ static void test(char const* magic, int comps, int bits, int maxval)
     TEST("get_section()", i.get_section(buf, 0, 0, 2, 3) != 0, true);
     if (magic[1] > '3')
     {
-      int j=0; for (; 8*j < 6*i.bits_per_component(); ++j) if (buf[j] != j+'A') break;
+      int j = 0;
+      for (; 8 * j < 6 * i.bits_per_component(); ++j)
+        if (buf[j] != j + 'A')
+          break;
       std::cout << j << '\n';
     }
     else
     {
-      int j=0; for (; 8*j < 6*i.bits_per_component(); ++j) if (buf[j] != 5+7*j+9*j*j) break;
+      int j = 0;
+      for (; 8 * j < 6 * i.bits_per_component(); ++j)
+        if (buf[j] != 5 + 7 * j + 9 * j * j)
+          break;
       std::cout << j << '\n';
     }
-  } else {
+  }
+  else
+  {
     TEST("loading temp file", false, true);
     std::cerr << "Failed to load " << file << std::endl;
   }
@@ -85,10 +96,11 @@ static void test(char const* magic, int comps, int bits, int maxval)
 #endif
 }
 
-static void test_load()
+static void
+test_load()
 {
-  test("P1", 1,  1, 1);
-  test("P2", 1,  8, 255);
+  test("P1", 1, 1, 1);
+  test("P2", 1, 8, 255);
   test("P2", 1, 16, 65535);
 // PNM does not support components > 16 bits
 // (http://netpbm.sourceforge.net/doc/ppm.html)
@@ -96,12 +108,12 @@ static void test_load()
   test("P2", 1, 32, 16777216);
   test("P3", 3, 32, 16777216);
 #endif
-  test("P3", 3,  8, 255);
+  test("P3", 3, 8, 255);
   test("P3", 3, 16, 65535);
-  test("P4", 1,  1, 1);
-  test("P5", 1,  8, 255);
+  test("P4", 1, 1, 1);
+  test("P5", 1, 8, 255);
   test("P5", 1, 16, 65535);
-  test("P6", 3,  8, 255);
+  test("P6", 3, 8, 255);
   test("P6", 3, 16, 65535);
 }
 

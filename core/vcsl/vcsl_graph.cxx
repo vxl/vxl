@@ -9,15 +9,16 @@
 //---------------------------------------------------------------------------
 // Has `this' `cs' as node ?
 //---------------------------------------------------------------------------
-bool vcsl_graph::has(const vcsl_spatial_sptr &cs) const
+bool
+vcsl_graph::has(const vcsl_spatial_sptr & cs) const
 {
   bool result;
 
   std::vector<vcsl_spatial_sptr>::const_iterator i;
 
-  result=false;
-  for (i=vertices_.begin();i!=vertices_.end()&&!result;++i)
-    result=(*i)==cs;
+  result = false;
+  for (i = vertices_.begin(); i != vertices_.end() && !result; ++i)
+    result = (*i) == cs;
 
   return result;
 }
@@ -26,7 +27,8 @@ bool vcsl_graph::has(const vcsl_spatial_sptr &cs) const
 // Spatial coordinate system number `index'
 // REQUIRE: valid_index(index)
 //---------------------------------------------------------------------------
-vcsl_spatial_sptr vcsl_graph::item(unsigned int index) const
+vcsl_spatial_sptr
+vcsl_graph::item(unsigned int index) const
 {
   // require
   assert(valid_index(index));
@@ -38,7 +40,8 @@ vcsl_spatial_sptr vcsl_graph::item(unsigned int index) const
 // Add `cs' in `this'
 // REQUIRE: !has(cs)
 //---------------------------------------------------------------------------
-void vcsl_graph::put(const vcsl_spatial_sptr &cs)
+void
+vcsl_graph::put(const vcsl_spatial_sptr & cs)
 {
   // require
   assert(!has(cs));
@@ -50,24 +53,26 @@ void vcsl_graph::put(const vcsl_spatial_sptr &cs)
 // Remove `cs' from `this'
 // REQUIRE: has(cs)
 //---------------------------------------------------------------------------
-void vcsl_graph::remove(const vcsl_spatial_sptr &cs)
+void
+vcsl_graph::remove(const vcsl_spatial_sptr & cs)
 {
   // require
   assert(has(cs));
 
   std::vector<vcsl_spatial_sptr>::iterator i;
 
-  for (i=vertices_.begin(); i!=vertices_.end()&&((*i)!=cs); ++i)
+  for (i = vertices_.begin(); i != vertices_.end() && ((*i) != cs); ++i)
     ;
   vertices_.erase(i);
 }
 
 // Set the flag `reached' to false for each spatial coordinate system
 // Used by the search path algorithm
-void vcsl_graph::init_vertices() const
+void
+vcsl_graph::init_vertices() const
 {
   std::vector<vcsl_spatial_sptr>::const_iterator i;
 
-  for (i=vertices_.begin();i!=vertices_.end();++i)
+  for (i = vertices_.begin(); i != vertices_.end(); ++i)
     (*i)->set_reached(false);
 }

@@ -9,24 +9,25 @@
 #include "testlib/testlib_test.h"
 #include "vpl/vpl.h"
 
-void test_map_io()
+void
+test_map_io()
 {
   std::cout << "*************************\n"
-           << "Testing std::map binary io\n"
-           << "*************************\n";
+            << "Testing std::map binary io\n"
+            << "*************************\n";
 
-  int n = 10;
-  std::map<int, int, std::less<int> > m_int_int_out;
-  for (int i=0;i<n;++i)
-    m_int_int_out[i] = i*i+1;
+  int                                n = 10;
+  std::map<int, int, std::less<int>> m_int_int_out;
+  for (int i = 0; i < n; ++i)
+    m_int_int_out[i] = i * i + 1;
 
-  std::map<int, std::string, std::less<int> > m_int_string_out;
+  std::map<int, std::string, std::less<int>> m_int_string_out;
   m_int_string_out[1] = std::string("one");
   m_int_string_out[2] = std::string("two");
   m_int_string_out[3] = std::string("three");
   m_int_string_out[4] = std::string("four");
 
-  std::map<std::string, int, std::less<std::string> > m_string_int_out;
+  std::map<std::string, int, std::less<std::string>> m_string_int_out;
   m_string_int_out[std::string("one")] = 1;
   m_string_int_out[std::string("two")] = 2;
   m_string_int_out[std::string("three")] = 3;
@@ -41,9 +42,9 @@ void test_map_io()
   vsl_b_write(bfs_out, m_string_int_out);
   bfs_out.close();
 
-  std::map<int,int, std::less<int> > m_int_int_in;
-  std::map<int,std::string, std::less<int> > m_int_string_in;
-  std::map<std::string,int, std::less<std::string> > m_string_int_in;
+  std::map<int, int, std::less<int>>                 m_int_int_in;
+  std::map<int, std::string, std::less<int>>         m_int_string_in;
+  std::map<std::string, int, std::less<std::string>> m_string_int_in;
 
   vsl_b_ifstream bfs_in("vsl_map_io_test.bvl.tmp");
   TEST("Opened vsl_map_io_test.bvl.tmp for reading", (!bfs_in), false);
@@ -53,7 +54,7 @@ void test_map_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vsl_map_io_test.bvl.tmp");
+  vpl_unlink("vsl_map_io_test.bvl.tmp");
 
   TEST("std::map<int,int> out == in", m_int_int_out, m_int_int_in);
   TEST("std::map<int,std::string> out == in", m_int_string_out, m_int_string_in);

@@ -29,16 +29,17 @@ vgui_clear_tableau::vgui_clear_tableau()
   colour[3] = 0;
 
   clearing_ = true;
-  mask = GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT;
+  mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
   depth = 1;
   stencil = 0;
 }
 
 //-----------------------------------------------------------------------------
 //: Handle events sent to this tableau - use draw to perform OpenGL clearing.
-bool vgui_clear_tableau::handle(const vgui_event& event)
+bool
+vgui_clear_tableau::handle(const vgui_event & event)
 {
-  if (event.type==vgui_DRAW && clearing_)
+  if (event.type == vgui_DRAW && clearing_)
   {
     if (mask & GL_COLOR_BUFFER_BIT)
       glClearColor(colour[0], colour[1], colour[2], colour[3]);
@@ -63,7 +64,8 @@ bool vgui_clear_tableau::handle(const vgui_event& event)
 
 //-----------------------------------------------------------------------------
 //: Set colour of clear tableau to the given red, green, blue values.
-void vgui_clear_tableau::set_colour(float r, float g, float b, float a)
+void
+vgui_clear_tableau::set_colour(float r, float g, float b, float a)
 {
   colour[0] = r;
   colour[1] = g;
@@ -73,14 +75,16 @@ void vgui_clear_tableau::set_colour(float r, float g, float b, float a)
 
 //-----------------------------------------------------------------------------
 //: Make the given menu the default pop-up menu.
-void vgui_clear_tableau::add_popup(vgui_menu &menu)
+void
+vgui_clear_tableau::add_popup(vgui_menu & menu)
 {
-  menu.add("Configure",
-           new vgui_command_simple<vgui_clear_tableau>(this, &vgui_clear_tableau::config_dialog));
+  menu.add("Configure", new vgui_command_simple<vgui_clear_tableau>(this, &vgui_clear_tableau::config_dialog));
 
   std::string clear_label("Toggle clearing ");
-  if (clearing_) clear_label+="[on]";
-  else clear_label+="[off]";
+  if (clearing_)
+    clear_label += "[on]";
+  else
+    clear_label += "[off]";
 
   menu.add(clear_label.c_str(),
            new vgui_command_simple<vgui_clear_tableau>(this, &vgui_clear_tableau::toggle_clearing));
@@ -88,7 +92,8 @@ void vgui_clear_tableau::add_popup(vgui_menu &menu)
 
 //-----------------------------------------------------------------------------
 //: Toggle clearing on and off.
-void vgui_clear_tableau::toggle_clearing()
+void
+vgui_clear_tableau::toggle_clearing()
 {
   clearing_ = !clearing_;
   post_redraw();
@@ -96,7 +101,8 @@ void vgui_clear_tableau::toggle_clearing()
 
 //-----------------------------------------------------------------------------
 //: Display a dialog box to get data (colour, etc) for the clear tableau.
-void vgui_clear_tableau::config_dialog()
+void
+vgui_clear_tableau::config_dialog()
 {
   bool colour_val = (mask & GL_COLOR_BUFFER_BIT) != 0;
   bool depth_val = (mask & GL_DEPTH_BUFFER_BIT) != 0;
@@ -104,7 +110,7 @@ void vgui_clear_tableau::config_dialog()
   bool stencil_val = (mask & GL_STENCIL_BUFFER_BIT) != 0;
 
   vgui_dialog mydialog("Clear Config");
-  mydialog.checkbox("Colour",  colour_val);
+  mydialog.checkbox("Colour", colour_val);
   mydialog.checkbox("Depth", depth_val);
   mydialog.checkbox("Accum", accum_val);
   mydialog.checkbox("Stencil", stencil_val);
@@ -112,16 +118,20 @@ void vgui_clear_tableau::config_dialog()
   std::stringstream color_stm;
   color_stm << colour[0] << ' ' << colour[1] << ' ' << colour[2];
   std::string color = color_stm.str();
-  mydialog.inline_color("Clear Colour",color);
-  mydialog.field("Alpha", colour[3] );
+  mydialog.inline_color("Clear Colour", color);
+  mydialog.field("Alpha", colour[3]);
 
   if (mydialog.ask())
   {
     mask = 0;
-    if (colour_val) mask |= GL_COLOR_BUFFER_BIT;
-    if (depth_val) mask |= GL_DEPTH_BUFFER_BIT;
-    if (accum_val) mask |= GL_ACCUM_BUFFER_BIT;
-    if (stencil_val) mask |= GL_STENCIL_BUFFER_BIT;
+    if (colour_val)
+      mask |= GL_COLOR_BUFFER_BIT;
+    if (depth_val)
+      mask |= GL_DEPTH_BUFFER_BIT;
+    if (accum_val)
+      mask |= GL_ACCUM_BUFFER_BIT;
+    if (stencil_val)
+      mask |= GL_STENCIL_BUFFER_BIT;
 
     color_stm.str(color);
     color_stm >> colour[0] >> colour[1] >> colour[2];

@@ -14,7 +14,8 @@
 #endif
 
 //: Draw a string of font symbols.
-void vgui_font::draw(const std::string& str, unsigned int size) const
+void
+vgui_font::draw(const std::string & str, unsigned int size) const
 {
   static bool first_time = true;
   if (first_time)

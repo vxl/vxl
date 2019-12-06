@@ -8,7 +8,8 @@
 #include "testlib/testlib_test.h"
 
 
-void test_sleep_timer()
+void
+test_sleep_timer()
 {
   vul_timer tic;
   vpl_sleep(1);

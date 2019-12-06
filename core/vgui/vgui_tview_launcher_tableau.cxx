@@ -24,16 +24,20 @@
 #include "vgui/vgui_dialog.h"
 
 vgui_tview_launcher_tableau::vgui_tview_launcher_tableau()
-  : c_graph(vgui_key('g'), vgui_SHIFT) { }
+  : c_graph(vgui_key('g'), vgui_SHIFT)
+{}
 
-std::string vgui_tview_launcher_tableau::type_name() const
+std::string
+vgui_tview_launcher_tableau::type_name() const
 {
   return "vgui_tview_launcher_tableau";
 }
 
-bool vgui_tview_launcher_tableau::handle(const vgui_event& e)
+bool
+vgui_tview_launcher_tableau::handle(const vgui_event & e)
 {
-  if (c_graph(e)) {
+  if (c_graph(e))
+  {
     go(e.origin);
     return true;
   }
@@ -41,29 +45,33 @@ bool vgui_tview_launcher_tableau::handle(const vgui_event& e)
   return e.type == vgui_DRAW || e.type == vgui_DRAW_OVERLAY;
 }
 
-static void launch(const void* t)
+static void
+launch(const void * t)
 {
   // a static_cast may not cast away const.
-  void *Pv = const_cast<void*>(t);
-  static_cast<vgui_tview_launcher_tableau*>(Pv)->go(vgui_adaptor::current);
+  void * Pv = const_cast<void *>(t);
+  static_cast<vgui_tview_launcher_tableau *>(Pv)->go(vgui_adaptor::current);
 }
 
-void vgui_tview_launcher_tableau::get_popup(const vgui_popup_params& /*params*/, vgui_menu &m)
+void
+vgui_tview_launcher_tableau::get_popup(const vgui_popup_params & /*params*/, vgui_menu & m)
 {
   m.add("View tableau hierarchy", launch, this);
 }
 
-void vgui_tview_launcher_tableau::go(vgui_adaptor* a)
+void
+vgui_tview_launcher_tableau::go(vgui_adaptor * a)
 {
-  if (!a) {
+  if (!a)
+  {
     std::cerr << __FILE__ ": a = 0\n";
     return;
   }
-  vgui_tview_tableau_new tview(a->get_tableau());
+  vgui_tview_tableau_new    tview(a->get_tableau());
   vgui_viewer2D_tableau_new viewer(tview);
 
   vgui_dialog tview_dialog("Tableau hierarchy");
-  tview_dialog.inline_tableau(viewer, 300,300);
+  tview_dialog.inline_tableau(viewer, 300, 300);
   tview_dialog.set_ok_button("close");
   tview_dialog.set_cancel_button(nullptr);
   tview_dialog.ask();

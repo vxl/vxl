@@ -20,10 +20,17 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-int main()
+int
+main()
 {
   //: Convenient indices for vectors representing points, etc.
-  enum AXES { X, Y, Z, T };
+  enum AXES
+  {
+    X,
+    Y,
+    Z,
+    T
+  };
 
   //: Graph of defined CS
   // All CS must be added to this graph as they are created.
@@ -46,16 +53,22 @@ int main()
   // define the corresponding vectors:
 
   //: x-axis vector
-  vnl_vector_fixed <double, 3> xA;
-  xA[X]=1; xA[Y] = 0; xA[Z] = 0;
+  vnl_vector_fixed<double, 3> xA;
+  xA[X] = 1;
+  xA[Y] = 0;
+  xA[Z] = 0;
 
   //: y-axis vector
-  vnl_vector_fixed <double, 3> yA;
-  yA[X]=0; yA[Y] = 1; yA[Z] = 0;
+  vnl_vector_fixed<double, 3> yA;
+  yA[X] = 0;
+  yA[Y] = 1;
+  yA[Z] = 0;
 
   //: z-axis vector
-  vnl_vector_fixed <double, 3> zA;
-  zA[X]=0; zA[Y] = 0; zA[Z] = 1;
+  vnl_vector_fixed<double, 3> zA;
+  zA[X] = 0;
+  zA[Y] = 0;
+  zA[Z] = 1;
 
   //: 90 degree rotation about WCS y-axis
   // Transforms from WCS to right CS
@@ -68,20 +81,22 @@ int main()
   right->set_unique(WCS, &rightXF);
 
   //: Corner of a box with opposite corner at origin of WCS.
-  vnl_vector_fixed <double, 3> corner;
-  corner[X] = 1; corner[Y] = 2; corner[Z] = 3;
+  vnl_vector_fixed<double, 3> corner;
+  corner[X] = 1;
+  corner[Y] = 2;
+  corner[Z] = 3;
 
   // By inspection, corner should be (-3,2,1) in 'right' CS
   vnl_vector<double> cornerXF = WCS->from_local_to_cs(corner.as_ref(), right, 0);
 
   std::cout << cornerXF[0] << ", " << cornerXF[1] << ", " << cornerXF[2] << '\n';
-  assert(std::abs(cornerXF[0]+3) < 1e-6);
-  assert(std::abs(cornerXF[1]-2) < 1e-6);
-  assert(std::abs(cornerXF[2]-1) < 1e-6);
+  assert(std::abs(cornerXF[0] + 3) < 1e-6);
+  assert(std::abs(cornerXF[1] - 2) < 1e-6);
+  assert(std::abs(cornerXF[2] - 1) < 1e-6);
 
   // Note that at this point, none of the smart pointers should be deleted
   // since smart pointers, by definition, clean up themselves:
-//delete right->parent(); delete right; // don't !!
+  // delete right->parent(); delete right; // don't !!
 
   return 0;
 }

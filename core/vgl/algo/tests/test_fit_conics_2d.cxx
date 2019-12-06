@@ -35,14 +35,13 @@ static void test_conic_segment_methods()
 }
 #endif
 
-static void test_conic_regression()
+static void
+test_conic_regression()
 {
   std::cout << "Testing conic regression (unit circle)\n";
-  const double sr12 = vnl_math::sqrt1_2;
-  vgl_point_2d<double> p0( 1.0,  0.0), p1( sr12,  sr12),
-                       p2( 0.0,  1.0), p3(-sr12,  sr12),
-                       p4(-1.0,  0.0), p5(-sr12, -sr12),
-                       p6( 0.0, -1.0), p7( sr12, -sr12);
+  const double         sr12 = vnl_math::sqrt1_2;
+  vgl_point_2d<double> p0(1.0, 0.0), p1(sr12, sr12), p2(0.0, 1.0), p3(-sr12, sr12), p4(-1.0, 0.0), p5(-sr12, -sr12),
+    p6(0.0, -1.0), p7(sr12, -sr12);
   vgl_conic_2d_regression<double> reg;
   reg.add_point(p0);
   reg.add_point(p1);
@@ -54,16 +53,14 @@ static void test_conic_regression()
   reg.add_point(p7);
   reg.fit();
   std::cout << "algebraic fitting error " << reg.get_rms_algebraic_error() << '\n'
-           << "Sampson fitting error " << reg.get_rms_sampson_error() << '\n'
-           << "fitted conic " << reg.conic() << std::endl;
+            << "Sampson fitting error " << reg.get_rms_sampson_error() << '\n'
+            << "fitted conic " << reg.conic() << std::endl;
 
   TEST_NEAR("unit circle", reg.get_rms_sampson_error(), 0.0, 1e-12);
 
-  const double sr2 = vnl_math::sqrt2, sr16 = std::sqrt(1.6);
-  vgl_point_2d<double> q0( sr2,  sr2), q1(-sr12,  sr12),
-                       q2(-sr2, -sr2), q3( sr12, -sr12),
-                       q4( 0.0, sr16), q5(  0.0, -sr16),
-                       q6(sr16,  0.0), q7(-sr16,   0.0);
+  const double         sr2 = vnl_math::sqrt2, sr16 = std::sqrt(1.6);
+  vgl_point_2d<double> q0(sr2, sr2), q1(-sr12, sr12), q2(-sr2, -sr2), q3(sr12, -sr12), q4(0.0, sr16), q5(0.0, -sr16),
+    q6(sr16, 0.0), q7(-sr16, 0.0);
   reg.clear_points();
   reg.add_point(q0);
   reg.add_point(q1);
@@ -75,66 +72,69 @@ static void test_conic_regression()
   reg.add_point(q7);
   reg.fit();
   std::cout << "algebraic fitting error " << reg.get_rms_algebraic_error() << '\n'
-           << "Sampson fitting error " << reg.get_rms_sampson_error() << '\n'
-           << "fitted conic " << reg.conic() << std::endl;
+            << "Sampson fitting error " << reg.get_rms_sampson_error() << '\n'
+            << "fitted conic " << reg.conic() << std::endl;
 
   TEST_NEAR("2:1 at 45 deg", reg.get_rms_sampson_error(), 0.0, 1e-12);
 
   reg.clear_points();
-  reg.add_point(vgl_point_2d<double>(3.52074e-012,0.0));
-  reg.add_point(vgl_point_2d<double>(0.0151927,0.173651));
-  reg.add_point(vgl_point_2d<double>(0.0603082,0.342022));
-  reg.add_point(vgl_point_2d<double>(0.133976,0.500002));
-  reg.add_point(vgl_point_2d<double>(0.233957,0.642789));
-  reg.add_point(vgl_point_2d<double>(0.357214,0.766046));
-  reg.add_point(vgl_point_2d<double>(0.500002,0.866026));
-  reg.add_point(vgl_point_2d<double>(0.657981,0.939693));
-  reg.add_point(vgl_point_2d<double>(0.826353,0.984808));
-  reg.add_point(vgl_point_2d<double>(1,1));
-  reg.add_point(vgl_point_2d<double>(1.17365,0.984808));
-  reg.add_point(vgl_point_2d<double>(1.34202,0.939692));
-  reg.add_point(vgl_point_2d<double>(1.5,0.866025));
-  reg.add_point(vgl_point_2d<double>(1.64279,0.766044));
-  reg.add_point(vgl_point_2d<double>(1.76604,0.642787));
-  reg.add_point(vgl_point_2d<double>(1.86603,0.5));
-  reg.add_point(vgl_point_2d<double>(1.93969,0.34202));
-  reg.add_point(vgl_point_2d<double>(1.98481,0.173648));
-  reg.add_point(vgl_point_2d<double>(2,0.0));
+  reg.add_point(vgl_point_2d<double>(3.52074e-012, 0.0));
+  reg.add_point(vgl_point_2d<double>(0.0151927, 0.173651));
+  reg.add_point(vgl_point_2d<double>(0.0603082, 0.342022));
+  reg.add_point(vgl_point_2d<double>(0.133976, 0.500002));
+  reg.add_point(vgl_point_2d<double>(0.233957, 0.642789));
+  reg.add_point(vgl_point_2d<double>(0.357214, 0.766046));
+  reg.add_point(vgl_point_2d<double>(0.500002, 0.866026));
+  reg.add_point(vgl_point_2d<double>(0.657981, 0.939693));
+  reg.add_point(vgl_point_2d<double>(0.826353, 0.984808));
+  reg.add_point(vgl_point_2d<double>(1, 1));
+  reg.add_point(vgl_point_2d<double>(1.17365, 0.984808));
+  reg.add_point(vgl_point_2d<double>(1.34202, 0.939692));
+  reg.add_point(vgl_point_2d<double>(1.5, 0.866025));
+  reg.add_point(vgl_point_2d<double>(1.64279, 0.766044));
+  reg.add_point(vgl_point_2d<double>(1.76604, 0.642787));
+  reg.add_point(vgl_point_2d<double>(1.86603, 0.5));
+  reg.add_point(vgl_point_2d<double>(1.93969, 0.34202));
+  reg.add_point(vgl_point_2d<double>(1.98481, 0.173648));
+  reg.add_point(vgl_point_2d<double>(2, 0.0));
   reg.fit();
   std::cout << "algebraic fitting error " << reg.get_rms_algebraic_error() << '\n'
-           << "Sampson fitting error " << reg.get_rms_sampson_error() << '\n'
-           << "fitted conic " << reg.conic() << '\n';
+            << "Sampson fitting error " << reg.get_rms_sampson_error() << '\n'
+            << "fitted conic " << reg.conic() << '\n';
 
   TEST_NEAR("semi-circle centered on (1,0) ", reg.get_rms_sampson_error(), 0.0, 1e-05);
   reg.clear_points();
 }
 
-//A parametric form of the unit circle for testing ( s = 10 degree intervals)
-static void unit_circle(double s, double x0, double y0, double& x, double& y)
+// A parametric form of the unit circle for testing ( s = 10 degree intervals)
+static void
+unit_circle(double s, double x0, double y0, double & x, double & y)
 {
-  double theta = static_cast<double>(s)*vnl_math::pi/18;
+  double theta = static_cast<double>(s) * vnl_math::pi / 18;
   double c = std::cos(theta), si = std::sin(theta);
-  x = x0 + c; y = y0 + si;
+  x = x0 + c;
+  y = y0 + si;
 }
 
-static void test_fit_simple_chain()
+static void
+test_fit_simple_chain()
 {
-  std::vector<vgl_point_2d<double> > curve;
+  std::vector<vgl_point_2d<double>> curve;
 
   // Two segments from a unit circle forming a kind of sine wave
 
-  //first segment above horizontal axis centered at (1,0) scan -pi to 0
+  // first segment above horizontal axis centered at (1,0) scan -pi to 0
   vgl_fit_conics_2d<double> fitter;
-  for (int i = 18; i>=0; --i)
+  for (int i = 18; i >= 0; --i)
   {
     double x, y;
     unit_circle(i, 1.0, 0.0, x, y);
     vgl_point_2d<double> p(x, y);
     fitter.add_point(p);
   }
-  //Second segment below horizontal axis centered at (3,0) scan pi to 360
+  // Second segment below horizontal axis centered at (3,0) scan pi to 360
 
-  for (int i = 19; i<=36; ++i)
+  for (int i = 19; i <= 36; ++i)
   {
     double x, y;
     unit_circle(i, 3.0, 0.0, x, y);
@@ -143,14 +143,14 @@ static void test_fit_simple_chain()
   }
 
   fitter.fit();
-  std::vector<vgl_conic_segment_2d<double> >& segs = fitter.get_conic_segs();
+  std::vector<vgl_conic_segment_2d<double>> & segs = fitter.get_conic_segs();
   std::cout << "\nCurve fit Produced the following conic segments\n";
   for (auto & seg : segs)
     std::cout << seg << '\n';
 
   TEST("Number of conic segments ", segs.size(), 2);
 
-  //Test a real chain
+  // Test a real chain
   vgl_fit_conics_2d<double> f(10, 1);
 
   f.add_point(vgl_point_2d<double>(149.032, 103.331));
@@ -674,14 +674,14 @@ static void test_fit_simple_chain()
   f.add_point(vgl_point_2d<double>(147.354, 103.646));
   f.add_point(vgl_point_2d<double>(148.042, 103.422));
   f.fit();
-  std::vector<vgl_conic_segment_2d<double > > temp = f.get_conic_segs();
+  std::vector<vgl_conic_segment_2d<double>> temp = f.get_conic_segs();
 
   for (auto & cit : temp)
     std::cout << cit << '\n';
   TEST("Number of conic segments ", temp.size(), 1);
 
 
-  //Test a thin ellipse
+  // Test a thin ellipse
   vgl_fit_conics_2d<double> f1(10, 1);
 
   f1.add_point(vgl_point_2d<double>(41.9457, 138.862));
@@ -1052,14 +1052,15 @@ static void test_fit_simple_chain()
   f1.add_point(vgl_point_2d<double>(41.3536, 139.646));
   f1.add_point(vgl_point_2d<double>(41.9457, 138.862));
   f1.fit();
-  std::vector<vgl_conic_segment_2d<double > > temp1 = f1.get_conic_segs();
+  std::vector<vgl_conic_segment_2d<double>> temp1 = f1.get_conic_segs();
   for (auto & cit : temp1)
     std::cout << cit << '\n';
   TEST("Number of conic segments ", temp1.size(), 2);
 }
 
 
-static void test_fit_conics_2d()
+static void
+test_fit_conics_2d()
 {
   //  test_conic_segment_methods();
   test_conic_regression();

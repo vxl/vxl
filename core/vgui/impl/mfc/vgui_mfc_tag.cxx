@@ -7,7 +7,8 @@
 #include "vgui/vgui_tag.h"
 #include "vul/vul_trace.h"
 
-vgui_tag(mfc) {
+vgui_tag(mfc)
+{
   vul_trace;
   vgui_mfc::instance();
   vul_trace;

@@ -16,18 +16,16 @@
 
 
 #ifndef LEAVE_FILES_BEHIND
-#define LEAVE_FILES_BEHIND 0
+#  define LEAVE_FILES_BEHIND 0
 #endif
 
 
-
-
-
-void test_image_view_io_with_view_transform()
+void
+test_image_view_io_with_view_transform()
 {
   {
-    vil_image_view<vil_rgb<vxl_byte> > img(10, 10);
-    vil_image_view<vxl_byte > img2(img);
+    vil_image_view<vil_rgb<vxl_byte>> img(10, 10);
+    vil_image_view<vxl_byte>          img2(img);
 
     vil_image_view<vxl_byte> img3(vil_plane(img, 0));
 
@@ -40,7 +38,7 @@ void test_image_view_io_with_view_transform()
     }
 
     vil_image_view<vxl_byte> img4;
-    vsl_b_ifstream f2("vil_image_view_test_io_vt2.bvl.tmp");
+    vsl_b_ifstream           f2("vil_image_view_test_io_vt2.bvl.tmp");
     vsl_b_read(f2, img4);
     TEST("Finished reading file successfully", (!f2), false);
 
@@ -79,11 +77,11 @@ void test_image_view_io_with_view_transform()
 }
 
 
-
 // Check for multiple null pointer loading bug
-void test_image_view_io_as_null()
+void
+test_image_view_io_as_null()
 {
-  std::cout<<"Testing empty image IO "<<std::endl;
+  std::cout << "Testing empty image IO " << std::endl;
   vil_image_view<vxl_byte> im1, im2;
 
   vsl_b_ofstream bfs_out("vil_image_view_test_io.bvl.tmp");
@@ -105,14 +103,15 @@ void test_image_view_io_as_null()
 }
 
 
-template<class T>
-inline void test_image_view_io_as(T value1, T value2)
+template <class T>
+inline void
+test_image_view_io_as(T value1, T value2)
 {
-  std::cout<<"Testing IO of images of type "<<vil_pixel_format_of(T())<<std::endl;
-  vil_image_view<T> image1(15,17,3);
+  std::cout << "Testing IO of images of type " << vil_pixel_format_of(T()) << std::endl;
+  vil_image_view<T> image1(15, 17, 3);
   image1.fill(value1);
-  image1(3,2,1) = value2;
-  vil_image_view<T> image1p = vil_plane(image1,1);
+  image1(3, 2, 1) = value2;
+  vil_image_view<T> image1p = vil_plane(image1, 1);
 
   vsl_b_ofstream bfs_out("vil_image_view_test_io.bvl.tmp");
   TEST("Created vil_image_view_test_io.bvl.tmp for writing", (!bfs_out), false);
@@ -121,7 +120,7 @@ inline void test_image_view_io_as(T value1, T value2)
   bfs_out.close();
 
   vil_image_view<T> image2, image2p;
-  vsl_b_ifstream bfs_in("vil_image_view_test_io.bvl.tmp");
+  vsl_b_ifstream    bfs_in("vil_image_view_test_io.bvl.tmp");
   TEST("Opened vil_image_view_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, image2);
   vsl_b_read(bfs_in, image2p);
@@ -131,43 +130,43 @@ inline void test_image_view_io_as(T value1, T value2)
   vpl_unlink("vil_image_view_test_io.bvl.tmp");
 #endif
 
-  TEST("ni()",image2.ni(),image1.ni());
-  TEST("ni()",image2p.ni(),image2.ni());
-  TEST("nj()",image2.nj(),image1.nj());
-  TEST("nj()",image2p.nj(),image2.nj());
-  TEST("nplanes()",image2.nplanes(),image1.nplanes());
-  TEST("nplanes()",image2p.nplanes(),1);
-  TEST("istep()",image2.istep(),image1.istep());
-  TEST("jstep()",image2.jstep(),image1.jstep());
-  TEST("planestep()",image2.planestep(),image1.planestep());
-  TEST_NEAR("Data(0,0,0)",(double)(image1(0,0,0)-image2(0,0,0)),0,1e-6);
-  TEST_NEAR("Data(3,2,1)",(double)(image1(3,2,1)-image2(3,2,1)),0,1e-6);
-  TEST("Smart ptr", &image2p(0,0), &image2(0,0,1));
+  TEST("ni()", image2.ni(), image1.ni());
+  TEST("ni()", image2p.ni(), image2.ni());
+  TEST("nj()", image2.nj(), image1.nj());
+  TEST("nj()", image2p.nj(), image2.nj());
+  TEST("nplanes()", image2.nplanes(), image1.nplanes());
+  TEST("nplanes()", image2p.nplanes(), 1);
+  TEST("istep()", image2.istep(), image1.istep());
+  TEST("jstep()", image2.jstep(), image1.jstep());
+  TEST("planestep()", image2.planestep(), image1.planestep());
+  TEST_NEAR("Data(0,0,0)", (double)(image1(0, 0, 0) - image2(0, 0, 0)), 0, 1e-6);
+  TEST_NEAR("Data(3,2,1)", (double)(image1(3, 2, 1) - image2(3, 2, 1)), 0, 1e-6);
+  TEST("Smart ptr", &image2p(0, 0), &image2(0, 0, 1));
 }
 
-static void test_image_view_io()
+static void
+test_image_view_io()
 {
   std::cout << "*******************************\n"
-           << " Testing IO for vil_image_view\n"
-           << "*******************************\n";
+            << " Testing IO for vil_image_view\n"
+            << "*******************************\n";
 
   test_image_view_io_with_view_transform();
 
 #if VXL_HAS_INT_64
-  test_image_view_io_as(vxl_uint_64(3),vxl_uint_64(17));
-  test_image_view_io_as(vxl_int_64(5),vxl_int_64(-17));
+  test_image_view_io_as(vxl_uint_64(3), vxl_uint_64(17));
+  test_image_view_io_as(vxl_int_64(5), vxl_int_64(-17));
 #endif
-  test_image_view_io_as(vxl_uint_32(3),vxl_uint_32(17));
-  test_image_view_io_as(vxl_int_32(5),vxl_int_32(-17));
-  test_image_view_io_as(vxl_uint_16(4),vxl_uint_16(19));
-  test_image_view_io_as(vxl_int_16(11),vxl_int_16(-23));
-  test_image_view_io_as(vxl_byte(3),vxl_byte(17));
-  test_image_view_io_as(vxl_sbyte(14),vxl_sbyte(153));
-  test_image_view_io_as(float(-0.6f),float(13.5f));
-  test_image_view_io_as(double(12.1),double(123.456));
-  test_image_view_io_as(bool(false),bool(true));
+  test_image_view_io_as(vxl_uint_32(3), vxl_uint_32(17));
+  test_image_view_io_as(vxl_int_32(5), vxl_int_32(-17));
+  test_image_view_io_as(vxl_uint_16(4), vxl_uint_16(19));
+  test_image_view_io_as(vxl_int_16(11), vxl_int_16(-23));
+  test_image_view_io_as(vxl_byte(3), vxl_byte(17));
+  test_image_view_io_as(vxl_sbyte(14), vxl_sbyte(153));
+  test_image_view_io_as(float(-0.6f), float(13.5f));
+  test_image_view_io_as(double(12.1), double(123.456));
+  test_image_view_io_as(bool(false), bool(true));
   test_image_view_io_as_null();
-
 }
 
 TESTMAIN(test_image_view_io);

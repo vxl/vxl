@@ -23,9 +23,9 @@ vgui_mfc_statusbar::vgui_mfc_statusbar()
   statusbar = new CStatusBar();
   statusbar->Create(AfxGetApp()->GetMainWnd());
   unsigned x = ID_SEPARATOR;
-  statusbar->SetIndicators(&x,1);
-  CFrameWnd *fwnd = (CFrameWnd *)AfxGetApp()->GetMainWnd();
-  fwnd->ShowControlBar(statusbar,TRUE,FALSE);
+  statusbar->SetIndicators(&x, 1);
+  CFrameWnd * fwnd = (CFrameWnd *)AfxGetApp()->GetMainWnd();
+  fwnd->ShowControlBar(statusbar, TRUE, FALSE);
   statusbar->UpdateWindow();
   statusbar->ShowWindow(SW_SHOW);
 }
@@ -39,7 +39,8 @@ vgui_mfc_statusbar::~vgui_mfc_statusbar()
 static int context_id = 1;
 
 //: Updates the status bar by calling OnUpdateStatusBar of vgui_mfc_mainfrm
-void vgui_mfc_statusbar::update()
+void
+vgui_mfc_statusbar::update()
 {
   CCmdUI cui;
   cui.m_nID = ID_SEPARATOR;
@@ -52,18 +53,22 @@ void vgui_mfc_statusbar::update()
 
 
 //: Append given text (of given length) to the status bar
-int vgui_mfc_statusbar::write(const char* text, int n)
+int
+vgui_mfc_statusbar::write(const char * text, int n)
 {
   static bool start_new = false;
-  if (n == 1) {
-    if (text[0] == '\n') {
+  if (n == 1)
+  {
+    if (text[0] == '\n')
+    {
       // We are at the end of the message. Set a bool so we know next time
       // to clear the buffer before we start a new message.
       start_new = true;
     }
-    else if (start_new){
+    else if (start_new)
+    {
       statusbar->SetWindowText(linebuffer.c_str());
-      statusbar->SetPaneText(0,linebuffer.c_str());
+      statusbar->SetPaneText(0, linebuffer.c_str());
       linebuffer = "";
       linebuffer += text[0];
       start_new = false;
@@ -71,11 +76,13 @@ int vgui_mfc_statusbar::write(const char* text, int n)
     else
       linebuffer += text[0];
   }
-  else {
+  else
+  {
     linebuffer.append(text, n);
-    if (linebuffer.find('\n')) {
+    if (linebuffer.find('\n'))
+    {
       statusbar->SetWindowText(linebuffer.c_str());
-      statusbar->SetPaneText(0,linebuffer.c_str());
+      statusbar->SetPaneText(0, linebuffer.c_str());
       linebuffer = "";
     }
   }
@@ -88,11 +95,12 @@ int vgui_mfc_statusbar::write(const char* text, int n)
 }
 
 //: Write given text to the status bar.
-int vgui_mfc_statusbar::write(const char* text)
+int
+vgui_mfc_statusbar::write(const char * text)
 {
   statusbar->SetWindowText(text);
   linebuffer = text;
-  statusbar->SetPaneText(0,linebuffer.c_str());
+  statusbar->SetPaneText(0, linebuffer.c_str());
   statusbar->UpdateWindow();
   statusbar->ShowWindow(SW_SHOW);
   update();

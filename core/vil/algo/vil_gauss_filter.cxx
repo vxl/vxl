@@ -19,16 +19,16 @@
 vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double val_sigma)
 {
   sigma_ = val_sigma;
-  const double z = 1/(std::sqrt(2.0)*val_sigma);
+  const double z = 1 / (std::sqrt(2.0) * val_sigma);
   filt0_ = vnl_erf(0.5 * z) - vnl_erf(-0.5 * z);
   filt1_ = vnl_erf(1.5 * z) - vnl_erf(0.5 * z);
   filt2_ = vnl_erf(2.5 * z) - vnl_erf(1.5 * z);
 
-  double five_tap_total = 2*(filt2_ + filt1_) + filt0_;
-//  double four_tap_total = filt2_ + 2*(filt1_) + filt0_;
-//  double three_tap_total = filt2_ + filt1_ + filt0_;
+  double five_tap_total = 2 * (filt2_ + filt1_) + filt0_;
+  //  double four_tap_total = filt2_ + 2*(filt1_) + filt0_;
+  //  double three_tap_total = filt2_ + filt1_ + filt0_;
 
-//  Calculate 3 tap half Gaussian filter assuming constant edge extension
+  //  Calculate 3 tap half Gaussian filter assuming constant edge extension
   filt_edge0_ = (filt0_ + filt1_ + filt2_) / five_tap_total;
   filt_edge1_ = filt1_ / five_tap_total;
   filt_edge2_ = filt2_ / five_tap_total;
@@ -37,13 +37,13 @@ vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double val_sigma)
   filt_edge1_ = 0.0;
   filt_edge2_ = 0.0;
 #endif
-//  Calculate 4 tap skewed Gaussian filter assuming constant edge extension
-  filt_pen_edge_n1_ = (filt1_+filt2_) / five_tap_total;
+  //  Calculate 4 tap skewed Gaussian filter assuming constant edge extension
+  filt_pen_edge_n1_ = (filt1_ + filt2_) / five_tap_total;
   filt_pen_edge0_ = filt0_ / five_tap_total;
   filt_pen_edge1_ = filt1_ / five_tap_total;
   filt_pen_edge2_ = filt2_ / five_tap_total;
 
-//  Calculate 5 tap Gaussian filter
+  //  Calculate 5 tap Gaussian filter
   filt0_ = filt0_ / five_tap_total;
   filt1_ = filt1_ / five_tap_total;
   filt2_ = filt2_ / five_tap_total;
@@ -65,33 +65,33 @@ vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double val_sigma)
 // your filter when sd << (diff+1). In most applications you will
 // want filter.size() ~= sd*7, which will avoid significant truncation,
 // without wasting the outer taps on near-zero values.
-void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
-                               std::vector<double> &filter)
+void
+vil_gauss_filter_gen_ntap(double sd, unsigned diff, std::vector<double> & filter)
 {
-  std::size_t centre = filter.size()/2; // or just past centre if even length
-  double sum=0.0; // area under sampled curve.
-  double tap; // workspace
+  std::size_t centre = filter.size() / 2; // or just past centre if even length
+  double      sum = 0.0;                  // area under sampled curve.
+  double      tap;                        // workspace
 
-  if (diff==0)
+  if (diff == 0)
   {
-    const double z = 1/(std::sqrt(2.0)*sd);
-    if (filter.size() % 2 == 0)  // even length filter - off-centre
+    const double z = 1 / (std::sqrt(2.0) * sd);
+    if (filter.size() % 2 == 0) // even length filter - off-centre
     {
-      for (unsigned i=0 ; i<centre; ++i)
+      for (unsigned i = 0; i < centre; ++i)
       {
-        tap = vnl_erf((i+1.0) * z) - vnl_erf(i * z);
+        tap = vnl_erf((i + 1.0) * z) - vnl_erf(i * z);
         sum += tap;
-        filter[centre+i] = filter[centre-i-1] = tap;
+        filter[centre + i] = filter[centre - i - 1] = tap;
       }
       sum *= 2.0;
     }
     else // odd length filter - centre on zero
     {
-      for (unsigned i=1 ; i<=centre; ++i)
+      for (unsigned i = 1; i <= centre; ++i)
       {
-        tap = vnl_erf((i+0.5) * z) - vnl_erf((i-0.5) * z);
+        tap = vnl_erf((i + 0.5) * z) - vnl_erf((i - 0.5) * z);
         sum += tap;
-        filter[centre+i] = filter[centre-i] = tap;
+        filter[centre + i] = filter[centre - i] = tap;
       }
       sum *= 2.0;
       tap = vnl_erf(0.5 * z) - vnl_erf(-0.5 * z);
@@ -101,29 +101,28 @@ void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
   }
   else
   {
-    const double offset = filter.size() % 2 == 0 ? 0.0 : -0.5;
-    vnl_real_polynomial poly(1.0);
-    const double eta = -0.5/(sd*sd);
+    const double              offset = filter.size() % 2 == 0 ? 0.0 : -0.5;
+    vnl_real_polynomial       poly(1.0);
+    const double              eta = -0.5 / (sd * sd);
     const vnl_real_polynomial d_gauss(vnl_double_2(eta, 0.0).as_ref());
-    for (unsigned i=1; i<diff; ++i)
+    for (unsigned i = 1; i < diff; ++i)
     {
       // Evaluate d/dx (poly * gauss) where gauss = exp(-0.5*x^2/sd^2)
       // n.b. d/dx gauss = d_gauss * gauss
       poly = poly * d_gauss + poly.derivative();
     }
 
-    for (int i=-(int)centre ; i+centre<filter.size(); ++i)
+    for (int i = -(int)centre; i + centre < filter.size(); ++i)
     {
-      tap = poly.evaluate(i+1.0+offset)*std::exp(eta*(i+1.0+offset)*(i+1.0+offset))
-          - poly.evaluate(i+    offset)*std::exp(eta*(i+    offset)*(i+    offset));
+      tap = poly.evaluate(i + 1.0 + offset) * std::exp(eta * (i + 1.0 + offset) * (i + 1.0 + offset)) -
+            poly.evaluate(i + offset) * std::exp(eta * (i + offset) * (i + offset));
       sum += std::abs(tap);
-      filter[centre+i] = tap;
+      filter[centre + i] = tap;
     }
   }
 
   // normalise the result
   assert(sum >= 0.0);
   const double norm = 1.0 / sum;
-  std::transform(filter.begin(), filter.end(), filter.begin(),
-                 [norm] (double x) { return norm * x; } );
+  std::transform(filter.begin(), filter.end(), filter.begin(), [norm](double x) { return norm * x; });
 }

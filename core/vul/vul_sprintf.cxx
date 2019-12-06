@@ -16,7 +16,8 @@
 #endif
 #undef vsprintf // this works around a bug in libintl.h
 
-vul_sprintf::vul_sprintf(char const *fmt, ...) : std::string("")
+vul_sprintf::vul_sprintf(char const * fmt, ...)
+  : std::string("")
 {
   std::va_list ap;
   va_start(ap, fmt);
@@ -30,9 +31,10 @@ vul_sprintf::vul_sprintf(char const *fmt, ...) : std::string("")
   va_end(ap);
 }
 
-std::ostream & operator<<(std::ostream &os,const vul_sprintf& s)
+std::ostream &
+operator<<(std::ostream & os, const vul_sprintf & s)
 {
-  return os << (char const*)s;
+  return os << (char const *)s;
 }
 
 //--------------------------------------------------------------------------------

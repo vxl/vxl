@@ -28,7 +28,7 @@ static bool is_modal = true;
 
 //--------------------------------------------------------------------------------
 //: Constructor
-vgui_gtk_dialog_impl::vgui_gtk_dialog_impl(const char* name)
+vgui_gtk_dialog_impl::vgui_gtk_dialog_impl(const char * name)
   : vgui_dialog_impl(name)
 {
   title = name;
@@ -39,93 +39,91 @@ vgui_gtk_dialog_impl::vgui_gtk_dialog_impl(const char* name)
 
 //--------------------------------------------------------------------------------
 //: Destructor
-vgui_gtk_dialog_impl::~vgui_gtk_dialog_impl()
-{
-}
+vgui_gtk_dialog_impl::~vgui_gtk_dialog_impl() {}
 
 
 struct vgui_gtk_dialog_impl_choice
 {
   std::vector<std::string> names;
-  int index;
+  int                      index;
 };
 
 
 //--------------------------------------------------------------------------------
 //: Make a choice widget
-void* vgui_gtk_dialog_impl::choice_field_widget(const char* /*txt*/,
-                                                const std::vector<std::string>& labels,
-                                                int& val)
+void *
+vgui_gtk_dialog_impl::choice_field_widget(const char * /*txt*/, const std::vector<std::string> & labels, int & val)
 {
-  vgui_gtk_dialog_impl_choice *ch = new vgui_gtk_dialog_impl_choice;
+  vgui_gtk_dialog_impl_choice * ch = new vgui_gtk_dialog_impl_choice;
   ch->names = labels;
   ch->index = val;
 
-  return (void*)ch;
+  return (void *)ch;
 }
 
 //--------------------------------------------------------------------------------
 //: Make a tableau widget.
 //
 // This returns a vgui_gtk_adaptor, not a GtkWidget!
-void* vgui_gtk_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
-                                                  unsigned width, unsigned height)
+void *
+vgui_gtk_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height)
 {
-  vgui_gtk_adaptor *ct = new vgui_gtk_adaptor();
+  vgui_gtk_adaptor * ct = new vgui_gtk_adaptor();
   ct->set_tableau(tab);
-  GtkWidget *glarea= (( vgui_gtk_adaptor *)ct)->get_glarea_widget();
+  GtkWidget * glarea = ((vgui_gtk_adaptor *)ct)->get_glarea_widget();
   gtk_widget_set_usize(glarea, width, height);
   gtk_widget_show(glarea);
 
-  return (void*)ct;
+  return (void *)ct;
 }
 
 // GTK callbacks should have C linkage
-extern "C" {
-
-static
-void accept_cb(GtkWidget* /*widget*/,
-               gpointer   data)
+extern "C"
 {
-  if (debug) std::cerr << "accept\n";
-  vgui_gtk_dialog_impl::status_type* d = static_cast<vgui_gtk_dialog_impl::status_type*>(data);
-  *d = vgui_gtk_dialog_impl::OK;
-}
 
-static
-void cancel_cb(GtkWidget* /*widget*/,
-               gpointer data)
-{
-  if (debug) std::cerr << "cancel\n";
-  vgui_gtk_dialog_impl::status_type* d = static_cast<vgui_gtk_dialog_impl::status_type*>(data);
-  *d = vgui_gtk_dialog_impl::CANCEL;
-}
+  static void
+  accept_cb(GtkWidget * /*widget*/, gpointer data)
+  {
+    if (debug)
+      std::cerr << "accept\n";
+    vgui_gtk_dialog_impl::status_type * d = static_cast<vgui_gtk_dialog_impl::status_type *>(data);
+    *d = vgui_gtk_dialog_impl::OK;
+  }
 
-static
-gint close_window_cb(GtkWidget* /*widget*/,
-                     GdkEvent* /*event*/,
-                     gpointer data)
-{
-  if (debug) std::cerr << "close window\n";
-  vgui_gtk_dialog_impl::status_type* d = static_cast<vgui_gtk_dialog_impl::status_type*>(data);
-  *d = vgui_gtk_dialog_impl::CLOSE;
-  return FALSE; // propagate as necessary
-}
+  static void
+  cancel_cb(GtkWidget * /*widget*/, gpointer data)
+  {
+    if (debug)
+      std::cerr << "cancel\n";
+    vgui_gtk_dialog_impl::status_type * d = static_cast<vgui_gtk_dialog_impl::status_type *>(data);
+    *d = vgui_gtk_dialog_impl::CANCEL;
+  }
 
-struct vgui_gtk_dialog_impl_int_pair
-{
-  int* val;
-  int tmp;
-};
+  static gint
+  close_window_cb(GtkWidget * /*widget*/, GdkEvent * /*event*/, gpointer data)
+  {
+    if (debug)
+      std::cerr << "close window\n";
+    vgui_gtk_dialog_impl::status_type * d = static_cast<vgui_gtk_dialog_impl::status_type *>(data);
+    *d = vgui_gtk_dialog_impl::CLOSE;
+    return FALSE; // propagate as necessary
+  }
+
+  struct vgui_gtk_dialog_impl_int_pair
+  {
+    int * val;
+    int   tmp;
+  };
 
 
-void choose_cb(GtkWidget* /*widget*/,
-               gpointer data)
-{
-  vgui_gtk_dialog_impl_int_pair *ip = (vgui_gtk_dialog_impl_int_pair*) data;
-  *(ip->val) = ip->tmp;
-  if (debug) std::cerr << "choose " << (ip->tmp) << std::endl;
-}
+  void
+  choose_cb(GtkWidget * /*widget*/, gpointer data)
+  {
+    vgui_gtk_dialog_impl_int_pair * ip = (vgui_gtk_dialog_impl_int_pair *)data;
+    *(ip->val) = ip->tmp;
+    if (debug)
+      std::cerr << "choose " << (ip->tmp) << std::endl;
+  }
 
 } // extern "C"
 
@@ -133,12 +131,14 @@ void choose_cb(GtkWidget* /*widget*/,
 //: Changes the modality of the dialog.
 //  True makes the dialog modal (i.e. the dialog 'grabs' all events), this is the default.
 //  False makes the dialog non-modal.
-void vgui_gtk_dialog_impl::modal(const bool m)
+void
+vgui_gtk_dialog_impl::modal(const bool m)
 {
   is_modal = m;
 }
 
-void vgui_gtk_dialog_impl::set_ok_button(const char* txt)
+void
+vgui_gtk_dialog_impl::set_ok_button(const char * txt)
 {
   if (txt)
     ok_text = std::string(txt);
@@ -146,7 +146,8 @@ void vgui_gtk_dialog_impl::set_ok_button(const char* txt)
     ok_text = std::string("REMOVEBUTTON");
 }
 
-void vgui_gtk_dialog_impl::set_cancel_button(const char* txt)
+void
+vgui_gtk_dialog_impl::set_cancel_button(const char * txt)
 {
   if (txt)
     cancel_text = std::string(txt);
@@ -154,132 +155,139 @@ void vgui_gtk_dialog_impl::set_cancel_button(const char* txt)
     cancel_text = std::string("REMOVEBUTTON");
 }
 
-extern "C" {
-
-struct file_ok_data
+extern "C"
 {
-  GtkFileSelection* filew;
-  GtkEntry* file_entry;
-};
 
-//--------------------------------------------------------------------------------
-//: Gets the file selection for the file browser.
-void ok_file_browse(file_ok_data* data)
-{
-  gtk_entry_set_text( data->file_entry,
-                      gtk_file_selection_get_filename(data->filew) );
-  gtk_widget_destroy( GTK_WIDGET(data->filew) );
-  delete data;
-}
+  struct file_ok_data
+  {
+    GtkFileSelection * filew;
+    GtkEntry *         file_entry;
+  };
 
-//--------------------------------------------------------------------------------
-//: Cancels the file selection
-void cancel_file_browse(file_ok_data* data)
-{
-  gtk_widget_destroy( GTK_WIDGET(data->filew) );
-  delete data;
-}
+  //--------------------------------------------------------------------------------
+  //: Gets the file selection for the file browser.
+  void
+  ok_file_browse(file_ok_data * data)
+  {
+    gtk_entry_set_text(data->file_entry, gtk_file_selection_get_filename(data->filew));
+    gtk_widget_destroy(GTK_WIDGET(data->filew));
+    delete data;
+  }
 
-//--------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------
+  //: Cancels the file selection
+  void
+  cancel_file_browse(file_ok_data * data)
+  {
+    gtk_widget_destroy(GTK_WIDGET(data->filew));
+    delete data;
+  }
 
-void browse_files(GtkWidget* /*w*/, GtkEntry* file_entry)
-{
-  GtkFileSelection* filew = GTK_FILE_SELECTION( gtk_file_selection_new ("File selection") );
+  //--------------------------------------------------------------------------------
 
-  file_ok_data* data = new file_ok_data;
-  data->filew = filew;
-  data->file_entry = file_entry;
+  void
+  browse_files(GtkWidget * /*w*/, GtkEntry * file_entry)
+  {
+    GtkFileSelection * filew = GTK_FILE_SELECTION(gtk_file_selection_new("File selection"));
 
-  gtk_signal_connect_object (GTK_OBJECT(filew->cancel_button), "clicked",
-                             (GtkSignalFunc) cancel_file_browse, (GtkObject*)(data));
-  gtk_signal_connect_object (GTK_OBJECT(filew->ok_button), "clicked",
-                             (GtkSignalFunc) ok_file_browse, (GtkObject*)(data));
+    file_ok_data * data = new file_ok_data;
+    data->filew = filew;
+    data->file_entry = file_entry;
 
-  gtk_file_selection_set_filename (filew, gtk_entry_get_text(file_entry));
+    gtk_signal_connect_object(
+      GTK_OBJECT(filew->cancel_button), "clicked", (GtkSignalFunc)cancel_file_browse, (GtkObject *)(data));
+    gtk_signal_connect_object(
+      GTK_OBJECT(filew->ok_button), "clicked", (GtkSignalFunc)ok_file_browse, (GtkObject *)(data));
 
-  // Hide buttons for create directory, delete and rename file:
-  gtk_file_selection_hide_fileop_buttons(filew);
+    gtk_file_selection_set_filename(filew, gtk_entry_get_text(file_entry));
 
-  gtk_window_set_modal(GTK_WINDOW(filew), is_modal);
-  gtk_widget_show( GTK_WIDGET(filew) );
-}
+    // Hide buttons for create directory, delete and rename file:
+    gtk_file_selection_hide_fileop_buttons(filew);
 
-//-------------------------------------------------------------------------------
-//: Handles a change of color.
-// Done by passing the value back to the (hidden) text entry in the dialog box.
-void color_changed_cb(GtkColorSelection *colorsel, GtkEntry* color_entry)
-{
-  // Get the color from the color chooser (r,g,b,a):
-  gdouble color[4];
-  gtk_color_selection_get_color(colorsel, color);
+    gtk_window_set_modal(GTK_WINDOW(filew), is_modal);
+    gtk_widget_show(GTK_WIDGET(filew));
+  }
 
-  vul_sprintf color_str("%.3f %.3f %.3f", color[0], color[1], color[2]);
+  //-------------------------------------------------------------------------------
+  //: Handles a change of color.
+  // Done by passing the value back to the (hidden) text entry in the dialog box.
+  void
+  color_changed_cb(GtkColorSelection * colorsel, GtkEntry * color_entry)
+  {
+    // Get the color from the color chooser (r,g,b,a):
+    gdouble color[4];
+    gtk_color_selection_get_color(colorsel, color);
 
-  // Set the text entry back in the dialog to the color selected in the color chooser:
-  gtk_entry_set_text(GTK_ENTRY(color_entry), color_str.c_str());
-}
+    vul_sprintf color_str("%.3f %.3f %.3f", color[0], color[1], color[2]);
+
+    // Set the text entry back in the dialog to the color selected in the color chooser:
+    gtk_entry_set_text(GTK_ENTRY(color_entry), color_str.c_str());
+  }
 
 
-struct cancel_color_data
-{
-  std::string* orig_color;
-  GtkEntry* color_entry;
-  GtkColorSelectionDialog* colord;
-};
+  struct cancel_color_data
+  {
+    std::string *             orig_color;
+    GtkEntry *                color_entry;
+    GtkColorSelectionDialog * colord;
+  };
 
-//-------------------------------------------------------------------------------
-//: Handles OK button on color chooser.
-// by closing the dialog window and releasing memory.
-void ok_color_chooser(cancel_color_data* data)
-{
-  gtk_widget_destroy(GTK_WIDGET(data->colord));
-  delete data->orig_color;
-  delete data;
-}
+  //-------------------------------------------------------------------------------
+  //: Handles OK button on color chooser.
+  // by closing the dialog window and releasing memory.
+  void
+  ok_color_chooser(cancel_color_data * data)
+  {
+    gtk_widget_destroy(GTK_WIDGET(data->colord));
+    delete data->orig_color;
+    delete data;
+  }
 
-//-------------------------------------------------------------------------------
-//: Handles cancel button on color chooser.
-// by resetting the color to its original value, shutting down the color
-// chooser and passing control back to the dialog.
-void cancel_color_chooser(cancel_color_data* data)
-{
-  gtk_entry_set_text(GTK_ENTRY(data->color_entry), data->orig_color->c_str());
+  //-------------------------------------------------------------------------------
+  //: Handles cancel button on color chooser.
+  // by resetting the color to its original value, shutting down the color
+  // chooser and passing control back to the dialog.
+  void
+  cancel_color_chooser(cancel_color_data * data)
+  {
+    gtk_entry_set_text(GTK_ENTRY(data->color_entry), data->orig_color->c_str());
 
-  gtk_widget_destroy(GTK_WIDGET(data->colord));
-  delete data->orig_color;
-  delete data;
-}
+    gtk_widget_destroy(GTK_WIDGET(data->colord));
+    delete data->orig_color;
+    delete data;
+  }
 
-//-------------------------------------------------------------------------------
-//: Display a colour chooser.
-void choose_color(GtkWidget* /*w*/, GtkEntry* color_entry)
-{
-  GtkColorSelectionDialog* colord = GTK_COLOR_SELECTION_DIALOG( gtk_color_selection_dialog_new("Select color") );
-  gtk_widget_hide( GTK_WIDGET(colord->help_button) );
+  //-------------------------------------------------------------------------------
+  //: Display a colour chooser.
+  void
+  choose_color(GtkWidget * /*w*/, GtkEntry * color_entry)
+  {
+    GtkColorSelectionDialog * colord = GTK_COLOR_SELECTION_DIALOG(gtk_color_selection_dialog_new("Select color"));
+    gtk_widget_hide(GTK_WIDGET(colord->help_button));
 
-  cancel_color_data* data = new cancel_color_data;
-  data->orig_color = new std::string(gtk_entry_get_text(GTK_ENTRY(color_entry)));
-  data->color_entry = color_entry;
-  data->colord = colord;
+    cancel_color_data * data = new cancel_color_data;
+    data->orig_color = new std::string(gtk_entry_get_text(GTK_ENTRY(color_entry)));
+    data->color_entry = color_entry;
+    data->colord = colord;
 
-  gtk_signal_connect(GTK_OBJECT(colord->colorsel), "color_changed",
-                     (GtkSignalFunc)color_changed_cb, color_entry);
-  gtk_signal_connect_object (GTK_OBJECT(colord->cancel_button), "clicked",
-                             (GtkSignalFunc)cancel_color_chooser, (GtkObject*)data);
-  gtk_signal_connect_object (GTK_OBJECT(colord->ok_button), "clicked",
-                             (GtkSignalFunc)ok_color_chooser, (GtkObject*)data);
+    gtk_signal_connect(GTK_OBJECT(colord->colorsel), "color_changed", (GtkSignalFunc)color_changed_cb, color_entry);
+    gtk_signal_connect_object(
+      GTK_OBJECT(colord->cancel_button), "clicked", (GtkSignalFunc)cancel_color_chooser, (GtkObject *)data);
+    gtk_signal_connect_object(
+      GTK_OBJECT(colord->ok_button), "clicked", (GtkSignalFunc)ok_color_chooser, (GtkObject *)data);
 
-  gtk_window_set_modal(GTK_WINDOW(colord), is_modal);
-  gtk_widget_show(GTK_WIDGET(colord));
-}
+    gtk_window_set_modal(GTK_WINDOW(colord), is_modal);
+    gtk_widget_show(GTK_WIDGET(colord));
+  }
 
 } // extern "C"
 
 //-------------------------------------------------------------------------------
 //: Display the dialog box.
-bool vgui_gtk_dialog_impl::ask()
+bool
+vgui_gtk_dialog_impl::ask()
 {
-  GtkWidget* dialog = gtk_dialog_new();
+  GtkWidget * dialog = gtk_dialog_new();
 
   gtk_window_set_title(GTK_WINDOW(dialog), title.c_str());
   gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
@@ -287,56 +295,46 @@ bool vgui_gtk_dialog_impl::ask()
 
   if (ok_text.compare("REMOVEBUTTON"))
   {
-    GtkWidget *accept = gtk_button_new_with_label (ok_text.c_str());
-    gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
-                       accept, TRUE, TRUE, 0);
-    gtk_signal_connect(GTK_OBJECT(accept), "clicked",
-                       GTK_SIGNAL_FUNC(accept_cb),
-                       &dialog_status_);
+    GtkWidget * accept = gtk_button_new_with_label(ok_text.c_str());
+    gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area), accept, TRUE, TRUE, 0);
+    gtk_signal_connect(GTK_OBJECT(accept), "clicked", GTK_SIGNAL_FUNC(accept_cb), &dialog_status_);
     gtk_widget_show(accept);
   }
   if (cancel_text.compare("REMOVEBUTTON"))
   {
-    GtkWidget *cancel = gtk_button_new_with_label (cancel_text.c_str());
-    gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
-                     cancel, TRUE, TRUE, 0);
-    gtk_signal_connect(GTK_OBJECT(cancel), "clicked",
-                       GTK_SIGNAL_FUNC(cancel_cb),
-                       &dialog_status_);
+    GtkWidget * cancel = gtk_button_new_with_label(cancel_text.c_str());
+    gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area), cancel, TRUE, TRUE, 0);
+    gtk_signal_connect(GTK_OBJECT(cancel), "clicked", GTK_SIGNAL_FUNC(cancel_cb), &dialog_status_);
     gtk_widget_show(cancel);
   }
 
   // closing the dialog box is equivalent to canceling.
   //
-  gtk_signal_connect(GTK_OBJECT(dialog), "delete_event",
-                     GTK_SIGNAL_FUNC(close_window_cb),
-                     &dialog_status_);
+  gtk_signal_connect(GTK_OBJECT(dialog), "delete_event", GTK_SIGNAL_FUNC(close_window_cb), &dialog_status_);
 
   // list of widgets used to extract values
-  std::vector<GtkWidget*> wlist;
+  std::vector<GtkWidget *> wlist;
 
   // to delete the adaptors associated with inline tableaux
-  std::vector<vgui_gtk_adaptor*> adaptor_list;
+  std::vector<vgui_gtk_adaptor *> adaptor_list;
 
   // to delete the file selection dialog for the inline selection
-  std::vector<GtkWidget*> delete_wlist;
+  std::vector<GtkWidget *> delete_wlist;
 
-  for (std::vector<element>::iterator e_iter = elements.begin();
-       e_iter != elements.end(); ++e_iter) {
+  for (std::vector<element>::iterator e_iter = elements.begin(); e_iter != elements.end(); ++e_iter)
+  {
 
-    element l = *e_iter;
-    vgui_dialog_field *field = l.field;
+    element             l = *e_iter;
+    vgui_dialog_field * field = l.field;
 
-    GtkWidget* entry;
+    GtkWidget * entry;
 
-    if (l.type == int_elem ||
-        l.type == long_elem ||
-        l.type == float_elem ||
-        l.type == double_elem ||
-        l.type == string_elem) {
+    if (l.type == int_elem || l.type == long_elem || l.type == float_elem || l.type == double_elem ||
+        l.type == string_elem)
+    {
 
-      GtkWidget* hbox = gtk_hbox_new(FALSE, 10);
-      GtkWidget* label = gtk_label_new(field->label.c_str());
+      GtkWidget * hbox = gtk_hbox_new(FALSE, 10);
+      GtkWidget * label = gtk_label_new(field->label.c_str());
       gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT);
 
       entry = gtk_entry_new_with_max_length(50);
@@ -351,41 +349,42 @@ bool vgui_gtk_dialog_impl::ask()
       gtk_widget_show(hbox);
       wlist.push_back(entry);
     }
-    else if (l.type == bool_elem) {
-      vgui_bool_field *field = static_cast<vgui_bool_field*>(l.field);
+    else if (l.type == bool_elem)
+    {
+      vgui_bool_field * field = static_cast<vgui_bool_field *>(l.field);
       entry = gtk_check_button_new_with_label(field->label.c_str());
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(entry), field->var);
       gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), entry, TRUE, TRUE, 0);
       gtk_widget_show(entry);
       wlist.push_back(entry);
     }
-    else if (l.type == choice_elem) {
-      vgui_int_field *field = static_cast<vgui_int_field*>(l.field);
+    else if (l.type == choice_elem)
+    {
+      vgui_int_field * field = static_cast<vgui_int_field *>(l.field);
 
-      GtkWidget* hbox = gtk_hbox_new(FALSE, 10);
-      GtkWidget* label = gtk_label_new(field->label.c_str());
+      GtkWidget * hbox = gtk_hbox_new(FALSE, 10);
+      GtkWidget * label = gtk_label_new(field->label.c_str());
       gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT);
 
       entry = gtk_option_menu_new();
-      GtkWidget* menu = gtk_menu_new();
+      GtkWidget * menu = gtk_menu_new();
 
 
-      vgui_gtk_dialog_impl_choice *ch = (vgui_gtk_dialog_impl_choice*)l.widget;
+      vgui_gtk_dialog_impl_choice * ch = (vgui_gtk_dialog_impl_choice *)l.widget;
 
       int count = 0;
-      for (std::vector<std::string>::iterator s_iter =  ch->names.begin();
-           s_iter != ch->names.end(); ++s_iter, ++count) {
+      for (std::vector<std::string>::iterator s_iter = ch->names.begin(); s_iter != ch->names.end(); ++s_iter, ++count)
+      {
 
-        GtkWidget* item = gtk_menu_item_new_with_label(s_iter->c_str());
+        GtkWidget * item = gtk_menu_item_new_with_label(s_iter->c_str());
         gtk_widget_show(item);
         gtk_menu_append(GTK_MENU(menu), item);
 
-        vgui_gtk_dialog_impl_int_pair *ip = new vgui_gtk_dialog_impl_int_pair;
+        vgui_gtk_dialog_impl_int_pair * ip = new vgui_gtk_dialog_impl_int_pair;
         ip->val = &(ch->index);
         ip->tmp = count;
 
-        gtk_signal_connect(GTK_OBJECT(item), "activate",
-                           GTK_SIGNAL_FUNC(choose_cb), ip);
+        gtk_signal_connect(GTK_OBJECT(item), "activate", GTK_SIGNAL_FUNC(choose_cb), ip);
       }
 
       gtk_option_menu_set_menu(GTK_OPTION_MENU(entry), menu);
@@ -400,25 +399,26 @@ bool vgui_gtk_dialog_impl::ask()
       gtk_widget_show(hbox);
       wlist.push_back(entry);
     }
-    else if (l.type == text_msg) {
-      GtkWidget* label = gtk_label_new(field->label.c_str());
+    else if (l.type == text_msg)
+    {
+      GtkWidget * label = gtk_label_new(field->label.c_str());
       gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), label, TRUE, TRUE, 0);
       gtk_widget_show(label);
       wlist.push_back(entry);
     }
-    else if (l.type == file_bsr){
-      GtkWidget* hbox = gtk_hbox_new(FALSE, 10);
-      GtkWidget* label = gtk_label_new(field->label.c_str());
+    else if (l.type == file_bsr)
+    {
+      GtkWidget * hbox = gtk_hbox_new(FALSE, 10);
+      GtkWidget * label = gtk_label_new(field->label.c_str());
       gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT);
-      GtkWidget* button = gtk_button_new_with_label("Choose file...");
-      GtkWidget* entry = gtk_entry_new_with_max_length(150);
+      GtkWidget * button = gtk_button_new_with_label("Choose file...");
+      GtkWidget * entry = gtk_entry_new_with_max_length(150);
       gtk_entry_set_text(GTK_ENTRY(entry), l.field->current_value().c_str());
 
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                          GTK_SIGNAL_FUNC (browse_files), (gpointer)entry);
+      gtk_signal_connect(GTK_OBJECT(button), "clicked", GTK_SIGNAL_FUNC(browse_files), (gpointer)entry);
       gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
       gtk_box_pack_start(GTK_BOX(hbox), entry, TRUE, TRUE, 0);
-      gtk_box_pack_start(GTK_BOX(hbox), button,TRUE,TRUE, 0);
+      gtk_box_pack_start(GTK_BOX(hbox), button, TRUE, TRUE, 0);
 
       gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 0);
       gtk_widget_show(label);
@@ -427,7 +427,8 @@ bool vgui_gtk_dialog_impl::ask()
       gtk_widget_show(hbox);
       wlist.push_back(entry);
     }
-    else if (l.type == inline_file_bsr) {
+    else if (l.type == inline_file_bsr)
+    {
       // This is a complete hack. To get an "inline" browser, we
       // generate a file browser dialog, but "steal" the main box to
       // display within the current dialog. We cannot embed the file
@@ -438,9 +439,8 @@ bool vgui_gtk_dialog_impl::ask()
       //
       // This is ugly. A better solution would be most welcome.
 
-      GtkWidget* filew = gtk_file_selection_new ("File selection");
-      gtk_file_selection_set_filename (GTK_FILE_SELECTION(filew),
-                                       l.field->current_value().c_str());
+      GtkWidget * filew = gtk_file_selection_new("File selection");
+      gtk_file_selection_set_filename(GTK_FILE_SELECTION(filew), l.field->current_value().c_str());
 
       // Hide buttons for create directory, delete and rename file:
       gtk_file_selection_hide_fileop_buttons(GTK_FILE_SELECTION(filew));
@@ -448,27 +448,27 @@ bool vgui_gtk_dialog_impl::ask()
       gtk_widget_hide(GTK_FILE_SELECTION(filew)->ok_button);
       gtk_widget_hide(GTK_FILE_SELECTION(filew)->cancel_button);
 
-      GtkWidget* file_main_vbox = GTK_FILE_SELECTION(filew)->main_vbox;
+      GtkWidget * file_main_vbox = GTK_FILE_SELECTION(filew)->main_vbox;
 
-      gtk_widget_ref( file_main_vbox );
-      gtk_container_remove( GTK_CONTAINER(filew), file_main_vbox);
+      gtk_widget_ref(file_main_vbox);
+      gtk_container_remove(GTK_CONTAINER(filew), file_main_vbox);
       gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), file_main_vbox, TRUE, TRUE, 0);
-      gtk_widget_unref( file_main_vbox );
+      gtk_widget_unref(file_main_vbox);
 
-      gtk_widget_show( file_main_vbox );
+      gtk_widget_show(file_main_vbox);
       wlist.push_back(filew);
       delete_wlist.push_back(filew);
     }
-    else if (l.type == color_csr){
-      GtkWidget* hbox = gtk_hbox_new(FALSE, 10);
-      GtkWidget* label = gtk_label_new(field->label.c_str());
+    else if (l.type == color_csr)
+    {
+      GtkWidget * hbox = gtk_hbox_new(FALSE, 10);
+      GtkWidget * label = gtk_label_new(field->label.c_str());
       gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT);
-      GtkWidget* button = gtk_button_new_with_label("Choose color...");
-      GtkWidget* entry = gtk_entry_new_with_max_length(50);
+      GtkWidget * button = gtk_button_new_with_label("Choose color...");
+      GtkWidget * entry = gtk_entry_new_with_max_length(50);
       gtk_entry_set_text(GTK_ENTRY(entry), l.field->current_value().c_str());
 
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                          GTK_SIGNAL_FUNC (choose_color), entry);
+      gtk_signal_connect(GTK_OBJECT(button), "clicked", GTK_SIGNAL_FUNC(choose_color), entry);
       gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
       gtk_box_pack_start(GTK_BOX(hbox), entry, TRUE, TRUE, 0);
       gtk_box_pack_start(GTK_BOX(hbox), button, TRUE, TRUE, 0);
@@ -480,36 +480,34 @@ bool vgui_gtk_dialog_impl::ask()
       gtk_widget_show(hbox);
       wlist.push_back(entry);
     }
-    else if (l.type == inline_color_csr) {
-      GtkWidget* colorw = gtk_color_selection_new();
-      GtkWidget* color_entry = gtk_entry_new_with_max_length(50);
+    else if (l.type == inline_color_csr)
+    {
+      GtkWidget * colorw = gtk_color_selection_new();
+      GtkWidget * color_entry = gtk_entry_new_with_max_length(50);
 
-      gtk_entry_set_text(GTK_ENTRY(color_entry),
-                         l.field->current_value().c_str());
-      gtk_signal_connect(GTK_OBJECT(colorw), "color_changed",
-                         (GtkSignalFunc)color_changed_cb, color_entry);
+      gtk_entry_set_text(GTK_ENTRY(color_entry), l.field->current_value().c_str());
+      gtk_signal_connect(GTK_OBJECT(colorw), "color_changed", (GtkSignalFunc)color_changed_cb, color_entry);
 
-      gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), colorw, TRUE,
-                         TRUE, 0);
+      gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), colorw, TRUE, TRUE, 0);
       gtk_widget_show(colorw);
 
       // Connect the color entry text field to the dialog so that the
       // widget will be automatically destroyed.
-      gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), color_entry, TRUE,
-                         TRUE, 0);
+      gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), color_entry, TRUE, TRUE, 0);
       gtk_widget_hide(color_entry);
       wlist.push_back(color_entry);
     }
-    else if (l.type == inline_tabl) {
-      vgui_gtk_adaptor* adapt = static_cast<vgui_gtk_adaptor*>(l.widget);
-      GtkWidget* widg = adapt->get_glarea_widget();
-      GtkWidget* hbox = gtk_hbox_new(FALSE, 10);
+    else if (l.type == inline_tabl)
+    {
+      vgui_gtk_adaptor * adapt = static_cast<vgui_gtk_adaptor *>(l.widget);
+      GtkWidget *        widg = adapt->get_glarea_widget();
+      GtkWidget *        hbox = gtk_hbox_new(FALSE, 10);
 
       gtk_box_pack_start(GTK_BOX(hbox), widg, TRUE, TRUE, 0);
       gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 0);
       gtk_widget_show(hbox);
       wlist.push_back(widg);
-      adaptor_list.push_back( adapt );
+      adaptor_list.push_back(adapt);
     }
     else
       std::cerr << "Unknown type = " << int(l.type) << std::endl;
@@ -519,7 +517,8 @@ bool vgui_gtk_dialog_impl::ask()
 
   dialog_status_ = BUSY;
 
-  while ( dialog_status_ == BUSY ) {
+  while (dialog_status_ == BUSY)
+  {
     gtk_main_iteration();
   }
 
@@ -528,46 +527,44 @@ bool vgui_gtk_dialog_impl::ask()
   // the associated glarea should be destroyed by the time this
   // function call ends. That is, by the time further iterations of
   // the gtk main loop occur.
-  for ( std::vector<vgui_gtk_adaptor*>::iterator iter = adaptor_list.begin();
-        iter != adaptor_list.end(); ++iter ) {
+  for (std::vector<vgui_gtk_adaptor *>::iterator iter = adaptor_list.begin(); iter != adaptor_list.end(); ++iter)
+  {
     delete *iter;
   }
 
-  //gtk_signal_disconnect(GTK_OBJECT(dialog), destroy_handler_id);
+  // gtk_signal_disconnect(GTK_OBJECT(dialog), destroy_handler_id);
 
   bool ret_value = false;
-  if (dialog_status_ == CLOSE) {
+  if (dialog_status_ == CLOSE)
+  {
     // the window was closed without pressing any buttons. The windows will be destroyed, etc, so
     // we don't need to worry about anything.
   }
-  else if (dialog_status_ == OK)  // OK button has been pressed
+  else if (dialog_status_ == OK) // OK button has been pressed
   {
-    std::vector<GtkWidget*>::iterator w_iter = wlist.begin();
-    for (std::vector<element>::iterator e_iter = elements.begin();
-         e_iter != elements.end(); ++e_iter, ++w_iter) {
+    std::vector<GtkWidget *>::iterator w_iter = wlist.begin();
+    for (std::vector<element>::iterator e_iter = elements.begin(); e_iter != elements.end(); ++e_iter, ++w_iter)
+    {
       element l = *e_iter;
-      if (l.type == int_elem ||
-          l.type == long_elem ||
-          l.type == float_elem ||
-          l.type == double_elem ||
-          l.type == string_elem ||
-          l.type == file_bsr ||
-          l.type == color_csr ||
-          l.type == inline_color_csr) {
-        GtkWidget *input = *w_iter;
+      if (l.type == int_elem || l.type == long_elem || l.type == float_elem || l.type == double_elem ||
+          l.type == string_elem || l.type == file_bsr || l.type == color_csr || l.type == inline_color_csr)
+      {
+        GtkWidget * input = *w_iter;
         l.field->update_value(gtk_entry_get_text(GTK_ENTRY(input)));
       }
       if (l.type == inline_file_bsr)
         l.field->update_value(gtk_file_selection_get_filename(GTK_FILE_SELECTION(*w_iter)));
 
-      if (l.type == bool_elem) {
-        vgui_bool_field *field = static_cast<vgui_bool_field*>(l.field);
-        GtkWidget *input = *w_iter;
-        field->var = (bool) gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(input));
+      if (l.type == bool_elem)
+      {
+        vgui_bool_field * field = static_cast<vgui_bool_field *>(l.field);
+        GtkWidget *       input = *w_iter;
+        field->var = (bool)gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(input));
       }
-      if (l.type == choice_elem) {
-        vgui_int_field *field = static_cast<vgui_int_field*>(l.field);
-        vgui_gtk_dialog_impl_choice *ch = static_cast<vgui_gtk_dialog_impl_choice*>(l.widget);
+      if (l.type == choice_elem)
+      {
+        vgui_int_field *              field = static_cast<vgui_int_field *>(l.field);
+        vgui_gtk_dialog_impl_choice * ch = static_cast<vgui_gtk_dialog_impl_choice *>(l.widget);
         field->var = ch->index;
       }
     }
@@ -583,9 +580,9 @@ bool vgui_gtk_dialog_impl::ask()
   }
 
   // Destroy widgets that weren't inserted into this dialog
-  for ( std::vector<GtkWidget*>::iterator iter = delete_wlist.begin();
-        iter != delete_wlist.end(); ++iter ) {
-    gtk_widget_destroy( *iter );
+  for (std::vector<GtkWidget *>::iterator iter = delete_wlist.begin(); iter != delete_wlist.end(); ++iter)
+  {
+    gtk_widget_destroy(*iter);
   }
 
   return ret_value;

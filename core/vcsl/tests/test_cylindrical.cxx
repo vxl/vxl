@@ -13,9 +13,10 @@
 #include "testlib/testlib_test.h"
 #include "vcsl/vcsl_cylindrical.h"
 
-static void test_cylindrical()
+static void
+test_cylindrical()
 {
-  vcsl_cylindrical_sptr p=new vcsl_cylindrical;
+  vcsl_cylindrical_sptr p = new vcsl_cylindrical;
   TEST("test_cylindrical_sptr", bool(p), true);
 }
 

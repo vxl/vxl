@@ -8,17 +8,19 @@
 
 
 //-----------------------------------------------------------------------------
-vgui_qt* vgui_qt::instance()
+vgui_qt *
+vgui_qt::instance()
 {
-  static vgui_qt* instance_ = new vgui_qt;
+  static vgui_qt * instance_ = new vgui_qt;
   return instance_;
 }
 
 
 //-----------------------------------------------------------------------------
-void vgui_qt::init(int &argc, char **argv)
+void
+vgui_qt::init(int & argc, char ** argv)
 {
-   new QApplication(argc, argv);
+  new QApplication(argc, argv);
 
 #if 0
    QGLFormat f;
@@ -46,52 +48,56 @@ void vgui_qt::init(int &argc, char **argv)
 
 
 //-----------------------------------------------------------------------------
-void vgui_qt::run()
+void
+vgui_qt::run()
 {
-   qApp->exec();
+  qApp->exec();
 }
 
 //-----------------------------------------------------------------------------
-void vgui_qt::run_one_event()
+void
+vgui_qt::run_one_event()
 {
-   qApp->processEvents(QEventLoop::AllEvents, 10);
-   glFlush();
+  qApp->processEvents(QEventLoop::AllEvents, 10);
+  glFlush();
 }
 
 
 //-----------------------------------------------------------------------------
-void vgui_qt::run_till_idle()
+void
+vgui_qt::run_till_idle()
 {
-   qApp->processEvents(QEventLoop::AllEvents, 10);
-   glFlush();
+  qApp->processEvents(QEventLoop::AllEvents, 10);
+  glFlush();
 }
 
 //-----------------------------------------------------------------------------
-void vgui_qt::flush()
+void
+vgui_qt::flush()
 {
   glFlush();
   run_till_idle();
 }
 
 //-----------------------------------------------------------------------------
-vgui_window* vgui_qt::produce_window(int width, int height,
-                                     const vgui_menu& menubar,
-                                     const char* title)
+vgui_window *
+vgui_qt::produce_window(int width, int height, const vgui_menu & menubar, const char * title)
 {
-   return new vgui_qt_window(width, height, menubar, title);
+  return new vgui_qt_window(width, height, menubar, title);
 }
 
 
 //-----------------------------------------------------------------------------
-vgui_window* vgui_qt::produce_window(int width, int height,
-                                     const char* title)
+vgui_window *
+vgui_qt::produce_window(int width, int height, const char * title)
 {
-   return new vgui_qt_window(width, height, title);
+  return new vgui_qt_window(width, height, title);
 }
 
 
 //-----------------------------------------------------------------------------
-vgui_dialog_impl* vgui_qt::produce_dialog(const char* name)
+vgui_dialog_impl *
+vgui_qt::produce_dialog(const char * name)
 {
-   return new vgui_qt_dialog_impl(name);
+  return new vgui_qt_dialog_impl(name);
 }

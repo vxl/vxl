@@ -21,15 +21,15 @@
 #include "vgui_mfc_dialog_extensions_impl.h"
 #include "vgui_mfc_utils.h"
 
-#define VC_EXTRALEAN  // Exclude rarely-used stuff from Windows headers
+#define VC_EXTRALEAN // Exclude rarely-used stuff from Windows headers
 
-#include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
-#include <afxdisp.h>        // MFC Automation classes
-#include <afxdtctl.h>       // MFC support for Internet Explorer 4 Common Controls
+#include <afxwin.h>   // MFC core and standard components
+#include <afxext.h>   // MFC extensions
+#include <afxdisp.h>  // MFC Automation classes
+#include <afxdtctl.h> // MFC support for Internet Explorer 4 Common Controls
 #ifndef _AFX_NO_AFXCMN_SUPPORT
-#include <afxcmn.h>         // MFC support for Windows Common Controls
-#endif // _AFX_NO_AFXCMN_SUPPORT
+#  include <afxcmn.h> // MFC support for Windows Common Controls
+#endif                // _AFX_NO_AFXCMN_SUPPORT
 
 #include "vgui_mfc_app.h"
 
@@ -41,7 +41,8 @@
 
 static bool debug = false;
 
-vgui_mfc* vgui_mfc::instance()
+vgui_mfc *
+vgui_mfc::instance()
 {
   static vgui_mfc instance_;
   return &instance_;
@@ -50,7 +51,7 @@ vgui_mfc* vgui_mfc::instance()
 //---------------------------------------------------------------------------------
 //: Default constructor
 vgui_mfc::vgui_mfc()
-  : theApp_( 0 )
+  : theApp_(0)
 {
   utils = vgui_mfc_utils::instance();
 }
@@ -58,25 +59,31 @@ vgui_mfc::vgui_mfc()
 //: Destructor
 vgui_mfc::~vgui_mfc()
 {
-  for (unsigned i=0; i<windows_to_delete.size(); i++)
+  for (unsigned i = 0; i < windows_to_delete.size(); i++)
     delete windows_to_delete[i];
 }
 
 //--------------------------------------------------------------------------------
 //: Pure virtual function from vgui - returns the name of the GUI toolkit.
-std::string vgui_mfc::name() const { return "mfc"; }
+std::string
+vgui_mfc::name() const
+{
+  return "mfc";
+}
 
 
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui - initialise the implementation of vgui.
-void vgui_mfc::init(int &argc, char **argv)
+void
+vgui_mfc::init(int & argc, char ** argv)
 {
-  if (debug) std::cerr << "vgui_mfc::init()\n";
+  if (debug)
+    std::cerr << "vgui_mfc::init()\n";
 
   // If we are here, then we aren't trying to use vgui in an MFC
   // framework. That is, there shouldn't be another CWinApp
   // somewhere. So, create the vgui one.
-  if ( AfxGetApp() )
+  if (AfxGetApp())
     std::cerr << "vgui_mfc::init(): another CWinApp object exists!\n";
   else
     theApp_ = new vgui_mfc_app;
@@ -91,7 +98,8 @@ void vgui_mfc::init(int &argc, char **argv)
   AfxGetApp()->InitInstance();
 }
 
-void vgui_mfc::uninit()
+void
+vgui_mfc::uninit()
 {
   delete theApp_;
   theApp_ = 0;
@@ -100,9 +108,11 @@ void vgui_mfc::uninit()
 
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui - runs the event loop.
-void vgui_mfc::run()
+void
+vgui_mfc::run()
 {
-  if (debug) std::cerr << "vgui_mfc::run()\n";
+  if (debug)
+    std::cerr << "vgui_mfc::run()\n";
 
   //: Start the main thread
   AfxGetThread()->Run();
@@ -111,7 +121,8 @@ void vgui_mfc::run()
   AfxWinTerm();
 }
 
-void vgui_mfc::run_one_event()
+void
+vgui_mfc::run_one_event()
 {
   run_till_idle();
   MSG m_msg;
@@ -119,30 +130,33 @@ void vgui_mfc::run_one_event()
   ::PeekMessage(&m_msg, NULL, NULL, NULL, PM_NOREMOVE);
 }
 
-void vgui_mfc::run_till_idle()
+void
+vgui_mfc::run_till_idle()
 {
   MSG msg;
-  while ( ::PeekMessage( &msg, NULL, 0, 0, PM_NOREMOVE ) )
+  while (::PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
   {
-    if ( !AfxGetApp()->PumpMessage( ) )
+    if (!AfxGetApp()->PumpMessage())
     {
       ::PostQuitMessage(0);
       break;
     }
   }
-#if 0 // let MFC do its idle processing
+#if 0  // let MFC do its idle processing
   LONG lIdle = 0;
   while ( AfxGetApp()->OnIdle(lIdle++ ) ) ;
 #endif // 0
 }
 
-void vgui_mfc::flush()
+void
+vgui_mfc::flush()
 {
   glFlush();
   run_till_idle();
 }
 
-void vgui_mfc::quit()
+void
+vgui_mfc::quit()
 {
   // From MFC FAQ:
   // Same as double-clicking on main window close box.
@@ -150,36 +164,39 @@ void vgui_mfc::quit()
   AfxGetMainWnd()->SendMessage(WM_CLOSE);
 }
 
-void vgui_mfc::add_event(const vgui_event& event) {}
+void
+vgui_mfc::add_event(const vgui_event & event)
+{}
 
 
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui - creates a new window with a menubar.
-vgui_window* vgui_mfc::produce_window(int width, int height, const vgui_menu& menubar,
-                                      const char* title)
+vgui_window *
+vgui_mfc::produce_window(int width, int height, const vgui_menu & menubar, const char * title)
 {
-  vgui_window* a_window = new vgui_mfc_window(width, height, menubar, title);
+  vgui_window * a_window = new vgui_mfc_window(width, height, menubar, title);
   windows_to_delete.push_back(a_window);
   return a_window;
-  //return new vgui_mfc_window(width, height, menubar, title);
+  // return new vgui_mfc_window(width, height, menubar, title);
 }
 
 
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui - creates a new window.
-vgui_window* vgui_mfc::produce_window(int width, int height,
-                                      const char* title)
+vgui_window *
+vgui_mfc::produce_window(int width, int height, const char * title)
 {
-  vgui_window* a_window = new vgui_mfc_window(title, width, height);
+  vgui_window * a_window = new vgui_mfc_window(title, width, height);
   windows_to_delete.push_back(a_window);
   return a_window;
-  //return new vgui_mfc_window(title,width, height);
+  // return new vgui_mfc_window(title,width, height);
 }
 
 
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui - creates a new dialog box.
-vgui_dialog_impl* vgui_mfc::produce_dialog(const char* name)
+vgui_dialog_impl *
+vgui_mfc::produce_dialog(const char * name)
 {
   return new vgui_mfc_dialog_impl(name);
   return 0;
@@ -187,7 +204,8 @@ vgui_dialog_impl* vgui_mfc::produce_dialog(const char* name)
 
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui - creates a new dialog box.
-vgui_dialog_extensions_impl* vgui_mfc::produce_dialog_extension(const char* name)
+vgui_dialog_extensions_impl *
+vgui_mfc::produce_dialog_extension(const char * name)
 {
   return new vgui_mfc_dialog_extensions_impl(name);
   return 0;

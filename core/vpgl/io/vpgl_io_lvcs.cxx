@@ -4,9 +4,11 @@
 #include "vpgl/vpgl_lvcs.h"
 #include <vnl/io/vnl_io_matrix_fixed.h>
 
-void vsl_b_write(vsl_b_ostream & os, vpgl_lvcs const& lvcs)
+void
+vsl_b_write(vsl_b_ostream & os, vpgl_lvcs const & lvcs)
 {
-  if (!os) return;
+  if (!os)
+    return;
   unsigned version = 1;
   vsl_b_write(os, version);
   auto csn = static_cast<unsigned>(lvcs.get_cs_name());
@@ -32,9 +34,11 @@ void vsl_b_write(vsl_b_ostream & os, vpgl_lvcs const& lvcs)
 }
 
 //: Binary load lvcs from stream.
-void vsl_b_read(vsl_b_istream & is, vpgl_lvcs &lvcs)
+void
+vsl_b_read(vsl_b_istream & is, vpgl_lvcs & lvcs)
 {
-  if (!is) return;
+  if (!is)
+    return;
   short ver;
   vsl_b_read(is, ver);
   switch (ver)
@@ -43,7 +47,7 @@ void vsl_b_read(vsl_b_istream & is, vpgl_lvcs &lvcs)
     {
       unsigned cs_name;
       vsl_b_read(is, cs_name);
-      auto name = static_cast<vpgl_lvcs::cs_names>(cs_name);
+      auto   name = static_cast<vpgl_lvcs::cs_names>(cs_name);
       double lat, lon, elev, lat_scale, lon_scale;
       vsl_b_read(is, lat);
       vsl_b_read(is, lon);
@@ -52,45 +56,48 @@ void vsl_b_read(vsl_b_istream & is, vpgl_lvcs &lvcs)
       vsl_b_read(is, lon_scale);
       unsigned gaunit;
       vsl_b_read(is, gaunit);
-      auto geo_angle_unit = static_cast<vpgl_lvcs::AngUnits>(gaunit);
+      auto     geo_angle_unit = static_cast<vpgl_lvcs::AngUnits>(gaunit);
       unsigned lunit;
       vsl_b_read(is, lunit);
-      auto localXYZUnit = static_cast<vpgl_lvcs::LenUnits>(lunit);
+      auto   localXYZUnit = static_cast<vpgl_lvcs::LenUnits>(lunit);
       double lox, loy, theta;
       vsl_b_read(is, lox);
       vsl_b_read(is, loy);
       vsl_b_read(is, theta);
-      vpgl_lvcs temp(lat, lon, elev, name, lat_scale, lon_scale,
-                     geo_angle_unit, localXYZUnit, lox, loy, theta);
+      vpgl_lvcs temp(lat, lon, elev, name, lat_scale, lon_scale, geo_angle_unit, localXYZUnit, lox, loy, theta);
       lvcs = temp;
       break;
     }
     default:
       std::cerr << "I/O ERROR: vpgl_lvcs::b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< ver << '\n';
+                << "           Unknown version number " << ver << '\n';
       is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
 
 //: Print human readable summary of object to a stream
-void vsl_print_summary(std::ostream& os,const vpgl_lvcs & c)
+void
+vsl_print_summary(std::ostream & os, const vpgl_lvcs & c)
 {
   os << c << '\n';
 }
 
 //: Binary save lvcs sptr to stream
-void vsl_b_write(vsl_b_ostream & os, vpgl_lvcs_sptr const& lvcs_sptr)
+void
+vsl_b_write(vsl_b_ostream & os, vpgl_lvcs_sptr const & lvcs_sptr)
 {
-  if (!lvcs_sptr) return;
-  vpgl_lvcs* lvcs = lvcs_sptr.ptr();
+  if (!lvcs_sptr)
+    return;
+  vpgl_lvcs * lvcs = lvcs_sptr.ptr();
   vsl_b_write(os, *lvcs);
 }
 
 //: Binary load lvcs sptr from stream.
-void vsl_b_read(vsl_b_istream & is, vpgl_lvcs_sptr &lvcs_sptr)
+void
+vsl_b_read(vsl_b_istream & is, vpgl_lvcs_sptr & lvcs_sptr)
 {
-  vpgl_lvcs* lvcs = nullptr;
+  vpgl_lvcs * lvcs = nullptr;
   vsl_b_read(is, *lvcs);
   lvcs_sptr = lvcs;
 }

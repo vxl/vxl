@@ -18,8 +18,7 @@
 vgui_wx_statusbar::vgui_wx_statusbar(void)
   : widget_(0)
   , statusbuf_(new vgui_statusbuf(this))
-{
-}
+{}
 
 //: Destructor.
 vgui_wx_statusbar::~vgui_wx_statusbar(void)
@@ -31,7 +30,8 @@ vgui_wx_statusbar::~vgui_wx_statusbar(void)
 // vgui_wx_statusbar implementation.
 //-------------------------------------------------------------------------
 //: Append given text (of given length) to the status bar.
-int vgui_wx_statusbar::write(const char* text, int n)
+int
+vgui_wx_statusbar::write(const char * text, int n)
 {
   if (widget_)
   {
@@ -40,10 +40,13 @@ int vgui_wx_statusbar::write(const char* text, int n)
       if (text[0] == '\n')
       {
         // buffer filled, print to wxStatusBar and reset
-        widget_->SetStatusText(wxString(linebuffer_.c_str(),wxConvUTF8));
+        widget_->SetStatusText(wxString(linebuffer_.c_str(), wxConvUTF8));
         linebuffer_ = "";
       }
-      else { linebuffer_ += text[0]; }
+      else
+      {
+        linebuffer_ += text[0];
+      }
     }
     else
     {
@@ -51,7 +54,7 @@ int vgui_wx_statusbar::write(const char* text, int n)
       if (linebuffer_.find('\n') != std::string::npos)
       {
         // buffer filled, print to wxStatusBar and reset
-        widget_->SetStatusText(wxString(linebuffer_.c_str(),wxConvUTF8));
+        widget_->SetStatusText(wxString(linebuffer_.c_str(), wxConvUTF8));
         linebuffer_ = "";
       }
     }
@@ -60,12 +63,13 @@ int vgui_wx_statusbar::write(const char* text, int n)
 }
 
 //: Append given text to the status bar.
-int vgui_wx_statusbar::write(const char* text)
+int
+vgui_wx_statusbar::write(const char * text)
 {
   if (widget_)
   {
     linebuffer_ = text;
-    widget_->SetStatusText(wxString(linebuffer_.c_str(),wxConvUTF8));
+    widget_->SetStatusText(wxString(linebuffer_.c_str(), wxConvUTF8));
   }
 
   return 1;

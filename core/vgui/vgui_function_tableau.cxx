@@ -18,60 +18,62 @@ vgui_function_tableau::vgui_function_tableau()
   , motion_(nullptr)
   , key_press_(nullptr)
   , help_(nullptr)
-{
-}
+{}
 
 //----------------------------------------------------------------------------
 //: Destructor - called by vgui_function_tableau_sptr.
-vgui_function_tableau::~vgui_function_tableau()
-{
-}
+vgui_function_tableau::~vgui_function_tableau() {}
 
 bool vgui_function_tableau::redraw = false;
 
 //----------------------------------------------------------------------------
 //: Handles all events by passing them to the appropriate functions.
-bool vgui_function_tableau::handle(const vgui_event& event)
+bool
+vgui_function_tableau::handle(const vgui_event & event)
 {
-  if (event.type==vgui_DRAW && draw_)
+  if (event.type == vgui_DRAW && draw_)
   {
     return (*draw_)(event);
   }
-  else if (event.type==vgui_BUTTON_DOWN && mouse_down_)
+  else if (event.type == vgui_BUTTON_DOWN && mouse_down_)
   {
     bool retv = (*mouse_down_)(event);
-    if (redraw) {
+    if (redraw)
+    {
       post_redraw();
       redraw = false;
     }
     return retv;
   }
-  else if (event.type==vgui_BUTTON_UP && mouse_up_)
+  else if (event.type == vgui_BUTTON_UP && mouse_up_)
   {
     bool retv = (*mouse_up_)(event);
-    if (redraw) {
+    if (redraw)
+    {
       post_redraw();
       redraw = false;
     }
     return retv;
   }
-  else if (event.type==vgui_MOTION && motion_)
+  else if (event.type == vgui_MOTION && motion_)
   {
     bool retv = (*motion_)(event);
-    if (redraw) {
+    if (redraw)
+    {
       post_redraw();
       redraw = false;
     }
     return retv;
   }
-  else if (event.type==vgui_KEY_PRESS)
+  else if (event.type == vgui_KEY_PRESS)
   {
     if (event.key == '?' && help_)
       return (*help_)(event);
     else if (key_press_)
     {
       bool retv = (*key_press_)(event);
-      if (redraw) {
+      if (redraw)
+      {
         post_redraw();
         redraw = false;
       }
@@ -81,46 +83,68 @@ bool vgui_function_tableau::handle(const vgui_event& event)
   return false;
 }
 
-bool vgui_function_tableau::draw()
+bool
+vgui_function_tableau::draw()
 {
-  if (!draw_) return false;
+  if (!draw_)
+    return false;
   return (*draw_)(vgui_event(vgui_DRAW));
 }
 
-bool vgui_function_tableau::mouse_up(int x, int y, vgui_button b, vgui_modifier m)
+bool
+vgui_function_tableau::mouse_up(int x, int y, vgui_button b, vgui_modifier m)
 {
-  if (!mouse_up_) return false;
+  if (!mouse_up_)
+    return false;
   vgui_event e(vgui_BUTTON_UP);
-  e.button=b; e.modifier=m; e.wx=x; e.wy=y;
+  e.button = b;
+  e.modifier = m;
+  e.wx = x;
+  e.wy = y;
   return (*mouse_up_)(e);
 }
 
-bool vgui_function_tableau::mouse_down(int x, int y, vgui_button b, vgui_modifier m)
+bool
+vgui_function_tableau::mouse_down(int x, int y, vgui_button b, vgui_modifier m)
 {
-  if (!mouse_down_) return false;
+  if (!mouse_down_)
+    return false;
   vgui_event e(vgui_BUTTON_DOWN);
-  e.button=b; e.modifier=m; e.wx=x; e.wy=y;
+  e.button = b;
+  e.modifier = m;
+  e.wx = x;
+  e.wy = y;
   return (*mouse_down_)(e);
 }
 
-bool vgui_function_tableau::motion(int x, int y)
+bool
+vgui_function_tableau::motion(int x, int y)
 {
-  if (!motion_) return false;
+  if (!motion_)
+    return false;
   vgui_event e(vgui_MOTION);
-  e.wx=x; e.wy=y;
+  e.wx = x;
+  e.wy = y;
   return (*motion_)(e);
 }
 
-bool vgui_function_tableau::key_press(int x, int y, vgui_key k, vgui_modifier m)
+bool
+vgui_function_tableau::key_press(int x, int y, vgui_key k, vgui_modifier m)
 {
-  if (!key_press_) return false;
+  if (!key_press_)
+    return false;
   vgui_event e(vgui_KEY_PRESS);
-  e.wx=x; e.wy=y; e.key=k; e.modifier=m;
+  e.wx = x;
+  e.wy = y;
+  e.key = k;
+  e.modifier = m;
   return (*key_press_)(e);
 }
 
-bool vgui_function_tableau::help()
+bool
+vgui_function_tableau::help()
 {
-  if (!help_) return false;
+  if (!help_)
+    return false;
   return (*help_)(vgui_event(vgui_KEY_PRESS));
 }

@@ -8,15 +8,16 @@
 #include "testlib/testlib_test.h"
 #include "vpl/vpl.h"
 
-void test_line_segment_3d_double_io()
+void
+test_line_segment_3d_double_io()
 {
   std::cout << "**************************************\n"
-           << "Testing vgl_line_segment_3d<double> io\n"
-           << "**************************************\n";
+            << "Testing vgl_line_segment_3d<double> io\n"
+            << "**************************************\n";
 
-  vgl_point_3d<double> end0(1.2,3.4, 5.6);
-  vgl_point_3d<double> end1(5.6,7.8, 8.9);
-  vgl_line_segment_3d<double> p_out(end0,end1), p_in;
+  vgl_point_3d<double>        end0(1.2, 3.4, 5.6);
+  vgl_point_3d<double>        end1(5.6, 7.8, 8.9);
+  vgl_line_segment_3d<double> p_out(end0, end1), p_in;
 
   vsl_b_ofstream bfs_out("vgl_line_segment_3d_test_double_io.bvl.tmp");
   TEST("Created vgl_line_segment_3d_test_double_io.bvl.tmp for writing", (!bfs_out), false);
@@ -29,17 +30,17 @@ void test_line_segment_3d_double_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vgl_line_segment_3d_test_double_io.bvl.tmp");
+  vpl_unlink("vgl_line_segment_3d_test_double_io.bvl.tmp");
 
-  TEST("p_out == p_in", p_out.point1() == p_in.point1() &&
-                        p_out.point2() == p_in.point2(), true);
+  TEST("p_out == p_in", p_out.point1() == p_in.point1() && p_out.point2() == p_in.point2(), true);
 
   vsl_print_summary(std::cout, p_out);
   std::cout << std::endl;
   vsl_indent_clear_all_data();
 }
 
-void test_line_segment_3d_io()
+void
+test_line_segment_3d_io()
 {
   test_line_segment_3d_double_io();
 }

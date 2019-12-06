@@ -14,8 +14,8 @@
 // Default Constructor
 //
 
-vgui_dialog_extensions::vgui_dialog_extensions(const char* name)
-: vgui_dialog()
+vgui_dialog_extensions::vgui_dialog_extensions(const char * name)
+  : vgui_dialog()
 {
   impl = vgui::produce_extension_dialog(name);
 }
@@ -24,30 +24,36 @@ vgui_dialog_extensions::vgui_dialog_extensions(const char* name)
 vgui_dialog_extensions::~vgui_dialog_extensions()
 {
   delete impl;
-  impl = nullptr;//so base class doesn't crash
+  impl = nullptr; // so base class doesn't crash
 }
 
-bool vgui_dialog_extensions::ask()
+bool
+vgui_dialog_extensions::ask()
 {
-  if (impl) {
-    vgui_dialog_extensions_impl* my_impl = static_cast<vgui_dialog_extensions_impl*> (impl);
+  if (impl)
+  {
+    vgui_dialog_extensions_impl * my_impl = static_cast<vgui_dialog_extensions_impl *>(impl);
     return my_impl->ask();
   }
   return false;
 }
 
-void vgui_dialog_extensions::dir(const char* label, std::string& regexp, std::string& v)
+void
+vgui_dialog_extensions::dir(const char * label, std::string & regexp, std::string & v)
 {
-  if (impl) {
-    vgui_dialog_extensions_impl* my_impl = static_cast<vgui_dialog_extensions_impl*> (impl);
+  if (impl)
+  {
+    vgui_dialog_extensions_impl * my_impl = static_cast<vgui_dialog_extensions_impl *>(impl);
     my_impl->dir_browser(label, regexp, v);
   }
 }
 
-void vgui_dialog_extensions::line_break()
+void
+vgui_dialog_extensions::line_break()
 {
-   if (impl) {
-    vgui_dialog_extensions_impl* my_impl = static_cast<vgui_dialog_extensions_impl*> (impl);
+  if (impl)
+  {
+    vgui_dialog_extensions_impl * my_impl = static_cast<vgui_dialog_extensions_impl *>(impl);
     my_impl->line_break();
-   }
+  }
 }
