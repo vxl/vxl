@@ -18,13 +18,13 @@
 #include "vxl_config.h"
 #include "vnl_drand48.h"
 
-static constexpr unsigned short	RAND48_SEED_0 = 0x330e;
-static constexpr unsigned short	RAND48_SEED_1	= 0xabcd;
-static constexpr unsigned short	RAND48_SEED_2	= 0x1234;
-static constexpr unsigned short	RAND48_MULT_0	= 0xe66d;
-static constexpr unsigned short	RAND48_MULT_1	= 0xdeec;
-static constexpr unsigned short	RAND48_MULT_2	= 0x0005;
-static constexpr unsigned short	RAND48_ADD	  = 0x000b;
+static constexpr std::uint16_t	RAND48_SEED_0 = 0x330e;
+static constexpr std::uint16_t	RAND48_SEED_1	= 0xabcd;
+static constexpr std::uint16_t	RAND48_SEED_2	= 0x1234;
+static constexpr std::uint16_t	RAND48_MULT_0	= 0xe66d;
+static constexpr std::uint16_t	RAND48_MULT_1	= 0xdeec;
+static constexpr std::uint16_t	RAND48_MULT_2	= 0x0005;
+static constexpr std::uint16_t	RAND48_ADD	  = 0x000b;
 
 //===== local_ldexp.c ===
 /* Bit fiddling routines copied from msun/src/math_private.h,v 1.15 */
@@ -127,47 +127,46 @@ local_ldexp(double x, int n)
 
 // ^^^^^ local_ldexp.c ^^^^
 
-static unsigned short _rand48_seed[3] = {
+static std::uint16_t _rand48_seed[3] = {
 		RAND48_SEED_0,
 		RAND48_SEED_1,
 		RAND48_SEED_2
 };
-static unsigned short _rand48_mult[3] = {
+static std::uint16_t _rand48_mult[3] = {
 		RAND48_MULT_0,
 		RAND48_MULT_1,
 		RAND48_MULT_2
 };
-static unsigned short _rand48_add = RAND48_ADD;
+static std::uint16_t _rand48_add = RAND48_ADD;
 
 static void
-_dorand48(unsigned short xseed[3])
+_dorand48(std::uint16_t xseed[3])
 {
-	unsigned long accu;
-	unsigned short temp[2];
+	std::uint16_t temp[2];
 
-	accu = (unsigned long) _rand48_mult[0] * (unsigned long) xseed[0] +
-				 (unsigned long) _rand48_add;
-	temp[0] = (unsigned short) accu;        /* lower 16 bits */
-	accu >>= sizeof(unsigned short) * 8;
-	accu += (unsigned long) _rand48_mult[0] * (unsigned long) xseed[1] +
-					(unsigned long) _rand48_mult[1] * (unsigned long) xseed[0];
-	temp[1] = (unsigned short) accu;        /* middle 16 bits */
-	accu >>= sizeof(unsigned short) * 8;
-	accu += (unsigned long)_rand48_mult[0] * (unsigned long)xseed[2] +
-					(unsigned long)_rand48_mult[1] * (unsigned long)xseed[1] +
-					(unsigned long)_rand48_mult[2] * (unsigned long)xseed[0];
+	std::uint32_t accu = std::uint32_t{_rand48_mult[0]} * std::uint32_t{xseed[0]} +
+				 std::uint32_t{_rand48_add};
+	temp[0] = static_cast<std::uint16_t>( accu );        /* lower 16 bits */
+	accu >>= sizeof( std::uint16_t ) * 8;
+	accu += std::uint32_t{_rand48_mult[0]} * std::uint32_t{xseed[1]} +
+					std::uint32_t{_rand48_mult[1]} * std::uint32_t{xseed[0]};
+	temp[1] = static_cast<std::uint16_t>( accu );        /* middle 16 bits */
+	accu >>= sizeof( std::uint16_t ) * 8;
+	accu += std::uint32_t{_rand48_mult[0]} * std::uint32_t{xseed[2]} +
+					std::uint32_t{_rand48_mult[1]} * std::uint32_t{xseed[1]} +
+					std::uint32_t{_rand48_mult[2]} * std::uint32_t{xseed[0]};
 	xseed[0] = temp[0];
 	xseed[1] = temp[1];
-	xseed[2] = (unsigned short) accu;
+	xseed[2] = static_cast<std::uint16_t>( accu );
 }
 
 static double
-local_erand48(unsigned short xseed[3])
+local_erand48(std::uint16_t xseed[3])
 {
 	_dorand48(xseed);
-	return local_ldexp((double) xseed[0], -48) +
-				 local_ldexp((double) xseed[1], -32) +
-				 local_ldexp((double) xseed[2], -16);
+	return local_ldexp(static_cast<double>( xseed[0] ), -48) +
+				 local_ldexp(static_cast<double>( xseed[1] ), -32) +
+				 local_ldexp(static_cast<double>( xseed[2] ), -16);
 }
 
 //======================================================================================
@@ -180,8 +179,8 @@ double vnl_drand48()
 void vnl_srand48(long seed)
 {
   _rand48_seed[0] = RAND48_SEED_0;
-  _rand48_seed[1] = (unsigned short) seed;
-  _rand48_seed[2] = (unsigned short) (seed >> 16);
+  _rand48_seed[1] = static_cast<std::uint16_t>( seed );
+  _rand48_seed[2] = static_cast<std::uint16_t>( (seed >> 16) );
   _rand48_mult[0] = RAND48_MULT_0;
   _rand48_mult[1] = RAND48_MULT_1;
   _rand48_mult[2] = RAND48_MULT_2;
