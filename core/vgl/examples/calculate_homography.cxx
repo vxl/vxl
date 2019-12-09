@@ -58,7 +58,7 @@ main(int argc, char ** argv)
   easy2D->add_line(0, 0, float(centre_pointA.x()), float(centre_pointA.y()));
 
   // rotation and translation
-  double                  angle = -vnl_math::pi_over_180 * 20;
+  double angle = -vnl_math::pi_over_180 * 20;
   vgl_h_matrix_2d<double> H;
   H.set_identity().set_translation(100.0, 20.0).set_rotation(angle);
 
@@ -88,7 +88,7 @@ main(int argc, char ** argv)
 
   // compute the homography between set A and set B
   vgl_h_matrix_2d_compute_linear hcl;
-  vgl_h_matrix_2d<double>        H_comp = hcl.compute(pointsA, pointsB);
+  vgl_h_matrix_2d<double> H_comp = hcl.compute(pointsA, pointsB);
 
   // translate and rotate the centre of gravity of set A using the computed homography H_comp
   vgl_homg_point_2d<double> centre_pointB = H_comp * centre_pointA;
@@ -103,6 +103,6 @@ main(int argc, char ** argv)
   easy2D->add_line(0, 0, float(centre_pointB.x()), float(centre_pointB.y()));
 
   vgui_viewer2D_tableau_new viewer(easy2D);
-  vgui_shell_tableau_new    shell(viewer);
+  vgui_shell_tableau_new shell(viewer);
   return vgui::run(shell, 512, 512);
 }

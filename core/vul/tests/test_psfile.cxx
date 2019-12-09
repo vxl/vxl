@@ -66,7 +66,7 @@ static void
 test_psfile_grey_portrait()
 {
   std::string filename = vul_temp_filename() + ".ps";
-  vul_psfile  f(filename.c_str(), true);
+  vul_psfile f(filename.c_str(), true);
   TEST("temp file", bool(f), true);
 
   f.set_paper_type(vul_psfile::A4);
@@ -94,7 +94,7 @@ static void
 test_psfile_colour_portrait()
 {
   std::string filename = vul_temp_filename() + ".ps";
-  vul_psfile  f(filename.c_str(), true);
+  vul_psfile f(filename.c_str(), true);
   TEST("temp file", bool(f), true);
 
   f.set_paper_type(vul_psfile::A3);
@@ -120,7 +120,7 @@ static void
 test_psfile_geometry_portrait()
 {
   std::string filename = vul_temp_filename() + ".ps";
-  vul_psfile  f(filename.c_str(), true);
+  vul_psfile f(filename.c_str(), true);
   TEST("temp file", bool(f), true);
 
   f.set_paper_type(vul_psfile::ELEVEN_BY_SEVENTEEN);
@@ -146,7 +146,7 @@ static void
 test_psfile_grey_landscape()
 {
   std::string filename = vul_temp_filename() + ".ps";
-  vul_psfile  f(filename.c_str(), true);
+  vul_psfile f(filename.c_str(), true);
   TEST("temp file", bool(f), true);
 
   f.set_paper_type(vul_psfile::US_NORMAL);
@@ -175,7 +175,7 @@ static void
 test_psfile_colour_landscape()
 {
   std::string filename = vul_temp_filename() + ".ps";
-  vul_psfile  f(filename.c_str(), true);
+  vul_psfile f(filename.c_str(), true);
   TEST("temp file", bool(f), true);
 
   f.set_paper_type(vul_psfile::B5);
@@ -201,7 +201,7 @@ static void
 test_psfile_geometry_landscape()
 {
   std::string filename = vul_temp_filename() + ".ps";
-  vul_psfile  f(filename.c_str(), true);
+  vul_psfile f(filename.c_str(), true);
   TEST("temp file", bool(f), true);
 
   f.set_paper_type(vul_psfile::US_LEGAL);
@@ -229,7 +229,7 @@ static void
 test_psfile_combined()
 {
   std::string filename = vul_temp_filename() + ".ps";
-  vul_psfile  f(filename.c_str(), true);
+  vul_psfile f(filename.c_str(), true);
   TEST("temp file", bool(f), true);
 
   write_greyscale(f);

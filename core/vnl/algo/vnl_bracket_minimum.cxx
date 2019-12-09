@@ -23,7 +23,7 @@ swap(double & a, double & b)
 
 class vnl_bm_func
 {
-  vnl_vector<double>  v;
+  vnl_vector<double> v;
   vnl_cost_function * f;
 
 public:

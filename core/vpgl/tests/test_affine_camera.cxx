@@ -12,19 +12,19 @@ static void
 test_affine_camera()
 {
   // Test construction from ray and point
-  const double               sq2 = vnl_math::sqrt1_2;
-  const double               sq3 = vnl_math::sqrt1_3;
-  vgl_vector_3d<double>      ray(-sq3, -sq3, -sq3);
-  vgl_vector_3d<double>      up(0, 0, 1);
-  vgl_point_3d<double>       p(0.5, 0.5, 0.0);
-  double                     u0 = 50.0, v0 = 50.0;
-  double                     du = 1.0, dv = 1.0;
+  const double sq2 = vnl_math::sqrt1_2;
+  const double sq3 = vnl_math::sqrt1_3;
+  vgl_vector_3d<double> ray(-sq3, -sq3, -sq3);
+  vgl_vector_3d<double> up(0, 0, 1);
+  vgl_point_3d<double> p(0.5, 0.5, 0.0);
+  double u0 = 50.0, v0 = 50.0;
+  double du = 1.0, dv = 1.0;
   vpgl_affine_camera<double> C(ray, up, p, u0, v0, du, dv);
-  double                     u00 = 0, v00 = 0;
-  double                     u1 = 0, v1 = 0, u2 = 0, v2 = 0, u3 = 0, v3 = 0;
-  double                     x1 = p.x() - 0.5, y1 = p.y() - 0.5, z1 = 0;
-  double                     x2 = x1 + 1.0, y2 = y1, z2 = z1;
-  double                     x3 = x1, y3 = y1 + 1, z3 = z1;
+  double u00 = 0, v00 = 0;
+  double u1 = 0, v1 = 0, u2 = 0, v2 = 0, u3 = 0, v3 = 0;
+  double x1 = p.x() - 0.5, y1 = p.y() - 0.5, z1 = 0;
+  double x2 = x1 + 1.0, y2 = y1, z2 = z1;
+  double x3 = x1, y3 = y1 + 1, z3 = z1;
   C.project(p.x(), p.y(), p.z(), u00, v00);
   TEST_NEAR("test center projection", u00 + v00, 100, 1e-5);
   C.project(x1, y1, z1, u1, v1);
@@ -34,16 +34,16 @@ test_affine_camera()
   vgl_homg_point_2d<double> p0(u0, v0);
   C.set_viewing_distance(1000);
   vgl_homg_point_3d<double> cam_center = C.camera_center();
-  vgl_vector_3d<double>     cc_dir(cam_center.x(), cam_center.y(), cam_center.z());
-  double                    len = (ray - cc_dir).length();
+  vgl_vector_3d<double> cc_dir(cam_center.x(), cam_center.y(), cam_center.z());
+  double len = (ray - cc_dir).length();
   TEST_NEAR("Camera center", len, 0.0, 1e-8);
   vgl_homg_line_3d_2_points<double> l3d = C.backproject(p0);
-  vgl_homg_point_3d<double>         hpf = l3d.point_finite();
-  vgl_point_3d<double>              pf(hpf);
+  vgl_homg_point_3d<double> hpf = l3d.point_finite();
+  vgl_point_3d<double> pf(hpf);
   len = (pf - vgl_point_3d<double>(1000 * sq3, 1000 * sq3, 1000 * sq3)).length();
   TEST_NEAR("Backproject", len, 0.0, 1.0);
   vgl_homg_plane_3d<double> pp = C.principal_plane();
-  double                    algd = (pp.a() + pp.b() + pp.c()) * 1000 * sq3 + pp.d();
+  double algd = (pp.a() + pp.b() + pp.c()) * 1000 * sq3 + pp.d();
   TEST_NEAR("principal plane", algd, 0.0, 1e-08);
 
   // test realistic affine camera
@@ -64,19 +64,19 @@ test_affine_camera()
   vgl_vector_3d<double> test_dir(0.13271023792536230, 0.74172901339587183, -0.65743901879686173);
   TEST_NEAR("row ray dir", (row_ray_dir - test_dir).length(), 0.0, 1e-5);
 
-  vgl_point_3d<double>      wrld_pt(274.30804459155252, 85.614875071463018, -35.273309156122778);
+  vgl_point_3d<double> wrld_pt(274.30804459155252, 85.614875071463018, -35.273309156122778);
   vgl_homg_point_2d<double> img_pt(369.28342202880049, 554.72813713086771);
-  vgl_ray_3d<double>        row_ray = row_cam.backproject_ray(img_pt);
-  double                    ray_dist = vgl_distance(row_ray, wrld_pt);
+  vgl_ray_3d<double> row_ray = row_cam.backproject_ray(img_pt);
+  double ray_dist = vgl_distance(row_ray, wrld_pt);
   TEST_NEAR("row_ray_dist", ray_dist, 0.0, 0.05);
 
   // test postmultiply with a translation
-  vgl_vector_3d<double>      trans(3.0, -10.0, 5.0);
+  vgl_vector_3d<double> trans(3.0, -10.0, 5.0);
   vpgl_affine_camera<double> trans_row_cam = postmultiply_a(row_cam, trans);
-  vgl_homg_point_2d<double>  hpt = trans_row_cam.project(vgl_point_3d<double>(0, 0, 0));
-  vgl_point_2d<double>       pt(hpt);
-  vgl_point_2d<double>       test_pt(14.24918434, 543.8458145);
-  double                     pdist = (pt - test_pt).length();
+  vgl_homg_point_2d<double> hpt = trans_row_cam.project(vgl_point_3d<double>(0, 0, 0));
+  vgl_point_2d<double> pt(hpt);
+  vgl_point_2d<double> test_pt(14.24918434, 543.8458145);
+  double pdist = (pt - test_pt).length();
   TEST_NEAR("postmultiply translation", pdist, 0.0, 0.0001);
 }
 

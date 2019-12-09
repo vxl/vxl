@@ -46,12 +46,12 @@ wxSliderPanel::wxSliderPanel()
 }
 
 //: Constructor
-wxSliderPanel::wxSliderPanel(wxWindow *       parent,
-                             wxWindowID       id,
-                             wxWindowID       base_id,
-                             const wxPoint &  pos,
-                             const wxSize &   size,
-                             long             style,
+wxSliderPanel::wxSliderPanel(wxWindow * parent,
+                             wxWindowID id,
+                             wxWindowID base_id,
+                             const wxPoint & pos,
+                             const wxSize & size,
+                             long style,
                              const wxString & name)
   : send_messages_(true)
 {
@@ -62,12 +62,12 @@ wxSliderPanel::wxSliderPanel(wxWindow *       parent,
 
 //: Creator
 bool
-wxSliderPanel::Create(wxWindow *       parent,
-                      wxWindowID       id,
-                      wxWindowID       base_id,
-                      const wxPoint &  pos,
-                      const wxSize &   size,
-                      long             style,
+wxSliderPanel::Create(wxWindow * parent,
+                      wxWindowID id,
+                      wxWindowID base_id,
+                      const wxPoint & pos,
+                      const wxSize & size,
+                      long style,
                       const wxString & name)
 {
   base_id_ = base_id;
@@ -117,7 +117,7 @@ wxSliderPanel::CreateControls()
       new wxStaticText(this, wxID_STATIC, wxString::Format(wxT("%u"), i + 1), wxDefaultPosition, wxDefaultSize, 0);
     itemFlexGridSizer->Add(itemLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_TOP | wxLEFT, 3);
 
-    int        pos = val_to_sp(i, vals_[i]);
+    int pos = val_to_sp(i, vals_[i]);
     wxSlider * itemSlider =
       new wxSlider(this, base_id_ + 2 * i, pos, 0, 1000, wxDefaultPosition, wxSize(100, -1), wxSL_HORIZONTAL);
     itemFlexGridSizer->Add(itemSlider, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxLEFT, 3);
@@ -187,16 +187,16 @@ wxSliderPanel::GetWidgets(const wxEvent & event, wxSlider *& slider, wxTextCtrl 
 void
 wxSliderPanel::OnSliderTrack(wxScrollEvent & event)
 {
-  wxSlider *   slider;
+  wxSlider * slider;
   wxTextCtrl * text;
-  int          idx = GetWidgets(event, slider, text);
+  int idx = GetWidgets(event, slider, text);
   if (!slider || !text)
   {
     event.Skip();
     return;
   }
 
-  int    spos = event.GetInt();
+  int spos = event.GetInt();
   double val = sp_to_val(idx, spos);
   text->SetValue(wxString::Format(wxT("%g"), val));
 }
@@ -205,9 +205,9 @@ wxSliderPanel::OnSliderTrack(wxScrollEvent & event)
 void
 wxSliderPanel::OnSliderChange(wxScrollEvent & event)
 {
-  wxSlider *   slider;
+  wxSlider * slider;
   wxTextCtrl * text;
-  int          idx = GetWidgets(event, slider, text);
+  int idx = GetWidgets(event, slider, text);
   if (!slider || !text)
   {
     event.Skip();
@@ -229,9 +229,9 @@ wxSliderPanel::OnSliderChange(wxScrollEvent & event)
 void
 wxSliderPanel::OnChangeText(wxCommandEvent & event)
 {
-  wxSlider *   slider;
+  wxSlider * slider;
   wxTextCtrl * text;
-  int          idx = GetWidgets(event, slider, text);
+  int idx = GetWidgets(event, slider, text);
   if (!slider || !text)
   {
     event.Skip();
@@ -258,9 +258,9 @@ wxSliderPanel::OnChangeText(wxCommandEvent & event)
 void
 wxSliderPanel::OnEnterText(wxCommandEvent & event)
 {
-  wxSlider *   slider;
+  wxSlider * slider;
   wxTextCtrl * text;
-  int          idx = GetWidgets(event, slider, text);
+  int idx = GetWidgets(event, slider, text);
   if (!slider || !text)
   {
     event.Skip();
@@ -293,7 +293,7 @@ void
 wxSliderPanel::update_data(unsigned int i, double val, bool send_messages)
 {
   vals_[i] = val;
-  int          id = base_id_ + 2 * i + 1; // id of text control
+  int id = base_id_ + 2 * i + 1; // id of text control
   wxTextCtrl * text = dynamic_cast<wxTextCtrl *>(FindWindowById(id));
 
   // optionally disable sending messages about this update

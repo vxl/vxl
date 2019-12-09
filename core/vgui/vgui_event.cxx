@@ -32,7 +32,7 @@ vgui_event::init()
   {
     static int secs_0 = -1;
     static int msecs_0 = -1;
-    int        secs_now, msecs_now;
+    int secs_now, msecs_now;
     vul_get_timestamp(secs_now, msecs_now);
     if (secs_0 == -1 && msecs_0 == -1)
       secs_0 = secs_now, msecs_0 = msecs_now;
@@ -96,7 +96,7 @@ vgui_event::usecs_since(vgui_event const & e) const
 static struct
 {
   vgui_event_type t;
-  char const *    name;
+  char const * name;
 } fsm_event_table[] = {
 #if defined(macro)
 #  error blah

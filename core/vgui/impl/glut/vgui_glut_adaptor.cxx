@@ -720,12 +720,12 @@ vgui_glut_adaptor::bind_popups(vgui_modifier mod, vgui_button but)
 struct vgui_glut_adaptor_callback_data
 {
   vgui_glut_adaptor * org;
-  int                 val;
+  int val;
 };
 
 typedef std::pair<void *, int> pair_Pv_i;
-typedef std::list<pair_Pv_i>   list_Pv_i;
-static list_Pv_i *             timer_posts = nullptr;
+typedef std::list<pair_Pv_i> list_Pv_i;
+static list_Pv_i * timer_posts = nullptr;
 
 //: timeout is in milliseconds
 void

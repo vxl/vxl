@@ -27,7 +27,7 @@ vnl_real_eigensystem::vnl_real_eigensystem(vnl_matrix<double> const & M)
 
   vnl_vector<double> wr(n);
   vnl_vector<double> wi(n);
-  vnl_vector<long>   iv1(n);
+  vnl_vector<long> iv1(n);
   vnl_vector<double> fv1(n);
   vnl_matrix<double> devout(n, n);
 

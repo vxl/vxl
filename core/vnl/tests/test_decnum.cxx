@@ -135,7 +135,7 @@ run_constructor_tests()
     TEST("vnl_decnum b(\"-123e+4\");", b, -1230000L);
   }
   {
-    vnl_decnum        b("-1e120");
+    vnl_decnum b("-1e120");
     std::stringstream s;
     s << b << ' ';
     // verify that b outputs as  "-1e120"
@@ -209,42 +209,42 @@ run_constructor_tests()
   std::cout << "reading from istream:\n";
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_decnum        b;
+    vnl_decnum b;
     is << "+1";
     is >> b;
     TEST("\"+1\" >> b;", b, 1L);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_decnum        b;
+    vnl_decnum b;
     is << "-1";
     is >> b;
     TEST("\"-1\" >> b;", b, -1L);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_decnum        b;
+    vnl_decnum b;
     is << "123";
     is >> b;
     TEST("\"123\" >> b;", b, 123L);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_decnum        b;
+    vnl_decnum b;
     is << "123e5";
     is >> b;
     TEST("\"123e5\" >> b;", b, 12300000L);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_decnum        b;
+    vnl_decnum b;
     is << "-123e+4";
     is >> b;
     TEST("\"-123e+4\" >> b;", b, -1230000L);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_decnum        b;
+    vnl_decnum b;
     is << " 9";
     is >> b;
     TEST("\" 9\" >> b;", b, 9L);
@@ -531,7 +531,7 @@ run_addition_subtraction_tests()
 {
   std::cout << "\nStarting addition, subtraction tests:\n";
 
-  long       i, j;
+  long i, j;
   vnl_decnum bi, bj, bij;
 
   {

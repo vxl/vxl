@@ -27,14 +27,14 @@ test_project()
   m[2][2] = 1;
 
   vpgl_calibration_matrix<double> K(m);
-  vgl_rotation_3d<double>         R;
-  vgl_homg_point_3d<double>       center(0, 0, -10.0);
+  vgl_rotation_3d<double> R;
+  vgl_homg_point_3d<double> center(0, 0, -10.0);
   vpgl_perspective_camera<double> P(K, center, R);
   std::cout << "Camera " << P << '\n';
   // construct a 3-d box
   vgl_point_3d<double> pm(-1, -1, -1), pp(1, 1, 1);
-  vgl_box_3d<double>   box_3d(pm, pp);
-  vgl_box_2d<double>   box_2d = vpgl_project::project_bounding_box(P, box_3d);
+  vgl_box_3d<double> box_3d(pm, pp);
+  vgl_box_2d<double> box_2d = vpgl_project::project_bounding_box(P, box_3d);
   std::cout << "Input Box 3d " << box_3d << '\n' << "Output Box 2d " << box_2d << '\n';
   double minx = box_2d.min_x(), act_minx = (512.0 - 2000 / 9.0);
   TEST_NEAR("test bounding box projection", minx, act_minx, 1e-09);

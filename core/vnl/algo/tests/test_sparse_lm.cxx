@@ -12,7 +12,7 @@
 static void
 normalize(vnl_vector<double> & a, vnl_vector<double> & b)
 {
-  double       x_mean = 0.0, y_mean = 0.0;
+  double x_mean = 0.0, y_mean = 0.0;
   unsigned int num_pts = b.size() / 2;
   for (unsigned int i = 0; i < num_pts; ++i)
   {
@@ -104,19 +104,19 @@ camera_diff(const vnl_vector<double> & a1, const vnl_vector<double> & a2)
 class bundle_2d : public vnl_sparse_lst_sqr_function
 {
 public:
-  bundle_2d(unsigned int                           num_cam,
-            unsigned int                           num_pts,
-            const vnl_vector<double> &             data,
+  bundle_2d(unsigned int num_cam,
+            unsigned int num_pts,
+            const vnl_vector<double> & data,
             const std::vector<std::vector<bool>> & xmask,
-            UseGradient                            g = use_gradient,
-            UseWeights                             w = no_weights)
+            UseGradient g = use_gradient,
+            UseWeights w = no_weights)
     : vnl_sparse_lst_sqr_function(num_cam, 3, num_pts, 2, 0, xmask, 1, g, w)
     , data_(data)
   {}
 
   void
-  fij(int                        i,
-      int                        j,
+  fij(int i,
+      int j,
       vnl_vector<double> const & ai,
       vnl_vector<double> const & bj,
       vnl_vector<double> const & /*c*/,
@@ -177,7 +177,7 @@ public:
 void
 test_prob1()
 {
-  std::vector<bool>              null_row(25, true);
+  std::vector<bool> null_row(25, true);
   std::vector<std::vector<bool>> mask(4, null_row);
 
   const double a_data[] = { 0.0, 0.0, 0.0, 0.8, 10.0, 8.0, -0.7, -8.5, 8.5, 0.4, 4.0, 4.0 };
@@ -252,7 +252,7 @@ test_prob1()
   mask[2][12] = false;
 
   // create a subset of projections based on the mask
-  vnl_crs_index      crs(mask);
+  vnl_crs_index crs(mask);
   vnl_vector<double> proj2(crs.num_non_zero());
   for (int i = 0; i < crs.num_rows(); ++i)
   {
@@ -341,22 +341,22 @@ test_prob1()
 class bundle_2d_shared : public vnl_sparse_lst_sqr_function
 {
 public:
-  bundle_2d_shared(unsigned int                           num_cam,
-                   unsigned int                           num_pts,
-                   const vnl_vector<double> &             data,
+  bundle_2d_shared(unsigned int num_cam,
+                   unsigned int num_pts,
+                   const vnl_vector<double> & data,
                    const std::vector<std::vector<bool>> & xmask,
-                   UseGradient                            g = use_gradient)
+                   UseGradient g = use_gradient)
     : vnl_sparse_lst_sqr_function(num_cam, 3, num_pts, 2, 1, xmask, 1, g)
     , data_(data)
   {}
 
   void
-  fij(int                        i,
-      int                        j,
+  fij(int i,
+      int j,
       vnl_vector<double> const & ai,
       vnl_vector<double> const & bj,
       vnl_vector<double> const & c,
-      vnl_vector<double> &       fxij) override
+      vnl_vector<double> & fxij) override
   {
     double sa = std::sin(ai[0]);
     double ca = std::cos(ai[0]);
@@ -370,7 +370,7 @@ public:
           vnl_vector<double> const & ai,
           vnl_vector<double> const & bj,
           vnl_vector<double> const & c,
-          vnl_matrix<double> &       Aij) override
+          vnl_matrix<double> & Aij) override
   {
     double sa = std::sin(ai[0]);
     double ca = std::cos(ai[0]);
@@ -388,7 +388,7 @@ public:
           vnl_vector<double> const & ai,
           vnl_vector<double> const & bj,
           vnl_vector<double> const & c,
-          vnl_matrix<double> &       Bij) override
+          vnl_matrix<double> & Bij) override
   {
     double sa = std::sin(ai[0]);
     double ca = std::cos(ai[0]);
@@ -419,7 +419,7 @@ public:
 void
 test_prob2()
 {
-  std::vector<bool>              null_row(25, true);
+  std::vector<bool> null_row(25, true);
   std::vector<std::vector<bool>> mask(4, null_row);
 
   const double a_data[] = { 0.0, 0.0, 0.0, 0.8, 10.0, 8.0, -0.7, -8.5, 8.5, 0.4, 4.0, 4.0 };
@@ -488,7 +488,7 @@ test_prob2()
   mask[2][12] = false;
 
   // create a subset of projections based on the mask
-  vnl_crs_index      crs(mask);
+  vnl_crs_index crs(mask);
   vnl_vector<double> proj2(crs.num_non_zero());
   for (int i = 0; i < crs.num_rows(); ++i)
   {
@@ -577,11 +577,11 @@ test_prob2()
 class bundle_2d_robust : public bundle_2d
 {
 public:
-  bundle_2d_robust(unsigned int                           num_cam,
-                   unsigned int                           num_pts,
-                   const vnl_vector<double> &             data,
+  bundle_2d_robust(unsigned int num_cam,
+                   unsigned int num_pts,
+                   const vnl_vector<double> & data,
                    const std::vector<std::vector<bool>> & xmask,
-                   UseGradient                            g = use_gradient)
+                   UseGradient g = use_gradient)
     : bundle_2d(num_cam, num_pts, data, xmask, g, use_weights)
     , scale2_(1.0)
   {}
@@ -599,7 +599,7 @@ public:
                     vnl_vector<double> const & /*bj*/,
                     vnl_vector<double> const & /*c*/,
                     vnl_vector<double> const & fij,
-                    double &                   weight) override
+                    double & weight) override
   {
     int k = residual_indices_(i, j);
     assert(k >= 0);
@@ -647,7 +647,7 @@ public:
 void
 test_prob3()
 {
-  std::vector<bool>              null_row(25, true);
+  std::vector<bool> null_row(25, true);
   std::vector<std::vector<bool>> mask(4, null_row);
 
   const double a_data[] = { 0.0, 0.0, 0.0, 0.8, 10.0, 8.0, -0.7, -8.5, 8.5, 0.4, 4.0, 4.0 };
@@ -661,8 +661,8 @@ test_prob3()
 
   // initial perturbed parameters, add random gaussian noise
   vnl_vector<double> init_a(a_data, 12), init_b(b_data, 50);
-  double             sigma_pos = 1.0, sigma_ang = 0.1;
-  vnl_random         rnd(1234);
+  double sigma_pos = 1.0, sigma_ang = 0.1;
+  vnl_random rnd(1234);
   for (unsigned i = 0; i < init_a.size() / 3; ++i)
   {
     init_a[3 * i] += rnd.normal() * sigma_ang;
@@ -760,7 +760,7 @@ test_prob3()
   proj[33] -= 20.0;
 
   // create a subset of projections based on the mask
-  vnl_crs_index      crs(mask);
+  vnl_crs_index crs(mask);
   vnl_vector<double> proj2(crs.num_non_zero());
   for (int i = 0; i < crs.num_rows(); ++i)
   {

@@ -317,9 +317,9 @@ vgui_grid_tableau::cell_bounding_box(unsigned col, unsigned row, float & xmin, f
   if (col >= nb_cols || row >= nb_rows)
     return false;
   vgui_poly_tableau_vp_sc_snapshot snap;
-  float                            x0 = snap.vp[0], y0 = snap.vp[1];
-  float                            w = snap.vp[2], h = snap.vp[3];
-  float                            dx = w / nb_cols, dy = h / nb_rows;
+  float x0 = snap.vp[0], y0 = snap.vp[1];
+  float w = snap.vp[2], h = snap.vp[3];
+  float dx = w / nb_cols, dy = h / nb_rows;
   xmin = x0 + col * dx;
   ymin = y0 + row * dy;
   xmax = xmin + dx;

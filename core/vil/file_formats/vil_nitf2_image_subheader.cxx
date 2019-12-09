@@ -261,7 +261,7 @@ vil_nitf2_image_subheader::add_shared_field_defs_3(vil_nitf2_field_definitions *
 }
 
 void
-vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions *                  defs,
+vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions * defs,
                                               const vil_nitf2_classification::file_version & version)
 {
   switch (version)
@@ -478,7 +478,7 @@ bool
 vil_nitf2_image_subheader::get_date_time(int & year, int & month, int & day, int & hour, int & min, int & sec)
 {
   std::string date_time = "";
-  bool        success = this->get_property("IDATIM", date_time);
+  bool success = this->get_property("IDATIM", date_time);
   if (!success)
   {
     std::cout << "IDATIM Property failed in vil_nitf2_image_subheader\n";
@@ -498,7 +498,7 @@ vil_nitf2_image_subheader::get_date_time(int & year, int & month, int & day, int
     s_month = date_time.substr(9, 3);
     s_year = date_time.substr(12, 2);
     std::string months[] = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
-    bool        found = false;
+    bool found = false;
     for (int i = 0; (i < 12) && (!found); ++i)
     {
       if (s_month == months[i])
@@ -663,9 +663,9 @@ vil_nitf2_image_subheader::get_image_type() const
 }
 
 bool
-vil_nitf2_image_subheader::get_lut_info(unsigned int                              band,
-                                        int &                                     n_luts,
-                                        int &                                     ne_lut,
+vil_nitf2_image_subheader::get_lut_info(unsigned int band,
+                                        int & n_luts,
+                                        int & ne_lut,
                                         std::vector<std::vector<unsigned char>> & lut_d) const
 {
   if (!m_field_sequence.get_value("NLUTS", vil_nitf2_index_vector(band), n_luts) ||
@@ -699,7 +699,7 @@ vil_nitf2_image_subheader::get_lut_info(unsigned int                            
 vil_nitf2_field::field_tree *
 vil_nitf2_image_subheader::get_tree(int i) const
 {
-  auto *            t = new vil_nitf2_field::field_tree;
+  auto * t = new vil_nitf2_field::field_tree;
   std::stringstream name_stream;
   name_stream << "Image Subheader";
   if (i > 0)
@@ -811,7 +811,7 @@ bool
 vil_nitf2_image_subheader::get_sun_params(double & sun_el, double & sun_az)
 {
   // Now get the sub-header TRE parameters
-  vil_nitf2_tagged_record_sequence           isxhd_tres;
+  vil_nitf2_tagged_record_sequence isxhd_tres;
   vil_nitf2_tagged_record_sequence::iterator tres_itr;
   this->get_property("IXSHD", isxhd_tres);
 
@@ -1038,7 +1038,7 @@ bool
 vil_nitf2_image_subheader::get_correction_offset(double & u_off, double & v_off)
 {
   // Now get the sub-header TRE parameters
-  vil_nitf2_tagged_record_sequence           isxhd_tres;
+  vil_nitf2_tagged_record_sequence isxhd_tres;
   vil_nitf2_tagged_record_sequence::iterator tres_itr;
   this->get_property("IXSHD", isxhd_tres);
 
@@ -1074,8 +1074,8 @@ vil_nitf2_image_subheader::get_correction_offset(double & u_off, double & v_off)
     }
     else if (type == "STDIDB")
     {
-      int         r_off = 1;
-      int         c_off = 1;
+      int r_off = 1;
+      int c_off = 1;
       std::string temp_off;
       if ((*tres_itr)->get_value("START_ROW", r_off) && (*tres_itr)->get_value("START_COLUMN", temp_off))
       {
@@ -1102,11 +1102,11 @@ bool
 vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
                                           std::string & image_id,
                                           std::string & image_corner_geo_locations,
-                                          double *      rpc_data)
+                                          double * rpc_data)
 {
   // Get image ID and location from main header values
   std::string iid2 = "";
-  bool        success = this->get_property("IID2", iid2);
+  bool success = this->get_property("IID2", iid2);
   if (!success)
   {
     std::cout << "IID2 Property failed in vil_nitf2_image_subheader\n";
@@ -1123,7 +1123,7 @@ vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
   image_corner_geo_locations = igeolo;
 
   // Now get the sub-header TRE parameters
-  vil_nitf2_tagged_record_sequence           isxhd_tres;
+  vil_nitf2_tagged_record_sequence isxhd_tres;
   vil_nitf2_tagged_record_sequence::iterator tres_itr;
   this->get_property("IXSHD", isxhd_tres);
 

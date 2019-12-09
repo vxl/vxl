@@ -21,9 +21,9 @@ vgui_rasterpos4dv(double const X[4])
   glGetIntegerv(GL_VIEWPORT, vp);
 
   vnl_matrix_fixed<double, 4, 4> T = vgui_matrix_state::total_transformation();
-  vnl_vector_fixed<double, 4>    tmp = T * vnl_vector_fixed<double, 4>(X);
-  double                         rx = tmp[0] / tmp[3];
-  double                         ry = tmp[1] / tmp[3];
+  vnl_vector_fixed<double, 4> tmp = T * vnl_vector_fixed<double, 4>(X);
+  double rx = tmp[0] / tmp[3];
+  double ry = tmp[1] / tmp[3];
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();

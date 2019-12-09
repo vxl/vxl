@@ -23,7 +23,7 @@ is_vertex(vgl_polygon<T> const & poly, T x, T y)
 static void
 test_union()
 {
-  double              cont1[] = { 0, 0, 5, 0, 5, 5, 0, 5 };
+  double cont1[] = { 0, 0, 5, 0, 5, 5, 0, 5 };
   vgl_polygon<double> poly1(cont1, 4);
 
   {
@@ -37,7 +37,7 @@ test_union()
   }
 
   {
-    double              cont2[] = { 6, 0, 8, 1, 6, 2 };
+    double cont2[] = { 6, 0, 8, 1, 6, 2 };
     vgl_polygon<double> poly2(cont2, 3);
 
     vgl_polygon<double> result = vgl_clip(poly1, poly2, vgl_clip_type_union);
@@ -46,7 +46,7 @@ test_union()
 
 #ifdef BUILD_NONCOMMERCIAL
   {
-    double              cont2[] = { 4, 1, 8, 1, 8, 6, 4, 6 };
+    double cont2[] = { 4, 1, 8, 1, 8, 6, 4, 6 };
     vgl_polygon<double> poly2(cont2, 4);
 
     vgl_polygon<double> result = vgl_clip(poly1, poly2, vgl_clip_type_union);
@@ -62,7 +62,7 @@ test_union()
 static void
 test_intersection()
 {
-  float              cont1[] = { 0, 0, 5, 0, 5, 5, 0, 5 };
+  float cont1[] = { 0, 0, 5, 0, 5, 5, 0, 5 };
   vgl_polygon<float> poly1(cont1, 4);
 
   {
@@ -78,7 +78,7 @@ test_intersection()
 #endif
   }
   {
-    float              cont2[] = { 6, 0, 8, 1, 6, 2 };
+    float cont2[] = { 6, 0, 8, 1, 6, 2 };
     vgl_polygon<float> poly2(cont2, 3);
 
     vgl_polygon<float> result = vgl_clip(poly1, poly2, vgl_clip_type_intersect);
@@ -87,7 +87,7 @@ test_intersection()
 
 #ifdef BUILD_NONCOMMERCIAL
   {
-    float              cont2[] = { 4, 1, 8, 1, 8, 6, 4, 6 };
+    float cont2[] = { 4, 1, 8, 1, 8, 6, 4, 6 };
     vgl_polygon<float> poly2(cont2, 4);
 
     vgl_polygon<float> result = vgl_clip(poly1, poly2, vgl_clip_type_intersect);
@@ -98,8 +98,8 @@ test_intersection()
 #endif // BUILD_NONCOMMERCIAL
 
   {
-    float              cont2[] = { -3, -3, 8, -3, 8, 8, -3, 8 };
-    float              cont3[] = { -1, -1, 6, -1, 6, 6, -1, 6 };
+    float cont2[] = { -3, -3, 8, -3, 8, 8, -3, 8 };
+    float cont3[] = { -1, -1, 6, -1, 6, 6, -1, 6 };
     vgl_polygon<float> poly2(cont2, 4);
     poly2.add_contour(cont3, 4);
 

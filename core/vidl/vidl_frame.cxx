@@ -40,8 +40,8 @@ vidl_memory_chunk_frame::vidl_memory_chunk_frame(const vil_image_view_base & ima
   // use the pixel component format to account for
   // images of type vil_rgb<T>, vil_rgba<T>, etc.
   vil_pixel_format cmp_format = vil_pixel_format_component_format(image.pixel_format());
-  unsigned int     num_cmp = vil_pixel_format_num_components(image.pixel_format());
-  unsigned int     num_channels = image.nplanes() * num_cmp;
+  unsigned int num_cmp = vil_pixel_format_num_components(image.pixel_format());
+  unsigned int num_channels = image.nplanes() * num_cmp;
 
   if (cmp_format == VIL_PIXEL_FORMAT_UINT_16 && num_channels == 1)
   {

@@ -29,10 +29,10 @@ test_plane_intersection()
 static void
 test_direction_vector()
 {
-  vgl_point_3d<double>         p1(0, 0, 0);
-  vgl_point_3d<double>         p2(1, 2, 3);
+  vgl_point_3d<double> p1(0, 0, 0);
+  vgl_point_3d<double> p2(1, 2, 3);
   vgl_line_3d_2_points<double> l1(p1, p2);
-  vgl_vector_3d<double>        u = p2 - p1;
+  vgl_vector_3d<double> u = p2 - p1;
   TEST("Direction vector 1", u, l1.direction());
 }
 
@@ -40,9 +40,9 @@ test_direction_vector()
 static void
 test_parametric_point()
 {
-  vgl_point_3d<double>         p1(0, 0, 0);
-  vgl_point_3d<double>         p2(1, 2, 4);
-  vgl_point_3d<double>         p3(0.5, 1.0, 2.0);
+  vgl_point_3d<double> p1(0, 0, 0);
+  vgl_point_3d<double> p2(1, 2, 4);
+  vgl_point_3d<double> p3(0.5, 1.0, 2.0);
   vgl_line_3d_2_points<double> l1(p1, p2);
   TEST("Parametric point: t=0.0", l1.point_t(0.0), p1);
   TEST("Parametric point: t=1.0", l1.point_t(1.0), p2);

@@ -33,7 +33,7 @@ test_flood_fill4_byte()
             << " Testing vil_flood_fill4\n"
             << "*************************\n";
 
-  unsigned                 n = 10;
+  unsigned n = 10;
   vil_image_view<vxl_byte> image0, image1;
   image0.set_size(n, n);
   image0.fill(0);
@@ -79,7 +79,7 @@ test_flood_fill8_byte()
             << " Testing vil_flood_fill8\n"
             << "*************************\n";
 
-  unsigned                 n = 10;
+  unsigned n = 10;
   vil_image_view<vxl_byte> image0, image1;
   image0.set_size(n, n);
   image0.fill(0);

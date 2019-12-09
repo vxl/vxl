@@ -15,13 +15,13 @@ struct vil1_image_proxy_impl : public vil1_image_impl
   std::string filename;
 
   // cache this data:
-  int                   planes_;
-  int                   width_;
-  int                   height_;
-  int                   components_;
-  int                   bits_per_component_;
+  int planes_;
+  int width_;
+  int height_;
+  int components_;
+  int bits_per_component_;
   vil1_component_format component_format_;
-  std::string           file_format_;
+  std::string file_format_;
 
   vil1_image_proxy_impl(char const * file)
     : filename(file)

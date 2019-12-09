@@ -40,7 +40,7 @@ vnl_qr<std::complex<float>>::solve(const vnl_vector<std::complex<float>> & b) co
   vnl_vector<std::complex<double>> DOUBLE_b(b.size());
   vnl_copy(b, DOUBLE_b);
 
-  const std::complex<double> *     DOUBLE_b_data = DOUBLE_b.data_block();
+  const std::complex<double> * DOUBLE_b_data = DOUBLE_b.data_block();
   vnl_vector<std::complex<double>> DOUBLE_QtB(n);
   vnl_vector<std::complex<double>> DOUBLE_x(p);
 
@@ -89,7 +89,7 @@ vnl_qr<std::complex<float>>::QtB(const vnl_vector<std::complex<float>> & b) cons
   vnl_vector<std::complex<double>> DOUBLE_b(b.size());
   vnl_copy(b, DOUBLE_b);
 
-  const std::complex<double> *     DOUBLE_b_data = DOUBLE_b.data_block();
+  const std::complex<double> * DOUBLE_b_data = DOUBLE_b.data_block();
   vnl_vector<std::complex<double>> DOUBLE_QtB(n);
 
   // see comment above

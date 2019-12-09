@@ -157,9 +157,9 @@ test_image_equal(char const * type_name, vil1_image const & image, vil1_image co
 // The non_raw save and load functions are also called, but the images aren't compared.
 
 void
-vil1_test_image_type_raw(char const *       type_name, //!< type for image to read and write
-                         vil1_image const & image,     //!< test image to save and restore
-                         bool               exact = true)            //!< require read back image identical
+vil1_test_image_type_raw(char const * type_name,   //!< type for image to read and write
+                         vil1_image const & image, //!< test image to save and restore
+                         bool exact = true)        //!< require read back image identical
 {
   assert(type_name);
   int n = image.bits_per_component() * image.components();
@@ -315,9 +315,9 @@ create_grey_gif(const char * filename)
 }
 
 void
-vil1_test_image_type(char const *       type_name, // type for image to read and write
-                     vil1_image const & image,     // test image to save and restore
-                     bool               exact = true)            // require read back image identical
+vil1_test_image_type(char const * type_name,   // type for image to read and write
+                     vil1_image const & image, // test image to save and restore
+                     bool exact = true)        // require read back image identical
 {
   assert(type_name);
   int n = image.bits_per_component() * image.components();
@@ -501,8 +501,8 @@ static void
 test_save_load_image()
 {
   // create test images
-  int        sizex = 253;
-  int        sizey = 155;
+  int sizex = 253;
+  int sizey = 155;
   vil1_image image1 = CreateTest1bitImage(sizex, sizey);
   vil1_image image8 = CreateTest8bitImage(sizex, sizey);
   vil1_image image16 = CreateTest16bitImage(sizex, sizey);

@@ -18,8 +18,8 @@ main()
   std::cin >> pts;
 
   // Build design matrix D
-  int                npts = pts.rows();
-  int                dim = pts.columns();
+  int npts = pts.rows();
+  int dim = pts.columns();
   vnl_matrix<double> D(npts, dim + 1);
   for (int i = 0; i < npts; ++i)
   {
@@ -30,7 +30,7 @@ main()
 
   // 1. Compute using SVD
   {
-    vnl_svd<double>    svd(D);
+    vnl_svd<double> svd(D);
     vnl_vector<double> a = svd.nullvector();
     std::cout << "SVD residual = " << (D * a).magnitude() << std::endl;
   }
@@ -40,7 +40,7 @@ main()
     vnl_matrix<double> m;
     vnl_fastops::AtA(m, D);
     vnl_symmetric_eigensystem<double> eig(m);
-    vnl_vector<double>                a = eig.get_eigenvector(0);
+    vnl_vector<double> a = eig.get_eigenvector(0);
     std::cout << "Eig residual = " << (D * a).magnitude() << std::endl;
   }
 

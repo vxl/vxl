@@ -34,10 +34,10 @@ vil_bmp_file_format::make_input_image(vil_stream * vs)
 }
 
 vil_image_resource_sptr
-vil_bmp_file_format::make_output_image(vil_stream *     vs,
-                                       unsigned         nx,
-                                       unsigned         ny,
-                                       unsigned         nplanes,
+vil_bmp_file_format::make_output_image(vil_stream * vs,
+                                       unsigned nx,
+                                       unsigned ny,
+                                       unsigned nplanes,
                                        vil_pixel_format format)
 {
   return new vil_bmp_image(vs, nx, ny, nplanes, format);
@@ -348,8 +348,8 @@ vil_bmp_image::write_header()
   if (nplanes() == 1) // Need to write a colourmap in this case
   {
     unsigned int const n = 1 << vil_pixel_format_sizeof_components(pixel_format()) * 8; // usually 256
-    auto *             map = new vxl_byte[n * 4];
-    vxl_byte *         ptr = map;
+    auto * map = new vxl_byte[n * 4];
+    vxl_byte * ptr = map;
     for (unsigned int i = 0; i < n; ++i, ptr += 4)
     {
       for (unsigned int j = 0; j < 3; ++j)
@@ -393,7 +393,7 @@ vil_bmp_image::get_copy_view(unsigned x0, unsigned nx, unsigned y0, unsigned ny)
 
   std::ptrdiff_t top_left_y0_in_mem = 0;
   std::ptrdiff_t ystep = want_bytes_per_raster;
-  unsigned int   rows_to_skip = y0;
+  unsigned int rows_to_skip = y0;
   if (core_hdr.height > 0)
   {
     // Bottom-up pass
@@ -437,7 +437,7 @@ vil_bmp_image::get_copy_view(unsigned x0, unsigned nx, unsigned y0, unsigned ny)
     return nullptr;
   }
 
-  unsigned       np = 1;
+  unsigned np = 1;
   std::ptrdiff_t plane_step = 1;
   std::ptrdiff_t top_left_plane0_in_mem = 0;
   if (core_hdr.bitsperpixel == 8)
@@ -462,7 +462,7 @@ vil_bmp_image::get_copy_view(unsigned x0, unsigned nx, unsigned y0, unsigned ny)
     // re-organize channel ordering from BGRA to RGBA.
     // In other words,  swap B and R
     assert((want_bytes_per_raster & 3) == 0); //  must be multiple of 4
-    auto *           data = reinterpret_cast<vxl_byte *>(buf->data());
+    auto * data = reinterpret_cast<vxl_byte *>(buf->data());
     vxl_byte * const data_end = data + (want_bytes_per_raster * ny);
     for (; data != data_end; data += 4)
     {
@@ -510,7 +510,7 @@ vil_bmp_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned 
   unsigned const bypp = nplanes();
   unsigned const rowlen = ni() * bypp;
   unsigned const padlen = (3 - (rowlen + 3) % 4); // round row length up to a multiple of 4
-  vxl_byte       padding[3] = { 0, 0, 0 };
+  vxl_byte padding[3] = { 0, 0, 0 };
 
   assert(core_hdr.height < 0); // we utilize only top-down scan
 

@@ -8,10 +8,10 @@ namespace
 // create a test scene with world points, cameras, and ideal projections
 // of the points into the images
 void
-setup_scene(const vpgl_calibration_matrix<double> &        K,
-            std::vector<vgl_point_3d<double>> &            world,
+setup_scene(const vpgl_calibration_matrix<double> & K,
+            std::vector<vgl_point_3d<double>> & world,
             std::vector<vpgl_perspective_camera<double>> & cameras,
-            std::vector<vgl_point_2d<double>> &            image_points)
+            std::vector<vgl_point_2d<double>> & image_points)
 {
   world.clear();
   // The world points are the 8 corners of a unit cube
@@ -52,13 +52,13 @@ setup_scene(const vpgl_calibration_matrix<double> &        K,
 static void
 test_ba_fixed_k_lsqr()
 {
-  std::vector<vgl_point_3d<double>>            world;
+  std::vector<vgl_point_3d<double>> world;
   std::vector<vpgl_perspective_camera<double>> cameras;
-  std::vector<vgl_point_2d<double>>            image_points;
+  std::vector<vgl_point_2d<double>> image_points;
   // our known internal calibration
   vpgl_calibration_matrix<double> K(2000.0, vgl_homg_point_2d<double>(512, 384), 1, 0.7, 2);
   setup_scene(K, world, cameras, image_points);
-  std::vector<std::vector<bool>>               mask(cameras.size(), std::vector<bool>(world.size(), true));
+  std::vector<std::vector<bool>> mask(cameras.size(), std::vector<bool>(world.size(), true));
   std::vector<vpgl_calibration_matrix<double>> Ks(cameras.size(), K);
 
   vpgl_ba_fixed_k_lsqr func(Ks, image_points, mask);
@@ -85,13 +85,13 @@ test_ba_fixed_k_lsqr()
 
   double eps = 1e-8;
   func.set_residual_scale(1.0);
-  double             weight = 0.0;
+  double weight = 0.0;
   vnl_vector<double> dummy(2, 0.0), fij(2, 0.0);
   func.compute_weight_ij(0, 0, dummy, dummy, dummy, fij, weight);
   TEST_NEAR("weight(0) == 1.0", weight, 1.0, 1e-8);
   double val = 1e-10;
   double last_weight = 1.0;
-  bool   weight_decreasing = true;
+  bool weight_decreasing = true;
   for (unsigned int i = 0; i < 20; ++i)
   {
     fij[0] = val;
@@ -104,7 +104,7 @@ test_ba_fixed_k_lsqr()
   TEST("weight decreasing", weight_decreasing, true);
 
 
-  vnl_random         rnd;
+  vnl_random rnd;
   vnl_vector<double> a2(a), b2(b);
   for (double & i : b2)
   {

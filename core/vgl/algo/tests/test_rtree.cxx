@@ -41,7 +41,7 @@ test_point_box()
   TEST("test contains", p1_in, true);
 
   // test region search
-  vgl_box_2d<float>   bb;
+  vgl_box_2d<float> bb;
   vgl_point_2d<float> pb0(0.25f, 0.25f), pb1(0.75f, 0.75f);
   bb.add(pb0);
   bb.add(pb1);
@@ -55,7 +55,7 @@ test_point_box()
     TEST("test region search", found[0], p3);
   // test iterator
   std::cout << "Traversing point_box rtree, num nodes = " << tr.nodes() << '\n';
-  unsigned                        j = 0;
+  unsigned j = 0;
   vgl_rtree<V_, B_, C_>::iterator ti = tr.begin();
   for (; ti != tr.end(); ++ti, ++j)
     std::cout << "tr[" << j << "] = " << *ti << '\n';
@@ -64,7 +64,7 @@ test_point_box()
   // test polygon probe
   // a rectangle at 45 degrees (oriented box)
   vgl_point_2d<float> pr0(0.3f, 0.7f), pr1(0.7f, 0.3f), pr2(0.5f, 0.9f), pr3(0.9f, 0.5f);
-  vgl_polygon<float>  poly(1);
+  vgl_polygon<float> poly(1);
   poly.push_back(pr0);
   poly.push_back(pr1);
   poly.push_back(pr2);
@@ -81,19 +81,19 @@ test_point_box()
 
   // test large numbers of point insertions
   vgl_rtree<V_, B_, C_> tr_big;
-  vnl_random            r;
-  unsigned              ni = 1000;
+  vnl_random r;
+  unsigned ni = 1000;
   for (unsigned i = 0; i < ni; ++i)
   {
-    auto                x = static_cast<float>(r.drand32(0.0, 1.0));
-    auto                y = static_cast<float>(r.drand32(0.0, 1.0));
+    auto x = static_cast<float>(r.drand32(0.0, 1.0));
+    auto y = static_cast<float>(r.drand32(0.0, 1.0));
     vgl_point_2d<float> p(x, y);
     tr_big.add(p);
   }
   std::cout << "Big rtree num nodes = " << tr_big.nodes() << '\n';
   vgl_point_2d<float> plow(0.25f, 0.25f);
   vgl_point_2d<float> phigh(0.5f, 0.5f);
-  vgl_box_2d<float>   bbig;
+  vgl_box_2d<float> bbig;
   bbig.add(plow);
   bbig.add(phigh);
   std::vector<vgl_point_2d<float>> big_find;
@@ -153,7 +153,7 @@ test_box_box()
 
   // test iterator
   std::cout << "Traversing box_box rtree, num nodes = " << tr.nodes() << '\n';
-  unsigned                        j = 0;
+  unsigned j = 0;
   vgl_rtree<V_, B_, C_>::iterator ti = tr.begin();
   for (; ti != tr.end(); ++ti, ++j)
     std::cout << "tr[" << j << "] = " << *ti << '\n';
@@ -162,7 +162,7 @@ test_box_box()
   // test polygon probe
   // a rectangle at 45 degrees (oriented box)
   vgl_point_2d<float> pr0(0.3f, 0.7f), pr1(0.7f, 0.3f), pr2(0.5f, 0.9f), pr3(0.9f, 0.5f);
-  vgl_polygon<float>  poly(1);
+  vgl_polygon<float> poly(1);
   poly.push_back(pr0);
   poly.push_back(pr1);
   poly.push_back(pr2);

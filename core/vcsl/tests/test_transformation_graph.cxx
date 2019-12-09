@@ -39,7 +39,7 @@ test1(void);
 static void
 test1(void)
 {
-  vcsl_graph_sptr   graph = new vcsl_graph;
+  vcsl_graph_sptr graph = new vcsl_graph;
   vcsl_spatial_sptr csa = new vcsl_cartesian_3d;
   csa->set_graph(graph);
   vcsl_spatial_sptr cs1 = new vcsl_cartesian_3d;
@@ -55,7 +55,7 @@ test1(void)
   cs1_beat.push_back(1);
   cs1->set_beat(cs1_beat);
 
-  vcsl_scale_sptr     scale1 = new vcsl_scale;
+  vcsl_scale_sptr scale1 = new vcsl_scale;
   std::vector<double> beat1;
   beat1.reserve(3);
   beat1.push_back(0);
@@ -90,7 +90,7 @@ test1(void)
   cs2_beat.push_back(1);
   cs2->set_beat(cs2_beat);
 
-  vcsl_scale_sptr     scale2 = new vcsl_scale;
+  vcsl_scale_sptr scale2 = new vcsl_scale;
   std::vector<double> beat2 = cs2_beat;
   scale2->set_beat(beat2);
 
@@ -119,7 +119,7 @@ test1(void)
   cs3_beat.push_back(1);
   cs3->set_beat(cs3_beat);
 
-  vcsl_scale_sptr     scale3 = new vcsl_scale;
+  vcsl_scale_sptr scale3 = new vcsl_scale;
   std::vector<double> beat3 = cs3_beat;
   scale3->set_beat(beat3);
 

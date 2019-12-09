@@ -47,7 +47,7 @@ vsl_b_read(vsl_b_istream & is, vpgl_lvcs & lvcs)
     {
       unsigned cs_name;
       vsl_b_read(is, cs_name);
-      auto   name = static_cast<vpgl_lvcs::cs_names>(cs_name);
+      auto name = static_cast<vpgl_lvcs::cs_names>(cs_name);
       double lat, lon, elev, lat_scale, lon_scale;
       vsl_b_read(is, lat);
       vsl_b_read(is, lon);
@@ -56,10 +56,10 @@ vsl_b_read(vsl_b_istream & is, vpgl_lvcs & lvcs)
       vsl_b_read(is, lon_scale);
       unsigned gaunit;
       vsl_b_read(is, gaunit);
-      auto     geo_angle_unit = static_cast<vpgl_lvcs::AngUnits>(gaunit);
+      auto geo_angle_unit = static_cast<vpgl_lvcs::AngUnits>(gaunit);
       unsigned lunit;
       vsl_b_read(is, lunit);
-      auto   localXYZUnit = static_cast<vpgl_lvcs::LenUnits>(lunit);
+      auto localXYZUnit = static_cast<vpgl_lvcs::LenUnits>(lunit);
       double lox, loy, theta;
       vsl_b_read(is, lox);
       vsl_b_read(is, loy);

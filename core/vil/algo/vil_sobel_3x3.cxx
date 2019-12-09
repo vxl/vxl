@@ -10,20 +10,20 @@
 template <>
 void
 vil_sobel_3x3_1plane(const unsigned char * src,
-                     std::ptrdiff_t        s_istep,
-                     std::ptrdiff_t        s_jstep,
-                     float *               gi,
-                     std::ptrdiff_t        gi_istep,
-                     std::ptrdiff_t        gi_jstep,
-                     float *               gj,
-                     std::ptrdiff_t        gj_istep,
-                     std::ptrdiff_t        gj_jstep,
-                     unsigned              ni,
-                     unsigned              nj)
+                     std::ptrdiff_t s_istep,
+                     std::ptrdiff_t s_jstep,
+                     float * gi,
+                     std::ptrdiff_t gi_istep,
+                     std::ptrdiff_t gi_jstep,
+                     float * gj,
+                     std::ptrdiff_t gj_istep,
+                     std::ptrdiff_t gj_jstep,
+                     unsigned ni,
+                     unsigned nj)
 {
   const unsigned char * s_data = src;
-  float *               gi_data = gi;
-  float *               gj_data = gj;
+  float * gi_data = gi;
+  float * gj_data = gj;
 
   if (ni == 0 || nj == 0)
     return;
@@ -75,8 +75,8 @@ vil_sobel_3x3_1plane(const unsigned char * src,
   for (unsigned j = 1; j < nj1; ++j)
   {
     const unsigned char * s = s_data;
-    float *               pgi = gi_data;
-    float *               pgj = gj_data;
+    float * pgi = gi_data;
+    float * pgj = gj_data;
 
     // Zero the first elements in the rows
     *pgi = 0;
@@ -127,20 +127,20 @@ vil_sobel_3x3_1plane(const unsigned char * src,
 template <>
 void
 vil_sobel_3x3_1plane(const unsigned char * src,
-                     std::ptrdiff_t        s_istep,
-                     std::ptrdiff_t        s_jstep,
-                     double *              gi,
-                     std::ptrdiff_t        gi_istep,
-                     std::ptrdiff_t        gi_jstep,
-                     double *              gj,
-                     std::ptrdiff_t        gj_istep,
-                     std::ptrdiff_t        gj_jstep,
-                     unsigned              ni,
-                     unsigned              nj)
+                     std::ptrdiff_t s_istep,
+                     std::ptrdiff_t s_jstep,
+                     double * gi,
+                     std::ptrdiff_t gi_istep,
+                     std::ptrdiff_t gi_jstep,
+                     double * gj,
+                     std::ptrdiff_t gj_istep,
+                     std::ptrdiff_t gj_jstep,
+                     unsigned ni,
+                     unsigned nj)
 {
   const unsigned char * s_data = src;
-  double *              gi_data = gi;
-  double *              gj_data = gj;
+  double * gi_data = gi;
+  double * gj_data = gj;
 
   if (ni == 0 || nj == 0)
     return;
@@ -192,8 +192,8 @@ vil_sobel_3x3_1plane(const unsigned char * src,
   for (unsigned j = 1; j < nj1; ++j)
   {
     const unsigned char * s = s_data;
-    double *              pgi = gi_data;
-    double *              pgj = gj_data;
+    double * pgi = gi_data;
+    double * pgj = gj_data;
 
     // Zero the first elements in the rows
     *pgi = 0;
@@ -243,21 +243,21 @@ vil_sobel_3x3_1plane(const unsigned char * src,
 //  Computes both x and j gradients of an nx x nj plane of data
 template <>
 void
-vil_sobel_3x3_1plane(const float *  src,
+vil_sobel_3x3_1plane(const float * src,
                      std::ptrdiff_t s_istep,
                      std::ptrdiff_t s_jstep,
-                     float *        gi,
+                     float * gi,
                      std::ptrdiff_t gi_istep,
                      std::ptrdiff_t gi_jstep,
-                     float *        gj,
+                     float * gj,
                      std::ptrdiff_t gj_istep,
                      std::ptrdiff_t gj_jstep,
-                     unsigned       ni,
-                     unsigned       nj)
+                     unsigned ni,
+                     unsigned nj)
 {
   const float * s_data = src;
-  float *       gi_data = gi;
-  float *       gj_data = gj;
+  float * gi_data = gi;
+  float * gj_data = gj;
 
   if (ni == 0 || nj == 0)
     return;
@@ -309,8 +309,8 @@ vil_sobel_3x3_1plane(const float *  src,
   for (unsigned j = 1; j < nj1; ++j)
   {
     const float * s = s_data;
-    float *       pgi = gi_data;
-    float *       pgj = gj_data;
+    float * pgi = gi_data;
+    float * pgj = gj_data;
 
     // Zero the first elements in the rows
     *pgi = 0;
@@ -361,18 +361,18 @@ void
 vil_sobel_3x3_1plane(const double * src,
                      std::ptrdiff_t s_istep,
                      std::ptrdiff_t s_jstep,
-                     double *       gi,
+                     double * gi,
                      std::ptrdiff_t gi_istep,
                      std::ptrdiff_t gi_jstep,
-                     double *       gj,
+                     double * gj,
                      std::ptrdiff_t gj_istep,
                      std::ptrdiff_t gj_jstep,
-                     unsigned       ni,
-                     unsigned       nj)
+                     unsigned ni,
+                     unsigned nj)
 {
   const double * s_data = src;
-  double *       gi_data = gi;
-  double *       gj_data = gj;
+  double * gi_data = gi;
+  double * gj_data = gj;
 
   if (ni == 0 || nj == 0)
     return;
@@ -424,8 +424,8 @@ vil_sobel_3x3_1plane(const double * src,
   for (unsigned j = 1; j < nj1; ++j)
   {
     const double * s = s_data;
-    double *       pgi = gi_data;
-    double *       pgj = gj_data;
+    double * pgi = gi_data;
+    double * pgj = gj_data;
 
     // Zero the first elements in the rows
     *pgi = 0;

@@ -17,13 +17,13 @@
 //-------------------------------------------------------------------------
 IMPLEMENT_CLASS(wx_docview_frame, wxDocParentFrame)
 
-wx_docview_frame::wx_docview_frame(wxDocManager *   manager,
-                                   wxFrame *        parent,
-                                   wxWindowID       id,
+wx_docview_frame::wx_docview_frame(wxDocManager * manager,
+                                   wxFrame * parent,
+                                   wxWindowID id,
                                    const wxString & title,
-                                   const wxPoint &  pos,
-                                   const wxSize &   size,
-                                   long             type)
+                                   const wxPoint & pos,
+                                   const wxSize & size,
+                                   long type)
   : wxDocParentFrame(manager, parent, id, title, pos, size, type)
 {
   // SetIcon(wxIcon("flag_pr.ico", wxBITMAP_TYPE_ICO));

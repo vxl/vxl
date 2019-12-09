@@ -51,8 +51,8 @@ vgui_mfc_utils::~vgui_mfc_utils()
 //  Also add text to the_menu_name for the shortcut.
 void
 vgui_mfc_utils::add_menu_accelerator(const vgui_menu_item menu_item,
-                                     const WORD           function_id,
-                                     std::string &        the_menu_name)
+                                     const WORD function_id,
+                                     std::string & the_menu_name)
 {
   ACCEL acc;
   acc.cmd = function_id;
@@ -104,7 +104,7 @@ vgui_mfc_utils::add_submenu(const vgui_menu & menu)
     {
       if (debug)
         std::cerr << " <command>\n";
-      int         the_menu_id = ID_MENU_ITEMS + item_count++;
+      int the_menu_id = ID_MENU_ITEMS + item_count++;
       std::string the_menu_name = menu[i].name;
 
       // Add menu accelerators:
@@ -150,7 +150,7 @@ vgui_mfc_utils::set_menu(const vgui_menu & menu)
     }
     else if (menu[i].is_command())
     {
-      int         the_menu_id = ID_MENU_ITEMS + item_count++;
+      int the_menu_id = ID_MENU_ITEMS + item_count++;
       std::string the_menu_name = menu[i].name;
 
       // Add menu accelerators
@@ -209,7 +209,7 @@ vgui_mfc_utils::set_popup_menu(const vgui_menu & menu)
     {
       if (debug)
         std::cerr << " <command>\n";
-      int         the_menu_id = ID_MENU_ITEMS + item_count++;
+      int the_menu_id = ID_MENU_ITEMS + item_count++;
       std::string the_menu_name = menu[i].name;
 
       // Add menu accelerators:

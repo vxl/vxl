@@ -53,7 +53,7 @@ vgui_projection_inspector::back_project(double const x[3], double const p[4], do
   omega -= omega.transpose();
 
   // (un)dualize them :
-  double         omegad_[16] = { 0, +omega(2, 3), -omega(1, 3), +omega(1, 2), -omega(2, 3),
+  double omegad_[16] = { 0, +omega(2, 3), -omega(1, 3), +omega(1, 2), -omega(2, 3),
                          0, +omega(0, 3), -omega(0, 2), +omega(1, 3), -omega(0, 3),
                          0, +omega(0, 1), -omega(1, 2), +omega(0, 2), -omega(0, 1),
                          0 };
@@ -240,8 +240,8 @@ vgui_projection_inspector::image_to_window_coordinates(float ix, float iy, float
 
 //-----------------------------------------------------------------------------
 bool
-vgui_projection_inspector::compute_as_2d_affine(int     width,
-                                                int     height,
+vgui_projection_inspector::compute_as_2d_affine(int width,
+                                                int height,
                                                 float * offsetX,
                                                 float * offsetY,
                                                 float * scaleX,

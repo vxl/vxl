@@ -59,7 +59,7 @@ void
 print_video_standard_help(const CComPtr<IESFProperties> & props)
 {
   ESF_VIDEO_STANDARD val;
-  bool               mono;
+  bool mono;
 
   props->GetVideoStandard(&val, &mono);
   std::cout << std::setw(w1) << "video_standard" << ' ' << esf_video_standards[val] << '\n';
@@ -78,7 +78,7 @@ void
 print_resolution_help(const CComPtr<IESFProperties> & props)
 {
   ESF_RESOLUTION val;
-  long           width, height;
+  long width, height;
 
   props->GetResolution(&val, &width, &height);
   std::cout << std::setw(w1) << "resolution" << ' ' << esf_resolutions[val] << " (" << width << 'x' << height << ")\n";
@@ -104,7 +104,7 @@ print_output_format_help(const CComPtr<IESFProperties> & props)
   props->GetOutputFormat(&val);
   std::cout << std::setw(w1) << "output_format" << ' ' << vidl_dshow::get_guid_name(val) << '\n';
 
-  GUID *        table = 0;
+  GUID * table = 0;
   unsigned long count = 0;
   if (SUCCEEDED(props->GetOutputFormatsList(&count, &table)))
   {
@@ -520,7 +520,7 @@ struct from_string_to_pair
   std::pair<T1, T2>
   operator()(const std::string & str) const
   {
-    std::string        buf;
+    std::string buf;
     std::istringstream iss(str);
 
     std::pair<T1, T2> pair;
@@ -541,7 +541,7 @@ struct from_string_to_triple
   vbl_triple<T1, T2, T3>
   operator()(const std::string & str) const
   {
-    std::string        buf;
+    std::string buf;
     std::istringstream iss(str);
 
     vbl_triple<T1, T2, T3> triple;

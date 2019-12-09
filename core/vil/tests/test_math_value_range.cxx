@@ -16,7 +16,7 @@ test_math_value_range()
             << "******************************\n";
 
   // Create a test image with values 1...100
-  unsigned            ni = 10, nj = 10;
+  unsigned ni = 10, nj = 10;
   vil_image_view<int> img(ni, nj);
   for (unsigned i = 0; i < ni; ++i)
   {
@@ -60,7 +60,7 @@ test_math_value_range()
   TEST("vil_math_value_range_percentile(): 73 %", val == 73, true);
 
   // Test several percentiles at once
-  unsigned int        nfrac = 9;
+  unsigned int nfrac = 9;
   std::vector<double> fraction(nfrac);
   std::vector<double> true_value(nfrac);
   fraction[0] = 0.00;

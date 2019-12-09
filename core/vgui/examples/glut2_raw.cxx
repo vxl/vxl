@@ -10,9 +10,9 @@
 #include "vgui/vgui_image_tableau.h"
 #include "vgui/vgui_loader_tableau.h"
 
-vgui_image_tableau_new  image;
+vgui_image_tableau_new image;
 vgui_loader_tableau_new load(image);
-vgui_shell_tableau_new  shell(load);
+vgui_shell_tableau_new shell(load);
 
 // GLUT display callback. we never return from it.
 void

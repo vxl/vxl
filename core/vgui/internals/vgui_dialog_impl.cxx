@@ -227,7 +227,7 @@ vgui_dialog_impl::inline_tab(const vgui_tableau_sptr tab, unsigned width, unsign
 void
 vgui_dialog_impl::text_message(const char * txt)
 {
-  int              dummy_int = 0;
+  int dummy_int = 0;
   vgui_int_field * field = new vgui_int_field(txt, dummy_int);
 
   element l;

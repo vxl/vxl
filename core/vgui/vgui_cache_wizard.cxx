@@ -106,20 +106,20 @@ vgui_cache_wizard::load_image(vil1_image img)
 
 //: Returns the texture names associated with the specified image region
 bool
-vgui_cache_wizard::get_section(int                     id,
-                               int                     x,
-                               int                     y,
-                               int                     width,
-                               int                     height,
+vgui_cache_wizard::get_section(int id,
+                               int x,
+                               int y,
+                               int width,
+                               int height,
                                image_cache_quadrants * quadrants,
-                               dimension *             pos,
-                               dimension *             size)
+                               dimension * pos,
+                               dimension * size)
 {
   // Find out which image it is
-  wizard_image *          wz = images_[id];
-  vil1_image              img = wz->first;
+  wizard_image * wz = images_[id];
+  vil1_image img = wz->first;
   image_cache_quadrants * icq = wz->second;
-  dimension *             d = dimensions_[id];
+  dimension * d = dimensions_[id];
   // Work out which quadrant (x,y) lies in
   int qx_c = x / quadrant_width_;
   int qy_c = y / quadrant_height_;
@@ -243,7 +243,7 @@ void
 vgui_cache_wizard::TexImage2D_Brownie(vil1_image img)
 {
   void * the_pixels = nullptr;
-  bool   section_ok;
+  bool section_ok;
   // FIXME: the calls to fsm_macro_magic() are identical for each image pixel type.
   // They could be coalesced to reduce code maintenance.
 

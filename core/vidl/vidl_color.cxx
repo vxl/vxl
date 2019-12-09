@@ -71,13 +71,13 @@ struct table_init
   {
     const auto in_fmt = vidl_pixel_format(Fmt_Code / VIDL_PIXEL_FORMAT_ENUM_END);
     const auto out_fmt = vidl_pixel_format(Fmt_Code % VIDL_PIXEL_FORMAT_ENUM_END);
-    auto       in_color = static_cast<vidl_pixel_color>(vidl_pixel_traits_of<in_fmt>::color_idx);
-    auto       out_color = static_cast<vidl_pixel_color>(vidl_pixel_traits_of<out_fmt>::color_idx);
-    typedef typename vidl_pixel_traits_of<in_fmt>::type  in_type;
+    auto in_color = static_cast<vidl_pixel_color>(vidl_pixel_traits_of<in_fmt>::color_idx);
+    auto out_color = static_cast<vidl_pixel_color>(vidl_pixel_traits_of<out_fmt>::color_idx);
+    typedef typename vidl_pixel_traits_of<in_fmt>::type in_type;
     typedef typename vidl_pixel_traits_of<out_fmt>::type out_type;
-    unsigned                                             in_type_num = type_index<in_type>::index;
-    unsigned                                             out_type_num = type_index<out_type>::index;
-    typedef typename func_ptr<in_type, out_type>::type   fptr;
+    unsigned in_type_num = type_index<in_type>::index;
+    unsigned out_type_num = type_index<out_type>::index;
+    typedef typename func_ptr<in_type, out_type>::type fptr;
     table_entry_init<static_cast<vidl_pixel_color>(vidl_pixel_traits_of<in_fmt>::color_idx),
                      static_cast<vidl_pixel_color>(vidl_pixel_traits_of<out_fmt>::color_idx),
                      fptr>::set_entry(table[in_color][out_color][in_type_num][out_type_num]);
@@ -95,13 +95,13 @@ struct table_init<0>
   {
     const auto in_fmt = vidl_pixel_format(0);
     const auto out_fmt = vidl_pixel_format(0);
-    auto       in_color = static_cast<vidl_pixel_color>(vidl_pixel_traits_of<in_fmt>::color_idx);
-    auto       out_color = static_cast<vidl_pixel_color>(vidl_pixel_traits_of<out_fmt>::color_idx);
-    typedef vidl_pixel_traits_of<in_fmt>::type  in_type;
+    auto in_color = static_cast<vidl_pixel_color>(vidl_pixel_traits_of<in_fmt>::color_idx);
+    auto out_color = static_cast<vidl_pixel_color>(vidl_pixel_traits_of<out_fmt>::color_idx);
+    typedef vidl_pixel_traits_of<in_fmt>::type in_type;
     typedef vidl_pixel_traits_of<out_fmt>::type out_type;
-    unsigned                                    in_type_num = type_index<in_type>::index;
-    unsigned                                    out_type_num = type_index<out_type>::index;
-    typedef func_ptr<in_type, out_type>::type   fptr;
+    unsigned in_type_num = type_index<in_type>::index;
+    unsigned out_type_num = type_index<out_type>::index;
+    typedef func_ptr<in_type, out_type>::type fptr;
     table_entry_init<static_cast<vidl_pixel_color>(vidl_pixel_traits_of<in_fmt>::color_idx),
                      static_cast<vidl_pixel_color>(vidl_pixel_traits_of<out_fmt>::color_idx),
                      fptr>::set_entry(table[in_color][out_color][in_type_num][out_type_num]);
@@ -157,9 +157,9 @@ public:
 
   //: Apply the conversion
   vidl_color_conv_fptr
-  operator()(vidl_pixel_color       in_C,
+  operator()(vidl_pixel_color in_C,
              const std::type_info & in_type,
-             vidl_pixel_color       out_C,
+             vidl_pixel_color out_C,
              const std::type_info & out_type) const
   {
     unsigned int in_idx = type_index(in_type);
@@ -181,7 +181,7 @@ public:
 
 private:
   //: Table of color conversion functions
-  vidl_color_conv_fptr   table[VIDL_PIXEL_COLOR_ENUM_END][VIDL_PIXEL_COLOR_ENUM_END][num_types][num_types];
+  vidl_color_conv_fptr table[VIDL_PIXEL_COLOR_ENUM_END][VIDL_PIXEL_COLOR_ENUM_END][num_types][num_types];
   const std::type_info * type_table[num_types];
 };
 
@@ -197,9 +197,9 @@ converter conversion_table;
 // may actually reinterpret the data as other types (i.e. bool* or
 // vxl_uint_16*) via reinterpret_cast
 vidl_color_conv_fptr
-vidl_color_converter_func(vidl_pixel_color       in_C,
+vidl_color_converter_func(vidl_pixel_color in_C,
                           const std::type_info & in_type,
-                          vidl_pixel_color       out_C,
+                          vidl_pixel_color out_C,
                           const std::type_info & out_type)
 {
   return conversion_table(in_C, in_type, out_C, out_type);

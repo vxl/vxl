@@ -15,16 +15,16 @@
 int
 main(int argc, char ** argv)
 {
-  vul_arg<int>    a_num_cameras("-ncam", "number of cameras", 30);
-  vul_arg<int>    a_num_points("-npt", "number of points", 30);
+  vul_arg<int> a_num_cameras("-ncam", "number of cameras", 30);
+  vul_arg<int> a_num_points("-npt", "number of points", 30);
   vul_arg<double> a_frac_miss("-miss", "fraction of missing correspondences", 0.1);
-  vul_arg<bool>   a_no_gradient("-no_grad", "use numeric differencing instead of gradients", false);
+  vul_arg<bool> a_no_gradient("-no_grad", "use numeric differencing instead of gradients", false);
   vul_arg_parse(argc, argv);
 
   constexpr double max_p_err = 1.0; // maximum image error to introduce (pixels)
 
   // deterministic random number generator -- random but repeatable
-  long int   seed = 0;
+  long int seed = 0;
   vnl_random rnd(seed);
 
   std::vector<vgl_point_3d<double>> world;
@@ -34,7 +34,7 @@ main(int argc, char ** argv)
 
   // our known internal calibration
   vpgl_calibration_matrix<double> K(2000.0, vgl_homg_point_2d<double>(500, 500));
-  vgl_rotation_3d<double>         I; // no rotation initially
+  vgl_rotation_3d<double> I; // no rotation initially
 
   std::vector<vpgl_perspective_camera<double>> cameras;
   for (int i = 0; i < a_num_points(); ++i)
@@ -101,7 +101,7 @@ main(int argc, char ** argv)
   }
 
   // create a subset of projections based on the mask
-  vnl_crs_index                     crs(mask);
+  vnl_crs_index crs(mask);
   std::vector<vgl_point_2d<double>> subset_image_points(crs.num_non_zero());
   for (int i = 0; i < crs.num_rows(); ++i)
   {

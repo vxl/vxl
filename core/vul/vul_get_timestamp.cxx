@@ -29,7 +29,7 @@
 void
 vul_get_timestamp(int & secs, int & msecs)
 {
-  struct timeval    timestamp;
+  struct timeval timestamp;
   struct timezone * dummy = nullptr;
   gettimeofday(&timestamp, dummy);
 

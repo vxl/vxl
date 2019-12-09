@@ -17,7 +17,7 @@ test_image_abs_diff(unsigned ni, unsigned nj, T min, T max, T tol)
   vil_image_view<vxl_byte> bdiff_A(ni, nj);
   vil_image_view<vxl_byte> bdiff_B(ni, nj);
   vil_image_view<vxl_byte> bdiff_D(ni, nj);
-  T                        diff = std::abs(max - min);
+  T diff = std::abs(max - min);
 
   for (unsigned j = 0; j < nj; ++j)
     for (unsigned i = 0; i < ni; ++i)
@@ -242,8 +242,8 @@ test_image_view_maths_byte()
 
   // extra test for normalisation
 
-  int                   nx = 5;
-  int                   ny = 5;
+  int nx = 5;
+  int ny = 5;
   vil_image_view<float> orig_image(nx, ny), var_norm_image, correct_var_norm_image(nx, ny);
 
   // Create original image

@@ -29,8 +29,8 @@ test_non_intersecting()
   vgl_point_3d<double> b_p2(0, 4, 2);
   vgl_point_3d<double> b_p3(4, 0, 2);
 
-  vgl_line_segment_3d<double>    iline;
-  unsigned                       edge_p1, edge_p2;
+  vgl_line_segment_3d<double> iline;
+  unsigned edge_p1, edge_p2;
   vgl_triangle_3d_intersection_t ret =
     vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3, iline, edge_p1, edge_p2);
   TEST("Non-intersecting 1", ret, None);
@@ -63,7 +63,7 @@ test_intersecting1()
   vgl_triangle_3d_intersection_t ret = vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3);
   TEST("Intersecting 1 coplanar", ret, Coplanar);
   vgl_line_segment_3d<double> iline;
-  unsigned                    edge_p1, edge_p2;
+  unsigned edge_p1, edge_p2;
   ret = vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3, iline, edge_p1, edge_p2);
   TEST("Intersecting coplanar with iline", ret, Coplanar);
 }
@@ -85,7 +85,7 @@ test_intersecting2()
   TEST("Intersecting 2 Skew", ret, Skew);
 
   vgl_line_segment_3d<double> i_line;
-  unsigned                    edge_p1, edge_p2;
+  unsigned edge_p1, edge_p2;
   ret = vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3, i_line, edge_p1, edge_p2);
   TEST("Intersecting Skew with iline", ret, Skew);
   double p1_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(0, 0, 0));
@@ -116,7 +116,7 @@ test_intersecting3()
   TEST("Intersecting 3 Skew", ret, Skew);
 
   vgl_line_segment_3d<double> i_line;
-  unsigned                    edge_p1, edge_p2;
+  unsigned edge_p1, edge_p2;
   ret = vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3, i_line, edge_p1, edge_p2);
 
   double p1_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(0, 0, 0));
@@ -152,7 +152,7 @@ test_intersecting4()
   TEST("Intersecting 4 coplanar", ret, Coplanar);
 
   vgl_line_segment_3d<double> i_line;
-  unsigned                    edge_p1, edge_p2;
+  unsigned edge_p1, edge_p2;
   ret = vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3, i_line, edge_p1, edge_p2);
 
 
@@ -183,14 +183,14 @@ test_intersecting5_arrangement(const vgl_point_3d<double> & a_A,
                                const vgl_point_3d<double> & b_A,
                                const vgl_point_3d<double> & b_B,
                                const vgl_point_3d<double> & b_C,
-                               unsigned                     expected_edge_1,
-                               unsigned                     expected_edge_2)
+                               unsigned expected_edge_1,
+                               unsigned expected_edge_2)
 {
   vgl_triangle_3d_intersection_t ret = vgl_triangle_3d_triangle_intersection(a_A, a_B, a_C, b_A, b_B, b_C);
   TEST("Intersecting Skew", ret, Skew);
 
   vgl_line_segment_3d<double> i_line;
-  unsigned                    edge_p1, edge_p2;
+  unsigned edge_p1, edge_p2;
   ret = vgl_triangle_3d_triangle_intersection(a_A, a_B, a_C, b_A, b_B, b_C, i_line, edge_p1, edge_p2);
 
   double p1_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(1, 1, 0));
@@ -350,8 +350,8 @@ test_intersecting_degenerate_triangles1()
       test_desc += degen_tests_desc[j];
       test_desc += ")";
 
-      vgl_line_segment_3d<double>    i_line;
-      auto                           point1_edge = (unsigned)-1, point2_edge = (unsigned)-2;
+      vgl_line_segment_3d<double> i_line;
+      auto point1_edge = (unsigned)-1, point2_edge = (unsigned)-2;
       vgl_triangle_3d_intersection_t ret = vgl_triangle_3d_triangle_intersection(valid_p1,
                                                                                  valid_p2,
                                                                                  valid_p3,
@@ -507,10 +507,10 @@ test_intersect_plane()
   vgl_point_3d<double> p2(0, 15, 25);
   vgl_point_3d<double> p3(0, 45, 10);
 
-  vgl_plane_3d<double>           pl(0, 0, 1, -20); // the plane z=20 ==> normal intersection
-  vgl_line_segment_3d<double>    l;                // the returned intersection
-  vgl_point_3d<double>           p(0, 12, 20), q(0, 25, 20);
-  vgl_line_segment_3d<double>    l0(p, q); // the correct intersection
+  vgl_plane_3d<double> pl(0, 0, 1, -20); // the plane z=20 ==> normal intersection
+  vgl_line_segment_3d<double> l;         // the returned intersection
+  vgl_point_3d<double> p(0, 12, 20), q(0, 25, 20);
+  vgl_line_segment_3d<double> l0(p, q); // the correct intersection
   vgl_triangle_3d_intersection_t ret;
 
   ret = vgl_triangle_3d_plane_intersection(p1, p2, p3, pl, l);
@@ -745,48 +745,48 @@ test_distance()
   // Test one of the actual vertices
   {
     vgl_point_3d<double> q(0, 0, 0);
-    double               d = vgl_triangle_3d_distance(q, p1, p2, p3);
-    double               true_d = 0.0;
+    double d = vgl_triangle_3d_distance(q, p1, p2, p3);
+    double true_d = 0.0;
     TEST_NEAR("Vertex point", d, true_d, 1e-6);
   }
 
   // Test a point along a triangle edge
   {
     vgl_point_3d<double> q(0.5, 0.0, 0.0);
-    double               d = vgl_triangle_3d_distance(q, p1, p2, p3);
-    double               true_d = 0.0;
+    double d = vgl_triangle_3d_distance(q, p1, p2, p3);
+    double true_d = 0.0;
     TEST_NEAR("Edge point", d, true_d, 1e-6);
   }
 
   // Test a point within the triangle
   {
     vgl_point_3d<double> q(0.1, 0.1, 0.0);
-    double               d = vgl_triangle_3d_distance(q, p1, p2, p3);
-    double               true_d = 0.0;
+    double d = vgl_triangle_3d_distance(q, p1, p2, p3);
+    double true_d = 0.0;
     TEST_NEAR("Point inside", d, true_d, 1e-6);
   }
 
   // Test a point outside the triangle (but in same plane)
   {
     vgl_point_3d<double> q(-1.0, 0.0, 0.0);
-    double               d = vgl_triangle_3d_distance(q, p1, p2, p3);
-    double               true_d = 1.0;
+    double d = vgl_triangle_3d_distance(q, p1, p2, p3);
+    double true_d = 1.0;
     TEST_NEAR("Point outside but same plane", d, true_d, 1e-6);
   }
 
   // Test a point outside the triangle (in a different plane, but would project inside the triangle)
   {
     vgl_point_3d<double> q(0.1, 0.1, 1.0);
-    double               d = vgl_triangle_3d_distance(q, p1, p2, p3);
-    double               true_d = 1.0;
+    double d = vgl_triangle_3d_distance(q, p1, p2, p3);
+    double true_d = 1.0;
     TEST_NEAR("Point inside", d, true_d, 1e-6);
   }
 
   // Test a point outside the triangle (in a different plane, and would project outside the triangle)
   {
     vgl_point_3d<double> q(-1.0, 0.0, 1.0);
-    double               d = vgl_triangle_3d_distance(q, p1, p2, p3);
-    double               true_d = 1.4142135623730950488; // sqrt2
+    double d = vgl_triangle_3d_distance(q, p1, p2, p3);
+    double true_d = 1.4142135623730950488; // sqrt2
     TEST_NEAR("Point outside and different plane", d, true_d, 1e-6);
   }
 }

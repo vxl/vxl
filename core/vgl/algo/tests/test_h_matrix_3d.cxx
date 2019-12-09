@@ -44,13 +44,13 @@ test_constructors()
 {
   double data[16]; // the projective h-matrix
   {
-    double                  gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
+    double gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
     vgl_h_matrix_3d<double> H(gold);
     H.get(data);
     TEST("Constructor from raw 4x4 data array", equals(data, gold), true);
   }
   {
-    double                  gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
+    double gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
     vgl_h_matrix_3d<double> H0(gold);
     const vgl_h_matrix_3d<double> & H(H0);
     H.get(data);
@@ -59,7 +59,7 @@ test_constructors()
   {
     std::stringstream ss;
     ss << "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16";
-    double                  gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
+    double gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
     vgl_h_matrix_3d<double> H(ss);
     H.get(data);
     TEST("Constructor from istream", equals(data, gold), true);
@@ -67,7 +67,7 @@ test_constructors()
   {
     std::stringstream ss;
     ss << "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16";
-    double                  gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
+    double gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
     vgl_h_matrix_3d<double> H;
     ss >> H;
     H.get(data);
@@ -76,21 +76,21 @@ test_constructors()
   {
     std::stringstream ss;
     ss << "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16";
-    double                  gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
+    double gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
     vgl_h_matrix_3d<double> H;
     H.read(ss);
     H.get(data);
     TEST("read() method", equals(data, gold), true);
   }
   {
-    double                  gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
-    vnl_double_4x4          M(gold);
+    double gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
+    vnl_double_4x4 M(gold);
     vgl_h_matrix_3d<double> H(M);
     H.get(data);
     TEST("Constructor from vnl_double_4x4", equals(data, gold), true);
   }
   {
-    double                  gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
+    double gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
     vgl_h_matrix_3d<double> H0(gold);
     vgl_h_matrix_3d<double> H;
     H = H0;
@@ -98,15 +98,15 @@ test_constructors()
     TEST("Assignment operator", equals(data, gold), true);
   }
   {
-    double                  gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
+    double gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
     vgl_h_matrix_3d<double> H;
     H.set(gold);
     H.get(data);
     TEST("set(array)", equals(data, gold), true);
   }
   {
-    double                  gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
-    vnl_double_4x4          M(gold);
+    double gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }; // the "ground truth"
+    vnl_double_4x4 M(gold);
     vgl_h_matrix_3d<double> H;
     H.set(M);
     H.get(data);
@@ -118,7 +118,7 @@ static void
 test_identity_transform()
 {
   std::cout << "Testing identity transform on point\n";
-  vgl_h_matrix_3d<double>   Id(vnl_double_4x4().set_identity());
+  vgl_h_matrix_3d<double> Id(vnl_double_4x4().set_identity());
   vgl_homg_point_3d<double> p(4, 3, 2, 1), pp;
   pp = Id(p);
   std::cout << "Id = " << Id << '\n' << "p = " << p << " , Id(p) = " << pp << '\n';
@@ -132,7 +132,7 @@ static void
 test_perspective_transform()
 {
   std::cout << "Testing perspective transform on point\n";
-  vnl_double_4x4            M;
+  vnl_double_4x4 M;
   vgl_homg_point_3d<double> p(3, 2, 1), pp, ppp;
   M.put(0, 0, 1);
   M.put(0, 1, 2);
@@ -179,7 +179,7 @@ test_rotation_about_axis()
   pp = R(p);
   std::cout << "p = " << p << " , R(p) = " << pp << '\n';
   vgl_point_3d<double> xpp(pp);
-  double               distance =
+  double distance =
     std::sqrt((xpp.x() - 0.707) * (xpp.x() - 0.707) + (xpp.y() - 0.707) * (xpp.y() - 0.707) + xpp.z() * xpp.z());
   TEST_NEAR("rotation", distance, 0.0, 1e-03);
 }
@@ -226,14 +226,14 @@ test_compute_linear_points()
     points2.push_back(gt_H(i));
 
   vgl_h_matrix_3d_compute_linear hmcl;
-  vgl_h_matrix_3d<double>        H = hmcl.compute(points1, points2);
+  vgl_h_matrix_3d<double> H = hmcl.compute(points1, points2);
 
   std::cout << "The resulting transform\n" << H << '\n';
 
   vgl_homg_point_3d<double> p_test_hom(150.0, 75.0, 100.0);
-  vgl_point_3d<double>      p_test(p_test_hom);
-  vgl_point_3d<double>      p_test_mapped(gt_H(p_test_hom));
-  vgl_point_3d<double>      p_test_mapped2(H(p_test_hom));
+  vgl_point_3d<double> p_test(p_test_hom);
+  vgl_point_3d<double> p_test_mapped(gt_H(p_test_hom));
+  vgl_point_3d<double> p_test_mapped2(H(p_test_hom));
   std::cout << "supposed to map: " << p_test << " to " << p_test_mapped << '\n'
             << "maps: " << p_test_mapped2 << std::endl;
 
@@ -269,7 +269,7 @@ test_compute_linear_points()
     points2.push_back(gt_H2(i));
 
   vgl_h_matrix_3d_compute_linear hmcl2;
-  vgl_h_matrix_3d<double>        H2o = hmcl2.compute(points1, points2);
+  vgl_h_matrix_3d<double> H2o = hmcl2.compute(points1, points2);
 
   std::cout << "The resulting transform\n" << H2o << '\n';
 
@@ -326,7 +326,7 @@ test_compute_affine_points()
     points2.push_back(gt_H(i));
 
   vgl_h_matrix_3d_compute_affine hmca;
-  vgl_h_matrix_3d<double>        H = hmca.compute(points1, points2);
+  vgl_h_matrix_3d<double> H = hmca.compute(points1, points2);
 
   std::cout << "The resulting transform\n" << H << '\n';
 
@@ -337,9 +337,9 @@ test_compute_affine_points()
 
 
   vgl_homg_point_3d<double> p_test_hom(150.0, 75.0, 100.0);
-  vgl_point_3d<double>      p_test(p_test_hom);
-  vgl_point_3d<double>      p_test_mapped(gt_H(p_test_hom));
-  vgl_point_3d<double>      p_test_mapped2(H(p_test_hom));
+  vgl_point_3d<double> p_test(p_test_hom);
+  vgl_point_3d<double> p_test_mapped(gt_H(p_test_hom));
+  vgl_point_3d<double> p_test_mapped2(H(p_test_hom));
   std::cout << "supposed to map: " << p_test << " to " << p_test_mapped << '\n'
             << "maps: " << p_test_mapped2 << std::endl;
 
@@ -375,7 +375,7 @@ test_compute_affine_points()
     points2.push_back(gt_H2(i));
 
   vgl_h_matrix_3d_compute_affine hmca2;
-  vgl_h_matrix_3d<double>        H2a = hmca2.compute(points1, points2);
+  vgl_h_matrix_3d<double> H2a = hmca2.compute(points1, points2);
 
   std::cout << "The resulting transform\n" << H2a << '\n';
 
@@ -392,17 +392,17 @@ static void
 test_reflection_about_plane()
 {
   vgl_h_matrix_3d<double> H;
-  vgl_plane_3d<double>    plane(1, 2, 3, 4);
+  vgl_plane_3d<double> plane(1, 2, 3, 4);
   H.set_reflection_plane(plane);
   TEST_NEAR("determinant(reflection)", vnl_det(H.get_matrix()), -1, 1e-8);
 
   vgl_point_3d<double> p1(10, 10, 10), p2(-20, -30, 50);
   vgl_point_3d<double> p1r = H * vgl_homg_point_3d<double>(p1);
   vgl_point_3d<double> p2r = H * vgl_homg_point_3d<double>(p2);
-  double               plane_dist1 = vgl_distance(plane, p1);
-  double               reflect_dist1 = vgl_distance(p1, p1r);
-  double               plane_dist2 = vgl_distance(plane, p2);
-  double               reflect_dist2 = vgl_distance(p2, p2r);
+  double plane_dist1 = vgl_distance(plane, p1);
+  double reflect_dist1 = vgl_distance(p1, p1r);
+  double plane_dist2 = vgl_distance(plane, p2);
+  double reflect_dist2 = vgl_distance(p2, p2r);
   TEST_NEAR("reflection distance",
             std::max(std::abs(plane_dist1 - reflect_dist1 / 2.0), std::abs(plane_dist2 - reflect_dist2 / 2.0)),
             0.0,

@@ -176,7 +176,7 @@ vgui_displaybase_tableau::draw_soviews_render()
              so_iter != it->second.objects.end();
              ++so_iter)
         {
-          vgui_soview *   so = *so_iter;
+          vgui_soview * so = *so_iter;
           vgui_style_sptr style = so->get_style();
 
           if (!it->second.style && style)
@@ -333,7 +333,7 @@ vgui_displaybase_tableau::deselect(unsigned iden)
 
     // notify so's observers
     vgui_soview * so = vgui_soview::id_to_object(iden);
-    vgui_message  msg;
+    vgui_message msg;
 #if 0
     msg.text = "soview deselect";
 #endif // 0
@@ -362,7 +362,7 @@ vgui_displaybase_tableau::deselect_all()
 
     // notify so's observers
     vgui_soview * so = vgui_soview::id_to_object(iden);
-    vgui_message  msg;
+    vgui_message msg;
     msg.user = (void const *)&vgui_soview::msg_deselect;
     so->notify(msg);
 

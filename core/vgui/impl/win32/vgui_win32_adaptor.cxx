@@ -379,8 +379,8 @@ void
 vgui_win32_adaptor::OnHScroll(UINT message, WPARAM wParam, LPARAM lParam)
 {
   static SCROLLINFO si;
-  int               iHorzPos;
-  vgui_event        e;
+  int iHorzPos;
+  vgui_event e;
 
   // Get all the vertical scroll bar information
   si.cbSize = sizeof(si);
@@ -432,8 +432,8 @@ void
 vgui_win32_adaptor::OnVScroll(UINT message, WPARAM wParam, LPARAM lParam)
 {
   static SCROLLINFO si;
-  int               iVertPos;
-  vgui_event        e;
+  int iVertPos;
+  vgui_event e;
 
   // Get all the vertical scroll bar information
   si.cbSize = sizeof(si);
@@ -629,7 +629,7 @@ vgui_win32_adaptor::translate_key(UINT nChar, UINT nFlags, int * the_key, int * 
   else
   {
     unsigned short buf[1024];
-    unsigned char  lpKeyState[256];
+    unsigned char lpKeyState[256];
     std::memset(lpKeyState, 0, 256);
     std::memset(buf, 0, 256);
 

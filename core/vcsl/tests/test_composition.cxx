@@ -25,7 +25,7 @@
 static void
 test_composition()
 {
-  vcsl_graph_sptr   graph = new vcsl_graph;
+  vcsl_graph_sptr graph = new vcsl_graph;
   vcsl_spatial_sptr csa = new vcsl_cartesian_3d;
   csa->set_graph(graph);
   vcsl_spatial_sptr cs0 = new vcsl_cartesian_3d;
@@ -42,7 +42,7 @@ test_composition()
   cs0->set_beat(cs0_beat);
 
   vcsl_translation_sptr tr = new vcsl_translation;
-  std::vector<double>   tr_beat;
+  std::vector<double> tr_beat;
   tr_beat.reserve(3);
   tr_beat.push_back(0);
   tr_beat.push_back(0.5);
@@ -79,7 +79,7 @@ test_composition()
   scale_values.push_back(4);
   scale->set_scale(scale_values);
 
-  vcsl_composition_sptr                         composition = new vcsl_composition;
+  vcsl_composition_sptr composition = new vcsl_composition;
   std::vector<vcsl_spatial_transformation_sptr> transfo;
   transfo.emplace_back(tr.ptr());
   transfo.emplace_back(scale.ptr());

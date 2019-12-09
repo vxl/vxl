@@ -4,14 +4,14 @@
 #include "vpgl/vpgl_calibration_matrix.h"
 
 static const vgl_point_3d<double> GOAL(1.0, 1.0, 1.0);
-static const double               TOL = .001;
+static const double TOL = .001;
 
 // Creates a perspective camera looking at pt, and adds the camera and
 // the projection of GOAL to the list.
 static void
-add_pt_and_cam(vgl_homg_point_3d<double>                      pt,
-               vgl_vector_3d<double>                          trans,
-               std::vector<vgl_point_2d<double>> &            points,
+add_pt_and_cam(vgl_homg_point_3d<double> pt,
+               vgl_vector_3d<double> trans,
+               std::vector<vgl_point_2d<double>> & points,
                std::vector<vpgl_perspective_camera<double>> & cameras)
 {
   vpgl_calibration_matrix<double> k;
@@ -50,13 +50,13 @@ static void
 test_triangulate()
 {
   // First, get the cameras and points we'll be using to triangulate
-  std::vector<vgl_point_2d<double>>            points;
+  std::vector<vgl_point_2d<double>> points;
   std::vector<vpgl_perspective_camera<double>> cameras;
   get_cams_and_pts(points, cameras);
 
   // Perform the triangulation
   vgl_point_3d<double> pt;
-  double               err = vpgl_triangulate_points::triangulate(points, cameras, pt);
+  double err = vpgl_triangulate_points::triangulate(points, cameras, pt);
 
   std::cout << "Error is " << err << "." << std::endl;
 

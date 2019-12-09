@@ -11,7 +11,7 @@ test_xtreeio_matrix_fixed()
 {
   std::stringstream s;
 
-  double                         data_m[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+  double data_m[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
   vnl_matrix_fixed<double, 2, 4> m(data_m);
   x_write_tree(s, m);
   TEST("XML I/O for vnl_matrix_fixed<double,2,4>",
@@ -26,7 +26,7 @@ test_xtreeio_matrix()
 {
   std::stringstream s;
 
-  double             data_m[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+  double data_m[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
   vnl_matrix<double> m(data_m, 2, 4);
   x_write_tree(s, m);
   TEST("XML I/O for vnl_matrix<double>",
@@ -54,7 +54,7 @@ test_xtreeio_vector()
 {
   std::stringstream s;
 
-  double             data_v[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+  double data_v[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
   vnl_vector<double> v(data_v, 9);
   x_write_tree(s, v);
   TEST("XML I/O for vnl_vector<double>",
@@ -82,7 +82,7 @@ test_xio_matrix_fixed()
 {
   std::stringstream s;
 
-  double                         data_m[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+  double data_m[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
   vnl_matrix_fixed<double, 2, 4> m(data_m);
   x_write(s, m);
   TEST("XML I/O for vnl_matrix_fixed<double,2,4>",
@@ -96,7 +96,7 @@ test_xio_matrix()
 {
   std::stringstream s;
 
-  double             data_m[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+  double data_m[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
   vnl_matrix<double> m(data_m, 2, 4);
   x_write(s, m);
   TEST("XML I/O for vnl_matrix<double>",
@@ -122,7 +122,7 @@ test_xio_vector()
 {
   std::stringstream s;
 
-  double             data_v[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+  double data_v[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
   vnl_vector<double> v(data_v, 9);
   x_write(s, v);
   TEST("XML I/O for vnl_vector<double>",

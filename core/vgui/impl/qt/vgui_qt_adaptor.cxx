@@ -244,7 +244,7 @@ vgui_event
 vgui_qt_adaptor::translate(QKeyEvent * e)
 {
   vgui_event ev;
-  int        state = vgui_MODIFIER_NULL;
+  int state = vgui_MODIFIER_NULL;
   if (e->state() & ControlButton)
     state |= vgui_CTRL;
   if (e->state() & AltButton)
@@ -302,7 +302,7 @@ vgui_event
 vgui_qt_adaptor::translate(QWheelEvent * e)
 {
   vgui_event ev;
-  int        state = vgui_MODIFIER_NULL;
+  int state = vgui_MODIFIER_NULL;
   if (e->state() & ControlButton)
     state |= vgui_CTRL;
   if (e->state() & AltButton)

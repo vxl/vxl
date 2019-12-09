@@ -79,7 +79,7 @@ bool
 almost_equal_helper(const T & real1, const T & real2)
 {
   bool result;
-  T    max, min, factor;
+  T max, min, factor;
   if (real1 < real2)
   {
     min = real1;
@@ -238,28 +238,28 @@ golden_test_vgl_io(bool save_file)
   // vgl_point_2d
 
   double double_pos[2] = { 2.3, 4.7 };
-  float  float_pos[2] = { 3.3f, 4.9f };
+  float float_pos[2] = { 3.3f, 4.9f };
 
   vgl_point_2d<double> double_point_2d_out(double_pos), double_point_2d_in;
   vgl_point_2d<double> double_point_2d_out2(4.6, 7.8), double_point_2d_in2;
   vgl_point_2d<double> double_point_2d_in_bis;
-  vgl_point_2d<float>  float_point_2d_out(float_pos), float_point_2d_in;
-  vgl_point_2d<float>  float_point_2d_out2(4.7f, 6.8f), float_point_2d_in2;
+  vgl_point_2d<float> float_point_2d_out(float_pos), float_point_2d_in;
+  vgl_point_2d<float> float_point_2d_out2(4.7f, 6.8f), float_point_2d_in2;
 
   // vgl_point_3d
 
   double double_3d_pos[3] = { 2.3, 4.7, 5.6 };
-  float  float_3d_pos[3] = { 5.3f, 6.7f, 8.5f };
+  float float_3d_pos[3] = { 5.3f, 6.7f, 8.5f };
 
   vgl_point_3d<double> double_point_3d_out(double_3d_pos), double_point_3d_in;
   vgl_point_3d<double> double_point_3d_out2(4.6, 7.8, 0.4), double_point_3d_in2;
-  vgl_point_3d<float>  float_point_3d_out(float_3d_pos), float_point_3d_in;
-  vgl_point_3d<float>  float_point_3d_out2(5.9f, 8.8f, 9.2f), float_point_3d_in2;
+  vgl_point_3d<float> float_point_3d_out(float_3d_pos), float_point_3d_in;
+  vgl_point_3d<float> float_point_3d_out2(5.9f, 8.8f, 9.2f), float_point_3d_in2;
 
   // vgl_homg_point_2d
 
   double double_homg_pos[3] = { 2.3, 4.7, 6.7 };
-  float  float_homg_pos[3] = { 2.3f, 4.7f, 5.6f };
+  float float_homg_pos[3] = { 2.3f, 4.7f, 5.6f };
 
   vgl_homg_point_2d<double> double_homg_point_2d_out(double_homg_pos);
   vgl_homg_point_2d<double> double_homg_point_2d_in;
@@ -274,17 +274,17 @@ golden_test_vgl_io(bool save_file)
   // vgl_homg_point_3d
 
   double double_3d_homg_pos[4] = { 2.3, 4.7, 6.7, 1.0 };
-  float  float_3d_homg_pos[4] = { 2.3f, 4.7f, 5.6f, 2.4f };
+  float float_3d_homg_pos[4] = { 2.3f, 4.7f, 5.6f, 2.4f };
 
   vgl_homg_point_3d<double> double_homg_point_3d_out(double_3d_homg_pos), double_homg_point_3d_in;
   vgl_homg_point_3d<double> double_homg_point_3d_out2(4.6, 7.8, 9.1), double_homg_point_3d_in2;
-  vgl_homg_point_3d<float>  float_homg_point_3d_out(float_3d_homg_pos), float_homg_point_3d_in;
-  vgl_homg_point_3d<float>  float_homg_point_3d_out2(4.6f, 7.8f, 9.1f), float_homg_point_3d_in2;
+  vgl_homg_point_3d<float> float_homg_point_3d_out(float_3d_homg_pos), float_homg_point_3d_in;
+  vgl_homg_point_3d<float> float_homg_point_3d_out2(4.6f, 7.8f, 9.1f), float_homg_point_3d_in2;
 
   // vgl_line_2d
 
   vgl_line_2d<double> double_line_2d_out(double_point_2d_out, double_point_2d_out2), double_line_2d_in;
-  vgl_line_2d<float>  float_line_2d_out(float_point_2d_out, float_point_2d_out2), float_line_2d_in;
+  vgl_line_2d<float> float_line_2d_out(float_point_2d_out, float_point_2d_out2), float_line_2d_in;
 
   // vgl_homg_line_2d
 
@@ -319,21 +319,21 @@ golden_test_vgl_io(bool save_file)
 
   double double_min_pos[2] = { 3.4, 5.6 };
   double double_max_pos[2] = { 7.8, 9.1 };
-  float  float_min_pos[2] = { 2.4f, 4.6f };
-  float  float_max_pos[2] = { 7.7f, 9.0f };
+  float float_min_pos[2] = { 2.4f, 4.6f };
+  float float_max_pos[2] = { 7.7f, 9.0f };
 
   vgl_box_2d<double> double_box_2d_out(double_min_pos, double_max_pos), double_box_2d_in;
-  vgl_box_2d<float>  float_box_2d_out(float_min_pos, float_max_pos), float_box_2d_in;
+  vgl_box_2d<float> float_box_2d_out(float_min_pos, float_max_pos), float_box_2d_in;
 
   // vgl_box_3d
 
   vgl_box_3d<double> double_box_3d_out(-4.6, 2.8, 0.56, 4.3, 4.7, 2.12), double_box_3d_in;
-  vgl_box_3d<float>  float_box_3d_out(-3.6f, 1.8f, 5.46f, 3.9f, 6.7f, 9.04f), float_box_3d_in;
+  vgl_box_3d<float> float_box_3d_out(-3.6f, 1.8f, 5.46f, 3.9f, 6.7f, 9.04f), float_box_3d_in;
 
   // vgl_homg_plane_3d
 
   vgl_vector_3d<double> double_homg_normal(2.3, 4.7, 6.7);
-  vgl_vector_3d<float>  float_homg_normal(2.3f, 4.7f, 5.6f);
+  vgl_vector_3d<float> float_homg_normal(2.3f, 4.7f, 5.6f);
 
   vgl_homg_plane_3d<double> double_homg_plane_3d_out(double_homg_normal, double_homg_point_3d_out),
     double_homg_plane_3d_in;
@@ -394,7 +394,7 @@ golden_test_vgl_io(bool save_file)
   }
 
   // Read in file to each class in turn
-  std::string    gold_path = testlib_root_dir() + "/core/vgl/io/tests/golden_vgl_io_test.bvl";
+  std::string gold_path = testlib_root_dir() + "/core/vgl/io/tests/golden_vgl_io_test.bvl";
   vsl_b_ifstream bfs_in(gold_path.c_str());
   TEST("Opened golden_vgl_io_test.bvl for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, double_point_2d_in);

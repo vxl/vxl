@@ -93,7 +93,7 @@ vgui_mfc_app::InitInstance()
   // pDocument->m_bAutoDelete = FALSE; //awf added to stop segv on exit.
   //  probly wrong.  Then removed as it did nowt.
 
-  CFrameWnd *    pFrame = (CFrameWnd *)(RUNTIME_CLASS(vgui_mfc_mainfrm)->CreateObject());
+  CFrameWnd * pFrame = (CFrameWnd *)(RUNTIME_CLASS(vgui_mfc_mainfrm)->CreateObject());
   CCreateContext context;
   context.m_pCurrentFrame = pFrame;
   context.m_pCurrentDoc = pDocument;
@@ -123,7 +123,7 @@ vgui_mfc_app::Run()
   // for tracking the idle time state
   BOOL bIdle = TRUE;
   LONG lIdleCount = 0;
-  MSG  msgCur;
+  MSG msgCur;
 
   // acquire and dispatch messages until a WM_QUIT message is received.
   for (;;)
@@ -212,11 +212,11 @@ vgui_mfc_app::OnIdle(LONG lCount)
   while (tmpl_pos)
   {
     CDocTemplate * tmpl = this->GetNextDocTemplate(tmpl_pos);
-    POSITION       doc_pos = tmpl->GetFirstDocPosition();
+    POSITION doc_pos = tmpl->GetFirstDocPosition();
     while (doc_pos)
     {
       CDocument * pdoc = tmpl->GetNextDoc(doc_pos);
-      POSITION    view_pos = pdoc->GetFirstViewPosition();
+      POSITION view_pos = pdoc->GetFirstViewPosition();
       while (view_pos)
       {
         vgui_mfc_adaptor * adaptor = (vgui_mfc_adaptor *)pdoc->GetNextView(view_pos);

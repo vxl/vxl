@@ -22,7 +22,7 @@ test_6x6()
   };
   vnl_matrix<double> S(Sdata, 6, 6);
 
-  vnl_real_eigensystem                  eig(S);
+  vnl_real_eigensystem eig(S);
   vnl_diag_matrix<std::complex<double>> D(eig.D.rows());
   for (unsigned i = 0; i < eig.D.rows(); ++i)
   {
@@ -41,7 +41,7 @@ static void
 test_4x4()
 {
   // unsympathetic
-  double             Xdata[] = { 686, 526, 701, 47, 588, 91, 910, 736, 930, 653, 762, 328, 846, 415, 262, 632 };
+  double Xdata[] = { 686, 526, 701, 47, 588, 91, 910, 736, 930, 653, 762, 328, 846, 415, 262, 632 };
   vnl_matrix<double> X(Xdata, 4, 4);
 
   vnl_real_eigensystem eig(X);

@@ -54,7 +54,7 @@ vgui_mfc_dialog_impl::~vgui_mfc_dialog_impl() {}
 struct vgui_mfc_dialog_choice
 {
   std::vector<std::string> names;
-  int                      index;
+  int index;
 };
 
 
@@ -75,8 +75,8 @@ vgui_mfc_dialog_impl::choice_field_widget(const char * /*txt*/, const std::vecto
 struct vgui_mfc_dialog_inline_tab
 {
   vgui_tableau_sptr tab;
-  unsigned          height;
-  unsigned          width;
+  unsigned height;
+  unsigned width;
 };
 
 //------------------------------------------------------------------------------
@@ -149,7 +149,7 @@ void
 vgui_mfc_dialog_impl::OnChooseColour(UINT uID)
 {
   char buffer[20];
-  int  which = uID - ID_CHOOSE_COLOUR;
+  int which = uID - ID_CHOOSE_COLOUR;
   ASSERT(which >= 0 && which < 100);
   std::cerr << "File browser loading...";
   CColorDialog colour_dialog(0, 0, this);
@@ -186,13 +186,13 @@ vgui_mfc_dialog_impl::ask()
 
   for (std::vector<element>::iterator e_iter1 = elements.begin(); e_iter1 != elements.end(); ++e_iter1)
   {
-    element             l = *e_iter1;
+    element l = *e_iter1;
     vgui_dialog_field * field = l.field;
 
     if (l.type == bool_elem)
     {
       vgui_bool_field * field = static_cast<vgui_bool_field *>(l.field);
-      int               field_length = std::strlen(field->label.c_str());
+      int field_length = std::strlen(field->label.c_str());
       if (max_length < field_length)
         max_length = field_length;
       height += 45;
@@ -269,7 +269,7 @@ vgui_mfc_dialog_impl::ask()
 
   // Ok button
   CButton * accept = 0;
-  int       right_of_ok_button;
+  int right_of_ok_button;
   if (ok_button_text_.size() > 0)
   {
     CRect r;
@@ -307,7 +307,7 @@ vgui_mfc_dialog_impl::ask()
   r.bottom = 3 * 8 + 2;
   for (std::vector<element>::iterator e_iter2 = elements.begin(); e_iter2 != elements.end(); ++e_iter2)
   {
-    element             l = *e_iter2;
+    element l = *e_iter2;
     vgui_dialog_field * field = l.field;
 
     if (l.type == int_elem || l.type == long_elem || l.type == float_elem || l.type == double_elem ||
@@ -355,7 +355,7 @@ vgui_mfc_dialog_impl::ask()
       r.bottom += 5 * 8;
       r.right = r.left + (field->label.size() + 3) * 8;
       vgui_bool_field * field = static_cast<vgui_bool_field *>(l.field);
-      CButton *         checkbox = new CButton();
+      CButton * checkbox = new CButton();
       checkbox->Create(_T(field->label.c_str()), WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_AUTOCHECKBOX, r, this, 4);
       checkbox->SetFont(font);
       checkbox->SetCheck(field->var); // Make sure checkbox displays current bool value.
@@ -425,7 +425,7 @@ vgui_mfc_dialog_impl::ask()
 
       // Now set the line editor next
       CEdit * edit = new CEdit();
-      int     savey = r.top;
+      int savey = r.top;
       r.left = r.right + 3 * 8;
       r.left = 2 * 4 + max_length * 8 + 2 * 8;
       r.right = width - 2 * 8; // r.left+l.field->current_value().size()*8;
@@ -501,7 +501,7 @@ vgui_mfc_dialog_impl::ask()
     else if (l.type == inline_tabl)
     {
       vgui_mfc_dialog_inline_tab * tab_data = (vgui_mfc_dialog_inline_tab *)l.widget;
-      vgui_mfc_adaptor *           widg = new vgui_mfc_adaptor();
+      vgui_mfc_adaptor * widg = new vgui_mfc_adaptor();
       widg->set_tableau(tab_data->tab);
       // because this adaptor is not in the main window we need to call setup_adaptor:
       widg->setup_adaptor(this, wglGetCurrentDC(), wglGetCurrentContext());
@@ -539,7 +539,7 @@ vgui_mfc_dialog_impl::ask()
     for (std::vector<element>::iterator e_iter3 = elements.begin(); e_iter3 != elements.end(); ++e_iter3, ++w_iter)
     {
       element l = *e_iter3;
-      CWnd *  input = *w_iter;
+      CWnd * input = *w_iter;
 
       if (l.type == int_elem || l.type == long_elem || l.type == float_elem || l.type == double_elem ||
           l.type == string_elem || l.type == file_bsr || l.type == color_csr || l.type == inline_color_csr ||

@@ -58,7 +58,7 @@ test_pmatrix()
     2, 0, 0, 0, 3, 10, 5, 5, 5, 12, 6, 6,
   };
   vnl_matrix_fixed<double, 3, 4> P(pdata);
-  vnl_svd_fixed<double, 3, 4>    svd(P, 1e-8);
+  vnl_svd_fixed<double, 3, 4> svd(P, 1e-8);
 
   vnl_matrix_fixed<double, 3, 4> res = svd.recompose() - P;
   TEST_NEAR("PMatrix recomposition residual", res.fro_norm(), 0, 1e-12);
@@ -91,7 +91,7 @@ test_I()
     1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
   };
   vnl_matrix_fixed<double, 3, 4> P(Idata);
-  vnl_svd_fixed<double, 3, 4>    svd(P);
+  vnl_svd_fixed<double, 3, 4> svd(P);
   std::cout << svd;
 
   vnl_vector_fixed<double, 4> w_expected(1, 1, 1, 0);
@@ -125,12 +125,12 @@ static void
 test_nullvector(char const * type, double max_err, T *, vnl_random & rng)
 {
   std::cout << "----- Testing vnl_svd_fixed<" << type << "> null vector -----" << std::endl;
-  constexpr int                 n = 3;
+  constexpr int n = 3;
   vnl_matrix_fixed<T, n, n + 1> A;
   test_util_fill_random(A.begin(), A.end(), rng);
   vnl_svd_fixed<T, n, n + 1> svd(A);
   vnl_vector_fixed<T, n + 1> x = svd.nullvector();
-  vnl_vector_fixed<T, n>     Ax = A * x;
+  vnl_vector_fixed<T, n> Ax = A * x;
   vnl_matlab_print(std::cout, A, "A", vnl_matlab_print_format_long);
   std::cout << "|| x|| = " << x.two_norm() << std::endl << "||Ax|| = " << Ax.two_norm() << std::endl;
   TEST_NEAR("||Ax||", Ax.two_norm(), 0.0, max_err);
@@ -142,7 +142,7 @@ test_speed(vnl_random & rng)
 {
   int ms_heap;
   {
-    double             sum = 0;
+    double sum = 0;
     const std::clock_t timer_01 = std::clock();
     vnl_matrix<double> A(3, 3);
     for (unsigned count = 0; count < 10000; ++count)
@@ -157,8 +157,8 @@ test_speed(vnl_random & rng)
   }
   int ms_stack;
   {
-    double                         sum = 0;
-    const std::clock_t             timer_03 = std::clock();
+    double sum = 0;
+    const std::clock_t timer_03 = std::clock();
     vnl_matrix_fixed<double, 3, 3> A;
     for (unsigned count = 0; count < 10000; ++count)
     {
@@ -172,8 +172,8 @@ test_speed(vnl_random & rng)
   }
   int ms_nosvd;
   {
-    double                         sum = 0;
-    const std::clock_t             timer_05 = std::clock();
+    double sum = 0;
+    const std::clock_t timer_05 = std::clock();
     vnl_matrix_fixed<double, 3, 3> A;
     for (unsigned count = 0; count < 10000; ++count)
     {

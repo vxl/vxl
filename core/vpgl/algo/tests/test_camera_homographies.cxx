@@ -40,11 +40,11 @@ test_camera_homographies()
   P[2][2] = -0.001;
   P[2][3] = 0.326;
   vpgl_proj_camera<double> c(P);
-  vgl_point_2d<double>     pact(275.5, 413.0);
+  vgl_point_2d<double> pact(275.5, 413.0);
   std::cout << "img_pt_act_scene" << pact << std::endl;
   vgl_point_3d<double> p3d_act;
   vgl_plane_3d<double> gpl(vgl_vector_3d<double>(0, 0, 1), vgl_point_3d<double>(0, 0, 0));
-  bool                 good = vpgl_backproject::bproj_plane(c, pact, gpl, vgl_point_3d<double>(0, 0, 0), p3d_act);
+  bool good = vpgl_backproject::bproj_plane(c, pact, gpl, vgl_point_3d<double>(0, 0, 0), p3d_act);
   if (good)
   {
     std::cout << "Actual world point " << p3d_act << std::endl;
@@ -56,7 +56,7 @@ test_camera_homographies()
   TEST_NEAR(" Project from X-Y Plane", er, 0.0, 0.001);
 
   vgl_homg_point_2d<double> h_pact(pact), homg_world_pt, homg_world_pt_vert;
-  vgl_h_matrix_2d<double>   H_from_act = vpgl_camera_homographies::homography_from_camera(c, gpl);
+  vgl_h_matrix_2d<double> H_from_act = vpgl_camera_homographies::homography_from_camera(c, gpl);
   homg_world_pt = H_from_act * h_pact;
   vgl_point_3d<double> act_world_pt_from_H(
     homg_world_pt.x() / homg_world_pt.w(), homg_world_pt.y() / homg_world_pt.w(), 0.0);
@@ -66,7 +66,7 @@ test_camera_homographies()
 
   std::cout << "\n ===== vertical plane actual camera ======" << std::endl;
   vgl_plane_3d<double> vert_pl(vgl_vector_3d<double>(-1 / sqrt(2), -1 / sqrt(2), 0.0), p3d_act);
-  vgl_ray_3d<double>   ray = c.backproject_ray(h_pact);
+  vgl_ray_3d<double> ray = c.backproject_ray(h_pact);
   vgl_point_3d<double> pint;
   good = vgl_intersection(ray, vert_pl, pint);
   std::cout << "Ray from camera " << ray << std::endl;

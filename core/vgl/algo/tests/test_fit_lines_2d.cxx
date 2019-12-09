@@ -21,11 +21,11 @@ static void
 test_line_segment_methods()
 {
   vgl_point_2d<double> p0(0.0, 0.0), p1(1.0, 2.0);
-  vgl_line_2d<double>  l(1.0, -1.0, 0.0);
+  vgl_line_2d<double> l(1.0, -1.0, 0.0);
   std::cout << "line angle " << l.slope_degrees() << '\n';
   TEST_NEAR("line angle", l.slope_degrees(), 45, 1e-04);
   vgl_line_segment_2d<double> seg(p0, p1);
-  double                      angle = seg.slope_degrees();
+  double angle = seg.slope_degrees();
   TEST_NEAR("line angle", seg.slope_degrees(), 63.43495, 1e-04);
   vgl_vector_2d<double> dir = seg.direction(), norm = seg.normal();
   std::cout << "segment angle = " << angle << '\n' << "direction " << dir << '\n' << "normal " << norm << '\n';
@@ -35,7 +35,7 @@ static void
 test_line_2d_regression()
 {
   std::cout << "Testing line regression\n";
-  vgl_point_2d<double>           p0(0.1, 0.9), p1(0.5, 1.6), p2(1.2, 2.0);
+  vgl_point_2d<double> p0(0.1, 0.9), p1(0.5, 1.6), p2(1.2, 2.0);
   vgl_line_2d_regression<double> reg;
   reg.increment_partial_sums(p0.x(), p0.y());
   reg.increment_partial_sums(p1.x(), p1.y());
@@ -50,8 +50,8 @@ static void
 test_fit_simple_chain()
 {
   std::vector<vgl_point_2d<double>> curve;
-  int                               npts = 15;
-  vgl_fit_lines_2d<double>          fitter;
+  int npts = 15;
+  vgl_fit_lines_2d<double> fitter;
   // A segment with a slope of 2
   for (int i = 0; i < npts; i++)
   {

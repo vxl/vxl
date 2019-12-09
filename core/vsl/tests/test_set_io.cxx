@@ -16,7 +16,7 @@ test_set_io()
             << "Testing std::set binary io\n"
             << "*************************\n";
 
-  int           n = 10;
+  int n = 10;
   std::set<int> s_int_out;
   for (int i = 0; i < n; ++i)
     s_int_out.insert(i);
@@ -33,7 +33,7 @@ test_set_io()
   vsl_b_write(bfs_out, s_string_out);
   bfs_out.close();
 
-  std::set<int>         s_int_in;
+  std::set<int> s_int_in;
   std::set<std::string> s_string_in;
 
   vsl_b_ifstream bfs_in("vsl_set_io_test.bvl.tmp");

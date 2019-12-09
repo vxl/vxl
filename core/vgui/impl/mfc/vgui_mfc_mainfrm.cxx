@@ -107,8 +107,8 @@ vgui_mfc_mainfrm::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar * pScrollBar)
 {
   // --- For the time being this routine only deals with this windows' scroll
   // bar and not to any controls within the window
-  CWinApp *      app = AfxGetApp();
-  POSITION       pos = app->GetFirstDocTemplatePosition();
+  CWinApp * app = AfxGetApp();
+  POSITION pos = app->GetFirstDocTemplatePosition();
   CDocTemplate * tmpl = app->GetNextDocTemplate(pos);
   pos = tmpl->GetFirstDocPosition();
   CDocument * pdoc = tmpl->GetNextDoc(pos);
@@ -149,8 +149,8 @@ vgui_mfc_mainfrm::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar * pScrollBar)
 {
   // For the time being this routine only deals with this windows' scroll
   // bar and not to any controls within the window
-  CWinApp *      app = AfxGetApp();
-  POSITION       pos = app->GetFirstDocTemplatePosition();
+  CWinApp * app = AfxGetApp();
+  POSITION pos = app->GetFirstDocTemplatePosition();
   CDocTemplate * tmpl = app->GetNextDocTemplate(pos);
   pos = tmpl->GetFirstDocPosition();
   CDocument * pdoc = tmpl->GetNextDoc(pos);

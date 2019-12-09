@@ -26,8 +26,8 @@
 
 // static data
 vgui_toolkit * vgui::instance_ = nullptr;
-bool           vgui::init_called = false;
-bool           vgui::quit_called = false;
+bool vgui::init_called = false;
+bool vgui::quit_called = false;
 
 
 std::ostream vgui::out(std::cout.rdbuf());
@@ -374,10 +374,10 @@ vgui::run(vgui_tableau_sptr const & tableau, int width, int height, std::string 
 //: Display this tableau and run till dead (with menubar).
 int
 vgui::run(vgui_tableau_sptr const & tableau,
-          int                       width,
-          int                       height,
-          vgui_menu const &         menubar,
-          std::string const &       title)
+          int width,
+          int height,
+          vgui_menu const & menubar,
+          std::string const & title)
 {
   adapt(tableau, width, height, menubar, title);
   return vgui::run();

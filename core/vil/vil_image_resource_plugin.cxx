@@ -20,9 +20,9 @@ static std::vector<vil_image_resource_plugin *> * vil_image_resource_plugins_lis
 
 bool
 vil_image_resource_plugin::load_the_image(vil_image_view_base_sptr & image,
-                                          const std::string &        path,
-                                          const std::string &        filetype,
-                                          const std::string &        colour)
+                                          const std::string & path,
+                                          const std::string & filetype,
+                                          const std::string & colour)
 {
   if (vil_image_resource_plugins_list_ == nullptr || is_a() != std::string("vil_image_resource_plugin"))
   {

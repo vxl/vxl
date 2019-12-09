@@ -592,12 +592,12 @@ vidl_v4l2_device::read_frame()
     }
 
   struct v4l2_buffer buf;
-  bool               completed = false;
+  bool completed = false;
   do
   {
-    fd_set         fds;
+    fd_set fds;
     struct timeval tv;
-    int            r;
+    int r;
 
     FD_ZERO(&fds);
     FD_SET(fd, &fds);

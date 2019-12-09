@@ -62,19 +62,19 @@ method3(const vil_image_view<imT> & src_image, vil_image_view<imT> & dest_image,
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
-    unsigned       ni = src_image.ni(), nj = src_image.nj(), np = src_image.nplanes();
+    unsigned ni = src_image.ni(), nj = src_image.nj(), np = src_image.nplanes();
     std::ptrdiff_t sistep = src_image.istep(), sjstep = src_image.jstep(), spstep = src_image.planestep();
     std::ptrdiff_t distep = dest_image.istep(), djstep = dest_image.jstep(), dpstep = dest_image.planestep();
-    const imT *    splane = src_image.top_left_ptr();
-    imT *          dplane = dest_image.top_left_ptr();
+    const imT * splane = src_image.top_left_ptr();
+    imT * dplane = dest_image.top_left_ptr();
     for (unsigned p = 0; p < np; ++p, splane += spstep, dplane += dpstep)
     {
       const imT * srow = splane;
-      imT *       drow = dplane;
+      imT * drow = dplane;
       for (unsigned j = 0; j < nj; ++j, srow += sjstep, drow += djstep)
       {
         const imT * spixel = srow;
-        imT *       dpixel = drow;
+        imT * dpixel = drow;
         for (unsigned i = 0; i < ni; ++i, spixel += sistep, dpixel += distep)
           *dpixel = *spixel + 1;
         ;
@@ -92,15 +92,15 @@ method4(const vil_image_view<imT> & src_image, vil_image_view<imT> & dest_image,
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
-    unsigned       ni = src_image.ni(), nj = src_image.nj(), np = src_image.nplanes();
+    unsigned ni = src_image.ni(), nj = src_image.nj(), np = src_image.nplanes();
     std::ptrdiff_t sistep = src_image.istep(), sjstep = src_image.jstep(), spstep = src_image.planestep();
     std::ptrdiff_t distep = dest_image.istep(), djstep = dest_image.jstep(), dpstep = dest_image.planestep();
-    const imT *    splane = src_image.top_left_ptr();
-    imT *          dplane = dest_image.top_left_ptr();
+    const imT * splane = src_image.top_left_ptr();
+    imT * dplane = dest_image.top_left_ptr();
     for (unsigned p = 0; p < np; ++p, splane += spstep, dplane += dpstep)
     {
       const imT * srow = splane;
-      imT *       drow = dplane;
+      imT * drow = dplane;
       for (unsigned j = 0; j < nj; ++j, srow += sjstep, drow += djstep)
       {
         for (unsigned i = 0; i < ni; ++i)
@@ -121,15 +121,15 @@ method5(const vil_image_view<imT> & src_image, vil_image_view<imT> & dest_image,
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
-    unsigned       ni = src_image.ni(), nj = src_image.nj(), np = src_image.nplanes();
+    unsigned ni = src_image.ni(), nj = src_image.nj(), np = src_image.nplanes();
     std::ptrdiff_t sjstep = src_image.jstep(), spstep = src_image.planestep();
     std::ptrdiff_t djstep = dest_image.jstep(), dpstep = dest_image.planestep();
-    const imT *    splane = src_image.top_left_ptr();
-    imT *          dplane = dest_image.top_left_ptr();
+    const imT * splane = src_image.top_left_ptr();
+    imT * dplane = dest_image.top_left_ptr();
     for (unsigned p = 0; p < np; ++p, splane += spstep, dplane += dpstep)
     {
       const imT * srow = splane;
-      imT *       drow = dplane;
+      imT * drow = dplane;
       for (unsigned j = 0; j < nj; ++j, srow += sjstep, drow += djstep)
       {
         for (unsigned i = 0; i < ni; ++i)
@@ -150,15 +150,15 @@ method6(const vil_image_view<imT> & src_image, vil_image_view<imT> & dest_image,
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
-    unsigned       ni = src_image.ni(), nj = src_image.nj(), np = src_image.nplanes();
+    unsigned ni = src_image.ni(), nj = src_image.nj(), np = src_image.nplanes();
     std::ptrdiff_t sistep = src_image.istep(), sjstep = src_image.jstep(), spstep = src_image.planestep();
     std::ptrdiff_t distep = dest_image.istep(), djstep = dest_image.jstep(), dpstep = dest_image.planestep();
-    const imT *    splane = src_image.top_left_ptr();
-    imT *          dplane = dest_image.top_left_ptr();
+    const imT * splane = src_image.top_left_ptr();
+    imT * dplane = dest_image.top_left_ptr();
     for (unsigned p = 0; p < np; ++p, splane += spstep, dplane += dpstep)
     {
       const imT * srow = splane - sistep; // going to index i=n..1
-      imT *       drow = dplane - distep;
+      imT * drow = dplane - distep;
       for (unsigned j = 0; j < nj; ++j, srow += sjstep, drow += djstep)
       {
         for (unsigned i = ni; i; --i)
@@ -178,7 +178,7 @@ method7(const vil_image_view<imT> & src_image, vil_image_view<imT> & dest_image,
   // Uses row[i] to simulate lookup type access used in original vil1 images
   assert(src_image.nplanes() == NP && src_image.ni() == NI);
   const imT * src_raster_ptrs[NP][NJ];
-  imT *       dest_raster_ptrs[NP][NJ];
+  imT * dest_raster_ptrs[NP][NJ];
 
   {
     unsigned nj = src_image.nj(), np = src_image.nplanes();
@@ -257,8 +257,8 @@ int
 main(int argc, char ** argv)
 {
   vil_image_view<vxl_byte> src_byte_image(NI, NJ, NP), dest_byte_image(NI, NJ, NP);
-  vil_image_view<float>    src_float_image(NI, NJ, NP), dest_float_image(NI, NJ, NP);
-  int                      n_loops = 100;
+  vil_image_view<float> src_float_image(NI, NJ, NP), dest_float_image(NI, NJ, NP);
+  int n_loops = 100;
 
   std::cout << "Times to copy and increment a " << NI << " x " << NJ << " image of " << NP
             << " planes (in microsecs) [Range= 0.5(max-min)]\n\n";

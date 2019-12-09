@@ -88,7 +88,7 @@ test_pixels()
   for (int i = 0; i < 32; ++i)
   {
     const char * buf = vul_sprintf("0x1<<%3d", i);
-    GLuint       w = (0x1 << i);
+    GLuint w = (0x1 << i);
     print_binary(buf, &w, sizeof(w));
   }
   std::cerr << "\nr=1, g=0, b=1, a=0\n\n";

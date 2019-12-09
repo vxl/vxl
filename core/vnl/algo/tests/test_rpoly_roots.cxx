@@ -5,7 +5,7 @@
 void
 test_rpoly_roots()
 {
-  double             coeffs[] = { 5, 4, 3, 2, 1 };
+  double coeffs[] = { 5, 4, 3, 2, 1 };
   vnl_vector<double> a(coeffs, 5);
 
   vnl_rpoly_roots roots(a);

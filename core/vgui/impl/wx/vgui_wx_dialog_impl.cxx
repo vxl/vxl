@@ -66,7 +66,7 @@ public:
   {
     // ***** should add wildcard value,
     //       but need to pass it through from element->widget
-    wxFileName   filename(handles_[e.GetId()]->GetValue());
+    wxFileName filename(handles_[e.GetId()]->GetValue());
     wxFileDialog file_dialog(handles_[e.GetId()], wxT("Choose a file"), filename.GetPath(), filename.GetFullName());
 
     if (file_dialog.ShowModal() == wxID_OK)
@@ -257,7 +257,7 @@ vgui_wx_dialog_impl::ask(void)
 struct vgui_wx_dialog_choice
 {
   std::vector<std::string> names;
-  int                      index;
+  int index;
 };
 
 //: Create a choice widget.
@@ -273,8 +273,8 @@ vgui_wx_dialog_impl::choice_field_widget(const char * WXUNUSED(txt), const std::
 struct vgui_wx_dialog_inline_tab
 {
   vgui_tableau_sptr tab;
-  unsigned int      height;
-  unsigned int      width;
+  unsigned int height;
+  unsigned int width;
 };
 
 //: Create the inline_tableau_widget (OpenGL area).
@@ -302,7 +302,7 @@ vgui_wx_dialog_impl::build_wx_dialog(void)
 
   // handler for dynamic connection
   vgui_wx_event_handler * handler = new vgui_wx_event_handler;
-  int                     id = wxID_HIGHEST;
+  int id = wxID_HIGHEST;
 
   // probe for column sizes
   max_label_width_ = probe_for_max_label_width();
@@ -450,7 +450,7 @@ int
 vgui_wx_dialog_impl::probe_for_max_label_width(void)
 {
   wxStaticText temp(dialog_, wxID_ANY, wxString());
-  int          max_width = temp.GetSize().GetX();
+  int max_width = temp.GetSize().GetX();
   for (std::vector<element>::const_iterator e = elements.begin(); e != elements.end(); ++e)
   {
     switch (e->type)
@@ -486,7 +486,7 @@ vgui_wx_dialog_impl::bool_element(vgui_dialog_field * field)
   assert(field);
 
   wxSizer * cell = new wxBoxSizer(wxHORIZONTAL);
-  bool *    var = &dynamic_cast<vgui_bool_field *>(field)->var;
+  bool * var = &dynamic_cast<vgui_bool_field *>(field)->var;
   cell->Add(new wxCheckBox(dialog_,
                            wxID_ANY,
                            wxString(field->label.c_str(), wxConvUTF8),
@@ -505,7 +505,7 @@ vgui_wx_dialog_impl::choice_element(vgui_dialog_field * field, vgui_wx_dialog_ch
   assert(field);
   assert(choices);
 
-  wxSizer *      cell = new wxBoxSizer(wxHORIZONTAL);
+  wxSizer * cell = new wxBoxSizer(wxHORIZONTAL);
   wxStaticText * st = new wxStaticText(dialog_,
                                        wxID_STATIC,
                                        wxString(field->label.c_str(), wxConvUTF8),
@@ -520,7 +520,7 @@ vgui_wx_dialog_impl::choice_element(vgui_dialog_field * field, vgui_wx_dialog_ch
     choice_labels.Add(wxString(label->c_str(), wxConvUTF8));
   }
 
-  int *      var = &dynamic_cast<vgui_int_field *>(field)->var;
+  int * var = &dynamic_cast<vgui_int_field *>(field)->var;
   wxChoice * wx_choice =
     new wxChoice(dialog_, wxID_ANY, wxDefaultPosition, wxDefaultSize, choice_labels, 0, wxGenericValidator(var));
   wx_choice->SetSelection(*var);
@@ -559,9 +559,9 @@ vgui_wx_dialog_impl::text_element(vgui_dialog_field * field)
 
 wxSizer *
 vgui_wx_dialog_impl::text_with_button_element(vgui_dialog_field * field,
-                                              wxTextCtrl *&       text_control,
+                                              wxTextCtrl *& text_control,
                                               const std::string & button,
-                                              int                 event_id)
+                                              int event_id)
 {
   assert(field);
 

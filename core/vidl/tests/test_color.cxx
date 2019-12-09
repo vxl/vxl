@@ -30,7 +30,7 @@ test_color()
   // Test vidl_color_converter_func to make sure it finds the
   // correct function pointers
   {
-    bool                 same_func = true;
+    bool same_func = true;
     vidl_color_conv_fptr cf =
       vidl_color_converter_func(VIDL_PIXEL_COLOR_RGB, typeid(vxl_byte), VIDL_PIXEL_COLOR_RGBA, typeid(vxl_byte));
     vidl_color_conv_fptr cft = &vidl_color_converter<VIDL_PIXEL_COLOR_RGB, VIDL_PIXEL_COLOR_RGBA>::convert;
@@ -87,7 +87,7 @@ test_color()
       vidl_color_converter_func(VIDL_PIXEL_COLOR_RGB, typeid(vxl_byte), VIDL_PIXEL_COLOR_MONO, typeid(vxl_uint_16));
     assert(cf);
 
-    vxl_byte    in[] = { 128, 200, 95 };
+    vxl_byte in[] = { 128, 200, 95 };
     vxl_uint_16 out[1], out2[1];
 
     cf(in, reinterpret_cast<vxl_byte *>(out));

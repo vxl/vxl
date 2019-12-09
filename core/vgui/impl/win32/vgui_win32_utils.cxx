@@ -20,14 +20,14 @@ vgui_win32_utils::instance()
 // Convert a vgui_menu to equivalent MENUTEMPLATE structure used by
 // Win32 function LoadMenuIndirect.
 HMENU
-vgui_win32_utils::vgui_menu_to_win32(vgui_menu const &                vguimenu,
+vgui_win32_utils::vgui_menu_to_win32(vgui_menu const & vguimenu,
                                      std::vector<vgui_command_sptr> & callbacks_,
-                                     HACCEL *                         hAccel,
-                                     bool                             isPopup)
+                                     HACCEL * hAccel,
+                                     bool isPopup)
 {
-  HMENU                    hMenu;
+  HMENU hMenu;
   MENUITEMTEMPLATEHEADER * pMenuHeader;
-  MENUITEMTEMPLATE *       pMenuItem;
+  MENUITEMTEMPLATE * pMenuItem;
 
   // Note that the MENUITEMTEMPLATE structures are variable in length,
   // Therefore we allocate capacity*sizeof(char) initially.
@@ -89,9 +89,9 @@ vgui_win32_utils::addMenuItems(vgui_menu const & vguimenu, int offset_in, bool i
   static unsigned int max_menuitem_size = 256;
 
   MENUITEMTEMPLATE * pMenuItem;
-  WCHAR *            pMenuItemText;
-  std::string        menuItemText;
-  int                stride, offset; // in unit of unsigned char
+  WCHAR * pMenuItemText;
+  std::string menuItemText;
+  int stride, offset; // in unit of unsigned char
 
   // Loop over all menu items and convert them into MENUITEMTEMPLATE
   // Note that there are four types of menu item in vgui_menu:
@@ -174,14 +174,14 @@ vgui_win32_utils::addMenuItems(vgui_menu const & vguimenu, int offset_in, bool i
 // Convert a vgui_menu to equivalent extended MENUTEMPLATE structure used by
 // Win32 function LoadMenuIndirect.
 HMENU
-vgui_win32_utils::vgui_menu_to_win32ex(vgui_menu const &                vguimenu,
+vgui_win32_utils::vgui_menu_to_win32ex(vgui_menu const & vguimenu,
                                        std::vector<vgui_command_sptr> & callbacks_,
-                                       HACCEL *                         hAccel,
-                                       bool                             isPopup)
+                                       HACCEL * hAccel,
+                                       bool isPopup)
 {
-  HMENU                    hMenu;
+  HMENU hMenu;
   MENUEX_TEMPLATE_HEADER * pMenuHeader;
-  MENUEX_TEMPLATE_ITEM *   pMenuItem;
+  MENUEX_TEMPLATE_ITEM * pMenuItem;
 
   // Note that the MENUEX_TEMPLATE_ITEM structures are variable in length,
   // but are aligned on DWORD boundaries. Therefore we allocate
@@ -252,10 +252,10 @@ vgui_win32_utils::addMenuItemsEx(vgui_menu const & vguimenu, int offset_in, bool
   static unsigned int max_menuitem_size = 256;
 
   MENUEX_TEMPLATE_ITEM * pMenuItem;
-  WCHAR *                pMenuItemText;
-  std::string            menuItemText;
-  int                    stride, offset;
-  bool                   last_item;
+  WCHAR * pMenuItemText;
+  std::string menuItemText;
+  int stride, offset;
+  bool last_item;
 
   // Loop over all menu items and convert them into MENUTEMPLATE
   // Note that there are four types of menu item in vgui_menu:

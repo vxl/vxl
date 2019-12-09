@@ -108,7 +108,7 @@ main()
     // Make a vnl_cost_function, and use vnl_amoeba
     std::cout << "** Amoeba (Nelder Meade downhill simplex)  **\n";
     vnl_least_squares_cost_function cf(&f);
-    vnl_amoeba                      amoeba(cf);
+    vnl_amoeba amoeba(cf);
     x = x0.as_ref();
     amoeba.minimize(x);
     std::cout << "Rosenbrock min of " << cf.f(x) << " at " << x << '\n'
@@ -117,7 +117,7 @@ main()
   {
     std::cout << "** Conjugate Gradient **\n";
     vnl_rosenbrock_grad_cost_fun rcf;
-    vnl_conjugate_gradient       cg(rcf);
+    vnl_conjugate_gradient cg(rcf);
     x = x0.as_ref();
     cg.minimize(x);
     std::cout << "CG min of " << rcf.f(x) << " at " << x << std::endl;
@@ -127,7 +127,7 @@ main()
   {
     std::cout << "** LBFGS (Limited memory Broyden Fletcher Goldfarb Shanno) **\n";
     vnl_rosenbrock_grad_cost_fun rcf;
-    vnl_lbfgs                    lbfgs(rcf);
+    vnl_lbfgs lbfgs(rcf);
     x = x0.as_ref();
     lbfgs.minimize(x);
     //    assert(lbfgs.get_end_error() == rcf.f(x));
@@ -138,7 +138,7 @@ main()
   {
     std::cout << "** Powell (Powell's direction set method) **\n";
     vnl_rosenbrock_grad_cost_fun rcf;
-    vnl_powell                   powell(&rcf);
+    vnl_powell powell(&rcf);
     x = x0.as_ref();
     powell.minimize(x);
     //    assert(lbfgs.get_end_error() == rcf.f(x));

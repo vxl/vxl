@@ -35,9 +35,9 @@ public:
   void
   init()
   {
-    vgui_image_tableau_sptr    img = vgui_image_tableau_new();
+    vgui_image_tableau_sptr img = vgui_image_tableau_new();
     vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(img);
-    vgui_shell_tableau_sptr    shell = vgui_shell_tableau_new(viewer);
+    vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(viewer);
     this->add_child(shell);
 
     gen_gl_list();
@@ -121,8 +121,8 @@ int
 main(int argc, char ** argv)
 {
   vgui::init(argc, argv);
-  vgui_menu     menubar = basic_menu::get_menu();
-  unsigned      w = 512, h = 512;
+  vgui_menu menubar = basic_menu::get_menu();
+  unsigned w = 512, h = 512;
   vgui_window * win = vgui::produce_window(w, h, menubar);
   win->show(); // call this function earlier to make GL context available.
 

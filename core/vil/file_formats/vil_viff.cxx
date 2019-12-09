@@ -80,10 +80,10 @@ vil_viff_file_format::make_input_image(vil_stream * is)
 }
 
 vil_image_resource_sptr
-vil_viff_file_format::make_output_image(vil_stream *     is,
-                                        unsigned int     ni,
-                                        unsigned int     nj,
-                                        unsigned int     nplanes,
+vil_viff_file_format::make_output_image(vil_stream * is,
+                                        unsigned int ni,
+                                        unsigned int nj,
+                                        unsigned int nplanes,
                                         vil_pixel_format format)
 {
   return new vil_viff_image(is, ni, nj, nplanes, format);
@@ -118,10 +118,10 @@ vil_viff_image::file_format() const
   return vil_viff_format_tag;
 }
 
-vil_viff_image::vil_viff_image(vil_stream *     is,
-                               unsigned int     ni,
-                               unsigned int     nj,
-                               unsigned int     nplanes,
+vil_viff_image::vil_viff_image(vil_stream * is,
+                               unsigned int ni,
+                               unsigned int nj,
+                               unsigned int nplanes,
                                vil_pixel_format format)
   : is_(is)
   , ni_(ni)
@@ -171,8 +171,8 @@ vil_viff_image::read_header()
 
   vxl_uint_32 ispare1 = header_.ispare1;
   vxl_uint_32 ispare2 = header_.ispare2;
-  float       fspare1 = header_.fspare1;
-  float       fspare2 = header_.fspare2;
+  float fspare1 = header_.fspare1;
+  float fspare2 = header_.fspare2;
 
   if (!endian_consistent_)
   {
@@ -265,10 +265,10 @@ vil_viff_image::get_copy_view(unsigned int x0, unsigned int xs, unsigned int y0,
   if (format_ == VIL_PIXEL_FORMAT_BOOL && x0 % 8 != 0)
     std::cerr << "vil_viff_image::get_copy_view(): Warning: x0 should be a multiple of 8 for this type of image\n";
 
-  vxl_uint_32           rowsize = (pix_size * xs + 7) / 8;
-  vxl_uint_32           tbytes = rowsize * ys * nplanes_;
+  vxl_uint_32 rowsize = (pix_size * xs + 7) / 8;
+  vxl_uint_32 tbytes = rowsize * ys * nplanes_;
   vil_memory_chunk_sptr buf = new vil_memory_chunk(tbytes, format_);
-  auto *                ib = reinterpret_cast<vxl_byte *>(buf->data());
+  auto * ib = reinterpret_cast<vxl_byte *>(buf->data());
   for (unsigned int p = 0; p < nplanes_; ++p)
   {
     for (unsigned int y = y0; y < y0 + ys; ++y)
@@ -334,7 +334,7 @@ vil_viff_image::put_view(vil_image_view_base const & buf, unsigned int x0, unsig
     return false;
   }
   const vxl_byte * ob = ibuf.top_left_ptr();
-  unsigned int     pix_size = 8 * vil_pixel_format_sizeof_components(format_);
+  unsigned int pix_size = 8 * vil_pixel_format_sizeof_components(format_);
   if (format_ == VIL_PIXEL_FORMAT_BOOL)
     pix_size = 1;
   if (format_ == VIL_PIXEL_FORMAT_BOOL && x0 % 8 != 0)
@@ -406,7 +406,7 @@ void
 vil_viff_image::set_ispare1(vxl_uint_32 ispare1)
 {
   header_.ispare1 = ispare1;
-  int    longsize = sizeof(vxl_uint_32);
+  int longsize = sizeof(vxl_uint_32);
   auto * bytes = new vxl_byte[longsize];
   std::memcpy(bytes, &ispare1, longsize);
   if (!endian_consistent_)
@@ -421,7 +421,7 @@ void
 vil_viff_image::set_ispare2(vxl_uint_32 ispare2)
 {
   header_.ispare2 = ispare2;
-  int    longsize = sizeof(vxl_uint_32);
+  int longsize = sizeof(vxl_uint_32);
   auto * bytes = new vxl_byte[longsize];
   std::memcpy(bytes, &ispare2, longsize);
   if (!endian_consistent_)
@@ -436,7 +436,7 @@ void
 vil_viff_image::set_fspare1(float fspare1)
 {
   header_.fspare1 = fspare1;
-  int    floatsize = sizeof(float);
+  int floatsize = sizeof(float);
   auto * bytes = new vxl_byte[floatsize];
   std::memcpy(bytes, &fspare1, floatsize);
   if (!endian_consistent_)
@@ -452,7 +452,7 @@ void
 vil_viff_image::set_fspare2(float fspare2)
 {
   header_.fspare2 = fspare2;
-  int    floatsize = sizeof(float);
+  int floatsize = sizeof(float);
   auto * bytes = new vxl_byte[floatsize];
   std::memcpy(bytes, &fspare2, floatsize);
   if (!endian_consistent_)

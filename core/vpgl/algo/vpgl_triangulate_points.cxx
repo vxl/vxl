@@ -21,12 +21,12 @@
 
 
 double
-vpgl_triangulate_points::triangulate(const std::vector<vgl_point_2d<double>> &            points,
+vpgl_triangulate_points::triangulate(const std::vector<vgl_point_2d<double>> & points,
                                      const std::vector<vpgl_perspective_camera<double>> & cameras,
-                                     vgl_point_3d<double> &                               point_3d)
+                                     vgl_point_3d<double> & point_3d)
 {
   constexpr int num_vars = 3; // One var for x, y, z of output 3d point
-  const int     num_eqs = static_cast<const int>(2 * points.size());
+  const int num_eqs = static_cast<const int>(2 * points.size());
 
   // Set up the least-squares solution.
   vnl_matrix<double> A(num_eqs, num_vars, 0.0);
@@ -57,7 +57,7 @@ vpgl_triangulate_points::triangulate(const std::vector<vgl_point_2d<double>> &  
 
   // Find the least squares result
   vnl_svd<double> svd(A);
-  vnl_double_3    x = svd.solve(b);
+  vnl_double_3 x = svd.solve(b);
 
   point_3d.set(x.begin());
 

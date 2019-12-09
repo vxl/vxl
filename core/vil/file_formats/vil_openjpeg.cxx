@@ -84,8 +84,8 @@ struct opj_header
   vxl_uint_32 tile_height_;
   vxl_uint_32 num_tiles_x_;
   vxl_uint_32 num_tiles_y_;
-  vxl_int_32  x0_;
-  vxl_int_32  y0_;
+  vxl_int_32 x0_;
+  vxl_int_32 y0_;
   vxl_uint_32 num_reductions_;
 };
 
@@ -118,11 +118,11 @@ public:
 
 private:
   opj_dparameters_t params_;
-  opj_codec_t *     codec_;
-  opj_image_t *     image_;
-  opj_stream_t *    stream_;
-  opj_header        header_;
-  OPJ_CODEC_FORMAT  opj_codec_format_;
+  opj_codec_t * codec_;
+  opj_image_t * image_;
+  opj_stream_t * stream_;
+  opj_header header_;
+  OPJ_CODEC_FORMAT opj_codec_format_;
 
   bool error_;
   bool silent_;
@@ -161,16 +161,16 @@ struct vil_openjpeg_image_impl
 {
   // OpenJPEG data structures
   opj_cparameters_t encode_params_;
-  opj_codec_t *     encode_codec_{ nullptr };
-  opj_image_t *     image_{ nullptr };
-  opj_header        header_;
-  OPJ_CODEC_FORMAT  opj_codec_format_;
+  opj_codec_t * encode_codec_{ nullptr };
+  opj_image_t * image_{ nullptr };
+  opj_header header_;
+  OPJ_CODEC_FORMAT opj_codec_format_;
 
   // Fields needed for the vil implementation
   vil_stream_sptr vstream_;
-  vil_streampos   vstream_start_{ 0 };
-  bool            is_valid_{ false };
-  bool            error_{ false };
+  vil_streampos vstream_start_{ 0 };
+  bool is_valid_{ false };
+  bool error_{ false };
 
   vil_openjpeg_image_impl(void)
     : vstream_(nullptr)
@@ -371,7 +371,7 @@ vil_openjpeg_decoder ::header(void) const
 vxl_uint_32
 vil_openjpeg_decoder ::opj_vil_stream_read(void * p_buffer, vxl_uint_32 p_nb_bytes, void * p_user_data)
 {
-  auto *        stream = reinterpret_cast<vil_stream *>(p_user_data);
+  auto * stream = reinterpret_cast<vil_stream *>(p_user_data);
   vil_streampos b = stream->read(p_buffer, p_nb_bytes);
   if (b == 0 || !stream->ok())
   {
@@ -388,7 +388,7 @@ vil_openjpeg_decoder ::opj_vil_stream_read(void * p_buffer, vxl_uint_32 p_nb_byt
 vxl_uint_32
 vil_openjpeg_decoder ::opj_vil_stream_write(void * p_buffer, vxl_uint_32 p_nb_bytes, void * p_user_data)
 {
-  auto *        stream = reinterpret_cast<vil_stream *>(p_user_data);
+  auto * stream = reinterpret_cast<vil_stream *>(p_user_data);
   vil_streampos b = stream->write(p_buffer, p_nb_bytes);
   if (b == 0 || !stream->ok())
   {
@@ -405,7 +405,7 @@ vil_openjpeg_decoder ::opj_vil_stream_write(void * p_buffer, vxl_uint_32 p_nb_by
 vxl_uint_32
 vil_openjpeg_decoder ::opj_vil_stream_skip(vxl_uint_32 p_nb_bytes, void * p_user_data)
 {
-  auto *        stream = reinterpret_cast<vil_stream *>(p_user_data);
+  auto * stream = reinterpret_cast<vil_stream *>(p_user_data);
   vil_streampos start = stream->tell();
   stream->seek(start + p_nb_bytes);
   if (!stream->ok())
@@ -783,7 +783,7 @@ template <typename T_PIXEL>
 vil_image_view_base_sptr
 vil_openjpeg_image ::opj2vil(void * opj_view, unsigned int i0, unsigned int ni, unsigned int j0, unsigned int nj) const
 {
-  auto *       opj_view_t = reinterpret_cast<opj_image_t *>(opj_view);
+  auto * opj_view_t = reinterpret_cast<opj_image_t *>(opj_view);
   unsigned int np = opj_view_t->numcomps;
 
   vil_memory_chunk_sptr chunk = new vil_memory_chunk(ni * nj * np * sizeof(T_PIXEL), this->pixel_format());
@@ -795,12 +795,12 @@ vil_openjpeg_image ::opj2vil(void * opj_view, unsigned int i0, unsigned int ni, 
   {
     T_PIXEL sign = opj_view_t->comps[p].sgnd ? 1 << (opj_view_t->comps[p].prec - 1) : 0;
 
-    int *     src_plane = opj_view_t->comps[p].data;
+    int * src_plane = opj_view_t->comps[p].data;
     T_PIXEL * dst_plane = vil_view_t->begin() + p * vil_view_t->planestep();
 
     for (unsigned int j = 0; j < nj; ++j)
     {
-      int *     src_row = src_plane + (j0 + j) * opj_view_t->comps[p].w + i0;
+      int * src_row = src_plane + (j0 + j) * opj_view_t->comps[p].w + i0;
       T_PIXEL * dst_row = dst_plane + j * vil_view_t->jstep();
 
       for (unsigned int i = 0; i < ni; ++i)

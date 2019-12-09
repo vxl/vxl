@@ -17,7 +17,7 @@ test_line_3d_2_points_float_io()
             << "**************************************\n";
 
   //// test constructors, accessors
-  vgl_point_3d<float>         p1(1.25f, 3.5f, -99.f), p2(5.625f, 7.875f, 0.0f);
+  vgl_point_3d<float> p1(1.25f, 3.5f, -99.f), p2(5.625f, 7.875f, 0.0f);
   vgl_line_3d_2_points<float> p_out(p1, p2), p_in;
 
   vsl_b_ofstream bfs_out("vgl_line_3d_2_points_test_float_io.bvl.tmp");
@@ -51,7 +51,7 @@ test_line_3d_2_points_double_io()
             << "***************************************\n";
 
   //// test constructors, accessors
-  vgl_point_3d<double>         p1(1.25, 3.5, -99.), p2(5.625, 7.875, 0.0);
+  vgl_point_3d<double> p1(1.25, 3.5, -99.), p2(5.625, 7.875, 0.0);
   vgl_line_3d_2_points<double> p_out(p1, p2), p_in;
 
   vsl_b_ofstream bfs_out("vgl_line_3d_2_points_test_double_io.bvl.tmp");

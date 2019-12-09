@@ -118,12 +118,12 @@ main(int argc, char ** argv)
             << " up:    " << up_event.as_string() << '\n'
             << " down:  " << down_event.as_string() << std::endl;
 
-  vgui_image_tableau_new    back_img_tab(*back_img);
-  vgui_easy2D_tableau_new   easy2d_tab(back_img_tab);
+  vgui_image_tableau_new back_img_tab(*back_img);
+  vgui_easy2D_tableau_new easy2d_tab(back_img_tab);
   vgui_viewer2D_tableau_new viewer_tab(easy2d_tab);
 
-  float           x = (back_img->ni() - sprite_img->ni()) / 2.0f + 0.25f;
-  float           y = (back_img->nj() - sprite_img->nj()) / 2.0f + 0.25f;
+  float x = (back_img->ni() - sprite_img->ni()) / 2.0f + 0.25f;
+  float y = (back_img->nj() - sprite_img->nj()) / 2.0f + 0.25f;
   vgui_soview2D * sprite_soview = easy2d_tab->add_image(x, y, *sprite_img);
 
   // After a soview2D has been created for the sprite image (which
@@ -132,7 +132,7 @@ main(int argc, char ** argv)
   sprite_img = nullptr;
 
   move_sprite_tableau_new move_tab(viewer_tab, sprite_soview);
-  vgui_shell_tableau_new  shell_tab(move_tab);
+  vgui_shell_tableau_new shell_tab(move_tab);
 
   return vgui::run(shell_tab, back_img->ni(), back_img->nj());
 }

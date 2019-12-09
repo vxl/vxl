@@ -125,8 +125,8 @@ vgui_listmanager2D_tableau::contains_hit(std::vector<unsigned> const & names)
   {
     // get id of std::list
     vgui_displaylist2D_tableau_sptr list;
-    list.vgui_tableau_sptr::        operator=(i->child());
-    unsigned                        list_id = list->get_id();
+    list.vgui_tableau_sptr::operator=(i->child());
+    unsigned list_id = list->get_id();
 
     std::vector<unsigned>::const_iterator ni = std::find(names.begin(), names.end(), list_id);
     if (ni != names.end())
@@ -146,7 +146,7 @@ vgui_listmanager2D_tableau::get_hits(float x, float y, std::vector<std::vector<u
        ++i, ++count)
   {
     vgui_displaylist2D_tableau_sptr display;
-    display.vgui_tableau_sptr::     operator=(i->child());
+    display.vgui_tableau_sptr::operator=(i->child());
 
     if (this->active[count] && this->visible[count])
     {
@@ -163,14 +163,14 @@ vgui_listmanager2D_tableau::get_hits(float x, float y, std::vector<std::vector<u
 }
 
 void
-vgui_listmanager2D_tableau::find_closest(float                                x,
-                                         float                                y,
+vgui_listmanager2D_tableau::find_closest(float x,
+                                         float y,
                                          std::vector<std::vector<unsigned>> * hits,
-                                         vgui_soview2D **                     closest_so,
-                                         vgui_displaylist2D_tableau_sptr *    closest_display)
+                                         vgui_soview2D ** closest_so,
+                                         vgui_displaylist2D_tableau_sptr * closest_display)
 {
-  float                           closest_dist = -1; // vnl_numeric_traits<float>::maxval;
-  std::vector<unsigned>           closest_hit;
+  float closest_dist = -1; // vnl_numeric_traits<float>::maxval;
+  std::vector<unsigned> closest_hit;
   vgui_displaylist2D_tableau_sptr display;
   closest_display = nullptr;
   closest_so = nullptr;
@@ -248,13 +248,13 @@ bool
 vgui_listmanager2D_tableau::motion(int x, int y)
 {
   vgui_projection_inspector pi;
-  float                     ix, iy;
+  float ix, iy;
   pi.window_to_image_coordinates(int(x), int(y), ix, iy);
 
   std::vector<std::vector<unsigned>> hits;
   get_hits(x, y, &hits);
 
-  vgui_soview2D *                 closest_so;
+  vgui_soview2D * closest_so;
   vgui_displaylist2D_tableau_sptr closest_display;
   find_closest(ix, iy, &hits, &closest_so, &closest_display);
 
@@ -268,7 +268,7 @@ vgui_listmanager2D_tableau::motion(int x, int y)
 
   if (highlight_so)
   {
-    vgui_soview *   so = highlight_so;
+    vgui_soview * so = highlight_so;
     vgui_style_sptr style = so->get_style();
     style->apply_point_size();
     style->apply_line_width();
@@ -287,7 +287,7 @@ vgui_listmanager2D_tableau::motion(int x, int y)
 #ifdef DEBUG
     std::cerr << "vgui_listmanager2D_tableau::motion highlighting : " << closest_id << '\n';
 #endif
-    vgui_soview *   so = closest_so;
+    vgui_soview * so = closest_so;
     vgui_style_sptr style = so->get_style();
     style->apply_point_size();
     style->apply_line_width();
@@ -314,7 +314,7 @@ vgui_listmanager2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_mo
          ++i, ++count)
     {
       vgui_displaylist2D_tableau_sptr display;
-      display.vgui_tableau_sptr::     operator=(i->child());
+      display.vgui_tableau_sptr::operator=(i->child());
       if (this->active[count] && this->visible[count])
         display->handle(this->saved_event_);
     }
@@ -323,13 +323,13 @@ vgui_listmanager2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_mo
 
   // send the event only to the displaylist that contains the closest soview
   vgui_projection_inspector pi;
-  float                     ix, iy;
+  float ix, iy;
   pi.window_to_image_coordinates(int(x), int(y), ix, iy);
 
   std::vector<std::vector<unsigned>> hits;
   get_hits(x, y, &hits);
 
-  vgui_soview2D *                 closest_so;
+  vgui_soview2D * closest_so;
   vgui_displaylist2D_tableau_sptr closest_display;
   find_closest(ix, iy, &hits, &closest_so, &closest_display);
 
@@ -357,7 +357,7 @@ vgui_listmanager2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, vgui_m
       this->set_active(num - 1, false);
       this->set_visible(num - 1, false);
       vgui_displaylist2D_tableau_sptr list;
-      list.vgui_tableau_sptr::        operator=(this->children[num - 1].child());
+      list.vgui_tableau_sptr::operator=(this->children[num - 1].child());
       if (highlight_list == list)
       {
         highlight_list = vgui_displaylist2D_tableau_sptr();
@@ -375,7 +375,7 @@ vgui_listmanager2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, vgui_m
       this->set_visible(num - 1, true);
 
       vgui_displaylist2D_tableau_sptr list;
-      list.vgui_tableau_sptr::        operator=(this->children[num - 1].child());
+      list.vgui_tableau_sptr::operator=(this->children[num - 1].child());
       if (highlight_list == list)
       {
         highlight_list = vgui_displaylist2D_tableau_sptr();

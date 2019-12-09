@@ -15,8 +15,8 @@ test_line_segment_2d_double_io()
             << "Testing vgl_line_segment_2d<double> io\n"
             << "**************************************\n";
 
-  vgl_point_2d<double>        end0(1.2, 3.4);
-  vgl_point_2d<double>        end1(5.6, 7.8);
+  vgl_point_2d<double> end0(1.2, 3.4);
+  vgl_point_2d<double> end1(5.6, 7.8);
   vgl_line_segment_2d<double> p_out(end0, end1), p_in;
 
   vsl_b_ofstream bfs_out("vgl_line_segment_2d_test_double_io.bvl.tmp");

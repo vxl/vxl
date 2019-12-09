@@ -21,7 +21,7 @@ vgui_qt_window::setup_widget(int w, int h, const char * title)
   // QWidget* mainwidget = new QWidget(this);
 
   // Create a frame to store the GL widget
-  QFrame *      frame = new QFrame(this);
+  QFrame * frame = new QFrame(this);
   QHBoxLayout * hlayout = new QHBoxLayout;
   hlayout->setMargin(2);
   frame->setLayout(hlayout);

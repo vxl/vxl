@@ -89,8 +89,8 @@ vnl_matlab_print_scalar(std::complex<double> v, char * buf, vnl_matlab_print_for
 {
   if (format == vnl_matlab_print_format_default)
     format = vnl_matlab_print_format_top();
-  int  width = 16;
-  int  precision = 12;
+  int width = 16;
+  int precision = 12;
   char conv = 'f';
 
   switch (format)
@@ -187,8 +187,8 @@ vnl_matlab_print_scalar(std::complex<float> v, char * buf, vnl_matlab_print_form
 {
   if (format == vnl_matlab_print_format_default)
     format = vnl_matlab_print_format_top();
-  int  width = 10;
-  int  precision = 6;
+  int width = 10;
+  int precision = 6;
   char conv = 'f';
 
   switch (format)

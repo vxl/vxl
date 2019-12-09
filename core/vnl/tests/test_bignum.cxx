@@ -25,7 +25,7 @@ template <typename T>
 void
 test_to_string(const T arg)
 {
-  std::string      bignum_as_string;
+  std::string bignum_as_string;
   const vnl_bignum bignum{ arg };
   vnl_bignum_to_string(bignum_as_string, bignum);
 
@@ -40,7 +40,7 @@ test_decimal_digits_to_string()
 {
   for (int i{}; i < 10; ++i)
   {
-    std::string      bignum_as_string;
+    std::string bignum_as_string;
     const vnl_bignum bignum{ static_cast<T>(i) };
     vnl_bignum_to_string(bignum_as_string, bignum);
 
@@ -244,7 +244,7 @@ run_constructor_tests()
     TEST("vnl_bignum b(\"123e12\");", (double)b, 123e12);
   }
   {
-    vnl_bignum        b("-1e120");
+    vnl_bignum b("-1e120");
     std::stringstream s;
     s << b;
     std::cout << b << '\n';
@@ -326,119 +326,119 @@ run_constructor_tests()
   std::cout << "reading from istream:\n";
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << "+1";
     is >> b;
     TEST("\"+1\" >> b;", b, 1L);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << "-1";
     is >> b;
     TEST("\"-1\" >> b;", b, -1L);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << "123";
     is >> b;
     TEST("\"123\" >> b;", b, 123L);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << "123e5";
     is >> b;
     TEST("\"123e5\" >> b;", b, 12300000L);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << "123e+4";
     is >> b;
     TEST("\"123e+4\" >> b;", b, 1230000L);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << "0x0";
     is >> b;
     TEST("\"0x0\" >> b;", b, 0x0);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << "0x9";
     is >> b;
     TEST("\"0x9\" >> b;", b, 0x9);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << "0xa";
     is >> b;
     TEST("\"0xa\" >> b;", b, 0xa);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << "0xf";
     is >> b;
     TEST("\"0xf\" >> b;", b, 0xf);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << "0xA";
     is >> b;
     TEST("\"0xA\" >> b;", b, 0xa);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << "0xF";
     is >> b;
     TEST("\"0xF\" >> b;", b, 0xf);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << "0x1aF";
     is >> b;
     TEST("\"0x1aF\" >> b;", b, 0x1af);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << '0';
     is >> b;
     TEST("\"0\" >> b;", b, 0L);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << "00";
     is >> b;
     TEST("\"00\" >> b;", b, 0L);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << "012334567";
     is >> b;
     TEST("\"012334567\" >> b;", b, 012334567);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << '9';
     is >> b;
     TEST("\"9\" >> b;", b, 9L);
   }
   {
     std::stringstream is(std::ios::in | std::ios::out);
-    vnl_bignum        b;
+    vnl_bignum b;
     is << " 9";
     is >> b;
     TEST("\" 9\" >> b;", b, 9L);
@@ -526,7 +526,7 @@ run_conversion_operator_tests()
   // Test for bug in bignum::dtobignum()
   // it wasn't resetting the value at the start.
   const vnl_bignum e(1000);
-  vnl_bignum       d(20);
+  vnl_bignum d(20);
   vnl_bignum_from_string(d, "1000");
   TEST("vnl_bignum_from_string", e, d);
 }
@@ -716,7 +716,7 @@ run_division_tests()
   TEST("(vnl_bignum(i+k)%vnl_bignum(j+l)) == vnl_bignum(long((i+k)%(j+l)))", mod_errors, 0);
 
 #ifdef INTERACTIVE
-  char       num[130], den[130];
+  char num[130], den[130];
   vnl_bignum b, r;
 
   while (true)
@@ -839,9 +839,9 @@ run_addition_subtraction_tests()
 {
   std::cout << "\nStarting addition, subtraction tests:\n";
 
-  long       i, j;
-  long       add_errors = 0;
-  long       sub_errors = 0;
+  long i, j;
+  long add_errors = 0;
+  long sub_errors = 0;
   vnl_bignum bi, bj, bij;
 
   std::cout << " for (i = 1; i < 0xfffffff;  i *= 3)\n"
@@ -1140,8 +1140,8 @@ run_shift_tests()
   run_right_shift_tests();
 #ifdef INTERACTIVE
   vnl_bignum b;
-  char       s[100];
-  int        sh;
+  char s[100];
+  int sh;
 
   while (true)
   {

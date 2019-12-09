@@ -21,7 +21,7 @@
 vil_pyramid_image_resource_sptr
 vil_pyramid_image_list_format::make_input_pyramid_image(char const * directory)
 {
-  vil_image_list                       il(directory);
+  vil_image_list il(directory);
   std::vector<vil_image_resource_sptr> rescs = il.resources();
   if (rescs.size() < 2L)
     return nullptr;
@@ -39,9 +39,9 @@ vil_pyramid_image_list_format::make_pyramid_output_image(char const * file)
 }
 
 static bool
-copy_base_resc(vil_image_resource_sptr const &   base_image,
-               const std::string &               full_filename,
-               char const *                      file_format,
+copy_base_resc(vil_image_resource_sptr const & base_image,
+               const std::string & full_filename,
+               char const * file_format,
                vil_blocked_image_resource_sptr & copy)
 {
   { // scope for closing resource
@@ -51,7 +51,7 @@ copy_base_resc(vil_image_resource_sptr const &   base_image,
     if (!brsc || brsc->size_block_i() % 2 != 0 || brsc->size_block_i() % 2 != 0)
       brsc = new vil_blocked_image_facade(base_image);
     // handle case of RGBA as four planes
-    vil_pixel_format                fmt = vil_pixel_format_component_format(brsc->pixel_format());
+    vil_pixel_format fmt = vil_pixel_format_component_format(brsc->pixel_format());
     vil_blocked_image_resource_sptr out_resc = vil_new_blocked_image_resource(full_filename.c_str(),
                                                                               brsc->ni(),
                                                                               brsc->nj(),
@@ -98,18 +98,18 @@ level_filename(std::string & directory, std::string & filename, float level)
 //  Each level has the same scale ratio (0.5) to the preceding level.
 //  Level 0 is the original base image.
 vil_pyramid_image_resource_sptr
-vil_pyramid_image_list_format::make_pyramid_image_from_base(char const *                    directory,
+vil_pyramid_image_list_format::make_pyramid_image_from_base(char const * directory,
                                                             vil_image_resource_sptr const & base_image,
-                                                            unsigned int                    nlevels,
-                                                            bool                            copy_base,
-                                                            char const *                    level_file_format,
-                                                            char const *                    filename)
+                                                            unsigned int nlevels,
+                                                            bool copy_base,
+                                                            char const * level_file_format,
+                                                            char const * filename)
 {
   if (!vil_image_list::vil_is_directory(directory))
     return nullptr;
-  std::string                     d = directory;
-  std::string                     fn = filename;
-  std::string                     full_filename = level_filename(d, fn, 0.0f) + '.' + level_file_format;
+  std::string d = directory;
+  std::string fn = filename;
+  std::string full_filename = level_filename(d, fn, 0.0f) + '.' + level_file_format;
   vil_blocked_image_resource_sptr blk_base;
   if (copy_base)
   {
@@ -132,7 +132,7 @@ vil_pyramid_image_list_format::make_pyramid_image_from_base(char const *        
       image = vil_pyramid_image_resource::decimate(image, full_filename.c_str());
     }
   } // end program scope to close resource files
-  vil_image_list                       il(directory);
+  vil_image_list il(directory);
   std::vector<vil_image_resource_sptr> rescs = il.resources();
   return new vil_pyramid_image_list(rescs);
 }
@@ -165,8 +165,8 @@ vil_pyramid_image_list::vil_pyramid_image_list(std::vector<vil_image_resource_sp
     if (!brsc)
       brsc = new vil_blocked_image_facade(image);
     vil_cached_image_resource * cimr = new vil_cached_image_resource(brsc, 100);
-    vil_image_resource_sptr     ir = (vil_image_resource *)cimr;
-    auto *                      level = new pyramid_level(ir);
+    vil_image_resource_sptr ir = (vil_image_resource *)cimr;
+    auto * level = new pyramid_level(ir);
     levels_.push_back(level);
   }
   // sort on image width
@@ -245,14 +245,14 @@ vil_pyramid_image_list::put_resource(vil_image_resource_sptr const & image)
 {
   if (this->is_same_size(image))
     return false;
-  float       level = this->find_next_level(image);
+  float level = this->find_next_level(image);
   std::string copy_name = "copyR";
   std::string file = level_filename(directory_, copy_name, level);
   std::string ffmt = "pgm";
   if (image->file_format())
     ffmt = image->file_format();
   file = file + '.' + ffmt;
-  unsigned int                    sbi = 0, sbj = 0;
+  unsigned int sbi = 0, sbj = 0;
   vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
   if (bir)
   {
@@ -288,7 +288,7 @@ vil_pyramid_image_list::closest(const float scale) const
 
   if (nlevels == 1)
     return levels_[0];
-  float        mind = 1.0e08f; // huge scale;
+  float mind = 1.0e08f; // huge scale;
   unsigned int lmin = 0;
   for (unsigned int i = 0; i < nlevels; ++i)
   {
@@ -319,7 +319,7 @@ vil_pyramid_image_list::get_copy_view(unsigned int i0,
     return nullptr;
   }
   pyramid_level * pl = levels_[level];
-  float           actual_scale = pl->scale_;
+  float actual_scale = pl->scale_;
 
   float fi0 = actual_scale * i0, fni = actual_scale * n_i, fj0 = actual_scale * j0, fnj = actual_scale * n_j;
   // transform image coordinates by actual scale
@@ -348,8 +348,8 @@ vil_pyramid_image_list::get_copy_view(unsigned int i0,
                                       unsigned int n_i,
                                       unsigned int j0,
                                       unsigned int n_j,
-                                      const float  scale,
-                                      float &      actual_scale) const
+                                      const float scale,
+                                      float & actual_scale) const
 {
   // find the resource that is closest to the specified scale
   pyramid_level * pl = this->closest(scale);

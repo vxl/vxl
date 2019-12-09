@@ -114,7 +114,7 @@ vgui_tview_tableau::draw_icons(vgui_tableau_sptr const & parent, float x, float 
   if (children.size() > 0)
   {
     float ny = y + spacing * children.size(); // fsm; was: y + spacing*children.size()/10;
-    int   num = static_cast<int>(children.size());
+    int num = static_cast<int>(children.size());
 
     float total_x = (num - 1) * spacing;
     float start_x = x - (int)(total_x / 2.0f); // why the cast?
@@ -223,9 +223,9 @@ vgui_tview_tableau::draw_icons(vgui_tableau_sptr const & parent, float x, float 
 
 void
 vgui_tview_tableau::add_icons(std::vector<vgui_tview_tableau::icon> * icons,
-                              vgui_tableau_sptr const &               parent,
-                              float                                   x,
-                              float                                   y)
+                              vgui_tableau_sptr const & parent,
+                              float x,
+                              float y)
 {
   std::vector<vgui_tableau_sptr> children;
   parent->get_children(&children);
@@ -263,7 +263,7 @@ vgui_tview_tableau::find_closest_icon(std::vector<vgui_tview_tableau::icon> cons
   std::cerr << "vgui_tview_tableau::find_closest_icon() number of icons = " << icons.size() << '\n';
 #endif
 
-  float             closest_dist = -1;
+  float closest_dist = -1;
   vgui_tableau_sptr closest;
 
   for (std::vector<icon>::const_iterator i_iter = icons.begin(); i_iter != icons.end(); ++i_iter)
@@ -336,7 +336,7 @@ vgui_tview_tableau::handle(const vgui_event & e)
     add_icons(&icons, child, startx, starty);
 
     vgui_projection_inspector pi;
-    float                     ix, iy;
+    float ix, iy;
     pi.window_to_image_coordinates(e.wx, e.wy, ix, iy);
 
     closest_icon = find_closest_icon(icons, ix, iy);
@@ -347,7 +347,7 @@ vgui_tview_tableau::handle(const vgui_event & e)
     add_icons(&icons, child, startx, starty);
 
     vgui_projection_inspector pi;
-    float                     ix, iy;
+    float ix, iy;
     pi.window_to_image_coordinates(e.wx, e.wy, ix, iy);
 
     vgui_tableau_sptr t = find_closest_icon(icons, ix, iy);

@@ -30,7 +30,7 @@ vidl_image_list_ostream::vidl_image_list_ostream()
 vidl_image_list_ostream::vidl_image_list_ostream(const std::string & directory,
                                                  const std::string & name_format,
                                                  const std::string & file_format,
-                                                 const unsigned int  init_index)
+                                                 const unsigned int init_index)
 {
   open(directory, name_format, file_format, init_index);
 }
@@ -41,7 +41,7 @@ bool
 vidl_image_list_ostream::open(const std::string & directory,
                               const std::string & name_format,
                               const std::string & file_format,
-                              const unsigned int  init_index)
+                              const unsigned int init_index)
 {
   if (!vul_file::is_directory(directory))
   {
@@ -50,7 +50,7 @@ vidl_image_list_ostream::open(const std::string & directory,
     return false;
   }
 
-  bool                           valid_file_format = false;
+  bool valid_file_format = false;
   std::list<vil_file_format *> & l = vil_file_format::all();
   for (auto & p : l)
   {

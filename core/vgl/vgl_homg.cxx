@@ -15,5 +15,5 @@ template <>
 long double vgl_homg<long double>::infinitesimal_tol = 1e-12;
 #else
 extern int vgl_homg_dummy_var; // avoid warning about empty symbol
-int        vgl_homg_dummy_var = 12345678;
+int vgl_homg_dummy_var = 12345678;
 #endif

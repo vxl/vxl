@@ -18,17 +18,17 @@
 
 double
 compute_projection_error(std::vector<vpgl_rational_camera<double>> const & cams,
-                         std::vector<vgl_point_2d<double>> const &         corrs,
-                         vgl_point_3d<double> &                            intersection)
+                         std::vector<vgl_point_2d<double>> const & corrs,
+                         vgl_point_3d<double> & intersection)
 {
-  auto   cit = cams.begin();
-  auto   rit = corrs.begin();
+  auto cit = cams.begin();
+  auto rit = corrs.begin();
   double error = 0.0;
   for (; cit != cams.end() && rit != corrs.end(); ++cit, ++rit)
   {
     vgl_point_2d<double> uvp = (*cit).project(intersection);
     vgl_point_2d<double> uv = *rit;
-    double               err = std::sqrt(std::pow(uv.x() - uvp.x(), 2.0) + std::pow(uv.y() - uvp.y(), 2));
+    double err = std::sqrt(std::pow(uv.x() - uvp.x(), 2.0) + std::pow(uv.y() - uvp.y(), 2));
     error += err;
   }
   return error;
@@ -36,22 +36,22 @@ compute_projection_error(std::vector<vpgl_rational_camera<double>> const & cams,
 
 double
 error_corr(vpgl_rational_camera<double> const & cam,
-           vgl_point_2d<double> const &         corr,
-           vgl_point_3d<double> const &         intersection)
+           vgl_point_2d<double> const & corr,
+           vgl_point_3d<double> const & intersection)
 {
   vgl_point_2d<double> uvp = cam.project(intersection);
   return std::sqrt(std::pow(corr.x() - uvp.x(), 2.0) + std::pow(corr.y() - uvp.y(), 2));
 }
 
 //: assumes an initial estimate for intersection values, only refines the intersection and computes a re-projection
-//error
+// error
 double
 re_projection_error(std::vector<vpgl_rational_camera<double>> const & cams,
-                    std::vector<float> const &                        cam_weights,
+                    std::vector<float> const & cam_weights,
                     std::vector<std::vector<vgl_point_2d<double>>> const &
-                                                              corrs, // for each 3d corr (outer vector), 2d locations for each cam (inner vector)
+                      corrs, // for each 3d corr (outer vector), 2d locations for each cam (inner vector)
                     std::vector<vgl_point_3d<double>> const & intersections,
-                    std::vector<vgl_point_3d<double>> &       finals)
+                    std::vector<vgl_point_3d<double>> & finals)
 {
   double error = 100000.0;
 
@@ -73,15 +73,15 @@ re_projection_error(std::vector<vpgl_rational_camera<double>> const & cams,
 }
 
 //: assumes an initial estimate for intersection values, only refines the intersection and computes a re-projection
-//error for each corr separately
+// error for each corr separately
 void
 re_projection_error(std::vector<vpgl_rational_camera<double>> const & cams,
-                    std::vector<float> const &                        cam_weights,
+                    std::vector<float> const & cam_weights,
                     std::vector<std::vector<vgl_point_2d<double>>> const &
-                                                              corrs, // for each 3d corr (outer vector), 2d locations for each cam (inner vector)
+                      corrs, // for each 3d corr (outer vector), 2d locations for each cam (inner vector)
                     std::vector<vgl_point_3d<double>> const & intersections,
-                    std::vector<vgl_point_3d<double>> &       finals,
-                    vnl_vector<double> &                      errors)
+                    std::vector<vgl_point_3d<double>> & finals,
+                    vnl_vector<double> & errors)
 {
   double error = 100000.0;
   errors.fill(error);
@@ -117,7 +117,7 @@ print_perm(std::vector<unsigned> & params_indices)
 }
 
 //: to generate the permutations, always increment the one at the very end by one; if it exceeds max, then increment the
-//one before as well, etc.
+// one before as well, etc.
 bool
 increment_perm(std::vector<unsigned> & params_indices, unsigned size)
 {
@@ -150,13 +150,13 @@ increment_perm(std::vector<unsigned> & params_indices, unsigned size)
 //: performs an exhaustive search in the parameter space of the cameras.
 bool
 vpgl_rational_adjust_multiple_pts::adjust(
-  std::vector<vpgl_rational_camera<double>> const &      cams,
-  std::vector<float> const &                             cam_weights,
+  std::vector<vpgl_rational_camera<double>> const & cams,
+  std::vector<float> const & cam_weights,
   std::vector<std::vector<vgl_point_2d<double>>> const & corrs, // a vector of correspondences for each cam
-  double                                                 radius,
-  int                                  n, // divide radius into n intervals to generate camera translation space
+  double radius,
+  int n, // divide radius into n intervals to generate camera translation space
   std::vector<vgl_vector_2d<double>> & cam_translations, // output translations for each cam
-  std::vector<vgl_point_3d<double>> &  intersections)
+  std::vector<vgl_point_3d<double>> & intersections)
 {
   cam_translations.clear();
   intersections.clear();
@@ -171,7 +171,7 @@ vpgl_rational_adjust_multiple_pts::adjust(
       return false;
 
   // turn the correspondences into the format that we'll need
-  std::vector<vgl_point_2d<double>>              temp(cams.size());
+  std::vector<vgl_point_2d<double>> temp(cams.size());
   std::vector<std::vector<vgl_point_2d<double>>> corrs_reformatted(cnt_corrs_for_each_cam, temp);
 
   for (unsigned int i = 0; i < cnt_corrs_for_each_cam; ++i)
@@ -191,8 +191,8 @@ vpgl_rational_adjust_multiple_pts::adjust(
   }
 
   // search the camera translation space
-  int                 param_cnt = 2 * (int)cams.size();
-  double              increment = radius / n;
+  int param_cnt = 2 * (int)cams.size();
+  double increment = radius / n;
   std::vector<double> param_values;
   param_values.push_back(0.0);
   for (int i = 1; i <= n; ++i)
@@ -206,12 +206,12 @@ vpgl_rational_adjust_multiple_pts::adjust(
 
   // now for each param go through all possible param values
   std::vector<unsigned> params_indices(param_cnt, 0);
-  int                   cnt = (int)std::pow((float)param_cnt, (float)param_values.size());
+  int cnt = (int)std::pow((float)param_cnt, (float)param_values.size());
   std::cout << "will try: " << cnt << " param combinations: ";
   std::cout.flush();
-  bool                  done = false;
-  double                big_value = 10000000.0;
-  double                min_error = big_value;
+  bool done = false;
+  double big_value = 10000000.0;
+  double min_error = big_value;
   std::vector<unsigned> params_indices_best(params_indices);
   while (!done)
   {
@@ -266,9 +266,9 @@ vpgl_rational_adjust_multiple_pts::adjust(
 
 vpgl_cam_trans_search_lsqr::vpgl_cam_trans_search_lsqr(
   std::vector<vpgl_rational_camera<double>> const & cams,
-  std::vector<float>                                cam_weights,
+  std::vector<float> cam_weights,
   std::vector<std::vector<vgl_point_2d<double>>> const &
-                                    image_pts, // for each 3D corr, an array of 2D corrs for each camera
+    image_pts, // for each 3D corr, an array of 2D corrs for each camera
   std::vector<vgl_point_3d<double>> initial_pts)
   : vnl_least_squares_function(2 * (unsigned)cams.size(),
                                (unsigned)(cams.size() * image_pts.size()),
@@ -281,7 +281,7 @@ vpgl_cam_trans_search_lsqr::vpgl_cam_trans_search_lsqr(
 
 void
 vpgl_cam_trans_search_lsqr::f(vnl_vector<double> const & translation, // size is 2*cams.size()
-                              vnl_vector<double> &       projection_errors) // size is cams.size()*image_pts.size() -->
+                              vnl_vector<double> & projection_errors) // size is cams.size()*image_pts.size() -->
                                                                       // compute a residual for each 3D corr point
 {
   // compute the new set of cameras with the current cam parameters
@@ -307,11 +307,11 @@ vpgl_cam_trans_search_lsqr::get_finals(std::vector<vgl_point_3d<double>> & final
 //: run Lev-Marq optimization to search the param space to find the best parameter setting
 bool
 vpgl_rational_adjust_multiple_pts::adjust_lev_marq(
-  std::vector<vpgl_rational_camera<double>> const &      cams,
-  std::vector<float> const &                             cam_weights,
-  std::vector<std::vector<vgl_point_2d<double>>> const & corrs,            // a vector of correspondences for each cam
-  std::vector<vgl_vector_2d<double>> &                   cam_translations, // output translations for each cam
-  std::vector<vgl_point_3d<double>> &                    intersections) // output 3d locations for each correspondence
+  std::vector<vpgl_rational_camera<double>> const & cams,
+  std::vector<float> const & cam_weights,
+  std::vector<std::vector<vgl_point_2d<double>>> const & corrs, // a vector of correspondences for each cam
+  std::vector<vgl_vector_2d<double>> & cam_translations,        // output translations for each cam
+  std::vector<vgl_point_3d<double>> & intersections)            // output 3d locations for each correspondence
 {
   cam_translations.clear();
   intersections.clear();
@@ -326,7 +326,7 @@ vpgl_rational_adjust_multiple_pts::adjust_lev_marq(
       return false;
 
   // turn the correspondences into the format that we'll need
-  std::vector<vgl_point_2d<double>>              temp(cams.size());
+  std::vector<vgl_point_2d<double>> temp(cams.size());
   std::vector<std::vector<vgl_point_2d<double>>> corrs_reformatted(cnt_corrs_for_each_cam, temp);
 
   for (unsigned int i = 0; i < cnt_corrs_for_each_cam; ++i)
@@ -358,7 +358,7 @@ vpgl_rational_adjust_multiple_pts::adjust_lev_marq(
 
   // search the camera translation space using Lev-Marq
   vpgl_cam_trans_search_lsqr transsf(cams, cam_weights, corrs_reformatted, intersections_initial);
-  vnl_levenberg_marquardt    levmarq(transsf);
+  vnl_levenberg_marquardt levmarq(transsf);
   levmarq.set_verbose(true);
   // Set the x-tolerance.  When the length of the steps taken in X (variables)
   // are no longer than this, the minimization terminates.
@@ -406,15 +406,15 @@ vpgl_rational_adjust_multiple_pts::adjust_lev_marq(
 // run Lev-Marq optimization to search the param spae to find the best parameter setting
 bool
 vpgl_rational_adjust_multiple_pts::adjust_lev_marq(
-  std::vector<vpgl_rational_camera<double>> const &      cams,        // cameras that will be corrected
-  std::vector<float> const &                             cam_weights, // camera weight parameters
-  std::vector<std::vector<vgl_point_2d<double>>> const & corrs,       // a vector of correspondences for each cam
-  vgl_point_3d<double> const &                           initial_pt,  // initial 3-d point for back-projection
-  double const &                                         zmin, // minimum allowed height of the 3-d intersection point
-  double const &                                         zmax, // maximum allowed height of the 3-d intersection point
-  std::vector<vgl_vector_2d<double>> &                   cam_translations, // output translations for each camera
-  std::vector<vgl_point_3d<double>> &                    intersections, // output 3-d locations for each correspondence
-  double const                                           relative_diameter)
+  std::vector<vpgl_rational_camera<double>> const & cams,       // cameras that will be corrected
+  std::vector<float> const & cam_weights,                       // camera weight parameters
+  std::vector<std::vector<vgl_point_2d<double>>> const & corrs, // a vector of correspondences for each cam
+  vgl_point_3d<double> const & initial_pt,                      // initial 3-d point for back-projection
+  double const & zmin,                                          // minimum allowed height of the 3-d intersection point
+  double const & zmax,                                          // maximum allowed height of the 3-d intersection point
+  std::vector<vgl_vector_2d<double>> & cam_translations,        // output translations for each camera
+  std::vector<vgl_point_3d<double>> & intersections,            // output 3-d locations for each correspondence
+  double const relative_diameter)
 {
   cam_translations.clear();
   intersections.clear();
@@ -430,7 +430,7 @@ vpgl_rational_adjust_multiple_pts::adjust_lev_marq(
       return false;
 
   // reformat the correspondences array
-  std::vector<vgl_point_2d<double>>              temp(cams.size());
+  std::vector<vgl_point_2d<double>> temp(cams.size());
   std::vector<std::vector<vgl_point_2d<double>>> corrs_reformatted(cnt_corrs_for_each_cam, temp);
 
   for (unsigned int i = 0; i < cnt_corrs_for_each_cam; ++i)
@@ -464,7 +464,7 @@ vpgl_rational_adjust_multiple_pts::adjust_lev_marq(
 
   // search the camera translation space using Lev-Marq
   vpgl_cam_trans_search_lsqr transsf(cams, cam_weights, corrs_reformatted, intersections_initial);
-  vnl_levenberg_marquardt    levmarq(transsf);
+  vnl_levenberg_marquardt levmarq(transsf);
   levmarq.set_verbose(true);
   // Set the x-tolerance.  Minimization terminates when the length of the steps taken in X (variables) are less than
   // input x-tolerance

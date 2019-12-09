@@ -18,11 +18,11 @@ test_pyramid_image_view()
 
   vil_image_view<float> black_img(120, 120, 1);
   black_img.fill(1.0);
-  vil_image_view_base_sptr      black_img_sptr = new vil_image_view<float>(black_img);
+  vil_image_view_base_sptr black_img_sptr = new vil_image_view<float>(black_img);
   vil_pyramid_image_view<float> v2(black_img_sptr, 3);
 
   // get the level 1 image. level 0 is the original one
-  double                   scale;
+  double scale;
   vil_image_view_base_sptr small_img = v2.get_view(1, scale);
   TEST_NEAR("New Scale at the pyramid", scale, 0.5, 0.001);
   TEST_EQUAL("New image ni at the pyramid", small_img->ni(), 60);

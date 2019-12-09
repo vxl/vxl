@@ -23,9 +23,9 @@
 unsigned const ni = 512;
 unsigned const nj = 512;
 
-float   g_scale = 1.0f;
-float   g_bias = 0.0f;
-bool    g_use_color_maps = false;
+float g_scale = 1.0f;
+float g_bias = 0.0f;
+bool g_use_color_maps = false;
 GLfloat g_mapRfloat[256];
 GLfloat g_mapGfloat[256];
 GLfloat g_mapBfloat[256];
@@ -88,9 +88,9 @@ template <class InPix, class FramePix>
 void
 convert_and_draw(InPix * buffer, GLenum pack_type, GLenum pix_type, FramePix * /*dummy*/)
 {
-  unsigned   size = ni * nj;
+  unsigned size = ni * nj;
   FramePix * framebuf = new FramePix[size];
-  InPix *    p = buffer;
+  InPix * p = buffer;
   FramePix * fp = framebuf;
   if (g_scale == 1.0 && g_bias == 0.0 && !g_use_color_maps)
   {
@@ -197,14 +197,14 @@ option_string(unsigned option)
 template <class PixType>
 struct test_it
 {
-  PixType *   buffer;
-  PixType *   buffer_copy;
-  GLenum      pack_type;
-  GLenum      pix_type;
+  PixType * buffer;
+  PixType * buffer_copy;
+  GLenum pack_type;
+  GLenum pix_type;
   std::string in_pix_name;
 
   result_type best_result;
-  unsigned    best_option;
+  unsigned best_option;
 
   test_it(std::string const & name, GLenum pack_type, GLenum pix_type);
   ~test_it();
@@ -245,11 +245,11 @@ test_it<PixType>::test_pattern(unsigned option)
   glPixelTransferi(GL_MAP_COLOR, 0);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  vul_timer     timer;
+  vul_timer timer;
   unsigned long draws = 0;
-  unsigned      i = 10;
-  unsigned      j = 10;
-  long          elapsed;
+  unsigned i = 10;
+  unsigned j = 10;
+  long elapsed;
   vgui_macro_report_errors;
   timer.mark();
   do

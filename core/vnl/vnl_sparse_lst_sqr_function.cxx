@@ -32,8 +32,8 @@ vnl_sparse_lst_sqr_function::vnl_sparse_lst_sqr_function(unsigned int num_a,
                                                          unsigned int num_params_per_b,
                                                          unsigned int num_params_c,
                                                          unsigned int num_residuals_per_e,
-                                                         UseGradient  g,
-                                                         UseWeights   w)
+                                                         UseGradient g,
+                                                         UseWeights w)
   : failure(false)
   , residual_indices_()
   , indices_a_(num_a + 1, 0)
@@ -64,15 +64,15 @@ vnl_sparse_lst_sqr_function::vnl_sparse_lst_sqr_function(unsigned int num_a,
 // Assumes each available residual has size \p num_residuals_per_e
 // The optional argument should be no_gradient if the gradf function has not
 // been implemented.  Default is use_gradient.
-vnl_sparse_lst_sqr_function::vnl_sparse_lst_sqr_function(unsigned int                           num_a,
-                                                         unsigned int                           num_params_per_a,
-                                                         unsigned int                           num_b,
-                                                         unsigned int                           num_params_per_b,
-                                                         unsigned int                           num_params_c,
+vnl_sparse_lst_sqr_function::vnl_sparse_lst_sqr_function(unsigned int num_a,
+                                                         unsigned int num_params_per_a,
+                                                         unsigned int num_b,
+                                                         unsigned int num_params_per_b,
+                                                         unsigned int num_params_c,
                                                          const std::vector<std::vector<bool>> & xmask,
-                                                         unsigned int                           num_residuals_per_e,
-                                                         UseGradient                            g,
-                                                         UseWeights                             w)
+                                                         unsigned int num_residuals_per_e,
+                                                         UseGradient g,
+                                                         UseWeights w)
   : failure(false)
   , residual_indices_(xmask)
   , indices_a_(num_a + 1, 0)
@@ -108,13 +108,13 @@ vnl_sparse_lst_sqr_function::vnl_sparse_lst_sqr_function(unsigned int           
 // xmask must be a_sizes.size() by b_sizes.size() and contain e_sizes.size() true entries
 // The optional argument should be no_gradient if the gradf function has not
 // been implemented.  Default is use_gradient.
-vnl_sparse_lst_sqr_function::vnl_sparse_lst_sqr_function(const std::vector<unsigned int> &      a_sizes,
-                                                         const std::vector<unsigned int> &      b_sizes,
-                                                         unsigned int                           num_params_c,
-                                                         const std::vector<unsigned int> &      e_sizes,
+vnl_sparse_lst_sqr_function::vnl_sparse_lst_sqr_function(const std::vector<unsigned int> & a_sizes,
+                                                         const std::vector<unsigned int> & b_sizes,
+                                                         unsigned int num_params_c,
+                                                         const std::vector<unsigned int> & e_sizes,
                                                          const std::vector<std::vector<bool>> & xmask,
-                                                         UseGradient                            g,
-                                                         UseWeights                             w)
+                                                         UseGradient g,
+                                                         UseWeights w)
   : failure(false)
   , residual_indices_(xmask)
   , indices_a_(a_sizes.size() + 1, 0)
@@ -151,7 +151,7 @@ void
 vnl_sparse_lst_sqr_function::f(vnl_vector<double> const & a,
                                vnl_vector<double> const & b,
                                vnl_vector<double> const & c,
-                               vnl_vector<double> &       e)
+                               vnl_vector<double> & e)
 {
   for (unsigned int i = 0; i < number_of_a(); ++i)
   {
@@ -165,7 +165,7 @@ vnl_sparse_lst_sqr_function::f(vnl_vector<double> const & a,
       unsigned int k = r_itr.first;
       // This is semi const incorrect - there is no vnl_vector_ref_const
       const vnl_vector_ref<double> bj(number_of_params_b(j), const_cast<double *>(b.data_block()) + index_b(j));
-      vnl_vector_ref<double>       eij(number_of_residuals(k), e.data_block() + index_e(k));
+      vnl_vector_ref<double> eij(number_of_residuals(k), e.data_block() + index_e(k));
       fij(i, j, ai, bj, c, eij); // compute residual vector e_ij
     }
   }
@@ -181,9 +181,9 @@ vnl_sparse_lst_sqr_function::f(vnl_vector<double> const & a,
 //  You do not need to overload this method unless you want to provide
 //  a more efficient implementation for your problem.
 void
-vnl_sparse_lst_sqr_function::jac_blocks(vnl_vector<double> const &        a,
-                                        vnl_vector<double> const &        b,
-                                        vnl_vector<double> const &        c,
+vnl_sparse_lst_sqr_function::jac_blocks(vnl_vector<double> const & a,
+                                        vnl_vector<double> const & b,
+                                        vnl_vector<double> const & c,
                                         std::vector<vnl_matrix<double>> & A,
                                         std::vector<vnl_matrix<double>> & B,
                                         std::vector<vnl_matrix<double>> & C)
@@ -218,13 +218,13 @@ vnl_sparse_lst_sqr_function::jac_blocks(vnl_vector<double> const &        a,
 //  You do not need to overload this method unless you want to provide
 //  a more efficient implementation for your problem.
 void
-vnl_sparse_lst_sqr_function::fd_jac_blocks(vnl_vector<double> const &        a,
-                                           vnl_vector<double> const &        b,
-                                           vnl_vector<double> const &        c,
+vnl_sparse_lst_sqr_function::fd_jac_blocks(vnl_vector<double> const & a,
+                                           vnl_vector<double> const & b,
+                                           vnl_vector<double> const & c,
                                            std::vector<vnl_matrix<double>> & A,
                                            std::vector<vnl_matrix<double>> & B,
                                            std::vector<vnl_matrix<double>> & C,
-                                           double                            stepsize)
+                                           double stepsize)
 {
   for (unsigned int i = 0; i < number_of_a(); ++i)
   {
@@ -258,7 +258,7 @@ vnl_sparse_lst_sqr_function::compute_weights(vnl_vector<double> const & a,
                                              vnl_vector<double> const & b,
                                              vnl_vector<double> const & c,
                                              vnl_vector<double> const & e,
-                                             vnl_vector<double> &       weights)
+                                             vnl_vector<double> & weights)
 {
   for (unsigned int i = 0; i < number_of_a(); ++i)
   {
@@ -292,8 +292,8 @@ vnl_sparse_lst_sqr_function::apply_weights(vnl_vector<double> const & weights, v
     vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
     for (auto & r_itr : row)
     {
-      unsigned int           j = r_itr.second;
-      unsigned int           k = r_itr.first;
+      unsigned int j = r_itr.second;
+      unsigned int k = r_itr.first;
       vnl_vector_ref<double> eij(number_of_residuals(k), e.data_block() + index_e(k));
       apply_weight_ij(i, j, weights[k], eij);
     }
@@ -307,7 +307,7 @@ vnl_sparse_lst_sqr_function::apply_weights(vnl_vector<double> const & weights, v
 //  You do not need to overload this method unless you want to provide
 //  a more specialized implementation for your problem.
 void
-vnl_sparse_lst_sqr_function::apply_weights(vnl_vector<double> const &        weights,
+vnl_sparse_lst_sqr_function::apply_weights(vnl_vector<double> const & weights,
                                            std::vector<vnl_matrix<double>> & A,
                                            std::vector<vnl_matrix<double>> & B,
                                            std::vector<vnl_matrix<double>> & C)
@@ -378,13 +378,13 @@ vnl_sparse_lst_sqr_function::jac_Cij(unsigned int /*i*/,
 
 //: Use this to compute a finite-difference Jacobian A_ij
 void
-vnl_sparse_lst_sqr_function::fd_jac_Aij(int                        i,
-                                        int                        j,
+vnl_sparse_lst_sqr_function::fd_jac_Aij(int i,
+                                        int j,
                                         vnl_vector<double> const & ai,
                                         vnl_vector<double> const & bj,
                                         vnl_vector<double> const & c,
-                                        vnl_matrix<double> &       Aij,
-                                        double                     stepsize)
+                                        vnl_matrix<double> & Aij,
+                                        double stepsize)
 {
   const unsigned int dim = ai.size();
   const unsigned int n = Aij.rows();
@@ -419,13 +419,13 @@ vnl_sparse_lst_sqr_function::fd_jac_Aij(int                        i,
 
 //: Use this to compute a finite-difference Jacobian B_ij
 void
-vnl_sparse_lst_sqr_function::fd_jac_Bij(int                        i,
-                                        int                        j,
+vnl_sparse_lst_sqr_function::fd_jac_Bij(int i,
+                                        int j,
                                         vnl_vector<double> const & ai,
                                         vnl_vector<double> const & bj,
                                         vnl_vector<double> const & c,
-                                        vnl_matrix<double> &       Bij,
-                                        double                     stepsize)
+                                        vnl_matrix<double> & Bij,
+                                        double stepsize)
 {
   const unsigned int dim = bj.size();
   const unsigned int n = Bij.rows();
@@ -460,13 +460,13 @@ vnl_sparse_lst_sqr_function::fd_jac_Bij(int                        i,
 
 //: Use this to compute a finite-difference Jacobian C_ij
 void
-vnl_sparse_lst_sqr_function::fd_jac_Cij(int                        i,
-                                        int                        j,
+vnl_sparse_lst_sqr_function::fd_jac_Cij(int i,
+                                        int j,
                                         vnl_vector<double> const & ai,
                                         vnl_vector<double> const & bj,
                                         vnl_vector<double> const & c,
-                                        vnl_matrix<double> &       Cij,
-                                        double                     stepsize)
+                                        vnl_matrix<double> & Cij,
+                                        double stepsize)
 {
   const unsigned int dim = c.size();
   assert(dim == number_of_params_c());
@@ -533,7 +533,7 @@ vnl_sparse_lst_sqr_function::apply_weight_ij(int /*i*/, int /*j*/, double const 
 void
 vnl_sparse_lst_sqr_function::apply_weight_ij(int /*i*/,
                                              int /*j*/,
-                                             double const &       weight,
+                                             double const & weight,
                                              vnl_matrix<double> & Aij,
                                              vnl_matrix<double> & Bij,
                                              vnl_matrix<double> & Cij)

@@ -44,8 +44,8 @@ test_ray()
   double sv = 15787, ov = 15430;
 
   vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
-  vgl_point_3d<double>         p3d(ox, oy, oz);
-  vgl_vector_3d<double>        v;
+  vgl_point_3d<double> p3d(ox, oy, oz);
+  vgl_vector_3d<double> v;
   vpgl_ray::ray(rcam, p3d, v);
   std::cout << "Ray Direction " << v << '\n';
   double x_y = v.x() / v.y();
@@ -57,14 +57,14 @@ test_ray()
 
   vpgl_local_rational_camera<double> lrcam(lvcs, rcam);
 
-  vgl_point_3d<double>  orig;
+  vgl_point_3d<double> orig;
   vgl_vector_3d<double> dir;
 
   bool good = vpgl_ray::ray(lrcam, ou, ov, orig, dir);
   TEST("ray()", good, true);
   std::cout << "Orig: " << orig << "\n Dir: " << dir << '\n';
   vgl_vector_3d<double> tdir(0.0689725, -0.487625, -0.870325);
-  double                err = (tdir - dir).length();
+  double err = (tdir - dir).length();
   TEST_NEAR("test local rational ray_direction", err, 0.0, 1e-6);
 
   vgl_point_2d<double> impt1(ou, ov);
@@ -89,13 +89,13 @@ test_ray()
   vpgl_affine_camera<double> row_cam(row1, row2);
   row_cam.set_viewing_distance(9325.6025071654913);
   vgl_point_3d<double> wrld_pt(274.30804459155252, 85.614875071463018, -35.273309156122778);
-  vgl_ray_3d<double>   affine_ray;
+  vgl_ray_3d<double> affine_ray;
   good = vpgl_ray::ray(row_cam, wrld_pt, affine_ray);
   vgl_homg_point_2d<double> img_pt(369.28342202880049, 554.72813713086771);
-  vgl_ray_3d<double>        gt_ray = row_cam.backproject_ray(img_pt);
-  double                    dir_dist = (affine_ray.direction() - gt_ray.direction()).length();
-  vgl_point_3d<double>      cp = vgl_closest_point(affine_ray, wrld_pt);
-  double                    gnd_pt_dist = (cp - wrld_pt).length();
+  vgl_ray_3d<double> gt_ray = row_cam.backproject_ray(img_pt);
+  double dir_dist = (affine_ray.direction() - gt_ray.direction()).length();
+  vgl_point_3d<double> cp = vgl_closest_point(affine_ray, wrld_pt);
+  double gnd_pt_dist = (cp - wrld_pt).length();
   TEST_NEAR("affine ray ", dir_dist + gnd_pt_dist, 0.0, 1e-5);
 }
 

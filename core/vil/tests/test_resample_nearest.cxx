@@ -16,7 +16,7 @@ test_resample_nearest_byte()
             << "******************************\n";
 
   vil_image_view<vxl_byte> image0;
-  vil_image_view<double>   dest_im;
+  vil_image_view<double> dest_im;
   image0.set_size(10, 10);
 
   std::cout << "Testing one plane image\n";

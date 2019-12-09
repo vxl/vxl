@@ -23,8 +23,8 @@ test_image_list()
             << "************************\n";
   // Test image list by saving three resource files and then
   // retrieving them using image_list.
-  constexpr unsigned int         ni = 73;
-  constexpr unsigned int         nj = 43;
+  constexpr unsigned int ni = 73;
+  constexpr unsigned int nj = 43;
   vil_image_view<unsigned short> image;
   image.set_size(ni, nj);
   for (unsigned i = 0; i < ni; ++i)
@@ -32,7 +32,7 @@ test_image_list()
       image(i, j) = (unsigned short)(i + ni * j);
   vil_image_resource_sptr ir = vil_new_image_resource_of_view(image);
 
-  const unsigned                 ni2 = 36, nj2 = 21;
+  const unsigned ni2 = 36, nj2 = 21;
   vil_image_view<unsigned short> image2;
   image2.set_size(ni2, nj2);
   for (unsigned i = 0; i < ni2; ++i)
@@ -40,15 +40,15 @@ test_image_list()
       image2(i, j) = (unsigned short)(i + ni2 * j);
   vil_image_resource_sptr ir2 = vil_new_image_resource_of_view(image2);
 
-  const unsigned                 ni3 = 18, nj3 = 10;
+  const unsigned ni3 = 18, nj3 = 10;
   vil_image_view<unsigned short> image3;
   image3.set_size(ni3, nj3);
   for (unsigned i = 0; i < ni3; ++i)
     for (unsigned j = 0; j < nj3; ++j)
       image3(i, j) = (unsigned short)(i + ni3 * j);
-  bool                    good;
+  bool good;
   vil_image_resource_sptr ir3 = vil_new_image_resource_of_view(image3);
-  std::string             dir = "image_list_dir";
+  std::string dir = "image_list_dir";
   {
     bool mkdir = vul_file::make_directory(dir.c_str());
     if (mkdir)
@@ -71,7 +71,7 @@ test_image_list()
     std::cout << "Saved R2\n";
     chd = vpl_chdir("..");
     std::cout << "return code for chdir(..): " << chd << std::endl;
-    vil_image_list                       il(dir.c_str());
+    vil_image_list il(dir.c_str());
     std::vector<vil_image_resource_sptr> rescs = il.resources();
     std::cout << "Size = " << rescs.size() << std::endl;
     TEST("size()", rescs.size(), 2);

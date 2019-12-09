@@ -51,7 +51,7 @@ double
 method1(imT & image, int n_loops)
 {
   typedef typename imT::pixel_type PT;
-  std::time_t                      t0 = std::clock();
+  std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
     for (unsigned j = 0; j < height(image); ++j)
@@ -67,7 +67,7 @@ double
 method2(imT & image, int n_loops)
 {
   typedef typename imT::pixel_type PT;
-  std::time_t                      t0 = std::clock();
+  std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
     unsigned ni = width(image), nj = height(image);
@@ -112,13 +112,13 @@ compute_stats(int i, imT & image, int n_loops)
 int
 main(int argc, char ** argv)
 {
-  vil1_memory_image_of<vxl_byte>           byte_1image(NI, NJ);
-  vil1_memory_image_of<float>              float_1image(NI, NJ);
+  vil1_memory_image_of<vxl_byte> byte_1image(NI, NJ);
+  vil1_memory_image_of<float> float_1image(NI, NJ);
   vil1_memory_image_of<vil1_rgb<vxl_byte>> rgb_1image(NI, NJ);
-  vil_image_view<vxl_byte>                 byte_2image(NI, NJ);
-  vil_image_view<float>                    float_2image(NI, NJ);
-  vil_image_view<vil_rgb<vxl_byte>>        rgb_2image(NI, NJ);
-  int                                      n_loops = 100;
+  vil_image_view<vxl_byte> byte_2image(NI, NJ);
+  vil_image_view<float> float_2image(NI, NJ);
+  vil_image_view<vil_rgb<vxl_byte>> rgb_2image(NI, NJ);
+  int n_loops = 100;
   std::cout << "Times to fill a " << NI << " x " << NJ << " image of 1 plane (in microsecs) [Range= 0.5(max-min)]\n"
             << "vil1_memory_image_of Images of BYTE\n";
   for (int i = 1; i <= 2; ++i)

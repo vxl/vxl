@@ -18,7 +18,7 @@ test_gaussian_type(T epsilon, const std::string & type_name)
   {
     vpdl_gaussian<T, 3> gauss3;
     vpdl_gaussian<T, 1> gauss1;
-    vpdl_gaussian<T>    gauss_default, gauss(3), gauss_init(vnl_vector<T>(10, T(1)), vnl_matrix<T>(10, 10, T(3)));
+    vpdl_gaussian<T> gauss_default, gauss(3), gauss_init(vnl_vector<T>(10, T(1)), vnl_matrix<T>(10, 10, T(3)));
 
     TEST(("dimension <" + type_name + "> fixed").c_str(), gauss3.dimension(), 3);
     TEST(("dimension <" + type_name + "> scalar").c_str(), gauss1.dimension(), 1);
@@ -82,7 +82,7 @@ test_gaussian_type(T epsilon, const std::string & type_name)
   // test mean, covariance, square malanobis distance, probability density,
   // cumulative probability, box probability
   {
-    vnl_vector_fixed<T, 3>    mean(T(1.0), T(2.0), T(4.0));
+    vnl_vector_fixed<T, 3> mean(T(1.0), T(2.0), T(4.0));
     vnl_matrix_fixed<T, 3, 3> covar(T(0));
     covar(0, 0) = (T)0.5;
     covar(0, 1) = (T)0.2;
@@ -96,7 +96,7 @@ test_gaussian_type(T epsilon, const std::string & type_name)
 
     vpdl_gaussian<T, 3> gauss3(mean, covar);
     vpdl_gaussian<T, 1> gauss1(mean[0], covar(0, 0));
-    vpdl_gaussian<T>    gauss(mean.as_ref(), covar.as_ref());
+    vpdl_gaussian<T> gauss(mean.as_ref(), covar.as_ref());
 
     // test direct access to data member
     // there is no direct access to covariance, it is recomputed, so use TEST_NEAR
@@ -113,7 +113,7 @@ test_gaussian_type(T epsilon, const std::string & type_name)
     // test virtual functions
     const vpdl_distribution<T, 3> & dist3 = gauss3;
     const vpdl_distribution<T, 1> & dist1 = gauss1;
-    const vpdl_distribution<T> &    dist = gauss;
+    const vpdl_distribution<T> & dist = gauss;
 
     // test indirect access to data members (compute full covariance)
     vnl_vector_fixed<T, 3> m3;
@@ -142,7 +142,7 @@ test_gaussian_type(T epsilon, const std::string & type_name)
 
     vnl_vector_fixed<T, 3> test_pt(T(1.5), T(3.0), T(3.0));
     vnl_vector_fixed<T, 3> d = mean - test_pt;
-    T                      sqr_mahal_dist = dot_product(d, vnl_inverse(covar) * d);
+    T sqr_mahal_dist = dot_product(d, vnl_inverse(covar) * d);
 
     // test mahalanobis distance calculations
     TEST_NEAR(
@@ -186,11 +186,11 @@ test_gaussian_type(T epsilon, const std::string & type_name)
 
     // test gradient virtual functions against numerical difference
     vnl_vector_fixed<T, 3> g3;
-    T                      dp = std::sqrt(epsilon);
-    T                      den = dist3.density(test_pt);
-    T                      den_x = dist3.density(test_pt + vnl_vector_fixed<T, 3>(dp, 0, 0));
-    T                      den_y = dist3.density(test_pt + vnl_vector_fixed<T, 3>(0, dp, 0));
-    T                      den_z = dist3.density(test_pt + vnl_vector_fixed<T, 3>(0, 0, dp));
+    T dp = std::sqrt(epsilon);
+    T den = dist3.density(test_pt);
+    T den_x = dist3.density(test_pt + vnl_vector_fixed<T, 3>(dp, 0, 0));
+    T den_y = dist3.density(test_pt + vnl_vector_fixed<T, 3>(0, dp, 0));
+    T den_z = dist3.density(test_pt + vnl_vector_fixed<T, 3>(0, 0, dp));
     vnl_vector_fixed<T, 3> grad(den_x - den, den_y - den, den_z - den);
     grad /= dp;
     T density = dist3.gradient_density(test_pt, g3);

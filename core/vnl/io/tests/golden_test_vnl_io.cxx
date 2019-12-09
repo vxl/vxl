@@ -42,7 +42,7 @@ golden_test_vnl_io(bool save_file)
   //------------------------------------------------------------------------------------
 
   // vnl_vector
-  constexpr int      n_vec = 50;
+  constexpr int n_vec = 50;
   vnl_vector<double> v_out(n_vec), v_in;
 
   for (int i = 0; i < n_vec; i++)
@@ -51,8 +51,8 @@ golden_test_vnl_io(bool save_file)
   }
 
   // vnl_matrix
-  constexpr int      m_mat = 10;
-  constexpr int      n_mat = 6;
+  constexpr int m_mat = 10;
+  constexpr int n_mat = 6;
   vnl_matrix<double> m_out(m_mat, n_mat), m_in;
 
   for (int i = 0; i < m_mat; i++)
@@ -67,11 +67,11 @@ golden_test_vnl_io(bool save_file)
   vnl_diag_matrix<double> diag_mat_out(v_out), diag_mat_in;
 
   // vnl_matrix_fixed
-  double                         datablock[4] = { 1.1, 1.2, 2.1, 2.2 };
+  double datablock[4] = { 1.1, 1.2, 2.1, 2.2 };
   vnl_matrix_fixed<double, 2, 2> m_fixed_out(datablock), m_fixed_in;
 
   // vnl_real_n_polynomial
-  vnl_vector<double>       coeffs(4);
+  vnl_vector<double> coeffs(4);
   vnl_matrix<unsigned int> exponents(4, 2);
 
   coeffs(0) = 0.1;
@@ -96,9 +96,9 @@ golden_test_vnl_io(bool save_file)
 
   // vnl_sparse_matrix
   vnl_sparse_matrix<double> m_sparse_out(3, 3), m_sparse_in(3, 3);
-  std::vector<int>          col_1(3);
-  std::vector<int>          col_2(2);
-  std::vector<int>          col_3(1);
+  std::vector<int> col_1(3);
+  std::vector<int> col_2(2);
+  std::vector<int> col_3(1);
 
   col_1[0] = 1;
   col_1[1] = 2;
@@ -148,7 +148,7 @@ golden_test_vnl_io(bool save_file)
   }
 
   // Read in file to each class in turn
-  std::string    gold_path = testlib_root_dir() + "/core/vnl/io/tests/golden_test_vnl_io.bvl";
+  std::string gold_path = testlib_root_dir() + "/core/vnl/io/tests/golden_test_vnl_io.bvl";
   vsl_b_ifstream bfs_in(gold_path.c_str());
   TEST("Opened golden_test_vnl_io.bvl for reading ", !bfs_in, false);
   vsl_b_read(bfs_in, v_in);

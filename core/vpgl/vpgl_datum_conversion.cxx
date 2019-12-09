@@ -63,7 +63,7 @@ ipow(double x, int i)
 //*************************************************************************
 
 void
-wgs72_to_wgs84_deltas(double   phi,         //!< input lat (degrees)
+wgs72_to_wgs84_deltas(double phi,           //!< input lat (degrees)
                       double * delta_phi,   //!< lat shift (degrees)
                       double * delta_lamda, //!< lon shift (degrees)
                       double * delta_hgt)   //!< elev shift (meters)
@@ -107,9 +107,9 @@ wgs72_to_wgs84_deltas(double   phi,         //!< input lat (degrees)
 //*************************************************************************
 
 void
-wgs72_to_wgs84(double   phi, //!< input lat, lon, elev coord (degrees)
-               double   lamda,
-               double   height,
+wgs72_to_wgs84(double phi, //!< input lat, lon, elev coord (degrees)
+               double lamda,
+               double height,
                double * wgs84_phi,   //!< lat shift (degrees)
                double * wgs84_lamda, //!< lon shift (degrees)
                double * wgs84_hgt)   //!< elev shift (meters)
@@ -128,9 +128,9 @@ wgs72_to_wgs84(double   phi, //!< input lat, lon, elev coord (degrees)
 //*************************************************************************
 
 void
-wgs84_to_wgs72(double   phi, //!< input lat, lon, elev coord (degrees)
-               double   lamda,
-               double   height,
+wgs84_to_wgs72(double phi, //!< input lat, lon, elev coord (degrees)
+               double lamda,
+               double height,
                double * wgs72_phi,   //!< lat shift (degrees)
                double * wgs72_lamda, //!< lon shift (degrees)
                double * wgs72_hgt)   //!< elev shift (meters)
@@ -206,9 +206,9 @@ nad27m_to_wgs84_deltas(double phi,           //!< input lat (degrees)
 //*************************************************************************
 
 void
-nad27m_to_wgs84(double   phi, //!< input lat, lon, elev coord (degrees)
-                double   lamda,
-                double   height,
+nad27m_to_wgs84(double phi, //!< input lat, lon, elev coord (degrees)
+                double lamda,
+                double height,
                 double * wgs84_phi,   //!< lat shift (degrees)
                 double * wgs84_lamda, //!< lon shift (degrees)
                 double * wgs84_hgt)   //!< elev shift (meters)
@@ -228,9 +228,9 @@ nad27m_to_wgs84(double   phi, //!< input lat, lon, elev coord (degrees)
 //*************************************************************************
 
 void
-wgs84_to_nad27m(double   phi, //!< input lat, lon, elev coord (degrees)
-                double   lamda,
-                double   height,
+wgs84_to_nad27m(double phi, //!< input lat, lon, elev coord (degrees)
+                double lamda,
+                double height,
                 double * nad27m_phi,   //!< lat shift (degrees)
                 double * nad27m_lamda, //!< lon shift (degrees)
                 double * nad27m_hgt)   //!< elev shift (meters)
@@ -305,9 +305,9 @@ nad27n_to_wgs84_deltas(double phi,           //!< input lat (degrees)
 //*************************************************************************
 
 void
-nad27n_to_wgs84(double   phi, //!< input lat, lon, elev coord (degrees)
-                double   lamda,
-                double   height,
+nad27n_to_wgs84(double phi, //!< input lat, lon, elev coord (degrees)
+                double lamda,
+                double height,
                 double * wgs84_phi,   //!< lat shift (degrees)
                 double * wgs84_lamda, //!< lon shift (degrees)
                 double * wgs84_hgt)   //!< elev shift (meters)
@@ -326,9 +326,9 @@ nad27n_to_wgs84(double   phi, //!< input lat, lon, elev coord (degrees)
 //*************************************************************************
 
 void
-wgs84_to_nad27n(double   phi, //!< input lat, lon, elev coord (degrees)
-                double   lamda,
-                double   height,
+wgs84_to_nad27n(double phi, //!< input lat, lon, elev coord (degrees)
+                double lamda,
+                double height,
                 double * nad27n_phi,   //!< lat shift (degrees)
                 double * nad27n_lamda, //!< lon shift (degrees)
                 double * nad27n_hgt)   //!< elev shift (meters)
@@ -360,9 +360,9 @@ wgs84_to_nad27n(double   phi, //!< input lat, lon, elev coord (degrees)
 //*************************************************************************
 
 void
-nad27n_to_wgs84_alternate(double   nad27_lat,
-                          double   nad27_lon,
-                          double   nad27_el,
+nad27n_to_wgs84_alternate(double nad27_lat,
+                          double nad27_lon,
+                          double nad27_el,
                           double * wgs84_lat,
                           double * wgs84_lon,
                           double * wgs84_el)
@@ -614,9 +614,9 @@ nad27n_to_wgs84_alternate(double   nad27_lat,
 //*************************************************************************
 
 void
-wgs84_to_nad27n_alternate(double   wgs84_lat,
-                          double   wgs84_lon,
-                          double   wgs84_el,
+wgs84_to_nad27n_alternate(double wgs84_lat,
+                          double wgs84_lon,
+                          double wgs84_el,
                           double * nad27n_lat,
                           double * nad27n_lon,
                           double * nad27n_el)
@@ -903,14 +903,14 @@ geo_centric2detic(double geocentric_lat, //!< geocentric latitude of input point
 //
 //**********************************************************************
 void
-GRS_to_latlong(double   x,
-               double   y,
-               double   z, //!< Input GRS coords
+GRS_to_latlong(double x,
+               double y,
+               double z, //!< Input GRS coords
                double * geodetic_lat,
                double * lon,
                double * el, //!< output coordinates of point
-               double   A,
-               double   B) //!< Major and minor axes of earth
+               double A,
+               double B) //!< Major and minor axes of earth
 {
   double new_lat; //!< used in iteration
   double N;       //!< Local distance to earth center
@@ -969,14 +969,14 @@ GRS_to_latlong(double   x,
 //**********************************************************************
 
 void
-latlong_to_GRS(double   geodetic_lat,
-               double   lon,
-               double   el, //!< Input coordinates of point
+latlong_to_GRS(double geodetic_lat,
+               double lon,
+               double el, //!< Input coordinates of point
                double * x,
                double * y,
                double * z, //!< Output GRS coords
-               double   A,
-               double   B) //!< Major and minor axes of earth
+               double A,
+               double B) //!< Major and minor axes of earth
 {
   double geocentric_lat;
   double local_radius; //!< Local distance to earth center
@@ -1009,9 +1009,9 @@ latlong_to_GRS(double   geodetic_lat,
 //*************************************************************************
 
 void
-nad27n_to_wgs72(double   phi, //!< input lat, lon, elev coord (degrees)
-                double   lamda,
-                double   height,
+nad27n_to_wgs72(double phi, //!< input lat, lon, elev coord (degrees)
+                double lamda,
+                double height,
                 double * wgs72_phi,   //!< lat in wgs72 (degrees)
                 double * wgs72_lamda, //!< lon in wgs72 (degrees)
                 double * wgs72_hgt)   //!< elev in wgs72 (meters)
@@ -1029,9 +1029,9 @@ nad27n_to_wgs72(double   phi, //!< input lat, lon, elev coord (degrees)
 //*************************************************************************
 
 void
-wgs72_to_nad27n(double   phi, //!< input lat, lon, elev coord (degrees)
-                double   lamda,
-                double   height,
+wgs72_to_nad27n(double phi, //!< input lat, lon, elev coord (degrees)
+                double lamda,
+                double height,
                 double * nad27n_phi,   //!< lat in nad27n (degrees)
                 double * nad27n_lamda, //!< lon in nad27n (degrees)
                 double * nad27n_hgt)   //!< elev in nad27n (meters)

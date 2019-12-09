@@ -20,8 +20,8 @@
 struct example_tableau : public vgui_image_tableau
 {
   char ** filenames;
-  int     nr_files;
-  int     current_file;
+  int nr_files;
+  int current_file;
   example_tableau(char ** f, int n = 1)
     : vgui_image_tableau(*f)
     , filenames(f)
@@ -80,7 +80,7 @@ main(int argc, char ** argv)
   vgui_tableau_sptr my_tab = example_tableau_new(argv + 1, argc - 1);
 
   vgui_viewer2D_tableau_new viewer(my_tab);
-  vgui_shell_tableau_new    shell(viewer);
+  vgui_shell_tableau_new shell(viewer);
 
   // Start event loop, using easy method.
   return vgui::run(shell, 960, 540);

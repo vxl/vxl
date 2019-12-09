@@ -16,15 +16,15 @@ test_algo_exp_grad_filter_1d_byte_float()
             << " Testing vil_algo_exp_grad_filter_1d byte-float\n"
             << "************************************************\n";
 
-  constexpr int         n = 100;
+  constexpr int n = 100;
   std::vector<vxl_byte> src(n);
   for (int i = 0; i < n; ++i)
     src[i] = 0;
   src[50] = 100;
 
-  float              k = 0.25;
+  float k = 0.25;
   std::vector<float> dest_block(n + 2);
-  float *            dest = &dest_block[1];
+  float * dest = &dest_block[1];
   dest[-1] = 9876;
   dest[n] = 9876; // Marks to check for over-runs
   vil_exp_grad_filter_1d(&src[0], 1, &dest[0], 1, n, k);
@@ -53,7 +53,7 @@ test_algo_exp_grad_filter_1d_byte_float()
 
   // Test application to whole images
   vil_image_view<vxl_byte> src_im(10, 10);
-  vil_image_view<float>    dest_im;
+  vil_image_view<float> dest_im;
   src_im.fill(10);
   for (unsigned j = 0; j < 10; ++j)
     for (unsigned i = 5; i < 10; ++i)

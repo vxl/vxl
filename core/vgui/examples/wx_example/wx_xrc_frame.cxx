@@ -79,12 +79,12 @@ public:
 //-------------------------------------------------------------------------
 IMPLEMENT_CLASS(wx_xrc_frame, wxFrame)
 
-wx_xrc_frame::wx_xrc_frame(wxWindow *       parent,
-                           wxWindowID       id,
+wx_xrc_frame::wx_xrc_frame(wxWindow * parent,
+                           wxWindowID id,
                            const wxString & title,
-                           const wxPoint &  pos,
-                           const wxSize &   size,
-                           long             type)
+                           const wxPoint & pos,
+                           const wxSize & size,
+                           long type)
 //: wxFrame(parent, id, title, pos, size, type)
 {
   observer_ = new vgui_wx_observer();
@@ -142,9 +142,9 @@ wx_xrc_frame::wx_xrc_frame(wxWindow *       parent,
   tab_->set_foreground(1, 0, 0);
   point_ = tab_->add_point(sliders_->data()[0], sliders_->data()[1]);
 
-  vgui_tableau_sptr         tableau;
+  vgui_tableau_sptr tableau;
   vgui_viewer2D_tableau_new viewer(tab_);
-  vgui_shell_tableau_new    shell(viewer);
+  vgui_shell_tableau_new shell(viewer);
   shell->set_enable_key_bindings(true);
   canvas_->set_tableau(shell);
 }

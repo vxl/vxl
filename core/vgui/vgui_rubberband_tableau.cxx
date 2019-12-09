@@ -222,12 +222,12 @@ vgui_rubberband_tableau::draw_infinite_line(float a, float b, float c)
   // Compute the bounding box.
   // This will be the viewport but in the coordinates of the image.
   vgui_projection_inspector pi;
-  float                     x0, y0, x1, y1;
+  float x0, y0, x1, y1;
   pi.image_viewport(x0, y0, x1, y1);
 
   float x3, y3;
   float x4, y4;
-  bool  f = vgl_clip_line_to_box(a, b, c, x0, y0, x1, y1, x3, y3, x4, y4);
+  bool f = vgl_clip_line_to_box(a, b, c, x0, y0, x1, y1, x3, y3, x4, y4);
   if (!f)
     return; // no intersection
 

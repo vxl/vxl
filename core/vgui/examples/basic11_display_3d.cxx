@@ -41,7 +41,7 @@ main(int argc, char ** argv)
   // Add the easy3D tableau to a viewer3D tableau (this
   // gives us functionality to zoom and move the 3D object):
   vgui_viewer3D_tableau_new viewer(list3D);
-  vgui_shell_tableau_new    shell(viewer);
+  vgui_shell_tableau_new shell(viewer);
 
   return vgui::run(shell, 512, 512, "3d-example");
 }

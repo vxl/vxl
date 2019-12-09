@@ -18,7 +18,7 @@
 vnl_vector<double>
 vnl_levenberg_marquardt_minimize(vnl_least_squares_function & f, vnl_vector<double> const & initial_estimate)
 {
-  vnl_vector<double>      x = initial_estimate;
+  vnl_vector<double> x = initial_estimate;
   vnl_levenberg_marquardt lm(f);
   lm.minimize(x);
   return x;
@@ -63,14 +63,14 @@ vnl_levenberg_marquardt::~vnl_levenberg_marquardt()
 //--------------------------------------------------------------------------------
 
 void
-vnl_levenberg_marquardt::lmdif_lsqfun(long *   n,     // I   Number of residuals
-                                      long *   p,     // I   Number of unknowns
-                                      double * x,     // I   Solution vector, size n
-                                      double * fx,    // O   Residual vector f(x)
-                                      long *   iflag, // IO  0 ==> print, -1 ==> terminate
-                                      void *   userdata)
+vnl_levenberg_marquardt::lmdif_lsqfun(long * n,     // I   Number of residuals
+                                      long * p,     // I   Number of unknowns
+                                      double * x,   // I   Solution vector, size n
+                                      double * fx,  // O   Residual vector f(x)
+                                      long * iflag, // IO  0 ==> print, -1 ==> terminate
+                                      void * userdata)
 {
-  auto *                       self = static_cast<vnl_levenberg_marquardt *>(userdata);
+  auto * self = static_cast<vnl_levenberg_marquardt *>(userdata);
   vnl_least_squares_function * f = self->f_;
   assert(*p == (int)f->get_number_of_unknowns());
   assert(*n == (int)f->get_number_of_residuals());
@@ -148,11 +148,11 @@ vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double> & x)
     return false;
   }
 
-  vnl_vector<double> fx(m, 0.0);                      // W m   Storage for target vector
-  vnl_vector<double> diag(n, 0);                      // I     Multiplicative scale factors for variables
-  long               user_provided_scale_factors = 1; // 1 is no, 2 is yes
-  double             factor = 100;
-  long               nprint = 1;
+  vnl_vector<double> fx(m, 0.0);        // W m   Storage for target vector
+  vnl_vector<double> diag(n, 0);        // I     Multiplicative scale factors for variables
+  long user_provided_scale_factors = 1; // 1 is no, 2 is yes
+  double factor = 100;
+  long nprint = 1;
 
   vnl_vector<double> qtf(n, 0);
   vnl_vector<double> wa1(n, 0);
@@ -220,8 +220,8 @@ vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double> & x)
 //--------------------------------------------------------------------------------
 
 void
-vnl_levenberg_marquardt::lmder_lsqfun(long *   n,  // I   Number of residuals
-                                      long *   p,  // I   Number of unknowns
+vnl_levenberg_marquardt::lmder_lsqfun(long * n,    // I   Number of residuals
+                                      long * p,    // I   Number of unknowns
                                       double * x,  // I   Solution vector, size n
                                       double * fx, // O   Residual vector f(x)
                                       double * fJ, // O   m * n Jacobian f(x)
@@ -229,7 +229,7 @@ vnl_levenberg_marquardt::lmder_lsqfun(long *   n,  // I   Number of residuals
                                       long * iflag, // I   1 -> calc fx, 2 -> calc fjac
                                       void * userdata)
 {
-  auto *                       self = static_cast<vnl_levenberg_marquardt *>(userdata);
+  auto * self = static_cast<vnl_levenberg_marquardt *>(userdata);
   vnl_least_squares_function * f = self->f_;
   assert(*p == (int)f->get_number_of_unknowns());
   assert(*n == (int)f->get_number_of_residuals());
@@ -265,8 +265,8 @@ vnl_levenberg_marquardt::lmder_lsqfun(long *   n,  // I   Number of residuals
       vnl_vector<double> feval(*n);
       vnl_matrix<double> finite_jac(*p, *n, 0.0);
       vnl_vector<double> wa1(*n);
-      long               info = 1;
-      double             diff;
+      long info = 1;
+      double diff;
       f->f(ref_x, feval);
       v3p_netlib_fdjac2_(lmdif_lsqfun,
                          n,
@@ -332,8 +332,8 @@ vnl_levenberg_marquardt::minimize_using_gradient(vnl_vector<double> & x)
 
 
   double factor = 100;
-  long   nprint = 1;
-  long   mode = 1, nfev, njev;
+  long nprint = 1;
+  long mode = 1, nfev, njev;
 
   vnl_vector<double> diag(n, 0);
   vnl_vector<double> qtf(n, 0);

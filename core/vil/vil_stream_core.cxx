@@ -76,7 +76,7 @@ vil_stream_core::m_transfer(char * buf, vil_streampos pos, vil_streampos n, bool
 
   // transfer data
   {
-    char *        tbuf = buf;
+    char * tbuf = buf;
     vil_streampos tpos = pos;
     vil_streampos tn = n;
     while (tn > 0)

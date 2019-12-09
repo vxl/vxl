@@ -71,9 +71,9 @@ main(int argc, char ** argv)
   vgui::init(argc, argv);
   vgui_clear_tableau_sptr cleartab = vgui_clear_tableau_new();
   cleartab->set_colour(1, 0, 0);
-  my_tab_new                easy(cleartab);
+  my_tab_new easy(cleartab);
   vgui_viewer2D_tableau_new viewer(easy);
-  vgui_shell_tableau_new    shell(viewer);
+  vgui_shell_tableau_new shell(viewer);
 
   // Add some objects to our easy2D so we can see what happens when they
   // are highlighted.

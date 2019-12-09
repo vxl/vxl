@@ -60,8 +60,8 @@ vnl_polynomial<double>
 polynomial(char * txt)
 {
   std::vector<double> coef;
-  std::stringstream   ss(txt);
-  double              onecoef;
+  std::stringstream ss(txt);
+  double onecoef;
   while (ss >> onecoef)
     coef.insert(coef.begin(), 1, onecoef);
   while (coef.size() && coef.back() == 0.0)
@@ -72,7 +72,7 @@ polynomial(char * txt)
 int
 main()
 {
-  char                   l[65000];
+  char l[65000];
   vnl_polynomial<double> p;
   while (std::cin.getline(l, 65000))
   {

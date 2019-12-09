@@ -41,7 +41,7 @@ test_second()
   std::cout << "vul_temp_filename() returns '" << filename1 << "'\n";
   // file must be opened for subsequent filename to be different (Borland)
   std::ofstream ostr1(filename1.c_str());
-  std::string   filename2 = vul_temp_filename();
+  std::string filename2 = vul_temp_filename();
   ostr1.close();
   std::cout << "vul_temp_filename() returns '" << filename2 << "'\n";
 

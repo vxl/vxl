@@ -144,7 +144,7 @@ vnl_bignum::vnl_bignum(long double d)
 }
 
 static char rt[4096];
-static int  rt_pos = 0;
+static int rt_pos = 0;
 
 static char
 next(const char *& s, std::istream ** is)
@@ -683,9 +683,9 @@ operator<<(std::ostream & os, const vnl_bignum & b)
   }
   if (d.is_infinity())
     return os << "Inf";
-  vnl_bignum q, r;                               // Temp quotient and remainder
-  char *     cbuf = new char[5 * (b.count + 1)]; // Temp character buffer
-  Counter    i = 0;
+  vnl_bignum q, r;                           // Temp quotient and remainder
+  char * cbuf = new char[5 * (b.count + 1)]; // Temp character buffer
+  Counter i = 0;
   do
   {                                  // repeat:
     divide(d, 10L, q, r);            //   Divide vnl_bignum by ten
@@ -848,8 +848,8 @@ int
 vnl_bignum::dtoBigNum(const char * s)
 {
   this->resize(0);
-  this->sign = 1;     // Reset number to 0.
-  Counter    len = 0; // No chars converted yet
+  this->sign = 1;  // Reset number to 0.
+  Counter len = 0; // No chars converted yet
   vnl_bignum sum;
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r')
     ++s; // skip whitespace
@@ -902,7 +902,7 @@ vnl_bignum::xtoBigNum(const char * s)
   sign = 1; // Reset number to 0.
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r')
     ++s; // skip whitespace
-  auto    size = Counter(std::strlen(s));
+  auto size = Counter(std::strlen(s));
   Counter len = 2; // skip leading "0x"
   while (len < size)
   {                                             // While there are more chars
@@ -920,7 +920,7 @@ vnl_bignum::otoBigNum(const char * s)
   sign = 1; // Reset number to 0.
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r')
     ++s; // skip whitespace
-  auto    size = Counter(std::strlen(s));
+  auto size = Counter(std::strlen(s));
   Counter len = 0; // No chars converted yet
   while (len < size)
   {                                             // While there are more chars
@@ -1000,7 +1000,7 @@ add(const vnl_bignum & b1, const vnl_bignum & b2, vnl_bignum & sum)
   }
   sum.resize(bmax->count); // Allocate data for their sum
   unsigned long temp, carry = 0;
-  Counter       i = 0;
+  Counter i = 0;
   if (b1.data)
   {
     while (i < bmin->count)
@@ -1034,7 +1034,7 @@ add(const vnl_bignum & b1, const vnl_bignum & b2, vnl_bignum & sum)
 void
 increment(vnl_bignum & bnum)
 {
-  Counter       i = 0;
+  Counter i = 0;
   unsigned long carry = 1;
   while (i < bnum.count && carry)
   { // increment, element by element.
@@ -1057,8 +1057,8 @@ subtract(const vnl_bignum & bmax, const vnl_bignum & bmin, vnl_bignum & diff)
 {
   diff.resize(bmax.count); // Allocate data for difference
   unsigned long temp;
-  int           borrow = 0;
-  Counter       i = 0;
+  int borrow = 0;
+  Counter i = 0;
   for (; i < bmin.count; i++)
   {                                                         // Subtract word by word.
     temp = (unsigned long)bmax.data[i] + 0x10000L - borrow; // Add radix to bmax's data
@@ -1080,7 +1080,7 @@ subtract(const vnl_bignum & bmax, const vnl_bignum & bmin, vnl_bignum & diff)
 void
 decrement(vnl_bignum & bnum)
 {
-  Counter       i = 0;
+  Counter i = 0;
   unsigned long borrow = 1;
   while (i < bnum.count && borrow)
   { // decrement, element by element.
@@ -1143,7 +1143,7 @@ multiply_aux(const vnl_bignum & b, Data d, vnl_bignum & prod, Counter i)
   if (d != 0)
   { // if d == 0, nothing to do
     unsigned long temp;
-    Data          carry = 0;
+    Data carry = 0;
 
     Counter j = 0;
     for (; j < b.count; j++)
@@ -1261,13 +1261,13 @@ multiply_subtract(vnl_bignum & u, const vnl_bignum & v, Data q_hat, Counter j)
   if (q_hat == 0)
     return q_hat;  // if q_hat 0, nothing to do
   vnl_bignum rslt; // create a temporary vnl_bignum
-  Counter    tmpcnt;
+  Counter tmpcnt;
   rslt.resize(v.count + 1u); // allocate data for it
 
   // simultaneous computation of u - v*q_hat
   unsigned long prod, diff;
-  Data          carry = 0, borrow = 0;
-  Counter       i = 0;
+  Data carry = 0, borrow = 0;
+  Counter i = 0;
   for (; i < v.count; ++i)
   {
     // for each digit of v, multiply it by q_hat and subtract the result
@@ -1430,15 +1430,15 @@ left_shift(const vnl_bignum & b1, int l)
 vnl_bignum
 right_shift(const vnl_bignum & b1, int l)
 {
-  vnl_bignum rslt;                                         // result of shift
-  auto       shrinkage = Counter(l / 16);                  // # of words rslt will shrink
-  Data       shift = Data(l % 16);                         // amount to actually shift
-  Data       dregs = Data(b1.data[b1.count - 1] >> shift); // high end data to save
+  vnl_bignum rslt;                                   // result of shift
+  auto shrinkage = Counter(l / 16);                  // # of words rslt will shrink
+  Data shift = Data(l % 16);                         // amount to actually shift
+  Data dregs = Data(b1.data[b1.count - 1] >> shift); // high end data to save
   if (shrinkage + (dregs == 0) < b1.count)
   {                                                           // if not all data shifted out
     rslt.sign = b1.sign;                                      // rslt follows sign of input
     rslt.resize(b1.count - shrinkage - (dregs == 0 ? 1 : 0)); // allocate new data
-    Data    lshift = Data(16 - shift);                        // amount to shift high word
+    Data lshift = Data(16 - shift);                           // amount to shift high word
     Counter i = 0;
     while (i < rslt.count - 1)
     {                                                         // shift current word

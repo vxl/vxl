@@ -41,7 +41,7 @@ test_na_type(T na_v, T qnan_v)
   TEST("!isna(nan_to_na(4.0))", !vnl_na_isna(vnl_na_nan_to_na(T(4.0))), true);
 
   {
-    T                  x = 0.0;
+    T x = 0.0;
     std::istringstream ss("NA");
     vnl_na_extract(ss, x);
     TEST("x=\"NA\"", vnl_na_isna(x), true);
@@ -49,7 +49,7 @@ test_na_type(T na_v, T qnan_v)
   }
 
   {
-    T                  x = 0.0;
+    T x = 0.0;
     std::istringstream ss("NA  ");
     vnl_na_extract(ss, x);
     TEST("x=\"NA  \"", vnl_na_isna(x), true);
@@ -57,7 +57,7 @@ test_na_type(T na_v, T qnan_v)
   }
 
   {
-    T                  x = 0.0;
+    T x = 0.0;
     std::istringstream ss("1.0   ");
     vnl_na_extract(ss, x);
     TEST("x=\"1.0\"", x, 1.0);
@@ -65,7 +65,7 @@ test_na_type(T na_v, T qnan_v)
   }
 
   {
-    T                  x = 0.0, y = 0.0;
+    T x = 0.0, y = 0.0;
     std::istringstream ss("NA1.0");
     vnl_na_extract(ss, x);
     vnl_na_extract(ss, y);
@@ -74,7 +74,7 @@ test_na_type(T na_v, T qnan_v)
   }
 
   {
-    T                  x = 0.0, y = 0.0;
+    T x = 0.0, y = 0.0;
     std::istringstream ss("1.0NA");
     vnl_na_extract(ss, x);
     vnl_na_extract(ss, y);
@@ -83,7 +83,7 @@ test_na_type(T na_v, T qnan_v)
   }
 
   {
-    T                  x = 0.0, y = 0.0;
+    T x = 0.0, y = 0.0;
     std::istringstream ss("NANA");
     vnl_na_extract(ss, x);
     vnl_na_extract(ss, y);
@@ -92,7 +92,7 @@ test_na_type(T na_v, T qnan_v)
   }
 
   {
-    T                  x = 0.0, y = 0.0;
+    T x = 0.0, y = 0.0;
     std::istringstream ss("NA 1.0");
     vnl_na_extract(ss, x);
     vnl_na_extract(ss, y);
@@ -101,7 +101,7 @@ test_na_type(T na_v, T qnan_v)
   }
 
   {
-    T                  x = 0.0, y = 0.0;
+    T x = 0.0, y = 0.0;
     std::istringstream ss("1.0 NA");
     vnl_na_extract(ss, x);
     vnl_na_extract(ss, y);
@@ -110,7 +110,7 @@ test_na_type(T na_v, T qnan_v)
   }
 
   {
-    T                  x = 0.0, y = 0.0;
+    T x = 0.0, y = 0.0;
     std::istringstream ss("NA NA");
     vnl_na_extract(ss, x);
     vnl_na_extract(ss, y);
@@ -119,7 +119,7 @@ test_na_type(T na_v, T qnan_v)
   }
 
   {
-    T                  x = 0.0, y = 0.0;
+    T x = 0.0, y = 0.0;
     std::istringstream ss("-1.0-1.0");
     vnl_na_extract(ss, x);
     vnl_na_extract(ss, y);

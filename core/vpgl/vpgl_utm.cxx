@@ -56,7 +56,7 @@ static double es2, esp2;
 static double ml02;
 static double false_easting2;
 static double false_northing2;
-static int    ind2;
+static int ind2;
 static double e02, e12, e22, e32;
 
 // Function to return the sign of an argument
@@ -175,15 +175,15 @@ vpgl_utm::~vpgl_utm() = default;
 // (UTM_coordinate_system) and creates a point represented the transformed location in the
 // to_coordinate_system(geodetic_coordinate_system).
 void
-vpgl_utm::transform(int      utm_zone,
-                    double   x,
-                    double   y,
-                    double   z,
+vpgl_utm::transform(int utm_zone,
+                    double x,
+                    double y,
+                    double z,
                     double & lat,
                     double & lon,
                     double & elev,
-                    bool     south_flag,
-                    double   utm_central_meridian)
+                    bool south_flag,
+                    double utm_central_meridian)
 {
   // double D2R = vnl_math::pi_over_180;
   double e = std::sqrt((sqr(a_) - sqr(b_)) / sqr(a_));
@@ -200,11 +200,11 @@ vpgl_utm::transform(int      utm_zone,
 
   double con, temp_phi;             // temporary angles
   double delta_phi;                 // difference between longitudes
-  long   i;                         // counter variable
+  long i;                           // counter variable
   double sin_phi, cos_phi, tan_phi; // sin cos and tangent values
   double c, cs, t, ts, n, r, d, ds; // temporary variables
   double f, h, g, temp;             // temporary variables
-  long   max_iter = 6;              // maximum number of iterations, I changed from 6 to 20
+  long max_iter = 6;                // maximum number of iterations, I changed from 6 to 20
 
   if (ind2 != 0)
   {
@@ -296,13 +296,13 @@ vpgl_utm::transform(int      utm_zone,
 }
 
 void
-vpgl_utm::transform(int      utm_zone,
-                    double   x,
-                    double   y,
+vpgl_utm::transform(int utm_zone,
+                    double x,
+                    double y,
                     double & lat,
                     double & lon,
-                    bool     south_flag,
-                    double   utm_central_meridian)
+                    bool south_flag,
+                    double utm_central_meridian)
 {
   double elev;
   this->transform(utm_zone, x, y, 0.0, lat, lon, elev, south_flag, utm_central_meridian);
@@ -319,7 +319,7 @@ vpgl_utm::transform(double lat, double lon, double & x, double & y, int & utm_zo
   double e = std::sqrt(1.0 - b_ * b_ / (a_ * a_));
   // This value must eventually set by user. lon_zone stands for
   // longitudinal zone, and it must be between 1 and 60.
-  int    south_flag;
+  int south_flag;
   double utm_central_meridian = 0;
 
   utm_central_meridian = (6 * utm_zone) - 183;

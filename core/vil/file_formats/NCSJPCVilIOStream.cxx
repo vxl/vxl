@@ -33,9 +33,9 @@ CNCSJPCVilIOStream::Open(vil_stream * stream, bool bWrite)
   std::stringstream str;
   str << "name " << mId++;
   std::string nm = str.str();
-  unsigned    n = nm.size();
-  char *      name = new char[n + 1];
-  unsigned    i = 0;
+  unsigned n = nm.size();
+  char * name = new char[n + 1];
+  unsigned i = 0;
   for (std::string::iterator sit = nm.begin(); sit != nm.end(); ++sit, ++i)
     name[i] = *sit;
   name[n] = '\0';
@@ -108,19 +108,19 @@ CNCSJPCVilIOStream::Seek(INT64 offset, Origin origin)
 }
 
 INT64 NCS_FASTCALL
-      CNCSJPCVilIOStream::Tell()
+CNCSJPCVilIOStream::Tell()
 {
   return (INT64)(mVilStream->tell() - mHomePos);
 }
 
 INT64 NCS_FASTCALL
-      CNCSJPCVilIOStream::Size()
+CNCSJPCVilIOStream::Size()
 {
   return (INT64)(mVilStream->file_size() - mHomePos);
 }
 
 bool NCS_FASTCALL
-     CNCSJPCVilIOStream::Read(void * buffer, UINT32 count)
+CNCSJPCVilIOStream::Read(void * buffer, UINT32 count)
 {
   vil_streampos bytesRead = mVilStream->read(buffer, count);
   if (bytesRead != count)
@@ -132,7 +132,7 @@ bool NCS_FASTCALL
 }
 
 bool NCS_FASTCALL
-     CNCSJPCVilIOStream::Write(void * buffer, UINT32 count)
+CNCSJPCVilIOStream::Write(void * buffer, UINT32 count)
 {
   vil_streampos bytesWritten = mVilStream->write(buffer, count);
   if (bytesWritten != count)

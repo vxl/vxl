@@ -100,17 +100,17 @@ vpgl_lvcs::operator=(const vpgl_lvcs & lvcs)
   return *this;
 }
 
-vpgl_lvcs::vpgl_lvcs(double   orig_lat,
-                     double   orig_lon,
-                     double   orig_elev,
+vpgl_lvcs::vpgl_lvcs(double orig_lat,
+                     double orig_lon,
+                     double orig_elev,
                      cs_names cs_name,
-                     double   lat_scale,
-                     double   lon_scale,
+                     double lat_scale,
+                     double lon_scale,
                      AngUnits ang_unit, // = DEG
                      LenUnits len_unit, // = METERS
-                     double   lox,
-                     double   loy,
-                     double   theta)
+                     double lox,
+                     double loy,
+                     double theta)
   : local_cs_name_(cs_name)
   , localCSOriginLat_(orig_lat)
   , localCSOriginLon_(orig_lon)
@@ -152,9 +152,9 @@ vpgl_lvcs::vpgl_lvcs(double   orig_lat,
 //  Similarly, the unit of elevation is specified by elev_unit.
 //  The local cartesian system is aligned with North and East
 //
-vpgl_lvcs::vpgl_lvcs(double   orig_lat,
-                     double   orig_lon,
-                     double   orig_elev,
+vpgl_lvcs::vpgl_lvcs(double orig_lat,
+                     double orig_lon,
+                     double orig_elev,
                      cs_names cs_name,
                      AngUnits ang_unit,
                      LenUnits len_unit)
@@ -196,11 +196,11 @@ vpgl_lvcs::vpgl_lvcs(double   orig_lat,
 //  Similarly, the unit of elevation is specified by elev_unit.
 //  The local cartesian system is aligned with North and East
 //
-vpgl_lvcs::vpgl_lvcs(double   lat_low,
-                     double   lon_low,
-                     double   lat_high,
-                     double   lon_high,
-                     double   elev,
+vpgl_lvcs::vpgl_lvcs(double lat_low,
+                     double lon_low,
+                     double lat_high,
+                     double lon_high,
+                     double elev,
                      cs_names cs_name,
                      AngUnits ang_unit,
                      LenUnits elev_unit)
@@ -255,9 +255,9 @@ void
 vpgl_lvcs::degrees_to_dms(double geoval, int & degrees, int & minutes, double & seconds) const
 {
   double fmin = std::fabs(geoval - (int)geoval) * 60.0;
-  int    isec = (int)((fmin - (int)fmin) * 60.0 + .5);
-  int    imin = (int)((isec == 60) ? fmin + 1 : fmin);
-  int    extra = (geoval > 0) ? 1 : -1;
+  int isec = (int)((fmin - (int)fmin) * 60.0 + .5);
+  int imin = (int)((isec == 60) ? fmin + 1 : fmin);
+  int extra = (geoval > 0) ? 1 : -1;
   degrees = (int)((imin == 60) ? geoval + extra : geoval);
   minutes = (imin == 60 ? 0 : imin);
   seconds = (fmin - (int)fmin) * 60.0;
@@ -393,7 +393,7 @@ vpgl_lvcs::compute_scale()
 
 //------------------------------------------------------------------------------
 //: Converts pointin, given in local vertical coord system, to pointout in the global coord system given by the string
-//lobalcs_name.
+// lobalcs_name.
 //  X, Y, Z in pointin are assumed to be lengths, in the units specified
 //  by this->localXYZUnit_.
 //  pointout is written out in [angle, angle, length], as specified by
@@ -404,12 +404,12 @@ void
 vpgl_lvcs::local_to_global(const double pointin_x,
                            const double pointin_y,
                            const double pointin_z,
-                           cs_names     global_cs_name,
-                           double &     pointout_lon,
-                           double &     pointout_lat,
-                           double &     pointout_z,
-                           AngUnits     output_ang_unit,
-                           LenUnits     output_len_unit) const
+                           cs_names global_cs_name,
+                           double & pointout_lon,
+                           double & pointout_lat,
+                           double & pointout_z,
+                           AngUnits output_ang_unit,
+                           LenUnits output_len_unit) const
 {
   double local_to_meters, local_to_feet, local_to_radians, local_to_degrees;
   this->get_angle_conversions(local_to_radians, local_to_degrees);
@@ -584,7 +584,7 @@ vpgl_lvcs::local_to_global(const double pointin_x,
 
 //----------------------------------------------------------------------------
 //: Converts pointin, given in a global coord system described by global_cs_name, to pointout in the local vertical
-//coord system.
+// coord system.
 //  The units of X, Y, Z are specified by input_ang_unit and input_len_unit
 //  to define lon, lat, elev in (angle, angle, length).
 //  The output point is returned in the units specified by
@@ -594,12 +594,12 @@ void
 vpgl_lvcs::global_to_local(const double pointin_lon,
                            const double pointin_lat,
                            const double pointin_z,
-                           cs_names     global_cs_name,
-                           double &     pointout_x,
-                           double &     pointout_y,
-                           double &     pointout_z,
-                           AngUnits     input_ang_unit,
-                           LenUnits     input_len_unit) const
+                           cs_names global_cs_name,
+                           double & pointout_x,
+                           double & pointout_y,
+                           double & pointout_z,
+                           AngUnits input_ang_unit,
+                           LenUnits input_len_unit) const
 {
   double local_to_meters, local_to_feet, local_to_radians, local_to_degrees;
   this->get_angle_conversions(local_to_radians, local_to_degrees);
@@ -679,7 +679,7 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
       nad27n_to_wgs84(global_lat, global_lon, global_elev, &local_lat, &local_lon, &local_elev);
 
       vpgl_utm u;
-      int      zone;
+      int zone;
       u.transform(local_lat, local_lon, pointout_x, pointout_y, zone);
       if (zone != localUTMOrigin_Zone_)
       {
@@ -722,7 +722,7 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
       wgs72_to_wgs84(global_lat, global_lon, global_elev, &local_lat, &local_lon, &local_elev);
 
       vpgl_utm u;
-      int      zone;
+      int zone;
       u.transform(local_lat, local_lon, pointout_x, pointout_y, zone);
       if (zone != localUTMOrigin_Zone_)
       {
@@ -763,7 +763,7 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
     else if (local_cs_name_ == vpgl_lvcs::utm)
     {
       vpgl_utm u;
-      int      zone;
+      int zone;
       u.transform(global_lat, global_lon, pointout_x, pointout_y, zone);
       if (zone != localUTMOrigin_Zone_)
       {

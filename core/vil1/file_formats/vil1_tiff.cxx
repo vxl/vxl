@@ -66,7 +66,7 @@ vil1_tiff_file_format_probe(vil1_stream * is)
   if (hdr[1]!=0x002A && hdr[1]!=0x2A00)
     return 0;
 #else
-  char         hdr[4];
+  char hdr[4];
   unsigned int read = is->read(hdr, sizeof hdr);
   if (read < sizeof hdr)
     return false;
@@ -106,12 +106,12 @@ vil1_tiff_file_format::make_input_image(vil1_stream * is)
 }
 
 vil1_image_impl *
-vil1_tiff_file_format::make_output_image(vil1_stream *         is,
-                                         int                   planes,
-                                         int                   width,
-                                         int                   height,
-                                         int                   components,
-                                         int                   bits_per_component,
+vil1_tiff_file_format::make_output_image(vil1_stream * is,
+                                         int planes,
+                                         int width,
+                                         int height,
+                                         int components,
+                                         int bits_per_component,
                                          vil1_component_format format)
 {
   return new vil1_tiff_generic_image(is, planes, width, height, components, bits_per_component, format);
@@ -142,14 +142,14 @@ struct vil1_tiff_structures
       vs->unref();
   }
 
-  TIFF *        tif;
+  TIFF * tif;
   vil1_stream * vs;
-  int           filesize;
+  int filesize;
 
-  unsigned long  tilewidth;
-  unsigned long  tileheight;
+  unsigned long tilewidth;
+  unsigned long tileheight;
   unsigned short compression;
-  unsigned long  rows_per_strip;
+  unsigned long rows_per_strip;
   unsigned short planar_config;
   unsigned short photometric;
 
@@ -192,8 +192,8 @@ vil1_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
 static tsize_t
 vil1_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
 {
-  auto *         p = (vil1_tiff_structures *)h;
-  tsize_t        ret = p->vs->write(buf, n);
+  auto * p = (vil1_tiff_structures *)h;
+  tsize_t ret = p->vs->write(buf, n);
   vil1_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
@@ -266,7 +266,7 @@ bool
 vil1_tiff_generic_image::get_property(char const * tag, void * prop) const
 {
   unsigned short orientation;
-  int            orientation_val_ok = TIFFGetField(p->tif, TIFFTAG_ORIENTATION, &orientation);
+  int orientation_val_ok = TIFFGetField(p->tif, TIFFTAG_ORIENTATION, &orientation);
   if (orientation_val_ok != 1)
   {
     // kym - apparently most products ignore this orientation tag and use the default
@@ -727,7 +727,7 @@ vil1_tiff_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys)
 
     // Random access only to strips.
     // Get the nearby strips...
-    int      y1 = (y0 + ys - 1);
+    int y1 = (y0 + ys - 1);
     unsigned strip_min = y0 / p->rows_per_strip;
     unsigned strip_max = y1 / p->rows_per_strip;
     assert(strip_max <= p->numberofstrips);
@@ -771,7 +771,7 @@ vil1_tiff_generic_image::put_section(void const * buf, int x0, int y0, int xs, i
 {
   // Random access only to strips.
   // Put the nearby strips...
-  int      y1 = (y0 + ys - 1);
+  int y1 = (y0 + ys - 1);
   unsigned strip_min = y0 / p->rows_per_strip;
   unsigned strip_max = y1 / p->rows_per_strip;
   assert(strip_max <= p->numberofstrips);
@@ -793,7 +793,7 @@ vil1_tiff_generic_image::put_section(void const * buf, int x0, int y0, int xs, i
     // printf("writing strip %d, y  = %d .. %d\n", strip_id, ymin, ymax);
     for (long y = ymin; y <= ymax; ++y)
     {
-      unsigned char *       file_row = p->buf + (y - strip_min_row) * p->scanlinesize;
+      unsigned char * file_row = p->buf + (y - strip_min_row) * p->scanlinesize;
       const unsigned char * mem_row = (const unsigned char *)buf + (y - y0) * xs * pixel_byte_size;
       std::memcpy(file_row + x0 * pixel_byte_size, mem_row, xs * pixel_byte_size);
     }

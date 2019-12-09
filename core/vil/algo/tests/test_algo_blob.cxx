@@ -85,10 +85,10 @@ static void
 test_algo_blob()
 {
   std::cout << "=== Testing vil_blob ===\n";
-  vil_image_view<bool>             image(10, 11);
-  vil_image_view<unsigned>         labels;
-  vil_image_view<unsigned>         edge_labels;
-  std::vector<vil_blob_region>     regions;
+  vil_image_view<bool> image(10, 11);
+  vil_image_view<unsigned> labels;
+  vil_image_view<unsigned> edge_labels;
+  std::vector<vil_blob_region> regions;
   std::vector<vil_blob_pixel_list> edge_lists;
 
   // Create 3 x 3 square

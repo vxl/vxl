@@ -20,8 +20,8 @@ vil1_clamp_image(vil1_image const & base, double low, double high, T * buf, int 
     return false;
 
   unsigned size = w * h;
-  T        low_thresh = T(low);
-  T        high_thresh = T(high);
+  T low_thresh = T(low);
+  T high_thresh = T(high);
   for (unsigned pos = 0; pos < size; ++pos)
   {
     VIL1_CLAMP_IMAGE_THRESHOLD(buf[pos], low_thresh, high_thresh);
@@ -43,8 +43,8 @@ vil1_clamp_image(vil1_image const & base, double low, double high, T * buf, int 
     if (!base.get_section(buf, x0, y0, w, h))                                                                          \
       return false;                                                                                                    \
     unsigned size = w * h;                                                                                             \
-    T        low_thresh = T(low);                                                                                      \
-    T        high_thresh = T(high);                                                                                    \
+    T low_thresh = T(low);                                                                                             \
+    T high_thresh = T(high);                                                                                           \
     for (unsigned pos = 0; pos < size; ++pos)                                                                          \
     {                                                                                                                  \
       VIL1_CLAMP_IMAGE_THRESHOLD(buf[pos].r, low_thresh, high_thresh);                                                 \

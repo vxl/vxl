@@ -12,7 +12,7 @@
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>
 
-constexpr int    TM_UNKNOWNS_COUNT = 16;
+constexpr int TM_UNKNOWNS_COUNT = 16;
 constexpr double DEGENERACY_THRESHOLD = 0.00001;
 
 
@@ -25,7 +25,7 @@ constexpr double DEGENERACY_THRESHOLD = 0.00001;
 bool
 vgl_h_matrix_3d_compute_linear::solve_linear_problem(std::vector<vgl_homg_point_3d<double>> const & p1,
                                                      std::vector<vgl_homg_point_3d<double>> const & p2,
-                                                     vgl_h_matrix_3d<double> &                      H)
+                                                     vgl_h_matrix_3d<double> & H)
 {
   int n = p1.size();
   // transform the point sets and fill the design matrix
@@ -163,7 +163,7 @@ vgl_h_matrix_3d_compute_linear::solve_linear_problem(std::vector<vgl_homg_point_
 bool
 vgl_h_matrix_3d_compute_linear::compute_p(std::vector<vgl_homg_point_3d<double>> const & points1,
                                           std::vector<vgl_homg_point_3d<double>> const & points2,
-                                          vgl_h_matrix_3d<double> &                      H)
+                                          vgl_h_matrix_3d<double> & H)
 {
   // number of points must be the same
   assert(points1.size() == points2.size());

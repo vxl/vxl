@@ -38,7 +38,7 @@ struct brent_f2 : public vnl_cost_function
 void
 test_brent_minimizer()
 {
-  brent_f1            f1;
+  brent_f1 f1;
   vnl_brent_minimizer brent1(f1);
 
   double x = brent1.minimize(77);
@@ -50,7 +50,7 @@ test_brent_minimizer()
   TEST_NEAR("f1 minimize(13)", x, 2, 1e-6);
   std::cout << "Number of evaluations: " << f1.n_evals << std::endl;
 
-  brent_f2            f2;
+  brent_f2 f2;
   vnl_brent_minimizer brent2(f2);
 
   f2.n_evals = 0;

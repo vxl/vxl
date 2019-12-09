@@ -88,12 +88,12 @@ vil1_mit_file_format::make_input_image(vil1_stream * is)
 }
 
 vil1_image_impl *
-vil1_mit_file_format::make_output_image(vil1_stream *         is,
-                                        int                   planes,
-                                        int                   width,
-                                        int                   height,
-                                        int                   components,
-                                        int                   bits_per_component,
+vil1_mit_file_format::make_output_image(vil1_stream * is,
+                                        int planes,
+                                        int width,
+                                        int height,
+                                        int components,
+                                        int bits_per_component,
                                         vil1_component_format format)
 {
   return new vil1_mit_generic_image(is, planes, width, height, components, bits_per_component, format);
@@ -133,11 +133,11 @@ vil1_mit_generic_image::file_format() const
 }
 
 vil1_mit_generic_image::vil1_mit_generic_image(vil1_stream * is,
-                                               int           planes,
-                                               int           width,
-                                               int           height,
-                                               int           components,
-                                               int           bits_per_component,
+                                               int planes,
+                                               int width,
+                                               int height,
+                                               int components,
+                                               int bits_per_component,
                                                vil1_component_format)
   : is_(is)
 {

@@ -122,7 +122,7 @@ vnl_ldl_cholesky::inplace_solve(double * x) const
   // Solve L'x=y for x
   const double * L_data = &L_(n - 1, n - 2);
   const double * x_data = &x[n - 1];
-  unsigned       c = 1;
+  unsigned c = 1;
   for (int i = n - 2; i >= 0; --i, L_data -= (n + 1), --x_data, ++c)
   {
     x[i] -= dot(L_data, n, x_data, c);
@@ -155,10 +155,10 @@ vnl_ldl_cholesky::xt_m_x(const vnl_vector<double> & x) const
 {
   unsigned n = d_.size();
   assert(x.size() == n);
-  double         sum = 0.0;
+  double sum = 0.0;
   const double * xd = x.data_block();
   const double * L_col = L_.data_block();
-  unsigned       c = n;
+  unsigned c = n;
   for (unsigned i = 0; i < n; ++i, ++xd, L_col += (n + 1), --c)
   {
     double xLi = dot(L_col, n, xd, c); // x * i-th column
@@ -195,7 +195,7 @@ double
 vnl_ldl_cholesky::determinant() const
 {
   unsigned n = d_.size();
-  double   det = 1.0;
+  double det = 1.0;
   for (unsigned i = 0; i < n; ++i)
     det *= d_[i];
   return det;
@@ -212,7 +212,7 @@ vnl_ldl_cholesky::rank1_update(const vnl_vector<double> & v)
 {
   unsigned n = d_.size();
   assert(v.size() == n);
-  double             a = 1.0;
+  double a = 1.0;
   vnl_vector<double> w = v; // Workspace, modified as algorithm goes along
   for (unsigned j = 0; j < n; ++j)
   {
@@ -276,7 +276,7 @@ vnl_ldl_cholesky::inverse() const
     return vnl_matrix<double>();
   }
 
-  unsigned int       n = d_.size();
+  unsigned int n = d_.size();
   vnl_matrix<double> R(n, n);
   R.set_identity();
 

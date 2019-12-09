@@ -9,8 +9,8 @@ test_sparse_lu()
 {
   // mat0 of Kenneth S. Kunder's Sparse 1.3a release
   vnl_sparse_matrix<double> A(4, 4);
-  std::vector<int>          cols0(2), cols1(3), cols2(3), cols3(2);
-  std::vector<double>       vals0(2), vals1(3), vals2(3), vals3(2);
+  std::vector<int> cols0(2), cols1(3), cols2(3), cols3(2);
+  std::vector<double> vals0(2), vals1(3), vals2(3), vals3(2);
   cols0[0] = 0;
   cols0[1] = 1;
   vals0[0] = 2.0;
@@ -68,7 +68,7 @@ test_sparse_lu()
   TEST_NEAR("solution of mat5 example", xp[2], 3, 1.e-03);
 
   // test matrix derived from Poisson birth-death queue
-  double                    s = -0.01, l = 0.5, m = 0.5;
+  double s = -0.01, l = 0.5, m = 0.5;
   vnl_sparse_matrix<double> S(6, 6);
   S(0, 0) = s + l;
   S(0, 1) = -l;

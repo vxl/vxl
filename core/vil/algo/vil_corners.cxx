@@ -24,8 +24,8 @@
 void
 vil_corners(const vil_image_view<float> & grad_i,
             const vil_image_view<float> & grad_j,
-            vil_image_view<float> &       dest,
-            double                        k)
+            vil_image_view<float> & dest,
+            double k)
 {
   assert(grad_i.nplanes() == 1);
   assert(grad_j.nplanes() == 1);
@@ -66,13 +66,13 @@ vil_corners(const vil_image_view<float> & grad_i,
   const std::ptrdiff_t oj7 = -grad_j.jstep();
   const std::ptrdiff_t oj8 = grad_j.istep() - grad_j.jstep();
 
-  float *       d_data = &dest(2, 2);
+  float * d_data = &dest(2, 2);
   const float * gi_data = &grad_i(2, 2);
   const float * gj_data = &grad_j(2, 2);
 
   for (unsigned j = 2; j < nj2; ++j)
   {
-    float *       d = d_data;
+    float * d = d_data;
     const float * pgi = gi_data;
     const float * pgj = gj_data;
     for (unsigned i = 2; i < ni2; ++i)
@@ -103,8 +103,8 @@ vil_corners(const vil_image_view<float> & grad_i,
 void
 vil_corners(const vil_image_view<double> & grad_i,
             const vil_image_view<double> & grad_j,
-            vil_image_view<double> &       dest,
-            double                         k)
+            vil_image_view<double> & dest,
+            double k)
 {
   assert(grad_i.nplanes() == 1);
   assert(grad_j.nplanes() == 1);
@@ -145,13 +145,13 @@ vil_corners(const vil_image_view<double> & grad_i,
   const std::ptrdiff_t oj7 = -grad_j.jstep();
   const std::ptrdiff_t oj8 = grad_j.istep() - grad_j.jstep();
 
-  double *       d_data = &dest(2, 2);
+  double * d_data = &dest(2, 2);
   const double * gi_data = &grad_i(2, 2);
   const double * gj_data = &grad_j(2, 2);
 
   for (unsigned j = 2; j < nj2; ++j)
   {
-    double *       d = d_data;
+    double * d = d_data;
     const double * pgi = gi_data;
     const double * pgj = gj_data;
     for (unsigned i = 2; i < ni2; ++i)
@@ -190,7 +190,7 @@ vil_corners(const vil_image_view<double> & grad_i,
 void
 vil_corners_rohr(const vil_image_view<float> & gx, const vil_image_view<float> & gy, vil_image_view<float> & corner_im)
 {
-  vil_image_view<float>        tmp_im, work_im, gx2, gy2, gxy;
+  vil_image_view<float> tmp_im, work_im, gx2, gy2, gxy;
   vil_gauss_filter_5tap_params smooth_params(1.0);
 
   // Compute smoothed products of gradients

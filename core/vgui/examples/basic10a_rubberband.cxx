@@ -50,13 +50,13 @@ main(int argc, char ** argv)
   }
 
   // Make the tableau hierarchy.
-  vgui_image_tableau_new          image(argv[1]);
-  vgui_easy2D_tableau_new         easy(image);
+  vgui_image_tableau_new image(argv[1]);
+  vgui_easy2D_tableau_new easy(image);
   vgui_rubberband_easy2D_client * r_client = new vgui_rubberband_easy2D_client(easy);
   rubber = vgui_rubberband_tableau_new(r_client);
   vgui_composite_tableau_new comp(easy, rubber);
-  vgui_viewer2D_tableau_new  viewer(comp);
-  vgui_shell_tableau_new     shell(viewer);
+  vgui_viewer2D_tableau_new viewer(comp);
+  vgui_shell_tableau_new shell(viewer);
 
   // Create and run the window
   return vgui::run(shell, 512, 512, create_menus());

@@ -33,7 +33,7 @@ vnl_solve_qp_with_equality_constraints(const vnl_matrix<double> & H,
                                        const vnl_vector<double> & g,
                                        const vnl_matrix<double> & A,
                                        const vnl_vector<double> & b,
-                                       vnl_vector<double> &       x)
+                                       vnl_vector<double> & x)
 {
   // Test inputs
   // unsigned n=H.rows();   // Number of unknowns
@@ -44,7 +44,7 @@ vnl_solve_qp_with_equality_constraints(const vnl_matrix<double> & H,
   assert(b.size() == nc);
 
   vnl_matrix<double> H_inv;
-  vnl_cholesky       Hchol(H, vnl_cholesky::estimate_condition);
+  vnl_cholesky Hchol(H, vnl_cholesky::estimate_condition);
   if (Hchol.rcond() > 1e-8)
     H_inv = Hchol.inverse();
   else
@@ -85,7 +85,7 @@ vnl_solve_qp_zero_sum(const vnl_matrix<double> & H, const vnl_vector<double> & g
   assert(g.size() == H.rows());
 
   vnl_matrix<double> H_inv;
-  vnl_cholesky       Hchol(H, vnl_cholesky::estimate_condition);
+  vnl_cholesky Hchol(H, vnl_cholesky::estimate_condition);
   if (Hchol.rcond() > 1e-8)
     H_inv = Hchol.inverse();
   else
@@ -120,15 +120,15 @@ vnl_solve_qp_zero_sum(const vnl_matrix<double> & H, const vnl_vector<double> & g
 
 //: Update x, checking inequality constraints and modifying valid where necessary
 static bool
-vnl_solve_qp_update_x(vnl_vector<double> &       x,
+vnl_solve_qp_update_x(vnl_vector<double> & x,
                       const vnl_vector<double> & x1,
-                      vnl_vector<double> &       dx,
-                      std::vector<bool> &        valid,
-                      unsigned &                 n_valid)
+                      vnl_vector<double> & dx,
+                      std::vector<bool> & valid,
+                      unsigned & n_valid)
 {
   unsigned n = x.size();
   // Check non-negativity constraints
-  int    worst_i = -1;
+  int worst_i = -1;
   double min_alpha = 1.0;
   for (unsigned i = 0; i < n_valid; ++i)
   {
@@ -172,9 +172,9 @@ vnl_solve_qp_non_neg_step(const vnl_matrix<double> & H,
                           const vnl_vector<double> & g,
                           const vnl_matrix<double> & A,
                           const vnl_vector<double> & b,
-                          vnl_vector<double> &       x,
-                          std::vector<bool> &        valid,
-                          unsigned &                 n_valid)
+                          vnl_vector<double> & x,
+                          std::vector<bool> & valid,
+                          unsigned & n_valid)
 {
   // Find solution to H1(x+dx)+g1=0, subject to A1(x1+dx)=b
   // H1,A1,g1,x1 contain subsets defined by valid array
@@ -185,7 +185,7 @@ vnl_solve_qp_non_neg_step(const vnl_matrix<double> & H,
 
   vnl_matrix<double> H1(n_valid, n_valid);
   vnl_matrix<double> A1(nc, n_valid);
-  unsigned           j1 = 0;
+  unsigned j1 = 0;
   for (unsigned j = 0; j < n; ++j)
   {
     if (valid[j])
@@ -212,7 +212,7 @@ vnl_solve_qp_non_neg_step(const vnl_matrix<double> & H,
 
   vnl_vector<double> x1(n_valid); // Will contain non-zero elements of x
   vnl_vector<double> g1(n_valid);
-  unsigned           i1 = 0;
+  unsigned i1 = 0;
   for (unsigned i = 0; i < n; ++i)
   {
     if (valid[i])
@@ -241,9 +241,9 @@ vnl_solve_qp_non_neg_step(const vnl_matrix<double> & H,
 bool
 vnl_solve_qp_non_neg_sum_one_step(const vnl_matrix<double> & H,
                                   const vnl_vector<double> & g,
-                                  vnl_vector<double> &       x,
-                                  std::vector<bool> &        valid,
-                                  unsigned &                 n_valid)
+                                  vnl_vector<double> & x,
+                                  std::vector<bool> & valid,
+                                  unsigned & n_valid)
 {
   // Find solution to H1(x+dx)+g1=0, subject to sum(dx)=0.0
   // H1,g1,x1 contain subsets defined by valid array
@@ -252,7 +252,7 @@ vnl_solve_qp_non_neg_sum_one_step(const vnl_matrix<double> & H,
   unsigned n = H.rows(); // Full number of unknowns
 
   vnl_matrix<double> H1(n_valid, n_valid);
-  unsigned           j1 = 0;
+  unsigned j1 = 0;
   for (unsigned j = 0; j < n; ++j)
   {
     if (valid[j])
@@ -274,7 +274,7 @@ vnl_solve_qp_non_neg_sum_one_step(const vnl_matrix<double> & H,
 
   vnl_vector<double> x1(n_valid); // Will contain non-zero elements of x
   vnl_vector<double> g1(n_valid);
-  unsigned           i1 = 0;
+  unsigned i1 = 0;
   for (unsigned i = 0; i < n; ++i)
   {
     if (valid[i])
@@ -312,9 +312,9 @@ vnl_solve_qp_with_non_neg_constraints(const vnl_matrix<double> & H,
                                       const vnl_vector<double> & g,
                                       const vnl_matrix<double> & A,
                                       const vnl_vector<double> & b,
-                                      vnl_vector<double> &       x,
-                                      double                     con_tol,
-                                      bool                       verbose)
+                                      vnl_vector<double> & x,
+                                      double con_tol,
+                                      bool verbose)
 {
   // Test inputs
   unsigned n = H.rows(); // Number of unknowns
@@ -342,7 +342,7 @@ vnl_solve_qp_with_non_neg_constraints(const vnl_matrix<double> & H,
 
   // Indicate which elements of x are non-zero and to be optimised
   std::vector<bool> valid(n, true);
-  unsigned          n_valid = n;
+  unsigned n_valid = n;
 
   while (!vnl_solve_qp_non_neg_step(H, g, A, b, x, valid, n_valid))
   {
@@ -372,8 +372,8 @@ vnl_solve_qp_with_non_neg_constraints(const vnl_matrix<double> & H,
 bool
 vnl_solve_qp_non_neg_sum_one(const vnl_matrix<double> & H,
                              const vnl_vector<double> & g,
-                             vnl_vector<double> &       x,
-                             bool                       verbose)
+                             vnl_vector<double> & x,
+                             bool verbose)
 {
   // Test inputs
   unsigned n = H.rows(); // Number of unknowns
@@ -398,7 +398,7 @@ vnl_solve_qp_non_neg_sum_one(const vnl_matrix<double> & H,
 
   // Indicate which elements of x are non-zero and to be optimised
   std::vector<bool> valid(n, true);
-  unsigned          n_valid = n;
+  unsigned n_valid = n;
 
   while (!vnl_solve_qp_non_neg_sum_one_step(H, g, x, valid, n_valid))
   {

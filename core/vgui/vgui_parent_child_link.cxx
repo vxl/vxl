@@ -61,8 +61,8 @@ struct vgui_parent_child_link_impl
   // all is stored as a pointer as it must live longer than any static
   // parent_child_links
   typedef std::set<void *> all_t;
-  static all_t *           all;
-  static int               all_refs;
+  static all_t * all;
+  static int all_refs;
 
   inline vgui_parent_child_link_impl(vgui_tableau * p_, vgui_tableau * c_);
   inline ~vgui_parent_child_link_impl();
@@ -91,9 +91,9 @@ struct vgui_parent_child_link_impl
   release();
 
 private:
-  vgui_tableau * p;         // parent
-  vgui_tableau * c;         // child
-  int            use_count; // reference count
+  vgui_tableau * p; // parent
+  vgui_tableau * c; // child
+  int use_count;    // reference count
 
   // Helpers. the purpose of these functions is to perform
   // the double link/unlink required to cache the parent-child
@@ -107,7 +107,7 @@ private:
 
 // static data for impl class :
 std::set<void *> * vgui_parent_child_link_impl::all = nullptr;
-int                vgui_parent_child_link_impl::all_refs = -1;
+int vgui_parent_child_link_impl::all_refs = -1;
 
 void
 vgui_parent_child_link_impl::acquire()

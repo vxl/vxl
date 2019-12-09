@@ -30,7 +30,7 @@ test_symmetric_eigensystem()
 
   {
     vnl_symmetric_eigensystem<double> eig(S);
-    vnl_matrix<double>                res = eig.recompose() - S;
+    vnl_matrix<double> res = eig.recompose() - S;
     std::cout << "V'*D*V - S = " << res << std::endl << "residual = " << res.fro_norm() << std::endl;
     TEST_NEAR("recompose residual", res.fro_norm(), 0.0, 1e-12);
 
@@ -48,7 +48,7 @@ test_symmetric_eigensystem()
 
   {
     vnl_symmetric_eigensystem<double> eig(C);
-    vnl_matrix<double>                res = eig.recompose() - C;
+    vnl_matrix<double> res = eig.recompose() - C;
     std::cout << "V'*D*V - C = " << res << std::endl << "residual = " << res.fro_norm() << std::endl;
     TEST_NEAR("recompose residual", res.fro_norm(), 0.0, 1e-12);
 
@@ -60,9 +60,9 @@ test_symmetric_eigensystem()
 
   {
     // Generate a random system
-    vnl_random         rng;
-    int                n = 6;
-    int                s = 10;
+    vnl_random rng;
+    int n = 6;
+    int s = 10;
     vnl_matrix<double> D_rand(s, n);
     for (int i = 0; i < s; ++i)
       for (int j = 0; j < n; ++j)
@@ -89,8 +89,8 @@ test_symmetric_eigensystem()
 
   { // compare speed and values of specialised 3x3 version with nxn version
     constexpr unsigned n = 20000;
-    double             fixed_data[n][3];
-    double             netlib_data[n][3];
+    double fixed_data[n][3];
+    double netlib_data[n][3];
 
     int fixed_time;
     {
@@ -116,9 +116,9 @@ test_symmetric_eigensystem()
     int netlib_time;
     {
       // Generate same random system
-      vnl_random     rng(5);
+      vnl_random rng(5);
       vnl_double_3x3 M, evecs;
-      vnl_double_3   evals;
+      vnl_double_3 evals;
 
       const std::clock_t timer_03 = std::clock();
       for (auto & c : netlib_data)

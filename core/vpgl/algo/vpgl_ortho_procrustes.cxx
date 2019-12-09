@@ -47,7 +47,7 @@ vpgl_ortho_procrustes::compute()
   Cx /= N;
   Cy /= N;
   vnl_matrix<double> Xm(3, N), Ym(3, N);
-  double             smx = 0, smy = 0;
+  double smx = 0, smy = 0;
   for (unsigned c = 0; c < N; ++c)
   {
     vnl_vector_fixed<double, 3> Sx, Sy;
@@ -72,9 +72,9 @@ vpgl_ortho_procrustes::compute()
   Xm /= sigma_x;
   Ym /= sigma_y;
 
-  vnl_matrix<double>             Xt = Xm.transpose();
+  vnl_matrix<double> Xt = Xm.transpose();
   vnl_matrix_fixed<double, 3, 3> M = Ym * Xt;
-  vnl_svd<double>                SVD(M.as_ref());
+  vnl_svd<double> SVD(M.as_ref());
   vnl_matrix_fixed<double, 3, 3> U = SVD.U();
   vnl_matrix_fixed<double, 3, 3> V = SVD.V();
   vnl_matrix_fixed<double, 3, 3> Ut = U.transpose();
@@ -85,7 +85,7 @@ vpgl_ortho_procrustes::compute()
   T[1][1] = 1.0;
   T[2][2] = vnl_det<double>(temp);
   vnl_matrix_fixed<double, 3, 3> rr = V * T * Ut;
-  double                         dt = vnl_det(rr);
+  double dt = vnl_det(rr);
   if (dt <= 0.0)
   {
     cannot_compute_ = true;

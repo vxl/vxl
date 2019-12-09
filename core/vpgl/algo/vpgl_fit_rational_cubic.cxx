@@ -93,7 +93,7 @@ vpgl_cubic_lsqr::f(vnl_vector<double> const & coeffs, vnl_vector<double> & resid
   size_t n = image_pts_.size();
   for (size_t k = 0; k < n; ++k)
   {
-    double                       u = 0.0, v = 0.0;
+    double u = 0.0, v = 0.0;
     const vgl_point_3d<double> & p = ground_pts_[k];
     const vgl_point_2d<double> & uv = image_pts_[k];
     project(p.x(), p.y(), p.z(), u, v);
@@ -105,7 +105,7 @@ vpgl_cubic_lsqr::f(vnl_vector<double> const & coeffs, vnl_vector<double> & resid
 bool
 vpgl_fit_rational_cubic::compute_initial_guess()
 {
-  size_t             n = image_pts_.size();
+  size_t n = image_pts_.size();
   vnl_matrix<double> A(2 * n, 80);
   A.fill(0.0);
   for (size_t k = 0; k < n; ++k)
@@ -113,7 +113,7 @@ vpgl_fit_rational_cubic::compute_initial_guess()
     const vgl_point_3d<double> & p = ground_pts_[k];
     const vgl_point_2d<double> & uv = image_pts_[k];
     vnl_vector_fixed<double, 20> pv = vpgl_cubic_lsqr::power_vector(p.x(), p.y(), p.z());
-    double                       u = uv.x(), v = uv.y();
+    double u = uv.x(), v = uv.y();
     // the n x 80 data matrix is formed by:
     //     20                20            20            20
     // [pv(x0,y0,z0)  -u*pv(x0,y0,z0)       0             0      ]
@@ -131,7 +131,7 @@ vpgl_fit_rational_cubic::compute_initial_guess()
     }
   }
   vnl_svd<double> svd(A);
-  size_t          r = svd.rank();
+  size_t r = svd.rank();
   if (r < 80)
   {
     std::cout << "insufficent rank " << r << " for linear solution of cubic coefficients" << std::endl;
@@ -159,10 +159,10 @@ vpgl_fit_rational_cubic::initial_rms_error()
     const vgl_point_3d<double> & p = ground_pts_[k];
     const vgl_point_2d<double> & uv = image_pts_[k];
     vnl_vector_fixed<double, 20> pv = vpgl_cubic_lsqr::power_vector(p.x(), p.y(), p.z());
-    vnl_vector_fixed<double, 4>  polys = rational_coeffs * pv;
-    double                       u = polys[0] / polys[1];
-    double                       v = polys[2] / polys[3];
-    double                       er = (u - uv.x()) * (u - uv.x()) + (v - uv.y()) * (v - uv.y());
+    vnl_vector_fixed<double, 4> polys = rational_coeffs * pv;
+    double u = polys[0] / polys[1];
+    double v = polys[2] / polys[3];
+    double er = (u - uv.x()) * (u - uv.x()) + (v - uv.y()) * (v - uv.y());
     err_sq += er;
   }
   err_sq /= n;
@@ -175,7 +175,7 @@ vpgl_fit_rational_cubic::fit()
   if (verbose_)
     std::cout << "\n=====> Solve rational cubic polynomials <=====" << std::endl;
 
-  vpgl_cubic_lsqr         lsq(image_pts_, ground_pts_);
+  vpgl_cubic_lsqr lsq(image_pts_, ground_pts_);
   vnl_levenberg_marquardt levmarq(lsq);
   // same as internal default settings
   double xtol = 1e-10;
@@ -200,14 +200,14 @@ vpgl_fit_rational_cubic::fit()
   std::stringstream ss;
   levmarq.diagnose_outcome(ss);
   std::string outcome = ss.str();
-  size_t      pos = outcome.find_last_of("/");
+  size_t pos = outcome.find_last_of("/");
   if (pos == std::string::npos)
   {
     std::cout << "unexpected Levenberg-Marquardt error message " << outcome << std::endl;
     return false;
   }
   std::stringstream ss2;
-  size_t            nout = outcome.size();
+  size_t nout = outcome.size();
   for (size_t p = pos + 1; p < nout; ++p)
     ss2 << outcome[p];
   ss2 >> levmq_err_;

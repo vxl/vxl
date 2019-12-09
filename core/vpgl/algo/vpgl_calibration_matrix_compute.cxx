@@ -11,8 +11,8 @@
 #include <vgl/algo/vgl_h_matrix_2d_optimize_lmq.h>
 
 bool
-vpgl_calibration_matrix_compute::natural(const vgl_h_matrix_2d<double> &   homography,
-                                         const vgl_point_2d<double> &      principal_point,
+vpgl_calibration_matrix_compute::natural(const vgl_h_matrix_2d<double> & homography,
+                                         const vgl_point_2d<double> & principal_point,
                                          vpgl_calibration_matrix<double> & K)
 {
   // For zero skew and square aspect ratio, the IAC is of the following form:
@@ -30,8 +30,8 @@ vpgl_calibration_matrix_compute::natural(const vgl_h_matrix_2d<double> &   homog
   // equations.  Once we have a value for w[2][2] we can compute 'f'.
 
   vnl_matrix_fixed<double, 3, 3> H = homography.get_matrix();
-  const double                   u0 = principal_point.x();
-  const double                   v0 = principal_point.y();
+  const double u0 = principal_point.x();
+  const double v0 = principal_point.y();
 
   if (vnl_det(H) < 0)
   {
@@ -69,8 +69,8 @@ vpgl_calibration_matrix_compute::natural(const vgl_h_matrix_2d<double> &   homog
 bool
 vpgl_calibration_matrix_compute::natural(const std::vector<vgl_point_2d<double>> & image_pts,
                                          const std::vector<vgl_point_2d<double>> & ground_pts,
-                                         const vgl_point_2d<double> &              principal_point,
-                                         vpgl_calibration_matrix<double> &         K)
+                                         const vgl_point_2d<double> & principal_point,
+                                         vpgl_calibration_matrix<double> & K)
 {
   if (image_pts.size() != ground_pts.size())
   {

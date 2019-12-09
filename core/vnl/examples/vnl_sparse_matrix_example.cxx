@@ -6,9 +6,9 @@
 int
 main()
 {
-  constexpr int             N = 100;
+  constexpr int N = 100;
   vnl_sparse_matrix<double> a(N, N);
-  vnl_random                rg;
+  vnl_random rg;
 
   for (int i = 0; i < 10; ++i)
   {
@@ -21,7 +21,7 @@ main()
   a = a * a; // i.e., also a * aT
 
   vnl_sparse_symmetric_eigensystem s;
-  int                              b = s.CalculateNPairs(a, 2, true, 3);
+  int b = s.CalculateNPairs(a, 2, true, 3);
 
   if (b == 0)
   {

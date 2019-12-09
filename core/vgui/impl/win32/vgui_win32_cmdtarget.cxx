@@ -10,7 +10,7 @@ vgui_win32_cmdtarget::OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam)
 #endif
 
   // Look through message map to see if it applies to us
-  const AFX_MSGMAP *       pMessageMap;
+  const AFX_MSGMAP * pMessageMap;
   const AFX_MSGMAP_ENTRY * lpEntry;
   for (pMessageMap = GetMessageMap(); pMessageMap != NULL; pMessageMap = pMessageMap->pBaseMessageMap)
   {

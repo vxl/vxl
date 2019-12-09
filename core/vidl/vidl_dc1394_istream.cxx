@@ -343,7 +343,7 @@ vidl_dc1394_istream::close()
 bool
 vidl_dc1394_istream::valid_params(vidl_iidc1394_params::valid_options & options)
 {
-  dc1394_t *            d = dc1394_new();
+  dc1394_t * d = dc1394_new();
   dc1394camera_list_t * list;
 
   // enumerate the cameras

@@ -27,6 +27,6 @@ main(int argc, char ** argv)
   poly->add(image2, 0.5f, 0.5f, 0.5f, 0.5f);
 
   vgui_viewer2D_tableau_new view(poly);
-  vgui_shell_tableau_new    shell(view);
+  vgui_shell_tableau_new shell(view);
   return vgui::run(shell, 512, 512, __FILE__);
 }

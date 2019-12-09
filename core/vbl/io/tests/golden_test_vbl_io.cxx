@@ -50,7 +50,7 @@ golden_test_vbl_io(bool save_file)
   b_box_out.update(5.6, 7.8); // Socond point now defines a bounding box
 
   // 1d Array
-  int                 n = 50;
+  int n = 50;
   vbl_array_1d<float> a1_out, a1_in;
 
   a1_out.reserve(n + 10);
@@ -59,8 +59,8 @@ golden_test_vbl_io(bool save_file)
 
 
   // 2d Array
-  constexpr int     array_rows = 8;
-  constexpr int     array_cols = 6;
+  constexpr int array_rows = 8;
+  constexpr int array_cols = 6;
   vbl_array_2d<int> a2_out(array_rows, array_cols), a2_in;
 
   for (int i = 0; i < array_rows; i++)
@@ -71,9 +71,9 @@ golden_test_vbl_io(bool save_file)
 
 
   // 3d Array
-  constexpr int     array_row1 = 8;
-  constexpr int     array_row2 = 7;
-  constexpr int     array_row3 = 9;
+  constexpr int array_row1 = 8;
+  constexpr int array_row2 = 7;
+  constexpr int array_row3 = 9;
   vbl_array_3d<int> a3_out(array_row1, array_row2, array_row3), a3_in;
   for (int i = 0; i < array_row1; i++)
     for (int j = 0; j < array_row2; j++)
@@ -83,8 +83,8 @@ golden_test_vbl_io(bool save_file)
 
   // Sparse Array
   vbl_sparse_array_1d<double> sa_out, sa_in;
-  unsigned int                key1 = 3, key2 = 4, key3 = 5;
-  double                      data1 = 1.2, data2 = 3.4, data3 = 5.6;
+  unsigned int key1 = 3, key2 = 4, key3 = 5;
+  double data1 = 1.2, data2 = 3.4, data3 = 5.6;
 
   // create a sparse array - more than 5 elements so only first 5 are written out
   sa_out(key1) = data1;
@@ -96,9 +96,9 @@ golden_test_vbl_io(bool save_file)
 
   // Smart Pointer
   n = 50;
-  vbl_smart_ptr<impl>         sp1_out(new impl(n));
+  vbl_smart_ptr<impl> sp1_out(new impl(n));
   const vbl_smart_ptr<impl> & sp2_out(sp1_out);
-  vbl_smart_ptr<impl>         sp1_in, sp2_in;
+  vbl_smart_ptr<impl> sp1_in, sp2_in;
 
 
   // Save if option set
@@ -123,7 +123,7 @@ golden_test_vbl_io(bool save_file)
 
   std::cout << "Did we get this far ?\n";
 
-  std::string    gold_path = testlib_root_dir() + "/core/vbl/io/tests/golden_test_vbl_io.bvl";
+  std::string gold_path = testlib_root_dir() + "/core/vbl/io/tests/golden_test_vbl_io.bvl";
   vsl_b_ifstream bfs_in(gold_path.c_str());
 
   TEST("Opened golden_test_vbl_io.bvl for reading ", !bfs_in, false);

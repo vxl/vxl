@@ -33,9 +33,9 @@ test_sparse_matrix_double_io()
 
   vnl_sparse_matrix<double> m_out(3, 3), m_in0(3, 3), m_in1(3, 3);
   vnl_sparse_matrix<double> m10000_out(10000, 10000), m10000_in(10000, 10000);
-  std::vector<int>          col_1(3);
-  std::vector<int>          col_2(2);
-  std::vector<int>          col_3(1);
+  std::vector<int> col_1(3);
+  std::vector<int> col_2(2);
+  std::vector<int> col_3(1);
 
   col_1[0] = 1;
   col_1[1] = 2;

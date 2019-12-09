@@ -56,7 +56,7 @@ main()
   vidl_image_list_ostream test_out("./dump", "%05d", "bmp");
 
   vul_timer timer;
-  int       i = 150;
+  int i = 150;
   while (test.advance()
          //   test1.advance()
          //&& test2.advance()

@@ -14,8 +14,8 @@
 void
 vil_orientations(const vil_image_view<float> & grad_i,
                  const vil_image_view<float> & grad_j,
-                 vil_image_view<float> &       orient_im,
-                 vil_image_view<float> &       grad_mag)
+                 vil_image_view<float> & orient_im,
+                 vil_image_view<float> & grad_mag)
 {
   assert(grad_i.nplanes() == 1 && grad_j.nplanes() == 1);
   unsigned ni = grad_i.ni(), nj = grad_j.nj();
@@ -30,15 +30,15 @@ vil_orientations(const vil_image_view<float> & grad_i,
 
   const float * gi_row = &grad_i(0, 0);
   const float * gj_row = &grad_j(0, 0);
-  float *       o_row = &orient_im(0, 0);
-  float *       gm_row = &grad_mag(0, 0);
+  float * o_row = &orient_im(0, 0);
+  float * gm_row = &grad_mag(0, 0);
 
   for (unsigned j = 0; j < nj; ++j, gi_row += gi_jstep, gj_row += gj_jstep, o_row += o_jstep, gm_row += gm_jstep)
   {
     const float * pgi = gi_row;
     const float * pgj = gj_row;
-    float *       po = o_row;
-    float *       pgm = gm_row;
+    float * po = o_row;
+    float * pgm = gm_row;
     for (unsigned i = 0; i < ni; ++i, pgi += gi_istep, pgj += gj_istep, po += o_istep, pgm += gm_istep)
     {
       *po = std::atan2(*pgj, *pgi);
@@ -55,9 +55,9 @@ vil_orientations(const vil_image_view<float> & grad_i,
 void
 vil_orientations(const vil_image_view<float> & grad_i,
                  const vil_image_view<float> & grad_j,
-                 vil_image_view<vxl_byte> &    orient_im,
-                 vil_image_view<float> &       grad_mag,
-                 unsigned                      n_orientations)
+                 vil_image_view<vxl_byte> & orient_im,
+                 vil_image_view<float> & grad_mag,
+                 unsigned n_orientations)
 {
   assert(grad_i.nplanes() == 1 && grad_j.nplanes() == 1);
   assert(n_orientations <= 256);
@@ -73,8 +73,8 @@ vil_orientations(const vil_image_view<float> & grad_i,
 
   const float * gi_row = &grad_i(0, 0);
   const float * gj_row = &grad_j(0, 0);
-  vxl_byte *    o_row = &orient_im(0, 0);
-  float *       gm_row = &grad_mag(0, 0);
+  vxl_byte * o_row = &orient_im(0, 0);
+  float * gm_row = &grad_mag(0, 0);
 
   float scale = (2 * n_orientations - 1) / (6.28319f);
 
@@ -82,8 +82,8 @@ vil_orientations(const vil_image_view<float> & grad_i,
   {
     const float * pgi = gi_row;
     const float * pgj = gj_row;
-    vxl_byte *    po = o_row;
-    float *       pgm = gm_row;
+    vxl_byte * po = o_row;
+    float * pgm = gm_row;
     for (unsigned i = 0; i < ni; ++i, pgi += gi_istep, pgj += gj_istep, po += o_istep, pgm += gm_istep)
     {
       // In order to ensure bins are centred at k*2pi/n_orientation points,
@@ -107,10 +107,10 @@ vil_orientations(const vil_image_view<float> & grad_i,
 void
 vil_orientations_at_edges(const vil_image_view<float> & grad_i,
                           const vil_image_view<float> & grad_j,
-                          vil_image_view<vxl_byte> &    orient_im,
-                          vil_image_view<float> &       grad_mag,
-                          float                         grad_threshold,
-                          unsigned                      n_orientations)
+                          vil_image_view<vxl_byte> & orient_im,
+                          vil_image_view<float> & grad_mag,
+                          float grad_threshold,
+                          unsigned n_orientations)
 {
   assert(grad_i.nplanes() == 1 && grad_j.nplanes() == 1);
   assert(n_orientations <= 256);
@@ -126,8 +126,8 @@ vil_orientations_at_edges(const vil_image_view<float> & grad_i,
 
   const float * gi_row = &grad_i(0, 0);
   const float * gj_row = &grad_j(0, 0);
-  vxl_byte *    o_row = &orient_im(0, 0);
-  float *       gm_row = &grad_mag(0, 0);
+  vxl_byte * o_row = &orient_im(0, 0);
+  float * gm_row = &grad_mag(0, 0);
 
   float scale = (2 * n_orientations - 1) / (6.28319f);
 
@@ -135,8 +135,8 @@ vil_orientations_at_edges(const vil_image_view<float> & grad_i,
   {
     const float * pgi = gi_row;
     const float * pgj = gj_row;
-    vxl_byte *    po = o_row;
-    float *       pgm = gm_row;
+    vxl_byte * po = o_row;
+    float * pgm = gm_row;
     for (unsigned i = 0; i < ni; ++i, pgi += gi_istep, pgj += gj_istep, po += o_istep, pgm += gm_istep)
     {
       *pgm = std::sqrt(pgi[0] * pgi[0] + pgj[0] * pgj[0]);

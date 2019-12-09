@@ -47,11 +47,11 @@ test_backproject()
   den_v[18] = 0.3;
   den_v[19] = 1.0;
   // Scale and offsets
-  double                       sx = 50.0, ox = 150.0;
-  double                       sy = 120.0, oy = 100.0;
-  double                       sz = 5.0, oz = 10.0;
-  double                       su = 1000.0, ou = 500.0;
-  double                       sv = 400.0, ov = 200.0;
+  double sx = 50.0, ox = 150.0;
+  double sy = 120.0, oy = 100.0;
+  double sz = 5.0, oz = 10.0;
+  double su = 1000.0, ou = 500.0;
+  double sv = 400.0, ov = 200.0;
   vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
 
   vgl_point_3d<double> p0(150, 100, 10), p1(200, 100, 10), p2(200, 225, 15), p3(319.179226838, 295.970213457, 10),
@@ -68,7 +68,7 @@ test_backproject()
             << "Projection of " << p3 << "is " << test_point3 << '\n'
             << "Projection of " << p4 << "is " << test_point4 << '\n';
 
-  vnl_double_2         image_point(1250, 332);
+  vnl_double_2 image_point(1250, 332);
   vgl_point_2d<double> img_pt(1250, 332);
   TEST_NEAR("test projection p0", (img_pt - test_point0).length(), 0, 1e-8);
   TEST_NEAR("test projection p3", (img_pt - test_point3).length(), 0, 1e-8);
@@ -80,7 +80,7 @@ test_backproject()
   std::cout << "Initial X-Y Guess (" << initial_guess << ")\n";
 
   vnl_double_3 world_point;
-  bool         success = vpgl_backproject::bproj_plane(rcam, image_point, plane, initial_guess, world_point);
+  bool success = vpgl_backproject::bproj_plane(rcam, image_point, plane, initial_guess, world_point);
 
   std::cout << "X-Y Solution (" << world_point << ") should be " << p3 << '\n';
   TEST("X-Y plane backprojection convergence", success, true);

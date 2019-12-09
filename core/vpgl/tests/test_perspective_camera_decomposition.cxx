@@ -22,8 +22,8 @@ test_perspective_camera_decomposition()
 
 
   vpgl_perspective_camera<double> camera;
-  bool                            did_decompose = vpgl_perspective_decomposition(P, camera);
-  bool                            is_correct = false;
+  bool did_decompose = vpgl_perspective_decomposition(P, camera);
+  bool is_correct = false;
 
   if (did_decompose)
   {

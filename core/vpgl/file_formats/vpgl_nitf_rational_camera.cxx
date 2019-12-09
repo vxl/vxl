@@ -32,14 +32,14 @@ static int
 geostr_to_double(const char * in_string, double * val, vpgl_nitf_rational_camera::geopt_coord c)
 {
   //  int invalid = 1;
-  int          length;
-  int          deg, min;
-  float        fsec;
+  int length;
+  int deg, min;
+  float fsec;
   const char * orig = in_string;
 
   // here are lat/lon dependent variables
   char sposdir, cposdir, snegdir, cnegdir;
-  int  maxval;
+  int maxval;
 
   if (c == vpgl_nitf_rational_camera::LAT)
   {
@@ -237,7 +237,7 @@ bool
 vpgl_nitf_rational_camera::init(vil_nitf2_image * nitf_image, bool verbose)
 {
   std::vector<vil_nitf2_image_subheader *> headers = nitf_image->get_image_headers();
-  vil_nitf2_image_subheader *              hdr = headers[0];
+  vil_nitf2_image_subheader * hdr = headers[0];
 
   // initialize the array
   double tre_data[90];

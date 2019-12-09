@@ -11,8 +11,8 @@
 
 //: Erodes src_image to produce dest_image (assumed single plane)
 void
-vil_binary_erode(const vil_image_view<bool> &    src_image,
-                 vil_image_view<bool> &          dest_image,
+vil_binary_erode(const vil_image_view<bool> & src_image,
+                 vil_image_view<bool> & dest_image,
                  const vil_structuring_element & element)
 {
   vil_binary_erode(src_image, dest_image, element, vil_border_create_constant(src_image, true));
@@ -20,9 +20,9 @@ vil_binary_erode(const vil_image_view<bool> &    src_image,
 
 //: Erodes src_image to produce dest_image (assumed single plane)
 void
-vil_binary_erode(const vil_image_view<bool> &             src_image,
-                 vil_image_view<bool> &                   dest_image,
-                 const vil_structuring_element &          element,
+vil_binary_erode(const vil_image_view<bool> & src_image,
+                 vil_image_view<bool> & dest_image,
+                 const vil_structuring_element & element,
                  const vil_border<vil_image_view<bool>> & border)
 {
   assert(src_image.nplanes() == 1);
@@ -35,7 +35,7 @@ vil_binary_erode(const vil_image_view<bool> &             src_image,
   std::ptrdiff_t d_istep = dest_image.istep(), d_jstep = dest_image.jstep();
 
   const bool * src_row0 = src_image.top_left_ptr();
-  bool *       dest_row0 = dest_image.top_left_ptr();
+  bool * dest_row0 = dest_image.top_left_ptr();
 
   std::vector<std::ptrdiff_t> offset;
   vil_compute_offsets(offset, element, s_istep, s_jstep);
@@ -71,7 +71,7 @@ vil_binary_erode(const vil_image_view<bool> &             src_image,
   for (int j = jlo; j <= jhi; ++j)
   {
     const bool * src_p = src_row0 + j * s_jstep + ilo * s_istep;
-    bool *       dest_p = dest_row0 + j * d_jstep + ilo * d_istep;
+    bool * dest_p = dest_row0 + j * d_jstep + ilo * d_istep;
 
     for (int i = ilo; i <= ihi; ++i, src_p += s_istep, dest_p += d_istep)
     {

@@ -22,7 +22,7 @@ test_fastops()
   id10x10.set_identity();
   vnl_matrix<double> id99x99(99, 99);
   id99x99.set_identity();
-  double             data[10] = { -7.5, 1.5, 0., -107.25, 511., -509.75, 1.25, -1., 0., 1. };
+  double data[10] = { -7.5, 1.5, 0., -107.25, 511., -509.75, 1.25, -1., 0., 1. };
   vnl_matrix<double> m1x1(data, 1, 1); // the number -7.5
   vnl_matrix<double> m2x2(data, 2, 2);
   vnl_matrix<double> m2x2t = m2x2.transpose();

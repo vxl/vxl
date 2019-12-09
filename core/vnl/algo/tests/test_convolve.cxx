@@ -12,8 +12,8 @@
 void
 test_convolve()
 {
-  int                b_data[] = { -2, 0, 4, 6, 2, 0 };
-  vnl_vector<int>    b(6, 6, b_data);
+  int b_data[] = { -2, 0, 4, 6, 2, 0 };
+  vnl_vector<int> b(6, 6, b_data);
   vnl_vector<double> k1 = vnl_double_2(0.5, -0.5).as_vector();
 
   vnl_vector<double> r1 = vnl_convolve(b, k1, (double *)nullptr);
@@ -43,7 +43,7 @@ test_convolve()
 
   // TIMING TEST on a very long convolution:
   vnl_vector<double> l(10000), k3(2000);
-  vnl_random         rng;
+  vnl_random rng;
   test_util_fill_random(l.begin(), l.end(), rng);
   test_util_fill_random(k3.begin(), k3.end(), rng);
   constexpr unsigned ntimes = 10; // repeat some expts to get more accurate timings.
@@ -52,7 +52,7 @@ test_convolve()
   for (unsigned i = 0; i < ntimes; ++i)
     r9 = vnl_convolve(l, k3);
   const std::clock_t timer_02 = std::clock();
-  const int          ms1 = (timer_02 - timer_01) / (CLOCKS_PER_SEC / 1000);
+  const int ms1 = (timer_02 - timer_01) / (CLOCKS_PER_SEC / 1000);
   std::cout << "Done straightforward 10000x2000 convolution in " << ms1 / double(ntimes) << " milliseconds\n";
 
   vnl_vector<double> r10;
@@ -60,7 +60,7 @@ test_convolve()
   for (unsigned i = 0; i < ntimes; ++i)
     r10 = vnl_convolve(l, k3, 16384);
   const std::clock_t timer_04 = std::clock();
-  const int          ms2 = (timer_04 - timer_03) / (CLOCKS_PER_SEC / 1000);
+  const int ms2 = (timer_04 - timer_03) / (CLOCKS_PER_SEC / 1000);
 
   TEST_NEAR("vnl_convolve() with_fft(16384)", (r9 - r10).two_norm(), 0.0, 1e-6);
   std::cout << "Done FFT-2-based 10000x2000 convolution in " << ms2 / double(ntimes) << " milliseconds\n";
@@ -70,7 +70,7 @@ test_convolve()
   for (unsigned i = 0; i < ntimes; ++i)
     r11 = vnl_convolve(l, k3, 12800);
   const std::clock_t timer_06 = std::clock();
-  const int          ms3 = (timer_06 - timer_05) / (CLOCKS_PER_SEC / 1000);
+  const int ms3 = (timer_06 - timer_05) / (CLOCKS_PER_SEC / 1000);
   TEST_NEAR("vnl_convolve() with_fft(12800)", (r9 - r11).two_norm(), 0.0, 1e-6);
   std::cout << "Done FFT-2,5-based 10000x2000 convolution in " << ms3 / double(ntimes) << " milliseconds\n";
 
@@ -79,13 +79,13 @@ test_convolve()
   for (unsigned i = 0; i < ntimes; ++i)
     r12 = vnl_convolve(l, k3, 27648);
   const std::clock_t timer_08 = std::clock();
-  const int          ms4 = (timer_08 - timer_07) / (CLOCKS_PER_SEC / 1000);
+  const int ms4 = (timer_08 - timer_07) / (CLOCKS_PER_SEC / 1000);
   TEST_NEAR("vnl_convolve() with_fft(27648)", (r9 - r12).two_norm(), 0.0, 1e-6);
   std::cout << "Done FFT-2,3-based 10000x2000 convolution in " << ms4 / double(ntimes) << " milliseconds\n";
 
-  double             c1_data[] = { -1, 0, 1, 2, 3, 4 };
+  double c1_data[] = { -1, 0, 1, 2, 3, 4 };
   vnl_vector<double> c1(6, 6, c1_data);
-  double             c2_data[] = { 5, 3, 1, -1, -3, -5 };
+  double c2_data[] = { 5, 3, 1, -1, -3, -5 };
   vnl_vector<double> c2(6, 6, c2_data);
   vnl_vector<double> r5 = vnl_convolve_cyclic(c1, c2, (double *)nullptr);
   TEST("vnl_convolve_cyclic() length", r5.size(), 6);

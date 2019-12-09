@@ -19,11 +19,11 @@ test_nonlinear_minimizer_io()
   double xtol_out = 0.001;
   double ftol_out = xtol_out * 0.01;
   double gtol_out = 0.005;
-  int    maxfev_out = 3000;
+  int maxfev_out = 3000;
   double epsfcn_out = xtol_out * 0.001;
-  bool   trace_out = false;
-  bool   verbose_out = false;
-  int    cd_out = 1;
+  bool trace_out = false;
+  bool verbose_out = false;
+  int cd_out = 1;
 
   minimizer_out.set_f_tolerance(ftol_out);
   minimizer_out.set_x_tolerance(xtol_out);
@@ -53,11 +53,11 @@ test_nonlinear_minimizer_io()
   double ftol_in = minimizer_in.get_f_tolerance();
   double xtol_in = minimizer_in.get_x_tolerance();
   double gtol_in = minimizer_in.get_g_tolerance();
-  int    maxfev_in = minimizer_in.get_max_function_evals();
+  int maxfev_in = minimizer_in.get_max_function_evals();
   double epsfcn_in = minimizer_in.get_epsilon_function();
-  bool   trace_in = minimizer_in.get_trace();
-  bool   verbose_in = minimizer_in.get_verbose();
-  int    cd_in = minimizer_in.get_check_derivatives();
+  bool trace_in = minimizer_in.get_trace();
+  bool verbose_in = minimizer_in.get_verbose();
+  int cd_in = minimizer_in.get_check_derivatives();
 
   TEST("ftol_in == ftol_out", ftol_in == ftol_out, true);
   TEST("xtol_in == xtol_out", xtol_in == xtol_out, true);

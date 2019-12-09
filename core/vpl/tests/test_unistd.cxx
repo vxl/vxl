@@ -47,7 +47,7 @@ test_unistd(int argc, char * argv[])
   if (argc >= 2)
   {
     char hostname[256];
-    int  retval = vpl_gethostname(hostname, 255);
+    int retval = vpl_gethostname(hostname, 255);
     if (retval != 0)
     {
       std::cerr << "errno: " << errno
@@ -79,7 +79,7 @@ test_unistd(int argc, char * argv[])
   }
   {
     std::ifstream f(ROOT_PATH "/vpltest/file");
-    int           s;
+    int s;
     f >> s;
     TEST("Create file in directory", s, 1234);
   }
@@ -93,7 +93,7 @@ test_unistd(int argc, char * argv[])
 
     std::FILE * fp = std::fopen("file", "w");
     TEST("fopen non-NULL FILE", fp != nullptr, true);
-    int         data[1] = { 99 };
+    int data[1] = { 99 };
     std::size_t n = std::fwrite(data, sizeof(data[0]), 1, fp);
     std::cout << "fwrite return value: " << n << std::endl;
     TEST("fwrite return value", n, 1);
@@ -109,7 +109,7 @@ test_unistd(int argc, char * argv[])
     std::cout << "file number: " << fd << std::endl;
     std::FILE * fp2 = vpl_fdopen(fd, "r");
     TEST("fdopen non-NULL FILE", fp2 != nullptr, true);
-    int         data[1] = { 0 };
+    int data[1] = { 0 };
     std::size_t n = std::fread(data, sizeof(data[0]), 1, fp2);
     TEST("fread return value", n, 1);
     std::cout << "fread return value: " << n << std::endl << "data[0]: " << data[0] << std::endl;

@@ -34,7 +34,7 @@ static vil_image_view<float>
 decimate_block(std::vector<std::vector<vil_image_view<float>>> const & blocks)
 {
   vil_image_view<float> blk = blocks[0][0];
-  unsigned int          sbi = blk.ni(), sbj = blk.nj();
+  unsigned int sbi = blk.ni(), sbj = blk.nj();
   vil_image_view<float> dec_block;
   dec_block.set_size(sbi, sbj);
   for (unsigned int dj = 0; dj < sbj; ++dj)
@@ -54,7 +54,7 @@ decimate_block(std::vector<std::vector<vil_image_view<float>>> const & blocks)
         i0 = 2 * di - sbi;
       }
       vil_image_view<float> blk = blocks[r][c];
-      float                 v = 0.25f * (blk(i0, j0) + blk(i0 + 1, j0) + blk(i0, j0 + 1) + blk(i0 + 1, j0 + 1));
+      float v = 0.25f * (blk(i0, j0) + blk(i0 + 1, j0) + blk(i0, j0 + 1) + blk(i0 + 1, j0 + 1));
       dec_block(di, dj) = v;
     }
   }
@@ -68,8 +68,8 @@ convert_multi_plane_to_float(vil_image_view_base_sptr & blk, std::vector<vil_ima
     return false;
   fblk.clear();
   vil_pixel_format fmt = blk->pixel_format();
-  unsigned int     ni = blk->ni(), nj = blk->nj();
-  unsigned int     np = blk->nplanes();
+  unsigned int ni = blk->ni(), nj = blk->nj();
+  unsigned int np = blk->nplanes();
   if (fmt == VIL_PIXEL_FORMAT_BYTE)
   {
     vil_image_view<unsigned char> bv = blk;
@@ -103,7 +103,7 @@ static void
 convert_multi_plane_from_float(std::vector<vil_image_view<float>> & fblk, vil_image_view<unsigned char> & blk)
 {
   unsigned int ni = fblk[0].ni(), nj = fblk[0].nj();
-  auto         np = (unsigned int)(fblk.size());
+  auto np = (unsigned int)(fblk.size());
   for (unsigned int p = 0; p < np; ++p)
     for (unsigned int j = 0; j < nj; ++j)
       for (unsigned int i = 0; i < ni; ++i)
@@ -114,7 +114,7 @@ static void
 convert_multi_plane_from_float(std::vector<vil_image_view<float>> & fblk, vil_image_view<unsigned short> & blk)
 {
   unsigned int ni = fblk[0].ni(), nj = fblk[0].nj();
-  auto         np = (unsigned int)(fblk.size());
+  auto np = (unsigned int)(fblk.size());
   for (unsigned int p = 0; p < np; ++p)
     for (unsigned int j = 0; j < nj; ++j)
       for (unsigned int i = 0; i < ni; ++i)
@@ -123,7 +123,7 @@ convert_multi_plane_from_float(std::vector<vil_image_view<float>> & fblk, vil_im
 
 bool
 vil_pyramid_image_resource::blocked_decimate(vil_blocked_image_resource_sptr const & brsc,
-                                             vil_blocked_image_resource_sptr &       dec_resc)
+                                             vil_blocked_image_resource_sptr & dec_resc)
 {
   if (!brsc)
     return false;
@@ -226,7 +226,7 @@ vil_pyramid_image_resource::blocked_decimate(vil_blocked_image_resource_sptr con
     case 4:
     {
       std::vector<std::vector<std::vector<vil_image_view<float>>>> buf(2);
-      std::vector<std::vector<vil_image_view<float>>>              nbrhd(2);
+      std::vector<std::vector<vil_image_view<float>>> nbrhd(2);
       for (unsigned int k = 0; k < 2; ++k)
       {
         buf[k] = std::vector<std::vector<vil_image_view<float>>>(nbi);
@@ -240,7 +240,7 @@ vil_pyramid_image_resource::blocked_decimate(vil_blocked_image_resource_sptr con
         // update the block buffer by stepping down two block rows
         for (unsigned int bi = 0; bi < nbi; ++bi)
         {
-          vil_image_view_base_sptr           bij = brsc->get_block(bi, bj);
+          vil_image_view_base_sptr bij = brsc->get_block(bi, bj);
           std::vector<vil_image_view<float>> fbij;
           // convert to float
           if (!convert_multi_plane_to_float(bij, fbij))

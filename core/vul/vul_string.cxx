@@ -74,11 +74,11 @@ vul_string_c_trim(char * str, const char * rem) // Trim characters from string
 {
   char * s = str;
   char * result = str;
-  char   c;
+  char c;
   while ((c = *s++) != END_OF_STRING)
   {
     const char * r = rem;
-    char         t;
+    char t;
     while ((t = *r++) != END_OF_STRING && t != c)
       ;                     // Scan for match
     if (t == END_OF_STRING) // If no match found
@@ -95,11 +95,11 @@ vul_string_c_left_trim(char * str, const char * rem) // Trim prefix from string
 {
   char * result = str;
   char * s;
-  char   c;
+  char c;
   for (s = str; (c = *s) != END_OF_STRING; s++)
   {
     const char * r = rem;
-    char         t;
+    char t;
     while ((t = *r++) != END_OF_STRING && t != c)
       ;                     // Scan for match
     if (t == END_OF_STRING) // If no match found
@@ -120,8 +120,8 @@ vul_string_c_right_trim(char * str, const char * rem) // Trim suffix from string
   for (; s >= str; s--)
   {
     const char * r = rem;
-    char         t;
-    char         c = *s;
+    char t;
+    char c = *s;
     while ((t = *r++) != END_OF_STRING && t != c)
       ;                     // Scan for match
     if (t == END_OF_STRING) // If no match found
@@ -135,7 +135,7 @@ vul_string_c_right_trim(char * str, const char * rem) // Trim suffix from string
 char *
 vul_string_c_reverse(char * c) // Reverse the order of characters
 {
-  int  length = (int)std::strlen(c); // Number of characters in string
+  int length = (int)std::strlen(c); // Number of characters in string
   char temp;
 
   for (int i = 0, j = length - 1; // Counting from front and rear
@@ -193,7 +193,7 @@ vul_string_capitalize(std::string & s)
   // non-alphanumeric to alphanumeric, and word endings as the reverse
   // transition.
   std::string::iterator si;
-  bool                  in_word = false;
+  bool in_word = false;
   for (si = s.begin(); si != s.end(); ++si)
   {
     if (!in_word && std::isalnum(*si))
@@ -289,7 +289,7 @@ double
 vul_string_atof_withsuffix(std::string const & s)
 {
   std::istringstream ss(s);
-  double             d;
+  double d;
   ss >> d;
   if (!ss)
     return 0.0;
@@ -355,13 +355,13 @@ myequals(IT b1, IT e1, const char * b2, const char * e2)
 bool
 vul_string_to_bool(const std::string & str)
 {
-  std::string::const_iterator               begin = std::find_if(str.begin(), str.end(), NotSpace);
+  std::string::const_iterator begin = std::find_if(str.begin(), str.end(), NotSpace);
   const std::string::const_reverse_iterator rend(begin);
-  std::string::const_iterator               end = std::find_if(str.rbegin(), rend, NotSpace).base();
-  const char *                              syes = "YES";
-  const char *                              strue = "TRUE";
-  const char *                              s1 = "1";
-  const char *                              son = "ON";
+  std::string::const_iterator end = std::find_if(str.rbegin(), rend, NotSpace).base();
+  const char * syes = "YES";
+  const char * strue = "TRUE";
+  const char * s1 = "1";
+  const char * son = "ON";
   return myequals(begin, end, syes, syes + 3) || myequals(begin, end, strue, strue + 4) ||
          myequals(begin, end, s1, s1 + 1) || myequals(begin, end, son, son + 2);
 }
@@ -466,7 +466,7 @@ vul_string_to_int_list(std::string str)
 bool
 vul_string_expand_var(std::string & str)
 {
-  std::string::size_type       i = 0; // index to current char.
+  std::string::size_type i = 0; // index to current char.
   const std::string::size_type npos = std::string::npos;
 
   // If there is a problem, carry on trying to convert rest
@@ -482,8 +482,8 @@ vul_string_expand_var(std::string & str)
   std::string::size_type var_begin = 0;
 
   std::string::size_type bracket_type = npos; // index into open_brackets.
-  const std::string      open_brackets("{([");
-  const std::string      close_brackets("})]");
+  const std::string open_brackets("{([");
+  const std::string close_brackets("})]");
 
   while (i < str.size())
   {

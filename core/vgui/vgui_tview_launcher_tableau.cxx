@@ -67,7 +67,7 @@ vgui_tview_launcher_tableau::go(vgui_adaptor * a)
     std::cerr << __FILE__ ": a = 0\n";
     return;
   }
-  vgui_tview_tableau_new    tview(a->get_tableau());
+  vgui_tview_tableau_new tview(a->get_tableau());
   vgui_viewer2D_tableau_new viewer(tview);
 
   vgui_dialog tview_dialog("Tableau hierarchy");

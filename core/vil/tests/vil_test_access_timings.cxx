@@ -82,9 +82,9 @@ method4(vil_image_view<imT> & image, int n_loops)
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
-    unsigned       ni = image.ni(), nj = image.nj(), np = image.nplanes();
+    unsigned ni = image.ni(), nj = image.nj(), np = image.nplanes();
     std::ptrdiff_t istep = image.istep(), jstep = image.jstep(), pstep = image.planestep();
-    imT *          plane = image.top_left_ptr();
+    imT * plane = image.top_left_ptr();
     for (unsigned p = 0; p < np; ++p, plane += pstep)
     {
       imT * row = plane;
@@ -107,9 +107,9 @@ method5(vil_image_view<imT> & image, int n_loops)
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
-    unsigned       ni = image.ni(), nj = image.nj(), np = image.nplanes();
+    unsigned ni = image.ni(), nj = image.nj(), np = image.nplanes();
     std::ptrdiff_t istep = image.istep(), jstep = image.jstep(), pstep = image.planestep();
-    imT *          plane = image.top_left_ptr();
+    imT * plane = image.top_left_ptr();
     for (unsigned p = 0; p < np; ++p, plane += pstep)
     {
       imT * row = plane;
@@ -134,9 +134,9 @@ method6(vil_image_view<imT> & image, int n_loops)
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
-    unsigned       ni = image.ni(), nj = image.nj(), np = image.nplanes();
+    unsigned ni = image.ni(), nj = image.nj(), np = image.nplanes();
     std::ptrdiff_t istep = image.istep(), jstep = image.jstep(), pstep = image.planestep();
-    imT *          plane = image.top_left_ptr();
+    imT * plane = image.top_left_ptr();
     for (unsigned p = 0; p < np; ++p, plane += pstep)
     {
       imT * row = plane;
@@ -193,9 +193,9 @@ method8(vil_image_view<imT> & image, int n_loops)
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
-    unsigned       ni = image.ni(), nj = image.nj(), np = image.nplanes();
+    unsigned ni = image.ni(), nj = image.nj(), np = image.nplanes();
     std::ptrdiff_t istep = image.istep(), jstep = image.jstep(), pstep = image.planestep();
-    imT *          plane = image.top_left_ptr();
+    imT * plane = image.top_left_ptr();
     for (unsigned p = 0; p < np; ++p, plane += pstep)
     {
       imT * row = plane;
@@ -252,8 +252,8 @@ int
 main(int argc, char ** argv)
 {
   vil_image_view<vxl_byte> byte_image(NI, NJ, NP);
-  vil_image_view<float>    float_image(NI, NJ, NP);
-  int                      n_loops = 100;
+  vil_image_view<float> float_image(NI, NJ, NP);
+  int n_loops = 100;
 
   std::cout << "Times to fill a " << NI << " x " << NJ << " image of " << NP
             << " planes (in microsecs) [Range= 0.5(max-min)]\n"

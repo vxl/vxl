@@ -114,7 +114,7 @@ save_frames(vidl_v4l2_device & dev)
     vidl_image_list_ostream test_out("./dump", "%05d", "ppm");
 
     vul_timer timer;
-    int       i = 100;
+    int i = 100;
     std::cout << "Grabbing " << i << " frames in directory ./dump" << std::endl;
     while (i-- && test.advance())
     {

@@ -34,9 +34,9 @@ simple_test()
     c.print_orig(i);
   }
 #endif
-  vgl_ray_3d<double>   interp_ray = c.ray(3.5, 2.5);
+  vgl_ray_3d<double> interp_ray = c.ray(3.5, 2.5);
   vgl_point_3d<double> org = interp_ray.origin();
-  double               er = std::fabs(org.x() - 3.5) + std::fabs(org.y() - 2.5);
+  double er = std::fabs(org.x() - 3.5) + std::fabs(org.y() - 2.5);
   TEST_NEAR("interpolated ray", er, 0.0, 0.0001);
   double x = 1.5, y = 2.5, z = 0.0, u = 0.0, v = 0.0;
   c.project(x, y, z, u, v);
@@ -62,8 +62,8 @@ proj_test()
   unsigned nj = 480;
   // construct a perspective camera for reference
   vpgl_calibration_matrix<double> K(ni, vgl_point_2d<double>((double)ni / 2.0, (double)nj / 2.0));
-  vgl_point_3d<double>            center(10.0, 5.0, 15.0);
-  vgl_rotation_3d<double>         R;
+  vgl_point_3d<double> center(10.0, 5.0, 15.0);
+  vgl_rotation_3d<double> R;
   vpgl_perspective_camera<double> pcam(K, center, R);
 
   // set each ray in the generic camera to be same as perspective camera
@@ -79,7 +79,7 @@ proj_test()
 
   // project some random 3-d points into the image
   std::vector<vgl_point_3d<double>> test_pts;
-  vgl_vector_3d<double>             offset(center.x(), center.y(), center.z());
+  vgl_vector_3d<double> offset(center.x(), center.y(), center.z());
   test_pts.push_back(vgl_point_3d<double>(-4.2, -1.0, 10.9) + offset);
   test_pts.push_back(vgl_point_3d<double>(-4.0, 3.4, 9.1) + offset);
   test_pts.push_back(vgl_point_3d<double>(4.0, 2.9, 11.3) + offset);
@@ -125,7 +125,7 @@ proj_test()
 
   for (std::vector<vgl_point_2d<double>>::const_iterator pit = test_pts1.begin(); pit != test_pts1.end(); ++pit)
   {
-    double             u = pit->x(), v = pit->y();
+    double u = pit->x(), v = pit->y();
     vgl_ray_3d<double> ray = pcam.backproject_ray(u, v);
     vgl_ray_3d<double> r = gcam.ray(u, v);
 

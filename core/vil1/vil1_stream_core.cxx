@@ -63,7 +63,7 @@ vil1_stream_core::m_transfer(char * buf, vil1_streampos pos, vil1_streampos n, b
 
   // transfer data
   {
-    char *         tbuf = buf;
+    char * tbuf = buf;
     vil1_streampos tpos = pos;
     vil1_streampos tn = n;
     while (tn > 0)
@@ -71,7 +71,7 @@ vil1_stream_core::m_transfer(char * buf, vil1_streampos pos, vil1_streampos n, b
       vil1_streampos bl = tpos / (long)blocksize_;                                  // which block
       vil1_streampos s = tpos - (long)blocksize_ * bl;                              // start index in block_
       vil1_streampos z = ((tn + s > (long)blocksize_) ? (long)blocksize_ - s : tn); // number of bytes to write
-      char *         tmp = block_[bl];
+      char * tmp = block_[bl];
       if (read)
         for (vil1_streampos k = 0; k < z; ++k)
           tbuf[k] = tmp[s + k]; // prefer memcpy ?

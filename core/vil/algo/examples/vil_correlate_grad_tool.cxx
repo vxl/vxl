@@ -31,7 +31,7 @@ main(int argc, char ** argv)
   vul_arg<std::string> in_path("-i", "Input image");
   vul_arg<std::string> kernel_path("-k", "Kernel image");
   vul_arg<std::string> out_path("-o", "Output image", "output.jpg");
-  vul_arg<bool>        suppress_non_max("-s", "Suppress non-peaks", false);
+  vul_arg<bool> suppress_non_max("-s", "Suppress non-peaks", false);
   vul_arg_parse(argc, argv);
 
   if (in_path() == "" || kernel_path() == "")

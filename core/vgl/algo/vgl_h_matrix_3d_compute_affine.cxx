@@ -13,7 +13,7 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-constexpr int    TM_UNKNOWNS_COUNT = 9;
+constexpr int TM_UNKNOWNS_COUNT = 9;
 constexpr double DEGENERACY_THRESHOLD = 0.00001;
 
 
@@ -25,7 +25,7 @@ constexpr double DEGENERACY_THRESHOLD = 0.00001;
 bool
 vgl_h_matrix_3d_compute_affine::solve_linear_problem(std::vector<vgl_homg_point_3d<double>> const & p1,
                                                      std::vector<vgl_homg_point_3d<double>> const & p2,
-                                                     vnl_matrix<double> &                           M)
+                                                     vnl_matrix<double> & M)
 {
   int n = static_cast<int>(p1.size());
   // fill the design matrix
@@ -87,7 +87,7 @@ vgl_h_matrix_3d_compute_affine::solve_linear_problem(std::vector<vgl_homg_point_
 bool
 vgl_h_matrix_3d_compute_affine::compute_p(std::vector<vgl_homg_point_3d<double>> const & points1,
                                           std::vector<vgl_homg_point_3d<double>> const & points2,
-                                          vgl_h_matrix_3d<double> &                      H)
+                                          vgl_h_matrix_3d<double> & H)
 {
   // number of points must be the same
   assert(points1.size() == points2.size());

@@ -65,7 +65,7 @@ main(int argc, char ** argv)
   easy2D->add_line(100, 100, 200, 400);
   easy2D->add_circle(100, 100, 50);
   vgui_viewer2D_tableau_new viewer(easy2D);
-  vgui_shell_tableau_new    shell(viewer);
+  vgui_shell_tableau_new shell(viewer);
 
   return vgui::run(shell, image->width(), image->height(), create_menu());
 }

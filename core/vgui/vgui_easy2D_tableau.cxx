@@ -341,7 +341,7 @@ vgui_easy2D_tableau::print_psfile(std::string filename, int reduction_factor, bo
   {
     if (get_image_tableau()->get_image_resource())
     {
-      vil_image_resource_sptr  img_sptr = get_image_tableau()->get_image_resource();
+      vil_image_resource_sptr img_sptr = get_image_tableau()->get_image_resource();
       vil_image_view<vxl_byte> img = img_sptr->get_view();
       if (!img)
       {
@@ -367,7 +367,7 @@ vgui_easy2D_tableau::print_psfile(std::string filename, int reduction_factor, bo
     }
     else
     {
-      vil1_image      img = get_image_tableau()->get_image();
+      vil1_image img = get_image_tableau()->get_image();
       unsigned char * data = new unsigned char[img.get_size_bytes()];
       img.get_section(data, 0, 0, wd, ht);
       if (vil1_pixel_format(img) == VIL1_BYTE)
@@ -396,8 +396,8 @@ vgui_easy2D_tableau::print_psfile(std::string filename, int reduction_factor, bo
     std::cerr << "vgui_easy2D_tableau: Printing geometric objects\n";
 
   std::vector<vgui_soview *> all_objs = get_all();
-  vgui_style_sptr            style = nullptr;
-  float                      style_point_size = 0;
+  vgui_style_sptr style = nullptr;
+  float style_point_size = 0;
   for (std::vector<vgui_soview *>::iterator i = all_objs.begin(); i != all_objs.end(); ++i)
   {
     vgui_soview * sv = *i;

@@ -42,13 +42,13 @@ struct GLUTwindow
 };
 
 // we use these extern global variables in libGLUT to do the trickery :
-extern Display *    __glutDisplay;
+extern Display * __glutDisplay;
 extern GLUTwindow * __glutCurrentWindow;
 extern GLUTwindow * __glutMenuWindow;
 
 //--------------------------------------------------------------------------------
 
-int  vgui_glut_menu_hack::glut_button = 0;
+int vgui_glut_menu_hack::glut_button = 0;
 bool vgui_glut_menu_hack::active = false;
 void (*vgui_glut_menu_hack::last_minute_change_callback)(int menu_id) = 0;
 

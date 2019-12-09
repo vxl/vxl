@@ -40,7 +40,7 @@ inline bool
 is_video_device(const char * file)
 {
   struct stat s;
-  bool        isvd = (lstat(file, &s) == 0 && S_ISCHR(s.st_mode) &&      // is character device
+  bool isvd = (lstat(file, &s) == 0 && S_ISCHR(s.st_mode) &&      // is character device
                ((int)((unsigned short)(s.st_rdev) >> 8) == 81) && // major number 81
                ((int)((unsigned short)(s.st_rdev) & 0xC0) == 0)   // minor in [0,63]
   );
@@ -73,7 +73,7 @@ void
 vidl_v4l2_devices::load_devices(const char * dirname)
 {
   // std::cerr << "Directory: " << dirname << std::endl;
-  DIR *           dp;
+  DIR * dp;
   struct dirent * ep;
   dp = opendir(dirname);
   char filename[200];

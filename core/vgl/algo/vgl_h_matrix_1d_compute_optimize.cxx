@@ -24,7 +24,7 @@
 class XXX : public vnl_least_squares_function
 {
 private:
-  unsigned                   N;
+  unsigned N;
   const std::vector<double> &z1, z2;
 
 public:
@@ -109,14 +109,14 @@ do_compute(const std::vector<double> & z1, const std::vector<double> & z2, vgl_h
 bool
 vgl_h_matrix_1d_compute_optimize::compute_cool_homg(const std::vector<vgl_homg_point_1d<double>> & p1,
                                                     const std::vector<vgl_homg_point_1d<double>> & p2,
-                                                    vgl_h_matrix_1d<double> &                      M)
+                                                    vgl_h_matrix_1d<double> & M)
 {
   unsigned N = p1.size();
   assert(N == p2.size());
   if (N < 3)
     return false;
 
-  std::vector<double>            z1(N, 0.0), z2(N, 0.0);
+  std::vector<double> z1(N, 0.0), z2(N, 0.0);
   vgl_h_matrix_1d_compute_linear C;
   C.compute(p1, p2, M);
 

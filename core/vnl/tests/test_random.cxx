@@ -23,7 +23,7 @@ test_random()
 
   double sum = 0.0;
   double sum_sq = 0.0;
-  int    n = 10000;
+  int n = 10000;
   for (int i = 0; i < n; ++i)
   {
     double r = mz_random.normal();

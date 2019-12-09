@@ -21,7 +21,7 @@
 bool
 vpgl_fm_compute_2_point::compute(const std::vector<vgl_homg_point_2d<double>> & pr,
                                  const std::vector<vgl_homg_point_2d<double>> & pl,
-                                 vpgl_fundamental_matrix<double> &              fm)
+                                 vpgl_fundamental_matrix<double> & fm)
 {
   // Check that there are at least 2 points.
   if (pr.size() < 2 || pl.size() < 2)
@@ -40,9 +40,9 @@ vpgl_fm_compute_2_point::compute(const std::vector<vgl_homg_point_2d<double>> & 
 
   // Condition if necessary.
   std::vector<vgl_homg_point_2d<double>> pr_norm, pl_norm;
-  vgl_norm_trans_2d<double>              prnt, plnt;
-  double                                 sl = 1.0, sr = 1.0, cxl = 0.0, cyl = 0.0, cxr = 0.0, cyr = 0.0;
-  bool                                   isotropic = true;
+  vgl_norm_trans_2d<double> prnt, plnt;
+  double sl = 1.0, sr = 1.0, cxl = 0.0, cyl = 0.0, cxr = 0.0, cyr = 0.0;
+  bool isotropic = true;
   if (precondition_)
   {
     prnt.compute_from_points(pr, isotropic);
@@ -89,8 +89,8 @@ vpgl_fm_compute_2_point::compute(const std::vector<vgl_homg_point_2d<double>> & 
                  cxr * sr * wr * yl + cxl * sl * wl * yr + xl * yr - xr * yl);
     }
   }
-  vnl_svd<double>                svdS(S);
-  vnl_vector<double>             solution = svdS.nullvector();
+  vnl_svd<double> svdS(S);
+  vnl_vector<double> solution = svdS.nullvector();
   vnl_matrix_fixed<double, 3, 3> F_vnl;
   F_vnl(0, 0) = 0;
   F_vnl(0, 1) = solution(2);

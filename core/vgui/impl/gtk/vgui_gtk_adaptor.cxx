@@ -30,7 +30,7 @@
 #include "vgui_gtk_window.h"
 
 static bool debug = false;
-vgui_menu   vgui_gtk_adaptor::last_popup;
+vgui_menu vgui_gtk_adaptor::last_popup;
 
 extern "C"
 {
@@ -163,7 +163,7 @@ vgui_gtk_adaptor::post_overlay_redraw()
 typedef struct
 {
   vgui_gtk_adaptor * adapt;
-  int                name;
+  int name;
 } vgui_gtk_adaptor_callback_data;
 
 //: timeout is in milliseconds
@@ -251,7 +251,7 @@ vgui_gtk_adaptor::handle(GtkWidget * widget, GdkEvent * gev, gpointer context)
     GdkEventMotion * e = (GdkEventMotion *)gev;
     if (e->is_hint)
     {
-      int             x, y;
+      int x, y;
       GdkModifierType state;
       gdk_window_get_pointer(e->window, &x, &y, &state);
       vgui_gtk_utils::set_modifiers(event, state);
@@ -445,7 +445,7 @@ extern "C"
   timeout_callback(gpointer data)
   {
     vgui_gtk_adaptor_callback_data * cd = static_cast<vgui_gtk_adaptor_callback_data *>(data);
-    vgui_event                       e(vgui_TIMER);
+    vgui_event e(vgui_TIMER);
     e.timer_id = cd->name;
     cd->adapt->dispatch_to_tableau(e);
 

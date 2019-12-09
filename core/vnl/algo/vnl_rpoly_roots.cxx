@@ -80,8 +80,8 @@ vnl_rpoly_roots::realroots(double tol) const
 bool
 vnl_rpoly_roots::compute()
 {
-  long                      fail = 0;
-  long                      n = coeffs_.size() - 1;
+  long fail = 0;
+  long n = coeffs_.size() - 1;
   v3p_netlib_rpoly_global_t rpoly_global;
   v3p_netlib_rpoly_(coeffs_.data_block(), &n, r_.data_block(), i_.data_block(), &fail, &rpoly_global);
 

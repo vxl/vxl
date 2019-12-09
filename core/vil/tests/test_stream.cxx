@@ -54,7 +54,7 @@ test_stream(int argc, char * argv[])
 
 #if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
   constexpr unsigned int size = 4096; // should be enough
-  std::wstring           wdir;
+  std::wstring wdir;
   wdir.resize(size);
   const int ret = MultiByteToWideChar(CP_ACP, 0, dir.c_str(), int(dir.size()), &wdir[0], size);
   TEST("dir name converts to wchart_t type", ret > 0, true);

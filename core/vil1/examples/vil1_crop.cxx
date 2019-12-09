@@ -21,10 +21,10 @@ main(int argc, char ** argv)
   }
   char const * input_filename = argv[1];
   char const * output_filename = argv[2];
-  int          x0 = std::stoi(argv[3]);
-  int          y0 = std::stoi(argv[4]);
-  int          w = std::stoi(argv[5]);
-  int          h = std::stoi(argv[6]);
+  int x0 = std::stoi(argv[3]);
+  int y0 = std::stoi(argv[4]);
+  int w = std::stoi(argv[5]);
+  int h = std::stoi(argv[6]);
 
   vil1_image in = vil1_load(input_filename);
 

@@ -15,7 +15,7 @@
 #include <vgui/impl/win32/vgui_win32_adaptor.h>
 
 extern LRESULT CALLBACK
-               globalDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+globalDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 vgui_win32_dialog_impl::vgui_win32_dialog_impl(const char * name, HWND hWnd)
   : vgui_dialog_impl(name)
@@ -40,9 +40,9 @@ struct vgui_win32_dialog_pushbutton
   }
 
   unsigned short ctrl_id;
-  std::string    label;
-  HANDLE         hBitmap;
-  unsigned       width, height;
+  std::string label;
+  HANDLE hBitmap;
+  unsigned width, height;
 };
 
 // struct vgui_win32_dialog_pushbutton;
@@ -63,7 +63,7 @@ vgui_win32_dialog_impl::~vgui_win32_dialog_impl()
 struct vgui_win32_dialog_choice
 {
   std::vector<std::string> names;
-  int                      index;
+  int index;
 };
 
 
@@ -82,8 +82,8 @@ vgui_win32_dialog_impl::choice_field_widget(const char * /*txt*/, const std::vec
 struct vgui_win32_dialog_inline_tab
 {
   vgui_tableau_sptr tab;
-  unsigned          height;
-  unsigned          width;
+  unsigned height;
+  unsigned width;
 };
 
 // Make a tableau widget.
@@ -131,17 +131,17 @@ vgui_win32_dialog_impl::FindDialogSize(int & width,
                                        int & height,
                                        int & max_length,
                                        int & fbsr_count,
-                                       int   cxChar,
-                                       int   cyChar,
-                                       int   width_sep,
-                                       int   height_sep,
-                                       int   button_length,
-                                       int   edit_length,
-                                       int   browser_length)
+                                       int cxChar,
+                                       int cyChar,
+                                       int width_sep,
+                                       int height_sep,
+                                       int button_length,
+                                       int edit_length,
+                                       int browser_length)
 {
   // Minimum dialog size
   const int cyCaption = GetSystemMetrics(SM_CYCAPTION);
-  int       field_length, field_height;
+  int field_length, field_height;
 
   height = 3 * height_sep + cyCaption; // top, bottom margin plus an OK/Cancel button;
   max_length = width_sep;
@@ -156,7 +156,7 @@ vgui_win32_dialog_impl::FindDialogSize(int & width,
   field_length = field_height = 0;
   for (std::vector<element>::iterator e_iter = elements.begin(); e_iter != elements.end(); ++e_iter)
   {
-    element             l = *e_iter;
+    element l = *e_iter;
     vgui_dialog_field * field = l.field;
 
     if (!use_line_break)
@@ -206,7 +206,7 @@ vgui_win32_dialog_impl::FindDialogSize(int & width,
     {
       // one or several lines of text
       char *text, *next_text;
-      int   w, w1, h;
+      int w, w1, h;
 
       text = (char *)field->label.c_str();
       w = 0;
@@ -240,8 +240,8 @@ vgui_win32_dialog_impl::FindDialogSize(int & width,
     {
       // a tableau
       vgui_win32_dialog_inline_tab * tab_data = (vgui_win32_dialog_inline_tab *)l.widget;
-      int                            w = tab_data->width / cxChar + 2 * width_sep; // plus width_sep on each side
-      int                            h = tab_data->height;
+      int w = tab_data->width / cxChar + 2 * width_sep; // plus width_sep on each side
+      int h = tab_data->height;
 
       field_length += w;
       if (field_height < h)
@@ -328,17 +328,17 @@ vgui_win32_dialog_impl::ask()
   const int cxChar = LOWORD(GetDialogBaseUnits());
   const int cyChar = HIWORD(GetDialogBaseUnits());
 
-  const int     height_sep = 6 * cyChar / 4; // vertical distance between two adjacent controls.
-  constexpr int width_sep = 2;               // horizontal distance between two adjacent controls.
+  const int height_sep = 6 * cyChar / 4; // vertical distance between two adjacent controls.
+  constexpr int width_sep = 2;           // horizontal distance between two adjacent controls.
   constexpr int edit_length = 20;
   constexpr int browser_length = 40;
   constexpr int button_length = 12;
-  const int     button_height = 6 * cyChar / 4;
-  const int     edit_height = 5 * cyChar / 4;
+  const int button_height = 6 * cyChar / 4;
+  const int edit_height = 5 * cyChar / 4;
 
-  int   width, height, max_length, fbsr_count;
+  int width, height, max_length, fbsr_count;
   short x, y, cx, cy;
-  RECT  rect;
+  RECT rect;
 
   // Find if line_break is used
   for (std::vector<element>::iterator e_iter = elements.begin(); e_iter != elements.end(); ++e_iter)
@@ -428,11 +428,11 @@ vgui_win32_dialog_impl::ask()
   x = cxChar;
   y = cyChar >> 1;
   unsigned short ctrl_count = 0;
-  HWND           hCtrlWnd;
-  short          dy = 0;
+  HWND hCtrlWnd;
+  short dy = 0;
   for (std::vector<element>::iterator e_iter = elements.begin(); e_iter != elements.end(); ++e_iter)
   {
-    element             l = *e_iter;
+    element l = *e_iter;
     vgui_dialog_field * field = l.field;
 
     if (l.type == int_elem || l.type == long_elem || l.type == float_elem || l.type == double_elem ||
@@ -579,7 +579,7 @@ vgui_win32_dialog_impl::ask()
     {
       // one or several lines of text
       char *text, *next_text;
-      int   field_length;
+      int field_length;
 
       text = (char *)field->label.c_str();
       cx = 0;
@@ -784,7 +784,7 @@ vgui_win32_dialog_impl::ask()
       pb->ctrl_id = wDlgCtrlId;
 
       callback_control_data ccd;
-      vgui_button_field *   l = (vgui_button_field *)field;
+      vgui_button_field * l = (vgui_button_field *)field;
       ccd.child_id = wDlgCtrlId;
       ccd.cmnd = l->cmnd;
       callback_controls.push_back(ccd);
@@ -859,7 +859,7 @@ vgui_win32_dialog_impl::DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARA
     {
       LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT)lParam;
       // Obtain info of control item
-      HDC  hDC = lpDIS->hDC;
+      HDC hDC = lpDIS->hDC;
       RECT rectItem = lpDIS->rcItem;
       UINT ctrlID = lpDIS->CtlID;
       BOOL isDisabled = lpDIS->itemState & ODS_DISABLED; // get button state
@@ -1068,7 +1068,7 @@ vgui_win32_dialog_impl::OnOK()
 {
   HWND hWndCtrl;
   char buf[MAX_PATH];
-  int  control_count, ctrl_id;
+  int control_count, ctrl_id;
 
   ok_clicked = true;
 
@@ -1076,7 +1076,7 @@ vgui_win32_dialog_impl::OnOK()
   control_count = 0;
   for (std::vector<element>::iterator e_iter = elements.begin(); e_iter != elements.end(); ++e_iter)
   {
-    element             l = *e_iter;
+    element l = *e_iter;
     vgui_dialog_field * field = l.field;
     ctrl_id = DLG_ID_START + control_count;
     hWndCtrl = GetDlgItem(hWnd, ctrl_id);
@@ -1127,8 +1127,8 @@ vgui_win32_dialog_impl::OnCancel()
 BOOL
 vgui_win32_dialog_impl::OnBrowse(HWND hDlg, WORD wCtrlId)
 {
-  static TCHAR        szFileName[MAX_PATH], szTitleName[MAX_PATH];
-  static TCHAR        szFilter[] = TEXT("All Files (*.*)\0*.*\0") TEXT("All Files (*.*)\0*.*\0\0");
+  static TCHAR szFileName[MAX_PATH], szTitleName[MAX_PATH];
+  static TCHAR szFilter[] = TEXT("All Files (*.*)\0*.*\0") TEXT("All Files (*.*)\0*.*\0\0");
   static OPENFILENAME ofn;
 
   ofn.lStructSize = sizeof(OPENFILENAME);
@@ -1161,11 +1161,11 @@ vgui_win32_dialog_impl::OnBrowse(HWND hDlg, WORD wCtrlId)
 BOOL
 vgui_win32_dialog_impl::OnColor(HWND hDlg, WORD wCtrlId, LPTSTR lpColor)
 {
-  char        buffer[16];
+  char buffer[16];
   std::string strColor;
 
   static CHOOSECOLOR cc;
-  static COLORREF    crCustColors[16];
+  static COLORREF crCustColors[16];
 
   cc.lStructSize = sizeof(CHOOSECOLOR);
   cc.hwndOwner = hDlg;
@@ -1303,12 +1303,12 @@ void PrepareImageRect(BOOL bHasTitle, RECT* rpItem, RECT* rpTitle, BOOL bIsPress
 #endif // 0
 
 void
-vgui_win32_dialog_impl::DrawImageOnButton(HDC      hDC,
-                                          RECT *   lprcItem,
-                                          HBITMAP  hBitmap,
+vgui_win32_dialog_impl::DrawImageOnButton(HDC hDC,
+                                          RECT * lprcItem,
+                                          HBITMAP hBitmap,
                                           unsigned w,
                                           unsigned h,
-                                          BOOL     isDisabled)
+                                          BOOL isDisabled)
 {
   RECT rcImage;
 

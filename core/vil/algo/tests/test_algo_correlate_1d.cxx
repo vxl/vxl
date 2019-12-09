@@ -17,7 +17,7 @@ test_algo_correlate_1d_double()
             << " Testing vil_correlate_1d\n"
             << "**************************\n";
 
-  constexpr int       n = 10;
+  constexpr int n = 10;
   std::vector<double> src(n), dest(n + 2), kernel(3);
   for (int i = 0; i < n; ++i)
     src[i] = i + 1;
@@ -203,7 +203,7 @@ test_algo_correlate_1d_double()
 
   std::cout << "\n\nvil_correlate_1d(vil_image_resource_sptr&,...)\n";
 
-  vil_image_resource_sptr  mem = vil_new_image_resource(n, n, 1, VIL_PIXEL_FORMAT_BYTE);
+  vil_image_resource_sptr mem = vil_new_image_resource(n, n, 1, VIL_PIXEL_FORMAT_BYTE);
   vil_image_view<vxl_byte> v(n, n, 1), v_out(n, n, 1);
   for (int j = 0; j < n; ++j)
     for (int i = 0; i < n; ++i)

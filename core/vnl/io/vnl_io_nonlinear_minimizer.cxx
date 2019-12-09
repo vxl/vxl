@@ -70,11 +70,11 @@ vsl_b_read(vsl_b_istream & is, vnl_nonlinear_minimizer & p)
   double ftol;   // Termination tolerance on F (sum of squared residuals)
   double xtol;   // Termination tolerance on X (solution vector)
   double gtol;   // Termination tolerance on Grad(F)' * F = 0
-  int    maxfev; // Termination maximum number of iterations.
+  int maxfev;    // Termination maximum number of iterations.
   double epsfcn; // Step length for FD Jacobian
-  bool   trace;
-  bool   verbose;
-  int    check_derivatives;
+  bool trace;
+  bool verbose;
+  int check_derivatives;
 
   vsl_b_read(is, ver);
   switch (ver)

@@ -39,7 +39,7 @@ test_backproject_dem()
   if (!cam)
     return;
   vpgl_geo_camera * geo_cam;
-  bool              success = vpgl_geo_camera::init_geo_camera(dem_resc, geo_cam);
+  bool success = vpgl_geo_camera::init_geo_camera(dem_resc, geo_cam);
   std::cout << *geo_cam << std::endl;
   vpgl_backproject_dem bpdem(dem_resc);
   // vgl_point_2d<double> img_pt(4012.0, 2036.0);

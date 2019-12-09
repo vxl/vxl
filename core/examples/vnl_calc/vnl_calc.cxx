@@ -111,7 +111,7 @@ int
 main(int argc, char ** argv)
 {
   mystack<Matrix> stack;
-  int             cout_precision = 0;
+  int cout_precision = 0;
 
   // Matrix::set_print_format("%20.16e");
   std::string print_format = "%20.16e";
@@ -149,7 +149,7 @@ main(int argc, char ** argv)
     }
     else if (arg == "svd")
     {
-      Matrix          a = stack.pop();
+      Matrix a = stack.pop();
       vnl_svd<double> svd(a);
       stack.push(svd.U());
       stack.push(svd.W().as_matrix());
@@ -203,7 +203,7 @@ main(int argc, char ** argv)
     }
     else
     { // Load from file
-      Matrix        m;
+      Matrix m;
       std::ifstream f(arg.c_str());
       if (!m.read_ascii(f))
       {

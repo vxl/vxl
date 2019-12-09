@@ -30,7 +30,7 @@ vgui_adaptor_tableau::~vgui_adaptor_tableau()
 }
 
 //: Take a message (which is invariably being sent from a child tableau), and call the adaptor's post_message(...)
-//method.
+// method.
 void
 vgui_adaptor_tableau::post_message(char const * msg, void const * data)
 {
@@ -39,7 +39,7 @@ vgui_adaptor_tableau::post_message(char const * msg, void const * data)
 }
 
 //: Take a redraw message (which is invariably being sent from a child tableau), and call the adaptor's post_redraw()
-//method.
+// method.
 void
 vgui_adaptor_tableau::post_redraw()
 {
@@ -48,7 +48,7 @@ vgui_adaptor_tableau::post_redraw()
 }
 
 //: Take an overlay_redraw message (which is invariably being sent from a child tableau) & call the adaptor's
-//post_redraw() method.
+// post_redraw() method.
 void
 vgui_adaptor_tableau::post_overlay_redraw()
 {

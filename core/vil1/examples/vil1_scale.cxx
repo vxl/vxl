@@ -23,8 +23,8 @@ main(int argc, char ** argv)
     std::cerr << "usage: vil1_scale w h in out format\n";
     return -1;
   }
-  int          w = std::stoi(argv[1]);
-  int          h = std::stoi(argv[2]);
+  int w = std::stoi(argv[1]);
+  int h = std::stoi(argv[2]);
   char const * input_filename = argv[3];
   char const * output_filename = argv[4];
   char const * output_format = argv[5];
@@ -45,10 +45,10 @@ constexpr int HALFSCALE = 2048;
 
 struct pnmscale
 {
-  int   rows, cols, format, newformat, newrows, newcols, newpixels;
-  int   argn, specxscale, specyscale, specxsize, specysize, specxysize;
+  int rows, cols, format, newformat, newrows, newcols, newpixels;
+  int argn, specxscale, specyscale, specxsize, specysize, specxysize;
   float xscale, yscale;
-  long  sxscale, syscale;
+  long sxscale, syscale;
 
   pnmscale() { specxscale = specyscale = specxsize = specysize = specxysize = newpixels = 0; }
 
@@ -156,9 +156,9 @@ struct pnmscale
       pm_error("scale must be greater than 0");
   }
 
-  int        current_inrow;
+  int current_inrow;
   vil1_image in;
-  int        current_outrow;
+  int current_outrow;
   vil1_image out;
 
   void
@@ -259,12 +259,12 @@ template <class T, class longT>
 void
 pnmscaleT<T, longT>::go()
 {
-  T *  xelrow;
-  T *  tempxelrow;
-  T *  newxelrow;
-  T *  xP;
-  T *  nxP;
-  int  row, col, needtoreadrow;
+  T * xelrow;
+  T * tempxelrow;
+  T * newxelrow;
+  T * xP;
+  T * nxP;
+  int row, col, needtoreadrow;
   long fracrowtofill, fracrowleft;
 
   xelrow = new T[cols];
@@ -274,7 +274,7 @@ pnmscaleT<T, longT>::go()
     tempxelrow = new T[cols];
 
   auto * gs = new longT[cols];
-  int    rowsread = 0;
+  int rowsread = 0;
   fracrowleft = syscale;
   needtoreadrow = 1;
   for (col = 0; col < cols; ++col)
@@ -338,8 +338,8 @@ pnmscaleT<T, longT>::go()
     else
     {
       longT g;
-      long  fraccoltofill, fraccolleft;
-      int   needcol;
+      long fraccoltofill, fraccolleft;
+      int needcol;
 
       nxP = newxelrow;
       fraccoltofill = SCALE;

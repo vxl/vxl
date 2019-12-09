@@ -220,25 +220,25 @@ vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector
 }
 
 bool
-vil_nitf2_tagged_record::get_value(std::string                    tag,
+vil_nitf2_tagged_record::get_value(std::string tag,
                                    const vil_nitf2_index_vector & indexes,
-                                   std::string &                  out_value) const
+                                   std::string & out_value) const
 {
   return m_field_sequence->get_value(std::move(tag), indexes, out_value);
 }
 
 bool
-vil_nitf2_tagged_record::get_value(std::string                    tag,
+vil_nitf2_tagged_record::get_value(std::string tag,
                                    const vil_nitf2_index_vector & indexes,
-                                   vil_nitf2_location *&          out_value) const
+                                   vil_nitf2_location *& out_value) const
 {
   return m_field_sequence->get_value(std::move(tag), indexes, out_value);
 }
 
 bool
-vil_nitf2_tagged_record::get_value(std::string                    tag,
+vil_nitf2_tagged_record::get_value(std::string tag,
                                    const vil_nitf2_index_vector & indexes,
-                                   vil_nitf2_date_time &          out_value) const
+                                   vil_nitf2_date_time & out_value) const
 {
   return m_field_sequence->get_value(std::move(tag), indexes, out_value);
 }
@@ -247,9 +247,9 @@ vil_nitf2_tagged_record::get_value(std::string                    tag,
 // if not VXL_HAS_INT_64 isn't defined the vil_nitf2_long is the same as just plain 'int'
 // and this function will be a duplicate of that get_value
 bool
-vil_nitf2_tagged_record::get_value(std::string                    tag,
+vil_nitf2_tagged_record::get_value(std::string tag,
                                    const vil_nitf2_index_vector & indexes,
-                                   vil_nitf2_long &               out_value) const
+                                   vil_nitf2_long & out_value) const
 {
   return m_field_sequence->get_value(std::move(tag), indexes, out_value);
 }
@@ -292,7 +292,7 @@ vil_nitf2_tagged_record::vil_nitf2_tagged_record()
 bool
 vil_nitf2_tagged_record::test()
 {
-  bool         error = false;
+  bool error = false;
   const char * test_tre_tag = "@TEST@";
   // Example Tagged Record Extension definition
   vil_nitf2_tagged_record_definition::define(test_tre_tag, "Test Definition")
@@ -457,7 +457,7 @@ vil_nitf2_tagged_record::test()
     auto * vs2 = new vil_stream_core();
     record->write(*(vil_stream *)vs2);
     vil_streampos bufsize = vs2->file_size();
-    char *        buf = new char[(unsigned int)bufsize + 1];
+    char * buf = new char[(unsigned int)bufsize + 1];
     vs2->seek(0);
     vs2->read(buf, bufsize);
     buf[bufsize] = '\0';
@@ -510,7 +510,7 @@ vil_nitf2_tagged_record::test()
     // Fetch A[1,*]
     std::cerr << "Get values (partial index)...\n";
     vil_nitf2_index_vector indexes;
-    std::vector<int>       a_values;
+    std::vector<int> a_values;
     indexes.push_back(1);
     if (!record->get_values("A", indexes, a_values) || a_values.size() != 1 || a_values[0] != 2)
     {
@@ -582,7 +582,7 @@ vil_nitf2_tagged_record::write(vil_nitf2_ostream & output)
   // Check whether the std::right amount was written
   vil_streampos end = output.tell();
   vil_streampos length_written = end - start;
-  int           expected_length = s_tag_formatter().field_width + s_length_formatter().field_width + length();
+  int expected_length = s_tag_formatter().field_width + s_length_formatter().field_width + length();
   return length_written == expected_length;
 }
 

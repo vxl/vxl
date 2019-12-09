@@ -7,11 +7,11 @@
 class test_func1 : public vnl_sparse_lst_sqr_function
 {
 public:
-  test_func1(unsigned int                           num_a,
-             unsigned int                           num_b,
+  test_func1(unsigned int num_a,
+             unsigned int num_b,
              const std::vector<std::vector<bool>> & xmask,
-             UseGradient                            g = use_gradient,
-             UseWeights                             w = use_weights)
+             UseGradient g = use_gradient,
+             UseWeights w = use_weights)
     : vnl_sparse_lst_sqr_function(num_a, 2, num_b, 3, 2, xmask, 2, g, w)
   {}
 
@@ -21,7 +21,7 @@ public:
       vnl_vector<double> const & ai,
       vnl_vector<double> const & bj,
       vnl_vector<double> const & c,
-      vnl_vector<double> &       eij) override
+      vnl_vector<double> & eij) override
   {
     eij[0] = (ai[0] * ai[0] - bj[0] * ai[1]) * bj[2] * bj[2] * bj[2] + c[0] * ai[0];
     eij[1] = (ai[1] * ai[1] - bj[1] * ai[0]) * bj[2] * bj[2] * bj[2] + c[1] * ai[1];
@@ -33,7 +33,7 @@ public:
           vnl_vector<double> const & ai,
           vnl_vector<double> const & bj,
           vnl_vector<double> const & c,
-          vnl_matrix<double> &       Aij) override
+          vnl_matrix<double> & Aij) override
   {
     Aij[0][0] = 2.0 * ai[0] * bj[2] * bj[2] * bj[2] + c[0];
     Aij[0][1] = -bj[0] * bj[2] * bj[2] * bj[2];
@@ -88,7 +88,7 @@ public:
 static void
 test_sparse_lst_sqr_function()
 {
-  std::vector<bool>              null_row(4, false);
+  std::vector<bool> null_row(4, false);
   std::vector<std::vector<bool>> mask(3, null_row);
 
   //        |1 1 0 0|
@@ -180,7 +180,7 @@ test_sparse_lst_sqr_function()
   b[5] = 0.0;
   b[6] = -2.0;
 
-  vnl_vector<double>              f(my_func.index_e(my_func.number_of_e()));
+  vnl_vector<double> f(my_func.index_e(my_func.number_of_e()));
   std::vector<vnl_matrix<double>> A(my_func.number_of_e(), vnl_matrix<double>(2, 2, 0.0));
   std::vector<vnl_matrix<double>> B(my_func.number_of_e(), vnl_matrix<double>(2, 3, 0.0));
   std::vector<vnl_matrix<double>> C(my_func.number_of_e(), vnl_matrix<double>(2, 2, 0.0));
@@ -193,7 +193,7 @@ test_sparse_lst_sqr_function()
   my_func.compute_weights(a, b, c, f, weights);
 
   // apply weights
-  vnl_vector<double>              wf(f);
+  vnl_vector<double> wf(f);
   std::vector<vnl_matrix<double>> wA(A), wB(B), wC(C);
   my_func.apply_weights(weights, wf);
   my_func.apply_weights(weights, wA, wB, wC);

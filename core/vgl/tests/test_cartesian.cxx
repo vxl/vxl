@@ -170,7 +170,7 @@ test_vector_3d()
   TEST("orthogonal", orthogonal(v1, cross_product(v1, v)), true);
 
   vgl_vector_3d<double> tr[4];
-  double                check = 0.0;
+  double check = 0.0;
 
   // Orthogonal vectors test case 1
   vgl_vector_3d<double> n1(1.0, 0.0, 0.0);
@@ -266,7 +266,7 @@ test_vector_3d()
 static void
 test_point_2d()
 {
-  int               d[] = { 5, 5 };
+  int d[] = { 5, 5 };
   vgl_point_2d<int> p1(3, 7), p2(d), p3(-1, -8);
   std::cout << p3 << std::endl;
 
@@ -307,12 +307,12 @@ test_point_2d()
   r = cross_ratio(p1, p2, c, p3);
   TEST("cross_ratio", r, 1.5);
 
-  vgl_line_2d<double>  l1(3, 4, 5), l2(3, 2, 1);
+  vgl_line_2d<double> l1(3, 4, 5), l2(3, 2, 1);
   vgl_point_2d<double> pi(l1, l2); // intersection
   vgl_point_2d<double> pp(1, -2);
   TEST("intersection", pi, pp);
 
-  vgl_line_2d<int>  l3(1, 2, 3), l4(3, 2, 1);
+  vgl_line_2d<int> l3(1, 2, 3), l4(3, 2, 1);
   vgl_point_2d<int> pj(l3, l4); // intersection
   vgl_point_2d<int> pq(1, -2);
   TEST("intersection", pj, pq);
@@ -348,7 +348,7 @@ test_point_2d()
 static void
 test_point_3d()
 {
-  int               d[] = { 5, 5, 5 };
+  int d[] = { 5, 5, 5 };
   vgl_point_3d<int> p1(3, 7, -1), p2(d), p3(-1, -8, 7);
   std::cout << p3 << std::endl;
 
@@ -406,7 +406,7 @@ test_point_3d()
 static void
 test_line_2d()
 {
-  double              d[] = { 5, 5, -1 };
+  double d[] = { 5, 5, -1 };
   vgl_line_2d<double> l1(3, 7, 0), l2(d), l3(0, -1, -8);
   std::cout << l3 << std::endl;
 
@@ -571,7 +571,7 @@ test_line_2d()
                                         326.99996948242187),
        false);
 
-  vgl_box_2d<double>          bx(0, 2, 0, 3);
+  vgl_box_2d<double> bx(0, 2, 0, 3);
   vgl_line_segment_2d<double> ls3 = vgl_clip_line_to_box(li, bx);
   std::cout << ls3 << '\n';
   TEST("line segment equality", ls3, ls);
@@ -609,8 +609,8 @@ test_line_2d()
   TEST(
     "istream line_segment_2d", l_s, vgl_line_segment_2d<float>(vgl_point_2d<float>(4, 6), vgl_point_2d<float>(7, 9)));
 
-  std::stringstream           is1;
-  vgl_point_2d<double>        pf0(1.0, 2.0), pf1(3.0, 4.0);
+  std::stringstream is1;
+  vgl_point_2d<double> pf0(1.0, 2.0), pf1(3.0, 4.0);
   vgl_line_segment_2d<double> lf(pf0, pf1), lfr;
   is1 << lf;
   is1 >> lfr;
@@ -620,7 +620,7 @@ test_line_2d()
 static void
 test_line_3d()
 {
-  vgl_point_3d<double>        p1(1, 0, 0), p2(0, 1, 2);
+  vgl_point_3d<double> p1(1, 0, 0), p2(0, 1, 2);
   vgl_line_segment_3d<double> ls(p1, p2); // line segment through these two points
   TEST("line segment: point1()", ls.point1(), p1);
   TEST("line segment: point2()", ls.point2(), p2);
@@ -719,7 +719,7 @@ test_plane_3d()
   TEST("pt4 NOT on pl3", eqn34 == 0, false);
 
   // And some other planes:
-  double               d[] = { 0, 3, 4, 1 };
+  double d[] = { 0, 3, 4, 1 };
   vgl_plane_3d<double> plane1(3, 7, -1, 1), plane2(d), plane3(-1, -8, 7, 1);
   std::cout << plane3 << std::endl;
 
@@ -808,7 +808,7 @@ test_box_2d()
   TEST("max_point", b.max_point(), p12);
 
   vgl_point_2d<double> p4(0.5, 0.5), p5(2, 2);
-  vgl_box_2d<double>   b2(p4, p5);
+  vgl_box_2d<double> b2(p4, p5);
   TEST("box has volume 2.25", b2.volume(), 2.25);
   TEST("!contains(b2)", b.contains(b2), false);
   vgl_box_2d<double> b3(p5, p4);
@@ -1047,7 +1047,7 @@ test_box_3d()
   TEST("max_point", b.max_point(), p123);
 
   vgl_point_3d<double> p4(0.5, 0.5, 0.5), p5(2, 2, 2);
-  vgl_box_3d<double>   b2(p4, p5);
+  vgl_box_3d<double> b2(p4, p5);
   TEST("box has volume 3.375", b2.volume(), 3.375);
   TEST("!contains(b2)", b.contains(b2), false);
   vgl_box_3d<double> b3(p5, p4);
@@ -1205,7 +1205,7 @@ test_1d_basis()
 {
   std::cout << "  TEST OF PROJECTIVE BASIS WITH 1D POINTS\n";
 
-  float               p11 = 0.f, p12 = 1.f, p13 = 1e33f; // almost infinity ;-)
+  float p11 = 0.f, p12 = 1.f, p13 = 1e33f; // almost infinity ;-)
   vgl_1d_basis<float> b_1_p(p11, p12, p13);
   // The following is essentially just a mapping
   // from float to vgl_homg_point_1d<double> :
@@ -1220,7 +1220,7 @@ test_1d_basis()
 
   std::cout << "  TEST OF PROJECTIVE BASIS ON A 2D LINE\n";
 
-  vgl_point_2d<int>               p21(0, 1), p22(1, 3), p23(2, 5); // On the line 2x-y+1=0
+  vgl_point_2d<int> p21(0, 1), p22(1, 3), p23(2, 5); // On the line 2x-y+1=0
   vgl_1d_basis<vgl_point_2d<int>> b_2_p(p21, p22, p23);
   p = b_2_p.project(p21);
   TEST("origin", p, vgl_homg_point_1d<double>(0.0));
@@ -1233,7 +1233,7 @@ test_1d_basis()
 
   std::cout << "  TEST OF PROJECTIVE BASIS ON A 3D LINE\n";
 
-  vgl_point_3d<double>               p31(0, 1, 3), p32(1, 3, 2), p33(2, 5, 1); // On the line 2x-y+1=0,x+z=3
+  vgl_point_3d<double> p31(0, 1, 3), p32(1, 3, 2), p33(2, 5, 1); // On the line 2x-y+1=0,x+z=3
   vgl_1d_basis<vgl_point_3d<double>> b_3_p(p31, p32, p33);
   p = b_3_p.project(p31);
   TEST("origin", p, vgl_homg_point_1d<double>(0.0));
@@ -1246,7 +1246,7 @@ test_1d_basis()
 
   std::cout << "  TEST OF PROJECTIVE BASIS OF CONCURRENT 2D LINES\n";
 
-  vgl_line_2d<int>               l21(0, 1, 1), l22(1, 3, 1), l23(2, 5, 1); // Through the point (2,-1,1)
+  vgl_line_2d<int> l21(0, 1, 1), l22(1, 3, 1), l23(2, 5, 1); // Through the point (2,-1,1)
   vgl_1d_basis<vgl_line_2d<int>> b_2_l(l21, l22, l23);
   p = b_2_l.project(l21);
   TEST("origin", p, vgl_homg_point_1d<double>(0.0));

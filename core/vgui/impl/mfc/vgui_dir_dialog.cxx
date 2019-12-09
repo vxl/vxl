@@ -299,8 +299,8 @@ CDlgWnd::CheckDir(const CString & ss)
   pOld->SetWindowText(ss);
 
   // Save the current text/selection in the edit control
-  CString strSaved;   // Current text in edit box
-  int     start, end; // Current selection in edit box
+  CString strSaved; // Current text in edit box
+  int start, end;   // Current selection in edit box
   CEdit * pEdit = (CEdit *)GetDlgItem(IDC_DIR);
   ASSERT(pEdit != NULL);
   pEdit->GetWindowText(strSaved);
@@ -486,9 +486,9 @@ CDirEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
     else if (start == len && nChar != '\b')
     {
       // Try to do completion of the directory name
-      CFileFind ff;        // Used to find directory names that start with ss
-      int       count = 0; // Number of matching directory names
-      CString   strMatch;  // The last directory found that matches
+      CFileFind ff;     // Used to find directory names that start with ss
+      int count = 0;    // Number of matching directory names
+      CString strMatch; // The last directory found that matches
 
       BOOL bContinue = ff.FindFile(ss + "*");
 
@@ -648,8 +648,8 @@ vgui_dir_dialog::vgui_dir_dialog(LPCTSTR initial, LPCTSTR filter, CWnd * pParent
 void
 vgui_dir_dialog::OnInitDone()
 {
-  CRect  rct; // Used to move/resize controls
-  CWnd * pp;  // Parent = the dialog window itself
+  CRect rct; // Used to move/resize controls
+  CWnd * pp; // Parent = the dialog window itself
   VERIFY(pp = GetParent());
 
   ASSERT(pp->GetDlgItem(stc3) != NULL);

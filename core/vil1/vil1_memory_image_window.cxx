@@ -12,9 +12,9 @@
 #endif
 
 vil1_memory_image_window::vil1_memory_image_window(const vil1_memory_image_of<vxl_byte> & image,
-                                                   int                                    centre_x,
-                                                   int                                    centre_y,
-                                                   int                                    mask_size)
+                                                   int centre_x,
+                                                   int centre_y,
+                                                   int mask_size)
   : image1_(image)
 {
   init(centre_x, centre_y, mask_size);
@@ -52,9 +52,9 @@ labs(int x)
 // images.
 int
 vil1_memory_image_window::sum_abs_diff(const vil1_memory_image_of<vxl_byte> & image2,
-                                       int                                    centre2_x,
-                                       int                                    centre2_y,
-                                       int                                    early_exit_level)
+                                       int centre2_x,
+                                       int centre2_y,
+                                       int early_exit_level)
 {
   int mask2_col_index = centre2_x - mask_size_ / 2;
   int mask2_row_index = centre2_y - mask_size_ / 2;
@@ -104,9 +104,9 @@ vil1_memory_image_window::sum_abs_diff(const vil1_memory_image_of<vxl_byte> & im
 // images.
 int
 vil1_memory_image_window::sum_sqr_diff(const vil1_memory_image_of<vxl_byte> & image2,
-                                       int                                    centre2_x,
-                                       int                                    centre2_y,
-                                       int                                    early_exit_level)
+                                       int centre2_x,
+                                       int centre2_y,
+                                       int early_exit_level)
 {
   int mask2_col_index = centre2_x - mask_size_ / 2;
   int mask2_row_index = centre2_y - mask_size_ / 2;
@@ -153,10 +153,10 @@ vil1_memory_image_window::sum_sqr_diff(const vil1_memory_image_of<vxl_byte> & im
 
 int
 vil1_memory_image_window::normalised_sum_abs_diff(const vil1_memory_image_of<vxl_byte> & image2,
-                                                  int                                    centre2_x,
-                                                  int                                    centre2_y,
-                                                  double                                 normalise_ratio,
-                                                  int                                    early_exit_level)
+                                                  int centre2_x,
+                                                  int centre2_y,
+                                                  double normalise_ratio,
+                                                  int early_exit_level)
 {
   int mask2_col_index = centre2_x - mask_size_ / 2;
   int mask2_row_index = centre2_y - mask_size_ / 2;
@@ -179,8 +179,8 @@ vil1_memory_image_window::normalised_sum_abs_diff(const vil1_memory_image_of<vxl
 
 double
 vil1_memory_image_window::normalised_cross_correlation(const vil1_memory_image_of<vxl_byte> & image2,
-                                                       int                                    centre2_x,
-                                                       int                                    centre2_y)
+                                                       int centre2_x,
+                                                       int centre2_y)
 {
   // set mask size
   int n = (int)mask_size_ / 2;

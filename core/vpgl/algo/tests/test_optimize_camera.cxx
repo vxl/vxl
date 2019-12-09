@@ -16,13 +16,13 @@
 #include "vnl/vnl_math.h" // for pi
 
 void
-test_opt_orient_pos(vpgl_perspective_camera<double> const &        cam,
+test_opt_orient_pos(vpgl_perspective_camera<double> const & cam,
                     std::vector<vgl_homg_point_3d<double>> const & world,
-                    std::vector<vgl_point_2d<double>> const &      image,
-                    vnl_random &                                   rnd)
+                    std::vector<vgl_point_2d<double>> const & image,
+                    vnl_random & rnd)
 {
-  constexpr double max_t_err = 10.0;             // maximum translation error to introduce
-  const double     max_r_err = vnl_math::pi / 4; // maximum rotation error to introduce (radians)
+  constexpr double max_t_err = 10.0;         // maximum translation error to introduce
+  const double max_r_err = vnl_math::pi / 4; // maximum rotation error to introduce (radians)
 
   // select a random rotation axis
   vnl_double_3 dw = (vnl_double_3(rnd.drand32(), rnd.drand32(), rnd.drand32()) - 0.5).normalize();
@@ -35,9 +35,9 @@ test_opt_orient_pos(vpgl_perspective_camera<double> const &        cam,
   std::cout << "Initial position:" << cam.get_camera_center() << std::endl
             << "Initial principal ray:" << cam.principal_axis() << std::endl;
 
-  vgl_point_3d<double>                    c = cam.get_camera_center();
+  vgl_point_3d<double> c = cam.get_camera_center();
   const vpgl_calibration_matrix<double> & K = cam.get_calibration();
-  const vgl_rotation_3d<double> &         R = cam.get_rotation();
+  const vgl_rotation_3d<double> & R = cam.get_rotation();
 
   vgl_point_3d<double> new_center = c + max_t_err * dc;
   std::cout << "new center = " << new_center << std::endl;
@@ -63,10 +63,10 @@ test_opt_orient_pos(vpgl_perspective_camera<double> const &        cam,
 }
 
 void
-test_opt_orient_pos_f(vpgl_perspective_camera<double> const &        cam,
+test_opt_orient_pos_f(vpgl_perspective_camera<double> const & cam,
                       std::vector<vgl_homg_point_3d<double>> const & world,
-                      std::vector<vgl_point_2d<double>> const &      image,
-                      vnl_random &                                   rnd)
+                      std::vector<vgl_point_2d<double>> const & image,
+                      vnl_random & rnd)
 {
 
   constexpr double max_t_err = 0; // 10.0; // maximum translation error to introduce
@@ -84,9 +84,9 @@ test_opt_orient_pos_f(vpgl_perspective_camera<double> const &        cam,
             << "Initial principal ray:" << cam.principal_axis() << std::endl
             << "Initial focal length:" << cam.get_calibration().focal_length() << std::endl;
 
-  vgl_point_3d<double>                    c = cam.get_camera_center();
+  vgl_point_3d<double> c = cam.get_camera_center();
   const vpgl_calibration_matrix<double> & K = cam.get_calibration();
-  const vgl_rotation_3d<double> &         R = cam.get_rotation();
+  const vgl_rotation_3d<double> & R = cam.get_rotation();
 
   vgl_point_3d<double> new_center = c + max_t_err * dc;
   std::cout << "new center = " << new_center << std::endl;
@@ -123,7 +123,7 @@ test_optimize_camera()
   constexpr double max_p_err = 0.25; // maximum image error to introduce (pixels)
 
   std::vector<vgl_homg_point_3d<double>> world;
-  double                                 side_len = 1.0;
+  double side_len = 1.0;
   world.emplace_back(0.0, 0.0, 0.0);
   world.emplace_back(0.0, 0.0, side_len);
   world.emplace_back(0.0, side_len, 0.0);
@@ -134,7 +134,7 @@ test_optimize_camera()
   world.emplace_back(side_len, side_len, side_len);
 
   vpgl_calibration_matrix<double> K(2000.0, vgl_homg_point_2d<double>(512, 384));
-  vgl_homg_point_3d<double>       c(4.0, 4.0, 4.0);
+  vgl_homg_point_3d<double> c(4.0, 4.0, 4.0);
   vpgl_perspective_camera<double> cam(K, c, vgl_rotation_3d<double>());
   // look at the center of the cube
   cam.look_at(vgl_homg_point_3d<double>(side_len / 2, side_len / 2, side_len / 2));
@@ -146,7 +146,7 @@ test_optimize_camera()
   for (const auto & i : world)
   {
     vgl_homg_point_2d<double> hpt = cam(i);
-    vgl_vector_2d<double>     err(rnd.drand32() - 0.5, rnd.drand32() - 0.5);
+    vgl_vector_2d<double> err(rnd.drand32() - 0.5, rnd.drand32() - 0.5);
     err *= max_p_err;
     image.push_back(vgl_point_2d<double>(hpt.x() / hpt.w(), hpt.y() / hpt.w()) + err);
     std::cout << err << '\t' << vgl_point_2d<double>(hpt.x() / hpt.w(), hpt.y() / hpt.w()) << std::endl;

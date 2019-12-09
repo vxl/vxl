@@ -28,7 +28,7 @@ test_sphere()
 
   // l1 is the X-axis
   vgl_line_3d_2_points<double> l1(vgl_point_3d<double>(-2, 0, 0), vgl_point_3d<double>(2, 0, 0));
-  vgl_point_3d<double>         p1, p2;
+  vgl_point_3d<double> p1, p2;
   TEST("clip x-axis to empty sphere", s.clip(l1, p1, p2), false);
   TEST("clip x-axis to unit sphere", u.clip(l1, p1, p2), true);
   TEST("Intersection point 1", p1, vgl_point_3d<double>(-1, 0, 0));
@@ -44,7 +44,7 @@ test_sphere()
   std::cout << u << std::endl;
   std::ostringstream oss;
   oss << u.centre().x() << " " << u.centre().y() << " " << u.centre().z() << " " << u.radius();
-  std::istringstream    iss(oss.str());
+  std::istringstream iss(oss.str());
   vgl_sphere_3d<double> v;
   iss >> v;
   TEST("Basic i/o", u == v, true);

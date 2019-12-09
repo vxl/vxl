@@ -21,7 +21,7 @@
 bool
 vpgl_fm_compute_8_point::compute(const std::vector<vgl_homg_point_2d<double>> & pr,
                                  const std::vector<vgl_homg_point_2d<double>> & pl,
-                                 vpgl_fundamental_matrix<double> &              fm)
+                                 vpgl_fundamental_matrix<double> & fm)
 {
   // Check that there are at least 8 points.
   if (pr.size() < 8 || pl.size() < 8)
@@ -40,7 +40,7 @@ vpgl_fm_compute_8_point::compute(const std::vector<vgl_homg_point_2d<double>> & 
 
   // Condition if necessary.
   std::vector<vgl_homg_point_2d<double>> pr_norm, pl_norm;
-  vgl_norm_trans_2d<double>              prnt, plnt;
+  vgl_norm_trans_2d<double> prnt, plnt;
   if (precondition_)
   {
     prnt.compute_from_points(pr);
@@ -74,8 +74,8 @@ vpgl_fm_compute_8_point::compute(const std::vector<vgl_homg_point_2d<double>> & 
     S(i, 7) = pl_norm[i].w() * pr_norm[i].y();
     S(i, 8) = pl_norm[i].w() * pr_norm[i].w();
   }
-  vnl_svd<double>                svdS(S);
-  vnl_vector<double>             solution = svdS.nullvector();
+  vnl_svd<double> svdS(S);
+  vnl_vector<double> solution = svdS.nullvector();
   vnl_matrix_fixed<double, 3, 3> F_vnl{};
   F_vnl(0, 0) = solution(0);
   F_vnl(0, 1) = solution(1);

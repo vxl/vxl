@@ -83,13 +83,13 @@ int
 vnl_lsqr::aprod_(const long * mode,
                  const long * m,
                  const long * n,
-                 double *     x,
-                 double *     y,
+                 double * x,
+                 double * y,
                  long * /*leniw*/,
                  long * /*lenrw*/,
                  long * /*iw*/,
                  double * rw,
-                 void *   userdata)
+                 void * userdata)
 {
   //
   // THIS CODE IS DEPRECATED
@@ -123,8 +123,8 @@ vnl_lsqr::aprod_(const long * mode,
 int
 vnl_lsqr::minimize(vnl_vector<double> & result)
 {
-  long   m = ls_->get_number_of_residuals();
-  long   n = ls_->get_number_of_unknowns();
+  long m = ls_->get_number_of_residuals();
+  long n = ls_->get_number_of_unknowns();
   double damp = 0;
 
   // NOTE: rw is a scratch space used for both intermediate residual and unknown computations
@@ -136,7 +136,7 @@ vnl_lsqr::minimize(vnl_vector<double> & result)
   double btol = 0;
 #ifdef THIS_CODE_IS_DISABLED_BECAUSE_THE_LSQR_CODE_FROM_NETLIB_WAS_COPYRIGHTED_BY_ACM
   double conlim = 0;
-  long   nout = -1;
+  long nout = -1;
   double acond, rnorm, xnorm;
 #endif
   double anorm, arnorm;

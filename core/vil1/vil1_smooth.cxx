@@ -19,12 +19,12 @@ vil1_image
 vil1_smooth_gaussian(vil1_image const & in, double sigma)
 {
   // Create 1-D mask:
-  double              cutoff = 0.01;
-  double              lc = -2 * std::log(cutoff);                              // cutoff guaranteed > 0
-  int                 radius = (lc <= 0) ? 0 : 1 + int(std::sqrt(lc) * sigma); // sigma guaranteed >= 0
-  int                 size = 2 * radius + 1;
+  double cutoff = 0.01;
+  double lc = -2 * std::log(cutoff);                           // cutoff guaranteed > 0
+  int radius = (lc <= 0) ? 0 : 1 + int(std::sqrt(lc) * sigma); // sigma guaranteed >= 0
+  int size = 2 * radius + 1;
   std::vector<double> mask(size);
-  double              halfnorm = 0.0;
+  double halfnorm = 0.0;
   mask[radius] = 1.0;
   for (int x = 1; x <= radius; ++x)
   {

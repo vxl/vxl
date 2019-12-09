@@ -369,8 +369,8 @@ public:
       rmp = new vgui_range_map_params(*old_rmp);
 
     // use this array because vgui_dialog does not support long double fields
-    double      ranges[8];
-    int         choice = rmp->band_map_;
+    double ranges[8];
+    int choice = rmp->band_map_;
     vgui_dialog rmp_dialog("Set Range Mapping Parameters");
     if (nc_ == 1)
     {
@@ -436,7 +436,7 @@ public:
   }
 
   vgui_image_tableau_sptr tab_;
-  unsigned int            nc_;
+  unsigned int nc_;
 };
 
 //----------------------------------------------------------------------------

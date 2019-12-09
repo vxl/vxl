@@ -27,7 +27,7 @@
 
 
 vgui_adaptor * vgui_adaptor::current = nullptr;
-static int     adaptor_count = 0;
+static int adaptor_count = 0;
 
 //-----------------------------------------------------------------------------
 //: Constructor - create a default adaptor.
@@ -114,7 +114,7 @@ vgui_adaptor::config_dialog()
   static struct
   {
     vgui_modifier mod;
-    char const *  str;
+    char const * str;
   } mod_table[] = { { vgui_MODIFIER_NULL, "None" },
                     { vgui_CTRL, "Control" },
                     { vgui_SHIFT, "Shift" },
@@ -125,7 +125,7 @@ vgui_adaptor::config_dialog()
   // table stores the correspondence between vgui buttons and pretty names.
   static struct
   {
-    vgui_button  but;
+    vgui_button but;
     char const * str;
   } but_table[] = {
     { vgui_BUTTON_NULL, "None" }, { vgui_LEFT, "Left" }, { vgui_MIDDLE, "Middle" }, { vgui_RIGHT, "Right" }
@@ -134,12 +134,12 @@ vgui_adaptor::config_dialog()
 
   // get current bindings :
   vgui_modifier popup_modifier_;
-  vgui_button   popup_button_;
+  vgui_button popup_button_;
   get_popup_bindings(popup_modifier_, popup_button_);
 
   // make choice std::list, using the ordering in the table,
   // and set the initial value of the modifier index.
-  unsigned                 mod_index = 0;
+  unsigned mod_index = 0;
   std::vector<std::string> mod_labels;
   for (unsigned i = 0; i < num_mods; ++i)
   {
@@ -150,7 +150,7 @@ vgui_adaptor::config_dialog()
 
   // make choice std::list, using the ordering in the table,
   // and set the initial value of the button index.
-  unsigned                 but_index = 0;
+  unsigned but_index = 0;
   std::vector<std::string> but_labels;
   for (unsigned i = 0; i < num_buts; ++i)
   {
@@ -163,8 +163,8 @@ vgui_adaptor::config_dialog()
   std::cerr << "mod_index " << mod_index << std::endl << "button_index " << but_index << std::endl;
 #endif
 
-  bool        nested_popups_val = nested_popups;
-  bool        default_items_val = default_items;
+  bool nested_popups_val = nested_popups;
+  bool default_items_val = default_items;
   vgui_dialog mydialog("Adaptor Config");
   mydialog.choice("Popup modifier", mod_labels, mod_index);
   mydialog.choice("Popup button", but_labels, but_index);

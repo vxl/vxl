@@ -24,8 +24,8 @@ transpose_view(const vil_image_view<vxl_byte> & v)
 int
 main()
 {
-  unsigned                 ni = 9;
-  unsigned                 nj = 8;
+  unsigned ni = 9;
+  unsigned nj = 8;
   vil_image_view<vxl_byte> image(ni, nj);
 
   // Slow fill

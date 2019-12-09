@@ -32,7 +32,7 @@ main(int argc, char * argv[])
     return -1;
   }
   double a = std::stod(argv[1]);
-  int    n = std::stoi(argv[2]);
+  int n = std::stoi(argv[2]);
   while (n--)
   {
     double u = vnl_sample_uniform(0, 1);

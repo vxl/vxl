@@ -14,9 +14,9 @@
 int
 main()
 {
-  unsigned                 ni = 10;
-  unsigned                 nj = 10;
-  unsigned                 nplanes = 2;
+  unsigned ni = 10;
+  unsigned nj = 10;
+  unsigned nplanes = 2;
   vil_image_view<vxl_byte> image(ni, nj, nplanes);
 
   // Slow fill

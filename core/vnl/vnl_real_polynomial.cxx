@@ -38,10 +38,10 @@ vnl_real_polynomial_evaluate(double const * a, int n, T const & x)
 #  endif
 
 //: Instantiate templates before use
-template double               vnl_real_polynomial_evaluate
-                              SELECT(double)(double const *, int, double const &);
+template double vnl_real_polynomial_evaluate
+SELECT(double)(double const *, int, double const &);
 template std::complex<double> vnl_real_polynomial_evaluate
-                              SELECT(std::complex<double>)(double const *, int, std::complex<double> const &);
+SELECT(std::complex<double>)(double const *, int, std::complex<double> const &);
 
 //: Evaluate polynomial at value x
 double
@@ -78,11 +78,11 @@ vnl_real_polynomial::devaluate(std::complex<double> const & x) const
 double
 vnl_real_polynomial::evaluate_integral(double x) const
 {
-  int            d = coeffs_.size() - 1;
+  int d = coeffs_.size() - 1;
   const double * f = coeffs_.data_block();
-  double         sum = 0.0;
-  int            di = 1;
-  double         xi = x;
+  double sum = 0.0;
+  int di = 1;
+  double xi = x;
   for (int i = d; i >= 0; --i)
   {
     sum += f[i] * xi / di;
@@ -107,7 +107,7 @@ operator+(const vnl_real_polynomial & f1, const vnl_real_polynomial & f2)
   // Degree of result is highest of the two inputs
   const unsigned int d1 = f1.degree();
   const unsigned int d2 = f2.degree();
-  unsigned int       d = d1;
+  unsigned int d = d1;
   if (d2 > d)
     d = d2;
 
@@ -133,7 +133,7 @@ operator-(const vnl_real_polynomial & f1, const vnl_real_polynomial & f2)
   // Degree of result is highest of the two inputs
   const unsigned int d1 = f1.degree();
   const unsigned int d2 = f2.degree();
-  unsigned int       d = d1;
+  unsigned int d = d1;
   if (d2 > d)
     d = d2;
 
@@ -203,7 +203,7 @@ vnl_rms_difference(const vnl_real_polynomial & f1, const vnl_real_polynomial & f
 
   vnl_real_polynomial df = f2 - f1;
   vnl_real_polynomial df2 = df * df;
-  double              area = std::fabs(df2.evaluate_integral(x1, x2));
+  double area = std::fabs(df2.evaluate_integral(x1, x2));
   return std::sqrt(area / dx);
 }
 
@@ -211,7 +211,7 @@ vnl_rms_difference(const vnl_real_polynomial & f1, const vnl_real_polynomial & f
 vnl_real_polynomial
 vnl_real_polynomial::derivative() const
 {
-  int                d = degree();
+  int d = degree();
   vnl_vector<double> cd(d);
   for (int i = d - 1, di = 1; i >= 0; --i, ++di)
     cd[i] = coeffs_[i] * di;
@@ -223,7 +223,7 @@ vnl_real_polynomial::derivative() const
 vnl_real_polynomial
 vnl_real_polynomial::primitive() const
 {
-  int                d = coeffs_.size(); // degree+1
+  int d = coeffs_.size(); // degree+1
   vnl_vector<double> cd(d + 1);
   cd[d] = 0.0; // constant term
   for (int i = d - 1, di = 1; i >= 0; --i, ++di)
@@ -234,7 +234,7 @@ vnl_real_polynomial::primitive() const
 void
 vnl_real_polynomial::print(std::ostream & os) const
 {
-  int  d = degree();
+  int d = degree();
   bool first_coeff = true; // to avoid '+' in front of equation
 
   for (int i = 0; i <= d; ++i)

@@ -19,11 +19,11 @@ vil1_memory_image_impl::vil1_memory_image_impl(int planes, int w, int h, vil1_me
   init((void *)nullptr, planes, w, h, format.components, format.bits_per_component, format.component_format);
 }
 
-vil1_memory_image_impl::vil1_memory_image_impl(int                   planes,
-                                               int                   w,
-                                               int                   h,
-                                               int                   components,
-                                               int                   bits_per_component,
+vil1_memory_image_impl::vil1_memory_image_impl(int planes,
+                                               int w,
+                                               int h,
+                                               int components,
+                                               int bits_per_component,
                                                vil1_component_format component_format)
 {
   init((void *)nullptr, planes, w, h, components, bits_per_component, component_format);
@@ -34,10 +34,10 @@ vil1_memory_image_impl::vil1_memory_image_impl(int planes, int w, int h, vil1_pi
   init((void *)nullptr, planes, w, h, pixel_format);
 }
 
-vil1_memory_image_impl::vil1_memory_image_impl(int                   w,
-                                               int                   h,
-                                               int                   components,
-                                               int                   bits_per_component,
+vil1_memory_image_impl::vil1_memory_image_impl(int w,
+                                               int h,
+                                               int components,
+                                               int bits_per_component,
                                                vil1_component_format component_format)
 {
   init((void *)nullptr, 1, w, h, components, bits_per_component, component_format);
@@ -55,12 +55,12 @@ vil1_memory_image_impl::vil1_memory_image_impl(vil1_memory_image_impl const & i)
 }
 
 void
-vil1_memory_image_impl::init(void *                buf,
-                             int                   planes,
-                             int                   w,
-                             int                   h,
-                             int                   components,
-                             int                   bits_per_component,
+vil1_memory_image_impl::init(void * buf,
+                             int planes,
+                             int w,
+                             int h,
+                             int components,
+                             int bits_per_component,
                              vil1_component_format component_format)
 {
   is_foreign_buf_ = (buf != nullptr); // true if buf is non-nil
@@ -136,11 +136,11 @@ vil1_memory_image_impl::~vil1_memory_image_impl()
 
 
 void
-vil1_memory_image_impl::resize(int                   planes,
-                               int                   width,
-                               int                   height,
-                               int                   components,
-                               int                   bits_per_component,
+vil1_memory_image_impl::resize(int planes,
+                               int width,
+                               int height,
+                               int components,
+                               int bits_per_component,
                                vil1_component_format format)
 {
   components_ = components;
@@ -254,21 +254,21 @@ vil1_memory_image_impl::get_property(char const * tag, void * property_value) co
 // created prior to calling these functions.
 // Added by: Brendan McCane
 
-vil1_memory_image_impl::vil1_memory_image_impl(void *                           buf,
-                                               int                              planes,
-                                               int                              w,
-                                               int                              h,
+vil1_memory_image_impl::vil1_memory_image_impl(void * buf,
+                                               int planes,
+                                               int w,
+                                               int h,
                                                vil1_memory_image_format const & format)
 {
   init(buf, planes, w, h, format.components, format.bits_per_component, format.component_format);
 }
 
-vil1_memory_image_impl::vil1_memory_image_impl(void *                buf,
-                                               int                   planes,
-                                               int                   w,
-                                               int                   h,
-                                               int                   components,
-                                               int                   bits_per_component,
+vil1_memory_image_impl::vil1_memory_image_impl(void * buf,
+                                               int planes,
+                                               int w,
+                                               int h,
+                                               int components,
+                                               int bits_per_component,
                                                vil1_component_format component_format)
 {
   init(buf, planes, w, h, components, bits_per_component, component_format);
@@ -279,11 +279,11 @@ vil1_memory_image_impl::vil1_memory_image_impl(void * buf, int planes, int w, in
   init(buf, planes, w, h, pixel_format);
 }
 
-vil1_memory_image_impl::vil1_memory_image_impl(void *                buf,
-                                               int                   w,
-                                               int                   h,
-                                               int                   components,
-                                               int                   bits_per_component,
+vil1_memory_image_impl::vil1_memory_image_impl(void * buf,
+                                               int w,
+                                               int h,
+                                               int components,
+                                               int bits_per_component,
                                                vil1_component_format component_format)
 {
   init(buf, 1, w, h, components, bits_per_component, component_format);

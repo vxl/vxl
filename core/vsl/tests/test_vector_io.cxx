@@ -16,7 +16,7 @@ test_vector_io()
             << "Testing std::vector binary io\n"
             << "****************************\n";
 
-  int               n = 10;
+  int n = 10;
   std::vector<bool> v_bool_out(n);
   for (int i = 0; i < n; ++i)
     v_bool_out[i] = (i % 2 == 0);
@@ -38,9 +38,9 @@ test_vector_io()
   vsl_b_write(bfs_out, v_uchar_out);
   bfs_out.close();
 
-  std::vector<bool>          v_bool_in;
-  std::vector<int>           v_int_in;
-  std::vector<float>         v_float_in;
+  std::vector<bool> v_bool_in;
+  std::vector<int> v_int_in;
+  std::vector<float> v_float_in;
   std::vector<unsigned char> v_uchar_in;
 
   vsl_b_ifstream bfs_in("vsl_vector_io_test.bvl.tmp");
@@ -65,7 +65,7 @@ test_vector_io()
   vsl_print_summary(std::cout, v_uchar_in);
   std::cout << std::endl;
 
-  std::string    gold_path = testlib_root_dir() + "/core/vsl/tests/golden_vector_io_test.bvl";
+  std::string gold_path = testlib_root_dir() + "/core/vsl/tests/golden_vector_io_test.bvl";
   vsl_b_ifstream bfs_in2(gold_path.c_str());
 
   // If this test fails, it could be due to a missing golden file, or one

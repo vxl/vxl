@@ -28,8 +28,8 @@
 
 struct example_polygon_tableau : public vgui_tableau
 {
-  bool               boundary;
-  int                v;
+  bool boundary;
+  int v;
   std::vector<float> x;
   std::vector<float> y;
 
@@ -72,7 +72,7 @@ struct example_polygon_tableau : public vgui_tableau
         glEnd();
 
         // draw interior points
-        vgl_polygon<float>               p(&x[0], &y[0], n);
+        vgl_polygon<float> p(&x[0], &y[0], n);
         vgl_polygon_scan_iterator<float> si(p, boundary);
         si.reset();
         glColor3f(0, 1, 0); // green
@@ -95,7 +95,7 @@ struct example_polygon_tableau : public vgui_tableau
         if (v == -1)
           return false;
         vgui_projection_inspector pi;
-        float                     ix, iy;
+        float ix, iy;
         pi.window_to_image_coordinates(e.wx, e.wy, ix, iy);
         assert(0 <= v && v < (int)n);
         x[v] = ix;
@@ -109,10 +109,10 @@ struct example_polygon_tableau : public vgui_tableau
         if (v >= 0)
           return false;
         vgui_projection_inspector pi;
-        float                     ix, iy;
+        float ix, iy;
         pi.window_to_image_coordinates(e.wx, e.wy, ix, iy);
         double bd = 0;
-        int    bi = -1;
+        int bi = -1;
         for (unsigned int i = 0; i < n; ++i)
         {
           double d = hypot(ix - x[i], iy - y[i]);
@@ -145,10 +145,10 @@ main(int argc, char ** argv)
 {
   vgui::init(argc, argv);
   vul_arg<unsigned> n("-n", "number of vertices", 5);
-  vul_arg<bool>     b("-b", "include boundary vertices");
+  vul_arg<bool> b("-b", "include boundary vertices");
   vul_arg_parse(argc, argv);
 
-  vgui_tableau_sptr         tab = new example_polygon_tableau(n(), b());
+  vgui_tableau_sptr tab = new example_polygon_tableau(n(), b());
   vgui_viewer2D_tableau_new zoom(tab);
   return vgui::run(zoom, 512, 512);
 }

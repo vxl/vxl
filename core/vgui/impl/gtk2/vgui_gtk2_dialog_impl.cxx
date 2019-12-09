@@ -84,7 +84,7 @@ vgui_gtk2_dialog_impl::pushbutton_field_widget(const char * text, const void * f
 struct vgui_gtk2_dialog_impl_choice
 {
   std::vector<std::string> names;
-  int                      index;
+  int index;
 };
 
 //--------------------------------------------------------------------------------
@@ -150,7 +150,7 @@ extern "C"
   struct vgui_gtk2_dialog_impl_int_pair
   {
     int * val;
-    int   tmp;
+    int tmp;
   };
 
 
@@ -189,7 +189,7 @@ extern "C"
   struct file_ok_data
   {
     GtkFileSelection * filew;
-    GtkEntry *         file_entry;
+    GtkEntry * file_entry;
   };
 
   //--------------------------------------------------------------------------------
@@ -255,8 +255,8 @@ extern "C"
 
   struct cancel_color_data
   {
-    std::string *             orig_color;
-    GtkEntry *                color_entry;
+    std::string * orig_color;
+    GtkEntry * color_entry;
     GtkColorSelectionDialog * colord;
   };
 
@@ -350,7 +350,7 @@ vgui_gtk2_dialog_impl::ask()
   std::vector<GtkWidget *> delete_wlist;
 
   // true if there is "line_break" element in the dialog.
-  bool        has_line_break = false;
+  bool has_line_break = false;
   GtkWidget * current_hbox = 0;
 
   // traverse the dialog elements to see if there is a line_break.
@@ -370,7 +370,7 @@ vgui_gtk2_dialog_impl::ask()
   for (std::vector<element>::iterator e_iter = elements.begin(); e_iter != elements.end(); ++e_iter)
   {
 
-    element             l = *e_iter;
+    element l = *e_iter;
     vgui_dialog_field * field = l.field;
 
     GtkWidget * entry;
@@ -571,8 +571,8 @@ vgui_gtk2_dialog_impl::ask()
     else if (l.type == inline_tabl)
     {
       vgui_gtk2_adaptor * adapt = static_cast<vgui_gtk2_adaptor *>(l.widget);
-      GtkWidget *         widg = adapt->get_glarea_widget();
-      GtkWidget *         hbox = gtk_hbox_new(FALSE, 10);
+      GtkWidget * widg = adapt->get_glarea_widget();
+      GtkWidget * hbox = gtk_hbox_new(FALSE, 10);
 
       gtk_box_pack_start(GTK_BOX(hbox), widg, TRUE, TRUE, 0);
       if (has_line_break)
@@ -592,7 +592,7 @@ vgui_gtk2_dialog_impl::ask()
     else if (l.type == button_elem)
     {
       vgui_button_field * field = static_cast<vgui_button_field *>(l.field);
-      GtkWidget *         button = static_cast<GtkWidget *>(l.widget);
+      GtkWidget * button = static_cast<GtkWidget *>(l.widget);
       gtk_widget_show(button);
 
       // Connect the "clicked" signal to the callback function
@@ -660,12 +660,12 @@ vgui_gtk2_dialog_impl::ask()
       if (l.type == bool_elem)
       {
         vgui_bool_field * field = static_cast<vgui_bool_field *>(l.field);
-        GtkWidget *       input = *w_iter;
+        GtkWidget * input = *w_iter;
         field->var = (bool)gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(input));
       }
       if (l.type == choice_elem)
       {
-        vgui_int_field *               field = static_cast<vgui_int_field *>(l.field);
+        vgui_int_field * field = static_cast<vgui_int_field *>(l.field);
         vgui_gtk2_dialog_impl_choice * ch = static_cast<vgui_gtk2_dialog_impl_choice *>(l.widget);
         field->var = ch->index;
       }

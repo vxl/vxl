@@ -18,7 +18,7 @@ constexpr int H = 256;
 static void
 test_memory_image_of()
 {
-  std::string  tmp_nam = vul_temp_filename() + ".pgm";
+  std::string tmp_nam = vul_temp_filename() + ".pgm";
   char const * file_name_2 = tmp_nam != "" ? tmp_nam.c_str() : "vil1_test_memory_image_of.pgm";
   {
     std::cout << "unsigned char\n";
@@ -79,7 +79,7 @@ test_memory_image_of()
 
   {
     std::cout << "external_buffer\n";
-    unsigned char                       buf[] = { 1, 2, 3, 4, 5, 6 };
+    unsigned char buf[] = { 1, 2, 3, 4, 5, 6 };
     vil1_memory_image_of<unsigned char> image(buf, 3, 2);
 
     unsigned char & p = image(0, 0);

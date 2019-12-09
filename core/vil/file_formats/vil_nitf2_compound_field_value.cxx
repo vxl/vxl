@@ -81,9 +81,9 @@ vil_nitf2_date_time::write(std::ostream & output, int field_width) const
 bool
 vil_nitf2_date_time::read(std::istream & input, int field_width, bool & out_blank)
 {
-  bool        blank;
+  bool blank;
   std::string fieldStr;
-  bool        ok;
+  bool ok;
   ok = vil_nitf2_integer_formatter(4).read_vcl_stream(input, year, blank);
   out_blank = blank;
   ok &= vil_nitf2_integer_formatter(2).read_vcl_stream(input, month, blank);
@@ -149,8 +149,8 @@ vil_nitf2_location_degrees::output(std::ostream & os) const
 bool
 vil_nitf2_location_degrees::read(std::istream & input, int field_width, bool & out_blank)
 {
-  int  lat_width = (field_width - 1) / 2;
-  int  lon_width = (field_width + 1) / 2;
+  int lat_width = (field_width - 1) / 2;
+  int lon_width = (field_width + 1) / 2;
   bool ok, blank;
   ok = vil_nitf2_double_formatter(lat_width, precision, true).read_vcl_stream(input, lat_degrees, blank);
   out_blank = blank;

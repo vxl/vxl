@@ -25,9 +25,9 @@ test_sample_grid_bilin_byte()
     for (unsigned int i = 0; i < image0.ni(); ++i)
       image0(i, j) = vxl_byte(i + j * 10);
 
-  double              x0 = 5.0, y0 = 5.0;
-  double              dx1 = 1.0, dy1 = 0.0;
-  double              dx2 = 0.0, dy2 = 1.0;
+  double x0 = 5.0, y0 = 5.0;
+  double dx1 = 1.0, dy1 = 0.0;
+  double dx2 = 0.0, dy2 = 1.0;
   std::vector<double> vec(12);
 
   std::cout << "Fully in image\n";

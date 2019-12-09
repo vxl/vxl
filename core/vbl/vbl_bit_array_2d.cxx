@@ -51,8 +51,8 @@ vbl_bit_array_2d::enlarge(unsigned int num_rows, unsigned int num_cols)
   assert(num_rows >= num_rows_ && num_cols >= num_cols_);
 
   unsigned char * tempdata = data_;
-  unsigned int    tempm = num_rows_;
-  unsigned int    tempn = num_cols_;
+  unsigned int tempm = num_rows_;
+  unsigned int tempn = num_cols_;
 
   construct(num_rows, num_cols);
   fill(false); // fill with zeros
@@ -63,7 +63,7 @@ vbl_bit_array_2d::enlarge(unsigned int num_rows, unsigned int num_cols)
     {
       // find start of new column
       unsigned long byteindex;
-      unsigned int  bitindex;
+      unsigned int bitindex;
       index(i, 0, byteindex, bitindex);
 
       // find start of old column
@@ -127,7 +127,7 @@ bool
 vbl_bit_array_2d::operator()(unsigned int i, unsigned int j) const
 {
   unsigned long byteindex;
-  unsigned int  bitindex;
+  unsigned int bitindex;
   index(i, j, byteindex, bitindex);
 
   auto mask = (unsigned char)(1 << bitindex);
@@ -139,7 +139,7 @@ bool
 vbl_bit_array_2d::operator()(unsigned int i, unsigned int j)
 {
   unsigned long byteindex;
-  unsigned int  bitindex;
+  unsigned int bitindex;
   index(i, j, byteindex, bitindex);
 
   auto mask = (unsigned char)(1 << bitindex);
@@ -151,7 +151,7 @@ void
 vbl_bit_array_2d::put(unsigned int i, unsigned int j, bool const & x)
 {
   unsigned long byteindex;
-  unsigned int  bitindex;
+  unsigned int bitindex;
 
   index(i, j, byteindex, bitindex);
 

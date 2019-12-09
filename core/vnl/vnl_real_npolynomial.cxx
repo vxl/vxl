@@ -116,7 +116,7 @@ vnl_real_npolynomial::deval(const vnl_vector<double> & x)
 vnl_real_npolynomial
 vnl_real_npolynomial::deriv(unsigned int unk)
 {
-  vnl_vector<double>       c(nterms_);
+  vnl_vector<double> c(nterms_);
   vnl_matrix<unsigned int> p = polyn_;
 
   for (unsigned int i = 0; i < nterms_; i++)
@@ -192,7 +192,7 @@ vnl_real_npolynomial::operator+(vnl_real_npolynomial const & P) const
   assert(nvar_ == P.nvar_); // both polynomials must have the same variables
 
   vnl_vector<double> coef(nterms_ + P.nterms_);
-  unsigned int       i = 0;
+  unsigned int i = 0;
   for (; i < nterms_; ++i)
     coef(i) = coeffs_(i);
   for (unsigned int j = 0; j < P.nterms_; ++i, ++j)
@@ -233,7 +233,7 @@ vnl_real_npolynomial::operator-(vnl_real_npolynomial const & P) const
   assert(nvar_ == P.nvar_); // both polynomials must have the same variables
 
   vnl_vector<double> coef(nterms_ + P.nterms_);
-  unsigned int       i = 0;
+  unsigned int i = 0;
   for (; i < nterms_; ++i)
     coef(i) = coeffs_(i);
   for (unsigned int j = 0; j < P.nterms_; ++i, ++j)
@@ -255,7 +255,7 @@ vnl_real_npolynomial vnl_real_npolynomial::operator*(vnl_real_npolynomial const 
   assert(nvar_ == P.nvar_); // both polynomials must have the same variables
 
   vnl_vector<double> coef(nterms_ * P.nterms_);
-  unsigned int       k = 0;
+  unsigned int k = 0;
   for (unsigned int i = 0; i < nterms_; ++i)
     for (unsigned int j = 0; j < P.nterms_; ++j, ++k)
       coef(k) = coeffs_(i) * P.coeffs_(j);

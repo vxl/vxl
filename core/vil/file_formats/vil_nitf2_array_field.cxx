@@ -114,7 +114,7 @@ vil_nitf2_array_field::get_value_string(const vil_nitf2_index_vector & in_indice
 
 void
 vil_nitf2_array_field::do_dimension(const vil_nitf2_index_vector & in_indices,
-                                    vil_nitf2_field::field_tree *  inTree) const
+                                    vil_nitf2_field::field_tree * inTree) const
 {
   int dim = next_dimension(in_indices);
   for (int i = 0; i < dim; i++)
@@ -123,7 +123,7 @@ vil_nitf2_array_field::do_dimension(const vil_nitf2_index_vector & in_indices,
     vil_nitf2_index_vector curr_indices = in_indices;
     curr_indices.push_back(i);
     // create our tree node and add it to inTree's child list
-    auto *      tr = new vil_nitf2_field::field_tree;
+    auto * tr = new vil_nitf2_field::field_tree;
     std::string tag_str = tag();
     std::string index_str = index_string(curr_indices);
     std::string p_name;

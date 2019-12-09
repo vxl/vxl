@@ -15,8 +15,8 @@ test_line_segment_3d_double_io()
             << "Testing vgl_line_segment_3d<double> io\n"
             << "**************************************\n";
 
-  vgl_point_3d<double>        end0(1.2, 3.4, 5.6);
-  vgl_point_3d<double>        end1(5.6, 7.8, 8.9);
+  vgl_point_3d<double> end0(1.2, 3.4, 5.6);
+  vgl_point_3d<double> end1(5.6, 7.8, 8.9);
   vgl_line_segment_3d<double> p_out(end0, end1), p_in;
 
   vsl_b_ofstream bfs_out("vgl_line_segment_3d_test_double_io.bvl.tmp");

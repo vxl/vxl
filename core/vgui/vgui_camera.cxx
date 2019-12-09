@@ -49,7 +49,7 @@ vgui_camera::get_glprojmatrix(int imagesizex, int imagesizey) const
   Pinit(2, 3) = 0;
 
   vnl_matrix_fixed<double, 3, 4> P = C * Pinit;
-  vnl_vector_fixed<double, 4>    ABC = pmatrix.get_row(2);
+  vnl_vector_fixed<double, 4> ABC = pmatrix.get_row(2);
 
   // this currently sets the back clipping plane to pass through
   //   point [1 0 -0.5] for no real reason... just that it seems

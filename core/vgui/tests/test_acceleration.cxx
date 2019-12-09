@@ -29,8 +29,8 @@ void
 pattern_RGB16(unsigned char * data)
 {
   unsigned short * my_data = (unsigned short *)data;
-  unsigned short   r = 0xf800;
-  unsigned short   g = 0x07e0;
+  unsigned short r = 0xf800;
+  unsigned short g = 0x07e0;
 #if 0
   unsigned short b = 0x001f;
 
@@ -67,7 +67,7 @@ pattern_RGB24(unsigned char * data)
 void
 pattern_RGB32(unsigned char * data, bool little_endian)
 {
-  unsigned long   r, g, b;
+  unsigned long r, g, b;
   unsigned long * my_data = (unsigned long *)data;
   if (little_endian)
   {
@@ -103,9 +103,9 @@ main()
   // GLX window code straight out of
   // http://www.eecs.tulane.edu/www/graphics/doc/OpenGL-Man-Pages/glXIntro.html
   std::cerr << "Opening double-buffered, RGBA GLX context...\n\n";
-  Display *     display = XOpenDisplay(0);
+  Display * display = XOpenDisplay(0);
   XVisualInfo * visualinfo = glXChooseVisual(display, DefaultScreen(display), attribs);
-  GLXContext    context = glXCreateContext(display, visualinfo, 0, GL_TRUE);
+  GLXContext context = glXCreateContext(display, visualinfo, 0, GL_TRUE);
 
   Colormap cmap = XCreateColormap(display, RootWindow(display, visualinfo->screen), visualinfo->visual, AllocNone);
 
@@ -182,8 +182,8 @@ main()
   if (false)
   {
     std::cerr << "\nvgui_glClear - ";
-    int       draws = 0;
-    int       elapsed;
+    int draws = 0;
+    int elapsed;
     vul_timer timer;
     do
     {
@@ -197,8 +197,8 @@ main()
   if (false)
   {
     std::cerr << "\nglClear - ";
-    int       draws = 0;
-    int       elapsed;
+    int draws = 0;
+    int elapsed;
     vul_timer timer;
     do
     {
@@ -212,8 +212,8 @@ main()
   if (true)
   {
     std::cerr << "\nUsing default (RGBA) format with glDrawPixels - ";
-    int       draws = 0;
-    int       elapsed;
+    int draws = 0;
+    int elapsed;
     vul_timer timer;
     do
     {
@@ -226,8 +226,8 @@ main()
   if (true)
   {
     std::cerr << "\nUsing recommended format with glDrawPixels - ";
-    int       draws = 0;
-    int       elapsed;
+    int draws = 0;
+    int elapsed;
     vul_timer timer;
     do
     {
@@ -240,8 +240,8 @@ main()
   if (true)
   {
     std::cerr << "\nUsing recommended format with vgui_accelerate::instance()->vgui_glDrawPixels - ";
-    int       draws = 0;
-    int       elapsed;
+    int draws = 0;
+    int elapsed;
     vul_timer timer;
     do
     {

@@ -135,12 +135,12 @@ vgui_enhance_tableau::handle(const vgui_event & e)
     if (enhancing_)
     {
       // get original offsets and scales
-      vgui_matrix_state              ms;
+      vgui_matrix_state ms;
       vnl_matrix_fixed<double, 4, 4> M = ms.modelview_matrix();
-      float                          sx = (float)M(0, 0);
-      float                          sy = (float)M(0, 0);
-      float                          ox = (float)M(0, 3);
-      float                          oy = (float)M(1, 3);
+      float sx = (float)M(0, 0);
+      float sy = (float)M(0, 0);
+      float ox = (float)M(0, 3);
+      float oy = (float)M(1, 3);
 
       glEnable(GL_SCISSOR_TEST);
       int size_2 = size + size;

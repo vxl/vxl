@@ -44,7 +44,7 @@ double_test()
   double b_data[] = { 68, 39, 39, 50 };
 
   vnl_vector<double> b(b_data, 4);
-  vnl_qr<double>     qr(A);
+  vnl_qr<double> qr(A);
 
   vnl_matlab_print(std::cout, qr.Q(), "Q");
   vnl_matlab_print(std::cout, qr.R(), "R");
@@ -94,8 +94,8 @@ void
 new_test(T *)
 {
   vnl_random rng(1000);
-  unsigned   m = 5; // m must be >= n when using the netlib QR algorithms,
-  unsigned   n = 5; // but n >= m for a random A and b to have exact solution.
+  unsigned m = 5; // m must be >= n when using the netlib QR algorithms,
+  unsigned n = 5; // but n >= m for a random A and b to have exact solution.
 
   vnl_matrix<T> A(m, n);
   test_util_fill_random(A.begin(), A.end(), rng);
@@ -105,10 +105,10 @@ new_test(T *)
   test_util_fill_random(b.begin(), b.end(), rng);
   vnl_matlab_print(std::cout, b, "b");
 
-  vnl_qr<T>             qr(A);
+  vnl_qr<T> qr(A);
   vnl_matrix<T> const & Q = qr.Q();
   vnl_matrix<T> const & R = qr.R();
-  vnl_vector<T>         x = qr.solve(b);
+  vnl_vector<T> x = qr.solve(b);
 
   vnl_matlab_print(std::cout, Q, "Q");
   vnl_matlab_print(std::cout, R, "R");

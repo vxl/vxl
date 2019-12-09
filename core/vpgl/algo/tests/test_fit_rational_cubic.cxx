@@ -70,11 +70,11 @@ power_vector(double x, double y, double z)
 }
 
 static void
-project(const double                         x,
-        const double                         y,
-        const double                         z,
-        double &                             u,
-        double &                             v,
+project(const double x,
+        const double y,
+        const double z,
+        double & u,
+        double & v,
         vnl_vector_fixed<double, 20> const & neu_u,
         vnl_vector_fixed<double, 20> const & den_u,
         vnl_vector_fixed<double, 20> const & neu_v,
@@ -138,12 +138,12 @@ test_fit_rational_cubic()
 
   std::vector<vgl_point_2d<double>> image_pts;
   std::vector<vgl_point_3d<double>> ground_pts;
-  size_t                            n_points = 1000;
+  size_t n_points = 1000;
   for (unsigned i = 0; i < n_points; i++)
   {
-    double               x = 2.0 * rng.drand64() - 1.0;
-    double               y = 2.0 * rng.drand64() - 1.0;
-    double               z = 2.0 * rng.drand64() - 1.0;
+    double x = 2.0 * rng.drand64() - 1.0;
+    double y = 2.0 * rng.drand64() - 1.0;
+    double z = 2.0 * rng.drand64() - 1.0;
     vgl_point_3d<double> p3d(x, y, z);
     ground_pts.push_back(p3d);
     double u, v;
@@ -165,7 +165,7 @@ test_fit_rational_cubic()
   std::cout << "initial rms error " << frc.initial_rms_error() << std::endl;
   frc.fit();
   std::cout << "final rms error " << frc.final_rms_error() << std::endl;
-  bool                             good = frc.final_rms_error() < 1.0e-6;
+  bool good = frc.final_rms_error() < 1.0e-6;
   std::vector<std::vector<double>> result = frc.rational_coeffs();
   TEST("fit test rpc", good, true);
 
@@ -262,9 +262,9 @@ test_fit_rational_cubic()
   ground_pts.clear();
   for (unsigned i = 0; i < n_points; i++)
   {
-    double               x = 2.0 * rng.drand64() - 1.0;
-    double               y = 2.0 * rng.drand64() - 1.0;
-    double               z = 2.0 * rng.drand64() - 1.0;
+    double x = 2.0 * rng.drand64() - 1.0;
+    double y = 2.0 * rng.drand64() - 1.0;
+    double z = 2.0 * rng.drand64() - 1.0;
     vgl_point_3d<double> p3d(x, y, z);
     ground_pts.push_back(p3d);
     double u, v;

@@ -142,7 +142,7 @@ front_back_wibbler::handle(const vgui_event & e)
                 << "   extensions : " << glGetString(GL_EXTENSIONS) << std::endl;
       {
         GLboolean bool_v;
-        GLint     int_v;
+        GLint int_v;
 
         glGetIntegerv(GL_AUX_BUFFERS, &int_v);
         std::cerr << "   " << int_v << " aux buffers\n";

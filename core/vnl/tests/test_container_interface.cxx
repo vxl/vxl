@@ -92,9 +92,9 @@ test_common_interface()
   ///////////////////////////////////////////////
   {
     typename TContainer::element_type data[4] = { 1, 2, 3, 4 };
-    unsigned int                      indices[2] = { 1, 0 };
-    vnl_vector<unsigned int>          i(indices, 2);
-    TContainer                        matrix(2, 2);
+    unsigned int indices[2] = { 1, 0 };
+    vnl_vector<unsigned int> i(indices, 2);
+    TContainer matrix(2, 2);
     matrix.copy_in(data);
 #if !defined(_MSC_VER) // This code is failing on VS15 in Release mode for vnl_matrix_fixed
     // Removing temporarily so that this new test does not hold up other works.
@@ -129,13 +129,13 @@ test_common_interface()
 
   {
     const typename TContainer::element_type data1[4] = { 0, 1, 2, 3 };
-    TContainer                              l(2, 2);
+    TContainer l(2, 2);
     l.copy_in(data1);
     TContainer l_swap(l);
     TContainer l_std_swap(l);
 
     const typename TContainer::element_type data2[4] = { 4, 5, 6, 7 };
-    TContainer                              r(2, 2);
+    TContainer r(2, 2);
     r.copy_in(data2);
     TContainer r_swap(r);
     TContainer r_std_swap(r);

@@ -38,8 +38,8 @@ template <class T>
 void
 distance_squared(const std::vector<vnl_vector<T>> & s1,
                  const std::vector<vnl_vector<T>> & s2,
-                 std::vector<T> &                   d,
-                 int                                n_loops)
+                 std::vector<T> & d,
+                 int n_loops)
 {
   vnl_vector<double> stats(nstests);
   for (unsigned st = 0; st < nstests; ++st)
@@ -62,8 +62,8 @@ template <class T>
 void
 dot_product(const std::vector<vnl_vector<T>> & s1,
             const std::vector<vnl_vector<T>> & s2,
-            std::vector<T> &                   d,
-            int                                n_loops)
+            std::vector<T> & d,
+            int n_loops)
 {
   vnl_vector<double> stats(nstests);
   for (unsigned st = 0; st < nstests; ++st)
@@ -129,12 +129,12 @@ void
 print_pointers(const std::vector<vnl_vector<T>> & va,
                const std::vector<vnl_vector<T>> & vb,
                const std::vector<vnl_vector<T>> & vc,
-               const std::vector<T> &             na,
-               const vnl_matrix<T> &              ma,
-               const std::string &                file)
+               const std::vector<T> & na,
+               const vnl_matrix<T> & ma,
+               const std::string & file)
 {
 #ifdef DEBUG
-  unsigned      i;
+  unsigned i;
   std::ofstream os(file.c_str());
   os << "Data values\n"
      << "\nva:" << &va.front() << ' ' << &va.back() << '\n';
@@ -176,10 +176,10 @@ template <class T>
 void
 run_for_size(unsigned m, unsigned n, T /*dummy*/, const char * type, const char * size, vnl_random & rng)
 {
-  constexpr unsigned         n_data = 10;
+  constexpr unsigned n_data = 10;
   std::vector<vnl_vector<T>> x(n_data), y(n_data), z(n_data);
-  std::vector<T>             v(n_data);
-  vnl_matrix<T>              A(m, n);
+  std::vector<T> v(n_data);
+  vnl_matrix<T> A(m, n);
 
   for (unsigned k = 0; k < n_data; ++k)
   {

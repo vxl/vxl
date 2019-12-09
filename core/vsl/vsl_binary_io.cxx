@@ -18,9 +18,9 @@ template <typename TYPE>
 void
 local_vsl_b_write(vsl_b_ostream & os, const TYPE n)
 {
-  const size_t  MAX_INT_BUFFER_LENGTH = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(TYPE));
+  const size_t MAX_INT_BUFFER_LENGTH = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(TYPE));
   unsigned char buf[MAX_INT_BUFFER_LENGTH] = { 0 };
-  const auto    nbytes = (std::size_t)vsl_convert_to_arbitrary_length(&n, buf);
+  const auto nbytes = (std::size_t)vsl_convert_to_arbitrary_length(&n, buf);
   os.os().write((char *)buf, nbytes);
 }
 
@@ -28,8 +28,8 @@ template <typename TYPE>
 void
 local_vsl_b_read(vsl_b_istream & is, TYPE & n)
 {
-  const size_t    MAX_INT_BUFFER_LENGTH = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(TYPE));
-  unsigned char   buf[MAX_INT_BUFFER_LENGTH] = { 0 };
+  const size_t MAX_INT_BUFFER_LENGTH = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(TYPE));
+  unsigned char buf[MAX_INT_BUFFER_LENGTH] = { 0 };
   unsigned char * ptr = buf;
   do
   {
@@ -128,7 +128,7 @@ vsl_b_write(vsl_b_ostream & os, const std::string & str)
 void
 vsl_b_read(vsl_b_istream & is, std::string & str)
 {
-  std::string::iterator  it;
+  std::string::iterator it;
   std::string::size_type length;
 
   vsl_b_read(is, length);

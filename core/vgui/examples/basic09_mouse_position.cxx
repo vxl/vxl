@@ -58,7 +58,7 @@ main(int argc, char ** argv)
   vgui_tableau_sptr my_tab = example_tableau_new(argv[1]);
 
   vgui_viewer2D_tableau_new viewer(my_tab);
-  vgui_shell_tableau_new    shell(viewer);
+  vgui_shell_tableau_new shell(viewer);
 
   // Start event loop, using easy method.
   return vgui::run(shell, 512, 512);

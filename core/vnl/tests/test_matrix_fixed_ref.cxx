@@ -10,9 +10,9 @@ test_matrix_fixed_ref()
 
   // Test conversion behaviors in the presence of move constructors/move assignments
   {
-    constexpr double               bulk_data_array[4]{ 1.0, 2.0, 3.0, 4.0 };
+    constexpr double bulk_data_array[4]{ 1.0, 2.0, 3.0, 4.0 };
     vnl_matrix_fixed<double, 2, 2> initial_fixed_size_matrix(bulk_data_array);
-    vnl_matrix_ref<double>         ref_to_data{ initial_fixed_size_matrix.as_ref() };
+    vnl_matrix_ref<double> ref_to_data{ initial_fixed_size_matrix.as_ref() };
 
     TEST("vnl_matrix_ref{ vnl_matrix_fixed } share data pointer",
          initial_fixed_size_matrix.data_block() == ref_to_data.data_block(),
@@ -40,12 +40,12 @@ test_matrix_fixed_ref()
   {
     cols = 4
   };
-  typedef vnl_matrix_fixed<double, rows, cols>           mf;
-  typedef vnl_matrix_fixed_ref<double, rows, cols>       mfr;
+  typedef vnl_matrix_fixed<double, rows, cols> mf;
+  typedef vnl_matrix_fixed_ref<double, rows, cols> mfr;
   typedef vnl_matrix_fixed_ref_const<double, rows, cols> mfrc;
 
   unsigned int i, j;
-  mf           mat; // copy in
+  mf mat; // copy in
   for (i = 0; i < rows; ++i)
     for (j = 0; j < cols; ++j)
       mat(i, j) = 10 * i + j;
@@ -55,7 +55,7 @@ test_matrix_fixed_ref()
 
   // fixed_ref_const
   const mf & cmf = mat;
-  mfrc       cref(cmf);
+  mfrc cref(cmf);
   // check address
   for (i = 0; i < rows; ++i)
   {
@@ -139,10 +139,10 @@ test_matrix_fixed_ref()
     std::generate(a.begin(), a.end(), std::rand);
     std::generate(b.begin(), b.end(), std::rand);
     mfrc arefc(a), brefc(b);
-    mf   mc = arefc + brefc;
+    mf mc = arefc + brefc;
 
     mfr aref(a), bref(b);
-    mf  m = aref + bref;
+    mf m = aref + bref;
 
     mf m2 = arefc + bref;
     mf m3 = arefc + brefc;
@@ -156,10 +156,10 @@ test_matrix_fixed_ref()
     std::generate(a.begin(), a.end(), std::rand);
     std::generate(b.begin(), b.end(), std::rand);
     mfrc arefc(a), brefc(b);
-    mf   mc = arefc + brefc;
+    mf mc = arefc + brefc;
 
     mfr aref(a), bref(b);
-    mf  m = aref + bref;
+    mf m = aref + bref;
 
     mf m2 = arefc + bref;
     mf m3 = arefc + brefc;

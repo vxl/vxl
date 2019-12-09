@@ -58,7 +58,7 @@ test_operators()
 static void
 test_vector()
 {
-  vnl_random                       rng(9667566);
+  vnl_random rng(9667566);
   vnl_vector<std::complex<double>> a(5);
   fill_rand(a.begin(), a.end(), rng);
   vnl_vector<std::complex<double>> b(5);
@@ -90,8 +90,8 @@ test_cosine()
   vnl_random rng(1234567);
   for (int i = 0; i < 20; ++i)
   {
-    double               u = rng.drand32(vnl_math::pi_over_2);
-    double               v = rng.drand32(2.0);
+    double u = rng.drand32(vnl_math::pi_over_2);
+    double v = rng.drand32(2.0);
     std::complex<double> c(u, v);
     std::complex<double> d = std::cos(c);
     std::complex<double> e = tc_acos(d);

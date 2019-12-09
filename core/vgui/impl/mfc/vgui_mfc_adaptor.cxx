@@ -342,7 +342,7 @@ vgui_mfc_adaptor::create_bitmap(int cx, int cy, CDC *& pDC, HBITMAP & defaultBit
     pDC->CreateCompatibleDC(NULL);
   }
 
-  void *  buffer;
+  void * buffer;
   HBITMAP hbmp = CreateDIBSection(pDC->GetSafeHdc(), (BITMAPINFO *)&bih, DIB_RGB_COLORS, &buffer, NULL, 0);
   if (!hbmp)
   {
@@ -454,7 +454,7 @@ vgui_mfc_adaptor::service_redraws()
         return;
     }
     CDC * win_dc = wnd->GetDC();
-    RECT  r;
+    RECT r;
     wnd->GetClientRect(&r);
     win_dc->BitBlt(0, 0, r.right, r.bottom, m_pDC, 0, 0, SRCCOPY);
     wnd->ReleaseDC(win_dc);
@@ -598,7 +598,7 @@ mfc_key(UINT nChar, UINT nFlags, int * the_key, int * the_ascii_char)
   else
   {
     unsigned short buf[1024];
-    unsigned char  lpKeyState[256];
+    unsigned char lpKeyState[256];
     std::memset(lpKeyState, 0, 256);
     std::memset(buf, 0, 256);
 

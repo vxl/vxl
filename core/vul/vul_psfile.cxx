@@ -23,7 +23,7 @@
 #define Hex4bit(a) ((char)(((a) <= 9) ? ((a) + '0') : ((a)-10 + 'a')))
 
 static const float PIX2INCH = 72.0f;
-static bool        debug = true;
+static bool debug = true;
 
 // sizes of pages in inches
 static double paper_size[8][2] = {

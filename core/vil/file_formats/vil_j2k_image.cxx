@@ -135,10 +135,10 @@ vil_j2k_file_format::make_input_image(vil_stream * vs)
 
 
 vil_image_resource_sptr
-vil_j2k_file_format::make_output_image(vil_stream *          vs,
-                                       unsigned              ni,
-                                       unsigned              nj,
-                                       unsigned              nplanes,
+vil_j2k_file_format::make_output_image(vil_stream * vs,
+                                       unsigned ni,
+                                       unsigned nj,
+                                       unsigned nplanes,
                                        enum vil_pixel_format format)
 {
   vil_j2k_image * j2k_img = new vil_j2k_image(vs, ni, nj, nplanes, format, compression_ratio_);
@@ -265,12 +265,12 @@ vil_j2k_image::vil_j2k_image(vil_stream * is)
   }
 }
 
-vil_j2k_image::vil_j2k_image(vil_stream *          vs,
-                             unsigned              ni,
-                             unsigned              nj,
-                             unsigned              nplanes,
+vil_j2k_image::vil_j2k_image(vil_stream * vs,
+                             unsigned ni,
+                             unsigned nj,
+                             unsigned nplanes,
                              enum vil_pixel_format format,
-                             unsigned              compression_ratio)
+                             unsigned compression_ratio)
   : vil_image_resource()
   , mFileResource(new CNCSFile())
   , mStr(new CNCSJPCVilIOStream())
@@ -295,7 +295,7 @@ vil_j2k_image::vil_j2k_image(vil_stream *          vs,
     mBandinfo[1].szDesc = "Green";
     mBandinfo[2].szDesc = "Blue";
   }
-  NCSEcwCellType        t = convertType(format);
+  NCSEcwCellType t = convertType(format);
   NCSFileViewFileInfoEx finfo = *mFinfo;
   finfo.pBands = mBandinfo;
   finfo.nSizeX = ni;
@@ -398,8 +398,8 @@ vil_j2k_image::get_copy_view_decimated(unsigned sample0,
                                        unsigned num_samples,
                                        unsigned line0,
                                        unsigned numLines,
-                                       double   i_factor,
-                                       double   j_factor) const
+                                       double i_factor,
+                                       double j_factor) const
 {
   return get_copy_view_decimated_by_size(sample0,
                                          num_samples,
@@ -410,10 +410,10 @@ vil_j2k_image::get_copy_view_decimated(unsigned sample0,
 }
 
 vil_image_view_base_sptr
-vil_j2k_image::get_copy_view_decimated_by_size(unsigned     sample0,
-                                               unsigned     num_samples,
-                                               unsigned     line0,
-                                               unsigned     numLines,
+vil_j2k_image::get_copy_view_decimated_by_size(unsigned sample0,
+                                               unsigned num_samples,
+                                               unsigned line0,
+                                               unsigned numLines,
                                                unsigned int output_width,
                                                unsigned int output_height) const
 {
@@ -424,7 +424,7 @@ vil_j2k_image::get_copy_view_decimated_by_size(unsigned     sample0,
 
   // we want all bands mapped in the same order as they come in the input file
   // eg. bandMap = {0,1,2,3...nBands}
-  INT32   nBands = nplanes();
+  INT32 nBands = nplanes();
   INT32 * bandMap = (INT32 *)std::malloc(sizeof(UINT32) * nBands);
   for (int i = 0; i < nBands; i++)
   {
@@ -438,7 +438,7 @@ vil_j2k_image::get_copy_view_decimated_by_size(unsigned     sample0,
   if (output_width > maxDim || output_height > maxDim)
   {
     unsigned int biggestDim = (std::max)(output_width, output_height);
-    double       zoomFactor = ((double)maxDim) / ((double)biggestDim);
+    double zoomFactor = ((double)maxDim) / ((double)biggestDim);
     output_width = (unsigned int)(((double)output_width) * zoomFactor);
     output_height = (unsigned int)(((double)output_height) * zoomFactor);
   }
@@ -463,7 +463,7 @@ vil_j2k_image::get_copy_view_decimated_by_size(unsigned     sample0,
   }
 
   // number of samples times the bytes per sample in each band
-  double       bitsPerSample = mFileResource->GetFileInfo()->pBands[0].nBits;
+  double bitsPerSample = mFileResource->GetFileInfo()->pBands[0].nBits;
   unsigned int bytesPerSample = (unsigned int)std::ceil(bitsPerSample / 8.0);
   unsigned int singleBandLineSizeBytes = output_width * bytesPerSample;
   unsigned int allBandLineSizeBytes = singleBandLineSizeBytes * nBands;
@@ -559,12 +559,12 @@ vil_j2k_image::setMaxImageDimension(unsigned int widthOrHeight, bool remote)
 
 vil_image_view_base_sptr
 vil_j2k_image::s_decode_jpeg_2000(vil_stream * vs,
-                                  unsigned     i0,
-                                  unsigned     ni,
-                                  unsigned     j0,
-                                  unsigned     nj,
-                                  double       i_factor,
-                                  double       j_factor)
+                                  unsigned i0,
+                                  unsigned ni,
+                                  unsigned j0,
+                                  unsigned nj,
+                                  double i_factor,
+                                  double j_factor)
 {
   vil_j2k_image * j2k_image = new vil_j2k_image(vs);
   // remove limit by default, since vil is not typically used remotely
@@ -577,14 +577,14 @@ vil_j2k_image::s_decode_jpeg_2000(vil_stream * vs,
 
 vil_image_view_base_sptr
 vil_j2k_image::s_decode_jpeg_2000_by_size(vil_stream * vs,
-                                          unsigned     i0,
-                                          unsigned     ni,
-                                          unsigned     j0,
-                                          unsigned     nj,
+                                          unsigned i0,
+                                          unsigned ni,
+                                          unsigned j0,
+                                          unsigned nj,
                                           unsigned int output_width,
                                           unsigned int output_height)
 {
-  vil_j2k_image *          j2k_image = new vil_j2k_image(vs);
+  vil_j2k_image * j2k_image = new vil_j2k_image(vs);
   vil_image_view_base_sptr view =
     j2k_image->get_copy_view_decimated_by_size(i0, ni, j0, nj, output_width, output_height);
   delete j2k_image;
@@ -594,15 +594,15 @@ vil_j2k_image::s_decode_jpeg_2000_by_size(vil_stream * vs,
 template <class T>
 static bool
 write_line_BIL(vil_memory_chunk_sptr & chunk,
-               unsigned                ni,
-               unsigned                nplanes,
-               unsigned                istep,
-               unsigned                planestep,
-               unsigned                bytes_per_pixel,
-               CNCSFile *              f_resource,
-               NCSEcwCellType          t)
+               unsigned ni,
+               unsigned nplanes,
+               unsigned istep,
+               unsigned planestep,
+               unsigned bytes_per_pixel,
+               CNCSFile * f_resource,
+               NCSEcwCellType t)
 {
-  T *  cdata = reinterpret_cast<T *>(chunk->data());
+  T * cdata = reinterpret_cast<T *>(chunk->data());
   T ** line_ptr = new T *[nplanes];
   for (unsigned p = 0; p < nplanes; ++p)
     line_ptr[p] = new T[ni * bytes_per_pixel];
@@ -615,8 +615,8 @@ write_line_BIL(vil_memory_chunk_sptr & chunk,
       *(wline + i) = *(cdata + i * istep + p * planestep);
     }
   }
-  bool      good = true;
-  void **   outbuf = reinterpret_cast<void **>(line_ptr);
+  bool good = true;
+  void ** outbuf = reinterpret_cast<void **>(line_ptr);
   CNCSError writeError = f_resource->WriteLineBIL(t, nplanes, outbuf);
   if (writeError != NCS_SUCCESS)
     good = false;
@@ -638,7 +638,7 @@ vil_j2k_image::put_line(const vil_image_view_base & im)
   if (!mFileResource)
     return false;
   vil_pixel_format format = this->pixel_format();
-  unsigned         ni = this->ni(), nj = this->nj(), nplanes = this->nplanes();
+  unsigned ni = this->ni(), nj = this->nj(), nplanes = this->nplanes();
   if (line_index_ >= nj)
   {
     mFileResource->Close(true);
@@ -647,8 +647,8 @@ vil_j2k_image::put_line(const vil_image_view_base & im)
     mFileResource = 0;
     return true;
   }
-  unsigned              bytes_per_pixel = 0;
-  NCSEcwCellType        t = convertType(format);
+  unsigned bytes_per_pixel = 0;
+  NCSEcwCellType t = convertType(format);
   vil_memory_chunk_sptr chunk;
   // now write out the image line
   // note that float and double are defaulted since the J2K SDK doesn't
@@ -692,8 +692,8 @@ vil_j2k_image::put_view(const vil_image_view_base & im)
     return false;
   if (!mFileResource)
     return false;
-  unsigned                 ni = im.ni(), nj = im.nj();
-  vil_image_resource_sptr  mem_res = vil_new_image_resource_of_view(im);
+  unsigned ni = im.ni(), nj = im.nj();
+  vil_image_resource_sptr mem_res = vil_new_image_resource_of_view(im);
   vil_image_view_base_sptr view;
   for (unsigned j = 0; j < nj; ++j)
   {
@@ -722,16 +722,16 @@ vil_j2k_image::view_fits(const vil_image_view_base & im, unsigned i0, unsigned j
 bool
 vil_j2k_image::s_encode_jpeg2000(vil_stream * vs,
                                  const char * out_filename,
-                                 unsigned     compression_ratio,
-                                 unsigned     num_lines_block,
-                                 bool         verbose)
+                                 unsigned compression_ratio,
+                                 unsigned num_lines_block,
+                                 bool verbose)
 {
   vil_image_resource_sptr in_res = vil_load_image_resource_raw(vs);
   if (!in_res)
     return false;
-  unsigned         ni = in_res->ni(), nj = in_res->nj(), nplanes = in_res->nplanes();
+  unsigned ni = in_res->ni(), nj = in_res->nj(), nplanes = in_res->nplanes();
   vil_pixel_format format = in_res->pixel_format();
-  vil_stream *     os = vil_open(out_filename, "w");
+  vil_stream * os = vil_open(out_filename, "w");
   if (!vs)
     return false;
   vil_j2k_file_format fmt;
@@ -770,7 +770,7 @@ vil_j2k_image::s_encode_jpeg2000(vil_stream * vs,
   if (remaining_lines)
   {
     vil_image_view_base_sptr residual_view = in_res->get_view(0, ni, jb, remaining_lines);
-    vil_image_resource_sptr  residual_res = vil_new_image_resource_of_view(*residual_view);
+    vil_image_resource_sptr residual_res = vil_new_image_resource_of_view(*residual_view);
     vil_image_view_base_sptr view;
     for (unsigned j = 0; j < remaining_lines; ++j)
     {
@@ -790,9 +790,9 @@ vil_j2k_image::s_encode_jpeg2000(vil_stream * vs,
 bool
 vil_j2k_image::s_encode_jpeg2000(const char * in_filename,
                                  const char * out_filename,
-                                 unsigned     compression_ratio,
-                                 unsigned     num_lines_block,
-                                 bool         verbose)
+                                 unsigned compression_ratio,
+                                 unsigned num_lines_block,
+                                 bool verbose)
 {
   vil_stream * vs = vil_open(in_filename);
   vs->ref();

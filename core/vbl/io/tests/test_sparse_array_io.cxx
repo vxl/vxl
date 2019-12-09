@@ -50,7 +50,7 @@ test_sparse_array_io()
   else
   {
     // check every key/data pair, require same order too.
-    auto                                        s = v_in.begin();
+    auto s = v_in.begin();
     vbl_sparse_array_2d<double>::const_iterator r;
     // N.B. relies on sensible == operator for <T>
     for (r = v_out.begin(); r != v_out.end(); ++r)

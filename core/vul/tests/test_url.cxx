@@ -33,9 +33,9 @@ test_url()
             << "======== base64 stuff ===========\n";
 
   unsigned const nTests = 300;
-  std::string    data;
-  bool           correct_size = true;
-  bool           correct_decode = true;
+  std::string data;
+  bool correct_size = true;
+  bool correct_decode = true;
   for (unsigned i = 0; i < nTests; ++i)
   {
     data += (char)(i % 255);
@@ -89,7 +89,7 @@ test_url()
                "<html>\n  <head>\n    <title>VXL - C++ Libraries for Computer Vision</title>";
     if (i)
     {
-      int  l = std::strlen(b);
+      int l = std::strlen(b);
       char a[256];
       i->read(a, 1 + l);
       a[1 + l] = '\0';

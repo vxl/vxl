@@ -9,8 +9,8 @@
 vil1_pixel_format_t
 vil1_pixel_format(vil1_image const & I)
 {
-  int                   c = I.components();
-  int                   b = I.bits_per_component();
+  int c = I.components();
+  int b = I.bits_per_component();
   vil1_component_format f = I.component_format();
 
   // assume 8 = CHAR_BIT

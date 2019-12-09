@@ -35,9 +35,9 @@ namespace
 {
 class vgui_wx_app;
 wxAppConsole *
-          vgui_wx_create_app(void);
+vgui_wx_create_app(void);
 wxChar ** g_wxCharArgv = NULL;
-int       g_Argc = 0;
+int g_Argc = 0;
 } // namespace
 
 //-------------------------------------------------------------------------

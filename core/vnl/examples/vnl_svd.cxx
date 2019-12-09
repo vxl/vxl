@@ -23,7 +23,7 @@ solve_with_warning(vnl_matrix<double> const &, vnl_matrix<double> const &);
 int
 main()
 {
-  double             data[] = { 1, 1, 1, 1, 2, 3, 1, 3, 6 };
+  double data[] = { 1, 1, 1, 1, 2, 3, 1, 3, 6 };
   vnl_matrix<double> M(data, 3, 3);
   vnl_matrix<double> B(3, 1, 7.0); // column vector [7 7 7]^T
   vnl_matrix<double> result = solve_with_warning(M, B);

@@ -51,7 +51,7 @@ vil_nitf2_location_formatter::copy() const
 bool
 vil_nitf2_location_formatter::read_vcl_stream(std::istream & input, vil_nitf2_location *& out_value, bool & out_blank)
 {
-  std::streampos       tag_start_pos = input.tellg();
+  std::streampos tag_start_pos = input.tellg();
   vil_nitf2_location * location = new vil_nitf2_location_degrees(deg_precision(field_width));
   if (location->read(input, field_width, out_blank))
   {
@@ -160,7 +160,7 @@ vil_nitf2_long_long_formatter::read_vcl_stream(std::istream & input, vil_nitf2_l
     delete[] cstr;
     return false;
   }
-  bool   conversion_ok;
+  bool conversion_ok;
   char * endp;
   errno = 0;
 
@@ -288,12 +288,12 @@ vil_nitf2_exponential_formatter::read_vcl_stream(std::istream & input, double & 
   const char e_ok = cstr[3 + mantissa_width] == 'E';
   const char exp_sign = cstr[4 + mantissa_width];
   const bool exp_sign_ok = exp_sign == '+' || exp_sign == '-';
-  bool       retVal = (endp - cstr) == field_width // processed all chars
-                && errno == 0                      // read a number with no errors
-                && base_sign_ok                    // base sign in right place
-                && decimal_ok                      // decimal point in right place
-                && e_ok                            // 'E' in right place
-                && exp_sign_ok;                    // exponent sign in right place
+  bool retVal = (endp - cstr) == field_width // processed all chars
+                && errno == 0                // read a number with no errors
+                && base_sign_ok              // base sign in right place
+                && decimal_ok                // decimal point in right place
+                && e_ok                      // 'E' in right place
+                && exp_sign_ok;              // exponent sign in right place
   delete[] cstr;
   return retVal;
 }
@@ -306,7 +306,7 @@ vil_nitf2_exponential_formatter::write_vcl_stream(std::ostream & output, const d
   buffer << std::setw(field_width) << std::scientific << std::showpos << std::uppercase << std::internal
          << std::setfill('0') << std::setprecision(mantissa_width) << value;
   std::string buffer_string = buffer.str();
-  auto        length = (unsigned int)(buffer_string.length());
+  auto length = (unsigned int)(buffer_string.length());
   // Write everything up to the exponent sign
   output << buffer_string.substr(0, length - 3);
   // Write exponent digits, padding or unpadding them to desired width
@@ -494,15 +494,15 @@ vil_nitf2_tagged_record_sequence_formatter::copy() const
 }
 
 bool
-vil_nitf2_tagged_record_sequence_formatter::read(vil_nitf2_istream &                input,
+vil_nitf2_tagged_record_sequence_formatter::read(vil_nitf2_istream & input,
                                                  vil_nitf2_tagged_record_sequence & out_value,
-                                                 bool &                             out_blank)
+                                                 bool & out_blank)
 {
   if (field_width <= 0)
     return false;
   vil_streampos current = input.tell();
   vil_streampos end = current + field_width;
-  bool          error_reading_tre = false;
+  bool error_reading_tre = false;
   out_value.clear();
   while (input.tell() < end && !error_reading_tre)
   {

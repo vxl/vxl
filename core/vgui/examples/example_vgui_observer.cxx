@@ -20,7 +20,7 @@
 
 struct example_window_title_setter : public vgui_observer
 {
-  char **                argv;
+  char ** argv;
   vgui_deck_tableau_sptr deck;
 
   example_window_title_setter(char ** argv_, vgui_deck_tableau_sptr const & deck_)
@@ -76,7 +76,7 @@ main(int argc, char ** argv)
 
   // Create a deck tableau and add images given in the parameter list:
   vgui_deck_tableau_new deck;
-  unsigned int          w = 0, h = 0;
+  unsigned int w = 0, h = 0;
   for (int i = 1; i < argc; ++i)
   {
     if (vul_file::exists(argv[i]))
@@ -98,7 +98,7 @@ main(int argc, char ** argv)
   new example_window_title_setter(argv, deck);
 
   vgui_viewer2D_tableau_new viewer(deck);
-  vgui_shell_tableau_new    shell(viewer);
+  vgui_shell_tableau_new shell(viewer);
   shell->set_enable_key_bindings(true);
 
   return vgui::run(shell, w, h);

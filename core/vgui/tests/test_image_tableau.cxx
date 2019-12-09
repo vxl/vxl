@@ -13,7 +13,7 @@ test_image_tableau(int argc, char * argv[])
   // older code.
   //
   const char * input_file = argc > 1 ? argv[1] : "Please give it as command line parameter";
-  vil1_image   img = vil1_load(input_file);
+  vil1_image img = vil1_load(input_file);
   if (!img)
   {
     std::cout << "Couldn't load test image \"" << input_file << "\"\n";
@@ -21,7 +21,7 @@ test_image_tableau(int argc, char * argv[])
   else
   {
     vgui_image_tableau_new img_tab(input_file);
-    vil1_image             img2 = img_tab->get_image();
+    vil1_image img2 = img_tab->get_image();
     TEST("Construct with filename", !img2, false);
     TEST("Size is correct",
          img.width() == img2.width() && img.height() == img2.height() && img.components() == img2.components() &&

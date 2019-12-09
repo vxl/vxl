@@ -69,7 +69,7 @@ float
 red_value(const std::string & txt)
 {
   std::string nb_txt = text_to_color(txt);
-  float       red, green, blue;
+  float red, green, blue;
   std::sscanf(nb_txt.c_str(), "%f %f %f", &red, &green, &blue);
   return red;
 }
@@ -78,7 +78,7 @@ float
 green_value(const std::string & txt)
 {
   std::string nb_txt = text_to_color(txt);
-  float       red, green, blue;
+  float red, green, blue;
   std::sscanf(nb_txt.c_str(), "%f %f %f", &red, &green, &blue);
   return green;
 }
@@ -87,7 +87,7 @@ float
 blue_value(const std::string & txt)
 {
   std::string nb_txt = text_to_color(txt);
-  float       red, green, blue;
+  float red, green, blue;
   std::sscanf(nb_txt.c_str(), "%f %f %f", &red, &green, &blue);
   return blue;
 }

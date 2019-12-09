@@ -15,7 +15,7 @@ test_deque_io()
             << "Testing std::deque binary io\n"
             << "***************************\n";
 
-  int             n = 10;
+  int n = 10;
   std::deque<int> d_int_out;
   for (int i = 0; i < n; ++i)
     d_int_out.push_back(i);

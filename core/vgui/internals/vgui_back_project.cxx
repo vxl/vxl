@@ -28,7 +28,7 @@ vgui_back_project_d3d4d4d4d4_d4(double const x[3],
                                 double const P1[4],
                                 double const P2[4],
                                 double const pi[4],
-                                double       X[4])
+                                double X[4])
 {
   // X = ( (x[0] P1.P2 + x[1] P2.P0 + x[2] P0.P1).pi )*
   //             f0           f1           f2
@@ -70,7 +70,7 @@ bool
 vgui_back_project_ii_dd(int vx, int vy, double * x, double * y)
 {
   double const pi[4] = { 0, 0, 1, 0 };
-  double       X[4];
+  double X[4];
   if (!vgui_back_project_iid4_d4(vx, vy, pi, X))
     return false;
   if (X[3] == 0)

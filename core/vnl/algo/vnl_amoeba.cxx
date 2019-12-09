@@ -47,8 +47,8 @@ struct vnl_amoebaFit : public vnl_amoeba
   //: Initialise the simplex given one corner, x and displacements of others
   void
   set_up_simplex_absolute(std::vector<vnl_amoeba_SimplexCorner> & simplex,
-                          const vnl_vector<double> &              x,
-                          const vnl_vector<double> &              dx);
+                          const vnl_vector<double> & x,
+                          const vnl_vector<double> & dx);
 
   //: Perform optimisation.  Start simplex defined by scaling elements of x
   void
@@ -79,7 +79,7 @@ struct vnl_amoebaFit : public vnl_amoeba
   set_corner_a_plus_bl(vnl_amoeba_SimplexCorner * s,
                        const vnl_vector<double> & vbar,
                        const vnl_vector<double> & v,
-                       double                     lambda)
+                       double lambda)
   {
     s->v = (1 - lambda) * vbar + lambda * v;
     s->fv = f(s->v);
@@ -192,8 +192,8 @@ vnl_amoebaFit::set_up_simplex_relative(std::vector<vnl_amoeba_SimplexCorner> & s
 //: Initialise the simplex given one corner, x and displacements of others
 void
 vnl_amoebaFit::set_up_simplex_absolute(std::vector<vnl_amoeba_SimplexCorner> & simplex,
-                                       const vnl_vector<double> &              x,
-                                       const vnl_vector<double> &              dx)
+                                       const vnl_vector<double> & x,
+                                       const vnl_vector<double> & dx)
 {
   int n = x.size();
 
@@ -242,7 +242,7 @@ void
 vnl_amoebaFit::amoeba(vnl_vector<double> & x)
 {
   // Set up a simplex near the initial guess.
-  int                                   n = x.size();
+  int n = x.size();
   std::vector<vnl_amoeba_SimplexCorner> simplex(n + 1, vnl_amoeba_SimplexCorner(n));
 
   set_up_simplex_relative(simplex, x);
@@ -253,7 +253,7 @@ void
 vnl_amoebaFit::amoeba(vnl_vector<double> & x, const vnl_vector<double> & dx)
 {
   // Set up a simplex near the initial guess.
-  int                                   n = x.size();
+  int n = x.size();
   std::vector<vnl_amoeba_SimplexCorner> simplex(n + 1, vnl_amoeba_SimplexCorner(n));
 
   set_up_simplex_absolute(simplex, x, dx);
@@ -277,10 +277,10 @@ vnl_amoebaFit::amoeba(vnl_vector<double> & x, std::vector<vnl_amoeba_SimplexCorn
   }
 
   // Iterate until the diameter of the simplex is less than X_tolerance.
-  vnl_amoeba_SimplexCorner   reflect(n);
-  vnl_amoeba_SimplexCorner   expand(n);
-  vnl_amoeba_SimplexCorner   contract(n);
-  vnl_amoeba_SimplexCorner   shrink(n);
+  vnl_amoeba_SimplexCorner reflect(n);
+  vnl_amoeba_SimplexCorner expand(n);
+  vnl_amoeba_SimplexCorner contract(n);
+  vnl_amoeba_SimplexCorner shrink(n);
   vnl_amoeba_SimplexCorner * next;
 
   vnl_vector<double> vbar(n);
@@ -428,7 +428,7 @@ vnl_amoeba::minimize(vnl_cost_function & f, vnl_vector<double> & x, const vnl_ve
 class vnl_amoeba_LSCF : public vnl_cost_function
 {
   vnl_least_squares_function * ls_;
-  vnl_vector<double>           fx;
+  vnl_vector<double> fx;
 
 public:
   vnl_amoeba_LSCF(vnl_least_squares_function & ls)

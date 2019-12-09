@@ -46,7 +46,7 @@ vgui_qt_dialog_impl::ask()
   bool use_ok_button = !ok_button_text_.empty();
   bool use_cancel_button = !cancel_button_text_.empty();
 
-  QPushButton * ok, *cancel;
+  QPushButton *ok, *cancel;
   QVBoxLayout * total = new QVBoxLayout(this, 10, -1, "totallayout");
   QVBoxLayout * layout = new QVBoxLayout(total, -1, "vboxlayout");
 
@@ -78,7 +78,7 @@ vgui_qt_dialog_impl::ask()
 
   for (std::vector<element>::iterator ei = elements.begin(); ei != elements.end(); ++ei)
   {
-    element   l = (*ei);
+    element l = (*ei);
     QWidget * widget = static_cast<QWidget *>(l.widget);
     if (!widget)
       std::cerr << "No QWidget defined for element type " << l.type << std::endl;
@@ -88,7 +88,7 @@ vgui_qt_dialog_impl::ask()
           l.type == string_elem || l.type == bool_elem || l.type == choice_elem)
       {
         QHBoxLayout * hbox = new QHBoxLayout(layout, -1);
-        QLabel *      label = new QLabel(widget, l.field->label.c_str(), this);
+        QLabel * label = new QLabel(widget, l.field->label.c_str(), this);
         hbox->addWidget(label, 0);
         hbox->addStretch(1);
         hbox->addWidget(widget, 0);
@@ -139,13 +139,13 @@ vgui_qt_dialog_impl::ask()
       }
       else if (l.type == bool_elem)
       {
-        QCheckBox *       button = static_cast<QCheckBox *>(l.widget);
+        QCheckBox * button = static_cast<QCheckBox *>(l.widget);
         vgui_bool_field * field = static_cast<vgui_bool_field *>(l.field);
         field->var = button->isChecked();
       }
       else if (l.type == choice_elem)
       {
-        QComboBox *      box = static_cast<QComboBox *>(l.widget);
+        QComboBox * box = static_cast<QComboBox *>(l.widget);
         vgui_int_field * field = static_cast<vgui_int_field *>(l.field);
         field->var = box->currentItem();
       }
@@ -348,10 +348,10 @@ vgui_qt_colorchooser_impl::get_a_color()
 
 
 //-----------------------------------------------------------------------------
-vgui_qt_tableau_impl::vgui_qt_tableau_impl(QWidget *               parent,
+vgui_qt_tableau_impl::vgui_qt_tableau_impl(QWidget * parent,
                                            const vgui_tableau_sptr tab,
-                                           unsigned int            width,
-                                           unsigned int            height)
+                                           unsigned int width,
+                                           unsigned int height)
   : QWidget(parent, "vgui_qt_inline_gl_main_widget")
 {
   this->setFixedWidth(width);

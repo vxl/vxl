@@ -102,7 +102,7 @@ vgui_composite_tableau::handle(const vgui_event & event)
   // Save current matrix state. Each active child will be
   // invoked with this matrix state.
   vgui_matrix_state PM;
-  unsigned int      n = children.size();
+  unsigned int n = children.size();
 
   // "DRAW" events. Return true unless some child returns false.
   // What is the logic behind this? I'm no longer sure....

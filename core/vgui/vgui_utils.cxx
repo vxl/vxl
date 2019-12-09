@@ -90,7 +90,7 @@ vgui_utils::get_image()
 vil1_memory_image_of<vil1_rgb<unsigned char>>
 vgui_utils::colour_buffer_to_image()
 {
-  vil1_memory_image_of<vil1_rgb<GLubyte>>       colour_buffer = vgui_utils::get_image();
+  vil1_memory_image_of<vil1_rgb<GLubyte>> colour_buffer = vgui_utils::get_image();
   vil1_memory_image_of<vil1_rgb<unsigned char>> temp(colour_buffer);
   return temp;
 }
@@ -166,7 +166,7 @@ vgui_utils::get_view()
 vil_image_view<vxl_byte>
 vgui_utils::colour_buffer_to_view()
 {
-  vil_image_view<GLubyte>  buffer = vgui_utils::get_view();
+  vil_image_view<GLubyte> buffer = vgui_utils::get_view();
   vil_image_view<vxl_byte> temp(buffer);
   return temp;
 }
@@ -294,7 +294,7 @@ vgui_utils::enter_pick_mode(float x, float y, float w, float h)
     h = w;
 
   static unsigned const HIT_BUFFER_SIZE = 4096;
-  static GLuint         buffer[HIT_BUFFER_SIZE];
+  static GLuint buffer[HIT_BUFFER_SIZE];
 
   // define hit buffer
   glSelectBuffer(HIT_BUFFER_SIZE, buffer);

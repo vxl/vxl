@@ -7,14 +7,14 @@
 static void
 test_power()
 {
-  double         eps = 1e-11;
+  double eps = 1e-11;
   vnl_double_2x2 residue2, id2;
   id2.set_identity();
   vnl_matrix<double> ID2 = id2.as_ref();
-  vnl_double_3x3     residue3, id3;
+  vnl_double_3x3 residue3, id3;
   id3.set_identity();
   vnl_matrix<double> ID3 = id3.as_ref();
-  vnl_double_4x4     residue4, id4;
+  vnl_double_4x4 residue4, id4;
   id4.set_identity();
   vnl_matrix<double> ID4 = id4.as_ref();
   vnl_matrix<double> M, Mi;
@@ -27,7 +27,7 @@ test_power()
   TEST("-11th power of 2x2 Id", id2i, id2);
 
   // power of a specific 2x2 matrix
-  double         M2[4] = { 0.60684258354179, 0.89129896614890, 0.48598246870930, 0.76209683302739 };
+  double M2[4] = { 0.60684258354179, 0.89129896614890, 0.48598246870930, 0.76209683302739 };
   vnl_double_2x2 m2(M2);
   vnl_double_2x2 m2i = vnl_power(m2, 0);
   TEST("0th power of fixed 2x2 matrix", m2i, id2);
@@ -64,7 +64,7 @@ test_power()
   TEST("-11th power of 3x3 Id", id3i, id3);
 
   // power of a specific 3x3 matrix
-  double         M3[9] = { 0.45646766516834, 0.44470336435319, 0.92181297074480, 0.01850364324822, 0.61543234810009,
+  double M3[9] = { 0.45646766516834, 0.44470336435319, 0.92181297074480, 0.01850364324822, 0.61543234810009,
                    0.73820724581067, 0.82140716429525, 0.79193703742704, 0.17626614449462 };
   vnl_double_3x3 m3(M3);
   vnl_double_3x3 m3i = vnl_power(m3, 0);
@@ -102,7 +102,7 @@ test_power()
   TEST("-11th power of 4x4 Id", id4i, id4);
 
   // power of a specific 4x4 matrix
-  double         M4[16] = { 0.40570621306210, 0.89364953091353, 0.00986130066092, 0.60379247919382,
+  double M4[16] = { 0.40570621306210, 0.89364953091353, 0.00986130066092, 0.60379247919382,
                     0.93546969910761, 0.05789130478427, 0.13889088195695, 0.27218792496996,
                     0.91690443991341, 0.35286813221700, 0.20276521856027, 0.19881426776106,
                     0.41027020699095, 0.81316649730376, 0.19872174266149, 0.01527392702904 };

@@ -65,10 +65,10 @@ vil_jpeg_file_format::make_input_image(vil_stream * vs)
 }
 
 vil_image_resource_sptr
-vil_jpeg_file_format::make_output_image(vil_stream *          vs,
-                                        unsigned              nx,
-                                        unsigned              ny,
-                                        unsigned              nplanes,
+vil_jpeg_file_format::make_output_image(vil_stream * vs,
+                                        unsigned nx,
+                                        unsigned ny,
+                                        unsigned nplanes,
                                         enum vil_pixel_format format)
 {
   if (format != VIL_PIXEL_FORMAT_BYTE)
@@ -240,7 +240,7 @@ vil_jpeg_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned
                                                              view2.nplanes(),
                                                              view2.nplanes() * view2.ni(),
                                                              1);
-    JSAMPLE *                scanline = line.top_left_ptr();
+    JSAMPLE * scanline = line.top_left_ptr();
 
     for (unsigned int j = 0; j < view2.nj(); ++j)
     {

@@ -21,9 +21,9 @@ struct cubic : public vnl_cost_function
 void
 test_minimizers()
 {
-  cubic     c;
+  cubic c;
   vnl_brent b(&c);
-  double    x = 77;
+  double x = 77;
   std::cout << "brent1: ";
   b.minimize_given_bounds(-100, x, 100, 1e-6, &x);
   std::cout << std::endl;

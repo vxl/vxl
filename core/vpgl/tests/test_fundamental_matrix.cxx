@@ -56,10 +56,10 @@ test_fundamental_matrix()
 {
   // Test constructor from cameras:
 
-  double                          random_list1r[12] = { 1, 15, 9, -1, 2, -6, -9, 7, -5, 6, 10, 0 };
-  double                          random_list1l[12] = { 10.6, 1.009, .676, .5, -13, -10, 8, 5, 88, -2, -100, 11 };
-  vpgl_proj_camera<double>        C1r(random_list1r);
-  vpgl_proj_camera<double>        C1l(random_list1l);
+  double random_list1r[12] = { 1, 15, 9, -1, 2, -6, -9, 7, -5, 6, 10, 0 };
+  double random_list1l[12] = { 10.6, 1.009, .676, .5, -13, -10, 8, 5, 88, -2, -100, 11 };
+  vpgl_proj_camera<double> C1r(random_list1r);
+  vpgl_proj_camera<double> C1l(random_list1l);
   vpgl_fundamental_matrix<double> F1(C1r, C1l);
 
   vgl_homg_point_3d<double> p1w(.4, -0.1, 10);
@@ -68,15 +68,15 @@ test_fundamental_matrix()
 
   vnl_vector_fixed<double, 3> p1r_vnl(p1r.x(), p1r.y(), p1r.w());
   vnl_vector_fixed<double, 3> l1r_vnl = F1.get_matrix() * p1r_vnl;
-  vgl_homg_line_2d<double>    l1r(l1r_vnl[0], l1r_vnl[1], l1r_vnl[2]);
+  vgl_homg_line_2d<double> l1r(l1r_vnl[0], l1r_vnl[1], l1r_vnl[2]);
 
   TEST_NEAR("constructor from cameras", vgl_distance(l1r, p1l), 0, 1e-06);
 
   // Test constructor from matrix:
-  double                          random_list2[9] = { 1, 5, 0, -3, 2, 100, 50, -20, 1 };
-  vnl_matrix_fixed<double, 3, 3>  F2_vnl(random_list2);
+  double random_list2[9] = { 1, 5, 0, -3, 2, 100, 50, -20, 1 };
+  vnl_matrix_fixed<double, 3, 3> F2_vnl(random_list2);
   vpgl_fundamental_matrix<double> F2(F2_vnl);
-  vnl_svd<double>                 svd2(F2.get_matrix().as_matrix());
+  vnl_svd<double> svd2(F2.get_matrix().as_matrix());
   TEST_NEAR("constructor from matrix", svd2.W(2), 0, 1e-06);
 
   // Test epipole finder:
@@ -97,11 +97,11 @@ test_fundamental_matrix()
   TEST_NEAR("left epipolar line finder", vgl_distance(F1.l_epipolar_line(p2r), p2l), 0, 1e-06);
 
   // Test camera extraction:
-  double                          random_list2l[12] = { 5, 6, 40, -1, 15, 8, 5, -1, 10, 3, 7, 9 };
-  vpgl_proj_camera<double>        C2l(random_list2l);
-  vpgl_proj_camera<double>        C2r;
+  double random_list2l[12] = { 5, 6, 40, -1, 15, 8, 5, -1, 10, 3, 7, 9 };
+  vpgl_proj_camera<double> C2l(random_list2l);
+  vpgl_proj_camera<double> C2r;
   vpgl_fundamental_matrix<double> F3(C2r, C2l);
-  vpgl_proj_camera<double>        C2l_est = F3.extract_left_camera(vnl_vector_fixed<double, 3>(0, 0, 0), 1);
+  vpgl_proj_camera<double> C2l_est = F3.extract_left_camera(vnl_vector_fixed<double, 3>(0, 0, 0), 1);
   vpgl_fundamental_matrix<double> F3_est(C2r, C2l_est);
   std::cerr << "\nTrue fundamental matrix: " << F3.get_matrix() << '\n'
             << "Estimated fundamental matrix: " << F3_est.get_matrix() << '\n';

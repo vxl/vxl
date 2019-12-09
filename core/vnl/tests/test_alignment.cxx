@@ -35,9 +35,9 @@ test_element_product(const vnl_vector<float> & vec, const vnl_vector<float> & ve
 inline bool
 test_dot_product(const vnl_vector<float> & vec, const vnl_vector<float> & vec2)
 {
-  float    val = dot_product(vec, vec2);
+  float val = dot_product(vec, vec2);
   unsigned n = vec.size();
-  float    correct = 0.f;
+  float correct = 0.f;
   for (unsigned i = 0; i < n; ++i)
     correct += vec(i) * vec2(i);
 
@@ -55,9 +55,9 @@ test_dot_product(const vnl_vector<float> & vec, const vnl_vector<float> & vec2)
 inline bool
 test_euclid_dist_sq(const vnl_vector<float> & vec, const vnl_vector<float> & vec2)
 {
-  float    val = vnl_vector_ssd(vec, vec2);
+  float val = vnl_vector_ssd(vec, vec2);
   unsigned n = vec.size();
-  float    correct(0);
+  float correct(0);
   for (unsigned i = 0; i < n; ++i)
     correct += vnl_math::sqr(vec(i) - vec2(i));
 
@@ -127,9 +127,9 @@ test_vector_x_matrix(const vnl_vector<float> & vec, const vnl_matrix<float> & ma
 inline bool
 test_sum(const vnl_vector<float> & vec)
 {
-  float    val = vec.sum();
+  float val = vec.sum();
   unsigned n = vec.size();
-  float    correct(0);
+  float correct(0);
   for (unsigned i = 0; i < n; ++i)
     correct += vec(i);
 
@@ -147,9 +147,9 @@ test_sum(const vnl_vector<float> & vec)
 inline bool
 test_max(const vnl_vector<float> & vec)
 {
-  float    val = vec.max_value();
+  float val = vec.max_value();
   unsigned n = vec.size();
-  float    correct(-std::numeric_limits<float>::max());
+  float correct(-std::numeric_limits<float>::max());
   for (unsigned i = 0; i < n; ++i)
     correct = std::max(vec(i), correct);
 
@@ -167,9 +167,9 @@ test_max(const vnl_vector<float> & vec)
 inline bool
 test_min(const vnl_vector<float> & vec)
 {
-  float    val = vec.min_value();
+  float val = vec.min_value();
   unsigned n = vec.size();
-  float    correct(std::numeric_limits<float>::max());
+  float correct(std::numeric_limits<float>::max());
   for (unsigned i = 0; i < n; ++i)
     correct = std::min(vec(i), correct);
 
@@ -189,7 +189,7 @@ test_arg_max(const vnl_vector<float> & vec)
 {
   unsigned idx = vec.arg_max();
   unsigned n = vec.size();
-  float    correct_val(-std::numeric_limits<float>::max());
+  float correct_val(-std::numeric_limits<float>::max());
   unsigned correct_idx = 0;
   for (unsigned i = 0; i < n; ++i)
     if (vec(i) > correct_val)
@@ -209,7 +209,7 @@ test_arg_min(const vnl_vector<float> & vec)
 {
   unsigned idx = vec.arg_min();
   unsigned n = vec.size();
-  float    correct_val(std::numeric_limits<float>::max());
+  float correct_val(std::numeric_limits<float>::max());
   unsigned correct_idx = 0;
   for (unsigned i = 0; i < n; ++i)
     if (vec(i) < correct_val)
@@ -236,9 +236,9 @@ test_alignment_type()
 
   // Set up random data arrays.
   constexpr unsigned ndata = 13; // not a multiple of 2
-  float              matrix_data[ndata * ndata];
-  float              vector_data[ndata];
-  float              result_data[ndata];
+  float matrix_data[ndata * ndata];
+  float vector_data[ndata];
+  float result_data[ndata];
 
   vnl_random rng;
   for (unsigned int i = 0; i < ndata; ++i)
@@ -259,8 +259,8 @@ test_alignment_type()
           const vnl_matrix_ref<float> mat(nv, nv, matrix_data + m);
           const vnl_vector_ref<float> vec2(nv, matrix_data + m);
           const vnl_vector_ref<float> vec(nv, vector_data + v);
-          vnl_vector_ref<float>       result(nv, result_data + r);
-          bool                        rvtest = test_element_product(vec, vec2, result) && test_dot_product(vec, vec2) &&
+          vnl_vector_ref<float> result(nv, result_data + r);
+          bool rvtest = test_element_product(vec, vec2, result) && test_dot_product(vec, vec2) &&
                         test_euclid_dist_sq(vec, vec2) && test_matrix_x_vector(mat, vec, result) &&
                         test_vector_x_matrix(vec, mat, result) && test_sum(vec) && test_max(vec) && test_min(vec) &&
                         test_arg_max(vec) && test_arg_min(vec);

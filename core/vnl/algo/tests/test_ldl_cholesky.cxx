@@ -12,7 +12,7 @@
 void
 test_ldl_cholesky()
 {
-  vnl_random         rng(1000);
+  vnl_random rng(1000);
   vnl_matrix<double> A(3, 3);
   test_util_fill_random(A.begin(), A.end(), rng);
   A = A * A.transpose();
@@ -21,7 +21,7 @@ test_ldl_cholesky()
   I.set_identity();
 
   {
-    vnl_ldl_cholesky   chol(A);
+    vnl_ldl_cholesky chol(A);
     vnl_matrix<double> A2 = chol.lower_triangle() * vnl_diag_matrix<double>(chol.diagonal()) * chol.upper_triangle();
     TEST_NEAR("LDL'=A", (A - A2).fro_norm(), 0.0, 1e-12);
   }
@@ -93,7 +93,7 @@ test_ldl_cholesky()
     TEST_NEAR("Solve Lx=b", (x - x0).one_norm(), 0, 1e-6);
   }
   {
-    vnl_ldl_cholesky   chol(A);
+    vnl_ldl_cholesky chol(A);
     vnl_vector<double> v(3);
     test_util_fill_random(v.begin(), v.end(), rng);
 
@@ -103,7 +103,7 @@ test_ldl_cholesky()
     TEST_NEAR("x' * inv(M) * x", res1, res2, 1e-12);
   }
   {
-    vnl_ldl_cholesky   chol(A);
+    vnl_ldl_cholesky chol(A);
     vnl_vector<double> v(3);
     test_util_fill_random(v.begin(), v.end(), rng);
 

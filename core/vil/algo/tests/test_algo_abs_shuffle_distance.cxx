@@ -28,7 +28,7 @@ test_algo_abs_shuffle_distance()
             << " Testing vil_abs_shuffle_distance\n"
             << "**********************************\n";
 
-  const unsigned int       ni = 30, nj = 40;
+  const unsigned int ni = 30, nj = 40;
   vil_image_view<vxl_byte> image0(ni, nj);
 
   vil_structuring_element se;
@@ -39,7 +39,7 @@ test_algo_abs_shuffle_distance()
 
   TEST_NEAR("Shuffle dist to self = 0", vil_abs_shuffle_distance(image0, image0, se), 0.0, 1e-6);
 
-  unsigned                 ni1 = ni - 10, nj1 = nj - 10;
+  unsigned ni1 = ni - 10, nj1 = nj - 10;
   vil_image_view<vxl_byte> sub_im1 = vil_crop(image0, 2, ni1, 2, nj1);
   vil_image_view<vxl_byte> sub_im2 = vil_crop(image0, 3, ni1, 2, nj1);
   vil_image_view<vxl_byte> sub_im3 = vil_crop(image0, 4, ni1, 2, nj1);

@@ -121,12 +121,12 @@ vgui_vil_image_renderer::create_buffer(vgui_range_map_params_sptr const & rmp)
 //: creates a buffer for a portion of the image
 void
 vgui_vil_image_renderer::create_buffer(vgui_range_map_params_sptr const & rmp,
-                                       unsigned                           x0,
-                                       unsigned                           y0,
-                                       unsigned                           x1,
-                                       unsigned                           y1,
-                                       float                              zoomx,
-                                       float                              zoomy)
+                                       unsigned x0,
+                                       unsigned y0,
+                                       unsigned x1,
+                                       unsigned y1,
+                                       float zoomx,
+                                       float zoomy)
 {
   delete buffer_;
   buffer_ = new vgui_section_buffer(x0, y0, x1, y1, GL_NONE, GL_NONE);
@@ -139,9 +139,9 @@ vgui_vil_image_renderer::create_buffer(vgui_range_map_params_sptr const & rmp,
 // Create a buffer corresponding to a pyramid zoom level
 void
 vgui_vil_image_renderer::create_buffer(vgui_range_map_params_sptr const & rmp,
-                                       float                              zoomx,
-                                       float                              zoomy,
-                                       vil_image_resource_sptr const &    ir)
+                                       float zoomx,
+                                       float zoomy,
+                                       vil_image_resource_sptr const & ir)
 {
   delete buffer_;
   buffer_ = nullptr;
@@ -183,7 +183,7 @@ vgui_vil_image_renderer::render_directly(vgui_range_map_params_sptr const & rmp)
   // Extract the viewport parameters (currently displayed image region)
   unsigned i0 = 0, j0 = 0;
   unsigned ni = the_image_->ni(), nj = the_image_->nj();
-  float    zoomx = 1, zoomy = -1;
+  float zoomx = 1, zoomy = -1;
   pixel_view(i0, ni, j0, nj, zoomx, zoomy);
 
   // check if the viewport parameters changed from previous render
@@ -203,7 +203,7 @@ vgui_vil_image_renderer::render_directly(vgui_range_map_params_sptr const & rmp)
   // Check if the resource is a pyramid image
   // if so then the pyramid level with best match to displayed scale is used
   // to render the screen.  Much faster for large images
-  float                           actual_scale = 1.0f;
+  float actual_scale = 1.0f;
   vil_pyramid_image_resource_sptr pyr;
   if (the_image_->get_property(vil_property_pyramid))
     pyr = (vil_pyramid_image_resource *)the_image_.ptr();

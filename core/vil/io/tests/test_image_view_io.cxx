@@ -25,7 +25,7 @@ test_image_view_io_with_view_transform()
 {
   {
     vil_image_view<vil_rgb<vxl_byte>> img(10, 10);
-    vil_image_view<vxl_byte>          img2(img);
+    vil_image_view<vxl_byte> img2(img);
 
     vil_image_view<vxl_byte> img3(vil_plane(img, 0));
 
@@ -38,7 +38,7 @@ test_image_view_io_with_view_transform()
     }
 
     vil_image_view<vxl_byte> img4;
-    vsl_b_ifstream           f2("vil_image_view_test_io_vt2.bvl.tmp");
+    vsl_b_ifstream f2("vil_image_view_test_io_vt2.bvl.tmp");
     vsl_b_read(f2, img4);
     TEST("Finished reading file successfully", (!f2), false);
 
@@ -120,7 +120,7 @@ test_image_view_io_as(T value1, T value2)
   bfs_out.close();
 
   vil_image_view<T> image2, image2p;
-  vsl_b_ifstream    bfs_in("vil_image_view_test_io.bvl.tmp");
+  vsl_b_ifstream bfs_in("vil_image_view_test_io.bvl.tmp");
   TEST("Opened vil_image_view_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, image2);
   vsl_b_read(bfs_in, image2p);

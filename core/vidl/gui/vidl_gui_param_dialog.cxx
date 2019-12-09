@@ -47,7 +47,7 @@ vidl_gui_open_istream_dialog()
   vgui_dialog dlg("Select an Input Stream Type");
 
   std::vector<std::string> choices;
-  std::vector<int>         choice_codes;
+  std::vector<int> choice_codes;
   choices.push_back("Image List");
   choice_codes.push_back(IMAGE_LIST);
 #if VIDL_HAS_FFMPEG
@@ -106,7 +106,7 @@ vidl_gui_open_ostream_dialog()
   vgui_dialog dlg("Select an Output Stream Type");
 
   std::vector<std::string> choices;
-  std::vector<int>         choice_codes;
+  std::vector<int> choice_codes;
   choices.push_back("Image List");
   choice_codes.push_back(IMAGE_LIST);
 #if VIDL_HAS_FFMPEG
@@ -145,7 +145,7 @@ namespace vidl_gui_param_dialog
 vidl_image_list_istream *
 image_list_istream()
 {
-  vgui_dialog        dlg("Open Image List Input Stream");
+  vgui_dialog dlg("Open Image List Input Stream");
   static std::string image_filename = "*";
   static std::string ext = "*";
 
@@ -171,7 +171,7 @@ image_list_istream()
 vidl_image_list_ostream *
 image_list_ostream()
 {
-  vgui_dialog        dlg("Open Output Image List Stream");
+  vgui_dialog dlg("Open Output Image List Stream");
   static std::string directory = "";
   static std::string name_format = "%05u";
   static std::string ext = "*";
@@ -221,7 +221,7 @@ vidl_ffmpeg_istream *
 ffmpeg_istream()
 {
 #if VIDL_HAS_FFMPEG
-  vgui_dialog        dlg("Open FFMPEG Input Stream");
+  vgui_dialog dlg("Open FFMPEG Input Stream");
   static std::string image_filename = "";
   static std::string ext = "*";
 
@@ -251,7 +251,7 @@ vidl_ffmpeg_ostream *
 ffmpeg_ostream()
 {
 #if VIDL_HAS_FFMPEG
-  vgui_dialog        dlg("Open FFMPEG Output Stream");
+  vgui_dialog dlg("Open FFMPEG Output Stream");
   static std::string file = "";
   static std::string ext = "avi";
   dlg.file("File", ext, file);
@@ -312,7 +312,7 @@ v4l2_istream()
   }
   else if (devs.size() > 1)
   {
-    vgui_dialog              dlg("Select a video device");
+    vgui_dialog dlg("Select a video device");
     std::vector<std::string> video_names;
     for (unsigned int i = 0; i < devs.size(); ++i)
     {
@@ -328,7 +328,7 @@ v4l2_istream()
   int input_id = 0;
   if (devs(device_id).n_inputs() > 1)
   {
-    vgui_dialog              dlg("Select input");
+    vgui_dialog dlg("Select input");
     std::vector<std::string> input_names;
     for (unsigned int i = 0; i < devs(device_id).n_inputs(); ++i)
     {
@@ -426,7 +426,7 @@ dc1394_istream()
 
   if (options.cameras.size() > 1)
   {
-    vgui_dialog              dlg("Select an IIDC 1394 camera");
+    vgui_dialog dlg("Select an IIDC 1394 camera");
     std::vector<std::string> camera_names;
     for (unsigned int i = 0; i < options.cameras.size(); ++i)
     {
@@ -450,10 +450,10 @@ dc1394_istream()
     return NULL;
   }
   static unsigned int mode_id = 0;
-  bool                use_1394b = cam.b_mode;
+  bool use_1394b = cam.b_mode;
   if (cam.modes.size() > 1)
   {
-    vgui_dialog              dlg("Select a capture mode");
+    vgui_dialog dlg("Select a capture mode");
     std::vector<std::string> mode_names;
     for (unsigned int i = 0; i < cam.modes.size(); ++i)
     {
@@ -484,7 +484,7 @@ dc1394_istream()
     static unsigned int fr_id = 0;
     if (m.frame_rates.size() > 1)
     {
-      vgui_dialog              dlg("Select a frame rate");
+      vgui_dialog dlg("Select a frame rate");
       std::vector<std::string> rate_names;
       for (unsigned int i = 0; i < m.frame_rates.size(); ++i)
       {
@@ -511,7 +511,7 @@ dc1394_istream()
   }
 
   static unsigned int num_dma_buffers = 3;
-  static bool         drop_frames = false;
+  static bool drop_frames = false;
   {
     vgui_dialog dlg("Enter DMA Options");
     dlg.field("Number of DMA Buffers", num_dma_buffers);
@@ -543,12 +543,12 @@ dc1394_istream()
 bool
 update_iidc1394_params(std::vector<vidl_iidc1394_params::feature_options> & features)
 {
-  vgui_dialog           dlg("Set feature values");
+  vgui_dialog dlg("Set feature values");
   std::vector<unsigned> choices(features.size(), 0);
   for (unsigned int i = 0; i < features.size(); ++i)
   {
     vidl_iidc1394_params::feature_options & f = features[i];
-    std::stringstream                       ss;
+    std::stringstream ss;
 
     std::vector<std::string> modes;
     for (unsigned int j = 0; j < f.available_modes.size(); ++j)

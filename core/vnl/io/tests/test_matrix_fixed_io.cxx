@@ -12,7 +12,7 @@ test_matrix_fixed_double_2_2_io()
             << "Testing vnl_matrix_fixed<double,2,2> io\n"
             << "***************************************\n";
   //// test constructors, accessors
-  double                         datablock[4] = { 1.1, 1.2, 2.1, 2.2 };
+  double datablock[4] = { 1.1, 1.2, 2.1, 2.2 };
   vnl_matrix_fixed<double, 2, 2> m_out(datablock), m_in0, m_in1;
 
   // Give some initial content

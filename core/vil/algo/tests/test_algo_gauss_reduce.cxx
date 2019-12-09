@@ -196,14 +196,14 @@ test_algo_gauss_reduce_uint_16(unsigned nx)
   print_out(image0, "reduced_x", reduced_x);
 
   double dfirst = 0.071 * image0(2, 1) + 0.357 * image0(1, 1) + 0.572 * image0(0, 1);
-  auto   ifirst = (vxl_uint_16)vnl_math::rnd(dfirst);
+  auto ifirst = (vxl_uint_16)vnl_math::rnd(dfirst);
   TEST("First element", reduced_x(0, 1), ifirst);
 
   TEST("Next element", reduced_x(1, 1), image0(2, 1));
 
   unsigned L = (nx - 1) / 2;
-  double   dlast = 0.071 * image0(2 * L - 2, 1) + 0.357 * image0(2 * L - 1, 1) + 0.572 * image0(2 * L, 1);
-  auto     ilast = (vxl_uint_16)vnl_math::rnd(dlast);
+  double dlast = 0.071 * image0(2 * L - 2, 1) + 0.357 * image0(2 * L - 1, 1) + 0.572 * image0(2 * L, 1);
+  auto ilast = (vxl_uint_16)vnl_math::rnd(dlast);
   TEST("Last element", reduced_x(L, 1), ilast);
 
   vil_image_view<vxl_uint_16> test2;
@@ -242,13 +242,13 @@ test_algo_gauss_reduce_uint_16(unsigned nx)
   print_out(image1, "reduced_y", reduced_y);
 
   double dfirsty = 0.071 * image1(1, 2) + 0.357 * image1(1, 1) + 0.572 * image1(1, 0);
-  auto   ifirsty = (vxl_uint_16)vnl_math::rnd(dfirsty);
+  auto ifirsty = (vxl_uint_16)vnl_math::rnd(dfirsty);
   TEST("First element", reduced_y(1, 0), ifirsty);
 
   TEST("Next element", reduced_y(1, 1), image1(1, 2));
 
   double dlasty = 0.071 * image1(1, 2 * L - 2) + 0.357 * image1(1, 2 * L - 1) + 0.572 * image1(1, 2 * L);
-  auto   ilasty = (vxl_uint_16)vnl_math::rnd(dlasty);
+  auto ilasty = (vxl_uint_16)vnl_math::rnd(dlasty);
   TEST("Last element", reduced_y(1, L), ilasty);
 }
 

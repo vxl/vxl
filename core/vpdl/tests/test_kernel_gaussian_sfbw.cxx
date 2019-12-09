@@ -21,7 +21,7 @@ test_kernel_gaussian_sfbw_type(T epsilon, const std::string & type_name)
   samples.push_back(vnl_vector_fixed<T, 3>(-1, 2, 5));
   samples.push_back(vnl_vector_fixed<T, 3>(-10, 5, 0));
 
-  vnl_vector_fixed<T, 3>    mean(T(0));
+  vnl_vector_fixed<T, 3> mean(T(0));
   vnl_matrix_fixed<T, 3, 3> covar(T(0));
   for (unsigned int i = 0; i < samples.size(); ++i)
   {
@@ -39,10 +39,10 @@ test_kernel_gaussian_sfbw_type(T epsilon, const std::string & type_name)
 
   // values for probability tests
   vpdl_gaussian_sphere<T, 3> gauss3(vnl_vector_fixed<T, 3>(T(0)), bandwidth * bandwidth);
-  vnl_vector_fixed<T, 3>     pt1(1, 2, 0), pt2(10, 10, 10);
-  T                          density = T(0);
-  T                          cum_prob = T(0);
-  T                          box_prob = T(0);
+  vnl_vector_fixed<T, 3> pt1(1, 2, 0), pt2(10, 10, 10);
+  T density = T(0);
+  T cum_prob = T(0);
+  T box_prob = T(0);
   for (unsigned int i = 0; i < samples.size(); ++i)
   {
     density += gauss3.prob_density(pt1 - samples[i]);
@@ -68,11 +68,11 @@ test_kernel_gaussian_sfbw_type(T epsilon, const std::string & type_name)
 
     // test gradient virtual functions against numerical difference
     vnl_vector_fixed<T, 3> g3;
-    T                      dp = std::sqrt(epsilon);
-    T                      den = kernel_g3.density(pt1);
-    T                      den_x = kernel_g3.density(pt1 + vnl_vector_fixed<T, 3>(dp, 0, 0));
-    T                      den_y = kernel_g3.density(pt1 + vnl_vector_fixed<T, 3>(0, dp, 0));
-    T                      den_z = kernel_g3.density(pt1 + vnl_vector_fixed<T, 3>(0, 0, dp));
+    T dp = std::sqrt(epsilon);
+    T den = kernel_g3.density(pt1);
+    T den_x = kernel_g3.density(pt1 + vnl_vector_fixed<T, 3>(dp, 0, 0));
+    T den_y = kernel_g3.density(pt1 + vnl_vector_fixed<T, 3>(0, dp, 0));
+    T den_z = kernel_g3.density(pt1 + vnl_vector_fixed<T, 3>(0, 0, dp));
     vnl_vector_fixed<T, 3> grad(den_x - den, den_y - den, den_z - den);
     grad /= dp;
     T density = kernel_g3.gradient_density(pt1, g3);
@@ -119,12 +119,12 @@ test_kernel_gaussian_sfbw_type(T epsilon, const std::string & type_name)
       ("box_prob <" + type_name + ">").c_str(), kernel_g.box_prob(pt1.as_ref(), pt2.as_ref()), box_prob, epsilon);
 
     // test gradient virtual functions against numerical difference
-    vnl_vector<T>          g;
-    T                      dp = std::sqrt(epsilon);
-    T                      den = kernel_g.density(pt1.as_ref());
-    T                      den_x = kernel_g.density((pt1 + vnl_vector_fixed<T, 3>(dp, 0, 0)).as_ref());
-    T                      den_y = kernel_g.density((pt1 + vnl_vector_fixed<T, 3>(0, dp, 0)).as_ref());
-    T                      den_z = kernel_g.density((pt1 + vnl_vector_fixed<T, 3>(0, 0, dp)).as_ref());
+    vnl_vector<T> g;
+    T dp = std::sqrt(epsilon);
+    T den = kernel_g.density(pt1.as_ref());
+    T den_x = kernel_g.density((pt1 + vnl_vector_fixed<T, 3>(dp, 0, 0)).as_ref());
+    T den_y = kernel_g.density((pt1 + vnl_vector_fixed<T, 3>(0, dp, 0)).as_ref());
+    T den_z = kernel_g.density((pt1 + vnl_vector_fixed<T, 3>(0, 0, dp)).as_ref());
     vnl_vector_fixed<T, 3> grad(den_x - den, den_y - den, den_z - den);
     grad /= dp;
     T density = kernel_g.gradient_density(pt1.as_ref(), g);
@@ -153,7 +153,7 @@ test_kernel_gaussian_sfbw_type(T epsilon, const std::string & type_name)
 
     // values for probability tests
     vpdl_gaussian_sphere<T, 1> gauss(T(0), bandwidth * bandwidth);
-    T                          pt1 = T(1), pt2 = T(10);
+    T pt1 = T(1), pt2 = T(10);
     density = T(0);
     cum_prob = T(0);
     box_prob = T(0);

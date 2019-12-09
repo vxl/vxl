@@ -78,7 +78,7 @@ test_regexp()
   TEST("r1.deep_equal(r3)", r1.deep_equal(r3), false);
   TEST("r3.start()", r3.start(), 3);
   TEST("r3.end()", r3.end(), 7);
-  vul_reg_exp  r4(r3);
+  vul_reg_exp r4(r3);
   const char * strng3 = "I don't think it's here";
   TEST("r3.find(strng3)", r3.find(strng3), false);
   TEST("r4==r3", r4, r3);
@@ -124,7 +124,7 @@ test_regexp()
   std::cout << "\nTESTS FOR REGULAR EXPRESSIONS WITH ^\n";
 
   const char * s = "str at front";
-  vul_reg_exp  rxp("^str");
+  vul_reg_exp rxp("^str");
   TEST("vul_reg_exp rxp(^str)", 0, 0);
   TEST("rxp.find(\"str at front\")", rxp.find(s), true);
   TEST("rxp.start() == 0", rxp.start(), 0);

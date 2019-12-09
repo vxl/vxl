@@ -69,8 +69,8 @@ vnl_matops::homg_diff(vnl_matrix<double> const & A, vnl_matrix<double> const & B
 #define implement_converters(U, V)                                                                                     \
   vnl_matrix<U> make_matrix_##U(vnl_matrix<V> const & M)                                                               \
   {                                                                                                                    \
-    unsigned      m = M.rows();                                                                                        \
-    unsigned      n = M.columns();                                                                                     \
+    unsigned m = M.rows();                                                                                             \
+    unsigned n = M.columns();                                                                                          \
     vnl_matrix<U> ret(m, n);                                                                                           \
     for (unsigned i = 0; i < m; ++i)                                                                                   \
       for (unsigned j = 0; j < n; ++j)                                                                                 \
@@ -80,7 +80,7 @@ vnl_matops::homg_diff(vnl_matrix<double> const & A, vnl_matrix<double> const & B
                                                                                                                        \
   vnl_vector<U> make_vector_##U(vnl_vector<V> const & v)                                                               \
   {                                                                                                                    \
-    unsigned      n = v.size();                                                                                        \
+    unsigned n = v.size();                                                                                             \
     vnl_vector<U> ret(n);                                                                                              \
     for (unsigned i = 0; i < n; ++i)                                                                                   \
       ret[i] = static_cast<U>(v[i]);                                                                                   \

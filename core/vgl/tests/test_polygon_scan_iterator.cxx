@@ -42,7 +42,7 @@ test_without_boundary()
   // to be included, the 6 pixels are (0,0) (1,0) (2,0) (1,1) (2,1) (2,2).
   unsigned int count = 0;
   Polygon_scan it(poly, false);
-  int          y = 0;
+  int y = 0;
   for (it.reset(); it.next(); ++y)
   {
     std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany() << ") goes from " << it.fstartx() << " ("
@@ -70,7 +70,7 @@ test_with_boundary()
   // included, hence there are 3x4=12 pixels "inside" of this square:
   unsigned int count = 0;
   Polygon_scan it(poly);
-  int          y = 21;
+  int y = 21;
   for (it.reset(); it.next(); ++y)
   {
     std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany() << ") goes from " << it.fstartx() << " ("
@@ -102,7 +102,7 @@ test_degenerate_polygon()
   // Hence the number of integer-valued points is 30+29+...+2+1=30*31/2=465.
   Polygon_scan it(poly);
   unsigned int count = 0;
-  int          y = 10;
+  int y = 10;
   for (it.reset(); it.next(); ++y)
   {
     std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany() << ") goes from " << it.fstartx() << " ("
@@ -147,7 +147,7 @@ test_almost_horizontal()
   // The one at y=786 goes from x=424 to x=,
   // while the one at y=490 goes from x=424 to x=.
   Polygon_scan it(poly, false);
-  int          y = 786;
+  int y = 786;
   for (it.reset(); it.next(); ++y)
   {
     std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany() << ") goes from " << it.fstartx() << " ("

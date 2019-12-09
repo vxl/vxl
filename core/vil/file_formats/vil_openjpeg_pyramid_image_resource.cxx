@@ -107,12 +107,12 @@ vil_openjpeg_pyramid_image_resource::get_copy_view(unsigned i0, unsigned ni, uns
 // The origin and size parameters are in the coordinate system of the base image.
 // The scale factor is with respect to the base image (base scale = 1.0).
 vil_image_view_base_sptr
-vil_openjpeg_pyramid_image_resource::get_copy_view(unsigned    i0,
-                                                   unsigned    ni,
-                                                   unsigned    j0,
-                                                   unsigned    nj,
+vil_openjpeg_pyramid_image_resource::get_copy_view(unsigned i0,
+                                                   unsigned ni,
+                                                   unsigned j0,
+                                                   unsigned nj,
                                                    const float scale,
-                                                   float &     actual_scale) const
+                                                   float & actual_scale) const
 {
   if (scale >= 1.0f)
   {
@@ -120,7 +120,7 @@ vil_openjpeg_pyramid_image_resource::get_copy_view(unsigned    i0,
     return this->get_copy_view(i0, ni, j0, nj, 0);
   }
   float f_lev = -std::log(scale) / std::log(2.0f);
-  auto  level = static_cast<unsigned>(f_lev);
+  auto level = static_cast<unsigned>(f_lev);
   if (level >= this->nlevels())
     level = this->nlevels() - 1;
   actual_scale = scale_at_level(level);

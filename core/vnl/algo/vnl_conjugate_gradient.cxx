@@ -31,8 +31,8 @@ vnl_conjugate_gradient::init(vnl_cost_function & f)
 double
 vnl_conjugate_gradient::valuecomputer_(double * x, void * userdata)
 {
-  auto *                 self = static_cast<vnl_conjugate_gradient *>(userdata);
-  vnl_cost_function *    f = self->f_;
+  auto * self = static_cast<vnl_conjugate_gradient *>(userdata);
+  vnl_cost_function * f = self->f_;
   vnl_vector_ref<double> ref_x(f->get_number_of_unknowns(), x);
 
   self->num_evaluations_++;
@@ -43,8 +43,8 @@ vnl_conjugate_gradient::valuecomputer_(double * x, void * userdata)
 void
 vnl_conjugate_gradient::gradientcomputer_(double * g, double * x, void * userdata)
 {
-  auto *                 self = static_cast<vnl_conjugate_gradient *>(userdata);
-  vnl_cost_function *    f = self->f_;
+  auto * self = static_cast<vnl_conjugate_gradient *>(userdata);
+  vnl_cost_function * f = self->f_;
   vnl_vector_ref<double> ref_x(f->get_number_of_unknowns(), x);
   vnl_vector_ref<double> ref_g(f->get_number_of_unknowns(), g);
 
@@ -54,8 +54,8 @@ vnl_conjugate_gradient::gradientcomputer_(double * g, double * x, void * userdat
 void
 vnl_conjugate_gradient::valueandgradientcomputer_(double * v, double * g, double * x, void * userdata)
 {
-  auto *                 self = static_cast<vnl_conjugate_gradient *>(userdata);
-  vnl_cost_function *    f = self->f_;
+  auto * self = static_cast<vnl_conjugate_gradient *>(userdata);
+  vnl_cost_function * f = self->f_;
   vnl_vector_ref<double> ref_x(f->get_number_of_unknowns(), x);
   vnl_vector_ref<double> ref_g(f->get_number_of_unknowns(), g);
 
@@ -68,7 +68,7 @@ vnl_conjugate_gradient::preconditioner_(double * out, double * in, void * userda
   // FIXME - there should be some way to set a preconditioner if you have one
   // e.g. P = inv(diag(A'A)) for linear least squares systems.
 
-  auto *              self = static_cast<vnl_conjugate_gradient *>(userdata);
+  auto * self = static_cast<vnl_conjugate_gradient *>(userdata);
   vnl_cost_function * f = self->f_;
 
   int n = f->get_number_of_unknowns();
@@ -81,13 +81,13 @@ bool
 vnl_conjugate_gradient::minimize(vnl_vector<double> & x)
 {
   double * xp = x.data_block();
-  double   max_norm_of_gradient;
-  long     number_of_iterations;
+  double max_norm_of_gradient;
+  long number_of_iterations;
   final_step_size_ = 0;
-  double             gradient_tolerance = gtol;
+  double gradient_tolerance = gtol;
   vnl_vector<double> workspace(f_->get_number_of_unknowns() * 3);
-  long               number_of_unknowns = f_->get_number_of_unknowns();
-  long               error_code;
+  long number_of_unknowns = f_->get_number_of_unknowns();
+  long error_code;
 
   // Compute the initial value.
   start_error_ = valuecomputer_(xp, this);

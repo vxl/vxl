@@ -27,7 +27,7 @@ bool
 is_okay(const std::string & name)
 {
   bool okay = true;
-  int  fd = open(name.c_str(), O_CREAT | O_EXCL, 0600);
+  int fd = open(name.c_str(), O_CREAT | O_EXCL, 0600);
   if (fd == -1)
   {
     okay = false;
@@ -77,7 +77,7 @@ std::string
 vul_temp_filename()
 {
 #if defined(_MSC_VER) || defined(__MINGW32__)
-  char   path[_MAX_PATH];
+  char path[_MAX_PATH];
   char * file;
   if (GetTempPath(_MAX_PATH, path) == 0)
     return "";
@@ -95,10 +95,10 @@ vul_temp_filename()
   // Don't use tmpnam, since it causes linker warnings (and sometimes
   // linker errors). Instead reimplement. Sigh.
   const unsigned int num_char_in_filename = 7 + 1; // should always be at least 1
-  std::string        filename;
-  std::string        tempdir;
-  unsigned int       count = 0;
-  bool               okay = false;
+  std::string filename;
+  std::string tempdir;
+  unsigned int count = 0;
+  bool okay = false;
 
   if (std::getenv("TMP"))
   {

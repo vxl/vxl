@@ -108,16 +108,16 @@ static void
 read_header(DcmObject * dataset, vil_dicom_header_info & i);
 
 static void
-read_pixels_into_buffer(DcmPixelData *          pixels,
-                        unsigned                num_samples,
-                        Uint16                  alloc,
-                        Uint16                  stored,
-                        Uint16                  high,
-                        Uint16                  rep,
-                        Float64                 slope,
-                        Float64                 intercept,
+read_pixels_into_buffer(DcmPixelData * pixels,
+                        unsigned num_samples,
+                        Uint16 alloc,
+                        Uint16 stored,
+                        Uint16 high,
+                        Uint16 rep,
+                        Float64 slope,
+                        Float64 intercept,
                         vil_memory_chunk_sptr & out_buf,
-                        vil_pixel_format &      out_format);
+                        vil_pixel_format & out_format);
 
 
 vil_dicom_image::vil_dicom_image(vil_stream * vs)
@@ -192,13 +192,13 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
   // the pixel format written into pixel_format.
   //
   vil_memory_chunk_sptr pixel_buf;
-  vil_pixel_format      pixel_format = VIL_PIXEL_FORMAT_UNKNOWN;
+  vil_pixel_format pixel_format = VIL_PIXEL_FORMAT_UNKNOWN;
 
   // First, read in the bytes and interpret them appropriately
   //
   {
     DcmPixelData * pixels = 0;
-    DcmStack       stack;
+    DcmStack stack;
     if (dset.search(DCM_PixelData, stack, ESM_fromHere, true) == EC_Normal)
     {
       if (stack.card() == 0)
@@ -271,9 +271,9 @@ vil_dicom_image::file_format() const
 }
 
 vil_dicom_image::vil_dicom_image(vil_stream * /*vs*/,
-                                 unsigned         ni,
-                                 unsigned         nj,
-                                 unsigned         nplanes,
+                                 unsigned ni,
+                                 unsigned nj,
+                                 unsigned nplanes,
                                  vil_pixel_format format)
 {
   assert(!"vil_dicom_image doesn't yet support output");
@@ -476,8 +476,8 @@ static DcmElement *
 find_element(DcmObject * dset, vxl_uint_16 group, vxl_uint_16 element)
 {
   DcmElement * result = 0;
-  DcmTagKey    key(group, element);
-  DcmStack     stack;
+  DcmTagKey key(group, element);
+  DcmStack stack;
   if (dset->search(key, stack, ESM_fromHere, true) == EC_Normal)
   {
     if (stack.card() == 0)
@@ -908,7 +908,7 @@ read_header(DcmObject * f, vil_dicom_header_info & i)
   try_set<ap_type(CS)>::proc(f, group, ap_el(AQPATIENTPOSITION), i.patient_pos_); // It's the patient position
 
   typedef vil_dicom_header_type_of<vil_dicom_header_DS>::type DS_type;
-  std::vector<DS_type>                                        ps_ips;
+  std::vector<DS_type> ps_ips;
   try_set<ap_type(DS)>::proc(f, group, ap_el(AQIMAGERPIXELSPACING), ps_ips);
   if (ps_ips.size() > 0)
     i.imager_spacing_x_ = ps_ips[0];
@@ -1003,7 +1003,7 @@ read_header(DcmObject * f, vil_dicom_header_info & i)
     f, group, ap_el(PRREALWORLDVALUESLOPE), i.real_world_value_slope_); // It's the real world slope value
 
   typedef vil_dicom_header_type_of<vil_dicom_header_US>::type US_type;
-  std::vector<US_type>                                        psb;
+  std::vector<US_type> psb;
   try_set<ap_type(US)>::proc(f, group, ap_el(EXPOSEDAREA), psb);
   if (psb.size() > 0)
     i.exposedarea_x_ = psb[0];
@@ -1036,13 +1036,13 @@ namespace
 template <class InT>
 void
 convert_src_type(InT const *,
-                 DcmPixelData *     pixels,
-                 unsigned           num_samples,
-                 Uint16             alloc,
-                 Uint16             stored,
-                 Uint16             high,
-                 Uint16             rep,
-                 DiInputPixel *&    pixel_data,
+                 DcmPixelData * pixels,
+                 unsigned num_samples,
+                 Uint16 alloc,
+                 Uint16 stored,
+                 Uint16 high,
+                 Uint16 rep,
+                 DiInputPixel *& pixel_data,
                  vil_pixel_format & act_format)
 {
   if (rep == 0 && stored <= 8)
@@ -1096,16 +1096,16 @@ swap_shorts(unsigned short * ip, unsigned short * op, int count)
 }
 #  endif // MIXED_ENDIAN
 static void
-read_pixels_into_buffer(DcmPixelData *          pixels,
-                        unsigned                num_samples,
-                        Uint16                  alloc,
-                        Uint16                  stored,
-                        Uint16                  high,
-                        Uint16                  rep,
-                        Float64                 slope,
-                        Float64                 intercept,
+read_pixels_into_buffer(DcmPixelData * pixels,
+                        unsigned num_samples,
+                        Uint16 alloc,
+                        Uint16 stored,
+                        Uint16 high,
+                        Uint16 rep,
+                        Float64 slope,
+                        Float64 intercept,
                         vil_memory_chunk_sptr & out_buf,
-                        vil_pixel_format &      out_format)
+                        vil_pixel_format & out_format)
 {
   // This will be the "true" pixel buffer type after the overlay
   // planes are removed and the pixel bits shifted to the lowest bits
@@ -1135,7 +1135,7 @@ read_pixels_into_buffer(DcmPixelData *          pixels,
   if (act_format == VIL_PIXEL_FORMAT_INT_16)
     act_format = VIL_PIXEL_FORMAT_UINT_16;
 #    endif // NO_OFFSET
-  bool             swap_data = false;
+  bool swap_data = false;
   unsigned short * temp1 = new unsigned short[num_samples];
   unsigned short * temp2 = reinterpret_cast<unsigned short *>(pixel_data->getData());
   swap_shorts(temp2, temp1, num_samples);

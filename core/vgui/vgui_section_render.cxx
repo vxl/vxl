@@ -36,16 +36,16 @@ fsm_debug(char const *, ...)
 {}
 #endif
 static bool
-clamped_viewport(float      x0,
-                 float      y0,
-                 float      x1,
-                 float      y1,
+clamped_viewport(float x0,
+                 float y0,
+                 float x1,
+                 float y1,
                  unsigned & i0,
                  unsigned & j0,
                  unsigned & ni,
                  unsigned & nj,
-                 float &    zoomx,
-                 float &    zoomy)
+                 float & zoomx,
+                 float & zoomy)
 {
   // Get current matrix state, in fortran order.
   double Pt[4][4], Mt[4][4];
@@ -163,15 +163,15 @@ pixel_view(unsigned & i0, unsigned & ni, unsigned & j0, unsigned & nj, float & z
 }
 
 static void
-GL_setup(GLenum                format,
-         GLenum                type,
-         bool                  hardware_map,
-         GLint &               alignment,
-         GLint &               row_length,
-         GLint &               skip_pixels,
-         GLint &               skip_rows,
-         GLint &               table_size,
-         GLboolean &           map_color,
+GL_setup(GLenum format,
+         GLenum type,
+         bool hardware_map,
+         GLint & alignment,
+         GLint & row_length,
+         GLint & skip_pixels,
+         GLint & skip_rows,
+         GLint & table_size,
+         GLboolean & map_color,
          vbl_array_1d<float> * fLmap,
          vbl_array_1d<float> * fRmap,
          vbl_array_1d<float> * fGmap,
@@ -241,16 +241,16 @@ GL_restore(GLboolean & map_color, GLint alignment, GLint row_length, GLint skip_
 }
 
 bool
-vgui_section_render(void const *          pixels,
-                    unsigned              w,
-                    unsigned              h, // Size of image.
-                    float                 x0,
-                    float                 y0, // Region of image
-                    float                 x1,
-                    float                 y1, // to render.
-                    GLenum                format,
-                    GLenum                type,
-                    bool                  hardware_map,
+vgui_section_render(void const * pixels,
+                    unsigned w,
+                    unsigned h, // Size of image.
+                    float x0,
+                    float y0, // Region of image
+                    float x1,
+                    float y1, // to render.
+                    GLenum format,
+                    GLenum type,
+                    bool hardware_map,
                     vbl_array_1d<float> * fLmap,
                     vbl_array_1d<float> * fRmap,
                     vbl_array_1d<float> * fGmap,
@@ -265,13 +265,13 @@ vgui_section_render(void const *          pixels,
   assert(!hardware_map || format != GL_LUMINANCE || fLmap);
   assert(!hardware_map || format != GL_RGB || (fRmap && fGmap && fBmap));
   assert(!hardware_map || format != GL_RGBA || (fRmap && fGmap && fBmap && fAmap));
-  float    zoomx = 1.0f, zoomy = 1.0f;
+  float zoomx = 1.0f, zoomy = 1.0f;
   unsigned i0 = 0, j0 = 0, ni = 0, nj = 0;
   if (!clamped_viewport(x0, y0, x1, y1, i0, j0, ni, nj, zoomx, zoomy))
     return false;
   int i_x0 = i0, i_y0 = j0, i_x1 = i0 + ni, i_y1 = j0 + nj;
   // Store old transfer characteristics for restoring it in a bit.
-  GLint     alignment, row_length, skip_pixels, skip_rows, table_size;
+  GLint alignment, row_length, skip_pixels, skip_rows, table_size;
   GLboolean map_color;
   GL_setup(format,
            type,
@@ -304,14 +304,14 @@ vgui_section_render(void const *          pixels,
 }
 
 bool
-vgui_view_render(void const *          pixels,
-                 unsigned              w,
-                 unsigned              h, // Size of view
-                 float                 zoomx,
-                 float                 zoomy,
-                 GLenum                format,
-                 GLenum                type,
-                 bool                  hardware_map,
+vgui_view_render(void const * pixels,
+                 unsigned w,
+                 unsigned h, // Size of view
+                 float zoomx,
+                 float zoomy,
+                 GLenum format,
+                 GLenum type,
+                 bool hardware_map,
                  vbl_array_1d<float> * fLmap,
                  vbl_array_1d<float> * fRmap,
                  vbl_array_1d<float> * fGmap,
@@ -324,7 +324,7 @@ vgui_view_render(void const *          pixels,
   assert(!hardware_map || format != GL_RGBA || (fRmap && fGmap && fBmap && fAmap));
 
   // Store old transfer characteristics for restoring it in a bit.
-  GLint     alignment, row_length, table_size, skip_pixels, skip_rows;
+  GLint alignment, row_length, table_size, skip_pixels, skip_rows;
   GLboolean map_color;
   GL_setup(format,
            type,

@@ -29,9 +29,9 @@ test_camera_compute_setup()
 {
   // PART 1: Test the affine camera computation
 
-  vnl_vector_fixed<double, 4>       r1(1, 2, 3, 4);
-  vnl_vector_fixed<double, 4>       r2(-1, 4, -2, 0);
-  vpgl_affine_camera<double>        C1(r1, r2);
+  vnl_vector_fixed<double, 4> r1(1, 2, 3, 4);
+  vnl_vector_fixed<double, 4> r2(-1, 4, -2, 0);
+  vpgl_affine_camera<double> C1(r1, r2);
   std::vector<vgl_point_3d<double>> world_pts;
   world_pts.emplace_back(1, 0, -1);
   world_pts.emplace_back(6, 1, 2);
@@ -182,7 +182,7 @@ test_perspective_compute_direct_linear_transform()
 
   // Calculate the projected points
   vpgl_perspective_camera<double> camera;
-  double                          err;
+  double err;
   vpgl_perspective_camera_compute::compute_dlt(image_pts, world_pts, camera, err);
 
   TEST_NEAR("Small error.", err, 0, .1);
@@ -202,8 +202,8 @@ static void
 test_perspective_compute_ground()
 {
   vpgl_calibration_matrix<double> trueK(1680, vgl_point_2d<double>(959.5, 539.5));
-  vgl_rotation_3d<double>         trueR(vnl_vector_fixed<double, 3>(1.87379, 0.0215981, -0.0331475));
-  vgl_point_3d<double>            trueC(14.5467, -6.71791, 4.79478);
+  vgl_rotation_3d<double> trueR(vnl_vector_fixed<double, 3>(1.87379, 0.0215981, -0.0331475));
+  vgl_point_3d<double> trueC(14.5467, -6.71791, 4.79478);
   vpgl_perspective_camera<double> trueP(trueK, trueC, trueR);
 
   // generate some points on the ground
@@ -243,8 +243,8 @@ static void
 test_calibration_compute_natural()
 {
   vpgl_calibration_matrix<double> trueK(1680, vgl_point_2d<double>(959.5, 539.5));
-  vgl_rotation_3d<double>         trueR(vnl_vector_fixed<double, 3>(1.87379, 0.0215981, -0.0331475));
-  vgl_point_3d<double>            trueC(14.5467, -6.71791, 4.79478);
+  vgl_rotation_3d<double> trueR(vnl_vector_fixed<double, 3>(1.87379, 0.0215981, -0.0331475));
+  vgl_point_3d<double> trueC(14.5467, -6.71791, 4.79478);
   vpgl_perspective_camera<double> trueP(trueK, trueC, trueR);
 
   // generate some points on the ground
@@ -314,14 +314,14 @@ test_compute_affine()
   row01[1] = -2.13683;
   row01[2] = -0.229387;
   row01[3] = 648.49;
-  vpgl_affine_camera<double>        acam(row00, row01), fitted_acam;
+  vpgl_affine_camera<double> acam(row00, row01), fitted_acam;
   std::vector<vgl_point_2d<double>> pts_2d;
   for (const auto & i : pts_3d)
   {
     pts_2d.push_back(acam.project(i));
   }
-  bool                           good = vpgl_affine_camera_compute::compute(pts_2d, pts_3d, fitted_acam);
-  double                         er0 = 0.0;
+  bool good = vpgl_affine_camera_compute::compute(pts_2d, pts_3d, fitted_acam);
+  double er0 = 0.0;
   vnl_matrix_fixed<double, 3, 4> Mgt = acam.get_matrix(), Mfitted = fitted_acam.get_matrix();
   for (size_t r = 0; r < 2; ++r)
     for (size_t c = 0; c < 2; ++c)
@@ -375,16 +375,16 @@ test_compute_rational()
   double su = 14106, ou = 13785;
   double sv = 15402, ov = 15216;
 
-  vpgl_rational_camera<double>      rcam(neu_u1, den_u1, neu_v1, den_v1, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
+  vpgl_rational_camera<double> rcam(neu_u1, den_u1, neu_v1, den_v1, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
   std::vector<vgl_point_2d<double>> image_pts;
   std::vector<vgl_point_3d<double>> ground_pts;
-  size_t                            n_points = 1000;
-  vnl_random                        rng;
+  size_t n_points = 1000;
+  vnl_random rng;
   for (unsigned i = 0; i < n_points; i++)
   {
-    double               x = 2.0 * sx * rng.drand64() + (ox - sx);
-    double               y = 2.0 * sy * rng.drand64() + (oy - sy);
-    double               z = 2.0 * sz * rng.drand64() + (oz - sz);
+    double x = 2.0 * sx * rng.drand64() + (ox - sx);
+    double y = 2.0 * sy * rng.drand64() + (oy - sy);
+    double z = 2.0 * sz * rng.drand64() + (oz - sz);
     vgl_point_3d<double> p3d(x, y, z);
     ground_pts.push_back(p3d);
     double u, v;
@@ -392,14 +392,14 @@ test_compute_rational()
     image_pts.push_back(vgl_point_2d<double>(u, v));
   }
   vpgl_rational_camera<double> fcam;
-  bool                         good = vpgl_rational_camera_compute::compute(image_pts, ground_pts, fcam);
+  bool good = vpgl_rational_camera_compute::compute(image_pts, ground_pts, fcam);
   if (good)
   {
     double rms_er = 0.0;
     for (size_t i = 0; i < n_points; ++i)
     {
       const vgl_point_3d<double> & p3 = ground_pts[i];
-      double                       u, v;
+      double u, v;
       fcam.project(p3.x(), p3.y(), p3.z(), u, v);
       double sq_err = (u - image_pts[i].x()) * (u - image_pts[i].x()) + (v - image_pts[i].y()) * (v - image_pts[i].y());
       rms_er += sq_err;

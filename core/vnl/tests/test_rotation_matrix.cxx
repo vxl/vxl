@@ -90,7 +90,7 @@ calc_and_test_matrix(const vnl_vector<double> & axis, const vnl_matrix_fixed<dou
     return false;
 
   vnl_matrix<double> D = R - M;
-  double             max_err = D.absolute_value_max();
+  double max_err = D.absolute_value_max();
 
   // Check that rotation matrix is correct within a tolerance
   success = success && (max_err <= dtol);
@@ -112,15 +112,15 @@ calc_and_test_matrix(const vnl_vector<double> & axis, const vnl_matrix_fixed<dou
 static void
 test_euler_rotations()
 {
-  bool               success = true;
+  bool success = true;
   constexpr unsigned ntrials = 100;
   for (unsigned i = 0; i < ntrials; ++i)
   {
-    bool   this_trial_ok = true;
+    bool this_trial_ok = true;
     double ang = randgen.drand32(-4 * vnl_math::pi, 4 * vnl_math::pi);
 
-    vnl_vector<double>             axis(3); // The magnitude of this vector indicates the angle of rotation
-    vnl_matrix_fixed<double, 3, 3> M;       // True answer
+    vnl_vector<double> axis(3);       // The magnitude of this vector indicates the angle of rotation
+    vnl_matrix_fixed<double, 3, 3> M; // True answer
 
     //--- rotations about x-axis ---
     get_rotation_matrix_euler_angle(ang, x_axis, M);

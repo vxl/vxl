@@ -9,10 +9,10 @@ void
 test_vector_fixed_ref()
 {
   { // exercise conversions and verify const behavior
-    const double       numbers[4]{ 0, 11, 22, 33 };
+    const double numbers[4]{ 0, 11, 22, 33 };
     vnl_vector<double> v{ numbers, 4 };
     // vnl_vector_ref(numbers, 4); // Should fail to compile due to const double numbers
-    vnl_vector_ref<double>       memory_access_vnl_ref{ v.size(), v.data_block() };
+    vnl_vector_ref<double> memory_access_vnl_ref{ v.size(), v.data_block() };
     const vnl_vector_ref<double> const_cpprefvector{ memory_access_vnl_ref };
 
     const_cpprefvector.as_ref();
@@ -21,9 +21,9 @@ test_vector_fixed_ref()
 
   // Test conversion behaviors in the presence of move constructors/move assignments
   {
-    constexpr double            bulk_data_array[4]{ 1.0, 2.0, 3.0, 4.0 };
+    constexpr double bulk_data_array[4]{ 1.0, 2.0, 3.0, 4.0 };
     vnl_vector_fixed<double, 4> initial_fixed_size_matrix(bulk_data_array);
-    vnl_vector_ref<double>      ref_to_data{ initial_fixed_size_matrix.as_ref() };
+    vnl_vector_ref<double> ref_to_data{ initial_fixed_size_matrix.as_ref() };
 
     TEST("vnl_vector_ref{ vnl_vector_fixed } share data pointer",
          initial_fixed_size_matrix.data_block() == ref_to_data.data_block(),
@@ -48,12 +48,12 @@ test_vector_fixed_ref()
   {
     size = 4
   };
-  typedef vnl_vector_fixed<double, size>           vf;
-  typedef vnl_vector_fixed_ref<double, size>       vfr;
+  typedef vnl_vector_fixed<double, size> vf;
+  typedef vnl_vector_fixed_ref<double, size> vfr;
   typedef vnl_vector_fixed_ref_const<double, size> vfrc;
 
   int i;
-  vf  vec; // copy in
+  vf vec; // copy in
   for (i = 0; i < size; ++i)
   {
     vec(i) = i;
@@ -64,7 +64,7 @@ test_vector_fixed_ref()
 
   // fixed_ref_const
   const vf & cvf = vec;
-  vfrc       cref(cvf);
+  vfrc cref(cvf);
   // check address
   for (i = 0; i < size; ++i)
   {
@@ -103,10 +103,10 @@ test_vector_fixed_ref()
     std::generate(a.begin(), a.end(), std::rand);
     std::generate(b.begin(), b.end(), std::rand);
     vfrc arefc(a), brefc(b);
-    vf   mc = arefc + brefc;
+    vf mc = arefc + brefc;
 
     vfr aref(a), bref(b);
-    vf  m = aref + bref;
+    vf m = aref + bref;
 
     vf m2 = arefc + bref;
     vf m3 = arefc + brefc;
@@ -120,10 +120,10 @@ test_vector_fixed_ref()
     std::generate(a.begin(), a.end(), std::rand);
     std::generate(b.begin(), b.end(), std::rand);
     vfrc arefc(a), brefc(b);
-    vf   mc = arefc + brefc;
+    vf mc = arefc + brefc;
 
     vfr aref(a), bref(b);
-    vf  m = aref + bref;
+    vf m = aref + bref;
 
     vf m2 = arefc + bref;
     vf m3 = arefc + brefc;

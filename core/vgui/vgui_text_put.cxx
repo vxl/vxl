@@ -23,7 +23,7 @@ vgui_text_put(const char * str, unsigned size)
   if (!glut_was_initialized)
   {
     glut_was_initialized = true;
-    int    argc = 0;
+    int argc = 0;
     char * argv[1] = { nullptr };
     glutInit(&argc, argv);
   }
@@ -66,7 +66,7 @@ vgui_text_length(const char * str, unsigned size)
   if (!glut_was_initialized)
   {
     glut_was_initialized = true;
-    int    argc = 0;
+    int argc = 0;
     char * argv[1] = { nullptr };
     glutInit(&argc, argv);
   }
@@ -111,7 +111,7 @@ vgui_char_width(unsigned char c, unsigned size)
   if (!glut_was_initialized)
   {
     glut_was_initialized = true;
-    int    argc = 0;
+    int argc = 0;
     char * argv[1] = { nullptr };
     glutInit(&argc, argv);
   }

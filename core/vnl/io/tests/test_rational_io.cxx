@@ -22,7 +22,7 @@ test_rational_io()
   vsl_b_write(bfs_out, one);
   bfs_out.close();
 
-  vnl_rational   r1, r2, r3;
+  vnl_rational r1, r2, r3;
   vsl_b_ifstream bfs_in("vnl_rational_test_io.bvl.tmp");
   TEST("Opened vnl_rational_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, r1);

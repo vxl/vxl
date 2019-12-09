@@ -39,13 +39,13 @@ test_arg()
 {
   vul_arg_info_list arglist;
 
-  vul_arg<int>                 int1(arglist, "-int", "A help string", 1);
-  vul_arg<int>                 int2(arglist, "-int2", "Another help string", 2);
-  vul_arg<bool>                bool1(arglist, "-bool1", "And another", false);
-  vul_arg<bool>                bool2(arglist, "-bool2", "And another", true);
-  vul_arg<bool>                bool3(arglist, "-bool3", "And a final help test just to finish off...", true);
-  vul_arg<std::list<int>>      list1(arglist, "-list1", "List...");
-  vul_arg<char *>              filename1(arglist);
+  vul_arg<int> int1(arglist, "-int", "A help string", 1);
+  vul_arg<int> int2(arglist, "-int2", "Another help string", 2);
+  vul_arg<bool> bool1(arglist, "-bool1", "And another", false);
+  vul_arg<bool> bool2(arglist, "-bool2", "And another", true);
+  vul_arg<bool> bool3(arglist, "-bool3", "And a final help test just to finish off...", true);
+  vul_arg<std::list<int>> list1(arglist, "-list1", "List...");
+  vul_arg<char *> filename1(arglist);
   vul_arg<std::vector<double>> list2(arglist, "-list2", "double List...");
   vul_arg<int> required(arglist, "-req", "Another one to declare a required flag", vul_arg<int>::is_required);
 
@@ -63,7 +63,7 @@ test_arg()
   TEST("filename == f", std::strcmp(filename1(), "f"), 0);
 
   {
-    unsigned       true_list_length = sizeof list1_contents / sizeof list1_contents[0];
+    unsigned true_list_length = sizeof list1_contents / sizeof list1_contents[0];
     std::list<int> l = list1();
     TEST("list1 length", l.size(), true_list_length);
     bool ok = true;
@@ -78,7 +78,7 @@ test_arg()
     TEST("list1 contents", ok, true);
   }
   {
-    unsigned            true_list_length = sizeof list2_contents / sizeof list2_contents[0];
+    unsigned true_list_length = sizeof list2_contents / sizeof list2_contents[0];
     std::vector<double> l = list2();
     TEST("list2 length", l.size(), true_list_length);
     bool ok = true;

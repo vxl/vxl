@@ -53,9 +53,9 @@ vgui_blender_tableau::vgui_blender_tableau(vil1_image const & img, vgui_range_ma
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_blender_tableau_new.
 //  Creates a blender with the given image and alpha_ value.
-vgui_blender_tableau::vgui_blender_tableau(vil_image_resource_sptr const &    img,
+vgui_blender_tableau::vgui_blender_tableau(vil_image_resource_sptr const & img,
                                            vgui_range_map_params_sptr const & rmp,
-                                           float                              a)
+                                           float a)
   : renderer_(nullptr)
   , vil_renderer_(nullptr)
   , rmp_(rmp)
@@ -69,9 +69,9 @@ vgui_blender_tableau::vgui_blender_tableau(vil_image_resource_sptr const &    im
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_blender_tableau_new.
 //  Creates a blender with the given image and alpha_ value.
-vgui_blender_tableau::vgui_blender_tableau(vil_image_view_base const &        img,
+vgui_blender_tableau::vgui_blender_tableau(vil_image_view_base const & img,
                                            vgui_range_map_params_sptr const & rmp,
-                                           float                              a)
+                                           float a)
   : renderer_(nullptr)
   , vil_renderer_(nullptr)
   , rmp_(rmp)

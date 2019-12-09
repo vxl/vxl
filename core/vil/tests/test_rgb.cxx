@@ -12,7 +12,7 @@
 template <class T>
 void test_vil_rgb(T)
 {
-  T          v = 7.0;
+  T v = 7.0;
   vil_rgb<T> J0(v);
   TEST("Construct a vil_rgb value. ", J0, vil_rgb<T>(7.0, 7.0, 7.0));
   std::string type_name = typeid(J0).name();
@@ -21,8 +21,8 @@ void test_vil_rgb(T)
   J0.r = 6.0;
   TEST("Construct a vil_rgb value. ", J0, vil_rgb<T>(6.0, 7.0, 7.0));
 
-  T          r0 = 25.0, g0 = 35.0, b0 = 45.0;
-  T          r1 = 25.0, g1 = 35.0, b1 = 45.0;
+  T r0 = 25.0, g0 = 35.0, b0 = 45.0;
+  T r1 = 25.0, g1 = 35.0, b1 = 45.0;
   vil_rgb<T> B0(r0, g0, b0);
   TEST_NEAR("Convert vil_rpb to grey ", B0.grey(), 33.15, 0.15);
 
@@ -86,19 +86,19 @@ test_vil_rgb_bool()
   std::cout << "****************************************\n"
             << " Testing vil_rgb<bool>\n"
             << "****************************************\n";
-  bool          v = true;
+  bool v = true;
   vil_rgb<bool> J0(v);
   TEST("bool ", J0, vil_rgb<bool>(1, 1, 1));
   std::cout << "vil_rgb<bool> should be [1, 1, 1], is " << J0 << std::endl;
   J0.r = false;
   TEST("bool ", J0, vil_rgb<bool>(0, 1, 1));
 
-  bool          r = true, g = false, b = true;
+  bool r = true, g = false, b = true;
   vil_rgb<bool> J(r, g, b);
   TEST("bool ", J, vil_rgb<bool>(1, 0, 1));
   std::cout << "vil_rgb<bool> should be [1 0 1], is " << J << std::endl;
 
-  double      d = 2.0f;
+  double d = 2.0f;
   std::string type_name = typeid(J).name();
   TEST("vil_rgb<bool> / double ", operator/(J, d), vil_rgb<double>(0.5, 0.0, 0.5));
   std::cout << type_name << " / double should be [0.5 0.0 0.5], is " << operator/(J, d) << std::endl;

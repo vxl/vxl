@@ -51,8 +51,8 @@ view_as_rgb(const vil_image_view<vxl_byte> & v)
 int
 main()
 {
-  unsigned                          ni = 6;
-  unsigned                          nj = 6;
+  unsigned ni = 6;
+  unsigned nj = 6;
   vil_image_view<vil_rgb<vxl_byte>> rgb_image(ni, nj);
 
   std::cout << "Create an image of type vil_image_view<vil_rgb<vxl_byte> >\n";

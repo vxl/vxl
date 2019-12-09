@@ -98,7 +98,7 @@ test_string()
   TEST("vul_string_to_bool(Not \"0\")", vul_string_to_bool("0"), false);
   TEST("vul_string_to_bool(Not \"onwibble\")", vul_string_to_bool("onwibble"), false);
 
-  int              int_list_data[] = { 1, 2, 10, 21, 24, -1, -3, -5, -7 };
+  int int_list_data[] = { 1, 2, 10, 21, 24, -1, -3, -5, -7 };
   std::vector<int> int_list(int_list_data, int_list_data + 9);
   TEST(
     "vul_string_to_int_list(\"1:2,10,21:3:25,-1:-2:-7\")", vul_string_to_int_list("1:2,10,21:3:25,-1:-2:-7"), int_list);
