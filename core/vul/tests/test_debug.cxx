@@ -2,6 +2,7 @@
 #include <iostream>
 #include <new>
 #include <string>
+#include <limits>
 #include "testlib/testlib_test.h"
 //:
 // \file
@@ -83,13 +84,26 @@ test_debug()
     vpl_unlink(long_filename.c_str());
 
     vul_debug_set_coredump_and_throw_on_out_of_memory(filetemplate);
+
     bool caught_exception = false;
     try
     {
-      std::size_t too_much = 0;
-      too_much -= 1000;
+      //NOTE the following line can not be a const or constexpr 
+      //     otherwise the warning of too large of memory becomes a compiler
+      //     error instead of a warning.
+      std::size_t too_much = std::numeric_limits<std::size_t>::max();
+#ifdef __GNUC__
+#  pragma GCC diagnostic push
+// disable all warnings here, we really do want to fail at allocation!
+#  pragma GCC diagnostic ignored "-Wall"
+#endif
+      /* no diagnostic for this one */
       char * p = new char[too_much];
+#ifdef __GNUC__
+#  pragma GCC diagnostic pop
+#endif
       p[0] = '\0';
+      delete [] p;
     }
     catch (const std::bad_alloc &)
     {
