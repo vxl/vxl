@@ -14,8 +14,8 @@ test_na()
   // Create NaN, NA
   double qnan_d = std::numeric_limits<double>::quiet_NaN();
   double na_d = vil_na(double());
-  float  qnan_f = std::numeric_limits<float>::quiet_NaN();
-  float  na_f = vil_na(float());
+  float qnan_f = std::numeric_limits<float>::quiet_NaN();
+  float na_f = vil_na(float());
 
 #define print_hex(p)                                                                                                   \
   std::hex << std::setfill('0') << std::setw(2) << (short)reinterpret_cast<unsigned char *>(&(p))[sizeof(p) - 1];      \

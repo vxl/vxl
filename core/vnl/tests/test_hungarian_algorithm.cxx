@@ -142,7 +142,7 @@ test_skewed_problem(unsigned const M, unsigned const N)
 {
   std::cout << "Creating " << M << 'x' << N << " matrix" << std::endl;
   vnl_matrix<double> cost(M, N);
-  double             low = std::min(M, N) + 5.0;
+  double low = std::min(M, N) + 5.0;
   for (unsigned i = 0; i < M; ++i)
   {
     for (unsigned j = 0; j < N; ++j)
@@ -190,7 +190,7 @@ run_test(vnl_matrix<double> const & cost, unsigned solution[])
 
   {
     std::cout << "Test transposed problem" << std::endl;
-    vnl_matrix<double>    costT = cost.transpose();
+    vnl_matrix<double> costT = cost.transpose();
     std::vector<unsigned> assign = vnl_hungarian_algorithm<double>(costT);
 
     std::vector<unsigned> solutionT(costT.rows(), unsigned(-1));
@@ -249,7 +249,7 @@ test_hungarian_algorithm_2()
   }
 
   {
-    double             cost_val[3][4] = { { 2.0, 1.0, 5.0, 3.0 }, { 0.5, 6.0, 3.0, 0.5 }, { 7.0, 1.0, 3.0, 0.1 } };
+    double cost_val[3][4] = { { 2.0, 1.0, 5.0, 3.0 }, { 0.5, 6.0, 3.0, 0.5 }, { 7.0, 1.0, 3.0, 0.1 } };
     vnl_matrix<double> cost(&cost_val[0][0], 3, 4);
 
     std::cout << "//-----------------------//\n"
@@ -265,7 +265,7 @@ test_hungarian_algorithm_2()
   {
     // test where the greedy solution is not the optimal
     std::cout << "\n\nTest when greedy != optimal\n";
-    double             cost_val[3][4] = { { 2.0, 1.0, 5.0, 3.0 }, { 0.5, 0.2, 3.0, 0.5 }, { 7.0, 1.0, 3.0, 0.1 } };
+    double cost_val[3][4] = { { 2.0, 1.0, 5.0, 3.0 }, { 0.5, 0.2, 3.0, 0.5 }, { 7.0, 1.0, 3.0, 0.1 } };
     vnl_matrix<double> cost(&cost_val[0][0], 3, 4);
 
     std::cout << "//-----------------------//\n"
@@ -282,7 +282,7 @@ test_hungarian_algorithm_2()
     // a white box test where the row-by-row minimum is not the
     // solution
     std::cout << "\n\nTest when row-by-row min != optimal\n";
-    double             cost_val[3][4] = { { 2.0, 1.0, 5.0, 3.0 }, { 0.5, 6.0, 3.0, 0.5 }, { 0.1, 1.0, 3.0, 0.2 } };
+    double cost_val[3][4] = { { 2.0, 1.0, 5.0, 3.0 }, { 0.5, 6.0, 3.0, 0.5 }, { 0.1, 1.0, 3.0, 0.2 } };
     vnl_matrix<double> cost(&cost_val[0][0], 3, 4);
 
     std::cout << "//-----------------------//\n"

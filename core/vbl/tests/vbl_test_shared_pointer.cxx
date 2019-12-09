@@ -121,7 +121,7 @@ test_derived_class()
     std::cout << "Construct with derived smart pointer\n";
     {
       d1p dp(new derv_class1);
-      bp  p(dp);
+      bp p(dp);
       TEST("  Points to derived", p->who(), 1);
       TEST("  Object exists", derv_class1::cnt, 1);
     }

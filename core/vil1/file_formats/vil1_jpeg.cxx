@@ -60,12 +60,12 @@ vil1_jpeg_file_format::make_input_image(vil1_stream * vs)
 }
 
 vil1_image_impl *
-vil1_jpeg_file_format::make_output_image(vil1_stream *         vs,
-                                         int                   planes,
-                                         int                   width,
-                                         int                   height,
-                                         int                   components,
-                                         int                   bits_per_component,
+vil1_jpeg_file_format::make_output_image(vil1_stream * vs,
+                                         int planes,
+                                         int width,
+                                         int height,
+                                         int components,
+                                         int bits_per_component,
                                          vil1_component_format format)
 {
   if (format != VIL1_COMPONENT_FORMAT_UNSIGNED_INT)
@@ -97,12 +97,12 @@ vil1_jpeg_generic_image::get_property(char const * tag, void * prop) const
   return false;
 }
 
-vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream *         s,
-                                                 int                   planes,
-                                                 int                   width,
-                                                 int                   height,
-                                                 int                   components,
-                                                 int                   bits_per_component,
+vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream * s,
+                                                 int planes,
+                                                 int width,
+                                                 int height,
+                                                 int components,
+                                                 int bits_per_component,
                                                  vil1_component_format format)
   : jc(new vil1_jpeg_compressor(s))
   , jd(nullptr)

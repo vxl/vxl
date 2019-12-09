@@ -11,7 +11,7 @@
 void
 test_cholesky()
 {
-  vnl_random         rng(1000);
+  vnl_random rng(1000);
   vnl_matrix<double> A(3, 3);
   test_util_fill_random(A.begin(), A.end(), rng);
   A = A * A.transpose();

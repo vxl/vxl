@@ -25,7 +25,7 @@ void
 test_vlarge_block(void * block, std::size_t s, T scale)
 {
   // fill one of the blocks with large numbers.
-  T * const   numbers = static_cast<T *>(block);
+  T * const numbers = static_cast<T *>(block);
   std::size_t n = s / sizeof(T);
 
   for (std::size_t i = 0; i < n; ++i)

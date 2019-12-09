@@ -14,7 +14,7 @@ test_algo_quad_envelope_float()
     data[i] = 1.0f;
   data[2] = -10;
   std::vector<double> x, y, z;
-  double              a = 0.8;
+  double a = 0.8;
   vil_quad_envelope(&data[0], 1, data.size(), x, y, z, a);
   TEST("Only one parabola in envelope", x.size(), 1);
   TEST_NEAR("Centre", x[0], 2.0, 1e-6);
@@ -109,7 +109,7 @@ test_algo_quad_distance_function_with_pos_float_float()
             << " Testing vil_quad_distance_function<float,float> with position\n"
             << "***************************************************************\n";
   vil_image_view<float> src(7, 7), dest;
-  vil_image_view<int>   pos;
+  vil_image_view<int> pos;
   src.fill(1.0f);
   src(2, 4) = -10.0f;
   vil_quad_distance_function(src, 1, 1, dest, pos);

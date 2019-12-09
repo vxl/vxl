@@ -68,7 +68,7 @@ clamp(double f)
     for (unsigned i = 0; i < size; ++i)                                                                                \
     {                                                                                                                  \
       S const & s = src[i];                                                                                            \
-      D &       d = dst[i];                                                                                            \
+      D & d = dst[i];                                                                                                  \
       Code;                                                                                                            \
     }                                                                                                                  \
   }

@@ -15,7 +15,7 @@ test_rotate_image()
 
   constexpr unsigned int ni = 55;
   constexpr unsigned int nj = 35;
-  vil_image_view<float>  image, dest1, dest2;
+  vil_image_view<float> image, dest1, dest2;
   image.set_size(ni, nj);
   image.fill(17.f);
 

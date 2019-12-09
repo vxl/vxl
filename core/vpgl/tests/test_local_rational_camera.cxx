@@ -48,11 +48,11 @@ construct_rational_camera()
     cmatrix[3][i] = d_v[i];
   }
   // The scales and offsets
-  vpgl_scale_offset<double>              sox(0.0347, -71.4049);
-  vpgl_scale_offset<double>              soy(0.0219, 41.8216);
-  vpgl_scale_offset<double>              soz(501, -30);
-  vpgl_scale_offset<double>              sou(4764, 4693);
-  vpgl_scale_offset<double>              sov(4221, 3921);
+  vpgl_scale_offset<double> sox(0.0347, -71.4049);
+  vpgl_scale_offset<double> soy(0.0219, 41.8216);
+  vpgl_scale_offset<double> soz(501, -30);
+  vpgl_scale_offset<double> sou(4764, 4693);
+  vpgl_scale_offset<double> sov(4221, 3921);
   std::vector<vpgl_scale_offset<double>> scale_offsets;
   scale_offsets.push_back(sox);
   scale_offsets.push_back(soy);
@@ -70,11 +70,11 @@ test_local_rational_camera()
   double eu, ev;
 
   vpgl_rational_camera<double> rcam = construct_rational_camera();
-  double                       xoff = rcam.offset(vpgl_rational_camera<double>::X_INDX);
-  double                       yoff = rcam.offset(vpgl_rational_camera<double>::Y_INDX);
-  double                       zoff = rcam.offset(vpgl_rational_camera<double>::Z_INDX);
+  double xoff = rcam.offset(vpgl_rational_camera<double>::X_INDX);
+  double yoff = rcam.offset(vpgl_rational_camera<double>::Y_INDX);
+  double zoff = rcam.offset(vpgl_rational_camera<double>::Z_INDX);
 
-  vpgl_lvcs                          lvcs(yoff, xoff, zoff);
+  vpgl_lvcs lvcs(yoff, xoff, zoff);
   vpgl_local_rational_camera<double> lrcam(lvcs, rcam);
 
   double ug, vg, ul, vl;
@@ -103,19 +103,19 @@ test_local_rational_camera()
 
   //---- test file I/O
   std::string path = "./test.lrcam";
-  bool        good = lrcam.save(path);
+  bool good = lrcam.save(path);
   TEST("save to file", good, true);
   vpgl_local_rational_camera<double> * lrc_r = read_local_rational_camera<double>(path);
-  double                               ulr, vlr;
+  double ulr, vlr;
   lrc_r->project(0.0, 0.0, 0.0, ulr, vlr);
   TEST_NEAR("read from file", std::fabs(ug - ulr) + std::fabs(vg - vlr), 0.0, 1e-3);
   vpl_unlink(path.c_str());
   // test binary I/O
-  std::string    b_path = "./test_binary.vsl";
+  std::string b_path = "./test_binary.vsl";
   vsl_b_ofstream os(b_path);
   vsl_b_write(os, lrcam);
   os.close();
-  vsl_b_ifstream                     is(b_path);
+  vsl_b_ifstream is(b_path);
   vpgl_local_rational_camera<double> lrcam_r;
   vsl_b_read(is, lrcam_r);
   double ulb, vlb;

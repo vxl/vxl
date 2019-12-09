@@ -62,12 +62,12 @@ fsm_assert_(int lineno, bool pass, char const * expr)
 static void
 test_matlab()
 {
-  vnl_vector<float>          v(4);
+  vnl_vector<float> v(4);
   vnl_vector_fixed<float, 4> vf;
   for (unsigned i = 0; i < v.size(); ++i)
     vf[i] = v[i] = 0.1f * float(i);
 
-  vnl_matrix<double>             M(3, 4);
+  vnl_matrix<double> M(3, 4);
   vnl_matrix_fixed<double, 3, 4> Mf;
   for (unsigned i = 0; i < M.rows(); ++i)
     for (unsigned j = 0; j < M.cols(); ++j)
@@ -89,7 +89,7 @@ test_matlab()
 
   // vnl_matlab_write, vnl_matlab_read
   {
-    std::string  tmp_nam = vul_temp_filename(), tmp_nam2 = vul_temp_filename();
+    std::string tmp_nam = vul_temp_filename(), tmp_nam2 = vul_temp_filename();
     char const * file = tmp_nam != "" ? tmp_nam.c_str() : "smoo.mat";
     char const * file2 = tmp_nam2 != "" ? tmp_nam2.c_str() : "smoo2.mat";
     {
@@ -118,7 +118,7 @@ test_matlab()
       fsm_assert(vh.read_data(v_.begin()));
       fsm_assert(v_ == v);
 
-      std::ifstream      f2(file2);
+      std::ifstream f2(file2);
       vnl_matlab_readhdr vh2(f2);
       fsm_assert(vh2 ? true : false);
       fsm_assert(vh2.is_single());

@@ -69,8 +69,8 @@ test_arbitrary_length_int_conversion_short()
             << "Testing arbitrary length int conversion for signed shorts\n"
             << "*********************************************************\n";
 
-  signed short   a[65538];
-  signed short   b[65540];
+  signed short a[65538];
+  signed short b[65540];
   signed short * c = &b[1];
 
   int i = 0;
@@ -81,7 +81,7 @@ test_arbitrary_length_int_conversion_short()
 
   unsigned maxbuf = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * 65538;
 
-  auto *        buf = new unsigned char[maxbuf];
+  auto * buf = new unsigned char[maxbuf];
   unsigned long len = vsl_convert_to_arbitrary_length(a, buf, 65538);
   std::cout << " Max required buffer size is " << maxbuf << ". Used " << len << std::endl;
 
@@ -115,8 +115,8 @@ test_arbitrary_length_int_conversion_ushort()
             << "Testing arbitrary length int conversion for unsigned shorts\n"
             << "***********************************************************\n";
 
-  unsigned short   a[65538];
-  unsigned short   b[65540];
+  unsigned short a[65538];
+  unsigned short b[65540];
   unsigned short * c = &b[1];
 
   int i = 0;
@@ -127,7 +127,7 @@ test_arbitrary_length_int_conversion_ushort()
 
   unsigned maxbuf = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * 65538;
 
-  auto *        buf = new unsigned char[maxbuf];
+  auto * buf = new unsigned char[maxbuf];
   unsigned long len = vsl_convert_to_arbitrary_length(a, buf, 65538);
   std::cout << " Max required buffer size is " << maxbuf << ". Used " << len << std::endl;
 
@@ -159,12 +159,12 @@ test_explicit_int_io()
             << "Testing explicit length integer io\n"
             << "**********************************\n";
 
-  unsigned long     i;
+  unsigned long i;
   const std::size_t mult = 1ull << 48;
 
 
   std::stringstream ss(std::ios::in | std::ios::out | std::ios::binary);
-  const char *      b = ss.str().c_str();
+  const char * b = ss.str().c_str();
   TEST("stringstream buffer is available (and empty)", b[0], '\0');
   {
     vsl_b_ostream bss(&ss);
@@ -211,8 +211,8 @@ test_extreme_int_io()
 
   // Some fudges to get the max values
   // std::numeric_limits doesn't seem to work yet
-  long          min_long = 1L << (8 * sizeof(long) - 1);
-  long          max_long = ~min_long;
+  long min_long = 1L << (8 * sizeof(long) - 1);
+  long max_long = ~min_long;
   unsigned long max_ulong = ~0;
 
   vsl_b_ofstream bfs_out("vsl_extreme_int_io_test.bvl.tmp");
@@ -223,8 +223,8 @@ test_extreme_int_io()
   vsl_b_write(bfs_out, max_ulong);
   bfs_out.close();
 
-  long          min_long_in = 77;
-  long          max_long_in = 77;
+  long min_long_in = 77;
+  long max_long_in = 77;
   unsigned long max_ulong_in = 77;
 
   vsl_b_ifstream bfs_in("vsl_extreme_int_io_test.bvl.tmp");

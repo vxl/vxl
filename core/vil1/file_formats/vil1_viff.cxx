@@ -84,12 +84,12 @@ vil1_viff_file_format::make_input_image(vil1_stream * is)
 }
 
 vil1_image_impl *
-vil1_viff_file_format::make_output_image(vil1_stream *         is,
-                                         int                   planes,
-                                         int                   width,
-                                         int                   height,
-                                         int                   components,
-                                         int                   bits_per_component,
+vil1_viff_file_format::make_output_image(vil1_stream * is,
+                                         int planes,
+                                         int width,
+                                         int height,
+                                         int components,
+                                         int bits_per_component,
                                          vil1_component_format format)
 {
   return new vil1_viff_generic_image(is, planes, width, height, components, bits_per_component, format);
@@ -139,11 +139,11 @@ vil1_viff_generic_image::file_format() const
 }
 
 vil1_viff_generic_image::vil1_viff_generic_image(vil1_stream * is,
-                                                 int           planes,
-                                                 int           width,
-                                                 int           height,
+                                                 int planes,
+                                                 int width,
+                                                 int height,
                                                  int /*components*/,
-                                                 int                   bits_per_component,
+                                                 int bits_per_component,
                                                  vil1_component_format format)
   : is_(is)
   , width_(width)
@@ -190,8 +190,8 @@ vil1_viff_generic_image::read_header()
 
   vxl_uint_32 ispare1 = header_.ispare1;
   vxl_uint_32 ispare2 = header_.ispare2;
-  float       fspare1 = header_.fspare1;
-  float       fspare2 = header_.fspare2;
+  float fspare1 = header_.fspare1;
+  float fspare2 = header_.fspare2;
 
   if (!endian_consistent_)
   {
@@ -480,7 +480,7 @@ void
 vil1_viff_generic_image::set_ispare1(vxl_uint_32 ispare1)
 {
   header_.ispare1 = ispare1;
-  int    longsize = sizeof(vxl_uint_32);
+  int longsize = sizeof(vxl_uint_32);
   auto * bytes = new unsigned char[longsize];
   std::memcpy(bytes, &ispare1, longsize);
   if (!endian_consistent_)
@@ -495,7 +495,7 @@ void
 vil1_viff_generic_image::set_ispare2(vxl_uint_32 ispare2)
 {
   header_.ispare2 = ispare2;
-  int    longsize = sizeof(vxl_uint_32);
+  int longsize = sizeof(vxl_uint_32);
   auto * bytes = new unsigned char[longsize];
   std::memcpy(bytes, &ispare2, longsize);
   if (!endian_consistent_)
@@ -510,7 +510,7 @@ void
 vil1_viff_generic_image::set_fspare1(float fspare1)
 {
   header_.fspare1 = fspare1;
-  int    floatsize = sizeof(float);
+  int floatsize = sizeof(float);
   auto * bytes = new unsigned char[floatsize];
   std::memcpy(bytes, &fspare1, floatsize);
   if (!endian_consistent_)
@@ -526,7 +526,7 @@ void
 vil1_viff_generic_image::set_fspare2(float fspare2)
 {
   header_.fspare2 = fspare2;
-  int    floatsize = sizeof(float);
+  int floatsize = sizeof(float);
   auto * bytes = new unsigned char[floatsize];
   std::memcpy(bytes, &fspare2, floatsize);
   if (!endian_consistent_)

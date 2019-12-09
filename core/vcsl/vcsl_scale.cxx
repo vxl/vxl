@@ -39,7 +39,7 @@ vcsl_scale::execute(const vnl_vector<double> & v, double time) const
   // require
   assert(is_valid());
 
-  double             value = scale_value(time);
+  double value = scale_value(time);
   vnl_vector<double> result(v.size());
   for (unsigned int i = 0; i < v.size(); ++i)
     result.put(i, value * v.get(i));
@@ -59,7 +59,7 @@ vcsl_scale::inverse(const vnl_vector<double> & v, double time) const
   assert(is_valid());
   assert(is_invertible(time));
 
-  double             value = scale_value(time);
+  double value = scale_value(time);
   vnl_vector<double> result(v.size());
   for (unsigned int i = 0; i < v.size(); ++i)
     result.put(i, v.get(i) / value);

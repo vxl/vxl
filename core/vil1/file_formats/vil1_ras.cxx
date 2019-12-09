@@ -26,7 +26,7 @@ namespace
 inline void
 swap_endian(vxl_uint_32 & word)
 {
-  auto *     bytes = (vxl_uint_8 *)&word;
+  auto * bytes = (vxl_uint_8 *)&word;
   vxl_uint_8 t = bytes[0];
   bytes[0] = bytes[3];
   bytes[3] = t;
@@ -71,7 +71,7 @@ compute_length(vxl_uint_32 w, vxl_uint_32 h, vxl_uint_32 d)
 
 // From http://gmt.soest.hawaii.edu/gmt/doc/html/GMT_Docs/node111.html
 // and other documents on the web.
-const vxl_uint_8      RAS_MAGIC[] = { 0x59, 0xA6, 0x6A, 0x95 };
+const vxl_uint_8 RAS_MAGIC[] = { 0x59, 0xA6, 0x6A, 0x95 };
 constexpr vxl_uint_32 RT_OLD = 0;          // Raw pixrect image in MSB-first order
 constexpr vxl_uint_32 RT_STANDARD = 1;     // Raw pixrect image in MSB-first order
 constexpr vxl_uint_32 RT_BYTE_ENCODED = 2; // (Run-length compression of bytes)
@@ -94,12 +94,12 @@ vil1_ras_file_format::make_input_image(vil1_stream * vs)
 }
 
 vil1_image_impl *
-vil1_ras_file_format::make_output_image(vil1_stream *         vs,
-                                        int                   planes,
-                                        int                   width,
-                                        int                   height,
-                                        int                   components,
-                                        int                   bits_per_component,
+vil1_ras_file_format::make_output_image(vil1_stream * vs,
+                                        int planes,
+                                        int width,
+                                        int height,
+                                        int components,
+                                        int bits_per_component,
                                         vil1_component_format format)
 {
   return new vil1_ras_generic_image(vs, planes, width, height, components, bits_per_component, format);
@@ -148,11 +148,11 @@ vil1_ras_generic_image::file_format() const
 }
 
 vil1_ras_generic_image::vil1_ras_generic_image(vil1_stream * vs,
-                                               int           planes,
-                                               int           width,
-                                               int           height,
-                                               int           components,
-                                               int           bits_per_component,
+                                               int planes,
+                                               int width,
+                                               int height,
+                                               int components,
+                                               int bits_per_component,
                                                vil1_component_format /*format*/)
   : vs_(vs)
 {
@@ -397,7 +397,7 @@ vil1_ras_generic_image::put_section(void const * buf, int x0, int y0, int xs, in
 
   // only pad if whole lines are written. Otherwise, assume the
   // previous contents are valid.
-  bool       need_pad = (file_byte_width == buff_byte_width + 1);
+  bool need_pad = (file_byte_width == buff_byte_width + 1);
   vxl_uint_8 zero = 0;
 
   auto const * ob = (vxl_uint_8 const *)buf;

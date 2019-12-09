@@ -30,7 +30,7 @@ test_equi_rectification()
   row01[1] = -2.13683;
   row01[2] = -0.229387;
   row01[3] = 648.49;
-  vpgl_affine_camera<double>  acam0(row00, row01);
+  vpgl_affine_camera<double> acam0(row00, row01);
   vnl_vector_fixed<double, 4> row10, row11;
   row10[0] = 2.8301;
   row10[1] = -0.00578537;
@@ -40,7 +40,7 @@ test_equi_rectification()
   row11[1] = -2.88516;
   row11[2] = -0.754392;
   row11[3] = 1061.18;
-  vpgl_affine_camera<double>               acam1(row10, row11);
+  vpgl_affine_camera<double> acam1(row10, row11);
   std::vector<vnl_vector_fixed<double, 3>> pts0;
   pts0.emplace_back(517.08519082044199, 405.49679591436848, 1.0);
   pts0.emplace_back(368.62656130374893, 533.20968068909804, 1.0);
@@ -86,8 +86,8 @@ test_equi_rectification()
   pts1.emplace_back(510.49270359363777, 901.38726023140657, 1.0);
 
   vpgl_affine_fundamental_matrix<double> aF(acam0, acam1);
-  vnl_matrix_fixed<double, 3, 3>         H0, H1;
-  bool                                   good = vpgl_equi_rectification::rectify_pair(aF, pts0, pts1, H0, H1);
+  vnl_matrix_fixed<double, 3, 3> H0, H1;
+  bool good = vpgl_equi_rectification::rectify_pair(aF, pts0, pts1, H0, H1);
   TEST("Run on a real example", good, true);
 
   // check colinear epipolar lines
@@ -109,8 +109,8 @@ test_equi_rectification()
   TEST("real_example:affine_rectification has collinear epipolar lines", equal_v, true);
 
   //  check with synthetic data for u transform
-  double                                   su = -0.5, sigma_u = 0.1, tu = 10;
-  double                                   u0_avg = 0.0, u1_avg = 0.0, v1_avg = 0.0;
+  double su = -0.5, sigma_u = 0.1, tu = 10;
+  double u0_avg = 0.0, u1_avg = 0.0, v1_avg = 0.0;
   std::vector<vnl_vector_fixed<double, 3>> syn_pts0, syn_pts1 = pts1;
   for (size_t i = 0; i < n; ++i)
   {
@@ -130,7 +130,7 @@ test_equi_rectification()
   vnl_matrix_fixed<double, 3, 3> fm(0.0);
   fm[1][2] = fm[2][1] = -1.0;
   vpgl_affine_fundamental_matrix<double> syn_aF(fm);
-  vnl_matrix_fixed<double, 3, 3>         syn_H0, syn_H1, syn_test_H0, syn_test_H1;
+  vnl_matrix_fixed<double, 3, 3> syn_H0, syn_H1, syn_test_H0, syn_test_H1;
   good = vpgl_equi_rectification::rectify_pair(syn_aF, syn_pts0, syn_pts1, syn_H0, syn_H1);
 
   syn_test_H0.set_identity();
@@ -158,12 +158,12 @@ test_equi_rectification()
   //
   // **************  the projective case **************
   //
-  double                          random_list0[12] = { 1, 15, 9, -1, 2, -6, -9, 7, -5, 6, 10, 0 };
-  double                          random_list1[12] = { 10.6, 1.009, .676, .5, -13, -10, 8, 5, 88, -2, -100, 11 };
-  vpgl_proj_camera<double>        C0(random_list0);
-  vpgl_proj_camera<double>        C1(random_list1);
+  double random_list0[12] = { 1, 15, 9, -1, 2, -6, -9, 7, -5, 6, 10, 0 };
+  double random_list1[12] = { 10.6, 1.009, .676, .5, -13, -10, 8, 5, 88, -2, -100, 11 };
+  vpgl_proj_camera<double> C0(random_list0);
+  vpgl_proj_camera<double> C1(random_list1);
   vpgl_fundamental_matrix<double> F(C0, C1);
-  vnl_matrix_fixed<double, 3, 3>  mF = F.get_matrix();
+  vnl_matrix_fixed<double, 3, 3> mF = F.get_matrix();
 
   std::vector<vgl_homg_point_3d<double>> p3d;
   p3d.emplace_back(2, -1, 5);

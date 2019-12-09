@@ -108,7 +108,7 @@ doTest3()
   constexpr unsigned int n = 20;
 
   vnl_sparse_matrix<double> ms(n, n);
-  vnl_matrix<double>        md(n, n);
+  vnl_matrix<double> md(n, n);
   md = 0.0; // Initialise to all zeros
   // The matrix must be symmetric
   for (unsigned i = 0; i < n; i++)
@@ -128,9 +128,9 @@ doTest3()
   }
   std::cout << "md:\n" << md << std::endl;
 
-  constexpr unsigned int            nvals = 2;
+  constexpr unsigned int nvals = 2;
   vnl_symmetric_eigensystem<double> ed(md);
-  vnl_sparse_symmetric_eigensystem  es;
+  vnl_sparse_symmetric_eigensystem es;
   TEST("vnl_sparse_symmetric_eigensystem::CalculateNPairs()", es.CalculateNPairs(ms, nvals, true, 20), 0);
 
   // Report 'em.
@@ -147,7 +147,7 @@ doTest4()
   constexpr unsigned int n = 20;
 
   vnl_sparse_matrix<double> ms(n, n);
-  vnl_matrix<double>        md(n, n);
+  vnl_matrix<double> md(n, n);
   md = 0.0; // Initialise to all zeros
   // The matrix must be symmetric
   for (unsigned i = 0; i < n; i++)
@@ -158,9 +158,9 @@ doTest4()
     // ms(i,i) = md(i,i) = 1.0*(i+1)*(i+1);
   }
 
-  constexpr unsigned int            nvals = 3;
+  constexpr unsigned int nvals = 3;
   vnl_symmetric_eigensystem<double> ed(md);
-  vnl_sparse_symmetric_eigensystem  es;
+  vnl_sparse_symmetric_eigensystem es;
   TEST("vnl_sparse_symmetric_eigensystem::CalculateNPairs() succeeded", es.CalculateNPairs(ms, nvals), 0);
 
   // Report 'em.
@@ -184,7 +184,7 @@ doTest5()
   // test that B = identity produces same answers as
   // A * x = lambda * x
   vnl_sparse_matrix<double> ms(n, n), bIdentity(n, n);
-  vnl_matrix<double>        md(n, n);
+  vnl_matrix<double> md(n, n);
   md = 0.0; // Initialise to all zeros
   // The matrix must be symmetric
   for (unsigned i = 0; i < n; i++)
@@ -196,9 +196,9 @@ doTest5()
     // ms(i,i) = md(i,i) = 1.0*(i+1)*(i+1);
   }
 
-  constexpr unsigned int            nvals = 3;
+  constexpr unsigned int nvals = 3;
   vnl_symmetric_eigensystem<double> ed(md);
-  vnl_sparse_symmetric_eigensystem  es;
+  vnl_sparse_symmetric_eigensystem es;
   TEST("vnl_sparse_symmetric_eigensystem::CalculateNPairs(A, B) succeeded",
        es.CalculateNPairs(ms, bIdentity, nvals, 0, 0, true, false),
        0);
@@ -218,7 +218,7 @@ void
 doTest6()
 {
   constexpr int matOrd = 6;
-  double        Sdata[matOrd * matOrd] = {
+  double Sdata[matOrd * matOrd] = {
     30.0000, -3.4273, 13.9254, 13.7049, -2.4446, 20.2380, -3.4273, 13.7049, -2.4446, 1.3659,  3.6702,  -0.2282,
     13.9254, -2.4446, 20.2380, 3.6702,  -0.2282, 28.6779, 13.7049, 1.3659,  3.6702,  12.5273, -1.6045, 3.9419,
     -2.4446, 3.6702,  -0.2282, -1.6045, 3.9419,  2.5821,  20.2380, -0.2282, 28.6779, 3.9419,  2.5821,  44.0636,

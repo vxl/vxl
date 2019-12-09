@@ -1613,9 +1613,9 @@ color_value(int theme, int color_index)
                                 BLUE20, BLUE21, BLUE22, BLUE23, BLUE24, BLUE25, BLUE26, BLUE27, BLUE28, BLUE29,
                                 BLUE30, BLUE31, BLUE32, BLUE33, BLUE34, BLUE35, BLUE36, BLUE37 };
 
-  int               r_val = RedArrays[theme][color_index];
-  int               g_val = GreenArrays[theme][color_index];
-  int               b_val = BlueArrays[theme][color_index];
+  int r_val = RedArrays[theme][color_index];
+  int g_val = GreenArrays[theme][color_index];
+  int b_val = BlueArrays[theme][color_index];
   vil_rgb<vxl_byte> val((vxl_byte)r_val, (vxl_byte)g_val, (vxl_byte)b_val);
   return val;
 }

@@ -32,14 +32,14 @@ test_mixture_of_type(T epsilon, const std::string & type_name)
   // test a bunch of instantiations to make sure they compile
   {
     vpdl_mixture_of<vpdl_gaussian_sphere<T, 3>> mix_gauss_s3;
-    vpdl_mixture_of<vpdl_gaussian_indep<T, 3>>  mix_gauss_i3;
-    vpdl_mixture_of<vpdl_gaussian<T, 3>>        mix_gauss_f3;
+    vpdl_mixture_of<vpdl_gaussian_indep<T, 3>> mix_gauss_i3;
+    vpdl_mixture_of<vpdl_gaussian<T, 3>> mix_gauss_f3;
     vpdl_mixture_of<vpdl_gaussian_sphere<T, 1>> mix_gauss_s1;
-    vpdl_mixture_of<vpdl_gaussian_indep<T, 1>>  mix_gauss_i1;
-    vpdl_mixture_of<vpdl_gaussian<T, 1>>        mix_gauss_f1;
-    vpdl_mixture_of<vpdl_gaussian_sphere<T>>    mix_gauss_s;
-    vpdl_mixture_of<vpdl_gaussian_indep<T>>     mix_gauss_i;
-    vpdl_mixture_of<vpdl_gaussian<T>>           mix_gauss_f;
+    vpdl_mixture_of<vpdl_gaussian_indep<T, 1>> mix_gauss_i1;
+    vpdl_mixture_of<vpdl_gaussian<T, 1>> mix_gauss_f1;
+    vpdl_mixture_of<vpdl_gaussian_sphere<T>> mix_gauss_s;
+    vpdl_mixture_of<vpdl_gaussian_indep<T>> mix_gauss_i;
+    vpdl_mixture_of<vpdl_gaussian<T>> mix_gauss_f;
   }
 
   // create a few sample distributions
@@ -59,7 +59,7 @@ test_mixture_of_type(T epsilon, const std::string & type_name)
     vpdl_gaussian_indep<T, 3> gauss3(mean3, var3);
 
     typedef vpdl_gaussian_indep<T, 3> dist_t;
-    vpdl_mixture_of<dist_t>           mixture;
+    vpdl_mixture_of<dist_t> mixture;
 
     TEST(("initial num_components <" + type_name + ">").c_str(), mixture.num_components(), 0);
 
@@ -103,11 +103,11 @@ test_mixture_of_type(T epsilon, const std::string & type_name)
 
     // test gradient virtual functions against numerical difference
     vnl_vector_fixed<T, 3> g3;
-    T                      dp = std::sqrt(epsilon);
-    T                      den = mixture2.density(pt);
-    T                      den_x = mixture2.density(pt + vnl_vector_fixed<T, 3>(dp, 0, 0));
-    T                      den_y = mixture2.density(pt + vnl_vector_fixed<T, 3>(0, dp, 0));
-    T                      den_z = mixture2.density(pt + vnl_vector_fixed<T, 3>(0, 0, dp));
+    T dp = std::sqrt(epsilon);
+    T den = mixture2.density(pt);
+    T den_x = mixture2.density(pt + vnl_vector_fixed<T, 3>(dp, 0, 0));
+    T den_y = mixture2.density(pt + vnl_vector_fixed<T, 3>(0, dp, 0));
+    T den_z = mixture2.density(pt + vnl_vector_fixed<T, 3>(0, 0, dp));
     vnl_vector_fixed<T, 3> grad(den_x - den, den_y - den, den_z - den);
     grad /= dp;
     T density = mixture2.gradient_density(pt, g3);
@@ -139,7 +139,7 @@ test_mixture_of_type(T epsilon, const std::string & type_name)
     vpdl_gaussian<T, 1> gauss3(mean3[0], var3[0]);
 
     typedef vpdl_gaussian<T, 1> dist_t;
-    vpdl_mixture_of<dist_t>     mixture;
+    vpdl_mixture_of<dist_t> mixture;
 
     TEST(("initial num_components <" + type_name + ">").c_str(), mixture.num_components(), 0);
 
@@ -270,17 +270,17 @@ test_mixture_of_type(T epsilon, const std::string & type_name)
          true);
 
     vnl_vector_fixed<T, 3> pt(T(0), T(1.5), T(1));
-    T                      prob = T(0.1 * gauss1.prob_density(pt.as_ref()) + 0.6 * gauss2.prob_density(pt.as_ref()) +
+    T prob = T(0.1 * gauss1.prob_density(pt.as_ref()) + 0.6 * gauss2.prob_density(pt.as_ref()) +
                0.3 * gauss3.prob_density(pt.as_ref()));
     TEST_NEAR(("probability density <" + type_name + ">").c_str(), mixture2.prob_density(pt.as_ref()), prob, epsilon);
 
     // test gradient virtual functions against numerical difference
-    vnl_vector<T>          g;
-    T                      dp = std::sqrt(epsilon);
-    T                      den = mixture2.density(pt.as_ref());
-    T                      den_x = mixture2.density((pt + vnl_vector_fixed<T, 3>(dp, 0, 0)).as_ref());
-    T                      den_y = mixture2.density((pt + vnl_vector_fixed<T, 3>(0, dp, 0)).as_ref());
-    T                      den_z = mixture2.density((pt + vnl_vector_fixed<T, 3>(0, 0, dp)).as_ref());
+    vnl_vector<T> g;
+    T dp = std::sqrt(epsilon);
+    T den = mixture2.density(pt.as_ref());
+    T den_x = mixture2.density((pt + vnl_vector_fixed<T, 3>(dp, 0, 0)).as_ref());
+    T den_y = mixture2.density((pt + vnl_vector_fixed<T, 3>(0, dp, 0)).as_ref());
+    T den_z = mixture2.density((pt + vnl_vector_fixed<T, 3>(0, 0, dp)).as_ref());
     vnl_vector_fixed<T, 3> grad(den_x - den, den_y - den, den_z - den);
     grad /= dp;
     T density = mixture2.gradient_density(pt.as_ref(), g);

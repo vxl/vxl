@@ -34,13 +34,13 @@ vil_nitf2_classification::s_field_definitions()
 
 const vil_nitf2_field_definitions *
 vil_nitf2_classification::get_field_definitions(const file_version & version,
-                                                std::string          tag_prefix,
-                                                std::string          pretty_name_prefix)
+                                                std::string tag_prefix,
+                                                std::string pretty_name_prefix)
 {
   vil_nitf2_field_definitions * field_defs = nullptr;
   if (version == V_NITF_20 || version == V_NITF_21)
   {
-    type_field_defs_key                 key = std::make_pair(version, std::make_pair(tag_prefix, pretty_name_prefix));
+    type_field_defs_key key = std::make_pair(version, std::make_pair(tag_prefix, pretty_name_prefix));
     type_field_defs_map::const_iterator map_entry = s_field_definitions().find(key);
     if (map_entry != s_field_definitions().end())
     {
@@ -60,12 +60,12 @@ vil_nitf2_classification::get_field_definitions(const file_version & version,
 
 void
 vil_nitf2_classification::add_field_defs(vil_nitf2_field_definitions * defs,
-                                         const file_version &          version,
-                                         std::string                   tag_prefix,
-                                         const std::string &           pretty_name_prefix)
+                                         const file_version & version,
+                                         std::string tag_prefix,
+                                         const std::string & pretty_name_prefix)
 {
   const std::string & tp = tag_prefix;
-  const std::string   np = pretty_name_prefix + " ";
+  const std::string np = pretty_name_prefix + " ";
   switch (version)
   {
     case V_NITF_20:

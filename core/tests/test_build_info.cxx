@@ -22,7 +22,7 @@
 static std::string
 get_current_date_time(const char * format)
 {
-  char        buf[1024];
+  char buf[1024];
   std::time_t t;
   std::time(&t);
   std::strftime(buf, sizeof(buf), format, std::localtime(&t));

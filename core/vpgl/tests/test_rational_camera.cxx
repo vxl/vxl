@@ -15,13 +15,13 @@
 static void
 test_rational_camera()
 {
-  bool   good;
+  bool good;
   double eu, ev;
 
   // Test indentity camera
   vpgl_rational_camera<double> icam; // default constructor
-  double                       x = 1.0, y = 2.0, z = 10.0;
-  double                       u = 0, v = 0;
+  double x = 1.0, y = 2.0, z = 10.0;
+  double u = 0, v = 0;
   icam.project(x, y, z, u, v);
   TEST("test identity camera", u == 1 && v == 2, true);
   // Test a populated rational camera
@@ -66,11 +66,11 @@ test_rational_camera()
   den_v[18] = 0.3;
   den_v[19] = 1.0;
   // Scale and offsets
-  double                       sx = 50.0, ox = 150.0;
-  double                       sy = 125.0, oy = 100.0;
-  double                       sz = 5.0, oz = 10.0;
-  double                       su = 1000.0, ou = 500;
-  double                       sv = 500.0, ov = 200;
+  double sx = 50.0, ox = 150.0;
+  double sy = 125.0, oy = 100.0;
+  double sz = 5.0, oz = 10.0;
+  double su = 1000.0, ou = 500;
+  double sv = 500.0, ov = 200;
   vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
 
   good = true;
@@ -90,7 +90,7 @@ test_rational_camera()
   for (unsigned i = 0; i < 8; ++i)
   {
     vnl_vector_fixed<double, 3> world_point_vnl(act_x[i], act_y[i], act_z[i]);
-    auto                        image_point_vnl = rcam.project(world_point_vnl);
+    auto image_point_vnl = rcam.project(world_point_vnl);
 
     rcam.project(act_x[i], act_y[i], act_z[i], u, v);
     std::cout << "vnl: " << world_point_vnl << "->" << image_point_vnl << std::endl;
@@ -106,7 +106,7 @@ test_rational_camera()
   for (unsigned i = 0; i < 8; ++i)
   {
     vgl_point_3d<double> world_point_vgl(act_x[i], act_y[i], act_z[i]);
-    auto                 image_point_vgl = rcam.project(world_point_vgl);
+    auto image_point_vgl = rcam.project(world_point_vgl);
 
     rcam.project(act_x[i], act_y[i], act_z[i], u, v);
     std::cout << world_point_vgl << "->" << image_point_vgl << std::endl;
@@ -146,11 +146,11 @@ test_rational_camera()
     good = good && eu < 0.01 && ev < 0.01;
   }
   TEST("test default constructor with member setting", good, true);
-  vpgl_scale_offset<double>              sox(sx, ox);
-  vpgl_scale_offset<double>              soy(sy, oy);
-  vpgl_scale_offset<double>              soz(sz, oz);
-  vpgl_scale_offset<double>              sou(su, ou);
-  vpgl_scale_offset<double>              sov(sv, ov);
+  vpgl_scale_offset<double> sox(sx, ox);
+  vpgl_scale_offset<double> soy(sy, oy);
+  vpgl_scale_offset<double> soz(sz, oz);
+  vpgl_scale_offset<double> sou(su, ou);
+  vpgl_scale_offset<double> sov(sv, ov);
   std::vector<vpgl_scale_offset<double>> soffs;
   soffs.push_back(sox);
   soffs.push_back(soy);

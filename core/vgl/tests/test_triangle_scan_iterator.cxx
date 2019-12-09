@@ -25,7 +25,7 @@ test_triangle_scan_iterator()
     ti.c.x = x[2];
     ti.c.y = y[2];
 
-    vgl_polygon<float>               p(x, y, 3);
+    vgl_polygon<float> p(x, y, 3);
     vgl_polygon_scan_iterator<float> pi(p, false);
 
     bool failed = false;
@@ -77,7 +77,7 @@ test_triangle_scan_iterator()
     ti.c.y = y[2];
 
     bool pass = true;
-    int  i = 0;
+    int i = 0;
     for (ti.reset(); ti.next();)
     {
       int y = ti.scany();

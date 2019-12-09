@@ -11,7 +11,7 @@
 
 vpgl_invmap_cost_function::vpgl_invmap_cost_function(vnl_vector_fixed<double, 2> const & image_point,
                                                      vnl_vector_fixed<double, 4> const & plane,
-                                                     vpgl_camera<double> const &         cam)
+                                                     vpgl_camera<double> const & cam)
   : vnl_cost_function(2)
   , image_point_(image_point)
   , plane_(plane)

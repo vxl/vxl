@@ -62,7 +62,7 @@ test_pyramid_image_resource(int argc, char * argv[])
       image(i, j) = static_cast<unsigned short>(i + ni * j);
   vil_image_resource_sptr ir = vil_new_image_resource_of_view(image);
 
-  const unsigned                 ni2 = 36, nj2 = 21;
+  const unsigned ni2 = 36, nj2 = 21;
   vil_image_view<unsigned short> image2;
   image2.set_size(ni2, nj2);
   for (unsigned i = 0; i < ni2; ++i)
@@ -70,14 +70,14 @@ test_pyramid_image_resource(int argc, char * argv[])
       image2(i, j) = static_cast<unsigned short>(i + ni2 * j);
   vil_image_resource_sptr ir2 = vil_new_image_resource_of_view(image2);
 
-  const unsigned                 ni3 = 18, nj3 = 10;
+  const unsigned ni3 = 18, nj3 = 10;
   vil_image_view<unsigned short> image3;
   image3.set_size(ni3, nj3);
   for (unsigned i = 0; i < ni3; ++i)
     for (unsigned j = 0; j < nj3; ++j)
       image3(i, j) = static_cast<unsigned short>(i + ni3 * j);
   vil_image_resource_sptr ir3 = vil_new_image_resource_of_view(image3);
-  std::string             d = "pyramid_dir";
+  std::string d = "pyramid_dir";
   std::cout << "Made pyramid directory " << d << '\n';
   vul_file::make_directory(d.c_str());
   // Test pyramid_image_list::put_resource(..)
@@ -98,7 +98,7 @@ test_pyramid_image_resource(int argc, char * argv[])
     std::cout << '\n';
     for (unsigned i = 0; i < pir->nlevels(); ++i)
       pir->print(i);
-    float                          actual_scale = 1.0f;
+    float actual_scale = 1.0f;
     vil_image_view<unsigned short> tview = pir->get_copy_view(15, 10, 10, 20, 0.6f, actual_scale);
     std::cout << "tview dimensions (" << tview.ni() << ' ' << tview.nj() << ") actual scale = " << actual_scale << '\n';
     TEST_NEAR("actual scale in pyramid image", actual_scale, 0.493, 0.01);
@@ -154,11 +154,11 @@ test_pyramid_image_resource(int argc, char * argv[])
     {
       for (unsigned l = 0; l < bpyr->nlevels(); ++l)
         bpyr->print(l);
-      float                          ac = 1.0f;
+      float ac = 1.0f;
       vil_image_view<unsigned short> v25 = bpyr->get_copy_view(0.25f, ac);
-      unsigned                       ni25 = v25.ni();
+      unsigned ni25 = v25.ni();
       vil_image_view<unsigned short> v50 = bpyr->get_copy_view(0.5f, ac);
-      unsigned                       ni50 = v50.ni();
+      unsigned ni50 = v50.ni();
       std::cout << "ni25 = " << ni25 << ",  ni50 = " << ni50 << '\n';
       bool good = (ni25 == 19 && ni50 == 37) || (ni25 == 18 && ni50 == 36);
       TEST("Pyramid read", good, true);
@@ -257,12 +257,12 @@ test_pyramid_image_resource(int argc, char * argv[])
       std::cout << '\n';
     }
     TEST("multiimage tiff pyramid read", rv(1, 1) == 19, true);
-    vil_image_resource_sptr        rlev_0 = rpi->get_resource(0);
-    auto *                         tlev_0 = (vil_tiff_image *)rlev_0.ptr();
-    unsigned                       nimgs = tlev_0->nimages();
+    vil_image_resource_sptr rlev_0 = rpi->get_resource(0);
+    auto * tlev_0 = (vil_tiff_image *)rlev_0.ptr();
+    unsigned nimgs = tlev_0->nimages();
     vil_image_view<unsigned short> vl0 = rlev_0->get_view(1, 1, 1, 1);
     std::cout << "view0(0,0) " << vl0(0, 0) << '\n';
-    vil_image_resource_sptr        rlev_1 = rpi->get_resource(1);
+    vil_image_resource_sptr rlev_1 = rpi->get_resource(1);
     vil_image_view<unsigned short> vl1 = rlev_1->get_view(1, 1, 1, 1);
     std::cout << "view1(0,0) " << vl1(0, 0) << '\n';
     vil_image_view<unsigned short> vl0a = rlev_0->get_view(1, 1, 1, 1);
@@ -273,7 +273,7 @@ test_pyramid_image_resource(int argc, char * argv[])
   std::string fb = "tiff_pyramid_from_base.tif";
   { // scope for pyfb
     vil_pyramid_image_resource_sptr pyfb = vil_new_pyramid_image_from_base(fb.c_str(), bir, 3, "tiff", d.c_str());
-    unsigned                        nlevels = pyfb->nlevels();
+    unsigned nlevels = pyfb->nlevels();
     std::cout << "Read nlevels = " << nlevels << '\n';
     for (unsigned L = 0; L < nlevels; ++L)
       pyfb->print(L);
@@ -319,15 +319,15 @@ test_pyramid_image_resource(int argc, char * argv[])
   //
 #if HAS_J2K
   good = true;
-  std::string             filepath = image_base + "p0_12a.ntf";
+  std::string filepath = image_base + "p0_12a.ntf";
   vil_image_resource_sptr resc = vil_load_image_resource(filepath.c_str());
   if (resc)
   {
     vil_nitf2_image * nitf2 = static_cast<vil_nitf2_image *>(resc.ptr());
     good = nitf2 && nitf2->is_jpeg_2000_compressed();
     vil_j2k_nitf2_pyramid_image_resource * j2k_nitf = new vil_j2k_nitf2_pyramid_image_resource(resc);
-    unsigned                               n_i = j2k_nitf->ni(), n_j = j2k_nitf->nj();
-    unsigned                               nlevels = j2k_nitf->nlevels();
+    unsigned n_i = j2k_nitf->ni(), n_j = j2k_nitf->nj();
+    unsigned nlevels = j2k_nitf->nlevels();
     good = good && n_i == 3 && n_j == 5 && nlevels == 1;
     vil_image_view_base_sptr view = j2k_nitf->get_copy_view(0);
     good = good && view && view->pixel_format() == VIL_PIXEL_FORMAT_BYTE;
@@ -339,7 +339,7 @@ test_pyramid_image_resource(int argc, char * argv[])
   }
   // test compression
   // make a test image
-  unsigned                       nic = 131, njc = 151; // odd dimensions
+  unsigned nic = 131, njc = 151; // odd dimensions
   vil_image_view<unsigned short> comp_view(nic, njc);
   for (unsigned j = 0; j < njc; ++j)
     for (unsigned i = 0; i < nic; ++i)
@@ -355,7 +355,7 @@ test_pyramid_image_resource(int argc, char * argv[])
     vil_image_resource_sptr cres = fmt.make_output_image(vs, nic, njc, 1, VIL_PIXEL_FORMAT_UINT_16);
     good = cres->put_view(comp_view);
     vs->unref();
-    vil_image_resource_sptr        reload_res = vil_load_image_resource(comp_file.c_str());
+    vil_image_resource_sptr reload_res = vil_load_image_resource(comp_file.c_str());
     vil_image_view<unsigned short> reload_view =
       *reinterpret_cast<vil_image_view<unsigned short> *>(reload_res->get_view().ptr());
     for (unsigned j = 0; j < njc && good; ++j)
@@ -373,7 +373,7 @@ test_pyramid_image_resource(int argc, char * argv[])
     good = vil_save(long_view, uncomp_file.c_str()) &&
            vil_j2k_image::s_encode_jpeg2000(uncomp_file.c_str(), long_comp_file.c_str());
 
-    vil_image_resource_sptr        reload_long_res = vil_load_image_resource(long_comp_file.c_str());
+    vil_image_resource_sptr reload_long_res = vil_load_image_resource(long_comp_file.c_str());
     vil_image_view<unsigned short> reload_long_view =
       *reinterpret_cast<vil_image_view<unsigned short> *>(reload_long_res->get_view().ptr());
     for (unsigned j = 0; j < njc && good; ++j)
@@ -390,13 +390,13 @@ test_pyramid_image_resource(int argc, char * argv[])
   //------- Test OpenJPEG image pyramid resource ------------------//
   //
 #if HAS_OPENJPEG2
-  std::string             filepath_open_jpg2 = image_base + "jpeg2000/file1.jp2";
+  std::string filepath_open_jpg2 = image_base + "jpeg2000/file1.jp2";
   vil_image_resource_sptr resc_open_jpeg2 = vil_load_image_resource(filepath_open_jpg2.c_str());
   if (resc_open_jpeg2)
   {
     auto * j2k = static_cast<vil_openjpeg_image *>(resc_open_jpeg2.ptr());
     good = j2k && j2k->is_valid();
-    auto *   j2k_pyr = new vil_openjpeg_pyramid_image_resource(resc_open_jpeg2);
+    auto * j2k_pyr = new vil_openjpeg_pyramid_image_resource(resc_open_jpeg2);
     unsigned n_i = j2k_pyr->ni(), n_j = j2k_pyr->nj();
     unsigned nlevels = j2k_pyr->nlevels();
     good = good && n_i == 768 && n_j == 512 && nlevels == 6;

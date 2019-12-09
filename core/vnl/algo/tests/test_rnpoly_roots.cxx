@@ -9,7 +9,7 @@ print_roots(vnl_rnpoly_solve & solver)
 {
   std::vector<vnl_vector<double> *> re = solver.real();
   std::vector<vnl_vector<double> *> im = solver.imag();
-  const unsigned int                dim = re[0]->size();
+  const unsigned int dim = re[0]->size();
   std::cout << "Roots are:" << std::endl;
   std::vector<vnl_vector<double> *>::iterator rp, ip;
   for (rp = re.begin(), ip = im.begin(); rp != re.end(); ++rp, ++ip)
@@ -30,16 +30,16 @@ unit_circles_intersect()
   // Intersection of two unit circles, centered in (0,0) and in (1,0):
   constexpr unsigned int dim = 2; // two-dimensional problem setting
 
-  double                   f1_data[] = { 1.0, 1.0, -1.0 };
-  vnl_vector<double>       f1(f1_data, 3);
+  double f1_data[] = { 1.0, 1.0, -1.0 };
+  vnl_vector<double> f1(f1_data, 3);
   vnl_matrix<unsigned int> p1(3, dim, 0);
   p1(0, 0) = 2;
   p1(1, 1) = 2;
   vnl_real_npolynomial poly1(f1, p1);
   std::cout << poly1; // X^2 +Y^2 -1
 
-  double                   f2_data[] = { 1.0, -1.0 };
-  vnl_vector<double>       f2(f2_data, 2);
+  double f2_data[] = { 1.0, -1.0 };
+  vnl_vector<double> f2(f2_data, 2);
   vnl_matrix<unsigned int> p2(2, 2, 0);
   p2(0, 0) = 1;
   vnl_real_npolynomial monom1(f2, p2);
@@ -48,7 +48,7 @@ unit_circles_intersect()
   vnl_real_npolynomial poly2 = monom1 * monom1; // (X-1)^2
   poly2 = poly2 - 1;
 
-  vnl_vector<double>       f3(1, 1.0);
+  vnl_vector<double> f3(1, 1.0);
   vnl_matrix<unsigned int> p3(1, dim, 0);
   p3(0, 1) = 2;
   vnl_real_npolynomial monom3(f3, p3); // Y^2
@@ -85,8 +85,8 @@ ellipses_intersect()
   // Real intersection of two ellipses, both centered in (0,0):
   constexpr unsigned int dim = 2; // two-dimensional problem setting
 
-  double                   f1_data[] = { 1.0, 2.0, -1.0 };
-  vnl_vector<double>       f1(f1_data, 3);
+  double f1_data[] = { 1.0, 2.0, -1.0 };
+  vnl_vector<double> f1(f1_data, 3);
   vnl_matrix<unsigned int> p1(3, dim, 0);
   p1(0, 0) = 2;
   p1(1, 1) = 2;
@@ -146,7 +146,7 @@ static void
 single_fourth_degree()
 {
   constexpr unsigned int dim = 1; // one-dimensional problem setting
-  vnl_vector<double>     coeffs(5);
+  vnl_vector<double> coeffs(5);
   // Coefficients from generating co-variance matrix for the following set of points:
   //   .9  -25.3 -118.7
   // -4.5  -22.2  -74.0
@@ -163,11 +163,11 @@ single_fourth_degree()
   pol(2, 0) = 2;
   pol(3, 0) = 1;
   pol(4, 0) = 0;
-  vnl_real_npolynomial                monom1(coeffs, pol);
+  vnl_real_npolynomial monom1(coeffs, pol);
   std::vector<vnl_real_npolynomial *> l(1, &monom1);
-  vnl_rnpoly_solve                    solver(l);
-  std::vector<vnl_vector<double> *>   realVal = solver.real();
-  std::vector<vnl_vector<double> *>   imagVal = solver.imag();
+  vnl_rnpoly_solve solver(l);
+  std::vector<vnl_vector<double> *> realVal = solver.real();
+  std::vector<vnl_vector<double> *> imagVal = solver.imag();
 
   TEST("Real part of roots has size 4", realVal.size(), 4);
   TEST("Imag part of roots has size 4", imagVal.size(), 4);
@@ -187,7 +187,7 @@ static void
 scaled_fourth_degree()
 {
   constexpr unsigned int dim = 1; // one-dimensional problem setting
-  vnl_vector<double>     coeffs(5);
+  vnl_vector<double> coeffs(5);
   // Coefficients from generating co-variance matrix for the following set of points:
   //   9  -253 -1187
   // -45  -222  -740
@@ -211,11 +211,11 @@ scaled_fourth_degree()
   pol(2, 0) = 2;
   pol(3, 0) = 1;
   pol(4, 0) = 0;
-  vnl_real_npolynomial                monom1(coeffs, pol);
+  vnl_real_npolynomial monom1(coeffs, pol);
   std::vector<vnl_real_npolynomial *> l(1, &monom1);
-  vnl_rnpoly_solve                    solver(l);
-  std::vector<vnl_vector<double> *>   realVal = solver.real();
-  std::vector<vnl_vector<double> *>   imagVal = solver.imag();
+  vnl_rnpoly_solve solver(l);
+  std::vector<vnl_vector<double> *> realVal = solver.real();
+  std::vector<vnl_vector<double> *> imagVal = solver.imag();
 
   // Scale back the roots:
   std::vector<vnl_vector<double> *>::iterator rp, ip;

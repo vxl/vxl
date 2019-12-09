@@ -38,9 +38,9 @@ static void
 test_lens_warp_mapper()
 {
   {
-    unsigned int                           img_size = 128;
-    vgl_point_2d<double>                   center(img_size / 2.0, img_size / 2.0);
-    double                                 k[] = { 0.001, 0.0001 };
+    unsigned int img_size = 128;
+    vgl_point_2d<double> center(img_size / 2.0, img_size / 2.0);
+    double k[] = { 0.001, 0.0001 };
     vpgl_poly_radial_distortion<double, 2> rd(center, k);
 
     // make the checkerboard image
@@ -57,7 +57,7 @@ test_lens_warp_mapper()
 
     // Pixel coords
     vpgl_calibration_matrix<double> I; // identity
-    vil_image_view<vxl_byte>        unwarp_pixel_cb(cb.ni(), cb.nj(), 1);
+    vil_image_view<vxl_byte> unwarp_pixel_cb(cb.ni(), cb.nj(), 1);
     vpgl_lens_unwarp_pixel(cb, unwarp_pixel_cb, rd, I, interpolator);
 
     vil_image_view<vxl_byte> warp_cb(cb.ni(), cb.nj(), 1);
@@ -88,14 +88,14 @@ test_lens_warp_mapper()
   //===================================================
   // timing tests
   {
-    vgl_point_2d<double>                   center(256.0, 256.0);
-    double                                 k[2] = { 0.001, 0.0001 };
+    vgl_point_2d<double> center(256.0, 256.0);
+    double k[2] = { 0.001, 0.0001 };
     vpgl_poly_radial_distortion<double, 2> rd(center, k);
 
     vil_image_view<vxl_byte> cb = make_checker_board(512, 512, 32);
 
     vil_image_view<vxl_byte> warp_cb(cb.ni(), cb.nj(), 1);
-    vul_timer                t;
+    vul_timer t;
     vpgl_lens_warp(cb, warp_cb, rd, interpolator);
     long time = t.user();
     std::cout << "warp: time = " << time / 1000.0 << std::endl;

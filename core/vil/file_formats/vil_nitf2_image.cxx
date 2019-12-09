@@ -67,7 +67,7 @@ vil_nitf2_file_format::make_output_image(vil_stream * /*vs*/,
 vil_streampos
 vil_nitf2_image::get_offset_to(vil_nitf2_header::section_type sec,
                                vil_nitf2_header::portion_type por,
-                               unsigned int                   index) const
+                               unsigned int index) const
 {
   vil_streampos p;
   if (sec == vil_nitf2_header::enum_file_header)
@@ -118,7 +118,7 @@ vil_nitf2_image::size_to(vil_nitf2_header::section_type sec, vil_nitf2_header::p
   }
   std::string sh = vil_nitf2_header::section_len_header_tag(sec);
   std::string s = vil_nitf2_header::section_len_data_tag(sec);
-  int         i;
+  int i;
   for (i = 0; i < index; i++)
   {
     int current_header_size;
@@ -156,12 +156,12 @@ vil_nitf2_image::size_to(vil_nitf2_header::section_type sec, vil_nitf2_header::p
 }
 
 vil_image_view_base_sptr (*vil_nitf2_image::s_decode_jpeg_2000)(vil_stream * vs,
-                                                                unsigned     i0,
-                                                                unsigned     ni,
-                                                                unsigned     j0,
-                                                                unsigned     nj,
-                                                                double       i_factor,
-                                                                double       j_factor) = nullptr;
+                                                                unsigned i0,
+                                                                unsigned ni,
+                                                                unsigned j0,
+                                                                unsigned nj,
+                                                                double i_factor,
+                                                                double j_factor) = nullptr;
 
 vil_nitf2_image::vil_nitf2_image(vil_stream * is)
   : m_stream(is)
@@ -236,7 +236,7 @@ vil_streampos
 vil_nitf2_image::get_offset_to_image_data_block_band(unsigned int image_index,
                                                      unsigned int block_index_x,
                                                      unsigned int block_index_y,
-                                                     int          bandIndex) const
+                                                     int bandIndex) const
 {
   // band index is ignored when i_mode != "S"
   std::string i_mode;
@@ -435,7 +435,7 @@ enum vil_pixel_format
 vil_nitf2_image::pixel_format() const
 {
   std::string pixel_type;
-  int         bits_per_pixel;
+  int bits_per_pixel;
   if (current_image_header()->get_property("PVTYPE", pixel_type) &&
       current_image_header()->get_property("NBPP", bits_per_pixel))
   {
@@ -571,8 +571,8 @@ vil_nitf2_image::get_copy_view_decimated_j2k(unsigned start_i,
                                              unsigned num_i,
                                              unsigned start_j,
                                              unsigned num_j,
-                                             double   i_factor,
-                                             double   j_factor) const
+                                             double i_factor,
+                                             double j_factor) const
 {
   // ACCORDING TO DOCUMENTATION, IF PARAMETERS ARE BAD, WE SHOULD RETURN NULL POINTER.
   if ((start_i + num_i > ni()) || (start_j + num_j > nj()))
@@ -637,8 +637,8 @@ vil_nitf2_image::get_copy_view_uncompressed(unsigned start_i, unsigned num_i, un
 template <class T>
 vil_memory_chunk_sptr
 maybe_byte_align_data(vil_memory_chunk_sptr in_data,
-                      unsigned int          num_samples,
-                      unsigned int          in_bits_per_sample,
+                      unsigned int num_samples,
+                      unsigned int in_bits_per_sample,
                       T /*dummy*/)
 {
   if (in_bits_per_sample != sizeof(T) * 8)
@@ -734,18 +734,18 @@ get_index<bool>(bool in_val)
 
 template <class T>
 vil_image_view_base_sptr
-get_block_vcl_internal(vil_pixel_format      pix_format,
+get_block_vcl_internal(vil_pixel_format pix_format,
                        vil_memory_chunk_sptr image_memory,
-                       unsigned int          pixels_per_block_x,
-                       unsigned int          pixels_per_block_y,
-                       unsigned int          nplanes,
-                       unsigned int          i_step,
-                       unsigned int          j_step,
-                       unsigned int          plane_step,
-                       bool                  need_to_right_justify,
-                       unsigned int          extra_bits,
-                       unsigned int          bits_per_pixel_per_band,
-                       bool                  data_is_all_blank,
+                       unsigned int pixels_per_block_x,
+                       unsigned int pixels_per_block_y,
+                       unsigned int nplanes,
+                       unsigned int i_step,
+                       unsigned int j_step,
+                       unsigned int plane_step,
+                       bool need_to_right_justify,
+                       unsigned int extra_bits,
+                       unsigned int bits_per_pixel_per_band,
+                       bool data_is_all_blank,
                        const vil_nitf2_image_subheader * /*image_header*/,
                        T dummy)
 {
@@ -825,7 +825,7 @@ vil_nitf2_image::get_block(unsigned int block_index_x, unsigned int block_index_
     return nullptr;
 
   // calculate the start position of the block that we need
-  int         bits_per_pixel_per_band, actualBitsPerPixelPerBand;
+  int bits_per_pixel_per_band, actualBitsPerPixelPerBand;
   std::string bitJustification;
   if (!current_image_header()->get_property("NBPP", bits_per_pixel_per_band) ||
       !current_image_header()->get_property("ABPP", actualBitsPerPixelPerBand) ||
@@ -833,7 +833,7 @@ vil_nitf2_image::get_block(unsigned int block_index_x, unsigned int block_index_
   {
     return nullptr;
   }
-  int  extra_bits = bits_per_pixel_per_band - actualBitsPerPixelPerBand;
+  int extra_bits = bits_per_pixel_per_band - actualBitsPerPixelPerBand;
   bool need_to_right_justify = bitJustification == "L" && (extra_bits > 0);
 
   // bytes per pixel... round up to nearest byte
@@ -851,7 +851,7 @@ vil_nitf2_image::get_block(unsigned int block_index_x, unsigned int block_index_
 
 
   unsigned int i_step(0), j_step(0), plane_step(0);
-  bool         data_is_all_blank = false;
+  bool data_is_all_blank = false;
   if (image_mode_type == "S")
   {
 #if 0  // NOT USED

@@ -75,15 +75,15 @@ test_rational_adjust()
   //
   // test 3-d registration
   // world points
-  vgl_point_3d<double>              c0(44.363757, 33.289254, 31.000366);
-  vgl_point_3d<double>              c1(44.369636, 33.293019, 35.749939);
-  vgl_point_3d<double>              c2(44.373331, 33.292956, 32.587067);
-  vgl_point_3d<double>              c3(44.395048, 33.292964, 41.883163);
-  vgl_point_3d<double>              c4(44.395221, 33.289763, 38.543938);
-  vgl_point_3d<double>              c5(44.384865, 33.290064, 39.703369);
-  vgl_point_3d<double>              c6(44.351024, 33.290036, 36.203430);
-  vgl_point_3d<double>              c7(44.341150, 33.293502, 38.745071);
-  vgl_point_3d<double>              c8(44.352379, 33.294193, 44.503021);
+  vgl_point_3d<double> c0(44.363757, 33.289254, 31.000366);
+  vgl_point_3d<double> c1(44.369636, 33.293019, 35.749939);
+  vgl_point_3d<double> c2(44.373331, 33.292956, 32.587067);
+  vgl_point_3d<double> c3(44.395048, 33.292964, 41.883163);
+  vgl_point_3d<double> c4(44.395221, 33.289763, 38.543938);
+  vgl_point_3d<double> c5(44.384865, 33.290064, 39.703369);
+  vgl_point_3d<double> c6(44.351024, 33.290036, 36.203430);
+  vgl_point_3d<double> c7(44.341150, 33.293502, 38.745071);
+  vgl_point_3d<double> c8(44.352379, 33.294193, 44.503021);
   std::vector<vgl_point_3d<double>> geo_points;
   geo_points.push_back(c0);
   geo_points.push_back(c1);

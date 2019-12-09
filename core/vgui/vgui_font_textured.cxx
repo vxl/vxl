@@ -207,7 +207,7 @@ vgui_font_textured::load_bmf_font(const std::string & font_file)
 
   // read sgi (iris) embedded image
   vil_smart_ptr<vil_stream> sgi_section = new vil_stream_section(stream.ptr(), 3 + 96 + 256 * 4 * 4);
-  vil_image_view<GLubyte>   texture_image = vil_load_image_resource_raw(sgi_section.ptr())->get_view();
+  vil_image_view<GLubyte> texture_image = vil_load_image_resource_raw(sgi_section.ptr())->get_view();
 
   load_texture(texture_image);
 

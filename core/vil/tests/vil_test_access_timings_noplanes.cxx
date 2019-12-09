@@ -76,9 +76,9 @@ method4(vil_image_view<imT> & image, int n_loops)
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
-    unsigned       ni = image.ni(), nj = image.nj();
+    unsigned ni = image.ni(), nj = image.nj();
     std::ptrdiff_t istep = image.istep(), jstep = image.jstep();
-    imT *          row = image.top_left_ptr();
+    imT * row = image.top_left_ptr();
     for (unsigned j = 0; j < nj; ++j, row += jstep)
     {
       imT * pixel = row;
@@ -97,9 +97,9 @@ method5(vil_image_view<imT> & image, int n_loops)
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
-    unsigned       ni = image.ni(), nj = image.nj();
+    unsigned ni = image.ni(), nj = image.nj();
     std::ptrdiff_t istep = image.istep(), jstep = image.jstep();
-    imT *          row = image.top_left_ptr();
+    imT * row = image.top_left_ptr();
     for (unsigned j = 0; j < nj; ++j, row += jstep)
     {
       imT * pixel = row + (ni - 1) * istep;
@@ -120,9 +120,9 @@ method6(vil_image_view<imT> & image, int n_loops)
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
-    unsigned       ni = image.ni(), nj = image.nj();
+    unsigned ni = image.ni(), nj = image.nj();
     std::ptrdiff_t jstep = image.jstep();
-    imT *          row = image.top_left_ptr();
+    imT * row = image.top_left_ptr();
     for (unsigned j = 0; j < nj; ++j, row += jstep)
     {
       for (unsigned i = 0; i < ni; ++i)
@@ -171,9 +171,9 @@ method8(vil_image_view<imT> & image, int n_loops)
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
-    unsigned       ni = image.ni(), nj = image.nj();
+    unsigned ni = image.ni(), nj = image.nj();
     std::ptrdiff_t istep = image.istep(), jstep = image.jstep();
-    imT *          row = image.top_left_ptr();
+    imT * row = image.top_left_ptr();
     for (unsigned j = 0; j < nj; ++j, row += jstep)
     {
       for (unsigned i = 0; i < ni; ++i)
@@ -235,10 +235,10 @@ compute_stats(int i, vil_image_view<imT> & image, int n_loops)
 int
 main(int argc, char ** argv)
 {
-  vil_image_view<vxl_byte>          byte_image(NI, NJ);
-  vil_image_view<float>             float_image(NI, NJ);
+  vil_image_view<vxl_byte> byte_image(NI, NJ);
+  vil_image_view<float> float_image(NI, NJ);
   vil_image_view<vil_rgb<vxl_byte>> rgb_image(NI, NJ);
-  int                               n_loops = 100;
+  int n_loops = 100;
 
   std::cout << "Times to fill a " << NI << " x " << NJ << " image of 1 plane (in microsecs) [Range= 0.5(max-min)]"
             << std::endl

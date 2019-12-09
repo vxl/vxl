@@ -33,7 +33,7 @@ std::string
 vul_file::get_cwd()
 {
   constexpr int BIG = 65536;
-  char          buf[BIG];
+  char buf[BIG];
   if (getcwd(buf, BIG - 1))
     return buf;
   else
@@ -241,7 +241,7 @@ vul_file::delete_file_glob(std::string const & file_glob)
   replace('/', '\\', command);
   command = "del /Q " + command;
 #else
-  std::string            command = "/bin/rm -f " + file_glob;
+  std::string command = "/bin/rm -f " + file_glob;
 #endif
   return std::system(command.c_str()) == 0;
 }
@@ -264,8 +264,8 @@ vul_file::expand_tilde(char const * vul_filename)
   //// ** Have a tilde, go for it
 
   // 1. Strip to directory only, and remove the tilde itself
-  std::string            fn(vul_filename);
-  std::string            dir;
+  std::string fn(vul_filename);
+  std::string dir;
   std::string::size_type first_slash = fn.find('/');
   if (first_slash != std::string::npos)
   {
@@ -310,7 +310,7 @@ std::wstring
 vul_file::get_cwd(wchar_t * /*dummy*/)
 {
   constexpr int BIG = 65536;
-  wchar_t       buf[BIG];
+  wchar_t buf[BIG];
   buf[0] = L'\0';
   _wgetcwd(buf, BIG - 1);
   return buf;

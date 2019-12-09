@@ -19,8 +19,8 @@
 
 struct example_pyramid_tableau : public vgui_tableau
 {
-  int                    level;
-  vil1_pyramid           pyr;
+  int level;
+  vil1_pyramid pyr;
   vgui_image_tableau_new image_tab;
   vgui_parent_child_link pclink;
 
@@ -91,7 +91,7 @@ main(int argc, char ** argv)
   }
   std::cerr << image << std::endl;
 
-  vgui_tableau_sptr         tab(new example_pyramid_tableau(image));
+  vgui_tableau_sptr tab(new example_pyramid_tableau(image));
   vgui_viewer2D_tableau_new zoom(tab);
   return vgui::run(zoom, image.width(), image.height());
 }

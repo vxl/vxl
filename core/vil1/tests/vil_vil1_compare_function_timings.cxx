@@ -125,7 +125,7 @@ conv1d(vil_image_view<vxl_byte> & image, int n_loops, bool print)
 
   if (print)
     std::cout << "Time to 1d convolve a " << image.ni() << '*' << image.nj() << "vil image of vxl_byte\n";
-  float       kernel[] = { -1.0f, 0.5f, 1.0f, 0.5f, -1.0f };
+  float kernel[] = { -1.0f, 0.5f, 1.0f, 0.5f, -1.0f };
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
     vil_convolve_1d(image, dest, kernel + 2, -2, 2, float(), vil_convolve_trim, vil_convolve_constant_extend);
@@ -140,7 +140,7 @@ conv1d(vil_image_view<float> & image, int n_loops, bool print)
 
   if (print)
     std::cout << "Time to 1d convolve a " << image.ni() << '*' << image.nj() << "vil image of float\n";
-  float       kernel[] = { -1.0f, 0.5f, 1.0f, 0.5f, -1.0f };
+  float kernel[] = { -1.0f, 0.5f, 1.0f, 0.5f, -1.0f };
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
     vil_convolve_1d(image, dest, kernel + 2, -2, 2, float(), vil_convolve_trim, vil_convolve_constant_extend);
@@ -160,9 +160,9 @@ conv1d(vil1_memory_image_of<vxl_byte> & image, int n_loops, bool print)
   vil1_memory_image_of<float> dest;
   if (print)
     std::cout << "Time to 1d convolve a " << image.width() << '*' << image.height() << " vil1 image of vxl_byte\n";
-  float                                kernel[] = { -1.0f, 0.5f, 1.0f, 0.5f, -1.0f };
+  float kernel[] = { -1.0f, 0.5f, 1.0f, 0.5f, -1.0f };
   vil1_convolve_signal_1d<float const> K(kernel, 0, 2, 4);
-  std::time_t                          t0 = std::clock();
+  std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
     dest.resize(image.width(), image.height());
@@ -184,9 +184,9 @@ conv1d(vil1_memory_image_of<float> & image, int n_loops, bool print)
   vil1_memory_image_of<float> dest;
   if (print)
     std::cout << "Time to 1d convolve a " << image.width() << '*' << image.height() << " vil1 image of float\n";
-  float                                kernel[] = { -1.0f, 0.5f, 1.0f, 0.5f, -1.0f };
+  float kernel[] = { -1.0f, 0.5f, 1.0f, 0.5f, -1.0f };
   vil1_convolve_signal_1d<float const> K(kernel, 0, 2, 4);
-  std::time_t                          t0 = std::clock();
+  std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
     dest.resize(image.width(), image.height());
@@ -247,12 +247,12 @@ compute_stats(int i, imT & image, int n_loops)
 int
 main(int argc, char ** argv)
 {
-  vil1_memory_image_of<vxl_byte>           byte_1image(NI, NJ);
-  vil1_memory_image_of<float>              float_1image(NI, NJ);
+  vil1_memory_image_of<vxl_byte> byte_1image(NI, NJ);
+  vil1_memory_image_of<float> float_1image(NI, NJ);
   vil1_memory_image_of<vil1_rgb<vxl_byte>> rgb_1image(NI, NJ);
-  vil_image_view<vxl_byte>                 byte_2image(NI, NJ);
-  vil_image_view<float>                    float_2image(NI, NJ);
-  vil_image_view<vil_rgb<vxl_byte>>        rgb_2image(NI, NJ);
+  vil_image_view<vxl_byte> byte_2image(NI, NJ);
+  vil_image_view<float> float_2image(NI, NJ);
+  vil_image_view<vil_rgb<vxl_byte>> rgb_2image(NI, NJ);
   std::cout << "Times to process a " << NI << " x " << NJ << " image (in microsecs) [Range= 0.5(max-min)]\n";
 
   // Estimate time so we can set n_loops appropriately

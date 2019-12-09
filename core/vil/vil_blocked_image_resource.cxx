@@ -34,10 +34,10 @@ vil_blocked_image_resource::n_block_j() const
 }
 
 bool
-vil_blocked_image_resource::get_blocks(unsigned int                                         start_block_i,
-                                       unsigned int                                         end_block_i,
-                                       unsigned int                                         start_block_j,
-                                       unsigned int                                         end_block_j,
+vil_blocked_image_resource::get_blocks(unsigned int start_block_i,
+                                       unsigned int end_block_i,
+                                       unsigned int start_block_j,
+                                       unsigned int end_block_j,
                                        std::vector<std::vector<vil_image_view_base_sptr>> & blocks) const
 {
   for (unsigned int bi = start_block_i; bi <= end_block_i; ++bi)
@@ -58,10 +58,10 @@ vil_blocked_image_resource::get_blocks(unsigned int                             
 }
 
 bool
-vil_blocked_image_resource::put_blocks(unsigned int                                               start_block_i,
-                                       unsigned int                                               end_block_i,
-                                       unsigned int                                               start_block_j,
-                                       unsigned int                                               end_block_j,
+vil_blocked_image_resource::put_blocks(unsigned int start_block_i,
+                                       unsigned int end_block_i,
+                                       unsigned int start_block_j,
+                                       unsigned int end_block_j,
                                        std::vector<std::vector<vil_image_view_base_sptr>> const & blocks)
 {
   for (unsigned int bi = start_block_i; bi <= end_block_i; ++bi)
@@ -94,8 +94,8 @@ vil_blocked_image_resource::glue_blocks_together(
   }
 
   // now paste all the image blocks into their proper location in outImage
-  unsigned int     curr_i = 0;
-  unsigned int     curr_j = 0;
+  unsigned int curr_i = 0;
+  unsigned int curr_j = 0;
   vil_pixel_format fmt = vil_pixel_format_component_format(this->pixel_format());
   switch (fmt)
   {
@@ -172,12 +172,12 @@ vil_blocked_image_resource::block_j_offset(unsigned int block_j, unsigned int j,
 // Therefore we need to trim them in order to have the
 // correct pieces to glue together to form the view.
 bool
-vil_blocked_image_resource::trim_border_blocks(unsigned int                                         i0,
-                                               unsigned int                                         ni,
-                                               unsigned int                                         j0,
-                                               unsigned int                                         nj,
-                                               unsigned int                                         start_block_i,
-                                               unsigned int                                         start_block_j,
+vil_blocked_image_resource::trim_border_blocks(unsigned int i0,
+                                               unsigned int ni,
+                                               unsigned int j0,
+                                               unsigned int nj,
+                                               unsigned int start_block_i,
+                                               unsigned int start_block_j,
                                                std::vector<std::vector<vil_image_view_base_sptr>> & blocks) const
 {
   // loop through all the boxes and trim the boxes around the border if necessary.
@@ -219,7 +219,7 @@ vil_blocked_image_resource::trim_border_blocks(unsigned int                     
 #define TRIM_BORDER_BLOCK_CASE(FORMAT, T)                                                                              \
   case FORMAT:                                                                                                         \
   {                                                                                                                    \
-    vil_image_view<T>   currBlock = static_cast<vil_image_view<T> &>(*blocks[bi][bj]);                                 \
+    vil_image_view<T> currBlock = static_cast<vil_image_view<T> &>(*blocks[bi][bj]);                                   \
     vil_image_view<T> * croppedBlock = new vil_image_view<T>();                                                        \
     *croppedBlock = vil_crop(currBlock, bi0, bin - bi0 + 1, bj0, bjn - bj0 + 1);                                       \
     blocks[bi][bj] = croppedBlock;                                                                                     \

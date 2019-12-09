@@ -32,8 +32,8 @@ vil_nitf2_tagged_record_definition::all_definitions()
 }
 
 
-vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition(std::string                   name,
-                                                                       std::string                   pretty_name,
+vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition(std::string name,
+                                                                       std::string pretty_name,
                                                                        vil_nitf2_field_definitions * defs)
   : m_name(std::move(name))
   , m_pretty_name(std::move(pretty_name))
@@ -68,14 +68,14 @@ vil_nitf2_tagged_record_definition::undefine(const std::string & name)
 }
 
 vil_nitf2_tagged_record_definition &
-vil_nitf2_tagged_record_definition::field(std::string                     tag,
-                                          std::string                     pretty_name,
-                                          vil_nitf2_field_formatter *     formatter,
-                                          bool                            blanks_ok,
-                                          vil_nitf2_field_functor<int> *  width_functor,
+vil_nitf2_tagged_record_definition::field(std::string tag,
+                                          std::string pretty_name,
+                                          vil_nitf2_field_formatter * formatter,
+                                          bool blanks_ok,
+                                          vil_nitf2_field_functor<int> * width_functor,
                                           vil_nitf2_field_functor<bool> * condition_functor,
-                                          std::string                     units,
-                                          std::string                     description)
+                                          std::string units,
+                                          std::string description)
 {
   if (m_definition_completed)
   {
@@ -98,7 +98,7 @@ vil_nitf2_tagged_record_definition::field(std::string                     tag,
 
 vil_nitf2_tagged_record_definition &
 vil_nitf2_tagged_record_definition::repeat(vil_nitf2_field_functor<int> * repeat_functor,
-                                           vil_nitf2_field_definitions &  field_definitions)
+                                           vil_nitf2_field_definitions & field_definitions)
 {
   if (m_definition_completed)
   {

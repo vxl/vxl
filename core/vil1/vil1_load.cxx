@@ -70,7 +70,7 @@ vil1_image
 vil1_load(char const * filename)
 {
   vil1_image i = vil1_load_raw(filename);
-  bool       top_first = true, bgr = false;
+  bool top_first = true, bgr = false;
   i.get_property(vil1_property_top_row_first, &top_first);
   if (i.components() == 3)
     i.get_property(vil1_property_component_order_is_BGR, &bgr);

@@ -136,7 +136,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24, VIDL_PIXEL_FORMAT_UYVY_422>
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_RGB_24);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_UYVY_422);
     const auto * rgb = reinterpret_cast<const vxl_byte *>(in_frame.data());
-    auto *       uyvy = reinterpret_cast<vxl_byte *>(out_frame.data());
+    auto * uyvy = reinterpret_cast<vxl_byte *>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1) / 2;
     for (unsigned int c = 0; c < num_half_pix; ++c)
     {
@@ -146,7 +146,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24, VIDL_PIXEL_FORMAT_UYVY_422>
       const vxl_byte & r2 = *(rgb++);
       const vxl_byte & g2 = *(rgb++);
       const vxl_byte & b2 = *(rgb++);
-      vxl_byte         y1, u1, v1, y2, u2, v2;
+      vxl_byte y1, u1, v1, y2, u2, v2;
       vidl_color_convert_rgb2yuv(r1, g1, b1, y1, u1, v1);
       vidl_color_convert_rgb2yuv(r2, g2, b2, y2, u2, v2);
       *(uyvy++) = (u1 + u2) / 2u;
@@ -173,7 +173,7 @@ struct convert<VIDL_PIXEL_FORMAT_UYVY_422, VIDL_PIXEL_FORMAT_RGB_24>
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_UYVY_422);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_RGB_24);
     const auto * uyvy = reinterpret_cast<const vxl_byte *>(in_frame.data());
-    auto *       rgb = reinterpret_cast<vxl_byte *>(out_frame.data());
+    auto * rgb = reinterpret_cast<vxl_byte *>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1) / 2;
     for (unsigned int c = 0; c < num_half_pix; ++c)
     {
@@ -181,7 +181,7 @@ struct convert<VIDL_PIXEL_FORMAT_UYVY_422, VIDL_PIXEL_FORMAT_RGB_24>
       const vxl_byte & y1 = *(uyvy++);
       const vxl_byte & v1 = *(uyvy++);
       const vxl_byte & y2 = *(uyvy++);
-      vxl_byte         r, g, b;
+      vxl_byte r, g, b;
       vidl_color_convert_yuv2rgb(y1, u1, v1, r, g, b);
       *(rgb++) = r;
       *(rgb++) = g;
@@ -210,7 +210,7 @@ struct convert<VIDL_PIXEL_FORMAT_UYVY_422, VIDL_PIXEL_FORMAT_MONO_8>
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_UYVY_422);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_MONO_8);
     const auto * uyvy = reinterpret_cast<const vxl_byte *>(in_frame.data());
-    auto *       mono = reinterpret_cast<vxl_byte *>(out_frame.data());
+    auto * mono = reinterpret_cast<vxl_byte *>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1) / 2;
     for (unsigned int c = 0; c < num_half_pix; ++c)
     {
@@ -240,7 +240,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24, VIDL_PIXEL_FORMAT_YUYV_422>
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_RGB_24);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_YUYV_422);
     const auto * rgb = reinterpret_cast<const vxl_byte *>(in_frame.data());
-    auto *       yuyv = reinterpret_cast<vxl_byte *>(out_frame.data());
+    auto * yuyv = reinterpret_cast<vxl_byte *>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1) / 2;
     for (unsigned int c = 0; c < num_half_pix; ++c)
     {
@@ -250,7 +250,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24, VIDL_PIXEL_FORMAT_YUYV_422>
       const vxl_byte & r2 = *(rgb++);
       const vxl_byte & g2 = *(rgb++);
       const vxl_byte & b2 = *(rgb++);
-      vxl_byte         y1, u1, v1, y2, u2, v2;
+      vxl_byte y1, u1, v1, y2, u2, v2;
       vidl_color_convert_rgb2yuv(r1, g1, b1, y1, u1, v1);
       vidl_color_convert_rgb2yuv(r2, g2, b2, y2, u2, v2);
       *(yuyv++) = y1;
@@ -277,7 +277,7 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_RGB_24>
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_YUYV_422);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_RGB_24);
     const auto * yuyv = reinterpret_cast<const vxl_byte *>(in_frame.data());
-    auto *       rgb = reinterpret_cast<vxl_byte *>(out_frame.data());
+    auto * rgb = reinterpret_cast<vxl_byte *>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1) / 2;
     for (unsigned int c = 0; c < num_half_pix; ++c)
     {
@@ -285,7 +285,7 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_RGB_24>
       const vxl_byte & u1 = *(yuyv++);
       const vxl_byte & y2 = *(yuyv++);
       const vxl_byte & v1 = *(yuyv++);
-      vxl_byte         r, g, b;
+      vxl_byte r, g, b;
       vidl_color_convert_yuv2rgb(y1, u1, v1, r, g, b);
       *(rgb++) = r;
       *(rgb++) = g;
@@ -313,11 +313,11 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24P, VIDL_PIXEL_FORMAT_YUYV_422>
   {
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_RGB_24P);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_YUYV_422);
-    const auto *     red = reinterpret_cast<const vxl_byte *>(in_frame.data());
+    const auto * red = reinterpret_cast<const vxl_byte *>(in_frame.data());
     const vxl_byte * green = red + in_frame.ni() * in_frame.nj();
     const vxl_byte * blue = green + in_frame.ni() * in_frame.nj();
-    auto *           yuyv = reinterpret_cast<vxl_byte *>(out_frame.data());
-    unsigned int     num_half_pix = (in_frame.ni() * in_frame.nj() + 1) / 2;
+    auto * yuyv = reinterpret_cast<vxl_byte *>(out_frame.data());
+    unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1) / 2;
     for (unsigned int c = 0; c < num_half_pix; ++c)
     {
       const vxl_byte & r1 = *(red++);
@@ -326,7 +326,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24P, VIDL_PIXEL_FORMAT_YUYV_422>
       const vxl_byte & r2 = *(red++);
       const vxl_byte & g2 = *(green++);
       const vxl_byte & b2 = *(blue++);
-      vxl_byte         y1, u1, v1, y2, u2, v2;
+      vxl_byte y1, u1, v1, y2, u2, v2;
       vidl_color_convert_rgb2yuv(r1, g1, b1, y1, u1, v1);
       vidl_color_convert_rgb2yuv(r2, g2, b2, y2, u2, v2);
       *(yuyv++) = y1;
@@ -352,9 +352,9 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_RGB_24P>
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_YUYV_422);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_RGB_24P);
     const auto * yuyv = reinterpret_cast<const vxl_byte *>(in_frame.data());
-    auto *       red = reinterpret_cast<vxl_byte *>(out_frame.data());
-    vxl_byte *   green = red + out_frame.ni() * out_frame.nj();
-    vxl_byte *   blue = green + out_frame.ni() * out_frame.nj();
+    auto * red = reinterpret_cast<vxl_byte *>(out_frame.data());
+    vxl_byte * green = red + out_frame.ni() * out_frame.nj();
+    vxl_byte * blue = green + out_frame.ni() * out_frame.nj();
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1) / 2;
     for (unsigned int c = 0; c < num_half_pix; ++c)
     {
@@ -362,7 +362,7 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_RGB_24P>
       const vxl_byte & u1 = *(yuyv++);
       const vxl_byte & y2 = *(yuyv++);
       const vxl_byte & v1 = *(yuyv++);
-      vxl_byte         r, g, b;
+      vxl_byte r, g, b;
       vidl_color_convert_yuv2rgb(y1, u1, v1, r, g, b);
       *(red++) = r;
       *(green++) = g;
@@ -390,7 +390,7 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_MONO_8>
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_YUYV_422);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_MONO_8);
     const auto * yuyv = reinterpret_cast<const vxl_byte *>(in_frame.data());
-    auto *       mono = reinterpret_cast<vxl_byte *>(out_frame.data());
+    auto * mono = reinterpret_cast<vxl_byte *>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1) / 2;
     for (unsigned int c = 0; c < num_half_pix; ++c)
     {
@@ -552,11 +552,11 @@ vidl_convert_frame(const vidl_frame_sptr & in_frame, vidl_pixel_format format)
   if (format == VIDL_PIXEL_FORMAT_UNKNOWN)
     return nullptr;
 
-  unsigned              ni = in_frame->ni();
-  unsigned              nj = in_frame->nj();
-  unsigned              size = vidl_pixel_format_buffer_size(ni, nj, format);
+  unsigned ni = in_frame->ni();
+  unsigned nj = in_frame->nj();
+  unsigned size = vidl_pixel_format_buffer_size(ni, nj, format);
   vil_memory_chunk_sptr memory = new vil_memory_chunk(size, VIL_PIXEL_FORMAT_BYTE);
-  vidl_frame_sptr       out_frame = new vidl_memory_chunk_frame(ni, nj, format, memory);
+  vidl_frame_sptr out_frame = new vidl_memory_chunk_frame(ni, nj, format, memory);
 
   if (vidl_convert_frame(*in_frame, *out_frame))
     return out_frame;
@@ -594,8 +594,8 @@ vidl_convert_to_frame(const vil_image_view_base & image)
   // use the pixel component format to account for
   // images of type vil_rgb<T>, vil_rgba<T>, etc.
   vil_pixel_format cmp_format = vil_pixel_format_component_format(image.pixel_format());
-  unsigned int     num_cmp = vil_pixel_format_num_components(image.pixel_format());
-  unsigned int     num_channels = np * num_cmp;
+  unsigned int num_cmp = vil_pixel_format_num_components(image.pixel_format());
+  unsigned int num_channels = np * num_cmp;
 
   // special case for 16 bit images
   if (cmp_format == VIL_PIXEL_FORMAT_UINT_16)
@@ -639,7 +639,7 @@ vidl_convert_to_frame(const vil_image_view_base & image)
     img.deep_copy(vil_image_view<vxl_byte>(image));
   else
   {
-    vil_image_resource_sptr  resrc = vil_new_image_resource_of_view(image);
+    vil_image_resource_sptr resrc = vil_new_image_resource_of_view(image);
     vil_image_view_base_sptr bimage = vil_convert_cast(vxl_byte(), resrc->get_view());
     if (!bimage)
       return nullptr;
@@ -714,7 +714,7 @@ vidl_convert_to_view(vidl_frame const & frame, vil_image_view_base & image, vidl
   if (image.pixel_format() == VIL_PIXEL_FORMAT_BYTE)
   {
     auto & img = static_cast<vil_image_view<vxl_byte> &>(image);
-    bool   interleaved = (img.planestep() == 1);
+    bool interleaved = (img.planestep() == 1);
 
     switch (require_color)
     {
@@ -810,8 +810,8 @@ vidl_convert_wrap_in_view(vidl_frame const & frame)
   if (pt.chroma_shift_x != 0 || pt.chroma_shift_y != 0 || pt.bits_per_pixel % pt.num_channels != 0)
     return nullptr;
 
-  unsigned       ni = frame.ni(), nj = frame.nj();
-  unsigned       np = pt.num_channels;
+  unsigned ni = frame.ni(), nj = frame.nj();
+  unsigned np = pt.num_channels;
   std::ptrdiff_t i_step, j_step, p_step;
   switch (pt.arrangement)
   {

@@ -84,11 +84,11 @@ vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double> & M,
 
   current_system = this;
 
-  long                dim = mat->columns();
-  long                nvals = (smallest) ? -n : n;
-  long                nperm = 0;
-  long                nmval = n;
-  long                nmvec = dim;
+  long dim = mat->columns();
+  long nvals = (smallest) ? -n : n;
+  long nperm = 0;
+  long nmval = n;
+  long nmvec = dim;
   std::vector<double> temp_vals(n * 4);
   std::vector<double> temp_vecs(n * dim);
 
@@ -210,13 +210,13 @@ vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double> & M,
 int
 vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double> & A,
                                                   vnl_sparse_matrix<double> & B,
-                                                  int                         nEV,
-                                                  double                      tolerance,
-                                                  int                         numberLanczosVecs,
-                                                  bool                        smallest,
-                                                  bool                        magnitude,
-                                                  int                         maxIterations,
-                                                  double                      sigma)
+                                                  int nEV,
+                                                  double tolerance,
+                                                  int numberLanczosVecs,
+                                                  bool smallest,
+                                                  bool magnitude,
+                                                  int maxIterations,
+                                                  double sigma)
 {
   mat = &A;
   Bmat = &B;
@@ -232,7 +232,7 @@ vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double> & A,
   nvalues = 0;
 
   constexpr long whichLength = 2;
-  char           which[whichLength + 1];
+  char which[whichLength + 1];
   which[whichLength] = '\0';
   if (smallest)
     which[0] = 'S';
@@ -264,8 +264,8 @@ vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double> & A,
 
 #define DONE 99
   constexpr int genEigProblemLength = 1;
-  char          genEigProblem = 'G';
-  long          info = 0; // Initialization info (INPUT) and error flag (OUTPUT)
+  char genEigProblem = 'G';
+  long info = 0; // Initialization info (INPUT) and error flag (OUTPUT)
 
 #define IPARAMSIZE 12
   long iParam[IPARAMSIZE];
@@ -424,7 +424,7 @@ vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double> & A,
 
   // which Ritz vctors do we want?
   constexpr int howMnyLength = 1;
-  char          howMny = 'A'; // all
+  char howMny = 'A'; // all
 
   // selection vector for which Ritz vectors to calc.
   // we want them all, so allocate the space (dseupd uses it)

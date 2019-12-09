@@ -56,7 +56,7 @@ main(int argc, char **)
   int fact = 20;
 
   // create and save a bilinearly interpolated over-sampled image
-  const char *             fn_bilin = "example_interpolate_image_bilin.png";
+  const char * fn_bilin = "example_interpolate_image_bilin.png";
   vil_image_view<vxl_byte> image_bilin;
   vil_resample_bilin(
     image_orig, image_bilin, -1.0, -1.0, 1.0 / fact, 0.0, 0.0, 1.0 / fact, fact * (ni + 1) + 1, fact * (nj + 1) + 1);
@@ -64,7 +64,7 @@ main(int argc, char **)
   std::cout << "Wrote bilinearly interpolated over-sampled image to " << fn_bilin << std::endl;
 
   // create and save a bicubicly interpolated over-sampled image
-  const char *             fn_bicub = "example_interpolate_image_bicub.png";
+  const char * fn_bicub = "example_interpolate_image_bicub.png";
   vil_image_view<vxl_byte> image_bicub;
   vil_resample_bicub(
     image_orig, image_bicub, -1.0, -1.0, 1.0 / fact, 0.0, 0.0, 1.0 / fact, fact * (ni + 1) + 1, fact * (nj + 1) + 1);

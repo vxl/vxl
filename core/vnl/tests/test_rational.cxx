@@ -263,7 +263,7 @@ test_frac()
 static void
 test_long_64()
 {
-  long         l1 = 1234321234321L, l2 = 2 * l1, l3 = 123456787654321L, l4 = l3 + 1;
+  long l1 = 1234321234321L, l2 = 2 * l1, l3 = 123456787654321L, l4 = l3 + 1;
   vnl_rational r(-l1, -l2) /* denom = 2*num */, s(l3, -l4) /* relatively prime */, p;
   TEST("vnl_math::isfinite", vnl_math::isfinite(r), true);
   TEST("vnl_math::isnan", vnl_math::isnan(s), false);
@@ -303,7 +303,7 @@ test_approx()
   d = vnl_rational(-1.23456);
   TEST("construct from double", d, vnl_rational(-123456, 100000));
   vnl_rational pi = vnl_rational(vnl_math::pi);
-  auto         pi_a = double(pi);
+  auto pi_a = double(pi);
   TEST("pi", pi_a - vnl_math::pi < 1e-18 && vnl_math::pi - pi_a < 1e-18, true);
   std::cout << "Best rational approximation of pi: " << pi << " = " << pi_a << '\n'
             << "Compare this with pi in 20 decimals:                     " << vnl_math::pi << std::endl;

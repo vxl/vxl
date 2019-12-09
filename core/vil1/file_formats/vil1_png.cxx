@@ -56,12 +56,12 @@ vil1_png_file_format::make_input_image(vil1_stream * is)
 }
 
 vil1_image_impl *
-vil1_png_file_format::make_output_image(vil1_stream *         is,
-                                        int                   planes,
-                                        int                   width,
-                                        int                   height,
-                                        int                   components,
-                                        int                   bits_per_component,
+vil1_png_file_format::make_output_image(vil1_stream * is,
+                                        int planes,
+                                        int width,
+                                        int height,
+                                        int components,
+                                        int bits_per_component,
                                         vil1_component_format format)
 {
   return new vil1_png_generic_image(is, planes, width, height, components, bits_per_component, format);
@@ -104,7 +104,7 @@ struct vil1_jmpbuf_wrapper
 };
 
 static vil1_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
-static bool                jmpbuf_ok = false;
+static bool jmpbuf_ok = false;
 
 // Must be  a macro - setjmp needs its stack frame to live
 #define png_setjmp_on(ACTION)                                                                                          \
@@ -153,12 +153,12 @@ pngtopnm_error_handler(png_structp png_ptr, png_const_charp msg)
 
 struct vil1_png_structures
 {
-  bool         reading_;
+  bool reading_;
   png_struct * png_ptr;
-  png_info *   info_ptr;
-  png_byte **  rows;
-  int          channels;
-  bool         ok;
+  png_info * info_ptr;
+  png_byte ** rows;
+  int channels;
+  bool ok;
 
   vil1_png_structures(bool reading)
   {

@@ -31,8 +31,8 @@ vnl_log_gamma(double x)
 }
 
 constexpr int MAX_ITS = 100;
-const double  MaxRelError = 3.0e-7;
-const double  vnl_very_small = 1.0e-30;
+const double MaxRelError = 3.0e-7;
+const double vnl_very_small = 1.0e-30;
 
 //: Use series expansion of incomplete gamma function
 static double

@@ -113,7 +113,7 @@ static void
 test_ref_unref()
 {
   // Test protect and unref
-  int       good_count = base_impl::reftotal + 2;
+  int good_count = base_impl::reftotal + 2;
   base_sptr p = new base_impl(1);
   base_sptr q = p;
   base_sptr r = new base_impl(1);

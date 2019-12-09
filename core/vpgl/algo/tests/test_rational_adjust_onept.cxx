@@ -127,18 +127,18 @@ test_rational_adjust_onept()
   std::vector<vgl_vector_2d<double>> cam_trans;
 
   vgl_point_3d<double> intersection;
-  bool                 good = vpgl_rational_adjust_onept::adjust(cams, corrs, cam_trans, intersection);
+  bool good = vpgl_rational_adjust_onept::adjust(cams, corrs, cam_trans, intersection);
   TEST("vpgl_rational_adjust_onept::adjust", good, true);
   std::cout << "3-d intersection point " << intersection << '\n';
   for (unsigned i = 0; i < 2; ++i)
     std::cout << "T[" << i << "] " << cam_trans[i] << '\n';
 
-  double               elevation = 34.5121;
+  double elevation = 34.5121;
   vgl_point_2d<double> ap0(1.14572, 1.67109);
   vgl_point_2d<double> ap1(-1.31294, -1.66164);
   vgl_point_2d<double> t0(cam_trans[0].x(), cam_trans[0].y());
   vgl_point_2d<double> t1(cam_trans[1].x(), cam_trans[1].y());
-  double               d = vgl_distance<double>(ap0, t0) + vgl_distance<double>(ap1, t1);
+  double d = vgl_distance<double>(ap0, t0) + vgl_distance<double>(ap1, t1);
 
   TEST_NEAR("test 3-d elevation", intersection.z(), elevation, 0.1);
   TEST_NEAR("test rational_adjust_one_point_translations", d, 0, 0.1);

@@ -93,7 +93,7 @@ test_pmatrix()
     2, 0, 0, 0, 3, 10, 5, 5, 5, 12, 6, 6,
   };
   vnl_matrix<double> P(pdata, 3, 4);
-  vnl_svd<double>    svd(P, 1e-8);
+  vnl_svd<double> svd(P, 1e-8);
 
   vnl_matrix<double> res = svd.recompose() - P;
   TEST_NEAR("PMatrix recomposition residual", res.fro_norm(), 0, 1e-12);
@@ -125,7 +125,7 @@ test_I()
     1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
   };
   vnl_matrix<double> P(3, 4, 12, Idata);
-  vnl_svd<double>    svd(P);
+  vnl_svd<double> svd(P);
   std::cout << svd;
 
   vnl_vector_fixed<double, 4> w_expected(1, 1, 1, 0);
@@ -158,10 +158,10 @@ template <class T>
 static void
 test_nullvector(char const * type, double max_err, T *, vnl_random & rng)
 {
-  int           n = 5;
+  int n = 5;
   vnl_matrix<T> A(n, n + 1);
   test_util_fill_random(A.begin(), A.end(), rng);
-  vnl_svd<T>    svd(A);
+  vnl_svd<T> svd(A);
   vnl_vector<T> x = svd.nullvector();
   vnl_vector<T> Ax = A * x;
   std::cout << __FILE__ ": type = " << type << std::endl;

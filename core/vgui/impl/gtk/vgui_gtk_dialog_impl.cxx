@@ -45,7 +45,7 @@ vgui_gtk_dialog_impl::~vgui_gtk_dialog_impl() {}
 struct vgui_gtk_dialog_impl_choice
 {
   std::vector<std::string> names;
-  int                      index;
+  int index;
 };
 
 
@@ -112,7 +112,7 @@ extern "C"
   struct vgui_gtk_dialog_impl_int_pair
   {
     int * val;
-    int   tmp;
+    int tmp;
   };
 
 
@@ -161,7 +161,7 @@ extern "C"
   struct file_ok_data
   {
     GtkFileSelection * filew;
-    GtkEntry *         file_entry;
+    GtkEntry * file_entry;
   };
 
   //--------------------------------------------------------------------------------
@@ -227,8 +227,8 @@ extern "C"
 
   struct cancel_color_data
   {
-    std::string *             orig_color;
-    GtkEntry *                color_entry;
+    std::string * orig_color;
+    GtkEntry * color_entry;
     GtkColorSelectionDialog * colord;
   };
 
@@ -324,7 +324,7 @@ vgui_gtk_dialog_impl::ask()
   for (std::vector<element>::iterator e_iter = elements.begin(); e_iter != elements.end(); ++e_iter)
   {
 
-    element             l = *e_iter;
+    element l = *e_iter;
     vgui_dialog_field * field = l.field;
 
     GtkWidget * entry;
@@ -500,8 +500,8 @@ vgui_gtk_dialog_impl::ask()
     else if (l.type == inline_tabl)
     {
       vgui_gtk_adaptor * adapt = static_cast<vgui_gtk_adaptor *>(l.widget);
-      GtkWidget *        widg = adapt->get_glarea_widget();
-      GtkWidget *        hbox = gtk_hbox_new(FALSE, 10);
+      GtkWidget * widg = adapt->get_glarea_widget();
+      GtkWidget * hbox = gtk_hbox_new(FALSE, 10);
 
       gtk_box_pack_start(GTK_BOX(hbox), widg, TRUE, TRUE, 0);
       gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 0);
@@ -558,12 +558,12 @@ vgui_gtk_dialog_impl::ask()
       if (l.type == bool_elem)
       {
         vgui_bool_field * field = static_cast<vgui_bool_field *>(l.field);
-        GtkWidget *       input = *w_iter;
+        GtkWidget * input = *w_iter;
         field->var = (bool)gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(input));
       }
       if (l.type == choice_elem)
       {
-        vgui_int_field *              field = static_cast<vgui_int_field *>(l.field);
+        vgui_int_field * field = static_cast<vgui_int_field *>(l.field);
         vgui_gtk_dialog_impl_choice * ch = static_cast<vgui_gtk_dialog_impl_choice *>(l.widget);
         field->var = ch->index;
       }

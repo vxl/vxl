@@ -42,8 +42,8 @@ void
 vil_structuring_element::set_to_disk(double r)
 {
   std::vector<int> px, py;
-  double           r2 = r * r;
-  int              r0 = int(r + 1);
+  double r2 = r * r;
+  int r0 = int(r + 1);
   for (int j = -r0; j <= r0; ++j)
     for (int i = -r0; i <= r0; ++i)
       if (i * i + j * j < r2)
@@ -104,10 +104,10 @@ operator<<(std::ostream & os, const vil_structuring_element & element)
 //: Generate a list of offsets for use on image with istep,jstep
 //  Gives an efficient way of looping through all the pixels in the structuring element
 void
-vil_compute_offsets(std::vector<std::ptrdiff_t> &   offset,
+vil_compute_offsets(std::vector<std::ptrdiff_t> & offset,
                     const vil_structuring_element & element,
-                    std::ptrdiff_t                  istep,
-                    std::ptrdiff_t                  jstep)
+                    std::ptrdiff_t istep,
+                    std::ptrdiff_t jstep)
 {
   unsigned n = element.p_i().size();
   offset.resize(n);

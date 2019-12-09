@@ -141,7 +141,7 @@ vgui_gtk2_adaptor::swap_buffers()
 void
 vgui_gtk2_adaptor::make_current()
 {
-  GdkGLContext *  glcontext = gtk_widget_get_gl_context(widget);
+  GdkGLContext * glcontext = gtk_widget_get_gl_context(widget);
   GdkGLDrawable * gldrawable = gtk_widget_get_gl_drawable(widget);
   assert(gldrawable);
   gdk_gl_drawable_make_current(gldrawable, glcontext);
@@ -179,7 +179,7 @@ vgui_gtk2_adaptor::post_idle_request()
 typedef struct
 {
   vgui_gtk2_adaptor * adapt;
-  int                 name;
+  int name;
 } vgui_gtk2_adaptor_callback_data;
 
 //: timeout is in milliseconds
@@ -249,7 +249,7 @@ vgui_gtk2_adaptor::handle_configure(GtkWidget * widget, GdkEvent * gev, gpointer
 
   // The following 5 lines are required to make GL context available
   // so that some GL functions (such as glGenLists()) can succeed.
-  GdkGLContext *  glcontext = gtk_widget_get_gl_context(widget);
+  GdkGLContext * glcontext = gtk_widget_get_gl_context(widget);
   GdkGLDrawable * gldrawable = gtk_widget_get_gl_drawable(widget);
   if (!gdk_gl_drawable_gl_begin(gldrawable, glcontext))
     return FALSE;
@@ -271,13 +271,13 @@ gint
 vgui_gtk2_adaptor::handle_motion_notify(GtkWidget * widget, GdkEvent * gev, gpointer context)
 {
   vgui_gtk2_adaptor * adaptor = (vgui_gtk2_adaptor *)context;
-  vgui_event          event;
+  vgui_event event;
 
   event.type = vgui_MOTION;
   GdkEventMotion * e = (GdkEventMotion *)gev;
   if (e->is_hint)
   {
-    int             x, y;
+    int x, y;
     GdkModifierType state;
     gdk_window_get_pointer(e->window, &x, &y, &state);
     vgui_gtk2_utils::set_modifiers(event, state);
@@ -299,8 +299,8 @@ gint
 vgui_gtk2_adaptor::handle_button(GtkWidget * widget, GdkEvent * gev, gpointer context)
 {
   vgui_gtk2_adaptor * adaptor = (vgui_gtk2_adaptor *)context;
-  vgui_event          event;
-  GdkEventType        type = gev->type;
+  vgui_event event;
+  GdkEventType type = gev->type;
 
   if (type == GDK_BUTTON_PRESS)
     event.type = vgui_BUTTON_DOWN;
@@ -340,8 +340,8 @@ gint
 vgui_gtk2_adaptor::handle_key(GtkWidget * widget, GdkEvent * gev, gpointer context)
 {
   vgui_gtk2_adaptor * adaptor = (vgui_gtk2_adaptor *)context;
-  vgui_event          event;
-  GdkEventType        type = gev->type;
+  vgui_event event;
+  GdkEventType type = gev->type;
 
   if (type == GDK_KEY_PRESS)
     event.type = vgui_KEY_PRESS;
@@ -360,7 +360,7 @@ vgui_gtk2_adaptor::handle_key(GtkWidget * widget, GdkEvent * gev, gpointer conte
 gint
 vgui_gtk2_adaptor::handle_enter_leave(GtkWidget * widget, GdkEvent * gev, gpointer context)
 {
-  vgui_event   event;
+  vgui_event event;
   GdkEventType type = gev->type;
 
   if (type == GDK_ENTER_NOTIFY)
@@ -506,7 +506,7 @@ extern "C"
   timeout_callback(gpointer data)
   {
     vgui_gtk2_adaptor_callback_data * cd = static_cast<vgui_gtk2_adaptor_callback_data *>(data);
-    vgui_event                        e(vgui_TIMER);
+    vgui_event e(vgui_TIMER);
     e.timer_id = cd->name;
     cd->adapt->dispatch_to_tableau(e);
 

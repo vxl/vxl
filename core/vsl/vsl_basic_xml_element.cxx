@@ -22,7 +22,7 @@ vsl_basic_xml_element::add_attribute(std::string attr_name, std::string value)
 void
 vsl_basic_xml_element::add_attribute(std::string attr_name, double value)
 {
-  std::string                         value_str = toString(value);
+  std::string value_str = toString(value);
   std::pair<std::string, std::string> attr(attr_name, value_str.data());
   attrs_.push_back(attr);
 }
@@ -30,7 +30,7 @@ vsl_basic_xml_element::add_attribute(std::string attr_name, double value)
 void
 vsl_basic_xml_element::add_attribute(std::string attr_name, long value)
 {
-  std::string                         value_str = toString(value);
+  std::string value_str = toString(value);
   std::pair<std::string, std::string> attr(attr_name, value_str);
   attrs_.push_back(attr);
 }

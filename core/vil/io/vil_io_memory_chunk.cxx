@@ -105,9 +105,9 @@ vsl_b_read(vsl_b_istream & is, vil_memory_chunk & chunk)
 
   short w;
   vsl_b_read(is, w);
-  int              format;
+  int format;
   vil_pixel_format pixel_format;
-  unsigned         n;
+  unsigned n;
   switch (w)
   {
     case 1:

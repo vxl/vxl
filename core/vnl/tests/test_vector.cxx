@@ -17,14 +17,14 @@ test_common_interface()
   std::cout << "Testing swap" << std::endl;
 
   const typename TContainer::element_type l_values[4] = { 0, 1, 2, 3 };
-  TContainer                              l(4, 4, l_values);
-  TContainer                              l_swap(l);
-  TContainer                              l_std_swap(l);
+  TContainer l(4, 4, l_values);
+  TContainer l_swap(l);
+  TContainer l_std_swap(l);
 
   const typename TContainer::element_type r_values[4] = { 4, 5, 6, 7 };
-  TContainer                              r(4, 4, r_values);
-  TContainer                              r_swap(r);
-  TContainer                              r_std_swap(r);
+  TContainer r(4, 4, r_values);
+  TContainer r_swap(r);
+  TContainer r_std_swap(r);
 
   l_swap.swap(r_swap);
   TEST("swap left-right", l.is_equal(r_swap, 10e-6), true);
@@ -61,7 +61,7 @@ vnl_vector_test_int()
   TEST("vnl_vector<int> v2(2,2)", (v2.get(0) == 2 && v2.get(1) == 2), true);
 
   //  vnl_vector(unsigned int len, int n, T const values[]);
-  int             vcvalues[] = { 1, 0 };
+  int vcvalues[] = { 1, 0 };
   vnl_vector<int> vc(2, 2, vcvalues);
   TEST("vnl_vector<int> vc(2,2,int[])", (vc(0) == 1 && vc(1) == 0), true);
 
@@ -117,7 +117,7 @@ vnl_vector_test_int()
   TEST("(v0 == v2)", (v0 == v2), false);
   TEST("v1.fill(3)", (v1.fill(3), (v1.get(0) == 3 && v1.get(1) == 3)), true);
   TEST("v2.fill(2)", (v2.fill(2), (v2.get(0) == 2 && v2.get(1) == 2)), true);
-  int             v3values[] = { 1, 2, 3 };
+  int v3values[] = { 1, 2, 3 };
   vnl_vector<int> v3(3, 3, v3values);
   TEST("v3(3,3,{1,2,3})", (v3.get(0) == 1 && v3.get(1) == 2 && v3.get(2) == 3), true);
   vnl_vector<int> v4(v3);
@@ -149,7 +149,7 @@ vnl_vector_test_int()
   TEST("v3/=5", ((v3 /= 5), (v3 == v4)), true);
 
   //// additional tests
-  int             vvalues[] = { 0, -2, 2, 0 };
+  int vvalues[] = { 0, -2, 2, 0 };
   vnl_vector<int> v(4, 4, vvalues);
   v0 = v;
   v1 = v;
@@ -170,11 +170,11 @@ vnl_vector_test_int()
   TEST("v.update([4],3)", ((v1 = 4), (v.update(v1, 3)), (v(0) == 0 && v(1) == -2 && v(2) == 2 && v(3) == 4)), true);
 
   { // new scope to reuse variables
-    int             vvalues[] = { 1, 0, 0, 0 };
+    int vvalues[] = { 1, 0, 0, 0 };
     vnl_vector<int> v(4, 4, vvalues);
-    int             v1values[] = { 1, 0, 0 };
-    int             v2values[] = { 0, 1, 0 };
-    int             v3values[] = { 0, 0, 1 };
+    int v1values[] = { 1, 0, 0 };
+    int v2values[] = { 0, 1, 0 };
+    int v3values[] = { 0, 0, 1 };
     vnl_vector<int> v1(3, 3, v1values);
     vnl_vector<int> v2(3, 3, v2values);
     vnl_vector<int> v3(3, 3, v3values);
@@ -195,7 +195,7 @@ vnl_vector_test_int()
   }
 
   {
-    int             vvalues[] = { 1, 2, 3 };
+    int vvalues[] = { 1, 2, 3 };
     vnl_vector<int> v(3, 3, vvalues);
     vnl_matrix<int> m = outer_product(v, v);
     TEST("outer_product",
@@ -204,7 +204,7 @@ vnl_vector_test_int()
          true);
   }
   {
-    int             vvalues[] = { 1, 0, 0, 0 };
+    int vvalues[] = { 1, 0, 0, 0 };
     vnl_vector<int> v(4, 4, vvalues);
     TEST("v.squared_magnitude", (v.squared_magnitude() == 1), true);
     TEST("v.magnitude", (v.magnitude() == 1), true);
@@ -217,7 +217,7 @@ vnl_vector_test_int()
   //////////
 
   {
-    int             vvalues[] = { 0, 1, 2, 3 };
+    int vvalues[] = { 0, 1, 2, 3 };
     vnl_vector<int> v(4, 4, vvalues);
     TEST("v", (0 == v[0] && 1 == v[1] && 2 == v[2] && 3 == v[3]), true);
     v.flip();
@@ -235,7 +235,7 @@ vnl_vector_test_int()
   //////////
 
   {
-    int             vvalues[] = { 0, 1, 2, 3 };
+    int vvalues[] = { 0, 1, 2, 3 };
     vnl_vector<int> v(4, 4, vvalues);
     vnl_vector<int> v_temp;
 
@@ -275,7 +275,7 @@ vnl_vector_test_int()
   //////////////////
 
   {
-    int             vvalues[] = { 0, 1, 2, 3 };
+    int vvalues[] = { 0, 1, 2, 3 };
     vnl_vector<int> v(4, 4, vvalues);
     vnl_vector<int> v_temp = v;
 
@@ -330,7 +330,7 @@ vnl_vector_test_float()
   vnl_vector<float> v2(2, 2);
   TEST("vnl_vector<float> v2(2,2)", (v2.get(0) == 2 && v2.get(1) == 2), true);
 
-  float             vcvalues[2] = { 1 };
+  float vcvalues[2] = { 1 };
   vnl_vector<float> vc(2, 2, vcvalues);
   TEST("vnl_vector<float> vc(2,2,float[])", (vc(0) == 1 && vc(1) == 0), true);
   TEST("v1=2", (v1 = 2, (v1.get(0) == 2 && v1.get(1) == 2)), true);
@@ -377,7 +377,7 @@ vnl_vector_test_float()
 
   //// additional tests
   //  vnl_vector<float> v(4,4,0,-2,2,0); no var args with floats
-  float             vvalues[] = { 0, -2, 2, 0 };
+  float vvalues[] = { 0, -2, 2, 0 };
   vnl_vector<float> v(4, 4, vvalues);
   v[0] = 0;
   v[1] = -2;
@@ -402,7 +402,7 @@ vnl_vector_test_float()
   TEST("v.update([4],3)", ((v1 = 4), (v.update(v1, 3)), (v(0) == 0 && v(1) == -2 && v(2) == 2 && v(3) == 4)), true);
 
   { // new scope to reuse variables
-    float             vvalues[] = { 1, 0, 0, 0 };
+    float vvalues[] = { 1, 0, 0, 0 };
     vnl_vector<float> v(4, 4, vvalues);
     v[0] = 1;
     v[1] = 0;
@@ -433,8 +433,8 @@ vnl_vector_test_float()
   }
 
   {
-    vnl_float_3                   v(1.f, 2.f, 3.f);
-    vnl_float_4                   v2(1.f, 2.f, 3.f, 4.f);
+    vnl_float_3 v(1.f, 2.f, 3.f);
+    vnl_float_4 v2(1.f, 2.f, 3.f, 4.f);
     vnl_matrix_fixed<float, 3, 4> m = outer_product(v, v2);
     TEST("outer_product -> fixed 3 x fixed 4",
          (m(0, 0) == 1 && m(0, 1) == 2 && m(0, 2) == 3 && m(0, 3) == 4 && m(1, 0) == 2 && m(1, 1) == 4 &&
@@ -479,7 +479,7 @@ vnl_vector_test_float()
   }
 
   {
-    double             vvalues[] = { 1, 0, 0, 0 };
+    double vvalues[] = { 1, 0, 0, 0 };
     vnl_vector<double> vd(4);
     vnl_vector<double> v(4, 4, vvalues);
     v[0] = 1;
@@ -496,7 +496,7 @@ vnl_vector_test_float()
   }
 
   {
-    float             vvalues[] = { -7, -2, -3, -4 };
+    float vvalues[] = { -7, -2, -3, -4 };
     vnl_vector<float> v(4, 4, vvalues);
     v[0] = -7;
     v[1] = -2;
@@ -511,7 +511,7 @@ vnl_vector_test_float()
   }
 
   {
-    double             vvalues[] = { -7, -2, -3, -4 };
+    double vvalues[] = { -7, -2, -3, -4 };
     vnl_vector<double> v(4, 4, vvalues);
     v[0] = -7;
     v[1] = -2;
@@ -528,7 +528,7 @@ vnl_vector_test_float()
   // We should test odd sized vector's for the special SSE2 handling of
   // different sizes.
   {
-    float             vvalues[] = { -7, -2, -3, -4, 5 };
+    float vvalues[] = { -7, -2, -3, -4, 5 };
     vnl_vector<float> v(5, 5, vvalues);
     v[0] = -7;
     v[1] = -2;
@@ -544,7 +544,7 @@ vnl_vector_test_float()
   }
 
   {
-    float             vvalues[] = { -7, -2, -3, -4, 5, 2 };
+    float vvalues[] = { -7, -2, -3, -4, 5, 2 };
     vnl_vector<float> v(6, 6, vvalues);
     v[0] = -7;
     v[1] = -2;
@@ -560,7 +560,7 @@ vnl_vector_test_float()
     TEST("v.arg_min()", v.arg_min(), 0);
   }
   {
-    double             vvalues[] = { -7, -2, -3, -4, 5 };
+    double vvalues[] = { -7, -2, -3, -4, 5 };
     vnl_vector<double> v(5, 5, vvalues);
     v[0] = -7;
     v[1] = -2;
@@ -581,11 +581,11 @@ vnl_vector_test_float()
 void
 vnl_vector_test_matrix()
 {
-  int             mvalues[] = { 1, 2, 3, 4, 5, 6 }; // product with matrices
+  int mvalues[] = { 1, 2, 3, 4, 5, 6 }; // product with matrices
   vnl_matrix<int> m(2, 3, 6, mvalues);
 
-  int             v2values[] = { 1, 0 };
-  int             v3values[] = { 1, 0, 0 };
+  int v2values[] = { 1, 0 };
+  int v3values[] = { 1, 0, 0 };
   vnl_vector<int> v, v2(2, 2, v2values), v3(3, 3, v3values);
   TEST("v.pre_multiply(m)", ((v = v3), (v.pre_multiply(m)), (v.size() == 2 && v(0) == 1 && v(1) == 4)), true);
   TEST("v.post_multiply(m)",
@@ -602,9 +602,9 @@ vnl_vector_test_conversion()
   bool check;
   {
     // convert from a vnl_vector to a block array:
-    int             v1values[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+    int v1values[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
     vnl_vector<int> v1(12, 12, v1values);
-    const int *     data = v1.data_block();
+    const int * data = v1.data_block();
     {
       check = true;
       for (int d = 0; d < 12; d++)
@@ -613,7 +613,7 @@ vnl_vector_test_conversion()
     }
     TEST("(const int*) m.data_block", check, true);
 
-    typedef int   block[12];
+    typedef int block[12];
     const block & v2 = *((const block *)data);
     {
       check = true;
@@ -650,7 +650,7 @@ vnl_vector_test_conversion()
 static void
 vnl_vector_test_io()
 {
-  double             expected_data[] = { 1.0, 2.0, 3.0 };
+  double expected_data[] = { 1.0, 2.0, 3.0 };
   vnl_vector<double> expected(expected_data, 3);
   {
     std::stringstream ss;
@@ -709,7 +709,7 @@ vnl_vector_test_two_nrm2_timing(unsigned size, unsigned long num)
   for (unsigned i = 0; i < size; i++)
     a(i) = i / size;
 
-  double    c = 0;
+  double c = 0;
   vul_timer t;
   for (unsigned i = 0; i < num; i++)
     c += vnl_c_vector<double>::two_nrm2(a.begin(), size);
@@ -735,7 +735,7 @@ vnl_vector_test_euclid_dist_sq_timing(unsigned size, unsigned long num)
     b(i) = i * i / size;
   }
 
-  double    c = 0;
+  double c = 0;
   vul_timer t;
   for (unsigned i = 0; i < num; i++)
     c += vnl_c_vector<double>::euclid_dist_sq(a.begin(), b.begin(), size);

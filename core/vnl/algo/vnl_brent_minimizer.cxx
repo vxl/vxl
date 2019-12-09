@@ -15,7 +15,7 @@ static const double EPS = 1e-8;
 // Wrapper to make it easy to evaluate the cost function
 class vnl_brent_minimizer_func
 {
-  vnl_vector<double>  v;
+  vnl_vector<double> v;
   vnl_cost_function * f;
 
 public:
@@ -50,7 +50,7 @@ double
 vnl_brent_minimizer::minimize_given_bounds(double ax, double bx, double cx)
 {
   vnl_brent_minimizer_func f(*f_);
-  double                   fb = f(bx);
+  double fb = f(bx);
 
   return minimize_given_bounds_and_one_f(ax, bx, cx, fb);
 }

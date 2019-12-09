@@ -8,16 +8,16 @@
 static void
 test_calibration_matrix()
 {
-  double                          focal_length = 3;
-  vgl_homg_point_2d<double>       principal_point(20, 30, 2);
-  double                          x_scale = 2;
-  double                          y_scale = 2;
-  double                          skew = 0;
+  double focal_length = 3;
+  vgl_homg_point_2d<double> principal_point(20, 30, 2);
+  double x_scale = 2;
+  double y_scale = 2;
+  double skew = 0;
   vpgl_calibration_matrix<double> K1(focal_length, principal_point, x_scale, y_scale, skew);
 
   // Test equality of constructors.
   vnl_matrix_fixed<double, 3, 3> M(0.0);
-  double                         scale_factor = -100;
+  double scale_factor = -100;
   M(0, 0) = scale_factor * x_scale * focal_length;
   M(1, 1) = scale_factor * y_scale * focal_length;
   M(2, 2) = scale_factor;

@@ -22,7 +22,7 @@ test_awk()
     std::stringstream tmp;
     tmp << "";
     std::stringstream in(tmp.str().c_str());
-    vul_awk           awk(in);
+    vul_awk awk(in);
     TEST("empty:awk on empty file is invalid", !awk, true);
     TEST("empty:awk on creation has line 1", awk.NR(), 1);
   }
@@ -34,7 +34,7 @@ test_awk()
         << "2a 2b 2c\n"
         << "  3a  3b 3c" << std::endl;
     std::stringstream in(tmp.str().c_str());
-    vul_awk           awk(in);
+    vul_awk awk(in);
     TEST("easy:awk on non-empty file is valid", (bool)awk, true);
     TEST("easy:awk on creation has line 1", awk.NR(), 1);
     char letter[] = "abc";
@@ -74,7 +74,7 @@ test_awk()
         << "  6a\n"
         << "#Last line is a comment" << std::endl;
     std::stringstream in(tmp.str().c_str());
-    vul_awk           awk(in, vul_awk::strip_comments);
+    vul_awk awk(in, vul_awk::strip_comments);
     TEST("comment:awk on non-empty file is valid", (bool)awk, true);
     TEST("comment:awk on creation has line 2", awk.NR(), 2);
     char letter[] = "abcdef";

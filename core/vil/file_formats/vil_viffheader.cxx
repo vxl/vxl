@@ -12,10 +12,10 @@
 // \param nrows - vil_image::nj()
 // \param storage_type - similar to vil_image::pixel_format()
 // \param num_bands - similar to vil_image::n_planes()
-vil_viff_xvimage::vil_viff_xvimage(unsigned              ncols,
-                                   unsigned              nrows,
+vil_viff_xvimage::vil_viff_xvimage(unsigned ncols,
+                                   unsigned nrows,
                                    vil_viff_data_storage storage_type,
-                                   unsigned              num_bands)
+                                   unsigned num_bands)
 {
   const unsigned VIL_VIFF_COMMENT_LENGTH = 512L;
 

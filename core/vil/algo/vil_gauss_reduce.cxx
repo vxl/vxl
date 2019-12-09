@@ -21,24 +21,24 @@
 template <>
 void
 vil_gauss_reduce_1plane(const vxl_byte * src_im,
-                        unsigned         src_ni,
-                        unsigned         src_nj,
-                        std::ptrdiff_t   s_x_step,
-                        std::ptrdiff_t   s_y_step,
-                        vxl_byte *       dest_im,
-                        std::ptrdiff_t   d_x_step,
-                        std::ptrdiff_t   d_y_step)
+                        unsigned src_ni,
+                        unsigned src_nj,
+                        std::ptrdiff_t s_x_step,
+                        std::ptrdiff_t s_y_step,
+                        vxl_byte * dest_im,
+                        std::ptrdiff_t d_x_step,
+                        std::ptrdiff_t d_y_step)
 {
-  vxl_byte *       d_row = dest_im;
+  vxl_byte * d_row = dest_im;
   const vxl_byte * s_row = src_im;
-  std::ptrdiff_t   sxs2 = s_x_step * 2;
-  unsigned         ni2 = (src_ni - 3) / 2;
+  std::ptrdiff_t sxs2 = s_x_step * 2;
+  unsigned ni2 = (src_ni - 3) / 2;
   for (unsigned y = 0; y < src_nj; ++y)
   {
     // Set first element of row
     *d_row = static_cast<vxl_byte>(vnl_math::rnd(0.071f * s_row[sxs2] + 0.357f * s_row[s_x_step] + 0.572f * s_row[0]));
 
-    vxl_byte *       d = d_row + d_x_step;
+    vxl_byte * d = d_row + d_x_step;
     const vxl_byte * s = s_row + sxs2;
     for (unsigned x = 0; x < ni2; ++x)
     {
@@ -61,24 +61,24 @@ vil_gauss_reduce_1plane(const vxl_byte * src_im,
 //  every other pixel.  Fills [0,(ni+1)/2-1][0,nj-1] elements of dest
 template <>
 void
-vil_gauss_reduce_1plane(const float *  src_im,
-                        unsigned       src_ni,
-                        unsigned       src_nj,
+vil_gauss_reduce_1plane(const float * src_im,
+                        unsigned src_ni,
+                        unsigned src_nj,
                         std::ptrdiff_t s_x_step,
                         std::ptrdiff_t s_y_step,
-                        float *        dest_im,
+                        float * dest_im,
                         std::ptrdiff_t d_x_step,
                         std::ptrdiff_t d_y_step)
 {
-  float *        d_row = dest_im;
-  const float *  s_row = src_im;
+  float * d_row = dest_im;
+  const float * s_row = src_im;
   std::ptrdiff_t sxs2 = s_x_step * 2;
-  unsigned       ni2 = (src_ni - 3) / 2;
+  unsigned ni2 = (src_ni - 3) / 2;
   for (unsigned y = 0; y < src_nj; ++y)
   {
     // Set first element of row
     *d_row = 0.071f * s_row[sxs2] + 0.357f * s_row[s_x_step] + 0.572f * s_row[0];
-    float *       d = d_row + d_x_step;
+    float * d = d_row + d_x_step;
     const float * s = s_row + sxs2;
     for (unsigned x = 0; x < ni2; ++x)
     {
@@ -102,23 +102,23 @@ vil_gauss_reduce_1plane(const float *  src_im,
 template <>
 void
 vil_gauss_reduce_1plane(const double * src_im,
-                        unsigned       src_ni,
-                        unsigned       src_nj,
+                        unsigned src_ni,
+                        unsigned src_nj,
                         std::ptrdiff_t s_x_step,
                         std::ptrdiff_t s_y_step,
-                        double *       dest_im,
+                        double * dest_im,
                         std::ptrdiff_t d_x_step,
                         std::ptrdiff_t d_y_step)
 {
-  double *       d_row = dest_im;
+  double * d_row = dest_im;
   const double * s_row = src_im;
   std::ptrdiff_t sxs2 = s_x_step * 2;
-  unsigned       ni2 = (src_ni - 3) / 2;
+  unsigned ni2 = (src_ni - 3) / 2;
   for (unsigned y = 0; y < src_nj; ++y)
   {
     // Set first element of row
     *d_row = 0.071 * s_row[sxs2] + 0.357 * s_row[s_x_step] + 0.572 * s_row[0];
-    double *       d = d_row + d_x_step;
+    double * d = d_row + d_x_step;
     const double * s = s_row + sxs2;
     for (unsigned x = 0; x < ni2; ++x)
     {
@@ -140,25 +140,25 @@ vil_gauss_reduce_1plane(const double * src_im,
 //  every other pixel.  Fills [0,(ni+1)/2-1][0,nj-1] elements of dest
 template <>
 void
-vil_gauss_reduce_1plane(const int *    src_im,
-                        unsigned       src_ni,
-                        unsigned       src_nj,
+vil_gauss_reduce_1plane(const int * src_im,
+                        unsigned src_ni,
+                        unsigned src_nj,
                         std::ptrdiff_t s_x_step,
                         std::ptrdiff_t s_y_step,
-                        int *          dest_im,
+                        int * dest_im,
                         std::ptrdiff_t d_x_step,
                         std::ptrdiff_t d_y_step)
 {
-  int *          d_row = dest_im;
-  const int *    s_row = src_im;
+  int * d_row = dest_im;
+  const int * s_row = src_im;
   std::ptrdiff_t sxs2 = s_x_step * 2;
-  unsigned       ni2 = (src_ni - 3) / 2;
+  unsigned ni2 = (src_ni - 3) / 2;
   for (unsigned y = 0; y < src_nj; ++y)
   {
     // Set first element of row
     *d_row = vnl_math::rnd(0.071f * s_row[sxs2] + 0.357f * s_row[s_x_step] + 0.572f * s_row[0]);
 
-    int *       d = d_row + d_x_step;
+    int * d = d_row + d_x_step;
     const int * s = s_row + sxs2;
     for (unsigned x = 0; x < ni2; ++x)
     {
@@ -181,25 +181,25 @@ vil_gauss_reduce_1plane(const int *    src_im,
 template <>
 void
 vil_gauss_reduce_1plane(const vxl_int_16 * src_im,
-                        unsigned           src_ni,
-                        unsigned           src_nj,
-                        std::ptrdiff_t     s_x_step,
-                        std::ptrdiff_t     s_y_step,
-                        vxl_int_16 *       dest_im,
-                        std::ptrdiff_t     d_x_step,
-                        std::ptrdiff_t     d_y_step)
+                        unsigned src_ni,
+                        unsigned src_nj,
+                        std::ptrdiff_t s_x_step,
+                        std::ptrdiff_t s_y_step,
+                        vxl_int_16 * dest_im,
+                        std::ptrdiff_t d_x_step,
+                        std::ptrdiff_t d_y_step)
 {
-  vxl_int_16 *       d_row = dest_im;
+  vxl_int_16 * d_row = dest_im;
   const vxl_int_16 * s_row = src_im;
-  std::ptrdiff_t     sxs2 = s_x_step * 2;
-  unsigned           ni2 = (src_ni - 3) / 2;
+  std::ptrdiff_t sxs2 = s_x_step * 2;
+  unsigned ni2 = (src_ni - 3) / 2;
   for (unsigned y = 0; y < src_nj; ++y)
   {
     // Set first element of row
     *d_row =
       static_cast<vxl_int_16>(vnl_math::rnd(0.071f * s_row[sxs2] + 0.357f * s_row[s_x_step] + 0.572f * s_row[0]));
 
-    vxl_int_16 *       d = d_row + d_x_step;
+    vxl_int_16 * d = d_row + d_x_step;
     const vxl_int_16 * s = s_row + sxs2;
     for (unsigned x = 0; x < ni2; ++x)
     {
@@ -224,26 +224,26 @@ vil_gauss_reduce_1plane(const vxl_int_16 * src_im,
 //  Note, 131 filter only an approximation
 template <>
 void
-vil_gauss_reduce_2_3_1plane(const float *  src_im,
-                            unsigned       src_ni,
-                            unsigned       src_nj,
+vil_gauss_reduce_2_3_1plane(const float * src_im,
+                            unsigned src_ni,
+                            unsigned src_nj,
                             std::ptrdiff_t s_x_step,
                             std::ptrdiff_t s_y_step,
-                            float *        dest_im,
+                            float * dest_im,
                             std::ptrdiff_t d_x_step,
                             std::ptrdiff_t d_y_step)
 {
-  float *        d_row = dest_im;
-  const float *  s_row = src_im;
+  float * d_row = dest_im;
+  const float * s_row = src_im;
   std::ptrdiff_t sxs2 = s_x_step * 2, sxs3 = s_x_step * 3;
-  unsigned       d_ni = (2 * src_ni + 1) / 3;
-  unsigned       d_ni2 = d_ni / 2;
+  unsigned d_ni = (2 * src_ni + 1) / 3;
+  unsigned d_ni2 = d_ni / 2;
   for (unsigned y = 0; y < src_nj; ++y)
   {
     // Set first elements of row
     d_row[0] = 0.75f * s_row[0] + 0.25f * s_row[s_x_step];
     d_row[d_x_step] = 0.5f * s_row[s_x_step] + 0.5f * s_row[sxs2];
-    float *       d = d_row + 2 * d_x_step;
+    float * d = d_row + 2 * d_x_step;
     const float * s = s_row + sxs3;
     for (unsigned x = 1; x < d_ni2; ++x)
     {
@@ -272,25 +272,25 @@ vil_gauss_reduce_2_3_1plane(const float *  src_im,
 template <>
 void
 vil_gauss_reduce_2_3_1plane(const double * src_im,
-                            unsigned       src_ni,
-                            unsigned       src_nj,
+                            unsigned src_ni,
+                            unsigned src_nj,
                             std::ptrdiff_t s_x_step,
                             std::ptrdiff_t s_y_step,
-                            double *       dest_im,
+                            double * dest_im,
                             std::ptrdiff_t d_x_step,
                             std::ptrdiff_t d_y_step)
 {
-  double *       d_row = dest_im;
+  double * d_row = dest_im;
   const double * s_row = src_im;
   std::ptrdiff_t sxs2 = s_x_step * 2, sxs3 = s_x_step * 3;
-  unsigned       d_ni = (2 * src_ni + 1) / 3;
-  unsigned       d_ni2 = d_ni / 2;
+  unsigned d_ni = (2 * src_ni + 1) / 3;
+  unsigned d_ni2 = d_ni / 2;
   for (unsigned y = 0; y < src_nj; ++y)
   {
     // Set first elements of row
     d_row[0] = 0.75 * s_row[0] + 0.25 * s_row[s_x_step];
     d_row[d_x_step] = 0.5 * s_row[s_x_step] + 0.5 * s_row[sxs2];
-    double *       d = d_row + 2 * d_x_step;
+    double * d = d_row + 2 * d_x_step;
     const double * s = s_row + sxs3;
     for (unsigned x = 1; x < d_ni2; ++x)
     {
@@ -319,26 +319,26 @@ vil_gauss_reduce_2_3_1plane(const double * src_im,
 template <>
 void
 vil_gauss_reduce_2_3_1plane(const vxl_byte * src_im,
-                            unsigned         src_ni,
-                            unsigned         src_nj,
-                            std::ptrdiff_t   s_x_step,
-                            std::ptrdiff_t   s_y_step,
-                            vxl_byte *       dest_im,
-                            std::ptrdiff_t   d_x_step,
-                            std::ptrdiff_t   d_y_step)
+                            unsigned src_ni,
+                            unsigned src_nj,
+                            std::ptrdiff_t s_x_step,
+                            std::ptrdiff_t s_y_step,
+                            vxl_byte * dest_im,
+                            std::ptrdiff_t d_x_step,
+                            std::ptrdiff_t d_y_step)
 {
-  vxl_byte *       d_row = dest_im;
+  vxl_byte * d_row = dest_im;
   const vxl_byte * s_row = src_im;
-  std::ptrdiff_t   sxs2 = s_x_step * 2, sxs3 = s_x_step * 3;
-  unsigned         d_ni = (2 * src_ni + 1) / 3;
-  unsigned         d_ni2 = d_ni / 2;
+  std::ptrdiff_t sxs2 = s_x_step * 2, sxs3 = s_x_step * 3;
+  unsigned d_ni = (2 * src_ni + 1) / 3;
+  unsigned d_ni2 = d_ni / 2;
   for (unsigned y = 0; y < src_nj; ++y)
   {
     // Set first elements of row
     // The 0.5 offset in the following ensures rounding
     d_row[0] = vxl_byte(0.5f + 0.75f * s_row[0] + 0.25f * s_row[s_x_step]);
     d_row[d_x_step] = vxl_byte(0.5f + 0.5f * s_row[s_x_step] + 0.5f * s_row[sxs2]);
-    vxl_byte *       d = d_row + 2 * d_x_step;
+    vxl_byte * d = d_row + 2 * d_x_step;
     const vxl_byte * s = s_row + sxs3;
     for (unsigned x = 1; x < d_ni2; ++x)
     {
@@ -367,27 +367,27 @@ vil_gauss_reduce_2_3_1plane(const vxl_byte * src_im,
 //  Note, 131 filter only an approximation
 template <>
 void
-vil_gauss_reduce_2_3_1plane(const int *    src_im,
-                            unsigned       src_ni,
-                            unsigned       src_nj,
+vil_gauss_reduce_2_3_1plane(const int * src_im,
+                            unsigned src_ni,
+                            unsigned src_nj,
                             std::ptrdiff_t s_x_step,
                             std::ptrdiff_t s_y_step,
-                            int *          dest_im,
+                            int * dest_im,
                             std::ptrdiff_t d_x_step,
                             std::ptrdiff_t d_y_step)
 {
-  int *          d_row = dest_im;
-  const int *    s_row = src_im;
+  int * d_row = dest_im;
+  const int * s_row = src_im;
   std::ptrdiff_t sxs2 = s_x_step * 2, sxs3 = s_x_step * 3;
-  unsigned       d_ni = (2 * src_ni + 1) / 3;
-  unsigned       d_ni2 = d_ni / 2;
+  unsigned d_ni = (2 * src_ni + 1) / 3;
+  unsigned d_ni2 = d_ni / 2;
   for (unsigned y = 0; y < src_nj; ++y)
   {
     // Set first elements of row
     // The 0.5 offset in the following ensures rounding
     d_row[0] = int(0.5f + 0.75f * s_row[0] + 0.25f * s_row[s_x_step]);
     d_row[d_x_step] = int(0.5f + 0.5f * s_row[s_x_step] + 0.5f * s_row[sxs2]);
-    int *       d = d_row + 2 * d_x_step;
+    int * d = d_row + 2 * d_x_step;
     const int * s = s_row + sxs3;
     for (unsigned x = 1; x < d_ni2; ++x)
     {
@@ -416,26 +416,26 @@ vil_gauss_reduce_2_3_1plane(const int *    src_im,
 template <>
 void
 vil_gauss_reduce_2_3_1plane(const vxl_int_16 * src_im,
-                            unsigned           src_ni,
-                            unsigned           src_nj,
-                            std::ptrdiff_t     s_x_step,
-                            std::ptrdiff_t     s_y_step,
-                            vxl_int_16 *       dest_im,
-                            std::ptrdiff_t     d_x_step,
-                            std::ptrdiff_t     d_y_step)
+                            unsigned src_ni,
+                            unsigned src_nj,
+                            std::ptrdiff_t s_x_step,
+                            std::ptrdiff_t s_y_step,
+                            vxl_int_16 * dest_im,
+                            std::ptrdiff_t d_x_step,
+                            std::ptrdiff_t d_y_step)
 {
-  vxl_int_16 *       d_row = dest_im;
+  vxl_int_16 * d_row = dest_im;
   const vxl_int_16 * s_row = src_im;
-  std::ptrdiff_t     sxs2 = s_x_step * 2, sxs3 = s_x_step * 3;
-  unsigned           d_ni = (2 * src_ni + 1) / 3;
-  unsigned           d_ni2 = d_ni / 2;
+  std::ptrdiff_t sxs2 = s_x_step * 2, sxs3 = s_x_step * 3;
+  unsigned d_ni = (2 * src_ni + 1) / 3;
+  unsigned d_ni2 = d_ni / 2;
   for (unsigned y = 0; y < src_nj; ++y)
   {
     // Set first elements of row
     // The 0.5 offset in the following ensures rounding
     d_row[0] = vxl_int_16(0.5f + 0.75f * s_row[0] + 0.25f * s_row[s_x_step]);
     d_row[d_x_step] = vxl_int_16(0.5f + 0.5f * s_row[s_x_step] + 0.5f * s_row[sxs2]);
-    vxl_int_16 *       d = d_row + 2 * d_x_step;
+    vxl_int_16 * d = d_row + 2 * d_x_step;
     const vxl_int_16 * s = s_row + sxs3;
     for (unsigned x = 1; x < d_ni2; ++x)
     {
@@ -461,27 +461,27 @@ vil_gauss_reduce_2_3_1plane(const vxl_int_16 * src_im,
 template <>
 void
 vil_gauss_reduce_121_1plane(const vxl_byte * src_im,
-                            unsigned         src_ni,
-                            unsigned         src_nj,
-                            std::ptrdiff_t   s_x_step,
-                            std::ptrdiff_t   s_y_step,
-                            vxl_byte *       dest_im,
-                            std::ptrdiff_t   d_x_step,
-                            std::ptrdiff_t   d_y_step)
+                            unsigned src_ni,
+                            unsigned src_nj,
+                            std::ptrdiff_t s_x_step,
+                            std::ptrdiff_t s_y_step,
+                            vxl_byte * dest_im,
+                            std::ptrdiff_t d_x_step,
+                            std::ptrdiff_t d_y_step)
 {
-  std::ptrdiff_t   sxs2 = s_x_step * 2;
-  std::ptrdiff_t   sys2 = s_y_step * 2;
-  vxl_byte *       d_row = dest_im + d_y_step;
+  std::ptrdiff_t sxs2 = s_x_step * 2;
+  std::ptrdiff_t sys2 = s_y_step * 2;
+  vxl_byte * d_row = dest_im + d_y_step;
   const vxl_byte * s_row1 = src_im + s_y_step;
   const vxl_byte * s_row2 = s_row1 + s_y_step;
   const vxl_byte * s_row3 = s_row2 + s_y_step;
-  unsigned         ni2 = (src_ni - 2) / 2;
-  unsigned         nj2 = (src_nj - 2) / 2;
+  unsigned ni2 = (src_ni - 2) / 2;
+  unsigned nj2 = (src_nj - 2) / 2;
   for (unsigned y = 0; y < nj2; ++y)
   {
     // Set first element of row
     *d_row = *s_row2;
-    vxl_byte *       d = d_row + d_x_step;
+    vxl_byte * d = d_row + d_x_step;
     const vxl_byte * s1 = s_row1 + sxs2;
     const vxl_byte * s2 = s_row2 + sxs2;
     const vxl_byte * s3 = s_row3 + sxs2;
@@ -512,7 +512,7 @@ vil_gauss_reduce_121_1plane(const vxl_byte * src_im,
 
   // Dest image should be (src_ni+1)/2 x (src_nj+1)/2
   const vxl_byte * s0 = src_im;
-  unsigned         ni = (src_ni + 1) / 2;
+  unsigned ni = (src_ni + 1) / 2;
   for (unsigned i = 0; i < ni; ++i)
   {
     dest_im[i] = *s0;
@@ -521,8 +521,8 @@ vil_gauss_reduce_121_1plane(const vxl_byte * src_im,
 
   if (src_nj & 1)
   {
-    unsigned         yhi = (src_nj - 1) / 2;
-    vxl_byte *       dest_last_row = dest_im + yhi * d_y_step;
+    unsigned yhi = (src_nj - 1) / 2;
+    vxl_byte * dest_last_row = dest_im + yhi * d_y_step;
     const vxl_byte * s_last = src_im + yhi * sys2;
     for (unsigned i = 0; i < ni; ++i)
     {
@@ -537,28 +537,28 @@ vil_gauss_reduce_121_1plane(const vxl_byte * src_im,
 //  Smooths with a 3x3 filter and subsamples
 template <>
 void
-vil_gauss_reduce_121_1plane(const float *  src_im,
-                            unsigned       src_ni,
-                            unsigned       src_nj,
+vil_gauss_reduce_121_1plane(const float * src_im,
+                            unsigned src_ni,
+                            unsigned src_nj,
                             std::ptrdiff_t s_x_step,
                             std::ptrdiff_t s_y_step,
-                            float *        dest_im,
+                            float * dest_im,
                             std::ptrdiff_t d_x_step,
                             std::ptrdiff_t d_y_step)
 {
   std::ptrdiff_t sxs2 = s_x_step * 2;
   std::ptrdiff_t sys2 = s_y_step * 2;
-  float *        d_row = dest_im + d_y_step;
-  const float *  s_row1 = src_im + s_y_step;
-  const float *  s_row2 = s_row1 + s_y_step;
-  const float *  s_row3 = s_row2 + s_y_step;
-  unsigned       ni2 = (src_ni - 2) / 2;
-  unsigned       nj2 = (src_nj - 2) / 2;
+  float * d_row = dest_im + d_y_step;
+  const float * s_row1 = src_im + s_y_step;
+  const float * s_row2 = s_row1 + s_y_step;
+  const float * s_row3 = s_row2 + s_y_step;
+  unsigned ni2 = (src_ni - 2) / 2;
+  unsigned nj2 = (src_nj - 2) / 2;
   for (unsigned y = 0; y < nj2; ++y)
   {
     // Set first element of row
     *d_row = *s_row2;
-    float *       d = d_row + d_x_step;
+    float * d = d_row + d_x_step;
     const float * s1 = s_row1 + sxs2;
     const float * s2 = s_row2 + sxs2;
     const float * s3 = s_row3 + sxs2;
@@ -587,7 +587,7 @@ vil_gauss_reduce_121_1plane(const float *  src_im,
 
   // Dest image should be (src_ni+1)/2 x (src_nj+1)/2
   const float * s0 = src_im;
-  unsigned      ni = (src_ni + 1) / 2;
+  unsigned ni = (src_ni + 1) / 2;
   for (unsigned i = 0; i < ni; ++i)
   {
     dest_im[i] = *s0;
@@ -596,8 +596,8 @@ vil_gauss_reduce_121_1plane(const float *  src_im,
 
   if (src_nj & 1)
   {
-    unsigned      yhi = (src_nj - 1) / 2;
-    float *       dest_last_row = dest_im + yhi * d_y_step;
+    unsigned yhi = (src_nj - 1) / 2;
+    float * dest_last_row = dest_im + yhi * d_y_step;
     const float * s_last = src_im + yhi * sys2;
     for (unsigned i = 0; i < ni; ++i)
     {
@@ -613,27 +613,27 @@ vil_gauss_reduce_121_1plane(const float *  src_im,
 template <>
 void
 vil_gauss_reduce_121_1plane(const double * src_im,
-                            unsigned       src_ni,
-                            unsigned       src_nj,
+                            unsigned src_ni,
+                            unsigned src_nj,
                             std::ptrdiff_t s_x_step,
                             std::ptrdiff_t s_y_step,
-                            double *       dest_im,
+                            double * dest_im,
                             std::ptrdiff_t d_x_step,
                             std::ptrdiff_t d_y_step)
 {
   std::ptrdiff_t sxs2 = s_x_step * 2;
   std::ptrdiff_t sys2 = s_y_step * 2;
-  double *       d_row = dest_im + d_y_step;
+  double * d_row = dest_im + d_y_step;
   const double * s_row1 = src_im + s_y_step;
   const double * s_row2 = s_row1 + s_y_step;
   const double * s_row3 = s_row2 + s_y_step;
-  unsigned       ni2 = (src_ni - 2) / 2;
-  unsigned       nj2 = (src_nj - 2) / 2;
+  unsigned ni2 = (src_ni - 2) / 2;
+  unsigned nj2 = (src_nj - 2) / 2;
   for (unsigned y = 0; y < nj2; ++y)
   {
     // Set first element of row
     *d_row = *s_row2;
-    double *       d = d_row + d_x_step;
+    double * d = d_row + d_x_step;
     const double * s1 = s_row1 + sxs2;
     const double * s2 = s_row2 + sxs2;
     const double * s3 = s_row3 + sxs2;
@@ -662,7 +662,7 @@ vil_gauss_reduce_121_1plane(const double * src_im,
 
   // Dest image should be (src_ni+1)/2 x (src_nj+1)/2
   const double * s0 = src_im;
-  unsigned       ni = (src_ni + 1) / 2;
+  unsigned ni = (src_ni + 1) / 2;
   for (unsigned i = 0; i < ni; ++i)
   {
     dest_im[i] = *s0;
@@ -671,8 +671,8 @@ vil_gauss_reduce_121_1plane(const double * src_im,
 
   if (src_nj & 1)
   {
-    unsigned       yhi = (src_nj - 1) / 2;
-    double *       dest_last_row = dest_im + yhi * d_y_step;
+    unsigned yhi = (src_nj - 1) / 2;
+    double * dest_last_row = dest_im + yhi * d_y_step;
     const double * s_last = src_im + yhi * sys2;
     for (unsigned i = 0; i < ni; ++i)
     {
@@ -687,28 +687,28 @@ vil_gauss_reduce_121_1plane(const double * src_im,
 //  Smooths with a 3x3 filter and subsamples
 template <>
 void
-vil_gauss_reduce_121_1plane(const int *    src_im,
-                            unsigned       src_ni,
-                            unsigned       src_nj,
+vil_gauss_reduce_121_1plane(const int * src_im,
+                            unsigned src_ni,
+                            unsigned src_nj,
                             std::ptrdiff_t s_x_step,
                             std::ptrdiff_t s_y_step,
-                            int *          dest_im,
+                            int * dest_im,
                             std::ptrdiff_t d_x_step,
                             std::ptrdiff_t d_y_step)
 {
   std::ptrdiff_t sxs2 = s_x_step * 2;
   std::ptrdiff_t sys2 = s_y_step * 2;
-  int *          d_row = dest_im + d_y_step;
-  const int *    s_row1 = src_im + s_y_step;
-  const int *    s_row2 = s_row1 + s_y_step;
-  const int *    s_row3 = s_row2 + s_y_step;
-  unsigned       ni2 = (src_ni - 2) / 2;
-  unsigned       nj2 = (src_nj - 2) / 2;
+  int * d_row = dest_im + d_y_step;
+  const int * s_row1 = src_im + s_y_step;
+  const int * s_row2 = s_row1 + s_y_step;
+  const int * s_row3 = s_row2 + s_y_step;
+  unsigned ni2 = (src_ni - 2) / 2;
+  unsigned nj2 = (src_nj - 2) / 2;
   for (unsigned y = 0; y < nj2; ++y)
   {
     // Set first element of row
     *d_row = *s_row2;
-    int *       d = d_row + d_x_step;
+    int * d = d_row + d_x_step;
     const int * s1 = s_row1 + sxs2;
     const int * s2 = s_row2 + sxs2;
     const int * s3 = s_row3 + sxs2;
@@ -739,7 +739,7 @@ vil_gauss_reduce_121_1plane(const int *    src_im,
 
   // Dest image should be (src_ni+1)/2 x (src_nj+1)/2
   const int * s0 = src_im;
-  unsigned    ni = (src_ni + 1) / 2;
+  unsigned ni = (src_ni + 1) / 2;
   for (unsigned i = 0; i < ni; ++i)
   {
     dest_im[i] = *s0;
@@ -748,8 +748,8 @@ vil_gauss_reduce_121_1plane(const int *    src_im,
 
   if (src_nj & 1)
   {
-    unsigned    yhi = (src_nj - 1) / 2;
-    int *       dest_last_row = dest_im + yhi * d_y_step;
+    unsigned yhi = (src_nj - 1) / 2;
+    int * dest_last_row = dest_im + yhi * d_y_step;
     const int * s_last = src_im + yhi * sys2;
     for (unsigned i = 0; i < ni; ++i)
     {
@@ -764,27 +764,27 @@ vil_gauss_reduce_121_1plane(const int *    src_im,
 template <>
 void
 vil_gauss_reduce_121_1plane(const vxl_int_16 * src_im,
-                            unsigned           src_ni,
-                            unsigned           src_nj,
-                            std::ptrdiff_t     s_x_step,
-                            std::ptrdiff_t     s_y_step,
-                            vxl_int_16 *       dest_im,
-                            std::ptrdiff_t     d_x_step,
-                            std::ptrdiff_t     d_y_step)
+                            unsigned src_ni,
+                            unsigned src_nj,
+                            std::ptrdiff_t s_x_step,
+                            std::ptrdiff_t s_y_step,
+                            vxl_int_16 * dest_im,
+                            std::ptrdiff_t d_x_step,
+                            std::ptrdiff_t d_y_step)
 {
-  std::ptrdiff_t     sxs2 = s_x_step * 2;
-  std::ptrdiff_t     sys2 = s_y_step * 2;
-  vxl_int_16 *       d_row = dest_im + d_y_step;
+  std::ptrdiff_t sxs2 = s_x_step * 2;
+  std::ptrdiff_t sys2 = s_y_step * 2;
+  vxl_int_16 * d_row = dest_im + d_y_step;
   const vxl_int_16 * s_row1 = src_im + s_y_step;
   const vxl_int_16 * s_row2 = s_row1 + s_y_step;
   const vxl_int_16 * s_row3 = s_row2 + s_y_step;
-  unsigned           ni2 = (src_ni - 2) / 2;
-  unsigned           nj2 = (src_nj - 2) / 2;
+  unsigned ni2 = (src_ni - 2) / 2;
+  unsigned nj2 = (src_nj - 2) / 2;
   for (unsigned y = 0; y < nj2; ++y)
   {
     // Set first element of row
     *d_row = *s_row2;
-    vxl_int_16 *       d = d_row + d_x_step;
+    vxl_int_16 * d = d_row + d_x_step;
     const vxl_int_16 * s1 = s_row1 + sxs2;
     const vxl_int_16 * s2 = s_row2 + sxs2;
     const vxl_int_16 * s3 = s_row3 + sxs2;
@@ -815,7 +815,7 @@ vil_gauss_reduce_121_1plane(const vxl_int_16 * src_im,
 
   // Dest image should be (src_ni+1)/2 x (src_nj+1)/2
   const vxl_int_16 * s0 = src_im;
-  unsigned           ni = (src_ni + 1) / 2;
+  unsigned ni = (src_ni + 1) / 2;
   for (unsigned i = 0; i < ni; ++i)
   {
     dest_im[i] = *s0;
@@ -824,8 +824,8 @@ vil_gauss_reduce_121_1plane(const vxl_int_16 * src_im,
 
   if (src_nj & 1)
   {
-    unsigned           yhi = (src_nj - 1) / 2;
-    vxl_int_16 *       dest_last_row = dest_im + yhi * d_y_step;
+    unsigned yhi = (src_nj - 1) / 2;
+    vxl_int_16 * dest_last_row = dest_im + yhi * d_y_step;
     const vxl_int_16 * s_last = src_im + yhi * sys2;
     for (unsigned i = 0; i < ni; ++i)
     {

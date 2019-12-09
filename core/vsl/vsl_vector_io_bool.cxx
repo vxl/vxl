@@ -35,7 +35,7 @@ vsl_b_read(vsl_b_istream & is, std::vector<bool> & v)
     return;
 
   unsigned int n;
-  short        ver;
+  short ver;
   vsl_b_read(is, ver);
   switch (ver)
   {

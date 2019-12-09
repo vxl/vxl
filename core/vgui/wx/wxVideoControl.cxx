@@ -57,11 +57,11 @@ wxVideoControl::wxVideoControl()
 }
 
 //: Constructor
-wxVideoControl::wxVideoControl(wxWindow *       parent,
-                               wxWindowID       id,
-                               const wxPoint &  pos,
-                               const wxSize &   size,
-                               long             style,
+wxVideoControl::wxVideoControl(wxWindow * parent,
+                               wxWindowID id,
+                               const wxPoint & pos,
+                               const wxSize & size,
+                               long style,
                                const wxString & name)
   : send_messages_(true)
 {
@@ -72,11 +72,11 @@ wxVideoControl::wxVideoControl(wxWindow *       parent,
 
 //: Creator
 bool
-wxVideoControl::Create(wxWindow *       parent,
-                       wxWindowID       id,
-                       const wxPoint &  pos,
-                       const wxSize &   size,
-                       long             style,
+wxVideoControl::Create(wxWindow * parent,
+                       wxWindowID id,
+                       const wxPoint & pos,
+                       const wxSize & size,
+                       long style,
                        const wxString & name)
 {
   wxPanel::Create(parent, id, pos, size, style, name);
@@ -117,7 +117,7 @@ wxVideoControl::CreateControls()
   frame_text_ = new wxTextCtrl(
     this, wxNewId(), wxString::Format(wxT("%d"), frame_), wxDefaultPosition, wxSize(50, -1), wxTE_PROCESS_ENTER);
   // count the number of digits in the maximum frame number
-  int          digits = 1;
+  int digits = 1;
   unsigned int num_frames = num_frames_ - 1;
   while (num_frames /= 10)
     ++digits;
@@ -342,7 +342,7 @@ wxVideoControl::pause()
 void
 wxVideoControl::OnKillTextFocus(wxCommandEvent & event)
 {
-  wxTextCtrl *     text = dynamic_cast<wxTextCtrl *>(FindWindowById(event.GetId()));
+  wxTextCtrl * text = dynamic_cast<wxTextCtrl *>(FindWindowById(event.GetId()));
   wxVideoControl * vc = dynamic_cast<wxVideoControl *>(text->GetParent());
   text->SetValue(wxString::Format(wxT("%d"), vc->frame_));
 }

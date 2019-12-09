@@ -18,7 +18,7 @@
 struct joe_tab : public vgui_tableau
 {
   std::string msg;
-  vgui_menu   the_menu;
+  vgui_menu the_menu;
 
   joe_tab(const std::string & m)
     : msg(m)

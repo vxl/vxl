@@ -50,9 +50,9 @@ main(int argc, char ** argv)
   }
 
   // Load an image into an image tableau:
-  vgui_image_tableau_new    image(argv[1]);
+  vgui_image_tableau_new image(argv[1]);
   vgui_viewer2D_tableau_new viewer(image);
-  vgui_shell_tableau_new    shell(viewer);
+  vgui_shell_tableau_new shell(viewer);
 
   // Create a window and add the tableau:
   vgui_window * win = vgui::produce_window(512, 512);

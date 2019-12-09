@@ -206,7 +206,7 @@ vgui_viewer2D_tableau::handle(const vgui_event & e)
     if (e.key == 'c')
     {
       vgui_adaptor * adap = e.origin;
-      vgui_window *  win = adap->get_window();
+      vgui_window * win = adap->get_window();
       if (win)
       {
         // current scroll pos range is [0,100]

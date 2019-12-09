@@ -70,7 +70,7 @@ vnl_cholesky::solve(vnl_vector<double> const & b) const
 {
   assert(b.size() == A_.columns());
 
-  long               n = A_.columns();
+  long n = A_.columns();
   vnl_vector<double> ret = b;
   v3p_netlib_dposl_(A_.data_block(), &n, &n, ret.data_block());
   return ret;
@@ -80,10 +80,10 @@ vnl_cholesky::solve(vnl_vector<double> const & b) const
 double
 vnl_cholesky::determinant() const
 {
-  long               n = A_.columns();
+  long n = A_.columns();
   vnl_matrix<double> I = A_;
-  double             det[2];
-  long               job = 10;
+  double det[2];
+  long job = 10;
   v3p_netlib_dpodi_(I.data_block(), &n, &n, det, &job);
   return det[0] * std::pow(10.0, det[1]);
 }
@@ -98,9 +98,9 @@ vnl_cholesky::inverse() const
     return vnl_matrix<double>();
   }
 
-  long               n = A_.columns();
+  long n = A_.columns();
   vnl_matrix<double> I = A_;
-  long               job = 01;
+  long job = 01;
   v3p_netlib_dpodi_(I.data_block(), &n, &n, nullptr, &job);
 
   // Copy lower triangle into upper
@@ -115,7 +115,7 @@ vnl_cholesky::inverse() const
 vnl_matrix<double>
 vnl_cholesky::lower_triangle() const
 {
-  unsigned           n = A_.columns();
+  unsigned n = A_.columns();
   vnl_matrix<double> L(n, n);
   // Zap upper triangle and transpose
   for (unsigned i = 0; i < n; ++i)
@@ -135,7 +135,7 @@ vnl_cholesky::lower_triangle() const
 vnl_matrix<double>
 vnl_cholesky::upper_triangle() const
 {
-  unsigned           n = A_.columns();
+  unsigned n = A_.columns();
   vnl_matrix<double> U(n, n);
   // Zap lower triangle and transpose
   for (unsigned i = 0; i < n; ++i)

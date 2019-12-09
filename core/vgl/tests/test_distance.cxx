@@ -58,12 +58,12 @@ test_point_to_line_segment_2d()
   std::cout << "-------------------------------------------------------\n"
             << "Testing vgl_distance(vgl_line_segment_2d, vgl_point_2d)\n"
             << "-------------------------------------------------------\n";
-  vgl_point_2d<double>        p(1, 0);
-  vgl_point_2d<double>        q(1, 1);
+  vgl_point_2d<double> p(1, 0);
+  vgl_point_2d<double> q(1, 1);
   vgl_line_segment_2d<double> l(p, q);
-  vgl_point_2d<double>        a(0, 0);
-  vgl_point_2d<double>        b(1, -1);
-  vgl_point_2d<double>        c(2, 2);
+  vgl_point_2d<double> a(0, 0);
+  vgl_point_2d<double> b(1, -1);
+  vgl_point_2d<double> c(2, 2);
 
   double d_la = vgl_distance(l, a);
   double d_al = vgl_distance(a, l);

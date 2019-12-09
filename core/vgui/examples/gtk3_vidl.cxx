@@ -14,9 +14,9 @@
 #include <vidl_vil1/vidl_vil1_frame.h>
 #include <vidl_vil1/vidl_vil1_movie.h>
 
-int                             idlecallbackid = -1;
-int                             timer = 30;
-vidl_vil1_movie_sptr            my_movie;
+int idlecallbackid = -1;
+int timer = 30;
+vidl_vil1_movie_sptr my_movie;
 vidl_vil1_movie::frame_iterator pframe(my_movie);
 
 gint
@@ -76,7 +76,7 @@ main(int argc, char ** argv)
   my_movie = vidl_vil1_io::load_movie(img_filenames);
   pframe = my_movie->first();
 
-  vil1_image             im = pframe->get_image();
+  vil1_image im = pframe->get_image();
   vgui_image_tableau_new img_tab(im);
 
   // set initial image region :
@@ -85,7 +85,7 @@ main(int argc, char ** argv)
 
   // plug into a GL context :
   vgui_gtk_adaptor * ct = new vgui_gtk_adaptor;
-  GtkWidget *        glarea = ct->get_glarea_widget();
+  GtkWidget * glarea = ct->get_glarea_widget();
   gtk_widget_set_usize(GTK_WIDGET(glarea), im.width(), im.height());
 
   // and set up the context

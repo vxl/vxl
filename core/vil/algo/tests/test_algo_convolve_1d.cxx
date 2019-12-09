@@ -29,7 +29,7 @@ test_algo_convolve_1d_double()
             << " Testing vil_convolve_1d\n"
             << "*************************\n";
 
-  constexpr int       n = 10;
+  constexpr int n = 10;
   std::vector<double> src(n), dest(n + 2);
   for (int i = 0; i < n; ++i)
     src[i] = i + 1;
@@ -173,7 +173,7 @@ test_algo_convolve_1d_double()
   TEST_NEAR("No overrun end", dest[n + 1], 999, 1e-6);
 
   std::cout << "Test vil_convolve_zero_extend end type with 4-tap filter\n";
-  double              kernel3[6] = { -888.88, 1.0, 3.0, 5.0, 1.0, -888.88 };
+  double kernel3[6] = { -888.88, 1.0, 3.0, 5.0, 1.0, -888.88 };
   std::vector<double> src2(n, 0.0);
   src2[0] = src2[n / 2] = src2[n - 1] = 1.0;
   for (int i = 0; i < n + 2; ++i)
@@ -405,7 +405,7 @@ test_algo_convolve_1d_double()
 
   std::cout << "\n\nvil_convolve_1d(vil_image_resource_sptr&,...)\n";
 
-  vil_image_resource_sptr  mem = vil_new_image_resource(n, n, 1, VIL_PIXEL_FORMAT_BYTE);
+  vil_image_resource_sptr mem = vil_new_image_resource(n, n, 1, VIL_PIXEL_FORMAT_BYTE);
   vil_image_view<vxl_byte> v(n, n, 1), v_out(n, n, 1);
   for (int j = 0; j < n; ++j)
     for (int i = 0; i < n; ++i)

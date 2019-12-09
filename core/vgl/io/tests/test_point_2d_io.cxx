@@ -18,12 +18,12 @@ test_point_2d_double_io()
             << "*******************************\n";
 
   // Test reading in a space delimited point.
-  std::string          point_with_spaces = "vgl_point_2d_test_spaces.tmp";
-  std::ofstream        t_out(point_with_spaces.c_str());
+  std::string point_with_spaces = "vgl_point_2d_test_spaces.tmp";
+  std::ofstream t_out(point_with_spaces.c_str());
   vgl_point_2d<double> truth(1.2, 3.4);
   t_out << "1.2 3.4";
   t_out.close();
-  std::ifstream        t_in(point_with_spaces.c_str());
+  std::ifstream t_in(point_with_spaces.c_str());
   vgl_point_2d<double> tmp;
   t_in >> tmp;
   vpl_unlink(point_with_spaces.c_str());
@@ -32,7 +32,7 @@ test_point_2d_double_io()
 
   //// test constructors, accessors
   vgl_point_2d<double> p_out(1.2, 3.4), p_in;
-  vsl_b_ofstream       bfs_out("vgl_point_2d_test_double_io.bvl.tmp");
+  vsl_b_ofstream bfs_out("vgl_point_2d_test_double_io.bvl.tmp");
   TEST("Created vgl_point_2d_test_double_io.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, p_out);
   bfs_out.close();

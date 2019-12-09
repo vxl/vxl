@@ -41,7 +41,7 @@ main(int argc, char ** argv)
 
   // Put the easy2D tableau into a viewer2D tableau:
   vgui_viewer2D_tableau_new viewer(easy2D);
-  vgui_shell_tableau_new    shell(viewer);
+  vgui_shell_tableau_new shell(viewer);
 
   // Create a window, add the tableau and show it on screen:
   return vgui::run(shell, image->width(), image->height());

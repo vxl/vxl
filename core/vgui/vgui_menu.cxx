@@ -91,10 +91,10 @@ vgui_menu::add(std::string const & n, vgui_command_sptr c, vgui_key key, vgui_mo
 
 void
 vgui_menu::add(std::string const & n,
-               vgui_menu_callback  f,
-               void const *        client_data,
-               vgui_key            key,
-               vgui_modifier       modifiers)
+               vgui_menu_callback f,
+               void const * client_data,
+               vgui_key key,
+               vgui_modifier modifiers)
 {
   im_here;
   vgui_command * cfunc = new vgui_command_cfunc(f, client_data);

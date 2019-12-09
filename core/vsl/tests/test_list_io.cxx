@@ -15,7 +15,7 @@ test_list_io()
             << "Testing std::list binary io\n"
             << "**************************\n";
 
-  int            n = 10;
+  int n = 10;
   std::list<int> l_int_out;
   for (int i = 0; i < n; ++i)
     l_int_out.push_back(i);
@@ -29,7 +29,7 @@ test_list_io()
   vsl_b_write(bfs_out, l_float_out);
   bfs_out.close();
 
-  std::list<int>   l_int_in;
+  std::list<int> l_int_in;
   std::list<float> l_float_in;
 
   vsl_b_ifstream bfs_in("vsl_list_io_test.bvl.tmp");

@@ -16,7 +16,7 @@ test_algo_2nd_deriv_3x3()
             << " Testing vil_2nd_deriv_3x3\n"
             << "*******************\n";
 
-  const unsigned int       ni = 5, nj = 6, i = 2, j = 3;
+  const unsigned int ni = 5, nj = 6, i = 2, j = 3;
   vil_image_view<vxl_byte> image_d2i;
   image_d2i.set_size(ni, nj);
   vil_image_view<vxl_byte> image_d2j;

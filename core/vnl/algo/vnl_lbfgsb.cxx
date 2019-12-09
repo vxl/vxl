@@ -41,7 +41,7 @@ vnl_lbfgsb::minimize(vnl_vector<double> & x)
   long m = this->max_corrections_;
 
   // Function and gradient.
-  double             f = 0;
+  double f = 0;
   vnl_vector<double> gradient(n);
 
   // Working space.
@@ -57,10 +57,10 @@ vnl_lbfgsb::minimize(vnl_vector<double> & x)
   //
   //
   vnl_vector<long> iwa(3 * n);
-  char             csave[60];
-  long             lsave[4];
-  long             isave[44];
-  double           dsave[29];
+  char csave[60];
+  long lsave[4];
+  long isave[44];
+  double dsave[29];
 
   // Task communication.
   char task[61] = "START                                                       ";

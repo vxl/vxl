@@ -101,7 +101,7 @@ vil_j2k_pyramid_image_resource::nlevels() const
   double scale = max_dim / 1000.0;
   if (scale <= 1.0)
     return 1;
-  double   lscale = std::log(scale);
+  double lscale = std::log(scale);
   unsigned nlev = static_cast<unsigned>(lscale / std::log(2.0));
   return nlev;
 }
@@ -124,19 +124,19 @@ vil_j2k_pyramid_image_resource::get_copy_view(unsigned i0, unsigned n_i, unsigne
 // The origin and size parameters are in the coordinate system of the base image.
 // The scale factor is with respect to the base image (base scale = 1.0).
 vil_image_view_base_sptr
-vil_j2k_pyramid_image_resource::get_copy_view(unsigned    i0,
-                                              unsigned    n_i,
-                                              unsigned    j0,
-                                              unsigned    n_j,
+vil_j2k_pyramid_image_resource::get_copy_view(unsigned i0,
+                                              unsigned n_i,
+                                              unsigned j0,
+                                              unsigned n_j,
                                               const float scale,
-                                              float &     actual_scale) const
+                                              float & actual_scale) const
 {
   if (scale >= 1.0f)
   {
     actual_scale = 1.0f;
     return this->get_copy_view(i0, n_i, j0, n_j, 0);
   }
-  float    f_lev = -std::log(scale) / std::log(2.0f);
+  float f_lev = -std::log(scale) / std::log(2.0f);
   unsigned level = static_cast<unsigned>(f_lev);
   if (level > this->nlevels())
     level = this->nlevels() - 1;

@@ -82,7 +82,7 @@ test_quadratic_2d()
     vnl_vector<double> x(n);
     x.fill(1);
     vnl_test_powell_quadratic cost1(n);
-    vnl_powell                powell(&cost1);
+    vnl_powell powell(&cost1);
     powell.minimize(x);
 
     double err = 0;
@@ -98,7 +98,7 @@ test_quadratic_2d()
     for (unsigned i = 0; i < n; ++i)
       x[i] = static_cast<int>(n) - static_cast<int>(i);
     vnl_test_powell_quadratic cost1(n);
-    vnl_powell                powell(&cost1);
+    vnl_powell powell(&cost1);
     powell.minimize(x);
 
     double err = 0;
@@ -129,7 +129,7 @@ test_quadratic_nd()
     vnl_vector<double> x(n);
     x.fill(1);
     vnl_test_powell_quadratic cost1(n);
-    vnl_powell                powell(&cost1);
+    vnl_powell powell(&cost1);
     powell.minimize(x);
 
     double err = 0;
@@ -151,10 +151,10 @@ test_rosenbrock_2d()
             << " test_rosenbrock_2d()\n"
             << "----------------------\n";
   vnl_test_powell_rosenbrock c;
-  vnl_double_2               xmin(1.0, 1.0); // true minimum
-  vnl_powell                 powell(&c);
-  vnl_double_2               x0(-2, 2); // initial x
-  vnl_vector<double>         x = x0.as_vector();
+  vnl_double_2 xmin(1.0, 1.0); // true minimum
+  vnl_powell powell(&c);
+  vnl_double_2 x0(-2, 2); // initial x
+  vnl_vector<double> x = x0.as_vector();
 
   powell.minimize(x);
   double r = (x - xmin).magnitude();

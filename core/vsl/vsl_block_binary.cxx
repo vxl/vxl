@@ -16,7 +16,7 @@
 
 struct vsl_block_t
 {
-  char *      ptr;
+  char * ptr;
   std::size_t size;
 };
 
@@ -72,7 +72,7 @@ vsl_block_binary_write_float_impl(vsl_b_ostream & os, const T * begin, std::size
   vsl_b_write(os, true); // Error check that this is a specialised version
 
   const std::size_t wanted = sizeof(T) * nelems;
-  vsl_block_t       block = allocate_up_to(wanted);
+  vsl_block_t block = allocate_up_to(wanted);
 
   // multiple-block version works equally efficiently with single block
   const std::size_t items_per_block = block.size / sizeof(T);
@@ -114,7 +114,7 @@ vsl_block_binary_write_int_impl(vsl_b_ostream & os, const T * begin, std::size_t
   vsl_b_write(os, true); // Error check that this is a specialised version
 
   const std::size_t wanted = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(T)) * nelems;
-  vsl_block_t       block = allocate_up_to(wanted);
+  vsl_block_t block = allocate_up_to(wanted);
 
   if (block.size == wanted)
   {
@@ -127,8 +127,8 @@ vsl_block_binary_write_int_impl(vsl_b_ostream & os, const T * begin, std::size_t
   {
     // Do multiple-block version
     const std::size_t items_per_block = block.size / VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(T));
-    std::size_t       n = nelems; // Number of items still to be converted.
-    const T * p = begin;          // Pointer to next block of data to be converted.
+    std::size_t n = nelems; // Number of items still to be converted.
+    const T * p = begin;    // Pointer to next block of data to be converted.
     assert(n > items_per_block);
     // Convert the data - just counting bytes for now.
     std::size_t n_bytes = 0;

@@ -9,14 +9,14 @@
 #include <vnl_inverse.h>
 
 bool
-vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<double> &   aF,
+vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<double> & aF,
                                       const std::vector<vnl_vector_fixed<double, 3>> & img_pts0,
                                       const std::vector<vnl_vector_fixed<double, 3>> & img_pts1,
-                                      vnl_matrix_fixed<double, 3, 3> &                 H0,
-                                      vnl_matrix_fixed<double, 3, 3> &                 H1,
-                                      double                                           min_scale)
+                                      vnl_matrix_fixed<double, 3, 3> & H0,
+                                      vnl_matrix_fixed<double, 3, 3> & H1,
+                                      double min_scale)
 {
-  double                         tol = 100.0 * vgl_tolerance<double>::position;
+  double tol = 100.0 * vgl_tolerance<double>::position;
   vnl_matrix_fixed<double, 3, 3> Mf = aF.get_matrix();
 
   //  vnl_vector_fixed<double, 3> e0; e0[0] = -Mf[2][1]; e0[1] = Mf[2][0]; e0[2] = 0;
@@ -76,7 +76,7 @@ vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<doubl
   {
     vnl_vector_fixed<double, 3> p0rot = H0 * img_pts0[i];
     vnl_vector_fixed<double, 3> p1rot = H1 * img_pts1[i];
-    double                      v0 = p0rot[1] - v0_avg, v1 = p1rot[1] - rv1_avg;
+    double v0 = p0rot[1] - v0_avg, v1 = p1rot[1] - rv1_avg;
     rSv0v1 += v0 * v1;
     rSv1v1 += v1 * v1;
   }
@@ -90,7 +90,7 @@ vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<doubl
   std::cout << "affine row trans: " << sr << ' ' << tv << std::endl;
 
   // Assign the transformation equally between the left and right images
-  bool   neg_scale = sr < 0.0; // determine if scale factor is negative
+  bool neg_scale = sr < 0.0; // determine if scale factor is negative
   double sv = fabs(sr), sqts = sqrt(sv), tfact = 1.0 / (1.0 + sqts);
   if (sv < min_scale)
   {
@@ -129,7 +129,7 @@ vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<doubl
   {
     vnl_vector_fixed<double, 3> p0rot = H0 * img_pts0[i];
     vnl_vector_fixed<double, 3> p1rot = H1 * img_pts1[i];
-    double                      u0 = p0rot[0] - u0_avg, u1 = p1rot[0] - u1_avg, v1 = p1rot[1] - v1_avg;
+    double u0 = p0rot[0] - u0_avg, u1 = p1rot[0] - u1_avg, v1 = p1rot[1] - v1_avg;
     Su0u1 += u0 * u1;
     Su1u1 += u1 * u1;
     Su0v1 += u0 * v1;
@@ -142,7 +142,7 @@ vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<doubl
   Su1v1 /= n;
   Sv1v1 /= n;
   vnl_matrix_fixed<double, 2, 2> AA, AAinv;
-  vnl_vector_fixed<double, 2>    bb, x;
+  vnl_vector_fixed<double, 2> bb, x;
   AA[0][0] = Su1u1;
   AA[0][1] = AA[1][0] = Su1v1;
   AA[1][1] = Sv1v1;
@@ -187,12 +187,12 @@ vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<doubl
 }
 
 bool
-vpgl_equi_rectification::rectify_pair(const vpgl_fundamental_matrix<double> &          F,
+vpgl_equi_rectification::rectify_pair(const vpgl_fundamental_matrix<double> & F,
                                       const std::vector<vnl_vector_fixed<double, 3>> & img_pts0,
                                       const std::vector<vnl_vector_fixed<double, 3>> & img_pts1,
-                                      vnl_matrix_fixed<double, 3, 3> &                 H0,
-                                      vnl_matrix_fixed<double, 3, 3> &                 H1,
-                                      double                                           min_scale)
+                                      vnl_matrix_fixed<double, 3, 3> & H0,
+                                      vnl_matrix_fixed<double, 3, 3> & H1,
+                                      double min_scale)
 {
   size_t n = img_pts0.size();
   if (n == 0 || img_pts1.size() != n)
@@ -200,12 +200,12 @@ vpgl_equi_rectification::rectify_pair(const vpgl_fundamental_matrix<double> &   
     std::cout << "null image pointset or pointsets of unequal size" << std::endl;
     return false;
   }
-  double                    tol = 100.0 * vgl_tolerance<double>::position;
+  double tol = 100.0 * vgl_tolerance<double>::position;
   vgl_homg_point_2d<double> he0, he1;
   F.get_epipoles(he0, he1);
   vnl_vector_fixed<double, 3> e0(he0.x(), he0.y(), he0.w());
   vnl_vector_fixed<double, 3> e1(he1.x(), he1.y(), he1.w());
-  double                      e0m = e0.magnitude(), e1m = e1.magnitude();
+  double e0m = e0.magnitude(), e1m = e1.magnitude();
   if (e0m < tol || e1m < tol)
   {
     std::cout << "in vpgl_equi_rectification::compute_rectification(projective), null epipoles" << std::endl;
@@ -289,7 +289,7 @@ vpgl_equi_rectification::rectify_pair(const vpgl_fundamental_matrix<double> &   
   {
     vnl_vector_fixed<double, 3> p0rot = H0 * img_pts0[i];
     vnl_vector_fixed<double, 3> p1rot = H1 * img_pts1[i];
-    double                      v0 = p0rot[1] - v0_avg, v1 = p1rot[1] - rv1_avg;
+    double v0 = p0rot[1] - v0_avg, v1 = p1rot[1] - rv1_avg;
     rSv0v1 += v0 * v1;
     rSv1v1 += v1 * v1;
   }
@@ -302,7 +302,7 @@ vpgl_equi_rectification::rectify_pair(const vpgl_fundamental_matrix<double> &   
   double tv = v0_avg - sr * rv1_avg;
   std::cout << "affine row trans: " << sr << ' ' << tv << std::endl;
   // Assign the transformation equally between the left and right images
-  bool   neg_scale = sr < 0.0; // determine if scale factor is negative
+  bool neg_scale = sr < 0.0; // determine if scale factor is negative
   double sv = fabs(sr), sqts = sqrt(sv), tfact = 1.0 / (1.0 + sqts);
   if (sv < min_scale)
   {
@@ -341,7 +341,7 @@ vpgl_equi_rectification::rectify_pair(const vpgl_fundamental_matrix<double> &   
   {
     vnl_vector_fixed<double, 3> p0rot = H0 * img_pts0[i];
     vnl_vector_fixed<double, 3> p1rot = H1 * img_pts1[i];
-    double                      u0 = p0rot[0] - u0_avg, u1 = p1rot[0] - u1_avg, v1 = p1rot[1] - v1_avg;
+    double u0 = p0rot[0] - u0_avg, u1 = p1rot[0] - u1_avg, v1 = p1rot[1] - v1_avg;
     Su0u1 += u0 * u1;
     Su1u1 += u1 * u1;
     Su0v1 += u0 * v1;
@@ -354,7 +354,7 @@ vpgl_equi_rectification::rectify_pair(const vpgl_fundamental_matrix<double> &   
   Su1v1 /= n;
   Sv1v1 /= n;
   vnl_matrix_fixed<double, 2, 2> AA, AAinv;
-  vnl_vector_fixed<double, 2>    bb, x;
+  vnl_vector_fixed<double, 2> bb, x;
   AA[0][0] = Su1u1;
   AA[0][1] = AA[1][0] = Su1v1;
   AA[1][1] = Sv1v1;

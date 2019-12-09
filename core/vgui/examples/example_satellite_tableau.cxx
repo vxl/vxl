@@ -51,7 +51,7 @@ main(int argc, char ** argv)
 {
   vgui::init(argc, argv);
 
-  example_object        sp;
+  example_object sp;
   vgui_deck_tableau_new deck(sp.a, sp.b1, sp.b2);
   return vgui::run(deck, 512, 512);
 }

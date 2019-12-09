@@ -16,7 +16,7 @@
 #include "vul/vul_file.h"
 
 static std::string image_file;
-static bool        exists;
+static bool exists;
 static void
 test_blocked_image_resource()
 {
@@ -24,8 +24,8 @@ test_blocked_image_resource()
             << " Testing vil_blocked_image_resource\n"
             << "************************************\n";
   // Test Resource
-  constexpr unsigned int         ni = 73;
-  constexpr unsigned int         nj = 43;
+  constexpr unsigned int ni = 73;
+  constexpr unsigned int nj = 43;
   vil_image_view<unsigned short> image;
   image.set_size(ni, nj);
   for (unsigned i = 0; i < ni; ++i)
@@ -34,8 +34,8 @@ test_blocked_image_resource()
   vil_image_resource_sptr ir = vil_new_image_resource_of_view(image);
 
   std::string path("test_blocked_tiff.tif");
-  unsigned    sbi = 16, sbj = 32;
-  unsigned    nbi = (ni + sbi - 1) / sbi, nbj = (nj + sbj - 1) / sbj;
+  unsigned sbi = 16, sbj = 32;
+  unsigned nbi = (ni + sbi - 1) / sbi, nbj = (nj + sbj - 1) / sbj;
   std::cout << "Creating new blocked resource " << path << '\n';
   { // scope for resource
     vil_blocked_image_resource_sptr bir = vil_new_blocked_image_resource(
@@ -48,7 +48,7 @@ test_blocked_image_resource()
     else
       TEST("Put view to tiff blocked resource", false, true);
   } // delete resource by going out of scope
-  vil_image_resource_sptr         lir = vil_load_image_resource(path.c_str());
+  vil_image_resource_sptr lir = vil_load_image_resource(path.c_str());
   vil_blocked_image_resource_sptr bir = blocked_image_resource(lir);
   if (bir)
   {
@@ -89,7 +89,7 @@ test_blocked_image_resource()
   ///////-------- ----- Test Copying Blocks -------------------------///////
   std::cout << "Start test for copying blocks\n";
   std::string path2("test_blocked_tiff2.tif");
-  bool        good_copy = true;
+  bool good_copy = true;
   { // scope to close bir2
     vil_blocked_image_resource_sptr bir2 = vil_new_blocked_image_resource(path2.c_str(),
                                                                           bir->ni(),
@@ -169,8 +169,8 @@ test_blocked_image_resource()
          (nbi == (ni + bif->size_block_i() - 1) / sbi) && (nbj == (nj + bif->size_block_j() - 1) / sbj),
          true);
     vil_image_view<unsigned short> block = bif->get_block(nbi - 1, nbj - 1);
-    unsigned                       slbi = ni - (nbi - 1) * sbi, slbj = nj - (nbj - 1) * sbj;
-    bool                           good = true;
+    unsigned slbi = ni - (nbi - 1) * sbi, slbj = nj - (nbj - 1) * sbj;
+    bool good = true;
     for (unsigned j = 0; j < slbj; ++j)
     {
       for (unsigned i = 0; i < slbi; ++i)
@@ -185,8 +185,8 @@ test_blocked_image_resource()
   std::cout << "Test copying from one facade to another\n";
   vil_image_view<unsigned short> dest;
   image.set_size(ni, nj);
-  unsigned                        dsbi = 3, dsbj = 7;
-  vil_image_resource_sptr         dir = vil_new_image_resource_of_view(image);
+  unsigned dsbi = 3, dsbj = 7;
+  vil_image_resource_sptr dir = vil_new_image_resource_of_view(image);
   vil_blocked_image_resource_sptr dbif = vil_new_blocked_image_facade(dir, dsbi, dsbj);
   if (dbif)
   {
@@ -204,7 +204,7 @@ test_blocked_image_resource()
           vil_image_view_base_sptr v = sbif->get_block(bi, bj);
           dbif->put_block(bi, bj, *v);
         }
-      bool                           valid = true;
+      bool valid = true;
       vil_image_view<unsigned short> out = dbif->get_view();
       for (unsigned i = 0; i < ni; ++i)
         for (unsigned j = 0; j < nj; ++j)
@@ -223,7 +223,7 @@ test_blocked_image_resource()
   {
     vil_image_view<unsigned short> flview = flbir->get_block(0, 0);
     vil_image_view<unsigned short> faview = fabir->get_block(0, 0);
-    bool                           valid = true;
+    bool valid = true;
     for (unsigned i = 0; i < sbi; ++i)
       for (unsigned j = 0; j < sbj; ++j)
         valid = valid && flview(i, j) == faview(i, j);
@@ -249,8 +249,8 @@ test_blocked_image_resource()
   }
   // get block 1
   vil_image_view_base_sptr old_blk;
-  bool                     got_b1 = cache.get_block(1, 0, old_blk);
-  bool                     the_same = old_blk == blk1;
+  bool got_b1 = cache.get_block(1, 0, old_blk);
+  bool the_same = old_blk == blk1;
   // get block 0 -- should not be in the queue
   bool got_b0 = cache.get_block(0, 0, old_blk);
   TEST("test store and retrieve", got_b1 && the_same && !got_b0, true);
@@ -301,7 +301,7 @@ test_blocked_image_resource()
   ///////--------------------- Test NITF Blocked Resource ---------------////
   if (exists)
   {
-    std::string             nitf_path = image_file + "ff_nitf_16bit.nitf";
+    std::string nitf_path = image_file + "ff_nitf_16bit.nitf";
     vil_image_resource_sptr imgr = vil_load_image_resource(nitf_path.c_str());
     if (imgr)
     {

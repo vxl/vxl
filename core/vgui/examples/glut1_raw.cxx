@@ -24,9 +24,9 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-vgui_deck_tableau_new   deck;
+vgui_deck_tableau_new deck;
 vgui_loader_tableau_new load(deck);
-vgui_shell_tableau_new  shell(load);
+vgui_shell_tableau_new shell(load);
 
 // GLUT keyboard event callback
 void
@@ -41,7 +41,7 @@ void
 idle()
 {
   static std::time_t last = 0;
-  std::time_t        now = time(nullptr);
+  std::time_t now = time(nullptr);
   if (now > last)
   {
     // Advance the deck

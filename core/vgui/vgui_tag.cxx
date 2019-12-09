@@ -13,7 +13,7 @@
 #define MAXTAGS 255
 
 // POD
-static unsigned          numtags = 0;
+static unsigned numtags = 0;
 static vgui_tag_function tags[MAXTAGS + 1];
 
 int

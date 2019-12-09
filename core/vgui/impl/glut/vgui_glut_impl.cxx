@@ -108,7 +108,7 @@ vgui_glut_impl::produce_window(int width, int height, char const * title)
 //       [user code]
 //       ...
 
-static int const    internal_label = 1234;
+static int const internal_label = 1234;
 static std::jmp_buf internal_buf;
 
 // This function is the idle callback used
@@ -183,7 +183,7 @@ vgui_glut_impl_process_command_queue()
 
     // a bit of casting.
     vgui_glut_adaptor * a = static_cast<vgui_glut_adaptor *>(p.first);
-    vgui_command *      c = static_cast<vgui_command *>(p.second);
+    vgui_command * c = static_cast<vgui_command *>(p.second);
 
     // switch to the relevant GL context.
     int old_win = glutGetWindow();

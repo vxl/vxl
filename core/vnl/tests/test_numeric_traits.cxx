@@ -125,17 +125,17 @@ test_numeric_traits()
 #endif
   // Testing maxval values
 
-  char           cm = vnl_numeric_traits<char>::maxval;
-  signed char    scm = vnl_numeric_traits<signed char>::maxval;
-  unsigned char  ucm = vnl_numeric_traits<unsigned char>::maxval;
-  short          sm = vnl_numeric_traits<short>::maxval;
+  char cm = vnl_numeric_traits<char>::maxval;
+  signed char scm = vnl_numeric_traits<signed char>::maxval;
+  unsigned char ucm = vnl_numeric_traits<unsigned char>::maxval;
+  short sm = vnl_numeric_traits<short>::maxval;
   unsigned short usm = vnl_numeric_traits<unsigned short>::maxval;
-  int            im = vnl_numeric_traits<int>::maxval;
-  unsigned int   uim = vnl_numeric_traits<unsigned int>::maxval;
-  long           lm = vnl_numeric_traits<long>::maxval;
-  unsigned long  ulm = vnl_numeric_traits<unsigned long>::maxval;
-  float          fm = vnl_numeric_traits<float>::maxval;
-  double         dm = vnl_numeric_traits<double>::maxval;
+  int im = vnl_numeric_traits<int>::maxval;
+  unsigned int uim = vnl_numeric_traits<unsigned int>::maxval;
+  long lm = vnl_numeric_traits<long>::maxval;
+  unsigned long ulm = vnl_numeric_traits<unsigned long>::maxval;
+  float fm = vnl_numeric_traits<float>::maxval;
+  double dm = vnl_numeric_traits<double>::maxval;
 #ifdef INCLUDE_LONG_DOUBLE_TESTS
   long double ldm = vnl_numeric_traits<long double>::maxval;
 #endif
@@ -217,7 +217,7 @@ test_numeric_traits()
 #endif // TEST_SIGNED_OVERFLOW
 
   auto * x = (unsigned char *)(&fm);
-  int    nr_of_ones = 0;
+  int nr_of_ones = 0;
   std::cout << "vnl_numeric_traits<float>::maxval has internal representation ";
 #if VXL_BIG_ENDIAN
   for (unsigned int i = 0; i < sizeof(float); ++i)

@@ -23,9 +23,9 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-static int          num_test;
-static int          tests_passed;
-static int          tests_failed;
+static int num_test;
+static int tests_passed;
+static int tests_failed;
 static const char * test_name;
 
 void
@@ -146,10 +146,10 @@ testlib_test_assert_near_relative(const std::string & msg, double expr, double t
 }
 
 void
-testlib_test_assert_near_relative(const std::string &  msg,
+testlib_test_assert_near_relative(const std::string & msg,
                                   std::complex<double> expr,
                                   std::complex<double> target,
-                                  double               tol)
+                                  double tol)
 {
   std::cout << msg << " should be " << target << ", is " << expr << ", " << std::flush;
   double max = std::abs(target);

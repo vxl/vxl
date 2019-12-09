@@ -45,9 +45,9 @@ double mask_gauss_17[1][17] = { { 0.0000,
 struct vil1_kernel_info
 {
   char const * name;
-  int          w;
-  int          h;
-  double *     mask;
+  int w;
+  int h;
+  double * mask;
 };
 
 vil1_kernel_info kernels[] = {
@@ -66,18 +66,18 @@ main(int argc, char ** argv)
   vul_arg_parse(argc, argv);
 
   // Load from disk into memory "inimg"
-  vil1_image                          in = vil1_load(a_input_filename().c_str());
+  vil1_image in = vil1_load(a_input_filename().c_str());
   vil1_memory_image_of<unsigned char> inimg(in);
 
   // Build kernel in "kernelimg"
   vil1_memory_image_of<float> kernelimg(0, 0);
-  std::string                 kernel(a_kernel());
+  std::string kernel(a_kernel());
   for (vil1_kernel_info * kp = kernels; kp->name; ++kp)
     if (kernel == kp->name)
     {
       kernelimg.resize(kp->w, kp->h);
       double * v = kp->mask;
-      double   power = 0;
+      double power = 0;
       for (int y = 0; y < kp->h; ++y)
         for (int x = 0; x < kp->w; ++x)
         {

@@ -64,7 +64,7 @@ main(int argc, char ** argv)
   pick_client client;
 
   vgui_rubberband_tableau_new rubbertab(&client);
-  vgui_shell_tableau_new      shell_tab(rubbertab);
+  vgui_shell_tableau_new shell_tab(rubbertab);
 
   vgui::adapt(shell_tab, 320, 240, "Test rubberband w/ popup dialog");
 

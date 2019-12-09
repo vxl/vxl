@@ -23,13 +23,13 @@
 static bool first_window = true;
 
 void
-vgui_mfc_window::init_window(char const *      title,
+vgui_mfc_window::init_window(char const * title,
                              vgui_menu const & menubar,
-                             bool              has_menu,
-                             unsigned          width,
-                             unsigned          height,
-                             int               posx,
-                             int               posy)
+                             bool has_menu,
+                             unsigned width,
+                             unsigned height,
+                             int posx,
+                             int posy)
 {
   // if (first_window) // First time use the main window
   {
@@ -151,7 +151,7 @@ vgui_mfc_window::iconify()
 void
 vgui_mfc_window::reshape(unsigned w, unsigned h)
 {
-  CWnd *          main_wnd = AfxGetApp()->GetMainWnd();
+  CWnd * main_wnd = AfxGetApp()->GetMainWnd();
   WINDOWPLACEMENT w_placement;
   // Obtain window geometry information
   main_wnd->GetWindowPlacement(&w_placement);
@@ -172,7 +172,7 @@ vgui_mfc_window::reshape(unsigned w, unsigned h)
 void
 vgui_mfc_window::reposition(int x, int y)
 {
-  CWnd *          main_wnd = AfxGetApp()->GetMainWnd();
+  CWnd * main_wnd = AfxGetApp()->GetMainWnd();
   WINDOWPLACEMENT w_placement;
 
   // Obtain window geometry information

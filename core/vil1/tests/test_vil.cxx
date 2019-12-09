@@ -70,8 +70,8 @@ test_vil(int argc, char * argv[])
 
   // Check if we can create an image_view and put it into a vil1_image
   vil1_memory_image_of<double> vil_mem(10, 8);
-  vil_image_resource_sptr      res1 = vil1_to_vil_image_resource(vil_mem);
-  vil_image_view<double>       image2(10, 8);
+  vil_image_resource_sptr res1 = vil1_to_vil_image_resource(vil_mem);
+  vil_image_view<double> image2(10, 8);
   for (unsigned int j = 0; j < image2.nj(); ++j)
     for (unsigned int i = 0; i < image2.ni(); ++i)
       image2(i, j) = (double)i - (double)j;

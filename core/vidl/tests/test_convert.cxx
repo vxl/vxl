@@ -24,9 +24,9 @@ test_convert()
             << "***********************\n";
 
   {
-    vxl_byte                 buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+    vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
     vil_image_view<vxl_byte> image;
-    vidl_frame_sptr          frame = new vidl_shared_frame(buffer, 4, 2, VIDL_PIXEL_FORMAT_UYVY_422);
+    vidl_frame_sptr frame = new vidl_shared_frame(buffer, 4, 2, VIDL_PIXEL_FORMAT_UYVY_422);
     vidl_convert_to_view(*frame, image);
 
     std::cout << image.ni() << ' ' << image.nj() << ' ' << image.nplanes() << std::endl;
@@ -65,7 +65,7 @@ test_convert()
     vil_image_view<vxl_byte> img8(16, 16, 3);
     img8.fill(100);
     vidl_frame_sptr frame = vidl_convert_to_frame(img8);
-    bool            valid = !!frame;
+    bool valid = !!frame;
     if (valid)
     {
       valid = valid && frame->ni() == img8.ni() && frame->nj() == img8.nj();
@@ -150,7 +150,7 @@ test_convert()
   // test conversions
   {
     vxl_byte buffer1[64], buffer2[64];
-    int      num_unsupported = 0;
+    int num_unsupported = 0;
     for (int i = 0; i < VIDL_PIXEL_FORMAT_ENUM_END; ++i)
     {
       vidl_shared_frame frame1(buffer1, 2, 2, vidl_pixel_format(i));
@@ -169,12 +169,12 @@ test_convert()
 
   // timing tests
   {
-    const int                ni = 640, nj = 480;
+    const int ni = 640, nj = 480;
     vil_image_view<vxl_byte> image(ni, nj, 1, 3);
-    vil_image_view<float>    imagef(ni, nj, 3);
-    vidl_frame_sptr          frame_image = new vidl_memory_chunk_frame(image);
-    vxl_byte                 buffer[ni * nj * 3];
-    vidl_frame_sptr          frame = new vidl_shared_frame(buffer, ni, nj, VIDL_PIXEL_FORMAT_UYVY_422);
+    vil_image_view<float> imagef(ni, nj, 3);
+    vidl_frame_sptr frame_image = new vidl_memory_chunk_frame(image);
+    vxl_byte buffer[ni * nj * 3];
+    vidl_frame_sptr frame = new vidl_shared_frame(buffer, ni, nj, VIDL_PIXEL_FORMAT_UYVY_422);
 
     vul_timer timer;
     for (unsigned int i = 0; i < 10; ++i)

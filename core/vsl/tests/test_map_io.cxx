@@ -16,7 +16,7 @@ test_map_io()
             << "Testing std::map binary io\n"
             << "*************************\n";
 
-  int                                n = 10;
+  int n = 10;
   std::map<int, int, std::less<int>> m_int_int_out;
   for (int i = 0; i < n; ++i)
     m_int_int_out[i] = i * i + 1;
@@ -42,8 +42,8 @@ test_map_io()
   vsl_b_write(bfs_out, m_string_int_out);
   bfs_out.close();
 
-  std::map<int, int, std::less<int>>                 m_int_int_in;
-  std::map<int, std::string, std::less<int>>         m_int_string_in;
+  std::map<int, int, std::less<int>> m_int_int_in;
+  std::map<int, std::string, std::less<int>> m_int_string_in;
   std::map<std::string, int, std::less<std::string>> m_string_int_in;
 
   vsl_b_ifstream bfs_in("vsl_map_io_test.bvl.tmp");

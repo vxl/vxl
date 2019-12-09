@@ -18,19 +18,19 @@
 static void
 test_dialog()
 {
-  static int         int_value = 2;
-  static long        long_value = 3;
-  static float       float_value = 3.1f;
-  static double      double_value = 4.2;
+  static int int_value = 2;
+  static long long_value = 3;
+  static float float_value = 3.1f;
+  static double double_value = 4.2;
   static std::string string_value = "dialog test";
-  static bool        bool_value = true;
+  static bool bool_value = true;
   static std::string inline_file_value = "/tmp/myfile_inline.txt";
   static std::string file_value = "/tmp/myfile.txt";
   static std::string regexp = "*.txt";
   static std::string inline_color_value = "blue";
   static std::string color_value = "red";
 
-  static int               choice_value = 1;
+  static int choice_value = 1;
   std::vector<std::string> labels;
   labels.push_back(std::string("fltk"));
   labels.push_back(std::string("motif"));
@@ -86,8 +86,8 @@ test_dialog()
 static void
 test_dialog2()
 {
-  vgui_dialog               mydialog("My dialog2");
-  vgui_image_tableau_new    image("az32_10.tif");
+  vgui_dialog mydialog("My dialog2");
+  vgui_image_tableau_new image("az32_10.tif");
   vgui_viewer2D_tableau_new viewer(image);
   mydialog.inline_tableau(viewer, 512, 512);
 
@@ -118,9 +118,9 @@ main(int argc, char ** argv)
 {
   vgui::init(argc, argv);
 
-  vgui_image_tableau_new    image(argc > 1 ? argv[1] : "az32_10.tif");
+  vgui_image_tableau_new image(argc > 1 ? argv[1] : "az32_10.tif");
   vgui_viewer2D_tableau_new viewer(image);
-  vgui_shell_tableau_new    shell(viewer);
+  vgui_shell_tableau_new shell(viewer);
 
   // Create a window with a menu, add the tableau and show it on screen:
   return vgui::run(shell, image->width(), image->height(), create_menus());

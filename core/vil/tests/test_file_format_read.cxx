@@ -259,8 +259,8 @@ read_value(std::istream & fin, bool & pix)
 template <class TruePixelType, class ImgPixelType>
 bool
 CheckPixels(Compare<TruePixelType, ImgPixelType> const & check,
-            char const *                                 true_data_file,
-            const vil_image_resource_sptr &              ir)
+            char const * true_data_file,
+            const vil_image_resource_sptr & ir)
 {
   // The true data is an ASCII file consisting of a sequence of
   // numbers. The first set of numbers are:
@@ -287,8 +287,8 @@ CheckPixels(Compare<TruePixelType, ImgPixelType> const & check,
   // Generate different views from the resource, including the full image.
   //
   std::vector<vil_image_view<ImgPixelType>> views;
-  std::vector<unsigned>                     offi;
-  std::vector<unsigned>                     offj;
+  std::vector<unsigned> offi;
+  std::vector<unsigned> offj;
   for (unsigned dl = 0; dl < 3; ++dl)
   {
     for (unsigned dt = 0; dt < 2; ++dt)
@@ -428,11 +428,11 @@ CheckFile(Compare<TruePixelType, ImgPixelType> const & check, char const * true_
 template <class TruePixelType, class ImgPixelType>
 bool
 CheckFormat(Compare<TruePixelType, ImgPixelType> const & check,
-            char const *                                 true_data_file,
-            char const *                                 img_data_file,
-            vil_file_format *                            ffmt)
+            char const * true_data_file,
+            char const * img_data_file,
+            vil_file_format * ffmt)
 {
-  bool         result;
+  bool result;
   vil_stream * is = new vil_stream_fstream((image_base + img_data_file).c_str(), "r");
   is->ref();
   if (is->ok())

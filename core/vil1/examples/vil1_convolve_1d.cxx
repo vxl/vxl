@@ -18,7 +18,7 @@ int
 main(int argc, char ** argv)
 {
   int const N = 5;
-  double    kernel[2 * N + 1];
+  double kernel[2 * N + 1];
 #if 0
   for (int i=-N; i<=N; ++i)
     kernel[i+N] = 0;
@@ -54,13 +54,13 @@ main(int argc, char ** argv)
       continue;
     }
 
-    vil1_memory_image_of<vxl_byte>         bytes(vil1_image_as_byte(I));
-    unsigned                               w = bytes.width();
-    unsigned                               h = bytes.height();
-    vil1_memory_image_of<double>           tmp(w, h);
-    vil1_memory_image_of<float>            smooth(w, h);
-    vil1_convolve_signal_1d<double const>  K(kernel, 0, N, 2 * N + 1);
-    vil1_memory_image_of<double> const &   tmpc = tmp;
+    vil1_memory_image_of<vxl_byte> bytes(vil1_image_as_byte(I));
+    unsigned w = bytes.width();
+    unsigned h = bytes.height();
+    vil1_memory_image_of<double> tmp(w, h);
+    vil1_memory_image_of<float> smooth(w, h);
+    vil1_convolve_signal_1d<double const> K(kernel, 0, N, 2 * N + 1);
+    vil1_memory_image_of<double> const & tmpc = tmp;
     vil1_memory_image_of<vxl_byte> const & bytesc = bytes;
 
     for (unsigned j = 0; j < sizeof(option) / sizeof(option[0]); ++j)

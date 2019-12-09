@@ -19,12 +19,12 @@ test_int()
   vnl_sym_matrix<int> sm2(2, 2);
   TEST(
     "\n\nvnl_sym_matrix<int> sm2(2,2)", (sm2(0, 0) == 2 && sm2(0, 1) == 2 && sm2(1, 0) == 2 && sm2(1, 1) == 2), true);
-  const vnl_matrix<int>     ma1(2, 2, 3);
+  const vnl_matrix<int> ma1(2, 2, 3);
   const vnl_sym_matrix<int> sm3(ma1);
   TEST("\n\n(const vnl_sym_matrix) sm3", (sm3(0, 0) == 3 && sm3(0, 1) == 3 && sm3(1, 0) == 3 && sm3(1, 1) == 3), true);
   std::cout << "sm3\n" << sm3 << std::endl << std::endl;
 
-  int                 td[] = { 1, 2, 3 };
+  int td[] = { 1, 2, 3 };
   vnl_sym_matrix<int> sm4(td, 2);
   std::cout << "sm4\n" << sm4 << std::endl << std::endl;
   vnl_matrix<int> ma2 = sm4.as_matrix();
@@ -33,7 +33,7 @@ test_int()
   TEST("operator== ", ma2 == sm4 && !(ma2 == sm3), true);
   std::cout << "sm3\n" << sm3 << std::endl << std::endl;
 
-  int                 td5[] = { 0, 0, 0 };
+  int td5[] = { 0, 0, 0 };
   vnl_sym_matrix<int> sm5(td5, 2);
   swap(sm5, sm4);
   TEST("swap",

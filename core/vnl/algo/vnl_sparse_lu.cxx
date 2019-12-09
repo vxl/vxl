@@ -41,8 +41,8 @@ vnl_sparse_lu::vnl_sparse_lu(vnl_sparse_matrix<double> const & M, operation mode
   spElement * pelement = nullptr;
   for (A_.reset(); A_.next();)
   {
-    int    r = A_.getrow();
-    int    c = A_.getcolumn();
+    int r = A_.getrow();
+    int c = A_.getcolumn();
     double v = A_.value();
     pelement = spGetElement(pmatrix_, r + 1, c + 1);
     if (pelement == nullptr)
@@ -200,7 +200,7 @@ vnl_sparse_lu::solve_transpose(vnl_vector<double> const & b)
 double
 vnl_sparse_lu::determinant()
 {
-  int    exponent;
+  int exponent;
   double determ;
   if (!factored_)
   {

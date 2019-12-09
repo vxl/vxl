@@ -12,14 +12,14 @@
 
 bool
 vpgl_backproject::bproj_plane(vpgl_generic_camera<double> const & gcam,
-                              vnl_double_2 const &                image_point,
-                              vnl_double_4 const &                plane,
-                              vnl_double_3 const &                initial_guess,
-                              vnl_double_3 &                      world_point,
-                              double                              error_tol,
-                              double                              relative_diameter)
+                              vnl_double_2 const & image_point,
+                              vnl_double_4 const & plane,
+                              vnl_double_3 const & initial_guess,
+                              vnl_double_3 & world_point,
+                              double error_tol,
+                              double relative_diameter)
 {
-  vgl_ray_3d<double>   ray;
+  vgl_ray_3d<double> ray;
   vgl_point_3d<double> ipt;
   vgl_plane_3d<double> gplane(plane[0], plane[1], plane[2], plane[3]);
   ray = gcam.ray(image_point[0], image_point[1]);
@@ -34,14 +34,14 @@ vpgl_backproject::bproj_plane(vpgl_generic_camera<double> const & gcam,
 
 bool
 vpgl_backproject::bproj_plane(vpgl_proj_camera<double> const & pcam,
-                              vnl_double_2 const &             image_point,
-                              vnl_double_4 const &             plane,
-                              vnl_double_3 const &             initial_guess,
-                              vnl_double_3 &                   world_point,
-                              double                           error_tol,
-                              double                           relative_diameter)
+                              vnl_double_2 const & image_point,
+                              vnl_double_4 const & plane,
+                              vnl_double_3 const & initial_guess,
+                              vnl_double_3 & world_point,
+                              double error_tol,
+                              double relative_diameter)
 {
-  vgl_ray_3d<double>   ray = pcam.backproject_ray(vgl_homg_point_2d<double>(image_point[0], image_point[1]));
+  vgl_ray_3d<double> ray = pcam.backproject_ray(vgl_homg_point_2d<double>(image_point[0], image_point[1]));
   vgl_plane_3d<double> gplane(plane[0], plane[1], plane[2], plane[3]);
 
   vgl_point_3d<double> ipt;
@@ -57,12 +57,12 @@ vpgl_backproject::bproj_plane(vpgl_proj_camera<double> const & pcam,
 //: Backproject an image point onto a plane, start with initial_guess
 bool
 vpgl_backproject::bproj_plane(vpgl_camera<double> const & cam,
-                              vnl_double_2 const &        image_point,
-                              vnl_double_4 const &        plane,
-                              vnl_double_3 const &        initial_guess,
-                              vnl_double_3 &              world_point,
-                              double                      error_tol,
-                              double                      relative_diameter)
+                              vnl_double_2 const & image_point,
+                              vnl_double_4 const & plane,
+                              vnl_double_3 const & initial_guess,
+                              vnl_double_3 & world_point,
+                              double error_tol,
+                              double relative_diameter)
 {
   // special case of a generic camera
   if (cam.type_name() == "vpgl_generic_camera")
@@ -73,7 +73,7 @@ vpgl_backproject::bproj_plane(vpgl_camera<double> const & cam,
   }
   // general case
   vpgl_invmap_cost_function cf(image_point, plane, cam);
-  vnl_double_2              x1(0.000, 0.0000);
+  vnl_double_2 x1(0.000, 0.0000);
   cf.set_params(initial_guess, x1);
   vnl_amoeba amoeba(cf);
   amoeba.set_max_iterations(100000);
@@ -104,16 +104,16 @@ vpgl_backproject::bproj_plane(vpgl_camera<double> const & cam,
 // point and one through a point formed by adding the vector to the point
 bool
 vpgl_backproject::bproj_point_vector(vpgl_proj_camera<double> const & cam,
-                                     vgl_point_2d<double> const &     point,
-                                     vgl_vector_2d<double> const &    vect,
-                                     vgl_plane_3d<double> &           plane)
+                                     vgl_point_2d<double> const & point,
+                                     vgl_vector_2d<double> const & vect,
+                                     vgl_plane_3d<double> & plane)
 {
   vgl_homg_point_2d<double> hp(point);
   // get a second point
-  vgl_vector_2d<double>     vu = vect / vect.length();
-  vgl_point_2d<double>      point_plus_vect = point + vu;
+  vgl_vector_2d<double> vu = vect / vect.length();
+  vgl_point_2d<double> point_plus_vect = point + vu;
   vgl_homg_point_2d<double> hp1(point_plus_vect);
-  vgl_homg_line_2d<double>  hline(hp, hp1);
+  vgl_homg_line_2d<double> hline(hp, hp1);
   vgl_homg_plane_3d<double> hpl = cam.backproject(hline);
   plane = vgl_plane_3d<double>(hpl);
   // might add checks for ideal plane later

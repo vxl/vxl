@@ -44,9 +44,9 @@ vpgl_bundle_adjust::~vpgl_bundle_adjust()
 //  \return parameters such that original point are recovered as (ns*x+nx, ns*y+ny)
 void
 vpgl_bundle_adjust::normalize_points(std::vector<vgl_point_2d<double>> & image_points,
-                                     double &                            nx,
-                                     double &                            ny,
-                                     double &                            ns)
+                                     double & nx,
+                                     double & ny,
+                                     double & ns)
 {
   nx = ny = ns = 0.0;
   for (auto & image_point : image_points)
@@ -88,7 +88,7 @@ vpgl_bundle_adjust::reflect_points(const vgl_plane_3d<double> & plane, std::vect
 
 // rotate the cameras 180 degrees around an axis
 void
-vpgl_bundle_adjust::rotate_cameras(const vgl_vector_3d<double> &                  axis,
+vpgl_bundle_adjust::rotate_cameras(const vgl_vector_3d<double> & axis,
                                    std::vector<vpgl_perspective_camera<double>> & cameras)
 {
   vnl_double_3 r(axis.x(), axis.y(), axis.z());
@@ -111,7 +111,7 @@ vpgl_bundle_adjust::rotate_cameras(const vgl_vector_3d<double> &                
 //  around this axis
 void
 vpgl_bundle_adjust::depth_reverse(std::vector<vpgl_perspective_camera<double>> & cameras,
-                                  std::vector<vgl_point_3d<double>> &            points)
+                                  std::vector<vgl_point_3d<double>> & points)
 {
   vnl_double_3 pc(0.0, 0.0, 0.0), cc(0.0, 0.0, 0.0);
   // compute the mean of the points
@@ -144,13 +144,13 @@ vpgl_bundle_adjust::depth_reverse(std::vector<vpgl_perspective_camera<double>> &
 //: Bundle Adjust
 bool
 vpgl_bundle_adjust::optimize(std::vector<vpgl_perspective_camera<double>> & cameras,
-                             std::vector<vgl_point_3d<double>> &            world_points,
-                             const std::vector<vgl_point_2d<double>> &      image_points,
-                             const std::vector<std::vector<bool>> &         mask)
+                             std::vector<vgl_point_3d<double>> & world_points,
+                             const std::vector<vgl_point_2d<double>> & image_points,
+                             const std::vector<std::vector<bool>> & mask)
 {
   delete ba_func_;
 
-  double                            nx = 0.0, ny = 0.0, ns = 1.0;
+  double nx = 0.0, ny = 0.0, ns = 1.0;
   std::vector<vgl_point_2d<double>> norm_image_points(image_points);
   if (normalize_data_)
     normalize_points(norm_image_points, nx, ny, ns);
@@ -260,9 +260,9 @@ vpgl_bundle_adjust::optimize(std::vector<vpgl_perspective_camera<double>> & came
 
 //: Write cameras and points to a file in VRML 2.0 for debugging
 void
-vpgl_bundle_adjust::write_vrml(const std::string &                                  filename,
+vpgl_bundle_adjust::write_vrml(const std::string & filename,
                                const std::vector<vpgl_perspective_camera<double>> & cameras,
-                               const std::vector<vgl_point_3d<double>> &            world_points)
+                               const std::vector<vgl_point_3d<double>> & world_points)
 {
   std::ofstream os(filename.c_str());
   os << "#VRML V2.0 utf8\n\n";
@@ -275,8 +275,8 @@ vpgl_bundle_adjust::write_vrml(const std::string &                              
     vnl_double_3x3 K = cameras[i].get_calibration().get_matrix();
 
     vgl_rotation_3d<double> R = (rot180x * cameras[i].get_rotation()).inverse();
-    vgl_point_3d<double>    ctr = cameras[i].get_camera_center();
-    double                  fov = 2.0 * std::max(std::atan(K[1][2] / K[1][1]), std::atan(K[0][2] / K[0][0]));
+    vgl_point_3d<double> ctr = cameras[i].get_camera_center();
+    double fov = 2.0 * std::max(std::atan(K[1][2] / K[1][1]), std::atan(K[0][2] / K[0][0]));
     os << "Viewpoint {\n"
        << "  position    " << ctr.x() << ' ' << ctr.y() << ' ' << ctr.z() << '\n'
        << "  orientation " << R.axis() << ' ' << R.angle() << '\n'

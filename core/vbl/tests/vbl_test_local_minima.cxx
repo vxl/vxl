@@ -12,15 +12,15 @@ static void
 vbl_test_local_minima_1d()
 {
   std::cout << "\n Testing vbl_local_minima 1d\n+++++++++++++++++++++++++\n\n";
-  unsigned             n = 10;
+  unsigned n = 10;
   vbl_array_1d<double> v(n, 1.0);
-  double               thresh = 0.01;
+  double thresh = 0.01;
   // set up minima at middle and two ends
   v[0] = 0.06;
   v[n / 2] = 0.05;
   v[n - 1] = 0.04;
   vbl_array_1d<double> minima = vbl_local_minima(v, thresh);
-  bool                 success = !minima.empty();
+  bool success = !minima.empty();
   for (double i : minima)
     std::cout << i << ' ';
   std::cout << '\n';
@@ -31,7 +31,7 @@ vbl_test_local_minima_1d()
   vi[0] = 0;
   vi[n / 2] = 0;
   vi[n - 1] = 0;
-  unsigned               tu = 0;
+  unsigned tu = 0;
   vbl_array_1d<unsigned> minun = vbl_local_minima(vi, tu);
   success = !minun.empty();
   for (unsigned int i : minun)
@@ -45,7 +45,7 @@ static void
 vbl_test_local_minima_2d()
 {
   std::cout << "\n Testing vbl_local_minima 2d\n+++++++++++++++++++++++++\n\n";
-  unsigned             nr = 10, nc = 5;
+  unsigned nr = 10, nc = 5;
   vbl_array_2d<double> v(nr, nc, 1.0);
 
   // minimum in middle of array
@@ -61,7 +61,7 @@ vbl_test_local_minima_2d()
   v[0][nc - 1] = 0.05;
   v[nr - 1][nc - 1] = 0.05;
   vbl_array_2d<double> minima = vbl_local_minima(v);
-  bool                 success = minima.rows() > 0;
+  bool success = minima.rows() > 0;
   for (unsigned r = 0; r < minima.rows(); ++r)
   {
     for (unsigned c = 0; c < minima.cols(); ++c)
@@ -99,8 +99,8 @@ static void
 vbl_test_local_minima_3d()
 {
   std::cout << "\n Testing vbl_local_minima 3d\n+++++++++++++++++++++++++\n\n";
-  double               thresh = 0.01;
-  unsigned             n1 = 5, n2 = 7, n3 = 9;
+  double thresh = 0.01;
+  unsigned n1 = 5, n2 = 7, n3 = 9;
   vbl_array_3d<double> v(n1, n2, n3, 1.0);
 
   // set middle of array
@@ -133,7 +133,7 @@ vbl_test_local_minima_3d()
   v[n1 / 2][n2 - 1][n3 / 2] = 0.05;
 
   vbl_array_3d<double> minima = vbl_local_minima(v, thresh);
-  bool                 success = minima.get_row1_count() > 0;
+  bool success = minima.get_row1_count() > 0;
   for (unsigned x1 = 0; x1 < minima.get_row1_count(); ++x1)
   {
     std::cout << "\n************************\n";

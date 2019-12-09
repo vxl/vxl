@@ -59,7 +59,7 @@ private:
   ~com_manager();
   com_manager(const com_manager &);
   com_manager &
-                operator=(const com_manager &);
+  operator=(const com_manager &);
   com_manager * operator&();
 
   static com_manager * instance_;
@@ -99,7 +99,7 @@ com_manager::find_capture_devices(void)
 
   // Create an enumerator for the video capture devices.
   CComPtr<IEnumMoniker> cap_device_enum;
-  HRESULT               hr = sys_device_enum->CreateClassEnumerator(
+  HRESULT hr = sys_device_enum->CreateClassEnumerator(
     // CLSID_LegacyAmFilterCategory,
     // CLSID_VideoCompressorCategory,
     CLSID_VideoInputDeviceCategory,
@@ -193,7 +193,7 @@ namespace
 struct guid_string_entry
 {
   char * name;
-  GUID   guid;
+  GUID guid;
 };
 
 class guid_name_list
@@ -204,7 +204,7 @@ public:
 
 private:
   static guid_string_entry names[];
-  static unsigned int      count;
+  static unsigned int count;
 };
 
 guid_string_entry guid_name_list::names[] = {
@@ -362,9 +362,9 @@ vidl_dshow::get_guid_from_fourcc(const std::string & fourcc)
 //: Extract information from AM_MEDIA_TYPE object.
 void
 vidl_dshow::get_media_info(const AM_MEDIA_TYPE & amt,
-                           unsigned int &        width,
-                           unsigned int &        height,
-                           vidl_pixel_format &   pixel_format)
+                           unsigned int & width,
+                           unsigned int & height,
+                           vidl_pixel_format & pixel_format)
 {
   // Examine the format block.
   if ((amt.formattype == FORMAT_VideoInfo) && (amt.cbFormat >= sizeof(VIDEOINFOHEADER)) && (amt.pbFormat != 0))
@@ -505,8 +505,8 @@ vidl_dshow::get_capture_device_moniker(const std::string & name)
 //: Connect two filters directly. ***** check this, might have errors
 void
 vidl_dshow::connect_filters(CComPtr<IFilterGraph2> & filter_graph,
-                            CComPtr<IBaseFilter> &   source,
-                            CComPtr<IBaseFilter> &   target)
+                            CComPtr<IBaseFilter> & source,
+                            CComPtr<IBaseFilter> & target)
 {
   // assert(!filter_graph);
   // assert(!source);

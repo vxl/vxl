@@ -20,7 +20,7 @@ display_mask(const std::vector<std::vector<bool>> & mask)
 static void
 test_crs_index()
 {
-  std::vector<bool>              null_col(8, false);
+  std::vector<bool> null_col(8, false);
   std::vector<std::vector<bool>> mask(10, null_col);
 
   mask[0][1] = true;
@@ -51,7 +51,7 @@ test_crs_index()
 
   // look up each index and check it's validity
   bool valid = true;
-  int  curr = 0;
+  int curr = 0;
   for (int i = 0; i < crs.num_rows(); ++i)
   {
     for (int j = 0; j < crs.num_cols(); ++j)

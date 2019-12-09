@@ -22,13 +22,13 @@
 static bool
 cams_near_equal(vpgl_perspective_camera<double> const & c1,
                 vpgl_perspective_camera<double> const & c2,
-                double                                  tolerance)
+                double tolerance)
 {
   vpgl_calibration_matrix<double> K1 = c1.get_calibration(), K2 = c2.get_calibration();
-  vgl_rotation_3d<double>         R1 = c1.get_rotation(), R2 = c2.get_rotation();
-  vgl_point_3d<double>            cc1 = c1.get_camera_center(), cc2 = c2.get_camera_center();
-  vnl_matrix_fixed<double, 3, 3>  Km1 = K1.get_matrix(), Km2 = K2.get_matrix();
-  vnl_matrix_fixed<double, 3, 3>  Rm1 = R1.as_matrix(), Rm2 = R2.as_matrix();
+  vgl_rotation_3d<double> R1 = c1.get_rotation(), R2 = c2.get_rotation();
+  vgl_point_3d<double> cc1 = c1.get_camera_center(), cc2 = c2.get_camera_center();
+  vnl_matrix_fixed<double, 3, 3> Km1 = K1.get_matrix(), Km2 = K2.get_matrix();
+  vnl_matrix_fixed<double, 3, 3> Rm1 = R1.as_matrix(), Rm2 = R2.as_matrix();
   for (unsigned r = 0; r < 3; ++r)
     for (unsigned c = 0; c < 3; ++c)
     {
@@ -45,10 +45,10 @@ static void
 test_perspective_camera()
 {
   // Construct the camera
-  double                          data[] = { 2000, 0, 512, 0, 2000, 384, 0, 0, 1 };
+  double data[] = { 2000, 0, 512, 0, 2000, 384, 0, 0, 1 };
   vpgl_calibration_matrix<double> K = vnl_double_3x3(data);
-  vgl_rotation_3d<double>         R; // the identity
-  vgl_homg_point_3d<double>       center(0, 0, -10.0);
+  vgl_rotation_3d<double> R; // the identity
+  vgl_homg_point_3d<double> center(0, 0, -10.0);
   vpgl_perspective_camera<double> P(K, center, R);
   std::cout << "Camera " << P;
 
@@ -68,7 +68,7 @@ test_perspective_camera()
   // rotation angle in radians
   double theta = vnl_math::pi_over_4; // 45 degrees
   // y axis is the rotation axis
-  vnl_double_3            axis(0.0, 1.0, 0.0);
+  vnl_double_3 axis(0.0, 1.0, 0.0);
   vgl_h_matrix_3d<double> tr;
   tr.set_identity();
   tr.set_rotation_about_axis(axis, theta);
@@ -80,11 +80,11 @@ test_perspective_camera()
   {
     // rotate the camera to look at a target
     // the second point is "above" the first given the "up" direction (defaults to Z)
-    vgl_homg_point_3d<double>       target(4.0, 2.5, -6.2), above(4.0, 2.5, -3.2);
-    vgl_homg_point_3d<double>       center_pt2(8.12, 2.81, 10.0);
+    vgl_homg_point_3d<double> target(4.0, 2.5, -6.2), above(4.0, 2.5, -3.2);
+    vgl_homg_point_3d<double> center_pt2(8.12, 2.81, 10.0);
     vpgl_perspective_camera<double> P(K, center_pt2, R);
     P.look_at(target);
-    bool                 infront = !P.is_behind_camera(target);
+    bool infront = !P.is_behind_camera(target);
     vgl_point_2d<double> tgt(P(target));
     vgl_point_2d<double> abv(P(above));
     std::cout << "target projects to " << tgt << std::endl << "this point should be above " << abv << std::endl;
@@ -95,24 +95,24 @@ test_perspective_camera()
   }
 
   vgl_homg_point_3d<double> X(10., 0, 0);
-  vgl_point_2d<double>      hur = P_rot.project(X);
+  vgl_point_2d<double> hur = P_rot.project(X);
   std::cout << X << '\n' << hur << '\n';
   TEST_NEAR("test postmultipy with pure rotation", hur.x(), 5340.43, 0.01);
   // shift down 1 unit in z
   tr.set_translation(0.0, 0.0, -1.0);
   vpgl_perspective_camera<double> P_rott = vpgl_perspective_camera<double>::postmultiply(P, tr);
-  vgl_point_2d<double>            hurt = P_rott.project(X);
+  vgl_point_2d<double> hurt = P_rott.project(X);
   std::cout << X << '\n' << hurt << '\n';
   TEST_NEAR("test postmultipy with general Euclidean", hurt.x(), 7843.59, 0.01);
 
   // test align up/down
   {
-    vgl_rotation_3d<double>         P0_R(.1, .4, -1); // euler angles
+    vgl_rotation_3d<double> P0_R(.1, .4, -1); // euler angles
     vpgl_perspective_camera<double> P0;
     P0.set_rotation(P0_R);
     P0.set_camera_center(vgl_point_3d<double>(0, 2, -1));
 
-    vgl_rotation_3d<double>         P1_R(.2, -.3, .7); // euler angles
+    vgl_rotation_3d<double> P1_R(.2, -.3, .7); // euler angles
     vpgl_perspective_camera<double> P1;
     P1.set_rotation(P1_R);
     P1.set_camera_center(vgl_point_3d<double>(6, -1, 2));
@@ -125,7 +125,7 @@ test_perspective_camera()
 
   // Test finite backprojection.
   {
-    vgl_rotation_3d<double>         P0_R(.1, .4, -1); // euler angles
+    vgl_rotation_3d<double> P0_R(.1, .4, -1); // euler angles
     vpgl_perspective_camera<double> P0;
     P0.set_rotation(P0_R);
     P0.set_camera_center(vgl_point_3d<double>(1, 1, 1));
@@ -143,7 +143,7 @@ test_perspective_camera()
         p.set(-1, -1, 0);
       else /* i == 3 */
         p.set(0, -1, -1);
-      vgl_homg_point_2d<double>    ip = P0.project(vgl_homg_point_3d<double>(p));
+      vgl_homg_point_2d<double> ip = P0.project(vgl_homg_point_3d<double>(p));
       vgl_line_3d_2_points<double> l = P0.backproject(vgl_point_2d<double>(ip.x() / ip.w(), ip.y() / ip.w()));
       all_succeeded = all_succeeded && parallel(l.point1() - p, l.point2() - p, .001) &&
                       !P0.is_behind_camera(vgl_homg_point_3d<double>(l.point2()));
@@ -152,7 +152,7 @@ test_perspective_camera()
   }
   // test stream operators
   vnl_matrix_fixed<double, 3, 3> k, Rm;
-  vgl_point_3d<double>           c(-25.3302, -31.0114, 1030.63);
+  vgl_point_3d<double> c(-25.3302, -31.0114, 1030.63);
   k[0][0] = 2200;
   k[0][1] = 0;
   k[0][2] = 640;
@@ -173,17 +173,17 @@ test_perspective_camera()
   Rm[2][1] = 0.617071;
   Rm[2][2] = -0.45478;
 
-  vgl_rotation_3d<double>         rot(Rm);
+  vgl_rotation_3d<double> rot(Rm);
   vpgl_calibration_matrix<double> Ko(k);
   vpgl_perspective_camera<double> Po;
   Po.set_camera_center(c);
   Po.set_rotation(rot);
   Po.set_calibration(Ko);
-  std::string   cam_path = "cam_path";
+  std::string cam_path = "cam_path";
   std::ofstream os(cam_path.c_str());
   os << Po;
   os.close();
-  std::ifstream                   is(cam_path.c_str());
+  std::ifstream is(cam_path.c_str());
   vpgl_perspective_camera<double> Pin;
   is >> Pin;
   bool eql = cams_near_equal(Pin, Po, 0.01);
@@ -192,7 +192,7 @@ test_perspective_camera()
   // test constructors and methods using translation
   vnl_vector_fixed<double, 3> cv(-25.3302, -31.0114, 1030.63), tv;
   tv = -(Rm * cv);
-  vgl_vector_3d<double>           t(tv[0], tv[1], tv[2]);
+  vgl_vector_3d<double> t(tv[0], tv[1], tv[2]);
   vpgl_perspective_camera<double> Ptc(Ko, rot, t);
   eql = cams_near_equal(Po, Ptc, 0.01);
   TEST("translation constructor", eql, true);
@@ -224,8 +224,8 @@ test_perspective_camera()
   vpgl_perspective_camera<double> Pact;
   str >> Pact;
   vgl_frustum_3d<double> fr_act = frustum(Pact, 0.5, 60.0);
-  vgl_point_3d<double>   pt_in(20.7763, 0.42938, 0.8249);
-  vgl_point_3d<double>   pt_out(-20.0135, -1.3294, 0.7445);
+  vgl_point_3d<double> pt_in(20.7763, 0.42938, 0.8249);
+  vgl_point_3d<double> pt_out(-20.0135, -1.3294, 0.7445);
   std::cout << "in " << pt_in << " out " << pt_out << '\n' << Pact << '\n' << fr_act << '\n';
   bool cont = fr_act.contains(pt_in);
   bool not_cont = !fr_act.contains(pt_out);

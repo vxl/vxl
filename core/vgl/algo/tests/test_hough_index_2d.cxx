@@ -11,19 +11,19 @@
 static void
 test_hough_index_2d()
 {
-  vgl_hough_index_2d<double>  hl(0.0, 0.0, 512.0, 512.0, 5.0);
-  vgl_point_2d<double>        p0(0, 0);
-  vgl_point_2d<double>        p1(100, 100);
-  vgl_point_2d<double>        p2(100, 200);
-  vgl_point_2d<double>        p3(200, 300);
-  vgl_point_2d<double>        p4(300, 300);
+  vgl_hough_index_2d<double> hl(0.0, 0.0, 512.0, 512.0, 5.0);
+  vgl_point_2d<double> p0(0, 0);
+  vgl_point_2d<double> p1(100, 100);
+  vgl_point_2d<double> p2(100, 200);
+  vgl_point_2d<double> p3(200, 300);
+  vgl_point_2d<double> p4(300, 300);
   vgl_line_segment_2d<double> l(p0, p1);
   vgl_line_segment_2d<double> l1(p0, p2);
   vgl_line_segment_2d<double> l3(p2, p3);
   vgl_line_segment_2d<double> l4(p1, p4);
-  bool                        inserted = hl.insert(l);
-  bool                        found_l = hl.find(l);
-  bool                        found_l1 = hl.find(l1);
+  bool inserted = hl.insert(l);
+  bool found_l = hl.find(l);
+  bool found_l1 = hl.find(l1);
   std::cout << "indexed =" << inserted << '\n' << "found_l = " << found_l << "found_l1 " << found_l1 << '\n';
   TEST("...", inserted && found_l && !found_l1, true);
   bool remove_l = hl.remove(l);

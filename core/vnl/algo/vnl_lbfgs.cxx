@@ -56,7 +56,7 @@ vnl_lbfgs::minimize(vnl_vector<double> & x)
   v3p_netlib_lbfgs_global_t lbfgs_global;
   v3p_netlib_lbfgs_init(&lbfgs_global);
 
-  long               iprint[2] = { 1, 0 };
+  long iprint[2] = { 1, 0 };
   vnl_vector<double> g(n);
 
   // Workspace
@@ -74,7 +74,7 @@ vnl_lbfgs::minimize(vnl_vector<double> & x)
   if (we_trace)
     std::cerr << "vnl_lbfgs: ";
 
-  double             best_f = 0;
+  double best_f = 0;
   vnl_vector<double> best_x;
 
   bool ok;

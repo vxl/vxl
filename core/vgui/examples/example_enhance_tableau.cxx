@@ -21,7 +21,7 @@ main(int argc, char ** argv)
 
   vgui::init(argc, argv);
 
-  vgui_image_tableau_new    image1(argv[1]);
+  vgui_image_tableau_new image1(argv[1]);
   vgui_enhance_tableau_sptr enhance;
 
   if (argc == 2)

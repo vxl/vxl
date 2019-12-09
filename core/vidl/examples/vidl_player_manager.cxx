@@ -278,7 +278,7 @@ vidl_player_manager::play_video()
 
   play_video_ = true;
   vul_timer t, t2;
-  int       count = 0;
+  int count = 0;
 
   while (play_video_ && istream_->is_valid() && istream_->advance())
   {
@@ -332,7 +332,7 @@ vidl_player_manager::go_to_frame()
 
   if (play_video_)
     return;
-  static int  frame_num = 0;
+  static int frame_num = 0;
   vgui_dialog go_to_frame_dlg("Go to Frame");
   go_to_frame_dlg.field("Frame Number", frame_num);
   if (!go_to_frame_dlg.ask())

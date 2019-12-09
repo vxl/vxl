@@ -18,8 +18,8 @@ test_bounding_box_double_io()
             << "***********************************\n";
   //// test constructors, accessors
   vbl_bounding_box<double, 2> p_out, p_in;
-  double                      X = 1.2;
-  double                      Y = 3.4;
+  double X = 1.2;
+  double Y = 3.4;
 
   p_out.update(X, Y); // Bounding box now has only one point and so no size
   X = 5.6;

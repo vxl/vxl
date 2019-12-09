@@ -24,17 +24,17 @@
 struct vul_file_iterator_data
 {
   struct _finddata_t data_;
-#  if defined        __MINGW32__
-  typedef long       handle_type; // works with msvc6
+#  if defined __MINGW32__
+  typedef long handle_type; // works with msvc6
 #  else
   typedef intptr_t handle_type; // not found by msvc6
 #  endif
   handle_type handle_;
 
-  std::string  found_;
+  std::string found_;
   char const * name_;
-  vul_reg_exp  reg_exp_;
-  std::string  original_dirname_;
+  vul_reg_exp reg_exp_;
+  std::string original_dirname_;
 
   handle_type
   find_first(const char * dirname, struct _finddata_t * data)
@@ -101,9 +101,9 @@ vul_file_iterator_data::vul_file_iterator_data(char const * glob)
   original_dirname_ = vul_file::dirname(glob);
   handle_ = find_first((original_dirname_ + "\\*").c_str(), &data_);
 
-  std::string           baseglob = vul_file::basename(glob);
+  std::string baseglob = vul_file::basename(glob);
   std::string::iterator i = baseglob.begin();
-  bool                  prev_slash = false, in_sqr_brackets = false;
+  bool prev_slash = false, in_sqr_brackets = false;
   // assemble the Regexp string
   std::string re = "^"; // match the start of the string
   while (i != baseglob.end())
@@ -162,12 +162,12 @@ vul_file_iterator_data::vul_file_iterator_data(char const * glob)
 
 struct vul_file_iterator_data
 {
-  std::string  original_dirname_;
-  DIR *        dir_handle_;
-  dirent *     de_;
-  std::string  found_;
+  std::string original_dirname_;
+  DIR * dir_handle_;
+  dirent * de_;
+  std::string found_;
   char const * name_;
-  vul_reg_exp  reg_exp_;
+  vul_reg_exp reg_exp_;
 
   vul_file_iterator_data(char const * glob);
 
@@ -231,9 +231,9 @@ vul_file_iterator_data::vul_file_iterator_data(char const * glob)
 {
   original_dirname_ = vul_file::dirname(glob) + "/";
 
-  std::string           baseglob = vul_file::basename(glob);
+  std::string baseglob = vul_file::basename(glob);
   std::string::iterator i = baseglob.begin();
-  bool                  prev_slash = false, in_sqr_brackets = false;
+  bool prev_slash = false, in_sqr_brackets = false;
   // assemble the Regexp string
   std::string re = "^"; // match the start of the string
   while (i != baseglob.end())

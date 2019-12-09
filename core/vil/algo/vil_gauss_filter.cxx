@@ -69,8 +69,8 @@ void
 vil_gauss_filter_gen_ntap(double sd, unsigned diff, std::vector<double> & filter)
 {
   std::size_t centre = filter.size() / 2; // or just past centre if even length
-  double      sum = 0.0;                  // area under sampled curve.
-  double      tap;                        // workspace
+  double sum = 0.0;                       // area under sampled curve.
+  double tap;                             // workspace
 
   if (diff == 0)
   {
@@ -101,9 +101,9 @@ vil_gauss_filter_gen_ntap(double sd, unsigned diff, std::vector<double> & filter
   }
   else
   {
-    const double              offset = filter.size() % 2 == 0 ? 0.0 : -0.5;
-    vnl_real_polynomial       poly(1.0);
-    const double              eta = -0.5 / (sd * sd);
+    const double offset = filter.size() % 2 == 0 ? 0.0 : -0.5;
+    vnl_real_polynomial poly(1.0);
+    const double eta = -0.5 / (sd * sd);
     const vnl_real_polynomial d_gauss(vnl_double_2(eta, 0.0).as_ref());
     for (unsigned i = 1; i < diff; ++i)
     {

@@ -81,8 +81,8 @@ test_ray_intersect()
   image_pts.push_back(p1);
   image_pts.push_back(p2);
   vpgl_ray_intersect<double> ri(2);
-  vgl_point_3d<double>       intersection;
-  vgl_point_3d<double>       initial_point(44.3542, 33.1855, 32);
+  vgl_point_3d<double> intersection;
+  vgl_point_3d<double> initial_point(44.3542, 33.1855, 32);
   /*bool success =*/ri.intersect(cams, image_pts, initial_point, intersection);
   std::cout << "Result " << intersection << '\n';
   TEST_NEAR("test ray_intersection",

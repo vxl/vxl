@@ -136,7 +136,7 @@ vgui_selector_tableau::get_bounding_box(float lo[3], float hi[3]) const
     {
       // get bbox of child *o_itr.
       std::map<std::string, vgui_parent_child_link>::const_iterator t_itr = child_map_.find(*o_itr);
-      float                                                         l[3], h[3];
+      float l[3], h[3];
       if (!t_itr->second->get_bounding_box(l, h))
         return false;
 
@@ -161,7 +161,7 @@ vgui_selector_tableau::add(vgui_tableau_sptr const & tab, std::string name)
     name = tab->file_name();
 
   std::map<std::string, vgui_parent_child_link>::iterator itr = child_map_.find(name);
-  bool                                                    exists = (itr != child_map_.end());
+  bool exists = (itr != child_map_.end());
 
   child_map_[name] = vgui_parent_child_link(this, tab);
   if (!exists)
@@ -380,7 +380,7 @@ public:
   }
 
   vgui_selector_tableau * selector;
-  std::string             name;
+  std::string name;
 };
 
 //----------------------------------------------------------------------------
@@ -399,7 +399,7 @@ public:
   }
 
   vgui_selector_tableau * selector;
-  std::string             name;
+  std::string name;
 };
 
 //----------------------------------------------------------------------------
@@ -441,7 +441,7 @@ public:
   }
 
   vgui_selector_tableau * selector;
-  motion                  m_type;
+  motion m_type;
 };
 
 
@@ -457,7 +457,7 @@ vgui_selector_tableau::get_popup(const vgui_popup_params & params, vgui_menu & m
   vgui_menu visible_menu;
   vgui_menu position_menu;
 
-  std::string                                check;
+  std::string check;
   std::vector<std::string>::reverse_iterator itr = render_order_.rbegin();
   for (; itr != render_order_.rend(); ++itr)
   {

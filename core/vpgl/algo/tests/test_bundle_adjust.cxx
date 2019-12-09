@@ -19,10 +19,10 @@
 // create a test scene with world points, cameras, and ideal projections
 // of the points into the images
 void
-setup_scene(const vpgl_calibration_matrix<double> &        K,
-            std::vector<vgl_point_3d<double>> &            world,
+setup_scene(const vpgl_calibration_matrix<double> & K,
+            std::vector<vgl_point_3d<double>> & world,
             std::vector<vpgl_perspective_camera<double>> & cameras,
-            std::vector<vgl_point_2d<double>> &            image_points)
+            std::vector<vgl_point_2d<double>> & image_points)
 {
   world.clear();
   // The world points are the 8 corners of a unit cube
@@ -127,7 +127,7 @@ make_occlusions(const std::vector<vgl_point_2d<double>> & image_points, std::vec
   mask[4][6] = false;
 
   // create a subset of projections based on the mask
-  vnl_crs_index                     crs(mask);
+  vnl_crs_index crs(mask);
   std::vector<vgl_point_2d<double>> subset_image_points(crs.num_non_zero());
   for (int i = 0; i < crs.num_rows(); ++i)
   {
@@ -145,15 +145,15 @@ make_occlusions(const std::vector<vgl_point_2d<double>> & image_points, std::vec
 // apply a similarity transformation to map the points as close as possible to
 // the the ground truth
 void
-similarity_to_truth(const std::vector<vgl_point_3d<double>> &      truth_pts,
-                    std::vector<vgl_point_3d<double>> &            est_pts,
+similarity_to_truth(const std::vector<vgl_point_3d<double>> & truth_pts,
+                    std::vector<vgl_point_3d<double>> & est_pts,
                     std::vector<vpgl_perspective_camera<double>> & est_cameras)
 {
   vgl_compute_similarity_3d<double> reg(est_pts, truth_pts);
   reg.estimate();
   const vgl_rotation_3d<double> & R = reg.rotation();
-  double                          s = reg.scale();
-  const vgl_vector_3d<double> &   t = reg.translation();
+  double s = reg.scale();
+  const vgl_vector_3d<double> & t = reg.translation();
   for (auto & p : est_pts)
   {
     p = R * p;
@@ -175,9 +175,9 @@ test_bundle_adjust()
 {
   constexpr double max_p_err = 0.25; // 1; // maximum image error to introduce (pixels)
 
-  std::vector<vgl_point_3d<double>>            world;
+  std::vector<vgl_point_3d<double>> world;
   std::vector<vpgl_perspective_camera<double>> cameras;
-  std::vector<vgl_point_2d<double>>            image_points;
+  std::vector<vgl_point_2d<double>> image_points;
   // our known internal calibration
   // vpgl_calibration_matrix<double> K(2.0,vgl_homg_point_2d<double>(0,0));
   vpgl_calibration_matrix<double> K(2000.0, vgl_homg_point_2d<double>(512, 384));
@@ -191,13 +191,13 @@ test_bundle_adjust()
   std::vector<vgl_point_2d<double>> noisy_image_points = make_noisy_measurements(image_points, max_p_err);
 
   // remove some measurements (occlusion)
-  std::vector<std::vector<bool>>    mask(cameras.size(), std::vector<bool>(world.size(), true));
+  std::vector<std::vector<bool>> mask(cameras.size(), std::vector<bool>(world.size(), true));
   std::vector<vgl_point_2d<double>> subset_image_points = make_occlusions(noisy_image_points, mask);
 
   // test optimization with fixed calibration
   {
     // make default cameras
-    vgl_rotation_3d<double>         I; // no rotation
+    vgl_rotation_3d<double> I; // no rotation
     vpgl_perspective_camera<double> init_cam(K, vgl_homg_point_3d<double>(0.0, 0.0, -10.0), I);
     init_cam.look_at(vgl_homg_point_3d<double>(0.0, 0.0, 0.0), vgl_vector_3d<double>(0, -1, 0));
     std::vector<vpgl_perspective_camera<double>> unknown_cameras(cameras.size(), init_cam);
@@ -206,7 +206,7 @@ test_bundle_adjust()
     std::vector<vgl_point_3d<double>> unknown_world(world.size(), vgl_point_3d<double>(0.0, 0.0, 0.0));
 
     vpgl_bundle_adjust ba;
-    bool               converge = ba.optimize(unknown_cameras, unknown_world, subset_image_points, mask);
+    bool converge = ba.optimize(unknown_cameras, unknown_world, subset_image_points, mask);
     TEST("Converged (fixed K)", converge, true);
     similarity_to_truth(world, unknown_world, unknown_cameras);
     double rms_3d_pts = 0.0;
@@ -235,7 +235,7 @@ test_bundle_adjust()
   // test optimization with shared calibration and unknown focal length
   {
     // make default cameras
-    vgl_rotation_3d<double>         I; // no rotation
+    vgl_rotation_3d<double> I; // no rotation
     vpgl_calibration_matrix<double> K2 = K;
     K2.set_focal_length(1500);
     vpgl_perspective_camera<double> init_cam(K2, vgl_homg_point_3d<double>(0.0, 0.0, -10.0), I);
@@ -284,7 +284,7 @@ test_bundle_adjust()
 
     std::vector<vgl_point_3d<double>> unknown_world(world);
     perturb_points(unknown_world, 0.1);
-    std::vector<vgl_point_3d<double>>            init_world(unknown_world);
+    std::vector<vgl_point_3d<double>> init_world(unknown_world);
     std::vector<vpgl_perspective_camera<double>> unknown_cameras(cameras);
     perturb_cameras(unknown_cameras, 0.1, 0.0001);
     std::vector<vpgl_perspective_camera<double>> init_cameras(unknown_cameras);
@@ -306,7 +306,7 @@ test_bundle_adjust()
     double rms_error = ba.end_error();
     std::cout << "Final RMS reprojection error: " << rms_error << std::endl;
     std::vector<double> weights = ba.final_weights();
-    bool                outliers_downweighted = true;
+    bool outliers_downweighted = true;
     for (unsigned i = 0; i < weights.size(); ++i)
     {
       if (i == 6 || i == 10) // outliers

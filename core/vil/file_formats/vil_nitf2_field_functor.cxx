@@ -8,9 +8,9 @@
 #include "vil_nitf2_index_vector.h"
 
 bool
-vil_nitf2_field_specified::operator()(vil_nitf2_field_sequence *     record,
+vil_nitf2_field_specified::operator()(vil_nitf2_field_sequence * record,
                                       const vil_nitf2_index_vector & indexes,
-                                      bool &                         result)
+                                      bool & result)
 {
   if (!record->find_field_definition(tag))
   {
@@ -21,7 +21,7 @@ vil_nitf2_field_specified::operator()(vil_nitf2_field_sequence *     record,
   if (field != nullptr)
   {
     std::string value;
-    bool        is_string_value = record->get_value(tag, indexes, value, true);
+    bool is_string_value = record->get_value(tag, indexes, value, true);
     if (is_string_value)
     {
       // a blank std::string field actually yields a valid field value (an empty
@@ -44,11 +44,11 @@ vil_nitf2_field_specified::operator()(vil_nitf2_field_sequence *     record,
 }
 
 bool
-vil_nitf2_max_field_value_plus_offset_and_threshold::operator()(vil_nitf2_field_sequence *     record,
+vil_nitf2_max_field_value_plus_offset_and_threshold::operator()(vil_nitf2_field_sequence * record,
                                                                 const vil_nitf2_index_vector & indexes,
-                                                                int &                          value)
+                                                                int & value)
 {
-  int  value1 = 0;
+  int value1 = 0;
   bool found = record->get_value(tag, indexes, value1, true);
   value1 *= tag_factor;
   value1 += offset;
@@ -57,11 +57,11 @@ vil_nitf2_max_field_value_plus_offset_and_threshold::operator()(vil_nitf2_field_
 }
 
 bool
-vil_nitf2_multiply_field_values::operator()(vil_nitf2_field_sequence *     record,
+vil_nitf2_multiply_field_values::operator()(vil_nitf2_field_sequence * record,
                                             const vil_nitf2_index_vector & indexes,
-                                            int &                          value)
+                                            int & value)
 {
-  int  value1, value2;
+  int value1, value2;
   bool found = record->get_value(tag_1, indexes, value1, true);
   found &= record->get_value(tag_2, indexes, value2, true);
   if (found)

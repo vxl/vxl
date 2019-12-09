@@ -11,14 +11,14 @@
 #include "vnl/vnl_math.h"
 union DoubleBitpatternType
 {
-  double      dbl;
+  double dbl;
   vxl_uint_64 uint_64;
   vxl_uint_32 uint_32[2];
 };
 
 union FloatBitpatternType
 {
-  float       flt;
+  float flt;
   vxl_uint_32 uint_32;
 };
 
@@ -112,14 +112,14 @@ vnl_na_extract_type(std::istream & is, T & value)
   if (!is)
     return;
   std::stringstream oneToken("");
-  unsigned int      char_processed_count = 0;
-  bool              period_found = false;
-  bool              current_location_is_delimiter = false;
+  unsigned int char_processed_count = 0;
+  bool period_found = false;
+  bool current_location_is_delimiter = false;
 
   while (!is.eof())
   {
     std::stringstream::char_type c;
-    std::istream::int_type       p = is.peek();
+    std::istream::int_type p = is.peek();
     if (char_processed_count == 0)
     { // The first character is the start of the token of interest.
       if (std::isspace(p))

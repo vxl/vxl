@@ -12,7 +12,7 @@ test_sym_matrix_double_io()
             << "Testing vnl_sym_matrix<double> io\n"
             << "*********************************\n";
   //// test constructors, accessors
-  constexpr int          n = 6;
+  constexpr int n = 6;
   vnl_sym_matrix<double> m_out(n), m_in1(n), m_in2;
 
   for (int i = 0; i < n; i++)

@@ -57,10 +57,10 @@ vil_png_file_format::make_input_image(vil_stream * is)
 }
 
 vil_image_resource_sptr
-vil_png_file_format::make_output_image(vil_stream *          vs,
-                                       unsigned              nx,
-                                       unsigned              ny,
-                                       unsigned              nplanes,
+vil_png_file_format::make_output_image(vil_stream * vs,
+                                       unsigned nx,
+                                       unsigned ny,
+                                       unsigned nplanes,
                                        enum vil_pixel_format format)
 {
   if (format != VIL_PIXEL_FORMAT_BYTE && format != VIL_PIXEL_FORMAT_UINT_16)
@@ -109,7 +109,7 @@ struct vil_jmpbuf_wrapper
 };
 
 static vil_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
-static bool               jmpbuf_ok = false;
+static bool jmpbuf_ok = false;
 
 // Must be  a macro - setjmp needs its stack frame to live
 #define png_setjmp_on(ACTION)                                                                                          \
@@ -158,12 +158,12 @@ pngtopnm_error_handler(png_structp png_ptr, png_const_charp msg)
 
 struct vil_png_structures
 {
-  bool         reading_;
+  bool reading_;
   png_struct * png_ptr;
-  png_info *   info_ptr;
-  png_byte **  rows;
-  int          channels;
-  bool         ok;
+  png_info * info_ptr;
+  png_byte ** rows;
+  int channels;
+  bool ok;
 
   vil_png_structures(bool reading)
   {
@@ -373,7 +373,7 @@ vil_png_image::read_header()
 
   png_byte const color_type = png_get_color_type(p_->png_ptr, p_->info_ptr);
   png_byte const bit_depth = png_get_bit_depth(p_->png_ptr, p_->info_ptr); // valid values are 1, 2, 4, 8, or 16
-  bool           is_bool_image = false;
+  bool is_bool_image = false;
 
 #if 1
   if (color_type == PNG_COLOR_TYPE_PALETTE)

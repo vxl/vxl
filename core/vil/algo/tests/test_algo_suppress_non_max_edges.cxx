@@ -19,7 +19,7 @@ test_algo_suppress_non_max_edges()
             << " Testing vil_suppress_non_max_edges\n"
             << "************************************\n";
 
-  unsigned                 ni = 20, nj = 16;
+  unsigned ni = 20, nj = 16;
   vil_image_view<vxl_byte> image0;
   image0.set_size(ni, nj);
 

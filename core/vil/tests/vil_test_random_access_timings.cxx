@@ -19,15 +19,15 @@
 constexpr unsigned NI = 256;
 constexpr unsigned NJ = 256;
 constexpr unsigned NP = 3;
-constexpr double   dx = 0.7;
-constexpr double   dy = 1.3;
+constexpr double dx = 0.7;
+constexpr double dy = 1.3;
 
 template <class imT>
 double
 method1(vil_image_view<imT> & image, const int * x, const int * y, int n_pts, int n_loops)
 {
   std::time_t t0 = std::clock();
-  double      sum = 0.0;
+  double sum = 0.0;
   for (int n = 0; n < n_loops; ++n)
   {
     for (int i = 0; i < n_pts; ++i)
@@ -43,7 +43,7 @@ double
 method2(vil_image_view<imT> & image, const int * x, const int * y, int n_pts, int n_loops)
 {
   std::time_t t0 = std::clock();
-  double      sum = 0.0;
+  double sum = 0.0;
   for (int n = 0; n < n_loops; ++n)
   {
     for (int i = 0; i < n_pts; ++i)
@@ -71,7 +71,7 @@ method3(vil_image_view<imT> & image, const int * x, const int * y, int n_pts, in
   }
 
   std::time_t t0 = std::clock();
-  double      sum = 0.0;
+  double sum = 0.0;
   for (int n = 0; n < n_loops; ++n)
   {
     for (int i = 0; i < n_pts; ++i)
@@ -124,9 +124,9 @@ template <class T>
 inline double
 bilin_interp1(double x, double y, const T * data, std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
-  int    p1x = int(x);
+  int p1x = int(x);
   double normx = x - p1x;
-  int    p1y = int(y);
+  int p1y = int(y);
   double normy = y - p1y;
 
   const T * pix1 = data + p1y * ystep + p1x * xstep;
@@ -141,9 +141,9 @@ template <class T>
 inline double
 bilin_interp2(double x, double y, const T ** data)
 {
-  int    p1x = int(x);
+  int p1x = int(x);
   double normx = x - p1x;
-  int    p1y = int(y);
+  int p1y = int(y);
   double normy = y - p1y;
 
   const T * row1 = data[p1y];
@@ -163,9 +163,9 @@ bilin_method1(vil_image_view<imT> & image, int n_pts, int n_loops, double & sum)
   sum = 0.0;
   for (int n = 0; n < n_loops; ++n)
   {
-    double         x = 1.3, y = 1.7;
+    double x = 1.3, y = 1.7;
     std::ptrdiff_t istep = image.istep(), jstep = image.jstep();
-    imT *          plane = image.top_left_ptr();
+    imT * plane = image.top_left_ptr();
     for (int i = 0; i < n_pts; ++i, x += dx, y += dy)
       sum += (double)bilin_interp1(x, y, plane, istep, jstep);
   }
@@ -260,8 +260,8 @@ main(int argc, char ** argv)
   byte_image.fill(17);
   vil_image_view<float> float_image(NI, NJ, 1);
   float_image.fill(17);
-  int              n_loops = 10000;
-  int              n_pts = 1000;
+  int n_loops = 10000;
+  int n_pts = 1000;
   std::vector<int> x(n_pts), y(n_pts);
   for (int i = 0; i < n_pts; ++i)
   {

@@ -19,7 +19,7 @@ static void
 test_identity_transform()
 {
   std::cout << "\n=== Testing identity transform ===\n";
-  vgl_h_matrix_1d<double>   Id(vnl_matrix_fixed<double, 2, 2>().set_identity());
+  vgl_h_matrix_1d<double> Id(vnl_matrix_fixed<double, 2, 2>().set_identity());
   vgl_homg_point_1d<double> p(3, 2), pp = Id(p);
   std::cout << "Id\n" << Id << '\n' << "p =" << p << " , Id(p) = pp =" << pp << std::endl;
   TEST("identity", p, pp);
@@ -34,7 +34,7 @@ test_perspective_transform()
   M.put(0, 1, 1.5);
   M.put(1, 0, 3.0);
   M.put(1, 1, 1.75);
-  vgl_h_matrix_1d<double>   Tproj(M);
+  vgl_h_matrix_1d<double> Tproj(M);
   vgl_homg_point_1d<double> p(3, 2);
   vgl_homg_point_1d<double> pp = Tproj(p);
   vgl_homg_point_1d<double> ppp = Tproj.preimage(pp);
@@ -49,9 +49,9 @@ static void
 test_projective_basis()
 {
   std::cout << "\n=== Testing canonical basis ===\n";
-  vgl_homg_point_1d<double>              p0(0, 1);
-  vgl_homg_point_1d<double>              p1(1, 1);
-  vgl_homg_point_1d<double>              p2(7, 1);
+  vgl_homg_point_1d<double> p0(0, 1);
+  vgl_homg_point_1d<double> p1(1, 1);
+  vgl_homg_point_1d<double> p2(7, 1);
   std::vector<vgl_homg_point_1d<double>> basis_points;
   basis_points.push_back(p0);
   basis_points.push_back(p1);
@@ -90,7 +90,7 @@ test_compute_svd()
   vgl_h_matrix_1d<double> H(points1, points2);
   std::cout << "The resulting transform\n" << H << std::endl;
   vnl_matrix_fixed<double, 2, 2> M = H.get_matrix();
-  vgl_homg_point_1d<double>      hdiag(M[0][0], M[1][1]);
+  vgl_homg_point_1d<double> hdiag(M[0][0], M[1][1]);
   std::cout << "The normalized upper diagonal " << hdiag << std::endl;
   TEST_NEAR("recover 2x scale matrix", hdiag - vgl_homg_point_1d<double>(5, -4), 0.0, 1e-06);
 }
@@ -115,10 +115,10 @@ test_compute_linear()
   points2.push_back(p23);
 
   vgl_h_matrix_1d_compute_linear hmcl;
-  vgl_h_matrix_1d<double>        H = hmcl.compute(points1, points2);
+  vgl_h_matrix_1d<double> H = hmcl.compute(points1, points2);
   std::cout << "The resulting transform\n" << H << std::endl;
   vnl_matrix_fixed<double, 2, 2> M = H.get_matrix();
-  vgl_homg_point_1d<double>      hdiag(M[0][0], M[1][1]);
+  vgl_homg_point_1d<double> hdiag(M[0][0], M[1][1]);
   std::cout << "The normalized upper diagonal " << hdiag << std::endl;
   TEST_NEAR("recover 2x scale matrix", hdiag - vgl_homg_point_1d<double>(5, -4), 0.0, 1e-06);
 }
@@ -144,9 +144,9 @@ test_compute_3point()
   points2.push_back(p22);
 
   vgl_h_matrix_1d_compute_3point hc4p;
-  vgl_h_matrix_1d<double>        H = hc4p.compute(points1, points2);
+  vgl_h_matrix_1d<double> H = hc4p.compute(points1, points2);
   vnl_matrix_fixed<double, 2, 2> M = H.get_matrix();
-  vgl_homg_point_1d<double>      hdiag(M[0][0], M[1][1]);
+  vgl_homg_point_1d<double> hdiag(M[0][0], M[1][1]);
   std::cout << "The normalized upper diagonal " << hdiag << std::endl;
   TEST_NEAR("recover 2x scale matrix", hdiag - vgl_homg_point_1d<double>(2, 3), 0.0, 1e-06);
 }
@@ -171,10 +171,10 @@ test_compute_optimize()
   points2.push_back(p23);
 
   vgl_h_matrix_1d_compute_optimize hmcl;
-  vgl_h_matrix_1d<double>          H = hmcl.compute(points1, points2);
+  vgl_h_matrix_1d<double> H = hmcl.compute(points1, points2);
   std::cout << "The resulting transform\n" << H << std::endl;
   vnl_matrix_fixed<double, 2, 2> M = H.get_matrix();
-  vgl_homg_point_1d<double>      hdiag(M[0][0], M[1][1]);
+  vgl_homg_point_1d<double> hdiag(M[0][0], M[1][1]);
   std::cout << "The normalized upper diagonal " << hdiag << std::endl;
   TEST_NEAR("recover 2x scale matrix", hdiag - vgl_homg_point_1d<double>(5, -4), 0.0, 1e-06);
 }

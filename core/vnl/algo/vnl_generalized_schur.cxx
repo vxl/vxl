@@ -40,10 +40,10 @@ vnl_generalized_schur(vnl_matrix<double> * A,
   R->set_size(n, n);
   R->fill(0);
 
-  long   sdim = 0;
-  long   lwork = 1000 + (8 * n + 16);
+  long sdim = 0;
+  long lwork = 1000 + (8 * n + 16);
   auto * work = new double[lwork];
-  long   info = 0;
+  long info = 0;
   A->inplace_transpose();
   B->inplace_transpose();
   v3p_netlib_dgges_("V",

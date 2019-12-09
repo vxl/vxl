@@ -15,11 +15,11 @@
 #  include <cstdio>
 
 LONG WINAPI
-     vxl_exception_filter(struct _EXCEPTION_POINTERS * ExceptionInfo)
+vxl_exception_filter(struct _EXCEPTION_POINTERS * ExceptionInfo)
 {
   // Retrieve exception information
-  PVOID   ExceptionAddress = ExceptionInfo->ExceptionRecord->ExceptionAddress;
-  DWORD   ExceptionCode = ExceptionInfo->ExceptionRecord->ExceptionCode;
+  PVOID ExceptionAddress = ExceptionInfo->ExceptionRecord->ExceptionAddress;
+  DWORD ExceptionCode = ExceptionInfo->ExceptionRecord->ExceptionCode;
   DWORD * ExceptionInformation = (DWORD *)ExceptionInfo->ExceptionRecord->ExceptionInformation;
 
   std::fprintf(stderr, "\nTOP-LEVEL EXCEPTION HANDLER\n");
@@ -51,7 +51,7 @@ LONG WINAPI
 #endif // defined(_WIN32)
 
 static std::vector<TestMainFunction> testlib_test_func_;
-static std::vector<std::string>      testlib_test_name_;
+static std::vector<std::string> testlib_test_name_;
 
 void
 list_test_names(std::ostream & ostr)

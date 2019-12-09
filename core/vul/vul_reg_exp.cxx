@@ -365,10 +365,10 @@ vul_reg_exp::protect(char c)
 // Global work variables for compile().
 //
 static const char * regparse; // Input-scan pointer.
-static int          regnpar;  // () count.
-static char         regdummy;
-static char *       regcode; // Code-emit pointer; &regdummy = don't.
-static long         regsize; // Code size.
+static int regnpar;           // () count.
+static char regdummy;
+static char * regcode; // Code-emit pointer; &regdummy = don't.
+static long regsize;   // Code size.
 
 //
 // Forward declarations for compile()'s friends.
@@ -417,10 +417,10 @@ regoptail(char *, const char *);
 void
 vul_reg_exp::compile(char const * exp)
 {
-  const char *  scan;
-  const char *  longest;
+  const char * scan;
+  const char * longest;
   unsigned long len;
-  int           flags;
+  int flags;
 
   if (exp == nullptr)
   {
@@ -527,8 +527,8 @@ reg(int paren, int * flagp)
   char * ret;
   char * br;
   char * ender;
-  int    parno = 0;
-  int    flags;
+  int parno = 0;
+  int flags;
 
   *flagp = HASWIDTH; // Tentatively.
 
@@ -616,7 +616,7 @@ regbranch(int * flagp)
   char * ret;
   char * chain;
   char * latest;
-  int    flags;
+  int flags;
 
   *flagp = WORST; // Tentatively.
 
@@ -654,9 +654,9 @@ static char *
 regpiece(int * flagp)
 {
   char * ret;
-  char   op;
+  char op;
   char * next;
-  int    flags;
+  int flags;
 
   ret = regatom(&flags);
   if (ret == nullptr)
@@ -730,7 +730,7 @@ static char *
 regatom(int * flagp)
 {
   char * ret;
-  int    flags;
+  int flags;
 
   *flagp = WORST; // Tentatively.
 
@@ -828,7 +828,7 @@ regatom(int * flagp)
       break;
     default:
     {
-      int  len;
+      int len;
       char ender;
 
       regparse--;
@@ -932,8 +932,8 @@ reginsert(char op, char * opnd)
 static void
 regtail(char * p, const char * val)
 {
-  char *         scan;
-  char *         temp;
+  char * scan;
+  char * temp;
   std::ptrdiff_t offset;
 
   if (p == &regdummy)
@@ -980,8 +980,8 @@ regoptail(char * p, const char * val)
 //
 // Global work variables for find().
 //
-static const char *  reginput;  // String-input pointer.
-static const char *  regbol;    // Beginning of input, for ^ check.
+static const char * reginput;   // String-input pointer.
+static const char * regbol;     // Beginning of input, for ^ check.
 static const char ** regstartp; // Pointer to startp array.
 static const char ** regendp;   // Ditto for endp.
 
@@ -1078,7 +1078,7 @@ vul_reg_exp::find(char const * string)
 static int
 regtry(const char * string, const char ** start, const char ** end, const char * prog)
 {
-  int           i;
+  int i;
   const char ** sp1;
   const char ** ep;
 
@@ -1143,7 +1143,7 @@ regmatch(const char * prog)
         break;
       case EXACTLY:
       {
-        int          len;
+        int len;
         const char * opnd;
 
         opnd = OPERAND(scan);
@@ -1180,7 +1180,7 @@ regmatch(const char * prog)
       case OPEN + 8:
       case OPEN + 9:
       {
-        int          no;
+        int no;
         const char * save;
 
         no = OP(scan) - OPEN;
@@ -1209,7 +1209,7 @@ regmatch(const char * prog)
       case CLOSE + 8:
       case CLOSE + 9:
       {
-        int          no;
+        int no;
         const char * save;
 
         no = OP(scan) - CLOSE;
@@ -1252,10 +1252,10 @@ regmatch(const char * prog)
       case STAR:
       case PLUS:
       {
-        char         nextch;
-        int          no;
+        char nextch;
+        int no;
         const char * save;
-        int          min_no;
+        int min_no;
 
         //
         // Lookahead to avoid useless match attempts when we know
@@ -1305,7 +1305,7 @@ regmatch(const char * prog)
 static int
 regrepeat(const char * p)
 {
-  int          count = 0;
+  int count = 0;
   const char * scan;
   const char * opnd;
 

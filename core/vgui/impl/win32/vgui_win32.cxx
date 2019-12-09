@@ -186,7 +186,7 @@ vgui_win32::run()
     vgui_win32_window * pwin = (vgui_win32_window *)get_current_window();
     if (pwin)
     {
-      HWND   hwnd = pwin->getWindowHandle();
+      HWND hwnd = pwin->getWindowHandle();
       HACCEL hAccel = pwin->getAccelHandle();
       if (!(hAccel && TranslateAccelerator(hwnd, hAccel, &msg)))
       {
@@ -271,7 +271,7 @@ vgui_win32::PumpMessage()
 inline int
 vgui_win32::find_window(HWND hwnd)
 {
-  int                                        i;
+  int i;
   std::vector<vgui_window *>::const_iterator it;
   for (i = 0, it = windows_to_delete.begin(); it != windows_to_delete.end(); it++, i++)
   {
@@ -329,9 +329,9 @@ vgui_win32::remove_current_dialog()
 }
 
 LRESULT CALLBACK
-        globalWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+globalWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-  LRESULT             lResult = 0;
+  LRESULT lResult = 0;
   vgui_win32_window * pwin;
 
   // Some messages should be handled here, not in vgui_window and vgui_adaptor
@@ -368,10 +368,10 @@ LRESULT CALLBACK
 }
 
 LRESULT CALLBACK
-        globalDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+globalDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-  LRESULT                  lResult = 0;
-  vgui_win32_window *      pwin;
+  LRESULT lResult = 0;
+  vgui_win32_window * pwin;
   vgui_win32_dialog_impl * dlg;
 
 
@@ -393,7 +393,7 @@ LRESULT CALLBACK
 }
 
 LRESULT CALLBACK
-        globalTableauProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+globalTableauProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
   vgui_win32_dialog_impl * dlg;
 

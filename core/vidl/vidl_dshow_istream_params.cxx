@@ -57,7 +57,7 @@ void
 print_help(const CComPtr<IAMVideoProcAmp> & am_video_proc_amp, const std::string & prop_tag)
 {
   std::map<std::string, vpa_property_wrap> prop = vpa_properties();
-  long                                     val, min, max, step, def, flag;
+  long val, min, max, step, def, flag;
 
   std::cout << std::setw(w1) << prop_tag;
   if (SUCCEEDED(am_video_proc_amp->GetRange(prop[prop_tag].key, &min, &max, &step, &def, &flag)))
@@ -77,7 +77,7 @@ void
 print_output_format_help(const CComPtr<IAMStreamConfig> & asc)
 // void print_output_format_help(IAMStreamConfig* asc)
 {
-  AM_MEDIA_TYPE *            amt = 0;
+  AM_MEDIA_TYPE * amt = 0;
   VIDEO_STREAM_CONFIG_CAPS * vscc = reinterpret_cast<VIDEO_STREAM_CONFIG_CAPS *>(new BYTE[128]);
 
   int count = 0, size = 0;

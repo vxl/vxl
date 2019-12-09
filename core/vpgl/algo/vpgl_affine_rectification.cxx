@@ -33,13 +33,13 @@ vpgl_affine_rectification::compute_affine_cam(const std::vector<vgl_point_2d<dou
 
 //:Extract the fundamental matrix from affine cameras
 bool
-vpgl_affine_rectification::compute_affine_f(const vpgl_affine_camera<double> *       cam1,
-                                            const vpgl_affine_camera<double> *       cam2,
+vpgl_affine_rectification::compute_affine_f(const vpgl_affine_camera<double> * cam1,
+                                            const vpgl_affine_camera<double> * cam2,
                                             vpgl_affine_fundamental_matrix<double> & FA)
 {
   vnl_matrix_fixed<double, 3, 4> M1 = cam1->get_matrix();
-  vgl_homg_point_3d<double>      C = cam1->camera_center();
-  vnl_vector_fixed<double, 4>    C1;
+  vgl_homg_point_3d<double> C = cam1->camera_center();
+  vnl_vector_fixed<double, 4> C1;
   C1[0] = C.x();
   C1[1] = C.y();
   C1[2] = C.z();
@@ -61,7 +61,7 @@ vpgl_affine_rectification::compute_affine_f(const vpgl_affine_camera<double> *  
   e2M[2][2] = 0;
 
   // find pseudo inverse of the first camera
-  vnl_svd<double>                temp{ (M1 * M1.transpose()).as_ref() }; // use svd to find inverse of M1*M1.transpose()
+  vnl_svd<double> temp{ (M1 * M1.transpose()).as_ref() }; // use svd to find inverse of M1*M1.transpose()
   vnl_matrix_fixed<double, 4, 3> M1inv = M1.transpose() * temp.inverse();
 
   vnl_matrix_fixed<double, 3, 3> FAM;
@@ -85,14 +85,14 @@ vpgl_affine_rectification::compute_affine_f(const vpgl_affine_camera<double> *  
 //  (if cameras are known, one can use known points in 3d in the observed scene, project them using the cameras and pass
 //  the image points to this routine)
 bool
-vpgl_affine_rectification::compute_rectification(const vpgl_affine_fundamental_matrix<double> &   FA,
+vpgl_affine_rectification::compute_rectification(const vpgl_affine_fundamental_matrix<double> & FA,
                                                  const std::vector<vnl_vector_fixed<double, 3>> & img_p1,
                                                  const std::vector<vnl_vector_fixed<double, 3>> & img_p2,
-                                                 vnl_matrix_fixed<double, 3, 3> &                 H1,
-                                                 vnl_matrix_fixed<double, 3, 3> &                 H2)
+                                                 vnl_matrix_fixed<double, 3, 3> & H1,
+                                                 vnl_matrix_fixed<double, 3, 3> & H2)
 {
   vnl_matrix_fixed<double, 3, 3> FAM = FA.get_matrix();
-  vnl_vector_fixed<double, 3>    e1;
+  vnl_vector_fixed<double, 3> e1;
   e1[0] = -FAM[2][1];
   e1[1] = FAM[2][0];
   e1[2] = 0;
@@ -129,7 +129,7 @@ vpgl_affine_rectification::compute_rectification(const vpgl_affine_fundamental_m
 
   // find a scaling and offset for the Y axis
   vnl_sparse_matrix<double> A(m, 2);
-  vnl_vector<double>        b(m);
+  vnl_vector<double> b(m);
   // setup rows of A and b
   for (unsigned i = 0; i < m; i++)
   {
@@ -141,7 +141,7 @@ vpgl_affine_rectification::compute_rectification(const vpgl_affine_fundamental_m
   }
 
   vnl_sparse_matrix_linear_system<double> ls(A, b);
-  vnl_vector<double>                      scaling(2);
+  vnl_vector<double> scaling(2);
   scaling[0] = scaling[1] = 0.0;
   vnl_lsqr lsqr(ls);
   lsqr.minimize(scaling);
@@ -166,7 +166,7 @@ vpgl_affine_rectification::compute_rectification(const vpgl_affine_fundamental_m
     b[i] = p1rot[0];
   }
   vnl_sparse_matrix_linear_system<double> ls2(AA, b);
-  vnl_vector<double>                      shear(3);
+  vnl_vector<double> shear(3);
   shear[0] = shear[1] = shear[2] = 0.0;
   vnl_lsqr lsqr2(ls2);
   lsqr2.minimize(shear);

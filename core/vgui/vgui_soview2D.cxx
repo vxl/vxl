@@ -587,12 +587,12 @@ vgui_soview2D_polygon::set_size(unsigned nn)
 
 //-----------------------------------------------------------
 
-vgui_soview2D_image::vgui_soview2D_image(float              in_x,
-                                         float              in_y,
+vgui_soview2D_image::vgui_soview2D_image(float in_x,
+                                         float in_y,
                                          vil1_image const & img,
-                                         bool               in_blend,
-                                         GLenum             format,
-                                         GLenum             type)
+                                         bool in_blend,
+                                         GLenum format,
+                                         GLenum type)
   : x_(in_x)
   , y_(in_y)
   , w_(img.width())
@@ -603,12 +603,12 @@ vgui_soview2D_image::vgui_soview2D_image(float              in_x,
   buffer_->apply(img, (vgui_range_map_params *)nullptr);
 }
 
-vgui_soview2D_image::vgui_soview2D_image(float                       in_x,
-                                         float                       in_y,
+vgui_soview2D_image::vgui_soview2D_image(float in_x,
+                                         float in_y,
                                          vil_image_view_base const & img,
-                                         bool                        in_blend,
-                                         GLenum                      format,
-                                         GLenum                      type)
+                                         bool in_blend,
+                                         GLenum format,
+                                         GLenum type)
   : x_(in_x)
   , y_(in_y)
   , w_(img.ni())

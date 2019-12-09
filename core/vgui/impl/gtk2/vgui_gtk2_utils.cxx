@@ -20,7 +20,7 @@
 #include "vgui/vgui_command.h"
 #include "vgui/vgui_menu.h"
 
-static bool     debug = false;
+static bool debug = false;
 GtkAccelGroup * vgui_gtk2_utils::accel_group = NULL;
 
 vgui_button

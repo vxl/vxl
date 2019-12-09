@@ -65,7 +65,7 @@ test_real_polynomial()
   TEST_NEAR("Integral", f1.evaluate_integral(2.0), 70.0 / 3, 1e-9);
 
   TEST("Polynomial of degree 0", vnl_real_polynomial(1.0).evaluate(0.5), 1.0);
-  double             v_data[] = { 3.0, 2.0, 1.0 };
+  double v_data[] = { 3.0, 2.0, 1.0 };
   vnl_vector<double> v(v_data, 3);
   TEST("Vector initialisation", vnl_real_polynomial(v).evaluate(2.0), 17.0);
 

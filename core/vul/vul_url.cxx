@@ -44,7 +44,7 @@ vul_http_open(char const * url)
   std::string host;
   std::string path;
   std::string auth;
-  int         port = 80; // default
+  int port = 80; // default
 
   // check it is an http URL.
   assert(std::strncmp(url, "http://", 7) == 0);
@@ -101,7 +101,7 @@ vul_http_open(char const * url)
 #if defined(_WIN32) && !defined(__CYGWIN__)
   if (called_WSAStartup == 0)
   {
-    WORD    wVersionRequested;
+    WORD wVersionRequested;
     WSADATA wsaData;
 
     wVersionRequested = MAKEWORD(2, 2);
@@ -265,7 +265,7 @@ vul_http_exists(char const * url)
   std::string host;
   std::string path;
   std::string auth;
-  int         port = 80; // default
+  int port = 80; // default
   assert(std::strncmp(url, "http://", 7) == 0);
 
   char const * p = url + 7;
@@ -319,7 +319,7 @@ vul_http_exists(char const * url)
 #if defined(_WIN32) && !defined(__CYGWIN__)
   if (called_WSAStartup == 0)
   {
-    WORD    wVersionRequested;
+    WORD wVersionRequested;
     WSADATA wsaData;
 
     wVersionRequested = MAKEWORD(2, 2);
@@ -597,10 +597,10 @@ encode_triplet(char data[3], unsigned int n)
 std::string
 vul_url::encode_base64(const std::string & in)
 {
-  std::string        out;
-  unsigned int       i = 0, line_octets = 0;
+  std::string out;
+  unsigned int i = 0, line_octets = 0;
   const unsigned int l = (unsigned int)(in.size());
-  char               data[3];
+  char data[3];
   while (i <= l)
   {
     if (i == l)
@@ -678,12 +678,12 @@ get_next_char(const std::string & in, unsigned int * i)
 std::string
 vul_url::decode_base64(const std::string & in)
 {
-  int  c;
+  int c;
   char data[3];
 
-  unsigned int       i = 0;
+  unsigned int i = 0;
   const unsigned int l = (unsigned int)(in.size());
-  std::string        out;
+  std::string out;
   while (i < l)
   {
     data[0] = data[1] = data[2] = 0;

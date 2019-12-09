@@ -126,6 +126,6 @@ bool
 vgui_invert_homg4x4(double const A[4][4], double B[4][4])
 {
   double const * A_[4] = { A[0], A[1], A[2], A[3] };
-  double *       B_[4] = { B[0], B[1], B[2], B[3] };
+  double * B_[4] = { B[0], B[1], B[2], B[3] };
   return vgui_invert_homg4x4(A_, B_);
 }

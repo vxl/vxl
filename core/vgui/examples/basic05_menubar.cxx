@@ -48,9 +48,9 @@ main(int argc, char ** argv)
   }
 
   // Make our tableau hierarchy.
-  vgui_image_tableau_new    image(argv[1]);
+  vgui_image_tableau_new image(argv[1]);
   vgui_viewer2D_tableau_new viewer(image);
-  vgui_shell_tableau_new    shell(viewer);
+  vgui_shell_tableau_new shell(viewer);
 
   // Create a window, but this time we also pass in a vgui_menu.
   return vgui::run(shell, 512, 512, create_menus());

@@ -24,8 +24,8 @@ test_sample_profile_bicub_byte()
     for (unsigned int i = 0; i < image1.ni(); ++i)
       image1(i, j) = vxl_byte(i + j * 10);
 
-  double              x0 = 5.0, y0 = 5.0;
-  double              dx = 1.0, dy = 0.0;
+  double x0 = 5.0, y0 = 5.0;
+  double dx = 1.0, dy = 0.0;
   std::vector<double> vec(3);
 
   vil_sample_profile_bicub(&vec[0], image1, x0, y0, dx, dy, 3);

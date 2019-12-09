@@ -26,10 +26,10 @@ vil_sgi_file_format::make_input_image(vil_stream * vs)
 }
 
 vil_image_resource_sptr
-vil_sgi_file_format::make_output_image(vil_stream *     vs,
-                                       unsigned         nx,
-                                       unsigned         ny,
-                                       unsigned         nplanes,
+vil_sgi_file_format::make_output_image(vil_stream * vs,
+                                       unsigned nx,
+                                       unsigned ny,
+                                       unsigned nplanes,
                                        vil_pixel_format format)
 {
   return new vil_sgi_image(vs, nx, ny, nplanes, format);

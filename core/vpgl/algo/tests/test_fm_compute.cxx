@@ -17,10 +17,10 @@ test_fm_compute()
 {
   // Test the 8 point algorithm from perfect correspondences.
 
-  double                          random_list1r[12] = { 1, 15, 9, -1, 2, -6, -9, 7, -5, 6, 10, 0 };
-  double                          random_list1l[12] = { 10.6, 1.009, .676, .5, -13, -10, 8, 5, 88, -2, -100, 11 };
-  vpgl_proj_camera<double>        C1r(random_list1r);
-  vpgl_proj_camera<double>        C1l(random_list1l);
+  double random_list1r[12] = { 1, 15, 9, -1, 2, -6, -9, 7, -5, 6, 10, 0 };
+  double random_list1l[12] = { 10.6, 1.009, .676, .5, -13, -10, 8, 5, 88, -2, -100, 11 };
+  vpgl_proj_camera<double> C1r(random_list1r);
+  vpgl_proj_camera<double> C1l(random_list1l);
   vpgl_fundamental_matrix<double> fm1(C1r, C1l);
   std::cerr << "Break 1:\n" << fm1.get_matrix(); // DEBUG
   std::vector<vgl_homg_point_3d<double>> p1w;
@@ -40,7 +40,7 @@ test_fm_compute()
     p1l.push_back(C1l.project(i));
   }
 
-  vpgl_fm_compute_8_point         fmc;
+  vpgl_fm_compute_8_point fmc;
   vpgl_fundamental_matrix<double> fm1est;
   fmc.compute(p1r, p1l, fm1est);
   std::cerr << "Break 2:\n" << fm1est.get_matrix(); // DEBUG
@@ -62,9 +62,9 @@ test_fm_compute()
   double clm[] = { 1.0, 0.0, 0.0, 0, 0.0, 1.0, 0.0, 0, 0.0, 1.0, 1.0, 0 };
   double crm[] = { 1.0, 0.0, 0.0, 2, 0.0, 1.0, 0.0, 4, 0.0, 1.0, 1.0, 6 };
 
-  vpgl_proj_camera<double>        Ctl = vnl_matrix_fixed<double, 3, 4>(clm), Ctr = vnl_matrix_fixed<double, 3, 4>(crm);
+  vpgl_proj_camera<double> Ctl = vnl_matrix_fixed<double, 3, 4>(clm), Ctr = vnl_matrix_fixed<double, 3, 4>(crm);
   vpgl_fundamental_matrix<double> fm3p(Ctr, Ctl);
-  vnl_double_3x3                  mideal = fm3p.get_matrix();
+  vnl_double_3x3 mideal = fm3p.get_matrix();
   std::cerr << "Two Point F Matrix Ideal:\n" << mideal; // DEBUG
   p1r.clear();
   p1l.clear();
@@ -74,11 +74,11 @@ test_fm_compute()
     p1r.push_back(Ctl.project(p1w[i]));
     p1l.push_back(Ctr.project(p1w[i]));
   }
-  vpgl_fm_compute_2_point         fc2(true);
+  vpgl_fm_compute_2_point fc2(true);
   vpgl_fundamental_matrix<double> f3lest;
   fc2.compute(p1r, p1l, f3lest);
   vnl_double_3x3 m3lin = f3lest.get_matrix();
-  double         sc = mideal[0][1] / m3lin[0][1];
+  double sc = mideal[0][1] / m3lin[0][1];
   m3lin *= sc;
   std::cerr << "Two Point F Matrix:\n" << m3lin; // DEBUG
   TEST_NEAR("fm two point linear from perfect correspondences", (mideal - m3lin).frobenius_norm(), 0, 1);

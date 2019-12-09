@@ -92,11 +92,11 @@ my_comparison(T a, T b, T tol)
 //: Test to see if all the pixels in two images are equal
 template <class T>
 bool
-test_image_equal(char const *                     type_name,
-                 vil_image_view<T> const &        image,
+test_image_equal(char const * type_name,
+                 vil_image_view<T> const & image,
                  vil_image_view_base_sptr const & pimage2,
-                 T                                tolerance = 0,
-                 unsigned                         max_bad_pixels = 0)
+                 T tolerance = 0,
+                 unsigned max_bad_pixels = 0)
 {
   vil_image_view<T> image2 = *pimage2;
 
@@ -311,12 +311,12 @@ create_grey_gif(const char * filename)
 
 template <class T>
 void
-vil_test_image_type(char const *              type_name, // type for image to read and write
-                    vil_image_view<T> const & image,     // test image to save and restore
-                    bool     test_cropped_image = true,  // set to false for non-"crop"-safe formats (viz. mit and viff)
-                    T        tolerance = 0,              // require read back image identical
-                    unsigned max_bad_pixels = 0,         // require read back image identical
-                    bool     fail_save = false)              // expect fail on save if true
+vil_test_image_type(char const * type_name,          // type for image to read and write
+                    vil_image_view<T> const & image, // test image to save and restore
+                    bool test_cropped_image = true,  // set to false for non-"crop"-safe formats (viz. mit and viff)
+                    T tolerance = 0,                 // require read back image identical
+                    unsigned max_bad_pixels = 0,     // require read back image identical
+                    bool fail_save = false)          // expect fail on save if true
 {
   int np = image.nplanes();
   std::cout << "=== Start testing " << type_name << " (" << sizeof(T) << " bpp, " << np << " plane"
@@ -367,7 +367,7 @@ vil_test_image_type(char const *              type_name, // type for image to re
   TEST("get_property(\"read-only\")", image3->get_property("read-only"), false);
   TEST("get_property(\"offset\")", image3->get_property("offset"), false);
   unsigned int qd = 0, depth = image2->pixel_format() == VIL_PIXEL_FORMAT_BOOL ? 1 : 8 * sizeof(T);
-  bool         qdr = image3->get_property("quantisation_depth", &qd);
+  bool qdr = image3->get_property("quantisation_depth", &qd);
   if (qdr)
     std::cout << "quantisation depth = " << qd << ", should be " << depth << '\n';
   else
@@ -568,8 +568,8 @@ static void
 test_vil_save_image_resource()
 {
   vil_image_view<vxl_byte> view = CreateTest8bitImage(251, 153);
-  vil_image_resource_sptr  mem = vil_new_image_resource_of_view(view);
-  const char *             out_path = "test_save_image_resource.pgm";
+  vil_image_resource_sptr mem = vil_new_image_resource_of_view(view);
+  const char * out_path = "test_save_image_resource.pgm";
   TEST("Saving image resource", vil_save_image_resource(mem, out_path), true);
   vil_image_view<vxl_byte> loaded_view = vil_load(out_path);
   TEST("Loaded correct image", vil_image_view_deep_equality(view, loaded_view), true);
@@ -583,8 +583,8 @@ static void
 test_vil_save_image_resource_wchar()
 {
   vil_image_view<vxl_byte> view = CreateTest8bitImage(251, 153);
-  vil_image_resource_sptr  mem = vil_new_image_resource_of_view(view);
-  const wchar_t *          out_path = L"wchar_test_save_image_resource.pgm";
+  vil_image_resource_sptr mem = vil_new_image_resource_of_view(view);
+  const wchar_t * out_path = L"wchar_test_save_image_resource.pgm";
   TEST("[wchar_t] Saving image resource", vil_save_image_resource(mem, out_path), true);
   vil_image_view<vxl_byte> loaded_view = vil_load(out_path);
   TEST("[wchar_t] Loaded correct image", vil_image_view_deep_equality(view, loaded_view), true);
@@ -599,20 +599,20 @@ static void
 test_save_load_image()
 {
   // create test images
-  int                         sizex = 253;
-  int                         sizey = 155;
-  vil_image_view<bool>        image1 = CreateTest1bitImage(sizex, sizey);
-  vil_image_view<vxl_byte>    image8 = CreateTest8bitImage(sizex, sizey);
+  int sizex = 253;
+  int sizey = 155;
+  vil_image_view<bool> image1 = CreateTest1bitImage(sizex, sizey);
+  vil_image_view<vxl_byte> image8 = CreateTest8bitImage(sizex, sizey);
   vil_image_view<vxl_uint_16> image16 = CreateTest16bitImage(sizex, sizey);
 #if 0 // read back pixel type will not match: ppm is always read in as 3-plane image
   vil_image_view<vil_rgb<vxl_byte> >  image24 = CreateTest24bitImage(sizex, sizey);
 #endif
   vil_image_view<vxl_uint_32> image32 = CreateTest32bitImage(sizex, sizey);
-  vil_image_view<vxl_byte>    image3p = CreateTest3planeImage(sizex, sizey);
-  vil_image_view<vxl_byte>    image3c = CreateTest3ComponentImage(sizex, sizey);
-  vil_image_view<vxl_byte>    image4p = CreateTest4planeImage(sizex, sizey);
-  vil_image_view<float>       imagefloat = CreateTestfloatImage(sizex, sizey);
-  vil_image_view<double>      imagedouble = CreateTestdoubleImage(sizex, sizey);
+  vil_image_view<vxl_byte> image3p = CreateTest3planeImage(sizex, sizey);
+  vil_image_view<vxl_byte> image3c = CreateTest3ComponentImage(sizex, sizey);
+  vil_image_view<vxl_byte> image4p = CreateTest4planeImage(sizex, sizey);
+  vil_image_view<float> imagefloat = CreateTestfloatImage(sizex, sizey);
+  vil_image_view<double> imagedouble = CreateTestdoubleImage(sizex, sizey);
 
 
   // PNG
@@ -720,7 +720,7 @@ test_save_load_image()
 
   // Test small image
   {
-    unsigned                 ni = 30, nj = 29;
+    unsigned ni = 30, nj = 29;
     vil_image_view<vxl_byte> small_greyscale_image(ni, nj);
     for (unsigned j = 0; j < nj; ++j)
       for (unsigned i = 0; i < ni; ++i)

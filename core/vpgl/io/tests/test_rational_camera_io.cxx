@@ -45,11 +45,11 @@ test_rational_camera_io()
   den_v[18] = 0.3;
   den_v[19] = 1.0;
   // Scale and offsets
-  double                       sx = 50.0, ox = 150.0;
-  double                       sy = 125.0, oy = 100.0;
-  double                       sz = 5.0, oz = 10.0;
-  double                       su = 1000.0, ou = 500;
-  double                       sv = 500.0, ov = 200;
+  double sx = 50.0, ox = 150.0;
+  double sy = 125.0, oy = 100.0;
+  double sz = 5.0, oz = 10.0;
+  double su = 1000.0, ou = 500;
+  double sv = 500.0, ov = 200;
   vpgl_rational_camera<double> rat_cam(neu_u, den_u, neu_v, den_v, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
 
   vsl_b_ofstream bp_out("test_rational_camera_io.tmp");
@@ -65,7 +65,7 @@ test_rational_camera_io()
   bp_in.close();
 
   std::vector<std::vector<double>> coefs = rat_cam_r.coefficients();
-  std::vector<double>              neu_u_r = coefs[vpgl_rational_camera<double>::NEU_U],
+  std::vector<double> neu_u_r = coefs[vpgl_rational_camera<double>::NEU_U],
                       den_u_r = coefs[vpgl_rational_camera<double>::DEN_U];
   std::vector<double> neu_v_r = coefs[vpgl_rational_camera<double>::NEU_V],
                       den_v_r = coefs[vpgl_rational_camera<double>::DEN_V];

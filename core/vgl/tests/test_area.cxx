@@ -6,7 +6,7 @@
 static void
 test_simple1()
 {
-  double              cont1[] = { 0, 0, 5, 0, 5, 3, 0, 3 };
+  double cont1[] = { 0, 0, 5, 0, 5, 3, 0, 3 };
   vgl_polygon<double> poly1(cont1, 4);
   TEST_NEAR("rectangle (ccw) signed", vgl_area_signed(poly1), 15, 1e-6);
   TEST_NEAR("rectangle (ccw) unsigned", vgl_area(poly1), 15, 1e-6);
@@ -18,7 +18,7 @@ test_simple1()
 static void
 test_simple2()
 {
-  float              cont1[] = { 0, 0, 0, 5, 4, 5, 4, 0 };
+  float cont1[] = { 0, 0, 0, 5, 4, 5, 4, 0 };
   vgl_polygon<float> poly1(cont1, 4);
   TEST_NEAR("rectangle (cw) signed", vgl_area_signed(poly1), -20, 1e-6);
   TEST_NEAR("rectangle (cw) unsigned", vgl_area(poly1), 20, 1e-6);
@@ -30,8 +30,8 @@ test_simple2()
 static void
 test_simple3()
 {
-  const double           x[4] = { 1.0, 20.0, 20.0, 1.0 };
-  const double           y[4] = { 1.0, 1.0, 20.0, 20.0 };
+  const double x[4] = { 1.0, 20.0, 20.0, 1.0 };
+  const double y[4] = { 1.0, 1.0, 20.0, 20.0 };
   constexpr unsigned int size = 4;
 
   vgl_polygon<double> poly;
@@ -49,8 +49,8 @@ test_simple3()
 static void
 test_holey()
 {
-  double              cont1[] = { 0, 0, 5, 0, 5, 5, 0, 5 };
-  double              cont2[] = { 1, 1, 1, 2, 2, 2, 2, 1 };
+  double cont1[] = { 0, 0, 5, 0, 5, 5, 0, 5 };
+  double cont2[] = { 1, 1, 1, 2, 2, 2, 2, 1 };
   vgl_polygon<double> poly(cont1, 4);
   poly.add_contour(cont2, 4);
   TEST_NEAR("rectangle with rectgular cutout signed", vgl_area_signed(poly), 24, 1e-6);

@@ -36,9 +36,9 @@ main(int argc, char ** argv)
   {
     std::cout << "Test elements from vgl." << std::endl;
 
-    vgl_point_2d<double>  p(3, 7);
+    vgl_point_2d<double> p(3, 7);
     vgl_vector_2d<double> v(1, 2);
-    vgl_point_2d<double>  q = p + v;
+    vgl_point_2d<double> q = p + v;
 
     // Use the following function as it is not templated (so must be in the library).
     vgl_point_3d<double> a1(0, 0, 0), a2(1, 0, 0), a3(0, 1, 0);

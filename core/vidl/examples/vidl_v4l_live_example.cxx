@@ -10,11 +10,11 @@
 int
 main()
 {
-  vidl_v4l_istream        test("/dev/video1");
+  vidl_v4l_istream test("/dev/video1");
   vidl_image_list_ostream test_out("./dump", "%05d", "ppm");
 
   vul_timer timer;
-  int       i = 10;
+  int i = 10;
   while (test.advance() && --i)
   {
     std::cout << "Grabbing: " << i << std::endl;

@@ -13,7 +13,7 @@
 static std::string
 date_and_time()
 {
-  std::time_t      clock;
+  std::time_t clock;
   struct std::tm * t_m;
   clock = std::time(nullptr);
   t_m = std::localtime(&clock);
@@ -289,7 +289,7 @@ bool
 vil_tiff_header::is_GEOTIFF() const
 {
   short * data;
-  short   count;
+  short count;
   return TIFFGetField(tif_, 34735 /*TIFFTAG_GEOKEYDIRECTORY*/, &count, &data) != 0;
 }
 #endif
@@ -727,12 +727,12 @@ vil_tiff_header::parse_pixel_format(vil_pixel_format const & fmt)
 // Setup the required header information in preparation for writing to
 // the tiff file header
 bool
-vil_tiff_header::set_header(unsigned                 ni,
-                            unsigned                 nj,
-                            unsigned                 nplns,
+vil_tiff_header::set_header(unsigned ni,
+                            unsigned nj,
+                            unsigned nplns,
                             vil_pixel_format const & fmt,
-                            const unsigned           size_block_i,
-                            const unsigned           size_block_j)
+                            const unsigned size_block_i,
+                            const unsigned size_block_j)
 {
   // also need machine endian
 #if VXL_BIG_ENDIAN
@@ -796,13 +796,13 @@ vil_tiff_header::set_header(unsigned                 ni,
 }
 
 // Constructor - writes the necessary header information to the open tiff file
-vil_tiff_header::vil_tiff_header(TIFF *                   tif,
-                                 const unsigned           ni,
-                                 const unsigned           nj,
-                                 const unsigned           nplanes,
+vil_tiff_header::vil_tiff_header(TIFF * tif,
+                                 const unsigned ni,
+                                 const unsigned nj,
+                                 const unsigned nplanes,
                                  vil_pixel_format const & fmt,
-                                 const unsigned           size_block_i,
-                                 const unsigned           size_block_j)
+                                 const unsigned size_block_i,
+                                 const unsigned size_block_j)
 {
   tif_ = tif;
 

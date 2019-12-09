@@ -39,8 +39,8 @@ main(int argc, char ** argv)
 
   vil1_image I = vil1_load(argv[1]);
   assert(I);
-  int      x0 = std::stoi(argv[2]);
-  int      y0 = std::stoi(argv[3]);
+  int x0 = std::stoi(argv[2]);
+  int y0 = std::stoi(argv[3]);
   unsigned w = std::stoi(argv[4]);
   unsigned h = std::stoi(argv[5]);
 

@@ -36,7 +36,7 @@ wx_docview_doc::wx_docview_doc(void)
   easy2D->add_infinite_line(1, 1, -100);
 
   vgui_viewer2D_tableau_new viewer(easy2D);
-  vgui_shell_tableau_new    shell(viewer);
+  vgui_shell_tableau_new shell(viewer);
   shell->set_enable_key_bindings(true);
   tableau_ = shell;
 }

@@ -12,7 +12,7 @@
 static std::vector<std::vector<double>>
 mul(std::vector<std::vector<double>> const & a, std::vector<std::vector<double>> const & b)
 {
-  size_t                           N = a.size();
+  size_t N = a.size();
   std::vector<std::vector<double>> out(N, std::vector<double>(N, 0.0));
   for (unsigned i = 0; i < N; ++i)
     for (unsigned j = 0; j < N; ++j)
@@ -98,10 +98,10 @@ test_quadric()
 
   std::vector<std::vector<double>> Q = elliptic_paraboloid.coef_matrix(), Qtrans;
   std::vector<std::vector<double>> T(4, std::vector<double>(4, 0.0));
-  double                           p = 0.785, q = 0.866;
-  double                           cp = cos(p), sp = sin(p);
-  double                           cq = cos(q), sq = sin(q);
-  double                           tx = 1.0, ty = 2.0, tz = 3.0;
+  double p = 0.785, q = 0.866;
+  double cp = cos(p), sp = sin(p);
+  double cq = cos(q), sq = sin(q);
+  double tx = 1.0, ty = 2.0, tz = 3.0;
   T[0][0] = cp;
   T[0][1] = -sp;
   T[0][3] = tx;
@@ -156,14 +156,14 @@ test_quadric()
   // a simple sphere case
   Qet = transform_quadric(Te, Qe);
   vgl_quadric_3d<double> tran_quad(Qet);
-  vgl_point_3d<double>   cent, true_cent(tx, ty, tz);
+  vgl_point_3d<double> cent, true_cent(tx, ty, tz);
   good = tran_quad.center(cent) && cent == true_cent;
   // full eccentric ellipsoid
   vgl_quadric_3d<double> eccentric_ellipsoid(0.5, 0.25, 0.125, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
   QeE = eccentric_ellipsoid.coef_matrix();
   QeET = transform_quadric(T, QeE);
   vgl_quadric_3d<double> tran_ecc_quad(QeET);
-  vgl_point_3d<double>   rot_cent;
+  vgl_point_3d<double> rot_cent;
   good = good && tran_ecc_quad.center(rot_cent);
   // to prove the center is correct, translate to move the center to the origin
   // and show that the translation dependent terms of the quadric vanish.
@@ -187,10 +187,10 @@ test_quadric()
   Tq[0][3] = 1.0;
   Tq[2][3] = 2.0;
   Tq[2][3] = 3.0;
-  vgl_quadric_3d<double>           tr_elliptic_para(Q, Tq);
+  vgl_quadric_3d<double> tr_elliptic_para(Q, Tq);
   std::vector<std::vector<double>> Hg;
   std::vector<std::vector<double>> Qg = tr_elliptic_para.canonical_quadric(Hg);
-  vgl_quadric_3d<double>           pqst_q(Qg);
+  vgl_quadric_3d<double> pqst_q(Qg);
   TEST("canonical frame ", pqst_q.type() == vgl_quadric_3d<double>::elliptic_paraboloid, true);
 }
 

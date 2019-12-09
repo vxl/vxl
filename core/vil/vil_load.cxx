@@ -49,7 +49,7 @@ vil_image_resource_sptr
 vil_load_image_resource_raw(char const * filename, bool verbose)
 {
   vil_smart_ptr<vil_stream> is = vil_open(filename, "r");
-  vil_image_resource_sptr   isp = nullptr;
+  vil_image_resource_sptr isp = nullptr;
   if (is)
   {
     try
@@ -85,8 +85,8 @@ vil_load_image_resource_plugin(char const * filename)
   vil_image_resource_plugin im_resource_plugin;
   if (im_resource_plugin.can_be_loaded(filename))
   {
-    vil_image_view_base *    img = new vil_image_view<vxl_byte>(640, 480, 3);
-    vil_image_resource_sptr  im;
+    vil_image_view_base * img = new vil_image_view<vxl_byte>(640, 480, 3);
+    vil_image_resource_sptr im;
     vil_image_view_base_sptr im_view(img);
     if (im_resource_plugin.load_the_image(im_view, filename))
     {
@@ -147,7 +147,7 @@ vil_image_resource_sptr
 vil_load_image_resource_raw(wchar_t const * filename, bool verbose)
 {
   vil_smart_ptr<vil_stream> is = vil_open(filename, "r");
-  vil_image_resource_sptr   isp = 0;
+  vil_image_resource_sptr isp = 0;
   if (is)
     isp = vil_load_image_resource_raw(is.as_pointer(), verbose);
   if (!isp && verbose)

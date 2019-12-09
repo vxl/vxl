@@ -275,12 +275,12 @@ convert_buffer(vil_image_view<InT> const & in, vgui_range_map_params_sptr const 
 //
 template <class InT>
 bool
-convert_image(vil_image_view<InT> const &        in,
+convert_image(vil_image_view<InT> const & in,
               vgui_range_map_params_sptr const & rmp,
-              void *                             out,
-              std::ptrdiff_t                     hstep,
-              GLenum                             format,
-              GLenum                             type)
+              void * out,
+              std::ptrdiff_t hstep,
+              GLenum format,
+              GLenum type)
 {
   bool result = false;
 
@@ -312,8 +312,8 @@ vgui_section_buffer::vgui_section_buffer(unsigned in_x,
                                          unsigned in_y,
                                          unsigned in_w,
                                          unsigned in_h,
-                                         GLenum   in_format,
-                                         GLenum   in_type)
+                                         GLenum in_format,
+                                         GLenum in_type)
   : format_(in_format)
   , type_(in_type)
   , x_(in_x)
@@ -398,7 +398,7 @@ vgui_section_buffer::apply(vil_image_resource_sptr const & image_in, vgui_range_
   case T:                                                                                                              \
   {                                                                                                                    \
     typedef vil_pixel_format_type_of<T>::type Type;                                                                    \
-    int                                       ni = image_in->ni(), nj = image_in->nj();                                \
+    int ni = image_in->ni(), nj = image_in->nj();                                                                      \
     if (w_ > (ni - x_))                                                                                                \
       w_ = (ni - x_);                                                                                                  \
     if (h_ > (nj - y_))                                                                                                \
@@ -409,7 +409,7 @@ vgui_section_buffer::apply(vil_image_resource_sptr const & image_in, vgui_range_
     break;                                                                                                             \
   }
 
-  bool             conversion_okay = false;
+  bool conversion_okay = false;
   vil_pixel_format component_format = vil_pixel_format_component_format(image_in->pixel_format());
 
   switch (component_format)

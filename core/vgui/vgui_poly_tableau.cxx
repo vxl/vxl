@@ -37,13 +37,13 @@
 #include "vgui/vgui_popup_params.h"
 
 //-----------------------------------------------------------------------------
-vgui_poly_tableau::item::item(vgui_tableau *            p,
+vgui_poly_tableau::item::item(vgui_tableau * p,
                               vgui_tableau_sptr const & c,
-                              float                     x_,
-                              float                     y_,
-                              float                     w_,
-                              float                     h_,
-                              int                       id_)
+                              float x_,
+                              float y_,
+                              float w_,
+                              float h_,
+                              int id_)
   : tab(p, c)
   , x(x_)
   , y(y_)
@@ -76,7 +76,7 @@ vgui_poly_tableau::item::inside(GLint const vp[4], int vx, int vy) const
 {
   float rx = float(vx - vp[0]) / vp[2];
   float ry = float(vy - vp[1]) / vp[3];
-  bool  ans = (x <= rx && rx < x + w) && (y <= ry && ry < y + h);
+  bool ans = (x <= rx && rx < x + w) && (y <= ry && ry < y + h);
 #ifdef DEBUG
   if (ans)
     std::cerr << "Point " << vx << ' ' << vy << " inside sub-window: " << id << '\n';

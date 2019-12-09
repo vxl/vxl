@@ -11,7 +11,7 @@ main(int /*argc*/, char ** /*argv*/)
 {
   vnl_sparse_matrix<double> A(10000, 1000);
 
-  std::vector<int>    cols(50);
+  std::vector<int> cols(50);
   std::vector<double> vals(50);
 
   for (int row_ = 0; row_ < 10000; ++row_)
@@ -38,8 +38,8 @@ main(int /*argc*/, char ** /*argv*/)
     b[i] += 0.01 * (((double)std::rand() / (double)RAND_MAX) - 0.5);
 
   vnl_sparse_matrix_linear_system<double> linear_system(A, b);
-  vnl_lsqr                                lsqr(linear_system);
-  vnl_vector<double>                      result(1000);
+  vnl_lsqr lsqr(linear_system);
+  vnl_vector<double> result(1000);
   lsqr.minimize(result);
   lsqr.diagnose_outcome(std::cerr);
 

@@ -28,8 +28,8 @@
 struct vgui_viewer3D_tableau_spin
 {
   vgui_viewer3D_tableau * viewer;
-  float                   delta_r[4];
-  double                  delay;
+  float delta_r[4];
+  double delay;
 };
 
 const void * const vgui_viewer3D_tableau::SPIN_EVENT = "x";
@@ -384,7 +384,7 @@ vgui_viewer3D_tableau::mouse_up(int x, int y, vgui_button button, vgui_modifier 
 
     double wscale = 2.0 / width;
     double hscale = 2.0 / height;
-    float  delta_r[4];
+    float delta_r[4];
     trackball(delta_r,
               static_cast<float>(wscale * beginx - 1),
               static_cast<float>(hscale * beginy - 1),

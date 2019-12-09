@@ -57,7 +57,7 @@ test_affine_rect()
   P2[2][0] = 1;
 
   vnl_matrix_fixed<double, 3, 3> FAM = FA.get_matrix();
-  vgl_homg_point_2d<double>      er, el;
+  vgl_homg_point_2d<double> er, el;
   FA.get_epipoles(er, el);
   std::cout << "er: " << er << " el: " << el << std::endl;
 
@@ -67,7 +67,7 @@ test_affine_rect()
 
   // test computation of rectification matrices
   std::vector<vnl_vector_fixed<double, 3>> img_p1, img_p2;
-  vnl_vector_fixed<double, 3>              p1;
+  vnl_vector_fixed<double, 3> p1;
   p1[0] = P1[0][0];
   p1[1] = P1[1][0];
   p1[2] = P1[2][0];

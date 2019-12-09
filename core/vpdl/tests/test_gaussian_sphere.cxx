@@ -17,7 +17,7 @@ test_gaussian_sphere_type(T epsilon, const std::string & type_name)
   {
     vpdl_gaussian_sphere<T, 3> gauss3;
     vpdl_gaussian_sphere<T, 1> gauss1;
-    vpdl_gaussian_sphere<T>    gauss_default, gauss(3), gauss_init(vnl_vector<T>(10, T(1)), T(3));
+    vpdl_gaussian_sphere<T> gauss_default, gauss(3), gauss_init(vnl_vector<T>(10, T(1)), T(3));
 
     TEST(("dimension <" + type_name + "> fixed").c_str(), gauss3.dimension(), 3);
     TEST(("dimension <" + type_name + "> scalar").c_str(), gauss1.dimension(), 1);
@@ -72,11 +72,11 @@ test_gaussian_sphere_type(T epsilon, const std::string & type_name)
   // test mean, covariance, square malanobis distance, probability density,
   // cumulative probability, box probability
   {
-    vnl_vector_fixed<T, 3>     mean(T(1.0), T(2.0), T(4.0));
-    T                          var = T(0.5);
+    vnl_vector_fixed<T, 3> mean(T(1.0), T(2.0), T(4.0));
+    T var = T(0.5);
     vpdl_gaussian_sphere<T, 3> gauss3(mean, var);
     vpdl_gaussian_sphere<T, 1> gauss1(mean[0], var);
-    vpdl_gaussian_sphere<T>    gauss(mean.as_ref(), var);
+    vpdl_gaussian_sphere<T> gauss(mean.as_ref(), var);
 
     // test direct access to data member
     TEST(("mean <" + type_name + "> fixed").c_str(), gauss3.mean(), mean);
@@ -89,7 +89,7 @@ test_gaussian_sphere_type(T epsilon, const std::string & type_name)
     // test virtual functions
     const vpdl_distribution<T, 3> & dist3 = gauss3;
     const vpdl_distribution<T, 1> & dist1 = gauss1;
-    const vpdl_distribution<T> &    dist = gauss;
+    const vpdl_distribution<T> & dist = gauss;
 
     vnl_matrix_fixed<T, 3, 3> Strue;
     Strue.fill(T(0)).fill_diagonal(var);
@@ -121,7 +121,7 @@ test_gaussian_sphere_type(T epsilon, const std::string & type_name)
 
     vnl_vector_fixed<T, 3> test_pt(T(1.5), T(3.0), T(3.0));
     vnl_vector_fixed<T, 3> d = mean - test_pt;
-    T                      sqr_mahal_dist = d[0] * d[0] / var + d[1] * d[1] / var + d[2] * d[2] / var;
+    T sqr_mahal_dist = d[0] * d[0] / var + d[1] * d[1] / var + d[2] * d[2] / var;
 
     // test mahalanobis distance calculations
     TEST(("mahalanobis dist <" + type_name + "> fixed").c_str(), gauss3.sqr_mahal_dist(test_pt), sqr_mahal_dist);
@@ -159,11 +159,11 @@ test_gaussian_sphere_type(T epsilon, const std::string & type_name)
 
     // test gradient virtual functions against numerical difference
     vnl_vector_fixed<T, 3> g3;
-    T                      dp = std::sqrt(epsilon);
-    T                      den = dist3.density(test_pt);
-    T                      den_x = dist3.density(test_pt + vnl_vector_fixed<T, 3>(dp, 0, 0));
-    T                      den_y = dist3.density(test_pt + vnl_vector_fixed<T, 3>(0, dp, 0));
-    T                      den_z = dist3.density(test_pt + vnl_vector_fixed<T, 3>(0, 0, dp));
+    T dp = std::sqrt(epsilon);
+    T den = dist3.density(test_pt);
+    T den_x = dist3.density(test_pt + vnl_vector_fixed<T, 3>(dp, 0, 0));
+    T den_y = dist3.density(test_pt + vnl_vector_fixed<T, 3>(0, dp, 0));
+    T den_z = dist3.density(test_pt + vnl_vector_fixed<T, 3>(0, 0, dp));
     vnl_vector_fixed<T, 3> grad(den_x - den, den_y - den, den_z - den);
     grad /= dp;
     T density = dist3.gradient_density(test_pt, g3);
@@ -229,9 +229,9 @@ test_gaussian_sphere_type(T epsilon, const std::string & type_name)
 
     // This is really a test of the base class box_prob function
     // An even dimension can have a create a sign error not seen in an odd one
-    vnl_vector_fixed<T, 2>          mean2(mean[0], mean[1]);
-    vpdl_gaussian_sphere<T, 2>      gauss2(mean2, var);
-    vnl_vector_fixed<T, 2>          test1_2(T(3), T(3)), test2_2(T(-1), T(1));
+    vnl_vector_fixed<T, 2> mean2(mean[0], mean[1]);
+    vpdl_gaussian_sphere<T, 2> gauss2(mean2, var);
+    vnl_vector_fixed<T, 2> test1_2(T(3), T(3)), test2_2(T(-1), T(1));
     typedef vpdl_distribution<T, 2> base2;
     TEST_NEAR(("box probability (base==derived) <" + type_name + "> even dim").c_str(),
               gauss2.base2::box_prob(test2_2, test1_2),

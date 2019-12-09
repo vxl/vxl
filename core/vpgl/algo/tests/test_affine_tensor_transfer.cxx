@@ -134,7 +134,7 @@ rat_cameras(vpgl_local_rational_camera<double> & cam0,
   ss0 << "39.7765084138" << std::endl;
   ss0 << "232.111831665" << std::endl;
 
-  std::istringstream                   istr(ss0.str());
+  std::istringstream istr(ss0.str());
   vpgl_local_rational_camera<double> * cam0_ptr = read_local_rational_camera<double>(istr);
 
   ss1 << " satId ="
@@ -248,7 +248,7 @@ rat_cameras(vpgl_local_rational_camera<double> & cam0,
   ss1 << "39.7765084138" << std::endl;
   ss1 << "232.111831665" << std::endl;
 
-  std::istringstream                   istr1(ss1.str());
+  std::istringstream istr1(ss1.str());
   vpgl_local_rational_camera<double> * cam1_ptr = read_local_rational_camera<double>(istr1);
 
   ss2 << " satId ="
@@ -362,7 +362,7 @@ rat_cameras(vpgl_local_rational_camera<double> & cam0,
   ss2 << "39.7765084138" << std::endl;
   ss2 << "232.111831665" << std::endl;
 
-  std::istringstream                   istr2(ss2.str());
+  std::istringstream istr2(ss2.str());
   vpgl_local_rational_camera<double> * cam2_ptr = read_local_rational_camera<double>(istr2);
   cam0 = *cam0_ptr;
   cam1 = *cam1_ptr;
@@ -375,22 +375,22 @@ test_affine_tensor_transfer()
   // affine cameras computed from actual rational cameras
   vpgl_local_rational_camera<double> rcam0, rcam1, rcam2;
   rat_cameras(rcam0, rcam1, rcam2);
-  size_t                                 ni_0 = 2592, nj_0 = 2913;
-  size_t                                 ni_1 = 2408, nj_1 = 2585;
-  size_t                                 ni_2 = 2295, nj_2 = 2710;
+  size_t ni_0 = 2592, nj_0 = 2913;
+  size_t ni_1 = 2408, nj_1 = 2585;
+  size_t ni_2 = 2295, nj_2 = 2710;
   std::vector<std::pair<size_t, size_t>> img_dims;
   img_dims.push_back(std::pair<size_t, size_t>(ni_0, nj_0));
   img_dims.push_back(std::pair<size_t, size_t>(ni_1, nj_1));
   img_dims.push_back(std::pair<size_t, size_t>(ni_2, nj_2));
   vpgl_affine_camera<double> acam0, acam1, acam2;
-  vgl_point_3d<double>       pmin(-100.0, -100.0, 0.0), pmax(1000.0, 1000.0, 100.0);
-  vgl_box_3d<double>         bb;
+  vgl_point_3d<double> pmin(-100.0, -100.0, 0.0), pmax(1000.0, 1000.0, 100.0);
+  vgl_box_3d<double> bb;
   bb.add(pmin);
   bb.add(pmax);
   size_t npoints = 1000;
-  bool   good0 = vpgl_affine_camera_convert::convert(rcam0, bb, acam0, npoints);
-  bool   good1 = vpgl_affine_camera_convert::convert(rcam1, bb, acam1, npoints);
-  bool   good2 = vpgl_affine_camera_convert::convert(rcam2, bb, acam2, npoints);
+  bool good0 = vpgl_affine_camera_convert::convert(rcam0, bb, acam0, npoints);
+  bool good1 = vpgl_affine_camera_convert::convert(rcam1, bb, acam1, npoints);
+  bool good2 = vpgl_affine_camera_convert::convert(rcam2, bb, acam2, npoints);
 
   vgl_point_3d<double> p3d(0.0, 0.0, 7.0);
   vgl_point_2d<double> p2d0 = acam0.project(p3d);
@@ -403,8 +403,8 @@ test_affine_tensor_transfer()
   std::cout << "Tensor\n" << aT;
   aT.compute();
   vpgl_affine_fundamental_matrix<double> aF12, aF13, vF12, vF13;
-  bool                                   good12 = aT.fmatrix_12(aF12);
-  bool                                   good13 = aT.fmatrix_13(aF13);
+  bool good12 = aT.fmatrix_12(aF12);
+  bool good13 = aT.fmatrix_13(aF13);
 
   TEST("fmatrix_12 success", good12, true);
   TEST("fmatrix_13 success", good13, true);
@@ -413,7 +413,7 @@ test_affine_tensor_transfer()
   vpgl_affine_rectification::compute_affine_f(&acam0, &acam2, vF13);
   vnl_matrix_fixed<double, 3, 3> vFm12 = vF12.get_matrix();
   vnl_matrix_fixed<double, 3, 3> vFm13 = vF13.get_matrix();
-  double                         vfrob_12 = vFm12.frobenius_norm(), vfrob_13 = vFm13.frobenius_norm();
+  double vfrob_12 = vFm12.frobenius_norm(), vfrob_13 = vFm13.frobenius_norm();
   vFm12 /= vfrob_12;
   vFm13 /= vfrob_13;
   vFm12 /= vFm12[2][2]; // consistent sign
@@ -423,8 +423,8 @@ test_affine_tensor_transfer()
   std::cout << "aF13\n" << aF13 << std::endl;
   std::cout << "vF13\n" << vFm13 << std::endl;
   vnl_matrix_fixed<double, 3, 3> aFm12 = aF12.get_matrix(), aFm13 = aF13.get_matrix();
-  double                         er12 = (vFm12 - aFm12 / aFm12[2][2]).frobenius_norm();
-  double                         er13 = (vFm13 - aFm13 / aFm13[2][2]).frobenius_norm();
+  double er12 = (vFm12 - aFm12 / aFm12[2][2]).frobenius_norm();
+  double er13 = (vFm13 - aFm13 / aFm13[2][2]).frobenius_norm();
   TEST_NEAR("Fundamental matrix from tensor", (er12 + er13) / 9.0, 0.0, 0.01);
   vgl_homg_point_2d<double> e12, e13;
   aT.get_epipoles(e12, e13);
@@ -434,12 +434,12 @@ test_affine_tensor_transfer()
   vF13.get_epipoles(ve13r, ve13l);
 
   vnl_matrix_fixed<double, 3, 3> F12m = aF12.get_matrix(), F13m = aF13.get_matrix();
-  vnl_svd<double>                svd2{ F12m.as_ref() };
-  vnl_vector_fixed<double, 3>    e12m = svd2.nullvector();
-  double                         r12 = e12m[0] / e12m[1];
-  vnl_svd<double>                svd3{ F13m.as_ref() };
-  vnl_vector_fixed<double, 3>    e13m = svd3.nullvector();
-  double                         r13 = e13m[0] / e13m[1];
+  vnl_svd<double> svd2{ F12m.as_ref() };
+  vnl_vector_fixed<double, 3> e12m = svd2.nullvector();
+  double r12 = e12m[0] / e12m[1];
+  vnl_svd<double> svd3{ F13m.as_ref() };
+  vnl_vector_fixed<double, 3> e13m = svd3.nullvector();
+  double r13 = e13m[0] / e13m[1];
 
   std::cout << "r12 " << r12 << " ve12 " << ve12r.x() / ve12r.y() << std::endl;
   std::cout << "r13 " << r13 << " ve13 " << ve13r.x() / ve13r.y() << std::endl;
@@ -464,18 +464,18 @@ test_affine_tensor_transfer()
   TEST_NEAR("Tri focal transfer", (er_p0 + er_p1 + er_p2) / 3.0, 0.0, 0.25);
   // shift hp0
   vnl_matrix_fixed<double, 3, 3> zero = aT.point_constraint_3x3(hp0, hp1, hp2);
-  double                         zero_scalar = aT.point_constraint(hp0, hp1, hp2);
+  double zero_scalar = aT.point_constraint(hp0, hp1, hp2);
   std::cout << "zero\n" << zero << std::endl;
   double ezero = (zero.frobenius_norm() / 9.0 + zero_scalar) / 2.0;
   TEST_NEAR("Tri focal 3x3 point constraint", ezero, 0.0, 1e-05);
   std::cout << "====3d point ==== " << p3d << std::endl;
   for (double del = -0.5; del < 0.5; del += 0.05)
   {
-    vgl_homg_point_2d<double>      hp0p(hp0.x() + del, hp0.y() + del);
-    vgl_homg_point_2d<double>      hp1p(hp1.x() + del, hp1.y() + del);
-    vgl_homg_point_2d<double>      hp2p(hp2.x() + del, hp2.y() + del);
+    vgl_homg_point_2d<double> hp0p(hp0.x() + del, hp0.y() + del);
+    vgl_homg_point_2d<double> hp1p(hp1.x() + del, hp1.y() + del);
+    vgl_homg_point_2d<double> hp2p(hp2.x() + del, hp2.y() + del);
     vnl_matrix_fixed<double, 3, 3> zerop = aT.point_constraint_3x3(hp0, hp1p, hp2);
-    double                         norm = 0.0;
+    double norm = 0.0;
     for (size_t r = 0; r < 3; ++r)
       for (size_t c = 0; c < 3; ++c)
         norm += fabs(zerop[r][c]);
@@ -497,7 +497,7 @@ test_affine_tensor_transfer()
   // epipolar constraints
   vnl_matrix_fixed<double, 1, 1> er_epicon_12 = mp1_t * F12m * mp0;
   vnl_matrix_fixed<double, 1, 1> er_epicon_13 = mp2_t * F13m * mp0;
-  double                         epi_er = er_epicon_12[0][0] + er_epicon_13[0][0];
+  double epi_er = er_epicon_12[0][0] + er_epicon_13[0][0];
   TEST_NEAR("epipolar constraint", epi_er / 2.0, 0.0, 0.005);
   vgl_homg_point_3d<double> hp3d_2(540.243, 78.4755, 53.832);
   vgl_homg_point_2d<double> hp0_2 = acam0.project(hp3d_2);
@@ -506,11 +506,11 @@ test_affine_tensor_transfer()
   std::cout << "======3d point====== " << hp3d_2 << std::endl;
   for (double del = -0.5; del < 0.5; del += 0.05)
   {
-    vgl_homg_point_2d<double>      hp0_2p(hp0_2.x() + del, hp0_2.y() + del);
-    vgl_homg_point_2d<double>      hp1_2p(hp1_2.x() + del, hp1_2.y() + del);
-    vgl_homg_point_2d<double>      hp2_2p(hp2_2.x() + del, hp2_2.y() + del);
+    vgl_homg_point_2d<double> hp0_2p(hp0_2.x() + del, hp0_2.y() + del);
+    vgl_homg_point_2d<double> hp1_2p(hp1_2.x() + del, hp1_2.y() + del);
+    vgl_homg_point_2d<double> hp2_2p(hp2_2.x() + del, hp2_2.y() + del);
     vnl_matrix_fixed<double, 3, 3> zerop = aT.point_constraint_3x3(hp0_2p, hp1_2, hp2_2);
-    double                         norm = 0.0;
+    double norm = 0.0;
     for (size_t r = 0; r < 2; ++r)
       for (size_t c = 0; c < 2; ++c)
         norm += fabs(zerop[r][c]);
@@ -532,10 +532,10 @@ test_affine_tensor_transfer()
   std::cout << "tr_p2 " << thp2_2.x() / thp2_2.w() << ' ' << thp2_2.y() / thp2_2.w() << " compared to "
             << hp2_2.x() / hp2_2.w() << ' ' << hp2_2.y() / hp2_2.w() << std::endl;
 
-  vgl_homg_point_3d<double>      hp3d_3(57.804, -60.4263, 24.1643);
-  vgl_homg_point_2d<double>      hp0_3 = acam0.project(hp3d_3);
-  vgl_homg_point_2d<double>      hp1_3 = acam1.project(hp3d_3);
-  vgl_homg_point_2d<double>      hp2_3 = acam2.project(hp3d_3);
+  vgl_homg_point_3d<double> hp3d_3(57.804, -60.4263, 24.1643);
+  vgl_homg_point_2d<double> hp0_3 = acam0.project(hp3d_3);
+  vgl_homg_point_2d<double> hp1_3 = acam1.project(hp3d_3);
+  vgl_homg_point_2d<double> hp2_3 = acam2.project(hp3d_3);
   vnl_matrix_fixed<double, 3, 3> zero_3 = aT.point_constraint_3x3(hp0_3, hp1_3, hp2_3);
   std::cout << "zero_3\n" << zero_3 << std::endl;
   vgl_homg_point_2d<double> thp0_3 = aT.image1_transfer(hp1_3, hp2_3);
@@ -551,11 +551,11 @@ test_affine_tensor_transfer()
   vgl_homg_line_2d<double> line3(hp2_2, hp2_3);
   line3.normalize();
   // test the resulting homography between images 1 and 2
-  vgl_h_matrix_2d<double>   H12 = aT.hmatrix_12(line3);
+  vgl_h_matrix_2d<double> H12 = aT.hmatrix_12(line3);
   vgl_homg_point_2d<double> hp1_gt(1801.64, 2515.54);
-  vgl_point_2d<double>      p2_gt(1674.99, 2180.48);
+  vgl_point_2d<double> p2_gt(1674.99, 2180.48);
   vgl_homg_point_2d<double> Hhp2 = H12 * hp1_gt;
-  vgl_point_2d<double>      Hep2(Hhp2);
+  vgl_point_2d<double> Hep2(Hhp2);
   std::cout << "Hep2 " << Hep2 << " compared to " << p2_gt << std::endl;
   double er_H12 = (Hep2 - p2_gt).length();
   TEST_NEAR("Homography from 1 to 2", er_H12, 0.0, 0.5);
@@ -564,10 +564,10 @@ test_affine_tensor_transfer()
   vgl_homg_line_2d<double> line2(hp1, hp1_2);
   line2.normalize();
   // test the resulting homography between images 1 and 2
-  vgl_h_matrix_2d<double>   H13 = aT.hmatrix_13(line2);
-  vgl_point_2d<double>      p3_gt(1603.97, 2249.03);
+  vgl_h_matrix_2d<double> H13 = aT.hmatrix_13(line2);
+  vgl_point_2d<double> p3_gt(1603.97, 2249.03);
   vgl_homg_point_2d<double> Hhp3 = H13 * hp1_gt;
-  vgl_point_2d<double>      Hep3(Hhp3);
+  vgl_point_2d<double> Hep3(Hhp3);
   std::cout << "Hep3 " << Hep3 << " compared to " << p3_gt << std::endl;
   double er_H13 = (Hep3 - p3_gt).length();
   TEST_NEAR("Homography from 1 to 3", er_H13, 0.0, 0.5);

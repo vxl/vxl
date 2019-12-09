@@ -40,8 +40,8 @@ vpgl_geo_camera::vpgl_geo_camera(vpgl_geo_camera const & rhs)
 
 bool
 vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const & geotiff_img,
-                                 const vpgl_lvcs_sptr &          lvcs,
-                                 vpgl_geo_camera *&              camera)
+                                 const vpgl_lvcs_sptr & lvcs,
+                                 vpgl_geo_camera *& camera)
 {
   // check if the image is tiff
   auto * geotiff_tiff = dynamic_cast<vil_tiff_image *>(geotiff_img.ptr());
@@ -66,7 +66,7 @@ vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const & geotiff_img,
     return false;
   }
 
-  int                              utm_zone;
+  int utm_zone;
   vil_geotiff_header::GTIF_HEMISPH h;
 
   std::vector<std::vector<double>> tiepoints;
@@ -75,9 +75,9 @@ vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const & geotiff_img,
   // create a transformation matrix
   // if there is a transformation matrix in GEOTIFF, use that
   vnl_matrix<double> trans_matrix;
-  double *           trans_matrix_values;
-  double             sx1, sy1, sz1;
-  bool               scale_tag = false;
+  double * trans_matrix_values;
+  double sx1, sy1, sz1;
+  bool scale_tag = false;
   if (gtif->gtif_trans_matrix(trans_matrix_values))
   {
     std::cout << "Transfer matrix is given, using that...." << std::endl;
@@ -121,11 +121,11 @@ vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const & geotiff_img,
 
 //: define a geo_camera by the image file name (filename should have format such as xxx_N35W73_S0.6x0.6_xxx.tif)
 bool
-vpgl_geo_camera::init_geo_camera(const std::string &    img_name,
-                                 unsigned               ni,
-                                 unsigned               nj,
+vpgl_geo_camera::init_geo_camera(const std::string & img_name,
+                                 unsigned ni,
+                                 unsigned nj,
                                  const vpgl_lvcs_sptr & lvcs,
-                                 vpgl_geo_camera *&     camera)
+                                 vpgl_geo_camera *& camera)
 {
   // determine the translation matrix from the image file name and construct a geo camera
   std::string name = vul_file::strip_directory(img_name);
@@ -137,7 +137,7 @@ vpgl_geo_camera::init_geo_camera(const std::string &    img_name,
 
   // determine the lat, lon, hemisphere (North or South) and direction (East or West)
   std::string hemisphere, direction;
-  float       lon, lat, scale_lat, scale_lon;
+  float lon, lat, scale_lat, scale_lon;
   std::size_t n = n_coords.find('N');
   if (n < n_coords.size())
     hemisphere = "N";
@@ -149,7 +149,7 @@ vpgl_geo_camera::init_geo_camera(const std::string &    img_name,
   else
     direction = "W";
 
-  std::string       n_str = n_coords.substr(n_coords.find_first_of(hemisphere) + 1,
+  std::string n_str = n_coords.substr(n_coords.find_first_of(hemisphere) + 1,
                                       n_coords.find_first_of(direction) - n_coords.find_first_of(hemisphere) - 1);
   std::stringstream str(n_str);
   str >> lat;
@@ -233,11 +233,11 @@ vpgl_geo_camera::init_geo_camera(const std::string &    img_name,
 // loads a geo_camera from the file and uses global WGS84 coordinates, so no need to convert negative values to
 // positives in the global_to_img method as in the previous method
 bool
-vpgl_geo_camera::init_geo_camera_from_filename(const std::string &    img_name,
-                                               unsigned               ni,
-                                               unsigned               nj,
+vpgl_geo_camera::init_geo_camera_from_filename(const std::string & img_name,
+                                               unsigned ni,
+                                               unsigned nj,
                                                const vpgl_lvcs_sptr & lvcs,
-                                               vpgl_geo_camera *&     camera)
+                                               vpgl_geo_camera *& camera)
 {
   // determine the translation matrix from the image file name and construct a geo camera
   std::string name = vul_file::strip_directory(img_name);
@@ -249,7 +249,7 @@ vpgl_geo_camera::init_geo_camera_from_filename(const std::string &    img_name,
 
   // determine the lat, lon, hemisphere (North or South) and direction (East or West)
   std::string hemisphere, direction;
-  float       lon, lat, scale;
+  float lon, lat, scale;
   std::size_t n = n_coords.find('N');
   if (n < n_coords.size())
     hemisphere = "N";
@@ -261,7 +261,7 @@ vpgl_geo_camera::init_geo_camera_from_filename(const std::string &    img_name,
   else
     direction = "W";
 
-  std::string       n_str = n_coords.substr(n_coords.find_first_of(hemisphere) + 1,
+  std::string n_str = n_coords.substr(n_coords.find_first_of(hemisphere) + 1,
                                       n_coords.find_first_of(direction) - n_coords.find_first_of(hemisphere) - 1);
   std::stringstream str(n_str);
   str >> lat;
@@ -301,11 +301,11 @@ vpgl_geo_camera::init_geo_camera_from_filename(const std::string &    img_name,
 
 //: init using a tfw file, reads the transformation matrix from the tfw
 bool
-vpgl_geo_camera::init_geo_camera(const std::string &    tfw_name,
+vpgl_geo_camera::init_geo_camera(const std::string & tfw_name,
                                  const vpgl_lvcs_sptr & lvcs,
-                                 int                    utm_zone,
-                                 unsigned               northing,
-                                 vpgl_geo_camera *&     camera)
+                                 int utm_zone,
+                                 unsigned northing,
+                                 vpgl_geo_camera *& camera)
 {
 
   std::ifstream ifs(tfw_name.c_str());
@@ -390,7 +390,7 @@ vpgl_geo_camera::lvcs_elev_origin()
   if (!lvcs_)
     return 0.0;
   double ox, oy, oz;
-  int    zone;
+  int zone;
   if (lvcs_->get_cs_name() == vpgl_lvcs::utm)
   {
     lvcs_->get_utm_origin(ox, oy, oz, zone);
@@ -519,8 +519,8 @@ vpgl_geo_camera::img_to_global(const double i, const double j, double & lon, dou
   if (is_utm_)
   {
     vpgl_utm utm;
-    double   elev = 0.0;
-    bool     south_flag = northing_ > 0;
+    double elev = 0.0;
+    bool south_flag = northing_ > 0;
     utm.transform(utm_zone_, v[0], v[1], v[2], lat, lon, elev, south_flag);
   }
   else
@@ -537,11 +537,11 @@ void
 vpgl_geo_camera::global_to_img(const double lon, const double lat, const double gz, double & u, double & v) const
 {
   vnl_vector<double> vec(4), res(4);
-  double             x1 = lon, y1 = lat, z1 = gz;
+  double x1 = lon, y1 = lat, z1 = gz;
   if (is_utm_)
   {
     vpgl_utm utm;
-    int      utm_zone;
+    int utm_zone;
     utm.transform(lat, lon, x1, y1, utm_zone);
     // std::cout << "utm returned x1: " << x1 << " y1: " << y1 << std::endl;
     // z1 = 0;
@@ -595,7 +595,7 @@ vpgl_geo_camera::img_to_global_utm(const double i, const double j, double & x, d
   else
   { // the trans matrix was using lat,lon coord, transform output to utm
     vpgl_utm utm;
-    int      dummy_zone;
+    int dummy_zone;
     utm.transform(v[0], v[1], x, y, dummy_zone);
   }
 }
@@ -615,7 +615,7 @@ vpgl_geo_camera::global_utm_to_img(const double x, const double y, int zone, dou
   else
   {
     vpgl_utm utm;
-    double   lat, lon, z;
+    double lat, lon, z;
     utm.transform(zone, x, y, elev, lat, lon, z);
     vec[0] = lat;
     vec[1] = lon;
@@ -684,7 +684,7 @@ vpgl_geo_camera::img_four_corners_in_utm(const unsigned ni,
   double lon, lat;
   this->img_to_global(0, 0, lon, lat);
   vpgl_utm utm;
-  int      utm_zone;
+  int utm_zone;
   utm.transform(lat, lon, e1, n1, utm_zone);
   this->img_to_global(ni, nj, lon, lat);
   utm.transform(lat, lon, e2, n2, utm_zone);
@@ -733,12 +733,12 @@ operator>>(std::istream & s, vpgl_geo_camera & p)
 }
 
 bool
-vpgl_geo_camera::comp_trans_matrix(double                           sx1,
-                                   double                           sy1,
-                                   double                           sz1,
+vpgl_geo_camera::comp_trans_matrix(double sx1,
+                                   double sy1,
+                                   double sz1,
                                    std::vector<std::vector<double>> tiepoints,
-                                   vnl_matrix<double> &             trans_matrix,
-                                   bool                             scale_tag)
+                                   vnl_matrix<double> & trans_matrix,
+                                   bool scale_tag)
 {
   // use tiepoints and scale values to create a transformation matrix
   // for now use the first tiepoint if there are more than one

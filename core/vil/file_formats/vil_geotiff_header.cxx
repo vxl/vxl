@@ -35,7 +35,7 @@ bool
 vil_geotiff_header::gtif_tiepoints(std::vector<std::vector<double>> & tiepoints)
 {
   double * points = nullptr;
-  short    count;
+  short count;
   if (TIFFGetField(tif_, GTIFF_TIEPOINTS, &count, &points) < 0)
     return false;
 
@@ -63,7 +63,7 @@ bool
 vil_geotiff_header::gtif_pixelscale(double & scale_x, double & scale_y, double & scale_z)
 {
   double * data;
-  short    count;
+  short count;
   if (TIFFGetField(tif_, GTIFF_PIXELSCALE, &count, &data))
   {
     assert(count == 3);
@@ -143,11 +143,11 @@ vil_geotiff_header::PCS_WGS84_UTM_zone(int & zone, GTIF_HEMISPH & hemisph) // he
   modeltype_t type;
   if (gtif_modeltype(type) && type == ModelTypeProjected)
   {
-    void *    value;
-    int       size;
-    int       length;
+    void * value;
+    int size;
+    int length;
     tagtype_t ttype;
-    bool      status = get_key_value(ProjectedCSTypeGeoKey, &value, size, length, ttype);
+    bool status = get_key_value(ProjectedCSTypeGeoKey, &value, size, length, ttype);
     if (!status)
     {
       std::cerr << "Missing ProjectedCSTypeGeoKey (" << ProjectedCSTypeGeoKey << ") key!\n";
@@ -200,12 +200,12 @@ vil_geotiff_header::GCS_WGS84_MET_DEG()
   modeltype_t type;
   if (gtif_modeltype(type) && type == ModelTypeGeographic)
   {
-    void *    value;
-    int       size;
-    int       length;
+    void * value;
+    int size;
+    int length;
     tagtype_t ttype;
-    bool      status;
-    short *   val;
+    bool status;
+    short * val;
 
     // confirm linear units (optional) are in meters
     status = get_key_value(GeogLinearUnitsGeoKey, &value, size, length, ttype);
@@ -257,11 +257,11 @@ vil_geotiff_header::PCS_NAD83_UTM_zone(int & zone, GTIF_HEMISPH & hemisph)
   modeltype_t type;
   if (gtif_modeltype(type) && type == ModelTypeProjected)
   {
-    void *    value;
-    int       size;
-    int       length;
+    void * value;
+    int size;
+    int length;
     tagtype_t ttype;
-    bool      status = get_key_value(ProjectedCSTypeGeoKey, &value, size, length, ttype);
+    bool status = get_key_value(ProjectedCSTypeGeoKey, &value, size, length, ttype);
     if (!status)
     {
       std::cerr << "Missing ProjectedCSTypeGeoKey (" << ProjectedCSTypeGeoKey << ") key!\n";

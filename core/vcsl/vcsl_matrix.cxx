@@ -112,9 +112,9 @@ vcsl_matrix::param_to_matrix(const vcsl_matrix_param_sptr & from, bool type) con
   T(2, 3) = -coef * from->zl;
   std::cout << "Translation:\n" << T;
   // Rotation matrix (Extrinsic parameters)
-  double             co = std::cos(coef * from->omega), so = std::sin(coef * from->omega);
-  double             cp = std::cos(coef * from->phi), sp = std::sin(coef * from->phi);
-  double             ck = std::cos(coef * from->kappa), sk = std::sin(coef * from->kappa);
+  double co = std::cos(coef * from->omega), so = std::sin(coef * from->omega);
+  double cp = std::cos(coef * from->phi), sp = std::sin(coef * from->phi);
+  double ck = std::cos(coef * from->kappa), sk = std::sin(coef * from->kappa);
   vnl_matrix<double> R(4, 4, 0.0);
   R(0, 0) = cp * ck;
   R(0, 1) = so * sp * ck + co * sk;

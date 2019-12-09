@@ -30,7 +30,7 @@ test_poly_radial_distortion()
 {
   test_poly_radial_distortion_constructors();
 
-  double                                 k[3] = { 0.5, 2.0, 3.0 };
+  double k[3] = { 0.5, 2.0, 3.0 };
   vpgl_poly_radial_distortion<double, 3> rd(vgl_point_2d<double>(100.0, 100.0), k);
   TEST("distort r=0", rd.distort_radius(0), 1);
   double r1 = rd.distort_radius(1) * 1;

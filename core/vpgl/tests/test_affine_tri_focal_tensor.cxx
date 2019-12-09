@@ -31,36 +31,36 @@ test_affine_tri_focal_tensor()
 {
   vpgl_affine_camera<double> c1; // identity camera
 
-  double                     temp = 1.0 / sqrt(2.0);
-  vgl_point_3d<double>       sp(1.0, 1.0, 2.0);
-  vgl_vector_3d<double>      ray2(-temp, 0.0, temp), ray3(0.0, -temp, temp);
-  vgl_vector_3d<double>      up23(0.0, -1.0, 0.0);
-  double                     u2 = -1.0, v2 = 1.0, u3 = 1.0, v3 = -1.0, su = 1.0, sv = 1.0;
-  vgl_homg_point_2d<double>  x1(1, 1), x2(-1, 1), x3(1, -1);
+  double temp = 1.0 / sqrt(2.0);
+  vgl_point_3d<double> sp(1.0, 1.0, 2.0);
+  vgl_vector_3d<double> ray2(-temp, 0.0, temp), ray3(0.0, -temp, temp);
+  vgl_vector_3d<double> up23(0.0, -1.0, 0.0);
+  double u2 = -1.0, v2 = 1.0, u3 = 1.0, v3 = -1.0, su = 1.0, sv = 1.0;
+  vgl_homg_point_2d<double> x1(1, 1), x2(-1, 1), x3(1, -1);
   vpgl_affine_camera<double> c2(ray2, up23, sp, u2, v2, su, sv);
   vpgl_affine_camera<double> c3(ray3, up23, sp, u3, v3, su, sv);
   std::cout << "c1\n" << c1 << std::endl;
   std::cout << "c2\n" << c2 << std::endl;
   std::cout << "c3\n" << c3 << std::endl;
   vpgl_affine_tri_focal_tensor<double> aT(c1, c2, c3);
-  bool                                 good = aT.compute();
+  bool good = aT.compute();
   std::cout << aT << std::endl;
   vpgl_affine_fundamental_matrix<double> aF12, aF13, aF23;
-  bool                                   goodf = aT.fmatrix_12(aF12) && aT.fmatrix_13(aF13) && aT.fmatrix_23(aF23);
+  bool goodf = aT.fmatrix_12(aF12) && aT.fmatrix_13(aF13) && aT.fmatrix_23(aF23);
   std::cout << "aF12 \n" << aF12 << std::endl;
   std::cout << "aF13 \n" << aF13 << std::endl;
   std::cout << "aF23 \n" << aF23 << std::endl;
   vnl_matrix_fixed<double, 3, 3> m12 = aF12.get_matrix();
-  double                         f12_ratio = m12[1][2] / m12[2][1];
-  double                         er = (f12_ratio + 1.0);
+  double f12_ratio = m12[1][2] / m12[2][1];
+  double er = (f12_ratio + 1.0);
   vnl_matrix_fixed<double, 3, 3> m13 = aF13.get_matrix();
-  double                         f13_ratio = m13[0][2] / m13[2][0];
+  double f13_ratio = m13[0][2] / m13[2][0];
   er += (f13_ratio + 1);
   vnl_matrix_fixed<double, 3, 3> m23 = aF23.get_matrix(); // delay test of f23
 
   TEST_NEAR("Affine fundamental matrices", er, 0.0, 0.001);
   vpgl_affine_camera<double> ac1, ac2, ac3;
-  bool                       goodc = aT.affine_camera_1(ac1) && aT.affine_camera_2(ac2) && aT.affine_camera_3(ac3);
+  bool goodc = aT.affine_camera_1(ac1) && aT.affine_camera_2(ac2) && aT.affine_camera_3(ac3);
   std::cout << "ac1 \n" << ac1 << std::endl;
   std::cout << "ac2 \n" << ac2 << std::endl;
   std::cout << "ac3 \n" << ac3 << std::endl;
@@ -83,8 +83,8 @@ test_affine_tri_focal_tensor()
   TEST_NEAR("perfect tri point match", fbz, 0.0, 0.000001);
 
   // move x2
-  double                         d = 1.5;
-  vgl_homg_point_2d<double>      x2p((x2.x() / x2.w()) + d, (x2.y() / x2.w()) + d);
+  double d = 1.5;
+  vgl_homg_point_2d<double> x2p((x2.x() / x2.w()) + d, (x2.y() / x2.w()) + d);
   vnl_matrix_fixed<double, 3, 3> zero_3x3_p = aT.point_constraint_3x3(x1, x2p, x3);
   std::cout << "zero 3x3_p\n" << zero_3x3_p << std::endl;
   double fbp = zero_3x3_p.frobenius_norm();
@@ -96,11 +96,11 @@ test_affine_tri_focal_tensor()
   double scalar_zero_p = aT.point_constraint(x1, x2p, x3);
   std::cout << "perturbed scalar zero = " << scalar_zero_p << std::endl;
   TEST("perturbed scalar tri point match", fabs(scalar_zero_p) > 0.0, true);
-  vgl_point_3d<double>        p3d2(2.0, 2.0, 2.0);
-  vgl_homg_point_2d<double>   pc1 = c1.project(p3d2);
-  vgl_homg_point_2d<double>   pc2 = c2.project(p3d2);
-  vgl_homg_point_2d<double>   pc3 = c3.project(p3d2);
-  vgl_homg_line_2d<double>    lc1(x1, pc1), lc2(x2, pc2), lc3(x3, pc3);
+  vgl_point_3d<double> p3d2(2.0, 2.0, 2.0);
+  vgl_homg_point_2d<double> pc1 = c1.project(p3d2);
+  vgl_homg_point_2d<double> pc2 = c2.project(p3d2);
+  vgl_homg_point_2d<double> pc3 = c3.project(p3d2);
+  vgl_homg_line_2d<double> lc1(x1, pc1), lc2(x2, pc2), lc3(x3, pc3);
   vnl_vector_fixed<double, 3> lc_3 = aT.line_constraint_3(lc1, lc2, lc3);
   std::cout << "line constraint 3 " << lc_3 << std::endl;
   double er_lc = lc_3.magnitude();

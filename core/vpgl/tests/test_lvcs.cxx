@@ -24,12 +24,12 @@ test_lvcs()
   lat3 = 38.982859;
   lon3 = -117.057278;
   vpgl_utm u;
-  double   x1, y1;
-  int      zone1;
-  double   x2, y2;
-  int      zone2;
-  double   x3, y3;
-  int      zone3;
+  double x1, y1;
+  int zone1;
+  double x2, y2;
+  int zone2;
+  double x3, y3;
+  int zone3;
   u.transform(lat1, lon1, x1, y1, zone1);
   TEST("wgs84 to utm, pt1 zone", zone1, 11);
   TEST_NEAR("wgs84 to utm, pt1 x", x1, 237346.15, 1);

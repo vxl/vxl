@@ -32,7 +32,7 @@ test_ortho_procrustes()
   vnl_vector_fixed<double, 3> rv, trans;
   for (unsigned i = 0; i < 3; ++i)
     rv[i] = 0.9068996774314604; // axis along diagonal, rotation of 90 degrees
-  vgl_rotation_3d<double>        rr(rv);
+  vgl_rotation_3d<double> rr(rv);
   vnl_matrix_fixed<double, 3, 3> rrr = rr.as_matrix();
   trans[0] = 10.0;
   trans[1] = 20.0;
@@ -52,11 +52,11 @@ test_ortho_procrustes()
     for (unsigned r = 0; r < 3; ++r)
       X[r][c] = trans_v[r];
   }
-  vpgl_ortho_procrustes   op(X, Y);
+  vpgl_ortho_procrustes op(X, Y);
   vgl_rotation_3d<double> R = op.R();
-  double                  s = op.s();
-  double                  error = op.residual_mean_sq_error();
-  bool                    ok = op.compute_ok();
+  double s = op.s();
+  double error = op.residual_mean_sq_error();
+  bool ok = op.compute_ok();
   if (ok)
     std::cout << "Compute succeeded \n";
   else
@@ -83,10 +83,10 @@ test_ortho_procrustes()
   Y[0][4] = 1.01;
   Y[1][4] = 1.03;
   Y[2][4] = 0.96;
-  vpgl_ortho_procrustes   op1(X, Y);
+  vpgl_ortho_procrustes op1(X, Y);
   vgl_rotation_3d<double> R1 = op1.R();
-  double                  s1 = op1.s();
-  double                  error1 = op1.residual_mean_sq_error();
+  double s1 = op1.s();
+  double error1 = op1.residual_mean_sq_error();
   ok = op.compute_ok();
   if (ok)
     std::cout << "Compute with error succeeded \n";

@@ -86,8 +86,8 @@ bool
 vnl_sparse_lm::minimize(vnl_vector<double> & a,
                         vnl_vector<double> & b,
                         vnl_vector<double> & c,
-                        bool                 use_gradient,
-                        bool                 use_weights)
+                        bool use_gradient,
+                        bool use_weights)
 {
   // verify that the vectors are of the correct size
   if (!check_vector_sizes(a, b, c))
@@ -177,8 +177,8 @@ vnl_sparse_lm::minimize(vnl_vector<double> & a,
 
         // this large inverse is the bottle neck of this algorithm
         vnl_matrix<double> H;
-        vnl_cholesky       Sa_cholesky(Sa, vnl_cholesky::quiet);
-        vnl_svd<double> *  Sa_svd = nullptr;
+        vnl_cholesky Sa_cholesky(Sa, vnl_cholesky::quiet);
+        vnl_svd<double> * Sa_svd = nullptr;
         // use SVD as a backup if Cholesky is deficient
         if (Sa_cholesky.rank_deficiency() > 0)
         {
@@ -428,7 +428,7 @@ vnl_sparse_lm::compute_normal_equations()
     Ui.fill(0.0);
     vnl_matrix<double> & Qi = Q_[i];
     Qi.fill(0.0);
-    unsigned int           ai_size = f_->number_of_params_a(i);
+    unsigned int ai_size = f_->number_of_params_a(i);
     vnl_vector_ref<double> eai(ai_size, ea_.data_block() + f_->index_a(i));
 
     vnl_crs_index::sparse_vector row = crs.sparse_row(i);
@@ -437,11 +437,11 @@ vnl_sparse_lm::compute_normal_equations()
       unsigned int j = r_itr.second;
       unsigned int k = r_itr.first;
       ;
-      vnl_matrix<double> &   Aij = A_[k];
-      vnl_matrix<double> &   Bij = B_[k];
-      vnl_matrix<double> &   Cij = C_[k];
-      vnl_matrix<double> &   Vj = V_[j];
-      vnl_matrix<double> &   Rj = R_[j];
+      vnl_matrix<double> & Aij = A_[k];
+      vnl_matrix<double> & Bij = B_[k];
+      vnl_matrix<double> & Cij = C_[k];
+      vnl_matrix<double> & Vj = V_[j];
+      vnl_matrix<double> & Rj = R_[j];
       vnl_vector_ref<double> ebj(Bij.cols(), eb_.data_block() + f_->index_b(j));
 
       vnl_fastops::inc_X_by_AtA(T_, Cij);      // T = C^T * C
@@ -466,7 +466,7 @@ vnl_sparse_lm::extract_diagonal() const
 {
   // Extract the diagonal of J^T*J as a vector
   vnl_vector<double> diag_UVT(size_a_ + size_b_ + size_c_);
-  int                z = 0;
+  int z = 0;
   for (int i = 0; i < num_a_; ++i)
   {
     const vnl_matrix<double> & Ui = U_[i];
@@ -518,7 +518,7 @@ vnl_sparse_lm::compute_invV_Y()
   for (int j = 0; j < num_b_; ++j)
   {
     vnl_matrix<double> & inv_Vj = inv_V_[j];
-    vnl_cholesky         Vj_cholesky(V_[j], vnl_cholesky::quiet);
+    vnl_cholesky Vj_cholesky(V_[j], vnl_cholesky::quiet);
     // use SVD as a backup if Cholesky is deficient
     if (Vj_cholesky.rank_deficiency() > 0)
     {
@@ -550,7 +550,7 @@ vnl_sparse_lm::compute_Z_Sa(vnl_matrix<double> & Sa)
   for (int i = 0; i < num_a_; ++i)
   {
     vnl_crs_index::sparse_vector row_i = crs.sparse_row(i);
-    vnl_matrix<double> &         Zi = Z_[i];
+    vnl_matrix<double> & Zi = Z_[i];
     Zi.fill(0.0);
     Zi -= Q_[i];
 
@@ -558,8 +558,8 @@ vnl_sparse_lm::compute_Z_Sa(vnl_matrix<double> & Sa)
     vnl_matrix<double> Sii(U_[i]); // copy Ui to initialize Sii
     for (auto & ri : row_i)
     {
-      unsigned int         j = ri.second;
-      unsigned int         k = ri.first;
+      unsigned int j = ri.second;
+      unsigned int k = ri.first;
       vnl_matrix<double> & Yij = Y_[k];
       vnl_fastops::dec_X_by_ABt(Sii, Yij, W_[k]); // S_ii -= Y_ij * W_ij^T
       vnl_fastops::inc_X_by_ABt(Zi, R_[j], Yij);  // Z_i  += R_j * Y_ij^T
@@ -570,7 +570,7 @@ vnl_sparse_lm::compute_Z_Sa(vnl_matrix<double> & Sa)
     for (int h = i + 1; h < num_a_; ++h)
     {
       vnl_crs_index::sparse_vector row_h = crs.sparse_row(h);
-      vnl_matrix<double>           Sih(f_->number_of_params_a(i), f_->number_of_params_a(h), 0.0);
+      vnl_matrix<double> Sih(f_->number_of_params_a(i), f_->number_of_params_a(h), 0.0);
 
       // iterate through both sparse rows finding matching columns
       bool row_done = false;
@@ -697,15 +697,15 @@ vnl_sparse_lm::compute_sea(vnl_vector<double> const & dc, vnl_vector<double> & s
   sea = ea_; // initialize se to ea_
   for (int i = 0; i < num_a_; ++i)
   {
-    vnl_vector_ref<double>       sei(f_->number_of_params_a(i), sea.data_block() + f_->index_a(i));
+    vnl_vector_ref<double> sei(f_->number_of_params_a(i), sea.data_block() + f_->index_a(i));
     vnl_crs_index::sparse_vector row_i = crs.sparse_row(i);
 
     vnl_fastops::inc_X_by_AtB(sei, Z_[i], dc);
 
     for (auto & ri : row_i)
     {
-      unsigned int           k = ri.first;
-      vnl_matrix<double> &   Yij = Y_[k];
+      unsigned int k = ri.first;
+      vnl_matrix<double> & Yij = Y_[k];
       vnl_vector_ref<double> ebj(Yij.cols(), eb_.data_block() + f_->index_b(ri.second));
       sei -= Yij * ebj; // se_i -= Y_ij * e_b_j
     }
@@ -724,14 +724,14 @@ vnl_sparse_lm::compute_Sa_sea(vnl_matrix<double> & Sa, vnl_vector<double> & sea)
   sea = ea_; // initialize se to ea_
   for (int i = 0; i < num_a_; ++i)
   {
-    vnl_vector_ref<double>       sei(f_->number_of_params_a(i), sea.data_block() + f_->index_a(i));
+    vnl_vector_ref<double> sei(f_->number_of_params_a(i), sea.data_block() + f_->index_a(i));
     vnl_crs_index::sparse_vector row_i = crs.sparse_row(i);
 
     // handle the diagonal blocks and computation of se separately
     vnl_matrix<double> Sii(U_[i]); // copy Ui to initialize Sii
     for (auto & ri : row_i)
     {
-      unsigned int         k = ri.first;
+      unsigned int k = ri.first;
       vnl_matrix<double> & Yij = Y_[k];
       vnl_fastops::dec_X_by_ABt(Sii, Yij, W_[k]); // S_ii -= Y_ij * W_ij^T
       vnl_vector_ref<double> ebj(Yij.cols(), eb_.data_block() + f_->index_b(ri.second));
@@ -743,7 +743,7 @@ vnl_sparse_lm::compute_Sa_sea(vnl_matrix<double> & Sa, vnl_vector<double> & sea)
     for (int h = i + 1; h < num_a_; ++h)
     {
       vnl_crs_index::sparse_vector row_h = crs.sparse_row(h);
-      vnl_matrix<double>           Sih(f_->number_of_params_a(i), f_->number_of_params_a(h), 0.0);
+      vnl_matrix<double> Sih(f_->number_of_params_a(i), f_->number_of_params_a(h), 0.0);
 
       // iterate through both sparse rows finding matching columns
       bool row_done = false;
@@ -779,7 +779,7 @@ vnl_sparse_lm::backsolve_db(vnl_vector<double> const & da, vnl_vector<double> co
 
   for (int j = 0; j < num_b_; ++j)
   {
-    vnl_vector<double>           seb(eb_.data_block() + f_->index_b(j), f_->number_of_params_b(j));
+    vnl_vector<double> seb(eb_.data_block() + f_->index_b(j), f_->number_of_params_b(j));
     vnl_crs_index::sparse_vector col = crs.sparse_col(j);
     if (size_c_ > 0)
     {
@@ -787,8 +787,8 @@ vnl_sparse_lm::backsolve_db(vnl_vector<double> const & da, vnl_vector<double> co
     }
     for (auto & c_itr : col)
     {
-      unsigned int                 k = c_itr.first;
-      unsigned int                 i = c_itr.second;
+      unsigned int k = c_itr.first;
+      unsigned int i = c_itr.second;
       const vnl_vector_ref<double> dai(f_->number_of_params_a(i),
                                        const_cast<double *>(da.data_block() + f_->index_a(i)));
       vnl_fastops::dec_X_by_AtB(seb, W_[k], dai);

@@ -95,7 +95,7 @@ test_holey_polygon()
   p.print(os);
   // read the poly
   os.close();
-  std::ifstream       is("./temp");
+  std::ifstream is("./temp");
   vgl_polygon<double> pr;
   is >> pr;
   pr.print(std::cout);
@@ -107,7 +107,7 @@ test_self_intersection()
 {
   std::cout << "compute polygon self intersections\n";
   std::vector<std::pair<unsigned, unsigned>> e1, e2;
-  std::vector<vgl_point_2d<double>>          ip;
+  std::vector<vgl_point_2d<double>> ip;
 
   {
     vgl_polygon<double> p;
@@ -176,8 +176,8 @@ test_self_intersection()
 
     // the correct solutions, but order may be incorrect
     typedef std::pair<unsigned, unsigned> upair;
-    std::vector<upair>                    e1s(5), e2s(5);
-    std::vector<vgl_point_2d<double>>     ips(5);
+    std::vector<upair> e1s(5), e2s(5);
+    std::vector<vgl_point_2d<double>> ips(5);
     e1s[0] = upair(0, 0);
     e2s[0] = upair(0, 2);
     ips[0] = vgl_point_2d<double>(.5, .5);
@@ -233,8 +233,8 @@ test_self_intersection()
 
     // the correct solutions, but order may be incorrect
     typedef std::pair<unsigned, unsigned> upair;
-    std::vector<upair>                    e1s(12), e2s(12);
-    std::vector<vgl_point_2d<double>>     ips(12);
+    std::vector<upair> e1s(12), e2s(12);
+    std::vector<vgl_point_2d<double>> ips(12);
     e1s[0] = upair(0, 0);
     e2s[0] = upair(0, 3);
     ips[0] = vgl_point_2d<double>(0, 1);

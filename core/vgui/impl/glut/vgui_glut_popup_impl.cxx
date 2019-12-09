@@ -149,9 +149,9 @@ vgui_glut_popup_impl::command_func(int value)
     std::cerr << "[that's a separator]\n";
   else
   {
-    int                 win = glutGetWindow();
+    int win = glutGetWindow();
     vgui_glut_adaptor * a = vgui_glut_adaptor::get_adaptor(win);
-    vgui_command *      c = reinterpret_cast<vgui_command *>(value);
+    vgui_command * c = reinterpret_cast<vgui_command *>(value);
     vgui_glut_impl_queue_command(a, c);
   }
 }

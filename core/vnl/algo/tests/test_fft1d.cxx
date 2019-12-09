@@ -43,12 +43,12 @@ test_fft_1d(int n)
 
   // create a number of arrays for testing the transform
   //====================================================
-  vnl_vector<std::complex<double>>  fTestArrayConvert(n);
-  vnl_vector<std::complex<double>>  fTestArrayFwd(n);
+  vnl_vector<std::complex<double>> fTestArrayConvert(n);
+  vnl_vector<std::complex<double>> fTestArrayFwd(n);
   std::vector<std::complex<double>> fTestVecConvert(n);
   std::vector<std::complex<double>> fTestVecFwd(n);
-  auto *                            fTestPtrConvert = new std::complex<double>[n];
-  auto *                            fTestPtrFwd = new std::complex<double>[n];
+  auto * fTestPtrConvert = new std::complex<double>[n];
+  auto * fTestPtrFwd = new std::complex<double>[n];
 
   // fill with data
   for (int iC = 0; iC < n; iC++)

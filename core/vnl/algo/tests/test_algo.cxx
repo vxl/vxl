@@ -44,7 +44,7 @@
 static void
 test_adjugate()
 {
-  int             data[] = { 1, -1, 1, -1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, -1, 1 };
+  int data[] = { 1, -1, 1, -1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, -1, 1 };
   vnl_matrix<int> m(data, 4, 4);
   vnl_matrix<int> m_adj = vnl_adjugate(m);
   vnl_matrix<int> identity(4, 4);
@@ -55,12 +55,12 @@ test_adjugate()
 static void
 test_matrix_inverse()
 {
-  double                  data[] = { 1., -1., 1., -1., 1., 1., -1., -1., 1., 1., 1., 1., 1., -1., -1., 1. };
-  vnl_matrix<double>      m(data, 4, 4);
+  double data[] = { 1., -1., 1., -1., 1., 1., -1., -1., 1., 1., 1., 1., 1., -1., -1., 1. };
+  vnl_matrix<double> m(data, 4, 4);
   vnl_svd_economy<double> svde(m);
-  vnl_matrix<double>      V = svde.V();
-  vnl_svd<double>         svd(m);
-  vnl_matrix<double>      V0 = svd.V();
+  vnl_matrix<double> V = svde.V();
+  vnl_svd<double> svd(m);
+  vnl_matrix<double> V0 = svd.V();
   TEST_NEAR("vnl_svd_economy", V[0][1], V0[0][1], 1e-6);
 
   vnl_matrix<double> inv{ vnl_matrix_inverse<double>(m).as_matrix() };
@@ -143,17 +143,17 @@ public:
 static void
 test_powell()
 {
-  F_test_powell      f; // local minimum is 1 in (1,1).
+  F_test_powell f; // local minimum is 1 in (1,1).
   vnl_vector<double> x(2);
   x[0] = x[1] = 0.0;
   vnl_conjugate_gradient cg(f);
   cg.minimize(x);
   TEST_NEAR("vnl_conjugate_gradient", x[0], 1.0, 1e-5);
 
-  F_broken               fb;
-  vnl_vector<double>     x2(1, 0);
+  F_broken fb;
+  vnl_vector<double> x2(1, 0);
   vnl_conjugate_gradient cg2(fb);
-  bool                   rv = cg2.minimize(x2);
+  bool rv = cg2.minimize(x2);
   TEST("vnl_conjugate_gradient on broken function should fail", rv, false);
 
 
@@ -193,7 +193,7 @@ static void
 test_lsqr()
 {
   vnl_sparse_matrix<double> A(2, 2);
-  vnl_vector<double>        b(2);
+  vnl_vector<double> b(2);
   A(0, 0) = 2;
   A(0, 1) = 3;
   A(1, 0) = 4;
@@ -201,7 +201,7 @@ test_lsqr()
   b[0] = 5;
   b[1] = 9;
   vnl_sparse_matrix_linear_system<double> ls(A, b);
-  vnl_vector<double>                      x(2);
+  vnl_vector<double> x(2);
   x[0] = x[1] = 0.0;
   vnl_lsqr lsqr(ls);
   lsqr.minimize(x);
@@ -226,8 +226,8 @@ static void
 test_discrete_diff()
 {
   F_test_discrete_diff f;
-  double               h = 0.1;
-  vnl_vector<double>   x(2);
+  double h = 0.1;
+  vnl_vector<double> x(2);
   x[0] = 5.0;
   x[1] = 9.0;
   vnl_matrix<double> J(2, 2);
@@ -242,7 +242,7 @@ test_generalized_schur()
 {
   vnl_matrix<float> A(4, 4, 0.0f), B(4, 4, 0.0f), L(4, 4, 1.0f), R(4, 4, 1.0f);
   vnl_vector<float> ar(4, 0.0f), ai(4, 0.0f), b(4, 0.0f);
-  bool              r = vnl_generalized_schur(&A, &B, &ar, &ai, &b, &L, &R);
+  bool r = vnl_generalized_schur(&A, &B, &ar, &ai, &b, &L, &R);
   TEST("vnl_generalized_schur", r, true);
 }
 

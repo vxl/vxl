@@ -50,11 +50,11 @@ construct_rational_camera()
     cmatrix[3][i] = d_v[i];
   }
   // The scales and offsets
-  vpgl_scale_offset<double>              sox(0.0347, -71.4049);
-  vpgl_scale_offset<double>              soy(0.0219, 41.8216);
-  vpgl_scale_offset<double>              soz(501, -30);
-  vpgl_scale_offset<double>              sou(4764, 4693);
-  vpgl_scale_offset<double>              sov(4221, 3921);
+  vpgl_scale_offset<double> sox(0.0347, -71.4049);
+  vpgl_scale_offset<double> soy(0.0219, 41.8216);
+  vpgl_scale_offset<double> soz(501, -30);
+  vpgl_scale_offset<double> sou(4764, 4693);
+  vpgl_scale_offset<double> sov(4221, 3921);
   std::vector<vpgl_scale_offset<double>> scale_offsets;
   scale_offsets.push_back(sox);
   scale_offsets.push_back(soy);
@@ -111,11 +111,11 @@ construct_local_rational_camera()
   }
 
   // The scales and offsets
-  vpgl_scale_offset<double>              sox(0.0986, 44.4692);
-  vpgl_scale_offset<double>              soy(0.1058, 33.252);
-  vpgl_scale_offset<double>              soz(500, 34);
-  vpgl_scale_offset<double>              sou(13982, 12782.0673959);
-  vpgl_scale_offset<double>              sov(17213, 13798.1995849);
+  vpgl_scale_offset<double> sox(0.0986, 44.4692);
+  vpgl_scale_offset<double> soy(0.1058, 33.252);
+  vpgl_scale_offset<double> soz(500, 34);
+  vpgl_scale_offset<double> sou(13982, 12782.0673959);
+  vpgl_scale_offset<double> sov(17213, 13798.1995849);
   std::vector<vpgl_scale_offset<double>> scale_offsets;
   scale_offsets.push_back(sox);
   scale_offsets.push_back(soy);
@@ -144,7 +144,7 @@ test_rational_camera_approx_perspective()
 #endif
   vgl_point_3d<double> pmin(sox.offset() - sox.scale(), soy.offset() - soy.scale(), 0);
   vgl_point_3d<double> pmax(sox.offset() + sox.scale(), soy.offset() + soy.scale(), soz.scale());
-  vgl_box_3d<double>   approx_vol(pmin, pmax);
+  vgl_box_3d<double> approx_vol(pmin, pmax);
 
   vpgl_perspective_camera<double> pc;
 
@@ -164,10 +164,10 @@ test_rational_camera_approx_affine()
   vgl_point_3d<double> roi_center(0, 0, 0);
   vgl_point_3d<double> roi_min = roi_center - vgl_vector_3d<double>(250, 250, 0);
   vgl_point_3d<double> roi_max = roi_center + vgl_vector_3d<double>(250, 250, 100);
-  vgl_box_3d<double>   roi(roi_min, roi_max);
+  vgl_box_3d<double> roi(roi_min, roi_max);
 
   vpgl_affine_camera<double> ac;
-  bool                       success = vpgl_affine_camera_convert::convert(loc_rat_cam, roi, ac);
+  bool success = vpgl_affine_camera_convert::convert(loc_rat_cam, roi, ac);
 
   TEST("vpgl_affine_camera_convert success", success, true);
 
@@ -178,7 +178,7 @@ test_rational_camera_approx_affine()
   {
     vgl_point_2d<double> img_pt1 = loc_rat_cam.project(test_pt);
     vgl_point_2d<double> img_pt2 = ac.project(test_pt);
-    double               dist = (img_pt2 - img_pt1).length();
+    double dist = (img_pt2 - img_pt1).length();
     // test to within one pixel
     TEST_NEAR("vpgl_affine_camera_convert projection", dist, 0.0, 0.5);
   }
@@ -191,10 +191,10 @@ test_generic_camera_convert()
   // test construction from a local rational camera   //
   //==================================================//
   vpgl_local_rational_camera<double> lcam = construct_local_rational_camera();
-  unsigned                           ni = 833, nj = 877;
-  vul_timer                          t;
-  vpgl_generic_camera<double>        gcam;
-  bool                               success = vpgl_generic_camera_convert::convert(lcam, ni, nj, gcam);
+  unsigned ni = 833, nj = 877;
+  vul_timer t;
+  vpgl_generic_camera<double> gcam;
+  bool success = vpgl_generic_camera_convert::convert(lcam, ni, nj, gcam);
   std::cout << " converted generic cam in " << t.real() / 1000.0 << " secs.\n";
   TEST("convert generic cam", success, true);
   if (success)
@@ -207,9 +207,9 @@ test_generic_camera_convert()
     vgl_ray_3d<double> lray, gray;
     success = vpgl_ray::ray(lcam, tu, tv, lray);
     gray = gcam.ray(tu, tv);
-    vgl_point_3d<double>  lorg = lray.origin(), gorg = gray.origin();
+    vgl_point_3d<double> lorg = lray.origin(), gorg = gray.origin();
     vgl_vector_3d<double> ldir = lray.direction(), gdir = gray.direction();
-    double                dorg = (lorg - gorg).length();
+    double dorg = (lorg - gorg).length();
     dorg -= 265.285;
     double dang = std::fabs(angle(ldir, gdir));
     TEST("lcam rays", success && std::fabs(dorg) < 0.1 && dang < 0.001, true);
@@ -275,12 +275,12 @@ test_generic_camera_convert()
   success = vpgl_generic_camera_convert::convert(icam, ni, nj, gcam);
   if (success)
   {
-    vgl_ray_3d<double>   rayc = gcam.ray(5, 5), ray0 = gcam.ray(0, 0);
+    vgl_ray_3d<double> rayc = gcam.ray(5, 5), ray0 = gcam.ray(0, 0);
     vgl_point_3d<double> org(0, 0, 0);
-    double               eorg = (rayc.origin() - org).length();
+    double eorg = (rayc.origin() - org).length();
     eorg += (ray0.origin() - org).length();
     vgl_vector_3d<double> z(0.0, 0.0, 1.0), cdir(-5.0, -5.0, 1.0);
-    double                edir = std::fabs(angle(z, rayc.direction()));
+    double edir = std::fabs(angle(z, rayc.direction()));
     edir += std::fabs(angle(cdir, ray0.direction()));
     TEST_NEAR("proj to generic camera", eorg + edir, 0.0, 1.0e-6);
   }
@@ -291,9 +291,9 @@ test_generic_camera_convert()
   //==================================================//
   // test construction from an affine camera //
   //==================================================//
-  vgl_vector_3d<double>      view_dir(0.0, 0.0, -1.0);
-  vgl_vector_3d<double>      up(0.0, 0.0, 1.0);
-  vgl_point_3d<double>       stare(0.0, 0.0, 0.0);
+  vgl_vector_3d<double> view_dir(0.0, 0.0, -1.0);
+  vgl_vector_3d<double> up(0.0, 0.0, 1.0);
+  vgl_point_3d<double> stare(0.0, 0.0, 0.0);
   vpgl_affine_camera<double> acam(view_dir, up, stare, 5, 5, 1.0, 1.0);
   acam.set_viewing_distance(1.0);
   vgl_homg_point_2d<double> ipt(0, 0, 1);
@@ -303,9 +303,9 @@ test_generic_camera_convert()
   success = vpgl_generic_camera_convert::convert(acam, ni, nj, gcam);
   if (success)
   {
-    vgl_ray_3d<double>   rayc = gcam.ray(5, 5), ray0 = gcam.ray(0, 0);
+    vgl_ray_3d<double> rayc = gcam.ray(5, 5), ray0 = gcam.ray(0, 0);
     vgl_point_3d<double> orgc(0.0, 0.0, 1.0), org0(-5.0, -5.0, 1.0);
-    double               eorg = (rayc.origin() - orgc).length();
+    double eorg = (rayc.origin() - orgc).length();
     eorg += (ray0.origin() - org0).length();
     double edir = (view_dir - rayc.direction()).length();
     TEST_NEAR("Affine to generic camera", eorg + edir, 0.0, 1.0e-6);

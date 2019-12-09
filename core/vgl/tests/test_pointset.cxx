@@ -16,9 +16,9 @@
 static void
 test_pointset()
 {
-  vgl_point_3d<double>  p0(1.0, 2.0, 3.0);
-  vgl_point_3d<double>  p1(4.0, 5.0, 6.0);
-  vgl_point_3d<double>  p2(7.0, 8.0, 9.0);
+  vgl_point_3d<double> p0(1.0, 2.0, 3.0);
+  vgl_point_3d<double> p1(4.0, 5.0, 6.0);
+  vgl_point_3d<double> p2(7.0, 8.0, 9.0);
   vgl_vector_3d<double> n0(1.0, 0.0, 0.0);
   vgl_vector_3d<double> n1(0.0, 1.0, 0.0);
   vgl_vector_3d<double> n2(0.0, 0.0, 1.0);
@@ -43,17 +43,17 @@ test_pointset()
   TEST(" Accessors ", good, true);
 
   // test bounding box
-  vgl_box_3d<double>   box = vgl_bounding_box(ptset);
+  vgl_box_3d<double> box = vgl_bounding_box(ptset);
   vgl_point_3d<double> min_pt = box.min_point();
   vgl_point_3d<double> max_pt = box.max_point();
   good = (min_pt == vgl_point_3d<double>(1.0, 1.0, 1.0)) && (max_pt == p1);
   TEST(" bounding box ", good, true);
   // test IO
-  std::string   path = "./test_ptset_io.txt";
+  std::string path = "./test_ptset_io.txt";
   std::ofstream ostr(path.c_str());
   ostr << ptset;
   ostr.close();
-  std::ifstream           istr(path.c_str());
+  std::ifstream istr(path.c_str());
   vgl_pointset_3d<double> io_ptset;
   istr >> io_ptset;
   good = io_ptset == ptset;
@@ -67,7 +67,7 @@ test_pointset()
   sostr << p2.x() << ' ' << p2.y() << ' ' << p2.z() << std::endl;
   sostr.close();
   vgl_pointset_3d<double> spset;
-  std::ifstream           sistr(path.c_str());
+  std::ifstream sistr(path.c_str());
   sistr >> spset;
   good = spset.npts() == 3;
   good = good && spset.p(0) == p0;

@@ -56,10 +56,10 @@ vil_pnm_file_format::make_input_image(vil_stream * vs)
 }
 
 vil_image_resource_sptr
-vil_pnm_file_format::make_output_image(vil_stream *     vs,
-                                       unsigned         ni,
-                                       unsigned         nj,
-                                       unsigned         nplanes,
+vil_pnm_file_format::make_output_image(vil_stream * vs,
+                                       unsigned ni,
+                                       unsigned nj,
+                                       unsigned nplanes,
                                        vil_pixel_format format)
 {
   return new vil_pnm_image(vs, ni, nj, nplanes, format);
@@ -337,10 +337,10 @@ operator>>(vil_stream & vs, int & a)
 vil_image_view_base_sptr
 vil_pnm_image::get_copy_view(unsigned x0, unsigned ni, unsigned y0, unsigned nj) const
 {
-  bool *           bb = nullptr;
-  unsigned char *  ib = nullptr;
+  bool * bb = nullptr;
+  unsigned char * ib = nullptr;
   unsigned short * jb = nullptr;
-  unsigned int *   kb = nullptr;
+  unsigned int * kb = nullptr;
 
   vil_memory_chunk_sptr buf;
 
@@ -367,11 +367,11 @@ vil_pnm_image::get_copy_view(unsigned x0, unsigned ni, unsigned y0, unsigned nj)
 
   if (magic_ > 4) // pgm or ppm raw image
   {
-    unsigned      bytes_per_sample = (bits_per_component_ + 7) / 8;
-    unsigned      bytes_per_pixel = nplanes() * bytes_per_sample;
+    unsigned bytes_per_sample = (bits_per_component_ + 7) / 8;
+    unsigned bytes_per_pixel = nplanes() * bytes_per_sample;
     vil_streampos byte_start = start_of_data_ + (y0 * ni_ + x0) * bytes_per_pixel;
-    unsigned      byte_width = ni_ * bytes_per_pixel;
-    unsigned      byte_out_width = ni * bytes_per_pixel;
+    unsigned byte_width = ni_ * bytes_per_pixel;
+    unsigned byte_out_width = ni * bytes_per_pixel;
 
     for (unsigned y = 0; y < nj; ++y)
     {
@@ -554,8 +554,8 @@ vil_pnm_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned 
     return false;
   }
 
-  const vil_image_view<bool> *        bb = nullptr;
-  const vil_image_view<vxl_byte> *    ob = nullptr;
+  const vil_image_view<bool> * bb = nullptr;
+  const vil_image_view<vxl_byte> * ob = nullptr;
   const vil_image_view<vxl_uint_16> * pb = nullptr;
   const vil_image_view<vxl_uint_32> * qb = nullptr;
 
@@ -576,11 +576,11 @@ vil_pnm_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned 
 
   if (magic_ == 5) // pgm raw image ==> nplanes() == 1
   {
-    unsigned      bytes_per_sample = (bits_per_component_ + 7) / 8;
-    unsigned      bytes_per_pixel = bytes_per_sample;
+    unsigned bytes_per_sample = (bits_per_component_ + 7) / 8;
+    unsigned bytes_per_pixel = bytes_per_sample;
     vil_streampos byte_start = start_of_data_ + (y0 * ni_ + x0) * bytes_per_pixel;
-    unsigned      byte_width = ni_ * bytes_per_pixel;
-    unsigned      byte_out_width = view.ni() * bytes_per_pixel;
+    unsigned byte_width = ni_ * bytes_per_pixel;
+    unsigned byte_out_width = view.ni() * bytes_per_pixel;
 
     if (bytes_per_sample == 1)
     {
@@ -628,10 +628,10 @@ vil_pnm_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned 
   }
   else if (magic_ == 6) // ppm raw image; cannot be written as efficiently as pgm
   {
-    unsigned      bytes_per_sample = (bits_per_component_ + 7) / 8;
-    unsigned      bytes_per_pixel = nplanes() * bytes_per_sample;
+    unsigned bytes_per_sample = (bits_per_component_ + 7) / 8;
+    unsigned bytes_per_pixel = nplanes() * bytes_per_sample;
     vil_streampos byte_start = start_of_data_ + (y0 * ni_ + x0) * bytes_per_pixel;
-    unsigned      byte_width = ni_ * bytes_per_pixel;
+    unsigned byte_width = ni_ * bytes_per_pixel;
 
     if (bytes_per_sample == 1)
     {
@@ -684,7 +684,7 @@ vil_pnm_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned 
     for (unsigned y = 0; y < view.nj(); ++y)
     {
       vil_streampos byte_start = start_of_data_ + (y0 + y) * byte_width + x0 / 8;
-      int           s = x0 & 7; // = x0%8;
+      int s = x0 & 7; // = x0%8;
       unsigned char a = 0;
       if (s)
       {

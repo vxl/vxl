@@ -21,8 +21,8 @@ void
 vgui_macro_error_reporter(char const * FILE, int LINE)
 {
   static char const * last_file = nullptr;
-  static int          last_line = 0;
-  static int          numerrors = 0;
+  static int last_line = 0;
+  static int numerrors = 0;
 
   GLenum err = glGetError();
   if (err != GL_NO_ERROR)

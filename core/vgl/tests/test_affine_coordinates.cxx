@@ -51,22 +51,22 @@ test_all()
   // basis
   vgl_point_2d<double> p0(1.0, 2.0), p1(3.0, 2.0), p2(1.0, 4.0);
   vgl_point_2d<double> p(4.0, 3.0);
-  double               a00 = 0.5, a11 = 0.5, a10 = -0.3, a01 = 0.3, tx = 10.0, ty = 5.0;
-  double               q0x = a00 * p0.x() + a01 * p0.y() + tx;
-  double               q0y = a10 * p0.x() + a11 * p0.y() + ty;
+  double a00 = 0.5, a11 = 0.5, a10 = -0.3, a01 = 0.3, tx = 10.0, ty = 5.0;
+  double q0x = a00 * p0.x() + a01 * p0.y() + tx;
+  double q0y = a10 * p0.x() + a11 * p0.y() + ty;
   vgl_point_2d<double> q0(q0x, q0y);
 
-  double               q1x = a00 * p1.x() + a01 * p1.y() + tx;
-  double               q1y = a10 * p1.x() + a11 * p1.y() + ty;
+  double q1x = a00 * p1.x() + a01 * p1.y() + tx;
+  double q1y = a10 * p1.x() + a11 * p1.y() + ty;
   vgl_point_2d<double> q1(q1x, q1y);
 
-  double               q2x = a00 * p2.x() + a01 * p2.y() + tx;
-  double               q2y = a10 * p2.x() + a11 * p2.y() + ty;
+  double q2x = a00 * p2.x() + a01 * p2.y() + tx;
+  double q2y = a10 * p2.x() + a11 * p2.y() + ty;
   vgl_point_2d<double> q2(q2x, q2y);
 
-  double                            qx = a00 * p.x() + a01 * p.y() + tx;
-  double                            qy = a10 * p.x() + a11 * p.y() + ty;
-  vgl_point_2d<double>              q(qx, qy);
+  double qx = a00 * p.x() + a01 * p.y() + tx;
+  double qy = a10 * p.x() + a11 * p.y() + ty;
+  vgl_point_2d<double> q(qx, qy);
   std::vector<vgl_point_2d<double>> p_pts, affine_p_pts;
   p_pts.push_back(p0);
   p_pts.push_back(p1);
@@ -90,8 +90,8 @@ test_all()
   }
   TEST("invariance of affine 2d coords", good, true);
   std::vector<vgl_point_3d<double>> Ppts, Qpts;
-  vgl_point_3d<double>              P0(1.0, 2.0, 3.0), P1(3.0, 2.5, 4.0), P2(1.5, 4.0, -1.0), P3(0.0, 10.0, 7.0);
-  vgl_point_3d<double>              P(4.0, 3.0, 10.0), Pm(-4.0, 3.0, 10.0);
+  vgl_point_3d<double> P0(1.0, 2.0, 3.0), P1(3.0, 2.5, 4.0), P2(1.5, 4.0, -1.0), P3(0.0, 10.0, 7.0);
+  vgl_point_3d<double> P(4.0, 3.0, 10.0), Pm(-4.0, 3.0, 10.0);
   Ppts.push_back(P0);
   Ppts.push_back(P1);
   Ppts.push_back(P2);
@@ -136,7 +136,7 @@ test_all()
   TEST("invariance of affine 3d coords", good, true);
   // project Pi into view1
   std::vector<vgl_point_2d<double>> ppts1, ppts2;
-  std::vector<std::vector<double>>  C1(2);
+  std::vector<std::vector<double>> C1(2);
   C1[0] = std::vector<double>(3);
   C1[1] = std::vector<double>(3);
   std::vector<double> tc(2, 0.0);
@@ -241,7 +241,7 @@ test_all()
     std::cout << affine_C_coords[i] << std::endl;
   }
   std::vector<vgl_point_2d<double>> cpts1, cpts2;
-  std::vector<std::vector<double>>  CC1(2);
+  std::vector<std::vector<double>> CC1(2);
   CC1[0] = std::vector<double>(3);
   CC1[1] = std::vector<double>(3);
   std::vector<double> tcc(2, 0.0);
@@ -287,22 +287,22 @@ test_all()
   }
   vgl_point_2d<double> min_p1 = box1.min_point();
   vgl_point_2d<double> max_p1 = box1.max_point();
-  double               diag1 = (max_p1 - min_p1).length();
+  double diag1 = (max_p1 - min_p1).length();
   vgl_point_2d<double> min_p2 = box2.min_point();
   vgl_point_2d<double> max_p2 = box2.max_point();
-  double               diag2 = (max_p2 - min_p2).length();
-  double               diam = diag1;
+  double diag2 = (max_p2 - min_p2).length();
+  double diam = diag1;
   if (diam < diag2)
     diam = diag2;
   unsigned nr = 1000;
-  double   norm_radius = 0.02;
-  double   r = norm_radius * diam;
+  double norm_radius = 0.02;
+  double r = norm_radius * diam;
   std::cout << "diameter " << diam << " Norm radius " << norm_radius << " Abs radius " << r << std::endl;
   vgl_pointset_3d<double> pset4, pset5;
-  vgl_point_3d<double>    z(0.0, 0.0, 0.0);
-  double                  L4 = (affine_C_coords[4] - z).length();
-  double                  L5 = (affine_C_coords[5] - z).length();
-  double                  max_diff = 0.0;
+  vgl_point_3d<double> z(0.0, 0.0, 0.0);
+  double L4 = (affine_C_coords[4] - z).length();
+  double L5 = (affine_C_coords[5] - z).length();
+  double max_diff = 0.0;
   for (unsigned k = 0; k < nr; ++k)
   {
     std::vector<vgl_point_2d<double>> rpts1, rpts2;
@@ -330,8 +330,8 @@ test_all()
   }
   std::cout << "max error " << max_diff << std::endl;
   // write pset to file
-  std::string   pfile4 = "D:/VisionSystems/Janus/Invariants/pt4_spread.txt";
-  std::string   pfile5 = "D:/VisionSystems/Janus/Invariants/pt5_spread.txt";
+  std::string pfile4 = "D:/VisionSystems/Janus/Invariants/pt4_spread.txt";
+  std::string pfile5 = "D:/VisionSystems/Janus/Invariants/pt5_spread.txt";
   std::ofstream ostr4(pfile4.c_str());
   ostr4 << pset4;
   ostr4.close();

@@ -17,7 +17,7 @@
 #undef printf // to work around a bug in libintl.h
 
 bool verbose_malloc = false;
-int  malloc_count = 0;
+int malloc_count = 0;
 
 // FIXME: Win32 will have different operator new in vnl dll from
 // the one generated here, so this test fails - RWMC.
@@ -52,7 +52,7 @@ test_multiply()
 
   vnl_matrix_fixed<double, 3, 2> m1(data_m1);
   vnl_matrix_fixed<double, 2, 4> m2(data_m2);
-  vnl_vector_fixed<double, 2>    v1(data_v1);
+  vnl_vector_fixed<double, 2> v1(data_v1);
 
   vnl_matrix_fixed<double, 3, 4> mr = m1 * m2;
   TEST("Matrix-matrix multiply",
@@ -89,7 +89,7 @@ test_int()
   vnl_int_2x2 mb = m2;
   TEST(
     "(vnl_matrix_fixed)(i,j)", (mb(0, 0) = 0, mb(0, 0) == 0 && mb(0, 1) == 2 && mb(1, 0) == 2 && mb(1, 1) == 2), true);
-  int         mcvalues[4] = { 1, 2, 3 };
+  int mcvalues[4] = { 1, 2, 3 };
   vnl_int_2x2 mc(mcvalues);
   TEST("vnl_int_2x2 mc(int[])", (mc(0, 0) == 1 && mc(0, 1) == 2 && mc(1, 0) == 3 && mc(1, 1) == 0), true);
   TEST("m0=2", (m0 = 2, (m0.get(0, 0) == 2 && m0.get(0, 1) == 2 && m0.get(1, 0) == 2 && m0.get(1, 1) == 2)), true);
@@ -232,10 +232,10 @@ test_int()
   TEST("m0=m2/5", ((m0 = m2 / 5), (m0.get(0, 0) == 1 && m0.get(0, 1) == 2 && m0.get(1, 0) == 3)), true);
   TEST("m2/=5", ((m2 /= 5), (m2 == m0)), true);
 
-  int         m6values[] = { 1, 2, 3, 4 };
+  int m6values[] = { 1, 2, 3, 4 };
   vnl_int_2x2 m6(m6values);
   TEST("vnl_int_2x2 m6({1,2,3,4})", m6.get(1, 1), 4);
-  int         m7values[] = { 5, 6, 7, 8 };
+  int m7values[] = { 5, 6, 7, 8 };
   vnl_int_2x2 m7(m7values);
   TEST("vnl_int_2x2 m7({5,6,7,8})", m7.get(1, 1), 8);
   TEST("m5=m6*m7",
@@ -269,7 +269,7 @@ test_int()
 
 
   // additional tests
-  int         mvalues[] = { 0, -2, 2, 0 };
+  int mvalues[] = { 0, -2, 2, 0 };
   vnl_int_2x2 m(mvalues);
   m0 = m;
   vnl_matrix<int> m3;
@@ -352,10 +352,10 @@ test_float()
   TEST("d2*=5.0f", ((d2 *= 5.0f), (d2 == d0)), true);
   TEST("d0=d2/5.0f", ((d0 = d2 / 5.0f), (d0.get(0, 0) == 1 && d0.get(0, 1) == 2 && d0.get(1, 0) == 3)), true);
   TEST("d2/=5.0f", ((d2 /= 5.0f), (d2 == d0)), true);
-  float         d6values[] = { 1.0f, 2.0f, 3.0f, 4.0f };
+  float d6values[] = { 1.0f, 2.0f, 3.0f, 4.0f };
   vnl_float_2x2 d6(d6values);
   TEST("vnl_float_2x2 d6({1.0,2.0,3.0,4.0})", d6.get(1, 1), 4.0);
-  float         d7values[] = { 5.0, 6.0, 7.0, 8.0 };
+  float d7values[] = { 5.0, 6.0, 7.0, 8.0 };
   vnl_float_2x2 d7(d7values);
   TEST("vnl_float_2x2 d7({5.0,6.0,7.0,8.0})", d7.get(1, 1), 8.0);
   TEST("d5=d6*d7",
@@ -367,7 +367,7 @@ test_float()
 
   // additional tests
   vnl_float_2x2 m1, m2;
-  float         mvalues[] = { 0, -2, 2, 0 };
+  float mvalues[] = { 0, -2, 2, 0 };
   vnl_float_2x2 m(mvalues);
   m1 = m;
   m2 = m;
@@ -450,10 +450,10 @@ test_double()
   TEST("d2*=5.0", ((d2 *= 5.0), (d2 == d0)), true);
   TEST("d0=d2/5.0", ((d0 = d2 / 5.0), (d0.get(0, 0) == 1 && d0.get(0, 1) == 2 && d0.get(1, 0) == 3)), true);
   TEST("d2/=5.0", ((d2 /= 5.0), (d2 == d0)), true);
-  double         d6values[] = { 1.0, 2.0, 3.0, 4.0 };
+  double d6values[] = { 1.0, 2.0, 3.0, 4.0 };
   vnl_double_2x2 d6(d6values);
   TEST("vnl_double_2x2 d6({1.0,2.0,3.0,4.0})", d6.get(1, 1), 4.0);
-  double         d7values[] = { 5.0, 6.0, 7.0, 8.0 };
+  double d7values[] = { 5.0, 6.0, 7.0, 8.0 };
   vnl_double_2x2 d7(d7values);
   TEST("vnl_double_2x2 d7({5.0,6.0,7.0,8.0})", d7.get(1, 1), 8.0);
   TEST("d5=d6*d7",
@@ -464,14 +464,14 @@ test_double()
        true);
 
   // apply sqrt to every element
-  double         d8values[] = { 0.0, 1.0, 9.0, 16.0 };
+  double d8values[] = { 0.0, 1.0, 9.0, 16.0 };
   vnl_double_2x2 d8(d8values);
   d8 = d8.apply(std::sqrt);
   TEST("apply(sqrt)", d8[0][0] == 0 && d8[0][1] == 1 && d8[1][0] == 3 && d8[1][1] == 4, true);
 
   {
     vnl_matrix_fixed<double, 4, 20> m(1.);
-    vnl_vector_fixed<double, 4>     vr = m.apply_rowwise(sum_vector);
+    vnl_vector_fixed<double, 4> vr = m.apply_rowwise(sum_vector);
     for (unsigned int i = 0; i < vr.size(); ++i)
       TEST("vr.apply_rowwise(sum_vector)", vr.get(i), 20.);
     vnl_vector_fixed<double, 20> vc = m.apply_columnwise(sum_vector);
@@ -554,7 +554,7 @@ test_matrix_fixed()
   std::printf("Now watch the mallocs\n");
   vnl_matrix_ref<double> CX = X.as_ref();
   vnl_vector_ref<double> cv = v.as_ref();
-  vnl_vector<double>     Xv = CX * (cv + cv);
+  vnl_vector<double> Xv = CX * (cv + cv);
   std::printf("X v = [ %g %g %g ]\n", Xv[0], Xv[1], Xv[2]);
 
   verbose_malloc = false;

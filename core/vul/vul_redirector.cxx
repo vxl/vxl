@@ -36,10 +36,10 @@ public:
 
 struct vul_redirector_data
 {
-  vul_redirector *           owner;
-  std::streambuf *           old_cerrbuf;
+  vul_redirector * owner;
+  std::streambuf * old_cerrbuf;
   vul_redirector_streambuf * buf;
-  std::ostream *             s;
+  std::ostream * s;
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -73,7 +73,7 @@ vcsl_rotation::execute(const vnl_vector<double> & v, double time) const
   assert(is_valid());
   assert((is_2d() && v.size() == 2) || (is_3d() && v.size() == 3));
 
-  vnl_quaternion<double>      q = quaternion(time);
+  vnl_quaternion<double> q = quaternion(time);
   vnl_vector_fixed<double, 3> result;
   if (mode_2d_)
   {
@@ -145,7 +145,7 @@ vcsl_rotation::quaternion(double time) const
   }
   else
   {
-    int                i = matching_interval(time);
+    int i = matching_interval(time);
     vnl_vector<double> axis_2d(3);
 
     if (mode_2d_)

@@ -79,7 +79,7 @@ main(int argc, char ** argv)
 
   vgui_image_tableau_new img_tab(img);
 
-  int                   wd = img.ni(), ht = img.nj();
+  int wd = img.ni(), ht = img.nj();
   vgui_text_tableau_new text_tab;
   text_tab->add(wd * 0.5f, ht * 0.25f, "this is some text");
 

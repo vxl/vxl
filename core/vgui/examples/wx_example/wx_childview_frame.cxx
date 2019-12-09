@@ -58,12 +58,12 @@ create_tableau(void)
 //-------------------------------------------------------------------------
 IMPLEMENT_CLASS(wx_childview_frame, wxFrame)
 
-wx_childview_frame::wx_childview_frame(wxWindow *       parent,
-                                       wxWindowID       id,
+wx_childview_frame::wx_childview_frame(wxWindow * parent,
+                                       wxWindowID id,
                                        const wxString & title,
-                                       const wxPoint &  pos,
-                                       const wxSize &   size,
-                                       long             type)
+                                       const wxPoint & pos,
+                                       const wxSize & size,
+                                       long type)
   : wxFrame(parent, id, title, pos, size, type)
 {
   // SetIcon(wxIcon("app.ico", wxBITMAP_TYPE_ICO));

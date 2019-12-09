@@ -39,7 +39,7 @@ static void
 test_conic_regression()
 {
   std::cout << "Testing conic regression (unit circle)\n";
-  const double         sr12 = vnl_math::sqrt1_2;
+  const double sr12 = vnl_math::sqrt1_2;
   vgl_point_2d<double> p0(1.0, 0.0), p1(sr12, sr12), p2(0.0, 1.0), p3(-sr12, sr12), p4(-1.0, 0.0), p5(-sr12, -sr12),
     p6(0.0, -1.0), p7(sr12, -sr12);
   vgl_conic_2d_regression<double> reg;
@@ -58,7 +58,7 @@ test_conic_regression()
 
   TEST_NEAR("unit circle", reg.get_rms_sampson_error(), 0.0, 1e-12);
 
-  const double         sr2 = vnl_math::sqrt2, sr16 = std::sqrt(1.6);
+  const double sr2 = vnl_math::sqrt2, sr16 = std::sqrt(1.6);
   vgl_point_2d<double> q0(sr2, sr2), q1(-sr12, sr12), q2(-sr2, -sr2), q3(sr12, -sr12), q4(0.0, sr16), q5(0.0, -sr16),
     q6(sr16, 0.0), q7(-sr16, 0.0);
   reg.clear_points();

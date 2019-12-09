@@ -45,8 +45,8 @@ test_amoeba()
 
             << "Testing on 1D cubic\n";
   testlib_test_amoeba_cubic c;
-  vnl_amoeba                amoeba1(c);
-  vnl_vector<double>        x(1);
+  vnl_amoeba amoeba1(c);
+  vnl_vector<double> x(1);
   x[0] = 77;
   std::cout << "amoeba1: ";
   amoeba1.minimize(x);
@@ -60,7 +60,7 @@ test_amoeba()
     x.set_size(n);
     x.fill(1);
     testlib_test_amoeba_cost1 cost1(n);
-    vnl_amoeba                amoeba2(cost1);
+    vnl_amoeba amoeba2(cost1);
     amoeba2.minimize(x);
 
     double err = 0;

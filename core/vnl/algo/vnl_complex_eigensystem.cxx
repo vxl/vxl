@@ -32,10 +32,10 @@ vnl_complex_eigensystem::compute(vnl_matrix<std::complex<double>> const & A, boo
   //
   vnl_matrix<std::complex<double>> tmp(A);
 
-  long                             work_space = 10 * N;
+  long work_space = 10 * N;
   vnl_vector<std::complex<double>> work(work_space);
 
-  long               rwork_space = 2 * N;
+  long rwork_space = 2 * N;
   vnl_vector<double> rwork(rwork_space);
 
   long info;
@@ -99,8 +99,8 @@ vnl_complex_eigensystem::vnl_complex_eigensystem(vnl_matrix<std::complex<double>
 //
 vnl_complex_eigensystem::vnl_complex_eigensystem(vnl_matrix<double> const & A_real,
                                                  vnl_matrix<double> const & A_imag,
-                                                 bool                       right,
-                                                 bool                       left)
+                                                 bool right,
+                                                 bool left)
   : N(A_real.rows())
   // L and R are intentionally not initialized.
   , W(N)

@@ -256,7 +256,7 @@ vul_sequence_filename_map::parse()
   {
     bool found_match = false;
     {
-      std::string       glob(image_dir_ + "*");
+      std::string glob(image_dir_ + "*");
       vul_file_iterator fn(glob);
       if (fn)
       {

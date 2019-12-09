@@ -29,7 +29,7 @@
 static void
 test_homg_point_1d()
 {
-  float                    d[] = { 5, 1 };
+  float d[] = { 5, 1 };
   vgl_homg_point_1d<float> p1(6, 3), p2(d), p3(-1, -8);
 
   TEST("inequality", (p1 != p3), true);
@@ -43,7 +43,7 @@ test_homg_point_1d()
   TEST("+=", (p2 += d1), p1);
   TEST("+=", p2, p1);
 
-  float         dd[] = { 1, 5, -3, 7 };
+  float dd[] = { 1, 5, -3, 7 };
   vnl_float_2x2 mm(dd);
   p2 = mm * p1; // homography
   TEST("matrix * point", p2, vgl_homg_point_1d<float>(7));
@@ -118,7 +118,7 @@ test_homg_point_1d()
 static void
 test_homg_point_2d()
 {
-  int                    d[] = { 5, 5, 1 };
+  int d[] = { 5, 5, 1 };
   vgl_homg_point_2d<int> p1(3, 7, 1), p2(d), p3(-1, -8, 1);
 
   TEST("inequality", (p1 != p3), true);
@@ -134,8 +134,8 @@ test_homg_point_2d()
 
   vnl_vector_fixed<double, 3> v = vgl_homg_operators_2d<double>::get_vector(u);
   TEST_NEAR("get_vector", v.two_norm(), 1.0, 1e-12);
-  double                    dd[] = { 1, 0, 0, 0, 2, 0, 1, 1, 3 };
-  vnl_double_3x3            mm(dd);
+  double dd[] = { 1, 0, 0, 0, 2, 0, 1, 1, 3 };
+  vnl_double_3x3 mm(dd);
   vgl_homg_point_2d<double> pt = mm * vgl_homg_point_2d<double>(3, 7, 1); // homography
   TEST("matrix*point", pt, vgl_homg_point_2d<double>(3, 14, 13));
 
@@ -247,7 +247,7 @@ test_homg_point_2d()
 static void
 test_homg_point_3d()
 {
-  int                    d[] = { 5, 5, 5, 1 };
+  int d[] = { 5, 5, 5, 1 };
   vgl_homg_point_3d<int> p1(3, 7, -1, 1), p2(d), p3(-1, -8, 7, 1);
 
   TEST("inequality", (p1 != p3), true);
@@ -264,8 +264,8 @@ test_homg_point_3d()
 
   vnl_vector_fixed<double, 4> v = vgl_homg_operators_3d<double>::get_vector(u);
   TEST_NEAR("get_vector", v.two_norm(), 1.0, 1e-12);
-  double                    dd[] = { 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 1, 1, 1, 3 };
-  vnl_double_4x4            mm(dd);
+  double dd[] = { 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 1, 1, 1, 3 };
+  vnl_double_4x4 mm(dd);
   vgl_homg_point_3d<double> pt = mm * vgl_homg_point_3d<double>(3, -2, 7, 1); // homography
   TEST("matrix*point", pt, vgl_homg_point_3d<double>(3, -4, 21, 11));
 
@@ -381,7 +381,7 @@ test_homg_point_3d()
 static void
 test_homg_line_2d()
 {
-  double                   d[] = { 5, 5, -1 };
+  double d[] = { 5, 5, -1 };
   vgl_homg_line_2d<double> l1(3, 7, 0), l2(d), l3(0, -1, -8);
 
   TEST("vgl_distance_origin", vgl_distance_origin(l1), 0);
@@ -396,8 +396,8 @@ test_homg_line_2d()
   vnl_vector_fixed<double, 3> v = vgl_homg_operators_2d<double>::get_vector(l2);
   vnl_vector_fixed<double, 3> vtrue = vnl_vector_fixed<double, 3>(d);
   TEST("get_vector", v, vtrue);
-  double                   dd[] = { 1, 0, 0, 0, 2, 0, 1, 1, 3 };
-  vnl_double_3x3           mm(dd);
+  double dd[] = { 1, 0, 0, 0, 2, 0, 1, 1, 3 };
+  vnl_double_3x3 mm(dd);
   vgl_homg_line_2d<double> l = mm * vgl_homg_line_2d<double>(3, 7, 1); // homography
   TEST("matrix*line", l, vgl_homg_line_2d<double>(3, 14, 13));
 
@@ -431,8 +431,8 @@ test_homg_line_2d()
   TEST("most_orthogonal_vector_svd", v[0] == 0 && v[1] == 0 && v[2] == 1, true);
 
   vgl_homg_point_2d<double> p1(1, 0), p2(0, 1);
-  vgl_homg_line_2d<double>  li(p1, p2); // line through these two points
-  vgl_homg_line_2d<double>  ll(1, 1, -1);
+  vgl_homg_line_2d<double> li(p1, p2); // line through these two points
+  vgl_homg_line_2d<double> ll(1, 1, -1);
   TEST("join", li, ll);
 
   vgl_homg_point_2d<double> p3(0, 3);
@@ -466,14 +466,14 @@ test_homg_line_2d()
 static void
 test_homg_line_3d()
 {
-  vgl_homg_point_3d<double>         p1(1, 1, 1, 2), p2(1, 1, 1, 0), p3(1, 2, 1, 1);
+  vgl_homg_point_3d<double> p1(1, 1, 1, 2), p2(1, 1, 1, 0), p3(1, 2, 1, 1);
   vgl_homg_line_3d_2_points<double> l1(p1, p2), l2(p2, p1), l3(p1, p3);
 
   TEST("inequality", (l1 != l3), true);
   TEST("equality", (l1 == l2), true);
 
-  double                    dd[] = { 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 1, 1, 1, 3 };
-  vnl_double_4x4            mm(dd);
+  double dd[] = { 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 1, 1, 1, 3 };
+  vnl_double_4x4 mm(dd);
   vgl_homg_plane_3d<double> l = mm * vgl_homg_plane_3d<double>(1, 3, 7, 1); // homography
   TEST("matrix*plane", l, vgl_homg_plane_3d<double>(1, 6, 21, 14));
 
@@ -508,7 +508,7 @@ test_homg_line_3d()
 static void
 test_homg_plane_3d()
 {
-  double                    d[] = { 0, 3, 4, 1 };
+  double d[] = { 0, 3, 4, 1 };
   vgl_homg_plane_3d<double> pl1(3, 7, -1, 1), pl2(d), pl3(-1, -8, 7, 1);
 
   TEST("inequality", (pl1 != pl3), true);
@@ -605,7 +605,7 @@ test_1d_basis()
 {
   std::cout << "  TEST OF PROJECTIVE BASIS WITH 1D POINTS\n";
 
-  vgl_homg_point_1d<float>               p11(0.f), p12(1.f), p13(1.f, 0.f);
+  vgl_homg_point_1d<float> p11(0.f), p12(1.f), p13(1.f, 0.f);
   vgl_1d_basis<vgl_homg_point_1d<float>> b_1_p(p11, p12, p13);
   // The following is essentially just a mapping
   // from vgl_homg_point_1d<float> to vgl_homg_point_1d<double> :
@@ -620,7 +620,7 @@ test_1d_basis()
 
   std::cout << "  TEST OF PROJECTIVE BASIS ON A 2D LINE\n";
 
-  vgl_homg_point_2d<int>               p21(0, 1), p22(1, 3), p23(2, 5); // On the line 2x-y+w=0
+  vgl_homg_point_2d<int> p21(0, 1), p22(1, 3), p23(2, 5); // On the line 2x-y+w=0
   vgl_1d_basis<vgl_homg_point_2d<int>> b_2_p(p21, p22, p23);
   p = b_2_p.project(p21);
   TEST("origin", p, vgl_homg_point_1d<double>(0.0));
@@ -633,7 +633,7 @@ test_1d_basis()
 
   std::cout << "  TEST OF PROJECTIVE BASIS ON A 3D LINE\n";
 
-  vgl_homg_point_3d<double>               p31(0, 1, 3), p32(1, 3, 2), p33(2, 5, 1); // On the line 2x-y+w=0,x+z=3w
+  vgl_homg_point_3d<double> p31(0, 1, 3), p32(1, 3, 2), p33(2, 5, 1); // On the line 2x-y+w=0,x+z=3w
   vgl_1d_basis<vgl_homg_point_3d<double>> b_3_p(p31, p32, p33);
   p = b_3_p.project(p31);
   TEST("origin", p, vgl_homg_point_1d<double>(0.0));
@@ -646,7 +646,7 @@ test_1d_basis()
 
   std::cout << "  TEST OF PROJECTIVE BASIS OF CONCURRENT 2D LINES\n";
 
-  vgl_homg_line_2d<int>               l21(0, 1, 1), l22(1, 3, 1), l23(2, 5, 1); // Through the point (2,-1,1)
+  vgl_homg_line_2d<int> l21(0, 1, 1), l22(1, 3, 1), l23(2, 5, 1); // Through the point (2,-1,1)
   vgl_1d_basis<vgl_homg_line_2d<int>> b_2_l(l21, l22, l23);
   p = b_2_l.project(l21);
   TEST("origin", p, vgl_homg_point_1d<double>(0.0));

@@ -16,11 +16,11 @@
 
 
 vidl_istream_image_resource::vidl_istream_image_resource(const vidl_istream_sptr & i_stream,
-                                                         int                       frame,
-                                                         unsigned int              ni,
-                                                         unsigned int              nj,
-                                                         unsigned int              np,
-                                                         vil_pixel_format          format)
+                                                         int frame,
+                                                         unsigned int ni,
+                                                         unsigned int nj,
+                                                         unsigned int np,
+                                                         vil_pixel_format format)
   : istream_(i_stream)
   , frame_number_(frame)
   , ni_(ni)
@@ -39,7 +39,7 @@ vidl_istream_image_resource::find_image_properties()
     return false;
 
   vidl_pixel_format fmt = frame->pixel_format();
-  unsigned int      bpp = vidl_pixel_format_bpp(fmt);
+  unsigned int bpp = vidl_pixel_format_bpp(fmt);
   ni_ = frame->ni();
   nj_ = frame->nj();
   np_ = vidl_pixel_format_num_channels(fmt);
@@ -117,7 +117,7 @@ vidl_istream_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j0
   if (!istream_)
     return nullptr;
 
-  int             curr_frame = istream_->frame_number();
+  int curr_frame = istream_->frame_number();
   vidl_frame_sptr frame = nullptr;
   if (curr_frame == frame_number_)
     frame = istream_->current_frame();

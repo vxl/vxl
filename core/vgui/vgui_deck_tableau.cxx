@@ -314,7 +314,7 @@ public:
   }
 
   vgui_deck_tableau * deck;
-  int                 index;
+  int index;
 };
 
 
@@ -328,7 +328,7 @@ vgui_deck_tableau::get_popup(const vgui_popup_params & params, vgui_menu & menu)
   // build child selection menu
   vgui_menu selections;
 
-  int                                           count = 0;
+  int count = 0;
   std::vector<vgui_parent_child_link>::iterator i = children.begin();
   for (; i != children.end(); ++i, ++count)
   {

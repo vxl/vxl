@@ -45,11 +45,11 @@ test_local_rational_camera_io()
   den_v[18] = 0.3;
   den_v[19] = 1.0;
   // Scale and offsets
-  double                       sx = 50.0, ox = 150.0;
-  double                       sy = 125.0, oy = 100.0;
-  double                       sz = 5.0, oz = 10.0;
-  double                       su = 1000.0, ou = 500;
-  double                       sv = 500.0, ov = 200;
+  double sx = 50.0, ox = 150.0;
+  double sy = 125.0, oy = 100.0;
+  double sz = 5.0, oz = 10.0;
+  double su = 1000.0, ou = 500;
+  double sv = 500.0, ov = 200;
   vpgl_rational_camera<double> rat_cam(neu_u, den_u, neu_v, den_v, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
 
   vpgl_lvcs lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);

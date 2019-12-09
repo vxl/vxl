@@ -23,14 +23,14 @@ test_perspective_camera_io()
 
   // ===========  Construct the camera
 
-  double                          data[] = { 2000, 0, 512, 0, 2000, 384, 0, 0, 1 };
+  double data[] = { 2000, 0, 512, 0, 2000, 384, 0, 0, 1 };
   vpgl_calibration_matrix<double> K = vnl_double_3x3(data);
-  vgl_homg_point_3d<double>       center(0, 0, -10.0);
+  vgl_homg_point_3d<double> center(0, 0, -10.0);
 
   // rotation angle in radians
   double theta = vnl_math::pi_over_4; // 45 degrees
   // y axis is the rotation axis
-  vnl_double_3            axis(0.0, 1.0, 0.0);
+  vnl_double_3 axis(0.0, 1.0, 0.0);
   vgl_h_matrix_3d<double> R;
   R.set_identity().set_rotation_about_axis(axis, theta);
   std::cout << "Rotation Matrix\n" << R << '\n';

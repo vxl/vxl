@@ -19,6 +19,6 @@ main(int argc, char ** argv)
   text->add(100, 100, "Hello world");
 
   vgui_viewer2D_tableau_new viewer(text);
-  vgui_shell_tableau_new    shell(viewer);
+  vgui_shell_tableau_new shell(viewer);
   return vgui::run(shell, 512, 512);
 }

@@ -19,13 +19,13 @@ main(int argc, char ** argv)
   vgui::init(argc, argv);
 
   // Set up the tableaux as before:
-  vgui_image_tableau_new    image(argc > 1 ? argv[1] : "az32_10.tif");
+  vgui_image_tableau_new image(argc > 1 ? argv[1] : "az32_10.tif");
   vgui_viewer2D_tableau_new viewer(image);
 
   // Plug into a GL context :
   // vgui_gtk_adaptor *ct = new vgui_gtk_adaptor("Gtk Window", 512,512,0,0);
   vgui_gtk_adaptor * ct = new vgui_gtk_adaptor();
-  GtkWidget *        glarea = ((vgui_gtk_adaptor *)ct)->get_glarea_widget();
+  GtkWidget * glarea = ((vgui_gtk_adaptor *)ct)->get_glarea_widget();
   gtk_widget_set_usize(glarea, 512, 512);
   gtk_widget_show(glarea);
 

@@ -17,7 +17,7 @@ test_affine_camera_io()
   std::cout << "Testing Projective camera" << std::endl;
 
   // Some matrices for testing.
-  double         random_list[12] = { 10.6, 1.009, .676, .5, -13, -10, 8, 5, 0.0, 0.0, 0.0, 1.0 };
+  double random_list[12] = { 10.6, 1.009, .676, .5, -13, -10, 8, 5, 0.0, 0.0, 0.0, 1.0 };
   vnl_double_3x4 random_matrix(random_list);
 
   std::cout << "Matrix:\n" << random_matrix << std::endl;

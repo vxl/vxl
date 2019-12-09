@@ -27,10 +27,10 @@ sqr(double x)
 }
 
 static void
-testlib_test_assert_near(const std::string &               msg,
+testlib_test_assert_near(const std::string & msg,
                          vgl_homg_point_2d<double> const & p2,
                          vgl_homg_point_2d<double> const & p1,
-                         double                            tol = 1e-6)
+                         double tol = 1e-6)
 {
   double expr = (p1.w() == 0 && p2.w() == 0) ? sqr(p1.x() * p2.y() - p1.y() * p2.x())
                                              : vgl_homg_operators_2d<double>::distance_squared(p1, p2);
@@ -38,10 +38,10 @@ testlib_test_assert_near(const std::string &               msg,
 }
 
 static void
-testlib_test_assert_near(const std::string &              msg,
+testlib_test_assert_near(const std::string & msg,
                          vgl_homg_line_2d<double> const & l2,
                          vgl_homg_line_2d<double> const & l1,
-                         double                           tol = 1e-6)
+                         double tol = 1e-6)
 {
   double expr = sqr(l1.a() / l1.b() - l2.a() / l2.b()) + sqr(l1.a() / l1.c() - l2.a() / l2.c()) +
                 sqr(l1.b() / l1.c() - l2.b() / l2.c());
@@ -49,10 +49,10 @@ testlib_test_assert_near(const std::string &              msg,
 }
 
 static void
-testlib_test_assert_near(const std::string &        msg,
+testlib_test_assert_near(const std::string & msg,
                          vgl_box_2d<double> const & b1,
                          vgl_box_2d<double> const & b2,
-                         double                     tol = 1e-6)
+                         double tol = 1e-6)
 {
   double expr = sqr(b1.min_x() - b2.min_x()) + sqr(b1.min_y() - b2.min_y()) + sqr(b1.max_x() - b2.max_x()) +
                 sqr(b1.max_y() - b2.max_y());
@@ -93,26 +93,26 @@ conic_distance(vgl_conic<double> const & c1, vgl_conic<double> const & c2)
 }
 
 static void
-testlib_test_assert_near(const std::string &       msg,
+testlib_test_assert_near(const std::string & msg,
                          vgl_conic<double> const & c2,
                          vgl_conic<double> const & c1,
-                         double                    tol = 1e-6)
+                         double tol = 1e-6)
 {
   testlib_test_assert_near(msg, conic_distance(c1, c2), 0.0, tol);
 }
 
 static void
-testlib_test_assert_far(const std::string &       msg,
+testlib_test_assert_far(const std::string & msg,
                         vgl_conic<double> const & c2,
                         vgl_conic<double> const & c1,
-                        double                    tol = 1e-6)
+                        double tol = 1e-6)
 {
   testlib_test_assert_far(msg, conic_distance(c1, c2), 0.0, tol);
 }
 
 static void
-check_points_on_conics(vgl_conic<double> const &                    c1,
-                       vgl_conic<double> const &                    c2,
+check_points_on_conics(vgl_conic<double> const & c1,
+                       vgl_conic<double> const & c2,
                        std::list<vgl_homg_point_2d<double>> const & pts)
 {
   // verify whether each of the intersection points (in pts) really lie on the conics
@@ -120,7 +120,7 @@ check_points_on_conics(vgl_conic<double> const &                    c1,
   for (; it != pts.end(); ++it)
   {
     vgl_homg_point_2d<double> p = *it;
-    double                    fval1, fval2, x, y;
+    double fval1, fval2, x, y;
     if (p.w() == 0)
     { // point at infinity
       x = p.x();
@@ -155,8 +155,8 @@ test_conic()
   // "global" variables, actually constants
   vgl_homg_point_2d<double> const centre(1, 2, 1);
   vgl_homg_point_2d<double> const direction(4, -3, 0);
-  double const                    halfpi = vnl_math::pi_over_2;
-  double const                    pythagoras = std::atan2(4.0, 3.0); // = 0.9273 radians (53.13 degrees)
+  double const halfpi = vnl_math::pi_over_2;
+  double const pythagoras = std::atan2(4.0, 3.0); // = 0.9273 radians (53.13 degrees)
 
   // 1. Test constructors
   std::cout << "\n\t=== test constructors ===\n";
@@ -202,7 +202,7 @@ test_conic()
   std::cout << "By equation: " << cc << '\n';
   TEST("circle equality", c, cc);
   double xc, yc, major_axis, minor_axis, angle;
-  bool   good = cc.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);
+  bool good = cc.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);
   TEST("circle geometry", good, true);
   TEST_NEAR("circle geometry: centre x", xc, 1, 1e-8);
   TEST_NEAR("circle geometry: centre y", yc, 2, 1e-8);
@@ -236,7 +236,7 @@ test_conic()
   TEST("tangent lines count = 0", lines.size(), 0);
 
   cc = vgl_conic<double>(1, 0, 1, -2, -4, 4); // idem, by equation
-  double         mm[] = { 1, 0, -1, 0, 1, -2, -1, -2, 4 };
+  double mm[] = { 1, 0, -1, 0, 1, -2, -1, -2, 4 };
   vnl_double_3x3 m(mm);
   cc = vgl_homg_operators_2d<double>::vgl_conic_from_matrix(m);
   TEST("vgl_conic_from_matrix", cc, c);
@@ -349,7 +349,7 @@ test_conic()
   npt = vgl_homg_operators_2d<double>::closest_point(c, vgl_homg_point_2d<double>(-2, 7, 2));
   TEST_NEAR("closest point (inside)", npt, top, 1e-6);
 
-  vgl_homg_line_2d<double>             l(1, -1, 0); // line x=y
+  vgl_homg_line_2d<double> l(1, -1, 0); // line x=y
   std::list<vgl_homg_point_2d<double>> pts = vgl_homg_operators_2d<double>::intersection(c, l);
   double x1 = (69 + 100 * std::sqrt(13.0)) / 53, x2 = (69 - 100 * std::sqrt(13.0)) / 53; // or interchanged
   TEST("intersection count = 2", pts.size(), 2);

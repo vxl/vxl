@@ -28,19 +28,19 @@ vil_image_list::files()
   if (!this->vil_is_directory(directory_.c_str()))
     return temp;
     // This mess should go away soon.
-#  if defined  __MINGW32__
+#  if defined __MINGW32__
   typedef long handle_type; // works with msvc6
 #  else
   typedef intptr_t handle_type; // not found by msvc6
 #  endif
 
-  handle_type        handle;
+  handle_type handle;
   struct _finddata_t data;
   handle = _findfirst((directory_ + "\\*").c_str(), &data);
   if (handle < 0)
     return temp;
-  std::string             s = data.name;
-  std::string             filename = directory_ + "\\" + s;
+  std::string s = data.name;
+  std::string filename = directory_ + "\\" + s;
   vil_image_resource_sptr resc;
   if (!this->vil_is_directory(filename.c_str()))
     temp.push_back(filename);
@@ -68,7 +68,7 @@ vil_image_list::files()
   std::vector<std::string> temp;
   if (!this->vil_is_directory(directory_.c_str()))
     return temp;
-  DIR *    dir_handle = opendir(directory_.c_str());
+  DIR * dir_handle = opendir(directory_.c_str());
   dirent * de;
   de = readdir(dir_handle);
   if (de == nullptr)
@@ -108,7 +108,7 @@ std::vector<vil_image_resource_sptr>
 vil_image_list::resources()
 {
   std::vector<vil_image_resource_sptr> temp;
-  std::vector<std::string>             fs = this->files();
+  std::vector<std::string> fs = this->files();
   for (auto & f : fs)
   {
     vil_image_resource_sptr resc = vil_load_image_resource(f.c_str(), il_verbose);
@@ -122,7 +122,7 @@ std::vector<vil_image_resource_sptr>
 vil_image_list::blocked_resources()
 {
   std::vector<vil_image_resource_sptr> temp;
-  std::vector<std::string>             fs = this->files();
+  std::vector<std::string> fs = this->files();
   for (auto & f : fs)
   {
     vil_image_resource_sptr resc = vil_load_image_resource(f.c_str(), il_verbose);
@@ -137,7 +137,7 @@ std::vector<vil_image_resource_sptr>
 vil_image_list::pyramids()
 {
   std::vector<vil_image_resource_sptr> temp;
-  std::vector<std::string>             fs = this->files();
+  std::vector<std::string> fs = this->files();
   for (auto & f : fs)
   {
     vil_pyramid_image_resource_sptr pyr = vil_load_pyramid_resource(f.c_str(), il_verbose);
@@ -163,7 +163,7 @@ bool
 vil_image_list::clean_directory()
 {
   std::vector<std::string> filez = this->files();
-  bool                     good = true;
+  bool good = true;
   std::cout << "starting to remove ..\n";
   for (auto & fit : filez)
     if (!this->remove_file(fit))

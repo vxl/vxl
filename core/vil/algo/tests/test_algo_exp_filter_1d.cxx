@@ -15,13 +15,13 @@ test_algo_exp_filter_1d_byte_float()
             << " Testing vil_algo_exp_filter_1d byte-float\n"
             << "*******************************************\n";
 
-  constexpr int         n = 100;
+  constexpr int n = 100;
   std::vector<vxl_byte> src(n);
   for (int i = 0; i < n; ++i)
     src[i] = 0;
   src[50] = 100;
 
-  double             k = 0.25;
+  double k = 0.25;
   std::vector<float> dest(n);
   vil_exp_filter_1d(&src[0], 1, &dest[0], 1, n, float(k));
 
@@ -55,7 +55,7 @@ test_algo_exp_filter_1d_byte_float()
 
   // Test application to whole images
   vil_image_view<vxl_byte> src_im(10, 10);
-  vil_image_view<float>    dest_im;
+  vil_image_view<float> dest_im;
   for (unsigned j = 0; j < 10; ++j)
     for (unsigned i = 0; i < 10; ++i)
       src_im(i, j) = vxl_byte(i + 10 * j);
@@ -79,13 +79,13 @@ test_algo_exp_filter_1d_float_float()
             << " Testing vil_algo_exp_filter_1d float-float\n"
             << "********************************************\n";
 
-  int                n = 100;
+  int n = 100;
   std::vector<float> src(n);
   for (int i = 0; i < n; ++i)
     src[i] = 0;
   src[50] = 100;
 
-  double             k = 0.25;
+  double k = 0.25;
   std::vector<float> dest(n);
   vil_exp_filter_1d(&src[0], 1, &dest[0], 1, n, float(k));
 

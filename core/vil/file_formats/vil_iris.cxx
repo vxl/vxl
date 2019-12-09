@@ -57,9 +57,9 @@ vil_iris_file_format::make_input_image(vil_stream * is)
   int colormap_;
 
   vxl_sint_16 magic_ = get_short(is);
-  int         storage_ = get_char(is);
-  int         bytes_per_component = get_char(is);
-  int         dimension_ = get_ushort(is);
+  int storage_ = get_char(is);
+  int bytes_per_component = get_char(is);
+  int dimension_ = get_ushort(is);
   /*int ni_     =*/get_ushort(is);
   /*int nj_     =*/get_ushort(is);
   /*int nplanes_=*/get_ushort(is);
@@ -90,10 +90,10 @@ vil_iris_file_format::make_input_image(vil_stream * is)
 }
 
 vil_image_resource_sptr
-vil_iris_file_format::make_output_image(vil_stream *     is,
-                                        unsigned int     ni,
-                                        unsigned int     nj,
-                                        unsigned int     nplanes,
+vil_iris_file_format::make_output_image(vil_stream * is,
+                                        unsigned int ni,
+                                        unsigned int nj,
+                                        unsigned int nplanes,
                                         vil_pixel_format format)
 {
   return new vil_iris_generic_image(is, ni, nj, nplanes, format);
@@ -130,10 +130,10 @@ vil_iris_generic_image::file_format() const
   return vil_iris_format_tag;
 }
 
-vil_iris_generic_image::vil_iris_generic_image(vil_stream *     is,
-                                               unsigned int     ni,
-                                               unsigned int     nj,
-                                               unsigned int     nplanes,
+vil_iris_generic_image::vil_iris_generic_image(vil_stream * is,
+                                               unsigned int ni,
+                                               unsigned int nj,
+                                               unsigned int nplanes,
                                                vil_pixel_format format)
   : starttab_(nullptr)
   , lengthtab_(nullptr)
@@ -322,9 +322,9 @@ vil_iris_generic_image::get_section_verbatim(unsigned int x0, unsigned int xs, u
   unsigned int row_len = xs * pix_size;
 
   vil_memory_chunk_sptr buf = new vil_memory_chunk(row_len * ys * nplanes_, format_);
-  auto *                ib = reinterpret_cast<vxl_byte *>(buf->data());
-  auto *                ob = reinterpret_cast<vxl_uint_16 *>(buf->data());
-  vxl_byte *            cbi = ib;
+  auto * ib = reinterpret_cast<vxl_byte *>(buf->data());
+  auto * ob = reinterpret_cast<vxl_uint_16 *>(buf->data());
+  vxl_byte * cbi = ib;
 
   // for each channel
   for (unsigned int channel = 0; channel < nplanes_; ++channel)
@@ -357,10 +357,10 @@ vil_iris_generic_image::get_section_rle(unsigned int x0, unsigned int xs, unsign
   unsigned int row_len = xs * pix_size;
 
   vil_memory_chunk_sptr buf = new vil_memory_chunk(row_len * ys * nplanes_, format_);
-  auto *                ib = reinterpret_cast<vxl_byte *>(buf->data());
-  auto *                ob = reinterpret_cast<vxl_uint_16 *>(buf->data());
-  vxl_byte *            cbi = ib;
-  auto *                exrow = new unsigned char[ni_];
+  auto * ib = reinterpret_cast<vxl_byte *>(buf->data());
+  auto * ob = reinterpret_cast<vxl_uint_16 *>(buf->data());
+  vxl_byte * cbi = ib;
+  auto * exrow = new unsigned char[ni_];
 
   // for each channel
   for (unsigned int channel = 0; channel < nplanes_; ++channel)
@@ -408,13 +408,13 @@ vil_iris_generic_image::put_view(vil_image_view_base const & buf, unsigned int x
   std::cerr << "vil_iris_image::put_view() : buf=" << buf.ni() << 'x' << buf.nj() << 'x' << buf.nplanes() << 'p'
             << " at (" << x0 << ',' << y0 << ")\n";
 #endif
-  const auto &          buff = static_cast<vil_image_view<unsigned char> const &>(buf);
+  const auto & buff = static_cast<vil_image_view<unsigned char> const &>(buf);
   const unsigned char * ob = buff.top_left_ptr();
-  unsigned int          pix_size = vil_pixel_format_sizeof_components(format_);
+  unsigned int pix_size = vil_pixel_format_sizeof_components(format_);
 
-  std::size_t    rowsize = pix_size * buf.ni();
+  std::size_t rowsize = pix_size * buf.ni();
   std::ptrdiff_t rowskip = pix_size * buff.jstep();
-  std::size_t    planeskip = pix_size * buff.planestep();
+  std::size_t planeskip = pix_size * buff.planestep();
 
   if (VXL_LITTLE_ENDIAN && pix_size > 1) // IRIS image data is big-endian
   {

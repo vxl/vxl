@@ -41,10 +41,10 @@
 struct vul_timer_data
 {
 #if !defined(_WIN32) || defined(__CYGWIN__)
-  tms            usage0; // usage mark.
-  struct timeval real0;  // wall clock mark.
+  tms usage0;           // usage mark.
+  struct timeval real0; // wall clock mark.
 #else
-  std::clock_t  usage0;
+  std::clock_t usage0;
   struct _timeb real0;
 #endif
 };

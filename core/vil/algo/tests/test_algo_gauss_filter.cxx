@@ -27,7 +27,7 @@ test_algo_gaussian_filter_5tap_byte_float()
   for (int i = 0; i < n; ++i)
     for (int j = 0; j < n; ++j)
       src(i, j) = vxl_byte(j * 10 + i);
-  vil_image_view<float>        dest;
+  vil_image_view<float> dest;
   vil_gauss_filter_5tap_params params(1.0);
   vil_gauss_filter_5tap(src, dest, params);
   std::cout << "Source\n";
@@ -59,7 +59,7 @@ test_algo_gaussian_filter_5tap_byte_float()
   vil_print_all(std::cout, dest);
 
   float sum = 0;
-  bool  fail1 = false, fail2 = false;
+  bool fail1 = false, fail2 = false;
   for (int i = 0; i < n; ++i)
     for (int j = 0; j < n; ++j)
     {
@@ -227,13 +227,13 @@ test_algo_gauss_filter_1d()
             << " Testing vil_gauss_filter_1d\n"
             << "*****************************\n\n";
 
-  unsigned                 nx = 15, ny = 17;
+  unsigned nx = 15, ny = 17;
   vil_image_view<vxl_byte> src_im(2 * nx + 1, 2 * ny + 1);
   src_im.fill(vxl_byte(0));
   src_im(nx, ny) = 100; // Centre pixel
   vil_image_view<float> dest_im;
 
-  double   sd = 2.5;
+  double sd = 2.5;
   unsigned half_width = 8;
   vil_gauss_filter_1d(src_im, dest_im, sd, half_width);
   TEST("Output image ni", dest_im.ni(), src_im.ni());
@@ -255,13 +255,13 @@ test_algo_gauss_filter_2d()
             << " Testing vil_gauss_filter_2d\n"
             << "*****************************\n\n";
 
-  unsigned                 nx = 15, ny = 17;
+  unsigned nx = 15, ny = 17;
   vil_image_view<vxl_byte> src_im(2 * nx + 1, 2 * ny + 1);
   src_im.fill(vxl_byte(0));
   src_im(nx, ny) = 100; // Centre pixel
   vil_image_view<float> dest_im;
 
-  double   sd = 2.5;
+  double sd = 2.5;
   unsigned half_width = 8;
   vil_gauss_filter_2d(src_im, dest_im, sd, half_width);
   TEST("Output image ni", dest_im.ni(), src_im.ni());

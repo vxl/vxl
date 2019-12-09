@@ -322,8 +322,8 @@ vul_expand_path_internal(std::string path)
     if (i == path.size() || path[i] == '/')
     {
       std::string sub(path.c_str(), path.c_str() + i);
-      char        buf[4096];
-      int         len = readlink(sub.c_str(), buf, sizeof buf);
+      char buf[4096];
+      int len = readlink(sub.c_str(), buf, sizeof buf);
       if (len != -1)
       {
         // it's a symlink. we should expand it and recurse.

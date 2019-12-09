@@ -22,13 +22,13 @@ vgl_h_matrix_2d_optimize_lmq::vgl_h_matrix_2d_optimize_lmq(vgl_h_matrix_2d<doubl
 bool
 vgl_h_matrix_2d_optimize_lmq::optimize_h(std::vector<vgl_homg_point_2d<double>> const & points1,
                                          std::vector<vgl_homg_point_2d<double>> const & points2,
-                                         vgl_h_matrix_2d<double> const &                h_initial,
-                                         vgl_h_matrix_2d<double> &                      h_optimized)
+                                         vgl_h_matrix_2d<double> const & h_initial,
+                                         vgl_h_matrix_2d<double> & h_optimized)
 {
-  projection_lsqf                lsq(points1, points2);
-  vnl_vector<double>             hv(9);
+  projection_lsqf lsq(points1, points2);
+  vnl_vector<double> hv(9);
   vnl_matrix_fixed<double, 3, 3> m = h_initial.get_matrix();
-  unsigned                       i = 0;
+  unsigned i = 0;
   for (unsigned r = 0; r < 3; ++r)
     for (unsigned c = 0; c < 3; ++c, ++i)
       hv[i] = m[r][c];
@@ -54,7 +54,7 @@ vgl_h_matrix_2d_optimize_lmq::optimize_h(std::vector<vgl_homg_point_2d<double>> 
 bool
 vgl_h_matrix_2d_optimize_lmq::optimize_p(std::vector<vgl_homg_point_2d<double>> const & points1,
                                          std::vector<vgl_homg_point_2d<double>> const & points2,
-                                         vgl_h_matrix_2d<double> &                      H)
+                                         vgl_h_matrix_2d<double> & H)
 {
   // number of points must be the same
   assert(points1.size() == points2.size());
@@ -104,7 +104,7 @@ vgl_h_matrix_2d_optimize_lmq::optimize_p(std::vector<vgl_homg_point_2d<double>> 
 bool
 vgl_h_matrix_2d_optimize_lmq::optimize_l(std::vector<vgl_homg_line_2d<double>> const & lines1,
                                          std::vector<vgl_homg_line_2d<double>> const & lines2,
-                                         vgl_h_matrix_2d<double> &                     H)
+                                         vgl_h_matrix_2d<double> & H)
 {
   // number of lines must be the same
   assert(lines1.size() == lines2.size());
@@ -145,7 +145,7 @@ vgl_h_matrix_2d_optimize_lmq::optimize_l(std::vector<vgl_homg_line_2d<double>> c
   initial_h_norm = tr2 * initial_h_ * tr1_inv;
   // convert to line form
   vnl_matrix_fixed<double, 3, 3> const & Mp_init = initial_h_norm.get_matrix();
-  vnl_matrix_fixed<double, 3, 3>         Ml_init = vnl_inverse_transpose(Mp_init);
+  vnl_matrix_fixed<double, 3, 3> Ml_init = vnl_inverse_transpose(Mp_init);
   h_initial_line.set(Ml_init);
 
   // run the optimization to refine the line transform
@@ -153,9 +153,9 @@ vgl_h_matrix_2d_optimize_lmq::optimize_l(std::vector<vgl_homg_line_2d<double>> c
     return false;
 
   // Convert the optimized line transform back to point form.
-  vgl_h_matrix_2d<double>                h_point_opt;
+  vgl_h_matrix_2d<double> h_point_opt;
   vnl_matrix_fixed<double, 3, 3> const & Ml_opt = h_line_opt.get_matrix();
-  vnl_matrix_fixed<double, 3, 3>         Mp_opt = vnl_inverse_transpose(Ml_opt);
+  vnl_matrix_fixed<double, 3, 3> Mp_opt = vnl_inverse_transpose(Ml_opt);
   h_point_opt.set(Mp_opt);
 
   // Finally, h_point_opt has to be transformed back to the coordinate
@@ -173,9 +173,9 @@ vgl_h_matrix_2d_optimize_lmq::optimize_l(std::vector<vgl_homg_line_2d<double>> c
 bool
 vgl_h_matrix_2d_optimize_lmq::optimize_pl(std::vector<vgl_homg_point_2d<double>> const & points1,
                                           std::vector<vgl_homg_point_2d<double>> const & points2,
-                                          std::vector<vgl_homg_line_2d<double>> const &  lines1,
-                                          std::vector<vgl_homg_line_2d<double>> const &  lines2,
-                                          vgl_h_matrix_2d<double> &                      H)
+                                          std::vector<vgl_homg_line_2d<double>> const & lines1,
+                                          std::vector<vgl_homg_line_2d<double>> const & lines2,
+                                          vgl_h_matrix_2d<double> & H)
 {
   // number of points must be the same
   assert(points1.size() == points2.size());

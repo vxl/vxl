@@ -335,7 +335,7 @@ vul_arg_info_list::parse(int & argc, char **& argv, bool warn_about_unrecognized
   while (*my_argv)
   {
     char * argmt = *my_argv;
-    bool   eaten = false;
+    bool eaten = false;
     for (unsigned int i = 0; i < args_.size(); ++i)
     {
       if (!args_[i]->option_.empty())
@@ -960,7 +960,7 @@ VDS int
 parse(vul_arg<std::vector<int>> * argmt, char ** argv)
 {
   std::list<int> tmp;
-  int            retval = list_parse(tmp, argv);
+  int retval = list_parse(tmp, argv);
   // Defaults should be cleared when the user supplies a value
   argmt->value_.clear();
   for (const auto & i : tmp)
@@ -988,7 +988,7 @@ VDS int
 parse(vul_arg<std::vector<unsigned>> * argmt, char ** argv)
 {
   std::list<int> tmp;
-  int            retval = list_parse(tmp, argv);
+  int retval = list_parse(tmp, argv);
   // Defaults should be cleared when the user supplies a value
   argmt->value_.clear();
   for (const auto & i : tmp)

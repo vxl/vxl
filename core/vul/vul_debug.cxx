@@ -43,7 +43,7 @@ static bool
 vul_debug_core_dump_in_windows_seh(const char * filename, EXCEPTION_POINTERS * pep)
 {
   static char buffer[2048];
-  static int  count = 0;
+  static int count = 0;
   std::snprintf(buffer, sizeof(buffer), filename, count++);
   buffer[sizeof(buffer) - 1] = 0; // Just in case it is too long
 
@@ -194,7 +194,7 @@ vul_debug_set_coredump_and_throw_on_windows_se(const char *)
 bool
 vul_debug_core_dump(const char * filename)
 {
-  static int  count = 0;
+  static int count = 0;
 #  ifdef VXL_UNISTD_HAS_GETPID
   std::string syscall = "gcore -o ";
   syscall += vul_sprintf(filename, count++);

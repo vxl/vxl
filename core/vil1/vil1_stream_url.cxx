@@ -66,10 +66,10 @@ encode_triplet(char data[3], unsigned n)
 static std::string
 encode_base64(const std::string & in)
 {
-  std::string        out;
-  unsigned int       i = 0, line_octets = 0;
+  std::string out;
+  unsigned int i = 0, line_octets = 0;
   const unsigned int l = (unsigned int)(in.size());
-  char               data[3];
+  char data[3];
   while (i < l)
   {
     data[0] = in[i++];
@@ -120,7 +120,7 @@ vil1_stream_url::vil1_stream_url(char const * url)
   std::string host = std::string(url + 7, p);
   std::string path = (*p) ? p + 1 : "";
   std::string auth;
-  int         port = 80; // default
+  int port = 80; // default
 
   // authentication
   for (unsigned int i = 0; i < host.size(); ++i)
@@ -160,7 +160,7 @@ vil1_stream_url::vil1_stream_url(char const * url)
   static int called_WSAStartup;
   if (called_WSAStartup == 0)
   {
-    WORD    wVersionRequested;
+    WORD wVersionRequested;
     WSADATA wsaData;
 
     wVersionRequested = MAKEWORD(2, 2);
@@ -263,7 +263,7 @@ vil1_stream_url::vil1_stream_url(char const * url)
   u_ = new vil1_stream_core;
   u_->ref();
   {
-    unsigned       entity_marker = 0; // count end of header CR and LFs
+    unsigned entity_marker = 0; // count end of header CR and LFs
     vil1_streampos n;
 #if defined(_WIN32) && !defined(__CYGWIN__)
     while ((n = recv(tcp_socket, buffer, sizeof buffer, 0)) > 0L)

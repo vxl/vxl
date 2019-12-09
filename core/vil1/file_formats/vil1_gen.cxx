@@ -72,7 +72,7 @@ vil1_gen_generic_image::vil1_gen_generic_image(std::string const & /*s*/,
 static int
 read_int(char const ** p_inout)
 {
-  int          val = 0;
+  int val = 0;
   char const * p = *p_inout;
   while (*p >= '0' && *p <= '9')
   {
@@ -182,11 +182,11 @@ vil1_gen_generic_image::get_section(void * buf, int /*x0*/, int /*y0*/, int xs, 
   }
   else if (type_ == vil1_gen_rgb)
   {
-    int    n = xs * ys;
+    int n = xs * ys;
     auto * p = (unsigned char *)buf;
-    auto   r = (unsigned char)(params_[0]);
-    auto   g = (unsigned char)(params_[1]);
-    auto   b = (unsigned char)(params_[2]);
+    auto r = (unsigned char)(params_[0]);
+    auto g = (unsigned char)(params_[1]);
+    auto b = (unsigned char)(params_[2]);
     while (n--)
     {
       *p++ = r;

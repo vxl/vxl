@@ -10,7 +10,7 @@
 extern "C" void
 test_matrix_update()
 {
-  unsigned           nr = 5, nc = 7;
+  unsigned nr = 5, nc = 7;
   vnl_matrix<double> M(nr, nc), true_M(nr, nc);
   vnl_matrix<double> Ma(nr, 1), Mb(1, nc);
   vnl_vector<double> a(nr), b(nc);

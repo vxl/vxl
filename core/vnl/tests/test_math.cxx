@@ -112,9 +112,9 @@ test_math()
   test_static_const_definition();
   test_math_constants();
 
-  int                  n = -11;
-  float                f = -7.5f;
-  double               d = -vnl_math::pi;
+  int n = -11;
+  float f = -7.5f;
+  double d = -vnl_math::pi;
   std::complex<double> i(0, 1);
   std::complex<double> z(-1, 2);
   std::complex<double> e_ipi = std::exp(d * i);
@@ -315,12 +315,12 @@ test_math()
               << std::endl;
   }
   // Create Inf and -Inf:
-  const float  pinf_f = std::numeric_limits<float>::infinity();
-  const float  ninf_f = -std::numeric_limits<float>::infinity();
+  const float pinf_f = std::numeric_limits<float>::infinity();
+  const float ninf_f = -std::numeric_limits<float>::infinity();
   const double pinf_d = std::numeric_limits<double>::infinity();
   const double ninf_d = -std::numeric_limits<double>::infinity();
   // Create NaN
-  const float  qnan_f = std::numeric_limits<float>::quiet_NaN();
+  const float qnan_f = std::numeric_limits<float>::quiet_NaN();
   const double qnan_d = std::numeric_limits<double>::quiet_NaN();
 #ifdef INCLUDE_LONG_DOUBLE_TESTS
   const long double pinf_q = std::numeric_limits<long double>::infinity();
@@ -437,20 +437,20 @@ test_math()
 
     unsigned short x_short_u = 7;
     unsigned short y_short_u = 2;
-    signed short   x_short_s = 7;
-    signed short   y_short_s = 2;
-    unsigned int   x_int_u = 7;
-    unsigned int   y_int_u = 2;
-    signed int     x_int_s = 7;
-    signed int     y_int_s = 2;
-    unsigned long  x_long_u = 7;
-    unsigned long  y_long_u = 2;
-    signed long    x_long_s = 7;
-    signed long    y_long_s = 2;
-    float          x_float = 7;
-    float          y_float = 2;
-    double         x_double = 7;
-    double         y_double = 2;
+    signed short x_short_s = 7;
+    signed short y_short_s = 2;
+    unsigned int x_int_u = 7;
+    unsigned int y_int_u = 2;
+    signed int x_int_s = 7;
+    signed int y_int_s = 2;
+    unsigned long x_long_u = 7;
+    unsigned long y_long_u = 2;
+    signed long x_long_s = 7;
+    signed long y_long_s = 2;
+    float x_float = 7;
+    float y_float = 2;
+    double x_double = 7;
+    double y_double = 2;
 #ifdef INCLUDE_LONG_DOUBLE_TESTS
     long double x_long_double = 7;
     long double y_long_double = 2;
@@ -597,20 +597,20 @@ test_math()
 
     unsigned short x_short_u = 7;
     unsigned short y_short_u = 2;
-    signed short   x_short_s = 7;
-    signed short   y_short_s = 2;
-    unsigned int   x_int_u = 7;
-    unsigned int   y_int_u = 2;
-    signed int     x_int_s = 7;
-    signed int     y_int_s = 2;
-    unsigned long  x_long_u = 7;
-    unsigned long  y_long_u = 2;
-    signed long    x_long_s = 7;
-    signed long    y_long_s = 2;
-    float          x_float = 7;
-    float          y_float = 2;
-    double         x_double = 7;
-    double         y_double = 2;
+    signed short x_short_s = 7;
+    signed short y_short_s = 2;
+    unsigned int x_int_u = 7;
+    unsigned int y_int_u = 2;
+    signed int x_int_s = 7;
+    signed int y_int_s = 2;
+    unsigned long x_long_u = 7;
+    unsigned long y_long_u = 2;
+    signed long x_long_s = 7;
+    signed long y_long_s = 2;
+    float x_float = 7;
+    float y_float = 2;
+    double x_double = 7;
+    double y_double = 2;
 #ifdef INCLUDE_LONG_DOUBLE_TESTS
     long double x_long_double = 7;
     long double y_long_double = 2;

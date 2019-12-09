@@ -24,12 +24,12 @@ vgui_win32_window::DefWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
   return 0;
 }
 
-vgui_win32_window::vgui_win32_window(HINSTANCE         hInst,
-                                     const char *      appName,
-                                     int               width,
-                                     int               height,
+vgui_win32_window::vgui_win32_window(HINSTANCE hInst,
+                                     const char * appName,
+                                     int width,
+                                     int height,
                                      vgui_menu const & menubar,
-                                     char const *      title)
+                                     char const * title)
   : cx_(width)
   , cy_(height)
   , first_show(true)
@@ -215,7 +215,7 @@ int
 vgui_win32_window::set_hscrollbar(int pos)
 {
   SCROLLINFO si;
-  int        oldPos;
+  int oldPos;
 
   si.cbSize = sizeof(si);
   si.fMask = SIF_POS;
@@ -234,7 +234,7 @@ int
 vgui_win32_window::set_vscrollbar(int pos)
 {
   SCROLLINFO si;
-  int        oldPos;
+  int oldPos;
 
   si.cbSize = sizeof(si);
   si.fMask = SIF_POS;

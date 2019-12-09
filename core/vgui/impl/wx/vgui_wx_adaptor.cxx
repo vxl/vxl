@@ -58,13 +58,13 @@ IMPLEMENT_CLASS(vgui_wx_adaptor, wxGLCanvas)
 vgui_menu vgui_wx_adaptor::last_popup_;
 
 //: Constructor.
-vgui_wx_adaptor::vgui_wx_adaptor(wxWindow *       parent,
-                                 wxWindowID       id,
-                                 const wxPoint &  pos,
-                                 const wxSize &   size,
-                                 long             style,
+vgui_wx_adaptor::vgui_wx_adaptor(wxWindow * parent,
+                                 wxWindowID id,
+                                 const wxPoint & pos,
+                                 const wxSize & size,
+                                 long style,
                                  const wxString & name,
-                                 int *            attributes)
+                                 int * attributes)
   : wxGLCanvas(parent, id, pos, size, style | wxFULL_REPAINT_ON_RESIZE | wxBORDER_SUNKEN, name, attributes)
   , view_(0)
   , redraw_posted_(true)
@@ -395,7 +395,7 @@ vgui_wx_adaptor::on_mouse_event(wxMouseEvent & event)
     vgui_macro_report_errors;
     // present the popup menu
     vgui_wx_menu popup;
-    wxMenu *     menu = popup.create_wx_menu(last_popup_);
+    wxMenu * menu = popup.create_wx_menu(last_popup_);
     vgui_macro_report_errors;
     PushEventHandler(&popup);
     PopupMenu(menu);

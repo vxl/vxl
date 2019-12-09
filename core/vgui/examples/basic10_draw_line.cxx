@@ -39,7 +39,7 @@ struct example_tableau : public vgui_easy2D_tableau
     {
       // Convert the coordinates from viewport coords to image coords:
       vgui_projection_inspector pi;
-      float                     ix, iy;
+      float ix, iy;
       pi.window_to_image_coordinates(int(e.wx), int(e.wy), ix, iy);
 
       if (start_x == -1)
@@ -90,7 +90,7 @@ main(int argc, char ** argv)
   example_tableau_new example_tab(image);
 
   vgui_viewer2D_tableau_new viewer(example_tab);
-  vgui_shell_tableau_new    shell(viewer);
+  vgui_shell_tableau_new shell(viewer);
 
   return vgui::run(shell, 512, 512);
 }

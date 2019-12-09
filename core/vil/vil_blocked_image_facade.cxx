@@ -16,8 +16,8 @@
 static const unsigned vil_size_block_i = 256, vil_size_block_j = 256;
 
 vil_blocked_image_facade::vil_blocked_image_facade(const vil_image_resource_sptr & src,
-                                                   const unsigned                  sbi,
-                                                   const unsigned                  sbj)
+                                                   const unsigned sbi,
+                                                   const unsigned sbj)
   : src_(src)
 {
   // cases
@@ -42,9 +42,9 @@ vil_blocked_image_facade::fill_block(vil_image_view_base_sptr & view) const
 #define FILL_BLOCK_CASE(FORMAT, T)                                                                                     \
   case FORMAT:                                                                                                         \
   {                                                                                                                    \
-    vil_image_view<T> *      dest = new vil_image_view<T>(sbi_, sbj_, nplanes());                                      \
+    vil_image_view<T> * dest = new vil_image_view<T>(sbi_, sbj_, nplanes());                                           \
     vil_image_view_base_sptr ptr = dest;                                                                               \
-    vil_image_view<T> *      src = reinterpret_cast<vil_image_view<T> *>(view.ptr());                                  \
+    vil_image_view<T> * src = reinterpret_cast<vil_image_view<T> *>(view.ptr());                                       \
     vil_copy_to_window<T>(*src, *dest, 0, 0);                                                                          \
     return dest;                                                                                                       \
   }                                                                                                                    \
@@ -77,7 +77,7 @@ vil_blocked_image_facade::get_block(unsigned block_index_i, unsigned block_index
     return nullptr;
   // check if the view that is supplied is smaller than a block
   unsigned icrop = ni - i0, jcrop = nj - j0;
-  bool     needs_fill = false;
+  bool needs_fill = false;
   if (icrop >= sbi_)
     icrop = sbi_;
   else
@@ -101,7 +101,7 @@ vil_blocked_image_facade::put_block(unsigned block_index_i, unsigned block_index
   // check if block is too big for the destination
   unsigned imax = i0 + sbi_, jmax = j0 + sbj_;
   unsigned icrop = sbi_, jcrop = sbj_;
-  bool     needs_trim = false;
+  bool needs_trim = false;
   if (imax > src_->ni())
   {
     icrop = src_->ni() - i0;
@@ -120,7 +120,7 @@ vil_blocked_image_facade::put_block(unsigned block_index_i, unsigned block_index
   case FORMAT:                                                                                                         \
   {                                                                                                                    \
     const vil_image_view<T> & curr_view = static_cast<const vil_image_view<T> &>(view);                                \
-    vil_image_view<T>         cview = vil_crop(curr_view, 0, icrop, 0, jcrop);                                         \
+    vil_image_view<T> cview = vil_crop(curr_view, 0, icrop, 0, jcrop);                                                 \
     return src_->put_view(cview, i0, j0);                                                                              \
   }                                                                                                                    \
   break

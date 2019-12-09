@@ -18,11 +18,11 @@ test_affine_fundamental_matrix_double()
   Mp[0][2] = s2;
   Mp[0][3] = -3.12132;
   Mp[1][1] = 1.0;
-  vpgl_affine_camera<double>             cr(M), cl(Mp);
+  vpgl_affine_camera<double> cr(M), cl(Mp);
   vpgl_affine_fundamental_matrix<double> F(cr, cl);
-  vnl_matrix_fixed<double, 3, 3>         Mf = F.get_matrix();
-  double                                 er = fabs(Mf[1][2] + 1) + fabs(Mf[2][1] - 1) + fabs(Mf[2][2] + 10.0);
-  bool                                   good = er < 0.001;
+  vnl_matrix_fixed<double, 3, 3> Mf = F.get_matrix();
+  double er = fabs(Mf[1][2] + 1) + fabs(Mf[2][1] - 1) + fabs(Mf[2][2] + 10.0);
+  bool good = er < 0.001;
   TEST("compute F matrix (double)", good, true);
 }
 
@@ -40,11 +40,11 @@ test_affine_fundamental_matrix_float()
   Mp[0][2] = s2;
   Mp[0][3] = -3.12132f;
   Mp[1][1] = 1.0f;
-  vpgl_affine_camera<float>             cr(M), cl(Mp);
+  vpgl_affine_camera<float> cr(M), cl(Mp);
   vpgl_affine_fundamental_matrix<float> F(cr, cl);
-  vnl_matrix_fixed<float, 3, 3>         Mf = F.get_matrix();
-  double                                er = fabs(Mf[1][2] + 1) + fabs(Mf[2][1] - 1) + fabs(Mf[2][2] + 10.0);
-  bool                                  good = er < 0.001;
+  vnl_matrix_fixed<float, 3, 3> Mf = F.get_matrix();
+  double er = fabs(Mf[1][2] + 1) + fabs(Mf[2][1] - 1) + fabs(Mf[2][2] + 10.0);
+  bool good = er < 0.001;
   TEST("compute F matrix (float)", good, true);
 }
 

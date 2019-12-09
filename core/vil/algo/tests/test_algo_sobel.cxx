@@ -19,9 +19,9 @@ test_algo_sobel()
             << " Testing vil_sobel\n"
             << "*******************\n";
 
-  const unsigned int       WD = 5, HT = 6, X = 2, Y = 3;
-  constexpr int            step = 9;
-  const double             halfstep = 0.5 * step, qrtrstep = 0.25 * step, eigtstep = 0.125 * step;
+  const unsigned int WD = 5, HT = 6, X = 2, Y = 3;
+  constexpr int step = 9;
+  const double halfstep = 0.5 * step, qrtrstep = 0.25 * step, eigtstep = 0.125 * step;
   vil_image_view<vxl_byte> image0;
   image0.set_size(WD, HT);
   image0.fill(10);

@@ -131,7 +131,7 @@ vil_nitf2_des::add_shared_field_defs_2(vil_nitf2_field_definitions * defs, int d
 vil_nitf2_field::field_tree *
 vil_nitf2_des::get_tree(int i) const
 {
-  auto *            t = new vil_nitf2_field::field_tree;
+  auto * t = new vil_nitf2_field::field_tree;
   std::stringstream name_stream;
   name_stream << "Data Extension Segment";
   if (i > 0)

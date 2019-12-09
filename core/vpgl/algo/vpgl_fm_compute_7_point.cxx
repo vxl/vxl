@@ -16,8 +16,8 @@
 
 //-------------------------------------------
 bool
-vpgl_fm_compute_7_point::compute(const std::vector<vgl_homg_point_2d<double>> &   pr,
-                                 const std::vector<vgl_homg_point_2d<double>> &   pl,
+vpgl_fm_compute_7_point::compute(const std::vector<vgl_homg_point_2d<double>> & pr,
+                                 const std::vector<vgl_homg_point_2d<double>> & pl,
                                  std::vector<vpgl_fundamental_matrix<double> *> & fm)
 {
   // Check that there are at least 7 points.
@@ -37,7 +37,7 @@ vpgl_fm_compute_7_point::compute(const std::vector<vgl_homg_point_2d<double>> & 
 
   // Condition if necessary.
   std::vector<vgl_homg_point_2d<double>> pr_norm, pl_norm;
-  vgl_norm_trans_2d<double>              prnt, plnt;
+  vgl_norm_trans_2d<double> prnt, plnt;
   if (precondition_)
   {
     prnt.compute_from_points(pr);
@@ -73,7 +73,7 @@ vpgl_fm_compute_7_point::compute(const std::vector<vgl_homg_point_2d<double>> & 
   }
 
   design_matrix.normalize_rows();
-  vnl_svd<double>    design_svd(design_matrix);
+  vnl_svd<double> design_svd(design_matrix);
   vnl_matrix<double> W = design_svd.nullspace();
 
   // Take the first and second nullvectors from the nullspace
@@ -137,7 +137,7 @@ vpgl_fm_compute_7_point::solve_quadratic(std::vector<double> v)
   if (d < 0.0)                    // doesn't work for compl_normex roots
     return std::vector<double>(); // empty list
 
-  double              q = -0.5 * (b + s * std::sqrt(d));
+  double q = -0.5 * (b + s * std::sqrt(d));
   std::vector<double> l;
   l.push_back(q / a);
   l.push_back(c / q);
@@ -168,7 +168,7 @@ vpgl_fm_compute_7_point::solve_cubic(std::vector<double> v)
   if (q == 0)
   {
     std::vector<double> w;
-    double              cbrt = (r < 0) ? std::exp(std::log(-2 * r) / 3.0) : -std::exp(std::log(2 * r) / 3.0);
+    double cbrt = (r < 0) ? std::exp(std::log(-2 * r) / 3.0) : -std::exp(std::log(2 * r) / 3.0);
     w.push_back(cbrt - b);
     return w;
   }
@@ -194,7 +194,7 @@ vpgl_fm_compute_7_point::solve_cubic(std::vector<double> v)
 
   // And finally the "irreducible case" (with 3 solutions):
   c = std::sqrt(q);
-  double              theta = std::acos(r / q / c) / 3;
+  double theta = std::acos(r / q / c) / 3;
   std::vector<double> l;
   l.push_back(-2.0 * c * std::cos(theta) - b);
   l.push_back(-2.0 * c * std::cos(theta + vnl_math::twopi / 3) - b);

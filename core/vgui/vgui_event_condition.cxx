@@ -16,13 +16,13 @@
 //----------------------------------------------------------------------------
 // Initialise event condition and check for impossible events.
 void
-vgui_event_condition::init(vgui_key      k,
-                           vgui_key      a,
-                           vgui_button   b,
+vgui_event_condition::init(vgui_key k,
+                           vgui_key a,
+                           vgui_button b,
                            vgui_modifier m,
-                           bool          is_pressed,
-                           bool          is_on,
-                           event_types   h)
+                           bool is_pressed,
+                           bool is_on,
+                           event_types h)
 {
   on = is_on;
   pressed = is_pressed;

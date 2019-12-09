@@ -71,7 +71,7 @@ actual_e_matrix()
 static void
 test_essential_matrix()
 {
-  double         cx = 10, cy = 0, cz = 0;
+  double cx = 10, cy = 0, cz = 0;
   vnl_double_3x3 T = skew_symmetric(-cx, -cy, -cz);
   // create an essential matrix for translation only
   vpgl_essential_matrix<double> E(T);
@@ -82,7 +82,7 @@ test_essential_matrix()
   vgl_point_2d<double> pr(0, 0);
   // This point in 3-d is (0,0,10);
   vpgl_perspective_camera<double> pc;
-  bool                            success = extract_left_camera<double>(E, pl, pr, pc);
+  bool success = extract_left_camera<double>(E, pl, pr, pc);
   TEST("test extract_left_camera", success, true);
   vgl_point_3d<double> cen = pc.get_camera_center();
   TEST_NEAR("test translation only between cameras", cen.x(), 1.0, 1e-03);
@@ -91,8 +91,8 @@ test_essential_matrix()
   vgl_h_matrix_3d<double> Rh;
   Rh.set_identity();
   vnl_vector_fixed<double, 3> ax(0, 1, 0), cv(10, 0, 0), t;
-  vgl_point_3d<double>        c(10, 0, 0); // Camera center
-  Rh.set_rotation_about_axis(ax, 0.5236);  // Rotation matrix
+  vgl_point_3d<double> c(10, 0, 0);       // Camera center
+  Rh.set_rotation_about_axis(ax, 0.5236); // Rotation matrix
   vnl_double_3x3 R = Rh.get_upper_3x3_matrix();
   t = -R * cv;
   vpgl_essential_matrix<double> Ei(skew_symmetric(t[0], t[1], t[2]) * R);
@@ -101,8 +101,8 @@ test_essential_matrix()
   pcl.set_rotation(vgl_rotation_3d<double>(Rh));
   pcl.set_camera_center(c);
   std::cout << "Ideal Left Perspective Camera  " << pcl << '\n';
-  vgl_point_3d<double>          X(0, 0, 10);
-  vgl_point_2d<double>          xl = pcl.project(X), xr(0, 0);
+  vgl_point_3d<double> X(0, 0, 10);
+  vgl_point_2d<double> xl = pcl.project(X), xr(0, 0);
   vpgl_essential_matrix<double> Er(pcr, pcl);
   std::cout << "Essential Matrix with rotation\n" << Er << '\n';
   vnl_double_3x3 error = Ei.get_matrix() - Er.get_matrix();
@@ -116,7 +116,7 @@ test_essential_matrix()
   // test using actual essential matrix
   vpgl_essential_matrix<double> Ea = actual_e_matrix();
   std::cout << "Actual E Matrix\n" << Ea << '\n';
-  vgl_point_2d<double>            xal(0.207847, 0.2126), xar(-0.1289, -0.0683432);
+  vgl_point_2d<double> xal(0.207847, 0.2126), xar(-0.1289, -0.0683432);
   vpgl_perspective_camera<double> palr; // reconstructed actual camera
   success = extract_left_camera<double>(Ea, xal, xar, palr, 6.25);
   TEST("test extract_left_camera", success, true);

@@ -10,7 +10,7 @@ static void
 test_range_map()
 {
   // Test the range map parameter class
-  long double                ma = 0, mb = 1, mc = 2, md = 3, me = 4, mf = 5;
+  long double ma = 0, mb = 1, mc = 2, md = 3, me = 4, mf = 5;
   vgui_range_map_params_sptr rmpL = new vgui_range_map_params(ma, mb);
   vgui_range_map_params_sptr rmpL1 = new vgui_range_map_params(*rmpL);
   vgui_range_map_params_sptr rmpL2 = new vgui_range_map_params(ma, mc);
@@ -50,26 +50,26 @@ test_range_map()
   // bool pixel type
   //
   vgui_range_map_params_sptr Lrmpb = new vgui_range_map_params(0, 1);
-  vgui_range_map<vxl_byte>   Lrmb(*Lrmpb);
-  vxl_byte                   valfalse = Lrmb.map_L_pixel(0);
-  vxl_byte                   valtrue = Lrmb.map_L_pixel(1);
+  vgui_range_map<vxl_byte> Lrmb(*Lrmpb);
+  vxl_byte valfalse = Lrmb.map_L_pixel(0);
+  vxl_byte valtrue = Lrmb.map_L_pixel(1);
   TEST("bool values", !valfalse && valtrue == 255, true);
 
   //
   // unsigned 8 bit (unsigned char)
   //
-  long double                   min = 0, max = 255;
-  vgui_range_map_params_sptr    Lrmpuc = new vgui_range_map_params(min, max);
-  vgui_range_map<vxl_byte>      Lrmuc(*Lrmpuc);
-  vxl_byte                      val8 = Lrmuc.map_L_pixel(127);
-  vbl_array_1d<vxl_byte>        map8 = Lrmuc.Lmap();
-  vbl_array_1d<float>           fmap8 = Lrmuc.fLmap();
+  long double min = 0, max = 255;
+  vgui_range_map_params_sptr Lrmpuc = new vgui_range_map_params(min, max);
+  vgui_range_map<vxl_byte> Lrmuc(*Lrmpuc);
+  vxl_byte val8 = Lrmuc.map_L_pixel(127);
+  vbl_array_1d<vxl_byte> map8 = Lrmuc.Lmap();
+  vbl_array_1d<float> fmap8 = Lrmuc.fLmap();
   vbl_array_1d<float>::iterator test = fmap8.begin();
-  vxl_byte                      val8f = (vxl_byte)(test[127] * 255 + 0.5);
+  vxl_byte val8f = (vxl_byte)(test[127] * 255 + 0.5);
 
   //  vxl_byte val8f = (vxl_byte)(fmap8[127]*255 + 0.5);
   unsigned size8 = Lrmuc.map_size();
-  bool     map_good = false;
+  bool map_good = false;
   if (Lrmuc.mapable())
   {
     map_good = true;
@@ -82,11 +82,11 @@ test_range_map()
   // signed 8 bit (signed char)
   //
   vgui_range_map_params_sptr Lrmpsc = new vgui_range_map_params(-128, 127);
-  vgui_range_map<vxl_sbyte>  Lrmsc(*Lrmpsc);
-  vxl_byte                   valsc = Lrmsc.map_L_pixel(-64);
-  vbl_array_1d<vxl_byte>     mapsc = Lrmsc.Lmap();
-  unsigned                   sizesc = Lrmsc.map_size();
-  int                        offsc = Lrmsc.offset();
+  vgui_range_map<vxl_sbyte> Lrmsc(*Lrmpsc);
+  vxl_byte valsc = Lrmsc.map_L_pixel(-64);
+  vbl_array_1d<vxl_byte> mapsc = Lrmsc.Lmap();
+  unsigned sizesc = Lrmsc.map_size();
+  int offsc = Lrmsc.offset();
   map_good = false;
   if (Lrmsc.mapable())
   {
@@ -102,11 +102,11 @@ test_range_map()
   // signed 16 bit (short)
   //
   vgui_range_map_params_sptr Lrmpsh = new vgui_range_map_params(-128, 127);
-  vgui_range_map<short>      Lrmsh(*Lrmpsh);
-  vxl_byte                   valsh = Lrmsh.map_L_pixel(0);
-  vbl_array_1d<vxl_byte>     mapsh = Lrmsh.Lmap();
-  unsigned                   sizesh = Lrmsh.map_size();
-  int                        offsh = Lrmsh.offset();
+  vgui_range_map<short> Lrmsh(*Lrmpsh);
+  vxl_byte valsh = Lrmsh.map_L_pixel(0);
+  vbl_array_1d<vxl_byte> mapsh = Lrmsh.Lmap();
+  unsigned sizesh = Lrmsh.map_size();
+  int offsh = Lrmsh.offset();
   map_good = false;
   if (Lrmsh.mapable())
   {
@@ -121,12 +121,12 @@ test_range_map()
   //
   // unsigned 16 bit (unsigned short)
   //
-  vgui_range_map_params_sptr     Lrmpush = new vgui_range_map_params(0, 255);
+  vgui_range_map_params_sptr Lrmpush = new vgui_range_map_params(0, 255);
   vgui_range_map<unsigned short> Lmush(*Lrmpush);
-  vxl_byte                       valush = Lmush.map_L_pixel(128);
-  vbl_array_1d<vxl_byte>         mapush = Lmush.Lmap();
-  unsigned                       sizeush = Lmush.map_size();
-  int                            offush = Lmush.offset();
+  vxl_byte valush = Lmush.map_L_pixel(128);
+  vbl_array_1d<vxl_byte> mapush = Lmush.Lmap();
+  unsigned sizeush = Lmush.map_size();
+  int offush = Lmush.offset();
   map_good = false;
   if (Lmush.mapable())
   {
@@ -140,7 +140,7 @@ test_range_map()
   // float
   //
   vgui_range_map_params_sptr Lrmpf = new vgui_range_map_params(-128, 127);
-  vgui_range_map<float>      Lrmf(*Lrmpf);
+  vgui_range_map<float> Lrmf(*Lrmpf);
   map_good = true;
   for (float x = -128.0f; x < 128.0f; ++x)
     map_good = map_good && (Lrmf.map_L_pixel(x) == (vxl_byte)(x + 128.0f));
@@ -150,19 +150,19 @@ test_range_map()
   //
   // RGB unsigned char
   //
-  long double                minR = 0, maxR = 255, minG = minR, maxG = maxR, minB = minR, maxB = maxR;
+  long double minR = 0, maxR = 255, minG = minR, maxG = maxR, minB = minR, maxB = maxR;
   vgui_range_map_params_sptr RGBrmpuc = new vgui_range_map_params(minR, maxR, minG, maxG, minB, maxB);
-  vgui_range_map<vxl_byte>   RGBrmuc(*RGBrmpuc);
-  vxl_byte                   Rval = RGBrmuc.map_R_pixel(127);
-  vxl_byte                   Gval = RGBrmuc.map_G_pixel(127);
-  vxl_byte                   Bval = RGBrmuc.map_B_pixel(127);
-  vbl_array_1d<vxl_byte>     Rmap = RGBrmuc.Rmap();
-  vbl_array_1d<vxl_byte>     Gmap = RGBrmuc.Gmap();
-  vbl_array_1d<vxl_byte>     Bmap = RGBrmuc.Bmap();
-  vbl_array_1d<float>        fRmap = RGBrmuc.fRmap();
-  vbl_array_1d<float>        fGmap = RGBrmuc.fGmap();
-  vbl_array_1d<float>        fBmap = RGBrmuc.fBmap();
-  unsigned                   RGBsize8 = RGBrmuc.map_size();
+  vgui_range_map<vxl_byte> RGBrmuc(*RGBrmpuc);
+  vxl_byte Rval = RGBrmuc.map_R_pixel(127);
+  vxl_byte Gval = RGBrmuc.map_G_pixel(127);
+  vxl_byte Bval = RGBrmuc.map_B_pixel(127);
+  vbl_array_1d<vxl_byte> Rmap = RGBrmuc.Rmap();
+  vbl_array_1d<vxl_byte> Gmap = RGBrmuc.Gmap();
+  vbl_array_1d<vxl_byte> Bmap = RGBrmuc.Bmap();
+  vbl_array_1d<float> fRmap = RGBrmuc.fRmap();
+  vbl_array_1d<float> fGmap = RGBrmuc.fGmap();
+  vbl_array_1d<float> fBmap = RGBrmuc.fBmap();
+  unsigned RGBsize8 = RGBrmuc.map_size();
   map_good = false;
   if (RGBrmuc.mapable())
   {

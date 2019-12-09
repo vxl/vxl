@@ -85,7 +85,7 @@ vil_jpeg_empty_output_buffer(j_compress_ptr cinfo)
 
 
 //: Terminate destination --- called by jpeg_finish_compress after all data has been written.  Usually needs to flush
-//buffer.
+// buffer.
 //
 //  \note \e not called by jpeg_abort or jpeg_destroy; surrounding
 //  application must deal with any cleanup that should happen even
@@ -93,7 +93,7 @@ vil_jpeg_empty_output_buffer(j_compress_ptr cinfo)
 void
 vil_jpeg_term_destination(j_compress_ptr cinfo)
 {
-  auto        dest = (vil_jpeg_dstptr)cinfo->dest; // cast to derived class
+  auto dest = (vil_jpeg_dstptr)cinfo->dest; // cast to derived class
   std::size_t datacount = vil_jpeg_OUTPUT_BUF_SIZE - dest->base.free_in_buffer;
 
   // Write any data remaining in the buffer

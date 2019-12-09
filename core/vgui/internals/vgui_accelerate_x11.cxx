@@ -39,11 +39,11 @@ struct gl_to_hermes_format_map
 {
   GLenum gl_format;
   GLenum gl_type;
-  int32  bits_per_pixel;
-  int32  red_mask;
-  int32  green_mask;
-  int32  blue_mask;
-  int32  alpha_mask;
+  int32 bits_per_pixel;
+  int32 red_mask;
+  int32 green_mask;
+  int32 blue_mask;
+  int32 alpha_mask;
 };
 
 // swap between little and big endian 32bit words.
@@ -105,9 +105,9 @@ vgui_accelerate_x11::vgui_glClear(GLbitfield mask)
   if (!vgui_no_acceleration)
   {
 #  if defined(VGUI_MESA) && defined(HAS_HERMES)
-    GLint     render_mode;
+    GLint render_mode;
     GLboolean rgba_mode;
-    GLint     draw_buffer;
+    GLint draw_buffer;
     glGetIntegerv(GL_RENDER_MODE, &render_mode);
     glGetBooleanv(GL_RGBA_MODE, &rgba_mode);
     glGetIntegerv(GL_DRAW_BUFFER, &draw_buffer);
@@ -115,12 +115,12 @@ vgui_accelerate_x11::vgui_glClear(GLbitfield mask)
     {
       if (mask & GL_COLOR_BUFFER_BIT)
       {
-        Pixmap      p_dummy;
-        XImage *    backbuffer;
+        Pixmap p_dummy;
+        XImage * backbuffer;
         XMesaBuffer mesabuf = XMesaGetCurrentBuffer();
         XMesaGetBackBuffer(mesabuf, &p_dummy, &backbuffer);
 
-        int       x_min, x_max, y_min, y_max;
+        int x_min, x_max, y_min, y_max;
         GLboolean scissor_enabled;
         glGetBooleanv(GL_SCISSOR_TEST, &scissor_enabled);
         if (scissor_enabled)
@@ -177,13 +177,13 @@ vgui_accelerate_x11::vgui_glDrawPixels(GLsizei width, GLsizei height, GLenum for
   if (!vgui_no_acceleration)
   {
 #  if defined(VGUI_MESA) && defined(HAS_HERMES)
-    GLint     render_mode;
+    GLint render_mode;
     GLboolean rgba_mode;
-    GLint     draw_buffer;
+    GLint draw_buffer;
     GLboolean raster_pos_valid;
     GLboolean depth_test_enabled;
-    GLfloat   pixel_zoom_x;
-    GLfloat   pixel_zoom_y;
+    GLfloat pixel_zoom_x;
+    GLfloat pixel_zoom_y;
     glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &raster_pos_valid);
     if (!raster_pos_valid)
       return true;
@@ -198,7 +198,7 @@ vgui_accelerate_x11::vgui_glDrawPixels(GLsizei width, GLsizei height, GLenum for
     {
       // See if there is a Hermes renderer for the specified GL format
       bool found_match = false;
-      int  format_index;
+      int format_index;
       for (int i = 0; i < number_of_accelerated_formats && !found_match; ++i)
       {
         if (gl_to_hermes_formats[i].gl_format == format && gl_to_hermes_formats[i].gl_type == type)
@@ -215,9 +215,9 @@ vgui_accelerate_x11::vgui_glDrawPixels(GLsizei width, GLsizei height, GLenum for
                                                      gl_to_hermes_formats[format_index].blue_mask,
                                                      0,
                                                      0);
-        Pixmap         p_dummy;
-        XImage *       backbuffer;
-        XMesaBuffer    mesabuf = XMesaGetCurrentBuffer();
+        Pixmap p_dummy;
+        XImage * backbuffer;
+        XMesaBuffer mesabuf = XMesaGetCurrentBuffer();
         XMesaGetBackBuffer(mesabuf, &p_dummy, &backbuffer);
 
         HermesFormat * dest_format = Hermes_FormatNew(
@@ -272,7 +272,7 @@ vgui_accelerate_x11::vgui_glDrawPixels(GLsizei width, GLsizei height, GLenum for
                  << dest_y_min << ' ' << dest_y_max << std::endl;
 #    endif
 
-        float     window_x_min, window_y_min, window_x_max, window_y_max;
+        float window_x_min, window_y_min, window_x_max, window_y_max;
         GLboolean scissor_enabled;
         glGetBooleanv(GL_SCISSOR_TEST, &scissor_enabled);
         if (scissor_enabled)
@@ -407,10 +407,10 @@ vgui_accelerate_x11::vgui_choose_cache_format(GLenum * format, GLenum * type)
     XMesaBuffer mesabuf = XMesaGetCurrentBuffer();
     // There must be a valid GL context initialized before this call can be made
     assert(mesabuf != 0);
-    Pixmap    p_dummy;
-    GLint     render_mode;
+    Pixmap p_dummy;
+    GLint render_mode;
     GLboolean rgba_mode;
-    GLint     draw_buffer;
+    GLint draw_buffer;
     GLboolean depth_test_enabled;
     glGetIntegerv(GL_RENDER_MODE, &render_mode);
     glGetBooleanv(GL_RGBA_MODE, &rgba_mode);
@@ -454,8 +454,8 @@ vgui_accelerate_x11::vgui_copy_back_to_aux()
     XMesaBuffer mesabuf = XMesaGetCurrentBuffer();
     assert(mesabuf != 0); // There must be a valid GL context initialized before this call can be made
     Pixmap p_dummy;
-    GLint  render_mode;
-    GLint  draw_buffer;
+    GLint render_mode;
+    GLint draw_buffer;
     glGetIntegerv(GL_RENDER_MODE, &render_mode);
     glGetIntegerv(GL_DRAW_BUFFER, &draw_buffer);
     if (render_mode == GL_RENDER && (draw_buffer == GL_BACK || draw_buffer == GL_BACK_LEFT))
@@ -490,8 +490,8 @@ vgui_accelerate_x11::vgui_copy_aux_to_back()
     XMesaBuffer mesabuf = XMesaGetCurrentBuffer();
     assert(mesabuf != 0); // There must be a valid GL context initialized before this call can be made
     Pixmap p_dummy;
-    GLint  render_mode;
-    GLint  draw_buffer;
+    GLint render_mode;
+    GLint draw_buffer;
     glGetIntegerv(GL_RENDER_MODE, &render_mode);
     glGetIntegerv(GL_DRAW_BUFFER, &draw_buffer);
     if (render_mode == GL_RENDER && (draw_buffer == GL_BACK || draw_buffer == GL_BACK_LEFT))

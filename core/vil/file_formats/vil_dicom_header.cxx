@@ -269,7 +269,7 @@ vil_dicom_header_format::determineFileType(vil_stream & fs)
     // The file is Part10 with no pre-amble
     // The file is a non-Part10 dicom file
     // The file is not a dicom file (or can't be determined as such)
-    char        dicm_read[5];
+    char dicm_read[5];
     std::string dicm_test;
 
     // Skip 128 byte pre-amble and test for DICM again
@@ -299,8 +299,8 @@ vil_dicom_header_format::determineFileType(vil_stream & fs)
       {
         // Some other format - test it with both little and
         // big endian
-        int                     num_tries = 0;
-        bool                    known = false;
+        int num_tries = 0;
+        bool known = false;
         vil_dicom_header_endian old_endian = file_endian_;
         file_endian_ = VIL_DICOM_HEADER_DEBIGENDIAN;
 
@@ -830,15 +830,15 @@ vil_dicom_header_format::readNSPhilipsElements(short element, int dblock_size, v
 bool
 vil_dicom_header_format::convertValueRepresentation(unsigned int & dblock_size, vil_stream & fs)
 {
-  bool        result = false;
+  bool result = false;
   std::string first, last;
-  char        temp[3];
+  char temp[3];
 
   // Union to convert the int to chars
   union int_char
   {
     vxl_uint_32 int_val;
-    char        char_val[4];
+    char char_val[4];
   } conv_dblock;
 
   if (last_read_.file_type_ != VIL_DICOM_HEADER_DTUNKNOWN)
@@ -964,7 +964,7 @@ vil_dicom_header_format::calculateEndian(void)
   union int_byte
   {
     vxl_uint_32 int_val;
-    vxl_byte    by_val[4];
+    vxl_byte by_val[4];
   } calc_endian;
 
   // Put 1 into the union
@@ -982,8 +982,8 @@ vil_dicom_header_format::determineMetaInfo(vil_stream & fs)
   vil_dicom_header_endian ret_end = VIL_DICOM_HEADER_DELITTLEENDIAN; // Assume little if none found
   // vil_dicom_header_endian ret_end = VIL_DICOM_HEADER_DEBIGENDIAN;
 
-  vxl_uint_16   group, element;
-  vxl_uint_32   data_block_size;
+  vxl_uint_16 group, element;
+  vxl_uint_32 data_block_size;
   vil_streampos ret_pos = fs.tell(); // Maintain the file position
 
   // The first section of the file header is always little endian,
@@ -1142,7 +1142,7 @@ vil_dicom_header_format::shortSwap(vxl_uint_16 short_in)
     union short_char
     {
       vxl_uint_16 short_val;
-      vxl_byte    byte_val[2];
+      vxl_byte byte_val[2];
     } short_swap;
 
     // Set the swapper
@@ -1175,7 +1175,7 @@ vil_dicom_header_format::intSwap(vxl_uint_32 int_in)
     union int_char
     {
       vxl_uint_32 int_val;
-      vxl_byte    byte_val[4];
+      vxl_byte byte_val[4];
     } int_swap;
 
     // Set the swapper

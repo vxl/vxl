@@ -34,12 +34,12 @@ main(int argc, char * argv[])
   // create an output image and a temporary image of the same size as the
   // input image
   vil_image_view<vxl_byte> imageOut(imageIn.ni(), imageIn.nj());
-  vil_image_view<float>    tmp(imageIn.ni(), imageIn.nj());
+  vil_image_view<float> tmp(imageIn.ni(), imageIn.nj());
 
   // create a normalized Gaussian kernel with standard deviation sigma=2.0
   std::cout << "Creating kernel...\n";
-  float         sigma = 2.f;
-  float         scaleFactor = 1.f / (2.f * sigma * sigma);
+  float sigma = 2.f;
+  float scaleFactor = 1.f / (2.f * sigma * sigma);
   constexpr int halfSupport = 1;
 
   // build kernel

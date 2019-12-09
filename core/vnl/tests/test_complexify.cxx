@@ -20,8 +20,8 @@ test_complexify_instance(const ValueType & re, const ValueType & im)
   std::cout << "Testing vnl_vector" << std::endl;
   std::cout << "##################" << std::endl;
 
-  vnl_vector<ValueType>               r_vector(length, re);
-  vnl_vector<ValueType>               i_vector(length, im);
+  vnl_vector<ValueType> r_vector(length, re);
+  vnl_vector<ValueType> i_vector(length, im);
   vnl_vector<std::complex<ValueType>> c_vector = vnl_complexify(r_vector);
   for (unsigned int i = 0; i < length; ++i)
   {
@@ -46,8 +46,8 @@ test_complexify_instance(const ValueType & re, const ValueType & im)
   std::cout << "Testing vnl_vector_fixed" << std::endl;
   std::cout << "########################" << std::endl;
 
-  vnl_vector_fixed<ValueType, length>               r_vector_fixed(re);
-  vnl_vector_fixed<ValueType, length>               i_vector_fixed(im);
+  vnl_vector_fixed<ValueType, length> r_vector_fixed(re);
+  vnl_vector_fixed<ValueType, length> i_vector_fixed(im);
   vnl_vector_fixed<std::complex<ValueType>, length> c_vector_fixed = vnl_complexify(r_vector_fixed);
   for (unsigned int i = 0; i < length; ++i)
   {
@@ -72,8 +72,8 @@ test_complexify_instance(const ValueType & re, const ValueType & im)
   std::cout << "Testing vnl_matrix" << std::endl;
   std::cout << "##################" << std::endl;
 
-  vnl_matrix<ValueType>               r_matrix(length, length, re);
-  vnl_matrix<ValueType>               i_matrix(length, length, im);
+  vnl_matrix<ValueType> r_matrix(length, length, re);
+  vnl_matrix<ValueType> i_matrix(length, length, im);
   vnl_matrix<std::complex<ValueType>> c_matrix = vnl_complexify(r_matrix);
   for (unsigned int c = 0; c < length; ++c)
   {
@@ -107,8 +107,8 @@ test_complexify_instance(const ValueType & re, const ValueType & im)
   std::cout << "Testing vnl_matrix_fixed" << std::endl;
   std::cout << "########################" << std::endl;
 
-  vnl_matrix_fixed<ValueType, length, length>               r_matrix_fixed(re);
-  vnl_matrix_fixed<ValueType, length, length>               i_matrix_fixed(im);
+  vnl_matrix_fixed<ValueType, length, length> r_matrix_fixed(re);
+  vnl_matrix_fixed<ValueType, length, length> i_matrix_fixed(im);
   vnl_matrix_fixed<std::complex<ValueType>, length, length> c_matrix_fixed = vnl_complexify(r_matrix_fixed);
   for (unsigned int c = 0; c < length; ++c)
   {
@@ -142,8 +142,8 @@ test_complexify_instance(const ValueType & re, const ValueType & im)
   std::cout << "Testing vnl_diag_matrix" << std::endl;
   std::cout << "#######################" << std::endl;
 
-  vnl_diag_matrix<ValueType>               r_diag_matrix(length, re);
-  vnl_diag_matrix<ValueType>               i_diag_matrix(length, im);
+  vnl_diag_matrix<ValueType> r_diag_matrix(length, re);
+  vnl_diag_matrix<ValueType> i_diag_matrix(length, im);
   vnl_diag_matrix<std::complex<ValueType>> c_diag_matrix = vnl_complexify(r_diag_matrix);
   for (unsigned int i = 0; i < length; ++i)
   {
@@ -168,8 +168,8 @@ test_complexify_instance(const ValueType & re, const ValueType & im)
   std::cout << "Testing vnl_diag_matrix_fixed" << std::endl;
   std::cout << "#############################" << std::endl;
 
-  vnl_diag_matrix_fixed<ValueType, length>               r_diag_matrix_fixed(re);
-  vnl_diag_matrix_fixed<ValueType, length>               i_diag_matrix_fixed(im);
+  vnl_diag_matrix_fixed<ValueType, length> r_diag_matrix_fixed(re);
+  vnl_diag_matrix_fixed<ValueType, length> i_diag_matrix_fixed(im);
   vnl_diag_matrix_fixed<std::complex<ValueType>, length> c_diag_matrix_fixed = vnl_complexify(r_diag_matrix_fixed);
   for (unsigned int i = 0; i < length; ++i)
   {
@@ -194,8 +194,8 @@ test_complexify_instance(const ValueType & re, const ValueType & im)
   std::cout << "Testing vnl_sym_matrix" << std::endl;
   std::cout << "######################" << std::endl;
 
-  vnl_sym_matrix<ValueType>               r_sym_matrix(length, re);
-  vnl_sym_matrix<ValueType>               i_sym_matrix(length, im);
+  vnl_sym_matrix<ValueType> r_sym_matrix(length, re);
+  vnl_sym_matrix<ValueType> i_sym_matrix(length, im);
   vnl_sym_matrix<std::complex<ValueType>> c_sym_matrix = vnl_complexify(r_sym_matrix);
   for (unsigned int c = 0; c < length; ++c)
   {

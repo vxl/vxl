@@ -51,8 +51,8 @@ public:
 
 protected:
   // fixed parameters
-  double       sr_;
-  double       sz_;
+  double sr_;
+  double sz_;
   vnl_double_3 p0_;
 
   // varying parameters
@@ -69,7 +69,7 @@ protected:
 void
 test_integral()
 {
-  my_test_integrant    f;
+  my_test_integrant f;
   vnl_simpson_integral simpson_integral;
 
   double a = 0;

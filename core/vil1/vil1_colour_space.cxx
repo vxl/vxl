@@ -71,8 +71,8 @@ template <class T>
 void
 vil1_colour_space_HSV_to_RGB(T h, T s, T v, T * r, T * g, T * b)
 {
-  T   p1, p2, p3, f, nr = 0, ng = 0, nb = 0;
-  T   xh;
+  T p1, p2, p3, f, nr = 0, ng = 0, nb = 0;
+  T xh;
   int i;
 
   v = v / 255;

@@ -22,7 +22,7 @@ class disjoint_sets
   struct node
   {
     LABEL parent;
-    LEN   rank;
+    LEN rank;
   };
   std::vector<node> store_;
 
@@ -90,15 +90,15 @@ public:
 // Produce a label image that enumerates all disjoint blobs in a binary image
 void
 vil_blob_labels(const vil_image_view<bool> & src_binary,
-                vil_blob_connectivity        conn,
-                vil_image_view<unsigned> &   dest_label)
+                vil_blob_connectivity conn,
+                vil_image_view<unsigned> & dest_label)
 {
   unsigned ni = src_binary.ni();
   unsigned nj = src_binary.nj();
   dest_label.set_size(ni, nj);
   dest_label.fill(0);
 
-  disjoint_sets         merge_list;
+  disjoint_sets merge_list;
   std::vector<unsigned> neighbouring_labels;
 
   unsigned n_prev_neighbours;
@@ -151,7 +151,7 @@ vil_blob_labels(const vil_image_view<bool> & src_binary,
         auto end = std::unique(neighbouring_labels.begin(), neighbouring_labels.end());
         // don't bother erasing unique's suffix, just keeping the end iterator
         // will be enough.
-        auto     it = neighbouring_labels.begin();
+        auto it = neighbouring_labels.begin();
         unsigned label = *it++;
         dest_label(i, j) = label;
 
@@ -163,7 +163,7 @@ vil_blob_labels(const vil_image_view<bool> & src_binary,
           merge_list.merge_labels(*it, label);
       }
     }
-  unsigned              n_merge = merge_list.size();
+  unsigned n_merge = merge_list.size();
   std::vector<unsigned> renumbering(n_merge, 0u);
   // Convert the merge lsit into a simple renumbering array,
   // and change to root of each disjoint set to its lowest member.
@@ -188,7 +188,7 @@ vil_blob_labels(const vil_image_view<bool> & src_binary,
   std::vector<unsigned> labels(renumbering.begin(), renumbering.end());
   std::sort(labels.begin(), labels.end());
   labels.erase(std::unique(labels.begin(), labels.end()), labels.end());
-  const auto            dodgy = static_cast<unsigned>(-1);
+  const auto dodgy = static_cast<unsigned>(-1);
   std::vector<unsigned> renum_renum(renumbering.size(), dodgy);
   renum_renum[0] = 0;
   for (unsigned l = 0, n = labels.size(); l < n; ++l)
@@ -211,8 +211,8 @@ vil_blob_labels(const vil_image_view<bool> & src_binary,
 //: Set all non-blob-edge pixels in a blob label image to zero.
 void
 vil_blob_labels_to_edge_labels(const vil_image_view<unsigned> & src_label,
-                               vil_blob_connectivity            conn,
-                               vil_image_view<unsigned> &       dest_label)
+                               vil_blob_connectivity conn,
+                               vil_image_view<unsigned> & dest_label)
 {
   unsigned ni = src_label.ni();
   unsigned nj = src_label.nj();
@@ -295,7 +295,7 @@ vil_blob_labels_to_regions(const vil_image_view<unsigned> & src_label, std::vect
 // A blob label value of n will be returned in dest_pixels_lists[n-1].
 // Note that pixel lists are not ordered.
 void
-vil_blob_labels_to_pixel_lists(const vil_image_view<unsigned> &   src_label,
+vil_blob_labels_to_pixel_lists(const vil_image_view<unsigned> & src_label,
                                std::vector<vil_blob_pixel_list> & dest_pixel_lists)
 {
   dest_pixel_lists.clear();

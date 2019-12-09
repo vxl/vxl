@@ -22,14 +22,14 @@ test_update_gaussian_type(T epsilon, const std::string & type_name)
 
   // compute the incremental means
   std::vector<vnl_vector_fixed<T, 3>> means(data.size());
-  vnl_vector_fixed<T, 3>              sum(T(0));
+  vnl_vector_fixed<T, 3> sum(T(0));
   // compute the incremental variances/covariances
-  std::vector<T>                         vars(data.size());
-  T                                      vsum = T(0);
-  std::vector<vnl_vector_fixed<T, 3>>    diagvars(data.size());
-  vnl_vector_fixed<T, 3>                 dvsum(T(0));
+  std::vector<T> vars(data.size());
+  T vsum = T(0);
+  std::vector<vnl_vector_fixed<T, 3>> diagvars(data.size());
+  vnl_vector_fixed<T, 3> dvsum(T(0));
   std::vector<vnl_matrix_fixed<T, 3, 3>> covars(data.size());
-  vnl_matrix_fixed<T, 3, 3>              cvsum(T(0));
+  vnl_matrix_fixed<T, 3, 3> cvsum(T(0));
   for (unsigned int i = 0; i < data.size(); ++i)
   {
     sum += data[i];
@@ -51,8 +51,8 @@ test_update_gaussian_type(T epsilon, const std::string & type_name)
   std::cout << "================= vpdt_gaussian (spherical) =================\n";
   {
     vpdt_gaussian<vnl_vector_fixed<T, 3>, T> gauss3;
-    bool                                     test_mean = true;
-    bool                                     test_vars = true;
+    bool test_mean = true;
+    bool test_vars = true;
     for (unsigned int i = 0; i < data.size(); ++i)
     {
       vpdt_update_gaussian(gauss3, T(1.0 / (i + 1)), data[i]);
@@ -109,8 +109,8 @@ test_update_gaussian_type(T epsilon, const std::string & type_name)
   std::cout << "================ vpdt_gaussian (independent) ================\n";
   {
     vpdt_gaussian<vnl_vector_fixed<T, 3>, vnl_vector_fixed<T, 3>> gauss3;
-    bool                                                          test_mean = true;
-    bool                                                          test_vars = true;
+    bool test_mean = true;
+    bool test_vars = true;
     for (unsigned int i = 0; i < data.size(); ++i)
     {
       vpdt_update_gaussian(gauss3, T(1.0 / (i + 1)), data[i]);
@@ -166,8 +166,8 @@ test_update_gaussian_type(T epsilon, const std::string & type_name)
   std::cout << "================= vpdt_gaussian (general) =================\n";
   {
     vpdt_gaussian<vnl_vector_fixed<T, 3>> gauss3;
-    bool                                  test_mean = true;
-    bool                                  test_vars = true;
+    bool test_mean = true;
+    bool test_vars = true;
     for (unsigned int i = 0; i < data.size(); ++i)
     {
       vpdt_update_gaussian(gauss3, T(1.0 / (i + 1)), data[i]);
@@ -232,8 +232,8 @@ test_update_gaussian_type(T epsilon, const std::string & type_name)
   std::cout << "================= vpdt_gaussian (scalar) =================\n";
   {
     vpdt_gaussian<T> gauss1;
-    bool             test_mean = true;
-    bool             test_vars = true;
+    bool test_mean = true;
+    bool test_vars = true;
     for (unsigned int i = 0; i < data.size(); ++i)
     {
       vpdt_update_gaussian(gauss1, T(1.0 / (i + 1)), data[i][0]);

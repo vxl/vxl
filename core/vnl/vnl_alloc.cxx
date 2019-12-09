@@ -8,7 +8,7 @@
 char *
 vnl_alloc::chunk_alloc(std::size_t size, int & nobjs)
 {
-  char *      result;
+  char * result;
   std::size_t total_bytes = size * nobjs;
   std::size_t bytes_left = end_free - start_free;
 
@@ -75,12 +75,12 @@ vnl_alloc::chunk_alloc(std::size_t size, int & nobjs)
 void *
 vnl_alloc::refill(std::size_t n)
 {
-  int    nobjs = 20;
+  int nobjs = 20;
   char * chunk = chunk_alloc(n, nobjs);
   obj ** my_free_list;
-  obj *  result;
-  obj *  current_obj, *next_obj;
-  int    i;
+  obj * result;
+  obj *current_obj, *next_obj;
+  int i;
 
   if (1 == nobjs)
     return chunk;
@@ -109,7 +109,7 @@ vnl_alloc::refill(std::size_t n)
 void *
 vnl_alloc::reallocate(void * p, std::size_t old_sz, std::size_t new_sz)
 {
-  void *      result;
+  void * result;
   std::size_t copy_sz;
 
   if (old_sz > VNL_ALLOC_MAX_BYTES && new_sz > VNL_ALLOC_MAX_BYTES)
@@ -125,8 +125,8 @@ vnl_alloc::reallocate(void * p, std::size_t old_sz, std::size_t new_sz)
   return result;
 }
 
-char *      vnl_alloc::start_free = nullptr;
-char *      vnl_alloc::end_free = nullptr;
+char * vnl_alloc::start_free = nullptr;
+char * vnl_alloc::end_free = nullptr;
 std::size_t vnl_alloc::heap_size = 0;
 
 vnl_alloc::obj * vnl_alloc::free_list[VNL_ALLOC_NFREELISTS] = { nullptr };

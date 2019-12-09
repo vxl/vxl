@@ -36,14 +36,14 @@ vil1_new(int width, int height, vil1_image const & prototype)
 
 
 vil1_image
-vil1_new(vil1_stream *         os,
-         int                   planes,
-         int                   width,
-         int                   height,
-         int                   components,
-         int                   bits_per_component,
+vil1_new(vil1_stream * os,
+         int planes,
+         int width,
+         int height,
+         int components,
+         int bits_per_component,
          vil1_component_format format,
-         char const *          file_format)
+         char const * file_format)
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";

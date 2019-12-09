@@ -41,7 +41,7 @@ vil_nitf2_field_sequence::create_array_fields(const vil_nitf2_field_definitions 
     if (node && node->is_field_definition())
     {
       vil_nitf2_field_definition * field_def = node->field_definition();
-      vil_nitf2_array_field *      field = field_def->formatter->create_array_field(num_dimensions, field_def);
+      vil_nitf2_array_field * field = field_def->formatter->create_array_field(num_dimensions, field_def);
       if (field)
       {
         insert_field(field_def->tag, field);
@@ -73,15 +73,15 @@ vil_nitf2_field_sequence::create_array_fields(const vil_nitf2_field_definitions 
 
 void
 vil_nitf2_field_sequence::set_array_fields_dimension(const vil_nitf2_field_definitions * field_defs,
-                                                     const vil_nitf2_index_vector &      index,
-                                                     int                                 repeat_count)
+                                                     const vil_nitf2_index_vector & index,
+                                                     int repeat_count)
 {
   for (auto node : *field_defs)
   {
     if (node && node->is_field_definition())
     {
       vil_nitf2_field_definition * field_def = node->field_definition();
-      vil_nitf2_array_field *      field = get_field(field_def->tag)->array_field();
+      vil_nitf2_array_field * field = get_field(field_def->tag)->array_field();
       if (field)
       {
         VIL_NITF2_LOG(log_debug) << "  (Setting tag " << field_def->tag << " dimension " << index << " to "
@@ -108,9 +108,9 @@ vil_nitf2_field_sequence::set_array_fields_dimension(const vil_nitf2_field_defin
 }
 
 bool
-vil_nitf2_field_sequence::read(vil_nitf2_istream &                 input,
+vil_nitf2_field_sequence::read(vil_nitf2_istream & input,
                                const vil_nitf2_field_definitions * field_defs,
-                               const vil_nitf2_index_vector &      indexes)
+                               const vil_nitf2_index_vector & indexes)
 {
   if (!field_defs)
     field_defs = m_field_definitions;
@@ -174,7 +174,7 @@ vil_nitf2_field_sequence::read(vil_nitf2_istream &                 input,
           if (indexes.size() == 0)
           {
             // read scalar field
-            bool                     fieldReadError;
+            bool fieldReadError;
             vil_nitf2_scalar_field * field =
               vil_nitf2_scalar_field::read(input, field_def, variable_width, &fieldReadError);
             if (field)
@@ -190,7 +190,7 @@ vil_nitf2_field_sequence::read(vil_nitf2_istream &                 input,
           else
           {
             // read vector field element
-            bool                         read_error = true;
+            bool read_error = true;
             vil_nitf2_field_definition * field_def = node->field_definition();
             if (field_def)
             {
@@ -219,7 +219,7 @@ vil_nitf2_field_sequence::read(vil_nitf2_istream &                 input,
       vil_nitf2_field_definition_repeat_node * repeat_node = node->repeat_node();
 
       // Compute how many times it repeats
-      int  repeat_count = 0;
+      int repeat_count = 0;
       bool computed_repeat = false;
       if (repeat_node->repeat_functor != nullptr)
       {
@@ -295,9 +295,9 @@ vil_nitf2_field_sequence::read(vil_nitf2_istream &                 input,
 }
 
 bool
-vil_nitf2_field_sequence::write(vil_nitf2_ostream &                 output,
+vil_nitf2_field_sequence::write(vil_nitf2_ostream & output,
                                 const vil_nitf2_field_definitions * field_defs,
-                                vil_nitf2_index_vector              indexes)
+                                vil_nitf2_index_vector indexes)
 {
   if (!field_defs)
     field_defs = m_field_definitions;
@@ -392,7 +392,7 @@ vil_nitf2_field_sequence::write(vil_nitf2_ostream &                 output,
     {
       vil_nitf2_field_definition_repeat_node * repeat_node = node->repeat_node();
       // Compute how many times it repeats
-      int  repeat_count = 0;
+      int repeat_count = 0;
       bool computed_repeat = false;
       if (repeat_node->repeat_functor != nullptr)
       {
@@ -446,7 +446,7 @@ vil_nitf2_field_sequence::get_field(const std::string & tag) const
 #define NITF_FIELD_SEQ_GET_VALUE(T)                                                                                    \
   bool vil_nitf2_field_sequence::get_value(std::string tag, T & out_value) const                                       \
   {                                                                                                                    \
-    vil_nitf2_field *        field = get_field(tag);                                                                   \
+    vil_nitf2_field * field = get_field(tag);                                                                          \
     vil_nitf2_scalar_field * scalar_field = field ? field->scalar_field() : 0;                                         \
     if (!scalar_field)                                                                                                 \
     {                                                                                                                  \

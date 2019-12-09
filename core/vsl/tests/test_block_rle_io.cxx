@@ -22,7 +22,7 @@ test_block_rle_io()
             << "*********************************\n";
 
   constexpr int n = 100;
-  bool          v_bool_out[n];
+  bool v_bool_out[n];
   for (int i = 0; i < n; ++i)
     v_bool_out[i] = i < 20;
   std::vector<int> v_int_out(n);
@@ -64,11 +64,11 @@ test_block_rle_io()
   TEST("Significant compression achieved", uncompressed_length > 100 && ratio < 0.3, true);
 
   {
-    bool                       v_bool_in[n];
-    std::vector<int>           v_int_in(n);
-    std::vector<float>         v_float_in(n);
+    bool v_bool_in[n];
+    std::vector<int> v_int_in(n);
+    std::vector<float> v_float_in(n);
     std::vector<unsigned char> v_uchar_in(n);
-    std::vector<vxl_int_64>    v_int64_in(n);
+    std::vector<vxl_int_64> v_int64_in(n);
 
     std::cout << "\n\n****** Testing vsl_block_binary_write/read round-trip\n\n";
     vsl_b_ifstream bfs_in_uncompressed("vsl_block_rle_uncomp_test.bvl.tmp");
@@ -95,11 +95,11 @@ test_block_rle_io()
     std::cout << std::endl;
   }
   {
-    bool                       v_bool_in[n];
-    std::vector<int>           v_int_in(n);
-    std::vector<float>         v_float_in(n);
+    bool v_bool_in[n];
+    std::vector<int> v_int_in(n);
+    std::vector<float> v_float_in(n);
     std::vector<unsigned char> v_uchar_in(n);
-    std::vector<vxl_int_64>    v_int64_in(n);
+    std::vector<vxl_int_64> v_int64_in(n);
 
 
     std::cout << "\n\n****** Testing vsl_block_binary_rle_write/read round-trip\n\n";
@@ -127,13 +127,13 @@ test_block_rle_io()
   }
   {
     std::cout << "\n\n****** Testing golden vsl_block_binary_rle_write/read\n\n";
-    bool                       v_bool_in[n];
-    std::vector<int>           v_int_in(n);
-    std::vector<float>         v_float_in(n);
+    bool v_bool_in[n];
+    std::vector<int> v_int_in(n);
+    std::vector<float> v_float_in(n);
     std::vector<unsigned char> v_uchar_in(n);
-    std::vector<vxl_int_64>    v_int64_in(n);
+    std::vector<vxl_int_64> v_int64_in(n);
 
-    std::string    gold_path = testlib_root_dir() + "/core/vsl/tests/golden_block_rle_comp_test.bvl";
+    std::string gold_path = testlib_root_dir() + "/core/vsl/tests/golden_block_rle_comp_test.bvl";
     vsl_b_ifstream bfs_in2(gold_path.c_str());
 
     // If this test fails, it could be due to a missing golden file, or one

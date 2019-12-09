@@ -104,9 +104,9 @@ using fptr3 = vnl_decnum (*)(const vnl_decnum &, unsigned long);
 class node
 {
 public:
-  fptr1  func1{ nullptr };
-  fptr2  func2{ nullptr };
-  fptr3  func3{ nullptr };
+  fptr1 func1{ nullptr };
+  fptr2 func2{ nullptr };
+  fptr3 func3{ nullptr };
   void * param1{ nullptr };
   void * param2{ nullptr };
   node() {}
@@ -385,7 +385,7 @@ hierarchy_brackets(std::string & expr, unsigned long s, int l)
 node
 build_tree(std::string const & expr, unsigned long s, int l)
 {
-  int  i, j;
+  int i, j;
   node n;
   // expr[s]--expr[s+l-1] is any of:
   //  (number)
@@ -552,8 +552,8 @@ main(int argc, char * argv[])
   if (argc == 2)
   {
     std::string expression = simplify(argv[1]); // bracketed and cleaned up version of argv[1]
-    node        root = build_tree(expression, 0L, expression.length());
-    vnl_decnum  result = calc(&root);
+    node root = build_tree(expression, 0L, expression.length());
+    vnl_decnum result = calc(&root);
     std::cout << result;
     unsigned long len = result.data().length();
     result.compactify();
@@ -575,8 +575,8 @@ main(int argc, char * argv[])
       if (!s[0])
         return 0; // empty line, or EOF
       std::string expression = simplify(s);
-      node        root = build_tree(expression, 0L, expression.length());
-      vnl_decnum  result = calc(&root);
+      node root = build_tree(expression, 0L, expression.length());
+      vnl_decnum result = calc(&root);
       std::cout << s << "\t=\t" << result;
       result.compactify();
       unsigned long len = result.data().length();

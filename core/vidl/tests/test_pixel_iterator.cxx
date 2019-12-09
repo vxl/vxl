@@ -34,7 +34,7 @@ test_pixel_iterator()
   {
     // The test buffer below contains 3 pixels encoded in RGB 24
     //                  | R  G  B| R  G  B| R  G  B |
-    vxl_byte        buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 3, 1, VIDL_PIXEL_FORMAT_RGB_24);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_RGB_24> itr(*frame);
     // polymorphic pixel iterator
@@ -58,7 +58,7 @@ test_pixel_iterator()
   {
     // The test buffer below contains 3 pixels encoded in RGB 24P
     //                  | R  R  R| G  G  G| B  B  B |
-    vxl_byte        buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 3, 1, VIDL_PIXEL_FORMAT_RGB_24P);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_RGB_24P> itr(*frame);
     // polymorphic pixel iterator
@@ -82,7 +82,7 @@ test_pixel_iterator()
   {
     // The test buffer below contains 3 pixels encoded in BGR 24
     //                  | B  G  R| B  G  R| B  G  R |
-    vxl_byte        buffer[] = { 3, 2, 1, 6, 5, 4, 9, 8, 7 };
+    vxl_byte buffer[] = { 3, 2, 1, 6, 5, 4, 9, 8, 7 };
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 3, 1, VIDL_PIXEL_FORMAT_BGR_24);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_BGR_24> itr(*frame);
     // polymorphic pixel iterator
@@ -106,7 +106,7 @@ test_pixel_iterator()
   {
     // The test buffer below contains 3 pixels encoded in RGBA 32
     //                  | R  G  B  A| R  G  B  A| R  G  B  A|
-    vxl_byte        buffer[] = { 1, 2, 3, 0, 4, 5, 6, 0, 7, 8, 9, 0 };
+    vxl_byte buffer[] = { 1, 2, 3, 0, 4, 5, 6, 0, 7, 8, 9, 0 };
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 3, 1, VIDL_PIXEL_FORMAT_RGBA_32);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_RGBA_32> itr(*frame);
     // polymorphic pixel iterator
@@ -133,7 +133,7 @@ test_pixel_iterator()
   {
     // The test buffer below contains 3 pixels encoded in RGBA 32P
     //                  | R  R  R| G  G  G| B  B  B| A  A  A|
-    vxl_byte        buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0 };
+    vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0 };
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 3, 1, VIDL_PIXEL_FORMAT_RGBA_32P);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_RGBA_32P> itr(*frame);
     // polymorphic pixel iterator
@@ -160,7 +160,7 @@ test_pixel_iterator()
   {
     // The test buffer below contains 2 pixels encoded in RGB 555
     //                      |RGB_555|RGB_555|
-    vxl_uint_16     buffer[] = { 0x7FAF, 0x0103 };
+    vxl_uint_16 buffer[] = { 0x7FAF, 0x0103 };
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 2, 1, VIDL_PIXEL_FORMAT_RGB_555);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_RGB_555> itr(*frame);
     // polymorphic pixel iterator
@@ -186,7 +186,7 @@ test_pixel_iterator()
   {
     // The test buffer below contains 2 pixels encoded in RGB 565
     //                      |RGB_565|RGB_565|
-    vxl_uint_16     buffer[] = { 0x7FAF, 0x0103 };
+    vxl_uint_16 buffer[] = { 0x7FAF, 0x0103 };
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 2, 1, VIDL_PIXEL_FORMAT_RGB_565);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_RGB_565> itr(*frame);
     // polymorphic pixel iterator
@@ -212,7 +212,7 @@ test_pixel_iterator()
   {
     // The test buffer below contains 4 pixels encoded in YUV 4:4:4 P
     //                  | Y  Y  Y  Y| U  U  U  U| V  V   V   V|
-    vxl_byte        buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+    vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 2, 2, VIDL_PIXEL_FORMAT_YUV_444P);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_YUV_444P> itr(*frame);
     // polymorphic pixel iterator
@@ -236,7 +236,7 @@ test_pixel_iterator()
   {
     // The test buffer below contains 4 pixels encoded in UYV 4:4:4
     //                  | U  Y  V| U  Y  V| U  Y  V|  U   Y   V|
-    vxl_byte        buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+    vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 2, 2, VIDL_PIXEL_FORMAT_UYV_444);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_UYV_444> itr(*frame);
     // polymorphic pixel iterator
@@ -260,7 +260,7 @@ test_pixel_iterator()
   if (vidl_has_pixel_iterator(VIDL_PIXEL_FORMAT_YUV_422P))
   {
     // The test buffer below contains 16 pixels encoded in YUV 422P
-    vxl_byte        buffer[] = { 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, // Y
+    vxl_byte buffer[] = { 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, // Y
                           17, 18, 19, 20, 21, 22, 23, 24,                                // U
                           25, 26, 27, 28, 29, 30, 31, 32 };                              // V
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 4, 4, VIDL_PIXEL_FORMAT_YUV_422P);
@@ -286,7 +286,7 @@ test_pixel_iterator()
   {
     // The test buffer below contains 4 pixels encoded in UYVU 4:2:2
     //                  | U  Y0 V Y1| U  Y0 V  Y1 |
-    vxl_byte        buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 2, 2, VIDL_PIXEL_FORMAT_UYVY_422);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_UYVY_422> itr(*frame);
     // polymorphic pixel iterator
@@ -312,7 +312,7 @@ test_pixel_iterator()
   {
     // The test buffer below contains 4 pixels encoded in YUYV 4:2:2
     //                  | Y0 U  Y1 V| Y0 U  Y1 V |
-    vxl_byte        buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 2, 2, VIDL_PIXEL_FORMAT_YUYV_422);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_YUYV_422> itr(*frame);
     // polymorphic pixel iterator
@@ -338,7 +338,7 @@ test_pixel_iterator()
   {
     // The test buffer below contains 8 pixels encoded in YUV 4:1:1 P
     //                  | Y  Y  Y  Y  Y  Y  Y  Y| U  U | V   V |
-    vxl_byte        buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+    vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 4, 2, VIDL_PIXEL_FORMAT_YUV_411P);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_YUV_411P> itr(*frame);
     // polymorphic pixel iterator
@@ -362,7 +362,7 @@ test_pixel_iterator()
   {
     // The test buffer below contains 8 pixels encoded in UYVY 4:1:1
     //                  | U  Y0 Y1 V  Y2 Y3|U  Y0 Y1  V  Y2  Y3|
-    vxl_byte        buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+    vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 4, 2, VIDL_PIXEL_FORMAT_UYVY_411);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_UYVY_411> itr(*frame);
     // polymorphic pixel iterator
@@ -387,7 +387,7 @@ test_pixel_iterator()
   if (vidl_has_pixel_iterator(VIDL_PIXEL_FORMAT_YUV_420P))
   {
     // The test buffer below contains 16 pixels encoded in YUV 420P
-    vxl_byte        buffer[] = { 1,  2,  3,  4,  5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, // Y
+    vxl_byte buffer[] = { 1,  2,  3,  4,  5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, // Y
                           17, 18, 19, 20,                                            // U
                           21, 22, 23, 24 };                                          // V
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 4, 4, VIDL_PIXEL_FORMAT_YUV_420P);
@@ -415,7 +415,7 @@ test_pixel_iterator()
   if (vidl_has_pixel_iterator(VIDL_PIXEL_FORMAT_YUV_410P))
   {
     // The test buffer below contains 16 pixels encoded in YUV 410P
-    vxl_byte        buffer[] = { 1,  2,  3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, // Y
+    vxl_byte buffer[] = { 1,  2,  3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, // Y
                           17, 18,                                                  // U
                           19, 20 };                                                // V
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 4, 4, VIDL_PIXEL_FORMAT_YUV_410P);
@@ -441,7 +441,7 @@ test_pixel_iterator()
   if (vidl_has_pixel_iterator(VIDL_PIXEL_FORMAT_MONO_16))
   {
     // The test buffer below contains 4 pixels encoded in Mono 16
-    vxl_uint_16     buffer[] = { 58791, 23010, 5, 100 };
+    vxl_uint_16 buffer[] = { 58791, 23010, 5, 100 };
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 2, 2, VIDL_PIXEL_FORMAT_MONO_16);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_16> itr(*frame);
     // polymorphic pixel iterator
@@ -464,7 +464,7 @@ test_pixel_iterator()
   if (vidl_has_pixel_iterator(VIDL_PIXEL_FORMAT_MONO_8))
   {
     // The test buffer below contains 4 pixels encoded in Mono 8
-    vxl_byte        buffer[] = { 255, 133, 122, 10 };
+    vxl_byte buffer[] = { 255, 133, 122, 10 };
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 2, 2, VIDL_PIXEL_FORMAT_MONO_8);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_8> itr(*frame);
     // polymorphic pixel iterator
@@ -487,7 +487,7 @@ test_pixel_iterator()
   if (vidl_has_pixel_iterator(VIDL_PIXEL_FORMAT_MONO_1))
   {
     // The test buffer below contains 16 pixels encoded in Mono 1 (boolean image)
-    vxl_byte        buffer[] = { 0xA3, 0x7B }; // 1010 0011 0111 1011
+    vxl_byte buffer[] = { 0xA3, 0x7B }; // 1010 0011 0111 1011
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 4, 4, VIDL_PIXEL_FORMAT_MONO_1);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1> itr(*frame);
     // polymorphic pixel iterator

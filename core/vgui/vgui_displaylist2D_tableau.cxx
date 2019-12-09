@@ -40,7 +40,7 @@ vgui_displaylist2D_tableau::handle(const vgui_event & e)
     unsigned hghlghted = this->get_highlighted();
     if (hghlghted)
     {
-      vgui_soview *   so = vgui_soview::id_to_object(hghlghted);
+      vgui_soview * so = vgui_soview::id_to_object(hghlghted);
       vgui_style_sptr style = so->get_style();
       if (style)
       {
@@ -102,7 +102,7 @@ unsigned
 vgui_displaylist2D_tableau::find_closest(float x, float y, std::vector<unsigned> const & hits)
 {
   unsigned closest = 0;
-  float    closest_dist = -1; // vnl_numeric_traits<float>::maxval;
+  float closest_dist = -1; // vnl_numeric_traits<float>::maxval;
 
   for (std::vector<unsigned>::const_iterator h_iter = hits.begin(); h_iter != hits.end(); ++h_iter)
   {
@@ -133,7 +133,7 @@ bool
 vgui_displaylist2D_tableau::motion(int x, int y)
 {
   vgui_projection_inspector pi;
-  float                     ix, iy;
+  float ix, iy;
   pi.window_to_image_coordinates(x, y, ix, iy);
 
   std::vector<unsigned> hits;

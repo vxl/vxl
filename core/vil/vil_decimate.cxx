@@ -29,8 +29,8 @@ vil_decimate(const vil_image_resource_sptr & src, unsigned i_factor, unsigned j_
 
 
 vil_decimate_image_resource::vil_decimate_image_resource(vil_image_resource_sptr const & src,
-                                                         unsigned                        i_factor,
-                                                         unsigned                        j_factor)
+                                                         unsigned i_factor,
+                                                         unsigned j_factor)
   : src_(src)
   , i_factor_(i_factor)
   , j_factor_(j_factor)
@@ -164,7 +164,7 @@ vil_decimate_image_resource::put_view(const vil_image_view_base & im, unsigned i
     case F:                                                                                                            \
     {                                                                                                                  \
       const vil_image_view<T> view = static_cast<const vil_image_view<T> &>(im);                                       \
-      vil_image_view<T>       decimated = vil_decimate(static_cast<vil_image_view<T> &>(*vs), i_factor_, j_factor_);   \
+      vil_image_view<T> decimated = vil_decimate(static_cast<vil_image_view<T> &>(*vs), i_factor_, j_factor_);         \
       if (view == decimated)                                                                                           \
         return true; /* If we have already modified the data, do nothing */                                            \
       assert(view.ni() == decimated.ni() && view.nj() == decimated.nj());                                              \

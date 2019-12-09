@@ -74,7 +74,7 @@ test_convert_diff_types(const char * golden_data_dir)
   else
     std::cout << "(no dump)\n";
 
-  vil_image_view<vxl_byte>    image_8_2 = vil_convert_cast(vxl_byte(), image2);
+  vil_image_view<vxl_byte> image_8_2 = vil_convert_cast(vxl_byte(), image2);
   vil_image_view<vxl_uint_16> image_2 = image2;
   TEST("Converting implicitly 16bit grey to 8bit grey", image_8_2(4, 2), vxl_byte(image_2(4, 2)));
 
@@ -96,7 +96,7 @@ test_convert_diff_types(const char * golden_data_dir)
   else
     std::cout << "(no dump)\n";
 
-  vil_image_view<vxl_byte>    image_8_4 = vil_convert_cast(vxl_byte(), image4);
+  vil_image_view<vxl_byte> image_8_4 = vil_convert_cast(vxl_byte(), image4);
   vil_image_view<vxl_uint_16> image_4 = image4;
   TEST("Converting implicitly 16bit RGB to 8bit grey", image_8_4(1, 0), vxl_byte(image_4(1, 0, 1)));
 
@@ -145,8 +145,8 @@ test_convert_stretch_range_limited()
   vil_print_all(std::cout, f_image) ;
 #endif // 0
 
-  float                    slo = 5.2f, shi = 5.8f;
-  vxl_byte                 dlo = 50, dhi = 200;
+  float slo = 5.2f, shi = 5.8f;
+  vxl_byte dlo = 50, dhi = 200;
   vil_image_view<vxl_byte> b_image;
   vil_convert_stretch_range_limited(f_image, b_image, slo, shi, dlo, dhi);
   TEST("Width", b_image.ni(), f_image.ni());
@@ -160,7 +160,7 @@ test_convert_stretch_range_limited()
 #endif // DEBUG
 
   float f55 = f_image(5, 5);
-  auto  b55 = vxl_byte(dlo + (f55 - slo) * (dhi - dlo) / (shi - slo) + 0.5);
+  auto b55 = vxl_byte(dlo + (f55 - slo) * (dhi - dlo) / (shi - slo) + 0.5);
 #if 0
   std::cout << "f55= " << f55 << '\n'
            << "b55= " << (int)b55 << '\n'
@@ -174,8 +174,8 @@ test_convert_to_n_planes()
 {
   constexpr unsigned n = 10;
   std::cout << "testing test_convert_to_n_planes(src,dest):\n";
-  vil_image_view<float>       f_image(n, n, 2);
-  vil_image_view<float>       f_image_expected(n, n, 3);
+  vil_image_view<float> f_image(n, n, 2);
+  vil_image_view<float> f_image_expected(n, n, 3);
   vil_image_view<vxl_uint_16> u16_image_expected(n, n, 3);
   for (unsigned j = 0; j < f_image.nj(); ++j)
     for (unsigned i = 0; i < f_image.ni(); ++i)
@@ -202,14 +202,14 @@ test_convert_to_n_planes()
 
   vil_math_scale_and_offset_values(f_image, 1.0f, 0.499f);
 
-  vil_image_view_base_sptr    f_image_dest_sptr(new vil_image_view<float>(f_image_dest));
+  vil_image_view_base_sptr f_image_dest_sptr(new vil_image_view<float>(f_image_dest));
   vil_image_view<vxl_uint_16> image_16_3 = vil_convert_round(vxl_uint_16(), f_image_dest_sptr);
   TEST("implicit vil_convert_round float to 16bit with rounding",
        vil_image_view_deep_equality(image_16_3, u16_image_expected),
        true);
 
   vil_image_view<vxl_uint_16> image_16_3_stretched = vil_convert_stretch_range(vxl_uint_16(), f_image_ref);
-  vxl_uint_16                 minp, maxp;
+  vxl_uint_16 minp, maxp;
   vil_math_value_range(image_16_3_stretched, minp, maxp);
   TEST("implicit vil_convert_stretch_range float to 16bit with rounding", minp == 0 && maxp == 65535, true);
 
@@ -260,7 +260,7 @@ test_simple_pixel_conversions()
 {
   {
     vil_convert_round_pixel<float, int> op;
-    int                                 out;
+    int out;
     op(5.5f, out);
     std::cout << out << std::endl;
     TEST("round_pixel float->int", out, 6);
@@ -270,7 +270,7 @@ test_simple_pixel_conversions()
   }
   {
     vil_convert_round_pixel<double, unsigned short> op;
-    unsigned short                                  out;
+    unsigned short out;
     op(5.5f, out);
     std::cout << out << std::endl;
     TEST("round_pixel double->ushort", out, 6);

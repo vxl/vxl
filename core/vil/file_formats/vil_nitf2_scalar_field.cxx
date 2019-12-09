@@ -14,10 +14,10 @@
 #endif
 
 vil_nitf2_scalar_field *
-vil_nitf2_scalar_field::read(vil_nitf2_istream &          input,
+vil_nitf2_scalar_field::read(vil_nitf2_istream & input,
                              vil_nitf2_field_definition * definition,
-                             int                          variable_width,
-                             bool *                       error)
+                             int variable_width,
+                             bool * error)
 {
   if (error)
     (*error) = false;
@@ -32,7 +32,7 @@ vil_nitf2_scalar_field::read(vil_nitf2_istream &          input,
     formatter->field_width = variable_width;
   // Parse string
   VIL_NITF2_LOG(log_debug) << "Reading tag " << definition->tag << ": ";
-  bool                     is_blank;
+  bool is_blank;
   vil_nitf2_scalar_field * result = formatter->read_field(input, is_blank);
 
   // Set result definition, if found, and output (for debugging):

@@ -24,7 +24,7 @@ test_bignum_io()
   vsl_b_write(bfs_out, m_inf);
   bfs_out.close();
 
-  vnl_bignum     r1, r2, r3, r4, r5;
+  vnl_bignum r1, r2, r3, r4, r5;
   vsl_b_ifstream bfs_in("vnl_bignum_test_io.bvl.tmp");
   TEST("Opened vnl_bignum_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, r1);

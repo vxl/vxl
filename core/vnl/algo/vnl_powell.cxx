@@ -25,12 +25,12 @@
 class vnl_powell_1dfun : public vnl_cost_function
 {
 public:
-  vnl_powell *        powell_;
+  vnl_powell * powell_;
   vnl_cost_function * f_;
-  unsigned int        n_;
-  vnl_vector<double>  x0_;
-  vnl_vector<double>  dx_;
-  vnl_vector<double>  tmpx_;
+  unsigned int n_;
+  vnl_vector<double> x0_;
+  vnl_vector<double> dx_;
+  vnl_vector<double> tmpx_;
   vnl_powell_1dfun(int n, vnl_cost_function * func, vnl_powell * p)
     : vnl_cost_function(1)
     , powell_(p)
@@ -71,19 +71,19 @@ vnl_nonlinear_minimizer::ReturnCodes
 vnl_powell::minimize(vnl_vector<double> & p)
 {
   // verbose_ = true;
-  int              n = p.size();
+  int n = p.size();
   vnl_powell_1dfun f1d(n, functor_, this);
 
   vnl_matrix<double> xi(n, n, vnl_matrix_identity);
   vnl_vector<double> ptt(n);
   vnl_vector<double> xit(n);
-  double             fret = functor_->f(p);
+  double fret = functor_->f(p);
   report_eval(fret);
   vnl_vector<double> pt = p;
   while (num_iterations_ < unsigned(maxfev))
   {
     double fp = fret;
-    int    ibig = 0;
+    int ibig = 0;
     double del = 0.0;
 
     for (int i = 0; i < n; i++)
@@ -97,16 +97,16 @@ vnl_powell::minimize(vnl_vector<double> & p)
       f1d.init(p, xit);
 #ifdef VNL_USE_OLD_BRENT_MINIMIZER
       vnl_brent brent(&f1d);
-      double    ax;
-      double    xx = initial_step_;
-      double    bx = 0.0;
+      double ax;
+      double xx = initial_step_;
+      double bx = 0.0;
       brent.bracket_minimum(&ax, &xx, &bx);
       fret = brent.minimize_given_bounds(bx, xx, ax, linmin_xtol_, &xx);
 #else
       vnl_brent_minimizer brent(f1d);
-      double              ax = 0.0;
-      double              xx = initial_step_;
-      double              bx;
+      double ax = 0.0;
+      double xx = initial_step_;
+      double bx;
       {
         double fa, fxx, fb;
         vnl_bracket_minimum(f1d, ax, xx, bx, fa, fxx, fb);
@@ -154,16 +154,16 @@ vnl_powell::minimize(vnl_vector<double> & p)
         f1d.init(p, xit);
 #ifdef VNL_USE_OLD_BRENT_MINIMIZER
         vnl_brent brent(&f1d);
-        double    ax;
-        double    xx = 1.0;
-        double    bx = 0.0;
+        double ax;
+        double xx = 1.0;
+        double bx = 0.0;
         brent.bracket_minimum(&ax, &xx, &bx);
         fret = brent.minimize_given_bounds(bx, xx, ax, linmin_xtol_, &xx);
 #else
         vnl_brent_minimizer brent(f1d);
-        double              ax = 0.0;
-        double              xx = 1.0;
-        double              bx;
+        double ax = 0.0;
+        double xx = 1.0;
+        double bx;
         {
           double fa, fxx, fb;
           vnl_bracket_minimum(f1d, ax, xx, bx, fa, fxx, fb);

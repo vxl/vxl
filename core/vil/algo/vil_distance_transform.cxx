@@ -25,7 +25,7 @@ vil_distance_transform(vil_image_view<float> & image)
 
   // Flip to achieve high to low pass
   // Don't use vil_flip* as they assume const images.
-  unsigned              ni = image.ni(), nj = image.nj();
+  unsigned ni = image.ni(), nj = image.nj();
   vil_image_view<float> flip_image(
     image.memory_chunk(), &image(ni - 1, nj - 1), ni, nj, 1, -image.istep(), -image.jstep(), image.nplanes());
   vil_distance_transform_one_way(flip_image);
@@ -41,12 +41,12 @@ void
 vil_distance_transform_one_way(vil_image_view<float> & image)
 {
   assert(image.nplanes() == 1);
-  unsigned       ni = image.ni();
-  unsigned       nj = image.nj();
-  unsigned       ni1 = ni - 1;
+  unsigned ni = image.ni();
+  unsigned nj = image.nj();
+  unsigned ni1 = ni - 1;
   std::ptrdiff_t istep = image.istep(), jstep = image.jstep();
   std::ptrdiff_t o1 = -istep, o2 = -jstep - istep, o3 = -jstep, o4 = istep - jstep;
-  float *        row0 = image.top_left_ptr();
+  float * row0 = image.top_left_ptr();
 
   const float sqrt2 = std::sqrt(2.0f);
 
@@ -101,9 +101,9 @@ void
 vil_distance_transform_r2_one_way(vil_image_view<float> & image)
 {
   assert(image.nplanes() == 1);
-  unsigned       ni = image.ni();
-  unsigned       nj = image.nj();
-  unsigned       ni2 = ni - 2;
+  unsigned ni = image.ni();
+  unsigned nj = image.nj();
+  unsigned ni2 = ni - 2;
   std::ptrdiff_t istep = image.istep(), jstep = image.jstep();
 
   //   Kernel defining points to consider (relative to XX)
@@ -239,7 +239,7 @@ vil_distance_transform_r2(vil_image_view<float> & image)
 
   // Flip to achieve high to low pass
   // Don't use vil_flip* as they assume const images.
-  unsigned              ni = image.ni(), nj = image.nj();
+  unsigned ni = image.ni(), nj = image.nj();
   vil_image_view<float> flip_image(
     image.memory_chunk(), &image(ni - 1, nj - 1), ni, nj, 1, -image.istep(), -image.jstep(), image.nplanes());
   vil_distance_transform_r2_one_way(flip_image);

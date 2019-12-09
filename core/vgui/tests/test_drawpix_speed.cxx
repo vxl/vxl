@@ -33,8 +33,8 @@ static Bool WaitForNotify(Display *d, XEvent *e, char *arg)
 double
 fps_gl(GLenum pack_type, GLenum pix_type)
 {
-  int       draws = 0;
-  int       elapsed;
+  int draws = 0;
+  int elapsed;
   vul_timer timer;
   timer.mark();
   do
@@ -56,11 +56,11 @@ fps_hermes(float src_scale, float dest_scale, HermesFormat * src_format, XImage 
     backbuffer->bits_per_pixel, backbuffer->red_mask, backbuffer->green_mask, backbuffer->blue_mask, 0, 0);
   HermesHandle converter = Hermes_ConverterInstance(HERMES_CONVERT_NORMAL);
   Hermes_ConverterRequest(converter, src_format, dest_format);
-  int       draws = 0;
-  int       elapsed;
+  int draws = 0;
+  int elapsed;
   vul_timer timer;
-  int       bytes_per_pixel = src_format->bits / 8;
-  int       succeed;
+  int bytes_per_pixel = src_format->bits / 8;
+  int succeed;
   do
   {
     succeed = Hermes_ConverterCopy(converter,
@@ -91,17 +91,17 @@ double
 fps_hermes_grey(float src_scale, float dest_scale, XImage * backbuffer)
 {
   // special paletted case for 8-bit mode
-  HermesHandle   palette = Hermes_PaletteInstance();
+  HermesHandle palette = Hermes_PaletteInstance();
   HermesFormat * dest_format = Hermes_FormatNew(
     backbuffer->bits_per_pixel, backbuffer->red_mask, backbuffer->green_mask, backbuffer->blue_mask, 0, 0);
   HermesFormat * src_format = Hermes_FormatNew(8, 0, 0, 0, 0, 1);
-  HermesHandle   converter = Hermes_ConverterInstance(HERMES_CONVERT_NORMAL);
+  HermesHandle converter = Hermes_ConverterInstance(HERMES_CONVERT_NORMAL);
   Hermes_ConverterRequest(converter, src_format, dest_format);
   Hermes_ConverterPalette(converter, palette, palette); // last param is a dummy
-  int       draws = 0;
-  int       elapsed;
+  int draws = 0;
+  int elapsed;
   vul_timer timer;
-  int       succeed;
+  int succeed;
   do
   {
     succeed = Hermes_ConverterCopy(converter,
@@ -146,7 +146,7 @@ pattern_grey(unsigned char * data)
 void
 pattern_RGB16(unsigned char * data, bool little_endian)
 {
-  unsigned short   r, g, b;
+  unsigned short r, g, b;
   unsigned short * my_data = (unsigned short *)data;
   if (little_endian)
   {
@@ -191,7 +191,7 @@ pattern_RGB24(unsigned char * data, bool /*little_endian*/)
 void
 pattern_RGB32(unsigned char * data, bool little_endian)
 {
-  unsigned long   r, g, b;
+  unsigned long r, g, b;
   unsigned long * my_data = (unsigned long *)data;
   if (little_endian)
   {
@@ -220,8 +220,8 @@ pattern_RGB32(unsigned char * data, bool little_endian)
 // Try to do the #ifdef .. #endif madness once and for all here :
 static struct
 {
-  GLenum       format;
-  GLenum       type;
+  GLenum format;
+  GLenum type;
   char const * nfixed;
   char const * pretty;
 }
@@ -247,9 +247,9 @@ main()
 {
   // GLX window code straight out of http://www.eecs.tulane.edu/www/graphics/doc/OpenGL-Man-Pages/glXIntro.html
   std::cerr << "Opening double-buffered, RGBA GLX context...\n\n";
-  Display *     display = XOpenDisplay(0);
+  Display * display = XOpenDisplay(0);
   XVisualInfo * visualinfo = glXChooseVisual(display, DefaultScreen(display), attribs);
-  GLXContext    context = glXCreateContext(display, visualinfo, 0, GL_TRUE);
+  GLXContext context = glXCreateContext(display, visualinfo, 0, GL_TRUE);
 
   Colormap cmap = XCreateColormap(display, RootWindow(display, visualinfo->screen), visualinfo->visual, AllocNone);
 
@@ -298,8 +298,8 @@ main()
   {
     std::cerr << std::endl;
     XMesaBuffer mesabuf = XMesaGetCurrentBuffer();
-    Pixmap      p;
-    XImage *    backbuffer;
+    Pixmap p;
+    XImage * backbuffer;
     XMesaGetBackBuffer(mesabuf, &p, &backbuffer);
 
     bool little_endian = (backbuffer->byte_order == LSBFirst);
@@ -366,8 +366,8 @@ main()
 
   {
     std::cerr << "\nglClear - ";
-    int       draws = 0;
-    int       elapsed;
+    int draws = 0;
+    int elapsed;
     vul_timer timer;
     do
     {
@@ -411,8 +411,8 @@ main()
 #if defined(HAS_HERMES) && VGUI_MESA
   {
     XMesaBuffer mesabuf = XMesaGetCurrentBuffer();
-    Pixmap      p;
-    XImage *    backbuffer;
+    Pixmap p;
+    XImage * backbuffer;
     XMesaGetBackBuffer(mesabuf, &p, &backbuffer);
 
     Hermes_Init();
@@ -422,8 +422,8 @@ main()
       std::cerr << "\nHermesClear - ";
       HermesHandle clearer = Hermes_ClearerInstance();
       Hermes_ClearerRequest(clearer, dest_format);
-      int       draws = 0;
-      int       elapsed;
+      int draws = 0;
+      int elapsed;
       vul_timer timer;
       do
       {
@@ -437,7 +437,7 @@ main()
     {
       std::cerr << "\nHermesConverter -\n";
       HermesFormat * src_format;
-      double         fps;
+      double fps;
       std::cerr << "source -    LUM      OxRGB565 OxRGB    OxBGR    Ox_RGB   0x_BGR\n";
 
       std::cerr << "zoom 1.00x  ";

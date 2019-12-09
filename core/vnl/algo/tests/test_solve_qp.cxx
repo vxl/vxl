@@ -12,7 +12,7 @@ test_solve_qp_with_non_neg_constraints1()
   // Minimise |x|^2 subject to 1.x=1 and x(i)>=0
   // x(i)>=0 not relevant for this solution
 
-  unsigned           n = 4;
+  unsigned n = 4;
   vnl_matrix<double> H(n, n, 0.0);
   for (unsigned i = 0; i < n; ++i)
     H(i, i) = 1.0;
@@ -36,7 +36,7 @@ test_solve_qp_with_non_neg_constraints2()
   // Minimise 0.5|x|^2 -x.(1 -1 1 1) subject to 1.x=1 and x(i)>=0
   // x(i)>=0 not relevant for this solution
 
-  unsigned           n = 4;
+  unsigned n = 4;
   vnl_matrix<double> H(n, n, 0.0);
   for (unsigned i = 0; i < n; ++i)
     H(i, i) = 1.0;
@@ -62,7 +62,7 @@ test_solve_qp_non_neg_sum_one1()
   // Minimise |x|^2 subject to 1.x=1 and x(i)>=0
   // x(i)>=0 not relevant for this solution
 
-  unsigned           n = 4;
+  unsigned n = 4;
   vnl_matrix<double> H(n, n, 0.0);
   for (unsigned i = 0; i < n; ++i)
     H(i, i) = 1.0;
@@ -85,7 +85,7 @@ test_solve_qp_non_neg_sum_one2()
   // Minimise 0.5|x|^2 -x.(1 -1 1 1) subject to 1.x=1 and x(i)>=0
   // x(i)>=0 not relevant for this solution
 
-  unsigned           n = 4;
+  unsigned n = 4;
   vnl_matrix<double> H(n, n, 0.0);
   for (unsigned i = 0; i < n; ++i)
     H(i, i) = 1.0;

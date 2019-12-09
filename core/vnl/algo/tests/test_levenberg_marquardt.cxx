@@ -104,9 +104,9 @@ do_linear_test(bool with_grad)
   b(4) = 1;
   b(5) = 24.3;
 
-  linear_est              f(A, b, with_grad);
+  linear_est f(A, b, with_grad);
   vnl_levenberg_marquardt lm(f);
-  vnl_vector<double>      x(2, -1000.0); // init can be far off
+  vnl_vector<double> x(2, -1000.0); // init can be far off
   // since obj function is linear
   // high precision can be achieved
   lm.set_x_tolerance(1e-12);

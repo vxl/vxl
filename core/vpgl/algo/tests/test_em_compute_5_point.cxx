@@ -19,8 +19,8 @@ static const double TOL = .001;
 
 static void
 normalize(const std::vector<vgl_point_2d<double>> & points,
-          const vpgl_calibration_matrix<double> &   k,
-          std::vector<vgl_point_2d<double>> &       normed_points)
+          const vpgl_calibration_matrix<double> & k,
+          std::vector<vgl_point_2d<double>> & normed_points)
 {
   vnl_matrix_fixed<double, 3, 3> k_inv = vnl_inverse(k.get_matrix());
 
@@ -39,9 +39,9 @@ normalize(const std::vector<vgl_point_2d<double>> & points,
 
 static void
 eval_e_mats(const std::vector<vpgl_essential_matrix<double>> & ems,
-            const std::vector<vgl_point_2d<double>> &          corres1,
-            const std::vector<vgl_point_2d<double>> &          corres2,
-            const std::string &                                test_name)
+            const std::vector<vgl_point_2d<double>> & corres1,
+            const std::vector<vgl_point_2d<double>> & corres2,
+            const std::string & test_name)
 {
   // Check each essential matrix.
   std::vector<vpgl_essential_matrix<double>>::const_iterator i;
@@ -90,7 +90,7 @@ test_unnormed()
   // Define the information in the first camera
   double focal_length1_mm = 5.4; // In mm
   double ccd_width1 = 5.312;
-  int    width1 = 640, height1 = 480;
+  int width1 = 640, height1 = 480;
   double focal_length1 = width1 * (focal_length1_mm / ccd_width1);
 
   vpgl_calibration_matrix<double> k1(focal_length1, vgl_point_2d<double>(width1 / 2, height1 / 2));
@@ -99,13 +99,13 @@ test_unnormed()
   // Define the information in the second camera
   double focal_length2_mm = 5.4; // In mm
   double ccd_width2 = 5.312;
-  int    width2 = 640, height2 = 480;
+  int width2 = 640, height2 = 480;
   double focal_length2 = width2 * (focal_length2_mm / ccd_width2);
 
   vpgl_calibration_matrix<double> k2(focal_length2, vgl_point_2d<double>(width2 / 2, height2 / 2));
 
   // Finally, the point correspondences
-  vgl_point_2d<double>              corres1_arr[] = { vgl_point_2d<double>(310, 263),
+  vgl_point_2d<double> corres1_arr[] = { vgl_point_2d<double>(310, 263),
                                          vgl_point_2d<double>(230, 246),
                                          vgl_point_2d<double>(585, 321),
                                          vgl_point_2d<double>(362, 119),
@@ -113,7 +113,7 @@ test_unnormed()
   std::vector<vgl_point_2d<double>> corres1(corres1_arr,
                                             corres1_arr + sizeof(corres1_arr) / sizeof(vgl_point_2d<double>));
 
-  vgl_point_2d<double>              corres2_arr[] = { vgl_point_2d<double>(274, 268),
+  vgl_point_2d<double> corres2_arr[] = { vgl_point_2d<double>(274, 268),
                                          vgl_point_2d<double>(199, 240),
                                          vgl_point_2d<double>(582, 377),
                                          vgl_point_2d<double>(370, 114),
@@ -126,7 +126,7 @@ test_unnormed()
 
   // Now actually do the computation.
   std::vector<vpgl_essential_matrix<double>> ems;
-  vpgl_em_compute_5_point<double>            em_5_pt;
+  vpgl_em_compute_5_point<double> em_5_pt;
 
   Assert("Un-normed: Testing that the 5 point algorithm returns correctly.",
          em_5_pt.compute(corres1, k1, corres2, k2, ems));
@@ -145,7 +145,7 @@ test_normed()
 {
   //*****************************
   // Finally, the point correspondences
-  vgl_point_2d<double>              corres1_arr[] = { vgl_point_2d<double>(-.291040, -.049485),
+  vgl_point_2d<double> corres1_arr[] = { vgl_point_2d<double>(-.291040, -.049485),
                                          vgl_point_2d<double>(-0.341221, 0.060139),
                                          vgl_point_2d<double>(0.138513, 0.329644),
                                          vgl_point_2d<double>(-0.028314, 0.155250),
@@ -153,7 +153,7 @@ test_normed()
   std::vector<vgl_point_2d<double>> corres1(corres1_arr,
                                             corres1_arr + sizeof(corres1_arr) / sizeof(vgl_point_2d<double>));
 
-  vgl_point_2d<double>              corres2_arr[] = { vgl_point_2d<double>(-0.373122, -0.034761),
+  vgl_point_2d<double> corres2_arr[] = { vgl_point_2d<double>(-0.373122, -0.034761),
                                          vgl_point_2d<double>(-0.425709, -0.102118),
                                          vgl_point_2d<double>(0.105493, 0.307611),
                                          vgl_point_2d<double>(-0.065042, 0.175362),
@@ -166,7 +166,7 @@ test_normed()
 
   // Now actually do the computation.
   std::vector<vpgl_essential_matrix<double>> ems;
-  vpgl_em_compute_5_point<double>            em_5_pt;
+  vpgl_em_compute_5_point<double> em_5_pt;
 
   Assert("Normed: Testing that the 5 point algorithm returns correctly.", em_5_pt.compute(corres1, corres2, ems));
 

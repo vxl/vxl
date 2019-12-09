@@ -49,12 +49,12 @@ vil1_pnm_file_format::make_input_image(vil1_stream * vs)
 }
 
 vil1_image_impl *
-vil1_pnm_file_format::make_output_image(vil1_stream *         vs,
-                                        int                   planes,
-                                        int                   width,
-                                        int                   height,
-                                        int                   components,
-                                        int                   bits_per_component,
+vil1_pnm_file_format::make_output_image(vil1_stream * vs,
+                                        int planes,
+                                        int width,
+                                        int height,
+                                        int components,
+                                        int bits_per_component,
                                         vil1_component_format format)
 {
   return new vil1_pnm_generic_image(vs, planes, width, height, components, bits_per_component, format);
@@ -94,11 +94,11 @@ vil1_pnm_generic_image::file_format() const
 }
 
 vil1_pnm_generic_image::vil1_pnm_generic_image(vil1_stream * vs,
-                                               int           planes,
-                                               int           width,
-                                               int           height,
-                                               int           components,
-                                               int           bits_per_component,
+                                               int planes,
+                                               int width,
+                                               int height,
+                                               int components,
+                                               int bits_per_component,
                                                vil1_component_format)
   : vs_(vs)
 {
@@ -381,9 +381,9 @@ vil1_pnm_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
       vs_->seek(byte_start);
       unsigned char a;
       vs_->read(&a, 1L);
-      int           s = x0 & 7; // = x0%8;
-      unsigned char b = 0;      // output
-      int           t = 0;
+      int s = x0 & 7;      // = x0%8;
+      unsigned char b = 0; // output
+      int t = 0;
       for (int x = 0; x < xs; ++x)
       {
         b |= static_cast<unsigned char>(((a >> (7 - s)) & 1) << (7 - t)); // single bit; high bit = first
@@ -493,11 +493,11 @@ vil1_pnm_generic_image::put_section(void const * buf, int x0, int y0, int xs, in
 
   if (magic_ > 4) // pgm or ppm raw image
   {
-    int            bytes_per_sample = (bits_per_component_ + 7) / 8;
-    int            bytes_per_pixel = components_ * bytes_per_sample;
+    int bytes_per_sample = (bits_per_component_ + 7) / 8;
+    int bytes_per_pixel = components_ * bytes_per_sample;
     vil1_streampos byte_start = start_of_data_ + (y0 * width_ + x0) * bytes_per_pixel;
-    int            byte_width = width_ * bytes_per_pixel;
-    int            byte_out_width = xs * bytes_per_pixel;
+    int byte_width = width_ * bytes_per_pixel;
+    int byte_out_width = xs * bytes_per_pixel;
 
     if (bytes_per_sample == 1 || (bytes_per_sample == 2 && VXL_BIG_ENDIAN))
     {
@@ -536,8 +536,8 @@ vil1_pnm_generic_image::put_section(void const * buf, int x0, int y0, int xs, in
     {
       vil1_streampos byte_start = start_of_data_ + (y0 + y) * byte_width + x0 / 8;
       vs_->seek(byte_start);
-      int           s = x0 & 7; // = x0%8;
-      int           t = 0;
+      int s = x0 & 7; // = x0%8;
+      int t = 0;
       unsigned char a = 0, b = ob[y * byte_out_width];
       if (s)
       {

@@ -33,10 +33,10 @@ void
 test_cplx(vnl_fft_prime_factors<double> const & /*prx*/,
           vnl_fft_prime_factors<double> const & /*pry*/,
           vnl_matrix<std::complex<double>> const & M,
-          int                                      dir)
+          int dir)
 {
   vnl_matrix<std::complex<double>> fft_matrix = M;
-  vnl_fft_2d<double>               fft(M.rows(), M.cols());
+  vnl_fft_2d<double> fft(M.rows(), M.cols());
   fft.transform(fft_matrix, dir);
   TEST("test rows", fft.rows(), M.rows());
   TEST("test cols", fft.cols(), M.cols());
@@ -97,7 +97,7 @@ test_fft2d()
   // verify that backwards * forwards is multiplication by .size().
 
   vnl_matrix<std::complex<double>> fft_matrix = cplx_matrix;
-  vnl_fft_2d<double>               fft(cplx_matrix.rows(), cplx_matrix.cols());
+  vnl_fft_2d<double> fft(cplx_matrix.rows(), cplx_matrix.cols());
   fft.fwd_transform(fft_matrix);
   fft.bwd_transform(fft_matrix);
 

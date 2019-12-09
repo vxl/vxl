@@ -24,7 +24,7 @@ vnl_bessel(unsigned n_max, double x, vnl_vector<double> & J)
     J[0] = 1.0;
     return;
   }
-  int                nhi = 2 * ((std::max(int(n_max), int(x)) + 15) / 2 + 1);
+  int nhi = 2 * ((std::max(int(n_max), int(x)) + 15) / 2 + 1);
   vnl_vector<double> j(nhi + 1);
   j[nhi] = 0.0;
   j[nhi - 1] = 1.0;
@@ -50,7 +50,7 @@ vnl_bessel0(double x)
 {
   if (x == 0)
     return 1.0;
-  int    nhi = 2 * ((int(x) + 15) / 2); // Even
+  int nhi = 2 * ((int(x) + 15) / 2); // Even
   double j3 = 0.0;
   double j2 = 1.0;
   double j0 = j2, j1;
@@ -82,7 +82,7 @@ vnl_bessel(unsigned n, double x)
       return 0.0;
   }
 
-  int    nhi = 2 * ((std::max(int(n), int(x)) + 15) / 2 + 1);
+  int nhi = 2 * ((std::max(int(n), int(x)) + 15) / 2 + 1);
   double j3 = 0.0;
   double j2 = 1.0;
   double j0 = j2, j1;

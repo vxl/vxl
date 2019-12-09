@@ -13,8 +13,8 @@ namespace vgl_test_compute_rigid_3d
 
 std::vector<vgl_point_3d<double>>
 transform_points(const std::vector<vgl_point_3d<double>> & points,
-                 const vgl_rotation_3d<double> &           R,
-                 vgl_vector_3d<double>                     t)
+                 const vgl_rotation_3d<double> & R,
+                 vgl_vector_3d<double> t)
 {
   std::vector<vgl_point_3d<double>> t_pts;
   for (const auto & point : points)
@@ -60,7 +60,7 @@ test_compute_rigid_3d()
   points1.emplace_back(42.3, 205.0, -325.0);
   points1.emplace_back(-5.0, 265.0, -305.0);
 
-  vgl_vector_3d<double>   t(100, -200, 200);
+  vgl_vector_3d<double> t(100, -200, 200);
   vgl_rotation_3d<double> R(3.0, -1.0, 0.5);
 
   std::vector<vgl_point_3d<double>> points2 = vgl_test_compute_rigid_3d::transform_points(points1, R, t);

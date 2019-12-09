@@ -29,11 +29,11 @@ vil_memory_image::vil_memory_image()
 //: Create an in-memory image of given size and pixel type.
 // If not interleaved, pixel type must be scalar or nplanes must be 1.
 // If n_interleaved_planes is not 1, pixel type must be scalar, and n_planes must be 1.
-vil_memory_image::vil_memory_image(unsigned         n_i,
-                                   unsigned         n_j,
-                                   unsigned         n_planes,
+vil_memory_image::vil_memory_image(unsigned n_i,
+                                   unsigned n_j,
+                                   unsigned n_planes,
                                    vil_pixel_format format,
-                                   unsigned         n_interleaved_planes /*=1*/)
+                                   unsigned n_interleaved_planes /*=1*/)
 {
   // Check that only once source of multiple planes is not 1.
   assert(((n_planes == 1 ? 0 : 1) + (n_interleaved_planes == 1 ? 0 : 1) +
@@ -178,7 +178,7 @@ vil_memory_image::put_view(const vil_image_view_base & im, unsigned i0, unsigned
 #define macro(F, T)                                                                                                    \
   case F:                                                                                                              \
   {                                                                                                                    \
-    vil_image_view<T> &       v = static_cast<vil_image_view<T> &>(*view_);                                            \
+    vil_image_view<T> & v = static_cast<vil_image_view<T> &>(*view_);                                                  \
     const vil_image_view<T> & w = static_cast<const vil_image_view<T> &>(im);                                          \
     if (v.memory_chunk() == w.memory_chunk())                                                                          \
     {                                                                                                                  \

@@ -17,7 +17,7 @@ test_homg_line_3d_2_points_double_io()
             << "********************************************\n";
 
   //// test constructors, accessors
-  vgl_homg_point_3d<float>         p1(1.25f, 3.5f, -9.9e1f), p2(5.625f, 7.875f, 0.0f);
+  vgl_homg_point_3d<float> p1(1.25f, 3.5f, -9.9e1f), p2(5.625f, 7.875f, 0.0f);
   vgl_homg_line_3d_2_points<float> p_out(p1, p2), p_in;
 
   vsl_b_ofstream bfs_out("vgl_homg_line_3d_2_points_test_double_io.bvl.tmp");

@@ -127,8 +127,8 @@ static inline void
 vil1_save_rgb_template(T const * p, int w, int h, std::string const & fn)
 {
   vil1_memory_image_of<vil1_rgb<unsigned char>> out(w, h);
-  auto *                                        o = (unsigned char *)out.get_buffer();
-  T const *                                     p_end = p + w * h * 3;
+  auto * o = (unsigned char *)out.get_buffer();
+  T const * p_end = p + w * h * 3;
   while (p != p_end)
     // possible loss of data! (e.g. clipping)
     // agap: but it's okay because the input values are in 0..255
@@ -141,8 +141,8 @@ static inline void
 vil1_save_gray_template(T const * p, int w, int h, std::string const & fn)
 {
   vil1_memory_image_of<unsigned char> out(w, h);
-  unsigned char *                     o = out.get_buffer();
-  T const *                           p_end = p + w * h;
+  unsigned char * o = out.get_buffer();
+  T const * p_end = p + w * h;
   while (p != p_end)
     // possible loss of data! (e.g. clipping)
     // agap: but it's okay because the input values are in 0..255

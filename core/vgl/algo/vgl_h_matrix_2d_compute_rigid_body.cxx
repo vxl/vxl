@@ -17,7 +17,7 @@
 //: Construct a vgl_h_matrix_2d_compute_rigid_body object.
 vgl_h_matrix_2d_compute_rigid_body::vgl_h_matrix_2d_compute_rigid_body() = default;
 
-constexpr int    TM_UNKNOWNS_COUNT = 3;
+constexpr int TM_UNKNOWNS_COUNT = 3;
 constexpr double DEGENERACY_THRESHOLD = 0.01;
 
 //-----------------------------------------------------------------------------
@@ -25,15 +25,15 @@ constexpr double DEGENERACY_THRESHOLD = 0.01;
 //: Compute the rigid body transformation between point sets
 //
 bool
-vgl_h_matrix_2d_compute_rigid_body::solve_rigid_body_problem(int                                            equ_count,
+vgl_h_matrix_2d_compute_rigid_body::solve_rigid_body_problem(int equ_count,
                                                              std::vector<vgl_homg_point_2d<double>> const & p1,
                                                              std::vector<vgl_homg_point_2d<double>> const & p2,
-                                                             vgl_h_matrix_2d<double> &                      H)
+                                                             vgl_h_matrix_2d<double> & H)
 {
   // transform the point sets and fill the design matrix
   vnl_matrix<double> D(equ_count, TM_UNKNOWNS_COUNT + 2);
-  int                n = p1.size();
-  int                row = 0;
+  int n = p1.size();
+  int row = 0;
   for (int i = 0; i < n; i++)
   {
     D(row, 0) = p1[i].x();
@@ -52,7 +52,7 @@ vgl_h_matrix_2d_compute_rigid_body::solve_rigid_body_problem(int                
   }
 
   D.normalize_rows();
-  vnl_svd<double>    svd(D);
+  vnl_svd<double> svd(D);
   vnl_vector<double> nullv = svd.nullvector();
   // last singular value should be zero for ideal data
   if (svd.W(4) > DEGENERACY_THRESHOLD * svd.W(3))
@@ -69,11 +69,11 @@ vgl_h_matrix_2d_compute_rigid_body::solve_rigid_body_problem(int                
   double norm = nullv[4];
   nullv /= norm;
   // convert to rotation
-  double                         y = nullv[1];
-  double                         x = nullv[0];
-  double                         angle = std::atan2(y, x);
-  double                         c = std::cos(angle);
-  double                         s = std::sin(angle);
+  double y = nullv[1];
+  double x = nullv[0];
+  double angle = std::atan2(y, x);
+  double c = std::cos(angle);
+  double s = std::sin(angle);
   vnl_matrix_fixed<double, 3, 3> M;
   M[0][0] = c;
   M[0][1] = -s;
@@ -91,7 +91,7 @@ vgl_h_matrix_2d_compute_rigid_body::solve_rigid_body_problem(int                
 bool
 vgl_h_matrix_2d_compute_rigid_body::compute_p(std::vector<vgl_homg_point_2d<double>> const & points1,
                                               std::vector<vgl_homg_point_2d<double>> const & points2,
-                                              vgl_h_matrix_2d<double> &                      H)
+                                              vgl_h_matrix_2d<double> & H)
 {
   // number of points must be the same
   assert(points1.size() == points2.size());
@@ -136,7 +136,7 @@ vgl_h_matrix_2d_compute_rigid_body::compute_p(std::vector<vgl_homg_point_2d<doub
 bool
 vgl_h_matrix_2d_compute_rigid_body::compute_l(std::vector<vgl_homg_line_2d<double>> const & lines1,
                                               std::vector<vgl_homg_line_2d<double>> const & lines2,
-                                              vgl_h_matrix_2d<double> &                     H)
+                                              vgl_h_matrix_2d<double> & H)
 {
   // number of lines must be the same
   assert(lines1.size() == lines2.size());
@@ -173,7 +173,7 @@ vgl_h_matrix_2d_compute_rigid_body::compute_l(std::vector<vgl_homg_line_2d<doubl
   // The result is a transform on lines so we need to convert it to
   // a point transform, i.e., hp = hl^-t.
   vnl_matrix_fixed<double, 3, 3> const & Ml = hl.get_matrix();
-  vnl_matrix_fixed<double, 3, 3>         Mp = vnl_inverse_transpose(Ml);
+  vnl_matrix_fixed<double, 3, 3> Mp = vnl_inverse_transpose(Ml);
   hp.set(Mp);
   //
   // Next, hp has to be transformed back to the coordinate system of
@@ -191,9 +191,9 @@ vgl_h_matrix_2d_compute_rigid_body::compute_l(std::vector<vgl_homg_line_2d<doubl
 bool
 vgl_h_matrix_2d_compute_rigid_body::compute_pl(std::vector<vgl_homg_point_2d<double>> const & points1,
                                                std::vector<vgl_homg_point_2d<double>> const & points2,
-                                               std::vector<vgl_homg_line_2d<double>> const &  lines1,
-                                               std::vector<vgl_homg_line_2d<double>> const &  lines2,
-                                               vgl_h_matrix_2d<double> &                      H)
+                                               std::vector<vgl_homg_line_2d<double>> const & lines1,
+                                               std::vector<vgl_homg_line_2d<double>> const & lines2,
+                                               vgl_h_matrix_2d<double> & H)
 {
   // number of points must be the same
   assert(points1.size() == points2.size());

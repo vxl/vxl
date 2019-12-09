@@ -20,7 +20,7 @@
 bool
 vgl_h_matrix_2d_compute_4point::compute_p(std::vector<vgl_homg_point_2d<double>> const & points1,
                                           std::vector<vgl_homg_point_2d<double>> const & points2,
-                                          vgl_h_matrix_2d<double> &                      H)
+                                          vgl_h_matrix_2d<double> & H)
 {
   vgl_h_matrix_2d<double> H1, H2;
   if (!H1.projective_basis(points1))
@@ -41,7 +41,7 @@ vgl_h_matrix_2d_compute_4point::compute_p(std::vector<vgl_homg_point_2d<double>>
 bool
 vgl_h_matrix_2d_compute_4point::compute_l(std::vector<vgl_homg_line_2d<double>> const & lines1,
                                           std::vector<vgl_homg_line_2d<double>> const & lines2,
-                                          vgl_h_matrix_2d<double> &                     H)
+                                          vgl_h_matrix_2d<double> & H)
 {
   vgl_h_matrix_2d<double> H1, H2;
   if (!H1.projective_basis(lines1))

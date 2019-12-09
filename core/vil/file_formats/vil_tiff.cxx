@@ -104,15 +104,15 @@ struct tif_stream_structures
       vs->unref();
   }
 
-  TIFF *        tif;
-  vil_stream *  vs;
+  TIFF * tif;
+  vil_stream * vs;
   vil_streampos filesize;
 };
 
 static tsize_t
 vil_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
 {
-  auto *    p = (tif_stream_structures *)h;
+  auto * p = (tif_stream_structures *)h;
   long long no = static_cast<long long>(n);
   if (no > p->filesize)
     p->filesize = n;
@@ -128,7 +128,7 @@ vil_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
   auto * p = (tif_stream_structures *)h;
   // there should be no problem with this case because n
   // is also of type tsize_t
-  auto          ret = (tsize_t)p->vs->write(buf, n);
+  auto ret = (tsize_t)p->vs->write(buf, n);
   vil_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
@@ -240,7 +240,7 @@ vil_tiff_file_format::make_input_image(vil_stream * is)
     delete h;
     return nullptr;
   }
-  unsigned      n = nimg(tss->tif);
+  unsigned n = nimg(tss->tif);
   tif_smart_ptr tif_sptr = new tif_ref_cnt(tss->tif);
   return new vil_tiff_image(tif_sptr, h, n);
 }
@@ -257,7 +257,7 @@ vil_tiff_file_format::make_input_pyramid_image(char const * file)
   bool open_for_reading = true;
   if (trace) // find test failure
     std::cerr << "make_input_pyramid_image::opening multi-image tiff pyramid resource\n";
-  tif_smart_ptr                   tif_sptr = new tif_ref_cnt(in);
+  tif_smart_ptr tif_sptr = new tif_ref_cnt(in);
   vil_pyramid_image_resource_sptr pyr = new vil_tiff_pyramid_resource(tif_sptr, open_for_reading);
   if (pyr->nlevels() <= 1)
     return nullptr;
@@ -281,18 +281,18 @@ level_filename(std::string & directory, std::string & filename, unsigned level)
 }
 
 vil_pyramid_image_resource_sptr
-vil_tiff_file_format::make_pyramid_image_from_base(char const *                    file,
+vil_tiff_file_format::make_pyramid_image_from_base(char const * file,
                                                    vil_image_resource_sptr const & base_image,
-                                                   unsigned                        nlevels,
-                                                   char const *                    temp_dir)
+                                                   unsigned nlevels,
+                                                   char const * temp_dir)
 {
   { // scope for writing the resources
     vil_pyramid_image_resource_sptr pyr = make_pyramid_output_image(file);
     pyr->put_resource(base_image);
     // Create the other pyramid levels
     { // scope for resource files
-      std::string             d = temp_dir;
-      std::string             fn = "tempR";
+      std::string d = temp_dir;
+      std::string fn = "tempR";
       vil_image_resource_sptr image = base_image;
       for (unsigned L = 1; L < nlevels; ++L)
       {
@@ -304,7 +304,7 @@ vil_tiff_file_format::make_pyramid_image_from_base(char const *                 
 
     // reopen them for reading
     { // scope for il resources
-      vil_image_list                       il(temp_dir);
+      vil_image_list il(temp_dir);
       std::vector<vil_image_resource_sptr> rescs = il.resources();
       for (auto & resc : rescs)
         pyr->put_resource(resc);
@@ -323,12 +323,12 @@ vil_tiff_file_format::make_pyramid_image_from_base(char const *                 
 }
 
 vil_blocked_image_resource_sptr
-vil_tiff_file_format::make_blocked_output_image(vil_stream *          vs,
-                                                unsigned              nx,
-                                                unsigned              ny,
-                                                unsigned              nplanes,
-                                                unsigned              size_block_i,
-                                                unsigned              size_block_j,
+vil_tiff_file_format::make_blocked_output_image(vil_stream * vs,
+                                                unsigned nx,
+                                                unsigned ny,
+                                                unsigned nplanes,
+                                                unsigned size_block_i,
+                                                unsigned size_block_j,
                                                 enum vil_pixel_format format)
 {
   if (size_block_i % 16 != 0 || size_block_j % 16 != 0)
@@ -369,10 +369,10 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream *          vs,
 
 
 vil_image_resource_sptr
-vil_tiff_file_format::make_output_image(vil_stream *          vs,
-                                        unsigned              ni,
-                                        unsigned              nj,
-                                        unsigned              nplanes,
+vil_tiff_file_format::make_output_image(vil_stream * vs,
+                                        unsigned ni,
+                                        unsigned nj,
+                                        unsigned nplanes,
                                         enum vil_pixel_format format)
 {
   return make_blocked_output_image(vs, ni, nj, nplanes, 0, 0, format).ptr();
@@ -384,7 +384,7 @@ vil_tiff_file_format::make_pyramid_output_image(char const * filename)
   TIFF * out = TIFFOpen(filename, "w");
   if (!out)
     return nullptr;
-  bool          open_for_reading = false;
+  bool open_for_reading = false;
   tif_smart_ptr tsptr = new tif_ref_cnt(out);
   return new vil_tiff_pyramid_resource(tsptr, open_for_reading);
 }
@@ -574,9 +574,9 @@ integral_type(unsigned bits_per_sample)
 template <class T>
 vil_memory_chunk_sptr
 tiff_maybe_byte_align_data(vil_memory_chunk_sptr in_data,
-                           unsigned              num_samples,
-                           unsigned              in_bits_per_sample,
-                           unsigned              bytes_per_block)
+                           unsigned num_samples,
+                           unsigned in_bits_per_sample,
+                           unsigned bytes_per_block)
 {
   if (!integral_type(in_bits_per_sample))
   {
@@ -667,8 +667,8 @@ vil_tiff_image::size_block_j() const
   if (h_->tile_length.valid)
     return static_cast<unsigned>(h_->tile_length.val);
 
-  auto     bps = static_cast<unsigned>(h_->bytes_per_strip());
-  auto     bpl = static_cast<unsigned>(h_->bytes_per_line());
+  auto bps = static_cast<unsigned>(h_->bytes_per_strip());
+  auto bpl = static_cast<unsigned>(h_->bytes_per_line());
   unsigned size = bps / bpl;
   return size;
   return 0;
@@ -724,14 +724,14 @@ vil_tiff_image::copy_byte_block(vxl_byte * data, const vxl_uint_32 nbytes, vil_m
 // Note strips won't trigger byte
 // alignment, because they are already aligned at this point.
 vil_image_view_base_sptr
-vil_tiff_image::view_from_buffer(vil_pixel_format &            fmt,
+vil_tiff_image::view_from_buffer(vil_pixel_format & fmt,
                                  vil_memory_chunk_sptr const & buf,
-                                 unsigned                      samples_per_block,
-                                 unsigned                      bits_per_sample) const
+                                 unsigned samples_per_block,
+                                 unsigned bits_per_sample) const
 {
   vil_image_view_base_sptr view = nullptr;
-  vil_memory_chunk_sptr    buf_out;
-  unsigned                 spp = h_->samples_per_pixel.val;
+  vil_memory_chunk_sptr buf_out;
+  unsigned spp = h_->samples_per_pixel.val;
   switch (fmt)
   {
 #define GET_BLOCK_CASE(FORMAT, T)                                                                                      \
@@ -810,7 +810,7 @@ vil_tiff_image::get_block(unsigned block_index_i, unsigned block_index_j) const
 
   // input memory chunk
   vil_memory_chunk_sptr buf = new vil_memory_chunk(encoded_block_size, fmt);
-  unsigned              expanded_sample_bytes = vil_pixel_format_sizeof_components(fmt);
+  unsigned expanded_sample_bytes = vil_pixel_format_sizeof_components(fmt);
 
 
   if (h_->is_tiled())
@@ -952,15 +952,15 @@ vil_image_view_base_sptr
 vil_tiff_image::fill_block_from_strip(vil_memory_chunk_sptr const & buf) const
 {
   vil_image_view_base_sptr view = nullptr;
-  vxl_uint_32              tl = size_block_j();
+  vxl_uint_32 tl = size_block_j();
 
-  unsigned         bpl = h_->bytes_per_line();
-  unsigned         bytes_per_strip = h_->bytes_per_strip();
-  unsigned         lines_per_strip = bytes_per_strip / bpl;
+  unsigned bpl = h_->bytes_per_line();
+  unsigned bytes_per_strip = h_->bytes_per_strip();
+  unsigned lines_per_strip = bytes_per_strip / bpl;
   vil_pixel_format fmt = vil_pixel_format_component_format(h_->pix_fmt);
-  unsigned         expanded_bytes_per_sample = vil_pixel_format_sizeof_components(fmt);
-  unsigned         spl = h_->samples_per_line();
-  unsigned         bytes_expanded_line = spl * expanded_bytes_per_sample;
+  unsigned expanded_bytes_per_sample = vil_pixel_format_sizeof_components(fmt);
+  unsigned spl = h_->samples_per_line();
+  unsigned bytes_expanded_line = spl * expanded_bytes_per_sample;
   // note here we make the last strip a full sized block to avoid
   // the messyness of multiple block sizes
   unsigned expanded_bytes_per_strip = tl * bytes_expanded_line;
@@ -973,13 +973,13 @@ vil_tiff_image::fill_block_from_strip(vil_memory_chunk_sptr const & buf) const
 
   // a buffer of zeros for filling partial strips to tile size
   vil_memory_chunk_sptr zero_buf = new vil_memory_chunk(bytes_expanded_line, fmt);
-  auto *                zero_ptr = reinterpret_cast<vxl_byte *>(zero_buf->data());
+  auto * zero_ptr = reinterpret_cast<vxl_byte *>(zero_buf->data());
   for (unsigned i = 0; i < bytes_expanded_line; ++i)
     zero_ptr[i] = 0;
 
   // buffer for the final unpacked output block
   vil_memory_chunk_sptr block_buf = new vil_memory_chunk(expanded_bytes_per_strip, fmt);
-  auto *                block_ptr = reinterpret_cast<vxl_byte *>(block_buf->data());
+  auto * block_ptr = reinterpret_cast<vxl_byte *>(block_buf->data());
   // read scan lines from the strip and paste into the block
   for (unsigned j = 0; j < tl; ++j, buf_ptr += bpl, block_ptr += bytes_expanded_line)
   {
@@ -1025,11 +1025,11 @@ vil_tiff_image::fill_block_from_strip(vil_memory_chunk_sptr const & buf) const
 }
 
 void
-vil_tiff_image::pad_block_with_zeros(unsigned   ioff,
-                                     unsigned   joff,
-                                     unsigned   iclip,
-                                     unsigned   jclip,
-                                     unsigned   bytes_per_pixel,
+vil_tiff_image::pad_block_with_zeros(unsigned ioff,
+                                     unsigned joff,
+                                     unsigned iclip,
+                                     unsigned jclip,
+                                     unsigned bytes_per_pixel,
                                      vxl_byte * block_buf)
 {
   unsigned jstep = size_block_i() * bytes_per_pixel;
@@ -1065,16 +1065,16 @@ vil_tiff_image::pad_block_with_zeros(unsigned   ioff,
 }
 
 void
-vil_tiff_image::fill_block_from_view(unsigned                    bi,
-                                     unsigned                    bj,
-                                     unsigned                    i0,
-                                     unsigned                    j0,
-                                     unsigned                    ioff,
-                                     unsigned                    joff,
-                                     unsigned                    iclip,
-                                     unsigned                    jclip,
+vil_tiff_image::fill_block_from_view(unsigned bi,
+                                     unsigned bj,
+                                     unsigned i0,
+                                     unsigned j0,
+                                     unsigned ioff,
+                                     unsigned joff,
+                                     unsigned iclip,
+                                     unsigned jclip,
                                      const vil_image_view_base & im,
-                                     vxl_byte *&                 block_buf)
+                                     vxl_byte *& block_buf)
 {
   unsigned bytes_per_sample = h_->bytes_per_sample();
   unsigned bytes_per_pixel = bytes_per_sample * nplanes();
@@ -1087,7 +1087,7 @@ vil_tiff_image::fill_block_from_view(unsigned                    bi,
   unsigned view_istep = 1, view_jstep = im.ni()*bytes_per_pixel, view_pstep = 1;
 #endif
   std::ptrdiff_t view_istep, view_jstep, view_pstep;
-  vxl_byte *     view_buf;
+  vxl_byte * view_buf;
   // Cast the pixel type and reinterpret upper_left_ptr as a byte array.
   switch (h_->pix_fmt)
   {
@@ -1120,8 +1120,8 @@ vil_tiff_image::fill_block_from_view(unsigned                    bi,
       return;
   }
   // initial index into block buffer
-  unsigned       bptr = joff * block_jstep;
-  unsigned       ibstart = ioff * bytes_per_pixel;
+  unsigned bptr = joff * block_jstep;
+  unsigned ibstart = ioff * bytes_per_pixel;
   std::ptrdiff_t vistp = view_istep * bytes_per_sample;
   std::ptrdiff_t vjstp = view_jstep * bytes_per_sample;
   std::ptrdiff_t vpstp = view_pstep * bytes_per_sample;
@@ -1129,7 +1129,7 @@ vil_tiff_image::fill_block_from_view(unsigned                    bi,
   // note that it is necessary to add the offset to the start of the
   // current block within the view, (view_i0, view_j0)
   std::ptrdiff_t vptr = (view_j0 + joff) * vjstp;
-  unsigned       ivstart = (view_i0 + ioff) * bytes_per_pixel;
+  unsigned ivstart = (view_i0 + ioff) * bytes_per_pixel;
   for (unsigned j = joff; j < jclip; ++j)
   {
     std::ptrdiff_t vrow_ptr = ivstart;
@@ -1155,7 +1155,7 @@ vil_tiff_image::fill_block_from_view(unsigned                    bi,
   if (this->pixel_format() == VIL_PIXEL_FORMAT_BOOL)
   {
     unsigned outsize = (bytes_per_block + 7 * sizeof(bool)) / (8 * sizeof(bool));
-    auto *   outbuf = new vxl_byte[outsize];
+    auto * outbuf = new vxl_byte[outsize];
     this->bitpack_block(bytes_per_block, block_buf, outbuf);
     delete[] block_buf;
     block_buf = outbuf; // bytes_per_block=outsize;
@@ -1179,7 +1179,7 @@ void
 vil_tiff_image::bitpack_block(unsigned bytes_per_block, const vxl_byte * in_block_buf, vxl_byte * out_block_buf)
 {
   unsigned bytes_per_bool = sizeof(bool);
-  auto *   bl = new vxl_byte[bytes_per_bool];
+  auto * bl = new vxl_byte[bytes_per_bool];
   unsigned bitctr = 0;
   unsigned outctr = 0;
   vxl_byte packed_byte = 0;
@@ -1347,7 +1347,7 @@ vil_tiff_pyramid_resource::closest(const float scale) const
     return nullptr;
   if (nlevels == 1)
     return levels_[0];
-  float    mind = 1.0e08f; // huge scale;
+  float mind = 1.0e08f; // huge scale;
   unsigned lmin = 0;
   for (unsigned i = 0; i < nlevels; ++i)
   {
@@ -1424,9 +1424,9 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i, unsigned j0,
   float scale = levels_[level]->scale_;
   float fi0 = std::floor(scale * i0), fj0 = std::floor(scale * j0);
   float fni = std::floor(scale * n_i), fnj = std::floor(scale * n_j);
-  auto  si0 = static_cast<unsigned>(fi0);
-  auto  sj0 = static_cast<unsigned>(fj0);
-  auto  sni = static_cast<unsigned>(fni);
+  auto si0 = static_cast<unsigned>(fi0);
+  auto sj0 = static_cast<unsigned>(fj0);
+  auto sni = static_cast<unsigned>(fni);
   if (sni == 0)
     sni = 1; // can't have less than one pixel
   auto snj = static_cast<unsigned>(fnj);
@@ -1444,12 +1444,12 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i, unsigned j0,
 // of the base image. The scale factor is with respect to the base
 // image (base scale = 1.0).
 vil_image_view_base_sptr
-vil_tiff_pyramid_resource::get_copy_view(unsigned    i0,
-                                         unsigned    n_i,
-                                         unsigned    j0,
-                                         unsigned    n_j,
+vil_tiff_pyramid_resource::get_copy_view(unsigned i0,
+                                         unsigned n_i,
+                                         unsigned j0,
+                                         unsigned n_j,
                                          const float scale,
-                                         float &     actual_scale) const
+                                         float & actual_scale) const
 {
   // Get the closest scale
   tiff_pyramid_level * pl = this->closest(scale);
@@ -1464,12 +1464,12 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned    i0,
 bool
 vil_tiff_pyramid_resource::put_resource(vil_image_resource_sptr const & ir)
 {
-  unsigned                        level = this->nlevels();
-  unsigned                        ni = ir->ni(), nj = ir->nj();
-  unsigned                        nplanes = ir->nplanes();
-  vil_pixel_format                fmt = ir->pixel_format();
+  unsigned level = this->nlevels();
+  unsigned ni = ir->ni(), nj = ir->nj();
+  unsigned nplanes = ir->nplanes();
+  vil_pixel_format fmt = ir->pixel_format();
   vil_blocked_image_resource_sptr bir = blocked_image_resource(ir);
-  unsigned                        sbi = 0, sbj = 0;
+  unsigned sbi = 0, sbj = 0;
   if (bir)
   {
     sbi = bir->size_block_i();
@@ -1482,7 +1482,7 @@ vil_tiff_pyramid_resource::put_resource(vil_image_resource_sptr const & ir)
   TIFFSetField(t_.tif(), TIFFTAG_SUBFILETYPE, FILETYPE_PAGE);
   /* Set the page number */
   TIFFSetField(t_.tif(), TIFFTAG_PAGENUMBER, level, 3);
-  auto *                  ti = new vil_tiff_image(t_, h, level);
+  auto * ti = new vil_tiff_image(t_, h, level);
   vil_image_resource_sptr resc = ti;
   if (!vil_copy_deep(ir, resc))
     return false;

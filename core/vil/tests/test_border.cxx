@@ -20,7 +20,7 @@ test_border_constant_byte()
   im(5, 0) = 59;
   im(30, 40) = 69;
 
-  vil_border<vil_image_view<vxl_byte>>          border = vil_border_create_constant(im, 13);
+  vil_border<vil_image_view<vxl_byte>> border = vil_border_create_constant(im, 13);
   vil_border_accessor<vil_image_view<vxl_byte>> accessor = vil_border_create_accessor(im, border);
 
   TEST("respect left border", accessor(0, 10), 42);
@@ -47,7 +47,7 @@ test_border_constant_hsv()
   im(50, 63, 1) = 51.1f;
   im(50, 63, 2) = 52.1f;
 
-  vil_border<vil_image_view<float>>          border = vil_border_create_constant(im, 13.3f);
+  vil_border<vil_image_view<float>> border = vil_border_create_constant(im, 13.3f);
   vil_border_accessor<vil_image_view<float>> accessor = vil_border_create_accessor(im, border);
 
   TEST_NEAR("respect left border plane 0", accessor(0, 10), 41.2, 1e-5);

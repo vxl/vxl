@@ -10,13 +10,13 @@
 static unsigned char black = 0, white = 10;
 
 static void
-print_out(unsigned int                  n,
-          const char *                  s1,
+print_out(unsigned int n,
+          const char * s1,
           vil_image_view<unsigned char> a,
-          const char *                  s2,
+          const char * s2,
           vil_image_view<unsigned char> b,
-          const char *                  s3,
-          vil_image_view<float>         c)
+          const char * s3,
+          vil_image_view<float> c)
 {
   std::cout << '\n';
   std::cout.width(n + 5);
@@ -54,14 +54,14 @@ test_line_filter_byte()
   vil_line_filter<unsigned char> filter;
 
   // Create test image
-  unsigned int                  n = 10;
+  unsigned int n = 10;
   vil_image_view<unsigned char> image(n, n);
   image.fill(black);
   for (unsigned int i = 0; i < n; ++i)
     image(i, 5) = white;
 
   vil_image_view<unsigned char> line_dir;
-  vil_image_view<float>         line_str;
+  vil_image_view<float> line_str;
 
   std::cout << "----- light_lines_3x3() -------\n";
 

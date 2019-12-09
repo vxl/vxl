@@ -17,7 +17,7 @@ main()
       M.data_block()[i] = rng.drand64(-1.0, 1.0);
     }
 
-    vnl_svd<double>         svd(M);
+    vnl_svd<double> svd(M);
     vnl_svd_economy<double> svd_e(M);
 
     vnl_matlab_print(std::cerr, svd.V());

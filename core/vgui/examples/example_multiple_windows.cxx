@@ -74,7 +74,7 @@ static void
 hedphelym(const void * const_data)
 {
   // a static_cast<> may not cast away const.
-  void *         data = const_cast<void *>(const_data);
+  void * data = const_cast<void *>(const_data);
   vgui_adaptor * adaptor = static_cast<vgui_adaptor *>(data);
   adaptor->post_destroy();
 }
@@ -84,7 +84,7 @@ static void
 ptolemy()
 {
   vgui_text_tableau_new text_tab;
-  std::stringstream     s;
+  std::stringstream s;
   s << "This is view " << window_count;
   text_tab->add(256, 256, s.str());
 
@@ -128,9 +128,9 @@ main(int argc, char ** argv)
   vgui_image_tableau_new img_tab(img);
   global_viewer_tab = vgui_viewer2D_tableau_new(img_tab);
 
-  int                   wd = img.width(), ht = img.height();
+  int wd = img.width(), ht = img.height();
   vgui_text_tableau_new text_tab;
-  std::stringstream     s;
+  std::stringstream s;
   s << "This is view " << window_count;
   text_tab->add(wd * .5f - 100, ht * .5f, s.str());
 

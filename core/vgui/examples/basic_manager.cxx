@@ -28,7 +28,7 @@ basic_manager::init()
 {
   itab_ = vgui_image_tableau_new(); // keep the image tableau handy
   vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(itab_);
-  vgui_shell_tableau_sptr    shell = vgui_shell_tableau_new(viewer);
+  vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(viewer);
   this->add_child(shell);
 }
 
@@ -51,7 +51,7 @@ basic_manager::quit()
 void
 basic_manager::load_image()
 {
-  vgui_dialog        load_image_dlg("Load image file");
+  vgui_dialog load_image_dlg("Load image file");
   static std::string image_filename = "";
   static std::string ext = "*.*";
   load_image_dlg.file("Image Filename:", ext, image_filename);

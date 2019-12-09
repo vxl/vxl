@@ -58,9 +58,9 @@ public:
 
 private:
   vgui_text_tableau_sptr text_tab_;
-  vgui_event_condition   start_idle_;
-  int                    handle_;
-  int                    idle_count_;
+  vgui_event_condition start_idle_;
+  int handle_;
+  int idle_count_;
 };
 
 int
@@ -68,11 +68,11 @@ main(int argc, char * argv[])
 {
   vgui::init(argc, argv);
 
-  vgui_text_tableau_new      text_tab;
-  vgui_tableau_sptr          idle_tab = new idle_tableau(text_tab);
+  vgui_text_tableau_new text_tab;
+  vgui_tableau_sptr idle_tab = new idle_tableau(text_tab);
   vgui_composite_tableau_new comp_tab(text_tab, idle_tab);
-  vgui_viewer2D_tableau_new  view_tab(comp_tab);
-  vgui_shell_tableau_new     shell_tab(view_tab);
+  vgui_viewer2D_tableau_new view_tab(comp_tab);
+  vgui_shell_tableau_new shell_tab(view_tab);
 
   return vgui::run(shell_tab, 100, 100);
 }

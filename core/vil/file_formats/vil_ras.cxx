@@ -34,7 +34,7 @@ namespace
 inline void
 swap_endian(vxl_uint_32 & word)
 {
-  auto *     bytes = reinterpret_cast<vxl_uint_8 *>(&word);
+  auto * bytes = reinterpret_cast<vxl_uint_8 *>(&word);
   vxl_uint_8 t = bytes[0];
   bytes[0] = bytes[3];
   bytes[3] = t;
@@ -83,7 +83,7 @@ compute_length(vxl_uint_32 w, vxl_uint_32 h, vxl_uint_32 d)
 
 // From http://gmt.soest.hawaii.edu/gmt/doc/html/GMT_Docs/node111.html
 // and other documents on the web.
-const vxl_uint_8      RAS_MAGIC[] = { 0x59, 0xA6, 0x6A, 0x95 };
+const vxl_uint_8 RAS_MAGIC[] = { 0x59, 0xA6, 0x6A, 0x95 };
 constexpr vxl_uint_32 RT_OLD = 0;          //< Raw pixrect image in MSB-first order
 constexpr vxl_uint_32 RT_STANDARD = 1;     //< Raw pixrect image in MSB-first order
 constexpr vxl_uint_32 RT_BYTE_ENCODED = 2; //< (Run-length compression of bytes)
@@ -111,10 +111,10 @@ vil_ras_file_format::make_input_image(vil_stream * vs)
 
 
 vil_image_resource_sptr
-vil_ras_file_format::make_output_image(vil_stream *     vs,
-                                       unsigned         ni,
-                                       unsigned         nj,
-                                       unsigned         nplanes,
+vil_ras_file_format::make_output_image(vil_stream * vs,
+                                       unsigned ni,
+                                       unsigned nj,
+                                       unsigned nplanes,
                                        vil_pixel_format format)
 {
   return new vil_ras_image(vs, ni, nj, nplanes, format);
@@ -355,9 +355,9 @@ vil_ras_image::get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj)
   unsigned buff_bytes_per_pixel = components_ * ((bits_per_component_ + 7) / 8);
   unsigned file_byte_width = width_ * file_bytes_per_pixel;
   file_byte_width += (file_byte_width % 2); // each scan line ends on a 16bit boundary
-  vil_streampos         file_byte_start = start_of_data_ + j0 * file_byte_width + i0 * file_bytes_per_pixel;
-  unsigned              buff_byte_width = ni * buff_bytes_per_pixel;
-  vil_pixel_format      fmt = pixel_format();
+  vil_streampos file_byte_start = start_of_data_ + j0 * file_byte_width + i0 * file_bytes_per_pixel;
+  unsigned buff_byte_width = ni * buff_bytes_per_pixel;
+  vil_pixel_format fmt = pixel_format();
   vil_memory_chunk_sptr buf = new vil_memory_chunk(ni * nj * buff_bytes_per_pixel, fmt);
 
   auto * ib = reinterpret_cast<vxl_uint_8 *>(buf->data());
@@ -377,7 +377,7 @@ vil_ras_image::get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj)
         for (unsigned i = 0; i < ni; ++i)
         {
           vxl_uint_8 * rp = pixel + 2;
-          vxl_uint_8   t = *pixel;
+          vxl_uint_8 t = *pixel;
           *pixel = *rp;
           *rp = t;
           pixel += 3;
@@ -470,7 +470,7 @@ vil_ras_image::put_view(const vil_image_view_base & view, unsigned i0, unsigned 
   unsigned file_byte_width = width_ * file_bytes_per_pixel;
   file_byte_width += (file_byte_width % 2); // each scan line ends on a 16bit boundary
   vil_streampos file_byte_start = start_of_data_ + j0 * file_byte_width + i0 * file_bytes_per_pixel;
-  unsigned      buff_byte_width = view.ni() * buff_bytes_per_pixel;
+  unsigned buff_byte_width = view.ni() * buff_bytes_per_pixel;
 
   assert(file_bytes_per_pixel == buff_bytes_per_pixel);
   assert(file_byte_width >= buff_byte_width);

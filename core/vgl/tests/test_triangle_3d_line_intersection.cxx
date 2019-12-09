@@ -24,12 +24,12 @@ test_point_inside()
             << "*************************************\n";
 
   // Define a triangle - arbitrary choice
-  vgl_point_3d<double>  p1(2, 1, -1), p2(1, -2, 0), p3(-1, 2, 2);
+  vgl_point_3d<double> p1(2, 1, -1), p2(1, -2, 0), p3(-1, 2, 2);
   vgl_vector_3d<double> v1(2, 1, -1), v2(1, -2, 0), v3(-1, 2, 2);
-  vgl_point_3d<double>  o(0, 0, 0);
+  vgl_point_3d<double> o(0, 0, 0);
 
   vgl_point_3d<double> q;
-  double               a1, a2, a3;
+  double a1, a2, a3;
 
   // test centroid
   {
@@ -112,12 +112,12 @@ test_line_intersection()
             << "*******************************************\n";
   {
     // Define a triangle - arbitrary choice
-    vgl_point_3d<double>  p1(2, 1, -1), p2(1, -2, 0), p3(-1, 2, 2);
+    vgl_point_3d<double> p1(2, 1, -1), p2(1, -2, 0), p3(-1, 2, 2);
     vgl_vector_3d<double> v1(2, 1, -1), v2(1, -2, 0), v3(-1, 2, 2);
-    vgl_point_3d<double>  o(0, 0, 0);
+    vgl_point_3d<double> o(0, 0, 0);
 
     // Define a line - arbitrary choice
-    vgl_point_3d<double>        centroid = o + v1 / 3.0 + v2 / 3.0 + v3 / 3.0;
+    vgl_point_3d<double> centroid = o + v1 / 3.0 + v2 / 3.0 + v3 / 3.0;
     vgl_line_segment_3d<double> lineseg(o, o + 2 * (centroid - o));
 
     vgl_point_3d<double> q; // intersection point - should be centroid
@@ -125,13 +125,13 @@ test_line_intersection()
     TEST("intersection point correct?", (q - centroid).length() < tol, true);
   }
   {
-    bool                 outside_fail = false, inside_fail = false;
-    constexpr double     rad = 0.01745329251994329577; // radians per degree, i.e., pi/180
+    bool outside_fail = false, inside_fail = false;
+    constexpr double rad = 0.01745329251994329577; // radians per degree, i.e., pi/180
     vgl_point_3d<double> i_pnt;
     for (double e = 1e-12; e < 0.0002; e *= 9.0) // height above/below triangle edge p1-p2
     {
-      vgl_point_3d<double>        l1_in(1001, 900, 1000 - e), l2_in(1001, 1100, 1000 - e);
-      vgl_point_3d<double>        l1_out(1001, 900, 1000 + e), l2_out(1001, 1100, 1000 + e);
+      vgl_point_3d<double> l1_in(1001, 900, 1000 - e), l2_in(1001, 1100, 1000 - e);
+      vgl_point_3d<double> l1_out(1001, 900, 1000 + e), l2_out(1001, 1100, 1000 + e);
       vgl_line_segment_3d<double> l_in(l1_in, l2_in), l_out(l1_out, l2_out);
       for (double a = -89.9; a < 89.95; a += 0.1) // angle of triangle normal w.r.t to l1-l2
       {

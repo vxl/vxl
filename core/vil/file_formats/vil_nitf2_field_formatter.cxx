@@ -25,7 +25,7 @@ vil_nitf2_field_formatter::read_char_array(std::istream & input, int size)
 std::string
 vil_nitf2_field_formatter::read_string(std::istream & input, int size)
 {
-  char *      cstr = read_char_array(input, size);
+  char * cstr = read_char_array(input, size);
   std::string str = std::string(cstr);
   delete[] cstr;
   return str;
@@ -34,7 +34,7 @@ vil_nitf2_field_formatter::read_string(std::istream & input, int size)
 std::string
 vil_nitf2_field_formatter::read_string(vil_stream & input, int size)
 {
-  char *        char_array = new char[size + 1];
+  char * char_array = new char[size + 1];
   vil_streampos pos = input.read(char_array, size);
   char_array[pos] = '\0';
   std::string retVal(char_array);
