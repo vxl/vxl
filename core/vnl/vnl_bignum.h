@@ -216,7 +216,10 @@ public:
     while (l) {                   // While more bits in l
       assert(i < sizeof(l));      // no more buffer space
       buf[i] = Data(l);           // Peel off lower order bits
-      l >>= 16;                   // Shift next bits into place
+
+      //NOTE: shifting by more than number of bits results in all zeros
+      constexpr int maxbits = sizeof(l)*8;
+      l >>= std::min(16,maxbits); // Shift next bits into place
       i++;
     }
     if (i > 0)
