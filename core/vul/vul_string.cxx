@@ -512,8 +512,18 @@ vul_string_expand_var(std::string & str)
         {
           state = in_var;
         }
-        [[fallthrough]]; // Keep backward compatible fall through 2019-11-24
-      case in_var:       // in a non-bracketed variable
+#if defined(__GNUC__) && __GNUC__ < 5
+        /* FALLTHRU */
+#else
+#  if __has_cpp_attribute(fallthrough)
+        [[fallthrough]]; // C++17
+#  elif __has_cpp_attribute(gnu::fallthrough)
+        [[gnu::fallthrough]] // C++11 and C++14;
+#  elif __has_cpp_attribute(clang::fallthrough)
+        [[clang::fallthrough]] // C++11 and C++14;
+#  endif
+#endif
+      case in_var: // in a non-bracketed variable
         assert(var_begin + 1 < str.size());
         assert(i > var_begin);
         if (str[i] == '$')
