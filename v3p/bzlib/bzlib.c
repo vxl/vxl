@@ -1430,7 +1430,7 @@ BZFILE * bzopen_or_bzdopen
 #ifdef BZ_STRICT_ANSI
       fp = NULL;
 #else
-      fp = (FILE *)fdopen(fd,mode2);
+      fp = fdopen(fd, (const char *)mode2);
 #endif
    }
    if (fp == NULL) return NULL;
