@@ -148,7 +148,7 @@ test_fit_rational_cubic()
     ground_pts.push_back(p3d);
     double u, v;
     project(x, y, z, u, v, neu_u, den_u, neu_v, den_v);
-    image_pts.push_back(vgl_point_2d<double>(u, v));
+    image_pts.emplace_back(u, v);
   }
   vnl_vector<double> coeffs;
   coeffs.set_size(80);
@@ -269,7 +269,7 @@ test_fit_rational_cubic()
     ground_pts.push_back(p3d);
     double u, v;
     project(x, y, z, u, v, neu_u, den_u, neu_v, den_v);
-    image_pts.push_back(vgl_point_2d<double>(u, v));
+    image_pts.emplace_back(u, v);
   }
   vpgl_fit_rational_cubic act_frc(image_pts, ground_pts);
   act_frc.compute_initial_guess();
