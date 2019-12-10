@@ -41,9 +41,10 @@
 #ifdef HAVE_STRING_H
 #  include <string.h>
 #endif
-#if defined(HAVE_STRINGS_H)
+#if defined(HAVE_STRINGS_H) && !defined(HAVE_STRING_H)
 #  include <strings.h>
 #endif
+
 #ifdef HAVE_STDLIB_H
 #  include <stdlib.h>
 #endif
@@ -100,8 +101,15 @@
 #  define EQUALN(a,b,n)           (strnicmp(a,b,n)==0)
 #  define EQUAL(a,b)              (stricmp(a,b)==0)
 #else
-#  define EQUALN(a,b,n)           (strncasecmp(a,b,n)==0)
-#  define EQUAL(a,b)              (strcasecmp(a,b)==0)
+/*  https://stackoverflow.com/questions/3694723/error-c3861-strcasecmp-identifier-not-found-in-visual-studio-2008/26359433 */
+/* not #if defined(_WIN32) || defined(_WIN64) because we have strncasecmp in mingw */
+#  ifdef _MSC_VER
+#    define EQUALN(a,b,n)           (_strnicmp(a,b,n)==0)
+#    define EQUAL(a,b)              (_stricmp(a,b)==0)
+#  else
+#    define EQUALN(a,b,n)           (strncasecmp(a,b,n)==0)
+#    define EQUAL(a,b)              (strcasecmp(a,b)==0)
+#  endif
 #endif
 #endif
 
