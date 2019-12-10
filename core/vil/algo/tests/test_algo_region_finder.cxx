@@ -20,7 +20,7 @@ test_algo_region_finder()
   {
     std::vector<unsigned> ri, rj;
     find.same_int_region(4, 0, ri, rj);
-    TEST("Extract same region again", ri.size() == 0 && rj.size() == 0, true);
+    TEST("Extract same region again", ri.empty() && rj.empty(), true);
   }
 
   {

@@ -158,7 +158,7 @@ vul_sequence_filename_map::parse()
   // Image dir and extension both blank :
   //  1 - Look in cwd for basename-compatible files with common image extensions
   //  2 - Look for basename-compatible files in common image dirs with corresponding image extensions
-  if (image_dir_ == "" && image_extension_ == "")
+  if (image_dir_.empty() && image_extension_.empty())
   {
     bool found_match = false;
     {
@@ -198,7 +198,7 @@ vul_sequence_filename_map::parse()
   //  1 - Look for basename-compatible files in cwd
   //  2 - Look for basename-compatible files in dir corresponding to given image extension
   //  3 - Look for basename-compatible files in common image dirs
-  else if (image_dir_ == "")
+  else if (image_dir_.empty())
   {
     bool found_match = false;
     {
@@ -252,7 +252,7 @@ vul_sequence_filename_map::parse()
   // Only extension is blank :
   //  1 - Look in image dir for basename-compatible files with extension corresponding to the image dir
   //  2 - Look in image dir for basename-compatible files with common image extensions
-  else if (image_extension_ == "")
+  else if (image_extension_.empty())
   {
     bool found_match = false;
     {
@@ -300,7 +300,7 @@ vul_sequence_filename_map::parse()
 
   // Start and/or end is not specified :
   //   Find all basename-compatible files and set sequence indices accordingly
-  if (indices_.size() == 0)
+  if (indices_.empty())
   {
     // See if we need to scan the image directory to get the sequence start/end
     if (start_ == -1 || end_ == -1)

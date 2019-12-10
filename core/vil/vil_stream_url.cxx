@@ -134,7 +134,7 @@ vil_stream_url::vil_stream_url(char const * url)
     }
 
   // port?
-  if (host.size() > 0)
+  if (!host.empty())
     for (auto i = (unsigned int)(host.size() - 1); i > 0; --i)
       if (host[i] == ':')
       {
@@ -232,7 +232,7 @@ vil_stream_url::vil_stream_url(char const * url)
 
   // send HTTP 1.1 request.
   std::snprintf(buffer, 4090, "GET /%s / HTTP/1.1\r\n", path.c_str());
-  if (auth != "")
+  if (!auth.empty())
     std::snprintf(buffer + std::strlen(buffer),
                   4090 - std::strlen(buffer),
                   "Authorization:  Basic %s\n",

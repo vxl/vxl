@@ -132,7 +132,7 @@ vil1_stream_url::vil1_stream_url(char const * url)
     }
 
   // port?
-  if (host.size() > 0)
+  if (!host.empty())
     for (unsigned int i = (unsigned int)(host.size() - 1); i > 0; --i)
       if (host[i] == ':')
       {
@@ -229,7 +229,7 @@ vil1_stream_url::vil1_stream_url(char const * url)
 
   // send HTTP 1.1 request.
   std::sprintf(buffer, "GET /%s / HTTP/1.1\n", path.c_str());
-  if (auth != "")
+  if (!auth.empty())
     std::sprintf(buffer + std::strlen(buffer), "Authorization:  Basic %s\n", encode_base64(auth).c_str());
     //    std::sprintf(buffer+std::strlen(buffer), "Authorization:  user  testuser:testuser\n");
 

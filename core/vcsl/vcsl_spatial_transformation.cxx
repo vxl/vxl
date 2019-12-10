@@ -12,7 +12,7 @@
 bool
 vcsl_spatial_transformation::valid_time(double time) const
 {
-  if (beat_.size() == 0)
+  if (beat_.empty())
     return true;
   return (beat_[0] <= time) && (time <= beat_[beat_.size() - 1]);
 }

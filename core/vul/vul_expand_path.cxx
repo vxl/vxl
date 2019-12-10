@@ -228,7 +228,7 @@ vul_expand_path_internal(std::string path)
 
   // if the path doesn't begin with a / then it must be relative to the
   // current directory.
-  if (path.size() >= 1 && path[0] != '/')
+  if (!path.empty() && path[0] != '/')
     path = std::string("./") + path;
 
   // expand ./ or just .

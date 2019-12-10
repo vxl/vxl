@@ -873,12 +873,12 @@ vnl_rnpoly_solve::Read_Input(std::vector<unsigned int> & ideg,
 
 vnl_rnpoly_solve::~vnl_rnpoly_solve()
 {
-  while (r_.size() > 0)
+  while (!r_.empty())
   {
     delete r_.back();
     r_.pop_back();
   }
-  while (i_.size() > 0)
+  while (!i_.empty())
   {
     delete i_.back();
     i_.pop_back();

@@ -127,7 +127,7 @@ vil_nitf2_array_field::do_dimension(const vil_nitf2_index_vector & in_indices,
     std::string tag_str = tag();
     std::string index_str = index_string(curr_indices);
     std::string p_name;
-    if (index_str == "")
+    if (index_str.empty())
       p_name = pretty_name();
     else
       p_name = "";

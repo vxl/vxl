@@ -74,7 +74,7 @@ vnl_sparse_matrix_linear_system<T>::apply_preconditioner(vnl_vector<double> cons
 {
   assert(x.size() == px.size());
 
-  if (jacobi_precond_.size() == 0)
+  if (jacobi_precond_.empty())
   {
     vnl_vector<T> tmp(get_number_of_unknowns());
     A_.diag_AtA(tmp);

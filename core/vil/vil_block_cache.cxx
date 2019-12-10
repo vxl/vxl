@@ -60,7 +60,7 @@ vil_block_cache::get_block(const unsigned & block_index_i,
 bool
 vil_block_cache::remove_block()
 {
-  if (!blocks_.size())
+  if (blocks_.empty())
   {
     std::cerr << "warning: attempt to remove block from empty cache\n";
     return false;

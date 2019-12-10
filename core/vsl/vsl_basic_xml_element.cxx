@@ -38,7 +38,7 @@ vsl_basic_xml_element::add_attribute(std::string attr_name, long value)
 void
 vsl_basic_xml_element::append_cdata(const std::string & cdata)
 {
-  if (cdata_.size() > 0)
+  if (!cdata_.empty())
     cdata_.append(" ");
   cdata_.append(cdata);
 }
@@ -46,7 +46,7 @@ vsl_basic_xml_element::append_cdata(const std::string & cdata)
 void
 vsl_basic_xml_element::append_cdata(double cdata)
 {
-  if (cdata_.size() > 0)
+  if (!cdata_.empty())
     cdata_.append(" ");
   cdata_.append(toString(cdata));
 }
@@ -54,7 +54,7 @@ vsl_basic_xml_element::append_cdata(double cdata)
 void
 vsl_basic_xml_element::append_cdata(int cdata)
 {
-  if (cdata_.size() > 0)
+  if (!cdata_.empty())
     cdata_.append(" ");
   cdata_.append(toString(cdata));
 }
@@ -74,7 +74,7 @@ vsl_basic_xml_element::x_write(std::ostream & ostr)
   x_write_open(ostr);
 
   // put the character data between the tags
-  if (cdata_.size() > 0)
+  if (!cdata_.empty())
     ostr << cdata_ << '\n';
 
   // close the element

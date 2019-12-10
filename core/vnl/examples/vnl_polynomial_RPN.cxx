@@ -32,10 +32,10 @@ operation(char op)
   {
     return stack.back();
   }
-  vnl_polynomial<double> p = stack.size() ? stack.back() : 0.0;
-  if (stack.size())
+  vnl_polynomial<double> p = !stack.empty() ? stack.back() : 0.0;
+  if (!stack.empty())
     stack.pop_back();
-  vnl_polynomial<double> p2 = stack.size() ? stack.back() : 0.0;
+  vnl_polynomial<double> p2 = !stack.empty() ? stack.back() : 0.0;
   if (op == '+')
     p += p2;
   else if (op == '-')
@@ -51,7 +51,7 @@ operation(char op)
     std::cerr << "Unknown operator " << op << std::endl;
     return p;
   }
-  if (stack.size())
+  if (!stack.empty())
     stack.pop_back();
   return p;
 }
@@ -64,7 +64,7 @@ polynomial(char * txt)
   double onecoef;
   while (ss >> onecoef)
     coef.insert(coef.begin(), 1, onecoef);
-  while (coef.size() && coef.back() == 0.0)
+  while (!coef.empty() && coef.back() == 0.0)
     coef.pop_back(); // highest order coeff should not be zero!
   return vnl_polynomial<double>(coef);
 }
