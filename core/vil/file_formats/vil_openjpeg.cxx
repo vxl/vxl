@@ -97,24 +97,24 @@ class vil_openjpeg_decoder
 {
 public:
   vil_openjpeg_decoder(OPJ_CODEC_FORMAT opj_codec_format);
-  ~vil_openjpeg_decoder(void);
+  ~vil_openjpeg_decoder();
 
   bool
-  error(void) const;
+  error() const;
   void
-  silence(void);
+  silence();
 
   bool
   init_from_stream(unsigned int reduction, void * stream);
   bool
   set_decode_area(unsigned int x, unsigned int y, unsigned int w, unsigned int h);
   opj_image_t *
-  take_image(void);
+  take_image();
   opj_image_t *
-  decode(void);
+  decode();
 
   const opj_header *
-  header(void) const;
+  header() const;
 
 private:
   opj_dparameters_t params_;
@@ -132,7 +132,7 @@ private:
   bool
   init_stream(void * stream);
   bool
-  read_header(void);
+  read_header();
 
   // OpenJPEG I/O helper functions
   static vxl_uint_32
@@ -172,7 +172,7 @@ struct vil_openjpeg_image_impl
   bool is_valid_{ false };
   bool error_{ false };
 
-  vil_openjpeg_image_impl(void)
+  vil_openjpeg_image_impl()
     : vstream_(nullptr)
   {
     std::memset(&this->encode_params_, 0, sizeof(opj_cparameters_t));
@@ -199,7 +199,7 @@ vil_openjpeg_decoder ::vil_openjpeg_decoder(OPJ_CODEC_FORMAT opj_codec_format)
 }
 
 
-vil_openjpeg_decoder ::~vil_openjpeg_decoder(void)
+vil_openjpeg_decoder ::~vil_openjpeg_decoder()
 {
   // De-allocate any necessary OpenJPEG data structures
   if (this->stream_)
@@ -221,14 +221,14 @@ vil_openjpeg_decoder ::~vil_openjpeg_decoder(void)
 
 
 bool
-vil_openjpeg_decoder ::error(void) const
+vil_openjpeg_decoder ::error() const
 {
   return this->error_;
 }
 
 
 void
-vil_openjpeg_decoder ::silence(void)
+vil_openjpeg_decoder ::silence()
 {
   this->silent_ = true;
 }
@@ -311,7 +311,7 @@ vil_openjpeg_decoder ::init_decoder(unsigned int reduction)
 
 
 bool
-vil_openjpeg_decoder ::read_header(void)
+vil_openjpeg_decoder ::read_header()
 {
   if (this->image_)
   {
@@ -341,7 +341,7 @@ vil_openjpeg_decoder ::set_decode_area(unsigned int x, unsigned int y, unsigned 
 
 
 opj_image_t *
-vil_openjpeg_decoder ::take_image(void)
+vil_openjpeg_decoder ::take_image()
 {
   opj_image_t * image = this->image_;
   this->image_ = nullptr;
@@ -350,7 +350,7 @@ vil_openjpeg_decoder ::take_image(void)
 
 
 opj_image_t *
-vil_openjpeg_decoder ::decode(void)
+vil_openjpeg_decoder ::decode()
 {
   this->error_ = false;
   return opj_decode(this->codec_, this->stream_);
@@ -358,7 +358,7 @@ vil_openjpeg_decoder ::decode(void)
 
 
 const opj_header *
-vil_openjpeg_decoder ::header(void) const
+vil_openjpeg_decoder ::header() const
 {
   return &this->header_;
 }
@@ -541,7 +541,7 @@ vil_openjpeg_image ::vil_openjpeg_image(vil_stream * is, vil_openjpeg_format opj
 }
 
 
-vil_openjpeg_image ::~vil_openjpeg_image(void)
+vil_openjpeg_image ::~vil_openjpeg_image()
 {
   // De-allocate any necessary OpenJPEG data structures
   if (this->impl_->image_)
@@ -554,7 +554,7 @@ vil_openjpeg_image ::~vil_openjpeg_image(void)
 
 
 bool
-vil_openjpeg_image ::validate_format(void)
+vil_openjpeg_image ::validate_format()
 {
   vil_streampos pos_start = this->impl_->vstream_->tell();
 
@@ -599,14 +599,14 @@ vil_openjpeg_image ::validate_format(void)
 
 
 bool
-vil_openjpeg_image ::is_valid(void) const
+vil_openjpeg_image ::is_valid() const
 {
   return this->impl_->is_valid_;
 }
 
 
 unsigned int
-vil_openjpeg_image ::nreductions(void) const
+vil_openjpeg_image ::nreductions() const
 {
   if (!this->impl_->is_valid_)
     return static_cast<unsigned int>(-1);
@@ -660,7 +660,7 @@ vil_openjpeg_image ::nj() const
 
 
 int
-vil_openjpeg_image ::maxbpp(void) const
+vil_openjpeg_image ::maxbpp() const
 {
   if (!this->impl_->is_valid_)
     return -1;

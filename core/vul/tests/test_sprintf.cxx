@@ -6,7 +6,7 @@
 #include "testlib/testlib_test.h"
 
 void
-test_sprintf(void)
+test_sprintf()
 {
   vul_sprintf buf0("[%d]", 123);
   std::cout << "buf0=" << buf0 << std::endl;
