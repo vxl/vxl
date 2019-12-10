@@ -34,7 +34,7 @@ main(int argc, char ** argv)
   vul_arg<bool> suppress_non_max("-s", "Suppress non-peaks", false);
   vul_arg_parse(argc, argv);
 
-  if (in_path() == "" || kernel_path() == "")
+  if (in_path().empty() || kernel_path().empty())
   {
     print_usage();
     vul_arg_display_usage_and_exit();

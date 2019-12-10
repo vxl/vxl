@@ -76,7 +76,7 @@ vil_blocked_image_resource::glue_blocks_together(
   const std::vector<std::vector<vil_image_view_base_sptr>> & blocks) const
 {
   vil_image_view_base_sptr result;
-  if (blocks.size() == 0)
+  if (blocks.empty())
     return result;
 
   // first calculate the overall size of the output image (all blocks glued together)
@@ -272,7 +272,7 @@ vil_blocked_image_resource::get_copy_view(unsigned int i0, unsigned int n_i, uns
   std::vector<std::vector<vil_image_view_base_sptr>> blocks;
 
   this->get_blocks(bi_start, bi_end, bj_start, bj_end, blocks);
-  if (!blocks.size())
+  if (blocks.empty())
     return view;
   // Trim them if necessary to fit the view
   if (!trim_border_blocks(i0, n_i, j0, n_j, bi_start, bj_start, blocks))

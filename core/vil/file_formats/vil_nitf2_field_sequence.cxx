@@ -171,7 +171,7 @@ vil_nitf2_field_sequence::read(vil_nitf2_istream & input,
         {
           // Either there is no width functor, in which case variable_width = -1 and will be ignored,
           // or there is a width functor, and the resulting positive variable_width will be applied.
-          if (indexes.size() == 0)
+          if (indexes.empty())
           {
             // read scalar field
             bool fieldReadError;
@@ -246,7 +246,7 @@ vil_nitf2_field_sequence::read(vil_nitf2_istream & input,
       //       FIELD B(i,j)
       // the following call to create_array_fields sets up fields
       // A (with 1 dimension) and B (with 2 dimensions).
-      if (indexes.size() == 0)
+      if (indexes.empty())
       {
         if (!create_array_fields(repeat_node->field_definitions, 1))
         {

@@ -408,8 +408,8 @@ vul_string_to_int_list(std::string str)
     if (str.size() > 1 && str[0] == ',')
       str.erase(0, 1);
 
-    bool matched2 = range_regexp.match(2).size() > 0;
-    bool matched3 = range_regexp.match(3).size() > 0;
+    bool matched2 = !range_regexp.match(2).empty();
+    bool matched3 = !range_regexp.match(3).empty();
 
     int s = vul_string_atoi(match1);
     int d = 1;

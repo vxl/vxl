@@ -108,7 +108,7 @@ vul_temp_filename()
   {
     tempdir = P_tmpdir; // defined in stdio.h
   }
-  char lastchar = (tempdir.size() > 0) ? tempdir[tempdir.size() - 1] : ' ';
+  char lastchar = (!tempdir.empty()) ? tempdir[tempdir.size() - 1] : ' ';
   if (lastchar != '/' && lastchar != '\\')
     tempdir += "/";
 

@@ -22,7 +22,7 @@ vcsl_spatial::~vcsl_spatial()
 bool
 vcsl_spatial::valid_time(double time) const
 {
-  if (beat_.size() == 0)
+  if (beat_.empty())
     return true;
   else
     return (beat_[0] <= time) && (time <= beat_[beat_.size() - 1]);
@@ -117,7 +117,7 @@ vcsl_spatial::recursive_path_from_local_to_cs_exists(const vcsl_spatial_sptr & o
   bool result;
   int i = -1; // dummy initialisation to avoid compiler warning
   std::vector<vcsl_spatial_sptr>::const_iterator child;
-  if (parent_.size() != 0) // If 'this' is not absolute
+  if (!parent_.empty()) // If 'this' is not absolute
     i = matching_interval(time);
   set_reached(true);
 
@@ -138,7 +138,7 @@ vcsl_spatial::recursive_path_from_local_to_cs_exists(const vcsl_spatial_sptr & o
     // If 'other' not found, check if 'other' can be reached through children of 'this'
     if (!result)
     {
-      if (potential_children_.size() != 0)
+      if (!potential_children_.empty())
       {
         for (child = potential_children_.begin(); !result && child != potential_children_.end(); ++child)
         {
@@ -199,7 +199,7 @@ vcsl_spatial::recursive_path_from_local_to_cs(const vcsl_spatial_sptr & other,
   int i = -1; // dummy initialisation to avoid compiler warning
   std::vector<vcsl_spatial_sptr>::const_iterator child;
 
-  if (parent_.size() != 0)
+  if (!parent_.empty())
     i = matching_interval(time);
 
   set_reached(true);
@@ -230,7 +230,7 @@ vcsl_spatial::recursive_path_from_local_to_cs(const vcsl_spatial_sptr & other,
       }
     if (!result)
     {
-      if (potential_children_.size() != 0)
+      if (!potential_children_.empty())
       {
         for (child = potential_children_.begin(); !result && child != potential_children_.end(); ++child)
         {
@@ -276,7 +276,7 @@ vcsl_spatial::is_absolute(double time) const
   assert(valid_time(time));
 
   // If list of parents is NULL, 'this' must be absolute
-  if (parent_.size() == 0)
+  if (parent_.empty())
     return true;
   else
   {

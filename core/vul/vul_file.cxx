@@ -283,7 +283,7 @@ vul_file::expand_tilde(char const * vul_filename)
   //  ~/fred       ""     "/fred"
   //  ~user/fred   "user" "/fred"
 
-  if (dir.size() == 0)
+  if (dir.empty())
   {
     // Was just ~, use getenv(HOME)
     char const * home_directory = getenv("HOME");

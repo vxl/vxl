@@ -48,7 +48,7 @@ vnl_decnum::vnl_decnum(std::string const & r)
         --exp;
       }
     }
-    if (data_ == "")
+    if (data_.empty())
       sign_ = ' ';
     else if (*p == 'e')
     {

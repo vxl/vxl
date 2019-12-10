@@ -121,7 +121,7 @@ print_perm(std::vector<unsigned> & params_indices)
 bool
 increment_perm(std::vector<unsigned> & params_indices, unsigned size)
 {
-  if (!params_indices.size()) // no need to permute!!
+  if (params_indices.empty()) // no need to permute!!
     return true;
 
   params_indices[params_indices.size() - 1] += 1;
@@ -161,9 +161,9 @@ vpgl_rational_adjust_multiple_pts::adjust(
   cam_translations.clear();
   intersections.clear();
   intersections.resize(corrs.size());
-  if (!cams.size() || !corrs.size() || cams.size() != corrs.size())
+  if (cams.empty() || corrs.empty() || cams.size() != corrs.size())
     return false;
-  if (!corrs[0].size())
+  if (corrs[0].empty())
     return false;
   auto cnt_corrs_for_each_cam = (unsigned)corrs[0].size();
   for (unsigned int i = 1; i < corrs.size(); ++i)
@@ -316,9 +316,9 @@ vpgl_rational_adjust_multiple_pts::adjust_lev_marq(
   cam_translations.clear();
   intersections.clear();
   intersections.resize(corrs.size());
-  if (!cams.size() || !corrs.size() || cams.size() != corrs.size())
+  if (cams.empty() || corrs.empty() || cams.size() != corrs.size())
     return false;
-  if (!corrs[0].size())
+  if (corrs[0].empty())
     return false;
   auto cnt_corrs_for_each_cam = (unsigned)corrs[0].size();
   for (unsigned int i = 1; i < corrs.size(); ++i)
@@ -420,9 +420,9 @@ vpgl_rational_adjust_multiple_pts::adjust_lev_marq(
   intersections.clear();
   intersections.clear();
   intersections.resize(corrs.size());
-  if (!cams.size() || !corrs.size() || cams.size() != corrs.size())
+  if (cams.empty() || corrs.empty() || cams.size() != corrs.size())
     return false;
-  if (!corrs[0].size())
+  if (corrs[0].empty())
     return false;
   auto cnt_corrs_for_each_cam = (unsigned)corrs[0].size();
   for (unsigned i = 1; i < corrs.size(); ++i)

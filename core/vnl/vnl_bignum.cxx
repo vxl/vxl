@@ -56,7 +56,7 @@ vnl_bignum::vnl_bignum(float f)
       d /= 0x10000L;                               // Shift d right 1 data "digit"
     }
     // Allocate and copy into permanent buffer
-    this->data = buf.size() > 0 ? new Data[buf.size()] : nullptr;
+    this->data = !buf.empty() ? new Data[buf.size()] : nullptr;
     this->count = (unsigned short)(buf.size());
     std::copy(buf.begin(), buf.end(), data);
   }
@@ -93,7 +93,7 @@ vnl_bignum::vnl_bignum(double d)
       d /= 0x10000L;                               // Shift d right 1 data "digit"
     }
     // Allocate and copy into permanent buffer
-    this->data = buf.size() > 0 ? new Data[buf.size()] : nullptr;
+    this->data = !buf.empty() ? new Data[buf.size()] : nullptr;
     this->count = (unsigned short)(buf.size());
     std::copy(buf.begin(), buf.end(), data);
   }

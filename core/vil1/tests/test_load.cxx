@@ -24,7 +24,7 @@ test(char const * magic, int comps, int bits, int maxval)
   if (comps == 3)
     ext = ".ppm";
   std::string tmp_nam = vul_temp_filename();
-  if (tmp_nam == "")
+  if (tmp_nam.empty())
     tmp_nam = "t";
   tmp_nam += ext;
   char const * file = tmp_nam.c_str();

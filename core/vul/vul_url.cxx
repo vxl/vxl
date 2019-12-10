@@ -70,7 +70,7 @@ vul_http_open(char const * url)
     }
 
   // port?
-  if (host.size() > 0L)
+  if (!host.empty())
     for (unsigned int i = (unsigned int)(host.size() - 1); i > 0; --i)
       if (host[i] == ':')
       {
@@ -180,7 +180,7 @@ vul_http_open(char const * url)
                 url,
                 host.c_str());
 
-  if (auth != "")
+  if (!auth.empty())
     std::snprintf(buffer + std::strlen(buffer),
                   4090 - std::strlen(buffer),
                   "Authorization: Basic %s\r\n",
@@ -387,7 +387,7 @@ vul_http_exists(char const * url)
   // send HTTP 1.1 request.
   std::snprintf(
     buffer, 4090, "HEAD %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n", url, host.c_str());
-  if (auth != "")
+  if (!auth.empty())
     std::snprintf(buffer + std::strlen(buffer),
                   4090 - std::strlen(buffer),
                   "Authorization: Basic %s\r\n",

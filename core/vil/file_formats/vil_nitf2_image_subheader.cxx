@@ -40,7 +40,7 @@ vil_nitf2_image_subheader::~vil_nitf2_image_subheader()
 {
   if (m_data_mask_table)
     delete m_data_mask_table; // jlm
-  if (vil_nitf2_tagged_record_definition::all_definitions().size())
+  if (!vil_nitf2_tagged_record_definition::all_definitions().empty())
   {
     vil_nitf2_tagged_record_definition::undefine("RPC00A");
     vil_nitf2_tagged_record_definition::undefine("RPC00B");
