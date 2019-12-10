@@ -69,6 +69,7 @@
 #include <iostream>
 #include <limits>
 #include <string>
+#include  <algorithm>
 #include <type_traits> // For enable_if and is_unsigned.
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
