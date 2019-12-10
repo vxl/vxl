@@ -83,7 +83,7 @@ test_url()
          false);
 
     std::istream * i = vul_url::open("https://vxl.github.io/");
-    TEST("vul_url::open(\"https://vxl.github.io/\")", i == 0, false);
+    TEST("vul_url::open(\"https://vxl.github.io/\")", i == nullptr, false);
 
     char b[] = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n"
                "<html>\n  <head>\n    <title>VXL - C++ Libraries for Computer Vision</title>";
