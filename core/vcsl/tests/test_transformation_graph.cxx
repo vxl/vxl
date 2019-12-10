@@ -22,7 +22,7 @@
 #include "vcsl/vcsl_graph.h"
 
 static void
-test1(void);
+test1();
 
 //-----------------------------------------------------------------------------
 //
@@ -37,7 +37,7 @@ test1(void);
 //
 //-----------------------------------------------------------------------------
 static void
-test1(void)
+test1()
 {
   vcsl_graph_sptr graph = new vcsl_graph;
   vcsl_spatial_sptr csa = new vcsl_cartesian_3d;
