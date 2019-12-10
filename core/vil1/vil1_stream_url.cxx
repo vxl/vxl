@@ -107,7 +107,7 @@ encode_base64(const std::string & in)
 
 
 vil1_stream_url::vil1_stream_url(char const * url)
-  : u_(0)
+  : u_(nullptr)
 {
   if (std::strncmp(url, "http://", 7) != 0 && std::strncmp(url, "https://", 8) != 0)
     return; // doesn't look like a URL to me....
@@ -324,6 +324,6 @@ vil1_stream_url::~vil1_stream_url()
   if (u_)
   {
     u_->unref();
-    u_ = 0;
+    u_ = nullptr;
   }
 }

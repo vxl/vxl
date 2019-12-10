@@ -9,7 +9,7 @@
 void
 vnl_sample_reseed()
 {
-  vnl_srand48(std::time(0));
+  vnl_srand48(std::time(nullptr));
 }
 
 void
