@@ -318,7 +318,7 @@ test_compute_affine()
   std::vector<vgl_point_2d<double>> pts_2d;
   for (const auto & i : pts_3d)
   {
-    pts_2d.push_back(acam.project(i));
+    pts_2d.emplace_back(acam.project(i));
   }
   bool good = vpgl_affine_camera_compute::compute(pts_2d, pts_3d, fitted_acam);
   double er0 = 0.0;
@@ -389,7 +389,7 @@ test_compute_rational()
     ground_pts.push_back(p3d);
     double u, v;
     rcam.project(x, y, z, u, v);
-    image_pts.push_back(vgl_point_2d<double>(u, v));
+    image_pts.emplace_back(u, v);
   }
   vpgl_rational_camera<double> fcam;
   bool good = vpgl_rational_camera_compute::compute(image_pts, ground_pts, fcam);

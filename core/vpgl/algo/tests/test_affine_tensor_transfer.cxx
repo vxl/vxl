@@ -379,9 +379,9 @@ test_affine_tensor_transfer()
   size_t ni_1 = 2408, nj_1 = 2585;
   size_t ni_2 = 2295, nj_2 = 2710;
   std::vector<std::pair<size_t, size_t>> img_dims;
-  img_dims.push_back(std::pair<size_t, size_t>(ni_0, nj_0));
-  img_dims.push_back(std::pair<size_t, size_t>(ni_1, nj_1));
-  img_dims.push_back(std::pair<size_t, size_t>(ni_2, nj_2));
+  img_dims.emplace_back(ni_0, nj_0);
+  img_dims.emplace_back(ni_1, nj_1);
+  img_dims.emplace_back(ni_2, nj_2);
   vpgl_affine_camera<double> acam0, acam1, acam2;
   vgl_point_3d<double> pmin(-100.0, -100.0, 0.0), pmax(1000.0, 1000.0, 100.0);
   vgl_box_3d<double> bb;

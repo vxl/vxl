@@ -589,8 +589,8 @@ vpgl_rational_camera_compute::compute(const std::vector<vgl_point_2d<double>> & 
     double zn = scale_offsets[2].normalize(p.z());
     double un = scale_offsets[3].normalize(uv.x());
     double vn = scale_offsets[4].normalize(uv.y());
-    norm_ground_pts.push_back(vgl_point_3d<double>(xn, yn, zn));
-    norm_image_pts.push_back(vgl_point_2d<double>(un, vn));
+    norm_ground_pts.emplace_back(xn, yn, zn);
+    norm_image_pts.emplace_back(un, vn);
   }
   vpgl_fit_rational_cubic frc(norm_image_pts, norm_ground_pts);
   if (!frc.compute_initial_guess())
