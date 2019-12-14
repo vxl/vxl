@@ -88,7 +88,7 @@ test_symmetric_eigensystem()
   }
 
   { // compare speed and values of specialised 3x3 version with nxn version
-    constexpr unsigned n = 40000;
+    constexpr unsigned n = 20000;
 
     double fixed_data[n][3];
     unsigned int fixed_time=0;
