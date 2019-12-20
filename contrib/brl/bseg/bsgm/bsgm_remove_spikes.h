@@ -68,7 +68,10 @@ class bsgm_remove_spikes {
   //: return the filtered dem image
   vil_image_view<float> filtered_img() const {return filtered_img_;}
 
-  //:debug functions
+  //: return an image of step edge locations (useful for registration)
+  vil_image_view<vxl_byte> edge_img() const {return edge_img_;}
+
+    //:debug functions
   //: return an image of number of clusters
   vil_image_view<float> k_means_img() const { return n_k_; }
   //: print z values in the neighborhood centered at (i, j)
@@ -91,6 +94,8 @@ class bsgm_remove_spikes {
   float cluster_tol_;
   //: an image of number of clusters at each (i,j)
   vil_image_view<float> n_k_;
+  //: an image of step edge locations, edge at (i,j)==true
+  vil_image_view<vxl_byte> edge_img_;
   //: the input dsm
   vil_image_view<float> input_img_;
   //: input image with border of nbrhd_radius
