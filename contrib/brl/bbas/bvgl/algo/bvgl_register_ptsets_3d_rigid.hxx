@@ -80,6 +80,7 @@ bool bvgl_register_ptsets_3d_rigid<T>::minimize_exhaustive()
   min_exhaustive_error_ = std::numeric_limits<T>::max();
   T z_at_min = T(0), y_at_min = T(0), x_at_min = T(0);
   for (T z = min_z; z <= max_z; z += t_inc_.z()) {
+    std::cout << '.';
     for (T y = min_y; y <= max_y; y += t_inc_.y()) {
       for (T x = min_x; x <= max_x; x += t_inc_.x()) {
         T err = distr_error(vgl_vector_3d<T>(x, y, z));
@@ -92,6 +93,7 @@ bool bvgl_register_ptsets_3d_rigid<T>::minimize_exhaustive()
       }
     }
   }
+  std::cout << std::endl;
   if (min_exhaustive_error_ >= outlier_thresh_) {
     exhaustive_t_ = vgl_vector_3d<T>(T(0), T(0), T(0));
     return false;
@@ -102,21 +104,24 @@ bool bvgl_register_ptsets_3d_rigid<T>::minimize_exhaustive()
 
 template <class T>
 bool bvgl_register_ptsets_3d_rigid<T>::minimize_ransac(vgl_vector_3d<T> const& initial_t){
+  //debug
+  std::cout << "frac " << transform_fraction_ << " frac_trans size " << frac_trans_.size() << " n hypos " << n_hypos_ << std::endl; 
   // select a random point from the test set
   size_t n = frac_trans_.size();
   vnl_random rand;
   T min_error = std::numeric_limits<T>::max();
+  best_ransac_t_ = initial_t;
   for(size_t i = 0; i<n_hypos_; ++i){
     size_t k = rand(n);
     const vgl_point_3d<T>& p = frac_trans_.p(k);
-    vgl_point_3d<T> tp = p + initial_t;
+    vgl_point_3d<T> tp = p + best_ransac_t_;
     vgl_point_3d<T> cp;
     if (!knn_fixed_.closest_point(tp, cp)) {
       std::cout << "KNN index failed to find neighbors" << std::endl;
       return false;
     }
     vgl_vector_3d<T> t = cp-tp;
-    vgl_vector_3d<T> tt = t+initial_t;
+    vgl_vector_3d<T> tt = t+best_ransac_t_;
     T er = distr_error(tt);
     if(er < min_error){
       min_error = er;

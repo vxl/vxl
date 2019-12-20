@@ -38,10 +38,13 @@ public:
   bvgl_register_ptsets_3d_rigid() = default;
 
   //: constructor with pointsets
-  bvgl_register_ptsets_3d_rigid(vgl_pointset_3d<T> const& fixed, vgl_pointset_3d<T> const& movable) :
-    fixed_(fixed),
+ bvgl_register_ptsets_3d_rigid(vgl_pointset_3d<T> const& fixed, vgl_pointset_3d<T> const& movable,
+                               size_t n_hypos = 100, double transform_fraction = 0.25) :
+  fixed_(fixed),
     movable_(movable),
-    knn_fixed_(fixed)
+    knn_fixed_(fixed),
+    n_hypos_(n_hypos),
+    transform_fraction_(transform_fraction)
   {
     // reduce the size of the movable pointset to reduce computation
     unsigned n = movable_.npts();
@@ -93,6 +96,7 @@ public:
   T outlier_thresh() const { return outlier_thresh_;}
   T transform_fraction() const {return transform_fraction_;}
   size_t min_n_pts() const {return min_n_pts_;}
+  size_t n_search_pts() const {return frac_trans_.size();}
   const bvgl_k_nearest_neighbors_3d<T>& knn_fixed() const {return knn_fixed_;}
   vgl_vector_3d<T> exhaustive_t()const {return exhaustive_t_;}
   vgl_vector_3d<T> best_ransac_t()const {return best_ransac_t_;}
