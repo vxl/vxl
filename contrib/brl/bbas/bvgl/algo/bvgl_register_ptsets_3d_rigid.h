@@ -28,7 +28,34 @@
 #include <vgl/vgl_vector_3d.h>
 #include <bvgl/bvgl_k_nearest_neighbors_3d.h>
 #include <vnl/vnl_random.h>
-
+// a display of progress as a moving '+' symbol
+class reg_progress{
+public:
+ reg_progress(size_t n_steps):n_(n_steps), move_(1), pos_(1){
+    display_ = std::string(n_+2,' ');
+    display_[0]='['; display_[n_+1] = ']';
+  }
+  void operator ()(){
+    for(size_t i = 1; i<=n_; ++i)
+      display_[i] = ' ';
+    display_[pos_]='+';
+    std::cout << '\r' << display_ << std::flush;
+    pos_ += move_;
+    if(pos_>n_){
+      pos_ = n_;
+      move_ = -move_;
+    }
+    if(pos_<1){
+      pos_ = 1;
+      move_ = -move_;
+    }
+  }
+private:
+  std::string display_;
+  int move_;
+  int pos_;
+  int n_;
+};
 template <class T>
 class bvgl_register_ptsets_3d_rigid
 {
