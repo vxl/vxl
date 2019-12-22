@@ -80,9 +80,14 @@ bool bvgl_register_ptsets_3d_rigid<T>::minimize_exhaustive()
   min_exhaustive_error_ = std::numeric_limits<T>::max();
   T z_at_min = T(0), y_at_min = T(0), x_at_min = T(0);
   for (T z = min_z; z <= max_z; z += t_inc_.z()) {
-    std::cout << '.';
     for (T y = min_y; y <= max_y; y += t_inc_.y()) {
+      size_t cnt = 1;
       for (T x = min_x; x <= max_x; x += t_inc_.x()) {
+        std::string cntr;
+        for(size_t i = 0; i<cnt; ++i)
+          cntr.push_back('+');
+        cnt++;
+        std::cout << '\r' << cntr << std::flush;
         T err = distr_error(vgl_vector_3d<T>(x, y, z));
         if (err < min_exhaustive_error_) {
           min_exhaustive_error_ = err;
