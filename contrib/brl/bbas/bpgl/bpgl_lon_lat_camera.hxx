@@ -6,18 +6,11 @@
 #include <vil/vil_save.h>
 #include <vgl/algo/vgl_compute_cremona_2d.h>
 template <class T>
-bool bpgl_lon_lat_camera<T>::init_image(std::string const& img_path, std::string const& lon_path, std::string const& lat_path) {
-  img_ = vil_load(img_path.c_str());
-  ni_ = img_.ni();
-  nj_ = img_.nj();
-  if(ni_== 0 || nj_ == 0){
-    std::cerr << "can't load image from " << img_path << std::endl;
-    return false;
-  }
+bool bpgl_lon_lat_camera<T>::init(std::string const& lon_path, std::string const& lat_path) {
   lon_ = vil_load(lon_path.c_str());
-  size_t nil = lon_.ni(), njl = lon_.nj();
-  if(nil != ni_ || njl != nj_){
-    std::cerr << "invalid longitude image loaded from " << lon_path << std::endl;
+  ni_  = lon_.ni(); nj_ = lon_.nj();
+  if(ni_==0 || nj_ == 0){
+    std::cerr << "couldn't load valid longitude image from " << lon_path << std::endl;
     return false;
   }
   lat_ = vil_load(lat_path.c_str());
@@ -26,7 +19,6 @@ bool bpgl_lon_lat_camera<T>::init_image(std::string const& img_path, std::string
     std::cerr << "invalid latitude image loaded from " << lat_path << std::endl;
     return false;
   } 
-
   std::vector<vgl_point_2d<T> > verts;
   T lon_00 = lon_(0,0), lat_00 = lat_(0,0);
   T lon_01 = lon_(0,(nj_-1)), lat_01 = lat_(0,(nj_-1));
