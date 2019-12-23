@@ -25,7 +25,7 @@ class bpgl_lon_lat_camera :  public vpgl_camera<T>
 {
  public:
  bpgl_lon_lat_camera():ni_(-1), nj_(-1){}
- bool init_image(std::string const& img_path, std::string const& lon_path, std::string const& lat_path);
+ bool init(std::string const& lon_path, std::string const& lat_path);
  virtual ~bpgl_lon_lat_camera() = default;
  bool fit_geo_to_uv_map();
  bool save_error_image(std::string const& path);
@@ -39,7 +39,6 @@ class bpgl_lon_lat_camera :  public vpgl_camera<T>
   vgl_cremona_trans_2d<double,7> ct_;
  size_t ni_;
  size_t nj_;
- vil_image_view<vxl_byte> img_;
  vil_image_view<float> lon_;
  vil_image_view<float> lat_;
  vgl_box_2d<T> geo_bb_;

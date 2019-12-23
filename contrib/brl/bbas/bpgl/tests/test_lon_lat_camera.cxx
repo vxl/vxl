@@ -15,15 +15,13 @@
 #include <bpgl/bpgl_lon_lat_camera.h>
 static void test_lon_lat_camera()
 {
-#if 0
-
+#if 0//disable test
   std::string lon_path = dir + "longitude.tif";
   std::string lat_path = dir + "latitude.tif";
-  std::string img_path = dir + "rgb.tif";
   std::string dsm_path = "D:/tests/aces_test/prob_dsm_1.0m.tif";
   std::string err_path = dir + "err_map.tif";
   bpgl_lon_lat_camera llc;
-  bool good = llc.init_image(img_path, lon_path, lat_path);
+  bool good = llc.init(img_path, lon_path, lat_path);
   good == good && llc.fit_geo_to_uv_map();
   good == good && llc.save_error_image(err_path);
 #endif
