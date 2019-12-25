@@ -111,6 +111,8 @@ class bpgl_geotif_camera : vpgl_camera<T>
   bool global_to_local(T gx, T gy, T gz, T& lx, T& ly, T& lz) const;
   T elevation_origin() const;
   bool set_spacing_from_wgs_matrix();
+  static bool geo_bounds_from_rational_cam(vpgl_camera<T>* rat_cam_ptr,  vgl_box_2d<T> const& image_bounds,
+                                           vgl_box_2d<T>& geo_bb, vgl_polygon<T>& geo_boundary);
   //: the dsm grid spacing in meters
   T dsm_spacing_;
 
@@ -137,6 +139,7 @@ class bpgl_geotif_camera : vpgl_camera<T>
   bool is_utm_;
   int utm_zone_;
   int hemisphere_flag_; //0 North, 1 South
+  vgl_box_2d<T> image_bounds_;
   vgl_box_2d<T> geo_bb_;
   vgl_polygon<T> geo_boundary_;
 };
