@@ -175,7 +175,7 @@ bool bpgl_geotif_camera<T>::geo_bounds_from_rational_cam(vpgl_camera<T>* cam_ptr
     std::vector<std::vector<T> > coef = rat_cam_ptr->coefficients();
     std::vector<vpgl_scale_offset<double> > scale_d;
     std::vector<std::vector<double> > coef_d;
-    for(std::vector<vpgl_scale_offset<T> >::iterator sit = scl_off.begin();
+    for(typename std::vector<vpgl_scale_offset<T> >::iterator sit = scl_off.begin();
         sit != scl_off.end(); ++sit){
       vpgl_scale_offset<T>& so = *sit;
       vpgl_scale_offset<double> sod(static_cast<double>(so.scale()), static_cast<double>(so.offset()));
