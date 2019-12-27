@@ -80,6 +80,7 @@ bool bpgl_geotif_camera<T>::init_from_geotif(vil_image_resource_sptr const& resc
     std::cerr << "TIFF image is not GEOTIFF!\n";
     return false;
   }
+  
   // retrieve header
   vil_geotiff_header* gtif = geotiff_tiff->get_geotiff_header();
   if (!gtif) {
@@ -165,92 +166,158 @@ bool bpgl_geotif_camera<T>::set_spacing_from_wgs_matrix(){
                                      (dly1-dly0) * (dly1-dly0)))/T(100000);
   return true;
 }
+// determine the geographic bounds of the camera region of interest
 template <class T>
 bool bpgl_geotif_camera<T>::geo_bounds_from_rational_cam(vpgl_camera<T>* cam_ptr, vgl_box_2d<T> const& image_bounds,
   vgl_box_2d<T>& geo_bb, vgl_polygon<T>& geo_boundary){
   vpgl_rational_camera<T>* rat_cam_ptr = dynamic_cast<vpgl_rational_camera<T>*>(cam_ptr);
-  if(rat_cam_ptr){
-    //cast camera<T> to camera<double> for backproject========>
-    std::vector<vpgl_scale_offset<T> > scl_off = rat_cam_ptr->scale_offsets();
-    std::vector<std::vector<T> > coef = rat_cam_ptr->coefficients();
-    std::vector<vpgl_scale_offset<double> > scale_d;
-    std::vector<std::vector<double> > coef_d;
-    for(typename std::vector<vpgl_scale_offset<T> >::iterator sit = scl_off.begin();
-        sit != scl_off.end(); ++sit){
-      vpgl_scale_offset<T>& so = *sit;
-      vpgl_scale_offset<double> sod(static_cast<double>(so.scale()), static_cast<double>(so.offset()));
-      scale_d.push_back(sod);
-    }
-    size_t np = coef.size();
-    for(size_t i = 0; i<np; ++i){
-      std::vector<T>& pcoef = coef[i];
-      size_t nc = pcoef.size();
-      std::vector<double> pcoef_d;
-      for(size_t j = 0; j<nc; ++j)
-        pcoef_d.push_back(static_cast<double>(pcoef[j]));
-      coef_d.push_back(pcoef_d);
-    }
-    vpgl_rational_camera<double> rat_cam_d(coef_d, scale_d);
-    //=============<
-    // define ground plane as bottom of valid 3-d region
-    // also define middle of ground plane as the initial guess for
-    // back projection
-    double sz = rat_cam_d.scale(vpgl_rational_camera<double>::Z_INDX);
-    double oz = rat_cam_d.offset(vpgl_rational_camera<double>::Z_INDX);
-    double ox = rat_cam_d.offset(vpgl_rational_camera<double>::X_INDX);
-    double oy = rat_cam_d.offset(vpgl_rational_camera<double>::Y_INDX);
-    double z0 = oz-sz;//min elevation
-    // default image bounds if input bounds are empty
-    vgl_box_2d<T> img_bb = image_bounds;
-    if(img_bb.is_empty()){
-      double su = rat_cam_d.scale(vpgl_rational_camera<double>::U_INDX);
-      double ou = rat_cam_d.offset(vpgl_rational_camera<double>::U_INDX);
-      double sv = rat_cam_d.scale(vpgl_rational_camera<double>::V_INDX);
-      double ov = rat_cam_d.offset(vpgl_rational_camera<double>::V_INDX);
-      double u0 = ou-su, v0 = ov-sv, u1 = ou+su, v1 = v0;
-      double u2 = u1, v2 = ov+sv,u3 = u0, v3 = v2;
-      vgl_point_2d<T> b0(u0, v0), b1(u1,v1), b2(u2, v2), b3(u3,v3);
-      img_bb.add(b0);img_bb.add(b1);img_bb.add(b2);img_bb.add(b3);
-    }
-    double minx = img_bb.min_x(), miny = img_bb.min_y();
-    double maxx = img_bb.max_x(), maxy = img_bb.max_y();
-    vgl_point_2d<double> p0(minx, miny), p1(maxx, miny), p2(maxx, maxy), p3(minx, maxy);
-    vgl_point_3d<double> P0, P1, P2, P3, Pi(ox, oy, z0);
-    bool good = true;
-    vgl_plane_3d<double> pl(T(0), T(0), T(1), -z0);
-    good = good && vpgl_backproject::bproj_plane(rat_cam_d, p0, pl, Pi, P0);
-    good = good && vpgl_backproject::bproj_plane(rat_cam_d, p1, pl, Pi, P1);
-    good = good && vpgl_backproject::bproj_plane(rat_cam_d, p2, pl, Pi, P2);
-    good = good && vpgl_backproject::bproj_plane(rat_cam_d, p3, pl, Pi, P3);
-    if(!good){
-      std::cerr << "Backprojection failed in geotif bounds" << std::endl;
-      return false;
-    }
-      std::vector<vgl_point_2d<T> > verts;
-      verts.emplace_back(P0.x(), P0.y()); verts.emplace_back(P1.x(), P1.y());
-      verts.emplace_back(P2.x(), P2.y()); verts.emplace_back(P3.x(), P3.y());
-      geo_boundary.push_back(verts);
-      geo_bb.add(verts[0]); geo_bb.add(verts[1]);
-      geo_bb.add(verts[2]); geo_bb.add(verts[3]);
-  }else 
+  if(!rat_cam_ptr){
+    std::cerr << "null rational camera pointer - fatal" << std::endl;
     return false;
+  }
+  //cast camera<T> to camera<double> for backproject=======
+  std::vector<vpgl_scale_offset<T> > scl_off = rat_cam_ptr->scale_offsets();
+  std::vector<std::vector<T> > coef = rat_cam_ptr->coefficients();
+  std::vector<vpgl_scale_offset<double> > scale_d;
+  std::vector<std::vector<double> > coef_d;
+  for(typename std::vector<vpgl_scale_offset<T> >::iterator sit = scl_off.begin();
+      sit != scl_off.end(); ++sit){
+    vpgl_scale_offset<T>& so = *sit;
+    vpgl_scale_offset<double> sod(static_cast<double>(so.scale()), static_cast<double>(so.offset()));
+    scale_d.push_back(sod);
+  }
+  size_t np = coef.size();
+  for(size_t i = 0; i<np; ++i){
+    std::vector<T>& pcoef = coef[i];
+    size_t nc = pcoef.size();
+    std::vector<double> pcoef_d;
+    for(size_t j = 0; j<nc; ++j)
+      pcoef_d.push_back(static_cast<double>(pcoef[j]));
+    coef_d.push_back(pcoef_d);
+  }
+  vpgl_rational_camera<double> rat_cam_d(coef_d, scale_d);
+  //=======================================================
+  
+  // define ground plane as bottom of valid 3-d region
+  // also define middle of ground plane as the initial guess for
+  // back projection
+  double sz = rat_cam_d.scale(vpgl_rational_camera<double>::Z_INDX);
+  double oz = rat_cam_d.offset(vpgl_rational_camera<double>::Z_INDX);
+  double ox = rat_cam_d.offset(vpgl_rational_camera<double>::X_INDX);
+  double oy = rat_cam_d.offset(vpgl_rational_camera<double>::Y_INDX);
+  double z0 = oz-sz;//min elevation
+  // default image bounds if input bounds are empty
+  vgl_box_2d<T> img_bb = image_bounds;
+  if(img_bb.is_empty()){
+    double su = rat_cam_d.scale(vpgl_rational_camera<double>::U_INDX);
+    double ou = rat_cam_d.offset(vpgl_rational_camera<double>::U_INDX);
+    double sv = rat_cam_d.scale(vpgl_rational_camera<double>::V_INDX);
+    double ov = rat_cam_d.offset(vpgl_rational_camera<double>::V_INDX);
+    double u0 = ou-su, v0 = ov-sv, u1 = ou+su, v1 = v0;
+    double u2 = u1, v2 = ov+sv,u3 = u0, v3 = v2;
+    vgl_point_2d<T> b0(u0, v0), b1(u1,v1), b2(u2, v2), b3(u3,v3);
+    img_bb.add(b0);img_bb.add(b1);img_bb.add(b2);img_bb.add(b3);
+  }
+  double minx = img_bb.min_x(), miny = img_bb.min_y();
+  double maxx = img_bb.max_x(), maxy = img_bb.max_y();
+  vgl_point_2d<double> p0(minx, miny), p1(maxx, miny), p2(maxx, maxy), p3(minx, maxy);
+  vgl_point_3d<double> P0, P1, P2, P3, Pi(ox, oy, z0);
+  bool good = true;
+  vgl_plane_3d<double> pl(T(0), T(0), T(1), -z0);
+  good = good && vpgl_backproject::bproj_plane(rat_cam_d, p0, pl, Pi, P0);
+  good = good && vpgl_backproject::bproj_plane(rat_cam_d, p1, pl, Pi, P1);
+  good = good && vpgl_backproject::bproj_plane(rat_cam_d, p2, pl, Pi, P2);
+  good = good && vpgl_backproject::bproj_plane(rat_cam_d, p3, pl, Pi, P3);
+  if(!good){
+    std::cerr << "Backprojection failed in geotif bounds" << std::endl;
+    return false;
+  }
+  std::vector<vgl_point_2d<T> > verts;
+  verts.emplace_back(P0.x(), P0.y()); verts.emplace_back(P1.x(), P1.y());
+  verts.emplace_back(P2.x(), P2.y()); verts.emplace_back(P3.x(), P3.y());
+  geo_boundary.push_back(verts);
+  geo_bb.add(verts[0]); geo_bb.add(verts[1]);
+  geo_bb.add(verts[2]); geo_bb.add(verts[3]);
+  return true;
+}
+// determine the geographic bounds of the camera region of interest
+template <class T>
+bool bpgl_geotif_camera<T>::geo_bounds_from_local_cam(std::shared_ptr<vpgl_camera<T> >const& lcam_ptr){
+  if(image_bounds_.is_empty()){
+    std::cerr << "can't define geo bounds for a local camera without image bounds" << std::endl;
+    return false;
+  }
+  if(!lvcs_ptr_){
+    std::cout << "can't define geo bounds for a local camers if  lvcs_ptr is null" << std::endl;
+    return false;
+  }
+  // cast the local camera to vpgl_camera<double>
+  vpgl_camera<double>* cam_d;
+  vnl_matrix_fixed<double, 3, 4> md;
+  if(lcam_ptr->type_name() == "vpgl_proj_camera" || lcam_ptr->type_name() == "vpgl_affine_camera"){
+    vpgl_proj_camera<T>* pcam = dynamic_cast<vpgl_proj_camera<T>*>(lcam_ptr.get());
+    const vnl_matrix_fixed<T, 3, 4>& m = pcam->get_matrix();
+    for(size_t r = 0; r<3; ++r)
+      for(size_t c = 0; c<4; ++r)
+        md[r][c] = static_cast<double>(m[r][c]);
+    cam_d = new vpgl_proj_camera<double>(md);
+  }
+  if(!cam_d){
+    std::cerr << "local camera is not projective or a subclass of projective" << std::endl;
+    return false;
+  }
+  // the ground plane for a local camera is defined at z = 0
+  vgl_plane_3d<double> gpl(0.0, 0.0, 1.0, 0.0);
+  double minx = image_bounds_.min_x(), miny = image_bounds_.min_y();
+  double maxx = image_bounds_.max_x(), maxy = image_bounds_.max_y();
+  vgl_point_2d<double> p0(minx, miny), p1(maxx, miny), p2(maxx, maxy), p3(minx, maxy);
+  vgl_point_3d<double> P0, P1, P2, P3, Pi(0.0, 0.0, 0.0);
+  bool good = true;
+  good = good && vpgl_backproject::bproj_plane(cam_d, p0, gpl, Pi, P0);
+  good = good && vpgl_backproject::bproj_plane(cam_d, p1, gpl, Pi, P1);
+  good = good && vpgl_backproject::bproj_plane(cam_d, p2, gpl, Pi, P2);
+  good = good && vpgl_backproject::bproj_plane(cam_d, p3, gpl, Pi, P3);
+  if(!good){
+    std::cerr << "Backprojection failed in geotif bounds" << std::endl;
+    delete cam_d;
+    return false;
+  }
+  //convert local intersection points to global pts using the lvcs
+  vgl_point_2d<T> gp0, gp1, gp2, gp3;
+  T z0;
+  this->local_to_global(P0.x(), P0.y(), 0.0, gp0.x(), gp0.y(), z0);
+  this->local_to_global(P1.x(), P1.y(), 0.0, gp1.x(), gp1.y(), z0);
+  this->local_to_global(P2.x(), P2.y(), 0.0, gp2.x(), gp2.y(), z0);
+  this->local_to_global(P3.x(), P3.y(), 0.0, gp3.x(), gp3.y(), z0);
+  std::vector<vgl_point_2d<T> > verts;
+    verts.emplace_back(gp0.x(), gp0.y()); verts.emplace_back(gp1.x(), gp1.y());
+  verts.emplace_back(gp2.x(), gp2.y()); verts.emplace_back(gp3.x(), gp3.y());
+  geo_boundary_.push_back(verts);
+  geo_bb_.add(verts[0]); geo_bb_.add(verts[1]);
+  geo_bb_.add(verts[2]); geo_bb_.add(verts[3]);
+  delete cam_d;
   return true;
 }
 //--------------------------------------
 // factory constructors
 //
 template <class T>
-bool bpgl_geotif_camera<T>::construct_from_geotif(vpgl_camera<T> const& general_cam, vil_image_resource_sptr resc, bool elev_org_at_zero, vpgl_lvcs_sptr lvcs_ptr) {
+bool bpgl_geotif_camera<T>::construct_from_geotif(vpgl_camera<T> const& general_cam, vil_image_resource_sptr resc,
+                                                  vgl_box_2d<T> const& image_bounds, bool elev_org_at_zero,
+                                                  vpgl_lvcs_sptr lvcs_ptr) {
   if(resc == nullptr){
     std::cerr << "null geotiff resource - can't proceed" << std::endl;
     return false;
   }
+  projection_enabled_ = true;
   elev_org_at_zero_ = elev_org_at_zero;
   has_lvcs_ = static_cast<bool>(lvcs_ptr);
   dsm_spacing_ = T(1);
-  T ni = static_cast<T>(resc->ni()), nj = static_cast<T>(resc->ni());
-  vgl_point_2d<T> min_p(T(0), T(0)), max_p(ni, nj);
-  image_bounds_.add(min_p);   image_bounds_.add(max_p);
+  if(image_bounds_.is_empty()){
+    T ni = static_cast<T>(resc->ni()), nj = static_cast<T>(resc->ni());
+    vgl_point_2d<T> min_p(T(0), T(0)), max_p(ni, nj);
+    image_bounds_.add(min_p);   image_bounds_.add(max_p);
+  }
   //case I - a camera which projects global geo coordinates - no local CS
   // TO DO - there might exist a UTM camera in the future
   if(general_cam.type_name() == "vpgl_rational_camera"||general_cam.type_name() == "bpgl_lon_lat_camera"&& !lvcs_ptr){
@@ -301,6 +368,10 @@ bool bpgl_geotif_camera<T>::construct_from_geotif(vpgl_camera<T> const& general_
    gcam_has_wgs84_cs_= false;
    project_local_points_ = false;
    general_cam_ = std::shared_ptr<vpgl_camera<T> >(general_cam.clone());
+   if (!geo_bounds_from_local_cam(general_cam_)) {
+       std::cerr << "failed to get geo bounds from local camera" << std::endl;
+       return false;
+   }
    this->init_from_geotif(resc);
    return true;
   }
@@ -309,8 +380,11 @@ bool bpgl_geotif_camera<T>::construct_from_geotif(vpgl_camera<T> const& general_
   return false;
 }
 template <class T>
-bool bpgl_geotif_camera<T>::construct_from_matrix(vpgl_camera<T> const& general_cam, vnl_matrix<T> const& geo_transform_matrix, bool elev_org_at_zero, vpgl_lvcs_sptr lvcs_ptr, int hemisphere_flag , int zone)
+bool bpgl_geotif_camera<T>::construct_from_matrix(vpgl_camera<T> const& general_cam, vnl_matrix<T> const& geo_transform_matrix,
+                                                  vgl_box_2d<T> const& image_bounds, bool elev_org_at_zero,
+                                                  vpgl_lvcs_sptr lvcs_ptr, int hemisphere_flag , int zone)
 {
+  projection_enabled_ = true;
   scale_defined_ = true;
   elev_org_at_zero_ = elev_org_at_zero;
   lvcs_ptr_ = lvcs_ptr;
@@ -371,6 +445,20 @@ bool bpgl_geotif_camera<T>::construct_from_matrix(vpgl_camera<T> const& general_
   return false;
 }
 template <class T>
+bool bpgl_geotif_camera<T>::construct_geo_data_only(vil_image_resource_sptr resc){
+  if(!resc){
+    std::cerr << "null DSM resource - can't proceed" << std::endl;
+    return false;
+  }
+  projection_enabled_ = false;
+  T tni = static_cast<T>(resc->ni()), tnj = static_cast<T>(resc->nj());
+  vgl_point_2d<T> minp(T(0), T(0));
+  vgl_point_2d<T> maxp(tni, tnj);
+  image_bounds_.add(minp);image_bounds_.add(maxp); 
+  return this->init_from_geotif(resc);
+}
+
+template <class T>
 bool bpgl_geotif_camera<T>::local_to_global(T lx, T ly, T lz, T& gx, T& gy, T& gz) const{
     double dlx = static_cast<double>(lx);
     double dly = static_cast<double>(ly);
@@ -423,7 +511,10 @@ bool bpgl_geotif_camera<T>::global_to_local(T gx, T gy, T gz, T& lx, T& ly, T& l
 }
 template <class T>
 void bpgl_geotif_camera<T>::project(const T x, const T y, const T z, T& u, T& v) const{
-
+  if(!projection_enabled_){
+    std::cerr << "Warning trying to project without a general camera defined" << std::endl;
+    return;
+  }
   // case I - The camera and the input points have the same CS
   if(!has_lvcs_){
     general_cam_->project(x, y, z, u, v);
@@ -525,6 +616,10 @@ T bpgl_geotif_camera<T>::elevation_origin() const{
 
 template <class T>
 void bpgl_geotif_camera<T>::project_gtif_to_image(const T tifu, const T tifv, const T tifz, T& u, T& v) const {
+  if(!projection_enabled_){
+    std::cerr << "Warning trying to project without a general camera defined" << std::endl;
+    return;
+  }
   // normal situation, wgs84 cs and lvcs
   if (has_lvcs_ && gcam_has_wgs84_cs_ && !is_utm_) {
     T lat = 0.0, lon = 0.0;
@@ -574,8 +669,28 @@ void bpgl_geotif_camera<T>::project_gtif_to_image(const T tifu, const T tifv, co
   }// TO DO geotiff in UTM but wgs84 global camera with no lvcs
   std::cout << "improper camera or geographic CS to project DSM points" << std::endl;
 }
-
-// Code for easy instantiation.
+template <class T>
+vpgl_lvcs_sptr bpgl_geotif_camera<T>::lower_left_lvcs(T elev_ll) const{
+  vpgl_lvcs_sptr ret;
+  if(image_bounds_.is_empty()){
+    std::cerr << "can't define lower left origin without image bounds" << std::endl;
+    return ret;
+  }
+  T j_ll =  image_bounds_.max_y()-T(1);
+  T i_ll = T(0);
+  T gx, gy;
+  dsm_to_global(i_ll, j_ll, gx, gy);
+  if(!is_utm_){
+    ret = new vpgl_lvcs(gy, gx, elev_ll, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+    return ret;
+  }
+  double lon, lat;
+  vpgl_utm utm;
+  utm.transform(utm_zone_, gx, gy, lat, lon, hemisphere_flag_>0);
+  ret = new vpgl_lvcs(lat, lon, elev_ll, vpgl_lvcs::utm, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  return ret;
+}
+  // Code for easy instantiation.
 #undef BPGL_GEOTIF_CAMERA_INSTANTIATE
 #define BPGL_GEOTIF_CAMERA_INSTANTIATE(T) \
 template class bpgl_geotif_camera<T >
