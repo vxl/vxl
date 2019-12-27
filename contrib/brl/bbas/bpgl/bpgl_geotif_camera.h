@@ -70,11 +70,13 @@ class bpgl_geotif_camera : vpgl_camera<T>
                              vgl_box_2d<T> const& image_bounds = vgl_box_2d<T>(), bool elev_org_at_zero = false,
                              vpgl_lvcs_sptr lvcs_ptr = nullptr,int hemisphere_flag = -1, int zone = 0);
 
-  //: construct without a camera to provide geographic transforms with no need for projection functions
+  //: construct without a camera to provide geographic transforms
+  //  when projection functions are not needed
   bool construct_geo_data_only(vil_image_resource_sptr resc);
 
-    //: are the input points in a local CS
+  //: are the input points in a local CS ?
   bool project_local_points() const {return project_local_points_;}
+
   //: project from local or global 3-d coordinates, to an image location (u, v)
   // if project_local_points() == true, coordinates are in a local CS otherwise in a global CS
   virtual void project(const T x, const T y, const T z, T& u, T& v) const;
@@ -87,17 +89,32 @@ class bpgl_geotif_camera : vpgl_camera<T>
   virtual bpgl_geotif_camera<T>* clone(void) const {return new bpgl_geotif_camera<T>(*this);}
 
   //: accessors
+  // in some versions of DSM algorithms the elevations are relative to
+  // the local CS, i.e. the origin for z is 0;
   bool elevation_origin_at_zero() const {return elev_org_at_zero_;}
+
+  //: is the cs of the DSM UTM?
   bool is_utm() const {return is_utm_;}
+
+  //: does the general camera used for projection have a lvcs?
   bool has_lvcs() const {return has_lvcs_;}
+
+  //: is the general camera coordinate system wgs84?
   bool general_cam_has_wgs84_cs() const {return gcam_has_wgs84_cs_;}
+
+  //: return a pointer to the general camera, e.g. a local rational camera
   std::shared_ptr<vpgl_camera<T> > general_camera() const {return general_cam_;}
+
+  //: return the lvcs pointer if defined, otherwise null
   vpgl_lvcs_sptr lvcs_ptr() {return lvcs_ptr_;}
+
+  //: the geographic matrix extracted from the geotiff header
   vnl_matrix<T> matrix() const {return matrix_;}
   
   //: spacing between dsm samples in meters
   T dsm_spacing() const{return dsm_spacing_;} 
-  //: utm info
+
+  //: utm CS information
   int utm_zone() const {return utm_zone_;}
   int hemisphere_flag() const {return hemisphere_flag_;}
 
@@ -105,7 +122,8 @@ class bpgl_geotif_camera : vpgl_camera<T>
   // can be either wgs84 or utm depending on CS of geotiff image
   vpgl_lvcs_sptr lower_left_lvcs(T elev_ll = T(0)) const;
 
-    //: if not empty, defines the geographic region of validity of the camera  
+  //: if not empty, defines the geographic region of validity of the camera  
+  // both a polygonal region and an enclosing bounding box are provided
   vgl_box_2d<T> geo_bb() const {return geo_bb_;}
   vgl_polygon<T> geo_boundary() const {return geo_boundary_;}
 
@@ -120,15 +138,28 @@ class bpgl_geotif_camera : vpgl_camera<T>
 
   //=====================================================================
  protected:
+  //: extract the geographic matrix from the geotiff header
   bool construct_matrix(T sx, T sy, T sz, std::vector<std::vector<T> > tiepoints);
+
+  //: intialize geographic info from the geotiff header
   bool init_from_geotif(vil_image_resource_sptr const& resc);
+
+  //: map local coordinate to global coordinates
   bool local_to_global(T lx, T ly, T lz, T& gx, T& gy, T& gz) const;
+  //: the opposite direction
   bool global_to_local(T gx, T gy, T gz, T& lx, T& ly, T& lz) const;
+
+  //: the elevation value at the CS origin
   T elevation_origin() const;
+
+  //: set the DSM spacing using the wgs CS - convert deg./pix to meters/pix
   bool set_spacing_from_wgs_matrix();
+
+  // set the geographic bounds given a rational camera
   static bool geo_bounds_from_rational_cam(vpgl_camera<T>* rat_cam_ptr,  vgl_box_2d<T> const& image_bounds,
                                            vgl_box_2d<T>& geo_bb, vgl_polygon<T>& geo_boundary);
 
+  // set the geographic bounds when the general camera is a local camera (e.g. affine)
   bool geo_bounds_from_local_cam(std::shared_ptr<vpgl_camera<T> >const& lcam_ptr);
 
   //:a general camera is defined, e.g. RPC
