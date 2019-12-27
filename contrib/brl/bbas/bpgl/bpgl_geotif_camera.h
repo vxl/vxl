@@ -39,7 +39,7 @@ class bpgl_geotif_camera : vpgl_camera<T>
   //: default constructor - may want a container of cameras
   //  the default member values represent the most common case, e.g. a local_rational_camera
  bpgl_geotif_camera():has_lvcs_(true), gcam_has_wgs84_cs_(true),
-    elev_org_at_zero_(true), is_utm_(false), project_local_points_(true),scale_defined_(false){}
+    elev_org_at_zero_(true), is_utm_(false), project_local_points_(true),scale_defined_(false), projection_enabled_(false){}
 
   virtual ~bpgl_geotif_camera() = default;
 
@@ -53,20 +53,28 @@ class bpgl_geotif_camera : vpgl_camera<T>
   //           the necessary adjustment to elevation values is made.
   //        2) the lvcs CS may not match the GEOTIFF header CS so extra internal conversion may be necessary,
   //           e.g., the lvcs CS is WGS84 and the GEOTIFF header CS is UTM
+  //        3) The geographic bounds of a geotif camera are determined from: a) the image bounds or b)from the DSM bounds or
+  //           c) from RPC scale and offset bounds, in this order, when defined
   //
-  bool construct_from_geotif(vpgl_camera<T> const& general_cam, vil_image_resource_sptr resc, bool elev_org_at_zero = false,
+  bool construct_from_geotif(vpgl_camera<T> const& general_cam, vil_image_resource_sptr resc,
+                             vgl_box_2d<T> const& image_bounds = vgl_box_2d<T>(), bool elev_org_at_zero = false,
                              vpgl_lvcs_sptr lvcs_ptr = nullptr);
 
   //: construct from a 4x4 transform matrix.
-  //if the lvcs is not defined then the camera must be a RPC camera in the WGS84 CS
-  //the UTM CS case is indicated by hemisphere flag being either 0 - Northern Hemisphere or 1 - Southern Hemisphere
-  //when the lvcs_ptr is null, UTM coordinates must be converted to WGS84 before projecting through the camera
+  // if the lvcs is not defined then the camera must be a RPC camera in the WGS84 CS
+  // the UTM CS case is indicated by hemisphere flag being either 0 - Northern Hemisphere or 1 - Southern Hemisphere
+  // when the lvcs_ptr is null, UTM coordinates must be converted to WGS84 before projecting through the camera
+  // The geographic bounds of a geotif camera are determined from: a) the image bounds or b)from the DSM bounds or
+  //  c) from RPC scale and offset bounds, in this order, when defined
   bool construct_from_matrix(vpgl_camera<T> const& general_cam, vnl_matrix<T> const& geo_transform_matrix,
-                             bool elev_org_at_zero = false, vpgl_lvcs_sptr lvcs_ptr = nullptr,int hemisphere_flag = -1, int zone = 0);
+                             vgl_box_2d<T> const& image_bounds = vgl_box_2d<T>(), bool elev_org_at_zero = false,
+                             vpgl_lvcs_sptr lvcs_ptr = nullptr,int hemisphere_flag = -1, int zone = 0);
 
-  //: are the input points in a local CS
+  //: construct without a camera to provide geographic transforms with no need for projection functions
+  bool construct_geo_data_only(vil_image_resource_sptr resc);
+
+    //: are the input points in a local CS
   bool project_local_points() const {return project_local_points_;}
-
   //: project from local or global 3-d coordinates, to an image location (u, v)
   // if project_local_points() == true, coordinates are in a local CS otherwise in a global CS
   virtual void project(const T x, const T y, const T z, T& u, T& v) const;
@@ -89,18 +97,25 @@ class bpgl_geotif_camera : vpgl_camera<T>
   
   //: spacing between dsm samples in meters
   T dsm_spacing() const{return dsm_spacing_;} 
+  //: utm info
+  int utm_zone() const {return utm_zone_;}
+  int hemisphere_flag() const {return hemisphere_flag_;}
 
-  //: if not empty, defines the region of validity of the camera
+  //: construct a lvcs at the lower_left corner of the geotiff image array
+  // can be either wgs84 or utm depending on CS of geotiff image
+  vpgl_lvcs_sptr lower_left_lvcs(T elev_ll = T(0)) const;
+
+    //: if not empty, defines the geographic region of validity of the camera  
   vgl_box_2d<T> geo_bb() const {return geo_bb_;}
   vgl_polygon<T> geo_boundary() const {return geo_boundary_;}
 
   //: =====Transforms between DSM image and global geo coordinates====
   // [e.g., (u,v)->(lon, lat) or (lon, lat, elev)->(u,v)]
 
-  //: map dsm image location to global geo X-Y coordinates
+  //: map dsm image location to global geo X-Y coordinates (wgs84 or UTM)
   void dsm_to_global(T i, T j, T& gx, T& gy) const;
 
-  //: map global geo X-Y to dsm u,v (uses GEOTIFF matrix)
+  //: map global geo X-Y (wgs84 or UTM) to dsm u,v (uses GEOTIFF matrix)
   void global_to_dsm(T gx, T gy, T& i, T& j) const;
 
   //=====================================================================
@@ -113,6 +128,12 @@ class bpgl_geotif_camera : vpgl_camera<T>
   bool set_spacing_from_wgs_matrix();
   static bool geo_bounds_from_rational_cam(vpgl_camera<T>* rat_cam_ptr,  vgl_box_2d<T> const& image_bounds,
                                            vgl_box_2d<T>& geo_bb, vgl_polygon<T>& geo_boundary);
+
+  bool geo_bounds_from_local_cam(std::shared_ptr<vpgl_camera<T> >const& lcam_ptr);
+
+  //:a general camera is defined, e.g. RPC
+  bool projection_enabled_;
+
   //: the dsm grid spacing in meters
   T dsm_spacing_;
 
