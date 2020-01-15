@@ -96,6 +96,8 @@ class vgui_adaptor
   // only the pure virtuals need be implemented.
   // the rest is quality-of-implementation stuff.
 
+  virtual double get_scale_factor() const;
+
   //: Return width of rendering area.
   //  *Not* the width of the viewport. There seems to be no OpenGL
   //  mechanism for doing this.

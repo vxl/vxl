@@ -23,6 +23,7 @@
 #include "vgui/vgui_tableau.h"
 #include "vgui/vgui_event.h"
 #include "vgui/vgui_matrix_state.h"
+#include "vgui/vgui_utils.h"
 
 
 vgui_enhance_tableau::vgui_enhance_tableau()
@@ -144,7 +145,7 @@ vgui_enhance_tableau::handle(const vgui_event & e)
 
       glEnable(GL_SCISSOR_TEST);
       int size_2 = size + size;
-      glScissor(x - size, y - size, size_2, size_2);
+      vgui_utils::set_glScissor(x - size, y - size, size_2, size_2);
 
       glMatrixMode(GL_MODELVIEW);
       glPushMatrix();
@@ -155,7 +156,7 @@ vgui_enhance_tableau::handle(const vgui_event & e)
       sy *= zoom_factor;
 
       GLint vp[4];
-      glGetIntegerv(GL_VIEWPORT, vp);
+      vgui_utils::get_glViewport(vp);
       float dx = (x)-ox;
       float dy = (vp[3] - 1 - y) - oy;
       float tmpx = zoom_factor * dx - dx;

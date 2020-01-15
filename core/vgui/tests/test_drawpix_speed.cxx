@@ -10,6 +10,7 @@
 
 #include "vgui/vgui_gl.h"
 #include "vgui/vgui_glx.h"
+#include "vgui/vgui_utils.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -314,7 +315,7 @@ main()
   }
 #endif
 
-  glViewport(0, 0, 512, 512);
+  vgui_utils::set_glViewport(0, 0, 512, 512);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(0.0, 512, 0.0, 512, -1.0, 1.0);
@@ -332,7 +333,7 @@ main()
   glDisable(GL_BLEND);
   glDisable(GL_DEPTH_TEST);
 
-  glPixelZoom(1.0, 1.0);
+  vgui_utils::set_glPixelZoom(1.0, 1.0);
   glDrawBuffer(GL_BACK_LEFT);
 
 #if 0 // commented out
@@ -392,14 +393,14 @@ main()
       std::cerr << 512 * 512 * fps << "   ";
     }
     std::cerr << "\nzoom 1.90x  ";
-    glPixelZoom(1.9f, 1.9f);
+    vgui_utils::set_glPixelZoom(1.9f, 1.9f);
     for (int i = 0; i < ft_size; ++i)
     {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);
       std::cerr << 512 * 512 * fps << "   ";
     }
     std::cerr << "\nzoom 0.51x  ";
-    glPixelZoom(0.51f, 0.51f);
+    vgui_utils::set_glPixelZoom(0.51f, 0.51f);
     for (int i = 0; i < ft_size; ++i)
     {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);

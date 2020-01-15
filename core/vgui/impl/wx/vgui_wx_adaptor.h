@@ -10,15 +10,17 @@
 // \verbatim
 //  Modifications
 //   03/22/2006 - File created. (miguelfv)
+//   11/18/2019 - Modifications to eliminate gl errors and memory leaks (JLM)
 // \endverbatim
 //=========================================================================
 
 #include <map>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>
-
+#include <memory>
 #include <wx/docview.h>
 #include <wx/glcanvas.h>
+#include "vgui_wx_window.h"
 class wxMenu;
 
 #ifdef _MSC_VER
@@ -33,6 +35,51 @@ class wxMenu;
 // application (i.e., extending the adaptor to use wxWidgets as your
 // vgui_toolkit).
 //-------------------------------------------------------------------------
+//  WxWidgets explaination of wxGLCanvas coordinates:
+//  "Please note that wxGLContext always uses physical pixels, even on the platforms where
+//  wxWindow uses logical pixels, affected by the coordinate scaling, on high DPI displays.
+//  Thus, if you want to set the OpenGL view port to the size of entire window, you must
+//  multiply the result returned by wxWindow::GetClientSize() by wxWindow::GetContentScaleFactor()
+//  before passing it to glViewport(). Same considerations apply to other OpenGL functions and
+//  other coordinates, notably those retrieved from wxMouseEvent in the event
+//
+//  https://github.com/wxWidgets/wxWidgets/blob/master/docs/changes.txt
+//    wxGLCanvas now uses physical pixels on high DPI displays under platforms
+//    where they're different from logical ones (wxGTK3, wxOSX). Multiply logical
+//    coordinates, e.g. returned by wxWindow::GetSize() by GetContentScaleFactor()
+//    before using them with OpenGL functions.
+//
+//  On Windows, the dpi scaling is handled after rendering by the windows manager, so no extra
+//  correction is needed. On Linux with wxWidgets+GTK and wxWidgets+macos version 3+ it is
+//  necessary to apply the dpi scale factor wherever the viewport screen coordinate system
+//  (gl canvas) is utilized. Other wx backends do not support dpi scaling.
+//
+//  The solution is to keep all the math in units of logical pixels, and to be sure to convert
+//  to and from physical pixels when needed. There are only a few commands that need to take
+//  this into considerations, they include (but are not limited to):
+//
+//  - glCopyPixels (uses glPixelZoom)
+//  - glDrawPixels (uses glPixelZoom)
+//  - glReadPixels
+//  - glBitmap
+//  - glLineWidth
+//  - glPointSize
+//  - glScissor
+//  - glViewport
+//  - Reading:
+//    - GL_VIEWPORT
+//    - GL_SCISSOR_BOX
+//    - GL_MAX_VIEWPORT_DIMS
+//
+// For this reason, these functions (except gl*Pixels) are wrapped in functions in vgui_utils
+// that will automatically apply the scale factors needed to them, so that they behave as if
+// you are in logical pixels. By multiplying glPixelZoom by the scale factor, glCopyPixels
+// and glDrawPixels will be in logical pixels. glReadPixels is always in physical pixels and
+// is handled manually and not used very often. Functions like glBitmap and glReadPixels
+// can only ever operate in physical pixels, and used vil_images to resample to behave as if
+// they are logical pixels.
+
+static int wx_adaptor_args[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
 class vgui_wx_adaptor
   : public wxGLCanvas
   , public vgui_adaptor
@@ -44,29 +91,40 @@ class vgui_wx_adaptor
   typedef vgui_adaptor_mixin mixin;
 
  public:
-  //: Constructor - used by dynamic creation.
-  vgui_wx_adaptor(wxWindow* parent,
+  // interface for 3.0 replaces 2_8
+vgui_wx_adaptor(wxWindow *parent,
+               wxWindowID id = wxID_ANY,
+               const int* args =wx_adaptor_args,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               const wxString& name = wxGLCanvasName,
+               const wxPalette& palette = wxNullPalette);
+
+  //: Constructor - used by dynamic creation. version 2_8
+/*
+ vgui_wx_adaptor(wxWindow* parent,
                   wxWindowID id = wxID_ANY,
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
                   long style = 0,
                   const wxString& name = wxT("vgui_wx_adaptor"),
                   int* attributes = 0);
-
+*/
   //: Destructor.
   virtual ~vgui_wx_adaptor();
-
-  void set_view(wxView* view) { view_ = view; }
 
   //-----------------------------------------------------------------------
   // vgui_adaptor virtual implementations
   //-----------------------------------------------------------------------
 
   //: Return width of rendering area.
-  virtual unsigned int get_width() const { return GetClientSize().GetWidth(); }
+  virtual unsigned int get_width() const {return GetClientSize().GetWidth();}
 
   //: Return height of rendering area.
-  virtual unsigned int get_height() const { return GetClientSize().GetHeight(); }
+  virtual unsigned int get_height() const { return GetClientSize().GetHeight();}
+
+  virtual double get_scale_factor() const;
 
   //: Redraw the rendering area.
   virtual void post_redraw();
@@ -102,9 +160,10 @@ class vgui_wx_adaptor
     m = mixin::popup_modifier;
     b = mixin::popup_button;
   }
-
+  //: ***** Set the window that constructed this
+  void set_window(vgui_wx_window* w) {window_ = w;}
   //: ***** Return window that contains this adaptor.
-  virtual vgui_window* get_window() const { return 0; }
+  virtual vgui_window* get_window() const { return window_; }
 
   //: Swap buffers if using double buffering.
   virtual void swap_buffers();
@@ -155,13 +214,14 @@ class vgui_wx_adaptor
   void on_timer(wxEvent& event);
 
   //: Generates a wxPaintEvent for the window to be repainted.
+  //  == not implemented ===
   void invalidate_canvas();
 
   //-----------------------------------------------------------------------
   //-----------------------------------------------------------------------
  private:
-  wxView* view_;
 
+  std::shared_ptr<wxGLContext> context_;
   static vgui_menu last_popup_;
 
   //: True while a redraw event has been requested but not implemented.
@@ -178,6 +238,8 @@ class vgui_wx_adaptor
 
   int last_key_down_;
   std::map<int,int> ascii_code_;
+
+  vgui_wx_window* window_;
 };
 
 #endif // vgui_wx_adaptor_h_

@@ -5,6 +5,7 @@
 #include "vgui/vgui_glu.h"
 #include <vgui/internals/trackball.h>
 #include "vgui/vgui.h"
+#include "vgui/vgui_utils.h"
 #include "vgui/vgui_event.h"
 #include "vgl/vgl_distance.h"
 
@@ -25,8 +26,8 @@ bstm_cam_tableau::bstm_cam_tableau() :
 void bstm_cam_tableau::setup_gl_matrices()
 {
   GLint vp[4]; // x,y,w,h
-  glGetIntegerv(GL_VIEWPORT, vp);
-  glViewport(0, 0, vp[2], vp[3]);
+  vgui_utils::get_glViewport(vp);
+  vgui_utils::set_glViewport(0, 0, vp[2], vp[3]);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -137,7 +138,7 @@ bool bstm_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifie
 
     //get viewport height and width
     GLdouble vp[4];
-    glGetDoublev(GL_VIEWPORT, vp); // ok
+    vgui_utils::get_glViewport(vp); // ok
     float width  = (float)vp[2];
     float height = (float)vp[3];
 
@@ -174,7 +175,7 @@ bool bstm_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifie
 
     //get viewport size
     GLdouble vp[4];
-    glGetDoublev(GL_VIEWPORT, vp); // ok
+    vgui_utils::get_glViewport(vp);
     double width = vp[2];
     double height = vp[3];
 
@@ -194,7 +195,7 @@ bool bstm_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifie
 
     //get viewport height, and mouse dx, dy
     GLint vp[4];
-    glGetIntegerv(GL_VIEWPORT, vp); // ok
+    vgui_utils::get_glViewport(vp);
     double width = (double)vp[2];
     double height = (double)vp[3];
     double dx = (beginx - x) / width;
@@ -233,7 +234,7 @@ bool bstm_cam_tableau::mouse_up(int x, int y, vgui_button button, vgui_modifier 
   if (c_mouse_rotate(button, modifier))
   {
     GLdouble vp[4];
-    glGetDoublev(GL_VIEWPORT, vp); // ok
+    vgui_utils::get_glViewport(vp);
     double width = vp[2];
     double height = vp[3];
 

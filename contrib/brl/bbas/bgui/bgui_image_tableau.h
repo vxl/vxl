@@ -24,6 +24,7 @@
 #include <vgui/vgui_text_tableau.h>
 #include <vil1/vil1_image.h>
 #include <vgui/vgui_gl.h>
+#include "vgui/vgui_utils.h"
 
 class bgui_image_tableau_vp_sc_snapshot
 {
@@ -33,7 +34,7 @@ class bgui_image_tableau_vp_sc_snapshot
   bool sc_was_enabled;
 
   bgui_image_tableau_vp_sc_snapshot() {
-    glGetIntegerv(GL_VIEWPORT, vp);
+    vgui_utils::get_glViewport(vp);
 
     //std::cout << "Saving    [" << vp[0] << ' ' << vp[1] << ' ' << vp[2] << ' ' << vp[3] << std::endl;
     glGetIntegerv(GL_SCISSOR_BOX, sc);
@@ -42,7 +43,7 @@ class bgui_image_tableau_vp_sc_snapshot
 
   ~bgui_image_tableau_vp_sc_snapshot() {
     // restore viewport :
-    glViewport(vp[0], vp[1], vp[2], vp[3]);
+    vgui_utils::set_glViewport(vp[0], vp[1], vp[2], vp[3]);
     //std::cout << "restoring [" << vp[0] << ' ' << vp[1] << ' ' << vp[2] << ' ' << vp[3] << std::endl;
     // turn off the scissor test, if it wasn't already on, and
     // restore old scissor settings :
@@ -50,7 +51,7 @@ class bgui_image_tableau_vp_sc_snapshot
       glEnable(GL_SCISSOR_TEST);
     else
       glDisable(GL_SCISSOR_TEST);
-    glScissor(sc[0], sc[1], sc[2], sc[3]);
+    vgui_utils::set_glScissor(sc[0], sc[1], sc[2], sc[3]);
   }
 };
 

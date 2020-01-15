@@ -14,7 +14,7 @@
 #include "vgui/vgui_window.h"
 #include "vgui/vgui_pixel.h"
 #include "vgui/vgui_macro.h"
-
+#include "vgui/vgui_utils.h"
 #if VGUI_MESA
 #  include <GL/xmesa.h>
 #endif
@@ -367,35 +367,35 @@ run_tests(void (*test_func)())
   g_use_color_maps = false;
   g_scale = 1.0f;
   g_bias = 0.0f;
-  glPixelZoom(1.0f, 1.0f);
+  vgui_utils::set_glPixelZoom(1.0f, 1.0f);
   std::cout << "Pixel zoom 1, no scaling, no colormap\n";
   test_func();
-  glPixelZoom(0.51f, 0.51f);
+  vgui_utils::set_glPixelZoom(0.51f, 0.51f);
   std::cout << "Pixel zoom 0.51, no scaling, no colormap\n";
   test_func();
-  glPixelZoom(1.27f, 1.27f);
+  vgui_utils::set_glPixelZoom(1.27f, 1.27f);
   std::cout << "Pixel zoom 1.27, no scaling, no colormap\n";
   test_func();
 
   g_scale = 0.5f;
   g_bias = 30.0f;
-  glPixelZoom(1.0f, 1.0f);
+  vgui_utils::set_glPixelZoom(1.0f, 1.0f);
   std::cout << "Pixel zoom 1, scaling, no colormap\n";
   test_func();
-  glPixelZoom(0.51f, 0.51f);
+  vgui_utils::set_glPixelZoom(0.51f, 0.51f);
   std::cout << "Pixel zoom 0.51, scaling, no colormap\n";
   test_func();
 
   g_use_color_maps = true;
   g_scale = 1.0f;
   g_bias = 0.0f;
-  glPixelZoom(1.0f, 1.0f);
+  vgui_utils::set_glPixelZoom(1.0f, 1.0f);
   std::cout << "Pixel zoom 1, no scaling, color map\n";
   test_func();
 
   g_scale = 0.5f;
   g_bias = 30.0f;
-  glPixelZoom(1.0f, 1.0f);
+  vgui_utils::set_glPixelZoom(1.0f, 1.0f);
   std::cout << "Pixel zoom 1, scaling, color map\n";
   test_func();
 }
@@ -422,7 +422,7 @@ main(int argc, char ** argv)
   glGetIntegerv(GL_ALPHA_BITS, &data_int);
   std::cout << "      alpha-bits : " << data_int << std::endl;
 
-  glViewport(0, 0, ni, nj);
+  vgui_utils::set_glViewport(0, 0, ni, nj);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(0.0, ni, 0.0, nj, -1.0, 1.0);

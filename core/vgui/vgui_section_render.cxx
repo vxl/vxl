@@ -11,9 +11,9 @@
 #endif
 #include <cassert>
 #include <climits> // for UCHAR_MAX
-// not used? #include <iostream>
 #include <vgui/internals/vgui_rasterpos.h>
 #include <vgui/internals/vgui_accelerate.h>
+#include "vgui/vgui_utils.h"
 
 static inline float
 fsm_max(float x, float y)
@@ -81,7 +81,7 @@ clamped_viewport(float x0,
 
   // Get size of viewport. We need this to determine how much to scale pixels by.
   GLint vp[4]; // x,y, w,h
-  glGetIntegerv(GL_VIEWPORT, vp);
+  vgui_utils::get_glViewport(vp);
   // int vp_x = vp[0];
   // int vp_y = vp[1];
   int vp_w = vp[2];
@@ -96,7 +96,7 @@ clamped_viewport(float x0,
   // [   0    0    1  ] [  0   0   1  ]
   // where vp_x, vp_y, vp_w, vp_h are the start, width and height of the viewport.
 
-  // Compute pixel zoom, as passed to glPixelZoom().
+  // Compute pixel zoom, as passed to vgui_utils::set_glPixelZoom().
   zoomx = a * vp_w / 2;
   zoomy = b * vp_h / 2;
 
@@ -293,7 +293,7 @@ vgui_section_render(void const * pixels,
   glPixelStorei(GL_UNPACK_SKIP_PIXELS, i_x0); // number of pixels to skip on the left.
   glPixelStorei(GL_UNPACK_SKIP_ROWS, i_y0);   // number of pixels to skip at the bottom.
 
-  glPixelZoom(zoomx, zoomy);
+  vgui_utils::set_glPixelZoom(zoomx, zoomy);
   vgui_accelerate::instance()->vgui_glDrawPixels(i_x1 - i_x0, // Size of pixel rectangle
                                                  i_y1 - i_y0, // to be written to frame buffer.
                                                  format,
@@ -343,7 +343,7 @@ vgui_view_render(void const * pixels,
   // Set pixel transfer characteristics.
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);            // use byte alignment for now.
   glPixelStorei(GL_UNPACK_ROW_LENGTH, w);           // size of image rows.
-  glPixelZoom(zoomx + 0.001f, zoomy + 0.001f);      // something weird happens
+  vgui_utils::set_glPixelZoom(zoomx + 0.001f, zoomy + 0.001f); // something weird happens
                                                     // for identity zoom
   vgui_accelerate::instance()->vgui_glDrawPixels(w, // Size of pixel rectangle
                                                  h, // to be written to frame buffer.

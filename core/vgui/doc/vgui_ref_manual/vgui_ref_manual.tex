@@ -197,7 +197,7 @@ simply achieve this by having a tableau with two children
       //  in left pane
       glScale(...);
       ...
-      glViewport(...);
+      vgui_utils::set_glViewport(...);
 
       //  Draw the left child in the new coordinates
       left->draw();
@@ -205,7 +205,7 @@ simply achieve this by having a tableau with two children
       //  Reset for right pane
       glScale(...);
       ...
-      glViewport(...);
+      vgui_utils::set_glViewport(...);
 
       //  Draw the right child
       right->draw();

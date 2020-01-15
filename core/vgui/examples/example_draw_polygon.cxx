@@ -21,6 +21,7 @@
 
 #include "vgui/vgui.h"
 #include "vgui/vgui_gl.h"
+#include "vgui/vgui_utils.h"
 #include "vgui/vgui_viewer2D_tableau.h"
 #include "vgui/vgui_projection_inspector.h"
 
@@ -58,14 +59,14 @@ struct example_polygon_tableau : public vgui_tableau
         glColor3f(1, 1, 1);
 
         // draw edges
-        glLineWidth(1.0);
+        vgui_utils::set_glLineWidth(1.0);
         glBegin(GL_LINE_LOOP);
         for (unsigned int i = 0; i < n; ++i)
           glVertex2f(x[i], y[i]);
         glEnd();
 
         // draw vertices
-        glPointSize(3);
+        vgui_utils::set_glPointSize(3);
         glBegin(GL_POINTS);
         for (unsigned int i = 0; i < n; ++i)
           glVertex2f(x[i], y[i]);

@@ -31,6 +31,7 @@
 #include <cassert>
 
 #include "vgui/vgui_gl.h"
+#include "vgui/vgui_utils.h"
 #include "vgui/vgui_macro.h"
 #include "vgui/vgui_event.h"
 #include "vgui/vgui_matrix_state.h"
@@ -65,8 +66,8 @@ vgui_poly_tableau::item::set_vp(GLint const vp[4])
     int(h * vp[3])          // h
   };
 
-  glViewport(region[0], region[1], region[2], region[3]);
-  glScissor(region[0], region[1], region[2], region[3]);
+  vgui_utils::set_glViewport(region[0], region[1], region[2], region[3]);
+  vgui_utils::set_glScissor(region[0], region[1], region[2], region[3]);
 }
 
 //-----------------------------------------------------------------------------
@@ -288,7 +289,7 @@ vgui_poly_tableau::handle(GLint const vp[4], vgui_event const & e)
         // draw border of child.
         vgui_matrix_state::identity_gl_matrices();
         glColor3f(sub[i].outline_color[0], sub[i].outline_color[1], sub[i].outline_color[2]);
-        glLineWidth(3);
+        vgui_utils::set_glLineWidth(3);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glMatrixMode(GL_MODELVIEW);

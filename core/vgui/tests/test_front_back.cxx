@@ -113,7 +113,7 @@ front_back_wibbler::handle(const vgui_event & e)
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       glColor3f(1, 1, 1);
-      glPointSize(4.0);
+      vgui_utils::set_glPointSize(4.0);
       glBegin(GL_POINTS);
       glVertex2f(0, 0);
       glEnd();

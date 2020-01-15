@@ -10,6 +10,7 @@
 
 #include "vgui/vgui_gl.h"
 #include "vgui/vgui_glx.h"
+#include "vgui/vgui_utils.h"
 #include <vgui/internals/vgui_accelerate.h>
 
 #include <X11/Xlib.h>
@@ -158,7 +159,7 @@ main()
   std::cerr << "   You do not have Hermes installed !!\n";
 #endif
 
-  glViewport(0, 0, 512, 512);
+  vgui_utils::set_glViewport(0, 0, 512, 512);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(0.0, 512, 0.0, 512, -1.0, 1.0);
@@ -176,7 +177,7 @@ main()
   glDisable(GL_BLEND);
   glDisable(GL_DEPTH_TEST);
 
-  glPixelZoom(1.0, 1.0);
+  vgui_utils::set_glPixelZoom(1.0, 1.0);
   glDrawBuffer(GL_BACK_LEFT);
 
   if (false)
@@ -274,13 +275,13 @@ main()
   vgui_accelerate::instance()->vgui_glDrawPixels(512, 512, GL_RGB, GLenum(GL_UNSIGNED_SHORT_5_6_5), global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
-  glPixelZoom(0.4f, 0.6f);
+  vgui_utils::set_glPixelZoom(0.4f, 0.6f);
   std::cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glClear(GL_COLOR_BUFFER_BIT);
   vgui_accelerate::instance()->vgui_glDrawPixels(512, 512, GL_RGB, GLenum(GL_UNSIGNED_SHORT_5_6_5), global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
-  glPixelZoom(1.8f, 0.3f);
+  vgui_utils::set_glPixelZoom(1.8f, 0.3f);
   std::cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glClear(GL_COLOR_BUFFER_BIT);
   vgui_accelerate::instance()->vgui_glDrawPixels(512, 512, GL_RGB, GLenum(GL_UNSIGNED_SHORT_5_6_5), global_data);

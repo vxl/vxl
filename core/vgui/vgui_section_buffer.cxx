@@ -39,6 +39,7 @@
 #include "vgui_section_render.h"
 #include "vgui_range_map_params.h"
 #include "vgui_range_map.h"
+#include "vgui_utils.h"
 #include "internals/vgui_gl_selection_macros.h"
 #include "internals/vgui_accelerate.h"
 
@@ -500,7 +501,7 @@ bool
 vgui_section_buffer::draw_as_rectangle(float x0, float y0, float x1, float y1) const
 {
   glColor3i(0, 1, 0); // is green good for everyone?
-  glLineWidth(1);
+  vgui_utils::set_glLineWidth(1);
   glBegin(GL_LINE_LOOP);
   glVertex2f(x0, y0);
   glVertex2f(x1, y0);

@@ -11,6 +11,7 @@
 
 //-----------------------------------------------------------------------------
 // A tableau that displays the mouse position when left mouse button is pressed.
+// The mouse position is sent to cout as well as the status bar
 struct example_tableau : public vgui_image_tableau
 {
   example_tableau(char const * f)
@@ -25,6 +26,7 @@ struct example_tableau : public vgui_image_tableau
     if (e.type == vgui_BUTTON_DOWN && e.button == vgui_LEFT && e.modifier == 0)
     {
       std::cout << "selecting at " << e.wx << ' ' << e.wy << std::endl;
+      vgui::out << "(" << e.wx << ' ' << e.wy << ")" << std::endl;
       return true; // event has been used
     }
 

@@ -18,6 +18,7 @@
 #include <bocl/bocl_kernel.h>
 
 #include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_utils.h"
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
 
@@ -133,10 +134,10 @@ bool boxm2_ocl_articulated_render_tableau::handle(vgui_event const &e)
     glClear(GL_COLOR_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);
     glRasterPos2i(0, 1);
-    glPixelZoom(1,-1);
+    vgui_utils::set_glPixelZoom(1,-1);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, pbuffer_);
     glDrawPixels(ni_, nj_, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-   glPointSize(5);
+   vgui_utils::set_glPointSize(5);
     glColor3f(1.0, 0.0, 0.0);
     //seg0.draw(); seg1.draw(); seg2.draw();
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);

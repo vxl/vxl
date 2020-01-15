@@ -11,9 +11,8 @@
 #include "vgui_wx_adaptor.h"
 #include "vgui_wx_menu.h"
 #include "vgui_wx_statusbar.h"
-
+#include "vgui.h"
 #include "vgui/vgui.h"
-
 #include <wx/frame.h>
 #include <wx/statusbr.h>
 
@@ -21,50 +20,55 @@
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
-
+#ifdef __WXMSW__
+#include <wx/msw/msvcrt.h>
+#endif
 //-------------------------------------------------------------------------
 // vgui_wx_window implementation - construction & destruction.
 //-------------------------------------------------------------------------
+// On high resolution screens with dots per inch larger than 96 it is necessarty
+// to scale the size of the window accoringly. That is if one wants a 100x100 window on
+// the screen and the dpi_scale factor is 2 then a 200x 200 window should be created.
+// the dpi scale is returned by wxWidgets by calling GetContentScaleFactor()
+//
 //: Constructor - create a new window.
 vgui_wx_window::vgui_wx_window(int width, int height, const char * title)
-  : frame_(new wxFrame(0, wxID_ANY, wxString(title, wxConvUTF8))) //, wxDefaultPosition, wxSize(width, height)))
+  : wxFrame((wxFrame*)nullptr, wxID_ANY, wxString(title, wxConvUTF8)) //, wxDefaultPosition, wxSize(width, height)))
   , menu_(0)
 {
+  this->SetWindowStyle(this->GetWindowStyle() | wxFULL_REPAINT_ON_RESIZE);
+  wxSize sz(width + 3, height + 3);
+  this->SetClientSize(sz);
   init_window();
-  frame_->SetClientSize(width + 3, height + 3);
 }
 
 //: Constructor - create a new window with a menubar.
 vgui_wx_window::vgui_wx_window(int width, int height, const vgui_menu & menubar, const char * title)
-  : frame_(new wxFrame(0, wxID_ANY, wxString(title, wxConvUTF8), wxDefaultPosition, wxSize(width, height)))
+  : wxFrame((wxFrame*)nullptr, wxID_ANY, wxString(title, wxConvUTF8)) //, wxDefaultPosition, wxSize(width, height))
   , menu_(0)
 {
-  init_window();
+  wxSize sz(width, height);
+  this->SetClientSize(sz);
+  this->SetWindowStyle(this->GetWindowStyle() | wxFULL_REPAINT_ON_RESIZE);
   set_menubar(menubar);
+  init_window();
 }
 
 //: Destructor.
 vgui_wx_window::~vgui_wx_window(void)
 {
-  delete statusbar_;
-
-  if (menu_)
-  {
-    frame_->PopEventHandler(true);
-    // ***** delete the wxMenu, or does the frame do it?
-    //       if so, I need to store a handle to it...
-    // *****
-  }
+  //delete statusbar_;
+  adaptor_->Destroy();
 }
 
 //: Catch all constructor.
 void
 vgui_wx_window::init_window(void)
 {
-  adaptor_ = new vgui_wx_adaptor(frame_);
-
-  statusbar_ = new vgui_wx_statusbar;
-  statusbar_->set_widget(frame_->CreateStatusBar());
+  adaptor_ = new vgui_wx_adaptor(this);
+  adaptor_->set_window(nullptr);//stop scroll errors
+  statusbar_ = std::shared_ptr<vgui_wx_statusbar>(new vgui_wx_statusbar);
+  statusbar_->set_widget(CreateStatusBar());
 
   // ***** if we support multiple windows, then i think we need to redirect
   //       vgui::out to the statusbar each time the window gets the focus
@@ -82,7 +86,7 @@ vgui_wx_window::set_menubar(const vgui_menu & menubar)
 {
   if (menu_)
   {
-    frame_->PopEventHandler(true);
+    this->PopEventHandler(true);
     menu_ = 0;
     // ***** delete the wxMenu, or does the frame do it?
     //       if so, I need to store a handle to it...
@@ -90,15 +94,15 @@ vgui_wx_window::set_menubar(const vgui_menu & menubar)
   }
 
   menu_ = new vgui_wx_menu;
-  frame_->SetMenuBar(menu_->create_wx_menubar(menubar));
-  frame_->PushEventHandler(menu_);
+  this->SetMenuBar(menu_->create_wx_menubar(menubar));
+  this->PushEventHandler(menu_);
 }
 
 //: If true, activate the statusbar (if it exists).
 void
 vgui_wx_window::set_statusbar(bool activate)
 {
-  activate ? frame_->GetStatusBar()->Show() : frame_->GetStatusBar()->Hide();
+  activate ? this->GetStatusBar()->Show() : this->GetStatusBar()->Hide();
 }
 
 //: Set the default adaptor (if it exists) to the given vgui_adaptor.
@@ -109,8 +113,8 @@ vgui_wx_window::set_adaptor(vgui_adaptor * adaptor)
 {
   // ***** how do I replace the client canvas? like this?
   // delete adaptor_;
-  frame_->RemoveChild(adaptor_);
-  adaptor_ = new vgui_wx_adaptor(frame_);
+  this->RemoveChild(adaptor_);
+  adaptor_ = new vgui_wx_adaptor(this);
 
   // ***** do I need to show it now?
 }
@@ -126,7 +130,8 @@ vgui_wx_window::get_adaptor(void)
 vgui_statusbar *
 vgui_wx_window::get_statusbar(void)
 {
-  return statusbar_;
+  //only called to write to statusbar so returning ptr is ok
+  return statusbar_.get();
 }
 
 //: If true, activate horizontal scrollbar (if it exists).
@@ -135,7 +140,7 @@ vgui_wx_window::enable_hscrollbar(bool show)
 {
   if (show)
   {
-    frame_->SetScrollbar(wxHORIZONTAL, 0, 1, 100);
+    this->SetScrollbar(wxHORIZONTAL, 0, 1, 100);
   }
   else
   {
@@ -150,7 +155,7 @@ vgui_wx_window::enable_vscrollbar(bool show)
 {
   if (show)
   {
-    frame_->SetScrollbar(wxVERTICAL, 0, 1, 100);
+    this->SetScrollbar(wxVERTICAL, 0, 1, 100);
   }
   else
   {
@@ -165,29 +170,29 @@ vgui_wx_window::reshape(unsigned width, unsigned height)
 {
   // ***** should this resize the window, or the client area?
   // frame_->SetSize(width, height);
-  frame_->SetClientSize(width, height);
+  this->SetClientSize(width, height);
 }
 
 //: Move the window to the new given x,y position.
 void
 vgui_wx_window::reposition(int x, int y)
 {
-  frame_->SetSize(x, y, -1, -1);
+  this->SetSize(x, y, -1, -1);
 }
 
 //: Use the given text as the window title (if the window has a title).
 void
 vgui_wx_window::set_title(std::string const & title)
 {
-  frame_->SetTitle(wxString(title.c_str(), wxConvUTF8));
+  this->SetTitle(wxString(title.c_str(), wxConvUTF8));
 }
 
 //: Set the position of the horizontal scrollbar, returns old position.
 int
 vgui_wx_window::set_hscrollbar(int pos)
 {
-  int temp = frame_->GetScrollPos(wxHORIZONTAL);
-  frame_->SetScrollPos(wxHORIZONTAL, pos);
+  int temp = this->GetScrollPos(wxHORIZONTAL);
+  this->SetScrollPos(wxHORIZONTAL, pos);
   return temp;
 }
 
@@ -195,7 +200,11 @@ vgui_wx_window::set_hscrollbar(int pos)
 int
 vgui_wx_window::set_vscrollbar(int pos)
 {
-  int temp = frame_->GetScrollPos(wxVERTICAL);
-  frame_->SetScrollPos(wxVERTICAL, pos);
+  int temp = this->GetScrollPos(wxVERTICAL);
+  this->SetScrollPos(wxVERTICAL, pos);
   return temp;
+}
+void vgui_wx_window::add_close_event() {
+    wxCloseEvent e;
+    this->AddPendingEvent(e);
 }

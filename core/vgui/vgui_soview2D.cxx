@@ -105,7 +105,7 @@ vgui_soview2D_lineseg::draw() const
 #endif
 
 #if 0
-  glLineWidth(style->line_width);
+  style->apply_line_width();
 #endif // 0
   glBegin(GL_LINES);
   glVertex2f(x0, y0);

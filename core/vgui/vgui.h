@@ -14,11 +14,13 @@
 //   30-AUG-2000  Marko Bacic, Oxford RRG -- Added flags to support MFC accel.
 //   26-APR-2002  K.Y.McGaul - Added some doxygen style comments.
 //   16-NOV_2007  Gamze Tunali - Added a new type of dialog called dialog_extensions
+//   12-NOV_2019  J.L. Mundy - Return the selected toolkit name
 // \endverbatim
 
 #include <string>
 #include <iosfwd>
 #include "dll.h"
+#include "vgui_toolkit.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -30,7 +32,7 @@ class vgui_menu;
 class vgui_dialog_impl;
 class vgui_dialog_extensions_impl;
 class vgui_tableau;
-class vgui_toolkit;
+//class vgui_toolkit;
 struct vgui_tableau_sptr;
 
 //: Namespace with a singleton vgui_toolkit instance.
@@ -67,7 +69,15 @@ class vgui
 
   //: True once quit() has been called.
   static vgui_DLLDATA bool quit_called;
+
  public:
+  //: toolkit name to handle missing  capabilites e.g. GLUT doesn't have a menubar
+  static std::string toolkit_name() {
+    if(instance_)
+      return instance_->name();
+    return "";
+  }
+
   //: Needed for statusbar.
   static vgui_DLLDATA std::ostream out;
 

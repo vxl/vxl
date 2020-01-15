@@ -167,6 +167,10 @@ void bgui_graph_tableau::update(std::vector<std::vector<double> > const& pos,
   n_plots_ = pos.size();
   if (!n_plots_)
     return;
+  if (vals.size() == 0) {
+      std::cerr << "in graph tableau - no values to plot " << std::endl;
+      return;
+  }
   n_ = pos[0].size();
   mpos_ = pos; mvals_=vals;
   double xmin, ymin, xmax, ymax;

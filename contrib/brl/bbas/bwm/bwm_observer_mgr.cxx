@@ -434,7 +434,7 @@ void bwm_observer_mgr::save_corr_XML()
       m = "IMAGE_TO_IMAGE";
     else
       m = "WORLD_TO_IMAGE";
-    vsl_basic_xml_element xml_element("correspondences");
+    vsl_basic_xml_element xml_element("Correspondences");
     xml_element.add_attribute("mode", m);
 
     std::string n = "";

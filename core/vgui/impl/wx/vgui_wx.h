@@ -10,6 +10,7 @@
 // \verbatim
 //  Modifications
 //   03/19/2006 - File created. (miguelfv)
+//   11/18/2019 - Modifications to eliminate gl errors and memory leaks (JLM)
 // \endverbatim
 //=========================================================================
 
@@ -27,8 +28,7 @@ class vgui_wx : public vgui_toolkit
 public:
   //: Singleton method instance.
   static vgui_wx* instance();
-
-private:
+  static void delete_instance();
   //: Returns the name of the GUI toolkit ("wx").
   virtual std::string name() const;
 
@@ -73,11 +73,13 @@ private:
   //: Create a new dialog window.
   virtual vgui_dialog_impl* produce_dialog(const char* name);
 
-  //: Handle to windows created that need deleting.
-  std::vector<vgui_window*> windows_to_delete_;
 
   //: True if we are embedding vgui_adaptor into wxWidgets app.
   bool adaptor_embedded_;
+  private:
+  //: the singleton instance
+  static vgui_wx* instance_;
+  vgui_wx_window* top_level_window_;
 };
 
 #endif // vgui_wx_h_

@@ -31,7 +31,7 @@ vgui_point3D::draw() const
     glDisable(GL_LIGHTING);
   }
 
-  // glPointSize(style->point_size);
+  // style->apply_point_size();
   glBegin(GL_POINTS);
   glVertex3f(x, y, z);
   glEnd();
@@ -64,7 +64,7 @@ vgui_lineseg3D::draw() const
     glDisable(GL_LIGHTING);
   }
 
-  // glLineWidth(style->line_width);
+  // style->apply_point_size();
   glBegin(GL_LINES);
   glVertex3f(x0, y0, z0);
   glVertex3f(x1, y1, z1);

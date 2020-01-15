@@ -18,6 +18,7 @@
 #include "vgui_gl.h"
 #include "vgui_tableau.h"
 #include "vgui_parent_child_link.h"
+#include "vgui/vgui_utils.h"
 
 #include "vgui_poly_tableau_sptr.h"
 
@@ -55,7 +56,7 @@ class vgui_poly_tableau_vp_sc_snapshot
   bool sc_was_enabled;
 
   vgui_poly_tableau_vp_sc_snapshot() {
-    glGetIntegerv(GL_VIEWPORT, vp);
+    vgui_utils::get_glViewport(vp);
 
     glGetIntegerv(GL_SCISSOR_BOX, sc);
     sc_was_enabled = glIsEnabled(GL_SCISSOR_TEST) == GL_TRUE;
@@ -63,7 +64,7 @@ class vgui_poly_tableau_vp_sc_snapshot
 
   ~vgui_poly_tableau_vp_sc_snapshot() {
     // restore viewport :
-    glViewport(vp[0], vp[1], vp[2], vp[3]);
+    vgui_utils::set_glViewport(vp[0], vp[1], vp[2], vp[3]);
 
     // turn off the scissor test, if it wasn't already on, and
     // restore old scissor settings :
@@ -71,7 +72,7 @@ class vgui_poly_tableau_vp_sc_snapshot
       glEnable(GL_SCISSOR_TEST);
     else
       glDisable(GL_SCISSOR_TEST);
-    glScissor(sc[0], sc[1], sc[2], sc[3]);
+    vgui_utils::set_glScissor(sc[0], sc[1], sc[2], sc[3]);
   }
 };
 

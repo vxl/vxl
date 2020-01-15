@@ -1,5 +1,7 @@
 #include "bwm_soview2D_cross.h"
 
+#include "vgui/vgui_utils.h"
+
 void bwm_soview2D_cross::draw() const
 {
 #ifdef DEBUG
@@ -26,7 +28,7 @@ void bwm_soview2D_cross::draw() const
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
   glRasterPos2d(x, y);
-  glBitmap(16, 16, 8, 8, 0, 0, cross_bmp);
+  vgui_utils::draw_glBitmap(16, 16, 8, 8, 0, 0, cross_bmp);
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, unpack);
 }

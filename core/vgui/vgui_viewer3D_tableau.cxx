@@ -21,6 +21,7 @@
 
 #include "vgui/vgui_gl.h"
 #include "vgui/vgui_glu.h"
+#include "vgui/vgui_utils.h"
 #include <vgui/internals/trackball.h>
 #include "vgui/vgui.h"
 #include "vgui/vgui_event.h"
@@ -118,7 +119,7 @@ void
 vgui_viewer3D_tableau::setup_gl_matrices()
 {
   GLdouble vp[4];
-  glGetDoublev(GL_VIEWPORT, vp); // ok
+  vgui_utils::get_glViewport(vp);
   double width = vp[2];
   double height = vp[3];
 
@@ -297,7 +298,7 @@ vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifie
 #endif
 
     GLdouble vp[4];
-    glGetDoublev(GL_VIEWPORT, vp); // ok
+    vgui_utils::get_glViewport(vp);
     float width = (float)vp[2];
     float height = (float)vp[3];
 
@@ -322,7 +323,7 @@ vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifie
 #endif
 
     GLdouble vp[4];
-    glGetDoublev(GL_VIEWPORT, vp); // ok
+    vgui_utils::get_glViewport(vp);
     double width = vp[2];
     double height = vp[3];
 
@@ -351,7 +352,7 @@ vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifie
   if (c_mouse_translate(button, modifier))
   {
     GLint vp[4];
-    glGetIntegerv(GL_VIEWPORT, vp); // ok
+    vgui_utils::get_glViewport(vp);
     double width = (double)vp[2];
     double height = (double)vp[3];
 
@@ -378,7 +379,7 @@ vgui_viewer3D_tableau::mouse_up(int x, int y, vgui_button button, vgui_modifier 
 #endif
 
     GLdouble vp[4];
-    glGetDoublev(GL_VIEWPORT, vp); // ok
+    vgui_utils::get_glViewport(vp);
     double width = vp[2];
     double height = vp[3];
 

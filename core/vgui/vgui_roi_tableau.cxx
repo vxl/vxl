@@ -17,6 +17,7 @@
 #include "vgui/vgui_event.h"
 #include "vgui/vgui_matrix_state.h"
 #include "vgui/vgui_gl.h"
+#include "vgui/vgui_utils.h"
 #include "vgui/vgui_glu.h"
 
 //------------------------------------------------------------------------------
@@ -125,7 +126,7 @@ vgui_roi_tableau::handle(vgui_event const & e)
   if (vgui_matrix_state::gl_matrices_are_cleared())
   {
     GLint vp[4];
-    glGetIntegerv(GL_VIEWPORT, vp);
+    vgui_utils::get_glViewport(vp);
     int wdth = vp[2];
     int hght = vp[3];
 

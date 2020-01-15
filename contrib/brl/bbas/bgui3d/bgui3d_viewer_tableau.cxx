@@ -11,6 +11,7 @@
 #endif
 #include "bgui3d_algo.h"
 #include "vgui/vgui_gl.h"
+#include "vgui/vgui_utils.h"
 #include "vnl/vnl_quaternion.h"
 #include "vnl/vnl_double_3x3.h"
 #include "vnl/vnl_double_3x4.h"
@@ -241,7 +242,7 @@ bgui3d_viewer_tableau::camera() const
   vgl_rotation_3d<double> R(vnl_quaternion<double>(q2,-q1,q4,q3));
 
   GLint vp[4];
-  glGetIntegerv(GL_VIEWPORT, vp);
+  vgui_utils::get_glViewport(vp);
   unsigned width = vp[2];
   unsigned height = vp[3];
 
