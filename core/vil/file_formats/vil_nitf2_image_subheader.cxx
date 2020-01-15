@@ -266,8 +266,7 @@ vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions * defs
 {
   switch (version)
   {
-    case vil_nitf2_classification::V_NITF_20:
-    {
+    case vil_nitf2_classification::V_NITF_20: {
       (*defs).field("ICORDS",
                     "Image Coordinate Representation",
                     NITF_ENUM(1,
@@ -293,8 +292,7 @@ vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions * defs
                     new vil_nitf2_field_value_one_of<std::string>("ICORDS", igeolo_icords));
       break;
     }
-    case vil_nitf2_classification::V_NITF_21:
-    {
+    case vil_nitf2_classification::V_NITF_21: {
       (*defs)
         .field("ICORDS",
                "Image Coordinate Representation",

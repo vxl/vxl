@@ -499,7 +499,7 @@ vgui_glut_adaptor::reshape(int width, int height)
   if (!f)
   {
     vgui_utils::set_glViewport(0, 0, width, height);
-    vgui_utils::set_glScissor (0, 0, width, height);
+    vgui_utils::set_glScissor(0, 0, width, height);
   }
 
   // call reshape on the sub-contexts :
@@ -812,8 +812,7 @@ implement_static_callback(special_up, (int key, int x, int y), (key, x, y));
 static void
 fsm_dump(char const * file)
 {
-  vil1_memory_image_of<vil1_rgb<GLubyte> > colour_buffer =
-    vgui_utils::get_image();
+  vil1_memory_image_of<vil1_rgb<GLubyte>> colour_buffer = vgui_utils::get_image();
 
   vil1_save(colour_buffer, file, "pnm");
 }

@@ -389,9 +389,10 @@ vgui_window *
 vgui::adapt(vgui_tableau_sptr const & tableau, int width, int height, std::string const & title)
 {
   vgui_window * win = vgui::produce_window(width, height, title);
-  if (!win) {
-      std::cerr << "null window - return without showing" << std::endl;
-      return win;
+  if (!win)
+  {
+    std::cerr << "null window - return without showing" << std::endl;
+    return win;
   }
   win->get_adaptor()->set_tableau(tableau);
   win->show();

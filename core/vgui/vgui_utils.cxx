@@ -95,14 +95,15 @@ vgui_utils::get_image(double scale)
 
   int width_logical = w / scale;
   int height_logical = h / scale;
-  vil1_memory_image_of<vil1_rgb<GLubyte> > logical_image(width_logical, height_logical);
+  vil1_memory_image_of<vil1_rgb<GLubyte>> logical_image(width_logical, height_logical);
 
   // Convert to views for vil_resample_bilin
-  vil_image_view<GLubyte> logical_view((GLubyte*)logical_image.begin(), width_logical, height_logical, 3, 3, 3*width_logical, 1);
-  vil_image_view<GLubyte> physical_view((GLubyte*)colour_buffer.begin(), w, h, 3, 3, 3*w, 1);
+  vil_image_view<GLubyte> logical_view(
+    (GLubyte *)logical_image.begin(), width_logical, height_logical, 3, 3, 3 * width_logical, 1);
+  vil_image_view<GLubyte> physical_view((GLubyte *)colour_buffer.begin(), w, h, 3, 3, 3 * w, 1);
 
   // Resample
-  vil_resample_bilin<GLubyte,GLubyte>(physical_view, logical_view, width_logical, height_logical);
+  vil_resample_bilin<GLubyte, GLubyte>(physical_view, logical_view, width_logical, height_logical);
 
   // Return
   return logical_image;
@@ -192,7 +193,7 @@ vgui_utils::get_view(double scale)
   vil_image_view<GLubyte> logical_view(width_logical, height_logical, 1, 3);
 
   // Don't use bicub here, it's ugly and fully of tons of artifacts. Bilin is ok
-  vil_resample_bilin<GLubyte,GLubyte>(view, logical_view, width_logical, height_logical);
+  vil_resample_bilin<GLubyte, GLubyte>(view, logical_view, width_logical, height_logical);
   return logical_view;
 }
 
@@ -236,7 +237,7 @@ vgui_utils::do_copy(double scale)
   // This doesn't matter, as long as the origin is 0,0? The only point of this
   // is to get the RasterPos at 0,0, so the width and height don't actually
   // matter.
-  glOrtho(0,vp[2]/scale, 0,vp[3]/scale, -1,+1); // near, far
+  glOrtho(0, vp[2] / scale, 0, vp[3] / scale, -1, +1); // near, far
 
   // set raster position to the bottom left-hand corner.
   glRasterPos2i(0, 0);
@@ -472,13 +473,12 @@ vgui_utils::bits_per_pixel(GLenum format, GLenum type)
  *              using vgui_adaptor::current. If this is not correct, the scale
  *              factor can manually be set
  */
-void vgui_utils::set_glViewport(GLint x, GLint y,
-                                GLsizei width, GLsizei height,
-                                double scale)
+void
+vgui_utils::set_glViewport(GLint x, GLint y, GLsizei width, GLsizei height, double scale)
 {
   get_gl_scale_default(scale);
 
-  glViewport(x*scale, y*scale, width*scale, height*scale);
+  glViewport(x * scale, y * scale, width * scale, height * scale);
 }
 
 /**
@@ -493,13 +493,12 @@ void vgui_utils::set_glViewport(GLint x, GLint y,
  *              using vgui_adaptor::current. If this is not correct, the scale
  *              factor can manually be set
  */
-void vgui_utils::set_glScissor(GLint x, GLint y,
-                               GLsizei width, GLsizei height,
-                               double scale)
+void
+vgui_utils::set_glScissor(GLint x, GLint y, GLsizei width, GLsizei height, double scale)
 {
   get_gl_scale_default(scale);
 
-  glScissor(x*scale, y*scale, width*scale, height*scale);
+  glScissor(x * scale, y * scale, width * scale, height * scale);
 }
 
 /**
@@ -511,7 +510,8 @@ void vgui_utils::set_glScissor(GLint x, GLint y,
  *              using vgui_adaptor::current. If this is not correct, the scale
  *              factor can manually be set
  */
-void vgui_utils::set_glLineWidth(GLfloat width, double scale)
+void
+vgui_utils::set_glLineWidth(GLfloat width, double scale)
 {
   get_gl_scale_default(scale);
   glLineWidth(scale * width);
@@ -526,7 +526,8 @@ void vgui_utils::set_glLineWidth(GLfloat width, double scale)
  *              using vgui_adaptor::current. If this is not correct, the scale
  *              factor can manually be set
  */
-void vgui_utils::set_glPointSize(GLfloat size, double scale)
+void
+vgui_utils::set_glPointSize(GLfloat size, double scale)
 {
   get_gl_scale_default(scale);
   glPointSize(scale * size);
@@ -549,7 +550,8 @@ void vgui_utils::set_glPointSize(GLfloat size, double scale)
  *              using vgui_adaptor::current. If this is not correct, the scale
  *              factor can manually be set
  */
-void vgui_utils::set_glPixelZoom(GLfloat xfactor, GLfloat yfactor, double scale)
+void
+vgui_utils::set_glPixelZoom(GLfloat xfactor, GLfloat yfactor, double scale)
 {
   get_gl_scale_default(scale);
   glPixelZoom(scale * xfactor, scale * yfactor);
@@ -577,25 +579,29 @@ void vgui_utils::set_glPixelZoom(GLfloat xfactor, GLfloat yfactor, double scale)
  *              using vgui_adaptor::current. If this is not correct, the scale
  *              factor can manually be set
  */
-void vgui_utils::draw_glBitmap(GLsizei width, GLsizei height,
-                               GLfloat xorig, GLfloat yorig,
-                               GLfloat xmove, GLfloat ymove,
- 	                             const GLubyte *bitmap,
-                               double scale)
+void
+vgui_utils::draw_glBitmap(GLsizei width,
+                          GLsizei height,
+                          GLfloat xorig,
+                          GLfloat yorig,
+                          GLfloat xmove,
+                          GLfloat ymove,
+                          const GLubyte * bitmap,
+                          double scale)
 {
   GLint unpack_size;
   glGetIntegerv(GL_UNPACK_ALIGNMENT, &unpack_size);
 
   // The real with is always divisible by 8, this is just how glBitmap works.
-  int remainder = width%8;
+  int remainder = width % 8;
   if (remainder)
   {
-    width += 8-remainder;
+    width += 8 - remainder;
   }
 
   get_gl_scale_default(scale);
 
-  if(scale == 1)
+  if (scale == 1)
   {
     glBitmap(width, height, xorig, yorig, xmove, ymove, bitmap);
   }
@@ -603,20 +609,20 @@ void vgui_utils::draw_glBitmap(GLsizei width, GLsizei height,
   {
     vil_image_view<bool> original_bitmap(width, height, 1);
 
-    int index=0;
-    unsigned char mask0=(0xff<<(8-unpack_size)) & 0xff;
+    int index = 0;
+    unsigned char mask0 = (0xff << (8 - unpack_size)) & 0xff;
     unsigned char mask = mask0;
 
     // Unpack into vil_image_view
-    for (int r=0; r<height; r++)
+    for (int r = 0; r < height; r++)
     {
-      for (int c=0; c<width; c++)
+      for (int c = 0; c < width; c++)
       {
         original_bitmap(c, r, 0) = bitmap[index] & mask;
         // Increment the mask
         mask >>= unpack_size;
         // If the mask is blank
-        if (! mask)
+        if (!mask)
         {
           // reset the bitmask
           mask = mask0;
@@ -630,23 +636,23 @@ void vgui_utils::draw_glBitmap(GLsizei width, GLsizei height,
     int width2 = width * scale;
     int height2 = height * scale;
     vil_image_view<bool> scaled_bitmap(width2, height2, 1);
-    vil_resample_nearest<bool,bool>(original_bitmap, scaled_bitmap, width2, height2);
+    vil_resample_nearest<bool, bool>(original_bitmap, scaled_bitmap, width2, height2);
 
     // Make sure new width is divisible by 8 (support for fractional scales)
-    remainder = width2%8;
+    remainder = width2 % 8;
     if (remainder)
     {
-      width2 += 8-remainder;
+      width2 += 8 - remainder;
     }
 
     // Make new GLubyte array
-    std::vector<GLubyte> raster_scaled(width2*height2, 0);
+    std::vector<GLubyte> raster_scaled(width2 * height2, 0);
 
     // repack into gl array.
     int stride = width2 * unpack_size / 8;
-    for (int r=0,index=0; r<height2; r++,index=stride*r)
+    for (int r = 0, index = 0; r < height2; r++, index = stride * r)
     {
-      for(int c=0; c<scaled_bitmap.ni(); c++)
+      for (int c = 0; c < scaled_bitmap.ni(); c++)
       {
         if (scaled_bitmap(c, r, 0))
         {
@@ -657,7 +663,7 @@ void vgui_utils::draw_glBitmap(GLsizei width, GLsizei height,
         // Increment the mask
         mask >>= unpack_size;
         // If the mask is blank
-        if (! mask)
+        if (!mask)
         {
           // reset the bitmask
           mask = mask0;
@@ -666,7 +672,6 @@ void vgui_utils::draw_glBitmap(GLsizei width, GLsizei height,
         }
       }
     }
-    glBitmap(width2, height2, xorig*scale, yorig*scale,
-             xmove*scale, ymove*scale, raster_scaled.data());
+    glBitmap(width2, height2, xorig * scale, yorig * scale, xmove * scale, ymove * scale, raster_scaled.data());
   }
 }

@@ -71,16 +71,14 @@ convert_buffer(vil_image_view<InT> const & in, vgui_range_map_params_sptr const 
       int O = rm.offset();
       switch (in.nplanes())
       {
-        case 1:
-        {
+        case 1: {
           vbl_array_1d<vxl_byte> Lmap = rm.Lmap();
           for (unsigned j = 0; j < in.nj(); ++j)
             for (unsigned i = 0; i < in.ni(); ++i)
               vgui_pixel_convert(Lmap[(unsigned)(in(i, j) + O)], *(out + i + j * hstep));
           return true;
         }
-        case 3:
-        {
+        case 3: {
           vbl_array_1d<vxl_byte> Rmap = rm.Rmap();
           vbl_array_1d<vxl_byte> Gmap = rm.Gmap();
           vbl_array_1d<vxl_byte> Bmap = rm.Bmap();
@@ -92,8 +90,7 @@ convert_buffer(vil_image_view<InT> const & in, vgui_range_map_params_sptr const 
                                  *(out + i + j * hstep));
           return true;
         }
-        case 4:
-        {
+        case 4: {
           vbl_array_1d<vxl_byte> Rmap = rm.Rmap();
           vbl_array_1d<vxl_byte> Gmap = rm.Gmap();
           vbl_array_1d<vxl_byte> Bmap = rm.Bmap();
@@ -396,8 +393,7 @@ vgui_section_buffer::apply(vil_image_resource_sptr const & image_in, vgui_range_
   // convert_buffer to actually convert the pixels.
 
 #define DoCase(T)                                                                                                      \
-  case T:                                                                                                              \
-  {                                                                                                                    \
+  case T: {                                                                                                            \
     typedef vil_pixel_format_type_of<T>::type Type;                                                                    \
     int ni = image_in->ni(), nj = image_in->nj();                                                                      \
     if (w_ > (ni - x_))                                                                                                \
@@ -453,8 +449,7 @@ vgui_section_buffer::apply(vil1_image const & image, vgui_range_map_params_sptr 
   bool section_ok = false;
 
 #define DoCase(PixelFormat, DataType, NComp)                                                                           \
-  case PixelFormat:                                                                                                    \
-  {                                                                                                                    \
+  case PixelFormat: {                                                                                                  \
     DataType * temp_buffer = new DataType[w_ * h_ * NComp];                                                            \
     section_ok = image.get_section(temp_buffer, x_, y_, w_, h_);                                                       \
     if (section_ok)                                                                                                    \

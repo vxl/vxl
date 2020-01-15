@@ -40,8 +40,7 @@ vil_blocked_image_facade::fill_block(vil_image_view_base_sptr & view) const
   switch (vil_pixel_format_component_format(pixel_format()))
   {
 #define FILL_BLOCK_CASE(FORMAT, T)                                                                                     \
-  case FORMAT:                                                                                                         \
-  {                                                                                                                    \
+  case FORMAT: {                                                                                                       \
     vil_image_view<T> * dest = new vil_image_view<T>(sbi_, sbj_, nplanes());                                           \
     vil_image_view_base_sptr ptr = dest;                                                                               \
     vil_image_view<T> * src = reinterpret_cast<vil_image_view<T> *>(view.ptr());                                       \
@@ -117,8 +116,7 @@ vil_blocked_image_facade::put_block(unsigned block_index_i, unsigned block_index
     switch (vil_pixel_format_component_format(pixel_format()))
     {
 #define TRIM_BLOCK_CASE(FORMAT, T)                                                                                     \
-  case FORMAT:                                                                                                         \
-  {                                                                                                                    \
+  case FORMAT: {                                                                                                       \
     const vil_image_view<T> & curr_view = static_cast<const vil_image_view<T> &>(view);                                \
     vil_image_view<T> cview = vil_crop(curr_view, 0, icrop, 0, jcrop);                                                 \
     return src_->put_view(cview, i0, j0);                                                                              \

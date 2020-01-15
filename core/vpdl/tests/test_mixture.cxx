@@ -13,8 +13,9 @@
 
 
 template <class T>
-vpdl_gaussian<T, 3> fit_gaussian(typename std::vector<vnl_vector_fixed<T, 3>>::const_iterator begin,
-                                 typename std::vector<vnl_vector_fixed<T, 3>>::const_iterator end)
+vpdl_gaussian<T, 3>
+fit_gaussian(typename std::vector<vnl_vector_fixed<T, 3>>::const_iterator begin,
+             typename std::vector<vnl_vector_fixed<T, 3>>::const_iterator end)
 {
   vnl_vector_fixed<T, 3> mean(T(0));
   vnl_matrix_fixed<T, 3, 3> covar(T(0));

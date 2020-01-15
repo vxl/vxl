@@ -61,8 +61,7 @@ vil_decimate_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j0
     switch (src_->pixel_format())
     {
 #define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
-  {                                                                                                                    \
+  case F: {                                                                                                            \
     vil_image_view<T> view(ni, nj, src_->nplanes());                                                                   \
     for (unsigned j = 0; j < nj; ++j)                                                                                  \
       for (unsigned i = 0; i < ni; ++i)                                                                                \
@@ -161,8 +160,7 @@ vil_decimate_image_resource::put_view(const vil_image_view_base & im, unsigned i
     switch (vs->pixel_format())
     {
 #  define macro(F, T)                                                                                                  \
-    case F:                                                                                                            \
-    {                                                                                                                  \
+    case F: {                                                                                                          \
       const vil_image_view<T> view = static_cast<const vil_image_view<T> &>(im);                                       \
       vil_image_view<T> decimated = vil_decimate(static_cast<vil_image_view<T> &>(*vs), i_factor_, j_factor_);         \
       if (view == decimated)                                                                                           \
@@ -193,8 +191,7 @@ vil_decimate_image_resource::put_view(const vil_image_view_base & im, unsigned i
     switch (src_->pixel_format())
     {
 #  define macro(F, T)                                                                                                  \
-    case F:                                                                                                            \
-    {                                                                                                                  \
+    case F: {                                                                                                          \
       const vil_image_view<T> & view = static_cast<const vil_image_view<T> &>(im);                                     \
       for (unsigned j = 0; j < im.nj(); ++j)                                                                           \
         for (unsigned i = 0; i < im.ni(); ++i)                                                                         \

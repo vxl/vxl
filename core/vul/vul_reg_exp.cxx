@@ -746,8 +746,7 @@ regatom(int * flagp)
       ret = regnode(ANY);
       *flagp |= HASWIDTH | SIMPLE;
       break;
-    case '[':
-    {
+    case '[': {
       int rxpclass;
       int rxpclassend;
 
@@ -826,8 +825,7 @@ regatom(int * flagp)
       regc('\0');
       *flagp |= HASWIDTH | SIMPLE;
       break;
-    default:
-    {
+    default: {
       int len;
       char ender;
 
@@ -1141,8 +1139,7 @@ regmatch(const char * prog)
           return 0;
         reginput++;
         break;
-      case EXACTLY:
-      {
+      case EXACTLY: {
         int len;
         const char * opnd;
 
@@ -1178,8 +1175,7 @@ regmatch(const char * prog)
       case OPEN + 6:
       case OPEN + 7:
       case OPEN + 8:
-      case OPEN + 9:
-      {
+      case OPEN + 9: {
         int no;
         const char * save;
 
@@ -1207,8 +1203,7 @@ regmatch(const char * prog)
       case CLOSE + 6:
       case CLOSE + 7:
       case CLOSE + 8:
-      case CLOSE + 9:
-      {
+      case CLOSE + 9: {
         int no;
         const char * save;
 
@@ -1228,8 +1223,7 @@ regmatch(const char * prog)
         else
           return 0;
       }
-      case BRANCH:
-      {
+      case BRANCH: {
         const char * save;
 
         if (OP(next) != BRANCH) // No choice.
@@ -1250,8 +1244,7 @@ regmatch(const char * prog)
         break;
       }
       case STAR:
-      case PLUS:
-      {
+      case PLUS: {
         char nextch;
         int no;
         const char * save;

@@ -43,8 +43,7 @@ vsl_b_read(vsl_b_istream & is, vpgl_lvcs & lvcs)
   vsl_b_read(is, ver);
   switch (ver)
   {
-    case 1:
-    {
+    case 1: {
       unsigned cs_name;
       vsl_b_read(is, cs_name);
       auto name = static_cast<vpgl_lvcs::cs_names>(cs_name);

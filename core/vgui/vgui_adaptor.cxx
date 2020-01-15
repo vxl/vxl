@@ -197,11 +197,11 @@ vgui_adaptor::dispatch_to_tableau(vgui_event const & e)
   // then set the glViewport
   if (e.type == vgui_DRAW || e.type == vgui_DRAW_OVERLAY || e.type == vgui_RESHAPE)
   {
-      GLsizei width= get_width(), height= get_height();
+    GLsizei width = get_width(), height = get_height();
     vgui_utils::set_glViewport(0, 0, width, height, get_scale_factor());
   }
 
-  vgui_macro_report_errors;//jlm
+  vgui_macro_report_errors; // jlm
   // set projection matrices to identity
   vgui_matrix_state::identity_gl_matrices();
 
@@ -301,7 +301,8 @@ vgui_adaptor::post_idle_request()
   // ignore idle processing by default.
 }
 
-double vgui_adaptor::get_scale_factor() const
+double
+vgui_adaptor::get_scale_factor() const
 {
   return 1.0;
 }

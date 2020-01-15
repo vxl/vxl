@@ -735,8 +735,7 @@ vil_tiff_image::view_from_buffer(vil_pixel_format & fmt,
   switch (fmt)
   {
 #define GET_BLOCK_CASE(FORMAT, T)                                                                                      \
-  case FORMAT:                                                                                                         \
-  {                                                                                                                    \
+  case FORMAT: {                                                                                                       \
     vil_image_view_base_sptr view;                                                                                     \
     buf_out = tiff_maybe_byte_align_data<T>(                                                                           \
       buf, samples_per_block, bits_per_sample, samples_per_block * vil_pixel_format_sizeof_components(fmt));           \
@@ -1092,8 +1091,7 @@ vil_tiff_image::fill_block_from_view(unsigned bi,
   switch (h_->pix_fmt)
   {
 #define GET_VIEW_PTR(FORMAT, T)                                                                                        \
-  case FORMAT:                                                                                                         \
-  {                                                                                                                    \
+  case FORMAT: {                                                                                                       \
     vil_image_view<T> view = static_cast<const vil_image_view<T> &>(im);                                               \
     view_istep = view.istep();                                                                                         \
     view_jstep = view.jstep();                                                                                         \

@@ -10,8 +10,7 @@ vpgl_rational_order_func::to_vector(vpgl_rational_order choice)
   {
 
     // order[VXL_INDEX] = VXL_INDEX
-    case vpgl_rational_order::VXL:
-    {
+    case vpgl_rational_order::VXL: {
       order[0] = 0;   // xxx
       order[1] = 1;   // xxy
       order[2] = 2;   // xxz
@@ -36,8 +35,7 @@ vpgl_rational_order_func::to_vector(vpgl_rational_order choice)
     }
 
     // order[VXL_INDEX] = RPC00B_INDEX
-    case vpgl_rational_order::RPC00B:
-    {
+    case vpgl_rational_order::RPC00B: {
       order[0] = 11;  // xxx
       order[1] = 14;  // xxy
       order[2] = 17;  // xxz
@@ -61,8 +59,7 @@ vpgl_rational_order_func::to_vector(vpgl_rational_order choice)
       break;
     }
 
-    default:
-    {
+    default: {
       throw std::invalid_argument("vpgl_rational_order not recognized");
     }
   }

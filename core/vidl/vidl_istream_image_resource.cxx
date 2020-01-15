@@ -156,8 +156,7 @@ vidl_istream_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j0
   switch (view->pixel_format())
   {
 #define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
-  {                                                                                                                    \
+  case F: {                                                                                                            \
     const vil_image_view<T> & v = static_cast<const vil_image_view<T> &>(*view);                                       \
     return new vil_image_view<T>(                                                                                      \
       v.memory_chunk(), &v(i0, j0), ni, nj, v.nplanes(), v.istep(), v.jstep(), v.planestep());                         \
@@ -194,8 +193,7 @@ vidl_istream_image_resource::create_empty_view() const
   switch (format_)
   {
 #define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
-  {                                                                                                                    \
+  case F: {                                                                                                            \
     return new vil_image_view<T>(ni_, nj_, np_);                                                                       \
   }
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)

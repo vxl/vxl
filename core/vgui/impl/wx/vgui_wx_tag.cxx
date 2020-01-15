@@ -11,7 +11,7 @@
 #include "vgui/vgui_tag.h"
 #include "vul/vul_trace.h"
 #ifdef __WXMSW__
-#include <wx/msw/msvcrt.h> 
+#  include <wx/msw/msvcrt.h>
 #endif
 vgui_tag(wx)
 {

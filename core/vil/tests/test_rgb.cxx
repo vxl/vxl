@@ -124,8 +124,8 @@ test_vil_rgb_bool()
   TEST("operator- ", A.operator-(A), vil_rgb<bool>(1, 1, 1));
   TEST("operator/ ", A.operator/(A), vil_rgb<bool>(0, 0, 0));
   TEST("operator/ ", A.operator/(A) == vil_rgb<bool>(0, 1, 0), false);
-  std::cout << "operator/ should be false, is " << (A.operator/(A) == vil_rgb<bool>(false, true, false)) << " since " << A << " / "
-            << A << " is false." << std::endl;
+  std::cout << "operator/ should be false, is " << (A.operator/(A) == vil_rgb<bool>(false, true, false)) << " since "
+            << A << " / " << A << " is false." << std::endl;
 
   TEST("operator+= ", A.operator+=(A), vil_rgb<bool>(0, 0, 1));
   TEST("operator-= ", A.operator-=(A), vil_rgb<bool>(1, 1, 1));
@@ -143,7 +143,8 @@ test_vil_rgb_bool()
   A.r = true, A.g = true;
   TEST("operator/= ", A.operator/=(false), vil_rgb<bool>(1, 1, 0));
   TEST("operator/= ", A.operator/=(true), vil_rgb<bool>(0, 0, 0));
-  std::cout << "operator/= should be true, is " << (A.operator/=(true) == vil_rgb<bool>(false, false, false)) << std::endl;
+  std::cout << "operator/= should be true, is " << (A.operator/=(true) == vil_rgb<bool>(false, false, false))
+            << std::endl;
 }
 
 static void

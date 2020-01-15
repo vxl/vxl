@@ -37,57 +37,49 @@ bandInfo(const vil_pixel_format & vilType)
   NCSFileBandInfo info;
   switch (vil_pixel_format_component_format(vilType))
   {
-    case VIL_PIXEL_FORMAT_UINT_32:
-    {
+    case VIL_PIXEL_FORMAT_UINT_32: {
       info.nBits = sizeof(vxl_uint_32) * 8;
       info.bSigned = std::numeric_limits<vxl_uint_32>::is_signed;
       info.szDesc = 0;
       return info;
     }
-    case VIL_PIXEL_FORMAT_INT_32:
-    {
+    case VIL_PIXEL_FORMAT_INT_32: {
       info.nBits = sizeof(vxl_int_32) * 8;
       info.bSigned = std::numeric_limits<vxl_int_32>::is_signed;
       info.szDesc = 0;
       return info;
     }
-    case VIL_PIXEL_FORMAT_UINT_16:
-    {
+    case VIL_PIXEL_FORMAT_UINT_16: {
       info.nBits = sizeof(vxl_uint_16) * 8;
       info.bSigned = std::numeric_limits<vxl_uint_16>::is_signed;
       info.szDesc = 0;
       return info;
     }
-    case VIL_PIXEL_FORMAT_INT_16:
-    {
+    case VIL_PIXEL_FORMAT_INT_16: {
       info.nBits = sizeof(vxl_int_16) * 8;
       info.bSigned = std::numeric_limits<vxl_int_16>::is_signed;
       info.szDesc = 0;
       return info;
     }
-    case VIL_PIXEL_FORMAT_BYTE:
-    {
+    case VIL_PIXEL_FORMAT_BYTE: {
       info.nBits = sizeof(vxl_byte) * 8;
       info.bSigned = std::numeric_limits<vxl_byte>::is_signed;
       info.szDesc = 0;
       return info;
     }
-    case VIL_PIXEL_FORMAT_SBYTE:
-    {
+    case VIL_PIXEL_FORMAT_SBYTE: {
       info.nBits = sizeof(vxl_sbyte) * 8;
       info.bSigned = std::numeric_limits<vxl_sbyte>::is_signed;
       info.szDesc = 0;
       return info;
     }
-    case VIL_PIXEL_FORMAT_FLOAT:
-    {
+    case VIL_PIXEL_FORMAT_FLOAT: {
       info.nBits = sizeof(float) * 8;
       info.bSigned = std::numeric_limits<float>::is_signed;
       info.szDesc = 0;
       return info;
     }
-    case VIL_PIXEL_FORMAT_DOUBLE:
-    {
+    case VIL_PIXEL_FORMAT_DOUBLE: {
       info.nBits = sizeof(double) * 8;
       info.bSigned = std::numeric_limits<double>::is_signed;
       info.szDesc = 0;
@@ -99,8 +91,7 @@ bandInfo(const vil_pixel_format & vilType)
     case VIL_PIXEL_FORMAT_UINT_64:
     case VIL_PIXEL_FORMAT_INT_64:
     case VIL_PIXEL_FORMAT_UNKNOWN:
-    default:
-    {
+    default: {
       assert(0);
       info.nBits = 0;
       info.bSigned = false;
@@ -656,8 +647,7 @@ vil_j2k_image::put_line(const vil_image_view_base & im)
   switch (vil_pixel_format_component_format(format))
   {
 #define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
-  {                                                                                                                    \
+  case F: {                                                                                                            \
     bytes_per_pixel = sizeof(T);                                                                                       \
     const vil_image_view<T> & view = static_cast<const vil_image_view<T> &>(im);                                       \
     chunk = view.memory_chunk();                                                                                       \

@@ -934,8 +934,7 @@ vil_nitf2_image::get_block(unsigned int block_index_x, unsigned int block_index_
   switch (vil_pixel_format_component_format(image_memory->pixel_format()))
   {
 #define GET_BLOCK_CASE(FORMAT, T)                                                                                      \
-  case FORMAT:                                                                                                         \
-  {                                                                                                                    \
+  case FORMAT: {                                                                                                       \
     T t = (T)0;                                                                                                        \
     return get_block_vcl_internal(FORMAT,                                                                              \
                                   image_memory,                                                                        \

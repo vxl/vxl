@@ -111,8 +111,7 @@ vil_memory_image::get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned
   switch (view_->pixel_format())
   {
 #define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
-  {                                                                                                                    \
+  case F: {                                                                                                            \
     const vil_image_view<T> & v = static_cast<const vil_image_view<T> &>(*view_);                                      \
     vil_image_view<T> w(v.memory_chunk(), &v(i0, j0), n_i, n_j, v.nplanes(), v.istep(), v.jstep(), v.planestep());     \
     return new vil_image_view<T>(vil_copy_deep(w));                                                                    \
@@ -142,8 +141,7 @@ vil_memory_image::get_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j)
   switch (view_->pixel_format())
   {
 #define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
-  {                                                                                                                    \
+  case F: {                                                                                                            \
     const vil_image_view<T> & v = static_cast<const vil_image_view<T> &>(*view_);                                      \
     return new vil_image_view<T>(                                                                                      \
       v.memory_chunk(), &v(i0, j0), n_i, n_j, v.nplanes(), v.istep(), v.jstep(), v.planestep());                       \
@@ -176,8 +174,7 @@ vil_memory_image::put_view(const vil_image_view_base & im, unsigned i0, unsigned
   switch (view_->pixel_format())
   {
 #define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
-  {                                                                                                                    \
+  case F: {                                                                                                            \
     vil_image_view<T> & v = static_cast<vil_image_view<T> &>(*view_);                                                  \
     const vil_image_view<T> & w = static_cast<const vil_image_view<T> &>(im);                                          \
     if (v.memory_chunk() == w.memory_chunk())                                                                          \
