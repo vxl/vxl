@@ -44,7 +44,7 @@ vidl_capture_tableau::handle(vgui_event const & e)
     if (e.type == vgui_RESHAPE)
     {
       GLint vp[4]; // x,y,w,h
-      glGetIntegerv(GL_VIEWPORT, vp);
+      vgui_utils::get_glViewport(vp);
       std::cout << "window size = " << vp[2] << ", " << vp[3] << std::endl;
     }
   }

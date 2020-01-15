@@ -10,6 +10,7 @@
 // \verbatim
 //  Modifications
 //   04/05/2006 - File created. (miguelfv)
+//   11/18/2019 - Modifications to eliminate gl errors and memory leaks (JLM)
 // \endverbatim
 //=========================================================================
 
@@ -19,14 +20,21 @@ class vgui_wx_menu;
 class vgui_wx_statusbar;
 
 #include <wx/frame.h>
+#include <memory>
 
 //-------------------------------------------------------------------------
 //: wxWidgets implementation of vgui_window.
 //
 // Creates a top-level window in wxWidgets and provides methods for its
 // management and customization.
+//
+// Note, the wx window subclass, wxFrame, does not pass down scrollbar events.
+// It is necessary to use the subclass wxScrolledWindow, but vgui just
+// needs to change the offset of the vgui_viewer2D token, not scroll the
+// window. The solution seems to be to create a custom subclass of wxWindow
+// to capture scroll events. TODO - JLM
 //-------------------------------------------------------------------------
-class vgui_wx_window : public vgui_window
+class vgui_wx_window : public vgui_window, public wxFrame
 {
  public:
   //: Constructor - create a new window.
@@ -59,13 +67,16 @@ class vgui_wx_window : public vgui_window
   virtual vgui_statusbar* get_statusbar();
 
   //: Display the window.
-  virtual void show() { frame_->Show(); }
+  // the dpi_scale is set here. For wxWidgets 3.1.3, the value
+  // is not valid until after the window is shown.
+  //
+  virtual void show() { this->Show(); }
 
   //: Hide the window from view.
-  virtual void hide() { frame_->Hide(); }
+  virtual void hide() { this->Hide(); }
 
   //: Turn the window into an icon.
-  virtual void iconify() { frame_->Iconize(); }
+  virtual void iconify() { this->Iconize(); }
 
   //: If true, activate horizontal scrollbar (if it exists).
   virtual void enable_hscrollbar(bool);
@@ -88,18 +99,17 @@ class vgui_wx_window : public vgui_window
   //: Set the position of the vertical scrollbar, returns old position.
   virtual int set_vscrollbar(int pos);
 
+  //: add a close event on exit (may not be necessary but can't hurt)
+  void add_close_event();
  private:
   //: Catch all constructor.
   void init_window();
-
-  //: The wxWidgets window.
-  wxFrame* frame_;
 
   //: vgui_adaptor associated with this window.
   vgui_wx_adaptor* adaptor_;
 
   //: Statusbar that vgui writes to.
-  vgui_wx_statusbar* statusbar_;
+  std::shared_ptr<vgui_wx_statusbar> statusbar_;
 
   //: wxMenuBar event handler and menu.
   vgui_wx_menu* menu_;

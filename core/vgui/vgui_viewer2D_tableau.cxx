@@ -68,7 +68,7 @@ void
 vgui_viewer2D_tableau::setup_gl_matrices()
 {
   GLint vp[4];
-  glGetIntegerv(GL_VIEWPORT, vp);
+  vgui_utils::get_glViewport(vp);
   int width = vp[2];
   int height = vp[3];
 
@@ -107,7 +107,7 @@ vgui_viewer2D_tableau::zoomin(float zoom_fac, int x, int y)
 
   // this bit is tricky.
   GLint vp[4];
-  glGetIntegerv(GL_VIEWPORT, vp);
+  vgui_utils::get_glViewport(vp);
   float dx = ((x - vp[0])) - token.offsetX;
   float dy = (vp[3] - 1 - (y - vp[1])) - token.offsetY;
 
@@ -129,7 +129,7 @@ void
 vgui_viewer2D_tableau::center_image(int w, int h)
 {
   GLfloat vp[4];
-  glGetFloatv(GL_VIEWPORT, vp);
+  vgui_utils::get_glViewport(vp);
   float width = vp[2];
   float height = vp[3];
 
@@ -150,7 +150,7 @@ draw_rect(float x0, float y0, float x1, float y1)
 {
   glColor3f(1, 0, 0);
 
-  glLineWidth(2);
+  vgui_utils::set_glLineWidth(2);
   glBegin(GL_LINE_LOOP);
   glVertex2f(x0, y0);
   glVertex2f(x0, y1);
@@ -180,7 +180,7 @@ vgui_viewer2D_tableau::handle(const vgui_event & e)
     {
       glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
       glEnable(GL_LINE_SMOOTH);
-      glLineWidth(1.5);
+      vgui_utils::set_glLineWidth(1.5);
     }
     else
       glDisable(GL_LINE_SMOOTH);
@@ -352,7 +352,7 @@ vgui_viewer2D_tableau::mouse_drag(int x, int y, vgui_button /*button*/, vgui_mod
   if (smooth_zooming)
   {
     GLdouble vp[4];
-    glGetDoublev(GL_VIEWPORT, vp);
+    vgui_utils::get_glViewport(vp);
     double height = vp[3];
 
     float newscale = 1.f - (1.5f * (prev_y - y) / (float)height);
@@ -384,7 +384,7 @@ vgui_viewer2D_tableau::mouse_drag(int x, int y, vgui_button /*button*/, vgui_mod
 
     // set projection*modelview matrices to render in **viewport** coordinates :
     GLdouble vp[4];
-    glGetDoublev(GL_VIEWPORT, vp);
+    vgui_utils::get_glViewport(vp);
     double width = vp[2];
     double height = vp[3];
 
@@ -457,7 +457,7 @@ vgui_viewer2D_tableau::mouse_up(int /*x*/, int /*y*/, vgui_button button, vgui_m
 
     // get size of viewport
     GLfloat vp[4];
-    glGetFloatv(GL_VIEWPORT, vp);
+    vgui_utils::get_glViewport(vp);
 
     // compute pre-modelview coordinates of corners of sweep region :
     float x1 = ((zoom_x - vp[0]) - this->token.offsetX) / this->token.scaleX;

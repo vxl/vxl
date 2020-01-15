@@ -224,6 +224,7 @@ void bwm_tableau_img::intensity_profile()
   std::cout << x1 << ',' << y1 << "-->" << x2 << ',' << y2 << std::endl;
   my_observer_->intensity_profile(x1, y1, x2, y2);
   this->unlock();
+  this->post_redraw();
 }
 
 void bwm_tableau_img::range_map()

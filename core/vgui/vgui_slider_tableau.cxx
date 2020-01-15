@@ -6,6 +6,7 @@
 #include "vgui_slider_tableau.h"
 
 #include "vgui/vgui_gl.h"
+#include "vgui/vgui_utils.h"
 
 vgui_slider_tableau::vgui_slider_tableau(slider_type type)
   : loc_(0.0f)
@@ -163,7 +164,7 @@ void
 vgui_slider_tableau::update_location(int newx, int newy)
 {
   GLfloat vp[4];
-  glGetFloatv(GL_VIEWPORT, vp);
+  vgui_utils::get_glViewport(vp);
   if (horiz_)
   {
     loc_ = last_loc_ + (newx - last_x_) / vp[2];

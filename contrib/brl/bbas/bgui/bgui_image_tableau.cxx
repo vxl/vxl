@@ -13,6 +13,8 @@
 #endif
 #include "vgui/vgui_event.h"
 #include "vgui/vgui.h"
+#include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_utils.h"
 #include "vgui/vgui_projection_inspector.h"
 #include "vil1/vil1_image.h"
 #include "vil1/vil1_rgba.h"
@@ -76,7 +78,7 @@ void bgui_image_tableau::get_pixel_info_from_frame_buffer(const int x, const int
 {
   // It's easier to get the buffer in vil1_rgba format and then convert to
   // RGB, because that avoids alignment problems with glReadPixels.
-  glPixelZoom(1,1);
+  vgui_utils::set_glPixelZoom(1,1);
   glPixelTransferi(GL_MAP_COLOR,0);
   glPixelTransferi(GL_RED_SCALE,1);   glPixelTransferi(GL_RED_BIAS,0);
   glPixelTransferi(GL_GREEN_SCALE,1); glPixelTransferi(GL_GREEN_BIAS,0);
@@ -86,8 +88,9 @@ void bgui_image_tableau::get_pixel_info_from_frame_buffer(const int x, const int
   glPixelStorei(GL_PACK_ROW_LENGTH,0);  // use default value (the arg to pixel routine).
   glPixelStorei(GL_PACK_SKIP_PIXELS,0); //
   glPixelStorei(GL_PACK_SKIP_ROWS,0);   //
+  double scale = vgui_adaptor::current->get_scale_factor();
   vil1_rgba<GLubyte> pixel;
-  glReadPixels(e.wx, e.wy,             //
+  glReadPixels(e.wx*scale, e.wy*scale, // Physical pixel location
                1, 1,             // height and width (only one pixel)
                GL_RGBA,          // format
                GL_UNSIGNED_BYTE, // type
@@ -505,24 +508,62 @@ void bgui_image_tableau::image_line(const float col_start,
                                     std::vector<double>& vals)
 {
   line_pos.clear();vals.clear();
+  vil_image_resource_sptr resc = this->get_image_resource();
+  if(!resc){
+    std::cerr <<  "null image resoure in image_line" << std::endl;
+    return;
+  }
+  size_t ni = resc->ni(), nj = resc->nj();
+  float nif = static_cast<float>(ni)-1.0f, njf = static_cast<float>(nj)-1.0f;
+  float cs = col_start, ce = col_end;
+  float rs = row_start, re = row_end;
+  // clamp line extremes to valid image range
+  if (cs < 0.0f && ce < 0.0f) {
+      std::cerr << " image line outside of image - abandon plot" << std::endl;
+      return;
+  }
+  if(cs < 0.0f) cs = 0.0f;
+  if(ce < 0.0f) ce = 0.0f;
+  
+  if(rs < 0.0f) rs = 0.0f;
+  if(re < 0.0f) re = 0.0f;
+  if (rs < 0.0f && re < 0.0f) {
+      std::cerr << " image line outside of image - abandon plot" << std::endl;
+      return;
+  }
+  if (cs > nif && ce > nif) {
+      std::cerr << " image line outside of image - abandon plot" << std::endl;
+      return;
+  }
+  if(cs > nif) cs = nif;
+  if(ce > nif) ce = nif;
+  if (rs > njf && re > njf) {
+      std::cerr << " image line outside of image - abandon plot" << std::endl;
+      return;
+  }
+  if(rs > njf) rs = njf;
+  if(re > njf) re = njf;
+
+
+
   //Get the image data
   // the line length in pixels
-  float length = std::sqrt((col_end-col_start)*(col_end-col_start) +
-                          (row_end-row_start)*(row_end-row_start));
+  float length = std::sqrt((ce-cs)*(ce-cs) +
+                          (re-rs)*(re-rs));
   if (length == 0)
     return;
   //initialize the line scan parameters
-  float xstep = (col_end-col_start)/length;
-  float ystep = (row_end-row_start)/length;
+  float xstep = (ce-cs)/length;
+  float ystep = (re-rs)/length;
   float sinc = std::sqrt(xstep*xstep + ystep*ystep);
   float spos = 0;
   line_pos.push_back(spos);
-  unsigned c = static_cast<unsigned>(col_start),
-   r = static_cast<unsigned>(row_start);
+  unsigned c = static_cast<unsigned>(cs),
+   r = static_cast<unsigned>(rs);
   vals.push_back(get_pixel_value(c, r));
 
   //extract the pixel values along the line
-  float xpos = col_start, ypos = row_start;
+  float xpos = cs, ypos = rs;
   unsigned nsteps = static_cast<unsigned>(length);
   for (unsigned i = 0; i<nsteps; ++i)
   {
@@ -545,20 +586,57 @@ void bgui_image_tableau::image_line(const float col_start,
                                     std::vector<std::vector<double> >& vals)
 {
   line_pos.clear();vals.clear();
+  vil_image_resource_sptr resc = this->get_image_resource();
+  if(!resc){
+    std::cerr <<  "null image resoure in image_line" << std::endl;
+    return;
+  }
+  size_t ni = resc->ni(), nj = resc->nj();
+  float nif = static_cast<float>(ni)-1.0f, njf = static_cast<float>(nj)-1.0f;
+  float cs = col_start, ce = col_end;
+  float rs = row_start, re = row_end;
+  // clamp line extremes to valid image range
+  if (cs < 0.0f && ce < 0.0f) {
+      std::cerr << " image line outside of image - abandon plot" << std::endl;
+      return;
+  }
+  if (cs < 0.0f) cs = 0.0f;
+  if (ce < 0.0f) ce = 0.0f;
+
+  if (rs < 0.0f) rs = 0.0f;
+  if (re < 0.0f) re = 0.0f;
+  if (rs < 0.0f && re < 0.0f) {
+      std::cerr << " image line outside of image - abandon plot" << std::endl;
+      return;
+  }
+  if (cs > nif && ce > nif) {
+      std::cerr << " image line outside of image - abandon plot" << std::endl;
+      return;
+  }
+  if (cs > nif) cs = nif;
+  if (ce > nif) ce = nif;
+  if (rs > njf && re > njf) {
+      std::cerr << " image line outside of image - abandon plot" << std::endl;
+      return;
+  }
+  if (rs > njf) rs = njf;
+  if (re > njf) re = njf;
+
+
   //Get the image data
   // the line length in pixels
-  float length = std::sqrt((col_end-col_start)*(col_end-col_start) +
-                          (row_end-row_start)*(row_end-row_start));
+  float length = std::sqrt((ce-cs)*(ce-cs) +
+                          (re-rs)*(re-rs));
   if (length == 0)
     return;
   //initialize the line scan parameters
-  float xstep = (col_end-col_start)/length;
-  float ystep = (row_end-row_start)/length;
+  float xstep = (ce-cs)/length;
+  float ystep = (re-rs)/length;
   float sinc = std::sqrt(xstep*xstep + ystep*ystep);
   float spos = 0;
   line_pos.push_back(spos);
-  unsigned c = static_cast<unsigned>(col_start),
-   r = static_cast<unsigned>(row_start);
+  unsigned c = static_cast<unsigned>(cs),
+   r = static_cast<unsigned>(rs);
   std::vector<double> cv = get_color_pixel_value(c, r);
   unsigned n_bands = cv.size();
   vals.resize(n_bands);
@@ -566,7 +644,7 @@ void bgui_image_tableau::image_line(const float col_start,
     vals[i].push_back(cv[i]);
 
   //extract the pixel values along the line
-  float xpos = col_start, ypos = row_start;
+  float xpos = cs, ypos = rs;
   unsigned nsteps = static_cast<unsigned>(length);
   for (unsigned i = 0; i<nsteps; ++i)
   {

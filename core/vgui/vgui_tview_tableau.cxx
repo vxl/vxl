@@ -15,6 +15,7 @@
 #endif
 
 #include "vgui/vgui_gl.h"
+#include "vgui/vgui_utils.h"
 #include "vgui/vgui_event.h"
 #include "vgui/vgui_tableau.h"
 #include "vgui/vgui_deck_tableau.h"
@@ -58,7 +59,7 @@ draw_rect(float x, float y, float w, float h)
 static void
 draw_border(float x, float y, float w, float h, int lt)
 {
-  glLineWidth(lt);
+  vgui_utils::set_glLineWidth(lt);
 
   glBegin(GL_LINE_LOOP);
   glVertex2f(x - w, y - h);
@@ -76,7 +77,7 @@ vgui_tview_tableau::draw_tableau_icon(float x, float y)
 
   glColor3f(1, 1, 1);
   glDisable(GL_LINE_STIPPLE);
-  // glLineWidth(2);
+  // vgui_utils::set_glLineWidth(2);
 
   draw_border(x, y, icon_width, icon_height, 2);
 }
@@ -99,7 +100,7 @@ vgui_tview_tableau::draw_tview_icon(float x, float y)
 
   glColor3f(1, 1, 1);
   glDisable(GL_LINE_STIPPLE);
-  // glLineWidth(2);
+  // vgui_utils::set_glLineWidth(2);
 
   draw_border(x, y, icon_width, icon_height, 2);
 }
@@ -123,7 +124,7 @@ vgui_tview_tableau::draw_icons(vgui_tableau_sptr const & parent, float x, float 
     // glLineStipple (1, 0x0101); // dotted
     // glLineStipple (1, 0x00FF); // dashed
     // glLineStipple (1, 0x1C47);  // dash/dot/dash
-    glLineWidth(1);
+    vgui_utils::set_glLineWidth(1);
 
     int ia = 0;
     for (std::vector<vgui_tableau_sptr>::iterator i = children.begin(); i != children.end(); ++i, ++ia)
@@ -166,7 +167,7 @@ vgui_tview_tableau::draw_icons(vgui_tableau_sptr const & parent, float x, float 
         }
       }
 
-      glLineWidth(1);
+      vgui_utils::set_glLineWidth(1);
       glBegin(GL_LINES);
       glVertex2f(x, y + icon_height);
       glVertex2f(start_x + offset_x, ny - (icon_height));
@@ -312,7 +313,7 @@ vgui_tview_tableau::handle(const vgui_event & e)
 #endif
 
   GLfloat vp[4];
-  glGetFloatv(GL_VIEWPORT, vp); // ok
+  vgui_utils::get_glViewport(vp);
   float width = vp[2];
   float height = vp[3];
 

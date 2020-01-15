@@ -36,6 +36,9 @@
 #include <wx/stattext.h>
 #include <wx/statbox.h>
 #include <wx/button.h>
+#ifdef __WXMSW__
+#include <wx/msw/msvcrt.h> 
+#endif
 
 #ifndef wxCommandEventHandler // wxWidgets-2.5.3 doesn't define this
 #  define wxCommandEventHandler(func)                                                                                  \
@@ -264,7 +267,7 @@ struct vgui_wx_dialog_choice
 void *
 vgui_wx_dialog_impl::choice_field_widget(const char * WXUNUSED(txt), const std::vector<std::string> & labels, int & val)
 {
-  vgui_wx_dialog_choice * choice_data = new vgui_wx_dialog_choice;
+  vgui_wx_dialog_choice * choice_data = new vgui_wx_dialog_choice; // leaks
   choice_data->names = labels;
   choice_data->index = val;
   return static_cast<void *>(choice_data);
@@ -281,7 +284,7 @@ struct vgui_wx_dialog_inline_tab
 void *
 vgui_wx_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height)
 {
-  vgui_wx_dialog_inline_tab * tab_data = new vgui_wx_dialog_inline_tab;
+  vgui_wx_dialog_inline_tab * tab_data = new vgui_wx_dialog_inline_tab; // leaks
   tab_data->tab = tab;
   tab_data->height = height;
   tab_data->width = width;
@@ -375,9 +378,11 @@ vgui_wx_dialog_impl::build_wx_dialog(void)
       case inline_tabl:
       { // create variable scope for adaptor
         // ***** error if more than one inline tableau in this dialog
+        // JLM update constructor to wx 3.0
         vgui_wx_adaptor * adaptor =
           new vgui_wx_adaptor(dialog_,
                               wxID_ANY,
+                              nullptr, //null attribute list
                               wxDefaultPosition,
                               wxSize(static_cast<vgui_wx_dialog_inline_tab *>(e->widget)->width,
                                      static_cast<vgui_wx_dialog_inline_tab *>(e->widget)->height),
@@ -393,9 +398,11 @@ vgui_wx_dialog_impl::build_wx_dialog(void)
 
         // adaptor->post_redraw();
         adaptor_ = adaptor;
+      // adaptor_->make_current();// is this necessary?
       }
       break;
-
+    case line_br:
+      break;//need to find out what line_br does FIXME JLM
       default:
         std::cerr << "Unknown type = " << e->type << std::endl;
     }

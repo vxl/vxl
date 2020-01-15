@@ -18,7 +18,6 @@ vgui_rasterpos4dv(double const X[4])
   vgui_matrix_state matrix_state;
 
   GLint vp[4]; // x,y, w,h
-  glGetIntegerv(GL_VIEWPORT, vp);
 
   vnl_matrix_fixed<double, 4, 4> T = vgui_matrix_state::total_transformation();
   vnl_vector_fixed<double, 4> tmp = T * vnl_vector_fixed<double, 4>(X);
@@ -31,7 +30,7 @@ vgui_rasterpos4dv(double const X[4])
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  //           To set a valid raster position outside the viewport, first
+  //          To set a valid raster position outside the viewport, first
   //          set a valid raster position inside the viewport, then call
   //          glBitmap with NULL as the bitmap parameter and with xmove
   //          and ymove set to the offsets of the new raster position.
@@ -39,6 +38,13 @@ vgui_rasterpos4dv(double const X[4])
   //          viewport.
   // (from http://www.opengl.org/developers/faqs/technical/clipping.htm#0070)
   glRasterPos2f(0, 0);
+  // This needs to be in physical pixel for glBitmap
+  // Don't use vgui_utils::get_glViewport here!
+  glGetIntegerv(GL_VIEWPORT, vp);
+  // Since vp is in physical pixels, this bitmap command works as intended on
+  // multiple DPIs, and does not need any further conversions
+  // Don't need to use vgui_utils::draw_glBitmap here, since there is no actual
+  // drawing
   glBitmap(0, 0, 0, 0, float(rx * vp[2] / 2), float(ry * vp[3] / 2), nullptr);
 }
 

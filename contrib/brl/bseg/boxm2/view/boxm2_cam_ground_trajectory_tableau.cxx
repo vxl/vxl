@@ -3,11 +3,11 @@
 // \file
 #include "vgui/vgui_gl.h"
 #include "vgui/vgui_glu.h"
+#include "vgui/vgui_utils.h"
 #include <vgui/internals/trackball.h>
 #include "vgui/vgui.h"
 #include "vgui/vgui_event.h"
 #include "vgl/vgl_distance.h"
-
 
 boxm2_cam_ground_trajectory_tableau::boxm2_cam_ground_trajectory_tableau() :
       c_mouse_rotate_left(vgui_CURSOR_LEFT),
@@ -30,8 +30,8 @@ boxm2_cam_ground_trajectory_tableau::boxm2_cam_ground_trajectory_tableau() :
 void boxm2_cam_ground_trajectory_tableau::setup_gl_matrices()
 {
   GLint vp[4]; // x,y,w,h
-  glGetIntegerv(GL_VIEWPORT, vp);
-  glViewport(0, 0, vp[2], vp[3]);
+  vgui_utils::get_glViewport(vp);
+  vgui_utils::set_glViewport(0, 0, vp[2], vp[3]);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();

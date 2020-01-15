@@ -6,6 +6,7 @@
 
 #include "vgui_back_project.h"
 #include "vgui/vgui_gl.h"
+#include "vgui/vgui_utils.h"
 #include "vgui_transpose_4x4.h"
 #include "vgui_multiply_4x4.h"
 
@@ -61,7 +62,7 @@ bool
 vgui_back_project_iid4_d4(int vx, int vy, double const pi[4], double X[4])
 {
   GLint vp[4];
-  glGetIntegerv(GL_VIEWPORT, vp);
+  vgui_utils::get_glViewport(vp);
   double x[3] = { 2 * (vx - vp[0]) / double(vp[2]) - 1, 2 * (vy - vp[1]) / double(vp[3]) - 1, 1 };
   return vgui_back_project_d3d4_d4(x, pi, X);
 }

@@ -10,6 +10,7 @@
 //=========================================================================
 
 #include "vgui/vgui_macro.h"
+#include "vgui/vgui_utils.h"
 
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
@@ -49,7 +50,7 @@ vgui_font_bitmap::vgui_font_bitmap(bitmap_font_type t)
       for (unsigned int i = 0; i < 256; i++)
       {
         glNewList(display_list_base_id_ + i, GL_COMPILE);
-        glBitmap(8, 13, 0.f, 2.f, 10.f, 0.f, bitmaps8x13[i]);
+        vgui_utils::draw_glBitmap(8, 13, 0.f, 2.f, 10.f, 0.f, bitmaps8x13[i]);
         glEndList();
       }
       break;
@@ -79,7 +80,7 @@ vgui_font_bitmap::draw(const std::string & str) const
 {
   for (unsigned int i = 0; i < str.size(); ++i)
   {
-    glBitmap(8, 13, 0.f, 2.f, 10.f, 0.f, bitmaps8x13[int(str[i])]);
+    vgui_utils::draw_glBitmap(8, 13, 0.f, 2.f, 10.f, 0.f, bitmaps8x13[int(str[i])]);
   }
 
 #if 0 // display lists not working

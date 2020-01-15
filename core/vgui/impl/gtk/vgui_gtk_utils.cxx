@@ -20,6 +20,7 @@
 
 #include "vgui/vgui_command.h"
 #include "vgui/vgui_menu.h"
+#include "vgui/vgui_utils.h"
 
 static bool debug = false;
 GtkAccelGroup * vgui_gtk_utils::accel_group = NULL;
@@ -82,7 +83,7 @@ void
 vgui_gtk_utils::set_coordinates(vgui_event & e, const gdouble x, const gdouble y)
 {
   GLint vp[4];
-  glGetIntegerv(GL_VIEWPORT, vp);
+  vgui_utils::get_glViewport(vp);
   // FIXME : the size of the current glViewport settings is not
   // really what we want -- we want the size of the _window_.
   e.wx = (int)x;

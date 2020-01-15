@@ -6,6 +6,7 @@
 #include "bgui3d_translate_event.h"
 #include "vgui/vgui_gl.h"
 #include "vgui/vgui_macro.h"
+#include "vgui/vgui_utils.h"
 
 #include <Inventor/SbColor.h>
 #include <Inventor/SoDB.h>
@@ -72,8 +73,8 @@ bgui3d_tableau::setup_opengl() const
   // This call is still needed on the linux side
   glEnable(GL_DEPTH_TEST);
 
-  glLineWidth( 1.0 );
-  glPointSize( 1.0 );
+  vgui_utils::set_glLineWidth( 1.0 );
+  vgui_utils::set_glPointSize( 1.0 );
 }
 
 
@@ -91,7 +92,7 @@ bgui3d_tableau::render()
 
   // Update the scene manager if the viewport has changed
   GLint vp[4];
-  glGetIntegerv(GL_VIEWPORT, vp);
+  vgui_utils::get_glViewport(vp);
   SbViewportRegion vguiViewport;
   vguiViewport.setViewportPixels(vp[0], vp[1], vp[2], vp[3]);
 
@@ -125,7 +126,7 @@ bgui3d_tableau::render_overlay()
 
   // Update the scene manager if the viewport has changed
   GLint vp[4];
-  glGetIntegerv(GL_VIEWPORT, vp);
+  vgui_utils::get_glViewport(vp);
   SbViewportRegion vguiViewport;
   vguiViewport.setViewportPixels(vp[0], vp[1], vp[2], vp[3]);
 

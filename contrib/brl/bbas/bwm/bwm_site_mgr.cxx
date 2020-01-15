@@ -52,6 +52,7 @@ bwm_site_mgr* bwm_site_mgr::instance()
 bwm_site_mgr::bwm_site_mgr(): site_name_(""), site_dir_(""), pyr_exe_(""),
                               camera_path_(""), video_path_("")
 {
+  tk_name_ = vgui::toolkit_name();
 #ifdef HAS_MFC
   site_create_process_ = new bwm_site_process();
 #endif
@@ -71,6 +72,10 @@ bwm_site_mgr::~bwm_site_mgr()
 
 void bwm_site_mgr::init_site()
 {
+  if(tk_name_ != "mfc"){
+    std::cout << tk_name_ << " lacks functionality to create" << std::endl;
+    return;
+  }
   // delete the active tableaux
   for (unsigned i=0; i<active_tableaus_.size(); i++)
     delete active_tableaus_[i];
@@ -155,6 +160,10 @@ void bwm_site_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
 //: create a dialog box to create site to add images, objects, etc..
 void bwm_site_mgr::create_site()
 {
+  if(tk_name_ != "mfc"){
+    std::cout << tk_name_ << " lacks functionality to create a site" << std::endl;
+    return;
+  }
   vgui_dialog_extensions site_dialog("CrossCut Site Creation");
 
   std::string site_name, site_dir, pyr_exe_path;
@@ -258,6 +267,10 @@ void bwm_site_mgr::create_site()
 //: create a dialog box to create site to add images, objects, etc..
 void bwm_site_mgr::edit_site()
 {
+  if(tk_name_ != "mfc"){
+    std::cout << tk_name_ << " lacks functionality to edit" << std::endl;
+    return;
+  }
   bwm_io_config_parser* parser = nullptr;
   parser = parse_config();
   if (parser == nullptr) {
@@ -886,28 +899,42 @@ void bwm_site_mgr::load_img_tableau()
   bwm_tableau_img* tab = tableau_factory_.create_tableau(&img);
   bwm_tableau_mgr::instance()->add_tableau(tab, name);
   active_tableaus_.push_back(img.clone());
+
+  tab->post_redraw();
 }
 
 void bwm_site_mgr::load_video_tableau()
 {
-  vgui_dialog_extensions params ("Video Tableau");
   static std::string video_path = "";
   static std::string camera_glob = "";
   std::string name = "none";
   std::string ext = "";
-  params.field("Tableau Name", name);
-  params.line_break();
-  params.dir("Frame Glob or File", ext, video_path);
-  params.line_break();
-  params.dir("Camera Glob", ext, camera_glob);
-  params.line_break();
-  params.set_modal(true);
-  if (!params.ask())
-    return;
-
+  if(tk_name_ == "mfc"){
+    vgui_dialog_extensions params ("Video Tableau");
+    params.field("Tableau Name", name);
+    params.line_break();
+    params.dir("Frame Glob or File", ext, video_path);
+    params.line_break();
+    params.dir("Camera Glob", ext, camera_glob);
+    params.line_break();
+    params.set_modal(true);
+    if (!params.ask())
+      return;
+  }else{
+    vgui_dialog params ("Video Tableau");
+    params.field("Tableau Name", name);
+    params.line_break();
+    params.file("Frame Glob or File", ext, video_path);
+    params.line_break();
+    params.file("Camera Glob", ext, camera_glob);
+    params.line_break();
+    params.set_modal(true);
+    if (!params.ask())
+      return;
+  }
   if (video_path == "") {
-    bwm_utils::show_error("Please specify a video path");
-    return;
+   bwm_utils::show_error("Please specify a video path");
+   return;
   }
 
   bwm_io_tab_config_video* video = new bwm_io_tab_config_video(name, true, video_path, camera_glob);
@@ -918,7 +945,7 @@ void bwm_site_mgr::load_video_tableau()
 
 void bwm_site_mgr::load_cam_tableau()
 {
-  vgui_dialog_extensions params ("Camera Tableau");
+
   std::string ext, name, img_file, cam_file, empty="";
   //std::string ext, name, cam_file, empty="";
   //static std::string img_file = "";
@@ -930,9 +957,10 @@ void bwm_site_mgr::load_cam_tableau()
   types.push_back("perspective");
   types.push_back("identity");
   types.push_back("geo");
+  if(tk_name_ == "mfc"){
+  vgui_dialog_extensions params ("Camera Tableau");
   params.field("Tableau Name", name);
   params.line_break();
-  //params.dir("Image...", ext, img_file);
   params.file("Image...", ext, img_file);
   params.line_break();
   params.choice("Camera Type",types, camera_type);
@@ -941,7 +969,19 @@ void bwm_site_mgr::load_cam_tableau()
   params.line_break();
   if (!params.ask())
     return;
-
+  }else{
+    vgui_dialog params ("Camera Tableau");
+    params.field("Tableau Name", name);
+    params.line_break();
+    params.file("Image...", ext, img_file);
+    params.line_break();
+    params.choice("Camera Type",types, camera_type);
+    params.line_break();
+    params.file("Camera...", ext, cam_file);
+    params.line_break();
+    if (!params.ask())
+      return;
+  }
   if ((img_file == "") || (cam_file == "" && camera_type != 4)) {  // for identity camera type, cam_file can be empty ?
     vgui_dialog error ("Error");
     error.message ("Please specify an input file (prefix)." );

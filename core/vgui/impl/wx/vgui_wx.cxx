@@ -11,9 +11,12 @@
 #include <cstddef>
 #include <iostream>
 #include "vgui_wx.h"
+#include "vgui_wx_app.h"
 #include "vgui_wx_window.h"
 #include "vgui_wx_dialog_impl.h"
 #include "vgui/vgui_gl.h"
+#include "vgui_wx_statusbar.h"
+#include "vgui_wx_adaptor.h"
 
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
@@ -26,30 +29,36 @@
 #include <wx/strconv.h>
 #ifdef __WXMSW__
 #  include <wx/msw/private.h>
+#include <wx/msw/msvcrt.h> 
 #endif
 
+
+vgui_wx* vgui_wx::instance_ = nullptr;
+
+vgui_wx* vgui_wx::instance()
+{
+  if (!instance_) {
+    instance_ = new vgui_wx();
+  }
+  return vgui_wx::instance_;
+}
+void vgui_wx::delete_instance(){
+  delete instance_;
+  instance_ = nullptr;
+}
 //-------------------------------------------------------------------------
 // Private helpers - declarations.
 //-------------------------------------------------------------------------
 namespace
 {
-class vgui_wx_app;
-wxAppConsole *
-vgui_wx_create_app(void);
-wxChar ** g_wxCharArgv = NULL;
-int g_Argc = 0;
-} // namespace
+  wxAppConsole* vgui_wx_create_app(void);//needed to intialize the wxApp
+  wxChar** g_wxCharArgv = NULL;
+  int g_Argc = 0;
+}
 
 //-------------------------------------------------------------------------
 // vgui_wx implementation - construction & destruction.
 //-------------------------------------------------------------------------
-//: Singleton method instance.
-vgui_wx *
-vgui_wx::instance()
-{
-  static vgui_wx * instance_ = new vgui_wx;
-  return instance_;
-}
 
 //: Returns the name of the GUI toolkit ("wx").
 std::string
@@ -60,7 +69,7 @@ vgui_wx::name(void) const
 
 //: Constructor - default.
 vgui_wx::vgui_wx(void)
-  : adaptor_embedded_(true)
+  : adaptor_embedded_(true), top_level_window_(nullptr)
 {
 #ifdef DEBUG
   std::cout << "vgui_wx::vgui_wx() - Constructor" << std::endl;
@@ -87,17 +96,22 @@ vgui_wx::init(int & argc, char ** argv)
 
   if (wxTheApp)
   {
-    // if we are here, then we aren't trying to use vgui in a wxWidgets App
+    // if we are here, then the wxWidgets main already exists.
+    // wxWidgets typically creates its own main but the vgui app 
+    // requires a main program vgui_wx implements the functionality of 
+    //  wxIMPLEMENT_APP_NO_MAIN
     std::cerr << "vgui_wx::init(): wxApp object already exists!\n";
-    // ***** exit here... or can we recover from this?
+    // unrecoverable error
     std::exit(-1);
   }
 
-  // Set the app initializer so that we can create the vgui_wx_app.
+  // Set the app initializer funcion to create the vgui_wx_app.
   wxAppInitializer vgui_wx_app_initializer(static_cast<wxAppInitializerFunction>(vgui_wx_create_app));
 
 #ifdef __WXMSW__
-  wxSetInstance(GetModuleHandle(0));
+  //wxSetInstance() should be called with the correct HINSTANCE if it differs from
+  //the main program executable, which is returned by GetModuleHandle(nullptr)
+  wxSetInstance(GetModuleHandle(nullptr));
   wxApp::m_nCmdShow = 0;
 #endif
 
@@ -144,7 +158,7 @@ vgui_wx::init(int & argc, char ** argv)
   // wxLog::SetActiveTarget(logger);
   wxLog::AddTraceMask(wxTRACE_RefCount);
 }
-
+// called when application exits
 void
 vgui_wx::uninit(void)
 {
@@ -162,16 +176,7 @@ vgui_wx::uninit(void)
   // ***** This should only be called if OnInit was called.
   wxTheApp->OnExit();
 
-  // ***** This call is causing system crashes, in WinXP?!?
-  // wxUninitialize();
-
-  // ***** Memory should be managed elsewhere... smart_ptr's???
-  // for (unsigned int i = 0; i < windows_to_delete_.size(); i++)
-  //{
-  //  delete windows_to_delete_[i]; // ***** what if user deleted it???
-  //  windows_to_delete_.clear();
-  //}
-
+  
   // If we convert the char** argv to a wxChar** version, free our
   // conversion now.
 #if wxUSE_UNICODE
@@ -183,6 +188,9 @@ vgui_wx::uninit(void)
   g_wxCharArgv = NULL;
   g_Argc = 0;
 #endif
+  //here is where items created during initialization are deleted
+  vgui_wx::delete_instance();
+  vgui_wx_app::delete_instance();
 }
 
 //-------------------------------------------------------------------------
@@ -206,7 +214,7 @@ vgui_wx::run(void)
     std::cerr << __FILE__ ":embedding adaptor; don't call run!\n";
     return;
   }
-
+  //Tell wxWidgets to start the event loop
   wxTheApp->OnRun();
 }
 
@@ -252,7 +260,9 @@ vgui_wx::quit(void)
 #ifdef DEBUG
   std::cout << "vgui_wx::quit()" << std::endl;
 #endif
-
+  if (top_level_window_)
+      top_level_window_->add_close_event();
+  
   // not controlling the main loop from vgui_wx
   if (adaptor_embedded_)
   {
@@ -267,14 +277,15 @@ vgui_wx::quit(void)
 
 //-------------------------------------------------------------------------
 // vgui_wx implementation - window creation.
-// ***** all of these should return smart pointers???
+// vgui_wx_window is a subclass of wxFrame so 
+//  wxWidgets should handle cleanup on exit
 //-------------------------------------------------------------------------
 //: Create a new window with a menubar.
 vgui_window *
 vgui_wx::produce_window(int width, int height, const vgui_menu & menubar, const char * title)
 {
-  vgui_window * win_tmp = new vgui_wx_window(width, height, menubar, title);
-  windows_to_delete_.push_back(win_tmp);
+  top_level_window_ = new vgui_wx_window(width, height, menubar, title);
+  vgui_window* win_tmp = dynamic_cast<vgui_window*>(top_level_window_);
   return win_tmp;
 }
 
@@ -282,8 +293,8 @@ vgui_wx::produce_window(int width, int height, const vgui_menu & menubar, const 
 vgui_window *
 vgui_wx::produce_window(int width, int height, const char * title)
 {
-  vgui_window * win_tmp = new vgui_wx_window(width, height, title);
-  windows_to_delete_.push_back(win_tmp);
+  vgui_wx_window* wx_win = new vgui_wx_window(width, height, title);
+  vgui_window* win_tmp = dynamic_cast<vgui_window*>(wx_win);
   return win_tmp;
 }
 
@@ -297,71 +308,19 @@ vgui_wx::produce_dialog(const char * name)
 //-------------------------------------------------------------------------
 // Private helpers - definitions.
 //-------------------------------------------------------------------------
+
 namespace
 {
-class vgui_wx_app : public wxApp
-{
-public:
-  //: Constructor - default.
-  vgui_wx_app()
-  {
-#ifdef DEBUG
-    std::cout << "vgui_wx_app: Constructor" << std::endl;
-#endif
-  }
-
-  //: Destructor.
-  virtual ~vgui_wx_app()
-  {
-#ifdef DEBUG
-    std::cout << "vgui_wx_app: Destructor" << std::endl;
-#endif
-  }
-
-  //: Called on app initialization.
-  bool
-  OnInit()
-  {
-#ifdef DEBUG
-    std::cout << "vgui_wx_app: OnInit()" << std::endl;
-#endif
-
-    // ***** wxApp's OnInit command parser usually gets in the way...
-    return true; // wxApp::OnInit();
-  }
-
-  //: Called on app exit.
-  virtual int
-  OnExit()
-  {
-#ifdef DEBUG
-    std::cout << "vgui_wx_app: OnExit()" << std::endl;
-#endif
-
-    return wxApp::OnExit();
-  }
-
-  //: Called if unhandled exception occurs inside main event loop.
-  // Return true to ignore the exception and false to exit the loop.
-  virtual bool
-  OnExceptionInMainLoop()
-  {
-#ifdef DEBUG
-    std::cout << "vgui_wx_app: OnExceptionInMainLoop()" << std::endl;
-#endif
-
-    return false;
-  }
-};
-
-// IMPLEMENT_APP_NO_MAIN(vgui_wx_app)
+   // this function is required to setup the wxApp when 
+   // wxWidgets doesn't produce its own main
+   //(see the implementation of the macro below)
+   // IMPLEMENT_APP_NO_MAIN(vgui_wx_app)
 wxAppConsole *
 vgui_wx_create_app(void)
 {
   wxAppConsole::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE, "your program");
-  return new vgui_wx_app;
-}
-
-// static vgui_wx_app& wxGetApp() { return *(vgui_wx_app *)wxTheApp; }
+    
+    return vgui_wx_app::instance();//new vgui_wx_app (singleton)
+  }
 
 } // unnamed namespace

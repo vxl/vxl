@@ -109,7 +109,9 @@ if(MFC_FOUND)
      process/bwm_site_process.cxx      process/bwm_site_process.h
   )
 endif()
-
+if(VGUI_USE_WX)
+  link_directories(${wxWidgets_LIB_DIR})
+endif()
 aux_source_directory(Templates bwm_sources)
 
 vxl_add_library(LIBRARY_NAME bwm LIBRARY_SOURCES ${bwm_sources})

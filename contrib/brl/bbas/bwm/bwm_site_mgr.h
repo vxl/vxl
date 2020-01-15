@@ -52,7 +52,7 @@ class bwm_site_mgr
  private:
   bwm_site_mgr();
   static bwm_site_mgr* instance_;
-
+  std::string tk_name_;
   std::vector<bwm_io_tab_config*> inactive_tableaus_;
   std::vector<bwm_io_tab_config*> active_tableaus_;
 

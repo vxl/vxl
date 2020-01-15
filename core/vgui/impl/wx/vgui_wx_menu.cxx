@@ -22,7 +22,9 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
-
+#ifdef __WXMSW__
+#include <wx/msw/msvcrt.h> 
+#endif
 //-------------------------------------------------------------------------
 // Private helpers - declarations.
 //-------------------------------------------------------------------------
@@ -104,7 +106,7 @@ vgui_wx_menu::create_wx_menu(const vgui_menu & menu)
 wxMenu *
 vgui_wx_menu::create_wx_submenu(const vgui_menu & menu)
 {
-  wxMenu * popup = new wxMenu;
+  wxMenu * popup = new wxMenu; // leaks
 
   for (unsigned int i = 0; i < menu.size(); i++)
   {

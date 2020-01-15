@@ -15,8 +15,8 @@
 #include "vnl/vnl_double_2.h"
 #include "vnl/vnl_double_3.h"
 #include "vnl/vnl_matlab_print.h"
-
 #include "vgui/vgui_gl.h"
+#include "vgui/vgui_utils.h"
 
 //------------------------------------------------------------------------------
 
@@ -133,9 +133,7 @@ void
 vgui_projection_inspector::inspect()
 {
   // get viewport :
-  glGetIntegerv(GL_VIEWPORT, (GLint *)vp); // fixed
-
-  // get projection and modelview matrices :
+  vgui_utils::get_glViewport((GLint *)vp);
   {
     glGetDoublev(GL_PROJECTION_MATRIX, P.data_block());
     P.inplace_transpose();

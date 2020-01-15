@@ -13,7 +13,7 @@
 #include "vgui_style.h"
 #include "vgui_macro.h"
 #include "vgui_gl.h"
-
+#include "vgui_utils.h"
 
 //: Create a new style object
 vgui_style_sptr
@@ -81,14 +81,14 @@ void
 vgui_style::apply_line_width() const
 {
   if (line_width > 0.0)
-    glLineWidth(line_width);
+    vgui_utils::set_glLineWidth(line_width);
 }
 
 void
 vgui_style::apply_point_size() const
 {
   if (point_size > 0.0)
-    glPointSize(point_size);
+    vgui_utils::set_glPointSize(point_size);
 }
 
 void

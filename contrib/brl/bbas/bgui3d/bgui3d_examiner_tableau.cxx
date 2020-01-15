@@ -13,6 +13,7 @@
 #include "vgui/vgui_menu.h"
 #include "vgui/vgui_command.h"
 #include "vgui/vgui_gl.h"
+#include "vgui/vgui_utils.h"
 
 #include <Inventor/actions/SoSearchAction.h>
 #include <Inventor/projectors/SbSphereSheetProjector.h>
@@ -623,12 +624,12 @@ bgui3d_examiner_tableau::draw_axis_cross()
   // Set the viewport in the OpenGL canvas. Dimensions are calculated
   // as a percentage of the total canvas size.
   GLint vp[4];
-  glGetIntegerv(GL_VIEWPORT, vp);
+  vgui_utils::get_glViewport(vp);
   const int view_x = vp[2];
   const int view_y = vp[3];
   const int pixelarea = int(0.25f * std::min(view_x, view_y));
   // lower right of canvas
-  glViewport(vp[0]+vp[2] - pixelarea, vp[1], pixelarea, pixelarea);
+  vgui_utils::set_glViewport(vp[0]+vp[2] - pixelarea, vp[1], pixelarea, pixelarea);
 
   // Set up the projection matrix.
   glMatrixMode(GL_PROJECTION);
@@ -674,7 +675,7 @@ bgui3d_examiner_tableau::draw_axis_cross()
 
   // Render the cross.
   {
-    glLineWidth(2.0);
+    vgui_utils::set_glLineWidth(2.0);
 
     enum { XAXIS, YAXIS, ZAXIS };
     int idx[3] = { XAXIS, YAXIS, ZAXIS };
@@ -719,11 +720,11 @@ bgui3d_examiner_tableau::draw_axis_cross()
   glColor3fv(SbVec3f(0.8f, 0.8f, 0.0f).getValue());
 
   glRasterPos2d(xpos[0], xpos[1]);
-  glBitmap(8, 7, 0, 0, 0, 0, xbmp);
+  vgui_utils::draw_glBitmap(8, 7, 0, 0, 0, 0, xbmp);
   glRasterPos2d(ypos[0], ypos[1]);
-  glBitmap(8, 7, 0, 0, 0, 0, ybmp);
+  vgui_utils::draw_glBitmap(8, 7, 0, 0, 0, 0, ybmp);
   glRasterPos2d(zpos[0], zpos[1]);
-  glBitmap(8, 7, 0, 0, 0, 0, zbmp);
+  vgui_utils::draw_glBitmap(8, 7, 0, 0, 0, 0, zbmp);
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, unpack);
   glPopMatrix();

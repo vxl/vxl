@@ -5,6 +5,7 @@
 // \file
 #include "vpgl/vpgl_perspective_camera.h"
 #include "vgui/vgui_modifier.h"
+#include "vgui/vgui_utils.h"
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
@@ -105,7 +106,7 @@ bool boxm2_ocl_render_tableau::handle(vgui_event const &e)
     glClear(GL_COLOR_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);
     glRasterPos2i(0, 1);
-    glPixelZoom(1,-1);
+    vgui_utils::set_glPixelZoom(1,-1);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, pbuffer_);
     glDrawPixels(ni_, nj_, GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);

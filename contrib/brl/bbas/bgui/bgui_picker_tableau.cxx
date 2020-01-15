@@ -11,6 +11,7 @@
 // \endverbatim
 
 #include "vgui/vgui.h"
+#include "vgui/vgui_utils.h"
 #include "vgui/vgui_gl.h"
 #include "vgui/vgui_projection_inspector.h"
 #include <vsol/vsol_point_2d.h>
@@ -100,7 +101,7 @@ void bgui_picker_tableau::draw_line()
 {
   if (!FIRSTPOINT)  // there is no point in drawing till we have a first point
     {
-      glLineWidth(w);
+      vgui_utils::set_glLineWidth(w);
       glColor3f(r,g,b);
 
       glBegin(GL_LINES);
@@ -115,7 +116,7 @@ void bgui_picker_tableau::draw_box()
 {
   if (!FIRSTPOINT)  // there is no point in drawing till we have a first point
     {
-      glLineWidth(w);
+      vgui_utils::set_glLineWidth(w);
       glColor3f(r,g,b);
 
       glBegin(GL_LINE_LOOP);
@@ -132,7 +133,7 @@ void bgui_picker_tableau::draw_box()
 //: Draw a line to help the user pick it.
 void bgui_picker_tableau::draw_anchor_line()
 {
-  glLineWidth(w);
+  vgui_utils::set_glLineWidth(w);
   glColor3f(r,g,b);
   glBegin(GL_LINES);
   glVertex2f(anchor_x, anchor_y);
@@ -381,7 +382,7 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
     {
       if (active && e.type == vgui_OVERLAY_DRAW )
   {
-    glLineWidth(w);
+    vgui_utils::set_glLineWidth(w);
     glColor3f(r,g,b);
 
     if (obj_type == poly_enum)
@@ -441,7 +442,7 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
     {
       if (e.type == vgui_OVERLAY_DRAW ) {
   unsigned n = point_set_list.size();
-  glPointSize(3);
+  vgui_utils::set_glPointSize(3);
   glColor3f(r,g,b);
   glBegin(GL_POINTS);
   for (unsigned i=0; i<n; ++i){

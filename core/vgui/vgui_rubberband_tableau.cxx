@@ -19,6 +19,7 @@
 #include "vgui/vgui_matrix_state.h"
 #include "vgui/vgui_projection_inspector.h"
 #include "vgui/vgui_adaptor.h"
+#include "vgui/vgui_utils.h"
 
 vgui_rubberband_tableau::object_type vgui_rubberband_tableau::obj_type = none_enum;
 
@@ -206,7 +207,7 @@ vgui_rubberband_tableau::draw_point(float x, float y)
 void
 vgui_rubberband_tableau::draw_line(float x0, float y0, float x1, float y1)
 {
-  glLineWidth(1);
+  vgui_utils::set_glLineWidth(1);
   glColor3f(1, 1, 1);
 
   glBegin(GL_LINES);
@@ -241,7 +242,7 @@ vgui_rubberband_tableau::draw_infinite_line(float a, float b, float c)
 void
 vgui_rubberband_tableau::draw_circle(float x, float y, float r)
 {
-  glLineWidth(1);
+  vgui_utils::set_glLineWidth(1);
   glColor3f(1, 1, 1);
   glBegin(GL_LINE_LOOP);
 
@@ -266,7 +267,7 @@ vgui_rubberband_tableau::draw_polygon(float px, float py)
   vgui_matrix_state M;
   M.save();
 
-  glLineWidth(1);
+  vgui_utils::set_glLineWidth(1);
   glColor3f(1, 1, 1);
   if (n == 1)
     glBegin(GL_LINES);
@@ -288,7 +289,7 @@ vgui_rubberband_tableau::draw_box(float x0, float y0, float x1, float y1)
   float ex = x0 > x1 ? x0 : x1;
   float ey = y0 > y1 ? y0 : y1;
 
-  glLineWidth(1);
+  vgui_utils::set_glLineWidth(1);
   glColor3f(1, 1, 1);
   glBegin(GL_LINE_LOOP);
 
@@ -312,7 +313,7 @@ vgui_rubberband_tableau::draw_linestrip(float px, float py)
   vgui_matrix_state M;
   M.save();
 
-  glLineWidth(1);
+  vgui_utils::set_glLineWidth(1);
   glColor3f(1, 1, 1);
   glBegin(GL_LINE_STRIP);
   for (unsigned i = 0; i < n; ++i)

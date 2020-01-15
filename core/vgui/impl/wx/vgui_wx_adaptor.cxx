@@ -2,6 +2,7 @@
 #include <iostream>
 #include <map>
 #include "vgui_wx_adaptor.h"
+#include "vgui_wx_window.h"
 //=========================================================================
 //:
 // \file
@@ -23,16 +24,19 @@
 #ifndef wxEventHandler // wxWidgets-2.5.3 doesn't define this
 #  define wxEventHandler(func) (wxObjectEventFunction) wxStaticCastEvent(wxEventFunction, &func)
 #endif
-
+#ifdef __WXMSW__
+#include <wx/msw/msvcrt.h> 
+#endif
 #include <cassert>
-// not used? #include <vcl_compiler.h>
 
+// not used? #include <vcl_compiler.h>
 //-------------------------------------------------------------------------
 // Private helpers - declarations.
 //-------------------------------------------------------------------------
 namespace
 {
 //: Event type for dynamic timer events.
+  // TODO timer implementation is incomplete (JLM)
 const wxEventType wxEVT_VGUI_TIMER = wxNewEventType();
 
 inline bool
@@ -53,11 +57,32 @@ translate_key(int key_code);
 // vgui_wx_adaptor implementation - construction & destruction.
 //-------------------------------------------------------------------------
 IMPLEMENT_CLASS(vgui_wx_adaptor, wxGLCanvas)
+// Enables wxWidgets runtime typing mechanism - supplanted now by C++ itself
 
 //: ***** To ensure the commands stay in scope for the lifetime of the popup.
 vgui_menu vgui_wx_adaptor::last_popup_;
 
-//: Constructor.
+// interface for 3.0
+   vgui_wx_adaptor::vgui_wx_adaptor(wxWindow *parent,
+                       wxWindowID id,
+                       const int *attributes,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name,
+                       const wxPalette& palette):
+                       wxGLCanvas(parent, id, attributes, pos,size,style|wxFULL_REPAINT_ON_RESIZE|wxBORDER_SUNKEN, name)
+  , redraw_posted_(true)
+  , overlay_redraw_posted_(true)
+  , idle_request_posted_(false)
+  , destroy_posted_(false), window_(nullptr)
+{
+
+  wxLogTrace(wxTRACE_RefCount, wxT("vgui_wx_adaptor::vgui_wx_adaptor"));
+  // 3.0 requires the gl context explictly in calls such as SetCurrent(context)
+  context_ = std::shared_ptr<wxGLContext>(new wxGLContext(this));
+}
+/* Constructor. deprecated 2.8 form
 vgui_wx_adaptor::vgui_wx_adaptor(wxWindow * parent,
                                  wxWindowID id,
                                  const wxPoint & pos,
@@ -74,16 +99,33 @@ vgui_wx_adaptor::vgui_wx_adaptor(wxWindow * parent,
 {
   wxLogTrace(wxTRACE_RefCount, wxT("vgui_wx_adaptor::vgui_wx_adaptor"));
 }
-
+*/
 //: Destructor.
 vgui_wx_adaptor::~vgui_wx_adaptor()
 {
+  wxWindow* win = this->GetParent();
+  wxEvtHandler* hnd = win->GetEventHandler();
+  bool hand_neq_win = hnd != win;
+  if(hand_neq_win)//can't remove self as event handler
+    win->PopEventHandler(true);
   wxLogTrace(wxTRACE_RefCount, wxT("vgui_wx_adaptor::~vgui_wx_adaptor"));
 }
 
 //-------------------------------------------------------------------------
 // vgui_wx_adaptor implementation - virtual functions from vgui_adaptor.
 //-------------------------------------------------------------------------
+
+double vgui_wx_adaptor::get_scale_factor() const
+{
+  #ifdef __WXX11__
+    // For some reason, X11 wx gives a scale factor that is not related to
+    // the logical/physical pixel difference between glViewport and wxGLCanvas
+    return 1.0;
+  #else
+    return GetContentScaleFactor();
+  #endif
+}
+
 //: Redraw the rendering area.
 void
 vgui_wx_adaptor::post_redraw(void)
@@ -113,6 +155,9 @@ vgui_wx_adaptor::post_idle_request(void)
   if (!idle_request_posted_)
   {
     idle_request_posted_ = true;
+    /*This function wakes up the (internal and platform dependent) idle system, i.e.it will force the system
+      to send an idle event even if the system currently is idle and thus would not send any idle event
+      until after some other event would get sent.*/
     wxWakeUpIdle();
   }
 }
@@ -140,25 +185,21 @@ vgui_wx_adaptor::post_destroy(void)
     destroy_posted_ = true;
     Close();
   }
-
-  // if (view_)
-  //{
-  //  view_->GetDocument()->DeleteAllViews();
-  //}
-  // else
-  //{
-  //  // ***** or should I call Destroy() ???
-  //  GetParent()->Close();
-  //}
-  // destroy_posted_ = true;
-
+  
   vgui_macro_report_errors;
 }
-
+/*
+  In 3.0 the better approach is to use Bind/Unbind as in:
+  m_timer->Bind(wxEVT_TIMER, &callback_function, &adaptor, id);
+  It will be necessary to maintain a set of wxTimer(s) for each id.
+  As each timer times out the corresponding vgui_event is dispatched.
+  Note timer implementation is incomplete - FIXME (JLM)
+ */
 //: Sets timer 'id' to dispatch a vgui_TIMER event every 'timeout' ms.
 void
 vgui_wx_adaptor::post_timer(float timeout, int id)
 {
+
   Connect(id, wxEVT_VGUI_TIMER, wxEventHandler(vgui_wx_adaptor::on_timer));
 }
 
@@ -177,10 +218,15 @@ vgui_wx_adaptor::swap_buffers()
 }
 
 //: Make this the current GL rendering context.
+/*
+  3.0 requires a context, e.g.,
+  wxGLContext* m_context; a member of adaptor
+  wxGLCanvas::SetCurrent(*m_context);
+ */
 void
 vgui_wx_adaptor::make_current()
 {
-  SetCurrent();
+  SetCurrent(*context_);
 }
 
 //-------------------------------------------------------------------------
@@ -199,10 +245,27 @@ EVT_CLOSE(vgui_wx_adaptor::on_close)
 END_EVENT_TABLE()
 
 //: Called when canvas is resized.
+/* wx doc on Update()
+Calling this method immediately repaints the invalidated area of the window and all of its children recursively
+(this normally only happens when the flow of control returns to the event loop).
+Notice that this function doesn't invalidate any area of the window so nothing happens if nothing has been
+invalidated (i.e. marked as requiring a redraw).
+Use Refresh() first if you want to immediately redraw the window unconditionally.
+*/
 void
-vgui_wx_adaptor::on_size(wxSizeEvent & event)
+vgui_wx_adaptor::on_size(wxSizeEvent& event)
 {
-  wxGLCanvas::OnSize(event);
+  // c/o doublemax https://forums.wxwidgets.org/viewtopic.php?t=29948
+  // And reading glx11.cpp's SetCurrent and msw's SetCurrent
+  // IsShown SHOULD have worked https://trac.wxwidgets.org/ticket/4343
+  // Surprise! it didn't
+  #if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__)
+    if(!GetXWindow() || !IsShown()) return;
+  #elif defined(__WXMSW__)
+    if(!GetHDC() || !IsShown()) return;
+  #endif
+
+  SetCurrent(*context_);//necesssary to insure the canvas is valid
   dispatch_to_tableau(vgui_RESHAPE);
   post_redraw();
   Update();
@@ -214,16 +277,21 @@ vgui_wx_adaptor::on_paint(wxPaintEvent & WXUNUSED(event))
 {
   vgui_macro_report_errors;
   // must always be here
-  wxPaintDC dc(this);
+  //wxPaintDC dc(this); //previous call
+
+  /*Do not call the derived class' paint function from any function in your code... ever.
+    If you need to redraw the GL canvas, call my_canvas_window->Refresh();,
+    which will send a new paint event to the window.(https://forums.wxwidgets.org/viewtopic.php?t=21513)*/
+  this->Refresh();
 
 #ifndef __WXMOTIF__
-  if (!GetContext())
-  {
-    return;
-  }
+//   if (!GetContext())
+//   {
+//     return;
+//   }
 #endif
 
-  SetCurrent();
+  SetCurrent(*context_);
 
   if (redraw_posted_ || overlay_redraw_posted_)
   {
@@ -374,10 +442,14 @@ vgui_wx_adaptor::on_mouse_event(wxMouseEvent & event)
   e.button = translate_mouse_button(event.GetButton());
   e.type = translate_mouse_event_type(event);
 
-  // ***** what should I return here?? What about if scrolled window??
+  
+  //wxWidgets on Linux returns mouse position in logical pixel coordinates
+  //not gl canvas screen coordinates. On Windows, the mouse position does
+  //take into account dpi scale on high resolution screens, so vgui::dpi_scale_
+  //is set to 1, while on Linux it is set to ::GetContentScaleFactor().
   e.wx = event.GetX();
-  e.wy = get_height() - event.GetY();
-
+  e.wy = get_height() - event.GetY(); //needed to make (0,0) lower left as a Cartesian system
+  
   // ***** what exactly goes here??
   e.timestamp = 0;
 
@@ -451,13 +523,8 @@ vgui_wx_adaptor::on_idle(wxIdleEvent & event)
 void
 vgui_wx_adaptor::on_close(wxCloseEvent & event)
 {
-  // ***** can't find error with inline_tableaus
-  vgui_macro_report_errors;
-  dispatch_to_tableau(vgui_DESTROY);
-  vgui_macro_report_errors;
-  Destroy();
-  // GetParent()->Destroy();
-  vgui_macro_report_errors;
+  //apparently everything done to close is taken care of by this call
+  // keep callback in case something comes up
 }
 
 //: Called at fixed intervals when using a timer.
@@ -475,14 +542,6 @@ void
 vgui_wx_adaptor::invalidate_canvas(void)
 {
   Refresh();
-
-#if 0
-  if (view_)
-  {
-    view_->GetDocument()->UpdateAllViews();
-  }
-  else { Refresh(); }
-#endif
 }
 
 //-------------------------------------------------------------------------
@@ -686,12 +745,14 @@ translate_key(int key_code)
       return vgui_CURSOR_RIGHT;
     case WXK_DOWN:
       return vgui_CURSOR_DOWN;
-    case WXK_PRIOR:
-      return vgui_PAGE_UP;
-    case WXK_NEXT:
-      return vgui_PAGE_DOWN;
-    // case WXK_PAGEUP    : return vgui_PAGE_UP;   // ***** ??
-    // case WXK_PAGEDOWN  : return vgui_PAGE_DOWN; // ***** ??
+//     case WXK_PRIOR:
+//       return vgui_PAGE_UP;
+//     case WXK_NEXT:
+//       return vgui_PAGE_DOWN;
+    case WXK_PAGEUP:
+      return vgui_PAGE_UP;   // ***** ??
+    case WXK_PAGEDOWN:
+      return vgui_PAGE_DOWN; // ***** ??
     case WXK_HOME:
       return vgui_HOME;
     case WXK_END:

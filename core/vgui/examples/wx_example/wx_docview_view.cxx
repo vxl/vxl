@@ -48,10 +48,9 @@ wx_docview_view::OnCreate(wxDocument * doc, long flags)
   int width, height;
   frame_->GetClientSize(&width, &height);
 
-  canvas_ = new vgui_wx_adaptor(frame_, wxID_ANY, wxDefaultPosition, wxSize(width, height));
+  canvas_ = new vgui_wx_adaptor(frame_, wxID_ANY, wx_adaptor_args, wxDefaultPosition, wxSize(width, height));
 
   canvas_->set_tableau(dynamic_cast<wx_docview_doc *>(doc)->tableau());
-  canvas_->set_view(this);
 
   return true;
 }

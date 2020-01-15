@@ -14,6 +14,7 @@ vgui_wx_adaptorXmlHandler::DoCreateResource()
 {
   vgui_wx_adaptor * adaptor =
     new vgui_wx_adaptor(m_parentAsWindow, GetID(), GetPosition(), GetSize(), GetStyle(), GetName());
+                          wx_adaptor_args,
 
   return adaptor;
 }

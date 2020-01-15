@@ -25,7 +25,9 @@
 
 #include "vgui/vgui_event.h"
 #include "vgui/vgui_gl.h"
+#include "vgui/vgui_utils.h"
 #include "vgui/vgui_projection_inspector.h"
+#include "vgui/vgui_adaptor.h"
 
 extern void post_to_status_bar(const char*);
 
@@ -118,7 +120,7 @@ bool xcv_image_tableau::handle(vgui_event const &e)
     base::handle(e);
     if (defined_) {
       // Draw a region of interest
-      glLineWidth(1);
+      vgui_utils::set_glLineWidth(1);
       glColor3f(0,1,0);
       glBegin(GL_LINE_LOOP);
       glVertex2f(roi_.x,roi_.y);
@@ -152,7 +154,7 @@ bool xcv_image_tableau::handle(vgui_event const &e)
     // RGB, because that avoids alignment problems with glReadPixels.
     vil1_rgba<GLubyte> pixel;
     //
-    glPixelZoom(1,1);
+    vgui_utils::set_glPixelZoom(1,1);
     glPixelTransferi(GL_MAP_COLOR,0);
     glPixelTransferi(GL_RED_SCALE,1);   glPixelTransferi(GL_RED_BIAS,0);
     glPixelTransferi(GL_GREEN_SCALE,1); glPixelTransferi(GL_GREEN_BIAS,0);
@@ -163,7 +165,8 @@ bool xcv_image_tableau::handle(vgui_event const &e)
     glPixelStorei(GL_PACK_SKIP_PIXELS,0); //
     glPixelStorei(GL_PACK_SKIP_ROWS,0);   //
 
-    glReadPixels(e.wx, e.wy,             //
+    double scale = vgui_adaptor::current->get_scale_factor();
+    glReadPixels(e.wx*scale, e.wy*scale, // Physical pixel location
                  1, 1,             // height and width (only one pixel)
                  GL_RGBA,          // format
                  GL_UNSIGNED_BYTE, // type

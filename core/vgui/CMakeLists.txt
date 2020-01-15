@@ -51,11 +51,10 @@ if(OPENGL_FOUND)
     find_package(MFC)
   endif()
 
-  #set(WXWIDGETS_USE_LIBS base core gl)
-  #find_package(wxWidgets)
-  #include(${VXL_CMAKE_DIR}/NewCMake/FindwxWidgets.cmake)
+  #apparently doesn't just require base core and gl due to wx setup.h
+  #find_package may need some refinement
   find_package(wxWidgets COMPONENTS base core gl)
-
+ 
   include_directories(${OPENGL_INCLUDE_DIR})
   if( GLUT_FOUND )
     include_directories(${GLUT_INCLUDE_DIR})
@@ -495,11 +494,14 @@ if(wxWidgets_FOUND)
       impl/wx/vgui_wx_dialog_impl.cxx impl/wx/vgui_wx_dialog_impl.h
       impl/wx/vgui_wx_menu.cxx        impl/wx/vgui_wx_menu.h
       impl/wx/vgui_wx_statusbar.cxx   impl/wx/vgui_wx_statusbar.h
+      impl/wx/vgui_wx_app.cxx         impl/wx/vgui_wx_app.h
     )
 
     set( vgui_sources ${vgui_sources} ${vgui_wx_sources} )
 
-    option(VXL_BUILD_VGUI_WX "Build extras for VGUI use in wxWidgets apps" NO)
+    #this option is not essential for the basic operation of vgui under wxWidgets
+    # should be considered experimental
+   option(VXL_BUILD_VGUI_WX "Build extras for VGUI use in wxWidgets apps" NO)
     if(VXL_BUILD_VGUI_WX)
       add_subdirectory(wx)
     endif()
@@ -550,15 +552,28 @@ endif()
 if(VGUI_USE_GTK2)
   target_link_libraries(${VXL_LIB_PREFIX}vgui ${GTK2_LIBRARIES})
 endif()
-if(VGUI_USE_WX)
-  if(wxWidgets_LINK_DIRECTORIES)
-    link_directories(${wxWidgets_LINK_DIRECTORIES})
-  endif()
 
-  if(wxWidgets_LIBRARIES)
-    target_link_libraries(${VXL_LIB_PREFIX}vgui ${wxWidgets_LIBRARIES})
-  endif()
-endif()
+if(VGUI_USE_WX)
+
+# the default build of wxWidgets requires strings to be unicode
+# vgui and dependent applications are implemented with standard strings
+# thus, the following removes the unicode requirement
+# if(MSVC)
+#   add_definitions("/DwxUSE_UNICODE=1" "/DUSE_OPENGL=1")
+# else()
+#   add_definitions("-DwxUSE_UNICODE=1" "-DUSE_OPENGL=1")
+# endif()
+
+ # the CMake GUI defines wxWidgets_LIB_DIR which will be filled in
+ # automatically if wxWidgets_LIB_DIR dir is in the path, otherwise can be
+ # instantiated manually. This path is not set properly by find_package(wxWidgets).
+ link_directories(${wxWidgets_LIB_DIR})
+
+ if(wxWidgets_LIBRARIES)
+   target_link_libraries(${VXL_LIB_PREFIX}vgui ${wxWidgets_LIBRARIES})
+ endif()
+
+endif(VGUI_USE_WX)
 
 # Basic vgui dependencies.
 # These should appear after the above, because most of

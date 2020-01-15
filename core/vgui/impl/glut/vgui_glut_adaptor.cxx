@@ -498,8 +498,8 @@ vgui_glut_adaptor::reshape(int width, int height)
   bool f = glut_dispatch(e);
   if (!f)
   {
-    glViewport(0, 0, width, height);
-    glScissor(0, 0, width, height);
+    vgui_utils::set_glViewport(0, 0, width, height);
+    vgui_utils::set_glScissor (0, 0, width, height);
   }
 
   // call reshape on the sub-contexts :
@@ -803,6 +803,7 @@ implement_static_callback(special_up, (int key, int x, int y), (key, x, y));
 //--------------------------------------------------------------------------------
 
 #ifdef DUMP_FRAME
+#  include "vgui/vgui_utils.h"
 #  include "vul/vul_sprintf.h"
 #  include "vil1/vil1_save.h"
 #  include "vil1/vil1_rgb.h"
@@ -811,62 +812,9 @@ implement_static_callback(special_up, (int key, int x, int y), (key, x, y));
 static void
 fsm_dump(char const * file)
 {
-  // get viewport size
-  GLint vp[4]; // x,y,w,h
-  glGetIntegerv(GL_VIEWPORT, vp);
-  unsigned x = vp[0];
-  unsigned y = vp[1];
-  unsigned w = vp[2];
-  unsigned h = vp[3];
+  vil1_memory_image_of<vil1_rgb<GLubyte> > colour_buffer =
+    vgui_utils::get_image();
 
-  // It's easier to get the buffer in vil1_rgba format and then convert to
-  // RGB, because that avoids alignment problems with glReadPixels.
-  static vil1_rgba<GLubyte> * pixels = 0;
-  if (!pixels)
-    pixels = new vil1_rgba<GLubyte>[w * h];
-
-  //
-  glPixelZoom(1, 1);
-  glPixelTransferi(GL_MAP_COLOR, 0);
-  glPixelTransferi(GL_RED_SCALE, 1);
-  glPixelTransferi(GL_RED_BIAS, 0);
-  glPixelTransferi(GL_GREEN_SCALE, 1);
-  glPixelTransferi(GL_GREEN_BIAS, 0);
-  glPixelTransferi(GL_BLUE_SCALE, 1);
-  glPixelTransferi(GL_BLUE_BIAS, 0);
-
-  //
-  glPixelStorei(GL_PACK_ALIGNMENT, 1);   // byte alignment.
-  glPixelStorei(GL_PACK_ROW_LENGTH, 0);  // use default value (the arg to pixel routine).
-  glPixelStorei(GL_PACK_SKIP_PIXELS, 0); //
-  glPixelStorei(GL_PACK_SKIP_ROWS, 0);   //
-
-  // read from the *back buffer*.
-  glReadBuffer(GL_BACK);
-
-  //
-  glReadPixels(x,
-               y, //
-               w,
-               h,                //
-               GL_RGBA,          // format
-               GL_UNSIGNED_BYTE, // type
-               pixels);
-
-  // glReadPixels() reads the pixels from the bottom of the viewport up.
-  // Copy them into a vil1_memory_image_of in the other order :
-  static vil1_memory_image_of<vil1_rgb<GLubyte>> colour_buffer;
-  colour_buffer.resize(w, h);
-
-  for (unsigned yy = 0; yy < h; ++yy)
-    for (unsigned xx = 0; xx < w; ++xx)
-    {
-      colour_buffer(xx, h - 1 - yy).r = pixels[xx + w * yy].r;
-      colour_buffer(xx, h - 1 - yy).g = pixels[xx + w * yy].g;
-      colour_buffer(xx, h - 1 - yy).b = pixels[xx + w * yy].b;
-    }
-
-  //
   vil1_save(colour_buffer, file, "pnm");
 }
 

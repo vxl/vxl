@@ -76,6 +76,10 @@ set( BRL_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/bmods )
 
 include_directories( ${BRL_INCLUDE_DIR} )
 
+# 3rd party libraries. These are dependenices of other BRL libraries, so it needs
+# to come before other add_subdirectories, or else they may be missing.
+add_subdirectory(b3p)
+
 # basic services package
 add_subdirectory(bbas)
 
@@ -86,9 +90,6 @@ endif()
 
 # process libraries
 add_subdirectory(bpro)
-
-# 3rd party libraries
-add_subdirectory(b3p)
 
 # cvg library
 add_subdirectory(cvg)

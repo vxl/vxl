@@ -12,6 +12,7 @@
 
 #include "vgui/vgui.h"
 #include "vgui/vgui_gl.h"
+#include "vgui/vgui_utils.h"
 #include "vgui/vgui_projection_inspector.h"
 
 xcv_picker_tableau::object_type xcv_picker_tableau::obj_type = none_enum;
@@ -63,7 +64,7 @@ void xcv_picker_tableau::draw_line()
 {
   if (!FIRSTPOINT)  // there is no point in drawing till we have a first point
   {
-    glLineWidth(2);
+    vgui_utils::set_glLineWidth(2);
     glColor3f(1,1,1);
 
     glBegin(GL_LINES);
