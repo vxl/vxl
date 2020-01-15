@@ -100,8 +100,7 @@ vil_blocked_image_resource::glue_blocks_together(
   switch (fmt)
   {
 #define GLUE_BLOCK_CASE(FORMAT, T)                                                                                     \
-  case FORMAT:                                                                                                         \
-  {                                                                                                                    \
+  case FORMAT: {                                                                                                       \
     vil_image_view<T> * output_image = new vil_image_view<T>(output_width, output_height, 1, nplanes());               \
     for (unsigned int bi = 0; bi < blocks.size(); bi++)                                                                \
     {                                                                                                                  \
@@ -217,8 +216,7 @@ vil_blocked_image_resource::trim_border_blocks(unsigned int i0,
       switch (vil_pixel_format_component_format(pixel_format()))
       {
 #define TRIM_BORDER_BLOCK_CASE(FORMAT, T)                                                                              \
-  case FORMAT:                                                                                                         \
-  {                                                                                                                    \
+  case FORMAT: {                                                                                                       \
     vil_image_view<T> currBlock = static_cast<vil_image_view<T> &>(*blocks[bi][bj]);                                   \
     vil_image_view<T> * croppedBlock = new vil_image_view<T>();                                                        \
     *croppedBlock = vil_crop(currBlock, bi0, bin - bi0 + 1, bj0, bjn - bj0 + 1);                                       \

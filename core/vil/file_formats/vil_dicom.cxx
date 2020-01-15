@@ -220,8 +220,7 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
   // Create an image resource to manage the pixel buffer
   //
 #  define DOCASE(fmt)                                                                                                  \
-    case fmt:                                                                                                          \
-    {                                                                                                                  \
+    case fmt: {                                                                                                        \
       typedef vil_pixel_format_type_of<fmt>::component_type T;                                                         \
       pixels_ = vil_new_image_resource_of_view(                                                                        \
         vil_image_view<T>(pixel_buf, (T *)pixel_buf->data(), ni(), nj(), nplanes(), nplanes(), ni() * nplanes(), 1));  \

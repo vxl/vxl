@@ -341,12 +341,12 @@ vgui_view_render(void const * pixels,
            fBmap,
            fAmap);
   // Set pixel transfer characteristics.
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);            // use byte alignment for now.
-  glPixelStorei(GL_UNPACK_ROW_LENGTH, w);           // size of image rows.
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);                       // use byte alignment for now.
+  glPixelStorei(GL_UNPACK_ROW_LENGTH, w);                      // size of image rows.
   vgui_utils::set_glPixelZoom(zoomx + 0.001f, zoomy + 0.001f); // something weird happens
-                                                    // for identity zoom
-  vgui_accelerate::instance()->vgui_glDrawPixels(w, // Size of pixel rectangle
-                                                 h, // to be written to frame buffer.
+                                                               // for identity zoom
+  vgui_accelerate::instance()->vgui_glDrawPixels(w,            // Size of pixel rectangle
+                                                 h,            // to be written to frame buffer.
                                                  format,
                                                  type,
                                                  pixels);

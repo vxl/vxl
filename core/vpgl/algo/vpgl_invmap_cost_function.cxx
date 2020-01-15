@@ -55,26 +55,22 @@ vpgl_invmap_cost_function::set_params(vnl_vector_fixed<double, 3> const & xyz, v
 {
   switch (pp_)
   {
-    case X_Y:
-    {
+    case X_Y: {
       x[0] = xyz[0];
       x[1] = xyz[1];
       break;
     }
-    case X_Z:
-    {
+    case X_Z: {
       x[0] = xyz[0];
       x[1] = xyz[2];
       break;
     }
-    case Y_Z:
-    {
+    case Y_Z: {
       x[0] = xyz[1];
       x[1] = xyz[2];
       break;
     }
-    default:
-    {
+    default: {
       x[0] = 0;
       x[1] = 0;
       std::cerr << "Improper prameterization in vpgl_invmap_cost_function\n";
@@ -88,26 +84,22 @@ vpgl_invmap_cost_function::set_params(vnl_vector_fixed<double, 3> const & xyz, v
   VXL_DEPRECATED_MACRO("vpgl_invmap_cost_function::set_params(, vnl_vector<double>&)");
   switch (pp_)
   {
-    case X_Y:
-    {
+    case X_Y: {
       x[0] = xyz[0];
       x[1] = xyz[1];
       break;
     }
-    case X_Z:
-    {
+    case X_Z: {
       x[0] = xyz[0];
       x[1] = xyz[2];
       break;
     }
-    case Y_Z:
-    {
+    case Y_Z: {
       x[0] = xyz[1];
       x[1] = xyz[2];
       break;
     }
-    default:
-    {
+    default: {
       x[0] = 0;
       x[1] = 0;
       std::cerr << "Improper prameterization in vpgl_invmap_cost_function\n";
@@ -121,29 +113,25 @@ vpgl_invmap_cost_function::point_3d(vnl_vector_fixed<double, 2> const & x, vnl_v
   // Switch on plane parameterization
   switch (pp_)
   {
-    case X_Y:
-    {
+    case X_Y: {
       xyz[0] = x[0];
       xyz[1] = x[1];
       xyz[2] = -(plane_[0] * x[0] + plane_[1] * x[1] + plane_[3]) / plane_[2];
       break;
     }
-    case X_Z:
-    {
+    case X_Z: {
       xyz[0] = x[0];
       xyz[2] = x[1];
       xyz[1] = -(plane_[0] * x[0] + plane_[2] * x[1] + plane_[3]) / plane_[1];
       break;
     }
-    case Y_Z:
-    {
+    case Y_Z: {
       xyz[1] = x[0];
       xyz[2] = x[1];
       xyz[0] = -(plane_[1] * x[0] + plane_[2] * x[1] + plane_[3]) / plane_[0];
       break;
     }
-    default:
-    {
+    default: {
       xyz[0] = 0;
       xyz[1] = 0;
       xyz[2] = 0;
@@ -159,29 +147,25 @@ vpgl_invmap_cost_function::point_3d(vnl_vector<double> const & x, vnl_vector_fix
   // Switch on plane parameterization
   switch (pp_)
   {
-    case X_Y:
-    {
+    case X_Y: {
       xyz[0] = x[0];
       xyz[1] = x[1];
       xyz[2] = -(plane_[0] * x[0] + plane_[1] * x[1] + plane_[3]) / plane_[2];
       break;
     }
-    case X_Z:
-    {
+    case X_Z: {
       xyz[0] = x[0];
       xyz[2] = x[1];
       xyz[1] = -(plane_[0] * x[0] + plane_[2] * x[1] + plane_[3]) / plane_[1];
       break;
     }
-    case Y_Z:
-    {
+    case Y_Z: {
       xyz[1] = x[0];
       xyz[2] = x[1];
       xyz[0] = -(plane_[1] * x[0] + plane_[2] * x[1] + plane_[3]) / plane_[0];
       break;
     }
-    default:
-    {
+    default: {
       xyz[0] = 0;
       xyz[1] = 0;
       xyz[2] = 0;

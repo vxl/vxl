@@ -683,8 +683,7 @@ vidl_convert_to_view(vidl_frame const & frame, vil_image_view_base & image, vidl
     {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #  define macro(F, T)                                                                                                  \
-    case F:                                                                                                            \
-    {                                                                                                                  \
+    case F: {                                                                                                          \
       vil_image_view<T> & dest_ref = static_cast<vil_image_view<T> &>(image);                                          \
       vil_convert_cast(wrapper, dest_ref);                                                                             \
       break;                                                                                                           \
@@ -771,8 +770,7 @@ vidl_convert_to_view(vidl_frame const & frame, vil_image_view_base & image, vidl
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #  define macro(F, T)                                                                                                  \
-    case F:                                                                                                            \
-    {                                                                                                                  \
+    case F: {                                                                                                          \
       vil_image_view<T> & dest_ref = static_cast<vil_image_view<T> &>(image);                                          \
       vil_convert_cast(temp, dest_ref);                                                                                \
       break;                                                                                                           \

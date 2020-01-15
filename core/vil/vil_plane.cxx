@@ -99,8 +99,7 @@ vil_plane_image_resource::put_view(const vil_image_view_base & im, unsigned i0, 
   switch (vs->pixel_format())
   {
 #define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
-  {                                                                                                                    \
+  case F: {                                                                                                            \
     const vil_image_view<T> view = static_cast<const vil_image_view<T> &>(im);                                         \
     vil_image_view<T> plane = vil_plane(static_cast<vil_image_view<T> &>(*vs), plane_);                                \
     if (view == plane)                                                                                                 \

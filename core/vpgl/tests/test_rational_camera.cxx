@@ -230,18 +230,15 @@ test_rational_camera()
 
       switch (choice)
       {
-        case vpgl_rational_order::VXL:
-        {
+        case vpgl_rational_order::VXL: {
           choice_str = "VXL";
           break;
         }
-        case vpgl_rational_order::RPC00B:
-        {
+        case vpgl_rational_order::RPC00B: {
           choice_str = "RPC00B";
           break;
         }
-        default:
-        {
+        default: {
           throw std::invalid_argument("vpgl_rational_order not recognized");
         }
       }

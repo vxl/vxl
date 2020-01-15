@@ -11,13 +11,14 @@
 
 #include <wx/statusbr.h>
 #ifdef __WXMSW__
-  #include <wx/msw/msvcrt.h>
+#  include <wx/msw/msvcrt.h>
 #endif
 //-------------------------------------------------------------------------
 // vgui_wx_statusbar implementation - construction & destruction.
 //-------------------------------------------------------------------------
 //: Constructor, creates a wxWidgets status bar and displays it.
-vgui_wx_statusbar::vgui_wx_statusbar(void): widget_(0)
+vgui_wx_statusbar::vgui_wx_statusbar(void)
+  : widget_(0)
 {
   statusbuf_ = new vgui_statusbuf(this); // leaks
 }

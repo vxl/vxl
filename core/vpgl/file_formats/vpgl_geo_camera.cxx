@@ -827,8 +827,7 @@ vpgl_geo_camera::b_read(vsl_b_istream & is)
   vsl_b_read(is, ver);
   switch (ver)
   {
-    case 1:
-    {
+    case 1: {
       unsigned nrows, ncols;
       vsl_b_read(is, nrows);
       vsl_b_read(is, ncols);

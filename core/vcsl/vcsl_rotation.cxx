@@ -157,8 +157,7 @@ vcsl_rotation::quaternion(double time) const
 
     switch (interpolator_[i])
     {
-      case vcsl_linear:
-      {
+      case vcsl_linear: {
         vnl_quaternion<double> q0, q1;
         if (mode_2d_)
         {

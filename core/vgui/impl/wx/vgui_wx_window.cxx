@@ -21,7 +21,7 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 #ifdef __WXMSW__
-#include <wx/msw/msvcrt.h>
+#  include <wx/msw/msvcrt.h>
 #endif
 //-------------------------------------------------------------------------
 // vgui_wx_window implementation - construction & destruction.
@@ -33,7 +33,7 @@
 //
 //: Constructor - create a new window.
 vgui_wx_window::vgui_wx_window(int width, int height, const char * title)
-  : wxFrame((wxFrame*)nullptr, wxID_ANY, wxString(title, wxConvUTF8)) //, wxDefaultPosition, wxSize(width, height)))
+  : wxFrame((wxFrame *)nullptr, wxID_ANY, wxString(title, wxConvUTF8)) //, wxDefaultPosition, wxSize(width, height)))
   , menu_(0)
 {
   this->SetWindowStyle(this->GetWindowStyle() | wxFULL_REPAINT_ON_RESIZE);
@@ -44,7 +44,7 @@ vgui_wx_window::vgui_wx_window(int width, int height, const char * title)
 
 //: Constructor - create a new window with a menubar.
 vgui_wx_window::vgui_wx_window(int width, int height, const vgui_menu & menubar, const char * title)
-  : wxFrame((wxFrame*)nullptr, wxID_ANY, wxString(title, wxConvUTF8)) //, wxDefaultPosition, wxSize(width, height))
+  : wxFrame((wxFrame *)nullptr, wxID_ANY, wxString(title, wxConvUTF8)) //, wxDefaultPosition, wxSize(width, height))
   , menu_(0)
 {
   wxSize sz(width, height);
@@ -57,7 +57,7 @@ vgui_wx_window::vgui_wx_window(int width, int height, const vgui_menu & menubar,
 //: Destructor.
 vgui_wx_window::~vgui_wx_window(void)
 {
-  //delete statusbar_;
+  // delete statusbar_;
   adaptor_->Destroy();
 }
 
@@ -66,7 +66,7 @@ void
 vgui_wx_window::init_window(void)
 {
   adaptor_ = new vgui_wx_adaptor(this);
-  adaptor_->set_window(nullptr);//stop scroll errors
+  adaptor_->set_window(nullptr); // stop scroll errors
   statusbar_ = std::shared_ptr<vgui_wx_statusbar>(new vgui_wx_statusbar);
   statusbar_->set_widget(CreateStatusBar());
 
@@ -130,7 +130,7 @@ vgui_wx_window::get_adaptor(void)
 vgui_statusbar *
 vgui_wx_window::get_statusbar(void)
 {
-  //only called to write to statusbar so returning ptr is ok
+  // only called to write to statusbar so returning ptr is ok
   return statusbar_.get();
 }
 
@@ -204,7 +204,9 @@ vgui_wx_window::set_vscrollbar(int pos)
   this->SetScrollPos(wxVERTICAL, pos);
   return temp;
 }
-void vgui_wx_window::add_close_event() {
-    wxCloseEvent e;
-    this->AddPendingEvent(e);
+void
+vgui_wx_window::add_close_event()
+{
+  wxCloseEvent e;
+  this->AddPendingEvent(e);
 }

@@ -286,8 +286,7 @@ vil_new_image_view_base_sptr(const vil_image_view_base & src)
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #  define macro(F, T)                                                                                                  \
-    case F:                                                                                                            \
-    {                                                                                                                  \
+    case F: {                                                                                                          \
       dest = new vil_image_view<T>(src);                                                                               \
       break;                                                                                                           \
     }

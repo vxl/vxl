@@ -88,7 +88,7 @@ test_debug()
     bool caught_exception = false;
     try
     {
-      //NOTE the following line can not be a const or constexpr 
+      // NOTE the following line can not be a const or constexpr
       //     otherwise the warning of too large of memory becomes a compiler
       //     error instead of a warning.
       std::size_t too_much = std::numeric_limits<std::size_t>::max();
@@ -103,7 +103,7 @@ test_debug()
 #  pragma GCC diagnostic pop
 #endif
       p[0] = '\0';
-      delete [] p;
+      delete[] p;
     }
     catch (const std::bad_alloc &)
     {

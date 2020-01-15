@@ -37,7 +37,7 @@
 #include <wx/statbox.h>
 #include <wx/button.h>
 #ifdef __WXMSW__
-#include <wx/msw/msvcrt.h> 
+#  include <wx/msw/msvcrt.h>
 #endif
 
 #ifndef wxCommandEventHandler // wxWidgets-2.5.3 doesn't define this
@@ -375,14 +375,13 @@ vgui_wx_dialog_impl::build_wx_dialog(void)
       }
       break;
 
-      case inline_tabl:
-      { // create variable scope for adaptor
+      case inline_tabl: { // create variable scope for adaptor
         // ***** error if more than one inline tableau in this dialog
         // JLM update constructor to wx 3.0
         vgui_wx_adaptor * adaptor =
           new vgui_wx_adaptor(dialog_,
                               wxID_ANY,
-                              nullptr, //null attribute list
+                              nullptr, // null attribute list
                               wxDefaultPosition,
                               wxSize(static_cast<vgui_wx_dialog_inline_tab *>(e->widget)->width,
                                      static_cast<vgui_wx_dialog_inline_tab *>(e->widget)->height),
@@ -398,11 +397,11 @@ vgui_wx_dialog_impl::build_wx_dialog(void)
 
         // adaptor->post_redraw();
         adaptor_ = adaptor;
-      // adaptor_->make_current();// is this necessary?
+        // adaptor_->make_current();// is this necessary?
       }
       break;
-    case line_br:
-      break;//need to find out what line_br does FIXME JLM
+      case line_br:
+        break; // need to find out what line_br does FIXME JLM
       default:
         std::cerr << "Unknown type = " << e->type << std::endl;
     }

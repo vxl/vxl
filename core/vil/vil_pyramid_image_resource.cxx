@@ -196,8 +196,7 @@ vil_pyramid_image_resource::blocked_decimate(vil_blocked_image_resource_sptr con
           switch (fmt)
           {
 #define CONVERT_BLOCK_CASE(FORMAT, T)                                                                                  \
-  case FORMAT:                                                                                                         \
-  {                                                                                                                    \
+  case FORMAT: {                                                                                                       \
     vil_image_view<T> out_blk;                                                                                         \
     vil_convert_cast(dec_blk, out_blk);                                                                                \
     if (!dec_resc->put_block(bi / 2, bj / 2, out_blk))                                                                 \
@@ -223,8 +222,7 @@ vil_pyramid_image_resource::blocked_decimate(vil_blocked_image_resource_sptr con
       return true;
     } // end of nplanes = 1 (grey scale)
     case 3:
-    case 4:
-    {
+    case 4: {
       std::vector<std::vector<std::vector<vil_image_view<float>>>> buf(2);
       std::vector<std::vector<vil_image_view<float>>> nbrhd(2);
       for (unsigned int k = 0; k < 2; ++k)

@@ -25,7 +25,7 @@
 #  define wxEventHandler(func) (wxObjectEventFunction) wxStaticCastEvent(wxEventFunction, &func)
 #endif
 #ifdef __WXMSW__
-#include <wx/msw/msvcrt.h> 
+#  include <wx/msw/msvcrt.h>
 #endif
 #include <cassert>
 
@@ -36,7 +36,7 @@
 namespace
 {
 //: Event type for dynamic timer events.
-  // TODO timer implementation is incomplete (JLM)
+// TODO timer implementation is incomplete (JLM)
 const wxEventType wxEVT_VGUI_TIMER = wxNewEventType();
 
 inline bool
@@ -63,19 +63,20 @@ IMPLEMENT_CLASS(vgui_wx_adaptor, wxGLCanvas)
 vgui_menu vgui_wx_adaptor::last_popup_;
 
 // interface for 3.0
-   vgui_wx_adaptor::vgui_wx_adaptor(wxWindow *parent,
-                       wxWindowID id,
-                       const int *attributes,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const wxPalette& palette):
-                       wxGLCanvas(parent, id, attributes, pos,size,style|wxFULL_REPAINT_ON_RESIZE|wxBORDER_SUNKEN, name)
+vgui_wx_adaptor::vgui_wx_adaptor(wxWindow * parent,
+                                 wxWindowID id,
+                                 const int * attributes,
+                                 const wxPoint & pos,
+                                 const wxSize & size,
+                                 long style,
+                                 const wxString & name,
+                                 const wxPalette & palette)
+  : wxGLCanvas(parent, id, attributes, pos, size, style | wxFULL_REPAINT_ON_RESIZE | wxBORDER_SUNKEN, name)
   , redraw_posted_(true)
   , overlay_redraw_posted_(true)
   , idle_request_posted_(false)
-  , destroy_posted_(false), window_(nullptr)
+  , destroy_posted_(false)
+  , window_(nullptr)
 {
 
   wxLogTrace(wxTRACE_RefCount, wxT("vgui_wx_adaptor::vgui_wx_adaptor"));
@@ -103,10 +104,10 @@ vgui_wx_adaptor::vgui_wx_adaptor(wxWindow * parent,
 //: Destructor.
 vgui_wx_adaptor::~vgui_wx_adaptor()
 {
-  wxWindow* win = this->GetParent();
-  wxEvtHandler* hnd = win->GetEventHandler();
+  wxWindow * win = this->GetParent();
+  wxEvtHandler * hnd = win->GetEventHandler();
   bool hand_neq_win = hnd != win;
-  if(hand_neq_win)//can't remove self as event handler
+  if (hand_neq_win) // can't remove self as event handler
     win->PopEventHandler(true);
   wxLogTrace(wxTRACE_RefCount, wxT("vgui_wx_adaptor::~vgui_wx_adaptor"));
 }
@@ -115,15 +116,16 @@ vgui_wx_adaptor::~vgui_wx_adaptor()
 // vgui_wx_adaptor implementation - virtual functions from vgui_adaptor.
 //-------------------------------------------------------------------------
 
-double vgui_wx_adaptor::get_scale_factor() const
+double
+vgui_wx_adaptor::get_scale_factor() const
 {
-  #ifdef __WXX11__
-    // For some reason, X11 wx gives a scale factor that is not related to
-    // the logical/physical pixel difference between glViewport and wxGLCanvas
-    return 1.0;
-  #else
-    return GetContentScaleFactor();
-  #endif
+#ifdef __WXX11__
+  // For some reason, X11 wx gives a scale factor that is not related to
+  // the logical/physical pixel difference between glViewport and wxGLCanvas
+  return 1.0;
+#else
+  return GetContentScaleFactor();
+#endif
 }
 
 //: Redraw the rendering area.
@@ -185,7 +187,7 @@ vgui_wx_adaptor::post_destroy(void)
     destroy_posted_ = true;
     Close();
   }
-  
+
   vgui_macro_report_errors;
 }
 /*
@@ -253,19 +255,21 @@ invalidated (i.e. marked as requiring a redraw).
 Use Refresh() first if you want to immediately redraw the window unconditionally.
 */
 void
-vgui_wx_adaptor::on_size(wxSizeEvent& event)
+vgui_wx_adaptor::on_size(wxSizeEvent & event)
 {
-  // c/o doublemax https://forums.wxwidgets.org/viewtopic.php?t=29948
-  // And reading glx11.cpp's SetCurrent and msw's SetCurrent
-  // IsShown SHOULD have worked https://trac.wxwidgets.org/ticket/4343
-  // Surprise! it didn't
-  #if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__)
-    if(!GetXWindow() || !IsShown()) return;
-  #elif defined(__WXMSW__)
-    if(!GetHDC() || !IsShown()) return;
-  #endif
+// c/o doublemax https://forums.wxwidgets.org/viewtopic.php?t=29948
+// And reading glx11.cpp's SetCurrent and msw's SetCurrent
+// IsShown SHOULD have worked https://trac.wxwidgets.org/ticket/4343
+// Surprise! it didn't
+#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__)
+  if (!GetXWindow() || !IsShown())
+    return;
+#elif defined(__WXMSW__)
+  if (!GetHDC() || !IsShown())
+    return;
+#endif
 
-  SetCurrent(*context_);//necesssary to insure the canvas is valid
+  SetCurrent(*context_); // necesssary to insure the canvas is valid
   dispatch_to_tableau(vgui_RESHAPE);
   post_redraw();
   Update();
@@ -277,7 +281,7 @@ vgui_wx_adaptor::on_paint(wxPaintEvent & WXUNUSED(event))
 {
   vgui_macro_report_errors;
   // must always be here
-  //wxPaintDC dc(this); //previous call
+  // wxPaintDC dc(this); //previous call
 
   /*Do not call the derived class' paint function from any function in your code... ever.
     If you need to redraw the GL canvas, call my_canvas_window->Refresh();,
@@ -442,14 +446,14 @@ vgui_wx_adaptor::on_mouse_event(wxMouseEvent & event)
   e.button = translate_mouse_button(event.GetButton());
   e.type = translate_mouse_event_type(event);
 
-  
-  //wxWidgets on Linux returns mouse position in logical pixel coordinates
-  //not gl canvas screen coordinates. On Windows, the mouse position does
-  //take into account dpi scale on high resolution screens, so vgui::dpi_scale_
-  //is set to 1, while on Linux it is set to ::GetContentScaleFactor().
+
+  // wxWidgets on Linux returns mouse position in logical pixel coordinates
+  // not gl canvas screen coordinates. On Windows, the mouse position does
+  // take into account dpi scale on high resolution screens, so vgui::dpi_scale_
+  // is set to 1, while on Linux it is set to ::GetContentScaleFactor().
   e.wx = event.GetX();
-  e.wy = get_height() - event.GetY(); //needed to make (0,0) lower left as a Cartesian system
-  
+  e.wy = get_height() - event.GetY(); // needed to make (0,0) lower left as a Cartesian system
+
   // ***** what exactly goes here??
   e.timestamp = 0;
 
@@ -523,7 +527,7 @@ vgui_wx_adaptor::on_idle(wxIdleEvent & event)
 void
 vgui_wx_adaptor::on_close(wxCloseEvent & event)
 {
-  //apparently everything done to close is taken care of by this call
+  // apparently everything done to close is taken care of by this call
   // keep callback in case something comes up
 }
 
@@ -745,12 +749,12 @@ translate_key(int key_code)
       return vgui_CURSOR_RIGHT;
     case WXK_DOWN:
       return vgui_CURSOR_DOWN;
-//     case WXK_PRIOR:
-//       return vgui_PAGE_UP;
-//     case WXK_NEXT:
-//       return vgui_PAGE_DOWN;
+      //     case WXK_PRIOR:
+      //       return vgui_PAGE_UP;
+      //     case WXK_NEXT:
+      //       return vgui_PAGE_DOWN;
     case WXK_PAGEUP:
-      return vgui_PAGE_UP;   // ***** ??
+      return vgui_PAGE_UP; // ***** ??
     case WXK_PAGEDOWN:
       return vgui_PAGE_DOWN; // ***** ??
     case WXK_HOME:

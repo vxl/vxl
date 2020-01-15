@@ -560,8 +560,7 @@ vil_openjpeg_image ::validate_format()
 
   switch (this->impl_->opj_codec_format_)
   {
-    case CODEC_JP2:
-    {
+    case CODEC_JP2: {
       // See specification ISO/IEC 15444-1 Part 1
       unsigned char sig[12] = { 0x00, 0x00, 0x00, 0x0C, 0x6A, 0x50, 0x20, 0x20, 0x0D, 0x0A, 0x87, 0x0A };
       unsigned char sig_file[12];
@@ -577,8 +576,7 @@ vil_openjpeg_image ::validate_format()
       break; // Although supported by OpenJPEG, the JPT codec
              // (JPEG2000 JPIP) is not yet implemented by the
              // vil implementation
-    case CODEC_J2K:
-    {
+    case CODEC_J2K: {
       // See specification ISO/IEC 15444-1 Part 1
       unsigned char sig[2] = { 0xFF, 0x4F };
       unsigned char sig_file[2];

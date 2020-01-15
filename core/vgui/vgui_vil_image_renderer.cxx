@@ -228,8 +228,7 @@ vgui_vil_image_renderer::render_directly(vgui_range_map_params_sptr const & rmp)
 #endif
   switch (format)
   {
-    case VIL_PIXEL_FORMAT_BYTE:
-    {
+    case VIL_PIXEL_FORMAT_BYTE: {
       vgui_range_map<unsigned char> rm(*rmp);
       switch (the_image_->nplanes())
       {
@@ -388,8 +387,7 @@ vgui_vil_image_renderer::render_directly(vgui_range_map_params_sptr const & rmp)
       vgui_range_map<unsigned short> rm(*rmp);
       switch (the_image_->nplanes())
       {
-        case 1:
-        {
+        case 1: {
           vbl_array_1d<float> fLmap = rm.fLmap();
           if (!fLmap.size())
             return false;

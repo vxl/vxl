@@ -23,7 +23,7 @@
 #endif
 #include <cassert>
 #ifdef __WXMSW__
-#include <wx/msw/msvcrt.h> 
+#  include <wx/msw/msvcrt.h>
 #endif
 //-------------------------------------------------------------------------
 // Private helpers - declarations.
