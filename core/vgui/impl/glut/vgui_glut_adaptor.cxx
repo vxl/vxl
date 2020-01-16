@@ -19,6 +19,7 @@
 #endif
 
 #include "vgui/vgui_glut.h"
+#include "vgui/vgui_utils.h"
 #include "vgui/vgui_macro.h"
 #include "vgui/vgui_popup_params.h"
 #include <vgui/internals/vgui_overlay_helper.h>
