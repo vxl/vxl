@@ -1023,7 +1023,8 @@ void bwm_site_mgr::load_cam_tableau()
 void bwm_site_mgr::load_fiducial_tableau()
 {
   std::string ext, name, img_file, fid_file, empty="";
-  vgui_dialog params ("Fiducial Tableau (fid xor img )");
+  if (tk_name_ == "mfc") {
+    vgui_dialog_extensions params("Fiducial Tableau (fid xor img )");
     params.field("Tableau Name", name);
     params.line_break();
     params.file("Image...", ext, img_file);
@@ -1032,6 +1033,17 @@ void bwm_site_mgr::load_fiducial_tableau()
     params.line_break();
     if (!params.ask())
       return;
+  }else {
+    vgui_dialog params("Fiducial Tableau (fid xor img )");
+    params.field("Tableau Name", name);
+    params.line_break();
+    params.file("Image...", ext, img_file);
+    params.line_break();
+    params.file("Fiducials...", ext, fid_file);
+    params.line_break();
+    if (!params.ask())
+      return;
+  }
     // the fid file contains the data to populate a fiducial tableau (like a site file)
     // initially just load a composite fiducial placement image and save the resulting
     // fiducial correspondences to a fid file path defined by the fiducial tableau popup
