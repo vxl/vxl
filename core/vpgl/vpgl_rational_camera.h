@@ -110,10 +110,10 @@ class vpgl_rational_order_func {
 
   // initializer_list for iteration
   // e.g. "for (auto item : vpgl_rational_order_func::initializer_list) {...}"
-  static constexpr std::array<vpgl_rational_order,2> initializer_list{
+  static constexpr std::array<vpgl_rational_order,2> initializer_list{{
       vpgl_rational_order::VXL,
       vpgl_rational_order::RPC00B
-  };
+  }};
 
  private:
   vpgl_rational_order_func() = delete;
