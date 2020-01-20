@@ -5,7 +5,7 @@
 #include <utility>
 #include <list>
 #include "vgui_glut_adaptor.h"
-#include <vgui/vgui_utils.h>
+
 //:
 // \file
 // \author fsm
