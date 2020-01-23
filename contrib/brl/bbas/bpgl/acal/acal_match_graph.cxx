@@ -323,7 +323,7 @@ acal_match_graph::compute_focus_tracks()
       if (n_connected_cams < params_.min_n_cams_)
         continue;
       // update metric
-      metric += static_cast<double>((n_connected_cams - 2) * (n_connected_cams - 2) * ntrks * (n_connected_cams / conn_comps_[c].size()));
+      metric += static_cast<double>((n_connected_cams - 2) * (n_connected_cams - 2) * ntrks * (static_cast<double>(n_connected_cams) / conn_comps_[c].size()));
       c_tracks[focus_v->cam_id_] = joint_tracks;
       }
     focus_track_metric_[c] = metric;
