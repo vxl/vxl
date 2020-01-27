@@ -297,6 +297,12 @@ acal_match_graph::compute_focus_tracks()
 {
   size_t nc = conn_comps_.size();
   focus_track_metric_.resize(nc, 0.0);
+
+  size_t V = 0;
+  for (size_t c = 0; c < nc; ++c) {
+    V += conn_comps_[c].size();
+  }
+
   for (size_t c = 0; c < nc; ++c) {
     size_t nv = conn_comps_[c].size();
     if (nv == 0) {
@@ -323,10 +329,10 @@ acal_match_graph::compute_focus_tracks()
       if (n_connected_cams < params_.min_n_cams_)
         continue;
       // update metric
-      metric += static_cast<double>((n_connected_cams - 2) * (n_connected_cams - 2) * ntrks * (static_cast<double>(n_connected_cams) / conn_comps_[c].size()));
+      metric += static_cast<double>((n_connected_cams - 2) * (n_connected_cams - 2) * ntrks);
       c_tracks[focus_v->cam_id_] = joint_tracks;
       }
-    focus_track_metric_[c] = metric;
+    focus_track_metric_[c] = metric * (static_cast<double>(nv) / V);
     focus_tracks_[c] = c_tracks;
   }
 }
