@@ -1,6 +1,7 @@
 // This is bbas/bpgl/bpgl_geotif_camera.h
 #ifndef bpgl_geotif_camera_h_
 #define bpgl_geotif_camera_h_
+
 //:
 // \file
 // \brief Converts a vpgl_camera to a geographic camera based on geotiff header information
@@ -19,18 +20,20 @@
 //  for the point cloud, a lvcs is required to relate the point coordinates to geographic coordinates, not necessarily
 //  in the same as the geographic coordinate system as the geotif image.
 //
+
 #include <iostream>
-#include <string>
 #include <memory>
+#include <string>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vnl/vnl_matrix.h>
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vil/vil_image_resource.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon.h>
+#include <vil/vil_image_resource.h>
+#include <vnl/vnl_matrix.h>
+#include <vpgl/file_formats/vpgl_geo_camera.h>
+#include <vpgl/vpgl_camera.h>
+
 // templated since may want to project <float> points
 template <class T>
 class bpgl_geotif_camera : vpgl_camera<T>
@@ -38,8 +41,11 @@ class bpgl_geotif_camera : vpgl_camera<T>
  public:
   //: default constructor - may want a container of cameras
   //  the default member values represent the most common case, e.g. a local_rational_camera
- bpgl_geotif_camera():has_lvcs_(true), gcam_has_wgs84_cs_(true),
-    elev_org_at_zero_(true), is_utm_(false), project_local_points_(true),scale_defined_(false), projection_enabled_(false){}
+  bpgl_geotif_camera()
+    : has_lvcs_(true), gcam_has_wgs84_cs_(true),
+      elev_org_at_zero_(true), is_utm_(false),
+      project_local_points_(true), scale_defined_(false),
+      projection_enabled_(false) {}
 
   virtual ~bpgl_geotif_camera() = default;
 
@@ -110,9 +116,9 @@ class bpgl_geotif_camera : vpgl_camera<T>
 
   //: the geographic matrix extracted from the geotiff header
   vnl_matrix<T> matrix() const {return matrix_;}
-  
+
   //: spacing between dsm samples in meters
-  T dsm_spacing() const{return dsm_spacing_;} 
+  T dsm_spacing() const {return dsm_spacing_;}
 
   //: utm CS information
   int utm_zone() const {return utm_zone_;}
@@ -122,7 +128,7 @@ class bpgl_geotif_camera : vpgl_camera<T>
   // can be either wgs84 or utm depending on CS of geotiff image
   vpgl_lvcs_sptr lower_left_lvcs(T elev_ll = T(0)) const;
 
-  //: if not empty, defines the geographic region of validity of the camera  
+  //: if not empty, defines the geographic region of validity of the camera
   // both a polygonal region and an enclosing bounding box are provided
   vgl_box_2d<T> geo_bb() const {return geo_bb_;}
   vgl_polygon<T> geo_boundary() const {return geo_boundary_;}
