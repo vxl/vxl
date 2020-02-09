@@ -26,7 +26,8 @@ class bwm_site_mgr
   static bwm_site_mgr* instance();
 
   virtual ~bwm_site_mgr();
-
+  //: a site consists of multiple tableaux
+  // also defines specific paths to data such as images and cameras
   void init_site();
   void create_site();
   void edit_site();
@@ -34,10 +35,11 @@ class bwm_site_mgr
   void save_site();
   void load_video_site();
   void save_video_site();
-
+  //: load various types of tablaux and their data
   void load_img_tableau();
   void load_cam_tableau();
   void load_video_tableau();
+  void load_fiducial_tableau();
   void save_video_world_points_vrml();
   void save_video_cameras_vrml();
   void save_video_cams_and_world_pts_vrml();
@@ -49,6 +51,11 @@ class bwm_site_mgr
   //: depth map scene io
   void load_depth_map_scene();
   void save_depth_map_scene();
+
+  //: config parser parses an XML file for the site/tableau configurations
+  // if path is null then a dialog asks for the path
+  bwm_io_config_parser* site_parser(std::string const& path = "");//user has to delete
+
  private:
   bwm_site_mgr();
   static bwm_site_mgr* instance_;
@@ -85,6 +92,6 @@ class bwm_site_mgr
                           int *choices,
                           double &lat, double &lon, double &elev);
 
-  bwm_io_config_parser* parse_config();
+  bwm_io_config_parser* parse_config(std::string const& path = "");
 };
 #endif // bwm_site_mgr_h_
