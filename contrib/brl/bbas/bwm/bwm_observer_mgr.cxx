@@ -158,6 +158,7 @@ void bwm_observer_mgr::set_corr_mode()
   int mode = bwm_observer_mgr::instance()->corr_mode();
   modes.push_back("Image to Image");
   modes.push_back("World to Image");
+  modes.push_back("Image to Fiducial");
 
   std::vector<std::string> n_corrs;
   int n = bwm_observer_mgr::instance()->n_corrs();
@@ -168,6 +169,7 @@ void bwm_observer_mgr::set_corr_mode()
   int t = bwm_observer_mgr::instance()->corr_type();
   types.push_back("Feature Correspondence ");
   types.push_back("Terrain Correspondence ");
+  types.push_back("Fiducial Position ");
 
   std::string name, type;
   params.choice("Correspondence Mode", modes, mode);
@@ -186,15 +188,19 @@ void bwm_observer_mgr::set_corr_mode()
                << " can't use WORLD_TO_IMAGE mode since the 3-d world"
                << " point is not defined" << std::endl;
     }
+  }else if(mode ==bwm_observer_mgr::IMAGE_TO_IMAGE){
+    corr_mode_ =  bwm_observer_mgr::IMAGE_TO_IMAGE;
+  }else if(mode ==bwm_observer_mgr::FIDUCIAL_IMAGE_LOCATION){
+    corr_mode_ =  bwm_observer_mgr::FIDUCIAL_IMAGE_LOCATION;
   }
-
   if (t == bwm_observer_mgr::FEATURE_CORR) {
     corr_type_ = bwm_observer_mgr::FEATURE_CORR;
   }
   else if (t == bwm_observer_mgr::TERRAIN_CORR) {
     corr_type_ = bwm_observer_mgr::TERRAIN_CORR;
-  }
-  else
+  }else if(t == bwm_observer_mgr::FIDUCIAL_CORR){
+    corr_type_ = bwm_observer_mgr::FIDUCIAL_CORR;
+  }else
     std::cout << "In bwm_observer_mgr::set_corr_mode() Undefined TYPE - " << t << std::endl;
 
   corr_mode_ = bwm_observer_mgr::IMAGE_TO_IMAGE;

@@ -33,7 +33,13 @@ class bwm_io_config_parser : public expatpp
   std::string corresp_type() const {return corr_type_; }
   std::vector<vsol_point_3d> corresp_world_pts() const {return corresp_world_pts_; }
 #endif
-
+  // accessors for fiducial information
+  std::vector<std::pair<float, float> > fiducial_locations() const {return fid_locs_;}
+  std::string fid_mode() const {return fid_mode_;}
+  std::string fid_type() const {return fid_type_;}
+  std::string fid_site_name() const {return fid_site_name_;}
+  std::string fid_image_path() const {return image_path_;}
+  std::string fiducial_path() const {return fiducial_path_;}
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
   virtual void endElement(const XML_Char* name);
@@ -72,8 +78,13 @@ class bwm_io_config_parser : public expatpp
   std::vector<vsol_point_3d> corresp_world_pts_;
 #endif
   std::vector<std::pair<std::string, vsol_point_2d> > corresp_elm_;
-
   void trim_string(std::string& s);
+  // members for reading the fiducial file 
+  std::string fid_site_name_;
+  std::string fiducial_path_;
+  std::string fid_mode_;
+  std::string fid_type_;
+  std::vector<std::pair<float, float> > fid_locs_;
 };
 
 #endif

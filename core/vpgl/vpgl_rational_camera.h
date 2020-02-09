@@ -291,7 +291,7 @@ class vpgl_rational_camera : public vpgl_camera<T>
   void set_scale(const coor_index coor_index, const T scale)
     {scale_offsets_[coor_index].set_scale(scale);}
 
-  //:set a specific scale value
+  //:set a specific offset value
   void set_offset(const coor_index coor_index, const T offset)
     {scale_offsets_[coor_index].set_offset(offset);}
 

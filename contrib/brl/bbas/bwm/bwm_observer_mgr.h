@@ -24,9 +24,9 @@
 class bwm_observer_mgr
 {
  public:
-  typedef enum {IMAGE_TO_IMAGE, WORLD_TO_IMAGE, WORLD_TO_WORLD} BWM_CORR_MODE;
+  typedef enum {IMAGE_TO_IMAGE, WORLD_TO_IMAGE, WORLD_TO_WORLD, FIDUCIAL_IMAGE_LOCATION} BWM_CORR_MODE;
   typedef enum {SINGLE_PT_CORR, MULTIPLE_CORRS} BWM_N_CORRS;
-  typedef enum {FEATURE_CORR, TERRAIN_CORR} BWM_CORR_TYPE;
+  typedef enum {FEATURE_CORR, TERRAIN_CORR, FIDUCIAL_CORR} BWM_CORR_TYPE;
 
   static bwm_observer_mgr* instance();
 
@@ -141,6 +141,7 @@ class bwm_observer_mgr
   std::vector<bwm_corr_sptr> corr_list_;
   std::vector<bwm_corr_sptr> terrain_corr_list_;
   std::vector<bwm_3d_corr_sptr> site_to_site_corr_list_;
+
 #if 0
   bool world_point_valid_;
   vgl_point_3d<double> corr_world_pt_;

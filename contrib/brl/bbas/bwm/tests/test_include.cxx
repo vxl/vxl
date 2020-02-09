@@ -24,13 +24,13 @@
 #include <bwm/bwm_observer.h>
 #include <bwm/bwm_observer_cam.h>
 #include <bwm/bwm_observer_generic_cam.h>
-#include <bwm/bwm_observer_geo_cam.h>
 #include <bwm/bwm_observer_img.h>
 #include <bwm/bwm_observer_mgr.h>
 #include <bwm/bwm_observer_proj_cam.h>
 #include <bwm/bwm_observer_rat_cam.h>
 #include <bwm/bwm_observer_vgui.h>
 #include <bwm/bwm_observer_video.h>
+#include <bwm/bwm_observer_fiducial.h>
 #include <bwm/bwm_plane_fitting_lsf.h>
 #include <bwm/bwm_popup_menu.h>
 #include <bwm/bwm_process_commands.h>
@@ -40,7 +40,6 @@
 #include <bwm/bwm_tableau_cam.h>
 #include <bwm/bwm_tableau_factory.h>
 #include <bwm/bwm_tableau_generic_cam.h>
-#include <bwm/bwm_tableau_geo_cam.h>
 #include <bwm/bwm_tableau_img.h>
 #include <bwm/bwm_tableau_mgr.h>
 #include <bwm/bwm_tableau_proj_cam.h>
@@ -48,6 +47,7 @@
 #include <bwm/bwm_tableau_sptr.h>
 #include <bwm/bwm_tableau_text.h>
 #include <bwm/bwm_tableau_video.h>
+#include <bwm/bwm_tableau_fiducial.h>
 #include <bwm/bwm_texture_map_generator.h>
 #include <bwm/bwm_world.h>
 

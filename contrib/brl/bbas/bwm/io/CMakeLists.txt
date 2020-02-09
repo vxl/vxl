@@ -2,8 +2,9 @@
 
 set(bwm_io_sources
    bwm_io_structs.h
-   bwm_site.h                  bwm_site.cxx
+   bwm_site.h                bwm_site.cxx
    bwm_site_sptr.h
+   bwm_fiducial_io.h         bwm_fiducial_io.cxx
 )
 aux_source_directory(Templates bwm_io_sources)
 
