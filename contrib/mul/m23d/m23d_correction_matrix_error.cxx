@@ -30,7 +30,7 @@ m23d_correction_matrix_error::m23d_correction_matrix_error(const vnl_matrix<doub
 //  3*(m+1) x 3 matrices formed from the elements of g1 and g2.
 void m23d_correction_matrix_error::compute_q(const vnl_vector<double>& g1,
                  const vnl_vector<double>& g2,
-                 vnl_vector<double>& q)
+                 vnl_vector<double>& q) const
 {
   unsigned t = 3*(n_modes_+1);
   unsigned k=0;

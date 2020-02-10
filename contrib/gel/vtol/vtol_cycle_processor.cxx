@@ -397,7 +397,7 @@ bool vtol_cycle_processor::assignable(vtol_edge_2d_sptr edg, const vtol_vertex_s
 //    There is no point in traversing the self loop twice.
 void vtol_cycle_processor::assign_initial_edge(vtol_edge_2d_sptr& e,
                                                vtol_vertex_sptr& first,
-                                               vtol_vertex_sptr& last)
+                                               vtol_vertex_sptr& last) const
 {
   if (debug1_)
       std::cout << "==== entering assign_initial_edge =====\n"
@@ -439,7 +439,7 @@ void vtol_cycle_processor::assign_initial_edge(vtol_edge_2d_sptr& e,
 //:   Link the vtol_edge, "edg" to the vtol_vertex, "last".
 //    Set the appropriate direction flag
 
-void vtol_cycle_processor::assign_ends(vtol_edge_2d_sptr edg, vtol_vertex_sptr& last)
+void vtol_cycle_processor::assign_ends(vtol_edge_2d_sptr edg, vtol_vertex_sptr& last) const
 {
   if (debug1_)
       std::cout << "==== entering assign_ends =====\n"
@@ -614,7 +614,7 @@ void vtol_cycle_processor::add_edge_to_path()
 //    Thus, the winding angle is opposite in sign, which is
 //    accounted for in code.
 bool vtol_cycle_processor::classify_path(std::vector<vtol_edge_2d_sptr>& path_edges,
-                                         vtol_one_chain_sptr& chain)
+                                         vtol_one_chain_sptr& chain) const
 {
   if (debug1_)
         std::cout << "======= In classify_path ========\n";

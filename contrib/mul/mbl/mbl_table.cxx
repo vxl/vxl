@@ -462,7 +462,7 @@ bool mbl_table::subtable(mbl_table &new_table,  const std::vector<std::string> &
 bool mbl_table::read_delimited_string(std::istream& is,
                                       std::string& str,
                                       bool& eol,
-                                      bool& eof)
+                                      bool& eof) const
 {
   str = "";
   eol = false;

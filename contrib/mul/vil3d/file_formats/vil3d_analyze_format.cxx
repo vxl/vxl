@@ -385,7 +385,7 @@ void vil3d_analyze_header::set_voxel_size(float si, float sj, float sk)
   dim.pixdim[3]=sk;
 }
 
-void vil3d_analyze_header::swapBytes(char *data, int size)
+void vil3d_analyze_header::swapBytes(char *data, int size) const
 {
   if (needSwap())
   {

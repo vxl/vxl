@@ -175,7 +175,7 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
   return true;
 }
 
-double HMatrix2DComputeRobust::stdev(std::vector<double>& residuals)
+double HMatrix2DComputeRobust::stdev(std::vector<double>& residuals) const
 {
   double ret = 0.0;
   for (int i = 0; i < data_size_; i++)

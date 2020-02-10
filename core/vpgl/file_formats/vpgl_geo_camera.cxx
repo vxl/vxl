@@ -674,7 +674,7 @@ vpgl_geo_camera::img_four_corners_in_utm(const unsigned ni,
                                          double & e1,
                                          double & n1,
                                          double & e2,
-                                         double & n2)
+                                         double & n2) const
 {
   if (!is_utm_)
   {

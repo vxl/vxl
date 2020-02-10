@@ -34,7 +34,7 @@ class vpgl_fm_compute_2_point
   // while the points pl are associated with the LHS.
   bool compute( const std::vector< vgl_homg_point_2d<double> >& pr,
                 const std::vector< vgl_homg_point_2d<double> >& pl,
-                vpgl_fundamental_matrix<double>& fm );
+                vpgl_fundamental_matrix<double>& fm ) const;
 
  protected:
   bool precondition_;

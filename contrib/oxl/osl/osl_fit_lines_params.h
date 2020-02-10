@@ -20,7 +20,7 @@ class osl_fit_lines_params
                        unsigned int ignore_end_edgels = 3);
 
   // Check parameters for consistency
-  bool SanityCheck();
+  bool SanityCheck() const;
 
   //The parameter members
   unsigned int min_fit_length_;   // Minimum number of pixels to fit lines to

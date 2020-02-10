@@ -51,7 +51,7 @@ vil_nitf2_field_formatter::read_c_str(std::istream & input, int length, char *& 
 }
 
 bool
-vil_nitf2_field_formatter::write_blank(std::ostream & output)
+vil_nitf2_field_formatter::write_blank(std::ostream & output) const
 {
   std::string str(field_width, ' ');
   output << str;
@@ -59,7 +59,7 @@ vil_nitf2_field_formatter::write_blank(std::ostream & output)
 }
 
 bool
-vil_nitf2_field_formatter::write_blank(vil_nitf2_ostream & output)
+vil_nitf2_field_formatter::write_blank(vil_nitf2_ostream & output) const
 {
   std::string str(field_width, ' ');
   output.write(str.c_str(), field_width);

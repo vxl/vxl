@@ -52,11 +52,11 @@ class msm_wt_mat_2d
   double det() const { return m11_*m22_ - m12_*m12_; }
 
   //: Calculate eigenvalues
-  void eigen_values(double& EV1, double& EV2);
+  void eigen_values(double& EV1, double& EV2) const;
 
   //: Calculate eigenvector associated with largest eigenvalue.
   //  Other evec given by (-evec1.y(),evec1.x())
-  void eigen_vector(vgl_vector_2d<double>& evec1, double& eval1, double& eval2);
+  void eigen_vector(vgl_vector_2d<double>& evec1, double& eval1, double& eval2) const;
 
   //: Calculates effect of applying rotation/scale to space
   // W2=TWT'/(a*a+b*b) where T is 2x2 matrix (a,-b;b,a)
@@ -91,7 +91,7 @@ class msm_wt_mat_2d
   void b_read(vsl_b_istream& bfs);
 
   //: Equality test
-  bool operator==(const msm_wt_mat_2d& wt_mat);
+  bool operator==(const msm_wt_mat_2d& wt_mat) const;
 };
 
 

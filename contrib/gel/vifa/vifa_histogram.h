@@ -61,7 +61,7 @@ class vifa_histogram : public vul_timestamp,
 
   // Misc. Methods
   void RemoveFlatPeaks(int nbins, float* cnts, bool cyclic);
-  float CompareToHistogram(vifa_histogram* h);
+  float CompareToHistogram(vifa_histogram* h) const;
 
   // Attribute accessors
   void  UpCount(float newval);
@@ -105,12 +105,12 @@ class vifa_histogram : public vul_timestamp,
   float ComputeArea() const;//total area
 
   //Find bounds that clip off a given percent of the area
-  float LowClipVal(float clip_fraction);
-  float HighClipVal(float clip_fraction);
+  float LowClipVal(float clip_fraction) const;
+  float HighClipVal(float clip_fraction) const;
 
-  void Print();
+  void Print() const;
   void Dump(char *);
-  int  WritePlot(const char* fname);
+  int  WritePlot(const char* fname) const;
 
  private:
   mutable int stats_consistent;  // A 2 bit state flag  Mean = 1 | StandDev = 2

@@ -64,12 +64,12 @@ class FMatrixCompute7Point
                std::vector<FMatrix*>&);
 
   //: Interface to above using preconditioned points
-  bool compute_preconditioned(std::vector<HomgPoint2D>&, std::vector<HomgPoint2D>&, std::vector<FMatrix*>&);
+  bool compute_preconditioned(std::vector<HomgPoint2D>&, std::vector<HomgPoint2D>&, std::vector<FMatrix*>&) const;
 
   //: Interface to above using preconditioned points
   bool compute_preconditioned(std::vector<vgl_homg_point_2d<double> >& points1,
                               std::vector<vgl_homg_point_2d<double> >& points2,
-                              std::vector<FMatrix*>&);
+                              std::vector<FMatrix*>&) const;
  protected:
   static std::vector<double> GetCoef(FMatrix const& F1, FMatrix const& F2);
   static std::vector<double> solve_quadratic(std::vector<double> v);

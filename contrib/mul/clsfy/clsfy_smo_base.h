@@ -90,7 +90,7 @@ class clsfy_smo_base
   //: Bias term in function evaluation.
   // For SVMs this would be the value to be subtracted from sum of kernel
   // functions to get 0 as class boundary.
-  double bias();
+  double bias() const;
 
   //: Reseeds the internal random number generator.
   // To achieve quasi-random initialisation use;
@@ -128,7 +128,7 @@ class clsfy_smo_base
   virtual int calc()=0;
 
   //: error rate on the training data
-  double error();
+  double error() const;
 };
 
 #endif

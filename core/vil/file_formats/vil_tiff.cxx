@@ -1029,7 +1029,7 @@ vil_tiff_image::pad_block_with_zeros(unsigned ioff,
                                      unsigned iclip,
                                      unsigned jclip,
                                      unsigned bytes_per_pixel,
-                                     vxl_byte * block_buf)
+                                     vxl_byte * block_buf) const
 {
   unsigned jstep = size_block_i() * bytes_per_pixel;
   unsigned row_start = ioff * bytes_per_pixel;

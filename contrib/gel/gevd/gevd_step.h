@@ -85,7 +85,7 @@ class gevd_step
                        gevd_bufferxy& edgels, //!< from end points of contours
                        gevd_bufferxy& direction,
                        gevd_bufferxy& locationx, gevd_bufferxy& locationy,
-                       int*& junctionx, int*& junctiony);
+                       int*& junctionx, int*& junctiony) const;
 
   float NoiseSigma() const;     //!< query stored/estimated noise sigma
   float NoiseResponse() const;  //!< response of noise sigma to filter ddG

@@ -26,7 +26,7 @@ class vpgl_fm_compute_7_point
   // while the points pl are associated with the LHS.
   bool compute( const std::vector< vgl_homg_point_2d<double> >& pr,
                 const std::vector< vgl_homg_point_2d<double> >& pl,
-                std::vector< vpgl_fundamental_matrix<double>* >& fm );
+                std::vector< vpgl_fundamental_matrix<double>* >& fm ) const;
 
  protected:
   static std::vector<double> get_coeffs( vnl_double_3x3 const& F1,

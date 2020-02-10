@@ -172,7 +172,7 @@ std::vector<double> FMatrixComputeRobust::calculate_residuals(std::vector<HomgPo
 }
 
 //: Find the standard deviation of the residuals
-double FMatrixComputeRobust::stdev(std::vector<double>& residuals)
+double FMatrixComputeRobust::stdev(std::vector<double>& residuals) const
 {
   double ret = 0.0;
   for (int i = 0; i < data_size_; i++)

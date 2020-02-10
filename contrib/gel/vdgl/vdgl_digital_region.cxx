@@ -550,7 +550,7 @@ std::vector<unsigned int> vdgl_digital_region::histogram(int nbins)
 
 std::vector<unsigned int> vdgl_digital_region::residual_histogram(int nbins,
                                                                  float* min,
-                                                                 float* max)
+                                                                 float* max) const
 {
   assert(nbins > 0);
   if (nbins == 1) return std::vector<unsigned int>(1, npts_);

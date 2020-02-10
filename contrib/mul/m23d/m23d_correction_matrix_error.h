@@ -38,7 +38,7 @@ class m23d_correction_matrix_error : public vnl_least_squares_function
   //  g1==g2 for full q, g2 = (0 0 ..1 ...0) when computing derivatives
   void compute_q(const vnl_vector<double>& g1,
                  const vnl_vector<double>& g2,
-                 vnl_vector<double>& q);
+                 vnl_vector<double>& q) const;
 
 public:
   m23d_correction_matrix_error(const vnl_matrix<double>& A,

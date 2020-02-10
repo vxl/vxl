@@ -151,7 +151,7 @@ class rsdl_kd_tree : public vbl_ref_count
                          int n,
                          rsdl_kd_node* current,
                          const std::vector< double >& sq_distances,
-                         int & num_found );
+                         int & num_found ) const;
 
   void points_in_bounding_box( rsdl_kd_node* current,
                                const rsdl_bounding_box& box,

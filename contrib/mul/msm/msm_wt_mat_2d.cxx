@@ -42,7 +42,7 @@ msm_wt_mat_2d msm_wt_mat_2d::inverse() const
 }
 
 //: Calculate eigenvalues
-void msm_wt_mat_2d::eigen_values(double& EV1, double& EV2)
+void msm_wt_mat_2d::eigen_values(double& EV1, double& EV2) const
 {
   double dac=m11_-m22_;
   double d=0.5*std::sqrt(dac*dac+4*m12_*m12_);
@@ -53,7 +53,7 @@ void msm_wt_mat_2d::eigen_values(double& EV1, double& EV2)
 
 //: Calculate eigenvector associated with largest eigenvalue.
 //  Other evec given by (-evec1.y(),evec1.x())
-void msm_wt_mat_2d::eigen_vector(vgl_vector_2d<double>& evec1, double& eval1, double& eval2)
+void msm_wt_mat_2d::eigen_vector(vgl_vector_2d<double>& evec1, double& eval1, double& eval2) const
 {
   double dac=m11_-m22_;
   double d=0.5*std::sqrt(dac*dac+4*m12_*m12_);
@@ -104,7 +104,7 @@ msm_wt_mat_2d& msm_wt_mat_2d::operator+=(const msm_wt_mat_2d& W)
 }
 
 //: Equality test
-bool msm_wt_mat_2d::operator==(const msm_wt_mat_2d& W)
+bool msm_wt_mat_2d::operator==(const msm_wt_mat_2d& W) const
 {
   return (std::fabs(m11_-W.m11_)<1e-8) &&
          (std::fabs(m12_-W.m12_)<1e-8) &&

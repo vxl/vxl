@@ -607,7 +607,7 @@ rsdl_kd_tree :: bounded_at_leaf ( const rsdl_point& query_point,
                                   int n,
                                   rsdl_kd_node* current,
                                   const std::vector< double >& sq_distances,
-                                  int & num_found )
+                                  int & num_found ) const
 {
   assert(n>0);
 #ifdef DEBUG

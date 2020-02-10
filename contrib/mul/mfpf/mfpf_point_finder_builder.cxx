@@ -125,7 +125,7 @@ void mfpf_point_finder_builder::parse_base_props(mbl_read_props_type& props)
 
 
 //: Set base-class parameters of point finder
-void mfpf_point_finder_builder::set_base_parameters(mfpf_point_finder& pf)
+void mfpf_point_finder_builder::set_base_parameters(mfpf_point_finder& pf) const
 {
   pf.set_step_size(step_size_);
   pf.set_search_area(search_ni_,search_nj_);

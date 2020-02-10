@@ -43,7 +43,7 @@ mcal_pca::~mcal_pca() = default;
 
 
 //: Return the number of modes to retain
-unsigned mcal_pca::choose_n_modes(const vnl_vector<double>& evals)
+unsigned mcal_pca::choose_n_modes(const vnl_vector<double>& evals) const
 {
   if (evals.size()==0) return 0;
   const double* v_data = evals.begin();

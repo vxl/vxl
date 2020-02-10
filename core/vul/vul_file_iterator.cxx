@@ -204,7 +204,7 @@ struct vul_file_iterator_data
 
   // should be constish, and ret 0 when nuffink
   char const *
-  value()
+  value() const
   {
     if (!dir_handle_)
       return nullptr;
@@ -213,7 +213,7 @@ struct vul_file_iterator_data
 
   // Return non-dir part of fn
   char const *
-  value_filename()
+  value_filename() const
   {
     if (!dir_handle_)
       return nullptr;

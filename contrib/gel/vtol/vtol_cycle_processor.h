@@ -69,10 +69,10 @@ class vtol_cycle_processor
   vtol_edge_2d_sptr search_for_next_edge(std::vector<vtol_edge_2d_sptr>& edges_at_last);
   bool assignable(vtol_edge_2d_sptr edg, const vtol_vertex_sptr& last);
   void assign_initial_edge(vtol_edge_2d_sptr& e, vtol_vertex_sptr& first,
-                           vtol_vertex_sptr& last);
-  void assign_ends(vtol_edge_2d_sptr edg, vtol_vertex_sptr& last);
+                           vtol_vertex_sptr& last) const;
+  void assign_ends(vtol_edge_2d_sptr edg, vtol_vertex_sptr& last) const;
   void add_edge_to_path();
-  bool classify_path(std::vector<vtol_edge_2d_sptr>& path_edges, vtol_one_chain_sptr& chain);
+  bool classify_path(std::vector<vtol_edge_2d_sptr>& path_edges, vtol_one_chain_sptr& chain) const;
   void compute_cycles();
   void sort_one_cycles();
   void process();

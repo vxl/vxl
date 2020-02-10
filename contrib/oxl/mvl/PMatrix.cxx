@@ -617,7 +617,7 @@ PMatrix::flip_sign()
 
 //: Splendid hack that tries to detect if the P is an image-coords P or a normalized P.
 bool
-PMatrix::looks_conditioned()
+PMatrix::looks_conditioned() const
 {
   double cond = svd()->W(0) / svd()->W(2);
   // std::cerr << "PMatrix::looks_conditioned: cond = " << cond << '\n';

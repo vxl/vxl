@@ -69,7 +69,7 @@ class FMatrixComputeRobust : public FMatrixCompute
   std::vector<double> calculate_residuals(std::vector<vgl_homg_point_2d<double> >& one,
                                          std::vector<vgl_homg_point_2d<double> >& two,
                                          FMatrix* F);
-  double stdev(std::vector<double>& residuals);
+  double stdev(std::vector<double>& residuals) const;
  protected:
   bool rank2_truncate_;
   double inthresh_;

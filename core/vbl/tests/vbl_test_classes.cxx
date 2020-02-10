@@ -32,7 +32,7 @@ base_impl::~base_impl()
 }
 
 void
-base_impl::Print(std::ostream & str)
+base_impl::Print(std::ostream & str) const
 {
   str << "base_impl(" << n << ") ";
 }
