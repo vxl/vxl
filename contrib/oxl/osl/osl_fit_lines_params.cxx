@@ -23,7 +23,7 @@ osl_fit_lines_params::osl_fit_lines_params(unsigned int min_fit_len,
 {}
 
 //: Checks that parameters are within acceptable bounds
-bool osl_fit_lines_params::SanityCheck()
+bool osl_fit_lines_params::SanityCheck() const
 {
   bool valid = true;
 

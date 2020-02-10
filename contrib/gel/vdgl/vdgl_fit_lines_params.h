@@ -38,7 +38,7 @@ class vdgl_fit_lines_params : public vbl_ref_count
  ~vdgl_fit_lines_params() override = default;
 
   //: Check that parameters are within acceptable bounds
-  bool SanityCheck();
+  bool SanityCheck() const;
 };
 
 std::ostream& operator<<(std::ostream& os, const vdgl_fit_lines_params& flp);

@@ -114,17 +114,17 @@ class vil_nitf2_image_subheader
   //  Defined extensions are RPC00A and RPC00B.
   bool get_rpc_params( std::string& rpc_type, std::string& image_id,
                        std::string& image_corner_geo_locations,
-                       double* rpc_data );
+                       double* rpc_data ) const;
 
   //: Return the elevation and azimuth angles of the sun
   //  \a sun_el --> sun elevation angle
   //  \a sun_az --> sun azimuthal angle
-  bool get_sun_params( double& sun_el, double& sun_az);
+  bool get_sun_params( double& sun_el, double& sun_az) const;
 
   //: Extract the date and time
-  bool get_date_time(int& year, int& month, int& day, int& hour, int& min, int& sec);
+  bool get_date_time(int& year, int& month, int& day, int& hour, int& min, int& sec) const;
 
-  bool get_correction_offset(double & u_off, double & v_off);
+  bool get_correction_offset(double & u_off, double & v_off) const;
 
  protected:
   vil_nitf2_field_sequence m_field_sequence;

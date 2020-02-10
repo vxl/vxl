@@ -188,7 +188,7 @@ protected:
   bool read_delimited_string(std::istream& is,
                              std::string& str,
                              bool& eol,
-                             bool& eof);
+                             bool& eof) const;
 
   //: The character delimiting each column.
   char delimiter_;

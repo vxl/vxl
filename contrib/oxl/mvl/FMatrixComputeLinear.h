@@ -64,12 +64,12 @@ class FMatrixComputeLinear : public FMatrixCompute
                FMatrix& F) override;
 
   //: Interface to above using preconditioned points
-  bool compute_preconditioned(std::vector<HomgPoint2D>&, std::vector<HomgPoint2D>&, FMatrix* F);
+  bool compute_preconditioned(std::vector<HomgPoint2D>&, std::vector<HomgPoint2D>&, FMatrix* F) const;
 
   //: Interface to above using preconditioned points
   bool compute_preconditioned(std::vector<vgl_homg_point_2d<double> >&,
                               std::vector<vgl_homg_point_2d<double> >&,
-                              FMatrix& F);
+                              FMatrix& F) const;
 
   inline FMatrix compute(PairMatchSetCorner& p) { return FMatrixCompute::compute(p); }
   inline FMatrix compute(std::vector<HomgPoint2D>& p1, std::vector<HomgPoint2D>& p2)

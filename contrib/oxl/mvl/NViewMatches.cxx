@@ -242,7 +242,7 @@ int NViewMatches::incorporate(const NViewMatch& newtrack)
 }
 
 //: Build an NViewMatch from the triplet \p (base_view..base_view+2)
-NViewMatch NViewMatches::make_triplet_match(int base_view, int c1, int c2, int c3)
+NViewMatch NViewMatches::make_triplet_match(int base_view, int c1, int c2, int c3) const
 {
   assert(base_view+2 < nviews_);
   NViewMatch newtrack(nviews_);

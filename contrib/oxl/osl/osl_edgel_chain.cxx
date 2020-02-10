@@ -69,10 +69,10 @@ float  osl_edgel_chain::GetX(unsigned int i) const { return x[i]; }
 float *osl_edgel_chain::GetX() const { return x; }
 float  osl_edgel_chain::GetY(unsigned int i) const { return y[i]; }
 float *osl_edgel_chain::GetY() const { return y; }
-void osl_edgel_chain::SetGrad(float v, unsigned int i) { grad[i] = v; }
-void osl_edgel_chain::SetTheta(float v, unsigned int i) { theta[i] = v; }
-void osl_edgel_chain::SetX(float v, unsigned int i) { x[i] = v; }
-void osl_edgel_chain::SetY(float v, unsigned int i) { y[i] = v; }
+void osl_edgel_chain::SetGrad(float v, unsigned int i) const { grad[i] = v; }
+void osl_edgel_chain::SetTheta(float v, unsigned int i) const { theta[i] = v; }
+void osl_edgel_chain::SetX(float v, unsigned int i) const { x[i] = v; }
+void osl_edgel_chain::SetY(float v, unsigned int i) const { y[i] = v; }
 unsigned int osl_edgel_chain::size() const { return n; }
 
 void osl_edgel_chain::SetLength(unsigned int nn)

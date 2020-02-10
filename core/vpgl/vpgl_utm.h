@@ -33,15 +33,15 @@ class vpgl_utm
   void transform(int utm_zone, double x, double y, double z,
                  double& lat, double& lon , double& elev,
                  bool south_flag = false,
-                 double utm_central_meridian = 0);
+                 double utm_central_meridian = 0) const;
 
   void transform(int utm_zone, double x, double y,
                  double& lat, double& lon,
                  bool south_flag = false,
-                 double utm_central_meridian = 0);
+                 double utm_central_meridian = 0) const;
   //: LatLon to UTM
   void transform(double lat, double lon,
-                 double& x, double& y, int& utm_zone);
+                 double& x, double& y, int& utm_zone) const;
 
  private:
   double a_, b_;

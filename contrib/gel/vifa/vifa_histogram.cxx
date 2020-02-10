@@ -989,7 +989,7 @@ float vifa_histogram::ComputeArea() const
 //----------------------------------------------------------------------
 //: Finds the lower bound value which eliminates a given fraction of histogram area.
 //
-float vifa_histogram::LowClipVal(float clip_fraction)
+float vifa_histogram::LowClipVal(float clip_fraction) const
 {
   if (clip_fraction < 0)
     clip_fraction = 0.0f;
@@ -1023,7 +1023,7 @@ float vifa_histogram::LowClipVal(float clip_fraction)
 //----------------------------------------------------------------------
 //: Finds the lower bound value which eliminates a given fraction of histogram area.
 //
-float vifa_histogram::HighClipVal(float clip_fraction)
+float vifa_histogram::HighClipVal(float clip_fraction) const
 {
   if (clip_fraction < 0)
     clip_fraction = 0.0f;
@@ -1056,7 +1056,7 @@ float vifa_histogram::HighClipVal(float clip_fraction)
 }
 //--------------------------------------------------------------------------
 //: Prints histogram counts onto std::cout
-void vifa_histogram::Print()
+void vifa_histogram::Print() const
 {
   float* vals = this->GetVals();
   float* counts = this->GetCounts();
@@ -1099,7 +1099,7 @@ void vifa_histogram::Dump(char *dumpfile)
 
 //---------------------------------------------------------------------------
 //: Writes histogram in format suitable for plotting tools like Gnuplot.
-int vifa_histogram::WritePlot(const char *fname)
+int vifa_histogram::WritePlot(const char *fname) const
 {
   std::ofstream fp(fname, std::ios::out); // open the file...
 
@@ -1139,7 +1139,7 @@ int vifa_histogram::WritePlot(const char *fname)
 //: Compare 'this' histogram to another (passed in).
 //    Taken from the old TargetJr class HistEntropy.
 //
-float vifa_histogram::CompareToHistogram(vifa_histogram* h)
+float vifa_histogram::CompareToHistogram(vifa_histogram* h) const
 {
   // h1 = 'this'
   float m1 = this->GetMean();

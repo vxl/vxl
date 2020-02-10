@@ -21,7 +21,7 @@
 bool
 vpgl_fm_compute_8_point::compute(const std::vector<vgl_homg_point_2d<double>> & pr,
                                  const std::vector<vgl_homg_point_2d<double>> & pl,
-                                 vpgl_fundamental_matrix<double> & fm)
+                                 vpgl_fundamental_matrix<double> & fm) const
 {
   // Check that there are at least 8 points.
   if (pr.size() < 8 || pl.size() < 8)

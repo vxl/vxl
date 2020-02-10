@@ -68,10 +68,10 @@ class vil_nitf2_field_formatter
 
   // Writes a blank instance of field value to output stream. Returns
   // true iff successfully written. No need to overload this method.
-  bool write_blank(std::ostream& output);
+  bool write_blank(std::ostream& output) const;
 
   // Same as above, but writes to a vil_stream.
-  bool write_blank(vil_stream& output);
+  bool write_blank(vil_stream& output) const;
 
   // Helper function which reads the specified number characters into
   // a string (if possible), which it returns as a null-terminated C string,

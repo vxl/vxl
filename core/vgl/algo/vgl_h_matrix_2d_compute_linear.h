@@ -56,7 +56,7 @@ class vgl_h_matrix_2d_compute_linear : public vgl_h_matrix_2d_compute
   bool solve_linear_problem(int equ_count,
                             std::vector<vgl_homg_point_2d<double> > const& p1,
                             std::vector<vgl_homg_point_2d<double> > const& p2,
-                            vgl_h_matrix_2d<double>& H);
+                            vgl_h_matrix_2d<double>& H) const;
 
   //: for lines, the solution should be weighted by line length
   bool

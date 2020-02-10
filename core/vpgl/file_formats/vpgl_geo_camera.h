@@ -156,7 +156,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
   int utm_zone() { return utm_zone_; }
   int utm_northing() { return northing_; }
 
-  bool img_four_corners_in_utm(const unsigned ni, const unsigned nj, double elev, double& e1, double& n1, double& e2, double& n2);
+  bool img_four_corners_in_utm(const unsigned ni, const unsigned nj, double elev, double& e1, double& n1, double& e2, double& n2) const;
 
   //: returns the corresponding geographical coordinate (lon, lat, elev) for a given pixel position (i,j,k)
   //  Note: not yet implemented -- PVr, 16 aug 2012

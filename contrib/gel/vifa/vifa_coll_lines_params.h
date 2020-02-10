@@ -57,7 +57,7 @@ class vifa_coll_lines_params : public gevd_param_mixin,
   vifa_coll_lines_params(const vifa_coll_lines_params& old_params);
 
   //: Output contents
-  void  print_info(void);
+  void  print_info(void) const;
 };
 
 

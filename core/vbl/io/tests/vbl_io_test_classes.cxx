@@ -46,7 +46,7 @@ impl::~impl()
 }
 
 void
-impl::Print(std::ostream & str)
+impl::Print(std::ostream & str) const
 {
   str << "impl(" << n << ") ";
 }

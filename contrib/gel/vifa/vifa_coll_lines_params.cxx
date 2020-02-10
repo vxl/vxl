@@ -32,7 +32,7 @@ vifa_coll_lines_params(const vifa_coll_lines_params& old_params)
 }
 
 void vifa_coll_lines_params::
-print_info(void)
+print_info(void) const
 {
   std::cout << "vifa_coll_lines_params:\n"
            << "  midpoint distance = " << midpt_distance_ << std::endl

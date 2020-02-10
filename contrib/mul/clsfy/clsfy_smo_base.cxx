@@ -18,7 +18,7 @@
 
 // ----------------------------------------------------------------
 
-double clsfy_smo_base::error()
+double clsfy_smo_base::error() const
 {
   return error_;
 }
@@ -65,7 +65,7 @@ void clsfy_smo_base::set_lagrange_mults(const vnl_vector<double>& lagrange_mults
 
 // ----------------------------------------------------------------
 
-double clsfy_smo_base::bias()
+double clsfy_smo_base::bias() const
 {
   return b_;
 }

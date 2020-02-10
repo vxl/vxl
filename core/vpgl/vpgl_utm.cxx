@@ -183,7 +183,7 @@ vpgl_utm::transform(int utm_zone,
                     double & lon,
                     double & elev,
                     bool south_flag,
-                    double utm_central_meridian)
+                    double utm_central_meridian) const
 {
   // double D2R = vnl_math::pi_over_180;
   double e = std::sqrt((sqr(a_) - sqr(b_)) / sqr(a_));
@@ -302,7 +302,7 @@ vpgl_utm::transform(int utm_zone,
                     double & lat,
                     double & lon,
                     bool south_flag,
-                    double utm_central_meridian)
+                    double utm_central_meridian) const
 {
   double elev;
   this->transform(utm_zone, x, y, 0.0, lat, lon, elev, south_flag, utm_central_meridian);
@@ -312,7 +312,7 @@ vpgl_utm::transform(int utm_zone,
 }
 
 void
-vpgl_utm::transform(double lat, double lon, double & x, double & y, int & utm_zone)
+vpgl_utm::transform(double lat, double lon, double & x, double & y, int & utm_zone) const
 {
   // double D2R = vnl_math::pi_over_180;
   utm_zone = int((lon + 180) / 6.0) + 1;

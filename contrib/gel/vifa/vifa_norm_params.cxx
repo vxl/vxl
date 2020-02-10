@@ -49,7 +49,7 @@ recompute(void)
 }
 
 float vifa_norm_params::
-normalize(float raw_intensity)
+normalize(float raw_intensity) const
 {
   if (imin_ == imax_)
     return raw_intensity;
@@ -112,7 +112,7 @@ get_norm_bounds(vil_image_view_base*  img,
 }
 
 void vifa_norm_params::
-print_info(void)
+print_info(void) const
 {
   std::cout << "vifa_norm_params:\n"
            << "  low % thresh    = " << plow << std::endl

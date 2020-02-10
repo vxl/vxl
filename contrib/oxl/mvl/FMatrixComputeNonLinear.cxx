@@ -388,7 +388,7 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
 }
 
 // Forms a map of the different rank-2 structures for the F Matrix
-void FMatrixComputeNonLinear::get_plan(int &r1, int &c1, int &r2, int &c2)
+void FMatrixComputeNonLinear::get_plan(int &r1, int &c1, int &r2, int &c2) const
 {
   switch (p_) {
     case 0 :

@@ -32,10 +32,10 @@ struct osl_edgel_chain
   float *GetX() const;
   float  GetY(unsigned int i) const;
   float *GetY() const;
-  void SetGrad(float v, unsigned int i);
-  void SetTheta(float v, unsigned int i);
-  void SetX(float v, unsigned int i);
-  void SetY(float v, unsigned int i);
+  void SetGrad(float v, unsigned int i) const;
+  void SetTheta(float v, unsigned int i) const;
+  void SetX(float v, unsigned int i) const;
+  void SetY(float v, unsigned int i) const;
   unsigned int size() const;
   //
   void write_ascii(std::ostream &) const;

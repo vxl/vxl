@@ -76,7 +76,7 @@ class vmal_track_lines
  private:
 
   double seg_angle(const vtol_edge_2d_sptr&, const vtol_edge_2d_sptr&);
-  bool belong(const vtol_edge_2d_sptr&, const vtol_edge_2d_sptr&);
+  bool belong(const vtol_edge_2d_sptr&, const vtol_edge_2d_sptr&) const;
   double dist(const vtol_edge_2d_sptr&, const vtol_edge_2d_sptr&);
 //-----------------------------------------------------------------------------
 //: Project the point (x0,y0) on the line ((ax,ay),(bx,by)).

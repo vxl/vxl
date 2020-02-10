@@ -74,11 +74,11 @@ float osl_edge::GetStartY() const { return v1->y; }
 float osl_edge::GetEndX() const { return v2->x; }
 float osl_edge::GetEndY() const { return v2->y; }
 
-void osl_edge::SetStartX(float v) { v1->x = v; }
-void osl_edge::SetStartY(float v) { v1->y = v; }
+void osl_edge::SetStartX(float v) const { v1->x = v; }
+void osl_edge::SetStartY(float v) const { v1->y = v; }
 
-void osl_edge::SetEndX(float v) { v2->x = v; }
-void osl_edge::SetEndY(float v) { v2->y = v; }
+void osl_edge::SetEndX(float v) const { v2->x = v; }
+void osl_edge::SetEndY(float v) const { v2->y = v; }
 
 //--------------------------------------------------------------------------------
 

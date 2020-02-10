@@ -34,12 +34,12 @@ class osl_edge : public osl_topology_base, public osl_edgel_chain
   float GetEndY() const;
 
   // set coordinates of end-vertices
-  void SetStartX(float v);
-  void SetStartY(float v);
+  void SetStartX(float v) const;
+  void SetStartY(float v) const;
   void SetStart(float x, float y);
 
-  void SetEndX(float v);
-  void SetEndY(float v);
+  void SetEndX(float v) const;
+  void SetEndY(float v) const;
   void SetEnd(float x, float y);
 };
 

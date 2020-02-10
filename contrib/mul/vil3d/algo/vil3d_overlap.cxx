@@ -33,8 +33,8 @@ public:
       if (voxB) nBnotA++;
   }
 
-  unsigned n_union() { return nAnotB+ nBnotA + nAandB; }
-  unsigned n_intersection() { return nAandB; }
+  unsigned n_union() const { return nAnotB+ nBnotA + nAandB; }
+  unsigned n_intersection() const { return nAandB; }
 };
 
 

@@ -81,7 +81,7 @@ class vifa_norm_params : public gevd_param_mixin,
   void recompute(void);
 
   //: Compute normalized equivalent of given intensity
-  float  normalize(float  raw_intensity);
+  float  normalize(float  raw_intensity) const;
 
   //: Find an image's low & high intensities for normalization
   static bool  get_norm_bounds(vil_image_view_base*  img,
@@ -92,7 +92,7 @@ class vifa_norm_params : public gevd_param_mixin,
                               );
 
   //: Dump the parameters
-  void  print_info(void);
+  void  print_info(void) const;
 
  private:
   //: Internal method to update clip points & interpolation line

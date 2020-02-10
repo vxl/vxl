@@ -473,7 +473,7 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min)
 #endif // 0
 
 bool
-vil_nitf2_image_subheader::get_date_time(int & year, int & month, int & day, int & hour, int & min, int & sec)
+vil_nitf2_image_subheader::get_date_time(int & year, int & month, int & day, int & hour, int & min, int & sec) const
 {
   std::string date_time = "";
   bool success = this->get_property("IDATIM", date_time);
@@ -806,7 +806,7 @@ vil_nitf2_image_subheader::add_USE_definitions()
 
 // Collect the Sun angles
 bool
-vil_nitf2_image_subheader::get_sun_params(double & sun_el, double & sun_az)
+vil_nitf2_image_subheader::get_sun_params(double & sun_el, double & sun_az) const
 {
   // Now get the sub-header TRE parameters
   vil_nitf2_tagged_record_sequence isxhd_tres;
@@ -1033,7 +1033,7 @@ vil_nitf2_image_subheader::add_MPD26A_definitions()
 
 // obtain column and row offset from STDIDB /SDTDIDC
 bool
-vil_nitf2_image_subheader::get_correction_offset(double & u_off, double & v_off)
+vil_nitf2_image_subheader::get_correction_offset(double & u_off, double & v_off) const
 {
   // Now get the sub-header TRE parameters
   vil_nitf2_tagged_record_sequence isxhd_tres;
@@ -1100,7 +1100,7 @@ bool
 vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
                                           std::string & image_id,
                                           std::string & image_corner_geo_locations,
-                                          double * rpc_data)
+                                          double * rpc_data) const
 {
   // Get image ID and location from main header values
   std::string iid2 = "";
