@@ -7,7 +7,89 @@
 #include <math.h>
 #include <vnl_det.h>
 #include <vnl_inverse.h>
+#include <vpgl/vpgl_essential_matrix.h>
+bool vpgl_equi_rectification::column_transform(const std::vector<vnl_vector_fixed<double, 3> >& img_pts0,
+                                               const std::vector<vnl_vector_fixed<double, 3> >& img_pts1,
+                                               vnl_matrix_fixed<double, 3, 3> const& H0,
+                                               vnl_matrix_fixed<double, 3, 3> const& H1,
+                                               vnl_matrix_fixed<double, 3, 3>& Usqt,
+                                               vnl_matrix_fixed<double, 3, 3>& Usqt_inv,
+                                               double min_scale){
+  double u0_avg = 0.0, u1_avg = 0.0, v1_avg = 0.0;
+  size_t n = img_pts0.size();
+  for (unsigned i = 0; i < n; i++)
+  {
+    vnl_vector_fixed<double, 3> p0rot = H0 * img_pts0[i];
+    vnl_vector_fixed<double, 3> p1rot = H1 * img_pts1[i];
+    p0rot/=p0rot[2]; p1rot/=p1rot[2];
+    u0_avg += p0rot[0];
+    u1_avg += p1rot[0];
+    v1_avg += p1rot[1];
+  }
+  u0_avg /= n;
+  u1_avg /= n;
+  v1_avg /= n;
 
+  double Su0u1 = 0.0, Su1u1 = 0.0;
+  double Su0v1 = 0.0, Su1v1 = 0.0, Sv1v1 = 0.0;
+  for (unsigned i = 0; i < n; i++)
+  {
+    vnl_vector_fixed<double, 3> p0rot = H0 * img_pts0[i];
+    vnl_vector_fixed<double, 3> p1rot = H1 * img_pts1[i];
+    p0rot/=p0rot[2]; p1rot/=p1rot[2];
+    double u0 = p0rot[0] - u0_avg, u1 = p1rot[0] - u1_avg, v1 = p1rot[1] - v1_avg;
+    Su0u1 += u0 * u1;
+    Su1u1 += u1 * u1;
+    Su0v1 += u0 * v1;
+    Su1v1 += u1 * v1;
+    Sv1v1 += v1 * v1;
+  }
+  Su0u1 /= n;
+  Su1u1 /= n;
+  Su0v1 /= n;
+  Su1v1 /= n;
+  Sv1v1 /= n;
+  vnl_matrix_fixed<double, 2, 2> AA, AAinv;
+  vnl_vector_fixed<double, 2> bb, x;
+  AA[0][0] = Su1u1;
+  AA[0][1] = AA[1][0] = Su1v1;
+  AA[1][1] = Sv1v1;
+  AA[2][2] = 1.0;
+  bb[0] = Su0u1;
+  bb[1] = Su0v1;
+  double d = fabs(vnl_det(AA));
+  if (d < 100.0 * vgl_tolerance<double>::position)
+  {
+    std::cout << "Singular solution for u affine transform" << std::endl;
+    return false;
+  }
+  AAinv = vnl_inverse(AA);
+  x = AAinv * bb;
+  double neg_scale = x[0] < 0.0; // determine if column scale factor is negative
+  double su = fabs(x[0]), sigma_u = x[1], sqtsu = sqrt(su), ufact = 1.0 / (1.0 + sqtsu);
+  // un-normalize to get the translation term
+  double tu = u0_avg - x[0] * u1_avg - sigma_u * v1_avg;
+  std::cout << "affine column trans: " << x[0] << ' ' << sigma_u << ' ' << tu << std::endl;
+  if (su < min_scale)
+  {
+    std::cout << "in vpgl_equi_rectification::compute_rectification(), row scale " << x[0] << " too small "
+              << std::endl;
+    return false;
+  }
+  // compute sqrt of transform
+  Usqt.set_identity();
+  Usqt[0][0] = sqtsu;
+  if (neg_scale)
+    Usqt[0][0] = -sqtsu;
+  Usqt[0][1] = ufact * sigma_u;
+  Usqt[0][2] = ufact * tu;
+
+  Usqt_inv.set_identity();
+  Usqt_inv[0][0] = 1.0 / sqtsu;
+  Usqt_inv[0][1] = -ufact * sigma_u / sqtsu;
+  Usqt_inv[0][2] = -ufact * tu / sqtsu;
+  return true;
+}
 bool
 vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<double> & aF,
                                       const std::vector<vnl_vector_fixed<double, 3>> & img_pts0,
