@@ -76,6 +76,15 @@ class vpgl_equi_rectification
                            vnl_matrix_fixed<double, 3, 3>& H0, vnl_matrix_fixed<double, 3, 3>& H1,
                            double min_scale = 0.1);
 
+  //:for convenience, from cameras, but only the fundamental matrix is used in the rectification
+  static bool rectify_pair(vpgl_affine_camera<double> const& A0, vpgl_affine_camera<double> const& A1,
+                           const std::vector<vnl_vector_fixed<double, 3> >& img_pts0,
+                           const std::vector<vnl_vector_fixed<double, 3> >& img_pts1,
+                           vnl_matrix_fixed<double, 3, 3>& H0, vnl_matrix_fixed<double, 3, 3>& H1,
+                           double min_scale = 0.1){
+    vpgl_affine_fundamental_matrix<double> aF(A0, A1);
+    return rectify_pair(aF, img_pts0, img_pts1, H0, H1, min_scale);
+  }
 
   //: the rectification of images perspective cameras
   //  epipoles are defined by the essential matrixof the two cameras
