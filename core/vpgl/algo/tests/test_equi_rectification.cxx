@@ -1,12 +1,14 @@
 #include <limits>
 #include <iostream>
 #include "testlib/testlib_test.h"
-#include <vpgl/algo/vpgl_equi_rectification.h>
-#include <vpgl/algo/vpgl_fm_compute_8_point.h>
+#include "vpgl/algo/vpgl_equi_rectification.h"
+#include "vpgl/algo/vpgl_fm_compute_8_point.h"
 #include "vpgl/vpgl_affine_camera.h"
 #include "vpgl/vpgl_proj_camera.h"
 #include "vpgl/vpgl_fundamental_matrix.h"
 #include "vpgl/vpgl_affine_fundamental_matrix.h"
+#include "vpgl/vpgl_perspective_camera.h"
+#include "vpgl/vpgl_essential_matrix.h"
 #include "vnl/vnl_vector_fixed.h"
 #include "vnl/vnl_matrix_fixed.h"
 #include "vgl/vgl_homg_point_2d.h"
@@ -114,7 +116,7 @@ test_equi_rectification()
   std::vector<vnl_vector_fixed<double, 3>> syn_pts0, syn_pts1 = pts1;
   for (size_t i = 0; i < n; ++i)
   {
-    const vnl_vector_fixed<double, 3> & sp1 = syn_pts1[i];
+    const vnl_vector_fixed<double, 3>& sp1 = syn_pts1[i];
     u1_avg += sp1[0];
     v1_avg += sp1[1];
     vnl_vector_fixed<double, 3> syn_p0;
@@ -156,52 +158,62 @@ test_equi_rectification()
   TEST_NEAR("affine_rectification collinear epipolar lines", syn_er0 + syn_er1, 0.0, 1e-8);
 
   //
-  // **************  the projective case **************
+  // **************  the perspective case **************
   //
-  double random_list0[12] = { 1, 15, 9, -1, 2, -6, -9, 7, -5, 6, 10, 0 };
-  double random_list1[12] = { 10.6, 1.009, .676, .5, -13, -10, 8, 5, 88, -2, -100, 11 };
-  vpgl_proj_camera<double> C0(random_list0);
-  vpgl_proj_camera<double> C1(random_list1);
-  vpgl_fundamental_matrix<double> F(C0, C1);
-  vnl_matrix_fixed<double, 3, 3> mF = F.get_matrix();
+  //camera 0
+  double kd[9] = { 8829.15, 0, 1024,
+    0, 8829.15, 766,
+    0, 0, 1 };
+  vnl_matrix_fixed<double, 3, 3> Km(kd);
+  vpgl_calibration_matrix<double> K(Km);
+  double rd[9] = { 0.640151, -0.758607, 0.121334,
+    -0.453832, -0.500846, -0.737014,
+    0.619873, 0.416735, -0.664898 };
+  vnl_matrix_fixed<double, 3, 3> R0m(rd);
+  vgl_rotation_3d<double> R0(R0m);
+  vgl_vector_3d<double> t0(8.71101, 327.467, 1698.42);
+  vpgl_perspective_camera<double> P0(K, R0, t0);
+  //camera 1
+  double rd1[9] = { 0.930967, 0.365021, 0.00776682,
+    0.24488, -0.608493, -0.754831,
+    -0.270803, 0.704625, -0.655873 };
+  vnl_matrix_fixed<double, 3, 3> R1m(rd1);
+  vgl_rotation_3d<double> R1(R1m);
+  vgl_vector_3d<double> t1(-463.118, 106.98, 2043.14);
+  vpgl_perspective_camera<double> P1(K, R1, t1);
+   n = 10;
+  std::vector<vnl_vector_fixed<double, 3> > img_pts0(n), img_pts1(n);
+  img_pts0[0] = vnl_vector_fixed<double, 3>(1776.9489999704870, 648.17236725689770, 1.0);
+  img_pts0[1] = vnl_vector_fixed<double, 3>(781.05785925332202, 1041.9915725535539, 1.0);
+  img_pts0[2] = vnl_vector_fixed<double, 3>(858.82214875398597, 744.90210438253109, 1.0);
+  img_pts0[3] = vnl_vector_fixed<double, 3>(454.80147386893833, 86.811832283988707, 1.0);
+  img_pts0[4] = vnl_vector_fixed<double, 3>(513.45158946665163, 39.239312171023265, 1.0);
+  img_pts0[5] = vnl_vector_fixed<double, 3>(624.92974551382588, 640.43308661626497, 1.0);
+  img_pts0[6] = vnl_vector_fixed<double, 3>(1170.5663210660630, 1221.6331987891060, 1.0);
+  img_pts0[7] = vnl_vector_fixed<double, 3>(441.01771889948571, 803.53175231982129, 1.0);
+  img_pts0[8] = vnl_vector_fixed<double, 3>(888.72913773975540, 410.65687500212738, 1.0);
+  img_pts0[9] = vnl_vector_fixed<double, 3>(357.60615423362964, 181.20738895038590, 1.0);
 
-  std::vector<vgl_homg_point_3d<double>> p3d;
-  p3d.emplace_back(2, -1, 5);
-  p3d.emplace_back(1, 10, 0);
-  p3d.emplace_back(-5, -7, 1);
-  p3d.emplace_back(0, 8, 10);
-  p3d.emplace_back(1, 2, 3);
-  p3d.emplace_back(-4, -10, 0);
-  p3d.emplace_back(6, 8, -5);
-  p3d.emplace_back(-2, 0, -1.5);
-
-  std::vector<vgl_homg_point_2d<double>> pts2d0, pts2d1;
-  for (const auto & i : p3d)
-  {
-    pts2d0.push_back(C0.project(i));
-    pts2d1.push_back(C1.project(i));
+  img_pts1[0] = vnl_vector_fixed<double, 3>(1529.9090429171958, 1201.2283542747637, 1.0);
+  img_pts1[1] = vnl_vector_fixed<double, 3>(553.79753239488241, 716.22019730235502, 1.0);
+  img_pts1[2] = vnl_vector_fixed<double, 3>(965.35187991236785, 672.81612193366141, 1.0);
+  img_pts1[3] = vnl_vector_fixed<double, 3>(1678.4486223775568, 247.27316931406526, 1.0);
+  img_pts1[4] = vnl_vector_fixed<double, 3>(1775.2406012164595, 262.00731765069975, 1.0);
+  img_pts1[5] = vnl_vector_fixed<double, 3>(1004.9951767448647, 514.68865692887289, 1.0);
+  img_pts1[6] = vnl_vector_fixed<double, 3>(471.72288303376052, 982.51632067480352, 1.0);
+  img_pts1[7] = vnl_vector_fixed<double, 3>(723.77964464151125, 468.15050631056698, 1.0);
+  img_pts1[8] = vnl_vector_fixed<double, 3>(1433.8532365590522, 587.93200197417616, 1.0);
+  img_pts1[9] = vnl_vector_fixed<double, 3>(1500.7921551078598, 228.66788795254868, 1.0);
+  H0.set_identity(); H1.set_identity();
+  good = vpgl_equi_rectification::rectify_pair(P0, P1, img_pts0, img_pts1, H0, H1);
+  TEST("perspective rectification rectify success", good, true);
+  double y_eq = 0.0;
+  for (size_t i = 0; i < n; ++i) {
+    vnl_vector_fixed<double, 3> p0h = H0 * img_pts0[i];
+    vnl_vector_fixed<double, 3> p1h = H1 * img_pts1[i];
+    p0h /= p0h[2]; p1h /= p1h[2];
+    y_eq += fabs(p0h[1] - p1h[1]);
   }
-  std::vector<vnl_vector_fixed<double, 3>> ppts0, ppts1;
-  for (size_t i = 0; i < pts2d0.size(); ++i)
-  {
-    ppts0.emplace_back(pts2d0[i].x(), pts2d0[i].y(), pts2d0[i].w());
-    ppts1.emplace_back(pts2d1[i].x(), pts2d1[i].y(), pts2d1[i].w());
-  }
-  vnl_matrix_fixed<double, 3, 3> pH0, pH1;
-  good = vpgl_equi_rectification::rectify_pair(F, ppts0, ppts1, pH0, pH1);
-  TEST("equi rectification projective", good, true);
-  equal_v = true;
-  for (size_t k = 0; k < pts2d0.size() && equal_v; ++k)
-  {
-    vnl_vector_fixed<double, 3> p0 = pts0[k], hp0, p1 = pts1[k], hp1;
-    hp0 = pH0 * p0;
-    hp1 = pH1 * p1;
-    double v0 = hp0[1] / hp0[2], v1 = hp1[1] / hp1[2];
-    double dv = fabs(v1 - v0);
-    if (dv > 1.1)
-      equal_v = false;
-  }
-  TEST("collinear epipolar lines projective", equal_v, true);
+  TEST_NEAR("rows aligned", y_eq, 0.0, 1e-3);
 }
-
 TESTMAIN(test_equi_rectification);
