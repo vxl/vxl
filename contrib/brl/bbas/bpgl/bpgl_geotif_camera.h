@@ -136,13 +136,14 @@ class bpgl_geotif_camera : vpgl_camera<T>
   //: map global geo X-Y (wgs84 or UTM) to dsm u,v (uses GEOTIFF matrix)
   void global_to_dsm(T gx, T gy, T& i, T& j) const;
 
+  //: intialize geographic info from the geotiff header
+  // camera projection not enabled but the above functions are available
+  bool init_from_geotif(vil_image_resource_sptr const& resc);
+
   //=====================================================================
  protected:
   //: extract the geographic matrix from the geotiff header
   bool construct_matrix(T sx, T sy, T sz, std::vector<std::vector<T> > tiepoints);
-
-  //: intialize geographic info from the geotiff header
-  bool init_from_geotif(vil_image_resource_sptr const& resc);
 
   //: map local coordinate to global coordinates
   bool local_to_global(T lx, T ly, T lz, T& gx, T& gy, T& gz) const;
