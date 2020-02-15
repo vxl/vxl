@@ -90,7 +90,8 @@ class vpgl_equi_rectification
   //  epipoles are defined by the essential matrixof the two cameras
   //  the point sets are correspondences between the two images and are used to define
   //  the column skew transform and row offset
-  static bool rectify_pair(vpgl_perspective_camera<double> const& P0, vpgl_perspective_camera<double> const& P1,
+  static bool rectify_pair(vpgl_perspective_camera<double> const& P0, 
+                           vpgl_perspective_camera<double> const& P1,
                            const std::vector<vnl_vector_fixed<double, 3> >& img_pts0,
                            const std::vector<vnl_vector_fixed<double, 3> >& img_pts1,
                            vnl_matrix_fixed<double, 3, 3> & H0,
