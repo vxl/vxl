@@ -4,9 +4,9 @@
 
 #include "bwm_tableau_img.h"
 #include "bwm_tableau_rat_cam.h"
-#include "bwm_tableau_geo_cam.h"
 #include "bwm_tableau_generic_cam.h"
 #include "bwm_tableau_video.h"
+#include "bwm_tableau_fiducial.h"
 #include "bwm_command_macros.h"
 #include "bwm_tableau_mgr.h"
 
@@ -196,16 +196,11 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
                                                           &bwm_tableau_img::
                                                           scroll_to_point));
   menu.add("Image Display", img_other);
-//  menu.separator();
 
-//  menu.add( "Deselect All Objects", // Not needed with shift middle mouse
-//            new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::deselect_all),
-//            vgui_key('-'));
-
-  // add more based on the tableau type
+  
+  // add more popup menu items based on the tableau type
   // all camera tableau children will do the following menu items
   if (tab_->type_name().compare("bwm_tableau_proj_cam")    == 0 ||
-      tab_->type_name().compare("bwm_tableau_geo_cam")     == 0 ||
       tab_->type_name().compare("bwm_tableau_rat_cam")     == 0 ||
       tab_->type_name().compare("bwm_tableau_video")       == 0 ||
       tab_->type_name().compare("bwm_tableau_generic_cam") == 0)
@@ -553,4 +548,17 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
                             &bwm_tableau_video::extract_histograms));
     menu.add("Video Correspondence", video_corr_submenu);
   }
+
+if (tab_->type_name().compare("bwm_tableau_fiducial")    == 0){
+  bwm_tableau_fiducial* fid_tab = static_cast<bwm_tableau_fiducial* > (tab_.as_pointer());
+  menu.separator();
+  vgui_menu corr_menu;
+  corr_menu.add( "enable fiducial corrs",
+                 new vgui_command_simple<bwm_tableau_fiducial>(fid_tab,&bwm_tableau_fiducial::enable_fid_corrs));
+  corr_menu.add( "disable fiducial corrs",
+                 new vgui_command_simple<bwm_tableau_fiducial>(fid_tab,&bwm_tableau_fiducial::disable_fid_corrs));
+  corr_menu.add( "save fiducial corrs",
+                 new vgui_command_simple<bwm_tableau_fiducial>(fid_tab,&bwm_tableau_fiducial::save_fiducial_corrs));
+    menu.add( "Fiducial Correspondence", corr_menu);
+ }
 }

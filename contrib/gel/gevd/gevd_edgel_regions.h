@@ -105,7 +105,7 @@ class gevd_edgel_regions
   // Utilities
   bool GroupContainsEdges(std::vector<vtol_edge_2d_sptr>& sg);
   bool InitRegionArray(std::vector<vtol_edge_2d_sptr>& sg);
-  unsigned char label_code(unsigned int label);
+  unsigned char label_code(unsigned int label) const;
   bool add_to_forward(unsigned int key, unsigned int value);
   bool add_to_reverse(unsigned int key, unsigned int value);
   unsigned char EncodeNeighborhood(unsigned int ul, unsigned int ur,
@@ -113,7 +113,7 @@ class gevd_edgel_regions
   void UpdateConnectedNeighborhood(unsigned int x, unsigned int y);
   void AssignEdgeLabels(unsigned int x, unsigned int y);
   void ApplyRegionEquivalence();
-  bool out_of_bounds(unsigned int x, unsigned int y);
+  bool out_of_bounds(unsigned int x, unsigned int y) const;
   void insert_adjacency(unsigned int region, const vtol_edge_2d_sptr& e);
   void CollectEdges();
   void CollectFaceEdges();
@@ -121,8 +121,8 @@ class gevd_edgel_regions
   void AccumulateMeans();
   void AccumulateRegionData();
   void InsertFaceData();
-  unsigned int X(unsigned int x);
-  unsigned int Y(unsigned int y);
+  unsigned int X(unsigned int x) const;
+  unsigned int Y(unsigned int y) const;
   unsigned int Xf(float x);
   unsigned int Yf(float y);
   bool insert_edgel(float pre_x, float pre_y, float x, float y,
@@ -132,11 +132,11 @@ class gevd_edgel_regions
                          unsigned int cur_label,
                          unsigned int label);
   bool get_next_label(std::vector<unsigned int>* labels,
-                      unsigned int& label);
+                      unsigned int& label) const;
   void print_edge_colis(unsigned int x, unsigned int y,
-                        gevd_region_edge* r1, gevd_region_edge* r2);
+                        gevd_region_edge* r1, gevd_region_edge* r2) const;
   bool corrupt_boundary(std::vector<vtol_edge_2d_sptr>& edges,
-                        std::vector<vtol_vertex_sptr>& bad_verts);
+                        std::vector<vtol_vertex_sptr>& bad_verts) const;
   bool remove_hairs(std::vector<vtol_edge_2d_sptr>& edges);
   bool connect_ends(std::vector<vtol_edge_2d_sptr>& edges,
                     std::vector<vtol_vertex_sptr>& bad_verts);

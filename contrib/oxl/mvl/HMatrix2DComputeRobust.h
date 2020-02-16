@@ -48,7 +48,7 @@ class HMatrix2DComputeRobust
   std::vector<double> calculate_residuals(std::vector<vgl_homg_point_2d<double> >& one,
                                          std::vector<vgl_homg_point_2d<double> >& two,
                                          HMatrix2D* H);
-  double stdev(std::vector<double>& residuals);
+  double stdev(std::vector<double>& residuals) const;
 
   double std_;
   std::vector<int> basis_;

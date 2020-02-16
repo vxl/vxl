@@ -119,7 +119,7 @@ vgui_wx_adaptor::~vgui_wx_adaptor()
 double
 vgui_wx_adaptor::get_scale_factor() const
 {
-#ifdef __WXX11__
+#if defined( __WXX11__) || defined(__WXMSW__)
   // For some reason, X11 wx gives a scale factor that is not related to
   // the logical/physical pixel difference between glViewport and wxGLCanvas
   return 1.0;

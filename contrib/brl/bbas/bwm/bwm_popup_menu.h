@@ -13,15 +13,6 @@ class bwm_popup_menu
   virtual ~bwm_popup_menu() {}
   void get_menu(vgui_menu& menu);
 
-  // Image Processing Related Menu Items
-#if 0
-  virtual void create_box();
-  virtual void create_polygon();
-  virtual void create_polyline();
-  virtual void create_point();
-  virtual void create_pointset();
-#endif // 0
-
   // ************* IMAGE Processing Methods
 
   //: Draws the histogram on a graph (if the image is greyscale)

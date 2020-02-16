@@ -187,7 +187,7 @@ double vmal_track_lines::seg_angle(const vtol_edge_2d_sptr& trans_line,const vto
   return alpha;
 }
 
-bool vmal_track_lines::belong(const vtol_edge_2d_sptr& trans_line,const vtol_edge_2d_sptr& fit_line)
+bool vmal_track_lines::belong(const vtol_edge_2d_sptr& trans_line,const vtol_edge_2d_sptr& fit_line) const
 {
   double tl1x=trans_line->v1()->cast_to_vertex_2d()->x();
   double tl2x=trans_line->v2()->cast_to_vertex_2d()->x();

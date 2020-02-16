@@ -148,12 +148,12 @@ void gevd_edgel_regions::print_intensity_data()
 //: The region array can be offset from the corner of the ROI.
 //    The following two methods transform from the ROI coordinate
 //    system to the region label array coordinate system
-unsigned int gevd_edgel_regions::X(unsigned int x)
+unsigned int gevd_edgel_regions::X(unsigned int x) const
 {
   return x-xo_;
 }
 
-unsigned int gevd_edgel_regions::Y(unsigned int y)
+unsigned int gevd_edgel_regions::Y(unsigned int y) const
 {
   return y-yo_;
 }
@@ -511,7 +511,7 @@ merge_equivalence(std::map<unsigned int, std::vector<unsigned int>* >& tab,
 //    The set of labels is searched to find a label larger than label, but
 //    not in the set, labels.
 bool gevd_edgel_regions::get_next_label(std::vector<unsigned int>* labels,
-                                        unsigned int& label)
+                                        unsigned int& label) const
 {
   unsigned int tmp = label+1;
   if (!labels)
@@ -890,7 +890,7 @@ bool gevd_edgel_regions::InitRegionArray(std::vector< vtol_edge_2d_sptr>& sg)
 //---------------------------------------------------------------
 //: Get code for a given label.
 //
-unsigned char gevd_edgel_regions::label_code(unsigned int label)
+unsigned char gevd_edgel_regions::label_code(unsigned int label) const
 {
   unsigned char result;
   if (label<min_region_label_)
@@ -1254,7 +1254,7 @@ static bool reg_edges_neq(gevd_region_edge* r1, gevd_region_edge* r2)
 // definition is at pixel granularity.  The edge collision causes a needed
 // edge to be superseded.
 void gevd_edgel_regions::print_edge_colis(unsigned int x, unsigned int y,
-                                          gevd_region_edge* r1, gevd_region_edge* r2)
+                                          gevd_region_edge* r1, gevd_region_edge* r2) const
 {
   if (reg_edges_neq(r1, r2))
     if (verbose_)
@@ -1269,7 +1269,7 @@ void gevd_edgel_regions::print_edge_colis(unsigned int x, unsigned int y,
 //    This routine tests this constraint.
 bool gevd_edgel_regions::
 corrupt_boundary(std::vector<vtol_edge_2d_sptr>& edges,
-                 std::vector<vtol_vertex_sptr>& bad_vertices)
+                 std::vector<vtol_vertex_sptr>& bad_vertices) const
 {
   bool bad = false;
   // Initialize Markers
@@ -1740,7 +1740,7 @@ void gevd_edgel_regions::ApplyRegionEquivalence()
 
 //-------------------------------------------------------------------
 //: Bounds check on region_label_array_
-bool gevd_edgel_regions::out_of_bounds(unsigned int x, unsigned int y)
+bool gevd_edgel_regions::out_of_bounds(unsigned int x, unsigned int y) const
 {
   bool out = x>(xend_-xo_)||y>(yend_-yo_);
   return out;

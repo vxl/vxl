@@ -106,7 +106,7 @@ bool FMatrixComputeLinear::compute (std::vector<HomgPoint2D>& points1,
 //-----------------------------------------------------------------------------
 bool FMatrixComputeLinear::compute_preconditioned (std::vector<vgl_homg_point_2d<double> >& points1,
                                                    std::vector<vgl_homg_point_2d<double> >& points2,
-                                                   FMatrix& F)
+                                                   FMatrix& F) const
 {
   // Create design matrix from conditioned points.
   FDesignMatrix design(points1, points2);
@@ -130,7 +130,7 @@ bool FMatrixComputeLinear::compute_preconditioned (std::vector<vgl_homg_point_2d
 //-----------------------------------------------------------------------------
 bool FMatrixComputeLinear::compute_preconditioned (std::vector<HomgPoint2D>& points1,
                                                    std::vector<HomgPoint2D>& points2,
-                                                   FMatrix *F)
+                                                   FMatrix *F) const
 {
   // Create design matrix from conditioned points.
   FDesignMatrix design(points1, points2);

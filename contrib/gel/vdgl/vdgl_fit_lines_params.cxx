@@ -8,7 +8,7 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-bool vdgl_fit_lines_params::SanityCheck()
+bool vdgl_fit_lines_params::SanityCheck() const
 {
   bool valid = true;
 

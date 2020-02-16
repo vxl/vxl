@@ -56,7 +56,7 @@ class FMatrixComputeNonLinear : public vnl_least_squares_function
   // Helpers-------------------------------------------------------------------
   void fmatrix_to_params(const FMatrix& F, vnl_vector<double>& params);
   FMatrix params_to_fmatrix(const vnl_vector<double>& params);
-  void get_plan(int &r1, int &c1, int &r2, int &c2);
+  void get_plan(int &r1, int &c1, int &r2, int &c2) const;
   vnl_vector<double> calculate_residuals(FMatrix* F);
 };
 

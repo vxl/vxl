@@ -47,7 +47,7 @@ SanityCheck()
 }
 
 void vifa_group_pgram_params::
-print_info(void)
+print_info(void) const
 {
   std::cout << "vifa_group_pgram_params:\n"
            << "  angle increment     = " << angle_increment_ << std::endl

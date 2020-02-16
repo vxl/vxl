@@ -111,7 +111,7 @@ class PMatrix : public vbl_ref_count
   bool is_behind_camera(const HomgPoint3D&);
   bool is_behind_camera(vgl_homg_point_3d<double> const&);
   void flip_sign();
-  bool looks_conditioned();
+  bool looks_conditioned() const;
   void fix_cheirality();
 
   // Data Access---------------------------------------------------------------

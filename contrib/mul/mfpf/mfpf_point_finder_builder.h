@@ -52,7 +52,7 @@ class mfpf_point_finder_builder
   void parse_base_props(mbl_read_props_type& props);
 
   //: Set base-class parameters of point finder
-  void set_base_parameters(mfpf_point_finder& pf);
+  void set_base_parameters(mfpf_point_finder& pf) const;
 
  public:
 

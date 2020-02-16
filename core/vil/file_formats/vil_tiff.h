@@ -301,7 +301,7 @@ class vil_tiff_image : public vil_blocked_image_resource
   void pad_block_with_zeros(unsigned ioff, unsigned joff,
                             unsigned iclip, unsigned jclip,
                             unsigned bytes_per_pixel,
-                            vxl_byte* block_buf);
+                            vxl_byte* block_buf) const;
 
   //: fill the block with view data
   void fill_block_from_view(unsigned bi, unsigned bj,

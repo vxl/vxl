@@ -9,6 +9,7 @@
 #include "bwm_observer_mgr.h"
 #include "bwm_tableau_mgr.h"
 #include "bwm_tableau_video.h"
+#include "bwm_tableau_fiducial.h"
 
 #include "bwm_observable_mesh.h"
 #include "bwm_world.h"
@@ -956,7 +957,6 @@ void bwm_site_mgr::load_cam_tableau()
   types.push_back("projective");
   types.push_back("perspective");
   types.push_back("identity");
-  types.push_back("geo");
   if(tk_name_ == "mfc"){
   vgui_dialog_extensions params ("Camera Tableau");
   params.field("Tableau Name", name);
@@ -1019,10 +1019,57 @@ void bwm_site_mgr::load_cam_tableau()
   bwm_tableau_img*  t = tableau_factory_.create_tableau(cam);
   bwm_tableau_mgr::instance()->add_tableau(t, name);
 }
-
-bwm_io_config_parser* bwm_site_mgr::parse_config()
+// a tableau for specifying the image locations of 3-d fiducial data
+void bwm_site_mgr::load_fiducial_tableau()
 {
-  std::string fname = bwm_utils::select_file();
+  std::string ext, name, img_file, fid_file, empty="";
+  if (tk_name_ == "mfc") {
+    vgui_dialog_extensions params("Fiducial Tableau (fid xor img )");
+    params.field("Tableau Name", name);
+    params.line_break();
+    params.file("Image...", ext, img_file);
+    params.line_break();
+    params.file("Fiducials...", ext, fid_file);
+    params.line_break();
+    if (!params.ask())
+      return;
+  }else {
+    vgui_dialog params("Fiducial Tableau (fid xor img )");
+    params.field("Tableau Name", name);
+    params.line_break();
+    params.file("Image...", ext, img_file);
+    params.line_break();
+    params.file("Fiducials...", ext, fid_file);
+    params.line_break();
+    if (!params.ask())
+      return;
+  }
+    // the fid file contains the data to populate a fiducial tableau (like a site file)
+    // initially just load a composite fiducial placement image and save the resulting
+    // fiducial correspondences to a fid file path defined by the fiducial tableau popup
+    // the state of the tableau is restored by loading the fid file
+    if ((img_file == "" && fid_file == "")||(img_file != "" && fid_file != "")) {
+      vgui_dialog error ("Error");
+      error.message ("only one of img_file and fid file can be entered");
+      error.ask();
+      return;
+    }
+
+    bwm_io_tab_config_fiducial* fid = new bwm_io_tab_config_fiducial(name, true, img_file, fid_file);
+  active_tableaus_.push_back(fid);
+  bwm_tableau_fiducial*  t = dynamic_cast<bwm_tableau_fiducial*>(tableau_factory_.create_tableau(fid));
+  if (!t) {
+      std::cerr << "factory can't create the fiducial tableau" << std::endl;
+      return;
+  }
+  bwm_tableau_mgr::instance()->add_tableau(t, name);
+}
+
+bwm_io_config_parser* bwm_site_mgr::parse_config(std::string const& path)
+{
+  std::string fname = path;
+  if(fname == "")
+   fname = bwm_utils::select_file();
 
   if (fname.size() == 0)
     return nullptr;
@@ -1044,7 +1091,10 @@ bwm_io_config_parser* bwm_site_mgr::parse_config()
   std::cout << "finished!" << std::endl;
   return parser;
 }
-
+bwm_io_config_parser*   bwm_site_mgr::site_parser(std::string const& path){
+  return this->parse_config(path);
+}
+  
 static void write_vrml_header(std::ofstream& str)
 {
   str << "#VRML V2.0 utf8\n"

@@ -275,7 +275,7 @@ int
 gevd_fold::RecoverJunctions(const gevd_bufferxy& image,
                             gevd_bufferxy& contour, gevd_bufferxy& direction,
                             gevd_bufferxy& locationx, gevd_bufferxy& locationy,
-                            int*& junctionx, int*& junctiony)
+                            int*& junctionx, int*& junctiony) const
 {
 #if defined(DEBUG)
   vul_timer t;

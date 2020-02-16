@@ -88,7 +88,7 @@ class NViewMatches : public std::vector<NViewMatch>
   int incorporate_triplet(int base_view, int c1, int c2, int c3);
   int incorporate(const NViewMatch& matches);
   void remove_inconsistencies();
-  NViewMatch make_triplet_match(int base_view, int c1, int c2, int c3);
+  NViewMatch make_triplet_match(int base_view, int c1, int c2, int c3) const;
 };
 
 class OffsetNViewMatch : public NViewMatch

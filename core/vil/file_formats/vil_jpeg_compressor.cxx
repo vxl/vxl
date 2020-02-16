@@ -126,7 +126,7 @@ vil_jpeg_compressor::set_quality(int q)
 }
 
 int
-vil_jpeg_compressor::get_quality()
+vil_jpeg_compressor::get_quality() const
 {
   return quality;
 }

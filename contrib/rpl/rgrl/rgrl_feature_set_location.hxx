@@ -44,7 +44,8 @@ rgrl_feature_set_location( feature_vector const& features,
   {
     feature_vector::const_iterator itr = features.begin();
     //feature_type_ = (*itr)->type_id();
-    feature_type_ = &typeid(*(*itr));
+    auto & xx = *(*itr);
+    feature_type_ = &typeid(xx);
     min = (*itr)->location();
     max = min;
     for ( ; itr != features.end(); ++itr ) {

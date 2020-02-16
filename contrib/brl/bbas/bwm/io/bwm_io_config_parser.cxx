@@ -59,8 +59,10 @@ bwm_io_config_parser ::cdataHandler(std::string name, std::string data)
   }
   else if (name.compare(PYRAMID_EXE_TAG) == 0) {
     site_->pyr_exe_path_.assign(data);
+  }else if(name.compare(FID_CORR_PATH_TAG) == 0){
+    fiducial_path_.assign(data);
   }
-   cdata = "";
+  cdata = "";
 }
 
 void
@@ -71,13 +73,19 @@ bwm_io_config_parser::handleAtts(const XML_Char** /*atts*/)
 void
 bwm_io_config_parser::startElement(const char* name, const char** atts)
 {
+ static bool in_fiducial_mode = false;
   if (std::strcmp(name, SITE_TAG) == 0) {
     for (int i=0; atts[i]; i+=2) {
       if (std::strcmp(atts[i], "name") == 0)
         convert(atts[i+1], site_->name_);
     }
-  }
-  else if ((std::strcmp(name,IMAGE_TABLEAU_TAG)== 0) ||
+  }else if(std::strcmp(name, FIDUCIAL_TABLEAU_TAG) == 0) {
+    for (int i=0; atts[i]; i+=2) {
+      if (std::strcmp(atts[i], "site") == 0)
+        convert(atts[i+1], fid_site_name_);
+    }
+    in_fiducial_mode = true;
+  }else if ((std::strcmp(name,IMAGE_TABLEAU_TAG)== 0) ||
     (std::strcmp(name, CAMERA_TABLEAU_TAG) == 0) ||
     (std::strcmp(name,COIN3D_TABLEAU_TAG) == 0) ||
     (std::strcmp(name,PROJ2D_TABLEAU_TAG) == 0)) {
@@ -102,10 +110,17 @@ bwm_io_config_parser::startElement(const char* name, const char** atts)
   }
   else if (std::strcmp(name, CORRESPONDENCES_TAG) == 0) {
     for (int i=0; atts[i]; i+=2) {
-      if (std::strcmp(atts[i], "mode") == 0)
-        convert(atts[i+1], site_->corr_mode_);
-      else if (std::strcmp(atts[i], "type") == 0)
-        convert(atts[i+1], site_->corr_type_);
+      if (std::strcmp(atts[i], "mode") == 0){
+        if(!in_fiducial_mode)
+          convert(atts[i+1], site_->corr_mode_);
+        else
+          convert(atts[i+1], fid_mode_);
+      }else if (std::strcmp(atts[i], "type") == 0){
+        if(!in_fiducial_mode)
+          convert(atts[i+1], site_->corr_type_);
+        else
+          convert(atts[i+1], fid_type_);
+      }
     }
   }
   else if (std::strcmp(name, CORRESP_PT_TAG) == 0) {
@@ -141,6 +156,15 @@ bwm_io_config_parser::startElement(const char* name, const char** atts)
       else if (std::strcmp(atts[i], "elev") == 0)
         convert(atts[i+1], elev_);
     }
+  }else if(std::strcmp(name, FID_LOC_TAG) == 0) {
+    float u = 0.0f, v = 0.0f;
+    for (int i=0; atts[i]; i+=2) {
+      if (std::strcmp(atts[i], "u") == 0)
+        convert(atts[i+1], u);
+      else if (std::strcmp(atts[i], "v") == 0)
+        convert(atts[i+1], v);
+    }
+    fid_locs_.emplace_back(u, v);
   }
 }
 

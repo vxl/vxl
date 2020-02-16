@@ -140,7 +140,7 @@ class vil3d_analyze_header
   //: Write header to given file
   bool write_file(const std::string& path) const;
 
-  void swapBytes(char *data, int size);
+  void swapBytes(char *data, int size) const;
   bool needSwap() const { return swap_bytes_; }
 
   //: Print out some parts of header
