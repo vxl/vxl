@@ -13,7 +13,8 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_new.h>
 #include <vnl/vnl_matrix_fixed.h>
-
+#include "rectify_params.h"
+#if 0
 struct rectify_params{
   rectify_params():
     min_disparity_z_(NAN), n_points_(1000), upsample_scale_(1.0),
@@ -27,7 +28,7 @@ struct rectify_params{
 };
 
 std::ostream& operator<<(std::ostream &os, const rectify_params& p);
-
+#endif
 //
 // requires two images and associated affine cameras. Class can load the data from files if needed.
 // the output is a pair of images that have common epipolar lines along image rows. The difference in

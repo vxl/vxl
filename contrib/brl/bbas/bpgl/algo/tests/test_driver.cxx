@@ -12,6 +12,7 @@ DECLARE( test_gridding );
 DECLARE( test_3d_from_disparity );
 DECLARE( test_heightmap_from_disparity );
 DECLARE( test_rectify_affine_image_pair );
+DECLARE( test_rectify_image_pair );
 
 void register_tests()
 {
@@ -26,6 +27,7 @@ void register_tests()
   REGISTER( test_3d_from_disparity );
   REGISTER( test_heightmap_from_disparity );
   REGISTER( test_rectify_affine_image_pair );
+  REGISTER( test_rectify_image_pair );
 }
 
 DEFINE_MAIN;
