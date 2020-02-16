@@ -50,7 +50,7 @@ bpgl_bundle_rolling_shutter_adj_lsqr::param_to_motion_matrix(int /*i*/, const do
     Mtopright+= wx*(wx*d*(s+t)*osqrinv -d*c);
   }
 
-  return vnl_double_4x4().set_identity().set_columns(0,Mtopleft).set_column(3,Mtopright);
+  return vnl_double_4x4().set_identity().set_columns(0,Mtopleft.as_ref()).set_column(3,Mtopright.as_ref());
 #if 0 // was:
   M(0,0)=Mtopleft(0,0);M(0,1)=Mtopleft(0,1);M(0,2)=Mtopleft(0,2);M(0,3)=Mtopright(0);
   M(1,0)=Mtopleft(1,0);M(1,1)=Mtopleft(1,1);M(1,2)=Mtopleft(1,2);M(1,3)=Mtopright(1);

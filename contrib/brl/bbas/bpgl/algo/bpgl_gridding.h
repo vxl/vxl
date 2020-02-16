@@ -193,7 +193,7 @@ class linear_interp
     // system matrices
     vnl_matrix<double> A(num_valid_neighbors,3);
     vnl_vector<double> b(num_valid_neighbors);
-    for (unsigned i=0; i<num_valid_neighbors; ++i) {
+    for (unsigned i=0; i<(unsigned)num_valid_neighbors; ++i) {
       A[i][0] = W[i] * (X[i] - x_origin);
       A[i][1] = W[i] * (Y[i] - y_origin);
       A[i][2] = W[i];

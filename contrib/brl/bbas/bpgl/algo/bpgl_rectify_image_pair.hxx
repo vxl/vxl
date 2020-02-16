@@ -12,12 +12,26 @@
 
 #include <vpgl/algo/vpgl_camera_convert.h>
 #include <vpgl/algo/vpgl_equi_rectification.h>
+#include "bpgl_rectify_image_pair.h"
+#include <vpgl/vpgl_fundamental_matrix.h>
+#include <vpgl/vpgl_affine_fundamental_matrix.h>
 
-#include "bpgl_rectify_affine_image_pair.h"
-
-bool bpgl_rectify_affine_image_pair::
-set_images_and_cams(vil_image_view_base_sptr const& view0, vpgl_affine_camera<double> const& acam0,
-                    vil_image_view_base_sptr const& view1, vpgl_affine_camera<double> const& acam1)
+template <class CAMT>
+void bpgl_rectify_image_pair<CAMT>::set_valid_types(){
+  valid_cam_types_.push_back("vpgl_affine_camera");
+  valid_cam_types_.push_back("vpgl_perspective_camera");
+}
+template <class CAMT>
+bool bpgl_rectify_image_pair<CAMT>::valid_type(std::string const& type){
+  for(size_t i = 0; i<valid_cam_types_.size(); ++i)
+    if(type == valid_cam_types_[i])
+      return true;
+  return false;
+}
+template <class CAMT>
+bool bpgl_rectify_image_pair<CAMT>::
+set_images_and_cams(vil_image_view_base_sptr const& view0, CAMT const& cam0,
+                    vil_image_view_base_sptr const& view1, CAMT const& cam1)
 {
   // convert images to float
   vil_image_view_base_sptr fview0 = vil_convert_cast(float(), view0);
@@ -34,17 +48,16 @@ set_images_and_cams(vil_image_view_base_sptr const& view0, vpgl_affine_camera<do
 
   // save to instance
   fview0_ = *fview0;
-  acam0_  = acam0;
+  cam0_  = cam0;
   fview1_ = *fview1;
-  acam1_  = acam1;
-  aF_ = vpgl_affine_fundamental_matrix<double> (acam0_, acam1_);
+  cam1_  = cam1;
   return true;
 }
 
-
-bool bpgl_rectify_affine_image_pair::
-set_images_and_cams(vil_image_resource_sptr const& resc0, vpgl_affine_camera<double> const& acam0,
-                    vil_image_resource_sptr const& resc1, vpgl_affine_camera<double> const& acam1)
+template <class CAMT>
+bool bpgl_rectify_image_pair<CAMT>::
+set_images_and_cams(vil_image_resource_sptr const& resc0, CAMT const& cam0,
+                    vil_image_resource_sptr const& resc1, CAMT const& cam1)
 {
   // get image views
   auto view0 = resc0->get_view();
@@ -60,55 +73,30 @@ set_images_and_cams(vil_image_resource_sptr const& resc0, vpgl_affine_camera<dou
   }
 
   // save to instance
-  return this->set_images_and_cams(view0, acam0, view1, acam1);
+  return this->set_images_and_cams(view0, cam0, view1, cam1);
 }
 
-
-bool bpgl_rectify_affine_image_pair::
-load_affine_camera(std::string const& cam_path, vpgl_affine_camera<double>& acam)
+template <class CAMT>
+bool bpgl_rectify_image_pair<CAMT>::
+load_camera(std::string const& cam_path, CAMT& cam)
 {
+  std::string ctype = cam.type_name();
+  if(!this->valid_type(ctype)){
+    std::cerr << "can't process camera of type " << ctype << std::endl;
+    return false;
+  }
   std::ifstream istr(cam_path);
   if (!istr) {
     std::cout << "Can't open camera path " << cam_path << std::endl;
     return false;
   }
-  vnl_matrix_fixed<double, 3, 4> M;
-  istr >> M;
-  bool aff = M[2][0] == 0.0 && M[2][1] == 0.0 && M[2][2] == 0.0;
-  if (aff && fabs(M[2][3]) > 0.0) {
-    acam.set_matrix(M);
-    return true;
-  }
-  std::cout << "camera not affine" << M << std::endl;
-  return false;
+  istr >> cam;
+  return true;
 }
 
 
-bool bpgl_rectify_affine_image_pair::
-load_images_and_cams(std::string const& image0_path, std::string const& acam0_path,
-                     std::string const& image1_path, std::string const& acam1_path)
-{
-  // read cameras
-  vpgl_affine_camera<double> acam0, acam1;
-  if(!load_affine_camera(acam0_path, acam0))
-    return false;
-  if(!load_affine_camera(acam1_path, acam1))
-    return false;
-
-  // read images
-  auto resc0 = vil_load_image_resource(image0_path.c_str());
-  if (!resc0)
-    return false;
-  auto resc1 = vil_load_image_resource(image1_path.c_str());
-  if (!resc1)
-    return false;
-
-  // save to instance
-  return this->set_images_and_cams(resc0, acam0, resc1, acam1);
-}
-
-
-void bpgl_rectify_affine_image_pair::
+template <class CAMT>
+void bpgl_rectify_image_pair<CAMT>::
 compute_warp_dimensions_offsets()
 {
   double dni0 = fview0_.ni()-1, dnj0 = fview0_.nj()-1;
@@ -168,9 +156,24 @@ compute_warp_dimensions_offsets()
   out_ni_ = static_cast<size_t>(scaled_w+0.5) +1;
   out_nj_ = static_cast<size_t>(scaled_h+0.5) +1;
 }
-
-
-bool bpgl_rectify_affine_image_pair::
+template <class CAMT>
+double bpgl_rectify_image_pair<CAMT>::scale_to_input_size(){
+  this->compute_warp_dimensions_offsets();
+  double ni0 = fview0_.ni(), nj0 = fview0_.nj();
+  double ni1=  fview1_.ni(), nj1 = fview1_.nj();
+  double w0 = std::max(ni0, ni1);
+  double h0 = std::max(nj0, nj1);
+  double sw = w0/out_ni_;
+  double sh = h0/out_nj_;
+  // 1.2 is geometric mean of 1 and sqrt(2)(45deg rotation)
+  // as a compromise scale for a rotated image
+  double s = 1.2*params_.upsample_scale_*std::max(sw, sh);
+  out_ni_ *= s;
+  out_nj_ *= s;
+  return s;
+}
+template <class CAMT>
+bool bpgl_rectify_image_pair<CAMT>::
 compute_rectification(vgl_box_3d<double>const& scene_box, size_t n_points, double average_z)
 {
   double min_x = scene_box.min_x();
@@ -189,10 +192,10 @@ compute_rectification(vgl_box_3d<double>const& scene_box, size_t n_points, doubl
     double y = rng.drand64()*height + min_y;
     double u0, v0, u1, v1;
 
-    acam0_.project(x,y,z0,u0,v0);
+    cam0_.project(x,y,z0,u0,v0);
     bool proj_0_good = (u0 >= 0 && u0 < ni0 && v0 >= 0 && v0 < nj0);
 
-    acam1_.project(x, y, z0, u1, v1);
+    cam1_.project(x, y, z0, u1, v1);
     bool proj_1_good = (u1 >= 0 && u1 < ni1 && v1 >= 0 && v1 < nj1);
 
     // store points regardless of if they project into each image
@@ -212,9 +215,26 @@ compute_rectification(vgl_box_3d<double>const& scene_box, size_t n_points, doubl
   }
   // sanity check
   bool epi_constraint = true;
+  vnl_matrix_fixed<double, 3, 3> Fm;
+  if(cam0_.type_name() == "vpgl_perspective_camera"){
+    vnl_matrix_fixed<double, 3, 4> m0 = cam0_.get_matrix(), m1 = cam1_.get_matrix();
+    vpgl_proj_camera<double> pc0(m0), pc1(m1);
+    vpgl_fundamental_matrix<double> Fp(pc0, pc1);
+    Fm = Fp.get_matrix();
+  }else if(cam0_.type_name() == "vpgl_affine_camera"){
+    vnl_matrix_fixed<double, 3, 4> m0 = cam0_.get_matrix(), m1 = cam1_.get_matrix();
+    vpgl_affine_camera<double> A0(m0), A1(m1);
+    vpgl_affine_fundamental_matrix<double> Fa(A0, A1);
+    Fm = Fa.get_matrix();
+  }else{
+    std::cerr << "Can't rectify image camera of type " << cam0_.type_name() << std::endl;
+    return false;
+  }
   for (size_t k = 0; k < img_pts0.size(); ++k) {
     vnl_vector_fixed<double, 3> pr = img_pts0[0], line_l, pl = img_pts1[0];
-    line_l = aF_.get_matrix() * pr;
+    line_l = Fm * pr;
+    //normalize line
+    line_l /= sqrt(line_l[0] * line_l[0] + line_l[1] * line_l[1]);
     double dp = dot_product(line_l, pl);
     epi_constraint = epi_constraint && fabs(dp) < 1.0e-6;
   }
@@ -223,9 +243,18 @@ compute_rectification(vgl_box_3d<double>const& scene_box, size_t n_points, doubl
     return false;
   }
 
-  if (!vpgl_equi_rectification::rectify_pair(aF_, img_pts0, img_pts1, H0_, H1_)) {
-    std::cout << "vpgl equi rectification failed" << std::endl;
-    return false;
+  if(cam0_.type_name() == "vpgl_affine_camera"){
+    vnl_matrix_fixed<double, 3, 4> m0 = cam0_.get_matrix(), m1 = cam1_.get_matrix();
+    vpgl_affine_camera<double> A0(m0), A1(m1);
+    if (!vpgl_equi_rectification::rectify_pair(A0, A1, img_pts0, img_pts1, H0_, H1_)) {
+      std::cout << "vpgl equi rectification failed" << std::endl;
+      return false;
+    }
+  }else if(cam0_.type_name() == "vpgl_perspective_camera"){
+    if (!vpgl_equi_rectification::rectify_pair(cam0_, cam1_, img_pts0, img_pts1, H0_, H1_)) {
+      std::cout << "vpgl equi rectification failed" << std::endl;
+      return false;
+    }
   }
   double singular_tol = 1.0e-6;
   if ((fabs(vnl_det(H0_)) < singular_tol) ||
@@ -264,28 +293,27 @@ compute_rectification(vgl_box_3d<double>const& scene_box, size_t n_points, doubl
     std::cout << "homographies do not minimize column shift" << std::endl;
     return false;
   }
-
-  this->compute_warp_dimensions_offsets();
-
+  double sf = this->scale_to_input_size();
   vnl_matrix_fixed<double, 3, 3> tr,sc;
   tr.set_identity();
   tr[0][2] = -du_off_; tr[1][2] = -dv_off_;
   H0_ = tr*H0_;
   H1_ = tr*H1_;
   sc.set_identity();
-  sc[0][0] = params_.upsample_scale_; sc[1][1] = sc[0][0];
+  sc[0][0] = sf; sc[1][1] = sc[0][0];
   H0_ = sc*H0_;
   H1_ = sc*H1_;
-  vnl_matrix_fixed<double, 3, 4> M0 = acam0_.get_matrix(), M1 = acam1_.get_matrix();
+  vnl_matrix_fixed<double, 3, 4> M0 = cam0_.get_matrix(), M1 = cam1_.get_matrix();
   M0 = H0_*M0;  M1 = H1_*M1;
-  rect_acam0_.set_matrix(M0);
-  rect_acam1_.set_matrix(M1);
+  rect_cam0_.set_matrix(M0);
+  rect_cam1_.set_matrix(M1);
   return true;
 }
 
 // provide the possibility of NAN as an invalid pixel value. Useful for subsequent
 // processing to avoid the invalid warp regions in the rectified image.
-void bpgl_rectify_affine_image_pair::
+template <class CAMT>
+void bpgl_rectify_image_pair<CAMT>::
 warp_image(vil_image_view<float> fview,
            vnl_matrix_fixed<double, 3, 3> const& H,
            vil_image_view<float>& fwarp,
@@ -313,10 +341,13 @@ warp_image(vil_image_view<float> fview,
   }
 }
 
-
-void bpgl_rectify_affine_image_pair::
-warp_pair()
+template <class CAMT>
+void bpgl_rectify_image_pair<CAMT>::warp_pair()
 {
   this->warp_image(fview0_, H0_, rect_fview0_, out_ni_, out_nj_);
   this->warp_image(fview1_, H1_, rect_fview1_, out_ni_, out_nj_);
 }
+  // Code for easy instantiation.
+#undef BPGL_RECTIFY_IMAGE_PAIR_INSTANTIATE
+#define BPGL_RECTIFY_IMAGE_PAIR_INSTANTIATE(CAMT) \
+template class bpgl_rectify_image_pair<CAMT>

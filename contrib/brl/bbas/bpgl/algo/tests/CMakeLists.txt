@@ -14,6 +14,7 @@ add_executable( bpgl_algo_test_all
   test_3d_from_disparity.cxx
   test_heightmap_from_disparity.cxx
   test_rectify_affine_image_pair.cxx
+  test_rectify_image_pair.cxx
 )
 
 target_link_libraries( bpgl_algo_test_all bpgl_algo ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib )
@@ -35,6 +36,7 @@ add_test( NAME bpgl_algo_test_gridding COMMAND $<TARGET_FILE:bpgl_algo_test_all>
 add_test( NAME bpgl_algo_test_3d_from_disparity COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_3d_from_disparity )
 add_test( NAME bpgl_algo_test_heightmap_from_disparity COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_heightmap_from_disparity )
 add_test( NAME bpgl_algo_test_rectify_affine_image_pair COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_rectify_affine_image_pair )
+add_test( NAME bpgl_algo_test_rectify_image_pair COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_rectify_image_pair )
 
 add_executable( bpgl_algo_test_include test_include.cxx )
 target_link_libraries( bpgl_algo_test_include bpgl_algo vpl)
