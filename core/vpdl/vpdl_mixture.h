@@ -105,8 +105,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   }
 
   // Destructor
-  ~vpdl_mixture()
-  {
+  ~vpdl_mixture() override {
     for (unsigned int i=0; i<components_.size(); ++i) {
       delete components_[i];
     }
@@ -128,21 +127,19 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   }
 
   //: Create a copy on the heap and return base class pointer
-  virtual vpdl_distribution<T,n>* clone() const
-  {
+  vpdl_distribution<T, n> *clone() const override {
     return new vpdl_mixture<T,n>(*this);
   }
 
   //: Return the run time dimension, which does not equal \c n when \c n==0
-  virtual unsigned int dimension() const
-  {
+  unsigned int dimension() const override {
     if (n > 0 || num_components() == 0)
       return n;
     return components_[0]->distribution->dimension();
   }
 
   //: Return the number of components in the mixture
-  unsigned int num_components() const { return components_.size(); }
+  unsigned int num_components() const override { return components_.size(); }
 
   //: Access (const) a component distribution of the mixture
   const vpdl_distribution<T,n>& distribution(unsigned int index) const
@@ -192,8 +189,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   }
 
   //: Evaluate the unnormalized density at a point
-  virtual T density(const vector& pt) const
-  {
+  T density(const vector &pt) const override {
     typedef typename std::vector<component*>::const_iterator comp_itr;
     T dens = 0;
     for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
@@ -204,8 +200,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   }
 
   //: Compute the probability density at this point
-  T prob_density(const vector& pt) const
-  {
+  T prob_density(const vector &pt) const override {
     typedef typename std::vector<component*>::const_iterator comp_itr;
     T prob = 0;
     T sum_w = 0;
@@ -221,8 +216,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   // \return the density at \a pt since it is usually needed as well, and
   //         is often trivial to compute while computing gradient
   // \retval g the gradient vector
-  virtual T gradient_density(const vector& pt, vector& g) const
-  {
+  T gradient_density(const vector &pt, vector &g) const override {
     typedef typename std::vector<component*>::const_iterator comp_itr;
     const unsigned int d = this->dimension();
     vpdt_set_size(g,d);
@@ -239,8 +233,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   }
 
   //: The probability integrated over a box
-  T box_prob(const vector& min_pt, const vector& max_pt) const
-  {
+  T box_prob(const vector &min_pt, const vector &max_pt) const override {
     typedef typename std::vector<component*>::const_iterator comp_itr;
     T prob = 0;
     T sum_w = 0;
@@ -255,8 +248,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   //: Evaluate the cumulative distribution function at a point
   // This is the integral of the density function from negative infinity
   // (in all dimensions) to the point in question
-  virtual T cumulative_prob(const vector& pt) const
-  {
+  T cumulative_prob(const vector &pt) const override {
     typedef typename std::vector<component*>::const_iterator comp_itr;
     T prob = 0;
     T sum_w = 0;
@@ -270,8 +262,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
 
   //: Compute the mean of the distribution.
   // weighted average of the component means
-  virtual void compute_mean(vector& mean) const
-  {
+  void compute_mean(vector &mean) const override {
     const unsigned int d = this->dimension();
     vpdt_set_size(mean,d);
     vpdt_fill(mean,T(0));
@@ -290,8 +281,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   }
 
   //: Compute the covariance of the distribution.
-  virtual void compute_covar(matrix& covar) const
-  {
+  void compute_covar(matrix &covar) const override {
     const unsigned int d = this->dimension();
     vector mean;
     vpdt_set_size(covar,d);
@@ -322,8 +312,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   //: The normalization constant for the density
   // When density() is multiplied by this value it becomes prob_density
   // norm_const() is reciprocal of the integral of density over the entire field
-  virtual T norm_const() const
-  {
+  T norm_const() const override {
     typedef typename std::vector<component*>::const_iterator comp_itr;
     T sum = 0;
     for (comp_itr i = components_.begin(); i != components_.end(); ++i)

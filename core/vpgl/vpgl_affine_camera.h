@@ -96,7 +96,7 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
 
   //: Clone `this': creation of a new object and initialization
   // legal C++ because the return type is covariant with vpgl_camera<T>*
-   virtual vpgl_affine_camera<T> *clone() const override;
+   vpgl_affine_camera<T> *clone() const override;
 
    //: the direction of all affine camera rays
    vgl_vector_3d<T> ray_dir() const { return ray_dir_; }

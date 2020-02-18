@@ -42,7 +42,7 @@ class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
 
   //: Destructor
   // Prevents base destructor from releasing memory we don't own
-  virtual ~vnl_vector_ref() = default;
+  ~vnl_vector_ref() override = default;
 
   //: Reference to self to make non-const temporaries.
   // This is intended for passing vnl_vector_fixed objects to

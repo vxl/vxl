@@ -330,7 +330,7 @@ class vpgl_rational_camera : public vpgl_camera<T>
   // --- project 3D world point to 2D image point --
 
   //: The generic camera interface. u represents image column, v image row.
-  virtual void project(const T x, const T y, const T z, T& u, T& v) const override;
+  void project(const T x, const T y, const T z, T &u, T &v) const override;
 
   //: Project a world point onto the image (vnl interface)
   vnl_vector_fixed<T, 2> project(vnl_vector_fixed<T, 3> const& world_point) const;

@@ -42,14 +42,12 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
   : vpdl_kernel_fbw_base<T,n>(samplez,bandwid) {}
 
   //: Create a copy on the heap and return base class pointer
-  virtual vpdl_distribution<T,n>* clone() const
-  {
+  vpdl_distribution<T, n> *clone() const override {
     return new vpdl_kernel_gaussian_sfbw<T,n>(*this);
   }
 
   //: Evaluate the unnormalized density at a point
-  virtual T density(const vector& pt) const
-  {
+  T density(const vector &pt) const override {
     const unsigned int nc = this->num_components();
     if (nc <= 0)
       return 0.0;
@@ -70,8 +68,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
   }
 
   //: Evaluate the probability density at a point
-  virtual T prob_density(const vector& pt) const
-  {
+  T prob_density(const vector &pt) const override {
     const unsigned int nc = this->num_components();
     if (nc <= 0)
       return 0.0;
@@ -83,8 +80,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
   // \return the density at \a pt since it is usually needed as well, and
   //         is often trivial to compute while computing gradient
   // \retval g the gradient vector
-  virtual T gradient_density(const vector& pt, vector& g) const
-  {
+  T gradient_density(const vector &pt, vector &g) const override {
     const unsigned int d = this->dimension();
     vpdt_set_size(g,d);
     vpdt_fill(g,T(0));
@@ -115,8 +111,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
   //: Evaluate the cumulative distribution function at a point
   // This is the integral of the density function from negative infinity
   // (in all dimensions) to the point in question
-  virtual T cumulative_prob(const vector& pt) const
-  {
+  T cumulative_prob(const vector &pt) const override {
     const unsigned int nc = this->num_components();
     if (nc <= 0)
       return 0.0;
@@ -139,8 +134,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
   //: The probability of being in an axis-aligned box
   // The box is defined by two points, the minimum and maximum.
   // Reimplemented for efficiency since the axis are independent
-  T box_prob(const vector& min_pt, const vector& max_pt) const
-  {
+  T box_prob(const vector &min_pt, const vector &max_pt) const override {
     const unsigned int nc = this->num_components();
     if (nc <= 0)
       return 0.0;
@@ -164,8 +158,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
   }
 
   //: Compute the covariance of the distribution.
-  virtual void compute_covar(matrix& covar) const
-  {
+  void compute_covar(matrix &covar) const override {
     const unsigned int d = this->dimension();
     const unsigned int nc = this->num_components();
     vector mean;
@@ -187,8 +180,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
   }
 
   //: The normalization constant for the kernel
-  virtual T kernel_norm_const() const
-  {
+  T kernel_norm_const() const override {
     const unsigned int dim = this->dimension();
     double v2pi = this->bandwidth()*this->bandwidth()*vnl_math::twopi;
     double denom = v2pi;

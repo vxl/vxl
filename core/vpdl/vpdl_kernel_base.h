@@ -42,11 +42,10 @@ class vpdl_kernel_base : public vpdl_multi_cmp_dist<T,n>
   : samples_(samplez) {}
 
   //: Return the number of components in the mixture
-  unsigned int num_components() const { return samples_.size(); }
+  unsigned int num_components() const override { return samples_.size(); }
 
   //: Return the run time dimension, which does not equal \c n when \c n==0
-  virtual unsigned int dimension() const
-  {
+  unsigned int dimension() const override {
     if (n > 0 || num_components() == 0)
       return n;
     return vpdt_size(samples_[0]);
@@ -80,8 +79,7 @@ class vpdl_kernel_base : public vpdl_multi_cmp_dist<T,n>
 
   //: Compute the mean of the distribution.
   // Assume that each kernel has its mean at the sample point
-  virtual void compute_mean(vector& mean) const
-  {
+  void compute_mean(vector &mean) const override {
     const unsigned int d = this->dimension();
     vpdt_set_size(mean,d);
     vpdt_fill(mean,T(0));
@@ -131,8 +129,7 @@ class vpdl_kernel_fbw_base : public vpdl_kernel_base<T,n>
   //: The normalization constant for the density
   // When density() is multiplied by this value it becomes prob_density
   // norm_const() is reciprocal of the integral of density over the entire field
-  virtual T norm_const() const
-  {
+  T norm_const() const override {
     return kernel_norm_const()/this->num_components();
   }
 

@@ -53,19 +53,20 @@ class vpdl_mixture_of
   vpdl_mixture_of() {}
 
   // Destructor
-  virtual ~vpdl_mixture_of() {}
+  ~vpdl_mixture_of() override {}
 
   //: Create a copy on the heap and return base class pointer
-  virtual vpdl_distribution<T,n>* clone() const
-  {
+  vpdl_distribution<T, n> *clone() const override {
     return new vpdl_mixture_of<dist_t>(*this);
   }
 
   //: Return the run time dimension
-  virtual unsigned int dimension() const { return impl_.dimension(); }
+  unsigned int dimension() const override { return impl_.dimension(); }
 
   //: Return the number of components in the mixture
-  unsigned int num_components() const { return impl_.num_components(); }
+  unsigned int num_components() const override {
+    return impl_.num_components();
+  }
 
   //: Access (const) a component distribution of the mixture
   const dist_t& distribution(unsigned int index) const
@@ -88,41 +89,46 @@ class vpdl_mixture_of
   bool remove_last() { return impl_.remove_last(); }
 
   //: Compute the unnormalized density at this point
-  T density(const vector& pt) const { return impl_.density(pt); }
+  T density(const vector &pt) const override { return impl_.density(pt); }
 
   //: Compute the probability density at this point
-  T prob_density(const vector& pt) const { return vpdt_prob_density(impl_,pt); }
+  T prob_density(const vector &pt) const override {
+    return vpdt_prob_density(impl_, pt);
+  }
 
   //: Compute the gradient of the unnormalized density at a point
   // \return the density at \a pt since it is usually needed as well, and
   //         is often trivial to compute while computing gradient
   // \retval g the gradient vector
-  virtual T gradient_density(const vector& pt, vector& g) const
-  {
+  T gradient_density(const vector &pt, vector &g) const override {
     return impl_.gradient_density(pt,g);
   }
 
   //: The probability integrated over a box
-  T box_prob(const vector& min_pt, const vector& max_pt) const
-  { return vpdt_box_prob(impl_,min_pt,max_pt); }
+  T box_prob(const vector &min_pt, const vector &max_pt) const override {
+    return vpdt_box_prob(impl_, min_pt, max_pt);
+  }
 
   //: Evaluate the cumulative distribution function at a point
   // This is the integral of the density function from negative infinity
   // (in all dimensions) to the point in question
-  virtual T cumulative_prob(const vector& pt) const
-  { return impl_.cumulative_prob(pt); }
+  T cumulative_prob(const vector &pt) const override {
+    return impl_.cumulative_prob(pt);
+  }
 
   //: Compute the mean of the distribution.
   // weighted average of the component means
-  virtual void compute_mean(vector& mean) const { impl_.compute_mean(mean); }
+  void compute_mean(vector &mean) const override { impl_.compute_mean(mean); }
 
   //: Compute the covariance of the distribution.
-  virtual void compute_covar(matrix& covar) const { impl_.compute_covar(covar); }
+  void compute_covar(matrix &covar) const override {
+    impl_.compute_covar(covar);
+  }
 
   //: The normalization constant for the density
   // When density() is multiplied by this value it becomes prob_density
   // norm_const() is reciprocal of the integral of density over the entire field
-  virtual T norm_const() const { return impl_.norm_const(); }
+  T norm_const() const override { return impl_.norm_const(); }
 
   //: Normalize the weights of the components to add to 1.
   void normalize_weights() { impl_.normalize_weights(); }

@@ -58,8 +58,8 @@ class vpgl_cubic_lsqr : public vnl_least_squares_function
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  fx has been sized appropriately before the call.
-  virtual void f(vnl_vector<double> const& coefs,
-                 vnl_vector<double>& residuals);
+  void f(vnl_vector<double> const &coefs,
+         vnl_vector<double> &residuals) override;
   static vnl_vector_fixed<double, 20> power_vector(double x, double y, double z);
 
  private:
