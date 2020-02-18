@@ -65,7 +65,8 @@ void bsgm_prob_pairwise_dsm::compute_disparity(
                            min_disparity_, num_disparities(), border_val);
 
   bsgm_multiscale_disparity_estimator mde(params_.de_params_, ni_, nj_,
-                                          num_disparities(), num_active_disparities());
+                                          num_disparities(), num_active_disparities(),
+                                          params_.downscale_exponent_);
 
   bool good = mde.compute(img, img_reference, invalid,
                           min_disparity_, invalid_disp, params_.multi_scale_mode_,
@@ -74,7 +75,7 @@ void bsgm_prob_pairwise_dsm::compute_disparity(
     throw std::runtime_error("Multiscale disparity estimator failed");
 }
 
-// compute foward disparity
+// compute forward disparity
 void bsgm_prob_pairwise_dsm::compute_disparity_fwd()
 {
   compute_disparity(rect_bview0_, rect_bview1_, invalid_map_fwd_, disparity_fwd_);

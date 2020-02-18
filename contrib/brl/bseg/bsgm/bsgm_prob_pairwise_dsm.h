@@ -31,7 +31,7 @@
 // mde.compute(rect_bview0_, rect_bview1_, invalid_map_, min_disparity_,
 //             invalid_disp, params_.multi_scale_mode_, disp_r_);
 //
-// given a pixel (1182, 897) in rect_bview0 and the dispairity value at that location in the dispairity image,
+// given a pixel (1182, 897) in rect_bview0 and the disparity value at that location in the disparity image,
 // disp_r_, of -15.0, the corresponding pixel in rect_bview1 is (1167, 897)
 //
 #include <iostream>
@@ -63,7 +63,7 @@ struct pairwise_params
     quad_interp(quad_interp_);
   }
 
-  // accesors
+  // accessors
   void shadow_thresh(float thresh) {
     de_params_.shadow_thresh = thresh;
     shadow_thresh_ = thresh;
@@ -144,11 +144,11 @@ class bsgm_prob_pairwise_dsm
   void params(pairwise_params const& params) {params_ = params;}
   pairwise_params params() const {return params_;}
 
-  //: minimum dispartity to start search along an epipolar line
+  //: minimum disparity to start search along an epipolar line
   void min_disparity(int min_disparity) {min_disparity_ = min_disparity;}
   int min_disparity() const {return min_disparity_;}
 
-  //: maximum dispartity to end search along an epipolar line
+  //: maximum disparity to end search along an epipolar line
   void max_disparity(int max_disparity) {max_disparity_ = max_disparity;}
   int max_disparity() const{return max_disparity_;}
 
@@ -215,7 +215,7 @@ class bsgm_prob_pairwise_dsm
   void compute_height_fwd();
   void compute_height_rev();
 
-  //: comptute probablistic height
+  //: compute probabilistic height
   bool compute_prob();
 
   //: main process method
@@ -228,7 +228,7 @@ class bsgm_prob_pairwise_dsm
     this->compute_disparity_fwd();
     this->compute_height_fwd();
 
-    // consistency check & probablistic analysis
+    // consistency check & probabilistic analysis
     if (with_consistency_check) {
       this->compute_disparity_rev();
       this->compute_height_rev();
