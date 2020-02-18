@@ -10,9 +10,11 @@
 //      Nov 2008 J Becker: Added a clone function.
 // \endverbatim
 
-#include <iostream>
-#include <iosfwd>
 #include <cassert>
+#include <iosfwd>
+#include <iostream>
+#include <utility>
+
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
@@ -38,10 +40,10 @@ class rgrl_feature
        = default;
 
    //: ctor
-   rgrl_feature(vnl_vector<double> const &loc, double scale = 1.0)
-       : location_(loc), scale_(scale) {
+   rgrl_feature(vnl_vector<double> loc, double scale = 1.0)
+       : location_(std::move(loc)), scale_(scale) {
      assert(scale_ > 0);
-  }
+   }
 
   //:
   ~rgrl_feature() override = default;

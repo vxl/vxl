@@ -5,6 +5,8 @@
 // \date   March 2004
 
 #include <cassert>
+#include <utility>
+
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
@@ -22,24 +24,18 @@ rgrl_trans_rigid( unsigned int dimension )
   assert (dimension==0 || dimension==2 || dimension==3);
 }
 
-rgrl_trans_rigid::
-rgrl_trans_rigid( vnl_matrix<double> const& rot,
-                  vnl_vector<double> const& in_trans )
-  : R_( rot ),
-    trans_( in_trans )
-{
+rgrl_trans_rigid::rgrl_trans_rigid(vnl_matrix<double> rot,
+                                   vnl_vector<double> in_trans)
+    : R_(std::move(rot)), trans_(std::move(in_trans)) {
   assert ( R_.rows() == R_.cols() );  //make sure rotation is square matrix
   assert ( R_.rows() == trans_.size() );
 }
 
-rgrl_trans_rigid::
-rgrl_trans_rigid( vnl_matrix<double> const& rot,
-                  vnl_vector<double> const& in_trans,
-                  vnl_matrix<double> const& in_covar )
-  : rgrl_transformation( in_covar ),
-    R_( rot ),
-    trans_( in_trans )
-{
+rgrl_trans_rigid::rgrl_trans_rigid(vnl_matrix<double> rot,
+                                   vnl_vector<double> in_trans,
+                                   vnl_matrix<double> const &in_covar)
+    : rgrl_transformation(in_covar), R_(std::move(rot)),
+      trans_(std::move(in_trans)) {
   assert ( R_.rows() == R_.cols() );
   assert ( R_.rows() == trans_.size() );
   if ( is_covar_set() ) {

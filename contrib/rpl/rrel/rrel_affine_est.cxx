@@ -1,4 +1,6 @@
 #include <iostream>
+#include <utility>
+
 #include <vector>
 #include <algorithm>
 #include "rrel_affine_est.h"
@@ -39,13 +41,12 @@ rrel_affine_est( const std::vector< vgl_point_2d<double> > & from_pts,
   num_samples_ = size;
 }
 
-rrel_affine_est::
-rrel_affine_est( const std::vector< vnl_vector<double> > & from_pts,
-                 const std::vector< vnl_vector<double> > & to_pts,
-                 unsigned int dim )
-  : rrel_estimation_problem( (dim+1)*dim /*dof*/,  dim+1/*points to instantiate*/ ),
-    from_pts_( from_pts ), to_pts_( to_pts )
-{
+rrel_affine_est::rrel_affine_est(
+    const std::vector<vnl_vector<double>> &from_pts,
+    std::vector<vnl_vector<double>> to_pts, unsigned int dim)
+    : rrel_estimation_problem((dim + 1) * dim /*dof*/,
+                              dim + 1 /*points to instantiate*/),
+      from_pts_(from_pts), to_pts_(std::move(to_pts)) {
   assert( from_pts.size() == to_pts.size() );
   const unsigned size = from_pts.size();
 

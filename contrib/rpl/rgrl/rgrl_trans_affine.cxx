@@ -12,6 +12,8 @@
 // \endverbatim
 
 #include <cassert>
+#include <utility>
+
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
@@ -26,16 +28,11 @@ rgrl_trans_affine( unsigned int dimension )
 {
 }
 
-
-rgrl_trans_affine::
-rgrl_trans_affine( vnl_matrix<double> const& in_A,
-                   vnl_vector<double> const& in_trans,
-                   vnl_matrix<double> const& in_covar )
-  : rgrl_transformation( in_covar ),
-    A_( in_A ),
-    trans_( in_trans ),
-    from_centre_( in_trans.size(), 0.0 )
-{
+rgrl_trans_affine::rgrl_trans_affine(vnl_matrix<double> in_A,
+                                     vnl_vector<double> const &in_trans,
+                                     vnl_matrix<double> const &in_covar)
+    : rgrl_transformation(in_covar), A_(std::move(in_A)), trans_(in_trans),
+      from_centre_(in_trans.size(), 0.0) {
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
   if ( is_covar_set() ) {
@@ -44,41 +41,31 @@ rgrl_trans_affine( vnl_matrix<double> const& in_A,
   }
 }
 
-rgrl_trans_affine::
-rgrl_trans_affine( vnl_matrix<double> const& in_A,
-                   vnl_vector<double> const& in_trans,
-                   vnl_vector<double> const& from_centre )
-  : A_( in_A ),
-    trans_( in_trans ),
-    from_centre_( from_centre )
-{
+rgrl_trans_affine::rgrl_trans_affine(vnl_matrix<double> in_A,
+                                     vnl_vector<double> in_trans,
+                                     vnl_vector<double> from_centre)
+    : A_(std::move(in_A)), trans_(std::move(in_trans)),
+      from_centre_(std::move(from_centre)) {
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
   assert ( from_centre_.size() == trans_.size() );
 }
 
-rgrl_trans_affine::
-rgrl_trans_affine( vnl_matrix<double> const& in_A,
-                   vnl_vector<double> const& in_trans )
-  : A_( in_A ),
-    trans_( in_trans ),
-    from_centre_( in_trans.size(), 0.0 )
-{
+rgrl_trans_affine::rgrl_trans_affine(vnl_matrix<double> in_A,
+                                     vnl_vector<double> const &in_trans)
+    : A_(std::move(in_A)), trans_(in_trans),
+      from_centre_(in_trans.size(), 0.0) {
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
 }
 
-rgrl_trans_affine::
-rgrl_trans_affine( vnl_matrix<double> const& in_A,
-                   vnl_vector<double> const& in_trans,
-                   vnl_matrix<double> const& in_covar,
-                   vnl_vector<double> const& in_from_centre,
-                   vnl_vector<double> const& in_to_centre )
-  : rgrl_transformation( in_covar ),
-    A_( in_A ),
-    trans_( in_trans + in_to_centre ),
-    from_centre_( in_from_centre )
-{
+rgrl_trans_affine::rgrl_trans_affine(vnl_matrix<double> in_A,
+                                     vnl_vector<double> const &in_trans,
+                                     vnl_matrix<double> const &in_covar,
+                                     vnl_vector<double> in_from_centre,
+                                     vnl_vector<double> const &in_to_centre)
+    : rgrl_transformation(in_covar), A_(std::move(in_A)),
+      trans_(in_trans + in_to_centre), from_centre_(std::move(in_from_centre)) {
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
   assert ( from_centre_.size() == trans_.size() );
@@ -87,7 +74,6 @@ rgrl_trans_affine( vnl_matrix<double> const& in_A,
     assert ( covar_.rows() == A_.rows()* (A_.rows()+1) );
   }
 }
-
 
 void
 rgrl_trans_affine::

@@ -24,50 +24,48 @@ class rgrl_feature_face_pt
   : public rgrl_feature
 {
  public:
-  rgrl_feature_face_pt( vnl_vector< double > const& location,
-                        vnl_vector< double > const& normal );
+   rgrl_feature_face_pt(vnl_vector<double> const &location,
+                        vnl_vector<double> normal);
 
-  //: read in feature
+   //: read in feature
 
-  bool read( std::istream& is, bool skip_tag=false ) override;
+   bool read(std::istream &is, bool skip_tag = false) override;
 
-  //: write out feature
+   //: write out feature
 
-  void write( std::ostream& os ) const override;
+   void write(std::ostream &os) const override;
 
+   vnl_matrix<double> const &error_projector() const override;
 
-  vnl_matrix<double> const&
-  error_projector() const override;
+   vnl_matrix<double> const &error_projector_sqrt() const override;
 
+   unsigned int num_constraints() const override;
 
-  vnl_matrix<double> const&
-  error_projector_sqrt() const override;
+   // Defines type-related functions
+   rgrl_type_macro(rgrl_feature_face_pt, rgrl_feature);
 
-  unsigned int num_constraints() const override;
+   virtual vnl_vector<double> const &normal() const;
 
-  // Defines type-related functions
-  rgrl_type_macro( rgrl_feature_face_pt, rgrl_feature );
+   //: Return a matrix whose columns form the subspace tangent to the face
+   //normal
+   virtual vnl_matrix<double> const &tangent_subspace();
 
-  virtual vnl_vector<double> const& normal() const;
+   //: Result is a rgrl_feature_face_pt
+   rgrl_feature_sptr transform(rgrl_transformation const &xform) const override;
 
-  //: Return a matrix whose columns form the subspace tangent to the face normal
-  virtual vnl_matrix<double> const&
-  tangent_subspace();
+   //:  Compute the signature weight between two features.
+   double absolute_signature_weight(rgrl_feature_sptr other) const override;
 
-  //: Result is a rgrl_feature_face_pt
-  rgrl_feature_sptr transform( rgrl_transformation const& xform ) const override;
+   //:  Compute the signature error vector between two features.
+   vnl_vector<double>
+   signature_error_vector(rgrl_feature const &other) const override;
 
-  //:  Compute the signature weight between two features.
-  double absolute_signature_weight( rgrl_feature_sptr other ) const override;
+   //:  the dimensions of the signature error vector.
+   unsigned signature_error_dimension(
+       const std::type_info &other_feature_type) const override;
 
-  //:  Compute the signature error vector between two features.
-  vnl_vector<double> signature_error_vector( rgrl_feature const& other ) const override;
-
-  //:  the dimensions of the signature error vector.
-  unsigned signature_error_dimension( const std::type_info& other_feature_type ) const override;
-
-  //: make a clone copy
-  rgrl_feature_sptr clone() const override;
+   //: make a clone copy
+   rgrl_feature_sptr clone() const override;
 
  protected:
   friend class rgrl_feature_reader;

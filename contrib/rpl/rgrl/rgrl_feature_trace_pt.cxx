@@ -9,6 +9,8 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <cassert>
+#include <utility>
+
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
@@ -17,35 +19,24 @@
 
 rgrl_feature_trace_pt ::rgrl_feature_trace_pt() : rgrl_feature() {}
 
-rgrl_feature_trace_pt::
-rgrl_feature_trace_pt( vnl_vector<double> const& loc,
-                       vnl_vector<double> const& tangent )
-  : rgrl_feature( loc ),
-    tangent_( tangent ),
-    error_proj_( loc.size(), loc.size(), vnl_matrix_identity ),
-    subspace_cached_(false),
-    length_( 0 ), radius_( 0 )
-{
+rgrl_feature_trace_pt::rgrl_feature_trace_pt(vnl_vector<double> const &loc,
+                                             vnl_vector<double> tangent)
+    : rgrl_feature(loc), tangent_(std::move(tangent)),
+      error_proj_(loc.size(), loc.size(), vnl_matrix_identity),
+      subspace_cached_(false), length_(0), radius_(0) {
   tangent_.normalize();
   error_proj_ -= outer_product( tangent_, tangent_ );
 }
 
-rgrl_feature_trace_pt::
-rgrl_feature_trace_pt( vnl_vector<double> const& loc,
-                       vnl_vector<double> const& tangent,
-                       double                    length,
-                       double                    radius )
-  : rgrl_feature( loc ),
-    tangent_( tangent ),
-    error_proj_( loc.size(), loc.size(), vnl_matrix_identity ),
-    subspace_cached_(false),
-    length_( length ), radius_( radius )
-{
+rgrl_feature_trace_pt::rgrl_feature_trace_pt(vnl_vector<double> const &loc,
+                                             vnl_vector<double> tangent,
+                                             double length, double radius)
+    : rgrl_feature(loc), tangent_(std::move(tangent)),
+      error_proj_(loc.size(), loc.size(), vnl_matrix_identity),
+      subspace_cached_(false), length_(length), radius_(radius) {
   tangent_.normalize();
   error_proj_ -= outer_product( tangent_, tangent_ );
 }
-
-
 
 unsigned int
 rgrl_feature_trace_pt::

@@ -28,14 +28,14 @@ class rgrl_trans_spline
   rgrl_trans_spline(unsigned int dim = 0);
 
   //: Constructor
-  rgrl_trans_spline( std::vector<rgrl_spline_sptr>  splines,
-                     vnl_vector< double > const& x0, vnl_vector< double > const& delta,
-                     const rgrl_transformation_sptr& xform = nullptr );
+  rgrl_trans_spline(std::vector<rgrl_spline_sptr> splines,
+                    vnl_vector<double> x0, vnl_vector<double> delta,
+                    const rgrl_transformation_sptr &xform = nullptr);
   //: Constructor
-  rgrl_trans_spline( std::vector<rgrl_spline_sptr>  splines,
-                     vnl_vector< double > const& x0, vnl_vector< double > const& delta,
-                     vnl_matrix< double > const& covar,
-                     const rgrl_transformation_sptr& xform = nullptr );
+  rgrl_trans_spline(std::vector<rgrl_spline_sptr> splines,
+                    vnl_vector<double> x0, vnl_vector<double> delta,
+                    vnl_matrix<double> const &covar,
+                    const rgrl_transformation_sptr &xform = nullptr);
 
   ~rgrl_trans_spline() override = default;
 

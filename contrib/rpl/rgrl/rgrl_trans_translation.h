@@ -39,10 +39,10 @@ class rgrl_trans_translation
   //
   //  The transform is q = ( p - \a from_centre ) + \a trans + \a to_centre.
   //
-  rgrl_trans_translation( vnl_vector<double> const& trans,
-                          vnl_matrix<double> const& covar,
-                          vnl_vector<double> const& from_centre,
-                          vnl_vector<double> const& to_centre );
+  rgrl_trans_translation(vnl_vector<double> const &trans,
+                         vnl_matrix<double> const &covar,
+                         vnl_vector<double> from_centre,
+                         vnl_vector<double> const &to_centre);
 
   vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const override;
 

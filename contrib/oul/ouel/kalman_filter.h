@@ -74,25 +74,20 @@ class KalmanFilter
   vnl_matrix<double> K;
 
  public:
-  KalmanFilter(unsigned int ns, unsigned int nm, unsigned int nc,
-               const vnl_matrix<double> &Ai,
-               const vnl_matrix<double> &Hi,
-               const vnl_matrix<double> &Bi,
-               const vnl_matrix<double> &z_initial,
-               const vnl_matrix<double> &x_initial,
-               const vnl_matrix<double> &Pi);
+   KalmanFilter(unsigned int ns, unsigned int nm, unsigned int nc,
+                vnl_matrix<double> Ai, vnl_matrix<double> Hi,
+                vnl_matrix<double> Bi, vnl_matrix<double> z_initial,
+                const vnl_matrix<double> &x_initial,
+                const vnl_matrix<double> &Pi);
 
-  // this version does not have a control input
-  KalmanFilter(unsigned int ns, unsigned int nm,
-               const vnl_matrix<double> &Ai,
-               const vnl_matrix<double> &Hi,
-               const vnl_matrix<double> &z_initial,
-               const vnl_matrix<double> &x_initial,
-               const vnl_matrix<double> &Pi);
+   // this version does not have a control input
+   KalmanFilter(unsigned int ns, unsigned int nm, vnl_matrix<double> Ai,
+                vnl_matrix<double> Hi, vnl_matrix<double> z_initial,
+                const vnl_matrix<double> &x_initial,
+                const vnl_matrix<double> &Pi);
 
-  // some utility functions
-  void set_initial_input(const vnl_matrix<double> &x_initial)
-    {x_pred = x_initial;}
+   // some utility functions
+   void set_initial_input(const vnl_matrix<double> &x_initial) {x_pred = x_initial;}
 
   // zk is the next input measurement
   // Rk is the measurement  error covariance matrix

@@ -1,6 +1,8 @@
 // This is oul/ouel/kalman_filter.cxx
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
+#include <utility>
+
 #include "kalman_filter.h"
 //:
 // \file
@@ -56,21 +58,16 @@
 // \author Brendan McCane
 //----------------------------------------------------------------------
 
-KalmanFilter::KalmanFilter(
-  unsigned int ns, unsigned int nm, unsigned int nc,
-  const vnl_matrix<double> &Ai,
-  const vnl_matrix<double> &Hi,
-  const vnl_matrix<double> &Bi,
-  const vnl_matrix<double> &z_initial,
-  const vnl_matrix<double> &x_initial,
-  const vnl_matrix<double> &Pi
-  ):
-  // initialise all the matrices etc
-  num_signal_dimensions(ns), num_measurement_dimensions(nm),
-  num_control_dimensions(nc), A(Ai), H(Hi), B(Bi),
-  x(x_initial), x_pred(x_initial), z(z_initial),
-  P(Pi), K(ns, nm)
-{
+KalmanFilter::KalmanFilter(unsigned int ns, unsigned int nm, unsigned int nc,
+                           vnl_matrix<double> Ai, vnl_matrix<double> Hi,
+                           vnl_matrix<double> Bi, vnl_matrix<double> z_initial,
+                           const vnl_matrix<double> &x_initial,
+                           const vnl_matrix<double> &Pi)
+    : // initialise all the matrices etc
+      num_signal_dimensions(ns), num_measurement_dimensions(nm),
+      num_control_dimensions(nc), A(std::move(Ai)), H(std::move(Hi)),
+      B(std::move(Bi)), x(x_initial), x_pred(x_initial),
+      z(std::move(z_initial)), P(Pi), K(ns, nm) {
   // do some size checking
   if ((A.rows()!=num_signal_dimensions)||
     (A.cols()!=num_signal_dimensions))
@@ -113,7 +110,6 @@ KalmanFilter::KalmanFilter(
   }
 }
 
-
 //----------------------------------------------------------------------
 //: Constructor
 //
@@ -134,20 +130,16 @@ KalmanFilter::KalmanFilter(
 // \todo   under development
 // \author Brendan McCane
 //----------------------------------------------------------------------
-KalmanFilter::KalmanFilter(
-  unsigned int ns, unsigned int nm,
-  const vnl_matrix<double> &Ai,
-  const vnl_matrix<double> &Hi,
-  const vnl_matrix<double> &z_initial,
-  const vnl_matrix<double> &x_initial,
-  const vnl_matrix<double> &Pi
-  ):
-  // initialise all the matrices etc
-  num_signal_dimensions(ns), num_measurement_dimensions(nm),
-  num_control_dimensions(0), A(Ai), H(Hi),
-  x(x_initial), x_pred(x_initial), z(z_initial),
-  P(Pi), K(ns, nm)
-{
+KalmanFilter::KalmanFilter(unsigned int ns, unsigned int nm,
+                           vnl_matrix<double> Ai, vnl_matrix<double> Hi,
+                           vnl_matrix<double> z_initial,
+                           const vnl_matrix<double> &x_initial,
+                           const vnl_matrix<double> &Pi)
+    : // initialise all the matrices etc
+      num_signal_dimensions(ns), num_measurement_dimensions(nm),
+      num_control_dimensions(0), A(std::move(Ai)), H(std::move(Hi)),
+      x(x_initial), x_pred(x_initial), z(std::move(z_initial)), P(Pi),
+      K(ns, nm) {
   // do some size checking
   if ((A.rows()!=num_signal_dimensions)||
     (A.cols()!=num_signal_dimensions))

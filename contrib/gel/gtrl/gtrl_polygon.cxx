@@ -3,13 +3,12 @@
 // \file
 // \author crossge@crd.ge.com
 
+#include <utility>
+
 #include "gtrl_polygon.h"
 
-gtrl_polygon::gtrl_polygon( const std::vector<gtrl_vertex_sptr>& ps)
-  : ps_(ps)
-{
-}
-
+gtrl_polygon::gtrl_polygon(std::vector<gtrl_vertex_sptr> ps)
+    : ps_(std::move(ps)) {}
 
 // simple and efficient point in polygon test.
 //   from comp.graphics.algorithms faq

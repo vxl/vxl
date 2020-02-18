@@ -32,10 +32,9 @@ class rgrl_trans_reduced_quad
   //  hot(p)= [px^2 py^2 pxpy]^t in 2D, and
   //  hot(p)= [px^2 py^2 pz^2 pxpy pypz pxpz]^t in 3D.
   //
-  rgrl_trans_reduced_quad( vnl_matrix<double> const& Q,
-                           vnl_matrix<double> const& A,
-                           vnl_vector<double> const& trans,
-                           vnl_matrix<double> const& covar );
+  rgrl_trans_reduced_quad(vnl_matrix<double> Q, vnl_matrix<double> A,
+                          vnl_vector<double> const &trans,
+                          vnl_matrix<double> const &covar);
 
   //: Construct uncentered quadratic standard transform with unknown covar
   //
@@ -45,9 +44,8 @@ class rgrl_trans_reduced_quad
   //
   //  The covariance matrix is a zero matrix.
   //
-  rgrl_trans_reduced_quad( vnl_matrix<double> const& Q,
-                           vnl_matrix<double> const& A,
-                           vnl_vector<double> const& trans );
+  rgrl_trans_reduced_quad(vnl_matrix<double> Q, vnl_matrix<double> A,
+                          vnl_vector<double> const &trans);
 
   //: Construct a centered quadratic transform.
   //
@@ -55,12 +53,11 @@ class rgrl_trans_reduced_quad
   //  hot(p)= [px^2 py^2 pxpy]^t in 2D, and
   //  hot(p)= [px^2 py^2 pz^2 pxpy pypz pxpz]^t in 3D.
   //
-  rgrl_trans_reduced_quad( vnl_matrix<double> const& Q,
-                           vnl_matrix<double> const& A,
-                           vnl_vector<double> const& trans,
-                           vnl_matrix<double> const& covar,
-                           vnl_vector<double> const& from_centre,
-                           vnl_vector<double> const& to_centre );
+  rgrl_trans_reduced_quad(vnl_matrix<double> Q, vnl_matrix<double> A,
+                          vnl_vector<double> trans,
+                          vnl_matrix<double> const &covar,
+                          vnl_vector<double> const &from_centre,
+                          vnl_vector<double> const &to_centre);
 
   void set_from_center( vnl_vector<double> const& from_center );
 

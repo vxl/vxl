@@ -5,6 +5,8 @@
 // \date   Sep 2003
 
 #include <cassert>
+#include <utility>
+
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
@@ -21,17 +23,12 @@ rgrl_trans_quadratic( unsigned int dim)
 {
 }
 
-rgrl_trans_quadratic::
-rgrl_trans_quadratic( vnl_matrix<double> const& in_Q,
-                      vnl_matrix<double> const& in_A,
-                      vnl_vector<double> const& in_trans,
-                      vnl_matrix<double> const& in_covar )
-  : rgrl_transformation( in_covar ),
-    Q_( in_Q ),
-    A_( in_A ),
-    trans_( in_trans ),
-    from_centre_( in_trans.size(), 0.0 )
-{
+rgrl_trans_quadratic::rgrl_trans_quadratic(vnl_matrix<double> in_Q,
+                                           vnl_matrix<double> in_A,
+                                           vnl_vector<double> const &in_trans,
+                                           vnl_matrix<double> const &in_covar)
+    : rgrl_transformation(in_covar), Q_(std::move(in_Q)), A_(std::move(in_A)),
+      trans_(in_trans), from_centre_(in_trans.size(), 0.0) {
   assert ( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
@@ -41,34 +38,23 @@ rgrl_trans_quadratic( vnl_matrix<double> const& in_Q,
   }
 }
 
-rgrl_trans_quadratic::
-rgrl_trans_quadratic( vnl_matrix<double> const& in_Q,
-                      vnl_matrix<double> const& in_A,
-                      vnl_vector<double> const& in_trans )
-  : Q_( in_Q ),
-    A_( in_A ),
-    trans_( in_trans ),
-    from_centre_( in_trans.size(), 0.0 )
-{
+rgrl_trans_quadratic::rgrl_trans_quadratic(vnl_matrix<double> in_Q,
+                                           vnl_matrix<double> in_A,
+                                           vnl_vector<double> const &in_trans)
+    : Q_(std::move(in_Q)), A_(std::move(in_A)), trans_(in_trans),
+      from_centre_(in_trans.size(), 0.0) {
   assert ( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
 }
 
-
-rgrl_trans_quadratic::
-rgrl_trans_quadratic( vnl_matrix<double> const& in_Q,
-                      vnl_matrix<double> const& in_A,
-                      vnl_vector<double> const& in_trans,
-                      vnl_matrix<double> const& in_covar,
-                      vnl_vector<double> const& in_from_centre,
-                      vnl_vector<double> const& in_to_centre )
-  : rgrl_transformation( in_covar ),
-    Q_( in_Q ),
-    A_( in_A ),
-    trans_( in_trans ),
-    from_centre_( in_from_centre )
-{
+rgrl_trans_quadratic::rgrl_trans_quadratic(
+    vnl_matrix<double> in_Q, vnl_matrix<double> in_A,
+    vnl_vector<double> in_trans, vnl_matrix<double> const &in_covar,
+    vnl_vector<double> const &in_from_centre,
+    vnl_vector<double> const &in_to_centre)
+    : rgrl_transformation(in_covar), Q_(std::move(in_Q)), A_(std::move(in_A)),
+      trans_(std::move(in_trans)), from_centre_(in_from_centre) {
   assert ( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );

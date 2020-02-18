@@ -41,10 +41,9 @@ class m23d_correction_matrix_error : public vnl_least_squares_function
                  vnl_vector<double>& q) const;
 
 public:
-  m23d_correction_matrix_error(const vnl_matrix<double>& A,
-                                 const vnl_vector<double>& rhs,
-                                 unsigned n_modes,
-                                 unsigned k);
+  m23d_correction_matrix_error(const vnl_matrix<double> &A,
+                               vnl_vector<double> rhs, unsigned n_modes,
+                               unsigned k);
 
   //: The main function.
   //  Given g, returns error vector fx=(Aq-rhs), where vector q are the

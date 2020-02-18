@@ -41,9 +41,9 @@ class rgrl_mask_oriented_box
                           vnl_vector<double> const& len );
 
   //: Initialize a box from \a x0 to \a x1 using axes specified in columns of \a axes
-  rgrl_mask_oriented_box( vnl_vector<double> const& oriented_xmin,
-                          vnl_vector<double> const& oriented_xmax,
-                          vnl_matrix<double> const& axes );
+  rgrl_mask_oriented_box(vnl_vector<double> const &oriented_xmin,
+                         vnl_vector<double> oriented_xmax,
+                         vnl_matrix<double> axes);
 
   //: True if a point is inside the region
   bool inside( vnl_vector<double> const& pt ) const override;

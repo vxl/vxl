@@ -1,8 +1,10 @@
-#include <cstdlib>
-#include <string>
-#include <sstream>
-#include <iostream>
 #include <cmath>
+#include <cstdlib>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <utility>
+
 #include <vector>
 #include "mcal_general_ca.h"
 //:
@@ -99,24 +101,22 @@ class mcal_pair_cost2 : public vnl_cost_function
   mcal_single_basis_cost& cost_;
   vnl_vector<double> m1,m2;
  public:
-  mcal_pair_cost2(const vnl_matrix<double>& S,
-                  const vnl_vector<double>& mode1,
-                  const vnl_vector<double>& mode2,
-                  mcal_single_basis_cost& cost)
-  : vnl_cost_function(1), S_(S),
-    mode1_(mode1),mode2_(mode2),cost_(cost) {}
+   mcal_pair_cost2(vnl_matrix<double> S, const vnl_vector<double> &mode1,
+                   const vnl_vector<double> &mode2,
+                   mcal_single_basis_cost &cost)
+       : vnl_cost_function(1), S_(std::move(S)), mode1_(mode1), mode2_(mode2),
+         cost_(cost) {}
 
-  mcal_pair_cost2(const vnl_vector<double>& proj1,
-                  const vnl_vector<double>& proj2,
-                  const vnl_vector<double>& mode1,
-                  const vnl_vector<double>& mode2,
-                  mcal_single_basis_cost& cost);
+   mcal_pair_cost2(const vnl_vector<double> &proj1,
+                   const vnl_vector<double> &proj2,
+                   const vnl_vector<double> &mode1,
+                   const vnl_vector<double> &mode2,
+                   mcal_single_basis_cost &cost);
 
-  double f(const vnl_vector<double>& x) override;
+   double f(const vnl_vector<double> &x) override;
 
-  void covar(const vnl_vector<double>& p1,
-             const vnl_vector<double>& p2,
-             vnl_matrix<double>& S);
+   void covar(const vnl_vector<double> &p1, const vnl_vector<double> &p2,
+              vnl_matrix<double> &S);
 };
 
 mcal_pair_cost2::mcal_pair_cost2(const vnl_vector<double>& proj1,

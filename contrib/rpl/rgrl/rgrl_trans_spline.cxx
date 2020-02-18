@@ -19,25 +19,23 @@ rgrl_trans_spline( unsigned int dim )
 {
 }
 
-rgrl_trans_spline::
-rgrl_trans_spline( std::vector<rgrl_spline_sptr>  splines,
-                   vnl_vector< double > const& x0, vnl_vector< double > const& delta,
-                   const rgrl_transformation_sptr& xform )
-  : xform_( xform ), splines_(std::move( splines )),
-    x0_( x0 ), delta_( delta )
-{
+rgrl_trans_spline::rgrl_trans_spline(std::vector<rgrl_spline_sptr> splines,
+                                     vnl_vector<double> x0,
+                                     vnl_vector<double> delta,
+                                     const rgrl_transformation_sptr &xform)
+    : xform_(xform), splines_(std::move(splines)), x0_(std::move(x0)),
+      delta_(std::move(delta)) {
   assert( x0_.size() == delta_.size() );
   // covar_ = vnl_matrix< double >( splines[0]->num_of_control_points(), splines[0]->num_of_control_points(), 0.0 );
 }
 
-rgrl_trans_spline::
-rgrl_trans_spline( std::vector<rgrl_spline_sptr>  splines,
-                   vnl_vector< double > const& x0, vnl_vector< double > const& delta,
-                   vnl_matrix< double > const& covar,
-                   const rgrl_transformation_sptr& xform )
-  : rgrl_transformation( covar ),
-    xform_( xform ), splines_(std::move( splines )), x0_( x0 ), delta_( delta )
-{
+rgrl_trans_spline::rgrl_trans_spline(std::vector<rgrl_spline_sptr> splines,
+                                     vnl_vector<double> x0,
+                                     vnl_vector<double> delta,
+                                     vnl_matrix<double> const &covar,
+                                     const rgrl_transformation_sptr &xform)
+    : rgrl_transformation(covar), xform_(xform), splines_(std::move(splines)),
+      x0_(std::move(x0)), delta_(std::move(delta)) {
   assert( x0_.size() == delta_.size() );
 }
 

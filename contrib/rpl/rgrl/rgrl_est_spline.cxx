@@ -30,17 +30,20 @@ namespace{
   // for Levenberg Marquardt
   struct spline_least_squares_func : public vnl_least_squares_function
   {
-    spline_least_squares_func( const rgrl_spline_sptr& spline,
-                               std::vector< vnl_vector< double > > const& pts,
-                               vnl_diag_matrix<double> const& wgt,    // ( num of residuals ) x ( num of residuals )
-                               vnl_vector<double> const& displacement, // ( num of residuals ) x 1
-                               std::vector<unsigned> const& free_control_pt_index )
-        : vnl_least_squares_function( free_control_pt_index.size(), pts.size(), use_gradient ),
-                                //number of unknowns, number of residuals, has gradient function or not
-                                spline_( spline ),
-                                pts_( pts ), wgt_( wgt ), displacement_( displacement ),
-                                free_control_pt_index_( free_control_pt_index )
-    {
+    spline_least_squares_func(
+        const rgrl_spline_sptr &spline,
+        std::vector<vnl_vector<double>> const &pts,
+        vnl_diag_matrix<double>
+            wgt, // ( num of residuals ) x ( num of residuals )
+        vnl_vector<double> displacement, // ( num of residuals ) x 1
+        std::vector<unsigned> const &free_control_pt_index)
+        : vnl_least_squares_function(free_control_pt_index.size(), pts.size(),
+                                     use_gradient),
+          // number of unknowns, number of residuals, has gradient function or
+          // not
+          spline_(spline), pts_(pts), wgt_(std::move(wgt)),
+          displacement_(std::move(displacement)),
+          free_control_pt_index_(free_control_pt_index) {
       assert( pts.size() == wgt.rows() );
       assert( displacement.size() == wgt.rows() );
     }
@@ -91,14 +94,15 @@ namespace{
   // for Conjugate Gradient and other optimizers
   struct spline_cost_function : public vnl_cost_function
   {
-    spline_cost_function( const rgrl_spline_sptr& spline,
-                          std::vector< vnl_vector< double > >  pts,
-                          const vnl_diag_matrix<double>& wgt,    // ( num of residuals ) x ( num of residuals )
-                          const vnl_vector<double>& displacement ) // ( num of residuals ) x 1
-      : vnl_cost_function( spline->num_of_control_points() ),  //number of unknowns
-                           spline_( spline ),
-                           pts_( std::move(pts) ), wgt_( wgt ), displacement_( displacement )
-    {
+    spline_cost_function(
+        const rgrl_spline_sptr &spline, std::vector<vnl_vector<double>> pts,
+        vnl_diag_matrix<double>
+            wgt, // ( num of residuals ) x ( num of residuals )
+        vnl_vector<double> displacement) // ( num of residuals ) x 1
+        : vnl_cost_function(
+              spline->num_of_control_points()), // number of unknowns
+          spline_(spline), pts_(std::move(pts)), wgt_(std::move(wgt)),
+          displacement_(std::move(displacement)) {
       assert( pts.size() == wgt.rows() );
       assert( displacement.size() == wgt.rows() );
     }
@@ -135,19 +139,14 @@ namespace{
   };
 } // namespace
 
-rgrl_est_spline::
-rgrl_est_spline( unsigned dof,
-                 rgrl_mask_box  roi, vnl_vector<double> const& delta,
-                 vnl_vector< unsigned > const& m,
-                 bool use_thin_plate, double lambda )
-    : rgrl_nonlinear_estimator( dof ),
-      roi_(std::move(roi)), delta_(delta),
-      m_( m ),
-      use_thin_plate_( use_thin_plate ),
-      lambda_(lambda),
-      optimize_method_( RGRL_LEVENBERG_MARQUARDT ),
-      global_xform_( nullptr )
-{
+rgrl_est_spline::rgrl_est_spline(unsigned dof, rgrl_mask_box roi,
+                                 vnl_vector<double> delta,
+                                 vnl_vector<unsigned> const &m,
+                                 bool use_thin_plate, double lambda)
+    : rgrl_nonlinear_estimator(dof), roi_(std::move(roi)),
+      delta_(std::move(delta)), m_(m), use_thin_plate_(use_thin_plate),
+      lambda_(lambda), optimize_method_(RGRL_LEVENBERG_MARQUARDT),
+      global_xform_(nullptr) {
   unsigned num_control = 1;
   for (unsigned int i : m)
     num_control *= i + 3;
@@ -155,20 +154,15 @@ rgrl_est_spline( unsigned dof,
   assert( num_control == dof );
 }
 
-rgrl_est_spline::
-rgrl_est_spline( unsigned dof,
-                 const rgrl_transformation_sptr& global_xform,
-                 rgrl_mask_box  roi, vnl_vector<double> const& delta,
-                 vnl_vector< unsigned > const& m,
-                 bool use_thin_plate, double lambda )
-  : rgrl_nonlinear_estimator( dof ),
-    roi_(std::move(roi)), delta_(delta),
-    m_( m ),
-    use_thin_plate_( use_thin_plate ),
-    lambda_(lambda),
-    optimize_method_( RGRL_LEVENBERG_MARQUARDT ),
-    global_xform_( global_xform )
-{
+rgrl_est_spline::rgrl_est_spline(unsigned dof,
+                                 const rgrl_transformation_sptr &global_xform,
+                                 rgrl_mask_box roi, vnl_vector<double> delta,
+                                 vnl_vector<unsigned> const &m,
+                                 bool use_thin_plate, double lambda)
+    : rgrl_nonlinear_estimator(dof), roi_(std::move(roi)),
+      delta_(std::move(delta)), m_(m), use_thin_plate_(use_thin_plate),
+      lambda_(lambda), optimize_method_(RGRL_LEVENBERG_MARQUARDT),
+      global_xform_(global_xform) {
   unsigned num_control = 1;
   for (unsigned int i : m)
     num_control *= i + 3;
