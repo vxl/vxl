@@ -577,8 +577,7 @@ void FMatrix::compute_P_matrix(vnl_matrix<double> &P2) const
 // Does this by taking its vnl_svd<double>, setting the smallest singular value
 // to zero, and recomposing.  Sets the rank2_flag_ to true.
 
-void FMatrix::set_rank2_using_svd(void)
-{
+void FMatrix::set_rank2_using_svd() {
   // ma2_static_set_rank
   vnl_svd<double> svd(f_matrix_.as_ref()); // size 3x3
   svd.W(2) = 0;
@@ -630,10 +629,7 @@ void FMatrix::get (vnl_matrix<double>* f_matrix) const
 //----------------------------------------------------------------
 //
 //: Return the rank2_flag_
-bool FMatrix::get_rank2_flag (void) const
-{
-  return rank2_flag_;
-}
+bool FMatrix::get_rank2_flag() const { return rank2_flag_; }
 
 //----------------------------------------------------------------
 //

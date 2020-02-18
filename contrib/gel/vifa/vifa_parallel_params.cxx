@@ -44,9 +44,7 @@ vifa_parallel_params(vifa_parallel_params* np)
   }
 }
 
-void vifa_parallel_params::
-print_info(void) const
-{
+void vifa_parallel_params::print_info() const {
   std::cout << "vifa_parallel_params:\n"
            << "  min angle    = " << min_angle << std::endl
            << "  max angle    = " << max_angle << std::endl

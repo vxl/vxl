@@ -46,9 +46,7 @@ SanityCheck()
   return valid;
 }
 
-void vifa_group_pgram_params::
-print_info(void) const
-{
+void vifa_group_pgram_params::print_info() const {
   std::cout << "vifa_group_pgram_params:\n"
            << "  angle increment     = " << angle_increment_ << std::endl
            << "  max suppress radius = " << max_suppress_radius_ << std::endl

@@ -1,14 +1,9 @@
 // This is gel/vifa/vifa_int_faces_adj_attr.cxx
 #include "vifa_int_faces_adj_attr.h"
 
-vifa_int_faces_adj_attr::
-vifa_int_faces_adj_attr(void)
-  : vifa_int_faces_attr(),
-    closure_valid_(false),
-    seed_(nullptr),
-    seed_attr_(nullptr),
-    depth_(BAD_DEPTH)
-{
+vifa_int_faces_adj_attr::vifa_int_faces_adj_attr()
+    : vifa_int_faces_attr(), closure_valid_(false), seed_(nullptr),
+      seed_attr_(nullptr), depth_(BAD_DEPTH) {
   init();
   ComputeAttributes();
 }

@@ -116,8 +116,7 @@ vsol_rectangle_2d::~vsol_rectangle_2d() = default;
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d* vsol_rectangle_2d::clone(void) const
-{
+vsol_spatial_object_2d *vsol_rectangle_2d::clone() const {
   return new vsol_rectangle_2d(*this);
 }
 
@@ -128,34 +127,22 @@ vsol_spatial_object_2d* vsol_rectangle_2d::clone(void) const
 //---------------------------------------------------------------------------
 //: Return the first vertex
 //---------------------------------------------------------------------------
-vsol_point_2d_sptr vsol_rectangle_2d::p0(void) const
-{
-  return (*storage_)[0];
-}
+vsol_point_2d_sptr vsol_rectangle_2d::p0() const { return (*storage_)[0]; }
 
 //---------------------------------------------------------------------------
 //: Return the second vertex
 //---------------------------------------------------------------------------
-vsol_point_2d_sptr vsol_rectangle_2d::p1(void) const
-{
-  return (*storage_)[1];
-}
+vsol_point_2d_sptr vsol_rectangle_2d::p1() const { return (*storage_)[1]; }
 
 //---------------------------------------------------------------------------
 //: Return the third vertex
 //---------------------------------------------------------------------------
-vsol_point_2d_sptr vsol_rectangle_2d::p2(void) const
-{
-  return (*storage_)[2];
-}
+vsol_point_2d_sptr vsol_rectangle_2d::p2() const { return (*storage_)[2]; }
 
 //---------------------------------------------------------------------------
 //: Return the last vertex
 //---------------------------------------------------------------------------
-vsol_point_2d_sptr vsol_rectangle_2d::p3(void) const
-{
-  return (*storage_)[3];
-}
+vsol_point_2d_sptr vsol_rectangle_2d::p3() const { return (*storage_)[3]; }
 
 //***************************************************************************
 // Comparison
@@ -190,24 +177,21 @@ bool vsol_rectangle_2d::operator==(const vsol_spatial_object_2d& obj) const
 //---------------------------------------------------------------------------
 //: Return the width
 //---------------------------------------------------------------------------
-double vsol_rectangle_2d::width(void) const
-{
+double vsol_rectangle_2d::width() const {
   return (*storage_)[0]->distance((*storage_)[1]);
 }
 
 //---------------------------------------------------------------------------
 //: Return the height
 //---------------------------------------------------------------------------
-double vsol_rectangle_2d::height(void) const
-{
+double vsol_rectangle_2d::height() const {
   return (*storage_)[1]->distance((*storage_)[2]);
 }
 
 //---------------------------------------------------------------------------
 //: Return the area of `this'
 //---------------------------------------------------------------------------
-double vsol_rectangle_2d::area(void) const
-{
+double vsol_rectangle_2d::area() const {
   double result;
   result=width()*height();
   return result;

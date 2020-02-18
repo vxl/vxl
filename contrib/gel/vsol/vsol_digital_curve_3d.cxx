@@ -25,14 +25,12 @@ vsol_digital_curve_3d::vsol_digital_curve_3d(const vsol_digital_curve_3d &other)
 
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
-vsol_spatial_object_3d* vsol_digital_curve_3d::clone(void) const
-{
+vsol_spatial_object_3d *vsol_digital_curve_3d::clone() const {
   return new vsol_digital_curve_3d(*this);
 }
 
 //: Return the first point of `this'
-vsol_point_3d_sptr vsol_digital_curve_3d::p0(void) const
-{
+vsol_point_3d_sptr vsol_digital_curve_3d::p0() const {
   if (samples_.empty())
     return nullptr;
   else
@@ -40,8 +38,7 @@ vsol_point_3d_sptr vsol_digital_curve_3d::p0(void) const
 }
 
 //: Return the last point of `this'
-vsol_point_3d_sptr vsol_digital_curve_3d::p1(void) const
-{
+vsol_point_3d_sptr vsol_digital_curve_3d::p1() const {
   if (samples_.empty())
     return nullptr;
   else
@@ -106,8 +103,7 @@ bool vsol_digital_curve_3d::operator==(vsol_spatial_object_3d const& obj) const
 }
 
 //: Return the length of `this'
-double vsol_digital_curve_3d::length(void) const
-{
+double vsol_digital_curve_3d::length() const {
   double curve_length = 0.0;
   for ( auto itr=samples_.begin();
         itr+1 != samples_.end();  ++itr )
@@ -118,8 +114,7 @@ double vsol_digital_curve_3d::length(void) const
 }
 
 //: Compute the bounding box of `this'
-void vsol_digital_curve_3d::compute_bounding_box(void) const
-{
+void vsol_digital_curve_3d::compute_bounding_box() const {
   // valid under linear interpolation
   set_bounding_box(samples_[0]->x(), samples_[0]->y(), samples_[0]->z());
   for (unsigned int i=1; i<samples_.size(); ++i)

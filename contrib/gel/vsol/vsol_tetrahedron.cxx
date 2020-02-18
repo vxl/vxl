@@ -40,34 +40,22 @@ vsol_tetrahedron::vsol_tetrahedron(const vsol_tetrahedron &other) = default;
 //---------------------------------------------------------------------------
 //: Return the first vertex
 //---------------------------------------------------------------------------
-vsol_point_3d_sptr vsol_tetrahedron::p0(void) const
-{
-  return storage_[0];
-}
+vsol_point_3d_sptr vsol_tetrahedron::p0() const { return storage_[0]; }
 
 //---------------------------------------------------------------------------
 //: Return the second vertex
 //---------------------------------------------------------------------------
-vsol_point_3d_sptr vsol_tetrahedron::p1(void) const
-{
-  return storage_[1];
-}
+vsol_point_3d_sptr vsol_tetrahedron::p1() const { return storage_[1]; }
 
 //---------------------------------------------------------------------------
 //: Return the third vertex
 //---------------------------------------------------------------------------
-vsol_point_3d_sptr vsol_tetrahedron::p2(void) const
-{
-  return storage_[2];
-}
+vsol_point_3d_sptr vsol_tetrahedron::p2() const { return storage_[2]; }
 
 //---------------------------------------------------------------------------
 //: Return the last vertex
 //---------------------------------------------------------------------------
-vsol_point_3d_sptr vsol_tetrahedron::p3(void) const
-{
-  return storage_[3];
-}
+vsol_point_3d_sptr vsol_tetrahedron::p3() const { return storage_[3]; }
 
 //***************************************************************************
 // Status report
@@ -76,8 +64,7 @@ vsol_point_3d_sptr vsol_tetrahedron::p3(void) const
 //---------------------------------------------------------------------------
 //: Return the volume of `this'
 //---------------------------------------------------------------------------
-double vsol_tetrahedron::volume(void) const
-{
+double vsol_tetrahedron::volume() const {
   double dx01=storage_[0]->x()-storage_[1]->x();
   double dy01=storage_[0]->y()-storage_[1]->y();
   double dz01=storage_[0]->z()-storage_[1]->z();

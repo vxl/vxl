@@ -94,9 +94,7 @@ Clear()
 //-----------------------------------------------------------------
 //: Compute a histogram of parallel line coverage
 //
-vifa_histogram_sptr vifa_group_pgram::
-GetCoverageHist(void)
-{
+vifa_histogram_sptr vifa_group_pgram::GetCoverageHist() {
   vifa_histogram_sptr  h = new vifa_histogram(th_dim_, 0.0f, float(angle_range_));
 
   float*  cnts = h->GetCounts();
@@ -234,9 +232,7 @@ GetAdjacentPerimeter(int  bin)
 
 //------------------------------------------------------
 //: Compute the total length of parallel lines normalized by the total edge perimeter
-double vifa_group_pgram::
-norm_parallel_line_length(void)
-{
+double vifa_group_pgram::norm_parallel_line_length() {
   this->ComputeDominantDirs();
   if (dominant_dirs_.size() < 1)
   {
@@ -319,9 +315,7 @@ LineAtAngle(int  angle_bin)
 //------------------------------------------------------
 //: Compute the bounding box of the current index
 //
-void vifa_group_pgram::
-ComputeBoundingBox(void)
-{
+void vifa_group_pgram::ComputeBoundingBox() {
   // Reset the bounding box
   bb_->empty();
 
@@ -344,9 +338,7 @@ ComputeBoundingBox(void)
 //: Compute the dominant directions using the coverage histogram.
 //  A dominant direction is a local maximum in the coverage distribution.
 //
-void vifa_group_pgram::
-ComputeDominantDirs(void)
-{
+void vifa_group_pgram::ComputeDominantDirs() {
   dominant_dirs_.clear();
 
   // Get the coverage histogram and do find local maxima.

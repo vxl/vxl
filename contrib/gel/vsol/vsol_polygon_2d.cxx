@@ -55,8 +55,7 @@ vsol_polygon_2d::~vsol_polygon_2d()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d* vsol_polygon_2d::clone(void) const
-{
+vsol_spatial_object_2d *vsol_polygon_2d::clone() const {
   return new vsol_polygon_2d(*this);
 }
 
@@ -64,31 +63,27 @@ vsol_spatial_object_2d* vsol_polygon_2d::clone(void) const
 // Safe casting
 //***************************************************************************
 
-vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon(void)
-{
+vsol_polygon_2d *vsol_polygon_2d::cast_to_polygon() {
   if (!cast_to_triangle()||!cast_to_rectangle())
     return this;
   else
     return nullptr;
 }
 
-const vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon(void) const
-{
+const vsol_polygon_2d *vsol_polygon_2d::cast_to_polygon() const {
   if (!cast_to_triangle()||!cast_to_rectangle())
     return this;
   else
     return nullptr;
 }
 
-vsol_triangle_2d* vsol_polygon_2d::cast_to_triangle(void){return nullptr;}
-const vsol_triangle_2d* vsol_polygon_2d::cast_to_triangle(void) const
-{
+vsol_triangle_2d *vsol_polygon_2d::cast_to_triangle() { return nullptr; }
+const vsol_triangle_2d *vsol_polygon_2d::cast_to_triangle() const {
   return nullptr;
 }
 
-vsol_rectangle_2d* vsol_polygon_2d::cast_to_rectangle(void){return nullptr;}
-const vsol_rectangle_2d* vsol_polygon_2d::cast_to_rectangle(void) const
-{
+vsol_rectangle_2d *vsol_polygon_2d::cast_to_rectangle() { return nullptr; }
+const vsol_rectangle_2d *vsol_polygon_2d::cast_to_rectangle() const {
   return nullptr;
 }
 
@@ -155,8 +150,7 @@ bool vsol_polygon_2d::operator==(const vsol_spatial_object_2d& obj) const
 //---------------------------------------------------------------------------
 //: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
-void vsol_polygon_2d::compute_bounding_box(void) const
-{
+void vsol_polygon_2d::compute_bounding_box() const {
   set_bounding_box((*storage_)[0]->x(), (*storage_)[0]->y());
   for (unsigned int i=1;i<storage_->size();++i)
     add_to_bounding_box((*storage_)[i]->x(), (*storage_)[i]->y());
@@ -165,8 +159,7 @@ void vsol_polygon_2d::compute_bounding_box(void) const
 //---------------------------------------------------------------------------
 //: Return the area of `this'
 //---------------------------------------------------------------------------
-double vsol_polygon_2d::area(void) const
-{
+double vsol_polygon_2d::area() const {
   double area = 0.0;
   unsigned int last = storage_->size()-1;
 
@@ -203,8 +196,7 @@ double vsol_polygon_2d::area(void) const
 //  In the case of degenerate polygons, where area == 0, return the average of
 //  the vertex locations.
 //
-vsol_point_2d_sptr vsol_polygon_2d::centroid(void) const
-{
+vsol_point_2d_sptr vsol_polygon_2d::centroid() const {
   unsigned int nverts = storage_->size();
   assert(nverts>0);
   double sx = 0, sy = 0;
@@ -249,48 +241,46 @@ vsol_point_2d_sptr vsol_polygon_2d::centroid(void) const
 // the same.  This is checked by calculating the cross product of two
 // consecutive edges and verifying that these all have the same sign.
 //---------------------------------------------------------------------------
-bool vsol_polygon_2d::is_convex(void) const
-{
-   if (storage_->size()==3) return true; // A triangle is always convex
+bool vsol_polygon_2d::is_convex() const {
+  if (storage_->size() == 3)
+    return true; // A triangle is always convex
 
-   // First find a non-zero cross product.  This is certainly present,
-   // unless the polygon collapses to a line segment.
-   // Note that cross-product=0 means that two edges are parallel, which
-   // is perfectly valid, but the other "turnings" should still all be in
-   // the same direction.  An earlier implementation allowed for turning
-   // in the other direction after a cross-product=0.
+  // First find a non-zero cross product.  This is certainly present,
+  // unless the polygon collapses to a line segment.
+  // Note that cross-product=0 means that two edges are parallel, which
+  // is perfectly valid, but the other "turnings" should still all be in
+  // the same direction.  An earlier implementation allowed for turning
+  // in the other direction after a cross-product=0.
 
-   double n = 0.0;
-   for (unsigned int i=0; i<storage_->size(); ++i)
-   {
-     int j = (i>1) ? i-2 : i-2+storage_->size();
-     int k = (i>0) ? i-1 : i-1+storage_->size();
-     vsol_point_2d_sptr p0=(*storage_)[k];
-     vsol_point_2d_sptr p1=(*storage_)[j];
-     vsol_point_2d_sptr p2=(*storage_)[i];
-     vgl_vector_2d<double> v1=p0->to_vector(*p1);
-     vgl_vector_2d<double> v2=p1->to_vector(*p2);
-     n = cross_product(v1,v2);
-     if (n != 0.0)
-       break;
-   }
-   if (n == 0.0)
-     return true;
+  double n = 0.0;
+  for (unsigned int i = 0; i < storage_->size(); ++i) {
+    int j = (i > 1) ? i - 2 : i - 2 + storage_->size();
+    int k = (i > 0) ? i - 1 : i - 1 + storage_->size();
+    vsol_point_2d_sptr p0 = (*storage_)[k];
+    vsol_point_2d_sptr p1 = (*storage_)[j];
+    vsol_point_2d_sptr p2 = (*storage_)[i];
+    vgl_vector_2d<double> v1 = p0->to_vector(*p1);
+    vgl_vector_2d<double> v2 = p1->to_vector(*p2);
+    n = cross_product(v1, v2);
+    if (n != 0.0)
+      break;
+  }
+  if (n == 0.0)
+    return true;
 
-   for (unsigned int i=0; i<storage_->size(); ++i)
-   {
-     int j = (i>1) ? i-2 : i-2+storage_->size();
-     int k = (i>0) ? i-1 : i-1+storage_->size();
-     vsol_point_2d_sptr p0=(*storage_)[k];
-     vsol_point_2d_sptr p1=(*storage_)[j];
-     vsol_point_2d_sptr p2=(*storage_)[i];
-     vgl_vector_2d<double> v1=p0->to_vector(*p1);
-     vgl_vector_2d<double> v2=p1->to_vector(*p2);
-     double n2 = cross_product(v1,v2);
-     if (n2*n < 0)
-       return false; // turns in the other direction
-   }
-   return true;
+  for (unsigned int i = 0; i < storage_->size(); ++i) {
+    int j = (i > 1) ? i - 2 : i - 2 + storage_->size();
+    int k = (i > 0) ? i - 1 : i - 1 + storage_->size();
+    vsol_point_2d_sptr p0 = (*storage_)[k];
+    vsol_point_2d_sptr p1 = (*storage_)[j];
+    vsol_point_2d_sptr p2 = (*storage_)[i];
+    vgl_vector_2d<double> v1 = p0->to_vector(*p1);
+    vgl_vector_2d<double> v2 = p1->to_vector(*p2);
+    double n2 = cross_product(v1, v2);
+    if (n2 * n < 0)
+      return false; // turns in the other direction
+  }
+  return true;
 }
 
 //----------------------------------------------------------------
@@ -353,8 +343,7 @@ void vsol_polygon_2d::print_summary(std::ostream &os) const
 //---------------------------------------------------------------------------
 //: Default constructor.
 //---------------------------------------------------------------------------
-vsol_polygon_2d::vsol_polygon_2d(void)
-{
+vsol_polygon_2d::vsol_polygon_2d() {
   storage_=new std::vector<vsol_point_2d_sptr>();
 }
 

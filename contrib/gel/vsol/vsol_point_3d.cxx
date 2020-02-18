@@ -17,8 +17,7 @@ vsol_point_3d::~vsol_point_3d() = default;
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d* vsol_point_3d::clone(void) const
-{
+vsol_spatial_object_3d *vsol_point_3d::clone() const {
   return new vsol_point_3d(*this);
 }
 
@@ -49,16 +48,14 @@ bool vsol_point_3d::operator==(vsol_spatial_object_3d const& obj) const
 //: Return the real type of a point. It is a POINT
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d::vsol_spatial_object_3d_type
-vsol_point_3d::spatial_type(void) const
-{
+vsol_point_3d::spatial_type() const {
   return POINT;
 }
 
 //---------------------------------------------------------------------------
 //: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
-void vsol_point_3d::compute_bounding_box(void) const
-{
+void vsol_point_3d::compute_bounding_box() const {
   set_bounding_box(p_.x(),p_.y(),p_.z());
 }
 

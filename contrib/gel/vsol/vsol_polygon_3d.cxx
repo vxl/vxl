@@ -76,8 +76,7 @@ vsol_polygon_3d::~vsol_polygon_3d()
 //: Clone `this': creation of a new object and initialization.
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d* vsol_polygon_3d::clone(void) const
-{
+vsol_spatial_object_3d *vsol_polygon_3d::clone() const {
   return new vsol_polygon_3d(*this);
 }
 
@@ -145,8 +144,7 @@ bool vsol_polygon_3d::operator==(vsol_spatial_object_3d const& obj) const
 //---------------------------------------------------------------------------
 //: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
-void vsol_polygon_3d::compute_bounding_box(void) const
-{
+void vsol_polygon_3d::compute_bounding_box() const {
   set_bounding_box((*storage_)[0]->x(),
                    (*storage_)[0]->y(),
                    (*storage_)[0]->z());
@@ -159,8 +157,7 @@ void vsol_polygon_3d::compute_bounding_box(void) const
 //---------------------------------------------------------------------------
 //: Return the area of `this'
 //---------------------------------------------------------------------------
-double vsol_polygon_3d::area(void) const
-{
+double vsol_polygon_3d::area() const {
   // TO DO
   std::cerr << "Warning: vsol_polygon_3d::area() has not been implemented yet\n";
   return -1;
@@ -175,50 +172,48 @@ double vsol_polygon_3d::area(void) const
 // are all nonnegative (which proves the "turning") and equal to the
 // product of their lengths (which proves coplanarity).
 //---------------------------------------------------------------------------
-bool vsol_polygon_3d::is_convex(void) const
-{
-   if (storage_->size()==3) return true; // A triangle is always convex
+bool vsol_polygon_3d::is_convex() const {
+  if (storage_->size() == 3)
+    return true; // A triangle is always convex
 
-   // First find a non-zero cross product.  This is certainly present,
-   // unless the polygon collapses to a line segment.
-   // Note that cross-product=0 means that two edges are parallel, which
-   // is perfectly valid, but the other "turnings" should still all be in
-   // the same direction.  An earlier implementation allowed for turning
-   // in the other direction after a cross-product=0.
+  // First find a non-zero cross product.  This is certainly present,
+  // unless the polygon collapses to a line segment.
+  // Note that cross-product=0 means that two edges are parallel, which
+  // is perfectly valid, but the other "turnings" should still all be in
+  // the same direction.  An earlier implementation allowed for turning
+  // in the other direction after a cross-product=0.
 
-   vgl_vector_3d<double> n = vgl_vector_3d<double>(0.0,0.0,0.0);
-   for (unsigned int i=0; i<storage_->size(); ++i)
-   {
-     int j = (i>1) ? i-2 : i-2+storage_->size();
-     int k = (i>0) ? i-1 : i-1+storage_->size();
-     vsol_point_3d_sptr p0=(*storage_)[k];
-     vsol_point_3d_sptr p1=(*storage_)[j];
-     vsol_point_3d_sptr p2=(*storage_)[i];
-     vgl_vector_3d<double> v1=p0->to_vector(*p1);
-     vgl_vector_3d<double> v2=p1->to_vector(*p2);
-     n = cross_product(v1,v2);
-     if (n != vgl_vector_3d<double>(0.0,0.0,0.0))
-       break;
-   }
-   if (n == vgl_vector_3d<double>(0.0,0.0,0.0))
-     return true;
+  vgl_vector_3d<double> n = vgl_vector_3d<double>(0.0, 0.0, 0.0);
+  for (unsigned int i = 0; i < storage_->size(); ++i) {
+    int j = (i > 1) ? i - 2 : i - 2 + storage_->size();
+    int k = (i > 0) ? i - 1 : i - 1 + storage_->size();
+    vsol_point_3d_sptr p0 = (*storage_)[k];
+    vsol_point_3d_sptr p1 = (*storage_)[j];
+    vsol_point_3d_sptr p2 = (*storage_)[i];
+    vgl_vector_3d<double> v1 = p0->to_vector(*p1);
+    vgl_vector_3d<double> v2 = p1->to_vector(*p2);
+    n = cross_product(v1, v2);
+    if (n != vgl_vector_3d<double>(0.0, 0.0, 0.0))
+      break;
+  }
+  if (n == vgl_vector_3d<double>(0.0, 0.0, 0.0))
+    return true;
 
-   for (unsigned int i=0; i<storage_->size(); ++i)
-   {
-     int j = (i>1) ? i-2 : i-2+storage_->size();
-     int k = (i>0) ? i-1 : i-1+storage_->size();
-     vsol_point_3d_sptr p0=(*storage_)[k];
-     vsol_point_3d_sptr p1=(*storage_)[j];
-     vsol_point_3d_sptr p2=(*storage_)[i];
-     vgl_vector_3d<double> v1=p0->to_vector(*p1);
-     vgl_vector_3d<double> v2=p1->to_vector(*p2);
-     vgl_vector_3d<double> n2 = cross_product(v1,v2);
-     if (dot_product(n2,n) < 0)
-       return false; // turns in the other direction
-     if (!parallel(n2,n,1e-6))
-       return false; // non-planar
-   }
-   return true;
+  for (unsigned int i = 0; i < storage_->size(); ++i) {
+    int j = (i > 1) ? i - 2 : i - 2 + storage_->size();
+    int k = (i > 0) ? i - 1 : i - 1 + storage_->size();
+    vsol_point_3d_sptr p0 = (*storage_)[k];
+    vsol_point_3d_sptr p1 = (*storage_)[j];
+    vsol_point_3d_sptr p2 = (*storage_)[i];
+    vgl_vector_3d<double> v1 = p0->to_vector(*p1);
+    vgl_vector_3d<double> v2 = p1->to_vector(*p2);
+    vgl_vector_3d<double> n2 = cross_product(v1, v2);
+    if (dot_product(n2, n) < 0)
+      return false; // turns in the other direction
+    if (!parallel(n2, n, 1e-6))
+      return false; // non-planar
+  }
+  return true;
 }
 
 //---------------------------------------------------------------------------

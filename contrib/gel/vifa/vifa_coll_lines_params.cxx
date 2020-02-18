@@ -31,9 +31,7 @@ vifa_coll_lines_params(const vifa_coll_lines_params& old_params)
   endpt_distance_ = old_params.endpt_distance_;
 }
 
-void vifa_coll_lines_params::
-print_info(void) const
-{
+void vifa_coll_lines_params::print_info() const {
   std::cout << "vifa_coll_lines_params:\n"
            << "  midpoint distance = " << midpt_distance_ << std::endl
            << "  angle tolerance   = " << angle_tolerance_ << std::endl

@@ -21,9 +21,7 @@ vifa_image_histogram(const vil_image_view_base_sptr&  image,
   fill_histogram(image, percentage);
 }
 
-void vifa_image_histogram::
-init(void)
-{
+void vifa_image_histogram::init() {
   num = 1 << (byte_depth_ * 8);
 
   // Delete these because they have already been allocated by base constructor

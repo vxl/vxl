@@ -45,17 +45,13 @@ BaseTriTensorCompute::add_matches (std::list<HomgMatchPoint2D2D2D*> *match_list)
 //-----------------------------------------------------------------------------
 //
 //: clear all entries from the list of matched linesegments
-void
-BaseTriTensorCompute::clear_matches_line (void)
-{
+void BaseTriTensorCompute::clear_matches_line() {
   delete matchlineseg_list_ptr_;
 }
 
 //-----------------------------------------------------------------------------
 //
 //: clear all entries from the list of matched points
-void
-BaseTriTensorCompute::clear_matches_point (void)
-{
+void BaseTriTensorCompute::clear_matches_point() {
   delete matchpoint_list_ptr_;
 }

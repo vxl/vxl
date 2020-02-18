@@ -69,22 +69,18 @@ inline void vil3d_meta_image_swap64(char *a, unsigned n)
 //===================================================================
 // Header constructor
 //===================================================================
-vil3d_meta_image_header::vil3d_meta_image_header(void) :
-header_valid_(false),
-byte_order_msb_(false),
-offset_i_(0.0), offset_j_(0.0), offset_k_(0.0),
-vox_size_i_(1.0), vox_size_j_(1.0), vox_size_k_(1.0),
-dim_size_i_(0), dim_size_j_(0), dim_size_k_(0), nplanes_(1),
-need_swap_(false)
-{
+vil3d_meta_image_header::vil3d_meta_image_header()
+    : header_valid_(false), byte_order_msb_(false), offset_i_(0.0),
+      offset_j_(0.0), offset_k_(0.0), vox_size_i_(1.0), vox_size_j_(1.0),
+      vox_size_k_(1.0), dim_size_i_(0), dim_size_j_(0), dim_size_k_(0),
+      nplanes_(1), need_swap_(false) {
   // No construction code
 }
 
 //===================================================================
 // Header destructor
 //===================================================================
-vil3d_meta_image_header::~vil3d_meta_image_header(void)
-{
+vil3d_meta_image_header::~vil3d_meta_image_header() {
   // No destructor code
 }
 
@@ -96,8 +92,7 @@ void vil3d_meta_image_header::set_byte_order_msb(const bool is_msb)
   byte_order_msb_ = is_msb;
 }
 
-bool vil3d_meta_image_header::byte_order_is_msb(void) const
-{
+bool vil3d_meta_image_header::byte_order_is_msb() const {
   return byte_order_msb_;
 }
 
@@ -113,20 +108,11 @@ void vil3d_meta_image_header::set_offset(const double off_i,
   offset_k_ = off_k;
 }
 
-double vil3d_meta_image_header::offset_i(void) const
-{
-  return offset_i_;
-}
+double vil3d_meta_image_header::offset_i() const { return offset_i_; }
 
-double vil3d_meta_image_header::offset_j(void) const
-{
-  return offset_j_;
-}
+double vil3d_meta_image_header::offset_j() const { return offset_j_; }
 
-double vil3d_meta_image_header::offset_k(void) const
-{
-  return offset_k_;
-}
+double vil3d_meta_image_header::offset_k() const { return offset_k_; }
 
 //===================================================================
 // Set/get voxel sizes
@@ -140,20 +126,11 @@ void vil3d_meta_image_header::set_vox_size(const double vox_i,
   vox_size_k_ = vox_k;
 }
 
-double vil3d_meta_image_header::vox_size_i(void) const
-{
-  return vox_size_i_;
-}
+double vil3d_meta_image_header::vox_size_i() const { return vox_size_i_; }
 
-double vil3d_meta_image_header::vox_size_j(void) const
-{
-  return vox_size_j_;
-}
+double vil3d_meta_image_header::vox_size_j() const { return vox_size_j_; }
 
-double vil3d_meta_image_header::vox_size_k(void) const
-{
-  return vox_size_k_;
-}
+double vil3d_meta_image_header::vox_size_k() const { return vox_size_k_; }
 
 //===================================================================
 // Set/get image dimensions
@@ -169,25 +146,13 @@ void vil3d_meta_image_header::set_dim_size(const unsigned int ni,
   nplanes_ = np;
 }
 
-unsigned int vil3d_meta_image_header::ni(void) const
-{
-  return dim_size_i_;
-}
+unsigned int vil3d_meta_image_header::ni() const { return dim_size_i_; }
 
-unsigned int vil3d_meta_image_header::nj(void) const
-{
-  return dim_size_j_;
-}
+unsigned int vil3d_meta_image_header::nj() const { return dim_size_j_; }
 
-unsigned int vil3d_meta_image_header::nk(void) const
-{
-  return dim_size_k_;
-}
+unsigned int vil3d_meta_image_header::nk() const { return dim_size_k_; }
 
-unsigned int vil3d_meta_image_header::nplanes(void) const
-{
-  return nplanes_;
-}
+unsigned int vil3d_meta_image_header::nplanes() const { return nplanes_; }
 
 //===================================================================
 // Set/get element type
@@ -197,8 +162,7 @@ void vil3d_meta_image_header::set_element_type(const std::string &elem_type)
   elem_type_ = elem_type;
 }
 
-const std::string &vil3d_meta_image_header::element_type(void) const
-{
+const std::string &vil3d_meta_image_header::element_type() const {
   return elem_type_;
 }
 
@@ -210,8 +174,7 @@ void vil3d_meta_image_header::set_image_fname(const std::string &image_fname)
   im_file_ = image_fname;
 }
 
-const std::string &vil3d_meta_image_header::image_fname(void) const
-{
+const std::string &vil3d_meta_image_header::image_fname() const {
   return im_file_;
 }
 
@@ -223,16 +186,14 @@ void vil3d_meta_image_header::set_pixel_format(const vil_pixel_format format)
   pformat_ = format;
 }
 
-vil_pixel_format vil3d_meta_image_header::pixel_format(void) const
-{
+vil_pixel_format vil3d_meta_image_header::pixel_format() const {
   return pformat_;
 }
 
 //===================================================================
 // Set the header back to defaults
 //===================================================================
-void vil3d_meta_image_header::clear(void)
-{
+void vil3d_meta_image_header::clear() {
   header_valid_ = false;
   byte_order_msb_ = false;
   offset_i_ = offset_j_ = offset_k_ = 0.0;
@@ -321,8 +282,7 @@ void vil3d_meta_image_header::print_header(std::ostream &os) const
 //===================================================================
 // Check if swapping is needed
 //===================================================================
-void vil3d_meta_image_header::check_need_swap(void)
-{
+void vil3d_meta_image_header::check_need_swap() {
   union short_char
   {
     short short_val;
@@ -342,10 +302,7 @@ void vil3d_meta_image_header::check_need_swap(void)
 //===================================================================
 // Return whether swap is needed
 //===================================================================
-bool vil3d_meta_image_header::need_swap(void) const
-{
-  return need_swap_;
-}
+bool vil3d_meta_image_header::need_swap() const { return need_swap_; }
 
 //===================================================================
 // Check the next line in the header
@@ -701,47 +658,32 @@ fpath_(std::move(fname))
 //===================================================================
 // Destruct
 //===================================================================
-vil3d_meta_image::~vil3d_meta_image(void)
-{
+vil3d_meta_image::~vil3d_meta_image() {
   // No code necessary
 }
 
 //===================================================================
 // Get the image dimension details
 //===================================================================
-unsigned int vil3d_meta_image::nplanes(void) const
-{
-  return header_.nplanes();
-}
+unsigned int vil3d_meta_image::nplanes() const { return header_.nplanes(); }
 
-unsigned int vil3d_meta_image::ni(void) const
-{
-  return header_.ni();
-}
+unsigned int vil3d_meta_image::ni() const { return header_.ni(); }
 
-unsigned int vil3d_meta_image::nj(void) const
-{
-  return header_.nj();
-}
+unsigned int vil3d_meta_image::nj() const { return header_.nj(); }
 
-unsigned int vil3d_meta_image::nk(void) const
-{
-  return header_.nk();
-}
+unsigned int vil3d_meta_image::nk() const { return header_.nk(); }
 
 //===================================================================
 // Get the current header
 //===================================================================
-const vil3d_meta_image_header &vil3d_meta_image::header(void) const
-{
+const vil3d_meta_image_header &vil3d_meta_image::header() const {
   return header_;
 }
 
 //===================================================================
 // Get the pixel format
 //===================================================================
-vil_pixel_format vil3d_meta_image::pixel_format(void) const
-{
+vil_pixel_format vil3d_meta_image::pixel_format() const {
   return header_.pixel_format();
 }
 

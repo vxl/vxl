@@ -42,11 +42,7 @@ vifa_norm_params(const vifa_norm_params&  old_params)
   calculate_clip_points();
 }
 
-void vifa_norm_params::
-recompute(void)
-{
-  calculate_clip_points();
-}
+void vifa_norm_params::recompute() { calculate_clip_points(); }
 
 float vifa_norm_params::
 normalize(float raw_intensity) const
@@ -111,9 +107,7 @@ get_norm_bounds(vil_image_view_base*  img,
     return false;
 }
 
-void vifa_norm_params::
-print_info(void) const
-{
+void vifa_norm_params::print_info() const {
   std::cout << "vifa_norm_params:\n"
            << "  low % thresh    = " << plow << std::endl
            << "  high % thresh   = " << phigh << std::endl
@@ -123,9 +117,7 @@ print_info(void) const
            << "  int max         = " << imax_ << std::endl;
 }
 
-void vifa_norm_params::
-calculate_clip_points(void)
-{
+void vifa_norm_params::calculate_clip_points() {
   imin_ = 0.0f;
   imax_ = 0.0f;
 

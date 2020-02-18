@@ -28,8 +28,7 @@ void vtol_edge::unlink_inferior(const vtol_zero_chain_sptr& inf)
 //---------------------------------------------------------------------------
 //: Return the first non-empty zero-chain of `this'
 //---------------------------------------------------------------------------
-vtol_zero_chain_sptr vtol_edge::zero_chain(void) const
-{
+vtol_zero_chain_sptr vtol_edge::zero_chain() const {
   topology_list const& inf = *(inferiors());
   for (const auto & i : inf)
     if (i->cast_to_zero_chain()->v0()) // PVr- avoid returning empty chain
@@ -99,8 +98,7 @@ void vtol_edge::replace_end_point(vtol_vertex &curendpt,
 //---------------------------------------------------------------------------
 //: Determine the endpoints of an edge from its inferiors
 //---------------------------------------------------------------------------
-void vtol_edge::set_vertices_from_zero_chains(void)
-{
+void vtol_edge::set_vertices_from_zero_chains() {
   if (numinf()==1) // This is the normal case.
   {
     // Set v1_ to be the first on the
@@ -224,52 +222,41 @@ bool vtol_edge::operator==(const vsol_spatial_object_2d& obj) const
 
 //: Returns a list of vertices on the vtol_edge.
 
-std::vector<vtol_vertex *> *vtol_edge::compute_vertices(void)
-{
+std::vector<vtol_vertex *> *vtol_edge::compute_vertices() {
   SEL_INF(vtol_vertex,compute_vertices);
 }
 
 //: Returns the vtol_zero_chain list of the vtol_edge. This list is the Inferiors of the edge.
-std::vector<vtol_zero_chain *> *vtol_edge::compute_zero_chains(void)
-{
+std::vector<vtol_zero_chain *> *vtol_edge::compute_zero_chains() {
   COPY_INF(zero_chain);
 }
 
 //: Returns a list with itself as the only element. This utility is used in Inferior/Superior accessing methods.
-std::vector<vtol_edge *> *vtol_edge::compute_edges(void)
-{
-  LIST_SELF(vtol_edge);
-}
+std::vector<vtol_edge *> *vtol_edge::compute_edges() { LIST_SELF(vtol_edge); }
 
 //: Returns a list of one_chains which contain the vtol_edge. This list is the Superiors of the edge.
-std::vector<vtol_one_chain *> *vtol_edge::compute_one_chains(void)
-{
+std::vector<vtol_one_chain *> *vtol_edge::compute_one_chains() {
   SEL_SUP(vtol_one_chain,compute_one_chains);
 }
 
-
 //: Returns a list of the faces which contain the vtol_edge.
-std::vector<vtol_face *> *vtol_edge::compute_faces(void)
-{
+std::vector<vtol_face *> *vtol_edge::compute_faces() {
   SEL_SUP(vtol_face,compute_faces);
 }
 
 //: Returns the list of two_chains which contain the vtol_edge.
-std::vector<vtol_two_chain *> *vtol_edge::compute_two_chains(void)
-{
+std::vector<vtol_two_chain *> *vtol_edge::compute_two_chains() {
   SEL_SUP(vtol_two_chain,compute_two_chains);
 }
 
 //: Returns the list of blocks which contain the vtol_edge.
-std::vector<vtol_block *> *vtol_edge::compute_blocks(void)
-{
+std::vector<vtol_block *> *vtol_edge::compute_blocks() {
   SEL_SUP(vtol_block,compute_blocks);
 }
 
 //: Returns a list of vertices containing the endpoints of the edge.
 // These vertices are v1_ and v2_ in that order.
-vertex_list *vtol_edge::endpoints(void)
-{
+vertex_list *vtol_edge::endpoints() {
   auto *newl=new vertex_list;
   if (v1_)
     newl->push_back(v1_);

@@ -17,10 +17,7 @@
 //---------------------------------------------------------------------------
 // Default constructor
 //---------------------------------------------------------------------------
-vtol_topology_object::vtol_topology_object(void)
-  :superiors_(0),
-   inferiors_(0)
-{
+vtol_topology_object::vtol_topology_object() : superiors_(0), inferiors_(0) {
   inf_sup_cache_= new vtol_topology_cache(this);
   touch();
 }
@@ -150,8 +147,7 @@ void vtol_topology_object::unlink_inferior(const vtol_topology_object_sptr& infe
 //---------------------------------------------------------------------------
 //: Unlink `this' from all its inferiors
 //---------------------------------------------------------------------------
-void vtol_topology_object::unlink_all_inferiors(void)
-{
+void vtol_topology_object::unlink_all_inferiors() {
   // remove superior-inferior link, running through inferiors list back-to-front
   while (inferiors_.size()>0)
     unlink_inferior(inferiors_.back());
@@ -160,8 +156,7 @@ void vtol_topology_object::unlink_all_inferiors(void)
 //---------------------------------------------------------------------------
 //: Unlink `this' of the network
 //---------------------------------------------------------------------------
-void vtol_topology_object::unlink(void)
-{
+void vtol_topology_object::unlink() {
   while (superiors_.size()>0)
     superiors_.front()->unlink_inferior(this);
   unlink_all_inferiors();
@@ -169,8 +164,7 @@ void vtol_topology_object::unlink(void)
 
 //: get list of vertices
 
-vertex_list* vtol_topology_object::vertices(void) const
-{
+vertex_list *vtol_topology_object::vertices() const {
   auto* new_list=new vertex_list;
   inf_sup_cache_->vertices(*new_list);
   return new_list;
@@ -184,8 +178,7 @@ void vtol_topology_object::vertices(vertex_list& verts) const
 }
 
 //: get list of zero_chains
-zero_chain_list* vtol_topology_object::zero_chains(void) const
-{
+zero_chain_list *vtol_topology_object::zero_chains() const {
   auto* new_list=new zero_chain_list;
   inf_sup_cache_->zero_chains(*new_list);
   return new_list;
@@ -199,8 +192,7 @@ void vtol_topology_object::zero_chains(zero_chain_list &zerochains) const
 
 //: get list of edges
 
-edge_list* vtol_topology_object::edges(void) const
-{
+edge_list *vtol_topology_object::edges() const {
   auto* new_list=new edge_list;
   inf_sup_cache_->edges(*new_list);
   return new_list;
@@ -215,8 +207,7 @@ void vtol_topology_object::edges(edge_list &edges) const
 
 //: get list of one chains
 
-one_chain_list* vtol_topology_object::one_chains(void) const
-{
+one_chain_list *vtol_topology_object::one_chains() const {
   auto* new_list=new one_chain_list;
   inf_sup_cache_->one_chains(*new_list);
   return new_list;
@@ -231,8 +222,7 @@ void vtol_topology_object::one_chains(one_chain_list &onechains) const
 
 //: get list of faces
 
-face_list *vtol_topology_object::faces(void) const
-{
+face_list *vtol_topology_object::faces() const {
   auto *new_list=new face_list;
   inf_sup_cache_->faces(*new_list);
   return new_list;
@@ -247,8 +237,7 @@ void vtol_topology_object::faces(face_list &face_list) const
 
 //: get list of two chains
 
-two_chain_list *vtol_topology_object::two_chains(void) const
-{
+two_chain_list *vtol_topology_object::two_chains() const {
   auto *new_list=new two_chain_list;
   inf_sup_cache_->two_chains(*new_list);
   return new_list;
@@ -263,8 +252,7 @@ void vtol_topology_object::two_chains(two_chain_list &new_list) const
 
 //: get list of blocks
 
-block_list *vtol_topology_object::blocks(void) const
-{
+block_list *vtol_topology_object::blocks() const {
   auto *new_list=new block_list;
   inf_sup_cache_->blocks(*new_list);
   return new_list;
@@ -336,19 +324,15 @@ void vtol_topology_object::describe(std::ostream &strm,
 //---------------------------------------------------------------------------
 //: Compute lists of vertices
 //---------------------------------------------------------------------------
-std::vector<vtol_vertex *> *vtol_topology_object::compute_vertices(void)
-{
+std::vector<vtol_vertex *> *vtol_topology_object::compute_vertices() {
   std::cout << "Compute vertices\n";
   return nullptr;
 }
 
-
 //---------------------------------------------------------------------------
 //: Compute lists of zero chains
 //---------------------------------------------------------------------------
-std::vector<vtol_zero_chain *> *
-vtol_topology_object::compute_zero_chains(void)
-{
+std::vector<vtol_zero_chain *> *vtol_topology_object::compute_zero_chains() {
   std::cout << "Compute zero_chains\n";
   return nullptr;
 }
@@ -357,8 +341,7 @@ vtol_topology_object::compute_zero_chains(void)
 //: compute lists of edges
 //---------------------------------------------------------------------------
 
-std::vector<vtol_edge *> *vtol_topology_object::compute_edges(void)
-{
+std::vector<vtol_edge *> *vtol_topology_object::compute_edges() {
   std::cout << "Compute edges\n";
   return nullptr;
 }
@@ -366,9 +349,7 @@ std::vector<vtol_edge *> *vtol_topology_object::compute_edges(void)
 //---------------------------------------------------------------------------
 //: compute lists of one chains
 //---------------------------------------------------------------------------
-std::vector<vtol_one_chain *> *
-vtol_topology_object::compute_one_chains(void)
-{
+std::vector<vtol_one_chain *> *vtol_topology_object::compute_one_chains() {
   std::cout << "Compute one chains\n";
   return nullptr;
 }
@@ -376,8 +357,7 @@ vtol_topology_object::compute_one_chains(void)
 //---------------------------------------------------------------------------
 //: compute lists of faces
 //---------------------------------------------------------------------------
-std::vector<vtol_face *> *vtol_topology_object::compute_faces(void)
-{
+std::vector<vtol_face *> *vtol_topology_object::compute_faces() {
   std::cout << "Compute faces\n";
   return nullptr;
 }
@@ -385,9 +365,7 @@ std::vector<vtol_face *> *vtol_topology_object::compute_faces(void)
 //---------------------------------------------------------------------------
 //: compute lists of two chains
 //---------------------------------------------------------------------------
-std::vector<vtol_two_chain *> *
-vtol_topology_object::compute_two_chains(void)
-{
+std::vector<vtol_two_chain *> *vtol_topology_object::compute_two_chains() {
   std::cout << "Compute two chains\n";
   return nullptr;
 }
@@ -395,8 +373,7 @@ vtol_topology_object::compute_two_chains(void)
 //---------------------------------------------------------------------------
 //: compute lists of blocks
 //---------------------------------------------------------------------------
-std::vector<vtol_block *> *vtol_topology_object::compute_blocks(void)
-{
+std::vector<vtol_block *> *vtol_topology_object::compute_blocks() {
   std::cout << "Compute blocks\n";
   return nullptr;
 }

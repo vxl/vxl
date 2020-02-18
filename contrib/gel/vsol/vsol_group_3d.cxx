@@ -16,9 +16,7 @@
 //---------------------------------------------------------------------------
 //: Default Constructor: with no child
 //---------------------------------------------------------------------------
-vsol_group_3d::vsol_group_3d(void)
-  : vsol_spatial_object_3d()
-{
+vsol_group_3d::vsol_group_3d() : vsol_spatial_object_3d() {
   storage_=new std::vector<vsol_spatial_object_3d_sptr>();
 }
 
@@ -45,8 +43,7 @@ vsol_group_3d::~vsol_group_3d()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d* vsol_group_3d::clone(void) const
-{
+vsol_spatial_object_3d *vsol_group_3d::clone() const {
   return new vsol_group_3d(*this);
 }
 
@@ -74,8 +71,7 @@ vsol_spatial_object_3d_sptr vsol_group_3d::object(unsigned int i) const
 //: Return the real type of a group. It is a SPATIALGROUP
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d::vsol_spatial_object_3d_type
-vsol_group_3d::spatial_type(void) const
-{
+vsol_group_3d::spatial_type() const {
   return vsol_spatial_object_3d::SPATIALGROUP;
 }
 
@@ -83,8 +79,7 @@ vsol_group_3d::spatial_type(void) const
 //: Compute the bounding box of `this'
 // Require: size()>0
 //---------------------------------------------------------------------------
-void vsol_group_3d::compute_bounding_box(void) const
-{
+void vsol_group_3d::compute_bounding_box() const {
   // require
   assert(size()>0);
 
@@ -101,8 +96,7 @@ void vsol_group_3d::compute_bounding_box(void) const
 //---------------------------------------------------------------------------
 //: Return the number of objects of the group
 //---------------------------------------------------------------------------
-unsigned int vsol_group_3d::deep_size(void) const
-{
+unsigned int vsol_group_3d::deep_size() const {
   int result=0;
   std::vector<vsol_spatial_object_3d_sptr>::iterator i;
   for (i=storage_->begin(); i!=storage_->end(); ++i)

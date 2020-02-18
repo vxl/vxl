@@ -108,10 +108,7 @@ FMatrixSkew::decompose_to_skew_rank3(vnl_matrix<double> *skew_matrix_ptr,
 //
 //: Null function as already Rank 2.
 
-inline void
-FMatrixSkew::set_rank2_using_svd (void)
-{
-}
+inline void FMatrixSkew::set_rank2_using_svd() {}
 
 //-----------------------------------------------------------------------------
 //
@@ -330,11 +327,7 @@ FMatrixSkew::set (const vnl_matrix<double>& f_matrix )
 //
 //: Returns the rank2_flag_ which is always true for FMatrixSkew.
 
-inline bool
-FMatrixSkew::get_rank2_flag (void) const
-{
-  return true;
-}
+inline bool FMatrixSkew::get_rank2_flag() const { return true; }
 
 //----------------------------------------------------------------
 //
