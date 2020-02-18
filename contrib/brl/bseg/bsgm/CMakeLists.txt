@@ -6,7 +6,7 @@ set(bsgm_sources
     bsgm_multiscale_disparity_estimator.h  bsgm_multiscale_disparity_estimator.cxx
     bsgm_align_pointsets_3d.h              bsgm_align_pointsets_3d.hxx
     bsgm_prob_align_pointsets_3d.h         bsgm_prob_align_pointsets_3d.hxx
-    bsgm_prob_pairwise_dsm.h               bsgm_prob_pairwise_dsm.cxx
+    bsgm_prob_pairwise_dsm.h               bsgm_prob_pairwise_dsm.hxx
     bsgm_error_checking.h                  bsgm_error_checking.cxx
     bsgm_pair_selector.h                   bsgm_pair_selector.cxx
     bsgm_remove_spikes.h                   bsgm_remove_spikes.cxx

@@ -123,39 +123,24 @@ struct pairwise_params
   bool coarse_dsm_disparity_estimate_ = true;
 };
 
-
+template <class CAM_T>
 class bsgm_prob_pairwise_dsm
 {
  public:
   bsgm_prob_pairwise_dsm() = default;
 
-  bsgm_prob_pairwise_dsm(vil_image_resource_sptr const& resc0, vpgl_affine_camera<double> const& acam0,
-                         vil_image_resource_sptr const& resc1, vpgl_affine_camera<double> const& acam1)
+  bsgm_prob_pairwise_dsm(vil_image_resource_sptr const& resc0, CAM_T const& acam0,
+                         vil_image_resource_sptr const& resc1, CAM_T const& acam1)
   {
-    affine_ = true;
-    rip_affine_.set_images_and_cams(resc0, acam0, resc1, acam1);
+    rip_.set_images_and_cams(resc0, acam0, resc1, acam1);
   }
 
-  bsgm_prob_pairwise_dsm(vil_image_view<unsigned char> const& view0, vpgl_affine_camera<double> const& acam0,
-                         vil_image_view<unsigned char> const& view1, vpgl_affine_camera<double> const& acam1)
+  bsgm_prob_pairwise_dsm(vil_image_view<unsigned char> const& view0, CAM_T const& acam0,
+                         vil_image_view<unsigned char> const& view1, CAM_T const& acam1)
   {
-    affine_ = true;
-    rip_affine_.set_images_and_cams(vil_new_image_resource_of_view(view0), acam0, vil_new_image_resource_of_view(view1), acam1);
+    rip_.set_images_and_cams(vil_new_image_resource_of_view(view0), acam0, vil_new_image_resource_of_view(view1), acam1);
   }
 
-  bsgm_prob_pairwise_dsm(vil_image_resource_sptr const& resc0, vpgl_perspective_camera<double> const& pcam0,
-                         vil_image_resource_sptr const& resc1, vpgl_perspective_camera<double> const& pcam1)
-  {
-    affine_ = false;
-    rip_perspective_.set_images_and_cams(resc0, pcam0, resc1, pcam1);
-  }
-
-  bsgm_prob_pairwise_dsm(vil_image_view<unsigned char> const& view0, vpgl_perspective_camera<double> const& pcam0,
-                         vil_image_view<unsigned char> const& view1, vpgl_perspective_camera<double> const& pcam1)
-  {
-    affine_ = false;
-    rip_perspective_.set_images_and_cams(vil_new_image_resource_of_view(view0), pcam0, vil_new_image_resource_of_view(view1), pcam1);
-  }
 
   // ACCESSORS-----
 
@@ -190,10 +175,8 @@ class bsgm_prob_pairwise_dsm
   //: rectified images and cams
   const vil_image_view<vxl_byte>& rectified_bview0() const  {return rect_bview0_;}
   const vil_image_view<vxl_byte>& rectified_bview1() const  {return rect_bview1_;}
-  const vpgl_affine_camera<double>& rectified_acam0() const {return rip_affine_.rect_cam0();}
-  const vpgl_affine_camera<double>& rectified_acam1() const {return rip_affine_.rect_cam1();}
-  const vpgl_perspective_camera<double>& rectified_pcam0() const { return rip_perspective_.rect_cam0(); }
-  const vpgl_perspective_camera<double>& rectified_pcam1() const { return rip_perspective_.rect_cam1(); }
+  const CAM_T& rectified_cam0() const {return rip_.rect_cam0();}
+  const CAM_T& rectified_cam1() const {return rip_.rect_cam1();}
 
   //: disparity results
   vil_image_view<vxl_byte> invalid_map_fwd() const { return bool_to_byte(invalid_map_fwd_); }
@@ -279,7 +262,6 @@ class bsgm_prob_pairwise_dsm
       vil_image_view<float>& disparity);
 
   // compute height for generic inputs
-  template <class CAM_T>
   void compute_height(
     const CAM_T& cam,
     const CAM_T& cam_reference,
@@ -300,8 +282,8 @@ class bsgm_prob_pairwise_dsm
  private:
   bool affine_; //vs. perspective
   pairwise_params params_;
-  bpgl_rectify_image_pair<vpgl_affine_camera<double> > rip_affine_;
-  bpgl_rectify_image_pair<vpgl_perspective_camera<double> > rip_perspective_;
+  bpgl_rectify_image_pair<CAM_T> rip_;
+
   size_t ni_;
   size_t nj_;
   int min_disparity_;
@@ -340,5 +322,5 @@ class bsgm_prob_pairwise_dsm
   vil_image_view<float> prob_heightmap_prob_;
 
 };
-
+#define BSGM_PROB_PAIRWISE_DSM_INSTANTIATE(T) extern "please include bsgm/bsgm_prob_pairwise_dsm.hxx first"
 #endif // bsgm_prob_pairwise_dsm_h_
