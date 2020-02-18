@@ -223,9 +223,7 @@ vil1_memory_image_impl::put_section(void const * ibuf, int x0, int y0, int xs, i
   return true;
 }
 
-vil1_image
-vil1_memory_image_impl::get_plane(unsigned int plane) const
-{
+vil1_image vil1_memory_image_impl::get_plane(unsigned int plane) const {
   assert(plane == 0);
   return const_cast<vil1_memory_image_impl *>(this);
 }

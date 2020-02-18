@@ -144,9 +144,10 @@ class vgl_plane_3d
 
 //: Return true iff p is the plane at infinity
 //  Always returns false
-template <class T> inline
-bool is_ideal(vgl_plane_3d<T> const&, T tol=(T)0) { return false; }
-
+template <class T>
+inline bool is_ideal(vgl_plane_3d<T> const &, T /*tol*/ = (T)0) {
+  return false;
+}
 
 //: Write to stream
 // \relatesalso vgl_plane_3d

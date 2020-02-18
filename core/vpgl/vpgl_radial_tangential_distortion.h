@@ -89,10 +89,11 @@ class vpgl_radial_tangential_distortion : public vpgl_lens_distortion<T>
   //: Set a translation to apply before of after distortion
   // This is needed when distorting an image to translate the resulting image
   // such that all points have positive indices
-  void set_translation(const vgl_vector_2d<T>& offset, bool after = true) override
-  {
+  void set_translation(const vgl_vector_2d<T> &offset,
+                       bool /*after*/ = true) override {
     center_ += offset;
   }
+
  protected:
   vgl_vector_2d<T> apply_distortion(vgl_vector_2d<T> const& x) const;
   //: The center of distortion

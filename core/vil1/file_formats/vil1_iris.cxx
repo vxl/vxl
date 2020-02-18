@@ -274,15 +274,11 @@ vil1_iris_generic_image::write_header()
   return is_->write(dummy, 404L) == 404L;
 }
 
-
-vil1_image
-vil1_iris_generic_image::get_plane(unsigned int plane) const
-{
+vil1_image vil1_iris_generic_image::get_plane(unsigned int plane) const {
   assert((int)plane < planes_);
   std::cerr << __FILE__ ": do something for vil1_iris_generic_image::get_plane\n";
   return nullptr;
 }
-
 
 bool
 vil1_iris_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) const

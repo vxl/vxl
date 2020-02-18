@@ -97,17 +97,10 @@ vil1_jpeg_generic_image::get_property(char const * tag, void * prop) const
   return false;
 }
 
-vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream * s,
-                                                 int planes,
-                                                 int width,
-                                                 int height,
-                                                 int components,
-                                                 int bits_per_component,
-                                                 vil1_component_format format)
-  : jc(new vil1_jpeg_compressor(s))
-  , jd(nullptr)
-  , stream(s)
-{
+vil1_jpeg_generic_image::vil1_jpeg_generic_image(
+    vil1_stream *s, int planes, int width, int height, int components,
+    int bits_per_component, vil1_component_format format)
+    : jc(new vil1_jpeg_compressor(s)), jd(nullptr), stream(s) {
   stream->ref();
   // warn
   if (planes != 1)
@@ -268,9 +261,7 @@ vil1_jpeg_generic_image::component_format() const
 }
 
 //: assume only one plane
-vil1_image
-vil1_jpeg_generic_image::get_plane(unsigned int p) const
-{
+vil1_image vil1_jpeg_generic_image::get_plane(unsigned int p) const {
   assert(p == 0);
   return const_cast<vil1_jpeg_generic_image *>(this);
 }
