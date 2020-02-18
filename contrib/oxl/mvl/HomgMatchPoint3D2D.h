@@ -26,8 +26,8 @@ class HomgMatchPoint3D2D
 
   // Data Access-------------------------------------------------------------
 
-  HomgPoint3D get_point3D (void);
-  HomgPoint2D get_point2D (void);
+  HomgPoint3D get_point3D();
+  HomgPoint2D get_point2D();
   void set (HomgPoint3D *point3D_ptr, HomgPoint2D *point2D_ptr);
 };
 

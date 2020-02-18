@@ -39,11 +39,11 @@ class vsol_surface_3d : public vsol_spatial_object_3d
   // virtuals of vsol_spatial_object_3d
   //***************************************************************************
 
-  vsol_surface_3d* cast_to_surface(void) override { return this; }
-  vsol_surface_3d const* cast_to_surface(void) const override { return this; }
+  vsol_surface_3d *cast_to_surface() override { return this; }
+  vsol_surface_3d const *cast_to_surface() const override { return this; }
 
-  vsol_region_3d *cast_to_region(void) override {return nullptr;}
-  vsol_region_3d const* cast_to_region(void) const override {return nullptr;}
+  vsol_region_3d *cast_to_region() override { return nullptr; }
+  vsol_region_3d const *cast_to_region() const override { return nullptr; }
 
   //***************************************************************************
   // Basic operations

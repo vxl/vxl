@@ -78,7 +78,7 @@ class vifa_norm_params : public gevd_param_mixin,
   vifa_norm_params(const vifa_norm_params&  old_params);
 
   //: Force update of clip points & interpolation line
-  void recompute(void);
+  void recompute();
 
   //: Compute normalized equivalent of given intensity
   float  normalize(float  raw_intensity) const;
@@ -92,11 +92,11 @@ class vifa_norm_params : public gevd_param_mixin,
                               );
 
   //: Dump the parameters
-  void  print_info(void) const;
+  void print_info() const;
 
- private:
+private:
   //: Internal method to update clip points & interpolation line
-  void  calculate_clip_points(void);
+  void calculate_clip_points();
 };
 
 typedef vbl_smart_ptr<vifa_norm_params>  vifa_norm_params_sptr;

@@ -81,45 +81,44 @@ class vifa_int_face_attr_common : public vifa_int_face_attr_common_params
 
  public:
   //: Default constructor
-  vifa_int_face_attr_common(void);
+   vifa_int_face_attr_common();
 
-  //: Full constructor
-  vifa_int_face_attr_common(vdgl_fit_lines_params*    fitter_params,
-                            vifa_group_pgram_params*  gpp_s,
-                            vifa_group_pgram_params*  gpp_w,
-                            vifa_coll_lines_params*   cpp,
-                            vifa_norm_params*         np
-                           );
+   //: Full constructor
+   vifa_int_face_attr_common(vdgl_fit_lines_params *fitter_params,
+                             vifa_group_pgram_params *gpp_s,
+                             vifa_group_pgram_params *gpp_w,
+                             vifa_coll_lines_params *cpp, vifa_norm_params *np);
 
-  //: Destructor.
-  ~vifa_int_face_attr_common() override;
+   //: Destructor.
+   ~vifa_int_face_attr_common() override;
 
-  // ---
-  // Public functional methods
-  // ---
-  virtual bool  ComputeAttributes() = 0;
-  virtual bool  GetAttributes(std::vector<float>&  attrs) = 0;
-  virtual bool  GetNativeAttributes(std::vector<float>&  attrs) = 0;
-  virtual bool  valid_p() const { return attributes_valid_; }
+   // ---
+   // Public functional methods
+   // ---
+   virtual bool ComputeAttributes() = 0;
+   virtual bool GetAttributes(std::vector<float> &attrs) = 0;
+   virtual bool GetNativeAttributes(std::vector<float> &attrs) = 0;
+   virtual bool valid_p() const { return attributes_valid_; }
 
-  // Data access for non-attributes
-  virtual edge_2d_list&  GetEdges() = 0;
-  edge_2d_list&          GetFittedEdges();
-  double fitted_max() { return fitted_edges_stats_.get_max(); }
-  double fitted_min() { return fitted_edges_stats_.get_min(); }
-  double fitted_var() { return fitted_edges_stats_.get_var(); }
-  double fitted_mean() { return fitted_edges_stats_.get_mean(); }
+   // Data access for non-attributes
+   virtual edge_2d_list &GetEdges() = 0;
+   edge_2d_list &GetFittedEdges();
+   double fitted_max() { return fitted_edges_stats_.get_max(); }
+   double fitted_min() { return fitted_edges_stats_.get_min(); }
+   double fitted_var() { return fitted_edges_stats_.get_var(); }
+   double fitted_mean() { return fitted_edges_stats_.get_mean(); }
 
-  coll_list&  get_collinear_lines();
-  double col_span_mean() { return col_span_.get_mean(); }
-  double col_span_var() { return col_span_.get_var(); }
-  double col_support_mean() { return col_support_.get_mean(); }
-  double col_support_var() { return col_support_.get_var(); }
-  double col_contrib_mean() { return col_contrib_.get_mean(); }
-  double col_contrib_var() { return col_contrib_.get_var(); }
-  double col_collapse();
+   coll_list &get_collinear_lines();
+   double col_span_mean() { return col_span_.get_mean(); }
+   double col_span_var() { return col_span_.get_var(); }
+   double col_support_mean() { return col_support_.get_mean(); }
+   double col_support_var() { return col_support_.get_var(); }
+   double col_contrib_mean() { return col_contrib_.get_mean(); }
+   double col_contrib_var() { return col_contrib_.get_var(); }
+   double col_collapse();
 
-  vifa_group_pgram_params_sptr get_strong_group_pgram_params() {return gpp_s_;}
+   vifa_group_pgram_params_sptr get_strong_group_pgram_params() {
+     return gpp_s_;}
   vifa_group_pgram_params_sptr get_weak_group_pgram_params() { return gpp_w_; }
   void  set_strong_group_pgram_params(const vifa_group_pgram_params&  gp)
     { gpp_s_ = new vifa_group_pgram_params(gp); }

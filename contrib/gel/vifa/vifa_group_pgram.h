@@ -57,29 +57,27 @@ class vifa_group_pgram : public vifa_group_pgram_params
   void    Clear();
 
   // Data accessors
-  vifa_histogram_sptr   GetCoverageHist(void);
+  vifa_histogram_sptr GetCoverageHist();
   vifa_line_cover_sptr  GetLineCover(int  angle_bin);
   double         LineCoverage(int  angle_bin);
   void           CollectAdjacentLines(int      angle_bin,
                                       imp_line_list&  lg
                                      );
-  vifa_bbox_sptr GetBoundingBox(void);
+  vifa_bbox_sptr GetBoundingBox();
   void           SetTemp1(const double  tmp) { tmp1_ = tmp; }
   double         GetAdjacentPerimeter(int  bin);
-  double         norm_parallel_line_length(void);
+  double norm_parallel_line_length();
 
- protected:
+protected:
   int            AngleLoc(const imp_line_sptr&  il);
   imp_line_sptr  LineAtAngle(int  angle_bin);
-  void           CheckUpdateBoundingBox(void);
-  void           ComputeBoundingBox(void);
-  void           ComputeDominantDirs(void);
+  void CheckUpdateBoundingBox();
+  void ComputeBoundingBox();
+  void ComputeDominantDirs();
 };
 
 // Test consistency of bound
-inline void vifa_group_pgram::
-CheckUpdateBoundingBox(void)
-{
+inline void vifa_group_pgram::CheckUpdateBoundingBox() {
   if (!bb_ )
   {
     bb_ = new vifa_bbox;
@@ -91,12 +89,9 @@ CheckUpdateBoundingBox(void)
     this->ComputeBoundingBox();
 }
 
-inline vifa_bbox_sptr vifa_group_pgram::
-GetBoundingBox(void)
-{
+inline vifa_bbox_sptr vifa_group_pgram::GetBoundingBox() {
   this->CheckUpdateBoundingBox();
   return bb_;
 }
-
 
 #endif  // VIFA_GROUP_PGRAM_H

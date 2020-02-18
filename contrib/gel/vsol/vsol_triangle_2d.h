@@ -63,7 +63,7 @@ class vsol_triangle_2d : public vsol_polygon_2d
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  vsol_spatial_object_2d* clone(void) const override;
+  vsol_spatial_object_2d *clone() const override;
 
   //***************************************************************************
   // Access
@@ -72,17 +72,17 @@ class vsol_triangle_2d : public vsol_polygon_2d
   //---------------------------------------------------------------------------
   //: Return the first vertex
   //---------------------------------------------------------------------------
-  vsol_point_2d_sptr p0(void) const;
+  vsol_point_2d_sptr p0() const;
 
   //---------------------------------------------------------------------------
   //: Return the second vertex
   //---------------------------------------------------------------------------
-  vsol_point_2d_sptr p1(void) const;
+  vsol_point_2d_sptr p1() const;
 
   //---------------------------------------------------------------------------
   //: Return the last vertex
   //---------------------------------------------------------------------------
-  vsol_point_2d_sptr p2(void) const;
+  vsol_point_2d_sptr p2() const;
 
   //***************************************************************************
   // Comparison
@@ -103,7 +103,7 @@ class vsol_triangle_2d : public vsol_polygon_2d
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
-  double area(void) const override;
+  double area() const override;
 
   //***************************************************************************
   // Element change
@@ -124,8 +124,8 @@ class vsol_triangle_2d : public vsol_polygon_2d
   //---------------------------------------------------------------------------
   void set_p2(const vsol_point_2d_sptr &new_p2);
 
-  vsol_triangle_2d* cast_to_triangle(void) override { return this; }
-  vsol_triangle_2d const* cast_to_triangle(void) const override { return this; }
+  vsol_triangle_2d *cast_to_triangle() override { return this; }
+  vsol_triangle_2d const *cast_to_triangle() const override { return this; }
 
   // ==== Binary IO methods ======
 

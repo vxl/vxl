@@ -51,7 +51,7 @@ class FMatrixPlanar : public FMatrix
   bool set (const double* f_matrix ) override;
   bool set (const vnl_double_3x3& f_matrix ) override;
   //: Returns the rank2 flag which is always true for FMatrixPlanar.
-  inline bool get_rank2_flag (void) const { return true; }
+  inline bool get_rank2_flag() const { return true; }
   //: Null function since planar FMatrix has already rank 2.
   inline void set_rank2_flag (bool /*rank2_flag*/) const {}
 };

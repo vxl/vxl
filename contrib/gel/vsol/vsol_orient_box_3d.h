@@ -36,7 +36,9 @@ class vsol_orient_box_3d : public vsol_volume_3d
 
   ~vsol_orient_box_3d() override = default;
 
-  vsol_spatial_object_3d* clone(void) const override {return new vsol_orient_box_3d(*this); }
+  vsol_spatial_object_3d *clone() const override {
+    return new vsol_orient_box_3d(*this);
+  }
 
   // accessors
   // these min and max points belong to the bounding box

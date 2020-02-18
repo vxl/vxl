@@ -11,8 +11,8 @@ class HMatrix1DComputeDesign : public HMatrix1DCompute
                          const std::vector<vgl_homg_point_1d<double> >&,
                          HMatrix1D *) override;
  public:
-  HMatrix1DComputeDesign(void);
-  ~HMatrix1DComputeDesign() override;
+   HMatrix1DComputeDesign();
+   ~HMatrix1DComputeDesign() override;
 };
 
 #endif // _HMatrix1DComputeDesign_h_

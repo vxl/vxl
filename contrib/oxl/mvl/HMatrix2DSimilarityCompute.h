@@ -20,13 +20,13 @@
 class HMatrix2DSimilarityCompute : public HMatrix2DCompute
 {
  public:
-  HMatrix2DSimilarityCompute(void);
-  ~HMatrix2DSimilarityCompute() override;
+   HMatrix2DSimilarityCompute();
+   ~HMatrix2DSimilarityCompute() override;
 
-  // left in for capes :
-  static HMatrix2D compute(PairMatchSetCorner const& matches);
-  static HMatrix2D compute(PointArray const& p1, PointArray const& p2);
-  int minimum_number_of_correspondences() const override { return 2; }
+   // left in for capes :
+   static HMatrix2D compute(PairMatchSetCorner const &matches);
+   static HMatrix2D compute(PointArray const &p1, PointArray const &p2);
+   int minimum_number_of_correspondences() const override { return 2; }
  protected:
   bool compute_p(PointArray const&, PointArray const&, HMatrix2D *) override;
  private:

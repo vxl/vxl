@@ -24,7 +24,7 @@ class vifa_gaussian
  public:
   vifa_gaussian(float  mu, float  sigma) : mu_(mu), sigma_(sigma) {}
 
-  virtual ~vifa_gaussian(void) = default;
+  virtual ~vifa_gaussian() = default;
 
   float  pdf(float  x);
 

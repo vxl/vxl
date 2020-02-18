@@ -39,8 +39,8 @@ class BaseTriTensorCompute
 
   void add_matches (std::list<HomgMatchPoint2D2D2D*> *match_list);
 
-  void clear_matches_line (void);
-  void clear_matches_point (void);
+  void clear_matches_line();
+  void clear_matches_point();
 
   // INTERNALS-------------------------------------------------------------
 

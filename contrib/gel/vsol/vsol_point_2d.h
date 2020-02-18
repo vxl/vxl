@@ -83,14 +83,14 @@ class vsol_point_2d : public vsol_spatial_object_2d
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  vsol_spatial_object_2d* clone(void) const override;
+  vsol_spatial_object_2d *clone() const override;
 
   //---------------------------------------------------------------------------
   //: Safe casting
   //---------------------------------------------------------------------------
 
-  vsol_point_2d* cast_to_point(void) override { return this;}
-  vsol_point_2d const* cast_to_point(void) const override { return this;}
+  vsol_point_2d *cast_to_point() override { return this; }
+  vsol_point_2d const *cast_to_point() const override { return this; }
 
   //***************************************************************************
   // Access
@@ -99,12 +99,12 @@ class vsol_point_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Return the abscissa
   //---------------------------------------------------------------------------
-  inline double x(void) const { return p_.x(); }
+  inline double x() const { return p_.x(); }
 
   //---------------------------------------------------------------------------
   //: Return the ordinate
   //---------------------------------------------------------------------------
-  inline double y(void) const { return p_.y(); }
+  inline double y() const { return p_.y(); }
 
   //***************************************************************************
   // Comparison
@@ -128,12 +128,12 @@ class vsol_point_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Return the real type of a point. It is a POINT
   //---------------------------------------------------------------------------
-  vsol_spatial_object_2d_type spatial_type(void) const override;
+  vsol_spatial_object_2d_type spatial_type() const override;
 
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  void compute_bounding_box(void) const override;
+  void compute_bounding_box() const override;
 
   //***************************************************************************
   // Status setting

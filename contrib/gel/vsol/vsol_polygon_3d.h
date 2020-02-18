@@ -56,41 +56,45 @@ class vsol_polygon_3d : public vsol_region_3d
   //---------------------------------------------------------------------------
   //: Default constructor. Do nothing.
   //---------------------------------------------------------------------------
-  vsol_polygon_3d(void);
+   vsol_polygon_3d();
 
-  //---------------------------------------------------------------------------
-  //: Constructor from a std::vector (not a geometric vector but a list of points)
-  //  REQUIRE: new_vertices.size()>=3 and valid_vertices(new_vertices)
-  //---------------------------------------------------------------------------
-  explicit vsol_polygon_3d(std::vector<vsol_point_3d_sptr> const& new_vertices);
+   //---------------------------------------------------------------------------
+   //: Constructor from a std::vector (not a geometric vector but a list of
+   //points)
+   //  REQUIRE: new_vertices.size()>=3 and valid_vertices(new_vertices)
+   //---------------------------------------------------------------------------
+   explicit vsol_polygon_3d(
+       std::vector<vsol_point_3d_sptr> const &new_vertices);
 
-  //---------------------------------------------------------------------------
-  //: Copy constructor
-  //---------------------------------------------------------------------------
-  vsol_polygon_3d(vsol_polygon_3d const& other);
+   //---------------------------------------------------------------------------
+   //: Copy constructor
+   //---------------------------------------------------------------------------
+   vsol_polygon_3d(vsol_polygon_3d const &other);
 
-  //---------------------------------------------------------------------------
-  //: Destructor
-  //---------------------------------------------------------------------------
-  ~vsol_polygon_3d() override;
+   //---------------------------------------------------------------------------
+   //: Destructor
+   //---------------------------------------------------------------------------
+   ~vsol_polygon_3d() override;
 
-  //---------------------------------------------------------------------------
-  //: Clone `this': creation of a new object and initialization
-  //  See Prototype pattern
-  //---------------------------------------------------------------------------
-  vsol_spatial_object_3d* clone(void) const override;
+   //---------------------------------------------------------------------------
+   //: Clone `this': creation of a new object and initialization
+   //  See Prototype pattern
+   //---------------------------------------------------------------------------
+   vsol_spatial_object_3d *clone() const override;
 
-  //---------------------------------------------------------------------------
-  //: Safe down-casting methods
-  //---------------------------------------------------------------------------
-  vsol_polygon_3d *cast_to_polygon(void) override {return this;}
-  vsol_polygon_3d const* cast_to_polygon(void) const override {return this;}
+   //---------------------------------------------------------------------------
+   //: Safe down-casting methods
+   //---------------------------------------------------------------------------
+   vsol_polygon_3d *cast_to_polygon() override { return this; }
+   vsol_polygon_3d const *cast_to_polygon() const override { return this; }
 
-  virtual vsol_triangle_3d* cast_to_triangle(void) {return nullptr;}
-  virtual const vsol_triangle_3d* cast_to_triangle(void) const {return nullptr;}
+   virtual vsol_triangle_3d *cast_to_triangle() { return nullptr; }
+   virtual const vsol_triangle_3d *cast_to_triangle() const { return nullptr; }
 
-  virtual vsol_rectangle_3d* cast_to_rectangle(void) {return nullptr;}
-  virtual const vsol_rectangle_3d* cast_to_rectangle(void) const {return nullptr;}
+   virtual vsol_rectangle_3d *cast_to_rectangle() { return nullptr; }
+   virtual const vsol_rectangle_3d *cast_to_rectangle() const {
+     return nullptr;
+   }
 
   //***************************************************************************
   // Access
@@ -124,32 +128,34 @@ class vsol_polygon_3d : public vsol_region_3d
   //---------------------------------------------------------------------------
   //: Return the region type of a polygon.  Its spatial type is a REGION
   //---------------------------------------------------------------------------
-  vsol_region_3d_type region_type(void) const override { return vsol_region_3d::POLYGON; }
+  vsol_region_3d_type region_type() const override {
+    return vsol_region_3d::POLYGON;
+  }
 
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  void compute_bounding_box(void) const override;
+  void compute_bounding_box() const override;
 
   //---------------------------------------------------------------------------
   //: Return the number of vertices
   //---------------------------------------------------------------------------
-  unsigned int size(void) const { return storage_->size(); }
+  unsigned int size() const { return storage_->size(); }
 
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
-  double area(void) const override; // virtual of vsol_region_3d
+  double area() const override; // virtual of vsol_region_3d
 
   //---------------------------------------------------------------------------
   //: Return the plane where 'this' polygon resides
   //---------------------------------------------------------------------------
-  vgl_homg_plane_3d<double> plane(void) const { return plane_; }
+  vgl_homg_plane_3d<double> plane() const { return plane_; }
 
   //---------------------------------------------------------------------------
   //: Is `this' convex ?
   //---------------------------------------------------------------------------
-  bool is_convex(void) const override;
+  bool is_convex() const override;
 
   //---------------------------------------------------------------------------
   //: Is `i' a valid index for the list of vertices ?

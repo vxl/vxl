@@ -11,8 +11,8 @@ class HMatrix1DComputeOptimize1 : public HMatrix1DCompute
                          const std::vector<vgl_homg_point_1d<double> >&,
                          HMatrix1D *) override;
  public:
-  HMatrix1DComputeOptimize1(void);
-  ~HMatrix1DComputeOptimize1() override;
+   HMatrix1DComputeOptimize1();
+   ~HMatrix1DComputeOptimize1() override;
 };
 
 typedef HMatrix1DComputeOptimize1 HMatrix1DComputeOptimise1;

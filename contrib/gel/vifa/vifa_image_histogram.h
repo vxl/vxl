@@ -34,10 +34,9 @@ class vifa_image_histogram : public vifa_histogram
                       );
 
  protected:
-  void init(void);
-  void fill_histogram(const vil_image_view_base_sptr&  src_buf,
-                      double                    percentage = 100.0
-                     );
+   void init();
+   void fill_histogram(const vil_image_view_base_sptr &src_buf,
+                       double percentage = 100.0);
 };
 
 

@@ -57,7 +57,7 @@ class vsol_triangle_3d : public vsol_polygon_3d
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  vsol_spatial_object_3d* clone(void) const override;
+  vsol_spatial_object_3d *clone() const override;
 
   //***************************************************************************
   // Access
@@ -66,17 +66,17 @@ class vsol_triangle_3d : public vsol_polygon_3d
   //---------------------------------------------------------------------------
   //: Return the first vertex
   //---------------------------------------------------------------------------
-  vsol_point_3d_sptr p0(void) const;
+  vsol_point_3d_sptr p0() const;
 
   //---------------------------------------------------------------------------
   //: Return the second vertex
   //---------------------------------------------------------------------------
-  vsol_point_3d_sptr p1(void) const;
+  vsol_point_3d_sptr p1() const;
 
   //---------------------------------------------------------------------------
   //: Return the last vertex
   //---------------------------------------------------------------------------
-  vsol_point_3d_sptr p2(void) const;
+  vsol_point_3d_sptr p2() const;
 
   //***************************************************************************
   // Comparison
@@ -97,7 +97,7 @@ class vsol_triangle_3d : public vsol_polygon_3d
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
-  double area(void) const override;
+  double area() const override;
 
   //***************************************************************************
   // Element change

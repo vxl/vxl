@@ -37,7 +37,7 @@ class rgrl_event: public vbl_ref_count
   ~rgrl_event() override = default;
 
   //: Return the string name associated with the event
-  virtual std::string name(void) const = 0;
+  virtual std::string name() const = 0;
 
   virtual bool is_same_type(rgrl_event const& e) const = 0;
 };

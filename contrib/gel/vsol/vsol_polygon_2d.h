@@ -57,67 +57,71 @@ class vsol_polygon_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   //: Default constructor.
   //---------------------------------------------------------------------------
-  vsol_polygon_2d(void);
+   vsol_polygon_2d();
 
-  //---------------------------------------------------------------------------
-  //: Constructor from a std::vector (not a geometric vector but a list of points)
-  //  REQUIRE: new_vertices.size()>=3
-  //---------------------------------------------------------------------------
-  explicit vsol_polygon_2d(const std::vector<vsol_point_2d_sptr> &new_vertices);
+   //---------------------------------------------------------------------------
+   //: Constructor from a std::vector (not a geometric vector but a list of
+   //points)
+   //  REQUIRE: new_vertices.size()>=3
+   //---------------------------------------------------------------------------
+   explicit vsol_polygon_2d(
+       const std::vector<vsol_point_2d_sptr> &new_vertices);
 
-  //---------------------------------------------------------------------------
-  //: Copy constructor
-  //---------------------------------------------------------------------------
-  vsol_polygon_2d(const vsol_polygon_2d &other);
+   //---------------------------------------------------------------------------
+   //: Copy constructor
+   //---------------------------------------------------------------------------
+   vsol_polygon_2d(const vsol_polygon_2d &other);
 
-  //---------------------------------------------------------------------------
-  //: Destructor
-  //---------------------------------------------------------------------------
-  ~vsol_polygon_2d() override;
+   //---------------------------------------------------------------------------
+   //: Destructor
+   //---------------------------------------------------------------------------
+   ~vsol_polygon_2d() override;
 
-  //---------------------------------------------------------------------------
-  //: Clone `this': creation of a new object and initialization
-  //  See Prototype pattern
-  //---------------------------------------------------------------------------
-  vsol_spatial_object_2d* clone(void) const override;
+   //---------------------------------------------------------------------------
+   //: Clone `this': creation of a new object and initialization
+   //  See Prototype pattern
+   //---------------------------------------------------------------------------
+   vsol_spatial_object_2d *clone() const override;
 
-  //---------------------------------------------------------------------------
-  //: Safe casting
-  //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //: Safe casting
+   //---------------------------------------------------------------------------
 
-  vsol_polygon_2d* cast_to_polygon(void) override;
-  const vsol_polygon_2d* cast_to_polygon(void) const override;
+   vsol_polygon_2d *cast_to_polygon() override;
+   const vsol_polygon_2d *cast_to_polygon() const override;
 
-  virtual vsol_triangle_2d* cast_to_triangle(void);
-  virtual const vsol_triangle_2d* cast_to_triangle(void) const;
+   virtual vsol_triangle_2d *cast_to_triangle();
+   virtual const vsol_triangle_2d *cast_to_triangle() const;
 
-  virtual vsol_rectangle_2d* cast_to_rectangle(void);
-  virtual const vsol_rectangle_2d* cast_to_rectangle(void) const;
+   virtual vsol_rectangle_2d *cast_to_rectangle();
+   virtual const vsol_rectangle_2d *cast_to_rectangle() const;
 
-  //***************************************************************************
-  // Access
-  //***************************************************************************
+   //***************************************************************************
+   // Access
+   //***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Return vertex `i'
-  //  REQUIRE: valid_index(i)
-  //---------------------------------------------------------------------------
-  vsol_point_2d_sptr vertex(const int i) const;
+   //---------------------------------------------------------------------------
+   //: Return vertex `i'
+   //  REQUIRE: valid_index(i)
+   //---------------------------------------------------------------------------
+   vsol_point_2d_sptr vertex(const int i) const;
 
-  //***************************************************************************
-  // Comparison
-  //***************************************************************************
+   //***************************************************************************
+   // Comparison
+   //***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Has `this' the same points than `other' in the same order ?
-  //---------------------------------------------------------------------------
-  virtual bool operator==(const vsol_polygon_2d &other) const;
-  bool operator==(const vsol_spatial_object_2d& obj) const override; // virtual of vsol_spatial_object_2d
+   //---------------------------------------------------------------------------
+   //: Has `this' the same points than `other' in the same order ?
+   //---------------------------------------------------------------------------
+   virtual bool operator==(const vsol_polygon_2d &other) const;
+   bool operator==(const vsol_spatial_object_2d &obj)
+       const override; // virtual of vsol_spatial_object_2d
 
-  //---------------------------------------------------------------------------
-  //: Has `this' not the same points than `other' in the same order ?
-  //---------------------------------------------------------------------------
-  inline bool operator!=(const vsol_polygon_2d &o)const{return !operator==(o);}
+   //---------------------------------------------------------------------------
+   //: Has `this' not the same points than `other' in the same order ?
+   //---------------------------------------------------------------------------
+   inline bool operator!=(const vsol_polygon_2d &o) const {
+     return !operator==(o);}
 
   //***************************************************************************
   // Status report
@@ -126,65 +130,67 @@ class vsol_polygon_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   //: Return the region type of a polygon.  Its spatial type is a REGION
   //---------------------------------------------------------------------------
-  vsol_region_2d_type region_type(void) const override { return vsol_region_2d::POLYGON; }
+   vsol_region_2d_type region_type() const override {
+     return vsol_region_2d::POLYGON;
+   }
 
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  void compute_bounding_box(void) const override;
+   void compute_bounding_box() const override;
 
-  //---------------------------------------------------------------------------
-  //: Return the number of vertices
-  //---------------------------------------------------------------------------
-  unsigned int size(void) const { return static_cast<int>(storage_->size()); }
+   //---------------------------------------------------------------------------
+   //: Return the number of vertices
+   //---------------------------------------------------------------------------
+   unsigned int size() const { return static_cast<int>(storage_->size()); }
 
-  //---------------------------------------------------------------------------
-  //: Return the area of `this'
-  //---------------------------------------------------------------------------
-  double area(void) const override; // virtual of vsol_region_2d
+   //---------------------------------------------------------------------------
+   //: Return the area of `this'
+   //---------------------------------------------------------------------------
+   double area() const override; // virtual of vsol_region_2d
 
-  //---------------------------------------------------------------------------
-  //: Return the centroid of `this'
-  //---------------------------------------------------------------------------
-  vsol_point_2d_sptr centroid(void) const override;
+   //---------------------------------------------------------------------------
+   //: Return the centroid of `this'
+   //---------------------------------------------------------------------------
+   vsol_point_2d_sptr centroid() const override;
 
-  //---------------------------------------------------------------------------
-  //: Is `this' convex ?
-  //---------------------------------------------------------------------------
-  bool is_convex(void) const override;
+   //---------------------------------------------------------------------------
+   //: Is `this' convex ?
+   //---------------------------------------------------------------------------
+   bool is_convex() const override;
 
-  //---------------------------------------------------------------------------
-  //: Is `i' a valid index for the list of vertices ?
-  //---------------------------------------------------------------------------
-  bool valid_index(unsigned int i) const { return i<storage_->size(); }
+   //---------------------------------------------------------------------------
+   //: Is `i' a valid index for the list of vertices ?
+   //---------------------------------------------------------------------------
+   bool valid_index(unsigned int i) const { return i < storage_->size(); }
 
-  //---------------------------------------------------------------------------
-  //: Are `new_vertices' valid vertices to build a polygon of the current type?
-  //  All vertex sets are valid for a general polygon.
-  //---------------------------------------------------------------------------
-  virtual bool valid_vertices(const std::vector<vsol_point_2d_sptr> ) const;
+   //---------------------------------------------------------------------------
+   //: Are `new_vertices' valid vertices to build a polygon of the current type?
+   //  All vertex sets are valid for a general polygon.
+   //---------------------------------------------------------------------------
+   virtual bool valid_vertices(const std::vector<vsol_point_2d_sptr>) const;
 
+   // ==== Binary IO methods ======
 
-  // ==== Binary IO methods ======
+   //: Binary save self to stream.
+   void b_write(vsl_b_ostream &os) const override;
 
-  //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const override;
+   //: Binary load self from stream.
+   void b_read(vsl_b_istream &is) override;
 
-  //: Binary load self from stream.
-  void b_read(vsl_b_istream &is) override;
+   //: Return IO version number;
+   short version() const;
 
-  //: Return IO version number;
-  short version() const;
+   //: Print an ascii summary to the stream
+   void print_summary(std::ostream &os) const;
 
-  //: Print an ascii summary to the stream
-  void print_summary(std::ostream &os) const;
+   //: Return a platform independent string identifying the class
+   std::string is_a() const override { return std::string("vsol_polygon_2d"); }
 
-  //: Return a platform independent string identifying the class
-  std::string is_a() const override { return std::string("vsol_polygon_2d"); }
-
-  //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(std::string const& cls) const override
-  { return cls==is_a() || vsol_region_2d::is_class(cls); }
+   //: Return true if the argument matches the string identifying the class or
+   //any parent class
+   bool is_class(std::string const &cls) const override {
+     return cls == is_a() || vsol_region_2d::is_class(cls); }
 
   //---------------------------------------------------------------------------
   //: output description to stream

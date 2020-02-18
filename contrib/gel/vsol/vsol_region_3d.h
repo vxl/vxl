@@ -33,13 +33,17 @@ class vsol_region_3d : public vsol_surface_3d
   //---------------------------------------------------------------------------
   //: Return the region type
   //---------------------------------------------------------------------------
-  virtual vsol_region_3d_type region_type(void) const { return vsol_region_3d::REGION_NO_TYPE; }
+  virtual vsol_region_3d_type region_type() const {
+    return vsol_region_3d::REGION_NO_TYPE;
+  }
 
  public:
   //---------------------------------------------------------------------------
   //: Return the spatial type
   //---------------------------------------------------------------------------
-  vsol_spatial_object_3d_type spatial_type(void) const override { return vsol_spatial_object_3d::REGION; }
+   vsol_spatial_object_3d_type spatial_type() const override {
+     return vsol_spatial_object_3d::REGION;
+   }
 
   //***************************************************************************
   // Initialization
@@ -54,11 +58,11 @@ class vsol_region_3d : public vsol_surface_3d
   // virtuals of vsol_spatial_object_3d
   //***************************************************************************
 
-  vsol_region_3d* cast_to_region(void) override { return this; }
-  vsol_region_3d const* cast_to_region(void) const override { return this; }
+  vsol_region_3d *cast_to_region() override { return this; }
+  vsol_region_3d const *cast_to_region() const override { return this; }
 
-  virtual vsol_polygon_3d *cast_to_polygon(void) {return nullptr;}
-  virtual vsol_polygon_3d const* cast_to_polygon(void) const {return nullptr;}
+  virtual vsol_polygon_3d *cast_to_polygon() { return nullptr; }
+  virtual vsol_polygon_3d const *cast_to_polygon() const { return nullptr; }
 
   //***************************************************************************
   // Status report
@@ -67,12 +71,12 @@ class vsol_region_3d : public vsol_surface_3d
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
-  virtual double area(void) const=0;
+  virtual double area() const = 0;
 
   //---------------------------------------------------------------------------
   //: Return true if this region is convex
   //---------------------------------------------------------------------------
-  virtual bool is_convex(void) const=0;
+  virtual bool is_convex() const = 0;
 
   //: Return a platform independent string identifying the class
   std::string is_a() const override { return std::string("vsol_region_3d"); }
