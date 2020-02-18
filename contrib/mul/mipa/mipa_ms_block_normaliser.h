@@ -22,16 +22,13 @@
 class mipa_ms_block_normaliser : public mipa_block_normaliser
 {
   //: Number of SIFT-like scales at which the histogram cells are combined
-  unsigned nscales_;
+  unsigned nscales_{1};
 
   //: Is there an overall histogram (over all cells) included at the end
-  bool include_overall_histogram_;
+  bool include_overall_histogram_{false};
 
- public:
-
-  mipa_ms_block_normaliser():
-      mipa_block_normaliser(),
-      nscales_(1), include_overall_histogram_(false) {}
+public:
+  mipa_ms_block_normaliser() : mipa_block_normaliser() {}
 
   mipa_ms_block_normaliser(const mipa_block_normaliser& lbn,
                            unsigned nscales,bool include_overall_histogram):

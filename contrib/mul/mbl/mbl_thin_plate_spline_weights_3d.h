@@ -31,10 +31,10 @@
 class mbl_thin_plate_spline_weights_3d
 {
   vnl_vector<double> Wx_,Wy_,Wz_;
-  double Ax0_, AxX_, AxY_, AxZ_;
-  double Ay0_, AyX_, AyY_, AyZ_;
-  double Az0_, AzX_, AzY_, AzZ_;
-  double energy_x_,energy_y_,energy_z_;
+  double Ax0_{0}, AxX_{1}, AxY_{0}, AxZ_{0};
+  double Ay0_{0}, AyX_{0}, AyY_{1}, AyZ_{0};
+  double Az0_{0}, AzX_{0}, AzY_{0}, AzZ_{1};
+  double energy_x_{0}, energy_y_{0}, energy_z_{0};
 
   std::vector<vgl_point_3d<double> > src_pts_, pt_wts_;
 

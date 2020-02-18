@@ -106,11 +106,11 @@ public:
   rgrl_type_macro( rgrl_converge_status, rgrl_object );
 
 protected:
-  converge_type conv_;
-  status_type   status_;
-  double   error_;
-  unsigned oscillation_count_;
-  double   error_diff_;
+  converge_type conv_{conv_on_going};
+  status_type status_{status_on_going};
+  double error_{-1.0};
+  unsigned oscillation_count_{0};
+  double error_diff_{-1.0};
 };
 
 #endif // rgrl_converge_status_h_

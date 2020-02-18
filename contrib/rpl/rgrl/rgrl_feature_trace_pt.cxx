@@ -15,14 +15,7 @@
 
 #include <rgrl/rgrl_cast.h>
 
-rgrl_feature_trace_pt ::
-rgrl_feature_trace_pt()
-  : rgrl_feature(),
-    subspace_cached_( false ),
-    length_( 0 ), radius_( 0 )
-{
-
-}
+rgrl_feature_trace_pt ::rgrl_feature_trace_pt() : rgrl_feature() {}
 
 rgrl_feature_trace_pt::
 rgrl_feature_trace_pt( vnl_vector<double> const& loc,

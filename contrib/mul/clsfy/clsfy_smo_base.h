@@ -26,56 +26,56 @@ class clsfy_smo_base
  protected:
 
   //: Error rate on the training data
-  double error_;
+   double error_{0.0};
 
-  //: An iterator on the data;
-  mbl_data_wrapper<vnl_vector<double> > *data_;
+   //: An iterator on the data;
+   mbl_data_wrapper<vnl_vector<double>> *data_{nullptr};
 
-  //: The parameters to be optimised
-  vnl_vector<double> alph_;
+   //: The parameters to be optimised
+   vnl_vector<double> alph_;
 
-  //: Amount by which a sample can violate the KKT conditions
-  double tolerance_;
+   //: Amount by which a sample can violate the KKT conditions
+   double tolerance_{0.001};
 
-  //: Tolerance on several equalities.
-  // Including testing if a Lagrange multiplier is at one of the bounds.
-  double eps_;
+   //: Tolerance on several equalities.
+   // Including testing if a Lagrange multiplier is at one of the bounds.
+   double eps_{0.001};
 
-  //: Bias
-  // \invariant a_i unbound and optimal => KKT_i holds
-  double b_;
+   //: Bias
+   // \invariant a_i unbound and optimal => KKT_i holds
+   double b_{0.0};
 
-  //: Cache KKT error values for unbound multipliers.
-  // \invariant a_i unbound => E_i = f(x_i) - y1
-  std::vector<double> error_cache_;
+   //: Cache KKT error values for unbound multipliers.
+   // \invariant a_i unbound => E_i = f(x_i) - y1
+   std::vector<double> error_cache_;
 
-  //: Target values y_i
-  std::vector<int> target_;
+   //: Target values y_i
+   std::vector<int> target_;
 
-  //: The norm of each training vector is useful to know quickly
-  std::vector<double> precomputed_self_dot_product_;
+   //: The norm of each training vector is useful to know quickly
+   std::vector<double> precomputed_self_dot_product_;
 
-  vnl_random rng_;
+   vnl_random rng_;
 
-  //: Attempt to jointly optimise Lagrange multipliers i1, and i2.
-  // \param i1 first Lagrange multiplier.
-  // \param i2 second Lagrange multiplier.
-  // \param E1 The amount by which i1 violates KKT conditions.
-  virtual int take_step(int i1, int i2, double E1) =0;
+   //: Attempt to jointly optimise Lagrange multipliers i1, and i2.
+   // \param i1 first Lagrange multiplier.
+   // \param i2 second Lagrange multiplier.
+   // \param E1 The amount by which i1 violates KKT conditions.
+   virtual int take_step(int i1, int i2, double E1) = 0;
 
-  //: Attempt to optimise sample i1.
-  // This attempts to find another value i2,
-  // in order to jointly optimise both.
-  virtual int examine_example(int i1) =0;
+   //: Attempt to optimise sample i1.
+   // This attempts to find another value i2,
+   // in order to jointly optimise both.
+   virtual int examine_example(int i1) = 0;
 
-  //: Access the data points
-  const vnl_vector<double> & data_point(unsigned long l);
+   //: Access the data points
+   const vnl_vector<double> &data_point(unsigned long l);
 
-  //: Calculate the kernel for data items i1 and i2;
-  virtual double kernel(int i1, int i2) =0;
+   //: Calculate the kernel for data items i1 and i2;
+   virtual double kernel(int i1, int i2) = 0;
 
-  //: Calculate the classifier function learnt so far for data item k.
-  virtual double learned_func(int k) ;
+   //: Calculate the classifier function learnt so far for data item k.
+   virtual double learned_func(int k);
 
  public:
 

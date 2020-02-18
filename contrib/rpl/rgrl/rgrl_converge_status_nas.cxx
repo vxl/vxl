@@ -5,14 +5,10 @@
 
 #include "rgrl_converge_status_nas.h"
 
-rgrl_converge_status_nas::
-rgrl_converge_status_nas()
-  : rgrl_converge_status(),
-    iteration_(0),
-    stability_(-1),
-    consistency_(-1)
-{
-}
+rgrl_converge_status_nas::rgrl_converge_status_nas()
+    : rgrl_converge_status()
+
+{}
 
 rgrl_converge_status_nas::
 rgrl_converge_status_nas( bool     in_has_converged,

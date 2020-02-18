@@ -27,15 +27,15 @@ class mfpf_region_about_lineseg : public mfpf_region_definer
 {
 private:
   //: Index of first point defining reference frame
-  unsigned i0_;
+  unsigned i0_{0};
   //: Index of second point defining reference frame
-  unsigned i1_;
+  unsigned i1_{1};
 
   //: Width of ROI, relative to |p1-p0|
-  double rel_wi_;
+  double rel_wi_{1.2};
 
   //: Height of ROI, relative to |p1-p0|
-  double rel_wj_;
+  double rel_wj_{0.5};
 
   //: Width of ROI in world coords
   double wi_;

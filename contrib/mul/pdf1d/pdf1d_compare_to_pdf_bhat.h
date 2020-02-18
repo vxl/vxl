@@ -25,8 +25,9 @@ class pdf1d_compare_to_pdf_bhat : public pdf1d_compare_to_pdf
   mbl_cloneable_ptr<pdf1d_builder> builder_;
 
   //: Number of samples per data-point used in estimating overlap
-  int n_per_point_;
- public:
+  int n_per_point_{3};
+
+public:
 
   //: Dflt ctor
   pdf1d_compare_to_pdf_bhat();

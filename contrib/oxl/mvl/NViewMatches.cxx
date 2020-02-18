@@ -81,10 +81,9 @@ int NViewMatch::count_observations() const
 /////////////////////////////////////////////////////////////////////////////
 
 // Default ctor
-NViewMatches::NViewMatches():
-  min_overlap_(2)
-{
-}
+NViewMatches::NViewMatches()
+
+{}
 
 NViewMatches::NViewMatches(std::istream& s)
 {

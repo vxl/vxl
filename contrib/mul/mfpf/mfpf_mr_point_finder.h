@@ -28,9 +28,9 @@ class mfpf_mr_point_finder
 
   //: Maximum number of candidates to retain during multi_search_and_prune
   //  If zero, then refine all.
-  unsigned max_after_pruning_;
+  unsigned max_after_pruning_{0};
 
- public:
+public:
 
   //: Dflt ctor
   mfpf_mr_point_finder();

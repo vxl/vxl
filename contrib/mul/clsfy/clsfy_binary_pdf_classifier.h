@@ -21,60 +21,54 @@ class clsfy_binary_pdf_classifier : public clsfy_classifier_base
 {
  protected:
   //: The current distribution model
-  vpdfl_pdf_base *pdf_;
+   vpdfl_pdf_base *pdf_{nullptr};
 
-  //: The value of log probability density marking the class boundary
-  // Above this value the answer is 1, and below it is 0
-  double log_prob_limit_;
+   //: The value of log probability density marking the class boundary
+   // Above this value the answer is 1, and below it is 0
+   double log_prob_limit_{0.0};
 
  public:
 
   // default constructor
-  clsfy_binary_pdf_classifier(): pdf_(nullptr), log_prob_limit_(0.0) {}
+   clsfy_binary_pdf_classifier() {}
 
-  //: A useful constructor
-  // Specify the log probability density limit
-  clsfy_binary_pdf_classifier(const vpdfl_pdf_base &pdf,
-                              double log_prob_limit):
-      pdf_(pdf.clone()), log_prob_limit_(log_prob_limit) {}
+   //: A useful constructor
+   // Specify the log probability density limit
+   clsfy_binary_pdf_classifier(const vpdfl_pdf_base &pdf, double log_prob_limit)
+       : pdf_(pdf.clone()), log_prob_limit_(log_prob_limit) {}
 
-  // Destructor
-  ~clsfy_binary_pdf_classifier() override { deleteStuff(); }
+   // Destructor
+   ~clsfy_binary_pdf_classifier() override { deleteStuff(); }
 
-  //: Classify the input vector
-  // Returns either class1 (Inside PDF mode) or class 0 (Outside PDF mode).
-  unsigned classify(const vnl_vector<double> &input) const override;
+   //: Classify the input vector
+   // Returns either class1 (Inside PDF mode) or class 0 (Outside PDF mode).
+   unsigned classify(const vnl_vector<double> &input) const override;
 
-  //: Return the probability the input being in class 0.
-  // output(0) contains the probability that the input is in class 1
-  void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const override;
+   //: Return the probability the input being in class 0.
+   // output(0) contains the probability that the input is in class 1
+   void class_probabilities(std::vector<double> &outputs,
+                            const vnl_vector<double> &input) const override;
 
-  //: Log likelihood of being in class 0, i.e. const + log(P(class=0|data)).
-  // The constant is chosen such that the decision boundary is at logL ==0;
-  // This function is intended for binary classifiers only.
-  // logL is related to class probability as P(class=0|data) = exp(logL) / (1+exp(logL))
-  double log_l(const vnl_vector<double> &input) const override;
+   //: Log likelihood of being in class 0, i.e. const + log(P(class=0|data)).
+   // The constant is chosen such that the decision boundary is at logL ==0;
+   // This function is intended for binary classifiers only.
+   // logL is related to class probability as P(class=0|data) = exp(logL) /
+   // (1+exp(logL))
+   double log_l(const vnl_vector<double> &input) const override;
 
-  //: Set the log probability density limit,
-  // above which the inputs are in class 1.
-  void set_log_prob_limit(double limit)
-  {
-    log_prob_limit_ = limit;
-  }
+   //: Set the log probability density limit,
+   // above which the inputs are in class 1.
+   void set_log_prob_limit(double limit) { log_prob_limit_ = limit; }
 
-  //: The log probability density limit,
-  // above which the inputs are in class 1.
-  double log_prob_limit() const
-  {
-    return log_prob_limit_;
-  }
+   //: The log probability density limit,
+   // above which the inputs are in class 1.
+   double log_prob_limit() const { return log_prob_limit_; }
 
-  //: Set the PDF.
-  // The class takes its own deep copy of the PDF.
-  void set_pdf(const vpdfl_pdf_base &pdf)
-  {
-    deleteStuff();
-    pdf_ = pdf.clone();
+   //: Set the PDF.
+   // The class takes its own deep copy of the PDF.
+   void set_pdf(const vpdfl_pdf_base &pdf) {
+     deleteStuff();
+     pdf_ = pdf.clone();
   }
 
   bool has_pdf() const

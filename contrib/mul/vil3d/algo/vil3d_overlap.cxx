@@ -9,17 +9,16 @@ class vil3d_bool_overlap_functor
 {
 public:
   //: N voxels true in A but not in B
-  unsigned nAnotB;
+  unsigned nAnotB{0};
 
   //: N voxels true in B but not in A
-  unsigned nBnotA;
+  unsigned nBnotA{0};
 
   //: N voxels true in A and B
-  unsigned nAandB;
+  unsigned nAandB{0};
 
   //: Constructor
-  vil3d_bool_overlap_functor()
-    : nAnotB(0),nBnotA(0),nAandB(0) {}
+  vil3d_bool_overlap_functor() {}
 
   //: Operator function
   void operator()(bool voxA, bool voxB)

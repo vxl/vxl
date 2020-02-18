@@ -23,12 +23,12 @@
 template <class T>
 class vimt_gaussian_pyramid_builder_2d : public vimt_image_pyramid_builder
 {
-  int max_levels_;
+  int max_levels_{99};
 
   mutable vimt_image_2d_of<T> work_im_;
 
   //: Filter width (usually 5 for a 15851 filter, or 3 for a 121 filter)
-  unsigned filter_width_;
+  unsigned filter_width_{5};
 
   //:Minimum size in X direction of top layer of pyramid.
   unsigned minXSize_;

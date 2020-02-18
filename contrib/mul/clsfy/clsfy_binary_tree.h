@@ -24,21 +24,20 @@ class clsfy_binary_tree_op
 {
  protected:
     //Index within data of variable used at this node (set to -1 if none assigned)
-    int data_index_;
-    const vnl_vector<double>* data_ptr_;
-    clsfy_binary_threshold_1d classifier_;
+   int data_index_{-1};
+   const vnl_vector<double> *data_ptr_{nullptr};
+   clsfy_binary_threshold_1d classifier_;
 
  public:
+   clsfy_binary_tree_op() {}
+   clsfy_binary_tree_op(const vnl_vector<double> *data_ptr, int data_index = -1)
+       : data_index_(data_index), data_ptr_(data_ptr) {}
 
-  clsfy_binary_tree_op() : data_index_(-1), data_ptr_(nullptr) {}
-  clsfy_binary_tree_op(const vnl_vector<double>* data_ptr,
-                       int data_index=-1)
-    : data_index_(data_index), data_ptr_(data_ptr) {}
-
-  clsfy_binary_threshold_1d& classifier() {return classifier_;}
-  unsigned data_index() const {return data_index_;}
-  void set_data_index(unsigned index) {data_index_=index;}
-  void set_data_ptr(const vnl_vector<double>* data_ptr) {data_ptr_= data_ptr;}
+   clsfy_binary_threshold_1d &classifier() { return classifier_; }
+   unsigned data_index() const { return data_index_; }
+   void set_data_index(unsigned index) { data_index_ = index; }
+   void set_data_ptr(const vnl_vector<double> *data_ptr) {
+     data_ptr_ = data_ptr;}
 
   //: Return reference to data - NB throws std::bad_cast if null
   const vnl_vector<double >& data() const {return *data_ptr_;}
@@ -113,7 +112,7 @@ class clsfy_binary_tree : public clsfy_classifier_base
   };
 
   //: Constructor
-  clsfy_binary_tree(): root_(nullptr),cache_node_(nullptr) {}
+  clsfy_binary_tree() {}
 
   ~clsfy_binary_tree() override;
 
@@ -163,8 +162,9 @@ class clsfy_binary_tree : public clsfy_classifier_base
   //: Normally only the builder uses this
   void set_root(  clsfy_binary_tree_node* root);
  private:
-  clsfy_binary_tree_node* root_;
-  mutable clsfy_binary_tree_node* cache_node_;
+   clsfy_binary_tree_node *root_{nullptr};
+   mutable clsfy_binary_tree_node *cache_node_{nullptr};
+
  private:
   void copy(const clsfy_binary_tree& srcTree);
   void copy_children(clsfy_binary_tree_node* pSrcNode,clsfy_binary_tree_node* pNode);

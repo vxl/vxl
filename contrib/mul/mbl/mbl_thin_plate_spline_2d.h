@@ -47,11 +47,11 @@
 class mbl_thin_plate_spline_2d
 {
   vnl_vector<double> Wx_,Wy_;
-  double Ax0_, AxX_, AxY_;
-  double Ay0_, AyX_, AyY_;
-  double energy_x_,energy_y_;
+  double Ax0_{0}, AxX_{1}, AxY_{0};
+  double Ay0_{0}, AyX_{0}, AyY_{1};
+  double energy_x_{0}, energy_y_{0};
 
-  bool return_pure_affine_;
+  bool return_pure_affine_{false};
 
   std::vector<vgl_point_2d<double> > src_pts_;
 

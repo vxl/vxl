@@ -23,13 +23,10 @@
 //                                                  data manager
 //
 
-rgrl_data_manager::
-rgrl_data_manager( bool multi_stage )
-  : multi_stage_( multi_stage ),
-    multi_feature_( false )
-{
-}
+rgrl_data_manager::rgrl_data_manager(bool multi_stage)
+    : multi_stage_(multi_stage)
 
+{}
 
 rgrl_data_manager::
 ~rgrl_data_manager() = default;

@@ -51,19 +51,19 @@ class mbl_progress
  public:
 
   //: Constructor
-  mbl_progress(): throw_exception_on_cancel_(false) {}
+   mbl_progress() {}
 
-  //: Destructor
-  virtual ~mbl_progress() = default;
+   //: Destructor
+   virtual ~mbl_progress() = default;
 
-  //: Estimated number of iterations for the given identifier.
-  void set_estimated_iterations(const std::string& identifier,
-                                const int iterations,
-                                const std::string& display_text);
+   //: Estimated number of iterations for the given identifier.
+   void set_estimated_iterations(const std::string &identifier,
+                                 const int iterations,
+                                 const std::string &display_text);
 
-  //: If true set_progress() will throw an exception if cancel has been set
-  void set_throw_exception_on_cancel(bool t)
-    { throw_exception_on_cancel_=t; }
+   //: If true set_progress() will throw an exception if cancel has been set
+   void set_throw_exception_on_cancel(bool t) {
+     throw_exception_on_cancel_ = t; }
 
   //: Sets progress for the given identifier.
   // Checks whether cancel has been set; if so calls end_progress(),
@@ -138,7 +138,7 @@ class mbl_progress
   std::map<std::string, bool> identifier2cancel_;
 
   //: If true set_progress() will throw an exception if cancel has been set.
-  bool throw_exception_on_cancel_;
+  bool throw_exception_on_cancel_{false};
 };
 
 //========================================================================

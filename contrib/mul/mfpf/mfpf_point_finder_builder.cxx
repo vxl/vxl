@@ -25,11 +25,8 @@
 //=======================================================================
 
 mfpf_point_finder_builder::mfpf_point_finder_builder()
-  : step_size_(1.0),
-    search_ni_(5),search_nj_(0),
-    search_nA_(0),search_dA_(0.0),search_ns_(0),search_ds_(1.0)
-{
-}
+
+{}
 
 //=======================================================================
 // Destructor

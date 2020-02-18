@@ -74,14 +74,14 @@ class vil3d_meta_image_header
   bool set_header_voxel_size(const std::string &vsize);
 
   // Set to true if the header is valid
-  bool header_valid_;
+  bool header_valid_{false};
 
   // Header data
-  bool byte_order_msb_;
-  double offset_i_, offset_j_, offset_k_;
-  double vox_size_i_, vox_size_j_, vox_size_k_;
-  unsigned int dim_size_i_, dim_size_j_, dim_size_k_;
-  unsigned int nplanes_;
+  bool byte_order_msb_{false};
+  double offset_i_{0.0}, offset_j_{0.0}, offset_k_{0.0};
+  double vox_size_i_{1.0}, vox_size_j_{1.0}, vox_size_k_{1.0};
+  unsigned int dim_size_i_{0}, dim_size_j_{0}, dim_size_k_{0};
+  unsigned int nplanes_{1};
   std::string elem_type_;
   std::string im_file_;
 
@@ -90,7 +90,7 @@ class vil3d_meta_image_header
   vil_pixel_format pformat_;
 
   // True if swapping is needed
-  bool need_swap_;
+  bool need_swap_{false};
 };
 
 //: Print out header

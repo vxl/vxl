@@ -76,12 +76,12 @@ class rgrl_scale
   bool read( std::istream& is );
 
  private:
-  bool                has_geometric_scale_;
-  double              geometric_scale_;
-  bool                has_signature_inv_covar_;
-  vnl_matrix<double>  signature_inv_covar_;
+   bool has_geometric_scale_{false};
+   double geometric_scale_;
+   bool has_signature_inv_covar_{false};
+   vnl_matrix<double> signature_inv_covar_;
 
-  type                geo_scale_type_;
+   type geo_scale_type_;
 };
 
 //: output operator

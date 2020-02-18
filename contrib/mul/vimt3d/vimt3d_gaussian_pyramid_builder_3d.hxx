@@ -36,10 +36,9 @@ static inline mbl_logger& images_logger()
     return l;
 }
 
-
-template<class T>
+template <class T>
 vimt3d_gaussian_pyramid_builder_3d<T>::vimt3d_gaussian_pyramid_builder_3d()
-: max_levels_(99),uniform_reduction_(false),filter_width_(5)
+
 {
   set_min_size(5, 5, 5);
 }

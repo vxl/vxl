@@ -42,11 +42,11 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
     BAD_DEPTH = -1
   };
 
-  bool            closure_valid_;
+  bool closure_valid_{false};
 
   vtol_intensity_face_sptr  seed_;
   vifa_int_face_attr_sptr    seed_attr_;
-  int              depth_;
+  int depth_{BAD_DEPTH};
   int              size_filter_;
 
   float            junk_area_percentage_;

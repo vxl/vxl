@@ -27,10 +27,9 @@ unsigned mmn_diffusion_solver::gACS_CHECK_PERIOD=10;
 
 //: Default constructor
 mmn_diffusion_solver::mmn_diffusion_solver()
-  : nnodes_(0), max_iterations_(2000), min_iterations_(200), epsilon_(1.0E-5),
-    verbose_(false)
+
 {
-    init();
+  init();
 }
 
 //: Construct with arcs

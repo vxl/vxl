@@ -11,9 +11,8 @@
 
 //: Default constructor
 mmn_graph_rep1::mmn_graph_rep1()
-  : max_n_arcs_(0), n_arcs_(0)
-{
-}
+
+{}
 
 //: Build from list of arcs
 void mmn_graph_rep1::build(unsigned n_nodes,

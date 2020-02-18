@@ -21,7 +21,7 @@
 //  select which mode is required.
 class msm_shape_mode_view {
 private:
-  const msm_ref_shape_model* shape_model_;
+  const msm_ref_shape_model *shape_model_{nullptr};
   msm_ref_shape_instance sm_inst_;
 
   vnl_vector<double> b_sd_;
@@ -30,19 +30,19 @@ private:
   std::vector<msm_points> points_;
 
     //: Number of shapes for each mode
-  unsigned n_per_mode_;
+  unsigned n_per_mode_{3};
 
-    //: Current mode
-  unsigned mode_;
+  //: Current mode
+  unsigned mode_{0};
 
-    //: Range in units of sd
-  double sd_range_;
+  //: Range in units of sd
+  double sd_range_{3.0};
 
-    //: Scale relative to optimal scale to fit shapes to window
-  double rel_scale_;
+  //: Scale relative to optimal scale to fit shapes to window
+  double rel_scale_{0.95};
 
-    //: When true, overlap all the shapes
-  bool overlap_shapes_;
+  //: When true, overlap all the shapes
+  bool overlap_shapes_{false};
 
   vgl_box_2d<int>  display_win_;
 

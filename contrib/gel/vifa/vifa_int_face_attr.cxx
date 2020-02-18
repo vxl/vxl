@@ -5,20 +5,14 @@
 
 #include <vtol/vtol_intensity_face.h>
 
-vifa_int_face_attr::
-vifa_int_face_attr(vdgl_fit_lines_params*  fitter_params,
-                   vifa_group_pgram_params*  gpp,
-                   vifa_group_pgram_params*  gpp_w,
-                   vifa_norm_params*    np) :
-  vifa_int_face_attr_common(fitter_params, gpp, gpp_w, nullptr, np),
-  face_(nullptr),
-  cached_min_(0.0f),
-  cached_max_(0.0f),
-  cached_mean_(0.0f),
-  cached_var_(0.0f),
-  npobj_(nullptr)
-{
-}
+vifa_int_face_attr::vifa_int_face_attr(vdgl_fit_lines_params *fitter_params,
+                                       vifa_group_pgram_params *gpp,
+                                       vifa_group_pgram_params *gpp_w,
+                                       vifa_norm_params *np)
+    : vifa_int_face_attr_common(fitter_params, gpp, gpp_w, nullptr, np),
+      face_(nullptr)
+
+{}
 
 vifa_int_face_attr::
 vifa_int_face_attr(const vtol_intensity_face_sptr& f,

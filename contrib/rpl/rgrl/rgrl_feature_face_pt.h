@@ -94,8 +94,8 @@ class rgrl_feature_face_pt
   //   This is tangent subspace.  It is computed once, when first needed, and cached.
   //   This is because the feature
   //  location and tangent are fixed.
-  bool subspace_cached_;
-  vnl_matrix< double > tangent_subspace_;
+   bool subspace_cached_{false};
+   vnl_matrix<double> tangent_subspace_;
 };
 
 

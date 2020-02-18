@@ -20,9 +20,8 @@
 
 //: Default constructor
 fhs_searcher::fhs_searcher()
-  : geom_wt_(1.0)
-{
-}
+
+{}
 
 //: Set tree defining relationships between features
 //  Input arcs define neighbour relationships in any order.

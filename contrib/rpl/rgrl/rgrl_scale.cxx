@@ -9,14 +9,9 @@
 
 #include "rgrl_scale.h"
 
+rgrl_scale::rgrl_scale()
 
-rgrl_scale::
-rgrl_scale()
-  : has_geometric_scale_( false ),
-    has_signature_inv_covar_( false )
-{
-}
-
+{}
 
 bool
 rgrl_scale::

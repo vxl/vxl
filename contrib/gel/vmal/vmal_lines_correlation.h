@@ -56,8 +56,8 @@ class vmal_lines_correlation
                       unsigned char &value0, unsigned char &value1);
 
  private:
-  int delta_;
-  double radius_;
+   int delta_{5};
+   double radius_{5.0};
 };
 
 #endif // vmal_lines_corrletation_h_

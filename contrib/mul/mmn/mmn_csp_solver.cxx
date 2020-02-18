@@ -12,10 +12,7 @@
 #include <cassert>
 
 //: Default constructor
-mmn_csp_solver::mmn_csp_solver():nnodes_(0),verbose_(false)
-{
-    init();
-}
+mmn_csp_solver::mmn_csp_solver() { init(); }
 
 //: Construct with arcs
 mmn_csp_solver::mmn_csp_solver(unsigned num_nodes,const std::vector<mmn_arc>& arcs):

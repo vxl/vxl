@@ -27,11 +27,11 @@
 class clsfy_null_builder : public clsfy_builder_base
 {
   //: The classification result to always return.
-  unsigned default_class_;
+  unsigned default_class_{0};
 
- public:
+public:
   // Dflt ctor
-   clsfy_null_builder(): default_class_(0) {}
+  clsfy_null_builder() {}
 
   //: Create empty model
   // Caller is responsible for deletion

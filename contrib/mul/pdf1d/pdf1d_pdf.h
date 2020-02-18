@@ -29,9 +29,10 @@ class pdf1d_sampler;
 // representations of the parameter distributions.
 class pdf1d_pdf
 {
-  double mean_;
-  double var_;
- protected:
+  double mean_{0.0};
+  double var_{0.0};
+
+protected:
   void set_mean(double m) { mean_ = m; }
   void set_variance(double v) { var_ = v; }
  public:

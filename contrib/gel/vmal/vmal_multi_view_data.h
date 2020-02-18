@@ -57,14 +57,14 @@ class vmal_multi_view_data: public vbl_ref_count
   std::ostream& print(std::ostream& str);
 
  private:
-  int nbviews_;
-  int nbfeatures_; //number of features wishing to be detected
-  int size_vect_ft_;//the number of features in all images
-  int matchnum_; //the number of tracks
-  bool closed_track_;
+   int nbviews_{0};
+   int nbfeatures_;   // number of features wishing to be detected
+   int size_vect_ft_; // the number of features in all images
+   int matchnum_;     // the number of tracks
+   bool closed_track_;
 
-  NViewMatches MVM;
-  std::vector<T> all_pts;
+   NViewMatches MVM;
+   std::vector<T> all_pts;
 };
 
 #endif // vmal_multi_view_data_

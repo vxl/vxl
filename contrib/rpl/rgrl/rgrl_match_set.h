@@ -214,13 +214,12 @@ class rgrl_match_set
   friend class rgrl_match_set_from_to_iterator;
   friend class rgrl_match_set_const_from_to_iterator;
 
-
-  const std::type_info* from_type_;
-  const std::type_info* to_type_;
+  const std::type_info *from_type_{nullptr};
+  const std::type_info *to_type_{nullptr};
   rgrl_feature_set_label from_label_;
   rgrl_feature_set_label to_label_;
 
-  mutable unsigned int num_constraints_per_match_;
+  mutable unsigned int num_constraints_per_match_{0};
   std::vector< rgrl_feature_sptr > from_features_;
   std::vector< rgrl_feature_sptr > xformed_from_features_;
   std::vector< std::vector< match_info > > matches_and_weights_;

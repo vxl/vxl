@@ -192,18 +192,20 @@ msm_points mean_shape(const std::vector<std::vector<msm_points> >& points, unsig
 class mbm_covar_stats_2d
 {
   public:
-  double sum1, sum2;
-  double sum11, sum12, sum22;
-  unsigned n;
+    double sum1{0}, sum2{0};
+    double sum11{0}, sum12{0}, sum22{0};
+    unsigned n{0};
 
-  mbm_covar_stats_2d() : sum1(0),sum2(0),sum11(0),sum12(0),sum22(0),n(0) {}
+    mbm_covar_stats_2d() {}
 
-  //: Add 2D observation
-  void obs(double x, double y)
-  {
-    sum1+=x; sum2+=y;
-    sum11+=x*x; sum12+=x*y; sum22+=y*y;
-    n++;
+    //: Add 2D observation
+    void obs(double x, double y) {
+      sum1 += x;
+      sum2 += y;
+      sum11 += x * x;
+      sum12 += x * y;
+      sum22 += y * y;
+      n++;
   }
 
   void obs(vgl_point_2d<double> p) { obs(p.x(),p.y()); }

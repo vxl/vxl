@@ -41,19 +41,19 @@ class ParamModifier;
 
 class gevd_param_mixin
 {
-  bool valid_;
+  bool valid_{true};
   std::string error_msg_;
  public:
   //=====================================================
   //: Constructor.  By default a constructed parameter block is valid.
-  gevd_param_mixin() : valid_(true) {}
-  // Destructor
-  virtual ~gevd_param_mixin() = default;
-  //=====================================================
-  virtual bool SanityCheck();
-  bool Valid() const { return valid_; }
-  const char* GetErrorMsg() const { return error_msg_.c_str(); }
-  void SetErrorMsg(const char* msg);
+   gevd_param_mixin() {}
+   // Destructor
+   virtual ~gevd_param_mixin() = default;
+   //=====================================================
+   virtual bool SanityCheck();
+   bool Valid() const { return valid_; }
+   const char *GetErrorMsg() const { return error_msg_.c_str(); }
+   void SetErrorMsg(const char *msg);
 #if 0// not implemented in vxl
   virtual void Describe(ParamModifier&) {}
 #endif

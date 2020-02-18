@@ -116,13 +116,13 @@ class rgrl_object
 #endif
 
   // For debugging
-  mutable unsigned int debug_flag_;
-  mutable bool warning_;
+   mutable unsigned int debug_flag_{0};
+   mutable bool warning_{true};
 
-  // For event handling
-  typedef std::map< unsigned, rgrl_object_observer > observer_map;
-  observer_map observers_;
-  unsigned int observer_count_;
+   // For event handling
+   typedef std::map<unsigned, rgrl_object_observer> observer_map;
+   observer_map observers_;
+   unsigned int observer_count_{0};
 };
 
 #endif

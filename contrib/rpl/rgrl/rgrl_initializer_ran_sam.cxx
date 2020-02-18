@@ -30,13 +30,11 @@ static vnl_random global_generator_;
 typedef rgrl_match_set::from_iterator FIter;
 typedef FIter::to_iterator TIter;
 
-rgrl_initializer_ran_sam::
-rgrl_initializer_ran_sam( )
-  : generate_all_(false),
-    generator_( &global_generator_ ),
-    own_generator_( false ),
-    xform_(nullptr), scale_(nullptr),
-    samples_to_take_(0)
+rgrl_initializer_ran_sam::rgrl_initializer_ran_sam()
+    : generator_(&global_generator_),
+
+      xform_(nullptr), scale_(nullptr)
+
 {
   set_sampling_params();
 }

@@ -22,15 +22,15 @@
 class vdtop_8_neighborhood_mask
 {
  public:
-  vdtop_8_neighborhood_mask() :mask_(0) {}
-  vdtop_8_neighborhood_mask(vdtop_8_neighborhood_mask const& arg)  = default;
-  vdtop_8_neighborhood_mask(vxl_byte arg_code) :mask_(arg_code) {}
+   vdtop_8_neighborhood_mask() {}
+   vdtop_8_neighborhood_mask(vdtop_8_neighborhood_mask const &arg) = default;
+   vdtop_8_neighborhood_mask(vxl_byte arg_code) : mask_(arg_code) {}
 
-  vdtop_8_neighborhood_mask& operator=(const vdtop_8_neighborhood_mask & arg) = default;
+   vdtop_8_neighborhood_mask &
+   operator=(const vdtop_8_neighborhood_mask &arg) = default;
 
-  bool operator==(vdtop_8_neighborhood_mask arg) const
-  {
-    return mask_==arg.mask_ ;
+   bool operator==(vdtop_8_neighborhood_mask arg) const {
+     return mask_ == arg.mask_;
   }
 
   //: Gives the number of 8-components 8 connected to the center.
@@ -182,21 +182,21 @@ class vdtop_8_neighborhood_mask
   }
 
  private:
-  vxl_byte mask_ ;
+   vxl_byte mask_{0};
 
-  //precomputed tables
-  static vdtop_EXPORT const vxl_byte nb8cc_[256] ;
-  static vdtop_EXPORT const vxl_byte nb4cc_[256] ;
-  static vdtop_EXPORT const vxl_byte m8cc_[256][4] ;
-  static vdtop_EXPORT const vxl_byte m4cc_[256][4] ;
-  static vdtop_EXPORT const vxl_byte m8dir_[256][8] ;
-  static vdtop_EXPORT const vxl_byte m4dir_[256][4] ;
-  static vdtop_EXPORT const bool m8simple_[256] ;
-  static vdtop_EXPORT const bool m4simple_[256] ;
-  static vdtop_EXPORT const bool m8simple_or_isolated_[256] ;
-  static vdtop_EXPORT const bool m4simple_or_isolated_[256] ;
-  static vdtop_EXPORT const vxl_byte nb4neighbors_[256] ;
-  static vdtop_EXPORT const vxl_byte nb8neighbors_[256] ;
+   // precomputed tables
+   static vdtop_EXPORT const vxl_byte nb8cc_[256];
+   static vdtop_EXPORT const vxl_byte nb4cc_[256];
+   static vdtop_EXPORT const vxl_byte m8cc_[256][4];
+   static vdtop_EXPORT const vxl_byte m4cc_[256][4];
+   static vdtop_EXPORT const vxl_byte m8dir_[256][8];
+   static vdtop_EXPORT const vxl_byte m4dir_[256][4];
+   static vdtop_EXPORT const bool m8simple_[256];
+   static vdtop_EXPORT const bool m4simple_[256];
+   static vdtop_EXPORT const bool m8simple_or_isolated_[256];
+   static vdtop_EXPORT const bool m4simple_or_isolated_[256];
+   static vdtop_EXPORT const vxl_byte nb4neighbors_[256];
+   static vdtop_EXPORT const vxl_byte nb8neighbors_[256];
 };
 
 #endif

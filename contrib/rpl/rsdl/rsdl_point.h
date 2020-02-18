@@ -97,9 +97,9 @@ class rsdl_point
   void resize( unsigned int Nc, unsigned int Na );
 
  private:
-  unsigned int Nc_;
-  unsigned int Na_;
-  double *data_;
+   unsigned int Nc_{0};
+   unsigned int Na_{0};
+   double *data_{nullptr};
 };
 
 std::ostream& operator<< ( std::ostream& ostr, const rsdl_point& pt );

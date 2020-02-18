@@ -17,7 +17,7 @@
 #include "vil/vil_convert.h"
 
 msdi_array_of_marked_images::msdi_array_of_marked_images()
-  : grey_only_(true),image_pyr_ok_(false),index_(0)
+
 {
   pyr_builder_.set_min_size(24,24);
 }

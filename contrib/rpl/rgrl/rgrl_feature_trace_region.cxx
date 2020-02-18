@@ -30,14 +30,8 @@ rgrl_feature_trace_region( vnl_vector<double> const& loc,
 {
 }
 
-
-rgrl_feature_trace_region::
-rgrl_feature_trace_region( )
-  : rgrl_feature_trace_pt(),
-    region_length_( 0 ), region_radius_( 0 )
-{
-}
-
+rgrl_feature_trace_region::rgrl_feature_trace_region()
+    : rgrl_feature_trace_pt() {}
 
 unsigned int
 rgrl_feature_trace_region::

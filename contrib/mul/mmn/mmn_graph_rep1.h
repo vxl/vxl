@@ -33,10 +33,10 @@ class mmn_graph_rep1
 #endif // 0
 
   //: Maximum number of arcs used
-  unsigned max_n_arcs_;
+  unsigned max_n_arcs_{0};
 
   //: Current number of arcs
-  unsigned n_arcs_;
+  unsigned n_arcs_{0};
 
   //: Index of node chosen to be root (if >n_nodes,then none chosen)
   unsigned root_index_;

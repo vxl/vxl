@@ -25,11 +25,11 @@ namespace {
   }
 }
 
-rrel_kernel_density_obj::rrel_kernel_density_obj(rrel_kernel_scale_type scale_type)
-  : scale_type_(scale_type),
-    fix_x_( false )
-{
-}
+rrel_kernel_density_obj::rrel_kernel_density_obj(
+    rrel_kernel_scale_type scale_type)
+    : scale_type_(scale_type)
+
+{}
 
 double
 rrel_kernel_density_obj::fcn(vect_const_iter /*res_begin*/, vect_const_iter /*res_end*/,

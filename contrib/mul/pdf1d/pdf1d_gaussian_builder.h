@@ -21,7 +21,7 @@ class pdf1d_gaussian;
 //: Class to build pdf1d_gaussian objects
 class pdf1d_gaussian_builder : public pdf1d_builder
 {
-  double min_var_;
+  double min_var_{1.0e-6};
 
   pdf1d_gaussian& gaussian(pdf1d_pdf& model) const;
  public:

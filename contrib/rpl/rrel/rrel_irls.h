@@ -170,23 +170,23 @@ class rrel_irls
  protected:
   //  Parameters
   int max_iterations_;
-  bool test_converge_;
+  bool test_converge_{true};
   double convergence_tol_;
-  bool est_scale_during_;
-  bool use_weighted_scale_;
+  bool est_scale_during_{true};
+  bool use_weighted_scale_{true};
   int iterations_for_scale_est_;
-  double scale_lower_bound_;
-  int trace_level_;
+  double scale_lower_bound_{-1.0};
+  int trace_level_{0};
 
   //  Variables of estimation.
   vnl_vector<double> params_;
   vnl_matrix<double> cofact_;
-  bool params_initialized_;
+  bool params_initialized_{false};
   double scale_;
-  bool scale_initialized_;
-  double obj_fcn_, prev_obj_fcn_;
-  bool converged_;
-  int iteration_;
+  bool scale_initialized_{false};
+  double obj_fcn_{1e256}, prev_obj_fcn_{1e256};
+  bool converged_{false};
+  int iteration_{0};
 };
 
 #endif // rrel_irls_h_

@@ -37,9 +37,8 @@
 //=======================================================================
 
 vpdfl_kernel_pdf_builder::vpdfl_kernel_pdf_builder()
-    : min_var_(1.0e-6), build_type_(select_equal), fixed_width_(1.0)
-{
-}
+
+{}
 
 //=======================================================================
 // Destructor

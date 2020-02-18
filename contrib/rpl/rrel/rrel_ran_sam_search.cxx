@@ -19,14 +19,11 @@
 // Random number generator. This will be shared by all ran_sam instances.
 static vnl_random global_generator_;
 
+rrel_ran_sam_search::rrel_ran_sam_search()
+    : generator_(&global_generator_),
 
-rrel_ran_sam_search::rrel_ran_sam_search( )
-  : generate_all_(false),
-    generator_( &global_generator_ ),
-    own_generator_( false ),
-    params_(0), scale_(0),
-    samples_to_take_(0),
-    trace_level_(0)
+      params_(0)
+
 {
   set_sampling_params();
 }

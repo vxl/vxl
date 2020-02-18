@@ -54,97 +54,96 @@ class msdi_marked_images_from_files : public msdi_marked_images
 {
  private:
   //: Define behaviour of this iterator regarding reflections of points/images
-  msdi_reflection_state ref_state_;
+   msdi_reflection_state ref_state_{Raw};
 
-  //: Text to be added to beginning of points names to get reflected version
-  //  Only significant for ref_state_==ReflectAsymRawPts
-  std::string ref_prefix_;
+   //: Text to be added to beginning of points names to get reflected version
+   //  Only significant for ref_state_==ReflectAsymRawPts
+   std::string ref_prefix_;
 
-  //: Define point mapping for reflected points
-  //  ref_point_index_[i] is index in old list of reflected point i
-  //  Only used for ReflectSym state.
-  std::vector<unsigned> ref_point_index_;
+   //: Define point mapping for reflected points
+   //  ref_point_index_[i] is index in old list of reflected point i
+   //  Only used for ReflectSym state.
+   std::vector<unsigned> ref_point_index_;
 
-  //: When true, convert multiplane images to single plane
-  bool grey_only_;
+   //: When true, convert multiplane images to single plane
+   bool grey_only_{true};
 
-  //: Scaling required to convert from units in image to desired world units
-  // (e.g. 1000 for mm if image units are metres)
-  // Only used if load_as_float_ is true.
-  float unit_scaling_;
+   //: Scaling required to convert from units in image to desired world units
+   // (e.g. 1000 for mm if image units are metres)
+   // Only used if load_as_float_ is true.
+   float unit_scaling_{1000.0f};
 
-  //: Image directory
-  std::string image_dir_;
+   //: Image directory
+   std::string image_dir_;
 
-  //: Image names
-  std::vector<std::string> image_name_;
+   //: Image names
+   std::vector<std::string> image_name_;
 
-  //: Points directory
-  std::string points_dir_;
+   //: Points directory
+   std::string points_dir_;
 
-  //: Points file names
-  std::vector<std::string> points_name_;
+   //: Points file names
+   std::vector<std::string> points_name_;
 
-  //  ==== Workspace variables ====
+   //  ==== Workspace variables ====
 
-  //: Current points
-  msm_points points_;
+   //: Current points
+   msm_points points_;
 
-  //: Current image pyramid
-  vimt_image_pyramid image_pyr_;
+   //: Current image pyramid
+   vimt_image_pyramid image_pyr_;
 
-  //: Current image pyramid (using float)
-  vimt_image_pyramid float_image_pyr_;
+   //: Current image pyramid (using float)
+   vimt_image_pyramid float_image_pyr_;
 
-  //: Current base image
-  vimt_image_2d_of<vxl_byte> image_;
+   //: Current base image
+   vimt_image_2d_of<vxl_byte> image_;
 
-  //: Current base image (using float)
-  vimt_image_2d_of<float> float_image_;
+   //: Current base image (using float)
+   vimt_image_2d_of<float> float_image_;
 
+   //: True if image is reflection of that loaded from disk
+   bool image_is_reflected_;
 
-  //: True if image is reflection of that loaded from disk
-  bool image_is_reflected_;
+   //: True if points are a reflection of those loaded from disk
+   bool points_are_reflected_;
 
-  //: True if points are a reflection of those loaded from disk
-  bool points_are_reflected_;
+   //: True if image_ is current
+   bool image_ok_{false};
 
-  //: True if image_ is current
-  bool image_ok_;
+   //: True if image_pyr_ is current
+   bool image_pyr_ok_{false};
 
-  //: True if image_pyr_ is current
-  bool image_pyr_ok_;
+   //: True if points_ are current
+   bool points_ok_{false};
 
-  //: True if points_ are current
-  bool points_ok_;
+   //: When true, load image into a float image
+   bool load_as_float_{false};
 
-  //: When true, load image into a float image
-  bool load_as_float_;
+   //: Index of current image
+   int index_{0};
 
+   //: Load in current image and generate suitable pyramid
+   void get_image();
 
-  //: Index of current image
-  int index_;
+   //: Load in current points
+   void get_points();
 
-  //: Load in current image and generate suitable pyramid
-  void get_image();
+   //: Pyramid builder
+   vimt_gaussian_pyramid_builder_2d<vxl_byte> pyr_builder_;
 
-  //: Load in current points
-  void get_points();
+   //: Float pyramid builder
+   vimt_gaussian_pyramid_builder_2d<float> float_pyr_builder_;
 
-  //: Pyramid builder
-  vimt_gaussian_pyramid_builder_2d<vxl_byte> pyr_builder_;
+   // Private copy operator to prevent copying
+   msdi_marked_images_from_files &
+   operator=(const msdi_marked_images_from_files &) = delete;
 
-  //: Float pyramid builder
-  vimt_gaussian_pyramid_builder_2d<float> float_pyr_builder_;
+   //: Reflect current points
+   void reflect_points();
 
-  // Private copy operator to prevent copying
-  msdi_marked_images_from_files& operator=(const msdi_marked_images_from_files&) = delete;
-
-  //: Reflect current points
-  void reflect_points();
-
-  //: Reflect current image
-  void reflect_image();
+   //: Reflect current image
+   void reflect_image();
 
  public:
   //: Default constructor

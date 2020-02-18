@@ -274,7 +274,7 @@ class rgrl_data_manager: public rgrl_object
  private:
   rgrl_data_manager_data_storage   data_;
   bool                             multi_stage_;
-  bool                             multi_feature_;
+  bool multi_feature_{false};
 };
 
 #endif

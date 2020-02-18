@@ -69,11 +69,7 @@ inline void vil3d_meta_image_swap64(char *a, unsigned n)
 //===================================================================
 // Header constructor
 //===================================================================
-vil3d_meta_image_header::vil3d_meta_image_header()
-    : header_valid_(false), byte_order_msb_(false), offset_i_(0.0),
-      offset_j_(0.0), offset_k_(0.0), vox_size_i_(1.0), vox_size_j_(1.0),
-      vox_size_k_(1.0), dim_size_i_(0), dim_size_j_(0), dim_size_k_(0),
-      nplanes_(1), need_swap_(false) {
+vil3d_meta_image_header::vil3d_meta_image_header() {
   // No construction code
 }
 

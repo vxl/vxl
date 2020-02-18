@@ -16,16 +16,12 @@
 #endif
 
 // Default ctor
-OctreeLevel::OctreeLevel( const int d) :
-  depth( d),
-  size( d<0 ? 0 : (1<<d)),
-  color( size, size, size),
-  next( nullptr),
-  prev( nullptr)
+OctreeLevel::OctreeLevel(const int d)
+    : depth(d), size(d < 0 ? 0 : (1 << d)), color(size, size, size)
+
 {
   std::cout << "Size = " << size << std::endl;
 }
-
 
 OctreeLevel::OctreeLevel( OctreeLevel *p) :
   depth( p->GetDepth()+1),

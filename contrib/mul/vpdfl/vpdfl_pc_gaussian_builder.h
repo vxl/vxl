@@ -37,16 +37,16 @@ class vpdfl_pc_gaussian_builder : public vpdfl_gaussian_builder
 
   //: The method used to decide how to calculate the number of principle components.
   // defaults to fixed.
-  partitionMethods partitionMethod_;
+  partitionMethods partitionMethod_{vpdfl_pc_gaussian_builder::fixed};
 
   //: The proportion of variance that should be encoded with the principle components..
   // Isn't used by default..
-  double proportionOfVariance_;
+  double proportionOfVariance_{0};
 
   //: The number of components to represent in the principle space.
-  unsigned fixed_partition_;
+  unsigned fixed_partition_{1};
 
- public:
+public:
   //: Dflt ctor
   vpdfl_pc_gaussian_builder();
 

@@ -27,9 +27,9 @@
 class clsfy_knn_builder : public clsfy_builder_base
 {
   //: The number of nearest neighbours to look for.
-  unsigned k_;
+  unsigned k_{1};
 
- public:
+public:
   // Dflt ctor
   clsfy_knn_builder();
 

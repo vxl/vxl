@@ -27,7 +27,7 @@
 
 template <class T>
 vimt_scale_pyramid_builder_2d<T>::vimt_scale_pyramid_builder_2d()
-: max_levels_(99)
+
 {
   set_scale_step(2.0);
   set_min_size(5, 5);

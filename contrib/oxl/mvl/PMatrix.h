@@ -146,7 +146,7 @@ class PMatrix : public vbl_ref_count
   // Data Members--------------------------------------------------------------
  protected:
   vnl_double_3x4 p_matrix_;
-  mutable vnl_svd<double>* svd_;
+  mutable vnl_svd<double> *svd_{nullptr};
 };
 
 std::ostream& operator<<(std::ostream& s, const PMatrix& p);

@@ -13,7 +13,7 @@ class vipl_section_iterator
  protected:
   vipl_section_descriptor< DataType >* hsreal_descriptor;
   vipl_section_container< DataType >* hscontainer;
-  int hsincr_count;
+  int hsincr_count{0};
   // Assigns the pointer directly. Does not deep copy them.
   vipl_section_iterator(
        vipl_section_descriptor< DataType >* desc ,

@@ -99,9 +99,9 @@ class vimt3d_vil3d_v3m_image: public vil3d_image_resource
   //: Storage type for header information when the whole image has not yet been loaded.
   struct header_t
   {
-    unsigned ni, nj, nk, nplanes;
+    unsigned ni{0}, nj{0}, nk{0}, nplanes{0};
     vimt3d_transform_3d w2i;
-    header_t(): ni(0), nj(0), nk(0), nplanes(0) {}
+    header_t() {}
     //: Expected pixel type.
     enum vil_pixel_format pixel_format;
     bool operator ==(const header_t& rhs) const;

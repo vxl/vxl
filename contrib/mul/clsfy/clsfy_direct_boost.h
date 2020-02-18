@@ -36,13 +36,13 @@ class clsfy_direct_boost : public clsfy_classifier_base
   std::vector<double> threshes_;
 
   //: number of classifiers used
-  int n_clfrs_used_;
+  int n_clfrs_used_{-1};
 
   //: dimensionality of data.
   // (ie size of input vectors v, ie the total number of different features)
-  int n_dims_;
+  int n_dims_{-1};
 
-//================protected methods =================================
+  //================protected methods =================================
 
   //: Delete objects on heap
   void delete_stuff();

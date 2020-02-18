@@ -41,7 +41,7 @@ class rgrl_transformation
   ~rgrl_transformation() override;
 
   //: default constructor
-  rgrl_transformation() :  is_covar_set_(false) {  }
+  rgrl_transformation() {}
 
   //: initialize with covariance matrix
   rgrl_transformation( const vnl_matrix<double>& cov );
@@ -210,7 +210,7 @@ class rgrl_transformation
 
   //: flag of setting covariance
   //  Check it before using covariance matrix
-  bool is_covar_set_;
+  bool is_covar_set_{false};
 
   //: scaling factors of current transformation on each dimension
   //  This is computed from current transformation.

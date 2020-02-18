@@ -162,23 +162,16 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 #endif
 }
 
-template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
-  vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
-  ::vipl_filter()
-  : hsimage_border_size(0),
-    hsinput_state(Not_Ready),
-    hsfilter_state(Not_Ready),
-    hsoutput_state(Not_Ready),
-    hsnuminputs(1),
-    hsinf(std::vector<inimagept>(hsnuminputs)),
-    hsoutf(nullptr),
-    hssrc_section(nullptr),
-    hsinsecp(nullptr),
-    hsdst_section(nullptr),
-    hssecp(nullptr),
-    hsinROA (nullptr),
-    hsROA (nullptr),
-    hsis_input_driven(false)
+template <class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity,
+          class PixelItr>
+vipl_filter<ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr>::vipl_filter()
+    : hsinput_state(Not_Ready), hsfilter_state(Not_Ready),
+      hsoutput_state(Not_Ready),
+
+      hsinf(std::vector<inimagept>(hsnuminputs)), hsoutf(nullptr),
+      hssrc_section(nullptr), hsinsecp(nullptr), hsdst_section(nullptr),
+      hssecp(nullptr), hsinROA(nullptr), hsROA(nullptr)
+
 {
 #if 0
   for (int i = 0; i < numinputs(); i++)

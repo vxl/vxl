@@ -34,19 +34,19 @@ class clsfy_adaboost_sorted_builder : public clsfy_builder_base
   //: bool indicating whether or not to save data to disk.
   // NB useful to save data to disk, if don't have enough RAM
   // but also makes training very slow
-  bool save_data_to_disk_;
+  bool save_data_to_disk_{false};
 
   //: batch size
   // i.e. number of training examples held in RAM whilst sorting takes place
-  int bs_;
+  int bs_{-1};
 
   //: maximum number of classifiers found by Adaboost algorithm
-  int max_n_clfrs_;
+  int max_n_clfrs_{-1};
 
   //: pointer to 1d builder used to build each weak classifier
-  clsfy_builder_1d* weak_builder_;
+  clsfy_builder_1d *weak_builder_{nullptr};
 
- public:
+public:
 
   // Dflt ctor
   clsfy_adaboost_sorted_builder();

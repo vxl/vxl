@@ -111,11 +111,10 @@ namespace
 
   struct dist_id
   {
-    double dist_;
-    unsigned id_;
+    double dist_{-1};
+    unsigned id_{0};
 
-    dist_id()
-    : dist_(-1), id_(0) {}
+    dist_id() {}
 
     dist_id( double d, unsigned id )
     : dist_(d), id_(id) {}

@@ -50,26 +50,29 @@ class vipl_gaussian_convolution : public vipl_filter_2d<ImgIn,ImgOut,DataIn,Data
 
  private:
   // attribute to store the "temporary mask"
-  double* mask_;
-  inline double*& ref_mask(){return mask_;}
-  inline void put_mask(double* v){mask_=v;}
-  inline double* mask() const{return mask_;}
-  int masksize_;
-  inline int& ref_masksize(){return masksize_;}
-  inline void put_masksize(int v){masksize_=v;}
-  inline int masksize() const{return masksize_;}
+   double *mask_{nullptr};
+   inline double *&ref_mask() { return mask_; }
+   inline void put_mask(double *v) { mask_ = v; }
+   inline double *mask() const { return mask_; }
+   int masksize_{0};
+   inline int &ref_masksize() { return masksize_; }
+   inline void put_masksize(int v) { masksize_ = v; }
+   inline int masksize() const { return masksize_; }
 
-// -+-+- constructors/destructors: -+-+-
+   // -+-+- constructors/destructors: -+-+-
  public:
-  inline vipl_gaussian_convolution(double s=1, double c=0.01)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>()
-           , sigma_(s)
-           , cutoff_(c)
-           , mask_(nullptr)
-           , masksize_(0)
-    { if (s < 0) ref_sigma() = -s;
-      if (c < 0.005) ref_cutoff() = 0.005;
-      if (c > 0.5) ref_cutoff() = 0.5; }
+   inline vipl_gaussian_convolution(double s = 1, double c = 0.01)
+       : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(), sigma_(s),
+         cutoff_(c)
+
+   {
+     if (s < 0)
+       ref_sigma() = -s;
+     if (c < 0.005)
+       ref_cutoff() = 0.005;
+     if (c > 0.5)
+       ref_cutoff() = 0.5;
+   }
 
   inline vipl_gaussian_convolution(vipl_gaussian_convolution const& A)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A)

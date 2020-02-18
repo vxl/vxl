@@ -27,10 +27,8 @@
 
 //=======================================================================
 
-template<class T>
-vil3d_image_view<T>::vil3d_image_view()
-: top_left_(nullptr),istep_(0),jstep_(0),kstep_(0),planestep_(0)
-{}
+template <class T>
+vil3d_image_view<T>::vil3d_image_view() : top_left_(nullptr) {}
 
 template<class T>
 vil3d_image_view<T>::vil3d_image_view(unsigned ni, unsigned nj,

@@ -55,14 +55,14 @@ class TriTensor
   vbl_array_3d<double> T;
 
   // Caches for various computed quantities
-  mutable const HomgPoint2D* e12_;
-  mutable const HomgPoint2D* e13_;
+  mutable const HomgPoint2D *e12_{nullptr};
+  mutable const HomgPoint2D *e13_{nullptr};
 
-  mutable const FManifoldProject* fmp12_;
-  mutable const FManifoldProject* fmp13_;
-  mutable const FManifoldProject* fmp23_;
+  mutable const FManifoldProject *fmp12_{nullptr};
+  mutable const FManifoldProject *fmp13_{nullptr};
+  mutable const FManifoldProject *fmp23_{nullptr};
 
- public:
+public:
 
   // Constructors/Initializers/Destructors-----------------------------------
 

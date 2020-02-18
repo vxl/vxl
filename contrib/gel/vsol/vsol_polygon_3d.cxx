@@ -32,9 +32,8 @@ void vsol_polygon_3d::compute_plane()
 // Default constructor
 //----------------------------------------------------------------
 vsol_polygon_3d::vsol_polygon_3d()
-: storage_(nullptr)
-{
-}
+
+{}
 
 //---------------------------------------------------------------------------
 //: Constructor from a std::vector (not a geometric vector but a list of points).

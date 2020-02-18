@@ -23,9 +23,8 @@
 //=======================================================================
 //: Default constructor
 clsfy_simple_adaboost::clsfy_simple_adaboost()
-: n_clfrs_used_(-1) , n_dims_(-1)
-{
-}
+
+{}
 
 clsfy_simple_adaboost::clsfy_simple_adaboost(const clsfy_simple_adaboost& c)
   : clsfy_classifier_base()

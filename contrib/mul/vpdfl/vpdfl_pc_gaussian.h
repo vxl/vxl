@@ -32,10 +32,10 @@ class vpdfl_pc_gaussian : public vpdfl_gaussian
 {
   //: The number of dimensions to have full Covariance (i.e. elliptical shape)
   // The rest are assumed spherical
-  unsigned partition_;
+  unsigned partition_{0};
 
   //: The constant when calculating the Mahalanobis dist in the principal space.
-  double log_k_principal_;
+  double log_k_principal_{0.0};
 
   //: Pre-calculate log_k_principal_.
   // Should only be called after setting all other data values.
@@ -44,9 +44,9 @@ class vpdfl_pc_gaussian : public vpdfl_gaussian
   //: How the inherited set() function chooses the partition.
   // If NULL, set(const vnl_vector<double>&,const vnl_matrix<double>& evecs,const vnl_vector<double>&)
   // will fail.
-  vpdfl_pc_gaussian_builder * partition_chooser_;
+  vpdfl_pc_gaussian_builder *partition_chooser_{nullptr};
 
- public:
+public:
   //: Dflt ctor
   vpdfl_pc_gaussian();
 

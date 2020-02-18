@@ -24,13 +24,10 @@
 //=======================================================================
 
 clsfy_random_forest_builder::clsfy_random_forest_builder()
-  : ntrees_(100),
-    max_depth_(-1), min_node_size_(-1),
-    poob_indices_(nullptr),
-    calc_test_error_(true)
+
 {
-    unsigned long default_seed=123654987;
-    seed_sampler(default_seed);
+  unsigned long default_seed = 123654987;
+  seed_sampler(default_seed);
 }
 
 clsfy_random_forest_builder::clsfy_random_forest_builder(unsigned ntrees,

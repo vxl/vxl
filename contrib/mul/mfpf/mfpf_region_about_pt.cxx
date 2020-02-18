@@ -21,10 +21,7 @@
 // Dflt ctor
 //=======================================================================
 
-mfpf_region_about_pt::mfpf_region_about_pt()
-  : i0_(0),i1_(0),i2_(1),rel_wi_(1.0),rel_wj_(1.0),form_("box")
-{
-}
+mfpf_region_about_pt::mfpf_region_about_pt() : form_("box") {}
 
 //=======================================================================
 // Destructor

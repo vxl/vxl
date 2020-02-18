@@ -30,17 +30,17 @@
 template <class T>
 class vimt3d_gaussian_pyramid_builder_3d : public vimt_image_pyramid_builder
 {
-  int max_levels_;
+  int max_levels_{99};
 
   //: When true, subsample in x,y,z every time.
   //  When not true and width of z pixels much more than that in x and y,
   //  then only smooth and sub-sample in x and y
-  bool uniform_reduction_;
+  bool uniform_reduction_{false};
 
   mutable vil3d_image_view<T> work_im1_,work_im2_;
 
   //: Filter width (usually 5 for a 15851 filter, or 3 for a 121 filter)
-  unsigned filter_width_;
+  unsigned filter_width_{5};
 
   //:Minimum size in X direction of top layer of pyramid.
   unsigned min_x_size_;

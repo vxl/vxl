@@ -40,9 +40,9 @@ class rgrl_matcher_pseudo_int_3d
    public:
     // the mapped location is to be integer
     vnl_int_3           location;
-    double              intensity;
-    double              weight;
-    rgrl_mapped_pixel_type(): location(), intensity(0.0), weight(1.0)  {}
+    double intensity{0.0};
+    double weight{1.0};
+    rgrl_mapped_pixel_type() : location() {}
   };
 
   typedef std::vector< rgrl_mapped_pixel_type > rgrl_mapped_pixel_vector_type;
@@ -81,9 +81,9 @@ class rgrl_matcher_pseudo_int_3d
   struct discrete_shift_node {
     vnl_int_3  shift_;
     //: delta step compared to previous node
-    double     step_;
+    double step_{0.0};
 
-    discrete_shift_node(): shift_(), step_(0.0) {}
+    discrete_shift_node() : shift_() {}
 
     discrete_shift_node(vnl_int_3  shift, const double& step)
       : shift_(std::move(shift)), step_(step) {}

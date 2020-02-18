@@ -27,7 +27,7 @@
 //=======================================================================
 
 msm_ref_shape_instance::msm_ref_shape_instance()
-  : model_(nullptr),use_prior_(false)
+
 {
   param_limiter_ = msm_no_limiter();
 }

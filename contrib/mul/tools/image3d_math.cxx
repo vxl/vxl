@@ -159,27 +159,27 @@ class operand
 
 
  protected:
-  operand_type_t operand_type_;
-
+   operand_type_t operand_type_{e_never};
 
  public:
-  operand(): operand_type_(e_never) {} // if used with this value - should throw.
+   operand() {} // if used with this value - should throw.
 
-  explicit operand(const std::string& s):
-    string_(s), operand_type_(e_string) {}
-  explicit operand(const vimt3d_image_3d_of<double>& i):
-    image_3d_of_double_(i), operand_type_(e_image_3d_of_double) {}
-  explicit operand(const vimt3d_image_3d_of<float>& i):
-    image_3d_of_float_(i), operand_type_(e_image_3d_of_float) {}
-  explicit operand(const vimt3d_image_3d_of<int>& i):
-    image_3d_of_int_(i), operand_type_(e_image_3d_of_int) {}
-  explicit operand(const double& i):
-    double_(i), operand_type_(e_double) {}
+   explicit operand(const std::string &s)
+       : string_(s), operand_type_(e_string) {}
+   explicit operand(const vimt3d_image_3d_of<double> &i)
+       : image_3d_of_double_(i), operand_type_(e_image_3d_of_double) {}
+   explicit operand(const vimt3d_image_3d_of<float> &i)
+       : image_3d_of_float_(i), operand_type_(e_image_3d_of_float) {}
+   explicit operand(const vimt3d_image_3d_of<int> &i)
+       : image_3d_of_int_(i), operand_type_(e_image_3d_of_int) {}
+   explicit operand(const double &i) : double_(i), operand_type_(e_double) {}
 
-  operand_type_t operand_type() const { return operand_type_; }
+   operand_type_t operand_type() const { return operand_type_; }
 
-  bool is_string() const { return operand_type_==e_string; }
-  const std::string& as_string() const { assert(is_string()); return string_; }
+   bool is_string() const { return operand_type_ == e_string; }
+   const std::string &as_string() const {
+     assert(is_string());
+     return string_; }
 
   bool is_double() const
   {

@@ -36,15 +36,15 @@ class pdf1d_kernel_pdf_builder : public pdf1d_builder
   enum build_type { fixed_width, select_equal, width_from_sep, adaptive };
  private:
   //: Minimum variance of whole model
-  double min_var_;
+   double min_var_{1.0e-6};
 
-  //: Type of building to be performed
-  build_type build_type_;
+   //: Type of building to be performed
+   build_type build_type_{select_equal};
 
-  //: Width set if fixed_width option on build used
-  double fixed_width_;
+   //: Width set if fixed_width option on build used
+   double fixed_width_{1.0};
 
-  pdf1d_kernel_pdf& kernel_pdf(pdf1d_pdf& model) const;
+   pdf1d_kernel_pdf &kernel_pdf(pdf1d_pdf &model) const;
  public:
 
   //: Dflt ctor

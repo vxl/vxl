@@ -14,11 +14,9 @@ rgrl_estimator( unsigned int param_dof )
 {
 }
 
-rgrl_estimator::
-rgrl_estimator()
-  : dof_( 0 )
-{
-}
+rgrl_estimator::rgrl_estimator()
+
+{}
 
 rgrl_estimator::
 ~rgrl_estimator() = default;

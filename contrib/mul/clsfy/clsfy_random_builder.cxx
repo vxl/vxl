@@ -20,8 +20,8 @@
 
 //=======================================================================
 
-clsfy_random_builder::clsfy_random_builder():
-confidence_(0.0)
+clsfy_random_builder::clsfy_random_builder()
+
 {}
 
 //=======================================================================

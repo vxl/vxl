@@ -22,9 +22,8 @@
 #include <vnl/algo/vnl_lbfgs.h>
 #include <clsfy/clsfy_logit_loss_function.h>
 
-clsfy_binary_hyperplane_logit_builder::clsfy_binary_hyperplane_logit_builder():
-      clsfy_binary_hyperplane_ls_builder(),
-      alpha_(1e-6),min_p_(0.001) {}
+clsfy_binary_hyperplane_logit_builder::clsfy_binary_hyperplane_logit_builder()
+    : clsfy_binary_hyperplane_ls_builder() {}
 
 //: Weighting on regularisation term
 void clsfy_binary_hyperplane_logit_builder::set_alpha(double a)

@@ -26,9 +26,9 @@
 
 //=======================================================================
 
-template<class T>
+template <class T>
 vimt_dog_pyramid_builder_2d<T>::vimt_dog_pyramid_builder_2d()
-: max_levels_(99)
+
 {
   set_min_size(5, 5);
 }

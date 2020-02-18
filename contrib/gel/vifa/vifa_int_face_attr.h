@@ -36,16 +36,16 @@ class vifa_int_face_attr: public vifa_int_face_attr_common
   //: The face whose attributes we store
   vtol_intensity_face_sptr  face_;
 
-  float            cached_min_;
-  float            cached_max_;
-  float            cached_mean_;
-  float            cached_var_;
+  float cached_min_{0.0f};
+  float cached_max_{0.0f};
+  float cached_mean_{0.0f};
+  float cached_var_{0.0f};
   float            cached_2_parallel_;
   float            cached_4_parallel_;
   int              cached_80_parallel_;
-  vifa_parallel*   npobj_;
+  vifa_parallel *npobj_{nullptr};
 
- public:
+public:
 
   vifa_int_face_attr(vdgl_fit_lines_params*    fitter_params = nullptr,
                      vifa_group_pgram_params*  gpp = nullptr,

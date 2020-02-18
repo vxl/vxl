@@ -55,8 +55,8 @@ class rgrl_feature_face_region : public rgrl_feature_face_pt, public rgrl_featur
   rgrl_feature_face_region();
 
   //: The normal width, and the radius on the tangent surface in physical coordinates.
-  double thickness_;
-  double radius_;
+  double thickness_{0};
+  double radius_{0};
 };
 
 #endif

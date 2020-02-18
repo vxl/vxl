@@ -69,10 +69,10 @@ public:
   rgrl_type_macro( rgrl_converge_status_nas, rgrl_converge_status );
 
 protected:
-  int iteration_;
+  int iteration_{0};
 
-  double stability_;
-  double consistency_;
+  double stability_{-1};
+  double consistency_{-1};
 
   vnl_vector<double> init_scaling_factors_;
 

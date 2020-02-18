@@ -30,7 +30,7 @@ struct osl_stash_link {
   osl_stash_link *next;
 };
 
-osl_topology_base::osl_topology_base() : id(0), stash_head(nullptr) { }
+osl_topology_base::osl_topology_base() {}
 void  osl_topology_base::stash_add(char const *name,
                                    void const *data,
                                    void (*dtor)(void *))

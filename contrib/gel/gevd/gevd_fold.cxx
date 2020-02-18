@@ -35,12 +35,10 @@ const int RDS[] = {0,-1, 1,-2, 2,-3, 3,-4, 4,-5, 5}; // radial search
 constexpr int FRAME = 4; // 3 for NMS and extension, 4 for contour
 
 gevd_fold::gevd_fold(float smooth_sigma, // width of filter dG
-                     float noise_sigma,   // sensor/texture intensity noise -[0 1]
+                     float noise_sigma, // sensor/texture intensity noise -[0 1]
                      float contour_factor, float junction_factor)
-  : smoothSigma(smooth_sigma), noiseSigma(noise_sigma),
-    contourFactor(contour_factor), junctionFactor(junction_factor),
-    filterFactor(6)              // factor from gevd_float_operators::Hessian
-{
+    : smoothSigma(smooth_sigma), noiseSigma(noise_sigma),
+      contourFactor(contour_factor), junctionFactor(junction_factor) {
   if (smoothSigma < 0.5)        // no guarantee for 2-pixel separation
     std::cerr << "gevd_fold::gevd_fold -- too small smooth_sigma: "
              << smoothSigma << std::endl;
@@ -55,7 +53,6 @@ gevd_fold::gevd_fold(float smooth_sigma, // width of filter dG
 
   //std::cout << "Init Step\n" << *this << std::endl;
 }
-
 
 bool
 gevd_fold::DetectEdgels(const gevd_bufferxy& image,

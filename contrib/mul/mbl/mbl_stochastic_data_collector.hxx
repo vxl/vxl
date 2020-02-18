@@ -16,11 +16,8 @@
 //=======================================================================
 
 template <class T>
-mbl_stochastic_data_collector<T>::
-mbl_stochastic_data_collector()
-: samples_(0), nPresented_(0), rand(9667566)
-{
-}
+mbl_stochastic_data_collector<T>::mbl_stochastic_data_collector()
+    : samples_(0), rand(9667566) {}
 
 //=======================================================================
 

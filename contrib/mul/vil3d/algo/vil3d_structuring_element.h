@@ -25,21 +25,20 @@ class vil3d_structuring_element
   //: k position of elements (i,j,k)
   std::vector<int> p_k_;
   //: i range of elements is [min_i_,max_i_]
-  int min_i_;
+  int min_i_{0};
   //: i range of elements is [min_i_,max_i_]
-  int max_i_;
+  int max_i_{-1};
   //: j range of elements is [min_j_,max_j_]
-  int min_j_;
+  int min_j_{0};
   //: j range of elements is [min_j_,max_j_]
-  int max_j_;
+  int max_j_{-1};
   //: k range of elements is [min_k_,max_k_]
-  int min_k_;
+  int min_k_{0};
   //: k range of elements is [min_k_,max_k_]
-  int max_k_;
+  int max_k_{-1};
 
- public:
-  vil3d_structuring_element()
-    : min_i_(0),max_i_(-1),min_j_(0),max_j_(-1),min_k_(0),max_k_(-1) {}
+public:
+  vil3d_structuring_element() {}
 
   //: Define elements { (p_i[a],p_j[a],p_k[a]) }
   vil3d_structuring_element(const std::vector<int>& p_i,

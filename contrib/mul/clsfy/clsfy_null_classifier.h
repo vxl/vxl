@@ -22,73 +22,70 @@ class clsfy_null_classifier : public clsfy_classifier_base
 {
  public:
   // Dflt constructor
-  clsfy_null_classifier(): n_dims_(0u), default_class_(0u) {}
+   clsfy_null_classifier() {}
 
-  //: Constructor for when you need a different default
-  clsfy_null_classifier(unsigned dc): n_dims_(0u), default_class_(dc) {}
+   //: Constructor for when you need a different default
+   clsfy_null_classifier(unsigned dc) : n_dims_(0u), default_class_(dc) {}
 
-  //: Return the probability the input being in each class.
-  void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const override;
+   //: Return the probability the input being in each class.
+   void class_probabilities(std::vector<double> &outputs,
+                            const vnl_vector<double> &input) const override;
 
-  //: Log likelihood of being in class
-  double log_l(const vnl_vector<double> &input) const override;
+   //: Log likelihood of being in class
+   double log_l(const vnl_vector<double> &input) const override;
 
-  //: The number of possible output classes.
-  unsigned n_classes() const override;
+   //: The number of possible output classes.
+   unsigned n_classes() const override;
 
-  //: The dimensionality of input vectors.
-  unsigned n_dims() const override
-  { return n_dims_; }
+   //: The dimensionality of input vectors.
+   unsigned n_dims() const override { return n_dims_; }
 
-  //: Set the number of dimensions the classifier reports that it uses.
-  // The classifier itself pays no attention to this value, but it
-  // may be useful for other error checking code which calls n_dims()
-  void set_n_dims(unsigned n)
-  { n_dims_ = n; }
+   //: Set the number of dimensions the classifier reports that it uses.
+   // The classifier itself pays no attention to this value, but it
+   // may be useful for other error checking code which calls n_dims()
+   void set_n_dims(unsigned n) { n_dims_ = n; }
 
-  //: The classification result that is always returned.
-  unsigned default_class() const
-  { return default_class_; }
+   //: The classification result that is always returned.
+   unsigned default_class() const { return default_class_; }
 
-  //: Set the number of dimensions the classifier reports that it uses.
-  // The classifier itself pays no attention to this value, but it
-  // may be useful for other error checking code which calls n_dims()
-  void set_default_class(unsigned dc)
-  { default_class_ = dc; }
+   //: Set the number of dimensions the classifier reports that it uses.
+   // The classifier itself pays no attention to this value, but it
+   // may be useful for other error checking code which calls n_dims()
+   void set_default_class(unsigned dc) { default_class_ = dc; }
 
-  //: Name of the class
-  std::string is_a() const override;
+   //: Name of the class
+   std::string is_a() const override;
 
-  //: Name of the class
-  bool is_class(std::string const& s) const override;
+   //: Name of the class
+   bool is_class(std::string const &s) const override;
 
-  //: Create a copy on the heap and return base class pointer
-  clsfy_classifier_base* clone() const override;
+   //: Create a copy on the heap and return base class pointer
+   clsfy_classifier_base *clone() const override;
 
-  //: Print class to os
-  void print_summary(std::ostream& os) const override;
+   //: Print class to os
+   void print_summary(std::ostream &os) const override;
 
-  //: Save class to binary file stream
-  void b_write(vsl_b_ostream& bfs) const override;
+   //: Save class to binary file stream
+   void b_write(vsl_b_ostream &bfs) const override;
 
-  //: Load class from binary file stream
-  void b_read(vsl_b_istream& bfs) override;
+   //: Load class from binary file stream
+   void b_read(vsl_b_istream &bfs) override;
 
-  //: The probabilities of returning a value in each class.
-  const std::vector<double> & probs() const;
+   //: The probabilities of returning a value in each class.
+   const std::vector<double> &probs() const;
 
-  //: Set the prior probabilities of each class
-  // The values are normalised to sum to 1.
-  void set_probs(const std::vector<double> &);
+   //: Set the prior probabilities of each class
+   // The values are normalised to sum to 1.
+   void set_probs(const std::vector<double> &);
 
 
  private:
 
   //: The classifier may get asked this
-  unsigned n_dims_;
+   unsigned n_dims_{0u};
 
-  //: The class value that is always returned, whatever the input vector.
-  unsigned default_class_;
+   //: The class value that is always returned, whatever the input vector.
+   unsigned default_class_{0u};
 };
 
 #endif // clsfy_null_classifier_h_

@@ -116,7 +116,7 @@ class rgrl_estimator
   //
 
  private:
-  unsigned int dof_;
+   unsigned int dof_{0};
 };
 
 // ===================================================================
@@ -168,54 +168,43 @@ class rgrl_nonlinear_estimator
   //: Default constructor
   //
   //  Does nothing.
-  rgrl_nonlinear_estimator()
-   : rgrl_estimator(),
-     max_num_iterations_(0),
-     relative_threshold_(1e-8)
-  { }
+   rgrl_nonlinear_estimator()
+       : rgrl_estimator()
 
-  //: Constructor.
-  //
-  // See the comments for param_dof(). The parameter is required by
-  // some algorithms such as random sampling and DBICP.
-  rgrl_nonlinear_estimator( unsigned int /*param_dof*/ )
-   : rgrl_estimator(),
-     max_num_iterations_(0),
-     relative_threshold_(1e-8)
-  { }
+   {}
 
+   //: Constructor.
+   //
+   // See the comments for param_dof(). The parameter is required by
+   // some algorithms such as random sampling and DBICP.
+   rgrl_nonlinear_estimator(unsigned int /*param_dof*/)
+       : rgrl_estimator(), max_num_iterations_(0), relative_threshold_(1e-8) {}
 
-  ~rgrl_nonlinear_estimator() override = default;
+   ~rgrl_nonlinear_estimator() override = default;
 
-  //: Linear estimator is non-iterative
-  //
+   //: Linear estimator is non-iterative
+   //
 
-  bool
-  is_iterative_method() const override
-  { return true; }
+   bool is_iterative_method() const override { return true; }
 
-  //: set max number of iterations
-  void set_max_num_iter( int max )
-  { max_num_iterations_ = max; }
+   //: set max number of iterations
+   void set_max_num_iter(int max) { max_num_iterations_ = max; }
 
-  //: return max number of iterations
-  int max_num_iter() const
-  { return max_num_iterations_; }
+   //: return max number of iterations
+   int max_num_iter() const { return max_num_iterations_; }
 
-  //: set relative threshold for parameters change
-  void set_rel_thres( double thres )
-  { relative_threshold_ = thres; }
+   //: set relative threshold for parameters change
+   void set_rel_thres(double thres) { relative_threshold_ = thres; }
 
-  //: relative threshold
-  double rel_thres() const
-  { return relative_threshold_; }
+   //: relative threshold
+   double rel_thres() const { return relative_threshold_; }
 
  protected:
   //: specify the maximum number of iterations for this estimator
-  int max_num_iterations_;
+   int max_num_iterations_{0};
 
-  //: The threshold for relative parameter change before termination
-  double relative_threshold_;
+   //: The threshold for relative parameter change before termination
+   double relative_threshold_{1e-8};
 };
 
 bool

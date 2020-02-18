@@ -269,12 +269,10 @@ void PairMatchSet::print_brief() const
 // == ITERATOR [class PairMatchSet::iterator] ==
 
 //: Construct an empty iterator.
-PairMatchSet::iterator::iterator(bool full_only):
-  c_(nullptr),
-  match_index_(0),
-  full_only_(full_only)
-{
-}
+PairMatchSet::iterator::iterator(bool full_only)
+    :
+
+      full_only_(full_only) {}
 
 //: Construct an iterator which will enumerate the matches in PairMatchSet cc.
 PairMatchSet::iterator::iterator(const PairMatchSet& cc, bool full_only):

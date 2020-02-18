@@ -23,13 +23,10 @@
 
 //=======================================================================
 
-clsfy_binary_tree_builder::clsfy_binary_tree_builder():
-    max_depth_(-1),min_node_size_(5),nbranch_params_(-1),calc_test_error_(true)
-{
-    unsigned long default_seed=123654987;
-    seed_sampler(default_seed);
+clsfy_binary_tree_builder::clsfy_binary_tree_builder() {
+  unsigned long default_seed = 123654987;
+  seed_sampler(default_seed);
 }
-
 
 //=======================================================================
 

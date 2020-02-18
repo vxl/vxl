@@ -7,10 +7,9 @@
 #include <vtol/vtol_edge_2d_sptr.h>
 
 template <class T>
-vmal_multi_view_data<T>::vmal_multi_view_data():
-nbviews_(0)
-{
-}
+vmal_multi_view_data<T>::vmal_multi_view_data()
+
+{}
 
 template <class T>
 vmal_multi_view_data<T>::vmal_multi_view_data(int nbviews):

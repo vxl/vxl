@@ -102,7 +102,7 @@ class gevd_step
   float smoothSigma;                   //!< spatial smoothing
   float noiseSigma;                    //!< sensor/texture noise
   float contourFactor, junctionFactor; //!< threshold factor for edgels
-  float filterFactor;                  //!< factor in convolution filter
+  float filterFactor{2};               //!< factor in convolution filter
 };
 
 #endif // gevd_step_h_

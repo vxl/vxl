@@ -10,10 +10,9 @@
 #endif
 #include "vnl/vnl_vector.h"
 
-rsdl_point::rsdl_point( )
-  : Nc_(0), Na_(0), data_(nullptr)
-{
-}
+rsdl_point::rsdl_point()
+
+{}
 
 rsdl_point::rsdl_point( unsigned int Nc, unsigned int Na )
   : Nc_(Nc), Na_(Na), data_( new double[ Nc_ + Na_ ] )

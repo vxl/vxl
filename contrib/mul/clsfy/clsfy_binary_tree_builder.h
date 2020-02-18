@@ -54,18 +54,18 @@ class clsfy_binary_tree_builder : public clsfy_builder_base
     //: The max depth of any leaf node in the tree
     //If negative no max is applied, and all final leaf nodes are pure
     //(i.e. single class)
-    int max_depth_;
+    int max_depth_{-1};
 
     //: Minimum number of points associated with any node
     // If negative this is ignored, otherwise if a split would produce a child
     // node less than this, then the split does not occur and the branch is
     // terminated
-    int min_node_size_;
+    int min_node_size_{5};
 
     //: Set this for random forest behaviour
     //At each split the selection is only from a random subset of this size
     //If negative (default) it is ignored and all are used
-    int nbranch_params_;
+    int nbranch_params_{-1};
 
     //: Work space for randomising params (NB not thread safe)
     mutable std::vector<unsigned > base_indices_;
@@ -171,7 +171,7 @@ class clsfy_binary_tree_builder : public clsfy_builder_base
         clsfy_binary_tree_bnode* parent,
         bool to_left, bool pure) const;
 
-    bool calc_test_error_;
+    bool calc_test_error_{true};
 };
 
 

@@ -23,15 +23,15 @@ class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base
 {
   //: C, the upper bound on the Lagrange multipliers.
   // 0 means no (or infinite) upper bound.
-  double boundC_;
+  double boundC_{0};
 
   //: Width of Gaussian function
-  double rbf_width_;
+  double rbf_width_{1.0};
 
- public:
+public:
 
   //: Dflt ctor
-   clsfy_rbf_svm_smo_1_builder(): boundC_(0), rbf_width_(1.0) {}
+  clsfy_rbf_svm_smo_1_builder() {}
 
   //: Create empty model
   clsfy_classifier_base* new_classifier() const override{return new clsfy_rbf_svm();}

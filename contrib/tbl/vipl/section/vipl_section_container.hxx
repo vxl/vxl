@@ -46,18 +46,10 @@ template < class DataType >
   if (hsthe && (hsthe != this)) FILTER_IMPTR_DEC_REFCOUNT(hsthe);
 }
 
-template < class DataType >
-  vipl_section_container< DataType > ::vipl_section_container()
-  : hsthe(this),
-    hsimgsz (2,0),
-    hsimgstart (2,0),
-    hssecsz (2,0),
-    hsoverlap (2,0),
-    hsrawdata (0),
-    hsimgptr (nullptr),
-    refcount_ (1)
-// C++ auto-generated low-level constructor
-{}
+template <class DataType>
+vipl_section_container<DataType>::vipl_section_container()
+    : hsthe(this), hsimgsz(2, 0), hsimgstart(2, 0), hssecsz(2, 0),
+      hsoverlap(2, 0), hsrawdata(0) {}
 
 template < class DataType >
   vipl_section_container< DataType > ::vipl_section_container(const vipl_section_container< DataType > &t)

@@ -21,13 +21,9 @@
 #endif
 #include <cassert>
 
-rgrl_match_set::
-rgrl_match_set(  )
-  : from_type_( nullptr ),
-    to_type_( nullptr ),
-    num_constraints_per_match_( 0 )
-{
-}
+rgrl_match_set::rgrl_match_set()
+
+{}
 
 rgrl_match_set::
 rgrl_match_set( const std::type_info& feature_type )
@@ -341,12 +337,12 @@ write( std::ostream& os ) const
 namespace{
   struct sort_node {
 
-    unsigned ind_;
+    unsigned ind_{0};
     rgrl_feature_sptr fea_;
 
     sort_node()
-      : ind_(0)
-    { }
+
+    {}
 
     sort_node( unsigned i, const rgrl_feature_sptr& f)
       : ind_(i), fea_(f)

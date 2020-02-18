@@ -112,10 +112,10 @@ class clsfy_random_classifier : public clsfy_classifier_base
   std::vector<double> probs_;
 
   //: The mean confidence noise added to class probabilities
-  double confidence_;
+  double confidence_{0.0};
 
   //: The classifier may get asked this
-  unsigned n_dims_;
+  unsigned n_dims_{0u};
 
   //: Give the same answers if the same vector is presented twice in a row
   mutable vnl_vector<double> last_inputs_;

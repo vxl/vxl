@@ -43,7 +43,7 @@ class mmn_diffusion_solver
     std::vector<mmn_arc> arcs_;
 
     //: Total number of nodes
-    unsigned nnodes_;
+    unsigned nnodes_{0};
 
     //: Workspace for costs of each arc
     std::vector<neigh_arc_cost_t > arc_costs_;
@@ -74,16 +74,16 @@ class mmn_diffusion_solver
     double max_delta_;
 
     //: max number of iterations allowed
-    unsigned max_iterations_;
+    unsigned max_iterations_{2000};
 
     //: min iterations allowed before additional convergence checks
-    unsigned min_iterations_;
+    unsigned min_iterations_{200};
 
     //: Convergence criterion on max_delta_
-    double epsilon_;
+    double epsilon_{1.0E-5};
 
     //:verbose debug output
-    bool verbose_;
+    bool verbose_{false};
 
     //: Previous solution value at arc consistency check
     double soln_val_prev_;

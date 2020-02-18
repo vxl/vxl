@@ -16,16 +16,11 @@
 #endif
 #include <cassert>
 
-rgrl_view::
-rgrl_view()
-  : from_image_roi_(nullptr),
-    to_image_roi_(nullptr),
-    current_region_(0),
-    global_region_(0),
-    current_resolution_(0),
-    num_updates_global_region_(0)
-{
-}
+rgrl_view::rgrl_view()
+    : from_image_roi_(nullptr), to_image_roi_(nullptr), current_region_(0),
+      global_region_(0)
+
+{}
 
 rgrl_view::
 rgrl_view( rgrl_mask_sptr          const& from_image_roi,

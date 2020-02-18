@@ -122,11 +122,8 @@ bool mfpf_pf_cost::check_and_refine_minima(vnl_vector<double>& params,
 //=======================================================================
 
 mfpf_point_finder::mfpf_point_finder()
-  : step_size_(1.0),
-    search_ni_(5),search_nj_(0),
-    nA_(0),dA_(0.0),ns_(0),ds_(1.0)
-{
-}
+
+{}
 
 //=======================================================================
 // Destructor

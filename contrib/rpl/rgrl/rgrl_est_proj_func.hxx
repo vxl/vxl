@@ -44,19 +44,15 @@ rgrl_est_proj_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 }
 
 template <unsigned int Tdim, unsigned int Fdim>
-rgrl_est_proj_func<Tdim, Fdim>::
-rgrl_est_proj_func( bool with_grad )
-: vnl_least_squares_function( (Fdim+1)*(Tdim+1)-1,
-                              1000 /*artificial number to avoid warning*/,
-                              with_grad ? use_gradient : no_gradient ),
-  matches_ptr_( nullptr ),
-  from_centre_(double(0)), to_centre_(double(0)),
-  index_row_(maxval_unsigned), index_col_(maxval_unsigned),
-  max_num_iterations_(50),
-  relative_threshold_(1e-7),
-  zero_svd_thres_(1e-5)
-{
-}
+rgrl_est_proj_func<Tdim, Fdim>::rgrl_est_proj_func(bool with_grad)
+    : vnl_least_squares_function((Fdim + 1) * (Tdim + 1) - 1,
+                                 1000 /*artificial number to avoid warning*/,
+                                 with_grad ? use_gradient : no_gradient),
+
+      from_centre_(double(0)), to_centre_(double(0)),
+      index_row_(maxval_unsigned), index_col_(maxval_unsigned)
+
+{}
 
 //: convert parameters
 template <unsigned int Tdim, unsigned int Fdim>

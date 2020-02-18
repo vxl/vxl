@@ -18,17 +18,18 @@
 class mmn_triplet
 {
  public:
-  unsigned v1,v2,v3;
+   unsigned v1{999999}, v2{999999}, v3{999999};
 
-  mmn_triplet() :v1(999999),v2(999999),v3(999999) {}
-  mmn_triplet(unsigned i1, unsigned i2, unsigned i3)
-    : v1(i1),v2(i2),v3(i3) {}
+   mmn_triplet() {}
+   mmn_triplet(unsigned i1, unsigned i2, unsigned i3)
+       : v1(i1), v2(i2), v3(i3) {}
 
-  //: Return smallest node index
-  unsigned min_v() const
-  {
-    if (v1<v2) return v1<v3?v1:v3;
-    else       return v2<v3?v2:v3;
+   //: Return smallest node index
+   unsigned min_v() const {
+     if (v1 < v2)
+       return v1 < v3 ? v1 : v3;
+     else
+       return v2 < v3 ? v2 : v3;
   }
 
   //: Return middle node index

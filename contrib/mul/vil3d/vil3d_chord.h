@@ -20,15 +20,16 @@
 class vil3d_chord
 {
 private:
-  int start_x_;
-  int end_x_;
-  int y_;
-  int z_;
+  int start_x_{0};
+  int end_x_{-1};
+  int y_{0};
+  int z_{0};
+
 public:
     //: Constructor
-  vil3d_chord() : start_x_(0),end_x_(-1),y_(0),z_(0) {}
+  vil3d_chord() {}
 
-    //: Constructor
+  //: Constructor
   vil3d_chord(int start_x, int end_x, int y, int z)
     : start_x_(start_x), end_x_(end_x), y_(y), z_(z) {}
 

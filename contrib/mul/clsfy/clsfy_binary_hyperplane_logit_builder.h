@@ -32,10 +32,11 @@ class clsfy_binary_hyperplane_logit_builder  : public clsfy_binary_hyperplane_ls
 {
  private:
   //: Weighting on regularisation term
-  double alpha_;
+   double alpha_{1e-6};
 
-  //: Min prob to be returned by classifier
-  double min_p_;
+   //: Min prob to be returned by classifier
+   double min_p_{0.001};
+
  public:
 
   // Dflt ctor

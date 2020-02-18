@@ -117,7 +117,7 @@ scale_location_by( const rgrl_feature_sptr& before_sptr, const double& scale )
 
 struct scaled_feature_node {
   //: scale at this level
-  double sigma_;
+  double sigma_{0.0};
 
   //: mask_box
   //  should be enough to set it as image size
@@ -127,7 +127,7 @@ struct scaled_feature_node {
   std::vector< rgrl_feature_sptr >  features_;
 
   //: ctor
-  scaled_feature_node() : sigma_(0.0), roi_(2)  {   }
+  scaled_feature_node() : roi_(2) {}
 
   //: size operator
   unsigned size() const { return features_.size(); }

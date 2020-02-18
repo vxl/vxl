@@ -56,7 +56,7 @@ struct vtol_extract_topology_params
   //
   // Default: 0 (no smoothing)
   //
-  unsigned num_for_smooth;
+  unsigned num_for_smooth{0};
 
   vtol_extract_topology_params&
   set_smooth( unsigned s ) { num_for_smooth = s; return *this; }
@@ -70,7 +70,7 @@ struct vtol_extract_topology_params
   // change. This will make code more robust against changes to the
   // code and parameter set, because we don't have a bunch of unnamed
   // arguments to change or worry about.
-  vtol_extract_topology_params() : num_for_smooth( 0 ) {}
+  vtol_extract_topology_params() {}
 };
 
 //: Stores an edgel chain and a corresponding topological edge
@@ -406,8 +406,8 @@ class vtol_extract_topology
   struct LabelPoint
   {
     LABEL_TYPE label;
-    bool valid;
-    LabelPoint(): label(0), valid(false) {}
+    bool valid{false};
+    LabelPoint() : label(0) {}
     LabelPoint(LABEL_TYPE const& lt, bool v): label(lt), valid(v) {}
     bool operator==( LabelPoint const& lp ) {
       return (lp.valid == this->valid) && ( (lp.valid) ? lp.label == this->label : true );
