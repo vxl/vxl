@@ -28,20 +28,11 @@ vifa_coll_lines::vifa_coll_lines(const vtol_edge_2d_sptr&  e,
   discard_flag_ = discard_flag;
 }
 
-vifa_coll_lines::~vifa_coll_lines(void)
-{
-  hypothesized_line_ = nullptr;
-}
+vifa_coll_lines::~vifa_coll_lines() { hypothesized_line_ = nullptr; }
 
-bool vifa_coll_lines::get_discard_flag(void) const
-{
-  return discard_flag_;
-}
+bool vifa_coll_lines::get_discard_flag() const { return discard_flag_; }
 
-int vifa_coll_lines::get_id(void) const
-{
-  return id_;
-}
+int vifa_coll_lines::get_id() const { return id_; }
 
 double vifa_coll_lines::get_measure(const vtol_edge_2d&  e) const
 {
@@ -59,13 +50,9 @@ double vifa_coll_lines::get_projected_length(const vtol_edge_2d&  e) const
                                                v2);
 }
 
-edge_2d_list& vifa_coll_lines::get_contributors(void)
-{
-  return contributors_;
-}
+edge_2d_list &vifa_coll_lines::get_contributors() { return contributors_; }
 
-face_list* vifa_coll_lines::get_contributor_faces(void)
-{
+face_list *vifa_coll_lines::get_contributor_faces() {
   auto*  ret = new face_list;
 
   for (auto & contributor : contributors_)
@@ -138,8 +125,7 @@ void vifa_coll_lines::add_and_update(const vtol_edge_2d_sptr&  e)
   this->fit_line();
 }
 
-double vifa_coll_lines::spanning_length(void)
-{
+double vifa_coll_lines::spanning_length() {
   vgl_point_2d<double> p1;
   vgl_point_2d<double> p2;
 
@@ -220,8 +206,7 @@ double vifa_coll_lines::spanning_length(vgl_point_2d<double>&  p1,
   return std::sqrt((dx * dx) + (dy * dy));
 }
 
-double vifa_coll_lines::support_length(void)
-{
+double vifa_coll_lines::support_length() {
   double  len = 0.0;
   for (auto & contributor : contributors_)
   {
@@ -319,8 +304,7 @@ double vifa_coll_lines::get_measure(const vtol_edge_2d&  e,
   return rv;
 }
 
-void vifa_coll_lines::fit_line(void)
-{
+void vifa_coll_lines::fit_line() {
   std::vector<double>  x;
   std::vector<double>  y;
   double              A;

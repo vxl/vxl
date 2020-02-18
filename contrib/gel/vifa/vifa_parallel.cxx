@@ -157,23 +157,14 @@ vifa_parallel::~vifa_parallel()
   delete norm_h_;
 }
 
-void vifa_parallel::reset(void)
-{
+void vifa_parallel::reset() {
   delete norm_h_;
   norm_h_ = normalize_histogram(raw_h_);
 }
 
-vifa_histogram* vifa_parallel::
-get_raw_hist(void)
-{
-  return raw_h_;
-}
+vifa_histogram *vifa_parallel::get_raw_hist() { return raw_h_; }
 
-vifa_histogram* vifa_parallel::
-get_norm_hist(void)
-{
-  return norm_h_;
-}
+vifa_histogram *vifa_parallel::get_norm_hist() { return norm_h_; }
 
 void vifa_parallel::
 map_gaussian(float&  max_angle,
@@ -317,9 +308,7 @@ snapshot(char* fname)
   norm_h_->WritePlot(fname);
 }
 
-float vifa_parallel::
-area(void)
-{
+float vifa_parallel::area() {
   if (norm_h_->GetMaxCount() == 0.0)
   {
     // Return 0 area for empty histograms
@@ -331,9 +320,7 @@ area(void)
   }
 }
 
-float vifa_parallel::
-bin_variance(void)
-{
+float vifa_parallel::bin_variance() {
   float* counts = norm_h_->GetCounts();
   int    res = norm_h_->GetRes();
   float  sum = 0;

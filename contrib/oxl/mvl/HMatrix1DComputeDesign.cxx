@@ -15,8 +15,7 @@
 //
 //********************************************************************************
 
-
-HMatrix1DComputeDesign::HMatrix1DComputeDesign(void) : HMatrix1DCompute() { }
+HMatrix1DComputeDesign::HMatrix1DComputeDesign() : HMatrix1DCompute() {}
 HMatrix1DComputeDesign::~HMatrix1DComputeDesign() = default;
 
 bool

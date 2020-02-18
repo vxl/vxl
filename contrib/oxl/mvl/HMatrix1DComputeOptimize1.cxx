@@ -92,7 +92,7 @@ void do_compute(const std::vector<double> &z1,const std::vector<double> &z2,HMat
   M.set(T);
 }
 
-HMatrix1DComputeOptimize1::HMatrix1DComputeOptimize1(void) : HMatrix1DCompute() { }
+HMatrix1DComputeOptimize1::HMatrix1DComputeOptimize1() : HMatrix1DCompute() {}
 HMatrix1DComputeOptimize1::~HMatrix1DComputeOptimize1() = default;
 
 bool

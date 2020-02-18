@@ -408,9 +408,7 @@ inline void ConvertHostToMSB(char * ptr, int nbyte, int nelem=1)
   }
 }
 
-
-bool vil3d_gipl_image::write_header(void)
-{
+bool vil3d_gipl_image::write_header() {
   os_->seek(0L);
   char buf[GIPL_HEADERSIZE];
   int temp;
@@ -613,7 +611,6 @@ bool vil3d_gipl_image::write_header(void)
   start_of_data_ = os_->tell();
   return true;
 }
-
 
 //: Set the size of the each voxel in the i,j,k directions.
 // You can get the voxel sizes via get_properties().

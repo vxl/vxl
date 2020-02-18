@@ -29,9 +29,7 @@ vtol_chain::~vtol_chain() = default;
 //---------------------------------------------------------------------------
 //: Return a pointer to the inferiors (no copy)
 //---------------------------------------------------------------------------
-const chain_list *
-vtol_chain::chain_inferiors(void) const
-{
+const chain_list *vtol_chain::chain_inferiors() const {
   return &chain_inferiors_;
 }
 
@@ -41,9 +39,7 @@ vtol_chain::chain_inferiors(void) const
 //
 // Deprecated.
 //---------------------------------------------------------------------------
-const chain_list *
-vtol_chain::chain_superiors(void) const
-{
+const chain_list *vtol_chain::chain_superiors() const {
   auto *result=new chain_list;
   result->reserve(chain_superiors_.size());
   std::list<vtol_chain*>::const_iterator i;
@@ -139,8 +135,7 @@ void vtol_chain::unlink_chain_inferior(const vtol_chain_sptr& chain_inferior)
 //---------------------------------------------------------------------------
 //: Unlink `this' with all its chain inferiors
 //---------------------------------------------------------------------------
-void vtol_chain::unlink_all_chain_inferiors(void)
-{
+void vtol_chain::unlink_all_chain_inferiors() {
   while (chain_inferiors_.size()>0)
     unlink_chain_inferior(chain_inferiors_.back());
 }
@@ -148,8 +143,7 @@ void vtol_chain::unlink_all_chain_inferiors(void)
 //---------------------------------------------------------------------------
 //: Unlink `this' of the network
 //---------------------------------------------------------------------------
-void vtol_chain::unlink(void)
-{
+void vtol_chain::unlink() {
   while (chain_superiors_.size()>0)
     chain_superiors_.front()->unlink_chain_inferior(this);
   unlink_all_chain_inferiors();
@@ -159,16 +153,12 @@ void vtol_chain::unlink(void)
 //---------------------------------------------------------------------------
 //: Is `this' a connected chain ?
 //---------------------------------------------------------------------------
-bool vtol_chain::is_cycle(void) const
-{
-  return is_cycle_;
-}
+bool vtol_chain::is_cycle() const { return is_cycle_; }
 
 //---------------------------------------------------------------------------
 //: Reset the chain
 //---------------------------------------------------------------------------
-void vtol_chain::clear(void)
-{
+void vtol_chain::clear() {
   directions_.clear();
   unlink_all_chain_inferiors();
 }

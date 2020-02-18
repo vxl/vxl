@@ -77,8 +77,7 @@ bool vsol_polyhedron::operator==(vsol_spatial_object_3d const& obj) const
 //---------------------------------------------------------------------------
 //: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
-void vsol_polyhedron::compute_bounding_box(void) const
-{
+void vsol_polyhedron::compute_bounding_box() const {
   set_bounding_box(storage_[0]->x(),
                    storage_[0]->y(),
                    storage_[0]->z());
@@ -91,8 +90,7 @@ void vsol_polyhedron::compute_bounding_box(void) const
 //---------------------------------------------------------------------------
 //: Return the volume of `this'
 //---------------------------------------------------------------------------
-double vsol_polyhedron::volume(void) const
-{
+double vsol_polyhedron::volume() const {
   // TO DO
   std::cerr << "Warning: vsol_polyhedron::volume() has not been implemented yet\n";
   return -1;
@@ -101,8 +99,7 @@ double vsol_polyhedron::volume(void) const
 //---------------------------------------------------------------------------
 //: Is `this' convex ?
 //---------------------------------------------------------------------------
-bool vsol_polyhedron::is_convex(void) const
-{
+bool vsol_polyhedron::is_convex() const {
   // A polyhedron is always convex since the point order is irrelevant
   return true;
 }

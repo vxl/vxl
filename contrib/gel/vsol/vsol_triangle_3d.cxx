@@ -42,8 +42,7 @@ vsol_triangle_3d::~vsol_triangle_3d() = default;
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d* vsol_triangle_3d::clone(void) const
-{
+vsol_spatial_object_3d *vsol_triangle_3d::clone() const {
   return new vsol_triangle_3d(*this);
 }
 
@@ -54,26 +53,17 @@ vsol_spatial_object_3d* vsol_triangle_3d::clone(void) const
 //---------------------------------------------------------------------------
 //: Return the first vertex
 //---------------------------------------------------------------------------
-vsol_point_3d_sptr vsol_triangle_3d::p0(void) const
-{
-  return (*storage_)[0];
-}
+vsol_point_3d_sptr vsol_triangle_3d::p0() const { return (*storage_)[0]; }
 
 //---------------------------------------------------------------------------
 //: Return the second vertex
 //---------------------------------------------------------------------------
-vsol_point_3d_sptr vsol_triangle_3d::p1(void) const
-{
-  return (*storage_)[1];
-}
+vsol_point_3d_sptr vsol_triangle_3d::p1() const { return (*storage_)[1]; }
 
 //---------------------------------------------------------------------------
 //: Return the last vertex
 //---------------------------------------------------------------------------
-vsol_point_3d_sptr vsol_triangle_3d::p2(void) const
-{
-  return (*storage_)[2];
-}
+vsol_point_3d_sptr vsol_triangle_3d::p2() const { return (*storage_)[2]; }
 
 //***************************************************************************
 // Comparison
@@ -108,8 +98,7 @@ bool vsol_triangle_3d::operator==(vsol_spatial_object_3d const& obj) const
 //---------------------------------------------------------------------------
 //: Return the area of `this'
 //---------------------------------------------------------------------------
-double vsol_triangle_3d::area(void) const
-{
+double vsol_triangle_3d::area() const {
   double dx02=(*storage_)[0]->x()-(*storage_)[2]->x();
   double dy02=(*storage_)[0]->y()-(*storage_)[2]->y();
   double dz02=(*storage_)[0]->z()-(*storage_)[2]->z();

@@ -36,7 +36,7 @@ direct_compute(double T[2][2],
   T[1][1]=-B[1][0]*A[0][1]+B[1][1]*A[0][0];
 }
 
-HMatrix1DCompute3Point::HMatrix1DCompute3Point(void) : HMatrix1DCompute() { }
+HMatrix1DCompute3Point::HMatrix1DCompute3Point() : HMatrix1DCompute() {}
 HMatrix1DCompute3Point::~HMatrix1DCompute3Point() = default;
 
 bool

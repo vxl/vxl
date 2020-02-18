@@ -79,9 +79,7 @@ bool vifa_int_face_attr_common_params::SanityCheck()
   return valid;
 }
 
-void vifa_int_face_attr_common_params::
-print_info(void)
-{
+void vifa_int_face_attr_common_params::print_info() {
   std::cout << "vifa_int_face_attr_common_params:\n"
            << "  line fitting params: ";
   if (fitter_params_.ptr())

@@ -54,8 +54,7 @@ vsol_digital_curve_2d::~vsol_digital_curve_2d() = default;
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d* vsol_digital_curve_2d::clone(void) const
-{
+vsol_spatial_object_2d *vsol_digital_curve_2d::clone() const {
   return new vsol_digital_curve_2d(*this);
 }
 
@@ -66,8 +65,7 @@ vsol_spatial_object_2d* vsol_digital_curve_2d::clone(void) const
 //---------------------------------------------------------------------------
 //: Return the first point of `this'
 //---------------------------------------------------------------------------
-vsol_point_2d_sptr vsol_digital_curve_2d::p0(void) const
-{
+vsol_point_2d_sptr vsol_digital_curve_2d::p0() const {
   if ( samples_.empty() )
     return nullptr;
 
@@ -77,8 +75,7 @@ vsol_point_2d_sptr vsol_digital_curve_2d::p0(void) const
 //---------------------------------------------------------------------------
 //: Return the last point of `this'
 //---------------------------------------------------------------------------
-vsol_point_2d_sptr vsol_digital_curve_2d::p1(void) const
-{
+vsol_point_2d_sptr vsol_digital_curve_2d::p1() const {
   if ( samples_.empty() )
     return nullptr;
 
@@ -164,8 +161,7 @@ bool vsol_digital_curve_2d::operator==(const vsol_spatial_object_2d& obj) const
 //---------------------------------------------------------------------------
 //: Return the length of `this'
 //---------------------------------------------------------------------------
-double vsol_digital_curve_2d::length(void) const
-{
+double vsol_digital_curve_2d::length() const {
   double curve_length = 0.0;
   for ( auto itr=samples_.begin();
         itr+1 != samples_.end();  ++itr )
@@ -175,12 +171,10 @@ double vsol_digital_curve_2d::length(void) const
   return curve_length;
 }
 
-
 //---------------------------------------------------------------------------
 //: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
-void vsol_digital_curve_2d::compute_bounding_box(void) const
-{
+void vsol_digital_curve_2d::compute_bounding_box() const {
   // valid under linear interpolation
   set_bounding_box(samples_[0]->x(), samples_[0]->y());
   for (unsigned int i=1; i<samples_.size(); ++i)

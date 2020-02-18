@@ -51,8 +51,7 @@ vsol_poly_set_2d::~vsol_poly_set_2d()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d* vsol_poly_set_2d::clone(void) const
-{
+vsol_spatial_object_2d *vsol_poly_set_2d::clone() const {
   return new vsol_poly_set_2d(*this);
 }
 
@@ -148,8 +147,7 @@ bool vsol_poly_set_2d::operator==(const vsol_spatial_object_2d& obj) const
 //---------------------------------------------------------------------------
 //: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
-void vsol_poly_set_2d::compute_bounding_box(void) const
-{
+void vsol_poly_set_2d::compute_bounding_box() const {
   set_bounding_box((*storage_)[0]->get_bounding_box());
   for (unsigned int i=1;i<storage_->size();++i)
     add_to_bounding_box((*storage_)[i]->get_bounding_box());
@@ -158,8 +156,7 @@ void vsol_poly_set_2d::compute_bounding_box(void) const
 //---------------------------------------------------------------------------
 //: Return the area of `this'
 //---------------------------------------------------------------------------
-double vsol_poly_set_2d::area(void) const
-{
+double vsol_poly_set_2d::area() const {
   double area = 0.0;
   unsigned int last = storage_->size()-1;
 
@@ -192,8 +189,7 @@ double vsol_poly_set_2d::area(void) const
 //  In the case of degenerate poly_sets, where area == 0, return the average of
 //  the vertex locations.
 //
-vsol_point_2d_sptr vsol_poly_set_2d::centroid(void) const
-{
+vsol_point_2d_sptr vsol_poly_set_2d::centroid() const {
   std::vector<vsol_point_2d_sptr> p;
   for (auto & i : *storage_)
   {
@@ -210,8 +206,7 @@ vsol_point_2d_sptr vsol_poly_set_2d::centroid(void) const
 // the same.  This is checked by calculating the cross product of two
 // consecutive edges and verifying that these all have the same sign.
 //---------------------------------------------------------------------------
-bool vsol_poly_set_2d::is_convex(void) const
-{
+bool vsol_poly_set_2d::is_convex() const {
   // First find a non-zero cross product.  This is certainly present,
   // unless the poly_set collapses to a line segment.
   // Note that cross-product=0 means that two edges are parallel, which
@@ -287,11 +282,9 @@ void vsol_poly_set_2d::print_summary(std::ostream &os) const
 //---------------------------------------------------------------------------
 //: Default constructor.
 //---------------------------------------------------------------------------
-vsol_poly_set_2d::vsol_poly_set_2d(void)
-{
+vsol_poly_set_2d::vsol_poly_set_2d() {
   storage_=new std::vector<vsol_polygon_2d_sptr>();
 }
-
 
 //: Binary save vsol_poly_set_2d to stream.
 void
