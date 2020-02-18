@@ -25,7 +25,7 @@
 class vgl_h_matrix_3d_compute
 {
  public:
-   vgl_h_matrix_3d_compute() {}
+   vgl_h_matrix_3d_compute() = default;
    virtual ~vgl_h_matrix_3d_compute() = default;
 
    // set this to true for verbose run-time information

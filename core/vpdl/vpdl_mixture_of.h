@@ -50,10 +50,10 @@ class vpdl_mixture_of
   typedef typename vpdt_field_traits<field_type>::matrix_type matrix;
 
   // Default Constructor
-  vpdl_mixture_of() {}
+  vpdl_mixture_of() = default;
 
   // Destructor
-  ~vpdl_mixture_of() override {}
+  ~vpdl_mixture_of() override = default;
 
   //: Create a copy on the heap and return base class pointer
   vpdl_distribution<T, n> *clone() const override {

@@ -34,7 +34,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
   typedef typename vpdt_field_traits<vector>::matrix_type matrix;
 
   //: Default Constructor
-  vpdl_kernel_gaussian_sfbw() {}
+  vpdl_kernel_gaussian_sfbw() = default;
 
   //: Constructor - from sample centers and bandwidth (variance)
   vpdl_kernel_gaussian_sfbw(const std::vector<vector>& samplez,

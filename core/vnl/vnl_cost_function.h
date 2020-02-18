@@ -28,7 +28,7 @@ class VNL_EXPORT vnl_cost_function : public vnl_unary_function<double, vnl_vecto
  public:
 
   //! Default constructor
-   vnl_cost_function() {}
+   vnl_cost_function() = default;
 
    //! Construct with a specified number of unknowns
    vnl_cost_function(int number_of_unknowns) : dim(number_of_unknowns) {}

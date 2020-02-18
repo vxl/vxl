@@ -165,7 +165,7 @@ UTM_init2(double lat_center2, double r_major, double e, int south_flag)
 
 vpgl_utm::vpgl_utm()
 
-{}
+    = default;
 
 vpgl_utm::vpgl_utm(const vpgl_utm & t) = default;
 

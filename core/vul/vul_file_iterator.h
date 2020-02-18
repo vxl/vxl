@@ -48,7 +48,7 @@ class vul_file_iterator
 {
 
  public:
-   vul_file_iterator() {}
+   vul_file_iterator() = default;
 
    //: Initialize, and scan to get first file from "glob"
    vul_file_iterator(char const *glob);

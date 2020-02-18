@@ -116,7 +116,7 @@ struct tif_ref_cnt
 //The smart pointer to the tiff handle
 struct tif_smart_ptr
 {
-  tif_smart_ptr() {}
+  tif_smart_ptr() = default;
 
   tif_smart_ptr(tif_ref_cnt* tptr):tptr_(tptr)
   { if (tptr_) tptr_->ref(); }

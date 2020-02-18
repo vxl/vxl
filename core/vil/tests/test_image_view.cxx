@@ -555,7 +555,8 @@ class my_int
   int a{ 0 };
 
 public:
-  my_int(){};
+  my_int() = default;
+  ;
   my_int(const my_int & i) = default;
   ;
   explicit my_int(int i)

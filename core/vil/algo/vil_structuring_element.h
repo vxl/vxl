@@ -31,7 +31,7 @@ class vil_structuring_element
   int max_j_{-1};
 
 public:
-  vil_structuring_element() {}
+  vil_structuring_element() = default;
 
   //: Define elements { (p_i[k],p_j[k]) }
   vil_structuring_element(const std::vector<int>& v_p_i,const std::vector<int>& v_p_j)

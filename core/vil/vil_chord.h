@@ -20,7 +20,7 @@ struct vil_chord
   unsigned j{0};
 
   //: Default constructor
-  vil_chord() {}
+  vil_chord() = default;
 
   //: Construct
   vil_chord(unsigned ilo1, unsigned ihi1, unsigned j1)

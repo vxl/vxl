@@ -112,7 +112,7 @@ class vgl_hough_index_2d
       angle_range_(i.angle_range_), angle_increment_(i.angle_increment_),
       r_dim_(i.r_dim_), th_dim_(i.th_dim_), index_(i.index_) {}
 
-  ~vgl_hough_index_2d(){}
+  ~vgl_hough_index_2d() = default;
 
   // Data Access---------------------------------------------------------------
 

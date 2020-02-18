@@ -25,7 +25,7 @@ class vcsl_cartesian
   //***************************************************************************
 
   //: Default constructor. Sets itself right handed
-  vcsl_cartesian() {}
+  vcsl_cartesian() = default;
 
 public:
   // Destructor

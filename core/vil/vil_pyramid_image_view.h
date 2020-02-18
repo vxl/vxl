@@ -26,7 +26,7 @@ class vil_pyramid_image_view
 {
  public:
     //: Default constructor, creates an empty list of pyramid
-   vil_pyramid_image_view() {}
+   vil_pyramid_image_view() = default;
 
    //: Creates a pyramid with one image only and its scale is set to 1.0
    //(biggest)

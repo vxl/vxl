@@ -38,17 +38,20 @@ class vgl_cremona_trans_2d
 {
  public:
   //: default constructor
-  vgl_cremona_trans_2d(){}
+   vgl_cremona_trans_2d() = default;
 
- vgl_cremona_trans_2d(vgl_norm_trans_2d<T> const & tr_from, vgl_norm_trans_2d<T> const & tr_to,
-                       vnl_vector<T> const& rational_coeffs):tr_from_(tr_from), tr_to_(tr_to), coeff_(rational_coeffs){}
+   vgl_cremona_trans_2d(vgl_norm_trans_2d<T> const &tr_from,
+                        vgl_norm_trans_2d<T> const &tr_to,
+                        vnl_vector<T> const &rational_coeffs)
+       : tr_from_(tr_from), tr_to_(tr_to), coeff_(rational_coeffs) {}
 
-  //:set members of a default instance
-  void set(vgl_norm_trans_2d<T> const & tr_from, vgl_norm_trans_2d<T> const & tr_to,
-           vnl_vector<T> const& rational_coeffs){
-    tr_from_ = tr_from;
-    tr_to_ = tr_to;
-    coeff_ = rational_coeffs;
+   //:set members of a default instance
+   void set(vgl_norm_trans_2d<T> const &tr_from,
+            vgl_norm_trans_2d<T> const &tr_to,
+            vnl_vector<T> const &rational_coeffs) {
+     tr_from_ = tr_from;
+     tr_to_ = tr_to;
+     coeff_ = rational_coeffs;
   }
 
   //: maps from -> to

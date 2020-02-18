@@ -24,7 +24,7 @@ class vbl_bit_array_2d
 {
  public:
   // Default constructor
-   vbl_bit_array_2d() {}
+   vbl_bit_array_2d() = default;
    //: Construct num_rows x num_cols array and leave data uninitialised
    vbl_bit_array_2d(unsigned int m, unsigned int n) { construct(m, n); }
    //: Construct num_rows x num_cols array and fill all cells with v

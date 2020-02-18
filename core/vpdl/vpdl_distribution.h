@@ -33,32 +33,31 @@ template<class T, unsigned int n=0>
 class vpdl_distribution
 {
  public:
-  virtual ~vpdl_distribution() {}
+   virtual ~vpdl_distribution() = default;
 
-  //: the data type used for vectors
-  typedef typename vpdt_field_default<T,n>::type field_type;
+   //: the data type used for vectors
+   typedef typename vpdt_field_default<T, n>::type field_type;
 
-  //: the data type used for vectors
-  typedef typename vpdt_field_default<T,n>::type vector;
-  //: the data type used for matrices
-  typedef typename vpdt_field_traits<field_type>::matrix_type matrix;
+   //: the data type used for vectors
+   typedef typename vpdt_field_default<T, n>::type vector;
+   //: the data type used for matrices
+   typedef typename vpdt_field_traits<field_type>::matrix_type matrix;
 
-  //: Return the run time dimension, which does not equal \c n when \c n==0
-  virtual unsigned int dimension() const = 0;
+   //: Return the run time dimension, which does not equal \c n when \c n==0
+   virtual unsigned int dimension() const = 0;
 
-  //: Create a copy on the heap and return base class pointer
-  virtual vpdl_distribution<T,n>* clone() const = 0;
+   //: Create a copy on the heap and return base class pointer
+   virtual vpdl_distribution<T, n> *clone() const = 0;
 
-  //: Evaluate the unnormalized density at a point
-  // \note This is not a probability density.
-  // To make this a probability multiply by norm_const()
-  // \sa prob_density
-  virtual T density(const vector& pt) const = 0;
+   //: Evaluate the unnormalized density at a point
+   // \note This is not a probability density.
+   // To make this a probability multiply by norm_const()
+   // \sa prob_density
+   virtual T density(const vector &pt) const = 0;
 
-  //: Evaluate the probability density at a point
-  virtual T prob_density(const vector& pt) const
-  {
-    return density(pt) * norm_const();
+   //: Evaluate the probability density at a point
+   virtual T prob_density(const vector &pt) const {
+     return density(pt) * norm_const();
   }
 
   //: Evaluate the log probability density at a point

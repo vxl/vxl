@@ -92,16 +92,16 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
  public:
 
   //: Default Constructor
-  vpdl_mixture() {}
+   vpdl_mixture() = default;
 
-  // Copy Constructor
-  vpdl_mixture(vpdl_mixture<T,n> const& other)
-    : vpdl_multi_cmp_dist<T,n>(other), components_(other.components_.size(),nullptr)
-  {
-    // deep copy of the data
-    for (unsigned int i=0; i<components_.size(); ++i) {
-      components_[i] = new component(*other.components_[i]);
-    }
+   // Copy Constructor
+   vpdl_mixture(vpdl_mixture<T, n> const &other)
+       : vpdl_multi_cmp_dist<T, n>(other),
+         components_(other.components_.size(), nullptr) {
+     // deep copy of the data
+     for (unsigned int i = 0; i < components_.size(); ++i) {
+       components_[i] = new component(*other.components_[i]);
+     }
   }
 
   // Destructor

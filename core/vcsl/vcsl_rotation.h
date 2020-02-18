@@ -32,7 +32,7 @@ class vcsl_rotation
   //***************************************************************************
 
   //: Default constructor. Sets 3D rotation mode
-   vcsl_rotation() {}
+   vcsl_rotation() = default;
 
    // Destructor
    ~vcsl_rotation() override = default;

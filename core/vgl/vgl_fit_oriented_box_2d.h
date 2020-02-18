@@ -23,7 +23,7 @@ template <class T>
 class vgl_fit_oriented_box_2d {
  public:
   //:default constructor
-   vgl_fit_oriented_box_2d() {}
+   vgl_fit_oriented_box_2d() = default;
 
    //: constructor with polygon
    vgl_fit_oriented_box_2d(vgl_polygon<T> const &poly,

@@ -44,7 +44,7 @@ class vpdl_gaussian : public vpdl_gaussian_base<T,n>
   : impl_(mean_val,covar) {}
 
   //: Destructor
-  ~vpdl_gaussian() override {}
+  ~vpdl_gaussian() override = default;
 
   //: Create a copy on the heap and return base class pointer
   vpdl_distribution<T, n> *clone() const override {

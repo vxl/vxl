@@ -26,7 +26,7 @@ public:
 
 
   //: Destructor
-  ~vpdl_multi_cmp_dist() override {}
+  ~vpdl_multi_cmp_dist() override = default;
 
   //: The number of components
   virtual unsigned int num_components() const = 0;

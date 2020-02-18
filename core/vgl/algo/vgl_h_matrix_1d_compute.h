@@ -29,7 +29,7 @@ class vgl_h_matrix_1d_compute
 {
  public:
   //
-   vgl_h_matrix_1d_compute() {}
+   vgl_h_matrix_1d_compute() = default;
    virtual ~vgl_h_matrix_1d_compute() = default;
 
    //: set this to true for verbose run-time information; default is false
