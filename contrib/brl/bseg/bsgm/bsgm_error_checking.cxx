@@ -312,15 +312,17 @@ bsgm_compute_invalid_map(
 
     // Find the left border
     for( int x = 0; x < w; x++ ){
-      invalid_tar(x,y) = true;
-      if( img_tar(x,y) != border_val )
+      if( img_tar(x,y) == border_val )
+        invalid_tar(x,y) = true;
+      else
         break;
     } //x
 
     // Find the right border
     for( int x = w-1; x >= 0; x-- ){
-      invalid_tar(x,y) = true;
-      if( img_tar(x,y) != border_val )
+      if( img_tar(x,y) == border_val )
+        invalid_tar(x,y) = true;
+      else
         break;
     } //x
   } //y
@@ -347,7 +349,7 @@ bsgm_compute_invalid_map(
         break;
 
     // Mask any pixels in the target image which map into the right border
-    for( int x = std::max( 0, rb - max_disparity ); x < w ; x++ )
+    for( int x = std::max( 0, rb - max_disparity + 1 ); x < w ; x++ )
       invalid_tar(x,y) = true;
   } //y
 
