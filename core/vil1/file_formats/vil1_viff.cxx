@@ -444,9 +444,7 @@ vil1_viff_generic_image::check_endian()
   return endian_consistent_;
 }
 
-vil1_image
-vil1_viff_generic_image::get_plane(unsigned int plane) const
-{
+vil1_image vil1_viff_generic_image::get_plane(unsigned int plane) const {
   assert((int)plane < planes_);
   std::cerr << "FIXME: this should be an adapter that shifts to the plane asked for\n";
   return const_cast<vil1_viff_generic_image *>(this);

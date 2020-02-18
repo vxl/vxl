@@ -59,9 +59,7 @@ struct vil1_image_as_impl
   {
     return format::component_format;
   }
-  vil1_image
-  get_plane(unsigned int p) const override
-  {
+  vil1_image get_plane(unsigned int p) const override {
     assert(p == 0);
     return const_cast<vil1_image_as_impl *>(this);
   }

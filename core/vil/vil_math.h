@@ -278,9 +278,10 @@ void vil_math_median_unimplemented();
 // values, the result will be the floor of the average.
 //
 // \relatesalso vil_image_view
-template<class imT>
-inline void vil_math_median(imT& median, const vil_image_view<imT>& im, unsigned p)
-{
+template <class imT>
+inline void vil_math_median(imT & /*median*/,
+                            const vil_image_view<imT> & /*im*/,
+                            unsigned /*p*/) {
   vil_math_median_unimplemented();
 }
 // median is unimplemented in the general case (for now).

@@ -132,15 +132,12 @@ vil1_mit_generic_image::file_format() const
   return vil1_mit_format_tag;
 }
 
-vil1_mit_generic_image::vil1_mit_generic_image(vil1_stream * is,
-                                               int planes,
-                                               int width,
-                                               int height,
+vil1_mit_generic_image::vil1_mit_generic_image(vil1_stream *is, int planes,
+                                               int width, int height,
                                                int components,
                                                int bits_per_component,
                                                vil1_component_format)
-  : is_(is)
-{
+    : is_(is) {
   is_->ref();
   assert(planes == 1);
   width_ = width;
@@ -256,9 +253,7 @@ vil1_mit_generic_image::put_section(void const * buf, int x0, int y0, int xs, in
   return true;
 }
 
-vil1_image
-vil1_mit_generic_image::get_plane(unsigned int plane) const
-{
+vil1_image vil1_mit_generic_image::get_plane(unsigned int plane) const {
   assert(plane == 0);
   return const_cast<vil1_mit_generic_image *>(this);
 }

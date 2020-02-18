@@ -9,9 +9,7 @@
 // Is `this' invertible at time `time'?
 // REQUIRE: valid_time(time)
 //---------------------------------------------------------------------------
-bool
-vcsl_translation::is_invertible(double time) const
-{
+bool vcsl_translation::is_invertible(double time) const {
   // require
   assert(valid_time(time));
 

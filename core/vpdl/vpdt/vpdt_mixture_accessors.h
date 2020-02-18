@@ -36,8 +36,8 @@ class vpdt_num_components_accessor
   };
 
   //: The main function
-  bool operator() ( const mixture_type& mix, return_type& retval ) const
-  {
+  bool operator()(const mixture_type & /*mix*/,
+                  return_type & /*retval*/) const {
     return false;
   }
 };
@@ -93,8 +93,8 @@ class vpdt_weight_accessor
   vpdt_weight_accessor(unsigned int index = 0) {}
 
   //: The main function
-  bool operator() ( const mixture_type& mix, return_type& retval ) const
-  {
+  bool operator()(const mixture_type & /*mix*/,
+                  return_type & /*retval*/) const {
     return false;
   }
 };
@@ -162,8 +162,8 @@ class vpdt_mixture_accessor
   vpdt_mixture_accessor(const accessor_type& a, unsigned int index = 0) {}
 
   //: The main function
-  bool operator() ( const mixture_type& mix, return_type& retval ) const
-  {
+  bool operator()(const mixture_type & /*mix*/,
+                  return_type & /*retval*/) const {
     return false;
   }
 };
@@ -239,8 +239,8 @@ class vpdt_mixture_accessor<mixture_type,
   : idx(index) {}
 
   //: Constructor
-  vpdt_mixture_accessor(const accessor_type& a, unsigned int index = 0)
-  : idx(index) {}
+  vpdt_mixture_accessor(const accessor_type & /*a*/, unsigned int index = 0)
+      : idx(index) {}
 
   //: The main function
   bool operator() ( const mixture_type& mix, return_type& retval ) const

@@ -10,15 +10,13 @@
 #include "vpgl/vpgl_generic_camera.h"
 #include "vnl/vnl_random.h"
 
-bool
-vpgl_backproject::bproj_plane(vpgl_generic_camera<double> const & gcam,
-                              vnl_double_2 const & image_point,
-                              vnl_double_4 const & plane,
-                              vnl_double_3 const & initial_guess,
-                              vnl_double_3 & world_point,
-                              double error_tol,
-                              double relative_diameter)
-{
+bool vpgl_backproject::bproj_plane(vpgl_generic_camera<double> const &gcam,
+                                   vnl_double_2 const &image_point,
+                                   vnl_double_4 const &plane,
+                                   vnl_double_3 const & /*initial_guess*/,
+                                   vnl_double_3 &world_point,
+                                   double /*error_tol*/,
+                                   double /*relative_diameter*/) {
   vgl_ray_3d<double> ray;
   vgl_point_3d<double> ipt;
   vgl_plane_3d<double> gplane(plane[0], plane[1], plane[2], plane[3]);
@@ -31,16 +29,13 @@ vpgl_backproject::bproj_plane(vpgl_generic_camera<double> const & gcam,
   return true;
 }
 
-
-bool
-vpgl_backproject::bproj_plane(vpgl_proj_camera<double> const & pcam,
-                              vnl_double_2 const & image_point,
-                              vnl_double_4 const & plane,
-                              vnl_double_3 const & initial_guess,
-                              vnl_double_3 & world_point,
-                              double error_tol,
-                              double relative_diameter)
-{
+bool vpgl_backproject::bproj_plane(vpgl_proj_camera<double> const &pcam,
+                                   vnl_double_2 const &image_point,
+                                   vnl_double_4 const &plane,
+                                   vnl_double_3 const & /*initial_guess*/,
+                                   vnl_double_3 &world_point,
+                                   double /*error_tol*/,
+                                   double /*relative_diameter*/) {
   vgl_ray_3d<double> ray = pcam.backproject_ray(vgl_homg_point_2d<double>(image_point[0], image_point[1]));
   vgl_plane_3d<double> gplane(plane[0], plane[1], plane[2], plane[3]);
 
@@ -52,7 +47,6 @@ vpgl_backproject::bproj_plane(vpgl_proj_camera<double> const & pcam,
   world_point[2] = ipt.z();
   return true;
 }
-
 
 //: Backproject an image point onto a plane, start with initial_guess
 bool

@@ -15,9 +15,7 @@
 
 //--------------------------------------------------------------------------------
 
-vil1_image
-vil1_image_impl::get_plane(unsigned int p) const
-{
+vil1_image vil1_image_impl::get_plane(unsigned int p) const {
   assert((int)p < planes());
   return nullptr; // since this function has to be overloaded
 }

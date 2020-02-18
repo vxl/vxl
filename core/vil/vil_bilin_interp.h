@@ -155,11 +155,10 @@ inline double vil_bilin_interp_safe_edgena(const vil_image_view<T> &view,
 //  If (x,y) is outside interpolatable image region and NDEBUG is not defined
 //  the code will fail an ASSERT.
 //  The safe interpolatable region is [0,nx-1]*[0,ny-1].
-template<class T>
-inline double vil_bilin_interp(double x, double y, const T* data,
-                               int nx, int ny,
-                               std::ptrdiff_t xstep, std::ptrdiff_t ystep)
-{
+template <class T>
+inline double vil_bilin_interp(double x, double y, const T *data, int nx,
+                               int ny, std::ptrdiff_t xstep,
+                               std::ptrdiff_t ystep) {
   assert (x>=0);
   assert (y>=0);
   assert (x<=nx-1);

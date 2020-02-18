@@ -77,11 +77,10 @@ inline T vil_nearest_interp_safe(
 //  If (x,y) is outside interpolatable image region and NDEBUG is not defined
 //  the code will fail an ASSERT.
 //  The safe interpolatable region is [-0.5,view.ni()-0.5)*[0.5,view.nj()-0.5).
-template<class T>
-inline T vil_nearest_interp(double x, double y, const T* data,
-                            int nx, int ny,
-                            std::ptrdiff_t xstep, std::ptrdiff_t ystep)
-{
+template <class T>
+inline T vil_nearest_interp(double x, double y, const T *data, int nx,
+                            int ny, std::ptrdiff_t xstep,
+                            std::ptrdiff_t ystep) {
   int ix = int(x + 0.5);
   int iy = int(y + 0.5);
   assert (ix>=0);
@@ -90,7 +89,6 @@ inline T vil_nearest_interp(double x, double y, const T* data,
   assert (iy<ny);
   return *(data + ix*xstep + iy*ystep);
 }
-
 
 //: Compute nearest neighbour interpolation at (x,y), with minimal bound checks
 //  If (x,y) is outside interpolatable image region and NDEBUG is not defined

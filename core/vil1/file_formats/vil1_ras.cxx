@@ -413,9 +413,7 @@ vil1_ras_generic_image::put_section(void const * buf, int x0, int y0, int xs, in
   return true;
 }
 
-vil1_image
-vil1_ras_generic_image::get_plane(unsigned int plane) const
-{
+vil1_image vil1_ras_generic_image::get_plane(unsigned int plane) const {
   assert(plane == 0);
   return const_cast<vil1_ras_generic_image *>(this);
 }

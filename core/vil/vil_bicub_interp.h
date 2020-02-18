@@ -95,16 +95,15 @@ inline double vil_bicub_interp_safe(const vil_image_view<T> &view,
 //  If (x,y) is outside interpolatable image region and NDEBUG is not defined
 //  the code will fail an ASSERT.
 //  The safe interpolatable region is [1,nx-2]*[1,ny-2].
-template<class T>
-inline double vil_bicub_interp(double x, double y, const T* data,
-                               int nx, int ny,
-                               std::ptrdiff_t xstep, std::ptrdiff_t ystep)
-{
-    assert (x>=1);
-    assert (y>=1);
-    assert (x<=nx-2);
-    assert (y<=ny-2);
-    return vil_bicub_interp_raw(x,y,data,xstep,ystep);
+template <class T>
+inline double vil_bicub_interp(double x, double y, const T *data, int nx,
+                               int ny, std::ptrdiff_t xstep,
+                               std::ptrdiff_t ystep) {
+  assert(x >= 1);
+  assert(y >= 1);
+  assert(x <= nx - 2);
+  assert(y <= ny - 2);
+  return vil_bicub_interp_raw(x, y, data, xstep, ystep);
 }
 
 //: Compute bicubic interpolation at (x,y), with minimal bound checks
