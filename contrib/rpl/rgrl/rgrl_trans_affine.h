@@ -28,26 +28,22 @@ class rgrl_trans_affine
   //  The transform is q = \a A * p + \a trans. See covar() for the
   //  ordering of the covariance matrix.
   //
-  rgrl_trans_affine( vnl_matrix<double> const& A,
-                     vnl_vector<double> const& trans,
-                     vnl_matrix<double> const& covar );
+  rgrl_trans_affine(vnl_matrix<double> A, vnl_vector<double> const &trans,
+                    vnl_matrix<double> const &covar);
 
   //: Construct affine standard transform
   //
   //  The transform is q = \a A * p + \a trans.
   //
-  rgrl_trans_affine( vnl_matrix<double> const& A,
-                     vnl_vector<double> const& trans,
-                     vnl_vector<double> const& from_centre );
+  rgrl_trans_affine(vnl_matrix<double> A, vnl_vector<double> trans,
+                    vnl_vector<double> from_centre);
 
   //: Construct affine standard transform with unknown covariance
   //
   //  The transform is q = \a A * p + \a trans.
   //  The covariance matrix is a zero matrix.
   //
-  rgrl_trans_affine( vnl_matrix<double> const& A,
-                     vnl_vector<double> const& trans );
-
+  rgrl_trans_affine(vnl_matrix<double> A, vnl_vector<double> const &trans);
 
   //: Construct a centered affine transform.
   //
@@ -55,11 +51,10 @@ class rgrl_trans_affine
   //
   //  See covar() for the ordering of the covariance matrix.
   //
-  rgrl_trans_affine( vnl_matrix<double> const& A,
-                     vnl_vector<double> const& trans,
-                     vnl_matrix<double> const& covar,
-                     vnl_vector<double> const& from_centre,
-                     vnl_vector<double> const& to_centre );
+  rgrl_trans_affine(vnl_matrix<double> A, vnl_vector<double> const &trans,
+                    vnl_matrix<double> const &covar,
+                    vnl_vector<double> from_centre,
+                    vnl_vector<double> const &to_centre);
 
   vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const override;
 

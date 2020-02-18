@@ -6,18 +6,18 @@
 #include "vnl/vnl_math.h"
 
 #include <cassert>
+#include <utility>
+
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
 #include <rgrl/rgrl_util.h>
 #include <rgrl/rgrl_cast.h>
 
-
-rgrl_feature_face_pt ::
-rgrl_feature_face_pt( vnl_vector< double > const& location,
-                      vnl_vector< double > const& normal )
-  : rgrl_feature( location ), normal_( normal ), subspace_cached_( false )
-{
+rgrl_feature_face_pt ::rgrl_feature_face_pt(vnl_vector<double> const &location,
+                                            vnl_vector<double> normal)
+    : rgrl_feature(location), normal_(std::move(normal)),
+      subspace_cached_(false) {
   normal_.normalize();
 }
 

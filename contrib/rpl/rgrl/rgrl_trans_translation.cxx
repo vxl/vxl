@@ -6,6 +6,8 @@
 // \date   Dec 2003
 
 #include <cassert>
+#include <utility>
+
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
@@ -38,15 +40,11 @@ rgrl_trans_translation( vnl_vector<double> const& in_trans )
 {
 }
 
-rgrl_trans_translation::
-rgrl_trans_translation( vnl_vector<double> const& in_trans,
-                        vnl_matrix<double> const& in_covar,
-                        vnl_vector<double> const& in_from_centre,
-                        vnl_vector<double> const& in_to_centre )
-  : rgrl_transformation( in_covar ),
-    trans_( in_trans + in_to_centre ),
-    from_centre_( in_from_centre )
-{
+rgrl_trans_translation::rgrl_trans_translation(
+    vnl_vector<double> const &in_trans, vnl_matrix<double> const &in_covar,
+    vnl_vector<double> in_from_centre, vnl_vector<double> const &in_to_centre)
+    : rgrl_transformation(in_covar), trans_(in_trans + in_to_centre),
+      from_centre_(std::move(in_from_centre)) {
   if ( is_covar_set() ) {
     assert ( covar_.rows() == covar_.cols() );
     assert ( covar_.rows() == trans_.size() );

@@ -32,15 +32,13 @@ class rgrl_trans_rigid
 
   //: Constructor based on an initial transformation and covar estimate
   //
-  rgrl_trans_rigid( vnl_matrix<double> const& rot,
-                    vnl_vector<double> const& trans,
-                    vnl_matrix<double> const& covar );
+  rgrl_trans_rigid(vnl_matrix<double> rot, vnl_vector<double> trans,
+                   vnl_matrix<double> const &covar);
 
   //: Constructor based on an initial transformation and unknown covar
   //
   //  The  covariance matrix is a zero matrix.
-  rgrl_trans_rigid( vnl_matrix<double> const& rot,
-                    vnl_vector<double> const& trans );
+  rgrl_trans_rigid(vnl_matrix<double> rot, vnl_vector<double> trans);
 
   //: Sets the translation component of this transformation
   //  \note This method is valid for only the 3d version

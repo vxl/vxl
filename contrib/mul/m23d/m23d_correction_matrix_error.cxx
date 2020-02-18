@@ -4,19 +4,19 @@
 // \author Tim Cootes
 // \brief Error term for calculation of correction to projective matrix
 
-#include <mbl/mbl_matxvec.h>
 #include <cassert>
+#include <mbl/mbl_matxvec.h>
+#include <utility>
+
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
 
-m23d_correction_matrix_error::m23d_correction_matrix_error(const vnl_matrix<double>& A,
-                              const vnl_vector<double>& rhs,
-                              unsigned n_modes,
-                              unsigned k)
-  : vnl_least_squares_function(9*(n_modes+1),A.rows(),use_gradient),
-    A_(A),rhs_(rhs),n_modes_(n_modes),k_(k)
-{
+m23d_correction_matrix_error::m23d_correction_matrix_error(
+    const vnl_matrix<double> &A, vnl_vector<double> rhs, unsigned n_modes,
+    unsigned k)
+    : vnl_least_squares_function(9 * (n_modes + 1), A.rows(), use_gradient),
+      A_(A), rhs_(std::move(rhs)), n_modes_(n_modes), k_(k) {
 #ifndef NDEBUG
   unsigned t = 3*(n_modes+1);
   assert(A.cols() == (t*(t+1))/2);

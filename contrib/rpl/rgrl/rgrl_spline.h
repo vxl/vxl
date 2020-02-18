@@ -53,22 +53,22 @@ class rgrl_spline
   //: Constructor
   rgrl_spline( ) : rgrl_object() { }
   rgrl_spline( vnl_vector< unsigned > const& m );
-  rgrl_spline( vnl_vector< unsigned > const& m, vnl_vector< double > const& c );
+  rgrl_spline(vnl_vector<unsigned> const &m, vnl_vector<double> c);
 
-//    rgrl_spline( vnl_vector<double> const& delta,
-//                 vnl_vector<double> const& x0,
-//                 vnl_vector<double> const& x1 );
-//    rgrl_spline( vnl_vector<int> const& m,
-//                    vnl_vector<double> const& delta,
-//                    vnl_vector<double> const& p0);
-//    rgrl_spline( vnl_vector<double> const& c,
-//                 vnl_vector<double> const& delta,
-//                 vnl_vector<double> const& x0,
-//                 vnl_vector<double> const& x1 );
-//    rgrl_spline( vnl_vector<double> const& c,
-//                    vnl_vector<int> const& m,
-//                    vnl_vector<double> const& delta,
-//                    vnl_vector<double> const& p0 );
+  //    rgrl_spline( vnl_vector<double> const& delta,
+  //                 vnl_vector<double> const& x0,
+  //                 vnl_vector<double> const& x1 );
+  //    rgrl_spline( vnl_vector<int> const& m,
+  //                    vnl_vector<double> const& delta,
+  //                    vnl_vector<double> const& p0);
+  //    rgrl_spline( vnl_vector<double> const& c,
+  //                 vnl_vector<double> const& delta,
+  //                 vnl_vector<double> const& x0,
+  //                 vnl_vector<double> const& x1 );
+  //    rgrl_spline( vnl_vector<double> const& c,
+  //                    vnl_vector<int> const& m,
+  //                    vnl_vector<double> const& delta,
+  //                    vnl_vector<double> const& p0 );
 
   //: Destructor.
   ~rgrl_spline() override = default;

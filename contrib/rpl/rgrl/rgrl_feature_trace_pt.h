@@ -30,14 +30,13 @@ class rgrl_feature_trace_pt
   // rgrl_feature_trace_pt();
 
   //:  Constructor to initialize feature_trace_pt location.
-  rgrl_feature_trace_pt( vnl_vector<double> const& loc,
-                         vnl_vector<double> const& tangent );
+  rgrl_feature_trace_pt(vnl_vector<double> const &loc,
+                        vnl_vector<double> tangent);
 
   //:  Constructor to initialize feature_trace_pt location that has a length along the tangent and a normal.
-  rgrl_feature_trace_pt( vnl_vector<double> const& loc,
-                         vnl_vector<double> const& tangent,
-                         double                    length,
-                         double                    radius );
+  rgrl_feature_trace_pt(vnl_vector<double> const &loc,
+                        vnl_vector<double> tangent, double length,
+                        double radius);
 
   //: read in feature
 

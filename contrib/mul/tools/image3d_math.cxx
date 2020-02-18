@@ -24,6 +24,8 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 #include <cassert>
+#include <utility>
+
 #include "vsl/vsl_deque_io.hxx"
 #include "vsl/vsl_map_io.hxx"
 #include "vsl/vsl_stream.h"
@@ -164,8 +166,8 @@ class operand
  public:
    operand() = default; // if used with this value - should throw.
 
-   explicit operand(const std::string &s)
-       : string_(s), operand_type_(e_string) {}
+   explicit operand(std::string s)
+       : string_(std::move(s)), operand_type_(e_string) {}
    explicit operand(const vimt3d_image_3d_of<double> &i)
        : image_3d_of_double_(i), operand_type_(e_image_3d_of_double) {}
    explicit operand(const vimt3d_image_3d_of<float> &i)

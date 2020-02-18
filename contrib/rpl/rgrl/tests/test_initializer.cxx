@@ -17,6 +17,8 @@
 #include <rgrl/rgrl_cast.h>
 #include <rgrl/rgrl_invariant_match.h>
 
+#include <utility>
+
 #include "vnl/vnl_random.h"
 
 namespace {
@@ -28,27 +30,23 @@ namespace {
 class simple_invariant_feature: public rgrl_invariant
 {
  public:
-  simple_invariant_feature(const vnl_vector<double>& location,
-                           const vnl_vector<double>& cart_inv,
-                           const vnl_vector<double>& ang_inv)
-    : location_(location),
-      cart_inv_(cart_inv),
-      ang_inv_(ang_inv)
-  {}
-  ~simple_invariant_feature() override = default;
+   simple_invariant_feature(vnl_vector<double> location,
+                            vnl_vector<double> cart_inv,
+                            vnl_vector<double> ang_inv)
+       : location_(std::move(location)), cart_inv_(std::move(cart_inv)),
+         ang_inv_(std::move(ang_inv)) {}
+   ~simple_invariant_feature() override = default;
 
-  //estimate the a translation using the location
-  bool estimate(rgrl_invariant_sptr         from,
-                rgrl_transformation_sptr&   xform,
-                rgrl_scale_sptr&            scale ) override
-  {
-    simple_invariant_feature* simple_from =
-      rgrl_cast<simple_invariant_feature*>(from);
-    vnl_vector<double> t = simple_from->location()-location_;
-    xform = new rgrl_trans_translation(t);
-    scale = new rgrl_scale;
-    scale->set_geometric_scale( 0 );
-    return true;
+   // estimate the a translation using the location
+   bool estimate(rgrl_invariant_sptr from, rgrl_transformation_sptr &xform,
+                 rgrl_scale_sptr &scale) override {
+     simple_invariant_feature *simple_from =
+         rgrl_cast<simple_invariant_feature *>(from);
+     vnl_vector<double> t = simple_from->location() - location_;
+     xform = new rgrl_trans_translation(t);
+     scale = new rgrl_scale;
+     scale->set_geometric_scale(0);
+     return true;
   }
 
   const vnl_vector<double>& location() const {return location_;}

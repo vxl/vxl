@@ -5,6 +5,8 @@
 // \file
 
 #include <cassert>
+#include <utility>
+
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
@@ -39,15 +41,11 @@ rgrl_mask_oriented_box( vnl_vector<double> const& x0,
   update_bounding_box();
 }
 
-rgrl_mask_oriented_box::
-rgrl_mask_oriented_box( vnl_vector<double> const& oriented_xmin,
-                        vnl_vector<double> const& oriented_xmax,
-                        vnl_matrix<double> const& axes )
-  : rgrl_mask( oriented_xmin.size() ),
-    omin_( oriented_xmin ),
-    omax_( oriented_xmax ),
-    axes_( axes )
-{
+rgrl_mask_oriented_box::rgrl_mask_oriented_box(
+    vnl_vector<double> const &oriented_xmin, vnl_vector<double> oriented_xmax,
+    vnl_matrix<double> axes)
+    : rgrl_mask(oriented_xmin.size()), omin_(oriented_xmin),
+      omax_(std::move(oriented_xmax)), axes_(std::move(axes)) {
   assert( oriented_xmin.size() == oriented_xmax.size() );
   assert( oriented_xmin.size() == axes.rows() );
   assert( oriented_xmin.size() == axes.cols() );

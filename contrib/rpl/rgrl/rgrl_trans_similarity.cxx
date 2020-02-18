@@ -5,6 +5,8 @@
 // \date   Feb 2003
 
 #include <cassert>
+#include <utility>
+
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
@@ -20,28 +22,21 @@ rgrl_trans_similarity( unsigned int dimension )
 {
 }
 
-rgrl_trans_similarity::
-rgrl_trans_similarity( vnl_matrix<double> const& rot_and_scale,
-                       vnl_vector<double> const& in_trans )
-  : A_( rot_and_scale ),
-    trans_( in_trans ),
-    from_centre_( in_trans.size(), 0.0 )
-{
+rgrl_trans_similarity::rgrl_trans_similarity(vnl_matrix<double> rot_and_scale,
+                                             vnl_vector<double> const &in_trans)
+    : A_(std::move(rot_and_scale)), trans_(in_trans),
+      from_centre_(in_trans.size(), 0.0) {
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
   // assert ( ( A_.rows() != 2 || covar_.rows() == 4 ) ); // 2d has 4 params
   // assert ( ( A_.rows() != 3 || covar_.rows() == 7 ) ); // 3d has 7 params
 }
 
-rgrl_trans_similarity::
-rgrl_trans_similarity( vnl_matrix<double> const& rot_and_scale,
-                       vnl_vector<double> const& in_trans,
-                       vnl_matrix<double> const& in_covar )
-  : rgrl_transformation( in_covar ),
-    A_( rot_and_scale ),
-    trans_( in_trans ),
-    from_centre_( in_trans.size(), 0.0 )
-{
+rgrl_trans_similarity::rgrl_trans_similarity(vnl_matrix<double> rot_and_scale,
+                                             vnl_vector<double> const &in_trans,
+                                             vnl_matrix<double> const &in_covar)
+    : rgrl_transformation(in_covar), A_(std::move(rot_and_scale)),
+      trans_(in_trans), from_centre_(in_trans.size(), 0.0) {
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
   if ( is_covar_set() ) {
@@ -51,17 +46,12 @@ rgrl_trans_similarity( vnl_matrix<double> const& rot_and_scale,
   }
 }
 
-rgrl_trans_similarity::
-rgrl_trans_similarity( vnl_matrix<double> const& in_A,
-                       vnl_vector<double> const& in_trans,
-                       vnl_matrix<double> const& in_covar,
-                       vnl_vector<double> const& in_from_centre,
-                       vnl_vector<double> const& in_to_centre )
-  : rgrl_transformation( in_covar ),
-    A_( in_A ),
-    trans_( in_trans + in_to_centre ),
-    from_centre_( in_from_centre )
-{
+rgrl_trans_similarity::rgrl_trans_similarity(
+    vnl_matrix<double> in_A, vnl_vector<double> const &in_trans,
+    vnl_matrix<double> const &in_covar, vnl_vector<double> in_from_centre,
+    vnl_vector<double> const &in_to_centre)
+    : rgrl_transformation(in_covar), A_(std::move(in_A)),
+      trans_(in_trans + in_to_centre), from_centre_(std::move(in_from_centre)) {
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
   assert ( from_centre_.size() == trans_.size() );

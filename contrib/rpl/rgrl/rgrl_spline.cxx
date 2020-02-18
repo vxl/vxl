@@ -1,5 +1,7 @@
-#include <iostream>
 #include <cmath>
+#include <iostream>
+#include <utility>
+
 #include <vector>
 #include "rgrl_spline.h"
 //:
@@ -37,10 +39,8 @@ rgrl_spline( vnl_vector< unsigned > const& m )
   c_.fill( 0.0 );
 }
 
-rgrl_spline::
-rgrl_spline( vnl_vector< unsigned > const& m, vnl_vector< double > const& c )
-  : m_( m ), c_( c )
-{
+rgrl_spline::rgrl_spline(vnl_vector<unsigned> const &m, vnl_vector<double> c)
+    : m_(m), c_(std::move(c)) {
   unsigned int n = 1;
   for (unsigned i=0; i<m.size(); ++i)
     n *= (m_[i]+3);

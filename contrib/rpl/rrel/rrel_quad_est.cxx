@@ -1,4 +1,6 @@
 #include <iostream>
+#include <utility>
+
 #include <vector>
 #include <algorithm>
 #include "rrel_quad_est.h"
@@ -40,14 +42,13 @@ rrel_quad_est( const std::vector< vgl_point_2d<double> > & from_pts,
   num_samples_ = size;
 }
 
-rrel_quad_est::
-rrel_quad_est( const std::vector< vnl_vector<double> > & from_pts,
-                 const std::vector< vnl_vector<double> > & to_pts,
-                 unsigned int dim )
-: rrel_estimation_problem( ((dim+3)*dim/2+1)*dim /*dof*/,
-                           ((dim+3)*dim/2+1)/*points to instantiate*/ ),
-    from_pts_( from_pts ), to_pts_( to_pts )
-{
+rrel_quad_est::rrel_quad_est(const std::vector<vnl_vector<double>> &from_pts,
+                             std::vector<vnl_vector<double>> to_pts,
+                             unsigned int dim)
+    : rrel_estimation_problem(
+          ((dim + 3) * dim / 2 + 1) * dim /*dof*/,
+          ((dim + 3) * dim / 2 + 1) /*points to instantiate*/),
+      from_pts_(from_pts), to_pts_(std::move(to_pts)) {
   // only deals with 2D for now
   assert( dim == 2 );
   assert( from_pts.size() == to_pts.size() );

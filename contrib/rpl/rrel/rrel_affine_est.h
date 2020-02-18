@@ -27,9 +27,8 @@ public:
                    const std::vector< vgl_point_2d<double> > & to_pts );
 
   //: Constructor with data pre-separated into arrays of independent and dependent variables.
-  rrel_affine_est( const std::vector< vnl_vector<double> > & from_pts,
-                   const std::vector< vnl_vector<double> > & to_pts,
-                   unsigned int dim = 2 );
+  rrel_affine_est(const std::vector<vnl_vector<double>> &from_pts,
+                  std::vector<vnl_vector<double>> to_pts, unsigned int dim = 2);
 
   //: Destructor.
   ~rrel_affine_est() override;

@@ -29,10 +29,9 @@ class rgrl_trans_quadratic
   //  See covar() for the
   //  ordering of the covariance matrix.
   //
-  rgrl_trans_quadratic( vnl_matrix<double> const& Q,
-                        vnl_matrix<double> const& A,
-                        vnl_vector<double> const& trans,
-                        vnl_matrix<double> const& covar );
+  rgrl_trans_quadratic(vnl_matrix<double> Q, vnl_matrix<double> A,
+                       vnl_vector<double> const &trans,
+                       vnl_matrix<double> const &covar);
 
   //: Construct quadratic standard transform
   //
@@ -44,9 +43,8 @@ class rgrl_trans_quadratic
   //
   //  The covariance matrix is a zero matrix.
   //
-  rgrl_trans_quadratic( vnl_matrix<double> const& Q,
-                        vnl_matrix<double> const& A,
-                        vnl_vector<double> const& trans );
+  rgrl_trans_quadratic(vnl_matrix<double> Q, vnl_matrix<double> A,
+                       vnl_vector<double> const &trans);
 
   void
   set_from_center( vnl_vector<double> const& from_center );
@@ -59,13 +57,11 @@ class rgrl_trans_quadratic
   //
   //  See covar() for the ordering of the covariance matrix.
   //
-  rgrl_trans_quadratic( vnl_matrix<double> const& Q,
-                        vnl_matrix<double> const& A,
-                        vnl_vector<double> const& trans,
-                        vnl_matrix<double> const& covar,
-                        vnl_vector<double> const& from_centre,
-                        vnl_vector<double> const& to_centre );
-
+  rgrl_trans_quadratic(vnl_matrix<double> Q, vnl_matrix<double> A,
+                       vnl_vector<double> trans,
+                       vnl_matrix<double> const &covar,
+                       vnl_vector<double> const &from_centre,
+                       vnl_vector<double> const &to_centre);
 
   vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const override;
 

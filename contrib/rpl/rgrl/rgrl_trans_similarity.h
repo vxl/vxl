@@ -30,15 +30,15 @@ class rgrl_trans_similarity
 
   //: Constructor based on an initial transformation and covar estimate
   //
-  rgrl_trans_similarity( vnl_matrix<double> const& rot_and_scale,
-                         vnl_vector<double> const& trans,
-                         vnl_matrix<double> const& covar );
+  rgrl_trans_similarity(vnl_matrix<double> rot_and_scale,
+                        vnl_vector<double> const &trans,
+                        vnl_matrix<double> const &covar);
 
   //: Constructor based on an initial transformation and unknown covar
   //
   //  The  covariance matrix is a zero matrix.
-  rgrl_trans_similarity( vnl_matrix<double> const& rot_and_scale,
-                         vnl_vector<double> const& trans );
+  rgrl_trans_similarity(vnl_matrix<double> rot_and_scale,
+                        vnl_vector<double> const &trans);
 
   //: Construct a centered affine transform.
   //
@@ -46,11 +46,10 @@ class rgrl_trans_similarity
   //
   //  See covar() for the ordering of the covariance matrix.
   //
-  rgrl_trans_similarity( vnl_matrix<double> const& A,
-                         vnl_vector<double> const& trans,
-                         vnl_matrix<double> const& covar,
-                         vnl_vector<double> const& from_centre,
-                         vnl_vector<double> const& to_centre );
+  rgrl_trans_similarity(vnl_matrix<double> A, vnl_vector<double> const &trans,
+                        vnl_matrix<double> const &covar,
+                        vnl_vector<double> from_centre,
+                        vnl_vector<double> const &to_centre);
 
   vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const override;
 
