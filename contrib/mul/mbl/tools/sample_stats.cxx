@@ -74,9 +74,14 @@ int main2(int argc, char *argv[])
   vul_arg<std::string> in_file("-i", "input file containing scalar values (whitespace-separated); otherwise uses stdin", "");
   vul_arg<std::string> out_file("-o", "output file to append statistics; otherwise write to stdout", "");
   vul_arg<std::string> label("-label","Adds this label to each line outputting a statistic - useful for later grep");
-  vul_arg<std::string> format("-fmt","Specify the output format, e.g. \"table\", \"list\" (default is list). See help for more details.");
+  vul_arg<std::string> format(
+      "-fmt",
+      R"(Specify the output format, e.g. "table", "list" (default is list). See help for more details.)");
   vul_arg<bool> nohead("-h","Specify this to SUPPRESS column headers in tabular format", false);
-  vul_arg<std::string> sep("-sep", "String to use as a separator between columns in tabular format, e.g. \", \" or \"  \" (default=TAB)", "\t");
+  vul_arg<std::string> sep(
+      "-sep",
+      R"(String to use as a separator between columns in tabular format, e.g. ", " or "  " (default=TAB))",
+      "\t");
   // These options are statistical measures:
   vul_arg<bool> n("-n", "Specify this to record the number of samples", false);
   vul_arg<bool> mean("-mean", "Specify this to record the mean", false);
