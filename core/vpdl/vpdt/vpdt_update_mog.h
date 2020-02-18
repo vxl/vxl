@@ -217,7 +217,7 @@ class vpdt_mog_lee_updater : public vpdt_mog_updater<mog_type>
       const gaussian_type& g = mix.distribution(i);
       double sqr_dist = g.sqr_mahal_dist(sample);
       if (sqr_dist < gt2_)
-        matchez.push_back(std::pair<unsigned int,double>(i,sqr_dist));
+        matchez.emplace_back(i, sqr_dist);
     }
     // if only one match, it has prob 1
     if (matchez.size() == 1) {
