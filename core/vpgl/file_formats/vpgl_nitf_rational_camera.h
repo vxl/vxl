@@ -55,12 +55,11 @@ class vpgl_nitf_rational_camera : public vpgl_rational_camera<double>
   vnl_double_2 lower_right() const {return lr_;}
 
   //: print all camera information
-  void print(
-      std::ostream& ostr = std::cout,
-      vpgl_rational_order output_order = vpgl_rational_order::VXL
-      ) const;
+  void print(std::ostream &ostr = std::cout,
+             vpgl_rational_order output_order =
+                 vpgl_rational_order::VXL) const override;
 
- private:
+private:
   // internal functions
   bool init(vil_nitf2_image* nitf_image, bool verbose);
 

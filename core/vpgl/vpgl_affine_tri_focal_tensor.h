@@ -139,9 +139,9 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
     *this = vpgl_affine_tri_focal_tensor(vpgl_affine_camera<Type>(), vpgl_affine_camera<Type>(m2), vpgl_affine_camera<Type>(m3));
   }
 
-  virtual ~vpgl_affine_tri_focal_tensor() {}
+  ~vpgl_affine_tri_focal_tensor() override {}
 
-  virtual bool compute() { return vpgl_tri_focal_tensor<Type>::compute();}
+  bool compute() override { return vpgl_tri_focal_tensor<Type>::compute(); }
   // Data Access-------------------------------------------------------------
 
   void set(const vpgl_affine_camera<Type>& c1,const vpgl_affine_camera<Type>& c2, const vpgl_affine_camera<Type>& c3);
@@ -184,22 +184,25 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
     return vpgl_tri_focal_tensor<Type>::line_constraint_3(line1t, line2t, line3t);
   }
 
-  virtual vgl_homg_point_2d<Type> image1_transfer(vgl_homg_point_2d<Type> const& point2,
-                                                  vgl_homg_point_2d<Type> const& point3) const{
+  vgl_homg_point_2d<Type>
+  image1_transfer(vgl_homg_point_2d<Type> const &point2,
+                  vgl_homg_point_2d<Type> const &point3) const override {
     vgl_homg_point_2d<Type> p2t = img_pt_transforms_[1]*point2;
     vgl_homg_point_2d<Type> p3t = img_pt_transforms_[2]*point3;
     vgl_homg_point_2d<Type> ret = vpgl_tri_focal_tensor<Type>::image1_transfer(p2t, p3t);
     return img_pt_transforms_[0].preimage(ret);
   }
-  virtual vgl_homg_point_2d<Type> image2_transfer(vgl_homg_point_2d<Type> const& point1,
-                                                  vgl_homg_point_2d<Type> const& point3) const{
+  vgl_homg_point_2d<Type>
+  image2_transfer(vgl_homg_point_2d<Type> const &point1,
+                  vgl_homg_point_2d<Type> const &point3) const override {
     vgl_homg_point_2d<Type> p1t = img_pt_transforms_[0]*point1;
     vgl_homg_point_2d<Type> p3t = img_pt_transforms_[2]*point3;
     vgl_homg_point_2d<Type> ret = vpgl_tri_focal_tensor<Type>::image2_transfer(p1t, p3t);
     return img_pt_transforms_[1].preimage(ret);
   }
-  virtual vgl_homg_point_2d<Type> image3_transfer(vgl_homg_point_2d<Type> const& point1,
-                                                  vgl_homg_point_2d<Type> const& point2) const{
+  vgl_homg_point_2d<Type>
+  image3_transfer(vgl_homg_point_2d<Type> const &point1,
+                  vgl_homg_point_2d<Type> const &point2) const override {
     vgl_homg_point_2d<Type> p1t = img_pt_transforms_[0]*point1;
     vgl_homg_point_2d<Type> p2t = img_pt_transforms_[1]*point2;
     vgl_homg_point_2d<Type> ret = vpgl_tri_focal_tensor<Type>::image3_transfer(p1t, p2t);
@@ -207,22 +210,25 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   }
   //: line transfer
   //  line in image 1 corresponding to lines in images 2 and 3 and etc.
-  virtual vgl_homg_line_2d<Type> image1_transfer(vgl_homg_line_2d<Type> const& line2,
-                                                 vgl_homg_line_2d<Type> const& line3) const{
+  vgl_homg_line_2d<Type>
+  image1_transfer(vgl_homg_line_2d<Type> const &line2,
+                  vgl_homg_line_2d<Type> const &line3) const override {
     vgl_homg_line_2d<Type> l2t = img_pt_transforms_[1]*line2;
     vgl_homg_line_2d<Type> l3t = img_pt_transforms_[2]*line3;
     vgl_homg_line_2d<Type> ret = vpgl_tri_focal_tensor<Type>::image1_transfer(l2t, l3t);
     return img_pt_transforms_[0].preimage(ret);
   }
-  virtual vgl_homg_line_2d<Type> image2_transfer(vgl_homg_line_2d<Type> const& line1,
-                                                 vgl_homg_line_2d<Type> const& line3) const{
+  vgl_homg_line_2d<Type>
+  image2_transfer(vgl_homg_line_2d<Type> const &line1,
+                  vgl_homg_line_2d<Type> const &line3) const override {
     vgl_homg_line_2d<Type> l1t = img_pt_transforms_[0]*line1;
     vgl_homg_line_2d<Type> l3t = img_pt_transforms_[2]*line3;
     vgl_homg_line_2d<Type> ret = vpgl_tri_focal_tensor<Type>::image2_transfer(l1t, l3t);
     return img_pt_transforms_[1].preimage(ret);
   }
-  virtual vgl_homg_line_2d<Type> image3_transfer(vgl_homg_line_2d<Type> const& line1,
-                                                 vgl_homg_line_2d<Type> const& line2) const{
+  vgl_homg_line_2d<Type>
+  image3_transfer(vgl_homg_line_2d<Type> const &line1,
+                  vgl_homg_line_2d<Type> const &line2) const override {
     vgl_homg_line_2d<Type> l1t = img_pt_transforms_[0]*line1;
     vgl_homg_line_2d<Type> l2t = img_pt_transforms_[1]*line2;
     vgl_homg_line_2d<Type> ret = vpgl_tri_focal_tensor<Type>::image3_transfer(l1t, l2t);
@@ -231,20 +237,23 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   //: homographies induced by a line
   // homography between images 3 and 1 given a line in image 2 and etc.
   // note that image normalizing transforms are taken into account
-  virtual vgl_h_matrix_2d<Type> hmatrix_13(vgl_homg_line_2d<Type> const& line2) const{
-	  vgl_homg_line_2d<Type> l2t = img_pt_transforms_[1] * line2;
+  vgl_h_matrix_2d<Type>
+  hmatrix_13(vgl_homg_line_2d<Type> const &line2) const override {
+    vgl_homg_line_2d<Type> l2t = img_pt_transforms_[1] * line2;
     vgl_h_matrix_2d<Type> Ht = vpgl_tri_focal_tensor<Type>::hmatrix_13(l2t);
     return (img_pt_transforms_[2].get_inverse())*Ht*img_pt_transforms_[0];
   }
 
-  virtual vgl_h_matrix_2d<Type> hmatrix_12(vgl_homg_line_2d<Type> const& line3) const{
-	  vgl_homg_line_2d<Type> l3t = img_pt_transforms_[2] * line3;
-	  l3t.normalize();
+  vgl_h_matrix_2d<Type>
+  hmatrix_12(vgl_homg_line_2d<Type> const &line3) const override {
+    vgl_homg_line_2d<Type> l3t = img_pt_transforms_[2] * line3;
+    l3t.normalize();
     vgl_h_matrix_2d<Type> Ht = vpgl_tri_focal_tensor<Type>::hmatrix_12(l3t);
     return (img_pt_transforms_[1].get_inverse())*Ht*img_pt_transforms_[0];
   }
 
-  virtual bool get_epipoles(vgl_homg_point_2d<Type>& e12, vgl_homg_point_2d<Type>& e13)  {
+  bool get_epipoles(vgl_homg_point_2d<Type> &e12,
+                    vgl_homg_point_2d<Type> &e13) override {
     vgl_homg_point_2d<Type> temp12, temp13;
     bool good = vpgl_tri_focal_tensor<Type>::get_epipoles(temp12, temp13);
     if(good){
@@ -254,15 +263,14 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
     return good;
   }
 
-  virtual vgl_homg_point_2d<Type> epipole_12(){
+  vgl_homg_point_2d<Type> epipole_12() override {
     vgl_homg_point_2d<Type> temp = vpgl_tri_focal_tensor<Type>::epipole_12();
     return img_pt_transforms_[1].preimage(temp);
   }
-  virtual vgl_homg_point_2d<Type> epipole_13(){
+  vgl_homg_point_2d<Type> epipole_13() override {
     vgl_homg_point_2d<Type> temp = vpgl_tri_focal_tensor<Type>::epipole_13();
     return img_pt_transforms_[2].preimage(temp);
   }
-
 
 bool fmatrix_12(vpgl_affine_fundamental_matrix<Type>& f_12){
     if(!vpgl_tri_focal_tensor<Type>::f_matrices_1213_valid_) vpgl_tri_focal_tensor<Type>::compute_f_matrices();
