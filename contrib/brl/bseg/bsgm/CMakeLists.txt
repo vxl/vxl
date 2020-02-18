@@ -22,6 +22,6 @@ add_subdirectory( app )
 
 add_subdirectory( pro )
 
-#if( BUILD_TESTING )
-#  add_subdirectory(tests)
-#endif()
+if( BUILD_TESTING )
+  add_subdirectory(tests)
+endif()
