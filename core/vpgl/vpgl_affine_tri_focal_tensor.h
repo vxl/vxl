@@ -40,6 +40,8 @@
 //
 //------------------------------------------------------------------------------
 
+#include <utility>
+
 #include <vector>
 #include <iostream>
 #include <iosfwd>
@@ -101,9 +103,11 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
     this->init_img_transforms(); this->set(c1, c2, c3);
   }
   //: Construct from three cameras with scaling transforms
-  vpgl_affine_tri_focal_tensor(const vpgl_affine_camera<Type>& c1,const vpgl_affine_camera<Type>& c2,const vpgl_affine_camera<Type>& c3,
-                               std::vector<vgl_h_matrix_2d<Type> > const& img_pt_transforms):
-  img_pt_transforms_(img_pt_transforms){
+  vpgl_affine_tri_focal_tensor(
+      const vpgl_affine_camera<Type> &c1, const vpgl_affine_camera<Type> &c2,
+      const vpgl_affine_camera<Type> &c3,
+      std::vector<vgl_h_matrix_2d<Type>> img_pt_transforms)
+      : img_pt_transforms_(std::move(img_pt_transforms)) {
 
     vpgl_affine_camera<Type> pre_c1 = premultiply_a(c1, img_pt_transforms_[0]);
     vpgl_affine_camera<Type> pre_c2 = premultiply_a(c2, img_pt_transforms_[1]);

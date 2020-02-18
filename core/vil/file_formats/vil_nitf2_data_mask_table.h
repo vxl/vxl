@@ -24,38 +24,46 @@ class vil_stream;
 class vil_nitf2_data_mask_table
 {
  public:
-  vil_nitf2_data_mask_table( unsigned int numBlocksX, unsigned int numBlocksY,
-                             unsigned int numBands, const std::string& imode );
-  bool parse( vil_stream* stream );
+   vil_nitf2_data_mask_table(unsigned int numBlocksX, unsigned int numBlocksY,
+                             unsigned int numBands, std::string imode);
+   bool parse(vil_stream *stream);
 
-  //: If this function returns true, then you may call \sa block_band_offset()
-  bool has_offset_table() const { return BMR_n_BND_m.size() > 0; }
+   //: If this function returns true, then you may call \sa block_band_offset()
+   bool has_offset_table() const { return BMR_n_BND_m.size() > 0; }
 
-  //: If this function returns true, then you may call \sa pad_pixel()
-  bool has_pad_pixel_table() const { return TMR_n_BND_m.size() > 0; }
+   //: If this function returns true, then you may call \sa pad_pixel()
+   bool has_pad_pixel_table() const { return TMR_n_BND_m.size() > 0; }
 
-  vxl_uint_32 blocked_image_data_offset() const;
+   vxl_uint_32 blocked_image_data_offset() const;
 
-  //: Returns true iff this block is present in the data.  False otherwise.
-  //  If this returns false, then there is not sense calling block_band_offset
-  //  for this band/block combination. It will return 0xFFFFFFFF.
-  //  If this returns false, then this entire block/band is considered to be blank.
-  vxl_uint_32 block_band_present( unsigned int block_x, unsigned int block_y, int band = -1) const;
+   //: Returns true iff this block is present in the data.  False otherwise.
+   //  If this returns false, then there is not sense calling block_band_offset
+   //  for this band/block combination. It will return 0xFFFFFFFF.
+   //  If this returns false, then this entire block/band is considered to be
+   //  blank.
+   vxl_uint_32 block_band_present(unsigned int block_x, unsigned int block_y,
+                                  int band = -1) const;
 
-  //:
-  //  if imode == "S", then the band argument is used and I will return the offset to 'band'
-  //  if imode != "S", then the band argument is ignored, and I will return the offset to the
-  //  beginning of the requested block
-  vxl_uint_32 block_band_offset( unsigned int block_x, unsigned int block_y, int band = -1) const;
+   //:
+   //  if imode == "S", then the band argument is used and I will return the
+   //  offset to 'band' if imode != "S", then the band argument is ignored, and
+   //  I will return the offset to the beginning of the requested block
+   vxl_uint_32 block_band_offset(unsigned int block_x, unsigned int block_y,
+                                 int band = -1) const;
 
-  //:
-  // band argument is ignored if imode != "S"... i.e. all bands have the same pad pixel in that case
-  vxl_uint_32 pad_pixel( unsigned int block_x, unsigned int block_y, int band ) const;
+   //:
+   // band argument is ignored if imode != "S"... i.e. all bands have the same
+   // pad pixel in that case
+   vxl_uint_32 pad_pixel(unsigned int block_x, unsigned int block_y,
+                         int band) const;
 
-  vxl_uint_32 block_band_has_pad( unsigned int block_x, unsigned int block_y, int band = -1) const;
+   vxl_uint_32 block_band_has_pad(unsigned int block_x, unsigned int block_y,
+                                  int band = -1) const;
 
-  static void maybe_endian_swap( char* a, unsigned sizeOfAInBytes, vil_pixel_format pixFormat );
-  static void maybe_endian_swap( char* a, unsigned sizeOfAInBytes, unsigned int bytesPerSample );
+   static void maybe_endian_swap(char *a, unsigned sizeOfAInBytes,
+                                 vil_pixel_format pixFormat);
+   static void maybe_endian_swap(char *a, unsigned sizeOfAInBytes,
+                                 unsigned int bytesPerSample);
  protected:
   //Blocked Image Data Offset (in bytes)
   vxl_uint_32 IMDATOFF;

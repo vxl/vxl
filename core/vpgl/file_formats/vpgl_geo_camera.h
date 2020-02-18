@@ -13,6 +13,8 @@
 
 
 #include <iosfwd>
+#include <utility>
+
 #include <vector>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
@@ -33,9 +35,12 @@ class vpgl_geo_camera : public vpgl_camera<double>
   vpgl_geo_camera();
 
   //: if scale tag is false be sure that trans_matrix[0][0] and trans_matrix[1][1] is 1.0 otherwise set it to true
-  vpgl_geo_camera(vnl_matrix<double> trans_matrix,
-                  vpgl_lvcs_sptr lvcs)
-    : trans_matrix_(trans_matrix), is_utm_(false), scale_tag_(false) {if(lvcs) this->set_lvcs(lvcs); }
+  vpgl_geo_camera(vnl_matrix<double> trans_matrix, vpgl_lvcs_sptr lvcs)
+      : trans_matrix_(std::move(trans_matrix)), is_utm_(false),
+        scale_tag_(false) {
+    if (lvcs)
+      this->set_lvcs(lvcs);
+  }
 
   // copy constructor
   vpgl_geo_camera(vpgl_geo_camera const& rhs);

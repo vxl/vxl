@@ -33,6 +33,8 @@
 // (Note that there is no guarantee that the fitted cubic coefficients will be the same
 // as the original RPC coefficients.)
 //
+#include <utility>
+
 #include <vector>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
@@ -52,15 +54,16 @@ class vpgl_cubic_lsqr : public vnl_least_squares_function
 {
  public:
   //: Constructor
-  vpgl_cubic_lsqr(std::vector<vgl_point_2d<double> > const& image_pts,
-                  std::vector<vgl_point_3d<double> > const& ground_pts);
+   vpgl_cubic_lsqr(std::vector<vgl_point_2d<double>> const &image_pts,
+                   std::vector<vgl_point_3d<double>> ground_pts);
 
-  //: The main function.
-  //  Given the parameter vector x, compute the vector of residuals fx.
-  //  fx has been sized appropriately before the call.
-  void f(vnl_vector<double> const &coefs,
-         vnl_vector<double> &residuals) override;
-  static vnl_vector_fixed<double, 20> power_vector(double x, double y, double z);
+   //: The main function.
+   //  Given the parameter vector x, compute the vector of residuals fx.
+   //  fx has been sized appropriately before the call.
+   void f(vnl_vector<double> const &coefs,
+          vnl_vector<double> &residuals) override;
+   static vnl_vector_fixed<double, 20> power_vector(double x, double y,
+                                                    double z);
 
  private:
    vpgl_cubic_lsqr() = delete; // not valid
@@ -75,14 +78,18 @@ class vpgl_cubic_lsqr : public vnl_least_squares_function
 class vpgl_fit_rational_cubic
 {
  public:
-  vpgl_fit_rational_cubic(std::vector<vgl_point_2d<double> > image_pts,
-                          std::vector<vgl_point_3d<double> > ground_pts):
-  image_pts_(image_pts), ground_pts_(ground_pts), max_err_(1.0e-5), verbose_(false){
-    initial_guess_.set_size(80); initial_guess_.fill(0.0);
-    // a crude initial guess, avoids division by zero
-    initial_guess_[19] = 1.0; initial_guess_[39] = 1.0;
-    initial_guess_[59] = 1.0; initial_guess_[79] = 1.0;
-  }
+   vpgl_fit_rational_cubic(std::vector<vgl_point_2d<double>> image_pts,
+                           std::vector<vgl_point_3d<double>> ground_pts)
+       : image_pts_(std::move(image_pts)), ground_pts_(std::move(ground_pts)),
+         max_err_(1.0e-5), verbose_(false) {
+     initial_guess_.set_size(80);
+     initial_guess_.fill(0.0);
+     // a crude initial guess, avoids division by zero
+     initial_guess_[19] = 1.0;
+     initial_guess_[39] = 1.0;
+     initial_guess_[59] = 1.0;
+     initial_guess_[79] = 1.0;
+   }
 
   void set_verbose(bool verbose){verbose_ = verbose;}
   void set_max_error(double max_error) { max_err_ = max_error; }

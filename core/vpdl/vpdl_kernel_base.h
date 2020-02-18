@@ -12,6 +12,8 @@
 //   None
 // \endverbatim
 
+#include <utility>
+
 #include <vector>
 #include "vpdl_multi_cmp_dist.h"
 #include <vpdl/vpdt/vpdt_access.h> // function vpdt_size(v)
@@ -38,8 +40,8 @@ class vpdl_kernel_base : public vpdl_multi_cmp_dist<T,n>
   vpdl_kernel_base() = default;
 
   // Constructor from sample points
-  vpdl_kernel_base(const std::vector<vector>& samplez)
-  : samples_(samplez) {}
+  vpdl_kernel_base(std::vector<vector> samplez)
+      : samples_(std::move(samplez)) {}
 
   //: Return the number of components in the mixture
   unsigned int num_components() const override { return samples_.size(); }
