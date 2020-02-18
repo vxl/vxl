@@ -47,7 +47,7 @@ class EigenFace
     bool operator<(const LabelDist &x) const {return dist>x.dist;}
   };
 
-  EigenFace() {}
+  EigenFace() = default;
   ~EigenFace();
   bool add_training_image(Image *im, const char * label);
   bool calculate_eigenfaces();

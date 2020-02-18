@@ -24,7 +24,7 @@
 //: Default constructor
 clsfy_direct_boost::clsfy_direct_boost()
 
-{}
+    = default;
 
 clsfy_direct_boost::clsfy_direct_boost(const clsfy_direct_boost& c)
   : clsfy_classifier_base()

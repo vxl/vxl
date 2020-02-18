@@ -46,7 +46,7 @@ class gevd_param_mixin
  public:
   //=====================================================
   //: Constructor.  By default a constructed parameter block is valid.
-   gevd_param_mixin() {}
+   gevd_param_mixin() = default;
    // Destructor
    virtual ~gevd_param_mixin() = default;
    //=====================================================

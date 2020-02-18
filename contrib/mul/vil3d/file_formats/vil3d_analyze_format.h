@@ -106,7 +106,7 @@ class vil3d_analyze_header
    bool swap_bytes_{false}; // True if bytes need to be swapped
 
  public:
-   vil3d_analyze_header() {}
+   vil3d_analyze_header() = default;
    ~vil3d_analyze_header() = default;
 
    void reset();

@@ -22,7 +22,7 @@
 
 pdf1d_gaussian_builder::pdf1d_gaussian_builder()
 
-{}
+    = default;
 
 //=======================================================================
 // Destructor

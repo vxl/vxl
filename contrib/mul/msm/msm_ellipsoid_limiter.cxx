@@ -19,7 +19,7 @@
 //=======================================================================
 msm_ellipsoid_limiter::msm_ellipsoid_limiter()
 
-{}
+    = default;
 
 //: Define number of SDs to limit at
 void msm_ellipsoid_limiter::set_n_sds(double n_sds)

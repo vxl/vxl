@@ -48,7 +48,7 @@ class HomgMetric
 public:
   // Constructors/Destructors--------------------------------------------------
 
-  HomgMetric() {}
+  HomgMetric() = default;
   HomgMetric(const ImageMetric* metric);
 
   // HomgMetric(const HomgMetric& that); - use default

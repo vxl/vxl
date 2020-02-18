@@ -35,7 +35,7 @@ class rgrl_feature
   //: ctor
    rgrl_feature()
 
-   {}
+       = default;
 
    //: ctor
    rgrl_feature(vnl_vector<double> const &loc, double scale = 1.0)

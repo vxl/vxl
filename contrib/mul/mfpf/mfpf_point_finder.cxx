@@ -123,7 +123,7 @@ bool mfpf_pf_cost::check_and_refine_minima(vnl_vector<double>& params,
 
 mfpf_point_finder::mfpf_point_finder()
 
-{}
+    = default;
 
 //=======================================================================
 // Destructor

@@ -19,7 +19,7 @@ class mmn_arc
  public:
    unsigned v1{999999}, v2{999999};
 
-   mmn_arc() {}
+   mmn_arc() = default;
    mmn_arc(unsigned i1, unsigned i2) : v1(i1), v2(i2) {}
 
    //: Return smallest node index

@@ -114,7 +114,7 @@ namespace
     double dist_{-1};
     unsigned id_{0};
 
-    dist_id() {}
+    dist_id() = default;
 
     dist_id( double d, unsigned id )
     : dist_(d), id_(id) {}

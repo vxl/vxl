@@ -21,7 +21,7 @@ class rgrl_feature_region
 {
  public:
   // default ctor
-   rgrl_feature_region() {}
+   rgrl_feature_region() = default;
 
    // destructor
    virtual ~rgrl_feature_region() = default;

@@ -24,7 +24,7 @@
 
 msm_shape_instance::msm_shape_instance()
 
-{}
+    = default;
 
 //: Set up model (retains pointer to model)
 msm_shape_instance::msm_shape_instance(const msm_shape_model& model)

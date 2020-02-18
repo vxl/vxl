@@ -16,7 +16,7 @@
 
 //--------------------------------------------------------------------------------
 
-osl_edgel_chain::osl_edgel_chain() {}
+osl_edgel_chain::osl_edgel_chain() = default;
 
 osl_edgel_chain::osl_edgel_chain(unsigned int n_)
   : n(n_)

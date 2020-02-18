@@ -83,7 +83,7 @@ int NViewMatch::count_observations() const
 // Default ctor
 NViewMatches::NViewMatches()
 
-{}
+    = default;
 
 NViewMatches::NViewMatches(std::istream& s)
 {

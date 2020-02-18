@@ -19,7 +19,7 @@
 
 mbl_eps_writer::mbl_eps_writer()
 
-{}
+    = default;
 
 //: Open file and write header, given bounding box
 // Bounding box specified in "points" (72 points=1 inch)

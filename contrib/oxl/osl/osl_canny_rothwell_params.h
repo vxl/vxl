@@ -13,7 +13,7 @@
 class osl_canny_rothwell_params
 {
  public:
-   osl_canny_rothwell_params() {}
+   osl_canny_rothwell_params() = default;
    ~osl_canny_rothwell_params() = default;
 
    float sigma{1.0};

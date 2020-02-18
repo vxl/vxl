@@ -22,7 +22,7 @@
 class vdtop_8_neighborhood_mask
 {
  public:
-   vdtop_8_neighborhood_mask() {}
+   vdtop_8_neighborhood_mask() = default;
    vdtop_8_neighborhood_mask(vdtop_8_neighborhood_mask const &arg) = default;
    vdtop_8_neighborhood_mask(vxl_byte arg_code) : mask_(arg_code) {}
 

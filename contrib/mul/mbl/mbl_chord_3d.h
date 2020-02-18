@@ -23,7 +23,7 @@ private:
 
 public:
     //: Constructor
-  mbl_chord_3d() {}
+  mbl_chord_3d() = default;
 
   //: Constructor
   mbl_chord_3d(int start_x, int end_x, int y, int z)

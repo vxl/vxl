@@ -22,7 +22,7 @@ rrel_estimation_problem::rrel_estimation_problem( unsigned int dof,
 
 rrel_estimation_problem::rrel_estimation_problem()
 
-{}
+    = default;
 
 rrel_estimation_problem::~rrel_estimation_problem( )
 {

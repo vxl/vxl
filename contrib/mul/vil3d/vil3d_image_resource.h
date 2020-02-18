@@ -28,7 +28,7 @@
 class vil3d_image_resource
 {
  public:
-   vil3d_image_resource() {}
+   vil3d_image_resource() = default;
    virtual ~vil3d_image_resource() = default;
 
    //: Dimensions:  Planes x ni x nj.

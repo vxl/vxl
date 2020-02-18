@@ -62,7 +62,7 @@ class vimt3d_transform_3d
              Affine};
 
   //: Construct as identity transform
-  vimt3d_transform_3d() {}
+  vimt3d_transform_3d() = default;
 
   // An explicit destructor is required to avoid an internal compiler
   // error in icc 8.0 (internal error: 0_1270)

@@ -22,7 +22,7 @@
 
 //=======================================================================
 
-clsfy_random_classifier::clsfy_random_classifier() {}
+clsfy_random_classifier::clsfy_random_classifier() = default;
 
 //=======================================================================
 

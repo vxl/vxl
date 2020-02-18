@@ -24,7 +24,7 @@ struct msm_line_seg_pt
   double alpha{0.0};
 
   //: 1 Construct as undefined
-  msm_line_seg_pt() {}
+  msm_line_seg_pt() = default;
 
   //: 2 Construct as single point, index
   msm_line_seg_pt(int index) : i0(index),i1(-1),alpha(0.0) {}

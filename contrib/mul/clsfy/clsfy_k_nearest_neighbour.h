@@ -33,7 +33,7 @@ class clsfy_k_nearest_neighbour : public clsfy_classifier_base
 
  public:
   //: Construct a KNN classifier.
-   clsfy_k_nearest_neighbour() {}
+   clsfy_k_nearest_neighbour() = default;
 
    //: Return the classification of the given probe vector.
    unsigned classify(const vnl_vector<double> &input) const override;

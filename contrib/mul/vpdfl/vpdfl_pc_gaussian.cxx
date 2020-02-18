@@ -31,7 +31,7 @@
 //: Dflt ctor
 vpdfl_pc_gaussian::vpdfl_pc_gaussian()
 
-{}
+    = default;
 //=======================================================================
 
 //: Destructor

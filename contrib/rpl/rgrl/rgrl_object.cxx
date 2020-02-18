@@ -4,7 +4,7 @@
 
 rgrl_object::rgrl_object()
 
-{}
+    = default;
 
 rgrl_object::
 ~rgrl_object() = default;

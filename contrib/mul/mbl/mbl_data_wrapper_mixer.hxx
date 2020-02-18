@@ -17,7 +17,7 @@
 template <class T>
 mbl_data_wrapper_mixer<T>::mbl_data_wrapper_mixer()
 
-{}
+    = default;
 
 //: Constructor
 template<class T>

@@ -9,7 +9,7 @@
 template <class T>
 vmal_multi_view_data<T>::vmal_multi_view_data()
 
-{}
+    = default;
 
 template <class T>
 vmal_multi_view_data<T>::vmal_multi_view_data(int nbviews):

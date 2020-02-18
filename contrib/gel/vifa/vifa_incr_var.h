@@ -49,7 +49,7 @@ class vifa_incr_var : public vul_timestamp, public vbl_ref_count
 
  public:
   //: Default constructor
-   vifa_incr_var() {}
+   vifa_incr_var() = default;
 
    // copy constructor - compiler-provided one sets ref_count to nonzero which
    // is wrong -PVr

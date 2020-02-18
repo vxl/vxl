@@ -34,7 +34,7 @@ class mbl_lru_cache
   unsigned long n_{0};
 
 public:
-  mbl_lru_cache() {}
+  mbl_lru_cache() = default;
 
   //: Create a cache of size n.
   // The actual memory size of the cache will be

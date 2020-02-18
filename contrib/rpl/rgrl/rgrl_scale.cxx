@@ -11,7 +11,7 @@
 
 rgrl_scale::rgrl_scale()
 
-{}
+    = default;
 
 bool
 rgrl_scale::

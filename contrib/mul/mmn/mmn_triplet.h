@@ -20,7 +20,7 @@ class mmn_triplet
  public:
    unsigned v1{999999}, v2{999999}, v3{999999};
 
-   mmn_triplet() {}
+   mmn_triplet() = default;
    mmn_triplet(unsigned i1, unsigned i2, unsigned i3)
        : v1(i1), v2(i2), v3(i3) {}
 

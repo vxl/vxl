@@ -21,7 +21,7 @@
 //: Default constructor
 fhs_searcher::fhs_searcher()
 
-{}
+    = default;
 
 //: Set tree defining relationships between features
 //  Input arcs define neighbour relationships in any order.

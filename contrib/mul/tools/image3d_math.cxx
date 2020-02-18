@@ -162,7 +162,7 @@ class operand
    operand_type_t operand_type_{e_never};
 
  public:
-   operand() {} // if used with this value - should throw.
+   operand() = default; // if used with this value - should throw.
 
    explicit operand(const std::string &s)
        : string_(s), operand_type_(e_string) {}

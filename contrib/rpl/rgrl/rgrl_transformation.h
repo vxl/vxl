@@ -41,7 +41,7 @@ class rgrl_transformation
   ~rgrl_transformation() override;
 
   //: default constructor
-  rgrl_transformation() {}
+  rgrl_transformation() = default;
 
   //: initialize with covariance matrix
   rgrl_transformation( const vnl_matrix<double>& cov );

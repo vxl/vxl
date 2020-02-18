@@ -31,7 +31,7 @@ class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base
 public:
 
   //: Dflt ctor
-  clsfy_rbf_svm_smo_1_builder() {}
+  clsfy_rbf_svm_smo_1_builder() = default;
 
   //: Create empty model
   clsfy_classifier_base* new_classifier() const override{return new clsfy_rbf_svm();}

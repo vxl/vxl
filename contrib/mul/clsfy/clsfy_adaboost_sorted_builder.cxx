@@ -33,7 +33,7 @@
 
 clsfy_adaboost_sorted_builder::clsfy_adaboost_sorted_builder()
 
-{}
+    = default;
 
 //=======================================================================
 

@@ -30,7 +30,7 @@ class clsfy_binary_pdf_classifier : public clsfy_classifier_base
  public:
 
   // default constructor
-   clsfy_binary_pdf_classifier() {}
+   clsfy_binary_pdf_classifier() = default;
 
    //: A useful constructor
    // Specify the log probability density limit
