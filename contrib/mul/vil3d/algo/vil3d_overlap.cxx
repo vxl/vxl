@@ -18,7 +18,7 @@ public:
   unsigned nAandB{0};
 
   //: Constructor
-  vil3d_bool_overlap_functor() {}
+  vil3d_bool_overlap_functor() = default;
 
   //: Operator function
   void operator()(bool voxA, bool voxB)

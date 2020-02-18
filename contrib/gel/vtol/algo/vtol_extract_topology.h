@@ -70,7 +70,7 @@ struct vtol_extract_topology_params
   // change. This will make code more robust against changes to the
   // code and parameter set, because we don't have a bunch of unnamed
   // arguments to change or worry about.
-  vtol_extract_topology_params() {}
+  vtol_extract_topology_params() = default;
 };
 
 //: Stores an edgel chain and a corresponding topological edge

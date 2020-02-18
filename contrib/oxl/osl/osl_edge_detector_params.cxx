@@ -5,7 +5,7 @@
 
 osl_edge_detector_params::osl_edge_detector_params()
 
-{}
+    = default;
 
 #if 0 // commented out
 // from osl_edge_detector

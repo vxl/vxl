@@ -22,7 +22,7 @@
 
 msm_ref_shape_model::msm_ref_shape_model()
 
-{}
+    = default;
 
 //=======================================================================
 // Destructor

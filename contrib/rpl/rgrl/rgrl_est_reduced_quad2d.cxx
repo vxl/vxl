@@ -18,7 +18,7 @@
 
 rgrl_est_reduced_quad2d::rgrl_est_reduced_quad2d()
 
-{}
+    = default;
 
 rgrl_est_reduced_quad2d::
 rgrl_est_reduced_quad2d( unsigned int dimension,

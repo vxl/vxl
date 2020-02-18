@@ -12,7 +12,7 @@
 //: Default constructor
 mmn_graph_rep1::mmn_graph_rep1()
 
-{}
+    = default;
 
 //: Build from list of arcs
 void mmn_graph_rep1::build(unsigned n_nodes,

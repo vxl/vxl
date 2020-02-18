@@ -26,7 +26,7 @@
 
 mfpf_point_finder_builder::mfpf_point_finder_builder()
 
-{}
+    = default;
 
 //=======================================================================
 // Destructor

@@ -29,7 +29,7 @@ private:
 
 public:
     //: Default constructor
-  fhs_arc() {}
+  fhs_arc() = default;
 
   //: Constructor
   fhs_arc(unsigned i, unsigned j, double dx, double dy, double var_x, double var_y)

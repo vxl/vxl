@@ -44,7 +44,7 @@ class vil3d_image_view_base
 
    //: Default is an empty one-plane image
    //  Don't set nplanes_ to zero as it confuses set_size(nx,ny,nz) later
-   vil3d_image_view_base() {}
+   vil3d_image_view_base() = default;
 
  public:
   // The destructor must be virtual so that the memory chunk is destroyed.

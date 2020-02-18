@@ -14,7 +14,7 @@
 #include <mvl/HomgInterestPointSet.h>
 
 //: Constructor
-PairMatchSetCorner::PairMatchSetCorner() {}
+PairMatchSetCorner::PairMatchSetCorner() = default;
 
 //: Construct a PairMatchSetCorner that will contain matches between the given HomgInterestPointSets.
 // These objects are held by reference in the MatchSet and must therefore

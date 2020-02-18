@@ -24,7 +24,7 @@
 //: Default constructor
 clsfy_simple_adaboost::clsfy_simple_adaboost()
 
-{}
+    = default;
 
 clsfy_simple_adaboost::clsfy_simple_adaboost(const clsfy_simple_adaboost& c)
   : clsfy_classifier_base()

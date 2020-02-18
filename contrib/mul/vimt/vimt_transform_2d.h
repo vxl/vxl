@@ -70,7 +70,7 @@ class vimt_transform_2d
                 Projective,
                 Reflection};
 
-    vimt_transform_2d() {}
+    vimt_transform_2d() = default;
 
     bool is_identity() const { return form_==Identity; }
     Form form() const { return form_; }

@@ -27,7 +27,7 @@
 
 msm_shape_model_builder::msm_shape_model_builder()
 
-{}
+    = default;
 
 //=======================================================================
 // Destructor

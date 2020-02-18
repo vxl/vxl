@@ -23,7 +23,7 @@
 
 pdf1d_flat_builder::pdf1d_flat_builder()
 
-{}
+    = default;
 
 //=======================================================================
 // Destructor

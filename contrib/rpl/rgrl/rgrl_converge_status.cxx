@@ -12,7 +12,7 @@
 
 rgrl_converge_status::rgrl_converge_status()
 
-{}
+    = default;
 
 rgrl_converge_status::
 rgrl_converge_status( converge_type conv,

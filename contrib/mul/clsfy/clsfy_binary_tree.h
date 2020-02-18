@@ -29,7 +29,7 @@ class clsfy_binary_tree_op
    clsfy_binary_threshold_1d classifier_;
 
  public:
-   clsfy_binary_tree_op() {}
+   clsfy_binary_tree_op() = default;
    clsfy_binary_tree_op(const vnl_vector<double> *data_ptr, int data_index = -1)
        : data_index_(data_index), data_ptr_(data_ptr) {}
 
@@ -112,7 +112,7 @@ class clsfy_binary_tree : public clsfy_classifier_base
   };
 
   //: Constructor
-  clsfy_binary_tree() {}
+  clsfy_binary_tree() = default;
 
   ~clsfy_binary_tree() override;
 

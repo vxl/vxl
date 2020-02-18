@@ -20,7 +20,7 @@ class rgrl_convergence_tester
  public:
 
   //: ctor
-   rgrl_convergence_tester() {}
+   rgrl_convergence_tester() = default;
 
    ~rgrl_convergence_tester() override;
 

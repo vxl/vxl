@@ -38,7 +38,7 @@ const double min_wt = 1e-8;
 
 vpdfl_gaussian_builder::vpdfl_gaussian_builder()
 
-{}
+    = default;
 
 //=======================================================================
 // Destructor

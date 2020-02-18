@@ -25,7 +25,7 @@
 
 pdf1d_exponential_builder::pdf1d_exponential_builder()
 
-{}
+    = default;
 
 //=======================================================================
 // Destructor

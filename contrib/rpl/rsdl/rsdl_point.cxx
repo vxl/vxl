@@ -12,7 +12,7 @@
 
 rsdl_point::rsdl_point()
 
-{}
+    = default;
 
 rsdl_point::rsdl_point( unsigned int Nc, unsigned int Na )
   : Nc_(Nc), Na_(Na), data_( new double[ Nc_ + Na_ ] )

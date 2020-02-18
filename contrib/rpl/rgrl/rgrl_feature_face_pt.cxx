@@ -24,7 +24,7 @@ rgrl_feature_face_pt( vnl_vector< double > const& location,
 //  private constructor for transformed face points
 rgrl_feature_face_pt ::rgrl_feature_face_pt()
 
-{}
+    = default;
 
 vnl_matrix<double> const&
 rgrl_feature_face_pt ::

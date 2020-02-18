@@ -26,7 +26,7 @@ class msm_wt_mat_2d
  public:
 
   // Default Constructor - set to identity
-   msm_wt_mat_2d() {}
+   msm_wt_mat_2d() = default;
 
    // Constructor (requires m11_>=0 and m22_>=0)
    msm_wt_mat_2d(double m11, double m12, double m22)

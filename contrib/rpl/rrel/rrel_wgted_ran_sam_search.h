@@ -54,7 +54,7 @@ class rrel_wgted_ran_sam_search : public rrel_ran_sam_search
     double lower_{-1.0};
     double upper_{-1.0};
 
-    prob_interval() {}
+    prob_interval() = default;
 
     bool operator< ( const prob_interval& rhs ) const {
       return this->upper_ < rhs.upper_;

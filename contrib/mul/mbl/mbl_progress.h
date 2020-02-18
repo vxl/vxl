@@ -51,7 +51,7 @@ class mbl_progress
  public:
 
   //: Constructor
-   mbl_progress() {}
+   mbl_progress() = default;
 
    //: Destructor
    virtual ~mbl_progress() = default;

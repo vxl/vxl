@@ -27,7 +27,7 @@ private:
 
 public:
     //: Constructor
-  vil3d_chord() {}
+  vil3d_chord() = default;
 
   //: Constructor
   vil3d_chord(int start_x, int end_x, int y, int z)

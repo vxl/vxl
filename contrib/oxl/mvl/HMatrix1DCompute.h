@@ -21,7 +21,7 @@ class HMatrix1DCompute
 {
  public:
   //
-   HMatrix1DCompute() {}
+   HMatrix1DCompute() = default;
    virtual ~HMatrix1DCompute() = default;
 
    //

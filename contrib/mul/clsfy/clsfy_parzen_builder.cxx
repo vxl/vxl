@@ -23,7 +23,7 @@
 
 //=======================================================================
 
-clsfy_parzen_builder::clsfy_parzen_builder() {}
+clsfy_parzen_builder::clsfy_parzen_builder() = default;
 
 //=======================================================================
 

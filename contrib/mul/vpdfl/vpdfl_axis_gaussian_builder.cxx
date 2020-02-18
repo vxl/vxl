@@ -27,7 +27,7 @@
 
 vpdfl_axis_gaussian_builder::vpdfl_axis_gaussian_builder()
 
-{}
+    = default;
 
 //=======================================================================
 // Destructor

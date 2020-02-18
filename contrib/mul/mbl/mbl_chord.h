@@ -23,7 +23,7 @@ private:
 
 public:
     //: Constructor
-  mbl_chord() {}
+  mbl_chord() = default;
 
   //: Constructor
   mbl_chord(int start_x, int end_x, int y)

@@ -28,7 +28,7 @@ class PairMatchSetCorner;
 
 class HMatrix2DCompute {
 public:
-  HMatrix2DCompute() {}
+  HMatrix2DCompute() = default;
   virtual ~HMatrix2DCompute() = default;
 
   // set this to true for verbose run-time information

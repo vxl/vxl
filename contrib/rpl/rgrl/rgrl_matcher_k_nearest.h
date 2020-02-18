@@ -53,7 +53,7 @@ class rgrl_matcher_k_nearest
     double geo_err_{-1.0};
     nodes_vec_iterator itr_;
 
-    internal_dist_node() {}
+    internal_dist_node() = default;
 
     bool operator<( internal_dist_node const& rhs ) const;
   };

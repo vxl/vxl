@@ -38,7 +38,7 @@ class vil3d_structuring_element
   int max_k_{-1};
 
 public:
-  vil3d_structuring_element() {}
+  vil3d_structuring_element() = default;
 
   //: Define elements { (p_i[a],p_j[a],p_k[a]) }
   vil3d_structuring_element(const std::vector<int>& p_i,

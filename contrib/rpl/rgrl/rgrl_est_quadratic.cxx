@@ -16,7 +16,7 @@
 
 rgrl_est_quadratic::rgrl_est_quadratic()
 
-{}
+    = default;
 
 rgrl_est_quadratic::
 rgrl_est_quadratic( unsigned int dimension,

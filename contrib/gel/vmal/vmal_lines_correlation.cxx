@@ -10,7 +10,7 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-vmal_lines_correlation::vmal_lines_correlation() {}
+vmal_lines_correlation::vmal_lines_correlation() = default;
 
 vmal_lines_correlation::vmal_lines_correlation(int delta, double radius):
 delta_(delta),radius_(radius)

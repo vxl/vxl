@@ -50,7 +50,7 @@ class mbl_progress_hierarchy: public mbl_progress
   // value is out of 1.0.
   virtual void on_changed_progress(double fraction)=0;
 
-  mbl_progress_hierarchy() {}
+  mbl_progress_hierarchy() = default;
 
 private:
   //: The ordered hierarchy of identifiers.

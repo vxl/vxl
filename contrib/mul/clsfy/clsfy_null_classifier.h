@@ -22,7 +22,7 @@ class clsfy_null_classifier : public clsfy_classifier_base
 {
  public:
   // Dflt constructor
-   clsfy_null_classifier() {}
+   clsfy_null_classifier() = default;
 
    //: Constructor for when you need a different default
    clsfy_null_classifier(unsigned dc) : n_dims_(0u), default_class_(dc) {}

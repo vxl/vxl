@@ -23,7 +23,7 @@
 
 rgrl_match_set::rgrl_match_set()
 
-{}
+    = default;
 
 rgrl_match_set::
 rgrl_match_set( const std::type_info& feature_type )
@@ -342,7 +342,7 @@ namespace{
 
     sort_node()
 
-    {}
+        = default;
 
     sort_node( unsigned i, const rgrl_feature_sptr& f)
       : ind_(i), fea_(f)

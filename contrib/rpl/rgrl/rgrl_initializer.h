@@ -24,7 +24,7 @@ class rgrl_initializer
   : public rgrl_object
 {
  public:
-   rgrl_initializer() {}
+   rgrl_initializer() = default;
 
    ~rgrl_initializer() override;
 

@@ -31,7 +31,7 @@ class clsfy_null_builder : public clsfy_builder_base
 
 public:
   // Dflt ctor
-  clsfy_null_builder() {}
+  clsfy_null_builder() = default;
 
   //: Create empty model
   // Caller is responsible for deletion

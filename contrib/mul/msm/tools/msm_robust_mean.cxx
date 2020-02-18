@@ -196,7 +196,7 @@ class mbm_covar_stats_2d
     double sum11{0}, sum12{0}, sum22{0};
     unsigned n{0};
 
-    mbm_covar_stats_2d() {}
+    mbm_covar_stats_2d() = default;
 
     //: Add 2D observation
     void obs(double x, double y) {

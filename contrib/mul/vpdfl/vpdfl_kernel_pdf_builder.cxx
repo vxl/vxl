@@ -38,7 +38,7 @@
 
 vpdfl_kernel_pdf_builder::vpdfl_kernel_pdf_builder()
 
-{}
+    = default;
 
 //=======================================================================
 // Destructor

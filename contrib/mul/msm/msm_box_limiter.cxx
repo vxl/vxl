@@ -19,7 +19,7 @@
 //=======================================================================
 msm_box_limiter::msm_box_limiter()
 
-{}
+    = default;
 
 //: Define number of SDs to limit at
 void msm_box_limiter::set_n_sds(double n_sds)
