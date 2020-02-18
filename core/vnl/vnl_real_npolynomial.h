@@ -77,7 +77,7 @@ class VNL_EXPORT vnl_real_npolynomial
 
    //: Construct the polynomial with coefficients vector c and with exponents
    //matrix p
-   vnl_real_npolynomial(const vnl_vector<double> &c,
+   vnl_real_npolynomial(vnl_vector<double> c,
                         const vnl_matrix<unsigned int> &p);
 
    // Computations--------------------------------------------------------------

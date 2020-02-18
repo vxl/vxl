@@ -22,6 +22,8 @@
 // In the case where the highest degree is one, the Cremona transformation with
 // a common denominator is equivalent to the projective transformation.
 
+#include <utility>
+
 #include <vector>
 #include <iosfwd>
 #include <vnl/vnl_fwd.h> // for vnl_vector_fixed<T,2>
@@ -42,8 +44,8 @@ class vgl_cremona_trans_2d
 
    vgl_cremona_trans_2d(vgl_norm_trans_2d<T> const &tr_from,
                         vgl_norm_trans_2d<T> const &tr_to,
-                        vnl_vector<T> const &rational_coeffs)
-       : tr_from_(tr_from), tr_to_(tr_to), coeff_(rational_coeffs) {}
+                        vnl_vector<T> rational_coeffs)
+       : tr_from_(tr_from), tr_to_(tr_to), coeff_(std::move(rational_coeffs)) {}
 
    //:set members of a default instance
    void set(vgl_norm_trans_2d<T> const &tr_from,

@@ -1,17 +1,19 @@
+#include <iostream>
 #include <limits>
 #include <math.h>
-#include <iostream>
 #include <sstream>
+#include <utility>
+
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include "vpgl_fit_rational_cubic.h"
 
-vpgl_cubic_lsqr::vpgl_cubic_lsqr(std::vector<vgl_point_2d<double>> const & image_pts,
-                                 std::vector<vgl_point_3d<double>> const & ground_pts)
-  : vnl_least_squares_function(80, 2.0 * image_pts.size(), vnl_least_squares_function::no_gradient)
-  , image_pts_(image_pts)
-  , ground_pts_(ground_pts)
-{
+vpgl_cubic_lsqr::vpgl_cubic_lsqr(
+    std::vector<vgl_point_2d<double>> const &image_pts,
+    std::vector<vgl_point_3d<double>> ground_pts)
+    : vnl_least_squares_function(80, 2.0 * image_pts.size(),
+                                 vnl_least_squares_function::no_gradient),
+      image_pts_(image_pts), ground_pts_(std::move(ground_pts)) {
   rational_coeffs_.fill(0.0);
 }
 

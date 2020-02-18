@@ -14,6 +14,8 @@
 
 
 #include <limits>
+#include <utility>
+
 #include <vpdl/vpdt/vpdt_field_traits.h>
 #include <vpdl/vpdt/vpdt_field_default.h>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
@@ -65,8 +67,7 @@ class vpdt_gaussian
   }
 
   //: Constructor - from mean and variance
-  vpdt_gaussian(const F& m, const covar_type& c)
-  : mean(m), covar(c) {}
+  vpdt_gaussian(F m, covar_type c) : mean(std::move(m)), covar(std::move(c)) {}
 
   //: Return the dimension
   unsigned int dimension() const { return vpdt_size(mean); }

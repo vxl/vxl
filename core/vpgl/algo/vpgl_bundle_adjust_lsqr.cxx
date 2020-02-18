@@ -41,26 +41,16 @@ vpgl_bundle_adjust_lsqr::vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
 //  Each image point is assigned an inverse covariance (error projector) matrix
 // \note image points are not homogeneous because they require finite points to
 //       measure projection error
-vpgl_bundle_adjust_lsqr::vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
-                                                 unsigned int num_params_per_b,
-                                                 unsigned int num_params_c,
-                                                 const std::vector<vgl_point_2d<double>> & image_points,
-                                                 const std::vector<vnl_matrix<double>> & inv_covars,
-                                                 const std::vector<std::vector<bool>> & mask)
-  : vnl_sparse_lst_sqr_function(mask.size(),
-                                num_params_per_a,
-                                mask[0].size(),
-                                num_params_per_b,
-                                num_params_c,
-                                mask,
-                                2,
-                                use_gradient,
-                                use_weights)
-  , image_points_(image_points)
-  , use_covars_(true)
-  , scale2_(1.0)
-  , iteration_count_(0)
-{
+vpgl_bundle_adjust_lsqr::vpgl_bundle_adjust_lsqr(
+    unsigned int num_params_per_a, unsigned int num_params_per_b,
+    unsigned int num_params_c, std::vector<vgl_point_2d<double>> image_points,
+    const std::vector<vnl_matrix<double>> &inv_covars,
+    const std::vector<std::vector<bool>> &mask)
+    : vnl_sparse_lst_sqr_function(mask.size(), num_params_per_a, mask[0].size(),
+                                  num_params_per_b, num_params_c, mask, 2,
+                                  use_gradient, use_weights),
+      image_points_(std::move(image_points)), use_covars_(true), scale2_(1.0),
+      iteration_count_(0) {
   assert(image_points.size() == inv_covars.size());
   vnl_matrix<double> U(2, 2, 0.0);
   for (const auto & S : inv_covars)
@@ -87,7 +77,6 @@ vpgl_bundle_adjust_lsqr::vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
     factored_inv_covars_.push_back(U);
   }
 }
-
 
 //: Compute all the reprojection errors
 //  Given the parameter vectors a, b, and c, compute the vector of residuals e.

@@ -32,6 +32,8 @@
 // \endverbatim
 
 #include <iostream>
+#include <utility>
+
 #include <vector>
 #include <cstddef>
 #include <cassert>
@@ -444,7 +446,11 @@ class vnl_finite_int_poly
   static unsigned int cardinality() { return Ntothe(M); }
 
   //: Creates a general finite_int_poly.
-  inline vnl_finite_int_poly(std::vector<Scalar> const& p) : val_(p) { assert(N>1); assert(M>0); assert(p.size()<=M); }
+  inline vnl_finite_int_poly(std::vector<Scalar> p) : val_(std::move(p)) {
+    assert(N > 1);
+    assert(M > 0);
+    assert(p.size() <= M);
+  }
   //: Creates a degree 0 finite_int_poly.
   inline vnl_finite_int_poly(Scalar const& n) : val_(std::vector<Scalar>(1)) { assert(N>1); assert(M>0); val_[0]=n; }
   //: Default constructor. Creates a degree 0 finite_int_poly equal to 0.
