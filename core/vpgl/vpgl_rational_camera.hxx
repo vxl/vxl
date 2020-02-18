@@ -485,8 +485,9 @@ bool vpgl_rational_camera<T>::read_pvl(std::istream& istr)
   std::vector<T> den_v;
   T x_scale,x_off,y_scale,y_off,z_scale,z_off,u_scale,u_off,v_scale,v_off;
 
-  bool has_xs=0,has_xo=0,has_ys=0,has_yo=0,has_zs=0,has_zo=0;
-  bool has_us=0,has_uo=0,has_vs=0,has_vo=0;
+  bool has_xs = false, has_xo = false, has_ys = false, has_yo = false,
+       has_zs = false, has_zo = false;
+  bool has_us = false, has_uo = false, has_vs = false, has_vo = false;
 
   // assume RPC00B ordering as default
   auto input_order = vpgl_rational_order::RPC00B;
@@ -513,56 +514,56 @@ bool vpgl_rational_camera<T>::read_pvl(std::istream& istr)
     else if (input=="sampScale") {
       istr >> input;
       istr >> u_scale;
-      has_us = 1;
+      has_us = true;
     }
     else if (input=="sampOffset") {
       istr >> input;
       istr >> u_off;
-      has_uo = 1;
+      has_uo = true;
     }
 
     else if (input=="lineScale") {
       istr >> input;
       istr >> v_scale;
-      has_vs = 1;
+      has_vs = true;
     }
     else if (input=="lineOffset") {
       istr >> input;
       istr >> v_off;
-      has_vo = 1;
+      has_vo = true;
     }
 
     else if (input=="longScale") {
       istr >> input;
       istr >> x_scale;
-      has_xs = 1;
+      has_xs = true;
     }
     else if (input=="longOffset") {
       istr >> input;
       istr >> x_off;
-      has_xo = 1;
+      has_xo = true;
     }
 
     else if (input=="latScale") {
       istr >> input;
       istr >> y_scale;
-      has_ys = 1;
+      has_ys = true;
     }
     else if (input=="latOffset") {
       istr >> input;
       istr >> y_off;
-      has_yo = 1;
+      has_yo = true;
     }
 
     else if (input=="heightScale") {
       istr >> input;
       istr >> z_scale;
-      has_zs = 1;
+      has_zs = true;
     }
     else if (input=="heightOffset") {
       istr >> input;
       istr >> z_off;
-      has_zo = 1;
+      has_zo = true;
     }
 
     else if (input=="lineNumCoef") {
@@ -672,8 +673,9 @@ bool vpgl_rational_camera<T>::read_txt(std::istream& istr)
   std::vector<T> den_v;
   T x_scale,x_off,y_scale,y_off,z_scale,z_off,u_scale,u_off,v_scale,v_off;
 
-  bool has_xs=0,has_xo=0,has_ys=0,has_yo=0,has_zs=0,has_zo=0;
-  bool has_us=0,has_uo=0,has_vs=0,has_vo=0;
+  bool has_xs = false, has_xo = false, has_ys = false, has_yo = false,
+       has_zs = false, has_zo = false;
+  bool has_us = false, has_uo = false, has_vs = false, has_vo = false;
 
   // assume RPC00B ordering as default
   auto input_order = vpgl_rational_order::RPC00B;
@@ -688,56 +690,56 @@ bool vpgl_rational_camera<T>::read_txt(std::istream& istr)
     if (input=="SAMP_SCALE:") {
       //istr >> input;
       istr >> u_scale;
-      has_us = 1;
+      has_us = true;
     }
     else if (input=="SAMP_OFF:") {
       //istr >> input;
       istr >> u_off;
-      has_uo = 1;
+      has_uo = true;
     }
 
     else if (input=="LINE_SCALE:") {
       //istr >> input;
       istr >> v_scale;
-      has_vs = 1;
+      has_vs = true;
     }
     else if (input=="LINE_OFF:") {
       //istr >> input;
       istr >> v_off;
-      has_vo = 1;
+      has_vo = true;
     }
 
     else if (input=="LONG_SCALE:") {
       //istr >> input;
       istr >> x_scale;
-      has_xs = 1;
+      has_xs = true;
     }
     else if (input=="LONG_OFF:") {
       //istr >> input;
       istr >> x_off;
-      has_xo = 1;
+      has_xo = true;
     }
 
     else if (input=="LAT_SCALE:") {
       //istr >> input;
       istr >> y_scale;
-      has_ys = 1;
+      has_ys = true;
     }
     else if (input=="LAT_OFF:") {
       //istr >> input;
       istr >> y_off;
-      has_yo = 1;
+      has_yo = true;
     }
 
     else if (input=="HEIGHT_SCALE:") {
       //istr >> input;
       istr >> z_scale;
-      has_zs = 1;
+      has_zs = true;
     }
     else if (input=="HEIGHT_OFF:") {
       //istr >> input;
       istr >> z_off;
-      has_zo = 1;
+      has_zo = true;
     }
 
     else if (input=="LINE_NUM_COEFF_1:") {
