@@ -38,17 +38,17 @@ class vgl_line_3d_2_points
   //+**************************************************************************
 
   //: Default constructor with (0,0,0) and (1,0,0), which is the line \a y=z=0
-  inline vgl_line_3d_2_points(void)
-  : point1_(0,0,0), point2_(1,0,0) {}
+   inline vgl_line_3d_2_points() : point1_(0, 0, 0), point2_(1, 0, 0) {}
 
-  //: Copy constructor
-  inline vgl_line_3d_2_points(const vgl_line_3d_2_points<Type> &that)
-  : point1_(that.point1_), point2_(that.point2_) {}
+   //: Copy constructor
+   inline vgl_line_3d_2_points(const vgl_line_3d_2_points<Type> &that)
+       : point1_(that.point1_), point2_(that.point2_) {}
 
-  //: Construct from two points
-  inline vgl_line_3d_2_points(vgl_point_3d<Type> const& p1,
-                              vgl_point_3d<Type> const& p2)
-  : point1_(p1), point2_(p2) {assert(p1!=p2);}
+   //: Construct from two points
+   inline vgl_line_3d_2_points(vgl_point_3d<Type> const &p1,
+                               vgl_point_3d<Type> const &p2)
+       : point1_(p1), point2_(p2) {
+     assert(p1 != p2);}
 
   //: comparison
   bool operator==(vgl_line_3d_2_points<Type> const& l) const;

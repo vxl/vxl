@@ -44,7 +44,7 @@ class vpgl_camera : public vbl_ref_count
   virtual void project(const T x, const T y, const T z, T& u, T& v) const = 0;
 
   //: clone *this* polymorphically
-  virtual vpgl_camera<T>* clone(void) const = 0;
+  virtual vpgl_camera<T> *clone() const = 0;
 };
 
 // convenience typedefs for smart pointers to abstract cameras

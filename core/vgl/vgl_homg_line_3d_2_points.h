@@ -37,17 +37,19 @@ class vgl_homg_line_3d_2_points
   //+**************************************************************************
 
   //: Default constructor with (0,0,0,1) and (1,0,0,0), which is the line \a y=z=0
-  inline vgl_homg_line_3d_2_points(void)
-  : point_finite_(0,0,0,1), point_infinite_(1,0,0,0) {}
+   inline vgl_homg_line_3d_2_points()
+       : point_finite_(0, 0, 0, 1), point_infinite_(1, 0, 0, 0) {}
 
-  //: Copy constructor
-  inline vgl_homg_line_3d_2_points(const vgl_homg_line_3d_2_points<Type> &that)
-  : point_finite_(that.point_finite_), point_infinite_(that.point_infinite_) {}
+   //: Copy constructor
+   inline vgl_homg_line_3d_2_points(const vgl_homg_line_3d_2_points<Type> &that)
+       : point_finite_(that.point_finite_),
+         point_infinite_(that.point_infinite_) {}
 
-  //: Construct from two points
-  inline vgl_homg_line_3d_2_points(vgl_homg_point_3d<Type> const& point_1,
-                                   vgl_homg_point_3d<Type> const& point_2)
-  : point_finite_(point_1), point_infinite_(point_2) {force_point2_infinite();}
+   //: Construct from two points
+   inline vgl_homg_line_3d_2_points(vgl_homg_point_3d<Type> const &point_1,
+                                    vgl_homg_point_3d<Type> const &point_2)
+       : point_finite_(point_1), point_infinite_(point_2) {
+     force_point2_infinite();}
 
 #if 0
   //: Destructor (does nothing)
@@ -82,7 +84,7 @@ class vgl_homg_line_3d_2_points
  protected:
   //: force the point point_infinite_ to infinity, without changing the line
   // This is called by the constructors
-  void force_point2_infinite(void) const; // mutable const
+   void force_point2_infinite() const; // mutable const
 };
 
 #define l vgl_homg_line_3d_2_points<Type>

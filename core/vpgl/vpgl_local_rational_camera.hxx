@@ -46,11 +46,9 @@ vpgl_local_rational_camera(T longitude, T latitude, T elevation,
 
 // clone local rational camera
 template <class T>
-vpgl_local_rational_camera<T>* vpgl_local_rational_camera<T>::clone(void) const
-{
+vpgl_local_rational_camera<T> *vpgl_local_rational_camera<T>::clone() const {
   return new vpgl_local_rational_camera<T>(*this);
 }
-
 
 //--------------------------------------
 // Accessor/Mutator
