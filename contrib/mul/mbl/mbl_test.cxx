@@ -58,9 +58,10 @@ std::string timestamp()
 // In the longer term it may save the value via Dart2.
 void mbl_test_save_measurement( const std::string &measurement_path, double value)
 {
-  std::cout << "<DartMeasurement name=\"" <<
-    vul_file::strip_directory(measurement_path) <<
-    "\" type=\"numeric/float\">"<<value<<"</DartMeasurement>" << std::endl;
+  std::cout << "<DartMeasurement name=\""
+            << vul_file::strip_directory(measurement_path)
+            << R"(" type="numeric/float">)" << value << "</DartMeasurement>"
+            << std::endl;
 
   char * cpath = std::getenv("MBL_TEST_SAVE_MEASUREMENT_ROOT");
   std::string path(cpath?cpath:"");

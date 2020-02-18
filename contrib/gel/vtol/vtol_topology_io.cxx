@@ -32,7 +32,7 @@ void vtol_topology_io::write(std::list<vtol_topology_object_sptr> &topo_objects,
 {
   // write out the dtd table
 
-  strm << "<?xml version=\"1.0\" standalone=\"yes\"?>" << std::endl;
+  strm << R"(<?xml version="1.0" standalone="yes"?>)" << std::endl;
 
   write_dtd(strm);
 

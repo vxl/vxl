@@ -26,7 +26,9 @@ int main(int argc, char* argv[])
   vul_arg<std::vector<double> > quat("-q", "Input quaternion: x, y, z, w.  NB The order of elements follows vnl_quaternion.");
   vul_arg<std::vector<double> > eul("-e", "Input euler angles: rx, ry, rz");
   vul_arg<std::vector<double> > mat("-m", "Input 3x3 rotation matrix: row0, row1, row2");
-  vul_arg<std::string> out_rep("-out", "Output representation e.g. \"q\" (quaternion), \"m\" (matrix) or \"e\" (euler)");
+  vul_arg<std::string> out_rep(
+      "-out",
+      R"(Output representation e.g. "q" (quaternion), "m" (matrix) or "e" (euler))");
   vul_arg_parse(argc, argv);
 
   // Log the input arguments
