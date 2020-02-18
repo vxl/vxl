@@ -27,12 +27,12 @@
 class clsfy_parzen_builder : public clsfy_builder_base
 {
   //: The width of the RBF window function.  Default value is 1.0.
-  double sigma_;
+  double sigma_{1.0};
 
   //: The power, p, in the window function.  Default value is 2.0.
-  double power_;
+  double power_{2.0};
 
- public:
+public:
   // Dflt ctor
   clsfy_parzen_builder();
 

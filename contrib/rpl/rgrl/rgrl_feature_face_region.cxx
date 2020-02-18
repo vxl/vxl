@@ -29,12 +29,8 @@ rgrl_feature_face_region( vnl_vector< double > const& location,
 
 
 //  private constructor for transformed face points
-rgrl_feature_face_region ::
-rgrl_feature_face_region()
-  : rgrl_feature_face_pt(),
-    thickness_( 0 ), radius_( 0 )
-{
-}
+rgrl_feature_face_region ::rgrl_feature_face_region()
+    : rgrl_feature_face_pt() {}
 
 unsigned int
 rgrl_feature_face_region::

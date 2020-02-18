@@ -30,9 +30,8 @@
 //=======================================================================
 
 clsfy_direct_boost_builder::clsfy_direct_boost_builder()
-: save_data_to_disk_(false), bs_(-1), max_n_clfrs_(-1), weak_builder_(nullptr)
-{
-}
+
+{}
 
 //=======================================================================
 

@@ -48,7 +48,7 @@ class mmn_lbp_solver: public mmn_solver
     std::vector<mmn_arc> arcs_;
 
     //: Total number of nodes
-    unsigned nnodes_;
+    unsigned nnodes_{0};
 
     //: Workspace for costs of each arc
     std::vector<neigh_arc_cost_t > arc_costs_;
@@ -78,13 +78,13 @@ class mmn_lbp_solver: public mmn_solver
     double max_delta_;
 
     //: max number of iterations allowed
-    unsigned max_iterations_;
+    unsigned max_iterations_{100};
 
     //: min number of iterations before checking for solution looping (cycling)
-    unsigned min_simple_iterations_;
+    unsigned min_simple_iterations_{25};
 
     //: Convergence criterion on max_delta_
-    double epsilon_;
+    double epsilon_{1E-6};
 
     //: count of number of times a solution in history is revisited
     unsigned nrevisits_;
@@ -96,23 +96,23 @@ class mmn_lbp_solver: public mmn_solver
     unsigned cycle_detection_count_;
 
     //: message update smoothing constant (used if cycling detected)
-    double alpha_;
+    double alpha_{0.6};
 
     //: should message update be smoothed during cycling
-    bool smooth_on_cycling_;
+    bool smooth_on_cycling_{true};
 
     //; Maximum number of allowed cycle detections
     //NOTE only used if smooth_on_cycling_ is true
     //Otherwise we give up after the first cycle is detected
-    unsigned max_cycle_detection_count_;
+    unsigned max_cycle_detection_count_{3};
 
     //: solution value when cycling first detected
     double zbest_on_cycle_detection_;
 
     //:verbose debug output
-    bool verbose_;
+    bool verbose_{false};
 
-    msg_update_t msg_upd_mode_;
+    msg_update_t msg_upd_mode_{mmn_lbp_solver::eRANDOM_SERIAL};
 
     //: Magic numbers for cycle detection
     static constexpr unsigned NHISTORY_ = 5;

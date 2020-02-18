@@ -36,7 +36,7 @@ class CardinalSpline
 {
  public:
     typedef vnl_vector_fixed<double, 3> Vector3D;
-    CardinalSpline(): Mc(4,4,0.0), s(0.25) {}
+    CardinalSpline() : Mc(4, 4, 0.0) {}
     CardinalSpline(std::vector<Vector3D> &cPoints)
     : controlPoints(cPoints), Mc(4,4,0.0), s(0.25)
     {
@@ -126,7 +126,7 @@ class CardinalSpline
     }
     std::vector<Vector3D> controlPoints;
     vnl_matrix<double> Mc;
-    double s;
+    double s{0.25};
 };
 
 void vsl_b_write(vsl_b_ostream &os, const CardinalSpline &e);

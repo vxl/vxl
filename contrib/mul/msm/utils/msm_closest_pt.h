@@ -20,11 +20,11 @@
 //  If alpha==0, then point is just pts[i0]
 struct msm_line_seg_pt
 {
-  int i0, i1;
-  double alpha;
+  int i0{-1}, i1{-1};
+  double alpha{0.0};
 
   //: 1 Construct as undefined
-  msm_line_seg_pt() : i0(-1),i1(-1),alpha(0.0) {}
+  msm_line_seg_pt() {}
 
   //: 2 Construct as single point, index
   msm_line_seg_pt(int index) : i0(index),i1(-1),alpha(0.0) {}

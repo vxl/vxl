@@ -31,25 +31,25 @@ class msm_ref_shape_instance
 {
  private:
   //: Shape model of which this is an instance
-  const msm_ref_shape_model *model_;
+   const msm_ref_shape_model *model_{nullptr};
 
-  //: Model parameters
-  vnl_vector<double> b_;
+   //: Model parameters
+   vnl_vector<double> b_;
 
-  //: Current model points
-  msm_points points_;
+   //: Current model points
+   msm_points points_;
 
-  //: When true, use Gaussian prior on params in fit_to_points*
-  bool use_prior_;
+   //: When true, use Gaussian prior on params in fit_to_points*
+   bool use_prior_{false};
 
-  //: True if model points up to date with b_
-  bool points_valid_;
+   //: True if model points up to date with b_
+   bool points_valid_;
 
-  //: Object which applies limits to parameters in fit_to_points*
-  mbl_cloneable_ptr<msm_param_limiter> param_limiter_;
+   //: Object which applies limits to parameters in fit_to_points*
+   mbl_cloneable_ptr<msm_param_limiter> param_limiter_;
 
-  //: Workspace for points in fit_to_points
-  msm_points tmp_points_;
+   //: Workspace for points in fit_to_points
+   msm_points tmp_points_;
 
  public:
 

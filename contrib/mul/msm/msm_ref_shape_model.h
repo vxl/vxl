@@ -36,7 +36,7 @@ class msm_ref_shape_model
   msm_points mean_;
 
   //: Scale of mean points (=mean_.scale())
-  double mean_points_scale_;
+  double mean_points_scale_{0};
 
   //: Modes of variation
   vnl_matrix<double> modes_;

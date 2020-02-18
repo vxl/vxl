@@ -118,7 +118,7 @@ class rsdl_bins_2d
   point_type max_pt_;
   point_type bin_sizes_;
 
-  int num_bins_x_, num_bins_y_;
+  int num_bins_x_{1}, num_bins_y_{1};
 
   COORD_T dist_tolerance_sqr_ ;
 };

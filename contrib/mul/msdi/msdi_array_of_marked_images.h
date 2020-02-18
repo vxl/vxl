@@ -22,13 +22,13 @@ private:
   vimt_image_2d_of<vxl_byte> image_;
 
   //: When true, convert multiplane images to single plane
-  bool grey_only_;
+  bool grey_only_{true};
 
   //: True if image_ is current
   bool image_ok_;
 
   //: True if image_pyr_ is current
-  bool image_pyr_ok_;
+  bool image_pyr_ok_{false};
 
   //: Image directory
   std::string image_dir_;
@@ -40,7 +40,7 @@ private:
   const std::vector<msm_points> *points_;
 
   //: Index of current image
-  int index_;
+  int index_{0};
 
   //: Generate suitable pyramid from current image
   void get_image();

@@ -3,15 +3,9 @@
 //:
 //  \file
 
-
 osl_edge_detector_params::osl_edge_detector_params()
-  : sigma_(3.0f)
-  , low_(6)
-  , gauss_tail_(0.015f)
-  , fill_gaps_(true)
-  , verbose_(false)
-{
-}
+
+{}
 
 #if 0 // commented out
 // from osl_edge_detector

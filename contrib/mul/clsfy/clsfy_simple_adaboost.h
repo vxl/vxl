@@ -32,13 +32,13 @@ class clsfy_simple_adaboost : public clsfy_classifier_base
   std::vector<int> index_;
 
   //: number of classifiers used
-  int n_clfrs_used_;
+  int n_clfrs_used_{-1};
 
   //: dimensionality of data
   // (i.e. size of input vectors v, ie the total number of different features)
-  int n_dims_;
+  int n_dims_{-1};
 
-//================protected methods =================================
+  //================protected methods =================================
 
   //: Delete objects on heap
   void delete_stuff();

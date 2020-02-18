@@ -17,14 +17,15 @@
 class mbl_chord
 {
 private:
-  int start_x_;
-  int end_x_;
-  int y_;
+  int start_x_{0};
+  int end_x_{-1};
+  int y_{0};
+
 public:
     //: Constructor
-  mbl_chord() : start_x_(0),end_x_(-1),y_(0) {}
+  mbl_chord() {}
 
-    //: Constructor
+  //: Constructor
   mbl_chord(int start_x, int end_x, int y)
     : start_x_(start_x), end_x_(end_x), y_(y) {}
 

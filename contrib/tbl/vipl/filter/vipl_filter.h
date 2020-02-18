@@ -103,7 +103,9 @@ class vipl_filter          : public vipl_filter_abs
 
   //declare variable to hold "border" size for images.
   // May change to array in future (with argless accessor defaulting to largest)
- private: int hsimage_border_size;
+ private:
+   int hsimage_border_size{0};
+
  public: int image_border_size() const { return hsimage_border_size; }
  public: int & ref_image_border_size() { return hsimage_border_size; }
   // when too close to border what should we use as "fill" value.  It's up to
@@ -125,7 +127,9 @@ class vipl_filter          : public vipl_filter_abs
  public: VIPL_FILTER_STATE & ref_output_state() { return hsoutput_state; }
  public: void put_output_state(VIPL_FILTER_STATE const t) { hsoutput_state = t; }
   // how many input images are there.
- private: int hsnuminputs;
+ private:
+   int hsnuminputs{1};
+
  public: int numinputs() const { return hsnuminputs; }
  public: int & ref_numinputs() { return hsnuminputs; }
   // how many output images are there. currently only 1 is allowed but this will change...
@@ -177,7 +181,9 @@ class vipl_filter          : public vipl_filter_abs
  public: out_descriptor_type & ref_ROA() { return hsROA; }
   // if false (default) the ROA is taken from output image
   // if true, it is taken from the input image.
- private:  bool hsis_input_driven;
+ private:
+   bool hsis_input_driven{false};
+
  public: bool is_input_driven() const { return hsis_input_driven; }
  public: bool & ref_is_input_driven() { return hsis_input_driven; }
  public: void put_is_input_driven(bool b=true) { hsis_input_driven=b; }

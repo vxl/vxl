@@ -30,9 +30,8 @@
 
 //: Dflt ctor
 vpdfl_pc_gaussian::vpdfl_pc_gaussian()
-  : partition_(0), log_k_principal_(0.0), partition_chooser_(nullptr)
-{
-}
+
+{}
 //=======================================================================
 
 //: Destructor

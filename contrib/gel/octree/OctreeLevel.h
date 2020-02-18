@@ -34,8 +34,8 @@ class OctreeLevel
   int size;
   vbl_array_3d<int> color;
 
-  OctreeLevel *next;
-  OctreeLevel *prev;
+  OctreeLevel *next{nullptr};
+  OctreeLevel *prev{nullptr};
 };
 
 #endif // OctreeLevel_h_

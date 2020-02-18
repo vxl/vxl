@@ -26,13 +26,13 @@ class msm_ellipsoid_limiter : public msm_param_limiter
   vnl_vector<double> mode_var_;
 
   //: Max. allowed mahalanobis distance.
-  double M_max_;
+  double M_max_{3.0};
 
   //: Proportion of Gaussian to be accepted
   //  Used to set M_max when mode_var defined.
-  double accept_prop_;
+  double accept_prop_{0.98};
 
- public:
+public:
 
   msm_ellipsoid_limiter();
 

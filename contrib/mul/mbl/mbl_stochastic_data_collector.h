@@ -44,7 +44,7 @@ class mbl_stochastic_data_collector: public mbl_data_collector<T>
   mbl_data_array_wrapper<T > v_data_;
 
   //: The number of samples presented to record() so far.
-  unsigned long nPresented_;
+  unsigned long nPresented_{0};
 
   //: Random number generator used to decide whether to store a particular vector.
   vnl_random rand;

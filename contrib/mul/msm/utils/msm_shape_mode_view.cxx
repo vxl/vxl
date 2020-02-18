@@ -19,17 +19,12 @@
 // Dflt ctor
 //=======================================================================
 
-msm_shape_mode_view::msm_shape_mode_view():
-  shape_model_(nullptr),
-  points_(3),
-  n_per_mode_(3),
-  mode_(0),
-  sd_range_(3.0),
-  rel_scale_(0.95),
-  overlap_shapes_(false),
-  display_win_(0,255,0,128)
-{}
+msm_shape_mode_view::msm_shape_mode_view()
+    :
 
+      points_(3),
+
+      display_win_(0, 255, 0, 128) {}
 
 //: When true, overlap all the shapes to highlight changes
 void msm_shape_mode_view::set_overlap_shapes(bool b)

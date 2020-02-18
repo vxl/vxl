@@ -21,7 +21,7 @@ class pdf1d_flat;
 //: Class to build pdf1d_flat objects.  Sets to non-zero over range of data.
 class pdf1d_flat_builder : public pdf1d_builder
 {
-  double min_var_;
+  double min_var_{1.0e-6};
 
   pdf1d_flat& flat(pdf1d_pdf& model) const;
  public:

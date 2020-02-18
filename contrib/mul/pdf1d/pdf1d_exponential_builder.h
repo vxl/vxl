@@ -21,7 +21,7 @@ class pdf1d_exponential;
 //: Class to build pdf1d_exponential objects
 class pdf1d_exponential_builder : public pdf1d_builder
 {
-  double min_var_;
+  double min_var_{1.0e-6};
 
   pdf1d_exponential& exponential(pdf1d_pdf& model) const;
  public:

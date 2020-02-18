@@ -114,17 +114,17 @@ class rgrl_feature_trace_pt
   //: The basis for the subspace of vectors normal to the tangent direction.
   //  This is normal subspace.  It is computed once, when first needed, and cached.
   //  This is because the feature location and normal are fixed.
-  bool subspace_cached_;
-  vnl_matrix< double > normal_subspace_;
+   bool subspace_cached_{false};
+   vnl_matrix<double> normal_subspace_;
 
-  //  Chuck's note:  We'll have to be careful with the meaning of
-  //  these.  For example, in aligning extracted vessel boundaries,
-  //  the radius_ might mean the half-width of the vessel, whereas in
-  //  the pseudo-feature-based registration application, you might
-  //  want the radius to be slightly larger...
+   //  Chuck's note:  We'll have to be careful with the meaning of
+   //  these.  For example, in aligning extracted vessel boundaries,
+   //  the radius_ might mean the half-width of the vessel, whereas in
+   //  the pseudo-feature-based registration application, you might
+   //  want the radius to be slightly larger...
 
-  double length_;
-  double radius_;
+   double length_{0};
+   double radius_{0};
 };
 
 #endif

@@ -48,24 +48,27 @@ class vipl_median : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 
  private:
   // attribute to store the "temporary mask"
-  bool**  mask_;
-  bool**& ref_mask()          { return mask_; }
-  void    put_mask(bool** v)  { mask_=v; }
-  bool**  mask() const        { return mask_; }
+   bool **mask_{nullptr};
+   bool **&ref_mask() { return mask_; }
+   void put_mask(bool **v) { mask_ = v; }
+   bool **mask() const { return mask_; }
 
-  // -+-+- constructors/destructors: -+-+-
+   // -+-+- constructors/destructors: -+-+-
  public:
-  inline vipl_median(float r=1)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), radius_(r), mask_(nullptr){}
-  inline vipl_median(vipl_median const& A)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), radius_(A.radius()), mask_(nullptr) {}
-  inline ~vipl_median() override = default;
+   inline vipl_median(float r = 1)
+       : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(),
+         radius_(r) {}
+   inline vipl_median(vipl_median const &A)
+       : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(A),
+         radius_(A.radius()), mask_(nullptr) {}
+   inline ~vipl_median() override = default;
 
-  // -+-+- required method for filters: -+-+-
-  bool section_applyop() override;
-  // -+-+- optional method for filters, compute mask only once in preop, free in postop: -+-+-
-  bool preop() override;
-  bool postop() override;
+   // -+-+- required method for filters: -+-+-
+   bool section_applyop() override;
+   // -+-+- optional method for filters, compute mask only once in preop, free
+   // in postop: -+-+-
+   bool preop() override;
+   bool postop() override;
 };
 
 #ifdef INSTANTIATE_TEMPLATES

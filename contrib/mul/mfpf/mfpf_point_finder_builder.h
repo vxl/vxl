@@ -25,34 +25,34 @@ class mfpf_point_finder_builder
 {
  protected:
   //: Size of step between sample points
-  double step_size_;
+   double step_size_{1.0};
 
-  //: Number of points either side of centre to search
-  int search_ni_;
+   //: Number of points either side of centre to search
+   int search_ni_{5};
 
-  //: Number of points either side of centre to search
-  int search_nj_;
+   //: Number of points either side of centre to search
+   int search_nj_{0};
 
-  //: Define N. angles (ie try at A+idA, i in [-nA,+nA])
-  unsigned search_nA_;
+   //: Define N. angles (ie try at A+idA, i in [-nA,+nA])
+   unsigned search_nA_{0};
 
-  //: Angle step size (ie try at A+idA, i in [-nA,+nA])
-  double search_dA_;
+   //: Angle step size (ie try at A+idA, i in [-nA,+nA])
+   double search_dA_{0.0};
 
-  //: Number of scales to try at
-  unsigned search_ns_;
+   //: Number of scales to try at
+   unsigned search_ns_{0};
 
-  //: Scaling factor (ie try at ((ds)^i), i in [-ns,+ns]
-  double search_ds_;
+   //: Scaling factor (ie try at ((ds)^i), i in [-ns,+ns]
+   double search_ds_{1.0};
 
-  //: Return true if base class parameters are the same in b
-  bool base_equality(const mfpf_point_finder_builder& b) const;
+   //: Return true if base class parameters are the same in b
+   bool base_equality(const mfpf_point_finder_builder &b) const;
 
-  //: Parse relevant parameters from props list
-  void parse_base_props(mbl_read_props_type& props);
+   //: Parse relevant parameters from props list
+   void parse_base_props(mbl_read_props_type &props);
 
-  //: Set base-class parameters of point finder
-  void set_base_parameters(mfpf_point_finder& pf) const;
+   //: Set base-class parameters of point finder
+   void set_base_parameters(mfpf_point_finder &pf) const;
 
  public:
 

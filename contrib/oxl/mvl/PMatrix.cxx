@@ -37,8 +37,8 @@
 //: Constructor. Set up a canonical P matrix.
 //
 
-PMatrix::PMatrix ()
-  : svd_(nullptr)
+PMatrix::PMatrix()
+
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)

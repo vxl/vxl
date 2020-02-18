@@ -146,7 +146,9 @@ class vipl_section_descriptor
   void put_i_curr_sec_size( std::vector< int > const & v){ hsi_curr_sec_size = v;}
 
   // refcounting:
- private: int refcount_;
+ private:
+   int refcount_{1};
+
  public:  int refcount() const { return refcount_; }
  public:  int inc_refcount() { return ++refcount_; }
  public:  int dec_refcount() { if (refcount_<=1) { delete this; return 0; } return --refcount_; }

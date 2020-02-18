@@ -28,12 +28,7 @@
 // Default constructor gives identity mapping
 //=======================================================================
 
-mbl_thin_plate_spline_2d::mbl_thin_plate_spline_2d()
-  : Wx_(0),Wy_(0),
-    Ax0_(0),AxX_(1),AxY_(0),Ay0_(0),AyX_(0),AyY_(1),
-    energy_x_(0),energy_y_(0),return_pure_affine_(false)
-{
-}
+mbl_thin_plate_spline_2d::mbl_thin_plate_spline_2d() : Wx_(0), Wy_(0) {}
 
 //=======================================================================
 // Destructor

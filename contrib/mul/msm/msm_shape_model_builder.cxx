@@ -26,9 +26,8 @@
 //=======================================================================
 
 msm_shape_model_builder::msm_shape_model_builder()
-  : var_prop_(0.98),min_modes_(0),max_modes_(9999),ref_pose_source_(msm_aligner::first_shape)
-{
-}
+
+{}
 
 //=======================================================================
 // Destructor

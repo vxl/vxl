@@ -56,10 +56,7 @@ static bool tt_verbose = false;
 
 
 //: Default constructor.
-TriTensor::TriTensor()
-  : T(3, 3, 3), e12_(nullptr), e13_(nullptr), fmp12_(nullptr), fmp13_(nullptr), fmp23_(nullptr)
-{
-}
+TriTensor::TriTensor() : T(3, 3, 3) {}
 
 //
 //: Construct a TriTensor from a linear array of doubles.

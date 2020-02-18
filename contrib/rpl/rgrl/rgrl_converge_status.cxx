@@ -10,17 +10,9 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
+rgrl_converge_status::rgrl_converge_status()
 
-rgrl_converge_status::
-rgrl_converge_status( )
-  : conv_( conv_on_going ),
-    status_( status_on_going ),
-    error_( -1.0 ),
-    oscillation_count_( 0 ),
-    error_diff_( -1.0 )
-{
-
-}
+{}
 
 rgrl_converge_status::
 rgrl_converge_status( converge_type conv,

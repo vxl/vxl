@@ -116,18 +116,17 @@ class clsfy_random_forest_builder : public clsfy_builder_base
   virtual unsigned long get_tree_builder_seed() const;
 
   //: Number of trees
-  unsigned ntrees_;
+  unsigned ntrees_{100};
   //: The max depth of any child tree
   //If negative no max is applied, and all final leaf nodes are pure
   //(i.e. single class)
-  int max_depth_;
-
+  int max_depth_{-1};
 
   //: Minimum number of points associated with any node
   // If negative this is ignored, otherwise if a split would produce a child
   // node less than this, then the split does not occur and the branch is
   // terminated
-  int min_node_size_;
+  int min_node_size_{-1};
 
   //: Uniform sampler on 0,1 (for bootstrapping)
   mutable  vnl_random random_sampler_;
@@ -136,10 +135,11 @@ class clsfy_random_forest_builder : public clsfy_builder_base
   // Can be used for out of bag estimates
   // Saves for tree i the indices of all points used in its training
   // Note the storage is supplied from outside this class, as this is a kind of bolt-on
-  std::vector<std::vector<unsigned > >* poob_indices_;
- private:
+  std::vector<std::vector<unsigned>> *poob_indices_{nullptr};
+
+private:
   //: Does the builder calculate the error on the training set?
-  bool calc_test_error_;
+  bool calc_test_error_{true};
 };
 
 

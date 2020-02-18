@@ -21,7 +21,7 @@ class vpdfl_axis_gaussian;
 //: Class to build vpdfl_axis_gaussian objects
 class vpdfl_axis_gaussian_builder : public vpdfl_builder_base
 {
-  double min_var_;
+  double min_var_{1.0e-6};
 
   vpdfl_axis_gaussian& gaussian(vpdfl_pdf_base& model) const;
  public:

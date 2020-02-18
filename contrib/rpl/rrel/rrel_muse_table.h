@@ -37,12 +37,12 @@ bool operator< ( rrel_muse_key_type const& left_t, rrel_muse_key_type const& rig
 class rrel_muse_table_entry
 {
  public:
-  rrel_muse_table_entry() : initialized_(false) {}
-  bool initialized_;
-  double expected_;
-  double standard_dev_;
-  double muse_t_divisor_;
-  double muse_t_sq_divisor_;
+   rrel_muse_table_entry() {}
+   bool initialized_{false};
+   double expected_;
+   double standard_dev_;
+   double muse_t_divisor_;
+   double muse_t_sq_divisor_;
 };
 
 typedef std::map< rrel_muse_key_type, rrel_muse_table_entry > rrel_muse_map_type;

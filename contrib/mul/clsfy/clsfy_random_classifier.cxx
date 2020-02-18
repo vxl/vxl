@@ -22,10 +22,7 @@
 
 //=======================================================================
 
-clsfy_random_classifier::clsfy_random_classifier():
-confidence_(0.0), n_dims_(0u)
-{
-}
+clsfy_random_classifier::clsfy_random_classifier() {}
 
 //=======================================================================
 

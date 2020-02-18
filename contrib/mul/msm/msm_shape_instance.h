@@ -29,22 +29,22 @@ class msm_shape_instance
 {
  private:
   //: Shape model of which this is an instance
-  const msm_shape_model *model_;
+   const msm_shape_model *model_{nullptr};
 
-  //: Shape in reference frame
-  msm_ref_shape_instance ref_shape_;
+   //: Shape in reference frame
+   msm_ref_shape_instance ref_shape_;
 
-  //: Global transformation parameters
-  vnl_vector<double> pose_;
+   //: Global transformation parameters
+   vnl_vector<double> pose_;
 
-  //: Current points in world frame (transformed model pts)
-  msm_points points_;
+   //: Current points in world frame (transformed model pts)
+   msm_points points_;
 
-  //: True if points up to date with b_ and pose_
-  bool points_valid_;
+   //: True if points up to date with b_ and pose_
+   bool points_valid_;
 
-  //: Workspace for points in fit_to_points
-  msm_points tmp_points_;
+   //: Workspace for points in fit_to_points
+   msm_points tmp_points_;
 
  public:
 

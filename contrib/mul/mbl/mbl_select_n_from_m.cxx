@@ -11,7 +11,7 @@
 #endif
 
 mbl_select_n_from_m::mbl_select_n_from_m()
- : n_(0), m_(0), is_done_(false), use_random_(false)
+
 {
   random_.reseed(123746);
 }

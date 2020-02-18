@@ -21,17 +21,17 @@ class mfpf_dp_snake
 {
  protected:
   //: Maximum number of iterations to use during search
-  unsigned max_its_;
+   unsigned max_its_{10};
 
-  //: Finder used to search for good points along profiles
-  mbl_cloneable_ptr<mfpf_point_finder> finder_;
+   //: Finder used to search for good points along profiles
+   mbl_cloneable_ptr<mfpf_point_finder> finder_;
 
-  //: Current set of boundary points (a closed curve)
-  std::vector<vgl_point_2d<double> > pts_;
+   //: Current set of boundary points (a closed curve)
+   std::vector<vgl_point_2d<double>> pts_;
 
-  //: Compute the average of each point and its neighbours
-  void smooth_curve(std::vector<vgl_point_2d<double> >& src_pts,
-                    std::vector<vgl_point_2d<double> >& dest_pts);
+   //: Compute the average of each point and its neighbours
+   void smooth_curve(std::vector<vgl_point_2d<double>> &src_pts,
+                     std::vector<vgl_point_2d<double>> &dest_pts);
 
  public:
 

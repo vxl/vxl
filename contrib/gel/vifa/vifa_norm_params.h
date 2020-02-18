@@ -55,16 +55,16 @@ class vifa_norm_params : public gevd_param_mixin,
 
  private:
   //: Calculated x-coord of y == 0 [low intensity clip point]
-  float  imin_;
+   float imin_{0.0f};
 
-  //: Calculated x-coord of y == 1 [high intensity clip point]
-  float  imax_;
+   //: Calculated x-coord of y == 1 [high intensity clip point]
+   float imax_{0.0f};
 
-  //: Computed slope of line connecting high & low points
-  float  slope_;
+   //: Computed slope of line connecting high & low points
+   float slope_{0.0f};
 
-  //: Computed y-intercept of line connecting high & low points
-  float  b_;
+   //: Computed y-intercept of line connecting high & low points
+   float b_{0.0f};
 
  public:
   //: Default constructor

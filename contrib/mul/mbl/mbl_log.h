@@ -206,7 +206,7 @@ class mbl_logger
   const std::string& dump_prefix() const { return ""; }
   const std::string& timestamp() const { return ""; }
 #else
-  int level_;
+  int level_{NOTICE};
   mbl_log_output_base *output_;
   mbl_log_streambuf streambuf_;
   std::ostream logstream_;

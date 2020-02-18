@@ -28,42 +28,41 @@
 class vil3d_image_resource
 {
  public:
-  vil3d_image_resource(): reference_count_(0) {}
-  virtual ~vil3d_image_resource() = default;
+   vil3d_image_resource() {}
+   virtual ~vil3d_image_resource() = default;
 
-  //: Dimensions:  Planes x ni x nj.
-  // This concept is treated as a synonym to components.
-  virtual unsigned nplanes() const = 0;
-  //: Dimensions:  Planes x ni x nj x nk.
-  // The number of pixels in each row.
-  virtual unsigned ni() const = 0;
-  //: Dimensions:  Planes x ni x nj x nk.
-  // The number of pixels in each column.
-  virtual unsigned nj() const = 0;
-  //: Dimensions:  Planes x ni x nj x nk.
-  // The number of pixels in each column.
-  virtual unsigned nk() const = 0;
+   //: Dimensions:  Planes x ni x nj.
+   // This concept is treated as a synonym to components.
+   virtual unsigned nplanes() const = 0;
+   //: Dimensions:  Planes x ni x nj x nk.
+   // The number of pixels in each row.
+   virtual unsigned ni() const = 0;
+   //: Dimensions:  Planes x ni x nj x nk.
+   // The number of pixels in each column.
+   virtual unsigned nj() const = 0;
+   //: Dimensions:  Planes x ni x nj x nk.
+   // The number of pixels in each column.
+   virtual unsigned nk() const = 0;
 
-  //: Pixel Format.
-  // pixel_format() == VIL_PIXEL_FORMAT_BYTE
-  virtual enum vil_pixel_format pixel_format() const = 0;
+   //: Pixel Format.
+   // pixel_format() == VIL_PIXEL_FORMAT_BYTE
+   virtual enum vil_pixel_format pixel_format() const = 0;
 
-  //: Create a read/write view of the data.
-  // Modifying this view might modify the actual data.
-  // If you want to modify this data in place, call put_view after you done, and
-  // it should work efficiently. This function will always return a
-  // multi-plane scalar-pixel view of the data.
-  // \return 0 if unable to get view of correct size, or if resource is write-only.
-  //
-  // If you want to fill an existing view (e.g. a window onto some other image),
-  // then use
-  // \code
-  // vil3d_reformat(data->get_view(..), window);
-  //\endcode
-  virtual vil3d_image_view_base_sptr get_view(unsigned i0, unsigned ni,
-                                              unsigned j0, unsigned nj,
-                                              unsigned k0, unsigned nk) const
-  { return get_copy_view (i0, ni, j0, nj, k0, nk); }
+   //: Create a read/write view of the data.
+   // Modifying this view might modify the actual data.
+   // If you want to modify this data in place, call put_view after you done,
+   // and it should work efficiently. This function will always return a
+   // multi-plane scalar-pixel view of the data.
+   // \return 0 if unable to get view of correct size, or if resource is
+   // write-only.
+   //
+   // If you want to fill an existing view (e.g. a window onto some other
+   // image), then use \code vil3d_reformat(data->get_view(..), window);
+   //\endcode
+   virtual vil3d_image_view_base_sptr get_view(unsigned i0, unsigned ni,
+                                               unsigned j0, unsigned nj,
+                                               unsigned k0, unsigned nk) const {
+     return get_copy_view(i0, ni, j0, nj, k0, nk); }
 
   //: Create a read/write view of all the data.
   vil3d_image_view_base_sptr get_view() const
@@ -119,7 +118,7 @@ class vil3d_image_resource
   void unref() {
     assert(reference_count_>0);
     if (--reference_count_<=0) delete this;}
-  int reference_count_;
+  int reference_count_{0};
 };
 
 //: Use this type to refer to and store a vil3d_image_resource

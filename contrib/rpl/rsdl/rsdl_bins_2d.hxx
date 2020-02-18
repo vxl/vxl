@@ -15,15 +15,10 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>
 
-
-template < class COORD_T, class VALUE_T >
-rsdl_bins_2d< COORD_T, VALUE_T > ::
-rsdl_bins_2d()
-  : bins_(1,1), min_pt_(0,0), max_pt_(1,1), bin_sizes_(1,1), num_bins_x_(1), num_bins_y_(1),
-    dist_tolerance_sqr_( 0 )
-{
-}
-
+template <class COORD_T, class VALUE_T>
+rsdl_bins_2d<COORD_T, VALUE_T>::rsdl_bins_2d()
+    : bins_(1, 1), min_pt_(0, 0), max_pt_(1, 1), bin_sizes_(1, 1),
+      dist_tolerance_sqr_(0) {}
 
 template < class COORD_T, class VALUE_T >
 rsdl_bins_2d< COORD_T, VALUE_T > ::

@@ -36,50 +36,50 @@ class vifa_incr_var : public vul_timestamp, public vbl_ref_count
 {
  protected:
   //: The current mean of the data set
-  double data_mean_;
+   double data_mean_{0.0};
 
-  //: The current variance of the data set
-  double data_var_;
+   //: The current variance of the data set
+   double data_var_{0.0};
 
-  //: The number of samples in the data set
-  int    n_;
+   //: The number of samples in the data set
+   int n_{0};
 
-  //: The minimum-value and maximum-value sample of the data set
-  vbl_bounding_box<double,1> min_max_;
+   //: The minimum-value and maximum-value sample of the data set
+   vbl_bounding_box<double, 1> min_max_;
 
  public:
   //: Default constructor
-  vifa_incr_var() : data_mean_(0.0), data_var_(0.0), n_(0) {}
+   vifa_incr_var() {}
 
-  // copy constructor - compiler-provided one sets ref_count to nonzero which is wrong -PVr
-  vifa_incr_var(vifa_incr_var const& v)
-    : vul_timestamp(), vbl_ref_count(),
-      data_mean_(v.data_mean_), data_var_(v.data_var_),
-      n_(v.n_), min_max_(v.min_max_) {}
+   // copy constructor - compiler-provided one sets ref_count to nonzero which
+   // is wrong -PVr
+   vifa_incr_var(vifa_incr_var const &v)
+       : vul_timestamp(), vbl_ref_count(), data_mean_(v.data_mean_),
+         data_var_(v.data_var_), n_(v.n_), min_max_(v.min_max_) {}
 
-  //: Fetch the current mean
-  double get_mean() const { return data_mean_; }
+   //: Fetch the current mean
+   double get_mean() const { return data_mean_; }
 
-  //: Fetch the current variance
-  double get_var() const { return data_var_; }
+   //: Fetch the current variance
+   double get_var() const { return data_var_; }
 
-  //: Fetch the number of samples received so far
-  int    get_n() const { return n_; }
+   //: Fetch the number of samples received so far
+   int get_n() const { return n_; }
 
-  //: Fetch the minimum-value sample of the data set
-  double get_min() const { return min_max_.min()[0]; }
+   //: Fetch the minimum-value sample of the data set
+   double get_min() const { return min_max_.min()[0]; }
 
-  //: Fetch the maximum-value sample of the data set
-  double get_max() const { return min_max_.max()[0]; }
+   //: Fetch the maximum-value sample of the data set
+   double get_max() const { return min_max_.max()[0]; }
 
-  //: Update the mean & variance measures with a new sample
-  // This method is a convenience front-end for add_sample() (see below)
-  void   add_sample(double data_point); // !< The new data sample
+   //: Update the mean & variance measures with a new sample
+   // This method is a convenience front-end for add_sample() (see below)
+   void add_sample(double data_point); // !< The new data sample
 
-  //: Update the mean & variance measures with a new sample
-  void   add_sample(double data_point,  // !< The new data sample
-                    double prev_factor, // !< Ratio of current n_ & new n_
-                    double curr_factor);// !< Inverse of new n_
+   //: Update the mean & variance measures with a new sample
+   void add_sample(double data_point,   // !< The new data sample
+                   double prev_factor,  // !< Ratio of current n_ & new n_
+                   double curr_factor); // !< Inverse of new n_
 };
 
 typedef vbl_smart_ptr<vifa_incr_var>   vifa_incr_var_sptr;

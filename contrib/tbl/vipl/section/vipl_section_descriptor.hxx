@@ -103,18 +103,11 @@ vipl_section_descriptor< DataType > ::~vipl_section_descriptor()
 #endif
 }
 
-template < class DataType >
-vipl_section_descriptor< DataType > ::vipl_section_descriptor()
-  : hsreal_descriptor(this),
-    hsreal_container(nullptr),
-    hsi_data_ptr(nullptr),
-    hsi_data_offsets(2,0),
-    hsi_curr_sec_start(2,0),
-    hsi_curr_sec_end(2,0),
-    hsi_curr_sec_size(2,0),
-    refcount_ (1)
-// C++ auto-generated low-level constructor
-{
+template <class DataType>
+vipl_section_descriptor<DataType>::vipl_section_descriptor()
+    : hsreal_descriptor(this), hsreal_container(nullptr), hsi_data_ptr(nullptr),
+      hsi_data_offsets(2, 0), hsi_curr_sec_start(2, 0), hsi_curr_sec_end(2, 0),
+      hsi_curr_sec_size(2, 0) {
   hsreal_descriptor = this;
 }
 

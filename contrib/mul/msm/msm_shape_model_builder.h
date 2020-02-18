@@ -27,18 +27,18 @@ class msm_shape_model_builder
   mbl_cloneable_ptr<msm_param_limiter> param_limiter_;
 
   //: Choose n.modes to explain this proportion of variance
-  double var_prop_;
+  double var_prop_{0.98};
 
   //: Min. number of modes to select
-  unsigned min_modes_;
+  unsigned min_modes_{0};
 
   //: Max. number of modes to use
-  unsigned max_modes_;
+  unsigned max_modes_{9999};
 
   //: Define how to compute alignment of reference shape
-  msm_aligner::ref_pose_source ref_pose_source_;
+  msm_aligner::ref_pose_source ref_pose_source_{msm_aligner::first_shape};
 
- public:
+public:
 
   // Dflt ctor
   msm_shape_model_builder();

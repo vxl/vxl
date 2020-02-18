@@ -46,44 +46,41 @@ class vdgl_digital_region : public vsol_region_2d
  public:
 
   // Constructors/Initializers/Destructors---------------------------------
-  vdgl_digital_region()
-  : vsol_region_2d(),
-    npts_given_(false), npts_(0), pixel_size_(1.f), xp_(nullptr), yp_(nullptr), pix_(nullptr),
-    max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f),
-    io_(0.f), io_stdev_(0.0f), pix_index_(0),
-    fit_valid_(false), scatter_matrix_valid_(false),
-    X2_(0), Y2_(0), I2_(0), XY_(0), XI_(0), YI_(0), error_(0), sigma_sq_(0) {}
+   vdgl_digital_region() : vsol_region_2d(), min_((unsigned short)(-1)) {}
 
-  vdgl_digital_region(int npts, const float* xp, const float* yp, const unsigned short *pix);
-  vdgl_digital_region(vdgl_digital_region const& r);
-  ~vdgl_digital_region() override;
+   vdgl_digital_region(int npts, const float *xp, const float *yp,
+                       const unsigned short *pix);
+   vdgl_digital_region(vdgl_digital_region const &r);
+   ~vdgl_digital_region() override;
 
-  // Data Access-----------------------------------------------------------
-  // Data storage for the pixel arrays
-  void ResetPixelData();
-  void IncrementMeans(float x, float y, unsigned short pix);
-  void InitPixelArrays();
-  void SetNpts(int npts);
-  void InsertInPixelArrays(float x, float y, unsigned short pix);
+   // Data Access-----------------------------------------------------------
+   // Data storage for the pixel arrays
+   void ResetPixelData();
+   void IncrementMeans(float x, float y, unsigned short pix);
+   void InitPixelArrays();
+   void SetNpts(int npts);
+   void InsertInPixelArrays(float x, float y, unsigned short pix);
 
-  //: The region pixel coordinates and intensities
-  float const* Xj() const {return xp_;}
-  float const* Yj() const {return yp_;}
-  unsigned short const* Ij() const {return pix_;}
-  unsigned int Npix() const {return npts_;}
+   //: The region pixel coordinates and intensities
+   float const *Xj() const { return xp_; }
+   float const *Yj() const { return yp_; }
+   unsigned short const *Ij() const { return pix_; }
+   unsigned int Npix() const { return npts_; }
 
-  //: The size of a region pixel in image pixel units
-  //(due to expanded resolution processing)
-  void set_pixel_size(float pixel_size){pixel_size_= pixel_size;}
-  float get_pixel_size() const {return pixel_size_;}
+   //: The size of a region pixel in image pixel units
+   //(due to expanded resolution processing)
+   void set_pixel_size(float pixel_size) { pixel_size_ = pixel_size; }
+   float get_pixel_size() const { return pixel_size_; }
 
-  // Min and Max region intensities
-  float get_min() const { return min_; }
-  float get_max() const { return max_; }
-  //: reset the iterator for accessing region pixels
-  void reset() const { pix_index_ = -1; }
-  //: increment to next pixel and check if iterator is finished
-  bool next() const { ++pix_index_; return pix_index_<(int)npts_; }
+   // Min and Max region intensities
+   float get_min() const { return min_; }
+   float get_max() const { return max_; }
+   //: reset the iterator for accessing region pixels
+   void reset() const { pix_index_ = -1; }
+   //: increment to next pixel and check if iterator is finished
+   bool next() const {
+     ++pix_index_;
+     return pix_index_ < (int)npts_; }
   float X() const;    //!< The x pixel coordinate
   float Y() const;    //!< The y pixel coordinate
   unsigned short I() const;//!< The pixel intensity
@@ -149,27 +146,28 @@ class vdgl_digital_region : public vsol_region_2d
 
  protected:
   // Members
-  bool npts_given_;         //!< Creating a region with specified npts
-  unsigned int npts_;       //!< Number of pixels in the region
-  float pixel_size_;        //!< Image pixel size in fractions of a pixel
-  float *xp_, *yp_;         //!< The location of each pixel
-  unsigned short *pix_;     //!< The pixel intensities
-  float max_, min_;         //!< Upper and lower bounds
-  float xo_, yo_, io_;      //!< Mean Values
-  float io_stdev_;          //!< Intensity standard deviation for region
-  mutable int pix_index_;   //!< Index in pixel array (iterator)
-  void ComputeScatterMatrix() const; // mutable
-  void IncrByXYI(double x, double y, int intens) const; // mutable
-  double ComputeSampleResidual() const; // mutable
-  //members
-  mutable bool fit_valid_;           //!< Has a plane fit been done?
-  mutable bool scatter_matrix_valid_;//!< Is the scatter matrix current?
-  mutable double Ix_;                //!< dI/dx
-  mutable double Iy_;                //!< dI/dy
-  //: The sums of various monomials to form the scatter matrix
-  mutable double X2_,Y2_,I2_,XY_,XI_,YI_;
-  mutable double error_, sigma_sq_;  //!< fitting errors
-  mutable vnl_double_3x3 Si_;        //!< scatter matrix
+   bool npts_given_{false}; //!< Creating a region with specified npts
+   unsigned int npts_{0};   //!< Number of pixels in the region
+   float pixel_size_{1.f};  //!< Image pixel size in fractions of a pixel
+   float *xp_{nullptr}, *yp_{nullptr}; //!< The location of each pixel
+   unsigned short *pix_{nullptr};      //!< The pixel intensities
+   float max_{0}, min_;                //!< Upper and lower bounds
+   float xo_{0.f}, yo_{0.f}, io_{0.f}; //!< Mean Values
+   float io_stdev_{0.0f};     //!< Intensity standard deviation for region
+   mutable int pix_index_{0}; //!< Index in pixel array (iterator)
+   void ComputeScatterMatrix() const;                    // mutable
+   void IncrByXYI(double x, double y, int intens) const; // mutable
+   double ComputeSampleResidual() const;                 // mutable
+   // members
+   mutable bool fit_valid_{false}; //!< Has a plane fit been done?
+   mutable bool scatter_matrix_valid_{
+       false};         //!< Is the scatter matrix current?
+   mutable double Ix_; //!< dI/dx
+   mutable double Iy_; //!< dI/dy
+   //: The sums of various monomials to form the scatter matrix
+   mutable double X2_{0}, Y2_{0}, I2_{0}, XY_{0}, XI_{0}, YI_{0};
+   mutable double error_{0}, sigma_sq_{0}; //!< fitting errors
+   mutable vnl_double_3x3 Si_;             //!< scatter matrix
 };
 #include "vdgl_digital_region_sptr.h"
 //: merge regions - set the pixel arrays no statistics computed

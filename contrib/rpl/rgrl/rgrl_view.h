@@ -181,8 +181,8 @@ class rgrl_view
   rgrl_transformation_sptr   xform_estimate_;
   rgrl_transformation_sptr   inverse_estimate_;
 
-  unsigned                   current_resolution_;
-  int                        num_updates_global_region_;
+  unsigned current_resolution_{0};
+  int num_updates_global_region_{0};
 };
 
 

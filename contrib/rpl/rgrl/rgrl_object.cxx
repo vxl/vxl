@@ -2,11 +2,8 @@
 #include "rgrl_command.h"
 #include "rgrl_event.h"
 
-rgrl_object::
-rgrl_object()
-  : debug_flag_( 0 ),
-    warning_( true ),
-    observer_count_( 0 )
+rgrl_object::rgrl_object()
+
 {}
 
 rgrl_object::

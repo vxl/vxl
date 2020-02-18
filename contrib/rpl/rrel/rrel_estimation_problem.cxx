@@ -20,12 +20,9 @@ rrel_estimation_problem::rrel_estimation_problem( unsigned int dof,
 {
 }
 
-rrel_estimation_problem::rrel_estimation_problem( )
-  : scale_type_( NONE ),
-    single_scale_( 0 ),
-    multiple_scales_( nullptr )
-{
-}
+rrel_estimation_problem::rrel_estimation_problem()
+
+{}
 
 rrel_estimation_problem::~rrel_estimation_problem( )
 {

@@ -16,9 +16,8 @@
 #include "rgrl_trans_reduced_quad.h"
 #include "rgrl_match_set.h"
 
-rgrl_est_reduced_quad2d::
-rgrl_est_reduced_quad2d()
-  : condition_num_thrd_( 0.0 )
+rgrl_est_reduced_quad2d::rgrl_est_reduced_quad2d()
+
 {}
 
 rgrl_est_reduced_quad2d::

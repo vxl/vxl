@@ -30,20 +30,21 @@ class vil3d_image_view_base
 {
  protected:
   //: Number of columns.
-  unsigned ni_;
-  //: Number of rasters.
-  unsigned nj_;
-  //: Number of slices.
-  unsigned nk_;
-  //: Number of planes.
-  unsigned nplanes_;
+   unsigned ni_{0};
+   //: Number of rasters.
+   unsigned nj_{0};
+   //: Number of slices.
+   unsigned nk_{0};
+   //: Number of planes.
+   unsigned nplanes_{1};
 
-  vil3d_image_view_base(unsigned ni, unsigned nj, unsigned nk, unsigned nplanes):
-  ni_(ni), nj_(nj), nk_(nk), nplanes_(nplanes), reference_count_(0) {}
+   vil3d_image_view_base(unsigned ni, unsigned nj, unsigned nk,
+                         unsigned nplanes)
+       : ni_(ni), nj_(nj), nk_(nk), nplanes_(nplanes) {}
 
-  //: Default is an empty one-plane image
-  //  Don't set nplanes_ to zero as it confuses set_size(nx,ny,nz) later
-  vil3d_image_view_base(): ni_(0), nj_(0), nk_(0), nplanes_(1), reference_count_(0) {}
+   //: Default is an empty one-plane image
+   //  Don't set nplanes_ to zero as it confuses set_size(nx,ny,nz) later
+   vil3d_image_view_base() {}
 
  public:
   // The destructor must be virtual so that the memory chunk is destroyed.
@@ -99,7 +100,7 @@ class vil3d_image_view_base
   void unref() {
     assert(reference_count_>0);
     if (--reference_count_<=0) delete this;}
-  int reference_count_;
+  int reference_count_{0};
 };
 
 //: An interface between vil3d_image_views and vil3d_image_resources

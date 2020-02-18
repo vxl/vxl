@@ -146,14 +146,14 @@ class rgrl_initializer_ran_sam
   double desired_prob_good_;
   unsigned int max_populations_expected_;
   unsigned int min_samples_;
-  bool generate_all_;
+  bool generate_all_{false};
   bool should_estimate_global_region_;
 
   //: Random number generator.
   // Normally, this will point to the "global" generator, but a could
   // point to a local one if the user wants to specify a seed.
   vnl_random* generator_;
-  bool own_generator_;
+  bool own_generator_{false};
 
   // The estimate
   //
@@ -162,7 +162,7 @@ class rgrl_initializer_ran_sam
 
   // Sampling variables
   //
-  unsigned int samples_to_take_;
+  unsigned int samples_to_take_{0};
 };
 
 #endif

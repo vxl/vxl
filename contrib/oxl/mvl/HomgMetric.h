@@ -43,11 +43,12 @@ class PMatrix;
 class HomgMetric
 {
   // Data Members--------------------------------------------------------------
-  const ImageMetric* metric_;
- public:
+  const ImageMetric *metric_{nullptr};
+
+public:
   // Constructors/Destructors--------------------------------------------------
 
-  HomgMetric() : metric_(nullptr) {}
+  HomgMetric() {}
   HomgMetric(const ImageMetric* metric);
 
   // HomgMetric(const HomgMetric& that); - use default

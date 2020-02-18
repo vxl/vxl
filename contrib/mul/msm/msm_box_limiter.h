@@ -23,13 +23,13 @@ class msm_box_limiter : public msm_param_limiter
   vnl_vector<double> mode_sd_;
 
   //: Number of SDs to limit at
-  double n_sds_;
+  double n_sds_{3.0};
 
   //: Proportion of Gaussian to be accepted
   //  Used to set M_max when mode_var defined.
-  double accept_prop_;
+  double accept_prop_{0.98};
 
- public:
+public:
 
   msm_box_limiter();
 

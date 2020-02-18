@@ -50,10 +50,10 @@ class rgrl_matcher_k_nearest
 
   // nodes to be sorted based on distance
   struct internal_dist_node{
-    double geo_err_;
+    double geo_err_{-1.0};
     nodes_vec_iterator itr_;
 
-    internal_dist_node(): geo_err_(-1.0){  }
+    internal_dist_node() {}
 
     bool operator<( internal_dist_node const& rhs ) const;
   };

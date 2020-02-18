@@ -49,7 +49,8 @@ class vipl_dilate_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,Pixel
   void    put_radius(float v){ radius_ =   v;}
 
  private:
-  bool** mask_;
+   bool **mask_{nullptr};
+
  public:
   bool**  mask() const       { return mask_;}
  protected:
@@ -58,17 +59,20 @@ class vipl_dilate_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,Pixel
 
   // -+-+- constructors/destructors: -+-+-
  public:
-  inline vipl_dilate_disk(float r=1)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), radius_(r), mask_(nullptr) {}
-  inline vipl_dilate_disk(vipl_dilate_disk const& A)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), radius_(A.radius()), mask_(nullptr) {}
-  inline ~vipl_dilate_disk() override = default;
+   inline vipl_dilate_disk(float r = 1)
+       : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(),
+         radius_(r) {}
+   inline vipl_dilate_disk(vipl_dilate_disk const &A)
+       : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(A),
+         radius_(A.radius()), mask_(nullptr) {}
+   inline ~vipl_dilate_disk() override = default;
 
-// -+-+- required method for filters: -+-+-
-  bool section_applyop() override;
-// -+-+- optional method for filters, compute mask only once in preop, free in postop: -+-+-
-  bool preop() override;
-  bool postop() override;
+   // -+-+- required method for filters: -+-+-
+   bool section_applyop() override;
+   // -+-+- optional method for filters, compute mask only once in preop, free
+   // in postop: -+-+-
+   bool preop() override;
+   bool postop() override;
 };
 
 #ifdef INSTANTIATE_TEMPLATES

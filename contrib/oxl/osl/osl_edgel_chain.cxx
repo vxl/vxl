@@ -16,7 +16,7 @@
 
 //--------------------------------------------------------------------------------
 
-osl_edgel_chain::osl_edgel_chain() : n(0), x(nullptr), y(nullptr), grad(nullptr), theta(nullptr) { }
+osl_edgel_chain::osl_edgel_chain() {}
 
 osl_edgel_chain::osl_edgel_chain(unsigned int n_)
   : n(n_)

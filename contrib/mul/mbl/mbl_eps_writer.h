@@ -40,10 +40,10 @@ class mbl_eps_writer
   std::ofstream ofs_;
 
   //: Bounding box (in points)
-  double nx_,ny_;
+  double nx_{100.0}, ny_{100.0};
 
   //: Current scaling
-  double sx_,sy_;
+  double sx_{1.0}, sy_{1.0};
 
   //: Creates a greyscale image  at (tx,ty) with given pixel widths
   //  Size in points given by sx(),sy() * given values.

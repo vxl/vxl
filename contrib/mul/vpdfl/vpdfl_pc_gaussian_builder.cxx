@@ -35,12 +35,9 @@
 
 //=======================================================================
 
-vpdfl_pc_gaussian_builder::vpdfl_pc_gaussian_builder() :
-  partitionMethod_(vpdfl_pc_gaussian_builder::fixed),
-  proportionOfVariance_(0),
-  fixed_partition_(1)
-{
-}
+vpdfl_pc_gaussian_builder::vpdfl_pc_gaussian_builder()
+
+{}
 
 //=======================================================================
 

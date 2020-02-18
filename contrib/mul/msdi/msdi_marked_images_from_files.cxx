@@ -52,9 +52,7 @@ bool msdi_state_from_string(const std::string& str, msdi_reflection_state& state
 }
 
 msdi_marked_images_from_files::msdi_marked_images_from_files()
-  : ref_state_(Raw),grey_only_(true),unit_scaling_(1000.0f),
-    image_ok_(false),image_pyr_ok_(false),
-    points_ok_(false),load_as_float_(false),index_(0)
+
 {
   pyr_builder_.set_min_size(24,24);
   points_are_reflected_=false;

@@ -18,10 +18,11 @@ template<class T>
 class mbl_data_wrapper_mixer : public mbl_data_wrapper<T>
 {
   std::vector<mbl_data_wrapper<T> *> wrapper_;
-  unsigned long n_;
-  unsigned long index_;
-  unsigned long current_wrapper_;
- public:
+  unsigned long n_{0};
+  unsigned long index_{0};
+  unsigned long current_wrapper_{0};
+
+public:
   //: Default constructor
   mbl_data_wrapper_mixer();
 

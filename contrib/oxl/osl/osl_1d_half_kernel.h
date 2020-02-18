@@ -10,16 +10,14 @@
 template <class T>
 struct osl_1d_half_kernel
 {
-  osl_1d_half_kernel(unsigned capacity_ =40)
-    : capacity(capacity_)
-    , count(0)
-    , array(new T[capacity]) { }
+  osl_1d_half_kernel(unsigned capacity_ = 40)
+      : capacity(capacity_), array(new T[capacity]) {}
 
   ~osl_1d_half_kernel() { delete [] array; array = nullptr; }
 
   unsigned const capacity;
 
-  unsigned count;
+  unsigned count{0};
   T *array;
 };
 

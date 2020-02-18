@@ -37,7 +37,7 @@ struct osl_topology_base : public vbl_ref_count
 {
   osl_topology_base(osl_topology_base const& x)
     : vbl_ref_count(), id(x.id), stash_head(x.stash_head) {}
-  int id;
+  int id{0};
   osl_topology_base();
   ~osl_topology_base() override;
   void SetId(int );
@@ -52,7 +52,7 @@ struct osl_topology_base : public vbl_ref_count
   //: remove first stash with given name. the dtor is \e not called.
   void *stash_remove  (char const *name);
  private:
-  osl_stash_link *stash_head;
+   osl_stash_link *stash_head{nullptr};
 };
 
 //--------------------------------------------------------------------------------

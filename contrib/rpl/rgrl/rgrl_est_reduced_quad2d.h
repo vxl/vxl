@@ -58,7 +58,7 @@ class rgrl_est_reduced_quad2d
   rgrl_type_macro( rgrl_est_reduced_quad2d, rgrl_linear_estimator );
 
  private:
-  double condition_num_thrd_;
+   double condition_num_thrd_{0.0};
 };
 
 #endif // rgrl_est_reduced_quad2d_h_

@@ -14,11 +14,8 @@
 #include <cassert>
 
 //: Default constructor.
-template<class T>
-mbl_selected_data_wrapper<T>::mbl_selected_data_wrapper():
-  data_(nullptr), index_(0)
-{
-}
+template <class T>
+mbl_selected_data_wrapper<T>::mbl_selected_data_wrapper() : data_(nullptr) {}
 
 //: Constructor.
 template<class T>

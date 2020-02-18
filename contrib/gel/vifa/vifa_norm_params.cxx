@@ -13,20 +13,10 @@
 #include <ImageClasses/RectROI.h>
 #endif  // ROI_SUPPORTED
 
+vifa_norm_params::vifa_norm_params(float IntLow, float ProbLow, float IntHigh,
+                                   float ProbHigh)
+    : ilow(IntLow), plow(ProbLow), ihigh(IntHigh), phigh(ProbHigh)
 
-vifa_norm_params::
-vifa_norm_params(float  IntLow,
-                 float  ProbLow,
-                 float  IntHigh,
-                 float  ProbHigh) :
-  ilow(IntLow),
-  plow(ProbLow),
-  ihigh(IntHigh),
-  phigh(ProbHigh),
-  imin_(0.0f),
-  imax_(0.0f),
-  slope_(0.0f),
-  b_(0.0f)
 {
   calculate_clip_points();
 }

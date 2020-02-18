@@ -62,12 +62,7 @@ class vimt3d_transform_3d
              Affine};
 
   //: Construct as identity transform
-  vimt3d_transform_3d() :
-    xx_(1), xy_(0), xz_(0), xt_(0),
-    yx_(0), yy_(1), yz_(0), yt_(0),
-    zx_(0), zy_(0), zz_(1), zt_(0),
-    tx_(0), ty_(0), tz_(0), tt_(1),
-    form_(Identity), inv_uptodate_(false) {}
+  vimt3d_transform_3d() {}
 
   // An explicit destructor is required to avoid an internal compiler
   // error in icc 8.0 (internal error: 0_1270)
@@ -340,20 +335,20 @@ class vimt3d_transform_3d
   void simplify(double tol =1e-10);
 
  protected:
+   double xx_{1}, xy_{0}, xz_{0}, xt_{0}, yx_{0}, yy_{1}, yz_{0}, yt_{0},
+       zx_{0}, zy_{0}, zz_{1}, zt_{0}, tx_{0}, ty_{0}, tz_{0}, tt_{1};
+   Form form_{Identity};
 
-  double xx_,xy_,xz_,xt_,yx_,yy_,yz_,yt_,zx_, zy_, zz_, zt_, tx_,ty_,tz_,tt_;
-  Form form_;
+   // This is all the inverse data
+   // Notice the mutable here - take care if using threads!
+   mutable double xx2_, xy2_, xz2_, xt2_, yx2_, yy2_, yz2_, yt2_, zx2_, zy2_,
+       zz2_, zt2_, tx2_, ty2_, tz2_, tt2_;
+   mutable bool inv_uptodate_{false};
 
-  // This is all the inverse data
-  // Notice the mutable here - take care if using threads!
-  mutable double xx2_,xy2_,xz2_,xt2_,yx2_,yy2_,yz2_,yt2_,zx2_, zy2_, zz2_, zt2_, tx2_,ty2_,tz2_,tt2_;
-  mutable bool inv_uptodate_;
-
-
-  void calcInverse() const;
-  void setCheck(int n1,int n2,const char* str) const;
-  void angles(double& phi_x, double& phi_y, double& phi_z) const;
-  void setRotMat(double r_x, double r_y, double r_z);
+   void calcInverse() const;
+   void setCheck(int n1, int n2, const char *str) const;
+   void angles(double &phi_x, double &phi_y, double &phi_z) const;
+   void setRotMat(double r_x, double r_y, double r_z);
 };
 
 

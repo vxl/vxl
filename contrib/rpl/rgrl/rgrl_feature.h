@@ -33,16 +33,14 @@ class rgrl_feature
  public:
 
   //: ctor
-  rgrl_feature()
-  : scale_( 1.0 )
-  { }
+   rgrl_feature()
 
-  //: ctor
-  rgrl_feature( vnl_vector<double> const& loc, double scale = 1.0 )
-  : location_( loc ),
-    scale_( scale )
-  {
-    assert(scale_ > 0);
+   {}
+
+   //: ctor
+   rgrl_feature(vnl_vector<double> const &loc, double scale = 1.0)
+       : location_(loc), scale_(scale) {
+     assert(scale_ > 0);
   }
 
   //:
@@ -169,9 +167,9 @@ class rgrl_feature
   friend class rgrl_feature_reader;
 
   vnl_vector<double> location_;
-  double             scale_;
+  double scale_{1.0};
 
- private:
+private:
   // disabled
   rgrl_feature& operator=( rgrl_feature const& ) = delete;
 };

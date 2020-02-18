@@ -40,15 +40,15 @@ class vpdfl_kernel_pdf_builder : public vpdfl_builder_base
   enum build_type { fixed_width, select_equal, width_from_sep, adaptive };
  private:
   //: Minimum variance of whole model
-  double min_var_;
+   double min_var_{1.0e-6};
 
-  //: Type of building to be performed
-  build_type build_type_;
+   //: Type of building to be performed
+   build_type build_type_{select_equal};
 
-  //: Width set if fixed_width option on build used
-  double fixed_width_;
+   //: Width set if fixed_width option on build used
+   double fixed_width_{1.0};
 
-  vpdfl_kernel_pdf& kernel_pdf(vpdfl_pdf_base& model) const;
+   vpdfl_kernel_pdf &kernel_pdf(vpdfl_pdf_base &model) const;
  public:
 
   //: Dflt ctor

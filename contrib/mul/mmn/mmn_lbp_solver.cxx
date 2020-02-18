@@ -19,12 +19,9 @@
 
 //: Default constructor
 mmn_lbp_solver::mmn_lbp_solver()
-    : nnodes_(0), max_iterations_(100), min_simple_iterations_(25),
-      epsilon_(1E-6), alpha_(0.6), smooth_on_cycling_(true),
-      max_cycle_detection_count_(3), verbose_(false),
-      msg_upd_mode_(mmn_lbp_solver::eRANDOM_SERIAL)
+
 {
-    init();
+  init();
 }
 
 //: Construct with arcs

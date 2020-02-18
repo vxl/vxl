@@ -77,8 +77,8 @@ class PairMatchSet : public MatchSet
   class iterator
   {
 
-    const PairMatchSet* c_;
-    int match_index_;
+    const PairMatchSet *c_{nullptr};
+    int match_index_{0};
     int i1, i2;
     bool full_only_;
    public:

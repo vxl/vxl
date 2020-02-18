@@ -54,8 +54,8 @@ class PairMatchSetCorner : public PairMatchSet
   HomgInterestPointSet const* get_corners2() const { return corners2_; }
 
  private:
-  HomgInterestPointSet const* corners1_;
-  HomgInterestPointSet const* corners2_;
+   HomgInterestPointSet const *corners1_{nullptr};
+   HomgInterestPointSet const *corners2_{nullptr};
 };
 
 #endif // PairMatchSetCorner_h_

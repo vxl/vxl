@@ -43,36 +43,38 @@ class mmn_csp_solver
         mbl_stl_pred_pair_value_order<std::pair<unsigned ,unsigned > > >  arc_labels_subset_t2;
 
  private:
-    unsigned nnodes_;
+   unsigned nnodes_{0};
 
-    bool verbose_;
-    //:Vector of nodes, defining which labels are present for each node
-    //Note some sets may become empty
-    std::vector<label_subset_t > node_labels_present_;
+   bool verbose_{false};
+   //:Vector of nodes, defining which labels are present for each node
+   // Note some sets may become empty
+   std::vector<label_subset_t> node_labels_present_;
 
-    //: Define the subset of labels linked
-    // For each original arc (outer vector), the inner set gives all the
-    // corresponding node labels actually linked
-    // Note the first in the pair corresponds always to the lower node ID in the arc (i.e. as for arc pair costs
-    std::vector<arc_labels_subset_t1 > arc_labels_linked1_;
-    std::vector<arc_labels_subset_t2 > arc_labels_linked2_;
-    //:Store in graph form (so each node's neighbours are conveniently to hand)
-    mmn_graph_rep1 graph_;
+   //: Define the subset of labels linked
+   // For each original arc (outer vector), the inner set gives all the
+   // corresponding node labels actually linked
+   // Note the first in the pair corresponds always to the lower node ID in the
+   // arc (i.e. as for arc pair costs
+   std::vector<arc_labels_subset_t1> arc_labels_linked1_;
+   std::vector<arc_labels_subset_t2> arc_labels_linked2_;
+   //:Store in graph form (so each node's neighbours are conveniently to hand)
+   mmn_graph_rep1 graph_;
 
-    //: The arcs from which graph was generated
-    std::vector<mmn_arc> arcs_;
+   //: The arcs from which graph was generated
+   std::vector<mmn_arc> arcs_;
 
-    //: delete any node labels not linked by any current arcs
-    //Return true if any deletions occur
-    bool check_for_node_deletions();
+   //: delete any node labels not linked by any current arcs
+   // Return true if any deletions occur
+   bool check_for_node_deletions();
 
-    //: delete any arcs with either target node label not present
-    //Return true if any deletions occur
-    bool check_for_arc_deletions();
+   //: delete any arcs with either target node label not present
+   // Return true if any deletions occur
+   bool check_for_arc_deletions();
 
-    void initialise_arc_labels_linked(const std::vector<mmn_csp_solver:: arc_labels_subset_t >& links_subset);
+   void initialise_arc_labels_linked(
+       const std::vector<mmn_csp_solver::arc_labels_subset_t> &links_subset);
 
-    void init();
+   void init();
  public:
     //: Default constructor
     mmn_csp_solver();

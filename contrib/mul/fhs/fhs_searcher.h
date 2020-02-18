@@ -33,7 +33,7 @@ class fhs_searcher
   std::vector<fhs_arc> arc_;
 
   //: Scaling applied to shape cost (default 1.0)
-  double geom_wt_;
+  double geom_wt_{1.0};
 
   //: arc_to_j_[j] gives index of arc ending at given j
   std::vector<unsigned> arc_to_j_;

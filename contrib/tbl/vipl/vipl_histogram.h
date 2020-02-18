@@ -84,23 +84,24 @@ class vipl_histogram : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelIt
  public: DataOut scaleout() const { return scaleout_; }
 
   // the column of 2D "image" do we store the histogram
- public: int indexout_;
+ public:
+   int indexout_{0};
+
  public: int indexout() const { return indexout_; }
- public: bool checkrange_;
+ public:
+   bool checkrange_{false};
+
  public: bool checkrange() const { return checkrange_; }
 
   // -+-+- constructors/destructors: -+-+-
  public:
-  inline vipl_histogram(DataIn si=1, DataIn shi=0, DataOut so=1)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>()
-           , scalein_(si)
-           , shiftin_(shi)
-           , scaleout_(so)
-           , indexout_(0)
-           , checkrange_(false)
-      {
-        this->put_is_input_driven(true); // get sections from input
-      }
+   inline vipl_histogram(DataIn si = 1, DataIn shi = 0, DataOut so = 1)
+       : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(),
+         scalein_(si), shiftin_(shi), scaleout_(so)
+
+   {
+     this->put_is_input_driven(true); // get sections from input
+   }
 
   inline vipl_histogram(vipl_histogram const& A)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A)

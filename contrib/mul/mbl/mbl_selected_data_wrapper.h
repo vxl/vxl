@@ -25,8 +25,9 @@ class mbl_selected_data_wrapper: public mbl_data_wrapper<T>
 {
   mbl_data_wrapper<T> *data_;
   std::vector<unsigned> selection_;
-  unsigned index_;
- public:
+  unsigned index_{0};
+
+public:
   //: Copy constructor.
   mbl_selected_data_wrapper(const mbl_selected_data_wrapper<T>& p);
 

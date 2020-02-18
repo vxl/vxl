@@ -29,14 +29,9 @@
 //=======================================================================
 
 mbl_thin_plate_spline_weights_3d::mbl_thin_plate_spline_weights_3d()
-  : Wx_(0),Wy_(0),Wz_(0),
-    Ax0_(0),AxX_(1),AxY_(0),AxZ_(0),
-    Ay0_(0),AyX_(0),AyY_(1),AyZ_(0),
-    Az0_(0),AzX_(0),AzY_(0),AzZ_(1),
-    energy_x_(0),energy_y_(0),energy_z_(0),
-    src_pts_(0), pt_wts_(0)
-{
-}
+    : Wx_(0), Wy_(0), Wz_(0),
+
+      src_pts_(0), pt_wts_(0) {}
 
 //=======================================================================
 // Destructor

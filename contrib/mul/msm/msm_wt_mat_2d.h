@@ -21,17 +21,18 @@
 class msm_wt_mat_2d
 {
  private:
-  double m11_, m12_, m22_;
+   double m11_{1.0}, m12_{0.0}, m22_{1.0};
+
  public:
 
   // Default Constructor - set to identity
-  msm_wt_mat_2d()
-    : m11_(1.0),m12_(0.0),m22_(1.0) {}
+   msm_wt_mat_2d() {}
 
-  // Constructor (requires m11_>=0 and m22_>=0)
-  msm_wt_mat_2d(double m11, double m12, double m22)
-    : m11_(m11),m12_(m12),m22_(m22)
-  { assert(m11_>=0); assert(m22_>=0);}
+   // Constructor (requires m11_>=0 and m22_>=0)
+   msm_wt_mat_2d(double m11, double m12, double m22)
+       : m11_(m11), m12_(m12), m22_(m22) {
+     assert(m11_ >= 0);
+     assert(m22_ >= 0);}
 
   // Destructor
   ~msm_wt_mat_2d() = default;

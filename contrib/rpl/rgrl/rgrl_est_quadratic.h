@@ -58,7 +58,7 @@ class rgrl_est_quadratic
   double max_of_9_elements(double elt1, double elt2, double elt3,
                            double elt4, double elt5, double elt6,
                            double elt7, double elt8, double elt9 ) const;
-  double condition_num_thrd_;
+  double condition_num_thrd_{0.0};
 };
 
 #endif // rgrl_est_quadratic_h_

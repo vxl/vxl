@@ -129,19 +129,19 @@ class rrel_ran_sam_search
   double desired_prob_good_;
   unsigned int max_populations_expected_;
   unsigned int min_samples_;
-  bool generate_all_;
+  bool generate_all_{false};
 
   //: Random number generator.
   // Normally, this will point to the "global" generator, but a could
   // point to a local one if the user wants to specify a seed.
   vnl_random* generator_;
-  bool own_generator_;
+  bool own_generator_{false};
 
   //
   //  The estimate
   //
   vnl_vector<double> params_;
-  double scale_;
+  double scale_{0};
   std::vector<int> indices_;
   std::vector<double> residuals_;
 
@@ -149,9 +149,9 @@ class rrel_ran_sam_search
   //
   //  Sampling variables
   //
-  unsigned int samples_to_take_;
+  unsigned int samples_to_take_{0};
 
-  int trace_level_;
+  int trace_level_{0};
 };
 
 #endif

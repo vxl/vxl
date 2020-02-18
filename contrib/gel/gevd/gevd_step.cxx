@@ -80,12 +80,10 @@ constexpr int FRAME = 4; // 3 for NMS and extension, 4 for contour
 // boundary at junctions is 1/2 the value along contours.
 //
 gevd_step::gevd_step(float smooth_sigma, // width of filter dG
-                     float noise_sigma,   // sensor/texture intensity noise -[0 1]
+                     float noise_sigma, // sensor/texture intensity noise -[0 1]
                      float contour_factor, float junction_factor)
-  : smoothSigma(smooth_sigma), noiseSigma(noise_sigma),
-    contourFactor(contour_factor), junctionFactor(junction_factor),
-    filterFactor(2)              // factor from gevd_float_operators::Gradient
-{
+    : smoothSigma(smooth_sigma), noiseSigma(noise_sigma),
+      contourFactor(contour_factor), junctionFactor(junction_factor) {
   if (smoothSigma < 0.5)        // no guarantee for 2-pixel separation
     std::cerr << "gevd_step::gevd_step -- too small smooth_sigma: "
              << smoothSigma << std::endl;
@@ -100,7 +98,6 @@ gevd_step::gevd_step(float smooth_sigma, // width of filter dG
 
   //std::cout << "Init Step\n" << *this << std::endl;
 }
-
 
 //: Free space allocated for detecting step profiles.  Does nothing.
 gevd_step::~gevd_step() = default;

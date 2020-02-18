@@ -18,9 +18,10 @@ template<class T>
 class mbl_data_array_wrapper : public mbl_data_wrapper<T>
 {
   const T* data_;
-  unsigned long n_;
-  unsigned long index_;
- public:
+  unsigned long n_{0};
+  unsigned long index_{0};
+
+public:
   //: Default constructor
   mbl_data_array_wrapper();
 

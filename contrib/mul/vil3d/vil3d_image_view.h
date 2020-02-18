@@ -41,13 +41,13 @@ class vil3d_image_view : public vil3d_image_view_base
   //: Pointer to pixel at origin.
   T * top_left_;
   //: Add this to a pixel pointer to move one column left.
-  std::ptrdiff_t istep_;
+  std::ptrdiff_t istep_{0};
   //: Add this to a pixel pointer to move one row down.
-  std::ptrdiff_t jstep_;
+  std::ptrdiff_t jstep_{0};
   //: Add this to a pixel pointer to move one slice down.
-  std::ptrdiff_t kstep_;
+  std::ptrdiff_t kstep_{0};
   //: Add this to a pixel pointer to move one plane back.
-  std::ptrdiff_t planestep_;
+  std::ptrdiff_t planestep_{0};
 
   //: Reference to actual image data.
   vil_memory_chunk_sptr ptr_;

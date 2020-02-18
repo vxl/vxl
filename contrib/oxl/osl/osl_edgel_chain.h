@@ -14,8 +14,8 @@
 
 struct osl_edgel_chain
 {
-  unsigned int n;
-  float *x, *y, *grad, *theta;
+  unsigned int n{0};
+  float *x{nullptr}, *y{nullptr}, *grad{nullptr}, *theta{nullptr};
 
   osl_edgel_chain();
   osl_edgel_chain(unsigned int n_);

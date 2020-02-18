@@ -153,13 +153,11 @@ std::streamsize mbl_log_streambuf::xsputn( const char *ptr, std::streamsize ncha
 #ifndef MBL_LOG_DISABLE_ALL_LOGGING
 
 //: Default constructor only available to root's default logger.
-mbl_logger::mbl_logger():
-  level_(NOTICE),
-  output_(new mbl_log_output_stream(std::cerr, "")),
-  streambuf_(this),
-  logstream_(&streambuf_),
-  mt_logstream_(&logstream_)
-{
+mbl_logger::mbl_logger()
+    :
+
+      output_(new mbl_log_output_stream(std::cerr, "")), streambuf_(this),
+      logstream_(&streambuf_), mt_logstream_(&logstream_) {
   // This will have to change to support proper hierarchical control over categories.
 //  logstream_.tie(output_.real_stream_);
   // Don't insert default root logger - this would cause infinite recursion.

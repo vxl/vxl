@@ -23,9 +23,8 @@
 //=======================================================================
 //: Default constructor
 clsfy_direct_boost::clsfy_direct_boost()
-: n_clfrs_used_(-1) , n_dims_(-1)
-{
-}
+
+{}
 
 clsfy_direct_boost::clsfy_direct_boost(const clsfy_direct_boost& c)
   : clsfy_classifier_base()

@@ -18,8 +18,8 @@ class vimt_image;
 class vimt_image_pyramid
 {
   std::vector<vimt_image*> image_;
-  double base_pixel_width_;
-  double scale_step_;
+  double base_pixel_width_{1.0};
+  double scale_step_{2.0};
 
   void deleteImages();
  public:

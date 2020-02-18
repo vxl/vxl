@@ -156,20 +156,20 @@ class rgrl_est_proj_func
  protected:
   static const unsigned int proj_size_ = (Tdim+1)*(Fdim+1);
 
-  rgrl_set_of<rgrl_match_set_sptr> const* matches_ptr_;
+  rgrl_set_of<rgrl_match_set_sptr> const *matches_ptr_{nullptr};
   vnl_vector_fixed<double, Fdim>          from_centre_;
   vnl_vector_fixed<double, Tdim>          to_centre_;
 
   unsigned int index_row_;
   unsigned int index_col_;
   //: specify the maximum number of iterations for this estimator
-  int max_num_iterations_;
+  int max_num_iterations_{50};
 
   //: The threshold for relative parameter change before termination
-  double relative_threshold_;
+  double relative_threshold_{1e-7};
 
   //: zero singular value threshold
-  double zero_svd_thres_;
+  double zero_svd_thres_{1e-5};
 };
 
 #if 0

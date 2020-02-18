@@ -30,15 +30,15 @@
 class mbl_select_n_from_m
 {
  private:
-  unsigned int n_;
-  unsigned int m_;
-  bool is_done_;
-  bool use_random_;
+   unsigned int n_{0};
+   unsigned int m_{0};
+   bool is_done_{false};
+   bool use_random_{false};
 
-  std::vector<int> index_;
-  std::vector<int> not_index_;
+   std::vector<int> index_;
+   std::vector<int> not_index_;
 
-  mbl_random_n_from_m random_;
+   mbl_random_n_from_m random_;
 
  public:
 

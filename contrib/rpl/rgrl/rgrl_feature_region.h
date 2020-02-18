@@ -21,10 +21,10 @@ class rgrl_feature_region
 {
  public:
   // default ctor
-  rgrl_feature_region()  : pixel_coordinates_cached_( false ) {}
+   rgrl_feature_region() {}
 
-  // destructor
-  virtual ~rgrl_feature_region() = default;
+   // destructor
+   virtual ~rgrl_feature_region() = default;
 
 #if 0
   // Defines type-related functions
@@ -46,9 +46,9 @@ class rgrl_feature_region
   //  The pixel coordinates in the image are computed the first time
   //  they are needed and then cached.  This is safe the location of
   //  the feature does not change.
-  bool pixel_coordinates_cached_;
-  std::vector< vnl_vector<int> > pixel_coordinates_;
-  vnl_vector< double >          spacing_ratio_;
+   bool pixel_coordinates_cached_{false};
+   std::vector<vnl_vector<int>> pixel_coordinates_;
+   vnl_vector<double> spacing_ratio_;
 };
 
 #endif

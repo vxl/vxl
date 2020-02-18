@@ -70,12 +70,7 @@ class vimt_transform_2d
                 Projective,
                 Reflection};
 
-    vimt_transform_2d() :
-        xx_(1),xy_(0),xt_(0),
-        yx_(0),yy_(1),yt_(0),
-        tx_(0),ty_(0),tt_(1),
-        form_(Identity),inv_uptodate_(false) {}
-
+    vimt_transform_2d() {}
 
     bool is_identity() const { return form_==Identity; }
     Form form() const { return form_; }
@@ -194,16 +189,17 @@ class vimt_transform_2d
     vimt_transform_2d& simplify(double tol =1e-10);
 
  private:
+   double xx_{1}, xy_{0}, xt_{0}, yx_{0}, yy_{1}, yt_{0}, tx_{0}, ty_{0},
+       tt_{1};
+   Form form_{Identity};
 
-    double xx_,xy_,xt_,yx_,yy_,yt_,tx_,ty_,tt_;
-    Form form_;
+   // Notice the mutable here - take care if using threads!
+   mutable double xx2_, xy2_, xt2_, yx2_, yy2_, yt2_, tx2_, ty2_,
+       tt2_; // Inverse
+   mutable bool inv_uptodate_{false};
 
-    // Notice the mutable here - take care if using threads!
-    mutable double xx2_,xy2_,xt2_,yx2_,yy2_,yt2_,tx2_,ty2_,tt2_; // Inverse
-    mutable bool inv_uptodate_;
-
-    void calcInverse() const;
-    void setCheck(int n1,int n2,const char* str) const;
+   void calcInverse() const;
+   void setCheck(int n1, int n2, const char *str) const;
 };
 
 

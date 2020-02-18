@@ -103,48 +103,48 @@ class vil3d_analyze_header
   History    history;
 
  private:
-  bool swap_bytes_; // True if bytes need to be swapped
+   bool swap_bytes_{false}; // True if bytes need to be swapped
 
  public:
-  vil3d_analyze_header() : swap_bytes_(false) {}
-  ~vil3d_analyze_header() = default;
+   vil3d_analyze_header() {}
+   ~vil3d_analyze_header() = default;
 
-  void reset();
+   void reset();
 
-  //: Define format of pixels
-  enum vil_pixel_format pixel_format() const;
+   //: Define format of pixels
+   enum vil_pixel_format pixel_format() const;
 
-  //: Define format of pixels
-  void set_pixel_format(enum vil_pixel_format format);
+   //: Define format of pixels
+   void set_pixel_format(enum vil_pixel_format format);
 
-  //: Define number of pixels in each dimension
-  void set_image_size(unsigned ni, unsigned nj, unsigned nk, unsigned np=1);
+   //: Define number of pixels in each dimension
+   void set_image_size(unsigned ni, unsigned nj, unsigned nk, unsigned np = 1);
 
-  short int ni() const { return dim.dim[1]; }
-  short int nj() const { return dim.dim[2]; }
-  short int nk() const { return dim.dim[3]; }
+   short int ni() const { return dim.dim[1]; }
+   short int nj() const { return dim.dim[2]; }
+   short int nk() const { return dim.dim[3]; }
 
-  //: Number of planes (or time points in image sequence)
-  short int nplanes() const { return dim.dim[4]; }
+   //: Number of planes (or time points in image sequence)
+   short int nplanes() const { return dim.dim[4]; }
 
-  float voxel_width_i() const { return dim.pixdim[1]; }
-  float voxel_width_j() const { return dim.pixdim[2]; }
-  float voxel_width_k() const { return dim.pixdim[3]; }
+   float voxel_width_i() const { return dim.pixdim[1]; }
+   float voxel_width_j() const { return dim.pixdim[2]; }
+   float voxel_width_k() const { return dim.pixdim[3]; }
 
-  //: Define width of voxels in each dimension
-  void set_voxel_size(float si, float sj, float sk);
+   //: Define width of voxels in each dimension
+   void set_voxel_size(float si, float sj, float sk);
 
-  //: Read in header from given file
-  bool read_file(const std::string& path);
+   //: Read in header from given file
+   bool read_file(const std::string &path);
 
-  //: Write header to given file
-  bool write_file(const std::string& path) const;
+   //: Write header to given file
+   bool write_file(const std::string &path) const;
 
-  void swapBytes(char *data, int size) const;
-  bool needSwap() const { return swap_bytes_; }
+   void swapBytes(char *data, int size) const;
+   bool needSwap() const { return swap_bytes_; }
 
-  //: Print out some parts of header
-  void print_summary(std::ostream& os) const;
+   //: Print out some parts of header
+   void print_summary(std::ostream &os) const;
 };
 
 //: Print out some parts of header

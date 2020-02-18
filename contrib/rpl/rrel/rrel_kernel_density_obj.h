@@ -81,7 +81,7 @@ class rrel_kernel_density_obj : public rrel_objective
 
   rrel_kernel_scale_type scale_type_;
 
-  bool fix_x_;
+  bool fix_x_{false};
 };
 
 #endif

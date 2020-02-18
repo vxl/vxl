@@ -59,9 +59,9 @@ class NViewMatches : public std::vector<NViewMatch>
 {
   // Data Members--------------------------------------------------------------
   int nviews_;
-  int min_overlap_;
+  int min_overlap_{2};
 
- public:
+public:
   // Constructors/Destructors--------------------------------------------------
   NViewMatches();
   NViewMatches(std::istream& s);

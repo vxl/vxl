@@ -17,29 +17,25 @@ class rrel_wgted_ran_sam_search : public rrel_ran_sam_search
 {
  public:
   //: Constructor using a non-deterministic random-sampling seed.
-  rrel_wgted_ran_sam_search( )
-  : rrel_ran_sam_search(), is_sim_wgt_set_( false )
-  {   }
+   rrel_wgted_ran_sam_search() : rrel_ran_sam_search() {}
 
-  //: Constructor using a given random-sampling seed.
-  rrel_wgted_ran_sam_search( int seed )
-  : rrel_ran_sam_search( seed ), is_sim_wgt_set_( false )
-  {   }
+   //: Constructor using a given random-sampling seed.
+   rrel_wgted_ran_sam_search(int seed)
+       : rrel_ran_sam_search(seed), is_sim_wgt_set_(false) {}
 
-  ~rrel_wgted_ran_sam_search( ) override;
+   ~rrel_wgted_ran_sam_search() override;
 
-  // ----------------------------------------
-  //  Main estimation functions
-  // ----------------------------------------
+   // ----------------------------------------
+   //  Main estimation functions
+   // ----------------------------------------
 
-  //: \brief Estimation for an "ordinary" estimation problem.
-  bool
-  estimate( const rrel_estimation_problem* problem,
-            const rrel_objective* obj_fcn ) override;
+   //: \brief Estimation for an "ordinary" estimation problem.
+   bool estimate(const rrel_estimation_problem *problem,
+                 const rrel_objective *obj_fcn) override;
 
-  // -----------------------------------------
-  // Access to results and computed parameters
-  // -----------------------------------------
+   // -----------------------------------------
+   // Access to results and computed parameters
+   // -----------------------------------------
 
  protected:
   // ------------------------------------------------------------
@@ -54,11 +50,11 @@ class rrel_wgted_ran_sam_search : public rrel_ran_sam_search
 
  protected:
   struct prob_interval {
-    int      index_;
-    double   lower_;
-    double   upper_;
+    int index_{-1};
+    double lower_{-1.0};
+    double upper_{-1.0};
 
-    prob_interval() : index_(-1), lower_(-1.0), upper_(-1.0) {  }
+    prob_interval() {}
 
     bool operator< ( const prob_interval& rhs ) const {
       return this->upper_ < rhs.upper_;
@@ -67,7 +63,7 @@ class rrel_wgted_ran_sam_search : public rrel_ran_sam_search
 
   //: store the intervals
   std::vector<prob_interval> intervals_;
-  bool is_sim_wgt_set_;
+  bool is_sim_wgt_set_{false};
 };
 
 #endif

@@ -29,9 +29,9 @@
 class clsfy_random_builder : public clsfy_builder_base
 {
   //: Standard deviation of confidence noise added to class probabilities
-  double confidence_;
+  double confidence_{0.0};
 
- public:
+public:
   // Dflt ctor
   clsfy_random_builder();
 

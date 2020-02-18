@@ -20,18 +20,18 @@
 class fhs_arc
 {
 private:
-  unsigned i_;
-  unsigned j_;
-  double dx_;
-  double dy_;
-  double var_x_;
-  double var_y_;
+  unsigned i_{0};
+  unsigned j_{0};
+  double dx_{0};
+  double dy_{0};
+  double var_x_{1.0};
+  double var_y_{1.0};
+
 public:
     //: Default constructor
-  fhs_arc()
-    : i_(0),j_(0),dx_(0),dy_(0),var_x_(1.0),var_y_(1.0) {}
+  fhs_arc() {}
 
-    //: Constructor
+  //: Constructor
   fhs_arc(unsigned i, unsigned j, double dx, double dy, double var_x, double var_y)
     : i_(i),j_(j),dx_(dx),dy_(dy),var_x_(var_x),var_y_(var_y) {}
 

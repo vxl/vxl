@@ -26,7 +26,7 @@ class vimt_scale_pyramid_builder_2d : public vimt_image_pyramid_builder
   unsigned min_y_size_;
 
   //: Maximum levels
-  unsigned max_levels_;
+  unsigned max_levels_{99};
 
   //: Checks pyramid has at least n levels of correct type
   void checkPyr(vimt_image_pyramid& im_pyr, int n_levels) const;

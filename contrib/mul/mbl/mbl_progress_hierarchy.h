@@ -50,14 +50,14 @@ class mbl_progress_hierarchy: public mbl_progress
   // value is out of 1.0.
   virtual void on_changed_progress(double fraction)=0;
 
-  mbl_progress_hierarchy() : just_ended_(false) {}
+  mbl_progress_hierarchy() {}
 
- private:
+private:
   //: The ordered hierarchy of identifiers.
   std::vector<std::string> identifier_stack_;
 
   //: Has an existing identifier just been ended.
-  bool just_ended_;
+  bool just_ended_{false};
 };
 
 //========================================================================

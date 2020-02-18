@@ -28,17 +28,17 @@ private:
   //: Original index of point on which region is centred
   unsigned i0_orig_;
   //: Index of point on which region is centred
-  unsigned i0_;
+  unsigned i0_{0};
   //: Index of first point defining reference frame
-  unsigned i1_;
+  unsigned i1_{0};
   //: Index of second point defining reference frame
-  unsigned i2_;
+  unsigned i2_{1};
 
   //: Width of ROI, relative to |p2-p1|
-  double rel_wi_;
+  double rel_wi_{1.0};
 
   //: Height of ROI, relative to |p2-p1|
-  double rel_wj_;
+  double rel_wj_{1.0};
 
   //: Width of ROI in world coords
   double wi_;

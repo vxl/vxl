@@ -31,12 +31,10 @@ class mbl_lru_cache
   typedef std::map<I, std::pair<V, typename list_type::iterator> > map_type;
   map_type m_;
   //: Limit of cache size.
-  unsigned long n_;
+  unsigned long n_{0};
 
 public:
-
-  mbl_lru_cache(): n_(0) {}
-
+  mbl_lru_cache() {}
 
   //: Create a cache of size n.
   // The actual memory size of the cache will be

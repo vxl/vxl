@@ -130,14 +130,9 @@ distort_wrt_loc( vnl_double_2x2& jac_loc, vnl_double_2 const& true_loc, double k
   jac_loc(0,1) = jac_loc(1,0) = 2 * k1 * true_loc[0] * true_loc[1];
 }
 
+rgrl_trans_rad_dis_homo2d::rgrl_trans_rad_dis_homo2d()
+    : H_(0.0), from_centre_(0.0, 0.0), to_centre_(0.0, 0.0)
 
-rgrl_trans_rad_dis_homo2d::
-rgrl_trans_rad_dis_homo2d()
-  : H_( 0.0 ),
-    from_centre_( 0.0, 0.0 ),
-    to_centre_( 0.0, 0.0 ),
-    k1_from_( 0.0 ),
-    k1_to_( 0.0 )
 {}
 
 rgrl_trans_rad_dis_homo2d::

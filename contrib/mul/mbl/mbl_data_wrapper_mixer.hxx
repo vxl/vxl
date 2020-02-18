@@ -14,11 +14,10 @@
 #include <cassert>
 
 //: Default constructor
-template<class T>
+template <class T>
 mbl_data_wrapper_mixer<T>::mbl_data_wrapper_mixer()
-  : n_(0),index_(0),current_wrapper_(0)
-{
-}
+
+{}
 
 //: Constructor
 template<class T>

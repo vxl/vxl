@@ -85,10 +85,10 @@ class rgrl_feature_trace_region
 
   //  For pseudo matcher method, length_ is the length along the
   //  tangent direction, centered at the feature point's location.
-  double region_length_;
+  double region_length_{0};
   //  For pseudo matcher method, radius_ is half of the length along
   //  the normal directions.
-  double region_radius_;
+  double region_radius_{0};
 };
 
 #endif

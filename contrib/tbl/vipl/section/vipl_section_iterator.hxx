@@ -69,14 +69,9 @@ template < class DataType >
 #endif
 }
 
-template < class DataType >
-  vipl_section_iterator< DataType > ::vipl_section_iterator()
-  : hsreal_descriptor(nullptr),
-    hscontainer(nullptr),
-    hsincr_count(0)
-// C++ auto-generated low-level constructor
-{
-}
+template <class DataType>
+vipl_section_iterator<DataType>::vipl_section_iterator()
+    : hsreal_descriptor(nullptr), hscontainer(nullptr) {}
 
 template < class DataType >
   vipl_section_iterator< DataType > ::vipl_section_iterator(const vipl_section_iterator< DataType > &t)

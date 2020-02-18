@@ -27,16 +27,16 @@ typedef vil1_memory_image_of<double> Image;
 class EigenFace
 {
  private:
-  unsigned int image_size;
-  std::vector<vnl_vector<double> *> training_images;
-  std::vector<vnl_vector<double> *> encoded_training_images;
-  std::vector<char *> training_labels;
-  std::vector<vnl_vector<double> *> eigenvectors;
-  std::vector<double> eigenvalues;
-  vnl_vector<double> *average_training_image;
-  vnl_vector<double> *convert_image_to_vector(Image *im);
-  void encode_training_images();
-  void cleanup();
+   unsigned int image_size{0};
+   std::vector<vnl_vector<double> *> training_images;
+   std::vector<vnl_vector<double> *> encoded_training_images;
+   std::vector<char *> training_labels;
+   std::vector<vnl_vector<double> *> eigenvectors;
+   std::vector<double> eigenvalues;
+   vnl_vector<double> *average_training_image{nullptr};
+   vnl_vector<double> *convert_image_to_vector(Image *im);
+   void encode_training_images();
+   void cleanup();
 
  public:
   struct LabelDist
@@ -47,7 +47,7 @@ class EigenFace
     bool operator<(const LabelDist &x) const {return dist>x.dist;}
   };
 
-  EigenFace(): image_size(0), average_training_image(nullptr){}
+  EigenFace() {}
   ~EigenFace();
   bool add_training_image(Image *im, const char * label);
   bool calculate_eigenfaces();

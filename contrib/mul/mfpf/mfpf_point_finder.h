@@ -29,28 +29,28 @@ class mfpf_point_finder
 {
  protected:
   //: Size of step between sample points
-  double step_size_;
+   double step_size_{1.0};
 
-  //: Number of points either side of centre to search
-  int search_ni_;
+   //: Number of points either side of centre to search
+   int search_ni_{5};
 
-  //: Number of points either side of centre to search
-  int search_nj_;
+   //: Number of points either side of centre to search
+   int search_nj_{0};
 
-  //: Define N. angles (ie try at A+idA, i in [-nA,+nA])
-  unsigned nA_;
+   //: Define N. angles (ie try at A+idA, i in [-nA,+nA])
+   unsigned nA_{0};
 
-  //: Angle step size (ie try at A+idA, i in [-nA,+nA])
-  double dA_;
+   //: Angle step size (ie try at A+idA, i in [-nA,+nA])
+   double dA_{0.0};
 
-  //: Number of scales to try at
-  unsigned ns_;
+   //: Number of scales to try at
+   unsigned ns_{0};
 
-  //: Scaling factor (ie try at ((ds)^i), i in [-ns,+ns]
-  double ds_;
+   //: Scaling factor (ie try at ((ds)^i), i in [-ns,+ns]
+   double ds_{1.0};
 
-  //: Return true if base class parameters are the same in pf
-  bool base_equality(const mfpf_point_finder& pf) const;
+   //: Return true if base class parameters are the same in pf
+   bool base_equality(const mfpf_point_finder &pf) const;
  public:
 
   //: Dflt ctor

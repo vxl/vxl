@@ -14,9 +14,8 @@
 #include "rgrl_trans_quadratic.h"
 #include "rgrl_match_set.h"
 
-rgrl_est_quadratic::
-rgrl_est_quadratic()
-  : condition_num_thrd_( 0.0 )
+rgrl_est_quadratic::rgrl_est_quadratic()
+
 {}
 
 rgrl_est_quadratic::

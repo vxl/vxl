@@ -176,9 +176,9 @@ class rrel_estimation_problem
  private:
   unsigned int dof_;
   unsigned int num_samples_for_fit_;
-  scale_t scale_type_;
-  double single_scale_;
-  std::vector<double>* multiple_scales_;
+  scale_t scale_type_{NONE};
+  double single_scale_{0};
+  std::vector<double> *multiple_scales_{nullptr};
   std::vector<double>  similarity_weights_;
 };
 

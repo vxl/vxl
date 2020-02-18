@@ -20,86 +20,81 @@ class rgrl_convergence_tester
  public:
 
   //: ctor
-  rgrl_convergence_tester() : rel_tol_thres_(1e-3) { }
+   rgrl_convergence_tester() {}
 
-  ~rgrl_convergence_tester() override;
+   ~rgrl_convergence_tester() override;
 
-  //:  Compute the converge_status of the current view using multiple match sets
-  //   This is the pure virtual function implemented in the derived classes.
-  //
-  virtual rgrl_converge_status_sptr
-  compute_status( rgrl_converge_status_sptr               prev_status,
-                  rgrl_view                        const& prev_view,
-                  rgrl_view                        const& current_view,
-                  rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
-                  rgrl_set_of<rgrl_scale_sptr>     const& current_scales,
-                  bool                                    penalize_scaling = false )const  = 0;
+   //:  Compute the converge_status of the current view using multiple match
+   //sets
+   //   This is the pure virtual function implemented in the derived classes.
+   //
+   virtual rgrl_converge_status_sptr
+   compute_status(rgrl_converge_status_sptr prev_status,
+                  rgrl_view const &prev_view, rgrl_view const &current_view,
+                  rgrl_set_of<rgrl_match_set_sptr> const &current_match_sets,
+                  rgrl_set_of<rgrl_scale_sptr> const &current_scales,
+                  bool penalize_scaling = false) const = 0;
 
-  //:  Compute the converge_status of the current view using single match set
-  //
-  //   Matches are assumed to have from_feature mapped and stored and
-  //   associated weights computed already when passed to this function.
-  rgrl_converge_status_sptr
-  compute_status( const rgrl_converge_status_sptr&               prev_status,
-                  rgrl_view                        const& prev_view,
-                  rgrl_view                        const& current_view,
-                  const rgrl_match_set_sptr&                     current_match_set,
-                  const rgrl_scale_sptr&                         current_scale,
-                  bool                                    penalize_scaling = false)const;
+   //:  Compute the converge_status of the current view using single match set
+   //
+   //   Matches are assumed to have from_feature mapped and stored and
+   //   associated weights computed already when passed to this function.
+   rgrl_converge_status_sptr
+   compute_status(const rgrl_converge_status_sptr &prev_status,
+                  rgrl_view const &prev_view, rgrl_view const &current_view,
+                  const rgrl_match_set_sptr &current_match_set,
+                  const rgrl_scale_sptr &current_scale,
+                  bool penalize_scaling = false) const;
 
-  //:  Compute the converge_status of the current xform estimate using multiple match sets
-  rgrl_converge_status_sptr
-  compute_status( const rgrl_converge_status_sptr&               prev_status,
-                  const rgrl_transformation_sptr&                xform_estimate,
-                  const rgrl_estimator_sptr&                     xform_estimator,
-                  rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
-                  rgrl_set_of<rgrl_scale_sptr>     const& current_scales,
-                  bool                                    penalize_scaling = false)const;
-  //:  Compute the converge_status of the current xform estimate using single match set
-  rgrl_converge_status_sptr
-  compute_status( const rgrl_converge_status_sptr&               prev_status,
-                  const rgrl_transformation_sptr&                xform_estimate,
-                  const rgrl_estimator_sptr&                     xform_estimator,
-                  const rgrl_match_set_sptr&                     current_match_set,
-                  const rgrl_scale_sptr&                         current_scale,
-                  bool                                    penalize_scaling = false)const;
+   //:  Compute the converge_status of the current xform estimate using multiple
+   //match sets
+   rgrl_converge_status_sptr
+   compute_status(const rgrl_converge_status_sptr &prev_status,
+                  const rgrl_transformation_sptr &xform_estimate,
+                  const rgrl_estimator_sptr &xform_estimator,
+                  rgrl_set_of<rgrl_match_set_sptr> const &current_match_sets,
+                  rgrl_set_of<rgrl_scale_sptr> const &current_scales,
+                  bool penalize_scaling = false) const;
+   //:  Compute the converge_status of the current xform estimate using single
+   //match set
+   rgrl_converge_status_sptr
+   compute_status(const rgrl_converge_status_sptr &prev_status,
+                  const rgrl_transformation_sptr &xform_estimate,
+                  const rgrl_estimator_sptr &xform_estimator,
+                  const rgrl_match_set_sptr &current_match_set,
+                  const rgrl_scale_sptr &current_scale,
+                  bool penalize_scaling = false) const;
 
-  //: convenient function for initializing status
-  rgrl_converge_status_sptr
-  initialize_status( rgrl_view       const& init_view,
-                     rgrl_scale_sptr const& prior_scale,
-                     bool                   penalize_scaling ) const;
+   //: convenient function for initializing status
+   rgrl_converge_status_sptr
+   initialize_status(rgrl_view const &init_view,
+                     rgrl_scale_sptr const &prior_scale,
+                     bool penalize_scaling) const;
 
-  //: convenient function for initializing status
-  rgrl_converge_status_sptr
-  initialize_status( const rgrl_transformation_sptr&                xform_estimate,
-                     const rgrl_estimator_sptr&                     xform_estimator,
-                     rgrl_scale_sptr                  const& prior_scale,
-                     bool                                    penalize_scaling )const;
+   //: convenient function for initializing status
+   rgrl_converge_status_sptr
+   initialize_status(const rgrl_transformation_sptr &xform_estimate,
+                     const rgrl_estimator_sptr &xform_estimator,
+                     rgrl_scale_sptr const &prior_scale,
+                     bool penalize_scaling) const;
 
+   //: verify the final alignment
+   virtual rgrl_converge_status_sptr
+   verify(rgrl_view const &view,
+          rgrl_set_of<rgrl_match_set_sptr> const &current_match_sets,
+          rgrl_set_of<rgrl_scale_sptr> const &current_scales) const;
 
-  //: verify the final alignment
-  virtual
-  rgrl_converge_status_sptr
-  verify( rgrl_view                        const& view,
-          rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
-          rgrl_set_of<rgrl_scale_sptr>     const& current_scales ) const;
+   virtual rgrl_converge_status_sptr
+   verify(rgrl_view const &view, rgrl_match_set_sptr const &current_match_sets,
+          rgrl_scale_sptr const &current_scales) const;
 
-  virtual
-  rgrl_converge_status_sptr
-  verify( rgrl_view                   const& view,
-          rgrl_match_set_sptr         const& current_match_sets,
-          rgrl_scale_sptr             const& current_scales ) const;
+   //: set relative tolerance on convergence
+   void set_rel_tol(double rel_tol) { rel_tol_thres_ = rel_tol; }
 
-  //: set relative tolerance on convergence
-  void set_rel_tol( double rel_tol )
-  { rel_tol_thres_ = rel_tol; }
+   double rel_tol() const { return rel_tol_thres_; }
 
-  double rel_tol() const
-  { return rel_tol_thres_; }
-
-  // Defines type-related functions
-  rgrl_type_macro( rgrl_convergence_tester, rgrl_object );
+   // Defines type-related functions
+   rgrl_type_macro(rgrl_convergence_tester, rgrl_object);
 
  protected:
 
@@ -119,7 +114,7 @@ class rgrl_convergence_tester
                         rgrl_view                        const& current_view ) const;
 
  protected:
-  double  rel_tol_thres_;
+   double rel_tol_thres_{1e-3};
 };
 
 #endif

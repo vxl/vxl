@@ -23,7 +23,7 @@
 class clsfy_k_nearest_neighbour : public clsfy_classifier_base
 {
   //: The number of nearest neighbours to look for.
-  unsigned k_;
+  unsigned k_{1};
 
   //: The set of training input values.  Size should equal number of outputs.
   std::vector<vnl_vector<double> > trainInputs_;
@@ -33,33 +33,38 @@ class clsfy_k_nearest_neighbour : public clsfy_classifier_base
 
  public:
   //: Construct a KNN classifier.
-  clsfy_k_nearest_neighbour():k_(1) {}
+   clsfy_k_nearest_neighbour() {}
 
-  //: Return the classification of the given probe vector.
-  unsigned classify(const vnl_vector<double> &input) const override;
+   //: Return the classification of the given probe vector.
+   unsigned classify(const vnl_vector<double> &input) const override;
 
-  //: Provides a probability-like value that the input being in each class.
-  // output(i) i<nClasses, contains the probability that the input is in class i
-  void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const override;
+   //: Provides a probability-like value that the input being in each class.
+   // output(i) i<nClasses, contains the probability that the input is in class
+   // i
+   void class_probabilities(std::vector<double> &outputs,
+                            const vnl_vector<double> &input) const override;
 
-  //: This value has properties of a Log likelihood of being in class (binary classifiers only)
-  // class probability = exp(logL) / (1+exp(logL))
-  double log_l(const vnl_vector<double> &input) const override;
+   //: This value has properties of a Log likelihood of being in class (binary
+   //classifiers only)
+   // class probability = exp(logL) / (1+exp(logL))
+   double log_l(const vnl_vector<double> &input) const override;
 
-  //: Set the training data.
-  void set(const std::vector<vnl_vector<double> > &inputs, const std::vector<unsigned> &outputs);
+   //: Set the training data.
+   void set(const std::vector<vnl_vector<double>> &inputs,
+            const std::vector<unsigned> &outputs);
 
-  //: The number of nearest neighbours to look for.
-  // The default value is 1.
-  unsigned k() const {return k_;}
+   //: The number of nearest neighbours to look for.
+   // The default value is 1.
+   unsigned k() const { return k_; }
 
-  //: Set the number of nearest neighbours to look for.
-  // The default value is 1.
-  void set_k(unsigned k) {k_ = k;}
+   //: Set the number of nearest neighbours to look for.
+   // The default value is 1.
+   void set_k(unsigned k) { k_ = k; }
 
-  //: Return a reference to the training vectors.
-  // Vectors are ordered similarly to training_classes()
-  const std::vector<vnl_vector<double> >& training_vectors() const {return trainInputs_;}
+   //: Return a reference to the training vectors.
+   // Vectors are ordered similarly to training_classes()
+   const std::vector<vnl_vector<double>> &training_vectors() const {
+     return trainInputs_;}
 
   //: Return a reference to the training classes
   // Vectors are ordered similarly to training_vectors()

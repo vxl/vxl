@@ -125,8 +125,8 @@ class rgrl_trans_rad_dis_homo2d
   vnl_vector_fixed<double, 2> from_centre_;
   vnl_vector_fixed<double, 2> to_centre_;
 
-  double k1_from_;
-  double k1_to_;
+  double k1_from_{0.0};
+  double k1_to_{0.0};
 };
 
 #endif
