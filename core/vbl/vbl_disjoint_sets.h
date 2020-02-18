@@ -64,7 +64,7 @@ class vbl_disjoint_sets
   // Internal node data structure used for representing an element
   struct node
   {
-    node() {}
+    node() = default;
     //: represents the approximate max height of the node in its subtree
     int rank{0};
     int index{0};          // The index of the element the node represents

@@ -47,14 +47,14 @@
 
 struct ushort_tag
 {
-  ushort_tag() {}
+  ushort_tag() = default;
   vxl_uint_16 val;
   bool valid{false};
 };
 
 struct ulong_tag
 {
-  ulong_tag() {}
+  ulong_tag() = default;
   vxl_uint_32 val;
   bool valid{false};
 };

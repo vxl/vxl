@@ -33,7 +33,7 @@ class vbl_bounding_box_base
 {
  public:
   //: Construct an empty bounding box.
-   inline vbl_bounding_box_base() {}
+   inline vbl_bounding_box_base() = default;
 
    //: Incorporate 1d point x
    inline void update(T const &x) {

@@ -33,7 +33,7 @@
 class vgl_h_matrix_2d_compute
 {
  public:
-   vgl_h_matrix_2d_compute() {}
+   vgl_h_matrix_2d_compute() = default;
    virtual ~vgl_h_matrix_2d_compute() = default;
 
    // set this to true for verbose run-time information

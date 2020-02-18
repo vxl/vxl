@@ -29,7 +29,7 @@ class vgl_frustum_3d
 {
  public:
   //: default constructor
-   vgl_frustum_3d() {}
+   vgl_frustum_3d() = default;
 
    //: Construct the frustum from rays
    // the corner rays intersect in a common origin point, i.e., the apex

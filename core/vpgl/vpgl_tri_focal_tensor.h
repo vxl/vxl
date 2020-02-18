@@ -118,15 +118,12 @@ protected:
     this->init();// init must be second to avoid writing over cameras
  }
 
-  virtual ~vpgl_tri_focal_tensor() {}
+ virtual ~vpgl_tri_focal_tensor() = default;
 
-  //: compute all derivative quantities
-  virtual bool compute() {
-    return (
-      this->compute_epipoles() &&
-      this->compute_f_matrices() &&
-      this->compute_proj_cameras() &&
-      this->compute_f_matrix_23());
+ //: compute all derivative quantities
+ virtual bool compute() {
+   return (this->compute_epipoles() && this->compute_f_matrices() &&
+           this->compute_proj_cameras() && this->compute_f_matrix_23());
   }
   // Data Access-------------------------------------------------------------
 

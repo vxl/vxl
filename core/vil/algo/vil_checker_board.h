@@ -22,7 +22,7 @@ class vil_checker_board_params
  public:
    vil_checker_board_params()
 
-   {}
+       = default;
 
    vil_checker_board_params(int xsize, int ysize)
        : xsize_(xsize), ysize_(ysize), xnum_blks_(0), ynum_blks_(0), xoff_(0),

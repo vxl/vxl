@@ -89,7 +89,7 @@ class vil1_image_impl
  public:
   //:
   // the reference count starts at 0.
-   vil1_image_impl() {}
+   vil1_image_impl() = default;
    virtual ~vil1_image_impl() = default;
 
    //: Dimensions:  Planes x W x H x Components

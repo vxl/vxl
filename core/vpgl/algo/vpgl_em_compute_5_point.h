@@ -31,7 +31,7 @@ template <class T>
 class vpgl_em_compute_5_point
 {
   public:
-    vpgl_em_compute_5_point() {}
+    vpgl_em_compute_5_point() = default;
     vpgl_em_compute_5_point(bool v): verbose(v), tolerance(0.0001) { }
     vpgl_em_compute_5_point(bool v, double t): verbose(v), tolerance(t) { }
 
@@ -96,7 +96,7 @@ template <class T>
 class vpgl_em_compute_5_point_ransac
 {
     public:
-      vpgl_em_compute_5_point_ransac() {}
+      vpgl_em_compute_5_point_ransac() = default;
 
       vpgl_em_compute_5_point_ransac(unsigned nr, double trsh, bool v)
           : num_rounds(nr), inlier_threshold(trsh), verbose(v) {}

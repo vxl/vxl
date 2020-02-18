@@ -52,7 +52,7 @@ public:
   int minute{0};        // 0-59
   double second{0};     // 0-59.999...
   int sec_precision{0}; // second's significant decimal places
-  vil_nitf2_date_time() {}
+  vil_nitf2_date_time() = default;
   vil_nitf2_date_time(std::string format);
   ~vil_nitf2_date_time() override = default;
   bool is_valid() const override;

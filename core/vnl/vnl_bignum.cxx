@@ -19,7 +19,7 @@ using Data = unsigned short;
 
 vnl_bignum::vnl_bignum()
 
-{}
+    = default;
 
 //: Creates a vnl_bignum from a single-precision floating point number.
 

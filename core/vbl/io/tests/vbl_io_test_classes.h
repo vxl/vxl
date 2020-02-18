@@ -16,7 +16,7 @@ class impl : public vbl_ref_count
   int n{7};
 
   explicit impl(int nn);
-  impl(impl const& x) : vbl_ref_count(x), n(x.n) {}
+  impl(impl const &x) = default;
   impl();
   ~impl() override;
   void Print (std::ostream &str) const;

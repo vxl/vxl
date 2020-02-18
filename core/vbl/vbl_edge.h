@@ -16,7 +16,7 @@
 class vbl_edge
 {
  public:
-   vbl_edge() {}
+   vbl_edge() = default;
    vbl_edge(int v0, int ve, float w) : v0_(v0), v1_(ve), w_(w) {}
    void print(std::ostream &os) const {
      os << '(' << v0_ << ' ' << v1_ << ")\n"; }

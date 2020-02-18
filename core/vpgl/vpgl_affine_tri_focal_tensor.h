@@ -139,7 +139,7 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
     *this = vpgl_affine_tri_focal_tensor(vpgl_affine_camera<Type>(), vpgl_affine_camera<Type>(m2), vpgl_affine_camera<Type>(m3));
   }
 
-  ~vpgl_affine_tri_focal_tensor() override {}
+  ~vpgl_affine_tri_focal_tensor() override = default;
 
   bool compute() override { return vpgl_tri_focal_tensor<Type>::compute(); }
   // Data Access-------------------------------------------------------------

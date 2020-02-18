@@ -20,7 +20,7 @@
 
 vpgl_bundle_adjust::vpgl_bundle_adjust()
 
-{}
+    = default;
 
 vpgl_bundle_adjust::~vpgl_bundle_adjust()
 {

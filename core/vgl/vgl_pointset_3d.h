@@ -33,7 +33,7 @@ class vgl_pointset_3d
   std::vector< Type > scalars_;
  public:
   //: Default constructor
-   vgl_pointset_3d() {}
+   vgl_pointset_3d() = default;
 
    //: Construct from a list
    vgl_pointset_3d(std::vector<vgl_point_3d<Type>> points)

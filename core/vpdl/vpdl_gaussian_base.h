@@ -28,7 +28,7 @@ class vpdl_gaussian_base : public vpdl_distribution<T,n>
 
 
   //: Destructor
-  ~vpdl_gaussian_base() override {}
+  ~vpdl_gaussian_base() override = default;
 
   //: Access the mean directly
   virtual const vector& mean() const = 0;
