@@ -6,7 +6,7 @@
 // Default constructor
 //---------------------------------------------------------------------------
 vcsl_cartesian_2d::vcsl_cartesian_2d()
-  : right_handed_(true)
+
 {
   vcsl_axis_sptr a = new vcsl_axis;
   axes_.push_back(a);

@@ -32,26 +32,26 @@
 template <class Type>
 class vgl_cubic_spline_2d
 {
-  bool closed_curve_;                     // is the curve closed?
+  bool closed_curve_{false};              // is the curve closed?
   Type s_;                                // the parameter defining the first derivative at knots
   std::vector<vgl_point_2d<Type> > knots_; // the spline knots
  public:
   //: Default constructor - does not initialise!
-  vgl_cubic_spline_2d(): closed_curve_(false), s_(Type(0.5)) {}
+   vgl_cubic_spline_2d() : s_(Type(0.5)) {}
 
-  //: Construct from set of knots
-  vgl_cubic_spline_2d(std::vector<vgl_point_2d<Type> >  knots,
-                      Type s = Type(0.5),
-                      bool closed = false)
-    : closed_curve_(closed), s_(s), knots_(std::move(knots)){}
+   //: Construct from set of knots
+   vgl_cubic_spline_2d(std::vector<vgl_point_2d<Type>> knots,
+                       Type s = Type(0.5), bool closed = false)
+       : closed_curve_(closed), s_(s), knots_(std::move(knots)) {}
 
-  //: accessors
-  bool closed() const {return closed_curve_;}
-  Type s() const {return s_;}
-  std::vector<vgl_point_2d<Type> > knots() const {return knots_;}
+   //: accessors
+   bool closed() const { return closed_curve_; }
+   Type s() const { return s_; }
+   std::vector<vgl_point_2d<Type>> knots() const { return knots_; }
 
-  void set_knots(std::vector<vgl_point_2d<Type> > const& knots, bool closed)
-  { knots_ = knots; closed_curve_ = closed;}
+   void set_knots(std::vector<vgl_point_2d<Type>> const &knots, bool closed) {
+     knots_ = knots;
+     closed_curve_ = closed;}
   void set_s(Type s){s_ = s;}
 
   //: maximum value of the spline parameter

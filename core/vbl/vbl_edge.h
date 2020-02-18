@@ -16,12 +16,13 @@
 class vbl_edge
 {
  public:
-  vbl_edge(): v0_(-1), v1_(-1), w_(0.0f) {}
-  vbl_edge(int v0, int ve, float w): v0_(v0), v1_(ve) , w_(w){}
-  void print(std::ostream& os) const { os << '(' << v0_ << ' ' << v1_ << ")\n"; }
-  int v0_;
-  int v1_;
-  float w_;
+   vbl_edge() {}
+   vbl_edge(int v0, int ve, float w) : v0_(v0), v1_(ve), w_(w) {}
+   void print(std::ostream &os) const {
+     os << '(' << v0_ << ' ' << v1_ << ")\n"; }
+   int v0_{-1};
+   int v1_{-1};
+   float w_{0.0f};
 };
 bool operator<(const vbl_edge& e0, const vbl_edge& e1);
 #endif // vbl_edge_h_

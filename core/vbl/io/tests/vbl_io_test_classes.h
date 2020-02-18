@@ -13,7 +13,7 @@ class impl : public vbl_ref_count
 {
  public:
   static int reftotal;
-  int n;
+  int n{7};
 
   explicit impl(int nn);
   impl(impl const& x) : vbl_ref_count(x), n(x.n) {}

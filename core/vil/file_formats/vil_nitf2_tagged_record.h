@@ -290,11 +290,11 @@ class vil_nitf2_tagged_record
   static vil_nitf2_string_formatter & s_tag_formatter();
 
   // Member variables
-  vil_nitf2_scalar_field* m_length_field;
-  vil_nitf2_scalar_field* m_tag_field;
-  int m_length;
-  vil_nitf2_tagged_record_definition* m_definition;
-  vil_nitf2_field_sequence* m_field_sequence;
+  vil_nitf2_scalar_field *m_length_field{nullptr};
+  vil_nitf2_scalar_field *m_tag_field{nullptr};
+  int m_length{0};
+  vil_nitf2_tagged_record_definition *m_definition{nullptr};
+  vil_nitf2_field_sequence *m_field_sequence{nullptr};
 };
 
 std::ostream& operator << (std::ostream& os, const vil_nitf2_tagged_record& record);

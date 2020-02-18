@@ -214,8 +214,7 @@ class vul_arg_info_list
   };
   //: Construct an empty vul_arg_info_list.
   vul_arg_info_list(autonomy autonomy__ = subset)
-    : help_("-?"), // default help operator!
-      verbose_(false), autonomy_(autonomy__) {}
+      : help_("-?"), autonomy_(autonomy__) {}
 
   ~vul_arg_info_list() = default;
 
@@ -238,7 +237,7 @@ class vul_arg_info_list
   std::string help_;
   std::string description_;
   std::string command_precis_;
-  bool verbose_;
+  bool verbose_{false};
   autonomy autonomy_;
 
   void display_help( char const* progname= nullptr);

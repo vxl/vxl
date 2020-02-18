@@ -56,24 +56,29 @@ template <class T>
 class vbl_smart_ptr
 {
   //: The protected flag says whether or not the object held will be unref()fed when the smart pointer goes out of scope.
-  bool protected_;
+  bool protected_{true};
 
   //: Pointer to object, or 0.
   T *ptr_;
 
  public:
-  vbl_smart_ptr ()
-    : protected_(true), ptr_(nullptr) { }
+   vbl_smart_ptr() : ptr_(nullptr) {}
 
-  template<class Y>
-  vbl_smart_ptr (vbl_smart_ptr<Y> const &p)
-    : protected_(true), ptr_(p.as_pointer()) { if (ptr_) ref(ptr_); }
+   template <class Y>
+   vbl_smart_ptr(vbl_smart_ptr<Y> const &p) : ptr_(p.as_pointer()) {
+     if (ptr_)
+       ref(ptr_);
+   }
 
-  vbl_smart_ptr (vbl_smart_ptr<T> const &p)
-    : protected_(true), ptr_(p.as_pointer()) { if (ptr_) ref(ptr_); }
+   vbl_smart_ptr(vbl_smart_ptr<T> const &p) : ptr_(p.as_pointer()) {
+     if (ptr_)
+       ref(ptr_);
+   }
 
-  vbl_smart_ptr (T *p)
-    : protected_(true), ptr_(p) { if (ptr_) ref(ptr_); }
+   vbl_smart_ptr(T *p) : ptr_(p) {
+     if (ptr_)
+       ref(ptr_);
+   }
 
   ~vbl_smart_ptr ()
   {

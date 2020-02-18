@@ -15,12 +15,12 @@
 //  Pixels are ([ilo,ihi],y)
 struct vil_chord
 {
-  unsigned ilo;
-  unsigned ihi;
-  unsigned j;
+  unsigned ilo{1};
+  unsigned ihi{0};
+  unsigned j{0};
 
   //: Default constructor
-  vil_chord() : ilo(1),ihi(0),j(0) {}
+  vil_chord() {}
 
   //: Construct
   vil_chord(unsigned ilo1, unsigned ihi1, unsigned j1)

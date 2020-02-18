@@ -164,8 +164,7 @@ UTM_init2(double lat_center2, double r_major, double e, int south_flag)
 // Construct a transform with the given coordinate systems.
 
 vpgl_utm::vpgl_utm()
-  : a_(6378137)
-  , b_(6356752.3142) // WGS-84 by default
+
 {}
 
 vpgl_utm::vpgl_utm(const vpgl_utm & t) = default;

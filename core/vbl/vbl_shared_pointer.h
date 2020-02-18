@@ -41,7 +41,7 @@ class vbl_shared_pointer
 
   typedef vbl_shared_pointer_data data_t;
 
-  vbl_shared_pointer() : pointer(nullptr), count_data(nullptr) { }
+  vbl_shared_pointer() : pointer(nullptr) {}
 
   explicit
   vbl_shared_pointer(T *p) {
@@ -164,7 +164,7 @@ class vbl_shared_pointer
   }
  private:
   T *pointer;    //!< pointer to object.
-  data_t *count_data;
+  data_t *count_data{nullptr};
 };
 
 #define VBL_SHARED_POINTER_INSTANTIATE(T) // template class vbl_shared_pointer<T >

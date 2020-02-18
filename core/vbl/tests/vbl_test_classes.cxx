@@ -19,7 +19,7 @@ base_impl::base_impl(int nn)
 }
 
 base_impl::base_impl()
-  : n(7)
+
 {
   reftotal++;
   std::cout << "base_impl ctor : this=" << (void *)this << std::endl;

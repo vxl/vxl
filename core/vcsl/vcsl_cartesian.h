@@ -25,9 +25,9 @@ class vcsl_cartesian
   //***************************************************************************
 
   //: Default constructor. Sets itself right handed
-  vcsl_cartesian() : right_handed_(true) {}
+  vcsl_cartesian() {}
 
- public:
+public:
   // Destructor
   ~vcsl_cartesian() override = default;
 
@@ -51,7 +51,7 @@ class vcsl_cartesian
   //***************************************************************************
 
   //:  True if the axes of `this' are right handed
-  bool right_handed_;
+   bool right_handed_{true};
 };
 
 #endif // vcsl_cartesian_h_

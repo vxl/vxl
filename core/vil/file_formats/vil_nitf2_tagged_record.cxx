@@ -278,13 +278,8 @@ VIL_NITF2_TAGGED_RECORD_GET_VALUES(vil_nitf2_date_time);
 VIL_NITF2_TAGGED_RECORD_GET_VALUES(vil_nitf2_long);
 #endif
 
-
 vil_nitf2_tagged_record::vil_nitf2_tagged_record()
-  : m_length_field(nullptr)
-  , m_tag_field(nullptr)
-  , m_length(0)
-  , m_definition(nullptr)
-  , m_field_sequence(nullptr)
+
 {}
 
 // TO DO: rewrite this method a sequence of unit tests!

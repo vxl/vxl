@@ -116,7 +116,7 @@ struct tif_ref_cnt
 //The smart pointer to the tiff handle
 struct tif_smart_ptr
 {
-  tif_smart_ptr(): tptr_(nullptr){}
+  tif_smart_ptr() {}
 
   tif_smart_ptr(tif_ref_cnt* tptr):tptr_(tptr)
   { if (tptr_) tptr_->ref(); }
@@ -142,7 +142,7 @@ struct tif_smart_ptr
   //: Convenient get TIFF* for header construction; assumes temporary use
   TIFF* tif() const {if (tptr_) return tptr_->tif(); return nullptr;}
  private:
-  tif_ref_cnt* tptr_;
+   tif_ref_cnt *tptr_{nullptr};
 };
 
 //: Generic image interface for image TIFF image files (could have multiple images)
@@ -438,7 +438,7 @@ class vil_tiff_pyramid_resource : public vil_pyramid_image_resource
   tiff_pyramid_level* closest(const float scale) const;
 
   //: If true resource is open for read, else open for write
-  bool read_;
+  bool read_{true};
 
   //: the tiff handle
   tif_smart_ptr t_;

@@ -45,11 +45,11 @@ class vil_image_view : public vil_image_view_base
   //: Pointer to pixel at origin.
   T * top_left_;
   //: Add this to a pixel pointer to move one column left.
-  std::ptrdiff_t istep_;
+  std::ptrdiff_t istep_{0};
   //: Add this to a pixel pointer to move one row down.
-  std::ptrdiff_t jstep_;
+  std::ptrdiff_t jstep_{0};
   //: Add this to a pixel pointer to move one plane back.
-  std::ptrdiff_t planestep_;
+  std::ptrdiff_t planestep_{0};
 
   //: Reference to actual image data.
   vil_memory_chunk_sptr ptr_;
@@ -60,72 +60,81 @@ class vil_image_view : public vil_image_view_base
  public:
   //: Dflt ctor
   //  Creates an empty one-plane image.
-  vil_image_view(): top_left_(nullptr),istep_(0),jstep_(0),planestep_(0) {}
+   vil_image_view() : top_left_(nullptr) {}
 
-  //: Create an image of ni x nj pixels in (n_planes * n_interleaved_planes) planes
-  //  If n_interleaved_planes > 1, the planes are interleaved.
-  //  If n_planes > 1, each plane of pixels is stored contiguously.
-  //  n_planes and n_interleaved_planes should not be both different from 1.
-  //  n_planes * n_interleaved_planes should be 1 unless T is scalar.
-  vil_image_view(unsigned ni, unsigned nj, unsigned n_planes=1, unsigned n_interleaved_planes=1);
+   //: Create an image of ni x nj pixels in (n_planes * n_interleaved_planes)
+   //planes
+   //  If n_interleaved_planes > 1, the planes are interleaved.
+   //  If n_planes > 1, each plane of pixels is stored contiguously.
+   //  n_planes and n_interleaved_planes should not be both different from 1.
+   //  n_planes * n_interleaved_planes should be 1 unless T is scalar.
+   vil_image_view(unsigned ni, unsigned nj, unsigned n_planes = 1,
+                  unsigned n_interleaved_planes = 1);
 
-  //: Set this view to look at someone else's memory data.
-  //  If the data goes out of scope then this view could be invalid, and
-  //  there's no way of knowing until it's too late - so take care!
-  vil_image_view(const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
-                 std::ptrdiff_t i_step, std::ptrdiff_t j_step, std::ptrdiff_t plane_step);
+   //: Set this view to look at someone else's memory data.
+   //  If the data goes out of scope then this view could be invalid, and
+   //  there's no way of knowing until it's too late - so take care!
+   vil_image_view(const T *top_left, unsigned ni, unsigned nj, unsigned nplanes,
+                  std::ptrdiff_t i_step, std::ptrdiff_t j_step,
+                  std::ptrdiff_t plane_step);
 
-  //: Set this view to look at another view's data
-  //  Typically used by functions which generate a manipulated view of
-  //  another's image data.
-  //  Need to pass the memory chunk to set up the internal smart ptr appropriately
-  vil_image_view(const vil_memory_chunk_sptr& mem_chunk,
-                 const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
-                 std::ptrdiff_t i_step, std::ptrdiff_t j_step, std::ptrdiff_t plane_step);
+   //: Set this view to look at another view's data
+   //  Typically used by functions which generate a manipulated view of
+   //  another's image data.
+   //  Need to pass the memory chunk to set up the internal smart ptr
+   //  appropriately
+   vil_image_view(const vil_memory_chunk_sptr &mem_chunk, const T *top_left,
+                  unsigned ni, unsigned nj, unsigned nplanes,
+                  std::ptrdiff_t i_step, std::ptrdiff_t j_step,
+                  std::ptrdiff_t plane_step);
 
-  //: Copy constructor.
-  // The new object will point to the same underlying image as the rhs.
-  vil_image_view(const vil_image_view<T>& rhs);
+   //: Copy constructor.
+   // The new object will point to the same underlying image as the rhs.
+   vil_image_view(const vil_image_view<T> &rhs);
 
-  //: Construct from various vil_image_view types.
-  // The new object will point to the same underlying image as the rhs
-  // You can assign a vil_image_view<compound_type<T>> to a vil_image_view<T>
-  // in all reasonable cases - the lhs will have as many planes as the rhs has
-  // components. You can assign a vil_image_view<T> to a vil_image_view<compound_type<T>>
-  // when the underlying data is formatted appropriately and the lhs has
-  // as many components as the rhs has planes. O(1).
-  // If the view types are not compatible this object will be set to empty.
-  vil_image_view(const vil_image_view_base& rhs);
+   //: Construct from various vil_image_view types.
+   // The new object will point to the same underlying image as the rhs
+   // You can assign a vil_image_view<compound_type<T>> to a vil_image_view<T>
+   // in all reasonable cases - the lhs will have as many planes as the rhs has
+   // components. You can assign a vil_image_view<T> to a
+   // vil_image_view<compound_type<T>> when the underlying data is formatted
+   // appropriately and the lhs has as many components as the rhs has planes.
+   // O(1). If the view types are not compatible this object will be set to
+   // empty.
+   vil_image_view(const vil_image_view_base &rhs);
 
-  //: Construct from various vil_image_view types.
-  // The new object will point to the same underlying image as the rhs.
-  //
-  // You can assign a vil_image_view<compound_type<T>> to a vil_image_view<T>
-  // in all reasonable cases - the lhs will have as many planes as the rhs has
-  // components. You can assign a vil_image_view<T> to a vil_image_view<compound_type<T>>
-  // when the underlying data is formatted appropriately and the lhs has
-  // as many components as the rhs has planes. O(1).
-  // \throws vil_exception_pixel_formats_incompatible if view types are not compatible. Or
-  // returns a null image if exceptions are disabled.
-  vil_image_view(const vil_image_view_base_sptr& rhs);
+   //: Construct from various vil_image_view types.
+   // The new object will point to the same underlying image as the rhs.
+   //
+   // You can assign a vil_image_view<compound_type<T>> to a vil_image_view<T>
+   // in all reasonable cases - the lhs will have as many planes as the rhs has
+   // components. You can assign a vil_image_view<T> to a
+   // vil_image_view<compound_type<T>> when the underlying data is formatted
+   // appropriately and the lhs has as many components as the rhs has planes.
+   // O(1). \throws vil_exception_pixel_formats_incompatible if view types are
+   // not compatible. Or returns a null image if exceptions are disabled.
+   vil_image_view(const vil_image_view_base_sptr &rhs);
 
-  //  Destructor
-  ~vil_image_view() override = default;
+   //  Destructor
+   ~vil_image_view() override = default;
 
-  // === Standard container stuff ===
-  // This assumes that the data is arranged contiguously.
-  // Is this assumption good?
+   // === Standard container stuff ===
+   // This assumes that the data is arranged contiguously.
+   // Is this assumption good?
 
-  //: The pixel type of this image
-  typedef T pixel_type;
+   //: The pixel type of this image
+   typedef T pixel_type;
 
-  //: True if data all in one unbroken block and top_left_ptr() is lowest data address
-  bool is_contiguous() const;
+   //: True if data all in one unbroken block and top_left_ptr() is lowest data
+   //address
+   bool is_contiguous() const;
 
-  // === iterators ===
+   // === iterators ===
 
-  typedef T *iterator;
-  inline iterator begin() { assert(is_contiguous()); return top_left_; }
+   typedef T *iterator;
+   inline iterator begin() {
+     assert(is_contiguous());
+     return top_left_; }
   inline iterator end  () { assert(is_contiguous()); return top_left_ + size(); }
 
   typedef T const *const_iterator;

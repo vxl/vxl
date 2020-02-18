@@ -55,7 +55,7 @@ class vcsl_cartesian_2d
   //***************************************************************************
 
   //:  True if the axes of `this' are right handed
-  bool right_handed_;
+   bool right_handed_{true};
 };
 
 #endif // vcsl_cartesian_2d_h_

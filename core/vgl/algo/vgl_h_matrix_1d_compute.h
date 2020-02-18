@@ -29,21 +29,21 @@ class vgl_h_matrix_1d_compute
 {
  public:
   //
-  vgl_h_matrix_1d_compute() : verbose_(false) {}
-  virtual ~vgl_h_matrix_1d_compute() = default;
+   vgl_h_matrix_1d_compute() {}
+   virtual ~vgl_h_matrix_1d_compute() = default;
 
-  //: set this to true for verbose run-time information; default is false
-  void verbose(bool v) { verbose_=v; }
+   //: set this to true for verbose run-time information; default is false
+   void verbose(bool v) { verbose_ = v; }
 
-  //
-  // Compute methods :
-  //
+   //
+   // Compute methods :
+   //
 
-  //: principal interface: given point correspondences in p1,p2, returns H
-  bool compute(const std::vector<vgl_homg_point_1d<double> >& p1,
-               const std::vector<vgl_homg_point_1d<double> >& p2,
-               vgl_h_matrix_1d<double>& H)
-  { return compute_cool_homg(p1,p2,H); } // calls pure virtual function
+   //: principal interface: given point correspondences in p1,p2, returns H
+   bool compute(const std::vector<vgl_homg_point_1d<double>> &p1,
+                const std::vector<vgl_homg_point_1d<double>> &p2,
+                vgl_h_matrix_1d<double> &H) {
+     return compute_cool_homg(p1, p2, H); } // calls pure virtual function
 
   //: nonhomogeneous interface: given point correspondences in p1,p2, returns H
   bool compute(const double p1[],
@@ -59,22 +59,24 @@ class vgl_h_matrix_1d_compute
   { vgl_h_matrix_1d<double> H; compute(p1, p2, H); return H; }
 
  protected:
-  bool verbose_;
+   bool verbose_{false};
 
-  virtual bool compute_cool_homg(const std::vector<vgl_homg_point_1d<double> > &,
-                                 const std::vector<vgl_homg_point_1d<double> > &,
-                                 vgl_h_matrix_1d<double>& H) = 0;
+   virtual bool
+   compute_cool_homg(const std::vector<vgl_homg_point_1d<double>> &,
+                     const std::vector<vgl_homg_point_1d<double>> &,
+                     vgl_h_matrix_1d<double> &H) = 0;
 
-  bool compute_array_dbl(const double p1[], const double p2[], unsigned int length,
-                         vgl_h_matrix_1d<double>& H)
-  {
-    std::vector<vgl_homg_point_1d<double> > pt1; pt1.reserve(length);
-    std::vector<vgl_homg_point_1d<double> > pt2; pt2.reserve(length);
-    for (unsigned int i=0;i<length; ++i) {
-      pt1.emplace_back(p1[i],1.0);
-      pt2.emplace_back(p2[i],1.0);
-    }
-    return compute_cool_homg(pt1,pt2,H); // pure virtual function
+   bool compute_array_dbl(const double p1[], const double p2[],
+                          unsigned int length, vgl_h_matrix_1d<double> &H) {
+     std::vector<vgl_homg_point_1d<double>> pt1;
+     pt1.reserve(length);
+     std::vector<vgl_homg_point_1d<double>> pt2;
+     pt2.reserve(length);
+     for (unsigned int i = 0; i < length; ++i) {
+       pt1.emplace_back(p1[i], 1.0);
+       pt2.emplace_back(p2[i], 1.0);
+     }
+     return compute_cool_homg(pt1, pt2, H); // pure virtual function
   }
 };
 

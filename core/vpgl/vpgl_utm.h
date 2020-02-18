@@ -44,7 +44,7 @@ class vpgl_utm
                  double& x, double& y, int& utm_zone) const;
 
  private:
-  double a_, b_;
+   double a_{6378137}, b_{6356752.3142};
 };
 
 #endif

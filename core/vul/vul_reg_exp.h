@@ -93,14 +93,17 @@ class vul_reg_exp
   const char* regmust;
   //: Internal use only
   int   regmlen;
-  char* program;
+  char *program{nullptr};
   int   progsize;
   const char* searchstring;
  public:
   //: Creates an empty regular expression.
-  inline vul_reg_exp() : program(nullptr) { clear_bufs(); }
-  //: Creates a regular expression from string s, and compiles s.
-  inline vul_reg_exp(char const* s) : program(nullptr) { clear_bufs(); compile(s); }
+   inline vul_reg_exp() { clear_bufs(); }
+   //: Creates a regular expression from string s, and compiles s.
+   inline vul_reg_exp(char const *s) {
+     clear_bufs();
+     compile(s);
+   }
   //: Copy constructor
   vul_reg_exp(vul_reg_exp const&);
   //: Frees space allocated for regular expression.

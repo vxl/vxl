@@ -87,9 +87,9 @@ class vul_sequence_filename_map
   std::string index_format_;
   std::string image_dir_;
   std::string image_extension_;
-  int start_;
-  int step_;
-  int end_;
+  int start_{-1};
+  int step_{-1};
+  int end_{-1};
 
   void parse();
 };

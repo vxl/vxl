@@ -44,9 +44,7 @@ sse_iovect_callback(const long * n, const long * m, double * q, const long * j, 
 }
 
 vnl_sparse_symmetric_eigensystem::vnl_sparse_symmetric_eigensystem()
-  : nvalues(0)
-  , vectors(nullptr)
-  , values(nullptr)
+
 {}
 
 vnl_sparse_symmetric_eigensystem::~vnl_sparse_symmetric_eigensystem()

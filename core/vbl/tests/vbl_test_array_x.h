@@ -11,11 +11,13 @@
 
 class vbl_test_array_x
 {
-  double x_;
- public:
+  double x_{0.0};
+
+public:
   double x() const { return x_; }
   void set_x(double d)  { x_=d; }
-  vbl_test_array_x() : x_(0.0) { } // NB default constructor needed for vbl_array_2d<vbl_test_array_x>
+  vbl_test_array_x() {
+  } // NB default constructor needed for vbl_array_2d<vbl_test_array_x>
   vbl_test_array_x(int a, int b) : x_(a + b) { }
   vbl_test_array_x(float a, float b) : x_(a + b) { }
   vbl_test_array_x(double a, double b) : x_(a + b) { }

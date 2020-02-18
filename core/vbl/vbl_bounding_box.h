@@ -33,12 +33,12 @@ class vbl_bounding_box_base
 {
  public:
   //: Construct an empty bounding box.
-  inline vbl_bounding_box_base() : initialized_(false) { }
+   inline vbl_bounding_box_base() {}
 
-  //: Incorporate 1d point x
-  inline void update(T const& x) {
-    assert(DIM_::value == 1);
-    update(&x);
+   //: Incorporate 1d point x
+   inline void update(T const &x) {
+     assert(DIM_::value == 1);
+     update(&x);
   }
 
   //: Incorporate 2d point x, y
@@ -158,9 +158,9 @@ class vbl_bounding_box_base
   // non-const versions.
 
  private:
-  bool initialized_;
-  T min_[DIM_::value];
-  T max_[DIM_::value];
+   bool initialized_{false};
+   T min_[DIM_::value];
+   T max_[DIM_::value];
 };
 
 //: A class to hold and update a bounding box.

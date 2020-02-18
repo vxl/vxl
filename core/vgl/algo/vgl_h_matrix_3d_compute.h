@@ -25,24 +25,23 @@
 class vgl_h_matrix_3d_compute
 {
  public:
-  vgl_h_matrix_3d_compute() : verbose_(false) {}
-  virtual ~vgl_h_matrix_3d_compute() = default;
+   vgl_h_matrix_3d_compute() {}
+   virtual ~vgl_h_matrix_3d_compute() = default;
 
-  // set this to true for verbose run-time information
-  void verbose(bool v) { verbose_ = v; }
+   // set this to true for verbose run-time information
+   void verbose(bool v) { verbose_ = v; }
 
-  virtual int minimum_number_of_correspondences() const = 0;
+   virtual int minimum_number_of_correspondences() const = 0;
 
-  // Compute methods :
-  //
-  // They are implemented in terms of the pure virtual compute_ methods.
+   // Compute methods :
+   //
+   // They are implemented in terms of the pure virtual compute_ methods.
 
-  //: homography from matched points
-  bool compute(std::vector<vgl_homg_point_3d<double> > const& points1,
-               std::vector<vgl_homg_point_3d<double> > const& points2,
-               vgl_h_matrix_3d<double>& H)
-  {
-    return compute_p(points1, points2, H);
+   //: homography from matched points
+   bool compute(std::vector<vgl_homg_point_3d<double>> const &points1,
+                std::vector<vgl_homg_point_3d<double>> const &points2,
+                vgl_h_matrix_3d<double> &H) {
+     return compute_p(points1, points2, H);
   }
 
   //: homography from matched points - return h_matrix
@@ -52,10 +51,10 @@ class vgl_h_matrix_3d_compute
   { vgl_h_matrix_3d<double> H; compute_p(p1, p2, H); return H; }
 
  protected:
-  bool verbose_;
-  virtual bool compute_p(std::vector<vgl_homg_point_3d<double> > const& points1,
-                         std::vector<vgl_homg_point_3d<double> > const& points2,
-                         vgl_h_matrix_3d<double>& H) = 0;
+   bool verbose_{false};
+   virtual bool compute_p(std::vector<vgl_homg_point_3d<double>> const &points1,
+                          std::vector<vgl_homg_point_3d<double>> const &points2,
+                          vgl_h_matrix_3d<double> &H) = 0;
 };
 
 #endif // vgl_h_matrix_3d_compute_h_

@@ -22,16 +22,16 @@ class vil_structuring_element
   //: j position of elements (i,j)
   std::vector<int> p_j_;
   //: Elements in box bounded by [min_i_,max_i_][min_j_,max_j]
-  int min_i_;
+  int min_i_{0};
   //: Elements in box bounded by [min_i_,max_i_][min_j_,max_j]
-  int max_i_;
+  int max_i_{-1};
   //: Elements in box bounded by [min_i_,max_i_][min_j_,max_j]
-  int min_j_;
+  int min_j_{0};
   //: Elements in box bounded by [min_i_,max_i_][min_j_,max_j]
-  int max_j_;
+  int max_j_{-1};
 
- public:
-  vil_structuring_element() : min_i_(0),max_i_(-1),min_j_(0),max_j_(-1) {}
+public:
+  vil_structuring_element() {}
 
   //: Define elements { (p_i[k],p_j[k]) }
   vil_structuring_element(const std::vector<int>& v_p_i,const std::vector<int>& v_p_j)

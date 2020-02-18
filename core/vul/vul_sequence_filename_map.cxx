@@ -33,9 +33,7 @@ const int num_dir_ext_pairs = sizeof(dir_ext_pairs) / sizeof(dir_ext_pairs[0]);
 
 // Empty constructor to allow the operator= to be used later.
 vul_sequence_filename_map::vul_sequence_filename_map()
-  : start_(-1)
-  , step_(-1)
-  , end_(-1)
+
 {}
 
 vul_sequence_filename_map::vul_sequence_filename_map(std::string seq_template, std::vector<int> indices)

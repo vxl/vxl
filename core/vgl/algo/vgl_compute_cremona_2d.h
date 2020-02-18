@@ -44,19 +44,20 @@ class vgl_compute_cremona_2d
      enum constraint_t  {BI_RATIONAL, COMMON_DENOMINATOR, UNITY_DENOMINATOR, UNKNOWN};
   // Constructors/Initializers/Destructors-------------------------------------
 
- vgl_compute_cremona_2d(): linear_solved_(false), constr_type_(BI_RATIONAL) {}
-  ~vgl_compute_cremona_2d() {};
+     vgl_compute_cremona_2d() : constr_type_(BI_RATIONAL) {}
+     ~vgl_compute_cremona_2d(){};
 
-  // Operations----------------------------------------------------------------
-  
-  bool compute_linear(std::vector<vgl_homg_point_2d<T> > const& from_pts, 
-      std::vector<vgl_homg_point_2d<T> > const& to_pts, constraint_t ctype = BI_RATIONAL);
- bool project_linear(T X, T Y, T& x, T& y) const;
- T linear_error() {return linear_error_;}
+     // Operations----------------------------------------------------------------
 
- //: the cremona transformation produced by the linear solution
- vgl_cremona_trans_2d<T, deg> linear_trans(){
-   return vgl_cremona_trans_2d<T, deg>(tr_from_, tr_to_, linear_coeff_);
+     bool compute_linear(std::vector<vgl_homg_point_2d<T>> const &from_pts,
+                         std::vector<vgl_homg_point_2d<T>> const &to_pts,
+                         constraint_t ctype = BI_RATIONAL);
+     bool project_linear(T X, T Y, T &x, T &y) const;
+     T linear_error() { return linear_error_; }
+
+     //: the cremona transformation produced by the linear solution
+     vgl_cremona_trans_2d<T, deg> linear_trans() {
+       return vgl_cremona_trans_2d<T, deg>(tr_from_, tr_to_, linear_coeff_);
  }
  // internals
  vnl_vector<T> linear_coeff() const {return linear_coeff_;}
@@ -75,7 +76,7 @@ class vgl_compute_cremona_2d
  std::vector<vgl_homg_point_2d<T> > norm_to_pts_;
  T linear_error_;
  vnl_vector<T> linear_coeff_;
- bool linear_solved_;
+ bool linear_solved_{false};
 };
 
 #define VGL_COMPUTE_CREMONA_2D_INSTANTIATE(T, deg) extern "please include vgl/algo/vgl_compute_cremona_2d.hxx first"
