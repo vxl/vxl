@@ -17,14 +17,13 @@
 // written will succeed but will return garbage data.
 class vil1_stream_core : public vil1_stream
 {
-  vil1_streampos curpos_;       // current file pointer.
+  vil1_streampos curpos_{0}; // current file pointer.
   unsigned blocksize_;
   std::vector<char*> block_;
-  vil1_streampos tailpos_; // size of file so far
+  vil1_streampos tailpos_{0}; // size of file so far
 
- public:
-  vil1_stream_core(unsigned block_size = 16384)
-    : curpos_(0), blocksize_(block_size), tailpos_(0) {}
+public:
+  vil1_stream_core(unsigned block_size = 16384) : blocksize_(block_size) {}
 
   //: get current file size
   unsigned size() const { return tailpos_; }

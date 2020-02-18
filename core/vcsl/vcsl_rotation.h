@@ -32,26 +32,26 @@ class vcsl_rotation
   //***************************************************************************
 
   //: Default constructor. Sets 3D rotation mode
-  vcsl_rotation() : mode_2d_(false) {}
+   vcsl_rotation() {}
 
-  // Destructor
-  ~vcsl_rotation() override = default;
+   // Destructor
+   ~vcsl_rotation() override = default;
 
-  //***************************************************************************
-  // Status report
-  //***************************************************************************
+   //***************************************************************************
+   // Status report
+   //***************************************************************************
 
-  //: Is `this' invertible at time `time'?
-  //  REQUIRE: valid_time(time)
-  // Pure virtual function of vcsl_spatial_transformation
-  bool is_invertible(double /*time*/) const override { return true; }
+   //: Is `this' invertible at time `time'?
+   //  REQUIRE: valid_time(time)
+   // Pure virtual function of vcsl_spatial_transformation
+   bool is_invertible(double /*time*/) const override { return true; }
 
-  //: Is `this' correctly set ?
-  // Virtual function of vcsl_spatial_transformation
-  bool is_valid() const override
-  { return vcsl_spatial_transformation::is_valid() &&
-          this->duration()==axis_.size() &&
-          this->duration()==angle_.size(); }
+   //: Is `this' correctly set ?
+   // Virtual function of vcsl_spatial_transformation
+   bool is_valid() const override {
+     return vcsl_spatial_transformation::is_valid() &&
+            this->duration() == axis_.size() &&
+            this->duration() == angle_.size(); }
 
   //: Are `new_vector' a list of unit vectors ?
   bool are_unit_axes(list_of_vectors const& new_axis) const;
@@ -119,7 +119,7 @@ class vcsl_rotation
   vnl_quaternion<double> quaternion(double time) const;
 
   //: False if `this' is a 3D rotation, true if `this' is a 2D rotation
-  bool mode_2d_;
+  bool mode_2d_{false};
 
   //: Angle variation along the time in radians
   list_of_scalars angle_;

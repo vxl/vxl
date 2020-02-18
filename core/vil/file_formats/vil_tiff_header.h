@@ -47,16 +47,16 @@
 
 struct ushort_tag
 {
-  ushort_tag(): valid(false) {}
+  ushort_tag() {}
   vxl_uint_16 val;
-  bool valid;
+  bool valid{false};
 };
 
 struct ulong_tag
 {
-  ulong_tag() : valid(false) {}
+  ulong_tag() {}
   vxl_uint_32 val;
-  bool valid;
+  bool valid{false};
 };
 
 // The tiff header elements (tags)

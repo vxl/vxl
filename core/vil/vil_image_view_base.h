@@ -28,18 +28,18 @@ class vil_image_view_base
 {
  protected:
   //: Number of columns.
-  unsigned ni_;
-  //: Number of rasters.
-  unsigned nj_;
-  //: Number of planes.
-  unsigned nplanes_;
+   unsigned ni_{0};
+   //: Number of rasters.
+   unsigned nj_{0};
+   //: Number of planes.
+   unsigned nplanes_{1};
 
-  vil_image_view_base(unsigned n_i, unsigned n_j, unsigned n_planes):
-  ni_(n_i), nj_(n_j), nplanes_(n_planes), reference_count_(0) {}
+   vil_image_view_base(unsigned n_i, unsigned n_j, unsigned n_planes)
+       : ni_(n_i), nj_(n_j), nplanes_(n_planes), reference_count_(0) {}
 
-  //: Default is an empty one-plane image
-  //  Don't set nplanes_ to zero as it confuses set_size(nx,ny) later
-  vil_image_view_base(): ni_(0), nj_(0), nplanes_(1), reference_count_(0) {}
+   //: Default is an empty one-plane image
+   //  Don't set nplanes_ to zero as it confuses set_size(nx,ny) later
+   vil_image_view_base() : reference_count_(0) {}
 
  public:
   // The destructor must be virtual so that the memory chunk is destroyed.

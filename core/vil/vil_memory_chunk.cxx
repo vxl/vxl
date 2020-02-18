@@ -11,12 +11,7 @@
 #include <cassert>
 
 //: Dflt ctor
-vil_memory_chunk::vil_memory_chunk()
-  : data_(nullptr)
-  , size_(0)
-  , pixel_format_(VIL_PIXEL_FORMAT_UNKNOWN)
-  , ref_count_(0)
-{}
+vil_memory_chunk::vil_memory_chunk() : ref_count_(0) {}
 
 //: Allocate n bytes of memory
 vil_memory_chunk::vil_memory_chunk(std::size_t n, vil_pixel_format pixel_form)

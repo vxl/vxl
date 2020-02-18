@@ -26,15 +26,16 @@ class vil_image_resource_plugin : public vil_image_resource
  public:
 
   //: Default constructor
-  vil_image_resource_plugin() : filetype_(""), colour_(""), width_(-1), height_(-1) {}
+   vil_image_resource_plugin() : filetype_(""), colour_("") {}
 
-  //: Destructor
-  ~vil_image_resource_plugin() override = default;
+   //: Destructor
+   ~vil_image_resource_plugin() override = default;
 
-  //: Name of the class
-  virtual std::string is_a() const { return "vil_image_resource_plugin"; }
+   //: Name of the class
+   virtual std::string is_a() const { return "vil_image_resource_plugin"; }
 
-  vil_pixel_format pixel_format() const override { return VIL_PIXEL_FORMAT_UNKNOWN; }
+   vil_pixel_format pixel_format() const override {
+     return VIL_PIXEL_FORMAT_UNKNOWN; }
 
   unsigned ni() const override { return 0; }
   unsigned nj() const override { return 0; }
@@ -91,8 +92,8 @@ class vil_image_resource_plugin : public vil_image_resource
   unsigned int ni_;
   unsigned int nj_;
   unsigned int nplanes_;
-  int width_;
-  int height_;
+  int width_{-1};
+  int height_{-1};
 };
 
 #endif // vil_image_resource_plugin_h_

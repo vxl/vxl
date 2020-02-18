@@ -31,8 +31,7 @@ template <class T>
 class vpgl_em_compute_5_point
 {
   public:
-
-    vpgl_em_compute_5_point(): verbose(false), tolerance(0.0001) { }
+    vpgl_em_compute_5_point() {}
     vpgl_em_compute_5_point(bool v): verbose(v), tolerance(0.0001) { }
     vpgl_em_compute_5_point(bool v, double t): verbose(v), tolerance(t) { }
 
@@ -57,8 +56,8 @@ class vpgl_em_compute_5_point
                   std::vector<vpgl_essential_matrix<T> > &ems) const;
 
   protected:
-    const bool verbose;
-    const double tolerance;
+    const bool verbose{false};
+    const double tolerance{0.0001};
 
     void normalize(
         const std::vector<vgl_point_2d<T> > &points,
@@ -97,25 +96,23 @@ template <class T>
 class vpgl_em_compute_5_point_ransac
 {
     public:
-        vpgl_em_compute_5_point_ransac() :
-            num_rounds(512u), inlier_threshold(2.25), verbose(false) { }
+      vpgl_em_compute_5_point_ransac() {}
 
-        vpgl_em_compute_5_point_ransac(unsigned nr, double trsh, bool v) :
-            num_rounds(nr), inlier_threshold(trsh), verbose(v) { }
+      vpgl_em_compute_5_point_ransac(unsigned nr, double trsh, bool v)
+          : num_rounds(nr), inlier_threshold(trsh), verbose(v) {}
 
-    bool compute(
-        std::vector<vgl_point_2d<T> > const& right_points,
-        vpgl_calibration_matrix<T> const& right_k,
-        std::vector<vgl_point_2d<T> > const& left_points,
-        vpgl_calibration_matrix<T> const& left_k,
+      bool compute(std::vector<vgl_point_2d<T>> const &right_points,
+                   vpgl_calibration_matrix<T> const &right_k,
+                   std::vector<vgl_point_2d<T>> const &left_points,
+                   vpgl_calibration_matrix<T> const &left_k,
 
-        vpgl_essential_matrix<T> &best_em) const;
+                   vpgl_essential_matrix<T> &best_em) const;
 
 
     private:
-        const unsigned num_rounds;
-        const double inlier_threshold;
-        const bool verbose;
+      const unsigned num_rounds{512u};
+      const double inlier_threshold{2.25};
+      const bool verbose{false};
 };
 
 #endif // vpgl_em_compute_5_point_h_

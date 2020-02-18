@@ -13,10 +13,8 @@
 #include <cassert>
 
 //: Copy constructor
-vbl_bit_array_2d::vbl_bit_array_2d(vbl_bit_array_2d const & that)
-  : data_(nullptr)
-  , num_rows_(0)
-  , num_cols_(0)
+vbl_bit_array_2d::vbl_bit_array_2d(vbl_bit_array_2d const &that)
+
 {
   if (that.data_)
   {

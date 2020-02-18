@@ -1362,10 +1362,7 @@ vil_tiff_pyramid_resource::closest(const float scale) const
   return pl;
 }
 
-vil_tiff_pyramid_resource::vil_tiff_pyramid_resource()
-  : read_(true)
-  , t_(nullptr)
-{}
+vil_tiff_pyramid_resource::vil_tiff_pyramid_resource() : t_(nullptr) {}
 
 vil_tiff_pyramid_resource::vil_tiff_pyramid_resource(tif_smart_ptr const & t, bool read)
   : read_(read)

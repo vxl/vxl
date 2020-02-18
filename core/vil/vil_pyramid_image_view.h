@@ -26,11 +26,14 @@ class vil_pyramid_image_view
 {
  public:
     //: Default constructor, creates an empty list of pyramid
-    vil_pyramid_image_view(): nlevels_(0), max_levels_(256) {}
+   vil_pyramid_image_view() {}
 
-    //: Creates a pyramid with one image only and its scale is set to 1.0 (biggest)
-    vil_pyramid_image_view(vil_image_view_base_sptr image): nlevels_(1), max_levels_(256)
-    { images_.push_back(image); scales_.push_back(1.0); }
+   //: Creates a pyramid with one image only and its scale is set to 1.0
+   //(biggest)
+   vil_pyramid_image_view(vil_image_view_base_sptr image)
+       : nlevels_(1), max_levels_(256) {
+     images_.push_back(image);
+     scales_.push_back(1.0); }
 
     //: Creates a pyramid with one image only and its scale is set to 1.0 (biggest)
     vil_pyramid_image_view(const vil_image_view<T>& image): nlevels_(1), max_levels_(256)
@@ -89,10 +92,10 @@ class vil_pyramid_image_view
     std::vector<double> scales_;
 
     // the number of images in the view, 0 if it is empty
-    unsigned nlevels_;
+    unsigned nlevels_{0};
 
     // this is the number of levels that cannot be exceeded, by default it is 256
-    unsigned max_levels_;
+    unsigned max_levels_{256};
 
     //: returns true if the image size is < 4x4 or the max_level is reached
     inline bool limit_reached(unsigned i, unsigned j)

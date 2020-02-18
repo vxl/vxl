@@ -45,14 +45,14 @@ class vil_nitf2_date_time : public vil_nitf2_compound_field_value
 {
   friend class vil_nitf2_date_time_formatter;
 public:
-  int year;
-  int month;        // 1-12
-  int day;          // 1-31
-  int hour;         // 0-23
-  int minute;       // 0-59
-  double second;    // 0-59.999...
-  int sec_precision; // second's significant decimal places
-  vil_nitf2_date_time() : year(0), month(0), day(0), hour(0), minute(0), second(0), sec_precision(0) {}
+  int year{0};
+  int month{0};         // 1-12
+  int day{0};           // 1-31
+  int hour{0};          // 0-23
+  int minute{0};        // 0-59
+  double second{0};     // 0-59.999...
+  int sec_precision{0}; // second's significant decimal places
+  vil_nitf2_date_time() {}
   vil_nitf2_date_time(std::string format);
   ~vil_nitf2_date_time() override = default;
   bool is_valid() const override;

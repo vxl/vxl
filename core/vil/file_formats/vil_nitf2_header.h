@@ -72,8 +72,8 @@ public:
 protected:
   // Field sequences for different parts of this header.
   vil_nitf2_field_sequence m_field_sequence1;
-  vil_nitf2_field_sequence* m_field_sequence2;
-  vil_nitf2_field_sequence* m_field_sequence_classification;
+  vil_nitf2_field_sequence *m_field_sequence2{nullptr};
+  vil_nitf2_field_sequence *m_field_sequence_classification{nullptr};
 
   // Returns field definitions, which I own, for different parts of the header.
   static vil_nitf2_field_definitions* get_field_definitions_1();

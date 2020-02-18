@@ -89,60 +89,67 @@ class vil1_image_impl
  public:
   //:
   // the reference count starts at 0.
-  vil1_image_impl() : reference_count(0) {}
-  virtual ~vil1_image_impl() = default;
+   vil1_image_impl() {}
+   virtual ~vil1_image_impl() = default;
 
-  //: Dimensions:  Planes x W x H x Components
-  virtual int planes() const = 0;
-  //: Dimensions:  Planes x W x H x Components
-  virtual int width() const = 0;
-  //: Dimensions:  Planes x W x H x Components
-  virtual int height() const = 0;
-  //: Dimensions:  Planes x W x H x Components
-  virtual int components() const = 0;
+   //: Dimensions:  Planes x W x H x Components
+   virtual int planes() const = 0;
+   //: Dimensions:  Planes x W x H x Components
+   virtual int width() const = 0;
+   //: Dimensions:  Planes x W x H x Components
+   virtual int height() const = 0;
+   //: Dimensions:  Planes x W x H x Components
+   virtual int components() const = 0;
 
-  //: Number of bits per component.
-  // Size (in bits) for the smallest entity of the image.
-  virtual int bits_per_component() const = 0;
+   //: Number of bits per component.
+   // Size (in bits) for the smallest entity of the image.
+   virtual int bits_per_component() const = 0;
 
-  //: Format.
-  //  A standard RGB RGB RGB image has
-  // - components() == 3
-  // - bits_per_component() == 8
-  // - component_format() == VIL1_COMPONENT_FORMAT_UNSIGNED_INT
-  // Use vil1_print(fmt) to return a string description of the format fmt.
-  virtual enum vil1_component_format component_format() const = 0;
+   //: Format.
+   //  A standard RGB RGB RGB image has
+   // - components() == 3
+   // - bits_per_component() == 8
+   // - component_format() == VIL1_COMPONENT_FORMAT_UNSIGNED_INT
+   // Use vil1_print(fmt) to return a string description of the format fmt.
+   virtual enum vil1_component_format component_format() const = 0;
 
-  //: return the ith plane.
-  virtual vil1_image get_plane(unsigned int p) const;
+   //: return the ith plane.
+   virtual vil1_image get_plane(unsigned int p) const;
 
-  //: Copy buffer of this to BUF.
-  // The buffer is stored like this for each pixel:
-  // component0(plane0,plane1,plane2,...),component1(plane0,plane1,plane2,...),...\n
-  //   total size of BUF in bytes should be (bits_per_component * components + 7) / 8
-  //   i.e. rounding to the next multiple of 8 bits (only correct if 1 byte = 8 bits)
-  virtual bool get_section(void* buf, int x0, int y0, int width, int height) const = 0;
+   //: Copy buffer of this to BUF.
+   // The buffer is stored like this for each pixel:
+   // component0(plane0,plane1,plane2,...),component1(plane0,plane1,plane2,...),...\n
+   //   total size of BUF in bytes should be (bits_per_component * components +
+   //   7) / 8 i.e. rounding to the next multiple of 8 bits (only correct if 1
+   //   byte = 8 bits)
+   virtual bool get_section(void *buf, int x0, int y0, int width,
+                            int height) const = 0;
 
-  //: Copy plane PLANE of BUF to this.
-  // The buffer should look like this for each pixel:
-  // component0(plane0,plane1,plane2,...),component1(plane0,plane1,plane2,...),...\n
-  // total size of BUF in bytes should be (bits_per_component * components + 7) / 8
-  // i.e. rounding to the next multiple of 8 bits (only correct if 1 byte = 8 bits)
-  virtual bool put_section(void const* buf, int x0, int y0, int width, int height) = 0;
+   //: Copy plane PLANE of BUF to this.
+   // The buffer should look like this for each pixel:
+   // component0(plane0,plane1,plane2,...),component1(plane0,plane1,plane2,...),...\n
+   // total size of BUF in bytes should be (bits_per_component * components + 7)
+   // / 8 i.e. rounding to the next multiple of 8 bits (only correct if 1 byte =
+   // 8 bits)
+   virtual bool put_section(void const *buf, int x0, int y0, int width,
+                            int height) = 0;
 
-  //: Return a string describing the file format.
-  // Only file images have a format, others return 0
-  virtual char const* file_format() const { return nullptr; }
+   //: Return a string describing the file format.
+   // Only file images have a format, others return 0
+   virtual char const *file_format() const { return nullptr; }
 
-  //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = nullptr) const;
-  virtual bool set_property(char const* tag, void const* property_value = nullptr) const;
+   //: Extra property information
+   virtual bool get_property(char const *tag,
+                             void *property_value = nullptr) const;
+   virtual bool set_property(char const *tag,
+                             void const *property_value = nullptr) const;
 
-  //: Return the name of the class;
-  virtual std::string is_a() const { return "vil1_image_impl"; }
+   //: Return the name of the class;
+   virtual std::string is_a() const { return "vil1_image_impl"; }
 
-  //: Return true if the name of the class matches the argument
-  virtual bool is_class(std::string const& s) const { return s==this->is_a(); }
+   //: Return true if the name of the class matches the argument
+   virtual bool is_class(std::string const &s) const {
+     return s == this->is_a(); }
 
  private:
   friend class vil1_image;
@@ -154,7 +161,7 @@ class vil1_image_impl
     assert(reference_count>0);
     if (--reference_count<=0) delete this;
   }
-  int reference_count;
+  int reference_count{0};
 };
 
 #define VIL1_DISPATCH_AUX(VTYPE, uchar, Template, Args) \

@@ -20,14 +20,14 @@ class vil_memory_chunk
 {
   protected:
     //: Data
-    void *data_;
+    void *data_{nullptr};
 
     //: Number of elements (bytes)
-    std::size_t size_;
+    std::size_t size_{0};
 
     //: Indicate what format data is (used for binary IO)
     // Should always be a scalar type.
-    vil_pixel_format pixel_format_;
+    vil_pixel_format pixel_format_{VIL_PIXEL_FORMAT_UNKNOWN};
 
     //: Reference count
     vcl_atomic_count ref_count_;

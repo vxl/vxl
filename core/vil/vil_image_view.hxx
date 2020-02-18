@@ -93,21 +93,19 @@ vil_image_view<T>::vil_image_view(vil_memory_chunk_sptr const& mem_chunk,
 //: Copy constructor
 // If this view cannot set itself to view the other data (e.g. because the
 // types are incompatible) it will set itself to empty.
-template<class T>
-vil_image_view<T>::vil_image_view(const vil_image_view<T>& that)
-: vil_image_view_base(that.ni(),that.nj(),that.nplanes()),
-  top_left_(nullptr), istep_(0), jstep_(0), planestep_(0), ptr_(nullptr)
-{
+template <class T>
+vil_image_view<T>::vil_image_view(const vil_image_view<T> &that)
+    : vil_image_view_base(that.ni(), that.nj(), that.nplanes()),
+      top_left_(nullptr), ptr_(nullptr) {
   operator=( static_cast<vil_image_view_base const&>(that) );
 }
 
 //: Sort of copy constructor
 // If this view cannot set itself to view the other data (e.g. because the
 // types are incompatible) it will set itself to empty.
-template<class T>
-vil_image_view<T>::vil_image_view(const vil_image_view_base& that):
-top_left_(nullptr), istep_(0), jstep_(0), planestep_(0), ptr_(nullptr)
-{
+template <class T>
+vil_image_view<T>::vil_image_view(const vil_image_view_base &that)
+    : top_left_(nullptr), ptr_(nullptr) {
   operator=(that);
 }
 
@@ -115,9 +113,8 @@ top_left_(nullptr), istep_(0), jstep_(0), planestep_(0), ptr_(nullptr)
 // If this view cannot set itself to view the other data (e.g. because the
 // types are incompatible) it will set itself to empty.
 template <class T>
-vil_image_view<T>::vil_image_view(const vil_image_view_base_sptr& that):
-top_left_(nullptr), istep_(0), jstep_(0), planestep_(0), ptr_(nullptr)
-{
+vil_image_view<T>::vil_image_view(const vil_image_view_base_sptr &that)
+    : top_left_(nullptr), ptr_(nullptr) {
   operator=(that);
 }
 

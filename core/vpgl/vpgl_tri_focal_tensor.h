@@ -53,7 +53,7 @@ protected:
   vgl_homg_point_2d<Type> e13_;
 
   // cameras
-  bool cameras_valid_;
+  bool cameras_valid_{false};
   vpgl_proj_camera<Type> c1_;
   vpgl_proj_camera<Type> c2_;
   vpgl_proj_camera<Type> c3_;
@@ -77,11 +77,11 @@ protected:
 
   // Constructors/Initializers/Destructors-----------------------------------
 
- vpgl_tri_focal_tensor(): T_(vbl_array_3d<Type>(3, 3, 3, Type(0))),cameras_valid_(false)
-    {
-      for(size_t i = 0; i<3; ++i) T_[i][i][i]=Type(1);
-      this->init();
-    }
+   vpgl_tri_focal_tensor() : T_(vbl_array_3d<Type>(3, 3, 3, Type(0))) {
+     for (size_t i = 0; i < 3; ++i)
+       T_[i][i][i] = Type(1);
+     this->init();
+   }
  vpgl_tri_focal_tensor(const vbl_array_3d<Type>& T): T_(T),cameras_valid_(false)
     {
       this->init();

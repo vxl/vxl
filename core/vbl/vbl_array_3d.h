@@ -43,23 +43,21 @@ class vbl_array_3d
 
  private:
   element_type ***element_;
-  size_type row1_count_;
-  size_type row2_count_;
-  size_type row3_count_;
+  size_type row1_count_{0};
+  size_type row2_count_{0};
+  size_type row3_count_{0};
 
- public:
+public:
   typedef T*       iterator;
   typedef T const* const_iterator;
 
   typedef T       &reference;
   typedef T const &const_reference;
  public:
+   vbl_array_3d() : element_(nullptr) {}
 
-  vbl_array_3d(): element_(nullptr), row1_count_(0), row2_count_(0), row3_count_(0)
-  {}
-
-  vbl_array_3d(size_type n1, size_type n2, size_type n3)
-  { construct(n1, n2, n3); }
+   vbl_array_3d(size_type n1, size_type n2, size_type n3) {
+     construct(n1, n2, n3); }
 
   vbl_array_3d(size_type n1, size_type n2, size_type n3, T const* init_values)
   {
@@ -71,9 +69,7 @@ class vbl_array_3d
     construct(n1, n2, n3); fill(fill_value);
   }
 
-  vbl_array_3d(vbl_array_3d<T> const& that)
-  : element_(nullptr), row1_count_(0), row2_count_(0), row3_count_(0)
-  {
+  vbl_array_3d(vbl_array_3d<T> const &that) : element_(nullptr) {
     if (that.element_) {
       construct(that.row1_count_,that.row2_count_,that.row3_count_);
       set(that.data_block());

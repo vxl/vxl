@@ -33,7 +33,7 @@ impl::impl(int nn)
 }
 
 impl::impl()
-  : n(7)
+
 {
   reftotal++;
   std::cout << "impl ctor : this=" << (void *)this << std::endl;

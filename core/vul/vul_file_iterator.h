@@ -48,44 +48,43 @@ class vul_file_iterator
 {
 
  public:
+   vul_file_iterator() {}
 
-  vul_file_iterator() : p(nullptr) {}
+   //: Initialize, and scan to get first file from "glob"
+   vul_file_iterator(char const *glob);
 
-  //: Initialize, and scan to get first file from "glob"
-  vul_file_iterator(char const* glob);
+   //: Initialize, and scan to get first file from "glob"
+   vul_file_iterator(std::string const &glob);
 
-  //: Initialize, and scan to get first file from "glob"
-  vul_file_iterator(std::string const& glob);
+   ~vul_file_iterator();
 
-  ~vul_file_iterator();
+   //: Ask if done.
+   // Won't spin the disk
+   explicit operator bool() const;
 
-  //: Ask if done.
-  // Won't spin the disk
-  explicit operator bool() const;
+   //: Inverse boolean value
+   bool operator!() const;
 
-  //: Inverse boolean value
-  bool operator!() const;
+   //: Return the currently pointed-to pathname.
+   // Won't spin the disk
+   char const *operator()();
 
-  //: Return the currently pointed-to pathname.
-  // Won't spin the disk
-  char const* operator()();
+   //: Return the non-directory part of the current pathname.
+   char const *filename();
 
-  //: Return the non-directory part of the current pathname.
-  char const* filename();
+   //: Return the match for the i'th glob wildcard character (* or ?).
+   // Uses the most recent glob result.
+   char const *match(int i);
 
-  //: Return the match for the i'th glob wildcard character (* or ?).
-  // Uses the most recent glob result.
-  char const* match(int i);
+   //: Increment to the next file
+   // Will spin the disk
+   vul_file_iterator &operator++();
 
-  //: Increment to the next file
-  // Will spin the disk
-  vul_file_iterator& operator++();
-
-  //: Run a new match
-  void reset(char const* glob);
+   //: Run a new match
+   void reset(char const *glob);
 
  protected:
-  vul_file_iterator_data* p;
+   vul_file_iterator_data *p{nullptr};
 
  private:
   // postfix++ privatized.

@@ -18,21 +18,8 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-
 vpgl_bundle_adjust::vpgl_bundle_adjust()
-  : ba_func_(nullptr)
-  , use_m_estimator_(false)
-  , m_estimator_scale_(1.0)
-  , use_gradient_(true)
-  , self_calibrate_(false)
-  , normalize_data_(true)
-  , verbose_(false)
-  , max_iterations_(1000)
-  , x_tol_(1e-8)
-  , g_tol_(1e-8)
-  , epsilon_(1e-3)
-  , start_error_(0.0)
-  , end_error_(0.0)
+
 {}
 
 vpgl_bundle_adjust::~vpgl_bundle_adjust()

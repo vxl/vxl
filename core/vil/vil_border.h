@@ -41,19 +41,16 @@ class vil_border
 
  public:
   //: Default constructor, creates a constant border.
-  vil_border ()
-  : border_kind_(vil_border_constant)
-  , constant_value_()
-  {}
+   vil_border() : constant_value_() {}
 
-  //: Set the border kind.
-  void set_kind (vil_border_mode brdr_kind) { border_kind_ = brdr_kind; }
-  //: Get the current border kind.
-  vil_border_mode kind() const { return border_kind_; }
+   //: Set the border kind.
+   void set_kind(vil_border_mode brdr_kind) { border_kind_ = brdr_kind; }
+   //: Get the current border kind.
+   vil_border_mode kind() const { return border_kind_; }
 
-  //: True if border values are constant.
-  inline bool is_constant() const
-  { return border_kind_ == vil_border_constant; }
+   //: True if border values are constant.
+   inline bool is_constant() const {
+     return border_kind_ == vil_border_constant; }
 
   //: If border kind is vil_border_constant, returns the border value.
   inline const pixel_type& constant_value() const { return constant_value_; }
@@ -108,8 +105,8 @@ class vil_border
   }
 
  private:
-  vil_border_mode border_kind_;
-  pixel_type constant_value_;
+   vil_border_mode border_kind_{vil_border_constant};
+   pixel_type constant_value_;
 };
 
 //: Provides a pixel accessor which is syntax-compatible with vil_image_view.

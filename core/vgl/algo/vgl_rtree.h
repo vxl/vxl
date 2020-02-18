@@ -118,10 +118,10 @@ class vgl_rtree_iterator_base
  public:
   typedef vgl_rtree_node<V, B, C> node;
   node *current;
-  unsigned int i;
+  unsigned int i{0};
 
   vgl_rtree_iterator_base(node *root) : current(root), i(0) { }
-  vgl_rtree_iterator_base() : current(nullptr), i(0) { }
+  vgl_rtree_iterator_base() : current(nullptr) {}
 
   void operator_pp();
   void operator_mm();

@@ -62,7 +62,9 @@ class vnl_finite_int
   //: Creates a finite int element.
   //  Default constructor gives 0.
   //  Also serves as automatic cast from int to vnl_finite_int.
-  inline vnl_finite_int(int x = 0) : val_((x%=N)<0?N+x:x), mo_(0), lp1_(0) {assert(N>1);}
+  inline vnl_finite_int(int x = 0) : val_((x %= N) < 0 ? N + x : x) {
+    assert(N > 1);
+  }
   //  Copy constructor
   inline vnl_finite_int(Base const& x) : val_(int(x)), mo_(x.mo_), lp1_(x.lp1_) {}
   //  Destructor
@@ -262,8 +264,8 @@ class vnl_finite_int
   //: private function to set cached value of lp1_ when available
   void set_log(unsigned int r) const { r %= Base::totient(); lp1_ = r+1; }
 
-  mutable unsigned int mo_; //!< cached value for multiplicative order
-  mutable unsigned int lp1_; //!< cached value for 1+log()
+  mutable unsigned int mo_{0};  //!< cached value for multiplicative order
+  mutable unsigned int lp1_{0}; //!< cached value for 1+log()
 };
 
 //: formatted output

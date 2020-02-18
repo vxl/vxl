@@ -29,31 +29,29 @@ class vgl_frustum_3d
 {
  public:
   //: default constructor
- vgl_frustum_3d(): near_plane_(0), far_plane_(0), n_top_bot_face_verts_(0){}
+   vgl_frustum_3d() {}
 
-  //: Construct the frustum from rays
-  // the corner rays intersect in a common origin point, i.e., the apex
-  // of the frustum cone. It is assumed the rays are in sorted order
-  // around the cone surface, so that sequential rays are coplanar
-  // with a cone surface plane and the cross product r[i].dir X r[i+1].dir
-  // defines an outward-pointing normal. norm is the vector
-  // perpendicular to the parallel frustum faces. d0 is the distance in
-  // the norm vector dirction from the apex to the closest parallel face.
-  // d1 the distance in the norm direction from the apex to the far face.
-  //
-  vgl_frustum_3d(std::vector<vgl_ray_3d<Type> >  const& corner_rays,
-                 vgl_vector_3d<Type> const& norm, Type d0, Type d1);
+   //: Construct the frustum from rays
+   // the corner rays intersect in a common origin point, i.e., the apex
+   // of the frustum cone. It is assumed the rays are in sorted order
+   // around the cone surface, so that sequential rays are coplanar
+   // with a cone surface plane and the cross product r[i].dir X r[i+1].dir
+   // defines an outward-pointing normal. norm is the vector
+   // perpendicular to the parallel frustum faces. d0 is the distance in
+   // the norm vector dirction from the apex to the closest parallel face.
+   // d1 the distance in the norm direction from the apex to the far face.
+   //
+   vgl_frustum_3d(std::vector<vgl_ray_3d<Type>> const &corner_rays,
+                  vgl_vector_3d<Type> const &norm, Type d0, Type d1);
 
+   //: Equality test
+   inline bool operator==(vgl_frustum_3d<Type> const &other) const;
 
-  //: Equality test
-  inline bool operator==(vgl_frustum_3d<Type> const& other) const;
+   // Data Access---------------------------------------------------------------
+   const vgl_point_3d<Type> &apex() const { return apex_; }
 
-  // Data Access---------------------------------------------------------------
-  const vgl_point_3d<Type>& apex() const{
-    return apex_;}
-
-  const std::vector<vgl_plane_3d<Type> >& surface_planes() const
-  {return surface_planes_;}
+   const std::vector<vgl_plane_3d<Type>> &surface_planes() const {
+     return surface_planes_;}
 
   const vgl_plane_3d<Type>& near_plane() const
   {return surface_planes_[near_plane_];}
@@ -95,11 +93,11 @@ class vgl_frustum_3d
   vgl_vector_3d<Type> norm_;
   //: planes bounding the frustum volume including near and far plane
   std::vector<vgl_plane_3d<Type> > surface_planes_;
-  int near_plane_;
-  int far_plane_;
+  int near_plane_{0};
+  int far_plane_{0};
   std::vector<vgl_point_3d<Type> > verts_;
   //: the number of verts in the top or bottom face
-  int n_top_bot_face_verts_;
+  int n_top_bot_face_verts_{0};
   // key corresponds to plane index, value is clockwise verts on face boundary
   // clockwise with respect the the face normal
   std::map<int, std::vector<int> > faces_;

@@ -109,7 +109,7 @@ class vpgl_bundle_adjust
                       std::vector<vpgl_perspective_camera<double> >& cameras);
 
   //: The bundle adjustment error function
-  vpgl_bundle_adjust_lsqr* ba_func_;
+  vpgl_bundle_adjust_lsqr *ba_func_{nullptr};
   //: The last camera parameters
   vnl_vector<double> a_;
   //: The last point parameters
@@ -119,19 +119,19 @@ class vpgl_bundle_adjust
   //: The last estimated weights
   std::vector<double> weights_;
 
-  bool use_m_estimator_;
-  double m_estimator_scale_;
-  bool use_gradient_;
-  bool self_calibrate_;
-  bool normalize_data_;
-  bool verbose_;
-  unsigned int max_iterations_;
-  double x_tol_;
-  double g_tol_;
-  double epsilon_;
+  bool use_m_estimator_{false};
+  double m_estimator_scale_{1.0};
+  bool use_gradient_{true};
+  bool self_calibrate_{false};
+  bool normalize_data_{true};
+  bool verbose_{false};
+  unsigned int max_iterations_{1000};
+  double x_tol_{1e-8};
+  double g_tol_{1e-8};
+  double epsilon_{1e-3};
 
-  double start_error_;
-  double end_error_;
+  double start_error_{0.0};
+  double end_error_{0.0};
   int num_iterations_;
 };
 

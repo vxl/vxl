@@ -24,11 +24,13 @@ class vbl_bit_array_2d
 {
  public:
   // Default constructor
-  vbl_bit_array_2d() : data_(nullptr), num_rows_(0), num_cols_(0) {}
-  //: Construct num_rows x num_cols array and leave data uninitialised
-  vbl_bit_array_2d(unsigned int m, unsigned int n) { construct(m,n); }
-  //: Construct num_rows x num_cols array and fill all cells with v
-  vbl_bit_array_2d(unsigned int m, unsigned int n, bool v) { construct(m,n); fill(v); }
+   vbl_bit_array_2d() {}
+   //: Construct num_rows x num_cols array and leave data uninitialised
+   vbl_bit_array_2d(unsigned int m, unsigned int n) { construct(m, n); }
+   //: Construct num_rows x num_cols array and fill all cells with v
+   vbl_bit_array_2d(unsigned int m, unsigned int n, bool v) {
+     construct(m, n);
+     fill(v); }
   //: Construct num_rows x num_cols array and fill all cells with v
   vbl_bit_array_2d(unsigned int m, unsigned int n, bool v[]);
   //: Copy constructor
@@ -73,11 +75,13 @@ class vbl_bit_array_2d
   unsigned long size() const;
 
  private:
-  unsigned char *data_;
-  unsigned int num_rows_;
-  unsigned int num_cols_;
+   unsigned char *data_{nullptr};
+   unsigned int num_rows_{0};
+   unsigned int num_cols_{0};
 
-  void destruct() { delete[] data_; data_=nullptr; }
+   void destruct() {
+     delete[] data_;
+     data_ = nullptr; }
   void construct(unsigned int m, unsigned int n);
 
   //helper

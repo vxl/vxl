@@ -12,7 +12,7 @@ class base_impl : public vbl_ref_count
 {
  public:
   static int reftotal;
-  int n;
+  int n{7};
 
   base_impl(int nn);
   base_impl();
