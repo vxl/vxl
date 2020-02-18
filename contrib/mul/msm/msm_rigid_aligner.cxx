@@ -50,12 +50,10 @@ void msm_rigid_aligner::apply_transform(const msm_points& points,
 }
 
 //: Return scaling applied by the transform with given parameters.
-double msm_rigid_aligner::scale(const vnl_vector<double>& trans) const
-{
+double msm_rigid_aligner::scale(const vnl_vector<double> & trans) const {
   assert(trans.size()==3);
   return 1.0;
 }
-
 
 //: Estimate parameter which best map ref_points to points2
 //  Minimises ||points2-T(ref_points)||^2.

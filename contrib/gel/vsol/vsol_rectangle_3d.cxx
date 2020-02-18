@@ -164,8 +164,7 @@ bool vsol_rectangle_3d::in(vsol_point_3d_sptr const& ) const
 // Require: in(p)
 //---------------------------------------------------------------------------
 vgl_vector_3d<double>
-vsol_rectangle_3d::normal_at_point(vsol_point_3d_sptr const& p) const
-{
+vsol_rectangle_3d::normal_at_point(vsol_point_3d_sptr const & p) const {
   // require
   assert(in(p));
 

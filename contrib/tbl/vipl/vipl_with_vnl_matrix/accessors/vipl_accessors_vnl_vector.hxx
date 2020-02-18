@@ -9,13 +9,13 @@
 #endif
 
 template <class DataType>
-DataType fgetpixel(vnl_vector<DataType> const& i, int x, int y, DataType /* dummy */)
-{
+DataType fgetpixel(vnl_vector<DataType> const &i, int x, int y,
+                   DataType /* dummy */) {
   assert(y==0);
   return i(x);
 }
 template <class DataType>
-void fsetpixel(vnl_vector<DataType>& i, int x, int y, DataType e) {
+void fsetpixel(vnl_vector<DataType> &i, int x, int y, DataType e) {
   assert(y==0);
   i(x) = e;
 }

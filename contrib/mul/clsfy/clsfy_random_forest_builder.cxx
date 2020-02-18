@@ -119,84 +119,79 @@ void clsfy_random_forest_builder::b_read(vsl_b_istream& bfs)
 // return the mean error over the training set.
 // For many classifiers, you may use nClasses==1 to
 // indicate a binary classifier
-double clsfy_random_forest_builder::build(clsfy_classifier_base& classifier,
-                                          mbl_data_wrapper<vnl_vector<double> >& inputs,
-                                          unsigned nClasses,
-                                          const std::vector<unsigned> &outputs) const
-{
-    assert(classifier.is_class("clsfy_random_forest")); // equiv to dynamic_cast<> != 0
-    assert(inputs.size()==outputs.size());
-    assert(nClasses=1);
+double
+clsfy_random_forest_builder::build(clsfy_classifier_base &classifier,
+                                   mbl_data_wrapper<vnl_vector<double>> &inputs,
+                                   unsigned nClasses,
+                                   const std::vector<unsigned> &outputs) const {
+  assert(classifier.is_class(
+      "clsfy_random_forest")); // equiv to dynamic_cast<> != 0
+  assert(inputs.size() == outputs.size());
+  assert(nClasses = 1);
 
+  auto &random_forest = static_cast<clsfy_random_forest &>(classifier);
+  unsigned npoints = inputs.size();
+  std::vector<vnl_vector<double>> vin(npoints);
 
-    auto &random_forest = static_cast<clsfy_random_forest&>(classifier);
-    unsigned npoints=inputs.size();
-    std::vector<vnl_vector<double> > vin(npoints);
+  inputs.reset();
+  unsigned i = 0;
+  do {
+    vin[i++] = inputs.current();
+  } while (inputs.next());
 
-    inputs.reset();
-    unsigned i=0;
-    do
-    {
-        vin[i++] = inputs.current();
-    } while (inputs.next());
+  assert(i == inputs.size());
 
-    assert(i==inputs.size());
+  unsigned ndims = vin[0].size();
+  int nbranch_params = select_nbranch_params(ndims);
 
-    unsigned ndims=vin[0].size();
-    int nbranch_params=select_nbranch_params(ndims);
+  // Start with all parameter indices
+  std::cout << "npoints= " << npoints << "\tndims= " << ndims << std::endl;
+  std::vector<unsigned> indices(ndims, 0);
 
-    //Start with all parameter indices
-    std::cout<<"npoints= "<<npoints<<"\tndims= "<<ndims<<std::endl;
-    std::vector<unsigned> indices(ndims,0);
+  mbl_stl_increments(indices.begin(), indices.end(), 0);
 
-    mbl_stl_increments(indices.begin(),indices.end(),0);
+  // Clean any old trees
+  random_forest.prune();
 
-    //Clean any old trees
-    random_forest.prune();
+  if (poob_indices_) {
+    poob_indices_->clear();
+    poob_indices_->reserve(ntrees_);
+  }
 
-    if (poob_indices_)
-    {
-        poob_indices_->clear();
-        poob_indices_->reserve(ntrees_);
-    }
+  std::vector<vnl_vector<double>> bootstrapped_inputs;
+  std::vector<unsigned> bootstrapped_outputs;
 
+  for (i = 0; i < ntrees_; ++i) {
+    select_data(vin, outputs, bootstrapped_inputs, bootstrapped_outputs);
 
-    std::vector<vnl_vector<double> > bootstrapped_inputs;
-    std::vector<unsigned  > bootstrapped_outputs;
+    clsfy_binary_tree_builder builder;
+    builder.set_calc_test_error(false);
 
-    for (i=0;i<ntrees_;++i)
-    {
-        select_data(vin,outputs,bootstrapped_inputs,bootstrapped_outputs);
+    clsfy_classifier_base *pBaseClassifier = builder.new_classifier();
+    auto *pTreeClassifier = dynamic_cast<clsfy_binary_tree *>(pBaseClassifier);
+    assert(pTreeClassifier);
+    builder.set_nbranch_params(nbranch_params);
 
-        clsfy_binary_tree_builder builder;
-        builder.set_calc_test_error(false);
+    unsigned long seed = get_tree_builder_seed();
+    //        std::cout<<"The seed is "<<seed<<std::endl;
+    builder.seed_sampler(seed);
 
-        clsfy_classifier_base* pBaseClassifier=builder.new_classifier();
-        auto* pTreeClassifier=dynamic_cast<clsfy_binary_tree*>(pBaseClassifier);
-        assert(pTreeClassifier);
-        builder.set_nbranch_params(nbranch_params);
+    builder.set_max_depth(max_depth_);
+    builder.set_min_node_size(min_node_size_);
+    mbl_data_array_wrapper<vnl_vector<double>> bootstrapped_inputs_mbl(
+        bootstrapped_inputs);
 
-        unsigned long seed=get_tree_builder_seed();
-//        std::cout<<"The seed is "<<seed<<std::endl;
-        builder.seed_sampler(seed);
+    builder.build(*pTreeClassifier, bootstrapped_inputs_mbl, 1,
+                  bootstrapped_outputs);
 
-        builder.set_max_depth(max_depth_);
-        builder.set_min_node_size(min_node_size_);
-        mbl_data_array_wrapper<vnl_vector<double> > bootstrapped_inputs_mbl(bootstrapped_inputs);
+    mbl_cloneable_ptr<clsfy_classifier_base> treeClassifier(pTreeClassifier);
+    random_forest.trees_.push_back(treeClassifier);
+  }
 
-        builder.build(*pTreeClassifier,
-                      bootstrapped_inputs_mbl,
-                      1,
-                      bootstrapped_outputs);
-
-        mbl_cloneable_ptr<clsfy_classifier_base> treeClassifier(pTreeClassifier);
-        random_forest.trees_.push_back(treeClassifier);
-    }
-
-    if (calc_test_error_)
-        return clsfy_test_error(classifier, inputs, outputs);
-    else
-        return 0.0;
+  if (calc_test_error_)
+    return clsfy_test_error(classifier, inputs, outputs);
+  else
+    return 0.0;
 }
 //=======================================================================
 //: Create empty classifier

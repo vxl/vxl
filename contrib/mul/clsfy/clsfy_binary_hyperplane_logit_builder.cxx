@@ -44,11 +44,10 @@ void clsfy_binary_hyperplane_logit_builder::set_min_p(double p)
 //: Build a linear classifier, with the given data.
 // Return the mean error over the training set.
 // n_classes must be 1.
-double clsfy_binary_hyperplane_logit_builder::build(clsfy_classifier_base& classifier,
-                                          mbl_data_wrapper<vnl_vector<double> >& inputs,
-                                          unsigned n_classes,
-                                          const std::vector<unsigned>& outputs) const
-{
+double clsfy_binary_hyperplane_logit_builder::build(
+    clsfy_classifier_base &classifier,
+    mbl_data_wrapper<vnl_vector<double>> &inputs, unsigned n_classes,
+    const std::vector<unsigned> &outputs) const {
   assert (n_classes == 1);
   return clsfy_binary_hyperplane_logit_builder::build(classifier, inputs, outputs);
 }

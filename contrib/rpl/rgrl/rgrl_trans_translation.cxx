@@ -62,22 +62,17 @@ map_loc( vnl_vector<double> const& from,
   to = (from-from_centre_) + trans_;
 }
 
-void
-rgrl_trans_translation::
-map_dir( vnl_vector<double> const& from_loc,
-         vnl_vector<double> const& from_dir,
-         vnl_vector<double>      & to_dir    ) const
-{
+void rgrl_trans_translation::map_dir(vnl_vector<double> const & from_loc,
+                                     vnl_vector<double> const &from_dir,
+                                     vnl_vector<double> &to_dir) const {
   assert ( from_loc.size() == trans_.size() );
   assert ( from_dir.size() == trans_.size() );
 
   to_dir = from_dir;
 }
 
-vnl_matrix<double>
-rgrl_trans_translation::
-transfer_error_covar( vnl_vector<double> const& p  ) const
-{
+vnl_matrix<double> rgrl_trans_translation::transfer_error_covar(
+    vnl_vector<double> const & p) const {
   assert ( is_covar_set() );
   assert ( p.size() == trans_.size() );
 

@@ -44,18 +44,19 @@ inline double vil3d_tricub_interp_safe(double x, double y, double z, const T* da
 //  If (x,y,z) is outside interpolatable image region and NDEBUG is not defined
 //  the code will fail an ASSERT.
 //  The safe interpolatable region is [1,nx-3]*[1,ny-3]*[1,nz-3].
-template<class T>
-inline double vil3d_tricub_interp_assert(double x, double y, double z, const T* data,
-                                         int nx, int ny, int nz,
-                                         std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep)
-{
-    assert (x>=1);
-    assert (y>=1);
-    assert (z>=1);
-    assert (x<=nx-3);
-    assert (y<=ny-3);
-    assert (z<=nz-3);
-    return vil3d_tricub_interp_raw(x,y,z,data,xstep,ystep,zstep);
+template <class T>
+inline double vil3d_tricub_interp_assert(double x, double y, double z,
+                                         const T *data, int nx, int ny,
+                                         int nz, std::ptrdiff_t xstep,
+                                         std::ptrdiff_t ystep,
+                                         std::ptrdiff_t zstep) {
+  assert(x >= 1);
+  assert(y >= 1);
+  assert(z >= 1);
+  assert(x <= nx - 3);
+  assert(y <= ny - 3);
+  assert(z <= nz - 3);
+  return vil3d_tricub_interp_raw(x, y, z, data, xstep, ystep, zstep);
 }
 
 //: Compute tricubic interpolation at (x,y,z), with bound checks

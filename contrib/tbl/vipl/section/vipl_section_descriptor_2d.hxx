@@ -12,53 +12,44 @@
 
 //: Ctor useful to define 2D section descriptors for ROA's. If you.
 // Once constructed there is no way to change the data in the section descriptor.
-template < class DataType >
-vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(
-                int startx ,
-                int endx ,
-                int starty ,
-                int endy)
- : hsreal_descriptor (0),
-   hsreal_container (0),
-   hsi_data_ptr (0),
-   hsi_data_offsets ( std::vector< int > () ),
-   hsi_curr_sec_start ( std::vector< int > () ),
-   hsi_curr_sec_end ( std::vector< int > () ),
-   hsi_curr_sec_size ( std::vector< int > () )
-{
+template <class DataType>
+vipl_section_descriptor_2d<DataType>::vipl_section_descriptor_2d(int /*startx*/,
+                                                                 int /*endx*/,
+                                                                 int /*starty*/,
+                                                                 int /*endy*/)
+    : hsreal_descriptor(0), hsreal_container(0), hsi_data_ptr(0),
+      hsi_data_offsets(std::vector<int>()),
+      hsi_curr_sec_start(std::vector<int>()),
+      hsi_curr_sec_end(std::vector<int>()),
+      hsi_curr_sec_size(std::vector<int>()) {
   std::cerr << "Warning: called unimplemented vipl_section_descriptor_2d constructor with signature "
            << "int startx, int endx, int starty, int endy\n";
 }
 
 //: Assigns the pointers directly. Does not attempt to deep copy them.
-template < class DataType >
-  vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(
-                   vipl_section_descriptor< DataType >* desc ,
-                 vipl_section_container< DataType >* container): hsreal_descriptor (0),
-                 hsreal_container (0),
-                 hsi_data_ptr (0),
-                 hsi_data_offsets ( std::vector< int > () ),
-                 hsi_curr_sec_start ( std::vector< int > () ),
-                 hsi_curr_sec_end ( std::vector< int > () ),
-                 hsi_curr_sec_size ( std::vector< int > () )
-{
+template <class DataType>
+vipl_section_descriptor_2d<DataType>::vipl_section_descriptor_2d(
+    vipl_section_descriptor<DataType> * /*desc*/,
+    vipl_section_container<DataType> * /*container*/)
+    : hsreal_descriptor(0), hsreal_container(0), hsi_data_ptr(0),
+      hsi_data_offsets(std::vector<int>()),
+      hsi_curr_sec_start(std::vector<int>()),
+      hsi_curr_sec_end(std::vector<int>()),
+      hsi_curr_sec_size(std::vector<int>()) {
   std::cerr << "Warning: called unimplemented constructor with signature "
            << "vipl_section_descriptor< DataType >* desc, vipl_section_container< DataType >* container\n";
 }
 
 //:  Deep-copies the pointers
-template < class DataType >
-vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(
-          const vipl_section_descriptor< DataType >* desc ,
-          const vipl_section_container< DataType >* container ,
-          int t): hsreal_descriptor (0),
-          hsreal_container (0),
-          hsi_data_ptr (0),
-          hsi_data_offsets ( std::vector< int > () ),
-          hsi_curr_sec_start ( std::vector< int > () ),
-          hsi_curr_sec_end ( std::vector< int > () ),
-          hsi_curr_sec_size ( std::vector< int > () )
-{
+template <class DataType>
+vipl_section_descriptor_2d<DataType>::vipl_section_descriptor_2d(
+    const vipl_section_descriptor<DataType> * /*desc*/,
+    const vipl_section_container<DataType> * /*container*/, int /*t*/)
+    : hsreal_descriptor(0), hsreal_container(0), hsi_data_ptr(0),
+      hsi_data_offsets(std::vector<int>()),
+      hsi_curr_sec_start(std::vector<int>()),
+      hsi_curr_sec_end(std::vector<int>()),
+      hsi_curr_sec_size(std::vector<int>()) {
   std::cerr << "Warning: called unimplemented constructor with signature "
            << "const vipl_section_descriptor< DataType >* desc, const vipl_section_container< DataType >* container, int t\n";
 }

@@ -13,12 +13,11 @@
 //: Use bilinear to sample from each level of the image pyramid
 //  \param samples: Filled with image_pyr.n_levels() values
 //  \param dummy: Used to define type of image pyramid
-template<class T>
-void vimt_pyramid_values_at_point(const vimt_image_pyramid& image_pyr,
+template <class T>
+void vimt_pyramid_values_at_point(const vimt_image_pyramid &image_pyr,
                                   vgl_point_2d<double> p,
-                                  std::vector<double>& samples,
-                                  T dummy, int plane=0)
-{
+                                  std::vector<double> &samples, T /*dummy*/,
+                                  int plane = 0) {
   samples.resize(image_pyr.n_levels());
   for (unsigned L=image_pyr.lo();L<=image_pyr.hi();++L)
   {

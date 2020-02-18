@@ -214,14 +214,11 @@ T min_val(const vil1_memory_image_of<T> &image, T max)
  * \return vil1_memory_image_of<T> *: a new normalised image
  */
 
-template <class T> vil1_memory_image_of<T> *normalise_image
-(
-  const vil1_memory_image_of<T> &src,
-  T low, T high,
-  T min, T max,
-  T epsilon
-)
-{
+template <class T>
+vil1_memory_image_of<T> *normalise_image(const vil1_memory_image_of<T> &src,
+                                         T low, T high, T min, T max,
+                                         T epsilon
+) {
   assert(high>low);
   assert(max>min);
   vil1_memory_image_of<T> *ret =

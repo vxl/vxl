@@ -46,15 +46,11 @@ template < class DataType >
 
 
 // Deep copies the pointers.
-template < class DataType >
-vipl_section_iterator< DataType > ::vipl_section_iterator(
-                 vipl_section_descriptor< DataType >* desc ,
-                 vipl_section_container< DataType >* containr ,
-                int t)
-  : hsreal_descriptor(0),
-    hscontainer(0),
-    hsincr_count(0)
-{
+template <class DataType>
+vipl_section_iterator<DataType>::vipl_section_iterator(
+    vipl_section_descriptor<DataType> *desc,
+    vipl_section_container<DataType> *containr, int /*t*/)
+    : hsreal_descriptor(0), hscontainer(0), hsincr_count(0) {
   hsreal_descriptor = desc->virtual_copy();
   hscontainer = containr->virtual_copy();
 }

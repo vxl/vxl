@@ -252,12 +252,11 @@ void analyze_pt_pos(const std::vector<msm_points>& points0,
   }
 }
 
-void test_revised_pt_pos(const std::vector<msm_points>& points0,
-                      const std::vector<msm_points>& points1,
-                      const msm_curve& curve,
-                      unsigned pt_index, double new_pt_pos,
-                      mbl_stats_1d& d_stats0, mbl_stats_1d& d_stats1)
-{
+void test_revised_pt_pos(const std::vector<msm_points> &points0,
+                         const std::vector<msm_points> &points1,
+                         const msm_curve & /*curve*/, unsigned pt_index,
+                         double new_pt_pos, mbl_stats_1d &d_stats0,
+                         mbl_stats_1d &d_stats1) {
   unsigned n=points0.size();
   unsigned n_pts=points0[0].size();
   unsigned i0=int(new_pt_pos);

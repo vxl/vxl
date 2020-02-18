@@ -105,49 +105,46 @@ void clsfy_binary_tree_builder::b_read(vsl_b_istream& bfs)
 // return the mean error over the training set.
 // For many classifiers, you may use nClasses==1 to
 // indicate a binary classifier
-double clsfy_binary_tree_builder::build(clsfy_classifier_base& classifier,
-                                        mbl_data_wrapper<vnl_vector<double> >& inputs,
-                                        unsigned nClasses,
-                                        const std::vector<unsigned> &outputs) const
-{
-    assert(classifier.is_class("clsfy_binary_tree")); // equiv to dynamic_cast<> != 0
-    assert(inputs.size()==outputs.size());
-    assert(nClasses=1);
+double
+clsfy_binary_tree_builder::build(clsfy_classifier_base &classifier,
+                                 mbl_data_wrapper<vnl_vector<double>> &inputs,
+                                 unsigned nClasses,
+                                 const std::vector<unsigned> &outputs) const {
+  assert(
+      classifier.is_class("clsfy_binary_tree")); // equiv to dynamic_cast<> != 0
+  assert(inputs.size() == outputs.size());
+  assert(nClasses = 1);
 
+  auto &binary_tree = static_cast<clsfy_binary_tree &>(classifier);
+  unsigned npoints = inputs.size();
+  std::vector<vnl_vector<double>> vin(npoints);
 
-    auto &binary_tree = static_cast<clsfy_binary_tree&>(classifier);
-    unsigned npoints=inputs.size();
-    std::vector<vnl_vector<double> > vin(npoints);
+  inputs.reset();
+  unsigned i = 0;
+  do {
+    vin[i++] = inputs.current();
+  } while (inputs.next());
 
-    inputs.reset();
-    unsigned i=0;
-    do
-    {
-        vin[i++] = inputs.current();
-    } while (inputs.next());
+  assert(i == inputs.size());
 
-    assert(i==inputs.size());
+  unsigned ndims = vin.front().size();
+  base_indices_.resize(ndims);
+  mbl_stl_increments(base_indices_.begin(), base_indices_.end(), 0);
 
+  clsfy_binary_tree_op rootOp;
+  auto *root = new clsfy_binary_tree_bnode(nullptr, rootOp);
 
-    unsigned ndims=vin.front().size();
-    base_indices_.resize(ndims);
-    mbl_stl_increments(base_indices_.begin(),base_indices_.end(),0);
+  // Start with all indices
+  std::set<unsigned> indices;
+  mbl_stl_increments_n(std::inserter(indices, indices.end()), npoints, 0);
+  // Build the root node starting from all indices
+  build_a_node(vin, outputs, indices, root);
 
-    clsfy_binary_tree_op rootOp;
-    auto* root=new clsfy_binary_tree_bnode(nullptr,rootOp);
+  bool left = true;
+  bool right = false;
 
-    // Start with all indices
-    std::set<unsigned> indices;
-    mbl_stl_increments_n(std::inserter(indices,indices.end()),npoints,0);
-    // Build the root node starting from all indices
-    build_a_node(vin,outputs,indices,root);
-
-    bool left=true;
-    bool right=false;
-
-    bool pure=isNodePure(root->subIndicesL,outputs);
-    if (!pure)
-    { // Build the left branch children (recursively)
+  bool pure = isNodePure(root->subIndicesL, outputs);
+  if (!pure) { // Build the left branch children (recursively)
 #if 0
         std::cout<<"Building the root left branch children"<<std::endl;
 #endif

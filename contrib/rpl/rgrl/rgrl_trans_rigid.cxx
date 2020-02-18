@@ -94,12 +94,9 @@ map_loc( vnl_vector<double> const& from,
   to = R_ * from + trans_;
 }
 
-void
-rgrl_trans_rigid::
-map_dir( vnl_vector<double> const& from_loc,
-         vnl_vector<double> const& from_dir,
-         vnl_vector<double>      & to_dir    ) const
-{
+void rgrl_trans_rigid::map_dir(vnl_vector<double> const & from_loc,
+                               vnl_vector<double> const &from_dir,
+                               vnl_vector<double> &to_dir) const {
   assert ( from_loc.size() == R_.cols() );
   assert ( from_dir.size() == R_.cols() );
   to_dir = R_ * from_dir;

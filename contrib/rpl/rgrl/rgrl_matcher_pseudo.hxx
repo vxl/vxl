@@ -39,10 +39,8 @@ in_range( vil_image_view< PixelType > const& image,
 
 template <class PixelType>
 inline bool
-in_range( vil_image_view< PixelType > const& image, // FIXME: unused
-          rgrl_mask_sptr const& mask,
-          vnl_vector< double > const& location )
-{
+in_range(vil_image_view<PixelType> const & /*image*/, // FIXME: unused
+         rgrl_mask_sptr const &mask, vnl_vector<double> const &location) {
   if ( mask && !mask->inside( location ) )
       return false;
 
@@ -686,12 +684,10 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
 }
 
 template <class PixelType>
-double
-rgrl_matcher_pseudo<PixelType> ::
-compute_response( vnl_double_2                  const& mapped_location, // FIXME: unused
-                  rgrl_mapped_pixel_vector_type const& mapped_pixels,
-                  vnl_double_2                  const& shift ) const
-{
+double rgrl_matcher_pseudo<PixelType>::compute_response(
+    vnl_double_2 const & /*mapped_location*/, // FIXME: unused
+    rgrl_mapped_pixel_vector_type const &mapped_pixels,
+    vnl_double_2 const &shift) const {
   //  Extract the intensities at the mapped locations.  Make sure
   //  they are inside the image.
 

@@ -13,10 +13,9 @@
 #endif
 
 template <class TMap>
-void vdtop_set_structure_from_digital_graph(TMap & res,
-                                            const vil_image_view<vdtop_8_neighborhood_mask> & mask,
-                                            int nb_vertices, int nb_edges, vmap_2_map_tag)
-{
+void vdtop_set_structure_from_digital_graph(
+    TMap &res, const vil_image_view<vdtop_8_neighborhood_mask> &mask,
+    int /*nb_vertices*/, int nb_edges, vmap_2_map_tag) {
   int plane = 0;
 
   unsigned ni = mask.ni(), nj = mask.nj();

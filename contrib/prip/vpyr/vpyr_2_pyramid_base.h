@@ -64,15 +64,9 @@ struct vmap_simple_data
 {
   typedef D value_type ;
   value_type d;
-  value_type & data(vmap_level_index arg_level)
-  {
-    return d ;
-  }
+  value_type &data(vmap_level_index /*arg_level*/) { return d; }
 
-  const value_type & data(vmap_level_index arg_level) const
-  {
-    return d ;
-  }
+  const value_type &data(vmap_level_index /*arg_level*/) const { return d; }
   void set_level(vmap_level_index l) {}
 };
 
