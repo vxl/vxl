@@ -289,13 +289,10 @@ map_region_intensities( rgrl_transformation      const& trans,
 
 // pixel_locations are neighboring pixels in "pixel coordinates".
 template <class PixelType>
-void
-rgrl_matcher_pseudo_int_3d<PixelType> ::
-map_region_intensities( std::vector< vnl_vector<int> > const& pixel_locations,
-                        rgrl_transformation           const& trans,
-                        rgrl_feature_sptr                    feature_sptr,
-                        rgrl_mapped_pixel_vector_type      & mapped_pixels) const
-{
+void rgrl_matcher_pseudo_int_3d<PixelType>::map_region_intensities(
+    std::vector<vnl_vector<int>> const &pixel_locations,
+    rgrl_transformation const &trans, rgrl_feature_sptr feature_sptr,
+    rgrl_mapped_pixel_vector_type &mapped_pixels) const {
   DebugMacro( 1, "   number of pixel coorindates: " << pixel_locations.size() << std::endl );
   // check
   if ( pixel_locations.empty() ) return;

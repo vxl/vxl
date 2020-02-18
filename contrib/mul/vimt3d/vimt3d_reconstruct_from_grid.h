@@ -57,11 +57,12 @@ inline void vimt3d_reconstruct_ic_safe(double val, double x, double y, double z,
 //  No bound checks are made in release mode
 // \param val value at image coordinates x,y,z
 // \param add_data adds data to existing values
-template<class T>
-inline void vimt3d_reconstruct_ic_no_checks(double val, double x, double y, double z,
-                                            T* data, int ni, int nj, int nk,
-                                            std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep, bool add_data)
-{
+template <class T>
+inline void
+vimt3d_reconstruct_ic_no_checks(double val, double x, double y, double z,
+                                T *data, int ni, int nj, int nk,
+                                std::ptrdiff_t xstep, std::ptrdiff_t ystep,
+                                std::ptrdiff_t zstep, bool add_data) {
   int ix=vnl_math::rnd(x);
   int iy=vnl_math::rnd(y);
   int iz=vnl_math::rnd(z);
@@ -81,7 +82,6 @@ inline void vimt3d_reconstruct_ic_no_checks(double val, double x, double y, doub
 
   return;
 }
-
 
 //: Reconstruct a smoothed image grid p+i.u+j.v+k.w from vector (in world coordinates)
 //  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]

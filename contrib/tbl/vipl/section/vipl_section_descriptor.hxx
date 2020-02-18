@@ -44,20 +44,13 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(
 #endif
 
 //: Deep-copies the pointers
-template < class DataType >
-vipl_section_descriptor< DataType > ::vipl_section_descriptor(
-                const vipl_section_descriptor< DataType >* desc ,
-                const vipl_section_container< DataType >* container ,
-                int t)
- : hsreal_descriptor(0),
-   hsreal_container(0),
-   hsi_data_ptr(0),
-   hsi_data_offsets(2,0),
-   hsi_curr_sec_start(2,0),
-   hsi_curr_sec_end(2,0),
-   hsi_curr_sec_size(2,0),
-   refcount_ (1)
-{
+template <class DataType>
+vipl_section_descriptor<DataType>::vipl_section_descriptor(
+    const vipl_section_descriptor<DataType> *desc,
+    const vipl_section_container<DataType> *container, int /*t*/)
+    : hsreal_descriptor(0), hsreal_container(0), hsi_data_ptr(0),
+      hsi_data_offsets(2, 0), hsi_curr_sec_start(2, 0), hsi_curr_sec_end(2, 0),
+      hsi_curr_sec_size(2, 0), refcount_(1) {
   hsreal_descriptor = desc->virtual_copy();
   hsreal_container = container->virtual_copy();
 #ifdef DEBUG
@@ -72,19 +65,12 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(
 // image (there is none associated with it), but if used for the ROA of a
 // filter this can be used to limit its operation to only a small window
 // within the image.
-template < class DataType >
-vipl_section_descriptor< DataType > ::vipl_section_descriptor(
-                 std::vector< int >& startpts ,
-                 std::vector< int >& endpts)
-  : hsreal_descriptor (0),
-    hsreal_container (0),
-    hsi_data_ptr (0),
-    hsi_data_offsets (2,0),
-    hsi_curr_sec_start (2,0),
-    hsi_curr_sec_end (2,0),
-    hsi_curr_sec_size (2,0),
-    refcount_ (1)
-{
+template <class DataType>
+vipl_section_descriptor<DataType>::vipl_section_descriptor(
+    std::vector<int> & /*startpts*/, std::vector<int> & /*endpts*/)
+    : hsreal_descriptor(0), hsreal_container(0), hsi_data_ptr(0),
+      hsi_data_offsets(2, 0), hsi_curr_sec_start(2, 0), hsi_curr_sec_end(2, 0),
+      hsi_curr_sec_size(2, 0), refcount_(1) {
 #ifdef DEBUG
   std::cerr << "Warning: called unimplemented vipl_section_descriptor constructor with signature "
            << "std::vector<int>&, std::vector<int>&\n";
@@ -169,9 +155,9 @@ const DataType* vipl_section_descriptor< DataType > ::data_ptr() const
 // filter's ROA) and updates this section to be the intersection of the ROA
 // and the original section. It returns 0 if the region is empty, 1 if nothing
 // changed and 2 if there was really a change in the section.
-template < class DataType >
-int vipl_section_descriptor< DataType > ::restrict( const vipl_section_descriptor< DataType >& ROA)
-{
+template <class DataType>
+int vipl_section_descriptor<DataType>::restrict(
+    const vipl_section_descriptor<DataType> & /*ROA*/) {
   return 0;
 }
 

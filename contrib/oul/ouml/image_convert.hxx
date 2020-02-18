@@ -19,12 +19,9 @@
 //----------------------------------------------------------------------
 
 template <class T1, class T2>
-vil1_memory_image_of<T2> *convert_image
-(
-  const vil1_memory_image_of<T1> &from,
-  T2 &var
-)
-{
+vil1_memory_image_of<T2> *convert_image(const vil1_memory_image_of<T1> &from,
+                                        T2 & /*var*/
+) {
   vil1_memory_image_of<T2> *to;
   to = new vil1_memory_image_of<T2>(from.width(), from.height());
 
@@ -34,7 +31,6 @@ vil1_memory_image_of<T2> *convert_image
 
   return to;
 }
-
 
 //----------------------------------------------------------------------
 //: convert image
@@ -48,13 +44,12 @@ vil1_memory_image_of<T2> *convert_image
 // \author Brendan McCane
 //----------------------------------------------------------------------
 
-template <> vil1_memory_image_of<unsigned char> *
-convert_image<vil1_rgb<unsigned char>, unsigned char>
-(
-  const vil1_memory_image_of<vil1_rgb<unsigned char> > &from,
-  unsigned char &var
-)
-{
+template <>
+vil1_memory_image_of<unsigned char> *
+convert_image<vil1_rgb<unsigned char>, unsigned char>(
+    const vil1_memory_image_of<vil1_rgb<unsigned char>> &from,
+    unsigned char & /*var*/
+) {
   vil1_memory_image_of<unsigned char> *to
     = new vil1_memory_image_of<unsigned char>(from.width(), from.height());
 
@@ -65,13 +60,10 @@ convert_image<vil1_rgb<unsigned char>, unsigned char>
   return to;
 }
 
-template <> vil1_memory_image_of<double> *
-convert_image<vil1_rgb<unsigned char>, double>
-(
-  const vil1_memory_image_of<vil1_rgb<unsigned char> > &from,
-  double &var
-)
-{
+template <>
+vil1_memory_image_of<double> *convert_image<vil1_rgb<unsigned char>, double>(
+    const vil1_memory_image_of<vil1_rgb<unsigned char>> &from, double & /*var*/
+) {
   vil1_memory_image_of<double> *to
     = new vil1_memory_image_of<double>(from.width(), from.height());
 

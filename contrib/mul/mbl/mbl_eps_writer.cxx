@@ -207,16 +207,13 @@ void mbl_eps_writer::draw_polygon(const std::vector<vgl_point_2d<double> >& pts,
 }
 
 //: Write text in given font_size
-void mbl_eps_writer::write_text(double x, double y, int font_size,
-                                const std::string& text)
-{
+void mbl_eps_writer::write_text(double x, double y, int /*font_size*/,
+                                const std::string &text) {
   ofs_<<"/Times-Roman findfont"<<std::endl;
   ofs_<<"12 scalefont setfont"<<std::endl;
   ofs_<<"newpath"<<std::endl;
   ofs_<<x<<" "<<y<<" M ("<<text<<") show"<<std::endl;
 }
-
-
 
 //: Writes first plane of image in hex format to os
 void mbl_eps_writer::write_image_data(std::ostream& os,

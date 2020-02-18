@@ -85,11 +85,11 @@ double clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base& classifier,
 //: Build classifier from data.
 // returns the training error, or +INF if there is an error.
 // nClasses must be 1.
-double clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base& classifier,
-                                          mbl_data_wrapper<vnl_vector<double> >& inputs,
-                                          unsigned nClasses,
-                                          const std::vector<unsigned> &outputs) const
-{
+double
+clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base &classifier,
+                                   mbl_data_wrapper<vnl_vector<double>> &inputs,
+                                   unsigned nClasses,
+                                   const std::vector<unsigned> &outputs) const {
   assert(nClasses == 1);
   return build(classifier, inputs, outputs);
 }

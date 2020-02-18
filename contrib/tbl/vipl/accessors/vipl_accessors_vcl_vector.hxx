@@ -9,13 +9,13 @@
 #endif
 
 template <class DataType>
-DataType fgetpixel(std::vector<DataType> const& i, int x, int y, DataType /* dummy */)
-{
+DataType fgetpixel(std::vector<DataType> const &i, int x, int y,
+                   DataType /* dummy */) {
   assert(y==0);
   return i[x];
 }
 template <class DataType>
-void fsetpixel(std::vector<DataType>& i, int x, int y, DataType e) {
+void fsetpixel(std::vector<DataType> &i, int x, int y, DataType e) {
   assert(y==0);
   i[x] = e;
 }
@@ -25,7 +25,7 @@ DataType getpixel(std::vector<DataType> const& i, int x, int y, DataType /* dumm
   return i[x];
 }
 template <class DataType>
-void setpixel(std::vector<DataType>& i, int x, int y, DataType e) {
+void setpixel(std::vector<DataType> &i, int x, int y, DataType e) {
   assert(x>=0 && y==0);
   if ((unsigned)x>=i.size()) i.resize(x+1,0);
   i[x] = e;

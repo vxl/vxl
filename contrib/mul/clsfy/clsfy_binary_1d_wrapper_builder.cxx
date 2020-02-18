@@ -99,9 +99,9 @@ double clsfy_binary_1d_wrapper_builder::build(
 // Return the mean error over the training set.
 // n_classes must be 1.
 double clsfy_binary_1d_wrapper_builder::build(
-  clsfy_classifier_base &classifier, mbl_data_wrapper<vnl_vector<double> > &inputs,
-  unsigned n_classes, const std::vector<unsigned> &outputs) const
-{
+    clsfy_classifier_base &classifier,
+    mbl_data_wrapper<vnl_vector<double>> &inputs, unsigned n_classes,
+    const std::vector<unsigned> &outputs) const {
   assert (n_classes == 1);
   return build(classifier, inputs, outputs);
 }

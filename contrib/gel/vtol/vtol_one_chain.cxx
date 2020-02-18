@@ -631,9 +631,8 @@ void vtol_one_chain::add_edge(vtol_edge &new_edge,
 //---------------------------------------------------------------------------
 //: Remove an edge
 //---------------------------------------------------------------------------
-void vtol_one_chain::remove_edge(vtol_edge_sptr const& doomed_edge,
-                                 bool force_it)
-{
+void vtol_one_chain::remove_edge(vtol_edge_sptr const &doomed_edge,
+                                 bool force_it) {
   // require
   assert(force_it||!is_cycle());
 
@@ -650,9 +649,8 @@ void vtol_one_chain::remove_edge(vtol_edge_sptr const& doomed_edge,
   }
 }
 
-void vtol_one_chain::remove_edge(vtol_edge_2d_sptr const& doomed_edge,
-                                 bool force_it)
-{
+void vtol_one_chain::remove_edge(vtol_edge_2d_sptr const &doomed_edge,
+                                 bool force_it) {
   // require
   assert(force_it||!is_cycle());
 
@@ -670,9 +668,7 @@ void vtol_one_chain::remove_edge(vtol_edge_2d_sptr const& doomed_edge,
 }
 
 #if 1 // deprecated
-void vtol_one_chain::remove_edge(vtol_edge &doomed_edge,
-                                 bool force_it)
-{
+void vtol_one_chain::remove_edge(vtol_edge &doomed_edge, bool force_it) {
   std::cerr << "Warning: deprecated form of vtol_one_chain::remove_edge()\n";
   assert(force_it||!is_cycle());
 

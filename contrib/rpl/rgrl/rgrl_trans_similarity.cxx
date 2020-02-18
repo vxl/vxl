@@ -75,12 +75,9 @@ map_loc( vnl_vector<double> const& from,
   to += trans_;
 }
 
-void
-rgrl_trans_similarity::
-map_dir( vnl_vector<double> const& from_loc,
-         vnl_vector<double> const& from_dir,
-         vnl_vector<double>      & to_dir    ) const
-{
+void rgrl_trans_similarity::map_dir(vnl_vector<double> const & from_loc,
+                                    vnl_vector<double> const &from_dir,
+                                    vnl_vector<double> &to_dir) const {
   assert ( from_loc.size() == A_.cols() );
   assert ( from_dir.size() == A_.cols() );
   to_dir = A_ * from_dir;

@@ -89,11 +89,12 @@ inline double vil3d_trilin_interp_safe(const vil3d_image_view<T>& image,
 //  If (x,y) is outside interpolatable image region and NDEBUG is not defined
 //  the code will fail an ASSERT.
 //  The safe interpolatable region is [0,nx)*[0,ny)*[0,nz].
-template<class T>
-inline double vil3d_trilin_interp_assert(double x, double y, double z, const T* data,
-                                         unsigned nx, unsigned ny, unsigned nz,
-                                         std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep)
-{
+template <class T>
+inline double
+vil3d_trilin_interp_assert(double x, double y, double z, const T *data,
+                           unsigned nx, unsigned ny, unsigned nz,
+                           std::ptrdiff_t xstep, std::ptrdiff_t ystep,
+                           std::ptrdiff_t zstep) {
   assert(x>=0);
   assert(y>=0);
   assert(z>=0);

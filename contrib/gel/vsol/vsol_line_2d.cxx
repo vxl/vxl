@@ -238,8 +238,7 @@ bool vsol_line_2d::in(vsol_point_2d_sptr const& p) const
 // Require: in(p)
 //---------------------------------------------------------------------------
 vgl_homg_line_2d<double> *
-vsol_line_2d::tangent_at_point(vsol_point_2d_sptr const& p) const
-{
+vsol_line_2d::tangent_at_point(vsol_point_2d_sptr const & p) const {
   // require
   assert(in(p));
 

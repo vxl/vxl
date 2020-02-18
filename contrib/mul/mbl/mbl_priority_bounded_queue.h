@@ -44,11 +44,15 @@ public:
   typedef const value_type *ITER;
   //: Construct a bounded priority queue from a controlled sequence.
   // The bounded size will be the length of the sequence.
-  mbl_priority_bounded_queue(
-    size_type bound_size, ITER first, ITER last, const O& comp = O(),
-    const allocator_type& alloc = allocator_type()):
-      b_size_(0), c_(alloc), comp_(comp)
-    {for (; first != last; ++first) {++b_size_; push(*first);} }
+  mbl_priority_bounded_queue(size_type /*bound_size*/, ITER first, ITER last,
+                             const O &comp = O(),
+                             const allocator_type &alloc = allocator_type())
+      : b_size_(0), c_(alloc), comp_(comp) {
+    for (; first != last; ++first) {
+      ++b_size_;
+      push(*first);
+    }
+  }
 
   //: The largest size the queue can be before it starts throwing out data.
   size_type bound_size() const {return b_size_;}

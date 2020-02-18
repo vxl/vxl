@@ -25,17 +25,11 @@ template < class DataType >
 {}
 
 // The pointer is deep copied
-template < class DataType >
-  vipl_section_container< DataType > ::vipl_section_container( const vipl_section_container< DataType >* pt , int t)
-  : hsthe(0),
-    hsimgsz (2,0),
-    hsimgstart (2,0),
-    hssecsz (2,0),
-    hsoverlap (2,0),
-    hsrawdata (0),
-    hsimgptr (nullptr),
-    refcount_ (1)
-{
+template <class DataType>
+vipl_section_container<DataType>::vipl_section_container(
+    const vipl_section_container<DataType> *pt, int /*t*/)
+    : hsthe(0), hsimgsz(2, 0), hsimgstart(2, 0), hssecsz(2, 0), hsoverlap(2, 0),
+      hsrawdata(0), hsimgptr(nullptr), refcount_(1) {
   hsthe = pt->virtual_copy();
 }
 

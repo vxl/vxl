@@ -276,13 +276,10 @@ map_region_intensities( rgrl_transformation      const& trans,
 
 // pixel_locations are neighboring pixels in "pixel coordinates".
 template <class PixelType>
-void
-rgrl_matcher_pseudo_3d<PixelType> ::
-map_region_intensities( std::vector< vnl_vector<int> > const& pixel_locations,
-                        rgrl_transformation           const& trans,
-                        rgrl_feature_sptr                    feature_sptr,
-                        rgrl_mapped_pixel_vector_type      & mapped_pixels) const
-{
+void rgrl_matcher_pseudo_3d<PixelType>::map_region_intensities(
+    std::vector<vnl_vector<int>> const &pixel_locations,
+    rgrl_transformation const &trans, rgrl_feature_sptr feature_sptr,
+    rgrl_mapped_pixel_vector_type &mapped_pixels) const {
   DBG( std::cout << "   number of pixel coorindates: " << pixel_locations.size() << std::endl );
   // check # of pixels
   if ( pixel_locations.empty() )  return;
@@ -662,12 +659,10 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
 }
 
 template <class PixelType>
-double
-rgrl_matcher_pseudo_3d<PixelType> ::
-compute_response( vnl_double_3                  const& mapped_location, // FIXME: unused
-                  rgrl_mapped_pixel_vector_type const& mapped_pixels,
-                  vnl_double_3                  const& shift ) const
-{
+double rgrl_matcher_pseudo_3d<PixelType>::compute_response(
+    vnl_double_3 const & /*mapped_location*/, // FIXME: unused
+    rgrl_mapped_pixel_vector_type const &mapped_pixels,
+    vnl_double_3 const &shift) const {
   const unsigned size = mapped_pixels.size();
 
   //  Extract the intensities at the mapped locations.  Make sure

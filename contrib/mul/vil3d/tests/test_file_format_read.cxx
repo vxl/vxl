@@ -84,9 +84,9 @@ class CheckGrey : public CheckPixelT<T>
  public:
   CheckGrey( const char* file ): CheckPixelT<T>(file) {}
 
-  bool operator() ( unsigned int p, unsigned int i, unsigned int j, unsigned int k,
-                    const std::vector<TruePixelType>& pixel ) const override
-  {
+  bool operator()(unsigned int p, unsigned int i, unsigned int j,
+                  unsigned int k,
+                  const std::vector<TruePixelType> &pixel) const override {
     assert( p == 0 );
     return this->img_ && pixel.size() == 1 &&
       i < this->img_.ni() && j < this->img_.nj() && k < this->img_.nk() &&

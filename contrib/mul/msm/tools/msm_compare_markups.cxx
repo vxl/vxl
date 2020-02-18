@@ -437,11 +437,10 @@ void write_ellipses(mbl_eps_writer& writer, double region_height,
 
 
 // Draw disk at each point, at ref_shape[k]+pt_stats[k].mean
-void write_centre_points(mbl_eps_writer& writer, double region_height,
-                    const msm_points& ref_shape, double point_radius,
-                    const std::vector<mbm_covar_stats_2d>& pt_stats,
-                    unsigned step=1)
-{
+void write_centre_points(mbl_eps_writer &writer, double /*region_height*/,
+                         const msm_points &ref_shape, double point_radius,
+                         const std::vector<mbm_covar_stats_2d> &pt_stats,
+                         unsigned step = 1) {
   for (unsigned k=0;k<pt_stats.size();k+=step)
   {
     // Draw mean point
@@ -452,13 +451,11 @@ void write_centre_points(mbl_eps_writer& writer, double region_height,
   }
 }
 
-
 // Draw disk at each point, at ref_shape[k]+pt_stats[k].mean
-void write_centre_points(mbl_eps_writer& writer, double region_height,
-                    const msm_points& ref_shape, double point_radius,
-                    const std::vector<mbm_covar_stats_2d>& pt_stats,
-                    const std::vector<unsigned>& subset)
-{
+void write_centre_points(mbl_eps_writer &writer, double /*region_height*/,
+                         const msm_points &ref_shape, double point_radius,
+                         const std::vector<mbm_covar_stats_2d> &pt_stats,
+                         const std::vector<unsigned> &subset) {
   for (unsigned ik=0;ik<subset.size();ik++)
   {
     unsigned k=subset[ik];
@@ -470,7 +467,6 @@ void write_centre_points(mbl_eps_writer& writer, double region_height,
     writer.draw_disk(pt,point_radius);
   }
 }
-
 
 //: Given estimates of point on multiple images from >1 marker, estimate true pos
 // Input: p[i][j] point produced by annotator i on image j
