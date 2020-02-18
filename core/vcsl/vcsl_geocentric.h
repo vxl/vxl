@@ -31,7 +31,7 @@ class vcsl_geocentric
   //***************************************************************************
 
   // Default constructor.
-  vcsl_geocentric();
+   vcsl_geocentric() = delete;
 
  public:
   // Destructor

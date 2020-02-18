@@ -27,7 +27,7 @@ class vcsl_utm
   //***************************************************************************
 
   // Default constructor.
-  vcsl_utm();
+   vcsl_utm() = delete;
 
  public:
   // Destructor

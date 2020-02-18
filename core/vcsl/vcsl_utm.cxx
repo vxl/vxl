@@ -5,6 +5,7 @@
 //--------------------------------------------------------------------------
 // Default constructor
 //--------------------------------------------------------------------------
+#if 0 //private constructor can never be defined
 vcsl_utm::vcsl_utm()
 {
   vcsl_axis_sptr a = new vcsl_axis;
@@ -14,3 +15,4 @@ vcsl_utm::vcsl_utm()
   a = new vcsl_axis;
   axes_.push_back(a);
 }
+#endif
