@@ -43,7 +43,8 @@ rgrl_feature_set_bins_2d( feature_vector const& features,
   } else {
     auto itr = features.begin();
     //feature_type_ = (*itr)->type_id();
-    feature_type_ = &typeid(*(*itr));
+    auto & xx = *(*itr);
+    feature_type_ = &typeid(xx);
     min = (*itr)->location();
     max = min;
     for ( ; itr != features.end(); ++itr ) {
