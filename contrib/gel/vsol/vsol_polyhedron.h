@@ -71,16 +71,20 @@ class vsol_polyhedron : public vsol_volume_3d
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  vsol_spatial_object_3d* clone(void) const override { return new vsol_polyhedron(*this); }
+  vsol_spatial_object_3d *clone() const override {
+    return new vsol_polyhedron(*this);
+  }
 
   //---------------------------------------------------------------------------
   //: Safe down-casting methods
   //---------------------------------------------------------------------------
-  vsol_polyhedron *cast_to_polyhedron(void) override {return this;}
-  vsol_polyhedron const* cast_to_polyhedron(void) const override {return this;}
+  vsol_polyhedron *cast_to_polyhedron() override { return this; }
+  vsol_polyhedron const *cast_to_polyhedron() const override { return this; }
 
-  virtual vsol_tetrahedron* cast_to_tetrahedron(void) {return nullptr;}
-  virtual const vsol_tetrahedron* cast_to_tetrahedron(void) const {return nullptr;}
+  virtual vsol_tetrahedron *cast_to_tetrahedron() { return nullptr; }
+  virtual const vsol_tetrahedron *cast_to_tetrahedron() const {
+    return nullptr;
+  }
 
   //***************************************************************************
   // Access
@@ -114,28 +118,30 @@ class vsol_polyhedron : public vsol_volume_3d
   //---------------------------------------------------------------------------
   //: Return the volume type of a polyhedron.  Its spatial type is a VOLUME.
   //---------------------------------------------------------------------------
-  vsol_volume_3d_type volume_type(void)const override{return vsol_volume_3d::POLYHEDRON;}
+  vsol_volume_3d_type volume_type() const override {
+    return vsol_volume_3d::POLYHEDRON;
+  }
 
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  void compute_bounding_box(void) const override;
+  void compute_bounding_box() const override;
 
   //---------------------------------------------------------------------------
   //: Return the number of vertices
   //---------------------------------------------------------------------------
-  unsigned int size(void) const { return storage_.size(); }
-  unsigned int num_vertices(void) const { return storage_.size(); }
+  unsigned int size() const { return storage_.size(); }
+  unsigned int num_vertices() const { return storage_.size(); }
 
   //---------------------------------------------------------------------------
   //: Return the volume of `this'
   //---------------------------------------------------------------------------
-  double volume(void) const override;
+  double volume() const override;
 
   //---------------------------------------------------------------------------
   //: Is `this' convex ?
   //---------------------------------------------------------------------------
-  virtual bool is_convex(void) const;
+  virtual bool is_convex() const;
 
   //---------------------------------------------------------------------------
   //: Is `i' a valid index for the list of vertices ?

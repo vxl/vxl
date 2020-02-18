@@ -56,7 +56,7 @@ class HomgNorm2D : public SimilarityMetric
   void normalize(const std::vector<HomgPoint2D>& points);
   void normalize(std::vector<vgl_homg_point_2d<double> > const& points);
 
-  bool was_coincident(void) const { return was_coincident_; } // FSM
+  bool was_coincident() const { return was_coincident_; } // FSM
 
   void set(const std::vector<HomgPoint2D>& points) { normalize(points); }
   void set(std::vector<vgl_homg_point_2d<double> > const& points) { normalize(points); }

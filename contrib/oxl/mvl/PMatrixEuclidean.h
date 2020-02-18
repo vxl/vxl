@@ -22,15 +22,15 @@ class PMatrixEuclidean : public PMatrix
 {
  public:
   // Constructors/Initializers/Destructors-------------------------------------
-  PMatrixEuclidean(void) = default;
-  ~PMatrixEuclidean(void) override = default;
+   PMatrixEuclidean() = default;
+   ~PMatrixEuclidean() override = default;
 
-  // Computations--------------------------------------------------------------
+   // Computations--------------------------------------------------------------
 
-  bool decompose_to_intrinsic_extrinsic_params (vnl_matrix<double> * /*camera_matrix*/,
-                                                vnl_matrix<double> * /*R*/,
-                                                vnl_vector<double> * /*t*/)
-  { return false; } // FIXME: not yet implemented
+   bool decompose_to_intrinsic_extrinsic_params(
+       vnl_matrix<double> * /*camera_matrix*/, vnl_matrix<double> * /*R*/,
+       vnl_vector<double> * /*t*/) {
+     return false; } // FIXME: not yet implemented
 };
 
 #endif // PMatrixEuclidean_h_

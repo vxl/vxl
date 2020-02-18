@@ -36,13 +36,17 @@ class vsol_region_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Return the region type
   //---------------------------------------------------------------------------
-  virtual vsol_region_2d_type region_type(void) const { return vsol_region_2d::REGION_NO_TYPE; }
+  virtual vsol_region_2d_type region_type() const {
+    return vsol_region_2d::REGION_NO_TYPE;
+  }
 
  public:
   //---------------------------------------------------------------------------
   //: Return the spatial type
   //---------------------------------------------------------------------------
-  vsol_spatial_object_2d_type spatial_type(void) const override { return vsol_spatial_object_2d::REGION; }
+   vsol_spatial_object_2d_type spatial_type() const override {
+     return vsol_spatial_object_2d::REGION;
+   }
 
   //***************************************************************************
   // Initialization
@@ -57,14 +61,14 @@ class vsol_region_2d : public vsol_spatial_object_2d
   // virtuals of vsol_spatial_object_2d
   //***************************************************************************
 
-  vsol_region_2d* cast_to_region(void) override { return this; }
-  vsol_region_2d const* cast_to_region(void) const override { return this; }
+  vsol_region_2d *cast_to_region() override { return this; }
+  vsol_region_2d const *cast_to_region() const override { return this; }
 
-  virtual vsol_polygon_2d* cast_to_polygon(void) { return nullptr; }
-  virtual vsol_polygon_2d const* cast_to_polygon(void) const { return nullptr; }
+  virtual vsol_polygon_2d *cast_to_polygon() { return nullptr; }
+  virtual vsol_polygon_2d const *cast_to_polygon() const { return nullptr; }
 
-  virtual vsol_poly_set_2d* cast_to_poly_set(void) { return nullptr; }
-  virtual vsol_poly_set_2d const* cast_to_poly_set(void) const { return nullptr; }
+  virtual vsol_poly_set_2d *cast_to_poly_set() { return nullptr; }
+  virtual vsol_poly_set_2d const *cast_to_poly_set() const { return nullptr; }
   //***************************************************************************
   // Status report
   //***************************************************************************
@@ -72,17 +76,17 @@ class vsol_region_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
-  virtual double area(void) const=0;
+  virtual double area() const = 0;
 
   //---------------------------------------------------------------------------
   //: Return the centroid of `this'
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr centroid(void) const=0;
+  virtual vsol_point_2d_sptr centroid() const = 0;
 
   //---------------------------------------------------------------------------
   //: Return true if this region is convex
   //---------------------------------------------------------------------------
-  virtual bool is_convex(void) const=0;
+  virtual bool is_convex() const = 0;
 
   //: Return a platform independent string identifying the class
   std::string is_a() const override { return std::string("vsol_region_2d"); }

@@ -44,7 +44,7 @@ class vifa_parallel_params : public gevd_param_mixin,
   vifa_parallel_params(vifa_parallel_params*  np);
 
   //: Output contents
-  void  print_info(void) const;
+  void print_info() const;
 };
 
 

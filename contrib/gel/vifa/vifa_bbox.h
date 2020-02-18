@@ -25,10 +25,11 @@ class vifa_bbox : public vul_timestamp,
 {
  public:
   // Default constructor
-  inline vifa_bbox(void) = default;
-  // copy constructor - compiler-provided one sets ref_count to nonzero which is wrong -PVr
-  inline vifa_bbox(vifa_bbox const& b)
-    : vul_timestamp(), vbl_ref_count(), vgl_box_2d<double>(b) {}
+   inline vifa_bbox() = default;
+   // copy constructor - compiler-provided one sets ref_count to nonzero which
+   // is wrong -PVr
+   inline vifa_bbox(vifa_bbox const &b)
+       : vul_timestamp(), vbl_ref_count(), vgl_box_2d<double>(b) {}
 };
 
 typedef vbl_smart_ptr<vifa_bbox> vifa_bbox_sptr;

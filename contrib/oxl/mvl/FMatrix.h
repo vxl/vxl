@@ -127,7 +127,7 @@ class FMatrix
   //: Return a const reference to the transpose of the internal 3x3 matrix.
   const vnl_double_3x3& get_transpose_matrix () const { return ft_matrix_; }
 
-  bool get_rank2_flag (void) const;
+  bool get_rank2_flag() const;
   void set_rank2_flag (bool rank2_flag);
 
 friend std::ostream& operator<<(std::ostream& s, const FMatrix& F);

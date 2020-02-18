@@ -48,102 +48,106 @@ class vsol_group_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Default Constructor: group with no child
   //---------------------------------------------------------------------------
-  vsol_group_2d(void);
+   vsol_group_2d();
 
-  //---------------------------------------------------------------------------
-  //: Copy constructor.
-  //  The objects of the group are not duplicated
-  //---------------------------------------------------------------------------
-  vsol_group_2d(const vsol_group_2d &other);
+   //---------------------------------------------------------------------------
+   //: Copy constructor.
+   //  The objects of the group are not duplicated
+   //---------------------------------------------------------------------------
+   vsol_group_2d(const vsol_group_2d &other);
 
-  //---------------------------------------------------------------------------
-  //: Destructor
-  //  The objects of the group are not deleted
-  //---------------------------------------------------------------------------
-  ~vsol_group_2d() override;
+   //---------------------------------------------------------------------------
+   //: Destructor
+   //  The objects of the group are not deleted
+   //---------------------------------------------------------------------------
+   ~vsol_group_2d() override;
 
-  //---------------------------------------------------------------------------
-  //: Clone `this': creation of a new object and initialization
-  //  See Prototype pattern
-  //---------------------------------------------------------------------------
-  vsol_spatial_object_2d* clone(void) const override;
+   //---------------------------------------------------------------------------
+   //: Clone `this': creation of a new object and initialization
+   //  See Prototype pattern
+   //---------------------------------------------------------------------------
+   vsol_spatial_object_2d *clone() const override;
 
-  //***************************************************************************
-  // Access
-  //***************************************************************************
+   //***************************************************************************
+   // Access
+   //***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Return the object `i'
-  //  REQUIRE: i>=0 and i<size()
-  //---------------------------------------------------------------------------
-  vsol_spatial_object_2d_sptr object(unsigned int i) const;
+   //---------------------------------------------------------------------------
+   //: Return the object `i'
+   //  REQUIRE: i>=0 and i<size()
+   //---------------------------------------------------------------------------
+   vsol_spatial_object_2d_sptr object(unsigned int i) const;
 
-  //***************************************************************************
-  // Status report
-  //***************************************************************************
+   //***************************************************************************
+   // Status report
+   //***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Return the real type of a group. It is a SPATIALGROUP
-  //---------------------------------------------------------------------------
-  vsol_spatial_object_2d_type spatial_type(void) const override;
+   //---------------------------------------------------------------------------
+   //: Return the real type of a group. It is a SPATIALGROUP
+   //---------------------------------------------------------------------------
+   vsol_spatial_object_2d_type spatial_type() const override;
 
-  //---------------------------------------------------------------------------
-  //: Compute the bounding box of `this'
-  //  REQUIRE: size()>0
-  //---------------------------------------------------------------------------
-  void compute_bounding_box(void) const override; // virtual of vsol_spatial_object_2d
+   //---------------------------------------------------------------------------
+   //: Compute the bounding box of `this'
+   //  REQUIRE: size()>0
+   //---------------------------------------------------------------------------
+   void
+   compute_bounding_box() const override; // virtual of vsol_spatial_object_2d
 
-  //---------------------------------------------------------------------------
-  //: Return the number of direct children of the group
-  //---------------------------------------------------------------------------
-  unsigned int size(void) const { return storage_->size(); }
+   //---------------------------------------------------------------------------
+   //: Return the number of direct children of the group
+   //---------------------------------------------------------------------------
+   unsigned int size() const { return storage_->size(); }
 
-  //---------------------------------------------------------------------------
-  //: Return the number of objects of the group
-  //---------------------------------------------------------------------------
-  unsigned int deep_size(void) const;
+   //---------------------------------------------------------------------------
+   //: Return the number of objects of the group
+   //---------------------------------------------------------------------------
+   unsigned int deep_size() const;
 
-  //---------------------------------------------------------------------------
-  //: Is `new_object' a child (direct or not) of `this' ?
-  //---------------------------------------------------------------------------
-  bool is_child(const vsol_spatial_object_2d_sptr &new_object) const;
+   //---------------------------------------------------------------------------
+   //: Is `new_object' a child (direct or not) of `this' ?
+   //---------------------------------------------------------------------------
+   bool is_child(const vsol_spatial_object_2d_sptr &new_object) const;
 
-  //***************************************************************************
-  // Element change
-  //***************************************************************************
+   //***************************************************************************
+   // Element change
+   //***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Add an object `new_object' to `this'
-  //---------------------------------------------------------------------------
-  void add_object(const vsol_spatial_object_2d_sptr &new_object);
+   //---------------------------------------------------------------------------
+   //: Add an object `new_object' to `this'
+   //---------------------------------------------------------------------------
+   void add_object(const vsol_spatial_object_2d_sptr &new_object);
 
-  //***************************************************************************
-  // Removal
-  //***************************************************************************
+   //***************************************************************************
+   // Removal
+   //***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Remove object `i' of `this' (not delete it)
-  //  REQUIRE: i>=0 and i<size()
-  //---------------------------------------------------------------------------
-  void remove_object(unsigned int i);
+   //---------------------------------------------------------------------------
+   //: Remove object `i' of `this' (not delete it)
+   //  REQUIRE: i>=0 and i<size()
+   //---------------------------------------------------------------------------
+   void remove_object(unsigned int i);
 
-  //---------------------------------------------------------------------------
-  //: The same behavior than dynamic_cast<>.
-  //  Needed because VXL is not compiled with -frtti :-(
-  //---------------------------------------------------------------------------
-  const vsol_group_2d *cast_to_group(void) const override { return this; }
-  vsol_group_2d *cast_to_group(void) override { return this; }
+   //---------------------------------------------------------------------------
+   //: The same behavior than dynamic_cast<>.
+   //  Needed because VXL is not compiled with -frtti :-(
+   //---------------------------------------------------------------------------
+   const vsol_group_2d *cast_to_group() const override { return this; }
+   vsol_group_2d *cast_to_group() override { return this; }
 
-  //---------------------------------------------------------------------------
-  //: Has `this' the same number of elements and as other and equal elements?
-  //---------------------------------------------------------------------------
-  virtual bool operator==(const vsol_group_2d &other) const;
-  bool operator==(const vsol_spatial_object_2d& obj) const override; // virtual of vsol_spatial_object_2d
+   //---------------------------------------------------------------------------
+   //: Has `this' the same number of elements and as other and equal elements?
+   //---------------------------------------------------------------------------
+   virtual bool operator==(const vsol_group_2d &other) const;
+   bool operator==(const vsol_spatial_object_2d &obj)
+       const override; // virtual of vsol_spatial_object_2d
 
-  //---------------------------------------------------------------------------
-  //: Has `this' not the same number of elements and as other and not equal elements?
-  //---------------------------------------------------------------------------
-  inline bool operator!=(const vsol_group_2d &o)const{return !operator==(o);}
+   //---------------------------------------------------------------------------
+   //: Has `this' not the same number of elements and as other and not equal
+   //elements?
+   //---------------------------------------------------------------------------
+   inline bool operator!=(const vsol_group_2d &o) const {
+     return !operator==(o);}
 
   // ==== Binary IO methods ======
 

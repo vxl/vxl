@@ -112,7 +112,9 @@ class vsol_poly_set_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   //: Return the region type of a polygon.  Its spatial type is a REGION
   //---------------------------------------------------------------------------
-  vsol_region_2d_type region_type(void) const override { return vsol_region_2d::POLYGON_SET; }
+  vsol_region_2d_type region_type() const override {
+    return vsol_region_2d::POLYGON_SET;
+  }
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a poly_set, 0 otherwise
   //---------------------------------------------------------------------------
@@ -139,17 +141,17 @@ class vsol_poly_set_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
-  double area(void) const override; // virtual of vsol_region_2d
+  double area() const override; // virtual of vsol_region_2d
 
   //---------------------------------------------------------------------------
   //: Return the centroid of `this'
   //---------------------------------------------------------------------------
-  vsol_point_2d_sptr centroid(void) const override;
+  vsol_point_2d_sptr centroid() const override;
 
   //---------------------------------------------------------------------------
   //: Is `this' convex ?
   //---------------------------------------------------------------------------
-  bool is_convex(void) const override;
+  bool is_convex() const override;
   //***************************************************************************
   // Basic operations
   //***************************************************************************

@@ -55,7 +55,9 @@ class vsol_tetrahedron : public vsol_polyhedron
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  vsol_spatial_object_3d* clone(void) const override { return new vsol_tetrahedron(*this); }
+  vsol_spatial_object_3d *clone() const override {
+    return new vsol_tetrahedron(*this);
+  }
 
   //***************************************************************************
   // Access
@@ -64,22 +66,22 @@ class vsol_tetrahedron : public vsol_polyhedron
   //---------------------------------------------------------------------------
   //: Return the first vertex
   //---------------------------------------------------------------------------
-  vsol_point_3d_sptr p0(void) const;
+  vsol_point_3d_sptr p0() const;
 
   //---------------------------------------------------------------------------
   //: Return the second vertex
   //---------------------------------------------------------------------------
-  vsol_point_3d_sptr p1(void) const;
+  vsol_point_3d_sptr p1() const;
 
   //---------------------------------------------------------------------------
   //: Return the third vertex
   //---------------------------------------------------------------------------
-  vsol_point_3d_sptr p2(void) const;
+  vsol_point_3d_sptr p2() const;
 
   //---------------------------------------------------------------------------
   //: Return the last vertex
   //---------------------------------------------------------------------------
-  vsol_point_3d_sptr p3(void) const;
+  vsol_point_3d_sptr p3() const;
 
   //***************************************************************************
   // Status report
@@ -88,7 +90,7 @@ class vsol_tetrahedron : public vsol_polyhedron
   //---------------------------------------------------------------------------
   //: Return the volume of `this'
   //---------------------------------------------------------------------------
-  double volume(void) const override;
+  double volume() const override;
 
   //***************************************************************************
   // Element change

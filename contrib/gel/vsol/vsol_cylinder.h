@@ -90,7 +90,7 @@ class vsol_cylinder : public  vsol_spatial_object_3d
 
   vsol_spatial_object_3d* clone() const override { return new vsol_cylinder(*this); }
 
-  ~vsol_cylinder(void) override = default;
+  ~vsol_cylinder() override = default;
 };
 
 //: Binary save vsol_cylinder* to stream.

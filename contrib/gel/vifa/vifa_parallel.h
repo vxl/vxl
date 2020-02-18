@@ -56,12 +56,12 @@ class vifa_parallel: public vifa_parallel_params
                );
 
   //: Destructor
-  ~vifa_parallel(void) override;
+  ~vifa_parallel() override;
 
-  void  reset(void);
+  void reset();
 
-  vifa_histogram* get_raw_hist(void);
-  vifa_histogram* get_norm_hist(void);
+  vifa_histogram *get_raw_hist();
+  vifa_histogram *get_norm_hist();
 
   void  map_gaussian(float&  max_angle,
                      float&  std_dev,
@@ -72,10 +72,10 @@ class vifa_parallel: public vifa_parallel_params
                         float  scale
                        );
   void  snapshot(char* fname);
-  float  area(void);
-  float  bin_variance(void);
+  float area();
+  float bin_variance();
 
- private:
+private:
   float           map_x(float  raw_x);
   vifa_histogram* normalize_histogram(vifa_histogram*  h);
   float           find_peak(float&  max_value);

@@ -71,7 +71,7 @@ class vifa_int_face_attr_common_params : public gevd_param_mixin,
   vifa_int_face_attr_common_params(const vifa_int_face_attr_common_params&  old_params);
 
   //: Destructor.
-  ~vifa_int_face_attr_common_params(void) override;
+  ~vifa_int_face_attr_common_params() override;
 
   //: Publicly available setting of parameters.
   void  set_params(const vifa_int_face_attr_common_params&  ifap);
@@ -80,9 +80,9 @@ class vifa_int_face_attr_common_params : public gevd_param_mixin,
   bool  SanityCheck() override;
 
   //: Output contents
-  void  print_info(void);
+  void print_info();
 
- protected:
+protected:
   //: Assign internal parameter blocks.
   void  init_params(vdgl_fit_lines_params*    fitter_params,
                     vifa_group_pgram_params*  gpp_s,

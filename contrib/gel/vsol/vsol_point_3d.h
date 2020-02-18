@@ -74,12 +74,12 @@ class vsol_point_3d : public vsol_spatial_object_3d
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  vsol_spatial_object_3d* clone(void) const override;
+  vsol_spatial_object_3d *clone() const override;
 
   //---------------------------------------------------------------------------
   //: Safe downcasting methods
   //---------------------------------------------------------------------------
-  vsol_point_3d* cast_to_point(void) override { return this;}
+  vsol_point_3d *cast_to_point() override { return this; }
   vsol_point_3d const* cast_to_point() const override { return this;}
 
   //***************************************************************************
@@ -89,17 +89,17 @@ class vsol_point_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   //: Return the abscissa
   //---------------------------------------------------------------------------
-  inline double x(void) const { return p_.x(); }
+  inline double x() const { return p_.x(); }
 
   //---------------------------------------------------------------------------
   //: Return the ordinate
   //---------------------------------------------------------------------------
-  inline double y(void) const { return p_.y(); }
+  inline double y() const { return p_.y(); }
 
   //---------------------------------------------------------------------------
   //: Return the cote
   //---------------------------------------------------------------------------
-  inline double z(void) const { return p_.z(); }
+  inline double z() const { return p_.z(); }
 
   //***************************************************************************
   // Comparison
@@ -123,12 +123,12 @@ class vsol_point_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   //: Return the real type of a point. It is a POINT
   //---------------------------------------------------------------------------
-  vsol_spatial_object_3d_type spatial_type(void) const override;
+  vsol_spatial_object_3d_type spatial_type() const override;
 
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  void compute_bounding_box(void) const override;
+  void compute_bounding_box() const override;
 
   //***************************************************************************
   // Status setting

@@ -105,7 +105,7 @@ class vsol_rectangle_2d : public vsol_polygon_2d
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  vsol_spatial_object_2d* clone(void) const override;
+  vsol_spatial_object_2d *clone() const override;
 
   //***************************************************************************
   // Access
@@ -114,22 +114,22 @@ class vsol_rectangle_2d : public vsol_polygon_2d
   //---------------------------------------------------------------------------
   //: Return the first vertex
   //---------------------------------------------------------------------------
-  vsol_point_2d_sptr p0(void) const;
+  vsol_point_2d_sptr p0() const;
 
   //---------------------------------------------------------------------------
   //: Return the second vertex
   //---------------------------------------------------------------------------
-  vsol_point_2d_sptr p1(void) const;
+  vsol_point_2d_sptr p1() const;
 
   //---------------------------------------------------------------------------
   //: Return the third vertex
   //---------------------------------------------------------------------------
-  vsol_point_2d_sptr p2(void) const;
+  vsol_point_2d_sptr p2() const;
 
   //---------------------------------------------------------------------------
   //: Return the last vertex
   //---------------------------------------------------------------------------
-  vsol_point_2d_sptr p3(void) const;
+  vsol_point_2d_sptr p3() const;
 
   //***************************************************************************
   // Comparison
@@ -150,20 +150,20 @@ class vsol_rectangle_2d : public vsol_polygon_2d
   //---------------------------------------------------------------------------
   //: Return the width
   //---------------------------------------------------------------------------
-  double width(void) const;
+  double width() const;
 
   //---------------------------------------------------------------------------
   //: Return the height
   //---------------------------------------------------------------------------
-  double height(void) const;
+  double height() const;
 
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
-  double area(void) const override;
+  double area() const override;
 
-  vsol_rectangle_2d* cast_to_rectangle(void) override { return this; }
-  vsol_rectangle_2d const* cast_to_rectangle(void) const override { return this; }
+  vsol_rectangle_2d *cast_to_rectangle() override { return this; }
+  vsol_rectangle_2d const *cast_to_rectangle() const override { return this; }
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.

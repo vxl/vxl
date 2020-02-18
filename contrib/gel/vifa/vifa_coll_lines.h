@@ -45,17 +45,17 @@ class vifa_coll_lines : public vifa_coll_lines_params
                   double        endpt_distance = 3.0,
                   bool        src_from_discard = false
                  );
-  ~vifa_coll_lines(void) override;
+  ~vifa_coll_lines() override;
 
-  bool   get_discard_flag(void) const;
-  int    get_id(void) const;
+  bool get_discard_flag() const;
+  int get_id() const;
   double get_measure(const vtol_edge_2d&  e) const;
   double get_projected_length(const vtol_edge_2d&  e) const;
 
-  edge_2d_list&  get_contributors(void);
+  edge_2d_list &get_contributors();
 
   // Caller must delete returned face_list when done
-  face_list*    get_contributor_faces(void);
+  face_list *get_contributor_faces();
 
   static void  lms_fit(const std::vector<double>&  x,
                        const std::vector<double>&  y,
@@ -65,11 +65,11 @@ class vifa_coll_lines : public vifa_coll_lines_params
                       );
 
   void  add_and_update(const vtol_edge_2d_sptr&  e);
-  double  spanning_length(void);
+  double spanning_length();
   double  spanning_length(vgl_point_2d<double>&  p1,
                           vgl_point_2d<double>&  p2
                          );
-  double  support_length(void);
+  double support_length();
   bool  contains(const vtol_edge&  e);
 
  private:
@@ -85,7 +85,7 @@ class vifa_coll_lines : public vifa_coll_lines_params
                       const imp_line&    hyp_line
                      ) const;
 
-  void fit_line(void);
+  void fit_line();
 };
 
 typedef vbl_smart_ptr<vifa_coll_lines>  vifa_coll_lines_sptr;

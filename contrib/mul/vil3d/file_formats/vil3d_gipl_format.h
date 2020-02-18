@@ -53,7 +53,7 @@ class vil3d_gipl_image: public vil3d_image_resource
   float vox_width1_, vox_width2_, vox_width3_;
 
   bool read_header(vil_stream *is);
-  bool write_header(void);
+  bool write_header();
 
   //: Expected pixel type.
   enum vil_pixel_format pixel_format_;

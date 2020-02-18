@@ -18,51 +18,52 @@
 class vil3d_meta_image_header
 {
  public:
+   vil3d_meta_image_header();
+   ~vil3d_meta_image_header();
 
-  vil3d_meta_image_header(void);
-  ~vil3d_meta_image_header(void);
+   // Setter/getter methods
+   void set_byte_order_msb(const bool is_msb);
+   bool byte_order_is_msb() const;
 
-  // Setter/getter methods
-  void set_byte_order_msb(const bool is_msb);
-  bool byte_order_is_msb(void) const;
+   void set_offset(const double off_i, const double off_j, const double off_k);
+   double offset_i() const;
+   double offset_j() const;
+   double offset_k() const;
 
-  void set_offset(const double off_i, const double off_j, const double off_k);
-  double offset_i(void) const;
-  double offset_j(void) const;
-  double offset_k(void) const;
+   void set_vox_size(const double vox_i, const double vox_j,
+                     const double vox_k);
+   double vox_size_i() const;
+   double vox_size_j() const;
+   double vox_size_k() const;
 
-  void set_vox_size(const double vox_i, const double vox_j, const double vox_k);
-  double vox_size_i(void) const;
-  double vox_size_j(void) const;
-  double vox_size_k(void) const;
+   void set_dim_size(const unsigned int ni, const unsigned int nj,
+                     const unsigned int nk, const unsigned int np);
+   unsigned int ni() const;
+   unsigned int nj() const;
+   unsigned int nk() const;
+   unsigned int nplanes() const;
 
-  void set_dim_size(const unsigned int ni, const unsigned int nj, const unsigned int nk, const unsigned int np);
-  unsigned int ni(void) const;
-  unsigned int nj(void) const;
-  unsigned int nk(void) const;
-  unsigned int nplanes(void) const;
+   void set_element_type(const std::string &elem_type);
+   const std::string &element_type() const;
 
-  void set_element_type(const std::string &elem_type);
-  const std::string &element_type(void) const;
+   void set_image_fname(const std::string &image_fname);
+   const std::string &image_fname() const;
 
-  void set_image_fname(const std::string &image_fname);
-  const std::string &image_fname(void) const;
+   void set_pixel_format(const vil_pixel_format format);
+   vil_pixel_format pixel_format() const;
 
-  void set_pixel_format(const vil_pixel_format format);
-  vil_pixel_format pixel_format(void) const;
+   void clear();
 
-  void clear(void);
+   // Functions to handle file
+   bool read_header(const std::string &header_fname);
+   bool write_header(const std::string &header_fname) const;
 
-  // Functions to handle file
-  bool read_header(const std::string &header_fname);
-  bool write_header(const std::string &header_fname) const;
+   // Display header details
+   void print_header(std::ostream &os) const;
 
-  // Display header details
-  void print_header(std::ostream &os) const;
-
-  // Check if data needs to be swapped when reading/writing
-  void check_need_swap(void);
-  bool need_swap(void) const;
+   // Check if data needs to be swapped when reading/writing
+   void check_need_swap();
+   bool need_swap() const;
 
  private:
 
@@ -150,7 +151,7 @@ class vil3d_meta_image: public vil3d_image_resource
   unsigned nk() const override;
 
   //: Get the current header information
-  const vil3d_meta_image_header &header(void) const;
+  const vil3d_meta_image_header &header() const;
 
   //: Pixel Format.
   enum vil_pixel_format pixel_format() const override;

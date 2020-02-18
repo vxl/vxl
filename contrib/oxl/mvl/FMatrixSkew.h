@@ -52,7 +52,7 @@ class FMatrixSkew : public FMatrix
 
   bool set (const double* f_matrix ) override;
   bool set (const vnl_matrix<double>& f_matrix );
-  bool get_rank2_flag (void) const;
+  bool get_rank2_flag() const;
   void set_rank2_flag (bool rank2_flag);
 };
 

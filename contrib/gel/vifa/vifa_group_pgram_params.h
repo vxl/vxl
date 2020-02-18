@@ -57,9 +57,9 @@ class vifa_group_pgram_params : public gevd_param_mixin,
   bool  SanityCheck() override;
 
   //: Output contents
-  void  print_info(void) const;
+  void print_info() const;
 
- protected:
+protected:
   //: Assign internal parameter blocks.
   void  init_params(float  angle_increment,
                     int    max_suppress_radius,

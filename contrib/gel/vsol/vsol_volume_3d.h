@@ -30,7 +30,9 @@ class vsol_volume_3d : public vsol_spatial_object_3d
     MESH,
     NUM_VOLUME_TYPES
   };
-  virtual vsol_volume_3d_type volume_type(void) const { return vsol_volume_3d::VOLUME_NO_TYPE; }
+  virtual vsol_volume_3d_type volume_type() const {
+    return vsol_volume_3d::VOLUME_NO_TYPE;
+  }
 
  public:
   //---------------------------------------------------------------------------
@@ -57,12 +59,14 @@ class vsol_volume_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   //: Return the spatial type of `this'
   //---------------------------------------------------------------------------
-  vsol_spatial_object_3d_type spatial_type(void) const override { return vsol_spatial_object_3d::VOLUME; }
+  vsol_spatial_object_3d_type spatial_type() const override {
+    return vsol_spatial_object_3d::VOLUME;
+  }
 
   //---------------------------------------------------------------------------
   //: Return the volume of `this'
   //---------------------------------------------------------------------------
-  virtual double volume(void) const=0;
+  virtual double volume() const = 0;
 
   //: Return a platform independent string identifying the class
   std::string is_a() const override { return std::string("vsol_volume_3d"); }
