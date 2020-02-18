@@ -2360,12 +2360,12 @@ class operations
   void add_operation(const char* name, function_t func, function_type_t& t,
                      const char * help_input, const char * help_output, const char * help_desc)
   {
-    names_.push_back(name);
+    names_.emplace_back(name);
     functions_.push_back(func);
     function_types_.push_back(t);
-    help_input_.push_back(help_input);
-    help_output_.push_back(help_output);
-    help_desc_.push_back(help_desc);
+    help_input_.emplace_back(help_input);
+    help_output_.emplace_back(help_output);
+    help_desc_.emplace_back(help_desc);
   }
 
   //: Add all operations to the list.

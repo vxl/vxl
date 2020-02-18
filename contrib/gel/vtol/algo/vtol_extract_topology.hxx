@@ -438,7 +438,7 @@ trace_edge_chain( unsigned i, unsigned j, unsigned dir )
     // unit and create a vertex.
     move( (dir+2)%4, i, j );
     set_vertex_index( i, j, node_list_.size() );
-    node_list_.push_back( vertex_node( i, j ) );
+    node_list_.emplace_back(i, j);
     end_index = vertex_index( i, j );
     dir = prev_dir; // the direction we came from to the new end point.
     // The new end point is already in the edgel chain; no need to add again.
@@ -498,7 +498,7 @@ construct_topology( )
     for ( unsigned i = 0; i <= label_img_.ni(); ++i ) {
       if ( is_junction_vertex( i, j ) ) {
         set_vertex_index( i, j, node_list_.size() );
-        node_list_.push_back( vertex_node( i, j ) );
+        node_list_.emplace_back(i, j);
       }
     }
   }
@@ -546,7 +546,7 @@ construct_topology( )
         // Create a vertex at this point
         //
         set_vertex_index( i, j, node_list_.size() );
-        node_list_.push_back( vertex_node( i, j ) );
+        node_list_.emplace_back(i, j);
 
         // Create a vertex at a neighbour
         //
@@ -555,7 +555,7 @@ construct_topology( )
         assert( vertex_index( i2, j2 ) == vertex_node::null_index &&
                 is_boundary_vertex( i2, j2 ) );
         set_vertex_index( i2, j2, node_list_.size() );
-        node_list_.push_back( vertex_node( i2, j2 ) );
+        node_list_.emplace_back(i2, j2);
 
         // Trace from here, going both ways
         //
