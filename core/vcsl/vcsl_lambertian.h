@@ -27,7 +27,7 @@ class vcsl_lambertian
   //***************************************************************************
 
   // Default constructor.
-  vcsl_lambertian();
+   vcsl_lambertian() = delete;
 
  public:
   // Destructor

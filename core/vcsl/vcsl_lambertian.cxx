@@ -5,6 +5,7 @@
 //---------------------------------------------------------------------------
 // Default constructor
 //---------------------------------------------------------------------------
+#if 0 //Private constructors can never be called
 vcsl_lambertian::vcsl_lambertian()
 {
   vcsl_axis_sptr a = new vcsl_axis;
@@ -14,3 +15,4 @@ vcsl_lambertian::vcsl_lambertian()
   a = new vcsl_axis(*a);
   axes_.push_back(a);
 }
+#endif
