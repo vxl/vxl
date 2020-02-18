@@ -72,12 +72,9 @@ vpgl_proj_camera<T>::~vpgl_proj_camera()
   cached_svd_ = nullptr;
 }
 
-template <class T>
-vpgl_proj_camera<T>* vpgl_proj_camera<T>::clone(void) const
-{
+template <class T> vpgl_proj_camera<T> *vpgl_proj_camera<T>::clone() const {
   return new vpgl_proj_camera<T>(*this);
 }
-
 
 // PROJECTIONS AND BACKPROJECTIONS:----------------------------------------------
 

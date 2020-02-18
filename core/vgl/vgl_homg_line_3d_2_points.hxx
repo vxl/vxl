@@ -41,8 +41,7 @@ bool vgl_homg_line_3d_2_points<Type>::operator==(vgl_homg_line_3d_2_points<Type>
 
 //: force the point point_infinite_ to infinity, without changing the line
 template <class Type>
-void vgl_homg_line_3d_2_points<Type>::force_point2_infinite(void) const
-{
+void vgl_homg_line_3d_2_points<Type>::force_point2_infinite() const {
   //Require tolerance on ideal point
   Type tol = vgl_tolerance<Type>::position;
   if (point_infinite_.w() < tol && point_infinite_.w()>-tol) return; // already OK

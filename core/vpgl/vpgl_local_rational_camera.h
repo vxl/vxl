@@ -45,7 +45,7 @@ class vpgl_local_rational_camera : public vpgl_rational_camera<T>
 
   //: Clone `this': creation of a new object and initialization
   // legal C++ because the return type is covariant with vpgl_camera<T>*
- virtual  vpgl_local_rational_camera<T>* clone(void) const override;
+  virtual vpgl_local_rational_camera<T> *clone() const override;
 
   //: Equality test
   inline bool operator==(vpgl_local_rational_camera<T> const &that) const

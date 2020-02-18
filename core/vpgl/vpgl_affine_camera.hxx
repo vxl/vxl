@@ -238,12 +238,9 @@ backproject_ray( const vgl_homg_point_2d<T>& image_point ) const
   }
 }
 
-template <class T>
-vpgl_affine_camera<T>* vpgl_affine_camera<T>::clone(void) const
-{
+template <class T> vpgl_affine_camera<T> *vpgl_affine_camera<T>::clone() const {
   return new vpgl_affine_camera<T>(*this);
 }
-
 
 //: Find the world plane parallel to the image plane intersecting the camera center.
 template <class T>

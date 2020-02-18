@@ -87,7 +87,7 @@ class vpgl_proj_camera : public vpgl_camera<T>
 
   //: Clone `this': creation of a new object and initialization
   // legal C++ because the return type is covariant with vpgl_camera<T>*
-  vpgl_proj_camera<T>* clone(void) const override;
+  vpgl_proj_camera<T> *clone() const override;
 
   //: Assignment.
   const vpgl_proj_camera<T>& operator=( const vpgl_proj_camera& cam );

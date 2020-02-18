@@ -103,11 +103,9 @@ vpgl_rational_camera<T>::vpgl_rational_camera(
 
 // clone rational camera
 template <class T>
-vpgl_rational_camera<T>* vpgl_rational_camera<T>::clone(void) const
-{
+vpgl_rational_camera<T> *vpgl_rational_camera<T>::clone() const {
   return new vpgl_rational_camera<T>(*this);
 }
-
 
 //--------------------------------------
 // Set coefficient matrix

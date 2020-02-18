@@ -125,9 +125,9 @@ class vil_openjpeg_image : public vil_image_resource
                       unsigned int ni, unsigned int nj, unsigned int nplanes,
                       vil_pixel_format format, vil_openjpeg_format opjfmt);
   vil_openjpeg_image(vil_stream* is, vil_openjpeg_format opjfmt);
-  ~vil_openjpeg_image(void) override;
+  ~vil_openjpeg_image() override;
 
-  bool is_valid(void) const;
+  bool is_valid() const;
 
   // Inherit the documentation from vil_image_resource
 
@@ -164,7 +164,7 @@ class vil_openjpeg_image : public vil_image_resource
  private:
   bool validate_format();
 
-  int maxbpp(void) const;
+  int maxbpp() const;
 
   template<typename PIXEL_TYPE>
   vil_image_view_base_sptr opj2vil(
