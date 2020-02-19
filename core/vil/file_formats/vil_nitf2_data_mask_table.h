@@ -29,10 +29,10 @@ class vil_nitf2_data_mask_table
    bool parse(vil_stream *stream);
 
    //: If this function returns true, then you may call \sa block_band_offset()
-   bool has_offset_table() const { return BMR_n_BND_m.size() > 0; }
+   bool has_offset_table() const { return !BMR_n_BND_m.empty(); }
 
    //: If this function returns true, then you may call \sa pad_pixel()
-   bool has_pad_pixel_table() const { return TMR_n_BND_m.size() > 0; }
+   bool has_pad_pixel_table() const { return !TMR_n_BND_m.empty(); }
 
    vxl_uint_32 blocked_image_data_offset() const;
 
