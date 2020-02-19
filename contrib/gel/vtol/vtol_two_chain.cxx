@@ -242,7 +242,7 @@ void vtol_two_chain::update_superior_list_p_from_hierarchy_parent()
 {
   // Check to see if there is a parent node in the tree.
   const vtol_two_chain *hierarchy_parent=nullptr;
-  if (chain_superiors_.size()>0)
+  if (!chain_superiors_.empty())
     hierarchy_parent = chain_superiors_.front()->cast_to_two_chain();
 
   // If vtol_two_chain is a child of another vtol_two_chain...the superiors

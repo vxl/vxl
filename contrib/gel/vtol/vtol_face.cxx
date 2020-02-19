@@ -366,7 +366,10 @@ void vtol_face::compute_bounding_box() const
 bool vtol_face::IsHoleP() const
 {
   edge_list* edges = const_cast<vtol_face*>(this)->outside_boundary_edges();
-  if (edges->size() == 0) { delete edges; return false; }
+  if (edges->empty()) {
+    delete edges;
+    return false;
+  }
   vtol_edge_sptr e = edges->front();
   delete edges;
   std::list<vtol_topology_object*> const* chains = e->superiors_list();

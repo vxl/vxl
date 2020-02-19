@@ -47,12 +47,10 @@ int main(int argc, char** argv)
   vul_arg<double> angle("-A","Angle",45.0);
   vul_arg_parse(argc,argv);
 
-  if (input_path()=="")
-  {
+  if (input_path().empty()) {
     print_usage();
     return 0;
   }
-
 
   vimt_image_2d_of<vxl_byte> image;
   image.image() = vil_load(input_path().c_str());

@@ -140,7 +140,7 @@ void vpdfl_pdf_base::gradient_logp(vnl_vector<double>& g,
 
 bool vpdfl_pdf_base::is_valid_pdf() const
 {
-  return mean_.size() == var_.size() && mean_.size() > 0;
+  return mean_.size() == var_.size() && !mean_.empty();
 }
 
 

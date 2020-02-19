@@ -116,7 +116,7 @@ double clsfy_rbf_parzen::weightings(const vnl_vector<double> &input) const
 //: The dimensionality of input vectors.
 unsigned clsfy_rbf_parzen::n_dims() const
 {
-  if (trainInputs_.size() == 0)
+  if (trainInputs_.empty())
     return 0;
   else
     return trainInputs_[0].size();

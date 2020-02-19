@@ -243,8 +243,7 @@ void mfpf_mr_point_finder::multi_search_and_prune(
     = static_cast<const vimt_image_2d_of<float>&>(im_pyr(im_L));
   finder(L0).multi_search(image,pose0.p(),pose0.u(),poses,fits);
 
-  if (poses.size()==0)
-  {
+  if (poses.empty()) {
     std::cerr<<"Warning: No poses returned by mfpf_point_finder\n";
     // Perform search to find single good point
     vgl_point_2d<double> new_p;

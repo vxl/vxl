@@ -92,8 +92,7 @@ double mbl_sample_stats_1d::median() const
 {
   double ret;
 
-  if (samples_.size()>0)
-  {
+  if (!samples_.empty()) {
     if ( samples_.size() % 2 == 0 )
     {
       unsigned index = samples_.size() / 2 - 1;
@@ -121,8 +120,7 @@ double mbl_sample_stats_1d::median() const
 
       ret = *index_it;
     }
-  }
-  else // crazy value if  no samples
+  } else // crazy value if  no samples
   {
     ret = std::numeric_limits<double>::max();
   }
@@ -173,7 +171,7 @@ double mbl_sample_stats_1d::quantile(double q) const
 //=========================================================================
 double mbl_sample_stats_1d::nth_percentile(int n) const
 {
-  if (samples_.size()==0)
+  if (samples_.empty())
     return std::numeric_limits<double>::max();
 
   double fact = double(n)/100.0;
@@ -297,7 +295,8 @@ double mbl_sample_stats_1d::kurtosis() const
 //=========================================================================
 double mbl_sample_stats_1d::min() const
 {
-  if (samples_.size()==0) return std::numeric_limits<double>::max();
+  if (samples_.empty())
+    return std::numeric_limits<double>::max();
   else return stats_1d_.min();
 }
 
@@ -305,7 +304,8 @@ double mbl_sample_stats_1d::min() const
 //=========================================================================
 double mbl_sample_stats_1d::max() const
 {
-  if (samples_.size()==0) return std::numeric_limits<double>::min();
+  if (samples_.empty())
+    return std::numeric_limits<double>::min();
   else return stats_1d_.max();
 }
 
@@ -397,12 +397,9 @@ void mbl_sample_stats_1d::b_read(vsl_b_istream& bfs)
 void mbl_sample_stats_1d::print_summary(std::ostream& os) const
 {
   os << "mbl_sample_stats_1d: ";
-  if (samples_.size()==0)
-  {
+  if (samples_.empty()) {
     os << "No samples.";
-  }
-  else
-  {
+  } else {
     os << "mean: "<< mean()
        << " use MVUE: "<< use_mvue_
        << " sd: "<< sd()

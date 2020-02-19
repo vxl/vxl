@@ -100,8 +100,7 @@ int main(int argc, char** argv)
   vul_arg<std::string> out_path("-o","Output path");
   vul_arg_parse(argc,argv);
 
-  if (in_path()=="" || out_path()=="")
-  {
+  if (in_path().empty() || out_path().empty()) {
     print_usage();
     return 0;
   }

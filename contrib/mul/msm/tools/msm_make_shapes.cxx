@@ -20,8 +20,7 @@ int main(int argc, char** argv)
   vul_arg<unsigned> n_shapes("-n","Number of shapes",24);
 
   vul_arg_parse(argc,argv);
-  if (output_dir()=="")
-  {
+  if (output_dir().empty()) {
     print_usage();
     return 0;
   }

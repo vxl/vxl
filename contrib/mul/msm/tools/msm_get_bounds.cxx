@@ -25,8 +25,7 @@ int main(int argc, char** argv)
 
   vul_arg_parse(argc,argv);
 
-  if (in_pts_path()=="")
-  {
+  if (in_pts_path().empty()) {
     print_usage();
     return 0;
   }

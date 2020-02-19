@@ -307,8 +307,7 @@ int main( int argc, char* argv[] )
 
   vul_arg_parse(argc, argv);
 
-  if (param_path()=="")
-  {
+  if (param_path().empty()) {
     print_usage();
     return 0;
   }

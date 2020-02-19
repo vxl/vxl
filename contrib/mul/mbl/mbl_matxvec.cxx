@@ -117,8 +117,8 @@ void mbl_matxvec_prod_mv_2(const vnl_matrix<double>& M,
                            const vnl_vector<double>& V,
                            vnl_vector<double>& R)
 {
-  if (R.size()==0) return;
-
+  if (R.empty())
+    return;
 
   int nR = R.size();
 #ifndef NDEBUG

@@ -160,8 +160,7 @@ void tool_params::read_from_file(const std::string& path)
   overlap_shapes=vul_string_to_bool(props.get_optional_property("overlap_shapes","false"));
 
   std::string point_colours_str=props.get_optional_property("point_colours","");
-  if (point_colours_str!="")
-  {
+  if (!point_colours_str.empty()) {
     std::stringstream lcss(point_colours_str);
     mbl_parse_string_list(lcss,point_colours);
 
@@ -170,15 +169,13 @@ void tool_params::read_from_file(const std::string& path)
     std::cout<<std::endl;
   }
 
-  if (point_colours.size()<1)
-  {
+  if (point_colours.empty()) {
     point_colours.resize(1);
     point_colours[0]=point_colour;
   }
 
   std::string line_colours_str=props.get_optional_property("line_colours","");
-  if (line_colours_str!="")
-  {
+  if (!line_colours_str.empty()) {
     std::stringstream lcss(line_colours_str);
     mbl_parse_string_list(lcss,line_colours);
 
@@ -187,8 +184,7 @@ void tool_params::read_from_file(const std::string& path)
     std::cout<<std::endl;
   }
 
-  if (line_colours.size()<1)
-  {
+  if (line_colours.empty()) {
     line_colours.resize(1);
     line_colours[0]=line_colour;
   }
@@ -214,7 +210,8 @@ bool load_shape_params(const std::string& path,
   std::string line;
   while(std::getline(ifs,line))
   {
-    if (line=="") continue;
+    if (line.empty())
+      continue;
     std::stringstream ss(line);
     std::vector<double> x;
     ss>>std::ws;
@@ -224,8 +221,7 @@ bool load_shape_params(const std::string& path,
       ss>>v>>std::ws;
       x.push_back(v);
     }
-    if (x.size()>0)
-    {
+    if (!x.empty()) {
       vnl_vector<double> b_new(x.size());
       for (unsigned i=0;i<x.size();++i) b_new[i]=x[i];
       b.push_back(b_new);
@@ -247,8 +243,7 @@ int main(int argc, char** argv)
 
   msm_add_all_loaders();
 
-  if (param_path()=="")
-  {
+  if (param_path().empty()) {
     print_usage();
     return 0;
   }
@@ -264,10 +259,14 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  if (model_path()!="") params.shape_model_path=model_path();
-  if (curves_path()!="") params.curves_path=curves_path();
-  if (out_path()!="") params.out_path=out_path();
-  if (sp_path()!="") params.shape_params_path=sp_path();
+  if (!model_path().empty())
+    params.shape_model_path = model_path();
+  if (!curves_path().empty())
+    params.curves_path = curves_path();
+  if (!out_path().empty())
+    params.out_path = out_path();
+  if (!sp_path().empty())
+    params.shape_params_path = sp_path();
 
   msm_shape_model shape_model;
 

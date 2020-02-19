@@ -286,8 +286,7 @@ inline void msdi_get_reflection_params_from_props(mbl_read_props_type& props, pa
 {
   std::string ref_sym_str=props.get_optional_property("reflection_symmetry","");
   params.reflection_symmetry.resize(0);
-  if (ref_sym_str!="")
-  {
+  if (!ref_sym_str.empty()) {
     std::stringstream ss(ref_sym_str);
     mbl_parse_int_list(ss, std::back_inserter(params.reflection_symmetry),
                        unsigned());

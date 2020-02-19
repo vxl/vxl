@@ -64,8 +64,7 @@ error_projector() const
   if (scale_ == 0) {
     WarningMacro( "The scale is zero." );
   }
-  if ( !err_proj_.size() )
-  {
+  if (err_proj_.empty()) {
     const unsigned m = location_.size();
     err_proj_.set_size( m, m );
     err_proj_.set_identity();
@@ -82,8 +81,7 @@ error_projector_sqrt() const
   if (scale_ == 0) {
     WarningMacro( "The scale is zero." );
   }
-  if ( !err_proj_sqrt_.size() )
-  {
+  if (err_proj_sqrt_.empty()) {
     const unsigned m = location_.size();
     err_proj_sqrt_.set_size( m, m );
     err_proj_sqrt_.set_identity();

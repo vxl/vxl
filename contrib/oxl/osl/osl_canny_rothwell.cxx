@@ -323,7 +323,7 @@ void osl_canny_rothwell::Initial_hysteresis()
         px = edgels->GetX();
         py = edgels->GetY();
         pg = edgels->GetGrad();
-        while ( xcoords.size() ) {
+        while (!xcoords.empty()) {
           *(px++) = float(xcoords.front()); xcoords.pop_front();
           *(py++) = float(ycoords.front()); ycoords.pop_front();
           *(pg++) = grad.front(); grad.pop_front();
@@ -334,7 +334,7 @@ void osl_canny_rothwell::Initial_hysteresis()
 
   // Now re-create the thin_ image
   osl_canny_base_fill_raw_image(thin_, xsize_, ysize_, 0.0f);
-  while (edges.size()) {
+  while (!edges.empty()) {
 
     edgels = edges.front(); edges.pop_front();
     px = edgels->GetX();
@@ -579,7 +579,7 @@ void osl_canny_rothwell::Jump_single_breaks()
   float **t = thin_;
   // xdang_->reset();  ydang_->reset();
 
-  while (xdang_->size()) {
+  while (!xdang_->empty()) {
 
     x = xdang_->front(); xdang_->pop_front();
     y = ydang_->front(); ydang_->pop_front();
@@ -875,7 +875,7 @@ void osl_canny_rothwell::Find_junction_clusters()
   // Reset the junction image - this is order dependent because
   // the cluster centres appear in both lists
   // xjunc.reset();  yjunc.reset();
-  while ( xjunc.size() ) {
+  while (!xjunc.empty()) {
     junction_[xjunc.front()][yjunc.front()] = 1;
     xjunc.pop_front();
     yjunc.pop_front();

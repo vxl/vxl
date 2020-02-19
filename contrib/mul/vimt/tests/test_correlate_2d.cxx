@@ -57,8 +57,7 @@ static void test_correlate_2d_byte()
   std::vector<vgl_point_2d<double> > w_peaks2;
   vimt_find_world_peaks_3x3(w_peaks2,fit_image);
   TEST("Number of peaks",w_peaks2.size(),1);
-  if (w_peaks2.size()>0)
-  {
+  if (!w_peaks2.empty()) {
     TEST_NEAR("Peak 0",(w_peaks2[0]-vgl_point_2d<double>(3,7)).sqr_length(),0,1e-12);
   }
 }

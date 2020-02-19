@@ -132,12 +132,9 @@ void tool_params::read_from_file(const std::string& path)
                                                   "results_consistency.txt");
 
   std::string points_dirs_str=props.get_optional_property("points_dirs","");
-  if (points_dirs_str!="")
-  {
+  if (!points_dirs_str.empty()) {
     mbl_parse_string_list(points_dirs_str,points_dir);
-  }
-  else
-  {
+  } else {
     // Assume exactly two directories.
     points_dir.resize(2);
     points_dir[0]=props.get_required_property("points_dir1");
@@ -147,16 +144,15 @@ void tool_params::read_from_file(const std::string& path)
   curves_path=props.get_optional_property("curves_path","");
 
   std::string key_text_str=props.get_optional_property("key_text","");
-  if (key_text_str!="")
+  if (!key_text_str.empty())
     mbl_parse_string_list(key_text_str,key_text);
 
-  if (key_text.size()>0 && key_text.size()!=points_dir.size())
+  if (!key_text.empty() && key_text.size() != points_dir.size())
     std::cerr<<"WARNING: "
       <<"Number of key text lines does not match number of data sets"<<std::endl;
 
   std::string points_to_show_str=props.get_optional_property("points_to_show","");
-  if (points_to_show_str!="")
-  {
+  if (!points_to_show_str.empty()) {
     std::stringstream ss(points_to_show_str);
     mbl_parse_int_list(ss,std::back_inserter(points_to_show),unsigned());
   }
@@ -297,8 +293,7 @@ void print_summaries(std::ostream& os, std::string key,
                      const std::vector<mbl_sample_stats_1d>& stats,
                      const std::vector<unsigned>& index)
 {
-  if (index.size()==0)
-  {
+  if (index.empty()) {
     for (unsigned i=0;i<stats.size();++i)
     {
       os<<key<<i;
@@ -306,9 +301,7 @@ void print_summaries(std::ostream& os, std::string key,
       os<<" ";
       print_summary(os,stats[i]);
     }
-  }
-  else
-  {
+  } else {
     // Only print those listed in the index.
     for (unsigned i=0;i<index.size();++i)
     {
@@ -323,7 +316,6 @@ void print_summaries(std::ostream& os, std::string key,
       print_summary(os,stats[index[i]]);
     }
   }
-
 }
 
 //: Compares how consistently two sets of points are placed along curves.
@@ -369,8 +361,7 @@ int main(int argc, char** argv)
 
   msm_add_all_loaders();
 
-  if (param_path()=="")
-  {
+  if (param_path().empty()) {
     print_usage();
     return 0;
   }
@@ -386,7 +377,7 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  if (out_path()!="")
+  if (!out_path().empty())
     params.output_summary_path=out_path();
 
   msm_curves curves;

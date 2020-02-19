@@ -36,7 +36,8 @@ bool mfpf_searcher::find_near_pose(mfpf_point_finder& pf,
 {
   std::vector<unsigned> index;
   find_overlaps(pf,poses,pose,index);
-  if (index.size()==0) return false;  // No overlaps
+  if (index.empty())
+    return false; // No overlaps
 
   if (index.size()==1)
   {
@@ -153,7 +154,8 @@ void mfpf_searcher::search_around_set(mfpf_point_finder& pf,
                                       const vimt_image_2d_of<float>& image,
                                       mfpf_pose_set& pose_set)
 {
-  if (pose_set.poses.size()==0) return;
+  if (pose_set.poses.empty())
+    return;
 
   // Record size of search region, so that it can be re-instated later
   unsigned search_ni0=pf.search_ni();

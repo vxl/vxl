@@ -119,12 +119,9 @@ void tool_params::read_from_file(const std::string& path)
   n_to_keep=vul_string_atoi(props.get_optional_property("n_to_keep","0"));
 
   std::string points_dirs_str=props.get_optional_property("points_dirs","");
-  if (points_dirs_str!="")
-  {
+  if (!points_dirs_str.empty()) {
     mbl_parse_string_list(points_dirs_str,points_dir);
-  }
-  else
-  {
+  } else {
     // Assume exactly two directories.
     points_dir.resize(2);
     points_dir[0]=props.get_required_property("points_dir1");
@@ -132,16 +129,15 @@ void tool_params::read_from_file(const std::string& path)
   }
 
   std::string key_text_str=props.get_optional_property("key_text","");
-  if (key_text_str!="")
+  if (!key_text_str.empty())
     mbl_parse_string_list(key_text_str,key_text);
 
-  if (key_text.size()>0 && key_text.size()!=points_dir.size())
+  if (!key_text.empty() && key_text.size() != points_dir.size())
     std::cerr<<"WARNING: "
       <<"Number of key text lines does not match number of data sets"<<std::endl;
 
   std::string points_to_use_str=props.get_optional_property("points_to_use","");
-  if (points_to_use_str!="")
-  {
+  if (!points_to_use_str.empty()) {
     std::stringstream ss(points_to_use_str);
     mbl_parse_int_list(ss,std::back_inserter(points_to_use),unsigned());
   }
@@ -285,8 +281,7 @@ int main(int argc, char** argv)
   vul_arg<std::string> out_dir("-o","Output directory","");
   vul_arg_parse(argc,argv);
 
-  if (param_path()=="")
-  {
+  if (param_path().empty()) {
     print_usage();
     return 0;
   }
@@ -302,7 +297,7 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  if (out_dir()!="")
+  if (!out_dir().empty())
     params.output_dir=out_dir();
 
   unsigned n_sets = params.points_dir.size();
@@ -325,8 +320,7 @@ int main(int argc, char** argv)
   unsigned n_to_discard=0;
   if (params.n_to_keep>0) n_to_discard=n_sets-params.n_to_keep;
 
-  if (params.points_to_use.size()==0)
-  {
+  if (params.points_to_use.empty()) {
     // Use all points
     params.points_to_use.resize(n_pts);
     for (unsigned k=0;k<n_pts;++k)

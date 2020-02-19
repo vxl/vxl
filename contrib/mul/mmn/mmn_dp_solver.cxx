@@ -53,7 +53,8 @@ void mmn_dp_solver::set_arcs(unsigned num_nodes,
 //: Index of root node
 unsigned mmn_dp_solver::root() const
 {
-  if (deps_.size()==0) return 0;
+  if (deps_.empty())
+    return 0;
   return deps_[deps_.size()-1].v1;
 }
 
@@ -137,8 +138,7 @@ void mmn_dp_solver::process_dep2(const mmn_dependancy& dep)
   vnl_matrix<double>& pa12 = pc_[dep.arc12];
   vnl_matrix<int>& ind0 = index2_[dep.v0];
 
-  if (pa12.size()==0)
-  {
+  if (pa12.empty()) {
     if (dep.v1<dep.v2)
       pa12.set_size(nc1.size(),nc2.size());
     else
@@ -202,8 +202,7 @@ void mmn_dp_solver::process_dep2t(const mmn_dependancy& dep,
                                              dep.v0,dep.v1,dep.v2);
   std::ptrdiff_t tc_step0=tc.istep();
 
-  if (pa12.size()==0)
-  {
+  if (pa12.empty()) {
     if (dep.v1<dep.v2)
       pa12.set_size(nc1.size(),nc2.size());
     else
@@ -257,8 +256,7 @@ double mmn_dp_solver::solve(
   for (unsigned i=0;i<pair_cost.size();++i) pc_[i]=pair_cost[i];
   for (unsigned i=pair_cost.size();i<pc_.size();++i) pc_[i].set_size(0,0);
 
-  if (deps_.size()==0)
-  {
+  if (deps_.empty()) {
     std::cerr<<"No dependencies.\n";
     return 999.99;
   }
@@ -291,8 +289,7 @@ double mmn_dp_solver::solve(
   for (unsigned i=0;i<pair_cost.size();++i) pc_[i]=pair_cost[i];
   for (unsigned i=pair_cost.size();i<pc_.size();++i) pc_[i].set_size(0,0);
 
-  if (deps_.size()==0)
-  {
+  if (deps_.empty()) {
     std::cerr<<"No dependencies.\n";
     return 999.99;
   }

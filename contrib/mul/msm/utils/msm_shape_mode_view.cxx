@@ -47,7 +47,7 @@ void msm_shape_mode_view::set_shape_model(const msm_ref_shape_model& sm)
   b_sd_ = sm.mode_var();
   for (double & i : b_sd_) i=std::sqrt(i);
 
-  if (b_sd_.size()>0)
+  if (!b_sd_.empty())
     set_mode(1);
   else
     set_mode(0);

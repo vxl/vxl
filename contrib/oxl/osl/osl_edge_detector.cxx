@@ -919,7 +919,7 @@ void osl_edge_detector::Find_junction_clusters()
   // Reset the junction image - this is order dependent because
   // the cluster centres appear in both lists
   // xjunc.reset();  yjunc.reset();
-  while ( xjunc.size() ) {
+  while (!xjunc.empty()) {
     junction_[xjunc.front()][yjunc.front()] = 1;
     xjunc.pop_front();
     yjunc.pop_front();

@@ -47,8 +47,7 @@ void msm_pose_maker::set_from_curves(unsigned n_points,
 void msm_pose_maker::create_vectors(const msm_points& points,
                                     std::vector<vgl_vector_2d<double> >& dir) const
 {
-  if (end0_.size()==0)
-  {
+  if (end0_.empty()) {
     dir.resize(points.size());
     for (auto & i : dir)
       i=vgl_vector_2d<double>(1,0);

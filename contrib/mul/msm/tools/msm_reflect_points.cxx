@@ -25,8 +25,7 @@ int main(int argc, char** argv)
   vul_arg<double> x("-x","Reflection line, x=x0",0);
   vul_arg_parse(argc,argv);
 
-  if (in_path()=="" || out_path()=="")
-  {
+  if (in_path().empty() || out_path().empty()) {
     print_usage();
     return 0;
   }

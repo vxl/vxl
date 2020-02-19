@@ -43,8 +43,7 @@ vtol_block::vtol_block(vtol_two_chain_sptr const& faceloop)
 //---------------------------------------------------------------------------
 vtol_block::vtol_block(two_chain_list const& faceloops)
 {
-  if (faceloops.size()>0)
-  {
+  if (!faceloops.empty()) {
     link_inferior(faceloops.front());
   }
 
@@ -361,10 +360,7 @@ two_chain_list *vtol_block::hole_cycles() const
 //: get the boundary cycle
 vtol_two_chain_sptr vtol_block::get_boundary_cycle()
 {
-  return
-    (inferiors_.size() > 0)
-    ? inferiors_[0]->cast_to_two_chain()
-    : nullptr;
+  return (!inferiors_.empty()) ? inferiors_[0]->cast_to_two_chain() : nullptr;
 }
 
 //: add a hole cycle

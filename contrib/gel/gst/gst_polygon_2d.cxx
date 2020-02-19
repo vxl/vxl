@@ -13,7 +13,7 @@
 bool gst_polygon_2d::check_validity() const
 {
   // no edge list
-  if (edges_.size()<1)
+  if (edges_.empty())
     return false;
 
   // cycle through edges, looking for a completed polygon

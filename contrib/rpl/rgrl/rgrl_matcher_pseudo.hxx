@@ -183,7 +183,8 @@ compute_matches( rgrl_feature_set const&    from_set,
   typedef rgrl_match_set::from_iterator       from_iter;
   typedef from_iter::to_iterator              to_iter;
   for ( from_iter fitr = matches_sptr->from_begin(); fitr !=  matches_sptr->from_end(); ++fitr ) {
-    if ( fitr.size() == 0 )  continue;
+    if (fitr.empty())
+      continue;
 
     rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
     for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {

@@ -174,11 +174,11 @@ void gevd_region_proc::extract_regions()
 
   std::vector<vtol_edge_2d_sptr> * edgels = detector.GetEdges();
 
-  if (!edgels->size())
-    {
-      std::cout << "In gevd_region_proc::extract_regions()- No Edgels were computed\n";
-      return;
-    }
+  if (edgels->empty()) {
+    std::cout
+        << "In gevd_region_proc::extract_regions()- No Edgels were computed\n";
+    return;
+  }
 #if 0 // commented out
   std::vector<vtol_edge_2d_sptr>::iterator eit; = edgels.begin();
   for (eit = edgels->begin(); eit != edgels->end(); eit++)
@@ -195,11 +195,11 @@ void gevd_region_proc::extract_regions()
   gevd_clean_edgels cl;
   std::vector<vtol_edge_2d_sptr> clean_edgels;
   cl.DoCleanEdgelChains(*edgels, clean_edgels);
-  if (!clean_edgels.size())
-    {
-      std::cout << "In gevd_region_proc::extract_regions()- All edges removed by clean\n";
-      return;
-    }
+  if (clean_edgels.empty()) {
+    std::cout << "In gevd_region_proc::extract_regions()- All edges removed by "
+                 "clean\n";
+    return;
+  }
   gevd_edgel_regions er(debug_);
   er.set_magnification(expand_scale_);
   //if (verbose_)

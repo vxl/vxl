@@ -127,7 +127,7 @@ rgrl_mask_sphere::
 update_bounding_box()
 {
   // if ceter or radius not yet set
-  if ( !center_.size() || !radius_sqr_ )
+  if (center_.empty() || !radius_sqr_)
     return;
 
   const unsigned m = center_.size();
@@ -210,7 +210,7 @@ operator!=( const rgrl_mask_box& other ) const
 std::ostream& operator<<(std::ostream& os, const rgrl_mask_box& box)
 {
   os<< box.x0().size() << "  ";
-  if ( box.x0().size() )
+  if (!box.x0().empty())
     os << box.x0()<<"  "<<box.x1();
   return os;
 }

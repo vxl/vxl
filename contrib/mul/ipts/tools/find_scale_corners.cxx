@@ -28,8 +28,7 @@ int main( int argc, char* argv[] )
 //  vul_arg<std::string> smooth_path("-s","Output image file (Smooth )","smooth.pnm");
   vul_arg_parse(argc, argv);
 
-  if (in_path() == "")
-  {
+  if (in_path().empty()) {
     print_usage();
     vul_arg_display_usage_and_exit();
   }
@@ -63,8 +62,7 @@ int main( int argc, char* argv[] )
   vil_save(image,out_path().c_str());
   std::cout<<"Image + pts saved to "<<out_path()<<std::endl;
 
-  if (corner_path()!="")
-  {
+  if (!corner_path().empty()) {
     vil_image_view<vxl_byte> out_corners;
     // Apply sqrt to make structure more visible
     vil_math_sqrt(flat_corners.image());

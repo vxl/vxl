@@ -82,7 +82,7 @@ void clsfy_k_nearest_neighbour::class_probabilities(std::vector<double> &outputs
 //: The dimensionality of input vectors.
 unsigned clsfy_k_nearest_neighbour::n_dims() const
 {
-  if (trainInputs_.size() == 0)
+  if (trainInputs_.empty())
     return 0;
   else
     return trainInputs_[0].size();

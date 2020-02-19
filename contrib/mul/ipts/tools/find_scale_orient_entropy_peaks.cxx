@@ -32,8 +32,7 @@ int main( int argc, char* argv[] )
 
   vul_arg_parse(argc, argv);
 
-  if (in_path() == "")
-  {
+  if (in_path().empty()) {
     print_usage();
     vul_arg_display_usage_and_exit();
   }
@@ -82,9 +81,7 @@ int main( int argc, char* argv[] )
   vil_save(image,out_path().c_str());
   std::cout<<"Image + pts saved to "<<out_path()<<std::endl;
 
-
-  if (entropy_path()!="")
-  {
+  if (!entropy_path().empty()) {
     vil_image_view<vxl_byte> out_entropy;
     vil_convert_stretch_range(flat_entropy.image(),out_entropy);
     vil_save(out_entropy,entropy_path().c_str());

@@ -121,8 +121,7 @@ void msdi_marked_images_from_files::reflect_points()
   // Image voxels will be reflected about line x=0.5(ni-1).
   double ax=0.5*(image().image_size()[0]-1);
 
-  if (ref_point_index_.size()==0)
-  {
+  if (ref_point_index_.empty()) {
     // Set 1-1 matching
     ref_point_index_.resize(points_.size());
     for (unsigned i=0;i<points_.size();++i)
@@ -420,8 +419,7 @@ void msdi_marked_images_from_files::set_reflection_state_from_props(mbl_read_pro
 {
   std::string ref_sym_str=props.get_optional_property("reflection_symmetry","");
   ref_point_index_.resize(0);
-  if (ref_sym_str!="" && ref_sym_str!="-")
-  {
+  if (!ref_sym_str.empty() && ref_sym_str != "-") {
     std::stringstream ss(ref_sym_str);
     mbl_parse_int_list(ss, std::back_inserter(ref_point_index_),
                        unsigned());
@@ -437,13 +435,10 @@ void msdi_marked_images_from_files::set_reflection_state_from_props(mbl_read_pro
   if (ref_state_str=="Undefined")
   {
     // For backwards compatability.
-    if (ref_point_index_.size()>0)
-    {
+    if (!ref_point_index_.empty()) {
       if (only_reflect) ref_state_=ReflectOnly;
       else              ref_state_=ReflectSym;
-    }
-    else
-    {
+    } else {
       if (only_reflect) ref_state_=ReflectOnly;
       else              ref_state_=Raw;
     }

@@ -30,8 +30,7 @@ int main(int argc, char** argv)
   vul_arg<unsigned> cell_size("-c","Cell size",4);
   vul_arg_parse(argc, argv);
 
-  if (in_path() == "")
-  {
+  if (in_path().empty()) {
     print_usage();
     vul_arg_display_usage_and_exit();
   }

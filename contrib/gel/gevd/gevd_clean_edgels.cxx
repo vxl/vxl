@@ -537,8 +537,7 @@ void gevd_clean_edgels::RemoveBridges()
       }
     }
     //The main termination condition, i.e., no order one vertices
-    if (v_one.size()==0)
-    {
+    if (v_one.empty()) {
       order_one=false;
       continue;
     }

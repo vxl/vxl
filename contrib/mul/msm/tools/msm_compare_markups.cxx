@@ -196,12 +196,9 @@ void tool_params::read_from_file(const std::string& path)
   use_iterations=vul_string_to_bool(props.get_optional_property("use_iterations","false"));
 
   std::string points_dirs_str=props.get_optional_property("points_dirs","");
-  if (points_dirs_str!="")
-  {
+  if (!points_dirs_str.empty()) {
     mbl_parse_string_list(points_dirs_str,points_dir);
-  }
-  else
-  {
+  } else {
     // Assume exactly two directories.
     points_dir.resize(2);
     points_dir[0]=props.get_required_property("points_dir1");
@@ -209,7 +206,7 @@ void tool_params::read_from_file(const std::string& path)
   }
 
   std::string point_colours_str=props.get_optional_property("point_colours","");
-  if (point_colours_str!="")
+  if (!point_colours_str.empty())
     mbl_parse_string_list(point_colours_str,point_colour);
   else
   {
@@ -223,16 +220,15 @@ void tool_params::read_from_file(const std::string& path)
       <<"Number of colours does not match number of data sets"<<std::endl;
 
   std::string key_text_str=props.get_optional_property("key_text","");
-  if (key_text_str!="")
+  if (!key_text_str.empty())
     mbl_parse_string_list(key_text_str,key_text);
 
-  if (key_text.size()>0 && key_text.size()!=points_dir.size())
+  if (!key_text.empty() && key_text.size() != points_dir.size())
     std::cerr<<"WARNING: "
       <<"Number of key text lines does not match number of data sets"<<std::endl;
 
   std::string points_to_show_str=props.get_optional_property("points_to_show","");
-  if (points_to_show_str!="")
-  {
+  if (!points_to_show_str.empty()) {
     std::stringstream ss(points_to_show_str);
     mbl_parse_int_list(ss,std::back_inserter(points_to_show),unsigned());
   }
@@ -428,7 +424,7 @@ void write_ellipses(mbl_eps_writer& writer, double region_height,
                     const std::vector<unsigned>& subset,
                     unsigned point_step)
 {
-  if (subset.size()>0)
+  if (!subset.empty())
     write_ellipses(writer,region_height,ref_shape,point_radius,pt_stats,subset);
   else
     write_ellipses(writer,region_height,ref_shape,point_radius,pt_stats,point_step);
@@ -582,16 +578,13 @@ void plot_all_points(const tool_params& params,
     {
       writer.set_colour(params.point_colour[k%n_colours]);
 
-      if (params.points_to_show.size()>0)
-      {
+      if (!params.points_to_show.empty()) {
         for (unsigned i=0;i<params.points_to_show.size();++i)
         {
           unsigned i0=params.points_to_show[i];
           writer.draw_disk(points[k][j][i0],params.point_radius);
         }
-      }
-      else
-      {
+      } else {
         for (unsigned i=0;i<n_pts;++i)
           writer.draw_disk(points[k][j][i],params.point_radius);
       }
@@ -611,8 +604,7 @@ int main(int argc, char** argv)
 
   msm_add_all_loaders();
 
-  if (param_path()=="")
-  {
+  if (param_path().empty()) {
     print_usage();
     return 0;
   }
@@ -628,7 +620,7 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  if (out_path()!="")
+  if (!out_path().empty())
     params.output_all_path=out_path();
 
   unsigned n_sets = params.points_dir.size();
@@ -638,7 +630,7 @@ int main(int argc, char** argv)
   for (unsigned i=0;i<n_sets;++i)
     load_shapes(params.points_dir[i],params.points_names,points[i]);
 
-  if (params.out_image_dir!="")
+  if (!params.out_image_dir.empty())
     plot_all_points(params,points);
 
   // Compute mean of points on first image to use as a reference.
@@ -806,7 +798,7 @@ int main(int argc, char** argv)
   for (unsigned i=0;i<n_sets;++i)
   {
     writer2.set_colour(params.point_colour[i%n_colours]);
-    if (params.points_to_show.size()==0)
+    if (params.points_to_show.empty())
       write_centre_points(writer2,region_height,
                    ref_shape,params.point_radius,
                    pt_stats[i],params.point_step);

@@ -593,7 +593,7 @@ register_multi_feature( rgrl_mask_box            from_image_region,
     // estimator in each stage/resolution. If more than one is found,
     // only the first is kept.
     //
-    if ( xform_estimators.size() == 0 )
+    if (xform_estimators.empty())
       xform_estimator = initial_xform_estimator;
     else xform_estimator = xform_estimators[0];
     assert ( xform_estimator );

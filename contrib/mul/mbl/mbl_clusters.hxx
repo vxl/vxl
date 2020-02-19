@@ -245,7 +245,8 @@ unsigned mbl_clusters<T,D>::add_object(unsigned new_i, double r)
   assert(new_i<data_->size());
 
   // If initially empty, create one cluster
-  if (p_.size()==0) return create_cluster(new_i,r);
+  if (p_.empty())
+    return create_cluster(new_i, r);
 
   double d;
   unsigned j=nearest_cluster(data()[new_i],d);

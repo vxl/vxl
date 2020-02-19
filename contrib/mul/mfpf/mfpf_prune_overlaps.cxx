@@ -30,7 +30,8 @@ bool mfpf_find_near_pose(mfpf_point_finder& pf,
 {
   std::vector<unsigned> index;
   mfpf_find_overlaps(pf,poses,pose,index);
-  if (index.size()==0) return false;  // No overlaps
+  if (index.empty())
+    return false; // No overlaps
 
   if (index.size()==1)
   {

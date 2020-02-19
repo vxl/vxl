@@ -136,7 +136,7 @@ void vtol_chain::unlink_chain_inferior(const vtol_chain_sptr& chain_inferior)
 //: Unlink `this' with all its chain inferiors
 //---------------------------------------------------------------------------
 void vtol_chain::unlink_all_chain_inferiors() {
-  while (chain_inferiors_.size()>0)
+  while (!chain_inferiors_.empty())
     unlink_chain_inferior(chain_inferiors_.back());
 }
 
@@ -144,7 +144,7 @@ void vtol_chain::unlink_all_chain_inferiors() {
 //: Unlink `this' of the network
 //---------------------------------------------------------------------------
 void vtol_chain::unlink() {
-  while (chain_superiors_.size()>0)
+  while (!chain_superiors_.empty())
     chain_superiors_.front()->unlink_chain_inferior(this);
   unlink_all_chain_inferiors();
   vtol_topology_object::unlink();

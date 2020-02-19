@@ -130,7 +130,8 @@ execute(const rgrl_object* caller, const rgrl_event & event )
     for ( from_iter fitr = match_set->from_begin();
          fitr != match_set->from_end(); ++fitr ){
       // skip empty ones
-      if ( fitr.size() == 0 )  continue;
+      if (fitr.empty())
+        continue;
 
       // check roi
       if ( from_roi_sptr_ && !from_roi_sptr_->inside( fitr.from_feature()->location() ) )

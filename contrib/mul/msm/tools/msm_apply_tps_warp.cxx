@@ -30,10 +30,8 @@ int main(int argc, char** argv)
 
   vul_arg_parse(argc,argv);
 
-  if (src_con_pts_path()=="" ||
-      dest_con_pts_path()=="" ||
-      src_pts_path()=="")
-  {
+  if (src_con_pts_path().empty() || dest_con_pts_path().empty() ||
+      src_pts_path().empty()) {
     print_usage();
     return 0;
   }

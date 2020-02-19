@@ -356,8 +356,7 @@ int main(int argc, char** argv)
 
   msm_add_all_loaders();
 
-  if (param_path()=="")
-  {
+  if (param_path().empty()) {
     print_usage();
     return 0;
   }
@@ -373,9 +372,12 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  if (model_path()!="") params.shape_model_path=model_path();
-  if (curves_path()!="") params.curves_path=curves_path();
-  if (base_name()!="") params.base_name=base_name();
+  if (!model_path().empty())
+    params.shape_model_path = model_path();
+  if (!curves_path().empty())
+    params.curves_path = curves_path();
+  if (!base_name().empty())
+    params.base_name = base_name();
 
   msm_shape_model shape_model;
 
@@ -393,7 +395,7 @@ int main(int argc, char** argv)
       std::cout<<shape_model.mode_var()[i]<<' ';
   std::cout<<std::endl;
 
-  if (params.subspace_mode_path!="")
+  if (!params.subspace_mode_path.empty())
     shape_model = create_subspace_model(shape_model,
                                         params.subspace_mode_path,
                                         params.subspace_var_path);

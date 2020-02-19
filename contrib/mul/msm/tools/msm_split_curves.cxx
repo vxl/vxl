@@ -29,8 +29,7 @@ int main(int argc, char** argv)
 
   vul_arg_parse(argc,argv);
 
-  if (curves_path()=="")
-  {
+  if (curves_path().empty()) {
     print_usage();
     return 0;
   }
@@ -45,8 +44,7 @@ int main(int argc, char** argv)
   std::cout<<"Loaded "<<curves.size()<<" curves from "<<curves_path()<<std::endl;
 
   msm_points points;
-  if (pts_path()!="" && !points.read_text_file(pts_path()))
-  {
+  if (!pts_path().empty() && !points.read_text_file(pts_path())) {
     std::cerr<<"Failed to load points from "
             <<pts_path()<<std::endl;
     return 1;

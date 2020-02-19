@@ -143,8 +143,7 @@ int main(int argc, char** argv)
   vul_arg<bool> centre_shapes("-c","Centre shapes to origin.",false);
   vul_arg_parse(argc,argv);
 
-  if (list_path()=="")
-  {
+  if (list_path().empty()) {
     print_usage();
     return 0;
   }
@@ -165,8 +164,7 @@ int main(int argc, char** argv)
   load_shapes(params.points_dir,params.points_names,shapes);
 
   std::vector<std::string> points_names=params.points_names;
-  if (params.reflection_symmetry.size()>0)
-  {
+  if (!params.reflection_symmetry.empty()) {
     // Use reflections
     msm_points ref_points;
     unsigned n=shapes.size();

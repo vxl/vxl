@@ -36,8 +36,7 @@ bool mfpf_region_definer::set_from_stream(std::istream &is)
   std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
-  if (props.size()!=0)
-  {
+  if (!props.empty()) {
     std::cerr<<is_a()<<" does not expect any extra arguments.\n";
     mbl_read_props_look_for_unused_props(
       "mfpf_region_definer::set_from_stream", props, mbl_read_props_type());

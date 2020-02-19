@@ -34,8 +34,7 @@ int main( int argc, char* argv[] )
   vul_arg<int> half_width("-h","Half width of RIO",10);
   vul_arg_parse(argc, argv);
 
-  if (in_path() == "")
-  {
+  if (in_path().empty()) {
     print_usage();
     vul_arg_display_usage_and_exit();
   }

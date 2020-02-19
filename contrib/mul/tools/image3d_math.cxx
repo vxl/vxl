@@ -498,9 +498,8 @@ void close_brace__brace(opstack_t& s)
              << "At \"" << args_so_far << "\"<-- HERE\n";
     std::exit(1);
   }
-  if (s.size() < 1 || s.last_pop() > s.size() ||
-      s.last_pop()==0 || !s[s.size() - s.last_pop()].is_open_brace() )
-  {
+  if (s.empty() || s.last_pop() > s.size() || s.last_pop() == 0 ||
+      !s[s.size() - s.last_pop()].is_open_brace()) {
     std::cerr << "\nERROR: No matching opening brace found for closing brace.\n";
     if (del_stack_brace_re.find(args_so_far))
       std::cerr << "      The interaction of --del-stack and braces can be misleading. Try\n"

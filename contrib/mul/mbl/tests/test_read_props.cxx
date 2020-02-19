@@ -33,7 +33,8 @@ void test_read_props1()
     std::istringstream ss("{}");
     mbl_read_props_type props = mbl_read_props( ss );
     mbl_read_props_print(std::cout, props);
-    TEST("Case 1: props[ \"a\" ] == \"\"", props["a"]=="" && !ss.fail(), true);
+    TEST("Case 1: props[ \"a\" ] == \"\"", props["a"].empty() && !ss.fail(),
+         true);
   }
 
 #if 0 // This one won't work because the { } should be on their own lines
@@ -52,7 +53,8 @@ void test_read_props1()
     mbl_read_props_type props = mbl_read_props( ss );
     mbl_read_props_print(std::cout, props);
     TEST("Case 3: props[ \"a\" ] == \"a\"", props["a"]=="a" && !ss.fail(), true);
-    TEST("Case 3: props[ \"b\" ] == \"\"", props["b"]=="" && !ss.fail(), true);
+    TEST("Case 3: props[ \"b\" ] == \"\"", props["b"].empty() && !ss.fail(),
+         true);
   }
 
   {
@@ -240,7 +242,7 @@ void test_read_props1()
     TEST("Case 14a: present, correct", val1=="a", true);
 
     std::string val2 = props.get_optional_property("z");
-    TEST("Case 14b: missing, return empty string", val2=="", true);
+    TEST("Case 14b: missing, return empty string", val2.empty(), true);
     std::string val3 = props.get_optional_property("z","default");
     TEST("Case 14c: missing, return default string", val3=="default", true);
   }
@@ -259,7 +261,8 @@ void test_read_props_ws()
     std::istringstream ss("{}");
     mbl_read_props_type props = mbl_read_props_ws( ss );
     mbl_read_props_print(std::cout, props);
-    TEST("Case 1: props[ \"a\" ] == \"\"", props["a"]=="" && !ss.fail(), true);
+    TEST("Case 1: props[ \"a\" ] == \"\"", props["a"].empty() && !ss.fail(),
+         true);
   }
 
   {

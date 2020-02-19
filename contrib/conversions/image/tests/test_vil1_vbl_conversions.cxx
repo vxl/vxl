@@ -23,7 +23,8 @@ static void create_image(const char* name)
 static void test_vil1_vbl_conversions()
 {
   std::string filename = vul_temp_filename();
-  if (filename == "") filename = "vil1_vbl_test.pgm";
+  if (filename.empty())
+    filename = "vil1_vbl_test.pgm";
   create_image(filename.c_str());
   vil1_image im1 = vil1_load(filename.c_str());
   TEST("image file", (bool)im1, true);

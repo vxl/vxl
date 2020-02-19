@@ -149,7 +149,7 @@ void vtol_topology_object::unlink_inferior(const vtol_topology_object_sptr& infe
 //---------------------------------------------------------------------------
 void vtol_topology_object::unlink_all_inferiors() {
   // remove superior-inferior link, running through inferiors list back-to-front
-  while (inferiors_.size()>0)
+  while (!inferiors_.empty())
     unlink_inferior(inferiors_.back());
 }
 
@@ -157,7 +157,7 @@ void vtol_topology_object::unlink_all_inferiors() {
 //: Unlink `this' of the network
 //---------------------------------------------------------------------------
 void vtol_topology_object::unlink() {
-  while (superiors_.size()>0)
+  while (!superiors_.empty())
     superiors_.front()->unlink_inferior(this);
   unlink_all_inferiors();
 }
@@ -277,7 +277,7 @@ void vtol_topology_object::describe_inferiors(std::ostream &strm,
                                               int blanking) const
 {
   for (int n=0; n<blanking; ++n) strm << ' ';
-  if (inferiors()->size()==0)
+  if (inferiors()->empty())
     strm<<"**INFERIORS:  Empty\n";
   else
     strm<<"**INFERIORS:\n";
@@ -294,12 +294,10 @@ void vtol_topology_object::describe_superiors(std::ostream &strm,
                                               int blanking) const
 {
   for (int n=0; n<blanking; ++n) strm << ' ';
-  if (superiors_.size()==0)
-  {
+  if (superiors_.empty()) {
     strm<<"**SUPERIORS:  Empty\n";
     return;
-  }
-  else
+  } else
     strm<<"**SUPERIORS:\n";
 
   std::list<vtol_topology_object*>::const_iterator i;

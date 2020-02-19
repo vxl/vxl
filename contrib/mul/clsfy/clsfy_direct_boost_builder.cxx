@@ -345,7 +345,8 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
 
   for (int k=0; k<max_n_clfrs_; ++k)
   {
-    if (index.size() == 0 ) break;
+    if (index.empty())
+      break;
 
     // store best classifier that is left in list
     int ind= index[0];

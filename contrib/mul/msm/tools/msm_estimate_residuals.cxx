@@ -335,8 +335,7 @@ int main(int argc, char** argv)
 
   msm_add_all_loaders();
 
-  if (param_path()=="")
-  {
+  if (param_path().empty()) {
     print_usage();
     return 0;
   }
@@ -353,8 +352,7 @@ int main(int argc, char** argv)
   }
 
   image_list_params image_list;
-  if (test_list_path()!="")
-  {
+  if (!test_list_path().empty()) {
     try
     {
       image_list.read_from_file(test_list_path());
@@ -375,8 +373,7 @@ int main(int argc, char** argv)
   std::vector<msm_points> shapes(params.points_names.size());
   msm_load_shapes(params.points_dir,params.points_names,shapes);
 
-  if (params.reflection_symmetry.size()>0)
-  {
+  if (!params.reflection_symmetry.empty()) {
     // Use reflections
     msm_points ref_points;
     unsigned n=shapes.size();
@@ -391,8 +388,7 @@ int main(int argc, char** argv)
 
   std::vector<msm_test_stats> test_stats(params.max_modes+1);
 
-  if (test_list_path()!="")
-  {
+  if (!test_list_path().empty()) {
     std::cout<<"Testing on "<<image_list.points_names.size()<<" examples from "<<test_list_path()<<std::endl;
     msm_shape_model shape_model;
     builder.build_model(shapes,shape_model);
@@ -405,15 +401,14 @@ int main(int argc, char** argv)
     {
       test_model(shape_model,nm,test_shapes,params.ref0,params.ref1,test_stats[nm]);
     }
-  }
-  else
-  {
+  } else {
     std::cout<<"Performing "<<params.n_chunks<<"-fold cross validation on "<<shapes.size()<<" examples from training set."<<std::endl;
     leave_some_out_tests(builder,shapes,params.ref0,params.ref1,params.n_chunks,test_stats);
   }
 
   std::string out_path="residual_stats.txt";
-  if (output_path()!="") out_path=output_path();
+  if (!output_path().empty())
+    out_path = output_path();
   std::ofstream ofs(out_path.c_str());
   if (!ofs)
   {
