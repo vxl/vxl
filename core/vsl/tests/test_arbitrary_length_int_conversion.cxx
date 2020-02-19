@@ -164,8 +164,7 @@ test_explicit_int_io()
 
 
   std::stringstream ss(std::ios::in | std::ios::out | std::ios::binary);
-  const char * b = ss.str().c_str();
-  TEST("stringstream buffer is available (and empty)", b[0], '\0');
+  TEST("stringstream buffer is available (and empty)", ss.str().c_str()[0], '\0');
   {
     vsl_b_ostream bss(&ss);
     TEST("Created stringstream for writing", (!bss), false);
