@@ -59,6 +59,7 @@ static double false_northing2;
 static int ind2;
 static double e02, e12, e22, e32;
 
+static constexpr double maxlong_as_double = static_cast<double>(std::numeric_limits<long>::max());
 // Function to return the sign of an argument
 // ------------------------------------------
 static inline int
@@ -84,13 +85,13 @@ adjust_lon2(double x) // Angle in radians
       break;
     else if (long(vnl_math::abs(x / vnl_math::pi)) < 2)
       x -= (sign(x) * vnl_math::twopi);
-    else if (long(vnl_math::abs(x / (vnl_math::twopi))) < std::numeric_limits<long>::max())
+    else if (long(vnl_math::abs(x / (vnl_math::twopi))) < maxlong_as_double)
       x -= long((x / vnl_math::twopi) * vnl_math::twopi);
-    else if (((long)vnl_math::abs(x / (std::numeric_limits<long>::max() * vnl_math::twopi))) <
-             std::numeric_limits<long>::max())
-      x -= (((long)(x / (std::numeric_limits<long>::max() * vnl_math::twopi))) *
-            (vnl_math::twopi * std::numeric_limits<long>::max()));
-    else if (((long)vnl_math::abs(x / (DBLLONG * vnl_math::twopi))) < std::numeric_limits<long>::max())
+    else if (((long)vnl_math::abs(x / (maxlong_as_double * vnl_math::twopi))) <
+             maxlong_as_double)
+      x -= (((long)(x / (maxlong_as_double * vnl_math::twopi))) *
+            (vnl_math::twopi * maxlong_as_double));
+    else if (((long)vnl_math::abs(x / (DBLLONG * vnl_math::twopi))) < maxlong_as_double)
       x -= (((long)(x / (DBLLONG * vnl_math::twopi))) * (vnl_math::twopi * DBLLONG));
     else
       x -= (sign(x) * vnl_math::twopi);
@@ -108,13 +109,13 @@ adjust_lat2(double x) // Angle in radians
       break;
     else if (((long)vnl_math::abs(x / vnl_math::pi_over_2)) < 2)
       x -= (sign(x) * vnl_math::pi);
-    else if (((long)vnl_math::abs(x / vnl_math::pi)) < std::numeric_limits<long>::max())
+    else if (((long)vnl_math::abs(x / vnl_math::pi)) < maxlong_as_double)
       x -= ((long)(x / vnl_math::pi)) * vnl_math::pi;
-    else if (((long)vnl_math::abs(x / (std::numeric_limits<long>::max() * vnl_math::pi))) <
-             std::numeric_limits<long>::max())
-      x -= (((long)(x / (std::numeric_limits<long>::max() * vnl_math::pi))) *
-            (vnl_math::pi * std::numeric_limits<long>::max()));
-    else if (((long)vnl_math::abs(x / (DBLLONG * vnl_math::pi))) < std::numeric_limits<long>::max())
+    else if (((long)vnl_math::abs(x / (maxlong_as_double * vnl_math::pi))) <
+             maxlong_as_double)
+      x -= (((long)(x / (maxlong_as_double * vnl_math::pi))) *
+            (vnl_math::pi * maxlong_as_double));
+    else if (((long)vnl_math::abs(x / (DBLLONG * vnl_math::pi))) < maxlong_as_double)
       x -= (((long)(x / (DBLLONG * vnl_math::pi))) * (vnl_math::pi * DBLLONG));
     else
       x -= (sign(x) * vnl_math::pi);
