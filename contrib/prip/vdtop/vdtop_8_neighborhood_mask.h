@@ -108,14 +108,12 @@ class vdtop_8_neighborhood_mask
   }
 
   //: Returns a set composed of a single 8-connected component of this. i varies between 0 and t8p()-1.
-  vdtop_8_neighborhood_mask connected_8_component(int i)
-  {
+  vdtop_8_neighborhood_mask connected_8_component(int i) const {
     return vdtop_8_neighborhood_mask(m8cc_[mask_][i]) ;
   }
 
   //: Returns a set composed of a single 4-connected component of this. i varies between 0 and t4p()-1.
-  vdtop_8_neighborhood_mask connected_4_component(int i)
-  {
+  vdtop_8_neighborhood_mask connected_4_component(int i) const {
     return vdtop_8_neighborhood_mask(m4cc_[mask_][i]) ;
   }
 

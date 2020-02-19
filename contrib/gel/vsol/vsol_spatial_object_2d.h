@@ -135,7 +135,9 @@ class vsol_spatial_object_2d : public vsol_spatial_object
 
   //Operators
   virtual bool operator==(vsol_spatial_object_2d const& obj) const { return this==&obj; }
-  bool operator!=(vsol_spatial_object_2d const& obj) { return !(*this==obj); }
+  bool operator!=(vsol_spatial_object_2d const &obj) const {
+    return !(*this == obj);
+  }
 
   // Data Control--------------------------------------------------------------
 

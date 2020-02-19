@@ -88,12 +88,9 @@ class vdtop_freeman_code
     return *this ;
   }
 
-  vdtop_freeman_code operator-()
-  {
-    return opposite_[code_] ;
-  }
-  std::pair<vdtop_freeman_code,vdtop_freeman_code> reduction(vdtop_freeman_code arg)
-  {
+  vdtop_freeman_code operator-() const { return opposite_[code_]; }
+  std::pair<vdtop_freeman_code, vdtop_freeman_code>
+  reduction(vdtop_freeman_code arg) const {
     vxl_byte m =  reduction_[code_][arg.code_];
     return std::pair<vdtop_freeman_code,vdtop_freeman_code>(m&0x0F,(m&0xF0) >> 4) ;
   }
@@ -108,29 +105,22 @@ class vdtop_freeman_code
   }
 #endif // 0
 
-  bool parallel(vdtop_freeman_code arg)
-  {
+  bool parallel(vdtop_freeman_code arg) const {
     return normalized_[code_]==normalized_[arg.code_] ;
   }
 
-  bool orthogonal_to(vdtop_freeman_code arg)
-  {
+  bool orthogonal_to(vdtop_freeman_code arg) const {
     return are_orthogonal_[code_][arg.code_] ;
   }
-  vdtop_freeman_code orthogonal()
-  {
+  vdtop_freeman_code orthogonal() const {
     return vdtop_freeman_code(orthogonal_[code_]) ;
   }
   void normalise()
   {
     code_ = normalized_[code_] ;
   }
-  vxl_byte mask ()
-  {
-    return mask_ [code_] ;
-  }
-  bool is_between (vdtop_freeman_code arg1, vdtop_freeman_code arg2)
-  {
+  vxl_byte mask() const { return mask_[code_]; }
+  bool is_between(vdtop_freeman_code arg1, vdtop_freeman_code arg2) const {
     if (arg1.code_>arg2.code_)
     {
       return code_ > arg1.code_ || code_< arg2.code_ ;
@@ -138,10 +128,7 @@ class vdtop_freeman_code
     return code_ > arg1.code_ && code_< arg2.code_ ;
   }
 
-  vxl_byte code()
-  {
-    return code_ ;
-  }
+  vxl_byte code() const { return code_; }
 
   bool connection4() const
   {
