@@ -94,8 +94,7 @@ void tool_params::read_from_file(const std::string& path)
   std::string modes_to_reset_str
        =props.get_required_property("modes_to_reset");
   modes_to_reset.resize(0);
-  if (modes_to_reset_str!="")
-  {
+  if (!modes_to_reset_str.empty()) {
     std::stringstream ss(modes_to_reset_str);
     mbl_parse_int_list(ss, std::back_inserter(modes_to_reset),
                        unsigned());
@@ -125,8 +124,7 @@ int main(int argc, char** argv)
 
   msm_add_all_loaders();
 
-  if (param_path()=="")
-  {
+  if (param_path().empty()) {
     print_usage();
     return 0;
   }
@@ -153,8 +151,7 @@ int main(int argc, char** argv)
   msm_shape_instance sm_inst(shape_model);
   const msm_aligner& aligner = shape_model.aligner();
 
-  if (params.modes_to_reset.size() <= 0)
-  {
+  if (params.modes_to_reset.empty()) {
     std::cerr<<"No shape model modes to be reset specified.\n"
             <<"Please choose values between 0 and "
             << sm_inst.params().size()<<" for modes_to_reset.\n";

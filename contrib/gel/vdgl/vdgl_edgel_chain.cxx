@@ -53,7 +53,7 @@ bool vdgl_edgel_chain::add_edgels( const std::vector<vdgl_edgel> &es, int index)
   assert(index>=0);
   if ( (unsigned int)index> es_.size())
     return false;
-  else if (es_.size()== 0)
+  else if (es_.empty())
     es_= es;
   else
   {
@@ -80,7 +80,7 @@ for (int i=0; i< index; i++)
 std::ostream& operator<<(std::ostream& s, const vdgl_edgel_chain& p)
 {
   s << "<vdgl_edgel_chain (";
-  if ( p.es_.size() > 0)
+  if (!p.es_.empty())
     s << p.es_[0];
   for (unsigned int i=1; i< p.es_.size(); ++i)
     s << ", " << p.es_[i];

@@ -65,7 +65,8 @@ compute_weights( rgrl_scale const&  scales,
     DebugMacro_abv(1, fitr.from_feature()->location() << '\t');
     if ( fitr.empty() ) DebugMacro_abv(2, '\n' );
 
-    if ( fitr.size() == 0 )  continue;
+    if (fitr.empty())
+      continue;
 
     double sum_weights = 0; // for normalizing, later
     rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
@@ -150,15 +151,16 @@ aux_sum_weighted_residuals( rgrl_scale const&  scale,
   // the obj function value is indeed weighted sum of SQUARED residuals
   //
   for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ) {
-      if ( fitr.size() == 0 )  continue;
+    if (fitr.empty())
+      continue;
 
-      rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
-      for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
-        //  for each match with a "to" image feature
-        rgrl_feature_sptr to_feature = titr.to_feature();
-        double geometric_err = to_feature->geometric_error( *mapped_from );
+    rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
+    for (to_iter titr = fitr.begin(); titr != fitr.end(); ++titr) {
+      //  for each match with a "to" image feature
+      rgrl_feature_sptr to_feature = titr.to_feature();
+      double geometric_err = to_feature->geometric_error(*mapped_from);
 
-        weighted_sum += vnl_math::sqr(geometric_err) * titr.geometric_weight();
+      weighted_sum += vnl_math::sqr(geometric_err) * titr.geometric_weight();
       }
   }
 
@@ -183,27 +185,28 @@ aux_sum_rho_values( rgrl_scale const&  scale,
   double sum_rho = 0;
 
   for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ) {
-      if ( fitr.size() == 0 )  continue;
+    if (fitr.empty())
+      continue;
 
-      rgrl_feature_sptr mapped_from = fitr.from_feature()->transform( xform );
-      to_iter titr = fitr.begin();
-      double min_val = titr.to_feature()->geometric_error( *mapped_from );
+    rgrl_feature_sptr mapped_from = fitr.from_feature()->transform(xform);
+    to_iter titr = fitr.begin();
+    double min_val = titr.to_feature()->geometric_error(*mapped_from);
 
-      for ( ++titr; titr != fitr.end(); ++titr ) {
-        //  for each match with a "to" image feature
-        rgrl_feature_sptr to_feature = titr.to_feature();
-        double geometric_err = to_feature->geometric_error( *mapped_from );
+    for (++titr; titr != fitr.end(); ++titr) {
+      //  for each match with a "to" image feature
+      rgrl_feature_sptr to_feature = titr.to_feature();
+      double geometric_err = to_feature->geometric_error(*mapped_from);
 
-        // signature weight
-        //
-        //GY: don't know how to handle this in a correct way
-        // double signature_wgt = 1.0;
-        //if ( signature_precomputed_ ) {
-        //  signature_wgt = titr . signature_weight( );
-        //}
+      // signature weight
+      //
+      // GY: don't know how to handle this in a correct way
+      // double signature_wgt = 1.0;
+      // if ( signature_precomputed_ ) {
+      //  signature_wgt = titr . signature_weight( );
+      //}
 
-        if ( min_val > geometric_err )
-          min_val = geometric_err;
+      if (min_val > geometric_err)
+        min_val = geometric_err;
       }
       // sum of rho is weighted by signature??
       sum_rho += m_est_->rho(min_val, scale.geometric_scale());
@@ -223,7 +226,7 @@ aux_neg_log_likelihood( rgrl_scale const&  scale,
   int n = 0;
 
   for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr )
-    if ( fitr.size() > 0 ) {
+    if (!fitr.empty()) {
       // multi-match counts as one constraint
       n ++;
     }
@@ -245,7 +248,7 @@ aux_avg_neg_log_likelihood( rgrl_scale const&  scale,
   int n = 0;
 
   for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr )
-    if ( fitr.size() > 0 ) {
+    if (!fitr.empty()) {
       // multi-match counts as one constraint
       n ++;
     }

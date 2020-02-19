@@ -116,8 +116,7 @@ int main(int argc, char** argv)
 
   vul_arg_parse(argc,argv);
 
-  if (image_path()=="")
-  {
+  if (image_path().empty()) {
     print_usage();
     return 0;
   }

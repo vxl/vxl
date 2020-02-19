@@ -24,7 +24,7 @@ int main(int argc, char **argv)
   std::cerr << "loading topology\n";
   std::list<osl_edge*> edges;
   std::list<osl_vertex*> vertices;
-  if (in() == "")
+  if (in().empty())
     osl_load_topology(std::cin, edges, vertices);
   else
     osl_load_topology(in().c_str(), edges, vertices);
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 
   //
   std::cerr << "saving topology\n";
-  if (out() == "")
+  if (out().empty())
     osl_save_topology(std::cout, broken);
   else
     osl_save_topology(out().c_str(), broken);

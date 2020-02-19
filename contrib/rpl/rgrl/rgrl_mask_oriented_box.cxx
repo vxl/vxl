@@ -219,7 +219,7 @@ operator!=( const rgrl_mask_oriented_box& other ) const
 std::ostream& operator<<(std::ostream& os, const rgrl_mask_oriented_box& box)
 {
   os<< box.oriented_x0().size() << "  ";
-  if ( box.oriented_x0().size() ) {
+  if (!box.oriented_x0().empty()) {
     os << box.oriented_x0()<<"  "<<box.oriented_x1() << '\n'
        << box.axes() << std::endl;
   }

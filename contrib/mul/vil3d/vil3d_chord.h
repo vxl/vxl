@@ -62,7 +62,8 @@ public:
 //  Assumes chords do not overlap
 inline unsigned vil3d_volume(const std::vector<vil3d_chord>& chords)
 {
-  if (chords.size()==0) return 0;
+  if (chords.empty())
+    return 0;
   unsigned n=0;
   std::vector<vil3d_chord>::const_iterator c = chords.begin();
   for (;c!=chords.end();++c) n+=c->length();

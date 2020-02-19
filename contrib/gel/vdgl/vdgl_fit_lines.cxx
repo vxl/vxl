@@ -21,9 +21,9 @@
 //
 bool vdgl_fit_lines::fit_lines()
 {
-  if (line_segs_.size() > 0) // fit_lines() has already been called
+  if (!line_segs_.empty()) // fit_lines() has already been called
     return true;
-  if (!curves_.size())
+  if (curves_.empty())
     return false;
   fitter_.set_min_fit_length(min_fit_length_);
   fitter_.set_rms_error_tol(rms_distance_);

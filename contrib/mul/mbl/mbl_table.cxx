@@ -69,7 +69,8 @@ unsigned mbl_table::num_rows() const
 {
     int nrows=0;
     // If there are at least 1 column, assume all columns are the same as the first
-    if (columns_.size()>0) nrows=columns_[0].size();
+    if (!columns_.empty())
+      nrows = columns_[0].size();
     return nrows;
 }
 

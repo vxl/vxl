@@ -159,13 +159,10 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   {
     int l = label[i];
     if (l<0) continue;
-    if (mean_[l].size()==0)
-    {
+    if (mean_[l].empty()) {
       mean_[l] = v[i];
       n_samples_[l] = 1;
-    }
-    else
-    {
+    } else {
       mean_[l] += v[i];
       n_samples_[l] += 1;
     }

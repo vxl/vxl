@@ -50,11 +50,10 @@ int main(int argc,char **argv)
   H.compute(I);
 
   // save
-  if (outfile() == "") {
+  if (outfile().empty()) {
     std::cerr << "writing image to stdout\n";
     H.save_corners(std::cout);
-  }
-  else
+  } else
     H.save_corners(outfile().c_str());
 
   // cornerness map

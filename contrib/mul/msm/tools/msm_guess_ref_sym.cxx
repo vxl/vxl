@@ -173,8 +173,7 @@ int main(int argc, char** argv)
 
   msm_add_all_loaders();
 
-  if (image_list_path()=="" || ref_pt0()<0 || ref_pt1()<0)
-  {
+  if (image_list_path().empty() || ref_pt0() < 0 || ref_pt1() < 0) {
     print_usage();
     return 0;
   }

@@ -188,8 +188,7 @@ int main(int argc, char** argv)
 
   msm_add_all_loaders();
 
-  if (param_path()=="")
-  {
+  if (param_path().empty()) {
     print_usage();
     return 0;
   }
@@ -205,8 +204,10 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  if (out_path()!="") params.output_path = out_path();
-  if (shape_model_path()!="") params.shape_model_path = shape_model_path();
+  if (!out_path().empty())
+    params.output_path = out_path();
+  if (!shape_model_path().empty())
+    params.shape_model_path = shape_model_path();
 
   msm_shape_model shape_model;
 
@@ -229,8 +230,7 @@ int main(int argc, char** argv)
   load_shapes(params.points_dir,params.points_names,shapes);
 
   std::vector<std::string> points_names=params.points_names;
-  if (params.reflection_symmetry.size()>0)
-  {
+  if (!params.reflection_symmetry.empty()) {
     // Use reflections
     msm_points ref_points;
     unsigned n=shapes.size();
@@ -247,7 +247,6 @@ int main(int argc, char** argv)
     }
   }
 
-
   // Open the text file for output
   std::ofstream ofs(params.output_path.c_str());
   if (!ofs)
@@ -257,7 +256,7 @@ int main(int argc, char** argv)
   }
 
   bool write_bestfitpts = true;
-  if (params.out_points_dir == "")
+  if (params.out_points_dir.empty())
     write_bestfitpts = false;
   else
     std::cout << "Write best fit points to " << params.out_points_dir << std::endl;
@@ -266,7 +265,7 @@ int main(int argc, char** argv)
   for (double & i : sd) i=std::sqrt(i);
   mbl_stats_1d mahal_stats;
 
-  bool make_histos=(histo_name()!="");
+  bool make_histos = (!histo_name().empty());
   double n_sds=histo_range();
   std::vector<mbl_histogram> histo;
   if (make_histos)

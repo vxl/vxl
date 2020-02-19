@@ -96,8 +96,7 @@ int main(int argc, char** argv)
   vul_arg<double> min_sep("-mins","Minimum separation of points required",30.0);
   vul_arg_parse(argc,argv);
 
-  if (in_path()=="" || out_path()=="")
-  {
+  if (in_path().empty() || out_path().empty()) {
     print_usage();
     return 0;
   }

@@ -71,8 +71,7 @@ int main( int argc, char* argv[] )
 
   vul_arg_parse(argc, argv);
 
-  if (image1_path()=="" || image2_path()=="")
-  {
+  if (image1_path().empty() || image2_path().empty()) {
     print_usage();
     return 0;
   }

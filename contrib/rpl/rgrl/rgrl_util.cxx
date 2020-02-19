@@ -476,7 +476,8 @@ rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& cur
 {
   typedef rgrl_match_set::const_from_iterator FIter;
 
-  if ( current_match_sets.size() == 0 ) return false; //geometric scaling not significant
+  if (current_match_sets.empty())
+    return false; // geometric scaling not significant
 
   // The dimensionality of the space we are working in. Find it by
   // looking at the dimension of one of the data points.

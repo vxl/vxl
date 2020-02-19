@@ -296,8 +296,7 @@ void mcal_general_ca::build_about_mean(mbl_data_wrapper<vnl_vector<double> >& da
 
   data.reset();
 
-  if (data.current().size()==0)
-  {
+  if (data.current().empty()) {
     std::cerr<<"mcal_general_ca::build_about_mean()\n"
             <<"Warning: Samples claim to have zero dimensions.\n"
             <<"Constructing empty model.\n";

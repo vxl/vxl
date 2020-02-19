@@ -106,7 +106,7 @@ rgrl_est_matches_residual_number(rgrl_set_of<rgrl_match_set_sptr> const& matches
 
       rgrl_match_set const& one_set = *(matches[ms]);
       for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi )
-        if ( fi.size() ) {
+        if (!fi.empty()) {
           tot_num += fi.size() * fi.begin().to_feature()->dim();  // each point provides two constraints
         }
     }

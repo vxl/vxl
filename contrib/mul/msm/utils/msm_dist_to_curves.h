@@ -68,7 +68,8 @@ inline double msm_dist_to_curves(const msm_points& points,
                          const msm_curves& curves,
                          const vgl_point_2d<double>& pt)
 {
-  if (curves.size()==0) return 0.0;
+  if (curves.empty())
+    return 0.0;
   double min_d = msm_dist_to_curve(points,curves[0],pt);
   for (unsigned c=1;c<curves.size();++c)
   {
@@ -99,7 +100,8 @@ inline double msm_mean_dist_to_matching_curves(const msm_points& ref_points,
                                const msm_curves& curves,
                                const msm_points& points)
 {
-  if (curves.size()==0) return 0.0;
+  if (curves.empty())
+    return 0.0;
   if (points.size()==0) return 0.0;
   assert(ref_points.size()==points.size());
   assert(curves.max_index()<ref_points.size());

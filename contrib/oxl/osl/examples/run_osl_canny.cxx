@@ -25,7 +25,7 @@ int main(int argc, char **argv)
   vul_arg_parse(argc, argv);
 
   auto* in_file = new std::string(in());
-  if (*in_file == "") {
+  if (in_file->empty()) {
     std::cout << "input image file: ";
     char tmp[1024];
     std::cin >> tmp;
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
   std::list<osl_edge*> edges;
   osl_easy_canny(canny(), image, &edges);
 
-  if (out() == "")
+  if (out().empty())
     osl_save_topology(std::cout, edges, std::list<osl_Vertex*>());
   else
     osl_save_topology(out().c_str(), edges, std::list<osl_Vertex*>());

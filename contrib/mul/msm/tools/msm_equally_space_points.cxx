@@ -137,8 +137,7 @@ int main(int argc, char** argv)
   vul_arg<bool> verbose("-v","Verbose output",false);
   vul_arg_parse(argc,argv);
 
-  if (param_path()=="")
-  {
+  if (param_path().empty()) {
     print_usage();
     return 0;
   }
@@ -154,8 +153,10 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  if (output_dir()!="") params.out_points_dir = output_dir();
-  if (curves_path()!="") params.curves.parse_or_load(curves_path());
+  if (!output_dir().empty())
+    params.out_points_dir = output_dir();
+  if (!curves_path().empty())
+    params.curves.parse_or_load(curves_path());
 
   if (params.points_dir==params.out_points_dir)
   {

@@ -44,8 +44,7 @@ void msm_split_curve(const msm_curve& curve,
   for (unsigned i=0;i<n;++i)
     if (end_pt[curve[i]]) end_index.push_back(i);
 
-  if (end_index.size()==0)
-  {
+  if (end_index.empty()) {
     // No split points, so curve unchanged
     new_curves.push_back(curve);
     return;

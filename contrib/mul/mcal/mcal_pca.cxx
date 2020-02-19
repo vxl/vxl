@@ -45,7 +45,8 @@ mcal_pca::~mcal_pca() = default;
 //: Return the number of modes to retain
 unsigned mcal_pca::choose_n_modes(const vnl_vector<double>& evals) const
 {
-  if (evals.size()==0) return 0;
+  if (evals.empty())
+    return 0;
   const double* v_data = evals.begin();
   unsigned n=evals.size();
 
@@ -423,8 +424,7 @@ void mcal_pca::build_about_mean(mbl_data_wrapper<vnl_vector<double> >& data,
 
   data.reset();
 
-  if (data.current().size()==0)
-  {
+  if (data.current().empty()) {
     std::cerr<<"mcal_pca::build_about_mean()\n"
             <<"Warning: Samples claim to have zero dimensions.\n"
             <<"Constructing empty model.\n";

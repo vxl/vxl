@@ -25,8 +25,7 @@ bool mbl_linear_interpolator::set(const std::vector<double> &x, const std::vecto
   bool ret=false;
   clear();
 
-  if (x.size()==y.size() && x.size()>0)
-  {
+  if (x.size() == y.size() && !x.empty()) {
     x_=x;
     y_=y;
     sort();
@@ -56,8 +55,7 @@ double mbl_linear_interpolator::y(double x) const
 {
   double yval=std::numeric_limits<double>::quiet_NaN();
 
-  if (x_.size()>0)
-  {
+  if (!x_.empty()) {
     if (x<=x_.front())
       yval=y_.front();
     else if (x>=x_.back())

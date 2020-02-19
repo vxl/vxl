@@ -101,7 +101,11 @@ void mfpf_pose_predictor::set(const std::vector<mbl_chord>& roi,
   ref_y_ = ref_y;
 
   // Check bounding box
-  if (roi.size()==0) { roi_ni_=0; roi_nj_=0; return; }
+  if (roi.empty()) {
+    roi_ni_ = 0;
+    roi_nj_ = 0;
+    return;
+  }
   int ilo=roi[0].start_x(), ihi=roi[0].end_x();
   int jlo=roi[0].y(), jhi=roi[0].y();
 

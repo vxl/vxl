@@ -167,8 +167,7 @@ int main(int argc, char** argv)
 
   msm_add_all_loaders();
 
-  if (param_path()=="")
-  {
+  if (param_path().empty()) {
     print_usage();
     return 0;
   }
@@ -185,8 +184,7 @@ int main(int argc, char** argv)
   }
 
   msm_curves curves;
-  if (params.curves_path!="")
-  {
+  if (!params.curves_path.empty()) {
     if (!curves.read_text_file(params.curves_path))
       std::cerr<<"Failed to read in curves from " <<params.curves_path<<'\n';
   }

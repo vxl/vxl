@@ -24,8 +24,7 @@ int main( int argc, char* argv[] )
   vul_arg<float> threshold("-t","Threshold on DoG value",2.0f);
   vul_arg_parse(argc, argv);
 
-  if (in_path() == "")
-  {
+  if (in_path().empty()) {
     print_usage();
     vul_arg_display_usage_and_exit();
   }

@@ -106,7 +106,8 @@ invert_matches( rgrl_match_set const&    current_set,
   flip_node tmp;
   for ( from_iter fitr = current_set.from_begin(); fitr != current_set.from_end(); ++fitr )
   {
-    if ( fitr.size() == 0 )  continue;
+    if (fitr.empty())
+      continue;
 
     for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr )
     {

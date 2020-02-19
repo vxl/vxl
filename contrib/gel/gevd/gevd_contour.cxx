@@ -1014,8 +1014,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
 #ifdef DEBUG
   vul_timer t;
 #endif
-  if (!edges.size())
-  {
+  if (edges.empty()) {
     std::cerr << "gevd_contour::FindChains must precede gevd_contour::FindJunctions.\n";
     return 0;
   }

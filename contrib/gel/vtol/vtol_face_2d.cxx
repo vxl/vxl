@@ -180,7 +180,7 @@ vtol_face_2d::vtol_face_2d(one_chain_list const& onechs)
   //     list is the outside boundary...the
   //     remaining one_chains are holes.
 
-  if (onechs.size()>0)
+  if (!onechs.empty())
     link_inferior(onechs[0]);
 
   vtol_one_chain_sptr onech=get_boundary_cycle();

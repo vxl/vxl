@@ -201,7 +201,7 @@ void tool_params::read_from_file(const std::string& path)
   parts_for_modes_path=props.get_optional_property("parts_for_modes_path","");
   std::string mode_part_str=props.get_optional_property("mode_part","");
   mode_part.resize(0);
-  if (mode_part_str!="")
+  if (!mode_part_str.empty())
     mbl_parse_string_list(mode_part_str,mode_part);
 
   std::string ref_sym_str=props.get_optional_property("reflection_symmetry","-");
@@ -258,8 +258,7 @@ int main(int argc, char** argv)
 
   msm_add_all_loaders();
 
-  if (param_path()=="")
-  {
+  if (param_path().empty()) {
     print_usage();
     return 0;
   }
@@ -275,13 +274,12 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  if (out_path()!="")
+  if (!out_path().empty())
     params.shape_model_path=out_path();
 
   // Load in curves if required
   msm_curves parts_for_modes;
-  if (params.parts_for_modes_path!="")
-  {
+  if (!params.parts_for_modes_path.empty()) {
     if (!parts_for_modes.read_text_file(params.parts_for_modes_path))
     {
       std::cerr<<"Failed to read in parts from "
@@ -295,8 +293,7 @@ int main(int argc, char** argv)
   std::vector<msm_points> shapes(n);
   msm_load_shapes(params.points_dir,params.points_names,shapes);
 
-  if (params.reflection_symmetry.size()>0)
-  {
+  if (!params.reflection_symmetry.empty()) {
     // Use reflections
     msm_points ref_points;
     for (unsigned i=0;i<n;++i)
@@ -318,17 +315,13 @@ int main(int argc, char** argv)
 
   std::cout<<"Building shape model from "<<shapes.size()<<" examples."<<std::endl;
 
-  if (params.mode_part.size()==0)
-  {
+  if (params.mode_part.empty()) {
     builder.build_model(shapes,shape_model);
-  }
-  else
-  {
+  } else {
     std::vector<std::vector<unsigned> > pts_used;
     get_pts_used_for_modes(parts_for_modes,params.mode_part,pts_used);
     builder.build_model(shapes,pts_used,shape_model);
   }
-
 
   std::cout<<"Built model: "<<shape_model<<std::endl;
 
@@ -343,8 +336,7 @@ int main(int argc, char** argv)
     return 3;
   }
 
-  if (mode_var_path()!="")
-  {
+  if (!mode_var_path().empty()) {
     std::ofstream ofs(mode_var_path().c_str());
     if (!ofs)
     {

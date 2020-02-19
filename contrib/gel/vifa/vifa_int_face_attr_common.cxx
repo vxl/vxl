@@ -37,7 +37,7 @@ vifa_int_face_attr_common::~vifa_int_face_attr_common() = default;
 edge_2d_list& vifa_int_face_attr_common::
 GetFittedEdges()
 {
-  if (!fitted_edges_.size())
+  if (fitted_edges_.empty())
     this->fit_lines();
 
   return fitted_edges_;
@@ -49,7 +49,7 @@ get_collinear_lines()
   if (!cpp_)
     cpp_ = new vifa_coll_lines_params;
 
-  if (!collinear_lines_.size())
+  if (collinear_lines_.empty())
     this->find_collinear_lines();
 
   return collinear_lines_;
@@ -192,11 +192,10 @@ fit_lines()
              << " edges available\n";
 #endif
 
-  if (!edges_in_vect.size())
-  {
-    std::cerr << "vifa_int_face_attr_common::fit_lines: face_ is not set\n";
-    return;
-  }
+    if (edges_in_vect.empty()) {
+      std::cerr << "vifa_int_face_attr_common::fit_lines: face_ is not set\n";
+      return;
+    }
 
   std::vector<vdgl_digital_curve_sptr>  curves_in;
   for (auto & ei : edges_in_vect)
@@ -372,8 +371,7 @@ compute_parallel_sal(const vifa_group_pgram_params_sptr&  gpp)
            << " edges found\n";
 #endif
 
-  if (fedges.size())
-  {
+  if (!fedges.empty()) {
 #ifdef DEBUG
     std::cout << (*fitter_params_);
 #endif

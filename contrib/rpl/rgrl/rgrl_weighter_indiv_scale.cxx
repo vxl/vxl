@@ -61,7 +61,8 @@ compute_weights( rgrl_scale const&  scales,
     DebugMacro_abv(1, fitr.from_feature()->location() << '\t');
     if ( fitr.empty() ) DebugMacro_abv(2, '\n' );
 
-    if ( fitr.size() == 0 )  continue;
+    if (fitr.empty())
+      continue;
 
     double sum_weights = 0; // for normalizing, later
     rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
@@ -145,7 +146,8 @@ aux_sum_rho_values( rgrl_scale const&  scale,
 
   for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr )
   {
-    if ( fitr.size() == 0 )  continue;
+    if (fitr.empty())
+      continue;
 
     rgrl_feature_sptr mapped_from = fitr.from_feature()->transform( xform );
     to_iter titr = fitr.begin();

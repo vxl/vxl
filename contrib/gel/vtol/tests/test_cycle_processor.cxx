@@ -130,7 +130,7 @@ static void test_cycle_processor()
     vtol_cycle_processor cp(edges, true);
     one_chain_list nested_chains;
     cp.nested_one_cycles(nested_chains, 0.5);
-    if (nested_chains.size())
+    if (!nested_chains.empty())
       for (auto & nested_chain : nested_chains)
       {
         edge_list cedges; nested_chain->edges(cedges);
@@ -162,7 +162,7 @@ static void test_cycle_processor()
     nested_chains.clear();
     vtol_cycle_processor cp2(edges2, true);
     cp2.nested_one_cycles(nested_chains, 0.5);
-    if (nested_chains.size())
+    if (!nested_chains.empty())
       for (auto & nested_chain : nested_chains)
       {
         edge_list cedges; nested_chain->edges(cedges);
@@ -266,8 +266,7 @@ static void test_cycle_processor()
 #endif
     TEST("vtol_cycle_processor::merge_one_cycles()", merged_cycles.size(), 1);
     std::cout<< "number of one_cycles = " << merged_cycles.size() << std::endl;
-    if (merged_cycles.size() > 0)
-    {
+    if (!merged_cycles.empty()) {
       edge_list outer_edges; merged_cycles[0]->edges(outer_edges);
       std::cout<< "edges in merged cycle\n";
       for (auto & outer_edge : outer_edges)

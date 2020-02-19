@@ -89,14 +89,13 @@ static void pop_stacks(vertex_list& verts,
                        std::vector<vtol_edge_2d_sptr>& cycle_edges)
 {
   bool found = false;
-  while (verts.size()&&edges.size()&&!found)
-  {
+  while (!verts.empty() && !edges.empty() && !found) {
     found = verts.back()==v;
     cycle_edges.push_back(edges.back());
     verts.pop_back();
     edges.pop_back();
   }
-  if (!edges.size()&&verts.size())
+  if (edges.empty() && !verts.empty())
     verts.clear();
 }
 
@@ -477,7 +476,7 @@ void vtol_cycle_processor::assign_ends(vtol_edge_2d_sptr edg, vtol_vertex_sptr& 
 //    empty, then the last assignment to l_ is used.
 static void assign_stack_edge(std::vector<vtol_edge_2d_sptr>& e_stack, vtol_edge_2d_sptr& next_edge)
 {
-  if (!e_stack.size())
+  if (e_stack.empty())
     return;
   next_edge = e_stack.back();
 }
@@ -506,7 +505,7 @@ void vtol_cycle_processor::init(std::vector<vtol_edge_2d_sptr>& in_edges)
 //   completely explored and removed from edges_.
 void vtol_cycle_processor::set_bridge_vars()
 {
-  if (!edges_.size())
+  if (edges_.empty())
     return;
   v_stack_.clear();
   e_stack_.clear();
@@ -565,8 +564,7 @@ static bool classify_two_edge_path(vtol_edge_2d_sptr& e0, vtol_edge_2d_sptr& e1)
 //
 vtol_edge_2d_sptr vtol_cycle_processor::search_for_next_edge(std::vector<vtol_edge_2d_sptr>& edges_at_last)
 {
-  while (edges_at_last.size())
-  {
+  while (!edges_at_last.empty()) {
     vtol_edge_2d_sptr temp = ccw_edge(l_, last_, edges_at_last);
     if (debug2_)
     {
@@ -618,7 +616,7 @@ bool vtol_cycle_processor::classify_path(std::vector<vtol_edge_2d_sptr>& path_ed
 {
   if (debug1_)
         std::cout << "======= In classify_path ========\n";
-  if (!path_edges.size())
+  if (path_edges.empty())
     return false;
   edge_list c_edges;
   vtol_edge_2d_sptr e0 = *path_edges.begin();
@@ -717,7 +715,8 @@ void vtol_cycle_processor::print_edge(vtol_edge_2d_sptr& e)
 void vtol_cycle_processor::compute_cycles()
 {
   int limit = 10*edges_.size();//just to be guard against any infinite loop
-  while (edges_.size()&&limit--)//should be removed when sure none can happen
+  while (!edges_.empty() &&
+         limit--) // should be removed when sure none can happen
     if (found_next_edge_&&!cycle_)
     {
       bool force = false;
@@ -814,8 +813,7 @@ void vtol_cycle_processor::compute_cycles()
 //    nested_one_cycles_.
 void vtol_cycle_processor::sort_one_cycles()
 {
-  if (!chains_.size())
-  {
+  if (chains_.empty()) {
     std::cout << "In vtol_cycle_processor::sort_one_cycles(..) no cycles\n";
     return;
   }
@@ -936,7 +934,7 @@ bool vtol_cycle_processor::intersect_edges(std::vector<vtol_edge_sptr>& s1,
 {
   s1_and_s2.clear();
   //If either set is empty then the result is empty
-  if (!(s1.size()&&s2.size()))
+  if (!(!s1.empty() && !s2.empty()))
     return false;
   //Get Flags
   unsigned int flag1 = VSOL_FLAG5, flag2 = VSOL_FLAG6;
@@ -963,7 +961,7 @@ bool vtol_cycle_processor::intersect_edges(std::vector<vtol_edge_sptr>& s1,
   clear_flags(s2, flag1);
   clear_flags(s1, flag2);
   clear_flags(s2, flag2);
-  return s1_and_s2.size()>0;
+  return !s1_and_s2.empty();
 }
 
 //---------------------------------------------------------------------------
@@ -981,7 +979,7 @@ bool vtol_cycle_processor::difference_edges(std::vector<vtol_edge_sptr>& s1,
 {
   s1_minus_s2.clear();
   //If either set is empty then the result is empty
-  if (!(s1.size()&&s2.size()))
+  if (!(!s1.empty() && !s2.empty()))
     return false;
   //Get Flags
   unsigned int flag1 = VSOL_FLAG5, flag2 = VSOL_FLAG6;
@@ -1007,7 +1005,7 @@ bool vtol_cycle_processor::difference_edges(std::vector<vtol_edge_sptr>& s1,
   clear_flags(s2, flag1);
   clear_flags(s1, flag2);
   clear_flags(s2, flag2);
-  return s1_minus_s2.size()>0;
+  return !s1_minus_s2.empty();
 }
 
 //--------------------------------------------------------------------
@@ -1106,7 +1104,7 @@ bool vtol_cycle_processor::connect_paths(std::vector<vtol_edge_2d_sptr>& edges,
                                          std::vector<vtol_vertex_sptr>& bad_verts)
 {
   bool paths_connected = true;
-  if (!bad_verts.size())
+  if (bad_verts.empty())
     return paths_connected;
 
 //   if (edges.size()==1)

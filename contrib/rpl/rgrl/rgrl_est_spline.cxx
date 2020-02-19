@@ -257,7 +257,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
         vnl_vector<double> const& from_pt = fi.from_feature()->location();
         // If the point is not inside the region of interest, skip it.
-        if ( roi_.inside( from_pt ) && fi.size() != 0 ) {
+        if (roi_.inside(from_pt) && !fi.empty()) {
           // convert it into spline's coordinates
           point_in_knots( from_pt, from_pts_in_knots[i] );
 

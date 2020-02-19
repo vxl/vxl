@@ -307,7 +307,7 @@ bool vil3d_meta_image_header::check_next_header_line(const std::string &nxt_line
 {
   // Look for each element we're interested in
   std::string val = get_header_value(nxt_line);
-  if (val=="")
+  if (val.empty())
     return false;
 
   if (nxt_line.find("ObjectType")!= std::string::npos)

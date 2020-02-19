@@ -171,8 +171,7 @@ void EigenFace::cleanup()
 
 bool EigenFace::calculate_eigenfaces()
 {
-  if (training_images.size()<=0)
-  {
+  if (training_images.empty()) {
     std::cerr << "No training images\n";
     return false;
   }
@@ -277,7 +276,8 @@ vnl_vector<double> *EigenFace::convert_image_to_vector(Image *im)
 
 bool EigenFace::check_eigenvectors()
 {
-  if (eigenvectors.size()<=0) return false;
+  if (eigenvectors.empty())
+    return false;
 
   std::cout << "Eigenvalues are:" ;
   std::vector<double>::iterator val_iter;
@@ -367,8 +367,7 @@ void EigenFace::encode_training_images()
 
 vnl_vector<double>* EigenFace::encode(Image *im)
 {
-  if (eigenvectors.size()<=0)
-  {
+  if (eigenvectors.empty()) {
     return nullptr;
   }
   vnl_vector<double> *im_vec = convert_image_to_vector(im);
@@ -382,8 +381,7 @@ vnl_vector<double>* EigenFace::encode(Image *im)
 
 vnl_vector<double>* EigenFace::encode(vnl_vector<double> *t_vec)
 {
-  if (eigenvectors.size()<=0)
-  {
+  if (eigenvectors.empty()) {
     return nullptr;
   }
   auto *im_vec = new vnl_vector<double>(*t_vec);
@@ -437,7 +435,8 @@ char *EigenFace::classify(Image *im, double threshold, int k, int dim)
   std::priority_queue<LabelDist> pq;
 
   if (num_vectors()==0) return nullptr;
-  if (eigenvectors.size()==0) return nullptr;
+  if (eigenvectors.empty())
+    return nullptr;
 
   vnl_vector<double> *all_rep = encode(im);
   vnl_vector<double> rep(all_rep->extract(dim, all_rep->size()-dim));

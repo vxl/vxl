@@ -386,8 +386,7 @@ write( std::ostream& os ) const
        << covar_ << std::endl;
   }
 
-  if ( scaling_factors_.size() )
-  {
+  if (!scaling_factors_.empty()) {
     // write scaling factors
     os << "SCALING_FACTORS\n"
        << scaling_factors_.size() << '\n'

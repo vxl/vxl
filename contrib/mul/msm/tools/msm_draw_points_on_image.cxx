@@ -63,14 +63,13 @@ int main( int argc, char* argv[] )
 
   vul_arg_parse(argc,argv);
 
-  if (pts_path()=="")
-  {
+  if (pts_path().empty()) {
     print_usage();
     return 0;
   }
 
   msm_curves curves;
-  if (curves_path()!="" && !curves.read_text_file(curves_path()))
+  if (!curves_path().empty() && !curves.read_text_file(curves_path()))
     std::cerr<<"Failed to read in curves from "<<curves_path()<<'\n';
 
   msm_points points;
@@ -83,8 +82,7 @@ int main( int argc, char* argv[] )
   //================ Attempt to load image ========
   vimt_image_2d_of<vxl_byte> image;
 
-  if (image_path()!="")
-  {
+  if (!image_path().empty()) {
 
     vimt_load_to_byte(image_path().c_str(), image, 1000.0f);
     if (image.image().size()==0)
@@ -150,8 +148,7 @@ int main( int argc, char* argv[] )
     msm_draw_points_to_eps(writer,points,pt_radius(),false);
   }
 
-  if (curves.size()>0 && line_colour()!="none")
-  {
+  if (!curves.empty() && line_colour() != "none") {
     // Draw all the lines
     writer.set_colour(line_colour());
     msm_draw_shape_to_eps(writer,points,curves);

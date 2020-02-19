@@ -38,8 +38,7 @@ void msm_ref_shape_model::set(const msm_points& mean,
 {
   assert(mean.vector().size()%2==0);
   assert(mode_var.size()==modes.columns());
-  if (mode_var.size()!=0)
-  {
+  if (!mode_var.empty()) {
     assert(mean.size()*2==modes.rows());
   }
 

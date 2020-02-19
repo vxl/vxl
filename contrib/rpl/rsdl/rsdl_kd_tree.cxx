@@ -345,7 +345,7 @@ rsdl_kd_tree::n_nearest_with_stack( const rsdl_point& query_point,
 #ifdef DEBUG
       std::cout << "skipping node" << std::endl;
 #endif
-      if ( stack_vec.size() == 0 )
+      if (stack_vec.empty())
         return;  // DONE
       else {
         sq_dist = stack_vec[ stack_vec.size()-1 ].dist_;
@@ -365,7 +365,7 @@ rsdl_kd_tree::n_nearest_with_stack( const rsdl_point& query_point,
       update_closest( query_point, n, current, closest_indices, sq_distances, num_found );
 
       //  If stack is empty then we're done.
-      if ( stack_vec.size() == 0 )
+      if (stack_vec.empty())
         return;  // done
 
       //  If we're on the first path down the tree and if we can decide there
@@ -528,7 +528,7 @@ rsdl_kd_tree::n_nearest_with_heap( const rsdl_point& query_point,
     else std::cout << "skipping node" << std::endl;
 #endif
 
-    if ( heap_vec.size() == 0 )
+    if (heap_vec.empty())
       return;
     else {
       std::pop_heap( heap_vec.begin(), heap_vec.end() );

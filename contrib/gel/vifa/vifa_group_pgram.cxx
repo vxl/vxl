@@ -115,8 +115,7 @@ GetLineCover(int  angle_bin)
   imp_line_list  lg;
   this->CollectAdjacentLines(angle_bin, lg);
 
-  if (!lg.size())
-  {
+  if (lg.empty()) {
     return nullptr;
   }
 
@@ -234,8 +233,7 @@ GetAdjacentPerimeter(int  bin)
 //: Compute the total length of parallel lines normalized by the total edge perimeter
 double vifa_group_pgram::norm_parallel_line_length() {
   this->ComputeDominantDirs();
-  if (dominant_dirs_.size() < 1)
-  {
+  if (dominant_dirs_.empty()) {
     // No basis
     return 0.0;
   }

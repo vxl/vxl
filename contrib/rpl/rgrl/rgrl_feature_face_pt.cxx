@@ -33,7 +33,7 @@ error_projector() const
   if (scale_ == 0) {
     WarningMacro( "The scale is zero." );
   }
-  if ( !err_proj_.size() ) {
+  if (err_proj_.empty()) {
     err_proj_ = outer_product( normal_, normal_ ) ;
     err_proj_ /= vnl_math::sqr( scale_ );
   }
@@ -48,7 +48,7 @@ error_projector_sqrt() const
   if (scale_ == 0) {
     WarningMacro( "The scale is zero." );
   }
-  if ( !err_proj_sqrt_.size() ) {
+  if (err_proj_sqrt_.empty()) {
     err_proj_sqrt_ = outer_product( normal_, normal_ ) ;
     err_proj_sqrt_ /= scale_;
   }

@@ -354,8 +354,7 @@ void osl_fit_lines::MeanIncrementalFit(std::list<osl_edgel_chain*> *curves_, osl
   // have not been described by a straight line, that is so long as
   // a line has been fitted
   unsigned int length = dc->size() - old_finish_;
-  if ( curves_->size() && length )
-  {
+  if (!curves_->empty() && length) {
     auto *ndc = new osl_edgel_chain(length);
     for (i=0,j=old_finish_;j<dc->size();i++,j++)
     {
@@ -503,8 +502,7 @@ void osl_fit_lines::SquareIncrementalFit(std::list<osl_edgel_chain*> *curves_, o
   // have not been described by a straight line, that is so long as
   // a line has been fitted.
   unsigned int length = dc->size() - old_finish_;
-  if ( curves_->size() && length )
-  {
+  if (!curves_->empty() && length) {
     auto *ndc = new osl_edgel_chain(length);
     for (i=0,j=old_finish_;j<dc->size();i++,j++)
     {

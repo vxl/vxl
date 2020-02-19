@@ -106,7 +106,8 @@ static void test_bins_2d()
         all_close_indices.push_back( i );
     }
 
-    TEST("is_any_point_within_radius", bin_answer, (all_close_indices.size() > 0));
+    TEST("is_any_point_within_radius", bin_answer,
+         (!all_close_indices.empty()));
 
     std::vector< int > bin_close_indices;
     bins.points_within_radius( q, radius, bin_close_indices );
@@ -131,7 +132,8 @@ static void test_bins_2d()
     std::vector<int> answer;
     bins.n_nearest(d, 1, answer);
 
-    TEST("Second bin test bin size 5,5" , answer.size() >= 1 && (answer[0] == 1 ||  answer[0] == 2), true);
+    TEST("Second bin test bin size 5,5",
+         !answer.empty() && (answer[0] == 1 || answer[0] == 2), true);
   }
 
   {//same as new test with bin size 2,2
@@ -144,7 +146,8 @@ static void test_bins_2d()
     std::vector<int> answer;
     bins.n_nearest(d, 1, answer);
 
-    TEST("Second bin test bin size 2,2" , answer.size() >= 1 && (answer[0] == 1 ||  answer[0] == 2), true);
+    TEST("Second bin test bin size 2,2",
+         !answer.empty() && (answer[0] == 1 || answer[0] == 2), true);
   }
 }
 

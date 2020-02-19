@@ -86,8 +86,7 @@ int main(int argc, char** argv)
   vul_arg<std::string> im_type("-t","Image pixel type (byte/float)","float");
 
   vul_arg_parse(argc,argv);
-  if (image_path()=="")
-  {
+  if (image_path().empty()) {
     print_usage();
     return 0;
   }
@@ -102,11 +101,11 @@ int main(int argc, char** argv)
   // Read whole line in
   while (std::getline(ifs, name))
   {
-    if (name.size()!=0) names.push_back(name);
+    if (!name.empty())
+      names.push_back(name);
   }
 
-  if (names.size()==0)
-  {
+  if (names.empty()) {
     std::cerr<<"No images listed in "<<image_path()<<std::endl;
     return 1;
   }

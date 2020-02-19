@@ -139,7 +139,9 @@ class mbl_sample_stats_1d
 template <class S, class M>
 std::vector<double> mbl_apply_mask(const S &sample, const M &mask)
 {
-  if (sample.size()==0 || sample.size()!=mask.size()) throw std::runtime_error("Mask should be the same size as the sample and not empty\n");
+  if (sample.empty() || sample.size() != mask.size())
+    throw std::runtime_error(
+        "Mask should be the same size as the sample and not empty\n");
   mbl_sample_stats_1d stats;
   typename S::const_iterator sit=sample.begin();
   typename M::const_iterator mit=mask.begin();

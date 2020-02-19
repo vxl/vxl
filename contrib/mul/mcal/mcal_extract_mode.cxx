@@ -27,8 +27,7 @@ void mcal_extract_mode(std::vector<vnl_vector<double> >& dv,
                        vnl_vector<double>& mode,
                        double& var)
 {
-  if (used.size()==0)
-  {
+  if (used.empty()) {
     // Use all elements
     mcal_extract_mode(dv,mode,var);
     return;

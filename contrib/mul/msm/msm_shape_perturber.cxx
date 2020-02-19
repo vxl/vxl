@@ -47,8 +47,7 @@ void msm_shape_perturber::perturb( const msm_points& pts )
   vnl_vector<double> pose = aligner.compose( sm_inst_.pose(), dpose_ );
   sm_inst_.set_pose( pose );
 
-  if ( max_dparams_.size() != 0 )
-  {
+  if (!max_dparams_.empty()) {
     // Generate a random parameter offset
     for ( unsigned i=0; i<n_params_; ++i )
       dparams_[i] = random_value(rand_,max_dparams_[i],rel_gauss_);
@@ -62,9 +61,7 @@ void msm_shape_perturber::perturb( const msm_points& pts )
         p[i] = 0.0;
 
     sm_inst_.set_params(p);
-  }
-  else
-  {
+  } else {
     // a fair perturbation should be from the mean shape
     if ( n_params_ > 0 )
     {

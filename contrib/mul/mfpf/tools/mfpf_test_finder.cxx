@@ -130,8 +130,7 @@ int main(int argc, char** argv)
 
   vul_arg_parse(argc,argv);
 
-  if (param_path()=="")
-  {
+  if (param_path().empty()) {
     print_usage();
     return 0;
   }
@@ -218,8 +217,7 @@ int main(int argc, char** argv)
     mfpf_sort_matches(poses,fits);
 
     // Find the index of the closest point to p
-    if (poses.size()>0)
-    {
+    if (!poses.empty()) {
       double min_d = (p-poses[0].p()).length();
       unsigned best_j = 0;
       for (unsigned j=1;j<poses.size();++j)

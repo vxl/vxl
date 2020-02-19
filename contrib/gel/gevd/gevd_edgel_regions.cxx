@@ -313,7 +313,7 @@ bool gevd_edgel_regions::compute_edgel_regions(std::vector<vtol_edge_2d_sptr>& s
   }
 #endif
   vul_timer t;
-  if (!sgrp.size())
+  if (sgrp.empty())
     return false;
 
   // Set up the region label array with edge boundaries
@@ -352,7 +352,7 @@ bool gevd_edgel_regions::compute_edgel_regions(std::vector<vtol_edge_2d_sptr>& s
 
   // Construct vtol_intensity_faces
   this->ConstructFaces();
-  if (!faces_||!faces_->size())
+  if (!faces_ || faces_->empty())
     return false;
 
   // Collect intensity data for each region
@@ -1411,7 +1411,7 @@ bool gevd_edgel_regions::remove_hairs(std::vector<vtol_edge_2d_sptr>& edges)
   for (auto & hair : hairs)
     edges.erase(std::find(edges.begin(),edges.end(),hair));
 
-  return hairs.size() != 0;
+  return !hairs.empty();
 }
 
 //-----------------------------------------------------------
@@ -1426,7 +1426,7 @@ bool gevd_edgel_regions::connect_ends(std::vector<vtol_edge_2d_sptr>& edges,
                                       std::vector<vtol_vertex_sptr>& bad_verts)
 {
   bool all_ends_connected = true;
-  if (!bad_verts.size())
+  if (bad_verts.empty())
     return all_ends_connected;
   // Clear the bad vertex flags
   std::vector<vtol_vertex_sptr> temp; // temporary bad_verts array
@@ -1895,7 +1895,7 @@ void gevd_edgel_regions::ConstructFaces()
   {
     // Retrieve the face boundary edges
     std::vector<vtol_edge_2d_sptr>* edge_list = face_edge_index_[i];
-    if (!edge_list||!edge_list->size())
+    if (!edge_list || edge_list->empty())
       continue;
     // Make a new vtol_intensity_face
     vtol_cycle_processor cp(*edge_list);
@@ -1913,8 +1913,7 @@ void gevd_edgel_regions::ConstructFaces()
     // constructor can fail
     // looks like an expensive call
     std::vector<vtol_edge_sptr> face_edges; face->edges(face_edges);
-    if (face_edges.size())
-    {
+    if (!face_edges.empty()) {
       faces_->push_back(face);
       //  face->Protect();
       intensity_face_index_[i] = face;

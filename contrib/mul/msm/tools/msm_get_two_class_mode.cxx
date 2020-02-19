@@ -86,7 +86,8 @@ void get_shape_params(const std::vector<msm_points>& shapes,
 vnl_vector<double> calc_mean(std::vector<vnl_vector<double> >& v)
 {
   vnl_vector<double> sum;
-  if (v.size()>0) sum=v[0];
+  if (!v.empty())
+    sum = v[0];
   for (unsigned i=1;i<v.size();++i) sum+=v[i];
   sum/=v.size();
   return sum;
@@ -197,8 +198,7 @@ int main(int argc, char** argv)
 
   msm_add_all_loaders();
 
-  if (model_path()=="" || list_path1()=="" || list_path2()=="")
-  {
+  if (model_path().empty() || list_path1().empty() || list_path2().empty()) {
     print_usage();
     return 0;
   }
