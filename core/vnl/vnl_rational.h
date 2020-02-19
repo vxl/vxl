@@ -267,11 +267,8 @@ class VNL_EXPORT vnl_rational
     return r;
   }
   inline operator int_type() const { return truncate(); }
-  inline operator int_type() { return truncate(); }
   inline operator float() const { return ((float)num_)/((float)den_); }
-  inline operator float() { return ((float)num_)/((float)den_); }
   inline operator double() const { return ((double)num_)/((double)den_); }
-  inline operator double() { return ((double)num_)/((double)den_); }
 
   //: Calculate greatest common divisor of two integers.
   //  Used to simplify rational number.

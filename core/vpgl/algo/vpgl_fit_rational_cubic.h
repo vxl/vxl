@@ -104,7 +104,7 @@ class vpgl_fit_rational_cubic
   double initial_rms_error();
 
   //: error after non-linear optimization
-  double final_rms_error(){return levmq_err_;}
+  double final_rms_error() const { return levmq_err_; }
 
   //: the main process method
   bool fit();

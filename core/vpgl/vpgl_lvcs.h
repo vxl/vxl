@@ -124,7 +124,14 @@ class vpgl_lvcs : public vbl_ref_count
   inline LenUnits local_length_unit() const{return this->localXYZUnit_;}
   inline AngUnits geo_angle_unit() const {return this->geo_angle_unit_;}
   void print(std::ostream&) const;
-  bool save(std::string fname) { std::ofstream of(fname.c_str()); if (of) { print(of); return true; } return false; }
+  bool save(std::string fname) const {
+    std::ofstream of(fname.c_str());
+    if (of) {
+      print(of);
+      return true;
+    }
+    return false;
+  }
   void read(std::istream& strm);
   void write(std::ostream& strm);  // write just "read" would read
   friend std::ostream& operator << (std::ostream& os, const vpgl_lvcs& local_coord_sys);

@@ -360,8 +360,10 @@ struct tiff_pyramid_level
   //: temporary variable for current level
   unsigned cur_level_;
 
-  void print(const unsigned l)
-  { std::cout << "level[" << l <<  "] hindex " << header_index_ << " scale: " << scale_ << "  width: " << ni_ << std::endl; }
+  void print(const unsigned l) const {
+    std::cout << "level[" << l << "] hindex " << header_index_
+              << " scale: " << scale_ << "  width: " << ni_ << std::endl;
+  }
 };
 
 //:Pyramid resource built on the multi-image capability of the TIFF format
