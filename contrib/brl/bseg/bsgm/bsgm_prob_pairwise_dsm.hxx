@@ -83,7 +83,7 @@ void bsgm_prob_pairwise_dsm<CAM_T>::compute_disparity(
     if(forward)// img = img0, ref = img1
       min_disparity.fill(min_disparity_);
     else // reverse img = img1, ref = img0
-      min_disparity.fill(-(num_disparities()-fabs(min_disparity_)));
+      min_disparity.fill(-(num_disparities()+min_disparity_));
 
     bsgm_disparity_estimator bsgm(params_.de_params_, ni, nj, num_disparities());
     good = bsgm.compute(img, img_reference, invalid, min_disparity, invalid_disp, disparity);
