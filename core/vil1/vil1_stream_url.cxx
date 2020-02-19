@@ -36,9 +36,7 @@ static const int base64_encoding[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', '
 
 static char out_buf[4];
 
-static const char *
-encode_triplet(char data[3], unsigned n)
-{
+static const char *encode_triplet(const char data[3], unsigned n) {
   assert(n > 0 && n < 4);
   out_buf[0] = base64_encoding[(data[0] & 0xFC) >> 2];
 
