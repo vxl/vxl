@@ -57,12 +57,12 @@ class vsol_flags_id
   // Tag, Flag, and ID methods
 
   inline void set_user_flag(unsigned int flag);
-  inline bool get_user_flag(unsigned int flag);
+  inline bool get_user_flag(unsigned int flag) const;
   inline void unset_user_flag(unsigned int flag);
   inline void set_tagged_union_flag();
-  inline bool get_tagged_union_flag();
+  inline bool get_tagged_union_flag() const;
   inline void unset_tagged_union_flag();
-  inline int get_tag_id();
+  inline int get_tag_id() const;
   inline void set_tag_id(int id);
 };
 
@@ -75,8 +75,7 @@ inline void vsol_flags_id::set_user_flag(unsigned int flag)
 }
 
 //: check if a flag is set for a spatial object; flag can be VSOL_FLAG[1-6]
-inline bool vsol_flags_id::get_user_flag(unsigned int flag)
-{
+inline bool vsol_flags_id::get_user_flag(unsigned int flag) const {
   return (tag_ & flag) != 0;
 }
 
@@ -93,8 +92,7 @@ inline void vsol_flags_id::set_tagged_union_flag()
 }
 
 //: check if the flag used by TAGGED_UNION is set.
-inline bool vsol_flags_id::get_tagged_union_flag()
-{
+inline bool vsol_flags_id::get_tagged_union_flag() const {
   return get_user_flag(VSOL_UNIONBIT);
 }
 
@@ -104,10 +102,7 @@ inline void vsol_flags_id::unset_tagged_union_flag()
   unset_user_flag(VSOL_UNIONBIT);
 }
 
-inline int vsol_flags_id::get_tag_id()
-{
-  return tag_ & VSOL_DEXID_BITS;
-}
+inline int vsol_flags_id::get_tag_id() const { return tag_ & VSOL_DEXID_BITS; }
 
 inline void vsol_flags_id::set_tag_id(int id)
 {

@@ -55,13 +55,14 @@ class FMatrixCompute7Point
 
   //: Interface to above using arrays of HomgPoint2D.
   //  Makes a PairMatchSetCorner, and then calls the compute method above.
-  bool compute(std::vector<HomgPoint2D>&, std::vector<HomgPoint2D>&, std::vector<FMatrix*>&);
+  bool compute(std::vector<HomgPoint2D> &, std::vector<HomgPoint2D> &,
+               std::vector<FMatrix *> &) const;
 
   //: Interface to above using arrays of vgl_homg_point_2d.
   //  Makes a PairMatchSetCorner, and then calls the compute method with PairMatchSetCorner argument.
-  bool compute(std::vector<vgl_homg_point_2d<double> >& points1,
-               std::vector<vgl_homg_point_2d<double> >& points2,
-               std::vector<FMatrix*>&);
+  bool compute(std::vector<vgl_homg_point_2d<double>> &points1,
+               std::vector<vgl_homg_point_2d<double>> &points2,
+               std::vector<FMatrix *> &) const;
 
   //: Interface to above using preconditioned points
   bool compute_preconditioned(std::vector<HomgPoint2D>&, std::vector<HomgPoint2D>&, std::vector<FMatrix*>&) const;

@@ -88,16 +88,16 @@ public:
   // ---
 
   //: Min intensity
-  float  IntMin() { return cached_min_; }
+  float IntMin() const { return cached_min_; }
 
   //: Max intensity
-  float  IntMax() { return cached_max_; }
+  float IntMax() const { return cached_max_; }
 
   //: Mean intensity
-  float  IntMean() { return cached_mean_; }
+  float IntMean() const { return cached_mean_; }
 
   //: Intensity variance
-  float  IntVar() { return cached_var_; }
+  float IntVar() const { return cached_var_; }
 
   // ---
   // Geometric attribute computations

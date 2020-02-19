@@ -31,7 +31,7 @@ class ProjStructure
 
   ProjStructure();
 
-  ImageMetric const* get_image_metric(int) { return metric_; }
+  ImageMetric const *get_image_metric(int) const { return metric_; }
 
   PMatrix& P(int i) { return P_[i]; }
   PMatrix const& P(int i) const { return P_[i]; }

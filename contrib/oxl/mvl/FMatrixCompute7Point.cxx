@@ -45,10 +45,10 @@ bool FMatrixCompute7Point::compute(PairMatchSetCorner& matches, std::vector<FMat
 }
 
 //-----------------------------------------------------------------------------
-bool FMatrixCompute7Point::compute (std::vector<vgl_homg_point_2d<double> >& points1,
-                                    std::vector<vgl_homg_point_2d<double> >& points2,
-                                    std::vector<FMatrix*>& F)
-{
+bool FMatrixCompute7Point::compute(
+    std::vector<vgl_homg_point_2d<double>> &points1,
+    std::vector<vgl_homg_point_2d<double>> &points2,
+    std::vector<FMatrix *> &F) const {
   if (points1.size() < 7 || points2.size() < 7) {
     std::cerr << "FMatrixCompute7Point: Need at least 7 point pairs.\n"
              << "Number in each set: " << points1.size() << ", " << points2.size() << '\n';
@@ -81,10 +81,9 @@ bool FMatrixCompute7Point::compute (std::vector<vgl_homg_point_2d<double> >& poi
 }
 
 //-----------------------------------------------------------------------------
-bool FMatrixCompute7Point::compute(std::vector<HomgPoint2D>& points1,
-                                   std::vector<HomgPoint2D>& points2,
-                                   std::vector<FMatrix*>& F)
-{
+bool FMatrixCompute7Point::compute(std::vector<HomgPoint2D> &points1,
+                                   std::vector<HomgPoint2D> &points2,
+                                   std::vector<FMatrix *> &F) const {
   if (points1.size() < 7 || points2.size() < 7) {
     std::cerr << "FMatrixCompute7Point: Need at least 7 point pairs.\n"
              << "Number in each set: " << points1.size() << ", " << points2.size() << '\n';
