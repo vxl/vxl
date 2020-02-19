@@ -169,7 +169,8 @@ class vnl_finite_int
   //: Write N as the unique product of prime factors.
   static std::vector<unsigned int> decompose() {
     static std::vector<unsigned int> decomposition_ = std::vector<unsigned int>(); // cached value
-    if (decomposition_.size() > 0) return decomposition_;
+    if (!decomposition_.empty())
+      return decomposition_;
     unsigned int r = N;
     for (unsigned int d=2; d*d<=r; ++d)
       while (r%d == 0) { decomposition_.push_back(d); r /= d; }
@@ -528,11 +529,9 @@ class vnl_finite_int_poly
   static std::vector<Scalar>& modulo_polynomial(std::vector<Scalar> p = std::vector<Scalar>())
   {
     static std::vector<Scalar> poly_(M+1, Scalar(0));
-    if (p.size() == 0) { // retrieval
+    if (p.empty()) {         // retrieval
       assert(poly_[M] != 0); // cannot retrieve before having set
-    }
-    else
-    {
+    } else {
       assert(p.size() == M+1 && p[M].is_unit());// must be of effective degree M
       // Now set poly_, thereby making the coefficient poly_[M] equal to -1.
       Scalar f = -1/p[M];

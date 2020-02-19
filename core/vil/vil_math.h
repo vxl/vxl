@@ -159,7 +159,7 @@ inline void vil_math_value_range_percentile(const vil_image_view<T>& im,
   std::vector<double> fractions(1, fraction);
   std::vector<T> values;
   vil_math_value_range_percentiles(im, fractions, values);
-  if (values.size() > 0)
+  if (!values.empty())
     value = values[0]; // Bounds-checked access in case previous line failed.
 }
 

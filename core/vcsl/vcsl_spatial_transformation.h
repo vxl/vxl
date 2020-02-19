@@ -79,8 +79,10 @@ class vcsl_spatial_transformation : public vbl_ref_count
 
   //: Is `this' correctly set ?
   virtual bool is_valid() const
-  { return (duration()==0&&interpolator_.size()==0) ||
-           (duration()==interpolator_.size()+1); }
+  {
+    return (duration() == 0 && interpolator_.empty()) ||
+           (duration() == interpolator_.size() + 1);
+  }
 
   //***************************************************************************
   // Basic operations

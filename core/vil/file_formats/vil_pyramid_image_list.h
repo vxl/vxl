@@ -98,7 +98,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
   // This concept is treated as a synonym to components.
   inline unsigned int nplanes() const override
   {
-    if (levels_.size()>0)
+    if (!levels_.empty())
       return levels_[0]->image_->nplanes();
     else
       return 0;
@@ -108,7 +108,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
   // Dimensions:  Planes x ni x nj.
   inline unsigned int ni() const override
   {
-    if (levels_.size()>0)
+    if (!levels_.empty())
       return levels_[0]->image_->ni();
     else
       return 0;
@@ -118,7 +118,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
   // Dimensions:  Planes x ni x nj.
   inline unsigned int nj() const override
   {
-    if (levels_.size()>0)
+    if (!levels_.empty())
       return levels_[0]->image_->nj();
     else
       return 0;
@@ -128,7 +128,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
 
   inline enum vil_pixel_format pixel_format() const override
   {
-    if (levels_.size()>0)
+    if (!levels_.empty())
       return levels_[0]->image_->pixel_format();
     else
       return VIL_PIXEL_FORMAT_UNKNOWN;
@@ -141,7 +141,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
                                                         unsigned int j0,
                                                         unsigned int n_j) const override
   {
-    if (levels_.size()>0)
+    if (!levels_.empty())
       return levels_[0]->image_->get_copy_view(i0, n_i, j0, n_j);
     else
       return nullptr;
