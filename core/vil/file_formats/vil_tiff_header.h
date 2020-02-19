@@ -231,9 +231,9 @@ class vil_tiff_header
   bool is_GEOTIFF() const;
 #endif
 
-  bool need_byte_swap()
-  { return file_is_big_endian_!=machine_is_big_endian_ &&
-           bits_per_sample.val%8 != 0;
+  bool need_byte_swap() const {
+    return file_is_big_endian_ != machine_is_big_endian_ &&
+           bits_per_sample.val % 8 != 0;
   }
 
   vil_pixel_format pix_fmt;

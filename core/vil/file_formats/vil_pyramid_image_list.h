@@ -78,8 +78,7 @@ struct pyramid_level
   unsigned int cur_level_;
 
   //:print ni and scale and values
-  void print(const unsigned int l)
-  {
+  void print(const unsigned int l) const {
     std::cout << "level[" << l <<  "]  scale: " << scale_
              << "  ni: " << image_->ni() << '\n';
   }

@@ -158,8 +158,8 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //: returns the corresponding utm location for the given local position
   void local_to_utm(const double x, const double y, const double z, double& e, double& n, int& utm_zone);
 
-  int utm_zone() { return utm_zone_; }
-  int utm_northing() { return northing_; }
+  int utm_zone() const { return utm_zone_; }
+  int utm_northing() const { return northing_; }
 
   bool img_four_corners_in_utm(const unsigned ni, const unsigned nj, double elev, double& e1, double& n1, double& e2, double& n2) const;
 
