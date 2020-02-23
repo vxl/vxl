@@ -66,6 +66,9 @@ class vsph_spherical_coord : public vbl_ref_count
   // Returns true if the point changed, false if it was already on the sphere
   bool move_point(vsph_sph_point_3d& p);
 
+  //: Cartesian unit vector along the sphere radius at a point
+  vgl_vector_3d<double> radial_vector(vsph_sph_point_3d const& p);
+
   void print(std::ostream& os) const;
 
   void b_read(vsl_b_istream& is);

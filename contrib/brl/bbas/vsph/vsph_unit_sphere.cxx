@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <limits>
+#include <tuple>
 #include "vsph_unit_sphere.h"
 //
 #include "vsph_sph_point_2d.h"
@@ -15,7 +16,7 @@
 #include <bvrml/bvrml_write.h>
 #include <cassert>
 
-#define DEBUG
+
 
 bool operator < (vsph_edge const& a, vsph_edge const& b)
 {
@@ -44,7 +45,7 @@ void vsph_unit_sphere::insert_edge(vsph_edge const&  e)
 vsph_unit_sphere::vsph_unit_sphere(double point_angle,
                                    double min_theta, double max_theta)
 : neighbors_valid_(false), point_angle_(point_angle),
-  min_theta_(min_theta), max_theta_(max_theta)
+  min_theta_(min_theta), max_theta_(max_theta), verbose_(false)
 {
   std::cout << "Start construction" << std::endl;
   add_uniform_views();
@@ -207,10 +208,9 @@ void vsph_unit_sphere::add_uniform_views()
     //vgl_vector_3d<double> vector2=(*verts)[new_triangles[0][1]]-center;
     triangles.clear();
     triangles=new_triangles;
-#ifdef DEBUG
-    std::cout << "found " << triangles.size() << " trianges\n"
-             << "found " << (*verts).size() << " vertices" << std::endl;
-#endif
+    if(verbose_)
+      std::cout << "found " << triangles.size() << " trianges\n"
+                << "found " << (*verts).size() << " vertices" << std::endl;
   }
   // refine the vertices to points, eliminate duplicate ones and also eliminate the ones below given elevation
   // note that the relationship between vertex id and the id of the
@@ -244,17 +244,35 @@ void vsph_unit_sphere::add_uniform_views()
         sph_pts_.push_back(sv);
       }
     }
-#ifdef DEBUG
-    if (i%1000 ==0)
+
+    if (verbose_&&i%1000 ==0)
       std::cout << '.' << std::flush;
-#endif
+
+    int idx0 = triangles[i][0];
+    int idx1 = triangles[i][1];
+    int idx2 = triangles[i][2];
+    vgl_vector_3d<double>& cv0 = (*verts)[idx0]; vgl_point_3d<double> cp0(cv0.x(), cv0.y(), cv0.z());
+    vgl_vector_3d<double>& cv1 = (*verts)[idx1]; vgl_point_3d<double> cp1(cv1.x(), cv1.y(), cv1.z());
+    vgl_vector_3d<double>& cv2 = (*verts)[idx2]; vgl_point_3d<double> cp2(cv2.x(), cv2.y(), cv2.z());
+    vsph_sph_point_3d sv0, sv1, sv2;
+    coord_sys_.spherical_coord(cp0, sv0);
+    coord_sys_.spherical_coord(cp1, sv1);
+    coord_sys_.spherical_coord(cp2, sv2);
+    //adjust order of vertices so that face normal points outward
+    vgl_vector_3d<double> crp = cross_product(cv1-cv0,cv2-cv0);
+    crp /= crp.length();
+    vgl_vector_3d<double> rdir = coord_sys_.radial_vector(sv0);
+    double dp = dot_product(crp, rdir);
+    if(dp>=0.0)
+      triangles_.emplace_back(sv0, sv1, sv2, coord_sys_);
+    else
+      triangles_.emplace_back(sv2, sv1, sv0, coord_sys_);
   }
   std::cout << '\n' << std::flush;
-#ifdef DEBUG
-  std::cout << "finished refine\n"
-           << "start constructing edges from " << ntri << " triangles"
-           << std::endl;
-#endif
+  if(verbose_)
+    std::cout << "finished refine\n"
+              << "start constructing edges from " << ntri << " triangles"
+              << std::endl;
   delete verts;
   neighbors_.clear();
   neighbors_.resize(this->size());
@@ -292,19 +310,18 @@ void vsph_unit_sphere::add_uniform_views()
     if (i%1000 ==0)
       std::cout << '+' << std::flush;
   }
-#ifdef DEBUG
-  std::cout << "\nfinished find edges "<< edges_.size()
-           << " edges found\n" << std::flush;
-#endif
+  if(verbose_)
+    std::cout << "\nfinished find edges "<< edges_.size()
+              << " edges found\n" << std::flush;
   neighbors_valid_ = true;
 }
 
 void vsph_unit_sphere::remove_top_and_bottom()
 {
   int nsph = sph_pts_.size();
-#ifdef DEBUG
-  std::cout << "entering top and bottom with " << nsph << " rays\n" << std::flush;
-#endif
+  if(verbose_)
+    std::cout << "entering top and bottom with " << nsph << " rays\n" << std::flush;
+
   equivalent_ids_.clear();
   equivalent_ids_.resize(nsph, -1);
   neighbors_valid_ = false;
@@ -327,9 +344,9 @@ void vsph_unit_sphere::remove_top_and_bottom()
 
   sph_pts_.clear();
   sph_pts_ = sph_pts_new;
-#ifdef DEBUG
-  std::cout << "starting to remap " << edges_.size() <<  "edges\n" << std::flush;
-#endif
+  if(verbose_)
+    std::cout << "starting to remap " << edges_.size() <<  "edges\n" << std::flush;
+
   std::vector<vsph_edge> new_edges;
   for (auto & edge : edges_) {
     int is = equivalent_ids_[edge.vs_],
@@ -338,9 +355,9 @@ void vsph_unit_sphere::remove_top_and_bottom()
       continue;
     new_edges.emplace_back(is, ie);
   }
-#ifdef DEBUG
-  std::cout << "finished remap edges in remove top and bottom\n" << std::flush;
-#endif
+  if(verbose_)
+    std::cout << "finished remap edges in remove top and bottom\n" << std::flush;
+
   edges_.clear();
   edges_ = new_edges;
   neighbors_valid_ = false;
@@ -422,11 +439,11 @@ tangent_plane(vsph_sph_point_2d const& sp)
   return vgl_plane_3d<double>(cv, p);
 }
 
-void vsph_unit_sphere::display_vertices(std::string const & path) const
+bool vsph_unit_sphere::display_vertices(std::string const & path) const
 {
   std::ofstream os(path.c_str());
   if (!os.is_open())
-    return;
+    return false;
   os << "VRML V2.0 utf8\n"
      << "Shape {\n"
      << "   appearance Appearance {\n"
@@ -450,14 +467,15 @@ void vsph_unit_sphere::display_vertices(std::string const & path) const
      <<"   }\n"
      << " }\n"
      <<"}\n";
+  return true;
 }
 
-void vsph_unit_sphere::display_edges(std::string const & path) const
+bool vsph_unit_sphere::display_edges(std::string const & path) const
 {
   std::ofstream os(path.c_str());
   if (!os.is_open())
-    return;
-  os << "VRML V2.0 utf8\n"
+    return false;
+  os << "#VRML V2.0 utf8\n"
      << "Shape {\n"
      << "   appearance Appearance {\n"
      << "      material Material {\n"
@@ -472,7 +490,10 @@ void vsph_unit_sphere::display_edges(std::string const & path) const
   for (auto cit = cart_pts_.begin();
        cit != cart_pts_.end(); ++cit, ++cnt) {
     const vgl_vector_3d<double>& cp = *cit;
-    os << cp.x() << ' ' << cp.y() << ' ' << cp.z();
+    double x = fabs(cp.x())<0.001 ? 0.0 : cp.x();
+    double y = fabs(cp.y())<0.001 ? 0.0 : cp.y();
+    double z = fabs(cp.z())<0.001 ? 0.0 : cp.z();
+    os << x << ' ' << y << ' ' << z;
     if (cnt != np) os << ',';
     os << '\n';
   }
@@ -494,7 +515,69 @@ void vsph_unit_sphere::display_edges(std::string const & path) const
      << "    }\n"
      << "  }\n";
   os.close();
+  return true;
 }
+void vsph_unit_sphere::display_unit_sphere(std::ofstream& os, bool open_close){
+  if(open_close)
+    os << "#VRML V2.0 utf8\n";
+        std::vector<vgl_point_3d<double> > spts;
+      std::vector<std::tuple<size_t, size_t, size_t > > mapped_in_stris;
+      size_t pt_indx = 0;
+      size_t nt = triangles_.size();
+      for(size_t t = 0; t<nt; ++t){
+        const vsph_spherical_triangle& tri = triangles_[t];
+        spts.emplace_back(tri.v0_cart().x(), tri.v0_cart().y(), tri.v0_cart().z());
+        spts.emplace_back(tri.v1_cart().x(), tri.v1_cart().y(), tri.v1_cart().z());
+        spts.emplace_back(tri.v2_cart().x(), tri.v2_cart().y(), tri.v2_cart().z());
+        mapped_in_stris.emplace_back(pt_indx, pt_indx+1, pt_indx+2);
+        pt_indx +=3;
+      }
+    os << "Shape {\n"
+     << "  geometry IndexedFaceSet {\n"
+     << "   colorPerVertex FALSE\n"
+     << "     coord Coordinate {\n"
+     << "      point [\n";
+     int np = spts.size()-1;
+     for (size_t j = 0; j <= np; ++j){
+       const vgl_point_3d<double>& cp = spts[j];
+       double x = fabs(cp.x())<0.001 ? 0.0 : cp.x();
+       double y = fabs(cp.y())<0.001 ? 0.0 : cp.y();
+       double z = fabs(cp.z())<0.001 ? 0.0 : cp.z();
+       os << x << ' ' << y << ' ' << z;
+       if (j != np) os << ',';
+        os << '\n';
+     }
+      os <<             "]\n"
+         <<      "}\n"
+         << "    color Color {\n"
+         << "      color [\n";
+        os << 0.5 << ' ' <<  0.5 << ' ' << 0.5 << "\n";
+        os << "    ]\n"
+         << "}\n"
+         << "     coordIndex [\n";
+
+     int ne = mapped_in_stris.size()-1;
+     for (size_t j = 0; j <= ne; ++j) {
+       std::tuple<size_t, size_t, size_t>& tri = mapped_in_stris[j];
+       if (j != ne)
+         os << std::get<0>(tri) << ',' << std::get<1>(tri) << ',' << std::get<2>(tri) << ",-1,\n";
+       else
+         os << std::get<0>(tri) << ',' << std::get<1>(tri) << ','  << std::get<2>(tri) << ",-1\n";
+     }
+    os <<        "]\n";
+    os << "colorIndex[\n";
+    for (size_t j = 0; j<=np; ++j) 
+      if(j != np)
+        os << 0 << ", ";
+      else
+        os << 0 <<"\n";
+    os <<        "]\n"
+     << "    }\n"
+     << "  }\n";
+    if(open_close)
+      os.close();
+}
+
 
 
 void vsph_unit_sphere::display_data(std::string const & path,
@@ -600,11 +683,193 @@ void vsph_unit_sphere::display_color(std::string const & path,
   }
   os.close();
 }
+bool area_less(std::pair<size_t, double> const& pa, std::pair<size_t, double> const& pb) {
+  return pa.second < pb.second;
+}
 
-void vsph_unit_sphere::display_boxes(std::string const &  /*path*/,
-                                     std::vector<vsph_sph_box_2d> const&  /*boxes*/)
+bool vsph_unit_sphere::display_boxes(std::string const& path,
+                                     std::vector<vsph_sph_box_2d> const& boxes,
+                                     bool disp_unit_sphere)
 {
-  //need to break each region into smaller planar pieces
+  std::vector<std::pair<size_t, double> > box_areas;
+  size_t nb = boxes.size();
+  for (size_t i = 0; i < nb; ++i)
+    box_areas.emplace_back(i, boxes[i].area());
+  std::sort(box_areas.begin(), box_areas.end(),area_less);
+  std::vector<std::vector<float> > colors(8, std::vector<float>(3, 0.0f));
+  colors[0][0] = 1.0f;
+  colors[1][1] = 1.0f;
+  colors[2][0] = 1.0f; colors[2][1] = 1.0f;
+  colors[3][0] = 1.0f; colors[3][2] = 1.0f;
+  colors[4][1] = 1.0f; colors[4][2] = 1.0f;
+  colors[5][0] = 0.5f; colors[5][1] = 1.0f;
+  colors[6][0] = 1.0f; colors[6][1] = 0.5f;
+  colors[7][1] = 1.0f; colors[7][2] = 0.5f; 
+  
+  std::vector<std::map<size_t, vsph_spherical_triangle> > in_tris(nb);
+  for(size_t i = 0; i<nb; ++i){
+    const vsph_sph_box_2d& box = boxes[i];
+    size_t nt = triangles_.size();
+    for(size_t t = 0; t<nt; ++t){
+      size_t cidx = triangles_[t].cell_index();
+      const vsph_sph_point_3d& c = triangles_[t].centroid(coord_sys_);
+      if(box.contains(c.theta_, c.phi_))
+        in_tris[i][cidx] = triangles_[t];
+    }
+  }
+  
+  // extract points and associate with triangles
+  std::vector<std::vector<vgl_point_3d<double> > > pts(nb);
+  std::vector<std::vector<std::tuple<size_t, size_t, size_t > > > mapped_in_tris(nb);
+  for(size_t ii = 0; ii<nb; ++ii){
+    size_t i = box_areas[ii].first;
+    size_t pt_index = 0;
+    double del = 0.05/(1.0+i);
+    for(std::map<size_t, vsph_spherical_triangle> ::iterator trit = in_tris[i].begin();
+        trit != in_tris[i].end(); ++trit){
+      vsph_spherical_triangle& tri = trit->second;
+      pts[i].push_back(tri.v0_cart()+ del*coord_sys_.radial_vector(tri.v0()));
+      pts[i].push_back(tri.v1_cart()+ del*coord_sys_.radial_vector(tri.v1()));
+      pts[i].push_back(tri.v2_cart()+ del*coord_sys_.radial_vector(tri.v2()));
+      mapped_in_tris[i].emplace_back(pt_index, pt_index+1, pt_index+2);
+      pt_index+=3;
+    }
+  }
+  std::ofstream os(path.c_str());
+  if(!os){
+    std::cout << "can't open " << path << "to display boxes" << std::endl;
+    return false;
+  }
+  os << "#VRML V2.0 utf8\n";
+    for(size_t i = 0; i<nb; ++i){
+      size_t color_idx = i%8;
+     os << "Shape {\n"
+     << "  geometry IndexedFaceSet {\n"
+     << "   colorPerVertex FALSE\n"
+     << "     coord Coordinate {\n"
+     << "      point [\n";
+     int np = pts[i].size()-1;
+     for (size_t j = 0; j <= np; ++j){
+       const vgl_point_3d<double>& cp = pts[i][j];
+       double x = fabs(cp.x())<0.001 ? 0.0 : cp.x();
+       double y = fabs(cp.y())<0.001 ? 0.0 : cp.y();
+       double z = fabs(cp.z())<0.001 ? 0.0 : cp.z();
+       os << x << ' ' << y << ' ' << z;
+       if (j != np) os << ',';
+        os << '\n';
+     }
+      os <<             "]\n"
+         <<      "}\n"
+         << "    color Color {\n"
+         << "      color [\n";
+      for(size_t c = 0; c<7; ++c)
+        os << colors[c][0] << ' ' << colors[c][1] << ' ' << colors[c][2] << ",\n";
+      os << colors[7][0] << ' ' << colors[7][1] << ' ' << colors[7][2] << "\n";
+      os << "    ]\n"
+         << "}\n"
+         << "     coordIndex [\n";
+
+     int ne = mapped_in_tris[i].size()-1;
+     for (size_t j = 0; j <= ne; ++j) {
+       std::tuple<size_t, size_t, size_t>& tri = mapped_in_tris[i][j];
+       if (j != ne)
+         os << std::get<0>(tri) << ',' << std::get<1>(tri) << ',' << std::get<2>(tri) << ",-1,\n";
+       else
+         os << std::get<0>(tri) << ',' << std::get<1>(tri) << ','  << std::get<2>(tri) << ",-1\n";
+     }
+    os <<        "]\n";
+    os << "colorIndex[\n";
+    for (size_t j = 0; j<=np; ++j) 
+      if(j != np)
+        os << color_idx << ", ";
+      else
+        os << color_idx <<"\n";
+    os <<        "]\n"
+     << "    }\n"
+     << "  }\n";
+    }
+    if(disp_unit_sphere)
+      display_unit_sphere(os);
+    os.close();
+    return true;
+}
+bool vsph_unit_sphere::display_cells(std::string const & path, std::vector<vsph_spherical_triangle> const& triangles,
+                                     bool disp_unit_sphere){
+  std::ofstream os(path.c_str());
+  if(!os){
+    std::cout << "can't open " << path << "to display boxes" << std::endl;
+    return false;
+  }
+  size_t nt = triangles.size();
+  // extract points and associate with triangles
+  std::vector<vgl_point_3d<double> >  pts;
+  std::vector<std::tuple<size_t, size_t, size_t > >  mapped_in_tris;
+  size_t pt_index = 0;
+  for(size_t t = 0; t<nt; ++t){
+    const vsph_spherical_triangle& tri = triangles[t];
+    //map to the unit sphere
+    vsph_sph_point_3d sp0(1.0, tri.v0().theta_, tri.v0().phi_);
+    vsph_sph_point_3d sp1(1.0, tri.v1().theta_, tri.v1().phi_);
+    vsph_sph_point_3d sp2(1.0, tri.v2().theta_, tri.v2().phi_);
+
+    // cache Cartesian triangle vertices    
+    pts.push_back(coord_sys_.cart_coord(sp0));
+    pts.push_back(coord_sys_.cart_coord(sp1));
+    pts.push_back(coord_sys_.cart_coord(sp2));
+
+    // the triangle vertex indices
+    mapped_in_tris.emplace_back(pt_index, pt_index+1, pt_index+2);
+    pt_index+=3;
+  }
+
+  os << "#VRML V2.0 utf8\n";
+     os << "Shape {\n"
+     << "  geometry IndexedFaceSet {\n"
+     << "   colorPerVertex FALSE\n"
+     << "     coord Coordinate {\n"
+     << "      point [\n";
+     int np = pts.size()-1;
+     for (size_t j = 0; j <= np; ++j){
+       const vgl_point_3d<double>& cp = pts[j];
+       double x = fabs(cp.x())<0.001 ? 0.0 : cp.x();
+       double y = fabs(cp.y())<0.001 ? 0.0 : cp.y();
+       double z = fabs(cp.z())<0.001 ? 0.0 : cp.z();
+       os << x << ' ' << y << ' ' << z;
+       if (j != np) os << ',';
+        os << '\n';
+     }
+      os <<             "]\n"
+         <<      "}\n"
+         << "    color Color {\n"
+         << "      color [\n";
+        os << 0.0 << ' ' << 1.0 << ' ' << 0.0 << ",\n";
+        os << "    ]\n"
+         << "}\n"
+         << "     coordIndex [\n";
+
+     int ne = mapped_in_tris.size()-1;
+     for (size_t j = 0; j <= ne; ++j) {
+       std::tuple<size_t, size_t, size_t>& tri = mapped_in_tris[j];
+       if (j != ne)
+         os << std::get<0>(tri) << ',' << std::get<1>(tri) << ',' << std::get<2>(tri) << ",-1,\n";
+       else
+         os << std::get<0>(tri) << ',' << std::get<1>(tri) << ','  << std::get<2>(tri) << ",-1\n";
+     }
+    os <<        "]\n";
+    os << "colorIndex[\n";
+    for (size_t j = 0; j<=np; ++j) 
+      if(j != np)
+        os << 0 << ", ";
+      else
+        os << 0 <<"\n";
+    os <<        "]\n"
+     << "    }\n"
+     << "  }\n";
+    
+    if(disp_unit_sphere)
+      display_unit_sphere(os);
+    os.close();
+    return true;
 }
 
 bool vsph_unit_sphere::operator==(const vsph_unit_sphere &other) const

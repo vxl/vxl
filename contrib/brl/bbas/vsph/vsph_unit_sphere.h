@@ -16,8 +16,11 @@
 #include <iostream>
 #include <iosfwd>
 #include "vsph_sph_point_2d.h"
+#include "vsph_sph_point_3d.h"
 #include "vsph_sph_box_2d.h"
 #include "vsph_grid_index_2d.h"
+#include "vsph_spherical_coord.h"
+#include "vsph_spherical_triangle.h"
 #include "vsph_defs.h"//DIST_TOL, MARGIN
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_vector_3d.h>
@@ -51,7 +54,7 @@ class vsph_unit_sphere : public vbl_ref_count
 {
  public:
   //: default constructor
-  vsph_unit_sphere() : point_angle_(0.0), min_theta_(0.0), max_theta_(0.0) {}
+ vsph_unit_sphere() : point_angle_(0.0), min_theta_(0.0), max_theta_(0.0), verbose_(false) {}
   //: constructor, angles are in degrees
   // \p point_angle is the maximum angle between adjacent triangle vertices
   // \p min_theta and \p max_theta bound the points constructed on the sphere surface
@@ -61,6 +64,9 @@ class vsph_unit_sphere : public vbl_ref_count
   ~vsph_unit_sphere() override = default;
 
   //: accessors
+  //: print debug statements
+  // default is verbose == false
+  void set_verbose(bool verbose){verbose_ = verbose;}
   double point_angle() const {return point_angle_;}
 
   double min_theta() const {return min_theta_;}
@@ -105,12 +111,18 @@ class vsph_unit_sphere : public vbl_ref_count
   static vgl_plane_3d<double> tangent_plane(vsph_sph_point_2d const& sph);
 
   //: display the vertices in a vrml format
-  void display_vertices(std::string const & path) const;
+  bool display_vertices(std::string const & path) const;
 
   //: display the edges in a vrml format
-  void display_edges(std::string const & path) const;
+  bool display_edges(std::string const & path) const;
 
-  //: display data values associated with spherical positions
+  //: display the sphere as a vrml indexed face set
+  // The interface is designed to be used inside other display methods
+  // That is, if open_close is true, vrml header and file close statements are added,
+  // otherwise only the indexed face set is expanded in the file
+  void display_unit_sphere(std::ofstream& os, bool open_close = false);
+
+                           //: display data values associated with spherical positions
   void display_data(std::string const & path,
                     std::vector<double> const& data,
                     vsph_sph_box_2d const& mask = vsph_sph_box_2d()) const;
@@ -122,9 +134,16 @@ class vsph_unit_sphere : public vbl_ref_count
                      std::vector<float>(3, -1.0f),
                      vsph_sph_box_2d const& mask = vsph_sph_box_2d()) const;
 
-  //: display a set of axis aligned boxes on the sphere
-  void display_boxes(std::string const & path,
-                     std::vector<vsph_sph_box_2d> const& boxes);
+  //: display a set of axis aligned boxes on the sphere. The display is based on the triangle
+  // tesselation of the unit sphere
+  bool display_boxes(std::string const & path,
+                     std::vector<vsph_sph_box_2d> const& boxes,
+                     bool display_unit_sphere = true);
+
+  //: display spherical triangles that may not be in the unit sphere
+  //  coordinate system. Triangle coordinates are mapped to the unit sphere for display purposes
+  //  That is, origin and radius are not important for the display
+  bool display_cells(std::string const & path, std::vector<vsph_spherical_triangle> const& triangles, bool disp_unit_sphere);
 
   //: Iterator over the set of spherical points
   typedef std::vector<vsph_sph_point_2d>::iterator iterator;
@@ -166,8 +185,12 @@ class vsph_unit_sphere : public vbl_ref_count
   std::vector<vsph_edge> edges_;
   std::vector<int> equivalent_ids_;
   std::vector<std::set<int> > neighbors_;
+  std::vector<vsph_spherical_triangle> triangles_;
   vsph_grid_index_2d index_;
  private:
+  bool verbose_; // print debug statements
+  //: spherical coordinate system - default is unit sphere CS
+  vsph_spherical_coord coord_sys_;
   bool neighbors_valid_;
   //: these angles are stored in degrees for convenient interpretation
   double point_angle_;
