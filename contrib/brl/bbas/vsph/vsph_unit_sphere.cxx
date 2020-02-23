@@ -47,11 +47,11 @@ vsph_unit_sphere::vsph_unit_sphere(double point_angle,
 : neighbors_valid_(false), point_angle_(point_angle),
   min_theta_(min_theta), max_theta_(max_theta), verbose_(false)
 {
-  std::cout << "Start construction" << std::endl;
+  if(verbose_)std::cout << "Start construction" << std::endl;
   add_uniform_views();
   remove_top_and_bottom();
-  std::cout << "Unit sphere complete with " << sph_pts_.size() << " verts and "
-           <<  edges_.size() << " edges\n"<< std::endl;
+  if(verbose_) std::cout << "Unit sphere complete with " << sph_pts_.size() << " verts and "
+                        <<  edges_.size() << " edges\n"<< std::endl;
   this->set_cart_points();
 }
 
@@ -122,7 +122,7 @@ void vsph_unit_sphere::add_uniform_views()
 
   std::vector<int> tri8;
   tri8.push_back(1); tri8.push_back(2); tri8.push_back(5); triangles.push_back(tri8);
-  std::cout << "formed octahedron--" << std::endl;
+  if(verbose_) std::cout << "formed octahedron--" << std::endl;
   // iteratively refine the triangles
   // check the angle between two vertices (of the same triangle),
   // use the center of the spherical coordinate system
@@ -133,7 +133,7 @@ void vsph_unit_sphere::add_uniform_views()
   while (!done) {
     std::vector<std::vector<int> >  new_triangles;
     int ntri=triangles.size();
-    std::cout << "subdivide " << ntri << " triangles" << std::endl;
+    if(verbose_) std::cout << "subdivide " << ntri << " triangles" << std::endl;
     for (int i=0; i<ntri; i++) {
       std::vector<int> points;
       for (int j=0; j<3; j++) {
@@ -216,7 +216,7 @@ void vsph_unit_sphere::add_uniform_views()
   // note that the relationship between vertex id and the id of the
   // cart and sphere containers is changed by this filter
   int nv = (*verts).size();
-  std::cout << "Start finding equivalent vertices n = " << nv << '\n' << std::flush;
+  if(verbose_) std::cout << "Start finding equivalent vertices n = " << nv << '\n' << std::flush;
   equivalent_ids_.resize(nv, -1);
   int ntri = triangles.size();
   sph_pts_.reserve(nv);
