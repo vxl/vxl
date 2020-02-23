@@ -5,6 +5,7 @@ add_executable( vsph_test_all
   test_driver.cxx
   test_view_sphere.cxx
   test_spherical_coord.cxx
+  test_spherical_triangle.cxx
   test_camera_bounds.cxx
   test_sph_geom.cxx
   test_unit_sphere.cxx
@@ -18,6 +19,7 @@ target_link_libraries( vsph_test_all vsph ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PRE
 
 add_test( NAME vsph_test_view_sphere COMMAND $<TARGET_FILE:vsph_test_all> test_view_sphere )
 add_test( NAME vsph_test_spherical_coord COMMAND $<TARGET_FILE:vsph_test_all> test_spherical_coord )
+add_test( NAME vsph_test_spherical_triangle COMMAND $<TARGET_FILE:vsph_test_all> test_spherical_triangle )
 add_test( NAME vsph_test_camera_bounds COMMAND $<TARGET_FILE:vsph_test_all> test_camera_bounds )
 add_test( NAME vsph_test_sph_geom COMMAND $<TARGET_FILE:vsph_test_all> test_sph_geom )
 add_test( NAME vsph_test_unit_sphere COMMAND $<TARGET_FILE:vsph_test_all> test_unit_sphere )

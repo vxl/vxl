@@ -52,6 +52,12 @@ bool vsph_spherical_coord::move_point(vsph_sph_point_3d& p)
   p.set(radius_, p.theta_, p.phi_);
   return true;
 }
+vgl_vector_3d<double> vsph_spherical_coord::radial_vector(vsph_sph_point_3d const& p){
+  vgl_point_3d<double> p_cart = cart_coord(p);
+  vgl_vector_3d<double> radial_dir = p_cart-origin_;
+  radial_dir /= radial_dir.length();
+  return radial_dir;
+}
 
 void vsph_spherical_coord::print(std::ostream& os) const
 {
