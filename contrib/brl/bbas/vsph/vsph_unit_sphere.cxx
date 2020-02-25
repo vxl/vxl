@@ -524,11 +524,12 @@ void vsph_unit_sphere::display_unit_sphere(std::ofstream& os, bool open_close){
       std::vector<std::tuple<size_t, size_t, size_t > > mapped_in_stris;
       size_t pt_indx = 0;
       size_t nt = triangles_.size();
+      double s = 0.99;
       for(size_t t = 0; t<nt; ++t){
         const vsph_spherical_triangle& tri = triangles_[t];
-        spts.emplace_back(tri.v0_cart().x(), tri.v0_cart().y(), tri.v0_cart().z());
-        spts.emplace_back(tri.v1_cart().x(), tri.v1_cart().y(), tri.v1_cart().z());
-        spts.emplace_back(tri.v2_cart().x(), tri.v2_cart().y(), tri.v2_cart().z());
+        spts.emplace_back(s*tri.v0_cart().x(), s*tri.v0_cart().y(), s*tri.v0_cart().z());
+        spts.emplace_back(s*tri.v1_cart().x(), s*tri.v1_cart().y(), s*tri.v1_cart().z());
+        spts.emplace_back(s*tri.v2_cart().x(), s*tri.v2_cart().y(), s*tri.v2_cart().z());
         mapped_in_stris.emplace_back(pt_indx, pt_indx+1, pt_indx+2);
         pt_indx +=3;
       }
