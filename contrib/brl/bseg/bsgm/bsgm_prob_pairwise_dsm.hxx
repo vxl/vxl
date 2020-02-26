@@ -30,9 +30,9 @@ void bsgm_prob_pairwise_dsm<CAM_T>::rectify()
   // rectified images
   vil_image_view<float> fview0, fview1;
   rip_.set_params(rp);
-  if(!rip_.process(scene_box_))
+  if (!rip_.process(scene_box_))
     throw std::runtime_error("rectification failed");
-  
+
   fview0 = rip_.rectified_fview0(), fview1 = rip_.rectified_fview1();
 
   // remove small negative values due to interpolation during rectification
@@ -67,23 +67,23 @@ void bsgm_prob_pairwise_dsm<CAM_T>::compute_disparity(
   bool good = true;
   bsgm_compute_invalid_map(img, img_reference, invalid,
                            min_disparity_, num_disparities(), border_val);
-  if(params_.coarse_dsm_disparity_estimate_){
+  if (params_.coarse_dsm_disparity_estimate_) {
     bsgm_multiscale_disparity_estimator mde(params_.de_params_, ni_, nj_,
                                             num_disparities(), num_active_disparities());
 
     good = mde.compute(img, img_reference, invalid,
-                          min_disparity_, invalid_disp, params_.multi_scale_mode_,
-                          disparity);
+                       min_disparity_, invalid_disp, params_.multi_scale_mode_,
+                       disparity);
     if (!good)
       throw std::runtime_error("Multiscale disparity estimator failed");
-  }else{//use input min_disparity
+  } else {  // use input min_disparity
     size_t ni = img.ni(), nj = img.nj();
 
     vil_image_view<int> min_disparity(ni, nj);
-    if(forward)// img = img0, ref = img1
+    if (forward)  // img = img0, ref = img1
       min_disparity.fill(min_disparity_);
-    else // reverse img = img1, ref = img0
-      min_disparity.fill(-(num_disparities()+min_disparity_));
+    else  // reverse img = img1, ref = img0
+      min_disparity.fill(-(num_disparities() + min_disparity_));
 
     bsgm_disparity_estimator bsgm(params_.de_params_, ni, nj, num_disparities());
     good = bsgm.compute(img, img_reference, invalid, min_disparity, invalid_disp, disparity);
@@ -92,7 +92,7 @@ void bsgm_prob_pairwise_dsm<CAM_T>::compute_disparity(
   }
 }
 
-// compute foward disparity
+// compute forward disparity
 template <class CAM_T>
 void bsgm_prob_pairwise_dsm<CAM_T>::compute_disparity_fwd()
 {
@@ -116,9 +116,9 @@ void bsgm_prob_pairwise_dsm<CAM_T>::compute_disparity_rev()
 // compute height (tri_3d, ptset, heightmap)
 template <class CAM_T>
 void bsgm_prob_pairwise_dsm<CAM_T>::compute_height(const CAM_T& cam, const CAM_T& cam_reference,
-                                            const vil_image_view<float>& disparity,
-                                            vil_image_view<float>& tri_3d, vgl_pointset_3d<float>& ptset,
-                                            vil_image_view<float>& heightmap)
+                                                   const vil_image_view<float>& disparity,
+                                                   vil_image_view<float>& tri_3d, vgl_pointset_3d<float>& ptset,
+                                                   vil_image_view<float>& heightmap)
 {
   // triangulated image
   tri_3d = bpgl_3d_from_disparity(cam, cam_reference, disparity);
@@ -134,7 +134,7 @@ template <class CAM_T>
 void bsgm_prob_pairwise_dsm<CAM_T>::compute_height_fwd()
 {
   this->compute_height(rip_.rect_cam0(), rip_.rect_cam1(), disparity_fwd_,
-                         tri_3d_fwd_, ptset_fwd_, heightmap_fwd_);
+                       tri_3d_fwd_, ptset_fwd_, heightmap_fwd_);
 }
 
 // compute reverse height
@@ -142,7 +142,7 @@ template <class CAM_T>
 void bsgm_prob_pairwise_dsm<CAM_T>::compute_height_rev()
 {
   this->compute_height(rip_.rect_cam1(), rip_.rect_cam0(), disparity_rev_,
-                         tri_3d_rev_, ptset_rev_, heightmap_rev_);
+                       tri_3d_rev_, ptset_rev_, heightmap_rev_);
 }
 
 
@@ -301,6 +301,7 @@ static void map_prob_to_color(float prob, float& r, float& g, float& b)
   g = static_cast<float>(bvrml_custom_color::heatmap_custom[color_index][1]);
   b = static_cast<float>(bvrml_custom_color::heatmap_custom[color_index][2]);
 }
+
 template <class CAM_T>
 bool bsgm_prob_pairwise_dsm<CAM_T>::save_prob_ptset_color(std::string const& path) const
 {
@@ -322,6 +323,7 @@ bool bsgm_prob_pairwise_dsm<CAM_T>::save_prob_ptset_color(std::string const& pat
   ostr.close();
   return true;
 }
+
 #undef BSGM_PROB_PAIRWISE_DSM_INSTANTIATE
 #define BSGM_PROB_PAIRWISE_DSM_INSTANTIATE(CAMT) \
 template class bsgm_prob_pairwise_dsm<CAMT>

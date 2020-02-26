@@ -249,15 +249,13 @@ class bsgm_prob_pairwise_dsm
   //  output a color point cloud as ascii
   bool save_prob_ptset_color(std::string const& path) const;
 
- 
-
  protected:
 
   // compute disparity for generic inputs
   void compute_disparity(
       const vil_image_view<vxl_byte>& img,
       const vil_image_view<vxl_byte>& img_reference,
-      bool forward,//==true or reverse == false
+      bool forward,  // == true or reverse == false
       vil_image_view<bool>& invalid,
       vil_image_view<float>& disparity);
 
@@ -280,7 +278,7 @@ class bsgm_prob_pairwise_dsm
   bpgl_heightmap<float> get_bpgl_heightmap() const;
 
  private:
-  bool affine_; //vs. perspective
+  bool affine_;  // vs. perspective
   pairwise_params params_;
   bpgl_rectify_image_pair<CAM_T> rip_;
 
