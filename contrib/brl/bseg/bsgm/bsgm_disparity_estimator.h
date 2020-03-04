@@ -111,9 +111,9 @@ class bsgm_disparity_estimator
   //: Construct from parameters
   bsgm_disparity_estimator(
     const bsgm_disparity_estimator_params& params,
-    int img_width,
-    int img_height,
-    int num_disparities );
+    long long int img_width,
+    long long int img_height,
+    long long int num_disparities );
 
   //: Destructor
   ~bsgm_disparity_estimator();
@@ -144,10 +144,10 @@ class bsgm_disparity_estimator
   bsgm_disparity_estimator_params params_;
 
   //: Size of image
-  int w_, h_;
+  long long int w_, h_;
 
   //: Number of disparities to search over.
-  int num_disparities_;
+  long long int num_disparities_;
 
   //: All appearance and smoothing costs will be normalized to discrete
   // values such that this unit corresponds to 1.0 standard deviation of
@@ -177,11 +177,11 @@ class bsgm_disparity_estimator
   void setup_cost_volume(
     std::vector<unsigned char>& cost_data,
     std::vector< std::vector< unsigned char* > >& cost,
-    int depth );
+    long long int depth );
   void setup_cost_volume(
     std::vector<unsigned short>& cost_data,
     std::vector< std::vector< unsigned short* > >& cost,
-    int depth );
+    long long int depth );
 
   //: Compute appearance data costs
   void compute_census_data(
