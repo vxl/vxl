@@ -27,6 +27,8 @@ void bsgm_prob_pairwise_dsm<CAM_T>::rectify()
   rectify_params rp;
   rp.min_disparity_z_ = mid_z_;
   rp.upsample_scale_ = params_.upsample_scale_factor_;
+  rp.min_overlap_fraction_ = params_.min_overlap_fraction_;
+
   // rectified images
   vil_image_view<float> fview0, fview1;
   rip_.set_params(rp);
