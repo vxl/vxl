@@ -99,6 +99,9 @@ struct pairwise_params
   // upsample the rectified images by scale factor
   float upsample_scale_factor_ = 1.0f;
 
+  // minimum fraction of points in the zero disparity plane (w/in scene box) that must project into both images
+  double min_overlap_fraction_ = 0.25;
+
   // the standard deviation of consistent disparity point distances
   float std_dev_ = 3.75*ground_sample_dist_;
 
