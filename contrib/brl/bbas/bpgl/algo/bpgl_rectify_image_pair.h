@@ -26,7 +26,7 @@ template <class CAMT>
 class bpgl_rectify_image_pair
 {
  public:
-   bpgl_rectify_image_pair() { set_valid_types(); }
+  bpgl_rectify_image_pair() { set_valid_types(); }
 
   bpgl_rectify_image_pair(vil_image_view_base_sptr const& view0, CAMT const& cam0,
                           vil_image_view_base_sptr const& view1, CAMT const& cam1)
@@ -43,7 +43,7 @@ class bpgl_rectify_image_pair
   }
 
   bpgl_rectify_image_pair(vil_image_resource_sptr const& resc0, CAMT const& cam0,
-                                 vil_image_resource_sptr const& resc1, CAMT const& cam1)
+                          vil_image_resource_sptr const& resc1, CAMT const& cam1)
   {
     bool good = this->set_images_and_cams(resc0,cam0,resc1,cam1);
     set_valid_types();
