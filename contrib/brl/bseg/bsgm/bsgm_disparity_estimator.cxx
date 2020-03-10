@@ -19,9 +19,9 @@
 //----------------------------------------------------------------------------
 bsgm_disparity_estimator::bsgm_disparity_estimator(
   const bsgm_disparity_estimator_params& params,
-  int img_width,
-  int img_height,
-  int num_disparities ) :
+  long long int img_width,
+  long long int img_height,
+  long long int num_disparities ) :
     params_( params ),
     w_( img_width ),
     h_( img_height ),
@@ -31,6 +31,27 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
     p2_min_base_( 1.0f ),
     p2_max_base_( 8.0f )
 {
+  // Validate inputs
+  if (img_width < 0 || img_height < 0 || num_disparities < 0) {
+    std::ostringstream buffer;
+    buffer << "Cannot construct bsgm_disparity_estimator with negative width, height, or num_disparities." << std::endl
+           << "width = " << img_width << std::endl
+           << "height = " << img_height << std::endl
+           << "num_disparities = " << num_disparities << std::endl;
+    throw std::runtime_error(buffer.str());
+  }
+
+  // Check cost volume size
+  long long int cost_volume_size = img_width * img_height * num_disparities;
+  if (cost_volume_size < 0 || cost_volume_size > total_cost_data_.max_size()) {
+    std::ostringstream buffer;
+    buffer << "Cannot construct bsgm_disparity_estimator - cost volume is too large." << std::endl
+           << "width = " << img_width << std::endl
+           << "height = " << img_height << std::endl
+           << "num_disparities = " << num_disparities << std::endl;
+    throw std::runtime_error(buffer.str());
+  }
+
   // Setup any necessary cost volumes
   setup_cost_volume( fused_cost_data_, fused_cost_, num_disparities );
   setup_cost_volume( total_cost_data_, total_cost_, num_disparities );
@@ -60,7 +81,7 @@ bsgm_disparity_estimator::compute(
       img_ref.ni() != w_ || img_ref.nj() != h_ ||
       invalid_tar.ni() != w_ || invalid_tar.nj() != h_ ) return false;
 
-  int num_voxels = w_*h_*num_disparities_;
+  long long int num_voxels = w_*h_*num_disparities_;
 
   vul_timer timer, total_timer;
   if( params_.print_timing ){
@@ -186,12 +207,12 @@ void
 bsgm_disparity_estimator::setup_cost_volume(
   std::vector<unsigned char>& cost_data,
   std::vector< std::vector< unsigned char* > >& cost,
-  int depth )
+  long long int depth )
 {
   cost_data.resize( w_*h_*depth );
   cost.resize( h_ );
 
-  int idx = 0;
+  long long int idx = 0;
   for( int y = 0; y < h_; y++ ){
     cost[y].resize( w_ );
     for( int x = 0; x < w_; x++, idx += depth )
@@ -205,12 +226,12 @@ void
 bsgm_disparity_estimator::setup_cost_volume(
   std::vector<unsigned short>& cost_data,
   std::vector< std::vector< unsigned short* > >& cost,
-  int depth )
+  long long int depth )
 {
   cost_data.resize( w_*h_*depth );
   cost.resize( h_ );
 
-  int idx = 0;
+  long long int idx = 0;
   for( int y = 0; y < h_; y++ ){
     cost[y].resize( w_ );
     for( int x = 0; x < w_; x++, idx += depth )
@@ -358,8 +379,8 @@ bsgm_disparity_estimator::run_multi_dp(
   const vil_image_view<float>& grad_y,
   const vil_image_view<int>& min_disparity )
 {
-  int volume_size = w_*h_*num_disparities_;
-  int row_size = w_*num_disparities_;
+  long long int volume_size = w_*h_*num_disparities_;
+  long long int row_size = w_*num_disparities_;
   int num_dirs = params_.use_16_directions ? 16 : 8;
   float sqrt2norm = 1.0f/sqrt(2.0f);
   float grad_norm = 1.0f/params_.max_grad;
@@ -558,14 +579,14 @@ bsgm_disparity_estimator::run_multi_dp(
     int y_inc = (y_start < y_end) ? 1 : -1;
 
     // Initialize previous row
-    for( int v = 0; v < row_size; v++ )
+    for( long long int v = 0; v < row_size; v++ )
       dir_cost_prev[v] = 0;
 
     // Loop through rows
     for( int y = y_start; y != y_end + y_inc; y += y_inc ){
 
       // Re-initialize current row in case dir follows row
-      for( int v = 0; v < row_size; v++ )
+      for( long long int v = 0; v < row_size; v++ )
         dir_cost_cur[v] = 0;
 
       // Swap path idx if necessary for directions 8-15
