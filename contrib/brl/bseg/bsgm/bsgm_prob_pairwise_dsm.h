@@ -132,44 +132,68 @@ class bsgm_prob_pairwise_dsm
  public:
   bsgm_prob_pairwise_dsm() = default;
 
-  bsgm_prob_pairwise_dsm(vil_image_resource_sptr const& resc0, CAM_T const& acam0,
-                         vil_image_resource_sptr const& resc1, CAM_T const& acam1)
+  bsgm_prob_pairwise_dsm(vil_image_view_base_sptr const& view0, CAM_T const& cam0,
+                         vil_image_view_base_sptr const& view1, CAM_T const& cam1)
   {
-    rip_.set_images_and_cams(resc0, acam0, resc1, acam1);
+    this->set_images_and_cams(view0, cam0, view1, cam1);
   }
 
-  bsgm_prob_pairwise_dsm(vil_image_view<unsigned char> const& view0, CAM_T const& acam0,
-                         vil_image_view<unsigned char> const& view1, CAM_T const& acam1)
+  bsgm_prob_pairwise_dsm(vil_image_resource_sptr const& resc0, CAM_T const& cam0,
+                         vil_image_resource_sptr const& resc1, CAM_T const& cam1)
   {
-    rip_.set_images_and_cams(vil_new_image_resource_of_view(view0), acam0, vil_new_image_resource_of_view(view1), acam1);
+    this->set_images_and_cams(resc0, cam0, resc1, cam1);
   }
 
+  bsgm_prob_pairwise_dsm(vil_image_view<unsigned char> const& view0, CAM_T const& cam0,
+                         vil_image_view<unsigned char> const& view1, CAM_T const& cam1)
+  {
+    this->set_images_and_cams(view0, cam0, view1, cam1);
+  }
 
   // ACCESSORS-----
 
+  //: set images & cameras for analysis
+  bool set_images_and_cams(vil_image_view_base_sptr const& view0, CAM_T const& cam0,
+                           vil_image_view_base_sptr const& view1, CAM_T const& cam1)
+  {
+    return rip_.set_images_and_cams(view0, cam0, view1, cam1);
+  }
+
+  bool set_images_and_cams(vil_image_view<unsigned char> const& view0, CAM_T const& cam0,
+                           vil_image_view<unsigned char> const& view1, CAM_T const& cam1)
+  {
+    return rip_.set_images_and_cams(view0, cam0, view1, cam1);
+  }
+
+  bool set_images_and_cams(vil_image_resource_sptr const& resc0, CAM_T const& cam0,
+                           vil_image_resource_sptr const& resc1, CAM_T const& cam1)
+  {
+    return rip_.set_images_and_cams(resc0, cam0, resc1, cam1);
+  }
+
   //: parameters
   void params(pairwise_params const& params) {params_ = params;}
-  pairwise_params params() const {return params_;}
+  pairwise_params params() const { return params_; }
 
   //: minimum disparity to start search along an epipolar line
   void min_disparity(int min_disparity) {min_disparity_ = min_disparity;}
-  int min_disparity() const {return min_disparity_;}
+  int min_disparity() const { return min_disparity_; }
 
   //: maximum disparity to end search along an epipolar line
   void max_disparity(int max_disparity) {max_disparity_ = max_disparity;}
-  int max_disparity() const{return max_disparity_;}
+  int max_disparity() const { return max_disparity_; }
 
   //: number of disparities
-  int num_disparities() { return (max_disparity_ - min_disparity_); }
+  int num_disparities() const { return (max_disparity_ - min_disparity_); }
 
   //: how many disparity values are searched around the coarse search result
-  int num_active_disparities() {
+  int num_active_disparities() const {
     return static_cast<int>(num_disparities()*params_.active_disparity_factor_);
   }
 
   //: plane elevation for minimum least squares disparity
   void midpoint_z(double mid_z) {mid_z_ = mid_z;}
-  double midpoint_z() {return mid_z_;}
+  double midpoint_z() const { return mid_z_; }
 
   //: scene box for analysis
   void scene_box(vgl_box_3d<double> scene_box) { scene_box_ = scene_box; }
@@ -287,8 +311,8 @@ class bsgm_prob_pairwise_dsm
 
   size_t ni_;
   size_t nj_;
-  int min_disparity_;
-  int max_disparity_;
+  int min_disparity_ = -100;
+  int max_disparity_ = 100;
 
   double mid_z_ = NAN;
   double z_vs_disp_scale_ = 1.0;
