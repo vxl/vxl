@@ -13,6 +13,13 @@
  * for example, given the pixel location (100, 200) in image1 and a disparity value of -20 at that location
  * in the disparity image then the corresponding pixel location in image2 is (80, 200).
  * valid camera types, CAM_T, are vpgl_affine_camera<T> and vpgl_perspective_camera<T>
+ * For perspective cameras derived from structure from motion (SfM) it is possible that world points
+ * are behind one or both of the cameras. In this case the sense of the disparity is reversed. That is,
+ *             dZ
+ *            ---- > 0
+ *             dD
+ * In this case, scene depth is inverted and to obtain correct scene depth, disparity sense(sign) must be reversed.
+ * The required sign reveral is done interior to these functions
 **/
 template<typename T, typename CAM_T>
 vil_image_view<T> bpgl_3d_from_disparity(

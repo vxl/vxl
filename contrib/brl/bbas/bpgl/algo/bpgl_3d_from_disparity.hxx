@@ -4,6 +4,7 @@
 #include "bpgl_3d_from_disparity.h"
 
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 
 template<typename T, typename CAM_T>
@@ -53,12 +54,24 @@ vil_image_view<T> bpgl_3d_from_disparity(
   }
   else if (cam1.type_name() == "vpgl_perspective_camera") {
     vpgl_proj_camera<double> pp0(P0), pp1(P1);
+    // compute sense of disparity in case points are behind the camera
+    double sign = 1.0;
+    double id = double(ni)/2.0;
+    double jd = double(nj)/2.0;
+    size_t i = size_t(id), j = size_t(jd);
+    vgl_point_2d<double> x0(i, j), x1(i, j); // disp = 0
+    vgl_point_2d<double> x1ip1((i+1), j); //disp = +1
+    vgl_point_3d<double> p3d_i   = triangulate_3d_point(pp0, x0, pp1, x1);
+    vgl_point_3d<double> p3d_ip1 = triangulate_3d_point(pp0, x0, pp1, x1ip1);
+    double dz = p3d_ip1.z() - p3d_i.z();
+    if(dz > 0)
+      sign = -1.0;
     for (size_t j = 0; j < nj; ++j) {
       for (size_t i = 0; i < ni; ++i) {
         //4-30-2019 jlm changed i - disparity to i + disparity to be consistent with
         //the disparity computed by bsgm_disparity_estimator
         // could check against maximum valid value here as well, if we knew the size of the second image.
-        double i2 = i + disparity(i, j);
+        double i2 = i + sign*disparity(i, j);
         if (i2 >= 0) {
           vgl_point_2d<double> x0(i, j), x1(i2, j);
           vgl_point_3d<double> p3d = triangulate_3d_point(pp0, x0, pp1, x1);
