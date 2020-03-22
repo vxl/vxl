@@ -75,7 +75,7 @@ vil_image_view<T> bpgl_3d_from_disparity_with_scalar(
     CAM_T const& cam1,
     CAM_T const& cam2,
     vil_image_view<T> const& disparity,
-    vil_image_view<T> const& scalar, disparity_sense)
+    vil_image_view<T> const& scalar, int disparity_sense)
 {
   const unsigned int ni = disparity.ni();
   const unsigned int nj = disparity.nj();
@@ -97,12 +97,12 @@ template vil_image_view<T> \
 bpgl_3d_from_disparity<T, CAM_T>( \
     CAM_T const& cam1, \
     CAM_T const& cam2, \
-    vil_image_view<T> const& disparity);\
+    vil_image_view<T> const& disparity, int disparity_sense);\
 template vil_image_view<T> \
 bpgl_3d_from_disparity_with_scalar<T, CAM_T>( \
     CAM_T const& cam1,\
     CAM_T const& cam2,\
     vil_image_view<T> const& disparity,\
-    vil_image_view<T> const& scalar)
+    vil_image_view<T> const& scalar, int disparity_sense)
 
 #endif
