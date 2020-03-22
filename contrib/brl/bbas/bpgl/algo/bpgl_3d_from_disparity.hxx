@@ -11,7 +11,7 @@ template<typename T, typename CAM_T>
 vil_image_view<T> bpgl_3d_from_disparity(
     CAM_T const& cam1,
     CAM_T const& cam2,
-    vil_image_view<T> const& disparity)
+    vil_image_view<T> const& disparity, int disparity_sense)
 {
   // create matrix inverse of stacked projection matrices
   vnl_matrix_fixed<double,3,4> P0(cam1.get_matrix());
@@ -54,24 +54,12 @@ vil_image_view<T> bpgl_3d_from_disparity(
   }
   else if (cam1.type_name() == "vpgl_perspective_camera") {
     vpgl_proj_camera<double> pp0(P0), pp1(P1);
-    // compute sense of disparity in case points are behind the camera
-    double sign = 1.0;
-    double id = double(ni)/2.0;
-    double jd = double(nj)/2.0;
-    size_t i = size_t(id), j = size_t(jd);
-    vgl_point_2d<double> x0(i, j), x1(i, j); // disp = 0
-    vgl_point_2d<double> x1ip1((i+1), j); //disp = +1
-    vgl_point_3d<double> p3d_i   = triangulate_3d_point(pp0, x0, pp1, x1);
-    vgl_point_3d<double> p3d_ip1 = triangulate_3d_point(pp0, x0, pp1, x1ip1);
-    double dz = p3d_ip1.z() - p3d_i.z();
-    if(dz > 0)
-      sign = -1.0;
     for (size_t j = 0; j < nj; ++j) {
       for (size_t i = 0; i < ni; ++i) {
         //4-30-2019 jlm changed i - disparity to i + disparity to be consistent with
         //the disparity computed by bsgm_disparity_estimator
         // could check against maximum valid value here as well, if we knew the size of the second image.
-        double i2 = i + sign*disparity(i, j);
+        double i2 = i + disparity_sense*disparity(i, j);
         if (i2 >= 0) {
           vgl_point_2d<double> x0(i, j), x1(i2, j);
           vgl_point_3d<double> p3d = triangulate_3d_point(pp0, x0, pp1, x1);
@@ -87,13 +75,13 @@ vil_image_view<T> bpgl_3d_from_disparity_with_scalar(
     CAM_T const& cam1,
     CAM_T const& cam2,
     vil_image_view<T> const& disparity,
-    vil_image_view<T> const& scalar)
+    vil_image_view<T> const& scalar, disparity_sense)
 {
   const unsigned int ni = disparity.ni();
   const unsigned int nj = disparity.nj();
   vil_image_view<T> img3d(ni, nj, 4);
   vil_image_view<T> img3d3;
-  img3d3 = bpgl_3d_from_disparity(cam1, cam2, disparity);
+  img3d3 = bpgl_3d_from_disparity(cam1, cam2, disparity, disparity_sense);
   for(size_t j = 0; j<nj; ++j)
     for (size_t i = 0; i < ni; ++i) {
       for(size_t p =0; p<3; ++p)

@@ -6,6 +6,7 @@
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <limits>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
@@ -110,29 +111,37 @@ bool bvgl_ptset_3d_ops<T>::covariance_matrix(vgl_pointset_3d<T> const& ptset, vn
     f = T(1);
   size_t fn = static_cast<size_t>(f * n);
   //compute mean position
-  T mean_x = 0.0, mean_y = 0.0, mean_z = 0.0;
+  T mean_x = 0.0, mean_y = 0.0, mean_z = 0.0, np = 0.0;
   for (size_t i = 0; i < fn; ++i) {
     size_t k = rand(fn);
     vgl_point_3d<T> p = ptset.p(k);
+    T x = p.x(), y = p.y(), z = p.z();
+    if (!vnl_math::isfinite(x) || !vnl_math::isfinite(y) || !vnl_math::isfinite(z))
+      continue;
     mean_x += p.x();
     mean_y += p.y();
     mean_z += p.z();
+    np += 1.0;
   }
-  mean_x /= fn;   mean_y /= fn;   mean_z /= fn;
+  mean_x /= np;   mean_y /= np;   mean_z /= np;
   // compute the covariance matrix
   T C00 = 0.0, C01 = 0.0, C02 = 0.0;
-  T C11 = 0.0, C12 = 0.0, C22 = 0.0;
+  T C11 = 0.0, C12 = 0.0, C22 = 0.0; np = 0.0;
   for (size_t i = 0; i < fn; ++i) {
     size_t k = rand(fn);
     vgl_point_3d<T> p = ptset.p(k);
-    T vx = p.x() - mean_x;
-    T vy = p.y() - mean_y;
-    T vz = p.z() - mean_z;
+    T x = p.x(), y = p.y(), z = p.z();
+    if (!vnl_math::isfinite(x) || !vnl_math::isfinite(y) || !vnl_math::isfinite(z))
+      continue;
+    T vx = x - mean_x;
+    T vy = y - mean_y;
+    T vz = z - mean_z;
     C00 += vx * vx; C01 += vx * vy; C02 += vx * vz;
     C11 += vy * vy; C12 += vy * vz; C22 += vz * vz;
+    np += 1.0;
   }
-  C00 /= fn; C01 /= fn; C02 /= fn;
-  C11 /= fn; C12 /= fn; C22 /= fn;
+  C00 /= np; C01 /= np; C02 /= np;
+  C11 /= np; C12 /= np; C22 /= np;
 
   C[0][0] = C00;   C[0][1] = C01; C[1][0] = C01; C[0][2] = C02; C[2][0] = C02;
   C[1][1] = C11;   C[1][2] = C12; C[2][1] = C12; C[2][2] = C22;

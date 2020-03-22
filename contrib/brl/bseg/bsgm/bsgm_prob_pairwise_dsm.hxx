@@ -123,7 +123,7 @@ void bsgm_prob_pairwise_dsm<CAM_T>::compute_height(const CAM_T& cam, const CAM_T
                                                    vil_image_view<float>& heightmap)
 {
   // triangulated image
-  tri_3d = bpgl_3d_from_disparity(cam, cam_reference, disparity);
+  tri_3d = bpgl_3d_from_disparity(cam, cam_reference, disparity, params_.disparity_sense_);
 
   // convert triangulated image to pointset & heightmap
   auto bh = this->get_bpgl_heightmap();

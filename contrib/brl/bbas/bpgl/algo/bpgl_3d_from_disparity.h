@@ -15,23 +15,19 @@
  * valid camera types, CAM_T, are vpgl_affine_camera<T> and vpgl_perspective_camera<T>
  * For perspective cameras derived from structure from motion (SfM) it is possible that world points
  * are behind one or both of the cameras. In this case the sense of the disparity is reversed. That is,
- *             dZ
- *            ---- > 0
- *             dD
- * In this case, scene depth is inverted and to obtain correct scene depth, disparity sense(sign) must be reversed.
- * The required sign reveral is done interior to these functions
+ * the disparity_sense argument is set to -1
 **/
 template<typename T, typename CAM_T>
 vil_image_view<T> bpgl_3d_from_disparity(
     CAM_T const& cam1,
     CAM_T const& cam2,
-    vil_image_view<T> const& disparity);
+    vil_image_view<T> const& disparity, int disparity_sense = 1);
 
 template<typename T, typename CAM_T>
 vil_image_view<T> bpgl_3d_from_disparity_with_scalar(
     CAM_T const& cam1,
     CAM_T const& cam2,
     vil_image_view<T> const& disparity,
-    vil_image_view<T> const& scalar);
+    vil_image_view<T> const& scalar, int disparity_sense = 1);
 
 #endif
