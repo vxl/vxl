@@ -96,6 +96,10 @@ struct pairwise_params
   // the height map grid spacing, also relates to consistent distance tolerance
   float ground_sample_dist_ = 0.3f;
 
+  // reverse the sign of disparity (disparity_sense_ = -1) for situations where the scene is behind the camera
+  // happens occasionaly for perspective cameras computed by SfM
+  int disparity_sense_ = 1;
+
   // upsample the rectified images by scale factor
   float upsample_scale_factor_ = 1.0f;
 
