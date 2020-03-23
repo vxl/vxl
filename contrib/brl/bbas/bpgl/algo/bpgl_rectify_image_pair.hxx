@@ -152,9 +152,10 @@ compute_warp_dimensions_offsets()
     h = h1;
     dv_off_ = minj1;
   }
-  double scaled_w = w*params_.upsample_scale_, scaled_h = h*params_.upsample_scale_;
-  out_ni_ = static_cast<size_t>(scaled_w+0.5) +1;
-  out_nj_ = static_cast<size_t>(scaled_h+0.5) +1;
+  //double scaled_w = w*params_.upsample_scale_, scaled_h = h*params_.upsample_scale_;
+  // replaced by scale_to_input_size()
+  out_ni_ = static_cast<size_t>(w+0.5) +1;
+  out_nj_ = static_cast<size_t>(h+0.5) +1;
 }
 template <class CAMT>
 double bpgl_rectify_image_pair<CAMT>::scale_to_input_size(){
@@ -325,6 +326,11 @@ warp_image(vil_image_view<float> fview,
   fwarp.set_size(out_ni, out_nj);
   fwarp.fill(params_.invalid_pixel_val_);
   vnl_matrix_fixed<double, 3, 3> Hinv = vnl_inverse(H);
+  vnl_vector_fixed<double, 3> opix(0.0, 0.0, 1), hopix;
+  hopix = Hinv * opix;
+  vnl_vector_fixed<double, 3> mpix(out_ni, out_nj, 1), hmpix;
+  hmpix = Hinv * mpix;
+  
   for (size_t j =0; j<out_nj; ++j) {
     for (size_t i =0; i<out_ni; ++i) {
       double du = static_cast<double>(i);
