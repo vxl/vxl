@@ -118,9 +118,9 @@ bool bvgl_ptset_3d_ops<T>::covariance_matrix(vgl_pointset_3d<T> const& ptset, vn
     T x = p.x(), y = p.y(), z = p.z();
     if (!vnl_math::isfinite(x) || !vnl_math::isfinite(y) || !vnl_math::isfinite(z))
       continue;
-    mean_x += p.x();
-    mean_y += p.y();
-    mean_z += p.z();
+    mean_x += x;
+    mean_y += y;
+    mean_z += z;
     np += 1.0;
   }
   mean_x /= np;   mean_y /= np;   mean_z /= np;
