@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_distance.h>
 
 #include "bpgl_3d_from_disparity.h"
 #include "bpgl_heightmap_from_disparity.h"
@@ -202,7 +203,57 @@ void bpgl_heightmap<T>::_heightmap_from_pointset(
   } // end scalar interpolation
 
 }
+template<class T>
+void bpgl_heightmap<T>::heightmap_from_pointset(
+        const vgl_pointset_3d<T>& ptset,
+        vil_image_view<T>& heightmap_output,
+        vil_image_view<T>& scalar_output,
+        vil_image_view<T>& radial_std_dev){
+  
+  _heightmap_from_pointset(ptset,
+                           heightmap_output,
+                           scalar_output,
+                           true);
 
+  vgl_point_2d<T> upper_left(heightmap_bounds_.min_x(), heightmap_bounds_.max_y());
+  size_t ni = heightmap_output.ni(), nj = heightmap_output.nj();
+  // maximum neighbor distance
+  T max_dist = neighbor_dist_factor_ * ground_sample_distance_;
+
+  radial_std_dev.set_size(ni,nj);
+  radial_std_dev.fill(NAN);
+
+  std::vector<vgl_point_2d<T> > pts_2d;
+  for(size_t i = 0; i<ptset.size(); ++i)
+    pts_2d.emplace_back(ptset.p(i).x(), ptset.p(i).y());
+
+  bvgl_k_nearest_neighbors_2d<T> knn(pts_2d);
+  if (!knn.is_valid()) {
+    throw std::runtime_error("KNN initialization failure");
+  }  
+
+  for(size_t j = 0; j<nj; ++j)
+    for(size_t i = 0; i<ni; ++i){
+      vgl_point_2d<T> loc(upper_left.x()+ i*ground_sample_distance_, upper_left.y()- j*ground_sample_distance_);
+      std::vector<vgl_point_2d<T> > neighbor_locs;
+      std::vector<unsigned> neighbor_indices;
+      if (!knn.knn(loc, max_neighbors_, neighbor_locs, neighbor_indices, max_dist)) {
+        throw std::runtime_error("KNN failed to return neighbors");
+      }
+      size_t nn = neighbor_indices.size();
+      if (nn < min_neighbors_)
+        continue;
+      T var_sum = T(0), p_sum = T(0);
+      for(size_t k = 0; k<nn; ++k){
+        T prob = ptset.sc(neighbor_indices[k]);
+        T d = vgl_distance<T>(loc, neighbor_locs[k]);
+        var_sum += prob*d*d;
+        p_sum += prob;
+      }
+      T std_dev = sqrt(var_sum/p_sum);
+      radial_std_dev(i,j) = std_dev;
+    }
+}
 
 // ----------
 // Heightmap from triangulated input

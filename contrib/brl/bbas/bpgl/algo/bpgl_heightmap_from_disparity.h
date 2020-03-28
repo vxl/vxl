@@ -90,6 +90,13 @@ class bpgl_heightmap
         vil_image_view<T>& heightmap_output,
         vil_image_view<T>& scalar_output);
 
+    //: compute heightmap, scalar field and radial standard deviation image
+    void heightmap_from_pointset(
+        const vgl_pointset_3d<T>& ptset,
+        vil_image_view<T>& heightmap_output,
+        vil_image_view<T>& scalar_output,
+        vil_image_view<T>& radial_std_dev);
+
     //: compute heightmap from triangulated image
     void heightmap_from_tri(
         const vil_image_view<T>& tri_3d,
@@ -119,6 +126,7 @@ class bpgl_heightmap
         vil_image_view<T>& heightmap_output,
         vil_image_view<T>& scalar_output,
         bool ignore_scalar);
+
 
     // parameters
     vgl_box_3d<T> heightmap_bounds_;

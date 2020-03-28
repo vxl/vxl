@@ -206,7 +206,8 @@ bool bsgm_prob_pairwise_dsm<CAM_T>::compute_prob()
 
   // convert pointset to images
   auto bh = this->get_bpgl_heightmap();
-  bh.heightmap_from_pointset(prob_ptset_, prob_heightmap_z_, prob_heightmap_prob_);
+  //bh.heightmap_from_pointset(prob_ptset_, prob_heightmap_z_, prob_heightmap_prob_);
+  bh.heightmap_from_pointset(prob_ptset_, prob_heightmap_z_, prob_heightmap_prob_, radial_std_dev_image_);
   return true;
 }
 
