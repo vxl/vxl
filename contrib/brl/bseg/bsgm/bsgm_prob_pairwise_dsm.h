@@ -233,7 +233,7 @@ class bsgm_prob_pairwise_dsm
 
   const vil_image_view<float>& prob_heightmap() const {return prob_heightmap_z_;}
   const vil_image_view<float>& prob_confidence() const { return prob_heightmap_prob_; }
-
+  const vil_image_view<float>& radial_std_dev_image() const {return radial_std_dev_image_; }
 
   // PROCESS-----
 
@@ -349,7 +349,7 @@ class bsgm_prob_pairwise_dsm
 
   vil_image_view<float> prob_heightmap_z_;
   vil_image_view<float> prob_heightmap_prob_;
-
+  vil_image_view<float> radial_std_dev_image_;
 };
 #define BSGM_PROB_PAIRWISE_DSM_INSTANTIATE(T) extern "please include bsgm/bsgm_prob_pairwise_dsm.hxx first"
 #endif // bsgm_prob_pairwise_dsm_h_
