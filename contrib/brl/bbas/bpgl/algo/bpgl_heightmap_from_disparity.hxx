@@ -213,7 +213,7 @@ void bpgl_heightmap<T>::heightmap_from_pointset(
   _heightmap_from_pointset(ptset,
                            heightmap_output,
                            scalar_output,
-                           true);
+                           false);
 
   vgl_point_2d<T> upper_left(heightmap_bounds_.min_x(), heightmap_bounds_.max_y());
   size_t ni = heightmap_output.ni(), nj = heightmap_output.nj();
