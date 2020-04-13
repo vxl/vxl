@@ -82,7 +82,7 @@ vpgl_radial_tangential_distortion<T>::undistort( const vgl_homg_point_2d<T>& poi
   T delta = 0.0001;
   vgl_vector_2d<T> dpx(delta, T(0));
   vgl_vector_2d<T> dpy(T(0), delta);
-  T large = std::numeric_limits<double>::max();
+  T large = std::numeric_limits<T>::max();
   vgl_vector_2d<T> del(large, large);
   unsigned int i = 0;
   for (; i<100 && fabs(del.x())>eps && fabs(del.y())>eps ; ++i){
