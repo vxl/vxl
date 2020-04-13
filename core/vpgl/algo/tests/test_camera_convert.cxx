@@ -158,6 +158,7 @@ test_rational_camera_approx_perspective()
 void
 test_rational_camera_approx_affine()
 {
+#if HAS_GEOTIFF  // Requires GEOTIFF to succeed
   vpgl_local_rational_camera<double> loc_rat_cam = construct_local_rational_camera();
 
   // a 500x500x100 roi centered at the lvcs origin
@@ -182,6 +183,7 @@ test_rational_camera_approx_affine()
     // test to within one pixel
     TEST_NEAR("vpgl_affine_camera_convert projection", dist, 0.0, 0.5);
   }
+#endif
 }
 
 void

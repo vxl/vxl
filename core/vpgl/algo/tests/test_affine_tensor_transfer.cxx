@@ -372,6 +372,7 @@ rat_cameras(vpgl_local_rational_camera<double> & cam0,
 static void
 test_affine_tensor_transfer()
 {
+#if HAS_GEOTIFF
   // affine cameras computed from actual rational cameras
   vpgl_local_rational_camera<double> rcam0, rcam1, rcam2;
   rat_cameras(rcam0, rcam1, rcam2);
@@ -571,5 +572,6 @@ test_affine_tensor_transfer()
   std::cout << "Hep3 " << Hep3 << " compared to " << p3_gt << std::endl;
   double er_H13 = (Hep3 - p3_gt).length();
   TEST_NEAR("Homography from 1 to 3", er_H13, 0.0, 0.5);
+#endif
 }
 TESTMAIN(test_affine_tensor_transfer);
