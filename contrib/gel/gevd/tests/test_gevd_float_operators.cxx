@@ -49,7 +49,8 @@ test_gevd_float_operators()
   *(float*)kernel_buf.GetElementAddr(1,0) = -2.0f;
   *(float*)kernel_buf.GetElementAddr(1,1) = 3.0f;
   gevd_float_operators::Convolve(buf_in, kernel_buf, buf_out);
-#define TEST_(m,i,j,x) TEST_NEAR("gevd_float_operators::"#m, *(float*)buf_out->GetElementAddr(i,j), x, 1e-7f)
+  //NOTE: 1e-7f is too small of a tolerance
+#define TEST_(m,i,j,x) TEST_NEAR("gevd_float_operators::"#m, *(float*)buf_out->GetElementAddr(i,j), x, 2e-7f)
   for (int i=1; i<7; ++i) for (int j=1; j<7; ++j) { // avoid boundaries: undefined behaviour
     if      (i==2 && j==3) TEST_("Convolve", i,j, 0.0f);
     else if (i==2 && j==2) TEST_("Convolve", i,j, 10.0f);
