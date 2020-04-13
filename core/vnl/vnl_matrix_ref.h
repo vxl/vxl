@@ -58,8 +58,6 @@ class VNL_EXPORT vnl_matrix_ref : public vnl_matrix<T>
   vnl_matrix_ref & operator=( vnl_matrix_ref<T> const& ) = delete;
   vnl_matrix_ref & operator=( vnl_matrix_ref<T> && ) = delete;
 
-  explicit operator vnl_matrix<T>() const { return vnl_matrix<T>{*this}; };
-
   //: Reference to self to make non-const temporaries.
   // This is intended for passing vnl_matrix_fixed objects to
   // functions that expect non-const vnl_matrix references:

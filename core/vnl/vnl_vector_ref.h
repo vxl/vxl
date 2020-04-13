@@ -75,8 +75,6 @@ class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
   vnl_vector_ref<T> as_ref() { return *this; }
   const vnl_vector_ref<T> as_ref() const { return *this; }
   vnl_vector<T> as_vector() const { return vnl_vector<T>(this->data_block(), this->size()); }
-
-  explicit operator vnl_vector<T>() const { return this->as_vector(); }
 };
 
 //: Create a reference vector with part of an existing vector.
