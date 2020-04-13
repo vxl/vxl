@@ -29,9 +29,13 @@
 
 vnl_real_npolynomial::vnl_real_npolynomial(vnl_vector<double> c,
                                            const vnl_matrix<unsigned int> &p)
-    : coeffs_(std::move(c)), polyn_(p), nvar_(p.cols()), nterms_(p.rows()),
-      ideg_(p.max_value()) {
-  assert(c.size() == p.rows());
+    : coeffs_{std::move(c)}
+    , polyn_(p)
+    , nvar_{p.cols()}
+    , nterms_{p.rows()}
+    , ideg_{p.max_value()}
+{
+  assert(coeffs_.size() == polyn_.rows());
   simplify();
 }
 
