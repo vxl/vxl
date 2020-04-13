@@ -164,20 +164,20 @@ class vpgl_lvcs : public vbl_ref_count
 
  protected:
   cs_names local_cs_name_;    //!< Name of local frame's coord system ("nad27n", "wgs84" etc.)
-  double localCSOriginLat_;   //!< Lat (in geo_angle_unit_) of the origin
-  double localCSOriginLon_;   //!< Lon (in geo_angle_unit_) of the origin
-  double localCSOriginElev_;  //!< Elev (in localXYZUnit_) of the origin
-  double lat_scale_;          //!< radians/meter along lat at the origin)
-  double lon_scale_;          //!< radians/meter along lon at the origin)
+  double localCSOriginLat_{0.0};   //!< Lat (in geo_angle_unit_) of the origin
+  double localCSOriginLon_{0.0};   //!< Lon (in geo_angle_unit_) of the origin
+  double localCSOriginElev_{0.0};  //!< Elev (in localXYZUnit_) of the origin
+  double lat_scale_{0.0};          //!< radians/meter along lat at the origin)
+  double lon_scale_{0.0};          //!< radians/meter along lon at the origin)
   AngUnits geo_angle_unit_;   //!< lat lon angle unit (degrees or radians)
   LenUnits localXYZUnit_;     //!< Input (x,y,z) unit (meters or feet) in local CS
-  double lox_;                //!< Origin in local co-ordinates.
-  double loy_;                //!< Origin in local co-ordinates.
-  double theta_;              //!< Direction of north in radians.
+  double lox_{0.0};                //!< Origin in local co-ordinates.
+  double loy_{0.0};                //!< Origin in local co-ordinates.
+  double theta_{0.0};              //!< Direction of north in radians.
 
-  double localUTMOrigin_X_East_;  // in meters
-  double localUTMOrigin_Y_North_; // in meters
-  int localUTMOrigin_Zone_;
+  double localUTMOrigin_X_East_{0.0};  // in meters
+  double localUTMOrigin_Y_North_{0.0}; // in meters
+  int localUTMOrigin_Zone_{0};
 };
 
 //: return the scale for lat lon and elevation
