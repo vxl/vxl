@@ -49,9 +49,6 @@ class VNL_EXPORT vnl_matrix_ref : public vnl_matrix<T>
       const_cast<T *>(other.data_block()), false)
   { }
 
-  //vnl_matrix base class is not no_except, so derived class can not be either
-  vnl_matrix_ref(vnl_matrix_ref<T> &&) = default;
-
   ~vnl_matrix_ref() override = default;
 
   //: Copy and move constructor from vnl_matrix_ref<T> is disallowed by default
