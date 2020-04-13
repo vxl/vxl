@@ -41,9 +41,11 @@ struct linear_est : public vnl_least_squares_function
 {
   linear_est(vnl_matrix<double> const &A, vnl_vector<double> b, bool with_grad)
       : vnl_least_squares_function(A.cols(), A.rows(),
-                                   with_grad ? use_gradient : no_gradient),
-        A_(A), b_(std::move(b)) {
-    assert(A.rows() == b.size());
+                                   with_grad ? use_gradient : no_gradient)
+      , A_(A)
+      , b_(std::move(b))
+  {
+    assert(A_.rows() == b_.size());
   }
 
   void
