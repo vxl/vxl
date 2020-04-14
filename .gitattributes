@@ -12,7 +12,7 @@
 *.txx            whitespace=tab-in-indent,trailing-space
 *.py            whitespace=tab-in-indent,trailing-space
 
-*.bat           -crlf
+*.bat text eol=crlf
 *.bin           -crlf
 *.bmp           -crlf
 *.dsptemplate   -crlf
