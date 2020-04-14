@@ -80,7 +80,7 @@ bool bpgl_geotif_camera<T>::init_from_geotif(vil_image_resource_sptr const& resc
     std::cerr << "TIFF image is not GEOTIFF!\n";
     return false;
   }
-  
+
   // retrieve header
   vil_geotiff_header* gtif = geotiff_tiff->get_geotiff_header();
   if (!gtif) {
@@ -197,7 +197,7 @@ bool bpgl_geotif_camera<T>::geo_bounds_from_rational_cam(vpgl_camera<T>* cam_ptr
   }
   vpgl_rational_camera<double> rat_cam_d(coef_d, scale_d);
   //=======================================================
-  
+
   // define ground plane as bottom of valid 3-d region
   // also define middle of ground plane as the initial guess for
   // back projection
@@ -454,7 +454,7 @@ bool bpgl_geotif_camera<T>::construct_geo_data_only(vil_image_resource_sptr resc
   T tni = static_cast<T>(resc->ni()), tnj = static_cast<T>(resc->nj());
   vgl_point_2d<T> minp(T(0), T(0));
   vgl_point_2d<T> maxp(tni, tnj);
-  image_bounds_.add(minp);image_bounds_.add(maxp); 
+  image_bounds_.add(minp);image_bounds_.add(maxp);
   return this->init_from_geotif(resc);
 }
 

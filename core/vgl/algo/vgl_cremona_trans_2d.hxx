@@ -2,18 +2,18 @@
 #include <cmath>
 #include <iostream>
 static size_t factorial(size_t n){
-  size_t ret = 1;  
-  for ( size_t i = 2; i <= n; i++ ) {  
-    ret = ret * i;  
-  }  
-  return ret;  
+  size_t ret = 1;
+  for ( size_t i = 2; i <= n; i++ ) {
+    ret = ret * i;
+  }
+  return ret;
 }
 // the number of coefficients in a polynomial in X,Y with degree deg
 template <class T, size_t deg>
 size_t vgl_cremona_trans_2d<T, deg>::n_coeff(){
   return factorial(2+deg)/(2*factorial(deg));
 }
-// the monomials in a polynomial in X, Y of degree deg 
+// the monomials in a polynomial in X, Y of degree deg
 template <class T, size_t deg>
 vnl_vector<T> vgl_cremona_trans_2d<T, deg>::power_vector(T x, T y) {
   size_t nc = vgl_cremona_trans_2d<T, deg>::n_coeff();
@@ -82,7 +82,7 @@ std::istream&  operator>>(std::istream& s, vgl_cremona_trans_2d<T, deg>& t){
   vnl_matrix_fixed<T, 3, 3> m_from, m_to;
   s >> m_from; s >> m_to;
   size_t n = 4*vgl_cremona_trans_2d<T, deg>::n_coeff();
-  
+
   T c;
   vnl_vector<T> coeffs(n);
   for(size_t i = 0; i<n; ++i){

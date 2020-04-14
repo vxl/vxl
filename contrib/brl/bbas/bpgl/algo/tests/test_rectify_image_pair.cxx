@@ -100,7 +100,7 @@ static void test_rectify_image_pair() {
   std::cout << "\n========perspective camera 0==========\n" << P0 << std::endl;
   std::cout << "==========perspective camera 1==========\n" << P0 << std::endl;
   std::string pcam_path = "./pcam.txt";
-  
+
   std::ofstream postr(pcam_path.c_str());
   if (postr) {
     postr << P0;
@@ -138,7 +138,7 @@ static void test_rectify_image_pair() {
   std::cout << "orig perspective image dimensions (w,h) (" << ni0 << ' ' << nj0 << ")" << std::endl;
   prect.rectified_dims(width, height);
   std::cout << "perspective rectified dimensions (w,h) (" << width << ' ' << height << ")" << std::endl;
-  
+
 }
 
 TESTMAIN(test_rectify_image_pair);

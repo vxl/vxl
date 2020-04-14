@@ -12,7 +12,7 @@
 //
 // A cremona tranform is a generalization of the 2-d projective transformation
 // where the map (X,Y) -> (x, y) in Euclidian coordinates is defined by ratios of polynomials.
-// 
+//
 //       P(X, Y)       R(X, Y)
 //   x = -------   y = ------
 //       Q(X, Y)       S(X, Y)
@@ -61,14 +61,14 @@ class vgl_cremona_trans_2d
   vgl_homg_point_2d<T> operator()(vgl_homg_point_2d<T> const& p) const;
   vgl_point_2d<T> operator()(vgl_point_2d<T> const& p) const;
 
-  
+
 
   // utility functions (static to allow use in other classes)
 
   //: the number of coefficients in a polynomial in X,Y with degree deg
   static size_t n_coeff();
 
-  //: the monomials in a polynomial in X, Y of degree deg 
+  //: the monomials in a polynomial in X, Y of degree deg
   static vnl_vector<T> power_vector(T x, T y);
 
   // Data Members--------------------------------------------------------------
@@ -80,7 +80,7 @@ class vgl_cremona_trans_2d
   //: normalizing transformations to
   // enable accurate polynomial evaluation
   vgl_norm_trans_2d<T> tr_from_;
- vgl_norm_trans_2d<T> tr_to_;  
+ vgl_norm_trans_2d<T> tr_to_;
  // rational coefficients
  // <--------- 4 x n_coeff -------->
  //[ x_neu | x_den | y_neu | y_den ]

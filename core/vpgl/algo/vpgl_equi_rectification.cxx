@@ -292,14 +292,14 @@ bool vpgl_equi_rectification::rectify_pair(vpgl_perspective_camera<double> const
   // rotate about camera1 center so that both cameras have parallel focal planes
   // rotation that takes camera1 rotation, R1 to camera0 rotation, R0
   vnl_matrix_fixed<double, 3, 3> R10 = R0 * R1.transpose();
-  
+
   // define rotation that takes right epipole of E to an ideal point
   vnl_matrix_fixed<double, 3, 3> R0r(0.0), R00, R11, ix;
 
   // the principal ray of camera 0 (camera z axis)
   vnl_vector_fixed<double, 3> pray0(R0[2][0], R0[2][1], R0[2][2]), v1, v2;
-  pray0 /= pray0.magnitude(); 
-  
+  pray0 /= pray0.magnitude();
+
   v1 =vnl_cross_3d(epi0, pray0); //a vector perpendicular to the epipole vector and the principal ray
   v2 = vnl_cross_3d(epi0, v1);   //a vector perpendicular to both
 
@@ -308,7 +308,7 @@ bool vpgl_equi_rectification::rectify_pair(vpgl_perspective_camera<double> const
     R0r[0][c] = epi0[c];
     R0r[1][c] = v1[c];
     R0r[2][c] = v2[c];
-  }  
+  }
   // sanity check to see if the rotations reduce the essential matrix to the ix form, where
   //
   //       [ 0  0  0]
@@ -333,7 +333,7 @@ bool vpgl_equi_rectification::rectify_pair(vpgl_perspective_camera<double> const
     std::cerr << "epipolar lines not horizontal and/or rows not aligned" << std::endl;
     return false;
   }
-  // update the rectificaion homographies  
+  // update the rectificaion homographies
   H0 = K0 * R0r * K0_inv;
   H1 = K1 * R0r * R10 * K1_inv;
 

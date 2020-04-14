@@ -64,8 +64,8 @@ public:
  //: find the rotation to diagonalize the covariance matrix, C, of a pointset
  // if the rotation is improper, the sense of the eigenvector with the smallest eigenvalue is reversed
  static void R_to_diagonalize_covar(vnl_matrix_fixed<T, 3, 3> C, vnl_matrix_fixed<T,3,3>& R, std::vector<T>& lambda);
- 
- //: rotate a pointset with a 3x3 matrix 
+
+ //: rotate a pointset with a 3x3 matrix
  static vgl_pointset_3d<T> Rtrans(vgl_pointset_3d<T> const& ptset, vnl_matrix_fixed<T,3,3> const& R);
 
  //: transform a pointset with a similarity transform. translate_first = true means translate then scale and rotate.

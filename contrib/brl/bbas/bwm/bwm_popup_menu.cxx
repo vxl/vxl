@@ -197,7 +197,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
                                                           scroll_to_point));
   menu.add("Image Display", img_other);
 
-  
+
   // add more popup menu items based on the tableau type
   // all camera tableau children will do the following menu items
   if (tab_->type_name().compare("bwm_tableau_proj_cam")    == 0 ||

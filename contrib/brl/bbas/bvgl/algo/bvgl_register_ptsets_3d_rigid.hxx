@@ -110,7 +110,7 @@ bool bvgl_register_ptsets_3d_rigid<T>::minimize_exhaustive()
 template <class T>
 bool bvgl_register_ptsets_3d_rigid<T>::minimize_ransac(vgl_vector_3d<T> const& initial_t){
   //debug
-  std::cout << "frac " << transform_fraction_ << " frac_trans size " << frac_trans_.size() << " n hypos " << n_hypos_ << std::endl; 
+  std::cout << "frac " << transform_fraction_ << " frac_trans size " << frac_trans_.size() << " n hypos " << n_hypos_ << std::endl;
   // select a random point from the test set
   size_t n = frac_trans_.size();
   vnl_random rand;

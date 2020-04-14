@@ -34,7 +34,7 @@ vil_image_view<T> bpgl_3d_from_disparity(
         //the disparity computed by bsgm_disparity_estimator
         double i2 = i + disparity(i,j);
         vnl_vector_fixed<double,3> x(NAN);
-        
+
         // could check against maximum valid value here as well, if we knew the size of the second image.
         if (i2 >= 0) {
           // valid disparity value

@@ -18,7 +18,7 @@ bool bpgl_lon_lat_camera<T>::init(std::string const& lon_path, std::string const
   if(nila != ni_ || njla != nj_){
     std::cerr << "invalid latitude image loaded from " << lat_path << std::endl;
     return false;
-  } 
+  }
   std::vector<vgl_point_2d<T> > verts;
   T lon_00 = lon_(0,0), lat_00 = lat_(0,0);
   T lon_01 = lon_(0,(nj_-1)), lat_01 = lat_(0,(nj_-1));

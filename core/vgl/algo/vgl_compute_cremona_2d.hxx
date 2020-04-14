@@ -118,7 +118,7 @@ compute_linear(std::vector<vgl_homg_point_2d<T> > const& from_pts, std::vector<v
     std::cerr << "Unknown constraint type" << std::endl;
     return false;
   }
-     
+
 #if 1
   for (size_t k = 0; k < 4; ++k) {
       for (size_t i = 0; i < nc; ++i)
@@ -156,7 +156,7 @@ bool vgl_compute_cremona_2d<T, deg>::compute_linear_solution_error(){
   if(!linear_solved_){
    std::cerr << "no linear solution available" << std::endl;
     return false;
-  } 
+  }
   linear_error_ = T(0);
   size_t n = from_pts_.size();
   for(size_t i = 0; i<n; ++i){

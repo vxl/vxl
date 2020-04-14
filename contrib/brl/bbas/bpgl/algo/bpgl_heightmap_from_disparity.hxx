@@ -209,7 +209,7 @@ void bpgl_heightmap<T>::heightmap_from_pointset(
         vil_image_view<T>& heightmap_output,
         vil_image_view<T>& scalar_output,
         vil_image_view<T>& radial_std_dev){
-  
+
   _heightmap_from_pointset(ptset,
                            heightmap_output,
                            scalar_output,
@@ -230,7 +230,7 @@ void bpgl_heightmap<T>::heightmap_from_pointset(
   bvgl_k_nearest_neighbors_2d<T> knn(pts_2d);
   if (!knn.is_valid()) {
     throw std::runtime_error("KNN initialization failure");
-  }  
+  }
 
   for(size_t j = 0; j<nj; ++j)
     for(size_t i = 0; i<ni; ++i){

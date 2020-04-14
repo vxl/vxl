@@ -54,7 +54,7 @@ bwm_observer_fiducial::bwm_observer_fiducial(bgui_image_tableau_sptr const& img,
                                              std::string const& site_name,
                                              std::string const& image_path,
                                              std::string const& fid_path,
-                                             bool display_image_path): bwm_observer_vgui(img) 
+                                             bool display_image_path): bwm_observer_vgui(img)
 {
   COMMITED_STYLE =  vgui_style::new_style(0.0f, 1.0f, 0.0f, 1.0f, 1.0f);
   img->show_image_path(display_image_path);
@@ -126,7 +126,7 @@ bool bwm_observer_fiducial::handle(const vgui_event &e){
       this->update_pending(pt);
       return true;
     }
-  
+
   return base::handle(e);
 }
 void bwm_observer_fiducial::update_pending(vgl_point_2d<double> const& pt){
@@ -179,7 +179,7 @@ void bwm_observer_fiducial::remove_sel_committed(){
     }
   this->post_redraw();
 }
-   
+
 bool bwm_observer_fiducial::save_fiducial_corrs(std::string path){
   std::ofstream ostr(path.c_str());
   if(!ostr){

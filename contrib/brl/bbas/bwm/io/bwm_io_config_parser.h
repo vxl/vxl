@@ -79,7 +79,7 @@ class bwm_io_config_parser : public expatpp
 #endif
   std::vector<std::pair<std::string, vsol_point_2d> > corresp_elm_;
   void trim_string(std::string& s);
-  // members for reading the fiducial file 
+  // members for reading the fiducial file
   std::string fid_site_name_;
   std::string fiducial_path_;
   std::string fid_mode_;
