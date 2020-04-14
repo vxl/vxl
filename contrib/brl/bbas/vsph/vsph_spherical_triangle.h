@@ -34,7 +34,7 @@ class vsph_spherical_triangle
   //: default constructor
  vsph_spherical_triangle():cell_index_(unique_id_++){}
 
-  //: constructor, 
+  //: constructor,
  vsph_spherical_triangle(vsph_sph_point_3d const& v0, vsph_sph_point_3d const& v1,vsph_sph_point_3d const& v2,
                          vsph_spherical_coord& sph_cs){
    set(v0, v1, v2, sph_cs);
@@ -98,5 +98,5 @@ class vsph_spherical_triangle
   vgl_point_3d<double> v1_cart_;
   vgl_point_3d<double> v2_cart_;
   vgl_plane_3d<double> pl_;
-};  
+};
 #endif //spherical triangle

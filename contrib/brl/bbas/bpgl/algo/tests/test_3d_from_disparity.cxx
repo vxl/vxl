@@ -89,7 +89,7 @@ static void test_3d_from_disparity_perspective() {
   disparity.fill(0.0f);
   std::vector<vgl_point_3d<T> > pts_3d;
   std::vector<std::pair<size_t, size_t> > img_pts;
-  
+
   double r = 10;//range in xy
   for (double x = -r; x <= r; x += 1)
     for (double y = -r; y <= r; y += 1) {

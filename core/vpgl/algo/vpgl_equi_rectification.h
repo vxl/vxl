@@ -38,7 +38,7 @@
 // is minimized.
 //
 // The approach to rectification for perspective cameras follows that of
-// Fusiello, Andrea. (1999). Tutorial on Rectification of Stereo Images. 
+// Fusiello, Andrea. (1999). Tutorial on Rectification of Stereo Images.
 // The algorithm proceeds in three steps:
 //
 // 1) find the rotation about the camera center that takes the "left" camera (P1) rotation to the "right" camera (P0) rotation
@@ -90,7 +90,7 @@ class vpgl_equi_rectification
   //  epipoles are defined by the essential matrixof the two cameras
   //  the point sets are correspondences between the two images and are used to define
   //  the column skew transform and row offset
-  static bool rectify_pair(vpgl_perspective_camera<double> const& P0, 
+  static bool rectify_pair(vpgl_perspective_camera<double> const& P0,
                            vpgl_perspective_camera<double> const& P1,
                            const std::vector<vnl_vector_fixed<double, 3> >& img_pts0,
                            const std::vector<vnl_vector_fixed<double, 3> >& img_pts1,

@@ -12,7 +12,7 @@
 //
 // A cremona tranform is a generalization of the 2-d projective transformation
 // where the map (X,Y) -> (x, y) in Euclidian coordinates is defined by ratios of polynomials.
-// 
+//
 //       P(X, Y)       R(X, Y)
 //   x = -------   y = ------
 //       Q(X, Y)       S(X, Y)
@@ -21,7 +21,7 @@
 //
 // In the case where the highest degree is one, the Cremona transformation with
 // a common denominator is equivalent to the projective transformation.
-// 
+//
 // Various constraints on the generality of the transformation are available:
 //
 // BI_RATIONAL - full generality

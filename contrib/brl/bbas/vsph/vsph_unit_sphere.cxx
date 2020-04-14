@@ -567,7 +567,7 @@ void vsph_unit_sphere::display_unit_sphere(std::ofstream& os, bool open_close){
      }
     os <<        "]\n";
     os << "colorIndex[\n";
-    for (size_t j = 0; j<=np; ++j) 
+    for (size_t j = 0; j<=np; ++j)
       if(j != np)
         os << 0 << ", ";
       else
@@ -705,8 +705,8 @@ bool vsph_unit_sphere::display_boxes(std::string const& path,
   colors[4][1] = 1.0f; colors[4][2] = 1.0f;
   colors[5][0] = 0.5f; colors[5][1] = 1.0f;
   colors[6][0] = 1.0f; colors[6][1] = 0.5f;
-  colors[7][1] = 1.0f; colors[7][2] = 0.5f; 
-  
+  colors[7][1] = 1.0f; colors[7][2] = 0.5f;
+
   std::vector<std::map<size_t, vsph_spherical_triangle> > in_tris(nb);
   for(size_t i = 0; i<nb; ++i){
     const vsph_sph_box_2d& box = boxes[i];
@@ -718,7 +718,7 @@ bool vsph_unit_sphere::display_boxes(std::string const& path,
         in_tris[i][cidx] = triangles_[t];
     }
   }
-  
+
   // extract points and associate with triangles
   std::vector<std::vector<vgl_point_3d<double> > > pts(nb);
   std::vector<std::vector<std::tuple<size_t, size_t, size_t > > > mapped_in_tris(nb);
@@ -780,7 +780,7 @@ bool vsph_unit_sphere::display_boxes(std::string const& path,
      }
     os <<        "]\n";
     os << "colorIndex[\n";
-    for (size_t j = 0; j<=np; ++j) 
+    for (size_t j = 0; j<=np; ++j)
       if(j != np)
         os << color_idx << ", ";
       else
@@ -813,7 +813,7 @@ bool vsph_unit_sphere::display_cells(std::string const & path, std::vector<vsph_
     vsph_sph_point_3d sp1(1.0, tri.v1().theta_, tri.v1().phi_);
     vsph_sph_point_3d sp2(1.0, tri.v2().theta_, tri.v2().phi_);
 
-    // cache Cartesian triangle vertices    
+    // cache Cartesian triangle vertices
     pts.push_back(coord_sys_.cart_coord(sp0));
     pts.push_back(coord_sys_.cart_coord(sp1));
     pts.push_back(coord_sys_.cart_coord(sp2));
@@ -858,7 +858,7 @@ bool vsph_unit_sphere::display_cells(std::string const & path, std::vector<vsph_
      }
     os <<        "]\n";
     os << "colorIndex[\n";
-    for (size_t j = 0; j<=np; ++j) 
+    for (size_t j = 0; j<=np; ++j)
       if(j != np)
         os << 0 << ", ";
       else
@@ -866,7 +866,7 @@ bool vsph_unit_sphere::display_cells(std::string const & path, std::vector<vsph_
     os <<        "]\n"
      << "    }\n"
      << "  }\n";
-    
+
     if(disp_unit_sphere)
       display_unit_sphere(os);
     os.close();

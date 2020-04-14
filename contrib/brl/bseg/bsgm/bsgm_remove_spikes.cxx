@@ -7,7 +7,7 @@
 //
 // given a vector of z height values (zvals) find a set of clusters with values
 // within the cluster tolerance. max_k is the upper limit of number of clusters
-// 
+//
 //                  n in c  mean cluster z
 std::vector<std::pair<size_t, float> > bsgm_remove_spikes::cluster_centers(std::vector<float> zvals, size_t max_k) {
 
@@ -38,7 +38,7 @@ std::vector<std::pair<size_t, float> > bsgm_remove_spikes::cluster_centers(std::
         to_remove.push_back(i);
       }
     }
-    //remove z values added to the current cluster 
+    //remove z values added to the current cluster
     std::vector<float> temp2;
     for (size_t i = 0; i < n; ++i) {
       std::vector<size_t>::iterator iit = std::find(to_remove.begin(), to_remove.end(), i);
@@ -170,7 +170,7 @@ bool bsgm_remove_spikes::replace_spikes_with_local_z(bool smooth) {
             if(compare_frst_and_secnd)
               edge_img_(fi, fj) = vxl_byte(255);
           }else //replace spike with k-mean center
-            filtered_img_(fi, fj) = closest_mean; 
+            filtered_img_(fi, fj) = closest_mean;
         }
       }
       if (prt_ && i == id_ && j == jd_)

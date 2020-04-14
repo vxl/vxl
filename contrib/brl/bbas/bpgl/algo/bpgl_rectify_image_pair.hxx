@@ -330,7 +330,7 @@ warp_image(vil_image_view<float> fview,
   hopix = Hinv * opix;
   vnl_vector_fixed<double, 3> mpix(out_ni, out_nj, 1), hmpix;
   hmpix = Hinv * mpix;
-  
+
   for (size_t j =0; j<out_nj; ++j) {
     for (size_t i =0; i<out_ni; ++i) {
       double du = static_cast<double>(i);

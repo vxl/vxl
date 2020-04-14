@@ -41,7 +41,7 @@ class bwm_tableau_fiducial : public bwm_tableau_img
 
   void enable_fid_corrs();
 
-  void disable_fid_corrs();  
+  void disable_fid_corrs();
 
   void save_fiducial_corrs();
 

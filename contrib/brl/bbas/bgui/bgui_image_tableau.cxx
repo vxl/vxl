@@ -524,7 +524,7 @@ void bgui_image_tableau::image_line(const float col_start,
   }
   if(cs < 0.0f) cs = 0.0f;
   if(ce < 0.0f) ce = 0.0f;
-  
+
   if(rs < 0.0f) rs = 0.0f;
   if(re < 0.0f) re = 0.0f;
   if (rs < 0.0f && re < 0.0f) {

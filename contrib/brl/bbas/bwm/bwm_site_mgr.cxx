@@ -1094,7 +1094,7 @@ bwm_io_config_parser* bwm_site_mgr::parse_config(std::string const& path)
 bwm_io_config_parser*   bwm_site_mgr::site_parser(std::string const& path){
   return this->parse_config(path);
 }
-  
+
 static void write_vrml_header(std::ofstream& str)
 {
   str << "#VRML V2.0 utf8\n"
