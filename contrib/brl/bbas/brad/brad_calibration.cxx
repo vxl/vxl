@@ -24,7 +24,7 @@ vil_image_view<float> brad_nitf_abs_radiometric_calibrate(vil_image_view<unsigne
 
   // number of planes
   unsigned np = input_img.nplanes();
-  std::cout << "brad_nitf_abs_radiometric_calibrate" << "-- image plane: " << np << std::endl;
+  /* std::cout << "brad_nitf_abs_radiometric_calibrate" << "-- image plane: " << np << std::endl; */
 
   // check for known band type
   if (md.band_ != "PAN" && md.band_ != "MULTI" && md.band_ != "SWIR") {
