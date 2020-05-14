@@ -1,33 +1,36 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <cmath>
 #include <algorithm>
+#include <cmath>
+#include <fstream>
+#include <iostream>
 #include <set>
-#include "vul/vul_file.h"
+#include <sstream>
+
 #include "acal_match_graph.h"
+#include "vul/vul_file.h"
 
 acal_match_graph::acal_match_graph(
-//           cam id i         cam id j            matches (i, j)
+    //       cam id i         cam id j            matches (i, j)
     std::map<size_t, std::map<size_t, std::vector<acal_match_pair> > > const& incidence_matrix)
 {
   // construct vertices
   for (std::map<size_t, std::map<size_t, std::vector<acal_match_pair> > >::const_iterator iit = incidence_matrix.begin();
       iit != incidence_matrix.end(); ++iit) {
-      size_t i = iit->first;
-      if (!match_vertices_[i]) {
-        match_vertices_[i] = std::make_shared<match_vertex>(i);
+    size_t i = iit->first;
+    if (!match_vertices_[i]) {
+      match_vertices_[i] = std::make_shared<match_vertex>(i);
+    }
+    const std::map<size_t, std::vector<acal_match_pair> >& temp = iit->second;
+    for (std::map<size_t, std::vector<acal_match_pair> >::const_iterator jit = temp.begin();
+        jit != temp.end(); ++jit) {
+      size_t j = jit->first;
+      if (!match_vertices_[j]) {
+        match_vertices_[j] = std::make_shared<match_vertex>(j);
       }
-      const std::map<size_t, std::vector<acal_match_pair> >& temp = iit->second;
-      for (std::map<size_t, std::vector<acal_match_pair> >::const_iterator jit = temp.begin();
-          jit != temp.end(); ++jit) {
-        size_t j = jit->first;
-        if (!match_vertices_[j]) {
-          match_vertices_[j] = std::make_shared<match_vertex>(j);
-        }
-      }
+    }
   }
 
+  // construct edges
+  size_t edge_id = 0;
   for (std::map<size_t, std::map<size_t, std::vector<acal_match_pair> > >::const_iterator iit = incidence_matrix.begin();
       iit != incidence_matrix.end(); ++iit) {
     size_t i = iit->first;
@@ -40,7 +43,8 @@ acal_match_graph::acal_match_graph(
       if (matches.size() == 0)
         continue;
       std::shared_ptr<match_vertex> v1 = match_vertices_[j];
-      std::shared_ptr<match_edge> edge(new match_edge(v0, v1, matches));
+      std::shared_ptr<match_edge> edge(new match_edge(v0, v1, matches, edge_id));
+      edge_id++;
       v0->add_edge(edge.get()); v1->add_edge(edge.get());
       match_edges_.push_back(edge);
     }
