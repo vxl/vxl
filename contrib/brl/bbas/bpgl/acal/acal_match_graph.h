@@ -33,10 +33,27 @@ struct match_params
 {
   match_params() : min_n_tracks_(3), min_n_cams_(3), max_proj_error_(1.0), max_uncal_proj_error_(20.0) {}
 
+  match_params(size_t min_n_tracks, size_t min_n_cams,
+               double max_proj_error, double max_uncal_proj_error)
+    : min_n_tracks_(min_n_tracks), min_n_cams_(min_n_cams),
+      max_proj_error_(max_proj_error), max_uncal_proj_error_(max_uncal_proj_error)
+  {}
+
   size_t min_n_tracks_;
   size_t min_n_cams_;
   double max_proj_error_;
   double max_uncal_proj_error_;
+
+  bool operator==(match_params const& other) const {
+    return this->min_n_tracks_ == other.min_n_tracks_ &&
+           this->min_n_cams_ == other.min_n_cams_ &&
+           this->max_proj_error_ == other.max_proj_error_ &&
+           this->max_uncal_proj_error_ == other.max_uncal_proj_error_;
+  }
+  bool operator!=(match_params const& other) const {
+    return !(*this == other);
+  }
+
 };
 
 class match_vertex

@@ -26,21 +26,45 @@
 
 
 // a simple feature structure, just id and location
-struct acal_corr{
-	acal_corr() : id_(-1) { pt_.set(-1, -1); }
-  acal_corr(size_t id, vgl_point_2d<double> const& pt):id_(id),pt_(pt) {}
+struct acal_corr
+{
+  acal_corr() : id_(-1) { pt_.set(-1, -1); }
+  acal_corr(size_t id, vgl_point_2d<double> const& pt)
+    : id_(id), pt_(pt)
+  {}
+
   size_t id_;
   vgl_point_2d<double> pt_; // correspondence point
+
+  bool operator==(acal_corr const& other) const {
+    return this->id_ == other.id_ &&
+           this->pt_ == other.pt_;
+  }
+  bool operator!=(acal_corr const& other) const {
+    return !(*this == other);
+  }
 };
 
 
 // a structure to hold information regarding correspondence matches
-struct acal_match_pair{
-acal_match_pair(){}
-acal_match_pair(acal_corr const& corr1, acal_corr const& corr2):
-  corr1_(corr1), corr2_(corr2){}
+struct acal_match_pair
+{
+  acal_match_pair() {}
+  acal_match_pair(acal_corr const& corr1, acal_corr const& corr2)
+    : corr1_(corr1), corr2_(corr2)
+  {}
+
   acal_corr corr1_;// sift feature id and position in image 1
   acal_corr corr2_;// sift feature id and position in image 2
+
+  bool operator==(acal_match_pair const& other) const {
+    return this->corr1_ == other.corr1_ &&
+           this->corr2_ == other.corr2_;
+  }
+  bool operator!=(acal_match_pair const& other) const {
+    return !(*this == other);
+  }
+
   static bool near_equal(acal_match_pair const& mpa, acal_match_pair const& mpb, double tol = 0.1){
     vgl_vector_2d<double> dif1 = mpa.corr1_.pt_-mpb.corr1_.pt_;
     vgl_vector_2d<double> dif2 = mpa.corr2_.pt_ -mpb.corr2_.pt_;
