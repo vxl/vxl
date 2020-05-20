@@ -259,6 +259,10 @@ acal_match_tree::depth_sorted_nodes()
 
 acal_match_tree::~acal_match_tree()
 {
+  if (root_ == nullptr) {
+    return;
+  }
+
   std::vector<acal_match_node*> dsort = this->depth_sorted_nodes();
   for (std::vector<acal_match_node*>::iterator nit = dsort.begin();
        nit != dsort.end(); ++nit) {
