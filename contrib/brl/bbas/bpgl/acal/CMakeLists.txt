@@ -29,6 +29,8 @@ vxl_add_library(LIBRARY_NAME acal LIBRARY_SOURCES ${ACAL_SOURCES})
 
 target_link_libraries(acal brip vpgl vpgl_algo bjson bvgl vbl vgl vil_algo vil vcl)
 
+add_subdirectory(io)
+
 if( BUILD_TESTING)
   add_subdirectory(tests)
 endif()
