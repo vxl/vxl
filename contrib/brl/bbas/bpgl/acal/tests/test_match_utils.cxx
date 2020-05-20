@@ -12,6 +12,25 @@
 
 static void test_match_utils()
 {
+  // equality tests
+  acal_corr ac_a( 818, vgl_point_2d<double>(188.987, 227.430));
+  acal_corr ac_b(1617, vgl_point_2d<double>(278.163, 315.765));
+  acal_match_pair mp_ab(ac_a, ac_b);
+
+  acal_corr ac_c( 818, vgl_point_2d<double>(188.987, 227.430));
+  acal_corr ac_d(1617, vgl_point_2d<double>(278.163, 315.765));
+  acal_match_pair mp_cd(ac_c, ac_d);
+
+  acal_corr ac_e( 983, vgl_point_2d<double>(109.553, 284.380));
+  acal_corr ac_f(1834, vgl_point_2d<double>(150.748, 361.344));
+  acal_match_pair mp_ef(ac_e, ac_f);
+
+  TEST("acal_corr equality", ac_a, ac_c);
+  TEST("acal_corr inequality", ac_a != ac_b, true);
+
+  TEST("acal_match_pair equality", mp_ab, mp_cd);
+  TEST("acal_match_pair inequality", mp_ab != mp_ef, true);
+
   // 12 -> 21
   acal_corr c11( 818, vgl_point_2d<double>(188.987, 227.430));
   acal_corr c12(1617, vgl_point_2d<double>(278.163, 315.765));
