@@ -45,6 +45,11 @@ struct acal_corr
   }
 };
 
+inline std::ostream& operator<<(std::ostream& os, acal_corr const& corr)
+{
+  return os << "(" << corr.id_ << ", " << corr.pt_ << ")";
+}
+
 
 // a structure to hold information regarding correspondence matches
 struct acal_match_pair
@@ -73,6 +78,11 @@ struct acal_match_pair
     return ((dist1 < tol) && (dist2 < tol));
   }
 };
+
+inline std::ostream& operator<<(std::ostream& os, acal_match_pair const& mp)
+{
+  return os << "[" << mp.corr1_ << ", " << mp.corr2_ << "]";
+}
 
 
 class acal_match_utils

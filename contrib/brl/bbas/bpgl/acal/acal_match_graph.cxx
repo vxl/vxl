@@ -9,6 +9,13 @@
 #include "vul/vul_file.h"
 
 acal_match_graph::acal_match_graph(
+    std::map<size_t, std::map<size_t, std::vector<acal_match_pair> > > const& incidence_matrix)
+{
+  bool success = this->load_incidence_matrix(incidence_matrix);
+}
+
+bool
+acal_match_graph::load_incidence_matrix(
     //       cam id i         cam id j            matches (i, j)
     std::map<size_t, std::map<size_t, std::vector<acal_match_pair> > > const& incidence_matrix)
 {
@@ -49,6 +56,8 @@ acal_match_graph::acal_match_graph(
       match_edges_.push_back(edge);
     }
   }
+
+  return true;
 }
 
 bool
@@ -59,7 +68,10 @@ acal_match_graph::load_from_fmatches(std::string const& fmatches_path)
   bool good = acal_f_utils::read_f_matches(fmatches_path, fmatches, image_paths);
   if (!good)
     return false;
-  *this = acal_match_graph(fmatches);
+
+  if (!this->load_incidence_matrix(fmatches))
+    return false;
+
   image_paths_ = image_paths;
   return true;
 }
