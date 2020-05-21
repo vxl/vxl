@@ -39,11 +39,24 @@ struct f_params
   double F_similar_e_tol_;     //max abs value of offset, e to determine similar images
   double ray_uncertainty_tol_; //max ray uncertainty to keep camera pair
   size_t min_num_matches_;     //minimum number of required matches to output to fmatches file
+
+  bool operator==(f_params const& other) const {
+    return this->epi_dist_mul_ == other.epi_dist_mul_ &&
+           this->max_epi_dist_ == other.max_epi_dist_ &&
+           this->F_similar_abcd_tol_ == other.F_similar_abcd_tol_ &&
+           this->F_similar_e_tol_ == other.F_similar_e_tol_ &&
+           this->ray_uncertainty_tol_ == other.ray_uncertainty_tol_ &&
+           this->min_num_matches_ == other.min_num_matches_;
+  }
+  bool operator!=(f_params const& other) const {
+    return !(*this == other);
+  }
+
 };
 
 struct dtime
 {
-	dtime() {}
+  dtime() {}
   dtime(unsigned year, unsigned month, unsigned day, unsigned hours, unsigned minutes, unsigned seconds):
   year_(year), month_(month), day_(day), hours_(hours), minutes_(minutes), seconds_(seconds){}
 

@@ -1,6 +1,7 @@
 # acal/io/CMakeLists.txt
 
 set(acal_io_sources
+    acal_io_f_utils.h      acal_io_f_utils.cxx
     acal_io_match_graph.h  acal_io_match_graph.cxx
     acal_io_match_utils.h  acal_io_match_utils.cxx
 )
