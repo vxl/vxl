@@ -92,6 +92,8 @@ class acal_match_tree
 {
  public:
 
+  acal_match_tree()
+    : n_(0), min_n_tracks_(1), root_(nullptr) {}
   acal_match_tree(std::shared_ptr<acal_match_node> root)
     : n_(1), min_n_tracks_(1), root_(root) {}
   ~acal_match_tree();
