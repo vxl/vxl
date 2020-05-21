@@ -105,11 +105,6 @@ class acal_match_tree
     n_nodes(root_, n_);
   }
 
-  /* //: initialize the tree */
-  /* void create_root(size_t node_id, size_t child_id, std::vector<acal_match_pair> const& node_to_child_matches){ */
-  /*   root_ = std::shared_ptr<acal_match_node>(new acal_match_node(node_id, child_id, node_to_child_matches)); */
-  /* } */
-
   //: add a child node and reconcile the correspondence pairs globally over the full tree
   bool add_child_node(size_t parent_id, size_t child_id, std::vector<acal_match_pair> const& parent_to_child_matches);
 
