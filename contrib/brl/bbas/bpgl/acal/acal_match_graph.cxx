@@ -356,8 +356,8 @@ acal_match_graph::compute_match_trees()
       size_t fidx = f_vert->cam_id_;
       // make the match tree a pointer so a delete isn't called when exiting the scope of a function
       // note that delete clears the children in a bottom up order and sets the parent pointer to 0
-      std::shared_ptr<acal_match_tree> mt_ptr(new acal_match_tree());
-      mt_ptr->root_ = std::shared_ptr<acal_match_node>(new acal_match_node(fidx));
+      std::shared_ptr<acal_match_node> root(new acal_match_node(fidx));
+      std::shared_ptr<acal_match_tree> mt_ptr(new acal_match_tree(root));
       std::map<size_t, std::shared_ptr<match_vertex> > active_verts;
       active_verts[fidx] = f_vert;
       std::set<size_t> used_verts;     // vertices already explored for a given focus vertex

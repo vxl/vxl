@@ -24,6 +24,7 @@ acal_match_tree::add_child_node(
     size_t parent_id, size_t child_id,
     std::vector<acal_match_pair> const& parent_to_child_matches)
 {
+
   size_t min_n = 0;
   if(min_n_tracks_>=1)
     min_n = min_n_tracks_ -1;
@@ -259,10 +260,6 @@ acal_match_tree::depth_sorted_nodes()
 
 acal_match_tree::~acal_match_tree()
 {
-  if (root_ == nullptr) {
-    return;
-  }
-
   std::vector<acal_match_node*> dsort = this->depth_sorted_nodes();
   for (std::vector<acal_match_node*>::iterator nit = dsort.begin();
        nit != dsort.end(); ++nit) {
@@ -276,11 +273,11 @@ void
 acal_match_tree::n_nodes(std::shared_ptr<acal_match_node> const& node, size_t& n)
 {
   size_t nc = node->size();
-  if(nc == 0){
+  if (nc == 0) {
     n++;
     return;
   }
-  for(size_t c = 0; c<nc; ++c)
+  for (size_t c = 0; c<nc; ++c)
     n_nodes(node->children_[c], n);
   n++;
   return;

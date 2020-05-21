@@ -63,8 +63,7 @@ static void test_match_tree()
   std::shared_ptr<acal_match_node> child = acal_match_tree::find(root, 21);
   TEST("test parent child constructor, find", bool(child), true);
 
-  acal_match_tree mt;
-  mt.root_ = root;
+  acal_match_tree mt(root);
 
   mt.add_child_node(21, 22, mpairs_a);
   mt.add_child_node(12, 210, mpairs_b);
