@@ -103,7 +103,9 @@ class acal_match_graph
  public:
   acal_match_graph() {}
   //                         cam id i         cam id j            matches i -> j
-  acal_match_graph(std::map<size_t, std::map<size_t, std::vector<acal_match_pair> > >const& incidence_matrix);
+  acal_match_graph(std::map<size_t, std::map<size_t, std::vector<acal_match_pair> > > const& incidence_matrix);
+
+  bool load_incidence_matrix(std::map<size_t, std::map<size_t, std::vector<acal_match_pair> > > const& incidence_matrix);
   bool load_from_fmatches(std::string const& fmatches_path);
   bool load_affine_cams(std::string const& affine_cam_path);
   void adjust_affine_cams(std::map<size_t, vgl_vector_2d<double> >& cam_translations);
