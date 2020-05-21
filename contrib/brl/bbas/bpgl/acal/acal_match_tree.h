@@ -92,23 +92,26 @@ class acal_match_tree
 {
  public:
 
-  acal_match_tree():n_(0), min_n_tracks_(1){}
+  acal_match_tree(std::shared_ptr<acal_match_node> root)
+    : n_(1), min_n_tracks_(1), root_(root) {}
   ~acal_match_tree();
-  size_t size(){return n_;}
-  void update_tree_size(){
+
+  size_t size() {return n_;}
+
+  void update_tree_size() {
     n_ = 0;
     n_nodes(root_, n_);
   }
 
-  //: initialize the tree
-  void create_root(size_t node_id, size_t child_id, std::vector<acal_match_pair> const& node_to_child_matches){
-    root_ = std::shared_ptr<acal_match_node>(new acal_match_node(node_id, child_id, node_to_child_matches));
-  }
+  /* //: initialize the tree */
+  /* void create_root(size_t node_id, size_t child_id, std::vector<acal_match_pair> const& node_to_child_matches){ */
+  /*   root_ = std::shared_ptr<acal_match_node>(new acal_match_node(node_id, child_id, node_to_child_matches)); */
+  /* } */
 
-  //: add a child node and reconcile the correpondence pairs globally over the full tree
+  //: add a child node and reconcile the correspondence pairs globally over the full tree
   bool add_child_node(size_t parent_id, size_t child_id, std::vector<acal_match_pair> const& parent_to_child_matches);
 
-  //: prune correpondence pairs to insure consistent tracks over the full tree
+  //: prune correspondence pairs to insure consistent tracks over the full tree
   bool prune_tree(std::shared_ptr<acal_match_node> const& mutated_parent_node, size_t child_index);
 
   //: recursively remove correspondence pairs that are not present in reduced node corrs
@@ -118,7 +121,7 @@ class acal_match_tree
   static std::shared_ptr<acal_match_node> find(std::shared_ptr<acal_match_node> const& node, size_t cam_id);
 
   //: recursively find the number of nodes below a node in the tree
-  void  n_nodes(std::shared_ptr<acal_match_node> const& node, size_t& n);
+  void n_nodes(std::shared_ptr<acal_match_node> const& node, size_t& n);
 
   // debug methods
   //: save the tree in dot format for display
