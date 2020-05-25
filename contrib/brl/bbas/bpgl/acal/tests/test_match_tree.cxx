@@ -12,6 +12,12 @@
 
 static void test_match_tree()
 {
+  // generic match tree contructor/destructor
+  auto mt_delete_me = std::make_shared<acal_match_tree>(100);
+  TEST("acal_match_tree constructor", true, true);
+  mt_delete_me = nullptr;
+  TEST("acal_match_tree destructor", true, true);
+
 
   // 12 -> 21
   acal_corr c11( 818, vgl_point_2d<double>(188.987, 227.430));
@@ -59,20 +65,33 @@ static void test_match_tree()
   mpairs_a.push_back(m1a);   mpairs_a.push_back(m2a);   mpairs_a.push_back(m3a);
   mpairs_a.push_back(m4a);   mpairs_a.push_back(m5a);   mpairs_a.push_back(m6a);
 
-  std::shared_ptr<acal_match_node> root(new acal_match_node(12, 21, mpairs_b));
-  std::shared_ptr<acal_match_node> child = acal_match_tree::find(root, 21);
-  TEST("test parent child constructor, find", bool(child), true);
+  size_t root_id = 12;
+  acal_match_tree mt(root_id);
+  auto root = mt.root_;
 
-  acal_match_tree mt(root);
+  TEST("acal_match_tree root_id", root->cam_id_, root_id);
+  TEST("acal_match_tree root->is_leaf()", root->is_leaf(), true);
+  TEST("acal_match_tree root->is_root()", root->is_root(), true);
+
+  size_t child_id = 21;
+  mt.add_child_node(root_id, child_id, mpairs_b);
+  TEST("acal_match_tree add single child", root->size(), 1);
+  TEST("acal_match_tree child_id", root->children_[0]->cam_id_, child_id);
 
   mt.add_child_node(21, 22, mpairs_a);
   mt.add_child_node(12, 210, mpairs_b);
   mt.add_child_node(21, 220, mpairs_a);
   mt.add_child_node(210, 221, mpairs_a);
   mt.add_child_node(21, 222, mpairs_a);
-  child = acal_match_tree::find(root, 222);
 
-  acal_match_node* parent = child->parent_;
+  std::vector<size_t> ids = {12, 21, 22, 210, 220, 221, 222};
+  TEST("acal_match_tree sorted cam_ids", mt.cam_ids(), ids);
+
+  size_t find_child_id = 222;
+  auto child = acal_match_tree::find(root, find_child_id);
+  TEST("acal_match_tree::find has correct id", child->cam_id_, find_child_id);
+
+  auto parent = child->parent();
   size_t sc = parent->self_to_child_matches_.size();
   bool good = sc == 3;
   good = good && parent->self_to_child_matches_[0].size() == 2;

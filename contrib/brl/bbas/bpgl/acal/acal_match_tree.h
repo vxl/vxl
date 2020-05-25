@@ -20,49 +20,36 @@
 #include <memory>
 #include <map>
 #include <math.h>
+
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include "acal_match_utils.h"
 
 
-class acal_match_node
+class acal_match_node : public std::enable_shared_from_this<acal_match_node>
 {
  public:
-  acal_match_node():cam_id_(-1), parent_(0), node_depth_(0){}
-  acal_match_node(size_t node_id): cam_id_(node_id), parent_(0),node_depth_(0){}
-  acal_match_node(size_t node_id, size_t child_id, std::vector<acal_match_pair> const& self_to_child_matches):
-  cam_id_(node_id), node_depth_(0), parent_(0) {
-    this->add_child(child_id, self_to_child_matches);
-  }
-  ~acal_match_node(){
-    parent_ = 0;
-  }
-  size_t size(){return children_.size();}
-  bool is_leaf(){return size() == 0;}
-  bool is_root(){return parent_==0;}
 
-  // this parent accessor is designed to avoid wraping the
-  // bare parent pointer in a shared_ptr. Otherwise, the
-  // parent will be deleted multiple times causing a seg fault
-  // the argument "root" is needed for a protected shared pointer to the root node,
-  // since the root has no parent, needed by the approach
-  std::shared_ptr<acal_match_node> parent(std::shared_ptr<acal_match_node> const& root){
-    if(parent_ == 0)
-      return std::shared_ptr<acal_match_node>();
-    acal_match_node* grand_parent = parent_->parent_;
-    if(grand_parent == 0)
-      return root;
-    size_t nc = grand_parent->size();
-    for(size_t i = 0; i<nc; ++i)
-      if(parent_ == grand_parent->children_[i].get())
-        return grand_parent->children_[i];
-    return std::shared_ptr<acal_match_node>();
+  //: constructor
+  acal_match_node(size_t node_id = 0) : cam_id_(node_id) {}
+
+  //: property accessors
+  size_t size() { return children_.size(); }
+  bool is_leaf() { return children_.empty(); }
+  bool is_root() { return !has_parent_; }
+  bool has_parent() { return has_parent_; }
+
+  //: parent accessors
+  std::shared_ptr<acal_match_node> parent() { return parent_.lock(); }
+  void parent(std::shared_ptr<acal_match_node> node) {
+    has_parent_ = true;
+    parent_ = node;
   }
 
-  //: add a child node to "this" node
-  void add_child(size_t child_id, std::vector<acal_match_pair> const& self_to_child_matches){
-    std::shared_ptr<acal_match_node> child(new acal_match_node(child_id));
-    child->parent_= this;
+  //: create & add a child node to "this" node
+  void add_child(size_t child_id, std::vector<acal_match_pair> const& self_to_child_matches) {
+    auto child = std::make_shared<acal_match_node>(child_id);
+    child->parent(shared_from_this());
     children_.push_back(child);
     self_to_child_matches_.push_back(self_to_child_matches);
   }
@@ -79,12 +66,17 @@ class acal_match_node
     return found;
   }
 
-  // members
-  size_t cam_id_;
-  size_t node_depth_;
-  acal_match_node* parent_;
+  // public members
+  size_t cam_id_ = 0;
   std::vector<std::shared_ptr<acal_match_node> > children_;
   std::vector<std::vector<acal_match_pair> > self_to_child_matches_;
+
+ private:
+
+  // private members
+  bool has_parent_ = false;
+  std::weak_ptr<acal_match_node> parent_;
+
 };
 
 
@@ -92,12 +84,12 @@ class acal_match_tree
 {
  public:
 
-  acal_match_tree()
-    : n_(0), min_n_tracks_(1), root_(nullptr) {}
-  acal_match_tree(std::shared_ptr<acal_match_node> root)
-    : n_(1), min_n_tracks_(1), root_(root) {}
-  ~acal_match_tree();
+  //: constructor
+  acal_match_tree(size_t root_id = 0) {
+    root_->cam_id_ = root_id;
+  }
 
+  //: size accessor
   size_t size() {return n_;}
 
   void update_tree_size() {
@@ -127,28 +119,25 @@ class acal_match_tree
   //: recursively write the tree nodes and edges in dot format
   bool write_dot(std::ostream& ostr, std::shared_ptr<acal_match_node> const& node, size_t root_id);
 
-  //:: assign depth recursively
-  void assign_depth(std::shared_ptr<acal_match_node> const& node, size_t& depth);
-
-  //: collect nodes recursively
-  void collect_nodes(std::shared_ptr<acal_match_node>& node, std::vector<acal_match_node*>& nodes);
-
   //: collect correspondences recursively
   void collect_correspondences(std::shared_ptr<acal_match_node>& node, std::map<size_t, std::vector<vgl_point_2d<double> > >& corrs);
 
   //: reorganize correspondences in track format
   std::vector< std::map<size_t, vgl_point_2d<double> > > tracks();
 
-  //: sort nodes by tree depth
-  std::vector<acal_match_node* > depth_sorted_nodes();
-
-  //: return all cam ids
+  //: return sorted cam ids
   std::vector<size_t> cam_ids();
 
   // members
-  size_t n_;
-  size_t min_n_tracks_;
-  std::shared_ptr<acal_match_node> root_;
+  size_t n_ = 1;
+  size_t min_n_tracks_ = 1;
+  std::shared_ptr<acal_match_node> root_ = std::make_shared<acal_match_node>();
+
+ private:
+
+  // recursively locate camera ids
+  void cam_ids_recursive(std::vector<size_t>& ids, std::shared_ptr<acal_match_node> node);
+
 };
 
 #endif

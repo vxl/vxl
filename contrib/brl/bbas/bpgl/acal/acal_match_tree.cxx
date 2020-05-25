@@ -48,7 +48,7 @@ acal_match_tree::add_child_node(
   // in case the new node is being added as a child to a leaf node
   if (nc == 0) {
     // get parent of the leaf node being exended (i.e. the grand parent of the new node)
-    std::shared_ptr<acal_match_node> grand_parent = parent_node->parent(root_);
+    std::shared_ptr<acal_match_node> grand_parent = parent_node->parent();
 
     // in case the node to which the child is being added is the root, and the root has no children
     // thus the matches are not filtered
@@ -138,7 +138,7 @@ acal_match_tree::prune_tree(std::shared_ptr<acal_match_node> const& mutated_pare
   {
     reduced_parent_mpairs.clear();
     reduced_child_mpairs.clear();
-    std::shared_ptr<acal_match_node> parent = node->parent(root_);
+    std::shared_ptr<acal_match_node> parent = node->parent();
     size_t cidx = -1;
     if(!parent->child_index( node, cidx)){
       std::cout << "can't find child index for parent " << parent->cam_id_ << std::endl;
@@ -214,62 +214,6 @@ acal_match_tree::save_tree_dot_format(std::string const& path)
 
 
 void
-acal_match_tree::assign_depth(std::shared_ptr<acal_match_node> const& node, size_t& depth)
-{
-  node->node_depth_ = depth;
-  size_t nc = node->size();
-  if(nc == 0)
-    return;
-  depth++;
-  for(size_t c = 0; c<nc; ++c)
-    assign_depth(node->children_[c],depth);
-  return;
-}
-
-
-void
-acal_match_tree::collect_nodes(std::shared_ptr<acal_match_node>& node,
-                               std::vector<acal_match_node*>& nodes)
-{
-  nodes.push_back(node.get());
-  size_t nc = node->size();
-  if(nc == 0)
-    return;
-  for(size_t c = 0; c<nc; ++c)
-    collect_nodes(node->children_[c], nodes);
-  return;
-}
-
-
-static bool depth_greater(acal_match_node* a, acal_match_node* b){
-  return (a->node_depth_ > b->node_depth_);
-}
-
-
-std::vector<acal_match_node*>
-acal_match_tree::depth_sorted_nodes()
-{
-  std::vector<acal_match_node*> ret;
-  size_t zero = 0;
-  assign_depth(root_, zero);
-  collect_nodes(root_, ret);
-  std::sort(ret.begin(), ret.end(), depth_greater);
-  return ret;
-}
-
-
-acal_match_tree::~acal_match_tree()
-{
-  std::vector<acal_match_node*> dsort = this->depth_sorted_nodes();
-  for (std::vector<acal_match_node*>::iterator nit = dsort.begin();
-       nit != dsort.end(); ++nit) {
-    (*nit)->parent_ = 0;
-    (*nit)->children_.clear();
-  }
-}
-
-
-void
 acal_match_tree::n_nodes(std::shared_ptr<acal_match_node> const& node, size_t& n)
 {
   size_t nc = node->size();
@@ -293,7 +237,7 @@ acal_match_tree::collect_correspondences(
   size_t nc = node->size();
   if(nc == 0) {
     // node is leaf, so use second half of match_pair (corr2_) with respect to parent
-    std::shared_ptr<acal_match_node> parent = node->parent(root_);
+    std::shared_ptr<acal_match_node> parent = node->parent();
 
     // get parent's child index for node
     size_t cindx;
@@ -361,11 +305,20 @@ acal_match_tree::tracks()
 std::vector<size_t>
 acal_match_tree::cam_ids()
 {
-  std::vector<size_t> ret;
-  std::vector<acal_match_node*> nodes;
-  this->collect_nodes(root_, nodes);
-  size_t n = nodes.size();
-  for(size_t i = 0; i<n; ++i)
-    ret.push_back(nodes[i]->cam_id_);
-  return ret;
+  std::vector<size_t> ids;
+  cam_ids_recursive(ids, root_);
+  std::sort(ids.begin(), ids.end());
+  return ids;
 }
+
+
+void
+acal_match_tree::cam_ids_recursive(std::vector<size_t>& ids,
+                                   std::shared_ptr<acal_match_node> node)
+{
+  ids.push_back(node->cam_id_);
+  for (auto child : node->children_) {
+      cam_ids_recursive(ids, child);
+  }
+}
+
