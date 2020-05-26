@@ -34,13 +34,13 @@ class acal_match_node : public std::enable_shared_from_this<acal_match_node>
   acal_match_node(size_t node_id = 0) : cam_id_(node_id) {}
 
   //: property accessors
-  size_t size() { return children_.size(); }
-  bool is_leaf() { return children_.empty(); }
-  bool is_root() { return !has_parent_; }
-  bool has_parent() { return has_parent_; }
+  size_t size() const { return children_.size(); }
+  bool is_leaf() const { return children_.empty(); }
+  bool is_root() const { return !has_parent_; }
+  bool has_parent() const { return has_parent_; }
 
   //: parent accessors
-  std::shared_ptr<acal_match_node> parent() { return parent_.lock(); }
+  std::shared_ptr<acal_match_node> parent() const { return parent_.lock(); }
   void parent(std::shared_ptr<acal_match_node> node) {
     has_parent_ = true;
     parent_ = node;
@@ -53,6 +53,14 @@ class acal_match_node : public std::enable_shared_from_this<acal_match_node>
     children_.push_back(child);
     self_to_child_matches_.push_back(self_to_child_matches);
   }
+
+  //: parent & children node id
+  size_t parent_id() const;
+  std::vector<size_t> children_ids() const;
+
+  //: equality operators
+  bool operator==(acal_match_node const& other) const;
+  bool operator!=(acal_match_node const& other) const { return !(*this == other); }
 
   //: find the index (cindx) of a node in the set of parent's children
   bool child_index(std::shared_ptr<acal_match_node> const& node, size_t& cidx) {
@@ -78,6 +86,10 @@ class acal_match_node : public std::enable_shared_from_this<acal_match_node>
   std::weak_ptr<acal_match_node> parent_;
 
 };
+
+// streaming operator
+std::ostream& operator<<(std::ostream& os, acal_match_node const& node);
+
 
 
 class acal_match_tree
@@ -125,8 +137,18 @@ class acal_match_tree
   //: reorganize correspondences in track format
   std::vector< std::map<size_t, vgl_point_2d<double> > > tracks();
 
+  //: return nodes
+  std::vector<std::shared_ptr<acal_match_node> > nodes() const;
+
   //: return sorted cam ids
-  std::vector<size_t> cam_ids();
+  std::vector<size_t> cam_ids() const;
+
+  //: print tree
+  void print(std::ostream& os) const;
+
+  //: equality operators
+  bool operator==(acal_match_tree const& other) const;
+  bool operator!=(acal_match_tree const& other) const { return !(*this == other); }
 
   // members
   size_t n_ = 1;
@@ -135,9 +157,15 @@ class acal_match_tree
 
  private:
 
-  // recursively locate camera ids
-  void cam_ids_recursive(std::vector<size_t>& ids, std::shared_ptr<acal_match_node> node);
+  // recursively process tree info
+  void nodes_recursive(std::vector<std::shared_ptr<acal_match_node> >& nodes, std::shared_ptr<acal_match_node> node) const;
+  void cam_ids_recursive(std::vector<size_t>& ids, std::shared_ptr<acal_match_node> node) const;
+  void print_recursive(std::ostream& os, std::shared_ptr<acal_match_node> node, std::string indent = "  ") const;
 
 };
+
+// streaming operator
+std::ostream& operator<<(std::ostream& os, acal_match_tree const& tree);
+
 
 #endif

@@ -4,6 +4,79 @@
 #include "acal_match_tree.h"
 
 
+// --------------------
+// acal_match_node
+// --------------------
+
+// parent node id
+size_t
+acal_match_node::parent_id() const
+{
+  if (this->has_parent_) {
+    return this->parent()->cam_id_;
+  } else {
+    return 0;
+  }
+}
+
+
+// children node ids
+std::vector<size_t>
+acal_match_node::children_ids() const
+{
+  std::vector<size_t> ids;
+  for (auto child : this->children_) {
+    ids.push_back(child->cam_id_);
+  }
+  return ids;
+}
+
+
+//: node equality operator
+bool
+acal_match_node::operator==(acal_match_node const& other) const
+{
+  return this->cam_id_ == other.cam_id_ &&
+         this->is_root() == other.is_root() &&
+         (this->is_root() || (this->parent_id() == other.parent_id())) &&
+         this->children_ids() == other.children_ids() &&
+         this->self_to_child_matches_ == other.self_to_child_matches_;
+}
+
+
+//: node output stream
+std::ostream&
+operator<<(std::ostream& os, acal_match_node const& node)
+{
+  // id
+  os << "node " << node.cam_id_ << ": ";
+
+  // parent info
+  if (node.is_root()) {
+    os << "root, ";
+  } else {
+    os << "parent " << node.parent_id() << ", ";
+  }
+
+  // children info
+  os << "children: [";
+  std::string separator;
+  for (auto child : node.children_) {
+    os << separator << child->cam_id_;
+    separator = ",";
+  }
+  os << "]";
+
+  // return stream
+  return os;
+}
+
+
+// --------------------
+// acal_match_tree
+// --------------------
+
+
 std::shared_ptr<acal_match_node>
 acal_match_tree::find(std::shared_ptr<acal_match_node> const& node, size_t cam_id)
 {
@@ -302,8 +375,35 @@ acal_match_tree::tracks()
 }
 
 
+// return vector of nodes sorted by cam_id
+std::vector<std::shared_ptr<acal_match_node> >
+acal_match_tree::nodes() const
+{
+  std::vector<std::shared_ptr<acal_match_node> > nodes;
+  nodes_recursive(nodes, root_);
+  std::sort(nodes.begin(), nodes.end(),
+            [](std::shared_ptr<acal_match_node> a, std::shared_ptr<acal_match_node> b) {
+                return a->cam_id_ < b->cam_id_;
+            });
+  return nodes;
+}
+
+
+// private recursive function to return children nodes from starting node
+void
+acal_match_tree::nodes_recursive(std::vector<std::shared_ptr<acal_match_node> >& nodes,
+                                 std::shared_ptr<acal_match_node> node) const
+{
+  nodes.push_back(node);
+  for (auto child : node->children_) {
+      nodes_recursive(nodes, child);
+  }
+}
+
+
+// return sorted vector of node cam_ids
 std::vector<size_t>
-acal_match_tree::cam_ids()
+acal_match_tree::cam_ids() const
 {
   std::vector<size_t> ids;
   cam_ids_recursive(ids, root_);
@@ -312,13 +412,70 @@ acal_match_tree::cam_ids()
 }
 
 
+// private recursive function to return children cam_ids from starting node
 void
 acal_match_tree::cam_ids_recursive(std::vector<size_t>& ids,
-                                   std::shared_ptr<acal_match_node> node)
+                                   std::shared_ptr<acal_match_node> node) const
 {
   ids.push_back(node->cam_id_);
   for (auto child : node->children_) {
       cam_ids_recursive(ids, child);
   }
+}
+
+
+// tree equality operator
+bool
+acal_match_tree::operator==(acal_match_tree const& other) const
+{
+  auto this_nodes = this->nodes();
+  auto other_nodes = other.nodes();
+
+  // check for same # of nodes
+  size_t N = this_nodes.size();
+  if (other_nodes.size() != N) {
+    return false;
+  }
+
+  // compare node contents
+  for (size_t i = 0; i < N; i++) {
+    if (*this_nodes[i] != *other_nodes[i]) {
+      return false;
+    }
+  }
+
+  // all passed
+  return true;
+}
+
+
+// tree output stream
+void
+acal_match_tree::print(std::ostream& os) const
+{
+  os << "acal_match_tree:\n";
+  print_recursive(os, this->root_);
+}
+
+
+// private recursive function to output from starting node
+void
+acal_match_tree::print_recursive(std::ostream& os,
+                                 std::shared_ptr<acal_match_node> node,
+                                 std::string indent) const
+{
+  os << indent << *node << "\n";
+  for (auto child : node->children_) {
+    print_recursive(os, child, indent + "  ");
+  }
+}
+
+
+// tree output stream
+std::ostream&
+operator<<(std::ostream& os, acal_match_tree const& tree)
+{
+  tree.print(os);
+  return os;
 }
 
