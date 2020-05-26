@@ -77,6 +77,8 @@ test_match_graph()
       {2, "image2.tif"},
       {3, "image3.tif"},
       {4, "image4.tif"},
+      {5, "image5.tif"},
+      {6, "image6.tif"},
   };
 
   // cameras
@@ -162,6 +164,21 @@ test_match_graph()
 
   match_graph.validate_match_trees_and_set_metric();
   std::cout << "\nacal_match_graph::validate_match_trees_and_set_metric complete" << std::endl;
+
+
+  // equality test
+  acal_match_graph match_graph_copy;
+  match_graph_copy.set_image_paths(image_paths);
+  match_graph_copy.set_all_acams(cams);
+  success = match_graph_copy.load_incidence_matrix(incidence_matrix);
+  TEST("acal_match_graph !=", match_graph_copy != match_graph, true);
+
+  match_graph_copy.find_connected_components();
+  match_graph_copy.compute_focus_tracks();
+  match_graph_copy.compute_match_trees();
+  match_graph_copy.validate_match_trees_and_set_metric();
+
+  TEST("acal_match_graph ==", match_graph_copy, match_graph);
 
 }
 

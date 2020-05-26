@@ -8,6 +8,83 @@
 #include "acal_match_graph.h"
 #include "vul/vul_file.h"
 
+
+// --------------------
+// match_vertex
+// --------------------
+
+// edge ids connected to vertex
+std::vector<size_t>
+match_vertex::edge_ids() const
+{
+  std::vector<size_t> ids;
+  for (auto edge : edges_) {
+    ids.push_back(edge->id_);
+  }
+  return ids;
+}
+
+// equality operator
+bool
+match_vertex::operator==(match_vertex const& other) const
+{
+  return this->cam_id_ == other.cam_id_ &&
+         this->edge_ids() == other.edge_ids();
+}
+
+// streaming operator
+std::ostream&
+operator<<(std::ostream& os, match_vertex const& vertex)
+{
+  os << "vertex " << vertex.cam_id_ << " with edges [";
+
+  std::string separator;
+  for (auto edge_id : vertex.edge_ids()) {
+    os << separator << edge_id;
+    separator = ",";
+  }
+  os << "]";
+
+  return os;
+}
+
+
+// --------------------
+// match_edge
+// --------------------
+
+// vertex ids connected to edge
+std::vector<size_t>
+match_edge::vertex_ids() const
+{
+  std::vector<size_t> ids = {v0_->cam_id_, v1_->cam_id_};
+  return ids;
+}
+
+// equality operator
+bool
+match_edge::operator==(match_edge const& other) const
+{
+  return this->id_ == other.id_ &&
+         this->vertex_ids() == other.vertex_ids() &&
+         this->matches_ == other.matches_;
+}
+
+// streaming operator
+std::ostream&
+operator<<(std::ostream& os, match_edge const& edge)
+{
+  os << "edge " << edge.id_ << " connecting vertices ["
+     << edge.v0_->cam_id_ << "," << edge.v1_->cam_id_
+     << "] with " << edge.matches_.size() << " matches";
+  return os;
+}
+
+
+// --------------------
+// acal_match_graph
+// --------------------
+
 acal_match_graph::acal_match_graph(
     std::map<size_t, std::map<size_t, std::vector<acal_match_pair> > > const& incidence_matrix)
 {
@@ -50,10 +127,8 @@ acal_match_graph::load_incidence_matrix(
       if (matches.size() == 0)
         continue;
       std::shared_ptr<match_vertex> v1 = match_vertices_[j];
-      std::shared_ptr<match_edge> edge(new match_edge(v0, v1, matches, edge_id));
+      match_edges_.push_back(std::make_shared<match_edge>(v0, v1, matches, edge_id));
       edge_id++;
-      v0->add_edge(edge.get()); v1->add_edge(edge.get());
-      match_edges_.push_back(edge);
     }
   }
 
@@ -580,7 +655,7 @@ acal_match_graph::print_focus_tracks()
     for (std::map<size_t, std::vector< std::map<size_t, vgl_point_2d<double> > > >::const_iterator fit = ftemp.begin();
         fit != ftemp.end(); ++fit) {
       size_t focus_id = fit->first;
-      std::cout << ">>>>focus camera id " << focus_id << std::endl;
+      std::cout << "----- focus camera id " << focus_id << std::endl;
       const std::vector< std::map<size_t, vgl_point_2d<double> > >& tr_temp = fit->second;
       size_t t = 0;
       for (std::vector< std::map<size_t, vgl_point_2d<double> > >::const_iterator trit = tr_temp.begin();
@@ -789,3 +864,51 @@ acal_match_graph::trees(size_t conn_comp_index)
     ret.push_back(mit->second);
   return ret;
 }
+
+
+// equality for iterable (std::vector, std::map) of std::shared_ptr
+// requires special handling to compare dereferenced shared_ptr content
+// std::equal pattern from https://stackoverflow.com/a/8473603
+template<typename T>
+bool is_equal(std::vector<T> const& lhs, std::vector<T> const& rhs)
+{
+  auto pred = [] (decltype(*lhs.begin()) a, decltype(a) b)
+                 { return is_equal(a, b); };
+
+  return lhs.size() == rhs.size() &&
+         std::equal(lhs.begin(), lhs.end(), rhs.begin(), pred);
+}
+
+template<typename K, typename T>
+bool is_equal(std::map<K, T> const& lhs, std::map<K, T> const& rhs)
+{
+  auto pred = [] (decltype(*lhs.begin()) a, decltype(a) b)
+                 { return a.first == b.first && is_equal(a.second, b.second); };
+
+  return lhs.size() == rhs.size() &&
+         std::equal(lhs.begin(), lhs.end(), rhs.begin(), pred);
+}
+
+template<typename T>
+bool is_equal(std::shared_ptr<T> const& lhs, std::shared_ptr<T> const& rhs)
+{
+  return *lhs == *rhs;
+}
+
+
+// equality operator
+bool
+acal_match_graph::operator==(acal_match_graph const& other) const
+{
+  return this->params_ == other.params_
+      && this->image_paths_ == other.image_paths_
+      && this->all_acams_ == other.all_acams_
+      && is_equal(this->match_vertices_, other.match_vertices_)
+      && is_equal(this->match_edges_, other.match_edges_)
+      && is_equal(this->conn_comps_, other.conn_comps_)
+      && this->focus_tracks_ == other.focus_tracks_
+      && this->focus_track_metric_ == other.focus_track_metric_
+      && is_equal(this->match_trees_, other.match_trees_)
+      && this->match_tree_metric_ == other.match_tree_metric_;
+}
+
