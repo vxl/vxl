@@ -56,11 +56,11 @@ struct match_params
 
 };
 
+
 class match_vertex
 {
  public:
-  match_vertex(): cam_id_(-1), mark_(false) {}
-  match_vertex(size_t cam_id): cam_id_(cam_id), mark_(false) {}
+  match_vertex(size_t cam_id = 0): cam_id_(cam_id) {}
 
   void add_edge(match_edge* edge) {
     std::vector<match_edge* >::iterator eit;
@@ -76,26 +76,46 @@ class match_vertex
     edges_.clear();
   }
 
+  std::vector<size_t> edge_ids() const;
+
+  bool operator==(match_vertex const& other) const;
+  bool operator!=(match_vertex const& other) const { return !(*this == other); }
+
   size_t cam_id_;
-  bool mark_;
+  bool mark_ = false;
   std::vector<match_edge*> edges_;
 };
+
+// streaming operator
+std::ostream& operator<<(std::ostream& os, match_vertex const& vertex);
+
 
 class match_edge
 {
  public:
-  match_edge(): id_(-1) {}
   match_edge(std::shared_ptr<match_vertex> v0,
              std::shared_ptr<match_vertex> v1,
              std::vector<acal_match_pair> const& matches,
-             size_t id = 0):
-    v0_(v0), v1_(v1), matches_(matches), id_(id) {}
+             size_t id = 0)
+    : v0_(v0), v1_(v1), matches_(matches), id_(id)
+  {
+    v0_->add_edge(this);
+    v1_->add_edge(this);
+  }
+
+  std::vector<size_t> vertex_ids() const;
+
+  bool operator==(match_edge const& other) const;
+  bool operator!=(match_edge const& other) const { return !(*this == other); }
 
   size_t id_;
   std::vector<acal_match_pair>  matches_;
   std::shared_ptr<match_vertex> v0_;
   std::shared_ptr<match_vertex> v1_;
 };
+
+// streaming operator
+std::ostream& operator<<(std::ostream& os, match_edge const& edge);
 
 
 class acal_match_graph
@@ -192,6 +212,11 @@ class acal_match_graph
   bool save_graph_dot_format(std::string const& path);
   bool save_focus_graphs_dot_format(size_t ccomp_index, std::string const& path);
   bool save_match_trees_dot_format(size_t ccomp_index, std::string const& path, size_t num_trees = -1);
+
+
+  bool operator==(acal_match_graph const& other) const;
+  bool operator!=(acal_match_graph const& other) const { return !(*this == other); }
+
 
  private:
   match_params params_;
