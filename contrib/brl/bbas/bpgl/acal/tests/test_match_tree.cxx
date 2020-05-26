@@ -67,31 +67,59 @@ static void test_match_tree()
 
   size_t root_id = 12;
   acal_match_tree mt(root_id);
-  auto root = mt.root_;
+  std::cout << "create empty tree" << std::endl;
 
+  auto root = mt.root_;
   TEST("acal_match_tree root_id", root->cam_id_, root_id);
-  TEST("acal_match_tree root->is_leaf()", root->is_leaf(), true);
   TEST("acal_match_tree root->is_root()", root->is_root(), true);
+  TEST("acal_match_tree root->is_leaf()", root->is_leaf(), true);
 
   size_t child_id = 21;
   mt.add_child_node(root_id, child_id, mpairs_b);
-  TEST("acal_match_tree add single child", root->size(), 1);
-  TEST("acal_match_tree child_id", root->children_[0]->cam_id_, child_id);
+  std::cout << "add single child" << std::endl;
+
+  TEST("acal_match_tree root->size()", root->size(), 1);
+  TEST("acal_match_tree root->is_root()", root->is_root(), true);
+  TEST("acal_match_tree !root->is_leaf()", root->is_leaf(), false);
+
+  auto child = root->children_[0];
+  TEST("acal_match_tree child_id", child->cam_id_, child_id);
+  TEST("acal_match_tree !child->is_root()", child->is_root(), false);
+  TEST("acal_match_tree child->is_leaf()", child->is_leaf(), true);
+  TEST("acal_match_tree child->parent_id()", child->parent_id(), root_id);
 
   mt.add_child_node(21, 22, mpairs_a);
   mt.add_child_node(12, 210, mpairs_b);
   mt.add_child_node(21, 220, mpairs_a);
   mt.add_child_node(210, 221, mpairs_a);
   mt.add_child_node(21, 222, mpairs_a);
+  std::cout << "add many nodes" << std::endl;
 
-  std::vector<size_t> ids = {12, 21, 22, 210, 220, 221, 222};
-  TEST("acal_match_tree sorted cam_ids", mt.cam_ids(), ids);
+  std::vector<size_t> children_ids = {21, 210};
+  TEST("acal_match_tree root->children_ids()", root->children_ids(), children_ids);
+
+  std::vector<size_t> cam_ids = {12, 21, 22, 210, 220, 221, 222};
+  TEST("acal_match_tree sorted cam_ids()", mt.cam_ids(), cam_ids);
+
+  auto nodes = mt.nodes();
+  std::vector<size_t> node_ids;
+  std::transform(nodes.begin(), nodes.end(), std::back_inserter(node_ids),
+                 [](std::shared_ptr<acal_match_node> node) -> size_t { return node->cam_id_; });
+
+  std::cout << "recovered node ids: ";
+  for (auto node_id : node_ids)
+    std::cout << node_id << " ";
+  std::cout << std::endl;
+
+  TEST("acal_match_tree nodes()", node_ids, cam_ids);
 
   size_t find_child_id = 222;
-  auto child = acal_match_tree::find(root, find_child_id);
-  TEST("acal_match_tree::find has correct id", child->cam_id_, find_child_id);
+  auto found_child = acal_match_tree::find(root, find_child_id);
+  TEST("acal_match_tree::find has correct id", found_child->cam_id_, find_child_id);
 
-  auto parent = child->parent();
+  auto parent = found_child->parent();
+  TEST("acal_match_tree::find has correct parent id", parent->cam_id_, 21);
+
   size_t sc = parent->self_to_child_matches_.size();
   bool good = sc == 3;
   good = good && parent->self_to_child_matches_[0].size() == 2;
@@ -102,6 +130,31 @@ static void test_match_tree()
   vgl_point_2d<double> p = corrs[12][0];
   good = good && p == c41.pt_;
   TEST("collect correspondences", good, true);
+
+  // equivalence tests
+  acal_match_tree mt_copy(12);
+  mt_copy.add_child_node(12, 21, mpairs_b);
+  mt_copy.add_child_node(21, 22, mpairs_a);
+  mt_copy.add_child_node(12, 210, mpairs_b);
+  mt_copy.add_child_node(21, 220, mpairs_a);
+  mt_copy.add_child_node(210, 221, mpairs_a);
+  mt_copy.add_child_node(21, 222, mpairs_a);
+
+  std::cout << "created second match tree for equivalence tests" << std::endl;
+  std::cout << "Original - " << mt << std::endl;
+  std::cout << "Copy - " << mt_copy << std::endl;
+
+  auto rootA = mt.root_;
+  auto rootB = mt_copy.root_;
+  TEST("acal_match_tree root node ==", *rootA, *rootB);
+
+  find_child_id = 21;
+  auto childA = acal_match_tree::find(mt.root_, find_child_id);
+  auto childB = acal_match_tree::find(mt_copy.root_, find_child_id);
+  TEST("acal_match_tree child node ==", *childA, *childB);
+
+  TEST("acal_match_tree ==", mt, mt_copy);
+
 }
 
 TESTMAIN(test_match_tree);
