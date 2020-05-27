@@ -1,6 +1,9 @@
-#include <iostream>
-#include <vgl/io/vgl_io_point_2d.h>
 #include "acal_io_match_utils.h"
+
+#include <iostream>
+
+#include <vgl/io/vgl_io_point_2d.h>
+#include <vsl/vsl_indent.h>
 
 
 // -----acal_corr-----
@@ -38,8 +41,17 @@ vsl_b_read(vsl_b_istream & is, acal_corr& obj)
   }
 }
 
+//: Output a human readable summary to the stream
+void vsl_print_summary(std::ostream& os, const acal_corr& obj)
+{
+  os << "ID: " << obj.id_ << std::endl;
+  vsl_print_summary(os, obj.pt_);
+  os << std::endl;
+}
 
-// -----acal_match_pait-----
+
+
+// -----acal_match_pair-----
 
 //: Binary save object to stream.
 void
@@ -74,3 +86,18 @@ vsl_b_read(vsl_b_istream & is, acal_match_pair& obj)
   }
 }
 
+
+//: Output a human readable summary to the stream
+void vsl_print_summary(std::ostream& os, const acal_match_pair& obj)
+{
+  os << vsl_indent() << "Correspondence 1: " << std::endl;
+  vsl_indent_inc(os);
+  vsl_print_summary(os, obj.corr1_);
+  vsl_indent_dec(os);
+  os << vsl_indent() << "Correspondence 2: " << std::endl;
+  vsl_indent_inc(os);
+  vsl_print_summary(os, obj.corr2_);
+  vsl_indent_dec(os);
+
+  os << std::endl;
+}

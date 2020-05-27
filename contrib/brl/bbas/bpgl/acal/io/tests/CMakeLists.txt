@@ -6,6 +6,7 @@ set(acal_io_test_sources
 
     test_f_utils_io.cxx
     test_match_graph_io.cxx
+    test_match_tree_io.cxx
     test_match_utils_io.cxx
 )
 
@@ -14,6 +15,7 @@ target_link_libraries(acal_io_test_all ${VXL_LIB_PREFIX}acal_io ${VXL_LIB_PREFIX
 
 add_test( NAME acal_test_f_utils_io COMMAND $<TARGET_FILE:acal_io_test_all> test_f_utils_io )
 add_test( NAME acal_test_match_graph_io COMMAND $<TARGET_FILE:acal_io_test_all> test_match_graph_io )
+add_test( NAME acal_test_match_tree_io COMMAND $<TARGET_FILE:acal_io_test_all> test_match_tree_io )
 add_test( NAME acal_test_match_utils_io COMMAND $<TARGET_FILE:acal_io_test_all> test_match_utils_io )
 
 add_executable( acal_io_test_include test_include.cxx )
