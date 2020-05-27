@@ -154,7 +154,6 @@ static void test_match_tree()
   TEST("acal_match_tree child node ==", *childA, *childB);
 
   TEST("acal_match_tree ==", mt, mt_copy);
-
 }
 
 TESTMAIN(test_match_tree);
