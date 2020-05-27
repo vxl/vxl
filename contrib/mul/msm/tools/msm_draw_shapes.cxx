@@ -53,6 +53,11 @@ point_colours: { red green blue }
 // When defined, cycle through these colours when drawing each shape
 line_colours: { red green blue }
 
+// When defined, cycle through these styles when drawing each shape
+// Options: dots1, dots2, solid, dashes3-1, dashes3-2, dashes2-3, dashes1-3
+// dashesX-Y  X=length of dash, Y=length of space
+line_styles: { dots solid dashes3-2 }
+
 //: Colour of background (or "none" for transparent)
 background_colour: white
 
@@ -109,6 +114,9 @@ struct tool_params
 
   // When defined, cycle through these colours when drawing each shape
   std::vector<std::string> line_colours;
+
+  // When defined, cycle through these styles when drawing each shape
+  std::vector<std::string> line_styles;
 
   // When defined, cycle through these colours when drawing each shape
   std::vector<std::string> point_colours;
@@ -187,6 +195,23 @@ void tool_params::read_from_file(const std::string& path)
   if (line_colours.empty()) {
     line_colours.resize(1);
     line_colours[0]=line_colour;
+  }
+
+  std::string line_styles_str=props.get_optional_property("line_styles","");
+  if (line_styles_str!="")
+  {
+    std::stringstream lsss(line_styles_str);
+    mbl_parse_string_list(lsss,line_styles);
+
+    std::cout<<"LineStyles: ";
+    for (unsigned i=0;i<line_styles.size();++i) std::cout<<line_styles[i]<<" ";
+    std::cout<<std::endl;
+  }
+
+  if (line_styles.size()<1)
+  {
+    line_styles.resize(1);
+    line_styles[0]="solid";
   }
 
   out_path=props.get_optional_property("out_path","shapes.eps");
@@ -366,6 +391,28 @@ int main(int argc, char** argv)
       // Cycle through colours for lines
     writer.set_colour(params.line_colours[i%params.line_colours.size()]);
     writer.set_line_width(params.line_width);
+
+    // Cycle through styles
+    if (params.line_styles[i%params.line_styles.size()]=="dots1")
+      writer.ofs()<<"[0.5 1] 0 setdash"<<std::endl;
+    else
+    if (params.line_styles[i%params.line_styles.size()]=="dots2")
+      writer.ofs()<<"[0.5 2] 0 setdash"<<std::endl;
+    else
+    if (params.line_styles[i%params.line_styles.size()]=="dashes3-1")
+      writer.ofs()<<"[3 1] 0 setdash"<<std::endl;  // Dashes
+    else
+    if (params.line_styles[i%params.line_styles.size()]=="dashes3-2")
+      writer.ofs()<<"[3 2] 0 setdash"<<std::endl;  // Dashes
+    else
+    if (params.line_styles[i%params.line_styles.size()]=="dashes2-3")
+      writer.ofs()<<"[2 3] 0 setdash"<<std::endl;  // Dashes
+    else
+    if (params.line_styles[i%params.line_styles.size()]=="dashes1-3")
+      writer.ofs()<<"[1 3] 0 setdash"<<std::endl;  // Dashes
+    else
+      writer.ofs()<<"[1 0] 0 setdash"<<std::endl;  // Solid
+
     msm_draw_shape_to_eps(writer,points[i],curves);
   }
   writer.close();
