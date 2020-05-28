@@ -19,6 +19,7 @@
 #include "vsl/vsl_stack_io.h"
 #include "vsl/vsl_stream.h"
 #include "vsl/vsl_string_io.h"
+#include "vsl/vsl_tuple_io.h"
 #include "vsl/vsl_vector_io.h"
 
 int

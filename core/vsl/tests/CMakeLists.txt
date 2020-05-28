@@ -16,6 +16,7 @@ add_executable( vsl_test_all
   test_set_io.cxx
   test_stack_io.cxx
   test_string_io.cxx
+  test_tuple_io.cxx
   test_vector_io.cxx
   test_vlarge_block_io.cxx
   test_block_rle_io.cxx
@@ -39,11 +40,12 @@ add_test( NAME vsl_test_polymorphic_io COMMAND $<TARGET_FILE:vsl_test_all> test_
 add_test( NAME vsl_test_set_io COMMAND $<TARGET_FILE:vsl_test_all> test_set_io)
 add_test( NAME vsl_test_stack_io COMMAND $<TARGET_FILE:vsl_test_all> test_stack_io)
 add_test( NAME vsl_test_string_io COMMAND $<TARGET_FILE:vsl_test_all> test_string_io)
+add_test( NAME vsl_test_tuple_io COMMAND $<TARGET_FILE:vsl_test_all> test_tuple_io)
 add_test( NAME vsl_test_vector_io COMMAND $<TARGET_FILE:vsl_test_all> test_vector_io)
 add_test( NAME vsl_test_block_rle_io COMMAND $<TARGET_FILE:vsl_test_all> test_block_rle_io)
 
 # Don't add test_vlarge_block_io to the automatic list. It does nasty things
-# to memory which can result in wierd error messages, system lockup, and other
+# to memory which can result in weird error messages, system lockup, and other
 # unpleasant behaviour on some platforms
 # The following manual tests have been tried.
 # x86, Win2k, MSVC7.1 Release mode - test passes
