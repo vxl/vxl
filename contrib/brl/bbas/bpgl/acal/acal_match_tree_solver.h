@@ -89,7 +89,7 @@ public:
     match_graph_.validate_match_trees_and_set_metric();
     match_tree_ = match_graph_.largest_tree(conn_comp_index);
     tracks_ = match_tree_->tracks();
-    std::map<size_t, vpgl_affine_camera<double> >& acams = match_graph_.all_acams();
+    std::map<size_t, vpgl_affine_camera<double> >& acams = match_graph_.all_acams_;
     std::vector<size_t> tree_cam_ids = match_tree_->cam_ids();
     for(std::vector<size_t>::iterator cit = tree_cam_ids.begin();
         cit != tree_cam_ids.end(); ++cit){

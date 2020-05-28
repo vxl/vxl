@@ -1,4 +1,5 @@
 #include "acal_io_match_graph.h"
+#include "acal_io_match_tree.h"
 
 #include <iostream>
 #include <map>
@@ -49,7 +50,7 @@ vsl_b_read(vsl_b_istream & is, match_params& obj)
 }
 
 //: Output a human readable summary to the stream
-void vsl_print_summary(std::ostream& os, match_params& obj)
+void vsl_print_summary(std::ostream& os, const match_params& obj)
 {
   os << "Min n tracks: " << obj.min_n_tracks_ << std::endl;
   os << "Min n cams: " << obj.min_n_cams_ << std::endl;
@@ -63,21 +64,16 @@ void vsl_print_summary(std::ostream& os, match_params& obj)
 
 //: Binary save object to stream
 void
-vsl_b_write(vsl_b_ostream & os, acal_match_graph& graph)
+vsl_b_write(vsl_b_ostream & os, const acal_match_graph& graph)
 {
   constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
 
-  // Get graph attributes
-  std::map<size_t, std::map<size_t, std::shared_ptr<acal_match_tree> > > match_trees = graph.get_match_trees();
-  std::vector<size_t> match_tree_metrics = graph.get_match_tree_metrics();
-
   // Create serializable representations of each vertex
-  std::map<size_t, std::shared_ptr<match_vertex> > vertices = graph.vertices();
-  std::map<size_t, std::pair<bool, std::vector<size_t> > > serializable_vertices;
-  for (auto const& item : vertices) {
+  std::map<size_t, vertex_representation_type> serializable_vertices;
+  for (auto const& item : graph.match_vertices_) {
     size_t vertex_id = item.first;
-    std::shared_ptr<match_vertex> vertex = item.second;
+    const std::shared_ptr<match_vertex>& vertex = item.second;
 
     size_t cam_id = vertex->cam_id_;
     if (serializable_vertices.count(cam_id) > 0) {
@@ -94,9 +90,8 @@ vsl_b_write(vsl_b_ostream & os, acal_match_graph& graph)
   }
 
   // Create serializable representations of each edge
-  std::vector<std::shared_ptr<match_edge> > edges = graph.edges();
-  std::map<size_t, std::tuple<size_t, size_t, std::vector<acal_match_pair> > > serializable_edges;
-  for (auto const& e_ptr : edges) {
+  std::map<size_t, edge_representation_type> serializable_edges;
+  for (auto const& e_ptr : graph.match_edges_) {
     size_t edge_id = e_ptr->id_;
     if (serializable_edges.count(edge_id) > 0) {
       throw std::runtime_error("Can't pickle acal_match_graph - Non-unique edge ID!");
@@ -107,9 +102,8 @@ vsl_b_write(vsl_b_ostream & os, acal_match_graph& graph)
   }
 
   // Replace the connected component vertices with IDs
-  std::vector<std::vector<std::shared_ptr<match_vertex> > > connected_components = graph.get_connected_components();
   std::vector<std::vector<size_t> > connected_components_with_ids;
-  for (auto const& cc : connected_components) {
+  for (auto const& cc : graph.conn_comps_) {
     std::vector<size_t> verts_in_cc;
     for (auto const& v_ptr : cc) {
       verts_in_cc.push_back(v_ptr->cam_id_);
@@ -117,17 +111,26 @@ vsl_b_write(vsl_b_ostream & os, acal_match_graph& graph)
     connected_components_with_ids.push_back(verts_in_cc);
   }
 
+  // Create serializable representations of each tree
+  std::map<size_t, std::map<size_t, acal_match_tree> > serializable_trees;
+  for (auto const& item1 : graph.match_trees_) {
+    for (auto const& item2 : item1.second) {
+      // Extract the tree itself, since we can serialize that directly
+      serializable_trees[item1.first][item2.first] = *(item2.second);
+    }
+  }
+
   // Serialize the state of the graph
-  vsl_b_write(os, graph.get_params());
-  vsl_b_write(os, graph.get_image_paths());
-  vsl_b_write(os, graph.all_acams());
+  vsl_b_write(os, graph.params_);
+  vsl_b_write(os, graph.image_paths_);
+  vsl_b_write(os, graph.all_acams_);
   vsl_b_write(os, serializable_vertices);
   vsl_b_write(os, serializable_edges);
   vsl_b_write(os, connected_components_with_ids);
-  vsl_b_write(os, graph.get_focus_tracks());
-  vsl_b_write(os, graph.get_focus_track_metrics());
-  vsl_b_write(os, graph.get_match_trees());
-  vsl_b_write(os, graph.get_match_tree_metrics());
+  vsl_b_write(os, graph.focus_tracks_);
+  vsl_b_write(os, graph.focus_track_metric_);
+  vsl_b_write(os, serializable_trees);
+  vsl_b_write(os, graph.match_tree_metric_);
 }
 
 //: Binary load object from stream
@@ -149,9 +152,9 @@ vsl_b_read(vsl_b_istream & is, acal_match_graph& graph)
       vsl_b_read(is, image_paths);
       std::map<size_t, vpgl_affine_camera<double> > all_acams;
       vsl_b_read(is, all_acams);
-      std::map<size_t, std::pair<bool, std::vector<size_t> > > serialized_vertices;
+      std::map<size_t, vertex_representation_type> serialized_vertices;
       vsl_b_read(is, serialized_vertices);
-      std::map<size_t, std::tuple<size_t, size_t, std::vector<acal_match_pair> > > serialized_edges;
+      std::map<size_t, edge_representation_type> serialized_edges;
       vsl_b_read(is, serialized_edges);
       std::vector<std::vector<size_t> > connected_components_with_ids;
       vsl_b_read(is, connected_components_with_ids);
@@ -159,8 +162,8 @@ vsl_b_read(vsl_b_istream & is, acal_match_graph& graph)
       vsl_b_read(is, focus_tracks);
       std::vector<double> focus_track_metrics;
       vsl_b_read(is, focus_track_metrics);
-      std::map<size_t, std::map<size_t, std::shared_ptr<acal_match_tree> > > match_trees;
-      vsl_b_read(is, match_trees);
+      std::map<size_t, std::map<size_t, acal_match_tree> > serializable_trees;
+      vsl_b_read(is, serializable_trees);
       std::vector<size_t> match_tree_metrics;
       vsl_b_read(is, match_tree_metrics);
 
@@ -170,21 +173,25 @@ vsl_b_read(vsl_b_istream & is, acal_match_graph& graph)
         size_t vertex_id = item.first;
         auto representation = item.second;
 
-        auto v = std::make_shared<match_vertex>();
-        v->cam_id_ = vertex_id;
+        auto v = std::make_shared<match_vertex>(vertex_id);
         v->mark_ = representation.first;
         vertices[vertex_id] = v;
       }
 
-      // Construct edges
+      // Construct edges, use vertices just created
       std::map<size_t, std::shared_ptr<match_edge> > edges;
       for (auto const& item : serialized_edges) {
         size_t edge_id = item.first;
         auto representation = item.second;
 
-        auto e = std::make_shared<match_edge>();
-        e->id_ = edge_id;
-        e->matches_ = std::get<2>(representation);
+        size_t v0_id = std::get<0>(representation);
+        size_t v1_id = std::get<1>(representation);
+        std::vector<acal_match_pair> matches = std::get<2>(representation);
+
+        std::shared_ptr<match_vertex>& v0 = vertices[v0_id];
+        std::shared_ptr<match_vertex>& v1 = vertices[v1_id];
+
+        auto e = std::make_shared<match_edge>(v0, v1, matches, edge_id);
         edges[edge_id] = e;
       }
 
@@ -201,23 +208,7 @@ vsl_b_read(vsl_b_istream & is, acal_match_graph& graph)
         }
       }
 
-      // Put vertex pointers into edges
-      for (auto const& item : edges) {
-
-        size_t edge_id = item.first;
-        const std::shared_ptr<match_edge>& edge = item.second;
-
-        size_t v0_id = std::get<0>(serialized_edges[edge_id]);
-        size_t v1_id = std::get<1>(serialized_edges[edge_id]);
-
-        const std::shared_ptr<match_vertex>& v0 = vertices[v0_id];
-        const std::shared_ptr<match_vertex>& v1 = vertices[v1_id];
-
-        edge->v0_ = v0;
-        edge->v1_ = v1;
-      }
-
-      // Put vertex pointers into connected components
+      // Construct connected components using vertices
       std::vector<std::vector<std::shared_ptr<match_vertex> > > connected_components;
       for (auto const& cc_with_ids : connected_components_with_ids) {
         std::vector<std::shared_ptr<match_vertex> > cc;
@@ -236,17 +227,27 @@ vsl_b_read(vsl_b_istream & is, acal_match_graph& graph)
         edges_vector.push_back(edge);
       }
 
+      // Put raw trees back in shared pointers
+      std::map<size_t, std::map<size_t, acal_match_tree> > serialized_trees;
+      std::map<size_t, std::map<size_t, std::shared_ptr<acal_match_tree> > > trees;
+      for (auto const& item1 : serialized_trees) {
+        for (auto const& item2 : item1.second) {
+          // Copy tree from stack onto the heap, wrap in a shared pointer
+          trees[item1.first][item2.first] = std::make_shared<acal_match_tree>(item2.second);
+        }
+      }
+
       // Set graph state
-      graph.set_params(params);
-      graph.set_image_paths(image_paths);
-      graph.set_all_acams(all_acams);
-      graph.set_vertices(vertices);
-      graph.set_edges(edges_vector);
-      graph.set_connected_components(connected_components);
-      graph.set_focus_tracks(focus_tracks);
-      graph.set_focus_track_metrics(focus_track_metrics);
-      graph.set_match_trees(match_trees);
-      graph.set_match_tree_metrics(match_tree_metrics);
+      graph.params_ = params;
+      graph.image_paths_ = image_paths;
+      graph.all_acams_ = all_acams;
+      graph.match_vertices_ = vertices;
+      graph.match_edges_ = edges_vector;
+      graph.conn_comps_ = connected_components;
+      graph.focus_tracks_ = focus_tracks;
+      graph.focus_track_metric_ = focus_track_metrics;
+      graph.match_trees_ = trees;
+      graph.match_tree_metric_ = match_tree_metrics;
 
       break;
     }
@@ -261,7 +262,7 @@ vsl_b_read(vsl_b_istream & is, acal_match_graph& graph)
 }
 
 //: Output a human readable summary to the stream
-void vsl_print_summary(std::ostream& os, acal_match_graph& graph)
+void vsl_print_summary(std::ostream& os, const acal_match_graph& graph)
 {
   os << "Number of connected components: " << graph.n_connected_comp() << std::endl;
   // TODO

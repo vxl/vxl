@@ -15,7 +15,7 @@
 
 
 // typedef to avoid comma in macro
-typedef std::tuple<size_t, size_t, int, std::vector<int>,
+typedef std::tuple<size_t, int, std::vector<int>,
                    std::vector<std::vector<acal_match_pair> > > node_representation_type;
 
 // Used to serialize match nodes
