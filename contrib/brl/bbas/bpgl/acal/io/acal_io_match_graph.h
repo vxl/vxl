@@ -22,11 +22,11 @@ typedef std::tuple<size_t, size_t, std::vector<acal_match_pair> > edge_represent
 //: match_params
 void vsl_b_write(vsl_b_ostream &os, const match_params& obj);
 void vsl_b_read(vsl_b_istream &is, match_params& obj);
-void vsl_print_summary(std::ostream& os, match_params& obj);
+void vsl_print_summary(std::ostream& os, const match_params& obj);
 
 //: acal_match_graph
 void vsl_b_write(vsl_b_ostream &os, const acal_match_graph& graph);
 void vsl_b_read(vsl_b_istream &is, acal_match_graph& graph);
-void vsl_print_summary(std::ostream& os, acal_match_graph& graph);
+void vsl_print_summary(std::ostream& os, const acal_match_graph& graph);
 
 #endif // acal_io_match_graph_h_

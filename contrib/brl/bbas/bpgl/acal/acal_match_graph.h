@@ -13,16 +13,19 @@
 //   <none yet>
 // \endverbatim
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <memory>
-#include <vector>
-#include <map>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
 #include "acal_f_utils.h"
 #include "acal_match_tree.h"
+
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
+
 
 // forward declarations
 struct match_params;
@@ -148,48 +151,7 @@ class acal_match_graph
   std::shared_ptr<acal_match_tree> largest_tree(size_t conn_comp_index);
   std::vector<std::shared_ptr<acal_match_tree> > trees(size_t conn_comp_index);
 
-  // Getters
-  match_params& get_params() {return params_;}
-  std::map<size_t, std::string>& get_image_paths() {return image_paths_;}
-  std::map<size_t, vpgl_affine_camera<double> >& all_acams() {return all_acams_;}
   std::shared_ptr<match_vertex> vert(size_t index) {return match_vertices_[index];}
-  std::map<size_t, std::shared_ptr<match_vertex> >& vertices() {return match_vertices_;}
-  std::vector<std::shared_ptr<match_edge> >& edges() {return match_edges_;}
-  std::vector<std::vector<std::shared_ptr<match_vertex> > >& get_connected_components() {return conn_comps_;}
-  std::map<size_t, std::map<size_t, std::vector< std::map<size_t, vgl_point_2d<double> > > > >& get_focus_tracks() {return focus_tracks_;}
-  std::vector<double>& get_focus_track_metrics() {return focus_track_metric_;}
-  std::map<size_t, std::map<size_t, std::shared_ptr<acal_match_tree> > >& get_match_trees() {return match_trees_;}
-  std::vector<size_t>& get_match_tree_metrics() {return match_tree_metric_;}
-
-  // Setters
-  void set_params(match_params const& params) {params_ = params;}
-  void set_image_paths(std::map<size_t, std::string> const& image_paths) {image_paths_ = image_paths;}
-  void set_all_acams(std::map<size_t, vpgl_affine_camera<double> > const& all_acams) {
-    all_acams_ = all_acams;
-  }
-  void set_vertices(std::map<size_t, std::shared_ptr<match_vertex> > const& vertices) {
-    match_vertices_ = vertices;
-  }
-  void set_edges(std::vector<std::shared_ptr<match_edge> > const& edges) {
-    match_edges_ = edges;
-  }
-  void set_connected_components(std::vector<std::vector<std::shared_ptr<match_vertex> > > const& conn_comps) {
-    conn_comps_ = conn_comps;
-  }
-  void set_focus_tracks(std::map<size_t, std::map<size_t, std::vector< std::map<size_t, vgl_point_2d<double> > > > > const& focus_tracks) {
-    focus_tracks_ = focus_tracks;
-  }
-  void set_focus_track_metrics(std::vector<double> const& focus_track_metrics) {
-    focus_track_metric_ = focus_track_metrics;
-  }
-  void set_match_trees(std::map<size_t, std::map<size_t, std::shared_ptr<acal_match_tree> > > const& match_trees) {
-    match_trees_ = match_trees;
-  }
-  void set_match_tree_metrics(std::vector<size_t> const& match_tree_metrics) {
-    match_tree_metric_ = match_tree_metrics;
-  }
-
-
 
   std::map<size_t, std::vector< std::map<size_t, vgl_point_2d<double> > > > & focus_tracks(size_t connected_comp_idx){
     return focus_tracks_[connected_comp_idx];
@@ -218,7 +180,7 @@ class acal_match_graph
   bool operator!=(acal_match_graph const& other) const { return !(*this == other); }
 
 
- private:
+  // members
   match_params params_;
   std::map<size_t, std::string> image_paths_;
   std::map<size_t, vpgl_affine_camera<double> > all_acams_;

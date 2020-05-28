@@ -12,5 +12,5 @@
 
 
 // Used to serialize match nodes
-VSL_TUPLE_IO_INSTANTIATE(size_t, size_t, int, std::vector<int>,
+VSL_TUPLE_IO_INSTANTIATE(size_t, int, std::vector<int>,
                          std::vector<std::vector<acal_match_pair> >);
