@@ -27,6 +27,7 @@ set(vsl_sources
   vsl_set_io.hxx vsl_set_io.h
   vsl_stack_io.hxx vsl_stack_io.h
   vsl_string_io.hxx vsl_string_io.h
+  vsl_tuple_io.hxx vsl_tuple_io.h
   vsl_vector_io.hxx vsl_vector_io.h vsl_vector_io_bool.cxx
                                     vsl_vector_io_vector_bool.cxx
   vsl_basic_xml_element.cxx vsl_basic_xml_element.h
