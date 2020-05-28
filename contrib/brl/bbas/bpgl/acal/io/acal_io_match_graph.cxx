@@ -162,8 +162,8 @@ vsl_b_read(vsl_b_istream & is, acal_match_graph& graph)
       vsl_b_read(is, focus_tracks);
       std::vector<double> focus_track_metrics;
       vsl_b_read(is, focus_track_metrics);
-      std::map<size_t, std::map<size_t, acal_match_tree> > serializable_trees;
-      vsl_b_read(is, serializable_trees);
+      std::map<size_t, std::map<size_t, acal_match_tree> > serialized_trees;
+      vsl_b_read(is, serialized_trees);
       std::vector<size_t> match_tree_metrics;
       vsl_b_read(is, match_tree_metrics);
 
@@ -228,7 +228,6 @@ vsl_b_read(vsl_b_istream & is, acal_match_graph& graph)
       }
 
       // Put raw trees back in shared pointers
-      std::map<size_t, std::map<size_t, acal_match_tree> > serialized_trees;
       std::map<size_t, std::map<size_t, std::shared_ptr<acal_match_tree> > > trees;
       for (auto const& item1 : serialized_trees) {
         for (auto const& item2 : item1.second) {
