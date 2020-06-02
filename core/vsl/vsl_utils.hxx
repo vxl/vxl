@@ -52,8 +52,8 @@ void _vsl_for_each(TupleType&& t, FunctionType f)
 
 
 /*
- * Write / read / print wrappers, templated for any type.
- * Use with above code on arrays, tuples, etc.
+ * Write / read / print generic functions, templated for any type.
+ * Use with above code on heterogeneous data structures, e.g. tuples.
  * Can be replaced with generic lambdas once VXL requires C++14.
  * This implementation is based on the following: https://stackoverflow.com/a/30071501
  */

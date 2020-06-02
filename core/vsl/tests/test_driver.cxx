@@ -3,6 +3,7 @@
 DECLARE(test_indent);
 DECLARE(test_binary_io);
 DECLARE(test_arbitrary_length_int_conversion);
+DECLARE(test_array_io);
 DECLARE(test_clipon_polymorphic_io);
 DECLARE(test_complex_io);
 DECLARE(test_deque_io);
@@ -23,6 +24,7 @@ register_tests()
   REGISTER(test_indent);
   REGISTER(test_binary_io);
   REGISTER(test_arbitrary_length_int_conversion);
+  REGISTER(test_array_io);
   REGISTER(test_clipon_polymorphic_io);
   REGISTER(test_complex_io);
   REGISTER(test_deque_io);
