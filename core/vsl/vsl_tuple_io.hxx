@@ -14,6 +14,7 @@
 #include <tuple>
 
 #include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_indent.h>
 
 
 //: Write tuple to binary stream
@@ -56,9 +57,11 @@ void vsl_b_read(vsl_b_istream& is, std::tuple<Types ...>& v) {
 template <typename ... Types>
 void vsl_print_summary(std::ostream& os, const std::tuple<Types ...>& v) {
 
-  os << "Tuple size: " << std::tuple_size<std::tuple<Types ...> >::value << std::endl;
+  os << vsl_indent() << "Tuple size: " << std::tuple_size<std::tuple<Types ...> >::value << std::endl;
+  vsl_indent_inc(os);
   _vsl_for_each(v, _vsl_generic_print(os));
   os << std::endl;
+  vsl_indent_dec(os);
 }
 
 

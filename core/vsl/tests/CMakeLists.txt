@@ -7,6 +7,7 @@ add_executable( vsl_test_all
   test_indent.cxx
   test_binary_io.cxx
   test_arbitrary_length_int_conversion.cxx
+  test_array_io.cxx
   test_clipon_polymorphic_io.cxx
   test_complex_io.cxx
   test_deque_io.cxx
@@ -31,6 +32,7 @@ add_test( NAME vsl_test_binary_io COMMAND $<TARGET_FILE:vsl_test_all> test_binar
 
 add_test( NAME vsl_test_arbitrary_length_int_conversion COMMAND $<TARGET_FILE:vsl_test_all>
                                            test_arbitrary_length_int_conversion)
+add_test( NAME vsl_test_array_io COMMAND $<TARGET_FILE:vsl_test_all> test_array_io)
 add_test( NAME vsl_test_clipon_polymorphic_io COMMAND $<TARGET_FILE:vsl_test_all> test_clipon_polymorphic_io)
 add_test( NAME vsl_test_complex_io COMMAND $<TARGET_FILE:vsl_test_all> test_complex_io)
 add_test( NAME vsl_test_deque_io COMMAND $<TARGET_FILE:vsl_test_all> test_deque_io)
