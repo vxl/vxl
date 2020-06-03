@@ -6,29 +6,28 @@
 static void
 test_match_tree_io()
 {
-  auto root = std::make_shared<acal_match_tree>(0);
+  acal_match_tree tree(0);
 
   std::vector<acal_match_pair> root_to_child1_matches;
-  for (size_t i = 0; i < 5; k++) {
+  for (size_t i = 0; i < 5; i++) {
     vgl_point_2d<double> pt1(i, i);
     vgl_point_2d<double> pt2(i + 1, i + 2);
     acal_match_pair mp(acal_corr(i, pt1), acal_corr(i, pt2));
     root_to_child1_matches.push_back(mp);
   }
 
-  root->add_child(1, root_to_child1_matches);
+  tree.root_->add_child(1, root_to_child1_matches);
 
   std::vector<acal_match_pair> child1_to_child2_matches;
-  for (size_t i = 0; i < 10; k++) {
+  for (size_t i = 0; i < 10; i++) {
     vgl_point_2d<double> pt1(i, i);
     vgl_point_2d<double> pt2(i, i * 2);
     acal_match_pair mp(acal_corr(i, pt1), acal_corr(i, pt2));
     child1_to_child2_matches.push_back(mp);
   }
 
-  root->children_[0]->add_child(2, child1_to_child2_matches);
+  tree.root_->children_[0]->add_child(2, child1_to_child2_matches);
 
-  acal_match_tree tree(root);
   test_generic_io(tree, "acal_match_tree");
 }
 

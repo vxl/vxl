@@ -10,6 +10,33 @@
 
 
 // -----acal_match_tree-----
+// partial support - only printing
+
+//: Output a human readable summary to the stream
+void vsl_print_summary(std::ostream& os, const acal_match_node& node)
+{
+  // id
+  os << vsl_indent() << "node " << node.cam_id_ << ": ";
+
+  // parent info
+  if (node.is_root()) {
+    os << "root, ";
+  } else {
+    os << "parent " << node.parent_id() << ", ";
+  }
+
+  // children info
+  os << "children: [";
+  std::string separator;
+  for (auto child : node.children_) {
+    os << separator << child->cam_id_;
+    separator = ",";
+  }
+  os << "]" << std::endl;
+}
+
+
+// -----acal_match_tree-----
 
 //: Binary save object to stream
 void
@@ -127,12 +154,31 @@ vsl_b_read(vsl_b_istream & is, acal_match_tree& tree)
   }
 }
 
+
+// helper recursive function to traverse nodes
+void vsl_print_nodes_recursive(std::ostream& os,
+                               std::shared_ptr<acal_match_node> node)
+{
+  vsl_print_summary(os, *node);
+  vsl_indent_inc(os);
+  for (auto child : node->children_) {
+    vsl_print_nodes_recursive(os, child);
+  }
+  vsl_indent_dec(os);
+}
+
+
 //: Output a human readable summary to the stream
 void vsl_print_summary(std::ostream& os, const acal_match_tree& tree)
 {
-  os << "acal_match_tree:" << std::endl;
-  os << "  Number of nodes: " << tree.n_ << std::endl;
-  os << "  Min num of tracks: " << tree.min_n_tracks_ << std::endl;
-  // TODO: nodes
+  os << vsl_indent() << "acal_match_tree:" << std::endl;
+  os << vsl_indent() << "  Number of nodes: " << tree.n_ << std::endl;
+  os << vsl_indent() << "  Min num of tracks: " << tree.min_n_tracks_ << std::endl;
+  os << vsl_indent() << "  Nodes:" << std::endl;
+
+  vsl_indent_inc(os);
+  vsl_print_nodes_recursive(os, tree.root_);
+  vsl_indent_dec(os);
+
   os << std::endl;
 }

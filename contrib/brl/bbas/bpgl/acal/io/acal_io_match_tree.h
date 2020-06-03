@@ -20,6 +20,9 @@
 // Typedef heterogeneous container used in serialization
 typedef std::tuple<size_t, int, std::vector<int>, std::vector<std::vector<acal_match_pair> > > node_representation_type;
 
+// acal_match_node
+void vsl_print_summary(std::ostream& os, const acal_match_node& node);
+
 // acal_match_tree
 void vsl_b_write(vsl_b_ostream &os, const acal_match_tree& tree);
 void vsl_b_read(vsl_b_istream &is, acal_match_tree& tree);
