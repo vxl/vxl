@@ -4,7 +4,7 @@
 #include <acal/io/acal_io_match_utils.h>
 #include <vsl/vsl_vector_io.h>
 
-#include "vsl_tuple_io.hxx"
+#include <vsl/vsl_tuple_io.hxx>
 
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"

@@ -134,8 +134,8 @@ test_match_graph()
 
   // initialize match graph
   acal_match_graph match_graph;
-  match_graph.set_image_paths(image_paths);
-  match_graph.set_all_acams(cams);
+  match_graph.image_paths_ = image_paths;
+  match_graph.all_acams_ = cams;
   success = match_graph.load_incidence_matrix(incidence_matrix);
   TEST("acal_match_graph::load_incidence_matrix", success, true);
 
@@ -144,7 +144,7 @@ test_match_graph()
   std::cout << "\nacal_match_graph::find_connected_components complete" << std::endl;
   //  match_graph.print_connected_components();
 
-  auto components = match_graph.get_connected_components();
+  auto components = match_graph.conn_comps_;
   TEST("acal_match_graph 2 connected components", components.size(), 2);
   TEST("acal_match_graph component[0].size == 4", components[0].size(), 4);
   TEST("acal_match_graph component[1].size == 3", components[1].size(), 3);
@@ -154,7 +154,7 @@ test_match_graph()
   std::cout << "\nacal_match_graph::compute_focus_tracks complete" << std::endl;
   // match_graph.print_focus_tracks();
 
-  auto tracks = match_graph.get_focus_tracks();
+  auto tracks = match_graph.focus_tracks_;
   TEST("acal_match_graph tracks[0][0].size == 4", tracks[0][0].size(), 4);
   TEST("acal_match_graph tracks[1][4].size == 3", tracks[1][4].size(), 3);
 
@@ -168,8 +168,8 @@ test_match_graph()
 
   // equality test
   acal_match_graph match_graph_copy;
-  match_graph_copy.set_image_paths(image_paths);
-  match_graph_copy.set_all_acams(cams);
+  match_graph_copy.image_paths_ = image_paths;
+  match_graph_copy.all_acams_ = cams;
   success = match_graph_copy.load_incidence_matrix(incidence_matrix);
   TEST("acal_match_graph !=", match_graph_copy != match_graph, true);
 

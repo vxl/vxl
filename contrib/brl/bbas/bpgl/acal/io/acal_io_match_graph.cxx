@@ -5,6 +5,7 @@
 #include <map>
 #include <memory>
 
+#include <vsl/vsl_indent.h>
 #include <vsl/vsl_pair_io.h>
 #include <vsl/vsl_map_io.h>
 #include <vsl/vsl_vector_io.h>
@@ -52,10 +53,10 @@ vsl_b_read(vsl_b_istream & is, match_params& obj)
 //: Output a human readable summary to the stream
 void vsl_print_summary(std::ostream& os, const match_params& obj)
 {
-  os << "Min n tracks: " << obj.min_n_tracks_ << std::endl;
-  os << "Min n cams: " << obj.min_n_cams_ << std::endl;
-  os << "Max proj error: " << obj.max_proj_error_ << std::endl;
-  os << "Max uncal proj error: " << obj.max_uncal_proj_error_ << std::endl;
+  os << vsl_indent() << "Min n tracks: " << obj.min_n_tracks_ << std::endl;
+  os << vsl_indent() << "Min n cams: " << obj.min_n_cams_ << std::endl;
+  os << vsl_indent() << "Max proj error: " << obj.max_proj_error_ << std::endl;
+  os << vsl_indent() << "Max uncal proj error: " << obj.max_uncal_proj_error_ << std::endl;
   os << std::endl;
 }
 
@@ -263,7 +264,25 @@ vsl_b_read(vsl_b_istream & is, acal_match_graph& graph)
 //: Output a human readable summary to the stream
 void vsl_print_summary(std::ostream& os, const acal_match_graph& graph)
 {
-  os << "Number of connected components: " << graph.n_connected_comp() << std::endl;
-  // TODO
+  os << vsl_indent() << "acal_match_graph:" << std::endl;
+  os << vsl_indent() << "  Connected components: " << graph.n_connected_comp() << std::endl;
+  os << vsl_indent() << "  Vertices: " << graph.match_vertices_.size() << std::endl;
+  os << vsl_indent() << "  Edges: " << graph.match_edges_.size() << std::endl;
+
+  os << vsl_indent() << "Params:" << std::endl;
+  vsl_indent_inc(os);
+  vsl_print_summary(os, graph.params_);
+  vsl_indent_dec(os);
+
+  os << vsl_indent() << "Image paths:" << std::endl;
+  vsl_indent_inc(os);
+  vsl_print_summary(os, graph.image_paths_);
+  vsl_indent_dec(os);
+
+  os << vsl_indent() << "Affine cams:" << std::endl;
+  vsl_indent_inc(os);
+  vsl_print_summary(os, graph.all_acams_);
+  vsl_indent_dec(os);
+
   os << std::endl;
 }
