@@ -17,9 +17,34 @@
 //                          updated ToA Reflectance to Surface Reflectance compuation for all band type
 // \endverbatim
 //----------------------------------------------------------------------------
+#include <vector>
+#include <vil/vil_image_view.h>
 #include "brad_image_metadata.h"
 #include "brad_atmospheric_parameters.h"
-#include <vil/vil_image_view.h>
+
+
+//: get visible band ids from image metadata
+std::vector<size_t>
+brad_visible_band_ids(brad_image_metadata const& mdata);
+
+//: estimate airlight from dark pixels of the top-of-atmosphere (ToA) reflectance image
+std::vector<double>
+brad_airlight(vil_image_view<float> const& toa_reflectance,
+              std::vector<size_t> vis_band_ids = {},
+              double frac = 0.001);
+
+//: estimate average intensity from ToA reflectance
+std::vector<double>
+brad_toa_reflectance_mean(vil_image_view<float> const& toa_reflectance,
+                          std::vector<size_t> vis_band_ids = {});
+
+//: estimate surface reflectance from ToA reflectance
+vil_image_view<float>
+brad_surface_reflectance(vil_image_view<float> const& toa_reflectance,
+                         std::vector<double> toa_reflectance_mean,
+                         std::vector<double> airlight = {},
+                         double surface_reflectance_mean = 0.3);
+
 
 //: get visible band id from image metadata
 bool brad_get_visible_band_id(vil_image_view<float> const& radiance,

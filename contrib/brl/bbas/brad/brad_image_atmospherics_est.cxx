@@ -1,13 +1,247 @@
-#include <fstream>
-#include "brad_image_atmospherics_est.h"
-//
-#include "vil/vil_image_view.h"
-#include "vil/vil_math.h"
-#include <bsta/bsta_histogram.h>
-#include "vnl/vnl_math.h"
+#include <sstream>
+#include <stdexcept>
 
-#include "vil/vil_save.h" // temp
-#include "vil/vil_convert.h"
+#include "vil/vil_copy.h"
+#include "vil/vil_math.h"
+#include "vnl/vnl_math.h"
+#include <bsta/bsta_histogram.h>
+#include "brad_image_metadata.h"
+#include "brad_utils.h"
+
+#include "brad_image_atmospherics_est.h"
+
+
+//: get visible band ids from image metadata
+std::vector<size_t>
+brad_visible_band_ids(brad_image_metadata const& mdata)
+{
+  auto nbands = mdata.n_bands_;
+
+  // 1 band - immediate return
+  if (nbands == 1) {
+    return {0};
+  }
+
+  // 4-bands & recognized satellite
+  else if (nbands == 4) {
+    if (mdata.satellite_name_ == "GeoEye-1" ||
+        mdata.satellite_name_ == "QuickBird" ||
+        mdata.satellite_name_ == "IKONOS") {
+      return {0,1,2};
+    }
+  }
+
+  // 8-bands, multispectral, recognized satellite
+  else if (nbands == 8) {
+    if (mdata.band_ == "MULTI") {
+      if (mdata.satellite_name_ == "WorldView2" ||
+          mdata.satellite_name_ == "WorldView3") {
+        return {1,2,3,4};
+      }
+    }
+  }
+
+  // 16 bands, recognized satellite
+  else if (nbands == 16) {
+    if (mdata.satellite_name_ == "WorldView3") {
+      return {1,2,3,4};
+    }
+  }
+
+  // default - use first band
+  return {0};
+}
+
+
+// estimate airlight from dark pixels of the ToA reflectance image
+// - produces a vector of airlight values, one per band of the input image
+// - if no visible bands are specified or a single band input, airlight is
+//   determined independently for each band
+// - if multiple visible bands are specified, only those bands are used to
+//   determine airlight pixels
+std::vector<double>
+brad_airlight(vil_image_view<float> const& toa_reflectance,
+              std::vector<size_t> vis_band_ids,
+              double frac)
+{
+  // image attributes
+  size_t ni = toa_reflectance.ni();
+  size_t nj = toa_reflectance.nj();
+  size_t np = toa_reflectance.nplanes();
+
+  // validate vis_band_ids
+  brad_utils::validate_band_ids(np, vis_band_ids);
+
+  // output setup
+  std::vector<double> airlight(np, 0.0);
+
+  // compute airlight for each band independently
+  if (vis_band_ids.empty()) {
+
+    for (size_t p = 0; p < np; p++) {
+      auto band = vil_plane(toa_reflectance, p);
+
+      // histogram of visible pixels
+      float minval, maxval;
+      vil_math_value_range(band, minval, maxval);
+
+      bsta_histogram<double> h(minval, maxval, 512);
+      for (size_t j = 0; j < nj; j++) {
+        for (size_t i = 0; i < ni; i++) {
+          h.upcount(band(i,j), 1.0f);
+        }
+      }
+
+      // threshold identifying dark pixels
+      double airlight_thresh = h.value_with_area_below(frac);
+      airlight[p] = airlight_thresh;
+    }
+
+  }
+
+  // compute airlight from visible bands
+  else {
+
+    // "visible" image - sum pixel values across visible bands
+    vil_image_view<float> vis_image(ni, nj);
+    vis_image.fill(0.0f);
+
+    for (auto vis_band_id : vis_band_ids) {
+      vil_image_view<float> band = vil_plane(toa_reflectance, vis_band_id);
+      for (size_t j = 0; j < nj; j++) {
+        for (size_t i = 0; i < ni; i++) {
+          vis_image(i,j) += band(i, j);
+        }
+      }
+    }
+
+    // histogram of visible pixels
+    float minval, maxval;
+    vil_math_value_range(vis_image, minval, maxval);
+
+    bsta_histogram<double> h(minval, maxval, 512);
+    for (size_t j = 0; j < nj; j++) {
+      for (size_t i = 0; i < ni; i++) {
+        h.upcount(vis_image(i,j), 1.0f);
+      }
+    }
+
+    // threshold identifying dark pixels
+    double vis_image_thresh = h.value_with_area_below(frac);
+
+    // calculate airlight threshold for each band
+    // average intensity for "airlight" pixels
+    for (size_t p = 0; p < np; p++) {
+      auto band = vil_plane(toa_reflectance, p);
+
+      double sum = 0.0;
+      size_t count = 0;
+      for (size_t j = 0; j < nj; j++) {
+        for (size_t i = 0; i < ni; i++) {
+          if (vis_image(i, j) < vis_image_thresh) {
+            sum += double(band(i, j));
+            count++;
+          }
+        }
+      }
+      double airlight_thresh = sum / double(count);
+      airlight[p] = airlight_thresh;
+    }
+  }
+
+  // cleanup
+  return airlight;
+}
+
+
+// estimate average intensity from ToA reflectance
+// - produces a vector of average values, one per band of the input image
+// - if no visible bands are specified or a single band input, output is
+//   determined independently for each band
+// - if multiple visible bands are specified, only those bands are used to
+//   determine relectance mean for all bands
+std::vector<double>
+brad_toa_reflectance_mean(vil_image_view<float> const& toa_reflectance,
+                          std::vector<size_t> vis_band_ids)
+{
+  // image attributes
+  size_t ni = toa_reflectance.ni();
+  size_t nj = toa_reflectance.nj();
+  size_t np = toa_reflectance.nplanes();
+
+  // validate vis_band_ids
+  brad_utils::validate_band_ids(np, vis_band_ids);
+
+  // compute airlight for each band independently
+  if (vis_band_ids.empty()) {
+
+    std::vector<double> output(np, 0.0);
+    for (size_t p = 0; p < np; p++) {
+      double band_mean = 0.0;
+      vil_math_mean(band_mean, toa_reflectance, p);
+      output[p] = band_mean;
+    }
+
+    return output;
+
+  }
+
+  // compute from visible bands - single "mean" for all bands
+  else {
+
+    double sum = 0.0;
+    for (auto vis_band_id : vis_band_ids) {
+      double band_sum = 0.0;
+      vil_math_sum(band_sum, toa_reflectance, vis_band_id);
+      sum += band_sum;
+    }
+    double mean = sum / double(ni * nj * vis_band_ids.size());
+
+    return std::vector<double>(np, mean);
+  }
+
+}
+
+
+// estimate surface reflectance from ToA reflectance & statistics
+// surf_refl = surf_refl_mean * (toa_refl - airlight) /
+//                              (toa_refl_mean - airlight)
+vil_image_view<float>
+brad_surface_reflectance(vil_image_view<float> const& toa_reflectance,
+                         std::vector<double> toa_reflectance_mean,
+                         std::vector<double> airlight,
+                         double surface_reflectance_mean)
+{
+  // image attributes
+  size_t ni = toa_reflectance.ni();
+  size_t nj = toa_reflectance.nj();
+  size_t np = toa_reflectance.nplanes();
+
+  // validate inputs
+  brad_utils::validate_vector(np, toa_reflectance_mean, "ToA reflectance mean");
+  brad_utils::validate_vector(np, airlight, "airlight", true);
+
+  // initialize output
+  auto surface_reflectance = vil_copy_deep(toa_reflectance);
+
+  // apply image correction
+  for (size_t p = 0; p < np; p++) {
+    double toa_mean_p = toa_reflectance_mean[p];
+    double airlight_p = airlight.empty() ? 0.0 : airlight[p];
+
+    double scale = surface_reflectance_mean / (toa_mean_p - airlight_p);
+    double offset = - scale * airlight_p;
+
+    auto band = vil_plane(surface_reflectance, p);
+    vil_math_scale_and_offset_values(band, scale, offset);
+  }
+
+  // cleanup
+  return surface_reflectance;
+}
+
+
+
 
 bool brad_get_visible_band_id(vil_image_view<float> const& radiance,
                               brad_image_metadata const& mdata,
