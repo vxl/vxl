@@ -15,8 +15,6 @@
 #include "vnl/vnl_math.h"
 #include "vul/vul_awk.h"
 #include <brad/brad_image_metadata.h>
-#include <brad/brad_atmospheric_parameters.h>
-#include <brad/brad_image_atmospherics_est.h>
 #include <brad/brad_multispectral_functions.h>
 #include "brad_spectral_angle_mapper.h"
 
