@@ -1,21 +1,108 @@
-#include "brad_calibration.h"
-
 #include <iomanip>
 #include <iostream>
 #include <cmath>
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
 
-#include <brad/brad_image_metadata.h>
 #include "vil/vil_convert.h"
 #include "vnl/vnl_math.h"
+#include "brad_image_metadata.h"
+#include "brad_utils.h"
+
+#include "brad_calibration.h"
 
 
+// per-band gain & offset to convert DN to ToA reflectance
+//
+// toa_refl = rad_to_refl * [ (gain * (abscal/eff_bw) * DN) + offset ]
+//   calib_scale  = rad_to_refl * gain * (abscal/eff_bw)
+//   calib_offset = rad_to_refl * offset
+//
+std::tuple<std::vector<double>, std::vector<double> >
+brad_radiometric_calibration_params(brad_image_metadata const& md)
+{
+  // check for known band type
+  auto band_type = md.band_;
+  if (band_type != "PAN" && band_type != "MULTI" && band_type != "SWIR") {
+    std::ostringstream buffer;
+    buffer << "brad_radiometric_calibration_params: "
+           << "Unknown image band type <" << band_type << ">";
+    throw std::invalid_argument(buffer.str());
+  }
+
+  // retreive & vvalidate metadata parameters
+  auto n_bands = md.n_bands_;
+  double sun_dot_norm = std::sin(md.sun_elevation_ * vnl_math::pi_over_180);
+
+  auto abscal = md.abscal_;
+  brad_utils::validate_vector(n_bands, abscal, "absCalFactor");
+
+  auto effect_band_width = md.effect_band_width_;
+  brad_utils::validate_vector(n_bands, effect_band_width, "effectiveBandwidth");
+
+  auto vendor_gain = md.gains_;
+  brad_utils::validate_vector(n_bands, vendor_gain, "vendor gain");
+
+  auto vendor_offset = md.offsets_;
+  brad_utils::validate_vector(n_bands, vendor_offset, "vendor offset");
+
+  auto sun_irradiance = md.normal_sun_irradiance_values_;
+  brad_utils::validate_vector(n_bands, sun_irradiance, "solar irradiance");
+
+  // output calculation
+  std::vector<double> gain(n_bands);
+  std::vector<double> offset(n_bands);
+
+  for (size_t i = 0; i < n_bands; i++) {
+    double rad_to_refl = vnl_math::pi / (sun_irradiance[i] * sun_dot_norm);
+    gain[i] = rad_to_refl * vendor_gain[i] * (abscal[i] / effect_band_width[i]);
+    offset[i] = rad_to_refl * vendor_offset[i];
+  }
+
+  // cleanup
+  return std::make_tuple(gain, offset);
+}
+
+
+//: convert digital number (DN) to top-of-atmosphere (ToA) reflectance
+vil_image_view<float>
+brad_radiometric_calibration(vil_image_view<unsigned short> const& digital_number,
+                             std::vector<double> gain,
+                             std::vector<double> offset)
+{
+  // image attributes
+  size_t np = digital_number.nplanes();
+
+  // check inputs
+  brad_utils::validate_vector(np, gain, "calibration gain", true);
+  brad_utils::validate_vector(np, offset, "calibration offset", true);
+
+  // copy unit16 input to floating point output
+  vil_image_view<float> toa_reflectance;
+  vil_convert_cast(digital_number, toa_reflectance);
+
+  // apply gain & offset
+  for (size_t p = 0; p < np; p++) {
+    double gain_p = gain.empty() ? 1.0 : gain[p];
+    double offset_p = offset.empty() ? 0.0 : offset[p];
+
+    auto band = vil_plane(toa_reflectance, p);
+    vil_math_scale_and_offset_values(band, gain_p, offset_p);
+  }
+
+  // cleanup
+  return toa_reflectance;
+}
+
+
+
+//: convert digital number (DN) to top-of-atmosphere (ToA) reflectance
 vil_image_view<float> brad_nitf_abs_radiometric_calibrate(vil_image_view<unsigned short> const& input_img, brad_image_metadata const& md)
 {
   // ***
