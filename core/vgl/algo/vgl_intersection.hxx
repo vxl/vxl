@@ -323,11 +323,84 @@ bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& 
   inter_pt.set(p[0][0], p[1][0], p[2][0]);
   return true;
 }
+template <class T>
+bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vnl_matrix<T> const& covar, vgl_point_3d<T>& inter_pt){
+  size_t n = rays.size(), nr = covar.rows(), nc = covar.cols();
+  if(n<2){
+    std::cout << "insufficient number of rays " << n << " to compute intersection" << std::endl;
+    return false;
+  }
+  if(nr != nc || nr != 2*n){
+    std::cout << "covariance matrix must be 2n x 2n where n is the number of rays" <<std::endl;
+    return false;
+  }
+  vnl_svd<T> svd_cov(covar);
+  if(svd_cov.rank() != nr){
+   std::cout << "covariance matrix is singular" <<std::endl;
+    return false;
+  }
+  vnl_matrix<T> cov_inv = svd_cov.inverse();
+
+  // plane coordinate vectors for planes perpendicular to each ray
+  // perp_T = [u_0, v_0, u_1, v_1, ... , u_n-1, v_n-1]
+  vnl_matrix<T> perp_T(3, nr);
+  vnl_matrix<T> ray_origins(3, n);
+  size_t pidx = 0;
+  for(size_t i = 0; i<n; i++, pidx+=2){
+    const vgl_ray_3d<T>& r = rays[i];
+    vgl_point_3d<T> org_i = r.origin();
+    vgl_vector_3d<T> dir_i = r.direction();
+    // define the plane perpendicular to ray i
+    vgl_plane_3d<T> pl_perp(dir_i, org_i);
+    vgl_vector_3d<T> uvec, vvec;
+    // extract the unit vectors for the plane coordinate axes
+    pl_perp.plane_coord_vectors(uvec, vvec);
+    // convert to vnl
+    vnl_vector_fixed<T,3> ui(uvec.x(), uvec.y(), uvec.z());
+    vnl_vector_fixed<T,3> vi(vvec.x(), vvec.y(), vvec.z());
+    perp_T.set_column(pidx, ui.as_vector());
+    perp_T.set_column(pidx+1, vi.as_vector());
+    // cache the ray origins for the next stage
+    ray_origins[0][i] = org_i.x();
+    ray_origins[1][i] = org_i.y();
+    ray_origins[2][i] = org_i.z();
+  }
+
+  // the average ray projection matrix A
+  vnl_matrix<T> A = perp_T * cov_inv * perp_T.transpose();
+
+  vnl_svd<T> svd_A(A);
+  if(svd_A.rank() != 3){
+    std::cout << "matrix A has insufficient rank" << std::endl;
+    return false;
+  }
+  vnl_matrix<T> A_inv = svd_A.inverse();
+  vnl_matrix<T> perp = perp_T.transpose();
+
+  // the origin vectors are projected onto the orthogonal ray planes
+  vnl_matrix<T> proj(nr, 1);
+  pidx = 0;
+  for (size_t i = 0; i < n; ++i, pidx+=2) {
+    vnl_matrix<T> temp_o(3, 1), temp_p(1,3), temp;
+    temp_o.set_column(0, ray_origins.get_column(i));
+    temp_p.set_row(0, perp.get_row(pidx));
+    temp = temp_p * temp_o;
+    proj[pidx][0] = temp[0][0];
+    temp_p.set_row(0, perp.get_row(pidx+1));
+    temp = temp_p * temp_o;
+    proj[pidx+1][0] = temp[0][0];
+  }
+  //the intersection point based on weighted least squares
+  vnl_matrix<T> X = A_inv * perp_T * cov_inv * proj;
+  inter_pt.set(X[0][0], X[1][0], X[2][0]);
+  return true;
+}
 #undef VGL_ALGO_INTERSECTION_INSTANTIATE
 #define VGL_ALGO_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(const std::vector<vgl_plane_3d<T > >&); \
 template bool vgl_intersection(vgl_box_3d<T > const&, std::list<vgl_point_3d<T > >&); \
 template vgl_infinite_line_3d<T > vgl_intersection(const std::list<vgl_plane_3d<T > >& planes); \
 template bool vgl_intersection(const std::list<vgl_plane_3d<T > >& planes, std::vector<T > ws,vgl_infinite_line_3d<T >&,T& residual); \
-template bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& inter_pt)
+ template bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& inter_pt); \
+ template bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vnl_matrix<T> const& covar, vgl_point_3d<T>& inter_pt)
 #endif // vgl_algo_intersection_hxx_

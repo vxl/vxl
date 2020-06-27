@@ -507,6 +507,64 @@ test_ray_intersection()
     TEST("ray_intersection", true, false);
   }
 }
+static void
+test_ray_intersection_with_covariance()
+{
+  // repeat the test above by specifying an identity covariance matrix
+  vgl_vector_3d<double> dir0(-1.0, 0.0, 0.0);
+  vgl_point_3d<double> org0(1001.0, 2.0, 3.0);
+  vgl_vector_3d<double> dir1(0.0, -1.0, 0.0);
+  vgl_point_3d<double> org1(1.0, 1002.0, 3.0);
+  vgl_vector_3d<double> dir2(0.0, 0.0, -1.0);
+  vgl_point_3d<double> org2(1.0, 2.0, 1003.0);
+  vgl_vector_3d<double> dir3(-0.57735027, -0.57735027, -0.57735027);
+  vgl_point_3d<double> org3(578.35027, 579.35027, 580.35027);
+  vgl_ray_3d<double> r0(org0, dir0), r1(org1, dir1), r2(org2, dir2), r3(org3, dir3);
+  vnl_matrix<double> cov(8, 8);
+  cov.set_identity();
+  std::vector<vgl_ray_3d<double>> rays;
+  rays.push_back(r0);
+  rays.push_back(r1);
+  rays.push_back(r2);
+  rays.push_back(r3);
+  vgl_point_3d<double> inter_pt;
+  bool good = vgl_intersection(rays, cov, inter_pt);
+  if (good)
+  {
+    vgl_point_3d<double> origin(1.0, 2.0, 3.0);
+    double er = (inter_pt - origin).length();
+    TEST_NEAR("ray_intersection with identity covariance", er, 0.0, 0.001);
+  }
+  else
+  {
+    TEST("ray_intersection with identity covariance", true, false);
+  }
+  // define a vertical ray and an oblique ray
+  vgl_point_3d<double> org_v(0,-1,10), org_ob(17.32050807568877, 1, 10);
+  vgl_vector_3d<double> dir_v(0,0,1), dir_ob(-0.8660254037844386, 0., -0.5);
+  vgl_ray_3d<double> rv(org_v, dir_v), rob(org_ob, dir_ob);
+  std::vector<vgl_ray_3d<double> > rays2;
+  rays2.push_back(rv);
+  rays2.push_back(rob);
+  vnl_matrix<double> cov2(4, 4, 0.0);
+  cov2[0][0] = 4.0;  cov2[0][1] = 2.0;  cov2[0][2] = 2.4;
+  cov2[1][0] = 2.0;  cov2[1][1] = 4.0;  cov2[1][3] = 2.4;
+  cov2[2][0] = 2.4;  cov2[2][2] = 9.0;  cov2[2][3] = 4.5;
+  cov2[3][1] = 2.4;  cov2[3][2] = 4.5;  cov2[3][3] = 9.0;
+  
+  good = vgl_intersection(rays2, cov2, inter_pt);
+  if (good)
+  {
+    vgl_point_3d<double> gt(0.48780487804878114, -0.6097560975609748, -0.9857199717871661);
+    double er = (inter_pt - gt).length();
+    TEST_NEAR("ray_intersection with full covariance", er, 0.0, 0.00001);
+  }
+  else
+  {
+    TEST("ray_intersection with full covariance", true, false);
+  }
+
+}
 
 void
 test_intersection()
@@ -525,6 +583,7 @@ test_intersection()
   test_box_poly_intersection();
   test_poly_line_intersection();
   test_ray_intersection();
+  test_ray_intersection_with_covariance();
 }
 
 TESTMAIN(test_intersection);
