@@ -78,7 +78,7 @@ acal_match_tree_lsqr::compute_residuals(vnl_vector<double> const& x,
   std::map<size_t, vgl_point_3d<double> > inter_pts;
   //    track idx           cam_id     proj pt
   std::map<size_t, std::map<size_t, vgl_point_2d<double> > > proj_tracks;
-  if(! acal_f_utils::intersect_tracks_with_3d(trans_acams_, tracks_, inter_pts, proj_tracks)){
+  if(! acal_f_utils::intersect_tracks_with_3d(trans_acams_, tracks_, inter_pts, proj_tracks, ray_covariance_)){
     std::cout << "forcing huge residuals" << std::endl;
     residuals.fill(std::numeric_limits<double>::max());
     track_intersect_failure_ = true;
@@ -172,7 +172,8 @@ acal_match_tree_solver::solve_least_squares_problem()
   // solve full connected component
   // to make clear index corresponds to a connected component
   mt_lsq = acal_match_tree_lsqr(tree_acams_, tracks_, n_residuals_, cam_trans_penalty_);
-
+  if(ray_covariance_.rows()>0 && ray_covariance_.cols()>0)
+    mt_lsq.set_ray_covariance(ray_covariance_);
   mt_lsq.set_verbose(verbose_);
   vnl_levenberg_marquardt levmarq(mt_lsq);
   levmarq.set_verbose(true);

@@ -25,6 +25,7 @@
 #include "acal_f_utils.h"
 #include <vpgl/vpgl_affine_camera.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_matrix.h>
 #include <vnl/vnl_least_squares_function.h>
 #include "acal_match_tree.h"
 #include "acal_match_graph.h"
@@ -43,8 +44,10 @@ class acal_match_tree_lsqr : public vnl_least_squares_function
     vnl_least_squares_function(2*tree_acams.size(), n_residuals, vnl_least_squares_function::use_gradient),
     tree_acams_(tree_acams), trans_acams_(tree_acams), tracks_(tracks),
     verbose_(false), track_intersect_failure_(false),
-    cam_trans_penalty_(cam_trans_penalty){}
-
+      cam_trans_penalty_(cam_trans_penalty), ray_covariance_(vnl_matrix<double>(0,0)){}
+    void set_ray_covariance(vnl_matrix<double> const& ray_covariance){
+      ray_covariance_ = ray_covariance;
+    }
   //: The main function.
   //  Given the parameter vector translations, compute the vector of residuals, projection errors
   virtual void f(vnl_vector<double> const& translations,   // size is 2*cams.size() or 2 for single cam
@@ -66,6 +69,7 @@ class acal_match_tree_lsqr : public vnl_least_squares_function
 
  protected:
   bool verbose_;
+  vnl_matrix<double> ray_covariance_;
   double cam_trans_penalty_;
   bool track_intersect_failure_;
   std::map<size_t, vpgl_affine_camera<double> > tree_acams_; //original affine cameras
@@ -79,11 +83,11 @@ class acal_match_tree_lsqr : public vnl_least_squares_function
 class acal_match_tree_solver
 {
 public:
-  acal_match_tree_solver(): verbose_(false), cam_trans_penalty_(0.05),conn_comp_index_(-1){}
+ acal_match_tree_solver(): verbose_(false), cam_trans_penalty_(0.05),conn_comp_index_(-1), ray_covariance_(vnl_matrix<double>(0,0)){}
 
   acal_match_tree_solver(acal_match_graph const& match_graph, size_t conn_comp_index, double cam_trans_penalty = 0.05):
-    match_graph_(match_graph), verbose_(false),
-    cam_trans_penalty_(cam_trans_penalty), conn_comp_index_(conn_comp_index)
+  match_graph_(match_graph), verbose_(false),
+    cam_trans_penalty_(cam_trans_penalty), conn_comp_index_(conn_comp_index), ray_covariance_(vnl_matrix<double>(0,0))
   {
     match_graph_.compute_match_trees();
     match_graph_.validate_match_trees_and_set_metric();
@@ -103,6 +107,9 @@ public:
   }
 
   void set_verbose(bool verbose) { verbose_ = verbose; }
+  void set_ray_covariance_matrix(vnl_matrix<double> const& ray_covariance){
+    ray_covariance_ =ray_covariance;
+  }
   bool solve_least_squares_problem();
 
   //      cam_id         translation
@@ -126,6 +133,7 @@ public:
 
  private:
   bool verbose_;
+  vnl_matrix<double> ray_covariance_;
   size_t conn_comp_index_;
   double cam_trans_penalty_;
   acal_match_graph match_graph_;
