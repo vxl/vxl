@@ -173,6 +173,7 @@ acal_f_utils::intersect_tracks_with_3d(
     std::vector< std::map<size_t, vgl_point_2d<double> > > const& tracks,
     std::map<size_t, vgl_point_3d<double> >& inter_pts,
     std::map<size_t, std::map<size_t, vgl_point_2d<double> > > & projected_tracks,
+    vnl_matrix<double> const& ray_covariance,
     size_t cam_mask)
 {
   size_t n = cams.size();
@@ -204,10 +205,13 @@ acal_f_utils::intersect_tracks_with_3d(
     if(track_rays.size()<2)
       continue;
     vgl_point_3d<double> inter_pt;
-    if (!vgl_intersection(track_rays, inter_pt)) {
-      continue;
+    if(ray_covariance.rows() == 0 ||ray_covariance.cols() == 0){
+      if (!vgl_intersection(track_rays, inter_pt))
+        continue;
+    }else{
+      if (!vgl_intersection(track_rays, ray_covariance, inter_pt))
+        continue;
     }
-
     inter_pts[t] = inter_pt;
 
     //       cam id  corr pt

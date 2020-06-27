@@ -21,6 +21,7 @@
 #include <math.h>
 
 #include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_matrix.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vpgl/vpgl_camera.h>
@@ -121,10 +122,11 @@ class acal_f_utils
   // use map as output in case some intersections fail - the map key is input track vector index
   static bool intersect_tracks_with_3d(
       std::map<size_t, vpgl_affine_camera<double> >& cams,
-	    // tracks             cam_id  corr pt
+      // tracks             cam_id  corr pt
       std::vector< std::map<size_t, vgl_point_2d<double> > > const& tracks,
-	    std::map<size_t, vgl_point_3d<double> >& inter_pts,
-	    std::map<size_t, std::map<size_t, vgl_point_2d<double> > > & projected_tracks,
+      std::map<size_t, vgl_point_3d<double> >& inter_pts,
+      std::map<size_t, std::map<size_t, vgl_point_2d<double> > > & projected_tracks,
+      vnl_matrix<double> const& ray_covariance = vnl_matrix<double>(0,0),
       size_t cam_mask=-1);
 
   // different signature for convenience
