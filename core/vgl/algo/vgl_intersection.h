@@ -21,6 +21,7 @@
 #include <vector>
 #include <list>
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
+#include <vnl/vnl_matrix.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -52,9 +53,16 @@ vgl_intersection(const std::list<vgl_plane_3d<T> >& planes, std::vector<T> ws, v
 template <class T>
 bool vgl_intersection(vgl_box_3d<T> const& b, std::list<vgl_point_3d<T> >& p);
 
-//: Return true if a set of rays intersect in a point
+//: Return true if a set of rays produce a well-conditioned solution for their intersection
 template <class T>
 bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& inter_pt);
+
+//: Return true if a set of rays produce a well-conditioned solution for their intersection
+//  weight each ray according to a covariance matrix for orthogonal ray displacements
+//  displacement along a ray does not affect the intersection point.
+template <class T>
+bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vnl_matrix<T> const& covar, vgl_point_3d<T>& inter_pt);
+
 #define VGL_ALGO_INTERSECTION_INSTANTIATE(T) extern "please include vgl/algo/vgl_intersection.hxx first"
 
 #endif // vgl_algo_intersection_h_
