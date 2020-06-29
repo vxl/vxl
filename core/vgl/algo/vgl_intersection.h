@@ -54,12 +54,18 @@ template <class T>
 bool vgl_intersection(vgl_box_3d<T> const& b, std::list<vgl_point_3d<T> >& p);
 
 //: Return true if a set of rays produce a well-conditioned solution for their intersection
+// The intersection algorithm finds the 3D point that produces the smallest sum of squared
+// orthogonal distances to each ray.
 template <class T>
 bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& inter_pt);
 
 //: Return true if a set of rays produce a well-conditioned solution for their intersection
-//  weight each ray according to a covariance matrix for orthogonal ray displacements
-//  displacement along a ray does not affect the intersection point.
+//  Weight each ray according to a covariance matrix the 2-d orthogonal ray displacement vector,
+//  since a displacement along a ray does not affect the intersection point. It follows that for n rays,
+//  the covariance matrix is a 2n x 2n matrix. The coordinate system for the 2-d displacement vector
+//  is defined by the vgl_plane_3d<T>::plane_coord_vectors(vgl_vector_3d<T>& uvec, vgl_vector_3d<T>& vvec)
+//  method.
+//
 template <class T>
 bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vnl_matrix<T> const& covar, vgl_point_3d<T>& inter_pt);
 
