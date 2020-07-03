@@ -6,7 +6,7 @@
 // \file
 // \brief A non-linear optimizer for solving for camera translations
 // \author J.L. Mundy
-// \date Nov 28, 2018
+// \date July 3, 2020
 //
 // \verbatim
 //  Modifications
@@ -30,24 +30,32 @@
 #include "acal_match_tree.h"
 #include "acal_match_graph.h"
 #include "acal_solution_error.h"
-
-class acal_match_tree_lsqr : public vnl_least_squares_function
+// July 3, 2020 - the original implementation used the gradf function, i.e. vnl_least_squares_function::use_gradient
+// However an experiment where the numerical gradient is used yielded small residuals. So the current implementation
+// numerically computes the Jacobian at each step. 
+class acal_match_tree_lsqr_covar : public vnl_least_squares_function
 {
  public:
   //: Default constructor, use to define variable for assignment
-  acal_match_tree_lsqr() : vnl_least_squares_function(0,0){}
+   acal_match_tree_lsqr_covar() : vnl_least_squares_function(0, 0) { use_covariance_ = false; }
 
   //: Constructor
-  acal_match_tree_lsqr(std::map<size_t, vpgl_affine_camera<double> >& tree_acams,
+  acal_match_tree_lsqr_covar(std::map<size_t, vpgl_affine_camera<double> >& tree_acams,
                         std::vector< std::map<size_t, vgl_point_2d<double> > > tracks,
                         size_t n_residuals,  double cam_trans_penalty):
-    vnl_least_squares_function(2*tree_acams.size(), n_residuals, vnl_least_squares_function::use_gradient),
+  vnl_least_squares_function(2*tree_acams.size(), n_residuals, vnl_least_squares_function::no_gradient),
     tree_acams_(tree_acams), trans_acams_(tree_acams), tracks_(tracks),
     verbose_(false), track_intersect_failure_(false),
-      cam_trans_penalty_(cam_trans_penalty), ray_covariance_(vnl_matrix<double>(0,0)){}
-    void set_ray_covariance(vnl_matrix<double> const& ray_covariance){
-      ray_covariance_ = ray_covariance;
-    }
+      cam_trans_penalty_(cam_trans_penalty), use_covariance_(false){}
+
+    void set_covariance_info(vnl_matrix<double> sensor_inv_covar_cholesky_upper_tri,
+                             vnl_matrix<double> const& ray_covariance_plane_cs){
+      sensor_inv_covar_cholesky_upper_tri_ = sensor_inv_covar_cholesky_upper_tri;
+      ray_covariance_plane_cs_ = ray_covariance_plane_cs;
+      use_covariance_ = true;
+      use_gradient_ = vnl_least_squares_function::no_gradient;
+  }
+
   //: The main function.
   //  Given the parameter vector translations, compute the vector of residuals, projection errors
   virtual void f(vnl_vector<double> const& translations,   // size is 2*cams.size() or 2 for single cam
@@ -68,8 +76,10 @@ class acal_match_tree_lsqr : public vnl_least_squares_function
   std::map<size_t, vpgl_affine_camera<double> > trans_acams() {return trans_acams_;}
 
  protected:
-  bool verbose_;
-  vnl_matrix<double> ray_covariance_;
+bool verbose_;
+  bool use_covariance_;
+  vnl_matrix<double> sensor_inv_covar_cholesky_upper_tri_;
+  vnl_matrix<double> ray_covariance_plane_cs_;
   double cam_trans_penalty_;
   bool track_intersect_failure_;
   std::map<size_t, vpgl_affine_camera<double> > tree_acams_; //original affine cameras
@@ -83,11 +93,11 @@ class acal_match_tree_lsqr : public vnl_least_squares_function
 class acal_match_tree_solver
 {
 public:
- acal_match_tree_solver(): verbose_(false), cam_trans_penalty_(0.05),conn_comp_index_(-1), ray_covariance_(vnl_matrix<double>(0,0)){}
+ acal_match_tree_solver(): verbose_(false), cam_trans_penalty_(0.05),conn_comp_index_(-1),use_covariance_(false){}
 
   acal_match_tree_solver(acal_match_graph const& match_graph, size_t conn_comp_index, double cam_trans_penalty = 0.05):
   match_graph_(match_graph), verbose_(false),
-    cam_trans_penalty_(cam_trans_penalty), conn_comp_index_(conn_comp_index), ray_covariance_(vnl_matrix<double>(0,0))
+    cam_trans_penalty_(cam_trans_penalty), conn_comp_index_(conn_comp_index), use_covariance_(false)
   {
     match_graph_.compute_match_trees();
     match_graph_.validate_match_trees_and_set_metric();
@@ -107,8 +117,11 @@ public:
   }
 
   void set_verbose(bool verbose) { verbose_ = verbose; }
-  void set_ray_covariance_matrix(vnl_matrix<double> const& ray_covariance){
-    ray_covariance_ =ray_covariance;
+  void set_covariance_info(vnl_matrix<double> const& sensor_inv_covar_cholesky_upper_tri,
+                               vnl_matrix<double> const& ray_covariance_plane_cs){
+    sensor_inv_covar_cholesky_upper_tri_ = sensor_inv_covar_cholesky_upper_tri;
+    ray_covariance_plane_cs_ = ray_covariance_plane_cs;
+    use_covariance_ = true;
   }
   bool solve_least_squares_problem();
 
@@ -133,7 +146,9 @@ public:
 
  private:
   bool verbose_;
-  vnl_matrix<double> ray_covariance_;
+  bool use_covariance_;
+  vnl_matrix<double> ray_covariance_plane_cs_;
+  vnl_matrix<double> sensor_inv_covar_cholesky_upper_tri_;
   size_t conn_comp_index_;
   double cam_trans_penalty_;
   acal_match_graph match_graph_;

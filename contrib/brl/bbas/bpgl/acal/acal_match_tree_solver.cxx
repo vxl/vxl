@@ -8,7 +8,7 @@
 
 
 void
-acal_match_tree_lsqr::f(vnl_vector<double> const& translations,
+acal_match_tree_lsqr_covar::f(vnl_vector<double> const& translations,
                         vnl_vector<double>& residuals)
 {
   size_t n = tree_acams_.size();
@@ -34,7 +34,7 @@ acal_match_tree_lsqr::f(vnl_vector<double> const& translations,
 
 
 void
-acal_match_tree_lsqr::gradf(vnl_vector<double> const& x,
+acal_match_tree_lsqr_covar::gradf(vnl_vector<double> const& x,
                             vnl_matrix<double>& jacobian)
 {
   // n columns of Jacobian is number of camera translation components = 2*n_cams
@@ -66,9 +66,8 @@ acal_match_tree_lsqr::gradf(vnl_vector<double> const& x,
   }
 }
 
-
 void
-acal_match_tree_lsqr::compute_residuals(vnl_vector<double> const& x,
+acal_match_tree_lsqr_covar::compute_residuals(vnl_vector<double> const& x,
                                         vnl_vector<double>& residuals)
 {
   double tol = 10.0;
@@ -78,7 +77,7 @@ acal_match_tree_lsqr::compute_residuals(vnl_vector<double> const& x,
   std::map<size_t, vgl_point_3d<double> > inter_pts;
   //    track idx           cam_id     proj pt
   std::map<size_t, std::map<size_t, vgl_point_2d<double> > > proj_tracks;
-  if(! acal_f_utils::intersect_tracks_with_3d(trans_acams_, tracks_, inter_pts, proj_tracks, ray_covariance_)){
+  if(! acal_f_utils::intersect_tracks_with_3d(trans_acams_, tracks_, inter_pts, proj_tracks, ray_covariance_plane_cs_)){
     std::cout << "forcing huge residuals" << std::endl;
     residuals.fill(std::numeric_limits<double>::max());
     track_intersect_failure_ = true;
@@ -87,6 +86,7 @@ acal_match_tree_lsqr::compute_residuals(vnl_vector<double> const& x,
   size_t n_cams = trans_acams_.size();
   track_3d_points_ = inter_pts;
   size_t ridx = 0;
+  vnl_vector<double> temp_res(2*n_cams);
   for(std::map<size_t, std::map<size_t, vgl_point_2d<double> > >::iterator pit = proj_tracks.begin();
       pit != proj_tracks.end(); ++pit, ridx+=2*n_cams){
     size_t tidx = pit->first; //track index
@@ -99,13 +99,13 @@ acal_match_tree_lsqr::compute_residuals(vnl_vector<double> const& x,
       vgl_point_2d<double>& pt      = tracks_[tidx][cam_id];
       vgl_point_2d<double>& proj_pt = cit->second;
       size_t idx = ridx+offset;
-      residuals[idx] = pt.x()-proj_pt.x();
-      residuals[idx + 1] = pt.y()-proj_pt.y();
-      bool big_residuals = fabs(residuals[idx]) > tol || fabs(residuals[idx + 1]) > tol;
+      temp_res[idx] = pt.x()-proj_pt.x();
+      temp_res[idx + 1] = pt.y()-proj_pt.y();
+      bool big_residuals = fabs(temp_res[idx]) > tol || fabs(temp_res[idx + 1]) > tol;
       if(verbose_ && big_residuals) {
       std::cout << "Residual exceeds tolerance " << tol << std::endl;
-    }
-    if(big_residuals&&verbose_) std::cout << residuals[idx] << ' ' << residuals[idx+1] << std::endl;
+      }
+      if(big_residuals&&verbose_) std::cout << temp_res[idx] << ' ' << temp_res[idx+1] << std::endl;
     }
   }
   if (track_intersect_failure_&&verbose_) {
@@ -114,6 +114,16 @@ acal_match_tree_lsqr::compute_residuals(vnl_vector<double> const& x,
          pit != inter_pts.end(); ++pit)
       std::cout << pit->first << ' ' << pit->second.x() << ' ' << pit->second.y() << ' ' << pit->second.z() << std::endl;
   }
+  // if there is a covariance matrix defined then apply the  Cholesky upper triangular matrix
+  if(use_covariance_){
+    vnl_vector<double> res_with_covar = sensor_inv_covar_cholesky_upper_tri_*temp_res;
+    for(size_t i = 0; i<2*n_cams; ++i)
+      residuals[i] = res_with_covar[i];
+  }
+  else 
+    for (size_t i = 0; i < 2 * n_cams; ++i)
+      residuals[i] = temp_res[i];
+  
   size_t cam_offset = 2*tracks_.size()*tree_acams_.size();
   size_t cidx = 0;
   for(std::map<size_t, vpgl_affine_camera<double> >::iterator cit =  tree_acams_.begin();
@@ -166,14 +176,17 @@ acal_match_tree_solver::solve_least_squares_problem()
 {
   std::cout << "\n=====> Solve for cam translation(s)<=====" << std::endl;
 
-  acal_match_tree_lsqr mt_lsq;
+  acal_match_tree_lsqr_covar mt_lsq;
+  // check if covariance is used for weighted least squares
+
   // initialize residual index and retrieve affine cameras
     // define track network for solver
   // solve full connected component
   // to make clear index corresponds to a connected component
-  mt_lsq = acal_match_tree_lsqr(tree_acams_, tracks_, n_residuals_, cam_trans_penalty_);
-  if(ray_covariance_.rows()>0 && ray_covariance_.cols()>0)
-    mt_lsq.set_ray_covariance(ray_covariance_);
+  mt_lsq = acal_match_tree_lsqr_covar(tree_acams_, tracks_, n_residuals_, cam_trans_penalty_);
+  if(use_covariance_)
+    mt_lsq.set_covariance_info(sensor_inv_covar_cholesky_upper_tri_,
+                               ray_covariance_plane_cs_);
   mt_lsq.set_verbose(verbose_);
   vnl_levenberg_marquardt levmarq(mt_lsq);
   levmarq.set_verbose(true);
