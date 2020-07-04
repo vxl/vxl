@@ -49,36 +49,7 @@ class acal_match_tree_lsqr_covar : public vnl_least_squares_function
   vnl_least_squares_function(2*tree_acams.size(), n_residuals, vnl_least_squares_function::no_gradient),
     tree_acams_(tree_acams), trans_acams_(tree_acams), tracks_(tracks),
     verbose_(false), track_intersect_failure_(false),
-<<<<<<< HEAD
     cam_trans_penalty_(cam_trans_penalty){}
-=======
-      cam_trans_penalty_(cam_trans_penalty), use_covariance_(false){}
-
-  //: provide covariance data derived from satellite pose errors, i.e. error in 
-  // satellite position and orientation. The Levenberg-Marquardt algorithm minimizes
-  // the sum of squares of a residual vector, f, i.e., finds the camera translations,
-  //  x, that minimize f(x)^T f(x). Cholesky decomposition is applied to the inverse
-  //  of the pose covariance matrix S to form S^-1 = L L^T. The residual vector is
-  //  transformed as f_s(x) = L^T f(x) so that f_s(x)^T f_s(x) = f(x)^T S^-1 f(x), 
-  //  i.e. weighted least squares.
-  //
-  // The covariance matrix in the coordinate systems of the planes orthogonal to each ray,
-  // ray_covariance_plane_cs, is used by the ray intersection algorithm to compute a 
-  // weighted least squares estimate of the triangulated point.
-  // note that covariance is only applied if there is a single track.
-  void set_covariance_info(vnl_matrix<double> sensor_inv_covar_cholesky_upper_tri,
-                             vnl_matrix<double> const& ray_covariance_plane_cs){
-    if(tracks_.size() != 1){
-      std::cerr << "Warning attempt to apply weighted least squares to more than one track, reverting to unweighted solution"
-                << std::endl;
-      return;
-    }
-    sensor_inv_covar_cholesky_upper_tri_ = sensor_inv_covar_cholesky_upper_tri;
-      ray_covariance_plane_cs_ = ray_covariance_plane_cs;
-      use_covariance_ = true;
-      use_gradient_ = vnl_least_squares_function::no_gradient;//symbolic Jacobian not used
-  }
->>>>>>> Added sensor covariance to residuals
 
   //: The main function.
   //  Given the parameter vector translations, compute the vector of residuals, projection errors
@@ -100,14 +71,7 @@ class acal_match_tree_lsqr_covar : public vnl_least_squares_function
   std::map<size_t, vpgl_affine_camera<double> > trans_acams() {return trans_acams_;}
 
  protected:
-<<<<<<< HEAD
   bool verbose_;
-=======
-bool verbose_;
-  bool use_covariance_;
-  vnl_matrix<double> sensor_inv_covar_cholesky_upper_tri_;
-  vnl_matrix<double> ray_covariance_plane_cs_;
->>>>>>> Added sensor covariance to residuals
   double cam_trans_penalty_;
   bool track_intersect_failure_;
   std::map<size_t, vpgl_affine_camera<double> > tree_acams_; //original affine cameras
@@ -121,19 +85,11 @@ bool verbose_;
 class acal_match_tree_solver
 {
 public:
-<<<<<<< HEAD
   acal_match_tree_solver(): verbose_(false), cam_trans_penalty_(0.05),conn_comp_index_(-1){}
 
   acal_match_tree_solver(acal_match_graph const& match_graph, size_t conn_comp_index, double cam_trans_penalty = 0.05):
     match_graph_(match_graph), verbose_(false),
     cam_trans_penalty_(cam_trans_penalty), conn_comp_index_(conn_comp_index)
-=======
- acal_match_tree_solver(): verbose_(false), cam_trans_penalty_(0.05),conn_comp_index_(-1),use_covariance_(false){}
-
-  acal_match_tree_solver(acal_match_graph const& match_graph, size_t conn_comp_index, double cam_trans_penalty = 0.05):
-  match_graph_(match_graph), verbose_(false),
-    cam_trans_penalty_(cam_trans_penalty), conn_comp_index_(conn_comp_index), use_covariance_(false)
->>>>>>> Added sensor covariance to residuals
   {
     match_graph_.compute_match_trees();
     match_graph_.validate_match_trees_and_set_metric();

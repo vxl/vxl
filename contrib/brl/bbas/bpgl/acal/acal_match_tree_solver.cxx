@@ -70,7 +70,8 @@ void
 acal_match_tree_lsqr_covar::compute_residuals(vnl_vector<double> const& x,
                                         vnl_vector<double>& residuals)
 {
-  double tol = 15.0;//increased from 10 7/3/2020 JLM - numerical gradient has larger residuals on first iteration
+  double tol = 20.0; //7/4/2020 increased to allow for cholesky scale factor and numerical Jacobian
+  if(use_covariance_) tol*=sqrt(largest_cholesky_sing_val_);
   // if a track doesn't project make the residual 0 so no penalty
   residuals.fill(0.0);
   //     track idx   3d intersection point
@@ -118,7 +119,7 @@ acal_match_tree_lsqr_covar::compute_residuals(vnl_vector<double> const& x,
   if(use_covariance_){
     vnl_vector<double> res_with_covar = sensor_inv_covar_cholesky_upper_tri_*temp_res;
     for(size_t i = 0; i<2*n_cams; ++i)
-      residuals[i] = res_with_covar[i];
+      residuals[i] = res_with_covar[i]/sqrt(largest_cholesky_sing_val_);
   }
   else 
     for (size_t i = 0; i < 2 * n_cams; ++i)
