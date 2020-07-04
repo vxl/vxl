@@ -30,9 +30,13 @@
 #include "acal_match_tree.h"
 #include "acal_match_graph.h"
 #include "acal_solution_error.h"
+//
 // July 3, 2020 - the original implementation used the gradf function, i.e. vnl_least_squares_function::use_gradient
-// However an experiment where the numerical gradient is used yielded small residuals. So the current implementation
-// numerically computes the Jacobian at each step. 
+// However an experiment where the numerical gradient is used yielded much smaller projection errors. The average rms
+// projection error decreased from 0.35 to 0.02 pixels.So the current implementation numerically computes the Jacobian
+// at each step. The original analytical Jacobian did not account for the variation in ray intersection point. There was
+// no observed change in compute time. The resulting translations differ from the original implementations by ~0.5pix on average.
+// 
 class acal_match_tree_lsqr_covar : public vnl_least_squares_function
 {
  public:
@@ -48,12 +52,29 @@ class acal_match_tree_lsqr_covar : public vnl_least_squares_function
     verbose_(false), track_intersect_failure_(false),
       cam_trans_penalty_(cam_trans_penalty), use_covariance_(false){}
 
-    void set_covariance_info(vnl_matrix<double> sensor_inv_covar_cholesky_upper_tri,
+  //: provide covariance data derived from satellite pose errors, i.e. error in 
+  // satellite position and orientation. The Levenberg-Marquardt algorithm minimizes
+  // the sum of squares of a residual vector, f, i.e., finds the camera translations,
+  //  x, that minimize f(x)^T f(x). Cholesky decomposition is applied to the inverse
+  //  of the pose covariance matrix S to form S^-1 = L L^T. The residual vector is
+  //  transformed as f_s(x) = L^T f(x) so that f_s(x)^T f_s(x) = f(x)^T S^-1 f(x), 
+  //  i.e. weighted least squares.
+  //
+  // The covariance matrix in the coordinate systems of the planes orthogonal to each ray,
+  // ray_covariance_plane_cs, is used by the ray intersection algorithm to compute a 
+  // weighted least squares estimate of the triangulated point.
+  // note that covariance is only applied if there is a single track.
+  void set_covariance_info(vnl_matrix<double> sensor_inv_covar_cholesky_upper_tri,
                              vnl_matrix<double> const& ray_covariance_plane_cs){
-      sensor_inv_covar_cholesky_upper_tri_ = sensor_inv_covar_cholesky_upper_tri;
+    if(tracks_.size() != 1){
+      std::cerr << "Warning attempt to apply weighted least squares to more than one track, reverting to unweighted solution"
+                << std::endl;
+      return;
+    }
+    sensor_inv_covar_cholesky_upper_tri_ = sensor_inv_covar_cholesky_upper_tri;
       ray_covariance_plane_cs_ = ray_covariance_plane_cs;
       use_covariance_ = true;
-      use_gradient_ = vnl_least_squares_function::no_gradient;
+      use_gradient_ = vnl_least_squares_function::no_gradient;//symbolic Jacobian not used
   }
 
   //: The main function.

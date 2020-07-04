@@ -70,7 +70,7 @@ void
 acal_match_tree_lsqr_covar::compute_residuals(vnl_vector<double> const& x,
                                         vnl_vector<double>& residuals)
 {
-  double tol = 10.0;
+  double tol = 15.0;//increased from 10 7/3/2020 JLM - numerical gradient has larger residuals on first iteration
   // if a track doesn't project make the residual 0 so no penalty
   residuals.fill(0.0);
   //     track idx   3d intersection point
@@ -103,7 +103,7 @@ acal_match_tree_lsqr_covar::compute_residuals(vnl_vector<double> const& x,
       temp_res[idx + 1] = pt.y()-proj_pt.y();
       bool big_residuals = fabs(temp_res[idx]) > tol || fabs(temp_res[idx + 1]) > tol;
       if(verbose_ && big_residuals) {
-      std::cout << "Residual exceeds tolerance " << tol << std::endl;
+      std::cout << "Warning residual exceeds tolerance " << tol << std::endl;
       }
       if(big_residuals&&verbose_) std::cout << temp_res[idx] << ' ' << temp_res[idx+1] << std::endl;
     }
