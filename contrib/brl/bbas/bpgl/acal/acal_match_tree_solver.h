@@ -65,16 +65,18 @@ class acal_match_tree_lsqr_covar : public vnl_least_squares_function
   // weighted least squares estimate of the triangulated point.
   // note that covariance is only applied if there is a single track.
   void set_covariance_info(vnl_matrix<double> sensor_inv_covar_cholesky_upper_tri,
-                             vnl_matrix<double> const& ray_covariance_plane_cs){
+                           vnl_matrix<double> const& ray_covariance_plane_cs,
+                           double largest_cholesky_sing_val){
     if(tracks_.size() != 1){
       std::cerr << "Warning attempt to apply weighted least squares to more than one track, reverting to unweighted solution"
                 << std::endl;
       return;
     }
     sensor_inv_covar_cholesky_upper_tri_ = sensor_inv_covar_cholesky_upper_tri;
-      ray_covariance_plane_cs_ = ray_covariance_plane_cs;
-      use_covariance_ = true;
-      use_gradient_ = vnl_least_squares_function::no_gradient;//symbolic Jacobian not used
+    largest_cholesky_sing_val_ = largest_cholesky_sing_val;
+    ray_covariance_plane_cs_ = ray_covariance_plane_cs;
+    use_covariance_ = true;
+    use_gradient_ = vnl_least_squares_function::no_gradient;//symbolic Jacobian not used
   }
 
   //: The main function.
@@ -99,6 +101,7 @@ class acal_match_tree_lsqr_covar : public vnl_least_squares_function
  protected:
 bool verbose_;
   bool use_covariance_;
+  double largest_cholesky_sing_val_;
   vnl_matrix<double> sensor_inv_covar_cholesky_upper_tri_;
   vnl_matrix<double> ray_covariance_plane_cs_;
   double cam_trans_penalty_;

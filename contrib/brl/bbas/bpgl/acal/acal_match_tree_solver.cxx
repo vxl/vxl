@@ -70,7 +70,8 @@ void
 acal_match_tree_lsqr_covar::compute_residuals(vnl_vector<double> const& x,
                                         vnl_vector<double>& residuals)
 {
-  double tol = 15.0;//increased from 10 7/3/2020 JLM - numerical gradient has larger residuals on first iteration
+  double tol = 20.0; //7/4/2020 increased to allow for cholesky scale factor and numerical Jacobian
+  if(use_covariance_) tol*=sqrt(largest_cholesky_sing_val_);
   // if a track doesn't project make the residual 0 so no penalty
   residuals.fill(0.0);
   //     track idx   3d intersection point
@@ -118,7 +119,7 @@ acal_match_tree_lsqr_covar::compute_residuals(vnl_vector<double> const& x,
   if(use_covariance_){
     vnl_vector<double> res_with_covar = sensor_inv_covar_cholesky_upper_tri_*temp_res;
     for(size_t i = 0; i<2*n_cams; ++i)
-      residuals[i] = res_with_covar[i];
+      residuals[i] = res_with_covar[i]/sqrt(largest_cholesky_sing_val_);
   }
   else 
     for (size_t i = 0; i < 2 * n_cams; ++i)
@@ -184,9 +185,13 @@ acal_match_tree_solver::solve_least_squares_problem()
   // solve full connected component
   // to make clear index corresponds to a connected component
   mt_lsq = acal_match_tree_lsqr_covar(tree_acams_, tracks_, n_residuals_, cam_trans_penalty_);
-  if(use_covariance_)
+  if(use_covariance_){
+    vnl_svd<double> svd(sensor_inv_covar_cholesky_upper_tri_);
+    std::cout << "cholesky largest sing value "<< svd.W()[0] << std::endl;
     mt_lsq.set_covariance_info(sensor_inv_covar_cholesky_upper_tri_,
-                               ray_covariance_plane_cs_);
+                               ray_covariance_plane_cs_,
+                               svd.W()[0]);
+  }
   mt_lsq.set_verbose(verbose_);
   vnl_levenberg_marquardt levmarq(mt_lsq);
   levmarq.set_verbose(true);
