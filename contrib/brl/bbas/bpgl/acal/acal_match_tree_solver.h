@@ -6,7 +6,7 @@
 // \file
 // \brief A non-linear optimizer for solving for camera translations
 // \author J.L. Mundy
-// \date July 3, 2020
+// \date Nov 28, 2018
 //
 // \verbatim
 //  Modifications
@@ -29,24 +29,18 @@
 #include "acal_match_tree.h"
 #include "acal_match_graph.h"
 #include "acal_solution_error.h"
-//
-// July 3, 2020 - the original implementation used the gradf function, i.e. vnl_least_squares_function::use_gradient
-// However an experiment where the numerical gradient is used yielded much smaller projection errors. The average rms
-// projection error decreased from 0.35 to 0.02 pixels.So the current implementation numerically computes the Jacobian
-// at each step. The original analytical Jacobian did not account for the variation in ray intersection point. There was
-// no observed change in compute time. The resulting translations differ from the original implementations by ~0.5pix on average.
-// 
-class acal_match_tree_lsqr_covar : public vnl_least_squares_function
+
+class acal_match_tree_lsqr : public vnl_least_squares_function
 {
  public:
   //: Default constructor, use to define variable for assignment
-   acal_match_tree_lsqr_covar() : vnl_least_squares_function(0, 0) { use_covariance_ = false; }
+  acal_match_tree_lsqr() : vnl_least_squares_function(0,0){}
 
   //: Constructor
-  acal_match_tree_lsqr_covar(std::map<size_t, vpgl_affine_camera<double> >& tree_acams,
+  acal_match_tree_lsqr(std::map<size_t, vpgl_affine_camera<double> >& tree_acams,
                         std::vector< std::map<size_t, vgl_point_2d<double> > > tracks,
                         size_t n_residuals,  double cam_trans_penalty):
-  vnl_least_squares_function(2*tree_acams.size(), n_residuals, vnl_least_squares_function::no_gradient),
+    vnl_least_squares_function(2*tree_acams.size(), n_residuals, vnl_least_squares_function::use_gradient),
     tree_acams_(tree_acams), trans_acams_(tree_acams), tracks_(tracks),
     verbose_(false), track_intersect_failure_(false),
     cam_trans_penalty_(cam_trans_penalty){}
@@ -95,7 +89,7 @@ public:
     match_graph_.validate_match_trees_and_set_metric();
     match_tree_ = match_graph_.largest_tree(conn_comp_index);
     tracks_ = match_tree_->tracks();
-    std::map<size_t, vpgl_affine_camera<double> >& acams = match_graph_.all_acams_;
+    std::map<size_t, vpgl_affine_camera<double> >& acams = match_graph_.all_acams();
     std::vector<size_t> tree_cam_ids = match_tree_->cam_ids();
     for(std::vector<size_t>::iterator cit = tree_cam_ids.begin();
         cit != tree_cam_ids.end(); ++cit){
