@@ -211,6 +211,14 @@ acal_f_utils::intersect_tracks_with_3d(
     }else{
       if (!vgl_intersection(track_rays, ray_covariance, inter_pt))
         continue;
+      else{//
+        size_t n = track_rays.size();
+        std::cout << " Rays " << std::endl;
+        for (size_t i = 0; i < n; ++i) {
+          std::cout << track_rays[i] << std::endl;
+        }
+        std::cout << "plane covariance\n"<< ray_covariance << std::endl;
+      }//
     }
     inter_pts[t] = inter_pt;
 
