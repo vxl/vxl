@@ -340,7 +340,7 @@ bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vnl_matrix<T> con
     return false;
   }
   vnl_matrix<T> cov_inv = svd_cov.inverse();
-
+  std::cout << " covar \n"<< covar << std::endl;
   // plane coordinate vectors for planes perpendicular to each ray
   // perp_T = [u_0, v_0, u_1, v_1, ... , u_n-1, v_n-1]
   vnl_matrix<T> perp_T(3, nr);
@@ -365,10 +365,10 @@ bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vnl_matrix<T> con
     ray_origins[1][i] = org_i.y();
     ray_origins[2][i] = org_i.z();
   }
-
+  std::cout << "ptpt^T\n" << perp_T * perp_T.transpose() << std::endl;
   // the average ray projection matrix A
   vnl_matrix<T> A = perp_T * cov_inv * perp_T.transpose();
-
+  std::cout << "A\n" << A << std::endl;
   vnl_svd<T> svd_A(A);
   if(svd_A.rank() != 3){
     std::cout << "matrix A has insufficient rank" << std::endl;
@@ -390,7 +390,11 @@ bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vnl_matrix<T> con
     temp = temp_p * temp_o;
     proj[pidx+1][0] = temp[0][0];
   }
-  //the intersection point based on weighted least squares
+  std::cout << "proj\n" << proj << std::endl;
+  std::cout << "cov_inv*proj\n" << cov_inv * proj << std::endl;
+  std::cout << "perpT*cov_inv*proj\n" << perp_T * cov_inv * proj << std::endl;
+  std::cout << "A_inv\n" << A_inv << std::endl;
+  // the intersection point based on weighted least squares
   vnl_matrix<T> X = A_inv * perp_T * cov_inv * proj;
   inter_pt.set(X[0][0], X[1][0], X[2][0]);
   return true;
