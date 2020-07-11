@@ -3,7 +3,11 @@
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/algo/vgl_intersection.h>
 #include "acal_single_track_solver.h"
+<<<<<<< HEAD
 #define verbose_plus false
+=======
+
+>>>>>>> created a special single-track solver
 bool acal_single_track_solver::solve()
 {
   std::cout << "\n=====> Solve for cam translation(s)<=====" << std::endl;
