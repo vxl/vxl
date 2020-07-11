@@ -136,7 +136,7 @@ acal_match_tree_solver::init(size_t conn_comp_index)
   if(!match_tree_)
     return false;
   tracks_ = match_tree_->tracks();
-  std::map<size_t, vpgl_affine_camera<double> >& acams = match_graph_.all_acams();
+  std::map<size_t, vpgl_affine_camera<double> >& acams = match_graph_.all_acams_;
   std::vector<size_t> tree_cam_ids = match_tree_->cam_ids();
   for(std::vector<size_t>::iterator cit = tree_cam_ids.begin();
       cit != tree_cam_ids.end(); ++cit){
