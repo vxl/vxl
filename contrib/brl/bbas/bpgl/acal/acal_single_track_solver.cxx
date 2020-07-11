@@ -1,0 +1,133 @@
+#include <limits>
+#include <math.h>
+#include <vgl/vgl_ray_3d.h>
+#include <vgl/algo/vgl_intersection.h>
+#include "acal_single_track_solver.h"
+
+bool acal_single_track_solver::solve()
+{
+  std::cout << "\n=====> Solve for cam translation(s)<=====" << std::endl;
+
+  std::vector<vgl_ray_3d<double> >  track_rays;
+  for (std::map<size_t, vgl_point_2d<double> >::const_iterator cit = track_.begin();
+       cit != track_.end(); ++cit)
+    {
+      size_t cam_idx = cit->first;
+      const vpgl_affine_camera<double>& cam = track_acams_[cam_idx];
+      vgl_homg_point_2d<double> img_pt(cit->second);
+      vgl_ray_3d<double> ray = cam.backproject_ray(img_pt);
+      track_rays.push_back(ray);
+    }
+  if(track_rays.size()<2){
+    std::cerr << "Insufficient number of rays - fail" << std::endl;
+    return false;
+  }
+    if(!use_covariance_){
+      if (!vgl_intersection(track_rays, track_3d_point_)){
+       std::cerr << "Intersection failed - while not using covariance" << std::endl;
+       return false;
+      }
+    }else{
+      if (!vgl_intersection(track_rays, covar_plane_cs_, track_3d_point_)){
+        std::cerr << "Intersection failed - while using covariance" << std::endl;
+       return false;
+      }else{//
+        size_t n = track_rays.size();
+        std::cout << " Rays " << std::endl;
+        for (size_t i = 0; i < n; ++i) {
+          std::cout << track_rays[i] << std::endl;
+        }
+        std::cout << "plane covariance\n"<< covar_plane_cs_ << std::endl;
+      }//
+    }
+   
+  vnl_vector<double> translations(2 * track_acams_.size());
+  translations.fill(0.0);
+  size_t it = 0;
+  for (std::map<size_t, vgl_point_2d<double> >::const_iterator cit = track_.begin();
+       cit != track_.end(); ++cit, ++it)
+    {
+      size_t cam_idx = cit->first;
+      const vpgl_affine_camera<double>& cam = track_acams_[cam_idx];
+      vgl_point_2d<double> img_pt(cit->second);
+      vgl_point_2d<double> proj_3d_pt = cam.project(track_3d_point_);
+      vgl_vector_2d<double> t = img_pt - proj_3d_pt;
+      translations[2*it] = t.x();
+      translations[2*it+1] = t.y();
+      vnl_matrix_fixed<double, 3, 4> m = cam.get_matrix();
+      m[0][3] += translations[2*it];
+      m[1][3] += translations[2*it+1];
+      adjusted_acams_[cam_idx].set_matrix(m);
+    }
+  it = 0;
+  double sanity_thresh = 20.0;
+  bool fail = false;
+  if(verbose_)std::cout << "final translations:(cam idx tu  tv)" << std::endl;
+  for (std::map<size_t, vpgl_affine_camera<double> >::iterator ait = track_acams_.begin();
+       ait != track_acams_.end(); ++ait, ++it) {
+    size_t cam_idx = ait->first;
+    double tu = translations(2 * it);
+    double tv = translations(2 * it + 1);
+    if (fabs(tu) > sanity_thresh || fabs(tv) > sanity_thresh) {
+      std::cout << "solution failed " << std::endl;
+      fail = true;
+    }
+    vgl_vector_2d<double> trans(tu, tv);
+    translations_[cam_idx] = trans;
+    if(!fail&&verbose_) std::cout << cam_idx << ' ' << tu << ' ' << tv << std::endl;
+  }
+  if(!fail&&verbose_) std::cout << "mean sq track proj errors:(cam idx du  dv)" << std::endl;
+  // errors should be zero but check to detect problems
+  for (std::map<size_t, vgl_point_2d<double> >::const_iterator cit = track_.begin();
+       cit != track_.end(); ++cit, ++it){
+    size_t cidx = cit->first;
+    double min_eps_u =0.0, min_eps_v = 0.0;
+    double max_eps_u = 0.0, max_eps_v = 0.0;
+    double sq_eps_u = 0, sq_eps_v = 0;
+    const vpgl_affine_camera<double>& cam = adjusted_acams_[cidx];
+    vgl_point_2d<double> img_pt(cit->second);
+    vgl_point_2d<double> proj_3d_pt = cam.project(track_3d_point_);
+    vgl_vector_2d<double>  er = (img_pt - proj_3d_pt);
+    min_eps_u = er.x();
+    max_eps_u = er.x();
+    sq_eps_u = min_eps_u*min_eps_u;
+    min_eps_v = er.y();
+    max_eps_v = er.y();
+    sq_eps_v = min_eps_v*min_eps_v;
+    sol_errors_[cidx] = acal_solution_error(min_eps_u, min_eps_v, max_eps_u, max_eps_v, sqrt(sq_eps_u), sqrt(sq_eps_v));
+  }
+  return !fail;
+}
+
+
+void
+acal_single_track_solver::print_solution()
+{
+  
+  std::cout << "+++ [" << translations_.size() << "] Camera Translations +++" << std::endl;
+  std::cout << "           image name                                    cam_id     tx      ty      min       max      rms" << std::endl;
+  for(std::map<size_t, vgl_vector_2d<double> >::const_iterator mit =  translations_.begin();
+      mit != translations_.end(); ++mit){
+    size_t cam_idx = mit->first;
+    std::string name = inames_[mit->first];
+    std::cout << name << ' ' << cam_idx << " (" << mit->second.x() << ' ' << mit->second.y() << ") "
+              << sol_errors_[cam_idx].min_err() << ' ' << sol_errors_[cam_idx].max_err()
+              << ' ' << sol_errors_[cam_idx].total_rms() << std::endl;
+  }
+}
+std::map<size_t, vgl_vector_2d<double> >
+acal_single_track_solver::translations_with_specified_3d_pt(vgl_point_3d<double> const& pt_3d){
+  std::map<size_t, vgl_vector_2d<double> > ret;
+  for (std::map<size_t, vgl_point_2d<double> >::const_iterator cit = track_.begin();
+       cit != track_.end(); ++cit)
+    {
+      size_t cam_idx = cit->first;
+      const vpgl_affine_camera<double>& cam = track_acams_[cam_idx];
+      vgl_point_2d<double> img_pt(cit->second);
+      vgl_point_2d<double> proj_3d_pt = cam.project(pt_3d);
+      vgl_vector_2d<double> t = img_pt - proj_3d_pt;
+      ret[cam_idx] = t;
+    }
+  return ret;
+}
+
