@@ -3,7 +3,7 @@
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/algo/vgl_intersection.h>
 #include "acal_single_track_solver.h"
-
+#define verbose_plus false
 bool acal_single_track_solver::solve()
 {
   std::cout << "\n=====> Solve for cam translation(s)<=====" << std::endl;
@@ -31,7 +31,7 @@ bool acal_single_track_solver::solve()
       if (!vgl_intersection(track_rays, covar_plane_cs_, track_3d_point_)){
         std::cerr << "Intersection failed - while using covariance" << std::endl;
        return false;
-      }else{//
+      }else if(verbose_plus){
         size_t n = track_rays.size();
         std::cout << " Rays " << std::endl;
         for (size_t i = 0; i < n; ++i) {
