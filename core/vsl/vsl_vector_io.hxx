@@ -122,8 +122,8 @@ void vsl_print_summary(std::ostream& os, const std::vector<T> &v)
 
 
 #define VSL_VECTOR_IO_INSTANTIATE(T) \
-template void vsl_print_summary(std::ostream& s, const std::vector<T >& v); \
-template void vsl_b_write(vsl_b_ostream& s, const std::vector<T >& v); \
-template void vsl_b_read(vsl_b_istream& s, std::vector<T >& v)
+template VSL_EXPORT void vsl_print_summary(std::ostream& s, const std::vector<T >& v); \
+template VSL_EXPORT void vsl_b_write(vsl_b_ostream& s, const std::vector<T >& v); \
+template VSL_EXPORT void vsl_b_read(vsl_b_istream& s, std::vector<T >& v)
 
 #endif // vsl_vector_io_hxx_

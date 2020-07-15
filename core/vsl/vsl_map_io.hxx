@@ -88,9 +88,9 @@ void vsl_print_summary(std::ostream& os, const std::map<Key, T, Compare> &v)
 
 
 #define VSL_MAP_IO_INSTANTIATE(Key, T, Compare) \
-template void vsl_print_summary(std::ostream&, const std::map<Key, T, Compare >&); \
-template void vsl_b_write(vsl_b_ostream& s, const std::map<Key, T, Compare >& v); \
-template void vsl_b_read(vsl_b_istream& s, std::map<Key, T, Compare >& v)
+template VSL_EXPORT void vsl_print_summary(std::ostream&, const std::map<Key, T, Compare >&); \
+template VSL_EXPORT void vsl_b_write(vsl_b_ostream& s, const std::map<Key, T, Compare >& v); \
+template VSL_EXPORT void vsl_b_read(vsl_b_istream& s, std::map<Key, T, Compare >& v)
 
 //====================================================================================
 //: Write multimap to binary stream
@@ -162,8 +162,8 @@ void vsl_print_summary(std::ostream& os, const std::multimap<Key, T, Compare> &v
 
 
 #define VSL_MULTIMAP_IO_INSTANTIATE(Key, T, Compare) \
-template void vsl_print_summary(std::ostream&, const std::multimap<Key, T, Compare >&); \
-template void vsl_b_write(vsl_b_ostream& s, const std::multimap<Key, T, Compare >& v); \
-template void vsl_b_read(vsl_b_istream& s, std::multimap<Key, T, Compare >& v)
+template VSL_EXPORT void vsl_print_summary(std::ostream&, const std::multimap<Key, T, Compare >&); \
+template VSL_EXPORT void vsl_b_write(vsl_b_ostream& s, const std::multimap<Key, T, Compare >& v); \
+template VSL_EXPORT void vsl_b_read(vsl_b_istream& s, std::multimap<Key, T, Compare >& v)
 
 #endif // vsl_map_io_hxx_
