@@ -340,7 +340,6 @@ bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vnl_matrix<T> con
     return false;
   }
   vnl_matrix<T> cov_inv = svd_cov.inverse();
-  std::cout << " covar \n"<< covar << std::endl;
   // plane coordinate vectors for planes perpendicular to each ray
   // perp_T = [u_0, v_0, u_1, v_1, ... , u_n-1, v_n-1]
   vnl_matrix<T> perp_T(3, nr);
