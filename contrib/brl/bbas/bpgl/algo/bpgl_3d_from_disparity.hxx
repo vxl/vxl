@@ -52,7 +52,7 @@ vil_image_view<T> bpgl_3d_from_disparity(
     }
     return img3d;
   }
-  else if (cam1.type_name() == "vpgl_perspective_camera") {
+  else if (cam1.type_name() == "vpgl_perspective_camera"||cam1.type_name() == "vpgl_proj_camera") {
     vpgl_proj_camera<double> pp0(P0), pp1(P1);
     for (size_t j = 0; j < nj; ++j) {
       for (size_t i = 0; i < ni; ++i) {
