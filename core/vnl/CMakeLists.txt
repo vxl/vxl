@@ -254,12 +254,25 @@ set( vnl_sources
 aux_source_directory(Templates vnl_sources)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-  # gcc must have -msse2 option to enable sse2 support
   if(VNL_CONFIG_ENABLE_SSE2)
-    add_definitions( -msse2 )
+    if( NOT VXL_HAS_SSE2_HARDWARE_SUPPORT )
+      if( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE )
+        message( ${VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE_HELP} )
+      endif()
+      message( SEND_ERROR "Cannot have VNL_CONFIG_ENABLE_SSE2 because"
+                          " there is no SSE2 hardware support" )
+      set(VNL_CONFIG_ENABLE_SSE2 FALSE)
+    endif()
   endif()
   if(VNL_CONFIG_ENABLE_SSE2_ROUNDING)
-    add_definitions( -msse2 )
+    if( NOT VXL_HAS_SSE2_HARDWARE_SUPPORT )
+      if( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE )
+        message( ${VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE_HELP} )
+      endif()
+      message( SEND_ERROR "Cannot have VNL_CONFIG_ENABLE_SSE2_ROUNDING because"
+                          " there is no SSE2 hardware support" )
+      set(VNL_CONFIG_ENABLE_SSE2_ROUNDING FALSE)
+    endif()
   endif()
 endif()
 
