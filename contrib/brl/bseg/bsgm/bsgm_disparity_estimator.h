@@ -13,7 +13,12 @@
 #include <vnl/vnl_math.h>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_vector_2d.h>
-
+#include "bsgm_census.h"
+#include <vil/algo/vil_sobel_3x3.h>
+#include <vil/algo/vil_structuring_element.h>
+#include <vil/algo/vil_median.h>
+#include <vil/algo/vil_binary_erode.h>
+#include <vil/algo/vil_gauss_reduce.h>
 //:
 // \file
 // \brief An implementation of the semi-global matching stereo algorithm.
@@ -123,9 +128,10 @@ class bsgm_disparity_estimator
   // the target pixel i.e.
   //   img_target(x,y) <-> img_ref( x + disp_target(x,y), y )
   // Note that this is the opposite of the OpenCV SGM implementation.
+  template <class T>
   bool compute(
-    const vil_image_view<vxl_byte>& img_target,
-    const vil_image_view<vxl_byte>& img_ref,
+    const vil_image_view<T>& img_target,
+    const vil_image_view<T>& img_ref,
     const vil_image_view<bool>& invalid_target,
     const vil_image_view<int>& min_disparity,
     float invalid_disparity,
@@ -184,9 +190,10 @@ class bsgm_disparity_estimator
     long long int depth );
 
   //: Compute appearance data costs
+  template <class T>
   void compute_census_data(
-    const vil_image_view<vxl_byte>& img_target,
-    const vil_image_view<vxl_byte>& img_ref,
+    const vil_image_view<T>& img_target,
+    const vil_image_view<T>& img_ref,
     const vil_image_view<bool>& invalid_target,
     std::vector< std::vector< unsigned char* > >& app_cost,
     const vil_image_view<int>& min_disparity );
@@ -242,6 +249,177 @@ class bsgm_disparity_estimator
   bsgm_disparity_estimator()= default;
 };
 
+//-----------------------------------------------------------------------
+template <class T>
+void bsgm_disparity_estimator::compute_census_data(
+  const vil_image_view<T>& img_tar,
+  const vil_image_view<T>& img_ref,
+  const vil_image_view<bool>& invalid_tar,
+  std::vector< std::vector< unsigned char* > >& app_cost,
+  const vil_image_view<int>& min_disparity )
+{
+  int census_diam = 2*params_.census_rad + 1;
+  if( census_diam > 7 ) census_diam = 7;
+  if( census_diam < 3 ) census_diam = 3;
+  float census_norm = 8.0f*cost_unit_/(float)(census_diam*census_diam);
+  bool only_32_bits = census_diam <= 5;
+
+  // Compute census images
+  vil_image_view<vxl_uint_64> census_tar, census_ref;
+  vil_image_view<vxl_uint_64> census_conf_tar, census_conf_ref;
+  bsgm_compute_census_img(
+    img_tar, census_diam, census_tar, census_conf_tar, params_.census_tol );
+  bsgm_compute_census_img(
+    img_ref, census_diam, census_ref, census_conf_ref, params_.census_tol );
+
+  // Construct a bit-set look-up table for use later
+  unsigned char bit_set_table[256];
+  bsgm_generate_bit_set_lut( bit_set_table );
+
+  // Compute the appearance cost volume
+  for( int y = 0; y < h_; y++ ){
+    for( int x = 0; x < w_; x++ ){
+
+      unsigned char* ac = app_cost[y][x];
+
+      // If invalid pixel, fill with 255
+      if( invalid_tar(x,y) ){
+        for( int d = 0; d < num_disparities_; d++, ac++ )
+          *ac = 255;
+        continue;
+      }
+
+      // Target census values
+      vxl_uint_64 cen_t = census_tar(x,y);
+      vxl_uint_64 conf_t = census_conf_tar(x,y);
+
+      // Compute all costs
+      int x2 = x + min_disparity(x,y);
+      for ( int d = 0; d < num_disparities_; d++, x2++, ac++ ) {
+
+        // Check valid match pixel
+        if( x2 < 0 || x2 >= w_ )
+          *ac = 255;
+
+        // Compare census values using hamming distance
+        else {
+
+          // reference census values
+          vxl_uint_64 cen_r = census_ref(x2,y);
+          vxl_uint_64 conf_r = census_conf_ref(x2,y);
+
+          // census comparison
+          unsigned long long int cen_diff =
+            bsgm_compute_diff_string( cen_t, cen_r, conf_t, conf_r );
+
+          unsigned char ham =
+            bsgm_compute_hamming_lut( cen_diff, bit_set_table, only_32_bits );
+
+          float ham_norm = census_norm*ham;
+
+          // weighted update of appearance cost
+          float ac_new = (float)(*ac) + params_.census_weight*ham_norm;
+          *ac = (unsigned char)( ac_new > 255.0f ? 255.0f : ac_new );
+        }
+
+      } //d
+    } //j
+  } //i
+}
+
+//----------------------------------------------------------------------------
+template <class T>
+bool bsgm_disparity_estimator::compute(
+  const vil_image_view<T>& img_tar,
+  const vil_image_view<T>& img_ref,
+  const vil_image_view<bool>& invalid_tar,
+  const vil_image_view<int>& min_disp,
+  float invalid_disp,
+  vil_image_view<float>& disp_tar,
+  bool skip_error_check)
+{
+  disp_tar.set_size( w_, h_ );
+
+  // Validate images.
+  if( img_tar.ni() != w_ || img_tar.nj() != h_ ||
+      img_ref.ni() != w_ || img_ref.nj() != h_ ||
+      invalid_tar.ni() != w_ || invalid_tar.nj() != h_ ) return false;
+
+  long long int num_voxels = w_*h_*num_disparities_;
+
+  vul_timer timer, total_timer;
+  if( params_.print_timing ){
+    timer.mark(); total_timer.mark();
+  }
+
+  // Compute gradient images.
+  vil_image_view<float> grad_x_tar, grad_y_tar, grad_x_ref, grad_y_ref;
+  if( params_.use_gradient_weighted_smoothing ||
+      params_.xgrad_weight > 0.0f )
+    vil_sobel_3x3<T, float>( img_tar, grad_x_tar, grad_y_tar );
+
+  if( params_.print_timing )
+    print_time( "Gradient image computation", timer );
+
+  // Compute appearance cost volume data.
+  if( params_.census_weight > 0.0f ){
+    compute_census_data<T>( img_tar, img_ref,
+      invalid_tar, fused_cost_, min_disp );
+  }
+
+  if( params_.xgrad_weight > 0.0f ){
+    vil_sobel_3x3<T,float>( img_ref, grad_x_ref, grad_y_ref );
+    compute_xgrad_data( grad_x_tar, grad_x_ref,
+      invalid_tar, fused_cost_, min_disp );
+  }
+
+  active_app_cost_ = &fused_cost_;
+
+  if( params_.print_timing )
+    print_time( "Appearance cost computation", timer );
+
+  // Run the multi-directional dynamic programming to obtain a total cost
+  // volume incorporating appearance + smoothing.
+  run_multi_dp(
+    *active_app_cost_, total_cost_,
+    invalid_tar, grad_x_tar, grad_y_tar, min_disp );
+
+  if( params_.print_timing )
+    print_time( "Dynamic programming", timer );
+
+  // Find the lowest total cost disparity for each pixel, do quadratic
+  // interpolation if configured.
+  vil_image_view<unsigned short> disp_cost ;
+  compute_best_disparity_img( total_cost_, min_disp,
+    invalid_tar, invalid_disp, disp_tar, disp_cost );
+
+  // Median filter to remove speckles
+  vil_structuring_element se; se.set_to_disk( 1.9 );
+  vil_image_view<float> disp2( w_, h_ );
+  vil_median( disp_tar, disp2, se );
+  disp_tar.deep_copy( disp2 );
+
+  if( params_.print_timing )
+    print_time( "Disparity map extraction", timer );
+
+  // Find and fix errors if configured.
+  if( params_.error_check_mode > 0 && !skip_error_check){
+    bsgm_check_nonunique( disp_tar, disp_cost,
+      img_tar, invalid_disp, params_.shadow_thresh);
+
+    if( params_.error_check_mode > 1 )
+      bsgm_interpolate_errors( disp_tar, invalid_tar,
+        img_tar, invalid_disp, params_.shadow_thresh);
+
+    if (params_.print_timing)
+      print_time("Consistency check", timer);
+  }
+
+  if( params_.print_timing )
+    print_time( "TOTAL TIME", total_timer );
+
+  return true;
+}
 
 
 
