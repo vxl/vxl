@@ -12,6 +12,7 @@
 #include <vul/vul_timer.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_math.h>
 #include <vgl/vgl_vector_2d.h>
 #include "bsgm_census.h"
 #include <vil/algo/vil_sobel_3x3.h>
@@ -279,7 +280,7 @@ void bsgm_disparity_estimator::compute_census_data(
   // Compute the appearance cost volume
   for( int y = 0; y < h_; y++ ){
     for( int x = 0; x < w_; x++ ){
-
+      bool hit = (x == 2190 && y == 1200);
       unsigned char* ac = app_cost[y][x];
 
       // If invalid pixel, fill with 255
@@ -316,9 +317,9 @@ void bsgm_disparity_estimator::compute_census_data(
             bsgm_compute_hamming_lut( cen_diff, bit_set_table, only_32_bits );
 
           float ham_norm = census_norm*ham;
-
           // weighted update of appearance cost
           float ac_new = (float)(*ac) + params_.census_weight*ham_norm;
+          if(hit) std::cout << "ham_norm " << ham_norm << " w*ham " <<params_.census_weight*ham_norm << " ac_new " << ac_new << std::endl;
           *ac = (unsigned char)( ac_new > 255.0f ? 255.0f : ac_new );
         }
 
@@ -346,7 +347,10 @@ bool bsgm_disparity_estimator::compute(
       invalid_tar.ni() != w_ || invalid_tar.nj() != h_ ) return false;
 
   long long int num_voxels = w_*h_*num_disparities_;
-
+  // determine appearance scale factor
+  T app_scale = std::numeric_limits<T>::max();
+  if(app_scale > T(255))
+    params_.census_tol *=9;
   vul_timer timer, total_timer;
   if( params_.print_timing ){
     timer.mark(); total_timer.mark();
@@ -354,10 +358,19 @@ bool bsgm_disparity_estimator::compute(
 
   // Compute gradient images.
   vil_image_view<float> grad_x_tar, grad_y_tar, grad_x_ref, grad_y_ref;
-  if( params_.use_gradient_weighted_smoothing ||
-      params_.xgrad_weight > 0.0f )
-    vil_sobel_3x3<T, float>( img_tar, grad_x_tar, grad_y_tar );
-
+  if (params_.use_gradient_weighted_smoothing ||
+    params_.xgrad_weight > 0.0f) {
+    vil_sobel_3x3<T, float>(img_tar, grad_x_tar, grad_y_tar);
+    float mean_x, var_x, mean_y, var_y;
+    vil_math_mean_and_variance(mean_x,var_x,grad_x_tar,0);
+    vil_math_mean_and_variance(mean_y,var_y,grad_y_tar,0);
+    std::cout << "mean_tar_x, sd_tar_x " << mean_x << ' ' << sqrt(var_x) << std::endl;
+    std::cout << "mean_tar_y, sd_tar_y " << mean_y << ' ' << sqrt(var_y) << std::endl;
+    if (app_scale > T(255)) {
+      vil_math_scale_values(grad_x_tar, 0.04f);
+      vil_math_scale_values(grad_y_tar, 0.04f);
+    }
+  }
   if( params_.print_timing )
     print_time( "Gradient image computation", timer );
 
@@ -369,6 +382,15 @@ bool bsgm_disparity_estimator::compute(
 
   if( params_.xgrad_weight > 0.0f ){
     vil_sobel_3x3<T,float>( img_ref, grad_x_ref, grad_y_ref );
+    float mean_x, var_x, mean_y, var_y;
+    vil_math_mean_and_variance(mean_x,var_x,grad_x_ref,0);
+    vil_math_mean_and_variance(mean_y,var_y,grad_y_ref,0);
+    std::cout << "mean_ref_x, sd_ref_x " << mean_x << ' ' << sqrt(var_x) << std::endl;
+    std::cout << "mean_ref_y, sd_ref_y " << mean_y << ' ' << sqrt(var_y) << std::endl;
+    if (app_scale > T(255)) {
+      vil_math_scale_values(grad_x_ref, 0.04f);
+      vil_math_scale_values(grad_y_ref, 0.04f);
+    }
     compute_xgrad_data( grad_x_tar, grad_x_ref,
       invalid_tar, fused_cost_, min_disp );
   }
@@ -404,11 +426,11 @@ bool bsgm_disparity_estimator::compute(
 
   // Find and fix errors if configured.
   if( params_.error_check_mode > 0 && !skip_error_check){
-    bsgm_check_nonunique( disp_tar, disp_cost,
+    bsgm_check_nonunique<T>( disp_tar, disp_cost,
       img_tar, invalid_disp, params_.shadow_thresh);
 
     if( params_.error_check_mode > 1 )
-      bsgm_interpolate_errors( disp_tar, invalid_tar,
+      bsgm_interpolate_errors<T>( disp_tar, invalid_tar,
         img_tar, invalid_disp, params_.shadow_thresh);
 
     if (params_.print_timing)

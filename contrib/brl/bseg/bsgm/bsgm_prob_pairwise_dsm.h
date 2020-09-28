@@ -130,7 +130,7 @@ struct pairwise_params
   bool coarse_dsm_disparity_estimate_ = true;
 };
 
-template <class CAM_T>
+template <class CAM_T, class IMG_T>
 class bsgm_prob_pairwise_dsm
 {
  public:
@@ -148,8 +148,8 @@ class bsgm_prob_pairwise_dsm
     this->set_images_and_cams(resc0, cam0, resc1, cam1);
   }
 
-  bsgm_prob_pairwise_dsm(vil_image_view<unsigned char> const& view0, CAM_T const& cam0,
-                         vil_image_view<unsigned char> const& view1, CAM_T const& cam1)
+  bsgm_prob_pairwise_dsm(vil_image_view<IMG_T> const& view0, CAM_T const& cam0,
+                         vil_image_view<IMG_T> const& view1, CAM_T const& cam1)
   {
     this->set_images_and_cams(view0, cam0, view1, cam1);
   }
@@ -163,10 +163,12 @@ class bsgm_prob_pairwise_dsm
     return rip_.set_images_and_cams(view0, cam0, view1, cam1);
   }
 
-  bool set_images_and_cams(vil_image_view<unsigned char> const& view0, CAM_T const& cam0,
-                           vil_image_view<unsigned char> const& view1, CAM_T const& cam1)
+  bool set_images_and_cams(vil_image_view<IMG_T> const& view0, CAM_T const& cam0,
+                           vil_image_view<IMG_T> const& view1, CAM_T const& cam1)
   {
-    return rip_.set_images_and_cams(view0, cam0, view1, cam1);
+   vil_image_resource_sptr resc0_ptr = vil_new_image_resource_of_view(view0);
+   vil_image_resource_sptr resc1_ptr = vil_new_image_resource_of_view(view1);
+    return rip_.set_images_and_cams(resc0_ptr, cam0, resc1_ptr, cam1);
   }
 
   bool set_images_and_cams(vil_image_resource_sptr const& resc0, CAM_T const& cam0,
@@ -204,8 +206,8 @@ class bsgm_prob_pairwise_dsm
   vgl_box_3d<double> scene_box() const { return scene_box_; }
 
   //: rectified images and cams
-  const vil_image_view<vxl_byte>& rectified_bview0() const  {return rect_bview0_;}
-  const vil_image_view<vxl_byte>& rectified_bview1() const  {return rect_bview1_;}
+  const vil_image_view<IMG_T>& rectified_bview0() const  {return rect_bview0_;}
+  const vil_image_view<IMG_T>& rectified_bview1() const  {return rect_bview1_;}
   const CAM_T& rectified_cam0() const {return rip_.rect_cam0();}
   const CAM_T& rectified_cam1() const {return rip_.rect_cam1();}
 
@@ -284,8 +286,8 @@ class bsgm_prob_pairwise_dsm
 
   // compute disparity for generic inputs
   void compute_disparity(
-      const vil_image_view<vxl_byte>& img,
-      const vil_image_view<vxl_byte>& img_reference,
+      const vil_image_view<IMG_T>& img,
+      const vil_image_view<IMG_T>& img_reference,
       bool forward,  // == true or reverse == false
       vil_image_view<bool>& invalid,
       vil_image_view<float>& disparity);
@@ -323,8 +325,8 @@ class bsgm_prob_pairwise_dsm
 
   vgl_box_3d<double> scene_box_;
 
-  vil_image_view<vxl_byte> rect_bview0_;
-  vil_image_view<vxl_byte> rect_bview1_;
+  vil_image_view<IMG_T> rect_bview0_;
+  vil_image_view<IMG_T> rect_bview1_;
 
   // disparity data
   vil_image_view<bool> invalid_map_fwd_;
@@ -351,5 +353,5 @@ class bsgm_prob_pairwise_dsm
   vil_image_view<float> prob_heightmap_prob_;
   vil_image_view<float> radial_std_dev_image_;
 };
-#define BSGM_PROB_PAIRWISE_DSM_INSTANTIATE(T) extern "please include bsgm/bsgm_prob_pairwise_dsm.hxx first"
+#define BSGM_PROB_PAIRWISE_DSM_INSTANTIATE(CAM_T, IMG_T) extern "please include bsgm/bsgm_prob_pairwise_dsm.hxx first"
 #endif // bsgm_prob_pairwise_dsm_h_
