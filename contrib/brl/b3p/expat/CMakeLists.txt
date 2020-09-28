@@ -10,14 +10,19 @@ if(NOT VXL_USING_NATIVE_EXPAT)
     endif()
   endif()
 
-vxl_configure_file(${expat_SOURCE_DIR}/expatConfig.h.in
-                  ${expat_BINARY_DIR}/expatConfig.h include/vxl/contrib/brl/b3p/expat)
-vxl_configure_file(${expat_SOURCE_DIR}/expatDllConfig.h.in
-                  ${expat_BINARY_DIR}/expatDllConfig.h include/vxl/contrib/brl/b3p/expat)
-vxl_configure_file_copyonly(${expat_SOURCE_DIR}/expat.h
-                  ${expat_BINARY_DIR}/expat.h include/vxl/contrib/brl/b3p/expat)
+  vxl_configure_file(
+      ${CMAKE_CURRENT_SOURCE_DIR}/expatConfig.h.in
+      ${CMAKE_CURRENT_BINARY_DIR}/expatConfig.h
+      include/vxl/contrib/brl/b3p/expat
+  )
+  vxl_configure_file(
+      ${CMAKE_CURRENT_SOURCE_DIR}/expatDllConfig.h.in
+      ${CMAKE_CURRENT_BINARY_DIR}/expatDllConfig.h
+      include/vxl/contrib/brl/b3p/expat
+  )
 
-configure_file(${expat_SOURCE_DIR}/.NoDartCoverage ${expat_BINARY_DIR}/.NoDartCoverage)
+  configure_file(${expat_SOURCE_DIR}/.NoDartCoverage
+                 ${expat_BINARY_DIR}/.NoDartCoverage)
 
   set(expat_sources
       xmlparse.c
@@ -37,9 +42,11 @@ configure_file(${expat_SOURCE_DIR}/.NoDartCoverage ${expat_BINARY_DIR}/.NoDartCo
   include(${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
   TEST_BIG_ENDIAN(expat_BIGENDIAN)
 
-  include_directories(${CMAKE_CURRENT_BINARY_DIR})
-
-  vxl_add_library(LIBRARY_NAME expat LIBRARY_SOURCES ${expat_sources})
+  vxl_add_library(
+      LIBRARY_NAME expat
+      HEADER_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}"
+      LIBRARY_SOURCES ${expat_sources}
+  )
 
   if( BUILD_TESTING )
     add_subdirectory(tests)
