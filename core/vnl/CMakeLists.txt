@@ -278,6 +278,7 @@ endif()
 
 vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vnl
   LIBRARY_SOURCES ${vnl_sources}
+  HEADER_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}"  # vnl_config.h
   HEADER_INSTALL_DIR vnl)
 target_link_libraries( ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vcl )
 set(_curr_lib_name vnl)
