@@ -29,7 +29,7 @@
 // UNITY_DENOMINATOR  - both denominators are 1 - so not a rational form (analogous to affine)
 //
 #include <iosfwd>
-#include <vgl_norm_trans_2d.h>
+#include <vgl/algo/vgl_norm_trans_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>

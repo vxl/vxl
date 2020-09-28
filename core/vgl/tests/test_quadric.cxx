@@ -7,7 +7,7 @@
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
-#include <vgl_tolerance.h>
+#include <vgl/vgl_tolerance.h>
 // multiply square matrices
 static std::vector<std::vector<double>>
 mul(std::vector<std::vector<double>> const & a, std::vector<std::vector<double>> const & b)

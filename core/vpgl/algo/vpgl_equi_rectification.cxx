@@ -5,8 +5,8 @@
 #include "vgl/vgl_homg_point_2d.h"
 #include "vgl/vgl_tolerance.h"
 #include <math.h>
-#include <vnl_det.h>
-#include <vnl_inverse.h>
+#include <vnl/vnl_det.h>
+#include <vnl/vnl_inverse.h>
 #include <vpgl/vpgl_essential_matrix.h>
 bool vpgl_equi_rectification::column_transform(const std::vector<vnl_vector_fixed<double, 3> >& img_pts0,
                                                const std::vector<vnl_vector_fixed<double, 3> >& img_pts1,

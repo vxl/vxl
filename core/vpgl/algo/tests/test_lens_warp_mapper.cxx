@@ -5,7 +5,7 @@
 #endif
 #include "vgl/vgl_point_2d.h"
 #include "vpgl/vpgl_poly_radial_distortion.h"
-#include <vpgl_radial_tangential_distortion.h>
+#include <vpgl/vpgl_radial_tangential_distortion.h>
 #include <vpgl/algo/vpgl_lens_warp_mapper.h>
 #include "vil/vil_image_view.h"
 #include "vil/vil_save.h"
