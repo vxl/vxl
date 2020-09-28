@@ -353,7 +353,10 @@ set( vil_network_sources
   vil_stream_url.cxx vil_stream_url.h
 )
 
-vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil LIBRARY_SOURCES ${vil_sources} ${vil_network_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil
+    HEADER_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}"  # vil_config.h
+    LIBRARY_SOURCES ${vil_sources} ${vil_network_sources}
+)
 
 if(JPEG_FOUND)
   target_link_libraries( ${VXL_LIB_PREFIX}vil ${JPEG_LIBRARIES} )
