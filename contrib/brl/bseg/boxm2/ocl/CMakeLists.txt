@@ -4,11 +4,11 @@ if(VXL_BUILD_BRL)
 endif()
 
 # Set up boxm2_ocl_where_root_dir.h to have a macro set to $BOXM2_OPENCL_SRC_DIR
-vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/boxm2_ocl_where_root_dir.h.in
-  ${PROJECT_BINARY_DIR}/bseg/boxm2/ocl/boxm2_ocl_where_root_dir.h contrib/brl/bseg/boxm2/ocl
+vxl_configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/boxm2_ocl_where_root_dir.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/boxm2_ocl_where_root_dir.h
+    include/vxl/contrib/brl/bseg/boxm2/ocl
 )
-include_directories( ${PROJECT_BINARY_DIR}/bseg/boxm2/ocl/ )
-
 
 #depends on OPENCL being found...
 if(OpenCL_FOUND)
@@ -21,7 +21,11 @@ if(OpenCL_FOUND)
     )
   aux_source_directory(Templates boxm2_ocl_sources)
 
-  vxl_add_library(LIBRARY_NAME boxm2_ocl LIBRARY_SOURCES ${boxm2_ocl_sources})
+  vxl_add_library(
+      LIBRARY_NAME boxm2_ocl
+      HEADER_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}"
+      LIBRARY_SOURCES ${boxm2_ocl_sources}
+  )
   target_link_libraries(boxm2_ocl boxm2 boxm2_basic boxm2_io bocl boct bsta brdb expatpp ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl)
 
   #install the .h .hxx and libs
