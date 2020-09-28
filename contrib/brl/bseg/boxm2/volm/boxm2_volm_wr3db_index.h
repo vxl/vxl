@@ -34,8 +34,8 @@
 #include <iostream>
 #include <fstream>
 #include <vbl/vbl_ref_count.h>
-#include <bbas/volm/volm_spherical_container.h>
-#include <bbas/volm/volm_spherical_container_sptr.h>
+#include <volm/volm_spherical_container.h>
+#include <volm/volm_spherical_container_sptr.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/volm/boxm2_volm_locations_sptr.h>
 #ifdef _MSC_VER

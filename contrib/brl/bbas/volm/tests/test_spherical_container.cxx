@@ -5,7 +5,7 @@
 #endif
 #include "vpl/vpl.h"
 #include "vsl/vsl_binary_io.h"
-#include <bbas/volm/volm_spherical_container.h>
+#include <volm/volm_spherical_container.h>
 
 static void test_spherical_container()
 {

@@ -24,7 +24,7 @@
 #include <sdet/sdet_detector.h>
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_fit_lines.h>
-#include <bbas/bil/algo/bil_cedt.h>
+#include <bil/algo/bil_cedt.h>
 #include <bvgl/bvgl_triangle_interpolation_iterator.h>
 #include <imesh/algo/imesh_generate_mesh.h>
 

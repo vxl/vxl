@@ -3,7 +3,7 @@
 #include "boxm2_volm_wr3db_index.h"
 //:
 // \file
-#include <bbas/volm/volm_spherical_container.h>
+#include <volm/volm_spherical_container.h>
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include "vgl/vgl_box_3d.h"
 #ifdef _MSC_VER

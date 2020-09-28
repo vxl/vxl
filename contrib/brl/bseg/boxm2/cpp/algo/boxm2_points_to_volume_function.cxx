@@ -5,7 +5,7 @@
 //:
 // \file
 #include <cassert>
-#include <bbas/imesh/imesh_vertex.h>
+#include <imesh/imesh_vertex.h>
 #include <imesh/algo/imesh_intersect.h>
 #include <imesh/imesh_operations.h>
 #include <bvgl/bvgl_intersection.h>

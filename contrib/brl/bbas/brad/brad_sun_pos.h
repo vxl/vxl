@@ -24,7 +24,7 @@
 #ifndef __BRAD_SUN_POS_H
 #define __BRAD_SUN_POS_H
 
-#include <bbas/bsta/bsta_spherical_histogram.h>
+#include <bsta/bsta_spherical_histogram.h>
 
 
 //: the position of the sun relative to the local tangent plane

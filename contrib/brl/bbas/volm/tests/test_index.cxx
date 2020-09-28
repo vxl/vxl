@@ -9,9 +9,9 @@
 #include "vil/vil_save.h"
 #include "vsl/vsl_binary_io.h"
 #include "vul/vul_timer.h"
-#include <bbas/volm/volm_tile.h>
-#include <bbas/volm/volm_geo_index.h>
-#include <bbas/volm/volm_io.h>
+#include <volm/volm_tile.h>
+#include <volm/volm_geo_index.h>
+#include <volm/volm_io.h>
 #include <bkml/bkml_parser.h>
 
 static void test_index()

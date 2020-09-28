@@ -8,9 +8,9 @@
 #include <depth_map/depth_map_scene.h>
 #include <depth_map/depth_map_region_sptr.h>
 #include "vsl/vsl_binary_io.h"
-#include <bbas/volm/volm_tile.h>
-#include <bbas/volm/volm_geo_index.h>
-#include <bbas/volm/volm_io.h>
+#include <volm/volm_tile.h>
+#include <volm/volm_geo_index.h>
+#include <volm/volm_io.h>
 #include <volm/volm_category_io.h>
 #include <bkml/bkml_parser.h>
 #include <vcl_where_root_dir.h>

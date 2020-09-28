@@ -16,8 +16,8 @@
 #include <volm/volm_tile.h>
 #include <volm/volm_category_io.h>
 #include "vgl/vgl_intersection.h"
-#include <bseg/boxm2/boxm2_block_metadata.h>
-#include <bseg/boxm2/boxm2_scene.h>
+#include <boxm2/boxm2_block_metadata.h>
+#include <boxm2/boxm2_scene.h>
 
 
 //: A process to change the resolution/refinement of blocks based on the land type

@@ -9,7 +9,7 @@
 #include "vil/vil_save.h"
 #include "vsl/vsl_binary_io.h"
 #include "vul/vul_timer.h"
-#include <bbas/volm/volm_loc_hyp.h>
+#include <volm/volm_loc_hyp.h>
 #include "vgl/vgl_polygon.h"
 #include <bkml/bkml_parser.h>
 
