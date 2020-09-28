@@ -11,7 +11,7 @@
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boct/boct_bit_tree.h>
-#include <bbas/imesh/imesh_mesh.h>
+#include <imesh/imesh_mesh.h>
 #include <imesh/algo/imesh_kd_tree.h>
 #include <bvgl/bvgl_triangle_3d.h>
 #include <vnl/vnl_vector_fixed.h>

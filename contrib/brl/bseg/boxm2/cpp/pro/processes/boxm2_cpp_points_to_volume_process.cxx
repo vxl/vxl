@@ -21,8 +21,8 @@
 #include <boxm2/cpp/algo/boxm2_points_to_volume_function.h>
 
 //imesh/point cloud stuff
-#include <bbas/imesh/imesh_mesh.h>
-#include <bbas/imesh/imesh_fileio.h>
+#include <imesh/imesh_mesh.h>
+#include <imesh/imesh_fileio.h>
 
 //directory utility
 #include <vcl_where_root_dir.h>

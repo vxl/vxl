@@ -4,8 +4,8 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 #include "vpl/vpl.h"
-#include <bbas/volm/volm_spherical_shell_container.h>
-#include <bbas/volm/volm_spherical_shell_container_sptr.h>
+#include <volm/volm_spherical_shell_container.h>
+#include <volm/volm_spherical_shell_container_sptr.h>
 
 static void test_spherical_shell_container()
 {

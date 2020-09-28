@@ -20,7 +20,7 @@
 #include <bstm/ocl/bstm_ocl_util.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_random.h>
-#include <bbas/bsta/bsta_gaussian_indep.h>
+#include <bsta/bsta_gaussian_indep.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

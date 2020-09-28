@@ -4,8 +4,8 @@
 
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
-#include <bbas/volm/volm_query.h>
-#include <bbas/volm/volm_query_sptr.h>
+#include <volm/volm_query.h>
+#include <volm/volm_query_sptr.h>
 #include <volm/volm_camera_space.h>
 #include <volm/volm_camera_space_sptr.h>
 #include <volm/volm_spherical_region_query.h>
@@ -14,8 +14,8 @@
 #include <volm/volm_spherical_shell_container_sptr.h>
 #include <boxm2/volm/boxm2_volm_matcher_p0.h>
 #include <volm/volm_loc_hyp.h>
-#include <bbas/volm/volm_io.h>
-#include <bbas/volm/volm_tile.h>
+#include <volm/volm_io.h>
+#include <volm/volm_tile.h>
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include <boxm2/volm/boxm2_volm_locations_sptr.h>
 #ifdef _MSC_VER

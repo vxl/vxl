@@ -21,7 +21,7 @@
 #include <vector>
 #include <iostream>
 #include <iosfwd>
-#include <bbas/bsta/bsta_spherical_histogram.h>
+#include <bsta/bsta_spherical_histogram.h>
 #include <vnl/vnl_double_3.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>

@@ -30,7 +30,7 @@
 
 #include <brad/brad_sun_pos.h>
 
-#include <bbas/bres/bres_find.h>
+#include <bres/bres_find.h>
 
 const std::string brad_image_metadata::gain_offset_file_name = std::string("contrib/brl/bbas/brad/brad_sat_img_calibration_table.txt");
 const std::string brad_image_metadata::sun_irradiance_file_name = std::string("contrib/brl/bbas/brad/brad_sat_img_sun_irradiance_table.txt");

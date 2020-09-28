@@ -19,12 +19,12 @@
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
 #include <boxm2/volm/boxm2_volm_matcher_p0.h>
-#include <bbas/bocl/bocl_manager.h>
-#include <bbas/bocl/bocl_device.h>
+#include <bocl/bocl_manager.h>
+#include <bocl/bocl_device.h>
 #include <bkml/bkml_parser.h>
 #include "vil/vil_save.h"
-#include <bbas/volm/volm_io.h>
-#include <bbas/volm/volm_vrml_io.h>
+#include <volm/volm_io.h>
+#include <volm/volm_vrml_io.h>
 
 
 int main(int argc, char** argv)

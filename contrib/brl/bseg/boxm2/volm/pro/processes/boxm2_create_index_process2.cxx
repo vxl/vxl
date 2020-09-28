@@ -14,10 +14,10 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
-#include <bbas/volm/volm_spherical_shell_container.h>
-#include <bbas/volm/volm_spherical_shell_container_sptr.h>
-#include <bbas/volm/volm_loc_hyp.h>
-#include <bbas/volm/volm_geo_index.h>
+#include <volm/volm_spherical_shell_container.h>
+#include <volm/volm_spherical_shell_container_sptr.h>
+#include <volm/volm_loc_hyp.h>
+#include <volm/volm_geo_index.h>
 #include "vul/vul_timer.h"
 #include "vul/vul_file.h"
 #include "vil/vil_save.h"
