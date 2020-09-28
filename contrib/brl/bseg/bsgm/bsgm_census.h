@@ -32,24 +32,30 @@ bool bsgm_compute_census_img(
   census_conf.set_size( width, height );
 
   int nbhd_rad = (nbhd_diam-1)/2;
-
+  float big_sum = 0.0f;
+  float nums = 0.0f;
   // Iterate over each pixel
   for( int y = nbhd_rad; y < height-nbhd_rad; y++ ){
     for( int x = nbhd_rad; x < width-nbhd_rad; x++ ){
-
-      T center_max = T( std::min<T>( max_val, img(x,y) + tol ) );
-      T center_min = T( std::max<T>( 0, img(x,y) - tol ) );
+      T val = img(x, y);
+      if (val > 0)
+        int great = 0;
+      T center_max = T( std::min<T>( max_val, val+tol ) );
+      T center_min = 0;
+      if(val>tol)
+        center_min =T(std::max<T>(0, val-tol));
 
       unsigned long long cen = 0;
       unsigned long long conf = 0;
 
       int x_min = x-nbhd_rad, y_min = y-nbhd_rad;
 
-      unsigned char img_xy = img(x,y);
+      T img_xy = img(x,y);
+      float sum = 0.0f;
       for( int dy = 0; dy < nbhd_diam; dy++ ){
         const T* img_x2y2 = &img( x_min, y_min + dy );
         for( int dx = 0; dx < nbhd_diam; dx++, img_x2y2++ ){
-
+          sum += fabs(img_xy - *img_x2y2);
           // Record the sign of the sample-to-center difference in a bit at
           // each pixel in a patch.
           cen <<= 1;
@@ -61,10 +67,14 @@ bool bsgm_compute_census_img(
           if( *img_x2y2 <= center_min || *img_x2y2 >= center_max ) conf++;
         }
       }
+      sum /= (nbhd_diam * nbhd_diam);
+      big_sum += sum;
+      nums += 1.0f;
       census(x,y) = cen;
       census_conf(x,y) = conf;
     }
   }
+  std::cout << "census average diff from center " << big_sum / nums << std::endl;
   return true;
 };
 

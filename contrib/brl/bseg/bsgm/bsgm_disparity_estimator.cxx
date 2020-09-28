@@ -68,11 +68,10 @@ void bsgm_disparity_estimator::compute_xgrad_data(
   const vil_image_view<int>& min_disparity)
 {
   float grad_norm = cost_unit_ / 8.0f;
-
   // Compute the appearance cost volume
   for (int y = 0; y < h_; y++) {
     for (int x = 0; x < w_; x++) {
-
+      bool hit = (x == 2190 && y == 1200);
       unsigned char* ac = app_cost[y][x];
 
       // If invalid pixel, fill with 255
@@ -95,7 +94,7 @@ void bsgm_disparity_estimator::compute_xgrad_data(
 
           // gradient comparison
           float g = grad_norm * fabs(grad_x_tar(x, y) - grad_x_ref(x2, y));
-
+          if(hit) std::cout << "Grad norm " << grad_norm << " grad_tar " << grad_x_tar(x,y) << " grad_ref " << grad_x_ref(x2,y) << " g " << g << std::endl;
           // weighted update of appearance cost
           float ac_new = (float)(*ac) + params_.xgrad_weight * g;
           *ac = (unsigned char)(ac_new > 255.0f ? 255.0f : ac_new);
