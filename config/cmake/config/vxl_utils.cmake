@@ -61,6 +61,10 @@ endmacro()
 #  LIBRARY_SOURCES     (required) is a list of sources needed to create the
 #                      library. It should also contain headers to install for
 #                      building against the library.
+#  HEADER_BUILD_DIR    (optional) directory to append to library target
+#                      BUILD_INTERFACE. Useful to include a target build
+#                      directory (CMAKE_CURRENT_BINARY_DIR) containing files
+#                      generated via vxl_configure_file.
 #  HEADER_INSTALL_DIR  (optional) directory to install headers relative to
 #                      VXL_INSTALL_INCLUDE_DIR if VXL_INSTALL_INCLUDE_DIR is
 #                      not its default value; otherwise, the relative path in
@@ -69,7 +73,7 @@ endmacro()
 function( vxl_add_library )
   cmake_parse_arguments(vxl_add
      ""  # options
-     "LIBRARY_NAME;HEADER_INSTALL_DIR"  # oneValueArgs
+     "LIBRARY_NAME;HEADER_BUILD_DIR;HEADER_INSTALL_DIR"  # oneValueArgs
      "LIBRARY_SOURCES"  # multiValueArgs
      ${ARGN} )
 
@@ -95,9 +99,13 @@ function( vxl_add_library )
   endif()
 
   # build interface
-  set(vxl_add_BUILD_INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}")
+  set(build_interface "${CMAKE_CURRENT_SOURCE_DIR}")
+  if (DEFINED vxl_add_HEADER_BUILD_DIR)
+    list(APPEND build_interface "${vxl_add_HEADER_BUILD_DIR}")
+  endif()
+
   target_include_directories(${vxl_add_LIBRARY_NAME} PUBLIC
-      "$<BUILD_INTERFACE:${vxl_add_BUILD_INTERFACE}>"
+      "$<BUILD_INTERFACE:${build_interface}>"
   )
 
   # install interface
