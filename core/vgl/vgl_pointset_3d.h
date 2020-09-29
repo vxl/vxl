@@ -132,7 +132,10 @@ class vgl_pointset_3d
 
   void append_pointset(vgl_pointset_3d<Type> const& ptset){
     if(this->has_normals_ != ptset.has_normals())
+    {
+      std::cout<< "WARNING, cannot append a pointset without normals to one with normals." << std::endl;
       return; // can't be done
+    }
     unsigned npts = ptset.npts();
     for(unsigned i = 0; i<npts; ++i){
       if(!this->has_normals_&& !this->has_scalars_)
