@@ -280,7 +280,7 @@ void bsgm_disparity_estimator::compute_census_data(
   // Compute the appearance cost volume
   for( int y = 0; y < h_; y++ ){
     for( int x = 0; x < w_; x++ ){
-      bool hit = (x == 2190 && y == 1200);
+      
       unsigned char* ac = app_cost[y][x];
 
       // If invalid pixel, fill with 255
@@ -319,7 +319,7 @@ void bsgm_disparity_estimator::compute_census_data(
           float ham_norm = census_norm*ham;
           // weighted update of appearance cost
           float ac_new = (float)(*ac) + params_.census_weight*ham_norm;
-          if(hit) std::cout << "ham_norm " << ham_norm << " w*ham " <<params_.census_weight*ham_norm << " ac_new " << ac_new << std::endl;
+          
           *ac = (unsigned char)( ac_new > 255.0f ? 255.0f : ac_new );
         }
 
