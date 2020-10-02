@@ -350,25 +350,29 @@ bool bsgm_disparity_estimator::compute(
   // determine appearance scale factor
   T app_scale = std::numeric_limits<T>::max();
   if(app_scale > T(255))
-    params_.census_tol *=9;
+    params_.census_tol *=20;//FIXME compute automatically
+    //params_.census_tol *= 5;
   vul_timer timer, total_timer;
   if( params_.print_timing ){
     timer.mark(); total_timer.mark();
   }
 
   // Compute gradient images.
+  float gscale = 0.32f; //FIXME compute automatically
   vil_image_view<float> grad_x_tar, grad_y_tar, grad_x_ref, grad_y_ref;
   if (params_.use_gradient_weighted_smoothing ||
     params_.xgrad_weight > 0.0f) {
     vil_sobel_3x3<T, float>(img_tar, grad_x_tar, grad_y_tar);
+#if 0
     float mean_x, var_x, mean_y, var_y;
     vil_math_mean_and_variance(mean_x,var_x,grad_x_tar,0);
     vil_math_mean_and_variance(mean_y,var_y,grad_y_tar,0);
     std::cout << "mean_tar_x, sd_tar_x " << mean_x << ' ' << sqrt(var_x) << std::endl;
     std::cout << "mean_tar_y, sd_tar_y " << mean_y << ' ' << sqrt(var_y) << std::endl;
+#endif
     if (app_scale > T(255)) {
-      vil_math_scale_values(grad_x_tar, 0.04f);
-      vil_math_scale_values(grad_y_tar, 0.04f);
+      vil_math_scale_values(grad_x_tar, gscale);
+      vil_math_scale_values(grad_y_tar, gscale);
     }
   }
   if( params_.print_timing )
@@ -382,14 +386,16 @@ bool bsgm_disparity_estimator::compute(
 
   if( params_.xgrad_weight > 0.0f ){
     vil_sobel_3x3<T,float>( img_ref, grad_x_ref, grad_y_ref );
+#if 0
     float mean_x, var_x, mean_y, var_y;
     vil_math_mean_and_variance(mean_x,var_x,grad_x_ref,0);
     vil_math_mean_and_variance(mean_y,var_y,grad_y_ref,0);
     std::cout << "mean_ref_x, sd_ref_x " << mean_x << ' ' << sqrt(var_x) << std::endl;
     std::cout << "mean_ref_y, sd_ref_y " << mean_y << ' ' << sqrt(var_y) << std::endl;
+#endif
     if (app_scale > T(255)) {
-      vil_math_scale_values(grad_x_ref, 0.04f);
-      vil_math_scale_values(grad_y_ref, 0.04f);
+      vil_math_scale_values(grad_x_ref, gscale);
+      vil_math_scale_values(grad_y_ref, gscale);
     }
     compute_xgrad_data( grad_x_tar, grad_x_ref,
       invalid_tar, fused_cost_, min_disp );
