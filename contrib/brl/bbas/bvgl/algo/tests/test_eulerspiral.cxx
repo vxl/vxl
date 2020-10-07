@@ -196,25 +196,28 @@ MAIN( test_eulerspiral )
 
 
   std::cout << std::endl << "Example using eulerspiral look-up table " << std::endl;
+  TEST("Test eulerspiral lookup table is found",
+       bvgl_eulerspiral_lookup_table::instance()->has_table(), true);
+  std::cout << "eulerspiral lookup table located at <"
+            << bvgl_eulerspiral_lookup_table::instance()->lookup_file_path()
+            << ">" << std::endl;
+
   double s2 = vnl_math::pi*2+ 1.1;
   double e2 = 0.5 - vnl_math::pi*2;
   es.compute_es_params(vgl_point_2d< double >(0, 0), s2, vgl_point_2d< double >(1, 0), e2);
   es.print(std::cout);
 
-  if (bvgl_eulerspiral_lookup_table::instance()->has_table()){
-    double k0_new, gamma_new, len_new, k0_max_error_new, gamma_max_error_new, len_max_error_new ;
-    bvgl_eulerspiral_lookup_table::instance()->look_up(s2, e2, &k0_new, &gamma_new, &len_new,
-      &k0_max_error_new, &gamma_max_error_new, &len_max_error_new);
-    std::cout << "Data from look-up table : " << std::endl;
-    std::cout << "k0_new = " << k0_new << std::endl;
-    std::cout << "gamma_new = " << gamma_new << std::endl;
-    std::cout << "len_new = " << len_new << std::endl;
-    test_passed = (std::abs(es.k0()-k0_new) + std::abs(es.gamma()-gamma_new) +
-      std::abs(es.length()-len_new)) < 1e-2;
-    TEST("Test look-up table validity", test_passed, true);
-  }
-  else
-    std::cout << "no table" << std::endl;
+  double k0_new, gamma_new, len_new, k0_max_error_new, gamma_max_error_new, len_max_error_new ;
+  bvgl_eulerspiral_lookup_table::instance()->look_up(s2, e2, &k0_new, &gamma_new, &len_new,
+    &k0_max_error_new, &gamma_max_error_new, &len_max_error_new);
+  std::cout << "Data from look-up table : " << std::endl;
+  std::cout << "k0_new = " << k0_new << std::endl;
+  std::cout << "gamma_new = " << gamma_new << std::endl;
+  std::cout << "len_new = " << len_new << std::endl;
+  test_passed = (std::abs(es.k0()-k0_new) + std::abs(es.gamma()-gamma_new) +
+    std::abs(es.length()-len_new)) < 1e-2;
+  TEST("Test look-up table validity", test_passed, true);
+
 
   std::cout << "Comparing between levenberg_marquardt minimization and simple gradient descent" << std::endl;
 
