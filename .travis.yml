@@ -200,3 +200,23 @@ script:
   - ctest -D ExperimentalTest --schedule-random -j2 --output-on-failure
   - ctest -D ExperimentalSubmit
   - ninja install
+
+  # spot check install
+  - |
+    # some expected install files
+    install_files=(
+        "${PROJ_INSTALL_DIR}/include/vxl/vcl/vcl_compiler.h"
+        "${PROJ_INSTALL_DIR}/include/vxl/core/vnl/vnl_math.h"
+        "${PROJ_INSTALL_DIR}/include/vxl/core/vnl/vnl_config.h"
+        "${PROJ_INSTALL_DIR}/include/vxl/core/vgl/vgl_point_3d.h"
+        "${PROJ_INSTALL_DIR}/include/vxl/core/vgl/vgl_export.h"
+    )
+
+    # spot check file existence
+    for file in "${install_files[@]}"
+    do
+      if [ ! -f "${file}" ]; then
+        echo "Missing install file <${file}>" >& 2
+        exit 1
+      fi
+    done

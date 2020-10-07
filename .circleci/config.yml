@@ -68,3 +68,25 @@ jobs:
           name: Install
           working_directory: /build
           command: ninja install
+      - run:
+          name: Test install
+          working_directory: /build
+          command: |
+
+            # some expected install files
+            install_files=(
+                "/install/include/vxl/vcl/vcl_compiler.h"
+                "/install/include/vxl/core/vnl/vnl_math.h"
+                "/install/include/vxl/core/vnl/vnl_config.h"
+                "/install/include/vxl/core/vgl/vgl_point_3d.h"
+                "/install/include/vxl/core/vgl/vgl_export.h"
+            )
+
+            # spot check file existence
+            for file in "${install_files[@]}"
+            do
+              if [ ! -f "${file}" ]; then
+                echo "Missing installed file <${file}>" >& 2
+                exit 1
+              fi
+            done
