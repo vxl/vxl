@@ -20,6 +20,7 @@
 #include <bnl/algo/bnl_fresnel.h>
 #include <bvgl/algo/bvgl_biarc.h>
 
+#include <bres/bres_find.h>
 
 //some defines for Euler-spiral optimization
 constexpr int bvgl_eulerspiral_max_gradient_descent_iter = 50000;  // maxinum number of iterations for gradient descent
@@ -641,15 +642,8 @@ compute_es_params_use_levenberg_marquardt(bool use_lookup_table ){
 // ------------ bvgl_eulerspiral_lookup_table functions ----------------------//
 //
 
-#ifdef BVGL_WHERE_BRL_LIB_DIR_H_EXISTS
-  #include <bvgl_where_brl_lib_dir.h>
-  const std::string bvgl_eulerspiral_lookup_table::file_path = std::string(BRL_LIB_DIR);
-#else
-  const std::string bvgl_eulerspiral_lookup_table::file_path = std::string();
-#endif
-
-const std::string bvgl_eulerspiral_lookup_table::
-file_name = std::string("bvgl_eulerspiral_lookup_table.bvl");
+// lookup file, found via bres
+const std::string bvgl_eulerspiral_lookup_table::lookup_file_name_ = std::string("contrib/brl/bbas/bvgl/algo/bvgl_eulerspiral_lookup_table.bvl");
 
 //: static bvgl_eulerspiral_lookup_table instance
 bvgl_eulerspiral_lookup_table* bvgl_eulerspiral_lookup_table::instance_ = nullptr;
@@ -664,18 +658,15 @@ bvgl_eulerspiral_lookup_table *bvgl_eulerspiral_lookup_table::instance(){
 
 //: Constructor
 bvgl_eulerspiral_lookup_table::bvgl_eulerspiral_lookup_table(){
-  std::string full_path = bvgl_eulerspiral_lookup_table::file_path + std::string("/") +
-    bvgl_eulerspiral_lookup_table::file_name;
-  vsl_b_ifstream in_stream(full_path);
-  // vsl_b_ifstream in_stream(bvgl_eulerspiral_lookup_table::file_path +
-  //   bvgl_eulerspiral_lookup_table::file_path);
+  this->lookup_file_path_ = bres_find::locate(this->lookup_file_name_);
+  vsl_b_ifstream in_stream(this->lookup_file_path_);
   // check if data file is available
   if (!in_stream){
     this->has_table_ = false;
     in_stream.close();
-    std::cerr << "The data file used to speed-up Euler Spiral computation " <<
-      bvgl_eulerspiral_lookup_table::file_name
-      << " is corrupted or missing." << std::endl;
+    std::cerr << "The data file used to speed-up Euler Spiral computation "
+              << this->lookup_file_name_
+              << " is corrupted or missing." << std::endl;
     return;
   }
 

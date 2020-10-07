@@ -279,7 +279,8 @@ public:
   //: Return the pointer to the only instance of the class
   static bvgl_eulerspiral_lookup_table* instance();
   //: Return whether the look-up table are created successfully
-  bool has_table(){ return has_table_; }
+  bool has_table() const { return has_table_; }
+  std::string lookup_file_path() const { return lookup_file_path_; }
 
   //: look up approximate values and their maximum errors for k0, gamma, and len
   // providing a starting angle and an ending angle
@@ -295,8 +296,14 @@ private:
   //: hold the pointer to the only instance of the class
   static bvgl_eulerspiral_lookup_table * instance_;
 
-  static const std::string file_name; //("bvgl_eulerspiral_lookup_table.bvl");
-  static const std::string file_path; // (LEMSVXL_LIB_DIR)
+  // file base location
+  static const std::string lookup_file_name_; // bvgl_eulerspiral_lookup_table.bvl
+
+  // located file (using bres_find::locate)
+  std::string lookup_file_path_;
+
+  //: indicate whether the table was created successfully
+  bool has_table_;
 
   // ----------- THE LOOK-UP TABLE ----------------------------------
   //: size of the lookup tables (npts_ x npts_)
@@ -307,8 +314,6 @@ private:
   std::vector< std::vector< double > > len_table_;
   // : delta - difference between two consecutive sampled angles, = 2Pi / npts
   double dt_;
-  //: indicate whether the table was created successfully
-  bool has_table_;
 };
 
 #endif // bvgl_eulerspiral_h_
