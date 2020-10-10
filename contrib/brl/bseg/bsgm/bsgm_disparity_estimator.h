@@ -348,9 +348,12 @@ bool bsgm_disparity_estimator::compute(
 
   long long int num_voxels = w_*h_*num_disparities_;
   // determine appearance scale factor
+  float gscale = 1.0f; //SW18 has gscale = 0.32f
   T app_scale = std::numeric_limits<T>::max();
-  if(app_scale > T(255))
-    params_.census_tol *=20;//FIXME compute automatically
+  if( app_scale> T(255)){
+    params_.census_tol *=8;//SW18 has params_.census_tol *=20
+    gscale = 1.0f/8.0f;
+  }
     //params_.census_tol *= 5;
   vul_timer timer, total_timer;
   if( params_.print_timing ){
@@ -358,7 +361,6 @@ bool bsgm_disparity_estimator::compute(
   }
 
   // Compute gradient images.
-  float gscale = 0.32f; //FIXME compute automatically
   vil_image_view<float> grad_x_tar, grad_y_tar, grad_x_ref, grad_y_ref;
   if (params_.use_gradient_weighted_smoothing ||
     params_.xgrad_weight > 0.0f) {
