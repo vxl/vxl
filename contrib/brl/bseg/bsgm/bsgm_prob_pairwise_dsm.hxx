@@ -90,7 +90,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_disparity(
 
     good = mde.compute(img, img_reference, invalid,
                        min_disparity_, invalid_disp, params_.multi_scale_mode_,
-                       disparity);
+                       disparity, bits_per_pix_factors_[params_.effective_bits_per_pixel_]);
     if (!good)
       throw std::runtime_error("Multiscale disparity estimator failed");
   } else {  // use input min_disparity
@@ -103,7 +103,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_disparity(
       min_disparity.fill(-(num_disparities() + min_disparity_));
 
     bsgm_disparity_estimator bsgm(params_.de_params_, ni, nj, num_disparities());
-    good = bsgm.compute(img, img_reference, invalid, min_disparity, invalid_disp, disparity);
+    good = bsgm.compute(img, img_reference, invalid, min_disparity, invalid_disp, disparity,bits_per_pix_factors_[params_.effective_bits_per_pixel_]);
     if (!good)
       throw std::runtime_error("disparity estimator failed");
   }

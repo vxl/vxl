@@ -30,7 +30,7 @@ void bsgm_check_nonunique(
   const vil_image_view<unsigned short>& disp_cost,
   const vil_image_view<T>& img,
   float invalid_disparity,
-  T shadow_thresh,
+  unsigned short shadow_thresh,
   int disp_thresh = 1);
 
 
@@ -63,7 +63,7 @@ void bsgm_interpolate_errors(
   const vil_image_view<bool>& invalid,
   const vil_image_view<T>& img,
   float invalid_disparity,
-  T shadow_thresh);
+  unsigned short shadow_thresh);
 
 
 //: Flip the sign of all disparities, swap invalid values.

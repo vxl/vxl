@@ -17,7 +17,7 @@ void bsgm_check_nonunique(
   const vil_image_view<unsigned short>& disp_cost,
   const vil_image_view<T>& img,
   float invalid_disparity,
-  T shadow_thresh,
+  unsigned short shadow_thresh,
   int disp_thresh)
 {
   int w = disp_img.ni(), h = disp_img.nj();
@@ -167,7 +167,7 @@ void bsgm_interpolate_errors(
   const vil_image_view<bool>& invalid,
   const vil_image_view<T>& img,
   float invalid_disparity,
-  T shadow_thresh)
+  unsigned short shadow_thresh)
 {
   int num_sample_dirs = 8;
   float sample_percentile = 0.5f;
@@ -322,10 +322,10 @@ void bsgm_interpolate_errors(
 #undef BSGM_ERROR_CHECKING_INSTANTIATE
 #define BSGM_ERROR_CHECKING_INSTANTIATE(T) \
 template void bsgm_interpolate_errors(vil_image_view<float>& ,const vil_image_view<bool>&,        \
-                                      const vil_image_view<T>&,  float, T);                       \
+                                      const vil_image_view<T>&,  float, unsigned short);          \
 template void bsgm_compute_invalid_map(const vil_image_view<T>& , const vil_image_view<T>&,       \
                                        vil_image_view<bool>& , int, int, T);                      \
 template void bsgm_check_nonunique(vil_image_view<float>& , const vil_image_view<unsigned short>&,\
-                                   const vil_image_view<T>&, float, T shadow_thresh, int)
+                                   const vil_image_view<T>&, float, unsigned short, int)
 
 #endif // bsgm_error_checking_h_
