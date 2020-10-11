@@ -78,7 +78,7 @@ struct pairwise_params
   // internal disparity estimator params
   bsgm_disparity_estimator_params de_params_;
 
-  // intensity level out of 255 below which is considered to be in shadow, thus invalid
+  // intensity level below which is considered to be in shadow, thus invalid
   size_t shadow_thresh_ = 20;
 
   // if true, perform quadratic interpolation of disparity with respect to cost
@@ -128,30 +128,37 @@ struct pairwise_params
   //use the reduced resolution dsm to estimate min disparity
   //num_active_disparities are used if true otherwise num_disparities
   bool coarse_dsm_disparity_estimate_ = true;
+
+  // the effective bits per pixel for an image, e.g. a dynamic range of 2047 corresponds to 11 bits
+  int effective_bits_per_pixel_ = 8;
+
 };
 
 template <class CAM_T, class PIX_T>
 class bsgm_prob_pairwise_dsm
 {
  public:
-  bsgm_prob_pairwise_dsm() = default;
+  bsgm_prob_pairwise_dsm(){init_dynamic_range_table();}
 
   bsgm_prob_pairwise_dsm(vil_image_view_base_sptr const& view0, CAM_T const& cam0,
                          vil_image_view_base_sptr const& view1, CAM_T const& cam1)
   {
     this->set_images_and_cams(view0, cam0, view1, cam1);
+    init_dynamic_range_table();
   }
 
   bsgm_prob_pairwise_dsm(vil_image_resource_sptr const& resc0, CAM_T const& cam0,
                          vil_image_resource_sptr const& resc1, CAM_T const& cam1)
   {
     this->set_images_and_cams(resc0, cam0, resc1, cam1);
+    init_dynamic_range_table();
   }
 
   bsgm_prob_pairwise_dsm(vil_image_view<PIX_T> const& view0, CAM_T const& cam0,
                          vil_image_view<PIX_T> const& view1, CAM_T const& cam1)
   {
     this->set_images_and_cams(view0, cam0, view1, cam1);
+    init_dynamic_range_table();
   }
 
   // ACCESSORS-----
@@ -176,7 +183,14 @@ class bsgm_prob_pairwise_dsm
   {
     return rip_.set_images_and_cams(resc0, cam0, resc1, cam1);
   }
-
+  //: set a table of scale factors with respect to the effective bits per pixel
+  //  of the input imagery. For example the actual bits per pixel might be 11 or a range of (0, 2047)
+  //  however the typical range of intensities might be only (0, 725) so the appearance cost scale
+  //  will be 725/255 ~ 2.8. The nominal parmeters in bsgm are tuned for byte images thus the 255 denominator.
+  //  census threshold and gradient magnitude are adjusted for higher dynamic ranges according to this scale factor
+  void set_dynamic_range_table(std::map<int, float> const& bits_per_pix_factors){
+    bits_per_pix_factors_ = bits_per_pix_factors;
+  }
   //: parameters
   void params(pairwise_params const& params) {params_ = params;}
   pairwise_params params() const { return params_; }
@@ -258,8 +272,6 @@ class bsgm_prob_pairwise_dsm
   //: main process method
   bool process(bool with_consistency_check = true)
   {
-    if(std::numeric_limits<PIX_T>::max()>255)
-      params_.shadow_thresh_ *= 8;
     // rectification
     this->rectify();
 
@@ -313,6 +325,11 @@ class bsgm_prob_pairwise_dsm
   bpgl_heightmap<float> get_bpgl_heightmap() const;
 
  private:
+  //: fill default dynamic range scale factors
+  void init_dynamic_range_table(){
+    bits_per_pix_factors_[8] = 1.0f;
+    bits_per_pix_factors_[11] = 2.8f;
+  }
   bool affine_;  // vs. perspective
   pairwise_params params_;
   bpgl_rectify_image_pair<CAM_T> rip_;
@@ -330,6 +347,8 @@ class bsgm_prob_pairwise_dsm
   vil_image_view<PIX_T> rect_bview0_;
   vil_image_view<PIX_T> rect_bview1_;
 
+  std::map<int, float> bits_per_pix_factors_;
+  
   // disparity data
   vil_image_view<bool> invalid_map_fwd_;
   vil_image_view<bool> invalid_map_rev_;

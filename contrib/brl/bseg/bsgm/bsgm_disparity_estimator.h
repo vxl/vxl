@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <set>
 #include <iostream>
 #include <sstream>
@@ -60,7 +61,7 @@ struct bsgm_disparity_estimator_params
 
   //: When set > 0, pixels below this threshold will be flagged as invalid
   // when error_check_mode > 0
-  vxl_byte shadow_thresh;
+  unsigned short shadow_thresh;
 
   //: Set "bias_weight" to the range (0.0,1.0] to bias the SGM directional average
   // against the "bias_dir" parameter.  Use this if smoothing from certain
@@ -84,7 +85,6 @@ struct bsgm_disparity_estimator_params
 
   //: Print detailed timing information to cerr.
   bool print_timing;
-
 
   //: Default parameters
   bsgm_disparity_estimator_params():
@@ -119,9 +119,8 @@ class bsgm_disparity_estimator
     const bsgm_disparity_estimator_params& params,
     long long int img_width,
     long long int img_height,
-    long long int num_disparities );
-
-  //: Destructor
+    long long int num_disparities);
+    //: Destructor
   ~bsgm_disparity_estimator();
 
   //: Run the SGM algorithm to compute a disparity map for the img_target,
@@ -137,6 +136,7 @@ class bsgm_disparity_estimator
     const vil_image_view<int>& min_disparity,
     float invalid_disparity,
     vil_image_view<float>& disp_target,
+    float dynamic_range_factor = 1.0f,
     bool skip_error_check = false);
 
   //: Write out the appearance or total cost volume as a set of images for
@@ -174,7 +174,6 @@ class bsgm_disparity_estimator
   std::vector< std::vector< unsigned char* > > fused_cost_;
 
   std::vector< std::vector< unsigned char* > >* active_app_cost_;
-
 
   //
   // Sub-routines called by SGM in order
@@ -337,6 +336,7 @@ bool bsgm_disparity_estimator::compute(
   const vil_image_view<int>& min_disp,
   float invalid_disp,
   vil_image_view<float>& disp_tar,
+  float dynamic_range_factor,
   bool skip_error_check)
 {
   disp_tar.set_size( w_, h_ );
@@ -346,15 +346,15 @@ bool bsgm_disparity_estimator::compute(
       img_ref.ni() != w_ || img_ref.nj() != h_ ||
       invalid_tar.ni() != w_ || invalid_tar.nj() != h_ ) return false;
 
+  
   long long int num_voxels = w_*h_*num_disparities_;
   // determine appearance scale factor
   float gscale = 1.0f; //SW18 has gscale = 0.32f
   T app_scale = std::numeric_limits<T>::max();
   if( app_scale> T(255)){
-    params_.census_tol *=8;//SW18 has params_.census_tol *=20
-    gscale = 1.0f/8.0f;
+    params_.census_tol *=dynamic_range_factor;//SW18 has params_.census_tol *=20
+    gscale = 1.0f/dynamic_range_factor;
   }
-    //params_.census_tol *= 5;
   vul_timer timer, total_timer;
   if( params_.print_timing ){
     timer.mark(); total_timer.mark();
@@ -365,13 +365,7 @@ bool bsgm_disparity_estimator::compute(
   if (params_.use_gradient_weighted_smoothing ||
     params_.xgrad_weight > 0.0f) {
     vil_sobel_3x3<T, float>(img_tar, grad_x_tar, grad_y_tar);
-#if 0
-    float mean_x, var_x, mean_y, var_y;
-    vil_math_mean_and_variance(mean_x,var_x,grad_x_tar,0);
-    vil_math_mean_and_variance(mean_y,var_y,grad_y_tar,0);
-    std::cout << "mean_tar_x, sd_tar_x " << mean_x << ' ' << sqrt(var_x) << std::endl;
-    std::cout << "mean_tar_y, sd_tar_y " << mean_y << ' ' << sqrt(var_y) << std::endl;
-#endif
+
     if (app_scale > T(255)) {
       vil_math_scale_values(grad_x_tar, gscale);
       vil_math_scale_values(grad_y_tar, gscale);
@@ -388,13 +382,7 @@ bool bsgm_disparity_estimator::compute(
 
   if( params_.xgrad_weight > 0.0f ){
     vil_sobel_3x3<T,float>( img_ref, grad_x_ref, grad_y_ref );
-#if 0
-    float mean_x, var_x, mean_y, var_y;
-    vil_math_mean_and_variance(mean_x,var_x,grad_x_ref,0);
-    vil_math_mean_and_variance(mean_y,var_y,grad_y_ref,0);
-    std::cout << "mean_ref_x, sd_ref_x " << mean_x << ' ' << sqrt(var_x) << std::endl;
-    std::cout << "mean_ref_y, sd_ref_y " << mean_y << ' ' << sqrt(var_y) << std::endl;
-#endif
+
     if (app_scale > T(255)) {
       vil_math_scale_values(grad_x_ref, gscale);
       vil_math_scale_values(grad_y_ref, gscale);

@@ -39,7 +39,8 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
 
   // Check cost volume size
   long long int cost_volume_size = img_width * img_height * num_disparities;
-  if (cost_volume_size < 0 || cost_volume_size > total_cost_data_.max_size()) {
+  if (cost_volume_size < static_cast<long long int>(0) ||
+      cost_volume_size > static_cast<long long int>(total_cost_data_.max_size())) {
     std::ostringstream buffer;
     buffer << "Cannot construct bsgm_disparity_estimator - cost volume is too large." << std::endl
            << "width = " << img_width << std::endl

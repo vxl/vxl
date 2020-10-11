@@ -67,6 +67,7 @@ class bsgm_multiscale_disparity_estimator
     float invalid_disparity,
     int const& multi_scale_mode,
     vil_image_view<float>& disp_target,
+    float dynamic_range_factor = 1.0f,
     bool skip_error_check = false);
 
   //: Same as above, except compute disparity maps for both images and use a
@@ -127,6 +128,7 @@ bool bsgm_multiscale_disparity_estimator::compute(
   float invalid_disp,
   int const& multi_scale_mode,
   vil_image_view<float>& disp_tar,
+  float dynamic_range_factor,
   bool skip_error_check)
 {
   //int multi_scale_mode = 1;
@@ -174,7 +176,7 @@ bool bsgm_multiscale_disparity_estimator::compute(
   // Run SGM on coarse scale images
   vil_image_view<float> disp_t_coarse;
   if( !coarse_de_->compute( img_t_coarse, img_r_coarse, invalid_t_coarse,
-      min_disp_img_coarse, invalid_disp_coarse, disp_t_coarse ) )
+     min_disp_img_coarse, invalid_disp_coarse, disp_t_coarse, dynamic_range_factor ) )
     return false;
 
   //DEBUG
@@ -243,7 +245,7 @@ bool bsgm_multiscale_disparity_estimator::compute(
 
   // Run fine-scale SGM
   if( !fine_de_->compute( img_tar, img_ref, invalid_tar,
-      min_disp_img_fine, invalid_disp, disp_tar, skip_error_check ) )
+      min_disp_img_fine, invalid_disp, disp_tar, dynamic_range_factor, skip_error_check ) )
     return false;
 
   //fine_de_->write_cost_debug_imgs( std::string("C:/data/results"), true );

@@ -74,7 +74,7 @@ bool bsgm_compute_census_img(
       census_conf(x,y) = conf;
     }
   }
-  std::cout << "census average diff from center " << big_sum / nums << std::endl;
+  //std::cout << "census average diff from center " << big_sum / nums << std::endl;
   return true;
 };
 
