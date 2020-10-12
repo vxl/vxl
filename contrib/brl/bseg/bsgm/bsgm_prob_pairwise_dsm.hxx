@@ -82,6 +82,8 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_disparity(
   vxl_byte border_val = 0;
   float invalid_disp = NAN; //required for triangulation implementation
   bool good = true;
+  float dynamic_range_factor = bits_per_pix_factors_[params_.effective_bits_per_pixel_];
+  std::cout << "using dynamic range factor " << dynamic_range_factor << std::endl;
   bsgm_compute_invalid_map<PIX_T>(img, img_reference, invalid,
                            min_disparity_, num_disparities(), border_val);
   if (params_.coarse_dsm_disparity_estimate_) {
@@ -90,7 +92,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_disparity(
 
     good = mde.compute(img, img_reference, invalid,
                        min_disparity_, invalid_disp, params_.multi_scale_mode_,
-                       disparity, bits_per_pix_factors_[params_.effective_bits_per_pixel_]);
+                       disparity, dynamic_range_factor);
     if (!good)
       throw std::runtime_error("Multiscale disparity estimator failed");
   } else {  // use input min_disparity
@@ -103,7 +105,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_disparity(
       min_disparity.fill(-(num_disparities() + min_disparity_));
 
     bsgm_disparity_estimator bsgm(params_.de_params_, ni, nj, num_disparities());
-    good = bsgm.compute(img, img_reference, invalid, min_disparity, invalid_disp, disparity,bits_per_pix_factors_[params_.effective_bits_per_pixel_]);
+    good = bsgm.compute(img, img_reference, invalid, min_disparity, invalid_disp, disparity, dynamic_range_factor);
     if (!good)
       throw std::runtime_error("disparity estimator failed");
   }
