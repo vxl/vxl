@@ -83,7 +83,8 @@ class bsgm_multiscale_disparity_estimator
     float invalid_disparity,
     int const& multi_scale_mode,
     vil_image_view<float>& disp_target,
-    vil_image_view<float>& disp_ref);
+    vil_image_view<float>& disp_ref,
+    float dynamic_range_factor = 1.0f);
 
   //: Write out the appearance or total cost volume as a set of images for
   // debugging
@@ -265,14 +266,15 @@ bool bsgm_multiscale_disparity_estimator::compute_both(
   float invalid_disparity,
   int const& multi_scale_mode,
   vil_image_view<float>& disp_tar,
-  vil_image_view<float>& disp_ref)
+  vil_image_view<float>& disp_ref,
+  float dynamic_range_factor)
 {
   // Compute disparity maps for both images
   compute(img_tar, img_ref, invalid_tar, min_disparity,
-    invalid_disparity, multi_scale_mode, disp_tar, true);
+  invalid_disparity, multi_scale_mode, disp_tar, dynamic_range_factor, true);
   compute(img_ref, img_tar, invalid_ref,
     (-num_fine_disparities_-min_disparity+1),
-    invalid_disparity, multi_scale_mode, disp_ref, true);
+   invalid_disparity, multi_scale_mode, disp_ref, dynamic_range_factor,true);
 
   // Compute error maps
   vil_image_view<bool> error_tar, error_ref;
