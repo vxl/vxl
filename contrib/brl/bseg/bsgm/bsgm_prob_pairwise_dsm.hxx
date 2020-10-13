@@ -50,11 +50,14 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::rectify()
       if(f1>max_1) max_1 = f1;
     }
   }
-  //stretch range
+  //stretch range according to bits per pixel
   bool pix_type_short = std::numeric_limits<PIX_T>::max() == PIX_T(65535);
+  //sanity check
+  if(params_.effective_bits_per_pixel_ <=8 && pix_type_short)
+    throw std::runtime_error("pixel type and intensity dynamic range inconsistent");
   float max_v = 255.0f;
-  if(pix_type_short)// use range of (0, 2^ll-1)
-    max_v = 2047.0f;
+  if(pix_type_short)// use range of (0, 2^effective_bpp-1)
+    max_v = std::pow(2.0f, params_.effective_bits_per_pixel_)-1.0f;
   float scale_0 = max_v/max_0, scale_1 = max_v/max_1;
   rect_bview0_.set_size(ni_, nj_);
   rect_bview1_.set_size(ni_, nj_);
@@ -83,7 +86,6 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_disparity(
   float invalid_disp = NAN; //required for triangulation implementation
   bool good = true;
   float dynamic_range_factor = bits_per_pix_factors_[params_.effective_bits_per_pixel_];
-  std::cout << "using dynamic range factor " << dynamic_range_factor << std::endl;
   bsgm_compute_invalid_map<PIX_T>(img, img_reference, invalid,
                            min_disparity_, num_disparities(), border_val);
   if (params_.coarse_dsm_disparity_estimate_) {
