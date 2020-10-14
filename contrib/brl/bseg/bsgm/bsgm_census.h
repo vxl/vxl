@@ -3,6 +3,7 @@
 #define bsgm_census_h
 
 #include <vector>
+#include <limits>
 #include <vil/vil_image_view.h>
 
 //:
