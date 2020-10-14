@@ -8,7 +8,7 @@
 
 
 #include "bsgm_disparity_estimator.h"
-#include "bsgm_error_checking.h"
+
 
 
 
