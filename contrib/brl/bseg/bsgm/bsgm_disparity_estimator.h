@@ -21,6 +21,7 @@
 #include <vil/algo/vil_median.h>
 #include <vil/algo/vil_binary_erode.h>
 #include <vil/algo/vil_gauss_reduce.h>
+#include "bsgm_error_checking.h"
 //:
 // \file
 // \brief An implementation of the semi-global matching stereo algorithm.
