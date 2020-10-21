@@ -65,7 +65,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::rectify()
     for (size_t i = 0; i<ni_; ++i) {
       float f0 = fview0(i,j), f1 = fview1(i,j);
       rect_bview0_(i,j) = PIX_T(scale_0*f0);
-      rect_bview1_(i,j) = PIX_T(scale_0*f1);
+      rect_bview1_(i,j) = PIX_T(scale_1*f1);
     }
 }
 
