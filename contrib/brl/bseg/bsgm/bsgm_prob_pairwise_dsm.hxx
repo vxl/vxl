@@ -3,7 +3,7 @@
 #include "bsgm_prob_pairwise_dsm.h"
 #include "bsgm_error_checking.h"
 #include "bsgm_multiscale_disparity_estimator.h"
-#include <limits>
+#include <type_traits>
 #include <stdexcept>
 #include "vil/vil_convert.h"
 #include "vil/vil_save.h"
@@ -50,23 +50,28 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::rectify()
       if(f1>max_1) max_1 = f1;
     }
   }
-  //stretch range according to bits per pixel
-  bool pix_type_short = std::numeric_limits<PIX_T>::max() == PIX_T(65535);
-  //sanity check
+
+  // PIX_T == unsigned short
+  bool pix_type_short = std::is_same<PIX_T, unsigned short>::value;
+
+  // sanity check
   if(params_.effective_bits_per_pixel_ <=8 && pix_type_short)
     throw std::runtime_error("pixel type and intensity dynamic range inconsistent");
+
+  // stretch range according to bits per pixel
   float max_v = 255.0f;
   if(pix_type_short)// use range of (0, 2^effective_bpp-1)
     max_v = std::pow(2.0f, params_.effective_bits_per_pixel_)-1.0f;
   float scale_0 = max_v/max_0, scale_1 = max_v/max_1;
   rect_bview0_.set_size(ni_, nj_);
   rect_bview1_.set_size(ni_, nj_);
-  for (size_t j = 0; j<nj_; ++j) 
+  for (size_t j = 0; j<nj_; ++j) {
     for (size_t i = 0; i<ni_; ++i) {
       float f0 = fview0(i,j), f1 = fview1(i,j);
       rect_bview0_(i,j) = PIX_T(scale_0*f0);
       rect_bview1_(i,j) = PIX_T(scale_1*f1);
     }
+  }
 }
 
 // ----------
