@@ -23,6 +23,7 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vbl/vbl_array_3d.h>
+#include <vgl/vgl_bounding_box.h>
 
 template <class Type>
 class bvgl_grid_index_3d{
@@ -51,6 +52,8 @@ class bvgl_grid_index_3d{
   //: the distance from p to the closest point or optionally its normal plane
   Type distance(vgl_point_3d<Type> const& p) const;
   Type distance(vgl_point_3d<Type> const& p, Type& scalar) const;
+
+  std::vector<vgl_pointset_3d<Type> > intersecting_cells(vgl_box_3d<Type> const& box) const;
   //: accessors
 
   vgl_box_3d<Type> bounding_box() const {return bbox_;}
@@ -80,23 +83,28 @@ class bvgl_grid_index_3d{
 template <class Type>
 //: compute 3-d grid index values from point coordinates
 void bvgl_grid_index_3d<Type>::index(vgl_point_3d<Type> const& p, unsigned& ix, unsigned& iy, unsigned& iz) const{
-  ix = static_cast<unsigned>((p.x()-xmin_)/delta_x_);
-  iy = static_cast<unsigned>((p.y()-ymin_)/delta_y_);
-  iz = static_cast<unsigned>((p.z()-zmin_)/delta_z_);
-  if(ix>=nx_)
-    ix = nx_-1;
-  if(iy>=ny_)
-    iy = ny_-1;
-  if(iz>=nz_)
-    iz = nz_-1;
+  int ixi = static_cast<int>((p.x()-xmin_)/delta_x_);
+  int iyi = static_cast<int>((p.y()-ymin_)/delta_y_);
+  int izi = static_cast<int>((p.z()-zmin_)/delta_z_);
+  ix = ixi;
+  if(ixi<0) ix = 0;
+  if(ixi>=int(nx_)) ix = nx_-1;
+  iy = iyi;
+  if(iyi<0) iy = 0;
+  if(iyi>=int(ny_)) iy = ny_-1;
+  iz = izi;
+  if(izi<0) iz = 0;
+  if(izi>=int(nz_)) iz = nz_-1;
 }
 //: constructors
 template <class Type>
 bvgl_grid_index_3d<Type>::bvgl_grid_index_3d(unsigned nx, unsigned ny, unsigned nz, vgl_pointset_3d<Type> ptset, Type thresh):
-  nx_(nx), ny_(ny), nz_(nz), has_normals_(ptset.has_normals()), npts_(0), thresh_(thresh), has_scalars_(false){
+nx_(nx), ny_(ny), nz_(nz), has_normals_(ptset.has_normals()), npts_(0), thresh_(thresh), has_scalars_(ptset.has_scalars()){
   p_grid_ = vbl_array_3d<std::vector<vgl_point_3d<Type> > >(nx, ny, nz);
   if(has_normals_)
     n_grid_ = vbl_array_3d<std::vector<vgl_vector_3d<Type> > >(nx, ny, nz);
+  if(has_scalars_)
+    s_grid_ = vbl_array_3d<std::vector<Type> >(nx, ny, nz);
   bbox_ = vgl_bounding_box(ptset);
   xmin_ = bbox_.min_x();
   ymin_ = bbox_.min_y();
@@ -114,6 +122,8 @@ bvgl_grid_index_3d<Type>::bvgl_grid_index_3d(unsigned nx, unsigned ny, unsigned 
     npts_++;
     if(has_normals_)
       n_grid_[ix][iy][iz].push_back(ptset.n(i));
+    if(has_scalars_)
+      s_grid_[ix][iy][iz].push_back(ptset.sc(i));
   }
 }
 
@@ -215,5 +225,62 @@ Type bvgl_grid_index_3d<Type>::distance(vgl_point_3d<Type> const& p) const{
   Type scalar = Type(0);
   return this->distance(p, scalar);
 }
+template <class Type>
+std::vector<vgl_pointset_3d<Type> > bvgl_grid_index_3d<Type>::intersecting_cells(vgl_box_3d<Type> const& box) const{
+  std::vector<vgl_pointset_3d<Type> > ret;
+  vgl_point_3d<Type> minp = box.min_point(), maxp = box.max_point();
+  unsigned ix_min,  iy_min,  iz_min;
+  unsigned ix_max,  iy_max,  iz_max;
+  index(minp, ix_min, iy_min, iz_min);
+  index(maxp, ix_max, iy_max, iz_max);
+  unsigned ixs = ix_min, ixe = ix_max;
+  unsigned iys = iy_min, iye = iy_max;
+  unsigned izs = iz_min, ize = iz_max;
+  unsigned temp;
+  if(ixs>ixe){
+    temp = ixs;
+    ixs = ixe;
+    ixe = temp;
+  }
+  if(iys>iye){
+    temp = iys;
+    iys = iye;
+    iye = temp;
+  }
+  if(izs>ize){
+    temp = izs;
+    izs = ize;
+    ize = temp;
+  }
+  for(unsigned iz = izs; iz<=ize; ++iz)
+    for(unsigned iy = iys; iy<=iye; ++iy)
+      for(unsigned ix = ixs; ix<=ixe; ++ix){
+        const std::vector<vgl_point_3d<Type> >& pcell = p_grid_[ix][iy][iz];
+        vgl_pointset_3d<Type> temp;
+        size_t n = pcell.size();
+        
+          if (has_normals_ && has_scalars_) {
+            const std::vector<vgl_vector_3d<Type> >& ncell = n_grid_[ix][iy][iz];
+            const std::vector<Type>& scell = s_grid_[ix][iy][iz];
+            for (size_t k = 0; k < n; ++k) 
+            temp.add_point_with_normal_and_scalar(pcell[k], ncell[k], scell[k]);
+          }
+          else if (has_normals_ && !has_scalars_) {
+            const std::vector<vgl_vector_3d<Type> >& ncell = n_grid_[ix][iy][iz];
+            for (size_t k = 0; k < n; ++k)
+              temp.add_point_with_normal(pcell[k], ncell[k]);
+          }
+          else if (!has_normals_ && has_scalars_) {
+            const std::vector<Type>& scell = s_grid_[ix][iy][iz];
+            for (size_t k = 0; k < n; ++k)
+             temp.add_point_with_scalar(pcell[k], scell[k]);
+          }
+          else
+            for (size_t k = 0; k < n; ++k)
+             temp.add_point(pcell[k]);
 
+        ret.push_back(temp);
+      }//ix
+  return ret;
+}
 #endif// bvgl_grid_index_3d
