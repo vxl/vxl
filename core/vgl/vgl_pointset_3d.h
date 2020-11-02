@@ -131,9 +131,14 @@ class vgl_pointset_3d
 
 
   void append_pointset(vgl_pointset_3d<Type> const& ptset){
-    if(this->has_normals_ != ptset.has_normals())
+    if(points_.size()>0 && this->has_normals_ != ptset.has_normals())
     {
-      std::cout<< "WARNING, cannot append a pointset without normals to one with normals." << std::endl;
+      std::cout<< "WARNING, cannot append a pointset with inconsistent normal data" << std::endl;
+      return; // can't be done
+    }
+    if(points_.size()>0 && this->has_scalars_ != ptset.has_scalars())
+    {
+      std::cout<< "WARNING, cannot append a pointset with inconsistent scalar data." << std::endl;
       return; // can't be done
     }
     unsigned npts = ptset.npts();
