@@ -29,11 +29,10 @@ void test_pointset_3d_io_templated()
   }
 
   // construct pointsets with all combinations of points, normals, scalars
-  vgl_pointset_3d<Type> ptset_out_points(points);
-  vgl_pointset_3d<Type> ptset_out_points_normals(points, normals);
-  vgl_pointset_3d<Type> ptset_out_points_scalars(points, scalars);
-  vgl_pointset_3d<Type> ptset_out_points_normals_scalars(points, normals, scalars);
-  vgl_pointset_3d<Type> ptset_in;
+  vgl_pointset_3d<Type> ptset_out_points(points), ptset_in_points;
+  vgl_pointset_3d<Type> ptset_out_points_normals(points, normals), ptset_in_points_normals;
+  vgl_pointset_3d<Type> ptset_out_points_scalars(points, scalars), ptset_in_points_scalars;
+  vgl_pointset_3d<Type> ptset_out_points_normals_scalars(points, normals, scalars), ptset_in_points_normals_scalars;
 
   // === test pointset with only points ===
   vsl_b_ofstream bfs_out("vgl_pointset_3d_test_io.bvl.tmp");
@@ -43,13 +42,11 @@ void test_pointset_3d_io_templated()
 
   vsl_b_ifstream bfs_in("vgl_pointset_3d_test_io.bvl.tmp");
   TEST("Opened vgl_pointset_3d_test_io.bvl.tmp for reading", (!bfs_in), false);
-  vsl_b_read(bfs_in, ptset_in);
+  vsl_b_read(bfs_in, ptset_in_points);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink("vgl_pointset_3d_test_io.bvl.tmp");
-
-  TEST("ptset_out == ptset_in", ptset_out_points == ptset_in, true);
+  TEST("ptset_out == ptset_in", ptset_out_points == ptset_in_points, true);
 
   vsl_print_summary(std::cout, ptset_out_points);
   std::cout << std::endl;
@@ -63,13 +60,11 @@ void test_pointset_3d_io_templated()
 
   bfs_in = vsl_b_ifstream("vgl_pointset_3d_test_io.bvl.tmp");
   TEST("Opened vgl_pointset_3d_test_io.bvl.tmp for reading", (!bfs_in), false);
-  vsl_b_read(bfs_in, ptset_in);
+  vsl_b_read(bfs_in, ptset_in_points_normals);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink("vgl_pointset_3d_test_io.bvl.tmp");
-
-  TEST("ptset_out == ptset_in", ptset_out_points_normals == ptset_in, true);
+  TEST("ptset_out == ptset_in", ptset_out_points_normals == ptset_in_points_normals, true);
 
   vsl_print_summary(std::cout, ptset_out_points_normals);
   std::cout << std::endl;
@@ -83,13 +78,11 @@ void test_pointset_3d_io_templated()
 
   bfs_in = vsl_b_ifstream("vgl_pointset_3d_test_io.bvl.tmp");
   TEST("Opened vgl_pointset_3d_test_io.bvl.tmp for reading", (!bfs_in), false);
-  vsl_b_read(bfs_in, ptset_in);
+  vsl_b_read(bfs_in, ptset_in_points_scalars);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink("vgl_pointset_3d_test_io.bvl.tmp");
-
-  TEST("ptset_out == ptset_in", ptset_out_points_scalars == ptset_in, true);
+  TEST("ptset_out == ptset_in", ptset_out_points_scalars == ptset_in_points_scalars, true);
 
   vsl_print_summary(std::cout, ptset_out_points_scalars);
   std::cout << std::endl;
@@ -103,17 +96,18 @@ void test_pointset_3d_io_templated()
 
   bfs_in = vsl_b_ifstream("vgl_pointset_3d_test_io.bvl.tmp");
   TEST("Opened vgl_pointset_3d_test_io.bvl.tmp for reading", (!bfs_in), false);
-  vsl_b_read(bfs_in, ptset_in);
+  vsl_b_read(bfs_in, ptset_in_points_normals_scalars);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink("vgl_pointset_3d_test_io.bvl.tmp");
-
-  TEST("ptset_out == ptset_in", ptset_out_points_normals_scalars == ptset_in, true);
+  TEST("ptset_out == ptset_in", ptset_out_points_normals_scalars == ptset_in_points_normals_scalars, true);
 
   vsl_print_summary(std::cout, ptset_out_points_normals_scalars);
   std::cout << std::endl;
   vsl_indent_clear_all_data();
+
+  // delete temp file
+  vpl_unlink("vgl_pointset_3d_test_io.bvl.tmp");
 }
 
 
