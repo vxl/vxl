@@ -19,6 +19,7 @@ set(vgl_io_sources
   vgl_io_plane_3d.hxx vgl_io_plane_3d.h
   vgl_io_point_2d.hxx vgl_io_point_2d.h
   vgl_io_point_3d.hxx vgl_io_point_3d.h
+  vgl_io_pointset_3d.hxx vgl_io_pointset_3d.h
   vgl_io_vector_2d.hxx vgl_io_vector_2d.h
   vgl_io_vector_3d.hxx vgl_io_vector_3d.h
   vgl_io_cylinder.hxx vgl_io_cylinder.h
