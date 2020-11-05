@@ -17,6 +17,7 @@
 #include <vgl/io/vgl_io_plane_3d.h>
 #include <vgl/io/vgl_io_point_2d.h>
 #include <vgl/io/vgl_io_point_3d.h>
+#include <vgl/io/vgl_io_pointset_3d.h>
 #include <vgl/io/vgl_io_polygon.h>
 #include <vgl/io/vgl_io_vector_2d.h>
 #include <vgl/io/vgl_io_vector_3d.h>
