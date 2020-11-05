@@ -6,11 +6,6 @@
 
 #include "vgl_io_pointset_3d.h"
 
-#include <vgl/vgl_point_3d.h>
-#include <vsl/vsl_binary_io.h>
-
-#include <iostream>
-
 
 //============================================================================
 //: Binary save self to stream.
@@ -41,39 +36,47 @@ void vsl_b_read(vsl_b_istream &is, vgl_pointset_3d<T> & ptset)
   vsl_b_read(is, v);
   switch (v)
   {
-   case 1:
+    case 1: {
 
-    bool has_normals, has_scalars;
-    std::vector<vgl_point_3d<Type> > points;
-    vsl_b_read(is, has_normals);
-    vsl_b_read(is, has_scalars);
-    vsl_b_read(is, points);
+      // normal, scalar boolean flags
+      bool has_normals, has_scalars;
+      vsl_b_read(is, has_normals);
+      vsl_b_read(is, has_scalars);
 
-    if (has_normals) {
-      std::vector<vgl_vector_3d<Type> > normals;
-      vsl_b_read(is, normals);
+      // points
+      std::vector<vgl_point_3d<T> > points;
+      vsl_b_read(is, points);
+
+      // normals
+      std::vector<vgl_vector_3d<T> > normals;
+      if (has_normals) {
+        vsl_b_read(is, normals);
+      }
+
+      // scalars
+      std::vector<T> scalars;
+      if (has_scalars) {
+        vsl_b_read(is, scalars);
+      }
+
+      if (has_normals && has_scalars)
+        ptset.set_points_with_normals_and_scalars(points, normals, scalars);
+      else if (has_normals)
+        ptset.set_points_with_normals(points, normals);
+      else if (has_scalars)
+        ptset.set_points_with_scalars(points, scalars);
+      else
+        ptset.set_points(points);
+
+      break;
     }
-    if (has_scalars) {
-      std::vector< Type > scalars;
-      vsl_b_read(is, scalars);
+
+    default: {
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_pointset_3d<T>&)\n"
+                << "           Unknown version number " << v << '\n';
+      is.is().clear(std::ios::badbit);  // Set an unrecoverable IO error on stream
+      return;
     }
-
-    if (has_normals && has_scalars)
-      ptset.set_points_with_normals_and_scalars(points, normals, scalars);
-    else if (has_normals)
-      ptset.set_points_with_normals(points, normals);
-    else if (has_scalars)
-      ptset.set_points_with_scalars(points, scalars);
-    else
-      ptset.set_points(points);
-
-    break;
-
-   default:
-    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_pointset_3d<T>&)\n"
-              << "           Unknown version number " << v << '\n';
-    is.is().clear(std::ios::badbit);  // Set an unrecoverable IO error on stream
-    return;
   }
 }
 

@@ -7,8 +7,15 @@
 // \author Noah Johnson
 // \date 03-Nov-2020
 
+#include <iostream>
+
+#include <vgl/io/vgl_io_point_3d.h>
+#include <vgl/io/vgl_io_vector_3d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_vector_io.h>
+
 
 
 //: Binary save vgl_pointset_3d to stream.
