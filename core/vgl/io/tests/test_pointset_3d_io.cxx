@@ -25,7 +25,7 @@ void test_pointset_3d_io_templated()
   for (size_t i=0; i < 10; i++) {
     points.push_back(vgl_point_3d<Type>(i, i, i));
     normals.push_back(vgl_vector_3d<Type>(i, i, i));
-    scalars.push_back(i)
+    scalars.push_back(i);
   }
 
   // construct pointsets with all combinations of points, normals, scalars
@@ -56,12 +56,12 @@ void test_pointset_3d_io_templated()
   vsl_indent_clear_all_data();
 
   // === test pointset with points and normals ===
-  vsl_b_ofstream bfs_out("vgl_pointset_3d_test_io.bvl.tmp");
+  bfs_out = vsl_b_ofstream("vgl_pointset_3d_test_io.bvl.tmp");
   TEST("Created vgl_pointset_3d_test_io.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, ptset_out_points_normals);
   bfs_out.close();
 
-  vsl_b_ifstream bfs_in("vgl_point_3d_test_io.bvl.tmp");
+  bfs_in = vsl_b_ifstream("vgl_point_3d_test_io.bvl.tmp");
   TEST("Opened vgl_point_3d_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, ptset_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
@@ -76,12 +76,12 @@ void test_pointset_3d_io_templated()
   vsl_indent_clear_all_data();
 
   // === test pointset with points and scalars ===
-  vsl_b_ofstream bfs_out("vgl_pointset_3d_test_io.bvl.tmp");
+  bfs_out = vsl_b_ofstream("vgl_pointset_3d_test_io.bvl.tmp");
   TEST("Created vgl_pointset_3d_test_io.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, ptset_out_points_scalars);
   bfs_out.close();
 
-  vsl_b_ifstream bfs_in("vgl_point_3d_test_io.bvl.tmp");
+  bfs_in = vsl_b_ifstream("vgl_point_3d_test_io.bvl.tmp");
   TEST("Opened vgl_point_3d_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, ptset_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
@@ -96,12 +96,12 @@ void test_pointset_3d_io_templated()
   vsl_indent_clear_all_data();
 
   // === test pointset with points, normals, and scalars ===
-  vsl_b_ofstream bfs_out("vgl_pointset_3d_test_io.bvl.tmp");
+  bfs_out = vsl_b_ofstream("vgl_pointset_3d_test_io.bvl.tmp");
   TEST("Created vgl_pointset_3d_test_io.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, ptset_out_points_normals_scalars);
   bfs_out.close();
 
-  vsl_b_ifstream bfs_in("vgl_point_3d_test_io.bvl.tmp");
+  bfs_in = vsl_b_ifstream("vgl_point_3d_test_io.bvl.tmp");
   TEST("Opened vgl_point_3d_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, ptset_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
