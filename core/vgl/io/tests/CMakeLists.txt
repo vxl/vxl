@@ -5,6 +5,7 @@ add_executable( vgl_io_test_all
 
   test_point_2d_io.cxx
   test_point_3d_io.cxx
+  test_pointset_3d_io.cxx
   test_homg_point_1d_io.cxx
   test_homg_point_2d_io.cxx
   test_homg_point_3d_io.cxx
@@ -28,6 +29,7 @@ target_link_libraries( vgl_io_test_all ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}
 
 add_test( NAME vgl_io_test_point_2d_io COMMAND $<TARGET_FILE:vgl_io_test_all> test_point_2d_io )
 add_test( NAME vgl_io_test_point_3d_io COMMAND $<TARGET_FILE:vgl_io_test_all> test_point_3d_io )
+add_test( NAME vgl_io_test_pointset_3d_io COMMAND $<TARGET_FILE:vgl_io_test_all> test_pointset_3d_io )
 add_test( NAME vgl_io_test_homg_point_1d_io COMMAND $<TARGET_FILE:vgl_io_test_all> test_homg_point_1d_io )
 add_test( NAME vgl_io_test_homg_point_2d_io COMMAND $<TARGET_FILE:vgl_io_test_all> test_homg_point_2d_io )
 add_test( NAME vgl_io_test_homg_point_3d_io COMMAND $<TARGET_FILE:vgl_io_test_all> test_homg_point_3d_io )
