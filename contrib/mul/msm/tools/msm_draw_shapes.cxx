@@ -1,7 +1,9 @@
 //:
 // \file
 // \brief Tool to write eps files showing a set of shapes defined by shape parameters
-// Parameters loaded in from a text file, with one vector per line
+// Parameters loaded in from a text file, with one vector per line.
+// Includes option (save_as_sequence) to save each shape (one line of text file) as
+// a separate file (outfile_XXXX.eps), which can then be used to make animations.
 // \author Tim Cootes
 
 #include <sstream>
@@ -64,6 +66,8 @@ background_colour: white
 //: When true, overlap all the shapes (all have same centre point)
 overlap_shapes: false
 
+//: When true, save each shape to a separate file (out_path1234.eps)
+save_as_sequence: false
 
 // Approximate width of region to display shape
 width: 200
@@ -138,6 +142,8 @@ struct tool_params
   //: When true, overlap all the shapes (all have same centre point)
   bool overlap_shapes;
 
+  //: When true, save each shape to a separate file (out_path1234.eps)
+  bool save_as_sequence;
 
   //: Parse named text file to read in data
   //  Throws a mbl_exception_parse_error if fails
@@ -166,6 +172,8 @@ void tool_params::read_from_file(const std::string& path)
   point_colour=props.get_optional_property("point_colour","red");
   background_colour=props.get_optional_property("background_colour","white");
   overlap_shapes=vul_string_to_bool(props.get_optional_property("overlap_shapes","false"));
+  save_as_sequence=vul_string_to_bool(props.get_optional_property("save_as_sequence","false"));
+  if (save_as_sequence) overlap_shapes=true;  // Don't apply offset to video frames
 
   std::string point_colours_str=props.get_optional_property("point_colours","");
   if (!point_colours_str.empty()) {
@@ -256,6 +264,79 @@ bool load_shape_params(const std::string& path,
   return true;
 }
 
+// Return eps command to achieve given line style
+std::string line_style_command(std::string str)
+{
+  // Cycle through styles
+  if (str=="dots1")
+    return std::string("[0.5 1] 0 setdash");
+  else
+  if (str=="dots2")
+    return std::string("[0.5 2] 0 setdash");
+  else
+  if (str=="dashes3-1")
+    return std::string("[3 1] 0 setdash");  // Dashes
+  else
+  if (str=="dashes3-2")
+    return std::string("[3 2] 0 setdash");  // Dashes
+  else
+  if (str=="dashes2-3")
+    return std::string("[2 3] 0 setdash");  // Dashes
+  else
+  if (str=="dashes1-3")
+    return std::string("[1 3] 0 setdash");  // Dashes
+
+  return std::string("[1 0] 0 setdash");  // Solid
+}
+
+std::string make_filename(std::string basename, unsigned i)
+{
+  std::stringstream ss;
+  ss<<basename;
+  if (i<10) ss<<"0";
+  if (i<100) ss<<"0";
+  if (i<1000) ss<<"0";
+  ss<<i<<".eps";
+  return ss.str();
+}
+
+void save_as_sequence(tool_params& params,
+                      const std::vector<msm_points>& points,
+                      double w_height,
+                      const msm_curves& curves)
+{
+  unsigned n_shapes=points.size();
+  for (unsigned i=0;i<n_shapes;++i)
+  {
+    std::string filepath=  make_filename(params.out_path,i);
+
+    mbl_eps_writer writer(filepath.c_str(),
+                          params.width,w_height);
+
+    if (params.background_colour!="none")
+    {
+      writer.set_colour(params.background_colour);
+      writer.draw_background_box();
+    }
+
+      // Cycle through colours for points
+    writer.set_colour(params.point_colours[0]);
+
+    if (params.point_radius>0)
+      msm_draw_points_to_eps(writer,points[i],
+                             params.point_radius);
+
+      // Cycle through colours for lines
+    writer.set_colour(params.line_colours[0]);
+    writer.set_line_width(params.line_width);
+
+    writer.ofs()<<line_style_command(params.line_styles[0])<<std::endl;
+
+    msm_draw_shape_to_eps(writer,points[i],curves);
+    writer.close();
+  }
+  std::cout<<"Saved sequence to "<<params.out_path<<"????.eps"<<std::endl;
+}
 
 int main(int argc, char** argv)
 {
@@ -370,6 +451,12 @@ int main(int argc, char** argv)
     points[i].translate_by(t.x()+i*x_step,t.y());
   }
 
+  if (params.save_as_sequence)
+  {
+    save_as_sequence(params,points,w_height,curves);
+    return 0;
+  }
+
   mbl_eps_writer writer(params.out_path.c_str(),
                         params.width,w_height);
 
@@ -392,26 +479,7 @@ int main(int argc, char** argv)
     writer.set_colour(params.line_colours[i%params.line_colours.size()]);
     writer.set_line_width(params.line_width);
 
-    // Cycle through styles
-    if (params.line_styles[i%params.line_styles.size()]=="dots1")
-      writer.ofs()<<"[0.5 1] 0 setdash"<<std::endl;
-    else
-    if (params.line_styles[i%params.line_styles.size()]=="dots2")
-      writer.ofs()<<"[0.5 2] 0 setdash"<<std::endl;
-    else
-    if (params.line_styles[i%params.line_styles.size()]=="dashes3-1")
-      writer.ofs()<<"[3 1] 0 setdash"<<std::endl;  // Dashes
-    else
-    if (params.line_styles[i%params.line_styles.size()]=="dashes3-2")
-      writer.ofs()<<"[3 2] 0 setdash"<<std::endl;  // Dashes
-    else
-    if (params.line_styles[i%params.line_styles.size()]=="dashes2-3")
-      writer.ofs()<<"[2 3] 0 setdash"<<std::endl;  // Dashes
-    else
-    if (params.line_styles[i%params.line_styles.size()]=="dashes1-3")
-      writer.ofs()<<"[1 3] 0 setdash"<<std::endl;  // Dashes
-    else
-      writer.ofs()<<"[1 0] 0 setdash"<<std::endl;  // Solid
+    writer.ofs()<<line_style_command(params.line_styles[i%params.line_styles.size()])<<std::endl;
 
     msm_draw_shape_to_eps(writer,points[i],curves);
   }
