@@ -293,6 +293,16 @@ class VNL_EXPORT vnl_vector
   //: Iterator pointing to element beyond end of data
   const_iterator end() const { return data+num_elmts; }
 
+  //: Analog to std::vector::front().
+  T& front() { return *data; }
+  //: Analog to std::vector::back().
+  T& back() { return data[num_elmts - 1]; }
+
+  //: Analog to std::vector::front() (const overload).
+  const T& front() const { return *data; }
+  //: Analog to std::vector::back() (const overload).
+  const T& back() const { return data[num_elmts - 1]; }
+
   //: Return a reference to this.
   // Useful in code which would prefer not to know if its argument
   // is a vector, vector_ref or a vector_fixed.  Note that it doesn't
