@@ -236,8 +236,9 @@ class bsgm_prob_pairwise_dsm
   // produces a 3-d pointset and a z(x,y) heightmap
   const vil_image_view<float>& tri_3d_fwd() const {return tri_3d_fwd_;}
   const vil_image_view<float>& tri_3d_rev() const {return tri_3d_rev_;}
+  const vil_image_view<float>& xyz_prob() const {return xyz_prob_;}
 
-  const vil_image_view<float>& heightmap_fwd() const {return heightmap_fwd_;}
+    const vil_image_view<float>& heightmap_fwd() const {return heightmap_fwd_;}
   const vil_image_view<float>& heightmap_rev() const {return heightmap_rev_;}
 
   const vgl_pointset_3d<float> ptset_fwd() const {return ptset_fwd_;}
@@ -269,7 +270,11 @@ class bsgm_prob_pairwise_dsm
   //: compute probabilistic height
   bool compute_prob();
 
-  //: main process method
+  //: compute xyz_prob image - a 4 plane image of coordinates and probability
+  //  image planes: 0 -> x, 1 -> y, 2 -> z, 3 -> prob
+  void compute_xyz_prob();
+
+    //: main process method
   bool process(bool with_consistency_check = true)
   {
     // rectification
@@ -283,9 +288,9 @@ class bsgm_prob_pairwise_dsm
     if (with_consistency_check) {
       this->compute_disparity_rev();
       this->compute_height_rev();
-
       if (!compute_prob())
         return false;
+      this->compute_xyz_prob();
     }
     return true;
   }
@@ -358,6 +363,7 @@ class bsgm_prob_pairwise_dsm
   // triangulated data
   vil_image_view<float> tri_3d_fwd_;
   vil_image_view<float> tri_3d_rev_;
+  vil_image_view<float> xyz_prob_;
 
   // height data
   vgl_pointset_3d<float> ptset_fwd_;
