@@ -234,6 +234,34 @@ bool bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_prob()
   bh.heightmap_from_pointset(prob_ptset_, prob_heightmap_z_, prob_heightmap_prob_, radial_std_dev_image_);
   return true;
 }
+// assumes disparity_fwd, xyz_fwd_ and xyz_rev_ are available
+template <class CAM_T, class PIX_T>
+void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_xyz_prob(){
+  int ni = disparity_fwd_.ni(), nj = disparity_fwd_.nj();
+  xyz_prob_.set_size(ni, nj, 4);
+  xyz_prob_.fill(NAN);
+  float sdsq = params_.std_dev_;
+  sdsq *= sdsq;
+  for( int j = 0; j<nj; ++j)
+    for( int i = 0; i<ni; ++i){
+      // 3-d point at (i, j)
+      float xf = tri_3d_fwd_(i, j, 0), yf = tri_3d_fwd_(i, j, 1), zf = tri_3d_fwd_(i, j, 2);
+      if(!vnl_math::isfinite(xf) || !vnl_math::isfinite(yf) || !vnl_math::isfinite(zf))
+        continue;
+      // disparity at (i,j)
+      int disp = static_cast<int>(disparity_fwd_(i,j));
+      if(!vnl_math::isfinite(disp))
+        continue;
+      int ir = i + disp;
+      float xr = tri_3d_rev_(i, j, 0), yr = tri_3d_rev_(i, j, 1), zr = tri_3d_rev_(i, j, 2);
+      if(!vnl_math::isfinite(xr) || !vnl_math::isfinite(yr) || !vnl_math::isfinite(zr))
+        continue;
+      float d = sqrt((xf-xr)*(xf-xr) + (yf-yr)*(yf-yr) + (zf-zr)*(zf-zr));
+      float prob = exp(-d*d/sdsq);
+      xyz_prob_(i, j, 0) = xf; xyz_prob_(i, j, 1) = yf; xyz_prob_(i, j, 2) = zf;
+      xyz_prob_(i, j, 3) = prob;
+    }
+}
 
 template <class CAM_T, class PIX_T>
 bool bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::z_vs_disparity_scale(double& scale) const
