@@ -274,8 +274,13 @@ class bsgm_prob_pairwise_dsm
   //  image planes: 0 -> x, 1 -> y, 2 -> z, 3 -> prob
   void compute_xyz_prob();
 
-    //: main process method
-  bool process(bool with_consistency_check = true)
+  //: main process method
+  // with consistency check both forward and reverse disparities are computed
+  // and resulting 3-d points checked for consistency. knn_consistency matches
+  // forward and reverse 3-d points using a kd-tree index. Otherwise,
+  // 3-d points are matched according to the disparity location in
+  // the reverse xyz image
+  bool process(bool with_consistency_check = true, bool knn_consistency = true)
   {
     // rectification
     this->rectify();
@@ -288,9 +293,12 @@ class bsgm_prob_pairwise_dsm
     if (with_consistency_check) {
       this->compute_disparity_rev();
       this->compute_height_rev();
-      if (!compute_prob())
-        return false;
-      this->compute_xyz_prob();
+      if(knn_consistency){
+        if (!compute_prob())
+          return false;
+      }else{
+        this->compute_xyz_prob();
+      }
     }
     return true;
   }

@@ -242,6 +242,8 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_xyz_prob(){
   xyz_prob_.fill(NAN);
   float sdsq = params_.std_dev_;
   sdsq *= sdsq;
+  prob_distr_ = bsta_histogram<float>(0.0f, 1.0f, 100);
+  prob_ptset_.clear();
   for( int j = 0; j<nj; ++j)
     for( int i = 0; i<ni; ++i){
       // 3-d point at (i, j)
@@ -260,7 +262,18 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_xyz_prob(){
       float prob = exp(-d*d/sdsq);
       xyz_prob_(i, j, 0) = xf; xyz_prob_(i, j, 1) = yf; xyz_prob_(i, j, 2) = zf;
       xyz_prob_(i, j, 3) = prob;
+      prob_distr_.upcount(prob, 1.0);
+      prob_ptset_.add_point_with_scalar(vgl_point_3d<float>(xf, yf, zf), prob);
     }
+
+  size_t n = prob_ptset_.size();
+  if (n == 0) {
+    std::runtime_error("prob_ptset_ is empty");
+  }
+
+  // convert pointset to images
+  auto bh = this->get_bpgl_heightmap();
+  bh.heightmap_from_pointset(prob_ptset_, prob_heightmap_z_, prob_heightmap_prob_, radial_std_dev_image_);
 }
 
 template <class CAM_T, class PIX_T>
