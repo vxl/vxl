@@ -47,6 +47,7 @@
 #include <vgl/vgl_pointset_3d.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_new.h>
+#include <vul/vul_timer.h>
 #include <bpgl/algo/bpgl_rectify_image_pair.h>
 #include <bpgl/algo/bpgl_heightmap_from_disparity.h>
 #include <bpgl/algo/bpgl_gridding.h>
@@ -264,8 +265,8 @@ class bsgm_prob_pairwise_dsm
   void compute_disparity_rev();
 
   //: compute height data (tri_3d, ptset, heightmap)
-  void compute_height_fwd();
-  void compute_height_rev();
+  void compute_height_fwd(bool compute_hmap);
+  void compute_height_rev(bool compute_hmap);
 
   //: compute probabilistic height
   bool compute_prob();
@@ -280,19 +281,20 @@ class bsgm_prob_pairwise_dsm
   // forward and reverse 3-d points using a kd-tree index. Otherwise,
   // 3-d points are matched according to the disparity location in
   // the reverse xyz image
-  bool process(bool with_consistency_check = true, bool knn_consistency = true)
+  bool process(bool with_consistency_check = true, bool knn_consistency = true, bool compute_fwd_rev_ptsets_hmaps = true)
   {
     // rectification
     this->rectify();
 
     // compute foward disparity & height
     this->compute_disparity_fwd();
-    this->compute_height_fwd();
+    this->compute_height_fwd(compute_fwd_rev_ptsets_hmaps);
 
     // consistency check & probabilistic analysis
     if (with_consistency_check) {
       this->compute_disparity_rev();
-      this->compute_height_rev();
+      this->compute_height_rev(compute_fwd_rev_ptsets_hmaps);
+
       if(knn_consistency){
         if (!compute_prob())
           return false;
