@@ -148,27 +148,34 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_height(const CAM_T& cam, cons
 {
   // triangulated image
   tri_3d = bpgl_3d_from_disparity(cam, cam_reference, disparity, params_.disparity_sense_);
-
+#if 0
   // convert triangulated image to pointset & heightmap
   auto bh = this->get_bpgl_heightmap();
   bh.pointset_from_tri(tri_3d, ptset);
   bh.heightmap_from_pointset(ptset, heightmap);
+#endif
 }
 
 // compute forward height
 template <class CAM_T, class PIX_T>
-void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_height_fwd()
+void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_height_fwd(bool compute_hmap)
 {
-  this->compute_height(rip_.rect_cam0(), rip_.rect_cam1(), disparity_fwd_,
-                       tri_3d_fwd_, ptset_fwd_, heightmap_fwd_);
+  if(compute_hmap)
+    this->compute_height(rip_.rect_cam0(), rip_.rect_cam1(), disparity_fwd_,
+                         tri_3d_fwd_, ptset_fwd_, heightmap_fwd_);
+  else
+    tri_3d_fwd_ = bpgl_3d_from_disparity(rip_.rect_cam0(), rip_.rect_cam1(), disparity_fwd_, params_.disparity_sense_);
 }
 
 // compute reverse height
 template <class CAM_T, class PIX_T>
-void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_height_rev()
+void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_height_rev(bool compute_hmap)
 {
-  this->compute_height(rip_.rect_cam1(), rip_.rect_cam0(), disparity_rev_,
-                       tri_3d_rev_, ptset_rev_, heightmap_rev_);
+  if(compute_hmap)
+    this->compute_height(rip_.rect_cam1(), rip_.rect_cam0(), disparity_rev_,
+                         tri_3d_rev_, ptset_rev_, heightmap_rev_);
+  else
+    tri_3d_rev_ = bpgl_3d_from_disparity(rip_.rect_cam1(), rip_.rect_cam0(), disparity_rev_, params_.disparity_sense_);
 }
 
 
@@ -250,12 +257,13 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_xyz_prob(){
       float xf = tri_3d_fwd_(i, j, 0), yf = tri_3d_fwd_(i, j, 1), zf = tri_3d_fwd_(i, j, 2);
       if(!vnl_math::isfinite(xf) || !vnl_math::isfinite(yf) || !vnl_math::isfinite(zf))
         continue;
+      bool hit = (fabs(xf -172.799)<0.01) && (fabs(199.817-yf) < 0.01);
       // disparity at (i,j)
       int disp = static_cast<int>(disparity_fwd_(i,j));
       if(!vnl_math::isfinite(disp))
         continue;
       int ir = i + disp;
-      float xr = tri_3d_rev_(i, j, 0), yr = tri_3d_rev_(i, j, 1), zr = tri_3d_rev_(i, j, 2);
+      float xr = tri_3d_rev_(ir, j, 0), yr = tri_3d_rev_(ir, j, 1), zr = tri_3d_rev_(ir, j, 2);
       if(!vnl_math::isfinite(xr) || !vnl_math::isfinite(yr) || !vnl_math::isfinite(zr))
         continue;
       float d = sqrt((xf-xr)*(xf-xr) + (yf-yr)*(yf-yr) + (zf-zr)*(zf-zr));
@@ -265,12 +273,10 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_xyz_prob(){
       prob_distr_.upcount(prob, 1.0);
       prob_ptset_.add_point_with_scalar(vgl_point_3d<float>(xf, yf, zf), prob);
     }
-
   size_t n = prob_ptset_.size();
   if (n == 0) {
     std::runtime_error("prob_ptset_ is empty");
   }
-
   // convert pointset to images
   auto bh = this->get_bpgl_heightmap();
   bh.heightmap_from_pointset(prob_ptset_, prob_heightmap_z_, prob_heightmap_prob_, radial_std_dev_image_);
