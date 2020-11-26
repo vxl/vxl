@@ -148,12 +148,10 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_height(const CAM_T& cam, cons
 {
   // triangulated image
   tri_3d = bpgl_3d_from_disparity(cam, cam_reference, disparity, params_.disparity_sense_);
-#if 0
   // convert triangulated image to pointset & heightmap
   auto bh = this->get_bpgl_heightmap();
   bh.pointset_from_tri(tri_3d, ptset);
   bh.heightmap_from_pointset(ptset, heightmap);
-#endif
 }
 
 // compute forward height
