@@ -3,12 +3,12 @@
 #define vgl_fit_cylinder_3d_h_
 //:
 // \file
-// \brief Fits a cylinder to a set of 3D points
+// \brief Fits a cylinder to a set of 3D points,{ Xi }
 // \author Joseph L. Mundy
 // \date June 8, 2015
 //
 // The linear algorithm seeks to minimize the error e = Sum(ri^2 - r^2)^2
-// where, r is the cylinder radius and ri^2 = (C - Xi)^T P(C - Xi).
+// where, r is the cylinder radius and ri^2 = (C - Xi)^T P(C - Xi)
 // P is the projection operator, P = (I - W W^T) and W is the cylinder axis unit vector 
 // de/dr = Sum(ri^2 - r^2)= 0. It follows that r^2 = 1/n Sum(ri^2).
 // Thus  r = Sqrt(1/n Sum(ri^2))
@@ -99,15 +99,10 @@ public:
   // Data Access---------------------------------------------------------------
 
   std::vector<vgl_point_3d<T> > get_points() const;
-};
-
-
-#if 0
-  //: appropriate fit function should be called first to get the cylinder corresponding to the points
-  vgl_cylinder_3d<T>& get_cylinder {return cylinder_;}
+  vgl_cylinder_3d<T>& get_cylinder() {return cylinder_;}
 
 };
-#endif
+
 #define VGL_FIT_CYLINDER_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_cylinder_3d.hxx first"
 
 #endif // vgl_fit_cylinder_3d_h_
