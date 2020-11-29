@@ -20,7 +20,7 @@
 #include <string>
 #include <iostream>
 #include <iosfwd>
-#include <vgl/vgl_cylinder.h>
+#include <vgl/vgl_cylinder_3d.h>
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vsol/vsol_cylinder_sptr.h>
 #include <vsl/vsl_binary_io.h>
@@ -30,7 +30,7 @@
 
 class vsol_cylinder : public  vsol_spatial_object_3d
 {
-  vgl_cylinder<double> cyl_;
+  vgl_cylinder_3d<double> cyl_;
 
  public:
   vsol_cylinder() = default;

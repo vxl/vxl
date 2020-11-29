@@ -171,6 +171,18 @@ double vgl_distance(vgl_homg_point_3d<T> const& p,
 template <class T>
 double vgl_distance(vgl_point_3d<T> const& p,
                     vgl_sphere_3d<T> const& s);
+template <class T> inline
+double vgl_distance(vgl_sphere_3d<T> const& s,
+                    vgl_point_3d<T> const& p){ return vgl_distance(p,s);}
+
+//: distance to an infinite cylinder (length is ignored)
+template <class T>
+double vgl_distance(vgl_point_3d<T> const& p,
+                    vgl_cylinder_3d<T> const& c);
+template <class T> inline
+double vgl_distance(vgl_cylinder_3d<T> const& c,
+                    vgl_point_3d<T> const& p){ return vgl_distance(p,c);}
+
 //: distance between a point and the closest point on the polygon.
 //  If the third argument is "false", the edge from last to first point of
 //  each polygon sheet is not considered part of the polygon.

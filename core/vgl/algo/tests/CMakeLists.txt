@@ -11,6 +11,7 @@ add_executable( vgl_algo_test_all
   test_fit_lines_2d.cxx
   test_fit_plane_3d.cxx
   test_fit_sphere_3d.cxx
+  test_fit_cylinder_3d.cxx
   test_fit_quadric_3d.cxx
   test_h_matrix_1d.cxx
   test_h_matrix_2d.cxx
@@ -33,7 +34,8 @@ add_test( NAME vgl_test_convex_hull_2d COMMAND $<TARGET_FILE:vgl_algo_test_all> 
 add_test( NAME vgl_test_fit_conics_2d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_fit_conics_2d)
 add_test( NAME vgl_test_fit_lines_2d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_fit_lines_2d)
 add_test( NAME vgl_test_fit_plane_3d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_fit_plane_3d)
-add_test( NAME vgl_test_fit_sphere_3d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_fit_plane_3d)
+add_test( NAME vgl_test_fit_sphere_3d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_fit_sphere_3d)
+add_test( NAME vgl_test_fit_cylinder_3d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_fit_cylinder_3d)
 add_test( NAME vgl_test_fit_quadric_3d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_fit_plane_3d)
 add_test( NAME vgl_test_h_matrix_1d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_h_matrix_1d )
 add_test( NAME vgl_test_h_matrix_2d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_h_matrix_2d )

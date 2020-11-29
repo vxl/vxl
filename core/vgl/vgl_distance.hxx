@@ -21,6 +21,7 @@
 #include "vgl_plane_3d.h"
 #include "vgl_homg_plane_3d.h"
 #include "vgl_sphere_3d.h"
+#include "vgl_cylinder_3d.h"
 #include "vgl_polygon.h"
 #include "vgl_box_2d.h"
 #include "vgl_closest_point.h"
@@ -262,6 +263,13 @@ double vgl_distance(vgl_point_3d<T> const& p,
 }
 
 template <class T>
+double vgl_distance(vgl_point_3d<T> const& p,
+                    vgl_cylinder_3d<T> const& c){
+  vgl_point_3d<T> cp = vgl_closest_point(p, c);
+  return vgl_distance(p, cp);
+}
+
+template <class T>
 double vgl_distance(vgl_polygon<T> const& poly, vgl_point_2d<T> const& point, bool closed)
 {
   double dist = -1;
@@ -403,6 +411,9 @@ template double vgl_distance(vgl_point_3d<T >const&,vgl_plane_3d<T >const&); \
 template double vgl_distance(vgl_homg_plane_3d<T >const&,vgl_homg_point_3d<T >const&); \
 template double vgl_distance(vgl_homg_point_3d<T >const&,vgl_homg_plane_3d<T >const&); \
 template double vgl_distance(vgl_point_3d<T> const&, vgl_sphere_3d<T> const&); \
+template double vgl_distance(vgl_sphere_3d<T> const&, vgl_point_3d<T> const&); \
+template double vgl_distance(vgl_point_3d<T> const&, vgl_cylinder_3d<T> const&); \
+template double vgl_distance(vgl_cylinder_3d<T> const&, vgl_point_3d<T> const&); \
 template double vgl_distance(vgl_polygon<T >const&,vgl_point_2d<T >const&,bool); \
 template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_line_3d_2_points<T >const&); \
 template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_point_3d<T >const&); \

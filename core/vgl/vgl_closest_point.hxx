@@ -21,6 +21,7 @@
 #include "vgl_homg_point_3d.h"
 #include "vgl_plane_3d.h"
 #include "vgl_sphere_3d.h"
+#include "vgl_cylinder_3d.h"
 #include "vgl_homg_plane_3d.h"
 #include "vgl_homg_line_3d_2_points.h"
 #include "vgl_line_3d_2_points.h"
@@ -638,6 +639,24 @@ vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s,
 }
 
 template <class T>
+vgl_point_3d<T> vgl_closest_point(vgl_cylinder_3d<T> const& c,
+                                  vgl_point_3d<T> const& p){
+  // construct the cylinder axis as a 3-d line
+  T radius = c.radius();
+  const vgl_point_3d<T>& cent = c.center();
+  vgl_vector_3d<T> orient = c.orientation();
+  orient/=orient.length(); // unit vector
+  vgl_point_3d<T> p2 = cent + orient;
+  vgl_line_3d_2_points<T> axis(cent, p2);
+  vgl_point_3d<T> cp = vgl_closest_point(p, axis);
+  // unit radial vector
+  vgl_vector_3d<T> rv = p-cp; rv/=rv.length();
+  // point on cylinder surface
+  vgl_point_3d<T> ret = cp + radius*rv;
+  return ret;
+}
+
+template <class T>
 vgl_point_3d<T> vgl_closest_point(vgl_pointset_3d<T> const& ptset,
                                   vgl_point_3d<T> const& p, T dist){
   unsigned n = ptset.npts();
@@ -808,7 +827,10 @@ template std::pair<vgl_point_3d<T >,vgl_point_3d<T > > \
          vgl_closest_points(vgl_line_segment_3d<T >const&, vgl_line_segment_3d<T >const&, bool*); \
 template vgl_point_2d<T > vgl_closest_point(vgl_line_segment_2d<T > const&, vgl_point_2d<T > const&); \
 template vgl_point_3d<T > vgl_closest_point(vgl_line_segment_3d<T > const&, vgl_point_3d<T > const&); \
-template vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s, vgl_point_3d<T> const& p); \
+template vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& , vgl_point_3d<T> const& ); \
+template vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& , vgl_sphere_3d<T> const& ); \
+template vgl_point_3d<T> vgl_closest_point(vgl_cylinder_3d<T> const& , vgl_point_3d<T> const& ); \
+template vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& , vgl_cylinder_3d<T> const& ); \
 template vgl_point_3d<T> vgl_closest_point(vgl_pointset_3d<T> const& ptset, vgl_point_3d<T> const& p, T dist); \
 template vgl_point_3d<T> vgl_closest_point(vgl_cubic_spline_3d<T> const& cspl, vgl_point_3d<T> const& p)
 #endif // vgl_closest_point_hxx_

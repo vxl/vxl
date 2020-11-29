@@ -2,6 +2,7 @@
 // Peter Vanroose, 5 June 2003
 #include <iostream>
 #include <cmath>
+#include <limits>
 #include "testlib/testlib_test.h"
 #include "vgl/vgl_closest_point.h"
 #include "vgl/vgl_distance.h"
@@ -19,6 +20,7 @@
 #include "vgl/vgl_infinite_line_3d.h"
 #include "vgl/vgl_plane_3d.h"
 #include "vgl/vgl_sphere_3d.h"
+#include "vgl/vgl_cylinder_3d.h"
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
@@ -605,6 +607,26 @@ test_sphere_3d_closest_point()
   double er = std::sqrt(x * x + y * y + z * z);
   TEST_NEAR("Closest point on sphere", er, 0.0, 1.e-5);
 }
+
+static void
+test_cylinder_3d_closest_point()
+{
+  std::cout << "-------------------------------------------------\n"
+            << " Testing vgl_closest_point(3-d cylinder):\n"
+            << "-------------------------------------------------\n";
+  vgl_vector_3d<double> orient(0.0, 0.0, 1.0);//z axis
+  vgl_point_3d<double> cent(0.0, 0.0, 0.0);
+  double radius = 1.0;
+  // infinite cylinder
+  vgl_cylinder_3d<double> c(cent, radius, std::numeric_limits<double>::max());
+  vgl_point_3d<double> p(5.0, 5.0, 5.0);
+  vgl_point_3d<double> cp = vgl_closest_point(c, p);
+  double sq2over2 = sqrt(2.0)/2.0;
+  vgl_point_3d<double> gt(sq2over2, sq2over2, 5.0);
+  double er = (cp-gt).length();
+  TEST_NEAR("Closest point on cylinder", er, 0.0, 1.e-5);
+}
+
 // Test for closest point on a cubic spline
 static void
 test_spline_3d_closest_point()
