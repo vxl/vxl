@@ -84,8 +84,17 @@ public:
   // error conditions are reported on outstream
   T fit(vgl_vector_3d<T> const& W, std::ostream* outstream = nullptr, bool verbose = false);
 
-  //:fits a cylinder to the stored points using a linear method, where W is known
+  //:fit a cylinder to the stored points using a linear method, where W is known
   bool fit(vgl_vector_3d<T> const& W, const T error_marg, std::ostream* outstream = nullptr, bool verbose=false);
+
+  //: fit a cylinder to the stored points using a linear method, where W 
+  // is estimated as the eigenvector of the largest eigenvalue of the input pointset
+  // returns the average distance from the points to the cylinder
+  // error conditions are reported on outstream
+  T fit(std::ostream* outstream = nullptr, bool verbose = false);
+
+  //:fit a cylinder to the stored points using a linear method, where W is computed from the points
+  bool fit(const T error_marg, std::ostream* outstream = nullptr, bool verbose=false);
 
   // Data Access---------------------------------------------------------------
 

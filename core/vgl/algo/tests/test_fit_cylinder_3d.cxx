@@ -39,7 +39,35 @@ test_fit_unit_cylinder()
   vgl_fit_cylinder_3d<double> fit_cyl(pts);
 
   double error = fit_cyl.fit(z, &std::cout);
-  TEST_NEAR("linear fit perfect unit cylinder", error, 0.0, 1e-6);
+  TEST_NEAR("fit perfect unit cylinder", error, 0.0, 1e-6);
+}
+static void
+test_compute_W_fit_unit_cylinder(){
+  vgl_vector_3d<double> z(0.0, 0.0, 1.0);
+  std::vector<vgl_point_3d<double>> pts;
+  double sq2_over2 = sqrt(2.0)/2.0;
+  vgl_point_3d<double> p0(1.0, 0.0, -5.0);
+  vgl_point_3d<double> p1(0.0, 1.0, -5.0);
+  vgl_point_3d<double> p2(-1.0, 0.0, -5.0);
+  vgl_point_3d<double> p3(0.0, -1.0, -5.0);
+  vgl_point_3d<double> p4(sq2_over2, sq2_over2, -5.0);
+  vgl_point_3d<double> p5(-sq2_over2, sq2_over2, -5.0);
+  vgl_point_3d<double> p6(-sq2_over2, -sq2_over2, -5.0);
+  vgl_point_3d<double> p7(sq2_over2, -sq2_over2, -5.0);
+  vgl_vector_3d<double> vz(0.0, 0.0, 10.0);
+  pts.push_back(p0); pts.push_back(p0+vz);
+  pts.push_back(p1); pts.push_back(p1+vz);
+  pts.push_back(p2); pts.push_back(p2+vz);
+  pts.push_back(p3); pts.push_back(p3+vz); 
+  pts.push_back(p4); pts.push_back(p4+vz);
+  pts.push_back(p5); pts.push_back(p5+vz);
+  pts.push_back(p6); pts.push_back(p6+vz);
+  pts.push_back(p7); pts.push_back(p7+vz);
+  
+  vgl_fit_cylinder_3d<double> fit_cyl(pts);
+
+  double error = fit_cyl.fit(&std::cout);
+  TEST_NEAR("compute W and fit perfect unit cylinder", error, 0.0, 1e-6);
 }
 static void
 test_fit_unit_cylinder_rand_error()
@@ -76,6 +104,42 @@ test_fit_unit_cylinder_rand_error()
   vgl_fit_cylinder_3d<double> fit_cyl(pts);
   double error = fit_cyl.fit(z, &std::cout);
   TEST_NEAR("fit unit cylinder with error", error, 0.0, 0.1);
+}
+static void
+test_compute_W_fit_unit_cylinder_rand_error()
+{
+  vgl_vector_3d<double> z(0.0, 0.0, 1.0);
+  std::vector<vgl_point_3d<double>> pts;
+  double sq2_over2 = sqrt(2.0) / 2.0;
+  vgl_point_3d<double> p0(1.0, 0.0, -5.0);
+  vgl_point_3d<double> p1(0.0, 1.0, -5.0);
+  vgl_point_3d<double> p2(-1.0, 0.0, -5.0);
+  vgl_point_3d<double> p3(0.0, -1.0, -5.0);
+  vgl_point_3d<double> p4(sq2_over2, sq2_over2, -5.0);
+  vgl_point_3d<double> p5(-sq2_over2, sq2_over2, -5.0);
+  vgl_point_3d<double> p6(-sq2_over2, -sq2_over2, -5.0);
+  vgl_point_3d<double> p7(sq2_over2, -sq2_over2, -5.0);
+  vgl_vector_3d<double> vz(0.0, 0.0, 10.0);
+  pts.push_back(p0); pts.push_back(p0 + vz);
+  pts.push_back(p1); pts.push_back(p1 + vz);
+  pts.push_back(p2); pts.push_back(p2 + vz);
+  pts.push_back(p3); pts.push_back(p3 + vz);
+  pts.push_back(p4); pts.push_back(p4 + vz);
+  pts.push_back(p5); pts.push_back(p5 + vz);
+  pts.push_back(p6); pts.push_back(p6 + vz);
+  pts.push_back(p7); pts.push_back(p7 + vz);
+
+  // add random error (+-10%) to the points
+  vnl_random ran;
+  double e = 0.1;
+  for (auto& pt : pts)
+  {
+    vgl_vector_3d<double> er(ran.drand32(-e, e), ran.drand32(-e, e), ran.drand32(-e, e));
+    pt = pt + er;
+  }
+  vgl_fit_cylinder_3d<double> fit_cyl(pts);
+  double error = fit_cyl.fit(&std::cout);
+  TEST_NEAR("compute W and fit unit cylinder with error", error, 0.0, 0.1);
 }
 static void
 test_fit_actual_pts()
@@ -137,7 +201,9 @@ static void
 test_fit_cylinder_3d()
 {
   test_fit_unit_cylinder();
+  test_compute_W_fit_unit_cylinder();
   test_fit_unit_cylinder_rand_error();
+  test_compute_W_fit_unit_cylinder_rand_error();
   test_fit_actual_pts();
 }
 
