@@ -42,7 +42,7 @@ set( vgl_sources
   vgl_conic_segment_2d.h         vgl_conic_segment_2d.hxx
   vgl_polygon.h                  vgl_polygon.hxx
   vgl_sphere_3d.h                vgl_sphere_3d.hxx
-  vgl_cylinder.h                 vgl_cylinder.hxx
+  vgl_cylinder_3d.h              vgl_cylinder_3d.hxx
 
   # Planes
   vgl_plane_3d.h                 vgl_plane_3d.hxx

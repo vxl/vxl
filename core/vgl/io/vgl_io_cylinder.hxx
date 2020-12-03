@@ -6,13 +6,13 @@
 #include "vgl_io_cylinder.h"
 #include <vgl/io/vgl_io_point_3d.h>
 #include <vgl/io/vgl_io_vector_3d.h>
-#include <vgl/vgl_cylinder.h>
+#include <vgl/vgl_cylinder_3d.h>
 #include <vsl/vsl_binary_io.h>
 
 
 //: Binary save self to stream.
 template<class T>
-void vsl_b_write(vsl_b_ostream &os, const vgl_cylinder<T> & cyl)
+void vsl_b_write(vsl_b_ostream &os, const vgl_cylinder_3d<T> & cyl)
 {
   constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
@@ -24,7 +24,7 @@ void vsl_b_write(vsl_b_ostream &os, const vgl_cylinder<T> & cyl)
 
 //: Binary load self from stream
 template<class T>
-void vsl_b_read(vsl_b_istream &is, vgl_cylinder<T> & cyl)
+void vsl_b_read(vsl_b_istream &is, vgl_cylinder_3d<T> & cyl)
 {
   vgl_point_3d<double> center;
   vgl_vector_3d<double> orient;
@@ -60,7 +60,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_cylinder<T> & cyl)
 
 //: Print an ascii summary to the stream
 template<class T>
-void vsl_print_summary(std::ostream& os, const vgl_cylinder<T> & cyl)
+void vsl_print_summary(std::ostream& os, const vgl_cylinder_3d<T> & cyl)
 {
   //os << *this;
   os << "Cylinder with center=" << cyl.center() << " radius=" << cyl.radius() << " length=" << cyl.length() << std::endl;
@@ -68,8 +68,8 @@ void vsl_print_summary(std::ostream& os, const vgl_cylinder<T> & cyl)
 
 #undef VGL_IO_CYLINDER_INSTANTIATE
 #define VGL_IO_CYLINDER_INSTANTIATE(T) \
-template void vsl_print_summary(std::ostream &, const vgl_cylinder<T > &); \
-template void vsl_b_read(vsl_b_istream &, vgl_cylinder<T > &); \
-template void vsl_b_write(vsl_b_ostream &, const vgl_cylinder<T > &)
+template void vsl_print_summary(std::ostream &, const vgl_cylinder_3d<T > &); \
+template void vsl_b_read(vsl_b_istream &, vgl_cylinder_3d<T > &); \
+template void vsl_b_write(vsl_b_ostream &, const vgl_cylinder_3d<T > &)
 
 #endif

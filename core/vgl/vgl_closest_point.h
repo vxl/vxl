@@ -329,6 +329,18 @@ vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,
 template <class T>
 vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s,
                                   vgl_point_3d<T> const& p);
+template <class T> inline
+vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,
+                                  vgl_sphere_3d<T> const& s){return vgl_closest_point(s,p);}
+
+//: Return the closest point on an infinite cylinder \a c to a point \a p in 3D
+// \relatesalso vgl_point_3d
+template <class T>
+vgl_point_3d<T> vgl_closest_point(vgl_cylinder_3d<T> const& c,
+                                  vgl_point_3d<T> const& p);
+template <class T> inline
+vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,
+                                  vgl_cylinder_3d<T> const& c){return vgl_closest_point(c,p);}
 
 //: Return the closest point on a pointset \a ptset to a point \a p in 3D
 // \relatesalso vgl_point_3d. If ptset has normals, the closest point on the plane

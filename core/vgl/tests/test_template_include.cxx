@@ -7,7 +7,7 @@
 #include "vgl/vgl_conic_segment_2d.hxx"
 #include "vgl/vgl_conic.hxx"
 #include "vgl/vgl_convex.hxx"
-#include "vgl/vgl_cylinder.hxx"
+#include "vgl/vgl_cylinder_3d.hxx"
 #include "vgl/vgl_distance.hxx"
 #include "vgl/vgl_ellipse_scan_iterator.hxx"
 #include "vgl/vgl_homg_line_2d.hxx"

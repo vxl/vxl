@@ -27,7 +27,7 @@ template <class T> class vgl_conic;
 template <class Type> class vgl_conic_segment_2d;
 template <class T> class vgl_polygon;
 template <class Type> class vgl_sphere_3d;
-template <class Type> class vgl_cylinder;
+template <class Type> class vgl_cylinder_3d;
 class vgl_region_scan_iterator;
 template <class T> class vgl_ellipse_scan_iterator;
 template <class T> class vgl_polygon_scan_iterator;
