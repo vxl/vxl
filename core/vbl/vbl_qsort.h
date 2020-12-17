@@ -81,12 +81,4 @@ void vbl_qsort(std::vector<T>& v, int (*compare)(T const& a, T const& b))
   std::qsort(&v[0], v.size(), sizeof v[0], (vbl_qsort_compare_t)compare);
 }
 
-#define VBL_QSORT_INSTANTIATE(T) \
-/*template void vbl_qsort_ascending((T)*,int); */\
-/*template void vbl_qsort_descending((T)*,int) */
-
-#define VBL_QSORT_INSTANTIATE_vector(T) \
-/* template void vbl_qsort(std::vector<T >& v, \
-                        int (*compare)(T const& a, T const& b)) */
-
 #endif // vbl_qsort_h_

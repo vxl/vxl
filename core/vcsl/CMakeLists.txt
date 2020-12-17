@@ -39,10 +39,10 @@ doxygen_add_library(core/vcsl
 
     vcsl_spheroid.cxx vcsl_spheroid.h vcsl_spheroid_sptr.h
     vcsl_geographic.cxx vcsl_geographic.h vcsl_geographic_sptr.h
-    vcsl_utm.cxx vcsl_utm.h vcsl_utm_sptr.h
-    vcsl_geocentric.cxx vcsl_geocentric.h vcsl_geocentric_sptr.h
+    vcsl_utm.h vcsl_utm_sptr.h
+    vcsl_geocentric.h vcsl_geocentric_sptr.h
     vcsl_geodetic.h vcsl_geodetic_sptr.h
-    vcsl_lambertian.cxx vcsl_lambertian.h vcsl_lambertian_sptr.h
+    vcsl_lambertian.h vcsl_lambertian_sptr.h
 
     vcsl_spatial_transformation.cxx vcsl_spatial_transformation.h vcsl_spatial_transformation_sptr.h
 

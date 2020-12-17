@@ -15,7 +15,7 @@ set( vbl_sources
                               vbl_scoped_ptr.h
                               vbl_checked_delete.h
   vbl_sort.hxx                vbl_sort.h           vbl_sort.cxx
-  vbl_qsort.cxx               vbl_qsort.h
+                              vbl_qsort.h
 
   vbl_array_1d.hxx            vbl_array_1d.h
   vbl_array_2d.hxx            vbl_array_2d.h
