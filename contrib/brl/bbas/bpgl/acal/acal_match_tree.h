@@ -62,7 +62,7 @@ class acal_match_node : public std::enable_shared_from_this<acal_match_node>
   bool operator==(acal_match_node const& other) const;
   bool operator!=(acal_match_node const& other) const { return !(*this == other); }
 
-  //: find the index (cindx) of a node in the set of parent's children
+   //: find the index (cindx) of a node in the set of parent's children
   bool child_index(std::shared_ptr<acal_match_node> const& node, size_t& cidx) {
     size_t nc = children_.size();
     bool found = false;
@@ -95,11 +95,18 @@ std::ostream& operator<<(std::ostream& os, acal_match_node const& node);
 class acal_match_tree
 {
  public:
+  //: default constructor  
+  acal_match_tree() = default;
 
-  //: constructor
-  acal_match_tree(size_t root_id = 0) {
+  //: initalizing constructor
+  acal_match_tree(size_t root_id) {
     root_->cam_id_ = root_id;
   }
+  //: copy constructor
+  acal_match_tree(acal_match_tree const& mt);
+  
+  //: construct a new tree with the specified nodes removed
+  acal_match_tree(acal_match_tree const& tree, std::vector<size_t> nodes_to_remove);
 
   //: size accessor
   size_t size() {return n_;}
@@ -112,30 +119,42 @@ class acal_match_tree
   //: add a child node and reconcile the correspondence pairs globally over the full tree
   bool add_child_node(size_t parent_id, size_t child_id, std::vector<acal_match_pair> const& parent_to_child_matches);
 
+  //: find a leaf node - depth first search
+  static std::shared_ptr<acal_match_node>  find_leaf_node(std::shared_ptr<acal_match_node>& node);
+
+  //: delete a leaf node, returns false if not a leaf
+  static bool delete_leaf(std::shared_ptr<acal_match_node>& leaf_node);
+
+  //: delete a subtree including the subtree root,  returns false if deletion fails
+  static bool delete_subtree(std::shared_ptr<acal_match_node>& subtree_root);
+
+  //: copy a subtree - used in the copy constructor
+  static void copy_subtree(std::shared_ptr<acal_match_node> const& node_from, std::shared_ptr<acal_match_node>& node_to);
+
   //: prune correspondence pairs to insure consistent tracks over the full tree
-  bool prune_tree(std::shared_ptr<acal_match_node> const& mutated_parent_node, size_t child_index);
+  static bool prune_tree(std::shared_ptr<acal_match_node> const& mutated_parent_node, size_t child_index);
 
   //: recursively remove correspondence pairs that are not present in reduced node corrs
-  void prune_node(std::shared_ptr<acal_match_node> const& node, std::vector<acal_corr> const& reduced_node_corrs);
+  static void prune_node(std::shared_ptr<acal_match_node> const& node, std::vector<acal_corr> const& reduced_node_corrs);
 
   //: recursively find a node camera id and return the node pointer
   static std::shared_ptr<acal_match_node> find(std::shared_ptr<acal_match_node> const& node, size_t cam_id);
 
   //: recursively find the number of nodes below a node in the tree
-  void n_nodes(std::shared_ptr<acal_match_node> const& node, size_t& n);
+  static void n_nodes(std::shared_ptr<acal_match_node> const& node, size_t& n);
 
   // debug methods
   //: save the tree in dot format for display
-  bool save_tree_dot_format(std::string const& path);
+  bool save_tree_dot_format(std::string const& path) const;
 
   //: recursively write the tree nodes and edges in dot format
-  bool write_dot(std::ostream& ostr, std::shared_ptr<acal_match_node> const& node, size_t root_id);
+  bool write_dot(std::ostream& ostr, std::shared_ptr<acal_match_node> const& node, size_t root_id) const;
 
   //: collect correspondences recursively
-  void collect_correspondences(std::shared_ptr<acal_match_node>& node, std::map<size_t, std::vector<vgl_point_2d<double> > >& corrs);
-
+  static void collect_correspondences(std::shared_ptr<acal_match_node>& node, std::map<size_t, std::vector<vgl_point_2d<double> > >& corrs);
+  
   //: reorganize correspondences in track format
-  std::vector< std::map<size_t, vgl_point_2d<double> > > tracks();
+  std::vector< std::map<size_t, vgl_point_2d<double> > > tracks() ;
 
   //: return nodes
   std::vector<std::shared_ptr<acal_match_node> > nodes() const;
@@ -150,6 +169,12 @@ class acal_match_tree
   bool operator==(acal_match_tree const& other) const;
   bool operator!=(acal_match_tree const& other) const { return !(*this == other); }
 
+  //: assignment operator
+  acal_match_tree& operator = (acal_match_tree const& other) {
+    copy_subtree(other.root_, this->root_);
+    this->update_tree_size();
+    return *this;
+  }
   // members
   size_t n_ = 1;
   size_t min_n_tracks_ = 1;
