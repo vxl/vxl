@@ -538,11 +538,21 @@ acal_match_graph::valid_tree(std::shared_ptr<acal_match_tree> const& mtree)
   //std::cout << max_proj_error << ' ';
   if (max_proj_error > params_.max_uncal_proj_error_) {
     //std::cout << max_proj_error << " error exceeds limit for cam " << max_cam_id << " on track " << max_track << std::endl;
+    bad_track_camera_ids_[max_cam_id]++;
     return false;
   }
   return true;
 }
 
+void acal_match_graph::print_bad_camera_ids(){
+  std::cout << "cameras that have excessive projection error in a track" << std::endl;
+  for(std::map<size_t, size_t>::iterator bit = bad_track_camera_ids_.begin();
+      bit != bad_track_camera_ids_.end(); ++bit) {
+        size_t nbad = bit->second;
+        if (nbad == 0) continue;
+        std::cout << "cam id " << bit->first << " number of tracks invalidated " << bit->second << std::endl;
+  }
+}
 
 void
 acal_match_graph::validate_match_trees_and_set_metric()
@@ -552,20 +562,77 @@ acal_match_graph::validate_match_trees_and_set_metric()
   match_tree_metric_.resize(ncc, 0);
   for (size_t cc = 0; cc<ncc; ++cc) {
     std::map<size_t, std::shared_ptr<acal_match_tree> >& mtrees = match_trees_[cc];
-    std::map<size_t, std::shared_ptr<acal_match_tree> > temp;
-    if (mtrees.size()==0) {
+    std::map<size_t, std::shared_ptr<acal_match_tree> > temp, repaired_trees;
+    size_t  n_trees = mtrees.size();
+    if (n_trees==0) {
       std::cout << "no match trees for connected component " << cc << std::endl;
+      continue;
+    }
+    // initialize bad camera map
+    for (std::map<size_t, std::shared_ptr<acal_match_tree> >::iterator trit = mtrees.begin();
+         trit != mtrees.end(); ++trit) {
+      std::vector<size_t> cam_ids =  trit->second->cam_ids();
+      for(size_t i = 0; i<cam_ids.size(); ++i)
+        bad_track_camera_ids_[cam_ids[i]] = 0;//initialize bad in track count to 0
     }
     for (std::map<size_t, std::shared_ptr<acal_match_tree> >::iterator trit = mtrees.begin();
          trit != mtrees.end(); ++trit) {
-      if (valid_tree(trit->second))
+      if (valid_tree(trit->second))//updates bad track camera count
         temp[trit->first] = trit->second;
     }
-    match_trees_[cc] = temp;
-    std::shared_ptr<acal_match_tree> best_tree = this->largest_tree(cc);
-    if (!best_tree)
+    if(temp.size() > 0){
+      match_trees_[cc] = temp;
+      std::shared_ptr<acal_match_tree> best_tree = this->largest_tree(cc);
+      if (!best_tree){
+        match_tree_metric_[cc] = 0;
+        continue;
+      }
+      match_tree_metric_[cc] = best_tree->size();
       continue;
-    match_tree_metric_[cc] = best_tree->size();
+    }else{//no valid match trees
+      std::cout << "all match trees failed for connected component " << cc << " listing cams with excessive projection error"<< std::endl;
+      std::vector<size_t> bad_ids;
+      for (std::map<size_t, size_t>::iterator bit = bad_track_camera_ids_.begin();
+        bit != bad_track_camera_ids_.end(); ++bit) {
+        size_t nbad = bit->second;
+        if(nbad>0) bad_ids.push_back(bit->first);
+        if (nbad == 0) continue;
+        std::cout << "cam id " << bit->first << " n_bad / n_trees " << bit->second << " / " << n_trees << std::endl;
+      }
+      std::cout << "remove bad cameras from match trees and retry to find valid trees" << std::endl;
+      std::map<size_t, std::shared_ptr<acal_match_tree> > repaired_trees;
+      for(std::map<size_t, std::shared_ptr<acal_match_tree> >::iterator mit = mtrees.begin();
+          mit != mtrees.end(); ++mit){
+        size_t fid = mit->first;
+        if(bad_track_camera_ids_[fid]>0) // skip entire tree if root is bad
+          continue;       
+        std::shared_ptr<acal_match_tree> repaired(new acal_match_tree(*(mit->second), bad_ids));
+        repaired_trees[mit->first] = repaired;
+      }
+      // initialize bad camera map
+      bad_track_camera_ids_.clear();
+      for (std::map<size_t, std::shared_ptr<acal_match_tree> >::iterator trit = repaired_trees.begin();
+           trit != repaired_trees.end(); ++trit) {
+        std::vector<size_t> cam_ids =  trit->second->cam_ids();
+        for(size_t i = 0; i<cam_ids.size(); ++i)
+          bad_track_camera_ids_[cam_ids[i]] = 0;//initialize bad in track count to 0
+      }
+      for (std::map<size_t, std::shared_ptr<acal_match_tree> >::iterator trit = repaired_trees.begin();
+         trit != repaired_trees.end(); ++trit) {
+        if (valid_tree(trit->second))//updates bad track camera count
+          temp[trit->first] = trit->second;
+      }
+    }
+    if(temp.size() > 0){
+      match_trees_[cc] = temp;
+      std::shared_ptr<acal_match_tree> best_tree = this->largest_tree(cc);
+      if (!best_tree){
+        match_tree_metric_[cc] = 0;
+        continue;
+      }
+      match_tree_metric_[cc] = best_tree->size();
+      continue;
+    }
   }
 }
 

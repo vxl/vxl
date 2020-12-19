@@ -9,6 +9,7 @@
 #include <algorithm>
 
 #include <bpgl/acal/acal_match_tree.h>
+#include <bpgl/acal/acal_match_utils.h>
 
 static void test_match_tree()
 {
@@ -94,7 +95,7 @@ static void test_match_tree()
   mt.add_child_node(210, 221, mpairs_a);
   mt.add_child_node(21, 222, mpairs_a);
   std::cout << "add many nodes" << std::endl;
-
+  mt.update_tree_size();
   std::vector<size_t> children_ids = {21, 210};
   TEST("acal_match_tree root->children_ids()", root->children_ids(), children_ids);
 
@@ -154,6 +155,32 @@ static void test_match_tree()
   TEST("acal_match_tree child node ==", *childA, *childB);
 
   TEST("acal_match_tree ==", mt, mt_copy);
+
+  // copy constructor
+  acal_match_tree mt_copy_constr(mt);
+  TEST("copy constructor ==", mt, mt_copy_constr);
+
+  std::vector<size_t> to_remove;
+  to_remove.push_back(21);
+  acal_match_tree mt_cam_removed_21(mt, to_remove);  
+  std::cout << "Match tree with 21 removed \n" << mt_cam_removed_21 << std::endl;
+  TEST("tree with one child removed", mt_cam_removed_21.size(), 3);
+  // add other child to remove list
+  to_remove.push_back(210);
+  acal_match_tree mt_cam_removed_210(mt, to_remove);  
+  std::cout << "Match tree with 21 and 210 removed \n" << mt_cam_removed_210 << std::endl;
+  TEST("tree with both children removed", mt_cam_removed_210.size(), 1);
+  to_remove.clear();
+  to_remove.push_back(12);
+  acal_match_tree mt_cam_removed_12(mt, to_remove);
+  std::cout << "Match tree with 12 removed \n" << mt_cam_removed_12 << std::endl;
+  TEST("invalid isolated root", mt_cam_removed_12.root_->cam_id_, size_t(-1));
+
+  to_remove.clear();
+  to_remove.push_back(3);
+  acal_match_tree mt_cam_removed_3(mt, to_remove);
+  std::cout << "Match tree with non_existent node 3 removed - same as copy constructor \n" << mt_cam_removed_3 << std::endl;
+  TEST("copy is  ==", mt, mt_cam_removed_3);
 }
 
 TESTMAIN(test_match_tree);
