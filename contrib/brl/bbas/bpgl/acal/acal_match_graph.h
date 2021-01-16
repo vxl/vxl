@@ -174,7 +174,7 @@ class acal_match_graph
   bool save_graph_dot_format(std::string const& path);
   bool save_focus_graphs_dot_format(size_t ccomp_index, std::string const& path);
   bool save_match_trees_dot_format(size_t ccomp_index, std::string const& path, size_t num_trees = -1);
-
+  void print_bad_camera_ids();
 
   bool operator==(acal_match_graph const& other) const;
   bool operator!=(acal_match_graph const& other) const { return !(*this == other); }
@@ -196,7 +196,8 @@ class acal_match_graph
   std::map<size_t, std::map<size_t, std::shared_ptr<acal_match_tree> > > match_trees_;
   //   c_comp
   std::vector<size_t> match_tree_metric_;
-
+  //       cam_id   count
+  std::map<size_t, size_t> bad_track_camera_ids_;
 };
 
 #endif
