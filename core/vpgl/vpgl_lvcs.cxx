@@ -268,8 +268,8 @@ void
 vpgl_lvcs::compute_scale()
 {
   double wgs84_phi, wgs84_lamda, wgs84_hgt; // WGS84 coords of the origin
-  double grs80_x, grs80_y, grs80_z;         // GRS80 coords of the origin
-  double grs80_x1, grs80_y1, grs80_z1;
+  double grs84_x, grs84_y, grs84_z;         // GRS84 coords of the origin
+  double grs84_x1, grs84_y1, grs84_z1;
   double to_meters, to_feet, to_radians, to_degrees;
   this->get_angle_conversions(to_radians, to_degrees);
   this->get_length_conversions(to_meters, to_feet);
@@ -312,9 +312,9 @@ vpgl_lvcs::compute_scale()
   }
 
   // The inputs, wgs84_phi, wgs84_lamda, are assumed to be in radians
-  // The inputs wgs84_hgt, GRS80a, GRS80b, are assumed to be in meters
-  // The outputs grs80_x, grs80_y, grs80_z, are in meters
-  latlong_to_GRS(wgs84_phi, wgs84_lamda, wgs84_hgt, &grs80_x, &grs80_y, &grs80_z, GRS80_a, GRS80_b);
+  // The inputs wgs84_hgt, GRS84a, GRS84b, are assumed to be in meters
+  // The outputs grs84_x, grs84_y, grs84_z, are in meters
+  latlong_to_GRS(wgs84_phi, wgs84_lamda, wgs84_hgt, &grs84_x, &grs84_y, &grs84_z, GRS84_a, GRS84_b);
 
   if (lat_scale_ == 0.0)
   {
@@ -346,11 +346,11 @@ vpgl_lvcs::compute_scale()
         break;
     }
 
-    latlong_to_GRS(wgs84_phi, wgs84_lamda, wgs84_hgt, &grs80_x1, &grs80_y1, &grs80_z1, GRS80_a, GRS80_b);
+    latlong_to_GRS(wgs84_phi, wgs84_lamda, wgs84_hgt, &grs84_x1, &grs84_y1, &grs84_z1, GRS84_a, GRS84_b);
 
     lat_scale_ =
-      SMALL_STEP / std::sqrt((grs80_x - grs80_x1) * (grs80_x - grs80_x1) + (grs80_y - grs80_y1) * (grs80_y - grs80_y1) +
-                             (grs80_z - grs80_z1) * (grs80_z - grs80_z1));
+      SMALL_STEP / std::sqrt((grs84_x - grs84_x1) * (grs84_x - grs84_x1) + (grs84_y - grs84_y1) * (grs84_y - grs84_y1) +
+                             (grs84_z - grs84_z1) * (grs84_z - grs84_z1));
     // lat_scale_ is in radians/meter.
   }
 
@@ -382,11 +382,11 @@ vpgl_lvcs::compute_scale()
         break;
     }
 
-    latlong_to_GRS(wgs84_phi, wgs84_lamda, wgs84_hgt, &grs80_x1, &grs80_y1, &grs80_z1, GRS80_a, GRS80_b);
+    latlong_to_GRS(wgs84_phi, wgs84_lamda, wgs84_hgt, &grs84_x1, &grs84_y1, &grs84_z1, GRS84_a, GRS84_b);
 
     lon_scale_ =
-      SMALL_STEP / std::sqrt((grs80_x - grs80_x1) * (grs80_x - grs80_x1) + (grs80_y - grs80_y1) * (grs80_y - grs80_y1) +
-                             (grs80_z - grs80_z1) * (grs80_z - grs80_z1));
+      SMALL_STEP / std::sqrt((grs84_x - grs84_x1) * (grs84_x - grs84_x1) + (grs84_y - grs84_y1) * (grs84_y - grs84_y1) +
+                             (grs84_z - grs84_z1) * (grs84_z - grs84_z1));
     // lon_scale_ is in radians/meter
   }
 }
