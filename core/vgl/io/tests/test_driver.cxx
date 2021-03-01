@@ -14,6 +14,7 @@ DECLARE(test_line_2d_io);
 DECLARE(test_line_3d_2_points_io);
 DECLARE(test_line_segment_2d_io);
 DECLARE(test_line_segment_3d_io);
+DECLARE(test_oriented_box_2d_io);
 DECLARE(test_point_2d_io);
 DECLARE(test_point_3d_io);
 DECLARE(test_pointset_3d_io);
@@ -39,6 +40,7 @@ register_tests()
   REGISTER(test_line_3d_2_points_io);
   REGISTER(test_line_segment_2d_io);
   REGISTER(test_line_segment_3d_io);
+  REGISTER(test_oriented_box_2d_io);
   REGISTER(test_point_2d_io);
   REGISTER(test_point_3d_io);
   REGISTER(test_pointset_3d_io);

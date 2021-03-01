@@ -21,6 +21,7 @@ add_executable( vgl_io_test_all
   test_conic_io.cxx
   test_box_2d_io.cxx
   test_box_3d_io.cxx
+  test_oriented_box_2d_io.cxx
   test_plane_3d_io.cxx
   test_polygon_io.cxx
   golden_test_vgl_io.cxx
@@ -45,6 +46,7 @@ add_test( NAME vgl_io_test_homg_plane_3d_io COMMAND $<TARGET_FILE:vgl_io_test_al
 add_test( NAME vgl_io_test_conic_io COMMAND $<TARGET_FILE:vgl_io_test_all> test_conic_io )
 add_test( NAME vgl_io_test_box_2d_io COMMAND $<TARGET_FILE:vgl_io_test_all> test_box_2d_io )
 add_test( NAME vgl_io_test_box_3d_io COMMAND $<TARGET_FILE:vgl_io_test_all> test_box_3d_io )
+add_test( NAME vgl_io_test_oriented_box_2d_io COMMAND $<TARGET_FILE:vgl_io_test_all> test_oriented_box_2d_io )
 add_test( NAME vgl_io_test_plane_3d_io COMMAND $<TARGET_FILE:vgl_io_test_all> test_plane_3d_io )
 add_test( NAME vgl_io_test_polygon_io COMMAND $<TARGET_FILE:vgl_io_test_all> test_polygon_io )
 add_test( NAME vgl_io_golden_test COMMAND $<TARGET_FILE:vgl_io_test_all> golden_test_vgl_io )
