@@ -1,4 +1,5 @@
 // This is core/vgl/io/tests/test_oriented_box_2d_io.cxx
+
 #include <iostream>
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
@@ -7,6 +8,7 @@
 #include "vsl/vsl_indent.h"
 #include "testlib/testlib_test.h"
 #include "vpl/vpl.h"
+
 
 static void
 test_oriented_box_2d_double_io()
@@ -18,7 +20,7 @@ test_oriented_box_2d_double_io()
   vgl_point_2d<double> p1(1.2, 4.2);
   vgl_point_2d<double> p2(2.2, 3.2);
   vgl_line_segment_2d<double> major_axis(p1, p2);
-  double height = 5.7
+  double height = 5.7;
 
   vgl_oriented_box_2d<double> p_out(major_axis, height), p_in;
 
@@ -42,10 +44,12 @@ test_oriented_box_2d_double_io()
   vsl_indent_clear_all_data();
 }
 
+
 static void
 test_oriented_box_2d_io()
 {
   test_oriented_box_2d_double_io();
 }
+
 
 TESTMAIN(test_oriented_box_2d_io);
