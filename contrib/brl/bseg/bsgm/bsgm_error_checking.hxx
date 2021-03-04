@@ -9,6 +9,7 @@
 //#include <sstream>
 //#include <utility>
 #include <algorithm>
+#include <vgl/vgl_box_2d.h>
 #include <vil/vil_image_view.h>
 #include "bsgm_error_checking.h"
 template <class T>
@@ -18,13 +19,24 @@ void bsgm_check_nonunique(
   const vil_image_view<T>& img,
   float invalid_disparity,
   unsigned short shadow_thresh,
-  int disp_thresh)
+  int disp_thresh,
+  const vgl_box_2d<int>& img_window)
 {
+  int img_start_x, img_start_y;
+  if (img_window.is_empty()) {
+    img_start_x = 0;
+    img_start_y = 0;
+  }
+  else {
+    img_start_x = img_window.min_x();
+    img_start_y = img_window.min_y();
+  }
+
   int w = disp_img.ni(), h = disp_img.nj();
   std::vector<unsigned short> inv_cost(w);
   std::vector<int> inv_disp(w);
 
-  for (int y = 0; y < h; y++) {
+  for (int y = 0, img_y = img_start_y; y < h; y++, img_y++) {
 
     // Initialize an inverse disparity map for this row
     for (int x = 0; x < w; x++) {
@@ -55,7 +67,7 @@ void bsgm_check_nonunique(
     } //x
 
     // Check the uniqueness of each disparity.
-    for (int x = 0; x < w; x++) {
+    for (int x = 0, img_x = img_start_x; x < w; x++, img_x++) {
 
       if (std::isnan(invalid_disparity)) {
         if (std::isnan(disp_img(x, y)))
@@ -64,7 +76,7 @@ void bsgm_check_nonunique(
       else if (disp_img(x, y) == invalid_disparity) continue;
 
       // Label dark pixels as invalid, if thresh=0 nothing happens
-      if (img(x, y) < shadow_thresh) {
+      if (img(img_x, img_y) < shadow_thresh) {
         disp_img(x, y) = invalid_disparity;
         continue;
       }
@@ -95,61 +107,91 @@ void bsgm_compute_invalid_map(
   vil_image_view<bool>& invalid_tar,
   int min_disparity,
   int num_disparities,
-  T border_val)
-  {
-  int w = img_tar.ni(), h = img_tar.nj();
+  T border_val,
+  const vgl_box_2d<int>& target_window)
+{
+  int max_disparity = min_disparity + num_disparities;
+
+  // Iteration bounds
+  int w, h, img_start_x, img_start_y, img_stop_x, img_stop_y;
+  if (target_window.is_empty()) {
+    w = img_tar.ni();
+    h = img_tar.nj();
+    img_start_x = 0;
+    img_start_y = 0;
+    img_stop_x = w;
+    img_stop_y = h;
+  }
+  else {
+    w = target_window.width();
+    h = target_window.height();
+    img_start_x = target_window.min_x();
+    img_start_y = target_window.min_y();
+    img_stop_x = target_window.max_x();
+    img_stop_y = target_window.max_y();
+  }
+
+  // the x coordinate of the left-most possible reference pixel mapped to from the target
+  int img_ref_start_x = std::max(0, img_start_x + min_disparity);
+
+  // the x coordinate of the right-most possible reference pixel mapped to from the target
+  int img_ref_stop_x = std::min<int>(img_ref.ni(), img_stop_x + max_disparity);
 
   invalid_tar.set_size( w, h );
 
   // Initialize map
-  for( int y = 0; y < h; y++ )
-    for( int x = 0; x < w; x++ )
-      invalid_tar(x,y) = false;
+  for (int invalid_y = 0; invalid_y < h; invalid_y++)
+    for (int invalid_x = 0; invalid_x < w; invalid_x++)
+      invalid_tar(invalid_x, invalid_y) = false;
 
-   // Find the border in the target image
-  for( int y = 0; y < h; y++ ){
+  // Find the border in the target image
+  for (int invalid_y = 0, img_y = img_start_y; invalid_y < h; invalid_y++, img_y++) {
 
-    // Find the left border
-    for( int x = 0; x < w; x++ ){
-      if( img_tar(x,y) == border_val )
-        invalid_tar(x,y) = true;
+    // Fill in the left border
+    for (int invalid_x = 0, img_x = img_start_x; invalid_x < w; invalid_x++, img_x++) {
+      if (img_tar(img_x, img_y) == border_val)
+        invalid_tar(invalid_x, invalid_y) = true;
       else
         break;
     } //x
 
-    // Find the right border
-    for( int x = w-1; x >= 0; x-- ){
-      if( img_tar(x,y) == border_val )
-        invalid_tar(x,y) = true;
+    // Fill in the right border
+    for (int invalid_x = w - 1, img_x = img_stop_x - 1; invalid_x >= 0; invalid_x--, img_x--) {
+      if (img_tar(img_x, img_y) == border_val)
+        invalid_tar(invalid_x, invalid_y) = true;
       else
         break;
     } //x
   } //y
 
-  int max_disparity = min_disparity + num_disparities;
-
   // Find the border in the reference image
-  for( int y = 0; y < h; y++ ){
+  for (int invalid_y = 0, img_y = img_start_y; invalid_y < h; invalid_y++, img_y++) {
 
     // Find the left border
-    int lb = 0;
-    for( int x = 0; x < w; x++, lb++ )
-      if( img_ref(x,y) != border_val )
+    int lb_ref = img_ref_start_x;
+    for ( ; lb_ref < img_ref_stop_x; lb_ref++)
+      if (img_ref(lb_ref, img_y) != border_val)
         break;
+
+    int lb_target = lb_ref - min_disparity;
+    int lb_invalid = lb_target - img_start_x;
 
     // Mask any pixels in the target image which map into the left border
-    for( int x = 0; x < std::min( w, lb - min_disparity ); x++ )
-      invalid_tar(x,y) = true;
+    for (int invalid_x = 0; invalid_x < std::min(w, lb_invalid); invalid_x++)
+      invalid_tar(invalid_x, invalid_y) = true;
 
     // Find the right border
-    int rb = w-1;
-    for( int x = w-1; x >= 0; x--, rb-- )
-      if( img_ref(x,y) != border_val )
+    int rb_ref = img_ref_stop_x - 1;
+    for ( ; rb_ref >= img_ref_start_x; rb_ref--)
+      if (img_ref(rb_ref, img_y) != border_val)
         break;
 
+    int rb_target = rb_ref - max_disparity;
+    int rb_invalid = rb_target - img_start_x;
+
     // Mask any pixels in the target image which map into the right border
-    for( int x = std::max( 0, rb - max_disparity + 1 ); x < w ; x++ )
-      invalid_tar(x,y) = true;
+    for (int invalid_x = w - 1; invalid_x > std::max(0, rb_invalid); invalid_x--)
+      invalid_tar(invalid_x, invalid_y) = true;
   } //y
 
   //vil_image_view<vxl_byte> vis( w_, h_ );
@@ -167,8 +209,19 @@ void bsgm_interpolate_errors(
   const vil_image_view<bool>& invalid,
   const vil_image_view<T>& img,
   float invalid_disparity,
-  unsigned short shadow_thresh)
+  unsigned short shadow_thresh,
+  const vgl_box_2d<int>& img_window)
 {
+  int img_start_x, img_start_y;
+  if (img_window.is_empty()) {
+    img_start_x = 0;
+    img_start_y = 0;
+  }
+  else {
+    img_start_x = img_window.min_x();
+    img_start_y = img_window.min_y();
+  }
+
   int num_sample_dirs = 8;
   float sample_percentile = 0.5f;
   float shadow_sample_percentile = 0.75f;
@@ -293,11 +346,11 @@ void bsgm_interpolate_errors(
     } //y
   }//dir
 
-  // Iterpolate any invalid pixels by taking the median (or specified
+  // Interpolate any invalid pixels by taking the median (or specified
   // percentile) of accumulated sample set.
   std::vector<float>::iterator sample_itr = sample_vol.begin();
-  for( int y = 0; y < h; y++ ){
-    for( int x = 0; x < w; x++, sample_itr += num_sample_dirs ){
+  for (int y = 0, img_y = img_start_y; y < h; y++, img_y++) {
+    for (int x = 0, img_x = img_start_x; x < w; x++, img_x++, sample_itr += num_sample_dirs) {
       if (invalid(x, y)) continue;
 
       // Require half of the directions return valid samples, which prevents
@@ -309,7 +362,7 @@ void bsgm_interpolate_errors(
       int interp_idx;
 
       // Choose a sample index depending on whether pixel is shadow or not
-      if (img(x, y) < shadow_thresh)
+      if (img(img_x, img_y) < shadow_thresh)
         interp_idx = static_cast<int>((shadow_sample_percentile*sample_count(x, y)));
       else
         interp_idx = static_cast<int>((sample_percentile*sample_count(x, y)));
@@ -322,10 +375,13 @@ void bsgm_interpolate_errors(
 #undef BSGM_ERROR_CHECKING_INSTANTIATE
 #define BSGM_ERROR_CHECKING_INSTANTIATE(T) \
 template void bsgm_interpolate_errors(vil_image_view<float>& ,const vil_image_view<bool>&,        \
-                                      const vil_image_view<T>&,  float, unsigned short);          \
+                                      const vil_image_view<T>&,  float, unsigned short,           \
+                                      const vgl_box_2d<int>&);                                 \
 template void bsgm_compute_invalid_map(const vil_image_view<T>& , const vil_image_view<T>&,       \
-                                       vil_image_view<bool>& , int, int, T);                      \
+                                       vil_image_view<bool>& , int, int, T,                       \
+                                       const vgl_box_2d<int>&);                                \
 template void bsgm_check_nonunique(vil_image_view<float>& , const vil_image_view<unsigned short>&,\
-                                   const vil_image_view<T>&, float, unsigned short, int)
+                                   const vil_image_view<T>&, float, unsigned short, int,          \
+                                   const vgl_box_2d<int>&)
 
 #endif // bsgm_error_checking_h_

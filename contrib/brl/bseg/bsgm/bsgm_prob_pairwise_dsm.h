@@ -27,7 +27,7 @@
 
 //In more detail, consider the following call to the multi-scale estimator:
 //
-// bsgm_multiscale_disparity_estimator mde(params_.de_params_, ni_, nj_, num_disparities(), num_active_disparities());
+// bsgm_multiscale_disparity_estimator mde(params_.de_params_, rect_ni_, rect_nj_, num_disparities(), num_active_disparities());
 // mde.compute(rect_bview0_, rect_bview1_, invalid_map_, min_disparity_,
 //             invalid_disp, params_.multi_scale_mode_, disp_r_);
 //
@@ -42,7 +42,9 @@
 #include <math.h>
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <vil/vil_image_view.h>
@@ -98,7 +100,7 @@ struct pairwise_params
   float ground_sample_dist_ = 0.3f;
 
   // reverse the sign of disparity (disparity_sense_ = -1) for situations where the scene is behind the camera
-  // happens occasionaly for perspective cameras computed by SfM
+  // happens occasionally for perspective cameras computed by SfM
   int disparity_sense_ = 1;
 
   // upsample the rectified images by scale factor
@@ -110,7 +112,7 @@ struct pairwise_params
   // the standard deviation of consistent disparity point distances
   float std_dev_ = 3.75*ground_sample_dist_;
 
-  // multiply height probabilty with additional z vs d scale probability factor
+  // multiply height probability with additional z vs d scale probability factor
   bool use_z_vs_d_prob_ = false;
 
   // the lowest z vs d scale factor that is typically obtained in meters/pixel
@@ -119,7 +121,7 @@ struct pairwise_params
   // the standard deviation for the z vs d Gaussian distribution
   float z_vs_d_std_dev_ = 1.0f;
 
-  // pointset->heightmap gridding paramters:
+  // pointset->heightmap gridding parameters:
   // expected number of neighbors (between min/max neighbors) within some distance
   // (_neighbor_dist_factor * _ground_sample_distance) of each heightmap pixel
   unsigned min_neighbors_ = 3;
@@ -133,61 +135,85 @@ struct pairwise_params
   // the effective bits per pixel for an image, e.g. a dynamic range of 2047 corresponds to 11 bits
   int effective_bits_per_pixel_ = 8;
 
+  int window_padding_ = 100;
 };
+
 
 template <class CAM_T, class PIX_T>
 class bsgm_prob_pairwise_dsm
 {
  public:
-  bsgm_prob_pairwise_dsm(){init_dynamic_range_table();}
+  bsgm_prob_pairwise_dsm()
+  {
+    init_dynamic_range_table();
+    H0_.fill(NAN);
+    H1_.fill(NAN);
+  }
 
   bsgm_prob_pairwise_dsm(vil_image_view_base_sptr const& view0, CAM_T const& cam0,
                          vil_image_view_base_sptr const& view1, CAM_T const& cam1)
   {
-    this->set_images_and_cams(view0, cam0, view1, cam1);
+    set_images_and_cams(view0, cam0, view1, cam1);
     init_dynamic_range_table();
+    H0_.fill(NAN);
+    H1_.fill(NAN);
   }
 
   bsgm_prob_pairwise_dsm(vil_image_resource_sptr const& resc0, CAM_T const& cam0,
                          vil_image_resource_sptr const& resc1, CAM_T const& cam1)
   {
-    this->set_images_and_cams(resc0, cam0, resc1, cam1);
+    set_images_and_cams(resc0, cam0, resc1, cam1);
     init_dynamic_range_table();
+    H0_.fill(NAN);
+    H1_.fill(NAN);
   }
 
   bsgm_prob_pairwise_dsm(vil_image_view<PIX_T> const& view0, CAM_T const& cam0,
                          vil_image_view<PIX_T> const& view1, CAM_T const& cam1)
   {
-    this->set_images_and_cams(view0, cam0, view1, cam1);
+    set_images_and_cams(view0, cam0, view1, cam1);
     init_dynamic_range_table();
+    H0_.fill(NAN);
+    H1_.fill(NAN);
   }
 
   // ACCESSORS-----
 
   //: set images & cameras for analysis
-  bool set_images_and_cams(vil_image_view_base_sptr const& view0, CAM_T const& cam0,
+  void set_images_and_cams(vil_image_view_base_sptr const& view0, CAM_T const& cam0,
                            vil_image_view_base_sptr const& view1, CAM_T const& cam1)
   {
-    return rip_.set_images_and_cams(view0, cam0, view1, cam1);
+    rip_.set_images(view0, view1);
+    this->set_cameras(cam0, cam1);
   }
 
-  bool set_images_and_cams(vil_image_view<PIX_T> const& view0, CAM_T const& cam0,
+  void set_images_and_cams(vil_image_view<PIX_T> const& view0, CAM_T const& cam0,
                            vil_image_view<PIX_T> const& view1, CAM_T const& cam1)
   {
-   vil_image_resource_sptr resc0_ptr = vil_new_image_resource_of_view(view0);
-   vil_image_resource_sptr resc1_ptr = vil_new_image_resource_of_view(view1);
-    return rip_.set_images_and_cams(resc0_ptr, cam0, resc1_ptr, cam1);
+    vil_image_resource_sptr resc0_ptr = vil_new_image_resource_of_view(view0);
+    vil_image_resource_sptr resc1_ptr = vil_new_image_resource_of_view(view1);
+    rip_.set_images(resc0_ptr, resc1_ptr);
+    this->set_cameras(cam0, cam1);
   }
 
-  bool set_images_and_cams(vil_image_resource_sptr const& resc0, CAM_T const& cam0,
+  void set_images_and_cams(vil_image_resource_sptr const& resc0, CAM_T const& cam0,
                            vil_image_resource_sptr const& resc1, CAM_T const& cam1)
   {
-    return rip_.set_images_and_cams(resc0, cam0, resc1, cam1);
+    rip_.set_images(resc0, resc1);
+    this->set_cameras(cam0, cam1);
   }
+
+  void set_cameras(CAM_T const& cam0, CAM_T const& cam1)
+  {
+    rip_.set_cameras(cam0, cam1);
+    cam0_ = cam0;
+    cam1_ = cam1;
+  }
+
   //: set a table of scale factors with respect to the effective bits per pixel
   //  of the input imagery. For example the actual bits per pixel might be 11 or a range of (0, 2047)
   //  however the typical range of intensities might be only (0, 725) so the appearance cost scale
-  //  will be 725/255 ~ 2.8. The nominal parmeters in bsgm are tuned for byte images thus the 255 denominator.
+  //  will be 725/255 ~ 2.8. The nominal parameters in bsgm are tuned for byte images thus the 255 denominator.
   //  census threshold and gradient magnitude are adjusted for higher dynamic ranges according to this scale factor
   void set_dynamic_range_table(std::map<int, float> const& bits_per_pix_factors){
     bits_per_pix_factors_ = bits_per_pix_factors;
@@ -220,11 +246,33 @@ class bsgm_prob_pairwise_dsm
   void scene_box(vgl_box_3d<double> scene_box) { scene_box_ = scene_box; }
   vgl_box_3d<double> scene_box() const { return scene_box_; }
 
+  //: H0 rectification matrix (allow setting if already pre-computed)
+  void H0(vnl_matrix_fixed<double, 3, 3> H0) {H0_ = H0;}
+  vnl_matrix_fixed<double, 3, 3> H0() const {return H0_;}
+
+  //: H1 rectification matrix (allow setting if already pre-computed)
+  void H1(vnl_matrix_fixed<double, 3, 3> H1) {H1_ = H1;}
+  vnl_matrix_fixed<double, 3, 3> H1() const {return H1_;}
+
+  //: rectification image width (allow setting if already pre-computed)
+  void rect_ni(size_t rect_ni) {rect_ni_ = rect_ni;}
+  size_t rect_ni() const {return rect_ni_;}
+
+  //: rectification image height (allow setting if already pre-computed)
+  void rect_nj(size_t rect_nj) {rect_nj_ = rect_nj;}
+  size_t rect_nj() const {return rect_nj_;}
+
+  //: target image window to process within
+  void target_window(vgl_box_2d<int> target_window) { target_window_ = target_window; }
+  vgl_box_2d<int> target_window() const { return target_window_; }
+
   //: rectified images and cams
-  const vil_image_view<PIX_T>& rectified_bview0() const  {return rect_bview0_;}
-  const vil_image_view<PIX_T>& rectified_bview1() const  {return rect_bview1_;}
-  const CAM_T& rectified_cam0() const {return rip_.rect_cam0();}
-  const CAM_T& rectified_cam1() const {return rip_.rect_cam1();}
+  const vil_image_view<PIX_T>& rectified_bview0() const {return rect_bview0_;}
+  const vil_image_view<PIX_T>& rectified_bview1() const {return rect_bview1_;}
+  const CAM_T& rectified_cam0() const {return rect_cam0_;}
+  const CAM_T& rectified_cam1() const {return rect_cam1_;}
+  const vgl_box_2d<int>& rectified_target_window() const {return rect_target_window_;}
+  const vgl_box_2d<int>& rectified_reference_window() const {return rect_reference_window_;}
 
   //: disparity results
   vil_image_view<vxl_byte> invalid_map_fwd() const { return bool_to_byte(invalid_map_fwd_); }
@@ -239,13 +287,13 @@ class bsgm_prob_pairwise_dsm
   const vil_image_view<float>& tri_3d_rev() const {return tri_3d_rev_;}
   const vil_image_view<float>& xyz_prob() const {return xyz_prob_;}
 
-    const vil_image_view<float>& heightmap_fwd() const {return heightmap_fwd_;}
+  const vil_image_view<float>& heightmap_fwd() const {return heightmap_fwd_;}
   const vil_image_view<float>& heightmap_rev() const {return heightmap_rev_;}
 
   const vgl_pointset_3d<float> ptset_fwd() const {return ptset_fwd_;}
   const vgl_pointset_3d<float> ptset_rev() const {return ptset_rev_;}
 
-  //: probablistic results
+  //: probabilistic results
   const vgl_pointset_3d<float> prob_ptset() const {return prob_ptset_;}
   bsta_histogram<float> prob_pdf() const {return prob_distr_;}
 
@@ -269,11 +317,11 @@ class bsgm_prob_pairwise_dsm
   void compute_height_rev(bool compute_hmap);
 
   //: compute probabilistic height
-  bool compute_prob();
+  bool compute_prob(bool compute_prob_heightmap = true);
 
   //: compute xyz_prob image - a 4 plane image of coordinates and probability
   //  image planes: 0 -> x, 1 -> y, 2 -> z, 3 -> prob
-  void compute_xyz_prob();
+  void compute_xyz_prob(bool compute_heightmap = true);
 
   //: main process method
   // with consistency check both forward and reverse disparities are computed
@@ -281,12 +329,19 @@ class bsgm_prob_pairwise_dsm
   // forward and reverse 3-d points using a kd-tree index. Otherwise,
   // 3-d points are matched according to the disparity location in
   // the reverse xyz image
-  bool process(bool with_consistency_check = true, bool knn_consistency = true, bool compute_fwd_rev_ptsets_hmaps = true)
+  bool process(bool with_consistency_check = true, bool knn_consistency = true,
+               bool compute_fwd_rev_ptsets_hmaps = true)
   {
+    // check if not in window mode
+    bool window_mode = !target_window_.is_empty();
+    if (window_mode) {
+      throw std::runtime_error("Can't apply window processing using this process method");
+      return false;
+    }
     // rectification
     this->rectify();
 
-    // compute foward disparity & height
+    // compute forward disparity & height
     this->compute_disparity_fwd();
     this->compute_height_fwd(compute_fwd_rev_ptsets_hmaps);
 
@@ -295,23 +350,93 @@ class bsgm_prob_pairwise_dsm
       this->compute_disparity_rev();
       this->compute_height_rev(compute_fwd_rev_ptsets_hmaps);
 
-      if(knn_consistency){
-        if (!compute_prob())
+      if (knn_consistency) {
+        if (!compute_prob(true))  // true -> compute prob heightmap
           return false;
-      }else{
-        this->compute_xyz_prob();
+      } else {
+        this->compute_xyz_prob(true);  // true -> compute prob heightmap
       }
+    } else this->compute_ptset();
+
+    return true;
+  }
+
+
+  //: main process method when using windows into the full target and reference images
+  // the windows are defined in the original images not the rectified images
+  // the specified windows are transformed by the rectifying transforms.
+  // the flag first window is controlled by the user to allow multiple windows to be
+  // processed using the same rectified image pair. If first_window is true, then
+  // rectification is performed otherwise only stereo processing is carried out.
+  // Note that in the window mode, only the 3-d pointset with a probability scalar is
+  // computed -- no heightmaps are produced. If with_consistency_check is false then
+  // no point probabilities are computed and the value is always 1.1 indicating invalid.
+  bool process_with_windows(bool& first_window = true,
+                            bool with_consistency_check = false,
+                            bool print_timing = false)
+  {
+    // check if not in window mode
+    bool not_window_mode = target_window_.is_empty();
+
+    /* if (not_window_mode) { */
+    /*   throw std::runtime_error("Can't apply window processing without target window set"); */
+    /*   return false; */
+    /* } */
+
+    // tell disparity estimator to also print timing estimates
+    params_.de_params_.print_timing = print_timing;
+
+    vul_timer t;
+    // rectification
+    if (first_window) {
+      this->rectify();
+      if (print_timing) {
+        std::cout << "rectification(" << rect_bview0_.ni() << " x "
+                  << rect_bview0_.nj() << ") in " << t.real() / 1000.0
+                  << " sec." << std::endl;
+      }
+    } else {
+      prob_ptset_.clear();
+      rectify_windows();
+    }
+    // compute forward disparity & height
+    this->compute_disparity_fwd();
+    this->compute_height_fwd(false);  // false -> don't compute fwd heightmap
+    if (print_timing)
+        std::cout << "forward disparity and xyz img in " << t.real() / 1000.0 << " sec." << std::endl;
+    if (with_consistency_check) {
+      // consistency check & probabilistic analysis
+      t.mark();
+      this->compute_disparity_rev();
+      this->compute_height_rev(false);  // false -> don't compute reverse heightmap
+      this->compute_xyz_prob(false);  // false->don't compute heightmap, just prob pointset
+      if (print_timing)
+        std::cout << "reverse disparity and prob ptset in " << t.real() / 1000.0 << " sec." << std::endl;
+    } else {
+      this->compute_ptset();
+      if (print_timing)
+        std::cout << "non probabilistic ptset in " << t.real() / 1000.0 << " sec." << std::endl;
     }
     return true;
   }
 
   // MISC-----
 
-  //: apply a color map to the probabilty values and
+  //: apply a color map to the probability values and
   //  output a color point cloud as ascii
   bool save_prob_ptset_color(std::string const& path) const;
 
  protected:
+
+  vgl_box_2d<int> rectify_window(
+      vgl_box_2d<int>& window,
+      vnl_matrix_fixed<double, 3, 3> H,
+      size_t ni, size_t nj);
+
+  void translate_camera_into_window(
+      CAM_T& cam, vgl_box_2d<int> window);
+
+  void rectify_windows();
 
   // compute disparity for generic inputs
   void compute_disparity(
@@ -319,7 +444,9 @@ class bsgm_prob_pairwise_dsm
       const vil_image_view<PIX_T>& img_reference,
       bool forward,  // == true or reverse == false
       vil_image_view<bool>& invalid,
-      vil_image_view<float>& disparity);
+      vil_image_view<float>& disparity,
+      vgl_box_2d<int>& img_window,
+      vgl_box_2d<int>& img_reference_window);
 
   // compute height for generic inputs
   void compute_height(
@@ -339,7 +466,13 @@ class bsgm_prob_pairwise_dsm
   // get bpgl_heightmap instance
   bpgl_heightmap<float> get_bpgl_heightmap() const;
 
+  // compute the pointset without consistency checks
+  // probability = 1.1f to indicate no check was done
+  // and mitigate effects on algorithms using the result
+  void compute_ptset();
+
  private:
+
   //: fill default dynamic range scale factors
   void init_dynamic_range_table(){
     bits_per_pix_factors_[8] = 1.0f;
@@ -347,10 +480,14 @@ class bsgm_prob_pairwise_dsm
   }
   bool affine_;  // vs. perspective
   pairwise_params params_;
+  CAM_T cam0_;
+  CAM_T cam1_;
+  CAM_T rect_cam0_;
+  CAM_T rect_cam1_;
   bpgl_rectify_image_pair<CAM_T> rip_;
 
-  size_t ni_;
-  size_t nj_;
+  size_t rect_ni_;
+  size_t rect_nj_;
   int min_disparity_ = -100;
   int max_disparity_ = 100;
 
@@ -359,11 +496,20 @@ class bsgm_prob_pairwise_dsm
 
   vgl_box_3d<double> scene_box_;
 
+  // rectification matrices
+  vnl_matrix_fixed<double, 3, 3> H0_;
+  vnl_matrix_fixed<double, 3, 3> H1_;
+
+  vgl_box_2d<int> target_window_;
+  vgl_box_2d<int> rect_target_window_;
+
+  vgl_box_2d<int> rect_reference_window_;
+
   vil_image_view<PIX_T> rect_bview0_;
   vil_image_view<PIX_T> rect_bview1_;
 
   std::map<int, float> bits_per_pix_factors_;
-  
+
   // disparity data
   vil_image_view<bool> invalid_map_fwd_;
   vil_image_view<bool> invalid_map_rev_;
@@ -382,7 +528,7 @@ class bsgm_prob_pairwise_dsm
   vil_image_view<float> heightmap_fwd_;
   vil_image_view<float> heightmap_rev_;
 
-  // probablistic data
+  // probabilistic data
   vgl_pointset_3d<float> prob_ptset_;
   bsta_histogram<float> prob_distr_;
 

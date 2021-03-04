@@ -60,20 +60,18 @@ static void test_rectify_image_pair() {
   vgl_box_3d<double> scene_box;
   scene_box.add(pmin);   scene_box.add(pmax);
 
+  // this block throws std::runtime_error on failure
   bpgl_rectify_image_pair<vpgl_affine_camera<double> > rip;
-  bool success = rip.set_images_and_cams(res0, acam0, res1, acam1);
-  if (!success) {
-    std::cout << "bpgl_rectify_image_pair could not set images & cameras" << std::endl;
-  } else {
-    std::cout << "acam0: " << rip.cam0() << std::endl
-              << "acam1: " << rip.cam1() << std::endl;
-  }
+  rip.set_images(res0, res1);
+  rip.set_cameras(acam0, acam1);
+  std::cout << "acam0: " << rip.cam0() << std::endl
+            << "acam1: " << rip.cam1() << std::endl;
+  rip.process(scene_box);
+  TEST("rectify affine image pair", true, true);
 
-  success = success && rip.process(scene_box);
-  TEST("rectify affine image pair", success, true);
   std::cout << "max affine image dimensions (w,h) (" << ni0 << ' ' << nj0 << ")" << std::endl;
-  size_t width, height;
-  rip.rectified_dims(width, height);
+  std::pair<size_t, size_t> dims = rip.rectified_dims();
+  size_t width = dims.first, height = dims.second;
   std::cout << "affine rectified dimensions (w,h) (" << width << ' ' << height << ")" << std::endl;
   //=========== perspective case ==============
     //camera 0
@@ -131,12 +129,16 @@ static void test_rectify_image_pair() {
   vil_image_resource_sptr pres0 = vil_new_image_resource_of_view(pimg0);
   vil_image_resource_sptr pres1 = vil_new_image_resource_of_view(pimg1);
 
+  // this block throws std::runtime_error on failure
   bpgl_rectify_image_pair<vpgl_perspective_camera<double> > prect;
-  prect.set_images_and_cams(pres0, P0, pres1, P1);
-  good = prect.process(pscene_box);
-  TEST("perspective rectification", good, true);
+  prect.set_images(pres0, pres1);
+  prect.set_cameras(P0, P1);
+  prect.process(pscene_box);
+  TEST("perspective rectification", true, true);
+
   std::cout << "orig perspective image dimensions (w,h) (" << ni0 << ' ' << nj0 << ")" << std::endl;
-  prect.rectified_dims(width, height);
+  dims = prect.rectified_dims();
+  width = dims.first, height = dims.second;
   std::cout << "perspective rectified dimensions (w,h) (" << width << ' ' << height << ")" << std::endl;
 
 }

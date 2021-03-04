@@ -2,8 +2,10 @@
 #ifndef bsgm_census_h
 #define bsgm_census_h
 
+#include <algorithm>
 #include <vector>
 #include <limits>
+#include <vgl/vgl_box_2d.h>
 #include <vil/vil_image_view.h>
 
 //:
@@ -18,40 +20,69 @@
 // tolerance will typically be larger than 2
 // the caller is responsible for determining an
 // appropriate value.
+
+// Note: crop window concept modified on 12/20/2020 - JLM
+// It is useful to create a full sized output image but with
+// a window of valid data situated within the crop window bounds in the full image.
+// The output image has bounds
+// (0, img.ni()) x (0, img.nj()) and the valid data origin with the output image
+// is (crop_window.min_x(), crop_window.min_y())
+//
 template <class T>
 bool bsgm_compute_census_img(
   const vil_image_view<T>& img,
   int nbhd_diam,
   vil_image_view<vxl_uint_64>& census,
   vil_image_view<vxl_uint_64>& census_conf,
-  int tol = 2 )
+  int tol = 2,
+  const vgl_box_2d<int>& crop_window = vgl_box_2d<int>())
 {
-  int height = img.nj(), width = img.ni();
-  T max_val = std::numeric_limits<T>::max();
+
   // Can't handle bigger patch sizes with current implementation.
   if( nbhd_diam > 7 ) return false;
+  int nbhd_rad = (nbhd_diam-1)/2;
+
+  // Iteration bounds
+  int start_x, start_y, stop_x, stop_y;
+  int ni = img.ni(), nj = img.nj();
+  int width = ni, height = nj;
+  if (crop_window.is_empty()) {
+    start_x = nbhd_rad;
+    start_y = nbhd_rad;
+    stop_x = width - nbhd_rad;
+    stop_y = height - nbhd_rad;
+  } else {
+    // access input pixels only within window (and neighborhood radius)
+    start_x = crop_window.min_x() + nbhd_rad;
+    start_y = crop_window.min_y() + nbhd_rad;
+    stop_x = crop_window.max_x() - nbhd_rad;
+    stop_y = crop_window.max_y() - nbhd_rad;
+
+    // clip to image bounds (taking into account neighborhood radius)
+    start_x = std::max(start_x, nbhd_rad);
+    start_y = std::max(start_y, nbhd_rad);
+    stop_x = std::min(stop_x, ni - nbhd_rad);
+    stop_y = std::min(stop_y, nj - nbhd_rad);
+  }
 
   census.set_size( width, height );
   census_conf.set_size( width, height );
 
-  int nbhd_rad = (nbhd_diam-1)/2;
   // Iterate over each pixel
-  for( int y = nbhd_rad; y < height-nbhd_rad; y++ ){
-    for( int x = nbhd_rad; x < width-nbhd_rad; x++ ){
-      T val = img(x, y);
-      if (val > 0)
-        int great = 0;
-      T center_max = T( std::min<T>( max_val, val+tol ) );
+  T max_val = std::numeric_limits<T>::max();
+  for (int y = start_y; y < stop_y; y++) {
+    for (int x = start_x; x < stop_x; x++) {
+      T img_xy = img(x, y);
+      T center_max = T( std::min<T>( max_val, img_xy + tol ) );
       T center_min = 0;
-      if(val>tol)
-        center_min =T(std::max<T>(0, val-tol));
+      if (img_xy > tol)
+        center_min = T(std::max<T>(0, img_xy - tol));
 
       unsigned long long cen = 0;
       unsigned long long conf = 0;
 
-      int x_min = x-nbhd_rad, y_min = y-nbhd_rad;
+      int x_min = x - nbhd_rad, y_min = y - nbhd_rad;
 
-      T img_xy = img(x,y);
       for( int dy = 0; dy < nbhd_diam; dy++ ){
         const T* img_x2y2 = &img( x_min, y_min + dy );
         for( int dx = 0; dx < nbhd_diam; dx++, img_x2y2++ ){
@@ -66,8 +97,8 @@ bool bsgm_compute_census_img(
           if( *img_x2y2 <= center_min || *img_x2y2 >= center_max ) conf++;
         }
       }
-      census(x,y) = cen;
-      census_conf(x,y) = conf;
+      census(x, y) = cen;
+      census_conf(x, y) = conf;
     }
   }
   return true;
