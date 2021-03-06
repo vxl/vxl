@@ -436,17 +436,24 @@ warp_image(vil_image_view<float> fview,
     img_end_j = out_nj;
   }
   else {
-    // pad the window by a margin (so we have image data outside the window for kernels)
-    img_start_i = rectified_window.min_x() - margin;
-    img_start_j = rectified_window.min_y() - margin;
-    img_end_i = rectified_window.max_x() + margin;
-    img_end_j = rectified_window.max_y() + margin;
 
+    // use window
+    img_start_i = static_cast<size_t>(rectified_window.min_x());
+    img_start_j = static_cast<size_t>(rectified_window.min_y());
+    img_end_i = static_cast<size_t>(rectified_window.max_x());
+    img_end_j = static_cast<size_t>(rectified_window.max_y());
+
+    // pad the window by a margin (so we have image data outside the window for kernels)
     // clip to image bounds
-    img_start_i = std::max<size_t>(0, img_start_i);
-    img_start_j = std::max<size_t>(0, img_start_j);
-    img_end_i = std::min<size_t>(out_ni, img_end_i);
-    img_end_j = std::min<size_t>(out_nj, img_end_j);
+    // note: be careful of under- and over-flow since we're dealing with unsigned ints
+    img_start_i = (img_start_i <= margin ? 0 : img_start_i - margin);
+    img_start_j = (img_start_j <= margin ? 0 : img_start_j - margin);
+    img_end_i = (((img_end_i + margin >= img_end_i)  // overflow check
+                  || img_end_i + margin >= out_ni)  // bounds check
+                 ? out_ni : img_end_i + margin);
+    img_end_j = (((img_end_j + margin >= img_end_j)  // overflow check
+                  || img_end_j + margin >= out_nj)  // bounds check
+                 ? out_nj : img_end_j + margin);
   }
 
   size_t ni = fview.ni(), nj = fview.nj();
