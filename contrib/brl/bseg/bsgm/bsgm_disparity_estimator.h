@@ -509,10 +509,6 @@ bool bsgm_disparity_estimator::compute(
       // xgrad computed with 3x3 kernel, so need a margin of 1 pixel
       vgl_box_2d<int> tar_window_with_xgrad_margin = add_margin_to_window(target_window, 1, ni, nj);
 
-      if (params_.print_timing) {
-        std::cout << "target window with xgrad margin: " << tar_window_with_xgrad_margin << std::endl;
-      }
-
       /* // crop target image data inside window */
       /* vil_image_view<float> img_tar_cropped = vil_crop( */
       /*     img_tar, */
@@ -546,10 +542,6 @@ bool bsgm_disparity_estimator::compute(
     else {
       // xgrad computed with 3x3 kernel, so need a margin of 1 pixel
       vgl_box_2d<int> ref_window_with_xgrad_margin = add_margin_to_window(reference_window, 1, ni, nj);
-
-      if (params_.print_timing) {
-        std::cout << "reference window with xgrad margin: " << ref_window_with_xgrad_margin << std::endl;
-      }
 
       /* // crop reference image data inside window */
       /* vil_image_view<float> img_ref_cropped = vil_crop( */
