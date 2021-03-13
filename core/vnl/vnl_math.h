@@ -110,7 +110,7 @@ namespace vnl_math
   static constexpr double one_over_pi      = 0.31830988618379067154;
   static constexpr double two_over_pi      = 0.63661977236758134308;
   static constexpr double deg_per_rad      = 57.2957795130823208772;
-  static constexpr double sqrt2pi          = 2.50662827463100024161;
+  static constexpr double sqrt2pi          = 2.50662827463100050242;
   static constexpr double two_over_sqrtpi  = 1.12837916709551257390;
   static constexpr double one_over_sqrt2pi = 0.39894228040143267794;
   static constexpr double sqrt2            = 1.41421356237309504880;
