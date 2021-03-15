@@ -52,7 +52,8 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::rectify()
 
   // if rectification matrices weren't precomputed, compute them now
   if (std::isnan(H0_(0, 0)) || std::isnan(H1_(0, 0)) || rect_ni_ == 0 || rect_nj_ == 0) {
-    std::cout << "computing rectification again in bsgm_prob_pairwise_dsm::rectify" << std::endl; // todo: remove
+    if (debug_print)
+      std::cout << "computing rectification again in bsgm_prob_pairwise_dsm::rectify" << std::endl;
     rip_.compute_rectification(scene_box_);
     H0_ = rip_.H0();
     H1_ = rip_.H1();
@@ -61,9 +62,9 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::rectify()
     rect_nj_ = dims_pair.second;
   }
   else {
-    // TODO: Should we move this somewhere else: the header?
     // if they were precomputed, then set them
-    std::cout << "setting homographies" << std::endl;  // todo: remove
+    if (debug_print)
+      std::cout << "setting homographies in bsgm_prob_pairwise_dsm::rectify" << std::endl;
     rip_.set_homographies(H0_, H1_, rect_ni_, rect_nj_);
   }
 
@@ -163,8 +164,6 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::rectify()
   if (pix_type_short)  // use range of (0, 2^effective_bpp-1)
     max_v = std::pow(2.0f, params_.effective_bits_per_pixel_) - 1.0f;
 
-  // todo: remove
-  /* max_1 = 65659.97; */
   if (debug_print) {
     std::cout << "max_0 = " << max_0 << std::endl;
     std::cout << "max_1 = " << max_1 << std::endl;
