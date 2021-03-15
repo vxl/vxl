@@ -96,7 +96,7 @@ extern VNL_EXPORT char     vnl_huge_val(char);
 // understand.
 namespace vnl_math
 {
-  //: pi, e and all that
+  //: pi, e and all that.  Constants are rounded to the shown precision.
   static constexpr double e                = 2.71828182845904523536; // http://oeis.org/A001113
   static constexpr double log2e            = 1.44269504088896340736; // http://oeis.org/A007525
   static constexpr double log10e           = 0.43429448190325182765; // http://oeis.org/A002285
