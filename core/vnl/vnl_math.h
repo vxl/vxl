@@ -103,19 +103,19 @@ namespace vnl_math
   static constexpr double ln2              = 0.69314718055994530942;
   static constexpr double ln10             = 2.30258509299404568402;
   static constexpr double pi               = 3.14159265358979323846;
-  static constexpr double twopi            = 6.28318530717958647692;
+  static constexpr double twopi            = 6.28318530717958647693;
   static constexpr double pi_over_2        = 1.57079632679489661923;
   static constexpr double pi_over_4        = 0.78539816339744830962;
   static constexpr double pi_over_180      = 0.01745329251994329577;
   static constexpr double one_over_pi      = 0.31830988618379067154;
   static constexpr double two_over_pi      = 0.63661977236758134308;
-  static constexpr double deg_per_rad      = 57.2957795130823208772;
+  static constexpr double deg_per_rad      = 57.2957795130823208768;
   static constexpr double sqrt2pi          = 2.50662827463100050242;
   static constexpr double two_over_sqrtpi  = 1.12837916709551257390;
   static constexpr double one_over_sqrt2pi = 0.39894228040143267794;
   static constexpr double sqrt2            = 1.41421356237309504880;
   static constexpr double sqrt1_2          = 0.70710678118654752440;
-  static constexpr double sqrt1_3          = 0.57735026918962573106;
+  static constexpr double sqrt1_3          = 0.57735026918962576451;
   static constexpr double euler            = 0.57721566490153286061;
 
   //: IEEE double machine precision
@@ -123,7 +123,7 @@ namespace vnl_math
   static constexpr double sqrteps          = 1.490116119384766e-08;
   //: IEEE single machine precision
   static constexpr float  float_eps        = 1.192092896e-07f;
-  static constexpr float  float_sqrteps    = 3.4526698307e-4f;
+  static constexpr float  float_sqrteps    = 3.4526698300e-4f;
 
   //: Convert an angle to [0, 2Pi) range
   VNL_EXPORT double angle_0_to_2pi(double angle);
