@@ -428,11 +428,6 @@ class bsgm_prob_pairwise_dsm
 
  protected:
 
-  vgl_box_2d<int> rectify_window(
-      vgl_box_2d<int>& window,
-      vnl_matrix_fixed<double, 3, 3> H,
-      size_t ni, size_t nj);
-
   void translate_camera_into_window(
       CAM_T& cam, vgl_box_2d<int> window);
 
