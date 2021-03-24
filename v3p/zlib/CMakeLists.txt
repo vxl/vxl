@@ -28,5 +28,9 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(deflate.c PROPERTIES COMPILE_FLAGS -O1)
 endif()
 
-vxl_add_library(LIBRARY_NAME z LIBRARY_SOURCES ${zlib_sources} )
+vxl_add_library(
+    LIBRARY_NAME z 
+    LIBRARY_SOURCES ${zlib_sources}
+    DISABLE_MSVC_MP
+)
 
