@@ -37,7 +37,11 @@ set(OPENJPEG2_SRCS
 add_definitions( ${OPENJPEG2_DEFINITIONS} )
 
 # Pass proper definition to preprocessor to generate shared lib
-vxl_add_library(LIBRARY_NAME openjpeg2 LIBRARY_SOURCES ${OPENJPEG2_SRCS})
+vxl_add_library(
+    LIBRARY_NAME openjpeg2
+    LIBRARY_SOURCES ${OPENJPEG2_SRCS}
+    DISABLE_MSVC_MP
+)
 
 find_library(VXL_MATH_LIBRARY_FOUND m)
 if(VXL_MATH_LIBRARY_FOUND)
