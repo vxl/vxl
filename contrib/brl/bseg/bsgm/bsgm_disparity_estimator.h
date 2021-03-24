@@ -447,9 +447,10 @@ bool bsgm_disparity_estimator::compute(
       throw std::runtime_error("target window not the same size as cost volume");
 
     // target image must be large enough to be indexable by the target window
-    if (img_tar.ni() < target_window.max_x()
-        || img_tar.nj() < target_window.max_y())
-      throw std::runtime_error("target image smaller than window");
+    if (target_window.min_x() < 0 || img_tar.ni() <= (unsigned)target_window.max_x() ||
+        target_window.min_y() < 0 || img_tar.nj() <= (unsigned)target_window.max_y()) {
+      throw std::runtime_error("target window outside target image extents");
+    }
 
     // default reference window (full image width)
     if (reference_window.is_empty()) {
@@ -457,9 +458,10 @@ bool bsgm_disparity_estimator::compute(
     }
 
     // reference image must be large enough to be indexable by the reference window
-    if (img_ref.ni() < reference_window.max_x()
-        || img_ref.nj() < reference_window.max_y())
-      throw std::runtime_error("target image smaller than window");
+    if (reference_window.min_x() < 0 || img_ref.ni() <= (unsigned)reference_window.max_x() ||
+        reference_window.min_y() < 0 || img_ref.nj() <= (unsigned)reference_window.max_y()) {
+      throw std::runtime_error("reference window outside reference image extents");
+    }
   }
 
   // validate that the reference image is the same size as the target image
