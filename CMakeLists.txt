@@ -53,7 +53,7 @@ endif()
 # cmake versions.
 foreach(p
     ## Only policies introduced after the cmake_minimum_required
-    ## version need to explicitly be set to NEW.
+    ## version need to be set.
 
     ##----- Policies Introduced by CMake 3.12
     CMP0075  #: Include file check macros honor CMAKE_REQUIRED_LIBRARIES.
@@ -64,6 +64,19 @@ foreach(p
     )
   if(POLICY ${p})
     cmake_policy(SET ${p} NEW)
+  endif()
+endforeach()
+
+# Set old policies we have not adjusted to yet
+foreach(p
+    ## Only policies introduced after the cmake_minimum_required
+    ## version need to be set.
+
+    ##----- Policies Introduced by CMake 3.20
+    CMP0120  #: The WriteCompilerDetectionHeader module is removed.
+    )
+  if(POLICY ${p})
+    cmake_policy(SET ${p} OLD)
   endif()
 endforeach()
 
