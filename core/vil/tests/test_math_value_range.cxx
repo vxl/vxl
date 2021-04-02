@@ -1,45 +1,62 @@
 // This is core/vil/tests/test_math_value_range.cxx
 
 #include <iostream>
+#include <limits>
 #include "testlib/testlib_test.h"
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
 #include "vil/vil_math.h"
 
-
-static void
-test_math_value_range()
+template <class T>
+void view_cout(const vil_image_view<T>& view)
 {
-  std::cout << "******************************\n"
-            << " Testing vil_math_value_range\n"
-            << "******************************\n";
+  for (unsigned p = 0; p < view.nplanes(); ++p)
+  {
+    std::cout << "Plane " << p << "\n";
+    for (unsigned j = 0; j < view.nj(); ++j)
+    {
+      for (unsigned i = 0; i < view.ni(); ++i)
+      {
+        std::cout << view(i, j, p) << ' ';
+      }
+      std::cout << '\n';
+    }
+  }
+}
+
+
+template <class T>
+static void
+_test_math_value_range(std::string type_name, bool test_nan=false)
+{
+  std::cout << "************************************************\n"
+            << "test math_value_range vil_image_view<" << type_name << ">\n"
+            << "************************************************\n";
 
   // Create a test image with values 1...100
   unsigned ni = 10, nj = 10;
-  vil_image_view<int> img(ni, nj);
+  vil_image_view<T> img(ni, nj);
   for (unsigned i = 0; i < ni; ++i)
   {
     for (unsigned j = 0; j < nj; ++j)
     {
-      int val = j * ni + i + 1; // NB Ensure that data values not already sorted!
+      T val = j * ni + i + 1; // NB Ensure that data values not already sorted!
       img(i, j) = val;
-#ifdef DEBUG
-      std::cout << val << ' ';
-#endif
     }
-#ifdef DEBUG
-    std::cout << val << '\n';
-#endif
   }
 
+#ifdef DEBUG
+  view_cout(img);
+#endif
+
   // Check the min/max values
-  int min, max;
+  T min, max;
   vil_math_value_range(img, min, max);
   TEST("vil_math_value_range(): min", min == 1, true);
   TEST("vil_math_value_range(): max", max == 100, true);
 
-  int val = 0; // initialised to avoid compiler warning
+  T val = T(0); // initialised to avoid compiler warning
 
   // Test a likely pair of percentiles
   vil_math_value_range_percentile(img, 0.05, val);
@@ -60,38 +77,58 @@ test_math_value_range()
   TEST("vil_math_value_range_percentile(): 73 %", val == 73, true);
 
   // Test several percentiles at once
-  unsigned int nfrac = 9;
-  std::vector<double> fraction(nfrac);
-  std::vector<double> true_value(nfrac);
-  fraction[0] = 0.00;
-  true_value[0] = 1;
-  fraction[1] = 0.05;
-  true_value[1] = 5;
-  fraction[2] = 0.10;
-  true_value[2] = 10;
-  fraction[3] = 0.31;
-  true_value[3] = 31;
-  fraction[4] = 0.50;
-  true_value[4] = 50;
-  fraction[5] = 0.73;
-  true_value[5] = 73;
-  fraction[6] = 0.90;
-  true_value[6] = 90;
-  fraction[7] = 0.95;
-  true_value[7] = 95;
-  fraction[8] = 1.00;
-  true_value[8] = 100;
-  std::vector<int> value;
-  vil_math_value_range_percentiles(img, fraction, value);
-  bool all_correct = true;
-  for (unsigned f = 0; f < nfrac; ++f)
+  std::vector<double> fraction = {0.00, 0.05, 0.10, 0.31, 0.50,
+                                  0.73, 0.90, 0.95, 1.00};
+  std::vector<T> true_values = {1, 5, 10, 31, 50, 73, 90, 95, 100};
+  size_t nfrac = fraction.size();
+
+  std::vector<T> values;
+  vil_math_value_range_percentiles(img, fraction, values);
+  std::cout << "true_value, value:\n";
+  for (size_t f; f < nfrac; ++f)
   {
-    if (value[f] != true_value[f])
+    std::cout << true_values[f] << "," << values[f] << "\n";
+  }
+
+  TEST("vil_math_value_range_percentiles()", values, true_values);
+
+  // nan tests
+  if (!test_nan)
+    return;
+
+  // pad img with nan values
+  vil_image_view<T> img2(ni+2, nj+2);
+  img2.fill(std::numeric_limits<T>::quiet_NaN());
+  for (unsigned j = 0; j < nj; ++j)
+  {
+    for (unsigned i = 0; i < ni; ++i)
     {
-      all_correct = false;
+      img2(i+1, j+1) = img(i, j);
     }
   }
-  TEST("vil_math_value_range_percentiles(): all correct", all_correct, true);
+
+#ifdef DEBUG
+  view_cout(img2);
+#endif
+
+  std::vector<T> values2;
+  vil_math_value_range_percentiles(img2, fraction, values2, true);
+  std::cout << "true_value, value:\n";
+  for (size_t f; f < nfrac; ++f)
+  {
+    std::cout << true_values[f] << "," << values2[f] << "\n";
+  }
+
+  TEST("vil_math_value_range_percentiles(ignore_nan)", values2, true_values);
+}
+
+static void
+test_math_value_range()
+{
+  _test_math_value_range<vxl_byte>("vxl_byte");
+  _test_math_value_range<int>("int");
+  _test_math_value_range<float>("float", true);
+  _test_math_value_range<double>("double", true);
 }
 
 TESTMAIN(test_math_value_range);
