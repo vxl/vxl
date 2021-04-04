@@ -46,6 +46,7 @@ add_executable( vil_test_all
 
 
   # Math
+  test_flatten.cxx
   test_math_value_range.cxx
   test_math_median.cxx
   test_na.cxx
@@ -89,6 +90,7 @@ add_test( NAME vil_test_nearest_interp COMMAND $<TARGET_FILE:vil_test_all> test_
 add_test( NAME vil_test_resample_nearest COMMAND $<TARGET_FILE:vil_test_all> test_resample_nearest)
 
 # Math
+add_test( NAME vil_test_flatten COMMAND $<TARGET_FILE:vil_test_all> test_flatten)
 add_test( NAME vil_test_math_value_range COMMAND $<TARGET_FILE:vil_test_all> test_math_value_range)
 add_test( NAME vil_test_math_median COMMAND $<TARGET_FILE:vil_test_all> test_math_median)
 add_test( NAME vil_test_na COMMAND $<TARGET_FILE:vil_test_all> test_na)
