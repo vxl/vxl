@@ -34,6 +34,7 @@ DECLARE(test_round);
 DECLARE(test_pyramid_image_view);
 DECLARE(test_na);
 DECLARE(test_rgb);
+DECLARE(test_flatten);
 
 void
 register_tests()
@@ -72,6 +73,7 @@ register_tests()
   REGISTER(test_pyramid_image_view);
   REGISTER(test_na);
   REGISTER(test_rgb);
+  REGISTER(test_flatten);
 }
 
 DEFINE_MAIN;

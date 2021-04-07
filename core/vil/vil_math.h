@@ -9,9 +9,11 @@
 #include <cmath>
 #include <algorithm>
 #include <cassert>
+#include <type_traits>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
+#include "vil_flatten.h"
 #include "vil_image_view.h"
 #include "vil_image_resource.h"
 #include "vil_view_as.h"
@@ -83,14 +85,17 @@ inline void vil_math_value_range(const vil_image_view<vil_rgb<float> >& rgb_view
 // \param im The image to examine.
 // \param fraction The fractions of the data range (from the lower end).
 // \retval value The image data values corresponding to the specified percentiles.
+// \param ignore_nan Ignore NAN values (floating point only)
 // \relatesalso vil_image_view
 // \note This function requires the sorting of large parts of the image data
 // and can be very expensive in terms of both processing and memory.
 template <class T>
 inline void vil_math_value_range_percentiles(const vil_image_view<T>& im,
                                              const std::vector<double>& fraction,
-                                             std::vector<T>& value)
+                                             std::vector<T>& value,
+                                             bool ignore_nan=false)
 {
+  // clear return vector
   value.clear();
 
   // Test for invalid inputs
@@ -104,35 +109,33 @@ inline void vil_math_value_range_percentiles(const vil_image_view<T>& im,
     if (fraction[f]<0.0 || fraction[f]>1.0)
       return;
   }
-
-  // Copy the pixel values into a list.
-  unsigned ni = im.ni();
-  unsigned nj = im.nj();
-  unsigned np = im.nplanes();
-  std::ptrdiff_t istep = im.istep();
-  std::ptrdiff_t jstep = im.jstep();
-  std::ptrdiff_t pstep = im.planestep();
-  std::vector<T> data(ni*nj*np);
-
-  typename std::vector<T>::iterator it = data.begin();
-  const T* plane = im.top_left_ptr();
-  for (unsigned int p=0; p<np; ++p, plane+=pstep)
+  if (ignore_nan && !std::is_floating_point<T>::value)
   {
-    const T* row = plane;
-    for (unsigned int j=0; j<nj; ++j, row+=jstep)
-    {
-      const T* pixel = row;
-      for (unsigned int i=0; i<ni; ++i, pixel+=istep)
-      {
-        *it = *pixel;
-        it++;
-      }
+    std::cerr << "WARNING: vil_math_value_range_percentiles ignore_nan is "
+              << "only available for floating point arithmetic. "
+              << "Disabling ignore_nan." << std::endl;
+    ignore_nan = false;
+  }
+
+  // flatten image
+  std::vector<T> data = vil_flatten_row_major(im);
+
+  // ignore nan pixels via erase-remove idiom
+  // intended for floating point values only
+  if (ignore_nan) {
+    data.erase(std::remove_if(data.begin(), data.end(),
+                              [](const T& v) { return std::isnan(v); }),
+               data.end());
+    if (data.empty()) {
+      return;
     }
   }
+
+  // number of available pixels
   const std::size_t npix = data.size();
 
   // Get the nth_element corresponding to the specified fractions
-  value.resize(nfrac);
+  value.resize(nfrac, T(0));
   for (unsigned f=0; f<nfrac; ++f)
   {
     unsigned index = static_cast<unsigned>(fraction[f]*npix - 0.5);
@@ -148,17 +151,19 @@ inline void vil_math_value_range_percentiles(const vil_image_view<T>& im,
 // \param im The image to examine.
 // \param fraction The fraction of the data range (from the lower end).
 // \retval value The image data value corresponding to the specified percentile.
+// \param ignore_nan Ignore NAN values (floating point only)
 // \relatesalso vil_image_view
 // \note This function requires the sorting of large parts of the image data
 // and can be very expensive in terms of both processing and memory.
 template <class T>
 inline void vil_math_value_range_percentile(const vil_image_view<T>& im,
                                             const double fraction,
-                                            T& value)
+                                            T& value,
+                                            bool ignore_nan=false)
 {
   std::vector<double> fractions(1, fraction);
   std::vector<T> values;
-  vil_math_value_range_percentiles(im, fractions, values);
+  vil_math_value_range_percentiles(im, fractions, values, ignore_nan);
   if (!values.empty())
     value = values[0]; // Bounds-checked access in case previous line failed.
 }
