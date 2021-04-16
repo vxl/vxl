@@ -779,9 +779,13 @@ void vnl_matrix<T>::copy_out(T *p) const
 template <class T>
 vnl_matrix<T>& vnl_matrix<T>::set_identity()
 {
-  for (unsigned int i = 0; i < this->num_rows; ++i)    // For each row in the Matrix
-    for (unsigned int j = 0; j < this->num_cols; ++j)  // For each element in column
-      this->data[i][j] = (i==j) ? T(1) : T(0);
+  // Zero-filling all data, followed by a loop over the diagonal, is
+  // probably better than having a branch inside the loop. Similar to
+  // the set_identity() member function of vnl_matrix_fixed.
+  std::fill_n( this->data[0], this->num_rows * this->num_cols, T() );
+  const unsigned n = std::min( this->num_rows, this->num_cols );
+  for (unsigned int i = 0; i < n; ++i)
+    this->data[i][i] = 1;
   return *this;
 }
 
