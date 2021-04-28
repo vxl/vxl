@@ -88,27 +88,27 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   vpgl_lvcs_sptr const lvcs() {return lvcs_;}
 
-  double lvcs_elev_origin();
+  double lvcs_elev_origin() const;
 
     //: convert local coordinates to global coordinates in the geo_camera CS
   void local_to_global(double lx, double ly, double lz, double& gx, double& gy, double& gz) const;
 
   //: convert global coordinates in the geo_camera CS to local coordinates
-  bool global_to_local(double gx, double gy, double gz, double& lx, double& ly, double& lz);
+  bool global_to_local(double gx, double gy, double gz, double& lx, double& ly, double& lz) const;
 
   //: Implementing the generic camera interface of vpgl_camera.
   //  x,y,z are in local coordinates, u represents image column, v image row
   void project(const double x, const double y, const double z, double& u, double& v) const override;
 
   //: backprojects an image point into local coordinates (based on lvcs_)
-  void backproject(const double u, const double v, double& x, double& y, double& z);
+  void backproject(const double u, const double v, double& x, double& y, double& z) const;
 
   // adds translation to the trans matrix
   void translate(double tx, double ty, double z);
 
   //: the lidar pixel size in meters assumes square pixels
-  double pixel_spacing() { if (scale_tag_) return trans_matrix_[0][0];
-                           else return 1.0; }
+  double pixel_spacing() const { if (scale_tag_) return trans_matrix_[0][0];
+                                 else return 1.0; }
 
   bool operator ==(vpgl_geo_camera const& rhs) const;
 
@@ -156,7 +156,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
                          double& u, double& v) const;
 
   //: returns the corresponding utm location for the given local position
-  void local_to_utm(const double x, const double y, const double z, double& e, double& n, int& utm_zone);
+  void local_to_utm(const double x, const double y, const double z, double& e, double& n, int& utm_zone) const;
 
   int utm_zone() const { return utm_zone_; }
   int utm_northing() const { return northing_; }
@@ -165,9 +165,9 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   //: returns the corresponding geographical coordinate (lon, lat, elev) for a given pixel position (i,j,k)
   //  Note: not yet implemented -- PVr, 16 aug 2012
-  void img_to_wgs(unsigned i, unsigned j, unsigned k, double& lon, double& lat, double& elev);
+  void img_to_wgs(unsigned i, unsigned j, unsigned k, double& lon, double& lat, double& elev) const;
 
-  vnl_matrix<double>  trans_matrix(){return trans_matrix_; }
+  vnl_matrix<double> trans_matrix() const {return trans_matrix_; }
 
   //: since vpgl_geo_camera is not templated only vpgl_camera<double>* is covariant with vpgl_camera<T>*
   vpgl_geo_camera *clone() const override { return new vpgl_geo_camera(*this); }

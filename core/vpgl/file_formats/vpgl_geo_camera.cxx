@@ -363,7 +363,7 @@ vpgl_geo_camera::local_to_global(double lx, double ly, double lz, double & gx, d
   }
 }
 bool
-vpgl_geo_camera::global_to_local(double gx, double gy, double gz, double & lx, double & ly, double & lz)
+vpgl_geo_camera::global_to_local(double gx, double gy, double gz, double & lx, double & ly, double & lz) const
 {
   if (!lvcs_)
   {
@@ -385,7 +385,7 @@ vpgl_geo_camera::global_to_local(double gx, double gy, double gz, double & lx, d
 }
 
 double
-vpgl_geo_camera::lvcs_elev_origin()
+vpgl_geo_camera::lvcs_elev_origin() const
 {
   if (!lvcs_)
     return 0.0;
@@ -438,7 +438,7 @@ vpgl_geo_camera::project(const double x, const double y, const double z, double 
 
 //: backprojects an image point into local coordinates (based on lvcs_)
 void
-vpgl_geo_camera::backproject(const double u, const double v, double & x, double & y, double & z)
+vpgl_geo_camera::backproject(const double u, const double v, double & x, double & y, double & z) const
 {
   vnl_vector<double> vec(4), res(4);
   if (scale_tag_)
@@ -643,7 +643,7 @@ vpgl_geo_camera::global_utm_to_img(const double x, const double y, int zone, dou
 
 //: returns the corresponding utm location for the given local position
 void
-vpgl_geo_camera::local_to_utm(const double x, const double y, const double z, double & e, double & n, int & utm_zone)
+vpgl_geo_camera::local_to_utm(const double x, const double y, const double z, double & e, double & n, int & utm_zone) const
 {
   double lat, lon, gz;
   lvcs_->local_to_global(x, y, z, vpgl_lvcs::wgs84, lon, lat, gz);
@@ -793,7 +793,7 @@ vpgl_geo_camera::img_to_wgs(unsigned /*i*/,
                             unsigned /*k*/,
                             double & /*lon*/,
                             double & /*lat*/,
-                            double & /*elev*/)
+                            double & /*elev*/) const
 {
   assert(!"Not yet implemented");
 }
