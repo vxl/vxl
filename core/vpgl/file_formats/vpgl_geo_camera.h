@@ -47,6 +47,10 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   vpgl_geo_camera(vpgl_camera<double> const& rhs);
 
+  //: Load camera from image resource
+  bool load_from_resource(vil_image_resource_sptr const& geotiff_img,
+                          const vpgl_lvcs* lvcs=nullptr);
+
   //: uses lvcs to convert local x-y to global longitude and latitude
   static bool init_geo_camera(vil_image_resource_sptr const& geotiff_img,
                               const vpgl_lvcs_sptr& lvcs,
@@ -197,5 +201,10 @@ class vpgl_geo_camera : public vpgl_camera<double>
   int northing_; //0 North, 1 South
   bool scale_tag_;
 };
+
+//: Create a vpgl_geo_camera from a vil_image_resource_sptr & optional LVCS
+vpgl_geo_camera
+load_geo_camera_from_resource(vil_image_resource_sptr const& geotiff_img,
+                              const vpgl_lvcs* lvcs = nullptr);
 
 #endif // vpgl_geo_camera_h_
