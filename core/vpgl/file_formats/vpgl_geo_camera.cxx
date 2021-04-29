@@ -32,11 +32,13 @@ vpgl_geo_camera::vpgl_geo_camera()
 vpgl_geo_camera::vpgl_geo_camera(vpgl_geo_camera const & rhs)
   : vpgl_camera<double>(rhs)
   , trans_matrix_(rhs.trans_matrix_)
-  , lvcs_(new vpgl_lvcs(*(rhs.lvcs_)))
   , is_utm_(rhs.is_utm_)
   , utm_zone_(rhs.utm_zone_)
+  , northing_(rhs.northing_)
   , scale_tag_(rhs.scale_tag_)
-{}
+{
+  this->set_lvcs(rhs.lvcs_);
+}
 
 bool
 vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const & geotiff_img,
@@ -403,6 +405,7 @@ vpgl_geo_camera::lvcs_elev_origin() const
   }
   return 0.0;
 }
+
 //: transforms a given local 3d world point to image plane
 void
 vpgl_geo_camera::project(const double x, const double y, const double z, double & u, double & v) const

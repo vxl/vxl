@@ -82,7 +82,8 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //northing=0 means North, 1 is south
   void set_utm(int utm_zone, unsigned northing) { is_utm_=true, utm_zone_=utm_zone; northing_=northing; }
 
-  void set_lvcs(vpgl_lvcs_sptr lvcs) {lvcs_ = new vpgl_lvcs(*lvcs); }
+  void set_lvcs(const vpgl_lvcs* lvcs) {lvcs_ = (lvcs) ? lvcs->clone() : nullptr; }
+  void set_lvcs(const vpgl_lvcs_sptr& lvcs) {lvcs_ = (lvcs) ? lvcs->clone() : nullptr; }
 
   void set_scale_format(bool scale_tag) { scale_tag_=scale_tag; }
 
