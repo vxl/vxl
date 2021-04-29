@@ -702,19 +702,20 @@ vpgl_geo_camera::operator==(vpgl_geo_camera const & rhs) const
 std::ostream &
 operator<<(std::ostream & s, vpgl_geo_camera const & p)
 {
-  if (!p.is_utm_)
-    s << "geocam is using wgs_84 deg/meters" << '\n';
   if (p.lvcs_)
     s << p.trans_matrix_ << '\n' << *(p.lvcs_) << '\n';
   else
     s << p.trans_matrix_ << '\n';
-  if (p.is_utm_)
-  {
-    s << "geocam is using UTM with zone: " << p.utm_zone_ << '\n';
-    if (p.northing_)
-      s << "southern zone" << std::endl;
-    else
-      s << "northern zone" << std::endl;
+
+  if (!p.is_utm_) {
+    s << "geocam is using wgs84 deg/meters\n";
+  } else {
+    s << "geocam is using UTM with zone " << p.utm_zone_ << '\n';
+    if (p.northing_) {
+      s << "southern zone\n";
+    } else {
+      s << "northern zone\n";
+    }
   }
 
   return s;
