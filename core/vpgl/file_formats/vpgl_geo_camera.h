@@ -195,11 +195,11 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   vnl_matrix<double> trans_matrix_;           // 4x4 matrix
   //: lvcs of world parameters
-  vpgl_lvcs_sptr lvcs_;
-  bool is_utm_;
-  int utm_zone_;
-  int northing_; //0 North, 1 South
-  bool scale_tag_;
+  vpgl_lvcs_sptr lvcs_ = nullptr;
+  bool is_utm_ = false;
+  int utm_zone_ = 0;
+  int northing_ = 0; //0 North, 1 South
+  bool scale_tag_ = false;
 };
 
 //: Create a vpgl_geo_camera from a vil_image_resource_sptr & optional LVCS
