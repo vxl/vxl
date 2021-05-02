@@ -85,6 +85,8 @@ class vpgl_lvcs : public vbl_ref_count
   ~vpgl_lvcs() override;
   vpgl_lvcs& operator=(const vpgl_lvcs&);
 
+  //: Create a copy on the heap via new and return pointer
+  vpgl_lvcs *clone() const { return new vpgl_lvcs(*this); }
 
   // Utility Methods-----------------------------------------------------------
   void local_to_global(const double lx, const double ly, const double lz,
