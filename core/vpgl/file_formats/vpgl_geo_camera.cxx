@@ -1,5 +1,6 @@
 // This is core/vpgl/file_formats/vpgl_geo_camera.cxx
 #include <vector>
+#include <array>
 #include <stdexcept>
 #include "vpgl_geo_camera.h"
 //:
@@ -17,6 +18,7 @@
 #include "vpgl/vpgl_utm.h"
 #include "vul/vul_file.h"
 
+#include "vil/vil_load.h"
 #include <vil/file_formats/vil_geotiff_header.h>
 #include <vil/file_formats/vil_tiff.h>
 #include <vil/file_formats/vil_nitf2_image.h>
@@ -39,6 +41,15 @@ vpgl_geo_camera::vpgl_geo_camera(vpgl_geo_camera const & rhs)
   , scale_tag_(rhs.scale_tag_)
 {
   this->set_lvcs(rhs.lvcs_);
+}
+
+// Load camera from geotiff file
+bool
+vpgl_geo_camera::load_from_geotiff(std::string const& file,
+                                   const vpgl_lvcs *lvcs)
+{
+  auto resource = vil_load_image_resource(file.c_str());
+  return this->load_from_resource(resource, lvcs);
 }
 
 // Load camera from geotiff resource
@@ -129,6 +140,50 @@ vpgl_geo_camera::load_from_resource(vil_image_resource_sptr const & geotiff_img,
       << std::endl;
     return false;
   }
+}
+
+//: Load camera from GDAL geotransform
+// https://gdal.org/user/raster_data_model.html#affine-geotransform
+//
+// The affine GDAL GeoTransform is defined as
+//   Xgeo = GT(0) + Xpixel*GT(1) + Yline*GT(2)
+//   Ygeo = GT(3) + Xpixel*GT(4) + Yline*GT(5)
+//
+// This relates to the vpgl_geo_camera trans_matrix as follows
+//   | X |   | GT(1)  GT(2)  0  GT(0) |  | I |
+//   | Y | = | GT(4)  GT(5)  0  GT(3) |  | J |
+//   | Z |   | 0      0      1  0     |  | K |
+//   | 1 |   | 0      0      0  1     |  | 1 |
+// Where I==XPixel (column coordinate), J==YLine (row coordinate), and Z==K.
+//
+// Note GeoTransform pixel/line coordinates assume "PixelIsArea",
+// where (0.0, 0.0) is the top left corner of the top left pixel.
+// The location of the center of the top left pixel is at (0.5, 0.5).
+bool
+vpgl_geo_camera::load_from_geotransform(std::array<double, 6> geotransform,
+                                        int utm_zone,
+                                        int northing,
+                                        const vpgl_lvcs *lvcs)
+{
+  vnl_matrix_fixed<double, 4, 4> trans_matrix;
+  trans_matrix.fill(0);
+  trans_matrix.fill_diagonal(1);
+
+  // set geotransform items
+  trans_matrix[0][3] = geotransform[0];
+  trans_matrix[0][0] = geotransform[1];
+  trans_matrix[0][1] = geotransform[2];
+  trans_matrix[1][3] = geotransform[3];
+  trans_matrix[1][0] = geotransform[4];
+  trans_matrix[1][1] = geotransform[5];
+
+  // update object
+  this->trans_matrix_ = trans_matrix.as_matrix();
+  this->scale_tag_ = true;
+  this->is_utm_ = (utm_zone > 0);
+  this->utm_zone_ = utm_zone;
+  this->northing_ = northing;
+  this->set_lvcs(lvcs);
 }
 
 // static function to initialize geo camera on the heap
@@ -883,6 +938,17 @@ vpgl_geo_camera::b_read(vsl_b_istream & is)
   }
 }
 
+//: Create a vpgl_geo_camera from a geotiff file
+vpgl_geo_camera
+load_geo_camera_from_geotiff(std::string const& file,
+                             const vpgl_lvcs* lvcs)
+{
+  vpgl_geo_camera camera;
+  if (!camera.load_from_geotiff(file, lvcs))
+    std::runtime_error("Failed to load vpgl_geo_camera from geotiff file");
+  return camera;
+}
+
 //: Create a vpgl_geo_camera from a vil_image_resource_sptr & optional LVCS
 vpgl_geo_camera
 load_geo_camera_from_resource(vil_image_resource_sptr const& geotiff_img,
@@ -891,5 +957,18 @@ load_geo_camera_from_resource(vil_image_resource_sptr const& geotiff_img,
   vpgl_geo_camera camera;
   if (!camera.load_from_resource(geotiff_img, lvcs))
     std::runtime_error("Failed to load vpgl_geo_camera");
+  return camera;
+}
+
+//: Create a vpgl_geo_camera from GDAL geotransform
+vpgl_geo_camera
+load_geo_camera_from_geotransform(std::array<double, 6> geotransform,
+                                  int utm_zone,
+                                  int northing,
+                                  const vpgl_lvcs* lvcs)
+{
+  vpgl_geo_camera camera;
+  if (!camera.load_from_geotransform(geotransform, utm_zone, northing, lvcs))
+    std::runtime_error("Failed to load vpgl_geo_camera from geotransform");
   return camera;
 }

@@ -47,9 +47,19 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   vpgl_geo_camera(vpgl_camera<double> const& rhs);
 
+  // Load camera from geotiff file
+  bool load_from_geotiff(std::string const& file,
+                         const vpgl_lvcs *lvcs=nullptr);
+
   //: Load camera from image resource
   bool load_from_resource(vil_image_resource_sptr const& geotiff_img,
                           const vpgl_lvcs* lvcs=nullptr);
+
+  //: Load camera from GDAL geotransform
+  bool load_from_geotransform(std::array<double, 6> geotransform,
+                              int utm_zone = -1,
+                              int northing = 0, //0 North, 1 South
+                              const vpgl_lvcs *lvcs=nullptr);
 
   //: uses lvcs to convert local x-y to global longitude and latitude
   static bool init_geo_camera(vil_image_resource_sptr const& geotiff_img,
@@ -202,9 +212,22 @@ class vpgl_geo_camera : public vpgl_camera<double>
   bool scale_tag_ = false;
 };
 
+//: Create a vpgl_geo_camera from a geotiff file
+vpgl_geo_camera
+load_geo_camera_from_geotiff(std::string const& file,
+                             const vpgl_lvcs* lvcs = nullptr);
+
 //: Create a vpgl_geo_camera from a vil_image_resource_sptr & optional LVCS
 vpgl_geo_camera
 load_geo_camera_from_resource(vil_image_resource_sptr const& geotiff_img,
                               const vpgl_lvcs* lvcs = nullptr);
+
+//: Create a vpgl_geo_camera from GDAL geotransform
+// https://gdal.org/user/raster_data_model.html#affine-geotransform
+vpgl_geo_camera
+load_geo_camera_from_geotransform(std::array<double, 6> geotransform,
+                                  int utm_zone = -1,
+                                  int northing = 0, //0 North, 1 South
+                                  const vpgl_lvcs* lvcs = nullptr);
 
 #endif // vpgl_geo_camera_h_
