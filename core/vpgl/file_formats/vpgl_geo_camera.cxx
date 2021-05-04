@@ -18,10 +18,12 @@
 #include "vpgl/vpgl_utm.h"
 #include "vul/vul_file.h"
 
+#if HAS_GEOTIFF
 #include "vil/vil_load.h"
 #include <vil/file_formats/vil_geotiff_header.h>
 #include <vil/file_formats/vil_tiff.h>
 #include <vil/file_formats/vil_nitf2_image.h>
+#endif
 
 vpgl_geo_camera::vpgl_geo_camera()
 {
@@ -42,6 +44,10 @@ vpgl_geo_camera::vpgl_geo_camera(vpgl_geo_camera const & rhs)
 {
   this->set_lvcs(rhs.lvcs_);
 }
+
+
+// camera initialization requiring GEOTIFF capabilities
+#if HAS_GEOTIFF
 
 // Load camera from geotiff file
 bool
@@ -142,6 +148,22 @@ vpgl_geo_camera::load_from_resource(vil_image_resource_sptr const & geotiff_img,
   }
 }
 
+// static function to initialize geo camera on the heap
+// maintain for backward compatability
+bool
+vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const & geotiff_img,
+                                 const vpgl_lvcs_sptr & lvcs,
+                                 vpgl_geo_camera *& camera)
+{
+  vpgl_geo_camera cam;
+  if (!cam.load_from_resource(geotiff_img, lvcs.ptr()))
+    camera = nullptr;
+  else
+    camera = cam.clone();
+}
+
+#endif // HAS_GEOTIFF
+
 //: Load camera from GDAL geotransform
 // https://gdal.org/user/raster_data_model.html#affine-geotransform
 //
@@ -184,20 +206,6 @@ vpgl_geo_camera::load_from_geotransform(std::array<double, 6> geotransform,
   this->utm_zone_ = utm_zone;
   this->northing_ = northing;
   this->set_lvcs(lvcs);
-}
-
-// static function to initialize geo camera on the heap
-// maintain for backward compatability
-bool
-vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const & geotiff_img,
-                                 const vpgl_lvcs_sptr & lvcs,
-                                 vpgl_geo_camera *& camera)
-{
-  vpgl_geo_camera cam;
-  if (!cam.load_from_resource(geotiff_img, lvcs.ptr()))
-    camera = nullptr;
-  else
-    camera = cam.clone();
 }
 
 //: define a geo_camera by the image file name (filename should have format such as xxx_N35W73_S0.6x0.6_xxx.tif)
@@ -938,6 +946,8 @@ vpgl_geo_camera::b_read(vsl_b_istream & is)
   }
 }
 
+#if HAS_GEOTIFF
+
 //: Create a vpgl_geo_camera from a geotiff file
 vpgl_geo_camera
 load_geo_camera_from_geotiff(std::string const& file,
@@ -959,6 +969,8 @@ load_geo_camera_from_resource(vil_image_resource_sptr const& geotiff_img,
     std::runtime_error("Failed to load vpgl_geo_camera");
   return camera;
 }
+
+#endif // HAS_GEOTIFF
 
 //: Create a vpgl_geo_camera from GDAL geotransform
 vpgl_geo_camera

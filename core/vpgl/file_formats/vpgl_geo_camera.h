@@ -26,7 +26,10 @@
 
 #include <vpgl/vpgl_camera.h>
 
+#include <vil/vil_config.h> // defines HAS_GEOTIFF
+#if HAS_GEOTIFF
 #include <vil/vil_image_resource_sptr.h>
+#endif
 
 class vpgl_geo_camera : public vpgl_camera<double>
 {
@@ -47,6 +50,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   vpgl_geo_camera(vpgl_camera<double> const& rhs);
 
+#if HAS_GEOTIFF
   // Load camera from geotiff file
   bool load_from_geotiff(std::string const& file,
                          const vpgl_lvcs *lvcs=nullptr);
@@ -54,12 +58,6 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //: Load camera from image resource
   bool load_from_resource(vil_image_resource_sptr const& geotiff_img,
                           const vpgl_lvcs* lvcs=nullptr);
-
-  //: Load camera from GDAL geotransform
-  bool load_from_geotransform(std::array<double, 6> geotransform,
-                              int utm_zone = -1,
-                              int northing = 0, //0 North, 1 South
-                              const vpgl_lvcs *lvcs=nullptr);
 
   //: uses lvcs to convert local x-y to global longitude and latitude
   static bool init_geo_camera(vil_image_resource_sptr const& geotiff_img,
@@ -72,6 +70,13 @@ class vpgl_geo_camera : public vpgl_camera<double>
     vpgl_lvcs_sptr lvcs = nullptr;
     return init_geo_camera(geotiff_img, lvcs, camera);
   }
+#endif
+
+  //: Load camera from GDAL geotransform
+  bool load_from_geotransform(std::array<double, 6> geotransform,
+                              int utm_zone = -1,
+                              int northing = 0, //0 North, 1 South
+                              const vpgl_lvcs *lvcs=nullptr);
 
   //: warning, use this camera cautiously, the output of img_to_global method needs to be adjusted sign wise
   //  for 'S' use -lat and for 'W' -lon
@@ -212,6 +217,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
   bool scale_tag_ = false;
 };
 
+#if HAS_GEOTIFF
 //: Create a vpgl_geo_camera from a geotiff file
 vpgl_geo_camera
 load_geo_camera_from_geotiff(std::string const& file,
@@ -221,6 +227,7 @@ load_geo_camera_from_geotiff(std::string const& file,
 vpgl_geo_camera
 load_geo_camera_from_resource(vil_image_resource_sptr const& geotiff_img,
                               const vpgl_lvcs* lvcs = nullptr);
+#endif
 
 //: Create a vpgl_geo_camera from GDAL geotransform
 // https://gdal.org/user/raster_data_model.html#affine-geotransform
