@@ -206,6 +206,8 @@ vpgl_geo_camera::load_from_geotransform(std::array<double, 6> geotransform,
   this->utm_zone_ = utm_zone;
   this->northing_ = northing;
   this->set_lvcs(lvcs);
+
+  return true;
 }
 
 //: define a geo_camera by the image file name (filename should have format such as xxx_N35W73_S0.6x0.6_xxx.tif)
