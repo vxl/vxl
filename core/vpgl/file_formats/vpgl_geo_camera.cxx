@@ -157,9 +157,15 @@ vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const & geotiff_img,
 {
   vpgl_geo_camera cam;
   if (!cam.load_from_resource(geotiff_img, lvcs.ptr()))
+  {
     camera = nullptr;
+    return false;
+  }
   else
+  {
     camera = cam.clone();
+    return true;
+  }
 }
 
 #endif // HAS_GEOTIFF
