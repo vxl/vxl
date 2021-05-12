@@ -14,6 +14,7 @@
 #include <vgl/io/vgl_io_line_3d_2_points.hxx>
 #include <vgl/io/vgl_io_line_segment_2d.hxx>
 #include <vgl/io/vgl_io_line_segment_3d.hxx>
+#include <vgl/io/vgl_io_oriented_box_2d.hxx>
 #include <vgl/io/vgl_io_plane_3d.hxx>
 #include <vgl/io/vgl_io_point_2d.hxx>
 #include <vgl/io/vgl_io_point_3d.hxx>

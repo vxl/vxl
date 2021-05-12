@@ -16,6 +16,7 @@ set(vgl_io_sources
   vgl_io_line_3d_2_points.hxx vgl_io_line_3d_2_points.h
   vgl_io_line_segment_2d.hxx vgl_io_line_segment_2d.h
   vgl_io_line_segment_3d.hxx vgl_io_line_segment_3d.h
+  vgl_io_oriented_box_2d.hxx vgl_io_oriented_box_2d.h
   vgl_io_plane_3d.hxx vgl_io_plane_3d.h
   vgl_io_point_2d.hxx vgl_io_point_2d.h
   vgl_io_point_3d.hxx vgl_io_point_3d.h

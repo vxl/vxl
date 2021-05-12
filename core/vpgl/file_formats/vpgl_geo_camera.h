@@ -26,7 +26,10 @@
 
 #include <vpgl/vpgl_camera.h>
 
+#include <vil/vil_config.h> // defines HAS_GEOTIFF
+#if HAS_GEOTIFF
 #include <vil/vil_image_resource_sptr.h>
+#endif
 
 class vpgl_geo_camera : public vpgl_camera<double>
 {
@@ -47,6 +50,15 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   vpgl_geo_camera(vpgl_camera<double> const& rhs);
 
+#if HAS_GEOTIFF
+  // Load camera from geotiff file
+  bool load_from_geotiff(std::string const& file,
+                         const vpgl_lvcs *lvcs=nullptr);
+
+  //: Load camera from image resource
+  bool load_from_resource(vil_image_resource_sptr const& geotiff_img,
+                          const vpgl_lvcs* lvcs=nullptr);
+
   //: uses lvcs to convert local x-y to global longitude and latitude
   static bool init_geo_camera(vil_image_resource_sptr const& geotiff_img,
                               const vpgl_lvcs_sptr& lvcs,
@@ -58,6 +70,13 @@ class vpgl_geo_camera : public vpgl_camera<double>
     vpgl_lvcs_sptr lvcs = nullptr;
     return init_geo_camera(geotiff_img, lvcs, camera);
   }
+#endif
+
+  //: Load camera from GDAL geotransform
+  bool load_from_geotransform(std::array<double, 6> geotransform,
+                              int utm_zone = -1,
+                              int northing = 0, //0 North, 1 South
+                              const vpgl_lvcs *lvcs=nullptr);
 
   //: warning, use this camera cautiously, the output of img_to_global method needs to be adjusted sign wise
   //  for 'S' use -lat and for 'W' -lon
@@ -82,33 +101,34 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //northing=0 means North, 1 is south
   void set_utm(int utm_zone, unsigned northing) { is_utm_=true, utm_zone_=utm_zone; northing_=northing; }
 
-  void set_lvcs(vpgl_lvcs_sptr lvcs) {lvcs_ = new vpgl_lvcs(*lvcs); }
+  void set_lvcs(const vpgl_lvcs* lvcs) {lvcs_ = (lvcs) ? lvcs->clone() : nullptr; }
+  void set_lvcs(const vpgl_lvcs_sptr& lvcs) {lvcs_ = (lvcs) ? lvcs->clone() : nullptr; }
 
   void set_scale_format(bool scale_tag) { scale_tag_=scale_tag; }
 
   vpgl_lvcs_sptr const lvcs() {return lvcs_;}
 
-  double lvcs_elev_origin();
+  double lvcs_elev_origin() const;
 
     //: convert local coordinates to global coordinates in the geo_camera CS
   void local_to_global(double lx, double ly, double lz, double& gx, double& gy, double& gz) const;
 
   //: convert global coordinates in the geo_camera CS to local coordinates
-  bool global_to_local(double gx, double gy, double gz, double& lx, double& ly, double& lz);
+  bool global_to_local(double gx, double gy, double gz, double& lx, double& ly, double& lz) const;
 
   //: Implementing the generic camera interface of vpgl_camera.
   //  x,y,z are in local coordinates, u represents image column, v image row
   void project(const double x, const double y, const double z, double& u, double& v) const override;
 
   //: backprojects an image point into local coordinates (based on lvcs_)
-  void backproject(const double u, const double v, double& x, double& y, double& z);
+  void backproject(const double u, const double v, double& x, double& y, double& z) const;
 
   // adds translation to the trans matrix
   void translate(double tx, double ty, double z);
 
   //: the lidar pixel size in meters assumes square pixels
-  double pixel_spacing() { if (scale_tag_) return trans_matrix_[0][0];
-                           else return 1.0; }
+  double pixel_spacing() const { if (scale_tag_) return trans_matrix_[0][0];
+                                 else return 1.0; }
 
   bool operator ==(vpgl_geo_camera const& rhs) const;
 
@@ -156,7 +176,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
                          double& u, double& v) const;
 
   //: returns the corresponding utm location for the given local position
-  void local_to_utm(const double x, const double y, const double z, double& e, double& n, int& utm_zone);
+  void local_to_utm(const double x, const double y, const double z, double& e, double& n, int& utm_zone) const;
 
   int utm_zone() const { return utm_zone_; }
   int utm_northing() const { return northing_; }
@@ -165,9 +185,9 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   //: returns the corresponding geographical coordinate (lon, lat, elev) for a given pixel position (i,j,k)
   //  Note: not yet implemented -- PVr, 16 aug 2012
-  void img_to_wgs(unsigned i, unsigned j, unsigned k, double& lon, double& lat, double& elev);
+  void img_to_wgs(unsigned i, unsigned j, unsigned k, double& lon, double& lat, double& elev) const;
 
-  vnl_matrix<double>  trans_matrix(){return trans_matrix_; }
+  vnl_matrix<double> trans_matrix() const {return trans_matrix_; }
 
   //: since vpgl_geo_camera is not templated only vpgl_camera<double>* is covariant with vpgl_camera<T>*
   vpgl_geo_camera *clone() const override { return new vpgl_geo_camera(*this); }
@@ -190,11 +210,31 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   vnl_matrix<double> trans_matrix_;           // 4x4 matrix
   //: lvcs of world parameters
-  vpgl_lvcs_sptr lvcs_;
-  bool is_utm_;
-  int utm_zone_;
-  int northing_; //0 North, 1 South
-  bool scale_tag_;
+  vpgl_lvcs_sptr lvcs_ = nullptr;
+  bool is_utm_ = false;
+  int utm_zone_ = 0;
+  int northing_ = 0; //0 North, 1 South
+  bool scale_tag_ = false;
 };
+
+#if HAS_GEOTIFF
+//: Create a vpgl_geo_camera from a geotiff file
+vpgl_geo_camera
+load_geo_camera_from_geotiff(std::string const& file,
+                             const vpgl_lvcs* lvcs = nullptr);
+
+//: Create a vpgl_geo_camera from a vil_image_resource_sptr & optional LVCS
+vpgl_geo_camera
+load_geo_camera_from_resource(vil_image_resource_sptr const& geotiff_img,
+                              const vpgl_lvcs* lvcs = nullptr);
+#endif
+
+//: Create a vpgl_geo_camera from GDAL geotransform
+// https://gdal.org/user/raster_data_model.html#affine-geotransform
+vpgl_geo_camera
+load_geo_camera_from_geotransform(std::array<double, 6> geotransform,
+                                  int utm_zone = -1,
+                                  int northing = 0, //0 North, 1 South
+                                  const vpgl_lvcs* lvcs = nullptr);
 
 #endif // vpgl_geo_camera_h_

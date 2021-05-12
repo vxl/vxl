@@ -5,6 +5,7 @@
 
 set( vpgl_file_formats_sources
   vpgl_nitf_rational_camera.h  vpgl_nitf_rational_camera.cxx
+  vpgl_geo_camera.h            vpgl_geo_camera.cxx
 )
 
 include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
@@ -13,10 +14,6 @@ if(TIFF_FOUND)
   include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
   if(GEOTIFF_FOUND)
     include_directories(${GEOTIFF_INCLUDE_DIR})
-
-    set( vpgl_file_formats_sources ${vpgl_file_formats_sources}
-         vpgl_geo_camera.h         vpgl_geo_camera.cxx)
-
   endif()
 endif()
 

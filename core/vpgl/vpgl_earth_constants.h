@@ -18,8 +18,13 @@
 /* EARTH CONSTANTS */
 /* GRS-80 */
 #define GRS80_a 6378137.0
-#define GRS80_b 6356752.3
+#define GRS80_b 6356752.3141
 #define GRS80_e 0.08181921805
+
+/* GRS-84 */
+#define GRS84_a 6378137.0
+#define GRS84_b 6356752.31424518
+#define GRS84_e 0.08181919084262
 
 /* NAD 1927; Same as Clarke 1866 */
 #define NAD27_a 6378206.4

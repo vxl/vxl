@@ -52,6 +52,11 @@ class vil_geotiff_header
   //: returns true if in geographic coords, linear units are in meters and angular units are in degrees
   bool GCS_WGS84_MET_DEG();
 
+  //: other header fields
+  bool gtif_modeltype(modeltype_t& type);
+  bool gtif_rastertype(rastertype_t& type);
+  bool geounits(geounits_t& units);
+
   //: <key> : key id
   // <value>: a single value or an array of values
   // <size>:  the size of individual key values
@@ -77,15 +82,6 @@ class vil_geotiff_header
   // the number of keys defined in the rest of the tag
   int number_of_geokeys_;
 
-  modeltype_t model_type_;
-  rastertype_t raster_type_;
-  geographic_t geographic_type_;
-  geounits_t geounits_;
-
-  bool gtif_modeltype (modeltype_t& type);
-  bool gtif_rastertype (rastertype_t&);
-  bool geounits (geounits_t&);
-  bool geographic_type(geographic_t&);
 };
 
 #endif //vil_geotiff_header_h_

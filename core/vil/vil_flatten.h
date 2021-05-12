@@ -5,6 +5,7 @@
 // \file
 // \author Ian Scott.
 
+#include <vector>
 #include "vil_image_view.h"
 #include "vil_crop.h"
 #include "vil_plane.h"
@@ -34,6 +35,52 @@ inline vil_image_view<T> vil_flatten_planes(const vil_image_view<T> &im)
   }
 
   return ret;
+}
+
+//: Return a copy of a vil_image_view collapsed into one dimension.
+// Row-major order (C-style); iterate plane, row, column.
+// Consecutive elements of a row are adjacent in the resulting vector.
+// [ (plane0, row0, col0), (p0, r0, c1), (p0, r0, c2) ... ]
+template <class T>
+inline std::vector<T> vil_flatten_row_major(const vil_image_view<T> &im)
+{
+  std::vector<T> vec(im.size(), T(0));
+  size_t vec_i = 0;
+  for (unsigned int p=0; p<im.nplanes(); ++p)  // plane
+  {
+    for (unsigned int j=0; j<im.nj(); ++j)  // row
+    {
+      for (unsigned int i=0; i<im.ni(); ++i)  // column
+      {
+        vec[vec_i] = im(i,j,p);
+        ++vec_i;
+      }
+    }
+  }
+  return vec;
+}
+
+//: Return a copy of a vil_image_view collapsed into one dimension.
+// Column-major order (Fortran-style); iterate plane, column, row.
+// Consecutive elements of a column are adjacent in the resulting vector.
+// [ (plane0, row0, col0), (p0, r1, c0), (p0, r2, c0) ... ]
+template <class T>
+inline std::vector<T> vil_flatten_column_major(const vil_image_view<T> &im)
+{
+  std::vector<T> vec(im.size(), T(0));
+  size_t vec_i = 0;
+  for (unsigned int p=0; p<im.nplanes(); ++p)  // plane
+  {
+    for (unsigned int i=0; i<im.ni(); ++i)  // column
+    {
+      for (unsigned int j=0; j<im.nj(); ++j)  // row
+      {
+        vec[vec_i] = im(i,j,p);
+        ++vec_i;
+      }
+    }
+  }
+  return vec;
 }
 
 #endif // vil_flatten_h_

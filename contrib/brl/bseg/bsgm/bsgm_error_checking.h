@@ -8,6 +8,7 @@
 //#include <sstream>
 //#include <utility>
 
+#include <vgl/vgl_box_2d.h>
 #include <vil/vil_image_view.h>
 #include <vector>
 
@@ -31,7 +32,8 @@ void bsgm_check_nonunique(
   const vil_image_view<T>& img,
   float invalid_disparity,
   unsigned short shadow_thresh,
-  int disp_thresh = 1);
+  int disp_thresh = 1,
+  const vgl_box_2d<int>& img_window = vgl_box_2d<int>());
 
 
 //: Given two disparity maps, perform the full left-right check from the
@@ -53,7 +55,8 @@ void bsgm_compute_invalid_map(
   vil_image_view<bool>& invalid_tar,
   int min_disparity,
   int num_disparities,
-  T border_val = T(0) );
+  T border_val = T(0),
+  const vgl_box_2d<int>& target_window = vgl_box_2d<int>());
 
 //: Fill in disparity pixels flagged as errors via multi-directional
 // sampling.
@@ -63,7 +66,8 @@ void bsgm_interpolate_errors(
   const vil_image_view<bool>& invalid,
   const vil_image_view<T>& img,
   float invalid_disparity,
-  unsigned short shadow_thresh);
+  unsigned short shadow_thresh,
+  const vgl_box_2d<int>& img_window = vgl_box_2d<int>());
 
 
 //: Flip the sign of all disparities, swap invalid values.

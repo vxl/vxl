@@ -54,7 +54,11 @@ endif(WIN32)
 configure_file(${VXL3P_JPEG_SOURCE_DIR}/jpegDllConfig.h.in
                ${VXL3P_JPEG_BINARY_DIR}/jpegDllConfig.h)
 
-vxl_add_library( LIBRARY_NAME jpeg LIBRARY_SOURCES ${systemdependent_SRCS} ${common_SRCS} ${compression_SRCS} ${decompression_SRCS})
+vxl_add_library(
+    LIBRARY_NAME jpeg 
+    LIBRARY_SOURCES ${systemdependent_SRCS} ${common_SRCS} ${compression_SRCS} ${decompression_SRCS}
+    DISABLE_MSVC_MP
+)
 
 set(VXL_JPEG_LIBRARY_NAME jpeg)
 
