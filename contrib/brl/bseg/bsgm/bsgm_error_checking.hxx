@@ -12,6 +12,41 @@
 #include <vgl/vgl_box_2d.h>
 #include <vil/vil_image_view.h>
 #include "bsgm_error_checking.h"
+
+template <class T>
+void bsgm_check_shadows(
+  vil_image_view<float>& disp_img,
+  const vil_image_view<T>& img,
+  float invalid_disparity,
+  unsigned short shadow_thresh,
+  const vgl_box_2d<int>& img_window)
+{
+  // image window
+  int img_start_x, img_start_y;
+  if (img_window.is_empty()) {
+    img_start_x = 0;
+    img_start_y = 0;
+  }
+  else {
+    img_start_x = img_window.min_x();
+    img_start_y = img_window.min_y();
+  }
+
+  // check shadow threshold
+  int w = disp_img.ni(), h = disp_img.nj();
+  for (int y = 0, img_y = img_start_y; y < h; y++, img_y++) {
+    for (int x = 0, img_x = img_start_x; x < w; x++, img_x++) {
+      if (std::isnan(invalid_disparity) && std::isnan(disp_img(x, y))) {
+        continue;
+      } else if (disp_img(x, y) == invalid_disparity) {
+        continue;
+      } else if (img(img_x, img_y) < shadow_thresh) {
+        disp_img(x, y) = invalid_disparity;
+      }
+    }
+  }
+}
+
 template <class T>
 void bsgm_check_nonunique(
   vil_image_view<float>& disp_img,
@@ -374,6 +409,8 @@ void bsgm_interpolate_errors(
 }
 #undef BSGM_ERROR_CHECKING_INSTANTIATE
 #define BSGM_ERROR_CHECKING_INSTANTIATE(T) \
+template void bsgm_check_shadows(vil_image_view<float>& , const vil_image_view<T>&, \
+                                 float, unsigned short, const vgl_box_2d<int>&); \
 template void bsgm_interpolate_errors(vil_image_view<float>& ,const vil_image_view<bool>&,        \
                                       const vil_image_view<T>&,  float, unsigned short,           \
                                       const vgl_box_2d<int>&);                                 \
