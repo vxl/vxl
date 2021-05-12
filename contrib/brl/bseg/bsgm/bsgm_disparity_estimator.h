@@ -65,7 +65,7 @@ struct bsgm_disparity_estimator_params
   int error_check_mode;
 
   //: When set > 0, pixels below this threshold will be flagged as invalid
-  // when error_check_mode > 0
+  // applied for any error_check_mode
   unsigned short shadow_thresh;
 
   //: Set "bias_weight" to the range (0.0,1.0] to bias the SGM directional average
@@ -619,13 +619,20 @@ bool bsgm_disparity_estimator::compute(
     print_time("Disparity map extraction", timer);
 
   // Find and fix errors if configured.
-  if( params_.error_check_mode > 0 && !skip_error_check){
-    bsgm_check_nonunique<T>( disp_tar, disp_cost,
-      img_tar, invalid_disp, params_.shadow_thresh, 1, target_window);
+  if (!skip_error_check) {
 
-    if( params_.error_check_mode > 1 )
+    bsgm_check_shadows<T>(disp_tar, img_tar, invalid_disp,
+                          params_.shadow_thresh, target_window);
+
+    if ( params_.error_check_mode > 0) {
+      bsgm_check_nonunique<T>( disp_tar, disp_cost,
+        img_tar, invalid_disp, params_.shadow_thresh, 1, target_window);
+    }
+
+    if ( params_.error_check_mode > 1 ) {
       bsgm_interpolate_errors<T>( disp_tar, invalid_tar,
         img_tar, invalid_disp, params_.shadow_thresh, target_window);
+    }
 
     if (params_.print_timing)
       print_time("Consistency check", timer);
