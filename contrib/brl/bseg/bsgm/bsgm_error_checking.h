@@ -19,6 +19,16 @@
 // \author Thomas Pollard
 // \date July 24, 2018
 
+//: Invalidate disparity pixels with corresponding image intensity below
+// a shadow threshold
+template <class T>
+void bsgm_check_shadows(
+  vil_image_view<float>& disp_img,
+  const vil_image_view<T>& img,
+  float invalid_disparity,
+  unsigned short shadow_thresh,
+  const vgl_box_2d<int>& img_window = vgl_box_2d<int>());
+
 
 //: Use the OpenCV SGM uniqueness criteria to find bad disparities. This
 // is not quite the same as the left-right consistency check from the SGM
