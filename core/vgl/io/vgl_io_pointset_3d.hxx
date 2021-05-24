@@ -5,7 +5,7 @@
 // \file
 
 #include "vgl_io_pointset_3d.h"
-
+#include "vgl/vgl_export.h"
 
 //============================================================================
 //: Binary save self to stream.
@@ -92,8 +92,8 @@ void vsl_print_summary(std::ostream& os, const vgl_pointset_3d<T> & ptset)
 
 
 #define VGL_IO_POINTSET_3D_INSTANTIATE(T) \
-template void vsl_print_summary(std::ostream &, const vgl_pointset_3d<T > &); \
-template void vsl_b_read(vsl_b_istream &, vgl_pointset_3d<T > &); \
-template void vsl_b_write(vsl_b_ostream &, const vgl_pointset_3d<T > &)
+template VGL_EXPORT void vsl_print_summary(std::ostream &, const vgl_pointset_3d<T > &); \
+template VGL_EXPORT void vsl_b_read(vsl_b_istream &, vgl_pointset_3d<T > &); \
+template VGL_EXPORT void vsl_b_write(vsl_b_ostream &, const vgl_pointset_3d<T > &)
 
 #endif  // vgl_io_pointset_3d_hxx_
