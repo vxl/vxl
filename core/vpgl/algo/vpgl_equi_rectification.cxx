@@ -334,9 +334,11 @@ bool vpgl_equi_rectification::rectify_pair(vpgl_perspective_camera<double> const
     return false;
   }
   // update the rectificaion homographies
+  // map image points to focal plane space using K_inverse
+  // map to rectified focal plane image space
+  // map back to rectified image0 space by applying K0
   H0 = K0 * R0r * K0_inv;
-  H1 = K1 * R0r * R10 * K1_inv;
-
+  H1 = K0 * R0r * R10 * K1_inv;
   // compute offset and scale transforms
   size_t n = img_pts0.size();
 
@@ -361,7 +363,7 @@ bool vpgl_equi_rectification::rectify_pair(vpgl_perspective_camera<double> const
 
   // update the rectification homographies
   H0 = Tv0 * H0; H1 = Tv1 * H1;
-
+  
   // scale columns with an affine skew transform to minimize disparity on the pointsets img_pta0 and img_pts1
   double min_scale = 0.5;
   vnl_matrix_fixed<double, 3, 3> Usqt, Usqt_inv;
