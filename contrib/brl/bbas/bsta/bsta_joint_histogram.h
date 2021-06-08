@@ -101,6 +101,12 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
   bool index_b(T b, unsigned& indx) const;
 
   T volume() const;
+  T mean_a() const;
+  T mean_b() const;
+  T variance_a() const;
+  T variance_b() const;
+  T covar_ab() const;
+  T correlation_coef() const;
   T entropy() const;
   T mutual_information() const;
   T renyi_entropy() const;

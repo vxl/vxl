@@ -302,6 +302,99 @@ T bsta_joint_histogram<T>::volume() const
 }
 
 template <class T>
+T bsta_joint_histogram<T>::mean_a() const{
+  T sum = T(0);
+  T suma = T(0);
+  T mid_a = delta_a_/T(2);
+  for(size_t a = 0; a<nbins_a_; ++a)
+    for(size_t b = 0; b<nbins_b_; ++b){
+      sum += counts_[a][b];
+      suma += (a*delta_a_ + mid_a + min_a_)*counts_[a][b];
+    }
+  if(sum <= T(0))
+    return T(0);
+  T a_result = suma/sum;
+  return a_result;
+}
+template <class T>
+T bsta_joint_histogram<T>::mean_b() const{
+  T sum = T(0);
+  T sumb = T(0);
+  T mid_b = delta_b_/T(2);
+
+  for(size_t a = 0; a<nbins_a_; ++a)
+    for(size_t b = 0; b<nbins_b_; ++b){
+      sum += counts_[a][b];
+      sumb += (b*delta_b_ + mid_b + min_b_)*counts_[a][b];
+    }
+  if(sum == T(0))
+    return T(0);
+  T b_result = sumb/sum;
+  return b_result;
+}
+
+template <class T>
+T bsta_joint_histogram<T>::variance_a() const{
+  T mu_a = mean_a();
+  T sum = T(0), sumva = T(0);
+  T mid_a = delta_a_/T(2);
+  for(size_t b = 0; b<nbins_b_; ++b)
+    for(size_t a = 0; a<nbins_a_; ++a){
+      sum += counts_[a][b];
+      T temp = ((a*delta_a_ +mid_a + min_a_) - mu_a);
+      sumva += temp*temp*counts_[a][b];
+    }
+  if (sum<=T(2))
+    return T(0);
+  T result_va = sumva/(sum-T(2));// unbiased estimate
+  return result_va;
+}
+
+template <class T>
+T bsta_joint_histogram<T>::variance_b() const{
+  T mu_b = mean_b();
+  T sum = T(0), sumvb = T(0);
+  T mid_b = delta_b_/T(2);
+  for(size_t a = 0; a<nbins_a_; ++a)
+    for(size_t b = 0; b<nbins_b_; ++b){
+      sum += counts_[a][b];
+      T temp = ((b*delta_b_ + mid_b + min_b_) - mu_b);
+      sumvb += temp*temp*counts_[a][b];
+    }
+  if (sum<=T(2))
+    return T(0);
+  T result_vb = sumvb/(sum-T(2));
+  return result_vb;
+}
+
+template <class T>
+T bsta_joint_histogram<T>::covar_ab() const{
+  T mu_a = mean_a();
+  T mu_b = mean_b();
+  T sum = T(0), sumab = T(0);
+  T mid_a = delta_a_/T(2);
+  T mid_b = delta_b_/T(2);
+  for(size_t a = 0; a<nbins_a_; ++a)
+    for(size_t b = 0; b<nbins_b_; ++b){
+      sum += counts_[a][b];
+      sumab += (((a*delta_a_ + mid_a + min_a_) - mu_a)*((b*delta_b_ + mid_b + min_b_) - mu_b))*counts_[a][b];
+    }
+  if (sum<=T(2))
+    return T(0);
+  T result_ab = sumab/(sum-T(2));
+  return result_ab;
+
+}
+
+template <class T>
+T bsta_joint_histogram<T>::correlation_coef() const{
+  T vara = variance_a(), varb = variance_b(), cvar = covar_ab();
+  if(vara == T(0) || varb == T(0)) return T(0);
+  T rho = cvar/sqrt(vara*varb);
+  return rho;
+}
+
+template <class T>
 T bsta_joint_histogram<T>::entropy() const
 {
   T ent = 0;
