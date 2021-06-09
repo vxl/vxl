@@ -615,28 +615,21 @@ acal_match_graph::validate_match_trees_and_set_metric()
         temp[trit->first] = trit->second;
     }
 
-    if (temp.size() > 0)
+    // no valid match trees
+    if (temp.empty())
     {
-      match_trees_[cc] = temp;
-      std::shared_ptr<acal_match_tree> best_tree = this->largest_tree(cc);
-      if (!best_tree){
-        match_tree_metric_[cc] = 0;
-        continue;
-      }
-      match_tree_metric_[cc] = best_tree->size();
-      continue;
-    } else {//no valid match trees
       std::cout << "all match trees failed for connected component " << cc
-                << " listing cams with excessive projection error"<< std::endl;
+                << " listing cams with excessive projection error" << std::endl;
       std::vector<size_t> bad_ids;
       for (std::map<size_t, size_t>::iterator bit = bad_track_camera_ids_.begin();
            bit != bad_track_camera_ids_.end(); ++bit)
       {
         size_t nbad = bit->second;
-        if(nbad>0) bad_ids.push_back(bit->first);
-        if (nbad == 0) continue;
-        std::cout << "cam id " << bit->first << ", n_bad " << bit->second
-                  << ", n_trees " << n_trees << std::endl;
+        if (nbad > 0) {
+          bad_ids.push_back(bit->first);
+          std::cout << "cam id " << bit->first << ", n_bad " << nbad
+                    << ", n_trees " << n_trees << std::endl;
+        }
       }
 
       std::cout << "remove bad cameras from match trees and retry to find valid trees" << std::endl;
@@ -645,7 +638,7 @@ acal_match_graph::validate_match_trees_and_set_metric()
           mit != mtrees.end(); ++mit)
       {
         size_t fid = mit->first;
-        if(bad_track_camera_ids_[fid]>0) // skip entire tree if root is bad
+        if (bad_track_camera_ids_[fid] > 0) // skip entire tree if root is bad
           continue;
         std::shared_ptr<acal_match_tree> repaired(new acal_match_tree(*(mit->second), bad_ids));
         repaired_trees[mit->first] = repaired;
@@ -669,15 +662,15 @@ acal_match_graph::validate_match_trees_and_set_metric()
       }
     }
 
-    if (temp.size() > 0) {
+    if (temp.size() > 0)
+    {
       match_trees_[cc] = temp;
       std::shared_ptr<acal_match_tree> best_tree = this->largest_tree(cc);
-      if (!best_tree){
+      if (!best_tree) {
         match_tree_metric_[cc] = 0;
-        continue;
+      } else {
+        match_tree_metric_[cc] = best_tree->size();
       }
-      match_tree_metric_[cc] = best_tree->size();
-      continue;
     }
   }
 }
