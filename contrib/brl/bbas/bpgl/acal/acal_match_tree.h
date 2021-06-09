@@ -95,7 +95,7 @@ std::ostream& operator<<(std::ostream& os, acal_match_node const& node);
 class acal_match_tree
 {
  public:
-  //: default constructor  
+  //: default constructor
   acal_match_tree() = default;
 
   //: initalizing constructor
@@ -104,7 +104,7 @@ class acal_match_tree
   }
   //: copy constructor
   acal_match_tree(acal_match_tree const& mt);
-  
+
   //: construct a new tree with the specified nodes removed
   acal_match_tree(acal_match_tree const& tree, std::vector<size_t> nodes_to_remove);
 
@@ -152,7 +152,7 @@ class acal_match_tree
 
   //: collect correspondences recursively
   static void collect_correspondences(std::shared_ptr<acal_match_node>& node, std::map<size_t, std::vector<vgl_point_2d<double> > >& corrs);
-  
+
   //: reorganize correspondences in track format
   std::vector< std::map<size_t, vgl_point_2d<double> > > tracks() ;
 
