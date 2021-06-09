@@ -448,6 +448,14 @@ acal_match_tree::collect_correspondences(
   size_t nc = node->size(); // number of children
 
   if (nc == 0) {
+
+    // node has no children or parent
+    if (!node->has_parent()) {
+      std::cout << "singleton node " << node->cam_id_
+                << " (no children or parent)" << std::endl;
+      return;
+    }
+
     // node is leaf, so use second half of match_pair (corr2_) with respect to parent
     std::shared_ptr<acal_match_node> parent = node->parent();
 
@@ -506,6 +514,9 @@ acal_match_tree::tracks()
 
   std::map<size_t, std::vector<vgl_point_2d<double> > > tree_corrs;
   this->collect_correspondences(root_, tree_corrs);
+  if (tree_corrs.empty()) {
+    return ret;
+  }
 
   size_t nt = tree_corrs.begin()->second.size();
   for(size_t t = 0; t<nt; ++t){

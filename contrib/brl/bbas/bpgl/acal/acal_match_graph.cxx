@@ -515,7 +515,8 @@ acal_match_graph::compute_match_trees()
 bool
 acal_match_graph::valid_tree(std::shared_ptr<acal_match_tree> const& mtree)
 {
-  if (mtree->size() == 0)
+  // valid trees must have at least 2 nodes
+  if (mtree->size() < 2)
     return false;
 
   std::vector< std::map<size_t, vgl_point_2d<double> > > tracks = mtree->tracks();
