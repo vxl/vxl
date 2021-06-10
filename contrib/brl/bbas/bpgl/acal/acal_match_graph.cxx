@@ -24,6 +24,7 @@ match_vertex::edge_ids() const
   return ids;
 }
 
+
 // equality operator
 bool
 match_vertex::operator==(match_vertex const& other) const
@@ -31,6 +32,7 @@ match_vertex::operator==(match_vertex const& other) const
   return this->cam_id_ == other.cam_id_ &&
          this->edge_ids() == other.edge_ids();
 }
+
 
 // streaming operator
 std::ostream&
@@ -61,6 +63,7 @@ match_edge::vertex_ids() const
   return ids;
 }
 
+
 // equality operator
 bool
 match_edge::operator==(match_edge const& other) const
@@ -69,6 +72,7 @@ match_edge::operator==(match_edge const& other) const
          this->vertex_ids() == other.vertex_ids() &&
          this->matches_ == other.matches_;
 }
+
 
 // streaming operator
 std::ostream&
@@ -90,6 +94,7 @@ acal_match_graph::acal_match_graph(
 {
   bool success = this->load_incidence_matrix(incidence_matrix);
 }
+
 
 bool
 acal_match_graph::load_incidence_matrix(
@@ -135,6 +140,7 @@ acal_match_graph::load_incidence_matrix(
   return true;
 }
 
+
 bool
 acal_match_graph::load_from_fmatches(std::string const& fmatches_path)
 {
@@ -151,11 +157,13 @@ acal_match_graph::load_from_fmatches(std::string const& fmatches_path)
   return true;
 }
 
+
 bool
 acal_match_graph::load_affine_cams(std::string const& affine_cam_path)
 {
   return acal_f_utils::read_affine_cameras(affine_cam_path, all_acams_);
 }
+
 
 void
 acal_match_graph::clear_vertex_marks()
@@ -164,6 +172,7 @@ acal_match_graph::clear_vertex_marks()
       vit != match_vertices_.end(); ++vit)
     (*vit).second->mark_ = false;
 }
+
 
 std::vector<std::shared_ptr<match_vertex> >
 acal_match_graph::adjacent_verts(std::shared_ptr<match_vertex> const& v)
@@ -181,6 +190,7 @@ acal_match_graph::adjacent_verts(std::shared_ptr<match_vertex> const& v)
   return ret;
 }
 
+
 void
 acal_match_graph::visit(
     std::shared_ptr<match_vertex>& v,
@@ -197,6 +207,7 @@ acal_match_graph::visit(
   }
 }
 
+
 void
 acal_match_graph::find_connected_components()
 {
@@ -211,6 +222,7 @@ acal_match_graph::find_connected_components()
       conn_comps_.push_back(comp);
   }
 }
+
 
 void
 acal_match_graph::set_intersect_match_edge(
@@ -325,6 +337,7 @@ acal_match_graph::set_intersect_match_edge(
   focus_corrs = inter_focus_corrs;
 }
 
+
 bool
 acal_match_graph::find_joint_tracks(
     std::shared_ptr<match_vertex> const& focus_vert,
@@ -383,6 +396,7 @@ acal_match_graph::find_joint_tracks(
   return true;
 }
 
+
 void
 acal_match_graph::compute_focus_tracks()
 {
@@ -427,6 +441,7 @@ acal_match_graph::compute_focus_tracks()
     focus_tracks_[c] = c_tracks;
   }
 }
+
 
 void
 acal_match_graph::compute_match_trees()
@@ -496,34 +511,43 @@ acal_match_graph::compute_match_trees()
   } // end conn-comp
 }
 
+
 bool
 acal_match_graph::valid_tree(std::shared_ptr<acal_match_tree> const& mtree)
 {
-  if (mtree->size() == 0)
+  // valid trees must have at least 2 nodes
+  if (mtree->size() < 2)
     return false;
+
   std::vector< std::map<size_t, vgl_point_2d<double> > > tracks = mtree->tracks();
   std::map<size_t, std::map<size_t, vgl_point_2d<double> > > proj_tracks;
   std::map<size_t, vpgl_affine_camera<double> > tree_acams;
   std::vector<size_t> tree_cam_ids = mtree->cam_ids();
+
   for (std::vector<size_t>::iterator cit = tree_cam_ids.begin();
-      cit != tree_cam_ids.end(); ++cit) {
+       cit != tree_cam_ids.end(); ++cit)
+  {
     if (all_acams_.count(*cit) == 0) {
       std::cout << "affine camera " << *cit << " not in match graph - fatal" << std::endl;
       return false;
     }
     tree_acams[*cit] = all_acams_[*cit];
   }
+
   std::map<size_t, vgl_point_3d<double> > inter_pts;
   if (! acal_f_utils::intersect_tracks_with_3d(tree_acams, tracks, inter_pts, proj_tracks))
     return false;
+
   double max_proj_error = 0.0;
   size_t max_track = -1, max_cam_id = -1;
   for (std::map<size_t, std::map<size_t, vgl_point_2d<double> > >::iterator pit = proj_tracks.begin();
-      pit != proj_tracks.end(); ++pit) {
+       pit != proj_tracks.end(); ++pit)
+  {
     size_t tidx = pit->first; //track index
     std::map<size_t, vgl_point_2d<double> > temp = pit->second;
     for (std::map<size_t, vgl_point_2d<double> >::iterator cit = temp.begin();
-        cit != temp.end(); ++cit) {
+         cit != temp.end(); ++cit)
+    {
       size_t cam_id = cit->first;
       vgl_point_2d<double>& pt      = tracks[tidx][cam_id];
       vgl_point_2d<double>& proj_pt = cit->second;
@@ -535,6 +559,7 @@ acal_match_graph::valid_tree(std::shared_ptr<acal_match_tree> const& mtree)
       }
     }
   }
+
   //std::cout << max_proj_error << ' ';
   if (max_proj_error > params_.max_uncal_proj_error_) {
     //std::cout << max_proj_error << " error exceeds limit for cam " << max_cam_id << " on track " << max_track << std::endl;
@@ -544,7 +569,10 @@ acal_match_graph::valid_tree(std::shared_ptr<acal_match_tree> const& mtree)
   return true;
 }
 
-void acal_match_graph::print_bad_camera_ids(){
+
+void
+acal_match_graph::print_bad_camera_ids()
+{
   std::cout << "cameras that have excessive projection error in a track" << std::endl;
   for(std::map<size_t, size_t>::iterator bit = bad_track_camera_ids_.begin();
       bit != bad_track_camera_ids_.end(); ++bit) {
@@ -554,13 +582,16 @@ void acal_match_graph::print_bad_camera_ids(){
   }
 }
 
+
 void
 acal_match_graph::validate_match_trees_and_set_metric()
 {
   size_t ncc = conn_comps_.size();
   match_tree_metric_.clear();
   match_tree_metric_.resize(ncc, 0);
-  for (size_t cc = 0; cc<ncc; ++cc) {
+
+  for (size_t cc = 0; cc<ncc; ++cc)
+  {
     std::map<size_t, std::shared_ptr<acal_match_tree> >& mtrees = match_trees_[cc];
     std::map<size_t, std::shared_ptr<acal_match_tree> > temp, repaired_trees;
     size_t  n_trees = mtrees.size();
@@ -568,70 +599,79 @@ acal_match_graph::validate_match_trees_and_set_metric()
       std::cout << "no match trees for connected component " << cc << std::endl;
       continue;
     }
+
     // initialize bad camera map
     for (std::map<size_t, std::shared_ptr<acal_match_tree> >::iterator trit = mtrees.begin();
-         trit != mtrees.end(); ++trit) {
+         trit != mtrees.end(); ++trit)
+    {
       std::vector<size_t> cam_ids =  trit->second->cam_ids();
       for(size_t i = 0; i<cam_ids.size(); ++i)
         bad_track_camera_ids_[cam_ids[i]] = 0;//initialize bad in track count to 0
     }
+
     for (std::map<size_t, std::shared_ptr<acal_match_tree> >::iterator trit = mtrees.begin();
-         trit != mtrees.end(); ++trit) {
+         trit != mtrees.end(); ++trit)
+    {
       if (valid_tree(trit->second))//updates bad track camera count
         temp[trit->first] = trit->second;
     }
-    if(temp.size() > 0){
-      match_trees_[cc] = temp;
-      std::shared_ptr<acal_match_tree> best_tree = this->largest_tree(cc);
-      if (!best_tree){
-        match_tree_metric_[cc] = 0;
-        continue;
-      }
-      match_tree_metric_[cc] = best_tree->size();
-      continue;
-    }else{//no valid match trees
-      std::cout << "all match trees failed for connected component " << cc << " listing cams with excessive projection error"<< std::endl;
+
+    // no valid match trees
+    if (temp.empty())
+    {
+      std::cout << "all match trees failed for connected component " << cc
+                << " listing cams with excessive projection error" << std::endl;
       std::vector<size_t> bad_ids;
       for (std::map<size_t, size_t>::iterator bit = bad_track_camera_ids_.begin();
-        bit != bad_track_camera_ids_.end(); ++bit) {
+           bit != bad_track_camera_ids_.end(); ++bit)
+      {
         size_t nbad = bit->second;
-        if(nbad>0) bad_ids.push_back(bit->first);
-        if (nbad == 0) continue;
-        std::cout << "cam id " << bit->first << " n_bad / n_trees " << bit->second << " / " << n_trees << std::endl;
+        if (nbad > 0) {
+          bad_ids.push_back(bit->first);
+          std::cout << "cam id " << bit->first << ", n_bad " << nbad
+                    << ", n_trees " << n_trees << std::endl;
+        }
       }
+
       std::cout << "remove bad cameras from match trees and retry to find valid trees" << std::endl;
       std::map<size_t, std::shared_ptr<acal_match_tree> > repaired_trees;
       for(std::map<size_t, std::shared_ptr<acal_match_tree> >::iterator mit = mtrees.begin();
-          mit != mtrees.end(); ++mit){
+          mit != mtrees.end(); ++mit)
+      {
         size_t fid = mit->first;
-        if(bad_track_camera_ids_[fid]>0) // skip entire tree if root is bad
-          continue;       
+        if (bad_track_camera_ids_[fid] > 0) // skip entire tree if root is bad
+          continue;
         std::shared_ptr<acal_match_tree> repaired(new acal_match_tree(*(mit->second), bad_ids));
         repaired_trees[mit->first] = repaired;
       }
+
       // initialize bad camera map
       bad_track_camera_ids_.clear();
       for (std::map<size_t, std::shared_ptr<acal_match_tree> >::iterator trit = repaired_trees.begin();
-           trit != repaired_trees.end(); ++trit) {
+           trit != repaired_trees.end(); ++trit)
+      {
         std::vector<size_t> cam_ids =  trit->second->cam_ids();
         for(size_t i = 0; i<cam_ids.size(); ++i)
           bad_track_camera_ids_[cam_ids[i]] = 0;//initialize bad in track count to 0
       }
+
       for (std::map<size_t, std::shared_ptr<acal_match_tree> >::iterator trit = repaired_trees.begin();
-         trit != repaired_trees.end(); ++trit) {
+           trit != repaired_trees.end(); ++trit)
+      {
         if (valid_tree(trit->second))//updates bad track camera count
           temp[trit->first] = trit->second;
       }
     }
-    if(temp.size() > 0){
+
+    if (temp.size() > 0)
+    {
       match_trees_[cc] = temp;
       std::shared_ptr<acal_match_tree> best_tree = this->largest_tree(cc);
-      if (!best_tree){
+      if (!best_tree) {
         match_tree_metric_[cc] = 0;
-        continue;
+      } else {
+        match_tree_metric_[cc] = best_tree->size();
       }
-      match_tree_metric_[cc] = best_tree->size();
-      continue;
     }
   }
 }
@@ -937,7 +977,8 @@ acal_match_graph::trees(size_t conn_comp_index)
 // requires special handling to compare dereferenced shared_ptr content
 // std::equal pattern from https://stackoverflow.com/a/8473603
 template<typename T>
-bool is_equal(std::vector<T> const& lhs, std::vector<T> const& rhs)
+bool
+is_equal(std::vector<T> const& lhs, std::vector<T> const& rhs)
 {
   auto pred = [] (decltype(*lhs.begin()) a, decltype(a) b)
                  { return is_equal(a, b); };
@@ -947,7 +988,8 @@ bool is_equal(std::vector<T> const& lhs, std::vector<T> const& rhs)
 }
 
 template<typename K, typename T>
-bool is_equal(std::map<K, T> const& lhs, std::map<K, T> const& rhs)
+bool
+is_equal(std::map<K, T> const& lhs, std::map<K, T> const& rhs)
 {
   auto pred = [] (decltype(*lhs.begin()) a, decltype(a) b)
                  { return a.first == b.first && is_equal(a.second, b.second); };
@@ -957,7 +999,8 @@ bool is_equal(std::map<K, T> const& lhs, std::map<K, T> const& rhs)
 }
 
 template<typename T>
-bool is_equal(std::shared_ptr<T> const& lhs, std::shared_ptr<T> const& rhs)
+bool
+is_equal(std::shared_ptr<T> const& lhs, std::shared_ptr<T> const& rhs)
 {
   return *lhs == *rhs;
 }

@@ -77,8 +77,10 @@ operator<<(std::ostream& os, acal_match_node const& node)
 // --------------------
 
 // make a deep copy of a subtree
-void acal_match_tree::copy_subtree(std::shared_ptr<acal_match_node> const& node_from, std::shared_ptr<acal_match_node>& node_to){
-
+void
+acal_match_tree::copy_subtree(std::shared_ptr<acal_match_node> const& node_from,
+                              std::shared_ptr<acal_match_node>& node_to)
+{
   // don't copy the "from" parent pointer since copied subtree context is not specified
   // just set the camera id
   node_to->cam_id_ = node_from->cam_id_;
@@ -87,24 +89,27 @@ void acal_match_tree::copy_subtree(std::shared_ptr<acal_match_node> const& node_
   if(nc == 0) return; // nothing more to do node is a leaf
 
   // copy the data for the children
-  for (size_t c = 0; c<nc ; ++c) 
+  for (size_t c = 0; c<nc ; ++c)
     node_to->add_child(node_from->children_[c]->cam_id_, node_from->self_to_child_matches_[c]);
 
   //recursively copy the child subtrees
   for(size_t c = 0; c<nc; ++c)
     copy_subtree(node_from->children_[c], node_to->children_[c]);
-  
+
 }
-  
+
+
 // copy constructor
 acal_match_tree::acal_match_tree(acal_match_tree const& mt){
   copy_subtree(mt.root_, this->root_);
   this->update_tree_size();
 }
 
-// delete a leaf node of the tree
-bool acal_match_tree::delete_leaf(std::shared_ptr<acal_match_node>& leaf_node){
 
+// delete a leaf node of the tree
+bool
+acal_match_tree::delete_leaf(std::shared_ptr<acal_match_node>& leaf_node)
+{
   if(leaf_node->children_.size() != 0)//not a leaf node
     return false;
 
@@ -138,12 +143,14 @@ bool acal_match_tree::delete_leaf(std::shared_ptr<acal_match_node>& leaf_node){
   return false;
 }
 
-std::shared_ptr<acal_match_node>  acal_match_tree::find_leaf_node(std::shared_ptr<acal_match_node>& node){
 
+std::shared_ptr<acal_match_node>
+acal_match_tree::find_leaf_node(std::shared_ptr<acal_match_node>& node)
+{
   size_t nc = node->children_.size();
   if(nc == 0) // node is a leaf
     return node;
- 
+
   for(size_t c = 0; c<nc; ++c)
     return find_leaf_node(node->children_[c]);
 
@@ -151,9 +158,11 @@ std::shared_ptr<acal_match_node>  acal_match_tree::find_leaf_node(std::shared_pt
   return std::shared_ptr<acal_match_node>();
 }
 
-// delete a subtree with node as root including self
-bool acal_match_tree::delete_subtree(std::shared_ptr<acal_match_node>& subtree_root){
 
+// delete a subtree with node as root including self
+bool
+acal_match_tree::delete_subtree(std::shared_ptr<acal_match_node>& subtree_root)
+{
   // ::find_leaf_node operates depth first so the entire subtree will
   // eventually be deleted as leaf nodes are removed
   while(subtree_root->children_.size() > 0){
@@ -174,10 +183,13 @@ bool acal_match_tree::delete_subtree(std::shared_ptr<acal_match_node>& subtree_r
 
   return true;
 }
+
+
 // Each node to remove only appears once (at most) in a match tree
 // If the tree root is the node to be removed the cam_id becomes invalid, i.e.,  size_t(-1)
-acal_match_tree::acal_match_tree(acal_match_tree const& tree , std::vector<size_t> nodes_to_remove){
-
+acal_match_tree::acal_match_tree(acal_match_tree const& tree,
+                                 std::vector<size_t> nodes_to_remove)
+{
   //make a deep copy of the input tree
   *this = tree;
   size_t n = nodes_to_remove.size();
@@ -189,7 +201,7 @@ acal_match_tree::acal_match_tree(acal_match_tree const& tree , std::vector<size_
     std::shared_ptr<acal_match_node> found = this->find(this->root_, cam_id);
     if(!found)// node not in tree - or already removed so ok
       continue;
-    size_t found_id = found->cam_id_; 
+    size_t found_id = found->cam_id_;
     if(!delete_subtree(found)){
       std::cout << "Failed to remove subtree with root id " << cam_id << std::endl;
       continue;
@@ -201,6 +213,7 @@ acal_match_tree::acal_match_tree(acal_match_tree const& tree , std::vector<size_
   this->update_tree_size();
   //should now have a valid tree with the nodes to remove gone
 }
+
 
 std::shared_ptr<acal_match_node>
 acal_match_tree::find(std::shared_ptr<acal_match_node> const& node, size_t cam_id)
@@ -412,7 +425,7 @@ acal_match_tree::save_tree_dot_format(std::string const& path) const
 
 
 void
-acal_match_tree::n_nodes(std::shared_ptr<acal_match_node> const& node, size_t& n) 
+acal_match_tree::n_nodes(std::shared_ptr<acal_match_node> const& node, size_t& n)
 {
   size_t nc = node->size();
   if (nc == 0) {
@@ -427,34 +440,47 @@ acal_match_tree::n_nodes(std::shared_ptr<acal_match_node> const& node, size_t& n
 
 
 void
-acal_match_tree::collect_correspondences (
+acal_match_tree::collect_correspondences(
     std::shared_ptr<acal_match_node>& node,
-    std::map<size_t, std::vector<vgl_point_2d<double> > >& node_corrs) 
+    std::map<size_t, std::vector<vgl_point_2d<double> > >& node_corrs)
 {
   std::vector<vgl_point_2d<double> > temp;
-  size_t nc = node->size();// number of children
-  if(nc == 0) {
+  size_t nc = node->size(); // number of children
+
+  if (nc == 0) {
+
+    // node has no children or parent
+    if (!node->has_parent()) {
+      std::cout << "singleton node " << node->cam_id_
+                << " (no children or parent)" << std::endl;
+      return;
+    }
+
     // node is leaf, so use second half of match_pair (corr2_) with respect to parent
     std::shared_ptr<acal_match_node> parent = node->parent();
 
     // get parent's child index for node
     size_t cindx;
-    if(parent->child_index(node,  cindx))
+    if (parent->child_index(node,  cindx))
     {
       // retrieve the match pairs
       std::vector<acal_match_pair> & mpairs =  parent->self_to_child_matches_[cindx];
       size_t n = mpairs.size();
-      if(n == 0){
-        std::cout << "node " << node->cam_id_ << " has no correspondences - shouldn't happen" << std::endl;
+      if (n == 0) {
+        std::cout << "node " << node->cam_id_
+                  << " has no correspondences - shouldn't happen" << std::endl;
         return;
       }
+
       // extract the corr2_.pt_ half of the match pair and assign to leaf
       for(size_t i = 0; i<n; ++i)
         temp.push_back(mpairs[i].corr2_.pt_);
       node_corrs[node->cam_id_] = temp;
       return;
+
     } else {
-      std::cout << "can't find " << node->cam_id_ << "child in parent " << parent->cam_id_ << std::endl;
+      std::cout << "can't find " << node->cam_id_ << "child in parent "
+                << parent->cam_id_ << std::endl;
       return;
     }
   }
@@ -462,28 +488,35 @@ acal_match_tree::collect_correspondences (
   // not a leaf, so just pick any child to retrive match pairs to extract corr1_ to assign to node
   std::vector<acal_match_pair> & mpairs =  node->self_to_child_matches_[0];
   size_t n = mpairs.size();
-  if(n == 0){
+  if (n == 0) {
     std::cout << "node " << node->cam_id_ << " has no correspondences - shouldn't happen" << std::endl;
     return;
   }
 
   // extract corr1_ points
-  for(size_t i = 0; i<n; ++i)
+  for (size_t i = 0; i<n; ++i) {
     temp.push_back(mpairs[i].corr1_.pt_);
+  }
 
   node_corrs[node->cam_id_] = temp;
-  for(size_t c = 0; c<nc; ++c)
+  for (size_t c = 0; c<nc; ++c) {
     collect_correspondences(node->children_[c], node_corrs);
+  }
+
   return;
 }
 
+
 std::vector< std::map<size_t, vgl_point_2d<double> > >
-acal_match_tree::tracks() 
+acal_match_tree::tracks()
 {
   std::vector< std::map<size_t, vgl_point_2d<double> > > ret;
 
   std::map<size_t, std::vector<vgl_point_2d<double> > > tree_corrs;
   this->collect_correspondences(root_, tree_corrs);
+  if (tree_corrs.empty()) {
+    return ret;
+  }
 
   size_t nt = tree_corrs.begin()->second.size();
   for(size_t t = 0; t<nt; ++t){
