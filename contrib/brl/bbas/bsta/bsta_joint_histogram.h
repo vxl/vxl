@@ -103,10 +103,15 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
   T volume() const;
   T mean_a() const;
   T mean_b() const;
+
+  //: unbiased estimates e.g., var = 1/(sum_ab p_i -2) sum_ab((a-mean_a)*(a-mean_a)*p(a,b))
+  // -2 because count is increased by (wa+wb) for each upcount
   T variance_a() const;
   T variance_b() const;
   T covar_ab() const;
   T correlation_coef() const;
+
+  //: information theoretic quantities
   T entropy() const;
   T mutual_information() const;
   T renyi_entropy() const;
