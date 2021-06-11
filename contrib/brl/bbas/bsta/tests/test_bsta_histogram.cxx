@@ -227,6 +227,24 @@ void test_bsta_histogram()
     os_3d.close();
     vpl_unlink("./test_3d_hist_plot.wrl");
   }
+  // test mean, covariance
+  bsta_joint_histogram<double> hist_covar(-1.0, 1.0, 1201, -2.0, 2.0, 1201);
+  hist_covar.upcount(-1.0,1.0, -1.0, 1.0);
+  hist_covar.upcount(-1.0,1.0, 1.0, 1.0);
+  hist_covar.upcount(1.0, 1.0, -1.0, 1.0);
+  hist_covar.upcount(1.0,1.0, 1.0, 1.0);
+  hist_covar.upcount(-0.5,1.0, -0.5, 1.0);
+  hist_covar.upcount(-0.5,1.0, 0.5, 1.0);
+  hist_covar.upcount(0.5,1.0, -0.5, 1.0);
+  hist_covar.upcount(0.5,1.0, 0.5, 1.0);
+  hist_covar.upcount(1.0, 1.0, 1.0, 1.0);
+  double mean_a = hist_covar.mean_a(), mean_b = hist_covar.mean_b();
+  double var_a = hist_covar.variance_a(), var_b = hist_covar.variance_b();
+  double covar_ab = hist_covar.covar_ab();
+  std::cout << "mean a = "<< mean_a << " mean_b = " << mean_b << std::endl;
+  std::cout << "var a = " << var_a << " var_b = " << var_b << " covar_ab = " << covar_ab << std::endl;
+  double err2nd = fabs(mean_a - 0.1111) + fabs(mean_b - 0.1111) + fabs(var_a - 0.7361) + fabs(var_b - 0.7361) + fabs(covar_ab - 0.1111);
+  TEST_NEAR("2nd order moments joint histogram", err2nd, 0.0f, 0.005);
 }
 
 TESTMAIN(test_bsta_histogram);
