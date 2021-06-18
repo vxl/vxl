@@ -24,25 +24,34 @@ bool acal_single_track_solver::solve()
     std::cerr << "Insufficient number of rays - fail" << std::endl;
     return false;
   }
-    if(!use_covariance_){
-      if (!vgl_intersection(track_rays, track_3d_point_)){
-       std::cerr << "Intersection failed - while not using covariance" << std::endl;
-       return false;
-      }
-    }else{
-      if (!vgl_intersection(track_rays, covar_plane_cs_, track_3d_point_)){
-        std::cerr << "Intersection failed - while using covariance" << std::endl;
-       return false;
-      }else if(verbose_plus){
-        size_t n = track_rays.size();
-        std::cout << " Rays " << std::endl;
-        for (size_t i = 0; i < n; ++i) {
-          std::cout << track_rays[i] << std::endl;
-        }
-        std::cout << "plane covariance\n"<< covar_plane_cs_ << std::endl;
-      }//
+  if(!use_covariance_){
+    if (!vgl_intersection(track_rays, track_3d_point_)){
+      std::cerr << "Intersection failed - while not using covariance" << std::endl;
+      return false;
     }
-   
+  }else{
+    if (!vgl_intersection(track_rays, covar_plane_cs_, track_3d_point_)){
+      std::cerr << "Intersection failed - while using covariance" << std::endl;
+      return false;
+    }else if(verbose_plus){
+      size_t n = track_rays.size();
+      std::cout << " Rays " << std::endl;
+      for (size_t i = 0; i < n; ++i) {
+        std::cout << track_rays[i] << std::endl;
+      }
+      std::cout << "plane covariance\n"<< covar_plane_cs_ << std::endl;
+    }//
+  }
+  size_t nr = track_rays.size();
+  std::vector<double> sanity_thresholds(nr, 20.0);
+  if(use_covariance_){
+    for(size_t i = 0; i<nr; ++i){
+      size_t r = 2*i, c = 2*i;
+      double var = covar_plane_cs_[r][c];
+      if(var>100.0)
+        sanity_thresholds[i] = 50.0;
+    }
+  }
   vnl_vector<double> translations(2 * track_acams_.size());
   translations.fill(0.0);
   size_t it = 0;
@@ -62,27 +71,31 @@ bool acal_single_track_solver::solve()
       adjusted_acams_[cam_idx].set_matrix(m);
     }
   it = 0;
-  double sanity_thresh = 20.0;
-  bool fail = false;
+  std::vector<size_t> removed_cams;
   if(verbose_)std::cout << "final translations:(cam idx tu  tv)" << std::endl;
   for (std::map<size_t, vpgl_affine_camera<double> >::iterator ait = track_acams_.begin();
        ait != track_acams_.end(); ++ait, ++it) {
     size_t cam_idx = ait->first;
     double tu = translations(2 * it);
     double tv = translations(2 * it + 1);
+    double sanity_thresh = sanity_thresholds[it];
     if (fabs(tu) > sanity_thresh || fabs(tv) > sanity_thresh) {
-      std::cout << "solution failed " << std::endl;
-      fail = true;
-    }
+      std::cout << "solution for cam id " << cam_idx << " has too large a translation( "<< tu << ' ' << tv 
+                << ") removing from solved cameras" << std::endl;
+      removed_cams.push_back(cam_idx);
+    }else{
     vgl_vector_2d<double> trans(tu, tv);
     translations_[cam_idx] = trans;
-    if(!fail&&verbose_) std::cout << cam_idx << ' ' << tu << ' ' << tv << std::endl;
+    if(verbose_) std::cout << cam_idx << ' ' << tu << ' ' << tv << std::endl;
+    }
   }
-  if(!fail&&verbose_) std::cout << "mean sq track proj errors:(cam idx du  dv)" << std::endl;
   // errors should be zero but check to detect problems
   for (std::map<size_t, vgl_point_2d<double> >::const_iterator cit = track_.begin();
        cit != track_.end(); ++cit, ++it){
     size_t cidx = cit->first;
+    std::vector<size_t>::iterator rit = std::find(removed_cams.begin(), removed_cams.end(), cidx);
+    if(rit != removed_cams.end())
+      continue;
     double min_eps_u =0.0, min_eps_v = 0.0;
     double max_eps_u = 0.0, max_eps_v = 0.0;
     double sq_eps_u = 0, sq_eps_v = 0;
@@ -98,7 +111,7 @@ bool acal_single_track_solver::solve()
     sq_eps_v = min_eps_v*min_eps_v;
     sol_errors_[cidx] = acal_solution_error(min_eps_u, min_eps_v, max_eps_u, max_eps_v, sqrt(sq_eps_u), sqrt(sq_eps_v));
   }
-  return !fail;
+  return true;
 }
 
 
