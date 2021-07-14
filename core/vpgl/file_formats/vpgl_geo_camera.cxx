@@ -67,14 +67,14 @@ vpgl_geo_camera::load_from_resource(vil_image_resource_sptr const & geotiff_img,
   auto * geotiff_tiff = dynamic_cast<vil_tiff_image *>(geotiff_img.ptr());
   if (!geotiff_tiff)
   {
-    std::cerr << "vpgl_geo_camera::init_geo_camera : Error casting vil_image_resource to a tiff image.\n";
+    std::cerr << "vpgl_geo_camera::load_from_geotiff -- Error casting vil_image_resource to a tiff image.\n";
     return false;
   }
 
   // check if the tiff file is geotiff
   if (!geotiff_tiff->is_GEOTIFF())
   {
-    std::cerr << "vpgl_geo_camera::init_geo_camera -- The image should be a GEOTIFF!\n";
+    std::cerr << "vpgl_geo_camera::load_from_geotiff -- The image should be a GEOTIFF!\n";
     return false;
   }
 
@@ -82,7 +82,7 @@ vpgl_geo_camera::load_from_resource(vil_image_resource_sptr const & geotiff_img,
   vil_geotiff_header * gtif = geotiff_tiff->get_geotiff_header();
   if (!gtif)
   {
-    std::cerr << "vpgl_geo_camera::init_geo_camera -- no geotiff header!\n";
+    std::cerr << "vpgl_geo_camera::load_from_geotiff -- no geotiff header!\n";
     return false;
   }
 
@@ -111,14 +111,14 @@ vpgl_geo_camera::load_from_resource(vil_image_resource_sptr const & geotiff_img,
   }
   else
   {
-    std::cout << "vpgl_geo_camera::init_geo_camera comp_trans_matrix -- Transform matrix cannot be formed..\n";
+    std::cerr << "vpgl_geo_camera::load_from_geotiff -- comp_trans_matrix -- Transform matrix cannot be formed..\n";
     return false;
   }
 
   // validate trans_matrix
   if ((trans_matrix.rows() != 4) || (trans_matrix.cols() != 4))
   {
-    std::cerr << "vpgl_geo_camera::init_geo_camera requires 4x4 transform matrix\n";
+    std::cerr << "vpgl_geo_camera::load_from_geotiff -- requires 4x4 transform matrix\n";
     return false;
   }
 
@@ -140,9 +140,9 @@ vpgl_geo_camera::load_from_resource(vil_image_resource_sptr const & geotiff_img,
   }
   else
   {
-    std::cout
-      << "vpgl_geo_camera::init_geo_camera()-- if UTM only PCS_WGS84_UTM and PCS_NAD83_UTM, if geographic (GCS_WGS_84) "
-         "only linear units in meters, angular units in degrees are supported, please define otherwise!"
+    std::cerr
+      << "vpgl_geo_camera::load_from_geotiff -- if UTM only PCS_WGS84_UTM and PCS_NAD83_UTM, if geographic (GCS_WGS_84) "
+         "only linear units in meters, angular units in degrees are supported"
       << std::endl;
     return false;
   }
@@ -963,7 +963,7 @@ load_geo_camera_from_geotiff(std::string const& file,
 {
   vpgl_geo_camera camera;
   if (!camera.load_from_geotiff(file, lvcs))
-    std::runtime_error("Failed to load vpgl_geo_camera from geotiff file");
+    throw std::runtime_error("Failed to load vpgl_geo_camera from geotiff file");
   return camera;
 }
 
@@ -974,7 +974,7 @@ load_geo_camera_from_resource(vil_image_resource_sptr const& geotiff_img,
 {
   vpgl_geo_camera camera;
   if (!camera.load_from_resource(geotiff_img, lvcs))
-    std::runtime_error("Failed to load vpgl_geo_camera");
+    throw std::runtime_error("Failed to load vpgl_geo_camera");
   return camera;
 }
 
@@ -989,6 +989,6 @@ load_geo_camera_from_geotransform(std::array<double, 6> geotransform,
 {
   vpgl_geo_camera camera;
   if (!camera.load_from_geotransform(geotransform, utm_zone, northing, lvcs))
-    std::runtime_error("Failed to load vpgl_geo_camera from geotransform");
+    throw std::runtime_error("Failed to load vpgl_geo_camera from geotransform");
   return camera;
 }
