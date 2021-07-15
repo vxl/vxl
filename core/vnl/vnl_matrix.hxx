@@ -782,10 +782,14 @@ vnl_matrix<T>& vnl_matrix<T>::set_identity()
   // Zero-filling all data, followed by a loop over the diagonal, is
   // probably better than having a branch inside the loop. Similar to
   // the set_identity() member function of vnl_matrix_fixed.
-  std::fill_n( this->data[0], this->num_rows * this->num_cols, T() );
-  const unsigned n = std::min( this->num_rows, this->num_cols );
-  for (unsigned int i = 0; i < n; ++i)
-    this->data[i][i] = 1;
+  auto count = this->num_rows * this->num_cols;
+  if (count > 0) // this->data[0] can cause a crash when data is null (count is zero)
+  {
+    std::fill_n( this->data[0], count, T() );
+    const unsigned n = std::min( this->num_rows, this->num_cols );
+    for (unsigned int i = 0; i < n; ++i)
+      this->data[i][i] = 1;
+  }
   return *this;
 }
 
