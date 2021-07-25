@@ -20,6 +20,8 @@ set( bpgl_algo_sources
   rectify_params.h
   bpgl_rectify_affine_image_pair.h   bpgl_rectify_affine_image_pair.cxx
   bpgl_rectify_image_pair.h        bpgl_rectify_image_pair.hxx
+  bpgl_surface_type.h              bpgl_surface_type.cxx
+
 )
 
 # the ransac implementations use rpl/rrel

@@ -66,11 +66,13 @@ bsgm_multiscale_disparity_estimator::bsgm_multiscale_disparity_estimator(
   int img_height,
   int num_disparities,
   int num_active_disparities,
+  vgl_vector_2d<float> sun_dir_tar,
   int downscale_exp ) :
     fine_w_( img_width ),
     fine_h_( img_height ),
     num_fine_disparities_( num_disparities ),
     num_active_disparities_( num_active_disparities ),
+    sun_dir_tar_(sun_dir_tar),
     params_(params)
 {
   if( downscale_exp <= 0 || downscale_exp > 4 ) downscale_exponent_ = 2;
@@ -90,10 +92,9 @@ bsgm_multiscale_disparity_estimator::bsgm_multiscale_disparity_estimator(
   num_coarse_disparities_ = num_disparities / downscale_factor_;
 
   // Set up the single-scale SGMs
-  coarse_de_ = new bsgm_disparity_estimator(
-    params, coarse_w_, coarse_h_, num_coarse_disparities_ );
+  coarse_de_ = new bsgm_disparity_estimator(params, coarse_w_, coarse_h_, num_coarse_disparities_ , sun_dir_tar_);
   fine_de_ = new bsgm_disparity_estimator(
-    params, fine_w_, fine_h_, num_active_disparities );
+    params, fine_w_, fine_h_, num_active_disparities, sun_dir_tar_);
 }
 
 
