@@ -25,6 +25,81 @@
 #include "vil_math_sse.h"
 #endif
 
+namespace vil_math
+{
+
+// Copied from core/vnl/vnl_math.h
+#if defined(_MSC_VER)
+  // MSVC does not properly implement isfinite, iinf, isnan for C++11 conformance for integral types
+  // For integral types only:
+  template<typename T>
+  _Check_return_ typename std::enable_if<std::is_integral<T>::value, bool>::type isnan(_In_ T t) throw()
+  {
+    return std::isnan(static_cast<double>(t));
+  }
+  template<typename T>
+  _Check_return_ typename std::enable_if<std::is_integral<T>::value, bool>::type isinf(_In_ T t) throw()
+  {
+    return std::isinf(static_cast<double>(t));
+  }
+  template<typename T>
+  _Check_return_ typename std::enable_if<std::is_integral<T>::value, bool>::type isfinite(_In_ T t) throw()
+  {
+    return std::isfinite(static_cast<double>(t));
+  }
+  template<typename T>
+  _Check_return_ typename std::enable_if<std::is_integral<T>::value, bool>::type isnormal(_In_ T t) throw()
+  {
+    return std::isnormal(static_cast<double>(t));
+  }
+
+  // Floating point types can alias C++ standard that is implemented
+  template<typename T>
+  _Check_return_ typename std::enable_if<std::is_floating_point<T>::value, bool>::type isnan(_In_ T t) throw()
+  {
+	  return std::isnan(t);
+  }
+  template<typename T>
+  _Check_return_ typename std::enable_if<std::is_floating_point<T>::value, bool>::type isinf(_In_ T t) throw()
+  {
+	  return std::isinf(t);
+  }
+  template<typename T>
+  _Check_return_ typename std::enable_if<std::is_floating_point<T>::value, bool>::type isfinite(_In_ T t) throw()
+  {
+	  return std::isfinite(t);
+  }
+  template<typename T>
+  _Check_return_ typename std::enable_if<std::is_floating_point<T>::value, bool>::type isnormal(_In_ T t) throw()
+  {
+	  return std::isnormal(t);
+  }
+#else
+  // https://en.cppreference.com/w/cpp/numeric/math/isinf indicates that isinf should return bool
+  // However, several compiler environments do not properly conform to the C++11 standard for
+  // returning bool from these functions.  Wrap them to ensure conformance, and
+  // rely on the compiler to optimize the overhead away.
+
+  // Return a signed integer type has been seen with the following
+  // compilers/libstdc++:
+  //  RHEL7-devtool-6-gcc6.3
+  //  RHEL7-devtool-6-gcc6.3-m32
+  //  RHEL7-devtool-7-gcc7.2
+  // 	RHEL7-devtool-7-gcc7.2-m32
+
+  template <typename TArg>
+  inline bool isinf(TArg arg) { return bool(std::isinf(arg)); }
+  template <typename TArg>
+  inline bool isnan(TArg arg) { return bool(std::isnan(arg)); }
+  template <typename TArg>
+  inline bool isfinite(TArg arg) { return bool(std::isfinite(arg)); }
+  template <typename TArg>
+  inline bool isnormal(TArg arg) { return bool(std::isnormal(arg)); }
+#endif
+
+} // end of namespace vil_math
+
+
 //: Compute minimum and maximum values over view
 template<class T>
 inline void vil_math_value_range(const vil_image_view<T>& view, T& min_value, T& max_value)
@@ -124,7 +199,7 @@ inline void vil_math_value_range_percentiles(const vil_image_view<T>& im,
   // intended for floating point values only
   if (ignore_nan) {
     data.erase(std::remove_if(data.begin(), data.end(),
-                              [](const T& v) { return std::isnan(v); }),
+                              [](const T& x) { return vil_math::isnan(x); }),
                data.end());
     if (data.empty()) {
       return;
