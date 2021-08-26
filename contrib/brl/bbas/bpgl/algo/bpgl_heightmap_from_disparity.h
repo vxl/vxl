@@ -11,6 +11,7 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <vil/vil_image_view.h>
+#include "bpgl_surface_type.h"
 
 /**
  * Main convenience function
@@ -108,6 +109,17 @@ class bpgl_heightmap
         const vil_image_view<T>& scalar,
         vil_image_view<T>& heightmap_output,
         vil_image_view<T>& scalar_output);
+
+    void pointset_from_tri(
+          const vil_image_view<T>& tri_3d,
+          vgl_pointset_3d<T>& ptset_output,
+          std::map<size_t, std::pair<size_t, size_t> >& pt_index_to_pix
+        );
+    void surface_type_from_pointset(
+        const vgl_pointset_3d<T> & ptset,
+        const bpgl_surface_type & disparity_stype,
+        std::map<size_t, std::pair<size_t, size_t> > & pt_indx_to_pix,
+        bpgl_surface_type & heightmap_stype);
 
   private:
 

@@ -99,6 +99,37 @@ void bpgl_heightmap<T>::_pointset_from_tri(
 
 }
 
+template<class T>
+void
+bpgl_heightmap<T>::pointset_from_tri(const vil_image_view<T> & tri_3d,
+                   vgl_pointset_3d<T> & ptset_output,
+                   std::map<size_t, std::pair<size_t, size_t> > & pt_index_to_pix)
+{
+  // bounds with tolerance (avoid any floating point error in comparison)
+   T tol = 1e-3;
+  auto bounds_with_tolerance = heightmap_bounds_;
+  bounds_with_tolerance.expand_about_centroid(tol);
+  ptset_output.clear();
+  // add triangulated points to pointset
+  for (size_t j=0; j < tri_3d.nj(); ++j) {
+    for (size_t i=0; i < tri_3d.ni(); ++i) {
+      if (vnl_math::isfinite(tri_3d(i,j,0)) &&
+          vnl_math::isfinite(tri_3d(i,j,1)) &&
+          vnl_math::isfinite(tri_3d(i,j,2)) )
+      {
+        // confirm 3D point is within bounds
+        vgl_point_3d<T> point(tri_3d(i,j,0), tri_3d(i,j,1), tri_3d(i,j,2));
+        if(!bounds_with_tolerance.contains(point))
+          continue;
+        size_t indx = ptset_output.size();
+        pt_index_to_pix[indx] = std::pair<size_t, size_t>(i, j);
+        ptset_output.add_point(point);
+      }
+    }
+  }
+}
+
+
 
 // ----------
 // Heightmap from 3D pointset
@@ -203,6 +234,7 @@ void bpgl_heightmap<T>::_heightmap_from_pointset(
   } // end scalar interpolation
 
 }
+
 template<class T>
 void bpgl_heightmap<T>::heightmap_from_pointset(
         const vgl_pointset_3d<T>& ptset,
@@ -254,6 +286,44 @@ void bpgl_heightmap<T>::heightmap_from_pointset(
       radial_std_dev(i,j) = std_dev;
     }
 }
+
+template<class T>
+void bpgl_heightmap<T>::surface_type_from_pointset(
+    const vgl_pointset_3d<T>& ptset,
+    const bpgl_surface_type& disparity_stype,
+    std::map<size_t, std::pair<size_t, size_t> >& pt_indx_to_pix,
+    bpgl_surface_type& heightmap_stype)
+{
+  // check pointset sufficency
+  if (ptset.npts() < min_neighbors_) {
+    throw std::runtime_error("Not enough points in pointset for interpolation");
+  }
+
+  // pointset as 2-d points
+  std::vector<vgl_point_2d<T> > triangulated_xy;
+
+  for (const auto& point_3d : ptset.points()) {
+    vgl_point_2d<T> point_2d(point_3d.x(), point_3d.y());
+    triangulated_xy.emplace_back(point_2d);
+  }
+
+  // image upper left & size
+  // image must contain all samples within bounds, inclusive
+  vgl_point_2d<T> upper_left(heightmap_bounds_.min_x(), heightmap_bounds_.max_y());
+
+  // maximum neighbor distance
+  T max_dist = neighbor_dist_factor_ * ground_sample_distance_;
+
+  // heightmap gridding
+  bpgl_gridding::grid_surface_type_2d(
+      triangulated_xy,
+      disparity_stype, pt_indx_to_pix, heightmap_stype,
+      upper_left, ground_sample_distance_,
+      min_neighbors_, max_neighbors_, max_dist);
+
+}
+
+
 
 // ----------
 // Heightmap from triangulated input

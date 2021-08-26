@@ -45,6 +45,7 @@ class bsgm_multiscale_disparity_estimator
     int img_height,
     int num_disparities,
     int num_active_disparities,
+    vgl_vector_2d<float> sun_dir_tar = vgl_vector_2d<float>(0.0f, 0.0f),
     int downscale_exponent = 2 );
 
   //: Destructor
@@ -119,6 +120,8 @@ int bsgm_compute_median_of_image(
   bsgm_disparity_estimator* coarse_de_;
   bsgm_disparity_estimator* fine_de_;
   bsgm_disparity_estimator_params params_;
+
+  vgl_vector_2d<float> sun_dir_tar_ = vgl_vector_2d<float>(0.0, 0.0);
 };
 template <class T>
 bool bsgm_multiscale_disparity_estimator::compute(

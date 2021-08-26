@@ -17,6 +17,9 @@
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_distance.h>
+#include "bpgl_surface_type.h"
+#include <vil/vil_save.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -323,7 +326,105 @@ grid_data_2d(
   }
   return gridded;
 }
+// map surface types from disparity space to dsm grid space using
+// the disparity pixel index attached to the vector index of
+// each 2-d point in the input, data_in_loc
+ template<class T>
+void grid_surface_type_2d(
+    std::vector<vgl_point_2d<T> > const& data_in_loc,
+    bpgl_surface_type const& disparity_stype,
+    std::map<size_t, std::pair<size_t, size_t> >& pt_indx_to_pix,
+    bpgl_surface_type& heightmap_stype,
+    vgl_point_2d<T> out_upper_left,
+    T step_size,
+    unsigned min_neighbors = 3,
+    unsigned max_neighbors = 5,
+    T max_dist = vnl_numeric_traits<T>::maxval)
+{
+  std::vector<bpgl_surface_type::stype>& styps = heightmap_stype.stypes();
+  size_t dni = disparity_stype.ni(), dnj = disparity_stype.nj();
+  size_t hni = heightmap_stype.ni(), hnj = heightmap_stype.nj();
+ 
+ // total number of points
+ size_t npts = data_in_loc.size();
 
+ // validate input
+ if (npts != pt_indx_to_pix.size()) {
+   throw std::runtime_error("Input locations and pix index not equal size");
+ }
+
+ // validate min/max neighbor range
+ if (size_t(min_neighbors) > npts) {
+   throw std::runtime_error("Fewer points than minimum number of neighbors");
+ }
+ if (size_t(max_neighbors) > npts) {
+   max_neighbors = unsigned(npts);
+ }
+ if (min_neighbors > max_neighbors) {
+   throw std::runtime_error("Invalid neighbor range");
+ }
+
+  // create knn instance
+ bvgl_k_nearest_neighbors_2d<T> knn(data_in_loc);
+ if (!knn.is_valid()) {
+   throw std::runtime_error("KNN initialization failure");
+ }
+ size_t out_ni = heightmap_stype.ni(), out_nj = heightmap_stype.nj();
+ vgl_vector_2d<T> i_vec(T(1), T(0));
+ vgl_vector_2d<T> j_vec(T(0), -T(1));//spatial y coordinate is negated image j coordinate
+ 
+ for (unsigned j=0; j<hnj; ++j) {
+     for (unsigned i = 0; i < hni; ++i) {
+
+         // grid point
+         vgl_point_2d<T> loc = out_upper_left + i * step_size * i_vec + j * step_size * j_vec;
+
+         // retrieve at most max_neighbors within max_dist of interpolation point
+         std::vector<vgl_point_2d<T> > neighbor_locs;
+         std::vector<unsigned> neighbor_indices;
+         if (!knn.knn(loc, max_neighbors, neighbor_locs, neighbor_indices, max_dist)) {
+             throw std::runtime_error("KNN failed to return neighbors");
+         }
+
+         // check for at least min_neighbors
+         if (neighbor_indices.size() < min_neighbors) {
+             heightmap_stype.p(i, j, bpgl_surface_type::INVALID_DATA) = 1.0f;
+             continue;
+         }
+         // only consider neighbors within circumscribed circle around grid cell
+         // that touches the center of adjacent cells
+         std::vector<size_t> reduced_indices;
+         size_t iidx = 0;
+         float ccirc_radius = step_size * vnl_math::sqrt2;
+         for (auto p : neighbor_locs) {
+             if (vgl_distance(p, loc) <= ccirc_radius)
+               reduced_indices.push_back(neighbor_indices[iidx]);
+             ++iidx;
+         }
+         if (reduced_indices.size() == 0) {
+             heightmap_stype.p(i, j, bpgl_surface_type::INVALID_DATA) = 1.0f;
+             continue;
+         }
+         
+
+         // pix values in disparity space surface type
+         // take min probabilty as characteristic of grid cell.
+         for (auto t : styps) {
+           float min_p = 1.0f;
+           for (auto nidx : reduced_indices) {
+             std::pair<size_t, size_t> pix = pt_indx_to_pix[nidx];
+             size_t di = pix.first, dj = pix.second;
+             if (di >= dni || dj >= dnj)
+               continue;
+             float p = disparity_stype.const_p(di, dj, t);
+             if (p < min_p) min_p = p;
+           }
+           heightmap_stype.p(i, j, t) = min_p;
+         }
+     }//end i,
+ }//end j
+}// end grid
+ 
 
 template<class pointT, class pixelT>
 void pointset_from_grid(vil_image_view<pixelT> const& grid,
