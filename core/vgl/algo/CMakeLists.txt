@@ -18,7 +18,7 @@ set( vgl_algo_sources
   vgl_norm_trans_2d.hxx                    vgl_norm_trans_2d.h
   vgl_norm_trans_3d.hxx                    vgl_norm_trans_3d.h
   vgl_compute_similarity_3d.hxx            vgl_compute_similarity_3d.h
-  vgl_compute_rigid_3d.hxx            vgl_compute_rigid_3d.h
+  vgl_compute_rigid_3d.hxx                 vgl_compute_rigid_3d.h
                                            vgl_h_matrix_1d_compute.h
   vgl_h_matrix_1d_compute_linear.cxx       vgl_h_matrix_1d_compute_linear.h
   vgl_h_matrix_1d_compute_3point.cxx       vgl_h_matrix_1d_compute_3point.h
@@ -37,6 +37,7 @@ set( vgl_algo_sources
   vgl_fit_plane_3d.hxx                     vgl_fit_plane_3d.h
   vgl_fit_sphere_3d.hxx                    vgl_fit_sphere_3d.h
   vgl_fit_cylinder_3d.hxx                  vgl_fit_cylinder_3d.h
+  vgl_fit_xy_paraboloid_3d.hxx             vgl_fit_xy_paraboloid_3d.h
   vgl_intersection.hxx                     vgl_intersection.h
                                            vgl_rotation_3d.h
                                            vgl_rtree_c.h
@@ -45,7 +46,7 @@ set( vgl_algo_sources
   vgl_h_matrix_3d_compute_linear.cxx       vgl_h_matrix_3d_compute_linear.h
   vgl_h_matrix_3d_compute_affine.cxx       vgl_h_matrix_3d_compute_affine.h
   vgl_compute_cremona_2d.h                 vgl_compute_cremona_2d.hxx
-   vgl_cremona_trans_2d.h                 vgl_cremona_trans_2d.hxx
+  vgl_cremona_trans_2d.h                   vgl_cremona_trans_2d.hxx
 )
 aux_source_directory(Templates vgl_algo_sources)
 
