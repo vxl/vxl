@@ -210,7 +210,6 @@ bool bvgl_register_ptsets_3d_rigid<T>::minimize_mean_z_error(){
     vgl_vector_3d<T> t(initial_t.x(), initial_t.y(), tz);
     T zerr = mean_error(t).z();
     tz_error_vals.emplace_back(tz, zerr);
-    std::cout << tz << ' ' << zerr << std::endl;
   }
   //least squares 1d linear fit to mean z error data
   double  Sz2 = 0.0, Sz = 0.0;
@@ -235,7 +234,6 @@ bool bvgl_register_ptsets_3d_rigid<T>::minimize_mean_z_error(){
     return false;
   }
   coef = svd.solve(b);
-  std::cout << "coef( " << coef[0] << ' ' << coef[1] << " )" << std::endl;
   double tz_min = -coef[1]/coef[0];
   analytic_t_.set(analytic_t_.x(), analytic_t_.y(), tz_min);
   min_analytic_error_ = distr_error(analytic_t_);
