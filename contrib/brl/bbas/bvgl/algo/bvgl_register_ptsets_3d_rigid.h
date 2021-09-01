@@ -127,8 +127,11 @@ public:
   const bvgl_k_nearest_neighbors_3d<T>& knn_fixed() const {return knn_fixed_;}
   vgl_vector_3d<T> exhaustive_t()const {return exhaustive_t_;}
   vgl_vector_3d<T> best_ransac_t()const {return best_ransac_t_;}
+  vgl_vector_3d<T> analytic_t() const {return analytic_t_;}
   T min_exhaustive_error() const {return min_exhaustive_error_;}
   T min_ransac_error() const {return min_ransac_error_;}
+  T min_analytic_error() const {return min_analytic_error_;}
+  
 
 
   //: the rms error between the movable and fixed closest points
@@ -137,7 +140,10 @@ public:
   //: error defined in terms of distances to population fractions
   T distr_error(vgl_vector_3d<T> const& t);
 
-  //: Find the transformation that minimizes rms error by exhaustive search
+  //: the mean error vector
+  vgl_vector_3d<T>  mean_error(vgl_vector_3d<T> const& t);
+
+   //: Find the transformation that minimizes rms error by exhaustive search
   bool minimize_exhaustive();
 
   //: Find the transformation by a fixed number of RANSAC trials.
@@ -145,6 +151,16 @@ public:
 
   //: Find the transformation by a fixed number of RANSAC trails, using the exhaustive result as an initial transform.
   bool minimize_ransac() { return minimize_ransac(exhaustive_t()); }
+
+  //: Find the transformation that minimizes distribution error analytically
+  // The analytic solution is the extremum of a xy paraboloid fit to
+  // a grid of xy positions and error values defined by t_range and t_inc
+  bool minimize_analytic(vgl_vector_3d<T> const& initial_t);
+
+  //: Adjust z translation to minimize mean vertical error
+  // modifies tz component of analytic translation. tx, ty are analytic min values
+  bool minimize_mean_z_error();
+
   //: does this instance have valid pointsets
   bool valid_instance() const {return (fixed_.size()>0 && movable_.size()>0);}
 
@@ -157,6 +173,7 @@ public:
   size_t n_hypos_ = 100;
   T min_exhaustive_error_ = std::numeric_limits<T>::max();
   T min_ransac_error_ = std::numeric_limits<T>::max();
+  T min_analytic_error_ = std::numeric_limits<T>::max();
   vgl_vector_3d<T> exhaustive_t_ = vgl_vector_3d<T>(T(0),T(0),T(0));
 
   vgl_pointset_3d<T> fixed_;
@@ -164,6 +181,7 @@ public:
   vgl_pointset_3d<T> movable_;
   vgl_pointset_3d<T> frac_trans_;
   vgl_vector_3d<T> best_ransac_t_;
+  vgl_vector_3d<T> analytic_t_;
 
 };
 

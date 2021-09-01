@@ -6,9 +6,11 @@
 #include <fstream>
 #include <algorithm>
 #include <vgl/vgl_distance.h>
+#include <vgl/algo/vgl_fit_xy_paraboloid_3d.h>
 #include <vnl/vnl_random.h>
+#include <vnl/vnl_matrix.h>
+#include <vnl/algo/vnl_svd.h>
 
-// rotate then translate
 template <class T>
 T bvgl_register_ptsets_3d_rigid<T>::error(vgl_vector_3d<T> const& t)
 {
@@ -31,6 +33,29 @@ T bvgl_register_ptsets_3d_rigid<T>::error(vgl_vector_3d<T> const& t)
   }
   error /= cnt;
   return sqrt(error);
+}
+template <class T>
+vgl_vector_3d<T>  bvgl_register_ptsets_3d_rigid<T>::mean_error(vgl_vector_3d<T> const& t)
+{
+  size_t n = frac_trans_.npts();
+  vgl_vector_3d<T> ret(T(0),T(0),T(0));
+  T cnt = T(0);
+  for (size_t i = 0; i<n; ++i) {
+    const vgl_point_3d<T>& p = frac_trans_.p(i);
+    vgl_point_3d<T> tp(p.x()+t.x(), p.y()+t.y(), p.z()+t.z());
+    vgl_point_3d<T> cp;
+    if (!knn_fixed_.closest_point(tp, cp)) {
+      std::cout << "KNN index failed to find neighbors" << std::endl;
+      return ret;
+    }
+    T d = vgl_distance<T>(tp, cp);
+    if (d > outlier_thresh_)
+      continue;
+    ret += (cp - tp);
+    cnt += T(1);
+  }
+  ret /= cnt;
+  return ret;
 }
 
 // distr_error is defined as below. Ideally the distance distribution reaches 100% of the population
@@ -135,6 +160,85 @@ bool bvgl_register_ptsets_3d_rigid<T>::minimize_ransac(vgl_vector_3d<T> const& i
     }
   }
   min_ransac_error_ = min_error;
+  return true;
+}
+// the grid search is in x-y only. tz = initial_t.z()
+template <class T>
+bool bvgl_register_ptsets_3d_rigid<T>::minimize_analytic(vgl_vector_3d<T> const& initial_t){
+  if (fixed_.npts() == 0 || frac_trans_.npts() == 0) {
+    std::cerr << "No points to minimize" << std::endl;
+    return false;
+  }
+  T min_x = initial_t.x()-t_range_.x(), max_x = initial_t.x()+t_range_.x();
+  T min_y = initial_t.y()-t_range_.y(), max_y = initial_t.y()+t_range_.y();
+  T z = initial_t.z();
+
+  // initialize progress display
+  int nx = (max_x-min_x)/t_inc_.x();
+  reg_progress rp(nx);
+
+  std::vector<vgl_point_3d<T> > grid_pts;
+  for (T y = min_y; y <= max_y; y += t_inc_.y()) {
+    for (T x = min_x; x <= max_x; x += t_inc_.x()) {
+      rp();//update progress display
+      T err = distr_error(vgl_vector_3d<T>(x, y, z));
+      grid_pts.emplace_back(x, y, err);
+    }
+  }
+  std::cout << std::endl; // end progress display
+
+  vgl_fit_xy_paraboloid_3d<T> xyp(grid_pts);
+  if(!xyp.fit_linear(&std::cout))
+    return false;
+  std::string qtype = xyp.quadric_type();
+  if(qtype != "elliptic_paraboloid"){
+    std::cout << "incorrect quadric class - not an elliptic_paraboloid" << std::endl;
+    return false;
+  }
+  vgl_point_2d<T> min_xy = xyp.extremum_point();
+  analytic_t_ = vgl_vector_3d<T>(min_xy.x(), min_xy.y(), z);
+  min_analytic_error_ = distr_error(analytic_t_);
+  return true;
+}
+template <class T>
+bool bvgl_register_ptsets_3d_rigid<T>::minimize_mean_z_error(){
+  vgl_vector_3d<T> initial_t = analytic_t_;
+  std::vector<std::pair<T, T> > tz_error_vals;
+  T min_tz = initial_t.z() - 0.3, max_tz = initial_t.z() + 0.31;
+  std::cout << "refine tz plot " << std::endl;
+  for(T tz = min_tz; tz<=max_tz; tz += T(0.05)){
+    vgl_vector_3d<T> t(initial_t.x(), initial_t.y(), tz);
+    T zerr = mean_error(t).z();
+    tz_error_vals.emplace_back(tz, zerr);
+    std::cout << tz << ' ' << zerr << std::endl;
+  }
+  //least squares 1d linear fit to mean z error data
+  double  Sz2 = 0.0, Sz = 0.0;
+  double  Sez = 0.0, Se = 0.0, N = 0.0;
+  for(size_t i = 0; i<tz_error_vals.size(); ++i){
+    double z = tz_error_vals[i].first, e = tz_error_vals[i].second;
+    Sz2 += z*z; Sz += z;
+    Sez += e*z; Se += e; N+=1.0;
+  }
+  Sz2 /= N; Sz /= N;
+  Sez /= N; Se /= N;
+  
+  vnl_matrix<double> M(2,2);
+  M[0][0] = Sz2; M[0][1] = Sz;
+  M[1][0] = Sz; M[1][1] = 1;
+  vnl_vector<double> b(2), coef(2);
+   b[0] = Sez; b[1] = Se;
+  vnl_svd<double> svd(M);
+  size_t rank = svd.rank();
+  if(rank != 2){
+    std::cout << "Singular min z error solution" << std::endl;
+    return false;
+  }
+  coef = svd.solve(b);
+  std::cout << "coef( " << coef[0] << ' ' << coef[1] << " )" << std::endl;
+  double tz_min = -coef[1]/coef[0];
+  analytic_t_.set(analytic_t_.x(), analytic_t_.y(), tz_min);
+  min_analytic_error_ = distr_error(analytic_t_);
   return true;
 }
 
