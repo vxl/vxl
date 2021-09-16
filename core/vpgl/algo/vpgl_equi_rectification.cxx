@@ -54,7 +54,6 @@ bool vpgl_equi_rectification::column_transform(const std::vector<vnl_vector_fixe
   AA[0][0] = Su1u1;
   AA[0][1] = AA[1][0] = Su1v1;
   AA[1][1] = Sv1v1;
-  AA[2][2] = 1.0;
   bb[0] = Su0u1;
   bb[1] = Su0v1;
   double d = fabs(vnl_det(AA));
@@ -228,7 +227,6 @@ vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<doubl
   AA[0][0] = Su1u1;
   AA[0][1] = AA[1][0] = Su1v1;
   AA[1][1] = Sv1v1;
-  AA[2][2] = 1.0;
   bb[0] = Su0u1;
   bb[1] = Su0v1;
   double d = fabs(vnl_det(AA));
