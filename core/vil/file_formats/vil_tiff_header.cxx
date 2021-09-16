@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <ctime>
+#include <cstdint>
 #include "vil_tiff_header.h"
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
@@ -239,12 +240,12 @@ vil_tiff_header::read_header()
       std::cout << "TBC[" << i << "]=" << tile_byte_counts[i] << '\n';
   }
 #endif
-  uint32 count, f;
+  uint32_t count, f;
   char * data;
   f = TIFFGetField(tif_, 42113, &count, &data);
   if (f)
   {
-    for (uint32 i = 0; i < count; ++i)
+    for (uint32_t i = 0; i < count; ++i)
       no_data_value_.push_back(data[i]);
   }
 

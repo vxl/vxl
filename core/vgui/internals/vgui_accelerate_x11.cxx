@@ -8,6 +8,7 @@
 #include <iostream>
 #include <cmath>
 #include <cstring>
+#include <cstdint>
 #include <algorithm>
 #include "vgui_accelerate_x11.h"
 
@@ -39,11 +40,11 @@ struct gl_to_hermes_format_map
 {
   GLenum gl_format;
   GLenum gl_type;
-  int32 bits_per_pixel;
-  int32 red_mask;
-  int32 green_mask;
-  int32 blue_mask;
-  int32 alpha_mask;
+  int32_t bits_per_pixel;
+  int32_t red_mask;
+  int32_t green_mask;
+  int32_t blue_mask;
+  int32_t alpha_mask;
 };
 
 // swap between little and big endian 32bit words.
@@ -153,10 +154,10 @@ vgui_accelerate_x11::vgui_glClear(GLbitfield mask)
                             x_max - x_min,
                             y_max - y_min,
                             backbuffer->bytes_per_line,
-                            (int32)(clear_color[0] * 255.0F),
-                            (int32)(clear_color[1] * 255.0F),
-                            (int32)(clear_color[2] * 255.0F),
-                            (int32)(clear_color[3] * 255.0F));
+                            (int32_t)(clear_color[0] * 255.0F),
+                            (int32_t)(clear_color[1] * 255.0F),
+                            (int32_t)(clear_color[2] * 255.0F),
+                            (int32_t)(clear_color[3] * 255.0F));
         Hermes_FormatFree(dest_format);
       }
       GLbitfield leftover = mask & ~(GL_COLOR_BUFFER_BIT);
