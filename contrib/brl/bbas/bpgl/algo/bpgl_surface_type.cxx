@@ -10,131 +10,166 @@
 #include <stdexcept>
 #include <bvrml/bvrml_write.h>
 
-bool bpgl_surface_type::read(std::string const& directory) {
+bool
+bpgl_surface_type::read(std::string const& directory)
+{
   if (!vul_file::is_directory(directory)) {
-    std::string message = "type directory not accessable" + directory;
-    std::cout << message << std::endl;
+    std::cerr << "type directory not accessable "
+              << directory << std::endl;
     return false;
   }
+
   std::string glob = directory+"/*.tif";
   for (vul_file_iterator fn = glob; fn; ++fn) {
     std::string path = fn();
     vil_image_view<float> type_img = vil_load(path.c_str());
     if (type_img.ni() == 0|| type_img.nj() == 0) {
-      std::string message = "can't load type image from " + path;
-      std::cout << message << std::endl;
+      std::cerr << "can't load type image from " << path << std::endl;
       return false;
     }
     path = vul_file::strip_directory(path);
     std::string type_str = vul_file::strip_extension(path);
     stype t = this->type_from_string(type_str);
-    if( t == NO_SURFACE_TYPE)
+    if (t == NO_SURFACE_TYPE) {
       continue;
+    }
     type_images_[t] = type_img;
   }
   std::ifstream istr(directory + "/" + "domain.txt");
   if (!istr) {
-      std::cout << "domain.txt missing from directory" << std::endl;
+      std::cerr << "domain.txt missing from directory" << std::endl;
       return false;
   }
   std::string domain_str;
   istr >> domain_str;
   domain_ = this->domain_from_string(domain_str);
- 
+
   ni_ = type_images_[NO_DATA].ni();
   nj_ = type_images_[NO_DATA].nj();
   return true;
 }
 
-bool bpgl_surface_type::write(std::string const& directory) {
+bool
+bpgl_surface_type::write(std::string const& directory) const
+{
   if (!vul_file::is_directory(directory)) {
-    std::string message = "type data directory not accessable" + directory;
-    std::cout << message << std::endl;
+    std::cerr << "type data directory not accessable "
+              << directory << std::endl;
     return false;
   }
-  for (std::map<stype, vil_image_view<float> >::iterator cit = type_images_.begin();
-    cit != type_images_.end(); ++cit) {
-    std::string path = directory + "/" + type_to_string(cit->first) + ".tif";
-    if (!vil_save(cit->second, path.c_str())) {
-      std::cout << "Can't save type image to " << path << std::endl;
+
+  for (auto const& image : type_images_) {
+    if (image.first == NO_SURFACE_TYPE) {
+      continue;
+    }
+    std::string path = directory + "/" + type_to_string(image.first) + ".tif";
+    if (!vil_save(image.second, path.c_str())) {
+      std::cerr << "Can't save type image to " << path << std::endl;
       return false;
     }
   }
+
   std::string domain_path = directory + "/domain.txt";
   std::ofstream ostr(domain_path.c_str());
   if (!ostr) {
-    std::cout << "Can't write to " << domain_path << std::endl;
+    std::cerr << "Can't write to " << domain_path << std::endl;
     return false;
   }
   ostr << domain_to_string(domain_) << std::endl;
   ostr.close();
+
   return true;
 }
 
-bool bpgl_surface_type::apply(vil_image_view<bool> const& mask, stype type){
-  if(type_images_.count(type) == 0){
-    std::cout << "specified type " << type << " does not exist" << std::endl;
+bool
+bpgl_surface_type::apply(vil_image_view<bool> const& mask, stype type)
+{
+  if (type_images_.count(type) == 0) {
+    std::cerr << "specified type " << type << " does not exist" << std::endl;
     return false;
   }
   vil_image_view<float>& type_img = type_images_[type];
-  if(type_img.ni()!=ni_ || type_img.nj() != nj_){
-    std::cout << "mismatch in type image dimensions" << std::endl;
+  if( type_img.ni()!=ni_ || type_img.nj() != nj_) {
+    std::cerr << "mismatch in type image dimensions" << std::endl;
     return false;
   }
-  for(size_t j = 0; j<nj_; ++j)
-    for(size_t i = 0; i<ni_; ++i){
+  for (size_t j = 0; j<nj_; ++j) {
+    for (size_t i = 0; i<ni_; ++i) {
       bool m = mask(i,j);
       if(m) type_img(i,j) = 1.0f;
       else type_img(i,j) = 0.0f;
     }
+  }
   return true;
 }
-bool bpgl_surface_type::apply(vil_image_view<float> const& prob, stype type)
+
+bool
+bpgl_surface_type::apply(vil_image_view<float> const& prob, stype type)
 {
   if (type_images_.count(type) == 0)
   {
-    std::cout << "specified type " << type << " does not exist" << std::endl;
+    std::cerr << "specified type " << type << " does not exist" << std::endl;
     return false;
   }
   vil_image_view<float> & type_img = type_images_[type];
   if (type_img.ni() != ni_ || type_img.nj() != nj_)
   {
-    std::cout << "mismatch in type image dimensions" << std::endl;
+    std::cerr << "mismatch in type image dimensions" << std::endl;
     return false;
   }
-  for (size_t j = 0; j < nj_; ++j)
-    for (size_t i = 0; i < ni_; ++i)
-    {
+  for (size_t j = 0; j < nj_; ++j) {
+    for (size_t i = 0; i < ni_; ++i) {
       float pr = prob(i, j);
       type_img(i, j) = pr;
     }
+  }
   return true;
 }
 
-bool bpgl_surface_type::dsm_color_display(vil_image_view<float> const& dsm, vil_image_view<unsigned char>& display,
-                                          float shadow_prob_cutoff, float shadow_step_prob_cutoff) const{
-  if(this->domain_!= DSM && this->domain_ != FUSED_DSM && this->domain_ != MOSAIC_DSM){
-    std::cout << "only applies to a DSM surface type" << std::endl;
+bool
+bpgl_surface_type::dsm_color_display(vil_image_view<float> const& dsm,
+                                     vil_image_view<unsigned char>& display,
+                                     float shadow_prob_cutoff,
+                                     float shadow_step_prob_cutoff,
+                                     float min_val,
+                                     float max_val) const
+{
+  if (this->domain_ != DSM &&
+      this->domain_ != FUSED_DSM &&
+      this->domain_ != MOSAIC_DSM)
+  {
+    std::cerr << "dsm_color_display only applies to a DSM surface type" << std::endl;
     return false;
   }
+
   size_t ni = dsm.ni(), nj = dsm.nj();
-  if(ni != ni_ || nj != nj_){
-    std::cout << "inconsistent dsm dimensions" << std::endl;
+  if (ni != ni_ || nj != nj_) {
+    std::cerr << "inconsistent dsm dimensions" << std::endl;
     return false;
   }
-  // display dsm
-  float frac = 0.05f;
-  float high_frac = 1.0f - frac;
-  float min_val, max_val;
-  vil_math_value_range_percentile(dsm, frac, min_val, true);
-  vil_math_value_range_percentile(dsm, high_frac, max_val, true);
-  display.set_size(ni, nj, 3);
-  display.fill(vxl_byte(255));
+
+  // display limits
+  float low_frac = 0.05f;
+  float high_frac = 1.0f - low_frac;
+
+  if (std::isnan(min_val)) {
+    vil_math_value_range_percentile(dsm, low_frac, min_val, true);
+  }
+  if (std::isnan(max_val)) {
+    vil_math_value_range_percentile(dsm, high_frac, max_val, true);
+  }
+
+  std::cout << "dsm_color_display [min,max] = [" << min_val << ", " << max_val << "]" << std::endl;
+
   float scale = 1.0f;
   if(max_val-min_val > 0.0f)
     scale = 255.0f/(max_val-min_val);
-  for(size_t j = 0; j<nj; ++j)
-    for(size_t i = 0; i<ni; ++i){
+
+  display.set_size(ni, nj, 3);
+  display.fill(vxl_byte(255));
+
+  for (size_t j = 0; j<nj; ++j) {
+    for (size_t i = 0; i<ni; ++i) {
       float v = dsm(i,j);
       if (!vnl_math::isfinite(v))
         continue;
@@ -142,22 +177,26 @@ bool bpgl_surface_type::dsm_color_display(vil_image_view<float> const& dsm, vil_
       if(sv<0.0f) sv=0.0f;
       if(sv>255.0f) sv = 255.0f;
       size_t cind = static_cast<size_t>(sv);
-      for(size_t c = 0; c<3; ++c)
+      for (size_t c = 0; c<3; ++c) {
         display(i, j, c) = bvrml_custom_color::heatmap_custom[cind][c];
+      }
     }
+  }
+
   // apply shadow and shadow step color
-   vil_image_view<float> shadow;
-   vil_image_view<float> shadow_step;
-  if(!type_image(SHADOW, shadow))
-     return false;
-  if(!type_image(SHADOW_STEP, shadow_step))
-     return false;
-  for(size_t j = 0; j<nj; ++j)
-    for(size_t i = 0; i<ni; ++i){
+  vil_image_view<float> shadow;
+  vil_image_view<float> shadow_step;
+  if (!type_image(SHADOW, shadow))
+    return false;
+  if (!type_image(SHADOW_STEP, shadow_step))
+    return false;
+
+  for (size_t j = 0; j<nj; ++j) {
+    for (size_t i = 0; i<ni; ++i) {
       float rd = static_cast<float>(display(i,j,0)), gd = static_cast<float>(display(i,j,1)), bd = static_cast<float>(display(i,j,2));
       // write shadow type pixels first
       float s = shadow(i,j);
-      if(s>shadow_prob_cutoff){
+      if (s > shadow_prob_cutoff) {
         //black color
         display(i,j,0) = static_cast<vxl_byte>(0.0f);
         display(i,j,1) = static_cast<vxl_byte>(0.0f);
@@ -165,32 +204,42 @@ bool bpgl_surface_type::dsm_color_display(vil_image_view<float> const& dsm, vil_
       }
       //possibly overwrite with shadow step type
       float ss = shadow_step(i,j);
-      if(ss > shadow_step_prob_cutoff){
+      if (ss > shadow_step_prob_cutoff) {
         // violet color
         display(i,j,0) = static_cast<vxl_byte>(190.0f);
         display(i,j,1) = static_cast<vxl_byte>(0.0f);
         display(i,j,2) = static_cast<vxl_byte>(190.0f);
       }
     }
+  }
   return true;
 }
 
-bool write_dsm_color_display(std::string const& dsm_path, std::string const& surface_type_path, std::string const& display_path,
-                             float shadow_prob_cutoff, float shadow_step_prob_cutoff){
+bool
+write_dsm_color_display(std::string const& dsm_path,
+                        std::string const& surface_type_path,
+                        std::string const& display_path,
+                        float shadow_prob_cutoff,
+                        float shadow_step_prob_cutoff,
+                        float min_val,
+                        float max_val)
+{
   vil_image_view<float> dsm = vil_load(dsm_path.c_str());
   size_t ni = dsm.ni(), nj = dsm.nj();
-  if(ni == 0 || nj == 0){
-    std::cout << "Can't load dsm image from " << dsm_path << std::endl;
+  if (ni == 0 || nj == 0) {
+    std::cerr << "Can't load dsm image from " << dsm_path << std::endl;
     return false;
   }
   bpgl_surface_type st(surface_type_path);
-  if(st.ni() != ni || st.nj() != nj){
-    std::cout << "inconsistent dimensions between dsm (" << ni << ' ' << nj << ") and surface type ("<< st.ni() << ' ' << st.nj() << ")" << std::endl;
+  if (st.ni() != ni || st.nj() != nj) {
+    std::cerr << "inconsistent dimensions between dsm (" << ni << ' ' << nj << ") and surface type ("<< st.ni() << ' ' << st.nj() << ")" << std::endl;
     return false;
   }
   vil_image_view<vxl_byte> display;
-  if(!st.dsm_color_display(dsm, display, shadow_prob_cutoff, shadow_step_prob_cutoff)){
-    std::cout << "create display failed" << std::endl;
+  if (!st.dsm_color_display(dsm, display, shadow_prob_cutoff,
+                            shadow_step_prob_cutoff, min_val, max_val))
+  {
+    std::cerr << "create display failed" << std::endl;
     return false;
   }
   return vil_save(display, display_path.c_str());
