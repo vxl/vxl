@@ -128,14 +128,19 @@ vpgl_geo_camera::load_from_resource(vil_image_resource_sptr const & geotiff_img,
   this->is_utm_ = false;
   this->set_lvcs(lvcs);
 
+  
+
   // check if the model type is geographic and also the units
-  if (gtif->GCS_WGS84_MET_DEG())
+  if (gtif->GCS_WGS84_MET_DEG()){
+    this->extract_pixel_size();
     return true;
+  }
 
   // otherwise check if it is projected to UTM and figure out the zone
   if (gtif->PCS_WGS84_UTM_zone(utm_zone, h) || gtif->PCS_NAD83_UTM_zone(utm_zone, h))
   {
     this->set_utm(utm_zone, h);
+    this->extract_pixel_size();
     return true;
   }
   else
@@ -212,7 +217,7 @@ vpgl_geo_camera::load_from_geotransform(std::array<double, 6> geotransform,
   this->utm_zone_ = utm_zone;
   this->northing_ = northing;
   this->set_lvcs(lvcs);
-
+  this->extract_pixel_size();
   return true;
 }
 
@@ -304,6 +309,7 @@ vpgl_geo_camera::init_geo_camera(const std::string & img_name,
   }
   camera = new vpgl_geo_camera(trans_matrix, lvcs);
   camera->set_scale_format(true);
+  camera->extract_pixel_size();
   return true;
 
 #if 0
@@ -393,6 +399,7 @@ vpgl_geo_camera::init_geo_camera_from_filename(const std::string & img_name,
   trans_matrix[1][3] = lat + scale + 0.5 / (nj - 1.0);
   camera = new vpgl_geo_camera(trans_matrix, lvcs);
   camera->set_scale_format(true);
+  camera->extract_pixel_size();
   return true;
 }
 
@@ -427,40 +434,35 @@ vpgl_geo_camera::init_geo_camera(const std::string & tfw_name,
   if (utm_zone != 0)
     camera->set_utm(utm_zone, northing);
   camera->set_scale_format(true);
-
+  camera->extract_pixel_size();
   ifs.close();
   return true;
 }
 void vpgl_geo_camera::extract_pixel_size(){
-  if(!this->scale_tag_){
-    sx_ = 0.0;
-    sy_ = 0.0;
-    return;
-  }
-  if(this->is_utm_){
+  if(is_utm_ && this->scale_tag_){
     sx_ = trans_matrix_[0][0];
-    sy_ = trans_matrix_[1][1];
+    sy_ = fabs(trans_matrix_[1][1]);//can be negative
     return;
   }
-  // not in UTM so convert pixel spacings in degrees to meters
-  // if lvcs is null can't determine spacing in meters
-  if(!lvcs_){
-    sx_ = 0.0;
-    sy_ = 0.0;
-    return;
+  vpgl_lvcs lvcs;
+  if(lvcs_)
+    lvcs = vpgl_lvcs(*lvcs_);
+  else {
+    double lon, lat;
+    this->img_to_global(0.0, 0.0, lon, lat);
+    lvcs = vpgl_lvcs(lat, lon, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   }
-  //  img_to_global(const double i, const double j, double & lon, double & lat)
   double lon0, lat0, lonx, latx, lony, laty;
   this->img_to_global(0.0, 0.0, lon0, lat0);
   this->img_to_global(100000.0, 0.0, lonx, latx);
   this->img_to_global(0.0, 100000.0, lony, laty);
   double dlx0, dlx1, dly0, dly1, dlz ;
-  lvcs_->global_to_local(double(lon0), double(lat0), double(0),
+  lvcs.global_to_local(double(lon0), double(lat0), double(0),
                        vpgl_lvcs::wgs84, dlx0, dly0, dlz);
-  lvcs_->global_to_local(double(lonx), double(latx), double(0),
+  lvcs.global_to_local(double(lonx), double(latx), double(0),
                        vpgl_lvcs::wgs84, dlx1, dly1, dlz);
   sx_ = sqrt((dlx1-dlx0)*(dlx1-dlx0) + (dly1-dly0) * (dly1-dly0))/100000.0;
-  lvcs_->global_to_local(double(lony), double(laty), double(0),
+  lvcs.global_to_local(double(lony), double(laty), double(0),
                          vpgl_lvcs::wgs84, dlx1, dly1, dlz);
   sy_ = sqrt((dlx1-dlx0)*(dlx1-dlx0) + (dly1-dly0) * (dly1-dly0))/100000.0;
 }

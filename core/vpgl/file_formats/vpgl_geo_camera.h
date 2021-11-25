@@ -125,8 +125,11 @@ class vpgl_geo_camera : public vpgl_camera<double>
   // adds translation to the trans matrix
   void translate(double tx, double ty, double z);
 
-  //: the lidar pixel size in meters assumes square pixels
-  double pixel_spacing() const{return sqrt(sx_*sx_ + sy_*sy_);}
+  //: determine the pixel spacing
+  void extract_pixel_size();
+
+  //: the lidar pixel size in meters if pixel is square (mean of xy spacing)
+  double pixel_spacing() const{return 0.5*(sx_ + sy_);}
 
   //: the lidar pixel size in meters, general case
   void pixel_spacing(double& sx, double& sy){sx = sx_; sy = sy_;}
@@ -211,7 +214,6 @@ class vpgl_geo_camera : public vpgl_camera<double>
   // x and y pixel spacing in meters
   double sx_;
   double sy_;
-  void extract_pixel_size();
   vnl_matrix<double> trans_matrix_;           // 4x4 matrix
   //: lvcs of world parameters
   vpgl_lvcs_sptr lvcs_ = nullptr;
