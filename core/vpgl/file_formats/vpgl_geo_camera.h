@@ -39,8 +39,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   //: if scale tag is false be sure that trans_matrix[0][0] and trans_matrix[1][1] is 1.0 otherwise set it to true
   vpgl_geo_camera(vnl_matrix<double> trans_matrix, vpgl_lvcs_sptr lvcs)
-      : trans_matrix_(std::move(trans_matrix)), is_utm_(false),
-        scale_tag_(false) {
+    : trans_matrix_(std::move(trans_matrix)), is_utm_(false), scale_tag_(false), sx_(0.0), sy_(0.0){
     if (lvcs)
       this->set_lvcs(lvcs);
   }
@@ -127,8 +126,10 @@ class vpgl_geo_camera : public vpgl_camera<double>
   void translate(double tx, double ty, double z);
 
   //: the lidar pixel size in meters assumes square pixels
-  double pixel_spacing() const { if (scale_tag_) return trans_matrix_[0][0];
-                                 else return 1.0; }
+  double pixel_spacing() const{return sqrt(sx_*sx_ + sy_*sy_);}
+
+  //: the lidar pixel size in meters, general case
+  void pixel_spacing(double& sx, double& sy){sx = sx_; sy = sy_;}
 
   bool operator ==(vpgl_geo_camera const& rhs) const;
 
@@ -207,7 +208,10 @@ class vpgl_geo_camera : public vpgl_camera<double>
   short version() const { return 1; }
 
  private:
-
+  // x and y pixel spacing in meters
+  double sx_;
+  double sy_;
+  void extract_pixel_size();
   vnl_matrix<double> trans_matrix_;           // 4x4 matrix
   //: lvcs of world parameters
   vpgl_lvcs_sptr lvcs_ = nullptr;
@@ -236,5 +240,6 @@ load_geo_camera_from_geotransform(std::array<double, 6> geotransform,
                                   int utm_zone = -1,
                                   int northing = 0, //0 North, 1 South
                                   const vpgl_lvcs* lvcs = nullptr);
+
 
 #endif // vpgl_geo_camera_h_

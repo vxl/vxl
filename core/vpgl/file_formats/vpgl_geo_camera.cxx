@@ -25,7 +25,7 @@
 #include <vil/file_formats/vil_nitf2_image.h>
 #endif
 
-vpgl_geo_camera::vpgl_geo_camera()
+vpgl_geo_camera::vpgl_geo_camera(): sx_(0.0), sy_(0.0)
 {
   trans_matrix_.set_size(4, 4);
   trans_matrix_.fill(0);
@@ -215,6 +215,7 @@ vpgl_geo_camera::load_from_geotransform(std::array<double, 6> geotransform,
 
   return true;
 }
+
 
 //: define a geo_camera by the image file name (filename should have format such as xxx_N35W73_S0.6x0.6_xxx.tif)
 bool
@@ -430,7 +431,39 @@ vpgl_geo_camera::init_geo_camera(const std::string & tfw_name,
   ifs.close();
   return true;
 }
-
+void vpgl_geo_camera::extract_pixel_size(){
+  if(!this->scale_tag_){
+    sx_ = 0.0;
+    sy_ = 0.0;
+    return;
+  }
+  if(this->is_utm_){
+    sx_ = trans_matrix_[0][0];
+    sy_ = trans_matrix_[1][1];
+    return;
+  }
+  // not in UTM so convert pixel spacings in degrees to meters
+  // if lvcs is null can't determine spacing in meters
+  if(!lvcs_){
+    sx_ = 0.0;
+    sy_ = 0.0;
+    return;
+  }
+  //  img_to_global(const double i, const double j, double & lon, double & lat)
+  double lon0, lat0, lonx, latx, lony, laty;
+  this->img_to_global(0.0, 0.0, lon0, lat0);
+  this->img_to_global(100000.0, 0.0, lonx, latx);
+  this->img_to_global(0.0, 100000.0, lony, laty);
+  double dlx0, dlx1, dly0, dly1, dlz ;
+  lvcs_->global_to_local(double(lon0), double(lat0), double(0),
+                       vpgl_lvcs::wgs84, dlx0, dly0, dlz);
+  lvcs_->global_to_local(double(lonx), double(latx), double(0),
+                       vpgl_lvcs::wgs84, dlx1, dly1, dlz);
+  sx_ = sqrt((dlx1-dlx0)*(dlx1-dlx0) + (dly1-dly0) * (dly1-dly0))/100000.0;
+  lvcs_->global_to_local(double(lony), double(laty), double(0),
+                         vpgl_lvcs::wgs84, dlx1, dly1, dlz);
+  sy_ = sqrt((dlx1-dlx0)*(dlx1-dlx0) + (dly1-dly0) * (dly1-dly0))/100000.0;
+}
 //: transforms a given local 3d world point to global geo coordinates
 void
 vpgl_geo_camera::local_to_global(double lx, double ly, double lz, double & gx, double & gy, double & gz) const
