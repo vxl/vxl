@@ -409,8 +409,9 @@ void grid_surface_type_2d(
 
          // pix values in disparity space surface type
          // take min probabilty as characteristic of grid cell.
+         // except for the case of shadow, then take max
          for (auto t : styps) {
-           float min_p = 1.0f;
+           float min_p = 1.0f, max_p = 0.0f;
            for (auto nidx : reduced_indices) {
              std::pair<size_t, size_t> pix = pt_indx_to_pix[nidx];
              size_t di = pix.first, dj = pix.second;
@@ -418,8 +419,12 @@ void grid_surface_type_2d(
                continue;
              float p = disparity_stype.const_p(di, dj, t);
              if (p < min_p) min_p = p;
+             if (p > max_p) max_p = p;
            }
-           heightmap_stype.p(i, j, t) = min_p;
+           if(t == bpgl_surface_type::SHADOW)
+             heightmap_stype.p(i, j, t) = max_p;
+           else
+             heightmap_stype.p(i, j, t) = min_p;
          }
      }//end i,
  }//end j

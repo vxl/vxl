@@ -170,7 +170,6 @@ bsgm_shadow_step_filter(const vil_image_view<T> & img,
       bool any_invalid = false;
       float resp = 0;
       T vmin = std::numeric_limits<T>::max();
-      bool print = (i == 1128 && j == 211);
       for (int k = 0; (k < ns) && !any_invalid; ++k)
       {
         int di = std::get<0>(deriv_pix_offset[k]);
@@ -215,9 +214,6 @@ bsgm_shadow_step_filter(const vil_image_view<T> & img,
       float v = resp_img(i, j);
       if (v <= 1.0f)
         continue;
-      bool print = (i == 1115 && j == 193);
-      if (print)
-        std::cout << ' ';
       int k_max = 0;
       float fm1 = 0.0f, fm = 0.0f, fp = 0.0f, fp1 = 0.0f, f0 = 0.0f, v_max = 0;
       for (int k = 0; k < ns; ++k)
@@ -230,8 +226,6 @@ bsgm_shadow_step_filter(const vil_image_view<T> & img,
         if (off_j < 0 || off_j >= nj)
           continue;
         float v = resp_img(off_i, off_j);
-        if (print)
-          std::cout << k << ' ' << v << std::endl;
         if (v > v_max)
         {
           v_max = v;
