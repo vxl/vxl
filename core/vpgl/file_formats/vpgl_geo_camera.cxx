@@ -25,7 +25,7 @@
 #include <vil/file_formats/vil_nitf2_image.h>
 #endif
 
-vpgl_geo_camera::vpgl_geo_camera()
+vpgl_geo_camera::vpgl_geo_camera(): sx_(0.0), sy_(0.0)
 {
   trans_matrix_.set_size(4, 4);
   trans_matrix_.fill(0);
@@ -128,14 +128,19 @@ vpgl_geo_camera::load_from_resource(vil_image_resource_sptr const & geotiff_img,
   this->is_utm_ = false;
   this->set_lvcs(lvcs);
 
+  
+
   // check if the model type is geographic and also the units
-  if (gtif->GCS_WGS84_MET_DEG())
+  if (gtif->GCS_WGS84_MET_DEG()){
+    this->extract_pixel_size();
     return true;
+  }
 
   // otherwise check if it is projected to UTM and figure out the zone
   if (gtif->PCS_WGS84_UTM_zone(utm_zone, h) || gtif->PCS_NAD83_UTM_zone(utm_zone, h))
   {
     this->set_utm(utm_zone, h);
+    this->extract_pixel_size();
     return true;
   }
   else
@@ -212,9 +217,10 @@ vpgl_geo_camera::load_from_geotransform(std::array<double, 6> geotransform,
   this->utm_zone_ = utm_zone;
   this->northing_ = northing;
   this->set_lvcs(lvcs);
-
+  this->extract_pixel_size();
   return true;
 }
+
 
 //: define a geo_camera by the image file name (filename should have format such as xxx_N35W73_S0.6x0.6_xxx.tif)
 bool
@@ -303,6 +309,7 @@ vpgl_geo_camera::init_geo_camera(const std::string & img_name,
   }
   camera = new vpgl_geo_camera(trans_matrix, lvcs);
   camera->set_scale_format(true);
+  camera->extract_pixel_size();
   return true;
 
 #if 0
@@ -392,6 +399,7 @@ vpgl_geo_camera::init_geo_camera_from_filename(const std::string & img_name,
   trans_matrix[1][3] = lat + scale + 0.5 / (nj - 1.0);
   camera = new vpgl_geo_camera(trans_matrix, lvcs);
   camera->set_scale_format(true);
+  camera->extract_pixel_size();
   return true;
 }
 
@@ -426,11 +434,38 @@ vpgl_geo_camera::init_geo_camera(const std::string & tfw_name,
   if (utm_zone != 0)
     camera->set_utm(utm_zone, northing);
   camera->set_scale_format(true);
-
+  camera->extract_pixel_size();
   ifs.close();
   return true;
 }
-
+void vpgl_geo_camera::extract_pixel_size(){
+  if(is_utm_ && this->scale_tag_){
+    sx_ = trans_matrix_[0][0];
+    sy_ = fabs(trans_matrix_[1][1]);//can be negative
+    return;
+  }
+  vpgl_lvcs lvcs;
+  if(lvcs_)
+    lvcs = vpgl_lvcs(*lvcs_);
+  else {
+    double lon, lat;
+    this->img_to_global(0.0, 0.0, lon, lat);
+    lvcs = vpgl_lvcs(lat, lon, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  }
+  double lon0, lat0, lonx, latx, lony, laty;
+  this->img_to_global(0.0, 0.0, lon0, lat0);
+  this->img_to_global(100000.0, 0.0, lonx, latx);
+  this->img_to_global(0.0, 100000.0, lony, laty);
+  double dlx0, dlx1, dly0, dly1, dlz ;
+  lvcs.global_to_local(double(lon0), double(lat0), double(0),
+                       vpgl_lvcs::wgs84, dlx0, dly0, dlz);
+  lvcs.global_to_local(double(lonx), double(latx), double(0),
+                       vpgl_lvcs::wgs84, dlx1, dly1, dlz);
+  sx_ = sqrt((dlx1-dlx0)*(dlx1-dlx0) + (dly1-dly0) * (dly1-dly0))/100000.0;
+  lvcs.global_to_local(double(lony), double(laty), double(0),
+                         vpgl_lvcs::wgs84, dlx1, dly1, dlz);
+  sy_ = sqrt((dlx1-dlx0)*(dlx1-dlx0) + (dly1-dly0) * (dly1-dly0))/100000.0;
+}
 //: transforms a given local 3d world point to global geo coordinates
 void
 vpgl_geo_camera::local_to_global(double lx, double ly, double lz, double & gx, double & gy, double & gz) const
