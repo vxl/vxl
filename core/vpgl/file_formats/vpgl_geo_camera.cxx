@@ -43,6 +43,7 @@ vpgl_geo_camera::vpgl_geo_camera(vpgl_geo_camera const & rhs)
   , scale_tag_(rhs.scale_tag_)
 {
   this->set_lvcs(rhs.lvcs_);
+  rhs.pixel_spacing(sx_, sy_);
 }
 
 

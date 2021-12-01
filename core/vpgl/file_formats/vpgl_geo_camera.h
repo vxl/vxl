@@ -132,7 +132,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
   double pixel_spacing() const{return 0.5*(sx_ + sy_);}
 
   //: the lidar pixel size in meters, general case
-  void pixel_spacing(double& sx, double& sy){sx = sx_; sy = sy_;}
+  void pixel_spacing(double& sx, double& sy) const {sx = sx_; sy = sy_;}
 
   bool operator ==(vpgl_geo_camera const& rhs) const;
 
