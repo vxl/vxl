@@ -1,85 +1,246 @@
-version: 2
-jobs:
-  build:
-    docker:
-      - image: vsiri/vxl:latest
-    working_directory: /vxl
-    steps:
-      - checkout
+version: 2.1
 
-      - restore_cache:
-          keys:
-            - vxl_bin-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}
-            - vxl_bin-{{ .Environment.CACHE_VERSION }}-
+# -----------------------------------
+# Configuration environment variables
+# -----------------------------------
+#
+# Adjust project environment variables to override default config
+# https://circleci.com/docs/2.0/env-vars/#setting-an-environment-variable-in-a-project
+#
+# CACHE_VERSION : build cache version (setting to new value clears cache)
+#   default empty
+# CTEST_BUILD_CONFIGURATION : build configuration
+#   default "Release"
+# VXL_BUILD_CONTRIB : build contrib
+#   default 0 (off)
+# VXL_BUILD_CORE_VIDEO : build core video
+#   default 1 (on)
+# VXL_BUILD_VGUI : build vgui
+#   default 1 (on)
+# CTEST_EXTRA_BUILD_OPTIONS : additional ctest build options
+#  default empty
+# NINJA_JOB_CONCURRENCY : ninja job conurrency
+#  default $(nproc)/2
+# CTEST_JOB_CONCURRENCY : ctest job conurrency
+#   default $(nproc)/2
+# CTEST_TEST_OPTIONS : ctest test options
+#   default "--schedule-random --output-on-failure"
+# CDASH_ENABLE : set to 0 to disable cdash submission
+#   default 1
+# CDASH_CIRCLE_BRANCH : cdash submission for this branch name
+#   default "master"
+
+
+# --------------------
+# generic yaml anchors
+# --------------------
+x-references:
+
+  # directories
+  directories:
+    - &source_dir  /vxl/source
+    - &build_dir   /vxl/build
+    - &install_dir /vxl/install
+
+  # build cache: save & restore
+  # Restore will search for a cache in the following order:
+  # - most recent build from this SHA
+  # - if not available, most recent build from this branch
+  # - if not available, most recent build from the master branch
+  # Select a new build cache by setting the project envvar "CACHE_VERSION"
+  save_build_cache: &save_build_cache
+    save_cache:
+      name: Save build cache
+      key: build-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Environment.CIRCLE_SHA1 }}-{{ epoch }}
+      paths:
+        - *build_dir
+
+  restore_build_cache: &restore_build_cache
+    restore_cache:
+      name: Restore build cache
+      keys:
+        - build-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Environment.CIRCLE_SHA1 }}
+        - build-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+        - build-{{ .Environment.CACHE_VERSION }}-master-
+
+
+# -----
+# circleci custom commands
+# -----
+commands:
+
+  # fix times on source
+  # before script runs, we need to resolve timestamps between the git clone
+  # and the older build cache. A good discussion is found here:
+  # https://blog.esciencecenter.nl/travis-caching-and-incremental-builds-6518b89ee889
+  fix_times_on_source:
+    description: "Fixing times stamps on source files"
+    parameters:
+      source:
+        description: source directory
+        type: string
+        default: "."
+      build:
+        description: build directory
+        type: string
+    steps:
       - run:
           name: Fix times on source
           command: |
-            export OLDEST_DATE=$(find /build -type f -printf '%TD %TT\n' | sort | head -n 1)
-            if [ -f /build/vxl.md5 ]; then
-              (md5sum -c /build/vxl.md5 2>/dev/null || :) | awk '{if ($NF == "OK") print substr($0, 1, length($0)-4)}' | xargs touch -d "${OLDEST_DATE}"
+
+            # files & folders
+            FIX_SOURCE_DIR="<< parameters.source >>"
+            FIX_BUILD_DIR="<< parameters.build >>"
+            MD5_FILE="${FIX_BUILD_DIR}/build-cache.md5"
+
+            # ensure build cache exists
+            mkdir -p "${FIX_BUILD_DIR}"
+
+            # oldest date in build directory
+            export OLDEST_DATE=$(find "${FIX_BUILD_DIR}" -type f -printf '%TD %TT\n' | sort | head -1)
+            echo "OLDEST_DATE = $OLDEST_DATE"
+
+            # fix times on source
+            # note not all versions of awk appear to support null-terminated
+            # strings, thus we use `tr` to tranlate '\n'->'\0'
+            if [ -f "${MD5_FILE}" ]; then
+              (md5sum -c "${MD5_FILE}" 2>/dev/null || :) | awk '{if ($NF == "OK") printf "%s\n", substr($0, 1, length($0)-4)}' | tr '\n' '\0' | xargs -0 touch -d "${OLDEST_DATE}"
             fi
-            mkdir -p /build
-            find /vxl \( -type d -name .git \) -prune -o -type f -print0 | xargs -0 md5sum > /build/vxl.md5
+
+            # record md5 hash code for all source files
+            find "${FIX_SOURCE_DIR}" \( -type d -name .git \) -prune -o -type f -print0 | xargs -0 md5sum > "${MD5_FILE}"
+
+            # display build cache contents
+            ls -la "${FIX_BUILD_DIR}"
+
+
+# -------------
+# CircleCI jobs
+# -------------
+jobs:
+
+  # build & test with optional build cache
+  build_and_test:
+    # resource_class: medium+
+    docker:
+      - image: vsiri/vxl:latest
+    shell: /bin/bash -eo pipefail
+    working_directory: *source_dir
+    environment:
+      SOURCE_DIR: *source_dir
+      BUILD_DIR: *build_dir
+      INSTALL_DIR: *install_dir
+
+    parameters:
+      restore-cache:
+        description: "Restore build cache"
+        type: boolean
+        default: true
+
+    steps:
+      - checkout
+
+      - run:
+          name: Additional setup
+          command: |
+
+            # create directories
+            mkdir -p "${BUILD_DIR}" "${INSTALL_DIR}"
+
+      - when:
+          condition: << parameters.restore-cache >>
+          steps:
+            - *restore_build_cache
+
+      - fix_times_on_source:
+          source: *source_dir
+          build: *build_dir
+
       - run:
           name: Configure
+          working_directory: *build_dir
           command: |
-            set -e
-            mkdir -p /build
-            mkdir -p /install
-            cd /build
-            echo 'set(CTEST_BUILD_CONFIGURATION Release)
-            set(CTEST_CMAKE_GENERATOR "Ninja")
-            set(CTEST_SOURCE_DIRECTORY "/vxl")
-            set(CTEST_BINARY_DIRECTORY "/build")
-            set(CTEST_COMMAND "/usr/bin/ctest")
-            set(CTEST_CONFIGURE_COMMAND "${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE:STRING=\"${CTEST_BUILD_CONFIGURATION}\"")
-            set(CTEST_CONFIGURE_COMMAND "${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=/install -DCMAKE_CXX_STANDARD=11 -DVXL_BUILD_CONTRIB=0 -DVXL_BUILD_CORE_VIDEO=1 -DVXL_BUILD_VGUI=1")
-            set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} ${CTEST_BUILD_OPTIONS}")
-            set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} \"-G${CTEST_CMAKE_GENERATOR}\"")
-            set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} \"${CTEST_SOURCE_DIRECTORY}\"")
-            ctest_start(Experimental)
-            ctest_configure()' > ctest_start_configure.ctest
-            ctest -S ctest_start_configure.ctest -VV
+
+            # temporary enable envvar export
+            # allowing ctest to access configuration variables
+            set -a
+
+            # config variables (override in project settings)
+            : ${CTEST_BUILD_CONFIGURATION=Release}
+            : ${VXL_BUILD_CONTRIB=0}
+            : ${VXL_BUILD_CORE_VIDEO=1}
+            : ${VXL_BUILD_VGUI=1}
+            : ${CTEST_EXTRA_BUILD_OPTIONS=}
+
+            # disable envar export
+            set +a
+
+            # configure
+            CTEST_CONFIG_FILE="${SOURCE_DIR}/.circleci/circleci.ctest"
+            ctest -S "${CTEST_CONFIG_FILE}" -VV
             sed -ir "s|^Site: .*|Site: CircleCI ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}|" DartConfiguration.tcl
             sed -ir "s|^BuildName: .*|BuildName: Linux-c++ Build ${CIRCLE_BUILD_NUM}|" DartConfiguration.tcl
+
       - run:
           name: Build
-          working_directory: /build
-          command: set -x && ninja -j${NINJA_JOBS:-$((`nproc` / 2))}
-      - save_cache:
-          key: vxl_bin-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ epoch }}
-          paths:
-            - /build
+          working_directory: *build_dir
+          command: |
+
+            # default config variables (override in project settings)
+            : ${NINJA_JOB_CONCURRENCY=$((`nproc` / 2))}
+
+            # run ninja
+            ninja -j${NINJA_JOB_CONCURRENCY}
+
+      - *save_build_cache
+
       - run:
           name: Test
-          working_directory: /build
-          command: ctest -D ExperimentalTest --schedule-random -j `nproc` -V
+          working_directory: *build_dir
+          command: |
+
+            # default config variables (override in project settings)
+            : ${CTEST_JOB_CONCURRENCY=$((`nproc` / 2))}
+            : ${CTEST_TEST_OPTIONS="--schedule-random --output-on-failure"}
+
+            # test
+            ctest -D ExperimentalTest -j${CTEST_JOB_CONCURRENCY} ${CTEST_TEST_OPTIONS}
+
       - run:
           name: Submitting to open.cdash.org
-          working_directory: /build
+          working_directory: *build_dir
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+
+            # default config variables (override in project settings)
+            : ${CDASH_ENABLE=1}
+            : ${CDASH_CIRCLE_BRANCH="master"}
+
+            # cdash submission
+            if [[ "${CDASH_ENABLE}" == "1" && \
+                  "${CIRCLE_BRANCH}" == "${CDASH_CIRCLE_BRANCH}" ]]
+            then
               env | grep ^CIRCLE > circleci.env
               ctest -A circleci.env -D ExperimentalSubmit -V
             else
               echo "Skipping open.cdash.org submission..."
             fi
+
       - run:
           name: Install
-          working_directory: /build
+          working_directory: *build_dir
           command: ninja install
+
       - run:
           name: Test install
-          working_directory: /build
           command: |
 
             # some expected install files
             install_files=(
-                "/install/include/vxl/vcl/vcl_compiler.h"
-                "/install/include/vxl/core/vnl/vnl_math.h"
-                "/install/include/vxl/core/vnl/vnl_config.h"
-                "/install/include/vxl/core/vgl/vgl_point_3d.h"
-                "/install/include/vxl/core/vgl/vgl_export.h"
+                "${INSTALL_DIR}/include/vxl/vcl/vcl_compiler.h"
+                "${INSTALL_DIR}/include/vxl/core/vnl/vnl_math.h"
+                "${INSTALL_DIR}/include/vxl/core/vnl/vnl_config.h"
+                "${INSTALL_DIR}/include/vxl/core/vgl/vgl_point_3d.h"
+                "${INSTALL_DIR}/include/vxl/core/vgl/vgl_export.h"
             )
 
             # spot check file existence
@@ -88,5 +249,32 @@ jobs:
               if [ ! -f "${file}" ]; then
                 echo "Missing installed file <${file}>" >& 2
                 exit 1
+              else
+                echo "Found installed file <${file}>"
               fi
             done
+
+
+# ------------------
+# CircleCI workflows
+# ------------------
+workflows:
+
+  commit:
+    jobs:
+
+      # general commit - use build cache
+      - build_and_test:
+          restore-cache: true
+          filters:
+            branches:
+              ignore:
+                - master
+
+      # master commit - rebuild from scratch (no build cache)
+      - build_and_test:
+          restore-cache: false
+          filters:
+            branches:
+              only:
+                - master
