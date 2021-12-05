@@ -347,11 +347,8 @@ class bsgm_prob_pairwise_dsm
   const vil_image_view<float>& prob_confidence() const { return prob_heightmap_prob_; }
   const vil_image_view<float>& radial_std_dev_image() const {return radial_std_dev_image_; }
 
-  const bpgl_surface_type & rect_target_stype() const  { return rect_space_target_; }
-  const bpgl_surface_type & dsm_grid_stype() const { return dsm_grid_space_; }
-  bool save_dsm_grid_stype(std::string const& stype_dir){
-    return dsm_grid_space_.write(stype_dir);
-  }
+  const bpgl_surface_type & rect_target_stype() const  { return rect_target_stype_; }
+  const bpgl_surface_type & dsm_grid_stype() const { return dsm_grid_stype_; }
 
   // PROCESS-----
 
@@ -485,7 +482,11 @@ class bsgm_prob_pairwise_dsm
 
   //: apply a color map to the probability values and
   //  output a color point cloud as ascii
-  bool save_prob_ptset_color(std::string const& path) const;
+  void save_prob_ptset_color(std::string const& path) const;
+
+  //: save surface type data
+  void save_rect_target_stype(std::string const& path) const;
+  void save_dsm_grid_stype(std::string const& path) const;
 
  protected:
 
@@ -545,8 +546,8 @@ class bsgm_prob_pairwise_dsm
   vgl_vector_2d<float> sun_dir_1_;
 
   // define surface type probability layers
-  bpgl_surface_type rect_space_target_;
-  bpgl_surface_type dsm_grid_space_;
+  bpgl_surface_type rect_target_stype_;
+  bpgl_surface_type dsm_grid_stype_;
 
   // associate target_image pix_ij to triangulated 3-d pointset index
   std::map<size_t, std::pair<size_t, size_t> > pt_index_to_pix_;

@@ -5,6 +5,7 @@
 #include "bsgm_multiscale_disparity_estimator.h"
 #include <algorithm>
 #include <cmath>
+#include <sstream>
 #include <type_traits>
 #include <stdexcept>
 #include "vil/vil_convert.h"
@@ -277,14 +278,14 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_disparity_fwd()
 
 #if 1
   //apply invalid map to surface_types
-  rect_space_target_ = bpgl_surface_type(bpgl_surface_type::RECTIFIED_TARGET, rect_bview0_.ni(), rect_bview1_.nj());
-  rect_space_target_.apply(invalid_map_fwd_, bpgl_surface_type::INVALID_DATA);
+  rect_target_stype_ = bpgl_surface_type(bpgl_surface_type::RECTIFIED_TARGET, rect_bview0_.ni(), rect_bview1_.nj());
+  rect_target_stype_.apply(invalid_map_fwd_, bpgl_surface_type::INVALID_DATA);
   // apply shadow profile mask to surface_types
   vil_image_view<float> shadow_step;
   bsgm_shadow_step_filter<PIX_T>(rect_bview0_, invalid_map_fwd_, shadow_step, sun_dir_0_, params_.shadow_profile_radius_, params_.response_low_,params_.shadow_high_);
-  rect_space_target_.apply(shadow_step, bpgl_surface_type::SHADOW_STEP);
+  rect_target_stype_.apply(shadow_step, bpgl_surface_type::SHADOW_STEP);
   PIX_T sthresh = static_cast<PIX_T>(params_.shadow_thresh_);
-  rect_space_target_.apply(rect_bview0_, sthresh, bpgl_surface_type::SHADOW);
+  rect_target_stype_.apply(rect_bview0_, sthresh, bpgl_surface_type::SHADOW);
 #endif
 }
 
@@ -372,11 +373,11 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_height_fwd(bool compute_hmap)
     this->compute_height(rect_cam0_window, rect_cam1_window, disparity_fwd_,
                          tri_3d_fwd_, ptset_fwd_, heightmap_fwd_);//initializes pt_index_to_pix_
 #if 1
-    dsm_grid_space_.set_size(bpgl_surface_type::DSM, heightmap_fwd_.ni(), heightmap_fwd_.nj());
+    dsm_grid_stype_.set_size(bpgl_surface_type::DSM, heightmap_fwd_.ni(), heightmap_fwd_.nj());
     auto bh = this->get_bpgl_heightmap();
-    bh.surface_type_from_pointset(ptset_fwd_, rect_space_target_,pt_index_to_pix_, dsm_grid_space_);
+    bh.surface_type_from_pointset(ptset_fwd_, rect_target_stype_, pt_index_to_pix_, dsm_grid_stype_);
 #endif
-      }else{
+  } else {
     tri_3d_fwd_ = bpgl_3d_from_disparity(rect_cam0_window, rect_cam1_window,
                                          disparity_fwd_, params_.disparity_sense_);
   }
@@ -456,9 +457,9 @@ bool bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_prob(bool compute_prob_height
 #if 1
     std::pair<size_t, size_t>& pr = pt_index_to_pix_[i];
     size_t ii = pr.first, jj = pr.second;
-    if(ii>=rect_space_target_.ni() || jj >= rect_space_target_.nj())
+    if(ii>=rect_target_stype_.ni() || jj >= rect_target_stype_.nj())
       continue;
-    rect_space_target_.p(ii, jj, bpgl_surface_type::GEOMETRIC_CONSISTENCY)=prob;
+    rect_target_stype_.p(ii, jj, bpgl_surface_type::GEOMETRIC_CONSISTENCY)=prob;
 #endif
   }
 
@@ -471,11 +472,10 @@ bool bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_prob(bool compute_prob_height
   // convert pointset to images
   if (compute_prob_heightmap) {
     auto bh = this->get_bpgl_heightmap();
-    //bh.heightmap_from_pointset(prob_ptset_, prob_heightmap_z_, prob_heightmap_prob_);
     bh.heightmap_from_pointset(prob_ptset_, prob_heightmap_z_,
                                prob_heightmap_prob_, radial_std_dev_image_);
 #if 1
-    dsm_grid_space_.apply(prob_heightmap_prob_, bpgl_surface_type::GEOMETRIC_CONSISTENCY);
+    dsm_grid_stype_.apply(prob_heightmap_prob_, bpgl_surface_type::GEOMETRIC_CONSISTENCY);
 #endif
   }
   return true;
@@ -527,7 +527,8 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_xyz_prob(bool compute_prob_he
   // convert pointset to images
   if (compute_prob_heightmap) {
     auto bh = this->get_bpgl_heightmap();
-    bh.heightmap_from_pointset(prob_ptset_, prob_heightmap_z_, prob_heightmap_prob_, radial_std_dev_image_);
+    bh.heightmap_from_pointset(prob_ptset_, prob_heightmap_z_,
+                               prob_heightmap_prob_, radial_std_dev_image_);
   }
 }
 
@@ -644,14 +645,15 @@ static void map_prob_to_color(float prob, float& r, float& g, float& b)
 }
 
 template <class CAM_T, class PIX_T>
-bool bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_prob_ptset_color(std::string const& path) const
+void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_prob_ptset_color(std::string const& path) const
 {
   size_t n = prob_ptset_.size();
   float max = prob_distr_.value_with_area_above(0.05f);
   std::ofstream ostr(path.c_str());
   if (!ostr) {
-    std::cout << "Can't open " << path << " to write color ptset" << std::endl;
-    return false;
+    std::ostringstream buffer;
+    buffer << "Cannot open " << path << " to write color ptset";
+    throw std::runtime_error(buffer.str());
   }
   for (size_t i = 0; i<n; ++i) {
     float prob = prob_ptset_.sc(i);
@@ -662,9 +664,21 @@ bool bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_prob_ptset_color(std::string con
     ostr << p.x() << ' ' << p.y() << ' ' << p.z() << ' ' << r << ' ' << g << ' ' << b << std::endl;
   }
   ostr.close();
-  return true;
 }
 
+template <class CAM_T, class PIX_T>
+void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_target_stype(std::string const& path) const {
+  if (!rect_target_stype_.write(path)) {
+    throw std::runtime_error("save_rect_target_stype failed");
+  }
+}
+
+template <class CAM_T, class PIX_T>
+void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_dsm_grid_stype(std::string const& path) const {
+  if (!dsm_grid_stype_.write(path)) {
+    throw std::runtime_error("save_dsm_grid_stype failed");
+  }
+}
 
 template <class CAM_T, class PIX_T>
 void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::set_shadow_context_data(){

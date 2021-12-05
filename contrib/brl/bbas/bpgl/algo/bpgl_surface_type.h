@@ -183,6 +183,7 @@ class bpgl_surface_type
   bool write(std::string const& path) const;
 
   //: accessors
+  size_t ntypes() const {return type_images_.size();}
   size_t ni() const {return ni_;}
   size_t nj() const {return nj_;}
   domain domain_id() const {return domain_;}
