@@ -415,10 +415,10 @@ bool bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_prob(bool compute_prob_height
 {
   // check number of points
   if (ptset_fwd_.size() == 0) {
-    std::runtime_error("ptset_fwd_ is empty");
+    throw std::runtime_error("ptset_fwd_ is empty");
   }
   if (ptset_rev_.size() == 0) {
-    std::runtime_error("ptset_rev_ is empty");
+    throw std::runtime_error("ptset_rev_ is empty");
   }
 
   // overall pointset probability is related to how rapidly z changes with disparity
@@ -465,7 +465,7 @@ bool bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_prob(bool compute_prob_height
   // check size
   n = prob_ptset_.size();
   if (n == 0) {
-    std::runtime_error("prob_ptset_ is empty");
+    throw std::runtime_error("prob_ptset_ is empty");
   }
 
   // convert pointset to images
@@ -521,7 +521,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_xyz_prob(bool compute_prob_he
   }
   size_t n = prob_ptset_.size();
   if (n == 0) {
-    std::runtime_error("prob_ptset_ is empty");
+    throw std::runtime_error("prob_ptset_ is empty");
   }
 
   // convert pointset to images
@@ -708,7 +708,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::set_shadow_context_data(){
   //  |                    /---------\                    |
   //  | image space     long cast shadow                  |
   //  =====================================================
-  std::runtime_error("shadow dp weighting not implemented for the perspective camera");
+  throw std::runtime_error("shadow dp weighting not implemented for the perspective camera");
 }
 
 
