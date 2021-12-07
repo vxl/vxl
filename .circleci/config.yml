@@ -20,9 +20,9 @@ version: 2.1
 # CTEST_EXTRA_BUILD_OPTIONS : additional ctest build options
 #  default empty
 # NINJA_JOB_CONCURRENCY : ninja job conurrency
-#  default $(nproc)/2
+#  default $(nproc)
 # CTEST_JOB_CONCURRENCY : ctest job conurrency
-#   default $(nproc)/2
+#   default $(nproc)
 # CTEST_TEST_OPTIONS : ctest test options
 #   default "--schedule-random --output-on-failure"
 # CDASH_ENABLE : set to 0 to disable cdash submission
@@ -121,7 +121,7 @@ jobs:
 
   # build & test with optional build cache
   build_and_test:
-    # resource_class: medium+
+    resource_class: medium+
     docker:
       - image: vsiri/vxl:latest
     shell: /bin/bash -eo pipefail
@@ -187,7 +187,7 @@ jobs:
           command: |
 
             # default config variables (override in project settings)
-            : ${NINJA_JOB_CONCURRENCY=$((`nproc` / 2))}
+            : ${NINJA_JOB_CONCURRENCY=$(nproc)}
 
             # run ninja
             ninja -j${NINJA_JOB_CONCURRENCY}
@@ -200,7 +200,7 @@ jobs:
           command: |
 
             # default config variables (override in project settings)
-            : ${CTEST_JOB_CONCURRENCY=$((`nproc` / 2))}
+            : ${CTEST_JOB_CONCURRENCY=$(nproc)}
             : ${CTEST_TEST_OPTIONS="--schedule-random --output-on-failure"}
 
             # test
