@@ -52,8 +52,13 @@ bpgl_surface_type::read(std::string const& directory)
 bool
 bpgl_surface_type::write(std::string const& directory) const
 {
+  if ((type_images_.size() == 0) || (ni_ == 0) || (nj_ == 0)) {
+    std::cerr << "surface type images are not initalized or empty" << std::endl;
+    return false;
+  }
+
   if (!vul_file::is_directory(directory)) {
-    std::cerr << "type data directory not accessable "
+    std::cerr << "surface type data directory not accessable "
               << directory << std::endl;
     return false;
   }
