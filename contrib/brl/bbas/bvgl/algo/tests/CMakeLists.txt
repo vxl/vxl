@@ -5,7 +5,7 @@ add_executable( bvgl_algo_test_all
   test_2d_geo_index.cxx
   test_biarc.cxx
   test_eulerspiral.cxx
-  test_register
+  test_register.cxx
 )
 
 target_link_libraries( bvgl_algo_test_all bvgl_algo ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vnl_algo bnl ${VXL_LIB_PREFIX}testlib )
