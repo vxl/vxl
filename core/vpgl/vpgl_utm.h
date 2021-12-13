@@ -29,6 +29,7 @@ class vpgl_utm
   ~vpgl_utm();
   void SetSpheroidA(double a) { a_ = a; }
   void SetSpheroidB(double b) { b_ = b; }
+
   //UTM to LatLon
   void transform(int utm_zone, double x, double y, double z,
                  double& lat, double& lon , double& elev,
@@ -39,9 +40,14 @@ class vpgl_utm
                  double& lat, double& lon,
                  bool south_flag = false,
                  double utm_central_meridian = 0) const;
+
   //: LatLon to UTM
   void transform(double lat, double lon,
                  double& x, double& y, int& utm_zone) const;
+
+  void transform(double lat, double lon,
+                 double& x, double& y, int& utm_zone, bool& south_flag,
+                 int force_utm_zone=-1, int force_south_flag=-1) const;
 
  private:
    double a_{6378137}, b_{6356752.3142};
