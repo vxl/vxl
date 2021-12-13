@@ -314,17 +314,37 @@ vpgl_utm::transform(int utm_zone,
 void
 vpgl_utm::transform(double lat, double lon, double & x, double & y, int & utm_zone) const
 {
+  bool south_flag;
+  this->transform(lat, lon, x, y, utm_zone, south_flag, -1, -1);
+}
+
+// This WGS84 -> UTM conversion provides the ability to force a specific
+// UTM zone and/or south_flag as input, allowing points near UTM borders
+// and the equator to be transformed in an adjacent UTM system.
+void
+vpgl_utm::transform(double lat, double lon,
+                    double& x, double& y, int& utm_zone, bool& south_flag,
+                    int force_utm_zone, int force_south_flag) const
+{
+  // UTM zone
+  if (force_utm_zone >= 0) {
+    utm_zone = force_utm_zone;
+  } else {
+    utm_zone = int((lon + 180) / 6.0) + 1;
+  }
+
+  // UTM north vs. south
+  if (force_south_flag >= 0) {
+    south_flag = force_south_flag;
+  } else {
+    south_flag = lat < 0;
+  }
+
   // double D2R = vnl_math::pi_over_180;
-  utm_zone = int((lon + 180) / 6.0) + 1;
   double e = std::sqrt(1.0 - b_ * b_ / (a_ * a_));
-  // This value must eventually set by user. lon_zone stands for
-  // longitudinal zone, and it must be between 1 and 60.
-  int south_flag;
+
   double utm_central_meridian = 0;
-
   utm_central_meridian = (6 * utm_zone) - 183;
-
-  south_flag = lat < 0;
 
   double lon_center = adjust_lon2(utm_central_meridian * D2R);
   double lat_center = 0.0;
