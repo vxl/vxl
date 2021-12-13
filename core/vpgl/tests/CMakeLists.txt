@@ -14,6 +14,7 @@ add_executable( vpgl_test_all
   test_local_rational_camera.cxx
   test_generic_camera.cxx
   test_lvcs.cxx
+  test_utm.cxx
   test_tri_focal_tensor.cxx
   test_affine_fundamental_matrix.cxx
   test_affine_tri_focal_tensor.cxx
@@ -34,6 +35,7 @@ add_test( NAME vpgl_test_rational_camera COMMAND $<TARGET_FILE:vpgl_test_all> te
 add_test( NAME vpgl_test_local_rational_camera COMMAND $<TARGET_FILE:vpgl_test_all> test_local_rational_camera)
 add_test( NAME vpgl_test_generic_camera COMMAND $<TARGET_FILE:vpgl_test_all> test_generic_camera)
 add_test( NAME vpgl_test_lvcs COMMAND $<TARGET_FILE:vpgl_test_all> test_lvcs)
+add_test( NAME vpgl_test_utm COMMAND $<TARGET_FILE:vpgl_test_all> test_utm)
 add_test( NAME vpgl_test_tri_focal_tensor COMMAND $<TARGET_FILE:vpgl_test_all> test_tri_focal_tensor)
 add_test( NAME vpgl_test_affine_fundamental_matrix COMMAND $<TARGET_FILE:vpgl_test_all> test_affine_fundamental_matrix)
 add_test( NAME vpgl_test_affine_tri_focal_tensor COMMAND $<TARGET_FILE:vpgl_test_all> test_affine_tri_focal_tensor)

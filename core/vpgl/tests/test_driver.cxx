@@ -13,6 +13,7 @@ DECLARE(test_rational_camera);
 DECLARE(test_local_rational_camera);
 DECLARE(test_generic_camera);
 DECLARE(test_lvcs);
+DECLARE(test_utm);
 DECLARE(test_tri_focal_tensor);
 DECLARE(test_affine_tri_focal_tensor);
 DECLARE(test_affine_fundamental_matrix);
@@ -33,6 +34,7 @@ register_tests()
   REGISTER(test_local_rational_camera);
   REGISTER(test_generic_camera);
   REGISTER(test_lvcs);
+  REGISTER(test_utm);
   REGISTER(test_tri_focal_tensor);
   REGISTER(test_affine_tri_focal_tensor);
   REGISTER(test_affine_fundamental_matrix);
