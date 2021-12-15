@@ -53,6 +53,47 @@ test_utm_convert(double lat, double lon, double easting, double northing,
 }
 
 
+void
+test_utm2utm(int utm_zone_a, bool south_flag_a,
+             double easting_a, double northing_a,
+             int utm_zone_b, bool south_flag_b,
+             double easting_b, double northing_b)
+{
+  // report
+  std::cout << "\n"
+            << "UTM->UTM (easting, northing, utm_zone, south_flag)\n"
+            << "A = (" << easting_a << ", " << northing_a << ", "
+                   << utm_zone_a << ", " << south_flag_a << ")\n"
+            << "B = (" << easting_b << ", " << northing_b << ", "
+                   << utm_zone_b << ", " << south_flag_b << ")\n";
+
+  // UTM conversion object
+  vpgl_utm u;
+
+  // UTM result tolerance in meters
+  double utm_tol = 5e-3;  // 0.5 cm
+
+  // results
+  double easting_result, northing_result;
+
+  // A->B
+  u.utm2utm(utm_zone_a, south_flag_a, easting_a, northing_a,
+            utm_zone_b, south_flag_b, easting_result, northing_result);
+
+  std::cout << "A -> B\n";
+  TEST_NEAR("easting", easting_result, easting_b, utm_tol);
+  TEST_NEAR("northing", northing_result, northing_b, utm_tol);
+
+  // B->A
+  u.utm2utm(utm_zone_b, south_flag_b, easting_b, northing_b,
+            utm_zone_a, south_flag_a, easting_result, northing_result);
+
+  std::cout << "B -> A\n";
+  TEST_NEAR("easting", easting_result, easting_a, utm_tol);
+  TEST_NEAR("northing", northing_result, northing_a, utm_tol);
+
+}
+
 static void
 test_utm()
 {
@@ -71,6 +112,13 @@ test_utm()
   test_utm_convert(lat, lon, 166010.300, 110.683, 19, 0, 19);  // force 19-north
   test_utm_convert(lat, lon, 833967.414, 10e6 + 110.683, 18, 1, -1, 1);  // force 18-south
   test_utm_convert(lat, lon, 166010.300, 10e6 + 110.683, 19, 1, 19, 1);  // force 19-south
+
+  // UTM to UTM
+  test_utm2utm(18, 0, 833967.414, 110.683,  18, 0, 833967.414, 110.683); // default 18-north
+  test_utm2utm(18, 0, 833967.414, 110.683,  19, 0, 166010.300, 110.683);  // force 19-north
+  test_utm2utm(18, 0, 833967.414, 110.683,  18, 1, 833967.414, 10e6 + 110.683);  // force 19-north
+  test_utm2utm(18, 0, 833967.414, 110.683,  19, 1, 166010.300, 10e6 + 110.683);  // force 19-north
+
 }
 
 TESTMAIN(test_utm);
