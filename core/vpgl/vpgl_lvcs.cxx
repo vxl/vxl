@@ -1,12 +1,12 @@
 #include <string>
 #include <cstring>
+#include <fstream>
 #include "vpgl_lvcs.h"
 //:
 // \file
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
-#include "vsl/vsl_basic_xml_element.h"
 #include "vpgl/vpgl_datum_conversion.h"
 #include "vpgl/vpgl_earth_constants.h"
 #include "vpgl/vpgl_utm.h"
@@ -837,6 +837,18 @@ vpgl_lvcs::print(std::ostream & strm) const
        << localCSOriginElev_ << ")\n"
        << "scales(lat lon) : (" << lat_scale_ << ' ' << lon_scale_ << ")\n"
        << "local transform(lox loy theta) : (" << lox_ << ' ' << loy_ << ' ' << theta_ << ")\n]\n";
+}
+
+//: Save internals to strm
+bool
+vpgl_lvcs::save(std::string fname) const
+{
+  std::ofstream of(fname.c_str());
+  if (of) {
+    print(of);
+    return true;
+  }
+  return false;
 }
 
 //: Read internals from strm.

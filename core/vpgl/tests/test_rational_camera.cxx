@@ -2,7 +2,6 @@
 #include <vector>
 #include <cmath>
 #include "testlib/testlib_test.h"
-#include "vpl/vpl.h"
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
