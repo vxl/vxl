@@ -55,6 +55,7 @@ class vpgl_lvcs : public vbl_ref_count
   enum cs_names { wgs84 =0, nad27n, wgs72, utm, NumNames};
   static VPGL_EXPORT const char* cs_name_strings[];
   static vpgl_lvcs::cs_names str_to_enum(const char*);
+
   // Constructors/Initializers/Destructors-------------------------------------
   vpgl_lvcs(double orig_lat=0,         //!< latitude of LVCS orig in radians.
             double orig_lon=0,         //!< longitude of LVCS  orig in radians.
@@ -62,7 +63,7 @@ class vpgl_lvcs : public vbl_ref_count
             cs_names cs_name=wgs84,    //!< nad27n, wgs84, wgs72 or utm
             double lat_scale=0,        //!< radians/meter along lat (custom geoid)
             double lon_scale=0,        //!< radians/meter along lon (custom geoid)
-            AngUnits  ang_unit = DEG,  //!< angle units
+            AngUnits ang_unit=DEG,     //!< angle units
             LenUnits len_unit=METERS,  //!< input in LVCS in these length units.
             double lox=0,              //!< Origin in local co-ordinates.
             double loy=0,              //!< Origin in local co-ordinates.
@@ -72,7 +73,7 @@ class vpgl_lvcs : public vbl_ref_count
             double orig_lon,
             double orig_elev, //!< simplified interface
             cs_names cs_name,
-            AngUnits  ang_unit = DEG,
+            AngUnits ang_unit=DEG,
             LenUnits len_unit=METERS);
 
   vpgl_lvcs(double lat_low, double lon_low,  //!< lower corner bounding geo_rectangle
@@ -105,6 +106,7 @@ class vpgl_lvcs : public vbl_ref_count
   double radians_to_degrees(const double val) const;
   void degrees_to_dms(double, int& degrees, int& minutes, double& seconds) const;
   void radians_to_dms(double, int& degrees, int& minutes, double& seconds) const;
+
   // uses the units defined for *this lvcs, e.g. deg and meters. computes cartesian vector (p1 - p0)
   void angle_diff_to_cartesian_vector(const double lon0, const double lat0, const double lon1, const double lat1,
                                       double& cart_dx, double& cart_dy) const
@@ -125,17 +127,13 @@ class vpgl_lvcs : public vbl_ref_count
   cs_names get_cs_name() const;
   inline LenUnits local_length_unit() const{return this->localXYZUnit_;}
   inline AngUnits geo_angle_unit() const {return this->geo_angle_unit_;}
+
   void print(std::ostream&) const;
-  bool save(std::string fname) const {
-    std::ofstream of(fname.c_str());
-    if (of) {
-      print(of);
-      return true;
-    }
-    return false;
-  }
+  bool save(std::string fname) const;
+
   void read(std::istream& strm);
   void write(std::ostream& strm);  // write just "read" would read
+
   friend std::ostream& operator << (std::ostream& os, const vpgl_lvcs& local_coord_sys);
   friend std::istream& operator >> (std::istream& os, vpgl_lvcs& local_coord_sys);
   bool operator==(vpgl_lvcs const& r) const;

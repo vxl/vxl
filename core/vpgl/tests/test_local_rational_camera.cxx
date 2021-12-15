@@ -110,18 +110,7 @@ test_local_rational_camera()
   lrc_r->project(0.0, 0.0, 0.0, ulr, vlr);
   TEST_NEAR("read from file", std::fabs(ug - ulr) + std::fabs(vg - vlr), 0.0, 1e-3);
   vpl_unlink(path.c_str());
-  // test binary I/O
-  std::string b_path = "./test_binary.vsl";
-  vsl_b_ofstream os(b_path);
-  vsl_b_write(os, lrcam);
-  os.close();
-  vsl_b_ifstream is(b_path);
-  vpgl_local_rational_camera<double> lrcam_r;
-  vsl_b_read(is, lrcam_r);
-  double ulb, vlb;
-  lrc_r->project(0.0, 0.0, 0.0, ulb, vlb);
-  TEST_NEAR("read from binary file", std::fabs(ug - ulb) + std::fabs(vg - vlb), 0.0, 1e-3);
-  vpl_unlink(b_path.c_str());
+
   //-- test other geographic locations
   double x0 = -71.402457, y0 = 41.821589, z0 = 20;
   double ug0, vg0, ul0, vl0;

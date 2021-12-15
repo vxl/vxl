@@ -20,7 +20,7 @@ add_executable( vpgl_test_all
   test_affine_tri_focal_tensor.cxx
 )
 
-target_link_libraries( vpgl_test_all ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}testlib )
+target_link_libraries( vpgl_test_all ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME vpgl_test_proj_camera COMMAND $<TARGET_FILE:vpgl_test_all> test_proj_camera)
 add_test( NAME vpgl_test_perspective_camera COMMAND $<TARGET_FILE:vpgl_test_all> test_perspective_camera)
