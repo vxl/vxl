@@ -54,10 +54,11 @@ class bvgl_grid_index_3d{
   Type distance(vgl_point_3d<Type> const& p, Type& scalar) const;
 
   std::vector<vgl_pointset_3d<Type> > intersecting_cells(vgl_box_3d<Type> const& box) const;
-  //: accessors
 
+  //: accessors
   vgl_box_3d<Type> bounding_box() const {return bbox_;}
   unsigned npts() const {return npts_;}
+  unsigned size() const {return npts_;}
   bool has_normals() const {return has_normals_;}
   bool has_scalars() const {return has_scalars_;}
  protected:
