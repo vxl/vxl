@@ -24,6 +24,8 @@ template <class Type>
 class bvgl_k_nearest_neighbors_2d
 {
 public:
+  //: default constructor needed to support containers
+  bvgl_k_nearest_neighbors_2d() = default;
   //: Construct from set of points
   bvgl_k_nearest_neighbors_2d(
       std::vector<vgl_point_2d<Type> > const &ptset,
