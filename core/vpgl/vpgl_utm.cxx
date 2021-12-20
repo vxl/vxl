@@ -381,3 +381,31 @@ vpgl_utm::transform(double lat, double lon,
                                          (als / 30.0) * (61.0 - (58.0 * t) + sqr(t) + (600.0 * c) - 330.0 * esp2))))) +
       false_northing2;
 }
+
+// Convert between UTM systems.  Useful for converting from one
+// UTM coordiante system (utm_zone_in and south_flag_in) to an
+// adjacent UTM coordinate system (utm_zone_out and south_flag_out)
+// Conversion is performed by passing the point through WGS84 coordinates.
+void
+vpgl_utm::utm2utm(double utm_zone_in, bool south_flag_in,
+                  double x_in, double y_in,
+                  double utm_zone_out, bool south_flag_out,
+                  double& x_out, double& y_out) const
+{
+  // test for necessary conversion
+  if (utm_zone_in == utm_zone_out && south_flag_in == south_flag_out)
+  {
+    x_out = x_in;
+    y_out = y_in;
+    return;
+  }
+
+  // convert from utm_in to WGS84
+  double lon, lat;
+  this->transform(utm_zone_in, x_in, y_in, lat, lon, south_flag_in);
+
+  // convert from WGS84 to utm_out
+  int uz; bool sf;
+  this->transform(lat, lon, x_out, y_out, uz, sf,
+                  utm_zone_out, south_flag_out);
+}

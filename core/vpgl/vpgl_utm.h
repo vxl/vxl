@@ -49,6 +49,12 @@ class vpgl_utm
                  double& x, double& y, int& utm_zone, bool& south_flag,
                  int force_utm_zone=-1, int force_south_flag=-1) const;
 
+  //: Conversion between different UTM zones
+  void utm2utm(double utm_zone_in, bool south_flag_in,
+               double x_in, double y_in,
+               double utm_zone_out, bool south_flag_out,
+               double& x_out, double& y_out) const;
+
  private:
    double a_{6378137}, b_{6356752.3142};
 };
