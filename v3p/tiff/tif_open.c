@@ -349,7 +349,7 @@ TIFFClientOpen(
 	    tif->tif_header.common.tiff_magic != TIFF_LITTLEENDIAN
 	    #if MDI_SUPPORT
 	    &&
-	    #if HOST_BIGENDIAN
+	    #ifdef WORDS_BIGENDIAN
 	    tif->tif_header.common.tiff_magic != MDI_BIGENDIAN
 	    #else
 	    tif->tif_header.common.tiff_magic != MDI_LITTLEENDIAN

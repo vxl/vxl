@@ -85,10 +85,6 @@
 /* Set the native cpu bit order (FILLORDER_LSB2MSB or FILLORDER_MSB2LSB) */
 #define HOST_FILLORDER FILLORDER_LSB2MSB
 
-/* Native cpu byte order: 1 if big-endian (Motorola) or 0 if little-endian
-   (Intel) */
-#define HOST_BIGENDIAN 0
-
 /* Support CCITT Group 3 & 4 algorithms */
 #define CCITT_SUPPORT 1
 

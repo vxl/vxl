@@ -182,10 +182,6 @@
 /* Define to 1 if you have the <windows.h> header file. */
 #cmakedefine HAVE_WINDOWS_H
 
-/* Native cpu byte order: 1 if big-endian (Motorola) or 0 if little-endian
-   (Intel) */
-#cmakedefine HOST_BIGENDIAN
-
 /* Set the native cpu bit order (FILLORDER_LSB2MSB or FILLORDER_MSB2LSB) */
 /* Hard-coded to little-endian (Intel)  for now */
 #define HOST_FILLORDER FILLORDER_LSB2MSB
