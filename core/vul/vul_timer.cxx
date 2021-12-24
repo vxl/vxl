@@ -153,7 +153,7 @@ vul_timer::user()
   return (usage.tms_utime - data->usage0.tms_utime) * 1000 / CLK_TCK;
 #else
   std::clock_t usage = std::clock();
-  return (usage - data->usage0) / (CLOCKS_PER_SEC / 1000);
+  return (1000L * (usage - data->usage0)) / CLOCKS_PER_SEC;
 #endif
 }
 
@@ -183,7 +183,7 @@ vul_timer::all()
   return (usage.tms_utime + usage.tms_stime - data->usage0.tms_utime - data->usage0.tms_stime) * 1000 / CLK_TCK;
 #else
   std::clock_t usage = std::clock();
-  return (usage - data->usage0) / (CLOCKS_PER_SEC / 1000);
+  return (1000L * (usage - data->usage0)) / CLOCKS_PER_SEC;
 #endif
 }
 
