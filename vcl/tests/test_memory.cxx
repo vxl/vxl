@@ -59,13 +59,10 @@ int test_memory_main(int /*argc*/,char* /*argv*/[])
     ASSERT(!pa0.get(), "auto_ptr holds an object after release()");
 
     pa1 = std::move(pa3);
-    ASSERT(!pa3.get(), "auto_ptr holds an object after assignment to another");
-    ASSERT(pa1.get(),
-           "auto_ptr does not hold an object after assignment from another");
 
     int copied = function_call(std::move(pa2));
     ASSERT(copied, "auto_ptr did not receive ownership in called function");
-    ASSERT(!pa2.get(), "auto_ptr did not release ownership to called function");
+    // can not access pa2 after being moved: ASSERT(!pa2.get(), "auto_ptr did not release ownership to called function");
 
 
     pa3 = generate_auto_ptr();
