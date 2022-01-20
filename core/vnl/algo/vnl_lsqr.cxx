@@ -123,8 +123,8 @@ vnl_lsqr::aprod_(const long * mode,
 int
 vnl_lsqr::minimize(vnl_vector<double> & result)
 {
-  long m = ls_->get_number_of_residuals();
-  long n = ls_->get_number_of_unknowns();
+  const long m = ls_->get_number_of_residuals();
+  const long n = ls_->get_number_of_unknowns();
   double damp = 0;
 
   // NOTE: rw is a scratch space used for both intermediate residual and unknown computations
@@ -139,8 +139,6 @@ vnl_lsqr::minimize(vnl_vector<double> & result)
   long nout = -1;
   double acond, rnorm, xnorm;
 #endif
-  double anorm, arnorm;
-
   vnl_vector<double> rhs(m);
   ls_->get_rhs(rhs);
 
@@ -184,16 +182,15 @@ vnl_lsqr::minimize(vnl_vector<double> & result)
                    &xnorm,
                    this);
 #endif
-
   resid_norm_estimate_ = solver.GetFinalEstimateOfNormRbar();
   result_norm_estimate_ = solver.GetFinalEstimateOfNormOfX();
   A_condition_estimate_ = solver.GetConditionNumberEstimateOfAbar();
-  return_code_ = solver.GetStoppingReason();
   num_iter_ = solver.GetNumberOfIterationsPerformed();
-  anorm = solver.GetFrobeniusNormEstimateOfAbar();
-  arnorm = solver.GetFinalEstimateOfNormOfResiduals();
+  return_code_ = solver.GetStoppingReason();
 
 #ifdef THIS_CODE_IS_DISABLED_BECAUSE_THE_LSQR_CODE_FROM_NETLIB_WAS_COPYRIGHTED_BY_ACM
+  const double anorm = solver.GetFrobeniusNormEstimateOfAbar();
+  const double arnorm = solver.GetFinalEstimateOfNormOfResiduals();
   std::cerr << "A Fro norm estimate      = " << anorm << std::endl
             << "A condition estimate     = " << acond << std::endl
             << "Residual norm estimate   = " << rnorm << std::endl
