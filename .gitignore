@@ -49,3 +49,4 @@ cmake-build-*/
 
 # Exclude to keep j2k implementation separate from vxl
 v3p/j2k/*
+/CMakeUserPresets.json
