@@ -134,11 +134,7 @@ vnl_lsqr::minimize(vnl_vector<double> & result)
 
   double atol = 0;
   double btol = 0;
-#ifdef THIS_CODE_IS_DISABLED_BECAUSE_THE_LSQR_CODE_FROM_NETLIB_WAS_COPYRIGHTED_BY_ACM
-  double conlim = 0;
-  long nout = -1;
-  double acond, rnorm, xnorm;
-#endif
+
   vnl_vector<double> rhs(m);
   ls_->get_rhs(rhs);
 
@@ -154,49 +150,12 @@ vnl_lsqr::minimize(vnl_vector<double> & result)
 
   solver.Solve(m, n, rhs.data_block(), result.data_block());
 
-#ifdef THIS_CODE_IS_DISABLED_BECAUSE_THE_LSQR_CODE_FROM_NETLIB_WAS_COPYRIGHTED_BY_ACM
-  v3p_netlib_lsqr_(&m,
-                   &n,
-                   aprod_,
-                   &damp,
-                   &leniw,
-                   &lenrw,
-                   iw,
-                   &rw[0],
-                   rhs.data_block(),
-                   &v[0],
-                   &w[0],
-                   result.data_block(),
-                   &se[0],
-                   &atol,
-                   &btol,
-                   &conlim,
-                   &max_iter_,
-                   &nout,
-                   &return_code_,
-                   &num_iter_,
-                   &anorm,
-                   &acond,
-                   &rnorm,
-                   &arnorm,
-                   &xnorm,
-                   this);
-#endif
+
   resid_norm_estimate_ = solver.GetFinalEstimateOfNormRbar();
   result_norm_estimate_ = solver.GetFinalEstimateOfNormOfX();
   A_condition_estimate_ = solver.GetConditionNumberEstimateOfAbar();
   num_iter_ = solver.GetNumberOfIterationsPerformed();
   return_code_ = solver.GetStoppingReason();
-
-#ifdef THIS_CODE_IS_DISABLED_BECAUSE_THE_LSQR_CODE_FROM_NETLIB_WAS_COPYRIGHTED_BY_ACM
-  const double anorm = solver.GetFrobeniusNormEstimateOfAbar();
-  const double arnorm = solver.GetFinalEstimateOfNormOfResiduals();
-  std::cerr << "A Fro norm estimate      = " << anorm << std::endl
-            << "A condition estimate     = " << acond << std::endl
-            << "Residual norm estimate   = " << rnorm << std::endl
-            << "A'(Ax - b) norm estimate = " << arnorm << std::endl
-            << "x norm estimate          = " << xnorm << std::endl;
-#endif
 
   // We should return the return code, as translate_return_code is public and
   // it is very misleading that the return code from this function can't be fed
