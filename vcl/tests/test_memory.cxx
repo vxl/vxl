@@ -1,11 +1,10 @@
-#include <iostream>
 #include <cstdio>
 #include <memory>
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
 
-#define ASSERT(x,y) if (!(x)) { std::printf("FAIL: " y "\n"); status = 1; }
+#define ASSERT(x,y) if (!(x)) { std::printf("FAIL: " y "\n"); status = 1; } static_assert(true, "")
 
 static int instances = 0;
 
