@@ -1,7 +1,6 @@
 // This is core/vnl/vnl_bignum.cxx
 #include <cstdlib>
 #include <cstring>
-#include <cmath>
 #include <cassert>
 #include <algorithm>
 #include <vector>
