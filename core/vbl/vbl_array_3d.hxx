@@ -133,6 +133,27 @@ std::ostream & operator<<(std::ostream& os, vbl_array_3d<T> const& A)
 }
 
 template <class T>
+std::ostream& operator<<(std::ostream& os, vbl_array_3d<std::vector<T> > const& A)
+{
+    typedef typename vbl_array_3d<T>::size_type size_type;
+    os << "vbl_array_3d [";
+    for (size_type i = 0; i < A.get_row1_count(); ++i) {
+        os << std::endl << "  <" << i << '>';
+        for (size_type j = 0; j < A.get_row2_count(); ++j) {
+            os << std::endl << "   ";
+            for (size_type k = 0; k < A.get_row3_count(); ++k) {
+                os << '(';
+                for(size_type l = 0; l<A(i,j,k).size(); ++l)
+                   os << ' ' << A(i, j, k)[l];
+                os << " )";
+            }
+        }
+    }
+    os << "\n             ]" << std::endl;
+    return os;
+}
+
+template <class T>
 std::istream & operator>>(std::istream& is, vbl_array_3d<T>& A)
 {
   typedef typename vbl_array_3d<T>::size_type size_type;
@@ -141,6 +162,22 @@ std::istream & operator>>(std::istream& is, vbl_array_3d<T>& A)
       for (size_type k=0; k<A.get_row3_count(); ++k)
         is >> A(i,j,k);
   return is;
+}
+// requires vector size defined in A before input
+template <class T>
+std::istream& operator>>(std::istream& is, vbl_array_3d<std::vector<T> >& A)
+{
+    typedef typename vbl_array_3d<T>::size_type size_type;
+    for (size_type i = 0; i < A.get_row1_count(); ++i)
+        for (size_type j = 0; j < A.get_row2_count(); ++j)
+            for (size_type k = 0; k < A.get_row3_count(); ++k) {
+                for (size_type l = 0; l < A(i, j, k).size(); ++l) {
+                    T v;
+                    is >> v;
+                    A(i, j, k)[l] = v;
+                }
+            }
+    return is;
 }
 
 //--------------------------------------------------------------------------------
