@@ -26,6 +26,7 @@
 #include <vbl/vbl_array_3d.h>
 #include <vgl/vgl_bounding_box.h>
 #include <vgl/vgl_line_3d_2_points.h>
+#include <vnl/vnl_vector.h>
 template <class Type>
 class bvgl_grid_index_3d{
  public:
