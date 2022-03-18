@@ -16,7 +16,6 @@
 
 //: forward declare vgl_homg_point_2d<T> and vgl_vector_2d<T>
 #include <vgl/vgl_fwd.h>
-#include "vcl_compiler_detection.h"
 #include "vpgl_calibration_matrix.h"
 
 //: A base class for lens distortions

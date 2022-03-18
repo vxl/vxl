@@ -42,7 +42,6 @@
 //-------------------------------------------------------------------------
 #include <iostream>
 #include <vector>
-#include <vcl_compiler_detection.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

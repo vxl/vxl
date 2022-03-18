@@ -26,7 +26,6 @@
 #include "vil_pyramid_image_resource.h"
 #include "vil_image_view.h"
 #include <vxl_config.h>
-#include <vcl_compiler_detection.h>
 
 //: Make a new image of given format.
 // If the format is not scalar, the number of planes must be 1. When you create
