@@ -51,7 +51,6 @@ set( vcl_sources
   vcl_ctime.h
   vcl_cwchar.h
   vcl_cwctype.h
-  vcl_deprecated_header.h
   vcl_deque.h
   vcl_exception.h
   vcl_fstream.h
