@@ -95,14 +95,6 @@ set( vcl_sources
   internal/vcl_atomic_count_win32.h
   internal/vcl_interlocked.h
   
-  # Compiler specific files produced by WriteCompilerDetectionHeader
-  vcl_compiler_detection.h
-  compilers/VXL_COMPILER_INFO_AppleClang_CXX.h
-  compilers/VXL_COMPILER_INFO_Clang_CXX.h
-  compilers/VXL_COMPILER_INFO_GNU_CXX.h
-  compilers/VXL_COMPILER_INFO_Intel_CXX.h
-  compilers/VXL_COMPILER_INFO_MSVC_CXX.h
-  compilers/VXL_COMPILER_INFO_SunPro_CXX.h
 )
 
 

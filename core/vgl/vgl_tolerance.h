@@ -6,7 +6,6 @@
 //  \date 21 August 2007
 //  \brief Tolerances used throughout vgl when performing comparisons
 #include <vgl/vgl_export.h>
-#include <vcl_compiler_detection.h>
 
 template <typename T>
 class vgl_tolerance

@@ -1,7 +1,6 @@
 // This is core/vgui/vgui_message.h
 #ifndef vgui_message_h_
 #define vgui_message_h_
-#include <vcl_compiler_detection.h>
 //:
 // \file
 // \author  fsm
