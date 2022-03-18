@@ -6,7 +6,7 @@
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
-#include <vcl_deprecated.h>
+#include <vcl_compiler.h>
 
 vpgl_invmap_cost_function::vpgl_invmap_cost_function(vnl_vector_fixed<double, 2> const & image_point,
                                                      vnl_vector_fixed<double, 4> const & plane,
@@ -77,10 +77,11 @@ vpgl_invmap_cost_function::set_params(vnl_vector_fixed<double, 3> const & xyz, v
   }
 }
 
+#if !VXL_LEGACY_FUTURE_REMOVE
+VXL_DEPRECATED_MSG("Will be removed in future versions of VXL")
 void
 vpgl_invmap_cost_function::set_params(vnl_vector_fixed<double, 3> const & xyz, vnl_vector<double> & x)
 {
-  VXL_DEPRECATED_MACRO("vpgl_invmap_cost_function::set_params(, vnl_vector<double>&)");
   switch (pp_)
   {
     case X_Y: {
@@ -105,6 +106,7 @@ vpgl_invmap_cost_function::set_params(vnl_vector_fixed<double, 3> const & xyz, v
     }
   }
 }
+#endif
 
 void
 vpgl_invmap_cost_function::point_3d(vnl_vector_fixed<double, 2> const & x, vnl_vector_fixed<double, 3> & xyz)
@@ -139,10 +141,11 @@ vpgl_invmap_cost_function::point_3d(vnl_vector_fixed<double, 2> const & x, vnl_v
   }
 }
 
+#if !VXL_LEGACY_FUTURE_REMOVE
+VXL_DEPRECATED_MSG("Will be removed in future versions of VXL")
 void
 vpgl_invmap_cost_function::point_3d(vnl_vector<double> const & x, vnl_vector_fixed<double, 3> & xyz)
 {
-  VXL_DEPRECATED_MACRO("vpgl_invmap_cost_function::point_3d(vnl_vector<double>,)");
   // Switch on plane parameterization
   switch (pp_)
   {
@@ -172,3 +175,4 @@ vpgl_invmap_cost_function::point_3d(vnl_vector<double> const & x, vnl_vector_fix
     }
   }
 }
+#endif

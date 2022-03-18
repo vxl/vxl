@@ -1,6 +1,7 @@
 #ifndef vcl_deprecated_h_
 #define vcl_deprecated_h_
 
+#if !VXL_LEGACY_FUTURE_REMOVE
 //:
 // \file
 // \brief  Defines macros used for marking deprecated functions
@@ -50,6 +51,11 @@
   #endif
 #else
   #define VXL_DEPRECATED_MACRO(f) /* suppress deprecation warning */
+#endif
+
+#warning "vcl_deprecated.h, and it's associated VXL_WARN_DEPRECATED functions should be replaced with vcl_compiler.h and VXL_DEPRECATED_MSG variants."
+#else
+#error "vcl_deprecated.h, and it's associated VXL_WARN_DEPRECATED functions should be replaced with vcl_compiler.h and VXL_DEPRECATED_MSG variants."
 #endif
 
 #endif
