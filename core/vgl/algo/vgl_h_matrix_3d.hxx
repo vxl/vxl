@@ -18,7 +18,7 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_quaternion.h>
 #include <vnl/algo/vnl_svd.h>
-# include <vcl_deprecated.h>
+# include <vcl_compiler.h>
 
 template <class T>
 vgl_h_matrix_3d<T>::vgl_h_matrix_3d(std::vector<vgl_homg_point_3d<T> > const& points1,
@@ -216,12 +216,14 @@ void vgl_h_matrix_3d<T>::get (vnl_matrix_fixed<T,4,4>* H) const
   *H = t12_matrix_;
 }
 
+#if !VXL_LEGACY_FUTURE_REMOVE
 template <class T>
+VXL_DEPRECATED_MSG("Will be removed in future versions of VXL")
 void vgl_h_matrix_3d<T>::get (vnl_matrix<T>* H) const
 {
-  VXL_DEPRECATED_MACRO("vgl_h_matrix_3d<T>::get(vnl_matrix<T>*) const");
   *H = t12_matrix_.as_ref(); // size 4x4
 }
+#endif
 
 template <class T>
 vgl_h_matrix_3d<T>

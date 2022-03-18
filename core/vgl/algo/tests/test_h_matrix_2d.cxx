@@ -78,7 +78,7 @@ test_transform_types()
   pp = h(p);
   vgl_homg_point_2d<double> tasp(2.35711, 7.46975, 1.5);
   TEST_NEAR("aspect ratio", length(pp - tasp), 0.0, 1e-05);
-  vnl_matrix<double> M(2, 3);
+  vnl_matrix_fixed<double,2,3> M;
   M[0][0] = 0.707107;
   M[0][1] = -0.707107;
   M[0][2] = 1.1;

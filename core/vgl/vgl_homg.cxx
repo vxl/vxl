@@ -1,6 +1,6 @@
 // This is core/vgl/vgl_homg.cxx
 
-#ifndef VXL_LEGACY_REMOVE
+#if !VXL_LEGACY_FUTURE_REMOVE
 #  include "vgl_homg.h"
 // template <> float vgl_homg<float>::infinity = 3.4028234663852886e+38f;
 template <>

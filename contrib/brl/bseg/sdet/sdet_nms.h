@@ -45,6 +45,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
+#include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_2d.h>
@@ -95,7 +96,7 @@ class sdet_nms
 
  public:
   //: default constructor is not to be used
-  sdet_nms() VXL_DELETED_FUNCTION;
+  sdet_nms() = delete;
 
   //: Constructor from a parameter block, gradient magnitudes given as an image and gradients given as component images
   sdet_nms(const sdet_nms_params& nsp,

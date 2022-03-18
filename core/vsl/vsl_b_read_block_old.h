@@ -1,6 +1,8 @@
 // This is core/vsl/vsl_b_read_block_old.h
 #ifndef vsl_b_read_block_old_h_
 #define vsl_b_read_block_old_h_
+
+#if !VXL_LEGACY_FUTURE_REMOVE
 //:
 // \file
 // \brief Backwards compatibility support only.
@@ -24,7 +26,7 @@
 // backwards compatibility. If any of the functions are actually used, a
 // deprecation warning will be sent to cerr.
 
-#include <vcl_deprecated.h>
+#include <vcl_compiler.h>
 
 // The next declaration should be kept with its non-specialist definition.
 // It was this mistake that lead to the full replacement of vsl_b_read_block
@@ -35,9 +37,9 @@
 // then just #include "vsl_binary_explicit_io.h"
 // \deprecated in favour of vsl_block_binary_read
 template <class T>
+VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
 inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   while (nelems--)
     vsl_b_read(is, *(begin++));
 }
@@ -48,9 +50,9 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, std::size_t nelems
 // This function is very speed efficient.
 // \deprecated in favour of vsl_block_binary_read
 template <>
+VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
 inline void vsl_b_read_block_old(vsl_b_istream &is, double* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   is.is().read((char*) begin, (unsigned long)(nelems*sizeof(double)));
   vsl_swap_bytes((char *)begin, sizeof(double), nelems);
 }
@@ -61,9 +63,9 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, double* begin, std::size_t n
 // This function is very speed efficient.
 // \deprecated in favour of vsl_block_binary_read
 template <>
+VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
 inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   is.is().read((char*) begin, (unsigned long)(nelems*sizeof(float)));
   vsl_swap_bytes((char *)begin, sizeof(float), nelems);
 }
@@ -76,9 +78,9 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin, std::size_t ne
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 template <>
+VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
 inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   if (!is) return;
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
@@ -107,9 +109,9 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, std::size_t nele
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 template <>
+VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
 inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -138,9 +140,9 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int* begin, std::si
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 template <>
+VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
 inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -169,9 +171,9 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin, std::size_t ne
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 template <>
+VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
 inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned short* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -200,9 +202,9 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned short* begin, std::
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 template <>
+VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
 inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -231,9 +233,9 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin, std::size_t nel
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 template <>
+VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
 inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned long* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -251,5 +253,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned long* begin, std::s
     }
   }
 }
+
+#endif
 
 #endif // vsl_b_read_block_old_h_

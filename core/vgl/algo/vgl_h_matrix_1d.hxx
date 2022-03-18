@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include "vgl_h_matrix_1d.h"
+#include <vcl_compiler.h>
 #include <vgl/vgl_homg_point_1d.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -14,7 +15,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 #include <cassert>
-# include <vcl_deprecated.h>
+# include <vcl_compiler.h>
 
 //--------------------------------------------------------------------------------
 template <class T>
@@ -132,12 +133,14 @@ void vgl_h_matrix_1d<T>::get(vnl_matrix_fixed<T,2,2>* H) const
   *H = t12_matrix_;
 }
 
+#if !VXL_LEGACY_FUTURE_REMOVE
 template <class T>
+VXL_DEPRECATED_MSG("Will be removed in future versions of VXL")
 void vgl_h_matrix_1d<T>::get(vnl_matrix<T>* H) const
 {
-  VXL_DEPRECATED_MACRO("vgl_h_matrix_1d<T>::get(vnl_matrix<T>*) const");
   *H = t12_matrix_.as_ref(); // size 2x2
 }
+#endif
 
 template <class T>
 vgl_h_matrix_1d<T>&
