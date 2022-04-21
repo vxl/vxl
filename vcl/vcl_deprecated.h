@@ -53,7 +53,12 @@
   #define VXL_DEPRECATED_MACRO(f) /* suppress deprecation warning */
 #endif
 
+#ifdef _MSC_VER
+#pragma message ( "warning: vcl_deprecated.h, and it's associated VXL_WARN_DEPRECATED functions should be replaced with vcl_compiler.h and VXL_DEPRECATED_MSG variants." )
+#else
 #warning "vcl_deprecated.h, and it's associated VXL_WARN_DEPRECATED functions should be replaced with vcl_compiler.h and VXL_DEPRECATED_MSG variants."
+#endif
+
 #else
 #error "vcl_deprecated.h, and it's associated VXL_WARN_DEPRECATED functions should be replaced with vcl_compiler.h and VXL_DEPRECATED_MSG variants."
 #endif
