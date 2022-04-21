@@ -165,7 +165,11 @@ if(NOT VXL_USING_NATIVE_TIFF)
       )
     endif()
   endif()
-  vxl_add_library(LIBRARY_NAME tiff LIBRARY_SOURCES ${tiff_sources} )
+  vxl_add_library(
+      LIBRARY_NAME tiff
+      LIBRARY_SOURCES ${tiff_sources}
+      DISABLE_MSVC_MP
+  )
   target_link_libraries( tiff ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES})
 
   if( BUILD_TESTING)
