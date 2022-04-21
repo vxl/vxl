@@ -46,7 +46,11 @@ if (${VXL_USE_GEOTIFF})
       )
 
 
-    vxl_add_library(LIBRARY_NAME geotiff LIBRARY_SOURCES ${geotiff_sources} )
+    vxl_add_library(
+        LIBRARY_NAME geotiff
+        LIBRARY_SOURCES ${geotiff_sources}
+        DISABLE_MSVC_MP
+    )
     target_link_libraries(geotiff ${TIFF_LIBRARIES})
 
     #endif()
