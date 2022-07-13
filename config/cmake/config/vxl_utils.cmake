@@ -91,7 +91,7 @@ function( vxl_add_library )
     #     https://gitlab.kitware.com/cmake/cmake/-/issues/19724
     # - disabled for DISABLE_MSVC_MP
     if(MSVC AND NOT "${CMAKE_CXX_SIMULATE_ID}" STREQUAL "MSVC" AND NOT vxl_add_DISABLE_MSVC_MP)
-      target_compile_definitions(${vxl_add_LIBRARY_NAME} PRIVATE " /MP ")
+      target_compile_options(${vxl_add_LIBRARY_NAME} PRIVATE " /MP ")
     endif()
 
     set_property(GLOBAL APPEND PROPERTY VXLTargets_MODULES ${vxl_add_LIBRARY_NAME})
