@@ -1,6 +1,6 @@
 # contrib/brl/bseg/bbgm_batch/CMakeLists.txt
 
-if( PYTHONLIBS_FOUND )
+if( Python3_Development_FOUND )
   include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
   if( EXPAT_FOUND )
     if(EXPATPP_FOUND)
@@ -13,7 +13,7 @@ if( PYTHONLIBS_FOUND )
           include_directories( ${ZLIB_INCLUDE_DIR} )
           include_directories( ${BRL_INCLUDE_DIR}/b3p )
         endif()
-        include_directories( ${PYTHON_INCLUDE_DIRS} )
+        include_directories( ${Python3_INCLUDE_DIRS} )
         include_directories( ${BRL_INCLUDE_DIR} )
         include_directories( ${BRL_INCLUDE_DIR}/bpro )
         include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
@@ -44,12 +44,8 @@ if( PYTHONLIBS_FOUND )
             vidl_pro vil_pro
             vbl vil_io vil_io expat expatpp)
 
-          if(PYTHON_DEBUG_LIBRARIES)
-            target_link_libraries( bbgm_batch debug ${PYTHON_DEBUG_LIBRARIES})
-          endif()
-
-          if(PYTHON_LIBRARIES)
-            target_link_libraries( bbgm_batch optimized ${PYTHON_LIBRARIES})
+          if(Python3_LIBRARIES)
+            target_link_libraries( bbgm_batch optimized ${Python3_LIBRARIES})
           endif()
 
           if( BUILD_TESTING )

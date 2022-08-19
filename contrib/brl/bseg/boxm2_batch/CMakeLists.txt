@@ -6,10 +6,10 @@ include( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 include( ${BRL_CMAKE_DIR}/FindHadoop.cmake )
 include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
-if( PYTHONLIBS_FOUND )
+if( Python3_Development_FOUND )
   include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
   if( EXPAT_FOUND )
-    include_directories( ${PYTHON_INCLUDE_DIRS} )
+    include_directories( ${Python3_INCLUDE_DIRS} )
     include_directories( ${BRL_INCLUDE_DIR} )
     include_directories( ${BRL_INCLUDE_DIR}/bpro )
     include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
@@ -58,12 +58,8 @@ if( PYTHONLIBS_FOUND )
         target_link_libraries(boxm2_batch bhdfs_pro )
       endif()
 
-      if(PYTHON_DEBUG_LIBRARIES)
-        target_link_libraries( boxm2_batch debug ${PYTHON_DEBUG_LIBRARIES})
-      endif()
-
-      if(PYTHON_LIBRARIES)
-        target_link_libraries( boxm2_batch optimized ${PYTHON_LIBRARIES})
+      if(Python3_LIBRARIES)
+        target_link_libraries( boxm2_batch optimized ${Python3_LIBRARIES})
       endif()
 
 
