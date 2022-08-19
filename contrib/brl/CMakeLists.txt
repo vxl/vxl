@@ -66,7 +66,7 @@ endif()
 
 # discover python libraries if requested
 if(VXL_BUILD_BRL_PYTHON)
-  find_package(PythonLibs)
+  find_package(Python3 COMPONENTS Development)
 endif()
 
 # Location of brl's private FindXXX.cmake CMake modules.

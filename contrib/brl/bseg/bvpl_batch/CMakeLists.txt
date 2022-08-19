@@ -1,9 +1,9 @@
 # contrib/brl/bseg/bvpl_batch/CMakeLists.txt
 
-if( PYTHONLIBS_FOUND )
+if( Python3_Development_FOUND )
   include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
   if( EXPAT_FOUND )
-    include_directories( ${PYTHON_INCLUDE_DIRS} )
+    include_directories( ${Python3_INCLUDE_DIRS} )
     include_directories( ${BRL_INCLUDE_DIR} )
     include_directories( ${BRL_INCLUDE_DIR}/bpro )
     include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
@@ -28,12 +28,8 @@ if( PYTHONLIBS_FOUND )
 
       target_link_libraries(bvpl_batch bprb brdb bpro_batch ${VXL_LIB_PREFIX}vbl bvpl bvpl_pro bvpl_kernels_pro bvxm_grid_pro bvxm_grid_io bvxm_algo_pro)
 
-      if(PYTHON_DEBUG_LIBRARIES)
-        target_link_libraries( bvpl_batch debug ${PYTHON_DEBUG_LIBRARIES})
-      endif()
-
-      if(PYTHON_LIBRARIES)
-        target_link_libraries( bvpl_batch optimized ${PYTHON_LIBRARIES})
+      if(Python3_LIBRARIES)
+        target_link_libraries( bvpl_batch optimized ${Python3_LIBRARIES})
       endif()
 
       if( BUILD_TESTING )
