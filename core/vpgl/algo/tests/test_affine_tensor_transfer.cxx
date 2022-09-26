@@ -666,11 +666,13 @@ test_affine_tensor_transfer()
   std::cout << "eT13 " << eT13 << std::endl;
   double Fx = eF12b.x(), Fy = eF12b.y();
   double Tx = eT12.x(), Ty = eT12.y();
-  double er = fabs(Fx - Tx) + fabs(Fy - Ty);
+  double Fden12 = sqrt(Fx * Fx + Fy * Fy), Tden12 = sqrt(Tx * Tx + Ty * Ty);
+  double er = fabs((Fx * Tx + Fy * Ty) / (Fden12 * Tden12))- 1.0;
   TEST_NEAR("F epipole 12 vs. Direct Tensor epipole 12", er, 0.0, 1e-05);
-  Fx = eF12b.x() / eF13b.x(); Fy = eF13b.y() / eF13b.x();
-  Tx = eT12.x() / eT13.x(); Ty = eT13.y() / eT13.x();
-   double erb =  fabs(Fy - Ty);
+  Fx = eF13b.x();  Fy = eF13b.y();
+  Tx = eT13.x(); Ty = eT13.y();
+  Fden12 = sqrt(Fx * Fx + Fy * Fy); Tden12 = sqrt(Tx * Tx + Ty * Ty);
+  double erb = fabs((Fx * Tx + Fy * Ty) / (Fden12 * Tden12)) - 1.0;
   TEST_NEAR("F epipole 13 vs. Direct Tensor epipole 13", erb, 0.0, 1e-05);
   //Fundamental matrices from trifocal tensor
   vpgl_affine_fundamental_matrix<double> raF12, raF13, raF23;
