@@ -86,6 +86,36 @@ std::istream& operator >> (std::istream& istr, vpgl_affine_tri_focal_tensor<Type
   aT = vpgl_affine_tri_focal_tensor<Type>(T);
   return istr;
 }
+template<class Type>
+vbl_array_3d<Type> vpgl_affine_tri_focal_tensor<Type >::tensor_matrix(const vpgl_affine_camera<Type>& c1, const vpgl_affine_camera<Type>& c2,
+    const vpgl_affine_camera<Type>& c3) {
+    vbl_array_3d<Type> T(3, 3, 3);
+    vnl_matrix_fixed<Type, 3, 4> A = c1.get_matrix();
+    vnl_matrix_fixed<Type, 3, 4> B = c2.get_matrix();
+    vnl_matrix_fixed<Type, 3, 4> C = c3.get_matrix();
+    vnl_matrix_fixed<double, 4, 4> M;//double for numerical precision
+    for (size_t i = 0; i < 3; ++i)
+        for (size_t q = 0; q < 3; ++q)
+            for (size_t r = 0; r < 3; ++r) {
+                size_t ins = 0;
+                for (size_t k = 0; k < 3; ++k) {
+                    if (k == i)
+                        continue;
+                    for (size_t s = 0; s < 4; ++s) {
+                        M[ins][s] = A[k][s];
+                    }
+                    ins++;
+                }
+                for (size_t s = 0; s < 4; ++s) {
+                    M[2][s] = B[q][s];
+                    M[3][s] = C[r][s];
+                }
+                double sign = pow(-1.0, i);
+                T[i][q][r] = Type(sign * vnl_det(M));
+            }
+
+    return T;
+}
 
 // Code for easy instantiation.
 #undef vpgl_AFFINE_TRI_FOCAL_TENSOR_INSTANTIATE
