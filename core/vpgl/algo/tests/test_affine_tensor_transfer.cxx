@@ -5,7 +5,7 @@
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
-
+#include <string>
 #include <vnl/algo/vnl_svd.h>
 #include "vgl/vgl_box_3d.h"
 #include "vgl/vgl_distance.h"
@@ -16,6 +16,40 @@
 #include <vpgl/algo/vpgl_affine_rectification.h>
 #include <vpgl/algo/vpgl_ray_intersect.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
+#include <vgl/vgl_intersection.h>
+#include <vbl/vbl_array_3d.h>
+static vbl_array_3d<double> tensor_matrix(const vpgl_affine_camera<double>& c1,
+    const vpgl_affine_camera<double>& c2,
+    const vpgl_affine_camera<double>& c3) {
+    vbl_array_3d<double> T(3, 3, 3);
+    vnl_matrix_fixed<double, 3, 4> A = c1.get_matrix();
+    vnl_matrix_fixed<double, 3, 4> B = c2.get_matrix();
+    vnl_matrix_fixed<double, 3, 4> C = c3.get_matrix();
+    vnl_matrix_fixed<double, 4, 4> M;
+    for (size_t i = 0; i < 3; ++i)
+        for (size_t q = 0; q < 3; ++q)
+            for (size_t r = 0; r < 3; ++r) {
+                size_t ins = 0;
+                for (size_t k = 0; k < 3; ++k) {
+                    if (k == i)
+                        continue;
+                    for (size_t s = 0; s < 4; ++s) {
+                        M[ins][s] = A[k][s];
+                    }
+                    ins++;
+                }
+                for (size_t s = 0; s < 4; ++s) {
+                    M[2][s] = B[q][s];
+                    M[3][s] = C[r][s];
+                }
+                double sign = pow(-1.0, i);
+                T[i][q][r] = sign * vnl_det(M);
+            }
+            
+    return T;
+}
+
+
 
 static void
 rat_cameras(vpgl_local_rational_camera<double> & cam0,
@@ -400,7 +434,10 @@ test_affine_tensor_transfer()
   std::cout << "ap0 " << p2d0 << std::endl;
   std::cout << "ap1 " << p2d1 << std::endl;
   std::cout << "ap2 " << p2d2 << std::endl;
-  vpgl_affine_tri_focal_tensor<double> aT(acam0, acam1, acam2, img_dims);
+  // tri focal tensor directly from affine cameras
+  //vbl_array_3d<double> M = tensor_matrix(acam0, acam1, acam2);
+  //vpgl_affine_tri_focal_tensor<double> aT(M);
+  vpgl_affine_tri_focal_tensor<double> aT(acam0, acam1, acam2);
   std::cout << "Tensor\n" << aT;
   aT.compute();
   vpgl_affine_fundamental_matrix<double> aF12, aF13, vF12, vF13;
@@ -572,6 +609,164 @@ test_affine_tensor_transfer()
   std::cout << "Hep3 " << Hep3 << " compared to " << p3_gt << std::endl;
   double er_H13 = (Hep3 - p3_gt).length();
   TEST_NEAR("Homography from 1 to 3", er_H13, 0.0, 0.5);
+  // =======================================================================
+  //  test rectified affine cameras
+  //  3_9A, 3_9_B are a stereo pair
+  //  16_17A is from a different stereo pair.
+
+  vnl_matrix_fixed<double, 3, 4> rect_3_9A, rect_3_9B, rect_16_17A;
+  rect_3_9A[0][0] = 1.82233; rect_3_9A[0][1] = 2.35486; rect_3_9A[0][2] = 2.12925; rect_3_9A[0][3] = 169.926;
+  rect_3_9A[1][0] = 2.63149; rect_3_9A[1][1] = -2.00072; rect_3_9A[1][2] = -0.105309; rect_3_9A[1][3] = 728.692;
+  rect_3_9A[2][0] = 0.0;  rect_3_9A[2][1] = 0.0; rect_3_9A[2][2] = 0.0; rect_3_9A[2][3] = 1.0;
+
+  rect_3_9B[0][0] = 1.82233; rect_3_9B[0][1] = 2.35486; rect_3_9B[0][2] = -0.292419; rect_3_9B[0][3] = 307.145;
+  rect_3_9B[1][0] = 2.63149; rect_3_9B[1][1] = -2.00072; rect_3_9B[1][2] = -0.105309; rect_3_9B[1][3] = 728.692;
+  rect_3_9B[2][0] = 0.0;  rect_3_9B[2][1] = 0.0; rect_3_9B[2][2] = 0.0; rect_3_9B[2][3] = 1.0;
+     
+  rect_16_17A[0][0] = -0.851886; rect_16_17A[0][1] = -3.56306; rect_16_17A[0][2] = -0.405098; rect_16_17A[0][3] = 1300.28;
+  rect_16_17A[1][0] = -3.63329; rect_16_17A[1][1] = 0.84443; rect_16_17A[1][2] = 0.112556; rect_16_17A[1][3] = 1041.52;
+  rect_16_17A[2][0] = 0.0;  rect_16_17A[2][1] = 0.0; rect_16_17A[2][2] = 0.0; rect_16_17A[2][3] = 1.0;
+
+  vpgl_affine_camera<double> rac0(rect_3_9A), rac1(rect_3_9B), rac2(rect_16_17A);
+  std::vector<std::pair<size_t, size_t> > img_dimensions;
+  img_dimensions.emplace_back(1446, 1606);
+  img_dimensions.emplace_back(1446, 1606);
+  img_dimensions.emplace_back(1547, 1485);
+  
+
+  // 3-d point for corresponding 2-d image locations for each camera
+  vgl_point_3d<double> ap3d(36.148397, 3.2673, 66.99);
+  vgl_homg_point_2d<double> ap2d0 = rac0.project(ap3d);
+  vgl_homg_point_2d<double> ap2d1 = rac1.project(ap3d);
+  vgl_homg_point_2d<double> ap2d2 = rac2.project(ap3d);
+
+  // fundamental matrices from cameras
+  vpgl_affine_fundamental_matrix<double> cam_raF12(rac0, rac1), cam_raF13(rac0, rac2), cam_raF23(rac1, rac2);
+
+  //Epipoles from cam Fs
+  vgl_homg_point_2d<double> eF12a, eF12b;
+  cam_raF12.get_epipoles(eF12a, eF12b);
+  vgl_homg_point_2d<double> eF13a, eF13b;
+  cam_raF13.get_epipoles(eF13a, eF13b);
+  
+  
+  std::cout << "\n\n ======Testing results from affine tensor derived directly from 3 cameras ===== \n";
+  vpgl_affine_tri_focal_tensor<double> aTa(rac0, rac1, rac2, img_dimensions);
+  std::cout << "Tensor Matrix" << std::endl;
+  std::cout << aTa << std::endl;
+  aTa.compute();
+  //Epipoles from TriFocalTensor
+  vgl_homg_point_2d<double> eT13, eT12;
+  aTa.get_epipoles(eT12, eT13);
+  std::cout << "Epipoles from cam Fs" << std::endl;
+  std::cout << "eF12 " << eF12b << std::endl;
+  std::cout << "eF13 " << eF13b << std::endl;
+  std::cout << "\nEpipoles from aTa" << std::endl;
+  std::cout << "eT12 " << eT12 << std::endl;
+  std::cout << "eT13 " << eT13 << std::endl;
+  double Fx = eF12b.x(), Fy = eF12b.y();
+  double Tx = eT12.x(), Ty = eT12.y();
+  double er = fabs(Fx - Tx) + fabs(Fy - Ty);
+  TEST_NEAR("F epipole 12 vs. Direct Tensor epipole 12", er, 0.0, 1e-05);
+  Fx = eF12b.x() / eF13b.x(); Fy = eF13b.y() / eF13b.x();
+  Tx = eT12.x() / eT13.x(); Ty = eT13.y() / eT13.x();
+   double erb =  fabs(Fy - Ty);
+  TEST_NEAR("F epipole 13 vs. Direct Tensor epipole 13", erb, 0.0, 1e-05);
+  //Fundamental matrices from trifocal tensor
+  vpgl_affine_fundamental_matrix<double> raF12, raF13, raF23;
+  good12 = aTa.fmatrix_12(raF12);
+  good13 = aTa.fmatrix_13(raF13);
+  bool good23 = aTa.fmatrix_23(raF23);
+
+  vgl_homg_line_2d<double> l12 = raF12.l_epipolar_line(ap2d0); l12.normalize();
+  vgl_homg_line_2d<double> cam_l12 = cam_raF12.l_epipolar_line(ap2d0); cam_l12.normalize();
+  
+  vgl_homg_line_2d<double> l13 = raF13.l_epipolar_line(ap2d0); l13.normalize();
+  vgl_homg_line_2d<double> cam_l13 = cam_raF13.l_epipolar_line(ap2d0);  cam_l13.normalize();
+
+  vgl_homg_line_2d<double> l23 = raF23.l_epipolar_line(ap2d1); l23.normalize();
+  vgl_homg_line_2d<double> cam_l23 = cam_raF23.l_epipolar_line(ap2d1); cam_l23.normalize();
+
+  vgl_homg_point_2d<double> hp3(l13, l23);
+  vgl_point_2d<double> p3(hp3);
+  
+  vgl_homg_point_2d<double> cam_hp3(cam_l13, cam_l23);
+  vgl_point_2d<double> cam_p3(cam_hp3);
+  hp3 = aTa.image3_transfer(ap2d0, ap2d1);
+  vgl_point_2d<double> T_tr_p3(hp3);
+  
+  std::cout << "\nepipolar line intersection for transfer" << std::endl;
+  std::cout << "p from aTa Fs " << p3 << std::endl;
+  std::cout << "p from cam Fs " << cam_p3 << std::endl;
+  std::cout << "p from Tensor point transfer" << T_tr_p3 << std::endl;
+  double px = ap2d2.x(), py = ap2d2.y();
+  double perr = fabs(p3.x() - px) + fabs(p3.y() - py);
+  perr += fabs(cam_p3.x() - px) + fabs(cam_p3.y() - py);
+  perr += fabs(T_tr_p3.x() - px) + fabs(T_tr_p3.y() - py);
+  TEST_NEAR("Epipolar line intersection Ftensor and Fcam vs. tensor transfer", erb, 0.0, 1e-05);
+#if 0
+  // From TriFocalTensor
+  std::cout << "\nPoints on epipolar lines for graphing" << std::endl;
+  vgl_homg_point_2d<double> l13_hpa, l13_hpb;
+  cam_l13.get_two_points(l13_hpa, l13_hpb);
+  vgl_point_2d<double> l13_pa(l13_hpa), l13_pb(l13_hpb);
+
+  vgl_homg_point_2d<double> l23_hpa, l23_hpb;
+  cam_l23.get_two_points(l23_hpa, l23_hpb);
+  vgl_point_2d<double> l23_pa(l23_hpa), l23_pb(l23_hpb);
+
+  // From FM constructors
+  vgl_homg_point_2d<double> cam_l13_hpa, cam_l13_hpb;
+  cam_l13.get_two_points(cam_l13_hpa, cam_l13_hpb);
+  vgl_point_2d<double> cam_l13_pa(cam_l13_hpa), cam_l13_pb(cam_l13_hpb);
+
+  vgl_homg_point_2d<double> cam_l23_hpa, cam_l23_hpb;
+  cam_l23.get_two_points(cam_l23_hpa, cam_l23_hpb);
+  vgl_point_2d<double> cam_l23_pa(cam_l23_hpa), cam_l23_pb(cam_l23_hpb);
+#endif
+  std::cout << "\n==================High 3D test===================" << std::endl;
+  vnl_matrix_fixed<double, 3, 4> rect_2_6A, rect_3_6A, rect_10_14B;
+  rect_2_6A[0][0] = 2.01212; rect_2_6A[0][1] = 1.61412; rect_2_6A[0][2] = 1.74097; rect_2_6A[0][3] = 181.834;
+  rect_2_6A[1][0] = 1.85849; rect_2_6A[1][1] = -2.21326; rect_2_6A[1][2] = -0.129581; rect_2_6A[1][3] = 845.129;
+  rect_2_6A[2][0] = 0.0;  rect_2_6A[2][1] = 0.0; rect_2_6A[2][2] = 0.0; rect_2_6A[2][3] = 1.0;
+
+  rect_3_6A[0][0] = 1.24107; rect_3_6A[0][1] = 2.32837; rect_3_6A[0][2] = 1.87672; rect_3_6A[0][3] = 183.735;
+  rect_3_6A[1][0] = 2.58296; rect_3_6A[1][1] = -1.47613; rect_3_6A[1][2] = 0.183766; rect_3_6A[1][3] = 641.183;
+  rect_3_6A[2][0] = 0.0;  rect_3_6A[2][1] = 0.0; rect_3_6A[2][2] = 0.0; rect_3_6A[2][3] = 1.0;
+
+  rect_10_14B[0][0] = 1.50718; rect_10_14B[0][1] = -2.89163; rect_10_14B[0][2] =  -1.51664; rect_10_14B[0][3] =1028.24;
+  rect_10_14B[1][0] = -3.05964; rect_10_14B[1][1] = -1.57758; rect_10_14B[1][2] = -0.0382634; rect_10_14B[1][3] = 1319.74;
+  rect_10_14B[2][0] = 0.0;  rect_10_14B[2][1] = 0.0; rect_10_14B[2][2] = 0.0; rect_10_14B[2][3] = 1.0;
+  
+  vpgl_affine_camera<double> hac0(rect_2_6A), hac1(rect_3_6A), hac2(rect_10_14B);
+  img_dimensions.clear();
+  img_dimensions.emplace_back(1488, 1607);
+  img_dimensions.emplace_back(1485, 1606);
+  img_dimensions.emplace_back(1553, 1605);
+  vpgl_affine_tri_focal_tensor<double> aTh(hac0, hac1, hac2);
+  std::cout << "\n\n ======Testing high tower results from affine tensor derived directly from 3 cameras ===== \n";
+  std::cout << "Tensor Matrix" << std::endl;
+  std::cout << aTh << std::endl;
+  aTh.compute();
+  vgl_homg_point_2d<double> hp0_2_6(237, 678), hp0_3_6(316, 460), hp0_10_14, p0_10_14_act(728, 1531);
+  hp0_10_14 = aTh.image3_transfer(hp0_2_6, hp0_3_6);
+  vgl_point_2d<double> p0_10_14(hp0_10_14);
+  std::cout << "p0 " << p0_10_14 << std::endl;
+  double her0 = fabs(p0_10_14.x() - p0_10_14_act.x()) + fabs(p0_10_14.y() - p0_10_14_act.y());
+  
+  vgl_homg_point_2d<double> hp1_2_6(221, 678), hp1_3_6(300, 459), hp1_10_14, p1_10_14_act(740, 1531);
+  hp1_10_14 = aTh.image3_transfer(hp1_2_6, hp1_3_6);
+  vgl_point_2d<double> p1_10_14(hp1_10_14);
+  std::cout << "p1 " << p1_10_14 << std::endl;
+  double her1 = fabs(p1_10_14.x() - p1_10_14_act.x()) + fabs(p1_10_14.y() - p1_10_14_act.y());
+
+  vgl_homg_point_2d<double> hp2_2_6(181, 703), hp2_3_6(246, 479), hp2_10_14, p2_10_14_act(811, 1502);
+  hp2_10_14 = aTh.image3_transfer(hp2_2_6, hp2_3_6);
+  vgl_point_2d<double> p2_10_14(hp2_10_14);
+  std::cout << "p2 " << p2_10_14 << std::endl;
+  double her2 = fabs(p2_10_14.x() - p2_10_14_act.x()) + fabs(p2_10_14.y() - p2_10_14_act.y());
+  double her_avg = (her0 + her1 + her2)/3.0;
+  TEST_NEAR("High structure tensor transfer", her_avg, 0.0, 1.5);
 #endif
 }
 TESTMAIN(test_affine_tensor_transfer);

@@ -19,25 +19,18 @@
 //  Modifications:
 // \endverbatim
 //
-// The implementation is based on the 1998 paper by Mendonca and R. Cipolla
+// The previous implementation was based on the 1998 paper by Mendonca and R. Cipolla
 //  Analysis and Computation of an Affine Trifocal Tensor
-//
-//  The basic idea is that an affine camera can be converted to a projective camera
-//  by a 3-d homography of the form:
-//
-//     [1 0 0 0]
-// H = [0 1 0 0], which has the effect of swapping the 3rd
-//     [0 0 0 1]  and 4th columns of the 3x4 camera matrix
-//     [0 0 1 0]
-//
-// Thus, all the machinery of a regular projective tri focal tensor can be used,
-// such as transfer. It is only necessary to swap the columns back for the extraction
-// of affine cameras from the affine tri focal tensor. That is,
-//
-//    [a00 a01 a02 a03]        [a00 a01 a03 a02]
-//    [a10 a11 a12 a13] H  =   [a10 a11 a13 a12]
-//    [0   0   0   a23]        [ 0   0  a23  0 ]
-//
+// 
+//  The current implementation directly computes the tensor from three camera matrices and
+//  is considerably more numerically stable. The computation is from H&Z
+// 
+//                           | ~a^i |
+//        T_iqr = (-1)^(i+1) |  b^q |  <-determinant of 4x4 matrix
+//                           |  c^r |
+// i, q, r in {1, 2, 3}
+// the notation a^i, b^q, c^r  indicates rows of the 3x4 camera matrices A, B, C.
+// and ~a^i indicates two rows of camera matrix A with row i left out.
 //------------------------------------------------------------------------------
 
 #include <utility>
@@ -99,8 +92,8 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   vpgl_tri_focal_tensor<Type>(affine_tri_focal_tensor_array){this->init_img_transforms();}
 
   //: Construct from three cameras
-  vpgl_affine_tri_focal_tensor(const vpgl_affine_camera<Type>& c1,const vpgl_affine_camera<Type>& c2,const vpgl_affine_camera<Type>& c3){
-    this->init_img_transforms(); this->set(c1, c2, c3);
+  vpgl_affine_tri_focal_tensor(const vpgl_affine_camera<Type>& c1,const vpgl_affine_camera<Type>& c2,const vpgl_affine_camera<Type>& c3) {
+      this->init_img_transforms(); this->set_cams_and_tensor(c1, c2, c3, tensor_matrix(c1, c2, c3)); 
   }
   //: Construct from three cameras with scaling transforms
   vpgl_affine_tri_focal_tensor(
@@ -112,11 +105,7 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
     vpgl_affine_camera<Type> pre_c1 = premultiply_a(c1, img_pt_transforms_[0]);
     vpgl_affine_camera<Type> pre_c2 = premultiply_a(c2, img_pt_transforms_[1]);
     vpgl_affine_camera<Type> pre_c3 = premultiply_a(c3, img_pt_transforms_[2]);
-    vgl_h_matrix_3d<Type> H = get_canonical_h(pre_c1);
-    vpgl_affine_camera<Type> pre_post_c1 = postmultiply_a(pre_c1, H);
-    vpgl_affine_camera<Type> pre_post_c2 = postmultiply_a(pre_c2, H);
-    vpgl_affine_camera<Type> pre_post_c3 = postmultiply_a(pre_c3, H);
-    this->set(pre_post_c1, pre_post_c2, pre_post_c3);
+    this->set_cams_and_tensor(pre_c1, pre_c2, pre_c3, tensor_matrix(pre_c1, pre_c2, pre_c3));
   }
   //: Construct from three cameras with image dimensions
   vpgl_affine_tri_focal_tensor(const vpgl_affine_camera<Type>& c1,const vpgl_affine_camera<Type>& c2,const vpgl_affine_camera<Type>& c3,
@@ -155,7 +144,9 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   void set(const vnl_matrix_fixed<Type,2,4>& M1, const vnl_matrix_fixed<Type,2,4>& M2, const vnl_matrix_fixed<Type,2,4>& M3){
     this->set(vpgl_affine_camera<Type>(M1), vpgl_affine_camera<Type>(M2), vpgl_affine_camera<Type>(M3));
   }
-
+  void set_cams_and_tensor(const vpgl_affine_camera<Type>& c1, const vpgl_affine_camera<Type>& c2, const vpgl_affine_camera<Type>& c3, vbl_array_3d<Type> const& T) {
+      vpgl_tri_focal_tensor<Type>::set_cams_and_tensor(vpgl_proj_camera<Type>(c1.get_matrix()), vpgl_proj_camera<Type>(c2.get_matrix()), vpgl_proj_camera<Type>(c3.get_matrix()), T);
+  }
   // Data Control------------------------------------------------------------
   vnl_matrix_fixed<Type, 3,3> point_constraint_3x3(vgl_homg_point_2d<Type> const& point1,
                                                    vgl_homg_point_2d<Type> const& point2,
@@ -349,6 +340,9 @@ bool fmatrix_12(vpgl_affine_fundamental_matrix<Type>& f_12){
 
   // INTERNALS---------------------------------------------------------------
   private:
+  vbl_array_3d<Type> tensor_matrix(const vpgl_affine_camera<Type>& c1, const vpgl_affine_camera<Type>& c2,
+          const vpgl_affine_camera<Type>& c3);
+
   static vpgl_affine_fundamental_matrix<Type> null_F(){
     vnl_matrix_fixed<Type, 3, 3> M(Type(0));
     return vpgl_affine_fundamental_matrix<Type>(M);

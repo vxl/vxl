@@ -146,7 +146,11 @@ protected:
   void set(const vnl_matrix_fixed<Type,3,4>& M1, const vnl_matrix_fixed<Type,3,4>& M2, const vnl_matrix_fixed<Type,3,4>& M3){
     this->set(vpgl_proj_camera<Type>(M1), vpgl_proj_camera<Type>(M2), vpgl_proj_camera<Type>(M3));
   }
-
+  // set cameras used when tri_focal tensor array is set directly
+  void set_cams_and_tensor(const vpgl_proj_camera<Type>& c1, const vpgl_proj_camera<Type>& c2, 
+      const vpgl_proj_camera<Type>& c3, vbl_array_3d<Type> T) {
+      T_ = T;  c1_ = c1; c2_ = c2; c3_ = c3; cameras_valid_ = true; this->init();
+  }
   // Data Control------------------------------------------------------------
   //: tri focal tensor point constraint (should be a 3x3 array of all zeros if points correspond)
   vnl_matrix_fixed<Type, 3, 3> point_constraint_3x3(vgl_homg_point_2d<Type> const& point1,
