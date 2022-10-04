@@ -44,9 +44,11 @@ test_affine_tri_focal_tensor()
   std::cout << "c3\n" << c3 << std::endl;
   vpgl_affine_tri_focal_tensor<double> aT(c1, c2, c3);
   bool good = aT.compute();
+  TEST("Good Computations", good, true);
   std::cout << aT << std::endl;
-  vpgl_affine_fundamental_matrix<double> aF12, aF13, aF23;
-  bool goodf = aT.fmatrix_12(aF12) && aT.fmatrix_13(aF13) && aT.fmatrix_23(aF23);
+  vpgl_affine_fundamental_matrix<double> aF12 = aT.affine_fmatrix_12();
+  vpgl_affine_fundamental_matrix<double> aF13 = aT.affine_fmatrix_13();
+  vpgl_affine_fundamental_matrix<double> aF23 = aT.affine_fmatrix_23();
   std::cout << "aF12 \n" << aF12 << std::endl;
   std::cout << "aF13 \n" << aF13 << std::endl;
   std::cout << "aF23 \n" << aF23 << std::endl;
@@ -59,8 +61,9 @@ test_affine_tri_focal_tensor()
   vnl_matrix_fixed<double, 3, 3> m23 = aF23.get_matrix(); // delay test of f23
 
   TEST_NEAR("Affine fundamental matrices", er, 0.0, 0.001);
-  vpgl_affine_camera<double> ac1, ac2, ac3;
-  bool goodc = aT.affine_camera_1(ac1) && aT.affine_camera_2(ac2) && aT.affine_camera_3(ac3);
+  vpgl_affine_camera<double> ac1 = aT.affine_camera_1();
+  vpgl_affine_camera<double> ac2 = aT.affine_camera_2();
+  vpgl_affine_camera<double> ac3 = aT.affine_camera_3();
   std::cout << "ac1 \n" << ac1 << std::endl;
   std::cout << "ac2 \n" << ac2 << std::endl;
   std::cout << "ac3 \n" << ac3 << std::endl;
