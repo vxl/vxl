@@ -53,7 +53,7 @@
 #include "vpgl_tri_focal_tensor.h"
 
 template <class Type>
-class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
+class vpgl_affine_tri_focal_tensor : public vpgl_tri_focal_tensor<Type>
 {
   // Data Members------------------------------------------------------------
  protected:
@@ -164,13 +164,6 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
 
   //: destructor
   ~vpgl_affine_tri_focal_tensor() override = default;
-
-  //: compute all derivative quantities
-  bool
-  compute() override
-  {
-    return vpgl_tri_focal_tensor<Type>::compute();
-  }
 
   // Data Access-------------------------------------------------------------
 
