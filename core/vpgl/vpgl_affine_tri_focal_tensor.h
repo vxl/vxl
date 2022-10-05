@@ -56,65 +56,60 @@ template <class Type>
 class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
 {
   // Data Members------------------------------------------------------------
+ protected:
+
   // scale the image point locations to the range [-1, 1] for improved tensor accuracy
-  std::vector<vgl_h_matrix_2d<Type>> img_pt_transforms_;
+  std::vector<vgl_h_matrix_2d<Type> > img_pt_transforms_;
+
+  // scaling transforms from image dimensions
+  static std::vector<vgl_h_matrix_2d<Type> >
+  img_pt_transforms_from_dims(std::vector<std::pair<size_t, size_t> > const & dims);
+
+  // reset internal state
+  void
+  clear_img_pt_transforms();
 
   void
-  init_img_transforms()
+  clear()
   {
-    vgl_h_matrix_2d<Type> K;
-    K.set_identity();
-    img_pt_transforms_.resize(3, K);
+    vpgl_tri_focal_tensor<Type>::clear();
+    clear_img_pt_transforms();
   }
 
+  // setup using 3 affine cameras, tensor, optional scaling transforms
   void
-  set_transforms_from_dims(std::vector<std::pair<size_t, size_t>> const & dims)
-  {
-    img_pt_transforms_.resize(3);
-    size_t n = dims.size();
-    if (n != 3)
-    {
-      throw std::invalid_argument("invalid dims size");
-    }
-    for (size_t i = 0; i < 3; ++i)
-    {
-      vnl_matrix_fixed<Type, 3, 3> K(Type(0));
-      K[0][0] = Type(2) / dims[i].first;
-      K[1][1] = Type(2) / dims[i].second;
-      K[0][2] = -Type(1);
-      K[1][2] = -Type(1);
-      K[2][2] = Type(1);
-      img_pt_transforms_[i] = vgl_h_matrix_2d<Type>(K);
-    }
-  }
+  set_cams_and_tensor(const vpgl_affine_camera<Type> & c1,
+                      const vpgl_affine_camera<Type> & c2,
+                      const vpgl_affine_camera<Type> & c3,
+                      vbl_array_3d<Type> const & T,
+                      std::vector<vgl_h_matrix_2d<Type>> img_pt_transforms = {});
 
  public:
   // Constructors/Initializers/Destructors-----------------------------------
 
   vpgl_affine_tri_focal_tensor()
-    : vpgl_tri_focal_tensor<Type>()
   {
-    this->init_img_transforms();
+    this->clear();
   }
 
   vpgl_affine_tri_focal_tensor(const vbl_array_3d<Type> & T)
     : vpgl_tri_focal_tensor<Type>(T)
   {
-    this->init_img_transforms();
+    this->clear_img_pt_transforms();
   }
 
   //: Construct from projective tri focal tensor
   vpgl_affine_tri_focal_tensor(const vpgl_tri_focal_tensor<Type> & T)
     : vpgl_tri_focal_tensor<Type>(T)
   {
-    this->init_img_transforms();
+    this->clear_img_pt_transforms();
   }
 
   //: Construct from 27-element vector
   vpgl_affine_tri_focal_tensor(const Type * affine_tri_focal_tensor_array)
     : vpgl_tri_focal_tensor<Type>(affine_tri_focal_tensor_array)
   {
-    this->init_img_transforms();
+    this->clear_img_pt_transforms();
   }
 
   //: Construct from three cameras
@@ -122,31 +117,7 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
                                const vpgl_affine_camera<Type> & c2,
                                const vpgl_affine_camera<Type> & c3)
   {
-    this->init_img_transforms();
-    this->set_cams_and_tensor(c1, c2, c3, tensor_matrix(c1, c2, c3));
-  }
-
-  //: Construct from three cameras with scaling transforms
-  vpgl_affine_tri_focal_tensor(const vpgl_affine_camera<Type> & c1,
-                               const vpgl_affine_camera<Type> & c2,
-                               const vpgl_affine_camera<Type> & c3,
-                               std::vector<vgl_h_matrix_2d<Type>> img_pt_transforms)
-    : img_pt_transforms_(std::move(img_pt_transforms))
-  {
-    vpgl_affine_camera<Type> pre_c1 = premultiply_a(c1, img_pt_transforms_[0]);
-    vpgl_affine_camera<Type> pre_c2 = premultiply_a(c2, img_pt_transforms_[1]);
-    vpgl_affine_camera<Type> pre_c3 = premultiply_a(c3, img_pt_transforms_[2]);
-    this->set_cams_and_tensor(pre_c1, pre_c2, pre_c3, tensor_matrix(pre_c1, pre_c2, pre_c3));
-  }
-
-  //: Construct from three cameras with image dimensions
-  vpgl_affine_tri_focal_tensor(const vpgl_affine_camera<Type> & c1,
-                               const vpgl_affine_camera<Type> & c2,
-                               const vpgl_affine_camera<Type> & c3,
-                               std::vector<std::pair<size_t, size_t>> const & image_dims_ni_nj)
-  {
-    this->set_transforms_from_dims(image_dims_ni_nj);
-    *this = vpgl_affine_tri_focal_tensor(c1, c2, c3, img_pt_transforms_);
+    this->set(c1, c2, c3);
   }
 
   //: Construct from two remaining cameras, the first camera is already canonical, i.e. [1 0 0 | 0]
@@ -155,7 +126,7 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   vpgl_affine_tri_focal_tensor(const vpgl_affine_camera<Type> & c2,
                                const vpgl_affine_camera<Type> & c3)
   {
-    *this = vpgl_affine_tri_focal_tensor(vpgl_affine_camera<Type>(), c2, c3);
+    this->set(c2, c3);
   }
 
   //: Construct from three affine camera matrices
@@ -163,18 +134,32 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
                                const vnl_matrix_fixed<Type, 2, 4> & m2,
                                const vnl_matrix_fixed<Type, 2, 4> & m3)
   {
-    *this = vpgl_affine_tri_focal_tensor(vpgl_affine_camera<Type>(m1),
-                                         vpgl_affine_camera<Type>(m2),
-                                         vpgl_affine_camera<Type>(m3));
+    this->set(m1, m2, m3);
   }
 
   //: Construct from two camera matrices
   vpgl_affine_tri_focal_tensor(const vnl_matrix_fixed<Type, 3, 4> & m2,
                                const vnl_matrix_fixed<Type, 3, 4> & m3)
   {
-    *this = vpgl_affine_tri_focal_tensor(vpgl_affine_camera<Type>(),
-                                         vpgl_affine_camera<Type>(m2),
-                                         vpgl_affine_camera<Type>(m3));
+    this->set(m2, m3);
+  }
+
+  //: Construct from three cameras with scaling transforms
+  vpgl_affine_tri_focal_tensor(const vpgl_affine_camera<Type> & c1,
+                               const vpgl_affine_camera<Type> & c2,
+                               const vpgl_affine_camera<Type> & c3,
+                               std::vector<vgl_h_matrix_2d<Type>> img_pt_transforms)
+  {
+    this->set(c1, c2, c3, img_pt_transforms);
+  }
+
+  //: Construct from three cameras with image dimensions
+  vpgl_affine_tri_focal_tensor(const vpgl_affine_camera<Type> & c1,
+                               const vpgl_affine_camera<Type> & c2,
+                               const vpgl_affine_camera<Type> & c3,
+                               std::vector<std::pair<size_t, size_t>> const & image_dims_ni_nj)
+  {
+    this->set(c1, c2, c3, image_dims_ni_nj);
   }
 
   //: destructor
@@ -189,6 +174,7 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
 
   // Data Access-------------------------------------------------------------
 
+  //: setup from cameras or camera matrices
   void
   set(const vpgl_affine_camera<Type> & c1,
       const vpgl_affine_camera<Type> & c2,
@@ -212,16 +198,27 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   }
 
   void
-  set_cams_and_tensor(const vpgl_affine_camera<Type> & c1,
-                      const vpgl_affine_camera<Type> & c2,
-                      const vpgl_affine_camera<Type> & c3,
-                      vbl_array_3d<Type> const & T)
+  set(const vnl_matrix_fixed<Type, 2, 4> & m2,
+      const vnl_matrix_fixed<Type, 2, 4> & m3)
   {
-    vpgl_tri_focal_tensor<Type>::set_cams_and_tensor(vpgl_proj_camera<Type>(c1.get_matrix()),
-                                                     vpgl_proj_camera<Type>(c2.get_matrix()),
-                                                     vpgl_proj_camera<Type>(c3.get_matrix()),
-                                                     T);
+    this->set(vpgl_affine_camera<Type>(),
+              vpgl_affine_camera<Type>(m2),
+              vpgl_affine_camera<Type>(m3));
   }
+
+  //: setup from three cameras with scaling transforms
+  void
+  set(const vpgl_affine_camera<Type> & c1,
+      const vpgl_affine_camera<Type> & c2,
+      const vpgl_affine_camera<Type> & c3,
+      std::vector<vgl_h_matrix_2d<Type> > img_pt_transforms);
+
+  //: setup from three cameras with image dimensions
+  void
+  set(const vpgl_affine_camera<Type> & c1,
+      const vpgl_affine_camera<Type> & c2,
+      const vpgl_affine_camera<Type> & c3,
+      std::vector<std::pair<size_t, size_t> > const & image_dims_ni_nj);
 
   // Data Control------------------------------------------------------------
   vnl_matrix_fixed<Type, 3, 3>
@@ -467,7 +464,7 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   // INTERNALS---------------------------------------------------------------
  private:
 
-  vbl_array_3d<Type>
+  static vbl_array_3d<Type>
   tensor_matrix(const vpgl_affine_camera<Type> & c1,
                 const vpgl_affine_camera<Type> & c2,
                 const vpgl_affine_camera<Type> & c3);
@@ -478,7 +475,8 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
     vnl_matrix_fixed<Type, 3, 3> M(Type(0));
     return vpgl_affine_fundamental_matrix<Type>(M);
   }
-  vpgl_affine_camera<Type>
+
+  static vpgl_affine_camera<Type>
   null_acam()
   {
     vnl_matrix_fixed<Type, 2, 4> M(Type(0));

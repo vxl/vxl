@@ -5,19 +5,108 @@
 #include <vgl/vgl_tolerance.h>
 #include <vnl/vnl_det.h>
 
+// reset internal state
+template <class Type>
+void
+vpgl_affine_tri_focal_tensor<Type>::clear_img_pt_transforms()
+{
+  vgl_h_matrix_2d<Type> K;
+  K.set_identity();
+  img_pt_transforms_.resize(3, K);
+}
+
+// get scaling transforms from image dimensions
+template <class Type>
+std::vector<vgl_h_matrix_2d<Type> >
+vpgl_affine_tri_focal_tensor<Type>::img_pt_transforms_from_dims(
+    std::vector<std::pair<size_t, size_t> > const & dims)
+{
+  // check input
+  if (dims.size() != 3)
+    throw std::invalid_argument("invalid dims size");
+
+  // populate transforms
+  std::vector<vgl_h_matrix_2d<Type> > pt_transforms(3);
+  for (size_t i = 0; i < 3; ++i)
+  {
+    vnl_matrix_fixed<Type, 3, 3> K(Type(0));
+    K[0][0] = Type(2) / dims[i].first;
+    K[1][1] = Type(2) / dims[i].second;
+    K[0][2] = -Type(1);
+    K[1][2] = -Type(1);
+    K[2][2] = Type(1);
+    pt_transforms[i] = vgl_h_matrix_2d<Type>(K);
+  }
+
+  return pt_transforms;
+}
+
+//: setup using 3 affine cameras
 template <class Type>
 void
 vpgl_affine_tri_focal_tensor<Type>::set(const vpgl_affine_camera<Type> & c1,
                                         const vpgl_affine_camera<Type> & c2,
                                         const vpgl_affine_camera<Type> & c3)
 {
+  auto T = this->tensor_matrix(c1, c2, c3);
+  this->set_cams_and_tensor(c1, c2, c3, T);
+}
+
+//: setup using three cameras with scaling transforms
+template <class Type>
+void
+vpgl_affine_tri_focal_tensor<Type>::set(const vpgl_affine_camera<Type> & c1,
+                                        const vpgl_affine_camera<Type> & c2,
+                                        const vpgl_affine_camera<Type> & c3,
+                                        std::vector<vgl_h_matrix_2d<Type> > img_pt_transforms)
+{
+  vpgl_affine_camera<Type> pre_c1 = premultiply_a(c1, img_pt_transforms[0]);
+  vpgl_affine_camera<Type> pre_c2 = premultiply_a(c2, img_pt_transforms[1]);
+  vpgl_affine_camera<Type> pre_c3 = premultiply_a(c3, img_pt_transforms[2]);
+  auto T = this->tensor_matrix(pre_c1, pre_c2, pre_c3);
+  this->set_cams_and_tensor(pre_c1, pre_c2, pre_c3, T, img_pt_transforms);
+}
+
+//: setup using three cameras with image dimensions
+template <class Type>
+void
+vpgl_affine_tri_focal_tensor<Type>::set(const vpgl_affine_camera<Type> & c1,
+                                        const vpgl_affine_camera<Type> & c2,
+                                        const vpgl_affine_camera<Type> & c3,
+                                        std::vector<std::pair<size_t, size_t> > const & image_dims_ni_nj)
+{
+  auto img_pt_transforms = this->img_pt_transforms_from_dims(image_dims_ni_nj);
+  this->set(c1, c2, c3, img_pt_transforms);
+}
+
+//: setup using 3 affine cameras, tensor, optional scaling transforms
+// This function assumes no additional calculations are necessary beyond
+// an affine->projective camera conversion for storage
+template <class Type>
+void
+vpgl_affine_tri_focal_tensor<Type>::set_cams_and_tensor(const vpgl_affine_camera<Type> & c1,
+                                                        const vpgl_affine_camera<Type> & c2,
+                                                        const vpgl_affine_camera<Type> & c3,
+                                                        vbl_array_3d<Type> const & T,
+                                                        std::vector<vgl_h_matrix_2d<Type> > img_pt_transforms)
+{
+  // reset internal state
+  this->clear();
+
+  // projective cameras
   vpgl_proj_camera<Type> p1, p2, p3;
   if (!proj(c1, p1) || !proj(c2, p2) || !proj(c3, p3))
   {
     throw std::invalid_argument("vpgl_affine_tri_focal_tensor:set "
                                 "affine->projective failed");
   }
-  vpgl_tri_focal_tensor<Type>::set(p1, p2, p3);
+
+  // set using parent method
+  vpgl_tri_focal_tensor<Type>::set_cams_and_tensor(p1, p2, p3, T);
+
+  // set scaling transforms
+  if (!img_pt_transforms.empty())
+    img_pt_transforms_ = std::move(img_pt_transforms);
 }
 
 template <class Type>
