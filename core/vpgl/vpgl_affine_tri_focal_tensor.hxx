@@ -293,7 +293,7 @@ bool
 affine(vpgl_fundamental_matrix<Type> const & F,
        vpgl_affine_fundamental_matrix<Type> & aF)
 {
-  Type tol = Type(2) * vgl_tolerance<Type>::position;
+  Type tol = Type(1e-13);
   vnl_matrix_fixed<Type, 3, 3> M = F.get_matrix();
   Type max = M.absolute_value_max();
   if (max < tol) {

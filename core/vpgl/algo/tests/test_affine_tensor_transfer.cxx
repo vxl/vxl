@@ -653,7 +653,9 @@ test_affine_tensor_transfer()
   vpgl_affine_tri_focal_tensor<double> aTa(rac0, rac1, rac2, img_dimensions);
   std::cout << "Tensor Matrix" << std::endl;
   std::cout << aTa << std::endl;
-  aTa.compute();
+  good_compute = aTa.compute();
+  TEST("Compute success", good_compute, true);
+
   //Epipoles from TriFocalTensor
   vgl_homg_point_2d<double> eT13, eT12;
   aTa.get_epipoles(eT12, eT13);
@@ -673,10 +675,14 @@ test_affine_tensor_transfer()
   Fden12 = sqrt(Fx * Fx + Fy * Fy); Tden12 = sqrt(Tx * Tx + Ty * Ty);
   double erb = fabs((Fx * Tx + Fy * Ty) / (Fden12 * Tden12)) - 1.0;
   TEST_NEAR("F epipole 13 vs. Direct Tensor epipole 13", erb, 0.0, 1e-05);
+
   //Fundamental matrices from trifocal tensor
   vpgl_affine_fundamental_matrix<double> raF12 = aTa.affine_fmatrix_12();
+  std::cout << "raF12:\n" << raF12 << std::endl;
   vpgl_affine_fundamental_matrix<double> raF13 = aTa.affine_fmatrix_13();
+  std::cout << "raF13:\n" << raF13 << std::endl;
   vpgl_affine_fundamental_matrix<double> raF23 = aTa.affine_fmatrix_23();
+  std::cout << "raF23:\n" << raF23 << std::endl;
 
   vgl_homg_line_2d<double> l12 = raF12.l_epipolar_line(ap2d0); l12.normalize();
   vgl_homg_line_2d<double> cam_l12 = cam_raF12.l_epipolar_line(ap2d0); cam_l12.normalize();
