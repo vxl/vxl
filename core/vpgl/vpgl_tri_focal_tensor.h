@@ -70,56 +70,78 @@ class vpgl_tri_focal_tensor
   bool f_matrix_23_valid_ = false;
   vpgl_fundamental_matrix<Type> f23_;
 
-  // set flags false and results invalid
+  // reset internal state
   void
-  init();
+  clear_tensor();
+
+  void
+  clear_epipoles();
+
+  void
+  clear_f_matrices();
+
+  void
+  clear_cameras();
+
+  void
+  clear()
+  {
+    clear_tensor();
+    clear_epipoles();
+    clear_f_matrices();
+    clear_cameras();
+  }
 
   // make the Frobenius norm == 1
   void
   normalize();
+
+  // set cameras and tensor array directly
+  void
+  set_cams_and_tensor(const vpgl_proj_camera<Type> & c1,
+                      const vpgl_proj_camera<Type> & c2,
+                      const vpgl_proj_camera<Type> & c3,
+                      vbl_array_3d<Type> T);
 
  public:
 
   // Constructors/Initializers/Destructors-----------------------------------
 
   vpgl_tri_focal_tensor()
-    : T_(vbl_array_3d<Type>(3, 3, 3, Type(0)))
   {
-    for (size_t i = 0; i < 3; ++i)
-      T_[i][i][i] = Type(1);
-    this->init();
+    this->clear();
   }
 
   vpgl_tri_focal_tensor(const vbl_array_3d<Type> & T)
     : T_(T)
   {
-    this->init();
+    this->clear_cameras();
+    this->clear_f_matrices();
+    this->clear_epipoles();
   }
 
   //: Construct from 27-element vector
   vpgl_tri_focal_tensor(const Type * tri_focal_tensor_array)
     : T_(vbl_array_3d<Type>(3, 3, 3, tri_focal_tensor_array))
   {
-    this->init();
+    this->clear_cameras();
+    this->clear_f_matrices();
+    this->clear_epipoles();
   }
 
   //: Construct from three cameras
   vpgl_tri_focal_tensor(const vpgl_proj_camera<Type> & c1,
                         const vpgl_proj_camera<Type> & c2,
                         const vpgl_proj_camera<Type> & c3)
-    : T_(vbl_array_3d<Type>(3, 3, 3, Type(0)))
   {
     this->set(c1, c2, c3);
-    this->init(); // init must be second to avoid writing over cameras
   }
 
   //: Construct from two remaining cameras, the first camera is already canonical, i.e. [I | 0]
   vpgl_tri_focal_tensor(const vpgl_proj_camera<Type> & c2,
                         const vpgl_proj_camera<Type> & c3)
-    : T_(vbl_array_3d<Type>(3, 3, 3, Type(0)))
   {
-    this->set(vpgl_proj_camera<Type>(), c2, c3);
-    this->init(); // init must be second to avoid writing over cameras
+    this->set(c2, c3);
   }
 
   //: Construct from three camera matrices
@@ -127,20 +149,14 @@ class vpgl_tri_focal_tensor
                         const vnl_matrix_fixed<Type, 3, 4> & m2,
                         const vnl_matrix_fixed<Type, 3, 4> & m3)
   {
-    this->set(vpgl_proj_camera<Type>(m1),
-              vpgl_proj_camera<Type>(m2),
-              vpgl_proj_camera<Type>(m3));
-    this->init(); // init must be second to avoid writing over cameras
+    this->set(m1, m2, m3);
   }
 
   //: Construct from two camera matrices
   vpgl_tri_focal_tensor(const vnl_matrix_fixed<Type, 3, 4> & m2,
                         const vnl_matrix_fixed<Type, 3, 4> & m3)
   {
-    this->set(vpgl_proj_camera<Type>(),
-              vpgl_proj_camera<Type>(m2),
-              vpgl_proj_camera<Type>(m3));
-    this->init(); // init must be second to avoid writing over cameras
+    this->set(m2, m3);
   }
 
   //: destructor
@@ -169,6 +185,7 @@ class vpgl_tri_focal_tensor
     return true;
   }
 
+  //: access individual values in tensor array
   Type &
   operator()(size_t i1, size_t i2, size_t i3)
   {
@@ -187,12 +204,7 @@ class vpgl_tri_focal_tensor
     T_(i1, i2, i3) = value;
   }
 
-  void
-  set(vbl_array_3d<Type> & array)
-  {
-    *this = vpgl_tri_focal_tensor<Type>(array);
-  }
-
+  //: set cameras (or camera matrices)
   void
   set(const vpgl_proj_camera<Type> & c1,
       const vpgl_proj_camera<Type> & c2,
@@ -215,19 +227,13 @@ class vpgl_tri_focal_tensor
               vpgl_proj_camera<Type>(m3));
   }
 
-  // set cameras used when tri_focal tensor array is set directly
   void
-  set_cams_and_tensor(const vpgl_proj_camera<Type> & c1,
-                      const vpgl_proj_camera<Type> & c2,
-                      const vpgl_proj_camera<Type> & c3,
-                      vbl_array_3d<Type> T)
+  set(const vnl_matrix_fixed<Type, 3, 4> & m2,
+      const vnl_matrix_fixed<Type, 3, 4> & m3)
   {
-    T_ = T;
-    c1_ = c1;
-    c2_ = c2;
-    c3_ = c3;
-    cameras_valid_ = true;
-    this->init();
+    this->set(vpgl_proj_camera<Type>(),
+              vpgl_proj_camera<Type>(m2),
+              vpgl_proj_camera<Type>(m3));
   }
 
   // Data Control------------------------------------------------------------
