@@ -80,13 +80,22 @@ affine(vpgl_fundamental_matrix<Type> const & F,
   Type tol = Type(2) * vgl_tolerance<Type>::position;
   vnl_matrix_fixed<Type, 3, 3> M = F.get_matrix();
   Type max = M.absolute_value_max();
-  if (max < tol)
+  if (max < tol) {
+    std::cerr << "fundamental matrix elements are all (nearly) zero\n"
+              << M << std::endl;
     return false;
+  }
   M /= max;
+
   for (size_t r = 0; r < 2; ++r)
     for (size_t c = 0; c < 2; ++c)
-      if (fabs(M[r][c]) > tol)
+      if (fabs(M[r][c]) > tol) {
+        std::cerr << "fundamental matrix does not appear to be affine "
+                  << "(elements in upper left 2x2 block should have "
+                  << "magnitude less than " << tol << ")\n" << M << std::endl;
         return false;
+      }
+
   aF.set_matrix(M);
   return true;
 }
