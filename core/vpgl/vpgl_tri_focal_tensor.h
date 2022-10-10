@@ -289,30 +289,32 @@ class vpgl_tri_focal_tensor
   bool
   compute_epipoles();
 
-  virtual bool
+  virtual void
   get_epipoles(vgl_homg_point_2d<Type> & e12,
                vgl_homg_point_2d<Type> & e13)
   {
-    if (!epipoles_valid_)
-      compute_epipoles();
+    if (!this->compute_epipoles())
+      throw std::runtime_error("vpgl_tri_focal_tensor::get_epipoles "
+                               "invalid epipoles");
     e12 = e12_;
     e13 = e13_;
-    return epipoles_valid_;
   }
 
   virtual vgl_homg_point_2d<Type>
   epipole_12()
   {
-    if (!epipoles_valid_)
-      compute_epipoles();
+    if (!this->compute_epipoles())
+      throw std::runtime_error("vpgl_tri_focal_tensor::epipole_12 "
+                               "invalid epipoles");
     return e12_;
   }
 
   virtual vgl_homg_point_2d<Type>
   epipole_13()
   {
-    if (!epipoles_valid_)
-      compute_epipoles();
+    if (!this->compute_epipoles())
+      throw std::runtime_error("vpgl_tri_focal_tensor::epipole_13 "
+                               "invalid epipoles");
     return e13_;
   }
 
@@ -332,24 +334,27 @@ class vpgl_tri_focal_tensor
   vpgl_fundamental_matrix<Type>
   fmatrix_12()
   {
-    if (!f_matrices_1213_valid_)
-      compute_f_matrices();
+    if (!this->compute_f_matrices())
+      throw std::runtime_error("vpgl_tri_focal_tensor::fmatrix_12 "
+                               "invalid fundamental matrices");
     return f12_;
   }
 
   vpgl_fundamental_matrix<Type>
   fmatrix_13()
   {
-    if (!f_matrices_1213_valid_)
-      compute_f_matrices();
+    if (!this->compute_f_matrices())
+      throw std::runtime_error("vpgl_tri_focal_tensor::fmatrix_13 "
+                               "invalid fundamental matrices");
     return f13_;
   }
 
   vpgl_fundamental_matrix<Type>
   fmatrix_23()
   {
-    if (!f_matrix_23_valid_)
-      compute_f_matrix_23();
+    if (!this->compute_f_matrix_23())
+      throw std::runtime_error("vpgl_tri_focal_tensor::fmatrix_23 "
+                               "invalid fundamental matrices");
     return f23_;
   }
 
@@ -360,24 +365,27 @@ class vpgl_tri_focal_tensor
   vpgl_proj_camera<Type>
   proj_camera_1()
   {
-    if (!cameras_valid_)
-      compute_proj_cameras();
+    if (!this->compute_proj_cameras())
+      throw std::runtime_error("vpgl_tri_focal_tensor::proj_camera_1 "
+                               "invalid cameras");
     return c1_;
   }
 
   vpgl_proj_camera<Type>
   proj_camera_2()
   {
-    if (!cameras_valid_)
-      compute_proj_cameras();
+    if (!this->compute_proj_cameras())
+      throw std::runtime_error("vpgl_tri_focal_tensor::proj_camera_2 "
+                               "invalid cameras");
     return c2_;
   }
 
   vpgl_proj_camera<Type>
   proj_camera_3()
   {
-    if (!cameras_valid_)
-      compute_proj_cameras();
+    if (!this->compute_proj_cameras())
+      throw std::runtime_error("vpgl_tri_focal_tensor::proj_camera_3 "
+                               "invalid cameras");
     return c3_;
   }
 

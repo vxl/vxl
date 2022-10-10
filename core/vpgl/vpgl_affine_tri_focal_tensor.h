@@ -342,18 +342,14 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   }
 
   //: epipoles
-  bool
+  void
   get_epipoles(vgl_homg_point_2d<Type> & e12,
                vgl_homg_point_2d<Type> & e13) override
   {
     vgl_homg_point_2d<Type> temp12, temp13;
-    bool good = vpgl_tri_focal_tensor<Type>::get_epipoles(temp12, temp13);
-    if (good)
-    {
-      e12 = img_pt_transforms_[1].preimage(temp12);
-      e13 = img_pt_transforms_[2].preimage(temp13);
-    }
-    return good;
+    vpgl_tri_focal_tensor<Type>::get_epipoles(temp12, temp13);
+    e12 = img_pt_transforms_[1].preimage(temp12);
+    e13 = img_pt_transforms_[2].preimage(temp13);
   }
 
   vgl_homg_point_2d<Type>
@@ -374,8 +370,9 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   bool
   fmatrix_12(vpgl_affine_fundamental_matrix<Type> & f_12)
   {
-    if (!vpgl_tri_focal_tensor<Type>::f_matrices_1213_valid_)
-      vpgl_tri_focal_tensor<Type>::compute_f_matrices();
+    if (!vpgl_tri_focal_tensor<Type>::compute_f_matrices())
+      return false;
+
     vpgl_affine_fundamental_matrix<Type> temp;
     bool good = affine(vpgl_tri_focal_tensor<Type>::f12_, temp);
     if (good)
@@ -397,8 +394,9 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   bool
   fmatrix_13(vpgl_affine_fundamental_matrix<Type> & f_13)
   {
-    if (!vpgl_tri_focal_tensor<Type>::f_matrices_1213_valid_)
-      vpgl_tri_focal_tensor<Type>::compute_f_matrices();
+    if (!vpgl_tri_focal_tensor<Type>::compute_f_matrices())
+      return false;
+
     vpgl_affine_fundamental_matrix<Type> temp;
     bool good = affine(vpgl_tri_focal_tensor<Type>::f13_, temp);
     if (good)
@@ -420,8 +418,9 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   bool
   fmatrix_23(vpgl_affine_fundamental_matrix<Type> & f_23)
   {
-    if (!vpgl_tri_focal_tensor<Type>::f_matrix_23_valid_)
-      vpgl_tri_focal_tensor<Type>::compute_f_matrix_23();
+    if (!vpgl_tri_focal_tensor<Type>::compute_f_matrix_23())
+      return false;
+
     vpgl_affine_fundamental_matrix<Type> temp;
     bool good = affine(vpgl_tri_focal_tensor<Type>::f23_, temp);
     if (good)
@@ -444,27 +443,24 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   bool
   affine_camera_1(vpgl_affine_camera<Type> & c1)
   {
-    if (!vpgl_tri_focal_tensor<Type>::cameras_valid_)
-      vpgl_tri_focal_tensor<Type>::compute_proj_cameras();
-    vpgl_affine_camera<Type> ac;
+    if (!vpgl_tri_focal_tensor<Type>::compute_proj_cameras())
+      return false;
     return affine(vpgl_tri_focal_tensor<Type>::c1_, c1);
   }
 
   bool
   affine_camera_2(vpgl_affine_camera<Type> & c2)
   {
-    if (!vpgl_tri_focal_tensor<Type>::cameras_valid_)
-      vpgl_tri_focal_tensor<Type>::compute_proj_cameras();
-    vpgl_affine_camera<Type> ac;
+    if (!vpgl_tri_focal_tensor<Type>::compute_proj_cameras())
+      return false;
     return affine(vpgl_tri_focal_tensor<Type>::c2_, c2);
   }
 
   bool
   affine_camera_3(vpgl_affine_camera<Type> & c3)
   {
-    if (!vpgl_tri_focal_tensor<Type>::cameras_valid_)
-      vpgl_tri_focal_tensor<Type>::compute_proj_cameras();
-    vpgl_affine_camera<Type> ac;
+    if (!vpgl_tri_focal_tensor<Type>::compute_proj_cameras())
+      return false;
     return affine(vpgl_tri_focal_tensor<Type>::c3_, c3);
   }
 
