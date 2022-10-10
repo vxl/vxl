@@ -241,7 +241,7 @@ template <class Type>
 vnl_matrix_fixed<Type, 3, 3>
 vpgl_tri_focal_tensor<Type>::point_constraint_3x3(vgl_homg_point_2d<Type> const & point1,
                                                   vgl_homg_point_2d<Type> const & point2,
-                                                  vgl_homg_point_2d<Type> const & point3)
+                                                  vgl_homg_point_2d<Type> const & point3) const
 {
   Type z = Type(0);
   vnl_vector_fixed<Type, 3> x(z), xp(z), xpp(z);
@@ -284,7 +284,7 @@ template <class Type>
 Type
 vpgl_tri_focal_tensor<Type>::point_constraint(vgl_homg_point_2d<Type> const & point1,
                                               vgl_homg_point_2d<Type> const & point2,
-                                              vgl_homg_point_2d<Type> const & point3)
+                                              vgl_homg_point_2d<Type> const & point3) const
 {
   Type z = Type(0);
   vnl_vector_fixed<Type, 3> m(z), mp(z), mpp(z);
@@ -320,7 +320,7 @@ template <class Type>
 vnl_vector_fixed<Type, 3>
 vpgl_tri_focal_tensor<Type>::line_constraint_3(vgl_homg_line_2d<Type> const & line1,
                                                vgl_homg_line_2d<Type> const & line2,
-                                               vgl_homg_line_2d<Type> const & line3)
+                                               vgl_homg_line_2d<Type> const & line3) const
 {
   Type z = Type(0);
   vnl_vector_fixed<Type, 3> l(z), lp(z), lpp(z);
