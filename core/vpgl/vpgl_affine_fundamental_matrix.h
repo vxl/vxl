@@ -41,7 +41,7 @@ class vpgl_affine_fundamental_matrix : public vpgl_fundamental_matrix<T>
   // Getters and Setters:----------------
 
   //: Form the matrix from 3x3 vnl_fixed_matrix
-  void set_matrix( const vnl_matrix_fixed<T,3,3>& F );
+  void set_matrix( const vnl_matrix_fixed<T,3,3>& F ) override;
 
   //: Form the matrix from its free parameters. (JLM changed to H&Z convention 11/12/2018)
   void set_from_params( T a, T b, T c, T d, T e );

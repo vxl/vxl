@@ -113,7 +113,7 @@ class vpgl_fundamental_matrix
   void set_matrix( const vpgl_proj_camera<T>& cr,
                    const vpgl_proj_camera<T>& cl );
 
-  void set_matrix( const vnl_matrix_fixed<T,3,3>& F );
+  virtual void set_matrix( const vnl_matrix_fixed<T,3,3>& F );
 
  protected:
   //: Internal representation of the fundamental matrix.

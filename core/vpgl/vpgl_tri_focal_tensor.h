@@ -232,22 +232,22 @@ class vpgl_tri_focal_tensor
 
   // Data Control------------------------------------------------------------
   //: tri focal tensor point constraint (should be a 3x3 array of all zeros if points correspond)
-  vnl_matrix_fixed<Type, 3, 3>
+  virtual vnl_matrix_fixed<Type, 3, 3>
   point_constraint_3x3(vgl_homg_point_2d<Type> const & point1,
                        vgl_homg_point_2d<Type> const & point2,
-                       vgl_homg_point_2d<Type> const & point3);
+                       vgl_homg_point_2d<Type> const & point3) const;
 
   //:tri focal tensor scalar point constraint (should == 0 if points correspond)
-  Type
+  virtual Type
   point_constraint(vgl_homg_point_2d<Type> const & point1,
                    vgl_homg_point_2d<Type> const & point2,
-                   vgl_homg_point_2d<Type> const & point3);
+                   vgl_homg_point_2d<Type> const & point3) const;
 
   //: tri focal tensor line constraint (should be a 3 vector all zeros if lines correspond)
-  vnl_vector_fixed<Type, 3>
+  virtual vnl_vector_fixed<Type, 3>
   line_constraint_3(vgl_homg_line_2d<Type> const & line1,
                     vgl_homg_line_2d<Type> const & line2,
-                    vgl_homg_line_2d<Type> const & line3);
+                    vgl_homg_line_2d<Type> const & line3) const;
 
   //: point transfer
   //  point in image 1 corresponding to points in images 2 and 3 and etc.

@@ -227,7 +227,7 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   vnl_matrix_fixed<Type, 3, 3>
   point_constraint_3x3(vgl_homg_point_2d<Type> const & point1,
                        vgl_homg_point_2d<Type> const & point2,
-                       vgl_homg_point_2d<Type> const & point3)
+                       vgl_homg_point_2d<Type> const & point3) const override
   {
     vgl_homg_point_2d<Type> p1t = img_pt_transforms_[0] * point1;
     vgl_homg_point_2d<Type> p2t = img_pt_transforms_[1] * point2;
@@ -238,7 +238,7 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   Type
   point_constraint(vgl_homg_point_2d<Type> const & point1,
                    vgl_homg_point_2d<Type> const & point2,
-                   vgl_homg_point_2d<Type> const & point3)
+                   vgl_homg_point_2d<Type> const & point3) const override
   {
     vgl_homg_point_2d<Type> p1t = img_pt_transforms_[0] * point1;
     vgl_homg_point_2d<Type> p2t = img_pt_transforms_[1] * point2;
@@ -250,7 +250,7 @@ class vpgl_affine_tri_focal_tensor : protected vpgl_tri_focal_tensor<Type>
   vnl_vector_fixed<Type, 3>
   line_constraint_3(vgl_homg_line_2d<Type> const & line1,
                     vgl_homg_line_2d<Type> const & line2,
-                    vgl_homg_line_2d<Type> const & line3)
+                    vgl_homg_line_2d<Type> const & line3) const override
   {
     vgl_homg_line_2d<Type> line1t = img_pt_transforms_[0] * line1;
     vgl_homg_line_2d<Type> line2t = img_pt_transforms_[1] * line2;
