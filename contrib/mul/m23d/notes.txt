@@ -1,9 +1,0 @@
-m23d_ortho_flexible_builder
-
-- Could add additional constraints on g in correction_matrix_error
-  to resolve the  rotation ambiguity
-
-- Could add some additional iterations to refine shape/projections
-
-- Need to pre-process the data to select full rank set of views to
-  define the basis.

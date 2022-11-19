@@ -31,9 +31,6 @@
 
 #cmakedefine01 VXL_LEGACY_FUTURE_REMOVE
 #cmakedefine01 VXL_RUN_FAILING_TESTS
-#cmakedefine01 VXL_USE_HISTORICAL_IMPLICIT_CONVERSIONS
-#cmakedefine01 VXL_USE_HISTORICAL_PROTECTED_IVARS
-
 
 // -------------------- handy macros ---------------------------------------
 
@@ -198,10 +195,6 @@
 #   error "Invalid _MSC_VER version. Visual Studio 2015 = Version 14.x is needed to support C++11 features"
 #  endif // <1900
 #endif // _MSC_VER
-#endif
-
-#ifdef VNL_CONFIG_LEGACY_METHODS
-#include "vcl_legacy_aliases.h"
 #endif
 
 // Specialization for deprecation messages are needed to support various

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<bvxmRpcRegistrationProcess>
-<noise_multiplier desc="noise_multiplier" type="double" value="1.5" />
-<smooth desc="smooth" type="double" value="1.5" />
-<automatic_threshold desc="automatic_threshold" type="bool" value="0" />
-<junctionp desc="junctionp" type="bool" value="0" />
-<aggressive_junction_closure desc="aggressive_junction_closure" type="bool" value="0" />
-<edt_gaussian_sigma desc="edt_gaussian_sigma" type="double" value="2.0" />
-</bvxmRpcRegistrationProcess>

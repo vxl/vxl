@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<bvxmLidarInitProcess>
-	<mask_thresh type="float" desc="threshold for lidar mask (meters)" value="3.0"/>
-</bvxmLidarInitProcess>

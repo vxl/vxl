@@ -1,3 +1,0 @@
-// The following text is included in the main documentation page by doxygen
-/*! \mainpage vtol : 1, 2 and 3D Topology representations.
-*/

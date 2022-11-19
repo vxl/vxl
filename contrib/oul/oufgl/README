@@ -1,4 +1,0 @@
-This is the Otago University Frame Grabber Library. Currently it
-supports any video-for-linux device (at least I think it does). If
-you'd like to contribute code for other frame grabbers, or other
-systems, please do.

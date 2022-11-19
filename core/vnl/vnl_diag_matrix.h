@@ -154,27 +154,11 @@ class VNL_EXPORT vnl_diag_matrix
     return diagonal_[r];
   }
 
-#if VXL_LEGACY_FUTURE_REMOVE
-  VXL_DEPRECATED_MSG("Deprecated inconsistent return type.\nWARNING: .as_ref returns a vnl_matrix, not a vnl_matrix_ref, use .as_matrix() directly")
-#endif
-  vnl_matrix<T> as_ref() const { return as_matrix(); }
-
   // Need this until we add a vnl_diag_matrix ctor to vnl_matrix;
   vnl_matrix<T> as_matrix( ) const;
-#if ! VXL_LEGACY_FUTURE_REMOVE
-  VXL_DEPRECATED_MSG("Deprecated inconsistent name.\nUSE: .as_matrix() new consistent name.")
-  vnl_matrix<T> asMatrix () const { return this->as_matrix(); }
-#endif
 
   // This is as good as a vnl_diag_matrix ctor for vnl_matrix:
-#if ! VXL_USE_HISTORICAL_IMPLICIT_CONVERSIONS
   explicit operator vnl_matrix<T> () const { return this->as_matrix(); }
-#else
-#if VXL_LEGACY_FUTURE_REMOVE
-  VXL_DEPRECATED_MSG("Implicit cast conversion is dangerous.\nUSE: .as_matrix() or .as_ref() member function for clarity.")
-#endif
-  operator vnl_matrix<T> () const { return this->as_matrix(); }
-#endif
 
   inline void set_size(int n) { diagonal_.set_size(n); }
 

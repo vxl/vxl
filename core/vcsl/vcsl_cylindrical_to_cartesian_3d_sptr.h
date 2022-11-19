@@ -1,8 +1,0 @@
-#ifndef vcsl_cylindrical_to_cartesian_3d_sptr_h_
-#define vcsl_cylindrical_to_cartesian_3d_sptr_h_
-
-class vcsl_cylindrical_to_cartesian_3d;
-#include <vbl/vbl_smart_ptr.h>
-typedef vbl_smart_ptr<vcsl_cylindrical_to_cartesian_3d> vcsl_cylindrical_to_cartesian_3d_sptr;
-
-#endif // vcsl_cylindrical_to_cartesian_3d_sptr_h_

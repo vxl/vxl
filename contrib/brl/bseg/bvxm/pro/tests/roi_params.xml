@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<bvxmRoiInitProcess>
-	<error type="float" desc="camera pointing error (meters)" value="10.0"/>
-</bvxmRoiInitProcess>

@@ -752,9 +752,7 @@ class VNL_EXPORT vnl_matrix
   //: Delete data
   void destroy();
 
-#if ! VXL_USE_HISTORICAL_PROTECTED_IVARS
  private:
-#endif
   unsigned num_rows{0};   // Number of rows
   unsigned num_cols{0};   // Number of columns
   T** data{nullptr};      // Pointer to the vnl_matrix

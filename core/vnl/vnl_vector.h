@@ -483,9 +483,7 @@ class VNL_EXPORT vnl_vector
   void assert_finite_internal() const;
   void destroy();
 
-#if ! VXL_USE_HISTORICAL_PROTECTED_IVARS
  private:
-#endif
   size_t num_elmts{0};   // Number of elements (length)
   T* data{nullptr};      // Pointer to the actual data
   bool m_LetArrayManageMemory{true};

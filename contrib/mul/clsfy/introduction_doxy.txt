@@ -1,8 +1,0 @@
-// The following text is included in the main documentation page by doxygen
-/*! \mainpage clsfy - Various statistical classifiers.
-*
-* Code is divided into builders and classifiers, with full polymorphism over both trees,
-* as per the builder-model pattern.
-*
-* There is code to build and use linear, K-Nearest Neighbour, and Parzen Window classifiers
-*/

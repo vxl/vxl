@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<bvxmUpdateEdgesProcess>
-<edt_gaussian_sigma desc="edt_gaussian_sigma" type="double" value="2.0" />
-<edt_image_mean_scale desc="edt_image_mean_scale" type="double" value="0.5" />
-</bvxmUpdateEdgesProcess>

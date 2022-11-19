@@ -1,5 +1,0 @@
-add_executable( vil3d_algo_test_include test_include.cxx )
-target_link_libraries( vil3d_algo_test_include vil3d_algo)
-
-add_executable( vil3d_algo_test_template_include test_template_include.cxx )
-target_link_libraries( vil3d_algo_test_template_include vil3d_algo)

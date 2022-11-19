@@ -1,3 +1,0 @@
-@chapsummary
-Image Processing should be easier than Computer Vision.
-@endchapsummary

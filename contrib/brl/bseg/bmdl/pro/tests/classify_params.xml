@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<bmdlClassifyProcess>
-  <ground_threshold desc="ground threshold" type="float" value="2.0" />
-  <vegetation_threshold desc="vegetation threshold" type="float" value="1.0"/>
-  <area_threshold desc="area threshold" type="float" value="6" />
-  <height_resolution desc="height_resolution" type="float" value="0.5" />
-</bmdlClassifyProcess>

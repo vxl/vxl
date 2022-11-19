@@ -78,6 +78,9 @@ SET(VXL_LIBRARY_PROPERTIES ${VXL_LIBRARY_PROPERTIES} VERSION "${VXL_VERSION}"
 include(CMakeDependentOption)
 include(${CMAKE_CURRENT_SOURCE_DIR}/config/cmake/VXLInitializeBuildType.cmake)
 
+find_package (Eigen3 3.4 REQUIRED NO_MODULE)
+
+
 #Disable overzealous compiler warning.  If the definition is truely missing a link error will be created.
 include(CheckCXXCompilerFlag)
 #CHECK_CXX_COMPILER_FLAG(-Wno-undefined-var-template HAS_NO_UNDEFINED_VAR_TEMPLATE)
@@ -172,15 +175,6 @@ option( VXL_LEGACY_FUTURE_REMOVE "Disable features and cause errors for code dep
 mark_as_advanced(VXL_LEGACY_FUTURE_REMOVE)
 option(VXL_RUN_FAILING_TESTS "Enable long-time failing tests. If tests are failing for a long time, turn them off by default." OFF)
 mark_as_advanced(VXL_RUN_FAILING_TESTS)
-# Historically VXL implicitly converts between vnl_vector_fixed and vnl_vector or vnl_vector_ref ( & matrix types too),
-# when VXL_USE_HISTORICAL_IMPLICIT_CONVERSIONS:BOOL=OFF, require explicit conversions to occur, this simplifies finding
-# performance eating conversions by having the compiler throw errors until an explicit conversion is put into place.
-option(VXL_USE_HISTORICAL_IMPLICIT_CONVERSIONS "Set backwards compatible implicit conversion of types without warning or error when ON" ON)
-mark_as_advanced(VXL_USE_HISTORICAL_IMPLICIT_CONVERSIONS)
-# Historically the member variables for vnl_vector and vnl_matrix have been protected.  When VXL_USE_HISTORICAL_PROTECTED_IVARS:BOOL=ON
-# the ivars will be protected, when VXL_USE_HISTORICAL_PROTECTED_IVARS:BOOL=OFF the ivars will be private.
-option(VXL_USE_HISTORICAL_PROTECTED_IVARS "Set backwards compatible exposure of data members (instead of private members)" ON)
-mark_as_advanced(VXL_USE_HISTORICAL_PROTECTED_IVARS)
 
 # Option to build Windows Unicode support, the string
 # type of which is wchar_t, each character is a 16-bit unsigned integer.
@@ -275,7 +269,7 @@ endif()
 #-------------------------------------------------------------------
 #-- BUILD SELECTION OPTIONS
 # Options for selecting the core core libraries
-option( VXL_BUILD_CORE_NUMERICS_ONLY "Turn off everything except the core numerics" OFF)
+option( VXL_BUILD_CORE_NUMERICS_ONLY "Turn off everything except the core numerics" ON)
 mark_as_advanced(VXL_BUILD_CORE_NUMERICS_ONLY)
 option( VXL_BUILD_CORE_NUMERICS "Build VXL's numerics libraries" ON )
 CMAKE_DEPENDENT_OPTION( VXL_BUILD_CORE_GEOMETRY "Build VXL's geometry libraries" ON "NOT VXL_BUILD_CORE_NUMERICS_ONLY" OFF)
@@ -291,10 +285,10 @@ mark_as_advanced(VXL_BUILD_EXAMPLES)
 option( VXL_BUILD_NONDEPRECATED_ONLY "Build only nondeprecated libraries (Experimental)" ON )
 mark_as_advanced(VXL_BUILD_NONDEPRECATED_ONLY)
 
-CMAKE_DEPENDENT_OPTION(VXL_BUILD_CORE_PROBABILITY "Build VXL's probability libraries (Experimental)" ON
+CMAKE_DEPENDENT_OPTION(VXL_BUILD_CORE_PROBABILITY "Build VXL's probability libraries (Experimental)" OFF
                        "VXL_BUILD_CORE_NUMERICS;NOT VXL_BUILD_CORE_NUMERICS_ONLY" OFF)
 
-option(VXL_USE_GEOTIFF "Use the GEOTIFF Library if available" ON)
+option(VXL_USE_GEOTIFF "Use the GEOTIFF Library if available" OFF)
 mark_as_advanced(VXL_USE_GEOTIFF)
 
 # Build the core vxl + support libraries
@@ -303,10 +297,10 @@ add_subdirectory(v3p)
 add_subdirectory(core)
 
 # Optionally build the contributed libraries
-if( EXISTS ${CMAKE_CURRENT_LIST_DIR}/contrib/CMakeLists.txt )
-  CMAKE_DEPENDENT_OPTION(VXL_BUILD_CONTRIB "Build the contributed libraries?" OFF "VXL_BUILD_CORE_GEOMETRY;VXL_BUILD_CORE_NUMERICS;VXL_BUILD_CORE_UTILITIES;VXL_BUILD_CORE_SERIALISATION;VXL_BUILD_CORE_IMAGING;NOT VXL_BUILD_CORE_NUMERICS_ONLY" OFF)
-  add_subdirectory(contrib)
-endif()
+#if( EXISTS ${CMAKE_CURRENT_LIST_DIR}/contrib/CMakeLists.txt )
+#  CMAKE_DEPENDENT_OPTION(VXL_BUILD_CONTRIB "Build the contributed libraries?" OFF "VXL_BUILD_CORE_GEOMETRY;VXL_BUILD_CORE_NUMERICS;VXL_BUILD_CORE_UTILITIES;VXL_BUILD_CORE_SERIALISATION;VXL_BUILD_CORE_IMAGING;NOT VXL_BUILD_CORE_NUMERICS_ONLY" OFF)
+#  add_subdirectory(contrib)
+#endif()
 
 # Generate Project files dependacy generation for now for downstream packages
 

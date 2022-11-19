@@ -1,4 +1,0 @@
-add_executable( bvpl_functors_test_include test_include.cxx )
-target_link_libraries( bvpl_functors_test_include bvpl_functors)
-add_executable( bvpl_functors_test_template_include test_template_include.cxx )
-target_link_libraries( bvpl_functors_test_template_include bvpl_functors)

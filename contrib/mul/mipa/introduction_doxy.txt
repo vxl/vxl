@@ -1,6 +1,0 @@
-// The following text is included in the main documentation page by doxygen
-/*! \mainpage mipa : Manchester Image Processing Algorithms
-* Functions and classes to do various sorts of pixel twiddling.
-* Includes algorithms which are a bit too specialised to go into
-* vil/algo or vimt/algo
-*/

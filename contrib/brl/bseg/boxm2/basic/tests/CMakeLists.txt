@@ -1,4 +1,0 @@
-add_executable( boxm2_basic_test_include test_include.cxx )
-target_link_libraries( boxm2_basic_test_include boxm2_basic )
-add_executable( boxm2_basic_test_template_include test_template_include.cxx )
-target_link_libraries( boxm2_basic_test_template_include boxm2_basic )

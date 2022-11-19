@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<bvplCreateEdge2dKernelProcess>
-<height type="unsigned" value="5" />
-<width type="unsigned" value="5" />
-<axis_x type="float" value="1" />
-<axis_y type="float" value="0" />
-<axis_z type="float" value="0" />
-<angle type="float" value="0" />
-</bvplCreateEdge2dKernelProcess>

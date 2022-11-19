@@ -1,6 +1,0 @@
-// The following text is included in the main documentation page by doxygen
-/*! \mainpage ouml : Miscellaneous things.
- *  - eigenfaces : simple eigenfaces implementation
- *  - image_database : associates images and labels, useful for recognition type tasks.
- *  - polygon_mesh : a simple 3D polygon mesh for display.
-*/

@@ -1,3 +1,0 @@
-// The following text is included in the main documentation page by doxygen
-/*! \mainpage bapl : Brown Affine Patch Library
-*/
