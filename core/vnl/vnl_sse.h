@@ -20,13 +20,6 @@
 #include "vnl_alloc.h"  // is SSE enabled
 #include "vnl/vnl_export.h"
 
-// some caveats...
-// - Due to the way vnl_matrix is represented in memory cannot guarantee 16-byte alignment,
-//   therefore have to use slower unaligned loading intrinsics for matrices.
-// - The GCC 3.4 intrinsics seem to be horrendously slow...
-
-
-
 // Try and use compiler instructions for forcing inlining if possible
 // Also instruction for aligning stack memory is compiler dependent
 #if defined(__GNUC__)
@@ -45,17 +38,10 @@
 #endif
 
 
-
 # define VNL_SSE_HEAP_STORE(pf) _mm_storeu_##pf
 # define VNL_SSE_HEAP_LOAD(pf) _mm_loadu_##pf
-# if VNL_CONFIG_THREAD_SAFE
 #   define VNL_SSE_ALLOC(n,s,a) new char[(n)*(s)]
 #   define VNL_SSE_FREE(v,n,s) (delete [] static_cast<char*>(v))
-# else
-#   define VNL_SSE_ALLOC(n,s,a) vnl_alloc::allocate((n == 0) ? 8 : (n * s));
-#   define VNL_SSE_FREE(v,n,s) if (v) vnl_alloc::deallocate(v, (n == 0) ? 8 : (n * s));
-# endif
-
 
 // Stack memory can be aligned -> use SSE aligned store
 #ifndef VNL_SSE_STACK_STORE
@@ -88,7 +74,6 @@ VNL_SSE_FORCE_INLINE void vnl_sse_dealloc(void* mem, std::size_t n, unsigned siz
 #undef VNL_SSE_FORCE_INLINE
 #define VNL_SSE_FORCE_INLINE
 #endif
-
 
 //: Bog standard (no sse) implementation for non sse enabled hardware and any type which doesn't have a template specialisation.
 template <class T>
@@ -194,6 +179,4 @@ class VNL_EXPORT vnl_sse
     return idx;
   }
 };
-
-
 #endif // vnl_sse_h_

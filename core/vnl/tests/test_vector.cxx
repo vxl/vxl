@@ -565,8 +565,6 @@ vnl_vector_test_float()
     TEST("v.arg_min()", v.arg_min(), 0);
   }
 
-  // We should test odd sized vector's for the special SSE2 handling of
-  // different sizes.
   {
     float vvalues[] = { -7, -2, -3, -4, 5 };
     vnl_vector<float> v(5, 5, vvalues);

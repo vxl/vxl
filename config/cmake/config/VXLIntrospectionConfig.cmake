@@ -425,30 +425,6 @@ PERFORM_CHECK_C_HEADER(sys/times.h VCL_HAS_SYS_TIME_H)
 PERFORM_CHECK_C_HEADER(sys/types.h VCL_HAS_SYS_TYPES_H)
 PERFORM_CHECK_C_HEADER(unistd.h   VCL_HAS_UNISTD_H)
 
-# check for hardware support for sse2 with the current compiler flags
-PERFORM_CMAKE_TEST_RUN(${VXL_PLFM_TEST_FILE} VXL_HAS_SSE2_HARDWARE_SUPPORT)
-
-# if no support right now, see if the support exists if some flags
-# are added.  This can be used to give the user some useful info.
-if(NOT VXL_HAS_SSE2_HARDWARE_SUPPORT)
-  # -msse2 flags are the default on 64 bit systems,
-  # so the following is only relavant for 32 bit systems
-  if(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_SIZEOF_VOID_P EQUAL 4)
-    set(VXL_SSE_TEST_FLAG_BACKUP ${CMAKE_REQUIRED_FLAGS})
-    set(CMAKE_REQUIRED_FLAGS " -msse2 ${VXL_SSE_TEST_FLAG_BACKUP} ")
-    PERFORM_CMAKE_TEST_RUN(${VXL_PLFM_TEST_FILE} VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE)
-    set( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE_HELP
-      "The current compiler flags do not allow the SSE2 instructions to be used. "
-      "It looks like if you add the flag '-msse2' you will be able to use the "
-      "SSE2 instructions. If you make this change and still see this message, "
-      " you may need to set VXL_UPDATE_CONFIGURATION to ON."
-      CACHE INTERNAL "help string for how to enable SSE2 support" )
-    set(CMAKE_REQUIRED_FLAGS ${VXL_SSE_TEST_FLAG_BACKUP})
-    unset(VXL_SSE_TEST_FLAG_BACKUP)
-  endif()
-endif()
-
-
 #
 # Check for aligned dynamic memory allocation support, useful for sse
 #

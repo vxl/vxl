@@ -42,22 +42,10 @@
 #endif
 #include "dll.h"
 #include <vxl_config.h>
-#include <vnl/vnl_config.h> // for VNL_CONFIG_ENABLE_SSE2_ROUNDING
+
 #include <vnl/vnl_export.h>
 #ifdef VNL_CHECK_FPU_ROUNDING_MODE
 #include <cassert>
-#endif
-
-// Figure out when the fast implementation can be used
-#if VNL_CONFIG_ENABLE_SSE2_ROUNDING && defined(__SSE2__)
-# if !VXL_HAS_EMMINTRIN_H
-#   error "Required file emmintrin.h for SSE2 not found"
-# else
-#   include <emmintrin.h> // sse 2 intrinsics
-#   define USE_SSE2_IMPL 1
-# endif
-#else
-# define USE_SSE2_IMPL 0
 #endif
 
 // Turn on fast impl when using GCC on Intel-based machines with the following exception:
@@ -216,34 +204,8 @@ namespace vnl_math
 #endif
   using std::hypot;
 
-#if USE_SSE2_IMPL // Fast sse2 implementation
 
-// rnd_halfinttoeven  -- round towards nearest integer
-//         halfway cases are rounded towards the nearest even integer, e.g.
-//         rnd_halfinttoeven( 1.5) ==  2
-//         rnd_halfinttoeven(-1.5) == -2
-//         rnd_halfinttoeven( 2.5) ==  2
-//         rnd_halfinttoeven( 3.5) ==  4
-//
-// We assume that the rounding mode is not changed from the default
-// one (or at least that it is always restored to the default one).
-inline int rnd_halfinttoeven(float  x)
-{
-# if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-  assert(fegetround()==FE_TONEAREST);
-# endif
-  return _mm_cvtss_si32(_mm_set_ss(x));
-}
-
-inline int rnd_halfinttoeven(double  x)
-{
-# if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-  assert(fegetround()==FE_TONEAREST);
-# endif
-  return _mm_cvtsd_si32(_mm_set_sd(x));
-}
-
-#elif GCC_USE_FAST_IMPL // Fast gcc asm implementation
+#if GCC_USE_FAST_IMPL // Fast gcc asm implementation
 
 inline int rnd_halfinttoeven(float  x)
 {
@@ -328,7 +290,7 @@ inline int rnd_halfinttoeven(double x)
 #endif
 
 
-#if USE_SSE2_IMPL || GCC_USE_FAST_IMPL || VC_USE_FAST_IMPL
+#if GCC_USE_FAST_IMPL || VC_USE_FAST_IMPL
 
 // rnd_halfintup  -- round towards nearest integer
 //         halfway cases are rounded upward, e.g.
@@ -360,7 +322,7 @@ inline int rnd_halfintup(double x)
 
 #endif
 
-#if  USE_SSE2_IMPL || GCC_USE_FAST_IMPL || VC_USE_FAST_IMPL
+#if GCC_USE_FAST_IMPL || VC_USE_FAST_IMPL
 // rnd  -- round towards nearest integer
 //         halfway cases such as 0.5 may be rounded either up or down
 //         so as to maximize the efficiency, e.g.
@@ -381,31 +343,7 @@ inline int rnd(double x) { return x>=0.0?static_cast<int>(x+0.5):static_cast<int
 
 #endif
 
-#if  USE_SSE2_IMPL // Fast sse2 implementation
-// floor -- round towards minus infinity
-//
-// Be careful: argument absolute value must be less than INT_MAX/2
-// for floor to be guaranteed to work.
-// We also assume that the rounding mode is not changed from the default
-// one (or at least that it is always restored to the default one).
-
-inline int floor(float  x)
-{
-# if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-  assert(fegetround()==FE_TONEAREST);
-# endif
-   return _mm_cvtss_si32(_mm_set_ss(2*x-.5f))>>1;
-}
-
-inline int floor(double  x)
-{
-# if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-  assert(fegetround()==FE_TONEAREST);
-# endif
-   return _mm_cvtsd_si32(_mm_set_sd(2*x-.5))>>1;
-}
-
-#elif GCC_USE_FAST_IMPL // Fast gcc asm implementation
+#if GCC_USE_FAST_IMPL // Fast gcc asm implementation
 
 inline int floor(float  x)
 {
@@ -468,31 +406,7 @@ inline int floor(double x)
 #endif
 
 
-#if  USE_SSE2_IMPL // Fast sse2 implementation
-// ceil -- round towards plus infinity
-//
-// Be careful: argument absolute value must be less than INT_MAX/2
-// for ceil to be guaranteed to work.
-// We also assume that the rounding mode is not changed from the default
-// one (or at least that it is always restored to the default one).
-
-inline int ceil(float  x)
-{
-# if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-  assert(fegetround()==FE_TONEAREST);
-# endif
-   return -(_mm_cvtss_si32(_mm_set_ss(-.5f-2*x))>>1);
-}
-
-inline int ceil(double  x)
-{
-# if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-  assert(fegetround()==FE_TONEAREST);
-# endif
-   return -(_mm_cvtsd_si32(_mm_set_sd(-.5-2*x))>>1);
-}
-
-#elif GCC_USE_FAST_IMPL // Fast gcc asm implementation
+#if GCC_USE_FAST_IMPL // Fast gcc asm implementation
 
 inline int ceil(float  x)
 {

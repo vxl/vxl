@@ -231,8 +231,7 @@ test_alignment_type()
   std::cout << "*****************************************************\n"
             << "Testing vnl_sse alignment issues in with type " << typeid(float).name() << '\n'
             << "*****************************************************\n"
-            << '\n'
-            << std::endl;
+            << '\n' << std::endl;
 
   // Set up random data arrays.
   constexpr unsigned ndata = 13; // not a multiple of 2
