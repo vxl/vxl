@@ -10,24 +10,10 @@ doxygen_add_library(core/vnl
 # Create vnl_config.h
 option(VNL_CONFIG_CHECK_BOUNDS
   "Whether vnl_vector/vnl_matrix accessor methods check index bounds." ON)
-option(VNL_CONFIG_THREAD_SAFE
-  "Whether thread-safe vnl implementations are used." ON)
 
 mark_as_advanced(
   VNL_CONFIG_CHECK_BOUNDS
-  VNL_CONFIG_THREAD_SAFE
   )
-# Need to enforce 1/0 values for configuration.
-if(VNL_CONFIG_CHECK_BOUNDS)
-  set(VNL_CONFIG_CHECK_BOUNDS 1)
-else()
-  set(VNL_CONFIG_CHECK_BOUNDS 0)
-endif()
-if(VNL_CONFIG_THREAD_SAFE)
-  set(VNL_CONFIG_THREAD_SAFE 1)
-else()
-  set(VNL_CONFIG_THREAD_SAFE 0)
-endif()
 # If VXL_INSTALL_INCLUDE_DIR is the default value
 if("${VXL_INSTALL_INCLUDE_DIR}" STREQUAL "include/vxl")
   set(_config_install_dir ${VXL_INSTALL_INCLUDE_DIR}/core/vnl)

@@ -10,7 +10,4 @@
 // This is not intended to also control \e size checks when doing matrix-vector arithmetic.
 #define VNL_CONFIG_CHECK_BOUNDS   @VNL_CONFIG_CHECK_BOUNDS@
 
-//: Set to 0 if you don't need thread safe code (and use a more efficient alloc).
-#define VNL_CONFIG_THREAD_SAFE    @VNL_CONFIG_THREAD_SAFE@
-
 #endif
