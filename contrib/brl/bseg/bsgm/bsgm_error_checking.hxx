@@ -399,7 +399,7 @@ void bsgm_compute_invalid_map(
     img_stop_x = target_window.max_x();
     img_stop_y = target_window.max_y();
   }
-
+  
   // the x coordinate of the left-most possible reference pixel mapped to from the target
   int img_ref_start_x = std::max(0, img_start_x + min_disparity);
 
@@ -418,12 +418,13 @@ void bsgm_compute_invalid_map(
 
     // Fill in the left border
     for (int invalid_x = 0, img_x = img_start_x; invalid_x < w; invalid_x++, img_x++) {
-      if (img_tar(img_x, img_y) == border_val)
-        invalid_tar(invalid_x, invalid_y) = true;
+        if (img_tar(img_x, img_y) == border_val) {
+            invalid_tar(invalid_x, invalid_y) = true;
+       }
       else
         break;
     } //x
-
+    
     // Fill in the right border
     for (int invalid_x = w - 1, img_x = img_stop_x - 1; invalid_x >= 0; invalid_x--, img_x--) {
       if (img_tar(img_x, img_y) == border_val)
@@ -432,7 +433,13 @@ void bsgm_compute_invalid_map(
         break;
     } //x
   } //y
-
+#if 0 // for debug
+  vil_image_view<vxl_byte> tar_vis(w, h);
+  for (int y = 0; y < h; y++)
+      for (int x = 0; x < w; x++)
+          tar_vis(x, y) = invalid_tar(x, y) ? 255 : 0;
+  vil_save( vis, "D:/tests/WorldCup/AOI4/debug/invalid.png" );
+#endif
   // Find the border in the reference image
   for (int invalid_y = 0, img_y = img_start_y; invalid_y < h; invalid_y++, img_y++) {
 
@@ -448,7 +455,7 @@ void bsgm_compute_invalid_map(
     // Mask any pixels in the target image which map into the left border
     for (int invalid_x = 0; invalid_x < std::min(w, lb_invalid); invalid_x++)
       invalid_tar(invalid_x, invalid_y) = true;
-
+   
     // Find the right border
     int rb_ref = img_ref_stop_x - 1;
     for ( ; rb_ref >= img_ref_start_x; rb_ref--)
@@ -457,17 +464,17 @@ void bsgm_compute_invalid_map(
 
     int rb_target = rb_ref - max_disparity;
     int rb_invalid = rb_target - img_start_x;
-
+    
     // Mask any pixels in the target image which map into the right border
     for (int invalid_x = w - 1; invalid_x > std::max(0, rb_invalid); invalid_x--)
       invalid_tar(invalid_x, invalid_y) = true;
+    
   } //y
-
-  //vil_image_view<vxl_byte> vis( w_, h_ );
-  //for( int y = 0; y < h_; y++ )
-  //  for( int x = 0; x < w_; x++ )
-  //    vis(x,y) = invalid_tar(x,y) ? 255 : 0;
-  //vil_save( vis, "D:/results/sattel/invalid.png" );
+  
+  vil_image_view<vxl_byte> vis( w, h );
+  for( int y = 0; y < h; y++ )
+    for( int x = 0; x < w; x++ )
+      vis(x,y) = invalid_tar(x,y) ? 255 : 0;
 }
 
 //: Fill in disparity pixels flagged as errors via multi-directional

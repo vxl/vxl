@@ -144,6 +144,7 @@ struct pairwise_params
 
   int shadow_high_ = 150;
 
+  int disparity_search_margin_ = 100;
 };
 
 
@@ -268,6 +269,11 @@ class bsgm_prob_pairwise_dsm
   void params(pairwise_params const& params) {params_ = params;}
   pairwise_params params() const { return params_; }
 
+  //: specification of maximum height(m) in local coordinates
+  //  min_height assumed 0
+  void max_height(float height) {max_height_ = height;}
+  float max_height() const {return max_height_;}
+
   //: minimum disparity to start search along an epipolar line
   void min_disparity(int min_disparity) {min_disparity_ = min_disparity;}
   int min_disparity() const { return min_disparity_; }
@@ -359,6 +365,13 @@ class bsgm_prob_pairwise_dsm
   //  rectification must be executed before calling
   void set_shadow_context_data();
 
+  //: rectification must be performed first
+  //  uses the rectified camera models to determine
+  //  required disparity range. Overrides range set by
+  //  ::min_disparity and ::max_disparity methods
+  //  Only called when sgm_params multi_scale_mode = 2
+  void compute_min_max_disparity_from_height();
+
   //: compute disparities
   // fwd: arg order rectified image0:image1
   // rev: arg order rectified image1:image0
@@ -393,6 +406,12 @@ class bsgm_prob_pairwise_dsm
     }
     // rectification
     this->rectify();
+
+    // determine disparity range for individual pairs
+    // depends on view angle separation and max_height_
+    // used when a large height range must be searched
+    if(params_.multi_scale_mode_ == 2)
+      this->compute_min_max_disparity_from_height();
 
     // shadow weighted dynamic program
     // and other context uses
@@ -564,6 +583,9 @@ class bsgm_prob_pairwise_dsm
   size_t rect_nj_;
   int min_disparity_ = -100;
   int max_disparity_ = 100;
+  float min_height_ = 0.0;
+  float max_height_ = 150.0;//meters
+
 
   double mid_z_ = NAN;
   double z_vs_disp_scale_ = 1.0;
