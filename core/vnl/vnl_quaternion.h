@@ -132,7 +132,7 @@ class VNL_EXPORT vnl_quaternion : public vnl_vector_fixed<T, 4>
   inline T real() const { return (*this)[3]; }
 
   //: Copies and returns the imaginary part.
-  inline vnl_vector_fixed<T,3> imaginary() const { return this->extract(3,0); }
+  inline vnl_vector_fixed<T,3> imaginary() const { return vnl_vector_fixed<T,3>(this->extract(3,0)); }
 
   //: Axis of rotation.
   // \note Axis not well defined for theta==0. In such a case (or if provided axis==(0,0,0)), this function returns (0,0,1).

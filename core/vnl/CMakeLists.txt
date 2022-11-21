@@ -45,7 +45,6 @@ set( vnl_sources
   vnl_sparse_matrix.hxx        vnl_sparse_matrix.h
   vnl_matrix_exp.hxx           vnl_matrix_exp.h
   vnl_file_matrix.hxx          vnl_file_matrix.h
-  vnl_sym_matrix.hxx           vnl_sym_matrix.h
 
   # matrix operators
   vnl_fortran_copy.hxx         vnl_fortran_copy.h
@@ -85,10 +84,6 @@ set( vnl_sources
 
   # Quaternions
   vnl_quaternion.hxx           vnl_quaternion.h
-  # Rational number arithmetic; represented by two long integers
-  vnl_rational.cxx             vnl_rational.h
-  # Arbitrary precision integers
-  vnl_bignum.cxx               vnl_bignum.h
   # Arbitrary precision decimal numbers
   vnl_decnum.cxx               vnl_decnum.h
   # Finite field and finite ring numbers and arithmetic
@@ -103,9 +98,7 @@ set( vnl_sources
   # traits
   vnl_numeric_traits.cxx       vnl_numeric_traits.h
                                vnl_complex_traits.h
-  vnl_bignum_traits.cxx        vnl_bignum_traits.h
   vnl_decnum_traits.cxx        vnl_decnum_traits.h
-  vnl_rational_traits.cxx      vnl_rational_traits.h
 
   # matrix and vector specialisations
   vnl_int_matrix.cxx           vnl_int_matrix.h

@@ -54,7 +54,8 @@ T vnl_determinant(vnl_matrix<T> const &M, bool balance = false);
 template <class T, unsigned m, unsigned n>
 inline T vnl_determinant(vnl_matrix_fixed<T,m,n> const &M, bool balance = false)
 {
-  return vnl_determinant( M.as_ref(), balance );
+  const vnl_matrix<T> m_matrix{M};
+  return vnl_determinant( m_matrix, balance );
 }
 
 

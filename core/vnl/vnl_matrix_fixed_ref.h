@@ -146,6 +146,7 @@
 #include "vnl_matrix_fixed.h"
 #include "vnl_vector_fixed.h"
 #include "vnl_vector_fixed_ref.h"
+#include "vnl_diag_matrix.h"
 #include "vnl_c_vector.h"
 #include "vnl/vnl_export.h"
 
@@ -185,20 +186,20 @@ class VNL_EXPORT vnl_matrix_fixed_ref_const
   {
   }
   //: Get j-th row
-  vnl_vector_fixed<T,num_rows> get_row(unsigned row_index) const
+  vnl_vector_fixed<T,num_cols> get_row(unsigned row_index) const
   {
-    vnl_vector<T> v(num_cols);
+    vnl_vector_fixed<T, num_cols> v;
     for (unsigned int j = 0; j < num_cols; j++)    // For each element in row
-      v[j] = (*this)(row_index,j);
+      v[j] = this->data_block()[ row_index* num_cols + j];
     return v;
   }
 
   //: Get j-th column
-  vnl_vector_fixed<T,num_cols> get_column(unsigned column_index) const
+  vnl_vector_fixed<T,num_rows> get_column(unsigned column_index) const
   {
-    vnl_vector<T> v(num_rows);
+    vnl_vector_fixed<T, num_rows> v;
     for (unsigned int j = 0; j < num_rows; j++)
-      v[j] = (*this)(j,column_index);
+      v[j] = this->data_block()[ j* num_cols + column_index];
     return v;
   }
 
@@ -424,10 +425,10 @@ class VNL_EXPORT vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_
   // Basic 2D-Array functionality-------------------------------------------
 
   //: set element
-  void put (unsigned r, unsigned c, T const& v) { (*this)(r,c) = v; }
+  void put (unsigned r, unsigned c, T const& v) { this->operator()(r,c) = v; }
 
   //: get element
-  T    get (unsigned r, unsigned c) const { return (*this)(r,c); }
+  T    get (unsigned r, unsigned c) const { return *(data_block() + num_cols * r + c); }
 
   //: return pointer to given row
   // No boundary checking here.
@@ -766,6 +767,24 @@ class VNL_EXPORT vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_
 template<class T, unsigned m, unsigned n>
 inline
 vnl_matrix_fixed<T,m,n> operator+( const vnl_matrix_fixed_ref_const<T,m,n>& mat1, const vnl_matrix_fixed_ref_const<T,m,n>& mat2 )
+{
+  vnl_matrix_fixed<T,m,n> r;
+  vnl_matrix_fixed<T,m,n>::add( mat1.data_block(), mat2.data_block(), r.data_block() );
+  return r;
+}
+
+template<class T, unsigned m, unsigned n>
+inline
+  vnl_matrix_fixed<T,m,n> operator+( const vnl_matrix_fixed_ref_const<T,m,n>& mat1, const vnl_matrix_fixed<T,m,n>& mat2 )
+{
+  vnl_matrix_fixed<T,m,n> r;
+  vnl_matrix_fixed<T,m,n>::add( mat1.data_block(), mat2.data_block(), r.data_block() );
+  return r;
+}
+
+template<class T, unsigned m, unsigned n>
+inline
+  vnl_matrix_fixed<T,m,n> operator+( const vnl_matrix_fixed_ref_const<T,m,n>& mat1, const vnl_diag_matrix<T>& mat2 )
 {
   vnl_matrix_fixed<T,m,n> r;
   vnl_matrix_fixed<T,m,n>::add( mat1.data_block(), mat2.data_block(), r.data_block() );

@@ -2,6 +2,9 @@
 #include <limits>
 #include <typeinfo>
 #include <iostream>
+#include <iomanip>
+#include <sstream>
+
 #include "vnl/vnl_matrix.h"
 #include "vnl/vnl_vector.h"
 #include "vnl/vnl_matrix_ref.h"
@@ -127,21 +130,22 @@ test_vector_x_matrix(const vnl_vector<float> & vec, const vnl_matrix<float> & ma
 inline bool
 test_sum(const vnl_vector<float> & vec)
 {
-  float val = vec.sum();
-  unsigned n = vec.size();
+  const float val = vec.sum();
+  const unsigned n = vec.size();
   float correct(0);
   for (unsigned i = 0; i < n; ++i)
     correct += vec(i);
 
-  float err = std::abs(correct - val);
-  float neps = float(n) * std::numeric_limits<float>::epsilon();
+  const float err = std::abs(correct - val);
+  //const float neps = static_cast<float>(n) * 2.0*std::numeric_limits<float>::epsilon();
+  constexpr float neps = 1e-5;
   if (err < neps)
-    return true;
-  else
   {
-    std::cout << "sum: err: " << err << " n*eps: " << neps << std::endl;
-    return false;
+    return true;
   }
+  std::cout << vec << std::endl;
+  std::cout << std::setprecision(15) << "sum: err: " << err << " n*eps: " << neps << "\t" << correct << "!=" << val <<  std::endl;
+  return false;
 }
 
 inline bool
@@ -239,7 +243,8 @@ test_alignment_type()
   float vector_data[ndata];
   float result_data[ndata];
 
-  vnl_random rng;
+  vnl_random rng(123456789);
+  rng.reseed(123456789);
   for (unsigned int i = 0; i < ndata; ++i)
   {
     vector_data[i] = static_cast<float>(1.0 + 2.0 * rng.normal64());
@@ -247,23 +252,53 @@ test_alignment_type()
       matrix_data[i * ndata + j] = static_cast<float>(1.0 + 2.0 * rng.normal64());
   }
 
+
   for (unsigned nv = 3; nv < 8; ++nv) // different matrix/vector sizes
   {
     for (unsigned m = 0; m + nv < ndata; ++m)     // different matrix offsets
       for (unsigned v = 0; v + nv < ndata; ++v)   // different vector offsets
         for (unsigned r = 0; r + nv < ndata; ++r) // different result offsets
         {
-          std::cout << "vector size: " << nv << " matrix offset: " << m << " vector offset: " << v
-                    << " result offset: " << r << std::endl;
-          const vnl_matrix_ref<float> mat(nv, nv, matrix_data + m);
-          const vnl_vector_ref<float> vec2(nv, matrix_data + m);
-          const vnl_vector_ref<float> vec(nv, vector_data + v);
-          vnl_vector_ref<float> result(nv, result_data + r);
-          bool rvtest = test_element_product(vec, vec2, result) && test_dot_product(vec, vec2) &&
-                        test_euclid_dist_sq(vec, vec2) && test_matrix_x_vector(mat, vec, result) &&
-                        test_vector_x_matrix(vec, mat, result) && test_sum(vec) && test_max(vec) && test_min(vec) &&
-                        test_arg_max(vec) && test_arg_min(vec);
-          TEST("SSE", rvtest, true);
+          std::stringstream s;
+          s << "vector size: " << nv << " matrix offset: " << m << " vector offset: " << v
+                    << " result offset: " << r << ": ";
+          const vnl_matrix<float> mat(matrix_data + m, nv, nv);
+          const vnl_vector<float> vec2(matrix_data + m, nv);
+          const vnl_vector<float> vec(vector_data + v, nv);
+          vnl_vector<float> result(result_data + r,nv);
+
+          bool rvtest = true;
+          rvtest &= test_element_product(vec, vec2, result);
+          if(!rvtest)
+            s << "test_element_product ";
+          rvtest &= test_dot_product(vec, vec2);
+          if(!rvtest)
+            s << "test_dot_product ";
+          rvtest &= test_euclid_dist_sq(vec, vec2);
+          if(!rvtest)
+            s << "test_euclid_dist_sq ";
+          rvtest &= test_matrix_x_vector(mat, vec, result);
+          if(!rvtest)
+            s << "test_matrix_x_vector ";
+          rvtest &= test_vector_x_matrix(vec, mat, result);
+          if(!rvtest)
+            s << "test_vector_x_matrix ";
+          rvtest &= test_sum(vec);
+          if(!rvtest)
+            s << "test_sum ";
+          rvtest &= test_max(vec);
+          if(!rvtest)
+            s << "test_max ";
+          rvtest &= test_min(vec);
+          if(!rvtest)
+            s << "test_min ";
+          rvtest &= test_arg_max(vec);
+          if(!rvtest)
+            s << "test_arg_max ";
+          rvtest &= test_arg_min(vec);
+          if(!rvtest)
+            s << "test_arg_min ";
+          TEST((std::string("SSE")+s.str()).c_str(), rvtest, true);
         }
   }
 }

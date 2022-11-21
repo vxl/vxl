@@ -25,7 +25,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::fill (T value) const
 {
   for (unsigned int i = 0; i < nrows; i++)
     for (unsigned int j = 0; j < ncols; j++)
-      (*this)(i,j) = value;
+      this->operator()(i,j) = value;
   return *this;
 }
 
@@ -35,7 +35,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols> const&
 vnl_matrix_fixed_ref<T,nrows,ncols>::fill_diagonal(T value) const
 {
   for (unsigned int i = 0; i < nrows && i < ncols; i++)
-    (*this)(i,i) = value;
+    this->operator()(i,i) = value;
   return *this;
 }
 
@@ -49,7 +49,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::set_diagonal(vnl_vector<T> const& diag) con
   // the matrix's width & height; that explains the "||" in the assert,
   // and the "&&" in the upper bound for the "for".
   for (unsigned int i = 0; i < nrows && i < ncols; ++i)
-    (*this)(i,i) = diag[i];
+    this->operator()(i,i) = diag[i];
   return *this;
 }
 
@@ -60,9 +60,9 @@ vnl_matrix_fixed_ref_const<T,nrows,ncols>::print(std::ostream& os) const
 {
   for (unsigned int i = 0; i < nrows; i++)
   {
-    os << (*this)(i,0);
+    os << this->operator()(i,0);
     for (unsigned int j = 1; j < ncols; j++)
-      os << ' ' << (*this)(i,j);
+      os << ' ' << this->operator()(i,j);
     os << '\n';
   }
 }
@@ -96,7 +96,7 @@ vnl_matrix_fixed_ref_const<T,nrows,ncols>::transpose() const
   vnl_matrix_fixed<T,ncols,nrows> result;
   for (unsigned int i = 0; i < cols(); i++)
     for (unsigned int j = 0; j < rows(); j++)
-      result(i,j) = (*this)(j,i);
+      result(i,j) = this->operator()(j,i);
   return result;
 }
 
@@ -125,7 +125,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::update (vnl_matrix<T> const& m,
 #endif
   for (unsigned int i = top; i < bottom; i++)
     for (unsigned int j = left; j < right; j++)
-      (*this)(i,j) = m(i-top,j-left);
+      this->operator()(i,j) = m(i-top,j-left);
   return *this;
 }
 
@@ -145,9 +145,10 @@ vnl_matrix_fixed_ref_const<T,nrows,ncols>::extract (unsigned rowz, unsigned colz
   vnl_matrix<T> result(rowz, colz);
   for (unsigned int i = 0; i < rowz; i++)      // actual copy of all elements
     for (unsigned int j = 0; j < colz; j++)    // in submatrix
-      result(i,j) = (*this)(top+i,left+j);
+      result(i,j) = this->operator()(top+i,left+j);
   return result;
 }
+
 
 
 template<class T, unsigned nrows, unsigned ncols>
@@ -178,9 +179,9 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::set_identity() const
   // the loop. Probably worth the O(n) extra writes.
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-        (*this)(i,j) = T(0);
+        this->operator()(i,j) = T(0);
   for (unsigned int i = 0; i < nrows && i < ncols; ++i)
-    (*this)(i,i) = T(1);
+    this->operator()(i,i) = T(1);
   return *this;
 }
 
@@ -195,7 +196,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::normalize_rows() const
   {
     Abs_t norm(0); // double will not do for all types.
     for (unsigned int j = 0; j < ncols; j++)
-      norm += vnl_math::squared_magnitude( (*this)(i,j) );
+      norm += vnl_math::squared_magnitude( this->operator()(i,j) );
 
     if (norm != 0)
     {
@@ -205,7 +206,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::normalize_rows() const
       {
         // FIXME need correct rounding here
         // There is e.g. no *standard* operator*=(complex<float>, double), hence the T() cast.
-        (*this)(i,j) *= (T)(scale);
+        this->operator()(i,j) *= (T)(scale);
       }
     }
   }
@@ -220,7 +221,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::normalize_columns() const
   for (unsigned int j = 0; j < ncols; j++) {  // For each column in the Matrix
     Abs_t norm(0); // double will not do for all types.
     for (unsigned int i = 0; i < nrows; i++)
-      norm += vnl_math::squared_magnitude( (*this)(i,j) );
+      norm += vnl_math::squared_magnitude( this->operator()(i,j) );
 
     if (norm != 0)
     {
@@ -230,7 +231,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::normalize_columns() const
       {
         // FIXME need correct rounding here
         // There is e.g. no *standard* operator*=(complex<float>, double), hence the T() cast.
-        (*this)(i,j) *= (T)(scale);
+        this->operator()(i,j) *= (T)(scale);
       }
     }
   }
@@ -246,7 +247,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::scale_row(unsigned row_index, T value) cons
     vnl_error_matrix_row_index("scale_row", row_index);
 #endif
   for (unsigned int j = 0; j < ncols; j++)
-    (*this)(row_index,j) *= value;
+    this->operator()(row_index,j) *= value;
   return *this;
 }
 
@@ -259,7 +260,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::scale_column(unsigned column_index, T value
     vnl_error_matrix_col_index("scale_column", column_index);
 #endif
   for (unsigned int j = 0; j < nrows; j++)
-    (*this)(j,column_index) *= value;
+    this->operator()(j,column_index) *= value;
   return *this;
 }
 
@@ -289,7 +290,7 @@ vnl_matrix_fixed_ref_const<T,nrows,ncols>::get_n_columns (unsigned column, unsig
   vnl_matrix<T> result(nrows, n);
   for (unsigned int c = 0; c < n; ++c)
     for (unsigned int r = 0; r < nrows; ++r)
-      result(r, c) = (*this)(r,column + c);
+      result(r, c) = this->operator()(r,column + c);
   return result;
 }
 
@@ -299,7 +300,7 @@ vnl_vector<T> vnl_matrix_fixed_ref_const<T,nrows,ncols>::get_diagonal() const
 {
   vnl_vector<T> v(nrows < ncols ? nrows : ncols);
   for (unsigned int j = 0; j < nrows && j < ncols; ++j)
-    v[j] = (*this)(j,j);
+    v[j] = this->operator()(j,j);
   return v;
 }
 
@@ -310,7 +311,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols> const&
 vnl_matrix_fixed_ref<T,nrows,ncols>::set_row(unsigned row_index, T const *v) const
 {
   for (unsigned int j = 0; j < ncols; j++)
-    (*this)(row_index,j) = v[j];
+    this->operator()(row_index,j) = v[j];
   return *this;
 }
 
@@ -335,7 +336,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols> const&
 vnl_matrix_fixed_ref<T,nrows,ncols>::set_row(unsigned row_index, T v) const
 {
   for (unsigned int j = 0; j < ncols; j++)
-    (*this)(row_index,j) = v;
+    this->operator()(row_index,j) = v;
   return *this;
 }
 
@@ -346,7 +347,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols> const&
 vnl_matrix_fixed_ref<T,nrows,ncols>::set_column(unsigned column_index, T const *v) const
 {
   for (unsigned int i = 0; i < nrows; i++)
-    (*this)(i,column_index) = v[i];
+    this->operator()(i,column_index) = v[i];
   return *this;
 }
 
@@ -371,7 +372,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols> const&
 vnl_matrix_fixed_ref<T,nrows,ncols>::set_column(unsigned column_index, T v) const
 {
   for (unsigned int j = 0; j < nrows; j++)
-    (*this)(j,column_index) = v;
+    this->operator()(j,column_index) = v;
   return *this;
 }
 
@@ -390,7 +391,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::set_columns(unsigned starting_column, vnl_m
 
   for (unsigned int j = 0; j < m.cols(); ++j)
     for (unsigned int i = 0; i < nrows; i++)
-      (*this)(i,starting_column + j) = m(i,j);
+      this->operator()(i,starting_column + j) = m(i,j);
   return *this;
 }
 
@@ -404,7 +405,7 @@ vnl_matrix_fixed_ref_const<T,nrows,ncols>::is_identity() const
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
     {
-      T xm = (*this)(i,j);
+      T xm = this->operator()(i,j);
       if ( !((i == j) ? (xm == one) : (xm == zero)) )
         return false;
     }
@@ -420,7 +421,7 @@ vnl_matrix_fixed_ref_const<T,nrows,ncols>::is_identity(double tol) const
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
     {
-      T xm = (*this)(i,j);
+      T xm = this->operator()(i,j);
       abs_t absdev = (i == j) ? vnl_math::abs(xm - one) : vnl_math::abs(xm);
       if (absdev > tol)
         return false;
@@ -435,7 +436,7 @@ vnl_matrix_fixed_ref_const<T,nrows,ncols>::is_zero() const
   T const zero(0);
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      if ( !( (*this)(i, j) == zero) )
+      if ( !( this->operator()(i, j) == zero) )
         return false;
 
   return true;
@@ -447,7 +448,7 @@ vnl_matrix_fixed_ref_const<T,nrows,ncols>::is_zero(double tol) const
 {
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      if (vnl_math::abs((*this)(i,j)) > tol)
+      if (vnl_math::abs(this->operator()(i,j)) > tol)
         return false;
 
   return true;
@@ -459,7 +460,7 @@ vnl_matrix_fixed_ref_const<T,nrows,ncols>::has_nans() const
 {
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      if (vnl_math::isnan((*this)(i,j)))
+      if (vnl_math::isnan(this->operator()(i,j)))
         return true;
 
   return false;
@@ -471,7 +472,7 @@ vnl_matrix_fixed_ref_const<T,nrows,ncols>::is_finite() const
 {
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      if (!vnl_math::isfinite((*this)(i,j)))
+      if (!vnl_math::isfinite(this->operator()(i,j)))
         return false;
 
   return true;
@@ -497,7 +498,7 @@ vnl_matrix_fixed_ref_const<T,nrows,ncols>::assert_finite_internal() const
     for (unsigned int i=0; i<rows(); ++i)
     {
       for (unsigned int j=0; j<cols(); ++j)
-        std::cerr << char(vnl_math::isfinite((*this)(i, j)) ? '-' : '*');
+        std::cerr << char(vnl_math::isfinite(this->operator()(i, j)) ? '-' : '*');
       std::cerr << '\n';
     }
   }
@@ -530,7 +531,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::read_ascii(std::istream& s) const
 
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      s >> (*this)(i,j);
+      s >> this->operator()(i,j);
 
   return s.good() || s.eof();
 }
@@ -545,9 +546,9 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::flipud()
     const unsigned int r2 = nrows - 1 - r1;
     for (unsigned int c = 0; c < ncols; ++c)
     {
-      const T tmp = (*this)(r1, c);
-      (*this)(r1, c) = (*this)(r2, c);
-      (*this)(r2, c) = tmp;
+      const T tmp = this->operator()(r1, c);
+      this->operator()(r1, c) = this->operator()(r2, c);
+      this->operator()(r2, c) = tmp;
     }
   }
   return *this;
@@ -563,9 +564,9 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::fliplr()
     const unsigned int c2 = ncols - 1 - c1;
     for (unsigned int r = 0; r < nrows; ++r)
     {
-      const T tmp = (*this)(r, c1);
-      (*this)(r, c1) = (*this)(r, c2);
-      (*this)(r, c2) = tmp;
+      const T tmp = this->operator()(r, c1);
+      this->operator()(r, c1) = this->operator()(r, c2);
+      this->operator()(r, c2) = tmp;
     }
   }
   return *this;
@@ -580,7 +581,7 @@ vnl_matrix_fixed_ref_const<T,nrows,ncols>::operator_one_norm() const
   {
     abs_t t(0);
     for (unsigned int i=0; i<nrows; ++i)
-      t += vnl_math::abs( (*this)(i,j) );
+      t += vnl_math::abs( this->operator()(i,j) );
     if (t > m)
       m = t;
   }
@@ -596,7 +597,7 @@ vnl_matrix_fixed_ref_const<T,nrows,ncols>::operator_inf_norm() const
   {
     abs_t t(0);
     for (unsigned int j=0; j<ncols; ++j)
-      t += vnl_math::abs( (*this)(i,j) );
+      t += vnl_math::abs( this->operator()(i,j) );
     if (t > m)
       m = t;
   }
@@ -612,9 +613,9 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::inplace_transpose() const
   for (unsigned i = 0; i < nrows; ++i)
   for (unsigned j = i+1; j < ncols; ++j)
   {
-    T t = (*this)(i,j);
-    (*this)(i,j) = (*this)(j,i);
-    (*this)(j,i) = t;
+    T t = this->operator()(i,j);
+    this->operator()(i,j) = this->operator()(j,i);
+    this->operator()(j,i) = t;
   }
   return *this;
 }

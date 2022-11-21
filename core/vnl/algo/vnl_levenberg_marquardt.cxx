@@ -94,7 +94,7 @@ vnl_levenberg_marquardt::lmdif_lsqfun(long * n,     // I   Number of residuals
         std::cerr << ", " << x[4];
       if (*p > 5)
         std::cerr << ", ... ";
-      std::cerr << "] = " << ref_fx.magnitude() << '\n';
+      std::cerr << "] = " << ref_fx.as_vector().magnitude() << '\n';
     }
 
     f->trace(self->num_iterations_, ref_x, ref_fx);
@@ -102,11 +102,15 @@ vnl_levenberg_marquardt::lmdif_lsqfun(long * n,     // I   Number of residuals
   }
   else
   {
-    f->f(ref_x, ref_fx);
+    auto tmpx = ref_x.as_vector();
+    auto tmpfx = ref_fx.as_vector();
+    f->f(tmpx, tmpfx);
+    std::copy( tmpx.cbegin(), tmpx.cend(), ref_x.data());
+    std::copy( tmpfx.cbegin(), tmpfx.cend(), ref_fx.data());
   }
 
   if (self->start_error_ == 0)
-    self->start_error_ = ref_fx.rms();
+    self->start_error_ = ref_fx.as_vector().rms();
 
   if (f->failure)
   {
@@ -251,7 +255,7 @@ vnl_levenberg_marquardt::lmder_lsqfun(long * n,    // I   Number of residuals
   assert(*n >= *p);
   vnl_vector_ref<double> ref_x(*p, (double *)x); // const violation!
   vnl_vector_ref<double> ref_fx(*n, fx);
-  vnl_matrix_ref<double> ref_fJ(*n, *p, fJ);
+  vnl_matrix<double> ref_fJ( fJ, *n, *p);
 
   if (*iflag == 0)
   {
@@ -268,15 +272,20 @@ vnl_levenberg_marquardt::lmder_lsqfun(long * n,    // I   Number of residuals
         std::cerr << ", " << x[4];
       if (*p > 5)
         std::cerr << ", ... ";
-      std::cerr << "] = " << ref_fx.magnitude() << '\n';
+      std::cerr << "] = " << ref_fx.as_vector().magnitude() << '\n';
     }
     f->trace(self->num_iterations_, ref_x, ref_fx);
   }
   else if (*iflag == 1)
   {
-    f->f(ref_x, ref_fx);
+    auto tmpx = ref_x.as_vector();
+    auto tmpfx = ref_fx.as_vector();
+    f->f(tmpx, tmpfx);
+    std::copy( tmpx.cbegin(), tmpx.cend(), ref_x.data());
+    std::copy( tmpfx.cbegin(), tmpfx.cend(), ref_fx.data());
+
     if (self->start_error_ == 0)
-      self->start_error_ = ref_fx.rms();
+      self->start_error_ = ref_fx.as_vector().rms();
     ++(self->num_iterations_);
   }
   else if (*iflag == 2)
@@ -321,6 +330,7 @@ vnl_levenberg_marquardt::lmder_lsqfun(long * n,    // I   Number of residuals
         }
     }
   }
+  std::copy(ref_fJ.cbegin(), ref_fJ.cend(), fJ);
 
   if (f->failure)
   {

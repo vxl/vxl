@@ -9,6 +9,7 @@
 
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_cholesky.h>
+#include <numeric>
 
 //: Solve Sx=b for symmetric S
 static void
@@ -98,6 +99,7 @@ vnl_solve_qp_zero_sum(const vnl_matrix<double> & H, const vnl_vector<double> & g
 
   // Sum of elements in H_inv  (= 1'*H_inv*1)
   double H_inv_sum = vnl_c_vector<double>::sum(H_inv.begin(), H_inv.size());
+  //HACKM NEW TEST double H_inv_sum = std::accumulate(H_inv.begin(), H_inv.end(), 0.0);
 
   if (std::fabs(H_inv_sum) < 1e-8)
   {

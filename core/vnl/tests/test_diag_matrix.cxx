@@ -64,7 +64,7 @@ test_diag_matrix()
   std::cout << "vector product (post-multiplied) = " << vec << '\n';
   TEST("vector product", vec(0) == -0.5 && vec(1) == 0.0 && vec(2) == 1.5, true);
 
-  vec = th.as_ref() * m1;
+  vec = th.as_vector() * m1;
   std::cout << "vector product (pre-multiplied) = " << vec << '\n';
   TEST("vector product", vec(0) == -0.5 && vec(1) == 0.0 && vec(2) == 1.5, true);
 
@@ -80,7 +80,7 @@ test_diag_matrix()
   mat(2, 2) = 0.0;
   std::cout << "matrix =\n" << mat;
 
-  vnl_matrix_fixed<double, N, N> s1 = m1 + mat.as_ref();
+  vnl_matrix_fixed<double, N, N> s1 = (m1 + mat.as_ref()).as_matrix();
   std::cout << "m1+matrix =\n" << s1;
   TEST("matrix sum",
        s1(0, 0) == -0.25 && s1(0, 1) == -6.0 && s1(0, 2) == -3.0 && s1(1, 0) == 6.0 && s1(1, 1) == 0.0 &&
@@ -89,12 +89,16 @@ test_diag_matrix()
   vnl_matrix_fixed<double, N, N> s2 = mat.as_ref() + m1;
   std::cout << "matrix+m1 =\n" << s2;
   TEST("matrix sum",
-       s2(0, 0) == -0.25 && s2(0, 1) == -6.0 && s2(0, 2) == -3.0 && s2(1, 0) == 6.0 && s2(1, 1) == 0.0 &&
+       s2(0, 0) == -0.25 && s2(0, 1) == -6.0 && s2(0, 2) == -3.0
+         && s2(1, 0) == 6.0 && s2(1, 1) == 0.0 &&
          s2(1, 2) == -2.0 && s2(2, 0) == 3.0 && s2(2, 1) == 2.0 && s2(2, 2) == 0.25,
        true);
   vnl_matrix_fixed<double, N, N> d1 = m1 - mat.as_ref();
-  std::cout << "m1-matrix =\n" << d1;
-  TEST("matrix difference",
+  std::cout << "m1-matrix =\n" << d1 << std::endl;
+  std::cout << m1 << std::endl;
+  std::cout << mat.as_ref() << std::endl;
+  std::cout << "===" << std::endl;
+  TEST("matrix difference 'm1-matrix' ",
        d1(0, 0) == -0.25 && d1(0, 1) == 6.0 && d1(0, 2) == 3.0 && d1(1, 0) == -6.0 && d1(1, 1) == 0.0 &&
          d1(1, 2) == 2.0 && d1(2, 0) == -3.0 && d1(2, 1) == -2.0 && d1(2, 2) == 0.25,
        true);

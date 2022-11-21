@@ -8,6 +8,8 @@
 #include "vnl/vnl_vector.h"
 #include "vnl/vnl_matrix.h"
 #include "vnl/vnl_diag_matrix.h"
+#include <numeric>
+#include <algorithm>
 
 //-------------------------------------------------------------------
 
@@ -25,6 +27,7 @@ vnl_copy(S const & src, T & dst)
 {
   assert(src.size() == dst.size());
   vnl_copy(src.begin(), dst.begin(), src.size());
+  // HACK std::copy(src.cbegin(), src.cend(), dst.begin());
 }
 
 //------------------------------------------------------------------------

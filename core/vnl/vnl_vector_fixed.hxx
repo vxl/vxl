@@ -22,7 +22,7 @@ vnl_vector_fixed<T, n>::operator() (unsigned int i)
 #if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   assert(i < n);   // Check the index is valid.
 #endif
-  return data_[i];
+  return this->Superclass::operator()(i);
   }
 
 template<class T, unsigned int n>
@@ -32,28 +32,28 @@ vnl_vector_fixed<T, n>::operator() (unsigned int i) const
 #if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
 	assert(i < n);   // Check the index is valid
 #endif
-	return data_[i];
+	return this->Superclass::operator()(i);
 }
 
 template<class T, unsigned int n>
 T&
 vnl_vector_fixed<T, n>::operator[] (const size_t i)
-{ return data_[i]; }
+{ return this->Superclass::operator()(i); }
 
 template<class T, unsigned int n>
 const T&
 vnl_vector_fixed<T, n>::operator[] (const size_t i) const
-{ return data_[i]; }
+{ return this->Superclass::operator()(i); }
 
 template<class T, unsigned int n>
 T const*
 vnl_vector_fixed<T, n>::data_block() const
-{ return data_; }
+{ return this->data(); }
 
 template<class T, unsigned int n>
 T      *
 vnl_vector_fixed<T, n>::data_block()
-{ return data_; }
+{ return this->data(); }
 
 template<class T, unsigned int n>
 vnl_vector_fixed<T,n>
@@ -61,7 +61,7 @@ vnl_vector_fixed<T,n>::apply( T (*f)(T) )
 {
   vnl_vector_fixed<T,n> ret;
   for ( size_type i = 0; i < n; ++i )
-    ret[i] = f( data_[i] );
+    ret[i] = f( this->Superclass::operator()(i) );
   return ret;
 }
 
@@ -71,7 +71,7 @@ vnl_vector_fixed<T,n>::apply( T (*f)(const T&) )
 {
   vnl_vector_fixed<T,n> ret;
   for ( size_type i = 0; i < n; ++i )
-    ret[i] = f( data_[i] );
+    ret[i] = f( this->Superclass::operator()(i) );
   return ret;
 }
 
@@ -82,7 +82,7 @@ vnl_vector_fixed<T,n>::update( const vnl_vector<T>& v, unsigned int start )
   size_type stop = start + v.size();
   assert( stop <= n );
   for (size_type i = start; i < stop; i++)
-    this->data_[i] = v[i-start];
+    this->Superclass::operator()(i) = v(i-start);
   return *this;
 }
 
@@ -91,7 +91,7 @@ vnl_vector_fixed<T,n>&
 vnl_vector_fixed<T,n>::flip()
 {
   for ( unsigned int i=0; 2*i+1 < n; ++i )
-    std::swap( data_[i], data_[n-1-i] );
+    std::swap( this->Superclass::operator()(i), this->Superclass::operator()(n-1-i) );
   return *this;
 }
 
@@ -100,7 +100,7 @@ bool
 vnl_vector_fixed<T,n>::is_finite() const
 {
   for ( size_type i = 0; i < this->size(); ++i )
-    if ( !vnl_math::isfinite( (*this)[i] ) )
+    if ( !vnl_math::isfinite( this->Superclass::operator()(i) ) )
       return false;
 
   return true;
@@ -113,7 +113,7 @@ vnl_vector_fixed<T,n>::is_zero() const
 {
   T const zero(0);
   for ( size_type i = 0; i < this->size(); ++i )
-    if ( !( (*this)[i] == zero) )
+    if ( !( this->Superclass::operator()(i) == zero) )
       return false;
 
   return true;
@@ -125,7 +125,7 @@ bool
 vnl_vector_fixed<T,n>::read_ascii(std::istream& s)
 {
   for (size_type i = 0; i < this->size(); ++i)
-    s >> (*this)(i);
+    s >> this->Superclass::operator()(i);
 
   return s.good() || s.eof();
 }
@@ -159,7 +159,7 @@ vnl_vector_fixed<T, n>::get(unsigned int i) const
 	if (i >= this->size())            // If invalid index specified
 		vnl_error_vector_index("get", i);  // Raise exception
 #endif
-	return this->data_[i];
+	return this->Superclass::operator()(i);
 }
 
 // we don't need to explicitly instantiate all the operator+ and such

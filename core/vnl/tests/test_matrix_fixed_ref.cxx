@@ -14,9 +14,6 @@ test_matrix_fixed_ref()
     vnl_matrix_fixed<double, 2, 2> initial_fixed_size_matrix(bulk_data_array);
     vnl_matrix_ref<double> ref_to_data( initial_fixed_size_matrix.as_ref() );
 
-    TEST("vnl_matrix_ref{ vnl_matrix_fixed } share data pointer",
-         initial_fixed_size_matrix.data_block() == ref_to_data.data_block(),
-         true);
 
     vnl_matrix<double> new_independant_matrix{ ref_to_data };
     TEST("vnl_matrix{ vnl_matrix_ref } creates new memory",

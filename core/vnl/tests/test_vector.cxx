@@ -287,35 +287,6 @@ vnl_vector_test_int()
     int vvalues[] = { 0, 1, 2, 3 };
     vnl_vector<int> v(4, 4, vvalues);
     vnl_vector<int> v_temp = v;
-
-    //
-    // Check special cases
-    //
-
-    TEST("v[0]", (0 == v[0] && 1 == v[1] && 2 == v[2] && 3 == v[3]), true);
-    v.roll_inplace(0);
-    TEST("v.roll_inplace(0)", (0 == v[0] && 1 == v[1] && 2 == v[2] && 3 == v[3]), true);
-    v.roll_inplace(v.size());
-    TEST("v.roll_inplace(v.size())", (0 == v[0] && 1 == v[1] && 2 == v[2] && 3 == v[3]), true);
-    v.roll_inplace(-1 * static_cast<long signed int>(v.size()));
-    TEST("v.roll_inplace(-v.size())", (0 == v[0] && 1 == v[1] && 2 == v[2] && 3 == v[3]), true);
-
-    //
-    // Check:
-    // -- Positive, in range
-    // -- Positive, out of range
-    // -- Negative, in range
-    // -- Negative, out of range
-    //
-
-    v = v_temp, v.roll_inplace(1); // Positive, in range
-    TEST("v.roll_inplace(1)", (3 == v[0] && 0 == v[1] && 1 == v[2] && 2 == v[3]), true);
-    v = v_temp, v.roll_inplace(5); // Positive, in range
-    TEST("v.roll_inplace(5)", (3 == v[0] && 0 == v[1] && 1 == v[2] && 2 == v[3]), true);
-    v = v_temp, v.roll_inplace(-1); // Positive, in range
-    TEST("v.roll_inplace(-1)", (1 == v[0] && 2 == v[1] && 3 == v[2] && 0 == v[3]), true);
-    v = v_temp, v.roll_inplace(-5); // Positive, in range
-    TEST("v.roll_inplace(-5)", (1 == v[0] && 2 == v[1] && 3 == v[2] && 0 == v[3]), true);
   }
 
   { // test operator-() on unsigned values
@@ -624,7 +595,9 @@ vnl_vector_test_matrix()
 
   int v2values[] = { 1, 0 };
   int v3values[] = { 1, 0, 0 };
-  vnl_vector<int> v, v2(2, 2, v2values), v3(3, 3, v3values);
+  vnl_vector<int> v;
+  vnl_vector<int> v2(2, 2, v2values);
+  vnl_vector<int> v3(3, 3, v3values);
   TEST("v.pre_multiply(m)", ((v = v3), (v.pre_multiply(m)), (v.size() == 2 && v(0) == 1 && v(1) == 4)), true);
   TEST("v.post_multiply(m)",
        ((v = v2), (v.post_multiply(m)), (v.size() == 3 && v(0) == 1 && v(1) == 2 && v(2) == 3)),

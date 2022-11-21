@@ -84,7 +84,6 @@ if(NETLIB_FOUND)
   add_test( NAME vnl_algo_test_sparse_matrix COMMAND vnl_algo_test_all test_sparse_matrix           )
   add_test( NAME vnl_algo_test_svd COMMAND vnl_algo_test_all test_svd                     )
   add_test( NAME vnl_algo_test_svd_fixed COMMAND vnl_algo_test_all test_svd_fixed               )
-  add_test( NAME vnl_algo_test_symmetric_eigensystem COMMAND vnl_algo_test_all test_symmetric_eigensystem   )
 endif()
 
 add_executable( vnl_algo_test_include test_include.cxx )

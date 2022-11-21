@@ -51,126 +51,27 @@
 
 #include "vnl_c_vector.h"
 
-//--------------------------------------------------------------------------------
-// This macro allocates the dynamic storage used by a vnl_vector.
-#define vnl_vector_alloc_blah(size) \
-do { /* Macro needs to be a single statement to allow semicolon at macro end */ \
-  assert(this->m_LetArrayManageMemory); /*Resizing memory requires management rights */ \
-  this->num_elmts = (size); \
-  this->data = (size) ? vnl_c_vector<T>::allocate_T(size) : nullptr; \
-} while(false)
-
-// This macro deallocates the dynamic storage used by a vnl_vector.
-#define vnl_vector_free_blah                                      \
-do { /* Macro needs to be a single statement to allow semicolon at macro end */ \
-  if ( this->m_LetArrayManageMemory )                                \
-  {                                                               \
-    if (this->data)                                               \
-    {                                                             \
-    vnl_c_vector<T>::deallocate(this->data, this->num_elmts);     \
-    }                                                             \
-  }                                                               \
-  else                                                            \
-  {                                                               \
-    this->data = nullptr;                                         \
-    this->num_elmts = 0;                                          \
-  } \
-} while(false)
-
-//: Creates a vector with specified length. O(n).
-// Elements are not initialized.
-template<class T>
-vnl_vector<T>::vnl_vector (size_t len)
-{
-  vnl_vector_alloc_blah(len);
-}
-
-
 //: Creates a vector of specified length, and initialize all elements with value. O(n).
 
 template<class T>
 vnl_vector<T>::vnl_vector (size_t len, T const& value)
+  : Eigen::Matrix<T, Eigen::Dynamic, 1>(len)
 {
-  vnl_vector_alloc_blah(len);
-  if (this->data) //VS2012 Runtime Library's std::fill_n has debug assertion when data is null
-  {
-    std::fill_n( this->data, len, value );
-  }
+  this->setConstant(value);
 }
 
 //: Creates a vector of specified length and initialize first n elements with values. O(n).
 
 template<class T>
-vnl_vector<T>::vnl_vector (size_t len, size_t n, T const values[])
+vnl_vector<T>::vnl_vector (size_t len, size_t n, T const values[]): Eigen::Matrix<T, Eigen::Dynamic, 1>(len)
 {
-  vnl_vector_alloc_blah(len);
   // If user specified values, initialize first n elements with values
   // n.b Assignment is used over universal initialization to avoid a
   // gcc 4.8.5 ICE.
   const size_t copy_num = std::min(len,n);
-  std::copy(values, values + copy_num, data);
+  std::copy(values, values + copy_num, this->data());
 }
 
-
-//: Creates a new copy of vector v. O(n).
-template<class T>
-vnl_vector<T>::vnl_vector (vnl_vector<T> const& v)
-{
-  vnl_vector_alloc_blah(v.num_elmts);
-  if ( v.data ) {
-     std::copy( v.data, v.data + v.num_elmts, this->data );
-  }
-}
-
-
-//: Move-constructs a vector. O(1).
-template<class T>
-vnl_vector<T>::vnl_vector(vnl_vector<T>&& rhs)
-{
-  // Copy the data pointer and its length from the source object.
-  this->operator=(std::move(rhs));
-}
-
-//: Move-assigns rhs vector into lhs vector. O(1).
-template<class T>
-vnl_vector<T>& vnl_vector<T>::operator=(vnl_vector<T>&& rhs)
-{
-  // Self-assignment detection
-  if (&rhs != this)
-  {
-    if(!rhs.m_LetArrayManageMemory)
-    {
-      this->operator=(rhs); // Call non-move assignment operator.
-      return *this;
-    }
-    else if(!this->m_LetArrayManageMemory)
-    {
-      /* If `this` is managing own memory, then you are not allowed
-       * to replace the data pointer
-       * This code only works when the object is an vnl_matrix_ref correctly sized.
-       * Undefined behavior if this->m_LetArrayManageMemory==false,
-       * and rows,cols are not the same between `this` and rhs. */
-      assert(rhs.num_elmts == this->num_elmts );
-      std::copy( rhs.begin(), rhs.end(), this->begin() );
-    }
-    else
-    {
-      // Release any resource we're previously holding
-      if(this->data)
-      {
-        vnl_c_vector<T>::deallocate(this->data, this->num_elmts);
-      }
-      // Transfer ownership and invalidate old value
-      data = rhs.data;
-      num_elmts = rhs.num_elmts;
-      m_LetArrayManageMemory = rhs.m_LetArrayManageMemory;
-      rhs.data = nullptr;
-      rhs.num_elmts = 0;
-      rhs.m_LetArrayManageMemory = true;
-    }
-  }
-  return *this;
-}
 
 
 
@@ -178,58 +79,30 @@ vnl_vector<T>& vnl_vector<T>::operator=(vnl_vector<T>&& rhs)
 // Values in datablck are copied. O(n).
 
 template<class T>
-vnl_vector<T>::vnl_vector (T const* datablck, size_t len)
+vnl_vector<T>::vnl_vector (T const* datablck, size_t len): Eigen::Matrix<T, Eigen::Dynamic, 1>(len)
 {
-  vnl_vector_alloc_blah(len);
-  std::copy( datablck, datablck + len, this->data );
-}
-
-//------------------------------------------------------------
-
-template<class T>
-vnl_vector<T>::~vnl_vector()
-{
-  if (data) destroy();
+  std::copy( datablck, datablck + len, this->data() );
 }
 
 //: Frees up the array inside vector. O(1).
-
 template<class T>
 void vnl_vector<T>::destroy()
 {
-  vnl_vector_free_blah;
+  this->resize(0);
 }
 
 template<class T>
 void vnl_vector<T>::clear()
 {
-  if (data) {
-    destroy();
-    num_elmts = 0;
-    data = nullptr;
-  }
+  this->resize(0);
 }
 
 template<class T>
 bool vnl_vector<T>::set_size(size_t n)
 {
-  if (this->data) {
-    // if no change in size, do not reallocate.
-    if (this->num_elmts == n)
-      return false;
-
-    vnl_vector_free_blah;
-    vnl_vector_alloc_blah(n);
-  }
-  else {
-    // this happens if the vector is default constructed.
-    vnl_vector_alloc_blah(n);
-  }
+  this->resize(n);
   return true;
 }
-
-#undef vnl_vector_alloc_blah
-#undef vnl_vector_free_blah
 
 //------------------------------------------------------------
 
@@ -242,7 +115,7 @@ bool vnl_vector<T>::read_ascii(std::istream& s)
   bool size_known = (this->size() != 0);
   if (size_known) {
     for (size_t i = 0; i < this->size(); ++i) {
-      if ( ! (s >> (*this)(i)) ) {
+      if ( ! (s >> this->Superclass::operator()(i)) ) {
         return false;
       }
     }
@@ -271,26 +144,13 @@ vnl_vector<T> vnl_vector<T>::read(std::istream& s)
   return V;
 }
 
-//: Sets all elements of a vector to a specified fill value. O(n).
-
-template<class T>
-vnl_vector<T>&
-vnl_vector<T>::fill (T const& value)
-{
-  if (this->data) //VS2012 Runtime Library's std::fill_n has debug assertion when data is null
-  {
-    std::fill_n( this->data, this->num_elmts, value );
-  }
-  return *this;
-}
-
 //: Sets elements of a vector to those in an array. O(n).
 
 template<class T>
 vnl_vector<T>&
 vnl_vector<T>::copy_in (T const *ptr)
 {
-  std::copy( ptr, ptr + this->num_elmts, this->data );
+  std::copy( ptr, ptr + this->size(), this->data() );
   return *this;
 }
 
@@ -299,89 +159,13 @@ vnl_vector<T>::copy_in (T const *ptr)
 template<class T>
 void vnl_vector<T>::copy_out (T *ptr) const
 {
-  std::copy( this->data, this->data + this->num_elmts, ptr );
+  std::copy( this->cbegin(), this->cend(), ptr );
 }
 
 //: Copies rhs vector into lhs vector. O(n).
 // Changes the dimension of lhs vector if necessary.
 
-template<class T>
-vnl_vector<T>& vnl_vector<T>::operator= (vnl_vector<T> const& rhs)
-{
-  if (this != &rhs) { // make sure *this != m
-    if (rhs.data) {
-      this->set_size(rhs.size());
-      if(rhs.data) {
-        std::copy(rhs.data, rhs.data + this->num_elmts, this->data);
-      }
-    }
-    else {
-      // rhs is default-constructed.
-      clear();
-    }
-  }
-  return *this;
-}
 
-//: Increments all elements of vector with value. O(n).
-
-template<class T>
-vnl_vector<T>& vnl_vector<T>::operator+= (T value)
-{
-  for (size_t i = 0; i < this->num_elmts; i++)
-    this->data[i] += value;
-  return *this;
-}
-
-//: Multiplies all elements of vector with value. O(n).
-
-template<class T>
-vnl_vector<T>& vnl_vector<T>::operator*= (T value)
-{
-  for (size_t i = 0; i < this->num_elmts; i++)
-    this->data[i] *= value;
-  return *this;
-}
-
-//: Divides all elements of vector by value. O(n).
-
-template<class T>
-vnl_vector<T>& vnl_vector<T>::operator/= (T value)
-{
-  for (size_t i = 0; i < this->num_elmts; i++)
-    this->data[i] /= value;
-  return *this;
-}
-
-
-//: Mutates lhs vector with its addition with rhs vector. O(n).
-
-template<class T>
-vnl_vector<T>& vnl_vector<T>::operator+= (vnl_vector<T> const& rhs)
-{
-#ifndef NDEBUG
-  if (this->num_elmts != rhs.num_elmts)
-    vnl_error_vector_dimension ("operator+=", this->num_elmts, rhs.num_elmts);
-#endif
-  for (size_t i = 0; i < this->num_elmts; i++)
-    this->data[i] += rhs.data[i];
-  return *this;
-}
-
-
-//:  Mutates lhs vector with its subtraction with rhs vector. O(n).
-
-template<class T>
-vnl_vector<T>& vnl_vector<T>::operator-= (vnl_vector<T> const& rhs)
-{
-#ifndef NDEBUG
-  if (this->num_elmts != rhs.num_elmts)
-    vnl_error_vector_dimension ("operator-=", this->num_elmts, rhs.num_elmts);
-#endif
-  for (size_t i = 0; i < this->num_elmts; i++)
-    this->data[i] -= rhs.data[i];
-  return *this;
-}
 
 //: Pre-multiplies vector with matrix and stores result back in vector.
 // v = m * v. O(m*n). Vector is assumed a column matrix.
@@ -389,19 +173,8 @@ vnl_vector<T>& vnl_vector<T>::operator-= (vnl_vector<T> const& rhs)
 template<class T>
 vnl_vector<T>& vnl_vector<T>::pre_multiply (vnl_matrix<T> const& m)
 {
-#ifndef NDEBUG
-  if (m.columns() != this->num_elmts)           // dimensions do not match?
-    vnl_error_vector_dimension ("operator*=", this->num_elmts, m.columns());
-#endif
-  T* temp= vnl_c_vector<T>::allocate_T(m.rows()); // Temporary
-  for (size_t i = 0; i < m.rows(); i++) {     // For each index
-    temp[i] = (T)0;                             // Initialize element value
-    for (size_t k = 0; k < this->num_elmts; k++)      // Loop over column values
-      temp[i] += (m.get(i,k) * this->data[k]);  // Multiply
-  }
-  vnl_c_vector<T>::deallocate(this->data, this->num_elmts); // Free up the data space
-  num_elmts = m.rows();                         // Set new num_elmts
-  this->data = temp;                            // Pointer to new storage
+  vnl_vector<T> temp =  m * (*this);
+  *this = temp;
   return *this;                                 // Return vector reference
 }
 
@@ -411,34 +184,10 @@ vnl_vector<T>& vnl_vector<T>::pre_multiply (vnl_matrix<T> const& m)
 template<class T>
 vnl_vector<T>& vnl_vector<T>::post_multiply (vnl_matrix<T> const& m)
 {
-#ifndef NDEBUG
-  if (this->num_elmts != m.rows())              // dimensions do not match?
-    vnl_error_vector_dimension ("operator*=", this->num_elmts, m.rows());
-#endif
-  T* temp= vnl_c_vector<T>::allocate_T(m.columns()); // Temporary
-  for (size_t i = 0; i < m.columns(); i++) {  // For each index
-    temp[i] = (T)0;                             // Initialize element value
-    for (size_t k = 0; k < this->num_elmts; k++) // Loop over column values
-      temp[i] += (this->data[k] * m.get(k,i));  // Multiply
-  }
-  vnl_c_vector<T>::deallocate(this->data, num_elmts); // Free up the data space
-  num_elmts = m.columns();                      // Set new num_elmts
-  this->data = temp;                            // Pointer to new storage
+  this->Superclass::operator=(this->Superclass::transpose() * m).transpose().matrix();
   return *this;                                 // Return vector reference
 }
 
-
-//: Creates new vector containing the negation of THIS vector. O(n).
-
-template<class T>
-vnl_vector< typename vnl_numeric_traits<T>::signed_t> vnl_vector<T>::operator- () const
-{
-  vnl_vector<typename vnl_numeric_traits<T>::signed_t> result(this->num_elmts);
-  for (size_t i = 0; i < this->num_elmts; i++) {
-    result(i) = -this->data[i];           // negate element
-  }
-  return result;
-}
 
 //: Replaces elements with index beginning at start, by values of v. O(n).
 
@@ -447,31 +196,21 @@ vnl_vector<T>& vnl_vector<T>::update (vnl_vector<T> const& v, size_t start)
 {
   size_t stop = start + v.size();
 #ifndef NDEBUG
-  if ( stop > this->num_elmts)
+  if ( stop > this->size())
     vnl_error_vector_dimension ("update", stop-start, v.size());
 #endif
   //std::copy_n( v.data, stop - start, this->data + start );
   for (size_t i = start; i < stop; i++)
-    this->data[i] = v.data[i-start];
+    this->Superclass::operator()(i) = v(i-start);
   return *this;
 }
-
 
 //: Returns a subvector specified by the start index and length. O(n).
 
 template<class T>
 vnl_vector<T> vnl_vector<T>::extract (size_t len, size_t start) const
 {
-#ifndef NDEBUG
-  size_t stop = start + len;
-  if (this->num_elmts < stop)
-    vnl_error_vector_dimension ("extract", stop-start, len);
-#endif
-  vnl_vector<T> result(len);
-  //std::copy_n( this->data + start, len, result.data );
-  for (size_t i = 0; i < len; i++)
-    result.data[i] = data[start+i];
-  return result;
+  return vnl_vector<T>(this->segment(start,len));
 }
 
 //: Returns new vector whose elements are the products v1[i]*v2[i]. O(n).
@@ -510,8 +249,8 @@ vnl_vector<T> element_quotient (vnl_vector<T> const& v1, vnl_vector<T> const& v2
 template <class T>
 vnl_vector<T> vnl_vector<T>::apply(T (*f)(T const&)) const
 {
-  vnl_vector<T> ret(size());
-  vnl_c_vector<T>::apply(this->data, num_elmts, f, ret.data);
+  vnl_vector<T> ret(this->size());
+  vnl_c_vector<T>::apply(this->data(), this->size(), f, ret.data());
   return ret;
 }
 
@@ -519,8 +258,8 @@ vnl_vector<T> vnl_vector<T>::apply(T (*f)(T const&)) const
 template <class T>
 vnl_vector<T> vnl_vector<T>::apply(T (*f)(T)) const
 {
-  vnl_vector<T> ret(num_elmts);
-  vnl_c_vector<T>::apply(this->data, num_elmts, f, ret.data);
+  vnl_vector<T> ret(this->size());
+  vnl_c_vector<T>::apply(this->data(), this->size(), f, ret.data());
   return ret;
 }
 
@@ -589,10 +328,10 @@ template <class T>
 vnl_vector<T>&
 vnl_vector<T>::flip()
 {
-  for (size_t i=0;i<num_elmts/2;++i) {
-    T tmp=data[i];
-    data[i]=data[num_elmts-1-i];
-    data[num_elmts-1-i]=tmp;
+  for (size_t i=0;i<this->size()/2;++i) {
+    T tmp=this->Superclass::operator()(i);
+    this->Superclass::operator()(i)=this->Superclass::operator()(this->size()-1-i);
+    this->Superclass::operator()(this->size()-1-i)=tmp;
   }
   return *this;
 }
@@ -603,14 +342,14 @@ vnl_vector<T>::flip(const size_t &b, const size_t &e)
 {
 
 #if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
-  assert (!(b > this->num_elmts || e > this->num_elmts || b > e));
+  assert (!(b > this->size() || e > this->size() || b > e));
 #endif
 
   for (size_t i=b;i<(e-b)/2+b;++i) {
-    T tmp=data[i];
+    T tmp=this->Superclass::operator()(i);
     const size_t endIndex = e - 1 - (i-b);
-    data[i]=data[endIndex];
-    data[endIndex]=tmp;
+    this->Superclass::operator()(i)=this->Superclass::operator()(endIndex);
+    this->Superclass::operator()(endIndex)=tmp;
   }
   return *this;
 
@@ -620,13 +359,13 @@ template <class T>
 vnl_vector<T>
 vnl_vector<T>::roll(const int &shift) const
 {
-  vnl_vector<T> v(this->num_elmts);
-  const size_t wrapped_shift = shift % this->num_elmts;
+  vnl_vector<T> v(this->size());
+  const size_t wrapped_shift = shift % this->size();
   if (0 == wrapped_shift)
     return v.copy_in(this->data_block());
-  for (size_t i = 0; i < this->num_elmts; ++i)
+  for (size_t i = 0; i < this->size(); ++i)
     {
-    v[(i + wrapped_shift)%this->num_elmts] = this->data_block()[i];
+    v( (i + wrapped_shift)%this->size()) = this->data()[i];
     }
   return v;
 }
@@ -635,18 +374,17 @@ template <class T>
 vnl_vector<T>&
 vnl_vector<T>::roll_inplace(const int &shift)
 {
-  const size_t wrapped_shift = shift % this->num_elmts;
-  if (0 == wrapped_shift)
-    return *this;
-  return this->flip().flip(0,wrapped_shift).flip(wrapped_shift,this->num_elmts);
+  assert(0==1 &&  "This function not supported from for Eigen based VNL");
+  return *this;
 }
 
 template <class T>
 void vnl_vector<T>::swap(vnl_vector<T> &that) noexcept
 {
-  std::swap(this->num_elmts, that.num_elmts);
-  std::swap(this->data, that.data);
-  std::swap(this->m_LetArrayManageMemory, that.m_LetArrayManageMemory);
+  // Not efficient
+  vnl_vector<T> temp = *this;
+  *this = that;
+  that = temp;
 }
 
 //--------------------------------------------------------------------------------
@@ -739,8 +477,8 @@ bool vnl_vector<T>::is_equal(vnl_vector<T> const& rhs, double tol) const
 
   if (this->size() != rhs.size())                           //Size different ?
     return false;
-  for (size_t i = 0; i < size(); i++)
-    if (vnl_math::abs(this->data[i] - rhs.data[i]) > tol)    //Element different ?
+  for (size_t i = 0; i < this->size(); i++)
+    if (vnl_math::abs(this->Superclass::operator()(i) - rhs(i)) > tol)    //Element different ?
       return false;
 
   return true;
@@ -754,8 +492,8 @@ bool vnl_vector<T>::operator_eq (vnl_vector<T> const& rhs) const
 
   if (this->size() != rhs.size())                 // Size different ?
     return false;                                 // Then not equal.
-  for (size_t i = 0; i < size(); i++)           // For each index
-    if (!(this->data[i] == rhs.data[i]))          // Element different ?
+  for (size_t i = 0; i < this->size(); i++)           // For each index
+    if (this->Superclass::operator()(i) != rhs(i))          // Element different ?
       return false;                               // Then not equal.
 
   return true;                                    // Else same; return true.
@@ -790,11 +528,6 @@ std::istream& operator>>(std::istream& s, vnl_vector<T>& M)
 
 #define VNL_VECTOR_INSTANTIATE_COMMON(T) \
 template class VNL_EXPORT vnl_vector<T >; \
-/* arithmetic, comparison etc */ \
-/*template VNL_EXPORT vnl_vector<T > operator+(T const, vnl_vector<T > const &) ; */ \
-/*template VNL_EXPORT vnl_vector<T > operator-(T const, vnl_vector<T > const &) ; */ \
-/*template VNL_EXPORT vnl_vector<T > operator*(T const, vnl_vector<T > const &) ; */ \
-template VNL_EXPORT vnl_vector<T > operator*(vnl_matrix<T > const &, vnl_vector<T > const &); \
 /* element-wise */ \
 template VNL_EXPORT vnl_vector<T > element_product(vnl_vector<T > const &, vnl_vector<T > const &); \
 template VNL_EXPORT vnl_vector<T > element_quotient(vnl_vector<T > const &, vnl_vector<T > const &); \

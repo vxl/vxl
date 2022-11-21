@@ -21,10 +21,10 @@
 //   vnl_vector for which the data space has
 //   been supplied externally.
 template <class T>
-class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
+class VNL_EXPORT vnl_vector_ref : public Eigen::Map<eigen_vnl_vector<T>>
 {
  public:
-  using Base = vnl_vector<T>;
+  using Base = Eigen::Map<eigen_vnl_vector<T>>;
 
   //: Constructor
   // Do \e not call anything else than the default constructor of vnl_vector<T>
@@ -32,17 +32,18 @@ class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
   //        and can only be used on data in a read/write senses.
   //        There is no way to pass 'const T *' in a way that vnl_vector_ref
   //        can preserve memory access.
-  vnl_vector_ref(size_t n, T *space);
+  vnl_vector_ref(size_t n, T *space): Base(space, n)
+  {}
 
   //: Copy constructor
   // Do \e not call anything else than the default constructor of vnl_vector<T>
   // (That is why the default copy constructor is \e not good.)
   // NOTE: This interface breaks const correctness,
-  vnl_vector_ref(const vnl_vector_ref<T>& v);
+  vnl_vector_ref(const vnl_vector_ref<T> & v) = default;
 
   //: Destructor
   // Prevents base destructor from releasing memory we don't own
-  ~vnl_vector_ref() override = default;
+  ~vnl_vector_ref() = default;
 
   //: Reference to self to make non-const temporaries.
   // This is intended for passing vnl_vector_fixed objects to
@@ -58,7 +59,10 @@ class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
   // \attention Use this only to pass the reference to a
   // function. Otherwise, the underlying object will be destructed and
   // you'll be left with undefined behaviour.
-  vnl_vector_ref& non_const();
+  vnl_vector_ref& non_const()
+  {
+    return *this;
+  }
 
   //: Copy and move constructor from vnl_matrix_ref<T> is disallowed by default
   // due to other constructor definitions.
@@ -75,6 +79,12 @@ class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
   vnl_vector_ref<T> as_ref() { return *this; }
   const vnl_vector_ref<T> as_ref() const { return *this; }
   vnl_vector<T> as_vector() const { return vnl_vector<T>(this->data_block(), this->size()); }
+
+  T const *
+  data_block() const
+  {
+    return this->data();
+  }
 };
 
 //: Create a reference vector with part of an existing vector.

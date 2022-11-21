@@ -157,7 +157,7 @@ test_rosenbrock_2d()
   vnl_vector<double> x = x0.as_vector();
 
   powell.minimize(x);
-  double r = (x - xmin).magnitude();
+  const double r = (x - xmin).magnitude();
   TEST_NEAR("test_rosenbrock_2d", r, 0, 1e-6);
   std::cout << "Number of evaluations: " << powell.get_num_evaluations() << std::endl << std::endl;
 }

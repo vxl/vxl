@@ -390,8 +390,13 @@ template <class T> inline void vnl_c_vector_destruct(T *p, std::size_t n)
   for (std::size_t i=0; i<n; ++i)
     (p+i)->~T();
 }
-
-
+/* HACK
+inline void vnl_c_vector_destruct(float *, std::size_t) { }
+inline void vnl_c_vector_destruct(double *, std::size_t) { }
+inline void vnl_c_vector_destruct(long double *, std::size_t) { }
+inline void vnl_c_vector_destruct(std::complex<float> *, std::size_t) { }
+inline void vnl_c_vector_destruct(std::complex<double> *, std::size_t) { }
+*/
 inline void vnl_c_vector_destruct(std::complex<long double> *, std::size_t) { }
 
 template<class T>

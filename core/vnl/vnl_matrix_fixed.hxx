@@ -30,13 +30,31 @@ vnl_matrix_fixed<T, num_rows, num_cols> &
 vnl_matrix_fixed<T, num_rows, num_cols>::operator=(const vnl_matrix<T>& rhs)
 {
 	assert(rhs.rows() == num_rows && rhs.columns() == num_cols);
-	std::memcpy(data_[0], rhs.data_block(), num_rows*num_cols * sizeof(T));
+	std::memcpy(this->data(), rhs.data_block(), num_rows*num_cols * sizeof(T));
 	return *this;
 }
 
+template<class T, unsigned nrows, unsigned ncols>
+T       &
+vnl_matrix_fixed<T, nrows, ncols>::operator() (unsigned r, unsigned c)
+{
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+	assert(r < rows());   // Check the row index is valid
+	assert(c < cols());   // Check the column index is valid
+#endif
+	return this->Superclass::operator()(r,c);
+}
 
-
-
+template<class T, unsigned nrows, unsigned ncols>
+T const &
+vnl_matrix_fixed<T, nrows, ncols>::operator() (unsigned r, unsigned c) const
+{
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+	assert(r < rows());   // Check the row index is valid
+	assert(c < cols());   // Check the column index is valid
+#endif
+  return this->Superclass::operator()(r,c);
+}
 
 template<class T, unsigned nrows, unsigned ncols>
 void
@@ -139,7 +157,7 @@ vnl_matrix_fixed<T,nrows,ncols>::fill (T value)
 {
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      this->data_[i][j] = value;
+      this->Superclass::operator()(i,j) = value;
   return *this;
 }
 
@@ -149,7 +167,7 @@ vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::fill_diagonal (T value)
 {
   for (unsigned int i = 0; i < nrows && i < ncols; ++i)
-    this->data_[i][i] = value;
+    this->Superclass::operator()(i,i) = value;
   return *this;
 }
 
@@ -163,7 +181,7 @@ vnl_matrix_fixed<T,nrows,ncols>::set_diagonal(vnl_vector<T> const& diag)
   // the matrix's width & height; that explains the "||" in the assert,
   // and the "&&" in the upper bound for the "for".
   for (unsigned int i = 0; i < nrows && i < ncols; ++i)
-    this->data_[i][i] = diag[i];
+    this->Superclass::operator()(i,i) = diag[i];
   return *this;
 }
 
@@ -174,9 +192,9 @@ vnl_matrix_fixed<T,nrows,ncols>::print(std::ostream& os) const
 {
   for (unsigned int i = 0; i < nrows; ++i)
   {
-    os << this->data_[i][0];
+    os << this->Superclass::operator()(i,0);
     for (unsigned int j = 1; j < ncols; ++j)
-      os << ' ' << this->data_[i][j];
+      os << ' ' << this->Superclass::operator()(i,j);
     os << '\n';
   }
 }
@@ -188,7 +206,7 @@ vnl_matrix_fixed<T,nrows,ncols>
 ::apply(T (*f)(T const&)) const
 {
   vnl_matrix_fixed<T,nrows,ncols> ret;
-  vnl_c_vector<T>::apply(this->data_[0], rows()*cols(), f, ret.data_block());
+  vnl_c_vector<T>::apply(this->data(), this->Superclass::rows()*this->Superclass::cols(), f, ret.data_block());
   return ret;
 }
 
@@ -198,7 +216,7 @@ vnl_matrix_fixed<T,nrows,ncols>
 ::apply(T (*f)(T)) const
 {
   vnl_matrix_fixed<T,nrows,ncols> ret;
-  vnl_c_vector<T>::apply(this->data_[0], rows()*cols(), f, ret.data_block());
+  vnl_c_vector<T>::apply(this->data(), this->Superclass::rows()*this->Superclass::cols(), f, ret.data_block());
   return ret;
 }
 
@@ -234,9 +252,9 @@ vnl_matrix_fixed<T,ncols,nrows>
 vnl_matrix_fixed<T,nrows,ncols>::transpose() const
 {
   vnl_matrix_fixed<T,ncols,nrows> result;
-  for (unsigned int i = 0; i < cols(); ++i)
-    for (unsigned int j = 0; j < rows(); ++j)
-      result(i,j) = this->data_[j][i];
+  for (unsigned int i = 0; i < this->Superclass::cols(); ++i)
+    for (unsigned int j = 0; j < this->Superclass::rows(); ++j)
+      result(i,j) = this->Superclass::operator()(j,i);
   return result;
 }
 
@@ -265,7 +283,7 @@ vnl_matrix_fixed<T,nrows,ncols>::update (vnl_matrix<T> const& m,
 #endif
   for (unsigned int i = top; i < bottom; ++i)
     for (unsigned int j = left; j < right; ++j)
-      this->data_[i][j] = m(i-top,j-left);
+      this->Superclass::operator()(i,j) = m(i-top,j-left);
   return *this;
 }
 
@@ -283,7 +301,7 @@ vnl_matrix_fixed<T,nrows,ncols>::update (vnl_matrix_fixed<T,nrows,ncols> const& 
 #endif
   for (unsigned int i = top; i < bottom; ++i)
     for (unsigned int j = left; j < right; ++j)
-      this->data_[i][j] = m(i-top,j-left);
+      this->Superclass::operator()(i,j) = m(i-top,j-left);
   return *this;
 }
 
@@ -306,18 +324,24 @@ vnl_matrix_fixed<T,nrows,ncols>::extract (vnl_matrix<T>& sub_matrix,
 {
   unsigned int rowz = sub_matrix.rows();
   unsigned int colz = sub_matrix.cols();
-#ifndef NDEBUG
-  unsigned int bottom = top + rowz;
-  unsigned int right = left + colz;
-  if ((nrows < bottom) || (ncols < right))
-    vnl_error_matrix_dimension ("extract",
-                                nrows, ncols, bottom, right);
-#endif
-  for (unsigned int i = 0; i < rowz; ++i)      // actual copy of all elements
-    for (unsigned int j = 0; j < colz; ++j)    // in submatrix
-      sub_matrix(i,j) = this->data_[top+i][left+j];
+  sub_matrix = this->Superclass::operator()(Eigen::seq(top, top+rowz-1), Eigen::seq(left, left+colz-1));
 }
 
+template<class T, unsigned nrows, unsigned ncols>
+void
+vnl_matrix_fixed<T,nrows,ncols>::extract (vnl_matrix_ref<T>& sub_matrix,
+                                           unsigned top, unsigned left) const
+{
+  const unsigned int rowz = sub_matrix.rows();
+  const unsigned int colz = sub_matrix.cols();
+  for(int i =top ; i < top+rowz; ++i)
+  {
+    for(int j=left; j < left+colz; ++j)
+    {
+      sub_matrix(i-top,j-left) = this->Superclass::operator()(i,j);
+    }
+  }
+}
 
 template<class T, unsigned nrows, unsigned ncols>
 vnl_matrix_fixed<T,nrows,ncols>&
@@ -345,7 +369,7 @@ vnl_matrix_fixed<T,nrows,ncols>::set_identity()
   *this = vnl_matrix_fixed();
   const unsigned n = std::min( nrows, ncols );
   for (unsigned int i = 0; i < n; ++i)
-    this->data_[i][i] = 1;
+    this->Superclass::operator()(i,i) = 1;
   return *this;
 }
 
@@ -359,7 +383,7 @@ vnl_matrix_fixed<T,nrows,ncols>::normalize_rows()
   {
     abs_t norm(0); // double will not do for all types.
     for (unsigned int j = 0; j < ncols; ++j)
-      norm += vnl_math::squared_magnitude( this->data_[i][j] );
+      norm += vnl_math::squared_magnitude( this->Superclass::operator()(i,j) );
 
     if (norm != 0)
     {
@@ -369,7 +393,7 @@ vnl_matrix_fixed<T,nrows,ncols>::normalize_rows()
       {
         // FIXME need correct rounding here
         // There is e.g. no *standard* operator*=(complex<float>, double), hence the T() cast.
-        this->data_[i][j] *= T(scale);
+        this->Superclass::operator()(i,j) *= T(scale);
       }
     }
   }
@@ -383,7 +407,7 @@ vnl_matrix_fixed<T,nrows,ncols>::normalize_columns()
   for (unsigned int j = 0; j < ncols; ++j) {  // For each column in the Matrix
     abs_t norm(0); // double will not do for all types.
     for (unsigned int i = 0; i < nrows; ++i)
-      norm += vnl_math::squared_magnitude( this->data_[i][j] );
+      norm += vnl_math::squared_magnitude( this->Superclass::operator()(i,j) );
 
     if (norm != 0)
     {
@@ -393,7 +417,7 @@ vnl_matrix_fixed<T,nrows,ncols>::normalize_columns()
       {
         // FIXME need correct rounding here
         // There is e.g. no *standard* operator*=(complex<float>, double), hence the T() cast.
-        this->data_[i][j] *= T(scale);
+        this->Superclass::operator()(i,j) *= T(scale);
       }
     }
   }
@@ -409,7 +433,7 @@ vnl_matrix_fixed<T,nrows,ncols>::scale_row(unsigned row_index, T value)
     vnl_error_matrix_row_index("scale_row", row_index);
 #endif
   for (unsigned int j = 0; j < ncols; ++j)
-    this->data_[row_index][j] *= value;
+    this->Superclass::operator()(row_index,j) *= value;
   return *this;
 }
 
@@ -422,7 +446,7 @@ vnl_matrix_fixed<T,nrows,ncols>::scale_column(unsigned column_index, T value)
     vnl_error_matrix_col_index("scale_column", column_index);
 #endif
   for (unsigned int j = 0; j < nrows; ++j)
-    this->data_[j][column_index] *= value;
+    this->Superclass::operator()(j,column_index) *= value;
   return *this;
 }
 
@@ -435,7 +459,7 @@ vnl_matrix_fixed<T,nrows,ncols>
   {
     for (unsigned int c = 0; c < ncols; ++c)
     {
-    std::swap(this->data_[r][c], that.data_[r][c]);
+    std::swap(this->Superclass::operator()(r,c), that(r,c));
     }
   }
 }
@@ -449,9 +473,13 @@ vnl_matrix_fixed<T,nrows,ncols>::get_n_rows (unsigned row, unsigned n) const
   if (row + n > nrows)
     vnl_error_matrix_row_index ("get_n_rows", row);
 #endif
-
-  // Extract data rowwise.
-  return vnl_matrix<T>(data_[row], n, ncols);
+//  Superclass temp = this->Superclass::operator()(Eigen::seq(row,0), Eigen::seq(row+n-1,this->cols()-1));
+//  return temp;
+  vnl_matrix<T> result(n, ncols);
+  for (unsigned int c = 0; c < ncols; ++c)
+    for (unsigned int r = 0; r < n; ++r)
+    result(r, c) = this->Superclass::operator()(row+r,c);
+  return result;
 }
 
 template<class T, unsigned nrows, unsigned ncols>
@@ -462,11 +490,12 @@ vnl_matrix_fixed<T,nrows,ncols>::get_n_columns (unsigned column, unsigned n) con
   if (column + n > ncols)
     vnl_error_matrix_col_index ("get_n_columns", column);
 #endif
-
+//  Superclass temp = this->Superclass::operator()(Eigen::seq(0,column), Eigen::seq(this->rows()-1,column+n));
+//  return temp;
   vnl_matrix<T> result(nrows, n);
   for (unsigned int c = 0; c < n; ++c)
     for (unsigned int r = 0; r < nrows; ++r)
-      result(r, c) = this->data_[r][column + c];
+      result(r, c) = this->Superclass::operator()(r,column + c);
   return result;
 }
 
@@ -481,7 +510,7 @@ vnl_vector_fixed<T,ncols> vnl_matrix_fixed<T,nrows,ncols>::get_row(unsigned row_
 
   vnl_vector_fixed<T,ncols> v;
   for (unsigned int j = 0; j < ncols; ++j)    // For each element in row
-    v[j] = this->data_[row_index][j];
+    v[j] = this->Superclass::operator()(row_index,j);
   return v;
 }
 
@@ -496,7 +525,7 @@ vnl_vector_fixed<T,nrows> vnl_matrix_fixed<T,nrows,ncols>::get_column(unsigned c
 
   vnl_vector_fixed<T,nrows> v;
   for (unsigned int j = 0; j < nrows; ++j)
-    v[j] = this->data_[j][column_index];
+    v[j] = this->Superclass::operator()(j,column_index);
   return v;
 }
 
@@ -508,7 +537,7 @@ vnl_matrix_fixed<T,nrows,ncols>
 {
   vnl_matrix<T> m(i.size(), this->cols());
   for (unsigned int j = 0; j < i.size(); ++j)
-    m.set_row(j, this->get_row(i.get(j)).as_ref());
+    m.set_row(j, this->get_row(i.get(j)).as_vector());
   return m;
 }
 
@@ -520,7 +549,7 @@ vnl_matrix_fixed<T,nrows,ncols>
 {
   vnl_matrix<T> m(this->rows(), i.size());
   for (unsigned int j = 0; j < i.size(); ++j)
-    m.set_column(j, this->get_column(i.get(j)).as_ref());
+    m.set_column(j, this->get_column(i.get(j)).as_vector());
   return m;
 }
 
@@ -530,7 +559,7 @@ vnl_vector<T> vnl_matrix_fixed<T,nrows,ncols>::get_diagonal() const
 {
   vnl_vector<T> v(nrows < ncols ? nrows : ncols);
   for (unsigned int j = 0; j < nrows && j < ncols; ++j)
-    v[j] = this->data_[j][j];
+    v[j] = this->Superclass::operator()(j,j);
   return v;
 }
 
@@ -550,7 +579,7 @@ vnl_vector_fixed<T,nrows*ncols> vnl_matrix_fixed<T,nrows,ncols>::flatten_column_
   vnl_vector_fixed<T,nrows*ncols> v;
   for (unsigned int c = 0; c < ncols; ++c)
     for (unsigned int r = 0; r < nrows; ++r)
-      v[c*nrows+r] = this->data_[r][c];
+      v[c*nrows+r] = this->Superclass::operator()(r,c);
   return v;
 }
 
@@ -561,7 +590,7 @@ vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::set_row(unsigned row_index, T const *v)
 {
   for (unsigned int j = 0; j < ncols; ++j)
-    this->data_[row_index][j] = v[j];
+    this->Superclass::operator()(row_index,j) = v[j];
   return *this;
 }
 
@@ -573,7 +602,7 @@ vnl_matrix_fixed<T,nrows,ncols>::set_row(unsigned row_index, vnl_vector<T> const
     set_row(row_index,v.data_block());
   else
     for (unsigned int j = 0; j < v.size(); ++j)
-      this->data_[row_index][j] = v[j];
+      this->Superclass::operator()(row_index,j) = v[j];
   return *this;
 }
 
@@ -590,7 +619,7 @@ vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::set_row(unsigned row_index, T v)
 {
   for (unsigned int j = 0; j < ncols; ++j)
-    this->data_[row_index][j] = v;
+    this->Superclass::operator()(row_index,j) = v;
   return *this;
 }
 
@@ -601,7 +630,7 @@ vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::set_column(unsigned column_index, T const *v)
 {
   for (unsigned int i = 0; i < nrows; ++i)
-    this->data_[i][column_index] = v[i];
+    this->Superclass::operator()(i,column_index) = v[i];
   return *this;
 }
 
@@ -613,7 +642,7 @@ vnl_matrix_fixed<T,nrows,ncols>::set_column(unsigned column_index, vnl_vector<T>
     set_column(column_index,v.data_block());
   else
     for (unsigned int i = 0; i < v.size(); ++i)
-      this->data_[i][column_index] = v[i];
+      this->Superclass::operator()(i,column_index) = v[i];
   return *this;
 }
 
@@ -630,7 +659,7 @@ vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::set_column(unsigned column_index, T v)
 {
   for (unsigned int j = 0; j < nrows; ++j)
-    this->data_[j][column_index] = v;
+    this->Superclass::operator()(j,column_index) = v;
   return *this;
 }
 
@@ -641,7 +670,7 @@ vnl_matrix_fixed<T,nrows,ncols>::set_columns(unsigned starting_column, vnl_matri
 {
   for (unsigned int j = 0; j < m.cols() && starting_column+j < ncols; ++j) // don't go too far right; possibly only use part of m
     for (unsigned int i = 0; i < nrows && i < m.rows(); ++i) // smallest of the two heights; possibly only use part of m
-      this->data_[i][starting_column + j] = m(i,j);
+      this->Superclass::operator()(i,starting_column + j) = m(i,j);
   return *this;
 }
 
@@ -655,7 +684,7 @@ vnl_matrix_fixed<T,nrows,ncols>::is_identity() const
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
     {
-      T xm = this->data_[i][j];
+      T xm = this->Superclass::operator()(i,j);
       if ( !((i == j) ? (xm == one) : (xm == zero)) )
         return false;
     }
@@ -671,7 +700,7 @@ vnl_matrix_fixed<T,nrows,ncols>::is_identity(double tol) const
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
     {
-      T xm = this->data_[i][j];
+      T xm = this->Superclass::operator()(i,j);
       abs_t absdev = (i == j) ? vnl_math::abs(xm - one) : vnl_math::abs(xm);
       if (absdev > tol)
         return false;
@@ -686,7 +715,7 @@ vnl_matrix_fixed<T,nrows,ncols>::is_zero() const
   T const zero(0);
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      if ( !( this->data_[i][ j] == zero) )
+      if ( !( this->Superclass::operator()(i, j) == zero) )
         return false;
 
   return true;
@@ -704,7 +733,7 @@ bool vnl_matrix_fixed<T,nrows,ncols>
 
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      if (vnl_math::abs(this->data_[i][j] - rhs.data_[i][j]) > tol)
+      if (vnl_math::abs(this->Superclass::operator()(i,j) - rhs(i,j)) > tol)
         return false;                                    // difference greater than tol
 
   return true;
@@ -716,7 +745,7 @@ vnl_matrix_fixed<T,nrows,ncols>::is_zero(double tol) const
 {
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      if (vnl_math::abs(this->data_[i][j]) > tol)
+      if (vnl_math::abs(this->Superclass::operator()(i,j)) > tol)
         return false;
 
   return true;
@@ -728,7 +757,7 @@ vnl_matrix_fixed<T,nrows,ncols>::has_nans() const
 {
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      if (vnl_math::isnan(this->data_[i][j]))
+      if (vnl_math::isnan(this->Superclass::operator()(i,j)))
         return true;
 
   return false;
@@ -740,7 +769,7 @@ vnl_matrix_fixed<T,nrows,ncols>::is_finite() const
 {
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      if (!vnl_math::isfinite(this->data_[i][j]))
+      if (!vnl_math::isfinite(this->Superclass::operator()(i,j)))
         return false;
 
   return true;
@@ -756,17 +785,17 @@ vnl_matrix_fixed<T,nrows,ncols>::assert_finite_internal() const
 
   std::cerr << "\n\n" __FILE__ ": " << __LINE__ << ": matrix has non-finite elements\n";
 
-  if (rows() <= 20 && cols() <= 20)
+  if (this->Superclass::rows() <= 20 && this->Superclass::cols() <= 20)
     std::cerr << __FILE__ ": here it is:\n" << *this << '\n';
   else
   {
-    std::cerr << __FILE__ ": it is quite big (" << rows() << 'x' << cols() << ")\n"
+    std::cerr << __FILE__ ": it is quite big (" << this->Superclass::rows() << 'x' << this->Superclass::cols() << ")\n"
              << __FILE__ ": in the following picture '-' means finite and '*' means non-finite:\n";
 
-    for (unsigned int i=0; i<rows(); ++i)
+    for (unsigned int i=0; i<this->Superclass::rows(); ++i)
     {
-      for (unsigned int j=0; j<cols(); ++j)
-        std::cerr << char(vnl_math::isfinite(this->data_[i][ j]) ? '-' : '*');
+      for (unsigned int j=0; j<this->Superclass::cols(); ++j)
+        std::cerr << char(vnl_math::isfinite(this->Superclass::operator()(i, j)) ? '-' : '*');
       std::cerr << '\n';
     }
   }
@@ -799,7 +828,7 @@ vnl_matrix_fixed<T,nrows,ncols>::read_ascii(std::istream& s)
 
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      s >> this->data_[i][j];
+      s >> this->Superclass::operator()(i,j);
 
   return s.good() || s.eof();
 }
@@ -814,7 +843,7 @@ vnl_matrix_fixed<T,nrows,ncols>::flipud()
     const unsigned int r2 = nrows - 1 - r1;
     for (unsigned int c = 0; c < ncols; ++c)
     {
-    std::swap(this->data_[r1][c], this->data_[r2][c]);
+    std::swap(this->Superclass::operator()(r1,c), this->Superclass::operator()(r2,c));
     }
   }
   return *this;
@@ -830,7 +859,7 @@ vnl_matrix_fixed<T,nrows,ncols>::fliplr()
     const unsigned int c2 = ncols - 1 - c1;
     for (unsigned int r = 0; r < nrows; ++r)
     {
-    std::swap(this->data_[r][c1], this->data_[r][c2]);
+    std::swap(this->Superclass::operator()(r,c1), this->Superclass::operator()(r,c2));
     }
   }
   return *this;
@@ -845,7 +874,7 @@ vnl_matrix_fixed<T,nrows,ncols>::operator_one_norm() const
   {
     abs_t t(0);
     for (unsigned int i=0; i<nrows; ++i)
-      t += vnl_math::abs( this->data_[i][j] );
+      t += vnl_math::abs( this->Superclass::operator()(i,j) );
     if (t > m)
       m = t;
   }
@@ -861,7 +890,7 @@ vnl_matrix_fixed<T,nrows,ncols>::operator_inf_norm() const
   {
     abs_t t(0);
     for (unsigned int j=0; j<ncols; ++j)
-      t += vnl_math::abs( this->data_[i][j] );
+      t += vnl_math::abs( this->Superclass::operator()(i,j) );
     if (t > m)
       m = t;
   }
@@ -877,9 +906,9 @@ vnl_matrix_fixed<T,nrows,ncols>::inplace_transpose()
   for (unsigned i = 0; i < nrows; ++i)
   for (unsigned j = i+1; j < ncols; ++j)
   {
-    T t = this->data_[i][j];
-    this->data_[i][j] = this->data_[j][i];
-    this->data_[j][i] = t;
+    T t = this->Superclass::operator()(i,j);
+    this->Superclass::operator()(i,j) = this->Superclass::operator()(j,i);
+    this->Superclass::operator()(j,i) = t;
   }
   return *this;
 }
@@ -888,14 +917,14 @@ template <class T, unsigned m, unsigned n>
 T const*
 vnl_matrix_fixed<T, m, n>::data_block() const
 {
-	return data_[0];
+	return this->data();
 }
 
 template <class T, unsigned m, unsigned n>
 T      *
 vnl_matrix_fixed<T, m, n>::data_block()
 {
-	return data_[0];
+	return this->data();
 }
 
 template <class T, unsigned m, unsigned n>

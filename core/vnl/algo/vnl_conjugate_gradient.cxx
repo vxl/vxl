@@ -45,10 +45,12 @@ vnl_conjugate_gradient::gradientcomputer_(double * g, double * x, void * userdat
 {
   auto * self = static_cast<vnl_conjugate_gradient *>(userdata);
   vnl_cost_function * f = self->f_;
-  vnl_vector_ref<double> ref_x(f->get_number_of_unknowns(), x);
-  vnl_vector_ref<double> ref_g(f->get_number_of_unknowns(), g);
-
+  const auto num_unknowns = f->get_number_of_unknowns();
+  vnl_vector<double> ref_x(x, num_unknowns);
+  vnl_vector<double> ref_g(g, num_unknowns);
   f->gradf(ref_x, ref_g);
+  std::copy(ref_x.cbegin(), ref_x.cend() , x);
+  std::copy(ref_g.cbegin(), ref_g.cend() , g);
 }
 
 void
@@ -56,10 +58,12 @@ vnl_conjugate_gradient::valueandgradientcomputer_(double * v, double * g, double
 {
   auto * self = static_cast<vnl_conjugate_gradient *>(userdata);
   vnl_cost_function * f = self->f_;
-  vnl_vector_ref<double> ref_x(f->get_number_of_unknowns(), x);
-  vnl_vector_ref<double> ref_g(f->get_number_of_unknowns(), g);
-
+  const auto num_unknowns = f->get_number_of_unknowns();
+  vnl_vector<double> ref_x(x, num_unknowns);
+  vnl_vector<double> ref_g(g, num_unknowns);
   f->compute(ref_x, v, &ref_g);
+  std::copy(ref_x.cbegin(), ref_x.cend() , x);
+  std::copy(ref_g.cbegin(), ref_g.cend() , g);
 }
 
 void

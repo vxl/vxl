@@ -14,25 +14,6 @@
 constexpr unsigned nstests = 10;
 
 
-void
-fill_with_rng(double * begin, const double * end, double a, double b, vnl_random & rng)
-{
-  while (begin != end)
-  {
-    *begin = rng.drand64(a, b);
-    ++begin;
-  }
-}
-
-void
-fill_with_rng(float * begin, const float * end, float a, float b, vnl_random & rng)
-{
-  while (begin != end)
-  {
-    *begin = (float)rng.drand32(a, b);
-    ++begin;
-  }
-}
 
 template <class T>
 void
@@ -179,18 +160,20 @@ run_for_size(unsigned m, unsigned n, T /*dummy*/, const char * type, const char 
   constexpr unsigned n_data = 10;
   std::vector<vnl_vector<T>> x(n_data), y(n_data), z(n_data);
   std::vector<T> v(n_data);
-  vnl_matrix<T> A(m, n);
 
   for (unsigned k = 0; k < n_data; ++k)
   {
     x[k].set_size(n);
     z[k].set_size(m);
     y[k].set_size(m);
-    fill_with_rng(x[k].begin(), x[k].end(), T(-10000), T(10000), rng);
-    fill_with_rng(y[k].begin(), y[k].end(), T(-10000), T(10000), rng);
-    fill_with_rng(z[k].begin(), z[k].end(), T(-10000), T(10000), rng);
+
+    std::generate(x[k].begin(), x[k].end(), [&] () { return rng.drand64(T(-10000), T(10000));});
+    std::generate(y[k].begin(), y[k].end(), [&] () { return rng.drand64(T(-10000), T(10000));});
+    std::generate(z[k].begin(), z[k].end(), [&] () { return rng.drand64(T(-10000), T(10000));});
   }
-  fill_with_rng(A.begin(), A.end(), -10000, 10000, rng);
+  vnl_matrix<T> A(m, n);
+  std::generate(A.begin(), A.end(), [&] () { return rng.drand64(-10000, 10000);});
+
 
   int n_loops = 1000000 / m;
   std::cout << "\nTimes to operator on " << type << ' ' << m << "-d vectors and " << m << " x " << n

@@ -54,7 +54,6 @@ if(NETLIB_FOUND)
     vnl_complex_eigensystem.cxx vnl_complex_eigensystem.h
     vnl_symmetric_eigensystem.hxx vnl_symmetric_eigensystem.h
     vnl_generalized_eigensystem.cxx vnl_generalized_eigensystem.h
-    vnl_sparse_symmetric_eigensystem.cxx vnl_sparse_symmetric_eigensystem.h
     vnl_generalized_schur.cxx vnl_generalized_schur.h
     vnl_complex_generalized_schur.cxx vnl_complex_generalized_schur.h
 

@@ -141,6 +141,7 @@ test_common_interface()
     TContainer r_std_swap(r);
 
     l_swap.swap(r_swap);
+
     TEST("swap left-right", l.is_equal(r_swap, 10e-6), true);
     TEST("swap right-left", r.is_equal(l_swap, 10e-6), true);
 

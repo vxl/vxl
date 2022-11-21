@@ -296,11 +296,6 @@ add_subdirectory(vcl)
 add_subdirectory(v3p)
 add_subdirectory(core)
 
-# Optionally build the contributed libraries
-#if( EXISTS ${CMAKE_CURRENT_LIST_DIR}/contrib/CMakeLists.txt )
-#  CMAKE_DEPENDENT_OPTION(VXL_BUILD_CONTRIB "Build the contributed libraries?" OFF "VXL_BUILD_CORE_GEOMETRY;VXL_BUILD_CORE_NUMERICS;VXL_BUILD_CORE_UTILITIES;VXL_BUILD_CORE_SERIALISATION;VXL_BUILD_CORE_IMAGING;NOT VXL_BUILD_CORE_NUMERICS_ONLY" OFF)
-#  add_subdirectory(contrib)
-#endif()
 
 # Generate Project files dependacy generation for now for downstream packages
 

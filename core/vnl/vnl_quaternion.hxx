@@ -246,7 +246,7 @@ template <class T>
 vnl_matrix_fixed<T,4,4> vnl_quaternion<T>::rotation_matrix_transpose_4() const
 {
   vnl_matrix_fixed<T,4,4> rot;
-  return rot.set_identity().update(this->rotation_matrix_transpose().as_ref());
+  return rot.set_identity().update(this->rotation_matrix_transpose().as_matrix());
 }
 
 //: Returns the conjugate of given quaternion, having same real and opposite imaginary parts.
@@ -265,7 +265,9 @@ template <class T>
 vnl_quaternion<T> vnl_quaternion<T>::inverse() const
 {
   vnl_quaternion<T> inv = this->conjugate();
-  inv /= vnl_c_vector<T>::dot_product(this->data_, this->data_, 4);
+  inv /= vnl_c_vector<T>::dot_product(this->Superclass::data(), this->Superclass::data(), 4);
+  //HACK const auto denominator = this->dot(*this);
+  //HACK inv /= denominator;
   return inv;
 }
 

@@ -60,11 +60,11 @@ class VNL_EXPORT vnl_real_npolynomial
   //: degrees of every term for every variable
   vnl_matrix<unsigned int> polyn_;
   //: number of variables = # columns of polyn_
-  unsigned int nvar_{0};
+  Eigen::Index nvar_{0};
   //: number of terms of polynomial
-  unsigned int nterms_{0};
+  Eigen::Index nterms_{0};
   //: max. degree of polynomial
-  unsigned int ideg_{0};
+  Eigen::Index ideg_{0};
 
   friend class vnl_rnpoly_solve;
 

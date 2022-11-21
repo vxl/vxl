@@ -21,7 +21,6 @@
 #include "vnl_matrix_fixed.h"
 #include "vnl_diag_matrix.h"
 #include "vnl_diag_matrix_fixed.h"
-#include "vnl_sym_matrix.h"
 #include "vnl/vnl_export.h"
 
 //: Overwrite complex array C (of length n) with pairs from real arrays R and I.
@@ -40,7 +39,6 @@ void
 // - vnl_matrix_fixed
 // - vnl_diag_matrix
 // - vnl_diag_matrix_fixed
-// - vnl_sym_matrix
 
 //: Return complexified version of real vector R.
 // \relatesalso vnl_vector
@@ -102,11 +100,6 @@ vnl_diag_matrix_fixed<std::complex<T>,n >
   return C;
 }
 
-//: Return complexified version of real symmetric matrix R.
-// \relatesalso vnl_sym_matrix
-template <class T> VNL_EXPORT
-vnl_sym_matrix<std::complex<T> >
-  vnl_complexify(vnl_sym_matrix<T> const& R);
 
 //----------------------------------------------------------------------
 
@@ -117,7 +110,6 @@ vnl_sym_matrix<std::complex<T> >
 // - vnl_matrix_fixed
 // - vnl_diag_matrix
 // - vnl_diag_matrix_fixed
-// - vnl_sym_matrix
 
 //: Return complex vector R+j*I from two real vectors R and I.
 // \relatesalso vnl_vector
@@ -169,11 +161,5 @@ vnl_diag_matrix_fixed<std::complex<T>,n>
   vnl_complexify(R.begin(), I.begin(), C.begin(), R.size());
   return C;
 }
-
-//: Return complex diagonal matrix R+j*I from two real diagonal matrices R and I.
-// \relatesalso vnl_diag_matrix
-template <class T> VNL_EXPORT
-vnl_sym_matrix<std::complex<T> >
-  vnl_complexify(vnl_sym_matrix<T> const& R, vnl_sym_matrix<T> const& I);
 
 #endif // vnl_complexify_h_

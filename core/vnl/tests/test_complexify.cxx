@@ -190,40 +190,6 @@ test_complexify_instance(const ValueType & re, const ValueType & im)
     TEST("vnl_diag_matrix_fixed vnl_imag", im, r_diag_matrix_fixed.get(i, i));
   }
 
-  std::cout << "######################" << std::endl;
-  std::cout << "Testing vnl_sym_matrix" << std::endl;
-  std::cout << "######################" << std::endl;
-
-  vnl_sym_matrix<ValueType> r_sym_matrix(length, re);
-  vnl_sym_matrix<ValueType> i_sym_matrix(length, im);
-  vnl_sym_matrix<std::complex<ValueType>> c_sym_matrix = vnl_complexify(r_sym_matrix);
-  for (unsigned int c = 0; c < length; ++c)
-  {
-    for (unsigned int r = 0; r < length; ++r)
-    {
-      TEST("vnl_sym_matrix real", re, c_sym_matrix(r, c).real()); // no get()
-      TEST("vnl_sym_matrix imag", 0.0, c_sym_matrix(r, c).imag());
-    }
-  }
-  c_sym_matrix = vnl_complexify(r_sym_matrix, i_sym_matrix);
-  for (unsigned int c = 0; c < length; ++c)
-  {
-    for (unsigned int r = 0; r < length; ++r)
-    {
-      TEST("vnl_sym_matrix real", re, c_sym_matrix(r, c).real()); // no get()
-      TEST("vnl_sym_matrix imag", im, c_sym_matrix(r, c).imag());
-    }
-  }
-  r_sym_matrix = vnl_imag(c_sym_matrix);
-  i_sym_matrix = vnl_real(c_sym_matrix);
-  for (unsigned int c = 0; c < length; ++c)
-  {
-    for (unsigned int r = 0; r < length; ++r)
-    {
-      TEST("vnl_sym_matrix vnl_real", re, i_sym_matrix(r, c));
-      TEST("vnl_sym_matrix vnl_imag", im, r_sym_matrix(r, c));
-    }
-  }
 }
 
 static void

@@ -72,7 +72,7 @@ class VNL_ALGO_EXPORT vnl_ldl_cholesky
   const vnl_matrix<double>& lower_triangle() const { return L_; }
 
   //: Return upper-triangular factor.
-  vnl_matrix<double> upper_triangle() const { return L_.transpose(); }
+  vnl_matrix<double> upper_triangle() const { return L_.transpose().eval(); }
 
   //: Return elements of diagonal matrix D in LDL'
   const vnl_vector<double>& diagonal() const { return d_; }

@@ -21,7 +21,7 @@ vnl_int_matrix::vnl_int_matrix(const vnl_matrix<double> & d)
 
   for (unsigned i = 0; i < m; ++i)
     for (unsigned j = 0; j < n; ++j)
-      (*this)(i, j) = (int)d(i, j);
+      this->operator()(i, j) = (int)d(i, j);
 }
 
 //: Load from disk

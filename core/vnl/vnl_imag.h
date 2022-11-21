@@ -20,7 +20,6 @@
 #include "vnl_matrix_fixed.h"
 #include "vnl_diag_matrix.h"
 #include "vnl_diag_matrix_fixed.h"
-#include "vnl_sym_matrix.h"
 #include "vnl/vnl_export.h"
 
 //: Return array I of imaginary parts of complex array C.
@@ -34,7 +33,6 @@ vnl_imag(std::complex<T> const* C, T* I, unsigned int n);
 // - vnl_matrix_fixed
 // - vnl_diag_matrix
 // - vnl_diag_matrix_fixed
-// - vnl_sym_matrix
 
 //: Vector of imaginary parts of vnl_vector<std::complex<T> >.
 // \relatesalso vnl_vector
@@ -95,12 +93,5 @@ vnl_imag(vnl_diag_matrix_fixed<std::complex<T>,N > const& C)
     *rIt = std::imag(*cIt);
   return R;
 }
-
-//: Matrix of imaginary parts of vnl_sym_matrix<std::complex<T> >.
-// \relatesalso vnl_sym_matrix
-template <class T> VNL_EXPORT
-vnl_sym_matrix<T>
-vnl_imag(vnl_sym_matrix<std::complex<T> > const& C);
-
 
 #endif // vnl_imag_h_

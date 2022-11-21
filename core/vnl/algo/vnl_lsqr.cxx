@@ -33,7 +33,7 @@ public:
     vnl_vector_ref<double> x_ref(n, const_cast<double *>(x));
     vnl_vector_ref<double> y_ref(m, y);
 
-    vnl_vector_ref<double> tmp(m, rw);
+    vnl_vector<double> tmp(this->rw, m);
     this->ls_->multiply(x_ref, tmp);
     y_ref += tmp;
   }
@@ -51,7 +51,7 @@ public:
     vnl_vector_ref<double> x_ref(n, x);
     vnl_vector_ref<double> y_ref(m, const_cast<double *>(y));
 
-    vnl_vector_ref<double> tmp(n, this->rw);
+    vnl_vector<double> tmp(this->rw,n);
     this->ls_->transpose_multiply(y_ref, tmp);
     x_ref += tmp;
   }
@@ -106,13 +106,13 @@ vnl_lsqr::aprod_(const long * mode,
 
   if (*mode == 1)
   {
-    vnl_vector_ref<double> tmp(*m, rw);
+    vnl_vector<double> tmp(rw, *m);
     self->ls_->multiply(x_ref, tmp);
     y_ref += tmp;
   }
   else
   {
-    vnl_vector_ref<double> tmp(*n, rw);
+    vnl_vector<double> tmp(rw, *n);
     self->ls_->transpose_multiply(y_ref, tmp);
     x_ref += tmp;
   }

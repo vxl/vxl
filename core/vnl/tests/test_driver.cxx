@@ -1,6 +1,5 @@
 #include "testlib/testlib_register.h"
 
-DECLARE(test_bignum);
 DECLARE(test_decnum);
 DECLARE(test_complexify);
 DECLARE(test_complex);
@@ -20,13 +19,11 @@ DECLARE(test_na);
 DECLARE(test_numeric_traits);
 DECLARE(test_power);
 DECLARE(test_quaternion);
-DECLARE(test_rational);
 DECLARE(test_polynomial);
 DECLARE(test_real_polynomial);
 DECLARE(test_real_npolynomial);
 DECLARE(test_resize);
 DECLARE(test_rotation_matrix);
-DECLARE(test_sym_matrix);
 DECLARE(test_transpose);
 DECLARE(test_fastops);
 DECLARE(test_vector);
@@ -47,7 +44,6 @@ DECLARE(test_vnl_index_sort);
 void
 register_tests()
 {
-  REGISTER(test_bignum);
   REGISTER(test_decnum);
   REGISTER(test_complexify);
   REGISTER(test_complex);
@@ -66,13 +62,11 @@ register_tests()
   REGISTER(test_numeric_traits);
   REGISTER(test_power);
   REGISTER(test_quaternion);
-  REGISTER(test_rational);
   REGISTER(test_polynomial);
   REGISTER(test_real_polynomial);
   REGISTER(test_real_npolynomial);
   REGISTER(test_resize);
   REGISTER(test_rotation_matrix);
-  REGISTER(test_sym_matrix);
   REGISTER(test_transpose);
   REGISTER(test_fastops);
   REGISTER(test_vector);

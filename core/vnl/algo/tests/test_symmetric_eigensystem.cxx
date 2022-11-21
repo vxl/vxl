@@ -117,8 +117,12 @@ test_symmetric_eigensystem()
     {
       // Generate same random system
       vnl_random rng(5);
-      vnl_double_3x3 M, evecs;
-      vnl_double_3 evals;
+      vnl_matrix<double> evecs;
+      evecs.resize(3,3);
+      vnl_matrix<double> M;
+      M.resize(3,3);
+      vnl_vector<double> evals;
+      evals.resize(3);
 
       for (auto & c : netlib_data)
       {
@@ -130,7 +134,7 @@ test_symmetric_eigensystem()
         M(2, 2) = rng.drand64() * 10.0 - 5.0;
 
         const auto timer_03 = std::chrono::high_resolution_clock::now();
-        vnl_symmetric_eigensystem_compute(M.as_ref(), evecs.as_ref().non_const(), evals.as_ref().non_const());
+        vnl_symmetric_eigensystem_compute(M, evecs, evals);
         const auto timer_04 = std::chrono::high_resolution_clock::now();
         netlib_time += (timer_04 - timer_03).count();
         c[0] = evals[0];

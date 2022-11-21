@@ -429,20 +429,19 @@ vnl_sparse_lm::compute_normal_equations()
     vnl_matrix<double> & Qi = Q_[i];
     Qi.fill(0.0);
     unsigned int ai_size = f_->number_of_params_a(i);
-    vnl_vector_ref<double> eai(ai_size, ea_.data_block() + f_->index_a(i));
+    vnl_vector<double> eai(ea_.data_block() + f_->index_a(i), ai_size);
 
     vnl_crs_index::sparse_vector row = crs.sparse_row(i);
     for (auto & r_itr : row)
     {
       unsigned int j = r_itr.second;
       unsigned int k = r_itr.first;
-      ;
+
       vnl_matrix<double> & Aij = A_[k];
       vnl_matrix<double> & Bij = B_[k];
       vnl_matrix<double> & Cij = C_[k];
       vnl_matrix<double> & Vj = V_[j];
       vnl_matrix<double> & Rj = R_[j];
-      vnl_vector_ref<double> ebj(Bij.cols(), eb_.data_block() + f_->index_b(j));
 
       vnl_fastops::inc_X_by_AtA(T_, Cij);      // T = C^T * C
       vnl_fastops::inc_X_by_AtA(Ui, Aij);      // Ui += A_ij^T * A_ij
@@ -451,11 +450,17 @@ vnl_sparse_lm::compute_normal_equations()
       vnl_fastops::inc_X_by_AtB(Qi, Cij, Aij); // Qi += C_ij^T * A_ij
       vnl_fastops::inc_X_by_AtB(Rj, Cij, Bij); // Rj += C_ij^T * B_ij
 
-      vnl_vector_ref<double> eij(f_->number_of_residuals(k), e_.data_block() + f_->index_e(k));
+      vnl_vector<double> eij( e_.data_block() + f_->index_e(k), f_->number_of_residuals(k));
+      vnl_vector<double> ebj( eb_.data_block() + f_->index_b(j), Bij.cols());
+
       vnl_fastops::inc_X_by_AtB(eai, Aij, eij); // e_a_i += A_ij^T * e_ij
       vnl_fastops::inc_X_by_AtB(ebj, Bij, eij); // e_b_j += B_ij^T * e_ij
       vnl_fastops::inc_X_by_AtB(ec_, Cij, eij); // e_c   += C_ij^T * e_ij
+
+      std::copy(eij.cbegin(), eij.cend(), e_.data_block() + f_->index_e(k));
+      std::copy(ebj.cbegin(), ebj.cend(), eb_.data_block() + f_->index_b(j) );
     }
+    std::copy(eai.cbegin(), eai.cend(),ea_.data_block() + f_->index_a(i));
   }
 }
 
@@ -697,7 +702,7 @@ vnl_sparse_lm::compute_sea(vnl_vector<double> const & dc, vnl_vector<double> & s
   sea = ea_; // initialize se to ea_
   for (int i = 0; i < num_a_; ++i)
   {
-    vnl_vector_ref<double> sei(f_->number_of_params_a(i), sea.data_block() + f_->index_a(i));
+    vnl_vector<double> sei( sea.data_block() + f_->index_a(i), f_->number_of_params_a(i));
     vnl_crs_index::sparse_vector row_i = crs.sparse_row(i);
 
     vnl_fastops::inc_X_by_AtB(sei, Z_[i], dc);
@@ -709,6 +714,7 @@ vnl_sparse_lm::compute_sea(vnl_vector<double> const & dc, vnl_vector<double> & s
       vnl_vector_ref<double> ebj(Yij.cols(), eb_.data_block() + f_->index_b(ri.second));
       sei -= Yij * ebj; // se_i -= Y_ij * e_b_j
     }
+    std::copy(sei.cbegin(), sei.cend(), sea.data_block() + f_->index_a(i));
   }
 }
 
@@ -793,8 +799,9 @@ vnl_sparse_lm::backsolve_db(vnl_vector<double> const & da, vnl_vector<double> co
                                        const_cast<double *>(da.data_block() + f_->index_a(i)));
       vnl_fastops::dec_X_by_AtB(seb, W_[k], dai);
     }
-    vnl_vector_ref<double> dbi(f_->number_of_params_b(j), db.data_block() + f_->index_b(j));
+    vnl_vector<double> dbi(db.data_block() + f_->index_b(j),f_->number_of_params_b(j));
     vnl_fastops::Ab(dbi, inv_V_[j], seb);
+    std::copy(dbi.cbegin(), dbi.cend(), db.data_block() + f_->index_b(j));
   }
 }
 

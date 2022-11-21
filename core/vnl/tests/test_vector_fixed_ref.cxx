@@ -12,7 +12,7 @@ test_vector_fixed_ref()
     const double numbers[4]{ 0, 11, 22, 33 };
     vnl_vector<double> v{ numbers, 4 };
     // vnl_vector_ref(numbers, 4); // Should fail to compile due to const double numbers
-    vnl_vector_ref<double> memory_access_vnl_ref{ v.size(), v.data_block() };
+    vnl_vector_ref<double> memory_access_vnl_ref{ static_cast<size_t>(v.size()), v.data_block() };
     const vnl_vector_ref<double> const_cpprefvector{ memory_access_vnl_ref };
 
     const_cpprefvector.as_ref();

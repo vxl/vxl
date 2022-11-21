@@ -37,7 +37,6 @@ struct vnl_matrix_inverse : public vnl_svd<T>
   vnl_matrix<T> as_matrix() const { return this->inverse(); }
 
   explicit operator vnl_matrix<T>() const { return this->inverse(); }
-
 };
 
 template <class T>

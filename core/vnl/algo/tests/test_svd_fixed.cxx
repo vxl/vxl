@@ -13,7 +13,8 @@
 #include <vnl/algo/vnl_svd_fixed.h>
 #include <vnl/algo/vnl_svd.h>
 #include "vnl/vnl_inverse.h"
-
+#include "vnl/vnl_matlab_print_format.h"
+#include "vnl/vnl_matlab_print.h"
 
 template <class T, class S>
 static void
@@ -95,7 +96,7 @@ test_I()
   std::cout << svd;
 
   vnl_vector_fixed<double, 4> w_expected(1, 1, 1, 0);
-  TEST_NEAR("Singular values", vnl_vector_ssd(w_expected, svd.W().diagonal().as_ref()), 0, 1e-16);
+  TEST_NEAR("Singular values", vnl_vector_ssd(w_expected, svd.W().diagonal().as_vector()), 0, 1e-16);
 }
 
 template <class T, unsigned int N>
@@ -119,7 +120,6 @@ test_svd_recomposition(char const * type, double maxres, T * /* tag */, vnl_rand
 }
 
 
-#include "vnl/vnl_matlab_print.h"
 template <class T>
 static void
 test_nullvector(char const * type, double max_err, T *, vnl_random & rng)

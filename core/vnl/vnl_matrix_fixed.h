@@ -101,16 +101,18 @@ vnl_matrix_fixed<T, M, O> vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed<T
 // Read the overview documentation of vnl_vector_fixed.
 // The text there applies here.
 template <class T, unsigned int num_rows, unsigned int num_cols>
-class VNL_EXPORT vnl_matrix_fixed
+class VNL_EXPORT vnl_matrix_fixed: public Eigen::Matrix<T, num_rows, num_cols, (num_cols !=1) & Eigen::RowMajorBit>
 {
- private:
-   static constexpr size_t num_elements = num_rows*num_cols;
-   static constexpr size_t num_bytes = num_elements*sizeof(T);
-   T data_[num_rows][num_cols]; // Local storage
-
+ protected:
+    using Superclass = Eigen::Matrix<T, num_rows, num_cols, (num_cols !=1) & Eigen::RowMajorBit>;
  public:
   typedef vnl_matrix_fixed<T,num_rows,num_cols> self;
   typedef size_t size_type;
+
+  template<typename Derived>
+  vnl_matrix_fixed(const Eigen::MatrixBase<Derived> & rhs)
+    : Superclass(rhs)
+  {}
 
   //: Construct an empty num_rows*num_cols matrix
   vnl_matrix_fixed() = default;
@@ -143,13 +145,13 @@ class VNL_EXPORT vnl_matrix_fixed
   //: Construct an m*n matrix and fill with value
   explicit vnl_matrix_fixed(T value)
   {
-    std::fill_n(data_[0],num_elements,value);
+    std::fill_n(this->data(),this->size(),value);
   }
 
   //: Construct an m*n Matrix and copy data into it row-wise.
   explicit vnl_matrix_fixed(const T* datablck)
   {
-    std::memcpy(data_[0], datablck, num_bytes);
+    std::copy(datablck, datablck+this->size(), this->data());
   }
 
   //: Construct an m*n Matrix and copy rhs into it.
@@ -157,9 +159,8 @@ class VNL_EXPORT vnl_matrix_fixed
   vnl_matrix_fixed(const vnl_matrix<T>& rhs)
   {
     assert(rhs.rows() == num_rows && rhs.columns() == num_cols);
-    std::memcpy(data_[0], rhs.data_block(), num_bytes);
+    std::copy(rhs.data(), rhs.data()+rhs.size(), this->data());
   }
-
 
   //: Set all elements to value v
   // Complexity $O(r.c)$
@@ -173,18 +174,18 @@ class VNL_EXPORT vnl_matrix_fixed
 
   //: Return the total number of elements stored by the matrix.
   // This equals rows() * cols()
-  constexpr unsigned int size() const { return num_elements; }
+  //constexpr unsigned int size() const { return this->Superclass::size(); }
 
   //: Return the number of rows.
-  constexpr unsigned int rows() const { return num_rows; }
+  //constexpr unsigned int rows() const { return num_rows; }
 
   //: Return the number of columns.
   // A synonym for columns().
-  constexpr unsigned int cols() const { return num_cols; }
+  //constexpr unsigned int cols() const { return num_cols; }
 
   //: Return the number of columns.
   // A synonym for cols().
-  constexpr unsigned int columns() const { return num_cols; }
+  constexpr unsigned int columns() const { return this->cols(); }
 
   //: set element
   inline void put (unsigned r, unsigned c, T const& v)
@@ -195,7 +196,7 @@ class VNL_EXPORT vnl_matrix_fixed
     if (c >= num_cols)                // If invalid size specified
       vnl_error_matrix_col_index("put", c); // Raise exception
 #endif
-    this->data_[r][c] = v;
+    this->Superclass::operator()(r,c) = v;
   }
 
   //: get element
@@ -207,19 +208,19 @@ class VNL_EXPORT vnl_matrix_fixed
     if (c >= num_cols)                // If invalid size specified
       vnl_error_matrix_col_index("get", c); // Raise exception
 #endif
-    return this->data_[r][c];
+    return this->Superclass::operator()(r,c);
   }
 
   //: set element, and return *this
-  vnl_matrix_fixed& set (unsigned r, unsigned c, T const& v) { (*this)(r,c) = v; return *this; }
+  vnl_matrix_fixed& set (unsigned r, unsigned c, T const& v) { this->Superclass::operator()(r,c) = v; return *this; }
 
   //: return pointer to given row
   // No boundary checking here.
-  T       * operator[] (unsigned r) { return data_[r]; }
+  T       * operator[] (unsigned r) { return this->data() + r*this->Superclass::cols(); }
 
   //: return pointer to given row
   // No boundary checking here.
-  T const * operator[] (unsigned r) const { return data_[r]; }
+  T const * operator[] (unsigned r) const { return this->data() + r*this->Superclass::cols(); }
 
   //: Access an element for reading or writing
   // There are assert style boundary checks - #define NDEBUG to turn them off.
@@ -349,7 +350,7 @@ class VNL_EXPORT vnl_matrix_fixed
   //:
   vnl_matrix_fixed& operator+= (vnl_matrix<T> const& m)
   {
-    assert( m.rows() == rows() && m.cols() == cols() );
+    assert( m.rows() == this->Superclass::rows() && m.cols() == this->Superclass::cols() );
     self::add( data_block(), m.data_block(), data_block() ); return *this;
   }
 
@@ -362,7 +363,7 @@ class VNL_EXPORT vnl_matrix_fixed
   //:
   vnl_matrix_fixed& operator-= (vnl_matrix<T> const& m)
   {
-    assert( m.rows() == rows() && m.cols() == cols() );
+    assert( m.rows() == this->Superclass::rows() && m.cols() == this->Superclass::cols() );
     self::sub( data_block(), m.data_block(), data_block() );
     return *this;
   }
@@ -384,9 +385,9 @@ class VNL_EXPORT vnl_matrix_fixed
     for (unsigned i = 0; i < num_rows; ++i)
       for (unsigned j = 0; j < num_cols; ++j)
       {
-        T accum = this->data_[i][0] * s(0,j);
+        T accum = this->Superclass::operator()(i,0) * s(0,j);
         for (unsigned k = 1; k < num_cols; ++k)
-          accum += this->data_[i][k] * s(k,j);
+          accum += this->Superclass::operator()(i,k) * s(k,j);
         out(i,j) = accum;
       }
     return *this = out;
@@ -459,6 +460,14 @@ class VNL_EXPORT vnl_matrix_fixed
   //  [top,top+sub_matrix.rows()-1][left,left+sub_matrix.cols()-1]
   void extract ( vnl_matrix<T>& sub_matrix,
                  unsigned top=0, unsigned left=0) const;
+
+  //: Extract a sub-matrix starting at (top,left)
+  //
+  //  The output is stored in \a sub_matrix, and it should have the
+  //  required size on entry.  Thus the result will contain elements
+  //  [top,top+sub_matrix.rows()-1][left,left+sub_matrix.cols()-1]
+  void extract ( vnl_matrix_ref<T>& sub_matrix,
+          unsigned top=0, unsigned left=0) const;
 
   //: Get a vector equal to the given row
   vnl_vector_fixed<T,num_cols> get_row   (unsigned row) const;
@@ -570,13 +579,13 @@ class VNL_EXPORT vnl_matrix_fixed
   typedef typename vnl_c_vector<T>::abs_t abs_t;
 
   //: Return sum of absolute values of elements
-  abs_t array_one_norm() const { return vnl_c_vector<T>::one_norm(begin(), size()); }
+  abs_t array_one_norm() const { return vnl_c_vector<T>::one_norm(begin(), this->Superclass::size()); }
 
   //: Return square root of sum of squared absolute element values
-  abs_t array_two_norm() const { return vnl_c_vector<T>::two_norm(begin(), size()); }
+  abs_t array_two_norm() const { return vnl_c_vector<T>::two_norm(begin(), this->Superclass::size()); }
 
   //: Return largest absolute element value
-  abs_t array_inf_norm() const { return vnl_c_vector<T>::inf_norm(begin(), size()); }
+  abs_t array_inf_norm() const { return vnl_c_vector<T>::inf_norm(begin(), this->Superclass::size()); }
 
   //: Return sum of absolute values of elements
   abs_t absolute_value_sum() const { return array_one_norm(); }
@@ -591,28 +600,28 @@ class VNL_EXPORT vnl_matrix_fixed
   abs_t operator_inf_norm() const;
 
   //: Return Frobenius norm of matrix (sqrt of sum of squares of its elements)
-  abs_t frobenius_norm() const { return vnl_c_vector<T>::two_norm(begin(), size()); }
+  abs_t frobenius_norm() const { return vnl_c_vector<T>::two_norm(begin(), this->Superclass::size()); }
 
   //: Return Frobenius norm of matrix (sqrt of sum of squares of its elements)
   abs_t fro_norm() const { return frobenius_norm(); }
 
   //: Return RMS of all elements
-  abs_t rms() const { return vnl_c_vector<T>::rms_norm(begin(), size()); }
+  abs_t rms() const { return vnl_c_vector<T>::rms_norm(begin(), this->Superclass::size()); }
 
   //: Return minimum value of elements
-  T min_value() const { return vnl_c_vector<T>::min_value(begin(), size()); }
+  T min_value() const { return vnl_c_vector<T>::min_value(begin(), this->Superclass::size()); }
 
   //: Return maximum value of elements
-  T max_value() const { return vnl_c_vector<T>::max_value(begin(), size()); }
+  T max_value() const { return vnl_c_vector<T>::max_value(begin(), this->Superclass::size()); }
 
   //: Return location of minimum value of elements
-  unsigned arg_min() const { return vnl_c_vector<T>::arg_min(begin(), size()); }
+  unsigned arg_min() const { return vnl_c_vector<T>::arg_min(begin(), this->Superclass::size()); }
 
   //: Return location of maximum value of elements
-  unsigned arg_max() const { return vnl_c_vector<T>::arg_max(begin(), size()); }
+  unsigned arg_max() const { return vnl_c_vector<T>::arg_max(begin(), this->Superclass::size()); }
 
   //: Return mean of all matrix elements
-  T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }
+  T mean() const { return vnl_c_vector<T>::mean(begin(), this->Superclass::size()); }
 
   // predicates
 
@@ -707,16 +716,16 @@ class VNL_EXPORT vnl_matrix_fixed
   //: Iterators
   typedef T       *iterator;
   //: Iterator pointing to start of data
-  inline iterator       begin() { return data_[0]; }
+  inline iterator       begin() { return this->data(); }
   //: Iterator pointing to element beyond end of data
-  inline iterator       end() { return begin() + size(); }
+  inline iterator       end() { return begin() + this->Superclass::size(); }
 
   //: Const iterators
   typedef T const *const_iterator;
   //: Iterator pointing to start of data
-  inline const_iterator begin() const { return data_[0]; }
+  inline const_iterator begin() const { return this->data(); }
   //: Iterator pointing to element beyond end of data
-  inline const_iterator end() const { return begin() + size(); }
+  inline const_iterator end() const { return begin() + this->Superclass::size(); }
 
   //--------------------------------------------------------------------------------
 

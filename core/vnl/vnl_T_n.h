@@ -16,11 +16,11 @@
 #include "vnl/vnl_export.h"
 
 //: cpp traits!
-#define vnl_T_n_aux_1(T) (T x) { data_[0] = x; } static_assert(true, "")
-#define vnl_T_n_aux_2(T) (T x, T y) { data_[0] = x; data_[1] = y; } static_assert(true, "")
-#define vnl_T_n_aux_3(T) (T x, T y, T z) { data_[0] = x; data_[1] = y; data_[2] = z; } static_assert(true, "")
-#define vnl_T_n_aux_4(T) (T x, T y, T z, T w) { data_[0] = x; data_[1] = y; data_[2] = z; data_[3] = w; } static_assert(true, "")
-#define vnl_T_n_aux_5(T) (T x, T y, T z, T w, T u) { data_[0] = x; data_[1] = y; data_[2] = z; data_[3] = w; data_[4]= u; } static_assert(true, "")
+#define vnl_T_n_aux_1(T) (T x) { (*this)[0] = x; } static_assert(true, "")
+#define vnl_T_n_aux_2(T) (T x, T y) { (*this)[0] = x; (*this)[1] = y; } static_assert(true, "")
+#define vnl_T_n_aux_3(T) (T x, T y, T z) { (*this)[0] = x; (*this)[1] = y; (*this)[2] = z; } static_assert(true, "")
+#define vnl_T_n_aux_4(T) (T x, T y, T z, T w) { (*this)[0] = x; (*this)[1] = y; (*this)[2] = z; (*this)[3] = w; } static_assert(true, "")
+#define vnl_T_n_aux_5(T) (T x, T y, T z, T w, T u) { (*this)[0] = x; (*this)[1] = y; (*this)[2] = z; (*this)[3] = w; (*this)[4]= u; } static_assert(true, "")
 
 //: this macro defines the class.
 // e.g. use vnl_T_n_impl(int,2) to implement class vnl_int_2.

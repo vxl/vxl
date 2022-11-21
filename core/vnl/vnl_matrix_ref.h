@@ -33,23 +33,31 @@
 //    operator new, and are therefore unlikely to be the unwitting subject
 //    of an operator delete.
 template <class T>
-class VNL_EXPORT vnl_matrix_ref : public vnl_matrix<T>
-{
-  typedef vnl_matrix<T> Base;
+using eigen_vnl_matrix_ref = Eigen::Map<eigen_vnl_matrix<T>>;
 
- public:
+template <class T>
+class VNL_EXPORT vnl_matrix_ref : public eigen_vnl_matrix_ref<T>
+{
+public:
+  typedef eigen_vnl_matrix_ref<T> Base;
+protected:
+  using Superclass=eigen_vnl_matrix_ref<T> ;
+public:
 
   // Constructors/Destructors--------------------------------------------------
   vnl_matrix_ref(unsigned int row, unsigned int col, const T *datablck)
-    : vnl_matrix<T>(row, col, const_cast<T *>(datablck), false)
+    : eigen_vnl_matrix_ref<T>( const_cast<T *>(datablck), row, col)
   { }
 
   vnl_matrix_ref(const vnl_matrix_ref<T> & other)
-  : vnl_matrix<T>(other.rows(), other.cols(),
-      const_cast<T *>(other.data_block()), false)
+  : eigen_vnl_matrix_ref<T>(const_cast<T *>(other.data()), other.rows(), other.cols())
   { }
 
-  ~vnl_matrix_ref() override = default;
+  ~vnl_matrix_ref() = default;
+
+  T * data_block() { return this->Superclass::data(); }
+  // T const * const data_block() const { return this->Superclass::data(); }
+
 
   //: Copy and move constructor from vnl_matrix_ref<T> is disallowed by default
   // due to other constructor definitions.
@@ -57,6 +65,14 @@ class VNL_EXPORT vnl_matrix_ref : public vnl_matrix<T>
   //  because it does not define external memory to be managed.
   vnl_matrix_ref & operator=( vnl_matrix_ref<T> const& ) = delete;
   vnl_matrix_ref & operator=( vnl_matrix_ref<T> && ) = delete;
+
+  //: Return the number of columns.
+  // A synonym for cols().
+  inline unsigned int
+  columns() const
+  {
+    return this->cols();
+  }
 
   //: Reference to self to make non-const temporaries.
   // This is intended for passing vnl_matrix_fixed objects to
@@ -73,6 +89,29 @@ class VNL_EXPORT vnl_matrix_ref : public vnl_matrix<T>
   // function. Otherwise, the underlying object will be destructed and
   // you'll be left with undefined behaviour.
   vnl_matrix_ref& non_const() { return *this; }
+
+  //: Extract a sub-matrix of size r x c, starting at (top,left)
+  //  Thus it contains elements  [top,top+r-1][left,left+c-1]
+  vnl_matrix<T>
+  extract(unsigned r, unsigned c, unsigned top = 0, unsigned left = 0) const
+  {
+    // Sub-optimal, equivalent interface
+    vnl_matrix<T> tmp{*this};
+    return tmp.extract(r, c, top, left);
+  }
+
+  //: Extract a sub-matrix starting at (top,left)
+  //
+  //  The output is stored in \a sub_matrix, and it should have the
+  //  required size on entry.  Thus the result will contain elements
+  //  [top,top+sub_matrix.rows()-1][left,left+sub_matrix.cols()-1]
+  void
+  extract(vnl_matrix<T> & sub_matrix, unsigned top = 0, unsigned left = 0) const
+  {
+    // Sub-optimal, equivalent interface
+    vnl_matrix<T> tmp{*this};
+    return tmp.extract(sub_matrix, top, left);
+  }
 
  private:
   //: Resizing is disallowed

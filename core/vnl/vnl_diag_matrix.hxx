@@ -16,10 +16,10 @@
 template <class T>
 vnl_vector<T> vnl_diag_matrix<T>::solve(vnl_vector<T> const& b) const
 {
-  unsigned len = diagonal_.size();
+  const unsigned len = this->size();
   vnl_vector<T> ret(len);
   for (unsigned i = 0; i < len; ++i)
-    ret[i] = b[i] / diagonal_[i];
+    ret[i] = b(i) / this->operator()(i);
   return ret;
 }
 
@@ -27,9 +27,9 @@ vnl_vector<T> vnl_diag_matrix<T>::solve(vnl_vector<T> const& b) const
 template <class T>
 void vnl_diag_matrix<T>::solve(vnl_vector<T> const& b, vnl_vector<T>* out) const
 {
-  unsigned len = diagonal_.size();
+  const unsigned len = this->size();
   for (unsigned i = 0; i < len; ++i)
-    (*out)[i] = b[i] / diagonal_[i];
+    (*out)[i] = b[i] / this->operator()(i);
 }
 
 //: Print in MATLAB diag([1 2 3]) form.

@@ -18,10 +18,10 @@ tc_acos(std::complex<double> x);
 
 // make a vector with random, complex entries :
 static void
-fill_rand(std::complex<double> * b, std::complex<double> * e, vnl_random & rng)
+fill_rand(vnl_vector<std::complex<double>>::iterator b, vnl_vector<std::complex<double>>::iterator e, vnl_random & rng)
 {
-  for (std::complex<double> * p = b; p < e; ++p)
-    (*p) = std::complex<double>(rng.drand64(-1.0, +1.0), rng.drand64(-1.0, +1.0));
+  for (; b != e; ++b)
+    (*b) = std::complex<double>(rng.drand64(-1.0, +1.0), rng.drand64(-1.0, +1.0));
 }
 
 static void

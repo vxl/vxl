@@ -168,7 +168,7 @@ void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
   vnl_matrix<double> md(rows(),columns());
   for (int rr = 0; rr<rows(); rr++)
     for (int cc = 0; cc<columns(); cc++)
-      md(rr,cc) = (*this)(rr,cc);
+      md(rr,cc) = this->Superclass::operator()(rr,cc);
 
   vnl_matrix<double> pd(prows,pcols);
   for (int rr = 0; rr<prows; rr++)

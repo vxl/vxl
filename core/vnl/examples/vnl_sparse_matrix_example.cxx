@@ -1,6 +1,5 @@
 #include <iostream>
 #include "vnl/vnl_sparse_matrix.h"
-#include <vnl/algo/vnl_sparse_symmetric_eigensystem.h>
 #include "vnl/vnl_random.h"
 
 int
@@ -19,22 +18,5 @@ main()
 
   a.normalize_rows();
   a = a * a; // i.e., also a * aT
-
-  vnl_sparse_symmetric_eigensystem s;
-  int b = s.CalculateNPairs(a, 2, true, 3);
-
-  if (b == 0)
-  {
-    std::cout << s.get_eigenvalue(0) << std::endl;
-    std::cout << s.get_eigenvector(0) << std::endl;
-
-    std::cout << s.get_eigenvalue(1) << std::endl;
-    std::cout << s.get_eigenvector(1) << std::endl;
-  }
-  else
-  {
-    std::cerr << "b = " << b << std::endl;
-  }
-
   return 0;
 }

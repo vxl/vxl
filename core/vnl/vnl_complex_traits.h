@@ -88,36 +88,4 @@ template <> struct VNL_EXPORT vnl_complex_traits<std::complex<long double> >
   static std::complex<long double> complexify(long double x) { return x; }
 };
 
-#include "vnl_bignum.h"
-
-template <> struct VNL_EXPORT vnl_complex_traits<vnl_bignum>
-{
-  enum { isreal = true };
-  static vnl_bignum conjugate(vnl_bignum x) { return x; }
-  static std::complex<vnl_bignum> complexify(vnl_bignum x) { return std::complex<vnl_bignum>(x,vnl_bignum(0L)); }
-};
-
-template <> struct VNL_EXPORT vnl_complex_traits<std::complex<vnl_bignum> >
-{
-  enum { isreal = false };
-  static std::complex<vnl_bignum> conjugate(std::complex<vnl_bignum> x) { return std::complex<vnl_bignum>(x.real(),-x.imag()); }
-  static std::complex<vnl_bignum> complexify(std::complex<vnl_bignum> x) { return x; }
-};
-
-#include "vnl_rational.h"
-
-template <> struct VNL_EXPORT vnl_complex_traits<vnl_rational>
-{
-  enum { isreal = true };
-  static vnl_rational conjugate(vnl_rational x) { return x; }
-  static std::complex<vnl_rational> complexify(vnl_rational x) { return std::complex<vnl_rational>(x, vnl_rational(0,1)); }
-};
-
-template <> struct VNL_EXPORT vnl_complex_traits<std::complex<vnl_rational> >
-{
-  enum { isreal = false };
-  static std::complex<vnl_rational> conjugate(std::complex<vnl_rational> x) {return std::complex<vnl_rational>(x.real(),-x.imag());}
-  static std::complex<vnl_rational> complexify(std::complex<vnl_rational> x) { return x; }
-};
-
 #endif // vnl_complex_traits_h_

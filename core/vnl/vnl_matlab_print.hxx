@@ -134,10 +134,11 @@ std::ostream& vnl_matlab_print(std::ostream& s,
 
 template <class T>
 std::ostream& vnl_matlab_print(std::ostream& s,
-                              vnl_matrix_ref<T> const& M,
+                              vnl_matrix_ref<T> const& M_ref,
                               char const* variable_name,
                               vnl_matlab_print_format format)
 {
+  vnl_matrix<T> M {M_ref}; // Make a local copy for printing
   if (variable_name)
     s << variable_name << " = [ ...\n";
 

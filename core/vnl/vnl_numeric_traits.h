@@ -16,8 +16,6 @@
 //   980212           AWF      Initial version.
 //   AWF              010498   Moved to math
 //   LSB (Manchester) 23/3/01  Documentation tidied
-//   Peter Vanroose   14/7/01  vnl_rational added
-//   Peter Vanroose   14/10/01 vnl_rational moved to vnl_rational.h
 //   AWF              250202   Add const T specializations for the basic types.
 // \endverbatim
 //

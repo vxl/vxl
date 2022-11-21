@@ -20,7 +20,6 @@
 #include "vnl_matrix_fixed.h"
 #include "vnl_diag_matrix.h"
 #include "vnl_diag_matrix_fixed.h"
-#include "vnl_sym_matrix.h"
 #include "vnl/vnl_export.h"
 
 //: Return array R of real parts of complex array C.
@@ -34,7 +33,6 @@ vnl_real(std::complex<T> const* C, T* R, unsigned int n);
 // - vnl_matrix_fixed
 // - vnl_diag_matrix
 // - vnl_diag_matrix_fixed
-// - vnl_sym_matrix
 
 //: Vector of real parts of vnl_vector<std::complex<T> >.
 // \relatesalso vnl_vector
@@ -95,11 +93,5 @@ vnl_real(vnl_diag_matrix_fixed<std::complex<T>,N > const& C)
     *rIt = std::real(*cIt);
   return R;
 }
-
-//: Matrix of real parts of vnl_sym_matrix<std::complex<T> >.
-// \relatesalso vnl_sym_matrix
-template <class T> VNL_EXPORT
-vnl_sym_matrix<T>
-vnl_real(vnl_sym_matrix<std::complex<T> > const& C);
 
 #endif // vnl_real_h_

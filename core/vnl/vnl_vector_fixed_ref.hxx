@@ -96,7 +96,7 @@ bool
 vnl_vector_fixed_ref<T,n>::read_ascii(std::istream& s) const
 {
   for (unsigned i = 0; i < this->size(); ++i)
-    s >> (*this)(i);
+    s >> this->data_block()[i];
 
   return s.good() || s.eof();
 }

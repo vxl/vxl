@@ -48,26 +48,51 @@
 # undef ERROR_CHECKING
 #endif
 #include "vnl/vnl_export.h"
+#include <Eigen/Core>
+#include <numeric>
 
-template <class T> class vnl_vector;
-template <class T> class vnl_matrix;
+template <class T>
+class vnl_vector;
+template <class T>
+class vnl_matrix;
 
 //--------------------------------------------------------------------------------
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define v vnl_vector<T>
-#define m vnl_matrix<T>
+#  define v vnl_vector<T>
+#  define m vnl_matrix<T>
 #endif // DOXYGEN_SHOULD_SKIP_THIS
-template <class T> VNL_EXPORT m operator+(T const&, m const&);
-template <class T> VNL_EXPORT m operator-(T const&, m const&);
-template <class T> VNL_EXPORT m operator*(T const&, m const&);
-template <class T> VNL_EXPORT m element_product(m const&, m const&);
-template <class T> VNL_EXPORT m element_quotient(m const&, m const&);
-template <class T> VNL_EXPORT T dot_product(m const&, m const&);
-template <class T> VNL_EXPORT T inner_product(m const&, m const&);
-template <class T> VNL_EXPORT T cos_angle(m const&, m const& );
-template <class T> VNL_EXPORT std::ostream& operator<<(std::ostream&, m const&);
-template <class T> VNL_EXPORT std::istream& operator>>(std::istream&, m&);
+
+template <class T>
+VNL_EXPORT m
+operator+(T const &, m const &);
+template <class T>
+VNL_EXPORT m
+operator-(T const &, m const &);
+template <class T>
+VNL_EXPORT m
+operator*(T const &, m const &);
+template <class T>
+VNL_EXPORT m
+element_product(m const &, m const &);
+template <class T>
+VNL_EXPORT m
+element_quotient(m const &, m const &);
+template <class T>
+VNL_EXPORT T
+dot_product(m const &, m const &);
+template <class T>
+VNL_EXPORT T
+inner_product(m const &, m const &);
+template <class T>
+VNL_EXPORT T
+cos_angle(m const &, m const &);
+template <class T>
+VNL_EXPORT std::ostream &
+operator<<(std::ostream &, m const &);
+template <class T>
+VNL_EXPORT std::istream &
+operator>>(std::istream &, m &);
 #undef v
 #undef m
 
@@ -104,95 +129,154 @@ enum VNL_EXPORT vnl_matrix_type
 // as matrix_inverse, svd, qr etc.
 //
 // Note: Use a vnl_vector<T> with these matrices.
+template <class T>
+using eigen_vnl_matrix = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajorBit>;
 
-template<class T>
-class VNL_EXPORT vnl_matrix
+template <class T>
+class VNL_EXPORT vnl_matrix : public eigen_vnl_matrix<T>
 {
- public:
+protected:
+  using Superclass = eigen_vnl_matrix<T>;
+public:
   //: Default constructor creates an empty matrix of size 0,0.
-  vnl_matrix();
+  vnl_matrix() = default;
+
+    template<typename Derived>
+    vnl_matrix(const Eigen::MatrixBase<Derived> & rhs)
+      : Superclass(rhs)
+    {}
 
   //: Construct a matrix of size r rows by c columns
   // Contents are unspecified.
   // Complexity $O(1)$
-  vnl_matrix(unsigned r, unsigned c);                           // r rows, c cols.
+  vnl_matrix(unsigned r, unsigned c)
+    : Superclass(r, c)
+  {}
 
   //: Construct a matrix of size r rows by c columns, and all elements equal to v0
   // Complexity $O(r.c)$
-  vnl_matrix(unsigned r, unsigned c, T const& v0);              // r rows, c cols, value v0.
+  vnl_matrix(unsigned r, unsigned c, T const & v0)
+    : Superclass(r, c)
+  {
+    this->setConstant(v0);
+  }
+
+  // Provide the baseclass object
+  Superclass &
+  asEigen()
+  {
+    return *this;
+  }
 
   //: Construct a matrix of size r rows by c columns, with a special type
   // Contents are specified by t
   // Complexity $O(r.c)$
-  vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t);        // r rows, c cols, special type
+  vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t); // r rows, c cols, special type
 
   //: Construct a matrix of size r rows by c columns, initialised by an automatic array
   // The first n elements, are initialised row-wise, to values.
   // Complexity $O(n)$
-  vnl_matrix(unsigned r, unsigned c, unsigned n, T const values[]);  // use automatic arrays.
+  vnl_matrix(unsigned r, unsigned c, unsigned n, T const values[]); // use automatic arrays.
 
   //: Construct a matrix of size r rows by c columns, initialised by a memory block
   // The values are initialise row wise from the data.
   // Complexity $O(r.c)$
-  vnl_matrix(T const* data_block, unsigned r, unsigned c);      // fill row-wise.
+  vnl_matrix(T const * data_block, unsigned r, unsigned c); // fill row-wise.
 
   //: Copy construct a matrix
   // Complexity $O(r.c)$
-  vnl_matrix(vnl_matrix<T> const&);    // from another matrix.
-
+  // vnl_matrix(vnl_matrix<T> const &) = default; // from another matrix.
   // NOTE: move-assignment must be allowed to throw an exception, because we need to maintain
   //       backwards compatibility and the move-construction & move-aasignment
   //       operators fall back to the copy-assignment operator behavior in
   //       cases when the memory is externally managed.
   //: Move-constructor.
-  vnl_matrix(vnl_matrix<T> &&);
+  // vnl_matrix(vnl_matrix<T> &&) = default;
   //: Move-assignment operator
-  vnl_matrix<T>& operator=(vnl_matrix<T>&& rhs);
+  // vnl_matrix<T> & operator=(vnl_matrix<T> & rhs) = default;
+  // vnl_matrix<T> & operator=(vnl_matrix<T> && rhs) = default;
+
+  template<typename Derived>
+  vnl_matrix<T> &
+  operator=(const Eigen::MatrixBase<Derived> & rhs)
+  {
+      this->Superclass::operator=(rhs);
+      return *this;
+  }
 
   //: Matrix destructor
-  virtual ~vnl_matrix();
+  virtual ~vnl_matrix() = default;
 
-// Basic 2D-Array functionality-------------------------------------------
+  // Basic 2D-Array functionality-------------------------------------------
 
   //: Return the total number of elements stored by the matrix.
   // This equals rows() * cols()
-  inline unsigned int size() const { return this->num_rows*this->num_cols; }
+  // baseclass inline unsigned int size() const { return this->num_rows*this->num_cols; }
 
   //: Return the number of rows.
-  inline unsigned int rows() const { return this->num_rows; }
+  // baseclassinline unsigned int rows() const { return this->num_rows; }
 
   //: Return the number of columns.
   // A synonym for columns().
-  inline unsigned int cols() const { return this->num_cols; }
+  // baseclassinline unsigned int cols() const { return this->cols(); }
 
   //: Return the number of columns.
   // A synonym for cols().
-  inline unsigned int columns() const { return this->num_cols; }
+  inline unsigned int
+  columns() const
+  {
+    return this->cols();
+  }
 
   //: set element with boundary checks if error checking is on.
-  inline void put(unsigned r, unsigned c, T const&);
+  inline void
+  put(unsigned r, unsigned c, T const &);
 
   //: get element with boundary checks if error checking is on.
-  inline T get(unsigned r, unsigned c) const;
+  inline T
+  get(unsigned r, unsigned c) const;
 
   //: return pointer to given row
   // No boundary checking here.
-  T       * operator[](unsigned r) { return data[r]; }
+  T *
+  operator[](unsigned r)
+  {
+    return &(this->data()[r * this->columns()]);
+  }
 
   //: return pointer to given row
   // No boundary checking here.
-  T const * operator[](unsigned r) const { return data[r]; }
+  T const *
+  operator[](unsigned r) const
+  {
+    return &(this->data()[r * this->columns()]);
+  }
 
   //: Access an element for reading or writing
   // There are assert style boundary checks - #define NDEBUG to turn them off.
-  T       & operator()(unsigned r, unsigned c);
+  T &
+  operator()(unsigned r, unsigned c)
+  {
+#if VNL_CONFIG_CHECK_BOUNDS
+    assert(r < rows());   // Check the row index is valid
+    assert(c < cols());   // Check the column index is valid
+#endif
+    return this->Superclass::operator()(r,c);
+  }
 
   //: Access an element for reading
   // There are assert style boundary checks - #define NDEBUG to turn them off.
-  T const & operator()(unsigned r, unsigned c) const;
+  T const &
+  operator()(unsigned r, unsigned c) const
+  {
+#if VNL_CONFIG_CHECK_BOUNDS
+    assert(r < rows());   // Check the row index is valid
+    assert(c < cols());   // Check the column index is valid
+#endif
+    return this->Superclass::operator()(r,c);
+  }
 
-
-  // ----------------------- Filling and copying -----------------------
+    // ----------------------- Filling and copying -----------------------
 
   //: Sets all elements of matrix to specified value, and returns "*this".
   //  Complexity $O(r.c)$
@@ -206,7 +290,12 @@ class VNL_EXPORT vnl_matrix
   //  \code
   //     f(vnl_matrix<double>(5,5,1.0).normalize_columns());
   //  \endcode
-  vnl_matrix& fill(T const&);
+  vnl_matrix &
+  fill(T const & v)
+  {
+    this->Superclass::fill(v);
+    return *this;
+  }
 
   //: Sets all diagonal elements of matrix to specified value; returns "*this".
   //  Complexity $O(\min(r,c))$
@@ -220,13 +309,15 @@ class VNL_EXPORT vnl_matrix
   //  \code
   //     f(vnl_matrix<double>(3,3).fill_diagonal(5));
   //  \endcode
-  vnl_matrix& fill_diagonal(T const&);
+  vnl_matrix &
+  fill_diagonal(T const &);
 
   //: Sets the diagonal elements of this matrix to the specified list of values.
   //  Returning "*this" allows "chaining" two or more operations: see the
   //  reasoning (and the examples) in the documentation for method
   //  fill_diagonal().
-  vnl_matrix& set_diagonal(vnl_vector<T> const&);
+  vnl_matrix &
+  set_diagonal(vnl_vector<T> const &);
 
   //: Fills (laminates) this matrix with the given data, then returns it.
   //  We assume that the argument points to a contiguous rows*cols array, stored rowwise.
@@ -241,160 +332,151 @@ class VNL_EXPORT vnl_matrix
   //  \code
   //     f(vnl_matrix<double>(3,3).copy_in(array));
   //  \endcode
-  vnl_matrix& copy_in(T const *);
+  vnl_matrix &
+  copy_in(T const *);
 
   //: Fills (laminates) this matrix with the given data, then returns it.
   // A synonym for copy_in()
-  vnl_matrix& set(T const *d) { return copy_in(d); }
+  vnl_matrix &
+  set(T const * d)
+  {
+    return copy_in(d);
+  }
 
   //: Fills the given array with this matrix.
   //  We assume that the argument points to a contiguous rows*cols array, stored rowwise.
   // No bounds checking on the array.
-  void copy_out(T *) const;
+  void
+  copy_out(T *) const;
 
-  //: Set all elements to value v
-  // Complexity $O(r.c)$
-  vnl_matrix<T>& operator=(T const&v) { fill(v); return *this; }
+  //  //: Set all elements to value v
+  //  // Complexity $O(r.c)$
+  vnl_matrix<T> &
+  operator=(T const & v)
+  {
+    this->setConstant(v);
+    return *this;
+  }
 
   //: Copies all elements of rhs matrix into lhs matrix.
   // Complexity $O(\min(r,c))$
-  vnl_matrix<T>& operator=(vnl_matrix<T> const&);
+  vnl_matrix<T> &
+  operator=(vnl_matrix<T> const & rhs)
+  {
+    if (this != &rhs)
+    {
+      this->Superclass::operator=(rhs);
+    }
+    return *this;
+  }
+
 
   // ----------------------- Arithmetic --------------------------------
   // note that these functions should not pass scalar as a const&.
   // Look what would happen to A /= A(0,0).
 
-  //: Add rhs to each element of lhs matrix in situ
-  vnl_matrix<T>& operator+=(T value);
-
-  //: Subtract rhs from each element of lhs matrix in situ
-  vnl_matrix<T>& operator-=(T value);
-
+  // : Add rhs to each element of lhs matrix in situ
+  vnl_matrix<T> &
+  operator+=(const T & value)
+  {
+    this->array() += value;
+    return *this;
+  }
+  vnl_matrix<T> &
+  operator-=(const T & value)
+  {
+    this->array() -= value;
+    return *this;
+  }
   //: Scalar multiplication in situ of lhs matrix  by rhs
-  vnl_matrix<T>& operator*=(T value);
-
+  vnl_matrix<T> &
+  operator*=(const T & value)
+  {
+    this->Superclass::operator*=(value);
+    return *this;
+  }
   //: Scalar division of lhs matrix  in situ by rhs
-  vnl_matrix<T>& operator/=(T value);
+  vnl_matrix<T> &
+  operator/=(const T & value)
+  {
+    this->Superclass::operator/=(value);
+    return *this;
+  }
 
   //: Add rhs to lhs  matrix in situ
-  vnl_matrix<T>& operator+=(vnl_matrix<T> const&);
+  vnl_matrix<T> &
+  operator+=(vnl_matrix<T> const & rhs)
+  {
+    this->Superclass::operator+=(rhs);
+    return *this;
+  }
   //: Subtract rhs from lhs matrix in situ
-  vnl_matrix<T>& operator-=(vnl_matrix<T> const&);
+  vnl_matrix<T> &
+  operator-=(vnl_matrix<T> const & rhs)
+  {
+    this->Superclass::operator-=(rhs);
+    return *this;
+  }
   //: Multiply lhs matrix in situ by rhs
-  vnl_matrix<T>& operator*=(vnl_matrix<T> const&rhs) { return *this = (*this) * rhs; }
+  vnl_matrix<T> &
+  operator*=(vnl_matrix<T> const & rhs)
+  {
+    this->Superclass::operator*=(rhs);
+    return *this;
+  }
 
   //: Negate all elements of matrix
-  vnl_matrix<typename vnl_numeric_traits<T>::signed_t> operator-() const;
-
-
-  //: Add rhs to each element of lhs matrix and return result in new matrix
-  vnl_matrix<T> operator+(T const& v) const {
-    vnl_matrix<T> result(this->rows(), this->cols());
-    const unsigned int n = this->num_rows * this->num_cols;
-    T const *m = this->data[0];
-    T *dst = result.data[0];
-
-    for (unsigned int i = 0; i < n; ++i)
-      dst[i] = T(m[i] + v);
-    return result;
+  vnl_matrix<T>
+  operator-() const
+  {
+    return this->Superclass::operator-();
   }
 
   //: Subtract rhs from each element of lhs matrix and return result in new matrix
-  vnl_matrix<T> operator-(T const& v) const {
-    vnl_matrix<T> result(this->rows(), this->cols());
-    const unsigned int n = this->num_rows * this->num_cols;
-    T const *m = this->data[0];
-    T *dst = result.data[0];
-
-    for (unsigned int i = 0; i < n; ++i)
-      dst[i] = T(m[i] - v);
-    return result;
+  vnl_matrix<T>
+  operator-(T const & v) const
+  {
+    return vnl_matrix<T>{(this->array() - v).matrix()};
   }
 
-  //: Scalar multiplication of lhs matrix by rhs  and return result in new matrix
-  vnl_matrix<T> operator*(T const& v) const {
-    vnl_matrix<T> result(this->rows(), this->cols());
-    const unsigned int n = this->num_rows * this->num_cols;
-    T const *m = this->data[0];
-    T *dst = result.data[0];
 
-    for (unsigned int i = 0; i < n; ++i)
-      dst[i] = T(m[i] * v);
-    return result;
-  }
-
-  //: Scalar division of lhs matrix by rhs and return result in new matrix
-  vnl_matrix<T> operator/(T const& v) const {
-    vnl_matrix<T> result(this->rows(), this->cols());
-    const unsigned int n = this->num_rows * this->num_cols;
-    T const *m = this->data[0];
-    T *dst = result.data[0];
-
-    for (unsigned int i = 0; i < n; ++i)
-      dst[i] = T(m[i] / v);
-    return result;
+  //: Matrix add rhs to lhs matrix and return result in new matrix
+  vnl_matrix<T>
+  operator+(const T & v) const
+  {
+    return (this->array() + v).matrix();
   }
 
   //: Matrix add rhs to lhs matrix and return result in new matrix
-  vnl_matrix<T> operator+(vnl_matrix<T> const& rhs) const
+  vnl_matrix<T>
+  operator*(const T & v) const
   {
-    vnl_matrix<T> result(rhs.rows(),rhs.cols());
-#ifndef NDEBUG
-    if (this->num_rows != rhs.num_rows || this->num_cols != rhs.num_cols)
-      vnl_error_matrix_dimension ("vnl_matrix<T>::operator+", this->num_rows, this->num_cols, rhs.num_rows, rhs.num_cols);
-#endif
+    return this->Superclass::operator*(v);
+  }
+  //: Matrix add rhs to lhs matrix and return result in new matrix
+  vnl_matrix<T>
+  operator/(const T & v) const
+  {
+    return this->Superclass::operator/(v);
+  }
 
-    const unsigned int n = this->num_rows * this->num_cols;
-    T const *a = this->data[0];
-    T const *b = rhs.data[0];
-    T *dst = result.data[0];
-
-    for (unsigned int i=0; i<n; ++i)
-      dst[i] = T(a[i] + b[i]);
-    return result;
+  vnl_matrix<T>
+  operator+(vnl_matrix<T> const & rhs) const
+  {
+    return this->Superclass::operator+(rhs);
   }
 
   //: Matrix subtract rhs from lhs and return result in new matrix
-  vnl_matrix<T> operator-(vnl_matrix<T> const& rhs) const
+  vnl_matrix<T>
+  operator-(vnl_matrix<T> const & rhs) const
   {
-    vnl_matrix<T> result(rhs.rows(),rhs.cols());
-#ifndef NDEBUG
-    if (this->num_rows != rhs.num_rows || this->num_cols != rhs.num_cols)
-      vnl_error_matrix_dimension ("vnl_matrix<T>::operator+", this->num_rows, this->num_cols, rhs.num_rows, rhs.num_cols);
-#endif
-
-    const unsigned int n = this->num_rows * this->num_cols;
-    T const *a = this->data[0];
-    T const *b = rhs.data[0];
-    T *dst = result.data[0];
-
-    for (unsigned int i=0; i<n; ++i)
-      dst[i] = T(a[i] - b[i]);
-    return result;
+    return this->Superclass::operator-(rhs);
   }
   //: Matrix multiply lhs by rhs matrix and return result in new matrix
-  vnl_matrix<T> operator*(vnl_matrix<T> const& rhs) const
+  vnl_matrix<T>
+  operator*(vnl_matrix<T> const & rhs) const
   {
-    vnl_matrix<T> result(this->rows(), rhs.cols());
-#ifndef NDEBUG
-    if (this->num_cols != rhs.num_rows)
-      vnl_error_matrix_dimension("vnl_matrix<T>::operator*", this->num_rows, this->num_cols,
-                                 rhs.num_rows, rhs.num_cols);
-#endif
-
-    const unsigned int l = this->num_rows;
-    const unsigned int m = this->num_cols; // == rhs.num_rows
-    const unsigned int n = rhs.num_cols;
-
-    for (unsigned int i = 0; i < l; ++i) {
-      for (unsigned int k = 0; k < n; ++k) {
-        T sum{0};
-        for (unsigned int j = 0; j < m; ++j)
-          sum += T(this->data[i][j] * rhs.data[j][k]);
-        result.data[i][k] = sum;
-      }
-    }
-    return result;
+    return this->Superclass::operator*(rhs);
   }
 
   ////--------------------------- Additions ----------------------------
@@ -403,84 +485,108 @@ class VNL_EXPORT vnl_matrix
   vnl_matrix<T> apply(T (*f)(T)) const;
 
   //: Make a new matrix by applying function to each element.
-  vnl_matrix<T> apply(T (*f)(T const&)) const;
+  vnl_matrix<T> apply(T (*f)(T const &)) const;
 
   //: Make a vector by applying a function across rows.
-  vnl_vector<T> apply_rowwise(T (*f)(vnl_vector<T> const&)) const;
+  vnl_vector<T> apply_rowwise(T (*f)(vnl_vector<T> const &)) const;
 
   //: Make a vector by applying a function across columns.
-  vnl_vector<T> apply_columnwise(T (*f)(vnl_vector<T> const&)) const;
+  vnl_vector<T> apply_columnwise(T (*f)(vnl_vector<T> const &)) const;
 
   //: Return transpose
-  vnl_matrix<T> transpose() const;
+  vnl_matrix<T>
+  transpose() const
+  {
+    vnl_matrix<T> out (*this);
+    out.Superclass::transposeInPlace();
+    return out;
+  }
 
   //: Return conjugate transpose
-  vnl_matrix<T> conjugate_transpose() const;
+  vnl_matrix<T>
+  conjugate_transpose() const;
 
   //: Set values of this matrix to those of M, starting at [top,left]
-  vnl_matrix<T>& update(vnl_matrix<T> const&, unsigned top=0, unsigned left=0);
+  vnl_matrix<T> &
+  update(vnl_matrix<T> const &, unsigned top = 0, unsigned left = 0);
 
   //: Set the elements of the i'th column to v[i]  (No bounds checking)
-  vnl_matrix& set_column(unsigned i, T const * v);
+  vnl_matrix &
+  set_column(unsigned i, T const * v);
 
   //: Set the elements of the i'th column to value, then return *this.
-  vnl_matrix& set_column(unsigned i, T value );
+  vnl_matrix &
+  set_column(unsigned i, T value);
 
   //: Set j-th column to v, then return *this.
-  vnl_matrix& set_column(unsigned j, vnl_vector<T> const& v);
+  vnl_matrix &
+  set_column(unsigned j, vnl_vector<T> const & v);
 
   //: Set columns to those in M, starting at starting_column, then return *this.
-  vnl_matrix& set_columns(unsigned starting_column, vnl_matrix<T> const& M);
+  vnl_matrix &
+  set_columns(unsigned starting_column, vnl_matrix<T> const & M);
 
   //: Set the elements of the i'th row to v[i]  (No bounds checking)
-  vnl_matrix& set_row(unsigned i, T const * v);
+  vnl_matrix &
+  set_row(unsigned i, T const * v);
 
   //: Set the elements of the i'th row to value, then return *this.
-  vnl_matrix& set_row(unsigned i, T value );
+  vnl_matrix &
+  set_row(unsigned i, T value);
 
   //: Set the i-th row
-  vnl_matrix& set_row(unsigned i, vnl_vector<T> const&);
+  vnl_matrix &
+  set_row(unsigned i, vnl_vector<T> const &);
 
   //: Extract a sub-matrix of size r x c, starting at (top,left)
   //  Thus it contains elements  [top,top+r-1][left,left+c-1]
-  vnl_matrix<T> extract(unsigned r, unsigned c,
-                        unsigned top=0, unsigned left=0) const;
+  vnl_matrix<T>
+  extract(unsigned r, unsigned c, unsigned top = 0, unsigned left = 0) const;
 
   //: Extract a sub-matrix starting at (top,left)
   //
   //  The output is stored in \a sub_matrix, and it should have the
   //  required size on entry.  Thus the result will contain elements
   //  [top,top+sub_matrix.rows()-1][left,left+sub_matrix.cols()-1]
-  void extract ( vnl_matrix<T>& sub_matrix,
-                 unsigned top=0, unsigned left=0) const;
+  void
+  extract(vnl_matrix<T> & sub_matrix, unsigned top = 0, unsigned left = 0) const;
 
 
   //: Get a vector equal to the given row
-  vnl_vector<T> get_row(unsigned r) const;
+  vnl_vector<T>
+  get_row(unsigned r) const;
 
   //: Get a vector equal to the given column
-  vnl_vector<T> get_column(unsigned c) const;
+  vnl_vector<T>
+  get_column(unsigned c) const;
 
   //: Get a matrix composed of rows from the indices specified in the supplied vector.
-  vnl_matrix<T> get_rows(vnl_vector<unsigned int> i) const;
+  vnl_matrix<T>
+  get_rows(vnl_vector<unsigned int> i) const;
 
   //: Get a matrix composed of columns from the indices specified in the supplied vector.
-  vnl_matrix<T> get_columns(vnl_vector<unsigned int> i) const;
+  vnl_matrix<T>
+  get_columns(vnl_vector<unsigned int> i) const;
 
   //: Get n rows beginning at rowstart
-  vnl_matrix<T> get_n_rows(unsigned rowstart, unsigned n) const;
+  vnl_matrix<T>
+  get_n_rows(unsigned rowstart, unsigned n) const;
 
   //: Get n columns beginning at colstart
-  vnl_matrix<T> get_n_columns(unsigned colstart, unsigned n) const;
+  vnl_matrix<T>
+  get_n_columns(unsigned colstart, unsigned n) const;
 
   //: Return a vector with the content of the (main) diagonal
-  vnl_vector<T> get_diagonal() const;
+  vnl_vector<T>
+  get_diagonal() const;
 
   //: Flatten row-major (C-style)
-  vnl_vector<T> flatten_row_major() const;
+  vnl_vector<T>
+  flatten_row_major() const;
 
   //: Flatten column-major (Fortran-style)
-  vnl_vector<T> flatten_column_major() const;
+  vnl_vector<T>
+  flatten_column_major() const;
 
   // ==== mutators ====
 
@@ -496,7 +602,8 @@ class VNL_EXPORT vnl_matrix
   //     M.set_identity().scale_row(0,3).scale_column(1,2);
   //  \endcode
   //  If the matrix is not square, anyhow set main diagonal to 1, the rest to 0.
-  vnl_matrix& set_identity();
+  vnl_matrix &
+  set_identity();
 
   //: Transposes this matrix efficiently, and returns it.
   //  Returning "*this" allows "chaining" two or more operations:
@@ -504,7 +611,8 @@ class VNL_EXPORT vnl_matrix
   //  \code
   //     M.copy_in(array).inplace_transpose();
   //  \endcode
-  vnl_matrix& inplace_transpose();
+  vnl_matrix &
+  inplace_transpose();
 
   //: Reverses the order of rows, and returns "*this".
   //  Returning "*this" allows "chaining" two or more operations:
@@ -512,7 +620,8 @@ class VNL_EXPORT vnl_matrix
   //  \code
   //     M.flipud().fliplr();
   //  \endcode
-  vnl_matrix& flipud();
+  vnl_matrix &
+  flipud();
 
   //: Reverses the order of columns, and returns "*this".
   //  Returning "*this" allows "chaining" two or more operations:
@@ -520,7 +629,8 @@ class VNL_EXPORT vnl_matrix
   //  \code
   //     M.flipud().fliplr();
   //  \endcode
-  vnl_matrix& fliplr();
+  vnl_matrix &
+  fliplr();
 
   //: Normalizes each row so it is a unit vector, and returns "*this".
   //  Zero rows are not modified
@@ -534,7 +644,8 @@ class VNL_EXPORT vnl_matrix
   //  \code
   //     f(vnl_matrix<double>(5,5,1.0).normalize_rows());
   //  \endcode
-  vnl_matrix& normalize_rows();
+  vnl_matrix &
+  normalize_rows();
 
   //: Normalizes each column so it is a unit vector, and returns "*this".
   //  Zero columns are not modified
@@ -548,7 +659,8 @@ class VNL_EXPORT vnl_matrix
   //  \code
   //     f(vnl_matrix<double>(5,5,1.0).normalize_columns());
   //  \endcode
-  vnl_matrix& normalize_columns();
+  vnl_matrix &
+  normalize_columns();
 
   //: Scales elements in given row by a factor T, and returns "*this".
   //  Returning "*this" allows "chaining" two or more operations:
@@ -556,7 +668,8 @@ class VNL_EXPORT vnl_matrix
   //  \code
   //     M.set_identity().scale_row(0,3).scale_column(1,2);
   //  \endcode
-  vnl_matrix& scale_row(unsigned row, T value);
+  vnl_matrix &
+  scale_row(unsigned row, T value);
 
   //: Scales elements in given column by a factor T, and returns "*this".
   //  Returning "*this" allows "chaining" two or more operations:
@@ -564,88 +677,155 @@ class VNL_EXPORT vnl_matrix
   //  \code
   //     M.set_identity().scale_row(0,3).scale_column(1,2);
   //  \endcode
-  vnl_matrix& scale_column(unsigned col, T value);
+  vnl_matrix &
+  scale_column(unsigned col, T value);
 
   //: Swap this matrix with that matrix
-  void swap(vnl_matrix<T> & that) noexcept;
+  void
+  swap(vnl_matrix<T> & that) noexcept;
 
   //: Type def for norms.
   typedef typename vnl_c_vector<T>::abs_t abs_t;
 
   //: Return sum of absolute values of elements
-  abs_t array_one_norm() const { return vnl_c_vector<T>::one_norm(begin(), size()); }
+  abs_t
+  array_one_norm() const
+  {
+    return vnl_c_vector<T>::one_norm(this->cbegin(), this->size());
+  }
 
   //: Return square root of sum of squared absolute element values
-  abs_t array_two_norm() const { return vnl_c_vector<T>::two_norm(begin(), size()); }
+  abs_t
+  array_two_norm() const
+  {
+    return vnl_c_vector<T>::two_norm(this->cbegin(), this->size());
+  }
 
   //: Return largest absolute element value
-  abs_t array_inf_norm() const { return vnl_c_vector<T>::inf_norm(begin(), size()); }
+  abs_t
+  array_inf_norm() const
+  {
+    return vnl_c_vector<T>::inf_norm(this->cbegin(), this->size());
+  }
 
   //: Return sum of absolute values of elements
-  abs_t absolute_value_sum() const { return array_one_norm(); }
+  abs_t
+  absolute_value_sum() const
+  {
+    return array_one_norm();
+  }
 
   //: Return largest absolute value
-  abs_t absolute_value_max() const { return array_inf_norm(); }
+  abs_t
+  absolute_value_max() const
+  {
+    return array_inf_norm();
+  }
 
   // $ || M ||_1 := \max_j \sum_i | M_{ij} | $
-  abs_t operator_one_norm() const;
+  abs_t
+  operator_one_norm() const;
 
   // $ || M ||_\inf := \max_i \sum_j | M_{ij} | $
-  abs_t operator_inf_norm() const;
+  abs_t
+  operator_inf_norm() const;
 
   //: Return Frobenius norm of matrix (sqrt of sum of squares of its elements)
-  abs_t frobenius_norm() const { return vnl_c_vector<T>::two_norm(begin(), size()); }
+  abs_t
+  frobenius_norm() const
+  {
+    return array_two_norm();
+  }
 
   //: Return Frobenius norm of matrix (sqrt of sum of squares of its elements)
-  abs_t fro_norm() const { return frobenius_norm(); }
+  abs_t
+  fro_norm() const
+  {
+    return frobenius_norm();
+  }
+
 
   //: Return RMS of all elements
-  abs_t rms() const { return vnl_c_vector<T>::rms_norm(begin(), size()); }
+  abs_t
+  rms() const
+  {
+    return vnl_c_vector<T>::rms_norm(this->cbegin(), this->size());
+  }
 
   //: Return minimum value of elements
-  T min_value() const { return vnl_c_vector<T>::min_value(begin(), size()); }
+  T
+  min_value() const
+  {
+    return vnl_c_vector<T>::min_value(this->cbegin(), this->size());
+  }
 
   //: Return maximum value of elements
-  T max_value() const { return vnl_c_vector<T>::max_value(begin(), size()); }
+  T
+  max_value() const
+  {
+    return vnl_c_vector<T>::max_value(this->cbegin(), this->size());
+  }
 
   //: Return location of minimum value of elements
-  unsigned arg_min() const { return vnl_c_vector<T>::arg_min(begin(), size()); }
+  unsigned
+  arg_min() const
+  {
+    return vnl_c_vector<T>::arg_min(this->cbegin(), this->size());
+  }
+  unsigned
+  arg_max() const
+  {
+    return vnl_c_vector<T>::arg_max(this->cbegin(), this->size());
+  }
 
-  //: Return location of maximum value of elements
-  unsigned arg_max() const { return vnl_c_vector<T>::arg_max(begin(), size()); }
+  //: Mean of values in vector
+  // baseclass T mean() const { return this->sum() / static_cast<T>(this->size()); }
 
-  //: Return mean of all matrix elements
-  T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }
+  //: Sum of values in a vector
+  // baseclass T sum() const { return std::accumulate(this->cbegin(), this->cend(), 0.0); }
+
 
   // predicates
 
   //: Return true iff the size is zero.
-  bool empty() const { return !data || !num_rows || !num_cols; }
+  bool
+  empty() const
+  {
+    return this->size() == 0;
+  }
 
   //:  Return true if all elements equal to identity.
-  bool is_identity() const;
+  bool
+  is_identity() const;
 
   //:  Return true if all elements equal to identity, within given tolerance
-  bool is_identity(double tol) const;
+  bool
+  is_identity(double tol) const;
 
   //: Return true if all elements equal to zero.
-  bool is_zero() const;
+  bool
+  is_zero() const;
 
   //: Return true if all elements equal to zero, within given tolerance
-  bool is_zero(double tol) const;
+  bool
+  is_zero(double tol) const;
 
   //:  Return true if all elements of both matrices are equal, within given tolerance
-  bool is_equal(vnl_matrix<T> const& rhs, double tol) const;
+  bool
+  is_equal(vnl_matrix<T> const & rhs, double tol) const;
 
   //: Return true if finite
-  bool is_finite() const;
+  bool
+  is_finite() const;
 
   //: Return true if matrix contains NaNs
-  bool has_nans() const;
+  bool
+  has_nans() const;
 
   //: abort if size is not as expected
   // This function does or tests nothing if NDEBUG is defined
-  void assert_size(unsigned VXL_USED_IN_DEBUG(r), unsigned VXL_USED_IN_DEBUG(c)) const
+  void
+  assert_size(unsigned VXL_USED_IN_DEBUG(r), unsigned VXL_USED_IN_DEBUG(c)) const
   {
 #ifndef NDEBUG
     assert_size_internal(r, c);
@@ -653,7 +833,8 @@ class VNL_EXPORT vnl_matrix
   }
   //: abort if matrix contains any INFs or NANs.
   // This function does or tests nothing if NDEBUG is defined
-  void assert_finite() const
+  void
+  assert_finite() const
   {
 #ifndef NDEBUG
     assert_finite_internal();
@@ -662,101 +843,193 @@ class VNL_EXPORT vnl_matrix
 
   ////----------------------- Input/Output ----------------------------
 
-  //: Read a vnl_matrix from an ascii std::istream, automatically determining file size if the input matrix has zero size.
-  static vnl_matrix<T> read(std::istream& s);
+  //: Read a vnl_matrix from an ascii std::istream, automatically determining file size if the input matrix has zero
+  //: size.
+  static vnl_matrix<T>
+  read(std::istream & s);
 
-  // : Read a vnl_matrix from an ascii std::istream, automatically determining file size if the input matrix has zero size.
-  bool read_ascii(std::istream& s);
+  // : Read a vnl_matrix from an ascii std::istream, automatically determining file size if the input matrix has zero
+  // size.
+  bool
+  read_ascii(std::istream & s);
 
   //--------------------------------------------------------------------------------
 
   //: Access the contiguous block storing the elements in the matrix row-wise. O(1).
   // 1d array, row-major order.
-  T const* data_block() const { return data[0]; }
+  T const *
+  data_block() const
+  {
+    return this->data();
+  }
 
   //: Access the contiguous block storing the elements in the matrix row-wise. O(1).
   // 1d array, row-major order.
-  T      * data_block() { return data[0]; }
+  T *
+  data_block()
+  {
+    return this->data();
+  }
 
-  //: Access the 2D array, so that elements can be accessed with array[row][col] directly.
-  //  2d array, [row][column].
-  T const* const* data_array() const { return data; }
-
-  //: Access the 2D array, so that elements can be accessed with array[row][col] directly.
-  //  2d array, [row][column].
-  T      *      * data_array() { return data; }
+  //  //: Access the 2D array, so that elements can be accessed with array[row][col] directly.
+  //  //  2d array, [row][column].
+  T const * const *
+  data_array() const
+  {
+    _data_ptr_ptr = new T *[this->rows()];
+    for (int r = 0; r < this->rows(); ++r)
+    {
+      _data_ptr_ptr[r] = const_cast<T *>(this->data()) + r * this->cols();
+    }
+    return _data_ptr_ptr;
+  }
+  //
+  //  //: Access the 2D array, so that elements can be accessed with array[row][col] directly.
+  //  //  2d array, [row][column].
+  T **
+  data_array()
+  {
+    _data_ptr_ptr = new T *[this->rows()];
+    for (int r = 0; r < this->rows(); ++r)
+    {
+      _data_ptr_ptr[r] = this->data() + r * this->cols();
+    }
+    return _data_ptr_ptr;
+  }
 
   typedef T element_type;
 
   //: Iterators
-  typedef T       *iterator;
-  //: Iterator pointing to start of data
-  iterator       begin() { return data?data[0]:nullptr; }
-  //: Iterator pointing to element beyond end of data
-  iterator       end() { return data?data[0]+num_rows*num_cols:nullptr; }
+  typedef T * iterator;
+  typedef T const * const_iterator;
 
-  //: Const iterators
-  typedef T const *const_iterator;
-  //: Iterator pointing to start of data
-  const_iterator begin() const { return data?data[0]:nullptr; }
-  //: Iterator pointing to element beyond end of data
-  const_iterator end() const { return data?data[0]+num_rows*num_cols:nullptr; }
+  //  //: Iterator pointing to start of data
+  iterator
+  begin()
+  {
+    return this->data() ? this->data() : nullptr;
+  }
+  const_iterator
+  begin() const
+  {
+    return this->data() ? this->data() : nullptr;
+  }
+  const_iterator
+  cbegin() const
+  {
+    return this->data() ? this->data() : nullptr;
+  }
+
+  //  //: Iterator pointing to element beyond end of data
+  iterator
+  end()
+  {
+    return this->data() ? this->data() + this->size() : nullptr;
+  }
+  const_iterator
+  end() const
+  {
+    return this->data() ? this->data() + this->size() : nullptr;
+  }
+  const_iterator
+  cend() const
+  {
+    return this->data() ? this->data() + this->size() : nullptr;
+  }
+
+  //
+  //  //: Const iterators
+  //  typedef T const *const_iterator;
+  //  //: Iterator pointing to start of data
+  //  const_iterator begin() const { return data?data[0]:nullptr; }
+  //  //: Iterator pointing to element beyond end of data
+  //  const_iterator end() const { return data?data[0]+rows()*cols():nullptr; }
 
   //: Return a reference to this.
   // Useful in code which would prefer not to know if its argument
   // is a matrix, matrix_ref or a matrix_fixed.  Note that it doesn't
   // return a matrix_ref, so it's only useful in templates or macros.
-  vnl_matrix<T> const& as_ref() const { return *this; }
+  vnl_matrix<T> const &
+  as_ref() const
+  {
+    return *this;
+  }
 
   //: Return a reference to this.
-  vnl_matrix<T>&       as_ref()       { return *this; }
+  vnl_matrix<T> &
+  as_ref()
+  {
+    return *this;
+  }
+
+  vnl_matrix<T> const &
+  as_matrix() const
+  {
+    return *this;
+  }
+
+  //: Return a reference to this.
+  vnl_matrix<T> &
+  as_matrix()
+  {
+    return *this;
+  }
 
   //--------------------------------------------------------------------------------
 
   //: Return true if *this == rhs
-  bool operator_eq(vnl_matrix<T> const & rhs) const;
+  bool
+  operator_eq(vnl_matrix<T> const & rhs) const;
 
   //: Equality operator
-  bool operator==(vnl_matrix<T> const &that) const { return  this->operator_eq(that); }
+  bool
+  operator==(vnl_matrix<T> const & that) const
+  {
+    return this->operator_eq(that);
+  }
 
   //: Inequality operator
-  bool operator!=(vnl_matrix<T> const &that) const { return !this->operator_eq(that); }
+  bool
+  operator!=(vnl_matrix<T> const & that) const
+  {
+    return !this->operator_eq(that);
+  }
 
   //: Print matrix to os in some hopefully sensible format
-  void print(std::ostream& os) const;
+  void
+  print(std::ostream & os) const;
 
   //: Make the matrix as if it had been default-constructed.
-  void clear();
+  void
+  clear();
 
   //: Resize to r rows by c columns. Old data lost.
   // Returns true if size changed.
-  bool set_size(unsigned r, unsigned c);
+  bool
+  set_size(unsigned r, unsigned c);
 
-//--------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------
 
- protected:
-  vnl_matrix( unsigned ext_num_rows, unsigned ext_num_cols,
-      T * continuous_external_memory_block, bool manage_own_memory )
-  : num_rows{ ext_num_rows}
-  , num_cols{ ext_num_cols}
-  , m_LetArrayManageMemory{ manage_own_memory }
+protected:
+  vnl_matrix(unsigned ext_num_rows, unsigned ext_num_cols, T * continuous_external_memory_block, bool manage_own_memory)
+    : Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic,Eigen::RowMajorBit>(ext_num_rows, ext_num_cols)
+    , m_LetArrayManageMemory{ manage_own_memory }
   {
-    this->data = vnl_c_vector<T>::allocate_Tptr(num_rows);
-    for (unsigned int i = 0; i < num_rows; ++i)
-      this->data[i] = continuous_external_memory_block + i * num_cols;
+    std::copy_n(continuous_external_memory_block, this->size(), this->data());
   }
 
-  void assert_size_internal(unsigned r, unsigned c) const;
-  void assert_finite_internal() const;
+  void
+  assert_size_internal(unsigned r, unsigned c) const;
+  void
+  assert_finite_internal() const;
 
   //: Delete data
-  void destroy();
+  void
+  destroy();
 
- private:
-  unsigned num_rows{0};   // Number of rows
-  unsigned num_cols{0};   // Number of columns
-  T** data{nullptr};      // Pointer to the vnl_matrix
-  bool m_LetArrayManageMemory{true};
+private:
+  bool m_LetArrayManageMemory{ true };
+  mutable T ** _data_ptr_ptr;
 };
 
 
@@ -766,57 +1039,83 @@ class VNL_EXPORT vnl_matrix
 //: Returns the value of the element at specified row and column. O(1).
 // Checks for valid range of indices.
 
-template<class T>
-inline T vnl_matrix<T>
-::get(unsigned r, unsigned c) const
+template <class T>
+inline T
+vnl_matrix<T>::get(unsigned r, unsigned c) const
 {
 #if VNL_CONFIG_CHECK_BOUNDS
-  if (r >= this->num_rows)                // If invalid size specified
+  if (r >= this->rows())                  // If invalid size specified
     vnl_error_matrix_row_index("get", r); // Raise exception
-  if (c >= this->num_cols)                // If invalid size specified
+  if (c >= this->cols())                  // If invalid size specified
     vnl_error_matrix_col_index("get", c); // Raise exception
 #endif
-  return this->data[r][c];
+  return this->Superclass::operator()(r,c);
 }
 
 //: Puts value into element at specified row and column. O(1).
 // Checks for valid range of indices.
 
-template<class T>
-inline void vnl_matrix<T>
-::put(unsigned r, unsigned c, T const& v)
+template <class T>
+inline void
+vnl_matrix<T>::put(unsigned r, unsigned c, T const & v)
 {
 #if VNL_CONFIG_CHECK_BOUNDS
-  if (r >= this->num_rows)                // If invalid size specified
+  if (r >= this->rows())                  // If invalid size specified
     vnl_error_matrix_row_index("put", r); // Raise exception
-  if (c >= this->num_cols)                // If invalid size specified
+  if (c >= this->cols())                  // If invalid size specified
     vnl_error_matrix_col_index("put", c); // Raise exception
 #endif
-  this->data[r][c] = v;             // Assign data value
+  this->Superclass::operator()(r, c) = v; // Assign data value
 }
 
 
 // non-member arithmetical operators.
-
-//:
-// \relatesalso vnl_matrix
-template<class T>
-inline vnl_matrix<T> operator*(T const& value, vnl_matrix<T> const& m)
+//
+////:
+//// \relatesalso vnl_matrix
+template <class T>
+inline vnl_matrix<T>
+operator*(T const & value, vnl_matrix<T> const & m)
 {
-  return m*value;
+  return m.operator*(value);
 }
 
-//:
-// \relatesalso vnl_matrix
-template<class T>
-inline vnl_matrix<T> operator+(T const& value, vnl_matrix<T> const& m)
+// template<class T>
+// inline vnl_matrix<T> operator*( vnl_matrix<T> const& m,T const& value)
+//{
+//   vnl_matrix<T> out {m};
+//   return out*=value;
+// }
+//
+////:
+//// \relatesalso vnl_matrix
+template <class T>
+inline vnl_matrix<T>
+operator+(T const & value, vnl_matrix<T> const & m)
 {
-  return m+value;
+  return m.operator+(value);
 }
+
+template <class T>
+inline vnl_matrix<T>
+operator-(T const & value, vnl_matrix<T> const & m)
+{
+  return m.operator-().operator+(value);
+}
+
+// template<class T>
+// inline vnl_matrix<T> operator+(vnl_matrix<T> const& m, T const& value)
+//{
+//   return m+value;
+// }
 
 //: Swap two matrices
 // \relatesalso vnl_matrix
-template<class T>
-inline void swap(vnl_matrix<T> &A, vnl_matrix<T> &B) noexcept { A.swap(B); }
+template <class T>
+inline void
+swap(vnl_matrix<T> & A, vnl_matrix<T> & B) noexcept
+{
+  A.swap(B);
+}
 
 #endif // vnl_matrix_h_
