@@ -197,6 +197,36 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::rectify()
 // ----------
 // Disparity
 // ----------
+// compute disparity range from maximum and minimum height
+template <class CAM_T, class PIX_T>
+void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_min_max_disparity_from_height() {
+  // centroid of scene box to locate x-y position of test point
+  vgl_point_3d<double> centroid = scene_box_.centroid();
+  vgl_point_3d<double> min_pt(centroid.x(), centroid.y(), 0.0);
+  vgl_point_3d<double> max_pt(centroid.x(), centroid.y(), max_height_);
+  // project into target camera
+  double u0_min, v0_min, u0_max, v0_max;
+  rect_cam0_.project(min_pt.x(), min_pt.y(), min_pt.z(), u0_min, v0_min);
+  rect_cam0_.project(max_pt.x(), max_pt.y(), max_pt.z(), u0_max, v0_max);
+
+  // project into reference camera
+  double u1_min, v1_min, u1_max, v1_max;
+  rect_cam1_.project(min_pt.x(), min_pt.y(), min_pt.z(), u1_min, v1_min);
+  rect_cam1_.project(max_pt.x(), max_pt.y(), max_pt.z(), u1_max, v1_max);
+
+  // delta is half the disparit range for min height and max height
+  double disparity_at_min_h = u1_min - u0_min;
+  double disparity_at_max_h = u1_max - u0_max;
+  double marg = params_.disparity_search_margin_;
+  double delta_disparity = 0.5 * fabs(disparity_at_max_h - disparity_at_min_h);
+
+  // add a margin for safety
+  min_disparity_ = -delta_disparity - marg;
+  max_disparity_ = delta_disparity + marg;
+
+  //print for search cost and memory monitoring
+    std::cout << "min_disparity " << min_disparity_ << " max disparity " << max_disparity_ << std::endl;
+}
 
 // compute disparity map from input images
 template <class CAM_T, class PIX_T>
@@ -317,6 +347,13 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_height(const CAM_T& cam, cons
   auto bh = this->get_bpgl_heightmap();
   //bh.pointset_from_tri(tri_3d, ptset);
   bh.pointset_from_tri(tri_3d, ptset, pt_index_to_pix_);
+#if 0
+  //DEBUG JLM
+  std::string path = "D:/tests/WorldCup/AOI4/debug/ptset_ambi.txt";
+  std::ofstream ostr(path.c_str());
+  ostr << ptset;
+  ostr.close();
+#endif
   bh.heightmap_from_pointset(ptset, heightmap);
 }
 

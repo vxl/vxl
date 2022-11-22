@@ -105,5 +105,35 @@ bsgm_multiscale_disparity_estimator::~bsgm_multiscale_disparity_estimator()
   delete fine_de_;
 }
 
-
+vil_image_view<float> bsgm_multiscale_disparity_estimator::fill_1x1_holes(vil_image_view<float> const& img) {
+    float large_spike_tol = 10.0f;
+    size_t ni = img.ni(), nj = img.nj();
+    vil_image_view<float> ret(img);
+    // ignore borders
+    for(int j = 1; j<(nj-1); ++j)
+        for (int i = 1; i < (ni - 1); ++i) {
+            float sum = 0.0f, ns = 0.0f;
+            for (int rj = -1; rj <= 1; ++rj)
+                for (int ri = -1; ri <= 1; ++ri)
+            {
+                if (ri == 0&&rj ==0) continue;
+                float v = img(i + ri, j + rj);
+                if (std::isnan(v))
+                    continue; 
+                sum += v; ns += 1.0f;
+            }
+            if (ns < 8.0) {
+                continue;
+            }
+            sum /= ns;
+            float v = img(i, j);
+            if (std::isnan(v)) {
+                ret(i, j) = sum;
+                continue;
+            }
+            if (fabs(v - sum) > large_spike_tol)
+                ret(i, j) = sum;
+       }
+    return ret;
+}
 //----------------------------------------------------------------------------

@@ -95,7 +95,7 @@ class bsgm_multiscale_disparity_estimator
   {
     fine_de_->write_cost_debug_imgs(out_dir, write_total_cost);
   }
-
+  vil_image_view<float> fill_1x1_holes(vil_image_view<float> const& img); 
  protected:
 int bsgm_compute_median_of_image(
   const vil_image_view<float>& img,
@@ -183,18 +183,14 @@ bool bsgm_multiscale_disparity_estimator::compute(
      min_disp_img_coarse, invalid_disp_coarse, disp_t_coarse, dynamic_range_factor ) )
     return false;
 
-  //DEBUG
-  //vil_save( disp_t_coarse, "D:/temp/sgm/mountain_pair/disp_t_coarse.tif");
 
-
-  // Mode 0 uses a constant min disparity for all pixels
-  if( multi_scale_mode == 0 ){
-
-    // Compute the median disparity for the
+  // Compute the median disparity for the entire target image
     int med_ds = bsgm_compute_median_of_image(
       disp_t_coarse, invalid_t_coarse, 0, coarse_w_, 0, coarse_h_,
       min_disp_coarse, num_coarse_disparities_, invalid_disp_coarse );
 
+  // Mode 0 uses a constant min disparity (the median) for all pixels
+  if( multi_scale_mode == 0 ){
     // Setup fine-scale min disparity image
     min_disp_img_fine.fill(
       med_ds*downscale_factor_ - num_active_disparities_/2 );
@@ -232,13 +228,15 @@ bool bsgm_multiscale_disparity_estimator::compute(
 
   // Mode 2 uses per pixel min disparity based on coarse disparity
   } else {
-
+      disp_t_coarse = fill_1x1_holes(disp_t_coarse);
     // Set the min (fine-scale) disparity for each pixel to a value
     // value centered on this median.
     for( int y = 0; y < coarse_h_; y++ ){
       for( int x = 0; x < coarse_w_; x++ ){
+        float d = disp_t_coarse(x,y);
+        if(std::isnan(d)) d = med_ds;
         min_disp_img_coarse(x,y) =
-         disp_t_coarse(x,y)*downscale_factor_ - num_active_disparities_/2;
+          d*downscale_factor_ - num_active_disparities_/2;
       }
     }
 
@@ -251,9 +249,21 @@ bool bsgm_multiscale_disparity_estimator::compute(
   if( !fine_de_->compute( img_tar, img_ref, invalid_tar,
       min_disp_img_fine, invalid_disp, disp_tar, dynamic_range_factor, skip_error_check ) )
     return false;
-
-  //fine_de_->write_cost_debug_imgs( std::string("C:/data/results"), true );
-
+  
+#if 0
+  //DEBUG visualize problems with disparity search----
+  // use coarse disparity as final result
+  vil_image_view<float> temp_f_disp;
+  vil_resample_bilin(disp_t_coarse, temp_f_disp, fine_w_, fine_h_);
+  for (size_t j = 0; j < fine_h_; ++j)
+      for (size_t i = 0; i < fine_w_; ++i)
+          temp_f_disp(i, j) = downscale_factor_ * temp_f_disp(i, j);
+  disp_tar = temp_f_disp; 
+  std::cout << "MEDIAN " << med_ds << std::endl;
+  vil_save(disp_tar, "c:/debug/final_disp_target.tif");
+  //fine_de_->write_cost_debug_imgs( std::string("c:/debug/results"), true );
+  //------
+#endif
   return true;
 }
 
