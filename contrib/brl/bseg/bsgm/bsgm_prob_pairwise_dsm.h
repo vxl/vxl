@@ -274,12 +274,34 @@ class bsgm_prob_pairwise_dsm
   void max_height(float height) {max_height_ = height;}
   float max_height() const {return max_height_;}
 
+  //: =====   disparity limits min, max disparity have multiple roles ======
+  //     multi_scale_mode controls search range by the multi_scale_disparity_estimator
+  //     as specified by these min_disparity and max_disparity parameters.
+  //     Let Dmt be median disparity over entire valid low res target image
+  //     Let Dmb be median disparity over a sub-block of the low-res target image
+  //     Let Dmp be disparity of a low resolution pixel
+  //     num_active_disparities is (max_disparity-min_disparity)*params_.active_disparity_factor_
+  //     Let delta = num_active_disparities/2
+  //
+  //     multi_scale_mode = 0 - search range is [Dmt - delta/2, Dmt + delta/2], 
+  //     multi_scale_mode = 1 - search range is [Dmb - delta/2, Dmb + delta/2],
+  //     multi_scale_mode = 2 - search range is [Dmp - delta/2, Dmp + delta/2], 
+  //       In this mode - min and max disparity are determined by projection of max_height_
+  //       into the rectified images of the stereo pair. This custom range lowers the
+  //       average memory use by disparity search over cost volumes in the sgm algorithm.
+  //       The max_height_ based custom values are limited to the initial min_disparity
+  //       and max_disparity settings in order to prevent excessive memory use. In a
+  //       search for max_height_ = 300m, the average range is +-275 with outliers of +-525.
+  //=========================================================================
+
   //: minimum disparity to start search along an epipolar line
-  void min_disparity(int min_disparity) {min_disparity_ = min_disparity;}
+  void min_disparity(int min_disparity)
+  {min_disparity_ = min_disparity; initial_min_disparity_ = min_disparity;}
   int min_disparity() const { return min_disparity_; }
 
   //: maximum disparity to end search along an epipolar line
-  void max_disparity(int max_disparity) {max_disparity_ = max_disparity;}
+  void max_disparity(int max_disparity)
+  {max_disparity_ = max_disparity; initial_max_disparity_ = max_disparity;}
   int max_disparity() const { return max_disparity_; }
 
   //: number of disparities
@@ -409,7 +431,7 @@ class bsgm_prob_pairwise_dsm
 
     // determine disparity range for individual pairs
     // depends on view angle separation and max_height_
-    // used when a large height range must be searched
+    // used to save memory when a large height range must be searched
     if(params_.multi_scale_mode_ == 2)
       this->compute_min_max_disparity_from_height();
 
@@ -583,6 +605,8 @@ class bsgm_prob_pairwise_dsm
   size_t rect_nj_;
   int min_disparity_ = -100;
   int max_disparity_ = 100;
+  int initial_min_disparity_ = -100;
+  int initial_max_disparity_ = 100;
   float min_height_ = 0.0;
   float max_height_ = 150.0;//meters
 
