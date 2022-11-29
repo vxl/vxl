@@ -224,8 +224,14 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_min_max_disparity_from_height
   min_disparity_ = -delta_disparity - marg;
   max_disparity_ = delta_disparity + marg;
 
+  // check for limit
+  if(abs(min_disparity_) > abs(initial_min_disparity_) || abs(max_disparity_) > abs(initial_max_disparity_)){
+    std::stringstream ss;
+    ss << "height-based disparity limits exceeded:(" << min_disparity_ << ' ' << max_disparity_ << ')' << std::endl;
+    throw std::runtime_error(ss.str());
+  }
   //print for search cost and memory monitoring
-    std::cout << "min_disparity " << min_disparity_ << " max disparity " << max_disparity_ << std::endl;
+  std::cout << "min_disparity " << min_disparity_ << " max disparity " << max_disparity_ << std::endl;
 }
 
 // compute disparity map from input images
