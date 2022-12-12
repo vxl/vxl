@@ -1015,6 +1015,13 @@ angle(const vnl_vector<T> & a, const vnl_vector_fixed<T, n> & b)
   return angle(a, b.as_ref());
 }
 
+template <class T, unsigned n>
+inline T
+angle(const vnl_vector_ref<T> & a, const vnl_vector_ref<T> & b)
+{
+  return angle(a.as_vector()), b.as_vector();
+}
+
 
 //:
 // \relatesalso vnl_vector_fixed

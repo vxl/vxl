@@ -21,10 +21,10 @@
 //   vnl_vector for which the data space has
 //   been supplied externally.
 template <class T>
-class VNL_EXPORT vnl_vector_ref : public Eigen::Map<eigen_vnl_vector<T>>
+class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
 {
  public:
-  using Base = Eigen::Map<eigen_vnl_vector<T>>;
+  using Base = vnl_vector<T>;
 
   //: Constructor
   // Do \e not call anything else than the default constructor of vnl_vector<T>

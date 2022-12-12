@@ -9,6 +9,9 @@ vxl_configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/test_build_info.h.in
                     ${CMAKE_CURRENT_BINARY_DIR}/test_build_info.h
                     core/tests )
 
+add_executable(eigen eigen.cpp)
+target_link_libraries(eigen Eigen3::Eigen)
+
 # needed for generated test_build_info.h
 include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 

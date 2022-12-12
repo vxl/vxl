@@ -26,8 +26,7 @@ vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vcl_where_root_dir.h.in ${PROJECT_B
 include_directories(${PROJECT_BINARY_DIR})
 set( vcl_sources
   vcl_deprecated.cxx
-
-        vcl_msvc_warnings.h
+  vcl_msvc_warnings.h
   vcl_windows_header.h
 
   vcl_sys/time.h

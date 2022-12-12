@@ -113,6 +113,22 @@ public:
     return tmp.extract(sub_matrix, top, left);
   }
 
+  bool is_equal(vnl_matrix_ref<T> const& rhs, double tol) const
+  {
+    if (this == &rhs)                                      // same object => equal.
+      return true;
+
+    if (this->rows() != rhs.rows() || this->cols() != rhs.cols())
+      return false;                                        // different sizes => not equal.
+
+    for (unsigned int i = 0; i < this->rows(); ++i)
+      for (unsigned int j = 0; j < this->columns(); ++j)
+        if (vnl_math::abs(this->operator()(i,j) - rhs(i,j)) > tol)
+          return false;                                    // difference greater than tol
+
+    return true;
+  }
+
  private:
   //: Resizing is disallowed
   bool resize (unsigned int, unsigned int) { return false; }

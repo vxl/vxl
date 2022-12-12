@@ -182,8 +182,6 @@ vnl_vector<T>& vnl_vector<T>::pre_multiply (vnl_matrix<T> const& m)
 // v = v * m. O(m*n). Vector is assumed a row matrix.
 
 template<class T>
-vnl_vector<T>& vnl_vector<T>::post_multiply (vnl_matrix<T> const& m)
-{
   this->Superclass::operator=(this->Superclass::transpose() * m).transpose().matrix();
   return *this;                                 // Return vector reference
 }
@@ -286,6 +284,7 @@ T inner_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2)
   if (v1.size() != v2.size())
     vnl_error_vector_dimension ("inner_product", v1.size(), v2.size());
 #endif
+  //return std::inner_product(v1.cbegin(), v1.cend(),v2.cbegin(), 0);
   return vnl_c_vector<T>::inner_product(v1.begin(),
                                         v2.begin(),
                                         v1.size());

@@ -83,6 +83,19 @@ swap(v &, v &) noexcept;
 
 //----------------------------------------------------------------------
 
+//abstract vnl_interface_baseclass to ensure common overrides
+//template <typename T>
+//class VNL_EXPORT vnl_interface
+//{
+//public:
+//
+//};
+
+template <class T>
+using eigen_vnl_vector = Eigen::Matrix<T, Eigen::Dynamic, 1>;
+
+
+
 //: Mathematical vector class, templated by type of element.
 // The vnl_vector<T> class implements one-dimensional arithmetic
 // vectors to be used with the vnl_matrix<T> class. vnl_vector<T>
@@ -94,10 +107,7 @@ swap(v &, v &) noexcept;
 // NOTE: Vectors are indexed from zero!  Thus valid elements are [0,size()-1].
 
 template <class T>
-using eigen_vnl_vector = Eigen::Matrix<T, Eigen::Dynamic, 1>;
-
-template <class T>
-class VNL_EXPORT vnl_vector : public eigen_vnl_vector<T>
+class VNL_EXPORT vnl_vector : public eigen_vnl_vector<T> //, public vnl_interface<T>
 {
 public:
   using Superclass = eigen_vnl_vector<T>;
@@ -105,38 +115,91 @@ public:
 public:
   friend class vnl_matrix<T>;
 
-  //: Creates an empty vector. O(1).
-  vnl_vector() = default;
+
+  vnl_vector(void):Superclass() {}
+
+  // This constructor allows you to construct MyVectorType from Eigen expressions
+  template<typename OtherDerived>
+  vnl_vector(const Eigen::MatrixBase<OtherDerived>& other)
+    : Superclass(other)
+  { }
+
+  // This method allows you to assign Eigen expressions to MyVectorType
+  template<typename OtherDerived>
+  vnl_vector<T>& operator=(const Eigen::MatrixBase <OtherDerived>& other)
+  {
+    this->Superclass::operator=(other);
+    return *this;
+  }
 
   //: Creates a vector containing n uninitialized elements.
   explicit vnl_vector(size_t len)
-    : Superclass(len)
-  {}
+    : Superclass(&dummy_data, 1), m_internal_vector(len)
+  {
+    // https://eigen.tuxfamily.org/dox/group__TutorialMapClass.html
+    // It is possible to change the array of a Map object after declaration, using the C++ "placement new" syntax:
+    // Despite appearances, this does not invoke the memory allocator, because the syntax specifies the location for storing the result.
+    // This syntax makes it possible to declare a Map object without first knowing the mapped array's location in memory:
+    Superclass * const replace_superclass_initialized = this;
+    new (replace_superclass_initialized) Superclass(m_internal_vector.data(), m_internal_vector.rows());
+  }
+
   vnl_vector(const Superclass & rhs)
-    : Superclass(rhs)
-  {}
+    : Superclass(&dummy_data, 1), m_internal_vector(rhs)
+  {
+    Superclass * const replace_superclass_initialized = this;
+    new (replace_superclass_initialized) Superclass(m_internal_vector.data(), m_internal_vector.rows());
+  }
+
   vnl_vector(Superclass && rhs)
-    : Superclass(rhs)
-  {}
+    :Superclass(&dummy_data, 1), m_internal_vector(rhs)
+  {
+    Superclass * const replace_superclass_initialized = this;
+    new (replace_superclass_initialized) Superclass(m_internal_vector.data(), m_internal_vector.rows());
+  }
 
   template <class OtherDerived>
   vnl_vector(const Eigen::MatrixBase<OtherDerived> &rhs)
-    : Superclass(rhs)
-  {}
+    : Superclass(&dummy_data, 1), m_internal_vector(rhs)
+  {
+    Superclass * const replace_superclass_initialized = this;
+    new (replace_superclass_initialized) Superclass(m_internal_vector.data(), m_internal_vector.rows());
+  }
 
-  //: Creates a vector containing n elements, all set to v0.
-  vnl_vector(size_t len, T const & v0);
+  //: Creates a vector of specified length, and initialize all elements with value. O(n).
+  vnl_vector (size_t len, T const& value)
+    : vnl_vector(len)
+  {
+    this->setConstant(value);
+  }
 
-  //: Creates a vector containing len elements, with the first n
-  // elements taken from the array values[]. O(n).
-  vnl_vector(size_t len, size_t n, T const values[]);
+  //: Creates a vector of specified length and initialize first n elements with values. O(n).
 
-  //: Creates a vector containing len elements, initialized with values from
-  // a data block.
-  vnl_vector(T const * data_block, size_t n);
+  vnl_vector (size_t len, size_t n, T const values[])
+    : vnl_vector(len)
+  {
+    // If user specified values, initialize first n elements with values
+    // n.b Assignment is used over universal initialization to avoid a
+    // gcc 4.8.5 ICE.
+    const size_t copy_num = std::min(len,n);
+    std::copy(values, values + copy_num, this->data());
+  }
+
+  //: Creates a vector from a block array of data, stored row-wise.
+  // Values in datablck are copied. O(n).
+  vnl_vector (T const* datablck, size_t len)
+    : vnl_vector(len)
+  {
+    std::copy( datablck, datablck + len, this->data() );
+  }
 
   //: Copy constructor.
-  vnl_vector(vnl_vector<T> const &) = default;
+  vnl_vector(vnl_vector<T> const & other)
+  : Superclass(&dummy_data, 1), m_internal_vector{other.m_internal_vector}
+  {
+    Superclass * const replace_superclass_initialized = this;
+    new (replace_superclass_initialized) Superclass(m_internal_vector.data(), m_internal_vector.rows());
+  }
 
   // NOTE: move-assignment must be allowed to throw an exception, because we need to maintain
   //       backwards compatibility and the move-construction & move-aasignment
@@ -147,7 +210,6 @@ public:
   //: Move-assignment operator
   vnl_vector<T> &
   operator=(vnl_vector<T> && rhs) = default;
-
 
   vnl_vector<T> &
   operator=(const Superclass & rhs)
@@ -171,10 +233,10 @@ public:
   vnl_vector<T> &
   operator=(vnl_vector<T> const & rhs)
   {
-    if(this != & rhs)
-    {
-      this->Superclass::operator=(rhs);
-    }
+    this->m_internal_vector = rhs.m_internal_vector;
+
+    Superclass * const replace_superclass_initialized = this;
+    new (replace_superclass_initialized) Superclass(this->m_internal_vector.data(), m_internal_vector.rows());
     return *this;
   }
 
@@ -307,9 +369,9 @@ public:
   vnl_vector<T> &
   pre_multiply(vnl_matrix<T> const & M);
 
-  //: *this = (*this)*M where M is a suitable matrix.
+  //: out = (*this)*M where M is a suitable matrix.
   //  this is treated as a row vector
-  vnl_vector<T> &
+  vnl_vector<T>
   post_multiply(vnl_matrix<T> const & M);
 
   //: *this = (*this)*M where M is a suitable matrix.
@@ -341,12 +403,12 @@ public:
   vnl_vector<T>
   operator+(T v) const
   {
-    return Superclass(this->array() + v);
+    return vnl_vector<T>( ( this->array() + v).matrix() );
   }
   vnl_vector<T>
   operator-(T v) const
   {
-    return Superclass(this->array() - v);
+    return vnl_vector<T>( (this->array() - v).matrix() );
   }
   vnl_vector<T>
   operator*(T v) const
@@ -715,6 +777,8 @@ private:
   const bool m_LetArrayManageMemory{ true };
 };
 
+template<class T>
+T vnl_vector<T>::dummy_data = 0.0;
 
 // Definitions of inline functions
 
