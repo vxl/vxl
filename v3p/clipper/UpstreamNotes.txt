@@ -1,22 +1,0 @@
-#
-# Upstream versions of this code was found here:
-# http://www.angusj.com/delphi/
-# https://sourceforge.net/projects/polyclipping/files/
-
-# The only files copied from the original zip file here are
-# README, License.txt, clipper.hpp, and clipper.cpp.
-
-# Conversions of the source code to remove eol spaces
-# and remove windows specific line endings are done
-# with the following commands.
-
-export LANG=C #Needed for sed to process these files without warnings
-export CLIPPER_SRC_DIR=~/Downloads/6.2.1.zip
-export VXL_CLIPPER_SRC_DIR=~/src/vxl/v3p/clipper
-
-sed "s/  *$//g" ${CLIPPER_SRC_DIR}/README          |sed "s///g" > ${VXL_CLIPPER_SRC_DIR}/README
-sed "s/  *$//g" ${CLIPPER_SRC_DIR}/License.txt     |sed "s///g" > ${VXL_CLIPPER_SRC_DIR}/License.txt
-sed "s/  *$//g" ${CLIPPER_SRC_DIR}/cpp/clipper.hpp |sed "s///g" > ${VXL_CLIPPER_SRC_DIR}/clipper.hxx
-
-sed "s/clipper.hpp/clipper.hxx/g" ${CLIPPER_SRC_DIR}/cpp/clipper.cpp \
-                                     |sed "s///g" > ${VXL_CLIPPER_SRC_DIR}/clipper.cpp
