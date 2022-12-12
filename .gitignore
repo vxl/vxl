@@ -51,4 +51,3 @@ cmake-build-*/
 v3p/j2k/*
 /CMakeUserPresets.json
 
-eigen

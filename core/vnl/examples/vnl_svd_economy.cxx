@@ -1,10 +1,32 @@
 #include <iostream>
-#include "vul/vul_timer.h"
 #include "vnl/vnl_random.h"
 #include "vnl/vnl_matrix.h"
 #include "vnl/vnl_matlab_print.h"
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_svd_economy.h>
+
+#include <chrono> // for std::chrono functions
+
+class Timer //https://www.learncpp.com/cpp-tutorial/timing-your-code/
+{
+private:
+  // Type aliases to make accessing nested type easier
+  using Clock = std::chrono::steady_clock;
+  using Second = std::chrono::duration<double, std::ratio<1> >;
+
+  std::chrono::time_point<Clock> m_beg { Clock::now() };
+
+public:
+  void reset()
+  {
+    m_beg = Clock::now();
+  }
+
+  double elapsed() const
+  {
+    return std::chrono::duration_cast<Second>(Clock::now() - m_beg).count();
+  }
+};
 
 int
 main()
@@ -39,16 +61,16 @@ main()
     for (unsigned int i = 0; i < N.size(); ++i)
       N.data_block()[i] = rng.drand64(-1.0, 1.0);
 
-    vul_timer timer;
+    Timer timer_t1;
     for (int i = 0; i < 1000; ++i)
       vnl_svd<double> svd(N);
 
-    int t1 = timer.user();
-    timer.mark();
+    int t1 = timer_t1.elapsed();
+    Timer timer_t2;
     for (int i = 0; i < 1000; ++i)
       vnl_svd_economy<double> svd_e(N);
 
-    int t2 = timer.user();
+    int t2 = timer_t2.elapsed();
 
     std::cerr << "time for 1000*svd(1000x10) : vnl_svd = " << t1 << " msec, "
               << "vnl_svd_economy = " << t2 << " msec.\n";

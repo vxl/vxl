@@ -26,7 +26,6 @@ vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vnl_config.h.in
 
 set( vnl_sources
   dll.h
-
   vnl_fwd.h
 
   # vector and matrix
@@ -75,7 +74,7 @@ set( vnl_sources
   vnl_matlab_read.cxx          vnl_matlab_read.h
   vnl_matlab_filewrite.cxx     vnl_matlab_filewrite.h
   vnl_matops.cxx               vnl_matops.h
-  # Polyniomial representations
+  # Polynomial representations
   vnl_polynomial.hxx           vnl_polynomial.h
   vnl_real_polynomial.cxx      vnl_real_polynomial.h
   vnl_real_npolynomial.cxx     vnl_real_npolynomial.h
@@ -175,8 +174,9 @@ set( vnl_sources
   vnl_definite_integral.cxx    vnl_definite_integral.h
 
   # hardware optimisation
-                               vnl_sse.h
-)
+  vnl_sse.h
+  vnl_vector_eigen_augment.h
+  )
 
 aux_source_directory(Templates vnl_sources)
 

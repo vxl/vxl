@@ -5,7 +5,6 @@ add_executable( vnl_test_all
   test_driver.cxx
 
   # The tests
-        test_decnum.cxx
   test_complex.cxx
   test_complexify.cxx
   test_inverse.cxx
@@ -24,12 +23,12 @@ add_executable( vnl_test_all
   test_numeric_traits.cxx
   test_power.cxx
   test_quaternion.cxx
-        test_polynomial.cxx
+  test_polynomial.cxx
   test_real_polynomial.cxx
   test_real_npolynomial.cxx
   test_resize.cxx
   test_rotation_matrix.cxx
-        test_transpose.cxx
+  test_transpose.cxx
   test_fastops.cxx
   test_vector.cxx
   test_gamma.cxx
@@ -52,22 +51,10 @@ endif()
 
 target_link_libraries(vnl_test_all ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}testlib ${CMAKE_THREAD_LIBS})
 
-if(VXL_BUILD_CORE_UTILITIES)
-  add_executable( vnl_test_with_core_utils
-    test_driver_with_core_utils.cxx
-    test_matlab.cxx
-    test_sample.cxx
-  )
-  target_link_libraries(vnl_test_with_core_utils ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib ${CMAKE_THREAD_LIBS})
-  add_test( NAME vnl_test_matlab COMMAND vnl_test_with_core_utils test_matlab                 )
-  add_test( NAME vnl_test_sample COMMAND vnl_test_with_core_utils test_sample                 )
-endif()
-
 add_executable(vnl_basic_operation_timings basic_operation_timings.cxx)
 target_link_libraries(vnl_basic_operation_timings ${VXL_LIB_PREFIX}vnl)
 add_test( NAME vnl_basic_operation_timings COMMAND vnl_basic_operation_timings   )
 
-add_test( NAME vnl_test_decnum COMMAND vnl_test_all test_decnum                 )
 add_test( NAME vnl_test_complex COMMAND vnl_test_all test_complex                )
 add_test( NAME vnl_test_complexify COMMAND vnl_test_all test_complexify             )
 add_test( NAME vnl_test_diag_matrix COMMAND vnl_test_all test_diag_matrix            )
@@ -80,7 +67,7 @@ add_test( NAME vnl_test_matrix COMMAND vnl_test_all test_matrix                 
 add_test( NAME vnl_test_container_interface COMMAND vnl_test_all test_container_interface )
 add_test( NAME vnl_test_matrix_exp COMMAND vnl_test_all test_matrix_exp             )
 add_test( NAME vnl_test_matrix_fixed COMMAND vnl_test_all test_matrix_fixed           )
-add_test( NAME vnl_test_vector_fixed_ref COMMAND vnl_test_all test_vector_fixed_ref       )
+#TODO HANS add_test( NAME vnl_test_vector_fixed_ref COMMAND vnl_test_all test_vector_fixed_ref       )
 add_test( NAME vnl_test_matrix_fixed_ref COMMAND vnl_test_all test_matrix_fixed_ref       )
 add_test( NAME vnl_test_numeric_traits COMMAND vnl_test_all test_numeric_traits         )
 add_test( NAME vnl_test_na COMMAND vnl_test_all test_na                     )

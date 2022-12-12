@@ -1,6 +1,5 @@
 #include "testlib/testlib_register.h"
 
-DECLARE(test_decnum);
 DECLARE(test_complexify);
 DECLARE(test_complex);
 DECLARE(test_inverse);
@@ -44,7 +43,6 @@ DECLARE(test_vnl_index_sort);
 void
 register_tests()
 {
-  REGISTER(test_decnum);
   REGISTER(test_complexify);
   REGISTER(test_complex);
   REGISTER(test_inverse);

@@ -182,7 +182,10 @@ vnl_vector<T>& vnl_vector<T>::pre_multiply (vnl_matrix<T> const& m)
 // v = v * m. O(m*n). Vector is assumed a row matrix.
 
 template<class T>
-  this->Superclass::operator=(this->Superclass::transpose() * m).transpose().matrix();
+vnl_vector<T>& vnl_vector<T>::post_multiply (vnl_matrix<T> const& m)
+{
+  auto temp = ((*this) * m).eval();
+  *this = temp;
   return *this;                                 // Return vector reference
 }
 
@@ -468,20 +471,7 @@ void vnl_vector<T>::assert_size_internal(size_t sz) const
   }
 }
 
-template <class T>
-bool vnl_vector<T>::is_equal(vnl_vector<T> const& rhs, double tol) const
-{
-  if (this == &rhs)                                         //Same object ? => equal.
-    return true;
 
-  if (this->size() != rhs.size())                           //Size different ?
-    return false;
-  for (size_t i = 0; i < this->size(); i++)
-    if (vnl_math::abs(this->Superclass::operator()(i) - rhs(i)) > tol)    //Element different ?
-      return false;
-
-  return true;
-}
 
 template<class T>
 bool vnl_vector<T>::operator_eq (vnl_vector<T> const& rhs) const

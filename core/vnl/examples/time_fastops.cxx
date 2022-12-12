@@ -2,7 +2,29 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
-#include "vul/vul_timer.h"
+
+#include <chrono> // for std::chrono functions
+
+class Timer //https://www.learncpp.com/cpp-tutorial/timing-your-code/
+{
+private:
+  // Type aliases to make accessing nested type easier
+  using Clock = std::chrono::steady_clock;
+  using Second = std::chrono::duration<double, std::ratio<1> >;
+
+  std::chrono::time_point<Clock> m_beg { Clock::now() };
+
+public:
+  void reset()
+  {
+    m_beg = Clock::now();
+  }
+
+  double elapsed() const
+  {
+    return std::chrono::duration_cast<Second>(Clock::now() - m_beg).count();
+  }
+};
 
 double
 vnl_fastops_dot(const double * a, const double * b, unsigned int n);
@@ -24,12 +46,12 @@ main()
   for (int i = 0; i < 1000000; ++i)
     x[i] = y[i] = 1.0 / std::sqrt(double(i + 1));
 
-  vul_timer t;
+  Timer t;
   for (int n = 0; n < 20; ++n)
     vnl_fastops_dot(&x[0], &y[0], x.size());
   std::cerr << "Method = " << METHOD << ", Optimized = " << OPTIMIZED << ", "
             << "Result = " << vnl_fastops_dot(&x[0], &y[0], x.size()) << ", ";
-  t.print(std::cerr);
+  std::cout << t.elapsed() << std::endl;
 
   return 0;
 }

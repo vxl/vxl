@@ -73,6 +73,44 @@ vnl_cross_3d( const vnl_vector<T>& v1, const vnl_vector<T>& v2 )
 }
 
 //: Compute the 3-D cross product
+// \relatesalso vnl_vector
+template<class T>
+inline vnl_vector<T>
+vnl_cross_3d( const vnl_vector_ref<T>& v1, const vnl_vector<T>& v2 )
+{
+  assert( v1.size() == 3 && v2.size() == 3 );
+  vnl_vector<T> result(3);
+  result[0] = v1[1] * v2[2] - v1[2] * v2[1]; // work for both col/row
+  result[1] = v1[2] * v2[0] - v1[0] * v2[2]; // representation
+  result[2] = v1[0] * v2[1] - v1[1] * v2[0];
+  return result;
+}
+
+template<class T>
+inline vnl_vector<T>
+vnl_cross_3d( const vnl_vector<T>& v1, const vnl_vector_ref<T>& v2 )
+{
+  assert( v1.size() == 3 && v2.size() == 3 );
+  vnl_vector<T> result(3);
+  result[0] = v1[1] * v2[2] - v1[2] * v2[1]; // work for both col/row
+  result[1] = v1[2] * v2[0] - v1[0] * v2[2]; // representation
+  result[2] = v1[0] * v2[1] - v1[1] * v2[0];
+  return result;
+}
+
+template<class T>
+inline vnl_vector<T>
+vnl_cross_3d( const vnl_vector_ref<T>& v1, const vnl_vector_ref<T>& v2 )
+{
+  assert( v1.size() == 3 && v2.size() == 3 );
+  vnl_vector<T> result(3);
+  result[0] = v1[1] * v2[2] - v1[2] * v2[1]; // work for both col/row
+  result[1] = v1[2] * v2[0] - v1[0] * v2[2]; // representation
+  result[2] = v1[0] * v2[1] - v1[1] * v2[0];
+  return result;
+}
+
+//: Compute the 3-D cross product
 // \relatesalso vnl_vector_fixed
 template<class T>
 inline vnl_vector_fixed<T,3>

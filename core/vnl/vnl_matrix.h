@@ -48,6 +48,7 @@
 # undef ERROR_CHECKING
 #endif
 #include "vnl/vnl_export.h"
+
 #include <Eigen/Core>
 #include <numeric>
 

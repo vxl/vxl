@@ -13,7 +13,7 @@
 #
 #   vxl-maintainers@lists.sf.net
 
-cmake_minimum_required(VERSION 3.10.2)
+cmake_minimum_required(VERSION 3.16.3)
 if(CMAKE_VERSION VERSION_LESS 3.12.0)
   cmake_policy(VERSION ${CMAKE_VERSION})
 else()
@@ -21,7 +21,7 @@ else()
 endif()
 
 if(NOT CMAKE_CXX_STANDARD)
-   set(CMAKE_CXX_STANDARD "11")
+   set(CMAKE_CXX_STANDARD "14")
 endif()
 if(NOT CMAKE_CXX_STANDARD_REQUIRED)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -29,7 +29,7 @@ endif()
 if(NOT CMAKE_CXX_EXTENSIONS)
   set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
-set(VALID_CXX_STANDARDS "11" "14" "17" "20")
+set(VALID_CXX_STANDARDS "14" "17" "20")
 if(NOT CMAKE_CXX_STANDARD IN_LIST VALID_CXX_STANDARDS )
    MESSAGE(FATAL_ERROR "CMAKE_CXX_STANDARD:STRING=${CMAKE_CXX_STANDARD} not in know standards list\n ${VALID_CXX_STANDARDS}.")
 endif()
@@ -78,7 +78,8 @@ SET(VXL_LIBRARY_PROPERTIES ${VXL_LIBRARY_PROPERTIES} VERSION "${VXL_VERSION}"
 include(CMakeDependentOption)
 include(${CMAKE_CURRENT_SOURCE_DIR}/config/cmake/VXLInitializeBuildType.cmake)
 
-find_package (Eigen3 3.4 REQUIRED NO_MODULE)
+#find_package (Eigen3 3.4 REQUIRED NO_MODULE)
+add_subdirectory(eigen)
 
 
 #Disable overzealous compiler warning.  If the definition is truely missing a link error will be created.
@@ -269,33 +270,23 @@ endif()
 #-------------------------------------------------------------------
 #-- BUILD SELECTION OPTIONS
 # Options for selecting the core core libraries
-option( VXL_BUILD_CORE_NUMERICS_ONLY "Turn off everything except the core numerics" ON)
+set(BUILD_TESTING ON CACHE BOOL "Force building testing" FORCE)
+set(VXL_BUILD_CORE_NUMERICS_ONLY ON CACHE BOOL "Force only to build NUMERICS" FORCE)
+#option( VXL_BUILD_CORE_NUMERICS_ONLY "Turn off everything except the core numerics" ON)
 mark_as_advanced(VXL_BUILD_CORE_NUMERICS_ONLY)
-option( VXL_BUILD_CORE_NUMERICS "Build VXL's numerics libraries" ON )
-CMAKE_DEPENDENT_OPTION( VXL_BUILD_CORE_GEOMETRY "Build VXL's geometry libraries" ON "NOT VXL_BUILD_CORE_NUMERICS_ONLY" OFF)
-CMAKE_DEPENDENT_OPTION( VXL_BUILD_CORE_SERIALISATION "Build VXL's serialisation libraries" ON "NOT VXL_BUILD_CORE_NUMERICS_ONLY" OFF)
-CMAKE_DEPENDENT_OPTION( VXL_BUILD_CORE_UTILITIES "Build VXL's utility libraries" ON "NOT VXL_BUILD_CORE_NUMERICS_ONLY" OFF)
-CMAKE_DEPENDENT_OPTION( VXL_BUILD_CORE_IMAGING "Build VXL's imaging libraries" ON "NOT VXL_BUILD_CORE_NUMERICS_ONLY" OFF)
+#option( VXL_BUILD_CORE_NUMERICS "Build VXL's numerics libraries" ON )
+set(VXL_BUILD_CORE_NUMERICS ON CACHE BOOL "Force only to build NUMERICS" FORCE)
 
 # By default, build examples when building tests. Examples require most of the core libraries
 CMAKE_DEPENDENT_OPTION( VXL_BUILD_EXAMPLES "Should the examples be built?" ${BUILD_TESTING}
-                      "VXL_BUILD_CORE_GEOMETRY;VXL_BUILD_CORE_NUMERICS;VXL_BUILD_CORE_UTILITIES;VXL_BUILD_CORE_SERIALISATION;VXL_BUILD_CORE_IMAGING" OFF)
+                      "VXL_BUILD_CORE_NUMERICS" OFF)
 mark_as_advanced(VXL_BUILD_EXAMPLES)
 
-option( VXL_BUILD_NONDEPRECATED_ONLY "Build only nondeprecated libraries (Experimental)" ON )
-mark_as_advanced(VXL_BUILD_NONDEPRECATED_ONLY)
-
-CMAKE_DEPENDENT_OPTION(VXL_BUILD_CORE_PROBABILITY "Build VXL's probability libraries (Experimental)" OFF
-                       "VXL_BUILD_CORE_NUMERICS;NOT VXL_BUILD_CORE_NUMERICS_ONLY" OFF)
-
-option(VXL_USE_GEOTIFF "Use the GEOTIFF Library if available" OFF)
-mark_as_advanced(VXL_USE_GEOTIFF)
 
 # Build the core vxl + support libraries
 add_subdirectory(vcl)
 add_subdirectory(v3p)
 add_subdirectory(core)
-
 
 # Generate Project files dependacy generation for now for downstream packages
 
