@@ -24,7 +24,8 @@ vrel_affine_est( const std::vector< vgl_point_2d<double> > & from_pts,
 
   constexpr unsigned dim = 2;
   const unsigned size = from_pts.size();
-
+  from_pts_.resize(size);
+  to_pts_.resize(size);
   // convert from vector to vnl_vector type
   vnl_vector<double> pt( dim );
   for ( unsigned int i=0; i<size; ++i ) {
@@ -47,7 +48,7 @@ vrel_affine_est::vrel_affine_est(
     : vrel_estimation_problem((dim + 1) * dim /*dof*/,
                               dim + 1 /*points to instantiate*/),
       from_pts_(from_pts), to_pts_(std::move(to_pts)) {
-  assert( from_pts.size() == to_pts.size() );
+  assert( from_pts_.size() == to_pts_.size() );
   const unsigned size = from_pts.size();
 
   affine_dof_ = (dim+1)*dim;
