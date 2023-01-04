@@ -1,5 +1,5 @@
 doxygen_add_library(contrib/rpl/rgrl
-  DEPENDS contrib/rpl/vrel contrib/rpl/rsdl core/vnl core/vbl core/vil
+  DEPENDS contrib/rpl/rsdl core/vnl core/vbl core/vil core/vrel
   PACKAGE contrib/rpl
   DESCRIPTION "Rensselaer (Generalized) Registration Library"
   )
