@@ -78,7 +78,7 @@ test_trans_affine()
 
   vnl_vector<double> xformed_direction( 3 );
 
-  // for the affine, the location is irrelevant when transforming a
+  // for the affine, the location is ivrelevant when transforming a
   // direction.
   //
   xform->map_direction( point, direction, xformed_direction );

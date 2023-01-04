@@ -26,8 +26,8 @@
 #include "vnl/vnl_math.h"
 #include "vnl/vnl_vector_fixed.h"
 
-#include <rrel/rrel_muset_obj.h>
-#include <rrel/rrel_tukey_obj.h>
+#include <vrel/vrel_muset_obj.h>
+#include <vrel/vrel_tukey_obj.h>
 
 #include <rgrl/rgrl_feature_based_registration.h>
 #include <rgrl/rgrl_feature_set_location.h>
@@ -226,13 +226,13 @@ main( int argc, char* argv[] )
 
   //Weighter
   //
-  std::unique_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
+  std::unique_ptr<vrel_m_est_obj>  m_est_obj( new vrel_tukey_obj(4) );
   rgrl_weighter_sptr wgter = new rgrl_weighter_m_est(std::move(m_est_obj), false, false);
 
   //Scale estimator
   //
   int max_set_size = 1000;  //maximum expected number of features
-  std::unique_ptr<rrel_objective> muset_obj( new rrel_muset_obj( max_set_size , false) );
+  std::unique_ptr<vrel_objective> muset_obj( new vrel_muset_obj( max_set_size , false) );
 
   rgrl_scale_estimator_unwgted_sptr unwgted_scale_est;
   rgrl_scale_estimator_wgted_sptr wgted_scale_est;

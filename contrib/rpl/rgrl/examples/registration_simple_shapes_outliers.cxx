@@ -27,8 +27,8 @@
 #include "vnl/vnl_math.h"
 #include "vnl/vnl_random.h"
 
-#include <rrel/rrel_muset_obj.h>
-#include <rrel/rrel_tukey_obj.h>
+#include <vrel/vrel_muset_obj.h>
+#include <vrel/vrel_tukey_obj.h>
 
 #include <rgrl/rgrl_feature_trace_pt.h>
 #include <rgrl/rgrl_feature_set_location.h>
@@ -245,12 +245,12 @@ main()
   // statistics literature \cite{holland:stats77}.  This is important
   // for rejecting errors due to mismatches, and therefore it is the
   // one we choose here. Implementation of a variety of loss functions
-  // can be found in \verb+vxl/contrib/rpl/rrel+.
+  // can be found in \verb+vxl/contrib/rpl/vrel+.
   //
   // \endlatexonly
 
   // BeginCodeSnippet
-  std::unique_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
+  std::unique_ptr<vrel_m_est_obj>  m_est_obj( new vrel_tukey_obj(4) );
   rgrl_weighter_sptr wgter = new rgrl_weighter_m_est(std::move(m_est_obj), false, false);
   // EndCodeSnippet
 
@@ -293,7 +293,7 @@ main()
   // \endlatexonly
 
   // BeginCodeSnippet
-  std::unique_ptr<rrel_objective> muset_obj( new rrel_muset_obj(0, false) );
+  std::unique_ptr<vrel_objective> muset_obj( new vrel_muset_obj(0, false) );
 
   rgrl_scale_estimator_unwgted_sptr unwgted_scale_est =
     new rgrl_scale_est_closest( std::move(muset_obj) );

@@ -22,7 +22,7 @@
 class vnl_random;
 
 //: Generate the initial estimate using random sampling.
-//  This is the re-implementation of rrel_ran_sam_search.
+//  This is the re-implementation of vrel_ran_sam_search.
 //  Modifications include using unweighted scale estimator
 //  to perform selection of the best transformation.
 //

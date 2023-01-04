@@ -10,7 +10,7 @@
 #include "vnl/vnl_matrix.h"
 #include "vnl/vnl_vector.h"
 
-#include <rrel/rrel_muset_obj.h>
+#include <vrel/vrel_muset_obj.h>
 
 #include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_feature_point.h>
@@ -62,7 +62,7 @@ static void test_scale_est()
   }
   var /= num_pts;
 
-  std::unique_ptr<rrel_objective> obj( new rrel_muset_obj( num_pts ) );
+  std::unique_ptr<vrel_objective> obj( new vrel_muset_obj( num_pts ) );
   rgrl_scale_est_closest closest_est( std::move(obj) );
 
   // Simple, one-to-one errors

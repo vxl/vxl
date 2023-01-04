@@ -15,7 +15,7 @@
 
 #include <vnl/vnl_matrix.h>
 
-class rrel_objective;
+class vrel_objective;
 
 //: Unweighted scale estimator using closest of the match points.
 //
@@ -38,7 +38,7 @@ class rgrl_scale_est_closest
   //robust scale.  The one that is commonly used is the MUSE objective
   //function. The flag \a do_signature_scale determines whether a signature
   //covariance will be estimated.
-  rgrl_scale_est_closest( std::unique_ptr<rrel_objective>  obj,
+  rgrl_scale_est_closest( std::unique_ptr<vrel_objective>  obj,
                           bool                          do_signature_scale = false );
 
   ~rgrl_scale_est_closest() override;
@@ -73,7 +73,7 @@ class rgrl_scale_est_closest
 
  protected:
   bool do_signature_scale_;
-  std::unique_ptr<rrel_objective> obj_;
+  std::unique_ptr<vrel_objective> obj_;
 };
 
 #endif // rgrl_scale_est_closest_h_
