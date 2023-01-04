@@ -15,8 +15,8 @@
 #include "vgl/vgl_homg_point_2d.h"
 #include "vgl/vgl_homg_line_2d.h"
 #include <vgl/algo/vgl_homg_operators_2d.h>
-#include <rrel/rrel_ran_sam_search.h>
-#include <rrel/rrel_muset_obj.h>
+#include <vrel/vrel_ran_sam_search.h>
+#include <vrel/vrel_muset_obj.h>
 
 
 //------------------------------------------
@@ -40,11 +40,11 @@ bpgl_fm_compute_ransac::compute(
   }
 
   // The following block is hacked from similar code in rrel_homography2d_est.
-  auto* estimator = new rrel_fm_problem( pr, pl );
+  auto* estimator = new vrel_fm_problem( pr, pl );
   estimator->verbose = false;
-  auto* ransac = new rrel_muset_obj((int)std::floor(pr.size()*.75));
+  auto* ransac = new vrel_muset_obj((int)std::floor(pr.size()*.75));
   estimator->set_prior_scale( 1.0 );
-  auto* ransam = new rrel_ran_sam_search;
+  auto* ransam = new vrel_ran_sam_search;
   ransam->set_trace_level(trace_level_);
 
   if (!gen_all_)
@@ -77,10 +77,10 @@ bpgl_fm_compute_ransac::compute(
 
 
 //------------------------------------------
-rrel_fm_problem::rrel_fm_problem(
+vrel_fm_problem::vrel_fm_problem(
   const std::vector< vgl_point_2d<double> >& pr,
   const std::vector< vgl_point_2d<double> >& pl ) :
-  rrel_estimation_problem(7,8)
+  vrel_estimation_problem(7,8)
 {
   assert( pr.size() == pl.size() );
 
@@ -95,11 +95,11 @@ rrel_fm_problem::rrel_fm_problem(
 
 //------------------------------------------
 bool
-rrel_fm_problem::fit_from_minimal_set(
+vrel_fm_problem::fit_from_minimal_set(
   const std::vector<int>& point_indices,
   vnl_vector<double>& params ) const
 {
-  if ( verbose ) std::cerr << "rrel_fm_problem::fit_from_minimal_set\n";
+  if ( verbose ) std::cerr << "vrel_fm_problem::fit_from_minimal_set\n";
   assert( point_indices.size() == 8 );
 
   std::vector< vgl_homg_point_2d<double> > set_pr, set_pl;
@@ -122,11 +122,11 @@ rrel_fm_problem::fit_from_minimal_set(
 
 //------------------------------------------
 void
-rrel_fm_problem::compute_residuals(
+vrel_fm_problem::compute_residuals(
   const vnl_vector<double>& params,
   std::vector<double>& residuals ) const
 {
-  if ( verbose ) std::cerr << "rrel_fm_problem::compute_residuals\n";
+  if ( verbose ) std::cerr << "vrel_fm_problem::compute_residuals\n";
 
   vpgl_fundamental_matrix<double> fm;
   params_to_fm(params, fm);
@@ -152,7 +152,7 @@ rrel_fm_problem::compute_residuals(
 
 //-------------------------------------------
 void
-rrel_fm_problem::fm_to_params(
+vrel_fm_problem::fm_to_params(
   const vpgl_fundamental_matrix<double>& fm,
   vnl_vector<double>& p ) const
 {
@@ -166,7 +166,7 @@ rrel_fm_problem::fm_to_params(
 
 //-------------------------------------------
 void
-rrel_fm_problem::params_to_fm(
+vrel_fm_problem::params_to_fm(
   const vnl_vector<double>& p,
   vpgl_fundamental_matrix<double>& fm ) const
 {
@@ -180,7 +180,7 @@ rrel_fm_problem::params_to_fm(
 
 //--------------------------------------------
 bool
-rrel_fm_problem::weighted_least_squares_fit(
+vrel_fm_problem::weighted_least_squares_fit(
   vnl_vector<double>& /*params*/,
   vnl_matrix<double>& /*norm_covar*/,
   const std::vector<double>* /*weights*/ ) const
