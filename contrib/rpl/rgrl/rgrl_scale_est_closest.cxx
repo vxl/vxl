@@ -5,7 +5,7 @@
 #include <iostream>
 #include "rgrl_scale_est_closest.h"
 
-#include <rrel/rrel_objective.h>
+#include <vrel/vrel_objective.h>
 #include "vnl/vnl_math.h"
 
 #include "rgrl_scale.h"
@@ -18,7 +18,7 @@
 #include <cassert>
 
 rgrl_scale_est_closest::
-rgrl_scale_est_closest( std::unique_ptr<rrel_objective>  obj,
+rgrl_scale_est_closest( std::unique_ptr<vrel_objective>  obj,
                         bool                          do_signature_scale )
   : do_signature_scale_( do_signature_scale ),
     obj_( std::move(obj) )

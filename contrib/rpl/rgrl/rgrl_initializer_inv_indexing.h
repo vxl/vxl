@@ -21,7 +21,7 @@
 
 //: Generate the set of initial estimates using invariant indexing.
 //
-//  The underlying data structure is rrel_kd_tree for
+//  The underlying data structure is vrel_kd_tree for
 //  k-dimensional invariant fields. The transformation model is
 //  determined by the invariant class. Therefore, no estimator is
 //  associated with the initializer.

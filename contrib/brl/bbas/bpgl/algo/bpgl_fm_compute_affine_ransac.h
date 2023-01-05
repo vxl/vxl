@@ -7,7 +7,7 @@
 //
 // A robust algorithm for computing the fundamental matrix from lists of
 // corresponding points between two rectified images.
-// This uses RREL to do the robust computation.
+// This uses VREL to do the robust computation.
 //
 // Internally, the affine fundamental matrix has the form
 // (using Hartly and Zisserman convention for a-e):
@@ -31,7 +31,7 @@
 #endif
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
-#include <rrel/rrel_estimation_problem.h>
+#include <vrel/vrel_estimation_problem.h>
 #include <vpgl/vpgl_affine_fundamental_matrix.h>
 
 class bpgl_fm_compute_affine_ransac_params;
@@ -74,17 +74,17 @@ class bpgl_fm_compute_affine_ransac_params
 };
 
 
-//: This is a helper class for bpgl_fm_compute_ransac using rrel.
-class rrel_fm_affine_problem : public rrel_estimation_problem
+//: This is a helper class for bpgl_fm_compute_ransac using vrel.
+class vrel_fm_affine_problem : public vrel_estimation_problem
 {
  public:
   //: Construct the problem object with two sets of corresponding points.
   // Points pr correspond to the RHS of the fundamental matrix, while the
   // points pl correspond to the LHS.
-  rrel_fm_affine_problem( const std::vector< vgl_point_2d<double> > & pr,
+  vrel_fm_affine_problem( const std::vector< vgl_point_2d<double> > & pr,
                           const std::vector< vgl_point_2d<double> > & pl );
 
-  ~rrel_fm_affine_problem() override = default;
+  ~vrel_fm_affine_problem() override = default;
 
   // Total number of correspondences.
   unsigned int num_samples() const override{ return pr_.size(); }

@@ -11,8 +11,8 @@
 #include <rgrl/rgrl_weighter_m_est.h>
 #include <rgrl/rgrl_convergence_on_median_error.h>
 
-#include <rrel/rrel_lms_obj.h>
-#include <rrel/rrel_tukey_obj.h>
+#include <vrel/vrel_lms_obj.h>
+#include <vrel/vrel_tukey_obj.h>
 
 #include <cassert>
 #ifdef _MSC_VER
@@ -256,14 +256,14 @@ generate_defaults(  rgrl_matcher_sptr                  &matcher,
   //
   // weighter:
   if ( !weighter ) {
-    std::unique_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
+    std::unique_ptr<vrel_m_est_obj>  m_est_obj( new vrel_tukey_obj(4) );
     weighter = new rgrl_weighter_m_est(std::move(m_est_obj), false, false);
     DebugMacro( 1, "Default weighter set to rgrl_weighter_m_est\n");
   }
 
   // unweighted scale estimator:
   if ( !unwgted_scale_est ) {
-    std::unique_ptr<rrel_objective> lms_obj( new rrel_lms_obj(1) );
+    std::unique_ptr<vrel_objective> lms_obj( new vrel_lms_obj(1) );
     unwgted_scale_est = new rgrl_scale_est_closest( std::move(lms_obj) );
     DebugMacro( 1, "Default unwgted scale estimator set to rgrl_scale_est_closest\n");
   }

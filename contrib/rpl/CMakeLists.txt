@@ -1,4 +1,4 @@
-project( rpl )
+ project( rpl )
 
 doxygen_add_package(contrib/rpl "RPI Libraries")
 
@@ -11,7 +11,6 @@ set( RPL_INSTALL_INCLUDE_DIR
 
 include_directories( ${RPL_INCLUDE_DIR} )
 
-add_subdirectory(rrel)
 add_subdirectory(rsdl)
 if(VXL_BUILD_MUL)
   add_subdirectory(rgrl)

@@ -15,9 +15,9 @@
 
 #include "vnl/vnl_double_2.h"
 
-#include <rrel/rrel_muset_obj.h>
-#include <rrel/rrel_m_est_obj.h>
-#include <rrel/rrel_tukey_obj.h>
+#include <vrel/vrel_muset_obj.h>
+#include <vrel/vrel_m_est_obj.h>
+#include <vrel/vrel_tukey_obj.h>
 
 #include <rgrl/rgrl_feature_trace_region.h>
 #include <rgrl/rgrl_feature_face_region.h>
@@ -372,7 +372,7 @@ main( int argc, char* argv[] )
   //
   rgrl_weighter_sptr wgter;
   {
-    std::unique_ptr< rrel_m_est_obj > m_est_obj( new rrel_tukey_obj(4) );
+    std::unique_ptr< vrel_m_est_obj > m_est_obj( new vrel_tukey_obj(4) );
     wgter = new rgrl_weighter_m_est( std::move(m_est_obj), true, true) ;
   }
 
@@ -384,7 +384,7 @@ main( int argc, char* argv[] )
   rgrl_scale_estimator_wgted_sptr wgted_scale_est;
   {
     // muse and unwgted_scale_est are not used
-    std::unique_ptr<rrel_objective> obj( new rrel_muset_obj( 1 ) );
+    std::unique_ptr<vrel_objective> obj( new vrel_muset_obj( 1 ) );
     unwgted_scale_est = new rgrl_scale_est_closest( std::move(obj) );
     wgted_scale_est = new rgrl_scale_est_all_weights( );
   }

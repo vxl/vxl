@@ -44,7 +44,7 @@ rgrl_spline::rgrl_spline(vnl_vector<unsigned> const &m, vnl_vector<double> c)
   unsigned int n = 1;
   for (unsigned i=0; i<m.size(); ++i)
     n *= (m_[i]+3);
-  assert ( c.size() == n );
+  assert ( c_.size() == n );
 }
 
 void

@@ -54,7 +54,7 @@ target_link_libraries( registration_range_data_blackbox rgrl ${VXL_LIB_PREFIX}te
 add_executable( estimate_normals_3d
   estimate_normals_3d.cxx
 )
-target_link_libraries( estimate_normals_3d rrel rsdl ${VXL_LIB_PREFIX}vnl_algo)
+target_link_libraries( estimate_normals_3d vrel rsdl ${VXL_LIB_PREFIX}vnl_algo)
 
 # pesudo matching executables
 add_executable( match_2d

@@ -39,11 +39,8 @@ aux_source_directory(Templates bpgl_algo_sources)
 
 vxl_add_library(LIBRARY_NAME bpgl_algo LIBRARY_SOURCES ${bpgl_algo_sources})
 
-target_link_libraries(bpgl_algo bpgl bvgl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_file_formats vsol ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
+target_link_libraries(bpgl_algo bpgl bvgl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_file_formats vsol ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vrel ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
 
-if(VXL_BUILD_RPL)
-  target_link_libraries(bpgl_algo rrel)
-endif()
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

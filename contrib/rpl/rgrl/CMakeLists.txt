@@ -1,5 +1,5 @@
 doxygen_add_library(contrib/rpl/rgrl
-  DEPENDS contrib/rpl/rrel contrib/rpl/rsdl core/vnl core/vbl core/vil
+  DEPENDS contrib/rpl/rsdl core/vnl core/vbl core/vil core/vrel
   PACKAGE contrib/rpl
   DESCRIPTION "Rensselaer (Generalized) Registration Library"
   )
@@ -163,7 +163,7 @@ set( rgrl_sources
 aux_source_directory( Templates rgrl_sources )
 
 vxl_add_library(LIBRARY_NAME rgrl LIBRARY_SOURCES ${rgrl_sources} )
-target_link_libraries( rgrl rrel rsdl vil3d ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul)
+target_link_libraries( rgrl vrel rsdl vil3d ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul)
 #find_package( ITK )
 #if( ITK_FOUND )
 #    target_link_libraries( rgrl ITKCommon )

@@ -44,8 +44,8 @@ namespace{
           spline_(spline), pts_(pts), wgt_(std::move(wgt)),
           displacement_(std::move(displacement)),
           free_control_pt_index_(free_control_pt_index) {
-      assert( pts.size() == wgt.rows() );
-      assert( displacement.size() == wgt.rows() );
+      assert( pts_.size() == wgt_.rows() );
+      assert( displacement_.size() == wgt_.rows() );
     }
 
     // x is the parameters
