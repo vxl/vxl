@@ -31,6 +31,8 @@ set( vpgl_algo_sources
   vpgl_camera_transform.h          vpgl_camera_transform.cxx
   vpgl_fit_rational_cubic.h        vpgl_fit_rational_cubic.cxx
   vpgl_equi_rectification.h        vpgl_equi_rectification.cxx
+  vpgl_affine_fm_robust_est.h      vpgl_affine_fm_robust_est.cxx
+  vpgl_affine_camera_robust_est.h  vpgl_affine_camera_robust_est.cxx
 )
 include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 if(TIFF_FOUND)
