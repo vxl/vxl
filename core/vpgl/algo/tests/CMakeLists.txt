@@ -15,6 +15,7 @@ add_executable( vpgl_algo_test_all
   test_driver.cxx
   test_optimize_camera.cxx
   test_fm_compute.cxx
+  test_affine_fm_compute.cxx
   test_camera_compute.cxx
   test_camera_convert.cxx
   test_camera_homographies.cxx
@@ -43,6 +44,7 @@ add_executable( vpgl_algo_test_all
   test_driver.cxx
   test_optimize_camera.cxx
   test_fm_compute.cxx
+  test_affine_fm_compute.cxx
   test_camera_compute.cxx
   test_camera_convert.cxx
   test_camera_homographies.cxx
@@ -73,6 +75,7 @@ add_test( NAME vpgl_algo_test_camera_convert COMMAND $<TARGET_FILE:vpgl_algo_tes
 add_test( NAME vpgl_algo_test_camera_homographies COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_camera_homographies )
 add_test( NAME vpgl_algo_test_optimize_camera COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_optimize_camera )
 add_test( NAME vpgl_algo_test_fm_compute COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_fm_compute )
+add_test( NAME vpgl_algo_test_affine_fm_compute COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_affine_fm_compute )
 add_test( NAME vpgl_algo_test_rational_adjust_onept COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_rational_adjust_onept )
 add_test( NAME vpgl_algo_test_rational_adjust COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_rational_adjust )
 add_test( NAME vpgl_algo_test_lens_warp_mapper COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_lens_warp_mapper )

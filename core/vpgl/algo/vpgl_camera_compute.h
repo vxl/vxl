@@ -46,12 +46,20 @@ class vpgl_proj_camera_compute
 class vpgl_affine_camera_compute
 {
  public:
-  //: Compute from two sets of corresponding points.
+  //: Compute from two sets of corresponding points. (minimum of 4)
   // Put the resulting camera into \p camera
   // \return true if successful.
   static bool compute( const std::vector< vgl_point_2d<double> >& image_pts,
                        const std::vector< vgl_point_3d<double> >& world_pts,
                        vpgl_affine_camera<double>& camera );
+
+  //:Compute from correspondences allowing a significant number of invalid matches
+  // the ransac algorithm uses the MUSE robust estimator,
+  // *J. Miller and C. Stewart, MUSE: Robust Surface Fitting using Unbiased Scale Estimates
+  // Proc. CVPR  1996
+  static bool compute_robust_ransac( const std::vector< vgl_point_2d<double> >& image_pts,
+                                     const std::vector< vgl_point_3d<double> >& world_pts,
+                                     vpgl_affine_camera<double>& camera );
  private:
   vpgl_affine_camera_compute() = delete;
 };

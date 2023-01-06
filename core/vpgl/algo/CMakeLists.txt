@@ -12,6 +12,7 @@ set( vpgl_algo_sources
   vpgl_fm_compute_8_point.h        vpgl_fm_compute_8_point.cxx
   vpgl_fm_compute_2_point.h        vpgl_fm_compute_2_point.cxx
   vpgl_em_compute_5_point.h        vpgl_em_compute_5_point.hxx
+  vpgl_affine_fm_compute_5_point.h vpgl_affine_fm_compute_5_point.cxx
   vpgl_lens_warp_mapper.h
   vpgl_invmap_cost_function.h      vpgl_invmap_cost_function.cxx
   vpgl_backproject.h               vpgl_backproject.cxx
@@ -46,7 +47,7 @@ aux_source_directory(Templates vpgl_algo_sources)
 
 vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vpgl_algo LIBRARY_SOURCES ${vpgl_algo_sources})
 
-target_link_libraries(${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_file_formats ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
+target_link_libraries(${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_file_formats ${VXL_LIB_PREFIX}vrel ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
