@@ -1,6 +1,7 @@
 #include "testlib/testlib_register.h"
 #include <vil/vil_config.h>
 DECLARE(test_fm_compute);
+DECLARE(test_affine_fm_compute);
 DECLARE(test_camera_compute);
 DECLARE(test_camera_convert);
 DECLARE(test_camera_homographies);
@@ -27,6 +28,7 @@ void
 register_tests()
 {
   REGISTER(test_fm_compute);
+  REGISTER(test_affine_fm_compute);
   REGISTER(test_camera_compute);
   REGISTER(test_camera_convert);
   REGISTER(test_camera_homographies);
