@@ -2,4 +2,4 @@
 
 typedef double* double_ptr;
 
-RREL_UTIL_INSTANTIATE_RAN_ITER( double, double_ptr );
+VREL_UTIL_INSTANTIATE_RAN_ITER( double, double_ptr );

@@ -8,7 +8,7 @@
 
 #include <vrel/vrel_objective.h>
 
-enum vrel_kernel_scale_type { RREL_KERNEL_MAD, RREL_KERNEL_PRIOR, RREL_KERNEL_MUSE };
+enum vrel_kernel_scale_type { VREL_KERNEL_MAD, VREL_KERNEL_PRIOR, VREL_KERNEL_MUSE };
 
 
 //: Kernel Density objective function.
@@ -28,7 +28,7 @@ class vrel_kernel_density_obj : public vrel_objective
 {
  public:
   //: Constructor.
-  vrel_kernel_density_obj(vrel_kernel_scale_type scale_type=RREL_KERNEL_MAD);
+  vrel_kernel_density_obj(vrel_kernel_scale_type scale_type=VREL_KERNEL_MAD);
 
   //: Destructor.
   ~vrel_kernel_density_obj() override = default;
@@ -41,23 +41,23 @@ class vrel_kernel_density_obj : public vrel_objective
                       vnl_vector<double>* param_vector=nullptr ) const override;
 
   //: Evaluate the objective function on homoscedastic residuals.
-  //  prior_scale is needed if the type RREL_KERNEL_PRIOR is used.
+  //  prior_scale is needed if the type VREL_KERNEL_PRIOR is used.
   //  \sa vrel_objective::fcn.
   double fcn( vect_const_iter res_begin, vect_const_iter res_end,
                       double prior_scale = 0,
                       vnl_vector<double>* = nullptr) const override;
 
   //: Set the type of the scale.
-  //  RREL_KERNEL_MAD uses median absolute deviations to estimate the scale.
-  //  RREL_KERNEL_PRIOR uses the prior scale provided.
-  //  RREL_KERNEL_MUSE uses MUSE to estimate the scale.
-  virtual void set_scale_type( vrel_kernel_scale_type t = RREL_KERNEL_MAD )
+  //  VREL_KERNEL_MAD uses median absolute deviations to estimate the scale.
+  //  VREL_KERNEL_PRIOR uses the prior scale provided.
+  //  VREL_KERNEL_MUSE uses MUSE to estimate the scale.
+  virtual void set_scale_type( vrel_kernel_scale_type t = VREL_KERNEL_MAD )
   { scale_type_ = t; }
 
   //: Depends on the scale type used.
   //  \sa vrel_objective::requires_prior_scale.
   bool requires_prior_scale() const override
-  { return scale_type_ == RREL_KERNEL_PRIOR; }
+  { return scale_type_ == VREL_KERNEL_PRIOR; }
 
   //: x is set to 0;
   void fix_x() { fix_x_ = true; }
