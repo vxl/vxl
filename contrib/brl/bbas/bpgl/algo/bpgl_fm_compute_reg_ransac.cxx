@@ -38,7 +38,7 @@ bpgl_fm_compute_reg_ransac::compute(
     return false;
   }
 
-  // The following block is hacked from similar code in rrel_homography2d_est.
+  // The following block is hacked from similar code in vrel_homography2d_est.
   auto* estimator = new vrel_fm_reg_problem( pr, pl );
   estimator->verbose=true;
   auto* ransac = new vrel_muset_obj((int)std::floor(pr.size()*.75));

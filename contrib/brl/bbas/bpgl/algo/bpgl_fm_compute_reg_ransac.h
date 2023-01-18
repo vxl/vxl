@@ -63,7 +63,7 @@ class bpgl_fm_compute_reg_ransac_params
 };
 
 
-//: This is a helper class for bpgl_fm_compute_ransac using rrel.
+//: This is a helper class for bpgl_fm_compute_ransac using vrel.
 class vrel_fm_reg_problem : public vrel_estimation_problem
 {
  public:

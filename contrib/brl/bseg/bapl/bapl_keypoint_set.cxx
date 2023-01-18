@@ -167,7 +167,7 @@ void bapl_keypoint_match_set::refine_matches(float outlier_threshold, std::vecto
   .. refinement code here ... should compute:  vnl_matrix_fixed<double, 3, 3> F_optimized
 
   //: remove the matches that are outliers to the optimized F
-  rrel_fm_problem estimator( rpts_refined, lpts_refined ); // class to be used to compute residuals
+  vrel_fm_problem estimator( rpts_refined, lpts_refined ); // class to be used to compute residuals
   vnl_vector<double> params;
   vpgl_fundamental_matrix<double> fm_optimized(F_optimized);
   estimator.fm_to_params(fm_optimized, params);

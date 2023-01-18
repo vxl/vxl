@@ -39,7 +39,7 @@ bpgl_fm_compute_ransac::compute(
     return false;
   }
 
-  // The following block is hacked from similar code in rrel_homography2d_est.
+  // The following block is hacked from similar code in vrel_homography2d_est.
   auto* estimator = new vrel_fm_problem( pr, pl );
   estimator->verbose = false;
   auto* ransac = new vrel_muset_obj((int)std::floor(pr.size()*.75));
@@ -185,7 +185,7 @@ vrel_fm_problem::weighted_least_squares_fit(
   vnl_matrix<double>& /*norm_covar*/,
   const std::vector<double>* /*weights*/ ) const
 {
-  std::cerr << "rrel_fm_problem::weighted_least_squares_fit was called, but is not implemented.\n";
+  std::cerr << "vrel_fm_problem::weighted_least_squares_fit was called, but is not implemented.\n";
   return false;
 }
 
