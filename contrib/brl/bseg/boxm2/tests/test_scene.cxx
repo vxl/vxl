@@ -6,14 +6,25 @@
 #include <vector>
 #include <boxm2/boxm2_scene.h>
 #include "testlib/testlib_test.h"
-#include "testlib/testlib_root_dir.h"
 #include "vgl/vgl_point_3d.h"
 #include "vpl/vpl.h"
+#include "vul/vul_file.h"
+
 void test_scene()
 {
   //test xml file
-  std::string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
+  std::string test_dir = "./test_scene/";
   std::string test_file = test_dir + "test.xml";
+  std::cout << "test_dir=" << test_dir << std::endl;
+
+  // create test directory
+  if (vul_file::is_directory(test_dir))
+    vul_file::delete_file_glob(test_dir + "/*");
+  else {
+    if (vul_file::exists(test_dir))
+      vul_file::delete_file_glob(test_dir);
+    vul_file::make_directory(test_dir);
+  }
 
   //create block metadata
   std::map<boxm2_block_id, boxm2_block_metadata> blocks;

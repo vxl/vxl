@@ -2,21 +2,19 @@
 #include <fstream>
 #include <cstdlib>
 #include "testlib/testlib_test.h"
-#include "testlib/testlib_root_dir.h"
 #include <baio/baio.h>
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
 #include "vnl/vnl_random.h"
 #include "vpl/vpl.h"
-
+#include "vul/vul_file.h"
 
 static void test_read()
 {
   //create file to read
   const unsigned int buffSize = 1024*1024;
-  std::string root_dir = testlib_root_dir();
-  std::string test_file = root_dir + "/contrib/brl/bbas/baio/tests/test_file_r.txt";
+  std::string test_file = "./test_file_r.txt";
   char* tester = new char[buffSize];
   vnl_random rand;
   for (unsigned int i=0;i<buffSize;++i)
