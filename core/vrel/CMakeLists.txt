@@ -7,7 +7,7 @@ doxygen_add_library(core/vrel
   )
 
 set(vrel_sources
- vrel_export.h                  vrel_fwd.h
+ vrel_fwd.h
  vrel_mlesac_obj.cxx            vrel_mlesac_obj.h
  vrel_ransac_obj.cxx            vrel_ransac_obj.h
  vrel_lms_obj.cxx               vrel_lms_obj.h
@@ -51,8 +51,8 @@ set(CURR_LIB_NAME vrel)
 set_vxl_library_properties(
      TARGET_NAME ${VXL_LIB_PREFIX}${CURR_LIB_NAME}
      BASE_NAME ${CURR_LIB_NAME}
-     EXPORT_HEADER_FILE ${RPL_BINARY_INCLUDE_DIR}/${CURR_LIB_NAME}/${CURR_LIB_NAME}_export.h
-     INSTALL_DIR ${RPL_INSTALL_INCLUDE_DIR}/${CURR_LIB_NAME}
+     EXPORT_HEADER_FILE ${VXLCORE_BINARY_INCLUDE_DIR}/${CURR_LIB_NAME}/${CURR_LIB_NAME}_export.h
+     INSTALL_DIR ${VXL_INSTALL_INCLUDE_DIR}/core/${CURR_LIB_NAME}
      USE_HIDDEN_VISIBILITY
 )
 
