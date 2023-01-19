@@ -14,7 +14,7 @@
 
 vrel_muset_obj::vrel_muset_obj( int max_n,
                                 bool use_sk_refine )
-  : use_sk_refine_( use_sk_refine ), muse_type_( RREL_MUSE_TRIMMED ),
+  : use_sk_refine_( use_sk_refine ), muse_type_( VREL_MUSE_TRIMMED ),
     table_owned_(true)
 {
   table_ = new vrel_muse_table(max_n);
@@ -28,7 +28,7 @@ vrel_muset_obj::vrel_muset_obj( int max_n,
 
 vrel_muset_obj::vrel_muset_obj( vrel_muse_table* table,
                                 bool use_sk_refine )
-  : use_sk_refine_(use_sk_refine), muse_type_( RREL_MUSE_TRIMMED ),
+  : use_sk_refine_(use_sk_refine), muse_type_( VREL_MUSE_TRIMMED ),
     table_owned_(false),
     table_(table)
 {
@@ -101,10 +101,10 @@ vrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
 
   switch ( muse_type_ )
   {
-   case RREL_MUSE_TRIMMED:
+   case VREL_MUSE_TRIMMED:
    {
 #ifdef DEBUG
-    std::cout << "\nRREL_MUSE_TRIMMED\n";
+    std::cout << "\nVREL_MUSE_TRIMMED\n";
 #endif
     double sum_residuals=0;
     double best_sum = 0;
@@ -178,10 +178,10 @@ vrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     break;
    }
 
-   case RREL_MUSE_TRIMMED_SQUARE:
+   case VREL_MUSE_TRIMMED_SQUARE:
    {
 #ifdef DEBUG
-    std::cout << "\nRREL_MUSE_TRIMMED_SQUARE\n";
+    std::cout << "\nVREL_MUSE_TRIMMED_SQUARE\n";
 #endif
     double sum_sq_residuals=0;
     double best_sum_sq = 0;
@@ -256,10 +256,10 @@ vrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     break;
    }
 
-   case RREL_MUSE_QUANTILE:
+   case VREL_MUSE_QUANTILE:
    {
 #ifdef DEBUG
-    std::cout << "\nRREL_MUSE_QUANTILE\n";
+    std::cout << "\nVREL_MUSE_QUANTILE\n";
 #endif
     for ( double frac=min_frac_; frac<=max_frac_+0.00001; frac+=frac_inc_ ) {
       int kk = vnl_math::rnd( frac*num_residuals );

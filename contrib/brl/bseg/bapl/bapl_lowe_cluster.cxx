@@ -14,8 +14,8 @@
 #include <bapl/bapl_lowe_keypoint.h>
 #include <bapl/bapl_affine2d_est.h>
 
-#include <rrel/rrel_ran_sam_search.h>
-#include <rrel/rrel_muset_obj.h>
+#include <vrel/vrel_ran_sam_search.h>
+#include <vrel/vrel_muset_obj.h>
 
 
 //: Constructor

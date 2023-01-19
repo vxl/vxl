@@ -194,8 +194,8 @@ void vrel_util_intercept_adjust_stats_copy( InpIter first, InpIter last,
 
 // Instantiation macros
 //
-#undef RREL_UTIL_INSTANTIATE_RAN_ITER
-#define RREL_UTIL_INSTANTIATE_RAN_ITER(VALUE_T, RAN_ITER) \
+#undef VREL_UTIL_INSTANTIATE_RAN_ITER
+#define VREL_UTIL_INSTANTIATE_RAN_ITER(VALUE_T, RAN_ITER) \
 template VALUE_T \
 vrel_util_median_abs_dev_scale( const RAN_ITER&,  const RAN_ITER&, int dof, VALUE_T* ); \
 template double \
@@ -228,8 +228,8 @@ void vrel_util_intercept_adjust_stats_copy( RAN_ITER first, RAN_ITER last, \
                                             VALUE_T & robust_mean, VALUE_T & robust_std, VALUE_T & inlier_frac, \
                                             int dof )
 
-#undef RREL_UTIL_INSTANTIATE_INP_ITER
-#define RREL_UTIL_INSTANTIATE_INP_ITER(VALUE_T, INP_ITER) \
+#undef VREL_UTIL_INSTANTIATE_INP_ITER
+#define VREL_UTIL_INSTANTIATE_INP_ITER(VALUE_T, INP_ITER) \
 template VALUE_T \
 vrel_util_weighted_scale( const INP_ITER& residuals_first, const INP_ITER& residuals_end, \
                           const INP_ITER& weights_first, int dof, VALUE_T* ); \

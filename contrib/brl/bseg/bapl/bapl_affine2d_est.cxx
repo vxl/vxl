@@ -18,7 +18,7 @@
 
 //: Constructor from a vector of matches (pairs of keypoint smart pointers)
 bapl_affine2d_est::bapl_affine2d_est( const std::vector< bapl_keypoint_match > & matches )
-  : rrel_estimation_problem( 6 /*dof*/, 3 /*points to instantiate*/ )
+  : vrel_estimation_problem( 6 /*dof*/, 3 /*points to instantiate*/ )
 {
   vnl_vector< double > p(2), q(2);
 
@@ -35,7 +35,7 @@ bapl_affine2d_est::bapl_affine2d_est( const std::vector< bapl_keypoint_match > &
 
 bapl_affine2d_est::bapl_affine2d_est( std::vector< vnl_vector<double> >  from_pts,
                                       std::vector< vnl_vector<double> >  to_pts )
-  : rrel_estimation_problem( 6 /*dof*/, 3 /*points to instantiate*/ ),
+  : vrel_estimation_problem( 6 /*dof*/, 3 /*points to instantiate*/ ),
     from_pts_(std::move( from_pts )), to_pts_(std::move( to_pts ))
 {
   assert( from_pts_.size() == to_pts_.size() );

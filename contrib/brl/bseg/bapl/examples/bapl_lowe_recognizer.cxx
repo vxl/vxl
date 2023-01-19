@@ -16,9 +16,9 @@
 #include <bapl/bapl_lowe_cluster.h>
 #include <bapl/bapl_affine2d_est.h>
 
-#include <rrel/rrel_lms_obj.h>
-#include <rrel/rrel_ran_sam_search.h>
-#include <rrel/rrel_muset_obj.h>
+#include <vrel/vrel_lms_obj.h>
+#include <vrel/vrel_ran_sam_search.h>
+#include <vrel/vrel_muset_obj.h>
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
@@ -118,8 +118,8 @@ int main( int argc, char* argv[] )
 
   est->set_no_prior_scale();
 
-  auto* muset = new rrel_muset_obj( clusters[0].size()+1 );
-  auto * ransam = new rrel_ran_sam_search;
+  auto* muset = new vrel_muset_obj( clusters[0].size()+1 );
+  auto * ransam = new vrel_ran_sam_search;
   ransam->set_trace_level(trace_level);
   ransam->set_sampling_params( 1 - muset->min_inlier_fraction(),
                                desired_prob_good,
@@ -138,9 +138,9 @@ int main( int argc, char* argv[] )
 
 #if 0
   int num_dep_res = est->num_samples_to_instantiate();
-  rrel_objective* lms = new rrel_lms_obj( num_dep_res );
+  vrel_objective* lms = new vrel_lms_obj( num_dep_res );
 
-  rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
+  vrel_ran_sam_search* ransam = new vrel_ran_sam_search;
   ransam->set_trace_level(trace_level);
   ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
 

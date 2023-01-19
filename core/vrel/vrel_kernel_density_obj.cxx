@@ -125,7 +125,7 @@ vrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
 
   switch ( scale_type_ )
   {
-   case RREL_KERNEL_MAD: {
+   case VREL_KERNEL_MAD: {
     //A median absolute deviations (MAD) scale estimate.
 
     //Here I avoid using vrel_util_median_abs_dev_scale
@@ -148,11 +148,11 @@ vrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
     break;
    }
 
-   case RREL_KERNEL_PRIOR:
+   case VREL_KERNEL_PRIOR:
     scale = prior_scale;
     break;
 
-   case RREL_KERNEL_MUSE: {
+   case VREL_KERNEL_MUSE: {
     vrel_muset_obj muse( (int)n );
     scale = muse.fcn( res_begin, res_end );
     break; }

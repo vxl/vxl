@@ -8,7 +8,7 @@
 // \author Matthew Leotta (mleotta@lems.brown.edu)
 // \date March 2001
 //
-// This code is a simplified version of rrel_homography2d_est by Chuck Stewart
+// This code is a simplified version of vrel_homography2d_est by Chuck Stewart
 //
 // \verbatim
 //  Modifications
@@ -22,11 +22,11 @@
 #include <vnl/vnl_fwd.h>
 #include <bapl/bapl_lowe_cluster.h>
 
-#include <rrel/rrel_estimation_problem.h>
+#include <vrel/vrel_estimation_problem.h>
 
 //: Class to maintain data and optimization model for 2d affine transform estimation.
 
-class bapl_affine2d_est : public rrel_estimation_problem
+class bapl_affine2d_est : public vrel_estimation_problem
 {
  public:
 

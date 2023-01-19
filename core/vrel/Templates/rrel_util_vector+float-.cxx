@@ -7,4 +7,4 @@
 
 // Apply explicit instantiation
 typedef std::vector<float>::iterator Iter;
-RREL_UTIL_INSTANTIATE_RAN_ITER(float, Iter);
+VREL_UTIL_INSTANTIATE_RAN_ITER(float, Iter);

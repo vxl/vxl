@@ -10,7 +10,7 @@
 
 class vrel_muse_table;
 
-enum vrel_muse_type { RREL_MUSE_TRIMMED, RREL_MUSE_TRIMMED_SQUARE, RREL_MUSE_QUANTILE };
+enum vrel_muse_type { VREL_MUSE_TRIMMED, VREL_MUSE_TRIMMED_SQUARE, VREL_MUSE_QUANTILE };
 
 //: The MUSET (MUSE trimmed) objective function, which should be used instead of LMS.
 //  MUSE is a robust objective function in the spirit of LMS/LTS
@@ -118,7 +118,7 @@ class vrel_muset_obj : public vrel_objective
   double inlier_fraction_increment() const { return frac_inc_; }
 
   //: Set the type of MUSE objective function
-  void set_muse_type( vrel_muse_type t = RREL_MUSE_TRIMMED )
+  void set_muse_type( vrel_muse_type t = VREL_MUSE_TRIMMED )
     { muse_type_ = t; }
 
   //: Access the type of MUSE objective function
