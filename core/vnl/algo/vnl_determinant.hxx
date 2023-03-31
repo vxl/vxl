@@ -70,7 +70,7 @@ T vnl_determinant(vnl_matrix<T> const &M, bool balance)
 
   switch (n)
   {
-   case 1: return M[0][0];
+   case 1: return M(0,0);
    case 2: return vnl_determinant(M[0], M[1]);
    case 3: return vnl_determinant(M[0], M[1], M[2]);
    case 4: return vnl_determinant(M[0], M[1], M[2], M[3]);

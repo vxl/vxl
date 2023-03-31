@@ -318,6 +318,7 @@ template <class T>
 bool
 vnl_matlab_read_or_die(std::istream & s, vnl_vector<T> & v, char const * name)
 {
+#ifdef NOT_USED_BY_ITK_XX
   vnl_matlab_readhdr h(s);
   if (!s) // eof?
     return false;
@@ -339,6 +340,7 @@ vnl_matlab_read_or_die(std::istream & s, vnl_vector<T> & v, char const * name)
     std::cerr << "vnl_matlab_read_or_die: failed to read data\n";
     std::abort();
   }
+#endif
   return true;
 }
 
@@ -346,6 +348,7 @@ template <class T>
 bool
 vnl_matlab_read_or_die(std::istream & s, vnl_matrix<T> & M, char const * name)
 {
+#ifdef NOT_USED_BY_ITK_XX
   vnl_matlab_readhdr h(s);
   if (!s) // eof?
     return false;
@@ -367,6 +370,7 @@ vnl_matlab_read_or_die(std::istream & s, vnl_matrix<T> & M, char const * name)
     std::cerr << "vnl_matlab_read_or_die: failed to read data\n";
     std::abort();
   }
+#endif
   return true;
 }
 

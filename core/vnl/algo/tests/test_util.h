@@ -1,6 +1,5 @@
 #ifndef test_util_h_
 #define test_util_h_
-#include <Eigen/Core>
 
 class vnl_random;
 #include <complex>

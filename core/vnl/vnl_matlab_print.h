@@ -14,6 +14,8 @@
 
 #include "vnl_matlab_print_format.h"
 #include "vnl/vnl_export.h"
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_matrix.h"
 
 // If a variable name (e.g. "foo") is given, the raw data will be preceded by
 //   "foo = diag([ " for a vnl_diag_matrix

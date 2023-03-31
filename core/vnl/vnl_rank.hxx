@@ -15,14 +15,14 @@ vnl_matrix<T> vnl_rank_row_reduce(vnl_matrix<T> const& mat, vnl_rank_pivot_type 
     changed = false;
     for (unsigned int r=0; r<m; ++r)
     {
-      unsigned int c=0; while (c<n && a[r][c] != 1 && a[r][c] != -1) ++c;
+      unsigned int c=0; while (c<n && a(r,c) != 1 && a(r,c) != -1) ++c;
       if (c==n) continue;
       for (unsigned int s=0; s<m; ++s)
       {
-        if (s==r || a[s][c] == 0) continue;
+        if (s==r || a(s,c) == 0) continue;
         for (unsigned int d=0; d<n; ++d)
-          if (d!=c) a[s][d] -= a[r][d] * a[r][c] * a[s][c];
-        a[s][c] = T(0);
+          if (d!=c) a(s,d) -= a(r,d) * a(r,c) * a(s,c);
+        a(s,c) = T(0);
         changed = true;
       }
     }
@@ -34,18 +34,18 @@ vnl_matrix<T> vnl_rank_row_reduce(vnl_matrix<T> const& mat, vnl_rank_pivot_type 
     changed = false;
     for (unsigned int r=0; r<m; ++r)
     {
-      unsigned int c=0; while (c<n && a[r][c] == 0) ++c;
+      unsigned int c=0; while (c<n && a(r,c) == 0) ++c;
       if (c==n) continue; // zero row
       for (unsigned int s=0; s<m; ++s)
       {
         if (s==r) continue;
-        T scale = a[s][c] / a[r][c];
+        T scale = a(s,c) / a(r,c);
         // Note that this can possibly be an integer division, so
-        // it is *not* guaranteed that a[r][c] * scale == a[s][c] .
+        // it is *not* guaranteed that a(r,c) * scale == a(s,c) .
         if (scale == 0) continue;
         for (unsigned int d=0; d<n; ++d)
-          if (d!=c) a[s][d] -= a[r][d] * scale;
-        a[s][c] -= a[r][c] * scale;
+          if (d!=c) a(s,d) -= a(r,d) * scale;
+        a(s,c) -= a(r,c) * scale;
         changed = true;
       }
     }
@@ -64,14 +64,14 @@ vnl_matrix<T> vnl_rank_column_reduce(vnl_matrix<T> const& mat, vnl_rank_pivot_ty
     changed = false;
     for (unsigned int c=0; c<n; ++c)
     {
-      unsigned int r=0; while (r<m && a[r][c] != 1 && a[r][c] != -1) ++r;
+      unsigned int r=0; while (r<m && a(r,c) != 1 && a(r,c) != -1) ++r;
       if (r==m) continue;
       for (unsigned int d=0; d<n; ++d)
       {
-        if (d==c || a[r][d] == 0) continue;
+        if (d==c || a(r,d) == 0) continue;
         for (unsigned int s=0; s<m; ++s)
-          if (s!=r) a[s][d] -= a[s][c] * a[r][c] * a[r][d];
-        a[r][d] = T(0);
+          if (s!=r) a(s,d) -= a(s,c) * a(r,c) * a(r,d);
+        a(r,d) = T(0);
         changed = true;
       }
     }
@@ -83,18 +83,18 @@ vnl_matrix<T> vnl_rank_column_reduce(vnl_matrix<T> const& mat, vnl_rank_pivot_ty
     changed = false;
     for (unsigned int c=0; c<n; ++c)
     {
-      unsigned int r=0; while (r<m && a[r][c] == 0) ++r;
+      unsigned int r=0; while (r<m && a(r,c) == 0) ++r;
       if (r==m) continue; // zero row
       for (unsigned int d=0; d<n; ++d)
       {
         if (d==c) continue;
-        T scale = a[r][d] / a[r][c];
+        T scale = a(r,d) / a(r,c);
         // Note that this can possibly be an integer division, so
-        // it is *not* guaranteed that a[r][c] * scale == a[r][d] .
+        // it is *not* guaranteed that a(r,c) * scale == a(r,d) .
         if (scale == 0) continue;
         for (unsigned int s=0; s<m; ++s)
-          if (s!=r) a[s][d] -= a[s][c] * scale;
-        a[r][d] -= a[r][c] * scale;
+          if (s!=r) a(s,d) -= a(s,c) * scale;
+        a(r,d) -= a(r,c) * scale;
         changed = true;
       }
     }
@@ -113,27 +113,27 @@ vnl_matrix<T> vnl_rank_row_column_reduce(vnl_matrix<T> const& mat, vnl_rank_pivo
     changed = false;
     for (unsigned int r=0; r<m; ++r)
     {
-      unsigned int c=0; while (c<n && a[r][c] != 1 && a[r][c] != -1) ++c;
+      unsigned int c=0; while (c<n && a(r,c) != 1 && a(r,c) != -1) ++c;
       if (c==n) continue;
       for (unsigned int s=0; s<m; ++s)
       {
-        if (s==r || a[s][c] == 0) continue;
+        if (s==r || a(s,c) == 0) continue;
         for (unsigned int d=0; d<n; ++d)
-          if (d!=c) a[s][d] -= a[r][d] * a[r][c] * a[s][c];
-        a[s][c] = T(0);
+          if (d!=c) a(s,d) -= a(r,d) * a(r,c) * a(s,c);
+        a(s,c) = T(0);
         changed = true;
       }
     }
     for (unsigned int c=0; c<n; ++c)
     {
-      unsigned int r=0; while (r<m && a[r][c] != 1 && a[r][c] != -1) ++r;
+      unsigned int r=0; while (r<m && a(r,c) != 1 && a(r,c) != -1) ++r;
       if (r==m) continue;
       for (unsigned int d=0; d<n; ++d)
       {
-        if (d==c || a[r][d] == 0) continue;
+        if (d==c || a(r,d) == 0) continue;
         for (unsigned int s=0; s<m; ++s)
-          if (s!=r) a[s][d] -= a[s][c] * a[r][c] * a[r][d];
-        a[r][d] = T(0);
+          if (s!=r) a(s,d) -= a(s,c) * a(r,c) * a(r,d);
+        a(r,d) = T(0);
         changed = true;
       }
     }
@@ -145,35 +145,35 @@ vnl_matrix<T> vnl_rank_row_column_reduce(vnl_matrix<T> const& mat, vnl_rank_pivo
     changed = false;
     for (unsigned int r=0; r<m; ++r)
     {
-      unsigned int c=0; while (c<n && a[r][c] == 0) ++c;
+      unsigned int c=0; while (c<n && a(r,c) == 0) ++c;
       if (c==n) continue; // zero row
       for (unsigned int s=0; s<m; ++s)
       {
         if (s==r) continue;
-        T scale = a[s][c] / a[r][c];
+        T scale = a(s,c) / a(r,c);
         // Note that this can possibly be an integer division, so
-        // it is *not* guaranteed that a[r][c] * scale == a[s][c] .
+        // it is *not* guaranteed that a(r,c) * scale == a(s,c) .
         if (scale == 0) continue;
         for (unsigned int d=0; d<n; ++d)
-          if (d!=c) a[s][d] -= a[r][d] * scale;
-        a[s][c] -= a[r][c] * scale;
+          if (d!=c) a(s,d) -= a(r,d) * scale;
+        a(s,c) -= a(r,c) * scale;
         changed = true;
       }
     }
     for (unsigned int c=0; c<n; ++c)
     {
-      unsigned int r=0; while (r<m && a[r][c] == 0) ++r;
+      unsigned int r=0; while (r<m && a(r,c) == 0) ++r;
       if (r==m) continue; // zero row
       for (unsigned int d=0; d<n; ++d)
       {
         if (d==c) continue;
-        T scale = a[r][d] / a[r][c];
+        T scale = a(r,d) / a(r,c);
         // Note that this can possibly be an integer division, so
-        // it is *not* guaranteed that a[r][c] * scale == a[r][d] .
+        // it is *not* guaranteed that a(r,c) * scale == a(r,d) .
         if (scale == 0) continue;
         for (unsigned int s=0; s<m; ++s)
-          if (s!=r) a[s][d] -= a[s][c] * scale;
-        a[r][d] -= a[r][c] * scale;
+          if (s!=r) a(s,d) -= a(s,c) * scale;
+        a(r,d) -= a(r,c) * scale;
         changed = true;
       }
     }
@@ -191,7 +191,7 @@ unsigned int vnl_rank(vnl_matrix<T> const& mat, vnl_rank_type t)
     for (unsigned int r=0; r<a.rows(); ++r)
     {
       unsigned int c=0;
-      while (c<a.columns() && a[r][c] == 0) ++c;
+      while (c<a.columns() && a(r,c) == 0) ++c;
       if (c!=a.columns()) ++rank; // not all elements in row r are 0
     }
   }
@@ -202,7 +202,7 @@ unsigned int vnl_rank(vnl_matrix<T> const& mat, vnl_rank_type t)
     for (unsigned int c=0; c<a.columns(); ++c)
     {
       unsigned int r=0;
-      while (r<a.rows() && a[r][c] == 0) ++r;
+      while (r<a.rows() && a(r,c) == 0) ++r;
       if (r!=a.rows()) ++rank; // not all elements in column c are 0
     }
   }

@@ -1,7 +1,10 @@
 // This is core/vnl/vnl_rotation_matrix.h
 #ifndef vnl_rotation_matrix_h_
 #define vnl_rotation_matrix_h_
+#ifdef NOT_USED_BY_ITK_XX
 #include "vnl/vnl_export.h"
+#include "vnl/vnl_vector.h"
+#include "vnl/vnl_matrix.h"
 
 //:
 //  \file
@@ -15,8 +18,6 @@
 //   12-Jan-2007 Peter Vanroose - Added vnl_matrix_fixed interface
 // \endverbatim
 
-template <class T> class vnl_vector;
-template <class T> class vnl_matrix;
 template <class T, unsigned int n> class vnl_vector_fixed;
 template <class T, unsigned int num_rows, unsigned int num_cols> class vnl_matrix_fixed;
 
@@ -33,5 +34,5 @@ VNL_EXPORT vnl_matrix_fixed<double,3,3> vnl_rotation_matrix(vnl_vector_fixed<dou
 //: Returns an orthogonal 3x3 matrix which is a rotation about the axis, by an angle equal to ||axis||.
 // \relatesalso vnl_matrix
 VNL_EXPORT vnl_matrix<double> vnl_rotation_matrix(vnl_vector<double> const& axis);
-
+#endif
 #endif // vnl_rotation_matrix_h_

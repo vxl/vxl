@@ -20,6 +20,7 @@
 template <class T>
 vnl_file_matrix<T>::vnl_file_matrix(char const* filename)
 {
+#ifdef NOT_USED_BY_ITK_XX
   if (filename && filename[0]=='-' && filename[1]=='\0')
     ok_ = this->read_ascii(std::cin);
   else {
@@ -29,6 +30,7 @@ vnl_file_matrix<T>::vnl_file_matrix(char const* filename)
 
   if (!ok_)
     std::cerr << "vnl_file_matrix: ERROR loading " << filename << '\n';
+#endif
 }
 
 //--------------------------------------------------------------------------------

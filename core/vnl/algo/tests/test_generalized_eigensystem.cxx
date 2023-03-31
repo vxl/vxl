@@ -23,8 +23,8 @@ test_generalized_eigensystem()
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, -1, 0, 0, 0, 0, 2, 0, 0,
   };
 
-  vnl_matrix<double> S(Sdata, 6, 6);
-  vnl_matrix<double> C(Cdata, 6, 6);
+  vnl_matrix<double> S = make_initialized_matrix<double, 6,6 >(36,Sdata);
+  vnl_matrix<double> C = make_initialized_matrix<double, 6,6 >(36, Cdata);
 
   vnl_generalized_eigensystem gev(C, S);
 

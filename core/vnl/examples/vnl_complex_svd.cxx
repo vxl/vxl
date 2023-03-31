@@ -23,7 +23,7 @@ main()
   for (int k = 0; k < 12; ++k)
     cmplx[k] = std::complex<double>(r[k], i[k]);
 
-  vnl_matrix<std::complex<double>> C(cmplx, 4, 3);
+  vnl_matrix<std::complex<double>> C = make_initialized_matrix<std::complex<double>, 4, 3>(12, cmplx);
 
   std::cout << "C = " << C << std::endl;
 
@@ -38,7 +38,8 @@ main()
   rhs[1] = 9;
   rhs[2] = -2;
   rhs[3] = -8;
-  vnl_vector<std::complex<double>> b(rhs, 4);
+  vnl_vector<std::complex<double>> b(rhs);
+  b.fill(4);
 
   // From "C x = b" find x:
   std::cout << "x = " << C_svd.solve(b) << std::endl;

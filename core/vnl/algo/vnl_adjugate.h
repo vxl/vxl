@@ -18,8 +18,8 @@
 //  does not involve divisions, so the adjoint of an integer matrix is integer.
 
 #include <vnl/algo/vnl_algo_export.h>
+#include <vnl/vnl_matrix.h>
 
-template <class T> class vnl_matrix;
 
 template <class T>
 void vnl_adjugate(vnl_matrix<T> const &A, vnl_matrix<T> *out);

@@ -37,7 +37,9 @@ test_sparse_lu()
   A.set_row(3, cols3, vals3);
   for (A.reset(); A.next();)
     std::cout << "A[" << A.getrow() << "][" << A.getcolumn() << "]= " << A.value() << '\n';
-  vnl_vector<double> b(4, 0.0), x(4);
+  vnl_vector<double> b(4);
+  b.fill(0.0);
+  vnl_vector<double>x(4);
   b[0] = 34.0;
   vnl_sparse_lu lu(A, vnl_sparse_lu::verbose);
   lu.solve(b, &x);

@@ -85,7 +85,7 @@ test_fft2d()
   vnl_complexify(real_array, imag_array, cplx_array, rows * cols);
 
   // data as matrices :
-  vnl_matrix<std::complex<double>> cplx_matrix(cplx_array, rows, cols);
+  vnl_matrix<std::complex<double>> cplx_matrix = make_initialized_matrix<double, rows,cols>(rows*cols,cplx_array);
 
   //--------------------------------------------------------------------------------
 
@@ -100,6 +100,7 @@ test_fft2d()
   vnl_fft_2d<double> fft(cplx_matrix.rows(), cplx_matrix.cols());
   fft.fwd_transform(fft_matrix);
   fft.bwd_transform(fft_matrix);
+
 
   double error = (fft_matrix - std::complex<double>(cplx_matrix.size()) * cplx_matrix).fro_norm();
   std::cout << "error = " << error << std::endl;

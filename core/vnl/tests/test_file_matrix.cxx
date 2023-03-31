@@ -19,7 +19,7 @@ test_file_matrix()
 
   TEST_NEAR("data(1,2)", H(1, 2), 0.0185, 1e-12);
 
-  H /= H[0][0];
+  H /= H(0,0);
 
   vnl_matlab_print(std::cout, H, "H");
   TEST_NEAR("file_matrix 3x3", H(0, 0), 1.0, 1e-12);

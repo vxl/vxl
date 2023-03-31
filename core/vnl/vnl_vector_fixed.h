@@ -311,6 +311,7 @@ public:
   {
     return vnl_vector_ref<T>(n, const_cast<T *>(this->data()));
   }
+
   vnl_vector<T>
   as_vector() const
   {
@@ -460,7 +461,6 @@ public:
   }
 
   //:
-  // using Superclass::operator-;
   vnl_vector_fixed<T, n>
   operator-() const
   {
@@ -523,7 +523,7 @@ public:
   vnl_vector_fixed<T, n> &
   normalize()
   {
-    this->Superclass::normalize();
+    this->normalize();
     return *this;
   }
 
@@ -829,7 +829,7 @@ template <class T, unsigned int n>
 inline vnl_vector<T>
 operator+(const vnl_vector<T> & a, const vnl_vector_fixed<T, n> & b)
 {
-  return a.Superclass::operator_+(b);
+  return a.operator_+(b);
 }
 
 //:
@@ -850,7 +850,7 @@ template <class T, unsigned int n>
 inline vnl_vector<T>
 operator-(const vnl_vector_fixed<T, n> & a, const vnl_vector<T> & b)
 {
-  return a.Superclass::operator-(b);
+  return a.operator-(b);
 }
 
 //:
@@ -860,7 +860,7 @@ template <class T, unsigned int n>
 inline vnl_vector<T>
 operator-(const vnl_vector<T> & a, const vnl_vector_fixed<T, n> & b)
 {
-  return a.Superclass::operator-(b);
+  return a.operator-(b);
 }
 
 //:

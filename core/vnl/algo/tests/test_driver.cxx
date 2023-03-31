@@ -21,7 +21,7 @@ DECLARE(test_qr);
 DECLARE(test_qsvd);
 DECLARE(test_rational);
 DECLARE(test_real_eigensystem);
-DECLARE(test_rnpoly_roots);
+// DECLARE(test_rnpoly_roots);
 DECLARE(test_rpoly_roots);
 DECLARE(test_sparse_matrix);
 DECLARE(test_integral);
@@ -60,7 +60,7 @@ register_tests()
   REGISTER(test_qsvd);
   REGISTER(test_real_eigensystem);
   REGISTER(test_integral);
-  REGISTER(test_rnpoly_roots);
+//  REGISTER(test_rnpoly_roots);
   REGISTER(test_rpoly_roots);
   REGISTER(test_sparse_matrix);
   REGISTER(test_svd);

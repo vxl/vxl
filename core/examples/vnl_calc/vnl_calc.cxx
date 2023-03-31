@@ -92,7 +92,7 @@ print(mystack<Matrix> const & stack, char const * fmt)
     {
       for (unsigned int j = 0; j < M.cols(); ++j)
       {
-        std::sprintf(buf, fmt, M[i][j]);
+        std::sprintf(buf, fmt, M(i,j));
         std::cout << ' ' << buf;
       }
       std::cout << std::endl;
@@ -129,7 +129,9 @@ main(int argc, char ** argv)
 
     if (arg[0] >= '0' && arg[0] <= '9')
     {
-      stack.push(Matrix(1, 1, std::stod(arg.c_str())));
+      Matrix tmp(1,1);
+      tmp.fill(std::stod(arg.c_str());
+      stack.push(tmp);
     }
     else if (arg == "+")
     {

@@ -59,7 +59,7 @@ std::ostream& vnl_matlab_print(std::ostream& s,
   if (variable_name)
     s << variable_name << " = diag([ ";
 
-  vnl_matlab_print(s, D.begin(), D.size(), format);
+  vnl_matlab_print(s, D.data(), D.rows(), format);
 
   if (variable_name)
     s << " ])\n";
@@ -100,7 +100,7 @@ std::ostream& vnl_matlab_print(std::ostream& s,
   if (variable_name)
     s << variable_name << " = [ ";
 
-  vnl_matlab_print(s, v.begin(), v.size(), format);
+  vnl_matlab_print(s, v.cbegin(), v.size(), format);
 
   if (variable_name)
     s << " ]\n";

@@ -491,7 +491,7 @@ vnl_hungarian_algorithm<T>::Step_done()
       if ( m_M(i,j) == STAR )
       {
         m_AssignmentVector[i] = j;
-        m_TotalCost += m_Cost_in[i][j];
+        m_TotalCost += m_Cost_in(i,j);
       }
     }
   }

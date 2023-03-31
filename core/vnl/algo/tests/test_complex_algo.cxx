@@ -37,7 +37,7 @@ test_matrix_inverse()
                                   -1.,
                                   std::complex<double>(-1., -1.),
                                   1. };
-  vnl_matrix<std::complex<double>> m(data, 4, 4);
+  vnl_matrix<std::complex<double>> m = make_initialized_matrix<std::complex<double>,4,4>(16,data);
   vnl_svd_economy<std::complex<double>> svde(m);
   vnl_matrix<std::complex<double>> V = svde.V();
   vnl_svd<std::complex<double>> svd(m);

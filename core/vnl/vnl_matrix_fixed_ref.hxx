@@ -264,6 +264,7 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::scale_column(unsigned column_index, T value
   return *this;
 }
 
+#ifdef NOT_USED_BY_ITK
 //: Returns a copy of n rows, starting from "row"
 template<class T, unsigned nrows, unsigned ncols>
 vnl_matrix<T>
@@ -293,6 +294,7 @@ vnl_matrix_fixed_ref_const<T,nrows,ncols>::get_n_columns (unsigned column, unsig
       result(r, c) = this->operator()(r,column + c);
   return result;
 }
+#endif
 
 //: Return a vector with the content of the (main) diagonal
 template<class T, unsigned nrows, unsigned ncols>

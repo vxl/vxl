@@ -55,7 +55,7 @@ class VNL_EXPORT vnl_real_polynomial
 
   //: Initialize polynomial from double.
   // Useful when adding or multiplying a polynomial and a number.
-  vnl_real_polynomial(double a): coeffs_(1u, a) {}
+  vnl_real_polynomial(double a): coeffs_(1u) { coeffs_.fill(a); }
 
   //: Initialize polynomial of a given degree.
   vnl_real_polynomial(int d): coeffs_(static_cast<unsigned int>(d)+1u) { assert (d>=0); }

@@ -13,6 +13,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 #include "vnl/vnl_export.h"
+#include "vnl/vnl_matrix.h"
 
 template <class TValue, class TIndex>
 class vnl_index_sort

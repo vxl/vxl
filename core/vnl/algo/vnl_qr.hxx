@@ -255,7 +255,8 @@ vnl_matrix<T> vnl_qr<T>::inverse() const
   vnl_matrix<T> inv(r,r);
 
   // Use solve() to compute the inverse matrix, using (00..010..00) as rhs
-  vnl_vector<T> rhs(r,T(0));
+  vnl_vector<T> rhs(r);
+  rhs.fill(T(0));
   for (unsigned int i=0; i<r; ++i)
   {
     rhs(i) = T(1);

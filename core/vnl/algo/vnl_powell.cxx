@@ -90,7 +90,7 @@ vnl_powell::minimize(vnl_vector<double> & p)
     {
       // xit = ith column of xi
       for (int j = 0; j < n; ++j)
-        xit[j] = xi[j][i];
+        xit[j] = xi(j,i);
       double fptt = fret;
 
       // 1D minimization along xi

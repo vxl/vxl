@@ -21,7 +21,7 @@ test_fft_1d(unsigned int N)
 {
   vnl_random rng;
   vnl_vector<std::complex<double>> signal(N);
-  test_util_fill_random(signal.begin(), signal.end(), rng);
+  test_util_fill_random(signal.data(), signal.data() + signal.size(), rng);
 
   vnl_fft_1d<double> fft(N);
 
@@ -45,7 +45,7 @@ test_fft_2d(unsigned int M, unsigned int N)
 {
   vnl_random rng;
   vnl_matrix<std::complex<double>> signal(M, N);
-  test_util_fill_random(signal.begin(), signal.end(), rng);
+  test_util_fill_random(signal.data(), signal.data() + signal.size(), rng);
 
   vnl_fft_2d<double> fft(M, N);
 

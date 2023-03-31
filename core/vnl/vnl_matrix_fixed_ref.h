@@ -272,11 +272,13 @@ class VNL_EXPORT vnl_matrix_fixed_ref_const
   vnl_matrix<T> extract (unsigned rowz,  unsigned colz,
                          unsigned top=0, unsigned left=0) const;
 
+#ifdef NOT_USED_BY_ITK
   //: Get n rows beginning at rowstart
   vnl_matrix<T> get_n_rows   (unsigned rowstart, unsigned n) const;
 
   //: Get n columns beginning at colstart
   vnl_matrix<T> get_n_columns(unsigned colstart, unsigned n) const;
+#endif
 
   //: Type def for norms.
   typedef typename vnl_c_vector<T>::abs_t abs_t;

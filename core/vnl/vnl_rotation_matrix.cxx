@@ -5,6 +5,7 @@
 #include "vnl/vnl_vector_fixed.h"
 #include "vnl/vnl_matrix_fixed.h"
 
+#ifdef NOT_USED_BY_ITK_XX
 bool
 vnl_rotation_matrix(double const x[3], double ** R)
 {
@@ -82,3 +83,4 @@ vnl_rotation_matrix(vnl_vector<double> const & axis)
   vnl_rotation_matrix(&axis[0], R.data_array());
   return R;
 }
+#endif

@@ -77,7 +77,7 @@ set( vnl_sources
   # Polynomial representations
   vnl_polynomial.hxx           vnl_polynomial.h
   vnl_real_polynomial.cxx      vnl_real_polynomial.h
-  vnl_real_npolynomial.cxx     vnl_real_npolynomial.h
+  # NOT USED vnl_real_npolynomial.cxx     vnl_real_npolynomial.h
 
   # alternative number representations
 
@@ -148,7 +148,7 @@ set( vnl_sources
   vnl_sparse_matrix_linear_system.cxx vnl_sparse_matrix_linear_system.h
 
   # special matrices
-  vnl_rotation_matrix.cxx      vnl_rotation_matrix.h
+  # NOT USED BY ITK vnl_rotation_matrix.cxx      vnl_rotation_matrix.h
   vnl_cross_product_matrix.h
   vnl_identity_3x3.h
 

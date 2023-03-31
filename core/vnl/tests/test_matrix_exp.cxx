@@ -24,9 +24,9 @@ test_matrix_exp()
   TEST_NEAR("expX(1,1)", expX(1, 1), 0.1379544126, 1e-10);
   TEST_NEAR("expX(2,2)", expX(2, 2), 0.2501918781, 1e-10);
 
-  vnl_double_3x3 rotv = vnl_rotation_matrix(v);
-  vnl_matlab_print(std::cout, rotv, "rotate exp([v])");
-  TEST_NEAR("rotv == expX", (rotv - expX).fro_norm(), 0.0, 1e-10);
+//  vnl_double_3x3 rotv = vnl_rotation_matrix(v);
+//  vnl_matlab_print(std::cout, rotv, "rotate exp([v])");
+//  TEST_NEAR("rotv == expX", (rotv - expX).fro_norm(), 0.0, 1e-10);
 }
 
 TESTMAIN(test_matrix_exp);

@@ -481,12 +481,13 @@ class VNL_EXPORT vnl_matrix_fixed: public Eigen::Matrix<T, num_rows, num_cols, (
   //: Get a matrix composed of columns from the indices specified in the supplied vector.
   vnl_matrix<T> get_columns(const vnl_vector<unsigned int> &i) const;
 
+#ifdef NOT_USED_BY_ITK
   //: Get n rows beginning at rowstart
   vnl_matrix<T> get_n_rows   (unsigned rowstart, unsigned n) const;
 
   //: Get n columns beginning at colstart
   vnl_matrix<T> get_n_columns(unsigned colstart, unsigned n) const;
-
+#endif
   //: Return a vector with the content of the (main) diagonal
   vnl_vector<T> get_diagonal() const;
 
@@ -698,7 +699,7 @@ class VNL_EXPORT vnl_matrix_fixed: public Eigen::Matrix<T, num_rows, num_cols, (
   // \sa vnl_matrix_ref::non_const
   vnl_matrix_ref<T> as_ref() { return vnl_matrix_ref<T>( num_rows, num_cols, data_block() ); }
   const vnl_matrix_ref<T> as_ref() const { return vnl_matrix_ref<T>( num_rows, num_cols, data_block() ); }
-  vnl_matrix<T> as_matrix() const { return vnl_matrix<T>(const_cast<T*>(data_block()),num_rows,num_cols); }
+  vnl_matrix<T> as_matrix() const { return make_initialized_matrix<T, num_rows, num_cols>( num_rows * num_cols, const_cast<T*>(data_block())); }
 
   //: Cheap conversion to vnl_matrix_ref
   // Sometimes, such as with templated functions, the compiler cannot

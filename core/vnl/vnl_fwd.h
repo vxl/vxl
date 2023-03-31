@@ -13,10 +13,8 @@ template <class T> struct vnl_complex_traits;
 template <class T> class vnl_numeric_traits;
 template <class T> class vnl_c_vector;
 
-template <class T> class vnl_vector;
 template <class T> class vnl_vector_ref;
 
-template <class T> class vnl_matrix;
 template <class T> class vnl_matrix_ref;
 
 template <class T, unsigned int n> class vnl_vector_fixed;

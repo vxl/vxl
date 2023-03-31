@@ -24,8 +24,8 @@ int
 main()
 {
   double data[] = { 1, 1, 1, 1, 2, 3, 1, 3, 6 };
-  vnl_matrix<double> M(data, 3, 3);
-  vnl_matrix<double> B(3, 1, 7.0); // column vector [7 7 7]^T
+  vnl_matrix<double> M = make_initialized_matrix<double, 3,3> (9, data);
+  vnl_matrix<double> B(3, 1); B.fill(7.0); // column vector [7 7 7]^T
   vnl_matrix<double> result = solve_with_warning(M, B);
   std::cerr << result << std::endl;
   M(2, 2) = 5;

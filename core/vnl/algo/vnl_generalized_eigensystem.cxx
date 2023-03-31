@@ -32,7 +32,7 @@ vnl_generalized_eigensystem::vnl_generalized_eigensystem(const vnl_matrix<double
   long ierr = -1;
 
   // Call EISPACK rsg.
-  v3p_netlib_rsg_(&n, &n, a, b, D.data_block(), &want_eigenvectors, V1.begin(), work1.begin(), work2.begin(), &ierr);
+  v3p_netlib_rsg_(&n, &n, a, b, D.data_block(), &want_eigenvectors, V1.data(), work1.data(), work2.data(), &ierr);
 
   // If b was not pos-def, retry with projection onto nullspace
   if (ierr == 7 * n + 1)

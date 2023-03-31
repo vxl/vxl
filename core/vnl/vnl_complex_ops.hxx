@@ -66,7 +66,7 @@ vnl_diag_matrix<std::complex<T> >
   vnl_complexify(vnl_diag_matrix<T> const& R)
 {
   vnl_diag_matrix<std::complex<T> > C(R.rows(), R.cols());
-  std::copy(R.cbegin(), R.cend(), C.begin());
+  std::copy(R.data(), R.data(), C.data());
   return C;
 }
 
@@ -149,9 +149,10 @@ vnl_matrix<T>
   vnl_real(vnl_matrix<std::complex<T> > const& C)
 {
   vnl_matrix<T> R(C.rows(), C.columns());
-  typename vnl_matrix<std::complex<T> >::const_iterator cIt = C.cbegin();
-  typename vnl_matrix<T>::iterator rIt = R.begin();
-  for (; cIt != C.end(); ++cIt, ++rIt)
+  typename vnl_matrix<std::complex<T> >::CoeffReturnType::const_iterator cIt = C.reshaped().cbegin();
+  typename vnl_matrix<T>::iterator rIt = R.reshaped().begin();
+  const auto forend = C.reshaped().end();
+  for (; cIt != forend; ++cIt, ++rIt)
     *rIt = std::real(*cIt);
   return R;
 }

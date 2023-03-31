@@ -21,11 +21,13 @@
 #include "vnl_matlab_header.h"
 #include "vnl/vnl_export.h"
 
+#include <vnl_vector.h>
+#include <vnl_matrix.h>
 
 // ------------------------------ easy ------------------------------
 
-template <class T> class vnl_vector;
-template <class T> class vnl_matrix;
+
+
 
 //: Attempt to read vector or matrix.
 // If the MATLAB header cannot be read, return false.

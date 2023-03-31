@@ -464,6 +464,7 @@ vnl_matrix_fixed<T,nrows,ncols>
   }
 }
 
+#ifdef NOT_USED_BY_ITK
 //: Returns a copy of n rows, starting from "row"
 template<class T, unsigned nrows, unsigned ncols>
 vnl_matrix<T>
@@ -498,6 +499,7 @@ vnl_matrix_fixed<T,nrows,ncols>::get_n_columns (unsigned column, unsigned n) con
       result(r, c) = this->Superclass::operator()(r,column + c);
   return result;
 }
+#endif
 
 //: Create a vector out of row[row_index].
 template<class T, unsigned nrows, unsigned ncols>

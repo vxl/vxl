@@ -44,7 +44,6 @@ template <class T>
 class VNL_EXPORT vnl_diag_matrix: public Eigen::DiagonalMatrix<T,Eigen::Dynamic, Eigen::Dynamic>
 {
 protected:
-  //vnl_vector<T> this->data();
   using Superclass = Eigen::DiagonalMatrix<T,Eigen::Dynamic, Eigen::Dynamic>;
  public:
   vnl_diag_matrix() = default;
@@ -127,20 +126,20 @@ protected:
 
   // iterators
 
-  typedef typename vnl_vector<T>::iterator iterator;
-  inline iterator begin() { return this->data(); }
-  inline iterator end() { return this->begin() + this->rows(); }
-  typedef typename vnl_vector<T>::const_iterator const_iterator;
-  inline const_iterator begin() const { return this->data(); }
-  inline const_iterator end() const { return this->begin() + this->rows(); }
-  inline const_iterator cbegin() const { return this->data(); }
-  inline const_iterator cend() const { return this->cbegin() + this->rows(); }
+//  typedef typename vnl_vector<T>::iterator iterator;
+//  inline iterator begin() { return this->data(); }
+//  inline iterator end() { return this->begin() + this->rows(); }
+//  typedef typename vnl_vector<T>::const_iterator const_iterator;
+//  inline const_iterator begin() const { return this->data(); }
+//  inline const_iterator end() const { return this->begin() + this->rows(); }
+//  inline const_iterator cbegin() const { return this->data(); }
+//  inline const_iterator cend() const { return this->cbegin() + this->rows(); }
 
   //: Return the total number of elements stored by the matrix.
   // Since vnl_diag_matrix only stores values on the diagonal
   // and must be square, size() == rows() == cols().
   // Size is the size of the diagonal for vnl, rather than the implied storage size from Eigen
-  inline unsigned int size() const { return this->Superclass::rows(); }
+//  inline unsigned int size() const { return this->Superclass::rows(); }
 
   //: Return the number of rows.
   // baseclass inline unsigned int rows() const { return diagonal_.size(); }

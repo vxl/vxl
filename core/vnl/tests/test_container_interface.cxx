@@ -52,7 +52,9 @@ test_common_interface()
   vnl_vector<int> v(2, 1);
   m.set_diagonal(v);
   int data[4] = { 0, 1, 2, 3 };
+#ifdef NOT_USED_BY_ITK_XX
   m.set(data);
+#endif
   m.copy_in(data);
   m.copy_out(data);
   TContainer n(2, 2);
@@ -106,8 +108,10 @@ test_common_interface()
     TEST("get_columns", matrix_ud.is_equal(matrix.get_rows(i), 10e-6), true);
 #endif
   }
+#ifdef NOT_USED_BY_ITK
   m.get_n_rows(0, 1);
   m.get_n_columns(0, 1);
+#endif
   m.get_diagonal();
   m.flatten_row_major();
   m.flatten_column_major();
