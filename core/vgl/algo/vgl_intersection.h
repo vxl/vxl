@@ -69,6 +69,11 @@ bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& 
 template <class T>
 bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vnl_matrix<T> const& covar, vgl_point_3d<T>& inter_pt);
 
+// special case of two rays
+// also returns the closest distance between the rays 
+template <class T>
+bool vgl_intersection(vgl_ray_3d<T> const& ray0, vgl_ray_3d<T> const& ray1, vgl_point_3d<T>& inter_pt, T& dist);
+
 #define VGL_ALGO_INTERSECTION_INSTANTIATE(T) extern "please include vgl/algo/vgl_intersection.hxx first"
 
 #endif // vgl_algo_intersection_h_

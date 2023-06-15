@@ -21,6 +21,8 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_det.h>
+#include <vnl/vnl_inverse.h>
 
 #include <cassert>
 #ifdef _MSC_VER
@@ -392,12 +394,39 @@ bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vnl_matrix<T> con
   inter_pt.set(X[0][0], X[1][0], X[2][0]);
   return true;
 }
+// special case of two rays and also returns the closest distance between the rays
+template <class T>
+bool vgl_intersection(vgl_ray_3d<T> const& ray0, vgl_ray_3d<T> const& ray1, vgl_point_3d<T>& inter_pt, T& dist){
+  const vgl_point_3d<T>& p0 = ray0.origin(), p1 = ray1.origin();
+  const vgl_vector_3d<T> v0 = ray0.direction(), v1 = ray1.direction();
+  vnl_matrix_fixed<T, 2, 2> A(0.0), Ainv;
+  A[0][0] = dot_product(v0, v0); A[0][1] = -dot_product(v0, v1);
+  A[1][0] = A[0][1];             A[1][1] = dot_product(v1, v1);
+  T det = vnl_det(A);
+  if(fabs(det)<1.0e-6)
+    return false;
+  Ainv = vnl_inverse(A);
+  
+  vnl_vector_fixed<T, 2> b, tvals;
+  b[0] = -dot_product((p0-p1), v0);
+  b[1] =  dot_product((p0-p1), v1);
+  
+  tvals = Ainv*b;
+  vgl_point_3d<T> P0 = p0 + tvals[0]*v0, P1 = p1 + tvals[1]*v1;
+  dist = (P0-P1).length();
+
+  // intersection point is average of position on each ray
+  inter_pt.set(0.5 * (P0.x() + P1.x()), 0.5 * (P0.y() + P1.y()), 0.5 * (P0.z() + P1.z()));
+  return true;
+}
+
 #undef VGL_ALGO_INTERSECTION_INSTANTIATE
 #define VGL_ALGO_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(const std::vector<vgl_plane_3d<T > >&); \
 template bool vgl_intersection(vgl_box_3d<T > const&, std::list<vgl_point_3d<T > >&); \
 template vgl_infinite_line_3d<T > vgl_intersection(const std::list<vgl_plane_3d<T > >& planes); \
 template bool vgl_intersection(const std::list<vgl_plane_3d<T > >& planes, std::vector<T > ws,vgl_infinite_line_3d<T >&,T& residual); \
- template bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& inter_pt); \
- template bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vnl_matrix<T> const& covar, vgl_point_3d<T>& inter_pt)
+template bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& inter_pt); \
+template bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vnl_matrix<T> const& covar, vgl_point_3d<T>& inter_pt); \
+template bool vgl_intersection(vgl_ray_3d<T> const& ray0, vgl_ray_3d<T> const& ray1, vgl_point_3d<T>& inter_pt, T& dist)
 #endif // vgl_algo_intersection_hxx_
