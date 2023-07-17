@@ -54,6 +54,9 @@ struct bsgm_disparity_estimator_params
   // truncated.
   float max_grad;
 
+  //: Adjust the value of P2 based on the probability of shadow step response
+  bool use_shadow_step_p2_adjustment;
+
   //: Use quadratic interpolation to obtain sub-pixel estimates of final
   // disparity map.
   bool perform_quadratic_interp;
@@ -95,7 +98,8 @@ struct bsgm_disparity_estimator_params
     use_16_directions(false),
     p1_scale(1.0f),
     p2_scale(1.0f),
-    use_gradient_weighted_smoothing(true),
+    use_gradient_weighted_smoothing(false),
+    use_shadow_step_p2_adjustment(true),
     max_grad(32.0f),
     perform_quadratic_interp(true),
     error_check_mode(1),
@@ -124,8 +128,8 @@ class bsgm_disparity_estimator
     long long int cost_volume_width,
     long long int cost_volume_height,
     long long int num_disparities,
-    vgl_vector_2d<float> const& sun_dir_tar = vgl_vector_2d<float>(0.0f, 0.0f));
-
+    vil_image_view<float> const& shadow_step_prob_targ = vil_image_view<float>(),
+    vgl_vector_2d<float> const& sun_dir_tar = vgl_vector_2d<float>(0.0f, 0.0f));//for bias weighting (deprecated)
   //: Destructor
   ~bsgm_disparity_estimator();
 
@@ -182,6 +186,9 @@ class bsgm_disparity_estimator
   std::vector< std::vector< unsigned char* > > fused_cost_;
 
   std::vector< std::vector< unsigned char* > >* active_app_cost_;
+
+  //: shadow step probability in rectified target image space
+  vil_image_view<float> shadow_step_prob_targ_;
 
   //: sun direction in rectified image space
   vgl_vector_2d<float> sun_dir_tar_;

@@ -94,7 +94,7 @@ bsgm_multiscale_disparity_estimator::bsgm_multiscale_disparity_estimator(
   // Set up the single-scale SGMs
   coarse_de_ = new bsgm_disparity_estimator(params, coarse_w_, coarse_h_, num_coarse_disparities_ , sun_dir_tar_);
   fine_de_ = new bsgm_disparity_estimator(
-    params, fine_w_, fine_h_, num_active_disparities, sun_dir_tar_);
+    params, fine_w_, fine_h_, num_active_disparities, shadow_step_prob_targ_, sun_dir_tar_);
 }
 
 

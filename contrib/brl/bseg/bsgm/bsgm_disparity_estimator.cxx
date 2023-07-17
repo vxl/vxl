@@ -18,6 +18,7 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
   long long int cost_volume_width,
   long long int cost_volume_height,
   long long int num_disparities,
+  vil_image_view<float> const& shadow_step_prob_targ,
   vgl_vector_2d<float> const& sun_dir_tar):
     params_( params ),
     w_( cost_volume_width ),
@@ -27,6 +28,7 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
     p1_base_( 1.0f ),
     p2_min_base_( 1.0f ),
     p2_max_base_( 8.0f ),
+    shadow_step_prob_targ_(shadow_step_prob_targ),
     sun_dir_tar_(sun_dir_tar)
 {
   // Validate inputs
@@ -456,6 +458,10 @@ bsgm_disparity_estimator::run_multi_dp(
         if( params_.use_gradient_weighted_smoothing )
           p2 = (unsigned short)(
             p2_max + (p2_min-p2_max)*deriv_img[deriv_idx](x,y) );
+
+        if(params.use_shadow_step_p2_adjustment&&shadow_step_prob_targ_)
+          p2 = (unsigned short)(
+            p2_max + (p2_min-p2_max)*shadow_step_prob_targ_(x,y) );
 
         // Compute the directional smoothing cost and add to total
         if( dy == 0 )
