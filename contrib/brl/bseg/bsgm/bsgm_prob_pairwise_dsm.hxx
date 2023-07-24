@@ -115,6 +115,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::rectify()
     }
   }
   if (max_0 == 0.0f) {
+    std::cout << "empty warped target image" << std::endl;
     throw std::runtime_error("empty warped target image");
   }
 
@@ -151,6 +152,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::rectify()
     }
   }
   if (max_1 == 0.0f) {
+    std::cout << "empty warped reference image" << std::endl;
     throw std::runtime_error("empty warped reference image");
   }
 
@@ -158,9 +160,10 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::rectify()
   bool pix_type_short = std::is_same<PIX_T, unsigned short>::value;
 
   // sanity check
-  if(params_.effective_bits_per_pixel_ <=8 && pix_type_short)
+  if(params_.effective_bits_per_pixel_ <=8 && pix_type_short){
+    std::cout << "pixel type and intensity dynamic range inconsistent" << std::endl;
     throw std::runtime_error("pixel type and intensity dynamic range inconsistent");
-
+  }
   // stretch range according to bits per pixel
   float max_v = 255.0f;
   if (pix_type_short)  // use range of (0, 2^effective_bpp-1)
@@ -228,47 +231,66 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_min_max_disparity_from_height
   if(abs(min_disparity_) > abs(initial_min_disparity_) || abs(max_disparity_) > abs(initial_max_disparity_)){
     std::stringstream ss;
     ss << "height-based disparity limits exceeded:(" << min_disparity_ << ' ' << max_disparity_ << ')' << std::endl;
+    std::cout << ss.str() << std::endl;
     throw std::runtime_error(ss.str());
   }
   //print for search cost and memory monitoring
   std::cout << "min_disparity " << min_disparity_ << " max disparity " << max_disparity_ << std::endl;
 }
-
+// invalid regions outside overlap of target and ref images, including disparity range
+template <class CAM_T, class PIX_T>
+void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_invalid_masks(){
+  vxl_byte border_val = 0;
+  bsgm_compute_invalid_map<PIX_T>(rect_bview0_, rect_bview1_, invalid_map_fwd_, min_disparity_,
+                                  num_disparities(), border_val, rect_target_window_);
+  bsgm_compute_invalid_map<PIX_T>(rect_bview1_, rect_bview0_, invalid_map_rev_, min_disparity_,
+                                  num_disparities(), border_val, rect_reference_window_);
+}
 // compute disparity map from input images
 template <class CAM_T, class PIX_T>
 void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_disparity(
     const vil_image_view<PIX_T>& img,
     const vil_image_view<PIX_T>& img_reference,
     bool forward,
-    vil_image_view<bool>& invalid,
+    /*vil_image_view<bool>& invalid,*/
     vil_image_view<float>& disparity,
     vgl_box_2d<int>& img_window,
     vgl_box_2d<int>& img_reference_window)
 {
   vxl_byte border_val = 0;
   float invalid_disp = NAN; //required for triangulation implementation
+  vil_image_view<bool> invalid;
   bool good = true;
   float dynamic_range_factor = bits_per_pix_factors_[params_.effective_bits_per_pixel_];
 
+#if 0
   bsgm_compute_invalid_map<PIX_T>(img, img_reference, invalid, min_disparity_,
                                   num_disparities(), border_val, img_window);
-
+#endif
   //assign sun direction according to forward or reverse
   vgl_vector_2d<float> sun_dir_tar, sun_dir_ref;
-  if (forward)
+  vil_image_view<float> sstep;
+  if (forward){
     sun_dir_tar = sun_dir_0_;
-  else
+    invalid = invalid_map_fwd_;
+    sstep = shadow_step_fwd_;
+      }else{
     sun_dir_tar = sun_dir_1_;
-
+    invalid = invalid_map_rev_;
+    sstep = shadow_step_rev_;
+  }
+  
   if (params_.coarse_dsm_disparity_estimate_) {
     bsgm_multiscale_disparity_estimator mde(params_.de_params_, rect_ni_, rect_nj_,
-                                            num_disparities(), num_active_disparities(), sun_dir_tar);
+                                            num_disparities(), num_active_disparities(),sstep,sun_dir_tar);
 
     good = mde.compute(img, img_reference, invalid,
                        min_disparity_, invalid_disp, params_.multi_scale_mode_,
                        disparity, dynamic_range_factor);
-    if (!good)
+    if (!good){
+      std::cout << "Multiscale disparity estimator failed" << std::endl;
       throw std::runtime_error("Multiscale disparity estimator failed");
+    }
   } else {  // use input min_disparity
 
     // SGM cost volume dimensions (full image size, or window)
@@ -292,14 +314,16 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_disparity(
 
 
     bsgm_disparity_estimator bsgm(params_.de_params_, cost_volume_width,
-                                  cost_volume_height, num_disparities(),
+                                  cost_volume_height, num_disparities(), sstep,
                                   sun_dir_tar);//potential use for dp sun dir bias
 
     good = bsgm.compute(img, img_reference, invalid, min_disparity,
                         invalid_disp, disparity, dynamic_range_factor,
                         false, img_window, img_reference_window);
-    if (!good)
+    if (!good){
+      std::cout << "disparity estimator failed" << std::endl;
       throw std::runtime_error("disparity estimator failed");
+    }
   }
 }
 
@@ -309,19 +333,18 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_disparity_fwd()
 {
   bool forward = true;
   compute_disparity(rect_bview0_, rect_bview1_, forward,
-                    invalid_map_fwd_, disparity_fwd_,
+                    /*invalid_map_fwd_,*/ disparity_fwd_,
                     rect_target_window_, rect_reference_window_);
-
-#if 1
-  //apply invalid map to surface_types
-  rect_target_stype_ = bpgl_surface_type(bpgl_surface_type::RECTIFIED_TARGET, rect_bview0_.ni(), rect_bview1_.nj());
-  rect_target_stype_.apply(invalid_map_fwd_, bpgl_surface_type::INVALID_DATA);
-  // apply shadow profile mask to surface_types
-  vil_image_view<float> shadow_step;
-  bsgm_shadow_step_filter<PIX_T>(rect_bview0_, invalid_map_fwd_, shadow_step, sun_dir_0_, params_.shadow_profile_radius_, params_.response_low_,params_.shadow_high_);
-  rect_target_stype_.apply(shadow_step, bpgl_surface_type::SHADOW_STEP);
-  PIX_T sthresh = static_cast<PIX_T>(params_.shadow_thresh_);
-  rect_target_stype_.apply(rect_bview0_, sthresh, bpgl_surface_type::SHADOW);
+#if 0
+    //apply invalid map to surface_types
+    rect_target_stype_ = bpgl_surface_type(bpgl_surface_type::RECTIFIED_TARGET, rect_bview0_.ni(), rect_bview1_.nj());
+    rect_target_stype_.apply(invalid_map_fwd_, bpgl_surface_type::INVALID_DATA);
+    // apply shadow profile mask to surface_types
+    vil_image_view<float> shadow_step;
+    bsgm_shadow_step_filter<PIX_T>(rect_bview0_, invalid_map_fwd_, shadow_step, sun_dir_0_, params_.shadow_profile_radius_, params_.response_low_, params_.shadow_high_);
+    rect_target_stype_.apply(shadow_step, bpgl_surface_type::SHADOW_STEP);
+    PIX_T sthresh = static_cast<PIX_T>(params_.shadow_thresh_);
+    rect_target_stype_.apply(rect_bview0_, sthresh, bpgl_surface_type::SHADOW);
 #endif
 }
 
@@ -331,7 +354,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_disparity_rev()
 {
   bool forward = false;
   compute_disparity(rect_bview1_, rect_bview0_, forward,
-                    invalid_map_rev_, disparity_rev_,
+                    /*invalid_map_rev_,*/ disparity_rev_,
                     rect_reference_window_, rect_target_window_);
 }
 
@@ -459,9 +482,11 @@ bool bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_prob(bool compute_prob_height
 {
   // check number of points
   if (ptset_fwd_.size() == 0) {
+    std::cout << "ptset_fwd_ is empty" << std::endl;
     throw std::runtime_error("ptset_fwd_ is empty");
   }
   if (ptset_rev_.size() == 0) {
+    std::cout << "ptset_rev_ is empty" << std::endl;
     throw std::runtime_error("ptset_rev_ is empty");
   }
 
@@ -509,6 +534,7 @@ bool bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_prob(bool compute_prob_height
   // check size
   n = prob_ptset_.size();
   if (n == 0) {
+    std::cout << "prob_ptset_ is empty" << std::endl;
     throw std::runtime_error("prob_ptset_ is empty");
   }
 
@@ -564,6 +590,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_xyz_prob(bool compute_prob_he
   }
   size_t n = prob_ptset_.size();
   if (n == 0) {
+    std::cout << "prob_ptset_ is empty"<< std::endl;
     throw std::runtime_error("prob_ptset_ is empty");
   }
 
@@ -696,6 +723,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_prob_ptset_color(std::string con
   if (!ostr) {
     std::ostringstream buffer;
     buffer << "Cannot open " << path << " to write color ptset";
+    std::cout << buffer.str() << std::endl;
     throw std::runtime_error(buffer.str());
   }
   for (size_t i = 0; i<n; ++i) {
@@ -712,6 +740,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_prob_ptset_color(std::string con
 template <class CAM_T, class PIX_T>
 void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_target_stype(std::string const& path) const {
   if (!rect_target_stype_.write(path)) {
+    std::cout << "save_rect_target_stype failed" << std::endl;
     throw std::runtime_error("save_rect_target_stype failed");
   }
 }
@@ -719,6 +748,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_target_stype(std::string co
 template <class CAM_T, class PIX_T>
 void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_dsm_grid_stype(std::string const& path) const {
   if (!dsm_grid_stype_.write(path)) {
+    std::cout << "save_dsm_grid_stype failed" << std::endl;
     throw std::runtime_error("save_dsm_grid_stype failed");
   }
 }
@@ -751,6 +781,20 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::set_shadow_context_data(){
     // convert to unit vectors
     sun_dir_0_ /= sun_dir_0_.length();
     sun_dir_1_ /= sun_dir_1_.length();
+    //apply invalid map to surface_types
+    rect_target_stype_ = bpgl_surface_type(bpgl_surface_type::RECTIFIED_TARGET, rect_bview0_.ni(), rect_bview1_.nj());
+    rect_target_stype_.apply(invalid_map_fwd_, bpgl_surface_type::INVALID_DATA);
+
+    // compute shadow attributes
+    // shadow step forward
+    bsgm_shadow_step_filter<PIX_T>(rect_bview0_, invalid_map_fwd_, shadow_step_fwd_, sun_dir_0_, params_.shadow_profile_radius_, params_.response_low_, params_.shadow_high_);
+    rect_target_stype_.apply(shadow_step_fwd_, bpgl_surface_type::SHADOW_STEP);
+    // shadow step reverse
+    bsgm_shadow_step_filter<PIX_T>(rect_bview1_, invalid_map_rev_, shadow_step_rev_, sun_dir_1_, params_.shadow_profile_radius_, params_.response_low_, params_.shadow_high_);
+
+    //shadow    
+    PIX_T sthresh = static_cast<PIX_T>(params_.shadow_thresh_);
+    rect_target_stype_.apply(rect_bview0_, sthresh, bpgl_surface_type::SHADOW);
     return;
   }
   // a perspective camera can project a vector into a finite image point, i.e. shadow vanishing point

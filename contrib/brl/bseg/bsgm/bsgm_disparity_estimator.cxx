@@ -5,7 +5,7 @@
 
 #include "vil/vil_save.h"
 #include "vil/vil_convert.h"
-
+#include <bsta/bsta_histogram.h>
 
 #include "bsgm_disparity_estimator.h"
 
@@ -18,7 +18,7 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
   long long int cost_volume_width,
   long long int cost_volume_height,
   long long int num_disparities,
-  vil_image_view<float> const& shadow_step_prob_targ,
+  vil_image_view<float> const& shadow_step_prob,
   vgl_vector_2d<float> const& sun_dir_tar):
     params_( params ),
     w_( cost_volume_width ),
@@ -28,9 +28,10 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
     p1_base_( 1.0f ),
     p2_min_base_( 1.0f ),
     p2_max_base_( 8.0f ),
-    shadow_step_prob_targ_(shadow_step_prob_targ),
+    shadow_step_prob_(shadow_step_prob),
     sun_dir_tar_(sun_dir_tar)
 {
+
   // Validate inputs
   if (cost_volume_width < 0 || cost_volume_height < 0 || num_disparities < 0) {
     std::ostringstream buffer;
@@ -50,9 +51,13 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
            << "width = " << cost_volume_width << std::endl
            << "height = " << cost_volume_height << std::endl
            << "num_disparities = " << num_disparities << std::endl;
+    std::cout << buffer.str() << std::endl;
     throw std::runtime_error(buffer.str());
   }
-
+  if(params_.use_shadow_step_p2_adjustment)
+    std::cout << "shadow_step P2 adjust" << std::endl;
+  else if(params_.use_gradient_weighted_smoothing)
+    std::cout << "dir grad P2 adjust" << std::endl;  
   // Setup any necessary cost volumes
   setup_cost_volume( fused_cost_data_, fused_cost_, num_disparities );
   setup_cost_volume( total_cost_data_, total_cost_, num_disparities );
@@ -119,7 +124,6 @@ void bsgm_disparity_estimator::compute_xgrad_data(
           // gradient comparison
           float g = grad_norm * fabs(grad_x_tar(img_x, img_y)
                                      - grad_x_ref(img_x2, img_y));
-
           // weighted update of appearance cost
           float ac_new = (float)(*ac) + params_.xgrad_weight * g;
           *ac = (unsigned char)(ac_new > 255.0f ? 255.0f : ac_new);
@@ -130,8 +134,6 @@ void bsgm_disparity_estimator::compute_xgrad_data(
   } //i
 
 }
-
-
 
 //----------------------------------------------------------------------------
 void
@@ -241,7 +243,6 @@ bsgm_disparity_estimator::run_multi_dp(
   // Compute directional derivatives used for gradient-weighted smoothing
   std::vector< vil_image_view<float> > deriv_img(4);
   if( params_.use_gradient_weighted_smoothing ){
-
     for( int g = 0; g < 4; g++ )
       deriv_img[g] = vil_image_view<float>( w_, h_ );
 
@@ -258,7 +259,8 @@ bsgm_disparity_estimator::run_multi_dp(
       }
     }
   }
-
+  bsta_histogram<float> hs(-1.0f, 1.0f, unsigned(25));
+  bsta_histogram<float> hp2(-10.0f, 10.0f, unsigned(50));
   //vil_image_view<vxl_byte> vis;
   //vil_convert_stretch_range_limited( grad_x, vis, -60.0f, 60.0f );
   //vil_save( vis, "D:/results/a.png" );
@@ -266,8 +268,9 @@ bsgm_disparity_estimator::run_multi_dp(
   // These will be default P1, P2 costs if no gradient-weighted smoothing
   auto p1 = (unsigned short)( p1_base_*cost_unit_*params_.p1_scale );
   float p2_max = p2_max_base_*cost_unit_*params_.p2_scale;
-  float p2_min = p2_min_base_*cost_unit_*params_.p2_scale;
+  float p2_min = 0.5*p2_min_base_*cost_unit_*params_.p2_scale;
   auto p2 = (unsigned short)( p2_max );
+  //std::cout << "P1, P2MAX, MIN " << p1 << ' ' << p2_max << ' ' << p2_min << std::endl;
 
   // Initialize total cost
   for( int y = 0; y < h_; y++ )
@@ -278,7 +281,6 @@ bsgm_disparity_estimator::run_multi_dp(
   // Setup buffers
   std::vector<unsigned short> dir_cost_cur( row_size, (unsigned short)0 );
   std::vector<unsigned short> dir_cost_prev( row_size, (unsigned short)0 );
-
   // Compute the smoothing costs for each direction independently
   for( int dir = 0; dir < num_dirs; dir++ ){
 
@@ -455,14 +457,18 @@ bsgm_disparity_estimator::run_multi_dp(
           continue;
 
         // If configured, compute a P2 weight based on local gradient
-        if( params_.use_gradient_weighted_smoothing )
-          p2 = (unsigned short)(
-            p2_max + (p2_min-p2_max)*deriv_img[deriv_idx](x,y) );
-
-        if(params.use_shadow_step_p2_adjustment&&shadow_step_prob_targ_)
-          p2 = (unsigned short)(
-            p2_max + (p2_min-p2_max)*shadow_step_prob_targ_(x,y) );
-
+        if( params_.use_gradient_weighted_smoothing ){
+          float g = deriv_img[deriv_idx](x,y);
+          p2 = (unsigned short)(p2_max + (p2_min-p2_max)* g);
+          //hs.upcount(g, 1.0f);
+          //hp2.upcount(p2, 1.0f);
+        }
+        if(params_.use_shadow_step_p2_adjustment && shadow_step_prob_){
+          float ss = shadow_step_prob_(x,y)*1.5;
+          if(ss > 1.0)ss = 1.0;
+          float p2f = p2_max + (p2_min-p2_max)* ss;
+        }
+        
         // Compute the directional smoothing cost and add to total
         if( dy == 0 )
           compute_dir_cost(
@@ -484,7 +490,14 @@ bsgm_disparity_estimator::run_multi_dp(
       dir_cost_prev = dir_cost_cur;
     } //y
   } //dir
-
+#if 0 //debug
+  std::cout << "HSS" << std::endl;
+  hs.print_vals_prob();
+  std::cout << "========================\n" << std::endl;
+  std::cout << "HP2" << std::endl;
+  hp2.print_vals_prob();
+  std::cout << "========================\n" << std::endl;
+#endif
 }//*/
 
 

@@ -98,8 +98,8 @@ struct bsgm_disparity_estimator_params
     use_16_directions(false),
     p1_scale(1.0f),
     p2_scale(1.0f),
-    use_gradient_weighted_smoothing(false),
-    use_shadow_step_p2_adjustment(true),
+    use_gradient_weighted_smoothing(true),
+    use_shadow_step_p2_adjustment(false),
     max_grad(32.0f),
     perform_quadratic_interp(true),
     error_check_mode(1),
@@ -128,7 +128,7 @@ class bsgm_disparity_estimator
     long long int cost_volume_width,
     long long int cost_volume_height,
     long long int num_disparities,
-    vil_image_view<float> const& shadow_step_prob_targ = vil_image_view<float>(),
+    vil_image_view<float> const& shadow_step_prob = vil_image_view<float>(),
     vgl_vector_2d<float> const& sun_dir_tar = vgl_vector_2d<float>(0.0f, 0.0f));//for bias weighting (deprecated)
   //: Destructor
   ~bsgm_disparity_estimator();
@@ -187,8 +187,11 @@ class bsgm_disparity_estimator
 
   std::vector< std::vector< unsigned char* > >* active_app_cost_;
 
-  //: shadow step probability in rectified target image space
-  vil_image_view<float> shadow_step_prob_targ_;
+  //: shadow step probability in rectified image space
+  vil_image_view<float> shadow_step_prob_;
+
+  //: shadow mask
+  vil_image_view<bool> shadow_mask_;
 
   //: sun direction in rectified image space
   vgl_vector_2d<float> sun_dir_tar_;
@@ -196,7 +199,18 @@ class bsgm_disparity_estimator
   //
   // Sub-routines called by SGM in order
   //
-
+  // compute shadow info
+  template <class T>
+  void compute_shadow_mask(const vil_image_view<T>& img_target){
+    size_t w = img_target.ni(), h = img_target.nj();
+    shadow_mask_.set_size(w, h);
+    shadow_mask_.fill(false);
+    for(size_t y = 0; y<h; ++y)
+      for(size_t x = 0; x<w; ++x)
+        if(img_target(x, y)<params_.shadow_thresh){
+          shadow_mask_(x,y) = true;
+        }
+  }
   //: Allocate and setup cost volumes based on current w_ and h_
   void setup_cost_volume(
     std::vector<unsigned char>& cost_data,
@@ -206,7 +220,7 @@ class bsgm_disparity_estimator
     std::vector<unsigned short>& cost_data,
     std::vector< std::vector< unsigned short* > >& cost,
     long long int depth );
-
+  
   //: Compute appearance data costs
   template <class T>
   void compute_census_data(
@@ -221,6 +235,12 @@ class bsgm_disparity_estimator
   void compute_xgrad_data(
     const vil_image_view<float>& grad_x_target,
     const vil_image_view<float>& grad_x_ref,
+    const vil_image_view<bool>& invalid_target,
+    std::vector< std::vector< unsigned char* > >& app_cost,
+    const vil_image_view<int>& min_disparity,
+    const vgl_box_2d<int>& target_window = vgl_box_2d<int>());
+
+  void compute_shadow_data(
     const vil_image_view<bool>& invalid_target,
     std::vector< std::vector< unsigned char* > >& app_cost,
     const vil_image_view<int>& min_disparity,
@@ -449,14 +469,15 @@ bool bsgm_disparity_estimator::compute(
 {
   // validate target image is big enough for the cost volume
   if (target_window.is_empty()) {
-    if (img_tar.ni() != w_ || img_tar.nj() != h_)
+    if (img_tar.ni() != w_ || img_tar.nj() != h_){
       throw std::runtime_error("target image not the same size as cost volume");
+    }
   }
   else {
     // sgm cost volume should have same size as target window
-    if (target_window.width() != w_ || target_window.height() != h_)
+    if (target_window.width() != w_ || target_window.height() != h_){
       throw std::runtime_error("target window not the same size as cost volume");
-
+    }
     // target image must be large enough to be indexable by the target window
     if (target_window.min_x() < 0 || img_tar.ni() <= (unsigned)target_window.max_x() ||
         target_window.min_y() < 0 || img_tar.nj() <= (unsigned)target_window.max_y()) {
@@ -476,15 +497,16 @@ bool bsgm_disparity_estimator::compute(
   }
 
   // validate that the reference image is the same size as the target image
-  if (img_ref.ni() != img_tar.ni() || img_ref.nj() != img_tar.nj())
+  if (img_ref.ni() != img_tar.ni() || img_ref.nj() != img_tar.nj()){
     throw std::runtime_error("target image and reference image have different shapes");
-
+  }
   // these two images should always have the same size as the cost volume
-  if (invalid_tar.ni() != w_ || invalid_tar.nj() != h_)
+  if (invalid_tar.ni() != w_ || invalid_tar.nj() != h_){
     throw std::runtime_error("invalid image different shape than cost volume");
-  if (min_disp.ni() != w_ || min_disp.nj() != h_)
+  }
+  if (min_disp.ni() != w_ || min_disp.nj() != h_){
     throw std::runtime_error("minimum disparity different shape than cost volume");
-
+  }
   // disparity image
   disp_tar.set_size(w_, h_);
 
@@ -499,6 +521,8 @@ bool bsgm_disparity_estimator::compute(
     params_.census_tol *=dynamic_range_factor;//SW18 has params_.census_tol *=20
     gscale = 1.0f/dynamic_range_factor;
   }
+  // shadow info
+  compute_shadow_mask(img_tar);
 
   // Compute census appearance cost volume data.
   if (params_.census_weight > 0.0f) {

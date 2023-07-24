@@ -45,7 +45,7 @@ class bsgm_multiscale_disparity_estimator
     int img_height,
     int num_disparities,
     int num_active_disparities,
-    vil_image_view<float> const& shadow_step_prob_targ = vil_image_view<float>(),
+    vil_image_view<float> const& shadow_step_prob = vil_image_view<float>(),
     vgl_vector_2d<float> sun_dir_tar = vgl_vector_2d<float>(0.0f, 0.0f),
     int downscale_exponent = 2 );
 
@@ -121,11 +121,15 @@ int bsgm_compute_median_of_image(
   bsgm_disparity_estimator* coarse_de_;
   bsgm_disparity_estimator* fine_de_;
   bsgm_disparity_estimator_params params_;
-  vil_image_view<float> shadow_step_prob_targ_;
-  vil_image_view<float> shadow_step_prob_targ_coarse_;
+  //illumination-related data
+  vil_image_view<float> shadow_step_prob_;
+  //down-sampled version
+  vil_image_view<float> ss_coarse_;
+
+  // sun direction for deprecated dp shadow bias method
   vgl_vector_2d<float> sun_dir_tar_ = vgl_vector_2d<float>(0.0, 0.0);
 };
-iltemplate <class T>
+template <class T>
 bool bsgm_multiscale_disparity_estimator::compute(
   const vil_image_view<T>& img_tar,
   const vil_image_view<T>& img_ref,
@@ -149,20 +153,18 @@ bool bsgm_multiscale_disparity_estimator::compute(
       invalid_tar.ni() != fine_w_ || invalid_tar.nj() != fine_h_ )
     return false;
 
-  if(params_.use_shadow_step_p2_adjustment &&
-     (shadow_step_prob_targ_.ni()!=fine_w_ || shadow_step_prob_targ_.nj()!=fine_h_)
-     )
-    return false;
+  if(params_.use_shadow_step_p2_adjustment)
+    if(shadow_step_prob_.ni()!=fine_w_ || shadow_step_prob_.nj()!=fine_h_){
+      std::cout << "empty or wrong size shadow step" << std::endl;
+      return false;
+    }
 
   // Downsample the images
   vil_image_view<T> img_t_coarse, img_r_coarse,
     temp_t_coarse, temp_r_coarse, working;
-  vil_image_view<T> temp_ss_coarse;
   
   vil_gauss_reduce( img_tar, img_t_coarse, working );
   vil_gauss_reduce( img_ref, img_r_coarse, working );
-  if(params_.use_shadow_step_p2_adjustment)
-    vil_gauss_reduce( shadow_step_prob_targ_, shadow_step_prob_targ_coarse_, working );
 
   for( int s = 1; s < downscale_exponent_; s++ ){
     vil_gauss_reduce( img_t_coarse, temp_t_coarse, working );
