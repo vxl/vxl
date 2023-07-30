@@ -18,6 +18,7 @@
 //        maps.
 // \author Thomas Pollard
 // \date July 24, 2018
+// utils
 
 //: Invalidate disparity pixels with corresponding image intensity below
 // a shadow threshold
@@ -43,6 +44,20 @@ void bsgm_shadow_step_filter(
   int response_low,
   int shadow_high);
 
+//helper function
+//template <class T>
+//void shadow_scanline_fill(std::vector<std::tuple<float, float, int, int, float> > shadow_vals,
+//                          vil_image_view<float>& disp_shad_fill, float prob_thresh,
+//                          T temp = T(0), bool print = false);
+
+//use shadow step to initiate disparity fill with
+//disparities at the end of the shadow backwards along a
+//scan in the direction of the sun
+template <class T>
+void bsgm_shadow_fill(vil_image_view<float> const& disparity, vgl_vector_2d<float> const& sun_dir,
+                      vil_image_view<float> const& shadow_step_prob, vil_image_view<float> const& shadow_prob,
+                      vil_image_view<float>& shadow_fill_disparity, float search_dist = 50.0f,
+                      float prob_thresh = 0.5, size_t gap =3, T temp = T(0), std::pair<int, int> print_pr = std::pair<int, int>(-1, -1));
 
 //: Use the OpenCV SGM uniqueness criteria to find bad disparities. This
 // is not quite the same as the left-right consistency check from the SGM

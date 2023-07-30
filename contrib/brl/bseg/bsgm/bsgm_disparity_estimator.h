@@ -191,7 +191,7 @@ class bsgm_disparity_estimator
   vil_image_view<float> shadow_step_prob_;
 
   //: shadow mask
-  vil_image_view<bool> shadow_mask_;
+  vil_image_view<float> shadow_prob_;
 
   //: sun direction in rectified image space
   vgl_vector_2d<float> sun_dir_tar_;
@@ -201,14 +201,14 @@ class bsgm_disparity_estimator
   //
   // compute shadow info
   template <class T>
-  void compute_shadow_mask(const vil_image_view<T>& img_target){
+  void compute_shadow_prob(const vil_image_view<T>& img_target){
     size_t w = img_target.ni(), h = img_target.nj();
-    shadow_mask_.set_size(w, h);
-    shadow_mask_.fill(false);
+    shadow_prob_.set_size(w, h);
+    shadow_prob_.fill(0.0f);
     for(size_t y = 0; y<h; ++y)
       for(size_t x = 0; x<w; ++x)
         if(img_target(x, y)<params_.shadow_thresh){
-          shadow_mask_(x,y) = true;
+          shadow_prob_(x,y) = 1.0f;
         }
   }
   //: Allocate and setup cost volumes based on current w_ and h_
@@ -522,7 +522,7 @@ bool bsgm_disparity_estimator::compute(
     gscale = 1.0f/dynamic_range_factor;
   }
   // shadow info
-  compute_shadow_mask(img_tar);
+  compute_shadow_prob(img_tar);
 
   // Compute census appearance cost volume data.
   if (params_.census_weight > 0.0f) {

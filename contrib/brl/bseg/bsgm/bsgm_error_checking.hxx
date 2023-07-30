@@ -9,6 +9,7 @@
 //#include <sstream>
 //#include <utility>
 #include <algorithm>
+#include <map>
 #include <tuple>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
@@ -279,6 +280,234 @@ bsgm_shadow_step_filter(const vil_image_view<T> & img,
       }
     }
 }
+static void one_d_dialation(std::vector<bool> const& vals, size_t gap, std::vector<bool>& dialated_vals) {
+    dialated_vals = vals;
+    size_t n = vals.size();
+    size_t nq = gap + 2;
+    if (n < nq)
+        return;
+    std::vector<bool> queue(nq);
+    for (size_t i = 0; i < n - nq; ++i) {
+        if (i == 22)
+            n = n;
+        for (size_t k = 0; k < nq; ++k)
+            queue[k] = vals[i + k];
+        if (queue[0] && queue[nq - 1])
+            for (size_t k = 1; k < nq - 1; ++k)
+                dialated_vals[i + k] = true;
+    }
+}
+static void one_d_tail_erode(std::vector<bool> const& vals, size_t rem, std::vector<bool>& eroded_vals) {
+  eroded_vals = vals;
+  size_t n = vals.size();
+  size_t nq = rem + 2;
+  if (n < nq)
+    return;
+  std::vector<bool> queue(nq);
+  for (size_t i = 0; i < n - nq; ++i) {
+    for (size_t k = 0; k < nq; ++k)
+      queue[k] = vals[i + k];
+    if (queue[0] && !queue[nq - 1])
+      for (size_t k = 1; k < nq - 1; ++k)
+        eroded_vals[i + k] = false;
+  }
+}
+static void shadow_step_enable(std::vector<std::pair<bool, bool> > const& shstp_scan, std::vector<bool>& enabled, int& first_idx, int& last_idx) {
+  size_t n = shstp_scan.size();
+  enabled.resize(n, false);
+  // state machine
+  bool start = true;
+  bool start_ss = false; //start state
+  bool end_enable = false; // end enable
+  for (size_t i = 0; i < n; ++i) {
+    bool shad = shstp_scan[i].first;
+    bool shstp = shstp_scan[i].second;
+    if (start && shstp) {
+      start_ss = true;
+      start = false;
+      enabled[i] = true;
+      first_idx = i;
+      continue;
+    }
+    if (start_ss)
+      if (shad || shstp) {
+        enabled[i] = true;
+        continue;
+      }else {
+        end_enable = true;
+        start_ss = false;
+        last_idx = i;
+      }
+  }
+}
+static float disp_3x3(vil_image_view<float> const& disparity, int i, int j, bool print = false){
+  int ni = disparity.ni(), nj = disparity.nj();
+  float sum = disparity(i, j), npix = 1.0f;
+  if (std::isnan(sum)) {
+      sum = 0.0f;
+      npix = 0.0f;
+  }
+  float v = 0.0f;
+  if (i > 0) {
+    v = disparity(i-1, j);
+    if(!std::isnan(v)){ sum += v; npix += 1.0f;}
+    if (j > 0) {
+      v = disparity(i, j-1);
+      if(!std::isnan(v)){sum += v; npix += 1.0f;}
+      v = disparity(i-1, j-1);
+      if(!std::isnan(v)){sum +=v; npix += 1.0f;
+      }
+    }
+    if (j < (nj-1)) {
+      v = disparity(i, j+1);
+      if(!std::isnan(v)){sum += v; npix += 1.0f;}
+      v = disparity(i-1, j + 1);
+      if(!std::isnan(v)){sum += v; npix += 1.0f;}
+    }
+  }
+  if (i < (ni-1)) {
+    v = disparity(i + 1, j);
+    if(!std::isnan(v)){sum += v; npix += 1.0f;}
+    if (j > 0) {
+      v = disparity(i+1, j-1);
+      if(!std::isnan(v)){sum += v; npix += 1.0f;}
+    }
+    if (j < (nj-1)) {
+      v = disparity(i+1, j+1);
+      if(!std::isnan(v)){sum +=v; npix += 1.0f;}
+      }
+  }
+  if(npix == 0.0f)
+    return NAN;
+  sum /= npix;
+  return sum;
+}
+std::vector<float> enabled_disparities(std::vector<std::tuple<float, float, int, int, float> >shadow_vals, vil_image_view<float> const& disparity, int first_idx, int last_idx, bool print = false){
+  std::vector<float> ret;
+  size_t ni = disparity.ni(), nj = disparity.nj();
+  for(size_t i = first_idx; i<=last_idx; ++i){
+    int id = std::get<2>(shadow_vals[i]), jd = std::get<3>(shadow_vals[i]);
+    if(id<0 || id >=ni) continue;
+    if(jd<0 || jd >=nj) continue;
+    float d = disp_3x3(disparity, id, jd, print);
+    if(std::isnan(d)) continue;
+    ret.push_back(d);
+  }
+  return ret;
+}
+
+static void shadow_scanline_fill(std::vector<std::tuple<float, float, int, int, float> > shadow_vals, vil_image_view<float> const& disparity,
+                                 size_t ni, size_t nj, vil_image_view<float>& disparity_fill, float prob_thresh, size_t gap, bool print) {
+  size_t n = shadow_vals.size();
+  std::vector<bool> cls_shad, dia_cls_shad, enabled, cls_ss, ss_erode;
+  std::vector<std::pair<bool, bool> > shadstp_scan;
+  
+  // classify shadow and shadow step
+  for (size_t i = 0; i < n; ++i){
+    cls_shad.push_back(std::get<0>(shadow_vals[i]) > prob_thresh);
+    cls_ss.push_back(std::get<1>(shadow_vals[i]) > prob_thresh);
+  }
+  // fill gaps in shadow
+  one_d_dialation(cls_shad, gap, dia_cls_shad);
+  size_t rem = 1;
+
+  if (print) {
+      std::cout << "Shadow dialate" << std::endl;
+    for (size_t i = 0; i < n; ++i)
+      std::cout << cls_shad[i] << ' ' << dia_cls_shad[i] << std::endl;
+  }
+
+  // erode shadow end of shadow step (closely spaced steps)
+  one_d_tail_erode(cls_ss, rem, ss_erode);  
+  for (size_t i = 0; i < n; ++i)
+    shadstp_scan.emplace_back(dia_cls_shad[i], ss_erode[i]);
+  
+  if (print) {
+      std::cout << '+';
+  }
+  // classify the portion of the scan to be replaced by shadow disparity
+  int first_idx = 0, last_idx = 0;
+  shadow_step_enable(shadstp_scan, enabled, first_idx, last_idx);
+  bool failed = first_idx == 0 && last_idx == 0;
+  if (failed)
+    return; // do nothing
+
+  // extract 3x3 smoothed disparities in enabled span
+  std::vector<float> disps = enabled_disparities(shadow_vals,  disparity, first_idx, last_idx, print);
+  if (print) {
+    std::cout << "enabled disparities" << std::endl;
+    for(float d : disps)
+      std::cout << d << std::endl;
+  }  
+  if (print)
+    std::cout << "\n=============== scanline fill all data ==================" << std::endl;
+  for(size_t i = 0; i<n; ++i){
+    bool sh = dia_cls_shad[i];
+    float ss = std::get<1>(shadow_vals[i]);
+    if(print) 
+      std::cout << sh << ' ' << ss << ' ' << enabled[i] << ' ' << std::get<2>(shadow_vals[i])<< ' ' << std::get<3>(shadow_vals[i]) << ' ' << std::get<4>(shadow_vals[i]) << ' ' << std::endl;
+  }
+}
+
+template <class T>
+void bsgm_shadow_fill(vil_image_view<float> const& disparity, vgl_vector_2d<float> const& sun_dir,
+                      vil_image_view<float> const& shadow_step_prob, vil_image_view<float> const& shadow_prob,
+                      vil_image_view<float>& disp_shad_fill, float search_dist, float prob_thresh, size_t gap, T temp, std::pair<int, int> print_pr){
+  
+  size_t ni = disparity.ni(), nj = disparity.nj();
+  disp_shad_fill.deep_copy(disparity);
+  std::map<size_t, std::map<size_t, std::vector<float> > > disp_map;
+  bool print = false;
+  for( int iys = 0; iys < nj; iys++ )
+    for( int ixs = 0; ixs < ni; ixs++ )
+      if(shadow_step_prob(ixs,iys)>prob_thresh){
+        print = (ixs == print_pr.first) && (iys == print_pr.second);
+        //set up scan path from shadow step to end of shadow
+        float xs = float(ixs), ys = float(iys);
+        vgl_point_2d<float> p0(xs, ys);
+        // end of search path
+        vgl_point_2d<float> p1 =  p0 + search_dist*sun_dir;
+        float xe = p1.x(), ye = p1.y();
+        std::vector<std::tuple<float, float, int, int, float> > shadow_vals, filled_vals;
+        bool broke_in_shadow = false;
+        float x, y;
+        bool init = true;
+        while (brip_line_generator::generate(init, float(xs), float(ys), xe, ye, x, y))
+        {
+            int xi = (int)x, yi = (int)y; //convert the pixel location to integer
+            if (xi < 0 || xi >= ni || yi < 0 || yi >= nj) {
+                broke_in_shadow = true;
+                break;
+            }
+            float ds = disparity(xi, yi);
+            shadow_vals.emplace_back(shadow_prob(xi, yi), shadow_step_prob(xi, yi), xi, yi, ds);
+        }//while
+             
+        // scan line went out of image
+        if (broke_in_shadow) {
+            std::cout << "out of bounds in shadow" << std::endl;
+            return;
+        }
+        shadow_scanline_fill(shadow_vals, disparity,  ni,  nj, disp_shad_fill, prob_thresh, gap, print);
+        if(print){
+          std::cout << "================  back filled disparities ======================" << std::endl;
+          init = true;
+          while (brip_line_generator::generate(init, float(xs), float(ys), xe, ye, x, y))
+            {
+              int xi = (int)x, yi = (int)y; //convert the pixel location to integer
+              if (xi < 0 || xi >= ni || yi < 0 || yi >= nj) {
+                broke_in_shadow = true;
+                break;
+              }
+              filled_vals.emplace_back(shadow_prob(xi, yi), shadow_step_prob(xi, yi), xi, yi, disp_shad_fill(xi, yi));
+            }//while
+          for(size_t i = 0;  i<filled_vals.size(); ++i)
+            std::cout << std::get<0>(filled_vals[i]) << ' ' << std::get<1>(filled_vals[i]) << ' ' << std::get<2>(filled_vals[i]) << ' '
+                      << std::get<3>(filled_vals[i]) << ' ' << std::get<4>(filled_vals[i])  << std::endl;
+        }//print
+      }//prob thresh
+
+} 
 
 
 template <class T>
@@ -663,6 +892,9 @@ template void bsgm_check_nonunique(vil_image_view<float>& , const vil_image_view
                                    const vgl_box_2d<int>&);                                       \
 template void bsgm_shadow_step_filter(const vil_image_view<T>&, const vil_image_view<bool>&,      \
                                       vil_image_view<float>&, const vgl_vector_2d<float>&,        \
-                                      int, int, int)
+                                      int, int, int);                   \
+template void bsgm_shadow_fill(vil_image_view<float> const&, vgl_vector_2d<float> const&,       \
+                              vil_image_view<float> const&, vil_image_view<float> const&,  \
+                               vil_image_view<float>&, float, float, size_t, T, std::pair<int, int>)                                                                                                                                                                            
 
 #endif // bsgm_error_checking_h_
