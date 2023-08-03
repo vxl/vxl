@@ -638,9 +638,9 @@ bsgm_disparity_estimator::compute_best_disparity_img(
       disp_img(x,y) += min_disparity(x,y);
     } //x
   } //y
-  //vil_image_view<float> temp;
-  //bsgm_shadow_fill<vxl_byte>(disp_img, sun_dir_tar_, shadow_step_prob_, shadow_prob_, temp, 15.0f);
-  //disp_img = temp;
+  // vil_image_view<float> temp;
+  // bsgm_shadow_fill<vxl_byte>(disp_img, sun_dir_tar_, shadow_step_prob_, shadow_prob_, temp);
+  // disp_img = temp;
 }
 
 

@@ -15,11 +15,14 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_convert.h>
 #include <vil/vil_save.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/algo/vil_sobel_3x3.h>
+#include <vil/algo/vil_blob.h>
 #include "bsgm_error_checking.h"
 #include <brip/brip_line_generator.h>
+#include <bsta/bsta_histogram.h>
 
 static bool pair_greater(std::pair<int, int> const& a, std::pair<int, int> const& b){
   return a.second > b.second;
@@ -280,27 +283,42 @@ bsgm_shadow_step_filter(const vil_image_view<T> & img,
       }
     }
 }
-static void one_d_dialation(std::vector<bool> const& vals, size_t gap, std::vector<bool>& dialated_vals) {
-    dialated_vals = vals;
-    size_t n = vals.size();
-    size_t nq = gap + 2;
-    if (n < nq)
-        return;
-    std::vector<bool> queue(nq);
-    for (size_t i = 0; i < n - nq; ++i) {
-        if (i == 22)
-            n = n;
-        for (size_t k = 0; k < nq; ++k)
-            queue[k] = vals[i + k];
-        if (queue[0] && queue[nq - 1])
-            for (size_t k = 1; k < nq - 1; ++k)
-                dialated_vals[i + k] = true;
+static void one_d_dialation(std::vector<bool> const& vals, size_t gap, std::vector<bool>& dialated_vals, bool print = false) {
+  dialated_vals = vals;
+  size_t n = vals.size();
+  size_t nq = gap + 2;
+  if (n < nq)
+    return;
+  std::vector<bool> queue(nq);
+  for (size_t i = 0; i < n - nq; ++i) {
+    for (size_t k = 0; k < nq; ++k)
+      queue[k] = vals[i + k];
+    if (queue[0] && queue[nq - 1])
+      for (size_t k = 1; k < nq - 1; ++k)
+        dialated_vals[i + k] = true;
+  }
+  if (print)
+      int jj = 0;
+  //find shadow end
+  size_t sh_end = 0;
+  bool done = false;
+  for (size_t i = 0; i < n-1&&!done ; ++i){
+    bool d = dialated_vals[i], dp = dialated_vals[i+1];
+    if(d && !dp){//end of shadow
+      sh_end = i;
+      done = true;
     }
+  }
+  // add gap at end
+  size_t sh_last = sh_end+1 + gap;
+  if(sh_last >= n) sh_last = n-1;
+  for(size_t i = sh_end+1; i <sh_last ; ++i)
+    dialated_vals[i] = true;
 }
 static void one_d_tail_erode(std::vector<bool> const& vals, size_t rem, std::vector<bool>& eroded_vals) {
   eroded_vals = vals;
   size_t n = vals.size();
-  size_t nq = rem + 2;
+  size_t nq = rem + 1;
   if (n < nq)
     return;
   std::vector<bool> queue(nq);
@@ -308,7 +326,7 @@ static void one_d_tail_erode(std::vector<bool> const& vals, size_t rem, std::vec
     for (size_t k = 0; k < nq; ++k)
       queue[k] = vals[i + k];
     if (queue[0] && !queue[nq - 1])
-      for (size_t k = 1; k < nq - 1; ++k)
+      for (size_t k = 0; k < nq - 1; ++k)
         eroded_vals[i + k] = false;
   }
 }
@@ -332,6 +350,10 @@ static void shadow_step_enable(std::vector<std::pair<bool, bool> > const& shstp_
     if (start_ss)
       if (shad || shstp) {
         enabled[i] = true;
+        if (i == n - 1) {
+          last_idx = n - 1;
+          return; //end of scan
+        }
         continue;
       }else {
         end_enable = true;
@@ -382,7 +404,7 @@ static float disp_3x3(vil_image_view<float> const& disparity, int i, int j, bool
   sum /= npix;
   return sum;
 }
-std::vector<float> enabled_disparities(std::vector<std::tuple<float, float, int, int, float> >shadow_vals, vil_image_view<float> const& disparity, int first_idx, int last_idx, bool print = false){
+static std::vector<float> enabled_disparities(std::vector<std::tuple<float, float, int, int, float> >shadow_vals, vil_image_view<float> const& disparity, int first_idx, int last_idx, bool print = false){
   std::vector<float> ret;
   size_t ni = disparity.ni(), nj = disparity.nj();
   for(size_t i = first_idx; i<=last_idx; ++i){
@@ -395,21 +417,183 @@ std::vector<float> enabled_disparities(std::vector<std::tuple<float, float, int,
   }
   return ret;
 }
+static float avg(std::vector<float> const& vals){
+  size_t n = vals.size();
+  float avg = 0.0;
+  for (size_t k = 0; k < n; ++k)
+    avg += vals[k];
+  avg /= n;
+  return avg;
+}
+// find flat sections of the disparity values under shadow
+static std::vector<std::tuple<size_t, size_t, float, std::vector<float> > >  scan_clusters(std::vector<float> const& disparities, float tol){
+  size_t n = disparities.size();
+  // states for the flat segmentation
+  bool start_flat = false;
+  bool end_flat = false;
+  bool done = false;
+  // queue to detect initial flat sequence
+  size_t nq = 3;
+  std::vector<float> flat_queue;
+  // cache for detected flat sequences
+  std::vector<std::tuple<size_t, size_t, float, std::vector<float> > > flats;
+  // global variables
+  float mean = 0.0;
+  int start_idx = 0, end_idx = 0;
+  // scan the disparities under the shadow/shadow_step sun vector scan
+  for (size_t i = 0; i < (n - nq) && !done; ++i) {
+    if (!start_flat) {
+      // fill queue
+      for (size_t k = 0; k < nq; ++k)
+        flat_queue.push_back(disparities[i + k]);
+      // check if flat
+      if ((fabs(flat_queue[0] - flat_queue[1]) + fabs(flat_queue[2] - flat_queue[1])) < 2.0f * tol) {
+        start_flat = true;
+        start_idx = i;
+        i += (nq - 1);
+        end_idx = i;
+        //early termination?
+        if (i >= (n - nq)) {
+          done = true;
+          mean = avg(flat_queue);
+          flats.emplace_back(start_idx, end_idx, mean, flat_queue);
+        } // otherwise attempt to extend the flat sequence
+        continue;
+      } else { flat_queue.clear(); } // or try to start a new flat sequence
+    }
+    // a flat sequence is active
+    if (start_flat) {
+      size_t qsize = flat_queue.size();
+      if (qsize < nq) {//shouldn't happen
+        start_flat = false;
+        flat_queue.clear();
+        continue;
+      }
+      float d = disparities[i];
+      mean = avg(flat_queue);
+      // check if new disparity can be added
+      if (fabs(d - mean) < tol) {
+        // can be added
+        flat_queue.push_back(d);
+        //========== start end of array special treatment ============
+        if (i == (n - nq - 1)) {
+          //could quit early due out of tolerance or reach end of array 
+          bool early_quit = false; 
+          while ((++i < n) && !done) {
+            // try to add new disparity
+            d = disparities[i];
+            mean = avg(flat_queue);
+            if (fabs(d - mean) < tol) {
+              flat_queue.push_back(d);
+              continue;
+            } else { //out of tolerance
+              flats.emplace_back(start_idx, i - 1, mean, flat_queue);
+              done = true;
+              early_quit = true;
+            }
+          }// end of array so potentially add flat to cache
+          if(!early_quit) flats.emplace_back(start_idx, i - 1, mean, flat_queue);
+          done = true;
+        }
+        // ============= finished end of array special treatment ============
+        
+      } else { //not near end of array and disparity can't be added
+        flats.emplace_back(start_idx, i - 1, mean, flat_queue);
+        flat_queue.clear();
+        start_flat = false;
+        i--;
+        continue;
+      }
+    }
+  }
+  return flats;
+}
+//                           n in c  mean z  
+static std::vector<std::pair<size_t, float> > clusters(std::vector<float> vals, size_t max_k = 10, float tol = 3.0, bool print = false)
+{
+  std::vector<std::pair<size_t, float> > ret;//the returned cluster centers
+
+  size_t n = vals.size();
+  if (n == 1) {
+    ret.emplace_back(n, vals[0]);
+    return ret;
+  }
+
+  //the remaining z values not assigned to a cluster
+  std::vector<float> temp = vals;
+  size_t k = 1;
+  while (k <= max_k) {
+    n = temp.size();
+    if (n == 0)
+      break;//all assigned
+
+    //next remaining cluster center candidate
+    float cent = temp[0];
+    float csize = 1.0f;
+    std::vector<size_t> to_remove;
+    to_remove.push_back(0);//index of cent
+    //scan the remaining z values for cluster membership
+    if(print) std::cout << "starting cluster " << k << " at center " << cent << std::endl;
+    for (size_t i = 1; i < n; ++i) {
+      if (fabs(temp[i] - cent) < tol) {
+        csize += 1.0f;
+        // running average of z values in cluster
+        cent = (cent * (csize - 1.0f) + temp[i]) / csize;
+        to_remove.push_back(i);
+        //std::cout << "remove " << temp[i] << " cent = " << cent << std::endl;
+      }
+    }
+    //cluster ends
+    //remove z values added to the current cluster
+    std::vector<float> temp2;
+    for (size_t i = 0; i < n; ++i) {
+      std::vector<size_t>::iterator iit = std::find(to_remove.begin(), to_remove.end(), i);
+      if(iit != to_remove.end()){
+        continue;// skip used vals
+      }
+      temp2.push_back(temp[i]); //store unused vals
+    }
+    temp = temp2;
+    //std::cout << temp.size() << " vals remaining" << std::endl;
+    //store the current cluster in the return set
+    ret.emplace_back(to_remove.size(), cent);
+    k++;
+  }
+  return ret;
+}
+static float find_end_disparity(float disp_initial, std::vector<std::tuple<size_t, size_t, float, std::vector<float> > > const& flats){
+  size_t n = flats.size();
+  if(n == 0)
+    return NAN;
+  if(n <= 2)
+    return std::get<2>(flats[n-1]);
+  // more complex cases
+  // report mean furthest from initial disparity
+  float mx = 0.0f;
+  float edis = 0.0f;
+  for(size_t i = 0; i<n; ++i){
+    float m = std::get<2>(flats[i]);
+    float d = fabs(m-disp_initial);
+    if(d>mx){
+      mx = d;
+      edis = m;
+    }
+  }
+  return edis;
+}
 
 static void shadow_scanline_fill(std::vector<std::tuple<float, float, int, int, float> > shadow_vals, vil_image_view<float> const& disparity,
-                                 size_t ni, size_t nj, vil_image_view<float>& disparity_fill, float prob_thresh, size_t gap, bool print) {
+                                 size_t ni, size_t nj, vil_image_view<float>& disparity_fill, vil_image_view<vxl_byte> enable_img, float prob_thresh, size_t gap, bool print) {
   size_t n = shadow_vals.size();
   std::vector<bool> cls_shad, dia_cls_shad, enabled, cls_ss, ss_erode;
   std::vector<std::pair<bool, bool> > shadstp_scan;
-  
   // classify shadow and shadow step
   for (size_t i = 0; i < n; ++i){
     cls_shad.push_back(std::get<0>(shadow_vals[i]) > prob_thresh);
     cls_ss.push_back(std::get<1>(shadow_vals[i]) > prob_thresh);
   }
   // fill gaps in shadow
-  one_d_dialation(cls_shad, gap, dia_cls_shad);
-  size_t rem = 1;
+  one_d_dialation(cls_shad, gap, dia_cls_shad, print);
 
   if (print) {
       std::cout << "Shadow dialate" << std::endl;
@@ -418,7 +602,9 @@ static void shadow_scanline_fill(std::vector<std::tuple<float, float, int, int, 
   }
 
   // erode shadow end of shadow step (closely spaced steps)
+  size_t rem = 3;//1
   one_d_tail_erode(cls_ss, rem, ss_erode);  
+
   for (size_t i = 0; i < n; ++i)
     shadstp_scan.emplace_back(dia_cls_shad[i], ss_erode[i]);
   
@@ -432,20 +618,54 @@ static void shadow_scanline_fill(std::vector<std::tuple<float, float, int, int, 
   if (failed)
     return; // do nothing
 
-  // extract 3x3 smoothed disparities in enabled span
-  std::vector<float> disps = enabled_disparities(shadow_vals,  disparity, first_idx, last_idx, print);
-  if (print) {
-    std::cout << "enabled disparities" << std::endl;
-    for(float d : disps)
-      std::cout << d << std::endl;
-  }  
   if (print)
     std::cout << "\n=============== scanline fill all data ==================" << std::endl;
   for(size_t i = 0; i<n; ++i){
     bool sh = dia_cls_shad[i];
     float ss = std::get<1>(shadow_vals[i]);
     if(print) 
-      std::cout << sh << ' ' << ss << ' ' << enabled[i] << ' ' << std::get<2>(shadow_vals[i])<< ' ' << std::get<3>(shadow_vals[i]) << ' ' << std::get<4>(shadow_vals[i]) << ' ' << std::endl;
+      std::cout << sh << ' ' << ss << ' ' << enabled[i] << ' ' << std::get<2>(shadow_vals[i])<< ' ' << std::get<3>(shadow_vals[i])
+                << ' ' << std::get<4>(shadow_vals[i]) << ' ' << std::endl;
+  }
+  // extract 3x3 smoothed disparities in enabled span
+  std::vector<float> enab_disps = enabled_disparities(shadow_vals,  disparity, first_idx, last_idx, print);
+  if (print) {
+    std::cout << "enabled disparities" << std::endl;
+    for(float d : enab_disps)
+      std::cout << d << std::endl;
+  }
+  size_t dsize = enab_disps.size();
+  if( dsize < 3)
+    return;// do nothing
+  float idisp = 0.0f;
+  for (size_t i = 0; i < 3; ++i)
+      idisp += enab_disps[i];
+  idisp /= 3.0f;
+  // find flat regions of the enabled disparities
+  float tol = 2.0f;
+  std::vector<std::tuple<size_t, size_t, float, std::vector<float> > > flats = scan_clusters(enab_disps, tol); 
+  float end_disp = 0.0f;
+  size_t fsize = flats.size();
+  if(fsize == 0){
+    int is = dsize-1, ie = dsize-4;
+    if(ie<0) ie = 0;
+    std::vector<float> temp;
+    for(int k = is; k>ie; k--)
+      temp.push_back(enab_disps[k]);
+    end_disp = avg(temp);
+  }else{
+    end_disp = find_end_disparity(idisp, flats);
+  }
+  // fill disparity values
+  if(print) 
+      std::cout << "disparity fill " << end_disp << std::endl;
+  for(size_t i = 0; i<n; ++i){
+    if(!enabled[i]) continue;
+    int id = std::get<2>(shadow_vals[i]), jd = std::get<3>(shadow_vals[i]);
+    if(id<0 || id>= ni ||jd<0 || jd>= nj)
+      continue;
+    enable_img(id, jd) = vxl_byte(255);
+    disparity_fill(id, jd) = end_disp;
   }
 }
 
@@ -456,6 +676,8 @@ void bsgm_shadow_fill(vil_image_view<float> const& disparity, vgl_vector_2d<floa
   
   size_t ni = disparity.ni(), nj = disparity.nj();
   disp_shad_fill.deep_copy(disparity);
+  vil_image_view<vxl_byte> enable_img(ni, nj);
+  enable_img.fill(vxl_byte(0));
   std::map<size_t, std::map<size_t, std::vector<float> > > disp_map;
   bool print = false;
   for( int iys = 0; iys < nj; iys++ )
@@ -473,22 +695,22 @@ void bsgm_shadow_fill(vil_image_view<float> const& disparity, vgl_vector_2d<floa
         float x, y;
         bool init = true;
         while (brip_line_generator::generate(init, float(xs), float(ys), xe, ye, x, y))
-        {
+          {
             int xi = (int)x, yi = (int)y; //convert the pixel location to integer
             if (xi < 0 || xi >= ni || yi < 0 || yi >= nj) {
-                broke_in_shadow = true;
-                break;
+              broke_in_shadow = true;
+              break;
             }
             float ds = disparity(xi, yi);
             shadow_vals.emplace_back(shadow_prob(xi, yi), shadow_step_prob(xi, yi), xi, yi, ds);
-        }//while
-             
+          }//while
+        
         // scan line went out of image
         if (broke_in_shadow) {
-            std::cout << "out of bounds in shadow" << std::endl;
-            return;
+          std::cout << "out of bounds in shadow" << std::endl;
+          return;
         }
-        shadow_scanline_fill(shadow_vals, disparity,  ni,  nj, disp_shad_fill, prob_thresh, gap, print);
+        shadow_scanline_fill(shadow_vals, disparity,  ni,  nj, disp_shad_fill, enable_img, prob_thresh, gap, print);
         if(print){
           std::cout << "================  back filled disparities ======================" << std::endl;
           init = true;
@@ -506,8 +728,82 @@ void bsgm_shadow_fill(vil_image_view<float> const& disparity, vgl_vector_2d<floa
                       << std::get<3>(filled_vals[i]) << ' ' << std::get<4>(filled_vals[i])  << std::endl;
         }//print
       }//prob thresh
+  std::string path = "D:/tests/WRIVA/results_07_20_2023/enable_img_8_3_6_7.tif";
+  vil_save(enable_img, path.c_str());
 
-} 
+  // enable regions
+  std::string region_path = "D:/tests/WRIVA/results_07_20_2023/enable_regions_8_3_6_7.tif";
+  vil_image_view<vxl_byte> enable_regions_img(ni, nj);
+  enable_regions_img.fill(vxl_byte(0));
+
+  bsta_histogram<float> h(-50, 20, unsigned(100));
+
+  // enable regions
+  vil_image_view<unsigned> region_labels;
+  vil_image_view<bool> enable_img_bool;
+  vil_convert_cast(enable_img, enable_img_bool);
+  vil_blob_labels(enable_img_bool, vil_blob_4_conn, region_labels);
+  std::vector<vil_blob_region> enable_regions;
+  vil_blob_labels_to_regions(region_labels, enable_regions);
+  //
+  //   ilo      ihi
+  //  .............
+  // j .+++++++++++.   <--- chord
+  //   .++++. .+++.
+  //     .+.   .+.
+  //     region
+  //
+  print = false;
+  size_t n = enable_regions.size();
+  for (size_t ir = 0; ir < n; ++ir) {
+    vil_blob_region& reg = enable_regions[ir];
+    float sum = 0.0f;
+    float area = 0.0f;
+    std::vector<float> temp;
+    for (size_t c = 0; c < reg.size(); ++c) {
+      vil_chord ch = reg[c];
+      size_t j = ch.j;
+      for (size_t i = ch.ilo; i <= ch.ihi; ++i) {
+        if(i == 1272 && j == 1337)
+            print = true;
+        //float d = disp_shad_fill(i, j);
+        float d = disparity(i, j);
+        temp.push_back(d);
+        enable_regions_img(i,j) = vxl_byte(255);
+      }
+    }
+    std::vector<std::pair<size_t, float> > clusts = clusters(temp);
+    if (print){
+      std::cout << "found " << clusts.size() << " clusters" << std::endl;
+      for(auto cl : clusts){
+        std::cout << cl.first << ' ' << cl.second << std::endl;
+      }
+      //std::cout << "input to clusters" << std::endl;
+      //for(auto d : temp)
+        //std::cout << d << std::endl;
+    }
+    float min_disp_mag = std::numeric_limits<float>::max();
+    size_t min_idx = 0;
+    for(size_t ic = 0; ic<clusts.size(); ++ic)
+      if(fabs(clusts[ic].second) < min_disp_mag){
+          min_disp_mag = fabs(clusts[ic].second);
+          min_idx = ic;
+        }
+    float fill = clusts[min_idx].second;
+    if(print) std::cout << "fill from cluster " << min_idx << " fill = " << fill << std::endl;
+    for (size_t c = 0; c < reg.size(); ++c) {
+      vil_chord ch = reg[c];
+      size_t j = ch.j;
+      for (size_t i = ch.ilo; i <= ch.ihi; ++i){
+        disp_shad_fill(i,j) = fill;
+      }
+    }
+    print = false;
+  }
+  vil_save(enable_regions_img, region_path.c_str());
+  //std::cout << "=====================Region Hist===================" << std::endl;
+  // h.print_vals_prob();
+}
 
 
 template <class T>

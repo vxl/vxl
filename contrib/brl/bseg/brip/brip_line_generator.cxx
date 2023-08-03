@@ -34,7 +34,8 @@ bool brip_line_generator::generate(bool& init, float xs, float ys,
   int xp = int(x);
   int yp = int(y);
   //Increment along the line until the motion is greater than one pixel
-  for (int i = 0; i<5; i++)
+  //  for (int i = 0; i<5; i++)
+  for (int i = 0; i<25; i++)//jlm insure end is reached
   {
     x += (float)0.5*xinc;
     y += (float)0.5*yinc;
