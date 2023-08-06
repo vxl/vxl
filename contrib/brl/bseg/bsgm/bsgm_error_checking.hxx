@@ -330,6 +330,7 @@ static void one_d_tail_erode(std::vector<bool> const& vals, size_t rem, std::vec
         eroded_vals[i + k] = false;
   }
 }
+
 static void shadow_step_enable(std::vector<std::pair<bool, bool> > const& shstp_scan, std::vector<bool>& enabled, int& first_idx, int& last_idx) {
   size_t n = shstp_scan.size();
   enabled.resize(n, false);
@@ -362,6 +363,7 @@ static void shadow_step_enable(std::vector<std::pair<bool, bool> > const& shstp_
       }
   }
 }
+
 static float disp_3x3(vil_image_view<float> const& disparity, int i, int j, bool print = false){
   int ni = disparity.ni(), nj = disparity.nj();
   float sum = disparity(i, j), npix = 1.0f;
@@ -728,11 +730,15 @@ void bsgm_shadow_fill(vil_image_view<float> const& disparity, vgl_vector_2d<floa
                       << std::get<3>(filled_vals[i]) << ' ' << std::get<4>(filled_vals[i])  << std::endl;
         }//print
       }//prob thresh
-  std::string path = "D:/tests/WRIVA/results_07_20_2023/enable_img_8_3_6_7.tif";
+  //std::string path = "D:/tests/WRIVA/results_07_20_2023/enable_img_8_3_6_7.tif";
+  //std::string path = "D:/tests/buenos_aires/results_07_22_2023/enable_img_8_4_1_2.tif";
+  std::string path = "D:/tests/buenos_aires/results_07_22_2023/enable_img_8_4_4_6.tif";
   vil_save(enable_img, path.c_str());
 
   // enable regions
-  std::string region_path = "D:/tests/WRIVA/results_07_20_2023/enable_regions_8_3_6_7.tif";
+  //std::string region_path = "D:/tests/WRIVA/results_07_20_2023/enable_regions_8_3_6_7.tif";
+  //std::string region_path = "D:/tests/buenos_aires/results_07_22_2023/enable_regions_8_4_1_2.tif";
+  std::string region_path = "D:/tests/buenos_aires/results_07_22_2023/enable_regions_8_4_4_6.tif";
   vil_image_view<vxl_byte> enable_regions_img(ni, nj);
   enable_regions_img.fill(vxl_byte(0));
 
@@ -764,7 +770,7 @@ void bsgm_shadow_fill(vil_image_view<float> const& disparity, vgl_vector_2d<floa
       vil_chord ch = reg[c];
       size_t j = ch.j;
       for (size_t i = ch.ilo; i <= ch.ihi; ++i) {
-        if(i == 1272 && j == 1337)
+        if(i == 1140 && j == 1105)
             print = true;
         //float d = disp_shad_fill(i, j);
         float d = disparity(i, j);
@@ -791,6 +797,7 @@ void bsgm_shadow_fill(vil_image_view<float> const& disparity, vgl_vector_2d<floa
         }
     float fill = clusts[min_idx].second;
     if(print) std::cout << "fill from cluster " << min_idx << " fill = " << fill << std::endl;
+    fill = 0.0f;
     for (size_t c = 0; c < reg.size(); ++c) {
       vil_chord ch = reg[c];
       size_t j = ch.j;
