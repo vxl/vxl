@@ -627,7 +627,7 @@ template<typename Derived> class DenseBase
     typedef std::conditional_t<IsVectorAtCompileTime, const_iterator_type, void> const_iterator;
     #endif
 
-    inline iterator begin();
+    virtual inline iterator begin();
     inline const_iterator begin() const;
     inline const_iterator cbegin() const;
     inline iterator end();

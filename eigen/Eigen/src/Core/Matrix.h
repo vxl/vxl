@@ -405,6 +405,15 @@ class Matrix : public PlainObjectBase<Matrix<Scalar_, Rows_, Cols_, Options_, Ma
   //------------------------------------------------------------
 
   using SelfMatrix = Matrix<Scalar_, Rows_, Cols_, Options_, MaxRows_, MaxCols_>;
+
+  // NOT ALLOWED FOR MATRIX, ONLY VECTOR
+  //  using typename Base::iterator;
+//  using typename Base::const_iterator;
+//  using Base::begin;
+//  using Base::cbegin;
+//  using Base::end;
+//  using Base::cend;
+
   template <class Scalar>
   using eigen_vnl_vector = Eigen::Matrix<Scalar, Eigen::Dynamic, 1>;
   using eigen_vnl_vector_same = eigen_vnl_vector<Scalar>;
@@ -456,14 +465,16 @@ class Matrix : public PlainObjectBase<Matrix<Scalar_, Rows_, Cols_, Options_, Ma
 
     // Just read until EOF
     std::vector<Scalar> allvals;
-    size_t n = 0;
+    constexpr size_t initial_reserve_size_for_vector = 128; // An initial guess for how many values to read.
+    allvals.reserve(initial_reserve_size_for_vector);
     Scalar value;
     while (s >> value) {
       allvals.push_back(value);
-      ++n;
     }
-    this->set_size(n);  //*this = vnl_vector<Scalar>(n);
-    for (size_t i = 0; i < n; ++i) (*this)[i] = allvals[i];
+    this->set_size(allvals.size());
+    for(int idx =0 ; idx < allvals.size(); ++idx) {
+      this->data()[idx] = allvals[idx];
+    }
     return true;
   }
 
@@ -509,7 +520,7 @@ class Matrix : public PlainObjectBase<Matrix<Scalar_, Rows_, Cols_, Options_, Ma
   // Return new vector = (*this)
   inline Matrix operator+() const { return *this; }
 
-  inline Matrix operator-() const { return this->operator-(); }
+  //inline Matrix operator-() const { return this->operator-(); }
 
   inline Matrix operator-(Matrix const& v) const { return this->Base::operator-(v); }
 
@@ -805,6 +816,7 @@ class Matrix : public PlainObjectBase<Matrix<Scalar_, Rows_, Cols_, Options_, Ma
     return *this;
   }
 
+
   //: Sets all diagonal elements of matrix to specified value. O(n).
 
   Matrix & fill_diagonal (Scalar const& value)
@@ -1044,12 +1056,12 @@ class Matrix : public PlainObjectBase<Matrix<Scalar_, Rows_, Cols_, Options_, Ma
   Scalar const * const *
   data_array() const
   {
-    _data_ptr_ptr.reset( new Scalar *[this->rows()] );
+    _data_ptr_ptr.reset( new Scalar * [this->rows()] );
     for (int r = 0; r < this->rows(); ++r)
     {
-      _data_ptr_ptr[r] = const_cast<Scalar *>(this->data()) + r * this->cols();
+      _data_ptr_ptr.get()[r] = const_cast<Scalar *>(this->data()) + r * this->cols();
     }
-    return _data_ptr_ptr;
+    return _data_ptr_ptr.get();
   }
   //
   //  //: Access the 2D array, so that elements can be accessed with array[row][col] directly.
@@ -1082,6 +1094,19 @@ class Matrix : public PlainObjectBase<Matrix<Scalar_, Rows_, Cols_, Options_, Ma
 #endif
   }
 
+  //: abort if size is not as expected
+  // This function does or tests nothing if NDEBUG is defined
+#ifndef NDEBUG
+  void assert_size(unsigned r, unsigned c) const
+  {
+    assert_size_internal(r, c);
+  }
+#else
+  void assert_size(unsigned , unsigned ) const
+  {
+  //NOOP
+  }
+#endif
   using abs_t = typename Base::Base::abs_t;
   // || M ||  = \max \sum | M   |
   //        1     j    i     ij

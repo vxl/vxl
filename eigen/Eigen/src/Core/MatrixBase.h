@@ -150,6 +150,8 @@ template<typename Derived> class MatrixBase
       return this->isApprox(rhs, tol);
     }
 
+
+
     // Gets the element at specified index and return its value. O(1).
     // Range check is performed.
 
@@ -162,7 +164,6 @@ template<typename Derived> class MatrixBase
     {
       return this->operator()(r, c);
     }
-
 
 
     // Puts the value at specified index. O(1).
@@ -255,7 +256,9 @@ template<typename Derived> class MatrixBase
       return array_inf_norm();
     }
 
+    void inplace_transpose() { return this->transposeInPlace(); }
 
+    Derived as_matrix() const { return *this; }
 
     // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
