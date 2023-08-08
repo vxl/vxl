@@ -711,10 +711,11 @@ class VNL_EXPORT vnl_matrix_fixed: public Eigen::Matrix<T, num_rows, num_cols, (
 
 
   //----------------------------------------------------------------------
-
   typedef T element_type;
 
   //: Iterators
+  /* NOTE std like iterators for matrix are not supported by Eigen
+
   typedef T       *iterator;
   //: Iterator pointing to start of data
   inline iterator       begin() { return this->data(); }
@@ -727,7 +728,7 @@ class VNL_EXPORT vnl_matrix_fixed: public Eigen::Matrix<T, num_rows, num_cols, (
   inline const_iterator begin() const { return this->data(); }
   //: Iterator pointing to element beyond end of data
   inline const_iterator end() const { return begin() + this->Superclass::size(); }
-
+*/
   //--------------------------------------------------------------------------------
 
   //: Return true if *this == rhs

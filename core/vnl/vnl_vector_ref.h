@@ -23,7 +23,8 @@
 template <class T>
 class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
 {
- public:
+public:
+  using Superclass = vnl_vector<T>;
   using Base = vnl_vector<T>;
 
   //: Constructor
@@ -100,56 +101,56 @@ class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
   // conversion operator that should work most of the time.
   // \sa vnl_vector_ref::non_const
   vnl_vector_ref<T> as_ref() { return *this; }
-  const vnl_vector_ref<T> as_ref() const { return *this; }
+//  const vnl_vector_ref<T> as_ref() const { return *this; }
   vnl_vector<T> as_vector() const { return vnl_vector<T>(this->data_block(), this->size()); }
 
-  T const *
-  data_block() const
-  {
-    return this->data();
-  }
-
-  //: Type defs for iterators
-  typedef T * iterator;
-  //: Iterator pointing to start of data
-  iterator
-  begin()
-  {
-    return this->data();
-  }
-
-  //: Iterator pointing to element beyond end of data
-  iterator
-  end()
-  {
-    return this->data() + this->size();
-  }
-
-  //: Const iterator type
-  typedef T const * const_iterator;
-  //: Iterator pointing to start of data
-  const_iterator
-  begin() const
-  {
-    return this->data();
-  }
-  const_iterator
-  cbegin() const
-  {
-    return this->data() ? this->data() : nullptr;
-  }
-
-  //: Iterator pointing to element beyond end of data
-  const_iterator
-  end() const
-  {
-    return this->data() + this->size();
-  }
-  const_iterator
-  cend() const
-  {
-    return this->data() ? this->data() + this->size() : nullptr;
-  }
+//  T const *
+//  data_block() const
+//  {
+//    return this->data();
+//  }
+// From superclass
+//  //: Type defs for iterators
+//  typedef T * iterator;
+//  //: Iterator pointing to start of data
+//  iterator
+//  begin()
+//  {
+//    return this->data();
+//  }
+//
+//  //: Iterator pointing to element beyond end of data
+//  iterator
+//  end()
+//  {
+//    return this->data() + this->size();
+//  }
+//
+//  //: Const iterator type
+//  typedef T const * const_iterator;
+//  //: Iterator pointing to start of data
+//  const_iterator
+//  begin() const
+//  {
+//    return this->data();
+//  }
+//  const_iterator
+//  cbegin() const
+//  {
+//    return this->data() ? this->data() : nullptr;
+//  }
+//
+//  //: Iterator pointing to element beyond end of data
+//  const_iterator
+//  end() const
+//  {
+//    return this->data() + this->size();
+//  }
+//  const_iterator
+//  cend() const
+//  {
+//    return this->data() ? this->data() + this->size() : nullptr;
+//  }
 
   //: Analogous to std::vector::front().
   T &
@@ -164,18 +165,18 @@ class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
     return *(this->data() + this->size() - 1);
   }
 
-  //: Analogous to std::vector::front() (const overload).
-  const T &
-  front() const
-  {
-    return *(this->data());
-  }
-  //: Analogous to std::vector::back() (const overload).
-  const T &
-  back() const
-  {
-    return *(this->data() + this->size() - 1);
-  }
+//  //: Analogous to std::vector::front() (const overload).
+//  const T &
+//  front() const
+//  {
+//    return *(this->data());
+//  }
+//  //: Analogous to std::vector::back() (const overload).
+//  const T &
+//  back() const
+//  {
+//    return *(this->data() + this->size() - 1);
+//  }
 
   vnl_vector_ref<T>& update (vnl_vector<T> const& v, size_t start)
   {
@@ -190,92 +191,92 @@ class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
     return *this;
   }
 
-  //: Returns a subvector specified by the start index and length. O(n).
-
-  vnl_vector<T> extract (size_t len, size_t start) const
-  {
-    return vnl_vector<T>(this->segment(start,len));
-  }
+//  //: Returns a subvector specified by the start index and length. O(n).
+//
+//  vnl_vector<T> extract (size_t len, size_t start) const
+//  {
+//    return vnl_vector<T>(this->segment(start,len));
+//  }
 
   // norms etc
   typedef typename vnl_c_vector<T>::abs_t abs_t;
 
-  //: Return sum of squares of elements
-  abs_t
-  squared_magnitude() const
-  {
-    return vnl_c_vector<T>::two_nrm2(this->data(), this->size());
-  }
-
-  //: Return magnitude (length) of vector
-  abs_t
-  magnitude() const
-  {
-    return two_norm();
-  }
-
-  //: Return sum of absolute values of the elements
-  abs_t
-  one_norm() const
-  {
-    return vnl_c_vector<T>::one_norm(this->data(), this->size());
-  }
-
-  //: Return sqrt of sum of squares of values of elements
-  abs_t
-  two_norm() const
-  {
-    return vnl_c_vector<T>::two_norm(this->data(), this->size());
-  }
-
-  //: Return largest absolute element value
-  abs_t
-  inf_norm() const
-  {
-    return vnl_c_vector<T>::inf_norm(this->data(), this->size());
-  }
-
-  //: Normalise by dividing through by the magnitude
-  vnl_vector_ref<T> &
-  normalize()
-  {
-    this->Superclass::normalize();
-    return *this;
-  }
-
-  // These next 6 functions are should really be helper functions since they aren't
-  // really proper functions on a vector in a philosophical sense.
-
-  //: Root Mean Squares of values
-  abs_t rms() const { return vnl_c_vector<T>::rms_norm(begin(), this->size()); }
-
-  //: Smallest value
-  T
-  min_value() const
-  {
-    return vnl_c_vector<T>::min_value(this->data(), this->size());
-  }
-
-  //: Largest value
-  T
-  max_value() const
-  {
-    return vnl_c_vector<T>::max_value(this->data(), this->size());
-  }
-
-  //: Location of smallest value
-  size_t
-  arg_min() const
-  {
-    return vnl_c_vector<T>::arg_min(this->data(), this->size());
-  }
-
-  //: Location of largest value
-  size_t
-  arg_max() const
-  {
-    return vnl_c_vector<T>::arg_max(this->data(), this->size());
-  }
+//  //: Return sum of squares of elements
+//  abs_t
+//  squared_magnitude() const
+//  {
+//    return vnl_c_vector<T>::two_nrm2(this->data(), this->size());
+//  }
+//
+//  //: Return magnitude (length) of vector
+//  abs_t
+//  magnitude() const
+//  {
+//    return two_norm();
+//  }
+//
+//  //: Return sum of absolute values of the elements
+//  abs_t
+//  one_norm() const
+//  {
+//    return vnl_c_vector<T>::one_norm(this->data(), this->size());
+//  }
+//
+//  //: Return sqrt of sum of squares of values of elements
+//  abs_t
+//  two_norm() const
+//  {
+//    return vnl_c_vector<T>::two_norm(this->data(), this->size());
+//  }
+//
+//  //: Return largest absolute element value
+//  abs_t
+//  inf_norm() const
+//  {
+//    return vnl_c_vector<T>::inf_norm(this->data(), this->size());
+//  }
+//
+//  //: Normalise by dividing through by the magnitude
+//  vnl_vector_ref<T> &
+//  normalize()
+//  {
+//    this->Superclass::normalize();
+//    return *this;
+//  }
+//
+//  // These next 6 functions are should really be helper functions since they aren't
+//  // really proper functions on a vector in a philosophical sense.
+//
+//  //: Root Mean Squares of values
+//  abs_t rms() const { return vnl_c_vector<T>::rms_norm(begin(), this->size()); }
+//
+//  //: Smallest value
+//  T
+//  min_value() const
+//  {
+//    return vnl_c_vector<T>::min_value(this->data(), this->size());
+//  }
+//
+//  //: Largest value
+//  T
+//  max_value() const
+//  {
+//    return vnl_c_vector<T>::max_value(this->data(), this->size());
+//  }
+//
+//  //: Location of smallest value
+//  size_t
+//  arg_min() const
+//  {
+//    return vnl_c_vector<T>::arg_min(this->data(), this->size());
+//  }
+//
+//  //: Location of largest value
+//  size_t
+//  arg_max() const
+//  {
+//    return vnl_c_vector<T>::arg_max(this->data(), this->size());
+//  }
 
 };
 

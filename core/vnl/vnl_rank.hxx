@@ -7,7 +7,7 @@
 template <class T>
 vnl_matrix<T> vnl_rank_row_reduce(vnl_matrix<T> const& mat, vnl_rank_pivot_type t)
 {
-  vnl_matrix<T> a = mat;
+  vnl_matrix<T> a { mat };
   bool changed = true;
   unsigned int m = a.rows(), n=a.columns();
   while (changed)

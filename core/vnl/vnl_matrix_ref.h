@@ -59,7 +59,6 @@ public:
   T * data_block() { return this->Superclass::data(); }
   // T const * const data_block() const { return this->Superclass::data(); }
 
-
   //: Copy and move constructor from vnl_matrix_ref<T> is disallowed by default
   // due to other constructor definitions.
   //: assignment and move-assignment is disallowed
@@ -67,13 +66,13 @@ public:
   vnl_matrix_ref & operator=( vnl_matrix_ref<T> const& ) = delete;
   vnl_matrix_ref & operator=( vnl_matrix_ref<T> && ) = delete;
 
-  //: Return the number of columns.
-  // A synonym for cols().
-  inline unsigned int
-  columns() const
-  {
-    return this->cols();
-  }
+//  //: Return the number of columns.
+//  // A synonym for cols().
+//  inline unsigned int
+//  columns() const
+//  {
+//    return this->cols();
+//  }
 
   //: Reference to self to make non-const temporaries.
   // This is intended for passing vnl_matrix_fixed objects to

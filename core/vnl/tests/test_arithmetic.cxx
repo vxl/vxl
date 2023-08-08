@@ -12,10 +12,10 @@
 
 #define NewMat(mat, r, c, data)                                                                                        \
   assert(sizeof(data) >= (r) * (c) * sizeof(double));                                                                  \
-  vnl_matrix<double> mat(data, r, c)
+  vnl_matrix<double> mat = vnl_matrix<double>::make_initialized_matrix(data, r, c)
 #define NewVec(vec, n, data)                                                                                           \
   assert(sizeof(data) >= (n) * sizeof(double));                                                                        \
-  vnl_vector<double> vec(data, n)
+  vnl_vector<double> vec = vnl_vector<double>::make_initialized_matrix(data, n)
 
 static void
 test_arithmetic_dynamic()

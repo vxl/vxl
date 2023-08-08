@@ -84,7 +84,8 @@ template class mystack<Matrix>;
 void
 print(mystack<Matrix> const & stack, char const * fmt)
 {
-  char buf[4096];
+  constexpr size_t max_buff_len=4096;
+  char buf[max_buff_len];
   for (unsigned int k = 0; k < stack.size(); ++k)
   {
     Matrix const & M = stack[k];
@@ -92,7 +93,7 @@ print(mystack<Matrix> const & stack, char const * fmt)
     {
       for (unsigned int j = 0; j < M.cols(); ++j)
       {
-        std::sprintf(buf, fmt, M(i,j));
+        std::snprintf(buf, max_buff_len, fmt, M(i,j));
         std::cout << ' ' << buf;
       }
       std::cout << std::endl;
@@ -130,7 +131,7 @@ main(int argc, char ** argv)
     if (arg[0] >= '0' && arg[0] <= '9')
     {
       Matrix tmp(1,1);
-      tmp.fill(std::stod(arg.c_str());
+      tmp.fill(std::stod(arg.c_str()));
       stack.push(tmp);
     }
     else if (arg == "+")

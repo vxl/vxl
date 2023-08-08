@@ -20,8 +20,8 @@ test_complexify_instance(const ValueType & re, const ValueType & im)
   std::cout << "Testing vnl_vector" << std::endl;
   std::cout << "##################" << std::endl;
 
-  vnl_vector<ValueType> r_vector(length, re);
-  vnl_vector<ValueType> i_vector(length, im);
+  vnl_vector<ValueType> r_vector(length); r_vector.fill(re);
+  vnl_vector<ValueType> i_vector(length); i_vector.fill(im);
   vnl_vector<std::complex<ValueType>> c_vector = vnl_complexify(r_vector);
   for (unsigned int i = 0; i < length; ++i)
   {
@@ -72,8 +72,8 @@ test_complexify_instance(const ValueType & re, const ValueType & im)
   std::cout << "Testing vnl_matrix" << std::endl;
   std::cout << "##################" << std::endl;
 
-  vnl_matrix<ValueType> r_matrix(length, length, re);
-  vnl_matrix<ValueType> i_matrix(length, length, im);
+  vnl_matrix<ValueType> r_matrix(length, length); r_matrix.fill(re);
+  vnl_matrix<ValueType> i_matrix(length, length); i_matrix.fill(im);
   vnl_matrix<std::complex<ValueType>> c_matrix = vnl_complexify(r_matrix);
   for (unsigned int c = 0; c < length; ++c)
   {

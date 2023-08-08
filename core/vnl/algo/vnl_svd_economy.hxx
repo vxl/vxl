@@ -35,10 +35,10 @@ vnl_svd_economy<real_t>::vnl_svd_economy( vnl_matrix<real_t> const& M ) :
   int mm = std::min(m_+1L,n_);
 
   // Make workspace vectors.
-  vnl_vector<real_t> work(m_, real_t(0));
-  vnl_vector<real_t> vspace(n_*n_, real_t(0));
-  vnl_vector<real_t> wspace(mm, real_t(0)); // complex fortran routine actually _wants_ complex W!
-  vnl_vector<real_t> espace(n_, real_t(0));
+  vnl_vector<real_t> work(m_); work.operator=(real_t(0));
+  vnl_vector<real_t> vspace(n_*n_); vspace.operator=(real_t(0));
+  vnl_vector<real_t> wspace(mm); wspace.operator=(real_t(0)); // complex fortran routine actually _wants_ complex W!
+  vnl_vector<real_t> espace(n_); espace.operator=(real_t(0));
 
   // Call Linpack SVD
   long ldu = 0;
@@ -99,7 +99,7 @@ vnl_svd_economy<real_t>::vnl_svd_economy( vnl_matrix<real_t> const& M ) :
     const real_t *d = vspace.data_block();
     for (int j = 0; j < n_; ++j)
       for (int i = 0; i < n_; ++i)
-        V_[i][j] = *(d++);
+        V_(i,j) = *(d++);
   }
 }
 

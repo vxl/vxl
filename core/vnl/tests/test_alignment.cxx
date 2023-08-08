@@ -262,7 +262,7 @@ test_alignment_type()
           std::stringstream s;
           s << "vector size: " << nv << " matrix offset: " << m << " vector offset: " << v
                     << " result offset: " << r << ": ";
-          const vnl_matrix<float> mat(matrix_data + m, nv, nv);
+          const vnl_matrix<float> mat= make_initialized_matrix(matrix_data + m, nv, nv);
           const vnl_vector<float> vec2(matrix_data + m, nv);
           const vnl_vector<float> vec(vector_data + v, nv);
           vnl_vector<float> result(result_data + r,nv);

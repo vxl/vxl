@@ -85,7 +85,7 @@ test_fft2d()
   vnl_complexify(real_array, imag_array, cplx_array, rows * cols);
 
   // data as matrices :
-  vnl_matrix<std::complex<double>> cplx_matrix = make_initialized_matrix<double, rows,cols>(rows*cols,cplx_array);
+  vnl_matrix<std::complex<double>> cplx_matrix = make_initialized_matrix<std::complex<double>, rows, cols>(rows*cols,cplx_array);
 
   //--------------------------------------------------------------------------------
 

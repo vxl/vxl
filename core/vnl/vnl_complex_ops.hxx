@@ -149,10 +149,9 @@ vnl_matrix<T>
   vnl_real(vnl_matrix<std::complex<T> > const& C)
 {
   vnl_matrix<T> R(C.rows(), C.columns());
-  typename vnl_matrix<std::complex<T> >::CoeffReturnType::const_iterator cIt = C.reshaped().cbegin();
-  typename vnl_matrix<T>::iterator rIt = R.reshaped().begin();
-  const auto forend = C.reshaped().end();
-  for (; cIt != forend; ++cIt, ++rIt)
+  auto rIt = R.reshaped().begin();
+  const auto forend = C.reshaped().cend();
+  for (  auto cIt = C.reshaped().cbegin(); cIt != forend; ++cIt, ++rIt)
     *rIt = std::real(*cIt);
   return R;
 }
@@ -209,8 +208,10 @@ vnl_matrix<T>
   vnl_matrix<T> R(C.rows(), C.columns());
   typename vnl_matrix<std::complex<T> >::const_iterator cIt = C.cbegin();
   typename vnl_matrix<T>::iterator rIt = R.begin();
-  for (; cIt != C.end(); ++cIt, ++rIt)
+  for (auto cIt = C.cbegin(); cIt != C.cend(); ++cIt, ++rIt)
+  {
     *rIt = std::imag(*cIt);
+  }
   return R;
 }
 

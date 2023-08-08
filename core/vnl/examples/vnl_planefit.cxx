@@ -32,7 +32,7 @@ main()
   {
     vnl_svd<double> svd(D);
     vnl_vector<double> a = svd.nullvector();
-    std::cout << "SVD residual = " << (D * a).magnitude() << std::endl;
+    std::cout << "SVD residual = " << (D * a).eval().magnitude() << std::endl;
   }
 
   // 2. Compute using eigensystem of D'*D
@@ -41,7 +41,7 @@ main()
     vnl_fastops::AtA(m, D);
     vnl_symmetric_eigensystem<double> eig(m);
     vnl_vector<double> a = eig.get_eigenvector(0);
-    std::cout << "Eig residual = " << (D * a).magnitude() << std::endl;
+    std::cout << "Eig residual = " << (D * a).eval().magnitude() << std::endl;
   }
 
   return 0;

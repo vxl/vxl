@@ -6,16 +6,19 @@
 #include <complex>
 #include "vnl_matlab_print_scalar.h"
 
+// Limit the number of bytes tha can be used to represent a number
+constexpr size_t MAX_NUMBER_CHARACTERS_ALLOWED=256;
+
 void
 vnl_matlab_print_scalar(int v, char * buf, vnl_matlab_print_format)
 {
-  std::sprintf(buf, "%4d ", v);
+  std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED, "%4d ", v);
 }
 
 void
 vnl_matlab_print_scalar(unsigned v, char * buf, vnl_matlab_print_format)
 {
-  std::sprintf(buf, "%4u ", v);
+  std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED, "%4u ", v);
 }
 
 void
@@ -27,21 +30,21 @@ vnl_matlab_print_scalar(float v, char * buf, vnl_matlab_print_format format)
   {
     case vnl_matlab_print_format_long:
       if (v == 0.0)
-        std::sprintf(buf, "%8d ", 0);
+        std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED, "%8d ", 0);
       else
-        std::sprintf(buf, "%8.5f ", v);
+        std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED, "%8.5f ", v);
       break;
     case vnl_matlab_print_format_short:
       if (v == 0.0)
-        std::sprintf(buf, "%6d ", 0);
+        std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED, "%6d ", 0);
       else
-        std::sprintf(buf, "%6.3f ", v);
+        std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED, "%6.3f ", v);
       break;
     case vnl_matlab_print_format_long_e:
-      std::sprintf(buf, "%11.7e ", v);
+      std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED,"%11.7e ", v);
       break;
     case vnl_matlab_print_format_short_e:
-      std::sprintf(buf, "%8.4e ", v);
+      std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED, "%8.4e ", v);
       break;
     default: /*vnl_matlab_print_format_default:*/
       std::abort();
@@ -57,18 +60,18 @@ vnl_matlab_print_scalar(double v, char * buf, vnl_matlab_print_format format)
   {
     case vnl_matlab_print_format_long:
       if (v == 0.0)
-        std::sprintf(buf, "%16d ", 0);
+        std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED, "%16d ", 0);
       else
-        std::sprintf(buf, "%16.13f ", v);
+        std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED, "%16.13f ", v);
       break;
     case vnl_matlab_print_format_short:
       if (v == 0.0)
-        std::sprintf(buf, "%8d ", 0);
+        std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED, "%8d ", 0);
       else
-        std::sprintf(buf, "%8.4f ", v);
+        std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED, "%8.4f ", v);
       break;
     case vnl_matlab_print_format_long_e:
-      std::sprintf(buf, "%20.14e ", v);
+      std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED, "%20.14e ", v);
       break;
     case vnl_matlab_print_format_short_e:
       std::sprintf(buf, "%10.4e ", v);
@@ -126,20 +129,21 @@ vnl_matlab_print_scalar(std::complex<double> v, char * buf, vnl_matlab_print_for
   double r = std::real(v);
   double i = std::imag(v);
 
-  char fmt[1024];
+  constexpr size_t MAXFMTLEN=1024;
+  char fmt[MAXFMTLEN];
   // Real part
   if (r == 0)
   {
-    std::sprintf(fmt,
+    std::snprintf(fmt,MAXFMTLEN,
                  "%%"
                  "%d"
                  "d ",
                  width);
-    std::sprintf(buf, fmt, 0);
+    std::snprintf(buf,MAX_NUMBER_CHARACTERS_ALLOWED, fmt, 0);
   }
   else
   {
-    std::sprintf(fmt,
+    std::snprintf(fmt,MAXFMTLEN,
                  "%%"
                  "%d"
                  "."
@@ -148,7 +152,7 @@ vnl_matlab_print_scalar(std::complex<double> v, char * buf, vnl_matlab_print_for
                  width,
                  precision,
                  conv);
-    std::sprintf(buf, fmt, r);
+    std::snprintf(buf,MAX_NUMBER_CHARACTERS_ALLOWED, fmt, r);
   }
 
   buf += std::strlen(buf);
@@ -156,12 +160,12 @@ vnl_matlab_print_scalar(std::complex<double> v, char * buf, vnl_matlab_print_for
   // Imaginary part.  Width is reduced as sign is taken care of separately
   if (i == 0)
   {
-    std::sprintf(fmt,
+    std::snprintf(fmt,MAXFMTLEN,
                  " %%"
                  "%d"
                  "s  ",
                  width - 1);
-    std::sprintf(buf, fmt, "");
+    std::snprintf(buf,MAX_NUMBER_CHARACTERS_ALLOWED, fmt, "");
   }
   else
   {
@@ -171,14 +175,14 @@ vnl_matlab_print_scalar(std::complex<double> v, char * buf, vnl_matlab_print_for
       sign = '-';
       i = -i;
     }
-    std::sprintf(fmt,
+    std::snprintf(fmt,MAXFMTLEN,
                  "%c%%"
                  "%d.%d%ci ",
                  sign,
                  width - 1,
                  precision,
                  conv);
-    std::sprintf(buf, fmt, i);
+    std::snprintf(buf,MAX_NUMBER_CHARACTERS_ALLOWED, fmt, i);
   }
 }
 
@@ -224,20 +228,21 @@ vnl_matlab_print_scalar(std::complex<float> v, char * buf, vnl_matlab_print_form
   float r = std::real(v);
   float i = std::imag(v);
 
-  char fmt[1024];
+  constexpr size_t MAXFMTLEN=1024;
+  char fmt[MAXFMTLEN];
   // Real part
   if (r == 0)
   {
-    std::sprintf(fmt,
+    std::snprintf(fmt,MAXFMTLEN,
                  "%%"
                  "%d"
                  "d ",
                  width);
-    std::sprintf(buf, fmt, 0);
+    std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED, fmt, 0);
   }
   else
   {
-    std::sprintf(fmt,
+    std::snprintf(fmt,MAXFMTLEN,
                  "%%"
                  "%d"
                  "."
@@ -246,7 +251,7 @@ vnl_matlab_print_scalar(std::complex<float> v, char * buf, vnl_matlab_print_form
                  width,
                  precision,
                  conv);
-    std::sprintf(buf, fmt, r);
+    std::snprintf(buf,MAX_NUMBER_CHARACTERS_ALLOWED, fmt, r);
   }
 
   buf += std::strlen(buf);
@@ -254,12 +259,12 @@ vnl_matlab_print_scalar(std::complex<float> v, char * buf, vnl_matlab_print_form
   // Imaginary part.  Width is reduced as sign is taken care of separately
   if (i == 0)
   {
-    std::sprintf(fmt,
+    std::snprintf(fmt,MAXFMTLEN,
                  " %%"
                  "%d"
                  "s  ",
                  width - 1);
-    std::sprintf(buf, fmt, "");
+    std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED, fmt, "");
   }
   else
   {
@@ -269,14 +274,14 @@ vnl_matlab_print_scalar(std::complex<float> v, char * buf, vnl_matlab_print_form
       sign = '-';
       i = -i;
     }
-    std::sprintf(fmt,
+    std::snprintf(fmt,MAXFMTLEN,
                  "%c%%"
                  "%d.%d%ci ",
                  sign,
                  width - 1,
                  precision,
                  conv);
-    std::sprintf(buf, fmt, i);
+    std::snprintf(buf, MAX_NUMBER_CHARACTERS_ALLOWED, fmt, i);
   }
 }
 

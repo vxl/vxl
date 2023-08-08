@@ -108,8 +108,8 @@ vnl_matrix<T> const& vnl_qr<T>::Q() const
     Q_->set_identity();
     vnl_matrix<T>& matrQ = *Q_;
 
-    vnl_vector<T> v(m, T(0));
-    vnl_vector<T> w(m, T(0));
+    vnl_vector<T> v = vnl_vector<T>::make_initialized_matrix<T>(m, T(0));
+    vnl_vector<T> w = vnl_vector<T>::make_initialized_matrix<T>(m, T(0));
 
     // Golub and vanLoan, p199.  backward accumulation of householder matrices
     // Householder vector k is [zeros(1,k-1) qraux_[k] qrdc_out_[k,:]]
@@ -275,7 +275,8 @@ vnl_matrix<T> vnl_qr<T>::tinverse() const
   vnl_matrix<T> tinv(r,r);
 
   // Use solve() to compute the inverse matrix, using (00..010..00) as rhs
-  vnl_vector<T> rhs(r,T(0));
+  vnl_vector<T> rhs(r);
+  rhs.fill(T(0));
   for (unsigned int i=0; i<r; ++i)
   {
     rhs(i) = T(1);

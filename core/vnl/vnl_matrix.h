@@ -91,20 +91,24 @@ using eigen_vnl_matrix = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen:
 template <class T>
 using vnl_matrix = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajorBit>;
 
-template<class T, const Eigen::Index r, const Eigen::Index c>
+template<class T, const Eigen::Index r=Eigen::Dynamic, const Eigen::Index c=Eigen::Dynamic>
+vnl_matrix<T> make_initialized_matrix(const T * const values, const Eigen::Index rows, const Eigen::Index cols)
+{
+  const Eigen::Map<Eigen::Matrix<T, r, c> > matrix_with_values( const_cast<T *>(values), rows, cols);
+  vnl_matrix<T> output = matrix_with_values;
+  return output;
+}
+
+template<class T, const Eigen::Index r=Eigen::Dynamic, const Eigen::Index c=Eigen::Dynamic>
 vnl_matrix<T> make_initialized_matrix(const Eigen::Index max_size, const T * const values)
 {
   if(r*c > max_size)
   {
     T full_size[r*c]={}; // Zero initialize
     std::copy_n(values, max_size, full_size);
-    const Eigen::Map<Eigen::Matrix<T, r, c> > matrix_with_values( full_size, r, c);
-    vnl_matrix<T> output = matrix_with_values;
-    return output;
+    return make_initialized_matrix<T,r,c>(full_size, r, c);
   }
-  const Eigen::Map<Eigen::Matrix<T, r, c> > matrix_with_values( const_cast<T *>(values), r, c);
-  vnl_matrix<T> output = matrix_with_values;
-  return output;
+  return make_initialized_matrix<T,r,c>(const_cast<T *>(values), r, c);;
 }
 
 

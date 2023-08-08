@@ -17,7 +17,6 @@ test_inverse()
   id3.set_identity();
   vnl_double_4x4 residue4, id4;
   id4.set_identity();
-  vnl_matrix<double> M, Mi;
 
   // 2x2 inverse of a specific matrix
   vnl_double_2x2 id2i = vnl_inverse(id2);
@@ -39,8 +38,8 @@ test_inverse()
   residue2 = m2i.transpose() * m2 - id2;
   TEST_NEAR("2x2 vnl_inverse_transpose", residue2.array_inf_norm(), 0.0, eps);
 
-  M = vnl_matrix<double>(m2.data_block(), 2, 2);
-  Mi = vnl_inverse(M);
+  vnl_matrix<double> M = make_initialized_matrix<double>(m2.data_block(), 2, 2);
+  vnl_matrix<double> Mi = vnl_inverse(M);
   residue2 = m2 * Mi - id2;
   TEST_NEAR("2x2 vnl_inverse", residue2.array_inf_norm(), 0.0, eps);
 

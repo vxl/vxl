@@ -187,6 +187,9 @@ namespace vnl_math
   inline bool isinf(TArg arg) { return bool(std::isinf(arg)); }
   template <typename TArg>
   inline bool isnan(TArg arg) { return bool(std::isnan(arg)); }
+
+  template<typename T>
+  inline bool isfinite(const std::complex<T> & arg) { return bool(std::isfinite(arg.real()) && std::isfinite(arg.imag())); }
   template <typename TArg>
   inline bool isfinite(TArg arg) { return bool(std::isfinite(arg)); }
   template <typename TArg>

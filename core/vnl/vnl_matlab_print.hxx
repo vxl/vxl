@@ -28,11 +28,12 @@ std::ostream &vnl_matlab_print(std::ostream& s,
                               unsigned length,
                               vnl_matlab_print_format format)
 {
-  char buf[1024];
+  constexpr size_t MAXBUFLEN=1024;
+  char buf[MAXBUFLEN];
   for (unsigned j=0; j<length; j++ ) {
     // Format according to selected style
     // In both cases an exact 0 goes out as such
-    vnl_matlab_print_scalar(array[j], buf, format);
+    vnl_matlab_print_scalar((array[j]), buf, format);
     s << buf;
   }
 
@@ -80,7 +81,7 @@ std::ostream& vnl_matlab_print(std::ostream& s,
     return s << "];\n";
 
   for (unsigned int i=0; i<M.rows(); i++ ) {
-    vnl_matlab_print(s, M[i], M.cols(), format);
+    vnl_matlab_print(s, M.get_row(i).data(), M.cols(), format);
 
     if (variable_name && (i == M.rows()-1))
       s << " ]";
@@ -100,7 +101,7 @@ std::ostream& vnl_matlab_print(std::ostream& s,
   if (variable_name)
     s << variable_name << " = [ ";
 
-  vnl_matlab_print(s, v.cbegin(), v.size(), format);
+  vnl_matlab_print(s, v.data(), v.size(), format);
 
   if (variable_name)
     s << " ]\n";
@@ -147,7 +148,7 @@ std::ostream& vnl_matlab_print(std::ostream& s,
 
   for (unsigned int i=0; i<M.rows(); ++i )
   {
-    vnl_matlab_print(s, M[i], M.cols(), format);
+    vnl_matlab_print(s, M.get_row(i).data(), M.cols(), format);
 
     if (variable_name && (i == M.rows()-1))
       s << " ]";

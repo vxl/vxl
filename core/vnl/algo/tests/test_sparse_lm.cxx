@@ -1,6 +1,7 @@
 #include <cassert>
 #include <iostream>
 #include <utility>
+#include <algorithm>
 
 #include "testlib/testlib_test.h"
 #include "vnl/vnl_sparse_lst_sqr_function.h"
@@ -136,10 +137,10 @@ public:
     double sa = std::sin(ai[0]);
     double ca = std::cos(ai[0]);
     double denom = (sa * bj[0] + ca * bj[1] + ai[2]);
-    Aij[0][0] =
+    Aij(0,0) =
       -((sa * bj[0] + ca * bj[1]) + (ca * bj[0] - sa * bj[1] + ai[1]) * (ca * bj[0] - sa * bj[1]) / denom) / denom;
-    Aij[0][1] = 1 / denom;
-    Aij[0][2] = -(ca * bj[0] - sa * bj[1] + ai[1]) / (denom * denom);
+    Aij(0,1) = 1 / denom;
+    Aij(0,2) = -(ca * bj[0] - sa * bj[1] + ai[1]) / (denom * denom);
   }
 
   void
@@ -154,8 +155,8 @@ public:
     double ca = std::cos(ai[0]);
     double denom = (sa * bj[0] + ca * bj[1] + ai[2]);
     double numer = (ca * bj[0] - sa * bj[1] + ai[1]);
-    Bij[0][0] = (ca - sa * numer / denom) / denom;
-    Bij[0][1] = (-sa - ca * numer / denom) / denom;
+    Bij(0,0) = (ca - sa * numer / denom) / denom;
+    Bij(0,1) = (-sa - ca * numer / denom) / denom;
   }
 
   void
@@ -178,13 +179,16 @@ test_prob1()
   std::vector<bool> null_row(25, true);
   std::vector<std::vector<bool>> mask(4, null_row);
 
-  const double a_data[] = { 0.0, 0.0, 0.0, 0.8, 10.0, 8.0, -0.7, -8.5, 8.5, 0.4, 4.0, 4.0 };
-  const double b_data[] = { -4.0, 8.0,  -2.0, 8.0,  0.0,  8.0,  2.0,  8.0,  4.0,  8.0,  -4.0, 10.0, -2.0,
+  constexpr double a_data[] = { 0.0, 0.0, 0.0, 0.8, 10.0, 8.0, -0.7, -8.5, 8.5, 0.4, 4.0, 4.0 };
+  constexpr double b_data[] = { -4.0, 8.0,  -2.0, 8.0,  0.0,  8.0,  2.0,  8.0,  4.0,  8.0,  -4.0, 10.0, -2.0,
                             10.0, 0.0,  10.0, 2.0,  10.0, 4.0,  10.0, -4.0, 12.0, -2.0, 12.0, 0.0,  12.0,
                             2.0,  12.0, 4.0,  12.0, -4.0, 14.0, -2.0, 14.0, 0.0,  14.0, 2.0,  14.0, 4.0,
                             14.0, -4.0, 16.0, -2.0, 16.0, 0.0,  16.0, 2.0,  16.0, 4.0,  16.0 };
 
-  vnl_vector<double> a(a_data, 12), b(b_data, 50), proj(100, 0.0);
+  vnl_vector<double> a(12), b(50), proj(100);
+  std::copy_n(a_data, 12, a.begin());
+  std::copy_n(b_data, 50, b.begin());
+  proj.fill(0.0);
   vnl_vector<double> c;
 
   // create a generator function with ideal data and zeros for all projections
@@ -197,14 +201,17 @@ test_prob1()
   // first two points is on the x-axis
   normalize(a, b);
 
-  vnl_vector<double> proj_test(100, 0.0);
+  vnl_vector<double> proj_test(100);
+  proj_test.fill(0.0);
   gen_func.f(a, b, c, proj_test);
   std::cout << "test normalization: " << (proj - proj_test).rms() << std::endl;
 
   // test 2D bundle adjustment with all data and no noise
   {
     // initial conditions (all points at origin)
-    vnl_vector<double> pa(12, 0.0), pb(50, 0.0), pc;
+    vnl_vector<double> pa(12), pb(50), pc;
+    pa.fill(0.0);
+    pb.fill(0.0);
     pa[2] = pa[5] = pa[8] = pa[11] = 10;
     pa[4] = 5;
     pa[7] = -5;
@@ -265,7 +272,9 @@ test_prob1()
   // test 2D bundle adjustment with missing data and no noise
   {
     // initial conditions (all points at origin)
-    vnl_vector<double> pa(12, 0.0), pb(50, 0.0), pc;
+    vnl_vector<double> pa(12), pb(50), pc;
+    pa.fill(0.0);
+    pb.fill(0.0);
     pa[2] = pa[5] = pa[8] = pa[11] = 10;
     pa[4] = 5;
     pa[7] = -5;
@@ -299,12 +308,13 @@ test_prob1()
   // test 2D bundle adjustment with missing data and uniform noise
   {
     // initial conditions (all points at origin)
-    vnl_vector<double> pa(12, 0.0), pb(50, 0.0), pc;
+    vnl_vector<double> pa(12), pb(5), pc;
+    pa.fill(0.0);
+    pb.fill(0.0);
     pa[2] = pa[5] = pa[8] = pa[11] = 10;
     pa[4] = 5;
     pa[7] = -5;
     pa[10] = -2;
-    ;
 
     bundle_2d my_func(4, 25, proj2, mask, vnl_sparse_lst_sqr_function::use_gradient);
 
@@ -371,11 +381,11 @@ public:
     double sa = std::sin(ai[0]);
     double ca = std::cos(ai[0]);
     double denom = (sa * bj[0] + ca * bj[1] + ai[2]);
-    Aij[0][0] = -c[0] *
+    Aij(0,0) = -c[0] *
                 ((sa * bj[0] + ca * bj[1]) + (ca * bj[0] - sa * bj[1] + ai[1]) * (ca * bj[0] - sa * bj[1]) / denom) /
                 denom;
-    Aij[0][1] = c[0] / denom;
-    Aij[0][2] = -c[0] * (ca * bj[0] - sa * bj[1] + ai[1]) / (denom * denom);
+    Aij(0,1) = c[0] / denom;
+    Aij(0,2) = -c[0] * (ca * bj[0] - sa * bj[1] + ai[1]) / (denom * denom);
   }
 
   void
@@ -390,8 +400,8 @@ public:
     double ca = std::cos(ai[0]);
     double denom = (sa * bj[0] + ca * bj[1] + ai[2]);
     double numer = c[0] * (ca * bj[0] - sa * bj[1] + ai[1]);
-    Bij[0][0] = (c[0] * ca - sa * numer / denom) / denom;
-    Bij[0][1] = (-c[0] * sa - ca * numer / denom) / denom;
+    Bij(0,0) = (c[0] * ca - sa * numer / denom) / denom;
+    Bij(0,1) = (-c[0] * sa - ca * numer / denom) / denom;
   }
 
   void
@@ -405,7 +415,7 @@ public:
     double sa = std::sin(ai[0]);
     double ca = std::cos(ai[0]);
     double denom = (sa * bj[0] + ca * bj[1] + ai[2]);
-    Cij[0][0] = (ca * bj[0] - sa * bj[1] + ai[1]) / denom;
+    Cij(0,0) = (ca * bj[0] - sa * bj[1] + ai[1]) / denom;
   }
 
   vnl_vector<double> data_;
@@ -418,13 +428,17 @@ test_prob2()
   std::vector<bool> null_row(25, true);
   std::vector<std::vector<bool>> mask(4, null_row);
 
-  const double a_data[] = { 0.0, 0.0, 0.0, 0.8, 10.0, 8.0, -0.7, -8.5, 8.5, 0.4, 4.0, 4.0 };
-  const double b_data[] = { -4.0, 8.0,  -2.0, 8.0,  0.0,  8.0,  2.0,  8.0,  4.0,  8.0,  -4.0, 10.0, -2.0,
+  constexpr double a_data[] = { 0.0, 0.0, 0.0, 0.8, 10.0, 8.0, -0.7, -8.5, 8.5, 0.4, 4.0, 4.0 };
+  constexpr double b_data[] = { -4.0, 8.0,  -2.0, 8.0,  0.0,  8.0,  2.0,  8.0,  4.0,  8.0,  -4.0, 10.0, -2.0,
                             10.0, 0.0,  10.0, 2.0,  10.0, 4.0,  10.0, -4.0, 12.0, -2.0, 12.0, 0.0,  12.0,
                             2.0,  12.0, 4.0,  12.0, -4.0, 14.0, -2.0, 14.0, 0.0,  14.0, 2.0,  14.0, 4.0,
                             14.0, -4.0, 16.0, -2.0, 16.0, 0.0,  16.0, 2.0,  16.0, 4.0,  16.0 };
 
-  vnl_vector<double> a(a_data, 12), b(b_data, 50), c(1, 1.5), proj(100, 0.0);
+  vnl_vector<double> a(12), b(50), c(1), proj(100);
+  std::copy_n(a_data, 12, a.begin());
+  std::copy_n(b_data, 50, b.begin());
+  c.fill(1.5);
+  proj.fill(0.0);
 
   // create a generator function with ideal data and zeros for all projections
   // the residuals of this functions are the ideal project points
@@ -439,7 +453,10 @@ test_prob2()
   // test 2D bundle adjustment with all data and no noise
   {
     // initial conditions (all points at origin)
-    vnl_vector<double> pa(12, 0.0), pb(50, 0.0), pc(1, 1.0);
+    vnl_vector<double> pa(12), pb(50), pc(1);
+    pa.fill(0.0);
+    pb.fill(0.0);
+    pc.fill(1.0);
     pa[2] = pa[5] = pa[8] = pa[11] = 10;
     pa[4] = 5;
     pa[7] = -5;
@@ -499,7 +516,10 @@ test_prob2()
   // test 2D bundle adjustment with missing data and no noise
   {
     // initial conditions (all points at origin)
-    vnl_vector<double> pa(12, 0.0), pb(50, 0.0), pc(1, 1.0);
+    vnl_vector<double> pa(12), pb(50), pc(1);
+    pa.fill(0.0);
+    pb.fill(0.0);
+    pc.fill(1.0);
     pa[2] = pa[5] = pa[8] = pa[11] = 10;
     pa[4] = 5;
     pa[7] = -5;
@@ -535,7 +555,10 @@ test_prob2()
   // test 2D bundle adjustment with missing data and uniform noise
   {
     // initial conditions (all points at origin)
-    vnl_vector<double> pa(12, 0.0), pb(50, 0.0), pc(1, 1.0);
+    vnl_vector<double> pa(12), pb(50), pc(1);
+    pa.fill(0.0);
+    pb.fill(0.0);
+    pc.fill(1.0);
     pa[2] = pa[5] = pa[8] = pa[11] = 10;
     pa[4] = 5;
     pa[7] = -5;
@@ -554,7 +577,6 @@ test_prob2()
     normalize(pa, pb);
 
     double rms_error_a = camera_diff(a, pa).rms();
-    ;
     double rms_error_b = (b - pb).rms();
     double rms_error_c = (c - pc).rms();
     std::cout << "RMS camera error: " << rms_error_a << "\nRMS points error: " << rms_error_b
@@ -646,13 +668,16 @@ test_prob3()
   std::vector<bool> null_row(25, true);
   std::vector<std::vector<bool>> mask(4, null_row);
 
-  const double a_data[] = { 0.0, 0.0, 0.0, 0.8, 10.0, 8.0, -0.7, -8.5, 8.5, 0.4, 4.0, 4.0 };
-  const double b_data[] = { -4.0, 8.0,  -2.0, 8.0,  0.0,  8.0,  2.0,  8.0,  4.0,  8.0,  -4.0, 10.0, -2.0,
+  constexpr double a_data[] = { 0.0, 0.0, 0.0, 0.8, 10.0, 8.0, -0.7, -8.5, 8.5, 0.4, 4.0, 4.0 };
+  constexpr double b_data[] = { -4.0, 8.0,  -2.0, 8.0,  0.0,  8.0,  2.0,  8.0,  4.0,  8.0,  -4.0, 10.0, -2.0,
                             10.0, 0.0,  10.0, 2.0,  10.0, 4.0,  10.0, -4.0, 12.0, -2.0, 12.0, 0.0,  12.0,
                             2.0,  12.0, 4.0,  12.0, -4.0, 14.0, -2.0, 14.0, 0.0,  14.0, 2.0,  14.0, 4.0,
                             14.0, -4.0, 16.0, -2.0, 16.0, 0.0,  16.0, 2.0,  16.0, 4.0,  16.0 };
 
-  vnl_vector<double> a(a_data, 12), b(b_data, 50), proj(100, 0.0);
+  vnl_vector<double> a(12), b(50), proj(100);
+  std::copy_n(a_data,12, a.begin());
+  std::copy_n(b_data, 50, b.begin());
+  proj.fill(0.0);
   vnl_vector<double> c;
 
   // initial perturbed parameters, add random gaussian noise
@@ -680,8 +705,11 @@ test_prob3()
     func.set_scale(0.3);
 
     vnl_matrix<double> A1(1, 3), A2(1, 3), B1(1, 2), B2(1, 2);
-    vnl_vector<double> ai(3, 0.0), bj(2, 0.0);
-    vnl_vector<double> fxij(1, 0.0);
+    vnl_vector<double> ai(3), bj(2);
+    ai.fill(0.0);
+    bj.fill(0.0);
+    vnl_vector<double> fxij(1);
+    fxij.fill(0.0);
     ai[0] = 0.1;
     ai[1] = -0.0;
     ai[2] = 0.0;

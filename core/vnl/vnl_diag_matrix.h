@@ -223,10 +223,9 @@ vnl_matrix<T> vnl_diag_matrix<T>::as_matrix() const
   vnl_matrix<T> ret(len, len);
   for (unsigned i = 0; i < len; ++i)
   {
-    unsigned j;
-    for (j = 0; j < i; ++j)
+    for (unsigned j = 0; j < i; ++j)
       ret(i,j) = T(0);
-    for (j = i+1; j < len; ++j)
+    for (unsigned j = i+1; j < len; ++j)
       ret(i,j) = T(0);
     ret(i,i) = this->operator()(i);
   }

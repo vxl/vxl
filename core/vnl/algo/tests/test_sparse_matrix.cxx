@@ -1,6 +1,7 @@
 // This is core/vnl/algo/tests/test_sparse_matrix.cxx
 #include <ctime>
 #include <iostream>
+#include <algorithm>
 #include "vnl/vnl_sparse_matrix.h"
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>
@@ -182,8 +183,8 @@ doTest6()
   constexpr double Cdata[matOrd * matOrd] = {
     -1, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 2, 0, -1, 0, 0, 2, 2, 0, 0, -1, 0, 2, 2, 0, 0, 0, -1, 0, 2, 2, 2, 2, 0, -1,
   };
-  vnl_matrix<double> S(Sdata, matOrd, matOrd);
-  vnl_matrix<double> C(Cdata, matOrd, matOrd);
+  vnl_matrix<double> S(matOrd, matOrd); std::copy_n(Sdata,matOrd*matOrd,S.begin());
+  vnl_matrix<double> C(matOrd, matOrd); std::copy_n(Cdata,matOrd*matOrd,C.begin());
 
   // set up spare matrices same as dense ones...
   vnl_sparse_matrix<double> sparseS(matOrd, matOrd);

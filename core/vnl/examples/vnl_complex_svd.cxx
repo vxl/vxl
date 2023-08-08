@@ -33,13 +33,11 @@ main()
   vnl_matlab_print(std::cout, C_svd.W(), "W");
   vnl_matlab_print(std::cout, C_svd.V(), "V");
 
-  std::complex<double> rhs[4];
-  rhs[0] = 3;
-  rhs[1] = 9;
-  rhs[2] = -2;
-  rhs[3] = -8;
-  vnl_vector<std::complex<double>> b(rhs);
-  b.fill(4);
+  vnl_vector<std::complex<double>> b(4);
+  b[0] = 3;
+  b[1] = 9;
+  b[2] = -2;
+  b[3] = -8;
 
   // From "C x = b" find x:
   std::cout << "x = " << C_svd.solve(b) << std::endl;

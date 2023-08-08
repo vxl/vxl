@@ -12,7 +12,7 @@ vnl_determinant(vnl_matrix<int> const & M, bool balance)
     case 1:
       return M[0][0];
     case 2:
-      return vnl_determinant(M[0], M[1]);
+      return vnl_determinant(M.row(0), M.row(1));
     case 3:
       return vnl_determinant(M[0], M[1], M[2]);
     case 4:

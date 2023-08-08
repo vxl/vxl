@@ -42,20 +42,26 @@ test_matrix_inverse()
   vnl_matrix<std::complex<double>> V = svde.V();
   vnl_svd<std::complex<double>> svd(m);
   vnl_matrix<std::complex<double>> V0 = svd.V();
-  TEST_NEAR("complex vnl_svd_economy", V[0][1], V0[0][1], 1e-6);
+  TEST_NEAR("complex vnl_svd_economy", V(0,1), V0(0,1), 1e-6);
 
   vnl_matrix<std::complex<double>> inv{ vnl_matrix_inverse<std::complex<double>>(m).as_matrix() };
   vnl_matrix<std::complex<double>> identity(4, 4);
   identity.set_identity();
-  TEST_NEAR("complex vnl_matrix_inverse", (m * inv - identity).array_inf_norm(), 0, 1e-6);
+  TEST_NEAR("complex vnl_matrix_inverse", (m * inv - identity).eval().array_inf_norm(), 0, 1e-6);
 }
 
 static void
 test_generalized_schur()
 {
-  vnl_matrix<std::complex<float>> A(4, 4, 0.0f), B(4, 4, 0.0f), L(4, 4, 1.0f), R(4, 4, 1.0f);
-  vnl_vector<std::complex<float>> a(4, 0.0f), b(4, 0.0f);
-  bool r = vnl_generalized_schur(&A, &B, &a, &b, &L, &R);
+  vnl_matrix<std::complex<float>> A(4, 4), B(4, 4), L(4, 4), R(4, 4);
+  A.fill(0.0f);
+  B.fill(0.0f);
+  L.fill(1.0f);
+  R.fill(1.0f);
+  vnl_vector<std::complex<float>> a(4), b(4);
+  a.fill(0.0f);
+  b.fill(0.0f);
+  const bool r = vnl_generalized_schur<float>(&A, &B, &a, &b, &L, &R);
   TEST("vnl_complex_generalized_schur", r, true);
 }
 
