@@ -15,6 +15,7 @@ test_lvcs()
   // results
   double x, y, z;
   int utm_zone;
+  bool south_flag;
 
 
   // ----- WGS84 lvcs -----
@@ -62,6 +63,14 @@ test_lvcs()
   TEST_NEAR("northing", y, orig_northing, 1e-3);
   TEST_NEAR("elevation", z, orig_elev, 1e-3);
   TEST("utm_zone", utm_zone, orig_utm_zone);
+
+  // origin in UTM with south_flag
+  lvcs_utm.get_utm_origin(x, y, z, utm_zone, south_flag);
+  TEST_NEAR("easting", x, orig_easting, 1e-3);
+  TEST_NEAR("northing", y, orig_northing, 1e-3);
+  TEST_NEAR("elevation", z, orig_elev, 1e-3);
+  TEST("utm_zone", utm_zone, orig_utm_zone);
+  TEST("south_flag", south_flag, orig_south_flag);
 
   // origin in WGS84
   std::cout << "WGS84 origin\n";
