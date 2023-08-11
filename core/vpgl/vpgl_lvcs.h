@@ -141,6 +141,9 @@ class vpgl_lvcs : public vbl_ref_count
   void get_utm_origin(double& x, double& y, double& elev, int& zone) const;
   void get_utm_origin(double& x, double& y, double& elev, int& zone, bool& south_flag) const;
 
+  void get_utm(int& zone, bool& south_flag) const;
+  void set_utm(int zone, bool south_flag);
+
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;
 
@@ -216,6 +219,13 @@ inline void vpgl_lvcs::get_utm_origin(double& x, double& y, double& elev, int& z
   elev = localCSOriginElev_;
   south_flag = localUTMOrigin_SouthFlag_;
 }
+
+inline void vpgl_lvcs::get_utm(int& zone, bool& south_flag) const
+{
+  zone = localUTMOrigin_Zone_;
+  south_flag = localUTMOrigin_SouthFlag_;
+}
+
 
 //------------------------------------------------------------
 //: Return the compass alignment transform.

@@ -396,6 +396,31 @@ vpgl_lvcs::compute_scale()
   }
 }
 
+//: Set the UTM zone & south_flag to a different value
+// This is useful when the LVCS is near a UTM zone border or the equator,
+// when it is appropriate to force the LVCS to be defined relative to the
+// neighboring UTM or opposite hemisphere
+void
+vpgl_lvcs::set_utm(int zone, bool south_flag)
+{
+  double local_to_radians, local_to_degrees;
+  this->get_angle_conversions(local_to_radians, local_to_degrees);
+
+  // use the force_utm_zone/force_south_flag form of vpgl_utm::transform
+  // to determine the easting/northing in the user-specified zone/south_flag
+  // void transform(lat, lon, easting, northing, utm_zone, south_flag,
+  //                force_utm_zone, force_south_flag)
+  vpgl_utm u;
+  u.transform(localCSOriginLat_ * local_to_degrees,
+              localCSOriginLon_ * local_to_degrees,
+              localUTMOrigin_X_East_,
+              localUTMOrigin_Y_North_,
+              localUTMOrigin_Zone_,
+              localUTMOrigin_SouthFlag_,
+              zone, south_flag);
+}
+
+
 //------------------------------------------------------------------------------
 //: Converts pointin, given in local vertical coord system, to pointout in the global coord system given by the string
 // lobalcs_name.
@@ -678,13 +703,10 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
 
       vpgl_utm u;
       int zone;
-      u.transform(local_lat, local_lon, pointout_x, pointout_y, zone);
-      if (zone != localUTMOrigin_Zone_)
-      {
-        std::cerr << "In vpgl_lvcs::global_to_local() -- the UTM zone of the input point is not the same as the zone "
-                     "of the lvcs origin!\n";
-        return;
-      }
+      bool south_flag;
+      u.transform(local_lat, local_lon, pointout_x, pointout_y, zone, south_flag,
+                  localUTMOrigin_Zone_, localUTMOrigin_SouthFlag_);
+
       pointout_x -= localUTMOrigin_X_East_;
       pointout_y -= localUTMOrigin_Y_North_;
       pointout_z = global_elev - localCSOriginElev_ * local_to_meters;
@@ -721,13 +743,10 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
 
       vpgl_utm u;
       int zone;
-      u.transform(local_lat, local_lon, pointout_x, pointout_y, zone);
-      if (zone != localUTMOrigin_Zone_)
-      {
-        std::cerr << "In vpgl_lvcs::global_to_local() -- the UTM zone of the input point is not the same as the zone "
-                     "of the lvcs origin!\n";
-        return;
-      }
+      bool south_flag;
+      u.transform(local_lat, local_lon, pointout_x, pointout_y, zone, south_flag,
+                  localUTMOrigin_Zone_, localUTMOrigin_SouthFlag_);
+
       pointout_x -= localUTMOrigin_X_East_;
       pointout_y -= localUTMOrigin_Y_North_;
       pointout_z = global_elev - localCSOriginElev_ * local_to_meters;
@@ -762,13 +781,10 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
     {
       vpgl_utm u;
       int zone;
-      u.transform(global_lat, global_lon, pointout_x, pointout_y, zone);
-      if (zone != localUTMOrigin_Zone_)
-      {
-        std::cerr << "In vpgl_lvcs::global_to_local() -- the UTM zone of the input point is not the same as the zone "
-                     "of the lvcs origin!\n";
-        return;
-      }
+      bool south_flag;
+      u.transform(global_lat, global_lon, pointout_x, pointout_y, zone, south_flag,
+                  localUTMOrigin_Zone_, localUTMOrigin_SouthFlag_);
+
       pointout_x -= localUTMOrigin_X_East_;
       pointout_y -= localUTMOrigin_Y_North_;
       pointout_z = global_elev - localCSOriginElev_ * local_to_meters;
