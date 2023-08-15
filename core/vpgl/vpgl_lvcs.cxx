@@ -1077,12 +1077,33 @@ vpgl_lvcs::b_read(vsl_b_istream & is)
 {
   if (!is)
     return;
+  int val;
   short ver;
   vsl_b_read(is, ver);
   switch (ver)
   {
     case 1:
-      int val;
+      vsl_b_read(is, val);
+      local_cs_name_ = (vpgl_lvcs::cs_names)val;
+      vsl_b_read(is, localCSOriginLat_);
+      vsl_b_read(is, localCSOriginLon_);
+      vsl_b_read(is, localCSOriginElev_);
+      vsl_b_read(is, lat_scale_);
+      vsl_b_read(is, lon_scale_);
+      vsl_b_read(is, val);
+      geo_angle_unit_ = (vpgl_lvcs::AngUnits)val;
+      vsl_b_read(is, val);
+      localXYZUnit_ = (vpgl_lvcs::LenUnits)val;
+      vsl_b_read(is, lox_);
+      vsl_b_read(is, loy_);
+      vsl_b_read(is, theta_);
+      vsl_b_read(is, localUTMOrigin_X_East_);
+      vsl_b_read(is, localUTMOrigin_Y_North_);
+      vsl_b_read(is, localUTMOrigin_Zone_);
+      localUTMOrigin_SouthFlag_ = (localCSOriginLat_ < 0);
+      break;
+
+    case 2:
       vsl_b_read(is, val);
       local_cs_name_ = (vpgl_lvcs::cs_names)val;
       vsl_b_read(is, localCSOriginLat_);

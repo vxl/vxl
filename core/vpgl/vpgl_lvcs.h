@@ -151,7 +151,7 @@ class vpgl_lvcs : public vbl_ref_count
   void b_read(vsl_b_istream &is);
 
   //: Return IO version number;
-  short version() const { return 1; }
+  short version() const { return 2; }
 
 
   // INTERNALS-----------------------------------------------------------------
