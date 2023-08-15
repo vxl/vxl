@@ -54,10 +54,9 @@ void bsgm_shadow_step_filter(
 //disparities at the end of the shadow backwards along a
 //scan in the direction of the sun
 template <class T>
-void bsgm_shadow_fill(vil_image_view<float> const& disparity, vgl_vector_2d<float> const& sun_dir,
-                      vil_image_view<float> const& shadow_step_prob, vil_image_view<float> const& shadow_prob,
-                      vil_image_view<float>& shadow_fill_disparity, float search_dist = 50.0f,
-                      float prob_thresh = 0.5, size_t gap =3, T temp = T(0), std::pair<int, int> print_pr = std::pair<int, int>(-1, -1));
+void bsgm_shadow_fill(vil_image_view<T> const& rect_img, vil_image_view<float> const& disparity, vgl_vector_2d<float> const& sun_dir,
+                      vil_image_view<float> const& shadow_step_prob, vil_image_view<float>& shadow_fill_disparity,
+                      float search_dist = 50.0f, float prob_thresh = 0.5, size_t gap =3, std::pair<int, int> print_pr = std::pair<int, int>(-1, -1));
 
 //: Use the OpenCV SGM uniqueness criteria to find bad disparities. This
 // is not quite the same as the left-right consistency check from the SGM

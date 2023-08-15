@@ -8,9 +8,13 @@
 #include <bsta/bsta_histogram.h>
 
 #include "bsgm_disparity_estimator.h"
-
-
-
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
+#include <vil/algo/vil_sobel_3x3.h>
+#include <vil/algo/vil_blob.h>
+#include "bsgm_error_checking.h"
+#include <brip/brip_line_generator.h>
+#include <bsta/bsta_histogram.h>
 
 //----------------------------------------------------------------------------
 bsgm_disparity_estimator::bsgm_disparity_estimator(
@@ -135,6 +139,179 @@ void bsgm_disparity_estimator::compute_xgrad_data(
 
 }
 
+static int shadow_scan(size_t i, size_t j,
+                       vil_image_view<float> const& shadow_step_prob,
+                       vgl_vector_2d<float> sun_dir,
+                       std::vector<std::tuple<float, int, int, bool> >& shstp_vals,
+                       float scan_length = 50.0f, float shad_stp_thresh = 0.85f){
+  int ni = shadow_step_prob.ni(), nj = shadow_step_prob.nj();
+  bool print = false;
+  float x_start = i, y_start = j;
+  vgl_point_2d<float> ps(x_start, y_start);
+  if (x_start == 932 && y_start == 1280)
+      print = true;
+  vgl_point_2d<float> pe = ps + scan_length*sun_dir;
+  float xe = pe.x(), ye = pe.y();
+  // scan along the sun vector and determine the shadow intensity profile
+  // starting at a shadow step filter probability above shad_stp_thresh
+  // profile data
+  // scan violated outside image bounds
+  bool broke_in_shadow = false;
+  // line scan
+  float x, y;
+  bool init = true;
+  while (brip_line_generator::generate(init, float(x_start), float(y_start), xe, ye, x, y))
+    {
+      int xi = (int)x, yi = (int)y; //convert the pixel location to integer
+      if (xi < 0 || xi >= ni || yi < 0 || yi >= nj) {
+        broke_in_shadow = true;
+        break;
+      }
+      float ss_prob = shadow_step_prob(xi, yi);
+      shstp_vals.emplace_back(ss_prob, xi, yi, false);
+    }//end while
+
+  // analyze profile for threshold at the start of the shadow region
+  size_t n = shstp_vals.size();
+  bool start = false;
+  bool done = false;
+  int st_i, st_j;
+  size_t ifinal  = 0;
+  for(size_t i = 0; i<n&&!done; ++i){
+    bool ss = std::get<0>(shstp_vals[i])> shad_stp_thresh;
+    int ii = std::get<1>(shstp_vals[i]), jj = std::get<2>(shstp_vals[i]);
+    // account for holes in the shadow step region
+    // pixel x is active if ss is true
+    // or any of sl, s+ , sr
+    //          |  scan
+    //          v
+    //          x
+    //       sl s+ sr
+    bool ss_plus = false;
+    bool ss_left = false;
+    bool ss_right = false;
+    if(i<(n-1)){
+      ss_plus = std::get<0>(shstp_vals[i+1])> shad_stp_thresh;
+      // for debug purposes
+      int i_plus = std::get<1>(shstp_vals[i+1]);
+      int j_plus = std::get<2>(shstp_vals[i+1]);
+      if(i_plus < ni-1){
+        int i_right = i_plus + 1;
+        ss_right = shadow_step_prob(i_right, j_plus)>shad_stp_thresh;
+      }
+      if(i_plus > 0){
+        int i_left = i_plus - 1;
+        ss_left = shadow_step_prob(i_left, j_plus) > shad_stp_thresh;
+      }
+    }
+    std::get<3>(shstp_vals[i]) = ss||ss_plus||ss_left||ss_right;
+    float rec = std::get<1>(shstp_vals[i]);
+    if (print)
+      std::cout << i << ' ' << ss << ' ' << ss_plus << ' ' << ss_left << ' ' << ss_right << std::endl;
+    if(ss&&!start){
+      start = true;
+      st_i = std::get<1>(shstp_vals[i]);
+      st_j = std::get<2>(shstp_vals[i]);
+    }
+    if(start&&std::get<3>(shstp_vals[i])){
+      if(i == (n-1)){
+        ifinal = i;
+        done = true;
+        start = false;
+      }
+      ifinal = i;
+      continue;
+    }
+    done = true;
+    start = false;
+  }
+  if(print)
+    std::cout << "IFINAL " << ifinal << std::endl;
+  return ifinal;
+}
+
+void bsgm_disparity_estimator::compute_shadow_data(
+    const vil_image_view<bool>& invalid_target,
+    //std::vector< std::vector< unsigned char* > >& app_cost,
+    std::vector< std::vector< unsigned short* > >& total_cost,
+    const vil_image_view<int>& min_disparity,
+    const vgl_box_2d<int>& target_window ){
+  // target and reference images have same size
+  int ni = static_cast<int>(shadow_step_prob_.ni()), nj = static_cast<int>(shadow_step_prob_.nj());
+  vil_image_view<float> temp(ni, nj);
+  temp.fill(0.0f);
+  // keep track of what windowed pixels in the full images the SGM volume corresponds to
+  // note: have to do this because the target and reference windows will be different sizes,
+  // so just simply cropping the gradient doesn't work
+  int img_start_x, img_start_y;
+  if (target_window.is_empty()) {
+    img_start_x = 0;
+    img_start_y = 0;
+  }
+  else {
+    img_start_x = target_window.min_x();
+    img_start_y = target_window.min_y();
+  }
+  bool print = false;
+  // Compute the appearance cost volume
+  // (keep track of SGM cost volume indices, and the corresponding target image indices)
+  for (int cost_y = 0, img_y = img_start_y; cost_y < h_; cost_y++, img_y++) {
+    for (int cost_x = 0, img_x = img_start_x; cost_x < w_; cost_x++, img_x++) {
+
+      unsigned short* tc = total_cost[cost_y][cost_x];
+      // If invalid pixel, fill with 255
+      if (invalid_target(cost_x, cost_y)) {
+        //for (int d = 0; d < num_disparities_; d++, ac++)
+          //*ac = 255;
+        continue;
+      }
+      if (shadow_step_prob_(cost_x, cost_y) >= 0.95f) {
+        if (cost_x == 932 && cost_y == 1280)
+          print = true;
+        std::vector<std::tuple<float, int, int, bool> > shstp_vals;
+        int last_index = shadow_scan(cost_x, cost_y, shadow_step_prob_, sun_dir_tar_, shstp_vals);
+        int n = shstp_vals.size();
+        if (n == 0)
+          continue;
+        last_index += 20;
+        if(last_index >= n)
+          last_index = n-1;
+        int ecx = std::get<1>(shstp_vals[last_index]), ecy = std::get<2>(shstp_vals[last_index]);
+        if (ecx < 0 || ecx >= w_ || ecy < 0 || ecy >= h_)
+          continue;
+        unsigned short* tc_end = total_cost[ecy][ecx];
+          for(int k = last_index; k>=0; k--){
+            int cx = std::get<1>(shstp_vals[k]), cy = std::get<2>(shstp_vals[k]);
+            if (cx < 0 || cx >= w_ || cy < 0 || cy >= h_)
+              continue;
+            //if(print) std::cout << "--------------" << std::endl;
+            for (int d = 0; d < num_disparities_; d++, tc++, tc_end++){
+              //if(print) std::cout << int(*tc) << ' ' << int(*tc_end) << std::endl;
+              *tc = *tc_end;
+            }
+          }
+      }
+    } //end x
+  }// end y
+  if(print){
+      for (int cost_y = 0; cost_y < h_; cost_y++){
+        for (int cost_x = 0; cost_x < w_; cost_x++){
+          unsigned short* tc = total_cost[cost_y][cost_x];
+          unsigned short min_tc = unsigned short(65535);
+          int dmin = 0;
+          for (int d = 0; d < num_disparities_; d++, tc++)
+            if(*tc < min_tc){
+              min_tc = *tc;
+              dmin = d;
+            }
+          temp(cost_x, cost_y) = float(dmin);
+        }
+      }
+      std::string path = "D:/tests/WRIVA/results_07_20_2023/min_cost_6_7_20.tif";
+      vil_save(temp, path.c_str());
+      print = false;
+  }
+}// end function
 //----------------------------------------------------------------------------
 void
 bsgm_disparity_estimator::write_cost_debug_imgs(
@@ -466,7 +643,8 @@ bsgm_disparity_estimator::run_multi_dp(
         if(params_.use_shadow_step_p2_adjustment && shadow_step_prob_){
           float ss = shadow_step_prob_(x,y)*1.5;
           if(ss > 1.0)ss = 1.0;
-          float p2f = p2_max + (p2_min-p2_max)* ss;
+          p2 = p2_max + (p2_min-p2_max)* ss;
+          //p1 = p1*(1.0 - ss);
         }
         
         // Compute the directional smoothing cost and add to total
@@ -638,9 +816,28 @@ bsgm_disparity_estimator::compute_best_disparity_img(
       disp_img(x,y) += min_disparity(x,y);
     } //x
   } //y
-   vil_image_view<float> temp;
-   bsgm_shadow_fill<vxl_byte>(disp_img, sun_dir_tar_, shadow_step_prob_, shadow_prob_, temp);
-   disp_img = temp;
+#if 0
+  vil_image_view<unsigned short> junk5;
+  vil_image_view<float> temp1, junk1, junk2, junk3;
+  vgl_vector_2d<float> junk4;
+  temp1.deep_copy(disp_img);
+  size_t ni = disp_img.ni(), nj = disp_img.nj();
+  vil_image_view<float> shadow_prob(ni, nj);
+  shadow_prob.fill(0.0f);
+  for (size_t j = 0; j < nj; ++j)
+    for (size_t i = 0; i < ni; ++i) 
+      if(shadow_step_prob_(i, j) >= 0.5){
+        unsigned short v = img_tar_(i, j);
+        vgl_vector_2d<float> junk = sun_dir_tar_;
+        float d = disp_img(i, j);
+         adaptive_shadow_prob( i,  j, img_tar_, shadow_step_prob_, sun_dir_tar_, shadow_prob, disp_img, 50.0f, 50.0f, 0.5f);
+      }
+  for (size_t j = 0; j < nj; ++j)
+    for (size_t i = 0; i < ni; ++i)
+      if(shadow_prob(i, j) > 0.5f)
+        temp1(i, j) = 0.0f;
+  disp_img = temp1;
+#endif
 }
 
 
