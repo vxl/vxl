@@ -139,6 +139,10 @@ class vpgl_lvcs : public vbl_ref_count
   bool operator==(vpgl_lvcs const& r) const;
 
   void get_utm_origin(double& x, double& y, double& elev, int& zone) const;
+  void get_utm_origin(double& x, double& y, double& elev, int& zone, bool& south_flag) const;
+
+  void get_utm(int& zone, bool& south_flag) const;
+  void set_utm(int zone, bool south_flag);
 
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;
@@ -147,7 +151,7 @@ class vpgl_lvcs : public vbl_ref_count
   void b_read(vsl_b_istream &is);
 
   //: Return IO version number;
-  short version() const { return 1; }
+  short version() const { return 2; }
 
 
   // INTERNALS-----------------------------------------------------------------
@@ -178,6 +182,7 @@ class vpgl_lvcs : public vbl_ref_count
   double localUTMOrigin_X_East_{0.0};  // in meters
   double localUTMOrigin_Y_North_{0.0}; // in meters
   int localUTMOrigin_Zone_{0};
+  bool localUTMOrigin_SouthFlag_{false};
 };
 
 //: return the scale for lat lon and elevation
@@ -202,11 +207,25 @@ inline void vpgl_lvcs::get_origin(double& lat, double& lon, double& elev) const
 
 inline void vpgl_lvcs::get_utm_origin(double& x, double& y, double& elev, int& zone) const
 {
+  bool south_flag = false;
+  get_utm_origin(x, y, elev, zone, south_flag);
+}
+
+inline void vpgl_lvcs::get_utm_origin(double& x, double& y, double& elev, int& zone, bool& south_flag) const
+{
   x = localUTMOrigin_X_East_;
   y = localUTMOrigin_Y_North_;
   zone = localUTMOrigin_Zone_;
   elev = localCSOriginElev_;
+  south_flag = localUTMOrigin_SouthFlag_;
 }
+
+inline void vpgl_lvcs::get_utm(int& zone, bool& south_flag) const
+{
+  zone = localUTMOrigin_Zone_;
+  south_flag = localUTMOrigin_SouthFlag_;
+}
+
 
 //------------------------------------------------------------
 //: Return the compass alignment transform.

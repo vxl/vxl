@@ -73,6 +73,7 @@ vpgl_lvcs::vpgl_lvcs(const vpgl_lvcs & lvcs)
   , localUTMOrigin_X_East_(lvcs.localUTMOrigin_X_East_)
   , localUTMOrigin_Y_North_(lvcs.localUTMOrigin_Y_North_)
   , localUTMOrigin_Zone_(lvcs.localUTMOrigin_Zone_)
+  , localUTMOrigin_SouthFlag_(lvcs.localUTMOrigin_SouthFlag_)
 {
   if (lat_scale_ == 0.0 || lon_scale_ == 0.0)
     this->compute_scale();
@@ -95,6 +96,7 @@ vpgl_lvcs::operator=(const vpgl_lvcs & lvcs)
   localUTMOrigin_X_East_ = lvcs.localUTMOrigin_X_East_;
   localUTMOrigin_Y_North_ = lvcs.localUTMOrigin_Y_North_;
   localUTMOrigin_Zone_ = lvcs.localUTMOrigin_Zone_;
+  localUTMOrigin_SouthFlag_ = lvcs.localUTMOrigin_SouthFlag_;
   if (lat_scale_ == 0.0 || lon_scale_ == 0.0)
     this->compute_scale();
   return *this;
@@ -135,7 +137,8 @@ vpgl_lvcs::vpgl_lvcs(double orig_lat,
                 localCSOriginLon_ * local_to_degrees,
                 localUTMOrigin_X_East_,
                 localUTMOrigin_Y_North_,
-                localUTMOrigin_Zone_);
+                localUTMOrigin_Zone_,
+                localUTMOrigin_SouthFlag_);
     // std::cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East " <<
     // localUTMOrigin_Y_North_ << " North" << std::endl;
     lat_scale_ = 0.0;
@@ -180,7 +183,8 @@ vpgl_lvcs::vpgl_lvcs(double orig_lat,
                 localCSOriginLon_ * local_to_degrees,
                 localUTMOrigin_X_East_,
                 localUTMOrigin_Y_North_,
-                localUTMOrigin_Zone_);
+                localUTMOrigin_Zone_,
+                localUTMOrigin_SouthFlag_);
     // std::cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " <<
     // localUTMOrigin_Y_North_ << " North  elev: " << localCSOriginElev_ << std::endl;
   }
@@ -226,7 +230,8 @@ vpgl_lvcs::vpgl_lvcs(double lat_low,
                 localCSOriginLon_ * local_to_degrees,
                 localUTMOrigin_X_East_,
                 localUTMOrigin_Y_North_,
-                localUTMOrigin_Zone_);
+                localUTMOrigin_Zone_,
+                localUTMOrigin_SouthFlag_);
     // std::cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " <<
     // localUTMOrigin_Y_North_ << " North" << std::endl;
   }
@@ -391,6 +396,31 @@ vpgl_lvcs::compute_scale()
   }
 }
 
+//: Set the UTM zone & south_flag to a different value
+// This is useful when the LVCS is near a UTM zone border or the equator,
+// when it is appropriate to force the LVCS to be defined relative to the
+// neighboring UTM or opposite hemisphere
+void
+vpgl_lvcs::set_utm(int zone, bool south_flag)
+{
+  double local_to_radians, local_to_degrees;
+  this->get_angle_conversions(local_to_radians, local_to_degrees);
+
+  // use the force_utm_zone/force_south_flag form of vpgl_utm::transform
+  // to determine the easting/northing in the user-specified zone/south_flag
+  // void transform(lat, lon, easting, northing, utm_zone, south_flag,
+  //                force_utm_zone, force_south_flag)
+  vpgl_utm u;
+  u.transform(localCSOriginLat_ * local_to_degrees,
+              localCSOriginLon_ * local_to_degrees,
+              localUTMOrigin_X_East_,
+              localUTMOrigin_Y_North_,
+              localUTMOrigin_Zone_,
+              localUTMOrigin_SouthFlag_,
+              zone, south_flag);
+}
+
+
 //------------------------------------------------------------------------------
 //: Converts pointin, given in local vertical coord system, to pointout in the global coord system given by the string
 // lobalcs_name.
@@ -423,15 +453,8 @@ vpgl_lvcs::local_to_global(const double pointin_x,
   double aligned_y = pointin_y;
   local_transform(aligned_x, aligned_y);
 
-  // Check current system is in south hemisphere or north hemisphere
-  bool south_flag = false;
-  if (localCSOriginLat_ < 0)
-    south_flag = true;
-
   if (local_cs_name_ == vpgl_lvcs::utm)
   {
-
-
     if (global_cs_name == vpgl_lvcs::utm)
     {
       if (output_len_unit == METERS)
@@ -457,7 +480,7 @@ vpgl_lvcs::local_to_global(const double pointin_x,
                 local_lat,
                 local_lon,
                 local_elev,
-                south_flag);
+                localUTMOrigin_SouthFlag_);
 
     if (global_cs_name == vpgl_lvcs::wgs84)
     { // global values will be in degrees and in meters
@@ -680,13 +703,10 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
 
       vpgl_utm u;
       int zone;
-      u.transform(local_lat, local_lon, pointout_x, pointout_y, zone);
-      if (zone != localUTMOrigin_Zone_)
-      {
-        std::cerr << "In vpgl_lvcs::global_to_local() -- the UTM zone of the input point is not the same as the zone "
-                     "of the lvcs origin!\n";
-        return;
-      }
+      bool south_flag;
+      u.transform(local_lat, local_lon, pointout_x, pointout_y, zone, south_flag,
+                  localUTMOrigin_Zone_, localUTMOrigin_SouthFlag_);
+
       pointout_x -= localUTMOrigin_X_East_;
       pointout_y -= localUTMOrigin_Y_North_;
       pointout_z = global_elev - localCSOriginElev_ * local_to_meters;
@@ -723,13 +743,10 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
 
       vpgl_utm u;
       int zone;
-      u.transform(local_lat, local_lon, pointout_x, pointout_y, zone);
-      if (zone != localUTMOrigin_Zone_)
-      {
-        std::cerr << "In vpgl_lvcs::global_to_local() -- the UTM zone of the input point is not the same as the zone "
-                     "of the lvcs origin!\n";
-        return;
-      }
+      bool south_flag;
+      u.transform(local_lat, local_lon, pointout_x, pointout_y, zone, south_flag,
+                  localUTMOrigin_Zone_, localUTMOrigin_SouthFlag_);
+
       pointout_x -= localUTMOrigin_X_East_;
       pointout_y -= localUTMOrigin_Y_North_;
       pointout_z = global_elev - localCSOriginElev_ * local_to_meters;
@@ -764,13 +781,10 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
     {
       vpgl_utm u;
       int zone;
-      u.transform(global_lat, global_lon, pointout_x, pointout_y, zone);
-      if (zone != localUTMOrigin_Zone_)
-      {
-        std::cerr << "In vpgl_lvcs::global_to_local() -- the UTM zone of the input point is not the same as the zone "
-                     "of the lvcs origin!\n";
-        return;
-      }
+      bool south_flag;
+      u.transform(global_lat, global_lon, pointout_x, pointout_y, zone, south_flag,
+                  localUTMOrigin_Zone_, localUTMOrigin_SouthFlag_);
+
       pointout_x -= localUTMOrigin_X_East_;
       pointout_y -= localUTMOrigin_Y_North_;
       pointout_z = global_elev - localCSOriginElev_ * local_to_meters;
@@ -901,7 +915,8 @@ vpgl_lvcs::read(std::istream & strm)
                 localCSOriginLon_ * local_to_degrees,
                 localUTMOrigin_X_East_,
                 localUTMOrigin_Y_North_,
-                localUTMOrigin_Zone_);
+                localUTMOrigin_Zone_,
+                localUTMOrigin_SouthFlag_);
     // std::cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " <<
     // localUTMOrigin_Y_North_ << " North" << std::endl;
   }
@@ -1052,6 +1067,7 @@ vpgl_lvcs::b_write(vsl_b_ostream & os) const
   vsl_b_write(os, localUTMOrigin_X_East_);
   vsl_b_write(os, localUTMOrigin_Y_North_);
   vsl_b_write(os, localUTMOrigin_Zone_);
+  vsl_b_write(os, localUTMOrigin_SouthFlag_);
 }
 
 
@@ -1061,12 +1077,12 @@ vpgl_lvcs::b_read(vsl_b_istream & is)
 {
   if (!is)
     return;
+  int val;
   short ver;
   vsl_b_read(is, ver);
   switch (ver)
   {
     case 1:
-      int val;
       vsl_b_read(is, val);
       local_cs_name_ = (vpgl_lvcs::cs_names)val;
       vsl_b_read(is, localCSOriginLat_);
@@ -1084,6 +1100,28 @@ vpgl_lvcs::b_read(vsl_b_istream & is)
       vsl_b_read(is, localUTMOrigin_X_East_);
       vsl_b_read(is, localUTMOrigin_Y_North_);
       vsl_b_read(is, localUTMOrigin_Zone_);
+      localUTMOrigin_SouthFlag_ = (localCSOriginLat_ < 0);
+      break;
+
+    case 2:
+      vsl_b_read(is, val);
+      local_cs_name_ = (vpgl_lvcs::cs_names)val;
+      vsl_b_read(is, localCSOriginLat_);
+      vsl_b_read(is, localCSOriginLon_);
+      vsl_b_read(is, localCSOriginElev_);
+      vsl_b_read(is, lat_scale_);
+      vsl_b_read(is, lon_scale_);
+      vsl_b_read(is, val);
+      geo_angle_unit_ = (vpgl_lvcs::AngUnits)val;
+      vsl_b_read(is, val);
+      localXYZUnit_ = (vpgl_lvcs::LenUnits)val;
+      vsl_b_read(is, lox_);
+      vsl_b_read(is, loy_);
+      vsl_b_read(is, theta_);
+      vsl_b_read(is, localUTMOrigin_X_East_);
+      vsl_b_read(is, localUTMOrigin_Y_North_);
+      vsl_b_read(is, localUTMOrigin_Zone_);
+      vsl_b_read(is, localUTMOrigin_SouthFlag_);
       break;
 
     default:
