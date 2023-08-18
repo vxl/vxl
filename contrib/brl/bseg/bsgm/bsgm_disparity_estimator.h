@@ -8,6 +8,7 @@
 #include <map>
 #include <set>
 #include <iostream>
+#include  <fstream>
 #include <sstream>
 #include <utility>
 
@@ -204,6 +205,7 @@ class bsgm_disparity_estimator
   // compute shadow info
   template <class T>
   void compute_shadow_prob(const vil_image_view<T>& img_target){
+    std::cout << "Shadow Thresh " << params_.shadow_thresh << std::endl;
     size_t w = img_target.ni(), h = img_target.nj();
     shadow_prob_.set_size(w, h);
     shadow_prob_.fill(0.0f);
@@ -267,7 +269,10 @@ class bsgm_disparity_estimator
     unsigned short p1,
     unsigned short p2,
     int prev_min_disparity,
-    int cur_min_disparity );
+    int cur_min_disparity,
+    bool on_line = false,
+    std::ofstream& ss = std::ofstream()
+    );
 
   //: Extract the min cost disparity at each pixel, using quadratic
   // interpolation if specified
@@ -642,9 +647,6 @@ bool bsgm_disparity_estimator::compute(
 
   if (params_.print_timing)
     print_time("Dynamic programming", timer);
-
-  compute_shadow_data(invalid_tar, total_cost_,
-                      min_disp, target_window);
 
   // Find the lowest total cost disparity for each pixel, do quadratic
   // interpolation if configured.

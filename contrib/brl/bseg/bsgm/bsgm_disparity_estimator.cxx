@@ -2,14 +2,16 @@
 
 #include <iomanip>
 #include <algorithm>
-
+#include <sstream>
+#include <vul/vul_file.h>
 #include "vil/vil_save.h"
 #include "vil/vil_convert.h"
-#include <bsta/bsta_histogram.h>
 
 #include "bsgm_disparity_estimator.h"
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
+#include <vgl_line_segment_2d.h>
+#include <vgl/vgl_distance.h>
 #include <vil/algo/vil_sobel_3x3.h>
 #include <vil/algo/vil_blob.h>
 #include "bsgm_error_checking.h"
@@ -229,7 +231,7 @@ static int shadow_scan(size_t i, size_t j,
     std::cout << "IFINAL " << ifinal << std::endl;
   return ifinal;
 }
-
+#if 0
 void bsgm_disparity_estimator::compute_shadow_data(
     const vil_image_view<bool>& invalid_target,
     //std::vector< std::vector< unsigned char* > >& app_cost,
@@ -312,6 +314,7 @@ void bsgm_disparity_estimator::compute_shadow_data(
       print = false;
   }
 }// end function
+#endif
 //----------------------------------------------------------------------------
 void
 bsgm_disparity_estimator::write_cost_debug_imgs(
@@ -416,7 +419,29 @@ bsgm_disparity_estimator::run_multi_dp(
 
   auto bias_dir = sun_dir_tar_;
   bool using_bias = (bias_weight > 0.0f) && (mag > 0.0f);
-
+  vil_image_view<vxl_byte> num_dirs_img(w_, h_);
+  num_dirs_img.fill(vxl_byte(0));
+  vil_image_view<float> p1_img(w_,h_);
+  vil_image_view<float> p2_img(w_,h_);
+  p1_img.fill(0.0f);
+  p2_img.fill(0.0f);
+  //WRIVA
+  vgl_point_2d<float> pgnd(940.0f,1231.0f);
+  vgl_point_2d<float> prf(1082.0f,1098.0f);
+  vgl_line_segment_2d<float> shln(pgnd, prf);
+  bool print = false;
+  //if(img_tar_.ni() == 2073 && img_tar_.nj() == 2132)
+  //if(img_tar_.ni() == 2011 && img_tar_.nj() == 2086)
+  if(img_tar_.ni() == 2018 && img_tar_.nj() == 2098)
+    print = true;
+  std::ofstream os;
+  if(print){
+    std::string ospath = "D:/tests/WRIVA/results_08_17_2023/dynamic_prog_6_7.txt";
+    if(!vul_file::exists(ospath)){
+    os.open(ospath.c_str());
+    os << num_disparities_ << std::endl;
+    }
+  }
   // Compute directional derivatives used for gradient-weighted smoothing
   std::vector< vil_image_view<float> > deriv_img(4);
   if( params_.use_gradient_weighted_smoothing ){
@@ -436,8 +461,23 @@ bsgm_disparity_estimator::run_multi_dp(
       }
     }
   }
-  bsta_histogram<float> hs(-1.0f, 1.0f, unsigned(25));
-  bsta_histogram<float> hp2(-10.0f, 10.0f, unsigned(50));
+  // allowed dynamic program dir code in shadow step and shadow 
+  // sun ray dir is opposite dp scan dir and along previous cost dx, dy vector
+  float sx = sun_dir_tar_.x(), sy = sun_dir_tar_.y();
+  float s22 = 0.383, c22 = 0.924;//sin and cos of 22.5 degrees
+  int shad_step_dp_dir_code = 0;
+  if(params_.use_shadow_step_p2_adjustment&&mag>0.0f){
+         if(fabs(sy)<=s22 && sx<=0)      shad_step_dp_dir_code = 0;
+    else if(fabs(sy)<=s22 && sx>0)       shad_step_dp_dir_code = 1;
+    else if((sy<-s22&&sy>=-c22)&& sx<0)  shad_step_dp_dir_code = 2;
+    else if((sy>s22&&sy<=c22)&& sx>=0)   shad_step_dp_dir_code = 3;
+    else if(fabs(sx)<s22 && sy<0)        shad_step_dp_dir_code = 4;
+    else if(fabs(sx)<s22 && sy>=0)       shad_step_dp_dir_code = 5;
+    else if((sy<-s22&&sy>=-c22)&& sx>=0) shad_step_dp_dir_code = 6;
+    else if((sy>s22&&sy<=c22)&& sx<0)    shad_step_dp_dir_code = 7;
+    std::cout << "sun dir(" << sx << ' ' << sy << ") shadow step dir code " << shad_step_dp_dir_code << std::endl;
+  }
+  
   //vil_image_view<vxl_byte> vis;
   //vil_convert_stretch_range_limited( grad_x, vis, -60.0f, 60.0f );
   //vil_save( vis, "D:/results/a.png" );
@@ -448,13 +488,14 @@ bsgm_disparity_estimator::run_multi_dp(
   float p2_min = 0.5*p2_min_base_*cost_unit_*params_.p2_scale;
   auto p2 = (unsigned short)( p2_max );
   //std::cout << "P1, P2MAX, MIN " << p1 << ' ' << p2_max << ' ' << p2_min << std::endl;
+  if(print) std::cout << "P1, P2MAX, MIN " << p1 << ' ' << p2_max << ' ' << p2_min << std::endl;
 
   // Initialize total cost
   for( int y = 0; y < h_; y++ )
     for( int x = 0; x < w_; x++ )
       for( int d = 0; d < num_disparities_; d++ )
         total_cost[y][x][d] = 0;
-
+  
   // Setup buffers
   std::vector<unsigned short> dir_cost_cur( row_size, (unsigned short)0 );
   std::vector<unsigned short> dir_cost_prev( row_size, (unsigned short)0 );
@@ -637,45 +678,79 @@ bsgm_disparity_estimator::run_multi_dp(
         if( params_.use_gradient_weighted_smoothing ){
           float g = deriv_img[deriv_idx](x,y);
           p2 = (unsigned short)(p2_max + (p2_min-p2_max)* g);
-          //hs.upcount(g, 1.0f);
-          //hp2.upcount(p2, 1.0f);
         }
-        if(params_.use_shadow_step_p2_adjustment && shadow_step_prob_){
-          float ss = shadow_step_prob_(x,y)*1.5;
+        // If configured compute p1, p2 values based on shadow data
+        // shadow_step prob image and sun ray direction must be valid
+        unsigned short p1_shad = p1;
+        if(params_.use_shadow_step_p2_adjustment && shadow_step_prob_&&mag>0.0f){
+          // probability of a height discontinuity casting a shadow
+          float sp = shadow_step_prob_(x,y);
+          // enhance probability
+          float ss = sp*1.5;
           if(ss > 1.0)ss = 1.0;
+          // decrease p2 over shadow step interval
           p2 = p2_max + (p2_min-p2_max)* ss;
-          //p1 = p1*(1.0 - ss);
+
+          // if past the step interval but still in shadow
+          // limit the dynamic program direction to that closest to opposite the sun ray dir
+          // that is, update total cost along the direction towards the step from outside the shadow
+          if((sp >= 0.8 || shadow_prob_(x,y) > 0.5f)&& (dir != shad_step_dp_dir_code))
+            continue;
+          // increase cost of disparity changes in shadow but not step
+          if(sp < 0.8 && shadow_prob_(x,y) > 0.5f){
+            p2 = 4*p2_max;
+            p1_shad = 8*p1;  
+          }
         }
-        
+        // on the debug line scan
+        bool on_line = false;
+        if(print){
+          num_dirs_img(x, y) = num_dirs_img(x, y)+ vxl_byte(dir);
+          p1_img(x,y) = p1_shad;
+          p2_img(x,y) = p2;
+          vgl_point_2d<float> px(x, y);
+          float dist = vgl_distance<float>(px, shln);
+          on_line = dist<1.0f;
+          if(on_line&&os) os << x << ' ' << y << std::endl;
+        }
         // Compute the directional smoothing cost and add to total
         if( dy == 0 )
           compute_dir_cost(
             &dir_cost_cur[(x+dx)*num_disparities_],
             (*active_app_cost_)[y][x],
             &dir_cost_cur[x*num_disparities_],
-            total_cost[y][x], dir_weight*p1, dir_weight*p2,// p1, p2,
-            min_disparity(x+dx,y+dy), min_disparity(x,y) );
+            total_cost[y][x], dir_weight*p1_shad, dir_weight*p2,// p1, p2,
+            min_disparity(x+dx,y+dy), min_disparity(x,y), on_line, os);
         else
           compute_dir_cost(
             &dir_cost_prev[(x+dx)*num_disparities_],
             (*active_app_cost_)[y][x],
             &dir_cost_cur[x*num_disparities_],
-            total_cost[y][x], dir_weight*p1, dir_weight*p2,// p1, p2,
-            min_disparity(x+dx,y+dy), min_disparity(x,y) );
+            total_cost[y][x], dir_weight*p1_shad, dir_weight*p2,// p1, p2,
+            min_disparity(x+dx,y+dy), min_disparity(x,y), on_line, os);
       } //x
 
       // Copy current row to previous
       dir_cost_prev = dir_cost_cur;
     } //y
   } //dir
-#if 0 //debug
-  std::cout << "HSS" << std::endl;
-  hs.print_vals_prob();
-  std::cout << "========================\n" << std::endl;
-  std::cout << "HP2" << std::endl;
-  hp2.print_vals_prob();
-  std::cout << "========================\n" << std::endl;
-#endif
+  if(print){
+    std::cout << "saving num_dirs, p1, p2" << std::endl;
+    //std::string path = "d:/tests/buenos_aires/results_07_22_2023/dir_count.tif";
+    std::string dcnt_path = "D:/tests/WRIVA/results_08_17_2023/dir_count_6_7.tif";
+    std::string p1_path = "D:/tests/WRIVA/results_08_17_2023/p1_6_7.tif";
+    std::string p2_path = "D:/tests/WRIVA/results_08_17_2023/p2_6_7.tif";
+
+    if(!vul_file::exists(dcnt_path)&&!vul_file::exists(p1_path)&&!vul_file::exists(p2_path)){
+      vil_save(num_dirs_img, dcnt_path.c_str());
+      vil_save(p1_img, p1_path.c_str());
+      vil_save(p2_img, p2_path.c_str());
+    }
+    if(os)
+      os.close();
+    print = false;
+  }
+
 }//*/
 
 
@@ -689,16 +764,22 @@ bsgm_disparity_estimator::compute_dir_cost(
   unsigned short p1,
   unsigned short p2,
   int prev_min_disparity,
-  int cur_min_disparity )
+  int cur_min_disparity,
+  bool on_line,
+  std::ofstream& os)
 {
+  //======
+  //debug collect cost comparisons
+  std::vector<std::tuple<float, float, float, float, float, float, float> > costs;
+  //======
   // Compute the offset the aligns previous and current disparities
   int prev_offset = cur_min_disparity - prev_min_disparity;
 
   const unsigned short* prc = prev_row_cost;
-
+  
   // Compute jump cost from best previous disparity with p2 penalty
   unsigned short min_prev_cost = *prc; prc++;
-
+  std::tuple<float, float, float, float, float> cst;
   for( int d = 1; d < num_disparities_; d++, prc++ )
     min_prev_cost = *prc < min_prev_cost ? *prc : min_prev_cost;
   unsigned short jump_cost = min_prev_cost + p2;
@@ -708,31 +789,55 @@ bsgm_disparity_estimator::compute_dir_cost(
   const unsigned char* cac = cur_app_cost;
   unsigned short* crc = cur_row_cost;
   unsigned short* tc = total_cost;
-
   // Main loop through disparities
   for( int d = 0; d < num_disparities_; d++, prc++, cac++, crc++, tc++ ){
-
+    //==== debug output p1, p2
+    std::tuple<float, float, float, float, float, float, float> cst;    
+    std::get<5>(cst) = p1;    std::get<6>(cst) = p2;
+    //====
     // This is the index of d in the previous cost vector
     int d_off = d + prev_offset;
 
     // The best cost for each disparity is the min of the jump with cost P2...
     unsigned short best_cost = jump_cost;
 
+    //==== debug jump cost
+    std::get<0>(cst) = best_cost;
+    //====
+
     // ...the min of no disparity change with 0 cost...
     if( d_off >= 0 && d_off < num_disparities_ ){
       unsigned short prc_d = *prc;
       best_cost = prc_d < best_cost ? prc_d: best_cost;
-    }
 
+      //==== debug compare previous to jump cost
+      std::get<1>(cst) = best_cost;
+      //====
+    }
+    
     // ...and +/- 1 disparity with P1 cost
+    // -1
     if( d_off > 0 && d_off <= num_disparities_ ){
       unsigned short prc_dm1 = *(prc-1) + p1;
       best_cost = prc_dm1 < best_cost ? prc_dm1: best_cost;
+
+      //==== debug compare slope -1 on previous
+      std::get<2>(cst) = best_cost;
+      //====
     }
+    // +1
     if( d_off >= -1 && d_off < num_disparities_-1 ){
       unsigned short prc_dp1 = *(prc+1) + p1;
       best_cost = prc_dp1 < best_cost ? prc_dp1: best_cost;
+
+      //==== debug compare slope +1 on previous
+      std::get<3>(cst) = best_cost;
+      //====
     }
+
+    //==== debug appearance cost
+    std::get<4>(cst) = *cac;
+    //====
 
     // Add the appearance cost and subtract off lowest cost to prevent
     // numerical overflow
@@ -740,10 +845,20 @@ bsgm_disparity_estimator::compute_dir_cost(
 
     // Add current cost to total
     *tc += *crc;
+    costs.push_back(cst);
+  }// end of disparity loop
 
-  } //d
-
-}
+  //==== debug write out costs
+  if(on_line&&os){
+    std::stringstream ss;
+    for(int i = 0; i< num_disparities_; ++i){
+      std::tuple<float, float, float, float, float, float, float>& tup = costs[i];
+      os << std::get<0>(tup) << ' ' << std::get<1>(tup) << ' ' << std::get<2>(tup) << ' '  << std::get<3>(tup)
+         << ' ' << std::get<4>(tup)<< ' ' << std::get<5>(tup)<< ' ' << std::get<6>(tup) << std::endl;;
+    }
+  }
+  //====
+} 
 
 
 //-------------------------------------------------------------------
@@ -816,28 +931,6 @@ bsgm_disparity_estimator::compute_best_disparity_img(
       disp_img(x,y) += min_disparity(x,y);
     } //x
   } //y
-#if 0
-  vil_image_view<unsigned short> junk5;
-  vil_image_view<float> temp1, junk1, junk2, junk3;
-  vgl_vector_2d<float> junk4;
-  temp1.deep_copy(disp_img);
-  size_t ni = disp_img.ni(), nj = disp_img.nj();
-  vil_image_view<float> shadow_prob(ni, nj);
-  shadow_prob.fill(0.0f);
-  for (size_t j = 0; j < nj; ++j)
-    for (size_t i = 0; i < ni; ++i) 
-      if(shadow_step_prob_(i, j) >= 0.5){
-        unsigned short v = img_tar_(i, j);
-        vgl_vector_2d<float> junk = sun_dir_tar_;
-        float d = disp_img(i, j);
-         adaptive_shadow_prob( i,  j, img_tar_, shadow_step_prob_, sun_dir_tar_, shadow_prob, disp_img, 50.0f, 50.0f, 0.5f);
-      }
-  for (size_t j = 0; j < nj; ++j)
-    for (size_t i = 0; i < ni; ++i)
-      if(shadow_prob(i, j) > 0.5f)
-        temp1(i, j) = 0.0f;
-  disp_img = temp1;
-#endif
 }
 
 
