@@ -426,8 +426,10 @@ bsgm_disparity_estimator::run_multi_dp(
   p1_img.fill(0.0f);
   p2_img.fill(0.0f);
   //WRIVA
-  vgl_point_2d<float> pgnd(940.0f,1231.0f);
-  vgl_point_2d<float> prf(1082.0f,1098.0f);
+  //vgl_point_2d<float> pgnd(940.0f,1231.0f);
+  //vgl_point_2d<float> prf(1082.0f,1098.0f);
+  vgl_point_2d<float> pgnd(1092.0f,1194.0f);
+  vgl_point_2d<float> prf(1188.0f,1063.0f);
   vgl_line_segment_2d<float> shln(pgnd, prf);
   bool print = false;
   //if(img_tar_.ni() == 2073 && img_tar_.nj() == 2132)
@@ -436,7 +438,7 @@ bsgm_disparity_estimator::run_multi_dp(
     print = true;
   std::ofstream os;
   if(print){
-    std::string ospath = "D:/tests/WRIVA/results_08_17_2023/dynamic_prog_6_7.txt";
+    std::string ospath = "D:/tests/WRIVA/results_08_17_2023/dynamic_prog_6_7_1092_1194.txt";
     if(!vul_file::exists(ospath)){
     os.open(ospath.c_str());
     os << num_disparities_ << std::endl;
@@ -697,7 +699,7 @@ bsgm_disparity_estimator::run_multi_dp(
           if((sp >= 0.8 || shadow_prob_(x,y) > 0.5f)&& (dir != shad_step_dp_dir_code))
             continue;
           // increase cost of disparity changes in shadow but not step
-          if(sp < 0.8 && shadow_prob_(x,y) > 0.5f){
+          if(sp < 0.9 && shadow_prob_(x,y) > 0.5f){
             p2 = 4*p2_max;
             p1_shad = 8*p1;  
           }
@@ -711,7 +713,7 @@ bsgm_disparity_estimator::run_multi_dp(
           vgl_point_2d<float> px(x, y);
           float dist = vgl_distance<float>(px, shln);
           on_line = dist<1.0f;
-          if(on_line&&os) os << x << ' ' << y << std::endl;
+          if(on_line&&os) os << x << ' ' << y << ' ' << dir << std::endl;
         }
         // Compute the directional smoothing cost and add to total
         if( dy == 0 )
