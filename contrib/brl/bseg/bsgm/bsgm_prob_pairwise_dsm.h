@@ -420,6 +420,8 @@ class bsgm_prob_pairwise_dsm
   bool process(bool with_consistency_check = true, bool knn_consistency = true,
                bool compute_fwd_rev_ptsets_hmaps = true)
   {
+    //vul_timer t, total;
+    //std::stringstream ss;
     // check if not in window mode
     bool window_mode = !target_window_.is_empty();
     if (window_mode) {
@@ -444,16 +446,20 @@ class bsgm_prob_pairwise_dsm
 
     // compute forward disparity & height
     this->compute_disparity_fwd();
+
     this->compute_height_fwd(compute_fwd_rev_ptsets_hmaps);
 
     // consistency check & probabilistic analysis
+
     if (with_consistency_check) {
       this->compute_disparity_rev();
+
       this->compute_height_rev(compute_fwd_rev_ptsets_hmaps);
+
 
       if (knn_consistency) {
         if (!compute_prob(true))  // true -> compute prob heightmap
-          return false;
+           return false;
       } else {
         this->compute_xyz_prob(true);  // true -> compute prob heightmap
       }
@@ -584,7 +590,11 @@ class bsgm_prob_pairwise_dsm
     bits_per_pix_factors_[8] = 1.0f;
     bits_per_pix_factors_[11] = 2.8f;
   }
-
+  static void print_elapsed_time(vul_timer& t, std::string const& msg, std::stringstream& ss){
+    std::string function = "compute time for " + msg;
+    ss << function << " " << t.real()/1000.0f << " seconds"<< std::endl;
+    t.mark();
+  }
   bool shadow_context_enabled_;
   vgl_vector_3d<float> sun_dir_3d_0_;
   vgl_vector_3d<float> sun_dir_3d_1_;
