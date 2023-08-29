@@ -533,8 +533,8 @@ bsgm_disparity_estimator::run_multi_dp(
           if((shadow_prob_(x,y) > 0.5)&&(dir != shad_step_dp_dir_code))
              continue;
           
-          // suppress appearance cost in shadow but not shadow step
-          if((sp < 0.9) && (shadow_prob_(x,y) > 0.5f)){
+          // suppress appearance cost
+          if(sp > 0.5 || shadow_prob_(x,y) > 0.5f){
             suppress_appearance = true;
           }
         }
