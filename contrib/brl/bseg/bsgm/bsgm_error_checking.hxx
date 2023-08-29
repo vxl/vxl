@@ -9,16 +9,20 @@
 //#include <sstream>
 //#include <utility>
 #include <algorithm>
+#include <map>
 #include <tuple>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_convert.h>
 #include <vil/vil_save.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/algo/vil_sobel_3x3.h>
+#include <vil/algo/vil_blob.h>
 #include "bsgm_error_checking.h"
 #include <brip/brip_line_generator.h>
+#include <bsta/bsta_histogram.h>
 
 static bool pair_greater(std::pair<int, int> const& a, std::pair<int, int> const& b){
   return a.second > b.second;
@@ -279,8 +283,86 @@ bsgm_shadow_step_filter(const vil_image_view<T> & img,
       }
     }
 }
+static void one_d_dialation(std::vector<bool> const& vals, size_t gap, std::vector<bool>& dialated_vals, bool print = false) {
+  dialated_vals = vals;
+  size_t n = vals.size();
+  size_t nq = gap + 2;
+  if (n < nq)
+    return;
+  std::vector<bool> queue(nq);
+  for (size_t i = 0; i < n - nq; ++i) {
+    for (size_t k = 0; k < nq; ++k)
+      queue[k] = vals[i + k];
+    if (queue[0] && queue[nq - 1])
+      for (size_t k = 1; k < nq - 1; ++k)
+        dialated_vals[i + k] = true;
+  }
+  if (print)
+      int jj = 0;
+  //find shadow end
+  size_t sh_end = 0;
+  bool done = false;
+  for (size_t i = 0; i < n-1&&!done ; ++i){
+    bool d = dialated_vals[i], dp = dialated_vals[i+1];
+    if(d && !dp){//end of shadow
+      sh_end = i;
+      done = true;
+    }
+  }
+  // add gap at end
+  size_t sh_last = sh_end+1 + gap;
+  if(sh_last >= n) sh_last = n-1;
+  for(size_t i = sh_end+1; i <sh_last ; ++i)
+    dialated_vals[i] = true;
+}
+static void one_d_tail_erode(std::vector<bool> const& vals, size_t rem, std::vector<bool>& eroded_vals) {
+  eroded_vals = vals;
+  size_t n = vals.size();
+  size_t nq = rem + 1;
+  if (n < nq)
+    return;
+  std::vector<bool> queue(nq);
+  for (size_t i = 0; i < n - nq; ++i) {
+    for (size_t k = 0; k < nq; ++k)
+      queue[k] = vals[i + k];
+    if (queue[0] && !queue[nq - 1])
+      for (size_t k = 0; k < nq - 1; ++k)
+        eroded_vals[i + k] = false;
+  }
+}
 
-
+static void shadow_step_enable(std::vector<std::pair<bool, bool> > const& shstp_scan, std::vector<bool>& enabled, int& first_idx, int& last_idx) {
+  size_t n = shstp_scan.size();
+  enabled.resize(n, false);
+  // state machine
+  bool start = true;
+  bool start_ss = false; //start state
+  bool end_enable = false; // end enable
+  for (size_t i = 0; i < n; ++i) {
+    bool shad = shstp_scan[i].first;
+    bool shstp = shstp_scan[i].second;
+    if (start && shstp) {
+      start_ss = true;
+      start = false;
+      enabled[i] = true;
+      first_idx = i;
+      continue;
+    }
+    if (start_ss)
+      if (shad || shstp) {
+        enabled[i] = true;
+        if (i == n - 1) {
+          last_idx = n - 1;
+          return; //end of scan
+        }
+        continue;
+      }else {
+        end_enable = true;
+        start_ss = false;
+        last_idx = i;
+      }
+  }
+}
 template <class T>
 void bsgm_check_nonunique(
   vil_image_view<float>& disp_img,
@@ -663,6 +745,6 @@ template void bsgm_check_nonunique(vil_image_view<float>& , const vil_image_view
                                    const vgl_box_2d<int>&);                                       \
 template void bsgm_shadow_step_filter(const vil_image_view<T>&, const vil_image_view<bool>&,      \
                                       vil_image_view<float>&, const vgl_vector_2d<float>&,        \
-                                      int, int, int)
+                                      int, int, int)                   
 
 #endif // bsgm_error_checking_h_

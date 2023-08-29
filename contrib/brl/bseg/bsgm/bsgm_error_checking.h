@@ -18,6 +18,7 @@
 //        maps.
 // \author Thomas Pollard
 // \date July 24, 2018
+// utils
 
 //: Invalidate disparity pixels with corresponding image intensity below
 // a shadow threshold
