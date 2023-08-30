@@ -413,16 +413,28 @@ T& vnl_sparse_matrix<T>::operator()(unsigned int r, unsigned int c)
 {
   assert((r < rows()) && (c < columns()));
   row& rw = elements[r];
-  typename row::iterator ri;
-  for (ri = rw.begin(); (ri != rw.end()) && ((*ri).first < c); ++ri)
-    /*nothing*/;
 
-  if ((ri == rw.end()) || ((*ri).first != c)) {
-    // Add new column to the row.
-    ri = rw.insert(ri, vnl_sparse_matrix_pair<T>(c,T()));
+  if (rw.empty())
+  {
+    rw.push_back(vnl_sparse_matrix_pair<T>(c, T()));
+    return rw.back().second;
   }
 
-  return (*ri).second;
+  if (c < rw.back().first)
+  {
+    // Because the last column number in the row is greater than `c`, the following iteration will stop before the end
+    // of the row.
+    typename row::iterator ri = rw.begin();
+    while (ri->first < c)
+      ++ri;
+
+    return (ri->first == c ? ri : rw.insert(ri, vnl_sparse_matrix_pair<T>(c, T())))->second;
+  }
+
+  if (c > rw.back().first)
+    rw.push_back(vnl_sparse_matrix_pair<T>(c, T()));
+
+  return rw.back().second;
 }
 
 //------------------------------------------------------------
