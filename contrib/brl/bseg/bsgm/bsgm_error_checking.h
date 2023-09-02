@@ -44,6 +44,18 @@ void bsgm_shadow_step_filter(
   int response_low,
   int shadow_high);
 
+// compute shadow probability adaptively based on the result of the
+// shadow step filter. Starting at shadow step points continue along
+// a scan in the sun direction until the last shadow step point. The rectified
+// image intensity at this pixel is used as a shadow threshold until the end
+// of the scan. Shadow scan length and shadow step probablity threshold (ss_thresh)
+// are parameters.
+void bsgm_shadow_prob(vil_image_view<unsigned short> const& rect_img,
+                      vgl_vector_2d<float> const& sun_dir,
+                      float default_shadow_thresh, 
+                      vil_image_view<float> const& shadow_step_prob,
+                      vil_image_view<float>& shadow_prob,
+                      float scan_length, float ss_thresh);
 
 //: Use the OpenCV SGM uniqueness criteria to find bad disparities. This
 // is not quite the same as the left-right consistency check from the SGM

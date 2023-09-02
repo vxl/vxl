@@ -283,6 +283,7 @@ bsgm_shadow_step_filter(const vil_image_view<T> & img,
       }
     }
 }
+
 static void one_d_dialation(std::vector<bool> const& vals, size_t gap, std::vector<bool>& dialated_vals, bool print = false) {
   dialated_vals = vals;
   size_t n = vals.size();
@@ -331,38 +332,6 @@ static void one_d_tail_erode(std::vector<bool> const& vals, size_t rem, std::vec
   }
 }
 
-static void shadow_step_enable(std::vector<std::pair<bool, bool> > const& shstp_scan, std::vector<bool>& enabled, int& first_idx, int& last_idx) {
-  size_t n = shstp_scan.size();
-  enabled.resize(n, false);
-  // state machine
-  bool start = true;
-  bool start_ss = false; //start state
-  bool end_enable = false; // end enable
-  for (size_t i = 0; i < n; ++i) {
-    bool shad = shstp_scan[i].first;
-    bool shstp = shstp_scan[i].second;
-    if (start && shstp) {
-      start_ss = true;
-      start = false;
-      enabled[i] = true;
-      first_idx = i;
-      continue;
-    }
-    if (start_ss)
-      if (shad || shstp) {
-        enabled[i] = true;
-        if (i == n - 1) {
-          last_idx = n - 1;
-          return; //end of scan
-        }
-        continue;
-      }else {
-        end_enable = true;
-        start_ss = false;
-        last_idx = i;
-      }
-  }
-}
 template <class T>
 void bsgm_check_nonunique(
   vil_image_view<float>& disp_img,

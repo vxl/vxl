@@ -208,11 +208,15 @@ class bsgm_disparity_estimator
     size_t w = img_target.ni(), h = img_target.nj();
     shadow_prob_.set_size(w, h);
     shadow_prob_.fill(0.0f);
+#if 0
     for(size_t y = 0; y<h; ++y)
       for(size_t x = 0; x<w; ++x)
         if(img_target(x, y)<params_.shadow_thresh){
           shadow_prob_(x,y) = 1.0f;
         }
+#endif
+    bsgm_shadow_prob(img_target, sun_dir_tar_, params_.shadow_thresh, shadow_step_prob_,
+                     shadow_prob_, 50.0f, 0.5f);
   }
   //: Allocate and setup cost volumes based on current w_ and h_
   void setup_cost_volume(
