@@ -269,20 +269,22 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_disparity(
 #endif
   //assign sun direction according to forward or reverse
   vgl_vector_2d<float> sun_dir_tar, sun_dir_ref;
-  vil_image_view<float> sstep;
+  vil_image_view<float> sstep,shd;
   if (forward){
     sun_dir_tar = sun_dir_0_;
     invalid = invalid_map_fwd_;
     sstep = shadow_step_fwd_;
+    shd = shadow_fwd_;
       }else{
     sun_dir_tar = sun_dir_1_;
     invalid = invalid_map_rev_;
     sstep = shadow_step_rev_;
+    shd = shadow_rev_;
   }
   
   if (params_.coarse_dsm_disparity_estimate_) {
     bsgm_multiscale_disparity_estimator mde(params_.de_params_, rect_ni_, rect_nj_,
-                                            num_disparities(), num_active_disparities(),sstep,sun_dir_tar);
+                                            num_disparities(), num_active_disparities(),sstep,shd,sun_dir_tar);
 
     good = mde.compute(img, img_reference, invalid,
                        min_disparity_, invalid_disp, params_.multi_scale_mode_,
@@ -314,7 +316,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_disparity(
 
 
     bsgm_disparity_estimator bsgm(params_.de_params_, cost_volume_width,
-                                  cost_volume_height, num_disparities(), sstep,
+                                  cost_volume_height, num_disparities(), sstep, shd,
                                   sun_dir_tar);//potential use for dp sun dir bias
 
     good = bsgm.compute(img, img_reference, invalid, min_disparity,
@@ -752,6 +754,60 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_dsm_grid_stype(std::string const
     throw std::runtime_error("save_dsm_grid_stype failed");
   }
 }
+template <class CAM_T, class PIX_T>
+void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow0(std::string const& path) const{
+  size_t ni = rect_bview0_.ni(), nj = rect_bview0_.nj(); 
+  vil_image_view<vxl_byte> temp(ni, nj, 3);
+  temp.fill(vxl_byte(0));
+  for(size_t j = 0;j<nj; ++j)
+    for(size_t i = 0;i<ni; ++i){
+      vxl_byte s = shadow_fwd_(i,j)*250.0f;
+      vxl_byte ss = shadow_step_fwd_(i,j)*250.0f;
+      vxl_byte v0 = rect_bview0_(i,j)/8;
+      if(v0>255) v0 = 255;
+      if(ss>125)
+        temp(i,j,1) = ss;
+      else
+        temp(i,j,1) = v0;
+      if(s > 0)
+        temp(i,j,0) = s;
+      else
+        temp(i,j,0) = v0;
+        
+      temp(i,j,2) = v0;
+    }
+  if (!vil_save(temp,path.c_str())) {
+    std::cout << "save_rect_shadow0 failed" << std::endl;
+    throw std::runtime_error("save_rect_shadow0 failed");
+  }
+}
+template <class CAM_T, class PIX_T>
+void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow1(std::string const& path) const{
+  size_t ni = rect_bview1_.ni(), nj = rect_bview1_.nj(); 
+  vil_image_view<vxl_byte> temp(ni, nj, 3);
+  temp.fill(vxl_byte(0));
+  for(size_t j = 0;j<nj; ++j)
+    for(size_t i = 0;i<ni; ++i){
+      vxl_byte s = shadow_rev_(i,j)*250.0f;
+      vxl_byte ss = shadow_step_rev_(i,j)*250.0f;
+      vxl_byte v1 = rect_bview1_(i,j)/8;
+      if(v1>255) v1 = 255;
+      if(ss>125)
+        temp(i,j,1) = ss;
+      else
+        temp(i,j,1) = v1;
+      if(s > 0)
+        temp(i,j,0) = s;
+      else
+        temp(i,j,0) = v1;
+        
+      temp(i,j,2) = v1;
+    }
+  if (!vil_save(temp,path.c_str())) {
+    std::cout << "save_rect_shadow1 failed" << std::endl;
+    throw std::runtime_error("save_rect_shadow1 failed");
+  }
+}
 
 template <class CAM_T, class PIX_T>
 void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::set_shadow_context_data(){
@@ -793,8 +849,14 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::set_shadow_context_data(){
     bsgm_shadow_step_filter<PIX_T>(rect_bview1_, invalid_map_rev_, shadow_step_rev_, sun_dir_1_, params_.shadow_profile_radius_, params_.response_low_, params_.shadow_high_);
 
     //shadow    
-    PIX_T sthresh = static_cast<PIX_T>(params_.shadow_thresh_);
-    rect_target_stype_.apply(rect_bview0_, sthresh, bpgl_surface_type::SHADOW);
+    float sthresh = static_cast<float>(params_.shadow_thresh_);
+    bsgm_shadow_prob(rect_bview0_, invalid_map_fwd_, sun_dir_0_,
+                     sthresh, shadow_step_fwd_, shadow_fwd_, 50.0f, 0.5f);
+
+    bsgm_shadow_prob(rect_bview1_, invalid_map_rev_, sun_dir_1_,
+                     sthresh, shadow_step_rev_, shadow_rev_, 50.0f, 0.5f);
+
+    rect_target_stype_.apply(shadow_fwd_, bpgl_surface_type::SHADOW);
     return;
   }
   // a perspective camera can project a vector into a finite image point, i.e. shadow vanishing point

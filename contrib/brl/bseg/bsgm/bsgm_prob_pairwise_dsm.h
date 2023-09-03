@@ -83,7 +83,7 @@ struct pairwise_params
   bsgm_disparity_estimator_params de_params_;
 
   // intensity level below which is considered to be in shadow, thus invalid
-  size_t shadow_thresh_ = 20;
+  size_t shadow_thresh_ = 20; // reasonable for byte pixel intensities
 
   // if true, perform quadratic interpolation of disparity with respect to cost
   bool quad_interp_ = false;
@@ -378,6 +378,9 @@ class bsgm_prob_pairwise_dsm
   const bpgl_surface_type & rect_target_stype() const  { return rect_target_stype_; }
   const bpgl_surface_type & dsm_grid_stype() const { return dsm_grid_stype_; }
 
+  const vil_image_view<float>&  rect_shadow_fwd() const {return shadow_fwd_;}
+  const vil_image_view<float>&  rect_shadow_rev() const {return shadow_rev_;}
+
   // PROCESS-----
 
   //: image rectification
@@ -537,6 +540,8 @@ class bsgm_prob_pairwise_dsm
   //: save surface type data
   void save_rect_target_stype(std::string const& path) const;
   void save_dsm_grid_stype(std::string const& path) const;
+  void save_rect_shadow0(std::string const& path) const;
+  void save_rect_shadow1(std::string const& path) const;
 
  protected:
 
@@ -602,6 +607,8 @@ class bsgm_prob_pairwise_dsm
   vgl_vector_2d<float> sun_dir_1_;
   vil_image_view<float> shadow_step_fwd_;
   vil_image_view<float> shadow_step_rev_;
+  vil_image_view<float> shadow_fwd_;
+  vil_image_view<float> shadow_rev_;
   // define surface type probability layers
   bpgl_surface_type rect_target_stype_;
   bpgl_surface_type dsm_grid_stype_;

@@ -129,8 +129,11 @@ class bsgm_disparity_estimator
     long long int cost_volume_width,
     long long int cost_volume_height,
     long long int num_disparities,
+    // optional shadow processing to eliminate overhang
+    // must be defined if use_shadow_step_p2_adjustment = true,
     vil_image_view<float> const& shadow_step_prob = vil_image_view<float>(),
-    vgl_vector_2d<float> const& sun_dir_tar = vgl_vector_2d<float>(0.0f, 0.0f));//for bias weighting (deprecated)
+    vil_image_view<float> const& shadow_prob = vil_image_view<float>(),
+    vgl_vector_2d<float> const& sun_dir_tar = vgl_vector_2d<float>(0.0f, 0.0f));
   //: Destructor
   ~bsgm_disparity_estimator();
 
@@ -204,7 +207,7 @@ class bsgm_disparity_estimator
   //
   // compute shadow info
   template <class T>
-  void compute_shadow_prob(const vil_image_view<T>& img_target){
+  void compute_shadow_prob(const vil_image_view<T>& img_target, vil_image_view<bool> const& invalid_target){
     size_t w = img_target.ni(), h = img_target.nj();
     shadow_prob_.set_size(w, h);
     shadow_prob_.fill(0.0f);
@@ -215,7 +218,7 @@ class bsgm_disparity_estimator
           shadow_prob_(x,y) = 1.0f;
         }
 #endif
-    bsgm_shadow_prob(img_target, sun_dir_tar_, params_.shadow_thresh, shadow_step_prob_,
+    bsgm_shadow_prob(img_target, invalid_target, sun_dir_tar_, params_.shadow_thresh, shadow_step_prob_,
                      shadow_prob_, 50.0f, 0.5f);
   }
   //: Allocate and setup cost volumes based on current w_ and h_
@@ -533,8 +536,8 @@ bool bsgm_disparity_estimator::compute(
     params_.census_tol *=dynamic_range_factor;//SW18 has params_.census_tol *=20
     gscale = 1.0f/dynamic_range_factor;
   }
-  // shadow info
-  compute_shadow_prob(img_tar);
+  // shadow info - (input from prob_pairwise_dsm instead of local computation)
+  //compute_shadow_prob(img_tar, invalid_tar);
 
   // Compute census appearance cost volume data.
   if (params_.census_weight > 0.0f) {
