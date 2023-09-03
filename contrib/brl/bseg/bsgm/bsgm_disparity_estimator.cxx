@@ -279,10 +279,12 @@ bsgm_disparity_estimator::run_multi_dp(
   float sx = sun_dir_tar_.x(), sy = sun_dir_tar_.y();//sun ray direction
   int shad_step_dp_dir_code = -1;//invalid dp direction
   bool shad_step_dynamic_prog = false;
+  std::vector<std::pair<int, int> > adj_dirs;
   if(params_.use_shadow_step_p2_adjustment&&mag>0.0f){
     bool shad_step_dynamic_prog = true;
     // for a dp with 8 directions
     if(num_dirs==8){
+      adj_dirs.resize(8, std::pair<int, int>(-1, -1));
       float s22 = 0.383, c22 = 0.924;//sin and cos of 22.5 degrees
       if(fabs(sy)<=s22 && sx<=0)           shad_step_dp_dir_code = 0;
       else if(fabs(sy)<=s22 && sx>0)       shad_step_dp_dir_code = 1;
@@ -292,8 +294,18 @@ bsgm_disparity_estimator::run_multi_dp(
       else if(fabs(sx)<s22 && sy>=0)       shad_step_dp_dir_code = 5;
       else if((sy<-s22&&sy>=-c22)&& sx>=0) shad_step_dp_dir_code = 6;
       else if((sy>s22&&sy<=c22)&& sx<0)    shad_step_dp_dir_code = 7;
+      // adjacent dirs
+      adj_dirs[0] = std::pair<int, int>(2, 7);
+      adj_dirs[1] = std::pair<int, int>(3, 6);
+      adj_dirs[2] = std::pair<int, int>(0, 4);
+      adj_dirs[3] = std::pair<int, int>(1, 5);
+      adj_dirs[4] = std::pair<int, int>(2, 6);
+      adj_dirs[5] = std::pair<int, int>(3, 7);
+      adj_dirs[6] = std::pair<int, int>(1, 4);
+      adj_dirs[7] = std::pair<int, int>(0, 5);
     // or 16 directions
     }else if(num_dirs = 16){
+      adj_dirs.resize(16, std::pair<int, int>(-1, -1));
       float s11 = 0.195, s34=0.556, s56 = 0.831, s79 = 0.981;
       // direction codes 0-7
       if(fabs(sy)<=s11 && sx<=0)           shad_step_dp_dir_code = 0;
@@ -313,6 +325,23 @@ bsgm_disparity_estimator::run_multi_dp(
       else if((sy>s56&&sy<s79)&&sx<0)      shad_step_dp_dir_code = 13;
       else if((sy<-s11&&sy>-s34)&& sx>=0)  shad_step_dp_dir_code = 14;
       else if((sy>s11&&sy<s34)&& sx<0)     shad_step_dp_dir_code = 15;
+      // adjacent dirs
+      adj_dirs[0] = std::pair<int, int>(8, 15);
+      adj_dirs[1] = std::pair<int, int>(9, 14);
+      adj_dirs[2] = std::pair<int, int>(8, 10);
+      adj_dirs[3] = std::pair<int, int>(9, 11);
+      adj_dirs[4] = std::pair<int, int>(10, 12);
+      adj_dirs[5] = std::pair<int, int>(11, 13);
+      adj_dirs[6] = std::pair<int, int>(12, 14);
+      adj_dirs[7] = std::pair<int, int>(13, 15);
+      adj_dirs[8] = std::pair<int, int>(0, 2);
+      adj_dirs[9] = std::pair<int, int>(1, 3);
+      adj_dirs[10] = std::pair<int, int>(2, 4);
+      adj_dirs[11] = std::pair<int, int>(3, 5);
+      adj_dirs[12] = std::pair<int, int>(4, 6);
+      adj_dirs[13] = std::pair<int, int>(5, 7);
+      adj_dirs[14] = std::pair<int, int>(1, 6);
+      adj_dirs[15] = std::pair<int, int>(0, 7);
     }
     //std::cout << "sun dir(" << sx << ' ' << sy << ") shadow step dir code " << shad_step_dp_dir_code << std::endl;
   }
@@ -533,8 +562,9 @@ bsgm_disparity_estimator::run_multi_dp(
 
           // In shadow, limit the dynamic program direction to that closest to opposite the sun ray dir
           // that is, update total cost along the direction towards the step from outside the shadow
-          if((shadow_prob_(x,y) > 0.5)&&(dir != shad_step_dp_dir_code))
-             continue;
+          int dc = shad_step_dp_dir_code;
+          if((shadow_prob_(x,y) > 0.5)&&((dir != dc)&&(dir != adj_dirs[dc].first)&&(dir != adj_dirs[dc].second)))
+            continue;
           
           // suppress appearance cost
           if(sp > 0.5 || shadow_prob_(x,y) > 0.5f){

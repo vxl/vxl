@@ -363,7 +363,9 @@ static void adaptive_shadow_prob(size_t i, size_t j,
       start = true;
     }
     if(start&&std::get<4>(shstp_vals[i])){
-      thresh = rec;
+      //thresh = rec;
+      if(rec<thresh)
+        thresh = rec;
       if(thresh < default_shadow_thresh)
         thresh = default_shadow_thresh;
       if(i == (n-1)){
@@ -378,7 +380,8 @@ static void adaptive_shadow_prob(size_t i, size_t j,
     start = false;
   }
   // thresh is set at end of shad step line scan
-
+  // or set to minimum
+  
   // finally scan and classify shadow
   start = false;
   bool sprint = false;
