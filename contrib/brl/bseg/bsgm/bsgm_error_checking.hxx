@@ -372,8 +372,8 @@ static void adaptive_shadow_prob(size_t i, size_t j,
         done = true;
         start = false;
       }
-      int xi = std::get<2>(shstp_vals[i]), yi = std::get<3>(shstp_vals[i]);
-      shadow_prob(xi, yi) = 1.0;
+      //int xi = std::get<2>(shstp_vals[i]), yi = std::get<3>(shstp_vals[i]);
+      //shadow_prob(xi, yi) = 1.0;
       continue;
     }
     done = true;
@@ -391,10 +391,12 @@ static void adaptive_shadow_prob(size_t i, size_t j,
     float rect = std::get<1>(shstp_vals[i]);
     bool shadow = rect<thresh;
     bool ss = std::get<4>(shstp_vals[i]);
-    if(!start&&(shadow||ss)){
+    //if(!start&&(shadow||ss)){
+    if(!start&&(shadow)){
       start = true;
     }
-    if(start && (ss || shadow)){
+    //if(start && (ss || shadow)){
+    if(start && (shadow)){
       shadow_prob(xi, yi) = 1.0;
       if(i == (n-1)){
         done = true;
