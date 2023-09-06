@@ -550,6 +550,7 @@ bsgm_disparity_estimator::run_multi_dp(
         // If configured, compute p1, p2 values based on shadow data
         // shadow_step prob image and sun ray direction must be valid
         bool suppress_appearance = false;
+        float adj_weight = 0.0f;
         if(params_.use_shadow_step_p2_adjustment && shadow_step_prob_&&mag>0.0f){
           //if(shad_step_dynamic_prog){
           // probability of a height discontinuity casting a shadow
@@ -563,11 +564,18 @@ bsgm_disparity_estimator::run_multi_dp(
           // In shadow, limit the dynamic program direction to that closest to opposite the sun ray dir
           // that is, update total cost along the direction towards the step from outside the shadow
           int dc = shad_step_dp_dir_code;
-          if((shadow_prob_(x,y) > 0.5)&&((dir != dc)&&(dir != adj_dirs[dc].first)&&(dir != adj_dirs[dc].second)))
-            continue;
           
+          if((shadow_prob_(x,y) > 0.5)&&( (dir != dc)&&(dir != adj_dirs[dc].first)&&(dir != adj_dirs[dc].second) ))
+            continue;
+
+          // see weight for adjacent directions
+          if(dir == dc) adj_weight = 1.0f;
+          else if(dir == adj_dirs[dc].first || dir == adj_dirs[dc].second)
+            adj_weight = params_.adj_dir_weight;
+
           // suppress appearance cost
-          if(sp > 0.5 || shadow_prob_(x,y) > 0.5f){
+          //if(sp > 0.5 || shadow_prob_(x,y) > 0.5f){
+          if(shadow_prob_(x,y) > 0.5f){
             suppress_appearance = true;
           }
         }
@@ -579,14 +587,16 @@ bsgm_disparity_estimator::run_multi_dp(
             (*active_app_cost_)[y][x],
             &dir_cost_cur[x*num_disparities_],
             total_cost[y][x], dir_weight*p1, dir_weight*p2,// p1, p2,
-            min_disparity(x+dx,y+dy), min_disparity(x,y), suppress_appearance);
+            min_disparity(x+dx,y+dy), min_disparity(x,y),
+            suppress_appearance, adj_weight);
         else
           compute_dir_cost(
             &dir_cost_prev[(x+dx)*num_disparities_],
             (*active_app_cost_)[y][x],
             &dir_cost_cur[x*num_disparities_],
             total_cost[y][x], dir_weight*p1, dir_weight*p2,// p1, p2,
-            min_disparity(x+dx,y+dy), min_disparity(x,y), suppress_appearance);
+            min_disparity(x+dx,y+dy), min_disparity(x,y),
+            suppress_appearance, adj_weight);
       } //x
 
       // Copy current row to previous
@@ -608,7 +618,8 @@ bsgm_disparity_estimator::compute_dir_cost(
   unsigned short p2,
   int prev_min_disparity,
   int cur_min_disparity,
-  bool suppress_appearance)
+  bool suppress_appearance,
+  float adj_weight)
 {
   // Compute the offset the aligns previous and current disparities
   int prev_offset = cur_min_disparity - prev_min_disparity;
@@ -657,14 +668,13 @@ bsgm_disparity_estimator::compute_dir_cost(
     // Add the appearance cost and subtract off lowest cost to prevent
     // numerical overflow. Appearance cost is constant if suppressed
     // so that best previous cost dominates.
-     if(suppress_appearance)
+    if(suppress_appearance){
        *crc =  vxl_byte(255) + best_cost - min_prev_cost;
-    else
+       *tc += (*crc)*adj_weight;
+    }else{
       *crc = *cac + best_cost - min_prev_cost;
-
-    // Add current cost to total
-    *tc += *crc;
-
+      *tc += (*crc);
+    }
   }// end of disparity loop
 } 
 

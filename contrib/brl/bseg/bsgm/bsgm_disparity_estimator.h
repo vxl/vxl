@@ -75,8 +75,14 @@ struct bsgm_disparity_estimator_params
   //: Set "bias_weight" to the range (0.0,1.0] to bias the SGM directional average
   // against the sun_dir_tar_ vector.  Use this if smoothing from certain
   // directions (i.e. sun angle for satellite imagery) is unreliable.  Set to
-  // 0 to disable biasing.
+  // 0 to disable biasing. (deprecated, supplanted by adj_dir_weight)
   float bias_weight;
+  
+  //: Under shadow step and shadow control of the dynamic program
+  //  scan with prior cost emphasis in the scan direction opposite to the sun rays
+  //  also include directions to each side of this primary direction with weight
+  //  defined by "adj_dir_weight" in the interval (0, 1) 
+  float adj_dir_weight;
 
   //: Appearance costs computed by different algorithms are statically fused
   // using these weights. Set any to <= 0 to prevent computation.
@@ -106,6 +112,7 @@ struct bsgm_disparity_estimator_params
     error_check_mode(1),
     shadow_thresh(0),
     bias_weight(0.0f),
+    adj_dir_weight(0.25f),
     census_weight(0.3f),
     xgrad_weight(0.7f),
     census_tol(2),
@@ -205,21 +212,16 @@ class bsgm_disparity_estimator
   //
   // Sub-routines called by SGM in order
   //
-  // compute shadow info
+  // compute shadow info, in case not supplied externally
   template <class T>
   void compute_shadow_prob(const vil_image_view<T>& img_target, vil_image_view<bool> const& invalid_target){
     size_t w = img_target.ni(), h = img_target.nj();
     shadow_prob_.set_size(w, h);
     shadow_prob_.fill(0.0f);
-#if 0
     for(size_t y = 0; y<h; ++y)
       for(size_t x = 0; x<w; ++x)
-        if(img_target(x, y)<params_.shadow_thresh){
+        if(img_target(x, y)<params_.shadow_thresh)
           shadow_prob_(x,y) = 1.0f;
-        }
-#endif
-    bsgm_shadow_prob(img_target, invalid_target, sun_dir_tar_, params_.shadow_thresh, shadow_step_prob_,
-                     shadow_prob_, 50.0f, 0.5f);
   }
   //: Allocate and setup cost volumes based on current w_ and h_
   void setup_cost_volume(
@@ -276,7 +278,8 @@ class bsgm_disparity_estimator
     unsigned short p2,
     int prev_min_disparity,
     int cur_min_disparity,
-    bool suppress_appearance = false
+    bool suppress_appearance = false,
+    float adj_weight = 0.0f
     );
 
   //: Extract the min cost disparity at each pixel, using quadratic
@@ -536,7 +539,7 @@ bool bsgm_disparity_estimator::compute(
     params_.census_tol *=dynamic_range_factor;//SW18 has params_.census_tol *=20
     gscale = 1.0f/dynamic_range_factor;
   }
-  // shadow info - (input from prob_pairwise_dsm instead of local computation)
+  // shadow info - (if commented out, input from prob_pairwise_dsm instead of local computation)
   //compute_shadow_prob(img_tar, invalid_tar);
 
   // Compute census appearance cost volume data.

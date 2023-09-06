@@ -765,7 +765,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow0(std::string const& 
       vxl_byte ss = shadow_step_fwd_(i,j)*250.0f;
       vxl_byte v0 = rect_bview0_(i,j)/8;
       if(v0>255) v0 = 255;
-      if(ss>125)
+      if(ss>64)
         temp(i,j,1) = ss;
       else
         temp(i,j,1) = v0;
@@ -792,7 +792,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow1(std::string const& 
       vxl_byte ss = shadow_step_rev_(i,j)*250.0f;
       vxl_byte v1 = rect_bview1_(i,j)/8;
       if(v1>255) v1 = 255;
-      if(ss>125)
+      if(ss>64)
         temp(i,j,1) = ss;
       else
         temp(i,j,1) = v1;
@@ -850,13 +850,38 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::set_shadow_context_data(){
 
     //shadow    
     float sthresh = static_cast<float>(params_.shadow_thresh_);
+#if 1
     bsgm_shadow_prob(rect_bview0_, invalid_map_fwd_, sun_dir_0_,
                      sthresh, shadow_step_fwd_, shadow_fwd_, 50.0f, 0.5f);
 
     bsgm_shadow_prob(rect_bview1_, invalid_map_rev_, sun_dir_1_,
                      sthresh, shadow_step_rev_, shadow_rev_, 50.0f, 0.5f);
-
+#else
+    size_t ni0 = rect_bview0_.ni(), nj0 = rect_bview0_.nj();
+    shadow_fwd_.set_size(ni0, nj0);
+    shadow_fwd_.fill(0.0f);
+    for(size_t j = 0; j<nj0; ++j)
+      for(size_t i = 0; i<ni0; ++i)
+        if(!invalid_map_fwd_(i,j)&&rect_bview0_(i, j)<sthresh)
+          shadow_fwd_(i,j) = 1.0f;
+    //============
+    size_t ni1 = rect_bview1_.ni(), nj1 = rect_bview1_.nj();
+    shadow_rev_.set_size(ni1, nj1);
+    shadow_rev_.fill(0.0f);
+    for(size_t j = 0; j<nj1; ++j)
+      for(size_t i = 0; i<ni1; ++i)
+        if(!invalid_map_rev_(i,j)&&rect_bview1_(i, j)<sthresh)
+          shadow_rev_(i,j) = 1.0f;
+#endif
+#if 0
+    vil_image_view<float> tmp(ni0, nj0);
+    tmp.fill(0.0f);
+    bsgm_shadow_prob(rect_bview0_, invalid_map_fwd_, sun_dir_0_,
+                     sthresh, shadow_step_fwd_, tmp, 50.0f, 0.5f);
+    rect_target_stype_.apply(tmp, bpgl_surface_type::SHADOW);
+#else
     rect_target_stype_.apply(shadow_fwd_, bpgl_surface_type::SHADOW);
+#endif
     return;
   }
   // a perspective camera can project a vector into a finite image point, i.e. shadow vanishing point
