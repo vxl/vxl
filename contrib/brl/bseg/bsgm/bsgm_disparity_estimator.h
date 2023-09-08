@@ -79,10 +79,17 @@ struct bsgm_disparity_estimator_params
   float bias_weight;
   
   //: Under shadow step and shadow control of the dynamic program
-  //  scan with prior cost emphasis in the scan direction opposite to the sun rays
+  //  scan with prior cost empthasized in the scan direction opposite to the sun rays,
   //  also include directions to each side of this primary direction with weight
   //  defined by "adj_dir_weight" in the interval (0, 1) 
   float adj_dir_weight;
+
+  //: suppress appearance cost in dynamic program for both shadow and shadow step
+  // pixels otherwise only suppress in shadow
+  bool app_supress_shadow_shad_step;
+
+  //: threhold for considering either shadow or shadow step active
+  float shad_shad_stp_prob_thresh;
 
   //: Appearance costs computed by different algorithms are statically fused
   // using these weights. Set any to <= 0 to prevent computation.
@@ -113,13 +120,15 @@ struct bsgm_disparity_estimator_params
     shadow_thresh(0),
     bias_weight(0.0f),
     adj_dir_weight(0.25f),
+    //adj_dir_weight(0.0f),
+    app_supress_shadow_shad_step(false),
+    shad_shad_stp_prob_thresh(0.5f),
     census_weight(0.3f),
     xgrad_weight(0.7f),
     census_tol(2),
     census_rad(2),
     print_timing(false)
     {}
-
 };
 
 // output parameters

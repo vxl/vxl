@@ -552,7 +552,6 @@ bsgm_disparity_estimator::run_multi_dp(
         bool suppress_appearance = false;
         float adj_weight = 0.0f;
         if(params_.use_shadow_step_p2_adjustment && shadow_step_prob_&&mag>0.0f){
-          //if(shad_step_dynamic_prog){
           // probability of a height discontinuity casting a shadow
           float sp = shadow_step_prob_(x,y);
           // enhance probability
@@ -562,23 +561,30 @@ bsgm_disparity_estimator::run_multi_dp(
           p2 = p2_max + (p2_min-p2_max)* ss;
 
           // In shadow, limit the dynamic program direction to that closest to opposite the sun ray dir
-          // that is, update total cost along the direction towards the step from outside the shadow
+          // that is, update total cost along the direction towards the shadow casting step discontinuity from outside the shadow
           int dc = shad_step_dp_dir_code;
           
-          if((shadow_prob_(x,y) > 0.5)&&( (dir != dc)&&(dir != adj_dirs[dc].first)&&(dir != adj_dirs[dc].second) ))
+          float pthr = params_.shad_shad_stp_prob_thresh;
+          float adjw = params_.adj_dir_weight;
+          // include dc and dp directions on each side of dc otherwise skip the current dp direction
+          if(adjw>0.0f && (shadow_prob_(x,y) > pthr)&&( (dir != dc)&&(dir != adj_dirs[dc].first)&&(dir != adj_dirs[dc].second) ))
             continue;
-
-          // see weight for adjacent directions
+          else if((shadow_prob_(x,y) > pthr)&& (dir != dc))
+            continue;
+                                                
+          // weight the effect of adjacent directions compared to the direction most aginst
+          // the sun ray direction
           if(dir == dc) adj_weight = 1.0f;
           else if(dir == adj_dirs[dc].first || dir == adj_dirs[dc].second)
-            adj_weight = params_.adj_dir_weight;
+            adj_weight = adjw;
 
           // suppress appearance cost
-          //if(sp > 0.5 || shadow_prob_(x,y) > 0.5f){
-          if(shadow_prob_(x,y) > 0.5f){
-            suppress_appearance = true;
-          }
-        }
+          suppress_appearance = false;
+           if(params_.app_supress_shadow_shad_step)
+            suppress_appearance = (sp > pthr) || (shadow_prob_(x,y) > pthr);
+          else
+            suppress_appearance = (shadow_prob_(x,y) > pthr);
+        }          
 
         // Compute the directional smoothing cost and add to total
         if( dy == 0 )
