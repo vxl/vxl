@@ -892,14 +892,14 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::set_shadow_context_data(){
     //shadow    
     float sthresh = static_cast<float>(params_.shadow_thresh_);
     if(params_.shadow_prob_method_ == "adaptive_sun_direction_scan"){
-      std::cout << "adaptive threshold " << sthresh << " adj weight " << params_.de_params_.adj_dir_weight << " supp. under shadow step " << params_.de_params_.app_supress_shadow_shad_step << std::endl;
+      //std::cout << "adaptive threshold " << sthresh << " adj weight " << params_.de_params_.adj_dir_weight << " supp. under shadow step " << params_.de_params_.app_supress_shadow_shad_step << std::endl;
       bsgm_shadow_prob(rect_bview0_, invalid_map_fwd_, sun_dir_0_,
                        sthresh, shadow_step_fwd_, shadow_fwd_, 50.0f, 0.5f);
 
       bsgm_shadow_prob(rect_bview1_, invalid_map_rev_, sun_dir_1_,
                        sthresh, shadow_step_rev_, shadow_rev_, 50.0f, 0.5f);
     }else if(params_.shadow_prob_method_ == "fixed_threshold"){
-      std::cout << "fixed threshold " << sthresh << " adj weight " << params_.de_params_.adj_dir_weight << std::endl;
+      //std::cout << "fixed threshold " << sthresh << " adj weight " << params_.de_params_.adj_dir_weight << std::endl;
       size_t ni0 = rect_bview0_.ni(), nj0 = rect_bview0_.nj();
       shadow_fwd_.set_size(ni0, nj0);
       shadow_fwd_.fill(0.0f);
