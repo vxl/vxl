@@ -45,5 +45,11 @@
 // data-conversion related to 'size_t'
 #pragma warning ( disable : 4267 )
 
+// warning for gethost
+#pragma warning ( disable : 4996 )
+
+// discard return value
+#pragma warning ( disable : 4834 )
+  
 #endif // _MSC_VER
 #endif //vcl_msvc_warnings_h__

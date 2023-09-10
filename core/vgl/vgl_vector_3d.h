@@ -81,16 +81,6 @@ class vgl_vector_3d
   inline T sqr_length() const { return x()*x()+y()*y()+z()*z(); }
 
 
-  //: One-parameter family of unit vectors that are orthogonal to *this, v(s).
-  // To get two orthogonal vectors call this function twice with s=0 and
-  // s=0.25 for example.
-  // \param s 0<=s<=1, v(0)==v(1)
-  // \note This function is not continuous near z==0. (Under the Hairy Ball
-  // theorem no such smooth function can exist.)
-  // \note This vector need not be normalized but it should have non-zero length.
-  // \deprecated Use global function orthogonal_vectors(vgl_vector_3d<T > const& a, double s) instead.
-  vgl_vector_3d<T> orthogonal_vectors(double s) const;
-
   //: Read from stream, possibly with formatting
   //  Either just reads three blank-separated numbers,
   //  or reads three comma-separated numbers,

@@ -22,17 +22,6 @@ double vgl_vector_3d<T>::length() const
   return std::sqrt( 0.0+sqr_length() );
 }
 
-#if !VXL_LEGACY_FUTURE_REMOVE
-//: The one-parameter family of unit vectors that are orthogonal to *this, v(s).
-// The parameterization is such that 0<=s<1, v(0)==v(1)
-template <class T>
-VXL_DEPRECATED_MSG("Will be removed in future versions of VXL")
-vgl_vector_3d<T> vgl_vector_3d<T>::orthogonal_vectors(double s) const
-{
-  return ::orthogonal_vectors(*this, s);
-}
-#endif
-
 template<class T>
 double angle(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b)
 {
