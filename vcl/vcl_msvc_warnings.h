@@ -50,9 +50,6 @@
 
 // discard return value
 #pragma warning ( disable : 4834 )
-
-// minus value unsigned type
-#pragma warning ( disable : 4146 )
   
 #endif // _MSC_VER
 #endif //vcl_msvc_warnings_h__
