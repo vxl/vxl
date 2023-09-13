@@ -422,8 +422,8 @@ T& vnl_sparse_matrix<T>::operator()(unsigned int r, unsigned int c)
 
   if (c < rw.back().first)
   {
-    // Because the last column number in the row is greater than `c`, the following iteration will stop before the end
-    // of the row.
+    // Because the column number of the last entry in the row is greater than `c`, the following iteration will stop
+    // before the end of the row.
     typename row::iterator ri = rw.begin();
     while (ri->first < c)
       ++ri;
@@ -477,16 +477,35 @@ void vnl_sparse_matrix<T>::put(unsigned int r, unsigned int c, T v)
 {
   assert((r < rows()) && (c < columns()));
   row& rw = elements[r];
-  typename row::iterator ri = rw.begin();
-  while (ri != rw.end() && (*ri).first < c)
-    ++ri;
 
-  if (ri == rw.end() || (*ri).first != c) {
-    // Add new column to the row.
-    rw.insert(ri, vnl_sparse_matrix_pair<T>(c,v));
+  if (rw.empty())
+  {
+    rw.push_back(vnl_sparse_matrix_pair<T>(c, v));
+    // Early return, having just added an entry to an empty row.
+    return;
+  }
+
+  if (c < rw.back().first)
+  {
+    // Because the column number of the last entry in the row is greater than `c`, the following iteration will stop
+    // before the end of the row.
+    typename row::iterator ri = rw.begin();
+    while (ri->first < c)
+      ++ri;
+
+    if (ri->first == c)
+      ri->second = v;
+    else
+      rw.insert(ri, vnl_sparse_matrix_pair<T>(c, v)); 
   }
   else
-    (*ri).second = v;
+  {
+    if (c > rw.back().first)
+      rw.push_back(vnl_sparse_matrix_pair<T>(c, v));
+    else
+      // So now `c` is equal to the column number of the last entry in the row, `rw.back().first`.
+      rw.back().second = v;
+  }
 }
 
 template <class T>
