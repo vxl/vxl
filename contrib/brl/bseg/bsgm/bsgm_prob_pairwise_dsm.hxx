@@ -795,15 +795,15 @@ template <class CAM_T, class PIX_T>
 void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow_info_overlay0(std::string const& path) const{
   size_t ni = rect_bview0_.ni(), nj = rect_bview0_.nj(); 
   int conv = 8;
-  if(std::is_same<PIX_T, unsigned char>::value)
+  if(std::is_same<PIX_T, vxl_byte>::value)
     conv = 1;
-  vil_image_view<unsigned char> temp(ni, nj, 3);
-  temp.fill(0);
+  vil_image_view<vxl_byte> temp(ni, nj, 3);
+  temp.fill(vxl_byte(0));
   for(size_t j = 0;j<nj; ++j)
     for(size_t i = 0;i<ni; ++i){
-      unsigned char s = shadow_fwd_(i,j)*250.0f;
-      unsigned char ss = shadow_step_fwd_(i,j)*250.0f;
-      unsigned char v0 = rect_bview0_(i,j)/conv;
+      vxl_byte s = shadow_fwd_(i,j)*250.0f;
+      vxl_byte ss = shadow_step_fwd_(i,j)*250.0f;
+      vxl_byte v0 = rect_bview0_(i,j)/conv;
       if(v0>255) v0 = 255;
       if(ss>25.0)
         temp(i,j,1) = ss;
@@ -823,16 +823,16 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow_info_overlay0(std::s
 template <class CAM_T, class PIX_T>
 void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow_info_overlay1(std::string const& path) const{
   size_t ni = rect_bview1_.ni(), nj = rect_bview1_.nj(); 
-  vil_image_view<unsigned char> temp(ni, nj, 3);
-  temp.fill(unsigned char(0));
+  vil_image_view<vxl_byte> temp(ni, nj, 3);
+  temp.fill(vxl_byte(0));
   int conv = 8;
-  if(std::is_same<PIX_T, unsigned char>::value)
+  if(std::is_same<PIX_T, vxl_byte>::value)
     conv = 1;
   for(size_t j = 0;j<nj; ++j)
     for(size_t i = 0;i<ni; ++i){
-      unsigned char s = shadow_rev_(i,j)*250.0f;
-      unsigned char ss = shadow_step_rev_(i,j)*250.0f;
-      unsigned char v1 = rect_bview1_(i,j)/conv;
+      vxl_byte s = shadow_rev_(i,j)*250.0f;
+      vxl_byte ss = shadow_step_rev_(i,j)*250.0f;
+      vxl_byte v1 = rect_bview1_(i,j)/conv;
       if(v1>255) v1 = 255;
       if(ss>25.0)
         temp(i,j,1) = ss;
