@@ -46,6 +46,7 @@ class bsgm_multiscale_disparity_estimator
     int num_disparities,
     int num_active_disparities,
     vil_image_view<float> const& shadow_step_prob = vil_image_view<float>(),
+    vil_image_view<float> const& shadow_prob = vil_image_view<float>(),
     vgl_vector_2d<float> sun_dir_tar = vgl_vector_2d<float>(0.0f, 0.0f),
     int downscale_exponent = 2 );
 
@@ -123,8 +124,10 @@ int bsgm_compute_median_of_image(
   bsgm_disparity_estimator_params params_;
   //illumination-related data
   vil_image_view<float> shadow_step_prob_;
+  vil_image_view<float> shadow_prob_;
   //down-sampled version
   vil_image_view<float> ss_coarse_;
+  vil_image_view<float> sh_coarse_;
 
   // sun direction for deprecated dp shadow bias method
   vgl_vector_2d<float> sun_dir_tar_ = vgl_vector_2d<float>(0.0, 0.0);

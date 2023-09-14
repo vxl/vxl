@@ -202,15 +202,6 @@ void vgl_h_matrix_2d<T>::get(vnl_matrix_fixed<T,3,3>* H) const
   *H = t12_matrix_;
 }
 
-#if !VXL_LEGACY_FUTURE_REMOVE
-template <class T>
-VXL_DEPRECATED_MSG("Will be removed in future versions of VXL")
-void vgl_h_matrix_2d<T>::get(vnl_matrix<T>* H) const
-{
-  *H = t12_matrix_.as_ref(); // size 3x3
-}
-#endif
-
 template <class T>
 vgl_h_matrix_2d<T>&
 vgl_h_matrix_2d<T>::set_identity()

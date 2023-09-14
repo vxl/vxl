@@ -102,9 +102,7 @@ class vgl_h_matrix_2d
   vnl_matrix_fixed<T,3,3> const& get_matrix() const { return t12_matrix_; }
   //: Fill M with contents of the 3x3 homography matrix
   void get(vnl_matrix_fixed<T,3,3>* M) const;
-  //:
-  // \deprecated use the vnl_matrix_fixed variant instead
-  void get(vnl_matrix<T>* M) const;
+
   //: Fill M with contents of the 3x3 homography matrix
   void get(T *M) const;
   //: Return an element from the 3x3 homography matrix
@@ -165,9 +163,6 @@ class vgl_h_matrix_2d
   //                           0   & 0   & 1
   // \end{array}\right]$
   vgl_h_matrix_2d& set_affine(vnl_matrix_fixed<T,2,3> const& M23);
-  //:
-  // \deprecated use the vnl_matrix_fixed variant instead
-  vgl_h_matrix_2d& set_affine(vnl_matrix<T> const& M23);
 
   bool is_rotation() const;
   bool is_euclidean() const;

@@ -67,6 +67,7 @@ bsgm_multiscale_disparity_estimator::bsgm_multiscale_disparity_estimator(
   int num_disparities,
   int num_active_disparities,
   vil_image_view<float> const& shadow_step_prob,
+  vil_image_view<float> const& shadow_prob,
   vgl_vector_2d<float> sun_dir_tar,
   int downscale_exp ) :
     fine_w_( img_width ),
@@ -74,6 +75,7 @@ bsgm_multiscale_disparity_estimator::bsgm_multiscale_disparity_estimator(
     num_fine_disparities_( num_disparities ),
     num_active_disparities_( num_active_disparities ),
     shadow_step_prob_(shadow_step_prob),
+    shadow_prob_(shadow_prob),
     sun_dir_tar_(sun_dir_tar),
     params_(params)
 {
@@ -97,16 +99,22 @@ bsgm_multiscale_disparity_estimator::bsgm_multiscale_disparity_estimator(
     // Downsample the images
   if(params_.use_shadow_step_p2_adjustment){
     // target shadow step
-    vil_image_view<float> temp_ss_coarse, working;
+    vil_image_view<float> temp_ss_coarse, temp_sh_coarse, working;
     vil_gauss_reduce( shadow_step_prob_, ss_coarse_, working );
     for( int s = 1; s < downscale_exponent_; s++ ){
       vil_gauss_reduce( ss_coarse_, temp_ss_coarse, working );
       ss_coarse_.deep_copy( temp_ss_coarse );
     }
+    // shadow 
+    vil_gauss_reduce(shadow_prob_, sh_coarse_, working);
+    for (int s = 1; s < downscale_exponent_; s++) {
+        vil_gauss_reduce(sh_coarse_, temp_sh_coarse, working);
+        sh_coarse_.deep_copy(temp_sh_coarse);
+    }
   }
-  coarse_de_ = new bsgm_disparity_estimator(params, coarse_w_, coarse_h_, num_coarse_disparities_ , ss_coarse_, sun_dir_tar_);
+  coarse_de_ = new bsgm_disparity_estimator(params, coarse_w_, coarse_h_, num_coarse_disparities_ , ss_coarse_, sh_coarse_, sun_dir_tar_);
   fine_de_ = new bsgm_disparity_estimator(
-    params, fine_w_, fine_h_, num_active_disparities, shadow_step_prob_, sun_dir_tar_);
+    params, fine_w_, fine_h_, num_active_disparities, shadow_step_prob_, shadow_prob_, sun_dir_tar_);
 }
 
 

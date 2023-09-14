@@ -28,6 +28,7 @@ static bool pair_greater(std::pair<int, int> const& a, std::pair<int, int> const
   return a.second > b.second;
 }
 
+
 template <class T>
 void bsgm_check_shadows(
   vil_image_view<float>& disp_img,
@@ -283,6 +284,183 @@ bsgm_shadow_step_filter(const vil_image_view<T> & img,
       }
     }
 }
+static void adaptive_shadow_prob(size_t i, size_t j, vil_image_view<bool> const& invalid,
+                                 vil_image_view<unsigned short> const& rect_image,
+                                 vil_image_view<float> const& shadow_step_prob,
+                                 vgl_vector_2d<float> sun_dir, vil_image_view<float>& shadow_prob,
+                                 float scan_length, float default_shadow_thresh, float shad_stp_thresh){
+  int ni = rect_image.ni(), nj = rect_image.nj();
+  // could be starting from default shadow
+  bool initial_ss = shadow_step_prob(i, j) > shad_stp_thresh;
+  int min_sha_step_interval = 1;
+  float x_start = i, y_start = j;
+  vgl_point_2d<float> ps(x_start, y_start);
+  vgl_point_2d<float> pe = ps + scan_length*sun_dir;
+  float xe = pe.x(), ye = pe.y();
+  // scan along the sun vector and determine the shadow intensity profile
+  // starting at a shadow step filter probability above shad_stp_thresh
+  // profile data
+  //                     ss_prob rect  xi   yi
+  std::vector<std::tuple<float, float, int, int, bool> > shstp_vals;
+  // scan violated outside image bounds
+  bool broke_in_shadow = false;
+  // line scan
+  float x, y;
+  bool init = true;
+  // internal memory for generate line since static memory not allowed
+  // as is the case in the brip_line_generator implementation
+  //=======
+  float dx, dy, mag, xinc,  yinc;
+  int x1,  y1;
+  //=======
+  while(bsgm_generate_line(init, float(x_start), float(y_start), xe, ye, x, y,
+                           // internal memory 
+                           dx, dy, mag, xinc, yinc, x1, y1))
+    {
+      int xi = (int)x, yi = (int)y; //convert the pixel location to integer
+      if (xi < 0 || xi >= ni || yi < 0 || yi >= nj) {
+        broke_in_shadow = true;
+        break;
+      }
+      float ss_prob = shadow_step_prob(xi, yi);
+      float rect = rect_image(xi, yi);
+      shstp_vals.emplace_back(ss_prob, rect, xi, yi, false);
+    }//end while
+
+  size_t n = shstp_vals.size();
+  bool start = false;
+  bool done = false;
+  // scan initialized by default shadow not shadow step
+  if(!initial_ss){
+    for(size_t i = 0; i<n&&!done; ++i){
+      int xi = std::get<2>(shstp_vals[i]), yi = std::get<3>(shstp_vals[i]);
+      bool inv = invalid(xi, yi);
+      float rect = std::get<1>(shstp_vals[i]);
+      bool shadow = rect<default_shadow_thresh;
+      if(!start&& shadow){
+        start = true;
+      }
+      if(start && shadow){
+        if(!inv && rect < default_shadow_thresh)
+          shadow_prob(xi, yi) = 1.0;
+        if(i == (n-1)){
+          done = true;
+          start = false;
+        }
+      }
+    }
+    return;
+  }
+  // analyze profile for threshold at the start of the shadow region
+  float thresh = default_shadow_thresh;
+  float max_thresh = default_shadow_thresh;
+  for(size_t i = 0; i<n&&!done; ++i){
+    bool ss = std::get<0>(shstp_vals[i])> shad_stp_thresh;
+    int ii = std::get<2>(shstp_vals[i]), jj = std::get<3>(shstp_vals[i]);
+    // account for holes in the shadow step region
+    // pixel x is active if ss is true
+    // or any of sl, s+ , sr
+    //          |  scan
+    //          v
+    //          x
+    //       sl s+ sr
+    bool ss_plus = false;
+    bool ss_left = false;
+    bool ss_right = false;
+    if(i<(n-1)){
+      ss_plus = std::get<0>(shstp_vals[i+1])> shad_stp_thresh;
+      int i_plus = std::get<2>(shstp_vals[i+1]);
+      int j_plus = std::get<3>(shstp_vals[i+1]);
+      if(i_plus < ni-1){
+        int i_right = i_plus + 1;
+        ss_right = shadow_step_prob(i_right, j_plus)>shad_stp_thresh;
+      }
+      if(i_plus > 0){
+        int i_left = i_plus - 1;
+        ss_left = shadow_step_prob(i_left, j_plus) > shad_stp_thresh;
+      }
+    }
+    std::get<4>(shstp_vals[i]) = ss||ss_plus||ss_left||ss_right;
+    float rec = std::get<1>(shstp_vals[i]);
+    if(ss&&!start){
+      start = true;
+    }
+    if(start&&std::get<4>(shstp_vals[i])){
+      max_thresh = rec;
+      if(rec<thresh)
+        thresh = rec;
+      if(thresh < default_shadow_thresh)
+        thresh = default_shadow_thresh;
+      if(i == (n-1)){
+        done = true;
+        start = false;
+      }
+      //int xi = std::get<2>(shstp_vals[i]), yi = std::get<3>(shstp_vals[i]);
+      //shadow_prob(xi, yi) = 1.0;
+      continue;
+    }
+    done = true;
+    start = false;
+  }
+  // max_thresh is set at end of shad step line scan
+  // thresh set to minimum
+  
+  // finally scan and classify shadow
+  start = false;
+  done = false;
+  for(size_t i = 0; i<n&&!done; ++i){
+    int xi = std::get<2>(shstp_vals[i]), yi = std::get<3>(shstp_vals[i]);
+    bool inv = invalid(xi, yi);
+    float rect = std::get<1>(shstp_vals[i]);
+    bool shadow = rect<thresh;
+    //bool shadow = rect<max_thresh;
+    //bool shadow = rect<default_shadow_thresh;
+    bool ss = std::get<4>(shstp_vals[i]);
+    //if(!start&&(shadow||ss)){
+    if(!start&&(shadow)){
+      start = true;
+    }
+    //if(start && (ss || shadow)){
+    if(start && (shadow)){
+      if(!inv && rect <= thresh)
+      //if(!inv && rect <= default_shadow_thresh)
+        shadow_prob(xi, yi) = 1.0;
+      else if(!inv && (thresh<max_thresh) && (rect < max_thresh)){
+        // float p = (1.0 - (float(rect) - thresh)/float(max_thresh-rect));
+        float p = exp(-2.5*(float(rect) - thresh)/float(max_thresh-rect));
+        if(p<0.0f) p = 0.0f;
+        if(p>1.0f) p = 1.0f;
+        shadow_prob(xi, yi)= p;
+      }
+      if(i == (n-1)){
+        done = true;
+        start = false;
+      }
+    }
+  }
+}
+
+template <class T>
+void bsgm_shadow_prob(vil_image_view<T> const& rect_img, vil_image_view<bool> const& invalid,
+                      vgl_vector_2d<float> const& sun_dir, float default_shadow_thresh, 
+                      vil_image_view<float> const& shadow_step_prob,
+                      vil_image_view<float>& shadow_prob,
+                      float scan_length, float ss_thresh){
+  size_t ni = rect_img.ni(), nj = rect_img.nj();
+  shadow_prob.set_size(ni, nj);
+  shadow_prob.fill(0.0f);
+  vil_image_view<unsigned short> temp;
+  if(std::is_same<T, unsigned short>::value)
+    temp = rect_img;
+  else // byte to short
+    vil_convert_cast(rect_img, temp);
+  for (size_t j = 0; j < nj; ++j)
+    for (size_t i = 0; i < ni; ++i) 
+      if(!invalid(i,j) && ((shadow_step_prob(i, j) >= ss_thresh)||(rect_img(i,j)<default_shadow_thresh)))
+        adaptive_shadow_prob(i, j, invalid, temp, shadow_step_prob,
+                             sun_dir,shadow_prob, scan_length, 
+                             default_shadow_thresh, ss_thresh);
+}
 static void one_d_dialation(std::vector<bool> const& vals, size_t gap, std::vector<bool>& dialated_vals, bool print = false) {
   dialated_vals = vals;
   size_t n = vals.size();
@@ -331,38 +509,6 @@ static void one_d_tail_erode(std::vector<bool> const& vals, size_t rem, std::vec
   }
 }
 
-static void shadow_step_enable(std::vector<std::pair<bool, bool> > const& shstp_scan, std::vector<bool>& enabled, int& first_idx, int& last_idx) {
-  size_t n = shstp_scan.size();
-  enabled.resize(n, false);
-  // state machine
-  bool start = true;
-  bool start_ss = false; //start state
-  bool end_enable = false; // end enable
-  for (size_t i = 0; i < n; ++i) {
-    bool shad = shstp_scan[i].first;
-    bool shstp = shstp_scan[i].second;
-    if (start && shstp) {
-      start_ss = true;
-      start = false;
-      enabled[i] = true;
-      first_idx = i;
-      continue;
-    }
-    if (start_ss)
-      if (shad || shstp) {
-        enabled[i] = true;
-        if (i == n - 1) {
-          last_idx = n - 1;
-          return; //end of scan
-        }
-        continue;
-      }else {
-        end_enable = true;
-        start_ss = false;
-        last_idx = i;
-      }
-  }
-}
 template <class T>
 void bsgm_check_nonunique(
   vil_image_view<float>& disp_img,
@@ -745,6 +891,9 @@ template void bsgm_check_nonunique(vil_image_view<float>& , const vil_image_view
                                    const vgl_box_2d<int>&);                                       \
 template void bsgm_shadow_step_filter(const vil_image_view<T>&, const vil_image_view<bool>&,      \
                                       vil_image_view<float>&, const vgl_vector_2d<float>&,        \
-                                      int, int, int)                   
+                                      int, int, int);                   \
+template  void bsgm_shadow_prob(vil_image_view<T> const&, vil_image_view<bool> const&, \
+vgl_vector_2d<float> const&, float, vil_image_view<float> const&, vil_image_view<float>&, \
+                                  float, float)
 
 #endif // bsgm_error_checking_h_

@@ -497,9 +497,20 @@ vil_tiff_header::compute_pixel_format()
             pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
             return false;
         }
+      case 3: 
+         switch (bbs)
+         {
+         case (sizeof(float)):
+             pix_fmt = VIL_PIXEL_FORMAT_FLOAT;
+             return true;
+
+         default:
+             pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+             return false;
+         }
       default:
-        // Need to handle other signed values??
-        return false;
+          pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+          return false;
     }
   }
   // Now for regular color images

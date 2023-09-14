@@ -216,15 +216,6 @@ void vgl_h_matrix_3d<T>::get (vnl_matrix_fixed<T,4,4>* H) const
   *H = t12_matrix_;
 }
 
-#if !VXL_LEGACY_FUTURE_REMOVE
-template <class T>
-VXL_DEPRECATED_MSG("Will be removed in future versions of VXL")
-void vgl_h_matrix_3d<T>::get (vnl_matrix<T>* H) const
-{
-  *H = t12_matrix_.as_ref(); // size 4x4
-}
-#endif
-
 template <class T>
 vgl_h_matrix_3d<T>
 vgl_h_matrix_3d<T>::get_inverse() const
