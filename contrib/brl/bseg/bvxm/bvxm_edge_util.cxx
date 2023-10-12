@@ -92,8 +92,8 @@ vil_image_view<vxl_byte> bvxm_edge_util::detect_edges(vil_image_view<vxl_byte> i
     // iterate over each point in the connected edge component
     for (unsigned j=0; j<ec->size(); j++) {
       vdgl_edgel curr_edgel = ec->edgel(j);
-      int cr_x = (int)curr_edgel.x();
-      int cr_y = (int)curr_edgel.y();
+      int cr_x = int(curr_edgel.x()+0.5);
+      int cr_y = int(curr_edgel.y()+0.5);
 
       // set the current edge pixel in the edge image
       img_edge(cr_x,cr_y) = 255;
