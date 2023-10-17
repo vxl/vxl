@@ -543,9 +543,18 @@ class bsgm_prob_pairwise_dsm
   //: save surface type data
   void save_rect_target_stype(std::string const& path) const;
   void save_dsm_grid_stype(std::string const& path) const;
+
+  //: shadow step and shadow information in rectified image space
+  vil_image_view<float> rect_shadow_info0() const;
   void save_rect_shadow_info0(std::string const& path) const;
+
+  vil_image_view<float> rect_shadow_info1() const;
   void save_rect_shadow_info1(std::string const& path) const;
+
+  vil_image_view<vxl_byte> rect_shadow_info_overlay0() const;
   void save_rect_shadow_info_overlay0(std::string const& path) const;
+
+  vil_image_view<vxl_byte> rect_shadow_info_overlay1() const;
   void save_rect_shadow_info_overlay1(std::string const& path) const;
 
  protected:
