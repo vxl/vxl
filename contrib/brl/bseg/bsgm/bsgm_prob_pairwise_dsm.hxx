@@ -281,7 +281,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_disparity(
     sstep = shadow_step_rev_;
     shd = shadow_rev_;
   }
-  
+
   if (params_.coarse_dsm_disparity_estimate_) {
     bsgm_multiscale_disparity_estimator mde(params_.de_params_, rect_ni_, rect_nj_,
                                             num_disparities(), num_active_disparities(),sstep,shd,sun_dir_tar);
@@ -756,51 +756,79 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_dsm_grid_stype(std::string const
 }
 
 template <class CAM_T, class PIX_T>
-void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow_info0(std::string const& path) const{
-  size_t ni = shadow_fwd_.ni(), nj = shadow_fwd_.nj(); 
+vil_image_view<float>
+bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::rect_shadow_info0() const
+{
+  size_t ni = shadow_fwd_.ni(), nj = shadow_fwd_.nj();
   vil_image_view<float> temp(ni, nj, 2);
   temp.fill(0.0f);
-  for(size_t j = 0;j<nj; ++j)
-    for(size_t i = 0;i<ni; ++i){
+  for(size_t j = 0; j<nj; ++j)
+  {
+    for(size_t i = 0; i<ni; ++i)
+    {
       float s = shadow_fwd_(i,j);
       float ss = shadow_step_fwd_(i,j);
       temp(i, j, 0) = s;
       temp(i, j, 1) = ss;
     }
-  if (!vil_save(temp,path.c_str())) {
+  }
+  return temp;
+}
+
+template <class CAM_T, class PIX_T>
+void
+bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow_info0(std::string const& path) const
+{
+  auto temp = this->rect_shadow_info0();
+  if (!vil_save(temp, path.c_str())) {
     throw std::runtime_error("save_rect_shadow_info0 failed");
   }
 }
+
 template <class CAM_T, class PIX_T>
-void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow_info1(std::string const& path) const{
-  size_t ni = shadow_rev_.ni(), nj = shadow_rev_.nj(); 
+vil_image_view<float>
+bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::rect_shadow_info1() const
+{
+  size_t ni = shadow_rev_.ni(), nj = shadow_rev_.nj();
   vil_image_view<float> temp(ni, nj, 2);
   temp.fill(0.0f);
-  for(size_t j = 0;j<nj; ++j)
-    for(size_t i = 0;i<ni; ++i){
+  for(size_t j = 0; j<nj; ++j)
+  {
+    for(size_t i = 0; i<ni; ++i)
+    {
       float s = shadow_rev_(i,j);
       float ss = shadow_step_rev_(i,j);
       temp(i, j, 0) = s;
       temp(i, j, 1) = ss;
     }
-  if (!vil_save(temp,path.c_str())) {
+  }
+  return temp;
+}
+
+template <class CAM_T, class PIX_T>
+void
+bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow_info1(std::string const& path) const
+{
+  auto temp = this->rect_shadow_info1();
+  if (!vil_save(temp, path.c_str())) {
     throw std::runtime_error("save_rect_shadow_info1 failed");
   }
 }
 
-
-
-
 template <class CAM_T, class PIX_T>
-void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow_info_overlay0(std::string const& path) const{
-  size_t ni = rect_bview0_.ni(), nj = rect_bview0_.nj(); 
+vil_image_view<vxl_byte>
+bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::rect_shadow_info_overlay0() const
+{
+  size_t ni = rect_bview0_.ni(), nj = rect_bview0_.nj();
   int conv = 8;
   if(std::is_same<PIX_T, vxl_byte>::value)
     conv = 1;
   vil_image_view<vxl_byte> temp(ni, nj, 3);
   temp.fill(vxl_byte(0));
-  for(size_t j = 0;j<nj; ++j)
-    for(size_t i = 0;i<ni; ++i){
+  for(size_t j = 0; j<nj; ++j)
+  {
+    for(size_t i = 0; i<ni; ++i)
+    {
       vxl_byte s = shadow_fwd_(i,j)*250.0f;
       vxl_byte ss = shadow_step_fwd_(i,j)*250.0f;
       vxl_byte v0 = rect_bview0_(i,j)/conv;
@@ -813,23 +841,37 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow_info_overlay0(std::s
         temp(i,j,0) = s;
       else
         temp(i,j,0) = v0;
-        
+
       temp(i,j,2) = v0;
     }
-  if (!vil_save(temp,path.c_str())) {
+  }
+  return temp;
+}
+
+template <class CAM_T, class PIX_T>
+void
+bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow_info_overlay0(std::string const& path) const
+{
+  auto temp = this->rect_shadow_info_overlay0();
+  if (!vil_save(temp, path.c_str())) {
     throw std::runtime_error("save_rect_shadow0 failed");
   }
 }
+
 template <class CAM_T, class PIX_T>
-void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow_info_overlay1(std::string const& path) const{
-  size_t ni = rect_bview1_.ni(), nj = rect_bview1_.nj(); 
+vil_image_view<vxl_byte>
+bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::rect_shadow_info_overlay1() const
+{
+  size_t ni = rect_bview1_.ni(), nj = rect_bview1_.nj();
   vil_image_view<vxl_byte> temp(ni, nj, 3);
   temp.fill(vxl_byte(0));
   int conv = 8;
   if(std::is_same<PIX_T, vxl_byte>::value)
     conv = 1;
-  for(size_t j = 0;j<nj; ++j)
-    for(size_t i = 0;i<ni; ++i){
+  for(size_t j = 0; j<nj; ++j)
+  {
+    for(size_t i = 0; i<ni; ++i)
+    {
       vxl_byte s = shadow_rev_(i,j)*250.0f;
       vxl_byte ss = shadow_step_rev_(i,j)*250.0f;
       vxl_byte v1 = rect_bview1_(i,j)/conv;
@@ -842,10 +884,19 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow_info_overlay1(std::s
         temp(i,j,0) = s;
       else
         temp(i,j,0) = v1;
-        
+
       temp(i,j,2) = v1;
     }
-  if (!vil_save(temp,path.c_str())) {
+  }
+  return temp;
+}
+
+template <class CAM_T, class PIX_T>
+void
+bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::save_rect_shadow_info_overlay1(std::string const& path) const
+{
+  auto temp = this->rect_shadow_info_overlay1();
+  if (!vil_save(temp, path.c_str())) {
     throw std::runtime_error("save_rect_shadow1 failed");
   }
 }
@@ -889,7 +940,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::set_shadow_context_data(){
     // shadow step reverse
     bsgm_shadow_step_filter<PIX_T>(rect_bview1_, invalid_map_rev_, shadow_step_rev_, sun_dir_1_, params_.shadow_profile_radius_, params_.response_low_, params_.shadow_high_);
 
-    //shadow    
+    //shadow
     float sthresh = static_cast<float>(params_.shadow_thresh_);
     if(params_.shadow_prob_method_ == "adaptive_sun_direction_scan"){
       //std::cout << "adaptive threshold " << sthresh << " adj weight " << params_.de_params_.adj_dir_weight << " supp. under shadow step " << params_.de_params_.app_supress_shadow_shad_step << std::endl;
@@ -915,7 +966,7 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::set_shadow_context_data(){
         for(size_t i = 0; i<ni1; ++i)
           if(!invalid_map_rev_(i,j)&&rect_bview1_(i, j)<sthresh)
             shadow_rev_(i,j) = 1.0f;
-      
+
     }else{
       throw std::runtime_error("undefined shadow probability method");
     }
