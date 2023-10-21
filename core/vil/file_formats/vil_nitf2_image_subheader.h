@@ -115,6 +115,7 @@ class vil_nitf2_image_subheader
   bool get_rpc_params( std::string& rpc_type, std::string& image_id,
                        std::string& image_corner_geo_locations,
                        double* rpc_data ) const;
+  bool get_rsm_params() const;
 
   //: Return the elevation and azimuth angles of the sun
   //  \a sun_el --> sun elevation angle
@@ -125,7 +126,7 @@ class vil_nitf2_image_subheader
   bool get_date_time(int& year, int& month, int& day, int& hour, int& min, int& sec) const;
 
   bool get_correction_offset(double & u_off, double & v_off) const;
-
+  static const vil_nitf2_field_definitions* get_defs() { return get_field_definitions_21(); }
  protected:
   vil_nitf2_field_sequence m_field_sequence;
   vil_nitf2_data_mask_table* m_data_mask_table;
@@ -141,6 +142,7 @@ class vil_nitf2_image_subheader
   static void add_geo_field_defs( vil_nitf2_field_definitions* defs, const vil_nitf2_classification::file_version& version );
   static void add_shared_field_defs_3( vil_nitf2_field_definitions* defs );
   static void add_rpc_definitions();
+  //static void add_rsm_definitions();
   static void add_USE_definitions();
   static void add_ICHIPB_definitions();
   static void add_MPD26A_definitions();

@@ -161,6 +161,13 @@ class vil_openjpeg_image : public vil_image_resource
 
   bool get_property(char const* tag, void* property_value = nullptr) const override;
 
+ //:
+  //  Static function that can be used to decode a JPEG2000 codestream
+  //  or file (jp2 file).  The stream must start at vs' current position.
+  static vil_image_view_base_sptr s_decode_jpeg_2000( vil_stream* vs,
+                                                      unsigned i0, unsigned ni,
+                                                      unsigned j0, unsigned nj,
+                                                      double i_factor, double j_factor );
  private:
   bool validate_format();
 

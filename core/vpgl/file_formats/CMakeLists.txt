@@ -6,6 +6,8 @@
 set( vpgl_file_formats_sources
   vpgl_nitf_rational_camera.h  vpgl_nitf_rational_camera.cxx
   vpgl_geo_camera.h            vpgl_geo_camera.cxx
+  vpgl_replacement_sensor_model_tres.h vpgl_replacement_sensor_model_tres.cxx
+  vpgl_nitf_RSM_camera.h vpgl_nitf_RSM_camera.cxx
 )
 
 include(${VXL_CMAKE_DIR}/FindTIFF.cmake)

@@ -34,6 +34,9 @@ class vil_nitf2_file_format : public vil_file_format
                                                     unsigned ny,
                                                     unsigned nplanes,
                                                     enum vil_pixel_format) override;
+  virtual vil_pyramid_image_resource_sptr
+      make_input_pyramid_image(char const* file) override;
+
 };
 
 //: Class for reading NITF 2.1 imagery files.

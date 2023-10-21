@@ -685,6 +685,7 @@ vil_openjpeg_image ::pixel_format() const
   {
     case 8:
       return VIL_PIXEL_FORMAT_BYTE;
+    case 11:
     case 16:
       return VIL_PIXEL_FORMAT_UINT_16;
     case 32:
@@ -825,3 +826,19 @@ vil_openjpeg_image ::get_property(char const * /*tag*/, void * /*property_value*
 {
   return false;
 }
+//:
+//  Static function that can be used to decode a JPEG2000 codestream
+//  or file (jp2 file).  The stream must start at vs' current position.
+vil_image_view_base_sptr vil_openjpeg_image::s_decode_jpeg_2000( vil_stream* vs,
+                                                                 unsigned i0, unsigned ni,
+                                                                 unsigned j0, unsigned nj,
+                                                                 double i_factor, double j_factor ){
+    vil_openjpeg_image* jp2_image = new vil_openjpeg_image(vs, VIL_OPENJPEG_J2K);
+  double max_factor = i_factor;
+  if(j_factor> i_factor)
+    max_factor = j_factor;
+  int reduction = int(log2(max_factor));
+    vil_image_view_base_sptr view = jp2_image->get_copy_view_reduced(i0, ni, j0, nj, reduction);
+  delete jp2_image;
+  return view;
+  } 
