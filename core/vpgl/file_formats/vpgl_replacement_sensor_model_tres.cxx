@@ -139,11 +139,24 @@ void vpgl_replacement_sensor_model_tres::define_RSMPCA(){
             .end(); // of RPC TRE
     }
 }
+// define TREs for cases not currently handled by vpgl_RSM_camera
 void vpgl_replacement_sensor_model_tres::define_RSMPIA(){
 // check for multiple polynomials
     vil_nitf2_tagged_record_definition* trpi = vil_nitf2_tagged_record_definition::find("RSMPIA");
     if (!trpi)
     {
-        vil_nitf2_tagged_record_definition::define("RSMPIA", "Multiple Section Polynomials");
+      vil_nitf2_tagged_record_definition::define("RSMPIA", "Multiple Section Polynomials")
+        .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
+        .end();
+    }
+}
+void vpgl_replacement_sensor_model_tres::define_RSMGIA(){
+// check for refinement grid
+    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMPIA");
+    if (!trgi)
+    {
+        vil_nitf2_tagged_record_definition::define("RSMGIA", "Multiple Section Polynomials")
+          .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
+          .end();
     }
 }

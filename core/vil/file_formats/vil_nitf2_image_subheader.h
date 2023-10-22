@@ -115,7 +115,6 @@ class vil_nitf2_image_subheader
   bool get_rpc_params( std::string& rpc_type, std::string& image_id,
                        std::string& image_corner_geo_locations,
                        double* rpc_data ) const;
-  bool get_rsm_params() const;
 
   //: Return the elevation and azimuth angles of the sun
   //  \a sun_el --> sun elevation angle

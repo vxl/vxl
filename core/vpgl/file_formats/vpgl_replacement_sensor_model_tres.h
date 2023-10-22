@@ -14,10 +14,12 @@
 class vpgl_replacement_sensor_model_tres{
  public:
   static void define_RSMPIA();
+  static void define_RSMGIA();
   static void define_RSMIDA();
   static void define_RSMPCA();
   static void define() {
       define_RSMPIA();
+      define_RSMGIA();
       define_RSMIDA();
       define_RSMPCA();
   }

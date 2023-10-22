@@ -27,56 +27,6 @@ vpgl_RSM_camera<T>::vpgl_RSM_camera()
   scale_offsets_.resize(5, soff);
 }
 
-
-template <class T>
-vpgl_RSM_camera<T>::vpgl_RSM_camera(
-    std::vector<T> const& neu_u,
-    std::vector<T> const& den_u,
-    std::vector<T> const& neu_v,
-    std::vector<T> const& den_v,
-    const T x_scale, const T x_off,
-    const T y_scale, const T y_off,
-    const T z_scale, const T z_off,
-    const T u_scale, const T u_off,
-    const T v_scale, const T v_off
-    )
-{
-  this->set_coefficients(neu_u, den_u, neu_v, den_v);
-  this->set_scale_offsets(x_scale, x_off, y_scale, y_off, z_scale, z_off,
-                          u_scale, u_off, v_scale, v_off);
-}
-
-//: Constructor from 4 coefficient arrays and 5 scale, offset pairs.
-template <class T>
-vpgl_RSM_camera<T>::vpgl_RSM_camera(
-    const double* neu_u,
-    const double* den_u,
-    const double* neu_v,
-    const double* den_v,
-    const T x_scale, const T x_off,
-    const T y_scale, const T y_off,
-    const T z_scale, const T z_off,
-    const T u_scale, const T u_off,
-    const T v_scale, const T v_off
-    )
-{
-  this->set_coefficients(neu_u, den_u, neu_v, den_v);
-  this->set_scale_offsets(x_scale, x_off, y_scale, y_off, z_scale, z_off,
-                          u_scale, u_off, v_scale, v_off);
-}
-
-// Constructor with an array encoding of the coefficients
-template <class T>
-vpgl_RSM_camera<T>::vpgl_RSM_camera(
-    std::vector<std::vector<T> > const& RSM_coeffs,
-    std::vector<vpgl_scale_offset<T> > const& scale_offsets
-    )
-{
-  this->set_coefficients(RSM_coeffs);
-  this->set_scale_offsets(scale_offsets);
-}
-
-
 //--------------------------------------
 // Clone
 
@@ -98,86 +48,42 @@ void vpgl_RSM_camera<T>::set_coefficients(
     std::vector<T> const& den_v
     )
 {
-  //this->set_coefficients(coeffs,input_order);
-}
-
-// set coefficients from 4 vector pointers
-template <class T>
-void vpgl_RSM_camera<T>::set_coefficients(
-    const double* neu_u,
-    const double* den_u,
-    const double* neu_v,
-    const double* den_v
-    )
-{
-  /*
-  vnl_matrix_fixed<T, 4, 20> coeffs;
-  for (unsigned i = 0; i<20; ++i) {
-    coeffs[NEU_U][i] = neu_u[i];
-    coeffs[DEN_U][i] = den_u[i];
-    coeffs[NEU_V][i] = neu_v[i];
-    coeffs[DEN_V][i] = den_v[i];
-  }
-  this->set_coefficients(coeffs,input_order);
-  */
+  coeffs_.clear();
+  coeffs_.push_back(neu_u);
+  coeffs_.push_back(den_u);
+  coeffs_.push_back(neu_v);
+  coeffs_.push_back(den_v);
 }
 
 // set coefficients from array encoding
 template <class T>
 void vpgl_RSM_camera<T>::set_coefficients(
-    std::vector<std::vector<T> > const& RSM_coeffs
+    std::vector<std::vector<T> > const& coeffs
     )
 {
-  
+  coeffs_ = coeffs;
 }
-#if 0
-// set coefficients from vnl matrix
-template <class T>
-void vpgl_RSM_camera<T>::set_coefficients(
-    vnl_matrix_fixed<T, 4, 20> const& RSM_coeffs,
-    vpgl_RSM_order input_order
-    )
-{
-  auto order = vpgl_RSM_order_func::to_vector(input_order);
-  for (unsigned j = 0; j<4; ++j)
-    for (unsigned i = 0; i<20; ++i)
-      RSM_coeffs_[j][i] = RSM_coeffs[j][order[i]];
-}
-#endif 
-//--------------------------------------
-// Get coefficient matrix
-#if 1
-// get coefficients as vnl matrix
-template <class T>
-vnl_matrix_fixed<T, 4, 20>
-vpgl_RSM_camera<T>::coefficient_matrix() const
-{
-  vnl_matrix_fixed<T, 4, 20> result;
-#if 0
-  for (unsigned j = 0; j<4; ++j)
-    for (unsigned i = 0; i<20; ++i)
-      result[j][order[i]] = RSM_coeffs_[j][i];
-#endif
-  return result;
-}
-#endif
 
 // get coefficients as std vector of vectors
 template <class T>
 std::vector<std::vector<T> >
 vpgl_RSM_camera<T>::coefficients() const
 {
-  
-  std::vector<std::vector<T> > result(4, std::vector<T>(20));
-  /*
-  for (unsigned j = 0; j<4; ++j)
-    for (unsigned i = 0; i<20; ++i)
-      result[j][order[i]] = RSM_coeffs_[j][i];
-  */
-  return result;
+  return coeffs_;
   
 }
-
+template <class T>
+void vpgl_RSM_camera<T>::set_powers(std::vector<int> const& neu_u_powers,
+                                    std::vector<int> const& den_u_powers,
+                                    std::vector<int> const& neu_v_powers,
+                                    std::vector<int> const& den_v_powers)
+{
+  powers_.clear();
+  powers_.push_back(neu_u_powers);
+  powers_.push_back(den_u_powers);
+  powers_.push_back(neu_v_powers);
+  powers_.push_back(den_v_powers);
+}
 
 //--------------------------------------
 // Set scale/offset values
@@ -209,70 +115,6 @@ void vpgl_RSM_camera<T>::set_scale_offsets(
   scale_offsets_ = scale_offsets;
 }
 
-
-//--------------------------------------
-// Utility functions
-
-//: Create a vector with the internal VXL order of monomial terms
-template <class T>
-vnl_vector_fixed<T, 20>
-vpgl_RSM_camera<T>::power_vector(const T x, const T y, const T z) const
-{
-  // Form the monomials in homogeneous form
-  double w  = 1;
-  double xx = x*x;
-  double xy = x*y;
-  double xz = x*z;
-  double yy = y*y;
-  double yz = y*z;
-  double zz = z*z;
-  double xxx = x*xx;
-  double xxy = x*xy;
-  double xxz = x*xz;
-  double xyy = x*yy;
-  double xyz = x*yz;
-  double xzz = x*zz;
-  double yyy = y*yy;
-  double yyz = y*yz;
-  double yzz = y*zz;
-  double zzz = z*zz;
-  double xww = x*w*w;
-  double yww = y*w*w;
-  double zww = z*w*w;
-  double www = w*w*w;
-  double xxw = xx*w;
-  double xyw = xy*w;
-  double xzw = xz*w;
-  double yyw = yy*w;
-  double yzw = yz*w;
-  double zzw = zz*w;
-
-  //fill the vector
-  vnl_vector_fixed<T, 20> pv;
-  pv.put( 0, T(xxx));
-  pv.put( 1, T(xxy));
-  pv.put( 2, T(xxz));
-  pv.put( 3, T(xxw));
-  pv.put( 4, T(xyy));
-  pv.put( 5, T(xyz));
-  pv.put( 6, T(xyw));
-  pv.put( 7, T(xzz));
-  pv.put( 8, T(xzw));
-  pv.put( 9, T(xww));
-  pv.put(10, T(yyy));
-  pv.put(11, T(yyz));
-  pv.put(12, T(yyw));
-  pv.put(13, T(yzz));
-  pv.put(14, T(yzw));
-  pv.put(15, T(yww));
-  pv.put(16, T(zzz));
-  pv.put(17, T(zzw));
-  pv.put(18, T(zww));
-  pv.put(19, T(www));
-  return pv;
-}
-
-
 //--------------------------------------
 // Project 3D world point into 2D image space
 
@@ -286,15 +128,46 @@ void vpgl_RSM_camera<T>::project(
   T sx = scale_offsets_[X_INDX].normalize(x);
   T sy = scale_offsets_[Y_INDX].normalize(y);
   T sz = scale_offsets_[Z_INDX].normalize(z);
-  /*
+  
   // projection
-  vnl_vector_fixed<T, 4> polys = RSM_coeffs_*power_vector(sx, sy, sz);
-  T su = polys[NEU_U]/polys[DEN_U];
-  T sv = polys[NEU_V]/polys[DEN_V];
+  // ==== u neumerator ====
+  double num_u = 0.0;
+  int c = 0;
+  for(int k = 0; k<=powers_[P_NEU_U][Z_INDX]; ++k)
+    for(int j = 0; j<=powers_[P_NEU_U][Y_INDX]; ++j)
+      for(int i = 0; i<=powers_[P_NEU_U][X_INDX]; ++i)
+          num_u += coeffs_[P_NEU_U][c++] * pow(sx, i) * pow(sy, j) * pow(sz, k);
+
+  double den_u = 0.0;
+  c = 0;
+  // ==== u denominator ====
+  for(int k = 0; k<=powers_[P_DEN_U][Z_INDX]; ++k)
+    for(int j = 0; j<=powers_[P_DEN_U][Y_INDX]; ++j)
+      for(int i = 0; i<=powers_[P_DEN_U][X_INDX]; ++i)
+          den_u += coeffs_[P_DEN_U][c++] * pow(sx, i) * pow(sy, j) * pow(sz, k);
+
+  // ==== v neumerator ====
+  double num_v = 0.0;
+  c = 0;
+ for(int k = 0; k<= powers_[P_NEU_V][Z_INDX]; ++k)
+    for(int j = 0; j<= powers_[P_NEU_V][Y_INDX]; ++j)
+        for (int i = 0; i <= powers_[P_NEU_V][X_INDX]; ++i) 
+            num_v += coeffs_[P_NEU_V][c++] * pow(sx, i) * pow(sy, j) * pow(sz, k);
+
+  // ==== v denominator ====
+  double den_v = 0.0;
+  c = 0;
+  for(int k = 0; k<=powers_[P_DEN_V][Z_INDX]; ++k)
+    for(int j = 0; j<=powers_[P_DEN_V][Y_INDX]; ++j)
+      for(int i = 0; i<=powers_[P_DEN_V][X_INDX]; ++i) 
+          den_v += coeffs_[P_DEN_V][c++] * pow(sx, i) * pow(sy, j) * pow(sz, k);
+
+  // ratios
+  double su = num_u/den_u;
+  double sv = num_v/den_v;
   // unscale the resulting image coordinates
   u = scale_offsets_[U_INDX].un_normalize(su);
   v = scale_offsets_[V_INDX].un_normalize(sv);
-  */
 }
 
 // vnl interface

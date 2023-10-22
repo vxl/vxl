@@ -58,7 +58,7 @@ class vpgl_nitf_rational_camera : public vpgl_rational_camera<double>
   void print(std::ostream &ostr = std::cout,
              vpgl_rational_order output_order =
                  vpgl_rational_order::VXL) const override;
-
+  static int geostr_to_latlon(const char * str, double * lat, double * lon);
 private:
   // internal functions
   bool init(vil_nitf2_image* nitf_image, bool verbose);

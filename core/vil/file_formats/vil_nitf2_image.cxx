@@ -50,15 +50,6 @@ vil_nitf2_file_format::make_input_image(vil_stream * vs)
     delete im;
     im = nullptr;
   }
-#if 0
-  std::string tp, id, loc;
-  double dat[1000];
-  std::vector<vil_nitf2_image_subheader*> headers = im->get_image_headers();
-  int rsn, rcn;
-  
-  for(size_t i = 0; i<headers.size(); ++i)
-    bool success = headers[i]->get_rsm_params(rsn, rcn, id);
-#endif
   return im;
 }
 

@@ -21,114 +21,44 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include "vpgl_camera.h"
-// ----------------------------------------
-// Represent scale and offset transformations used in normalization
-//
-template <class T>
-class vpgl_scale_offset
-{
- public:
-  vpgl_scale_offset() :
-    scale_(1), offset_(0) {}
-  vpgl_scale_offset(const T scale, const T offset) :
-    scale_(scale), offset_(offset) {}
+#include "vpgl_rational_camera.h"//for scale and offset class
 
-  //mutators/accessors
-  void set_scale(const T scale) {scale_ = scale;}
-  void set_offset(const T offset) {offset_ = offset;}
-  T scale() const {return scale_;}
-  T offset() const {return offset_;}
-
-  // normalize a coordinate value
-  T normalize(const T value) const
-  {
-    if (scale_==0)
-      return 0;
-    else
-      return (value-offset_)/scale_;
-  }
-
-  // un-normalize a coordinate value
-  T un_normalize(const T value) const
-  {
-    T temp = value*scale_;
-    return temp + offset_;
-  }
-  //: Equality test
-  inline bool operator==(vpgl_scale_offset<T> const &that) const
-  { return this == &that ||
-           (this->scale()==that.scale() &&
-            this->offset() == that.offset() );
-  }
- private:
-  //members
-  T scale_;
-  T offset_;
-};
-
-
-//--------------------=== rational camera ===---------------------------
+//--------------------=== replacement sensor model (RSM)  camera ===-----------------------
 //
 template <class T>
 class vpgl_RSM_camera : public vpgl_camera<T>
 {
 public:
-    //: enumeration for indexing coordinates
-    enum coor_index { X_INDX = 0, Y_INDX, Z_INDX, U_INDX, V_INDX };
-    //: enumeration for indexing polynomials
-    enum poly_index { NEU_U = 0, DEN_U, NEU_V, DEN_V };
+  //: enumeration for indexing coordinates
+  enum coor_index { X_INDX = 0, Y_INDX, Z_INDX, U_INDX, V_INDX };
+  //: enumeration for indexing polynomials
+  enum poly_index { NEU_U = 0, DEN_U, NEU_V, DEN_V };
+  //: enumeration for computing polys
+  enum poly_comp_index { P_NEU_U = 0, P_DEN_U, P_NEU_V, P_DEN_V};
+  //: default constructor
+  vpgl_RSM_camera();
 
-    //: default constructor
-    vpgl_RSM_camera();
+  //: Constructor with everything wrapped up in an array and vector.
+ vpgl_RSM_camera(std::vector<std::vector<int> >const& powers,
+                 std::vector<std::vector<T> > const& coeffs,
+                 std::vector<vpgl_scale_offset<T> > const& scale_offsets
+                 ): powers_(powers), coeffs_(coeffs), scale_offsets_(scale_offsets){}
+  
+  ~vpgl_RSM_camera() override = default;
 
-    //: Constructor from 4 coefficient vectors and 5 scale, offset pairs.
-    vpgl_RSM_camera(std::vector<T> const& neu_u,
-        std::vector<T> const& den_u,
-        std::vector<T> const& neu_v,
-        std::vector<T> const& den_v,
-        const T x_scale, const T x_off,
-        const T y_scale, const T y_off,
-        const T z_scale, const T z_off,
-        const T u_scale, const T u_off,
-        const T v_scale, const T v_off
-        );
+  std::string type_name() const override { return "vpgl_RSM_camera"; }
 
-    //: Constructor from 4 coefficient arrays and 5 scale, offset pairs.
-    vpgl_RSM_camera(const double* neu_u,
-        const double* den_u,
-        const double* neu_v,
-        const double* den_v,
-        const T x_scale, const T x_off,
-        const T y_scale, const T y_off,
-        const T z_scale, const T z_off,
-        const T u_scale, const T u_off,
-        const T v_scale, const T v_off
-        );
-
-    //: Constructor with everything wrapped up in an array and vector.
-    vpgl_RSM_camera(std::vector<std::vector<T> > const& RSM_coeffs,
-        std::vector<vpgl_scale_offset<T> > const& scale_offsets
-        );
-#if 0
-    //: Constructor with a coefficient matrix
-    vpgl_RSM_camera(vnl_matrix_fixed<T, 4, 20> const& RSM_coeffs,
-        std::vector<vpgl_scale_offset<T> > const& scale_offsets
-        );
-#endif
-    ~vpgl_RSM_camera() override = default;
-
-    std::string type_name() const override { return "vpgl_RSM_camera"; }
-
-    //: Clone `this': creation of a new object and initialization
-    // legal C++ because the return type is covariant with vpgl_camera<T>*
-    vpgl_RSM_camera<T>* clone() const override;
+  //: Clone `this': creation of a new object and initialization
+  // legal C++ because the return type is covariant with vpgl_camera<T>*
+  vpgl_RSM_camera<T>* clone() const override;
 
     //: Equality test
-    inline bool operator==(vpgl_RSM_camera<T> const& that) const
+  inline bool operator==(vpgl_RSM_camera<T> const& that) const
     {
-        return this == &that ||
-            ((this->coefficient_matrix() == that.coefficient_matrix()) &&
-                (this->scale_offsets() == that.scale_offsets()));
+      return this == &that ||
+      ((this->coefficients() == that.coefficients()) && (this->powers() == that.powers()) &&
+       (this->scale_offsets() == that.scale_offsets()));
+      return true;
     }
 
     // --- Mutators/Accessors ---
@@ -141,31 +71,30 @@ public:
         std::vector<T> const& den_v
         );
 
-    void set_coefficients(
-        const double* neu_u,
-        const double* den_u,
-        const double* neu_v,
-        const double* den_v
-        );
-
-    void set_coefficients(
-        std::vector<std::vector<T> > const& RSM_coeffs
-        );
-#if 0
-    void set_coefficients(
-        vnl_matrix_fixed<T, 4, 20> const& RSM_coeffs
-        );
-#endif
-    //: get the RSM polynomial coefficients in a vnl matrix
-    vnl_matrix_fixed<T, 4, 20> coefficient_matrix(
-        
-    ) const;
+    void set_coefficients(std::vector<std::vector<T> > const& RSM_coeffs);
 
     //: get the RSM polynomial coefficients in std vector of vectors
     std::vector<std::vector<T> > coefficients(
         
     ) const;
 
+    //: set the maximum power of each of x, y, z
+    void set_powers(std::vector<std::vector<int> >const& powers){
+      powers_ = powers;
+    }
+
+    std::vector<std::vector<int> > powers() const {
+        return powers_;
+    }
+
+    void set_powers(
+        std::vector<int> const& neu_u_powers,
+        std::vector<int> const& den_u_powers,
+        std::vector<int> const& neu_v_powers,
+        std::vector<int> const& den_v_powers
+    );
+
+    
     //: set all coordinate scale and offsets
     void set_scale_offsets(const T x_scale, const T x_off,
         const T y_scale, const T y_off,
@@ -175,7 +104,7 @@ public:
     );
 
     void set_scale_offsets(std::vector<vpgl_scale_offset<T> > const& scale_offsets);
-
+    
     //: get the scale and offsets in a vector
     std::vector<vpgl_scale_offset<T> > scale_offsets() const
     {
@@ -277,8 +206,8 @@ public:
     virtual bool read_txt(std::istream& istr);
 
 protected:
-    vnl_vector_fixed<T, 20>
-        vpgl_RSM_camera<T>::power_vector(const T x, const T y, const T z) const;
+    std::vector<std::vector<int> > powers_;
+    std::vector<std::vector<double> > coeffs_;
     std::vector<vpgl_scale_offset<T> > scale_offsets_;
 };
     //: Write to stream

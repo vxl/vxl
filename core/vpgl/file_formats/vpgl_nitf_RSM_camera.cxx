@@ -1,11 +1,48 @@
 #include "vpgl_nitf_RSM_camera.h"
+#include "vpgl_nitf_rational_camera.h"
 #include <vil/vil_load.h>
 bool
 vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
 {
   std::vector<vil_nitf2_image_subheader *> headers = nitf_image->get_image_headers();
    vil_nitf2_image_subheader * hdr = headers[1];//fix
-   hdr->get_property("IXSHD", isxhd_tres_);
+   if(!hdr->get_property("IXSHD", isxhd_tres_)){
+     std::cout << "IXSHD Property failed in vil_nitf2_image_subheader\n";
+     return false;
+   }
+   // Get image ID and location from main header values
+   if(!hdr->get_property("IID2", image_id_)){
+     std::cout << "IID2 Property failed in vil_nitf2_image_subheader\n";
+     return false;
+   }
+   //trim to standard length
+   image_id_ = image_id_.substr(0, 39);
+
+   if(!hdr->get_property("IGEOLO", image_igeolo_)){
+       std::cout << "IGEOLO Property failed in vil_nitf2_image_subheader\n";
+       return false;
+     }
+  // extract corner coordinates from image_geolo field
+  // example 324158N1171117W324506N1171031W324428N1170648W324120N1170734W
+  double ULlat, ULlon;
+  double URlat, URlon;
+  double LLlat, LLlon;
+  double LRlat, LRlon;
+
+  vpgl_nitf_rational_camera::geostr_to_latlon(image_igeolo_.c_str(), &ULlat, &ULlon);
+  vpgl_nitf_rational_camera::geostr_to_latlon(image_igeolo_.c_str() + 15, &URlat, &URlon);
+  vpgl_nitf_rational_camera::geostr_to_latlon(image_igeolo_.c_str() + 30, &LRlat, &LRlon);
+  vpgl_nitf_rational_camera::geostr_to_latlon(image_igeolo_.c_str() + 45, &LLlat, &LLlon);
+
+  ul_[vpgl_nitf_rational_camera::LAT] = ULlat;
+  ul_[vpgl_nitf_rational_camera::LON] = ULlon;
+  ur_[vpgl_nitf_rational_camera::LAT] = URlat;
+  ur_[vpgl_nitf_rational_camera::LON] = URlon;
+  ll_[vpgl_nitf_rational_camera::LAT] = LLlat;
+  ll_[vpgl_nitf_rational_camera::LON] = LLlon;
+  lr_[vpgl_nitf_rational_camera::LAT] = LRlat;
+  lr_[vpgl_nitf_rational_camera::LON] = LRlon;
+
    return true;
 }
 vpgl_nitf_RSM_camera::vpgl_nitf_RSM_camera(std::string const & nitf_image_path, bool verbose)
@@ -795,8 +832,12 @@ bool vpgl_nitf_RSM_camera::test_rsm_params() const{
           return false;
       }
     }
-    if (type == "RSMPIA"){ // looking for "RSMPCA..."
-      std::cout << "CAN'T HANDLE MULIPL SECTIONS" << std::endl; 
+    if (type == "RSMPIA"){ // looking for "RSMPIA..."
+      std::cout << "CAN'T HANDLE MULIPLE SECTIONS" << std::endl; 
+      return false;
+    }
+    if (type == "RSMGIA"){ // looking for "RSMGIA..."
+      std::cout << "CAN'T HANDLE GRID REFINEMENT" << std::endl; 
       return false;
     }
   }
@@ -917,4 +958,5 @@ get_rsm_camera_params(std::vector<std::vector<int> >& powers,
   }
   return good;
 }
+
     

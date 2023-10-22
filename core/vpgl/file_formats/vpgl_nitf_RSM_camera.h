@@ -42,6 +42,7 @@ class vpgl_nitf_RSM_camera : public vpgl_RSM_camera<double>
   bool get_rsm_camera_params(std::vector<std::vector<int> >& powers,
                              std::vector<std::vector<double> >& coeffs,
                              std::vector<vpgl_scale_offset<double> >& scale_offsets);
+
  private:
   // internal functions
   bool init(vil_nitf2_image* nitf_image, bool verbose);
