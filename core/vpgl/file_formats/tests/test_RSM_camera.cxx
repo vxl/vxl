@@ -73,7 +73,6 @@ static void test_RSM_camera()
   //double X = 44.377807*d2r, Y = 33.293708*d2r, Z = 34.0;
   //double X = 44.333154 * d2r, Y = 33.261389 * d2r, Z = 34.0;
   double X = 44.404525 * d2r, Y = 33.616347 * d2r, Z = 34.0;
-       
   rsm_cam.project(X, Y, Z, u, v);
   int minv = 0, maxv = 3351, minu = 0, maxu = 255;
   bool proj = u>=minu && u<=maxu && v>=minv && v<=maxv;

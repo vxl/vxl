@@ -7,6 +7,33 @@
 // \author Joseph Mundy
 // \date October 2023
 //
+//  The replacement sensor model (RSM) camera projects 3-d world points according to ratios of
+//  cubic polynomials. That is,
+// \verbatim
+//           neu_u(X,Y,Z)      neu_v(X,Y,Z)
+//       u = ------------  v = ------------
+//           den_u(X,Y,Z)      den_v(X,Y,X)
+// \endverbatim
+//  where u is the image column index and v is the image row index, and X, Y are 
+//  longitude and latitude in radians, and Z is in meters above the ellipsoid
+//
+//  neu_u(X,Y,Z),den_u(X,Y,Z), neu_v(X,Y,Z), den_v(X,Y,Z) are
+//  polynomials in three variables with maximum power of 5 for each of X,Y,Z.
+//  e.g., for power 3 for each of X, Y, Z and monomial coeffients C:
+// \verbatim
+//                  k=3   j=3   i=3 (      i  j  k )
+//  Poly(X,Y,Z) = Sum   Sum   Sum   ( C   x  y  z  )
+//                  k=0   j=0   i=0 (  ijk         )
+// \endverbatim
+//  In this case, there are 64 monomial terms in the order C   , C   , ... C
+//                                                          000   100       333
+//
+//  Polynomial calculations are often ill-conditioned if the variables are not
+//  normalized. All 5 variables, u,v,X,Y,Z, are normalized to the range [-1, 1].
+//  E.g., Xnorm = (X - Xoffset)/Xscale
+//  This normalization requires 10 additional offset and scale
+//  parameters for a total of 266 parameters for max power 3.
+
 #include <iostream>
 #include <string>
 #include <utility>
@@ -71,20 +98,20 @@ public:
         std::vector<T> const& den_v
         );
 
+    // In the order neu_u, den_u, neu_v, den_v
     void set_coefficients(std::vector<std::vector<T> > const& RSM_coeffs);
 
     //: get the RSM polynomial coefficients in std vector of vectors
+    // In the order neu_u, den_u, neu_v, den_v
     std::vector<std::vector<T> > coefficients(
         
     ) const;
 
     //: set the maximum power of each of x, y, z
+    //  for each of the four polynomials in the order,
+    //  neu_u, den_u, neu_v, den_v
     void set_powers(std::vector<std::vector<int> >const& powers){
       powers_ = powers;
-    }
-
-    std::vector<std::vector<int> > powers() const {
-        return powers_;
     }
 
     void set_powers(
@@ -93,10 +120,14 @@ public:
         std::vector<int> const& neu_v_powers,
         std::vector<int> const& den_v_powers
     );
-
+    //: In the order neu_u, den_u, neu_v, den_v
+    std::vector<std::vector<int> > powers() const {
+        return powers_;
+    }
     
     //: set all coordinate scale and offsets
-    void set_scale_offsets(const T x_scale, const T x_off,
+    void set_scale_offsets(
+        const T x_scale, const T x_off,
         const T y_scale, const T y_off,
         const T z_scale, const T z_off,
         const T u_scale, const T u_off,
@@ -180,65 +211,11 @@ public:
     //: Project a world point onto the image (vgl interface)
     vgl_point_2d<T> project(vgl_point_3d<T> world_point) const;
 
-    // --- print & save camera ---
-
-    //: print camera parameters
-    virtual void print(
-        std::ostream& s = std::cout
-    ) const;
-
-    //: save camera parameters to a file
-    virtual bool save(
-        std::string cam_path
-        ) const;
-
-    //: write PVL (parameter) to output stream
-    virtual void write_pvl(std::ostream& s) const;
-
-    // --- read camera ---
-
-    //: read from PVL (parameter value language) file/stream
-    bool read_pvl(std::string cam_path);
-    virtual bool read_pvl(std::istream& istr);
-
-    //: read from TXT file/stream
-    bool read_txt(std::string cam_path);
-    virtual bool read_txt(std::istream& istr);
-
 protected:
     std::vector<std::vector<int> > powers_;
     std::vector<std::vector<double> > coeffs_;
     std::vector<vpgl_scale_offset<T> > scale_offsets_;
 };
-    //: Write to stream
-    // \relatesalso vpgl_RSM_camera
-    template <class T>
-    std::ostream& operator<<(std::ostream& s, const vpgl_RSM_camera<T>& p);
-
-    //: Read from stream
-    // \relatesalso vpgl_RSM_camera
-    template <class T>
-    std::istream& operator>>(std::istream& is, vpgl_RSM_camera<T>& p);
-
-    //: Creates a RSM camera from a PVL file
-    // \relatesalso vpgl_RSM_camera
-    template <class T>
-    vpgl_RSM_camera<T>* read_RSM_camera(std::string cam_path);
-
-    //: Creates a RSM camera from a PVL input stream
-    // \relatesalso vpgl_RSM_camera
-    template <class T>
-    vpgl_RSM_camera<T>* read_RSM_camera(std::istream& istr);
-
-    //: Creates a RSM camera from a TXT file
-    // \relatesalso vpgl_RSM_camera
-    template <class T>
-    vpgl_RSM_camera<T>* read_RSM_camera_from_txt(std::string cam_path);
-
-    //: Creates a RSM camera from a TXT input stream
-    // \relatesalso vpgl_RSM_camera
-    template <class T>
-    vpgl_RSM_camera<T>* read_RSM_camera_from_txt(std::istream& istr);
 
 #define VPGL_RSM_CAMERA_INSTANTIATE(T) extern "please include vgl/vpgl_RSM_camera.hxx first"
 

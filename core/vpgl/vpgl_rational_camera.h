@@ -16,6 +16,8 @@
 //           den_u(X,Y,Z)      den_v(X,Y,X)
 // \endverbatim
 //  where u is the image column index and v is the image row index.
+//  for the NITF2.1 RPC00A,B encoding,
+//   X is longitude and Y is latitude in degrees, and Z is height above the ellipsoid in meters
 //
 //  neu_u(X,Y,Z),den_u(X,Y,Z), neu_v(X,Y,Z), den_v(X,Y,Z) are
 //  cubic polynomials in three variables and there are 20 coefficients each,
