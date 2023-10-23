@@ -14,6 +14,7 @@
 #endif
 #include "vnl/vnl_numeric_traits.h"
 #include "vnl/vnl_det.h"
+#include "vnl/vnl_math.h"
 #include "vnl/vnl_vector_fixed.h"
 #include "vnl/vnl_matrix_fixed.h"
 #include "vnl/vnl_random.h"
@@ -1533,6 +1534,59 @@ vpgl_affine_camera_convert::convert(vpgl_local_rational_camera<double> const & c
   camera_out.orient_ray_direction(vgl_vector_3d<double>(0, 0, -1));
   return success;
 }
+bool vpgl_affine_camera_convert::convert( vpgl_RSM_camera<double> const& camera_in,
+                                          vpgl_lvcs lvcs,
+                                          vgl_box_3d<double> const& region_of_interest,
+                                          vpgl_affine_camera<double>& camera_out,
+                                          unsigned int num_points){
+  vnl_random rng;
+  double min_x = region_of_interest.min_x();
+  double min_y = region_of_interest.min_y();
+  double min_z = region_of_interest.min_z();
+  double max_x = region_of_interest.max_x();
+  double max_y = region_of_interest.max_y();
+  double max_z = region_of_interest.max_z();
+
+  std::vector<vgl_point_2d<double>> image_pts;
+  std::vector<vgl_point_3d<double>> world_pts;
+  for (unsigned i = 0; i < num_points; ++i)
+  {
+    double x = rng.drand64(min_x, max_x); // sample in local coords
+    double y = rng.drand64(min_y, max_y);
+    double z = rng.drand64(min_z, max_z);
+    world_pts.emplace_back(x, y, z);
+    // convert to lon, lat, elev in (rad, rad, meters)
+    double X, Y, Z;
+    lvcs.local_to_global(x, y, z, vpgl_lvcs::wgs84, X, Y, Z);
+    // convert to radians
+    X /= vnl_math::deg_per_rad;
+    Y /= vnl_math::deg_per_rad;
+    double u, v;
+    camera_in.project(X, Y, Z, u, v); 
+    image_pts.emplace_back(u, v);
+  }
+
+  bool success = vpgl_affine_camera_compute::compute(image_pts, world_pts, camera_out);
+  // it is assumed that the camera is above the region of interest
+  camera_out.set_viewing_distance(max_z + region_of_interest.depth() * 10);
+  // camera rays point downward
+  camera_out.orient_ray_direction(vgl_vector_3d<double>(0, 0, -1));
+  double sum_er = 0.0;
+  double max_er = 0.0;
+#if 0 // debug test
+  for (unsigned i = 0; i < num_points; ++i) {
+      double uu, vv;
+      vgl_point_3d<double> wp = world_pts[i];
+      camera_out.project(wp.x(), wp.y(), wp.z(), uu, vv);
+      vgl_point_2d<double> ip = image_pts[i], pip(uu, vv);
+      double er = (ip - pip).length();
+      sum_er += er;
+      if (er > max_er) max_er = er; 
+  }
+  sum_er /= num_points;
+#endif
+  return success;
+}
 #else
 bool
 vpgl_affine_camera_convert::convert(vpgl_local_rational_camera<double> const & camera_in,
@@ -1540,6 +1594,13 @@ vpgl_affine_camera_convert::convert(vpgl_local_rational_camera<double> const & c
                                     vpgl_affine_camera<double> & camera_out,
                                     unsigned int num_points)
 {
+  return false; // Always report failure if GEOTIFF not available.
+}
+bool convert( vpgl_RSM_camera<double> const& camera_in,
+              vpgl_lvcs lvcs,
+              vgl_box_3d<double> const& region_of_interest,
+              vpgl_affine_camera<double>& camera_out,
+              unsigned int num_points){
   return false; // Always report failure if GEOTIFF not available.
 }
 #endif // HAS_GEOTIFF

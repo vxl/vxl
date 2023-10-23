@@ -69,6 +69,8 @@ vil_nitf2_file_format::make_input_pyramid_image(char const* file) {
   if(!vs)
     return nullptr;
   vil_image_resource_sptr imgr = this->make_input_image(vs.as_pointer());
+  if (!imgr)
+      return nullptr;
   vil_nitf2_image* nitfr = reinterpret_cast<vil_nitf2_image*>(imgr.as_pointer());
   if(!nitfr->is_jpeg_2000_compressed())
     return nullptr;

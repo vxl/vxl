@@ -20,6 +20,7 @@
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
+#include <vpgl/vpgl_RSM_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/vpgl_generic_camera.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
@@ -155,17 +156,25 @@ class vpgl_generic_camera_convert
   vpgl_generic_camera_convert() = delete;
 };
 
-//:methods for computing to an affine camera
+//:methods for converting to an affine camera
 class vpgl_affine_camera_convert
 {
  public:
 
-  //: Convert from rational camera using a local Euclidean coordinate system.
+  //: Convert from rational camera using a local Euclidean coordinate system
   static bool convert( vpgl_local_rational_camera<double> const& camera_in,
                        vgl_box_3d<double> const& region_of_interest,
                        vpgl_affine_camera<double>& camera_out,
                        unsigned int num_points=10000);
 
+  //: Convert from replacement sensor model (RSM) using a local Euclidean coordinate system.
+  // The local vertical coordinate system (lvcs) defines the mapping from longitude, latitude
+  // in degrees and height above the ellipsoid in meters to local X, Y, Z in meters.
+ static bool convert( vpgl_RSM_camera<double> const& camera_in,
+                      vpgl_lvcs lvcs,
+                      vgl_box_3d<double> const& region_of_interest,
+                      vpgl_affine_camera<double>& camera_out,
+                      unsigned int num_points=10000);
  private:
   vpgl_affine_camera_convert() = delete;
 };
