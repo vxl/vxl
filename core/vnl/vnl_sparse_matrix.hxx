@@ -453,13 +453,19 @@ T vnl_sparse_matrix<T>::get(unsigned int r, unsigned int c) const
 {
   assert((r < rows()) && (c < columns()));
   row const& rw = elements[r];
+
+  if (rw.empty() || c > rw.back().first)
+    return T();
+
+  // Because at this point `rw.back().first >= c`, the following iteration will stop before the end of the row.
   typename row::const_iterator ri = rw.begin();
-  while (ri != rw.end() && (*ri).first < c)
+  while (ri->first < c)
     ++ri;
-  if (ri == rw.end() || (*ri).first != c)
-    return T(); // uninitialised value (default constructor) is returned
+
+  if (ri->first == c)
+    return ri->second;
   else
-    return (*ri).second;
+    return T();
 }
 
 //------------------------------------------------------------
