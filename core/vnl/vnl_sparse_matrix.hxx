@@ -442,15 +442,7 @@ T& vnl_sparse_matrix<T>::operator()(unsigned int r, unsigned int c)
 template <class T>
 T vnl_sparse_matrix<T>::operator()(unsigned int r, unsigned int c) const
 {
-  assert((r < rows()) && (c < columns()));
-  row const& rw = elements[r];
-  typename row::const_iterator ri = rw.begin();
-  while (ri != rw.end() && (*ri).first < c)
-    ++ri;
-  if (ri == rw.end() || (*ri).first != c)
-    return T(); // uninitialised value (default constructor) is returned
-  else
-    return (*ri).second;
+  return this->get(r, c);
 }
 
 //------------------------------------------------------------
