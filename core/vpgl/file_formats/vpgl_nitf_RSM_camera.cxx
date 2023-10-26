@@ -1,6 +1,8 @@
 #include "vpgl_nitf_RSM_camera.h"
 #include "vpgl_nitf_rational_camera.h"
+#include <vpgl/vpgl_affine_camera.h>
 #include <vil/vil_load.h>
+#include <vpgl/algo/vpgl_camera_convert.h>
 #include <fstream>
 bool
 vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
@@ -11,7 +13,7 @@ vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
      std::cout << "IXSHD Property failed in vil_nitf2_image_subheader\n";
      return false;
    }
-   // Get image ID and location from main header values
+   // Get common metadata from the nitf2_image and image subheader
    if(!hdr->get_property("IID2", rsm_meta_.image_name_)){
      std::cout << "IID2 Property failed in vil_nitf2_image_subheader\n";
    }else rsm_meta_.image_name_valid = true;
@@ -68,15 +70,18 @@ vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
      vpgl_nitf_rational_camera::geostr_to_latlon(image_igeolo_.c_str() + 15, &URlat, &URlon);
      vpgl_nitf_rational_camera::geostr_to_latlon(image_igeolo_.c_str() + 30, &LRlat, &LRlon);
      vpgl_nitf_rational_camera::geostr_to_latlon(image_igeolo_.c_str() + 45, &LLlat, &LLlon);
-
-     ul_[vpgl_nitf_rational_camera::LAT] = ULlat;
-     ul_[vpgl_nitf_rational_camera::LON] = ULlon;
-     ur_[vpgl_nitf_rational_camera::LAT] = URlat;
-     ur_[vpgl_nitf_rational_camera::LON] = URlon;
-     ll_[vpgl_nitf_rational_camera::LAT] = LLlat;
-     ll_[vpgl_nitf_rational_camera::LON] = LLlon;
-     lr_[vpgl_nitf_rational_camera::LAT] = LRlat;
-     lr_[vpgl_nitf_rational_camera::LON] = LRlon;
+     // the rational camera has, e.g. ul(lat, lon) however
+     // if the point is interpreted as x, y then the order
+     // should be ul(lon, lat), so
+     unsigned LON = 0, LAT = 1;
+     ul_[LAT] = ULlat;
+     ul_[LON] = ULlon;
+     ur_[LAT] = URlat;
+     ur_[LON] = URlon;
+     ll_[LAT] = LLlat;
+     ll_[LON] = LLlon;
+     lr_[LAT] = LRlat;
+     lr_[LON] = LRlon;
    }
    return true;
 }
@@ -768,7 +773,117 @@ bool vpgl_nitf_RSM_camera::rsm_camera_params(std::vector<std::vector<int> >& pow
       vpgl_RSM_camera<double>::set_powers(powers);
       vpgl_RSM_camera<double>::set_coefficients(coeffs);
       vpgl_RSM_camera<double>::set_scale_offsets(scale_offsets);
-      return good;      
+    }
+    bool aux_good = true;
+    if (type == "RSMIDA"){
+      nitf_tre<std::string> nt("STID", false, true);
+      good = nt.get(tres_itr, rsm_meta_.platform_name_);
+      rsm_meta_.platform_name_valid = aux_good;
+// boundary metadata
+      double min_lon = std::numeric_limits<double>::max(), min_lat = min_lon;
+      double max_lon = -min_lon, max_lat = -min_lat;
+      double min_z, max_z;
+      nitf_tre<double> nt1("V1Z", false, false);
+      bool min_good = nt1.get(tres_itr, min_z);
+      nitf_tre<double> nt2("V8Z", false, false);
+      bool max_good = nt2.get(tres_itr, max_z);
+ 
+      rsm_meta_.upper_left_.set(ul_[0], ul_[1], min_z);
+      rsm_meta_.upper_right_.set(ur_[0], ur_[1], min_z);
+      rsm_meta_.lower_left_.set(ll_[0], ll_[1], max_z);
+      rsm_meta_.lower_right_.set(lr_[0], lr_[1], max_z);
+
+      // bounding box
+      // longitude bounds
+      if(ul_[0] < min_lon) min_lon = ul_[0];
+      if(ul_[0] > max_lon) max_lon = ul_[0];
+      if(ur_[0] < min_lon) min_lon = ur_[0];
+      if(ur_[0] > max_lon) max_lon = ur_[0];
+      if(ll_[0] < min_lon) min_lon = ll_[0];
+      if(ll_[0] > max_lon) max_lon = ll_[0];
+      if(lr_[0] < min_lon) min_lon = lr_[0];
+      if(lr_[0] > max_lon) max_lon = lr_[0];
+      // latitude bounds
+      if(ul_[1] < min_lat) min_lat = ul_[1];
+      if(ul_[1] > max_lat) max_lat = ul_[1];
+      if(ur_[1] < min_lat) min_lat = ur_[1];
+      if(ur_[1] > max_lat) max_lat = ur_[1];
+      if(ll_[1] < min_lat) min_lat = ll_[1];
+      if(ll_[1] > max_lat) max_lat = ll_[1];
+      if(lr_[1] < min_lat) min_lat = lr_[1];
+      if(lr_[1] > max_lat) max_lat = lr_[0];
+
+      vgl_point_3d<double> min_pt(min_lon, min_lat, min_z);
+      vgl_point_3d<double> max_pt(max_lon, max_lat, max_z);
+      rsm_meta_.bounding_box_= vgl_box_3d<double>(min_pt, max_pt);
+
+      // footprint
+      vgl_point_2d<double> ll(ll_[0],ll_[1]), lr(lr_[0],lr_[1]);
+      vgl_point_2d<double> ur(ur_[0],ur_[1]), ul(ul_[0],ul_[1]);
+      std::vector<vgl_point_2d<double> > sheet;
+      sheet.push_back(ll); sheet.push_back(lr);
+      sheet.push_back(ur); sheet.push_back(ul);
+      rsm_meta_.footprint_ = vgl_polygon<double>(sheet);
+      rsm_meta_.corners_valid = min_good && max_good && igeolo_valid_;
+      // view direction
+      // convert to local coordinates
+      // cent ===> lon, lat, elev
+      vgl_point_3d<double> cent = rsm_meta_.bounding_box_.centroid();
+      vpgl_lvcs lvcs(cent.y(), cent.x(), cent.z(), vpgl_lvcs::wgs84,
+                     vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+      double lx, ly, lz;
+      lvcs.global_to_local(cent.x(), cent.y(), cent.z(), vpgl_lvcs::wgs84, lx, ly, lz);
+      vgl_point_3d<double> loc_org(lx, ly, lz);
+      vgl_point_3d<double> loc_min_pt = loc_org + vgl_vector_3d<double>(-500.0, -500.0, -500.0);
+      vgl_point_3d<double> loc_max_pt = loc_org + vgl_vector_3d<double>(500.0, 500.0, 500.0);
+      vgl_box_3d<double> roi(loc_min_pt, loc_max_pt);
+
+      vpgl_RSM_camera* rsm_cam_ptr = reinterpret_cast<vpgl_RSM_camera<double>*>(this);
+      vpgl_affine_camera<double> acam;
+
+      vpgl_affine_camera_convert::convert(*rsm_cam_ptr, lvcs, roi, acam);
+      // looking towards the sensor requires a minus sign
+      vgl_vector_3d<double> ray_dir = -acam.ray_dir();
+
+      // degrees above horizon
+      double view_elevation = std::asin(ray_dir.z()) * vnl_math::deg_per_rad;
+        // degrees east of north (check jlm)
+       double view_azimuth = std::atan2(ray_dir.x(), ray_dir.y()) * vnl_math::deg_per_rad;;
+      if (view_azimuth < 0)
+        view_azimuth += 360;
+      
+      std::cout << "V elev" << view_elevation << "V az " << view_azimuth << std::endl;
+      rsm_meta_.view_angles_.set(view_elevation, view_azimuth);
+
+      // gsd at center of image
+      int min_r, max_r, min_c, max_c;
+      nitf_tre<int> nt1("MINR", false, false);
+      bool row_good_min = nt1.get(tres_itr, min_r);
+      nitf_tre<double> nt2("MAXR", false, false);
+      bool row_good_max = nt2.get(tres_itr, max_r);
+      nitf_tre<int> nt3("MINC", false, false);
+      bool col_good_min = nt1.get(tres_itr, min_r);
+      nitf_tre<double> nt4("MAXC", false, false);
+      bool col_good_max = nt2.get(tres_itr, max_r);
+      bool cent_good = row_good_min && row_good_max && col_good_min && col_good_max;
+      if(cent_good){
+        double u_cent = (max_r - min_r)/2;
+        double v_cent = (max_c - min_c)/2;
+        double u_centp = u_cent + vnl_math::sqrt1_2;
+        double v_centp = v_cent + vnl_math::sqrt1_2;
+        vgl_plane_3d<double> pl(0.0, 0.0, 1.0, -cent.z());
+        vgl_point_3d<double> ipt(0.0, 0.0, 0.0), wrld_ptc, wrld_ptp;
+        vpgl_camera<double>* acm_ptr = reinterpret_cast<vpgl_camera<double>*>(&acam);
+        bool gsd_good_c =
+          vpgl_backproject::bproj_plane(acam_ptr, vgl_point_2d<double>(u_cent, v_cent),
+                                        pl, ipt, wrld_ptc);
+        bool gsd_good_cp =
+          vpgl_backproject::bproj_plane(acam_ptr, vgl_point_2d<double>(u_centp, v_centp),
+                                        pl, ipt, wrld_ptp);
+        rsm_meta_.gsd_ = (wrld_ptp - wrld_ptc).length();
+        bool good_gsd =gsd_good_c && gsd_good_cp;
+        rsm_meta_.gsd_valid = good_gsd;
+      }
     }
   }
   return good;
