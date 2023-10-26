@@ -150,12 +150,83 @@ void vpgl_replacement_sensor_model_tres::define_RSMPIA(){
         .end();
     }
 }
+void vpgl_replacement_sensor_model_tres::define_RSMECA(){
+// check for refinement grid
+    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMECA");
+    if (!trgi)
+    {
+        vil_nitf2_tagged_record_definition::define("RSMECA", "Indirect Error Covariance")
+          .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
+          .end();
+    }
+}
+void vpgl_replacement_sensor_model_tres::define_RSMECB() {
+    // check for refinement grid
+    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMECB");
+    if (!trgi)
+    {
+        vil_nitf2_tagged_record_definition::define("RSMECB", "Extended Indirect Error Covariance")
+            .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
+            .end();
+    }
+}
+    
+void vpgl_replacement_sensor_model_tres::define_RSMDCA(){
+// check for refinement grid
+    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMDCA");
+    if (!trgi)
+    {
+        vil_nitf2_tagged_record_definition::define("RSMDCA", "Direct Error Covariance")
+          .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
+          .end();
+    }
+}
+void vpgl_replacement_sensor_model_tres::define_RSMDCB(){
+// check for refinement grid
+    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMDCB");
+    if (!trgi)
+    {
+        vil_nitf2_tagged_record_definition::define("RSMDCB", "Extended Direct Error Covariance")
+          .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
+          .end();
+    }
+}
+void vpgl_replacement_sensor_model_tres::define_RSMAPA(){
+// check for refinement grid
+    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMAPA");
+    if (!trgi)
+    {
+        vil_nitf2_tagged_record_definition::define("RSMAPA", "Adjustable Parameters")
+          .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
+          .end();
+    }
+}
+void vpgl_replacement_sensor_model_tres::define_RSMAPB(){
+// check for refinement grid
+    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMAPB");
+    if (!trgi)
+    {
+        vil_nitf2_tagged_record_definition::define("RSMAPB", "Extended Adjustable Parameters")
+          .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
+          .end();
+    }
+}
 void vpgl_replacement_sensor_model_tres::define_RSMGIA(){
 // check for refinement grid
     vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMPIA");
     if (!trgi)
     {
-        vil_nitf2_tagged_record_definition::define("RSMGIA", "Multiple Section Polynomials")
+        vil_nitf2_tagged_record_definition::define("RSMGIA", "Multi-section Grids")
+          .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
+          .end();
+    }
+}
+void vpgl_replacement_sensor_model_tres::define_RSMGGA(){
+// check for refinement grid
+    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMGGA");
+    if (!trgi)
+    {
+        vil_nitf2_tagged_record_definition::define("RSMGGA", "Ground to Image Grid")
           .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
           .end();
     }

@@ -5,6 +5,7 @@
 #include <cmath>
 #include <tuple>
 #include <vector>
+#include <fstream>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vpgl/vpgl_RSM_camera.h>
@@ -21,6 +22,8 @@ static void test_RSM_camera()
   std::string rsm_dir = "D:/tests/ReplacementSensorModel/";
   std::string rsm_path = rsm_dir +  "07APR2005_Hyperion_331406N0442000E_SWIR172_1p2A_L1R-BIB.ntf";
   std::string rsm_rgb_path = rsm_dir + "rsm_image_rgb.tif";
+  std::string tre_report_path = rsm_dir + "tre_report.txt";
+  std::ofstream tre_str(tre_report_path.c_str());
   {
     vil_image_resource_sptr resc = vil_load_image_resource(rsm_path.c_str());
     vil_nitf2_image* nitfr = reinterpret_cast<vil_nitf2_image*>(resc.as_pointer());
@@ -51,29 +54,29 @@ static void test_RSM_camera()
       }
     }
   }
-  vpgl_nitf_RSM_camera rcam(rsm_path.c_str());
+  vpgl_nitf_RSM_camera* rcam = new vpgl_nitf_RSM_camera(rsm_path.c_str());
   std::vector<std::vector<int> > powers;
   std::vector<std::vector<double> > coeffs;
   std::vector<vpgl_scale_offset<double> > scale_offsets;
-  bool testp = rcam.test_rsm_params();
+  bool testp = rcam->raw_tres(tre_str);
   if(testp) std::cout << "RSM TRES PASSED" << std::endl;
-  vnl_double_2 ul = rcam.upper_left();
-  vnl_double_2 lr = rcam.lower_right();
-  vnl_double_2 ur = rcam.upper_right();
-  vnl_double_2 ll = rcam.lower_left();
+  vnl_double_2 ul = rcam->upper_left();
+  vnl_double_2 lr = rcam->lower_right();
+  vnl_double_2 ur = rcam->upper_right();
+  vnl_double_2 ll = rcam->lower_left();
   vnl_double_2 mid = 0.5 * (ul + lr);
   std::cout << "MIDDLE " << mid << std::endl;
-  bool success = rcam.get_rsm_camera_params(powers, coeffs, scale_offsets);
+  bool success = rcam->rsm_camera_params(powers, coeffs, scale_offsets);
   if (success) std::cout << "RSM CAMERA PARAMETERS PASSED" << std::endl;
   // test constructor
-  vpgl_RSM_camera<double> rsm_cam(powers, coeffs, scale_offsets);
+  vpgl_RSM_camera<double>* rsm_cam = reinterpret_cast<vpgl_RSM_camera<double>*>(rcam);
   double d2r = 3.14159 / 180.0;
   //double X = 0.77377, Y = 0.58, Z = 20.7799, u, v;
   double u, v;
   //double X = 44.377807*d2r, Y = 33.293708*d2r, Z = 34.0;
   //double X = 44.333154 * d2r, Y = 33.261389 * d2r, Z = 34.0;
   double X = 44.404525 * d2r, Y = 33.616347 * d2r, Z = 34.0;
-  rsm_cam.project(X, Y, Z, u, v);
+  rsm_cam->project(X, Y, Z, u, v);
   int minv = 0, maxv = 3351, minu = 0, maxu = 255;
   bool proj = u>=minu && u<=maxu && v>=minv && v<=maxv;
   if (proj) std::cout << "RSM CAMERA PROJECTION PASSED" << std::endl;

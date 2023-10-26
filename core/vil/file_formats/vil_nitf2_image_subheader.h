@@ -116,6 +116,12 @@ class vil_nitf2_image_subheader
                        std::string& image_corner_geo_locations,
                        double* rpc_data ) const;
 
+  // grid points in row order (11, 12, 21, 22)
+  bool get_ichipb_info(std::pair<double, double>& translation,
+                       std::vector<std::pair<double, double> >& F_grid_points,
+                       std::vector<std::pair<double, double> >& O_grid_points,
+                       double& scale_factor, bool& anamorphic_corr);
+
   //: Return the elevation and azimuth angles of the sun
   //  \a sun_el --> sun elevation angle
   //  \a sun_az --> sun azimuthal angle
@@ -154,5 +160,4 @@ class vil_nitf2_image_subheader
   // using nitf files
   friend void vil_nitf2::cleanup_static_members();
 };
-
 #endif // VIL_NITF2_IMAGE_SUBHEADER_H
