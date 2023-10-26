@@ -3,6 +3,7 @@
 #include <vpgl/vpgl_affine_camera.h>
 #include <vil/vil_load.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
+#include <vpgl/algo/vpgl_backproject.h>
 #include <fstream>
 bool
 vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
@@ -857,14 +858,14 @@ bool vpgl_nitf_RSM_camera::rsm_camera_params(std::vector<std::vector<int> >& pow
 
       // gsd at center of image
       int min_r, max_r, min_c, max_c;
-      nitf_tre<int> nt1("MINR", false, false);
-      bool row_good_min = nt1.get(tres_itr, min_r);
-      nitf_tre<double> nt2("MAXR", false, false);
-      bool row_good_max = nt2.get(tres_itr, max_r);
-      nitf_tre<int> nt3("MINC", false, false);
-      bool col_good_min = nt1.get(tres_itr, min_r);
-      nitf_tre<double> nt4("MAXC", false, false);
-      bool col_good_max = nt2.get(tres_itr, max_r);
+      nitf_tre<int> nt3("MINR", false, false);
+      bool row_good_min = nt3.get(tres_itr, min_r);
+      nitf_tre<int> nt4("MAXR", false, false);
+      bool row_good_max = nt4.get(tres_itr, max_r);
+      nitf_tre<int> nt5("MINC", false, false);
+      bool col_good_min = nt5.get(tres_itr, min_c);
+      nitf_tre<int> nt6("MAXC", false, false);
+      bool col_good_max = nt6.get(tres_itr, max_c);
       bool cent_good = row_good_min && row_good_max && col_good_min && col_good_max;
       if(cent_good){
         double u_cent = (max_r - min_r)/2;
@@ -873,7 +874,7 @@ bool vpgl_nitf_RSM_camera::rsm_camera_params(std::vector<std::vector<int> >& pow
         double v_centp = v_cent + vnl_math::sqrt1_2;
         vgl_plane_3d<double> pl(0.0, 0.0, 1.0, -cent.z());
         vgl_point_3d<double> ipt(0.0, 0.0, 0.0), wrld_ptc, wrld_ptp;
-        vpgl_camera<double>* acm_ptr = reinterpret_cast<vpgl_camera<double>*>(&acam);
+        vpgl_camera<double>* acam_ptr = reinterpret_cast<vpgl_camera<double>*>(&acam);
         bool gsd_good_c =
           vpgl_backproject::bproj_plane(acam_ptr, vgl_point_2d<double>(u_cent, v_cent),
                                         pl, ipt, wrld_ptc);
