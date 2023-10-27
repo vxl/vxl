@@ -32,12 +32,15 @@ vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
        std::cout << "IGEOLO Property failed in vil_nitf2_image_subheader\n";
    }else igeolo_valid_ = true;
 
+   // elevation is degrees above tangent plane
+   // azimuth is clockwise from North
    double sun_elev, sun_azimuth;
    if(!hdr->get_sun_params(sun_elev, sun_azimuth)){
        std::cout << "get_sun_params failed in vil_nitf2_image_subheader\n";
    }else rsm_meta_.sun_angles_valid = true;
+
    if (rsm_meta_.sun_angles_valid)
-       rsm_meta_.sun_angles_.set(sun_azimuth, sun_elev);
+     rsm_meta_.sun_angles_.set(sun_azimuth, sun_elev);
 
    image_time t;
    if( !hdr->get_date_time(t.year, t.month, t.day, t.hour, t.min, t.sec)){
@@ -46,17 +49,19 @@ vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
    if(rsm_meta_.acquisition_time_valid)
      rsm_meta_.acqusisition_time_ = t;
 
+   // offset from ICHIPB (translation)
+   // or optionally STDIDC or STDIDB Block(START_COLUMN, START_ROW)
    double u_off, v_off;
-   if( !hdr->get_correction_offset(u_off, v_off)){
-     std::cout << "get_correction offset failed in vil_nitf2_image_subheader\n";
-   }else multi_tre_offset_valid = true;
-   if(multi_tre_offset_valid)
-     multi_tre_offset_.set(u_off, v_off);
+   if( !hdr->get_image_offset(u_off, v_off)){
+     std::cout << "get_image offset failed in vil_nitf2_image_subheader\n";
+   }else rsm_meta_.image_offset_valid = true;
+   if(rsm_meta_.image_offset_valid)
+     rsm_meta_.image_offset_.set(u_off, v_off);
 
    if( !hdr->get_ichipb_info(ichipb_.translation_, ichipb_.F_grid_points_,
                               ichipb_.O_grid_points_,ichipb_.scale_factor_,
                               ichipb_.anamorphic_corr_)){
-     std::cout << "get_ichipb_info failed in vil_nitf2_image_subheader\n";
+     std::cout << "ichipb_info not present in vil_nitf2_image_subheader\n";
    }else ichipb_.ichipb_data_valid_ = true;
 
    // extract corner coordinates from image_geolo field
@@ -71,7 +76,7 @@ vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
      vpgl_nitf_rational_camera::geostr_to_latlon(image_igeolo_.c_str() + 15, &URlat, &URlon);
      vpgl_nitf_rational_camera::geostr_to_latlon(image_igeolo_.c_str() + 30, &LRlat, &LRlon);
      vpgl_nitf_rational_camera::geostr_to_latlon(image_igeolo_.c_str() + 45, &LLlat, &LLlon);
-     // the rational camera has, e.g. ul(lat, lon) however
+     // the rational camera tres have, e.g. ul(lat, lon) however
      // if the point is interpreted as x, y then the order
      // should be ul(lon, lat), so
      unsigned LON = 0, LAT = 1;
@@ -601,14 +606,13 @@ bool vpgl_nitf_RSM_camera::raw_tres(std::ostream& tre_str, bool verbose ) const
   if(!RSMGGA) tre_str << "RSMGGA" << std::endl;
   return true;
 }
-bool vpgl_nitf_RSM_camera::rsm_camera_params(std::vector<std::vector<int> >& powers,
-    std::vector<std::vector<double> >& coeffs,
-    std::vector<vpgl_scale_offset<double> >& scale_offsets)
+bool vpgl_nitf_RSM_camera::set_RSM_camera_params()
 {
   vil_nitf2_tagged_record_sequence::const_iterator tres_itr;
-  powers.clear();
-  coeffs.clear();
-  scale_offsets.clear();
+  std::vector<std::vector<int> > powers;
+  std::vector<std::vector<double> > coeffs;
+  std::vector<vpgl_scale_offset<double> > scale_offsets;
+
   double x_scale, x_off;
   double y_scale, y_off;
   double z_scale, z_off;
@@ -780,7 +784,10 @@ bool vpgl_nitf_RSM_camera::rsm_camera_params(std::vector<std::vector<int> >& pow
       nitf_tre<std::string> nt("STID", false, true);
       good = nt.get(tres_itr, rsm_meta_.platform_name_);
       rsm_meta_.platform_name_valid = aux_good;
-// boundary metadata
+      // boundary metadata
+      //  Obtain elevation bounds from the ground domain vertices
+      //  The primary purpose of the RSM ground domain is to define
+      //  the region of validity of the RSM TRE Set representation in ground space.
       double min_lon = std::numeric_limits<double>::max(), min_lat = min_lon;
       double max_lon = -min_lon, max_lat = -min_lat;
       double min_z, max_z;
@@ -832,29 +839,37 @@ bool vpgl_nitf_RSM_camera::rsm_camera_params(std::vector<std::vector<int> >& pow
       vgl_point_3d<double> cent = rsm_meta_.bounding_box_.centroid();
       vpgl_lvcs lvcs(cent.y(), cent.x(), cent.z(), vpgl_lvcs::wgs84,
                      vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+      // Define bounding box for randomly selecting 3-d points to be
+      // projected using the RSM polynomial coefficients defined in
+      // the TREs.
       double lx, ly, lz;
       lvcs.global_to_local(cent.x(), cent.y(), cent.z(), vpgl_lvcs::wgs84, lx, ly, lz);
-      vgl_point_3d<double> loc_org(lx, ly, lz);
+      vgl_point_3d<double> loc_org(lx, ly, lz);//should be (0.0, 0.0, 0.0)
       vgl_point_3d<double> loc_min_pt = loc_org + vgl_vector_3d<double>(-500.0, -500.0, -500.0);
       vgl_point_3d<double> loc_max_pt = loc_org + vgl_vector_3d<double>(500.0, 500.0, 500.0);
       vgl_box_3d<double> roi(loc_min_pt, loc_max_pt);
 
+      // Cast the nitf camera to the base camera
       vpgl_RSM_camera* rsm_cam_ptr = reinterpret_cast<vpgl_RSM_camera<double>*>(this);
-      vpgl_affine_camera<double> acam;
 
+      // Fit the affine camera model to the set of random (XYZ -> UV) pairs
+      vpgl_affine_camera<double> acam;
       vpgl_affine_camera_convert::convert(*rsm_cam_ptr, lvcs, roi, acam);
-      // looking towards the sensor requires a minus sign
+
+      // The Cartesian vector looking towards the sensor requires a minus sign
+      //                              v
       vgl_vector_3d<double> ray_dir = -acam.ray_dir();
 
-      // degrees above horizon
+      // Convert the local Cartesian vector to
+      // geodetic coordinates according to IMD convention
+      //  degrees above horizon
       double view_elevation = std::asin(ray_dir.z()) * vnl_math::deg_per_rad;
-        // degrees east of north (check jlm)
+      //  degrees east of north 
        double view_azimuth = std::atan2(ray_dir.x(), ray_dir.y()) * vnl_math::deg_per_rad;;
       if (view_azimuth < 0)
         view_azimuth += 360;
-      
-      std::cout << "V elev" << view_elevation << "V az " << view_azimuth << std::endl;
-      rsm_meta_.view_angles_.set(view_elevation, view_azimuth);
+
+      rsm_meta_.view_angles_.set(view_azimuth, view_elevation);
 
       // gsd at center of image
       int min_r, max_r, min_c, max_c;

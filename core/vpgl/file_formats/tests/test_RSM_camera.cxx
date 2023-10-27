@@ -66,7 +66,9 @@ static void test_RSM_camera()
   vnl_double_2 ll = rcam->lower_left();
   vnl_double_2 mid = 0.5 * (ul + lr);
   std::cout << "MIDDLE " << mid << std::endl;
-  bool success = rcam->rsm_camera_params(powers, coeffs, scale_offsets);
+  bool rsm_tres = rcam->set_RSM_camera_params();
+  rcam->RSM_camera_params(powers, coeffs, scale_offsets);
+  bool success = powers.size() == 4;
   if (success) std::cout << "RSM CAMERA PARAMETERS PASSED" << std::endl;
   // test constructor
   vpgl_RSM_camera<double>* rsm_cam = reinterpret_cast<vpgl_RSM_camera<double>*>(rcam);

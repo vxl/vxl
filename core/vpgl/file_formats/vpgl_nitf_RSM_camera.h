@@ -38,7 +38,7 @@ struct rsm_metadata{
   vgl_point_3d<double> lower_right_;
   vgl_box_3d<double> bounding_box_; 
   vgl_polygon<double> footprint_;
-  vgl_point_2d<double> multi_tre_image_offset_; bool multi_tre_image_offset_valid = false;
+  vgl_point_2d<double> image_offset_;           bool image_offset_valid = false;
   vgl_point_2d<double> rsm_image_offset_;       bool rsm_image_offset = false;
   double cloud_percentage_;                     bool cloud_percentage_valid = false;
   double gsd_;                                  bool gsd_valid = false;
@@ -60,6 +60,7 @@ struct ichipb_data{
 {
  public:
 
+  // path to a NITFV2.1 image file
   vpgl_nitf_RSM_camera(std::string const& nitf_image_path,
                             bool verbose = false);
 
@@ -71,7 +72,10 @@ struct ichipb_data{
   // rational type
   std::string rational_extension_type() const {return "RSM";}
   // image name 
-  std::string image_id() const {return rsm_meta_.image_name_;}
+  std::string image_id() const {if(rsm_meta_.image_name_valid)
+      return rsm_meta_.image_name_;
+    else return "";
+  }
   //: 2D geographic coordinates of image corners (lon, lat in degrees)
   vnl_double_2 upper_left() const {return ul_;}
   vnl_double_2 upper_right() const {return ur_;}
@@ -83,13 +87,17 @@ struct ichipb_data{
   // a text file of tres present in header
   bool raw_tres(std::ostream& ostr, bool verbose = false) const;
 
+  bool set_RSM_camera_params();
+
   // the parameters necessary to construct rational polynomials
-  bool rsm_camera_params(std::vector<std::vector<int> >& powers,
+  void RSM_camera_params(std::vector<std::vector<int> >& powers,
                          std::vector<std::vector<double> >& coeffs,
-                         std::vector<vpgl_scale_offset<double> >& scale_offsets);
+                         std::vector<vpgl_scale_offset<double> >& scale_offsets){
+    powers = powers_; coeffs = coeffs_; scale_offsets = scale_offsets_;
+  }
     
   //Extracted metadata. 
-  bool meta(rsm_metadata& rsm_meta, ichipb_data& ichipb, vgl_point_2d<double>& multi_tre_offset, vgl_point_2d<double>& rsm_offset) const;
+  bool meta(rsm_metadata& rsm_meta, ichipb_data& ichipb) const;
   
     private:
   // internal functions
@@ -105,12 +113,7 @@ struct ichipb_data{
   vnl_double_2 ll_;
   vnl_double_2 lr_;
   rsm_metadata rsm_meta_;
-  
   ichipb_data ichipb_;
-  bool multi_tre_offset_valid = false;
-  vgl_point_2d<double> multi_tre_offset_;
-    bool rsm_offset_valid = false;
-  vgl_point_2d<double> rsm_offset_;
 };
 
 #endif // vpgl_nitf_RSM_camera_h_

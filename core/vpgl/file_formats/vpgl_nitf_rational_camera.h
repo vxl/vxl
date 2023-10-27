@@ -32,8 +32,8 @@
 class vpgl_nitf_rational_camera : public vpgl_rational_camera<double>
 {
  public:
-
-  enum geopt_coord { LAT, LON };
+  // note: to be consistent with point coords (x, y)
+  enum geopt_coord { LON, LAT };
   vpgl_nitf_rational_camera() = default;
 
   //: Construct from a nitf image file

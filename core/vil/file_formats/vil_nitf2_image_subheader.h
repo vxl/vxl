@@ -130,7 +130,9 @@ class vil_nitf2_image_subheader
   //: Extract the date and time
   bool get_date_time(int& year, int& month, int& day, int& hour, int& min, int& sec) const;
 
-  bool get_correction_offset(double & u_off, double & v_off) const;
+  // Offset from ICHIPB or from block offsets in STDIDB or STDIDC,
+  // precidenced is ICHIPB < STDIDC < STDIDB
+  bool get_image_offset(double & u_off, double & v_off) const;
   static const vil_nitf2_field_definitions* get_defs() { return get_field_definitions_21(); }
  protected:
   vil_nitf2_field_sequence m_field_sequence;

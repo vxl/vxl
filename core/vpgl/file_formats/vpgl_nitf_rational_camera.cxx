@@ -301,7 +301,7 @@ vpgl_nitf_rational_camera::init(vil_nitf2_image * nitf_image, bool verbose)
 
   // correction offset
   double correction_u_off, correction_v_off;
-  success = hdr->get_correction_offset(correction_u_off, correction_v_off);
+  success = hdr->get_image_offset(correction_u_off, correction_v_off);
 
   if (success)
   {

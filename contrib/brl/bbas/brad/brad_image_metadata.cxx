@@ -1279,7 +1279,8 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
 
   vpgl_nitf_rational_camera nitf_cam(nitf_image, false);
 
-  //upper_left_ = nitf_cam.upper_left(); // CAUTION: lat is x and lon is y when read from nitf camera with this method
+  // Note LON = 0, LAT = 1 // was reverse prior to Oct. 2023
+  // But has no effect since enums are used
   upper_right_.set(nitf_cam.upper_right()[nitf_cam.LON], nitf_cam.upper_right()[nitf_cam.LAT], 0);
   lower_left_.set(nitf_cam.lower_left()[nitf_cam.LON],   nitf_cam.lower_left()[nitf_cam.LAT], 0);
   //lower_right_ = nitf_cam.lower_right();

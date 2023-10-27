@@ -1034,7 +1034,7 @@ vil_nitf2_image_subheader::add_MPD26A_definitions()
 
 // obtain column and row offset from ICHIPB/STDIDB /SDTDIDC
 bool
-vil_nitf2_image_subheader::get_correction_offset(double & u_off, double & v_off) const
+vil_nitf2_image_subheader::get_image_offset(double & u_off, double & v_off) const
 {
   // Now get the sub-header TRE parameters
   vil_nitf2_tagged_record_sequence isxhd_tres;
