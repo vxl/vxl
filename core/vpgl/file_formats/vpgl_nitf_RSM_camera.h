@@ -95,7 +95,9 @@ struct ichipb_data{
   }
     
   //Extracted metadata. 
-  bool meta(rsm_metadata& rsm_meta, ichipb_data& ichipb) const;
+  void meta(rsm_metadata& rsm_meta, ichipb_data& ichipb) const {
+      rsm_meta = rsm_meta_; ichipb = ichipb_;
+  }
   
     private:
   // internal functions
