@@ -21,10 +21,6 @@ vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
    //trim to standard length
    rsm_meta_.image_name_ = rsm_meta_.image_name_.substr(0, 39);
    
-
-   rsm_meta_.effective_bits_per_pixel_ = hdr->get_number_of_bits_per_pixel();
-   rsm_meta_.effective_bits_per_pixel_valid = true;
-
    rsm_meta_.platform_name_ = hdr->get_image_source();
    rsm_meta_.platform_name_valid = true;
 
@@ -47,7 +43,7 @@ vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
      std::cout << "get_date_time failed in vil_nitf2_image_subheader\n";
    }else rsm_meta_.acquisition_time_valid = true;
    if(rsm_meta_.acquisition_time_valid)
-     rsm_meta_.acqusisition_time_ = t;
+     rsm_meta_.acquisition_time_ = t;  
 
    // offset from ICHIPB (translation)
    // or optionally STDIDC or STDIDB Block(START_COLUMN, START_ROW)

@@ -24,11 +24,10 @@ struct image_time {
   int year, month, day, hour, min, sec;
 };
 struct rsm_metadata{
-  rsm_metadata() = default;
   std::string catalog_id_;                     bool catalog_id_valid=false;
   std::string platform_name_;                  bool platform_name_valid=false;
   std::string image_name_;                     bool image_name_valid = false;
-  image_time acqusisition_time_;               bool acquisition_time_valid = false;
+  image_time acquisition_time_;                bool acquisition_time_valid = false;
   unsigned effective_bits_per_pixel_;          bool effective_bits_per_pixel_valid = false;
   std::string image_type_;                     bool image_type_valid = false;
   bool corners_valid = false;
@@ -39,7 +38,7 @@ struct rsm_metadata{
   vgl_box_3d<double> bounding_box_; 
   vgl_polygon<double> footprint_;
   vgl_point_2d<double> image_offset_;           bool image_offset_valid = false;
-  vgl_point_2d<double> rsm_image_offset_;       bool rsm_image_offset = false;
+  vgl_point_2d<double> rsm_image_offset_;       bool rsm_image_offset_valid = false;
   double cloud_percentage_;                     bool cloud_percentage_valid = false;
   double gsd_;                                  bool gsd_valid = false;
   //az, elev_ 
@@ -47,7 +46,6 @@ struct rsm_metadata{
   vgl_point_2d<double> view_angles_;            bool view_angles_valid = false;
 };
 struct ichipb_data{
-  ichipb_data() = default;
   bool ichipb_data_valid_ = false;
   std::pair<double, double> translation_;
   std::vector<std::pair<double, double> > F_grid_points_;
