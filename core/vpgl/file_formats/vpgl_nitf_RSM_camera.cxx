@@ -4,17 +4,34 @@
 #include <vil/vil_load.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
 #include <vpgl/algo/vpgl_backproject.h>
+#include <vil/file_formats/vil_nitf2_image_subheader.h>
 #include <fstream>
 bool
 vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
 {
   std::vector<vil_nitf2_image_subheader *> headers = nitf_image->get_image_headers();
-   vil_nitf2_image_subheader * hdr = headers[1];//fix
-   if(!hdr->get_property("IXSHD", isxhd_tres_)){
-     std::cout << "IXSHD Property failed in vil_nitf2_image_subheader\n";
-     return false;
-   }
-   // Get common metadata from the nitf2_image and image subheader
+  vil_nitf2_tagged_record_sequence::const_iterator tres_itr;
+  vil_nitf2_image_subheader *hdr;
+  size_t hcount = 0, hindex = 0;
+  for (unsigned i = 0; i<headers.size(); ++i)
+    if(headers[i]->get_property("IXSHD", isxhd_tres_)){
+        for (tres_itr = isxhd_tres_.begin(); tres_itr != isxhd_tres_.end(); ++tres_itr)
+          {
+            std::string type = (*tres_itr)->name();
+            if (type == "RSMPCA"){ // looking for "RSMPCA..."
+              hindex = i;
+              hcount++;
+              hdr = headers[i];
+            }
+          }
+    }
+  if(hcount != 1){
+    std::cout << "IXSHD Property failed in vil_nitf2_image_subheader: header count " << hcount << std::endl;
+    return false;
+  }
+  nitf_image->set_current_image(hindex);
+  headers[hindex]->get_property("IXSHD", isxhd_tres_);
+  // Get common metadata from the nitf2_image and image subheader
    if(!hdr->get_property("IID2", rsm_meta_.image_name_)){
      std::cout << "IID2 Property failed in vil_nitf2_image_subheader\n";
    }else rsm_meta_.image_name_valid = true;
@@ -107,12 +124,14 @@ vpgl_nitf_RSM_camera::vpgl_nitf_RSM_camera(std::string const & nitf_image_path, 
   auto * nitf_image = (vil_nitf2_image *)image.ptr();
 
   // read information
-  this->init(nitf_image, verbose);
+  if(!this->init(nitf_image, verbose))
+    throw std::runtime_error("can't form RSM NITF image");
 }
 
 vpgl_nitf_RSM_camera::vpgl_nitf_RSM_camera(vil_nitf2_image * nitf_image, bool verbose)
 {
-  this->init(nitf_image, verbose);
+  if(!this->init(nitf_image, verbose))
+    throw std::runtime_error("can't form RSM NITF image");
 }
 
 bool vpgl_nitf_RSM_camera::raw_tres(std::ostream& tre_str, bool verbose ) const
