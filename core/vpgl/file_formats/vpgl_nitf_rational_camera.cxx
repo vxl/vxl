@@ -231,7 +231,37 @@ vpgl_nitf_rational_camera::geostr_to_latlon(const char * str, double * lat, doub
 
   return latstrlen + lonstrlen;
 }
-
+void vpgl_nitf_rational_camera::geostr_to_latlon_v2(std::string const& str, std::vector<std::pair<double, double> >& coords) {
+  // separate string into four corner sections: (lat, lon), (lat, lon), (lat, lon), (lat, lon)
+  std::string::const_iterator sit =str.begin();
+  std::vector<double> latlons;
+  size_t inc_lat = 7, inc_lon = 8, inc;
+  geopt_coord lat_code = vpgl_nitf_rational_camera::LAT;
+  geopt_coord lon_code = vpgl_nitf_rational_camera::LON;
+  //initial condition
+  size_t start = 0;
+  inc = inc_lat;
+  geopt_coord code = lat_code;
+  for(size_t k = 0; k<8; ++k){
+      //extract lat or lon substring
+    std::string section;
+    double val = 0.0;
+    for (size_t cnt = 0; cnt < inc; ++cnt, ++sit) 
+      section.push_back(*sit); 
+    // convert to decimal degrees
+    geostr_to_double(section.c_str(), &val, code);
+    latlons.push_back(val);
+    //advance to next substring
+    start += inc;
+    if(inc == inc_lat) inc = inc_lon;
+    else inc = inc_lat;
+    if(code ==lat_code) code = lon_code;
+    else code = lat_code;
+  }
+  //form pairs
+  for(size_t i = 0; i<8; i+=2)
+    coords.emplace_back(latlons[i+1], latlons[i]);
+}
 
 bool
 vpgl_nitf_rational_camera::init(vil_nitf2_image * nitf_image, bool verbose)

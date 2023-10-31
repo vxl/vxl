@@ -27,7 +27,7 @@ struct rsm_metadata{
   std::string catalog_id_;                     bool catalog_id_valid=false;
   std::string platform_name_;                  bool platform_name_valid=false;
   std::string image_name_;                     bool image_name_valid = false;
-  image_time acquisition_time_;                bool acquisition_time_valid = false;
+  std::vector<int> acquisition_time_;          bool acquisition_time_valid = false;
   unsigned effective_bits_per_pixel_;          bool effective_bits_per_pixel_valid = false;
   std::string image_type_;                     bool image_type_valid = false;
   bool corners_valid = false;
@@ -81,6 +81,9 @@ struct ichipb_data{
   vnl_double_2 lower_right() const {return lr_;}
   // ======================================================
 
+  //: replacement sensor model tres present in header
+  bool nitf_header_contains_RSM_tres()const{ return RSM_defined_;}
+
   //: read NITF2.1 tagged record extensions (tres) from header
   // a text file of tres present in header
   bool raw_tres(std::ostream& ostr, bool verbose = false) const;
@@ -105,6 +108,7 @@ struct ichipb_data{
 
   // data members
   vil_nitf2_tagged_record_sequence  isxhd_tres_;
+  bool RSM_defined_ = false;
   bool igeolo_valid_ = false;
   std::string image_igeolo_;
   //: 2D geo-coordinates of image corners from igeolo

@@ -6,9 +6,39 @@
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vil/file_formats/vil_nitf2_image_subheader.h>
 #include <fstream>
+
+// create a composite class that operates on Cartesian local coordinates
+// similar to local_rational_camera, used to determine view angles and gsd
+class local_RSM_camera : public vpgl_camera<double>
+{
+public:
+  local_RSM_camera(vpgl_lvcs const& lvcs, vpgl_RSM_camera<double>*  RSM_cam_ptr):
+    lvcs_(lvcs), RSM_cam_ptr_(RSM_cam_ptr){}
+
+  // implement pure virtual methods
+  virtual vpgl_camera<double>* clone() const { return nullptr; }
+  
+  virtual void project(const double x, const double y, const double z, double& u, double& v) const
+  {
+    // first, convert local to global geographic coordinates
+    double lon, lat, gz;
+    lvcs_.local_to_global(x, y, z, vpgl_lvcs::wgs84, lon, lat, gz);
+    // convert to radians
+    double lon_rad = lon/vnl_math::deg_per_rad, lat_rad = lat/vnl_math::deg_per_rad;
+    // then, project global to 2D
+    RSM_cam_ptr_->project(lon_rad, lat_rad, gz, u, v);
+  }
+private:
+  vpgl_lvcs lvcs_;
+  // pointer will be deleted externally
+  vpgl_RSM_camera<double>* RSM_cam_ptr_;
+};
+
 bool
 vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
 {
+  // if there are multiple headers, find the first image containing RSM tres
+  // if there are multiple images with RSM tres - then fail for now
   std::vector<vil_nitf2_image_subheader *> headers = nitf_image->get_image_headers();
   vil_nitf2_tagged_record_sequence::const_iterator tres_itr;
   vil_nitf2_image_subheader *hdr;
@@ -27,11 +57,14 @@ vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
     }
   if(hcount != 1){
     std::cout << "IXSHD Property failed in vil_nitf2_image_subheader: header count " << hcount << std::endl;
+    nitf_image->set_current_image(0);
     return false;
   }
   nitf_image->set_current_image(hindex);
+  //get the tres including RSMPCA
   headers[hindex]->get_property("IXSHD", isxhd_tres_);
-  // Get common metadata from the nitf2_image and image subheader
+
+  // Get standard metadata from the nitf2_image and image subheader
    if(!hdr->get_property("IID2", rsm_meta_.image_name_)){
      std::cout << "IID2 Property failed in vil_nitf2_image_subheader\n";
    }else rsm_meta_.image_name_valid = true;
@@ -44,7 +77,7 @@ vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
    if(!hdr->get_property("IGEOLO", image_igeolo_)){
        std::cout << "IGEOLO Property failed in vil_nitf2_image_subheader\n";
    }else igeolo_valid_ = true;
-
+   
    // elevation is degrees above tangent plane
    // azimuth is clockwise from North
    double sun_elev, sun_azimuth;
@@ -55,8 +88,8 @@ vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
    if (rsm_meta_.sun_angles_valid)
      rsm_meta_.sun_angles_.set(sun_azimuth, sun_elev);
 
-   image_time t;
-   if( !hdr->get_date_time(t.year, t.month, t.day, t.hour, t.min, t.sec)){
+   std::vector<int> t(6, 0);
+   if( !hdr->get_date_time(t[0], t[1], t[2], t[3], t[4], t[5])){
      std::cout << "get_date_time failed in vil_nitf2_image_subheader\n";
    }else rsm_meta_.acquisition_time_valid = true;
    if(rsm_meta_.acquisition_time_valid)
@@ -74,34 +107,9 @@ vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
    if( !hdr->get_ichipb_info(ichipb_.translation_, ichipb_.F_grid_points_,
                               ichipb_.O_grid_points_,ichipb_.scale_factor_,
                               ichipb_.anamorphic_corr_)){
-     std::cout << "ichipb_info not present in vil_nitf2_image_subheader\n";
-   }else ichipb_.ichipb_data_valid_ = true;
+    }else ichipb_.ichipb_data_valid_ = true;
 
-   // extract corner coordinates from image_geolo field
-  // example 324158N1171117W324506N1171031W324428N1170648W324120N1170734W
-   if(igeolo_valid_){
-     double ULlat, ULlon;
-     double URlat, URlon;
-     double LLlat, LLlon;
-     double LRlat, LRlon;
 
-     vpgl_nitf_rational_camera::geostr_to_latlon(image_igeolo_.c_str(), &ULlat, &ULlon);
-     vpgl_nitf_rational_camera::geostr_to_latlon(image_igeolo_.c_str() + 15, &URlat, &URlon);
-     vpgl_nitf_rational_camera::geostr_to_latlon(image_igeolo_.c_str() + 30, &LRlat, &LRlon);
-     vpgl_nitf_rational_camera::geostr_to_latlon(image_igeolo_.c_str() + 45, &LLlat, &LLlon);
-     // the rational camera tres have, e.g. ul(lat, lon) however
-     // if the point is interpreted as x, y then the order
-     // should be ul(lon, lat), so
-     unsigned LON = 0, LAT = 1;
-     ul_[LAT] = ULlat;
-     ul_[LON] = ULlon;
-     ur_[LAT] = URlat;
-     ur_[LON] = URlon;
-     ll_[LAT] = LLlat;
-     ll_[LON] = LLlon;
-     lr_[LAT] = LRlat;
-     lr_[LON] = LRlon;
-   }
    return true;
 }
 vpgl_nitf_RSM_camera::vpgl_nitf_RSM_camera(std::string const & nitf_image_path, bool verbose)
@@ -120,18 +128,19 @@ vpgl_nitf_RSM_camera::vpgl_nitf_RSM_camera(std::string const & nitf_image_path, 
     std::cout << "not a nitf image in vpgl_nitf_RSM_camera_constructor\n";
     return;
   }
+  RSM_defined_ = true;
   // cast to an nitf2_image
   auto * nitf_image = (vil_nitf2_image *)image.ptr();
-
   // read information
   if(!this->init(nitf_image, verbose))
-    throw std::runtime_error("can't form RSM NITF image");
+    RSM_defined_ = false;
 }
 
 vpgl_nitf_RSM_camera::vpgl_nitf_RSM_camera(vil_nitf2_image * nitf_image, bool verbose)
 {
+  RSM_defined_ = true;
   if(!this->init(nitf_image, verbose))
-    throw std::runtime_error("can't form RSM NITF image");
+    RSM_defined_ = false;
 }
 
 bool vpgl_nitf_RSM_camera::raw_tres(std::ostream& tre_str, bool verbose ) const
@@ -627,7 +636,7 @@ bool vpgl_nitf_RSM_camera::set_RSM_camera_params()
   std::vector<std::vector<int> > powers;
   std::vector<std::vector<double> > coeffs;
   std::vector<vpgl_scale_offset<double> > scale_offsets;
-
+  bool aux_good = false;
   double x_scale, x_off;
   double y_scale, y_off;
   double z_scale, z_off;
@@ -790,12 +799,14 @@ bool vpgl_nitf_RSM_camera::set_RSM_camera_params()
       coeffs.push_back(rnpcf);  coeffs.push_back(rdpcf);
       good = (cnpcf.size() == cn_nterms) && (cdpcf.size() == cd_nterms) &&
         (rnpcf.size() == rn_nterms) && (rdpcf.size() == rd_nterms);
+      if(!good) return false;
       vpgl_RSM_camera<double>::set_powers(powers);
       vpgl_RSM_camera<double>::set_coefficients(coeffs);
       vpgl_RSM_camera<double>::set_scale_offsets(scale_offsets);
     }
-    bool aux_good = true;
+    
     if (type == "RSMIDA"){
+      aux_good = true;
       nitf_tre<std::string> nt("STID", false, true);
       good = nt.get(tres_itr, rsm_meta_.platform_name_);
       rsm_meta_.platform_name_valid = aux_good;
@@ -810,114 +821,136 @@ bool vpgl_nitf_RSM_camera::set_RSM_camera_params()
       bool min_good = nt1.get(tres_itr, min_z);
       nitf_tre<double> nt2("V8Z", false, false);
       bool max_good = nt2.get(tres_itr, max_z);
- 
-      rsm_meta_.upper_left_.set(ul_[0], ul_[1], min_z);
-      rsm_meta_.upper_right_.set(ur_[0], ur_[1], min_z);
-      rsm_meta_.lower_left_.set(ll_[0], ll_[1], max_z);
-      rsm_meta_.lower_right_.set(lr_[0], lr_[1], max_z);
+      std::vector<std::pair<double, double> > coords;
 
-      // bounding box
-      // longitude bounds
-      if(ul_[0] < min_lon) min_lon = ul_[0];
-      if(ul_[0] > max_lon) max_lon = ul_[0];
-      if(ur_[0] < min_lon) min_lon = ur_[0];
-      if(ur_[0] > max_lon) max_lon = ur_[0];
-      if(ll_[0] < min_lon) min_lon = ll_[0];
-      if(ll_[0] > max_lon) max_lon = ll_[0];
-      if(lr_[0] < min_lon) min_lon = lr_[0];
-      if(lr_[0] > max_lon) max_lon = lr_[0];
-      // latitude bounds
-      if(ul_[1] < min_lat) min_lat = ul_[1];
-      if(ul_[1] > max_lat) max_lat = ul_[1];
-      if(ur_[1] < min_lat) min_lat = ur_[1];
-      if(ur_[1] > max_lat) max_lat = ur_[1];
-      if(ll_[1] < min_lat) min_lat = ll_[1];
-      if(ll_[1] > max_lat) max_lat = ll_[1];
-      if(lr_[1] < min_lat) min_lat = lr_[1];
-      if(lr_[1] > max_lat) max_lat = lr_[0];
+      // extract corner coordinates from image_geolo field
+      // example 324158N1171117W324506N1171031W324428N1170648W324120N1170734W
+      // coordinates are encoded as:
+      // first section: 32 deg 41 min 58 seconds North
+      // extract and convert to decimal degrees
+      if(igeolo_valid_){
+        // from the NITF2.1 spec the IGEOLO order is:
+        // "(0,0), (0, MaxCol), (MaxRow, MaxCol), (MaxRow, 0)"
+        // i.e., UL > UR > LR > LL
+        std::vector<std::pair<double, double> > coords;
+        vpgl_nitf_rational_camera::geostr_to_latlon_v2(image_igeolo_, coords);
+        unsigned LON = vpgl_nitf_rational_camera::LON;
+        unsigned LAT = vpgl_nitf_rational_camera::LAT;
+        unsigned UL = vpgl_nitf_rational_camera::UL;
+        unsigned UR = vpgl_nitf_rational_camera::UR;
+        unsigned LR = vpgl_nitf_rational_camera::LR;
+        unsigned LL = vpgl_nitf_rational_camera::LL;
 
-      vgl_point_3d<double> min_pt(min_lon, min_lat, min_z);
-      vgl_point_3d<double> max_pt(max_lon, max_lat, max_z);
-      rsm_meta_.bounding_box_= vgl_box_3d<double>(min_pt, max_pt);
+        ul_[LON] = coords[UL].first; ul_[LAT] = coords[UL].second;
+        ur_[LON] = coords[UR].first; ur_[LAT] = coords[UR].second;
+        lr_[LON] = coords[LR].first; lr_[LAT] = coords[LR].second;
+        ll_[LON] = coords[LL].first; ll_[LAT] = coords[LL].second;
+        
+        rsm_meta_.upper_left_.set(coords[UL].first, coords[UL].second, min_z);
+        rsm_meta_.upper_right_.set(coords[UR].first, coords[UR].second, min_z);
+        rsm_meta_.lower_left_.set(coords[LL].first, coords[LL].second, max_z);
+        rsm_meta_.lower_right_.set(coords[LR].first, coords[LR].second, max_z);
 
-      // footprint
-      vgl_point_2d<double> ll(ll_[0],ll_[1]), lr(lr_[0],lr_[1]);
-      vgl_point_2d<double> ur(ur_[0],ur_[1]), ul(ul_[0],ul_[1]);
-      std::vector<vgl_point_2d<double> > sheet;
-      sheet.push_back(ll); sheet.push_back(lr);
-      sheet.push_back(ur); sheet.push_back(ul);
-      rsm_meta_.footprint_ = vgl_polygon<double>(sheet);
-      rsm_meta_.corners_valid = min_good && max_good && igeolo_valid_;
-      // view direction
-      // convert to local coordinates
-      // cent ===> lon, lat, elev
-      vgl_point_3d<double> cent = rsm_meta_.bounding_box_.centroid();
-      vpgl_lvcs lvcs(cent.y(), cent.x(), cent.z(), vpgl_lvcs::wgs84,
-                     vpgl_lvcs::DEG, vpgl_lvcs::METERS);
-      // Define bounding box for randomly selecting 3-d points to be
-      // projected using the RSM polynomial coefficients defined in
-      // the TREs.
-      double lx, ly, lz;
-      lvcs.global_to_local(cent.x(), cent.y(), cent.z(), vpgl_lvcs::wgs84, lx, ly, lz);
-      vgl_point_3d<double> loc_org(lx, ly, lz);//should be (0.0, 0.0, 0.0)
-      vgl_point_3d<double> loc_min_pt = loc_org + vgl_vector_3d<double>(-500.0, -500.0, -500.0);
-      vgl_point_3d<double> loc_max_pt = loc_org + vgl_vector_3d<double>(500.0, 500.0, 500.0);
-      vgl_box_3d<double> roi(loc_min_pt, loc_max_pt);
-
-      // Cast the nitf camera to the base camera
-      vpgl_RSM_camera* rsm_cam_ptr = reinterpret_cast<vpgl_RSM_camera<double>*>(this);
-
-      // Fit the affine camera model to the set of random (XYZ -> UV) pairs
-      vpgl_affine_camera<double> acam;
-      vpgl_affine_camera_convert::convert(*rsm_cam_ptr, lvcs, roi, acam);
-
-      // The Cartesian vector looking towards the sensor requires a minus sign
-      //                              v
-      vgl_vector_3d<double> ray_dir = -acam.ray_dir();
-
-      // Convert the local Cartesian vector to
-      // geodetic coordinates according to IMD convention
-      //  degrees above horizon
-      double view_elevation = std::asin(ray_dir.z()) * vnl_math::deg_per_rad;
-      //  degrees east of north 
-       double view_azimuth = std::atan2(ray_dir.x(), ray_dir.y()) * vnl_math::deg_per_rad;;
-      if (view_azimuth < 0)
-        view_azimuth += 360;
-
-      rsm_meta_.view_angles_.set(view_azimuth, view_elevation);
-
-      // gsd at center of image
-      int min_r, max_r, min_c, max_c;
-      nitf_tre<int> nt3("MINR", false, false);
-      bool row_good_min = nt3.get(tres_itr, min_r);
-      nitf_tre<int> nt4("MAXR", false, false);
-      bool row_good_max = nt4.get(tres_itr, max_r);
-      nitf_tre<int> nt5("MINC", false, false);
-      bool col_good_min = nt5.get(tres_itr, min_c);
-      nitf_tre<int> nt6("MAXC", false, false);
-      bool col_good_max = nt6.get(tres_itr, max_c);
-      bool cent_good = row_good_min && row_good_max && col_good_min && col_good_max;
-      if(cent_good){
-        double u_cent = (max_r - min_r)/2;
-        double v_cent = (max_c - min_c)/2;
-        double u_centp = u_cent + vnl_math::sqrt1_2;
-        double v_centp = v_cent + vnl_math::sqrt1_2;
-        vgl_plane_3d<double> pl(0.0, 0.0, 1.0, -cent.z());
-        vgl_point_3d<double> ipt(0.0, 0.0, 0.0), wrld_ptc, wrld_ptp;
-        vpgl_camera<double>* acam_ptr = reinterpret_cast<vpgl_camera<double>*>(&acam);
-        bool gsd_good_c =
-          vpgl_backproject::bproj_plane(acam_ptr, vgl_point_2d<double>(u_cent, v_cent),
-                                        pl, ipt, wrld_ptc);
-        bool gsd_good_cp =
-          vpgl_backproject::bproj_plane(acam_ptr, vgl_point_2d<double>(u_centp, v_centp),
-                                        pl, ipt, wrld_ptp);
-        rsm_meta_.gsd_ = (wrld_ptp - wrld_ptc).length();
-        bool good_gsd =gsd_good_c && gsd_good_cp;
-        rsm_meta_.gsd_valid = good_gsd;
+        for(size_t c =0; c<4; c+=2){
+          if(coords[c].first < min_lon)  min_lon = coords[c].first;
+          if(coords[c].first > max_lon)  max_lon = coords[c].first;
+          if(coords[c].second < min_lat) min_lat = coords[c].second;
+          if(coords[c].second > max_lat) max_lat = coords[c].second;
+        }
+        vgl_point_3d<double> min_pt(min_lon, min_lat, min_z);
+        vgl_point_3d<double> max_pt(max_lon, max_lat, max_z);
+        rsm_meta_.bounding_box_= vgl_box_3d<double>(min_pt, max_pt);
+        
+        // footprint in counter-clockwise order from lower left
+        vgl_point_2d<double> ll(coords[LL].first, coords[LL].second);
+        vgl_point_2d<double> lr(coords[LR].first, coords[LR].second);
+        vgl_point_2d<double> ur(coords[UR].first, coords[UR].second);
+        vgl_point_2d<double> ul(coords[UL].first, coords[UL].second);
+        std::vector<vgl_point_2d<double> > sheet;
+        sheet.push_back(ll); sheet.push_back(lr);
+        sheet.push_back(ur); sheet.push_back(ul);
+        rsm_meta_.footprint_ = vgl_polygon<double>(sheet);
+        rsm_meta_.corners_valid = min_good && max_good && igeolo_valid_;
+        
+        // view direction
+        // convert to local coordinates
+        // cent ===> lon, lat, elev
+        vgl_point_3d<double> cent = rsm_meta_.bounding_box_.centroid();
+        vpgl_lvcs lvcs(cent.y(), cent.x(), cent.z(), vpgl_lvcs::wgs84,
+                       vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+        // determine center of image for view_dir and gsd calculations
+        int min_r, max_r, min_c, max_c;
+        nitf_tre<int> nt3("MINR", false, false);
+        bool row_good_min = nt3.get(tres_itr, min_r);
+        nitf_tre<int> nt4("MAXR", false, false);
+        bool row_good_max = nt4.get(tres_itr, max_r);
+        nitf_tre<int> nt5("MINC", false, false);
+        bool col_good_min = nt5.get(tres_itr, min_c);
+        nitf_tre<int> nt6("MAXC", false, false);
+        bool col_good_max = nt6.get(tres_itr, max_c);
+        bool cent_good = row_good_min && row_good_max && col_good_min && col_good_max;
+        if(!cent_good)
+          return false;
+        if(cent_good){
+          double u_cent = (max_c - min_c)/2;
+          double v_cent = (max_r - min_r)/2;
+          vgl_point_2d<double> cpt(u_cent, v_cent);
+          // center + 1 pixel for gsd
+          double u_centp = u_cent + vnl_math::sqrt1_2;
+          double v_centp = v_cent + vnl_math::sqrt1_2;
+          vgl_point_2d<double> cptp(u_centp, v_centp);
+          // construct a local camera
+          vpgl_RSM_camera* rsm_cam_ptr = reinterpret_cast<vpgl_RSM_camera<double>*>(this);
+          local_RSM_camera* lcam_ptr = new local_RSM_camera(lvcs, rsm_cam_ptr);
+          // and cast to base camera
+          vpgl_camera<double>* camd = reinterpret_cast<vpgl_camera<double>*>(lcam_ptr);
+          // establish horizontal planes at the center height and + 100m
+          double z0 = cent.z();
+          vgl_plane_3d<double> pl0(0.0, 0.0, 1.0, -z0);
+          vgl_plane_3d<double> pl1(0.0, 0.0, 1.0, -z0+100.0);
+          // intial guess of local ray intersection with the planes, i.e. at the centroid
+          vgl_point_3d<double> ipt(0.0, 0.0, 0.0), p3d_0, p3d_1;
+          // non-linear search for the intersection points
+          bool success0 = vpgl_backproject::bproj_plane(camd, cpt, pl0, ipt, p3d_0);
+          bool success1 = vpgl_backproject::bproj_plane(camd, cpt, pl1, ipt, p3d_1);
+          bool proj_success = success0 && success1;
+          if(!proj_success) return false;
+          if(proj_success){
+            // compute the ray vector
+            vgl_vector_3d<double> ray_dir = p3d_1 - p3d_0;
+            ray_dir /= ray_dir.length();
+            if(ray_dir.z() < 0.0)
+              ray_dir *= -1.0;
+            // and normalize looking up towards the sensor
+            // Convert the local Cartesian vector to
+            // geodetic coordinates according to IMD convention
+            //  degrees above horizon
+            double view_elevation = std::asin(ray_dir.z()) * vnl_math::deg_per_rad;
+            //  degrees east of north 
+            double view_azimuth = std::atan2(ray_dir.x(), ray_dir.y()) * vnl_math::deg_per_rad;
+            if (view_azimuth < 0)
+              view_azimuth += 360;
+            rsm_meta_.view_angles_.set(view_azimuth, view_elevation);
+            rsm_meta_.view_angles_valid = true;
+          }
+          // gsd on centroid plane, intersections one pixel apart
+          bool gsd_good_c = vpgl_backproject::bproj_plane(camd, cpt, pl0, ipt, p3d_0);
+          bool gsd_good_cp = vpgl_backproject::bproj_plane(camd, cptp, pl0, ipt, p3d_1);
+          bool gsd_proj_success = gsd_good_c && gsd_good_cp;
+          if(!gsd_proj_success)
+            return false;
+          rsm_meta_.gsd_ = (p3d_1 - p3d_0).length();
+          bool good_gsd =gsd_good_c && gsd_good_cp;
+          rsm_meta_.gsd_valid = good_gsd;
+          delete lcam_ptr;
+        }          
       }
     }
+    
   }
-  return good;
+  if (!aux_good)
+      return false;
+  return true;
 }
 
     
