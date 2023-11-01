@@ -116,6 +116,12 @@ class vil_nitf2_image_subheader
                        std::string& image_corner_geo_locations,
                        double* rpc_data ) const;
 
+  // grid points in row order (11, 12, 21, 22)
+  bool get_ichipb_info(std::pair<double, double>& translation,
+                       std::vector<std::pair<double, double> >& F_grid_points,
+                       std::vector<std::pair<double, double> >& O_grid_points,
+                       double& scale_factor, bool& anamorphic_corr);
+
   //: Return the elevation and azimuth angles of the sun
   //  \a sun_el --> sun elevation angle
   //  \a sun_az --> sun azimuthal angle
@@ -124,8 +130,10 @@ class vil_nitf2_image_subheader
   //: Extract the date and time
   bool get_date_time(int& year, int& month, int& day, int& hour, int& min, int& sec) const;
 
-  bool get_correction_offset(double & u_off, double & v_off) const;
-
+  // Offset from ICHIPB or from block offsets in STDIDB or STDIDC,
+  // precidenced is ICHIPB < STDIDC < STDIDB
+  bool get_image_offset(double & u_off, double & v_off) const;
+  static const vil_nitf2_field_definitions* get_defs() { return get_field_definitions_21(); }
  protected:
   vil_nitf2_field_sequence m_field_sequence;
   vil_nitf2_data_mask_table* m_data_mask_table;
@@ -141,6 +149,7 @@ class vil_nitf2_image_subheader
   static void add_geo_field_defs( vil_nitf2_field_definitions* defs, const vil_nitf2_classification::file_version& version );
   static void add_shared_field_defs_3( vil_nitf2_field_definitions* defs );
   static void add_rpc_definitions();
+  //static void add_rsm_definitions();
   static void add_USE_definitions();
   static void add_ICHIPB_definitions();
   static void add_MPD26A_definitions();
@@ -153,5 +162,4 @@ class vil_nitf2_image_subheader
   // using nitf files
   friend void vil_nitf2::cleanup_static_members();
 };
-
 #endif // VIL_NITF2_IMAGE_SUBHEADER_H

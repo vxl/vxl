@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <cstdlib>
 #include "vil_nitf2_image.h"
+#include "vil/vil_open.h"
+#include <vil/file_formats/vil_j2k_nitf2_pyramid_image_resource.h>
 
 //:
 // \file
@@ -22,9 +24,10 @@
 #include "vil_nitf2_des.h"
 
 #if HAS_J2K
-#  include "vil_j2k_image.h"
-#endif // HAS_J2K
-
+#include "vil_j2k_image.h"
+#elif HAS_OPENJPEG2
+#include "vil_openjpeg.h"
+#endif
 int debug_level = 0;
 
 //--------------------------------------------------------------------------------
@@ -60,7 +63,21 @@ vil_nitf2_file_format::make_output_image(vil_stream * /*vs*/,
   // write not supported
   return nullptr;
 }
-
+vil_pyramid_image_resource_sptr
+vil_nitf2_file_format::make_input_pyramid_image(char const* file) {
+  vil_smart_ptr<vil_stream> vs = vil_open(file, "r");
+  if(!vs)
+    return nullptr;
+  vil_image_resource_sptr imgr = this->make_input_image(vs.as_pointer());
+  if (!imgr)
+      return nullptr;
+  vil_nitf2_image* nitfr = reinterpret_cast<vil_nitf2_image*>(imgr.as_pointer());
+  if(!nitfr->is_jpeg_2000_compressed())
+    return nullptr;
+  vil_pyramid_image_resource_sptr pyr = new vil_j2k_nitf2_pyramid_image_resource(imgr);
+  return pyr;
+}
+    
 //--------------------------------------------------------------------------------
 // class vil_nitf2_image
 
@@ -583,8 +600,10 @@ vil_nitf2_image::get_copy_view_decimated_j2k(unsigned start_i,
   if (!s_decode_jpeg_2000)
   {
 #if HAS_J2K
-    s_decode_jpeg_2000 = vil_j2k_image::s_decode_jpeg_2000;
-#else  // HAS_J2K
+    s_decode_jpeg_2000 = vil_j2k_image::s_decode_jpeg_2000; // HAS_J2K
+#elif HAS_OPENJPEG2  
+    s_decode_jpeg_2000 = vil_openjpeg_image::s_decode_jpeg_2000; // HAS OPENJPEG
+#else
     std::cerr << "Cannot decode JPEG 2000 image. The J2K library was not built." << std::endl;
     return nullptr;
 #endif // HAS_J2K

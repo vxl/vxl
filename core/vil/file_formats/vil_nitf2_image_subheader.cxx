@@ -736,12 +736,13 @@ vil_nitf2_image_subheader::add_rpc_definitions()
       // As these values are in <+/->n.nnnnnnE<+/->n (exponential) format,
       //   let's just read as strings now and convert into doubles later.
 
-      .repeat(20, vil_nitf2_field_definitions().field("LNC", "Line Number Coefficient", NITF_EXP(6, 1)))
+       .repeat(20, vil_nitf2_field_definitions().field("LNC", "Line Number Coefficient", NITF_EXP(6, 1)))
       .repeat(20, vil_nitf2_field_definitions().field("LDC", "Line Density Coefficient", NITF_EXP(6, 1)))
       .repeat(20, vil_nitf2_field_definitions().field("SNC", "Sample Number Coefficient", NITF_EXP(6, 1)))
       .repeat(20, vil_nitf2_field_definitions().field("SDC", "Sample Density Coefficient", NITF_EXP(6, 1)))
       .end(); // of RPC TRE
   }
+ 
   tr = vil_nitf2_tagged_record_definition::find("RPC00A");
   if (!tr)
   {
@@ -1031,15 +1032,14 @@ vil_nitf2_image_subheader::add_MPD26A_definitions()
 }
 
 
-// obtain column and row offset from STDIDB /SDTDIDC
+// obtain column and row offset from ICHIPB/STDIDB /SDTDIDC
 bool
-vil_nitf2_image_subheader::get_correction_offset(double & u_off, double & v_off) const
+vil_nitf2_image_subheader::get_image_offset(double & u_off, double & v_off) const
 {
   // Now get the sub-header TRE parameters
   vil_nitf2_tagged_record_sequence isxhd_tres;
   vil_nitf2_tagged_record_sequence::iterator tres_itr;
   this->get_property("IXSHD", isxhd_tres);
-
   double ulr = 0;
   double ulc = 0;
   // Check through the TREs to find "RPC"
@@ -1279,4 +1279,67 @@ vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
   }
 
   return true;
+}
+//
+//"SCALE_FACTOR", "ANAMORPH_CORR",
+//      "FI_COL_11", "FI_COL_12", "FI_COL_21", "FI_COL_22",
+//      "FI_ROW_11", "FI_ROW_12", "FI_ROW_21", "FI_ROW_22",
+//      "OP_COL_11", "OP_COL_12", "OP_COL_21", "OP_COL_22",
+//      "OP_ROW_11", "OP_ROW_12", "OP_ROW_21", "OP_ROW_22",
+bool vil_nitf2_image_subheader::get_ichipb_info(std::pair<double, double>& translation,
+                                                std::vector<std::pair<double, double> >& F_grid_points,
+                                                std::vector<std::pair<double, double> >& O_grid_points,
+                                                double& scale_factor, bool& anamorphic_corr){
+  vil_nitf2_tagged_record_sequence isxhd_tres;
+  vil_nitf2_tagged_record_sequence::iterator tres_itr;
+  this->get_property("IXSHD", isxhd_tres);
+
+  // Check through the TREs to find "RPC"
+  for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
+  {
+    std::string type = (*tres_itr)->name();
+    if (type == "ICHIPB")
+    {
+      int anacor;
+      if ((*tres_itr)->get_value("ANAMRPH_CORR", anacor))
+        anamorphic_corr = anacor > 0;
+      else return false;
+      bool success = true;
+      success = (*tres_itr)->get_value("SCALE_FACTOR", scale_factor);
+      if(!success) return false;
+
+      std::pair<double, double> f11, f12, f21, f22;
+      success = ((*tres_itr)->get_value("FI_ROW_11", f11.second) && (*tres_itr)->get_value("FI_COL_11", f11.first));
+      if(success)
+        translation = f11;
+      else return false;
+
+      success = ((*tres_itr)->get_value("FI_ROW_12", f12.second) && (*tres_itr)->get_value("FI_COL_12", f12.first));
+      if(!success) return false;
+
+      success = ((*tres_itr)->get_value("FI_ROW_21", f21.second) && (*tres_itr)->get_value("FI_COL_21", f21.first));
+      if(!success) return false;
+
+      success = ((*tres_itr)->get_value("FI_ROW_22", f22.second) && (*tres_itr)->get_value("FI_COL_22", f22.first));
+      if(!success) return false;
+
+      F_grid_points.push_back(f11);F_grid_points.push_back(f12);F_grid_points.push_back(f11);F_grid_points.push_back(f22);
+
+      std::pair<double, double> o11, o12, o21, o22;
+      success = ((*tres_itr)->get_value("OP_ROW_11", o11.second) && (*tres_itr)->get_value("OP_COL_11", o11.first));
+      if(!success) return false;
+      success = ((*tres_itr)->get_value("OP_ROW_12", o12.second) && (*tres_itr)->get_value("OP_COL_12", o12.first));
+      if(!success) return false;
+
+      success = ((*tres_itr)->get_value("OP_ROW_21", o21.second) && (*tres_itr)->get_value("OP_COL_21", o21.first));
+      if(!success) return false;
+
+      success = ((*tres_itr)->get_value("OP_ROW_22", o22.second) && (*tres_itr)->get_value("OP_COL_22", o22.first));
+      if(!success) return false;
+
+      F_grid_points.push_back(o11);F_grid_points.push_back(o12);F_grid_points.push_back(o11);F_grid_points.push_back(o22);
+      return true;
+    }
+  }
+  return false;
 }
