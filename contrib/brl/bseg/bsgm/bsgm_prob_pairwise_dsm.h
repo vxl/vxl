@@ -307,6 +307,11 @@ class bsgm_prob_pairwise_dsm
   {max_disparity_ = max_disparity; initial_max_disparity_ = max_disparity;}
   int max_disparity() const { return max_disparity_; }
 
+  //: maximum disparity to end search along an epipolar line
+  void disparity_search_margin(int disparity_search_margin)
+  {params_.disparity_search_margin_ = disparity_search_margin;}
+  int disparity_search_margin() const { return params_.disparity_search_margin_;}
+
   //: number of disparities
   int num_disparities() const { return (max_disparity_ - min_disparity_); }
 
