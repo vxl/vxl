@@ -26,6 +26,7 @@
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_quadric_3d.h>
 #include <bvgl/bvgl_k_nearest_neighbors_3d.h>
 #include <vnl/vnl_random.h>
 // a display of progress as a moving '+' symbol
@@ -131,6 +132,13 @@ public:
   T min_exhaustive_error() const {return min_exhaustive_error_;}
   T min_ransac_error() const {return min_ransac_error_;}
   T min_analytic_error() const {return min_analytic_error_;}
+  T error_variance() const {return error_variance_;}
+
+  //: the grid points used for minimize analytic
+  std::vector<vgl_point_3d<T> > analytic_grid_pts() const {return analytic_grid_pts_;}
+
+  //: the coefficients after fitting quadric patch to grid points
+  vgl_quadric_3d<T> paraboloid_linear() const {return paraboloid_linear_;}
   
 
 
@@ -139,6 +147,9 @@ public:
 
   //: error defined in terms of distances to population fractions
   T distr_error(vgl_vector_3d<T> const& t);
+
+  //: error variance movable and fixed closest points
+  T error_var(vgl_vector_3d<T> const& t);
 
   //: the mean error vector
   vgl_vector_3d<T>  mean_error(vgl_vector_3d<T> const& t);
@@ -161,6 +172,8 @@ public:
   // modifies tz component of analytic translation. tx, ty are analytic min values
   bool minimize_mean_z_error();
 
+  bool minimize_mean_z_error(vgl_vector_3d<T> const& initial_t);
+
   //: does this instance have valid pointsets
   bool valid_instance() const {return (fixed_.size()>0 && movable_.size()>0);}
 
@@ -174,6 +187,7 @@ public:
   T min_exhaustive_error_ = std::numeric_limits<T>::max();
   T min_ransac_error_ = std::numeric_limits<T>::max();
   T min_analytic_error_ = std::numeric_limits<T>::max();
+  T error_variance_ = std::numeric_limits<T>::max();
   vgl_vector_3d<T> exhaustive_t_ = vgl_vector_3d<T>(T(0),T(0),T(0));
 
   vgl_pointset_3d<T> fixed_;
@@ -183,6 +197,8 @@ public:
   vgl_vector_3d<T> best_ransac_t_;
   vgl_vector_3d<T> analytic_t_;
 
+  std::vector<vgl_point_3d<T> > analytic_grid_pts_;
+  vgl_quadric_3d<T> paraboloid_linear_;
 };
 
 
