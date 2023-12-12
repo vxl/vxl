@@ -250,7 +250,7 @@ bool bvgl_register_ptsets_3d_rigid<T>::minimize_analytic(vgl_vector_3d<T> const&
 }
 template <class T>
 bool bvgl_register_ptsets_3d_rigid<T>::minimize_mean_z_error(){
-  minimize_mean_z_error(analytic_t_);
+  return minimize_mean_z_error(analytic_t_);
 }
 
 template <class T>
