@@ -43,20 +43,28 @@ vpgl_nitf_RSM_camera::init(vil_nitf2_image * nitf_image, bool verbose)
   vil_nitf2_tagged_record_sequence::const_iterator tres_itr;
   vil_nitf2_image_subheader *hdr;
   size_t hcount = 0, hindex = 0;
+  int ixshdl, ixsofl;
   for (unsigned i = 0; i<headers.size(); ++i)
-    if(headers[i]->get_property("IXSHD", isxhd_tres_)){
+    if(headers[i]->get_property("IXSHDL", ixshdl)){
+      std::cout << "IXSHDL PRESENT, COUNT " << ixshdl << std::endl;
+      if(headers[i]->get_property("IXSOFL", ixsofl))
+        std::cout << "IXSOFL PRESENT " << ixsofl << std::endl;
+      if(headers[i]->get_property("IXSHD", isxhd_tres_)){
+        std::cout << "IXSHD PRESENT " << isxhd_tres_.size() << std::endl;
         for (tres_itr = isxhd_tres_.begin(); tres_itr != isxhd_tres_.end(); ++tres_itr)
           {
             std::string type = (*tres_itr)->name();
             if (type == "RSMPCA"){ // looking for "RSMPCA..."
+              std::cout << "RSMPCA PRESENT" << std::endl;
               hindex = i;
               hcount++;
               hdr = headers[i];
             }
           }
+      }
     }
   if(hcount != 1){
-    std::cout << "IXSHD Property failed in vil_nitf2_image_subheader: header count " << hcount << std::endl;
+    std::cout << "FAILED TO FIND RSM TREs in any nitf2_image_subheader: header count " << hcount << std::endl;
     nitf_image->set_current_image(0);
     return false;
   }
