@@ -93,6 +93,51 @@ T bvgl_register_ptsets_3d_rigid<T>::distr_error(vgl_vector_3d<T> const& t){
 }
 
 template <class T>
+T  bvgl_register_ptsets_3d_rigid<T>::error_var(vgl_vector_3d<T> const& t)
+{
+  size_t n = frac_trans_.npts();
+  T error = T(0);
+  T cnt = T(0);
+
+  // calculate mean error/distance
+  for (size_t i = 0; i<n; ++i) {
+    const vgl_point_3d<T>& p = frac_trans_.p(i);
+    vgl_point_3d<T> tp(p.x()+t.x(), p.y()+t.y(), p.z()+t.z());
+    vgl_point_3d<T> cp;
+    if (!knn_fixed_.closest_point(tp, cp)) {
+      std::cout << "KNN index failed to find neighbors" << std::endl;
+      return std::numeric_limits<T>::max();
+    }
+    T d = vgl_distance<T>(tp, cp);
+    if (d > outlier_thresh_)
+      continue;
+    cnt += T(1);
+    error += d;
+  }
+  error /= cnt; // error = mean distance
+
+  T mean_error = error;
+  T var = T(0);
+  
+  for (size_t i = 0; i<n; ++i) {
+    const vgl_point_3d<T>& p = frac_trans_.p(i);
+    vgl_point_3d<T> tp(p.x()+t.x(), p.y()+t.y(), p.z()+t.z());
+    vgl_point_3d<T> cp;
+    if (!knn_fixed_.closest_point(tp, cp)) {
+      std::cout << "KNN index failed to find neighbors" << std::endl;
+      return std::numeric_limits<T>::max();
+    }
+    T d = vgl_distance<T>(tp, cp);
+    if (d > outlier_thresh_)
+      continue;
+
+    var += ((d - mean_error)*(d - mean_error)) / cnt;
+  }
+
+  return var;
+}
+
+template <class T>
 bool bvgl_register_ptsets_3d_rigid<T>::minimize_exhaustive()
 {
   if (fixed_.npts() == 0 || frac_trans_.npts() == 0) {
@@ -185,6 +230,7 @@ bool bvgl_register_ptsets_3d_rigid<T>::minimize_analytic(vgl_vector_3d<T> const&
       grid_pts.emplace_back(x, y, err);
     }
   }
+  analytic_grid_pts_ = grid_pts;
   std::cout << std::endl; // end progress display
 
   vgl_fit_xy_paraboloid_3d<T> xyp(grid_pts);
@@ -198,11 +244,17 @@ bool bvgl_register_ptsets_3d_rigid<T>::minimize_analytic(vgl_vector_3d<T> const&
   vgl_point_2d<T> min_xy = xyp.extremum_point();
   analytic_t_ = vgl_vector_3d<T>(min_xy.x(), min_xy.y(), z);
   min_analytic_error_ = distr_error(analytic_t_);
+  error_variance_ = error_var(analytic_t_);
+  paraboloid_linear_ = xyp.paraboloid_linear();
   return true;
 }
 template <class T>
 bool bvgl_register_ptsets_3d_rigid<T>::minimize_mean_z_error(){
-  vgl_vector_3d<T> initial_t = analytic_t_;
+  return minimize_mean_z_error(analytic_t_);
+}
+
+template <class T>
+bool bvgl_register_ptsets_3d_rigid<T>::minimize_mean_z_error(vgl_vector_3d<T> const& initial_t){
   std::vector<std::pair<T, T> > tz_error_vals;
   T min_tz = initial_t.z() - 0.3, max_tz = initial_t.z() + 0.31;
   std::cout << "refine tz plot " << std::endl;
@@ -235,7 +287,7 @@ bool bvgl_register_ptsets_3d_rigid<T>::minimize_mean_z_error(){
   }
   coef = svd.solve(b);
   double tz_min = -coef[1]/coef[0];
-  analytic_t_.set(analytic_t_.x(), analytic_t_.y(), tz_min);
+  analytic_t_.set(initial_t.x(), initial_t.y(), tz_min);
   min_analytic_error_ = distr_error(analytic_t_);
   return true;
 }
