@@ -6,7 +6,8 @@
 void
 test_utm_convert(double lat, double lon, double easting, double northing,
                  int utm_zone, bool south_flag,
-                 int force_utm_zone=-1, int force_south_flag=-1)
+                 int force_utm_zone=-1, int force_south_flag=-1,
+                 double lat_expected=-9999, double lon_expected=-9999)
 {
   // report
   std::cout << "\n"
@@ -22,7 +23,7 @@ test_utm_convert(double lat, double lon, double easting, double northing,
 
 
   // UTM result tolerance in meters
-  double utm_tol = 1e-3;
+  double utm_tol = 5e-3; // 0.5 cm
 
   // WGS84 to UTM
   double easting_result, northing_result;
@@ -32,7 +33,9 @@ test_utm_convert(double lat, double lon, double easting, double northing,
               utm_zone_result, south_flag_result,
               force_utm_zone, force_south_flag);
 
-  std::cout << "WGS84 -> UTM\n";
+  std::cout << "WGS84 -> UTM\nUTM result ("
+            << easting_result << ", " << northing_result << ", "
+            << utm_zone_result << ", " << south_flag_result << ")\n";
   TEST_NEAR("easting", easting_result, easting, utm_tol);
   TEST_NEAR("northing", northing_result, northing, utm_tol);
   TEST("utm_zone", utm_zone_result, utm_zone);
@@ -46,9 +49,16 @@ test_utm_convert(double lat, double lon, double easting, double northing,
   double lat_result, lon_result;
   u.transform(utm_zone, easting, northing, lat_result, lon_result, south_flag);
 
-  std::cout << "UTM -> WGS84\n";
-  TEST_NEAR("latitude", lat_result, lat, wgs84_tol);
-  TEST_NEAR("longitude", lon_result, lon, wgs84_tol);
+  lat_expected = (lat_expected > -9999) ? lat_expected : lat;
+  lon_expected = (lon_expected > -9999) ? lon_expected : lon;
+
+  std::cout << "UTM -> WGS84\n"
+            << "(lat, lon) expected = ("
+            << lat_expected << ", " << lon_expected << ")\n"
+            << "(lat, lon) result =   ("
+            << lat_result << ", " << lon_result << ")\n";
+  TEST_NEAR("latitude", lat_result, lat_expected, wgs84_tol);
+  TEST_NEAR("longitude", lon_result, lon_expected, wgs84_tol);
 
 }
 
@@ -102,6 +112,20 @@ test_utm()
   test_utm_convert(37.905526, -119.987431, 237345.970, 4199541.989, 11, 0);
   test_utm_convert(37.904211, -120.001263, 763652.971, 4199427.978, 10, 0);
   test_utm_convert(38.982859, -117.057278, 495039.001, 4314875.991, 11, 0);
+
+  // antimeridian
+  test_utm_convert(71.1,  179.9, 604806.512, 7891059.819, 60, 0);
+  test_utm_convert(71.1, -180.1, 604806.512, 7891059.819, 60, 0, -1, -1, 71.1, 179.9);
+
+  test_utm_convert(71.1,  179.9, 387970.849, 7891417.933, 1, 0, 1, 0);
+  test_utm_convert(71.1, -180.1, 387970.849, 7891417.933, 1, 0, 1, 0, 71.1, 179.9);
+
+  test_utm_convert(71.1, -179.9, 395193.488, 7891059.819, 1, 0);
+  test_utm_convert(71.1,  180.1, 395193.488, 7891059.819, 1, 0, -1, -1, 71.1, -179.9);
+
+  test_utm_convert(71.1, -179.9, 612029.151, 7891417.933, 60, 0, 60, 0);
+  test_utm_convert(71.1,  180.1, 612029.151, 7891417.933, 60, 0, 60, 0, 71.1, -179.9);
+
 
   // WGS84 -> UTM with forced utm_zone & south_flag
   // The WGS84 point (lat = 0, lon = 72) is both on the equator and on the

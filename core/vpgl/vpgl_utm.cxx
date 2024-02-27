@@ -330,7 +330,11 @@ vpgl_utm::transform(double lat, double lon,
   if (force_utm_zone >= 0) {
     utm_zone = force_utm_zone;
   } else {
-    utm_zone = int((lon + 180) / 6.0) + 1;
+    // normalize longitude to [0,360)
+    double x = std::fmod(lon + 180.0, 360.0);
+    x = (x < 0) ? x + 360 : x;
+    // utm zone on range [1, 60]
+    utm_zone = int(x / 6.0) + 1;
   }
 
   // UTM north vs. south
