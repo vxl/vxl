@@ -482,6 +482,15 @@ vpgl_lvcs::local_to_global(const double pointin_x,
                 local_elev,
                 localUTMOrigin_SouthFlag_);
 
+    // unwrap local_lon relative to the LVCS origin
+    // handles antimeridian where longitude changes from -180 to 180
+    double dlon = local_lon - localCSOriginLon_ * local_to_degrees;
+    dlon = std::fmod(dlon + 180.0, 360.0);
+    dlon = (dlon < 0) ? dlon + 360.0 : dlon;
+    dlon = dlon - 180.0;
+
+    local_lon = dlon + localCSOriginLon_ * local_to_degrees;
+
     if (global_cs_name == vpgl_lvcs::wgs84)
     { // global values will be in degrees and in meters
       global_lat = local_lat;
