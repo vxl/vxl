@@ -366,6 +366,125 @@ test_lvcs_antimeridian(double lon, double lat, double elev,
 }
 
 
+void
+_test_lvcs_general(vpgl_lvcs lvcs,
+                   double lon, double lat, double elev,
+                   double meter_tol, double degree_tol)
+{
+  // results
+  double x, y, z;
+  double easting, northing;
+  int utm_zone;
+  bool south_flag;
+
+  // meter offsets as (x, y, z)
+  std::vector<std::vector<double> > meter_offsets = {
+      {0, 0, 0},
+      {100, 100, 100},
+      {-100, -100, -100},
+  };
+
+  // WGS84 offsets as (lon, lat, elev)
+  std::vector<std::vector<double> > wgs84_offsets = {
+      {0, 0, 0},
+      {0.01, 0.01, 100},
+      {-0.01, -0.01, -100},
+  };
+
+  // LVCS type
+  auto cs_name = lvcs.get_cs_name();
+  std::string cs_str = vpgl_lvcs::cs_name_strings[cs_name];
+
+  // report
+  std::cout << "\nTest " << cs_str << " lvcs\n"
+            << "(lon, lat, elev) = (" << lon << ", "
+            << lat << ", " << elev << ")\n";
+
+  if (cs_name == vpgl_lvcs::utm)
+  {
+    lvcs.get_utm_origin(easting, northing, z, utm_zone, south_flag);
+    std::cout << "(easting, northing, utm_zone, south_flag) = ("
+              << easting << ", " << northing << ", "
+              << utm_zone << ", " << south_flag << ")\n";
+  }
+  std::cout << "\n";
+
+  // WGS84 origin
+  std::cout << "WGS84 origin\n";
+  lvcs.get_origin(y, x, z);
+  TEST_NEAR("longitude", x, lon, degree_tol);
+  TEST_NEAR("latitude", y, lat, degree_tol);
+  TEST_NEAR("elevation", z, elev, meter_tol);
+
+  // local->global, offset local input, WGS84 output
+  for (auto & offset : meter_offsets)
+  {
+    _test_lvcs_local_to_global_wgs84(lvcs, lon, lat, elev,
+                                     offset[0], offset[1], offset[2],
+                                     meter_tol, degree_tol);
+  }
+
+  // local->global, offset local input, UTM output
+  if (cs_name == vpgl_lvcs::utm)
+  {
+    for (auto & offset : meter_offsets)
+    {
+      _test_lvcs_local_to_global_utm(lvcs, easting, northing, elev,
+                                     offset[0], offset[1], offset[2],
+                                     meter_tol);
+    }
+  }
+
+  // global->local, offset WGS84 input, local output
+  for (auto & offset : wgs84_offsets)
+  {
+    _test_lvcs_global_to_local_wgs84(lvcs, lon, lat, elev,
+                                     offset[0], offset[1], offset[2],
+                                     meter_tol);
+  }
+
+  // global->local, offset UTM input, local output
+  if (cs_name == vpgl_lvcs::utm)
+  {
+    for (auto & offset : meter_offsets)
+    {
+      _test_lvcs_global_to_local_utm(lvcs, easting, northing, elev,
+                                     offset[0], offset[1], offset[2],
+                                     meter_tol);
+    }
+  }
+}
+
+
+void
+test_lvcs_general(double lon, double lat, double elev,
+                  double meter_tol, double degree_tol,
+                  int extra_utm_zone=-1, int extra_south_flag=-1)
+{
+  // WGS84 LVCS
+  vpgl_lvcs lvcs_wgs84(lat, lon, elev, vpgl_lvcs::wgs84,
+                       vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  _test_lvcs_general(lvcs_wgs84, lon, lat, elev,
+                     meter_tol, degree_tol);
+
+  // UTM LVCS
+  vpgl_lvcs lvcs_utm(lat, lon, elev, vpgl_lvcs::utm,
+                     vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  _test_lvcs_general(lvcs_utm, lon, lat, elev,
+                     meter_tol, degree_tol);
+
+  // Also force into neighboring utm zone & south_flag
+  if (extra_utm_zone != -1)
+  {
+    std::cout << "\nAlso force to UTM zone " << extra_utm_zone
+              << " with south flag " << extra_south_flag << "\n";
+    lvcs_utm.set_utm(extra_utm_zone, extra_south_flag);
+    _test_lvcs_general(lvcs_utm, lon, lat, elev,
+                       meter_tol, degree_tol);
+  }
+}
+
+
 static void
 test_lvcs()
 {
@@ -498,6 +617,19 @@ test_lvcs()
   test_lvcs_force(orig_lat, orig_lon, orig_elev,
                   166010.300, 10e6 + 110.683, 19, 1,
                   meter_tol, degree_tol);
+
+
+  // ----- Prime Meridian/Equator -----
+
+  // exactly at lon/lat=0/0
+  test_lvcs_general( 0.0,  0.0, 100.0, meter_tol, degree_tol);
+
+  // around prime meridian & equator
+  // including UTM tests in neighboring utm_zone & south_flag
+  test_lvcs_general(-0.001,  0.001, 100.0, meter_tol, degree_tol, 31, 1);
+  test_lvcs_general( 0.001,  0.001, 100.0, meter_tol, degree_tol, 30, 1);
+  test_lvcs_general( 0.001, -0.001, 100.0, meter_tol, degree_tol, 30, 0);
+  test_lvcs_general(-0.001, -0.001, 100.0, meter_tol, degree_tol, 31, 0);
 
 
   // ----- Antimeridian -----
