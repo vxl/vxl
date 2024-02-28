@@ -699,9 +699,6 @@ bool vnl_matrix_fixed<T,nrows,ncols>
   if (this == &rhs)                                      // same object => equal.
     return true;
 
-  if (this->rows() != rhs.rows() || this->cols() != rhs.cols())
-    return false;                                        // different sizes => not equal.
-
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
       if (vnl_math::abs(this->data_[i][j] - rhs.data_[i][j]) > tol)
