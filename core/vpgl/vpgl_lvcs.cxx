@@ -819,10 +819,16 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
     local_lat = local_lon = local_elev = 0.0; // dummy initialisation
   }
 
+  // longitude difference in degrees, wrapped to range [-180, 180)
+  double dlon = local_lon - localCSOriginLon_ * local_to_degrees;
+  dlon = std::fmod(dlon + 180.0, 360.0);
+  dlon = (dlon < 0) ? dlon + 360.0 : dlon;
+  dlon = dlon - 180.0;
+
   // Now compute the x, y, z of the point in local vetical CS
   // first convert the local_lat to radians and local cs origin to meters
   pointout_y = (local_lat * DEGREES_TO_RADIANS - localCSOriginLat_ * local_to_radians) / lat_scale_;
-  pointout_x = (local_lon * DEGREES_TO_RADIANS - localCSOriginLon_ * local_to_radians) / lon_scale_;
+  pointout_x = (dlon * DEGREES_TO_RADIANS) / lon_scale_;
 
   pointout_z = local_elev - localCSOriginElev_ * local_to_meters;
 
