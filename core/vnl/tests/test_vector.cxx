@@ -616,6 +616,12 @@ vnl_vector_test_float()
   }
 
   TEST("vnl_vector_ssd", vnl_vector_ssd(vnl_vector<float>(4, 0.0f), vnl_vector<float>(4, 1.0f)), 4.0);
+
+  constexpr auto quiet_NaN = std::numeric_limits<float>::quiet_NaN();
+  TEST("vnl_vector { NaN } != { 0.0f }", vnl_vector<float>(1, quiet_NaN) != vnl_vector<float>(1, 0.0f), true);
+  TEST("vnl_vector { NaN } is_equal { 0.0f } is false",
+       vnl_vector<float>(1, quiet_NaN).is_equal(vnl_vector<float>(1, 0.0f), 0.0f),
+       false);
 }
 
 void
