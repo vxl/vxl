@@ -45,6 +45,10 @@ class vpgl_nitf_rational_camera : public vpgl_rational_camera<double>
   vpgl_nitf_rational_camera(vil_nitf2_image* nift_image,
                             bool verbose = false);
 
+  //: Read from nitf
+  bool read(std::string const& nitf_image, bool verbose = false);
+  bool read(vil_nitf2_image* nitf_image, bool verbose = false);
+
   std::string rational_extension_type() const {return nitf_rational_type_;}
 
   std::string image_id() const {return image_id_;}
@@ -68,8 +72,6 @@ class vpgl_nitf_rational_camera : public vpgl_rational_camera<double>
   static void geostr_to_latlon_v2(std::string const& str, std::vector<std::pair<double, double> >& coords);
 
  private:
-  // internal functions
-  bool init(vil_nitf2_image* nitf_image, bool verbose);
 
   // data members
   std::string nitf_rational_type_;
