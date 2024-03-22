@@ -263,8 +263,9 @@ void vpgl_nitf_rational_camera::geostr_to_latlon_v2(std::string const& str, std:
     coords.emplace_back(latlons[i+1], latlons[i]);
 }
 
+//: Read from a nitf image
 bool
-vpgl_nitf_rational_camera::init(vil_nitf2_image * nitf_image, bool verbose)
+vpgl_nitf_rational_camera::read(vil_nitf2_image * nitf_image, bool verbose)
 {
   std::vector<vil_nitf2_image_subheader *> headers = nitf_image->get_image_headers();
   vil_nitf2_image_subheader * hdr = headers[0];
@@ -347,34 +348,40 @@ vpgl_nitf_rational_camera::init(vil_nitf2_image * nitf_image, bool verbose)
   return true;
 }
 
-vpgl_nitf_rational_camera::vpgl_nitf_rational_camera(std::string const & nitf_image_path, bool verbose)
+//: Read from a nitf image file
+bool
+vpgl_nitf_rational_camera::read(std::string const & nitf_image_path, bool verbose)
 {
   // first open the nitf image
   vil_image_resource_sptr image = vil_load_image_resource(nitf_image_path.c_str());
   if (!image)
   {
-    std::cout << "Image load failed in vpgl_nitf_rational_camera_constructor\n";
-    return;
+    std::cerr << "Image load failed in vpgl_nitf_rational_camera_constructor\n";
+    return false;
   }
   std::string format = image->file_format();
   std::string prefix = format.substr(0, 4);
   if (prefix != "nitf")
   {
-    std::cout << "not a nitf image in vpgl_nitf_rational_camera_constructor\n";
-    return;
+    std::cerr << "not a nitf image in vpgl_nitf_rational_camera_constructor\n";
+    return false;
   }
   // cast to an nitf2_image
   auto * nitf_image = (vil_nitf2_image *)image.ptr();
 
   // read information
-  this->init(nitf_image, verbose);
+  return this->read(nitf_image, verbose);
 }
 
 vpgl_nitf_rational_camera::vpgl_nitf_rational_camera(vil_nitf2_image * nitf_image, bool verbose)
 {
-  this->init(nitf_image, verbose);
+  this->read(nitf_image, verbose);
 }
 
+vpgl_nitf_rational_camera::vpgl_nitf_rational_camera(std::string const & nitf_image_path, bool verbose)
+{
+  this->read(nitf_image_path, verbose);
+}
 
 // print all camera information
 void
