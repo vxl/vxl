@@ -701,7 +701,7 @@ bool vnl_matrix_fixed<T,nrows,ncols>
 
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      if (vnl_math::abs(this->data_[i][j] - rhs.data_[i][j]) > tol)
+      if (!(vnl_math::abs(this->data_[i][j] - rhs.data_[i][j]) <= tol))
         return false;                                    // difference greater than tol
 
   return true;
