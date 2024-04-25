@@ -36,6 +36,9 @@ class bpgl_surface_type
   enum stype { NO_DATA, INVALID_DATA, SHADOW, SHADOW_STEP, GEOMETRIC_CONSISTENCY, NO_SURFACE_TYPE};
   enum domain { RECTIFIED_TARGET, DSM, FUSED_DSM, MOSAIC_DSM, NO_DOMAIN};
 
+  static std::string domain_to_string(domain d);
+  static domain domain_from_string(std::string const& str);
+
   bpgl_surface_type()
     : ni_(0), nj_(0)
   {
@@ -148,34 +151,6 @@ class bpgl_surface_type
   std::string type_to_string(stype const& type) const
   {
     return type_names_.at(type);
-  }
-
-  domain domain_from_string(std::string const& domain_str) const
-  {
-    if (domain_str == "rectified_target") {
-      return RECTIFIED_TARGET;
-    } else if (domain_str == "DSM") {
-      return DSM;
-    } else if (domain_str == "fused_DSM") {
-      return FUSED_DSM;
-    } else if (domain_str == "mosaic_DSM") {
-      return MOSAIC_DSM;
-    }
-    return NO_DOMAIN;
-  }
-
-  std::string domain_to_string(domain const& dom) const
-  {
-    if (dom == RECTIFIED_TARGET) {
-      return "rectified_target";
-    } else if (dom == DSM) {
-      return "DSM";
-    } else if (dom == FUSED_DSM) {
-      return "fused_DSM";
-    } else if (dom == MOSAIC_DSM) {
-      return "mosaic_DSM";
-    }
-    return "no_domain";
   }
 
   bool read(std::string const& path);

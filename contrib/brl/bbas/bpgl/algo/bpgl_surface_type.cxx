@@ -6,9 +6,48 @@
 #include <vul/vul_file_iterator.h>
 #include <vnl/vnl_math.h>
 #include <bsta/bsta_histogram.h>
+#include <algorithm>
 #include <fstream>
 #include <stdexcept>
 #include <bvrml/bvrml_write.h>
+
+// enumeration to/from string
+std::string
+bpgl_surface_type::domain_to_string(bpgl_surface_type::domain d)
+{
+  if (d == RECTIFIED_TARGET) {
+    return "RECTIFIED_TARGET";
+  } else if (d == DSM) {
+    return "DSM";
+  } else if (d == FUSED_DSM) {
+    return "FUSED_DSM";
+  } else if (d == MOSAIC_DSM) {
+    return "MOSAIC_DSM";
+  }
+  return "NO_DOMAIN";
+}
+
+bpgl_surface_type::domain
+bpgl_surface_type::domain_from_string(std::string const& str)
+{
+  // upper case input
+  std::string str_upper = str;
+  std::transform(str_upper.begin(), str_upper.end(),
+                 str_upper.begin(), ::toupper);
+
+  // compare upper case
+  if (str_upper == "RECTIFIED_TARGET") {
+    return RECTIFIED_TARGET;
+  } else if (str_upper == "DSM") {
+    return DSM;
+  } else if (str_upper == "FUSED_DSM") {
+    return FUSED_DSM;
+  } else if (str_upper == "MOSAIC_DSM") {
+    return MOSAIC_DSM;
+  }
+  return NO_DOMAIN;
+}
+
 
 // single type_image from string input
 vil_image_view<float>
