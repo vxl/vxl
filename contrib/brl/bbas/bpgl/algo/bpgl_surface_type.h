@@ -203,6 +203,10 @@ class bpgl_surface_type
     return true;
   }
 
+  vil_image_view<float> type_image(std::string const& type_name) const;
+  vil_image_view<float> type_image(stype type) const;
+  std::map<stype, vil_image_view<float> > type_images() const;
+
   //: the available types
   std::vector<bpgl_surface_type::stype>& stypes() { return types_; }
 

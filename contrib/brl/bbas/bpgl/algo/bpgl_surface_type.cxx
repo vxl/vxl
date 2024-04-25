@@ -10,6 +10,31 @@
 #include <stdexcept>
 #include <bvrml/bvrml_write.h>
 
+// single type_image from string input
+vil_image_view<float>
+bpgl_surface_type::type_image(std::string const& type_name) const
+{
+  return type_image(type_from_string(type_name));
+}
+
+// single type_image from stype enumeration
+vil_image_view<float>
+bpgl_surface_type::type_image(stype type) const
+{
+  vil_image_view<float> image;
+  if (!type_image(type, image)) {
+    throw std::runtime_error("bpgl_surface_type::type_image failure");
+  }
+  return image;
+}
+
+// type_images std::map
+std::map<bpgl_surface_type::stype, vil_image_view<float> >
+bpgl_surface_type::type_images() const
+{
+  return type_images_;
+}
+
 bool
 bpgl_surface_type::read(std::string const& directory)
 {
