@@ -16,7 +16,7 @@ aux_source_directory(Templates bsgm_sources)
 
 vxl_add_library(LIBRARY_NAME bsgm LIBRARY_SOURCES ${bsgm_sources})
 
-target_link_libraries( bsgm vidl_pro ${VXL_LIB_PREFIX}bpgl_algo ${VXL_LIB_PREFIX}brip ${VXL_LIB_PREFIX}bsta ${VXL_LIB_PREFIX}bjson ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl)
+target_link_libraries( bsgm vidl_pro ${VXL_LIB_PREFIX}acal ${VXL_LIB_PREFIX}bpgl_algo ${VXL_LIB_PREFIX}brip ${VXL_LIB_PREFIX}bsta ${VXL_LIB_PREFIX}bjson ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl)
 
 add_subdirectory( app )
 
