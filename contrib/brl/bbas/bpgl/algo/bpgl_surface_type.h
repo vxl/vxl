@@ -36,6 +36,9 @@ class bpgl_surface_type
   enum stype { NO_DATA, INVALID_DATA, SHADOW, SHADOW_STEP, GEOMETRIC_CONSISTENCY, NO_SURFACE_TYPE};
   enum domain { RECTIFIED_TARGET, DSM, FUSED_DSM, MOSAIC_DSM, NO_DOMAIN};
 
+  static std::string domain_to_string(domain d);
+  static domain domain_from_string(std::string const& str);
+
   bpgl_surface_type()
     : ni_(0), nj_(0)
   {
@@ -150,34 +153,6 @@ class bpgl_surface_type
     return type_names_.at(type);
   }
 
-  domain domain_from_string(std::string const& domain_str) const
-  {
-    if (domain_str == "rectified_target") {
-      return RECTIFIED_TARGET;
-    } else if (domain_str == "DSM") {
-      return DSM;
-    } else if (domain_str == "fused_DSM") {
-      return FUSED_DSM;
-    } else if (domain_str == "mosaic_DSM") {
-      return MOSAIC_DSM;
-    }
-    return NO_DOMAIN;
-  }
-
-  std::string domain_to_string(domain const& dom) const
-  {
-    if (dom == RECTIFIED_TARGET) {
-      return "rectified_target";
-    } else if (dom == DSM) {
-      return "DSM";
-    } else if (dom == FUSED_DSM) {
-      return "fused_DSM";
-    } else if (dom == MOSAIC_DSM) {
-      return "mosaic_DSM";
-    }
-    return "no_domain";
-  }
-
   bool read(std::string const& path);
 
   bool write(std::string const& path) const;
@@ -202,6 +177,10 @@ class bpgl_surface_type
     type_image = it->second;
     return true;
   }
+
+  vil_image_view<float> type_image(std::string const& type_name) const;
+  vil_image_view<float> type_image(stype type) const;
+  std::map<stype, vil_image_view<float> > type_images() const;
 
   //: the available types
   std::vector<bpgl_surface_type::stype>& stypes() { return types_; }
