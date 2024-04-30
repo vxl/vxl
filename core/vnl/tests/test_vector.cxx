@@ -347,7 +347,33 @@ vnl_vector_test_int()
          (out_values[0] == minus_v2[0] && out_values[1] == minus_v2[1] && out_values[2] == minus_v2[2] &&
           out_values[3] == minus_v2[3]), true);
   }
+  { // test vnl_vector_fixed::is_equal
+    using int_vector_fixed_type = vnl_vector_fixed<int, 2>;
 
+    TEST("vnl_vector_fixed(0) instances compare equal",
+         int_vector_fixed_type(0).is_equal(int_vector_fixed_type(0), 0.0),
+         true);
+    TEST("vnl_vector_fixed(1) instances compare equal",
+         int_vector_fixed_type(1).is_equal(int_vector_fixed_type(1), 0.0),
+         true);
+    TEST("vnl_vector_fixed(0) and vnl_vector_fixed(1) do not compare equal",
+         int_vector_fixed_type(0).is_equal(int_vector_fixed_type(1), 0.0),
+         false);
+
+    using double_vector_fixed_type = vnl_vector_fixed<double, 2>;
+
+    const double_vector_fixed_type default_vector_fixed{};
+
+    TEST("A default double_vector_fixed_type compares equal to itself",
+         default_vector_fixed.is_equal(default_vector_fixed, 0.0),
+         true);
+    TEST("vnl_vector_fixed(0.9) and vnl_vector_fixed(1.1) do not compare equal with zero tol",
+         double_vector_fixed_type(0.9).is_equal(double_vector_fixed_type(1.1), 0.0),
+         false);
+    TEST("vnl_vector_fixed(0.9) and vnl_vector_fixed(1.1) compare equal with tol 0.3",
+         double_vector_fixed_type(0.9).is_equal(double_vector_fixed_type(1.1), 0.3),
+         true);
+  }
 }
 
 bool
