@@ -36,9 +36,15 @@ public:
  acal_single_track_solver(std::map<size_t, std::string> inames,std::map<size_t, vgl_point_2d<double> > track,std::map<size_t, vpgl_affine_camera<double> > const& acams):
   inames_(inames), track_(track), track_acams_(acams),verbose_(false), use_covariance_(false){}
   void set_verbose(bool verbose) { verbose_ = verbose; }
-  void set_covar_plane_cs(vnl_matrix<double> const& covar){
+
+  // potentially condition the covariance matrix by adding a scaled identity matrix, s*I.
+  // The scale s is based on the max singular value of the covariance matrix,
+  // i.e., s = frac*max_sing_val
+  void set_covar_plane_cs(vnl_matrix<double> const& covar, size_t large_track_size = 200, double max_sing_val_fraction = 0.02 ){
     covar_plane_cs_ = covar;
     use_covariance_ = true;
+    large_track_size_ = large_track_size;
+    max_sing_val_fraction_ = max_sing_val_fraction;
   }
   // the main solution method
   bool solve();
@@ -62,6 +68,8 @@ public:
   bool verbose_;
   bool use_covariance_;
   vnl_matrix<double> covar_plane_cs_;
+  size_t large_track_size_;
+  double max_sing_val_fraction_;
   std::map<size_t, std::string> inames_;
   std::map<size_t, vgl_point_2d<double> > track_;
   std::map<size_t, vpgl_affine_camera<double> > track_acams_;
