@@ -3,7 +3,7 @@
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/algo/vgl_intersection.h>
 #include "acal_single_track_solver.h"
-
+#include <vnl/algo/vnl_svd.h>
 #define verbose_plus false
 
 bool acal_single_track_solver::solve()
@@ -30,7 +30,36 @@ bool acal_single_track_solver::solve()
       return false;
     }
   }else{
-    if (!vgl_intersection(track_rays, covar_plane_cs_, track_3d_point_)){
+    // condition large track solutions
+    if(track_rays.size()> large_track_size_){
+      std::cout << "Processing the large number of rays case ( " << track_rays.size() << " )"<< std::endl;
+      vnl_svd<double> svd(covar_plane_cs_);
+      size_t nr = covar_plane_cs_.rows();
+      if(svd.rank() != nr){
+        std::cout << "satellite pose covariance matrix is singular" <<std::endl;
+        return false;
+      }
+      vnl_diag_matrix<double> W = svd.W();
+      vnl_matrix<double> cond_covar = covar_plane_cs_;
+      double max_singular_value = W[0];
+      double min_singular_value = W[nr-1];
+      // ill-conditioned problem metric
+      double ill_cond = max_singular_value/min_singular_value;
+      if(ill_cond > 100){
+        std::cout << "Large ray satellite covar is ill-conditioned ( " << ill_cond << " )"<< std::endl;
+        double cond_add = max_singular_value*max_sing_val_fraction_;
+        for(size_t r = 0; r<nr; ++r)
+          cond_covar[r][r] += cond_add;
+        std::cout << "adding scaled identity matrix " << cond_add << " x I " << std::endl;
+        vnl_svd<double> svd_add(cond_covar);
+        std::cout << "After add condition is  " << 1.0/svd_add.well_condition() << std::endl;
+        if (!vgl_intersection(track_rays, cond_covar, track_3d_point_)){
+          std::cerr << "Intersection failed - while using conditioned covariance on a large number of rays" << std::endl;
+          return false;
+        }
+        std::cout << "Large number of rays intersection point (lvcs) " << track_3d_point_ << std::endl;
+      }// end large number of rays
+    }else if (!vgl_intersection(track_rays, covar_plane_cs_, track_3d_point_)){
       std::cerr << "Intersection failed - while using covariance" << std::endl;
       return false;
     }else if(verbose_plus){
@@ -40,8 +69,8 @@ bool acal_single_track_solver::solve()
         std::cout << track_rays[i] << std::endl;
       }
       std::cout << "plane covariance\n"<< covar_plane_cs_ << std::endl;
-    }//
-  }
+    }// end verbose +
+  }// end using satellite covariance
   size_t nr = track_rays.size();
   std::vector<double> sanity_thresholds(nr, 20.0);
   if(use_covariance_){
