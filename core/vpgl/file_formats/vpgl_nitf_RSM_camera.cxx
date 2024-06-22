@@ -6,6 +6,7 @@
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vil/file_formats/vil_nitf2_image_subheader.h>
 #include <fstream>
+#include <limits>
 
 // create a composite class that operates on Cartesian local coordinates
 // similar to local_rational_camera, used to determine view angles and gsd
