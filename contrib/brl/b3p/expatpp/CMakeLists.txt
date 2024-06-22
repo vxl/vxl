@@ -9,14 +9,17 @@ if( EXPAT_FOUND )
     include_directories( ${BRL_BINARY_DIR}/b3p/expat )
   endif()
 
-  set( expatpp_sources expatpp.h expatpp.cpp expatpplib.h )
+  if( VXL_USING_NATIVE_EXPATPP )
+    include_directories( ${EXPATPP_INCLUDE_DIR} )
+  else()
+    set( expatpp_sources expatpp.h expatpp.cpp expatpplib.h )
 
-  vxl_add_library(LIBRARY_NAME expatpp LIBRARY_SOURCES ${expatpp_sources} )
-  target_link_libraries( expatpp ${EXPAT_LIBRARIES} )
+    vxl_add_library(LIBRARY_NAME expatpp LIBRARY_SOURCES ${expatpp_sources} )
+    target_link_libraries( expatpp ${EXPAT_LIBRARIES} )
 
-  if( BUILD_TESTING )
-    add_subdirectory(tests)
+    if( BUILD_TESTING )
+      add_subdirectory(tests)
+    endif()
   endif()
-
 
 endif()
