@@ -68,7 +68,7 @@ class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
   //: Evaluate the log probability density at a point
   T log_prob_density(const vector &pt) const override {
     return vpdt_log_prob_density(impl_,pt);
-  };
+  }
 
   //: Compute the gradient of the unnormalized density at a point
   // \return the density at \a pt since it is usually needed as well, and

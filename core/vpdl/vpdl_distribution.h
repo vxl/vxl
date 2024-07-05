@@ -64,7 +64,7 @@ class vpdl_distribution
   virtual T log_prob_density(const vector& pt) const
   {
     return std::log(prob_density(pt));
-  };
+  }
 
   //: Compute the gradient of the unnormalized density at a point
   // \return the density at \a pt since it is usually needed as well, and
