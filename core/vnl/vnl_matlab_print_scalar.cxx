@@ -6,11 +6,19 @@
 #include <complex>
 #include "vnl_matlab_print_scalar.h"
 
+
 void
-vnl_matlab_print_scalar(int v, char * buf, vnl_matlab_print_format)
+vnl_matlab_print_scalar(int v, char * buf, size_t buf_len, vnl_matlab_print_format)
 {
-  std::sprintf(buf, "%4d ", v);
+  std::snprintf(buf, buf_len, "%4d ", v);
 }
+
+void
+vnl_matlab_print_scalar(int v, char * buf, vnl_matlab_print_format) // add[[deprecated]]?
+{
+  vnl_matlab_print_scalar(v, buf, SIZE_T_MAX, format);
+}
+
 
 void
 vnl_matlab_print_scalar(unsigned v, char * buf, vnl_matlab_print_format)
