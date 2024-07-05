@@ -311,11 +311,11 @@ vil_pnm_image::write_header()
   vs_->seek(0L);
 
   char buf[1024];
-  std::sprintf(buf, "P%d\n#vil pnm image, #c=%u, bpc=%u\n%u %u\n", magic_, ncomponents_, bits_per_component_, ni_, nj_);
+  std::snprintf(buf, sizeof(buf), "P%d\n#vil pnm image, #c=%u, bpc=%u\n%u %u\n", magic_, ncomponents_, bits_per_component_, ni_, nj_);
   vs_->write(buf, std::strlen(buf));
   if (magic_ != 1 && magic_ != 4)
   {
-    std::sprintf(buf, "%lu\n", maxval_);
+    std::snprintf(buf, sizeof(buf), "%lu\n", maxval_);
     vs_->write(buf, std::strlen(buf));
   }
   start_of_data_ = vs_->tell();
@@ -528,7 +528,7 @@ static void
 operator<<(vil_stream & vs, int a)
 {
   char buf[128];
-  std::sprintf(buf, " %d\n", a);
+  std::snprintf(buf, sizeof(buf), " %d\n", a);
   vs.write(buf, std::strlen(buf));
 }
 

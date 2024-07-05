@@ -112,7 +112,7 @@ const char *
 vul_debug_windows_structured_exception::what() const throw()
 {
   static char buf[100];
-  std::sprintf(buf, "Caught Windows Structured Exception. Code %lx. Address %px", code(), address());
+  std::snprintf(buf, sizeof(buf), "Caught Windows Structured Exception. Code %lx. Address %px", code(), address());
   return buf;
 }
 
