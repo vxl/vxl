@@ -226,10 +226,10 @@ vil1_stream_url::vil1_stream_url(char const * url)
   char buffer[4096];
 
   // send HTTP 1.1 request.
-  std::sprintf(buffer, "GET /%s / HTTP/1.1\n", path.c_str());
+  std::snprintf(buffer, sizeof(buffer), "GET /%s / HTTP/1.1\n", path.c_str());
   if (!auth.empty())
-    std::sprintf(buffer + std::strlen(buffer), "Authorization:  Basic %s\n", encode_base64(auth).c_str());
-    //    std::sprintf(buffer+std::strlen(buffer), "Authorization:  user  testuser:testuser\n");
+    std::snprintf(buffer + std::strlen(buffer), sizeof(buffer), "Authorization:  Basic %s\n", encode_base64(auth).c_str());
+    //    std::snprintf(buffer+std::strlen(buffer), sizeof(buffer) "Authorization:  user  testuser:testuser\n");
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
   if (send(tcp_socket, buffer, (int)std::strlen(buffer), 0) < 0)

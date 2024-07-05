@@ -22,7 +22,7 @@ date_and_time()
   char datetime[20];
   std::strftime(tmp, sizeof(datetime), "%Y-%m-%d %H:%M:%S", t_m);
   // changed from "%c", to make it generic, size=19, and avoid compiler warning
-  std::sprintf(datetime, "%19s", tmp);
+  std::snprintf(datetime, sizeof(datetime), "%19s", tmp);
   return std::string(datetime);
 }
 

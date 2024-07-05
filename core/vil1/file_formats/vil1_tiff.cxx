@@ -675,7 +675,7 @@ vil1_tiff_generic_image::write_header()
   char tmp[20];
   char datetime[20];
   strftime(tmp,sizeof(datetime),"%c",t_m);
-  std::sprintf(datetime,"%19s",tmp);
+  std::snprintf(datetime, sizeof(datetime),"%19s",tmp);
   TIFFSetField(p->tif, TIFFTAG_DATETIME, datetime);
 #endif
 
