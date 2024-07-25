@@ -222,24 +222,20 @@ vil1_stream_url::vil1_stream_url(char const * url)
     return;
   }
 
-  // buffer for data transfers over socket.
-  char buffer[4096];
-
   // send HTTP 1.1 request.
-  std::sprintf(buffer, "GET /%s / HTTP/1.1\n", path.c_str());
+  std::string request = "GET /" + path + " / HTTP/1.1\n";
   if (!auth.empty())
-    std::sprintf(buffer + std::strlen(buffer), "Authorization:  Basic %s\n", encode_base64(auth).c_str());
-    //    std::sprintf(buffer+std::strlen(buffer), "Authorization:  user  testuser:testuser\n");
+    request += "Authorization:  Basic " + encode_base64(auth) + "\n";
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
-  if (send(tcp_socket, buffer, (int)std::strlen(buffer), 0) < 0)
+  if (send(tcp_socket, request.c_str(), (int)request.length(), 0) < 0)
   {
     std::cerr << __FILE__ ": error sending HTTP request\n";
     closesocket(tcp_socket);
     return;
   }
 #else
-  if (::write(tcp_socket, buffer, std::strlen(buffer)) < 0)
+  if (::write(tcp_socket, request.c_str(), request.length()) < 0)
   {
     std::cerr << __FILE__ ": error sending HTTP request\n";
     close(tcp_socket);
@@ -256,6 +252,9 @@ vil1_stream_url::vil1_stream_url(char const * url)
 #endif
 
   //  std::ofstream test2("/test2.jpg", std::ios::binary);
+
+  // buffer for data transfers over socket.
+  char buffer[4096];
 
   // read from socket into memory.
   u_ = new vil1_stream_core;
