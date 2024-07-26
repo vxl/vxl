@@ -92,7 +92,7 @@ print(mystack<Matrix> const & stack, char const * fmt)
     {
       for (unsigned int j = 0; j < M.cols(); ++j)
       {
-        std::sprintf(buf, fmt, M[i][j]);
+        std::snprintf(buf, sizeof(buf), fmt, M[i][j]);
         std::cout << ' ' << buf;
       }
       std::cout << std::endl;

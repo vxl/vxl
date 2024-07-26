@@ -155,13 +155,13 @@ vgui_mfc_dialog_impl::OnChooseColour(UINT uID)
   CColorDialog colour_dialog(0, 0, this);
   colour_dialog.DoModal();
   COLORREF colour = colour_dialog.GetColor();
-  std::sprintf(buffer, "%4.3f", float(colour & 0xff) / 255.0);
+  std::snprintf(buffer, sizeof(buffer), "%4.3f", float(colour & 0xff) / 255.0);
   CString s(buffer);
   s += " ";
-  std::sprintf(buffer, "%4.3f", float((colour >> 8) & 0xff) / 255.0);
+  std::snprintf(buffer, sizeof(buffer), "%4.3f", float((colour >> 8) & 0xff) / 255.0);
   s += buffer;
   s += " ";
-  std::sprintf(buffer, "%4.3f", float((colour >> 16) & 0xff) / 255.0);
+  std::snprintf(buffer, sizeof(buffer), "%4.3f", float((colour >> 16) & 0xff) / 255.0);
   s += buffer;
   csrs[which]->SetWindowText(s);
 }

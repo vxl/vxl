@@ -28,7 +28,7 @@ main()
       }
     }
     char fname[25];
-    std::sprintf(fname, "color_table_%2.2d.png", c);
+    std::snprintf(fname, sizeof(fname), "color_table_%2.2d.png", c);
     std::cout << "Saving " << fname << std::endl;
     vil_save(cimg, fname);
   }

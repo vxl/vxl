@@ -104,7 +104,7 @@ BasicGLPane::on_mouse_event(wxMouseEvent & event)
   }
 
   char message[100];
-  sprintf(message, "(%d, %d)", x, y);
+  snprintf(message, sizeof(message), "(%d, %d)", x, y);
   parent_frame->SetStatusText(message);
 }
 
@@ -114,7 +114,7 @@ BasicGLPane::resized(wxSizeEvent & evt)
   // static int alternate = 0;
   // alternate++;
   // char message[100];
-  // sprintf(message, "resize - %d", alternate);
+  // snprintf(message, sizeof(message), "resize - %d", alternate);
 
 #if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__)
   if (!GetXWindow() || !IsShown())
