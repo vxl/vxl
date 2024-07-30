@@ -46,7 +46,7 @@ class vgl_compute_cremona_2d
 
      vgl_compute_cremona_2d() : constr_type_(BI_RATIONAL) {}
      ~vgl_compute_cremona_2d() = default;
-     ;
+     
 
      // Operations----------------------------------------------------------------
 

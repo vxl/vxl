@@ -87,9 +87,9 @@ struct IntPoint {
   cInt Y;
 #ifdef use_xyz
   cInt Z;
-  IntPoint(cInt x = 0, cInt y = 0, cInt z = 0): X(x), Y(y), Z(z) {};
+  IntPoint(cInt x = 0, cInt y = 0, cInt z = 0): X(x), Y(y), Z(z) {}
 #else
-  IntPoint(cInt x = 0, cInt y = 0): X(x), Y(y) {};
+  IntPoint(cInt x = 0, cInt y = 0): X(x), Y(y) {}
 #endif
 
   friend inline bool operator== (const IntPoint& a, const IntPoint& b)
@@ -137,7 +137,7 @@ class PolyNode
 {
 public:
     PolyNode();
-    virtual ~PolyNode()= default;;
+    virtual ~PolyNode()= default;
     Path Contour;
     PolyNodes Childs;
     PolyNode* Parent;
@@ -160,7 +160,7 @@ private:
 class PolyTree: public PolyNode
 {
 public:
-    ~PolyTree() override{ Clear(); };
+    ~PolyTree() override{ Clear(); }
     PolyNode* GetFirst() const;
     void Clear();
     int Total() const;
@@ -226,8 +226,8 @@ public:
   bool AddPaths(const Paths &ppg, PolyType PolyTyp, bool Closed);
   virtual void Clear();
   IntRect GetBounds();
-  bool PreserveCollinear() {return m_PreserveCollinear;};
-  void PreserveCollinear(bool value) {m_PreserveCollinear = value;};
+  bool PreserveCollinear() {return m_PreserveCollinear;}
+  void PreserveCollinear(bool value) {m_PreserveCollinear = value;}
 protected:
   void DisposeLocalMinimaList();
   TEdge* AddBoundsToLML(TEdge *e, bool IsClosed);
@@ -278,10 +278,10 @@ public:
       PolyTree &polytree,
       PolyFillType subjFillType,
       PolyFillType clipFillType);
-  bool ReverseSolution() { return m_ReverseOutput; };
-  void ReverseSolution(bool value) {m_ReverseOutput = value;};
-  bool StrictlySimple() {return m_StrictSimple;};
-  void StrictlySimple(bool value) {m_StrictSimple = value;};
+  bool ReverseSolution() { return m_ReverseOutput; }
+  void ReverseSolution(bool value) {m_ReverseOutput = value;}
+  bool StrictlySimple() {return m_StrictSimple;}
+  void StrictlySimple(bool value) {m_StrictSimple = value;}
   //set the callback function for z value filling on intersections (otherwise Z is 0)
 #ifdef use_xyz
   void ZFillFunction(ZFillCallback zFillFunc);
