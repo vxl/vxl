@@ -58,7 +58,7 @@ class vil_file_format
                                char const * /*level_file_format*/,
                                char const * /*filename*/) {
     return nullptr;
-  };
+  }
 
   //: Make a "generic_image" on which put_section may be applied.
   // The stream vs is assumed to be open for writing, as an image header may be
