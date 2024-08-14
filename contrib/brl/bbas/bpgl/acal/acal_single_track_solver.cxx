@@ -31,7 +31,7 @@ bool acal_single_track_solver::solve()
     }
   }else{
     // condition large track solutions
-    if(track_rays.size()> large_track_size_){
+    if(track_rays.size() > large_track_size_){
       std::cout << "Processing the large number of rays case ( " << track_rays.size() << " )"<< std::endl;
       vnl_svd<double> svd(covar_plane_cs_);
       size_t nr = covar_plane_cs_.rows();
@@ -53,10 +53,12 @@ bool acal_single_track_solver::solve()
         std::cout << "adding scaled identity matrix " << cond_add << " x I " << std::endl;
         vnl_svd<double> svd_add(cond_covar);
         std::cout << "After add condition is  " << 1.0/svd_add.well_condition() << std::endl;
-        if (!vgl_intersection(track_rays, cond_covar, track_3d_point_)){
-          std::cerr << "Intersection failed - while using conditioned covariance on a large number of rays" << std::endl;
-          return false;
-        }
+      }
+      if (!vgl_intersection(track_rays, cond_covar, track_3d_point_)){
+        std::cerr << "Intersection failed - while using covariance on a large number of rays" << std::endl;
+        return false;
+      }
+      else{
         std::cout << "Large number of rays intersection point (lvcs) " << track_3d_point_ << std::endl;
       }// end large number of rays
     }else if (!vgl_intersection(track_rays, covar_plane_cs_, track_3d_point_)){
