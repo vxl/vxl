@@ -167,6 +167,8 @@ class acal_match_graph
 
   std::map<size_t, std::string> image_names();
 
+  std::vector<std::pair<vgl_point_2d<double>, vgl_point_2d<double> > > corrs(size_t cam_id_i, size_t cam_id_j);
+
   //: debug
   void print_connected_components();
   void print_n_tracks_for_conn_comp();
