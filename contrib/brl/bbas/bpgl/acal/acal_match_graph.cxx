@@ -1022,3 +1022,33 @@ acal_match_graph::operator==(acal_match_graph const& other) const
       && this->match_tree_metric_ == other.match_tree_metric_;
 }
 
+std::vector<std::pair<vgl_point_2d<double>, vgl_point_2d<double> > > acal_match_graph::corrs(size_t cam_id_i, size_t cam_id_j){
+  std::vector<std::pair<vgl_point_2d<double>, vgl_point_2d<double> > >  ret;
+  std::shared_ptr<match_vertex> vi = match_vertices_[cam_id_i],
+              vj = match_vertices_[cam_id_i];
+  if(!vi || !vj) return ret;
+  std::vector<match_edge*>& i_edges = vi->edges_;
+  size_t ne = i_edges.size();
+  if(ne == 0)
+    return ret;
+  bool found = false;
+  for(size_t e = 0; e<ne&&!found; ++e){
+    std::shared_ptr<match_vertex> vv = i_edges[e]->v1_;
+    if(vv->cam_id_ == cam_id_j){
+      std::vector<acal_match_pair>& mch =  i_edges[e]->matches_;
+      size_t nm = mch.size();
+      if(nm == 0)
+        return ret;
+      for(size_t m = 0; m<nm; ++m){
+        acal_match_pair& p = mch[m];
+        ret.emplace_back(p.corr1_.pt_, p.corr2_.pt_);
+      }
+      found = true;
+    }
+  }
+  return ret;
+}
+      
+  
+              
+    
