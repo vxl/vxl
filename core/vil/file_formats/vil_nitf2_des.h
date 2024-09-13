@@ -41,6 +41,7 @@ public:
     if ( ! m_field_sequence1->get_value( tag, out_value ) && m_field_sequence2 ){
       return m_field_sequence2->get_value( tag, out_value );
     }
+    return false;
   }
 
   // Sets out_value to the value of std::vector field element specified by tag and index.
