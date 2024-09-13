@@ -62,9 +62,10 @@ public:
   enum poly_index { NEU_U = 0, DEN_U, NEU_V, DEN_V };
   //: enumeration for computing polys
   enum poly_comp_index { P_NEU_U = 0, P_DEN_U, P_NEU_V, P_DEN_V};
+
   //: default constructor
   vpgl_RSM_camera();
-
+  
   //: Constructor with everything wrapped up in an array and vector.
  vpgl_RSM_camera(std::vector<std::vector<int> >const& powers,
                  std::vector<std::vector<T> > const& coeffs,
@@ -167,7 +168,7 @@ public:
     }
 
     //: get a specific scale_offset
-    vpgl_scale_offset<T> scl_off(const coor_index coor_index) const
+    vpgl_scale_offset<T> scale_offsets(const coor_index coor_index) const
     {
         return scale_offsets_[coor_index];
     }
