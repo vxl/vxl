@@ -119,12 +119,7 @@ public:
         std::vector<int> const& neu_u_powers,
         std::vector<int> const& den_u_powers,
         std::vector<int> const& neu_v_powers,
-        std::vector<int> const& den_v_powers
-    );
-    //: In the order neu_u, den_u, neu_v, den_v
-    std::vector<std::vector<int> > powers() const {
-        return powers_;
-    }
+        std::vector<int> const& den_v_powers);
     
     //: set all coordinate scale and offsets
     void set_scale_offsets(
@@ -173,6 +168,15 @@ public:
         return scale_offsets_[coor_index];
     }
 
+    //: In the order neu_u, den_u, neu_v, den_v
+    std::vector<std::vector<int> > powers() const {
+        return powers_;
+    }
+    //: In the order neu_u, den_u, neu_v, den_v
+    std::vector<std::vector<double> > coeffs() const {
+        return coeffs_;
+    }
+
     // --- Often useful for adjusting the camera ---
 
     //:set u-v translation offset
@@ -183,9 +187,17 @@ public:
     }
 
     //:get u-v translation offset
-    void image_offset(T& u_off, T& v_off) const
+    std::pair<T, T>  image_offset() const
     {
-        u_off = offset(U_INDX); v_off = offset(V_INDX);
+      std::pair<T, T> pr(offset(U_INDX), offset(V_INDX));
+      return pr;
+    }
+
+    //:get u-v scale
+    std::pair<T, T>  image_scale() const
+    {
+      std::pair<T, T> pr(scale(U_INDX), scale(V_INDX));
+      return pr;
     }
 
     //:set u-v scale
