@@ -140,6 +140,8 @@ void vpgl_replacement_sensor_model_tres::define_RSMPCA(){
     }
 }
 // define TREs for cases not currently handled by vpgl_RSM_camera
+// even if present only 40 bytes are read to recover the EDITION field
+
 void vpgl_replacement_sensor_model_tres::define_RSMPIA(){
 // check for multiple polynomials
     vil_nitf2_tagged_record_definition* trpi = vil_nitf2_tagged_record_definition::find("RSMPIA");
@@ -151,7 +153,6 @@ void vpgl_replacement_sensor_model_tres::define_RSMPIA(){
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMECA(){
-// check for refinement grid
     vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMECA");
     if (!trgi)
     {
@@ -161,7 +162,6 @@ void vpgl_replacement_sensor_model_tres::define_RSMECA(){
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMECB() {
-    // check for refinement grid
     vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMECB");
     if (!trgi)
     {
@@ -172,7 +172,6 @@ void vpgl_replacement_sensor_model_tres::define_RSMECB() {
 }
     
 void vpgl_replacement_sensor_model_tres::define_RSMDCA(){
-// check for refinement grid
     vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMDCA");
     if (!trgi)
     {
@@ -182,7 +181,6 @@ void vpgl_replacement_sensor_model_tres::define_RSMDCA(){
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMDCB(){
-// check for refinement grid
     vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMDCB");
     if (!trgi)
     {
@@ -192,7 +190,6 @@ void vpgl_replacement_sensor_model_tres::define_RSMDCB(){
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMAPA(){
-// check for refinement grid
     vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMAPA");
     if (!trgi)
     {
@@ -202,7 +199,6 @@ void vpgl_replacement_sensor_model_tres::define_RSMAPA(){
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMAPB(){
-// check for refinement grid
     vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMAPB");
     if (!trgi)
     {
@@ -212,7 +208,6 @@ void vpgl_replacement_sensor_model_tres::define_RSMAPB(){
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMGIA(){
-// check for refinement grid
     vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMPIA");
     if (!trgi)
     {
@@ -222,7 +217,6 @@ void vpgl_replacement_sensor_model_tres::define_RSMGIA(){
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMGGA(){
-// check for refinement grid
     vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMGGA");
     if (!trgi)
     {
