@@ -30,7 +30,6 @@ vil_pyramid_image_view<T>::vil_pyramid_image_view(vil_image_view_base_sptr image
   if (!img)
     return;
 
-  // it works with grey scale images
   //if (img->nplanes() != 1)
    // return;
 
