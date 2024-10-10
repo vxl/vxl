@@ -56,7 +56,7 @@ class vpgl_utm
                double& x_out, double& y_out) const;
 
  private:
-   double a_{6378137}, b_{6356752.3142};
+   double a_{6378137}, b_{6356752.31424518};
 };
 
 #endif
