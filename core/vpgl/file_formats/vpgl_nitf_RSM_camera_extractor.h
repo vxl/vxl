@@ -24,6 +24,7 @@
 struct image_time {
   int year, month, day, hour, min, sec;
 };
+// information extracted from NITF header
 struct rsm_metadata{
   std::string catalog_id_;                     bool catalog_id_valid=false;
   std::string platform_name_;                  bool platform_name_valid=false;
@@ -46,6 +47,7 @@ struct rsm_metadata{
   vgl_point_2d<double> min_image_corner_;        bool image_corners_valid = false;
   vgl_point_2d<double> max_image_corner_;
 };
+// if image is cropped defines offset
 struct ichipb_data{
   bool ichipb_data_valid = false;
   std::pair<double, double> translation_;
@@ -58,6 +60,9 @@ struct ichipb_data{
 class vpgl_nitf_RSM_camera_extractor
 {
  public:
+  // possible outcomes depending on header layout
+  enum tre_status{IMAGE_SUBHEADER_TREs_ONLY=0, IMAGE_SUBHEADER_TREs_RSM_TREs,
+                  IMAGE_SUBHEADER_TREs_RSM_TREs_OVRFL, INVALID};
    vpgl_nitf_RSM_camera_extractor() = default;
   // path to a NITFV2.1 image file
   vpgl_nitf_RSM_camera_extractor(std::string const& nitf_image_path,
@@ -81,7 +86,13 @@ class vpgl_nitf_RSM_camera_extractor
 
   //: number of image subheaders that contain RSM camera TREs
   //  a return of 0 indicates no RSM data
-  size_t nitf_header_contains_RSM_tres()const{ return RSM_cams_.size();}
+  size_t nitf_header_contains_RSM_tres() const {
+      size_t n_RSM = 0;
+      for (auto itr = nitf_status_.begin(); itr != nitf_status_.end(); ++itr)
+          if (itr->second != INVALID && itr->second != IMAGE_SUBHEADER_TREs_ONLY)
+            n_RSM++;
+      return n_RSM;
+  }
 
   //: read NITF2.1 tagged record extensions (tres) from header
   // and output a text file of tres present in header
@@ -100,6 +111,8 @@ class vpgl_nitf_RSM_camera_extractor
               << " has no RSM metadata" << std::endl;
     return false;
   }
+  // in case of multiple image subheaders the first index associated with
+  // a RSM camera definition
   int first_index_with_RSM() {
       if (RSM_cams_.size() == 0)
           return -1;
@@ -119,16 +132,47 @@ class vpgl_nitf_RSM_camera_extractor
       "has no RSM metadata" << std::endl;
     return false;
   }
-  private:
-  // internal functions
-  bool init(vil_nitf2_image* nitf_image, bool verbose);
-  bool process_igeolo(size_t image_subheader_index);
-  // data members
+  // describe the layout of the file header in terms of number of image
+  // subheaders and overflow conditions
+  void print_file_header_summary();
 
-  std::map<size_t, vil_nitf2_tagged_record_sequence> ixshd_tres_;
+ private:
+  // internal functions
+
+  // parse the image header tres for required information
+  bool determine_header_status(vil_nitf2_image_subheader* header_ptr, size_t header_idx,
+      bool& header_has_tres, bool& header_has_RSM, int& ixofl);
+
+  // parse the overflow area for possible RSM information
+  bool determine_overflow_status(vil_nitf2_image* nitf_image, size_t header_idx, int ixsofl,
+      bool& overflow_has_RSM);
+
+  // determine the layout of information in the file header
+  bool init(vil_nitf2_image* nitf_image, bool verbose);
+
+  // extract numerical geographic locations of image corners from
+  // the concatenated string representation
+  bool process_igeolo(size_t image_subheader_index);
+
+  // data members
+  // tres extracted from the image subheader
+  std::map<size_t, vil_nitf2_tagged_record_sequence> hdr_ixshd_tres_;
+
+  // tres extracted from the overflow area
+  std::map<size_t, vil_nitf2_tagged_record_sequence> ovfl_ixshd_tres_;
+
   bool RSM_defined_ = false;
+
+  // overall layout status of the file header
+  std::map<size_t, tre_status> nitf_status_;
+
+  // useful info from the tres
   std::map<size_t,rsm_metadata> rsm_meta_;
+
+  // cropped image offset
   std::map<size_t,ichipb_data> ichipb_data_;
+
+  // RSM cameras associated with potentially multiple image subheaders
   std::map<size_t, vpgl_RSM_camera<double> > RSM_cams_;
 };
 
