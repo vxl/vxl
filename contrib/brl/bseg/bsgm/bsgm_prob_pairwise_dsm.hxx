@@ -337,17 +337,6 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_disparity_fwd()
   compute_disparity(rect_bview0_, rect_bview1_, forward,
                     /*invalid_map_fwd_,*/ disparity_fwd_,
                     rect_target_window_, rect_reference_window_);
-#if 0
-    //apply invalid map to surface_types
-    rect_target_stype_ = bpgl_surface_type(bpgl_surface_type::RECTIFIED_TARGET, rect_bview0_.ni(), rect_bview1_.nj());
-    rect_target_stype_.apply(invalid_map_fwd_, bpgl_surface_type::INVALID_DATA);
-    // apply shadow profile mask to surface_types
-    vil_image_view<float> shadow_step;
-    bsgm_shadow_step_filter<PIX_T>(rect_bview0_, invalid_map_fwd_, shadow_step, sun_dir_0_, params_.shadow_profile_radius_, params_.response_low_, params_.shadow_high_);
-    rect_target_stype_.apply(shadow_step, bpgl_surface_type::SHADOW_STEP);
-    PIX_T sthresh = static_cast<PIX_T>(params_.shadow_thresh_);
-    rect_target_stype_.apply(rect_bview0_, sthresh, bpgl_surface_type::SHADOW);
-#endif
 }
 
 // compute reverse disparity
@@ -524,13 +513,13 @@ bool bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_prob(bool compute_prob_height
     float prob = p_mul * exp(-d*d/sdsq);
     prob_distr_.upcount(prob, 1.0);
     prob_ptset_.add_point_with_scalar(p, prob);
-#if 1
+
+    // assign knn probability to rectified image space geometric consistency
     std::pair<size_t, size_t>& pr = pt_index_to_pix_[i];
     size_t ii = pr.first, jj = pr.second;
     if(ii>=rect_target_stype_.ni() || jj >= rect_target_stype_.nj())
       continue;
     rect_target_stype_.p(ii, jj, bpgl_surface_type::GEOMETRIC_CONSISTENCY)=prob;
-#endif
   }
 
   // check size
@@ -545,9 +534,10 @@ bool bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_prob(bool compute_prob_height
     auto bh = this->get_bpgl_heightmap();
     bh.heightmap_from_pointset(prob_ptset_, prob_heightmap_z_,
                                prob_heightmap_prob_, radial_std_dev_image_);
-#if 1
+
+    // assign knn  probabilty as grid space geometric consistency
     dsm_grid_stype_.apply(prob_heightmap_prob_, bpgl_surface_type::GEOMETRIC_CONSISTENCY);
-#endif
+
   }
   return true;
 }
@@ -588,6 +578,9 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_xyz_prob(bool compute_prob_he
       xyz_prob_(i, j, 3) = prob;
       prob_distr_.upcount(prob, 1.0);
       prob_ptset_.add_point_with_scalar(vgl_point_3d<float>(xf, yf, zf), prob);
+
+      // assign xyz prob to rectified image space geometric consistency
+      rect_target_stype_.p(i, j, bpgl_surface_type::GEOMETRIC_CONSISTENCY)=prob;
     }
   }
   size_t n = prob_ptset_.size();
@@ -601,6 +594,9 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_xyz_prob(bool compute_prob_he
     auto bh = this->get_bpgl_heightmap();
     bh.heightmap_from_pointset(prob_ptset_, prob_heightmap_z_,
                                prob_heightmap_prob_, radial_std_dev_image_);
+
+    // assign xyz prob to grid space geometric consistency
+    dsm_grid_stype_.apply(prob_heightmap_prob_, bpgl_surface_type::GEOMETRIC_CONSISTENCY);
   }
 }
 
