@@ -20,7 +20,7 @@
 #include <iostream>
 #include <vgl/vgl_polygon.h>
 #include <vpgl_replacement_sensor_model_tres.h>
-
+#include <vnl/vnl_matrix_fixed.h>
 struct image_time {
   int year, month, day, hour, min, sec;
 };
@@ -44,8 +44,16 @@ struct rsm_metadata{
   vgl_point_2d<double> image_offset_;           bool image_offset_valid = false;
   vgl_point_2d<double> rsm_image_offset_;       bool rsm_image_offset_valid = false;
   //       x => column y => row
-  vgl_point_2d<double> min_image_corner_;        bool image_corners_valid = false;
+  vgl_point_2d<double> min_image_corner_;       bool image_corners_valid = false;
   vgl_point_2d<double> max_image_corner_;
+  bool geodetic_=true;
+  //vs. 0->360
+  bool longitude_plus_minus_180_=true; 
+  bool rectangular_=false;
+  vgl_point_3d<double> rect_origin_;            bool rect_origin_valid = false;
+  vnl_matrix_fixed<double, 3, 3> rect_trans_;   bool rect_trans_valid = false;
+  double sun_azimuth_radians_=0.0;              bool sun_azimuth_valid = false;
+  double sun_elevation_radians_=0.0;            bool sun_elevation_valid = false;
 };
 // if image is cropped defines offset
 struct ichipb_data{
@@ -174,6 +182,11 @@ class vpgl_nitf_RSM_camera_extractor
 
   // RSM cameras associated with potentially multiple image subheaders
   std::map<size_t, vpgl_RSM_camera<double> > RSM_cams_;
+
+  // Flags indicating if various TRE groups are present
+  // presence is checked by attemping to read the EDITION field (40 bytes)
+  bool RSMPCA = false, RSMPIA = false, RSMGIA = false, RSMECA = false, RSMECB = false;
+  bool RSMDCA = false, RSMDCB = false; bool RSMAPA = false, RSMAPB = false, RSMGGA = false;
 };
 
 #endif // vpgl_nitf_RSM_camera_extractor_h_

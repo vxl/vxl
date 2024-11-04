@@ -15,33 +15,27 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 
-
+//
+//==================== polycam =====================
+//
 //--------------------------------------
 // Constructors
 
 // Create an identity projection, i.e. (x,y) identically maps to (u,v)
 template <class T>
-vpgl_RSM_camera<T>::vpgl_RSM_camera()
+vpgl_polycam<T>::vpgl_polycam() : ridx_(0), cidx_(0)
 {
   vpgl_scale_offset<T> soff;
   scale_offsets_.resize(5, soff);
 }
 
-//--------------------------------------
-// Clone
-
-// clone RSM camera
-template <class T>
-vpgl_RSM_camera<T> *vpgl_RSM_camera<T>::clone() const {
-  return new vpgl_RSM_camera<T>(*this);
-}
 
 //--------------------------------------
 // Set coefficient matrix
 
 // set coefficients from 4 vectors
 template <class T>
-void vpgl_RSM_camera<T>::set_coefficients(
+void vpgl_polycam<T>::set_coefficients(
     std::vector<T> const& neu_u,
     std::vector<T> const& den_u,
     std::vector<T> const& neu_v,
@@ -57,7 +51,7 @@ void vpgl_RSM_camera<T>::set_coefficients(
 
 // set coefficients from array encoding
 template <class T>
-void vpgl_RSM_camera<T>::set_coefficients(
+void vpgl_polycam<T>::set_coefficients(
     std::vector<std::vector<T> > const& coeffs
     )
 {
@@ -67,13 +61,13 @@ void vpgl_RSM_camera<T>::set_coefficients(
 // get coefficients as std vector of vectors
 template <class T>
 std::vector<std::vector<T> >
-vpgl_RSM_camera<T>::coefficients() const
+vpgl_polycam<T>::coefficients() const
 {
   return coeffs_;
   
 }
 template <class T>
-void vpgl_RSM_camera<T>::set_powers(std::vector<int> const& neu_u_powers,
+void vpgl_polycam<T>::set_powers(std::vector<int> const& neu_u_powers,
                                     std::vector<int> const& den_u_powers,
                                     std::vector<int> const& neu_v_powers,
                                     std::vector<int> const& den_v_powers)
@@ -90,7 +84,7 @@ void vpgl_RSM_camera<T>::set_powers(std::vector<int> const& neu_u_powers,
 
 // set all scale offsets from individual values
 template <class T>
-void vpgl_RSM_camera<T>::set_scale_offsets(
+void vpgl_polycam<T>::set_scale_offsets(
     const T x_scale, const T x_off,
     const T y_scale, const T y_off,
     const T z_scale, const T z_off,
@@ -108,7 +102,7 @@ void vpgl_RSM_camera<T>::set_scale_offsets(
 
 // set all scale offsets from vector
 template <class T>
-void vpgl_RSM_camera<T>::set_scale_offsets(
+void vpgl_polycam<T>::set_scale_offsets(
     std::vector<vpgl_scale_offset<T> > const& scale_offsets
     )
 {
@@ -120,9 +114,8 @@ void vpgl_RSM_camera<T>::set_scale_offsets(
 
 // generic interface
 template <class T>
-void vpgl_RSM_camera<T>::project(
-    const T x, const T y, const T z,
-    T& u, T& v) const
+void vpgl_polycam<T>::project(
+    const T x, const T y, const T z, T& u, T& v) const
 {
   // scale, offset the world point before projection
   T sx = scale_offsets_[X_INDX].normalize(x);
@@ -169,11 +162,52 @@ void vpgl_RSM_camera<T>::project(
   u = scale_offsets_[U_INDX].un_normalize(su);
   v = scale_offsets_[V_INDX].un_normalize(sv);
 }
+// vnl interface
+template <class T>
+vnl_vector_fixed<T, 2>
+vpgl_polycam<T>::project(vnl_vector_fixed<T, 3> const& world_point) const
+{
+    vnl_vector_fixed<T, 2> image_point;
+    this->project(world_point[0], world_point[1], world_point[2],
+        image_point[0], image_point[1]);
+    return image_point;
+}
+
+// vgl interface
+template <class T>
+vgl_point_2d<T> vpgl_polycam<T>::project(vgl_point_3d<T> world_point) const
+{
+    T u = 0, v = 0;
+    this->project(world_point.x(), world_point.y(), world_point.z(), u, v);
+    return vgl_point_2d<T>(u, v);
+}
+
+//
+//================ RSM_camera ===========================
+//
+//--------------------------------------
+// Clone
+
+
+template <class T>
+vpgl_RSM_camera<T>* vpgl_RSM_camera<T>::clone() const {
+  return new vpgl_RSM_camera<T>(*this);
+}
+// generic base interface
+template <class T>
+void vpgl_RSM_camera<T>::project(const T x, const T y, const T z, T& u, T& v) const {
+  size_t row, col;
+  region_selector_.select(x, y, z, row, col);
+  T uu, vv;
+  polycams_[row-1][col-1].project(x, y, z, uu, vv);
+  u = uu - adj_u_;
+  v = vv - adj_v_;
+}
 
 // vnl interface
 template <class T>
 vnl_vector_fixed<T, 2>
-vpgl_RSM_camera<T>::project(vnl_vector_fixed<T, 3> const& world_point) const
+ vpgl_RSM_camera<T>::project(vnl_vector_fixed<T, 3> const& world_point) const
 {
   vnl_vector_fixed<T, 2> image_point;
   this->project(world_point[0], world_point[1], world_point[2],
@@ -189,11 +223,11 @@ vgl_point_2d<T> vpgl_RSM_camera<T>::project(vgl_point_3d<T> world_point) const
   this->project(world_point.x(), world_point.y(), world_point.z(), u, v);
   return vgl_point_2d<T>(u, v);
 }
-
 // Code for easy instantiation.
 #undef vpgl_RSM_CAMERA_INSTANTIATE
 #define vpgl_RSM_CAMERA_INSTANTIATE(T) \
 template class vpgl_scale_offset<T >; \
-template class vpgl_RSM_camera<T >
+template class vpgl_polycam<T>; \
+template class vpgl_RSM_camera<T>
 
 #endif // vpgl_RSM_camera_hxx_

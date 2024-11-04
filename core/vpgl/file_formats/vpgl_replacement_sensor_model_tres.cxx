@@ -1,5 +1,6 @@
 #include "vpgl_replacement_sensor_model_tres.h"
 #include <vil/file_formats/vil_nitf2_tagged_record_definition.h>
+#include <vil/file_formats/vil_nitf2_tagged_record.h>
 #include <vil/file_formats/vil_nitf2_field_functor.h>
 #include <vil/file_formats/vil_nitf2_field_definition.h>
 #include <vil/file_formats/vil_nitf2_typed_field_formatter.h>
@@ -9,7 +10,6 @@ void vpgl_replacement_sensor_model_tres::define_RSMIDA(){
     if (!tri)
     {
         vil_nitf2_tagged_record_definition::define("RSMIDA", "Replacement Sensor Model Identification")
-
             .field("IID", "Image Identifier", NITF_STR_BCSA(80))
             .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
             .field("ISID", "Sensor Identifier", NITF_STR_BCSA(40))
@@ -17,7 +17,7 @@ void vpgl_replacement_sensor_model_tres::define_RSMIDA(){
             .field("STID", "Sensor Type Identifier", NITF_STR_BCSA(40))
             .field("YEAR", "Year of Acquisition", NITF_INT(4), true)
             .field("MONTH", "Month of Acquisition", NITF_INT(2), true)
-            .field("DAY", "Month of Acquisition", NITF_INT(2), true)
+            .field("DAY", "Day of Acquisition", NITF_INT(2), true)
             .field("HOUR", "Hour of Acquisition", NITF_INT(2), true)
             .field("MINUTE", "Minute of Acquisition", NITF_INT(2), true)
             .field("SECOND", "Second of Acquisition", NITF_DBL(9, 6, false), true)
@@ -25,7 +25,7 @@ void vpgl_replacement_sensor_model_tres::define_RSMIDA(){
             .field("NCG", "Number of Simulatanous Cols", NITF_INT(8, false), true)
             .field("TRG", "Time Between Rows", NITF_EXP(14, 2), true)
             .field("TCG", "Time Between Cols", NITF_EXP(14, 2), true)
-            .field("NDD", "Ground Domain", NITF_STR_BCSA(1))
+            .field("GRNDD", "Ground Domain", NITF_STR_BCSA(1))
             .field("XUOR", "Rectangular Coord. Unit Vector", NITF_EXP(14, 2), true)
             .field("YUOR", "Rectangular Coord. Unit Vector", NITF_EXP(14, 2), true)
             .field("ZUOR", "Rectangular Coord. Unit Vector", NITF_EXP(14, 2), true)
@@ -38,7 +38,7 @@ void vpgl_replacement_sensor_model_tres::define_RSMIDA(){
             .field("ZUXR", "Rectangular Coord. Unit Vector", NITF_EXP(14, 2), true)
             .field("ZUYR", "Rectangular Coord. Unit Vector", NITF_EXP(14, 2), true)
             .field("ZUZR", "Rectangular Coord. Unit Vector", NITF_EXP(14, 2), true)
-            .field("V1X", "Vertex 1 Ground Domain X Coord.", NITF_EXP(14, 2), true)
+            .field("V1X", "Vertex 1 Ground Domain X Coord.", NITF_EXP(14, 2))
             .field("V1Y", "Vertex 1 Ground Domain Y Coord.", NITF_EXP(14, 2))
             .field("V1Z", "Vertex 1 Ground Domain Z Coord.", NITF_EXP(14, 2))
             .field("V2X", "Vertex 2 Ground Domain X Coord.", NITF_EXP(14, 2))
@@ -144,16 +144,42 @@ void vpgl_replacement_sensor_model_tres::define_RSMPCA(){
 
 void vpgl_replacement_sensor_model_tres::define_RSMPIA(){
 // check for multiple polynomials
-    vil_nitf2_tagged_record_definition* trpi = vil_nitf2_tagged_record_definition::find("RSMPIA");
+  vil_nitf2_tagged_record_definition* trpi = vil_nitf2_tagged_record_definition::find("RSMPIA");
     if (!trpi)
     {
       vil_nitf2_tagged_record_definition::define("RSMPIA", "Multiple Section Polynomials")
-        .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
+        .field("IID", "Image Identifier", NITF_STR(80), true)
+        .field("EDITION", "Association with Image", NITF_STR_BCSA(40), false)
+        .field("R0", "Constant Coef. Row",  NITF_EXP(21, 2), false)
+        .field("RX", "X Coef. Row",  NITF_EXP(21, 2), false)
+        .field("RY", "Y Coef. Row",  NITF_EXP(21, 2), false)
+        .field("RZ", "Z Coef. Row",  NITF_EXP(21, 2), false)
+        .field("RXX", "X^2 Coef. Row",  NITF_EXP(21, 2), false)
+        .field("RXY", "X*Y Coef. Row",  NITF_EXP(21, 2), false)
+        .field("RXZ", "X*Z Coef. Row",  NITF_EXP(21, 2), false)
+        .field("RYY", "Y^2 Coef. Row",  NITF_EXP(21, 2), false)
+        .field("RYZ", "Y*Z Coef. Row",  NITF_EXP(21, 2), false)
+        .field("RZZ", "Z^2 Coef. Row",  NITF_EXP(21, 2), false)
+        .field("C0", "Constant Coef. Col",  NITF_EXP(21, 2), false)
+        .field("CX", "X Coef. Col",  NITF_EXP(21, 2), false)
+        .field("CY", "Y Coef. Col",  NITF_EXP(21, 2), false)
+        .field("CZ", "Z Coef. Col",  NITF_EXP(21, 2), false)
+        .field("CXX", "X^2 Coef. Col",  NITF_EXP(21, 2), false)
+        .field("CXY", "X*Y Coef. Col",  NITF_EXP(21, 2), false)
+        .field("CXZ", "X*Z Coef. Col",  NITF_EXP(21, 2), false)
+        .field("CYY", "Y^2 Coef. Col",  NITF_EXP(21, 2), false)
+        .field("CYZ", "Y*Z Coef. Col",  NITF_EXP(21, 2), false)
+        .field("CZZ", "Z^2 Coef. Col",  NITF_EXP(21, 2), false)
+        .field("RNIS", "Number of Image Sections, Row", NITF_INT(3, false), false)
+        .field("CNIS", "Number of Image Sections, Col", NITF_INT(3, false), false)
+        .field("TNIS", "Number of Image Sections, Total", NITF_INT(3, false), false)
+        .field("RSSIZ", "Section Size, Image Rows",  NITF_EXP(21, 2), false)
+        .field("CSSIZ", "Section Size, Image Cols",  NITF_EXP(21, 2), false)
         .end();
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMECA(){
-    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMECA");
+  vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMECA");
     if (!trgi)
     {
         vil_nitf2_tagged_record_definition::define("RSMECA", "Indirect Error Covariance")
@@ -162,17 +188,28 @@ void vpgl_replacement_sensor_model_tres::define_RSMECA(){
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMECB() {
-    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMECB");
+#define INDCVDEF new vil_nitf2_field_value_one_of<std::string>("INCLIC", "Y")
+  vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMECB");
     if (!trgi)
     {
-        vil_nitf2_tagged_record_definition::define("RSMECB", "Extended Indirect Error Covariance")
-            .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
-            .end();
+      
+      vil_nitf2_tagged_record_definition::define("RSMECB", "Extended Indirect Error Covariance")
+        .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
+        .field("TID", "Triangulation ID", NITF_STR_BCSA(40))
+        .field("INCLIC", "Indirect Covariance Flag", NITF_STR_BCSA(1))
+        .field("INCLUC", "Unmodeled Error Covariance Flag", NITF_STR_BCSA(1))
+        .field("NPARO", "Number Original Adjustable Params", NITF_INT(2, false), false ,nullptr,INDCVDEF)
+        .field("IGN", "Number Independent Subgroups", NITF_INT(2, false), false, nullptr,INDCVDEF)
+        .field("CVDATE", "Version Date", NITF_STR_BCSA(8), false, nullptr,INDCVDEF)
+        .field("NPAR", "Number Active Adjustable Params", NITF_INT(2, false), false,nullptr,INDCVDEF)
+        .field("APTYP", "Adjustable Parameter Type", NITF_STR_BCSA(1), false,nullptr,INDCVDEF)
+        .field("LOCTYP","Local Coordiante System Id", NITF_STR_BCSA(1), false,nullptr,INDCVDEF)
+        .end();
     }
 }
     
 void vpgl_replacement_sensor_model_tres::define_RSMDCA(){
-    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMDCA");
+  vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMDCA");
     if (!trgi)
     {
         vil_nitf2_tagged_record_definition::define("RSMDCA", "Direct Error Covariance")
@@ -181,7 +218,7 @@ void vpgl_replacement_sensor_model_tres::define_RSMDCA(){
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMDCB(){
-    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMDCB");
+  vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMDCB");
     if (!trgi)
     {
         vil_nitf2_tagged_record_definition::define("RSMDCB", "Extended Direct Error Covariance")
@@ -190,7 +227,7 @@ void vpgl_replacement_sensor_model_tres::define_RSMDCB(){
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMAPA(){
-    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMAPA");
+  vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMAPA");
     if (!trgi)
     {
         vil_nitf2_tagged_record_definition::define("RSMAPA", "Adjustable Parameters")
@@ -208,7 +245,7 @@ void vpgl_replacement_sensor_model_tres::define_RSMAPB(){
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMGIA(){
-    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMPIA");
+  vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMPIA");
     if (!trgi)
     {
         vil_nitf2_tagged_record_definition::define("RSMGIA", "Multi-section Grids")
@@ -217,7 +254,7 @@ void vpgl_replacement_sensor_model_tres::define_RSMGIA(){
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMGGA(){
-    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMGGA");
+  vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMGGA");
     if (!trgi)
     {
         vil_nitf2_tagged_record_definition::define("RSMGGA", "Ground to Image Grid")
