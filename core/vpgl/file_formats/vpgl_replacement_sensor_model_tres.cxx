@@ -139,57 +139,101 @@ void vpgl_replacement_sensor_model_tres::define_RSMPCA(){
             .end(); // of RPC TRE
     }
 }
-// define TREs for cases not currently handled by vpgl_RSM_camera
-// even if present only 40 bytes are read to recover the EDITION field
-
 void vpgl_replacement_sensor_model_tres::define_RSMPIA(){
 // check for multiple polynomials
   vil_nitf2_tagged_record_definition* trpi = vil_nitf2_tagged_record_definition::find("RSMPIA");
+#if 0
+  if (!trpi)
+    {
+      vil_nitf2_tagged_record_definition::define("RSMPIA", "Multiple Section Polynomials")
+        .field("IID", "Image Identifier", NITF_STR(80), true)
+        .field("EDITION", "Association with Image", NITF_STR_BCSA(40), false)
+        .field("R0", "Constant Coef. Row",  NITF_STR_BCSA(21), false)
+        .field("RX", "X Coef. Row",  NITF_STR_BCSA(21), false)
+        .field("RY", "Y Coef. Row",  NITF_STR_BCSA(21), false)
+        .field("RZ", "Z Coef. Row",  NITF_STR_BCSA(21), false)
+        .field("RXX", "X^2 Coef. Row",  NITF_STR_BCSA(21), false)
+        .field("RXY", "X*Y Coef. Row",  NITF_STR_BCSA(21), false)
+        .field("RXZ", "X*Z Coef. Row",  NITF_STR_BCSA(21), false)
+        .field("RYY", "Y^2 Coef. Row",  NITF_STR_BCSA(21), false)
+        .field("RYZ", "Y*Z Coef. Row",  NITF_STR_BCSA(21), false)
+        .field("RZZ", "Z^2 Coef. Row",  NITF_STR_BCSA(21), false)
+        .field("C0", "Constant Coef. Col",  NITF_STR_BCSA(21), false)
+        .field("CX", "X Coef. Col",  NITF_STR_BCSA(21), false)
+        .field("CY", "Y Coef. Col",  NITF_STR_BCSA(21), false)
+        .field("CZ", "Z Coef. Col",  NITF_STR_BCSA(21), false)
+        .field("CXX", "X^2 Coef. Col",  NITF_STR_BCSA(21), false)
+        .field("CXY", "X*Y Coef. Col",  NITF_STR_BCSA(21), false)
+        .field("CXZ", "X*Z Coef. Col",  NITF_STR_BCSA(21), false)
+        .field("CYY", "Y^2 Coef. Col",  NITF_STR_BCSA(21), false)
+        .field("CYZ", "Y*Z Coef. Col",  NITF_STR_BCSA(21), false)
+        .field("CZZ", "Z^2 Coef. Col",  NITF_STR_BCSA(21), false)
+        .field("RNIS", "Number of Image Sections, Row", NITF_STR_BCS(3), false)
+        .field("CNIS", "Number of Image Sections, Col", NITF_STR_BCS(3), false)
+        .field("TNIS", "Number of Image Sections, Total", NITF_STR_BCS(3), false)
+        .field("RSSIZ", "Section Size, Image Rows",  NITF_STR_BCSA(21), false)
+        .field("CSSIZ", "Section Size, Image Cols",  NITF_STR_BCSA(21), false)
+        .end();
+    }
+#else
     if (!trpi)
     {
       vil_nitf2_tagged_record_definition::define("RSMPIA", "Multiple Section Polynomials")
         .field("IID", "Image Identifier", NITF_STR(80), true)
         .field("EDITION", "Association with Image", NITF_STR_BCSA(40), false)
-        .field("R0", "Constant Coef. Row",  NITF_EXP(21, 2), false)
-        .field("RX", "X Coef. Row",  NITF_EXP(21, 2), false)
-        .field("RY", "Y Coef. Row",  NITF_EXP(21, 2), false)
-        .field("RZ", "Z Coef. Row",  NITF_EXP(21, 2), false)
-        .field("RXX", "X^2 Coef. Row",  NITF_EXP(21, 2), false)
-        .field("RXY", "X*Y Coef. Row",  NITF_EXP(21, 2), false)
-        .field("RXZ", "X*Z Coef. Row",  NITF_EXP(21, 2), false)
-        .field("RYY", "Y^2 Coef. Row",  NITF_EXP(21, 2), false)
-        .field("RYZ", "Y*Z Coef. Row",  NITF_EXP(21, 2), false)
-        .field("RZZ", "Z^2 Coef. Row",  NITF_EXP(21, 2), false)
-        .field("C0", "Constant Coef. Col",  NITF_EXP(21, 2), false)
-        .field("CX", "X Coef. Col",  NITF_EXP(21, 2), false)
-        .field("CY", "Y Coef. Col",  NITF_EXP(21, 2), false)
-        .field("CZ", "Z Coef. Col",  NITF_EXP(21, 2), false)
-        .field("CXX", "X^2 Coef. Col",  NITF_EXP(21, 2), false)
-        .field("CXY", "X*Y Coef. Col",  NITF_EXP(21, 2), false)
-        .field("CXZ", "X*Z Coef. Col",  NITF_EXP(21, 2), false)
-        .field("CYY", "Y^2 Coef. Col",  NITF_EXP(21, 2), false)
-        .field("CYZ", "Y*Z Coef. Col",  NITF_EXP(21, 2), false)
-        .field("CZZ", "Z^2 Coef. Col",  NITF_EXP(21, 2), false)
-        .field("RNIS", "Number of Image Sections, Row", NITF_INT(3, false), false)
-        .field("CNIS", "Number of Image Sections, Col", NITF_INT(3, false), false)
-        .field("TNIS", "Number of Image Sections, Total", NITF_INT(3, false), false)
-        .field("RSSIZ", "Section Size, Image Rows",  NITF_EXP(21, 2), false)
-        .field("CSSIZ", "Section Size, Image Cols",  NITF_EXP(21, 2), false)
+        .field("R0", "Constant Coef. Row",  NITF_EXP(14,2), false)
+        .field("RX", "X Coef. Row",  NITF_EXP(14,2), false)
+        .field("RY", "Y Coef. Row",  NITF_EXP(14,2), false)
+        .field("RZ", "Z Coef. Row",  NITF_EXP(14,2), false)
+        .field("RXX", "X^2 Coef. Row",  NITF_EXP(14,2), false)
+        .field("RXY", "X*Y Coef. Row",  NITF_EXP(14,2), false)
+        .field("RXZ", "X*Z Coef. Row",  NITF_EXP(14,2), false)
+        .field("RYY", "Y^2 Coef. Row",  NITF_EXP(14,2), false)
+        .field("RYZ", "Y*Z Coef. Row",  NITF_EXP(14,2), false)
+        .field("RZZ", "Z^2 Coef. Row",  NITF_EXP(14,2), false)
+        .field("C0", "Constant Coef. Col",  NITF_EXP(14,2), false)
+        .field("CX", "X Coef. Col",  NITF_EXP(14,2), false)
+        .field("CY", "Y Coef. Col",  NITF_EXP(14,2), false)
+        .field("CZ", "Z Coef. Col",  NITF_EXP(14,2), false)
+        .field("CXX", "X^2 Coef. Col",  NITF_EXP(14,2), false)
+        .field("CXY", "X*Y Coef. Col",  NITF_EXP(14,2), false)
+        .field("CXZ", "X*Z Coef. Col",  NITF_EXP(14,2), false)
+        .field("CYY", "Y^2 Coef. Col",  NITF_EXP(14,2), false)
+        .field("CYZ", "Y*Z Coef. Col",  NITF_EXP(14,2), false)
+        .field("CZZ", "Z^2 Coef. Col",  NITF_EXP(14,2), false)
+        .field("RNIS", "Number of Image Sections, Row", NITF_STR_BCS(3), false)
+        .field("CNIS", "Number of Image Sections, Col", NITF_STR_BCS(3), false)
+        .field("TNIS", "Number of Image Sections, Total", NITF_STR_BCS(3), false)
+        .field("RSSIZ", "Section Size, Image Rows",  NITF_EXP(14,2), false)
+        .field("CSSIZ", "Section Size, Image Cols",  NITF_EXP(14,2), false)
         .end();
     }
+#endif
 }
+
+#define INDCVDEF new vil_nitf2_field_value_one_of<std::string>("INCLIC", "Y")
+ 
+
 void vpgl_replacement_sensor_model_tres::define_RSMECA(){
   vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMECA");
     if (!trgi)
     {
         vil_nitf2_tagged_record_definition::define("RSMECA", "Indirect Error Covariance")
           .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
+        .field("TID", "Triangulation ID", NITF_STR_BCSA(40))
+        .field("INCLIC", "Indirect Covariance Flag", NITF_STR_BCSA(1))
+        .field("INCLUC", "Unmodeled Error Covariance Flag", NITF_STR_BCSA(1))
+        .field("NPARO", "Number Original Adjustable Params", NITF_STR_BCS(2), false ,nullptr,INDCVDEF)
+        .field("IGN", "Number Independent Subgroups", NITF_STR_BCS(2), false, nullptr,INDCVDEF)
+        .field("CVDATE", "Version Date", NITF_STR_BCSA(8), false, nullptr,INDCVDEF)
+        .field("NPAR", "Number Active Adjustable Params", NITF_STR_BCS(2), false,nullptr,INDCVDEF)
+        .field("APTYP", "Adjustable Parameter Type", NITF_STR_BCSA(1), false,nullptr,INDCVDEF)
+        .field("LOCTYP","Local Coordiante System Id", NITF_STR_BCSA(1), false,nullptr,INDCVDEF)
           .end();
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMECB() {
-#define INDCVDEF new vil_nitf2_field_value_one_of<std::string>("INCLIC", "Y")
-  vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMECB");
+    vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMECB");
     if (!trgi)
     {
       
@@ -198,16 +242,18 @@ void vpgl_replacement_sensor_model_tres::define_RSMECB() {
         .field("TID", "Triangulation ID", NITF_STR_BCSA(40))
         .field("INCLIC", "Indirect Covariance Flag", NITF_STR_BCSA(1))
         .field("INCLUC", "Unmodeled Error Covariance Flag", NITF_STR_BCSA(1))
-        .field("NPARO", "Number Original Adjustable Params", NITF_INT(2, false), false ,nullptr,INDCVDEF)
-        .field("IGN", "Number Independent Subgroups", NITF_INT(2, false), false, nullptr,INDCVDEF)
+        .field("NPARO", "Number Original Adjustable Params", NITF_STR_BCS(2), false ,nullptr,INDCVDEF)
+        .field("IGN", "Number Independent Subgroups", NITF_STR_BCS(2), false, nullptr,INDCVDEF)
         .field("CVDATE", "Version Date", NITF_STR_BCSA(8), false, nullptr,INDCVDEF)
-        .field("NPAR", "Number Active Adjustable Params", NITF_INT(2, false), false,nullptr,INDCVDEF)
+        .field("NPAR", "Number Active Adjustable Params", NITF_STR_BCS(2), false,nullptr,INDCVDEF)
         .field("APTYP", "Adjustable Parameter Type", NITF_STR_BCSA(1), false,nullptr,INDCVDEF)
         .field("LOCTYP","Local Coordiante System Id", NITF_STR_BCSA(1), false,nullptr,INDCVDEF)
         .end();
     }
 }
-    
+
+// define TREs for cases not currently handled by vpgl_RSM_camera
+// even if present only 40 bytes are read to recover the EDITION field    
 void vpgl_replacement_sensor_model_tres::define_RSMDCA(){
   vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMDCA");
     if (!trgi)
@@ -245,7 +291,7 @@ void vpgl_replacement_sensor_model_tres::define_RSMAPB(){
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMGIA(){
-  vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMPIA");
+  vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMGIA");
     if (!trgi)
     {
         vil_nitf2_tagged_record_definition::define("RSMGIA", "Multi-section Grids")
