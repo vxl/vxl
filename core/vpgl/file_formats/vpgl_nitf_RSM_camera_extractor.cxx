@@ -332,8 +332,9 @@ vpgl_nitf_RSM_camera_extractor::vpgl_nitf_RSM_camera_extractor(vil_nitf2_image *
   }
 }
 
-bool vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(std::ostream& tre_str, bool verbose)
+bool vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
 {
+    std::stringstream& tre_str = ss_;
   // Now get the sub-header TRE parameters
   vil_nitf2_tagged_record_sequence::const_iterator tres_itr;
   // Check through the TREs to find ""
@@ -351,7 +352,9 @@ bool vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(std::ostream& tre_str, bo
       tre_str << "INVALID or missing TREs for IMAGE SUBHEADER " << sitr->first << std::endl;
       continue;
     }
-    
+    RSMIDA = false; RSMPIA = false; RSMPCA = false; RSMECA = false; RSMECB = false;
+    RSMGIA = false; RSMDCA = false; RSMDCB = false;
+    RSMAPA = false; RSMAPB = false; RSMGGA = false;
     tre_str << "======RSM DATA FOR IMAGE SUBHEADER " << sitr->first << std::endl;
     for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr)
       {
@@ -614,6 +617,7 @@ bool vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(std::ostream& tre_str, bo
             
             nitf_tre<double> nt81("SAZ", opt, false);
             nt81.get_append(tres_itr, tre_str, v);
+            RSMIDA = true;
           }
         if (type == "RSMPCA") { // looking for "RSMPCA..."
           // =======================================
@@ -727,6 +731,7 @@ bool vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(std::ostream& tre_str, bo
           
           nitf_tre<double> nt118("CDPCF", "vector", false, false);
           nt118.get_append(tres_itr, tre_str, v);
+          RSMPCA = true;
         }
       }
     for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr)
@@ -823,6 +828,31 @@ bool vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(std::ostream& tre_str, bo
           // =========================================
           nitf_tre<std::string> nt1("EDITION", false, false);
           nt1.get_append(tres_itr, tre_str, v);
+          nitf_tre<std::string> nt2("TID", false, false);
+          nt2.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt3("INCLIC", false, false);
+          nt3.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt4("INCLUC", true, false);
+          nt4.get_append(tres_itr, tre_str, v);
+
+          bool opt = (nt3.value_ != "Y");
+          nitf_tre<std::string> nt5("LOCTYP", opt, false);
+          nt5.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt6("APTYP", opt, false);
+          nt6.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt7("NISAP", opt, false);
+          nt7.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt8("NISAPR", opt, false);
+          nt8.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt9("NISAPC", false, false);
+          nt9.get_append(tres_itr, tre_str, v);
+
           RSMECA = true;
         }
         
@@ -907,403 +937,508 @@ bool vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(std::ostream& tre_str, bo
 
 bool vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
 {
-  for (auto itr = RSM_cams_.begin(); itr != RSM_cams_.end(); ++itr) {
-    size_t image_subheader_index = itr->first;
-    vil_nitf2_tagged_record_sequence& ixshd_tres = hdr_ixshd_tres_[image_subheader_index];
-    if(nitf_status_[image_subheader_index]== IMAGE_SUBHEADER_TREs_RSM_TREs_OVRFL)
-      ixshd_tres= ovfl_ixshd_tres_[image_subheader_index];
-    vil_nitf2_tagged_record_sequence::const_iterator tres_itr;
-    vpgl_region_selector<double> rsel;
-    bool good = false, aux_good = false;
-    if(RSMPIA){
-      // scan for RSMPIA in case of multiple polynomial camera regions
-      for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr){
-        std::string type = (*tres_itr)->name();
-        if (type == "RSMPIA") {
-          nitf_tre<double> nt0("R0");
-          good = nt0.get(tres_itr, rsel.row_coefs_[0]);
-          if (!good) return false;
-          nitf_tre<double> nt1("RX");
-          good = nt1.get(tres_itr, rsel.row_coefs_[1]);
-          if (!good) return false;
-          nitf_tre<double> nt2("RY");
-          good = nt2.get(tres_itr, rsel.row_coefs_[2]);
-          if (!good) return false;
-          nitf_tre<double> nt3("RZ");
-          good = nt3.get(tres_itr, rsel.row_coefs_[3]);
-          if (!good) return false;
-          nitf_tre<double> nt4("RXX");
-          good = nt4.get(tres_itr, rsel.row_coefs_[4]);
-          if (!good) return false;
-          nitf_tre<double> nt5("RXY");
-          good = nt5.get(tres_itr, rsel.row_coefs_[5]);
-          if (!good) return false;
-          nitf_tre<double> nt6("RXZ");
-          good = nt6.get(tres_itr, rsel.row_coefs_[6]);
-          if (!good) return false;
-          nitf_tre<double> nt7("RYY");
-          good = nt7.get(tres_itr, rsel.row_coefs_[7]);
-          if (!good) return false;
-          nitf_tre<double> nt8("RYZ");
-          good = nt8.get(tres_itr, rsel.row_coefs_[8]);
-          if (!good) return false;
-          nitf_tre<double> nt9("RZZ");
-          good = nt9.get(tres_itr, rsel.row_coefs_[9]);
-          nitf_tre<double> nt10("C0");
-          good = nt10.get(tres_itr, rsel.col_coefs_[0]);
-          if (!good) return false;
-          nitf_tre<double> nt11("CX");
-          good = nt11.get(tres_itr, rsel.col_coefs_[1]);
-          if (!good) return false;
-          nitf_tre<double> nt12("CY");
-          good = nt12.get(tres_itr, rsel.col_coefs_[2]);
-          if (!good) return false;
-          nitf_tre<double> nt13("CZ");
-          good = nt13.get(tres_itr, rsel.col_coefs_[3]);
-          if (!good) return false;
-          nitf_tre<double> nt14("CXX");
-          good = nt14.get(tres_itr, rsel.col_coefs_[4]);
-          if (!good) return false;
-          nitf_tre<double> nt15("CXY");
-          good = nt15.get(tres_itr, rsel.col_coefs_[5]);
-          if (!good) return false;
-          nitf_tre<double> nt16("CXZ");
-          good = nt16.get(tres_itr, rsel.col_coefs_[6]);
-          if (!good) return false;
-          nitf_tre<double> nt17("CYY");
-          good = nt17.get(tres_itr, rsel.col_coefs_[7]);
-          if (!good) return false;
-          nitf_tre<double> nt18("CYZ");
-          good = nt18.get(tres_itr, rsel.col_coefs_[8]);
-          if (!good) return false;
-          nitf_tre<double> nt19("CZZ");
-          good = nt19.get(tres_itr, rsel.col_coefs_[9]);
-          if (!good) return false;
-          nitf_tre<double> nt20("RNIS");
-          good = nt20.get(tres_itr, rsel.rnis_);
-          if (!good) return false;
-          nitf_tre<double> nt21("CNIS");
-          good = nt21.get(tres_itr, rsel.cnis_);
-          if (!good) return false;
-          nitf_tre<double> nt22("TNIS");
-          good = nt22.get(tres_itr, rsel.tnis_);
-          if (!good) return false;
-          nitf_tre<double> nt23("RSSIZ");
-          good = nt23.get(tres_itr, rsel.rssiz_);
-          if (!good) return false;
-          nitf_tre<double> nt24("CSSIZ");
-          good = nt24.get(tres_itr, rsel.cssiz_);
-          if (!good) return false;
-        }//RSMPIA
-      }//tres_itr
-    }//has RSMPIA
-    RSM_cams_[image_subheader_index]= vpgl_RSM_camera<double>(rsel);
-    for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr)
-      {
-        std::string type = (*tres_itr)->name();
-        if (type == "RSMPCA") {
-          std::vector<std::vector<int> > powers;
-          std::vector<std::vector<double> > coeffs;
-          std::vector<vpgl_scale_offset<double> > scale_offsets;
-          bool aux_good = false;
-          double x_scale, x_off, y_scale, y_off, z_scale, z_off;
-          double u_scale, u_off, v_scale, v_off;
-          int x_pow, y_pow, z_pow, rsn, csn;
-          
+    for (auto itr = RSM_cams_.begin(); itr != RSM_cams_.end(); ++itr) {
+        size_t image_subheader_index = itr->first;
+        vil_nitf2_tagged_record_sequence& ixshd_tres = hdr_ixshd_tres_[image_subheader_index];
+        if (nitf_status_[image_subheader_index] == IMAGE_SUBHEADER_TREs_RSM_TREs_OVRFL)
+            ixshd_tres = ovfl_ixshd_tres_[image_subheader_index];
+        vil_nitf2_tagged_record_sequence::const_iterator tres_itr;
+        vpgl_region_selector<double> rsel;
+        bool good = false, aux_good = false;
+        if (RSMIDA) {
+            // scan for RSMPIA in case of multiple polynomial camera regions
+            for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr) {
+                std::string type = (*tres_itr)->name();
+                if (type == "RSMIDA") {
+                    nitf_tre<std::string> nt("STID", false, true);
+                    aux_good = nt.get(tres_itr, rsm_meta_[image_subheader_index].platform_name_);
+                    if (!aux_good)
+                        return false;
+                    rsm_meta_[0].platform_name_valid = aux_good;
+                    std::string g;
+                    nitf_tre<std::string> ntG("GRNDD", false, true);
+                    aux_good = ntG.get(tres_itr, g);
+                    if (!aux_good) return false;
+                    if (g == "G" || g == "H") rsm_meta_[image_subheader_index].geodetic_ = true;
+                    if (g == "H") rsm_meta_[image_subheader_index].longitude_plus_minus_180_ = false;
+                    if (g == "R") {
+                        rsm_meta_[image_subheader_index].geodetic_ = false;
+                        rsm_meta_[image_subheader_index].rectangular_ = true;
+                        // if rectangular extract origin and transform
+                        double ox, oy, oz;
+                        nitf_tre<double> ntox("XUOR", false, true);
+                        aux_good = ntox.get(tres_itr, ox);
+                        if (!aux_good) return false;
+                        nitf_tre<double> ntoy("YUOR", false, true);
+                        aux_good = ntoy.get(tres_itr, oy);
+                        if (!aux_good) return false;
+                        nitf_tre<double> ntoz("ZUOR", false, true);
+                        aux_good = ntoz.get(tres_itr, oz);
+                        if (!aux_good) return false;
 
-          nitf_tre<int> ntr("RSN");
-          good = ntr.get(tres_itr, rsn);
-          if (!good) return false;
+                        rsm_meta_[image_subheader_index].rect_origin_.set(ox, oy, oz);
+                        rsm_meta_[image_subheader_index].rect_origin_valid = true;
 
-          nitf_tre<int> ntc("CSN");
-          good = ntc.get(tres_itr, csn);
-          if (!good) return false;
+                        vnl_matrix_fixed<double, 3, 3>& T = rsm_meta_[image_subheader_index].rect_trans_;
+                        nitf_tre<double> ntxx("XUXR", false, true);
+                        aux_good = ntxx.get(tres_itr, T[0][0]);
+                        if (!aux_good) return false;
+                        nitf_tre<double> ntxy("XUYR", false, true);
+                        aux_good = ntxy.get(tres_itr, T[0][1]);
+                        if (!aux_good) return false;
+                        nitf_tre<double> ntxz("XUYR", false, true);
+                        aux_good = ntxz.get(tres_itr, T[0][2]);
+                        if (!aux_good) return false;
+                        nitf_tre<double> ntyx("YUXR", false, true);
+                        aux_good = ntyx.get(tres_itr, T[1][0]);
+                        if (!aux_good) return false;
+                        nitf_tre<double> ntyy("YUYR", false, true);
+                        aux_good = ntyy.get(tres_itr, T[1][1]);
+                        if (!aux_good) return false;
+                        nitf_tre<double> ntyz("YUZR", false, true);
+                        aux_good = ntyz.get(tres_itr, T[1][2]);
+                        if (!aux_good) return false;
+                        nitf_tre<double> ntzx("ZUXR", false, true);
+                        aux_good = ntzx.get(tres_itr, T[2][0]);
+                        if (!aux_good) return false;
+                        nitf_tre<double> ntzy("ZUYR", false, true);
+                        aux_good = ntzy.get(tres_itr, T[2][1]);
+                        if (!aux_good) return false;
+                        nitf_tre<double> ntzz("ZUZR", false, true);
+                        aux_good = ntzz.get(tres_itr, T[2][2]);
+                        if (!aux_good) return false;
+                        rsm_meta_[image_subheader_index].rect_trans_valid = true;
+                    }
+                    // boundary metadata
+                    //  Obtain elevation bounds from the ground domain vertices
+                    //  The primary purpose of the RSM ground domain is to define
+                    //  the region of validity of the RSM TRE Set representation in ground space.
+                    double min_lon = std::numeric_limits<double>::max(), min_lat = min_lon;
+                    double max_lon = -min_lon, max_lat = -min_lat;
+                    double min_z, max_z;
+                    nitf_tre<double> nt1("V1Z", false, false);
+                    bool min_good = nt1.get(tres_itr, min_z);
+                    nitf_tre<double> nt2("V8Z", false, false);
+                    bool max_good = nt2.get(tres_itr, max_z);
+                    std::vector<std::pair<double, double> > coords;
 
-          vpgl_polycam<double> pcam(rsn, csn);
+                    if (rsm_meta_[image_subheader_index].xy_corners_valid) {
+                        rsm_meta_[image_subheader_index].bounding_box_.set_min_z(min_z);
+                        rsm_meta_[image_subheader_index].bounding_box_.set_max_z(max_z);
+                        rsm_meta_[image_subheader_index].xyz_corners_valid = true;
+                    }
+                    double az, el;
+                    nitf_tre<double> illa("IA0", false, false);
+                    bool az_good = illa.get(tres_itr, az);
+                    rsm_meta_[image_subheader_index].sun_azimuth_radians_ = az;
+                    rsm_meta_[image_subheader_index].sun_azimuth_valid = az_good;
+                    nitf_tre<double> ille("IE0", false, false);
+                    bool el_good = ille.get(tres_itr, el);
+                    rsm_meta_[image_subheader_index].sun_elevation_radians_ = el;
+                    rsm_meta_[image_subheader_index].sun_elevation_valid = el_good;
 
-          nitf_tre<double> nt0("RNRMO");
-          good = nt0.get(tres_itr, v_off);
-          if (!good) return false;
-          
-          nitf_tre<double> nt1("CNRMO");
-            good = nt1.get(tres_itr, u_off);
-            if (!good) return false;
-            
-            nitf_tre<double> nt2("XNRMO");
-            good = nt2.get(tres_itr, x_off);
-            if (!good) return false;
-            
-            nitf_tre<double> nt3("YNRMO");
-            good = nt3.get(tres_itr, y_off);
-            if (!good) return false;
-            
-            nitf_tre<double> nt4("ZNRMO");
-            good = nt4.get(tres_itr, z_off);
-            if (!good) return false;
-            
-            nitf_tre<double> nt5("RNRMSF");
-            good = nt5.get(tres_itr, v_scale);
-            if (!good) return false;
-            
-            nitf_tre<double> nt6("CNRMSF");
-            good = nt6.get(tres_itr, u_scale);
-            if (!good) return false;
-            
-            nitf_tre<double> nt7("XNRMSF");
-            good = nt7.get(tres_itr, x_scale);
-            if (!good) return false;
-            
-            nitf_tre<double> nt8("YNRMSF");
-            good = nt8.get(tres_itr, y_scale);
-            if (!good) return false;
-            
-            nitf_tre<double> nt9("ZNRMSF");
-            good = nt9.get(tres_itr, z_scale);
-            if (!good) return false;
-            
-            scale_offsets.emplace_back(x_scale, x_off);
-            scale_offsets.emplace_back(y_scale, y_off);
-            scale_offsets.emplace_back(z_scale, z_off);
-            scale_offsets.emplace_back(u_scale, u_off);
-            scale_offsets.emplace_back(v_scale, v_off);
-            
-            int rn_nterms;
-            std::vector<int> rnpows;
-            nitf_tre<int> nt10("RNPWRX");
-            good = nt10.get(tres_itr, x_pow);
-            if (!good) return false;
-            
-            nitf_tre<int> nt11("RNPWRY");
-            good = nt11.get(tres_itr, y_pow);
-            if (!good) return false;
-            
-            nitf_tre<int> nt12("RNPWRZ");
-            good = nt12.get(tres_itr, z_pow);
-            if (!good) return false;
-            
-            nitf_tre<int> nt13("RNTRMS");
-            good = nt13.get(tres_itr, rn_nterms);
-            if (!good) return false;
-            
-            rnpows.push_back(x_pow); rnpows.push_back(y_pow); rnpows.push_back(z_pow);
-            
-            std::vector<double> rnpcf;
-            nitf_tre<double> nt14("RNPCF");
-            good = nt14.get(tres_itr, rnpcf);
-            if (!good) return false;
-            
-            int rd_nterms;
-            std::vector<int> rdpows;
-            nitf_tre<int> nt15("RDPWRX");
-            good = nt15.get(tres_itr, x_pow);
-            if (!good) return false;
-            
-            nitf_tre<int> nt16("RDPWRY");
-            good = nt16.get(tres_itr, y_pow);
-            if (!good) return false;
-            
-            nitf_tre<int> nt17("RDPWRZ");
-            good = nt17.get(tres_itr, z_pow);
-            if (!good) return false;
-            
-            nitf_tre<int> nt18("RDTRMS");
-            good = nt18.get(tres_itr, rd_nterms);
-            if (!good) return false;
-            
-            rdpows.push_back(x_pow); rdpows.push_back(y_pow); rdpows.push_back(z_pow);
-            
-            std::vector<double> rdpcf;
-            nitf_tre<double> nt19("RDPCF");
-            good = nt19.get(tres_itr, rdpcf);
-            if (!good) return false;
-            int cn_nterms;
-            std::vector<int> cnpows;
-            nitf_tre<int> nt20("CNPWRX");
-            good = nt20.get(tres_itr, x_pow);
-            if (!good) return false;
-            
-            nitf_tre<int> nt21("CNPWRY");
-            good = nt21.get(tres_itr, y_pow);
-            if (!good) return false;
-            
-            nitf_tre<int> nt22("CNPWRZ");
-            good = nt22.get(tres_itr, z_pow);
-            if (!good) return false;
-            
-            nitf_tre<int> nt23("CNTRMS");
-            good = nt23.get(tres_itr, cn_nterms);
-            if (!good) return false;
-            
-            cnpows.push_back(x_pow); cnpows.push_back(y_pow); cnpows.push_back(z_pow);
-            
-            std::vector<double> cnpcf;
-            nitf_tre<double> nt24("CNPCF");
-            good = nt24.get(tres_itr, cnpcf);
-            if (!good) return false;
-            
-            int cd_nterms;
-            std::vector<int> cdpows;
-            nitf_tre<int> nt25("CDPWRX");
-            good = nt25.get(tres_itr, x_pow);
-            if (!good) return false;
-            
-            nitf_tre<int> nt26("CDPWRY");
-            good = nt26.get(tres_itr, y_pow);
-            if (!good) return false;
-            
-            nitf_tre<int> nt27("CDPWRZ");
-            good = nt27.get(tres_itr, z_pow);
-            if (!good) return false;
-            
-            nitf_tre<int> nt28("CDTRMS");
-            good = nt28.get(tres_itr, cd_nterms);
-            if (!good) return false;
-            
-            cdpows.push_back(x_pow); cdpows.push_back(y_pow); cdpows.push_back(z_pow);
-            
-            std::vector<double> cdpcf;
-            nitf_tre<double> nt29("CDPCF");
-            good = nt29.get(tres_itr, cdpcf);
-            if (!good) return false;
-            
-            powers.push_back(cnpows); powers.push_back(cdpows);
-            powers.push_back(rnpows); powers.push_back(rdpows);
-            coeffs.push_back(cnpcf);  coeffs.push_back(cdpcf);
-            coeffs.push_back(rnpcf);  coeffs.push_back(rdpcf);
-            good = (cnpcf.size() == cn_nterms) && (cdpcf.size() == cd_nterms) &&
-              (rnpcf.size() == rn_nterms) && (rdpcf.size() == rd_nterms);
-            if (!good) return false;
-            
-            pcam.set_powers(powers);
-            pcam.set_coefficients(coeffs);
-            pcam.set_scale_offsets(scale_offsets);
-            RSM_cams_[image_subheader_index].set_polycam(rsn, csn, pcam);
-          }
-         
-          if (type == "RSMIDA") {
-            nitf_tre<std::string> nt("STID", false, true);
-            aux_good = nt.get(tres_itr, rsm_meta_[image_subheader_index].platform_name_);
-            if(!aux_good)
-              return false;
-            rsm_meta_[0].platform_name_valid = aux_good;
-            std::string g;
-            nitf_tre<std::string> ntG("GRNDD", false, true);
-            aux_good = ntG.get(tres_itr, g);
-            if(!aux_good) return false;
-            if(g == "G" || g == "H") rsm_meta_[image_subheader_index].geodetic_= true;
-            if(g == "H") rsm_meta_[image_subheader_index].longitude_plus_minus_180_= false;
-            if(g == "R") {rsm_meta_[image_subheader_index].geodetic_= false;
-              rsm_meta_[image_subheader_index].rectangular_= true;
-              // if rectangular extract origin and transform
-              double ox, oy, oz;
-              nitf_tre<double> ntox("XUOR", false, true);
-              aux_good = ntox.get(tres_itr, ox);
-              if(!aux_good) return false;
-              nitf_tre<double> ntoy("YUOR", false, true);
-              aux_good = ntoy.get(tres_itr, oy);
-              if(!aux_good) return false;
-              nitf_tre<double> ntoz("ZUOR", false, true);
-              aux_good = ntoz.get(tres_itr, oz);
-              if(!aux_good) return false;
-
-              rsm_meta_[image_subheader_index].rect_origin_.set(ox, oy, oz);
-              rsm_meta_[image_subheader_index].rect_origin_valid= true;
-
-              vnl_matrix_fixed<double, 3, 3>& T = rsm_meta_[image_subheader_index].rect_trans_;
-              nitf_tre<double> ntxx("XUXR", false, true);
-              aux_good = ntxx.get(tres_itr, T[0][0]);
-              if(!aux_good) return false;
-              nitf_tre<double> ntxy("XUYR", false, true);
-              aux_good = ntxy.get(tres_itr, T[0][1]);
-              if(!aux_good) return false;
-              nitf_tre<double> ntxz("XUYR", false, true);
-              aux_good = ntxz.get(tres_itr, T[0][2]);
-              if(!aux_good) return false;
-              nitf_tre<double> ntyx("YUXR", false, true);
-              aux_good = ntyx.get(tres_itr, T[1][0]);
-              if(!aux_good) return false;
-              nitf_tre<double> ntyy("YUYR", false, true);
-              aux_good = ntyy.get(tres_itr, T[1][1]);
-              if(!aux_good) return false;
-              nitf_tre<double> ntyz("YUZR", false, true);
-              aux_good = ntyz.get(tres_itr, T[1][2]);
-              if(!aux_good) return false;
-              nitf_tre<double> ntzx("ZUXR", false, true);
-              aux_good = ntzx.get(tres_itr, T[2][0]);
-              if(!aux_good) return false;
-              nitf_tre<double> ntzy("ZUYR", false, true);
-              aux_good = ntzy.get(tres_itr, T[2][1]);
-              if(!aux_good) return false;
-              nitf_tre<double> ntzz("ZUZR", false, true);
-              aux_good = ntzz.get(tres_itr, T[2][2]);
-              if(!aux_good) return false;
-              rsm_meta_[image_subheader_index].rect_trans_valid= true;
+                    // determine corners of image 
+                    int min_r, max_r, min_c, max_c;
+                    nitf_tre<int> nt3("MINR", false, false);
+                    bool row_good_min = nt3.get(tres_itr, min_r);
+                    nitf_tre<int> nt4("MAXR", false, false);
+                    bool row_good_max = nt4.get(tres_itr, max_r);
+                    nitf_tre<int> nt5("MINC", false, false);
+                    bool col_good_min = nt5.get(tres_itr, min_c);
+                    nitf_tre<int> nt6("MAXC", false, false);
+                    bool col_good_max = nt6.get(tres_itr, max_c);
+                    bool img_corners_valid = row_good_min && row_good_max && col_good_min && col_good_max;
+                    if (!img_corners_valid) {
+                        std::cout << "Extracting image corners failed" << std::endl;
+                    }
+                    else {
+                        rsm_meta_[image_subheader_index].image_corners_valid = img_corners_valid;
+                        rsm_meta_[image_subheader_index].min_image_corner_.set(min_c, min_r);
+                        rsm_meta_[image_subheader_index].max_image_corner_.set(max_c, max_r);
+                    }
+                }
             }
-            // boundary metadata
-            //  Obtain elevation bounds from the ground domain vertices
-            //  The primary purpose of the RSM ground domain is to define
-            //  the region of validity of the RSM TRE Set representation in ground space.
-            double min_lon = std::numeric_limits<double>::max(), min_lat = min_lon;
-            double max_lon = -min_lon, max_lat = -min_lat;
-            double min_z, max_z;
-            nitf_tre<double> nt1("V1Z", false, false);
-            bool min_good = nt1.get(tres_itr, min_z);
-            nitf_tre<double> nt2("V8Z", false, false);
-            bool max_good = nt2.get(tres_itr, max_z);
-            std::vector<std::pair<double, double> > coords;
-            
-            if (rsm_meta_[image_subheader_index].xy_corners_valid) {
-              rsm_meta_[image_subheader_index].bounding_box_.set_min_z(min_z);
-              rsm_meta_[image_subheader_index].bounding_box_.set_max_z(max_z);
-              rsm_meta_[image_subheader_index].xyz_corners_valid = true;
+            if (!aux_good) {
+                std::cout << "Auxillary data access failed for subheader " << image_subheader_index << std::endl;
+                return false;
             }
-            double az, el;
-            nitf_tre<double> illa("IA0", false, false);
-            bool az_good = illa.get(tres_itr, az);
-            rsm_meta_[image_subheader_index].sun_azimuth_radians_ = az;
-            rsm_meta_[image_subheader_index].sun_azimuth_valid = az_good;
-            nitf_tre<double> ille("IE0", false, false);
-            bool el_good = ille.get(tres_itr, el);
-            rsm_meta_[image_subheader_index].sun_elevation_radians_ = el;
-            rsm_meta_[image_subheader_index].sun_elevation_valid = el_good;
+            if (rsm_meta_[image_subheader_index].image_corners_valid) {
+                rsel.minc_ = rsm_meta_[image_subheader_index].min_image_corner_.x();
+                rsel.minr_ = rsm_meta_[image_subheader_index].min_image_corner_.y();
+                rsel.maxc_ = rsm_meta_[image_subheader_index].max_image_corner_.x();
+                rsel.maxr_ = rsm_meta_[image_subheader_index].max_image_corner_.y();
+            }
 
-            // determine corners of image 
-            int min_r, max_r, min_c, max_c;
-            nitf_tre<int> nt3("MINR", false, false);
-            bool row_good_min = nt3.get(tres_itr, min_r);
-            nitf_tre<int> nt4("MAXR", false, false);
-            bool row_good_max = nt4.get(tres_itr, max_r);
-            nitf_tre<int> nt5("MINC", false, false);
-            bool col_good_min = nt5.get(tres_itr, min_c);
-            nitf_tre<int> nt6("MAXC", false, false);
-            bool col_good_max = nt6.get(tres_itr, max_c);
-            bool img_corners_valid = row_good_min && row_good_max && col_good_min && col_good_max;
-            if (!img_corners_valid) {
-              std::cout << "Extracting image corners failed" << std::endl;
-            }
-            else {
-              rsm_meta_[image_subheader_index].image_corners_valid = img_corners_valid;
-              rsm_meta_[image_subheader_index].min_image_corner_.set(min_c, min_r);
-              rsm_meta_[image_subheader_index].max_image_corner_.set(max_c, max_r);
-            }
-          }
         }
-    if (!aux_good) {
-        std::cout << "Auxillary data access failed for subheader " << image_subheader_index << std::endl;
-        return false;
-    }
-    if (rsm_meta_[image_subheader_index].image_corners_valid) {
-        RSM_cams_[image_subheader_index].reg_sel().minc_ = rsm_meta_[image_subheader_index].min_image_corner_.x();
-        RSM_cams_[image_subheader_index].reg_sel().minr_ = rsm_meta_[image_subheader_index].min_image_corner_.y();
-        RSM_cams_[image_subheader_index].reg_sel().maxc_ = rsm_meta_[image_subheader_index].max_image_corner_.x();
-        RSM_cams_[image_subheader_index].reg_sel().maxc_ = rsm_meta_[image_subheader_index].min_image_corner_.y();
-    }
-    
-  }
+        else {
+            std::cout << "RSMIDA not present - shouldn't happen at this point" << std::endl;
+            return false;
+        }
+        
+        if (RSMPIA) {
+            // scan for RSMPIA in case of multiple polynomial camera regions
+            for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr) {
+                std::string type = (*tres_itr)->name();
+                if (type == "RSMPIA") {
+#if 0
+                    nitf_tre<double> nt0("R0");
+                    good = nt0.get(tres_itr, rsel.row_coefs_[0]);
+                    if (!good) return false;
+                    nitf_tre<double> nt1("RX");
+                    good = nt1.get(tres_itr, rsel.row_coefs_[1]);
+                    if (!good) return false;
+                    nitf_tre<double> nt2("RY");
+                    good = nt2.get(tres_itr, rsel.row_coefs_[2]);
+                    if (!good) return false;
+                    nitf_tre<double> nt3("RZ");
+                    good = nt3.get(tres_itr, rsel.row_coefs_[3]);
+                    if (!good) return false;
+                    nitf_tre<double> nt4("RXX");
+                    good = nt4.get(tres_itr, rsel.row_coefs_[4]);
+                    if (!good) return false;
+                    nitf_tre<double> nt5("RXY");
+                    good = nt5.get(tres_itr, rsel.row_coefs_[5]);
+                    if (!good) return false;
+                    nitf_tre<double> nt6("RXZ");
+                    good = nt6.get(tres_itr, rsel.row_coefs_[6]);
+                    if (!good) return false;
+                    nitf_tre<double> nt7("RYY");
+                    good = nt7.get(tres_itr, rsel.row_coefs_[7]);
+                    if (!good) return false;
+                    nitf_tre<double> nt8("RYZ");
+                    good = nt8.get(tres_itr, rsel.row_coefs_[8]);
+                    if (!good) return false;
+                    nitf_tre<double> nt9("RZZ");
+                    good = nt9.get(tres_itr, rsel.row_coefs_[9]);
+                    nitf_tre<double> nt10("C0");
+                    good = nt10.get(tres_itr, rsel.col_coefs_[0]);
+                    if (!good) return false;
+                    nitf_tre<double> nt11("CX");
+                    good = nt11.get(tres_itr, rsel.col_coefs_[1]);
+                    if (!good) return false;
+                    nitf_tre<double> nt12("CY");
+                    good = nt12.get(tres_itr, rsel.col_coefs_[2]);
+                    if (!good) return false;
+                    nitf_tre<double> nt13("CZ");
+                    good = nt13.get(tres_itr, rsel.col_coefs_[3]);
+                    if (!good) return false;
+                    nitf_tre<double> nt14("CXX");
+                    good = nt14.get(tres_itr, rsel.col_coefs_[4]);
+                    if (!good) return false;
+                    nitf_tre<double> nt15("CXY");
+                    good = nt15.get(tres_itr, rsel.col_coefs_[5]);
+                    if (!good) return false;
+                    nitf_tre<double> nt16("CXZ");
+                    good = nt16.get(tres_itr, rsel.col_coefs_[6]);
+                    if (!good) return false;
+                    nitf_tre<double> nt17("CYY");
+                    good = nt17.get(tres_itr, rsel.col_coefs_[7]);
+                    if (!good) return false;
+                    nitf_tre<double> nt18("CYZ");
+                    good = nt18.get(tres_itr, rsel.col_coefs_[8]);
+                    if (!good) return false;
+                    nitf_tre<double> nt19("CZZ");
+                    good = nt19.get(tres_itr, rsel.col_coefs_[9]);
+                    if (!good) return false;
+                    nitf_tre<double> nt20("RNIS");
+                    std::string s;  //convert string to int only
+                    int v;
+                    good = nt20.get(tres_itr, s); ASC_int(s, v); rsel.rnis_ = v
+                        if (!good) return false;
+                    nitf_tre<double> nt21("CNIS");
+                    good = nt21.get(tres_itr, s); ASC_int(s, v); rsel.cnis_ = v;
+                    if (!good) return false;
+                    nitf_tre<double> nt22("TNIS");
+                    good = nt22.get(tres_itr, s); ASC_int(s, v); rsel.tnis_ = v;
+                    if (!good) return false;
+                    nitf_tre<double> nt23("RSSIZ");
+                    good = nt23.get(tres_itr, rsel.rssiz_);
+                    if (!good) return false;
+                    nitf_tre<double> nt24("CSSIZ");
+                    good = nt24.get(tres_itr, rsel.cssiz_);
+                    if (!good) return false;
+#else // had to read a string value so convert all string to val
+                    std::string s;
+                    nitf_tre<std::string> nt0("R0");
+                    good = nt0.get(tres_itr, s); ASC_double(s, rsel.row_coefs_[0]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt1("RX");
+                    good = nt1.get(tres_itr, s); ASC_double(s, rsel.row_coefs_[1]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt2("RY");
+                    good = nt2.get(tres_itr, s); ASC_double(s, rsel.row_coefs_[2]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt3("RZ");
+                    good = nt3.get(tres_itr, s); ASC_double(s, rsel.row_coefs_[3]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt4("RXX");
+                    good = nt4.get(tres_itr, s); ASC_double(s, rsel.row_coefs_[4]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt5("RXY");
+                    good = nt5.get(tres_itr, s); ASC_double(s, rsel.row_coefs_[5]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt6("RXZ");
+                    good = nt6.get(tres_itr, s); ASC_double(s, rsel.row_coefs_[6]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt7("RYY");
+                    good = nt7.get(tres_itr, s); ASC_double(s, rsel.row_coefs_[7]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt8("RYZ");
+                    good = nt8.get(tres_itr, s);  ASC_double(s, rsel.row_coefs_[8]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt9("RZZ");
+                    good = nt9.get(tres_itr, s); ASC_double(s, rsel.row_coefs_[9]);
+                    nitf_tre<std::string> nt10("C0");
+                    good = nt10.get(tres_itr, s); ASC_double(s, rsel.col_coefs_[0]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt11("CX");
+                    good = nt11.get(tres_itr, s); ASC_double(s, rsel.col_coefs_[1]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt12("CY");
+                    good = nt12.get(tres_itr, s); ASC_double(s, rsel.col_coefs_[2]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt13("CZ");
+                    good = nt13.get(tres_itr, s); ASC_double(s, rsel.col_coefs_[3]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt14("CXX");
+                    good = nt14.get(tres_itr, s); ASC_double(s, rsel.col_coefs_[4]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt15("CXY");
+                    good = nt15.get(tres_itr, s); ASC_double(s, rsel.col_coefs_[5]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt16("CXZ");
+                    good = nt16.get(tres_itr, s); ASC_double(s, rsel.col_coefs_[6]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt17("CYY");
+                    good = nt17.get(tres_itr, s); ASC_double(s, rsel.col_coefs_[7]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt18("CYZ");
+                    good = nt18.get(tres_itr, s); ASC_double(s, rsel.col_coefs_[8]);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt19("CZZ");
+                    good = nt19.get(tres_itr, s); ASC_double(s, rsel.col_coefs_[9]);
+                    if (!good) return false;
+                    int v;
+                    nitf_tre<std::string> nt20("RNIS");
+                    good = nt20.get(tres_itr, s); ASC_int(s, v); rsel.rnis_ = v;
+                    if (!good) return false;
+                    nitf_tre<std::string> nt21("CNIS");
+                    good = nt21.get(tres_itr, s); ASC_int(s, v); rsel.cnis_ = v;
+                    if (!good) return false;
+                    nitf_tre<std::string> nt22("TNIS");
+                    good = nt22.get(tres_itr, s); ASC_int(s, v); rsel.tnis_ = v;
+                    if (!good) return false;
+                    nitf_tre<std::string> nt23("RSSIZ");
+                    good = nt23.get(tres_itr, s); ASC_double(s, rsel.rssiz_);
+                    if (!good) return false;
+                    nitf_tre<std::string> nt24("CSSIZ");
+                    good = nt24.get(tres_itr, s); ASC_double(s, rsel.cssiz_);
+                    if (!good) return false;
+#endif
+                }//RSMPIA
+            }//tres_itr
+            
+        }else {//! has RSMPIA
+            //only one set of polynomials
+            // RSMPCA should only occur once with row and col == 1
+            manditory_PCA_row_ = 1; manditory_PCA_col_ = 1;
+            
+        }
+        RSM_cams_[image_subheader_index] = vpgl_RSM_camera<double>(rsel);
+        if (RSMPCA) {
+            for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr)
+            {
+                std::string type = (*tres_itr)->name();
+                if (type == "RSMPCA") {
+                    std::vector<std::vector<int> > powers;
+                    std::vector<std::vector<double> > coeffs;
+                    std::vector<vpgl_scale_offset<double> > scale_offsets;
+                    bool aux_good = false;
+                    double x_scale, x_off, y_scale, y_off, z_scale, z_off;
+                    double u_scale, u_off, v_scale, v_off;
+                    int x_pow, y_pow, z_pow, rsn, csn;
 
+
+                    nitf_tre<int> ntr("RSN");
+                    good = ntr.get(tres_itr, rsn);
+                    if (!good) return false;
+                    if (manditory_PCA_row_ == 1 && rsn != 1)
+                        return false;
+                    nitf_tre<int> ntc("CSN");
+                    good = ntc.get(tres_itr, csn);
+                    if (!good) return false;
+                    if (manditory_PCA_col_ == 1 && csn != 1)
+                        return false;
+
+                    vpgl_polycam<double> pcam(rsn, csn);
+
+                    nitf_tre<double> nt0("RNRMO");
+                    good = nt0.get(tres_itr, v_off);
+                    if (!good) return false;
+
+                    nitf_tre<double> nt1("CNRMO");
+                    good = nt1.get(tres_itr, u_off);
+                    if (!good) return false;
+
+                    nitf_tre<double> nt2("XNRMO");
+                    good = nt2.get(tres_itr, x_off);
+                    if (!good) return false;
+
+                    nitf_tre<double> nt3("YNRMO");
+                    good = nt3.get(tres_itr, y_off);
+                    if (!good) return false;
+
+                    nitf_tre<double> nt4("ZNRMO");
+                    good = nt4.get(tres_itr, z_off);
+                    if (!good) return false;
+
+                    nitf_tre<double> nt5("RNRMSF");
+                    good = nt5.get(tres_itr, v_scale);
+                    if (!good) return false;
+
+                    nitf_tre<double> nt6("CNRMSF");
+                    good = nt6.get(tres_itr, u_scale);
+                    if (!good) return false;
+
+                    nitf_tre<double> nt7("XNRMSF");
+                    good = nt7.get(tres_itr, x_scale);
+                    if (!good) return false;
+
+                    nitf_tre<double> nt8("YNRMSF");
+                    good = nt8.get(tres_itr, y_scale);
+                    if (!good) return false;
+
+                    nitf_tre<double> nt9("ZNRMSF");
+                    good = nt9.get(tres_itr, z_scale);
+                    if (!good) return false;
+
+                    scale_offsets.emplace_back(x_scale, x_off);
+                    scale_offsets.emplace_back(y_scale, y_off);
+                    scale_offsets.emplace_back(z_scale, z_off);
+                    scale_offsets.emplace_back(u_scale, u_off);
+                    scale_offsets.emplace_back(v_scale, v_off);
+
+                    int rn_nterms;
+                    std::vector<int> rnpows;
+                    nitf_tre<int> nt10("RNPWRX");
+                    good = nt10.get(tres_itr, x_pow);
+                    if (!good) return false;
+
+                    nitf_tre<int> nt11("RNPWRY");
+                    good = nt11.get(tres_itr, y_pow);
+                    if (!good) return false;
+
+                    nitf_tre<int> nt12("RNPWRZ");
+                    good = nt12.get(tres_itr, z_pow);
+                    if (!good) return false;
+
+                    nitf_tre<int> nt13("RNTRMS");
+                    good = nt13.get(tres_itr, rn_nterms);
+                    if (!good) return false;
+
+                    rnpows.push_back(x_pow); rnpows.push_back(y_pow); rnpows.push_back(z_pow);
+
+                    std::vector<double> rnpcf;
+                    nitf_tre<double> nt14("RNPCF");
+                    good = nt14.get(tres_itr, rnpcf);
+                    if (!good) return false;
+
+                    int rd_nterms;
+                    std::vector<int> rdpows;
+                    nitf_tre<int> nt15("RDPWRX");
+                    good = nt15.get(tres_itr, x_pow);
+                    if (!good) return false;
+
+                    nitf_tre<int> nt16("RDPWRY");
+                    good = nt16.get(tres_itr, y_pow);
+                    if (!good) return false;
+
+                    nitf_tre<int> nt17("RDPWRZ");
+                    good = nt17.get(tres_itr, z_pow);
+                    if (!good) return false;
+
+                    nitf_tre<int> nt18("RDTRMS");
+                    good = nt18.get(tres_itr, rd_nterms);
+                    if (!good) return false;
+
+                    rdpows.push_back(x_pow); rdpows.push_back(y_pow); rdpows.push_back(z_pow);
+
+                    std::vector<double> rdpcf;
+                    nitf_tre<double> nt19("RDPCF");
+                    good = nt19.get(tres_itr, rdpcf);
+                    if (!good) return false;
+                    int cn_nterms;
+                    std::vector<int> cnpows;
+                    nitf_tre<int> nt20("CNPWRX");
+                    good = nt20.get(tres_itr, x_pow);
+                    if (!good) return false;
+
+                    nitf_tre<int> nt21("CNPWRY");
+                    good = nt21.get(tres_itr, y_pow);
+                    if (!good) return false;
+
+                    nitf_tre<int> nt22("CNPWRZ");
+                    good = nt22.get(tres_itr, z_pow);
+                    if (!good) return false;
+
+                    nitf_tre<int> nt23("CNTRMS");
+                    good = nt23.get(tres_itr, cn_nterms);
+                    if (!good) return false;
+
+                    cnpows.push_back(x_pow); cnpows.push_back(y_pow); cnpows.push_back(z_pow);
+
+                    std::vector<double> cnpcf;
+                    nitf_tre<double> nt24("CNPCF");
+                    good = nt24.get(tres_itr, cnpcf);
+                    if (!good) return false;
+
+                    int cd_nterms;
+                    std::vector<int> cdpows;
+                    nitf_tre<int> nt25("CDPWRX");
+                    good = nt25.get(tres_itr, x_pow);
+                    if (!good) return false;
+
+                    nitf_tre<int> nt26("CDPWRY");
+                    good = nt26.get(tres_itr, y_pow);
+                    if (!good) return false;
+
+                    nitf_tre<int> nt27("CDPWRZ");
+                    good = nt27.get(tres_itr, z_pow);
+                    if (!good) return false;
+
+                    nitf_tre<int> nt28("CDTRMS");
+                    good = nt28.get(tres_itr, cd_nterms);
+                    if (!good) return false;
+
+                    cdpows.push_back(x_pow); cdpows.push_back(y_pow); cdpows.push_back(z_pow);
+
+                    std::vector<double> cdpcf;
+                    nitf_tre<double> nt29("CDPCF");
+                    good = nt29.get(tres_itr, cdpcf);
+                    if (!good) return false;
+
+                    powers.push_back(cnpows); powers.push_back(cdpows);
+                    powers.push_back(rnpows); powers.push_back(rdpows);
+                    coeffs.push_back(cnpcf);  coeffs.push_back(cdpcf);
+                    coeffs.push_back(rnpcf);  coeffs.push_back(rdpcf);
+                    good = (cnpcf.size() == cn_nterms) && (cdpcf.size() == cd_nterms) &&
+                        (rnpcf.size() == rn_nterms) && (rdpcf.size() == rd_nterms);
+                    if (!good) return false;
+
+                    pcam.set_powers(powers);
+                    pcam.set_coefficients(coeffs);
+                    pcam.set_scale_offsets(scale_offsets);
+                    RSM_cams_[image_subheader_index].set_polycam(rsn, csn, pcam);
+                }
+            }
+        }// RSMPCA
+        else {//RSMPCA
+            std::cout << "RSMPCA not found - shouldn't happen at this point" << std::endl;
+            return false;
+        }
+    }// image headers
     return true;
-  }
-  
+}
   
   void vpgl_nitf_RSM_camera_extractor::print_file_header_summary(){
     size_t n = nitf_status_.size();

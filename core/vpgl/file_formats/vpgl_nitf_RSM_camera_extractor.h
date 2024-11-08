@@ -104,7 +104,12 @@ class vpgl_nitf_RSM_camera_extractor
 
   //: read NITF2.1 tagged record extensions (tres) from header
   // and output a text file of tres present in header
-  bool scan_for_RSM_data(std::ostream& tre_str,  bool verbose);
+  bool scan_for_RSM_data(bool verbose);
+  // text stream of records found
+  std::stringstream tre_stream() {
+      std::stringstream s(ss_.str());
+      return s;
+  }
 
   //: set params for image subheaders that have RSM data
   bool set_RSM_camera_params();
@@ -146,7 +151,14 @@ class vpgl_nitf_RSM_camera_extractor
 
  private:
   // internal functions
-
+  void ASC_int(std::string str, int& ival){
+    std::stringstream ss(str);
+    ss >> ival;
+  }
+  void ASC_double(std::string str, double& dval){
+    std::stringstream ss(str);
+    ss >> dval;
+  }
   // parse the image header tres for required information
   bool determine_header_status(vil_nitf2_image_subheader* header_ptr, size_t header_idx,
       bool& header_has_tres, bool& header_has_RSM, int& ixofl);
@@ -183,10 +195,15 @@ class vpgl_nitf_RSM_camera_extractor
   // RSM cameras associated with potentially multiple image subheaders
   std::map<size_t, vpgl_RSM_camera<double> > RSM_cams_;
 
-  // Flags indicating if various TRE groups are present
+  // Flags indicating if various required TRE groups are present
+  bool RSMIDA = false, RSMPIA = false, RSMPCA = false, RSMECA = false, RSMECB = false;
+
   // presence is checked by attemping to read the EDITION field (40 bytes)
-  bool RSMPCA = false, RSMPIA = false, RSMGIA = false, RSMECA = false, RSMECB = false;
-  bool RSMDCA = false, RSMDCB = false; bool RSMAPA = false, RSMAPB = false, RSMGGA = false;
+  bool  RSMGIA = false , RSMDCA = false, RSMDCB = false; 
+  bool RSMAPA = false, RSMAPB = false, RSMGGA = false;
+  int manditory_PCA_row_ = -1; 
+  int manditory_PCA_col_ = -1;
+  std::stringstream ss_;
 };
 
 #endif // vpgl_nitf_RSM_camera_extractor_h_
