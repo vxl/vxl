@@ -156,9 +156,11 @@ vpgl_RSM_camera<double> construct_replacement_sensor_model(){
   scale_offsets.push_back(sox);  scale_offsets.push_back(soy);
   scale_offsets.push_back(soz);  scale_offsets.push_back(sou);
   scale_offsets.push_back(sov);
-  // needs to be updated due to mulitple region RSM
-  //vpgl_RSM_camera<double> RSM_cam(powers, coeffs, scale_offsets);
-  return vpgl_RSM_camera<double>();
+  vpgl_polycam<double> pcam(1, 1, powers, coeffs, scale_offsets);
+  vpgl_region_selector rsel;// rnis ==1 , cnis == 1
+  vpgl_RSM_camera<double> RSM_cam(rsel); // intializes polycam storage
+  RSM_cam.set_polycam(1, 1, pcam);
+  return RSM_cam;
 }
 void
 test_rational_camera_approx_perspective()
