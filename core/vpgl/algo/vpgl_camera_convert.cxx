@@ -1605,4 +1605,33 @@ bool convert( vpgl_RSM_camera<double> const& camera_in,
 }
 #endif // HAS_GEOTIFF
 
+bool vpgl_rational_camera_convert::convert(vpgl_RSM_camera<double> const& camera_in,
+                                           vgl_box_3d<double> const& region_of_interest,
+                                           vpgl_rational_camera<double>& camera_out,
+                                           unsigned int num_points){
+  // sample geodetic coordinates
+  vnl_random rng;
+  double min_x = region_of_interest.min_x(); //longitude degrees
+  double min_y = region_of_interest.min_y(); //latitude degrees
+  double min_z = region_of_interest.min_z(); //elevation meters
+  double max_x = region_of_interest.max_x();
+  double max_y = region_of_interest.max_y();
+  double max_z = region_of_interest.max_z();
+
+  std::vector<vgl_point_2d<double>> image_pts;
+  std::vector<vgl_point_3d<double>> world_pts;
+  for (unsigned i = 0; i < num_points; ++i)
+  {
+    double x = rng.drand64(min_x, max_x); // sample in local coords
+    double y = rng.drand64(min_y, max_y);
+    double z = rng.drand64(min_z, max_z);
+    world_pts.emplace_back(x, y, z);
+    double X = x/vnl_math::deg_per_rad, Y = y/vnl_math::deg_per_rad;
+    double u, v;
+    camera_in.project(X, Y, z, u, v); 
+    image_pts.emplace_back(u, v);
+  }
+  return vpgl_rational_camera_compute::compute(image_pts, world_pts, camera_out);
+}
+
 #endif // vpgl_camera_convert_cxx_

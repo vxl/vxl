@@ -4,6 +4,7 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 #include "vnl/vnl_fwd.h"
+#include "vnl/vnl_random.h"
 #include "vnl/vnl_matrix_fixed.h"
 #include "vgl/vgl_homg_point_2d.h"
 #include "vgl/vgl_point_3d.h"
@@ -157,7 +158,7 @@ vpgl_RSM_camera<double> construct_replacement_sensor_model(){
   scale_offsets.push_back(soz);  scale_offsets.push_back(sou);
   scale_offsets.push_back(sov);
   vpgl_polycam<double> pcam(1, 1, powers, coeffs, scale_offsets);
-  vpgl_region_selector rsel;// rnis ==1 , cnis == 1
+  vpgl_region_selector<double> rsel;// rnis ==1 , cnis == 1
   vpgl_RSM_camera<double> RSM_cam(rsel); // intializes polycam storage
   RSM_cam.set_polycam(1, 1, pcam);
   return RSM_cam;
@@ -388,6 +389,50 @@ test_generic_camera_convert()
     TEST("affine cam to generic", false, true);
   }
 }
+void
+test_rational_camera_convert()
+{
+  //==================================================//
+  // test construction from a ReplacementSensorModel camera   //
+  //==================================================//
+  vpgl_RSM_camera<double> rsm_cam = construct_replacement_sensor_model();
+  vgl_point_3d<double> min_pt(44.254166,32.77861, -100);
+  vgl_point_3d<double> max_pt(44.41305, 33.6911, +100);
+  vgl_box_3d<double> box;
+  box.add(min_pt); box.add(max_pt);
+  vpgl_rational_camera<double> rcam;
+  vpgl_rational_camera_convert::convert(rsm_cam, box, rcam);
+  vnl_random rng;
+  double min_x = box.min_x(); //longitude degrees
+  double min_y = box.min_y(); //latitude degrees
+  double min_z = box.min_z(); //elevation meters
+  double max_x = box.max_x();
+  double max_y = box.max_y();
+  double max_z = box.max_z();
+  // test n points
+  unsigned n = 100;
+  std::vector<vgl_point_2d<double>> image_pts;
+  std::vector<vgl_point_3d<double>> world_pts;
+  double max_error = 0.0;
+  for (unsigned i = 0; i < n; ++i)
+    {
+      double x = rng.drand64(min_x, max_x); // sample in local coords
+      double y = rng.drand64(min_y, max_y);
+      double z = rng.drand64(min_z, max_z);
+      // convert to radians
+      double X = x/vnl_math::deg_per_rad, Y = y/vnl_math::deg_per_rad;
+      
+      double uRSM, vRSM, uRPC, vRPC;
+      rsm_cam.project(X, Y, z, uRSM, vRSM); 
+      rcam.project(x, y, z, uRPC, vRPC);
+      double eru = fabs(uRPC-uRSM), erv = fabs(vRPC-vRSM);
+      double er = eru + erv;
+      if (er > max_error)
+          max_error = er;
+    }
+  
+  TEST_NEAR("RSM to rational camera convert", max_error, 0.0, 1.0e-3);
+}
 
 static void
 test_camera_convert()
@@ -397,6 +442,7 @@ test_camera_convert()
   test_replacement_sensor_model_camera_approx_affine();
   std::cout << "=== End test_rational_camera_approx" << std::endl;
   test_generic_camera_convert();
+  test_rational_camera_convert();
 }
 
 TESTMAIN(test_camera_convert);

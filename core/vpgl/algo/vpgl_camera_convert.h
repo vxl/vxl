@@ -179,4 +179,19 @@ class vpgl_affine_camera_convert
   vpgl_affine_camera_convert() = delete;
 };
 
+//:methods for converting to a rational camera (RPC, single set of rational polynomials)
+class vpgl_rational_camera_convert
+{
+ public:
+
+  //: Convert a replacement sensor model camera to a RPC camera
+  static bool convert( vpgl_RSM_camera<double> const& camera_in,
+                       vgl_box_3d<double> const& region_of_interest,
+                       vpgl_rational_camera<double>& camera_out,
+                       unsigned int num_points=10000);
+
+ private:
+  vpgl_rational_camera_convert() = delete;
+};
+
 #endif // vpgl_camera_convert_h_
