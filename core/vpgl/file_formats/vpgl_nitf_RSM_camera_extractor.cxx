@@ -79,7 +79,7 @@ bool vpgl_nitf_RSM_camera_extractor::process_igeolo(size_t image_subheader_index
     double min_z = 0.0, max_z = 1.0;
     vgl_point_3d<double> min_pt(min_lon, min_lat, min_z);
     vgl_point_3d<double> max_pt(max_lon, max_lat, max_z);
-    rsm_meta_[0].bounding_box_ = vgl_box_3d<double>(min_pt, max_pt);
+    rsm_meta_[image_subheader_index].bounding_box_ = vgl_box_3d<double>(min_pt, max_pt);
 
     // footprint in counter-clockwise order from lower left
     vgl_point_2d<double> ll(coords[LL].first, coords[LL].second);
@@ -247,7 +247,7 @@ vpgl_nitf_RSM_camera_extractor::init(vil_nitf2_image* nitf_image, bool verbose)
     
     std::string igeolo;
     if (!hdr->get_property("IGEOLO", igeolo)) {
-      std::cout << "IGEOLO Property failed in vil_nitf2_image_subheader "<< i << "\n";
+      std::cout << "IGEOLO Property not specified in vil_nitf2_image_subheader "<< i << "\n";
     }
     else{
       rsm_meta_[i].igeolo_ = igeolo;
@@ -827,8 +827,12 @@ bool vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           // =======================================
           nitf_tre<std::string> nt("RSMECA", tre_str);
           // =========================================
+          nitf_tre<std::string> nt0("IID", false, false);
+          nt0.get_append(tres_itr, tre_str, v);
+
           nitf_tre<std::string> nt1("EDITION", false, false);
           nt1.get_append(tres_itr, tre_str, v);
+
           nitf_tre<std::string> nt2("TID", false, false);
           nt2.get_append(tres_itr, tre_str, v);
 
@@ -839,20 +843,167 @@ bool vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt4.get_append(tres_itr, tre_str, v);
 
           bool opt = (nt3.value_ != "Y");
-          nitf_tre<std::string> nt5("LOCTYP", opt, false);
+          nitf_tre<int> nt5("NPAR", opt, false);
           nt5.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<std::string> nt6("APTYP", opt, false);
+          nitf_tre<int> nt6("NPARO", opt, false);
           nt6.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<std::string> nt7("NISAP", opt, false);
+          nitf_tre<int> nt7("IGN", opt, false);
           nt7.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<std::string> nt8("NISAPR", opt, false);
+          nitf_tre<std::string> nt8("CVDATE", opt, false);
           nt8.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<std::string> nt9("NISAPC", opt, false);
+          nitf_tre<double> nt9("XUOL", opt, false);
           nt9.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<double> nt10("YUOL", opt, false);
+          nt10.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<double> nt11("ZUOL", opt, false);
+          nt11.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<double> nt12("XUXL", opt, false);
+          nt12.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<double> nt13("XUYL", opt, false);
+          nt13.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<double> nt14("XUZL", opt, false);
+          nt14.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<double> nt15("YUXL", opt, false);
+          nt15.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<double> nt16("YUYL", opt, false);
+          nt16.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<double> nt17("YUZL", opt, false);
+          nt17.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<double> nt18("ZUXL", opt, false);
+          nt18.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<double> nt19("ZUYL", opt, false);
+          nt19.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<double> nt19a("ZUZL", opt, false);
+          nt19a.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt20("IRO", opt, false);
+          nt20.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt21("IRX", opt, false);
+          nt21.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt22("IRY", opt, false);
+          nt22.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt23("IRZ", opt, false);
+          nt23.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt24("IRXX", opt, false);
+          nt24.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt25("IRXY", opt, false);
+          nt25.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt26("IRXZ", opt, false);
+          nt26.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt27("IRYY", opt, false);
+          nt27.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt28("IRYZ", opt, false);
+          nt28.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt29("IRZZ", opt, false);
+          nt29.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt30("ICO", opt, false);
+          nt30.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt31("ICX", opt, false);
+          nt31.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt32("ICY", opt, false);
+          nt32.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt33("ICZ", opt, false);
+          nt33.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt34("ICXX", opt, false);
+          nt34.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt35("ICXY", opt, false);
+          nt35.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt36("ICXZ", opt, false);
+          nt36.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt37("ICYY", opt, false);
+          nt37.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt38("ICYZ", opt, false);
+          nt38.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt39("ICZZ", opt, false);
+          nt39.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt40("GXO", opt, false);
+          nt40.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt41("GYO", opt, false);
+          nt41.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt42("GZO", opt, false);
+          nt42.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt43("GXR", opt, false);
+          nt43.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt44("GYR", opt, false);
+          nt44.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt45("GZR", opt, false);
+          nt45.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt46("GS", opt, false);
+          nt46.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt47("GXX", opt, false);
+          nt47.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt48("GXY", opt, false);
+          nt48.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt49("GXZ", opt, false);
+          nt49.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt50("GYX", opt, false);
+          nt50.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt51("GYY", opt, false);
+          nt51.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt52("GYZ", opt, false);
+          nt52.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt53("GZX", opt, false);
+          nt53.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt54("GZY", opt, false);
+          nt54.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt55("GZZ", opt, false);
+          nt55.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<int> nt56("NUMOPG", opt, false);
+          nt56.get_append(tres_itr, tre_str, v);
+
+          nitf_tre<std::string> nt57("ERRCVG", "vector", opt, false);
+          nt57.get_append(tres_itr, tre_str, v);
 
           RSMECA = true;
         }
@@ -1320,7 +1471,7 @@ bool vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
                     scale_offsets.emplace_back(v_scale, v_off);
 
                     int rn_nterms;
-                    std::vector<int> rnpows;
+                    std::vector<int> rnpows;
                     nitf_tre<int> nt10("RNPWRX");
                     good = nt10.get(tres_itr, x_pow);
                     if (!good) return false;
@@ -1445,6 +1596,7 @@ bool vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
     size_t n = nitf_status_.size();
     if(n==0)
       std::cout << "NITF2.1 File has no image subheaders" << std::endl;
+
     else if(n== 1)
       std::cout <<  "NITF2.1 File has one image subheader" << std::endl;
     else
