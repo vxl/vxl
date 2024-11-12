@@ -293,11 +293,13 @@ vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions * defs
       break;
     }
     case vil_nitf2_classification::V_NITF_21: {
+      std::vector<std::string> coors = {"U","G","N","S","D"};
       (*defs)
         .field("ICORDS",
                "Image Coordinate Representation",
                NITF_ENUM(1,
                          vil_nitf2_enum_values()
+                           .value(" ", "No Coordinate System")
                            .value("U", "UTM expressed in MGRS form")
                            .value("G", "Geographic")
                            .value("N", "UTM/UPS (Northern hemisphere)") // actually means None for Nitf 2.0
@@ -312,7 +314,8 @@ vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions * defs
                NITF_STR_BCSA(60),
                false,
                nullptr,
-               new vil_nitf2_field_specified("ICORDS"));
+               //new vil_nitf2_field_specified("ICORDS") JLM 11/2024
+               new vil_nitf2_field_value_one_of<std::string>("ICORDS",coors));
       break;
     }
     default:
