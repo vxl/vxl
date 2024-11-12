@@ -30,9 +30,6 @@ vil_pyramid_image_view<T>::vil_pyramid_image_view(vil_image_view_base_sptr image
   if (!img)
     return;
 
-  //if (img->nplanes() != 1)
-   // return;
-
   images_.resize(levels);
   scales_.resize(levels);
   unsigned i=image->ni()/2, j=image->nj()/2;
