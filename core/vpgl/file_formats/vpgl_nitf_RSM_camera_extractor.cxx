@@ -851,44 +851,45 @@ bool vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
 
           nitf_tre<int> nt7("IGN", opt, false);
           nt7.get_append(tres_itr, tre_str, v);
+          int n_indp=0; nt.get(tres_itr, n_indp);
 
           nitf_tre<std::string> nt8("CVDATE", opt, false);
           nt8.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<double> nt9("XUOL", opt, false);
+          nitf_tre<std::string> nt9("XUOL", opt, false);
           nt9.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<double> nt10("YUOL", opt, false);
+          nitf_tre<std::string> nt10("YUOL", opt, false);
           nt10.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<double> nt11("ZUOL", opt, false);
+          nitf_tre<std::string> nt11("ZUOL", opt, false);
           nt11.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<double> nt12("XUXL", opt, false);
+          nitf_tre<std::string> nt12("XUXL", opt, false);
           nt12.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<double> nt13("XUYL", opt, false);
+          nitf_tre<std::string> nt13("XUYL", opt, false);
           nt13.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<double> nt14("XUZL", opt, false);
+          nitf_tre<std::string> nt14("XUZL", opt, false);
           nt14.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<double> nt15("YUXL", opt, false);
+          nitf_tre<std::string> nt15("YUXL", opt, false);
           nt15.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<double> nt16("YUYL", opt, false);
+          nitf_tre<std::string> nt16("YUYL", opt, false);
           nt16.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<double> nt17("YUZL", opt, false);
+          nitf_tre<std::string> nt17("YUZL", opt, false);
           nt17.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<double> nt18("ZUXL", opt, false);
+          nitf_tre<std::string> nt18("ZUXL", opt, false);
           nt18.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<double> nt19("ZUYL", opt, false);
+          nitf_tre<std::string> nt19("ZUYL", opt, false);
           nt19.get_append(tres_itr, tre_str, v);
 
-          nitf_tre<double> nt19a("ZUZL", opt, false);
+          nitf_tre<std::string> nt19a("ZUZL", opt, false);
           nt19a.get_append(tres_itr, tre_str, v);
 
           nitf_tre<std::string> nt20("IRO", opt, false);
@@ -999,12 +1000,13 @@ bool vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nitf_tre<std::string> nt55("GZZ", opt, false);
           nt55.get_append(tres_itr, tre_str, v);
 
+          for (size_t i = 0; i < n_indp; ++i) {
           nitf_tre<int> nt56("NUMOPG", opt, false);
           nt56.get_append(tres_itr, tre_str, v);
 
           nitf_tre<std::string> nt57("ERRCVG", "vector", opt, false);
           nt57.get_append(tres_itr, tre_str, v);
-
+          }
           RSMECA = true;
         }
         
@@ -1228,12 +1230,12 @@ bool vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
         }
         
         if (RSMPIA) {
-            // scan for RSMPIA in case of multiple polynomial camera regions
-            for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr) {
-                std::string type = (*tres_itr)->name();
-                if (type == "RSMPIA") {
+          // scan for RSMPIA in case of multiple polynomial camera regions
+          for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr) {
+            std::string type = (*tres_itr)->name();
+            if (type == "RSMPIA") {
 #if 1
-                    nitf_tre<double> nt0("R0");
+              nitf_tre<double> nt0("R0");
                     good = nt0.get(tres_itr, rsel.row_coefs_[0]);
                     if (!good) return false;
                     nitf_tre<double> nt1("RX");
@@ -1400,236 +1402,497 @@ bool vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
         if (RSMPCA) {
             for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr)
             {
-                std::string type = (*tres_itr)->name();
-                if (type == "RSMPCA") {
-                    std::vector<std::vector<int> > powers;
-                    std::vector<std::vector<double> > coeffs;
-                    std::vector<vpgl_scale_offset<double> > scale_offsets;
-                    bool aux_good = false;
-                    double x_scale, x_off, y_scale, y_off, z_scale, z_off;
-                    double u_scale, u_off, v_scale, v_off;
-                    int x_pow, y_pow, z_pow, rsn, csn;
+              std::string type = (*tres_itr)->name();
+              if (type == "RSMPCA") {
+                std::vector<std::vector<int> > powers;
+                std::vector<std::vector<double> > coeffs;
+                std::vector<vpgl_scale_offset<double> > scale_offsets;
+                bool aux_good = false;
+                double x_scale, x_off, y_scale, y_off, z_scale, z_off;
+                double u_scale, u_off, v_scale, v_off;
+                int x_pow, y_pow, z_pow, rsn, csn;
+                
+                
+                nitf_tre<int> ntr("RSN");
+                good = ntr.get(tres_itr, rsn);
+                if (!good) return false;
+                if (manditory_PCA_row_ == 1 && rsn != 1)
+                  return false;
+                nitf_tre<int> ntc("CSN");
+                good = ntc.get(tres_itr, csn);
+                if (!good) return false;
+                if (manditory_PCA_col_ == 1 && csn != 1)
+                  return false;
+                
+                vpgl_polycam<double> pcam(rsn, csn);
+                
+                nitf_tre<double> nt0("RNRMO");
+                good = nt0.get(tres_itr, v_off);
+                if (!good) return false;
+                
+                nitf_tre<double> nt1("CNRMO");
+                good = nt1.get(tres_itr, u_off);
+                if (!good) return false;
+                
+                nitf_tre<double> nt2("XNRMO");
+                good = nt2.get(tres_itr, x_off);
+                if (!good) return false;
+                
+                nitf_tre<double> nt3("YNRMO");
+                good = nt3.get(tres_itr, y_off);
+                if (!good) return false;
+                
+                nitf_tre<double> nt4("ZNRMO");
+                good = nt4.get(tres_itr, z_off);
+                if (!good) return false;
+                
+                nitf_tre<double> nt5("RNRMSF");
+                good = nt5.get(tres_itr, v_scale);
+                if (!good) return false;
+                
+                nitf_tre<double> nt6("CNRMSF");
+                good = nt6.get(tres_itr, u_scale);
+                if (!good) return false;
+                
+                nitf_tre<double> nt7("XNRMSF");
+                good = nt7.get(tres_itr, x_scale);
+                if (!good) return false;
+                
+                nitf_tre<double> nt8("YNRMSF");
+                good = nt8.get(tres_itr, y_scale);
+                if (!good) return false;
+                
+                nitf_tre<double> nt9("ZNRMSF");
+                good = nt9.get(tres_itr, z_scale);
+                if (!good) return false;
+                
+                scale_offsets.emplace_back(x_scale, x_off);
+                scale_offsets.emplace_back(y_scale, y_off);
+                scale_offsets.emplace_back(z_scale, z_off);
+                scale_offsets.emplace_back(u_scale, u_off);
+                scale_offsets.emplace_back(v_scale, v_off);
+                
+                int rn_nterms;
+                std::vector<int> rnpows;
 
-
-                    nitf_tre<int> ntr("RSN");
-                    good = ntr.get(tres_itr, rsn);
-                    if (!good) return false;
-                    if (manditory_PCA_row_ == 1 && rsn != 1)
-                        return false;
-                    nitf_tre<int> ntc("CSN");
-                    good = ntc.get(tres_itr, csn);
-                    if (!good) return false;
-                    if (manditory_PCA_col_ == 1 && csn != 1)
-                        return false;
-
-                    vpgl_polycam<double> pcam(rsn, csn);
-
-                    nitf_tre<double> nt0("RNRMO");
-                    good = nt0.get(tres_itr, v_off);
-                    if (!good) return false;
-
-                    nitf_tre<double> nt1("CNRMO");
-                    good = nt1.get(tres_itr, u_off);
-                    if (!good) return false;
-
-                    nitf_tre<double> nt2("XNRMO");
-                    good = nt2.get(tres_itr, x_off);
-                    if (!good) return false;
-
-                    nitf_tre<double> nt3("YNRMO");
-                    good = nt3.get(tres_itr, y_off);
-                    if (!good) return false;
-
-                    nitf_tre<double> nt4("ZNRMO");
-                    good = nt4.get(tres_itr, z_off);
-                    if (!good) return false;
-
-                    nitf_tre<double> nt5("RNRMSF");
-                    good = nt5.get(tres_itr, v_scale);
-                    if (!good) return false;
-
-                    nitf_tre<double> nt6("CNRMSF");
-                    good = nt6.get(tres_itr, u_scale);
-                    if (!good) return false;
-
-                    nitf_tre<double> nt7("XNRMSF");
-                    good = nt7.get(tres_itr, x_scale);
-                    if (!good) return false;
-
-                    nitf_tre<double> nt8("YNRMSF");
-                    good = nt8.get(tres_itr, y_scale);
-                    if (!good) return false;
-
-                    nitf_tre<double> nt9("ZNRMSF");
-                    good = nt9.get(tres_itr, z_scale);
-                    if (!good) return false;
-
-                    scale_offsets.emplace_back(x_scale, x_off);
-                    scale_offsets.emplace_back(y_scale, y_off);
-                    scale_offsets.emplace_back(z_scale, z_off);
-                    scale_offsets.emplace_back(u_scale, u_off);
-                    scale_offsets.emplace_back(v_scale, v_off);
-
-                    int rn_nterms;
-                    std::vector<int> rnpows;
-                    nitf_tre<int> nt10("RNPWRX");
-                    good = nt10.get(tres_itr, x_pow);
-                    if (!good) return false;
-
-                    nitf_tre<int> nt11("RNPWRY");
-                    good = nt11.get(tres_itr, y_pow);
-                    if (!good) return false;
-
-                    nitf_tre<int> nt12("RNPWRZ");
-                    good = nt12.get(tres_itr, z_pow);
-                    if (!good) return false;
-
-                    nitf_tre<int> nt13("RNTRMS");
-                    good = nt13.get(tres_itr, rn_nterms);
-                    if (!good) return false;
-
-                    rnpows.push_back(x_pow); rnpows.push_back(y_pow); rnpows.push_back(z_pow);
-
-                    std::vector<double> rnpcf;
-                    nitf_tre<double> nt14("RNPCF");
-                    good = nt14.get(tres_itr, rnpcf);
-                    if (!good) return false;
-
-                    int rd_nterms;
-                    std::vector<int> rdpows;
-                    nitf_tre<int> nt15("RDPWRX");
-                    good = nt15.get(tres_itr, x_pow);
-                    if (!good) return false;
-
-                    nitf_tre<int> nt16("RDPWRY");
-                    good = nt16.get(tres_itr, y_pow);
-                    if (!good) return false;
-
-                    nitf_tre<int> nt17("RDPWRZ");
-                    good = nt17.get(tres_itr, z_pow);
-                    if (!good) return false;
-
-                    nitf_tre<int> nt18("RDTRMS");
-                    good = nt18.get(tres_itr, rd_nterms);
-                    if (!good) return false;
-
-                    rdpows.push_back(x_pow); rdpows.push_back(y_pow); rdpows.push_back(z_pow);
-
-                    std::vector<double> rdpcf;
-                    nitf_tre<double> nt19("RDPCF");
-                    good = nt19.get(tres_itr, rdpcf);
-                    if (!good) return false;
-                    int cn_nterms;
-                    std::vector<int> cnpows;
-                    nitf_tre<int> nt20("CNPWRX");
-                    good = nt20.get(tres_itr, x_pow);
-                    if (!good) return false;
-
-                    nitf_tre<int> nt21("CNPWRY");
-                    good = nt21.get(tres_itr, y_pow);
-                    if (!good) return false;
-
-                    nitf_tre<int> nt22("CNPWRZ");
-                    good = nt22.get(tres_itr, z_pow);
-                    if (!good) return false;
-
-                    nitf_tre<int> nt23("CNTRMS");
-                    good = nt23.get(tres_itr, cn_nterms);
-                    if (!good) return false;
-
-                    cnpows.push_back(x_pow); cnpows.push_back(y_pow); cnpows.push_back(z_pow);
-
-                    std::vector<double> cnpcf;
-                    nitf_tre<double> nt24("CNPCF");
-                    good = nt24.get(tres_itr, cnpcf);
-                    if (!good) return false;
-
-                    int cd_nterms;
-                    std::vector<int> cdpows;
-                    nitf_tre<int> nt25("CDPWRX");
-                    good = nt25.get(tres_itr, x_pow);
-                    if (!good) return false;
-
-                    nitf_tre<int> nt26("CDPWRY");
-                    good = nt26.get(tres_itr, y_pow);
-                    if (!good) return false;
-
-                    nitf_tre<int> nt27("CDPWRZ");
-                    good = nt27.get(tres_itr, z_pow);
-                    if (!good) return false;
-
-                    nitf_tre<int> nt28("CDTRMS");
-                    good = nt28.get(tres_itr, cd_nterms);
-                    if (!good) return false;
-
-                    cdpows.push_back(x_pow); cdpows.push_back(y_pow); cdpows.push_back(z_pow);
-
-                    std::vector<double> cdpcf;
-                    nitf_tre<double> nt29("CDPCF");
-                    good = nt29.get(tres_itr, cdpcf);
-                    if (!good) return false;
-
-                    powers.push_back(cnpows); powers.push_back(cdpows);
-                    powers.push_back(rnpows); powers.push_back(rdpows);
-                    coeffs.push_back(cnpcf);  coeffs.push_back(cdpcf);
-                    coeffs.push_back(rnpcf);  coeffs.push_back(rdpcf);
-                    good = (cnpcf.size() == cn_nterms) && (cdpcf.size() == cd_nterms) &&
-                        (rnpcf.size() == rn_nterms) && (rdpcf.size() == rd_nterms);
-                    if (!good) return false;
-
-                    pcam.set_powers(powers);
-                    pcam.set_coefficients(coeffs);
-                    pcam.set_scale_offsets(scale_offsets);
-                    RSM_cams_[image_subheader_index].set_polycam(rsn, csn, pcam);
-                }
+                nitf_tre<int> nt10("RNPWRX");
+                good = nt10.get(tres_itr, x_pow);
+                if (!good) return false;
+                
+                nitf_tre<int> nt11("RNPWRY");
+                good = nt11.get(tres_itr, y_pow);
+                if (!good) return false;
+                
+                nitf_tre<int> nt12("RNPWRZ");
+                good = nt12.get(tres_itr, z_pow);
+                if (!good) return false;
+                
+                nitf_tre<int> nt13("RNTRMS");
+                good = nt13.get(tres_itr, rn_nterms);
+                if (!good) return false;
+                
+                rnpows.push_back(x_pow); rnpows.push_back(y_pow); rnpows.push_back(z_pow);
+                
+                std::vector<double> rnpcf;
+                nitf_tre<double> nt14("RNPCF");
+                good = nt14.get(tres_itr, rnpcf);
+                if (!good) return false;
+                
+                int rd_nterms;
+                std::vector<int> rdpows;
+                nitf_tre<int> nt15("RDPWRX");
+                good = nt15.get(tres_itr, x_pow);
+                if (!good) return false;
+                
+                nitf_tre<int> nt16("RDPWRY");
+                good = nt16.get(tres_itr, y_pow);
+                if (!good) return false;
+                
+                nitf_tre<int> nt17("RDPWRZ");
+                good = nt17.get(tres_itr, z_pow);
+                if (!good) return false;
+                
+                nitf_tre<int> nt18("RDTRMS");
+                good = nt18.get(tres_itr, rd_nterms);
+                if (!good) return false;
+                
+                rdpows.push_back(x_pow); rdpows.push_back(y_pow); rdpows.push_back(z_pow);
+                
+                std::vector<double> rdpcf;
+                nitf_tre<double> nt19("RDPCF");
+                good = nt19.get(tres_itr, rdpcf);
+                if (!good) return false;
+                int cn_nterms;
+                std::vector<int> cnpows;
+                nitf_tre<int> nt20("CNPWRX");
+                good = nt20.get(tres_itr, x_pow);
+                if (!good) return false;
+                
+                nitf_tre<int> nt21("CNPWRY");
+                good = nt21.get(tres_itr, y_pow);
+                if (!good) return false;
+                
+                nitf_tre<int> nt22("CNPWRZ");
+                good = nt22.get(tres_itr, z_pow);
+                if (!good) return false;
+                
+                nitf_tre<int> nt23("CNTRMS");
+                good = nt23.get(tres_itr, cn_nterms);
+                if (!good) return false;
+                
+                cnpows.push_back(x_pow); cnpows.push_back(y_pow); cnpows.push_back(z_pow);
+                
+                std::vector<double> cnpcf;
+                nitf_tre<double> nt24("CNPCF");
+                good = nt24.get(tres_itr, cnpcf);
+                if (!good) return false;
+                
+                int cd_nterms;
+                std::vector<int> cdpows;
+                nitf_tre<int> nt25("CDPWRX");
+                good = nt25.get(tres_itr, x_pow);
+                if (!good) return false;
+                
+                nitf_tre<int> nt26("CDPWRY");
+                good = nt26.get(tres_itr, y_pow);
+                if (!good) return false;
+                
+                nitf_tre<int> nt27("CDPWRZ");
+                good = nt27.get(tres_itr, z_pow);
+                if (!good) return false;
+                
+                nitf_tre<int> nt28("CDTRMS");
+                good = nt28.get(tres_itr, cd_nterms);
+                if (!good) return false;
+                
+                cdpows.push_back(x_pow); cdpows.push_back(y_pow); cdpows.push_back(z_pow);
+                
+                std::vector<double> cdpcf;
+                nitf_tre<double> nt29("CDPCF");
+                good = nt29.get(tres_itr, cdpcf);
+                if (!good) return false;
+                
+                powers.push_back(cnpows); powers.push_back(cdpows);
+                powers.push_back(rnpows); powers.push_back(rdpows);
+                coeffs.push_back(cnpcf);  coeffs.push_back(cdpcf);
+                coeffs.push_back(rnpcf);  coeffs.push_back(rdpcf);
+                good = (cnpcf.size() == cn_nterms) && (cdpcf.size() == cd_nterms) &&
+                  (rnpcf.size() == rn_nterms) && (rdpcf.size() == rd_nterms);
+                if (!good) return false;
+                
+                pcam.set_powers(powers);
+                pcam.set_coefficients(coeffs);
+                pcam.set_scale_offsets(scale_offsets);
+                RSM_cams_[image_subheader_index].set_polycam(rsn, csn, pcam);
+              }
             }
         }// RSMPCA
         else {//RSMPCA
-            std::cout << "RSMPCA not found - shouldn't happen at this point" << std::endl;
-            return false;
+          std::cout << "RSMPCA not found - shouldn't happen at this point" << std::endl;
+          return false;
         }
     }// image headers
     return true;
 }
-  
-  void vpgl_nitf_RSM_camera_extractor::print_file_header_summary(){
-    size_t n = nitf_status_.size();
-    if(n==0)
-      std::cout << "NITF2.1 File has no image subheaders" << std::endl;
 
-    else if(n== 1)
-      std::cout <<  "NITF2.1 File has one image subheader" << std::endl;
-    else
-      std::cout << "NITF2.1 File has " << n << " image subheaders" << std::endl;
-    
-    std::vector<int> inv;
-    for (auto itr = nitf_status_.begin(); itr != nitf_status_.end(); ++itr)
-      if (itr->second == INVALID)
-        inv.push_back(itr->first); 
-    int ni = inv.size();
-    if (ni > 0) {
-      if (ni == 1)
-        std::cout << "subheader " << inv[0] << " could not be examined" << std::endl;
-      else {
-        std::cout << "subheaders ";
-        for (int idx : inv)
-          std::cout << idx << ' ';
-        std::cout << " could not be examined" << std::endl;
-      }
+bool vpgl_nitf_RSM_camera_extractor::
+extract_adjustable_parameter_data() {
+    int image_subheader_index = this->first_index_with_RSM();
+    if (!RSMECA)
+        return false;
+    vil_nitf2_tagged_record_sequence& ixshd_tres = hdr_ixshd_tres_[image_subheader_index];
+    if (nitf_status_[image_subheader_index] == IMAGE_SUBHEADER_TREs_RSM_TREs_OVRFL)
+        ixshd_tres = ovfl_ixshd_tres_[image_subheader_index];
+    vil_nitf2_tagged_record_sequence::const_iterator tres_itr;
+    // scan for adjustable parameter covariance informatrion
+    int n_indp_subgroups = 0;
+    bool good = false;
+    std::string s;
+    adjustable_parameter_covar ap_data;
+    for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr) {
+        std::string type = (*tres_itr)->name();
+        if (type == "RSMECA") {
+            nitf_tre<std::string> nt0("INCLIC");
+            good = nt0.get(tres_itr, s);
+            if (!good || s != "Y") return false;
+            nitf_tre<int> nt1("NPAR");
+            int v;
+            good = nt1.get(tres_itr, v); ap_data.num_adj_params_ = v;            
+            if (!good) return false;
+            nitf_tre<int> nt2("NPARO");
+            good = nt2.get(tres_itr, v); ap_data.num_original_adj_params_ = v;
+            if (!good) return false;
+            nitf_tre<int> nt3("IGN");
+            good = nt3.get(tres_itr, n_indp_subgroups);
+            if (!good || n_indp_subgroups <= 0) return false;
+            nitf_tre<std::string> nt4("XUOL", false, false);
+            good = nt4.get(tres_itr, s); ASC_double(s, ap_data.translation_[0]);
+            if (!good) return false;
+            nitf_tre<std::string> nt5("YUOL", false, false);
+            good = nt5.get(tres_itr, s); ASC_double(s, ap_data.translation_[1]);
+            if (!good) return false;
+            nitf_tre<std::string> nt6("ZUOL", false, false);
+            good = nt6.get(tres_itr, s); ASC_double(s, ap_data.translation_[2]);
+            if (!good) return false;
+            nitf_tre<std::string> nt7("XUXL", false, false);
+            good = nt7.get(tres_itr, s); ASC_double(s, ap_data.rotation_[0][0]);
+            if (!good) return false;
+            nitf_tre<std::string> nt8("XUYL", false, false);
+            good = nt8.get(tres_itr, s); ASC_double(s, ap_data.rotation_[0][1]);
+            if (!good) return false;
+            nitf_tre<std::string> nt9("XUZL", false, false);
+            good = nt9.get(tres_itr, s); ASC_double(s, ap_data.rotation_[0][2]);
+            if (!good) return false;
+            nitf_tre<std::string> nt10("YUXL", false, false);
+            good = nt10.get(tres_itr, s); ASC_double(s, ap_data.rotation_[1][0]);
+            if (!good) return false;
+            nitf_tre<std::string> nt11("YUYL", false, false);
+            good = nt11.get(tres_itr, s); ASC_double(s, ap_data.rotation_[1][1]);
+            if (!good) return false;
+            nitf_tre<std::string> nt12("YUZL", false, false);
+            good = nt12.get(tres_itr, s); ASC_double(s, ap_data.rotation_[1][2]);
+            if (!good) return false;
+            nitf_tre<std::string> nt13("ZUXL", false, false);
+            good = nt13.get(tres_itr, s); ASC_double(s, ap_data.rotation_[2][0]);
+            if (!good) return false;
+            nitf_tre<std::string> nt14("ZUYL", false, false);
+            good = nt14.get(tres_itr, s); ASC_double(s, ap_data.rotation_[2][1]);
+            if (!good) return false;
+            nitf_tre<std::string> nt15("ZUZL", false, false);
+            good = nt15.get(tres_itr, s); ASC_double(s, ap_data.rotation_[2][2]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt16("IRO", false, false);
+            good = nt16.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["IRO"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt17("IRX", false, false);
+            good = nt17.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["IRX"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt18("IRY", false, false);
+            good = nt18.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["IRY"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt19("IRZ", false, false);
+            good = nt19.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["IRZ"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt20("IRXX", false, false);
+            good = nt20.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["IRXX"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt21("IRXY", false, false);
+            good = nt21.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["IRXY"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt22("IRXZ", false, false);
+            good = nt22.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["IRXZ"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt23("IRYZ", false, false);
+            good = nt23.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["IRYZ"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt24("IRZZ", false, false);
+            good = nt24.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["IRZZ"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt25("ICO", false, false);
+            good = nt25.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["ICO"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt26("ICX", false, false);
+            good = nt26.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["ICX"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt27("ICY", false, false);
+            good = nt27.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["ICY"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt28("ICZ", false, false);
+            good = nt28.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["ICZ"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt29("ICXX", false, false);
+            good = nt29.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["ICXX"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt30("ICXY", false, false);
+            good = nt30.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["ICXY"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt31("ICXZ", false, false);
+            good = nt31.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["ICXZ"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt32("ICYZ", false, false);
+            good = nt32.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["ICYZ"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt33("ICZZ", false, false);
+            good = nt33.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["ICZZ"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt34("GXO", false, false);
+            good = nt34.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GXO"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt35("GYO", false, false);
+            good = nt35.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GYO"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt36("GZO", false, false);
+            good = nt36.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GZO"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt37("GXR", false, false);
+            good = nt37.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GXR"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt38("GYR", false, false);
+            good = nt38.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GYR"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt39("GZR", false, false);
+            good = nt39.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GZR"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt40("GS", false, false);
+            good = nt40.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GS"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt41("GXX", false, false);
+            good = nt41.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GXX"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt42("GXY", false, false);
+            good = nt42.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GXY"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt43("GXZ", false, false);
+            good = nt43.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GXZ"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt44("GYX", false, false);
+            good = nt44.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GYX"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt45("GYY", false, false);
+            good = nt45.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GYY"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt46("GYZ", false, false);
+            good = nt46.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GYZ"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt47("GZX", false, false);
+            good = nt47.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GZX"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt48("GZY", false, false);
+            good = nt48.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GZY"]);
+            if (!good) return false;
+
+            nitf_tre<std::string> nt49("GZZ", false, false);
+            good = nt49.get(tres_itr, s);
+            if (s != "  ") ASC_int(s, ap_data.covar_index_["GZZ"]);
+            if (!good) return false;
+            for(size_t i = 0; i<n_indp_subgroups; ++i){
+              nitf_tre<int> nt50("NUMOPG", false, false);
+              int ncov;
+              good = nt50.get(tres_itr, ncov);
+              if(!good) return false;
+              vnl_matrix<double> m(ncov, ncov, 0.0);
+              nitf_tre<std::string> nt57("ERRCVG", "vector", false, false);
+              std::vector <std::string > upper_diag;
+              good = nt57.get(tres_itr, upper_diag);
+              if(!good) return false;
+              size_t k = 0;
+              for(size_t r = 0; r<ncov; ++r)
+                  for (size_t c = r; c < ncov; ++c, ++k) {
+                      ASC_double(upper_diag[k], m[r][c]);
+                      if (r != c) m[c][r] = m[r][c];
+                }
+              ap_data.independent_subgroups_.push_back(m);
+            }
+        }
     }
-    
-    for(auto itr = nitf_status_.begin(); itr != nitf_status_.end(); ++itr){
-      if(itr->second == INVALID)
-        continue;
-      if(itr->second == IMAGE_SUBHEADER_TREs_ONLY){
-        std::cout << "Image " << itr->first << " has image TREs in the subheader but no RSM information" << std::endl;
-        continue;
-      }else if(itr->second == IMAGE_SUBHEADER_TREs_RSM_TREs){
-        std::cout << "Image " << itr->first << " has both image TREs in the subheader as well as RSM information" << std::endl;
-        continue;
-      }else if(itr->second == IMAGE_SUBHEADER_TREs_RSM_TREs_OVRFL){
-        std::cout << "Image " << itr->first << " has image TREs in the subheader and RSM information is present in the overflow section" << std::endl;
-        continue;
-      }
+    ap_data.defined_ = true;
+    adj_param_data_[image_subheader_index] = ap_data;
+    return true;
+}
+void vpgl_nitf_RSM_camera_extractor::print_file_header_summary(){
+  size_t n = nitf_status_.size();
+  if(n==0)
+    std::cout << "NITF2.1 File has no image subheaders" << std::endl;
+  
+  else if(n== 1)
+    std::cout <<  "NITF2.1 File has one image subheader" << std::endl;
+  else
+    std::cout << "NITF2.1 File has " << n << " image subheaders" << std::endl;
+  
+  std::vector<int> inv;
+  for (auto itr = nitf_status_.begin(); itr != nitf_status_.end(); ++itr)
+    if (itr->second == INVALID)
+      inv.push_back(itr->first); 
+  int ni = inv.size();
+  if (ni > 0) {
+    if (ni == 1)
+      std::cout << "subheader " << inv[0] << " could not be examined" << std::endl;
+    else {
+      std::cout << "subheaders ";
+      for (int idx : inv)
+        std::cout << idx << ' ';
+      std::cout << " could not be examined" << std::endl;
     }
   }
+  
+  for(auto itr = nitf_status_.begin(); itr != nitf_status_.end(); ++itr){
+    if(itr->second == INVALID)
+      continue;
+    if(itr->second == IMAGE_SUBHEADER_TREs_ONLY){
+      std::cout << "Image " << itr->first << " has image TREs in the subheader but no RSM information" << std::endl;
+      continue;
+    }else if(itr->second == IMAGE_SUBHEADER_TREs_RSM_TREs){
+      std::cout << "Image " << itr->first << " has both image TREs in the subheader as well as RSM information" << std::endl;
+      continue;
+    }else if(itr->second == IMAGE_SUBHEADER_TREs_RSM_TREs_OVRFL){
+      std::cout << "Image " << itr->first << " has image TREs in the subheader and RSM information is present in the overflow section" << std::endl;
+      continue;
+    }
+  }
+}
