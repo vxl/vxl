@@ -64,6 +64,21 @@ struct ichipb_data{
   double scale_factor_;
   bool anamorphic_corr_;
 };
+struct adjustable_parameter_covar{
+  bool defined_ = false;
+  size_t num_adj_params_ = 0;
+  size_t num_original_adj_params_ = 0;
+
+  // local coordinate system
+  vnl_vector_fixed<double, 3> translation_;
+  vnl_matrix_fixed<double, 3, 3> rotation_;
+  
+  //  adjustable param    index  (1-based)
+  std::map<std::string, int> covar_index_;
+
+  //   group id         covariance matrix
+  std::vector<vnl_matrix<double> > independent_subgroups_;
+};
 
 class vpgl_nitf_RSM_camera_extractor
 {
@@ -110,9 +125,24 @@ class vpgl_nitf_RSM_camera_extractor
       std::stringstream s(ss_.str());
       return s;
   }
-
   //: set params for image subheaders that have RSM data
   bool set_RSM_camera_params();
+
+  //: extract adjustable parameter covariance
+  bool extract_adjustable_parameter_data();
+
+  bool process(bool verbose){
+    if(!scan_for_RSM_data(verbose))
+      return false;
+
+    if(!set_RSM_camera_params())
+      return false;
+
+    if(!extract_adjustable_parameter_data())
+      return false;
+
+    return true;
+  }
 
   //: return the RSM camera associated with the subheader index
   bool RSM_camera(vpgl_RSM_camera<double>& rsm_cam, size_t image_subheader_index = 0 ){
@@ -144,6 +174,12 @@ class vpgl_nitf_RSM_camera_extractor
     std::cout << "image_subheader index " << image_subheader_index <<
       "has no RSM metadata" << std::endl;
     return false;
+  }
+  bool adjustable_parameter_data(adjustable_parameter_covar& covar_data, size_t image_subheader_index = 0){
+    covar_data = adj_param_data_[image_subheader_index];
+    if(!covar_data.defined_)
+      return false;
+    return true;
   }
   // describe the layout of the file header in terms of number of image
   // subheaders and overflow conditions
@@ -194,6 +230,8 @@ class vpgl_nitf_RSM_camera_extractor
 
   // RSM cameras associated with potentially multiple image subheaders
   std::map<size_t, vpgl_RSM_camera<double> > RSM_cams_;
+
+  std::map<size_t, adjustable_parameter_covar> adj_param_data_;
 
   // Flags indicating if various required TRE groups are present
   bool RSMIDA = false, RSMPIA = false, RSMPCA = false, RSMECA = false, RSMECB = false;

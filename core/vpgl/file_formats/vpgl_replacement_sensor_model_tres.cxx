@@ -4,6 +4,31 @@
 #include <vil/file_formats/vil_nitf2_field_functor.h>
 #include <vil/file_formats/vil_nitf2_field_definition.h>
 #include <vil/file_formats/vil_nitf2_typed_field_formatter.h>
+#include <string>
+/// covariance matrix functor
+template<class T>
+class vil_nitf2_field_covar_size : public vil_nitf2_field_functor<T>
+{
+ public:
+  vil_nitf2_field_covar_size(std::string tag) : tag(std::move(tag)) {}
+
+  vil_nitf2_field_functor<int>* copy() const override {
+    return new vil_nitf2_field_covar_size(tag); }
+
+  bool operator() (vil_nitf2_field_sequence* record,
+                   const vil_nitf2_index_vector& indexes, T& value) override
+  {
+    bool success = record->get_value(tag, indexes, value, true);
+    if(!success)
+      return false;
+    // number of elements in the upper diagonal section
+    value = (value + 1)*value/2;
+    return success;
+  }
+ private:
+  std::string tag;
+};
+
 void vpgl_replacement_sensor_model_tres::define_RSMIDA(){
 
     vil_nitf2_tagged_record_definition* tri = vil_nitf2_tagged_record_definition::find("RSMIDA");
@@ -183,68 +208,71 @@ void vpgl_replacement_sensor_model_tres::define_RSMECA(){
   vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMECA");
     if (!trgi)
     {
-        vil_nitf2_tagged_record_definition::define("RSMECA", "Indirect Error Covariance")
-            .field("IID", "Image Identifier", NITF_STR_BCSA(80))
-            .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
-            .field("TID", "Triangulation ID", NITF_STR_BCSA(40))
-            .field("INCLIC", "Indirect Covariance Flag", NITF_STR_BCS(1))
-            .field("INCLUC", "Unmodeled Error Covariance Flag", NITF_STR_BCS(1))
-            .field("NPAR", "Number Original Adjustable Params", NITF_INT(2, false), false, nullptr, INDCVDEF)
-            .field("NPARO", "Number Original Adjustable Params", NITF_INT(2, false), false, nullptr, INDCVDEF)
-            .field("IGN", "Number Independent Subgroups", NITF_INT(2, false), false, nullptr, INDCVDEF)
-            .field("CVDATE", "Version Date", NITF_STR_BCSA(8), false, nullptr, INDCVDEF)
-            .field("XUOL", "Local Coordinate Origin", NITF_EXP(14, 2), false, nullptr, INDCVDEF)
-            .field("YUOL", "Local Coordinate Origin", NITF_EXP(14, 2), false, nullptr, INDCVDEF)
-            .field("ZUOL", "Local Coordinate Origin", NITF_EXP(14, 2), false, nullptr, INDCVDEF)
-            .field("XUXL", "Local Coordinate Origin", NITF_EXP(14, 2), false, nullptr, INDCVDEF)
-            .field("XUYL", "Local Coordinate Origin", NITF_EXP(14, 2), false, nullptr, INDCVDEF)
-            .field("XUZL", "Local Coordinate Origin", NITF_EXP(14, 2), false, nullptr, INDCVDEF)
-            .field("YUXL", "Local Coordinate Origin", NITF_EXP(14, 2), false, nullptr, INDCVDEF)
-            .field("YUYL", "Local Coordinate Origin", NITF_EXP(14, 2), false, nullptr, INDCVDEF)
-            .field("YUZL", "Local Coordinate Origin", NITF_EXP(14, 2), false, nullptr, INDCVDEF)
-            .field("ZUXL", "Local Coordinate Origin", NITF_EXP(14, 2), false, nullptr, INDCVDEF)
-            .field("ZUYL", "Local Coordinate Origin", NITF_EXP(14, 2), false, nullptr, INDCVDEF)
-            .field("ZUZL", "Local Coordinate Origin", NITF_EXP(14, 2), false, nullptr, INDCVDEF)
-            .field("IRO", "Image AdjP Row Const. Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("IRX", "Image AdjP Row X Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("IRY", "Image AdjP Row Y Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("IRZ", "Image AdjP Row Z Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("IRXX", "Image AdjP Row X^2 Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("IRXY", "Image AdjP Row XY Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("IRXZ", "Image AdjP Row XZ Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("IRYY", "Image AdjP Row Y^2 Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("IRYZ", "Image AdjP Row YZ Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("IRZZ", "Image AdjP Row Z^2 Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("ICO", "Image AdjP Row Const. Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("ICX", "Image AdjP Row X Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("ICY", "Image AdjP Row Y Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("ICZ", "Image AdjP Row Z Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("ICXX", "Image AdjP Row X^2 Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("ICXY", "Image AdjP Row XY Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("ICXZ", "Image AdjP Row XZ Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("ICYY", "Image AdjP Row Y^2 Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("ICYZ", "Image AdjP Row YZ Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("ICZZ", "Image AdjP Row Z^2 Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GXO", "Ground AdjP X Const. Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GYO", "Ground AdjP Y Const. Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GZO", "Ground AdjP Z Const. Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GXR", "X Ground Rotation Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GYR", "Y Ground Rotation Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GZR", "Z Ground Rotation Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GS", " Ground Scale Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GXX", "Ground X Adj.Prop. X Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GXY", "Ground X Adj.Prop. Y Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GXZ", "Ground X Adj.Prop. Z Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GYX", "Ground Y Adj.Prop. X Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GYY", "Ground Y Adj.Prop. Y Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GYZ", "Ground Y Adj.Prop. Z Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GZX", "Ground Z Adj.Prop. X Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GZY", "Ground Z Adj.Prop. Y Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-            .field("GZZ", "Ground Z Adj.Prop. Z Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-          .field("NUMOPG", "Number of Original Adj. Parameters", NITF_INT(2, false), false, nullptr, INDCVDEF)
-          .repeat(new vil_nitf2_field_value<int>("NUMOPG"),
-              vil_nitf2_field_definitions().field("ERRCVG", "Error Covariance", NITF_STR_BCSA(21), false, nullptr, INDCVDEF))
-            .end();
+      vil_nitf2_tagged_record_definition::define("RSMECA", "Indirect Error Covariance")
+        .field("IID", "Image Identifier", NITF_STR_BCSA(80))
+        .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
+        .field("TID", "Triangulation ID", NITF_STR_BCSA(40))
+        .field("INCLIC", "Indirect Covariance Flag", NITF_STR_BCS(1))
+        .field("INCLUC", "Unmodeled Error Covariance Flag", NITF_STR_BCS(1))
+        .field("NPAR", "Number Original Adjustable Params", NITF_INT(2, false), false, nullptr, INDCVDEF)
+        .field("NPARO", "Number Original Adjustable Params", NITF_INT(2, false), false, nullptr, INDCVDEF)
+        .field("IGN", "Number Independent Subgroups", NITF_INT(2, false), false, nullptr, INDCVDEF)
+        .field("CVDATE", "Version Date", NITF_STR_BCSA(8), false, nullptr, INDCVDEF)
+        .field("XUOL", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("YUOL", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("ZUOL", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("XUXL", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("XUYL", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("XUZL", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("YUXL", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("YUYL", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("YUZL", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("ZUXL", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("ZUYL", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("ZUZL", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("IRO", "Image AdjP Row Const. Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("IRX", "Image AdjP Row X Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("IRY", "Image AdjP Row Y Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("IRZ", "Image AdjP Row Z Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("IRXX", "Image AdjP Row X^2 Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("IRXY", "Image AdjP Row XY Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("IRXZ", "Image AdjP Row XZ Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("IRYY", "Image AdjP Row Y^2 Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("IRYZ", "Image AdjP Row YZ Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("IRZZ", "Image AdjP Row Z^2 Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("ICO", "Image AdjP Row Const. Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("ICX", "Image AdjP Row X Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("ICY", "Image AdjP Row Y Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("ICZ", "Image AdjP Row Z Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("ICXX", "Image AdjP Row X^2 Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("ICXY", "Image AdjP Row XY Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("ICXZ", "Image AdjP Row XZ Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("ICYY", "Image AdjP Row Y^2 Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("ICYZ", "Image AdjP Row YZ Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("ICZZ", "Image AdjP Row Z^2 Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GXO", "Ground AdjP X Const. Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GYO", "Ground AdjP Y Const. Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GZO", "Ground AdjP Z Const. Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GXR", "X Ground Rotation Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GYR", "Y Ground Rotation Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GZR", "Z Ground Rotation Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GS", " Ground Scale Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GXX", "Ground X Adj.Prop. X Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GXY", "Ground X Adj.Prop. Y Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GXZ", "Ground X Adj.Prop. Z Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GYX", "Ground Y Adj.Prop. X Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GYY", "Ground Y Adj.Prop. Y Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GYZ", "Ground Y Adj.Prop. Z Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GZX", "Ground Z Adj.Prop. X Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GZY", "Ground Z Adj.Prop. Y Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("GZZ", "Ground Z Adj.Prop. Z Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
+        .field("NUMOPG", "Number of Original Adj. Parameters", NITF_INT(2, false), false, nullptr, INDCVDEF)
+        .repeat("IGN", vil_nitf2_field_definitions()
+                
+                .repeat(new vil_nitf2_field_covar_size<int>("NUMOPG"),
+                        vil_nitf2_field_definitions()
+                        .field("ERRCVG", "Error Covariance", NITF_STR_BCSA(21), false, nullptr, INDCVDEF)))
+        .end();
     }
 }
 void vpgl_replacement_sensor_model_tres::define_RSMECB() {
