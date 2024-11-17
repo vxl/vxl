@@ -33,11 +33,13 @@ nitf_tre(std::string tag, std::string type, bool optional = false,
   bool append(std::ostream& ostr);
   bool get_append(vil_nitf2_tagged_record_sequence::const_iterator& tres_itr,
                   std::ostream& os,  bool verbose = false){
+
     bool good = get(tres_itr, verbose);
     if (!good) {
       os <<  tag_ + " required and failed" << std::endl;
       return good;
     }
+    
     good = append(os);
     if (!good){
       std::cout << "append failed for TRE " + tag_ << std::endl;

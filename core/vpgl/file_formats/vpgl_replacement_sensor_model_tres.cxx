@@ -28,6 +28,31 @@ class vil_nitf2_field_covar_size : public vil_nitf2_field_functor<T>
  private:
   std::string tag;
 };
+template<class T>
+class vil_nitf2_field_product_size : public vil_nitf2_field_functor<T>
+{
+ public:
+  vil_nitf2_field_product_size(std::string tag1, std::string tag2) : tag1(std::move(tag1)),tag2(std::move(tag2))  {}
+
+  vil_nitf2_field_functor<int>* copy() const override {
+    return new vil_nitf2_field_product_size(tag1, tag2); }
+
+  bool operator() (vil_nitf2_field_sequence* record,
+                   const vil_nitf2_index_vector& indexes, T& value) override
+  {
+    int value1, value2;
+    bool success = record->get_value(tag1, indexes, value1, true);
+    success = success && record->get_value(tag2, indexes, value2, true);
+    if(!success)
+      return false;
+    // number of elements in the upper diagonal section
+    value = value1*value2;
+    return success;
+  }
+ private:
+  std::string tag1;
+  std::string tag2;
+};
 
 void vpgl_replacement_sensor_model_tres::define_RSMIDA(){
 
@@ -266,12 +291,22 @@ void vpgl_replacement_sensor_model_tres::define_RSMECA(){
         .field("GZX", "Ground Z Adj.Prop. X Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
         .field("GZY", "Ground Z Adj.Prop. Y Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
         .field("GZZ", "Ground Z Adj.Prop. Z Index", NITF_STR_BCS(2), false, nullptr, INDCVDEF)
-        .field("NUMOPG", "Number of Original Adj. Parameters", NITF_INT(2, false), false, nullptr, INDCVDEF)
         .repeat("IGN", vil_nitf2_field_definitions()
-                
-                .repeat(new vil_nitf2_field_covar_size<int>("NUMOPG"),
-                        vil_nitf2_field_definitions()
-                        .field("ERRCVG", "Error Covariance", NITF_STR_BCSA(21), false, nullptr, INDCVDEF)))
+            .field("NUMOPG", "Number of Original Adj. Parameters", NITF_INT(2, false), false, nullptr, INDCVDEF)
+            .repeat(new vil_nitf2_field_covar_size<int>("NUMOPG"),
+                 vil_nitf2_field_definitions()
+                .field("ERRCVG", "Error Covariance", NITF_EXP(14, 2), false, nullptr, INDCVDEF))
+
+                .field("TCDF", "Time correlation domain flag",NITF_INT(1, false) , false, nullptr, INDCVDEF)
+                .field("NCSEG", "Number of Correlation Segments",NITF_INT(1, false) , false, nullptr, INDCVDEF)
+                .repeat("NCSEG",
+                    vil_nitf2_field_definitions()
+                   .field("CORSEG", "Segment Correlation Value",  NITF_EXP(14,2), false,  nullptr, INDCVDEF)
+                   .field("TAUSEG", "Segment Tau Value",  NITF_EXP(14,2), false,  nullptr, INDCVDEF))
+                )
+        .repeat(new vil_nitf2_field_product_size<int>("NPAR", "NPARO"),
+                vil_nitf2_field_definitions()
+                .field("MAP", "Mapping Matrix Element",  NITF_EXP(14,2),  false, nullptr, INDCVDEF))
         .end();
     }
 }
@@ -281,16 +316,23 @@ void vpgl_replacement_sensor_model_tres::define_RSMECB() {
     {
       
       vil_nitf2_tagged_record_definition::define("RSMECB", "Extended Indirect Error Covariance")
+        .field("IID", "Image Identifier", NITF_STR_BCSA(80))
         .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
         .field("TID", "Triangulation ID", NITF_STR_BCSA(40))
         .field("INCLIC", "Indirect Covariance Flag",  NITF_STR_BCS(1))
         .field("INCLUC", "Unmodeled Error Covariance Flag",  NITF_STR_BCS(1))
-        .field("NPARO", "Number Original Adjustable Params", NITF_STR_BCS(2), false ,nullptr,INDCVDEF)
-        .field("IGN", "Number Independent Subgroups", NITF_STR_BCS(2), false, nullptr,INDCVDEF)
+        .field("NPARO", "Number Original Adjustable Params", NITF_INT(2, false), false ,nullptr,INDCVDEF)
+        .field("IGN", "Number Independent Subgroups", NITF_INT(2, false), false, nullptr,INDCVDEF)
         .field("CVDATE", "Version Date", NITF_STR_BCSA(8), false, nullptr,INDCVDEF)
-        .field("NPAR", "Number Active Adjustable Params", NITF_STR_BCS(2), false,nullptr,INDCVDEF)
+        .field("NPAR", "Number Active Adjustable Params", NITF_INT(2, false), false,nullptr,INDCVDEF)
         .field("APTYP", "Adjustable Parameter Type", NITF_STR_BCS(1), false,nullptr,INDCVDEF)
         .field("LOCTYP","Local Coordiante System Id", NITF_STR_BCS(1), false,nullptr,INDCVDEF)
+        .field("NSFX", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("NSFY", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("NSFZ", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("NOFFX", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("NOFFY", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
+        .field("NOFFZ", "Local Coordinate Origin", NITF_STR_BCS(21), false, nullptr, INDCVDEF)
         .end();
     }
 }

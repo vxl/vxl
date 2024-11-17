@@ -241,6 +241,10 @@ public:
         std::pair<T, T> ret(adj_u_, adj_v_);
         return ret;
     }
+
+    size_t n_regions(){
+      return region_selector_.tnis_;
+    }
 protected:
     T adj_u_; // image column adjustable parameter
     T adj_v_; // image row adjustable parameter
