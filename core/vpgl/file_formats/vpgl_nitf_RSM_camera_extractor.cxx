@@ -21,8 +21,9 @@ void adjustable_parameter_metadata::print(std::ostream& os){
       if(itr->second>0)
         os << itr->first << ' ' << itr->second << std::endl;
   }
-  os << "\nIndependent subgroup covariance matrices:" << std::endl;
+  os << "\nIndependent subgroup covariance and correlation data:" << std::endl;
   for(size_t i = 0; i< independent_subgroup_covariance_.size(); ++i){
+    os << "\nindependent covariance block" << std::endl;
     os << independent_subgroup_covariance_[i] << std::endl;
     os << "correlation flag (" << correlation_flags_[i] <<")" << std::endl;
     os << "(cor. tau)yy piecewise correlation segments " << std::endl;
