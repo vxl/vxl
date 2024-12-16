@@ -14,7 +14,7 @@
 //       u = ------------  v = ------------
 //           den_u(X,Y,Z)      den_v(X,Y,X)
 // \endverbatim
-//  where u is the image column index and v is the image row index, and X, Y are 
+//  where u is the image column index and v is the image row index, and X, Y are
 //  longitude and latitude in radians, and Z is in meters above the ellipsoid
 //
 //  neu_u(X,Y,Z),den_u(X,Y,Z), neu_v(X,Y,Z), den_v(X,Y,Z) are
@@ -53,13 +53,13 @@
 template <class T>
 class vpgl_region_selector{
  public:
-  
+
  vpgl_region_selector() :rnis_(1), cnis_(1), tnis_(0), minr_(0), maxr_(0),
     minc_(0), maxc_(0), rssiz_(0.0), cssiz_(0.0) {
     row_coefs_.resize(10);
     col_coefs_.resize(10);
   }
-  
+
  vpgl_region_selector(std::vector<T> row_coefs, std::vector<T> col_coefs,
                       size_t minr, size_t maxr, size_t minc, size_t maxc,
                       size_t rnis, size_t cnis, size_t tnis, size_t rssiz, size_t cssiz):
@@ -67,7 +67,7 @@ class vpgl_region_selector{
     minc_(minc), maxc_(maxc), rnis_(rnis), cnis_(cnis), tnis_(tnis),
     rssiz_(rssiz), cssiz_(cssiz){
   }
-  
+
   void select(T X, T Y, T Z, size_t& region_row, size_t& region_col) const;
   std::vector<T> row_coefs_;
   std::vector<T> col_coefs_;
@@ -125,7 +125,7 @@ public:
     void set_powers(std::vector<std::vector<int> >const& powers) {
         powers_ = powers;
     }
-   
+
     void set_powers(
         std::vector<int> const& neu_u_powers,
         std::vector<int> const& den_u_powers,

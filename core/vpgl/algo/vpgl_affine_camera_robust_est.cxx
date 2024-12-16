@@ -101,7 +101,7 @@ vpgl_affine_camera_robust_est::compute_residuals( const vnl_vector<double>& para
   assert( residuals.size() == num_samples_ );
   for ( unsigned int i=0; i<num_samples_; ++i ) {
     double u = params[0]*from_pts_[i][0] + params[1]*from_pts_[i][1] + params[2]*from_pts_[i][2] + params[3];
-    double v = params[4]*from_pts_[i][0] + params[5]*from_pts_[i][1] + params[6]*from_pts_[i][2] + params[7]; 
+    double v = params[4]*from_pts_[i][0] + params[5]*from_pts_[i][1] + params[6]*from_pts_[i][2] + params[7];
     double ut = to_pts_[i][0], vt = to_pts_[i][1];
     residuals[i] = sqrt((ut-u)*(ut-u) + (vt-v)*(vt-v));
   }

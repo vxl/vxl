@@ -497,7 +497,7 @@ vil_tiff_header::compute_pixel_format()
             pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
             return false;
         }
-      case 3: 
+      case 3:
          switch (bbs)
          {
          case (sizeof(float)):

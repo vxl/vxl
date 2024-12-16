@@ -141,7 +141,7 @@ if(OPENJPEG2_FOUND)
     file_formats/vil_openjpeg.h  file_formats/vil_openjpeg.cxx
     file_formats/vil_openjpeg_pyramid_image_resource.h
     file_formats/vil_openjpeg_pyramid_image_resource.cxx
-    file_formats/vil_j2k_nitf2_pyramid_image_resource.h     
+    file_formats/vil_j2k_nitf2_pyramid_image_resource.h
     file_formats/vil_j2k_nitf2_pyramid_image_resource.cxx
 )
   add_definitions( ${OPENJPEG2_DEFINITIONS} )

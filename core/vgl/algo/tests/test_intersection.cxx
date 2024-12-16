@@ -551,7 +551,7 @@ test_ray_intersection_with_covariance()
   cov2[1][0] = 2.0;  cov2[1][1] = 4.0;  cov2[1][3] = 2.4;
   cov2[2][0] = 2.4;  cov2[2][2] = 9.0;  cov2[2][3] = 4.5;
   cov2[3][1] = 2.4;  cov2[3][2] = 4.5;  cov2[3][3] = 9.0;
-  
+
   good = vgl_intersection(rays2, cov2, inter_pt);
   if (good)
   {
@@ -579,7 +579,7 @@ test_ray_intersection_with_covariance()
   std::vector<vgl_ray_3d<double> > rays3;
   rays3.push_back(ar0);   rays3.push_back(ar1);   rays3.push_back(ar2);
   rays3.push_back(ar3);   rays3.push_back(ar4);   rays3.push_back(ar5);
- 
+
   vnl_matrix<double> S(12, 12, 0.0);
   S[0][0] = 4.30615026551; S[1][1] = 4.30615026551;
   S[2][2] = 4.09449741908; S[3][3] = 4.09449741908;

@@ -81,7 +81,7 @@ T vgl_fit_cylinder_3d<T>::fit(vgl_vector_3d<T> const& W, std::ostream* errstream
   T sum_uu = T(0), sum_uv = T(0), sum_vv = T(0);
   T sum_bu = T(0), sum_bv = T(0);
   for(size_t i = 0; i<n; ++i){
-    vgl_homg_point_3d<T> hp = norm(points_[i]);//normalize        
+    vgl_homg_point_3d<T> hp = norm(points_[i]);//normalize
     T x = hp.x()/hp.w();
     T y = hp.y()/hp.w();
     T z = hp.z()/hp.w();
@@ -103,11 +103,11 @@ T vgl_fit_cylinder_3d<T>::fit(vgl_vector_3d<T> const& W, std::ostream* errstream
   if(errstream)
       *errstream << "Singular solution for cylinder center \n";
     return T(-1);
-  }    
+  }
   vnl_matrix_fixed<T, 2, 2> covar_inv = vnl_inverse(covar);
   cent = covar_inv * B;
   vgl_vector_3d<T> c3d = cent[0]*U + cent[1]*V;
-  
+
   //4) undo the normalizing transformation
   vnl_matrix_fixed<T,4,4> H = norm.get_matrix();
   T scale = H[0][0];
@@ -152,7 +152,7 @@ T vgl_fit_cylinder_3d<T>::fit(vgl_vector_3d<T> const& W, std::ostream* errstream
     dsum += d;
   }
   return static_cast<T>(dsum/n);
- }                                     
+ }
 
 template <class T>
 std::vector<vgl_point_3d<T> > vgl_fit_cylinder_3d<T>::get_points() const{

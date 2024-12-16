@@ -17,7 +17,7 @@ vnl_matlab_print_scalar(int v, char * buf, size_t buf_len, vnl_matlab_print_form
 }
 
 void
-vnl_matlab_print_scalar(int v, char * buf, vnl_matlab_print_format) 
+vnl_matlab_print_scalar(int v, char * buf, vnl_matlab_print_format)
 {
  vnl_matlab_print_scalar(v, buf, SIZE_MAX);
 }
@@ -30,7 +30,7 @@ vnl_matlab_print_scalar(unsigned v, char * buf, size_t buf_len, vnl_matlab_print
 }
 
 void
-vnl_matlab_print_scalar(unsigned v, char * buf, vnl_matlab_print_format) 
+vnl_matlab_print_scalar(unsigned v, char * buf, vnl_matlab_print_format)
 {
  vnl_matlab_print_scalar(v, buf, SIZE_MAX);
 }

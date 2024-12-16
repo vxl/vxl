@@ -1562,7 +1562,7 @@ bool vpgl_affine_camera_convert::convert( vpgl_RSM_camera<double> const& camera_
     X /= vnl_math::deg_per_rad;
     Y /= vnl_math::deg_per_rad;
     double u, v;
-    camera_in.project(X, Y, Z, u, v); 
+    camera_in.project(X, Y, Z, u, v);
     image_pts.emplace_back(u, v);
   }
 
@@ -1581,7 +1581,7 @@ bool vpgl_affine_camera_convert::convert( vpgl_RSM_camera<double> const& camera_
       vgl_point_2d<double> ip = image_pts[i], pip(uu, vv);
       double er = (ip - pip).length();
       sum_er += er;
-      if (er > max_er) max_er = er; 
+      if (er > max_er) max_er = er;
   }
   sum_er /= num_points;
 #endif
@@ -1628,7 +1628,7 @@ bool vpgl_rational_camera_convert::convert(vpgl_RSM_camera<double> const& camera
     world_pts.emplace_back(x, y, z);
     double X = x/vnl_math::deg_per_rad, Y = y/vnl_math::deg_per_rad;
     double u, v;
-    camera_in.project(X, Y, z, u, v); 
+    camera_in.project(X, Y, z, u, v);
     image_pts.emplace_back(u, v);
   }
   return vpgl_rational_camera_compute::compute(image_pts, world_pts, camera_out);

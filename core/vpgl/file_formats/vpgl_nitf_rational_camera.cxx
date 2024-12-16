@@ -246,8 +246,8 @@ void vpgl_nitf_rational_camera::geostr_to_latlon_v2(std::string const& str, std:
       //extract lat or lon substring
     std::string section;
     double val = 0.0;
-    for (size_t cnt = 0; cnt < inc; ++cnt, ++sit) 
-      section.push_back(*sit); 
+    for (size_t cnt = 0; cnt < inc; ++cnt, ++sit)
+      section.push_back(*sit);
     // convert to decimal degrees
     geostr_to_double(section.c_str(), &val, code);
     latlons.push_back(val);

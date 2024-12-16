@@ -406,11 +406,11 @@ bool vgl_intersection(vgl_ray_3d<T> const& ray0, vgl_ray_3d<T> const& ray1, vgl_
   if(fabs(det)<1.0e-6)
     return false;
   Ainv = vnl_inverse(A);
-  
+
   vnl_vector_fixed<T, 2> b, tvals;
   b[0] = -dot_product((p0-p1), v0);
   b[1] =  dot_product((p0-p1), v1);
-  
+
   tvals = Ainv*b;
   vgl_point_3d<T> P0 = p0 + tvals[0]*v0, P1 = p1 + tvals[1]*v1;
   dist = (P0-P1).length();

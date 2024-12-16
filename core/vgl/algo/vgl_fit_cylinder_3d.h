@@ -9,7 +9,7 @@
 //
 // The linear algorithm seeks to minimize the error e = Sum(ri^2 - r^2)^2
 // where, r is the cylinder radius and ri^2 = (C - Xi)^T P(C - Xi)
-// P is the projection operator, P = (I - W W^T) and W is the cylinder axis unit vector 
+// P is the projection operator, P = (I - W W^T) and W is the cylinder axis unit vector
 // de/dr = Sum(ri^2 - r^2)= 0. It follows that r^2 = 1/n Sum(ri^2).
 // Thus  r = Sqrt(1/n Sum(ri^2))
 //
@@ -30,10 +30,10 @@
 //                 -   -        -                      -
 //  has a unique linear solution unless [covar] is singular
 //
-//  Determining W is not possible in a closed form solution and involves root finding leading to a 
+//  Determining W is not possible in a closed form solution and involves root finding leading to a
 //  brittle algorithm. A better approach is to quantize the W orientations
-//    (e.g. 5 degree intervals on the hemisphere) 
-//  and then find the W that minimizes e = Sum(ri^2 - r^2)^2. Can be costly with a large number of samples. 
+//    (e.g. 5 degree intervals on the hemisphere)
+//  and then find the W that minimizes e = Sum(ri^2 - r^2)^2. Can be costly with a large number of samples.
 //  If the cylinder has good uniform point coverage then W can be estimated from the points by finding the
 //  principal eigenvector of covar(X) = <Xi Xi^T>
 //
@@ -87,7 +87,7 @@ public:
   //:fit a cylinder to the stored points using a linear method, where W is known
   bool fit(vgl_vector_3d<T> const& W, const T error_marg, std::ostream* outstream = nullptr, bool verbose=false);
 
-  //: fit a cylinder to the stored points using a linear method, where W 
+  //: fit a cylinder to the stored points using a linear method, where W
   // is estimated as the eigenvector of the largest eigenvalue of the input pointset
   // returns the average distance from the points to the cylinder
   // error conditions are reported on outstream

@@ -86,14 +86,14 @@ vpgl_affine_fm_compute_5_point::compute(const std::vector< vgl_point_2d<double> 
     int max_pops = 1;
     int trace_level = 0;
     fg.set_no_prior_scale();
-    
+
     vrel_muset_obj muset(pr_norm.size() + 1);
     vrel_ran_sam_search ransam;
     ransam.set_trace_level(trace_level);
     ransam.set_sampling_params(1 - muset.min_inlier_fraction(),
                                desired_prob_good,
                                max_pops);
-    
+
     if (!ransam.estimate(&fg, &muset)){//access to base classes
       std::cout << "MUSE Fa estimator failed!!\n";
       return false;
@@ -101,7 +101,7 @@ vpgl_affine_fm_compute_5_point::compute(const std::vector< vgl_point_2d<double> 
     if(verbose_) std::cout << "===MUSE Fa succeeded===.\n"
                            << "estimate = " << ransam.params() << std::endl
                            << "scale = " << ransam.scale() << std::endl;
-    
+
     params = ransam.params();
   }
   fg.fill_Fa_from_params(params);
@@ -110,7 +110,7 @@ vpgl_affine_fm_compute_5_point::compute(const std::vector< vgl_point_2d<double> 
     Fu = plnt.get_matrix().transpose() * Fn * prnt.get_matrix();
   else Fu = Fn;
   // zero out upper 2x2
-  Fu[0][0] = 0.0; Fu[0][1] = 0.0; Fu[1][0] = 0.0; Fu[1][1] = 0.0; 
+  Fu[0][0] = 0.0; Fu[0][1] = 0.0; Fu[1][0] = 0.0; Fu[1][1] = 0.0;
   // normalize line coef
   double a =Fu[0][2], b =Fu[1][2];
   double s = sqrt(a*a + b*b);
