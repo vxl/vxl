@@ -54,7 +54,7 @@ if(OPENGL_FOUND)
   #apparently doesn't just require base core and gl due to wx setup.h
   #find_package may need some refinement
   find_package(wxWidgets COMPONENTS base core gl)
- 
+
   include_directories(${OPENGL_INCLUDE_DIR})
   if( GLUT_FOUND )
     include_directories(${GLUT_INCLUDE_DIR})

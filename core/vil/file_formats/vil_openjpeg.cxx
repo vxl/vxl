@@ -841,4 +841,4 @@ vil_image_view_base_sptr vil_openjpeg_image::s_decode_jpeg_2000( vil_stream* vs,
     vil_image_view_base_sptr view = jp2_image->get_copy_view_reduced(i0, ni, j0, nj, reduction);
   delete jp2_image;
   return view;
-  } 
+  }

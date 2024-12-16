@@ -56,7 +56,7 @@ test_camera_compute_setup()
         << C1e.get_matrix() << '\n';
     TEST_NEAR("vpgl_affine_camera_compute:", (C1.get_matrix() - C1e.get_matrix()).frobenius_norm(), 0, 1);
 }
-  
+
 
 void
 test_perspective_compute()
@@ -341,7 +341,7 @@ test_compute_affine()
 
 
   vnl_matrix_fixed<double, 3, 4> m_a;
- 
+
   for (size_t row = 0; row < 3; ++row)
       for (size_t col = 0; col < 4; ++col)
           m_a[row][col] = A[row][col];

@@ -745,7 +745,7 @@ vil_nitf2_image_subheader::add_rpc_definitions()
       .repeat(20, vil_nitf2_field_definitions().field("SDC", "Sample Density Coefficient", NITF_EXP(6, 1)))
       .end(); // of RPC TRE
   }
- 
+
   tr = vil_nitf2_tagged_record_definition::find("RPC00A");
   if (!tr)
   {

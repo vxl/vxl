@@ -64,7 +64,7 @@ std::vector<std::vector<T> >
 vpgl_polycam<T>::coefficients() const
 {
   return coeffs_;
-  
+
 }
 template <class T>
 void vpgl_polycam<T>::set_powers(std::vector<int> const& neu_u_powers,
@@ -121,7 +121,7 @@ void vpgl_polycam<T>::project(
   T sx = scale_offsets_[X_INDX].normalize(x);
   T sy = scale_offsets_[Y_INDX].normalize(y);
   T sz = scale_offsets_[Z_INDX].normalize(z);
-  
+
   // projection
   // ==== u neumerator ====
   double num_u = 0.0;
@@ -144,7 +144,7 @@ void vpgl_polycam<T>::project(
   c = 0;
  for(int k = 0; k<= powers_[P_NEU_V][Z_INDX]; ++k)
     for(int j = 0; j<= powers_[P_NEU_V][Y_INDX]; ++j)
-        for (int i = 0; i <= powers_[P_NEU_V][X_INDX]; ++i) 
+        for (int i = 0; i <= powers_[P_NEU_V][X_INDX]; ++i)
             num_v += coeffs_[P_NEU_V][c++] * pow(sx, i) * pow(sy, j) * pow(sz, k);
 
   // ==== v denominator ====
@@ -152,7 +152,7 @@ void vpgl_polycam<T>::project(
   c = 0;
   for(int k = 0; k<=powers_[P_DEN_V][Z_INDX]; ++k)
     for(int j = 0; j<=powers_[P_DEN_V][Y_INDX]; ++j)
-      for(int i = 0; i<=powers_[P_DEN_V][X_INDX]; ++i) 
+      for(int i = 0; i<=powers_[P_DEN_V][X_INDX]; ++i)
           den_v += coeffs_[P_DEN_V][c++] * pow(sx, i) * pow(sy, j) * pow(sz, k);
 
   // ratios

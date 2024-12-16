@@ -30,12 +30,12 @@ test_fit_unit_cylinder()
   pts.push_back(p0); pts.push_back(p0+vz);
   pts.push_back(p1); pts.push_back(p1+vz);
   pts.push_back(p2); pts.push_back(p2+vz);
-  pts.push_back(p3); pts.push_back(p3+vz); 
+  pts.push_back(p3); pts.push_back(p3+vz);
   pts.push_back(p4); pts.push_back(p4+vz);
   pts.push_back(p5); pts.push_back(p5+vz);
   pts.push_back(p6); pts.push_back(p6+vz);
   pts.push_back(p7); pts.push_back(p7+vz);
-  
+
   vgl_fit_cylinder_3d<double> fit_cyl(pts);
 
   double error = fit_cyl.fit(z, &std::cout);
@@ -58,12 +58,12 @@ test_compute_W_fit_unit_cylinder(){
   pts.push_back(p0); pts.push_back(p0+vz);
   pts.push_back(p1); pts.push_back(p1+vz);
   pts.push_back(p2); pts.push_back(p2+vz);
-  pts.push_back(p3); pts.push_back(p3+vz); 
+  pts.push_back(p3); pts.push_back(p3+vz);
   pts.push_back(p4); pts.push_back(p4+vz);
   pts.push_back(p5); pts.push_back(p5+vz);
   pts.push_back(p6); pts.push_back(p6+vz);
   pts.push_back(p7); pts.push_back(p7+vz);
-  
+
   vgl_fit_cylinder_3d<double> fit_cyl(pts);
 
   double error = fit_cyl.fit(&std::cout);
@@ -87,7 +87,7 @@ test_fit_unit_cylinder_rand_error()
   pts.push_back(p0); pts.push_back(p0+vz);
   pts.push_back(p1); pts.push_back(p1+vz);
   pts.push_back(p2); pts.push_back(p2+vz);
-  pts.push_back(p3); pts.push_back(p3+vz); 
+  pts.push_back(p3); pts.push_back(p3+vz);
   pts.push_back(p4); pts.push_back(p4+vz);
   pts.push_back(p5); pts.push_back(p5+vz);
   pts.push_back(p6); pts.push_back(p6+vz);

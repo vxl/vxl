@@ -22,7 +22,7 @@ vpgl_affine_fm_robust_est( const std::vector< vgl_point_2d<double> > & pr_pts,
 {
   assert( pr_pts.size() == pl_pts.size() );
 
-  
+
   const unsigned size = pr_pts.size();
 
   // convert from vector to vnl_vector type

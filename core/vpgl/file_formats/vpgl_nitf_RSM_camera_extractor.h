@@ -41,7 +41,7 @@ struct rsm_metadata{
   std::string igeolo_;                         bool igeolo_valid = false;
   bool xy_corners_valid = false;
   bool xyz_corners_valid = false;
-  vgl_point_2d<double> upper_left_;            
+  vgl_point_2d<double> upper_left_;
   vgl_point_2d<double> upper_right_;
   vgl_point_2d<double> lower_left_;
   vgl_point_2d<double> lower_right_;
@@ -63,7 +63,7 @@ struct adjustable_parameter_metadata{
   // local coordinate system
   vnl_vector_fixed<double, 3> translation_;
   vnl_matrix_fixed<double, 3, 3> rotation_;
-  
+
   // adjustable param covariance matrix index  (1-based)
   std::map<std::string, int> covar_index_;
 
@@ -97,7 +97,7 @@ class vpgl_nitf_RSM_camera_extractor
                             bool verbose = false);
 
   // image identification information
-  std::string image_id(size_t image_subheader_index) 
+  std::string image_id(size_t image_subheader_index)
     {
       if(rsm_meta_.count(image_subheader_index)>0){
         rsm_metadata rm = rsm_meta_[image_subheader_index];
@@ -176,7 +176,7 @@ class vpgl_nitf_RSM_camera_extractor
     rsm_metadata ret;
     if(rsm_meta_.count(image_subheader_index)>0)
        return  rsm_meta_[image_subheader_index];
-    
+
     std::cout << "image_subheader index " << image_subheader_index <<
       " has no general RSM metadata" << std::endl;
     return ret;
@@ -251,12 +251,12 @@ class vpgl_nitf_RSM_camera_extractor
   bool RSMIDA = false, RSMPIA = false, RSMPCA = false, RSMECA = false, RSMECB = false;
 
   // presence is checked by attemping to read the EDITION field (40 bytes)
-  bool  RSMGIA = false , RSMDCA = false, RSMDCB = false; 
+  bool  RSMGIA = false , RSMDCA = false, RSMDCB = false;
   bool RSMAPA = false, RSMAPB = false, RSMGGA = false;
 
   // These variables must be defined by some TRE section
   // to have a valid RPC camera
-  int manditory_PCA_row_ = -1; 
+  int manditory_PCA_row_ = -1;
   int manditory_PCA_col_ = -1;
 
   // storage for tre records to produce reports

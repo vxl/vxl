@@ -32,7 +32,7 @@ class vgl_fit_xy_paraboloid_3d
   std::vector<vgl_homg_point_3d<T> > points_;
   vgl_quadric_3d<T> paraboloid_linear_;
   // coefficient vector, p,  for paraboloid as a 6x1 matrix
-  // z = f(x,y) = p_[0][0]x^2 + p_[1][0]xy + p_[2][0]y^2 + p_[3][0]x + p_[4][0]y + p_[5][0] 
+  // z = f(x,y) = p_[0][0]x^2 + p_[1][0]xy + p_[2][0]y^2 + p_[3][0]x + p_[4][0]y + p_[5][0]
   vnl_matrix<T> p_;
   vgl_point_2d<T> extremum_;
  public:
@@ -63,7 +63,7 @@ class vgl_fit_xy_paraboloid_3d
 
   std::vector<vgl_point_3d<T> > points() const;
 
-  //: The linear fit 
+  //: The linear fit
   vgl_quadric_3d<T> paraboloid_linear() const {return paraboloid_linear_;}
 
   //: z values for fitted paraboloid

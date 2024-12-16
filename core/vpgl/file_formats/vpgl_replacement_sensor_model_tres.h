@@ -39,7 +39,7 @@ nitf_tre(std::string tag, std::string type, bool optional = false,
       os <<  tag_ + " required and failed" << std::endl;
       return good;
     }
-    
+
     good = append(os);
     if (!good){
       std::cout << "append failed for TRE " + tag_ << std::endl;
@@ -107,7 +107,7 @@ bool nitf_tre<T>::get(vil_nitf2_tagged_record_sequence::const_iterator& tres_itr
   }
   return false;
 }
-    
+
 template <class T>
 bool nitf_tre<T>::get(vil_nitf2_tagged_record_sequence::const_iterator& tres_itr, bool verbose){
   bool ret = true;

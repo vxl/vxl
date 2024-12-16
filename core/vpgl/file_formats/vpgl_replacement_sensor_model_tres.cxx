@@ -227,7 +227,7 @@ void vpgl_replacement_sensor_model_tres::define_RSMPIA(){
 }
 
 #define INDCVDEF new vil_nitf2_field_value_one_of<std::string>("INCLIC", "Y")
- 
+
 
 void vpgl_replacement_sensor_model_tres::define_RSMECA(){
   vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMECA");
@@ -314,7 +314,7 @@ void vpgl_replacement_sensor_model_tres::define_RSMECB() {
     vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMECB");
     if (!trgi)
     {
-      
+
       vil_nitf2_tagged_record_definition::define("RSMECB", "Extended Indirect Error Covariance")
         .field("IID", "Image Identifier", NITF_STR_BCSA(80))
         .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
@@ -338,7 +338,7 @@ void vpgl_replacement_sensor_model_tres::define_RSMECB() {
 }
 
 // define TREs for cases not currently handled by vpgl_RSM_camera
-// even if present only 40 bytes are read to recover the EDITION field    
+// even if present only 40 bytes are read to recover the EDITION field
 void vpgl_replacement_sensor_model_tres::define_RSMDCA(){
   vil_nitf2_tagged_record_definition* trgi = vil_nitf2_tagged_record_definition::find("RSMDCA");
     if (!trgi)

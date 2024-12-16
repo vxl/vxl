@@ -94,13 +94,13 @@ T vgl_fit_xy_paraboloid_3d<T>::fit_linear(std::ostream* errstream)
   p_[3][0] = (p[3][0] + p[1][0]*ty + 2.0*p[0][0]* tx);
   p_[4][0] = (p[4][0] + p[1][0]*tx + 2.0*p[2][0]*ty);
   p_[5][0] = ((p[5][0]-tz) + p[0][0]*tx*tx + p[1][0]*tx*ty + p[2][0]*ty*ty + p[3][0]*tx + p[4][0]*ty)/s;
- 
+
   // Transform the quadric back to the original coordinate frame
-  //  z = f(x,y) = p0x^2 + p1xy + p2y^2 + p3x + p4y + p5 
+  //  z = f(x,y) = p0x^2 + p1xy + p2y^2 + p3x + p4y + p5
   // full q = ax^2 + by^2 + cz^2 + dxy + exz + fyz + gxw +hyw +izw +jw^2 = 0
   // a = p0, b = p2, c = 0, d = p1, e = 0, f = 0, g = p3, h = p4, i = -1, j = p5
   paraboloid_linear_.set(p_[0][0], p_[2][0], 0.0, p_[1][0], 0.0, 0.0, p_[3][0], p_[4][0], -1.0, p_[5][0]);
-  
+
  // compute average z error for the pointset
   T z_err_sum = 0.0;
   for (unsigned i=0; i<n; i++) {
@@ -108,9 +108,9 @@ T vgl_fit_xy_paraboloid_3d<T>::fit_linear(std::ostream* errstream)
     z_err_sum += zerr;
   }
   z_err_sum /= n;
-  
+
   return static_cast<T>(z_err_sum);
-}                                     
+}
 
 template <class T>
 std::vector<vgl_point_3d<T> > vgl_fit_xy_paraboloid_3d<T>::points() const{
@@ -148,7 +148,7 @@ vgl_point_2d<T> vgl_fit_xy_paraboloid_3d<T>::extremum_point() const{
   b[0][0] = -p_[3][0]; b[1][0] = -p_[4][0];
   xy = pinv * b;
   return vgl_point_2d<T>(xy[0][0], xy[1][0]);
-}  
+}
 //--------------------------------------------------------------------------
 #undef VGL_FIT_XY_PARABOLOID_3D_INSTANTIATE
 #define VGL_FIT_XY_PARABOLOID_3D_INSTANTIATE(T) \

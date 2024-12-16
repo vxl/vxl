@@ -494,7 +494,7 @@ void vnl_sparse_matrix<T>::put(unsigned int r, unsigned int c, T v)
     if (ri->first == c)
       ri->second = v;
     else
-      rw.insert(ri, vnl_sparse_matrix_pair<T>(c, v)); 
+      rw.insert(ri, vnl_sparse_matrix_pair<T>(c, v));
   }
   else
   {

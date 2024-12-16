@@ -77,7 +77,7 @@ vil_nitf2_file_format::make_input_pyramid_image(char const* file) {
   vil_pyramid_image_resource_sptr pyr = new vil_j2k_nitf2_pyramid_image_resource(imgr);
   return pyr;
 }
-    
+
 //--------------------------------------------------------------------------------
 // class vil_nitf2_image
 
@@ -601,7 +601,7 @@ vil_nitf2_image::get_copy_view_decimated_j2k(unsigned start_i,
   {
 #if HAS_J2K
     s_decode_jpeg_2000 = vil_j2k_image::s_decode_jpeg_2000; // HAS_J2K
-#elif HAS_OPENJPEG2  
+#elif HAS_OPENJPEG2
     s_decode_jpeg_2000 = vil_openjpeg_image::s_decode_jpeg_2000; // HAS OPENJPEG
 #else
     std::cerr << "Cannot decode JPEG 2000 image. The J2K library was not built." << std::endl;

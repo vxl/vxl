@@ -361,7 +361,7 @@ bool vpgl_equi_rectification::rectify_pair(vpgl_perspective_camera<double> const
 
   // update the rectification homographies
   H0 = Tv0 * H0; H1 = Tv1 * H1;
-  
+
   // scale columns with an affine skew transform to minimize disparity on the pointsets img_pta0 and img_pts1
   double min_scale = 0.5;
   vnl_matrix_fixed<double, 3, 3> Usqt, Usqt_inv;

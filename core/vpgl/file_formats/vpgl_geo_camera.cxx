@@ -129,7 +129,7 @@ vpgl_geo_camera::load_from_resource(vil_image_resource_sptr const & geotiff_img,
   this->is_utm_ = false;
   this->set_lvcs(lvcs);
 
-  
+
 
   // check if the model type is geographic and also the units
   if (gtif->GCS_WGS84_MET_DEG()){

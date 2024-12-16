@@ -421,16 +421,16 @@ test_rational_camera_convert()
       double z = rng.drand64(min_z, max_z);
       // convert to radians
       double X = x/vnl_math::deg_per_rad, Y = y/vnl_math::deg_per_rad;
-      
+
       double uRSM, vRSM, uRPC, vRPC;
-      rsm_cam.project(X, Y, z, uRSM, vRSM); 
+      rsm_cam.project(X, Y, z, uRSM, vRSM);
       rcam.project(x, y, z, uRPC, vRPC);
       double eru = fabs(uRPC-uRSM), erv = fabs(vRPC-vRSM);
       double er = eru + erv;
       if (er > max_error)
           max_error = er;
     }
-  
+
   TEST_NEAR("RSM to rational camera convert", max_error, 0.0, 1.0e-3);
 }
 

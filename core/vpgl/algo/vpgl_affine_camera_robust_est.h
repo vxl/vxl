@@ -55,7 +55,7 @@ public:
   }
   //: The robust estimate
   vpgl_affine_camera<double> const Ca(){return Ca_;}
-  
+
 protected:
 
   std::vector< vnl_vector<double> > from_pts_; // 3-d points

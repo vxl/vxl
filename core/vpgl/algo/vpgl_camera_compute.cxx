@@ -171,7 +171,7 @@ bool vpgl_affine_camera_compute::compute_robust_ransac( const std::vector< vgl_p
   std::vector<vgl_homg_point_3d<double> > pwld_h;
   for( auto p : image_pts)
     pimg_h.emplace_back(p.x(), p.y(), 1.0);
-  
+
   for( auto p : world_pts){
     pwld_h.emplace_back(p.x(), p.y(), p.z(), 1.0);
     bb.add(p);
@@ -186,7 +186,7 @@ bool vpgl_affine_camera_compute::compute_robust_ransac( const std::vector< vgl_p
     img_norm.emplace_back(pimg_hn.x(), pimg_hn.y());
     wld_norm.emplace_back(pwld_hn.x(), pwld_hn.y(), pwld_hn.z());
   }
-  
+
   // start robust estimation
   vpgl_affine_camera_robust_est hg(wld_norm, img_norm);
   double max_outlier_frac = 0.5;
