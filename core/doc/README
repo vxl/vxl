@@ -40,4 +40,3 @@ To generate the documentation for the example vxl_doc_rules.[h,cxx]:
 1. Make sure doxygen is in your path
 
 2. Type "doxygen Doxyfile_for_vxl_doc_rules"
-
