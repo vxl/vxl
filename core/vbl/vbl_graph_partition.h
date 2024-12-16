@@ -28,7 +28,8 @@
 //:
 // \p t is a constant that determines the threshold on edge weight
 //  to form disconnected sets
-void vbl_graph_partition(vbl_disjoint_sets& ds, std::vector<vbl_edge>& edges, float t);
+void
+vbl_graph_partition(vbl_disjoint_sets & ds, std::vector<vbl_edge> & edges, float t);
 
 
 #endif // vbl_graph_partition_h_

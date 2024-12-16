@@ -8,7 +8,7 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-static char const * vil_viff_format_tag = "viff";
+static const char * vil_viff_format_tag = "viff";
 
 
 #include "vil/vil_stream.h"
@@ -89,7 +89,7 @@ vil_viff_file_format::make_output_image(vil_stream * is,
   return new vil_viff_image(is, ni, nj, nplanes, format);
 }
 
-char const *
+const char *
 vil_viff_file_format::tag() const
 {
   return vil_viff_format_tag;
@@ -112,7 +112,7 @@ vil_viff_image::vil_viff_image(vil_stream * is)
   }
 }
 
-char const *
+const char *
 vil_viff_image::file_format() const
 {
   return vil_viff_format_tag;
@@ -135,13 +135,10 @@ vil_viff_image::vil_viff_image(vil_stream * is,
   write_header();
 }
 
-vil_viff_image::~vil_viff_image()
-{
-  is_->unref();
-}
+vil_viff_image::~vil_viff_image() { is_->unref(); }
 
 bool
-vil_viff_image::get_property(char const * /*tag*/, void * /*prop*/) const
+vil_viff_image::get_property(const char * /*tag*/, void * /*prop*/) const
 {
   // This is not an in-memory image type, nor is it read-only:
   return false;
@@ -309,7 +306,7 @@ vil_viff_image::get_copy_view(unsigned int x0, unsigned int xs, unsigned int y0,
 }
 
 bool
-vil_viff_image::put_view(vil_image_view_base const & buf, unsigned int x0, unsigned int y0)
+vil_viff_image::put_view(const vil_image_view_base & buf, unsigned int x0, unsigned int y0)
 {
   assert(buf.pixel_format() == format_); // pixel formats of image and buffer must match
   if (!view_fits(buf, x0, y0) || buf.nplanes() != nplanes())
@@ -324,7 +321,7 @@ vil_viff_image::put_view(vil_image_view_base const & buf, unsigned int x0, unsig
             << ',' << y0 << ")\n";
 #endif
   // std::cout << "buf=" << buf << '\n';
-  auto const & ibuf = reinterpret_cast<vil_image_view<vxl_byte> const &>(buf);
+  const auto & ibuf = reinterpret_cast<const vil_image_view<vxl_byte> &>(buf);
   // std::cout << "ibuf=" << ibuf << '\n';
   if (ibuf.istep() != 1 || ibuf.jstep() != int(ni) || (ibuf.planestep() != int(ni * nj) && nplanes() != 1))
   {

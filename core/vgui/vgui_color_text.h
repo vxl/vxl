@@ -20,12 +20,16 @@
 #endif
 
 //: Convert a string naming a colour to a string of the RGB values.
-std::string text_to_color(const std::string&);
+std::string
+text_to_color(const std::string &);
 //: Given a string naming a colour, return its red value.
-float red_value(const std::string&);
+float
+red_value(const std::string &);
 //: Given a string naming a colour, return its green value.
-float green_value(const std::string&);
+float
+green_value(const std::string &);
 //: Given a string naming a colour, return its blue value.
-float blue_value(const std::string&);
+float
+blue_value(const std::string &);
 
 #endif // vgui_color_text_h_

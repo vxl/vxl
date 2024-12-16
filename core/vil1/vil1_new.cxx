@@ -22,7 +22,7 @@
 #include "vil1/vil1_memory_image_of.h"
 
 vil1_image
-vil1_new(int width, int height, vil1_image const & prototype)
+vil1_new(int width, int height, const vil1_image & prototype)
 {
   switch (vil1_pixel_format(prototype))
   {
@@ -43,7 +43,7 @@ vil1_new(vil1_stream * os,
          int components,
          int bits_per_component,
          vil1_component_format format,
-         char const * file_format)
+         const char * file_format)
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
@@ -67,7 +67,7 @@ vil1_new(vil1_stream * os,
 
 //: Make a new vil1_image_impl, writing to stream "os", size "w" x "h", copying pixel format etc from "prototype".
 vil1_image
-vil1_new(vil1_stream * os, int width, int height, vil1_image const & prototype, char const * file_format)
+vil1_new(vil1_stream * os, int width, int height, const vil1_image & prototype, const char * file_format)
 {
   return vil1_new(os,
                   prototype.planes(),
@@ -81,7 +81,7 @@ vil1_new(vil1_stream * os, int width, int height, vil1_image const & prototype, 
 
 //: Make a new vil1_image_impl, writing to file "filename", size "w" x "h", copying pixel format etc from "prototype".
 vil1_image
-vil1_new(char const * filename, int width, int height, vil1_image const & prototype, char const * file_format)
+vil1_new(const char * filename, int width, int height, const vil1_image & prototype, const char * file_format)
 {
   auto * os = new vil1_stream_fstream(filename, "w");
   return vil1_new(os,

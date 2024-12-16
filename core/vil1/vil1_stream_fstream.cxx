@@ -8,7 +8,7 @@
 #endif
 
 static std::ios::openmode
-modeflags(char const * mode)
+modeflags(const char * mode)
 {
   if (*mode == 0)
     return std::ios::openmode(0);
@@ -33,15 +33,15 @@ modeflags(char const * mode)
   return std::ios::openmode(0);
 }
 
-#define xerr                                                                                                           \
-  if (true)                                                                                                            \
-    ;                                                                                                                  \
-  else                                                                                                                 \
+#define xerr \
+  if (true)  \
+    ;        \
+  else       \
     (std::cerr << "std::fstream#" << id_ << ": ")
 
 static int id = 0;
 
-vil1_stream_fstream::vil1_stream_fstream(char const * fn, char const * mode)
+vil1_stream_fstream::vil1_stream_fstream(const char * fn, const char * mode)
   : flags_(modeflags(mode))
   , f_(fn, flags_ | std::ios::binary) // need ios::binary on windows.
 {
@@ -60,13 +60,10 @@ vil1_stream_fstream::vil1_stream_fstream(std::fstream& f):
 }
 #endif // 0
 
-vil1_stream_fstream::~vil1_stream_fstream()
-{
-  xerr << "vil1_stream_fstream# " << id_ << " being deleted\n";
-}
+vil1_stream_fstream::~vil1_stream_fstream() { xerr << "vil1_stream_fstream# " << id_ << " being deleted\n"; }
 
 vil1_streampos
-vil1_stream_fstream::write(void const * buf, vil1_streampos n)
+vil1_stream_fstream::write(const void * buf, vil1_streampos n)
 {
   assert(id > 0);
   if (!(flags_ & std::ios::out))
@@ -77,7 +74,7 @@ vil1_stream_fstream::write(void const * buf, vil1_streampos n)
 
   vil1_streampos a = tell();
   xerr << "write " << n << std::endl;
-  f_.write((char const *)buf, n);
+  f_.write((const char *)buf, n);
   if (!f_.good())
     std::cerr << ("vil1_stream_fstream: ERROR: write failed!\n");
   vil1_streampos b = tell();

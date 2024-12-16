@@ -12,8 +12,8 @@
 #include "vsl/vsl_block_binary.h"
 #include "vsl/vsl_complex_io.h"
 
-#define write_case_macro(T)                                                                                            \
-  vsl_b_write(os, unsigned(chunk.size() / sizeof(T)));                                                                 \
+#define write_case_macro(T)                            \
+  vsl_b_write(os, unsigned(chunk.size() / sizeof(T))); \
   vsl_block_binary_write(os, (const T *)chunk.const_data(), chunk.size() / sizeof(T))
 
 
@@ -80,19 +80,19 @@ vsl_b_write(vsl_b_ostream & os, const vil_memory_chunk & chunk)
 
 // This file never uses the fast versions of vsl_b_read_block, so just locally
 // implement the old slow version.
-#define read_case_macro_v1(T)                                                                                          \
-  chunk.set_size(n * sizeof(T), pixel_format);                                                                         \
-  for (unsigned i = 0; i < n; ++i)                                                                                     \
+#define read_case_macro_v1(T)                  \
+  chunk.set_size(n * sizeof(T), pixel_format); \
+  for (unsigned i = 0; i < n; ++i)             \
     vsl_b_read(is, static_cast<T *>(chunk.data())[i]);
 
-#define read_case_macro_v2(T)                                                                                          \
-  chunk.set_size(n * sizeof(T), pixel_format);                                                                         \
-  vsl_block_binary_read_confirm_specialisation(is, false);                                                             \
-  for (unsigned i = 0; i < n; ++i)                                                                                     \
+#define read_case_macro_v2(T)                              \
+  chunk.set_size(n * sizeof(T), pixel_format);             \
+  vsl_block_binary_read_confirm_specialisation(is, false); \
+  for (unsigned i = 0; i < n; ++i)                         \
     vsl_b_read(is, static_cast<T *>(chunk.data())[i]);
 
-#define read_case_macro_v3(T)                                                                                          \
-  chunk.set_size(n * sizeof(T), pixel_format);                                                                         \
+#define read_case_macro_v3(T)                  \
+  chunk.set_size(n * sizeof(T), pixel_format); \
   vsl_block_binary_read(is, static_cast<T *>(chunk.data()), n)
 
 

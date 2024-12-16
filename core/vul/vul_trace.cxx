@@ -6,7 +6,7 @@
 #endif
 
 void
-vul_trace_function(char const * file, int line)
+vul_trace_function(const char * file, int line)
 {
   std::cerr << "[vul_trace " << file << ':' << line << ']' << std::flush;
 }

@@ -11,23 +11,31 @@
 
 class impl : public vbl_ref_count
 {
- public:
+public:
   static int reftotal;
-  int n{7};
+  int n{ 7 };
 
   explicit impl(int nn);
-  impl(impl const &x) = default;
+  impl(const impl & x) = default;
   impl();
   ~impl() override;
-  void Print (std::ostream &str) const;
-  static void checkcount ();
+  void
+  Print(std::ostream & str) const;
+  static void
+  checkcount();
 };
 
-void vsl_b_read(vsl_b_istream&, impl &);
-void vsl_b_write(vsl_b_ostream&, const impl &);
-void vsl_print_summary(std::ostream&, const impl &);
-void vsl_b_read(vsl_b_istream& is, impl * &);
-void vsl_b_write(vsl_b_ostream& os, const impl *);
-void vsl_print_summary(std::ostream&, const impl *);
+void
+vsl_b_read(vsl_b_istream &, impl &);
+void
+vsl_b_write(vsl_b_ostream &, const impl &);
+void
+vsl_print_summary(std::ostream &, const impl &);
+void
+vsl_b_read(vsl_b_istream & is, impl *&);
+void
+vsl_b_write(vsl_b_ostream & os, const impl *);
+void
+vsl_print_summary(std::ostream &, const impl *);
 
 #endif // vbl_io_test_classes_h_

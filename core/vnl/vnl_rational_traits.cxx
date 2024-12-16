@@ -20,13 +20,13 @@ const std::complex<vnl_rational> vnl_numeric_traits<std::complex<vnl_rational>>:
 namespace vnl_math
 {
 vnl_rational
-squared_magnitude(std::complex<vnl_rational> const & x)
+squared_magnitude(const std::complex<vnl_rational> & x)
 {
   return x.real() * x.real() + x.imag() * x.imag();
 }
 
 vnl_rational
-abs(std::complex<vnl_rational> const & x)
+abs(const std::complex<vnl_rational> & x)
 {
   return vnl_rational(std::sqrt(double(x.real() * x.real() + x.imag() * x.imag())));
 }

@@ -65,7 +65,7 @@ vgui_remove_arg(unsigned index, int & argc, char ** argv)
 // the tag function are supposed to be idempotent and (b) a
 // tag function is called at most once per registration.
 bool
-vgui::exists(char const * toolkit)
+vgui::exists(const char * toolkit)
 {
   vgui_tag_call(); // see [*] above.
 
@@ -80,7 +80,7 @@ vgui::exists(char const * toolkit)
 //: Method for selecting a specific toolkit.
 //  This will abort() if given a toolkit which is not available.
 void
-vgui::select(char const * toolkit)
+vgui::select(const char * toolkit)
 {
   vgui_tag_call(); // see [*] above.
 
@@ -120,7 +120,7 @@ vgui::select(int & argc, char ** argv)
   // variable 'vgui' :
   if (!instance_)
   {
-    char const * env_name = getenv("vgui");
+    const char * env_name = getenv("vgui");
     if (env_name)
       instance_ = vgui_toolkit::lookup(env_name);
   }
@@ -225,7 +225,7 @@ vgui::uninit()
 //----------------------------------------------------------------------------
 //: Produce window with menubar.
 vgui_window *
-vgui::produce_window(int width, int height, vgui_menu const & menubar, std::string const & title)
+vgui::produce_window(int width, int height, const vgui_menu & menubar, const std::string & title)
 {
   if (instance_)
     return instance_->produce_window(width, height, menubar, title.c_str());
@@ -239,7 +239,7 @@ vgui::produce_window(int width, int height, vgui_menu const & menubar, std::stri
 //----------------------------------------------------------------------------
 //: Produce window without menubar.
 vgui_window *
-vgui::produce_window(int width, int height, std::string const & title)
+vgui::produce_window(int width, int height, const std::string & title)
 {
   if (instance_)
     return instance_->produce_window(width, height, title.c_str());
@@ -253,7 +253,7 @@ vgui::produce_window(int width, int height, std::string const & title)
 //----------------------------------------------------------------------------
 //: Produce dialog box.
 vgui_dialog_impl *
-vgui::produce_dialog(std::string const & name)
+vgui::produce_dialog(const std::string & name)
 {
   if (instance_)
     return instance_->produce_dialog(name.c_str());
@@ -267,7 +267,7 @@ vgui::produce_dialog(std::string const & name)
 //----------------------------------------------------------------------------
 //: Produce dialog box.
 vgui_dialog_extensions_impl *
-vgui::produce_extension_dialog(std::string const & name)
+vgui::produce_extension_dialog(const std::string & name)
 {
   if (instance_)
     return instance_->produce_dialog_extension(name.c_str());
@@ -353,7 +353,7 @@ vgui::flush()
 //-----------------------------------------------------------------------------
 //: Add event to the event queue.
 void
-vgui::add_event(vgui_event const & e)
+vgui::add_event(const vgui_event & e)
 {
   if (instance_)
     instance_->add_event(e);
@@ -364,7 +364,7 @@ vgui::add_event(vgui_event const & e)
 //-----------------------------------------------------------------------------
 //: Display this tableau and run till dead (no menubar).
 int
-vgui::run(vgui_tableau_sptr const & tableau, int width, int height, std::string const & title)
+vgui::run(const vgui_tableau_sptr & tableau, int width, int height, const std::string & title)
 {
   adapt(tableau, width, height, title);
   return vgui::run();
@@ -373,11 +373,11 @@ vgui::run(vgui_tableau_sptr const & tableau, int width, int height, std::string 
 //-----------------------------------------------------------------------------
 //: Display this tableau and run till dead (with menubar).
 int
-vgui::run(vgui_tableau_sptr const & tableau,
+vgui::run(const vgui_tableau_sptr & tableau,
           int width,
           int height,
-          vgui_menu const & menubar,
-          std::string const & title)
+          const vgui_menu & menubar,
+          const std::string & title)
 {
   adapt(tableau, width, height, menubar, title);
   return vgui::run();
@@ -386,7 +386,7 @@ vgui::run(vgui_tableau_sptr const & tableau,
 //-----------------------------------------------------------------------------
 //: Create the vgui_window but don't run it (no menubar).
 vgui_window *
-vgui::adapt(vgui_tableau_sptr const & tableau, int width, int height, std::string const & title)
+vgui::adapt(const vgui_tableau_sptr & tableau, int width, int height, const std::string & title)
 {
   vgui_window * win = vgui::produce_window(width, height, title);
   if (!win)
@@ -402,7 +402,7 @@ vgui::adapt(vgui_tableau_sptr const & tableau, int width, int height, std::strin
 //-----------------------------------------------------------------------------
 //: Create the vgui_window but don't run it (with menubar).
 vgui_window *
-vgui::adapt(vgui_tableau_sptr const & tableau, int width, int height, vgui_menu const & mb, std::string const & title)
+vgui::adapt(const vgui_tableau_sptr & tableau, int width, int height, const vgui_menu & mb, const std::string & title)
 {
   vgui_window * win = vgui::produce_window(width, height, mb, title);
   win->get_adaptor()->set_tableau(tableau);

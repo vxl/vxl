@@ -210,7 +210,8 @@ vgui_gtk_adaptor::post_destroy()
   }
 }
 
-void vgui_gtk_adaptor::set_default_popup(vgui_menu)
+void
+vgui_gtk_adaptor::set_default_popup(vgui_menu)
 {
   std::cerr << "vgui_gtk_adaptor::set_default_popup\n";
 }

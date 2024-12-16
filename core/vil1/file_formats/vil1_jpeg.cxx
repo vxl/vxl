@@ -41,12 +41,12 @@ vil1_jpeg_file_probe(vil1_stream * vs)
 }
 
 // static data
-static char const jpeg_string[] = "jpeg";
+static const char jpeg_string[] = "jpeg";
 
 //--------------------------------------------------------------------------------
 // class vil1_jpeg_file_format
 
-char const *
+const char *
 vil1_jpeg_file_format::tag() const
 {
   return jpeg_string;
@@ -86,7 +86,7 @@ vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream * s)
 }
 
 bool
-vil1_jpeg_generic_image::get_property(char const * tag, void * prop) const
+vil1_jpeg_generic_image::get_property(const char * tag, void * prop) const
 {
   if (0 == std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool *)prop) = true : true;
@@ -97,10 +97,17 @@ vil1_jpeg_generic_image::get_property(char const * tag, void * prop) const
   return false;
 }
 
-vil1_jpeg_generic_image::vil1_jpeg_generic_image(
-    vil1_stream *s, int planes, int width, int height, int components,
-    int bits_per_component, vil1_component_format format)
-    : jc(new vil1_jpeg_compressor(s)), jd(nullptr), stream(s) {
+vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream * s,
+                                                 int planes,
+                                                 int width,
+                                                 int height,
+                                                 int components,
+                                                 int bits_per_component,
+                                                 vil1_component_format format)
+  : jc(new vil1_jpeg_compressor(s))
+  , jd(nullptr)
+  , stream(s)
+{
   stream->ref();
   // warn
   if (planes != 1)
@@ -168,7 +175,7 @@ vil1_jpeg_generic_image::get_section(void * buf, int x0, int y0, int w, int h) c
 
 //: compressing a section onto the vil1_stream.
 bool
-vil1_jpeg_generic_image::put_section(void const * buf, int x0, int y0, int w, int h)
+vil1_jpeg_generic_image::put_section(const void * buf, int x0, int y0, int w, int h)
 {
   if (!jc)
   {
@@ -196,7 +203,7 @@ vil1_jpeg_generic_image::put_section(void const * buf, int x0, int y0, int w, in
   // write each scanline
   for (int i = 0; i < h; ++i)
   {
-    auto const * scanline = (JSAMPLE const *)((char const *)buf + i * w * bpp);
+    const auto * scanline = (JSAMPLE const *)((const char *)buf + i * w * bpp);
     if (!jc->write_scanline(y0 + i, scanline))
       return false;
   }
@@ -261,13 +268,15 @@ vil1_jpeg_generic_image::component_format() const
 }
 
 //: assume only one plane
-vil1_image vil1_jpeg_generic_image::get_plane(unsigned int p) const {
+vil1_image
+vil1_jpeg_generic_image::get_plane(unsigned int p) const
+{
   assert(p == 0);
   return const_cast<vil1_jpeg_generic_image *>(this);
 }
 
 //:
-char const *
+const char *
 vil1_jpeg_generic_image::file_format() const
 {
   return jpeg_string;

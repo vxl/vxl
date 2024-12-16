@@ -12,28 +12,29 @@
 
 #include <cassert>
 
-vrel_lts_obj::vrel_lts_obj( unsigned int num_sam_inst, double inlier_frac )
-  : num_sam_inst_( num_sam_inst ),
-    inlier_frac_( inlier_frac )
-{
-}
+vrel_lts_obj::vrel_lts_obj(unsigned int num_sam_inst, double inlier_frac)
+  : num_sam_inst_(num_sam_inst)
+  , inlier_frac_(inlier_frac)
+{}
 
 vrel_lts_obj::~vrel_lts_obj() = default;
 
 
 double
-vrel_lts_obj::fcn( vect_const_iter begin, vect_const_iter end,
-                   vect_const_iter /*scale begin*/,
-                   vnl_vector<double>* /*param_vector*/ ) const
+vrel_lts_obj::fcn(vect_const_iter begin,
+                  vect_const_iter end,
+                  vect_const_iter /*scale begin*/,
+                  vnl_vector<double> * /*param_vector*/) const
 {
-  return fcn( begin, end, 0.0, (vnl_vector<double>*)nullptr );
+  return fcn(begin, end, 0.0, (vnl_vector<double> *)nullptr);
 }
 
 
 double
-vrel_lts_obj::fcn( vect_const_iter begin, vect_const_iter end,
-                   double /*scale*/,
-                   vnl_vector<double>* /*param_vector*/ ) const
+vrel_lts_obj::fcn(vect_const_iter begin,
+                  vect_const_iter end,
+                  double /*scale*/,
+                  vnl_vector<double> * /*param_vector*/) const
 {
   // 1. We need to sort the squared residuals.
 
@@ -45,31 +46,33 @@ vrel_lts_obj::fcn( vect_const_iter begin, vect_const_iter end,
   // anything.
 
   std::vector<double> sq_res;
-  sq_res.reserve( end - begin );
-  for ( ; begin != end; ++begin ) {
-    sq_res.push_back( (*begin) * (*begin) );
+  sq_res.reserve(end - begin);
+  for (; begin != end; ++begin)
+  {
+    sq_res.push_back((*begin) * (*begin));
   }
 
   unsigned int num_residuals = sq_res.size();
-  assert( num_residuals >= num_sam_inst_ );
+  assert(num_residuals >= num_sam_inst_);
 
   // 2. Find the index of the "median value" if the residuals are sorted.
 
   unsigned int index;
-  if ( inlier_frac_ == 0.5 )
-    index = (num_residuals-num_sam_inst_)/2 + num_sam_inst_;
+  if (inlier_frac_ == 0.5)
+    index = (num_residuals - num_sam_inst_) / 2 + num_sam_inst_;
   else
-    index = vnl_math::rnd( (num_residuals-num_sam_inst_)*inlier_frac_ ) + num_sam_inst_;
-  if ( index >= num_residuals ) index = num_residuals-1;
+    index = vnl_math::rnd((num_residuals - num_sam_inst_) * inlier_frac_) + num_sam_inst_;
+  if (index >= num_residuals)
+    index = num_residuals - 1;
 
   // 3. Sort the squared residuals so that all the smallest residuals
   // are in positions less than index.
   auto loc = sq_res.begin() + index;
-  std::nth_element( sq_res.begin(), loc, sq_res.end() );
+  std::nth_element(sq_res.begin(), loc, sq_res.end());
 
   // 4. Sum them up.
-  double sum=0;
-  for ( unsigned int i=0; i<=index; ++i )
+  double sum = 0;
+  for (unsigned int i = 0; i <= index; ++i)
     sum += sq_res[i];
 
   return sum;

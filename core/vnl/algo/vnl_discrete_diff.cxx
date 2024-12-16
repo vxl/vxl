@@ -8,7 +8,7 @@
 */
 
 bool
-vnl_discrete_diff_fwd(vnl_least_squares_function * lsf, double h_, vnl_vector<double> const & x, vnl_matrix<double> & J)
+vnl_discrete_diff_fwd(vnl_least_squares_function * lsf, double h_, const vnl_vector<double> & x, vnl_matrix<double> & J)
 {
   vnl_vector<double> y(lsf->get_number_of_residuals());
   lsf->f(x, y);
@@ -21,8 +21,8 @@ vnl_discrete_diff_fwd(vnl_least_squares_function * lsf, double h_, vnl_vector<do
 
 bool
 vnl_discrete_diff_fwd(vnl_least_squares_function * lsf,
-                      vnl_vector<double> const & h,
-                      vnl_vector<double> const & x,
+                      const vnl_vector<double> & h,
+                      const vnl_vector<double> & x,
                       vnl_matrix<double> & J)
 {
   vnl_vector<double> y(lsf->get_number_of_residuals());
@@ -34,9 +34,9 @@ vnl_discrete_diff_fwd(vnl_least_squares_function * lsf,
 
 bool
 vnl_discrete_diff_fwd(vnl_least_squares_function * lsf,
-                      vnl_vector<double> const & h,
-                      vnl_vector<double> const & x,
-                      vnl_vector<double> const & y,
+                      const vnl_vector<double> & h,
+                      const vnl_vector<double> & x,
+                      const vnl_vector<double> & y,
                       vnl_matrix<double> & J)
 {
   unsigned m = J.rows();
@@ -64,7 +64,7 @@ vnl_discrete_diff_fwd(vnl_least_squares_function * lsf,
 }
 
 bool
-vnl_discrete_diff_sym(vnl_least_squares_function * lsf, double h_, vnl_vector<double> const & x, vnl_matrix<double> & J)
+vnl_discrete_diff_sym(vnl_least_squares_function * lsf, double h_, const vnl_vector<double> & x, vnl_matrix<double> & J)
 {
   vnl_vector<double> h(lsf->get_number_of_unknowns());
   h.fill(h_);
@@ -73,8 +73,8 @@ vnl_discrete_diff_sym(vnl_least_squares_function * lsf, double h_, vnl_vector<do
 
 bool
 vnl_discrete_diff_sym(vnl_least_squares_function * lsf,
-                      vnl_vector<double> const & h,
-                      vnl_vector<double> const & x,
+                      const vnl_vector<double> & h,
+                      const vnl_vector<double> & x,
                       vnl_matrix<double> & J)
 {
   unsigned m = J.rows();
@@ -110,7 +110,7 @@ vnl_discrete_diff_sym(vnl_least_squares_function * lsf,
 //----------------------------------------------------------------------
 
 void
-vnl_discrete_diff_test_lsf(vnl_least_squares_function * lsf, vnl_vector<double> const & x)
+vnl_discrete_diff_test_lsf(vnl_least_squares_function * lsf, const vnl_vector<double> & x)
 {
   unsigned int m = lsf->get_number_of_residuals();
   unsigned int n = lsf->get_number_of_unknowns();

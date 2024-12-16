@@ -23,7 +23,7 @@
 
 //: Send vil1_image to disk.
 bool
-vil1_save(vil1_image i, char const * filename, char const * file_format)
+vil1_save(vil1_image i, const char * filename, const char * file_format)
 {
   vil1_stream * os = vil1_open(filename, "w");
   if (!os || !os->ok())
@@ -48,7 +48,7 @@ vil1_save(vil1_image i, char const * filename, char const * file_format)
 
 //: Send vil1_image to disk; preserve byte order.
 bool
-vil1_save_raw(vil1_image const & i, char const * filename, char const * file_format)
+vil1_save_raw(const vil1_image & i, const char * filename, const char * file_format)
 {
   vil1_stream * os = vil1_open(filename, "w");
   return vil1_save_raw(i, os, file_format);
@@ -58,7 +58,7 @@ vil1_save_raw(vil1_image const & i, char const * filename, char const * file_for
 // The possible file_formats are defined by the subclasses of vil1_file_format
 // in vil1_file_format.cxx
 bool
-vil1_save_raw(vil1_image const & i, vil1_stream * os, char const * file_format)
+vil1_save_raw(const vil1_image & i, vil1_stream * os, const char * file_format)
 {
   vil1_image out = vil1_new(os, i.width(), i.height(), i, file_format);
 
@@ -73,13 +73,13 @@ vil1_save_raw(vil1_image const & i, vil1_stream * os, char const * file_format)
   return true;
 }
 
-static char const *
-guess_file_format(char const * filename)
+static const char *
+guess_file_format(const char * filename)
 {
-  char const * file_format = "pnm"; // default file format
+  const char * file_format = "pnm"; // default file format
 
   // find last "."
-  char const * dot = std::strrchr(filename, '.');
+  const char * dot = std::strrchr(filename, '.');
   if (!dot)
   {
     // filename doesn't end in ".anything"
@@ -114,7 +114,7 @@ guess_file_format(char const * filename)
 
 //: save to file, deducing format from filename.
 bool
-vil1_save(vil1_image const & i, char const * filename)
+vil1_save(const vil1_image & i, const char * filename)
 {
   return vil1_save(i, filename, guess_file_format(filename));
 }
@@ -124,11 +124,11 @@ vil1_save(vil1_image const & i, char const * filename)
 
 template <class T>
 static inline void
-vil1_save_rgb_template(T const * p, int w, int h, std::string const & fn)
+vil1_save_rgb_template(const T * p, int w, int h, const std::string & fn)
 {
   vil1_memory_image_of<vil1_rgb<unsigned char>> out(w, h);
   auto * o = (unsigned char *)out.get_buffer();
-  T const * p_end = p + w * h * 3;
+  const T * p_end = p + w * h * 3;
   while (p != p_end)
     // possible loss of data! (e.g. clipping)
     // agap: but it's okay because the input values are in 0..255
@@ -138,11 +138,11 @@ vil1_save_rgb_template(T const * p, int w, int h, std::string const & fn)
 
 template <class T>
 static inline void
-vil1_save_gray_template(T const * p, int w, int h, std::string const & fn)
+vil1_save_gray_template(const T * p, int w, int h, const std::string & fn)
 {
   vil1_memory_image_of<unsigned char> out(w, h);
   unsigned char * o = out.get_buffer();
-  T const * p_end = p + w * h;
+  const T * p_end = p + w * h;
   while (p != p_end)
     // possible loss of data! (e.g. clipping)
     // agap: but it's okay because the input values are in 0..255
@@ -152,7 +152,7 @@ vil1_save_gray_template(T const * p, int w, int h, std::string const & fn)
 
 //: Save raw unsigned chars, deducing format from filename
 void
-vil1_save_gray(unsigned char const * p, int w, int h, std::string const & fn)
+vil1_save_gray(const unsigned char * p, int w, int h, const std::string & fn)
 {
   vil1_save_gray_template(p, w, h, fn);
 }
@@ -161,7 +161,7 @@ vil1_save_gray(unsigned char const * p, int w, int h, std::string const & fn)
 // No scaling is performed, so values would be 0..255.
 // File format is deduced from filename.
 void
-vil1_save_gray(float const * p, int w, int h, std::string const & fn)
+vil1_save_gray(const float * p, int w, int h, const std::string & fn)
 {
   vil1_save_gray_template(p, w, h, fn);
 }
@@ -170,28 +170,28 @@ vil1_save_gray(float const * p, int w, int h, std::string const & fn)
 // No scaling is performed, so values would be 0..255.
 // File format is deduced from filename.
 void
-vil1_save_gray(double const * p, int w, int h, std::string const & fn)
+vil1_save_gray(const double * p, int w, int h, const std::string & fn)
 {
   vil1_save_gray_template(p, w, h, fn);
 }
 
 //: Save raw RGB, deducing format from filename
 void
-vil1_save_rgb(unsigned char const * p, int w, int h, std::string const & fn)
+vil1_save_rgb(const unsigned char * p, int w, int h, const std::string & fn)
 {
   vil1_save_rgb_template(p, w, h, fn);
 }
 
 //: Save raw floats as RGB.  See vil1_save_gray.
 void
-vil1_save_rgb(float const * p, int w, int h, std::string const & fn)
+vil1_save_rgb(const float * p, int w, int h, const std::string & fn)
 {
   vil1_save_rgb_template(p, w, h, fn);
 }
 
 //: Save raw doubles as RGB.  See vil1_save_gray.
 void
-vil1_save_rgb(double const * p, int w, int h, std::string const & fn)
+vil1_save_rgb(const double * p, int w, int h, const std::string & fn)
 {
   vil1_save_rgb_template(p, w, h, fn);
 }

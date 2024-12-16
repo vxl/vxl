@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------
 
 void
-printval(base_sptr const & p)
+printval(const base_sptr & p)
 {
   std::cout << "base_impl val = " << p->n << std::endl;
 }

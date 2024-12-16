@@ -31,9 +31,9 @@ Copyright: (C) 1997-2004, Advanced Interfaces Group,
 */
 
 #ifndef gpc_h_
-#define gpc_h_
+#  define gpc_h_
 
-#include <cstdio>
+#  include <cstdio>
 
 
 /*
@@ -45,9 +45,9 @@ Copyright: (C) 1997-2004, Advanced Interfaces Group,
 /* Increase GPC_EPSILON to encourage merging of near coincident edges    */
 /*                                                                       */
 /* For example: #define GPC_EPSILON (DBL_EPSILON*1000000000)             */
-#define GPC_EPSILON (DBL_EPSILON)
+#  define GPC_EPSILON (DBL_EPSILON)
 
-#define GPC_VERSION "2.32"
+#  define GPC_VERSION "2.32"
 
 
 /*
@@ -55,58 +55,61 @@ Copyright: (C) 1997-2004, Advanced Interfaces Group,
                            Public Data Types
 ===========================================================================
 */
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-typedef enum                        /* Set operation type                */
+#  ifdef __cplusplus
+extern "C"
 {
-  GPC_DIFF,                         /* Difference                        */
-  GPC_INT,                          /* Intersection                      */
-  GPC_XOR,                          /* Exclusive or                      */
-  GPC_UNION                         /* Union                             */
-} gpc_op;
+#  endif
 
-typedef struct                      /* Polygon vertex structure          */
-{
-  double              x;            /* Vertex x component                */
-  double              y;            /* vertex y component                */
-} gpc_vertex;
+  typedef enum /* Set operation type                */
+  {
+    GPC_DIFF, /* Difference                        */
+    GPC_INT,  /* Intersection                      */
+    GPC_XOR,  /* Exclusive or                      */
+    GPC_UNION /* Union                             */
+  } gpc_op;
 
-typedef struct                      /* Vertex list structure             */
-{
-  int                 num_vertices; /* Number of vertices in list        */
-  gpc_vertex         *vertex;       /* Vertex array pointer              */
-} gpc_vertex_list;
+  typedef struct /* Polygon vertex structure          */
+  {
+    double x; /* Vertex x component                */
+    double y; /* vertex y component                */
+  } gpc_vertex;
 
-typedef struct                      /* Polygon set structure             */
-{
-  int                 num_contours; /* Number of contours in polygon     */
-  int                *hole;         /* Hole / external contour flags     */
-  gpc_vertex_list    *contour;      /* Contour array pointer             */
-} gpc_polygon;
+  typedef struct /* Vertex list structure             */
+  {
+    int num_vertices;    /* Number of vertices in list        */
+    gpc_vertex * vertex; /* Vertex array pointer              */
+  } gpc_vertex_list;
 
-typedef struct                      /* Tristrip set structure            */
-{
-  int                 num_strips;   /* Number of tristrips               */
-  gpc_vertex_list    *strip;        /* Tristrip array pointer            */
-} gpc_tristrip;
+  typedef struct /* Polygon set structure             */
+  {
+    int num_contours;          /* Number of contours in polygon     */
+    int * hole;                /* Hole / external contour flags     */
+    gpc_vertex_list * contour; /* Contour array pointer             */
+  } gpc_polygon;
+
+  typedef struct /* Tristrip set structure            */
+  {
+    int num_strips;          /* Number of tristrips               */
+    gpc_vertex_list * strip; /* Tristrip array pointer            */
+  } gpc_tristrip;
 
 
-/*
-===========================================================================
-                       Public Function Prototypes
-===========================================================================
-*/
+  /*
+  ===========================================================================
+                         Public Function Prototypes
+  ===========================================================================
+  */
 
-int  gpc_polygon_clip        (gpc_op           set_operation,
-                              gpc_polygon     *subject_polygon,
-                              gpc_polygon     *clip_polygon,
-                              gpc_polygon     *result_polygon);
+  int
+  gpc_polygon_clip(gpc_op set_operation,
+                   gpc_polygon * subject_polygon,
+                   gpc_polygon * clip_polygon,
+                   gpc_polygon * result_polygon);
 
-void gpc_free_polygon        (gpc_polygon     *polygon);
+  void
+  gpc_free_polygon(gpc_polygon * polygon);
 
-#if 0 /* These functions are not used in vgl_clip */
+#  if 0 /* These functions are not used in vgl_clip */
 
 void gpc_read_polygon        (FILE            *infile_ptr,
                               int              read_hole_flags,
@@ -130,11 +133,11 @@ void gpc_polygon_to_tristrip (gpc_polygon     *polygon,
 
 void gpc_free_tristrip       (gpc_tristrip    *tristrip);
 
-#endif /* 0 */
+#  endif /* 0 */
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
 #endif /* gpc_h_ */
 

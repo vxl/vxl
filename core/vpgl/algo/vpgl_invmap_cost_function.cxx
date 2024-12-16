@@ -8,9 +8,9 @@
 #endif
 #include <vcl_compiler.h>
 
-vpgl_invmap_cost_function::vpgl_invmap_cost_function(vnl_vector_fixed<double, 2> const & image_point,
-                                                     vnl_vector_fixed<double, 4> const & plane,
-                                                     vpgl_camera<double> const & cam)
+vpgl_invmap_cost_function::vpgl_invmap_cost_function(const vnl_vector_fixed<double, 2> & image_point,
+                                                     const vnl_vector_fixed<double, 4> & plane,
+                                                     const vpgl_camera<double> & cam)
   : vnl_cost_function(2)
   , image_point_(image_point)
   , plane_(plane)
@@ -31,7 +31,7 @@ vpgl_invmap_cost_function::vpgl_invmap_cost_function(vnl_vector_fixed<double, 2>
 
 //: The main function.
 double
-vpgl_invmap_cost_function::f(vnl_vector<double> const & x)
+vpgl_invmap_cost_function::f(const vnl_vector<double> & x)
 {
   // fill out the 3-d point from the parameters
   vnl_vector_fixed<double, 3> p_3d;
@@ -50,26 +50,30 @@ vpgl_invmap_cost_function::f(vnl_vector<double> const & x)
 }
 
 void
-vpgl_invmap_cost_function::set_params(vnl_vector_fixed<double, 3> const & xyz, vnl_vector_fixed<double, 2> & x)
+vpgl_invmap_cost_function::set_params(const vnl_vector_fixed<double, 3> & xyz, vnl_vector_fixed<double, 2> & x)
 {
   switch (pp_)
   {
-    case X_Y: {
+    case X_Y:
+    {
       x[0] = xyz[0];
       x[1] = xyz[1];
       break;
     }
-    case X_Z: {
+    case X_Z:
+    {
       x[0] = xyz[0];
       x[1] = xyz[2];
       break;
     }
-    case Y_Z: {
+    case Y_Z:
+    {
       x[0] = xyz[1];
       x[1] = xyz[2];
       break;
     }
-    default: {
+    default:
+    {
       x[0] = 0;
       x[1] = 0;
       std::cerr << "Improper prameterization in vpgl_invmap_cost_function\n";
@@ -80,26 +84,30 @@ vpgl_invmap_cost_function::set_params(vnl_vector_fixed<double, 3> const & xyz, v
 #if !VXL_LEGACY_FUTURE_REMOVE
 VXL_DEPRECATED_MSG("Will be removed in future versions of VXL")
 void
-vpgl_invmap_cost_function::set_params(vnl_vector_fixed<double, 3> const & xyz, vnl_vector<double> & x)
+vpgl_invmap_cost_function::set_params(const vnl_vector_fixed<double, 3> & xyz, vnl_vector<double> & x)
 {
   switch (pp_)
   {
-    case X_Y: {
+    case X_Y:
+    {
       x[0] = xyz[0];
       x[1] = xyz[1];
       break;
     }
-    case X_Z: {
+    case X_Z:
+    {
       x[0] = xyz[0];
       x[1] = xyz[2];
       break;
     }
-    case Y_Z: {
+    case Y_Z:
+    {
       x[0] = xyz[1];
       x[1] = xyz[2];
       break;
     }
-    default: {
+    default:
+    {
       x[0] = 0;
       x[1] = 0;
       std::cerr << "Improper prameterization in vpgl_invmap_cost_function\n";
@@ -114,25 +122,29 @@ vpgl_invmap_cost_function::point_3d(vnl_vector_fixed<double, 2> const & x, vnl_v
   // Switch on plane parameterization
   switch (pp_)
   {
-    case X_Y: {
+    case X_Y:
+    {
       xyz[0] = x[0];
       xyz[1] = x[1];
       xyz[2] = -(plane_[0] * x[0] + plane_[1] * x[1] + plane_[3]) / plane_[2];
       break;
     }
-    case X_Z: {
+    case X_Z:
+    {
       xyz[0] = x[0];
       xyz[2] = x[1];
       xyz[1] = -(plane_[0] * x[0] + plane_[2] * x[1] + plane_[3]) / plane_[1];
       break;
     }
-    case Y_Z: {
+    case Y_Z:
+    {
       xyz[1] = x[0];
       xyz[2] = x[1];
       xyz[0] = -(plane_[1] * x[0] + plane_[2] * x[1] + plane_[3]) / plane_[0];
       break;
     }
-    default: {
+    default:
+    {
       xyz[0] = 0;
       xyz[1] = 0;
       xyz[2] = 0;
@@ -144,30 +156,34 @@ vpgl_invmap_cost_function::point_3d(vnl_vector_fixed<double, 2> const & x, vnl_v
 #if !VXL_LEGACY_FUTURE_REMOVE
 VXL_DEPRECATED_MSG("Will be removed in future versions of VXL")
 void
-vpgl_invmap_cost_function::point_3d(vnl_vector<double> const & x, vnl_vector_fixed<double, 3> & xyz)
+vpgl_invmap_cost_function::point_3d(const vnl_vector<double> & x, vnl_vector_fixed<double, 3> & xyz)
 {
   // Switch on plane parameterization
   switch (pp_)
   {
-    case X_Y: {
+    case X_Y:
+    {
       xyz[0] = x[0];
       xyz[1] = x[1];
       xyz[2] = -(plane_[0] * x[0] + plane_[1] * x[1] + plane_[3]) / plane_[2];
       break;
     }
-    case X_Z: {
+    case X_Z:
+    {
       xyz[0] = x[0];
       xyz[2] = x[1];
       xyz[1] = -(plane_[0] * x[0] + plane_[2] * x[1] + plane_[3]) / plane_[1];
       break;
     }
-    case Y_Z: {
+    case Y_Z:
+    {
       xyz[1] = x[0];
       xyz[2] = x[1];
       xyz[0] = -(plane_[1] * x[0] + plane_[2] * x[1] + plane_[3]) / plane_[0];
       break;
     }
-    default: {
+    default:
+    {
       xyz[0] = 0;
       xyz[1] = 0;
       xyz[2] = 0;

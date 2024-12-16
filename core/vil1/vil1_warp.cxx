@@ -16,8 +16,8 @@ VIL1_WARP_INSTANTIATE(vil1_rgb<unsigned char>, vil1_warp_mapping);
 VIL1_WARP_INSTANTIATE(double, vil1_warp_mapping);
 
 vil1_image
-vil1_warp(vil1_image const & in,
-          vil1_warp_mapping const & mapper,
+vil1_warp(const vil1_image & in,
+          const vil1_warp_mapping & mapper,
           vil1_warp_interpolation_type i,
           int out_width,
           int out_height)

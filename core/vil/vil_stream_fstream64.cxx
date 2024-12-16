@@ -36,14 +36,14 @@
 #    define _write ::write
 #  endif
 
-#  define xerr                                                                                                         \
-    if (true)                                                                                                          \
-      ;                                                                                                                \
-    else                                                                                                               \
+#  define xerr \
+    if (true)  \
+      ;        \
+    else       \
       (std::cerr << "std::fstream#" << fd_ << ": ")
 
 static int
-modeflags(char const * mode)
+modeflags(const char * mode)
 {
   bool read = false, write = false;
 
@@ -67,7 +67,7 @@ modeflags(char const * mode)
 }
 
 
-vil_stream_fstream64::vil_stream_fstream64(char const * fn, char const * mode)
+vil_stream_fstream64::vil_stream_fstream64(const char * fn, const char * mode)
   : mode_(modeflags(mode))
 {
   if (mode_ == O_RDONLY)
@@ -110,7 +110,7 @@ vil_stream_fstream64::~vil_stream_fstream64()
 }
 
 vil_streampos
-vil_stream_fstream64::write(void const * buf, vil_streampos n)
+vil_stream_fstream64::write(const void * buf, vil_streampos n)
 {
   assert(ok());
 

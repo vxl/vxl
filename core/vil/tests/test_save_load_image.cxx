@@ -92,9 +92,9 @@ my_comparison(T a, T b, T tol)
 //: Test to see if all the pixels in two images are equal
 template <class T>
 bool
-test_image_equal(char const * type_name,
-                 vil_image_view<T> const & image,
-                 vil_image_view_base_sptr const & pimage2,
+test_image_equal(const char * type_name,
+                 const vil_image_view<T> & image,
+                 const vil_image_view_base_sptr & pimage2,
                  T tolerance = 0,
                  unsigned max_bad_pixels = 0)
 {
@@ -311,8 +311,8 @@ create_grey_gif(const char * filename)
 
 template <class T>
 void
-vil_test_image_type(char const * type_name,          // type for image to read and write
-                    vil_image_view<T> const & image, // test image to save and restore
+vil_test_image_type(const char * type_name,          // type for image to read and write
+                    const vil_image_view<T> & image, // test image to save and restore
                     bool test_cropped_image = true,  // set to false for non-"crop"-safe formats (viz. mit and viff)
                     T tolerance = 0,                 // require read back image identical
                     unsigned max_bad_pixels = 0,     // require read back image identical

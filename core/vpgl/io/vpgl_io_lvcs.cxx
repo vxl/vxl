@@ -5,7 +5,7 @@
 #include <vnl/io/vnl_io_matrix_fixed.h>
 
 void
-vsl_b_write(vsl_b_ostream & os, vpgl_lvcs const & lvcs)
+vsl_b_write(vsl_b_ostream & os, const vpgl_lvcs & lvcs)
 {
   if (!os)
     return;
@@ -49,7 +49,8 @@ vsl_b_read(vsl_b_istream & is, vpgl_lvcs & lvcs)
   vsl_b_read(is, ver);
   switch (ver)
   {
-    case 1: {
+    case 1:
+    {
       unsigned cs_name;
       vsl_b_read(is, cs_name);
 
@@ -71,12 +72,17 @@ vsl_b_read(vsl_b_istream & is, vpgl_lvcs & lvcs)
       vsl_b_read(is, loy);
       vsl_b_read(is, theta);
 
-      vpgl_lvcs temp(lat, lon, elev,
-                    static_cast<vpgl_lvcs::cs_names>(cs_name),
-                    lat_scale, lon_scale,
-                    static_cast<vpgl_lvcs::AngUnits>(ang_unit),
-                    static_cast<vpgl_lvcs::LenUnits>(len_unit),
-                    lox, loy, theta);
+      vpgl_lvcs temp(lat,
+                     lon,
+                     elev,
+                     static_cast<vpgl_lvcs::cs_names>(cs_name),
+                     lat_scale,
+                     lon_scale,
+                     static_cast<vpgl_lvcs::AngUnits>(ang_unit),
+                     static_cast<vpgl_lvcs::LenUnits>(len_unit),
+                     lox,
+                     loy,
+                     theta);
       lvcs = temp;
       break;
     }
@@ -97,7 +103,7 @@ vsl_print_summary(std::ostream & os, const vpgl_lvcs & c)
 
 //: Binary save lvcs sptr to stream
 void
-vsl_b_write(vsl_b_ostream & os, vpgl_lvcs_sptr const & lvcs_sptr)
+vsl_b_write(vsl_b_ostream & os, const vpgl_lvcs_sptr & lvcs_sptr)
 {
   if (!lvcs_sptr)
     return;
@@ -111,7 +117,8 @@ vsl_b_read(vsl_b_istream & is, vpgl_lvcs_sptr & lvcs_sptr)
 {
   lvcs_sptr = vpgl_lvcs_sptr(new vpgl_lvcs());
   vsl_b_read(is, *lvcs_sptr);
-  if (!is.is().good()) {
+  if (!is.is().good())
+  {
     lvcs_sptr = nullptr;
   }
 }

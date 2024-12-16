@@ -66,7 +66,7 @@ class my_class : public parent_class
   //: Brief description of the member variable.
   double my_value;
 
- public:
+public:
   //: Brief description of method. Don't forget the colon, and don't continue on next line.
   // Do not leave any blank lines without the //, or doxygen
   // will think you have ended the documentation comment, and
@@ -82,10 +82,11 @@ class my_class : public parent_class
 
   //: Brief description of the enum.
   // Here comes the detailed description of the enum.
-  enum vxl_formats {
-    VXL_FLOAT,      //!< This is documentation for this element of the enum.
-    VXL_COMPLEX,    //!< This works for Doxygen only.
-    VXL_DOUBLE      //!< Remark the needed '!<' for this !
+  enum vxl_formats
+  {
+    VXL_FLOAT,   //!< This is documentation for this element of the enum.
+    VXL_COMPLEX, //!< This works for Doxygen only.
+    VXL_DOUBLE   //!< Remark the needed '!<' for this !
   };
 };
 

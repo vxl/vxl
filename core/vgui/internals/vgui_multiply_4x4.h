@@ -7,6 +7,7 @@
 // @author fsm
 
 // this will fail if M overlaps with A or B.
-void vgui_multiply_4x4(double const A[4][4], double const B[4][4], double M[4][4]);
+void
+vgui_multiply_4x4(const double A[4][4], const double B[4][4], double M[4][4]);
 
 #endif // vgui_multiply_4x4_h_

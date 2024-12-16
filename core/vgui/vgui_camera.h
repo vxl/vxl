@@ -25,27 +25,33 @@
 //  appropriately.
 class vgui_camera
 {
- public:
+public:
   //: Constructor - create a camera with a default projection matrix.
   vgui_camera() {}
 
   //: Constructor - create a camera with the given projection matrix.
-  vgui_camera(vnl_matrix_fixed<double,3,4> const& P) : pmatrix(P) {}
+  vgui_camera(const vnl_matrix_fixed<double, 3, 4> & P)
+    : pmatrix(P)
+  {}
 
   //: Set the projection matrix to the given matrix.
-  void set_pmatrix(vnl_matrix_fixed<double,3,4> const& m) { pmatrix= m; }
+  void
+  set_pmatrix(const vnl_matrix_fixed<double, 3, 4> & m)
+  {
+    pmatrix = m;
+  }
 
   //: Plug this matrix into a vgui_loader_tableau.
   //  Note: this will return a GL_PROJECTION_MATRIX with the assumption that
   //  you have a Euclidean reconstruction.  The result is that the front and
   //  back clipping planes will be PARALLEL (note: not projective frame!) to
   //  the image plane.
-  vnl_matrix_fixed<double,3,4> get_glprojmatrix( const int imagesizex= 720,
-                                                 const int imagesizey= 576) const;
+  vnl_matrix_fixed<double, 3, 4>
+  get_glprojmatrix(const int imagesizex = 720, const int imagesizey = 576) const;
 
- protected:
+protected:
   //: The projection matrix.
-  vnl_matrix_fixed<double,3,4> pmatrix;
+  vnl_matrix_fixed<double, 3, 4> pmatrix;
 };
 
 #endif // vgui_camera_h_

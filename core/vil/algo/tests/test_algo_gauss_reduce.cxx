@@ -12,7 +12,7 @@
 
 template <class T>
 inline void
-print_out(vil_image_view<T> const & orig, const char * msg, vil_image_view<T> const & modif)
+print_out(const vil_image_view<T> & orig, const char * msg, const vil_image_view<T> & modif)
 {
   std::cout << "Original: ";
   vil_print_all(std::cout, orig);
@@ -553,25 +553,25 @@ test_algo_gauss_reduce_121_byte_multiplane(unsigned nx, unsigned ny, unsigned np
             << " Testing vil_algo_gauss_reduce_121 (byte) (nx=" << nx << ", ny=" << ny << ", np=" << np << ")\n"
             << "*************************************************************\n";
 
-#define TEST_BODY(T)                                                                                                   \
-  for (unsigned int j = 0; j < image0.nj(); ++j)                                                                       \
-    for (unsigned int i = 0; i < image0.ni(); ++i)                                                                     \
-      for (unsigned p = 0; p < np; ++p)                                                                                \
-        image0(i, j, p) = static_cast<T>(i + j * 10 + 5 * p);                                                          \
-                                                                                                                       \
-  vil_gauss_reduce_121(image0, reduced_x);                                                                             \
-                                                                                                                       \
-  print_out(image0, "reduced_x", reduced_x);                                                                           \
-                                                                                                                       \
-  for (unsigned p = 0; p < np; ++p)                                                                                    \
-  {                                                                                                                    \
-    std::cout << "Test plane " << p << '\n';                                                                           \
-    TEST("First element", reduced_x(0, 1, p), image0(0, 2, p));                                                        \
-    TEST("Next element", reduced_x(1, 1, p), image0(2, 2, p));                                                         \
-    unsigned Lx = (nx + 1) / 2;                                                                                        \
-    unsigned Ly = (ny + 1) / 2;                                                                                        \
-    TEST("Last element in x", reduced_x(Lx - 1, 1, p), image0(2 * (Lx - 1), 2, p));                                    \
-    TEST("Last element in y", reduced_x(1, Ly - 1, p), image0(2, 2 * (Ly - 1), p));                                    \
+#define TEST_BODY(T)                                                                \
+  for (unsigned int j = 0; j < image0.nj(); ++j)                                    \
+    for (unsigned int i = 0; i < image0.ni(); ++i)                                  \
+      for (unsigned p = 0; p < np; ++p)                                             \
+        image0(i, j, p) = static_cast<T>(i + j * 10 + 5 * p);                       \
+                                                                                    \
+  vil_gauss_reduce_121(image0, reduced_x);                                          \
+                                                                                    \
+  print_out(image0, "reduced_x", reduced_x);                                        \
+                                                                                    \
+  for (unsigned p = 0; p < np; ++p)                                                 \
+  {                                                                                 \
+    std::cout << "Test plane " << p << '\n';                                        \
+    TEST("First element", reduced_x(0, 1, p), image0(0, 2, p));                     \
+    TEST("Next element", reduced_x(1, 1, p), image0(2, 2, p));                      \
+    unsigned Lx = (nx + 1) / 2;                                                     \
+    unsigned Ly = (ny + 1) / 2;                                                     \
+    TEST("Last element in x", reduced_x(Lx - 1, 1, p), image0(2 * (Lx - 1), 2, p)); \
+    TEST("Last element in y", reduced_x(1, Ly - 1, p), image0(2, 2 * (Ly - 1), p)); \
   } // end macro TEST_BODY
 
   {

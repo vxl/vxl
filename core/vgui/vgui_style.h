@@ -34,36 +34,40 @@
 // \endcode
 class vgui_style : public vbl_ref_count
 {
- public:
+public:
+  //: Create a new style object
+  static vgui_style_sptr
+  new_style();
 
   //: Create a new style object
-  static vgui_style_sptr new_style();
-
-  //: Create a new style object
-  static vgui_style_sptr new_style(float r, float g, float b,
-                                   float point_size, float line_width,
-                                   float alpha = 1.0f);
+  static vgui_style_sptr
+  new_style(float r, float g, float b, float point_size, float line_width, float alpha = 1.0f);
 
   //: Create a new style object from an existing one;
-  static vgui_style_sptr new_style(const vgui_style_sptr& style);
+  static vgui_style_sptr
+  new_style(const vgui_style_sptr & style);
 
   //: Sets the GL colour to this style's value
   //
   // Does nothing if the colour is invalid.
-  void apply_color() const;
+  void
+  apply_color() const;
 
   //: Sets the GL line width to this style's value
   //
   // Does nothing if the width is invalid (e.g. <= 0.0)
-  void apply_line_width() const;
+  void
+  apply_line_width() const;
 
   //: Sets the GL point size to this style's value
   //
   // Does nothing if the point size is invalid (e.g. <= 0.0)
-  void apply_point_size() const;
+  void
+  apply_point_size() const;
 
   //: Sets all the GL style parameters (colour, size, width).
-  void apply_all() const;
+  void
+  apply_all() const;
 
   //: Style colour.
   float rgba[4];
@@ -74,7 +78,7 @@ class vgui_style : public vbl_ref_count
   //: Style line width.
   float line_width;
 
- protected:
+protected:
   //: Constructor - creates a style with default values.
   vgui_style();
 
@@ -82,9 +86,16 @@ class vgui_style : public vbl_ref_count
   vgui_style(float r, float g, float b, float point_size, float line_width, float alpha);
 
   // Copy constructor
-  vgui_style(vgui_style const& s)
-    : vbl_ref_count(), point_size(s.point_size), line_width(s.line_width)
-    { rgba[0]=s.rgba[0]; rgba[1]=s.rgba[1]; rgba[2]=s.rgba[2]; rgba[3]=s.rgba[3]; }
+  vgui_style(const vgui_style & s)
+    : vbl_ref_count()
+    , point_size(s.point_size)
+    , line_width(s.line_width)
+  {
+    rgba[0] = s.rgba[0];
+    rgba[1] = s.rgba[1];
+    rgba[2] = s.rgba[2];
+    rgba[3] = s.rgba[3];
+  }
 
   // Destructor - only the smart pointer should use this
   ~vgui_style();
@@ -95,12 +106,13 @@ class vgui_style : public vbl_ref_count
 //: Finds out whether two vgui_styles are equal.
 class vgui_style_equal
 {
- public:
+public:
   //: Constructor - takes one of the styles to be compared.
   vgui_style_equal(vgui_style_sptr s1);
 
   //: Returns true if the given style is identical to the stored style.
-  bool operator() (vgui_style_sptr s2);
+  bool
+  operator()(vgui_style_sptr s2);
 
   vgui_style_sptr s_;
 };

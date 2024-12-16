@@ -17,16 +17,19 @@
 //: Binary save vil_smart_ptr to stream.
 // \relatesalso vil_smart_ptr
 template <class T>
-void vsl_b_write(vsl_b_ostream & os, const vil_smart_ptr<T> & v);
+void
+vsl_b_write(vsl_b_ostream & os, const vil_smart_ptr<T> & v);
 
 //: Binary load vil_smart_ptr from stream.
 // \relatesalso vil_smart_ptr
 template <class T>
-void vsl_b_read(vsl_b_istream & is, vil_smart_ptr<T> & v);
+void
+vsl_b_read(vsl_b_istream & is, vil_smart_ptr<T> & v);
 
 //: Print human readable summary of object to a stream
 // \relatesalso vil_smart_ptr
 template <class T>
-void vsl_print_summary(std::ostream & os,const vil_smart_ptr<T> & b);
+void
+vsl_print_summary(std::ostream & os, const vil_smart_ptr<T> & b);
 
 #endif // vil_io_smart_ptr_h

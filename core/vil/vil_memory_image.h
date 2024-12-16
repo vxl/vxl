@@ -22,7 +22,7 @@
 class vil_memory_image : public vil_image_resource
 {
   //: Management of the memory image is devolved to an internal image_view.
-  vil_image_view_base* view_;
+  vil_image_view_base * view_;
 
   //: Create an empty memory image.
   vil_memory_image();
@@ -38,49 +38,64 @@ class vil_memory_image : public vil_image_resource
                    unsigned n_interleaved_planes = 1);
 
   //: Create a wrapper around the given image_view
-  vil_memory_image(vil_image_view_base const &);
+  vil_memory_image(const vil_image_view_base &);
 
 
-  friend vil_image_resource_sptr vil_new_image_resource(
-    unsigned ni, unsigned nj, unsigned nplanes,
-    vil_pixel_format format);
+  friend vil_image_resource_sptr
+  vil_new_image_resource(unsigned ni, unsigned nj, unsigned nplanes, vil_pixel_format format);
 
-  friend vil_image_resource_sptr vil_new_image_resource_interleaved(
-    unsigned ni, unsigned nj, unsigned nplanes,
-    vil_pixel_format format);
+  friend vil_image_resource_sptr
+  vil_new_image_resource_interleaved(unsigned ni, unsigned nj, unsigned nplanes, vil_pixel_format format);
 
-  friend vil_image_resource_sptr vil_new_image_resource_of_view(
-    vil_image_view_base const & view);
+  friend vil_image_resource_sptr
+  vil_new_image_resource_of_view(const vil_image_view_base & view);
 
- public:
-
-  ~vil_memory_image() override {delete view_;}
+public:
+  ~vil_memory_image() override { delete view_; }
 
   //: Dimensions:  planes x width x height x components
-  unsigned nplanes() const override { return view_->nplanes(); }
-  unsigned ni() const override { return view_->ni(); }
-  unsigned nj() const override { return view_->nj(); }
+  unsigned
+  nplanes() const override
+  {
+    return view_->nplanes();
+  }
+  unsigned
+  ni() const override
+  {
+    return view_->ni();
+  }
+  unsigned
+  nj() const override
+  {
+    return view_->nj();
+  }
 
-  enum vil_pixel_format pixel_format() const override { return view_->pixel_format(); }
+  enum vil_pixel_format
+  pixel_format() const override
+  {
+    return view_->pixel_format();
+  }
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.
-  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                 unsigned j0, unsigned nj) const override;
+  vil_image_view_base_sptr
+  get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const override;
 
   //: Create a view of this data.
   // \return 0 if unable to get view of correct size.
-  vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
-                                            unsigned j0, unsigned nj) const override;
+  vil_image_view_base_sptr
+  get_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const override;
 
   //: Put the data in this view back into the image source.
-  bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0) override;
+  bool
+  put_view(const vil_image_view_base & im, unsigned i0, unsigned j0) override;
 
   //: Declare that this is an in-memory image which is not read-only
-  bool get_property(char const * tag, void * prop = nullptr) const override
+  bool
+  get_property(const char * tag, void * prop = nullptr) const override
   {
-    if (0==std::strcmp(tag, vil_property_memory))
-      return prop ? (*static_cast<bool*>(prop)) = true : true;
+    if (0 == std::strcmp(tag, vil_property_memory))
+      return prop ? (*static_cast<bool *>(prop)) = true : true;
 
     return false;
   }

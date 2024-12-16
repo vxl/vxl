@@ -22,7 +22,7 @@ class wx_docview_frame;
 //-------------------------------------------------------------------------
 class wx_docview_app : public wxApp
 {
- public:
+public:
   //: Constructor - default.
   wx_docview_app();
 
@@ -30,17 +30,23 @@ class wx_docview_app : public wxApp
   virtual ~wx_docview_app() {}
 
   //: Called on app initialization.
-  virtual bool OnInit();
+  virtual bool
+  OnInit();
 
   //: Called on app exit.
-  virtual int OnExit();
+  virtual int
+  OnExit();
 
   //: Provides access to this Apps main frame.
-  wx_docview_frame* get_main_frame() const { return frame_; }
+  wx_docview_frame *
+  get_main_frame() const
+  {
+    return frame_;
+  }
 
- private:
-  wxDocManager*      doc_manager_;
-  wx_docview_frame*  frame_;
+private:
+  wxDocManager * doc_manager_;
+  wx_docview_frame * frame_;
 };
 
 //: Implements wx_docview_app& wxGetApp().

@@ -16,10 +16,9 @@
 #include "vcsl_polar_sptr.h"
 
 //: Planar coordinate system specified by the parameters rho and theta
-class vcsl_polar
-  : public vcsl_spatial
+class vcsl_polar : public vcsl_spatial
 {
- public:
+public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -34,7 +33,11 @@ class vcsl_polar
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  const vcsl_polar *cast_to_polar() const override { return this; }
+  const vcsl_polar *
+  cast_to_polar() const override
+  {
+    return this;
+  }
 };
 
 #endif // vcsl_polar_h_

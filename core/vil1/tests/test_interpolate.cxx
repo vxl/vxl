@@ -10,12 +10,12 @@
 #include "vil1/vil1_interpolate.h"
 #include "testlib/testlib_test.h"
 
-static double const avg[5] = { 0.8709, 1.25178114, 1.0130145969, 1.0978098765, 1.0605102418 };
+static const double avg[5] = { 0.8709, 1.25178114, 1.0130145969, 1.0978098765, 1.0605102418 };
 
 static double
 f(double i, double j, int d)
 {
-  static double const taylor[5][5] = { { 0.8709, -0.2943, -0.6026, 0.4936, 0.6924 },
+  static const double taylor[5][5] = { { 0.8709, -0.2943, -0.6026, 0.4936, 0.6924 },
                                        { 0.8338, 0.6263, 0.2076, -0.1098, 0.0503 },
                                        { -0.1795, -0.9803, -0.4556, 0.8636, -0.5947 },
                                        { 0.7873, -0.7222, -0.6024, -0.0680, 0.3443 },

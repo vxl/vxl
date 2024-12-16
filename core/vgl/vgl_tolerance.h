@@ -10,12 +10,12 @@
 template <typename T>
 class vgl_tolerance
 {
-  public:
-    //! Tolerance for judging 4 points to be coplanar
-    static VGL_EXPORT const T point_3d_coplanarity;
+public:
+  //! Tolerance for judging 4 points to be coplanar
+  static VGL_EXPORT const T point_3d_coplanarity;
 
-    //! Tolerance for judging positions to be equal
-    static VGL_EXPORT const T position;
+  //! Tolerance for judging positions to be equal
+  static VGL_EXPORT const T position;
 };
 
 extern template class vgl_tolerance<double>;

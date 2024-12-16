@@ -13,7 +13,7 @@ static void
 test_write_endian()
 {
   std::string tmp_nam = vul_temp_filename() + ".bin";
-  char const * file = !tmp_nam.empty() ? tmp_nam.c_str() : "smoo.bin";
+  const char * file = !tmp_nam.empty() ? tmp_nam.c_str() : "smoo.bin";
 
   // write bytes
   vil1_stream * s = new vil1_stream_fstream(file, "w");

@@ -32,7 +32,7 @@ vgui_selector_tableau::vgui_selector_tableau() {}
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_selector_tableau_new.
 // Many children, top to bottom.
-vgui_selector_tableau::vgui_selector_tableau(std::vector<vgui_tableau_sptr> const & the_children)
+vgui_selector_tableau::vgui_selector_tableau(const std::vector<vgui_tableau_sptr> & the_children)
 {
   for (unsigned int i = 0; i < the_children.size(); ++i)
     add(the_children[i]);
@@ -155,7 +155,7 @@ vgui_selector_tableau::get_bounding_box(float lo[3], float hi[3]) const
 
 //----------------------------------------------------------------------------
 void
-vgui_selector_tableau::add(vgui_tableau_sptr const & tab, std::string name)
+vgui_selector_tableau::add(const vgui_tableau_sptr & tab, std::string name)
 {
   if (name == "")
     name = tab->file_name();
@@ -177,7 +177,7 @@ vgui_selector_tableau::add(vgui_tableau_sptr const & tab, std::string name)
 //: Add to list of child tableaux.
 // virtual
 bool
-vgui_selector_tableau::add_child(vgui_tableau_sptr const & t)
+vgui_selector_tableau::add_child(const vgui_tableau_sptr & t)
 {
   this->add(t);
   return true;
@@ -186,7 +186,7 @@ vgui_selector_tableau::add_child(vgui_tableau_sptr const & t)
 //----------------------------------------------------------------------------
 //: Remove given tableau from list of child tableaux.
 void
-vgui_selector_tableau::remove(vgui_tableau_sptr const & t)
+vgui_selector_tableau::remove(const vgui_tableau_sptr & t)
 {
   if (!remove_child(t))
     std::cerr << __FILE__ " : no such child tableau\n";
@@ -261,7 +261,7 @@ vgui_selector_tableau::get_tableau(const std::string & name) const
 //----------------------------------------------------------------------------
 // virtual
 bool
-vgui_selector_tableau::remove_child(vgui_tableau_sptr const & t)
+vgui_selector_tableau::remove_child(const vgui_tableau_sptr & t)
 {
   bool retval = false;
 

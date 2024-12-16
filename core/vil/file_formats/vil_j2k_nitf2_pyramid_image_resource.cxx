@@ -20,7 +20,7 @@ scale_at_level(unsigned level)
   return s;
 }
 
-vil_j2k_nitf2_pyramid_image_resource::vil_j2k_nitf2_pyramid_image_resource(vil_image_resource_sptr const & nitf2)
+vil_j2k_nitf2_pyramid_image_resource::vil_j2k_nitf2_pyramid_image_resource(const vil_image_resource_sptr & nitf2)
   : nitf2_sptr_(nitf2)
 {
   ptr_ = 0;
@@ -75,7 +75,7 @@ vil_j2k_nitf2_pyramid_image_resource::pixel_format() const
 
 //: Return a string describing the file format.
 // Only file images have a format, others return 0
-char const *
+const char *
 vil_j2k_nitf2_pyramid_image_resource::file_format() const
 {
   return "j2k_nitf2";

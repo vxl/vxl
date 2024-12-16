@@ -15,7 +15,7 @@
 //-----------------------------------------------------------------------------
 //: Sends a text description of the tableau hierarchy beneath the given tableau.
 static void
-vgui_text_graph(std::ostream & s, std::string const & prefix, vgui_tableau_sptr const & t)
+vgui_text_graph(std::ostream & s, const std::string & prefix, const vgui_tableau_sptr & t)
 {
   s << prefix << t /*->type_name()*/ << std::endl;
 
@@ -34,7 +34,7 @@ vgui_text_graph(std::ostream & s, std::string const & prefix, vgui_tableau_sptr 
 //-----------------------------------------------------------------------------
 //: Sends a text description of the tableau hierarchy beneath the given tableau.
 void
-vgui_text_graph(std::ostream & s, vgui_tableau_sptr const & t)
+vgui_text_graph(std::ostream & s, const vgui_tableau_sptr & t)
 {
   vgui_text_graph(s, "", t);
 }

@@ -19,7 +19,7 @@
 template <class mixture_type, class detector_type>
 class vpdt_mixture_any_detector
 {
- public:
+public:
   //: the functor return type
   typedef bool return_type;
   //: the functor return type
@@ -33,14 +33,18 @@ class vpdt_mixture_any_detector
   typedef typename vpdt_field_traits<F>::scalar_type T;
 
   //: Constructor
-  vpdt_mixture_any_detector(const detector_type& d) : detect(d) {}
+  vpdt_mixture_any_detector(const detector_type & d)
+    : detect(d)
+  {}
 
   //: The main function
-  bool operator() (const mixture_type& mix, const F& sample, bool& result) const
+  bool
+  operator()(const mixture_type & mix, const F & sample, bool & result) const
   {
     result = false;
-    for (unsigned int i=0; i<mix.num_components(); ++i){
-      if ( !detect(mix.distribution(i),sample,result) )
+    for (unsigned int i = 0; i < mix.num_components(); ++i)
+    {
+      if (!detect(mix.distribution(i), sample, result))
         return false;
       if (result)
         return true;
@@ -58,7 +62,7 @@ class vpdt_mixture_any_detector
 template <class mixture_type, class detector_type>
 class vpdt_mixture_all_detector
 {
- public:
+public:
   //: the functor return type
   typedef bool return_type;
   //: the functor return type
@@ -72,14 +76,18 @@ class vpdt_mixture_all_detector
   typedef typename vpdt_field_traits<F>::scalar_type T;
 
   //: Constructor
-  vpdt_mixture_all_detector(const detector_type& d) : detect(d) {}
+  vpdt_mixture_all_detector(const detector_type & d)
+    : detect(d)
+  {}
 
   //: The main function
-  bool operator() (const mixture_type& mix, const F& sample, bool& result) const
+  bool
+  operator()(const mixture_type & mix, const F & sample, bool & result) const
   {
     result = true;
-    for (unsigned int i=0; i<mix.num_components(); ++i){
-      if ( !detect(mix.distribution(i),sample,result) )
+    for (unsigned int i = 0; i < mix.num_components(); ++i)
+    {
+      if (!detect(mix.distribution(i), sample, result))
         return false;
       if (!result)
         return true;
@@ -97,7 +105,7 @@ class vpdt_mixture_all_detector
 template <class mixture_type, class detector_type>
 class vpdt_mixture_top_weight_detector
 {
- public:
+public:
   //: the functor return type
   typedef bool return_type;
   //: the functor return type
@@ -111,18 +119,22 @@ class vpdt_mixture_top_weight_detector
   typedef typename vpdt_field_traits<F>::scalar_type T;
 
   //: Constructor
-  vpdt_mixture_top_weight_detector(const detector_type& d, const T& w=T(0.5))
-    : detect(d), weight_thresh(w) {}
+  vpdt_mixture_top_weight_detector(const detector_type & d, const T & w = T(0.5))
+    : detect(d)
+    , weight_thresh(w)
+  {}
 
   //: The main function
-  bool operator() (const mixture_type& mix, const F& sample, bool& result) const
+  bool
+  operator()(const mixture_type & mix, const F & sample, bool & result) const
   {
     T total_weight = T(0);
     result = false;
-    for (unsigned int i=0; i<mix.num_components(); ++i){
+    for (unsigned int i = 0; i < mix.num_components(); ++i)
+    {
       if (total_weight > weight_thresh)
         return true;
-      if ( !detect(mix.distribution(i),sample,result) )
+      if (!detect(mix.distribution(i), sample, result))
         return false;
       if (result)
         return true;

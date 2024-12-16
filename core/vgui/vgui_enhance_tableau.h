@@ -31,7 +31,7 @@ class vgui_event;
 //  Use '{' and '}' to change the magnification.
 class vgui_enhance_tableau : public vgui_tableau
 {
- public:
+public:
   //: Constructor - don't use this, use vgui_enhance_tableau_new.
   //  A tableau constructed this way magnifies an area under the mouse pointer.
   vgui_enhance_tableau();
@@ -39,33 +39,40 @@ class vgui_enhance_tableau : public vgui_tableau
   //: Constructor - don't use this, use vgui_enhance_tableau_new.
   //  A tableau constructed this way magnifies area of the given tableau
   //  under the mouse pointer.
-  vgui_enhance_tableau(vgui_tableau_sptr const& t);
+  vgui_enhance_tableau(const vgui_tableau_sptr & t);
 
   //: Constructor - don't use this, use vgui_enhance_tableau_new.
   //  A tableau constructed this way displays the tableau t2 on top of t1 in
   //  a region around the mouse pointer.
-  vgui_enhance_tableau(vgui_tableau_sptr const& t1,
-                       vgui_tableau_sptr const& t2);
+  vgui_enhance_tableau(const vgui_tableau_sptr & t1, const vgui_tableau_sptr & t2);
 
   //: Returns the file_name of the first child tableau.
-  std::string file_name() const;
+  std::string
+  file_name() const;
 
   //: Returns the type of this tableau ('vgui_enhance_tableau').
-  std::string type_name() const;
+  std::string
+  type_name() const;
 
   //: True to enable key-presses to change size and magnification.
-  void set_enable_key_bindings(bool on) { enable_key_bindings = on; }
+  void
+  set_enable_key_bindings(bool on)
+  {
+    enable_key_bindings = on;
+  }
 
   //: Set the child in the first slot.
-  void set_child(vgui_tableau_sptr const& t);
+  void
+  set_child(const vgui_tableau_sptr & t);
 
- protected:
+protected:
   //: Destructor - called by vgui_enhance_tableau_sptr.
- ~vgui_enhance_tableau();
+  ~vgui_enhance_tableau();
 
   //: Handle all events sent to this tableau.
   //  In particular, use left mouse press to enhance/magnify.
-  bool handle(const vgui_event&);
+  bool
+  handle(const vgui_event &);
 
   //: First child, this is the tableau displayed, except when the mouse is down.
   vgui_parent_child_link slot1;
@@ -96,17 +103,19 @@ class vgui_enhance_tableau : public vgui_tableau
 struct vgui_enhance_tableau_new : public vgui_enhance_tableau_sptr
 {
   //: Constructor - magnifies an area under the mouse pointer.
-  vgui_enhance_tableau_new() :
-    vgui_enhance_tableau_sptr(new vgui_enhance_tableau()) { }
+  vgui_enhance_tableau_new()
+    : vgui_enhance_tableau_sptr(new vgui_enhance_tableau())
+  {}
 
   //: Constructor - magnifies area of the given tableau under the mouse pointer.
-  vgui_enhance_tableau_new(vgui_tableau_sptr const&t) :
-    vgui_enhance_tableau_sptr(new vgui_enhance_tableau(t)) { }
+  vgui_enhance_tableau_new(const vgui_tableau_sptr & t)
+    : vgui_enhance_tableau_sptr(new vgui_enhance_tableau(t))
+  {}
 
   //: Constructor - displays t2 on top of t1 in a region around mouse pointer.
-  vgui_enhance_tableau_new(vgui_tableau_sptr const&t1,
-                           vgui_tableau_sptr const&t2) :
-    vgui_enhance_tableau_sptr(new vgui_enhance_tableau(t1,t2)) { }
+  vgui_enhance_tableau_new(const vgui_tableau_sptr & t1, const vgui_tableau_sptr & t2)
+    : vgui_enhance_tableau_sptr(new vgui_enhance_tableau(t1, t2))
+  {}
 };
 
 #endif // vgui_enhance_tableau_h_

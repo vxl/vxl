@@ -44,24 +44,18 @@ makeNumDen(FloatingType d, int_type & num_, int_type & den_)
 
 //: Creates a rational from a double.
 //  This is done by computing the continued fraction approximation for d.
-vnl_rational::vnl_rational(double d)
-{
-  makeNumDen<double>(d, num_, den_);
-}
+vnl_rational::vnl_rational(double d) { makeNumDen<double>(d, num_, den_); }
 
 //: Creates a rational from a double.
 //  This is done by computing the continued fraction approximation for d.
-vnl_rational::vnl_rational(float f)
-{
-  makeNumDen<double>(f, num_, den_);
-}
+vnl_rational::vnl_rational(float f) { makeNumDen<double>(f, num_, den_); }
 
 //: Multiply/assign: replace lhs by lhs * rhs
 //  Note that 0 * Inf and Inf * 0 are undefined.
 //  Also note that there could be integer overflow during this calculation!
 //  In that case, an approximate result will be returned.
 vnl_rational &
-vnl_rational::operator*=(vnl_rational const & r)
+vnl_rational::operator*=(const vnl_rational & r)
 {
   assert(num_ != 0 || den_ != 0); // 0 * Inf is undefined
   int_type a = vnl_rational::gcd(r.numerator(), den_), b = vnl_rational::gcd(r.denominator(), num_);
@@ -109,7 +103,7 @@ vnl_rational::operator*=(int_type r)
 //  Also note that there could be integer overflow during this calculation!
 //  In that case, an approximate result will be returned.
 vnl_rational &
-vnl_rational::operator/=(vnl_rational const & r)
+vnl_rational::operator/=(const vnl_rational & r)
 {
   assert(num_ != 0 || den_ != 0); // 0/0, Inf/Inf undefined
   int_type a = vnl_rational::gcd(r.numerator(), num_), b = vnl_rational::gcd(r.denominator(), den_);

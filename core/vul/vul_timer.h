@@ -60,29 +60,40 @@ struct vul_timer_data;
 class vul_timer
 {
   //: struct containing timer data
-  vul_timer_data *data;
- public:
+  vul_timer_data * data;
+
+public:
   //: construct and reset counter to now.
   vul_timer();
   ~vul_timer();
   //: Reset the counted to now
-  void mark();
+  void
+  mark();
   //: Real        time (ms) since last mark
-  long real();
+  long
+  real();
   //: User        time (ms) since last mark
-  long user();
+  long
+  user();
   //: System      time (ms) since last mark
-  long system();
+  long
+  system();
   //: User+system time (ms) since last mark
-  long all();
+  long
+  all();
 
   //: Display user and real time since the last mark.
-  void print(std::ostream& s);
+  void
+  print(std::ostream & s);
 
- private:
+private:
   // disallow assigning to objects of this class:
-  vul_timer(vul_timer const &) { }
-  vul_timer& operator=(vul_timer const &) { return *this; }
+  vul_timer(const vul_timer &) {}
+  vul_timer &
+  operator=(const vul_timer &)
+  {
+    return *this;
+  }
 };
 
 #endif // vul_timer_h

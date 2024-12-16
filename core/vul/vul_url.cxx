@@ -38,7 +38,7 @@ static int called_WSAStartup = 0;
 
 //: only call this method with a correctly formatted http URL
 std::istream *
-vul_http_open(char const * url)
+vul_http_open(const char * url)
 {
   // split URL into auth, host, path and port number.
   std::string host;
@@ -49,7 +49,7 @@ vul_http_open(char const * url)
   // check it is an http URL.
   assert(std::strncmp(url, "http://", 7) == 0);
 
-  char const * p = url + 7;
+  const char * p = url + 7;
   while (*p && *p != '/')
     ++p;
   host = std::string(url + 7, p);
@@ -259,7 +259,7 @@ vul_http_open(char const * url)
 
 //: only call this method with a correctly formatted http URL
 bool
-vul_http_exists(char const * url)
+vul_http_exists(const char * url)
 {
   // split URL into auth, host, path and port number.
   std::string host;
@@ -268,7 +268,7 @@ vul_http_exists(char const * url)
   int port = 80; // default
   assert(std::strncmp(url, "http://", 7) == 0);
 
-  char const * p = url + 7;
+  const char * p = url + 7;
   while (*p && *p != '/')
     ++p;
   host = std::string(url + 7, p);
@@ -567,7 +567,9 @@ static const char base64_encoding[] = {
 
 static char out_buf[4];
 
-static const char *encode_triplet(const char data[3], unsigned int n) {
+static const char *
+encode_triplet(const char data[3], unsigned int n)
+{
   assert(n > 0 && n < 4);
   out_buf[0] = base64_encoding[(data[0] & 0xFC) >> 2];
   out_buf[1] = base64_encoding[((data[0] & 0x3) << 4) + ((data[1] & 0xf0) >> 4)];

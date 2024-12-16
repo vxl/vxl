@@ -18,24 +18,31 @@
 #include <vil/vil_file_format.h>
 #include <vil/vil_pyramid_image_resource.h>
 
-//The pyramid resource is made up of a set of image resources in
-// a single directory - the image list.
+// The pyramid resource is made up of a set of image resources in
+//  a single directory - the image list.
 class vil_pyramid_image_list_format : public vil_file_format
 {
- public:
+public:
   ~vil_pyramid_image_list_format() override = default;
 
   //: Return a character string which uniquely identifies this format.
-  //E.g. "pnm", "jpeg", etc.
-  char const* tag() const override {return "pyil";}//pyramid image list
+  // E.g. "pnm", "jpeg", etc.
+  const char *
+  tag() const override
+  {
+    return "pyil";
+  } // pyramid image list
 
   //: should return 0 so that no attempt is made to create a single image resource
-  vil_image_resource_sptr make_input_image(vil_stream* /*vs*/) override
-  { return nullptr; }
+  vil_image_resource_sptr
+  make_input_image(vil_stream * /*vs*/) override
+  {
+    return nullptr;
+  }
 
   //: Read a pyramid resource. Image list files are stored in directory.
   vil_pyramid_image_resource_sptr
-  make_input_pyramid_image(char const* directory) override;
+  make_input_pyramid_image(const char * directory) override;
 
 
   //: Construct a pyramid image resource from a base image
@@ -45,57 +52,65 @@ class vil_pyramid_image_list_format : public vil_file_format
   //  modification. Each pyramid file in the directory is named
   //  filename + "level_index", e.g. R0, R1, ... Rn.
   vil_pyramid_image_resource_sptr
-  make_pyramid_image_from_base(char const* directory,
-                               vil_image_resource_sptr const& base_image,
+  make_pyramid_image_from_base(const char * directory,
+                               const vil_image_resource_sptr & base_image,
                                unsigned int nlevels,
                                bool copy_base,
-                               char const* level_file_format,
-                               char const* filename) override;
+                               const char * level_file_format,
+                               const char * filename) override;
 
   //: A non-pyramid output image doesn't make sense here
-  vil_image_resource_sptr make_output_image(vil_stream* /*vs*/,
-                                                    unsigned int /*ni*/,
-                                                    unsigned int /*nj*/,
-                                                    unsigned int /*nplanes*/,
-                                                    enum vil_pixel_format) override
-  { return nullptr; }
+  vil_image_resource_sptr
+  make_output_image(vil_stream * /*vs*/,
+                    unsigned int /*ni*/,
+                    unsigned int /*nj*/,
+                    unsigned int /*nplanes*/,
+                    enum vil_pixel_format) override
+  {
+    return nullptr;
+  }
 
   vil_pyramid_image_resource_sptr
-    make_pyramid_output_image(char const* directory) override;
+  make_pyramid_output_image(const char * directory) override;
 };
 
 struct pyramid_level
 {
-  pyramid_level(vil_image_resource_sptr const& image)
-  : scale_(1.0f), image_(image), cur_level_(0) {}
+  pyramid_level(const vil_image_resource_sptr & image)
+    : scale_(1.0f)
+    , image_(image)
+    , cur_level_(0)
+  {}
   //: scale associated with level
   float scale_;
 
-  //:the resource
+  //: the resource
   vil_image_resource_sptr image_;
 
-  //:the current pyramid level for this resource
+  //: the current pyramid level for this resource
   unsigned int cur_level_;
 
-  //:print ni and scale and values
-  void print(const unsigned int l) const {
-    std::cout << "level[" << l <<  "]  scale: " << scale_
-             << "  ni: " << image_->ni() << '\n';
+  //: print ni and scale and values
+  void
+  print(const unsigned int l) const
+  {
+    std::cout << "level[" << l << "]  scale: " << scale_ << "  ni: " << image_->ni() << '\n';
   }
 };
 
 
 class vil_pyramid_image_list : public vil_pyramid_image_resource
 {
- public:
-  vil_pyramid_image_list(char const* directory);
-  vil_pyramid_image_list(std::vector<vil_image_resource_sptr> const& images);
+public:
+  vil_pyramid_image_list(const char * directory);
+  vil_pyramid_image_list(const std::vector<vil_image_resource_sptr> & images);
   ~vil_pyramid_image_list() override;
   //: The number of planes (or components) in the image.
   // This method refers to the base (max resolution) image
   // Dimensions:  Planes x ni x nj.
   // This concept is treated as a synonym to components.
-  inline unsigned int nplanes() const override
+  inline unsigned int
+  nplanes() const override
   {
     if (!levels_.empty())
       return levels_[0]->image_->nplanes();
@@ -105,7 +120,8 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
   //: The number of pixels in each row.
   // This method refers to the base (max resolution) image
   // Dimensions:  Planes x ni x nj.
-  inline unsigned int ni() const override
+  inline unsigned int
+  ni() const override
   {
     if (!levels_.empty())
       return levels_[0]->image_->ni();
@@ -115,7 +131,8 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
   //: The number of pixels in each column.
   // This method refers to the base (max resolution) image
   // Dimensions:  Planes x ni x nj.
-  inline unsigned int nj() const override
+  inline unsigned int
+  nj() const override
   {
     if (!levels_.empty())
       return levels_[0]->image_->nj();
@@ -125,7 +142,8 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
 
   //: Pixel Format.
 
-  inline enum vil_pixel_format pixel_format() const override
+  inline enum vil_pixel_format
+  pixel_format() const override
   {
     if (!levels_.empty())
       return levels_[0]->image_->pixel_format();
@@ -135,10 +153,8 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
 
   //: Create a read/write view of a copy of this data.
   // Applies only to the base image
-  inline vil_image_view_base_sptr get_copy_view(unsigned int i0,
-                                                        unsigned int n_i,
-                                                        unsigned int j0,
-                                                        unsigned int n_j) const override
+  inline vil_image_view_base_sptr
+  get_copy_view(unsigned int i0, unsigned int n_i, unsigned int j0, unsigned int n_j) const override
   {
     if (!levels_.empty())
       return levels_[0]->image_->get_copy_view(i0, n_i, j0, n_j);
@@ -148,75 +164,112 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0
-  char const* file_format() const override { return "pryl"; }
+  const char *
+  file_format() const override
+  {
+    return "pryl";
+  }
 
-        // --- Methods particular to pyramid resource ---
+  // --- Methods particular to pyramid resource ---
 
   //: number of levels in the pyramid
-  unsigned int nlevels() const override {return (unsigned int)(levels_.size());}
+  unsigned int
+  nlevels() const override
+  {
+    return (unsigned int)(levels_.size());
+  }
 
-  //:Copy an image resource to the pyramid.
+  //: Copy an image resource to the pyramid.
   // If an image of the same scale already exists, then method returns false.
-  bool put_resource(vil_image_resource_sptr const& image) override;
+  bool
+  put_resource(const vil_image_resource_sptr & image) override;
 
-  //:Add an image resource directly to the pyramid without copying.
+  //: Add an image resource directly to the pyramid without copying.
   // If an image of the same scale already exists, then method returns false.
-  bool add_resource(vil_image_resource_sptr const& image);
+  bool
+  add_resource(const vil_image_resource_sptr & image);
 
   //: virtual method for getting a level of the pyramid
-  vil_image_resource_sptr get_resource(const unsigned int level) const override
-    {return get_level(level);}
+  vil_image_resource_sptr
+  get_resource(const unsigned int level) const override
+  {
+    return get_level(level);
+  }
 
   //: Get a level image resource of the pyramid
-  inline vil_image_resource_sptr get_level(const unsigned int level) const
-  { if (level<levels_.size()) return levels_[level]->image_; else return nullptr; }
+  inline vil_image_resource_sptr
+  get_level(const unsigned int level) const
+  {
+    if (level < levels_.size())
+      return levels_[level]->image_;
+    else
+      return nullptr;
+  }
 
-  //:Get a partial view from the image from a specified pyramid level
-  vil_image_view_base_sptr get_copy_view(unsigned int i0, unsigned int n_i,
-                                                 unsigned int j0, unsigned int n_j,
-                                                 unsigned int level) const override;
+  //: Get a partial view from the image from a specified pyramid level
+  vil_image_view_base_sptr
+  get_copy_view(unsigned int i0, unsigned int n_i, unsigned int j0, unsigned int n_j, unsigned int level)
+    const override;
 
-  //:Get a view from the image in the pyramid closest to scale
-  vil_image_view_base_sptr get_copy_view(const float scale, float& actual_scale) const override
-  { return get_copy_view(0, ni(), 0, nj(), scale, actual_scale); }
+  //: Get a view from the image in the pyramid closest to scale
+  vil_image_view_base_sptr
+  get_copy_view(const float scale, float & actual_scale) const override
+  {
+    return get_copy_view(0, ni(), 0, nj(), scale, actual_scale);
+  }
 
-  //:Get a partial view from the image in the pyramid closest to scale.
+  //: Get a partial view from the image in the pyramid closest to scale.
   // The origin and size parameters are in the coordinate system of the base image.
-  vil_image_view_base_sptr get_copy_view(unsigned int i0, unsigned int n_i,
-                                         unsigned int j0, unsigned int n_j,
-                                         const float scale,
-                                         float& actual_scale) const override;
+  vil_image_view_base_sptr
+  get_copy_view(unsigned int i0,
+                unsigned int n_i,
+                unsigned int j0,
+                unsigned int n_j,
+                const float scale,
+                float & actual_scale) const override;
 
-  void set_directory(char const* directory) { directory_ = directory; }
+  void
+  set_directory(const char * directory)
+  {
+    directory_ = directory;
+  }
 
-  //for debugging purposes
-  void print(const unsigned int level) override
-  { if (level<levels_.size()) levels_[level]->print(level); }
+  // for debugging purposes
+  void
+  print(const unsigned int level) override
+  {
+    if (level < levels_.size())
+      levels_[level]->print(level);
+  }
 
- protected:
+protected:
   // no default constructor;
   vil_pyramid_image_list();
 
-           //    --- utility functions ---
+  //    --- utility functions ---
 
-  //:normalize the scale factors so that the base image scale = 1.0
-  void normalize_scales();
+  //: normalize the scale factors so that the base image scale = 1.0
+  void
+  normalize_scales();
 
-  //:find the image resource with scale closest to specified scale
-  pyramid_level* closest(const float scale) const;
+  //: find the image resource with scale closest to specified scale
+  pyramid_level *
+  closest(const float scale) const;
 
-  //:input image is the same size as one already in the pyramid
-  bool is_same_size(vil_image_resource_sptr const& image);
+  //: input image is the same size as one already in the pyramid
+  bool
+  is_same_size(const vil_image_resource_sptr & image);
 
-  //:find the nearest level to the image size
-  float find_next_level(vil_image_resource_sptr const& image);
+  //: find the nearest level to the image size
+  float
+  find_next_level(const vil_image_resource_sptr & image);
 
-          //    ---  members ---
+  //    ---  members ---
 
   std::string directory_;
 
-  //The set of images in the pyramid. levels_[0] is the base image
-  std::vector<pyramid_level*> levels_;
+  // The set of images in the pyramid. levels_[0] is the base image
+  std::vector<pyramid_level *> levels_;
 };
 
 #endif // vil_pyramid_image_list_h_

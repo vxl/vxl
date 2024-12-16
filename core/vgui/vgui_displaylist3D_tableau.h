@@ -21,31 +21,41 @@
 class vgui_soview3D;
 
 //: Displaying of three-dimensional geometric objects
-class vgui_displaylist3D_tableau : public vgui_displaybase_tableau, public vgui_drag_mixin
+class vgui_displaylist3D_tableau
+  : public vgui_displaybase_tableau
+  , public vgui_drag_mixin
 {
- public:
+public:
   //: Constructor - don't use this, use vgui_displaylist3D_tableau_new.
   vgui_displaylist3D_tableau() {}
 
-  std::string type_name() const { return "vgui_displaylist3D_tableau"; }
+  std::string
+  type_name() const
+  {
+    return "vgui_displaylist3D_tableau";
+  }
 
-  bool handle(const vgui_event& e);
-  bool mouse_down(int x, int y, vgui_button button, vgui_modifier modifier);
+  bool
+  handle(const vgui_event & e);
+  bool
+  mouse_down(int x, int y, vgui_button button, vgui_modifier modifier);
 
- protected:
+protected:
   //: Destructor - called by vgui_displaylist3D_tableau_sptr.
   ~vgui_displaylist3D_tableau() {}
 
- private:
-  void get_hits(float x, float y, std::vector<unsigned>& my_hits);
+private:
+  void
+  get_hits(float x, float y, std::vector<unsigned> & my_hits);
 };
 
 //: Creates a smart-pointer to a vgui_displaylist3D_tableau.
 struct vgui_displaylist3D_tableau_new : public vgui_displaylist3D_tableau_sptr
 {
   //: Constructor - create a default vgui_displaylist3D_tableau.
-  vgui_displaylist3D_tableau_new( )
-    : vgui_displaylist3D_tableau_sptr(new vgui_displaylist3D_tableau) {}
+  vgui_displaylist3D_tableau_new()
+    : vgui_displaylist3D_tableau_sptr(new vgui_displaylist3D_tableau)
+  {}
 };
 
 #endif // vgui_displaylist3D_tableau_h_

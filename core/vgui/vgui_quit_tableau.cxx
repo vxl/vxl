@@ -14,7 +14,7 @@
 #endif
 
 bool
-vgui_quit_tableau::handle(vgui_event const & e)
+vgui_quit_tableau::handle(const vgui_event & e)
 {
   if (e.type == vgui_KEY_PRESS)
   {

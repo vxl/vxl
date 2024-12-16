@@ -22,10 +22,17 @@
 //  Points outside image return zero.
 // \relatesalso vil_image_view
 template <class imType, class vecType>
-void vil_sample_grid_bilin(vecType* v,
-                           const vil_image_view<imType>& image,
-                           double x0, double y0, double dx1, double dy1,
-                           double dx2, double dy2, int n1, int n2);
+void
+vil_sample_grid_bilin(vecType * v,
+                      const vil_image_view<imType> & image,
+                      double x0,
+                      double y0,
+                      double dx1,
+                      double dy1,
+                      double dx2,
+                      double dy2,
+                      int n1,
+                      int n2);
 
 //: Sample grid from image, using bilinear interpolation
 //  Grid points are (x0+i.dx1+j.dx2,y0+i.dy1+j.dy2), where i=[0..n1-1], j=[0..n2-1]
@@ -35,9 +42,16 @@ void vil_sample_grid_bilin(vecType* v,
 //  Points outside image return NA.
 // \relatesalso vil_image_view
 template <class imType, class vecType>
-void vil_sample_grid_bilin_edgena(vecType* v,
-                                  const vil_image_view<imType>& image,
-                                  double x0, double y0, double dx1, double dy1,
-                                  double dx2, double dy2, int n1, int n2);
+void
+vil_sample_grid_bilin_edgena(vecType * v,
+                             const vil_image_view<imType> & image,
+                             double x0,
+                             double y0,
+                             double dx1,
+                             double dy1,
+                             double dx2,
+                             double dy2,
+                             int n1,
+                             int n2);
 
 #endif // vil_sample_grid_bilin_h_

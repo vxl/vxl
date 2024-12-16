@@ -53,51 +53,77 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_pixel.h>
 
-#define ConditionList0( format, type ) \
-  else if ( format==GL_RGB && type==GL_UNSIGNED_BYTE ) { Code( vgui_pixel_rgb888 ) } \
-  else if ( format==GL_BGR && type==GL_UNSIGNED_BYTE ) { Code( vgui_pixel_bgr888 ) } \
-  else if ( format==GL_RGBA && type==GL_UNSIGNED_BYTE ) { Code( vgui_pixel_rgba8888 ) }
+#define ConditionList0(format, type)                      \
+  else if (format == GL_RGB && type == GL_UNSIGNED_BYTE)  \
+  {                                                       \
+    Code(vgui_pixel_rgb888)                               \
+  }                                                       \
+  else if (format == GL_BGR && type == GL_UNSIGNED_BYTE)  \
+  {                                                       \
+    Code(vgui_pixel_bgr888)                               \
+  }                                                       \
+  else if (format == GL_RGBA && type == GL_UNSIGNED_BYTE) \
+  {                                                       \
+    Code(vgui_pixel_rgba8888)                             \
+  }
 
 #if defined(GL_UNSIGNED_SHORT_5_6_5)
-#define ConditionList1( format, type ) \
-  else if ( format==GL_RGB && type==GL_UNSIGNED_SHORT_5_6_5 ) { Code( vgui_pixel_rgb565 ) }
+#  define ConditionList1(format, type)                            \
+    else if (format == GL_RGB && type == GL_UNSIGNED_SHORT_5_6_5) \
+    {                                                             \
+      Code(vgui_pixel_rgb565)                                     \
+    }
 #else
-#define ConditionList1( format, type ) /* null */
+#  define ConditionList1(format, type) /* null */
 #endif
 
 // Is this right? GL_RGB and pixel_bgra? It is missing some endian issues?
 #if defined(GL_UNSIGNED_SHORT_5_5_5_1)
-#define ConditionList2( format, type ) \
-  else if ( format==GL_RGB && type==GL_UNSIGNED_SHORT_5_5_5_1 ) { Code( vgui_pixel_bgra5551 ) }
+#  define ConditionList2(format, type)                              \
+    else if (format == GL_RGB && type == GL_UNSIGNED_SHORT_5_5_5_1) \
+    {                                                               \
+      Code(vgui_pixel_bgra5551)                                     \
+    }
 #else
-#define ConditionList2( format, type ) /* null */
+#  define ConditionList2(format, type) /* null */
 #endif
 
 #if defined(GL_BGRA)
-#define ConditionList3( format, type ) \
-  else if ( format==GL_BGRA && type==GL_UNSIGNED_BYTE ) { Code( vgui_pixel_bgra8888 ) }
+#  define ConditionList3(format, type)                      \
+    else if (format == GL_BGRA && type == GL_UNSIGNED_BYTE) \
+    {                                                       \
+      Code(vgui_pixel_bgra8888)                             \
+    }
 #else
-#define ConditionList3( format, type ) /* null */
+#  define ConditionList3(format, type) /* null */
 #endif
 
 #if defined(GL_EXT_abgr) || defined(GL_ABGR_EXT)
-#define ConditionList4( format, type ) \
-  else if ( format==GL_ABGR_EXT && type==GL_UNSIGNED_BYTE ) { Code( vgui_pixel_abgr8888 ) }
+#  define ConditionList4(format, type)                          \
+    else if (format == GL_ABGR_EXT && type == GL_UNSIGNED_BYTE) \
+    {                                                           \
+      Code(vgui_pixel_abgr8888)                                 \
+    }
 #else
-#define ConditionList4( format, type ) /* null */
+#  define ConditionList4(format, type) /* null */
 #endif
 
 
-#define ConditionListBody( format, type ) \
-  ConditionList0(format,type) \
-  ConditionList1(format,type) \
-  ConditionList2(format,type) \
-  ConditionList3(format,type) \
-  ConditionList4(format,type) \
-  else if (0)do{}while (0)
+#define ConditionListBody(format, type)                                                                               \
+  ConditionList0(format, type) ConditionList1(format, type) ConditionList2(format, type) ConditionList3(format, type) \
+    ConditionList4(format, type) else if (0) do                                                                       \
+  {}                                                                                                                  \
+  while (0)
 
-#define ConditionListBegin if (0) do {} while (0)
+#define ConditionListBegin \
+  if (0)                   \
+    do                     \
+    {                      \
+  } while (0)
 #define ConditionListFail else
-#define ConditionListEnd  else { /* null */ }
+#define ConditionListEnd \
+  else                   \
+  { /* null */           \
+  }
 
 #endif // VGUI_GL_SELECTION_MACROS_H_

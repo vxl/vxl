@@ -23,7 +23,7 @@ struct vil1_image_proxy_impl : public vil1_image_impl
   vil1_component_format component_format_;
   std::string file_format_;
 
-  vil1_image_proxy_impl(char const * file)
+  vil1_image_proxy_impl(const char * file)
     : filename(file)
   {
     // cache some stuff
@@ -70,7 +70,7 @@ struct vil1_image_proxy_impl : public vil1_image_impl
   {
     return component_format_;
   }
-  char const *
+  const char *
   file_format() const override
   {
     return file_format_.c_str();
@@ -89,18 +89,18 @@ struct vil1_image_proxy_impl : public vil1_image_impl
     return vil1_load(filename.c_str()).get_section(buf, x0, y0, width, height);
   }
   bool
-  put_section(void const * buf, int x0, int y0, int width, int height) override
+  put_section(const void * buf, int x0, int y0, int width, int height) override
   {
     return vil1_load(filename.c_str()).put_section(buf, x0, y0, width, height);
   }
 
   bool
-  get_property(char const * tag, void * property_value) const override
+  get_property(const char * tag, void * property_value) const override
   {
     return vil1_load(filename.c_str()).get_property(tag, property_value);
   }
   bool
-  set_property(char const * tag, void const * property_value) const override
+  set_property(const char * tag, const void * property_value) const override
   {
     return vil1_load(filename.c_str()).set_property(tag, property_value);
   }
@@ -111,10 +111,10 @@ struct vil1_image_proxy_impl : public vil1_image_impl
 
   //: Return true if the name of the class matches the argument
   bool
-  is_class(std::string const &) const override;
+  is_class(const std::string &) const override;
 };
 
-vil1_image_proxy::vil1_image_proxy(char const * file)
+vil1_image_proxy::vil1_image_proxy(const char * file)
   : vil1_image(new vil1_image_proxy_impl(file))
 {}
 
@@ -128,7 +128,7 @@ vil1_image_proxy_impl::is_a() const
 
 //: Return true if the name of the class matches the argument
 bool
-vil1_image_proxy_impl::is_class(std::string const & s) const
+vil1_image_proxy_impl::is_class(const std::string & s) const
 {
   return s == vil1_image_proxy_impl::is_a() || vil1_image_impl::is_class(s);
 }

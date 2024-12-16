@@ -17,17 +17,23 @@ class vil_stream;
 
 struct vil_bmp_core_header
 {
-  enum { disk_size = 4+4+4+2+2 }; // this is what is *on disk*.
-  unsigned  header_size;  // 4
-  int       width;        // 4, can be negative
-  int       height;       // 4, can be negative
-  short     planes;       // 2
-  short     bitsperpixel; // 2
+  enum
+  {
+    disk_size = 4 + 4 + 4 + 2 + 2
+  }; // this is what is *on disk*.
+  unsigned header_size; // 4
+  int width;            // 4, can be negative
+  int height;           // 4, can be negative
+  short planes;         // 2
+  short bitsperpixel;   // 2
 
   vil_bmp_core_header();
-  void read(vil_stream *);
-  void write(vil_stream *) const;
-  void print(std::ostream &) const;
+  void
+  read(vil_stream *);
+  void
+  write(vil_stream *) const;
+  void
+  print(std::ostream &) const;
 };
 
 #endif // vil_bmp_core_header_h_

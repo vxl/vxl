@@ -24,50 +24,60 @@
 class vgl_h_matrix_2d_compute_linear : public vgl_h_matrix_2d_compute
 {
   bool allow_ideal_points_;
- protected:
+
+protected:
   //: compute from matched points
 
-  bool compute_p(std::vector<vgl_homg_point_2d<double> > const& points1,
-                 std::vector<vgl_homg_point_2d<double> > const& points2,
-                 vgl_h_matrix_2d<double>& H) override;
+  bool
+  compute_p(const std::vector<vgl_homg_point_2d<double>> & points1,
+            const std::vector<vgl_homg_point_2d<double>> & points2,
+            vgl_h_matrix_2d<double> & H) override;
 
-  //:compute from matched lines
+  //: compute from matched lines
 
-  bool compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
-                 std::vector<vgl_homg_line_2d<double> > const& lines2,
-                 vgl_h_matrix_2d<double>& H) override;
+  bool
+  compute_l(const std::vector<vgl_homg_line_2d<double>> & lines1,
+            const std::vector<vgl_homg_line_2d<double>> & lines2,
+            vgl_h_matrix_2d<double> & H) override;
 
-  //:compute from matched lines with weight vector
+  //: compute from matched lines with weight vector
 
-  bool compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
-                 std::vector<vgl_homg_line_2d<double> > const& lines2,
-                 std::vector<double> const& weights,
-                 vgl_h_matrix_2d<double>& H) override;
+  bool
+  compute_l(const std::vector<vgl_homg_line_2d<double>> & lines1,
+            const std::vector<vgl_homg_line_2d<double>> & lines2,
+            const std::vector<double> & weights,
+            vgl_h_matrix_2d<double> & H) override;
 
-  //:compute from matched points and lines
+  //: compute from matched points and lines
 
-  bool compute_pl(std::vector<vgl_homg_point_2d<double> > const& points1,
-                  std::vector<vgl_homg_point_2d<double> > const& points2,
-                  std::vector<vgl_homg_line_2d<double> > const& lines1,
-                  std::vector<vgl_homg_line_2d<double> > const& lines2,
-                  vgl_h_matrix_2d<double>& H) override;
+  bool
+  compute_pl(const std::vector<vgl_homg_point_2d<double>> & points1,
+             const std::vector<vgl_homg_point_2d<double>> & points2,
+             const std::vector<vgl_homg_line_2d<double>> & lines1,
+             const std::vector<vgl_homg_line_2d<double>> & lines2,
+             vgl_h_matrix_2d<double> & H) override;
 
-  //:Assumes all corresponding points have equal weight
-  bool solve_linear_problem(int equ_count,
-                            std::vector<vgl_homg_point_2d<double> > const& p1,
-                            std::vector<vgl_homg_point_2d<double> > const& p2,
-                            vgl_h_matrix_2d<double>& H) const;
+  //: Assumes all corresponding points have equal weight
+  bool
+  solve_linear_problem(int equ_count,
+                       const std::vector<vgl_homg_point_2d<double>> & p1,
+                       const std::vector<vgl_homg_point_2d<double>> & p2,
+                       vgl_h_matrix_2d<double> & H) const;
 
   //: for lines, the solution should be weighted by line length
   bool
-  solve_weighted_least_squares(std::vector<vgl_homg_line_2d<double> > const& l1,
-                               std::vector<vgl_homg_line_2d<double> > const& l2,
-                               std::vector<double> const& w,
-                               vgl_h_matrix_2d<double>& H);
+  solve_weighted_least_squares(const std::vector<vgl_homg_line_2d<double>> & l1,
+                               const std::vector<vgl_homg_line_2d<double>> & l2,
+                               const std::vector<double> & w,
+                               vgl_h_matrix_2d<double> & H);
 
- public:
+public:
   vgl_h_matrix_2d_compute_linear(bool allow_ideal_points = false);
-  int minimum_number_of_correspondences() const override { return 4; }
+  int
+  minimum_number_of_correspondences() const override
+  {
+    return 4;
+  }
 };
 
 #endif // vgl_h_matrix_2d_compute_linear_h_

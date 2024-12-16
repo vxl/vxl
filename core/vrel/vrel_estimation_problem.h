@@ -35,37 +35,50 @@ class vrel_wls_obj;
 
 class vrel_estimation_problem
 {
- public:
+public:
   //: Type of scale information this problem provides.
   //  NONE: problem does not provide any scale information. SINGLE:
   //  problem provides a single prior scale (homoscedastic
   //  data). MULTIPLE: problem provides a scale for each residual
   //  (heteroscedastic data).
-  enum scale_t { NONE = 0, SINGLE = 1, MULTIPLE = 2 };
+  enum scale_t
+  {
+    NONE = 0,
+    SINGLE = 1,
+    MULTIPLE = 2
+  };
 
- public:
+public:
   //: Constructor.
   // See the comments for param_dof() and num_samples_to_instantiate()
   // for the meaning of these two parameters.
-  vrel_estimation_problem( unsigned int param_dof,
-                           unsigned int num_samples_for_fit );
+  vrel_estimation_problem(unsigned int param_dof, unsigned int num_samples_for_fit);
 
   //: Constructor.
   // Derived classes using this _must_ call set_dof() and set_num_samples_for_fit().
-  vrel_estimation_problem( );
+  vrel_estimation_problem();
 
   //: Destructor.
   virtual ~vrel_estimation_problem();
 
   //: The degrees of freedom in the parameter set.
-  unsigned int param_dof() const { return dof_; }
+  unsigned int
+  param_dof() const
+  {
+    return dof_;
+  }
 
   //: Minimum number of samples required to uniquely instantiate a fit.
   //  dof()/num_samples_to_instantiate() gives the number of constraints per sample.
-  unsigned int num_samples_to_instantiate( ) const { return num_samples_for_fit_; }
+  unsigned int
+  num_samples_to_instantiate() const
+  {
+    return num_samples_for_fit_;
+  }
 
   //: The number of samples.
-  virtual unsigned int num_samples( ) const = 0;
+  virtual unsigned int
+  num_samples() const = 0;
 
   //: The degrees of freedom in the residual.
   //  Most of the time, this would be 1 since the residual comes from
@@ -74,7 +87,11 @@ class vrel_estimation_problem
   //  example, if the residual is a 2d Euclidean distance with
   //  possible error in both coordinates, the degrees of freedom in
   //  the error will be 2.)
-  virtual unsigned int residual_dof() const { return 1; }
+  virtual unsigned int
+  residual_dof() const
+  {
+    return 1;
+  }
 
   //: The number of "unique" samples.
   // In most problems, this equals num_samples. With estimation
@@ -85,15 +102,19 @@ class vrel_estimation_problem
   //
   // This is used by random sampling techniques to determine the
   // number of samples required to get a given probability of success.
-  virtual unsigned int num_unique_samples( ) const { return num_samples(); }
+  virtual unsigned int
+  num_unique_samples() const
+  {
+    return num_samples();
+  }
 
   //: Generate a parameter vector from a minimal sample set.
   // The \a point_indices vector are indices into the data set, and
   // must be filled in with num_samples_to_instantiate() indices.
   // Returns true if and only if the points resulted in a unique
   // parameter vector.
-  virtual bool fit_from_minimal_set( const std::vector<int>& /* point_indices */,
-                                     vnl_vector<double>& /* params */ ) const = 0;
+  virtual bool
+  fit_from_minimal_set(const std::vector<int> & /* point_indices */, vnl_vector<double> & /* params */) const = 0;
 
   //: Compute the residuals relative to the given parameter vector.
   // The number of residuals must be equal to the value returned
@@ -102,8 +123,8 @@ class vrel_estimation_problem
   // This is a deterministic procedure, in that multiple calls with a
   // given parameter vector must return the same residuals (in the
   // same order).
-  virtual void compute_residuals( const vnl_vector<double>& params,
-                                  std::vector<double>& residuals ) const = 0;
+  virtual void
+  compute_residuals(const vnl_vector<double> & params, std::vector<double> & residuals) const = 0;
 
   //: Compute the weights for the given residuals.
   // The residuals are essentially those returned by
@@ -111,42 +132,58 @@ class vrel_estimation_problem
   // to each residual. Some problems, however, many need to augment
   // the weights. Such problems should override this function (but
   // may want to call this to compute the "basic" weights).
-  virtual void compute_weights( const std::vector<double>& residuals,
-                                const vrel_wls_obj* obj,
-                                double scale,
-                                std::vector<double>& weights ) const;
+  virtual void
+  compute_weights(const std::vector<double> & residuals,
+                  const vrel_wls_obj * obj,
+                  double scale,
+                  std::vector<double> & weights) const;
 
   //: Type of scale information the problem provides.
-  virtual scale_t scale_type() const { return scale_type_; }
+  virtual scale_t
+  scale_type() const
+  {
+    return scale_type_;
+  }
 
   //: The prior scale vector, if available.
   // The call is valid only if scale_type() == MULTIPLE.
-  virtual const std::vector<double>& prior_multiple_scales() const;
+  virtual const std::vector<double> &
+  prior_multiple_scales() const;
 
   //: The prior scale, if available.
   // The call is valid only if scale_type() == SINGLE.
-  virtual double prior_scale() const;
+  virtual double
+  prior_scale() const;
 
   //: Sets the scales for heteroscedastic data.
   //  Side effect: set scale_type() = MULTIPLE.
-  virtual void set_prior_multiple_scales( const std::vector<double>& scales );
+  virtual void
+  set_prior_multiple_scales(const std::vector<double> & scales);
 
   //: Sets the scale for homoscedastic data.
   //  Side effect: set scale_type() = SINGLE.
-  virtual void set_prior_scale( double scale );
+  virtual void
+  set_prior_scale(double scale);
 
   //: Removes the scale information for the problem.
   //  Side effect: set scale_type() = NONE.
-  virtual void set_no_prior_scale( );
+  virtual void
+  set_no_prior_scale();
 
   //: Set similarity weights
   //  Currently it is only used in wgted random sampling search
-  void set_similarity_weights( const std::vector<double>& wgts )
-  { similarity_weights_ = wgts; }
+  void
+  set_similarity_weights(const std::vector<double> & wgts)
+  {
+    similarity_weights_ = wgts;
+  }
 
   //: Get similarity weights
-  const std::vector<double>& similarity_weights() const
-  { return similarity_weights_; }
+  const std::vector<double> &
+  similarity_weights() const
+  {
+    return similarity_weights_;
+  }
 
   //: Compute the parameter vector and the normalised covariance matrix.
   //  (Multiplying this matrix by the variance in the measurements
@@ -159,27 +196,40 @@ class vrel_estimation_problem
   // ignored as outliers (e.g. as explicitly identified as such by
   // Least Median of Squares), then their weights should just be set
   // to 0.
-  virtual bool weighted_least_squares_fit( vnl_vector<double>& params,
-                                           vnl_matrix<double>& norm_covar,
-                                           const std::vector<double>* weights=nullptr ) const = 0;
+  virtual bool
+  weighted_least_squares_fit(vnl_vector<double> & params,
+                             vnl_matrix<double> & norm_covar,
+                             const std::vector<double> * weights = nullptr) const = 0;
 
- protected:
+protected:
   //: Set the degrees of freedom.
-  void set_param_dof( unsigned int dof ) { dof_ = dof; }
+  void
+  set_param_dof(unsigned int dof)
+  {
+    dof_ = dof;
+  }
 
   //: Set the number of samples needed for a unique fit.
-  void set_num_samples_for_fit( unsigned int num_samp ) { num_samples_for_fit_ = num_samp; }
+  void
+  set_num_samples_for_fit(unsigned int num_samp)
+  {
+    num_samples_for_fit_ = num_samp;
+  }
 
   //: Set the type of prior scale.
-  void set_scale_type( scale_t t ) { scale_type_ = t; }
+  void
+  set_scale_type(scale_t t)
+  {
+    scale_type_ = t;
+  }
 
- private:
+private:
   unsigned int dof_;
   unsigned int num_samples_for_fit_;
-  scale_t scale_type_{NONE};
-  double single_scale_{0};
-  std::vector<double> *multiple_scales_{nullptr};
-  std::vector<double>  similarity_weights_;
+  scale_t scale_type_{ NONE };
+  double single_scale_{ 0 };
+  std::vector<double> * multiple_scales_{ nullptr };
+  std::vector<double> similarity_weights_;
 };
 
 #endif

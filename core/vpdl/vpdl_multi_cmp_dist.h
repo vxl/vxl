@@ -15,12 +15,12 @@
 #include "vpdl_distribution.h"
 
 //: The base class for all multiple component probability distributions.
-template<class T, unsigned int n=0>
-class vpdl_multi_cmp_dist : public vpdl_distribution<T,n>
+template <class T, unsigned int n = 0>
+class vpdl_multi_cmp_dist : public vpdl_distribution<T, n>
 {
 public:
   //: the data type used for vectors
-  typedef typename vpdt_field_default<T,n>::type vector;
+  typedef typename vpdt_field_default<T, n>::type vector;
   //: the data type used for matrices
   typedef typename vpdt_field_traits<vector>::matrix_type matrix;
 
@@ -29,11 +29,9 @@ public:
   ~vpdl_multi_cmp_dist() override = default;
 
   //: The number of components
-  virtual unsigned int num_components() const = 0;
-
+  virtual unsigned int
+  num_components() const = 0;
 };
-
-
 
 
 #endif // vpdl_multi_cmp_dist_h_

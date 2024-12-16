@@ -16,7 +16,7 @@ static char default_filename[] = "square.pgm";
 
 template <class T>
 inline T
-get_pixel(vil1_image const & i, int x, int y, T * /*dummy*/)
+get_pixel(const vil1_image & i, int x, int y, T * /*dummy*/)
 {
   T t;
   i.get_section(&t, x, y, 1, 1);

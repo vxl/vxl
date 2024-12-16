@@ -23,21 +23,32 @@
 //: A dialog field implementation that holds a std::string.
 class vgui_string_field : public vgui_dialog_field
 {
-  std::string &var_;
+  std::string & var_;
 
- public:
+public:
   //: Constructor - creates a string field with the given text as label.
-  vgui_string_field(const char* txt, std::string& var_to_modify)
-  : vgui_dialog_field(txt) , var_(var_to_modify) {}
+  vgui_string_field(const char * txt, std::string & var_to_modify)
+    : vgui_dialog_field(txt)
+    , var_(var_to_modify)
+  {}
 
   //: Destructor.
   ~vgui_string_field() {}
 
   //: Returns the current value of the string field.
-  std::string current_value() const { return var_; }
+  std::string
+  current_value() const
+  {
+    return var_;
+  }
 
   //: Set the given string to be the value of the string field.
-  bool update_value(std::string const& s) { var_ = s; return true; }
+  bool
+  update_value(const std::string & s)
+  {
+    var_ = s;
+    return true;
+  }
 };
 
 #endif // vgui_string_field_h_

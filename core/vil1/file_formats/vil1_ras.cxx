@@ -18,7 +18,7 @@
 
 #include "vxl_config.h"
 
-char const * vil1_ras_format_tag = "ras";
+const char * vil1_ras_format_tag = "ras";
 
 namespace
 {
@@ -105,7 +105,7 @@ vil1_ras_file_format::make_output_image(vil1_stream * vs,
   return new vil1_ras_generic_image(vs, planes, width, height, components, bits_per_component, format);
 }
 
-char const *
+const char *
 vil1_ras_file_format::tag() const
 {
   return vil1_ras_format_tag;
@@ -121,7 +121,7 @@ vil1_ras_generic_image::vil1_ras_generic_image(vil1_stream * vs)
 }
 
 bool
-vil1_ras_generic_image::get_property(char const * tag, void * prop) const
+vil1_ras_generic_image::get_property(const char * tag, void * prop) const
 {
   if (0 == std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool *)prop) = true : true;
@@ -141,7 +141,7 @@ vil1_ras_generic_image::get_property(char const * tag, void * prop) const
   return false;
 }
 
-char const *
+const char *
 vil1_ras_generic_image::file_format() const
 {
   return vil1_ras_format_tag;
@@ -365,7 +365,7 @@ vil1_ras_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
 }
 
 bool
-vil1_ras_generic_image::put_section(void const * buf, int x0, int y0, int xs, int ys)
+vil1_ras_generic_image::put_section(const void * buf, int x0, int y0, int xs, int ys)
 {
   if (col_map_)
   {
@@ -400,7 +400,7 @@ vil1_ras_generic_image::put_section(void const * buf, int x0, int y0, int xs, in
   bool need_pad = (file_byte_width == buff_byte_width + 1);
   vxl_uint_8 zero = 0;
 
-  auto const * ob = (vxl_uint_8 const *)buf;
+  const auto * ob = (const vxl_uint_8 *)buf;
 
   for (int y = 0; y < ys; ++y)
   {
@@ -413,7 +413,9 @@ vil1_ras_generic_image::put_section(void const * buf, int x0, int y0, int xs, in
   return true;
 }
 
-vil1_image vil1_ras_generic_image::get_plane(unsigned int plane) const {
+vil1_image
+vil1_ras_generic_image::get_plane(unsigned int plane) const
+{
   assert(plane == 0);
   return const_cast<vil1_ras_generic_image *>(this);
 }

@@ -34,4 +34,4 @@ class vrel_tukey_obj;
 class vrel_wgted_ran_sam_search;
 class vrel_wls_obj;
 
-#endif //vrel_fwd_h_
+#endif // vrel_fwd_h_

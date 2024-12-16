@@ -16,7 +16,7 @@
 #include "vil1/vil1_stream_url.h"
 
 vil1_stream *
-vil1_open(char const * what, char const * how)
+vil1_open(const char * what, const char * how)
 {
   // check for null pointer or empty strings.
   if (!what || !*what)

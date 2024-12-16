@@ -14,29 +14,26 @@
 #include "vil1/vil1_memory_image_impl.h"
 
 // macro to pull down data fields from the impl structure.
-#define cache_from_impl                                                                                                \
-  {                                                                                                                    \
-    if (ptr)                                                                                                           \
-    {                                                                                                                  \
-      vil1_memory_image_impl * mi = (vil1_memory_image_impl *)ptr;                                                     \
-      this->width_ = mi->width_;                                                                                       \
-      this->height_ = mi->height_;                                                                                     \
-      this->rows0_ = mi->rows_ ? mi->rows_[0] : 0;                                                                     \
-    }                                                                                                                  \
-    else                                                                                                               \
-    {                                                                                                                  \
-      this->width_ = 0;                                                                                                \
-      this->height_ = 0;                                                                                               \
-      this->rows0_ = 0;                                                                                                \
-    }                                                                                                                  \
+#define cache_from_impl                                            \
+  {                                                                \
+    if (ptr)                                                       \
+    {                                                              \
+      vil1_memory_image_impl * mi = (vil1_memory_image_impl *)ptr; \
+      this->width_ = mi->width_;                                   \
+      this->height_ = mi->height_;                                 \
+      this->rows0_ = mi->rows_ ? mi->rows_[0] : 0;                 \
+    }                                                              \
+    else                                                           \
+    {                                                              \
+      this->width_ = 0;                                            \
+      this->height_ = 0;                                           \
+      this->rows0_ = 0;                                            \
+    }                                                              \
   }
 
-vil1_memory_image::vil1_memory_image()
-{
-  cache_from_impl;
-}
+vil1_memory_image::vil1_memory_image() { cache_from_impl; }
 
-vil1_memory_image::vil1_memory_image(int planes, int w, int h, vil1_memory_image_format const & format)
+vil1_memory_image::vil1_memory_image(int planes, int w, int h, const vil1_memory_image_format & format)
   : vil1_image(new vil1_memory_image_impl(planes, w, h, format))
 {
   cache_from_impl;
@@ -78,9 +75,9 @@ vil1_memory_image::vil1_memory_image(int w, int h, vil1_pixel_format_t pixel_for
 // make a memory image if input is not already one.
 
 vil1_image
-make_memory_image(vil1_image const * thatp)
+make_memory_image(const vil1_image * thatp)
 {
-  vil1_image const & that = *thatp;
+  const vil1_image & that = *thatp;
   if (that.get_property("memory"))
     return that;
   assert(that.planes() > 0);
@@ -101,20 +98,20 @@ make_memory_image(vil1_image const * thatp)
 }
 
 //: If that is a memory image, just point to it, otherwise get_section
-vil1_memory_image::vil1_memory_image(vil1_image const & that)
+vil1_memory_image::vil1_memory_image(const vil1_image & that)
   : vil1_image(make_memory_image(&that))
 {
   cache_from_impl;
 }
 
-vil1_memory_image::vil1_memory_image(vil1_memory_image const & that)
+vil1_memory_image::vil1_memory_image(const vil1_memory_image & that)
   : vil1_image(that)
 {
   cache_from_impl;
 }
 
 vil1_memory_image &
-vil1_memory_image::operator=(vil1_memory_image const & that)
+vil1_memory_image::operator=(const vil1_memory_image & that)
 {
   vil1_image::operator=(that);
   cache_from_impl;
@@ -153,7 +150,7 @@ vil1_memory_image::assert_size(int width, int height) const
 
 // Added by Brendan McCane for creating images with already allocated
 // memory. Useful for use with framegrabbers.
-vil1_memory_image::vil1_memory_image(void * buf, int planes, int w, int h, vil1_memory_image_format const & format)
+vil1_memory_image::vil1_memory_image(void * buf, int planes, int w, int h, const vil1_memory_image_format & format)
   : vil1_image(new vil1_memory_image_impl(buf, planes, w, h, format))
 {
   cache_from_impl;

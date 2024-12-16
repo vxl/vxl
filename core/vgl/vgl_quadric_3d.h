@@ -32,9 +32,10 @@
 template <class T>
 class vgl_quadric_3d
 {
- public:
-   enum vgl_quadric_type {
-    no_type=0,
+public:
+  enum vgl_quadric_type
+  {
+    no_type = 0,
     real_ellipsoid,
     imaginary_ellipsoid,
     hyperboloid_of_one_sheet,
@@ -55,7 +56,7 @@ class vgl_quadric_3d
     num_quadric_types // is here to enable iterating through this list
   };
 
- private:
+private:
   // DATA MEMBERS
   bool det_zero_;
   vgl_quadric_type type_;
@@ -70,58 +71,106 @@ class vgl_quadric_3d
   T i_; //!< coefficient of \a zw
   T j_; //!< coefficient of \a w^2
 
- public:
-  inline vgl_quadric_type type() const { return type_; }
+public:
+  inline vgl_quadric_type
+  type() const
+  {
+    return type_;
+  }
 
   //: Returns the internal enum value corresponding to the string argument.
   // Useful for comparison purposes, or for use in "case" statements.
-  static vgl_quadric_type type_by_name(std::string const& name);
+  static vgl_quadric_type
+  type_by_name(const std::string & name);
 
   //: Converts the quadric type from enum (internal representation) to string.
-  static std::string type_by_number(vgl_quadric_type const& type) ;
+  static std::string
+  type_by_number(const vgl_quadric_type & type);
 
   //: Returns the coefficient of \f$X^2\f$
-  inline T a() const { return  a_; }
+  inline T
+  a() const
+  {
+    return a_;
+  }
 
   //: Returns the coefficient of \f$Y^2\f$
-  inline T b() const { return  b_; }
+  inline T
+  b() const
+  {
+    return b_;
+  }
 
   //: Returns the coefficient of \f$Z^2\f$
-  inline T c() const { return  c_; }
+  inline T
+  c() const
+  {
+    return c_;
+  }
 
   //: Returns the coefficient of \f$XY\f$
-  inline T d() const { return  d_; }
+  inline T
+  d() const
+  {
+    return d_;
+  }
 
   //: Returns the coefficient of \f$XZ\f$
-  inline T e() const { return  e_; }
+  inline T
+  e() const
+  {
+    return e_;
+  }
 
   //: Returns the coefficient of \f$YZ\f$
-  inline T f() const { return  f_; }
+  inline T
+  f() const
+  {
+    return f_;
+  }
 
   //: Returns the coefficient of \f$XW\f$
-  inline T g() const { return  g_; }
+  inline T
+  g() const
+  {
+    return g_;
+  }
 
   //: Returns the coefficient of \f$YW\f$
-  inline T h() const { return  h_; }
+  inline T
+  h() const
+  {
+    return h_;
+  }
 
   //: Returns the coefficient of \f$ZW\f$
-  inline T i() const { return  i_; }
+  inline T
+  i() const
+  {
+    return i_;
+  }
 
   //: Returns the coefficient of \f$W^2\f$
-  inline T j() const { return  j_; }
+  inline T
+  j() const
+  {
+    return j_;
+  }
 
   // CONSTRUCTORS AND RELATED STUFF
   // default constructor
-  vgl_quadric_3d() : type_(no_type) {}
+  vgl_quadric_3d()
+    : type_(no_type)
+  {}
 
   //: constructor using polynomial coefficients.
   vgl_quadric_3d(T a, T b, T c, T d, T e, T f, T g, T h, T i, T j);
 
   //: constructor from a linear array of polynomial coefficients, given as a C array.
-  vgl_quadric_3d(T const coeff[]);
+  vgl_quadric_3d(const T coeff[]);
 
   //: constructor from a matix of polynomial coefficients (see below)
-  vgl_quadric_3d(std::vector<std::vector<T> > const& Q);
+  vgl_quadric_3d(const std::vector<std::vector<T>> & Q);
 
   //: return a matrix of quadric coefficients of the form:
   //       _                  _
@@ -132,7 +181,8 @@ class vgl_quadric_3d
   //       -                  -
   //  Note that X^t Q X = 0 , where X^t =[x y z w] is the same as implicit equation 1) above.
   //
-  std::vector<std::vector<T> > coef_matrix() const;
+  std::vector<std::vector<T>>
+  coef_matrix() const;
 
   //: constructor from a canonical 4x4 quadric coefficient matrix and a 4x4 homogeneous matrix, H
   // representing the Euclidean transformation from the canonical frame to the global frame
@@ -141,77 +191,95 @@ class vgl_quadric_3d
   //             H = |      |  0^t is a 1x3 zero vector.
   //                 |0^t  1|
   //                  -    -
-  vgl_quadric_3d(std::vector<std::vector<T> > const& canonical_quadric, std::vector<std::vector<T> > const& H);
+  vgl_quadric_3d(const std::vector<std::vector<T>> & canonical_quadric, const std::vector<std::vector<T>> & H);
 
   //: constructor for central quadrics e.g. ellipsoid, ax^2+ by^2+ cz*2 + j = 0, where diag = [a,b,c,j]
   // are the diagonal elements of the 4x4 quadric coefficient matrix and a 4x4 homogeneous matrix, and
   //  H represents the Euclidean transformation from the canonical frame to the global frame (see above)
-  vgl_quadric_3d(std::vector<T> const& diag, std::vector<std::vector<T> > const& H);
+  vgl_quadric_3d(const std::vector<T> & diag, const std::vector<std::vector<T>> & H);
 
   //: set or reset the quadric using polynomial coefficients.
-  void set(T a, T b, T c, T d, T e, T f, T g, T h, T i, T j);
+  void
+  set(T a, T b, T c, T d, T e, T f, T g, T h, T i, T j);
 
-  void set(std::vector<std::vector<T> > const& Q);
+  void
+  set(const std::vector<std::vector<T>> & Q);
 
   //: comparison operator.
   //  Comparison is on the quadric, not the equation coefficients.  Hence two
   //  quadrics are identical if their coefficient vectors are multiples of
   //  each other.
-  bool operator==(vgl_quadric_3d<T> const& c) const;
+  bool
+  operator==(const vgl_quadric_3d<T> & c) const;
 
   // UTILITY FUNCTIONS
 
   //: Returns true if this quadric is degenerate
-  bool is_degenerate() const{return det_zero_;}
+  bool
+  is_degenerate() const
+  {
+    return det_zero_;
+  }
 
   //: Sampson distance d_sampson(p) = ||p^t Q p||^2/||grad(p*t Q p)||^2
   // a first order approximation to Euclidean distance
-  T sampson_dist(vgl_homg_point_3d<T> const& pt) const;
+  T
+  sampson_dist(const vgl_homg_point_3d<T> & pt) const;
 
   //: Returns true if the point pt belongs to the quadric surface.
   //  I.e., if it  satisfies the quadric equation within algebraic distance, i.e. pt^t Q pt < tol;
-  bool on(vgl_homg_point_3d<T> const& pt, T tol = T(0)) const;
+  bool
+  on(const vgl_homg_point_3d<T> & pt, T tol = T(0)) const;
 
   //: if the upper 3x3 submatrix of Q is full rank then the center of the quadric can be defined
   // otherwise the center is not defined for degenerate quadrics
-  bool center(vgl_point_3d<T>& center) const;
+  bool
+  center(vgl_point_3d<T> & center) const;
 
   //:: eigenvalues and eigenvectors of the upper 3x3 quadric matrix
-  void upper_3x3_eigensystem(std::vector<T>& eigenvalues, std::vector<std::vector<T> >& eigenvectors) const;
+  void
+  upper_3x3_eigensystem(std::vector<T> & eigenvalues, std::vector<std::vector<T>> & eigenvectors) const;
 
   //:: The quadric in its canonical frame if the center is defined, i.e. the upper 3x3 quadric matrix is full rank
   // In this case the quadric coefficient matrix in the canonical frame is
   // a 4x4 diagonal matrix, e.g. ax^2 + by^2 + cz^2 + j = 0. Note that the canonical frame is not unique as
   // alignment of quadric axes with the orthogonal frame has numerous possible arrangements.
   // H is a homogenous(4x4)transformation from canonical coordinate space back to the original space.
-  bool canonical_central_quadric(std::vector<T>& diag, std::vector<std::vector<T> >& H) const;
+  bool
+  canonical_central_quadric(std::vector<T> & diag, std::vector<std::vector<T>> & H) const;
 
   //: The quadric coefficient matrix in the canonical frame, whether or not the quadric is central
   // H is a homogenous(4x4)transformation from canonical coordinate space back to the original space.
-  std::vector<std::vector<T> > canonical_quadric(std::vector<std::vector<T> >& H) const;
- private:
+  std::vector<std::vector<T>>
+  canonical_quadric(std::vector<std::vector<T>> & H) const;
+
+private:
   //--------------------------------------------------------------------------
   //: set quadric type from polynomial coefficients and store in member type_
-  void compute_type();
-
+  void
+  compute_type();
 };
 
 // \relatesalso vgl_quadric_3d
 template <class T>
-std::ostream&  operator<<(std::ostream& s, vgl_quadric_3d<T> const& c);
+std::ostream &
+operator<<(std::ostream & s, const vgl_quadric_3d<T> & c);
 
 //: Read a b c d e f g h i j from stream
 // \relatesalso vgl_quadric_3d
 template <class T>
-std::istream&  operator>>(std::istream& s, vgl_quadric_3d<T>& c);
+std::istream &
+operator>>(std::istream & s, vgl_quadric_3d<T> & c);
 
 //: Computes the eigensystem for real symmetric matrices. Used to classify quadrics.
 template <class T, size_t n>
-void eigen(T m[n][n], T l[n], T vc[n][n]);
+void
+eigen(T m[n][n], T l[n], T vc[n][n]);
 
 //: Auxillary function used by eigen
 template <class T, size_t n>
-void twst(T m[n][n], T c, T s, int i, int j);
+void
+twst(T m[n][n], T c, T s, int i, int j);
 
 #define VGL_QUADRIC_3D_INSTANTIATE(T) extern "please include vgl/vgl_quadric_3d.hxx first"
 

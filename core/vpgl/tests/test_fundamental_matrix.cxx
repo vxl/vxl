@@ -127,7 +127,7 @@ test_fundamental_matrix()
   TEST_NEAR("left camera extraction from correspondences",
             vgl_distance(p3i[0], vgl_point_2d<double>(C2l_est2.project(vgl_homg_point_3d<double>(p3w[0])))),
             0,
-            6.3); //VERY UNSTABLE TEST,  5.0 is not quite enough
+            6.3); // VERY UNSTABLE TEST,  5.0 is not quite enough
 
   // Test computation of a Fundamental matrix from an Essential matrix:
   vnl_double_3x3 K1_;

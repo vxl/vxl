@@ -10,7 +10,8 @@
 // \author   awf@robots.ox.ac.uk
 // \date 02 Mar 00
 
-struct vil1_ip_traits_null_type {};
+struct vil1_ip_traits_null_type
+{};
 
 //: Describe image types (like char**)
 template <class T>
@@ -25,24 +26,24 @@ struct vil1_ip_traits
 
 //: Traits for c-like arrays
 template <class T>
-struct vil1_ip_traits<T * *>
+struct vil1_ip_traits<T **>
 {
   typedef T pixel_type;
-  typedef T* row_type;
+  typedef T * row_type;
 };
 
 template <class T>
-struct vil1_ip_traits<T const* const*>
+struct vil1_ip_traits<const T * const *>
 {
   typedef T pixel_type;
-  typedef T const* row_type;
+  typedef const T * row_type;
 };
 
 template <class T>
-struct vil1_ip_traits<T * const*>
+struct vil1_ip_traits<T * const *>
 {
   typedef T pixel_type;
-  typedef T const* row_type;
+  typedef const T * row_type;
 };
 
 #endif // vil1_ip_traits_h_

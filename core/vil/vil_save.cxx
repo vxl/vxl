@@ -28,7 +28,7 @@
 
 //: Send vil_image to disk.
 bool
-vil_save(const vil_image_view_base & im, char const * filename, char const * file_format)
+vil_save(const vil_image_view_base & im, const char * filename, const char * file_format)
 {
   vil_stream * os = vil_open(filename, "w");
   if (!os || !os->ok())
@@ -84,13 +84,13 @@ vil_save(const vil_image_view_base & im, char const * filename, char const * fil
 }
 
 
-char const *
-vil_save_guess_file_format(char const * filename)
+const char *
+vil_save_guess_file_format(const char * filename)
 {
-  char const * file_format = "pnm"; // default file format
+  const char * file_format = "pnm"; // default file format
 
   // find last "."
-  char const * dot = std::strrchr(filename, '.');
+  const char * dot = std::strrchr(filename, '.');
   if (!dot)
   {
     // filename doesn't end in ".anything"
@@ -132,14 +132,14 @@ vil_save_guess_file_format(char const * filename)
 
 //: save to file, deducing format from filename.
 bool
-vil_save(const vil_image_view_base & i, char const * filename)
+vil_save(const vil_image_view_base & i, const char * filename)
 {
   return vil_save(i, filename, vil_save_guess_file_format(filename));
 }
 
 //: Send vil_image to disk.
 bool
-vil_save_image_resource(const vil_image_resource_sptr & ir, char const * filename, char const * file_format)
+vil_save_image_resource(const vil_image_resource_sptr & ir, const char * filename, const char * file_format)
 {
   vil_stream * os = vil_open(filename, "w");
   if (!os || !os->ok())
@@ -159,7 +159,7 @@ vil_save_image_resource(const vil_image_resource_sptr & ir, char const * filenam
 
 //: save to file, deducing format from filename.
 bool
-vil_save_image_resource(const vil_image_resource_sptr & ir, char const * filename)
+vil_save_image_resource(const vil_image_resource_sptr & ir, const char * filename)
 {
   return vil_save_image_resource(ir, filename, vil_save_guess_file_format(filename));
 }
@@ -174,7 +174,7 @@ vil_save_image_resource(const vil_image_resource_sptr & ir, char const * filenam
 
 //: Send vil_image to disk.
 bool
-vil_save(const vil_image_view_base & im, wchar_t const * filename, wchar_t const * file_format)
+vil_save(const vil_image_view_base & im, const wchar_t * filename, const wchar_t * file_format)
 {
   vil_stream * os = vil_open(filename, "w");
   if (!os || !os->ok())
@@ -230,13 +230,13 @@ vil_save(const vil_image_view_base & im, wchar_t const * filename, wchar_t const
 }
 
 
-wchar_t const *
-vil_save_guess_file_format(wchar_t const * filename)
+const wchar_t *
+vil_save_guess_file_format(const wchar_t * filename)
 {
-  wchar_t const * file_format = L"pnm"; // default file format
+  const wchar_t * file_format = L"pnm"; // default file format
 
   // find last "."
-  wchar_t const * dot = wcsrchr(filename, L'.');
+  const wchar_t * dot = wcsrchr(filename, L'.');
   if (!dot)
   {
     // filename doesn't end in ".anything"
@@ -252,7 +252,7 @@ vil_save_guess_file_format(wchar_t const * filename)
     if (false)
     {
     }
-#  define macro(ext, fmt) else if (ext_lower_case == L"." L#  ext) file_format = L#  fmt
+#  define macro(ext, fmt) else if (ext_lower_case == L"." L#ext) file_format = L#fmt
     macro(tiff, tiff);
     macro(tif, tiff);
     macro(png, png);
@@ -277,14 +277,14 @@ vil_save_guess_file_format(wchar_t const * filename)
 
 //: save to file, deducing format from filename.
 bool
-vil_save(const vil_image_view_base & i, wchar_t const * filename)
+vil_save(const vil_image_view_base & i, const wchar_t * filename)
 {
   return vil_save(i, filename, vil_save_guess_file_format(filename));
 }
 
 //: Send vil_image to disk.
 bool
-vil_save_image_resource(const vil_image_resource_sptr & ir, wchar_t const * filename, wchar_t const * file_format)
+vil_save_image_resource(const vil_image_resource_sptr & ir, const wchar_t * filename, const wchar_t * file_format)
 {
   vil_stream * os = vil_open(filename, "w");
   if (!os || !os->ok())
@@ -304,7 +304,7 @@ vil_save_image_resource(const vil_image_resource_sptr & ir, wchar_t const * file
 
 //: save to file, deducing format from filename.
 bool
-vil_save_image_resource(const vil_image_resource_sptr & ir, wchar_t const * filename)
+vil_save_image_resource(const vil_image_resource_sptr & ir, const wchar_t * filename)
 {
   return vil_save_image_resource(ir, filename, vil_save_guess_file_format(filename));
 }

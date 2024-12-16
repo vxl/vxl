@@ -22,7 +22,7 @@ class wx_childview_frame;
 //-------------------------------------------------------------------------
 class wx_childview_app : public wxApp
 {
- public:
+public:
   //: Constructor - default.
   wx_childview_app();
 
@@ -30,13 +30,18 @@ class wx_childview_app : public wxApp
   virtual ~wx_childview_app() {}
 
   //: Called on app initialization.
-  virtual bool OnInit();
+  virtual bool
+  OnInit();
 
   //: Provides access to this Apps main frame.
-  wx_childview_frame* get_main_frame() const { return frame_; }
+  wx_childview_frame *
+  get_main_frame() const
+  {
+    return frame_;
+  }
 
- private:
-  wx_childview_frame*  frame_;
+private:
+  wx_childview_frame * frame_;
 };
 
 //: Implements wx_childview_app& wxGetApp().

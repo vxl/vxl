@@ -24,7 +24,7 @@
 
 class vrel_lms_obj : public vrel_objective
 {
- public:
+public:
   //: Constructor.
   //  \a num_sam_inst is the minimum number of samples needed for
   //  a unique parameter estimate. That is, num_sam_inst should be set
@@ -35,37 +35,49 @@ class vrel_lms_obj : public vrel_objective
   //  maximum expected fraction of outliers. If the maximum expected
   //  fraction of outliers is not known, then the MUSE objective
   //  function should be used.
-  vrel_lms_obj( unsigned int num_sam_inst, double inlier_frac=0.5 );
+  vrel_lms_obj(unsigned int num_sam_inst, double inlier_frac = 0.5);
 
   ~vrel_lms_obj() override;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   //  \sa vrel_objective::fcn.
-  double fcn( vect_const_iter res_begin, vect_const_iter res_end,
-                      vect_const_iter /* scale is unused */,
-                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const override;
+  double
+  fcn(vect_const_iter res_begin,
+      vect_const_iter res_end,
+      vect_const_iter /* scale is unused */,
+      vnl_vector<double> * = nullptr /* param vector is unused */) const override;
 
   //: Evaluate the objective function on homoscedastic residuals.
   //  \sa vrel_objective::fcn.
-  double fcn( vect_const_iter begin, vect_const_iter end,
-                      double = 0 /* scale is unused */,
-                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const override;
+  double
+  fcn(vect_const_iter begin,
+      vect_const_iter end,
+      double = 0 /* scale is unused */,
+      vnl_vector<double> * = nullptr /* param vector is unused */) const override;
 
   //: False.
   //  The LMS objective is based on order statistics, and does not
   //  require any scale parameter, estimated or otherwise.
-  bool requires_prior_scale() const override
-    { return false; }
+  bool
+  requires_prior_scale() const override
+  {
+    return false;
+  }
 
   //: True. The scale is estimated as MAD (Median Absolute Deviation)
   //  \sa vrel_objective::can_estimate_scale.
-  bool can_estimate_scale() const override { return true; }
+  bool
+  can_estimate_scale() const override
+  {
+    return true;
+  }
 
   //: Scale estimate (median absolute deviation -- MAD).
   //  \sa vrel_util_median_abs_dev_scale(.)
-  double scale( vect_const_iter res_begin, vect_const_iter res_end ) const override;
+  double
+  scale(vect_const_iter res_begin, vect_const_iter res_end) const override;
 
- protected:
+protected:
   //: Number of samples needed for a unique fit = number of dependent residuals.
   unsigned int num_sam_inst_;
   double inlier_frac_;

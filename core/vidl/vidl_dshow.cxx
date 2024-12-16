@@ -60,7 +60,8 @@ private:
   com_manager(const com_manager &);
   com_manager &
   operator=(const com_manager &);
-  com_manager * operator&();
+  com_manager *
+  operator&();
 
   static com_manager * instance_;
 
@@ -208,7 +209,7 @@ private:
 };
 
 guid_string_entry guid_name_list::names[] = {
-#define OUR_GUID_ENTRY(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8)                                                \
+#define OUR_GUID_ENTRY(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
   { #name, { l, w1, w2, { b1, b2, b3, b4, b5, b6, b7, b8 } } },
 #include <uuids.h>
 };

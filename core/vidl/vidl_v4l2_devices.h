@@ -32,17 +32,28 @@ class vidl_v4l2_devices
 {
   std::vector<vidl_v4l2_device_sptr> vecdev;
   vidl_v4l2_devices();
-  void load_devices(const char *name);
- public:
+  void
+  load_devices(const char * name);
+
+public:
   //: Instance
-  static vidl_v4l2_devices& all();
+  static vidl_v4l2_devices &
+  all();
 
   //: Return number of detected devices in the system
-  unsigned int size() const { return vecdev.size(); }
+  unsigned int
+  size() const
+  {
+    return vecdev.size();
+  }
   // Return device i (0..size()-1)
-  //vidl_v4l2_device& device(unsigned int i) {return *vecdev[i];}
+  // vidl_v4l2_device& device(unsigned int i) {return *vecdev[i];}
   //: Return device i (0..size()-1)
-  vidl_v4l2_device& operator()(unsigned int i) {return *vecdev[i];}
+  vidl_v4l2_device &
+  operator()(unsigned int i)
+  {
+    return *vecdev[i];
+  }
 };
 
 #endif // vidl_v4l2_devices_h_

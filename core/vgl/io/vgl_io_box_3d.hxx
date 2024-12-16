@@ -11,8 +11,9 @@
 
 //============================================================================
 //: Binary save self to stream.
-template<class T>
-void vsl_b_write(vsl_b_ostream &os, const vgl_box_3d<T> & p)
+template <class T>
+void
+vsl_b_write(vsl_b_ostream & os, const vgl_box_3d<T> & p)
 {
   constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
@@ -26,10 +27,12 @@ void vsl_b_write(vsl_b_ostream &os, const vgl_box_3d<T> & p)
 
 //============================================================================
 //: Binary load self from stream.
-template<class T>
-void vsl_b_read(vsl_b_istream &is, vgl_box_3d<T> & p)
+template <class T>
+void
+vsl_b_read(vsl_b_istream & is, vgl_box_3d<T> & p)
 {
-  if (!is) return;
+  if (!is)
+    return;
 
   short v;
   T min_pos[3];
@@ -37,41 +40,41 @@ void vsl_b_read(vsl_b_istream &is, vgl_box_3d<T> & p)
   vsl_b_read(is, v);
   switch (v)
   {
-   case 1:
-    vsl_b_read(is, min_pos[0]);
-    vsl_b_read(is, min_pos[1]);
-    vsl_b_read(is, min_pos[2]);
-    vsl_b_read(is, max_pos[0]);
-    vsl_b_read(is, max_pos[1]);
-    vsl_b_read(is, max_pos[2]);
-    p.set_min_position(min_pos);
-    p.set_max_position(max_pos);
-    break;
+    case 1:
+      vsl_b_read(is, min_pos[0]);
+      vsl_b_read(is, min_pos[1]);
+      vsl_b_read(is, min_pos[2]);
+      vsl_b_read(is, max_pos[0]);
+      vsl_b_read(is, max_pos[1]);
+      vsl_b_read(is, max_pos[2]);
+      p.set_min_position(min_pos);
+      p.set_max_position(max_pos);
+      break;
 
-   default:
-    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_box_3d<T>&)\n"
-             << "           Unknown version number "<< v << '\n';
-    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-    return;
+    default:
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_box_3d<T>&)\n"
+                << "           Unknown version number " << v << '\n';
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
+      return;
   }
 }
 
 //============================================================================
 //: Output a human readable summary to the stream
-template<class T>
-void vsl_print_summary(std::ostream& os,const vgl_box_3d<T> & p)
+template <class T>
+void
+vsl_print_summary(std::ostream & os, const vgl_box_3d<T> & p)
 {
   if (p.is_empty())
-    os<<"Empty 3d box\n";
+    os << "Empty 3d box\n";
   else
-    os<<"3d box with opposite corners at ("
-      <<p.min_x() << ',' << p.min_y() << ',' << p.min_z() <<") and ("
-      <<p.max_x() << ',' << p.max_y() << ',' << p.max_z() <<")\n";
+    os << "3d box with opposite corners at (" << p.min_x() << ',' << p.min_y() << ',' << p.min_z() << ") and ("
+       << p.max_x() << ',' << p.max_y() << ',' << p.max_z() << ")\n";
 }
 
-#define VGL_IO_BOX_3D_INSTANTIATE(T) \
-template void vsl_print_summary(std::ostream &, const vgl_box_3d<T > &); \
-template void vsl_b_read(vsl_b_istream &, vgl_box_3d<T > &); \
-template void vsl_b_write(vsl_b_ostream &, const vgl_box_3d<T > &)
+#define VGL_IO_BOX_3D_INSTANTIATE(T)                                      \
+  template void vsl_print_summary(std::ostream &, const vgl_box_3d<T> &); \
+  template void vsl_b_read(vsl_b_istream &, vgl_box_3d<T> &);             \
+  template void vsl_b_write(vsl_b_ostream &, const vgl_box_3d<T> &)
 
 #endif // vgl_io_box_3d_hxx_

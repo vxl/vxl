@@ -8,6 +8,7 @@
 // \brief  Display an error dialog box.
 
 //: Pop up an error dialog, and wait for the user to dismiss it.
-void vgui_error_dialog(char const* message);
+void
+vgui_error_dialog(const char * message);
 
 #endif // vgui_error_dialog_h_

@@ -24,7 +24,7 @@ struct example_pyramid_tableau : public vgui_tableau
   vgui_image_tableau_new image_tab;
   vgui_parent_child_link pclink;
 
-  example_pyramid_tableau(vil1_image const & image)
+  example_pyramid_tableau(const vil1_image & image)
     : level(0)
     , pyr(image)
     , pclink(this, image_tab)
@@ -33,7 +33,7 @@ struct example_pyramid_tableau : public vgui_tableau
   }
 
   bool
-  handle(vgui_event const & e)
+  handle(const vgui_event & e)
   {
     // compensate for size change by scaling by 2^level :
     glMatrixMode(GL_MODELVIEW);

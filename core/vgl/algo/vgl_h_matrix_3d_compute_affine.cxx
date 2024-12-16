@@ -21,10 +21,10 @@ constexpr double DEGENERACY_THRESHOLD = 0.00001;
 // Note: requires all finite points.
 // The algorithm finds the nullvector of the $3 n \times 9$ design matrix.
 
-//:Assumes all corresponding points have equal weight
+//: Assumes all corresponding points have equal weight
 bool
-vgl_h_matrix_3d_compute_affine::solve_linear_problem(std::vector<vgl_homg_point_3d<double>> const & p1,
-                                                     std::vector<vgl_homg_point_3d<double>> const & p2,
+vgl_h_matrix_3d_compute_affine::solve_linear_problem(const std::vector<vgl_homg_point_3d<double>> & p1,
+                                                     const std::vector<vgl_homg_point_3d<double>> & p2,
                                                      vnl_matrix<double> & M)
 {
   int n = static_cast<int>(p1.size());
@@ -85,8 +85,8 @@ vgl_h_matrix_3d_compute_affine::solve_linear_problem(std::vector<vgl_homg_point_
 }
 
 bool
-vgl_h_matrix_3d_compute_affine::compute_p(std::vector<vgl_homg_point_3d<double>> const & points1,
-                                          std::vector<vgl_homg_point_3d<double>> const & points2,
+vgl_h_matrix_3d_compute_affine::compute_p(const std::vector<vgl_homg_point_3d<double>> & points1,
+                                          const std::vector<vgl_homg_point_3d<double>> & points2,
                                           vgl_h_matrix_3d<double> & H)
 {
   // number of points must be the same

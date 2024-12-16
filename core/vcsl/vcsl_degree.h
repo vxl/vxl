@@ -16,8 +16,7 @@
 
 //: A unit associated to the angle dimension
 //  See also \b vcsl_radian
-class vcsl_degree
-  : public vcsl_angle_unit
+class vcsl_degree : public vcsl_angle_unit
 {
   //***************************************************************************
   // Constructors/Destructor
@@ -26,7 +25,7 @@ class vcsl_degree
   // Default constructor
   vcsl_degree() = default;
 
- public:
+public:
   // Destructor
   ~vcsl_degree() override = default;
 
@@ -36,14 +35,16 @@ class vcsl_degree
 
   //: Returns the number of units of `this' equal of the standard_unit for the dimension
   // Pure virtual function of vcsl_unit
-  double units_per_standard_unit() const override;
+  double
+  units_per_standard_unit() const override;
 
   //***************************************************************************
   // Singleton pattern
   //***************************************************************************
 
   //: Return the reference to the unique vcsl_degree object
-  static vcsl_degree_sptr instance();
+  static vcsl_degree_sptr
+  instance();
 };
 
 #endif // vcsl_degree_h_

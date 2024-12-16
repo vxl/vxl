@@ -10,13 +10,15 @@
 #include "vpgl/vpgl_generic_camera.h"
 #include "vnl/vnl_random.h"
 
-bool vpgl_backproject::bproj_plane(vpgl_generic_camera<double> const &gcam,
-                                   vnl_double_2 const &image_point,
-                                   vnl_double_4 const &plane,
-                                   vnl_double_3 const & /*initial_guess*/,
-                                   vnl_double_3 &world_point,
-                                   double /*error_tol*/,
-                                   double /*relative_diameter*/) {
+bool
+vpgl_backproject::bproj_plane(const vpgl_generic_camera<double> & gcam,
+                              const vnl_double_2 & image_point,
+                              const vnl_double_4 & plane,
+                              const vnl_double_3 & /*initial_guess*/,
+                              vnl_double_3 & world_point,
+                              double /*error_tol*/,
+                              double /*relative_diameter*/)
+{
   vgl_ray_3d<double> ray;
   vgl_point_3d<double> ipt;
   vgl_plane_3d<double> gplane(plane[0], plane[1], plane[2], plane[3]);
@@ -29,13 +31,15 @@ bool vpgl_backproject::bproj_plane(vpgl_generic_camera<double> const &gcam,
   return true;
 }
 
-bool vpgl_backproject::bproj_plane(vpgl_proj_camera<double> const &pcam,
-                                   vnl_double_2 const &image_point,
-                                   vnl_double_4 const &plane,
-                                   vnl_double_3 const & /*initial_guess*/,
-                                   vnl_double_3 &world_point,
-                                   double /*error_tol*/,
-                                   double /*relative_diameter*/) {
+bool
+vpgl_backproject::bproj_plane(const vpgl_proj_camera<double> & pcam,
+                              const vnl_double_2 & image_point,
+                              const vnl_double_4 & plane,
+                              const vnl_double_3 & /*initial_guess*/,
+                              vnl_double_3 & world_point,
+                              double /*error_tol*/,
+                              double /*relative_diameter*/)
+{
   vgl_ray_3d<double> ray = pcam.backproject_ray(vgl_homg_point_2d<double>(image_point[0], image_point[1]));
   vgl_plane_3d<double> gplane(plane[0], plane[1], plane[2], plane[3]);
 
@@ -50,10 +54,10 @@ bool vpgl_backproject::bproj_plane(vpgl_proj_camera<double> const &pcam,
 
 //: Backproject an image point onto a plane, start with initial_guess
 bool
-vpgl_backproject::bproj_plane(vpgl_camera<double> const & cam,
-                              vnl_double_2 const & image_point,
-                              vnl_double_4 const & plane,
-                              vnl_double_3 const & initial_guess,
+vpgl_backproject::bproj_plane(const vpgl_camera<double> & cam,
+                              const vnl_double_2 & image_point,
+                              const vnl_double_4 & plane,
+                              const vnl_double_3 & initial_guess,
                               vnl_double_3 & world_point,
                               double error_tol,
                               double relative_diameter)
@@ -61,7 +65,7 @@ vpgl_backproject::bproj_plane(vpgl_camera<double> const & cam,
   // special case of a generic camera
   if (cam.type_name() == "vpgl_generic_camera")
   {
-    auto gcam = dynamic_cast<vpgl_generic_camera<double> const &>(cam);
+    auto gcam = dynamic_cast<const vpgl_generic_camera<double> &>(cam);
     return vpgl_backproject::bproj_plane(
       gcam, image_point, plane, initial_guess, world_point, error_tol, relative_diameter);
   }
@@ -97,9 +101,9 @@ vpgl_backproject::bproj_plane(vpgl_camera<double> const & cam,
 // normalized to a unit vector. Two rays can be constructed, one through
 // point and one through a point formed by adding the vector to the point
 bool
-vpgl_backproject::bproj_point_vector(vpgl_proj_camera<double> const & cam,
-                                     vgl_point_2d<double> const & point,
-                                     vgl_vector_2d<double> const & vect,
+vpgl_backproject::bproj_point_vector(const vpgl_proj_camera<double> & cam,
+                                     const vgl_point_2d<double> & point,
+                                     const vgl_vector_2d<double> & vect,
                                      vgl_plane_3d<double> & plane)
 {
   vgl_homg_point_2d<double> hp(point);

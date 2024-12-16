@@ -4,7 +4,7 @@
 
 //: Binary save camera sptr to stream
 void
-vsl_b_write(vsl_b_ostream & os, vpgl_camera_double_sptr const & cam_sptr)
+vsl_b_write(vsl_b_ostream & os, const vpgl_camera_double_sptr & cam_sptr)
 {
   if (!cam_sptr)
     return;
@@ -14,7 +14,7 @@ vsl_b_write(vsl_b_ostream & os, vpgl_camera_double_sptr const & cam_sptr)
 
 //: Binary save camera sptr to stream
 void
-vsl_b_write(vsl_b_ostream & os, vpgl_camera_float_sptr const & cam_sptr)
+vsl_b_write(vsl_b_ostream & os, const vpgl_camera_float_sptr & cam_sptr)
 {
   if (!cam_sptr)
     return;

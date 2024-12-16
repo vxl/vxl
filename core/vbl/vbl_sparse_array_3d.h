@@ -31,70 +31,63 @@
 //: Sparse 3d array allowing space efficient access
 // You can use this as e.g. s(300,700,900) = T(2).
 template <class T>
-class vbl_sparse_array_3d : public vbl_sparse_array_base<T, vbl_triple<unsigned, unsigned, unsigned> >
+class vbl_sparse_array_3d : public vbl_sparse_array_base<T, vbl_triple<unsigned, unsigned, unsigned>>
 {
- public:
-
+public:
   //: Put a value into location (i,j,k).
-  bool put(unsigned i, unsigned j, unsigned k, const T& t)
+  bool
+  put(unsigned i, unsigned j, unsigned k, const T & t)
   {
-    return vbl_sparse_array_base<T,
-      vbl_triple<unsigned, unsigned, unsigned> >::
-      put(vbl_make_triple(i, j, k), t);
+    return vbl_sparse_array_base<T, vbl_triple<unsigned, unsigned, unsigned>>::put(vbl_make_triple(i, j, k), t);
   }
 
   //: Return contents of location (i,j,k).
   //  Returns an undefined value (in fact
   //  a T()) if location (i,j,k) has not been filled with a value.
-  T& operator () (unsigned i, unsigned j, unsigned k)
+  T &
+  operator()(unsigned i, unsigned j, unsigned k)
   {
-    return vbl_sparse_array_base<T,
-      vbl_triple<unsigned, unsigned, unsigned> >::
-      operator() (vbl_make_triple(i, j, k));
+    return vbl_sparse_array_base<T, vbl_triple<unsigned, unsigned, unsigned>>::operator()(vbl_make_triple(i, j, k));
   }
 
   //: Return contents of (i,j,k).  Assertion failure if not yet filled.
-  const T& operator () (unsigned i, unsigned j, unsigned k) const
+  const T &
+  operator()(unsigned i, unsigned j, unsigned k) const
   {
-    return vbl_sparse_array_base<T,
-      vbl_triple<unsigned, unsigned, unsigned> >::
-      operator() (vbl_make_triple(i, j, k));
+    return vbl_sparse_array_base<T, vbl_triple<unsigned, unsigned, unsigned>>::operator()(vbl_make_triple(i, j, k));
   }
 
   //: Return true if location (i,j,k) has been filled.
-  bool fullp(unsigned i, unsigned j, unsigned k) const
+  bool
+  fullp(unsigned i, unsigned j, unsigned k) const
   {
-    return vbl_sparse_array_base<T,
-      vbl_triple<unsigned, unsigned, unsigned> >::
-      fullp(vbl_make_triple(i, j, k));
+    return vbl_sparse_array_base<T, vbl_triple<unsigned, unsigned, unsigned>>::fullp(vbl_make_triple(i, j, k));
   }
 
   //: Return the address of location (i,j,k).  0 if not yet filled.
-  T* get_addr(unsigned i, unsigned j, unsigned k)
+  T *
+  get_addr(unsigned i, unsigned j, unsigned k)
   {
-    return vbl_sparse_array_base<T,
-      vbl_triple<unsigned, unsigned, unsigned> >::
-      get_addr(vbl_make_triple(i, j, k));
+    return vbl_sparse_array_base<T, vbl_triple<unsigned, unsigned, unsigned>>::get_addr(vbl_make_triple(i, j, k));
   }
 
   //: Print the Array to a stream in "(i,j,k): value" format.
-  std::ostream& print(std::ostream&) const;
+  std::ostream &
+  print(std::ostream &) const;
 };
 
 //: Stream operator - print the Array to a stream in "(i,j,k): value" format.
 template <class T>
-inline std::ostream& operator <<
-(std::ostream& s, const vbl_sparse_array_3d<T>& a)
+inline std::ostream &
+operator<<(std::ostream & s, const vbl_sparse_array_3d<T> & a)
 {
   return a.print(s);
 }
 
 
 #ifndef VBL_SPARSE_ARRAY_BASE_INSTANTIATE
-#define VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T) \
-extern "please include vbl/vbl_sparse_array_base.hxx instead"
+#  define VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T) extern "please include vbl/vbl_sparse_array_base.hxx instead"
 #endif // VBL_SPARSE_ARRAY_BASE_INSTANTIATE
-#define VBL_SPARSE_ARRAY_3D_INSTANTIATE(T) \
-extern "please include vbl/vbl_sparse_array_3d.hxx instead"
+#define VBL_SPARSE_ARRAY_3D_INSTANTIATE(T) extern "please include vbl/vbl_sparse_array_3d.hxx instead"
 
 #endif // vbl_sparse_array_3d_h_

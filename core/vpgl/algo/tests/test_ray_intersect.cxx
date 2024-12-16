@@ -74,7 +74,7 @@ test_ray_intersect()
   p1 = rcam1.project(p3d);
   p2 = rcam2.project(p3d);
   std::cout << "Projected point from rcam 1 " << p1 << '\n' << "Projected point from rcam 2 " << p2 << '\n';
-  std::vector<vpgl_camera<double> const *> cams(2);
+  std::vector<const vpgl_camera<double> *> cams(2);
   cams[0] = (vpgl_camera<double> *)(&rcam1);
   cams[1] = (vpgl_camera<double> *)(&rcam2);
   std::vector<vgl_point_2d<double>> image_pts;

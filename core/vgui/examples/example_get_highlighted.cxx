@@ -25,7 +25,7 @@ struct my_tab : public vgui_easy2D_tableau
 
   // Look for mouse motion events and see if the highlighted object has changed.
   bool
-  handle(vgui_event const & e)
+  handle(const vgui_event & e)
   {
     static vgui_soview * old_so = nullptr;
     if (e.type == vgui_MOTION)
@@ -52,7 +52,7 @@ typedef vgui_tableau_sptr_t<my_tab> my_tab_sptr;
 
 struct my_tab_new : public my_tab_sptr
 {
-  my_tab_new(vgui_tableau_sptr const & i)
+  my_tab_new(const vgui_tableau_sptr & i)
     : my_tab_sptr(new my_tab(i))
   {}
 };

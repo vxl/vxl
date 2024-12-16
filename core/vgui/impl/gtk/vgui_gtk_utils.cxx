@@ -47,7 +47,7 @@ vgui_gtk_utils::translate_button(int button)
 }
 
 vgui_key
-vgui_gtk_utils::translate_key(GdkEventKey const * gev)
+vgui_gtk_utils::translate_key(const GdkEventKey * gev)
 {
   if (gev->length == 1)
     return vgui_key(*(gev->string));
@@ -99,7 +99,7 @@ vgui_gtk_utils::set_modifiers(vgui_event & e, const guint state)
 
 
 bool
-vgui_gtk_utils::is_modifier(GdkEvent const * gev)
+vgui_gtk_utils::is_modifier(const GdkEvent * gev)
 {
   if (gev->type != GDK_KEY_PRESS && gev->type != GDK_KEY_RELEASE)
     return false;

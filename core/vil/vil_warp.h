@@ -37,13 +37,11 @@
 //
 // \relatesalso vil_image_view
 template <class sType, class dType, class MapFunctor, class InterpFunctor>
-void vil_warp(const vil_image_view<sType>& in,
-              vil_image_view<dType>& out,
-              MapFunctor mapper,
-              InterpFunctor interp)
+void
+vil_warp(const vil_image_view<sType> & in, vil_image_view<dType> & out, MapFunctor mapper, InterpFunctor interp)
 {
-  unsigned const out_w = out.ni();
-  unsigned const out_h = out.nj();
+  const unsigned out_w = out.ni();
+  const unsigned out_h = out.nj();
 
   assert(out.nplanes() == in.nplanes());
 

@@ -18,29 +18,49 @@
 template <class T>
 class vgl_triangle_scan_iterator : public vgl_region_scan_iterator
 {
- public:
+public:
   //: Vertices of triangle
-  struct pt { T x; T y; } a, b, c;
+  struct pt
+  {
+    T x;
+    T y;
+  } a, b, c;
 
 #if use_polygon_scan_iterator
-  vgl_triangle_scan_iterator() : data(0) {}
- ~vgl_triangle_scan_iterator();
+  vgl_triangle_scan_iterator()
+    : data(0)
+  {}
+  ~vgl_triangle_scan_iterator();
 #endif
 
-  void reset() override;
-  bool next() override;
-  inline int scany() const override { return scany_; }
-  inline int startx() const override { return startx_; }
-  inline int endx() const override { return endx_; }
+  void
+  reset() override;
+  bool
+  next() override;
+  inline int
+  scany() const override
+  {
+    return scany_;
+  }
+  inline int
+  startx() const override
+  {
+    return startx_;
+  }
+  inline int
+  endx() const override
+  {
+    return endx_;
+  }
 
- private:
+private:
   int scany_;
   int startx_;
   int endx_;
 
 #if use_polygon_scan_iterator
   struct data_t;
-  data_t *data;
+  data_t * data;
 #else
   int y0, y1;
   int x0, x1;

@@ -18,30 +18,49 @@ class vul_timestamp
   //: mark is incremented to give a unique timestamp
   static VUL_EXPORT unsigned long mark;
 
- public:
-
+public:
   //: Constructor
   vul_timestamp() { this->touch(); }
   //: Destructor
   virtual ~vul_timestamp() = default;
 
   //: Get a new timestamp
-  void touch() { timestamp_ = get_unique_timestamp(); }
+  void
+  touch()
+  {
+    timestamp_ = get_unique_timestamp();
+  }
   //: Get a new timestamp (incremented by 1 each time)
-  unsigned long get_time_stamp() const { return timestamp_; }
+  unsigned long
+  get_time_stamp() const
+  {
+    return timestamp_;
+  }
 
   //: Returns true if t is older than the last timestamp
-  bool older(vul_timestamp const& t)const{return timestamp_<t.get_time_stamp();}
+  bool
+  older(const vul_timestamp & t) const
+  {
+    return timestamp_ < t.get_time_stamp();
+  }
   //: Returns true if t is older than the last timestamp
-  inline bool older(vul_timestamp const* t) const { return older(*t); }
+  inline bool
+  older(const vul_timestamp * t) const
+  {
+    return older(*t);
+  }
 
- protected:
+protected:
   //: last timestamp
   unsigned long timestamp_;
 
- private:
+private:
   //: get a new timestamp
-  static unsigned long get_unique_timestamp() { return mark++; }
+  static unsigned long
+  get_unique_timestamp()
+  {
+    return mark++;
+  }
 };
 
 #endif // vul_timestamp_h

@@ -37,23 +37,25 @@
 // - `#'       clear events
 class vgui_blackbox_tableau : public vgui_wrapper_tableau
 {
- public:
+public:
   //: Constructor - don't use this, use vgui_blackbox_tableau_new.
-  vgui_blackbox_tableau(vgui_tableau_sptr const&);
+  vgui_blackbox_tableau(const vgui_tableau_sptr &);
 
   //: Handle all events used by this tableau.
   //  In particular, this tableau uses the key-strokes ',' (start/stop
   //  record), '.' (playback), 's' (playback w. dump), '/' (print
   //  events), '#' (clear events).
   //  Other events are passed to the child tableau.
-  virtual bool handle(const vgui_event& event);
+  virtual bool
+  handle(const vgui_event & event);
 
   //: Return the name of this tableau ('vgui_blackbox_tableau').
-  virtual std::string type_name() const;
+  virtual std::string
+  type_name() const;
 
- protected:
+protected:
   //: Destructor - called by smart-pointer vgui_blackbox_tableau_sptr.
- ~vgui_blackbox_tableau();
+  ~vgui_blackbox_tableau();
 
   //: True if events are being recorded.
   bool recording;
@@ -69,7 +71,9 @@ struct vgui_blackbox_tableau_new : public vgui_blackbox_tableau_sptr
 
   //: Constructor - creates a smart-pointer to a vgui_blackbox_tableau.
   //  Takes the single child tableau as a parameter.
-  vgui_blackbox_tableau_new(vgui_tableau_sptr const& a) : base(new vgui_blackbox_tableau(a)) { }
+  vgui_blackbox_tableau_new(const vgui_tableau_sptr & a)
+    : base(new vgui_blackbox_tableau(a))
+  {}
 };
 
 #endif // vgui_blackbox_tableau_h_

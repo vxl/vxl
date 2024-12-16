@@ -45,7 +45,7 @@
 
 //: Test to see if all the pixels in two images are equal
 bool
-test_image_equal(char const * type_name, vil1_image const & image, vil1_image const & image2, bool exact = true)
+test_image_equal(const char * type_name, const vil1_image & image, const vil1_image & image2, bool exact = true)
 {
   int sizex = image.width();
   int sizey = image.height();
@@ -157,8 +157,8 @@ test_image_equal(char const * type_name, vil1_image const & image, vil1_image co
 // The non_raw save and load functions are also called, but the images aren't compared.
 
 void
-vil1_test_image_type_raw(char const * type_name,   //!< type for image to read and write
-                         vil1_image const & image, //!< test image to save and restore
+vil1_test_image_type_raw(const char * type_name,   //!< type for image to read and write
+                         const vil1_image & image, //!< test image to save and restore
                          bool exact = true)        //!< require read back image identical
 {
   assert(type_name);
@@ -315,8 +315,8 @@ create_grey_gif(const char * filename)
 }
 
 void
-vil1_test_image_type(char const * type_name,   // type for image to read and write
-                     vil1_image const & image, // test image to save and restore
+vil1_test_image_type(const char * type_name,   // type for image to read and write
+                     const vil1_image & image, // test image to save and restore
                      bool exact = true)        // require read back image identical
 {
   assert(type_name);

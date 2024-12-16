@@ -26,17 +26,21 @@
 // derived from this class (see vidl_pixel_format.hxx)
 class vidl_pixel_iterator
 {
-  public:
-    //: Destructor
-    virtual ~vidl_pixel_iterator()= default;
-    //: Return the pixel format
-    virtual vidl_pixel_format pixel_format() const = 0;
-    //: Pre-increment: step to the next pixel
-    virtual vidl_pixel_iterator& operator++ () = 0;
-    //: Copy the pixel data into a byte array
-    virtual void get_data(vxl_byte* data) const = 0;
-    //: Set the pixel data from a byte array
-    virtual void set_data(const vxl_byte* data) = 0;
+public:
+  //: Destructor
+  virtual ~vidl_pixel_iterator() = default;
+  //: Return the pixel format
+  virtual vidl_pixel_format
+  pixel_format() const = 0;
+  //: Pre-increment: step to the next pixel
+  virtual vidl_pixel_iterator &
+  operator++() = 0;
+  //: Copy the pixel data into a byte array
+  virtual void
+  get_data(vxl_byte * data) const = 0;
+  //: Set the pixel data from a byte array
+  virtual void
+  set_data(const vxl_byte * data) = 0;
 };
 
 
@@ -44,14 +48,13 @@ class vidl_pixel_iterator
 // Creates a new pixel iterator on the heap
 // The iterator is initialized to the first pixel in the frame
 // \note The user is responsible for deleting the iterator
-vidl_pixel_iterator*
-vidl_make_pixel_iterator(const vidl_frame& frame);
+vidl_pixel_iterator *
+vidl_make_pixel_iterator(const vidl_frame & frame);
 
 
 //: Return true if the pixel format has a valid pixel iterator implementation
-bool vidl_has_pixel_iterator(vidl_pixel_format FMT);
-
-
+bool
+vidl_has_pixel_iterator(vidl_pixel_format FMT);
 
 
 #endif // vidl_pixel_iterator_h_

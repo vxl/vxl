@@ -14,7 +14,7 @@
 
 template <class T, class S>
 static void
-test_hilbert(T /*dummy*/, char const * type, S residual)
+test_hilbert(T /*dummy*/, const char * type, S residual)
 {
   std::cout << "----- Testing svd<" << type << ">(Hilbert_3x3) -----" << std::endl;
   using abs_t = typename vnl_numeric_traits<T>::abs_t;
@@ -134,7 +134,7 @@ test_I()
 
 template <class T>
 void
-test_svd_recomposition(char const * type, double maxres, T * /* tag */, vnl_random & rng)
+test_svd_recomposition(const char * type, double maxres, T * /* tag */, vnl_random & rng)
 {
   // Test inversion of 5x5 matrix of T :
   std::cout << "----- Testing vnl_svd<" << type << "> recomposition -----\n";

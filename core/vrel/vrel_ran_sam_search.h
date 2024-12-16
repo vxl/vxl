@@ -43,12 +43,12 @@ class vrel_estimation_problem;
 
 class vrel_ran_sam_search
 {
- public:
+public:
   //: Constructor using a non-deterministic random-sampling seed.
-  vrel_ran_sam_search( );
+  vrel_ran_sam_search();
 
   //: Constructor using a given random-sampling seed.
-  vrel_ran_sam_search( int seed );
+  vrel_ran_sam_search(int seed);
 
   virtual ~vrel_ran_sam_search();
 
@@ -57,13 +57,15 @@ class vrel_ran_sam_search
   //  samples as specified in least-median of squares.
 
   //: Indicate that all possible minimal subset samples should be tried.
-  void set_gen_all_samples();
+  void
+  set_gen_all_samples();
 
   //: Set the parameters for random sampling.
-  void set_sampling_params( double max_outlier_frac = 0.5,
-                            double desired_prob_good = 0.99,
-                            unsigned int max_populations_expected = 1,
-                            unsigned int min_samples = 0 );
+  void
+  set_sampling_params(double max_outlier_frac = 0.5,
+                      double desired_prob_good = 0.99,
+                      unsigned int max_populations_expected = 1,
+                      unsigned int min_samples = 0);
 
   // ----------------------------------------
   //  Main estimation functions
@@ -71,37 +73,65 @@ class vrel_ran_sam_search
 
   //: \brief Estimation for an "ordinary" estimation problem.
   virtual bool
-  estimate( const vrel_estimation_problem* problem,
-            const vrel_objective* obj_fcn );
+  estimate(const vrel_estimation_problem * problem, const vrel_objective * obj_fcn);
 
   // -----------------------------------------
   // Access to results and computed parameters
   // -----------------------------------------
 
   //:  Get the scale estimate.
-  double scale() const { return scale_; }
+  double
+  scale() const
+  {
+    return scale_;
+  }
 
   //:  Get the parameter estimate.
-  const vnl_vector<double>& params() const { return params_; }
+  const vnl_vector<double> &
+  params() const
+  {
+    return params_;
+  }
 
   //:  Get the indices of best data sample
-  const std::vector<int>& index() const { return indices_; }
+  const std::vector<int> &
+  index() const
+  {
+    return indices_;
+  }
 
   //:  Get the residuals for best sample
-  const std::vector<double>& residuals() const { return residuals_; }
+  const std::vector<double> &
+  residuals() const
+  {
+    return residuals_;
+  }
 
   //:  Get the cost for best sample returned by vrel_objective function
-  double cost() const { return min_obj_; }
+  double
+  cost() const
+  {
+    return min_obj_;
+  }
 
   //:  Get the number of samples tested in during estimation.
-  int samples_tested() const { return samples_to_take_; }
+  int
+  samples_tested() const
+  {
+    return samples_to_take_;
+  }
 
   //:  Print the sampling parameters.  Used for debugging.
-  void print_params() const;
+  void
+  print_params() const;
 
-  void set_trace_level( int level ) { trace_level_ = level; }
+  void
+  set_trace_level(int level)
+  {
+    trace_level_ = level;
+  }
 
- protected:
+protected:
   // ------------------------------------------------------------
   //  Random sampling functions.  Don't call directly.  These are
   //  public for test purposes.
@@ -109,19 +139,19 @@ class vrel_ran_sam_search
 
   //: Calculate number of samples --- non-unique matching estimation problems
   virtual void
-  calc_num_samples( const vrel_estimation_problem* problem );
+  calc_num_samples(const vrel_estimation_problem * problem);
 
   //: Determine the next random sample, filling in the "sample" vector.
   virtual void
-  next_sample( unsigned int taken, unsigned int num_points, std::vector<int>& sample,
-               unsigned int points_per_sample );
+  next_sample(unsigned int taken, unsigned int num_points, std::vector<int> & sample, unsigned int points_per_sample);
 
- private:
+private:
+  void
+  trace_sample(const std::vector<int> & point_indices) const;
+  void
+  trace_residuals(const std::vector<double> & residuals) const;
 
-  void trace_sample( const std::vector<int>& point_indices ) const;
-  void trace_residuals( const std::vector<double>& residuals ) const;
-
- protected:
+protected:
   //
   //  Parameters
   //
@@ -129,19 +159,19 @@ class vrel_ran_sam_search
   double desired_prob_good_;
   unsigned int max_populations_expected_;
   unsigned int min_samples_;
-  bool generate_all_{false};
+  bool generate_all_{ false };
 
   //: Random number generator.
   // Normally, this will point to the "global" generator, but a could
   // point to a local one if the user wants to specify a seed.
-  vnl_random* generator_;
-  bool own_generator_{false};
+  vnl_random * generator_;
+  bool own_generator_{ false };
 
   //
   //  The estimate
   //
   vnl_vector<double> params_;
-  double scale_{0};
+  double scale_{ 0 };
   std::vector<int> indices_;
   std::vector<double> residuals_;
 
@@ -149,9 +179,9 @@ class vrel_ran_sam_search
   //
   //  Sampling variables
   //
-  unsigned int samples_to_take_{0};
+  unsigned int samples_to_take_{ 0 };
 
-  int trace_level_{0};
+  int trace_level_{ 0 };
 };
 
 #endif

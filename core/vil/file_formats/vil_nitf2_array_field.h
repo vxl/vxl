@@ -31,10 +31,12 @@ class vil_nitf2_date_time;
 
 class vil_nitf2_array_field : public vil_nitf2_field
 {
- public:
+public:
   // Constructor
-  vil_nitf2_array_field(vil_nitf2_field_definition* definition, int num_dimensions)
-    : vil_nitf2_field(definition), m_num_dimensions(num_dimensions) {}
+  vil_nitf2_array_field(vil_nitf2_field_definition * definition, int num_dimensions)
+    : vil_nitf2_field(definition)
+    , m_num_dimensions(num_dimensions)
+  {}
 
   // Destructor
   ~vil_nitf2_array_field() override = default;
@@ -42,39 +44,44 @@ class vil_nitf2_array_field : public vil_nitf2_field
   //: Number of dimensions.
   // \returns this vector's number of dimensions, which equals
   // its "repeat" nesting level.
-  int num_dimensions() const override;
+  int
+  num_dimensions() const override;
 
   //: Given a partial index vector, set the value of the next dimension.
   // Length of indexes must be less than num_dimensions(). See comment
   // for member m_dimensions_map, below; indexes is its key. For example,
   // if indexes is empty, the first dimension is set.
-  void set_next_dimension(const vil_nitf2_index_vector& indexes, int bound);
+  void
+  set_next_dimension(const vil_nitf2_index_vector & indexes, int bound);
 
   //: Given a partial index vector, return value of next dimension (or zero if none).
   // Length of indexes must be less than num_dimensions(). See comment
   // for member m_dimensions_map, below; indexes is its key. For
   // example, if indexes is empty, the first dimension is retrieved.
-  int next_dimension(const vil_nitf2_index_vector& indexes) const;
+  int
+  next_dimension(const vil_nitf2_index_vector & indexes) const;
 
   //: Compares index vector against value dimensions.
-  bool check_index(const vil_nitf2_index_vector& indexes) const;
+  bool
+  check_index(const vil_nitf2_index_vector & indexes) const;
 
   //: Reads from input stream the scalar value at specified index.
   // check_index(indexes) must be true, or this will emit an error.
   // \returns success.
-  virtual bool read_vector_element(vil_nitf2_istream& input,
-                                   const vil_nitf2_index_vector& indexes,
-                                   int variable_width) = 0;
+  virtual bool
+  read_vector_element(vil_nitf2_istream & input, const vil_nitf2_index_vector & indexes, int variable_width) = 0;
 
   //: Writes to output stream the scalar value at specified index.
   // check_index(indexes) must be true, of this will emit an error.
   // Returns success.  Arg variable_width, if non-negative, overrides
   // formatter's field_width.
-  virtual bool write_vector_element(vil_nitf2_ostream& output,
-                                    const vil_nitf2_index_vector& indexes,
-                                    int variable_width) const = 0;
+  virtual bool
+  write_vector_element(vil_nitf2_ostream & output,
+                       const vil_nitf2_index_vector & indexes,
+                       int variable_width) const = 0;
 
-  field_tree* get_tree() const override;
+  field_tree *
+  get_tree() const override;
 
   //:
   // Sets out_value to the value of the element selected by specified
@@ -87,21 +94,58 @@ class vil_nitf2_array_field : public vil_nitf2_field
   // defined here for the convenience of my callers, so they don't have to
   // downcast to the specific field type.
 #if VXL_HAS_INT_64
-  virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_long& ) const { return false; }
+  virtual bool
+  value(const vil_nitf2_index_vector &, vil_nitf2_long &) const
+  {
+    return false;
+  }
 #endif
-  virtual bool value(const vil_nitf2_index_vector&, int& ) const { return false; }
-  virtual bool value(const vil_nitf2_index_vector&, double& ) const { return false; }
-  virtual bool value(const vil_nitf2_index_vector&, char& ) const { return false; }
-  virtual bool value(const vil_nitf2_index_vector&, void*& ) const { return false; }
-  virtual bool value(const vil_nitf2_index_vector&, std::string& ) const { return false; }
-  virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_location*& ) const { return false; }
-  virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_date_time& ) const { return false; }
-  virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_tagged_record_sequence& ) const { return false; }
+  virtual bool
+  value(const vil_nitf2_index_vector &, int &) const
+  {
+    return false;
+  }
+  virtual bool
+  value(const vil_nitf2_index_vector &, double &) const
+  {
+    return false;
+  }
+  virtual bool
+  value(const vil_nitf2_index_vector &, char &) const
+  {
+    return false;
+  }
+  virtual bool
+  value(const vil_nitf2_index_vector &, void *&) const
+  {
+    return false;
+  }
+  virtual bool
+  value(const vil_nitf2_index_vector &, std::string &) const
+  {
+    return false;
+  }
+  virtual bool
+  value(const vil_nitf2_index_vector &, vil_nitf2_location *&) const
+  {
+    return false;
+  }
+  virtual bool
+  value(const vil_nitf2_index_vector &, vil_nitf2_date_time &) const
+  {
+    return false;
+  }
+  virtual bool
+  value(const vil_nitf2_index_vector &, vil_nitf2_tagged_record_sequence &) const
+  {
+    return false;
+  }
 
- protected:
-  void do_dimension( const vil_nitf2_index_vector& index,
-                     vil_nitf2_field::field_tree* tr ) const;
-  std::string get_value_string(const vil_nitf2_index_vector& in_indices) const;
+protected:
+  void
+  do_dimension(const vil_nitf2_index_vector & index, vil_nitf2_field::field_tree * tr) const;
+  std::string
+  get_value_string(const vil_nitf2_index_vector & in_indices) const;
 
 
   //: Dimensionality of vector field

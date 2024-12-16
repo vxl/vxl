@@ -32,31 +32,36 @@
 //  scene.
 class vgui_loader_tableau : public vgui_wrapper_tableau
 {
- public:
-
+public:
   //: Constructor - don't use this, use vgui_loader_tableau_new.
   //  Takes the single child tableau as a parameter.
-  vgui_loader_tableau(vgui_tableau_sptr const& child);
+  vgui_loader_tableau(const vgui_tableau_sptr & child);
 
   //: Returns the type of this tableau ('vgui_loader_tableau').
-  std::string type_name() const;
+  std::string
+  type_name() const;
 
   //: Set the projection matrix to the given matrix.
-  void set_projection(vnl_matrix_fixed<double,4,4> const &m);
+  void
+  set_projection(const vnl_matrix_fixed<double, 4, 4> & m);
 
   //: Set the modelview matrix to the given matrix.
-  void set_modelview(vnl_matrix_fixed<double,4,4> const &m);
+  void
+  set_modelview(const vnl_matrix_fixed<double, 4, 4> & m);
 
   //: Unset the projection matrix.
-  void unset_projection();
+  void
+  unset_projection();
 
   //: Unset the modelview matrix.
-  void unset_modelview();
+  void
+  unset_modelview();
 
   //: Set projection and modalview matrices to the identity matrix.
   //  Calling this method is equivalent to calling set_projection(I) and
   //  set_modelview(I) with I an identity matrix.
-  void set_identity();
+  void
+  set_identity();
 
   //: Set projection matrix to identity and modelview matrix using glOrtho().
   // These easy methods set the projection matrix to the identity and the
@@ -65,21 +70,34 @@ class vgui_loader_tableau : public vgui_wrapper_tableau
   // Eg. to view an image which is w-by-h, one might use
   //   l.set_ortho(0,h, w,0);
   // unless one wants the image upside down.
-  void set_ortho(float x1, float y1, // bottom, left
-                 float x2, float y2);// top, right
+  void
+  set_ortho(float x1,
+            float y1, // bottom, left
+            float x2,
+            float y2); // top, right
 
   //: Set projection matrix to identity and modelview matrix using glOrtho().
-  void set_ortho(float x1,float y1,float z1, // bottom, left hand, far corner.
-                 float x2,float y2,float z2);// top, right hand, near corner.
+  void
+  set_ortho(float x1,
+            float y1,
+            float z1, // bottom, left hand, far corner.
+            float x2,
+            float y2,
+            float z2); // top, right hand, near corner.
 
   //: Default for a w-by-h image :
-  void set_image(unsigned w, unsigned h) { set_ortho(0.f, float(h), float(w), 0.f); }
+  void
+  set_image(unsigned w, unsigned h)
+  {
+    set_ortho(0.f, float(h), float(w), 0.f);
+  }
 
- protected:
+protected:
   //: Destructor - called by vgui_loader_tableau_sptr.
-  ~vgui_loader_tableau() { }
+  ~vgui_loader_tableau() {}
 
-  bool handle( vgui_event const &e);
+  bool
+  handle(const vgui_event & e);
 
   bool projectionmatrixloaded;
   bool modelviewmatrixloaded;
@@ -95,7 +113,9 @@ struct vgui_loader_tableau_new : public vgui_loader_tableau_sptr
   typedef vgui_loader_tableau_sptr base;
 
   //: Constructor - takes the single child tableau as a parameter.
-  vgui_loader_tableau_new(vgui_tableau_sptr const& child) : base(new vgui_loader_tableau(child)) { }
+  vgui_loader_tableau_new(const vgui_tableau_sptr & child)
+    : base(new vgui_loader_tableau(child))
+  {}
 };
 
 #endif // vgui_loader_tableau_h_

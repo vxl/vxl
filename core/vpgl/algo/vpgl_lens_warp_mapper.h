@@ -29,22 +29,23 @@
 // \note in general this is not the inverse of vpgl_lens_unwarp_bounds
 template <class DataT, class BoxT>
 vgl_box_2d<BoxT>
-vpgl_lens_warp_bounds(const vpgl_lens_distortion<DataT>& lens,
-                      const vgl_box_2d<BoxT>& box,
-                      BoxT step_size = BoxT(1))
+vpgl_lens_warp_bounds(const vpgl_lens_distortion<DataT> & lens, const vgl_box_2d<BoxT> & box, BoxT step_size = BoxT(1))
 {
   vgl_box_2d<BoxT> new_box;
-  for (BoxT x=box.min_x(); x<=box.max_x(); x+=step_size){
-    vgl_point_2d<DataT> p1(lens.distort(vgl_homg_point_2d<DataT>(x,box.min_y())));
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p1.x()), BoxT(p1.y()) ));
-    vgl_point_2d<DataT> p2(lens.distort(vgl_homg_point_2d<DataT>(x,box.max_y())));
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p2.x()), BoxT(p2.y()) ));
+  for (BoxT x = box.min_x(); x <= box.max_x(); x += step_size)
+  {
+    vgl_point_2d<DataT> p1(lens.distort(vgl_homg_point_2d<DataT>(x, box.min_y())));
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p1.x()), BoxT(p1.y())));
+    vgl_point_2d<DataT> p2(lens.distort(vgl_homg_point_2d<DataT>(x, box.max_y())));
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p2.x()), BoxT(p2.y())));
   }
-  for (BoxT y=box.min_y(); y<=box.max_y(); y+=step_size){
-    vgl_point_2d<DataT> p1(lens.distort(vgl_homg_point_2d<DataT>(box.min_x(),y)));
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p1.x()), BoxT(p1.y()) ));
-    vgl_point_2d<DataT> p2(lens.distort(vgl_homg_point_2d<DataT>(box.max_x(),y)));
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p2.x()), BoxT(p2.y()) ));;
+  for (BoxT y = box.min_y(); y <= box.max_y(); y += step_size)
+  {
+    vgl_point_2d<DataT> p1(lens.distort(vgl_homg_point_2d<DataT>(box.min_x(), y)));
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p1.x()), BoxT(p1.y())));
+    vgl_point_2d<DataT> p2(lens.distort(vgl_homg_point_2d<DataT>(box.max_x(), y)));
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p2.x()), BoxT(p2.y())));
+    ;
   }
   return new_box;
 }
@@ -54,22 +55,26 @@ vpgl_lens_warp_bounds(const vpgl_lens_distortion<DataT>& lens,
 // \note in general this is not the inverse of vpgl_lens_unwarp_bounds
 template <class DataT, class BoxT>
 vgl_box_2d<BoxT>
-vpgl_lens_warp_pixel_bounds(const vpgl_lens_distortion<DataT>& lens,
-                            const vgl_box_2d<BoxT>& box, const vpgl_calibration_matrix<DataT>& K,
+vpgl_lens_warp_pixel_bounds(const vpgl_lens_distortion<DataT> & lens,
+                            const vgl_box_2d<BoxT> & box,
+                            const vpgl_calibration_matrix<DataT> & K,
                             BoxT step_size = BoxT(1))
 {
   vgl_box_2d<BoxT> new_box;
-  for (BoxT x=box.min_x(); x<=box.max_x(); x+=step_size){
-    vgl_point_2d<DataT> p1(lens.distort_pixel(vgl_homg_point_2d<DataT>(x,box.min_y()),K));
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p1.x()), BoxT(p1.y()) ));
-    vgl_point_2d<DataT> p2(lens.distort_pixel(vgl_homg_point_2d<DataT>(x,box.max_y()),K));
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p2.x()), BoxT(p2.y()) ));
+  for (BoxT x = box.min_x(); x <= box.max_x(); x += step_size)
+  {
+    vgl_point_2d<DataT> p1(lens.distort_pixel(vgl_homg_point_2d<DataT>(x, box.min_y()), K));
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p1.x()), BoxT(p1.y())));
+    vgl_point_2d<DataT> p2(lens.distort_pixel(vgl_homg_point_2d<DataT>(x, box.max_y()), K));
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p2.x()), BoxT(p2.y())));
   }
-  for (BoxT y=box.min_y(); y<=box.max_y(); y+=step_size){
-    vgl_point_2d<DataT> p1(lens.distort_pixel(vgl_homg_point_2d<DataT>(box.min_x(),y)));
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p1.x()), BoxT(p1.y()) ));
-    vgl_point_2d<DataT> p2(lens.distort_pixel(vgl_homg_point_2d<DataT>(box.max_x(),y)));
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p2.x()), BoxT(p2.y()) ));;
+  for (BoxT y = box.min_y(); y <= box.max_y(); y += step_size)
+  {
+    vgl_point_2d<DataT> p1(lens.distort_pixel(vgl_homg_point_2d<DataT>(box.min_x(), y)));
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p1.x()), BoxT(p1.y())));
+    vgl_point_2d<DataT> p2(lens.distort_pixel(vgl_homg_point_2d<DataT>(box.max_x(), y)));
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p2.x()), BoxT(p2.y())));
+    ;
   }
   return new_box;
 }
@@ -79,22 +84,25 @@ vpgl_lens_warp_pixel_bounds(const vpgl_lens_distortion<DataT>& lens,
 // \note in general this is not the inverse of vpgl_lens_warp_bounds
 template <class DataT, class BoxT>
 vgl_box_2d<BoxT>
-vpgl_lens_unwarp_bounds(const vpgl_lens_distortion<DataT>& lens,
-                        const vgl_box_2d<BoxT>& box,
+vpgl_lens_unwarp_bounds(const vpgl_lens_distortion<DataT> & lens,
+                        const vgl_box_2d<BoxT> & box,
                         BoxT step_size = BoxT(1))
 {
   vgl_box_2d<BoxT> new_box;
-  for (BoxT x=box.min_x(); x<=box.max_x(); x+=step_size){
-    vgl_point_2d<DataT> p1(lens.undistort(vgl_homg_point_2d<DataT>(x,box.min_y())));
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p1.x()), BoxT(p1.y()) ));
-    vgl_point_2d<DataT> p2(lens.undistort(vgl_homg_point_2d<DataT>(x,box.max_y())));
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p2.x()), BoxT(p2.y()) ));
+  for (BoxT x = box.min_x(); x <= box.max_x(); x += step_size)
+  {
+    vgl_point_2d<DataT> p1(lens.undistort(vgl_homg_point_2d<DataT>(x, box.min_y())));
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p1.x()), BoxT(p1.y())));
+    vgl_point_2d<DataT> p2(lens.undistort(vgl_homg_point_2d<DataT>(x, box.max_y())));
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p2.x()), BoxT(p2.y())));
   }
-  for (BoxT y=box.min_y(); y<=box.max_y(); y+=step_size){
-    vgl_point_2d<DataT> p1(lens.undistort(vgl_homg_point_2d<DataT>(box.min_x(),y)));
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p1.x()), BoxT(p1.y()) ));
-    vgl_point_2d<DataT> p2(lens.undistort(vgl_homg_point_2d<DataT>(box.max_x(),y)));
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p2.x()), BoxT(p2.y()) ));;
+  for (BoxT y = box.min_y(); y <= box.max_y(); y += step_size)
+  {
+    vgl_point_2d<DataT> p1(lens.undistort(vgl_homg_point_2d<DataT>(box.min_x(), y)));
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p1.x()), BoxT(p1.y())));
+    vgl_point_2d<DataT> p2(lens.undistort(vgl_homg_point_2d<DataT>(box.max_x(), y)));
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p2.x()), BoxT(p2.y())));
+    ;
   }
   return new_box;
 }
@@ -105,23 +113,26 @@ vpgl_lens_unwarp_bounds(const vpgl_lens_distortion<DataT>& lens,
 // \note in general this is not the inverse of vpgl_lens_warp_bounds
 template <class DataT, class BoxT>
 vgl_box_2d<BoxT>
-vpgl_lens_unwarp_pixel_bounds(const vpgl_lens_distortion<DataT>& lens,
-                              const vgl_box_2d<BoxT>& box,
-                              const vpgl_calibration_matrix<DataT>& K,
+vpgl_lens_unwarp_pixel_bounds(const vpgl_lens_distortion<DataT> & lens,
+                              const vgl_box_2d<BoxT> & box,
+                              const vpgl_calibration_matrix<DataT> & K,
                               BoxT step_size = BoxT(1))
 {
   vgl_box_2d<BoxT> new_box;
-  for (BoxT x=box.min_x(); x<=box.max_x(); x+=step_size){
-    vgl_point_2d<DataT> p1(lens.undistort_pixel(vgl_homg_point_2d<DataT>(x,box.min_y())));
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p1.x()), BoxT(p1.y()) ));
-    vgl_point_2d<DataT> p2(lens.undistort_pixel(vgl_homg_point_2d<DataT>(x,box.max_y()),K));
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p2.x()), BoxT(p2.y()) ));
+  for (BoxT x = box.min_x(); x <= box.max_x(); x += step_size)
+  {
+    vgl_point_2d<DataT> p1(lens.undistort_pixel(vgl_homg_point_2d<DataT>(x, box.min_y())));
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p1.x()), BoxT(p1.y())));
+    vgl_point_2d<DataT> p2(lens.undistort_pixel(vgl_homg_point_2d<DataT>(x, box.max_y()), K));
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p2.x()), BoxT(p2.y())));
   }
-  for (BoxT y=box.min_y(); y<=box.max_y(); y+=step_size){
-    vgl_point_2d<DataT> p1(lens.undistort_pixel(vgl_homg_point_2d<DataT>(box.min_x(),y)),K);
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p1.x()), BoxT(p1.y()) ));
-    vgl_point_2d<DataT> p2(lens.undistort_pixel(vgl_homg_point_2d<DataT>(box.max_x(),y),K));
-    new_box.add(vgl_point_2d<BoxT>( BoxT(p2.x()), BoxT(p2.y()) ));;
+  for (BoxT y = box.min_y(); y <= box.max_y(); y += step_size)
+  {
+    vgl_point_2d<DataT> p1(lens.undistort_pixel(vgl_homg_point_2d<DataT>(box.min_x(), y)), K);
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p1.x()), BoxT(p1.y())));
+    vgl_point_2d<DataT> p2(lens.undistort_pixel(vgl_homg_point_2d<DataT>(box.max_x(), y), K));
+    new_box.add(vgl_point_2d<BoxT>(BoxT(p2.x()), BoxT(p2.y())));
+    ;
   }
   return new_box;
 }
@@ -133,14 +144,14 @@ vpgl_lens_unwarp_pixel_bounds(const vpgl_lens_distortion<DataT>& lens,
 // lie in the resulting image
 template <class sType, class dType, class T, class InterpFunctor>
 vil_image_view<dType>
-vpgl_lens_warp_resize(const vil_image_view<sType>& in,
+vpgl_lens_warp_resize(const vil_image_view<sType> & in,
                       dType /*out_dummy*/,
-                      vpgl_lens_distortion<T>& ld,
+                      vpgl_lens_distortion<T> & ld,
                       InterpFunctor interp)
 {
-  vgl_box_2d<int> bounds = vpgl_lens_warp_bounds(ld, vgl_box_2d<int>(0,in.ni(),0,in.nj()));
+  vgl_box_2d<int> bounds = vpgl_lens_warp_bounds(ld, vgl_box_2d<int>(0, in.ni(), 0, in.nj()));
   vgl_vector_2d<T> offset(T(-bounds.min_x()), T(-bounds.min_y()));
-  ld.set_translation( offset, true );
+  ld.set_translation(offset, true);
   vil_image_view<dType> out(bounds.width(), bounds.height(), in.nplanes());
   vpgl_lens_warp(in, out, ld, interp);
   return out;
@@ -152,15 +163,15 @@ vpgl_lens_warp_resize(const vil_image_view<sType>& in,
 // lie in the resulting image
 template <class sType, class dType, class T, class InterpFunctor>
 vil_image_view<dType>
-vpgl_lens_warp_pixel_resize(const vil_image_view<sType>& in,
+vpgl_lens_warp_pixel_resize(const vil_image_view<sType> & in,
                             dType /*out_dummy*/,
-                            vpgl_lens_distortion<T>& ld,
-                            const vpgl_calibration_matrix<T>& K,
+                            vpgl_lens_distortion<T> & ld,
+                            const vpgl_calibration_matrix<T> & K,
                             InterpFunctor interp)
 {
-  vgl_box_2d<int> bounds = vpgl_lens_warp_pixel_bounds(ld, vgl_box_2d<int>(0,in.ni(),0,in.nj()),K);
+  vgl_box_2d<int> bounds = vpgl_lens_warp_pixel_bounds(ld, vgl_box_2d<int>(0, in.ni(), 0, in.nj()), K);
   vgl_vector_2d<T> offset(T(-bounds.min_x()), T(-bounds.min_y()));
-  ld.set_translation( offset, true );
+  ld.set_translation(offset, true);
   vil_image_view<dType> out(bounds.width(), bounds.height(), in.nplanes());
   vpgl_lens_warp(in, out, ld, interp);
   return out;
@@ -170,17 +181,18 @@ vpgl_lens_warp_pixel_resize(const vil_image_view<sType>& in,
 // The algorithm uses the result at the previous pixel as an initial guess
 // which should reduce iterations until convergence
 template <class sType, class dType, class T, class InterpFunctor>
-void vpgl_lens_warp(const vil_image_view<sType>& in,
-                    vil_image_view<dType>& out,
-                    const vpgl_lens_distortion<T>& ld,
-                    InterpFunctor interp)
+void
+vpgl_lens_warp(const vil_image_view<sType> & in,
+               vil_image_view<dType> & out,
+               const vpgl_lens_distortion<T> & ld,
+               InterpFunctor interp)
 {
-  unsigned const out_w = out.ni();
-  unsigned const out_h = out.nj();
+  const unsigned out_w = out.ni();
+  const unsigned out_h = out.nj();
 
   assert(out.nplanes() == in.nplanes());
 
-  vgl_homg_point_2d<T> init(T(0),T(0));
+  vgl_homg_point_2d<T> init(T(0), T(0));
   for (unsigned oy = 0; oy < out_h; ++oy)
   {
     vgl_homg_point_2d<T> unwarp_pt = init;
@@ -188,10 +200,11 @@ void vpgl_lens_warp(const vil_image_view<sType>& in,
     {
       // *** Find (ix, iy) from (ox,oy)
       double ix, iy;
-      unwarp_pt = ld.undistort(vgl_homg_point_2d<T>(ox,oy),&unwarp_pt);
-      if (oy == 0) init = unwarp_pt;
-      ix = unwarp_pt.x()/unwarp_pt.w();
-      iy = unwarp_pt.y()/unwarp_pt.w();
+      unwarp_pt = ld.undistort(vgl_homg_point_2d<T>(ox, oy), &unwarp_pt);
+      if (oy == 0)
+        init = unwarp_pt;
+      ix = unwarp_pt.x() / unwarp_pt.w();
+      iy = unwarp_pt.y() / unwarp_pt.w();
       for (unsigned p = 0; p < out.nplanes(); ++p)
       {
         out(ox, oy, p) = dType(interp(in, ix, iy, p));
@@ -204,18 +217,19 @@ void vpgl_lens_warp(const vil_image_view<sType>& in,
 // The algorithm uses the result at the previous pixel as an initial guess
 // which should reduce iterations until convergence
 template <class sType, class dType, class T, class InterpFunctor>
-void vpgl_lens_warp_pixel(const vil_image_view<sType>& in,
-                          vil_image_view<dType>& out,
-                          const vpgl_lens_distortion<T>& ld,
-                          const vpgl_calibration_matrix<T>& K,
-                          InterpFunctor interp)
+void
+vpgl_lens_warp_pixel(const vil_image_view<sType> & in,
+                     vil_image_view<dType> & out,
+                     const vpgl_lens_distortion<T> & ld,
+                     const vpgl_calibration_matrix<T> & K,
+                     InterpFunctor interp)
 {
-  unsigned const out_w = out.ni();
-  unsigned const out_h = out.nj();
+  const unsigned out_w = out.ni();
+  const unsigned out_h = out.nj();
 
   assert(out.nplanes() == in.nplanes());
 
-  vgl_homg_point_2d<T> init(T(0),T(0));
+  vgl_homg_point_2d<T> init(T(0), T(0));
   for (unsigned oy = 0; oy < out_h; ++oy)
   {
     vgl_homg_point_2d<T> unwarp_pt = init;
@@ -223,10 +237,11 @@ void vpgl_lens_warp_pixel(const vil_image_view<sType>& in,
     {
       // *** Find (ix, iy) from (ox,oy)
       double ix, iy;
-      unwarp_pt = ld.undistort_pixel(vgl_homg_point_2d<T>(ox,oy),K, &unwarp_pt);
-      if (oy == 0) init = unwarp_pt;
-      ix = unwarp_pt.x()/unwarp_pt.w();
-      iy = unwarp_pt.y()/unwarp_pt.w();
+      unwarp_pt = ld.undistort_pixel(vgl_homg_point_2d<T>(ox, oy), K, &unwarp_pt);
+      if (oy == 0)
+        init = unwarp_pt;
+      ix = unwarp_pt.x() / unwarp_pt.w();
+      iy = unwarp_pt.y() / unwarp_pt.w();
       for (unsigned p = 0; p < out.nplanes(); ++p)
       {
         out(ox, oy, p) = dType(interp(in, ix, iy, p));
@@ -241,14 +256,14 @@ void vpgl_lens_warp_pixel(const vil_image_view<sType>& in,
 // lie in the resulting image
 template <class sType, class dType, class T, class InterpFunctor>
 vil_image_view<dType>
-vpgl_lens_unwarp_resize(const vil_image_view<sType>& in,
+vpgl_lens_unwarp_resize(const vil_image_view<sType> & in,
                         dType /*out_dummy*/,
-                        vpgl_lens_distortion<T>& ld,
+                        vpgl_lens_distortion<T> & ld,
                         InterpFunctor interp)
 {
-  vgl_box_2d<int> bounds = vpgl_lens_unwarp_bounds(ld, vgl_box_2d<int>(0,in.ni(),0,in.nj()));
+  vgl_box_2d<int> bounds = vpgl_lens_unwarp_bounds(ld, vgl_box_2d<int>(0, in.ni(), 0, in.nj()));
   vgl_vector_2d<T> offset(T(-bounds.min_x()), T(-bounds.min_y()));
-  ld.set_translation( offset, false );
+  ld.set_translation(offset, false);
   vil_image_view<dType> out(bounds.width(), bounds.height(), in.nplanes());
   vpgl_lens_unwarp(in, out, ld, interp);
   return out;
@@ -260,15 +275,15 @@ vpgl_lens_unwarp_resize(const vil_image_view<sType>& in,
 // lie in the resulting image
 template <class sType, class dType, class T, class InterpFunctor>
 vil_image_view<dType>
-vpgl_lens_unwarp_pixel_resize(const vil_image_view<sType>& in,
-                        dType /*out_dummy*/,
-                        vpgl_lens_distortion<T>& ld,
-                        const vpgl_calibration_matrix<T>& K,
-                        InterpFunctor interp)
+vpgl_lens_unwarp_pixel_resize(const vil_image_view<sType> & in,
+                              dType /*out_dummy*/,
+                              vpgl_lens_distortion<T> & ld,
+                              const vpgl_calibration_matrix<T> & K,
+                              InterpFunctor interp)
 {
-  vgl_box_2d<int> bounds = vpgl_lens_unwarp_pixel_bounds(ld, vgl_box_2d<int>(0,in.ni(),0,in.nj()), K);
+  vgl_box_2d<int> bounds = vpgl_lens_unwarp_pixel_bounds(ld, vgl_box_2d<int>(0, in.ni(), 0, in.nj()), K);
   vgl_vector_2d<T> offset(T(-bounds.min_x()), T(-bounds.min_y()));
-  ld.set_translation( offset, false );
+  ld.set_translation(offset, false);
   vil_image_view<dType> out(bounds.width(), bounds.height(), in.nplanes());
   vpgl_lens_unwarp(in, out, ld, interp);
   return out;
@@ -276,13 +291,14 @@ vpgl_lens_unwarp_pixel_resize(const vil_image_view<sType>& in,
 
 //: A version of vil_warp specialized for lens unwarping
 template <class sType, class dType, class T, class InterpFunctor>
-void vpgl_lens_unwarp(const vil_image_view<sType>& in,
-                      vil_image_view<dType>& out,
-                      const vpgl_lens_distortion<T>& ld,
-                      InterpFunctor interp)
+void
+vpgl_lens_unwarp(const vil_image_view<sType> & in,
+                 vil_image_view<dType> & out,
+                 const vpgl_lens_distortion<T> & ld,
+                 InterpFunctor interp)
 {
-  unsigned const out_w = out.ni();
-  unsigned const out_h = out.nj();
+  const unsigned out_w = out.ni();
+  const unsigned out_h = out.nj();
 
   assert(out.nplanes() == in.nplanes());
 
@@ -290,7 +306,7 @@ void vpgl_lens_unwarp(const vil_image_view<sType>& in,
   {
     for (unsigned ox = 0; ox < out_w; ++ox)
     {
-      vgl_point_2d<T> pt = ld.distort(vgl_homg_point_2d<T>(ox,oy));
+      vgl_point_2d<T> pt = ld.distort(vgl_homg_point_2d<T>(ox, oy));
       for (unsigned p = 0; p < out.nplanes(); ++p)
       {
         out(ox, oy, p) = dType(interp(in, pt.x(), pt.y(), p));
@@ -301,14 +317,15 @@ void vpgl_lens_unwarp(const vil_image_view<sType>& in,
 
 //: A version of vil_warp specialized for lens unwarping
 template <class sType, class dType, class T, class InterpFunctor>
-void vpgl_lens_unwarp_pixel(const vil_image_view<sType>& in,
-                            vil_image_view<dType>& out,
-                            const vpgl_lens_distortion<T>& ld,
-                            const vpgl_calibration_matrix<T>& K,
-                            InterpFunctor interp)
+void
+vpgl_lens_unwarp_pixel(const vil_image_view<sType> & in,
+                       vil_image_view<dType> & out,
+                       const vpgl_lens_distortion<T> & ld,
+                       const vpgl_calibration_matrix<T> & K,
+                       InterpFunctor interp)
 {
-  unsigned const out_w = out.ni();
-  unsigned const out_h = out.nj();
+  const unsigned out_w = out.ni();
+  const unsigned out_h = out.nj();
 
   assert(out.nplanes() == in.nplanes());
 
@@ -316,7 +333,7 @@ void vpgl_lens_unwarp_pixel(const vil_image_view<sType>& in,
   {
     for (unsigned ox = 0; ox < out_w; ++ox)
     {
-      vgl_point_2d<T> pt = ld.distort_pixel(vgl_homg_point_2d<T>(ox,oy), K);
+      vgl_point_2d<T> pt = ld.distort_pixel(vgl_homg_point_2d<T>(ox, oy), K);
       for (unsigned p = 0; p < out.nplanes(); ++p)
       {
         out(ox, oy, p) = dType(interp(in, pt.x(), pt.y(), p));

@@ -28,37 +28,50 @@ class vgui_menu;
 //  This is provided by default if you use a vgui_shell_tableau.
 class vgui_clear_tableau : public vgui_tableau
 {
- public:
+public:
   //: Constructor - don't use this, use vgui_clear_tableau_new.
   //  A vgui_clear_tableau does not have any children.
   vgui_clear_tableau();
 
   //: Returns the type of this tableau ('vgui_clear_tableau').
-  std::string type_name() const { return "vgui_clear_tableau"; }
+  std::string
+  type_name() const
+  {
+    return "vgui_clear_tableau";
+  }
 
   //: Set colour of clear_tableau to the given red, green, blue values.
-  void set_colour(float r, float g, float b, float a=1);
+  void
+  set_colour(float r, float g, float b, float a = 1);
 
   //: Set the given GLbitfield as the mask.
-  void set_mask(GLbitfield m) { mask = m; }
+  void
+  set_mask(GLbitfield m)
+  {
+    mask = m;
+  }
 
   //: Toggle clearing on and off.
-  void toggle_clearing();
+  void
+  toggle_clearing();
 
   //: Make the given menu the default pop-up menu.
-  void add_popup(vgui_menu &menu);
+  void
+  add_popup(vgui_menu & menu);
 
   //: Display a dialog box to get data (colour, etc) for the clear tableau.
-  void config_dialog();
+  void
+  config_dialog();
 
- protected:
+protected:
   //: Destructor - called by vgui_clear_tableau_sptr.
   virtual ~vgui_clear_tableau() {}
 
   //: Handle events sent to this tableau - use draw to perform OpenGL clearing.
-  virtual bool handle(const vgui_event&);
+  virtual bool
+  handle(const vgui_event &);
 
- private:
+private:
   GLbitfield mask;
 
   float colour[4]; // rgba
@@ -75,7 +88,9 @@ struct vgui_clear_tableau_new : public vgui_clear_tableau_sptr
   typedef vgui_clear_tableau_sptr base;
 
   //: Create a smart-pointer to a vgui_clear_tableau.
-  vgui_clear_tableau_new() : base(new vgui_clear_tableau()) {}
+  vgui_clear_tableau_new()
+    : base(new vgui_clear_tableau())
+  {}
 };
 
 #endif // vgui_clear_tableau_h_

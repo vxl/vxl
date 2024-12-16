@@ -52,75 +52,99 @@
 //
 class vpgl_cubic_lsqr : public vnl_least_squares_function
 {
- public:
+public:
   //: Constructor
-   vpgl_cubic_lsqr(std::vector<vgl_point_2d<double>> const &image_pts,
-                   std::vector<vgl_point_3d<double>> ground_pts);
+  vpgl_cubic_lsqr(const std::vector<vgl_point_2d<double>> & image_pts, std::vector<vgl_point_3d<double>> ground_pts);
 
-   //: The main function.
-   //  Given the parameter vector x, compute the vector of residuals fx.
-   //  fx has been sized appropriately before the call.
-   void f(vnl_vector<double> const &coefs,
-          vnl_vector<double> &residuals) override;
-   static vnl_vector_fixed<double, 20> power_vector(double x, double y,
-                                                    double z);
+  //: The main function.
+  //  Given the parameter vector x, compute the vector of residuals fx.
+  //  fx has been sized appropriately before the call.
+  void
+  f(const vnl_vector<double> & coefs, vnl_vector<double> & residuals) override;
+  static vnl_vector_fixed<double, 20>
+  power_vector(double x, double y, double z);
 
- private:
-   vpgl_cubic_lsqr() = delete; // not valid
-   void project(const double x, const double y, const double z, double &u,
-                double &v);
-   std::vector<vgl_point_2d<double>> image_pts_;
-   std::vector<vgl_point_3d<double>> ground_pts_;
-   vnl_matrix_fixed<double, 4, 20> rational_coeffs_;
+private:
+  vpgl_cubic_lsqr() = delete; // not valid
+  void
+  project(const double x, const double y, const double z, double & u, double & v);
+  std::vector<vgl_point_2d<double>> image_pts_;
+  std::vector<vgl_point_3d<double>> ground_pts_;
+  vnl_matrix_fixed<double, 4, 20> rational_coeffs_;
 };
 
 
 class vpgl_fit_rational_cubic
 {
- public:
-   vpgl_fit_rational_cubic(std::vector<vgl_point_2d<double>> image_pts,
-                           std::vector<vgl_point_3d<double>> ground_pts)
-       : image_pts_(std::move(image_pts)), ground_pts_(std::move(ground_pts)),
-         max_err_(1.0e-5), verbose_(false) {
-     initial_guess_.set_size(80);
-     initial_guess_.fill(0.0);
-     // a crude initial guess, avoids division by zero
-     initial_guess_[19] = 1.0;
-     initial_guess_[39] = 1.0;
-     initial_guess_[59] = 1.0;
-     initial_guess_[79] = 1.0;
-   }
+public:
+  vpgl_fit_rational_cubic(std::vector<vgl_point_2d<double>> image_pts, std::vector<vgl_point_3d<double>> ground_pts)
+    : image_pts_(std::move(image_pts))
+    , ground_pts_(std::move(ground_pts))
+    , max_err_(1.0e-5)
+    , verbose_(false)
+  {
+    initial_guess_.set_size(80);
+    initial_guess_.fill(0.0);
+    // a crude initial guess, avoids division by zero
+    initial_guess_[19] = 1.0;
+    initial_guess_[39] = 1.0;
+    initial_guess_[59] = 1.0;
+    initial_guess_[79] = 1.0;
+  }
 
-  void set_verbose(bool verbose){verbose_ = verbose;}
-  void set_max_error(double max_error) { max_err_ = max_error; }
+  void
+  set_verbose(bool verbose)
+  {
+    verbose_ = verbose;
+  }
+  void
+  set_max_error(double max_error)
+  {
+    max_err_ = max_error;
+  }
 
   //: the user defines the initial coefficient values
-  void set_initial_guess(vnl_vector<double> initial_guess){initial_guess_ = initial_guess;}
+  void
+  set_initial_guess(vnl_vector<double> initial_guess)
+  {
+    initial_guess_ = initial_guess;
+  }
 
   //: the initial coefficients are computed using linear least squares
-  bool compute_initial_guess();
+  bool
+  compute_initial_guess();
 
   //: result of linear least squares
-  double initial_rms_error();
+  double
+  initial_rms_error();
 
   //: error after non-linear optimization
-  double final_rms_error() const { return levmq_err_; }
+  double
+  final_rms_error() const
+  {
+    return levmq_err_;
+  }
 
   //: the main process method
-  bool fit();
+  bool
+  fit();
 
   //: return the fitted coefficients
-  std::vector<std::vector<double> > rational_coeffs(){return rational_coefs_;}
+  std::vector<std::vector<double>>
+  rational_coeffs()
+  {
+    return rational_coefs_;
+  }
 
- private:
-   vpgl_fit_rational_cubic() = delete;
-   bool verbose_;
-   double max_err_;
-   double levmq_err_;
-   std::vector<vgl_point_2d<double>> image_pts_;
-   std::vector<vgl_point_3d<double>> ground_pts_;
-   std::vector<std::vector<double>> rational_coefs_;
-   vnl_vector<double> initial_guess_;
+private:
+  vpgl_fit_rational_cubic() = delete;
+  bool verbose_;
+  double max_err_;
+  double levmq_err_;
+  std::vector<vgl_point_2d<double>> image_pts_;
+  std::vector<vgl_point_3d<double>> ground_pts_;
+  std::vector<std::vector<double>> rational_coefs_;
+  vnl_vector<double> initial_guess_;
 };
 
 

@@ -48,7 +48,7 @@ struct gl_to_hermes_format_map
 };
 
 // swap between little and big endian 32bit words.
-#    define endian_swap32(x)                                                                                           \
+#    define endian_swap32(x) \
       (((x & 0x000000ff) << 24) | ((x & 0x0000ff00) << 8) | ((x & 0x00ff0000) >> 8) | ((x & 0xff000000) >> 24))
 
 // To reduce maintenance, the table is written as if for a little-endian

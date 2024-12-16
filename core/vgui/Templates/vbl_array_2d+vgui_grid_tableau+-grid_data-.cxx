@@ -2,7 +2,7 @@
 #include "vgui/vgui_grid_tableau.h"
 
 std::ostream &
-operator<<(std::ostream & os, vgui_grid_tableau::grid_data const &)
+operator<<(std::ostream & os, const vgui_grid_tableau::grid_data &)
 {
   return os << "piglet";
 }

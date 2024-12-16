@@ -31,32 +31,36 @@
 template <class T>
 class vgl_homg_operators_2d
 {
- public:
+public:
   //: get a vnl_vector_fixed representation of a homogeneous object
-  static vnl_vector_fixed<T,3> get_vector(vgl_homg_point_2d<T> const& p);
+  static vnl_vector_fixed<T, 3>
+  get_vector(const vgl_homg_point_2d<T> & p);
 
   //: get a vnl_vector_fixed representation of a homogeneous object
-  static vnl_vector_fixed<T,3> get_vector(vgl_homg_line_2d<T> const& l);
+  static vnl_vector_fixed<T, 3>
+  get_vector(const vgl_homg_line_2d<T> & l);
 
   //: get a vnl_vector_fixed representation of a homogeneous object
-  static vnl_vector_fixed<T,6> get_vector(vgl_conic<T> const& c);
+  static vnl_vector_fixed<T, 6>
+  get_vector(const vgl_conic<T> & c);
 
   //: Normalize vgl_homg_point_2d<T> to unit magnitude
-  static void unitize(vgl_homg_point_2d<T>& a);
+  static void
+  unitize(vgl_homg_point_2d<T> & a);
 
-  static double angle_between_oriented_lines(const vgl_homg_line_2d<T>& line1,
-                                             const vgl_homg_line_2d<T>& line2);
+  static double
+  angle_between_oriented_lines(const vgl_homg_line_2d<T> & line1, const vgl_homg_line_2d<T> & line2);
   //: Get the 0 to pi/2 angle between two lines
-  static double abs_angle(const vgl_homg_line_2d<T>& line1,
-                          const vgl_homg_line_2d<T>& line2);
+  static double
+  abs_angle(const vgl_homg_line_2d<T> & line1, const vgl_homg_line_2d<T> & line2);
 
   //: Get the 2D distance between the two points.
-  static T distance(const vgl_homg_point_2d<T>& point1,
-                    const vgl_homg_point_2d<T>& point2);
+  static T
+  distance(const vgl_homg_point_2d<T> & point1, const vgl_homg_point_2d<T> & point2);
 
   //: Get the square of the 2D distance between the two points.
-  static T distance_squared(const vgl_homg_point_2d<T>& point1,
-                            const vgl_homg_point_2d<T>& point2);
+  static T
+  distance_squared(const vgl_homg_point_2d<T> & point1, const vgl_homg_point_2d<T> & point2);
 
   //: Get the square of the perpendicular distance to a line.
   // This is just the homogeneous form of the familiar
@@ -64,36 +68,40 @@ class vgl_homg_operators_2d
   // \[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \]
   // If either the point or the line are at infinity an error message is
   // printed and Homg::infinity is returned.
-  static T perp_dist_squared(const vgl_homg_point_2d<T>& point,
-                             const vgl_homg_line_2d<T>& line);
-  static T perp_dist_squared(const vgl_homg_line_2d<T>& line,
-                             const vgl_homg_point_2d<T>& point)
-  { return perp_dist_squared(point, line); }
+  static T
+  perp_dist_squared(const vgl_homg_point_2d<T> & point, const vgl_homg_line_2d<T> & line);
+  static T
+  perp_dist_squared(const vgl_homg_line_2d<T> & line, const vgl_homg_point_2d<T> & point)
+  {
+    return perp_dist_squared(point, line);
+  }
 
   //: True if the points are closer than Euclidean distance d.
-  static bool is_within_distance(const vgl_homg_point_2d<T>& p1,
-                                 const vgl_homg_point_2d<T>& p2, double d)
+  static bool
+  is_within_distance(const vgl_homg_point_2d<T> & p1, const vgl_homg_point_2d<T> & p2, double d)
   {
-    if (d <= 0) return false;
-    return distance_squared(p1, p2) < d*d;
+    if (d <= 0)
+      return false;
+    return distance_squared(p1, p2) < d * d;
   }
 
   //: Get the anticlockwise angle between a line and the \a x axis.
-  static double line_angle(const vgl_homg_line_2d<T>& line);
+  static double
+  line_angle(const vgl_homg_line_2d<T> & line);
 
   //: Get the line through two points (the cross-product).
-  static vgl_homg_line_2d<T> join(const vgl_homg_point_2d<T>& point1,
-                                  const vgl_homg_point_2d<T>& point2);
+  static vgl_homg_line_2d<T>
+  join(const vgl_homg_point_2d<T> & point1, const vgl_homg_point_2d<T> & point2);
 
   //: Get the line through two points (the cross-product).
   // In this case, we assume that the points are oriented,
   // and ensure the cross is computed with positive point omegas.
-  static vgl_homg_line_2d<T> join_oriented(const vgl_homg_point_2d<T>& point1,
-                                           const vgl_homg_point_2d<T>& point2);
+  static vgl_homg_line_2d<T>
+  join_oriented(const vgl_homg_point_2d<T> & point1, const vgl_homg_point_2d<T> & point2);
 
   //: Get the intersection point of two lines (the cross-product).
-  static vgl_homg_point_2d<T> intersection(const vgl_homg_line_2d<T>& line1,
-                                           const vgl_homg_line_2d<T>& line2);
+  static vgl_homg_point_2d<T>
+  intersection(const vgl_homg_line_2d<T> & line1, const vgl_homg_line_2d<T> & line2);
 
   //: Get the perpendicular line to line which passes through point.
   // Params are line \f$(a,b,c)\f$ and point \f$(x,y,1)\f$.
@@ -103,19 +111,20 @@ class vgl_homg_operators_2d
   //   \f$ap+bq=0\f$ (perpendicular condition) and
   //
   //   \f$px+qy+r=0\f$ (incidence condition).
-  static vgl_homg_line_2d<T> perp_line_through_point(const vgl_homg_line_2d<T>& line,
-                                                     const vgl_homg_point_2d<T>& point);
+  static vgl_homg_line_2d<T>
+  perp_line_through_point(const vgl_homg_line_2d<T> & line, const vgl_homg_point_2d<T> & point);
 
   //: Get the perpendicular projection of point onto line.
-  static vgl_homg_point_2d<T> perp_projection(const vgl_homg_line_2d<T>& line,
-                                              const vgl_homg_point_2d<T>& point);
+  static vgl_homg_point_2d<T>
+  perp_projection(const vgl_homg_line_2d<T> & line, const vgl_homg_point_2d<T> & point);
 
   //: Return the midpoint of the line joining two homogeneous points
-  static vgl_homg_point_2d<T> midpoint(const vgl_homg_point_2d<T>& p1,
-                                       const vgl_homg_point_2d<T>& p2);
+  static vgl_homg_point_2d<T>
+  midpoint(const vgl_homg_point_2d<T> & p1, const vgl_homg_point_2d<T> & p2);
 
   //: Intersect a set of 2D lines to find the least-square point of intersection.
-  static vgl_homg_point_2d<T> lines_to_point(const std::vector<vgl_homg_line_2d<T> >& lines);
+  static vgl_homg_point_2d<T>
+  lines_to_point(const std::vector<vgl_homg_line_2d<T>> & lines);
 
   //: cross ratio of four collinear points
   // This number is projectively invariant, and it is the coordinate of p4
@@ -137,85 +146,96 @@ class vgl_homg_operators_2d
   // In this implementation, a least-squares result is calculated when the
   // points are not exactly collinear.
   //
-  static double cross_ratio(const vgl_homg_point_2d<T>& p1,
-                            const vgl_homg_point_2d<T>& p2,
-                            const vgl_homg_point_2d<T>& p3,
-                            const vgl_homg_point_2d<T>& p4);
+  static double
+  cross_ratio(const vgl_homg_point_2d<T> & p1,
+              const vgl_homg_point_2d<T> & p2,
+              const vgl_homg_point_2d<T> & p3,
+              const vgl_homg_point_2d<T> & p4);
 
   //: Conjugate point of three given collinear points.
   // If cross ratio cr is given (default: -1), the generalized conjugate point
   // returned is such that the cross ratio ((x1,x2;x3,answer)) = cr.
-  static vgl_homg_point_2d<T> conjugate(const vgl_homg_point_2d<T>& a,
-                                        const vgl_homg_point_2d<T>& b,
-                                        const vgl_homg_point_2d<T>& c,
-                                        double cr = -1.0);
+  static vgl_homg_point_2d<T>
+  conjugate(const vgl_homg_point_2d<T> & a,
+            const vgl_homg_point_2d<T> & b,
+            const vgl_homg_point_2d<T> & c,
+            double cr = -1.0);
 
   //: compute most orthogonal vector with vnl_symmetric_eigensystem
-  static vnl_vector_fixed<T,3> most_orthogonal_vector(const std::vector<vgl_homg_line_2d<T> >& lines);
+  static vnl_vector_fixed<T, 3>
+  most_orthogonal_vector(const std::vector<vgl_homg_line_2d<T>> & lines);
 
   //: compute most orthogonal vector with SVD
-  static vnl_vector_fixed<T,3> most_orthogonal_vector_svd(const std::vector<vgl_homg_line_2d<T> >& lines);
+  static vnl_vector_fixed<T, 3>
+  most_orthogonal_vector_svd(const std::vector<vgl_homg_line_2d<T>> & lines);
 
   // coefficient <-> conic matrix conversion -------------------------
-  static vgl_conic<T> vgl_conic_from_matrix(vnl_matrix_fixed<T,3,3> const& mat);
-  static vnl_matrix_fixed<T,3,3> matrix_from_conic(vgl_conic<T> const&);
-  static vnl_matrix_fixed<T,3,3> matrix_from_dual_conic(vgl_conic<T> const&);
+  static vgl_conic<T>
+  vgl_conic_from_matrix(const vnl_matrix_fixed<T, 3, 3> & mat);
+  static vnl_matrix_fixed<T, 3, 3>
+  matrix_from_conic(const vgl_conic<T> &);
+  static vnl_matrix_fixed<T, 3, 3>
+  matrix_from_dual_conic(const vgl_conic<T> &);
 
   //: Find all real intersection points of a conic and a line (between 0 and 2, including points at infinity)
-  static std::list<vgl_homg_point_2d<T> > intersection(vgl_conic<T> const& c,
-                                                      vgl_homg_line_2d<T> const& l);
+  static std::list<vgl_homg_point_2d<T>>
+  intersection(const vgl_conic<T> & c, const vgl_homg_line_2d<T> & l);
 
   //: Find all real intersection points of two conics (between 0 and 4, including points at infinity)
-  static std::list<vgl_homg_point_2d<T> > intersection(vgl_conic<T> const& c1,
-                                                      vgl_conic<T> const& c2);
+  static std::list<vgl_homg_point_2d<T>>
+  intersection(const vgl_conic<T> & c1, const vgl_conic<T> & c2);
 
   //: Return the (at most) two tangent lines that pass through p and are tangent to the conic.
-  static std::list<vgl_homg_line_2d<T> > tangent_from(vgl_conic<T> const& c,
-                                                     vgl_homg_point_2d<T> const& p);
+  static std::list<vgl_homg_line_2d<T>>
+  tangent_from(const vgl_conic<T> & c, const vgl_homg_point_2d<T> & p);
 
   //: Return the list of common tangent lines of two conics.
-  static std::list<vgl_homg_line_2d<T> > common_tangents(vgl_conic<T> const& c1,
-                                                        vgl_conic<T> const& c2);
+  static std::list<vgl_homg_line_2d<T>>
+  common_tangents(const vgl_conic<T> & c1, const vgl_conic<T> & c2);
 
   //: Return the point on the line closest to the given point
-  static vgl_homg_point_2d<T> closest_point(vgl_homg_line_2d<T> const& l,
-                                            vgl_homg_point_2d<T> const& p);
+  static vgl_homg_point_2d<T>
+  closest_point(const vgl_homg_line_2d<T> & l, const vgl_homg_point_2d<T> & p);
 
   //: Return the point on the conic closest to the given point
-  static vgl_homg_point_2d<T> closest_point(vgl_conic<T> const& c,
-                                            vgl_homg_point_2d<T> const& p);
+  static vgl_homg_point_2d<T>
+  closest_point(const vgl_conic<T> & c, const vgl_homg_point_2d<T> & p);
 
   //: Return the point on the conic closest to the given point
-  static vgl_homg_point_2d<T> closest_point(vgl_conic<T> const& c,
-                                            vgl_point_2d<T> const& p);
+  static vgl_homg_point_2d<T>
+  closest_point(const vgl_conic<T> & c, const vgl_point_2d<T> & p);
 
   //: Return the shortest squared distance between the conic and the point
-  inline static T distance_squared(vgl_conic<T> const& c,
-                                   vgl_homg_point_2d<T> const& p)
-  { return distance_squared(closest_point(c,p), p); }
+  static inline T
+  distance_squared(const vgl_conic<T> & c, const vgl_homg_point_2d<T> & p)
+  {
+    return distance_squared(closest_point(c, p), p);
+  }
 
   //: Compute the bounding box of an ellipse
-  static vgl_box_2d<T> compute_bounding_box(vgl_conic<T> const& c);
+  static vgl_box_2d<T>
+  compute_bounding_box(const vgl_conic<T> & c);
 
- private:
+private:
   // Helper functions for conic intersection
-  static std::list<vgl_homg_point_2d<T> > do_intersect(vgl_conic<T> const& q, vgl_homg_line_2d<T> const& l);
-  static std::list<vgl_homg_point_2d<T> > do_intersect(vgl_conic<T> const& c1, vgl_conic<T> const& c2);
+  static std::list<vgl_homg_point_2d<T>>
+  do_intersect(const vgl_conic<T> & q, const vgl_homg_line_2d<T> & l);
+  static std::list<vgl_homg_point_2d<T>>
+  do_intersect(const vgl_conic<T> & c1, const vgl_conic<T> & c2);
 };
 
 //: Transform a point through a 3x3 projective transformation matrix
 // \relatesalso vgl_homg_point_2d
 template <class T>
-vgl_homg_point_2d<T> operator*(vnl_matrix_fixed<T,3,3> const& m,
-                               vgl_homg_point_2d<T> const& p);
+vgl_homg_point_2d<T>
+operator*(const vnl_matrix_fixed<T, 3, 3> & m, const vgl_homg_point_2d<T> & p);
 
 //: Transform a line through a 3x3 projective transformation matrix
 // \relatesalso vgl_homg_line_2d
 template <class T>
-vgl_homg_line_2d<T> operator*(vnl_matrix_fixed<T,3,3> const& m,
-                              vgl_homg_line_2d<T> const& p);
+vgl_homg_line_2d<T>
+operator*(const vnl_matrix_fixed<T, 3, 3> & m, const vgl_homg_line_2d<T> & p);
 
-#define VGL_HOMG_OPERATORS_2D_INSTANTIATE(T) \
-        "Please #include <vgl/algo/vgl_homg_operators_2d.hxx>"
+#define VGL_HOMG_OPERATORS_2D_INSTANTIATE(T) "Please #include <vgl/algo/vgl_homg_operators_2d.hxx>"
 
 #endif // vgl_homg_operators_2d_h_

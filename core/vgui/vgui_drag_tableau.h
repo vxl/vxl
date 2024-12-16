@@ -27,20 +27,24 @@
 //  functionality.  It is expected that this tableau would be used
 //  as a base class for your own derived tableau, not that this
 //  tableau would be used directly.
-class vgui_drag_tableau : public vgui_tableau, public vgui_drag_mixin
+class vgui_drag_tableau
+  : public vgui_tableau
+  , public vgui_drag_mixin
 {
- public:
+public:
   //: Constructor - don't use this, use vgui_drag_tableau_new.
   vgui_drag_tableau() {}
 
- protected:
+protected:
   //: Destructor - called by vgui_drag_tableau_sptr.
   ~vgui_drag_tableau() {}
 
   //: Handle all events sent to this tableau.
-  bool handle(const vgui_event& e)
+  bool
+  handle(const vgui_event & e)
   {
-    if (vgui_drag_mixin::handle(e)) return true;
+    if (vgui_drag_mixin::handle(e))
+      return true;
     return vgui_tableau::handle(e);
   }
 };
@@ -51,7 +55,9 @@ class vgui_drag_tableau : public vgui_tableau, public vgui_drag_mixin
 struct vgui_drag_tableau_new : public vgui_drag_tableau_sptr
 {
   //: Constructor - create a default vgui_drag_tableau.
-  vgui_drag_tableau_new() : vgui_drag_tableau_sptr(new vgui_drag_tableau) {}
+  vgui_drag_tableau_new()
+    : vgui_drag_tableau_sptr(new vgui_drag_tableau)
+  {}
 };
 
 #endif // vgui_drag_tableau_h_

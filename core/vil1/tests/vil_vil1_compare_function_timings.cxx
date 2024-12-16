@@ -161,14 +161,14 @@ conv1d(vil1_memory_image_of<vxl_byte> & image, int n_loops, bool print)
   if (print)
     std::cout << "Time to 1d convolve a " << image.width() << '*' << image.height() << " vil1 image of vxl_byte\n";
   float kernel[] = { -1.0f, 0.5f, 1.0f, 0.5f, -1.0f };
-  vil1_convolve_signal_1d<float const> K(kernel, 0, 2, 4);
+  vil1_convolve_signal_1d<const float> K(kernel, 0, 2, 4);
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
     dest.resize(image.width(), image.height());
     vil1_convolve_1d_x(
       K,
-      vil1_convolve_signal_2d<vxl_byte const>(image.row_array(), 0, 0, image.width(), 0, 0, image.height()),
+      vil1_convolve_signal_2d<const vxl_byte>(image.row_array(), 0, 0, image.width(), 0, 0, image.height()),
       (float *)0,
       vil1_convolve_signal_2d<float>(dest.row_array(), 0, 0, image.width(), 0, 0, image.height()),
       vil1_convolve_trim,
@@ -185,14 +185,14 @@ conv1d(vil1_memory_image_of<float> & image, int n_loops, bool print)
   if (print)
     std::cout << "Time to 1d convolve a " << image.width() << '*' << image.height() << " vil1 image of float\n";
   float kernel[] = { -1.0f, 0.5f, 1.0f, 0.5f, -1.0f };
-  vil1_convolve_signal_1d<float const> K(kernel, 0, 2, 4);
+  vil1_convolve_signal_1d<const float> K(kernel, 0, 2, 4);
   std::time_t t0 = std::clock();
   for (int n = 0; n < n_loops; ++n)
   {
     dest.resize(image.width(), image.height());
     vil1_convolve_1d_x(
       K,
-      vil1_convolve_signal_2d<float const>(image.row_array(), 0, 0, image.width(), 0, 0, image.height()),
+      vil1_convolve_signal_2d<const float>(image.row_array(), 0, 0, image.width(), 0, 0, image.height()),
       (float *)0,
       vil1_convolve_signal_2d<float>(dest.row_array(), 0, 0, image.width(), 0, 0, image.height()),
       vil1_convolve_trim,

@@ -52,199 +52,210 @@
 
 #define LENGTH 512L
 
-int vil1_viff_imagesize(struct vil1_viff_xvimage *image,int *dsize, int *dcount, int *msize,
-                        int *mcount, int *lsize,int *lcount);
+int
+vil1_viff_imagesize(struct vil1_viff_xvimage * image,
+                    int * dsize,
+                    int * dcount,
+                    int * msize,
+                    int * mcount,
+                    int * lsize,
+                    int * lcount);
 
 /**************************************************************
-*
-* MODULE NAME: createimage
-*
-*     PURPOSE: Create a generic image
-*
-*       INPUT:  col_size -- the size of a column
-*               row_size -- the size of a row
-*               data_storage_type -- the VFF_TYP_* define of image
-*               num_of_images -- # of images pointed to by imagedata
-*               num_data_bands -- # of bands/pixel, /image or dim vec data
-*               comment -- description of image
-*               map_row_size -- # of columns in map array
-*               map_col_size -- # of rows in map array
-*               map_storage_type -- Storage type of cells in the maps
-*               location_type -- implied or explicit location data
-*               location_dim -- explicit locations can be of any dimension
-*
-*      OUTPUT:  1.  returns a pointer to a vil1_viff_xvimage with image defined
-*
-* CALLED FROM:
-*
-* ROUTINES CALLED:
-*
-**************************************************************/
+ *
+ * MODULE NAME: createimage
+ *
+ *     PURPOSE: Create a generic image
+ *
+ *       INPUT:  col_size -- the size of a column
+ *               row_size -- the size of a row
+ *               data_storage_type -- the VFF_TYP_* define of image
+ *               num_of_images -- # of images pointed to by imagedata
+ *               num_data_bands -- # of bands/pixel, /image or dim vec data
+ *               comment -- description of image
+ *               map_row_size -- # of columns in map array
+ *               map_col_size -- # of rows in map array
+ *               map_storage_type -- Storage type of cells in the maps
+ *               location_type -- implied or explicit location data
+ *               location_dim -- explicit locations can be of any dimension
+ *
+ *      OUTPUT:  1.  returns a pointer to a vil1_viff_xvimage with image defined
+ *
+ * CALLED FROM:
+ *
+ * ROUTINES CALLED:
+ *
+ **************************************************************/
 
 struct vil1_viff_xvimage *
-vil1_viff_createimage(vxl_uint_32 col_size, vxl_uint_32 row_size,
-                      vxl_uint_32 data_storage_type, vxl_uint_32 num_of_images,
-                      vxl_uint_32 num_data_bands, const char* comment,
-                      vxl_uint_32 map_row_size, vxl_uint_32 map_col_size,
-                      vxl_uint_32 map_scheme, vxl_uint_32 map_storage_type,
-                      vxl_uint_32 location_type, vxl_uint_32 location_dim)
+vil1_viff_createimage(vxl_uint_32 col_size,
+                      vxl_uint_32 row_size,
+                      vxl_uint_32 data_storage_type,
+                      vxl_uint_32 num_of_images,
+                      vxl_uint_32 num_data_bands,
+                      const char * comment,
+                      vxl_uint_32 map_row_size,
+                      vxl_uint_32 map_col_size,
+                      vxl_uint_32 map_scheme,
+                      vxl_uint_32 map_storage_type,
+                      vxl_uint_32 location_type,
+                      vxl_uint_32 location_dim)
 {
-  struct vil1_viff_xvimage *image;
-  char    *maps,
-          *imagedata,
-          tmp_comment[LENGTH];
-  float   *location;
-  int     image_data_size_bytes,          /* # data bytes */
-          image_data_count_pixels,        /* # data pixels */
-          map_size_bytes,                 /* # map bytes */
-          map_count_cells,                /* # map cells */
-          location_size_bytes,            /* # location bytes */
-          location_count_objects;         /* # location objs */
+  struct vil1_viff_xvimage * image;
+  char *maps, *imagedata, tmp_comment[LENGTH];
+  float * location;
+  int image_data_size_bytes, /* # data bytes */
+    image_data_count_pixels, /* # data pixels */
+    map_size_bytes,          /* # map bytes */
+    map_count_cells,         /* # map cells */
+    location_size_bytes,     /* # location bytes */
+    location_count_objects;  /* # location objs */
 
-/* malloc room for the vil1_viff_xvimage structure */
+  /* malloc room for the vil1_viff_xvimage structure */
 
-    if ((image=(struct vil1_viff_xvimage*)malloc(sizeof(struct vil1_viff_xvimage))) == NULL)
+  if ((image = (struct vil1_viff_xvimage *)malloc(sizeof(struct vil1_viff_xvimage))) == NULL)
+  {
+    fprintf(stderr, "vil1_viff_createimage: No space for image - malloc failed!\n");
+    return 0;
+  }
+
+  /* setup the comment (can only be 511 chars) */
+
+  strncpy(tmp_comment, comment ? comment : "", LENGTH);
+  tmp_comment[LENGTH - 1] = '\0';
+
+  /* Load the image header with the values. These can be over-ridden by
+     giving them a different value after returning to the calling routine.
+   */
+  image->identifier = (char)XV_FILE_MAGIC_NUM;
+  image->file_type = XV_FILE_TYPE_XVIFF;
+  image->release = XV_IMAGE_REL_NUM;
+  image->version = XV_IMAGE_VER_NUM;
+  image->machine_dep = VFF_DEP_IEEEORDER; /* assume IEEE byte order */
+  strncpy(image->comment, tmp_comment, LENGTH);
+  image->row_size = row_size;
+  image->col_size = col_size;
+  image->startx = VFF_NOTSUB;
+  image->starty = VFF_NOTSUB;
+  image->pixsizx = 1.0;
+  image->pixsizy = 1.0;
+  image->location_type = location_type;
+  image->location_dim = location_dim;
+  image->num_of_images = num_of_images;
+  image->num_data_bands = num_data_bands;
+  image->data_storage_type = data_storage_type;
+  image->data_encode_scheme = VFF_DES_RAW;
+  image->map_scheme = map_scheme;
+  image->map_storage_type = map_storage_type;
+  image->map_row_size = map_row_size;
+  image->map_col_size = map_col_size;
+  image->map_subrow_size = 0;
+  image->map_enable = VFF_MAP_OPTIONAL;
+  image->maps_per_cycle = 0; /* Don't care */
+  image->color_space_model = VFF_CM_NONE;
+  image->ispare1 = 0;
+  image->ispare2 = 0;
+  image->fspare1 = 0;
+  image->fspare2 = 0;
+
+  /* get the sizes for the image data, map data, and location data */
+
+  if (!vil1_viff_imagesize(image,                    /* vil1_viff_xvimage */
+                           &image_data_size_bytes,   /* # data bytes */
+                           &image_data_count_pixels, /* # data pixels */
+                           &map_size_bytes,          /* # map bytes */
+                           &map_count_cells,         /* # map cells */
+                           &location_size_bytes,     /* # location bytes */
+                           &location_count_objects   /* # location objs */
+                           ))
+  {
+    fprintf(stderr, "vil1_viff_createimage: Uninterpretable image specification\n");
+    return 0;
+  }
+
+  /* malloc room for the image data */
+
+  if (image_data_size_bytes > 0)
+  {
+    if ((imagedata = (char *)malloc((size_t)image_data_size_bytes)) == NULL)
     {
-      fprintf(stderr,"vil1_viff_createimage: No space for image - malloc failed!\n");
+      fprintf(stderr, "vil1_viff_createimage: Not enough memory for image data!\n");
       return 0;
     }
+  }
+  else
+  {
+    imagedata = NULL;
+  }
 
-/* setup the comment (can only be 511 chars) */
+  /* malloc room for the color map data */
 
-    strncpy(tmp_comment, comment?comment:"", LENGTH);
-    tmp_comment[LENGTH - 1] = '\0';
-
-/* Load the image header with the values. These can be over-ridden by
-   giving them a different value after returning to the calling routine.
- */
-    image->identifier = (char)XV_FILE_MAGIC_NUM;
-    image->file_type = XV_FILE_TYPE_XVIFF;
-    image->release = XV_IMAGE_REL_NUM;
-    image->version = XV_IMAGE_VER_NUM;
-    image->machine_dep = VFF_DEP_IEEEORDER; /* assume IEEE byte order */
-    strncpy(image->comment, tmp_comment, LENGTH);
-    image->row_size = row_size;
-    image->col_size = col_size;
-    image->startx = VFF_NOTSUB;
-    image->starty = VFF_NOTSUB;
-    image->pixsizx = 1.0;
-    image->pixsizy = 1.0;
-    image->location_type = location_type;
-    image->location_dim = location_dim;
-    image->num_of_images = num_of_images;
-    image->num_data_bands = num_data_bands;
-    image->data_storage_type = data_storage_type;
-    image->data_encode_scheme = VFF_DES_RAW;
-    image->map_scheme = map_scheme;
-    image->map_storage_type = map_storage_type;
-    image->map_row_size = map_row_size;
-    image->map_col_size = map_col_size;
-    image->map_subrow_size = 0;
-    image->map_enable = VFF_MAP_OPTIONAL;
-    image->maps_per_cycle = 0;      /* Don't care */
-    image->color_space_model = VFF_CM_NONE;
-    image->ispare1 = 0;
-    image->ispare2 = 0;
-    image->fspare1 = 0;
-    image->fspare2 = 0;
-
-/* get the sizes for the image data, map data, and location data */
-
-    if (!vil1_viff_imagesize(image,                     /* vil1_viff_xvimage */
-                             &image_data_size_bytes,    /* # data bytes */
-                             &image_data_count_pixels,  /* # data pixels */
-                             &map_size_bytes,           /* # map bytes */
-                             &map_count_cells,          /* # map cells */
-                             &location_size_bytes,      /* # location bytes */
-                             &location_count_objects    /* # location objs */
-                            ))
+  if (map_size_bytes > 0)
+  {
+    if ((maps = (char *)malloc((size_t)map_size_bytes)) == NULL)
     {
-      fprintf(stderr, "vil1_viff_createimage: Uninterpretable image specification\n");
+      fprintf(stderr, "vil1_viff_createimage: Not enough memory for maps data!\n");
       return 0;
     }
+  }
+  else
+  {
+    maps = NULL;
+  }
 
-/* malloc room for the image data */
 
-    if (image_data_size_bytes > 0)
+  /* malloc room for the location */
+
+  if (location_size_bytes)
+  {
+    if ((location = (float *)malloc((size_t)location_size_bytes)) == NULL)
     {
-       if ((imagedata=(char*)malloc((size_t)image_data_size_bytes)) == NULL)
-       {
-         fprintf(stderr,"vil1_viff_createimage: Not enough memory for image data!\n");
-         return 0;
-       }
+      free(imagedata);
+      free(maps);
+      fprintf(stderr, "vil1_viff_createimage: Not enough memory for location data!\n");
+      return 0;
     }
-    else
-    {
-       imagedata = NULL;
-    }
-
-/* malloc room for the color map data */
-
-    if (map_size_bytes > 0)
-    {
-       if ((maps=(char*)malloc((size_t)map_size_bytes)) == NULL)
-       {
-         fprintf(stderr,"vil1_viff_createimage: Not enough memory for maps data!\n");
-         return 0;
-       }
-    }
-    else
-    {
-       maps = NULL;
-    }
+  }
+  else
+  {
+    location = NULL;
+  }
 
 
-/* malloc room for the location */
+  /* Load the image data, color map data, and location data */
 
-    if (location_size_bytes)
-    {
-       if ((location=(float*)malloc((size_t)location_size_bytes)) == NULL)
-       {
-         free(imagedata);
-         free(maps);
-         fprintf(stderr,"vil1_viff_createimage: Not enough memory for location data!\n");
-         return 0;
-       }
-    }
-    else
-    {
-       location = NULL;
-    }
+  image->maps = maps;
+  image->location = location;
+  image->imagedata = imagedata;
 
-
-/* Load the image data, color map data, and location data */
-
-    image->maps = maps;
-    image->location = location;
-    image->imagedata = imagedata;
-
-    return image;
+  return image;
 }
 
 /************************************************************
-*
-*  MODULE NAME: freeimage
-*
-*      PURPOSE: This routine frees a Khoros xvimage structure.
-*
-*        INPUT: image --  a pointer to a Khoros xvimage structure that
-*                         contains the image structure to be freed.
-*
-*       OUTPUT: (none)  since all we are doing is freeing as much of
-*               a image structure as we can.
-*
-*    CALLED BY: any routine that wishes to free an xvimage structure
-*
-*   WRITTEN BY: Mark Young
-*   MODIFIED BY: Scott Wilson - Updated to XV III 27-Feb-89
-*                Scott Wilson - Added bzero of header 13-Nov-91
-*                Scott Wilson - Added defensive ID test. 14-Jan-92
-*
-*************************************************************/
+ *
+ *  MODULE NAME: freeimage
+ *
+ *      PURPOSE: This routine frees a Khoros xvimage structure.
+ *
+ *        INPUT: image --  a pointer to a Khoros xvimage structure that
+ *                         contains the image structure to be freed.
+ *
+ *       OUTPUT: (none)  since all we are doing is freeing as much of
+ *               a image structure as we can.
+ *
+ *    CALLED BY: any routine that wishes to free an xvimage structure
+ *
+ *   WRITTEN BY: Mark Young
+ *   MODIFIED BY: Scott Wilson - Updated to XV III 27-Feb-89
+ *                Scott Wilson - Added bzero of header 13-Nov-91
+ *                Scott Wilson - Added defensive ID test. 14-Jan-92
+ *
+ *************************************************************/
 
-void vil1_viff_freeimage(struct vil1_viff_xvimage *image)
+void
+vil1_viff_freeimage(struct vil1_viff_xvimage * image)
 {
-  unsigned char id1,id2;
+  unsigned char id1, id2;
 
   /*
    *  Free as much of the xvimage structure as we can.  But first check to
@@ -252,50 +263,59 @@ void vil1_viff_freeimage(struct vil1_viff_xvimage *image)
    */
   if (image != NULL)
   {
-     /* Now see of the image itself is legal. This catches accidental
-        attempts to free an image already turned loose by vil1_viff_freeimage(). */
-     id1 = image->identifier;
-     id2 = XV_FILE_MAGIC_NUM;
-     if (id1 != id2)
-     {
-       fprintf(stderr, "vil1_viff_freeimage: Attempt to free an object that is not a VIFF image.\n");
-       fprintf(stderr, "vil1_viff_freeimage: Object may be a VIFF image that has already been free'd.\n");
-       fprintf(stderr, "vil1_viff_freeimage: Attempt aborted.\n");
-       return;
-     }
+    /* Now see of the image itself is legal. This catches accidental
+       attempts to free an image already turned loose by vil1_viff_freeimage(). */
+    id1 = image->identifier;
+    id2 = XV_FILE_MAGIC_NUM;
+    if (id1 != id2)
+    {
+      fprintf(stderr, "vil1_viff_freeimage: Attempt to free an object that is not a VIFF image.\n");
+      fprintf(stderr, "vil1_viff_freeimage: Object may be a VIFF image that has already been free'd.\n");
+      fprintf(stderr, "vil1_viff_freeimage: Attempt aborted.\n");
+      return;
+    }
 
-     /*  free image data */
-     if (image->imagedata != NULL && (image->row_size * image->col_size) > 0)
-       free ((char *) image->imagedata);
+    /*  free image data */
+    if (image->imagedata != NULL && (image->row_size * image->col_size) > 0)
+      free((char *)image->imagedata);
 
-     /*  free map data */
-     if (image->maps != NULL && image->map_row_size > 0)
-       free ((char *) image->maps);
+    /*  free map data */
+    if (image->maps != NULL && image->map_row_size > 0)
+      free((char *)image->maps);
 
-     /*  free location data */
-     if (image->location != NULL && image->row_size * image->col_size > 0 &&
-         image->location_type == VFF_LOC_EXPLICIT)
-       free ((char *) image->location);
+    /*  free location data */
+    if (image->location != NULL && image->row_size * image->col_size > 0 && image->location_type == VFF_LOC_EXPLICIT)
+      free((char *)image->location);
 
-     free((char *) image);
+    free((char *)image);
   }
 }
 
 
-static vxl_uint_32 vil1_viff_getmachsize(vxl_uint_32 mtype,vxl_uint_32 dtype)
+static vxl_uint_32
+vil1_viff_getmachsize(vxl_uint_32 mtype, vxl_uint_32 dtype)
 {
-  vxl_uint_32 tmp = (mtype==VFF_DEP_CRAYORDER) + 1;
+  vxl_uint_32 tmp = (mtype == VFF_DEP_CRAYORDER) + 1;
   switch (dtype)
   {
-   case VFF_TYP_BIT     : return (vxl_uint_32)0;
-   case VFF_TYP_1_BYTE  : return (vxl_uint_32)1;
-   case VFF_TYP_2_BYTE  : return mtype==VFF_DEP_CRAYORDER ? (vxl_uint_32)8 : (vxl_uint_32)2;
-   case VFF_TYP_4_BYTE  : return (vxl_uint_32)4*tmp;
-   case VFF_TYP_FLOAT   : return (vxl_uint_32)4*tmp;
-   case VFF_TYP_DOUBLE  : return (vxl_uint_32)8;
-   case VFF_TYP_COMPLEX : return (vxl_uint_32)8*tmp;
-   case VFF_TYP_DCOMPLEX: return (vxl_uint_32)16;
-   default              : return (vxl_uint_32)255;
+    case VFF_TYP_BIT:
+      return (vxl_uint_32)0;
+    case VFF_TYP_1_BYTE:
+      return (vxl_uint_32)1;
+    case VFF_TYP_2_BYTE:
+      return mtype == VFF_DEP_CRAYORDER ? (vxl_uint_32)8 : (vxl_uint_32)2;
+    case VFF_TYP_4_BYTE:
+      return (vxl_uint_32)4 * tmp;
+    case VFF_TYP_FLOAT:
+      return (vxl_uint_32)4 * tmp;
+    case VFF_TYP_DOUBLE:
+      return (vxl_uint_32)8;
+    case VFF_TYP_COMPLEX:
+      return (vxl_uint_32)8 * tmp;
+    case VFF_TYP_DCOMPLEX:
+      return (vxl_uint_32)16;
+    default:
+      return (vxl_uint_32)255;
   }
 }
 
@@ -321,57 +341,73 @@ static vxl_uint_32 vil1_viff_getmachsize(vxl_uint_32 mtype,vxl_uint_32 dtype)
        }
 */
 
-int vil1_viff_imagesize(struct vil1_viff_xvimage *image,int *dsize, int *dcount, int *msize,
-                        int *mcount, int *lsize,int *lcount)
+int
+vil1_viff_imagesize(struct vil1_viff_xvimage * image,
+                    int * dsize,
+                    int * dcount,
+                    int * msize,
+                    int * mcount,
+                    int * lsize,
+                    int * lcount)
 {
   vxl_uint_32 rows = image->col_size;
   vxl_uint_32 cols = image->row_size;
   vxl_uint_32 mach = image->machine_dep;
-  vxl_uint_32 datasize,datacount;
-  vxl_uint_32 mapsize,mapcount;
-  vxl_uint_32 locsize,loccount;
+  vxl_uint_32 datasize, datacount;
+  vxl_uint_32 mapsize, mapcount;
+  vxl_uint_32 locsize, loccount;
 
   /*
   ** Compute total size of DATA in bytes
   */
-  if (image->data_storage_type==VFF_TYP_BIT){
-     datasize = ((cols+7)/8)*rows;
-     datacount = datasize;
+  if (image->data_storage_type == VFF_TYP_BIT)
+  {
+    datasize = ((cols + 7) / 8) * rows;
+    datacount = datasize;
   }
-  else {
-     datasize = cols*rows * vil1_viff_getmachsize(mach, image->data_storage_type);
-     datacount = cols*rows;
+  else
+  {
+    datasize = cols * rows * vil1_viff_getmachsize(mach, image->data_storage_type);
+    datacount = cols * rows;
   }
 
-  datasize *= image->num_of_images*image->num_data_bands;
-  datacount *= image->num_of_images*image->num_data_bands;
+  datasize *= image->num_of_images * image->num_data_bands;
+  datacount *= image->num_of_images * image->num_data_bands;
 
   /*
   ** Compute number of MAP data objects
   */
   switch (image->map_scheme)
   {
-   case VFF_MS_NONE: mapcount = 0; break;
-   case VFF_MS_ONEPERBAND:
-   case VFF_MS_CYCLE: mapcount = image->num_data_bands*image->map_row_size*image->map_col_size; break;
-   case VFF_MS_SHARED:
-   case VFF_MS_GROUP: mapcount = image->map_row_size*image->map_col_size; break;
-   default: fprintf(stderr,"\nvil1_viff_imagesize: Unknown mapping scheme: %u\n", image->map_scheme); return 0;
+    case VFF_MS_NONE:
+      mapcount = 0;
+      break;
+    case VFF_MS_ONEPERBAND:
+    case VFF_MS_CYCLE:
+      mapcount = image->num_data_bands * image->map_row_size * image->map_col_size;
+      break;
+    case VFF_MS_SHARED:
+    case VFF_MS_GROUP:
+      mapcount = image->map_row_size * image->map_col_size;
+      break;
+    default:
+      fprintf(stderr, "\nvil1_viff_imagesize: Unknown mapping scheme: %u\n", image->map_scheme);
+      return 0;
   }
 
   /*
   ** mapcount now contains the number of CELLS, so convert to bytes
   */
-  if (image->map_storage_type==VFF_MAPTYP_NONE)
+  if (image->map_storage_type == VFF_MAPTYP_NONE)
     mapsize = 0;
   else
-    mapsize = mapcount*vil1_viff_getmachsize(mach, image->map_storage_type);
+    mapsize = mapcount * vil1_viff_getmachsize(mach, image->map_storage_type);
 
   /*
   ** Compute size of LOCATION data in bytes and floats
   */
-  loccount = rows*cols*image->location_dim;
-  locsize  = loccount*vil1_viff_getmachsize(mach, VFF_TYP_FLOAT);
+  loccount = rows * cols * image->location_dim;
+  locsize = loccount * vil1_viff_getmachsize(mach, VFF_TYP_FLOAT);
 
   *dsize = datasize;
   *dcount = datacount;

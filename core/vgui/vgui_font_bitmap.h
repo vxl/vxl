@@ -32,9 +32,10 @@ public:
   vgui_font_bitmap(bitmap_font_type t = BITMAP_FONT_8_13);
 
   //: Draw a string of font symbols.
-  virtual void draw(const std::string& str) const;
+  virtual void
+  draw(const std::string & str) const;
 
-//protected:
+  // protected:
   //: Destructor.
   virtual ~vgui_font_bitmap();
 

@@ -17,7 +17,7 @@
 #include "vpgl_backproject.h"
 
 bool
-vpgl_ray::ray(const vpgl_camera<double> * cam, vnl_double_3 const & point_3d, vnl_double_3 & r)
+vpgl_ray::ray(const vpgl_camera<double> * cam, const vnl_double_3 & point_3d, vnl_double_3 & r)
 {
   // special case of a generic camera
   if (cam->type_name() == "vpgl_generic_camera")
@@ -50,7 +50,7 @@ vpgl_ray::ray(const vpgl_camera<double> * cam, vnl_double_3 const & point_3d, vn
 }
 
 bool
-vpgl_ray::ray(const vpgl_camera<double> * cam, vgl_point_3d<double> const & point_3d, vgl_vector_3d<double> & r)
+vpgl_ray::ray(const vpgl_camera<double> * cam, const vgl_point_3d<double> & point_3d, vgl_vector_3d<double> & r)
 {
   vnl_double_3 p3d(point_3d.x(), point_3d.y(), point_3d.z());
   vnl_double_3 tr;
@@ -64,7 +64,7 @@ vpgl_ray::ray(const vpgl_camera<double> * cam, vgl_point_3d<double> const & poin
 // construct a ray at a 3-d point with an origin lying in the origin_z plane
 bool
 vpgl_ray::ray(const vpgl_camera<double> * cam,
-              vgl_point_3d<double> const & point_3d,
+              const vgl_point_3d<double> & point_3d,
               double origin_z,
               vgl_ray_3d<double> & ray)
 {
@@ -86,7 +86,7 @@ vpgl_ray::ray(const vpgl_camera<double> * cam,
 bool
 vpgl_ray::ray(const vpgl_camera<double> * cam,
               vgl_point_2d<double> image_pt,
-              vgl_point_2d<double> const & initial_guess,
+              const vgl_point_2d<double> & initial_guess,
               double origin_z,
               double dz,
               vgl_ray_3d<double> & ray)
@@ -104,15 +104,15 @@ vpgl_ray::ray(const vpgl_camera<double> * cam,
   return true;
 }
 bool
-vpgl_ray::ray(vpgl_rational_camera<double> const & rcam, vnl_double_3 const & point_3d, vnl_double_3 & ray)
+vpgl_ray::ray(const vpgl_rational_camera<double> & rcam, const vnl_double_3 & point_3d, vnl_double_3 & ray)
 {
   const auto * cam = static_cast<const vpgl_camera<double> *>(&rcam);
   return vpgl_ray::ray(cam, point_3d, ray);
 }
 
 bool
-vpgl_ray::ray(vpgl_rational_camera<double> const & rcam,
-              vgl_point_3d<double> const & point_3d,
+vpgl_ray::ray(const vpgl_rational_camera<double> & rcam,
+              const vgl_point_3d<double> & point_3d,
               vgl_vector_3d<double> & ray)
 {
   const auto * cam = static_cast<const vpgl_camera<double> *>(&rcam);
@@ -121,8 +121,8 @@ vpgl_ray::ray(vpgl_rational_camera<double> const & rcam,
 }
 
 bool
-vpgl_ray::ray(vpgl_rational_camera<double> const & rcam,
-              vgl_point_3d<double> const & point_3d,
+vpgl_ray::ray(const vpgl_rational_camera<double> & rcam,
+              const vgl_point_3d<double> & point_3d,
               vgl_ray_3d<double> & ray)
 {
   double z_off = rcam.offset(vpgl_rational_camera<double>::Z_INDX);
@@ -137,7 +137,7 @@ vpgl_ray::ray(vpgl_rational_camera<double> const & rcam,
 
 // compute a ray in local Cartesian coordinates for a local rational cam
 bool
-vpgl_ray::ray(vpgl_local_rational_camera<double> const & lrcam,
+vpgl_ray::ray(const vpgl_local_rational_camera<double> & lrcam,
               const double u,
               const double v,
               vgl_point_3d<double> & origin,
@@ -173,7 +173,7 @@ vpgl_ray::ray(vpgl_local_rational_camera<double> const & lrcam,
 
 //: compute a ray in local Cartesian coordinates at a given (u, v)
 bool
-vpgl_ray::ray(vpgl_local_rational_camera<double> const & lrcam,
+vpgl_ray::ray(const vpgl_local_rational_camera<double> & lrcam,
               const double u,
               const double v,
               vgl_ray_3d<double> & ray)
@@ -189,7 +189,7 @@ vpgl_ray::ray(vpgl_local_rational_camera<double> const & lrcam,
 
 // compute a ray in local Cartesian coordinates for a local rational cam
 bool
-vpgl_ray::plane_ray(vpgl_local_rational_camera<double> const & lrcam,
+vpgl_ray::plane_ray(const vpgl_local_rational_camera<double> & lrcam,
                     const vgl_point_2d<double> image_point1,
                     const vgl_point_2d<double> image_point2,
                     vgl_plane_3d<double> & plane)
@@ -225,7 +225,7 @@ vpgl_ray::plane_ray(vpgl_local_rational_camera<double> const & lrcam,
 }
 
 bool
-vpgl_ray::ray(vpgl_proj_camera<double> const & cam, vgl_point_3d<double> const & world_pt, vgl_ray_3d<double> & ray)
+vpgl_ray::ray(const vpgl_proj_camera<double> & cam, const vgl_point_3d<double> & world_pt, vgl_ray_3d<double> & ray)
 {
   vgl_point_3d<double> cc = cam.camera_center();
   if (vgl_distance(cc, world_pt) < vgl_tolerance<double>::position)
@@ -235,7 +235,7 @@ vpgl_ray::ray(vpgl_proj_camera<double> const & cam, vgl_point_3d<double> const &
 }
 
 bool
-vpgl_ray::principal_ray(vpgl_proj_camera<double> const & cam, vgl_ray_3d<double> & pray)
+vpgl_ray::principal_ray(const vpgl_proj_camera<double> & cam, vgl_ray_3d<double> & pray)
 {
   vnl_matrix_fixed<double, 3, 4> C = cam.get_matrix();
   vgl_vector_3d<double> dir(C[2][0], C[2][1], C[2][2]);
@@ -248,7 +248,7 @@ vpgl_ray::principal_ray(vpgl_proj_camera<double> const & cam, vgl_ray_3d<double>
   return true;
 }
 bool
-vpgl_ray::ray(vpgl_affine_camera<double> const & cam, vgl_point_3d<double> const & world_pt, vgl_ray_3d<double> & ray)
+vpgl_ray::ray(const vpgl_affine_camera<double> & cam, const vgl_point_3d<double> & world_pt, vgl_ray_3d<double> & ray)
 {
   vgl_point_2d<double> p2d = cam.project(world_pt);
   ray = cam.backproject_ray(vgl_homg_point_2d<double>(p2d));
@@ -256,8 +256,8 @@ vpgl_ray::ray(vpgl_affine_camera<double> const & cam, vgl_point_3d<double> const
 }
 
 bool
-vpgl_ray::ray(vpgl_perspective_camera<double> const & cam,
-              vgl_point_3d<double> const & world_pt,
+vpgl_ray::ray(const vpgl_perspective_camera<double> & cam,
+              const vgl_point_3d<double> & world_pt,
               vgl_ray_3d<double> & ray)
 {
   if (cam.is_behind_camera(vgl_homg_point_3d<double>(world_pt.x(), world_pt.y(), world_pt.z())))
@@ -267,14 +267,14 @@ vpgl_ray::ray(vpgl_perspective_camera<double> const & cam,
 }
 
 bool
-vpgl_ray::ray(vpgl_generic_camera<double> const & cam, vgl_point_3d<double> const & world_pt, vgl_ray_3d<double> & ray)
+vpgl_ray::ray(const vpgl_generic_camera<double> & cam, const vgl_point_3d<double> & world_pt, vgl_ray_3d<double> & ray)
 {
   ray = cam.ray(world_pt);
   return true;
 }
 
 double
-vpgl_ray::angle_between_rays(vgl_rotation_3d<double> const & r0, vgl_rotation_3d<double> const & r1)
+vpgl_ray::angle_between_rays(const vgl_rotation_3d<double> & r0, const vgl_rotation_3d<double> & r1)
 {
   vnl_vector_fixed<double, 3> zaxis, a0, a1;
   zaxis[0] = 0.0;
@@ -288,7 +288,7 @@ vpgl_ray::angle_between_rays(vgl_rotation_3d<double> const & r0, vgl_rotation_3d
 }
 
 double
-vpgl_ray::rot_about_ray(vgl_rotation_3d<double> const & r0, vgl_rotation_3d<double> const & r1)
+vpgl_ray::rot_about_ray(const vgl_rotation_3d<double> & r0, const vgl_rotation_3d<double> & r1)
 {
   // find axes for each rotation
   vnl_vector_fixed<double, 3> zaxis, a0, a1;
@@ -309,7 +309,7 @@ vpgl_ray::rot_about_ray(vgl_rotation_3d<double> const & r0, vgl_rotation_3d<doub
 }
 
 vgl_rotation_3d<double>
-vpgl_ray::rot_to_point_ray(vgl_vector_3d<double> const & ray_dir)
+vpgl_ray::rot_to_point_ray(const vgl_vector_3d<double> & ray_dir)
 {
   vnl_vector_fixed<double, 3> za(0.0, 0.0, 1.0), v(ray_dir.x(), ray_dir.y(), ray_dir.z());
   // rotation from principal axis to z axis

@@ -46,7 +46,7 @@ send_long(vil_stream * data, vxl_sint_32 s);
 static void
 expandrow(unsigned char * optr, unsigned char * iptr, int z);
 
-char const * vil_iris_format_tag = "iris";
+const char * vil_iris_format_tag = "iris";
 
 vil_image_resource_sptr
 vil_iris_file_format::make_input_image(vil_stream * is)
@@ -99,7 +99,7 @@ vil_iris_file_format::make_output_image(vil_stream * is,
   return new vil_iris_generic_image(is, ni, nj, nplanes, format);
 }
 
-char const *
+const char *
 vil_iris_file_format::tag() const
 {
   return vil_iris_format_tag;
@@ -107,7 +107,7 @@ vil_iris_file_format::tag() const
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil_iris_generic_image::vil_iris_generic_image(vil_stream * is, char const * imagename)
+vil_iris_generic_image::vil_iris_generic_image(vil_stream * is, const char * imagename)
   : starttab_(nullptr)
   , lengthtab_(nullptr)
   , is_(is)
@@ -118,13 +118,13 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream * is, char const * ima
 }
 
 bool
-vil_iris_generic_image::get_property(char const * /*tag*/, void * /*prop*/) const
+vil_iris_generic_image::get_property(const char * /*tag*/, void * /*prop*/) const
 {
   // This is not an in-memory image type, nor is it read-only:
   return false;
 }
 
-char const *
+const char *
 vil_iris_generic_image::file_format() const
 {
   return vil_iris_format_tag;
@@ -196,8 +196,9 @@ vil_iris_generic_image::read_header()
   nplanes_ = get_ushort(is_);
   pixmin_ = get_long(is_);
   pixmax_ = get_long(is_);
-  format_ = bytes_per_component == 1 ? VIL_PIXEL_FORMAT_BYTE
-                                     : bytes_per_component == 2 ? VIL_PIXEL_FORMAT_UINT_16 : VIL_PIXEL_FORMAT_UNKNOWN;
+  format_ = bytes_per_component == 1   ? VIL_PIXEL_FORMAT_BYTE
+            : bytes_per_component == 2 ? VIL_PIXEL_FORMAT_UINT_16
+                                       : VIL_PIXEL_FORMAT_UNKNOWN;
 
   // DUMMY1 starts at 20
   // image name starts at 24
@@ -396,7 +397,7 @@ vil_iris_generic_image::get_section_rle(unsigned int x0, unsigned int xs, unsign
 
 
 bool
-vil_iris_generic_image::put_view(vil_image_view_base const & buf, unsigned int x0, unsigned int y0)
+vil_iris_generic_image::put_view(const vil_image_view_base & buf, unsigned int x0, unsigned int y0)
 {
   assert(buf.pixel_format() == format_); // pixel formats of image and buffer must match
   if (!view_fits(buf, x0, y0))

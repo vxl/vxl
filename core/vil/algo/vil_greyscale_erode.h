@@ -10,11 +10,13 @@
 
 //: Return minimum value of im[offset[k]]
 template <class T>
-inline T vil_greyscale_erode(const T* im, const std::ptrdiff_t* offset, unsigned n)
+inline T
+vil_greyscale_erode(const T * im, const std::ptrdiff_t * offset, unsigned n)
 {
   T min_v = im[offset[0]];
-  for (unsigned i=1;i<n;++i)
-    if (im[offset[i]]<min_v) min_v=im[offset[i]];
+  for (unsigned i = 1; i < n; ++i)
+    if (im[offset[i]] < min_v)
+      min_v = im[offset[i]];
   return min_v;
 }
 
@@ -23,21 +25,27 @@ inline T vil_greyscale_erode(const T* im, const std::ptrdiff_t* offset, unsigned
 // \relatesalso vil_image_view
 // \relatesalso vil_structuring_element
 template <class T>
-inline T vil_greyscale_erode(const vil_image_view<T>& image, unsigned plane,
-                             const vil_structuring_element& element,
-                             int i0, int j0)
+inline T
+vil_greyscale_erode(const vil_image_view<T> & image,
+                    unsigned plane,
+                    const vil_structuring_element & element,
+                    int i0,
+                    int j0)
 {
   T min_v = T(0); // dummy initialisation - otherwise, compiler complains
-  bool first=true;
+  bool first = true;
   unsigned n = element.p_i().size();
-  for (unsigned int k=0;k<n;++k)
+  for (unsigned int k = 0; k < n; ++k)
   {
-    unsigned int i = i0+element.p_i()[k];
-    unsigned int j = j0+element.p_j()[k];
-    if (i<image.ni() && j<image.nj())
+    unsigned int i = i0 + element.p_i()[k];
+    unsigned int j = j0 + element.p_j()[k];
+    if (i < image.ni() && j < image.nj())
     {
-      if (first || image(i,j,plane) < min_v) {
-        min_v=image(i,j,plane); first=false; }
+      if (first || image(i, j, plane) < min_v)
+      {
+        min_v = image(i, j, plane);
+        first = false;
+      }
     }
   }
   return min_v;
@@ -49,8 +57,9 @@ inline T vil_greyscale_erode(const vil_image_view<T>& image, unsigned plane,
 // \relatesalso vil_image_view
 // \relatesalso vil_structuring_element
 template <class T>
-void vil_greyscale_erode(const vil_image_view<T>& src_image,
-                         vil_image_view<T>& dest_image,
-                         const vil_structuring_element& element);
+void
+vil_greyscale_erode(const vil_image_view<T> & src_image,
+                    vil_image_view<T> & dest_image,
+                    const vil_structuring_element & element);
 
 #endif // vil_greyscale_erode_h_

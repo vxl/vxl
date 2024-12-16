@@ -520,9 +520,9 @@ vnl_bignum::operator+(const vnl_bignum & b) const
     {                          // Else if abs(*this) < abs(b)
       subtract(b, *this, sum); //   sum = b - *this
       sum.sign = b.sign;       // Sign of sum follows b
-    }                          // (Else abs(*this) == abs(b)
-  }                            //   so sum must be zero)
-  return sum;                  // shallow swap on return
+    } // (Else abs(*this) == abs(b)
+  } //   so sum must be zero)
+  return sum; // shallow swap on return
 }
 
 //: Multiplies this with a vnl_bignum
@@ -682,13 +682,13 @@ operator<<(std::ostream & os, const vnl_bignum & b)
     cbuf[i++] = char(long(r) + '0'); //   Get one's digit
     d = q;                           //   Then discard one's digit
     q = r = 0L;                      //   Prep for next divide
-  } while (d != 0L);                 // until no more one's digits
+  } while (d != 0L); // until no more one's digits
   do
   {                  // repeat;
     os << cbuf[--i]; //   output char buf in reverse
-  } while (i);       // until no more chars
-  delete[] cbuf;     // delete temp char buf
-  return os;         // return output stream
+  } while (i); // until no more chars
+  delete[] cbuf; // delete temp char buf
+  return os;     // return output stream
 }
 
 //: Convert the number to a decimal representation in a string.
@@ -715,7 +715,7 @@ vnl_bignum_to_string(std::string & s, const vnl_bignum & b)
     s.insert(insert_point, 1, char('0' + long(r))); //   Get one's digit, and insert it at head.
     d = q;                                          //   Then discard one's digit
     q = r = 0L;                                     //   Prep for next divide
-  } while (d != 0L);                                // until no more one's digits
+  } while (d != 0L); // until no more one's digits
   return s;
 }
 
@@ -1110,7 +1110,7 @@ magnitude_cmp(const vnl_bignum & b1, const vnl_bignum & b2)
     else if (b1.data[i - 1] < b2.data[i - 1])
       return -1;
     i--;
-  }         // No data, or all elements same
+  } // No data, or all elements same
   return 0; //  so must be equal
 }
 
@@ -1247,8 +1247,8 @@ estimate_q_hat(const vnl_bignum & u, const vnl_bignum & v, Counter j)
     if (lhs <= rhs)                    // if lhs <= rhs
       break;                           //   test fails
     q_hat--;                           // Test passes:  decrement q_hat
-  }                                    // Loop again
-  return q_hat;                        // Return estimate
+  } // Loop again
+  return q_hat; // Return estimate
 }
 
 //: calculate u - v*q_hat

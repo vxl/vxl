@@ -363,7 +363,7 @@ vgui_displaybase_tableau::deselect_all()
     // notify so's observers
     vgui_soview * so = vgui_soview::id_to_object(iden);
     vgui_message msg;
-    msg.user = (void const *)&vgui_soview::msg_deselect;
+    msg.user = (const void *)&vgui_soview::msg_deselect;
     so->notify(msg);
 
     if (cb_)

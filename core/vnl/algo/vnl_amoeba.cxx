@@ -88,7 +88,7 @@ struct vnl_amoebaFit : public vnl_amoeba
 };
 
 int
-vnl_amoeba_SimplexCorner::compare(vnl_amoeba_SimplexCorner const & s1, vnl_amoeba_SimplexCorner const & s2)
+vnl_amoeba_SimplexCorner::compare(const vnl_amoeba_SimplexCorner & s1, const vnl_amoeba_SimplexCorner & s2)
 {
   return vnl_math::sgn(s1.fv - s2.fv);
 }
@@ -440,7 +440,7 @@ public:
   ~vnl_amoeba_LSCF() override = default;
 
   double
-  f(vnl_vector<double> const & x) override
+  f(const vnl_vector<double> & x) override
   {
     ls_->f(x, fx);
     return fx.squared_magnitude();

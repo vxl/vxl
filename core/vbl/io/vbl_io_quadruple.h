@@ -15,14 +15,17 @@
 
 //: Write pair to binary stream
 template <class S, class T, class U, class V>
-void vsl_b_write(vsl_b_ostream& s, const vbl_quadruple<S, T, U, V>& v);
+void
+vsl_b_write(vsl_b_ostream & s, const vbl_quadruple<S, T, U, V> & v);
 
 //: Read pair from binary stream
 template <class S, class T, class U, class V>
-void vsl_b_read(vsl_b_istream& s, vbl_quadruple<S, T, U, V>& v);
+void
+vsl_b_read(vsl_b_istream & s, vbl_quadruple<S, T, U, V> & v);
 
 //: Print human readable summary of object to a stream
 template <class S, class T, class U, class V>
-void vsl_print_summary(std::ostream & os,const vbl_quadruple<S, T, U, V> &v);
+void
+vsl_print_summary(std::ostream & os, const vbl_quadruple<S, T, U, V> & v);
 
 #endif // vbl_io_quadruple_h_

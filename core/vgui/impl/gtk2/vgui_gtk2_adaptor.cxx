@@ -226,7 +226,8 @@ vgui_gtk2_adaptor::post_destroy()
   }
 }
 
-void vgui_gtk2_adaptor::set_default_popup(vgui_menu)
+void
+vgui_gtk2_adaptor::set_default_popup(vgui_menu)
 {
 #ifdef DEBUG
   std::cerr << "vgui_gtk2_adaptor::set_default_popup\n";

@@ -24,10 +24,7 @@ vgui_wx_statusbar::vgui_wx_statusbar(void)
 }
 
 //: Destructor.
-vgui_wx_statusbar::~vgui_wx_statusbar(void)
-{
-  delete statusbuf_;
-}
+vgui_wx_statusbar::~vgui_wx_statusbar(void) { delete statusbuf_; }
 
 //-------------------------------------------------------------------------
 // vgui_wx_statusbar implementation.

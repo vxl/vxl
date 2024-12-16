@@ -24,36 +24,44 @@
 
 class vgl_h_matrix_2d_compute_4point : public vgl_h_matrix_2d_compute
 {
- public:
-  int minimum_number_of_correspondences() const override { return 4; }
+public:
+  int
+  minimum_number_of_correspondences() const override
+  {
+    return 4;
+  }
 
- protected:
+protected:
   //: compute from matched points
 
-  bool compute_p(std::vector<vgl_homg_point_2d<double> > const& points1,
-                 std::vector<vgl_homg_point_2d<double> > const& points2,
-                 vgl_h_matrix_2d<double>& H) override;
+  bool
+  compute_p(const std::vector<vgl_homg_point_2d<double>> & points1,
+            const std::vector<vgl_homg_point_2d<double>> & points2,
+            vgl_h_matrix_2d<double> & H) override;
 
-  //:compute from matched lines
+  //: compute from matched lines
 
-  bool compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
-                 std::vector<vgl_homg_line_2d<double> > const& lines2,
-                 vgl_h_matrix_2d<double>& H) override;
+  bool
+  compute_l(const std::vector<vgl_homg_line_2d<double>> & lines1,
+            const std::vector<vgl_homg_line_2d<double>> & lines2,
+            vgl_h_matrix_2d<double> & H) override;
 
-  //:compute from matched lines with weight vector
+  //: compute from matched lines with weight vector
 
-  bool compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
-                 std::vector<vgl_homg_line_2d<double> > const& lines2,
-                 std::vector<double> const& weights,
-                 vgl_h_matrix_2d<double>& H) override;
+  bool
+  compute_l(const std::vector<vgl_homg_line_2d<double>> & lines1,
+            const std::vector<vgl_homg_line_2d<double>> & lines2,
+            const std::vector<double> & weights,
+            vgl_h_matrix_2d<double> & H) override;
 
-  //:compute from matched points and lines
+  //: compute from matched points and lines
 
-  bool compute_pl(std::vector<vgl_homg_point_2d<double> > const& points1,
-                  std::vector<vgl_homg_point_2d<double> > const& points2,
-                  std::vector<vgl_homg_line_2d<double> > const& lines1,
-                  std::vector<vgl_homg_line_2d<double> > const& lines2,
-                  vgl_h_matrix_2d<double>& H) override;
+  bool
+  compute_pl(const std::vector<vgl_homg_point_2d<double>> & points1,
+             const std::vector<vgl_homg_point_2d<double>> & points2,
+             const std::vector<vgl_homg_line_2d<double>> & lines1,
+             const std::vector<vgl_homg_line_2d<double>> & lines2,
+             vgl_h_matrix_2d<double> & H) override;
 };
 
 #endif // vgl_h_matrix_2d_compute_4point_h_

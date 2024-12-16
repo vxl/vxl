@@ -16,7 +16,7 @@
 
 //--------------------------------------------------------------------------------
 
-char const * vil1_bmp_format_tag = "bmp";
+const char * vil1_bmp_format_tag = "bmp";
 
 vil1_image_impl *
 vil1_bmp_file_format::make_input_image(vil1_stream * is)
@@ -44,7 +44,7 @@ vil1_bmp_file_format::make_output_image(vil1_stream * is,
   return new vil1_bmp_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
-char const *
+const char *
 vil1_bmp_file_format::tag() const
 {
   return vil1_bmp_format_tag;
@@ -52,7 +52,7 @@ vil1_bmp_file_format::tag() const
 
 /////////////////////////////////////////////////////////////////////////////
 
-char const *
+const char *
 vil1_bmp_generic_image::file_format() const
 {
   return vil1_bmp_format_tag;
@@ -69,7 +69,7 @@ vil1_bmp_generic_image::vil1_bmp_generic_image(vil1_stream * is)
 }
 
 bool
-vil1_bmp_generic_image::get_property(char const * tag, void * prop) const
+vil1_bmp_generic_image::get_property(const char * tag, void * prop) const
 {
   if (0 == std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool *)prop) = false, true : true;
@@ -342,7 +342,7 @@ vil1_bmp_generic_image::get_section(void * ib, int x0, int y0, int w, int h) con
 
 
 bool
-vil1_bmp_generic_image::put_section(void const * ib, int x0, int y0, int xs, int ys)
+vil1_bmp_generic_image::put_section(const void * ib, int x0, int y0, int xs, int ys)
 {
   assert(ib != nullptr);
   int bypp = (components() * bits_per_component() + 7) / 8;
@@ -354,7 +354,7 @@ vil1_bmp_generic_image::put_section(void const * ib, int x0, int y0, int xs, int
   for (int y = 0; y < ys; ++y, ++skip_rows)
   {
     is_->seek(bit_map_start + skip_rows * rowlen + x0 * bypp);
-    is_->write(((char const *)ib) + y * xs * bypp, xs * bypp);
+    is_->write(((const char *)ib) + y * xs * bypp, xs * bypp);
   }
 
   return true;

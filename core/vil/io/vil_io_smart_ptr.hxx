@@ -13,14 +13,15 @@
 
 //=========================================================================
 //: Binary save self to stream.
-template<class T>
-void vsl_b_write(vsl_b_ostream & os, const vil_smart_ptr<T> &p)
+template <class T>
+void
+vsl_b_write(vsl_b_ostream & os, const vil_smart_ptr<T> & p)
 {
   // write version number
   constexpr short io_version_no = 2;
   vsl_b_write(os, io_version_no);
 
-  if (p.ptr() == nullptr)  // Deal with Null pointers first.
+  if (p.ptr() == nullptr) // Deal with Null pointers first.
   {
     vsl_b_write(os, true);
     vsl_b_write(os, 0ul); // Use 0 to indicate a null pointer.
@@ -36,93 +37,96 @@ void vsl_b_write(vsl_b_ostream & os, const vil_smart_ptr<T> &p)
   {
     id = os.add_serialisation_record(p.ptr());
 
-      // Say that this is the first time
-      // that this object is being saved.
-      // This isn't really necessary but
-      // it is useful as an error check
+    // Say that this is the first time
+    // that this object is being saved.
+    // This isn't really necessary but
+    // it is useful as an error check
     vsl_b_write(os, true);
-    vsl_b_write(os, id);     // Save the serial number
-// If you get an error in the next line, it could be because your type T
-// has no vsl_b_write(vsl_b_ostream &,const T*)  defined on it.
-// See the documentation in the .h file to see how to add it.
-    vsl_b_write(os, p.ptr());    // Only save the actual object if it
-                                  //hasn't been saved before to this stream
+    vsl_b_write(os, id);      // Save the serial number
+                              // If you get an error in the next line, it could be because your type T
+                              // has no vsl_b_write(vsl_b_ostream &,const T*)  defined on it.
+                              // See the documentation in the .h file to see how to add it.
+    vsl_b_write(os, p.ptr()); // Only save the actual object if it
+                              // hasn't been saved before to this stream
   }
   else
   {
-      // Say that this is not the first time
-      // that this object is being saved.
-      // This isn't really necessary but
-      // it is useful as an error check
+    // Say that this is not the first time
+    // that this object is being saved.
+    // This isn't really necessary but
+    // it is useful as an error check
 
     vsl_b_write(os, false);
-    vsl_b_write(os, id);         // Save the serial number
+    vsl_b_write(os, id); // Save the serial number
   }
 }
 
 //=====================================================================
 //: Binary load self from stream.
-template<class T>
-void vsl_b_read(vsl_b_istream &is, vil_smart_ptr<T> &p)
+template <class T>
+void
+vsl_b_read(vsl_b_istream & is, vil_smart_ptr<T> & p)
 {
-  if (!is) return;
+  if (!is)
+    return;
 
   short ver;
   vsl_b_read(is, ver);
   switch (ver)
   {
-   case 1:
-   case 2:
-   {
-    bool first_time; // true if the object is about to be loaded
-    vsl_b_read(is, first_time);
-
-    unsigned long id; // Unique serial number indentifying object
-    vsl_b_read(is, id);
-
-    if (id == 0) // Deal with Null pointers first.
+    case 1:
+    case 2:
     {
-      p = nullptr;
-      return;
+      bool first_time; // true if the object is about to be loaded
+      vsl_b_read(is, first_time);
+
+      unsigned long id; // Unique serial number indentifying object
+      vsl_b_read(is, id);
+
+      if (id == 0) // Deal with Null pointers first.
+      {
+        p = nullptr;
+        return;
+      }
+
+      T * pointer = static_cast<T *>(is.get_serialisation_pointer(id));
+      if (first_time != (pointer == nullptr))
+      {
+        // This checks that the saving stream and reading stream
+        // both agree on whether or not this is the first time they
+        // have seen this object.
+        std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_smart_ptr<T>&)\n"
+                  << "           De-serialisation failure\n";
+        is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
+        return;
+      }
+
+      if (pointer == nullptr)
+      {
+        // If you get an error in the next line, it could be because your type T
+        // has no vsl_b_read(vsl_b_ostream&,T*&)  defined on it.
+        // See the documentation in the .h file to see how to add it.
+        vsl_b_read(is, pointer);
+        is.add_serialisation_record(id, pointer);
+      }
+
+      p = pointer; // This operator method will set the internal
+                   // pointer in vil_smart_ptr.
+      break;
     }
-
-    T * pointer = static_cast<T *>( is.get_serialisation_pointer(id));
-    if (first_time != (pointer == nullptr))
-    {
-      // This checks that the saving stream and reading stream
-      // both agree on whether or not this is the first time they
-      // have seen this object.
+    default:
       std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_smart_ptr<T>&)\n"
-               << "           De-serialisation failure\n";
+                << "           Unknown version number " << ver << '\n';
       is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
-    }
-
-    if (pointer == nullptr)
-    {
-      // If you get an error in the next line, it could be because your type T
-      // has no vsl_b_read(vsl_b_ostream&,T*&)  defined on it.
-      // See the documentation in the .h file to see how to add it.
-      vsl_b_read(is, pointer);
-      is.add_serialisation_record(id, pointer);
-    }
-
-    p = pointer; // This operator method will set the internal
-                 //pointer in vil_smart_ptr.
-    break;
-   }
-   default:
-    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_smart_ptr<T>&)\n"
-             << "           Unknown version number "<< ver << '\n';
-    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-    return;
   }
 }
 
 //=====================================================================
 //: Output a human readable summary to the stream
-template<class T>
-void vsl_print_summary(std::ostream & os,const vil_smart_ptr<T> & p)
+template <class T>
+void
+vsl_print_summary(std::ostream & os, const vil_smart_ptr<T> & p)
 {
   os << "Smart ptr to ";
   if (p.ptr())
@@ -183,9 +187,9 @@ void vsl_print_summary(std::ostream, const vil_smart_ptr<T> *p)
 #endif
 
 #undef VIL_IO_SMART_PTR_INSTANTIATE
-#define VIL_IO_SMART_PTR_INSTANTIATE(T) \
-template void vsl_print_summary(std::ostream &, const vil_smart_ptr<T > &); \
-template void vsl_b_read(vsl_b_istream &, vil_smart_ptr<T > &); \
-template void vsl_b_write(vsl_b_ostream &, const vil_smart_ptr<T > &)
+#define VIL_IO_SMART_PTR_INSTANTIATE(T)                                      \
+  template void vsl_print_summary(std::ostream &, const vil_smart_ptr<T> &); \
+  template void vsl_b_read(vsl_b_istream &, vil_smart_ptr<T> &);             \
+  template void vsl_b_write(vsl_b_ostream &, const vil_smart_ptr<T> &)
 
 #endif // vil_io_smart_ptr_hxx_

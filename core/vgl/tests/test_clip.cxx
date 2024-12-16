@@ -8,8 +8,8 @@
 #include "testlib/testlib_test.h"
 
 template <class T>
-inline static bool
-is_vertex(vgl_polygon<T> const & poly, T x, T y)
+static inline bool
+is_vertex(const vgl_polygon<T> & poly, T x, T y)
 {
   for (unsigned int i = 0; i < poly.num_sheets(); ++i)
     for (unsigned int p = 0; p < poly[i].size(); ++p)

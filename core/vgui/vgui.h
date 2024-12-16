@@ -32,7 +32,7 @@ class vgui_menu;
 class vgui_dialog_impl;
 class vgui_dialog_extensions_impl;
 class vgui_tableau;
-//class vgui_toolkit;
+// class vgui_toolkit;
 struct vgui_tableau_sptr;
 
 //: Namespace with a singleton vgui_toolkit instance.
@@ -62,7 +62,7 @@ struct vgui_tableau_sptr;
 class vgui
 {
   //: Selected toolkit instance.
-  static vgui_DLLDATA vgui_toolkit* instance_;
+  static vgui_DLLDATA vgui_toolkit * instance_;
 
   //: True once init() has been called.
   static vgui_DLLDATA bool init_called;
@@ -70,10 +70,12 @@ class vgui
   //: True once quit() has been called.
   static vgui_DLLDATA bool quit_called;
 
- public:
+public:
   //: toolkit name to handle missing  capabilites e.g. GLUT doesn't have a menubar
-  static std::string toolkit_name() {
-    if(instance_)
+  static std::string
+  toolkit_name()
+  {
+    if (instance_)
       return instance_->name();
     return "";
   }
@@ -82,11 +84,13 @@ class vgui
   static vgui_DLLDATA std::ostream out;
 
   //: Method for determining if a given toolkit is available.
-  static bool exists(char const *toolkit);
+  static bool
+  exists(const char * toolkit);
 
   //: Method for selecting a specific toolkit.
   //  This will abort() if given a toolkit which is not available.
-  static void select(char const *toolkit);
+  static void
+  select(const char * toolkit);
 
   //: Select a toolkit from command line arguments and environment variables.
   //
@@ -96,79 +100,90 @@ class vgui
   //
   //  If no such environment variable is set, no toolkit is selected and the
   //  function returns false. Else the return value is true.
-  static bool select(int &argc, char **argv);
+  static bool
+  select(int & argc, char ** argv);
 
   //: Initialize the selected toolkit passing it the given command line.
-  static void init(int &argc, char **argv);
+  static void
+  init(int & argc, char ** argv);
 
   //: Uninitialize any previously initialized toolkit.
   //
   // This will be called before application exit; the user normally
   // need not call this.
   //
-  static void uninit();
+  static void
+  uninit();
 
   // Factory methods
   //----------------
 
   //: Produce window with menubar.
-  static vgui_window* produce_window(int width, int height,
-                                     vgui_menu const & menubar,
-                                     std::string const &title ="");
+  static vgui_window *
+  produce_window(int width, int height, const vgui_menu & menubar, const std::string & title = "");
   //: Produce window without menubar.
-  static vgui_window* produce_window(int width, int height,
-                                     std::string const &title ="");
+  static vgui_window *
+  produce_window(int width, int height, const std::string & title = "");
   //: Produce dialog box.
-  static vgui_dialog_impl* produce_dialog(std::string const &name);
+  static vgui_dialog_impl *
+  produce_dialog(const std::string & name);
 
   //: Produce dialog box.
-  static vgui_dialog_extensions_impl* produce_extension_dialog(std::string const &name);
+  static vgui_dialog_extensions_impl *
+  produce_extension_dialog(const std::string & name);
 
   // Convenience methods
   //--------------------
 
   //: Display this tableau and run till dead (no menubar).
-  static int run(vgui_tableau_sptr const&, int w, int h,
-                 std::string const &title ="");
+  static int
+  run(const vgui_tableau_sptr &, int w, int h, const std::string & title = "");
 
   //: Display this tableau and run till dead (with menubar)
-  static int run(vgui_tableau_sptr const&, int w, int h,
-                 vgui_menu const &menubar, std::string const &title ="");
+  static int
+  run(const vgui_tableau_sptr &, int w, int h, const vgui_menu & menubar, const std::string & title = "");
 
   //: Create the vgui_window but don't run it (no menubar).
-  static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h,
-                            std::string const &title ="");
+  static vgui_window *
+  adapt(const vgui_tableau_sptr &, int w, int h, const std::string & title = "");
 
   //: Create the vgui_window but don't run it (with menubar).
-  static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h,
-                            vgui_menu const &, std::string const &title ="");
+  static vgui_window *
+  adapt(const vgui_tableau_sptr &, int w, int h, const vgui_menu &, const std::string & title = "");
 
   // Functions for event-loop management
   //------------------------------------
 
   //: Run until quit is called.
-  static int  run();
+  static int
+  run();
 
   //: Run the next event in the event queue.
-  static void run_one_event();
+  static void
+  run_one_event();
 
   //: Run all events in the event queue.
-  static void run_till_idle();
+  static void
+  run_till_idle();
 
   //: Remove all events from the event queue.
-  static void flush();
+  static void
+  flush();
 
   //: Add event to the event queue.
-  static void add_event(vgui_event const &);
+  static void
+  add_event(const vgui_event &);
 
   //: Quit application.
-  static void quit();
+  static void
+  quit();
 
   //: Was quit called earlier?
   //
   // This is to help application-driven vgui programs determine when
   // the user has requested the GUI to close.
-  static bool quit_was_called();
+  static bool
+  quit_was_called();
 };
 
 
@@ -182,10 +197,15 @@ class vgui
 // translation unit will be included in the final executable, and
 // therefore the trigger variable below will be initialized, causing
 // the toolkits to be registered.
-int vgui_register_all_implementations();
+int
+vgui_register_all_implementations();
 static int trigger = vgui_register_all_implementations();
 
 // This function is here just to avoid "unused variable" compiler warnings
-static int dummy_use_of_trigger() { return trigger? 0: dummy_use_of_trigger(); }
+static int
+dummy_use_of_trigger()
+{
+  return trigger ? 0 : dummy_use_of_trigger();
+}
 
 #endif // vgui_h_

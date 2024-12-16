@@ -43,7 +43,11 @@ public:
       &array[VIDL_PIXEL_FORMAT_ENUM_END - 1]);
   }
 
-  bool operator[](unsigned int i) { return array[i]; }
+  bool
+  operator[](unsigned int i)
+  {
+    return array[i];
+  }
 
 private:
   bool array[VIDL_PIXEL_FORMAT_ENUM_END];
@@ -75,7 +79,7 @@ template <>
 struct make_pixel_iterator<VIDL_PIXEL_FORMAT_UNKNOWN>
 {
   static inline vidl_pixel_iterator *
-  apply(vidl_frame const & /*frame*/)
+  apply(const vidl_frame & /*frame*/)
   {
     return (vidl_pixel_iterator *)nullptr;
   }

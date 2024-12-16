@@ -34,36 +34,42 @@ main()
 
   int seed = 40;
   vnl_random mz_random(seed);
-  int inliers=0, outliers=0;
+  int inliers = 0, outliers = 0;
 
   //  generate and output data for left side
   int x;
-  for ( x = x0; x<=xd; ++ x ) {
-    double y = a0 + a1*x;
-    if ( mz_random.drand32() < outlier_frac ) {
+  for (x = x0; x <= xd; ++x)
+  {
+    double y = a0 + a1 * x;
+    if (mz_random.drand32() < outlier_frac)
+    {
       y += 20 + outlier_sigma * mz_random.normal();
-      outliers ++;
+      outliers++;
     }
-    else {
+    else
+    {
       y += sigma * mz_random.normal();
-      inliers ++ ;
+      inliers++;
     }
     std::cout << double(x) << "  " << y << std::endl;
   }
 
-  for ( ; x<=x1; ++ x) {
-    double y = b0 + b1*x;
-    if ( mz_random.drand32() < outlier_frac ) {
+  for (; x <= x1; ++x)
+  {
+    double y = b0 + b1 * x;
+    if (mz_random.drand32() < outlier_frac)
+    {
       y += outlier_sigma * mz_random.normal();
-      outliers ++;
+      outliers++;
     }
-    else {
+    else
+    {
       y += sigma * mz_random.normal();
-      inliers ++ ;
+      inliers++;
     }
     std::cout << double(x) << "  " << y << std::endl;
   }
-  std::cerr << "outlier frac = " << outliers / double(inliers+outliers) << std::endl;
+  std::cerr << "outlier frac = " << outliers / double(inliers + outliers) << std::endl;
 
   return 0;
 }

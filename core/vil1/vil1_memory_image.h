@@ -28,40 +28,64 @@ struct vil1_memory_image_format
 //: vil1_image, stored entirely in memory
 class vil1_memory_image : public vil1_image
 {
- public:
+public:
   vil1_memory_image();
-  vil1_memory_image(int planes, int w, int h, vil1_memory_image_format const&);
+  vil1_memory_image(int planes, int w, int h, const vil1_memory_image_format &);
   vil1_memory_image(int planes, int w, int h, int components, int bits_per_component, vil1_component_format);
   vil1_memory_image(int planes, int w, int h, vil1_pixel_format_t);
   vil1_memory_image(int w, int h, int components, int bits_per_component, vil1_component_format);
-  vil1_memory_image(int w, int h, vil1_pixel_format_t );
+  vil1_memory_image(int w, int h, vil1_pixel_format_t);
   // this constructor *should* be 'explicit'
-  vil1_memory_image(vil1_image const &);
-  vil1_memory_image(vil1_memory_image const&);
+  vil1_memory_image(const vil1_image &);
+  vil1_memory_image(const vil1_memory_image &);
 
-  vil1_memory_image& operator=(vil1_memory_image const&);
+  vil1_memory_image &
+  operator=(const vil1_memory_image &);
 
-  void resize(int width, int height);
-  void resize(int planes, int width, int height);
-  inline void* get_buffer() { return rows0_[0]; }
+  void
+  resize(int width, int height);
+  void
+  resize(int planes, int width, int height);
+  inline void *
+  get_buffer()
+  {
+    return rows0_[0];
+  }
 
-  vil1_memory_image(void *buf, int planes, int w, int h, vil1_memory_image_format const&);
-  vil1_memory_image(void *buf, int planes, int w, int h, int components, int bits_per_component, vil1_component_format);
-  vil1_memory_image(void *buf, int planes, int w, int h, vil1_pixel_format_t);
-  vil1_memory_image(void *buf, int w, int h, int components, int bits_per_component, vil1_component_format);
-  vil1_memory_image(void *buf, int w, int h, vil1_pixel_format_t );
+  vil1_memory_image(void * buf, int planes, int w, int h, const vil1_memory_image_format &);
+  vil1_memory_image(void * buf,
+                    int planes,
+                    int w,
+                    int h,
+                    int components,
+                    int bits_per_component,
+                    vil1_component_format);
+  vil1_memory_image(void * buf, int planes, int w, int h, vil1_pixel_format_t);
+  vil1_memory_image(void * buf, int w, int h, int components, int bits_per_component, vil1_component_format);
+  vil1_memory_image(void * buf, int w, int h, vil1_pixel_format_t);
 
   // these duplicate the signatures in the base class, but are inlined, so
   // much faster. the base class methods incur a virtual function call.
-  int width () const { return width_ ; }
-  int height() const { return height_; }
+  int
+  width() const
+  {
+    return width_;
+  }
+  int
+  height() const
+  {
+    return height_;
+  }
 
-  void assert_size(int width, int height) const;
+  void
+  assert_size(int width, int height) const;
 
   //: Reset this class's member variables from the image implementation
   // This is useful if the impl object has been modified outside the control of this object.
-  void recache_from_impl();
- protected:
+  void
+  recache_from_impl();
+
+protected:
   // The following informations are cached from the vil1_memory_image_impl :
   int width_;
   int height_;

@@ -21,10 +21,7 @@ vil_dicom_stream_producer::vil_dicom_stream_producer(vil_stream * in_vs)
 }
 
 
-vil_dicom_stream_producer::~vil_dicom_stream_producer()
-{
-  vs_->unref();
-}
+vil_dicom_stream_producer::~vil_dicom_stream_producer() { vs_->unref(); }
 
 
 OFBool
@@ -100,10 +97,7 @@ vil_dicom_stream_factory::vil_dicom_stream_factory(vil_stream * in_vs)
   vs_->ref();
 }
 
-vil_dicom_stream_factory::~vil_dicom_stream_factory()
-{
-  vs_->unref();
-}
+vil_dicom_stream_factory::~vil_dicom_stream_factory() { vs_->unref(); }
 
 
 DcmInputStream *
@@ -121,10 +115,7 @@ vil_dicom_stream_input::vil_dicom_stream_input(vil_stream * vs)
 {}
 
 
-vil_dicom_stream_input::~vil_dicom_stream_input()
-{
-  delete currentProducer();
-}
+vil_dicom_stream_input::~vil_dicom_stream_input() { delete currentProducer(); }
 
 
 DcmInputStreamFactory *

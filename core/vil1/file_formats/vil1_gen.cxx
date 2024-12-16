@@ -16,7 +16,7 @@
 #include "vil1/vil1_image.h"
 #include "vil1/vil1_property.h"
 
-char const * vil1_gen_format_tag = "gen";
+const char * vil1_gen_format_tag = "gen";
 
 vil1_image_impl *
 vil1_gen_file_format::make_input_image(vil1_stream * vs)
@@ -44,7 +44,7 @@ vil1_gen_file_format::make_input_image(vil1_stream * vs)
   return new vil1_gen_generic_image(s);
 }
 
-char const *
+const char *
 vil1_gen_file_format::tag() const
 {
   return vil1_gen_format_tag;
@@ -52,13 +52,13 @@ vil1_gen_file_format::tag() const
 
 /////////////////////////////////////////////////////////////////////////////
 
-char const *
+const char *
 vil1_gen_generic_image::file_format() const
 {
   return vil1_gen_format_tag;
 }
 
-vil1_gen_generic_image::vil1_gen_generic_image(std::string const & /*s*/,
+vil1_gen_generic_image::vil1_gen_generic_image(const std::string & /*s*/,
                                                int /*planes*/,
                                                int /*width*/,
                                                int /*height*/,
@@ -70,10 +70,10 @@ vil1_gen_generic_image::vil1_gen_generic_image(std::string const & /*s*/,
 }
 
 static int
-read_int(char const ** p_inout)
+read_int(const char ** p_inout)
 {
   int val = 0;
-  char const * p = *p_inout;
+  const char * p = *p_inout;
   while (*p >= '0' && *p <= '9')
   {
     int d = *p - '0';
@@ -85,9 +85,9 @@ read_int(char const ** p_inout)
 }
 
 void
-vil1_gen_generic_image::init(std::string const & s)
+vil1_gen_generic_image::init(const std::string & s)
 {
-  char const * p = s.c_str();
+  const char * p = s.c_str();
   // 1. Skip over "gen:"
   p += 4;
   // 2. Get size
@@ -160,7 +160,7 @@ vil1_gen_generic_image::init(std::string const & s)
 }
 
 bool
-vil1_gen_generic_image::get_property(char const * tag, void * prop) const
+vil1_gen_generic_image::get_property(const char * tag, void * prop) const
 {
   if (0 == std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool *)prop) = true : true;
@@ -200,13 +200,15 @@ vil1_gen_generic_image::get_section(void * buf, int /*x0*/, int /*y0*/, int xs, 
 }
 
 bool
-vil1_gen_generic_image::put_section(void const * /*buf*/, int /*x0*/, int /*y0*/, int /*xs*/, int /*ys*/)
+vil1_gen_generic_image::put_section(const void * /*buf*/, int /*x0*/, int /*y0*/, int /*xs*/, int /*ys*/)
 {
   std::abort();
   return false;
 }
 
-vil1_image vil1_gen_generic_image::get_plane(unsigned int plane) const {
+vil1_image
+vil1_gen_generic_image::get_plane(unsigned int plane) const
+{
   assert(plane == 0);
   return const_cast<vil1_gen_generic_image *>(this);
 }

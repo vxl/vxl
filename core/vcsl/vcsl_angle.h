@@ -16,8 +16,7 @@
 #include "vcsl_unit_sptr.h"
 
 //: Angle dimension
-class vcsl_angle
-  : public vcsl_dimension
+class vcsl_angle : public vcsl_dimension
 {
   //***************************************************************************
   // Constructors/Destructor
@@ -26,7 +25,7 @@ class vcsl_angle
   // Default constructor
   vcsl_angle() = default;
 
- public:
+public:
   // Destructor
   ~vcsl_angle() override = default;
 
@@ -36,18 +35,21 @@ class vcsl_angle
 
   //: Is `new_unit' a compatible unit for the dimension ?
   // Pure virtual function of vcsl_dimension
-  bool compatible_unit(vcsl_unit_sptr const& new_unit) const override;
+  bool
+  compatible_unit(const vcsl_unit_sptr & new_unit) const override;
 
   //: Return the standard unit associated to the dimension
   // Pure virtual function of vcsl_dimension
-  vcsl_unit_sptr standard_unit() const override;
+  vcsl_unit_sptr
+  standard_unit() const override;
 
   //***************************************************************************
   // Singleton pattern
   //***************************************************************************
 
   //: Return the reference to the unique vcsl_angle object
-  static vcsl_angle_sptr instance();
+  static vcsl_angle_sptr
+  instance();
 };
 
 #endif // vcsl_angle_h_

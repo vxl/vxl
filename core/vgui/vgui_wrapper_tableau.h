@@ -28,56 +28,68 @@
 //    I would welcome suggestions for a better name.
 class vgui_wrapper_tableau : public vgui_tableau
 {
- public:
+public:
   //: Constructor - don't use this, use vgui_wrapper_tableau_new.
   //  The child tableau is added later using add_child.
   vgui_wrapper_tableau();
 
   //: Constructor - don't use this, use vgui_wrapper_tableau_new.
   //  Takes the single child tableau for this tableau.
-  vgui_wrapper_tableau(vgui_tableau_sptr const&);
+  vgui_wrapper_tableau(const vgui_tableau_sptr &);
 
   //: Adds given tableau as child if none exists, else causes error.
-  bool add_child(vgui_tableau_sptr const&);
+  bool
+  add_child(const vgui_tableau_sptr &);
 
   //: The child tableau is removed if it is the same as the given tableau.
-  bool remove_child(vgui_tableau_sptr const&);
+  bool
+  remove_child(const vgui_tableau_sptr &);
 
   //: Returns the child's file_name if it exists.
-  std::string file_name() const;
+  std::string
+  file_name() const;
 
   //: Returns nice version of the name which also includes details of the child.
-  std::string pretty_name() const;
+  std::string
+  pretty_name() const;
 
   //: Returns the type of tableau ('vgui_wrapper_tableau').
-  std::string type_name() const;
+  std::string
+  type_name() const;
 
   //: Handle all events sent to this tableau.
   //  It is pointless to derive from vgui_wrapper_tableau
   //  unless this method is also overridden!
-  bool handle(vgui_event const &);
+  bool
+  handle(const vgui_event &);
 
   //: Get the bounding box for this tableau.
   //  Defaults to getting the bounding box of the child.
-  bool get_bounding_box(float low[3], float high[3]) const;
+  bool
+  get_bounding_box(float low[3], float high[3]) const;
 
   //: The single child of this tableau.
   vgui_parent_child_link child;
 
- protected:
+protected:
   // Destructor - called by vgui_wrapper_tableau_sptr.
   ~vgui_wrapper_tableau();
 };
 
 //: Create a smart-pointer to a vgui_wrapper_tableau.
-struct vgui_wrapper_tableau_new : public vgui_wrapper_tableau_sptr {
+struct vgui_wrapper_tableau_new : public vgui_wrapper_tableau_sptr
+{
   typedef vgui_wrapper_tableau_sptr base;
 
   //: Constructor - creates a default vgui_wrapper_tableau.
-  vgui_wrapper_tableau_new() : base(new vgui_wrapper_tableau()) { }
+  vgui_wrapper_tableau_new()
+    : base(new vgui_wrapper_tableau())
+  {}
 
   //: Constructor - takes the single child for the vgui_wrapper_tableau.
-  vgui_wrapper_tableau_new(vgui_tableau_sptr const&b) : base(new vgui_wrapper_tableau(b)) { }
+  vgui_wrapper_tableau_new(const vgui_tableau_sptr & b)
+    : base(new vgui_wrapper_tableau(b))
+  {}
 };
 
 #endif // vgui_wrapper_tableau_h_

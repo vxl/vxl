@@ -23,37 +23,40 @@
 //  more constraint \f$ ||p||=1 \f$, the degrees of freedom in the
 //  parameters is actually m-1.
 
-class vrel_orthogonal_regression : public vrel_estimation_problem {
+class vrel_orthogonal_regression : public vrel_estimation_problem
+{
 public:
-
   //: Constructor from a matrix.
-  vrel_orthogonal_regression( const vnl_matrix<double>& pts );
+  vrel_orthogonal_regression(const vnl_matrix<double> & pts);
 
   //: Constructor from a vector of points.
-  vrel_orthogonal_regression( const std::vector<vnl_vector<double> >& pts );
+  vrel_orthogonal_regression(const std::vector<vnl_vector<double>> & pts);
 
   //: Destructor.
   ~vrel_orthogonal_regression() override;
 
   //: Total number of samples
-  unsigned int num_samples( ) const override;
+  unsigned int
+  num_samples() const override;
 
   //: Generate a parameter estimate from a minimal sample set.
-  bool fit_from_minimal_set( const std::vector<int>& point_indices,
-                             vnl_vector<double>& params ) const override;
+  bool
+  fit_from_minimal_set(const std::vector<int> & point_indices, vnl_vector<double> & params) const override;
 
   //: Compute signed fit residuals relative to the parameter estimate.
-  void compute_residuals( const vnl_vector<double>& params,
-                          std::vector<double>& residuals ) const override;
+  void
+  compute_residuals(const vnl_vector<double> & params, std::vector<double> & residuals) const override;
 
   //: Weighted least squares parameter estimate.
-  bool weighted_least_squares_fit( vnl_vector<double>& params,
-                                   vnl_matrix<double>& cofact,
-                                   const std::vector<double>* weights=nullptr ) const override;
+  bool
+  weighted_least_squares_fit(vnl_vector<double> & params,
+                             vnl_matrix<double> & cofact,
+                             const std::vector<double> * weights = nullptr) const override;
 
-public:  // testing / debugging utility
-    //: \brief Print information as a test utility.
-  void print_points() const;
+public: // testing / debugging utility
+        //: \brief Print information as a test utility.
+  void
+  print_points() const;
 
 protected:
   vnl_matrix<double> vars_;

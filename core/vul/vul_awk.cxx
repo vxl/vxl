@@ -33,10 +33,7 @@ vul_awk::vul_awk(std::istream & s, ModeFlags mode)
   next();
 }
 
-vul_awk::~vul_awk()
-{
-  delete[] split_line_;
-}
+vul_awk::~vul_awk() { delete[] split_line_; }
 
 void
 vul_awk::next()
@@ -67,7 +64,7 @@ vul_awk::next()
       line_ += char(c);
     }
 
-    char const * linep = line_.c_str();
+    const char * linep = line_.c_str();
 
     // copy string
     delete[] split_line_;
@@ -136,10 +133,10 @@ vul_awk::next()
   }
 }
 
-char const *
+const char *
 vul_awk::line_from(int field_number) const
 {
-  char const * p = line_.c_str();
+  const char * p = line_.c_str();
   if (field_number >= NF())
     field_number = NF() - 1;
   if (field_number < 0)

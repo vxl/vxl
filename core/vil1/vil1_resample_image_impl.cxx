@@ -15,7 +15,7 @@
 #endif
 #include <cassert>
 
-vil1_resample_image_impl::vil1_resample_image_impl(vil1_image const & underlying, unsigned nw, unsigned nh)
+vil1_resample_image_impl::vil1_resample_image_impl(const vil1_image & underlying, unsigned nw, unsigned nh)
   : base(underlying)
   , new_width(nw)
   , new_height(nh)
@@ -35,13 +35,13 @@ vil1_resample_image_impl::get_plane(unsigned int p) const
 }
 
 bool
-vil1_resample_image_impl::put_section(void const *, int, int, int, int)
+vil1_resample_image_impl::put_section(const void *, int, int, int, int)
 {
   return false;
 }
 
 bool
-vil1_resample_image_impl::get_property(char const *, void *) const
+vil1_resample_image_impl::get_property(const char *, void *) const
 {
   return false;
 }

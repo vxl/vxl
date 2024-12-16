@@ -19,7 +19,7 @@
 
 #include "vxl_config.h"
 
-char const * vil_ras_format_tag = "ras";
+const char * vil_ras_format_tag = "ras";
 
 
 // ===========================================================================
@@ -121,7 +121,7 @@ vil_ras_file_format::make_output_image(vil_stream * vs,
 }
 
 
-char const *
+const char *
 vil_ras_file_format::tag() const
 {
   return vil_ras_format_tag;
@@ -141,14 +141,14 @@ vil_ras_image::vil_ras_image(vil_stream * vs)
 
 
 bool
-vil_ras_image::get_property(char const * /*tag*/, void * /*prop*/) const
+vil_ras_image::get_property(const char * /*tag*/, void * /*prop*/) const
 {
   // This is not an in-memory image type, nor is it read-only:
   return false;
 }
 
 
-char const *
+const char *
 vil_ras_image::file_format() const
 {
   return vil_ras_format_tag;

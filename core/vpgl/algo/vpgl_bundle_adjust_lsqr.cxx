@@ -41,16 +41,26 @@ vpgl_bundle_adjust_lsqr::vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
 //  Each image point is assigned an inverse covariance (error projector) matrix
 // \note image points are not homogeneous because they require finite points to
 //       measure projection error
-vpgl_bundle_adjust_lsqr::vpgl_bundle_adjust_lsqr(
-    unsigned int num_params_per_a, unsigned int num_params_per_b,
-    unsigned int num_params_c, std::vector<vgl_point_2d<double>> image_points,
-    const std::vector<vnl_matrix<double>> &inv_covars,
-    const std::vector<std::vector<bool>> &mask)
-    : vnl_sparse_lst_sqr_function(mask.size(), num_params_per_a, mask[0].size(),
-                                  num_params_per_b, num_params_c, mask, 2,
-                                  use_gradient, use_weights),
-      image_points_(std::move(image_points)), use_covars_(true), scale2_(1.0),
-      iteration_count_(0) {
+vpgl_bundle_adjust_lsqr::vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
+                                                 unsigned int num_params_per_b,
+                                                 unsigned int num_params_c,
+                                                 std::vector<vgl_point_2d<double>> image_points,
+                                                 const std::vector<vnl_matrix<double>> & inv_covars,
+                                                 const std::vector<std::vector<bool>> & mask)
+  : vnl_sparse_lst_sqr_function(mask.size(),
+                                num_params_per_a,
+                                mask[0].size(),
+                                num_params_per_b,
+                                num_params_c,
+                                mask,
+                                2,
+                                use_gradient,
+                                use_weights)
+  , image_points_(std::move(image_points))
+  , use_covars_(true)
+  , scale2_(1.0)
+  , iteration_count_(0)
+{
   assert(image_points.size() == inv_covars.size());
   vnl_matrix<double> U(2, 2, 0.0);
   for (const auto & S : inv_covars)
@@ -86,9 +96,9 @@ vpgl_bundle_adjust_lsqr::vpgl_bundle_adjust_lsqr(
 //  The parameters in b for each 3D point are {px, py, pz}
 //  the non-homogeneous position.
 void
-vpgl_bundle_adjust_lsqr::f(vnl_vector<double> const & a,
-                           vnl_vector<double> const & b,
-                           vnl_vector<double> const & c,
+vpgl_bundle_adjust_lsqr::f(const vnl_vector<double> & a,
+                           const vnl_vector<double> & b,
+                           const vnl_vector<double> & c,
                            vnl_vector<double> & e)
 {
   for (unsigned int i = 0; i < number_of_a(); ++i)
@@ -130,9 +140,9 @@ vpgl_bundle_adjust_lsqr::f(vnl_vector<double> const & a,
 void
 vpgl_bundle_adjust_lsqr::fij(int i,
                              int j,
-                             vnl_vector<double> const & ai,
-                             vnl_vector<double> const & bj,
-                             vnl_vector<double> const & c,
+                             const vnl_vector<double> & ai,
+                             const vnl_vector<double> & bj,
+                             const vnl_vector<double> & c,
                              vnl_vector<double> & fij)
 {
   //: Construct the ith camera
@@ -160,9 +170,9 @@ vpgl_bundle_adjust_lsqr::fij(int i,
 
 //: Compute the sparse Jacobian in block form.
 void
-vpgl_bundle_adjust_lsqr::jac_blocks(vnl_vector<double> const & a,
-                                    vnl_vector<double> const & b,
-                                    vnl_vector<double> const & c,
+vpgl_bundle_adjust_lsqr::jac_blocks(const vnl_vector<double> & a,
+                                    const vnl_vector<double> & b,
+                                    const vnl_vector<double> & c,
                                     std::vector<vnl_matrix<double>> & A,
                                     std::vector<vnl_matrix<double>> & B,
                                     std::vector<vnl_matrix<double>> & C)
@@ -201,10 +211,10 @@ vpgl_bundle_adjust_lsqr::jac_blocks(vnl_vector<double> const & a,
 void
 vpgl_bundle_adjust_lsqr::compute_weight_ij(int /*i*/,
                                            int /*j*/,
-                                           vnl_vector<double> const & /*ai*/,
-                                           vnl_vector<double> const & /*bj*/,
-                                           vnl_vector<double> const & /*c*/,
-                                           vnl_vector<double> const & fij,
+                                           const vnl_vector<double> & /*ai*/,
+                                           const vnl_vector<double> & /*bj*/,
+                                           const vnl_vector<double> & /*c*/,
+                                           const vnl_vector<double> & fij,
                                            double & weight)
 {
   double u2 = fij.squared_magnitude() / scale2_;
@@ -219,8 +229,8 @@ vpgl_bundle_adjust_lsqr::compute_weight_ij(int /*i*/,
 
 //: compute the 2x3 Jacobian of camera projection with respect to point location df/dpt where $f(pt) = P*pt$
 void
-vpgl_bundle_adjust_lsqr::jac_inhomg_3d_point(vnl_double_3x4 const & P,
-                                             vnl_vector<double> const & pt,
+vpgl_bundle_adjust_lsqr::jac_inhomg_3d_point(const vnl_double_3x4 & P,
+                                             const vnl_vector<double> & pt,
                                              vnl_matrix<double> & J)
 {
   double denom = P(2, 0) * pt[0] + P(2, 1) * pt[1] + P(2, 2) * pt[2] + P(2, 3);
@@ -252,9 +262,9 @@ vpgl_bundle_adjust_lsqr::jac_inhomg_3d_point(vnl_double_3x4 const & P,
 
 //: compute the 2x3 Jacobian of camera projection with respect to camera center df/dC where $f(C) = [M | -M*C]*pt$
 void
-vpgl_bundle_adjust_lsqr::jac_camera_center(vnl_double_3x3 const & M,
-                                           vnl_vector<double> const & C,
-                                           vnl_vector<double> const & pt,
+vpgl_bundle_adjust_lsqr::jac_camera_center(const vnl_double_3x3 & M,
+                                           const vnl_vector<double> & C,
+                                           const vnl_vector<double> & pt,
                                            vnl_matrix<double> & J)
 {
   // compute by swapping the role of the camera center and point position
@@ -270,10 +280,10 @@ vpgl_bundle_adjust_lsqr::jac_camera_center(vnl_double_3x3 const & M,
 // K*rod_to_matrix(r)*[I | -C]*pt$
 //  Here r is a Rodrigues vector, K is an upper triangular calibration matrix
 void
-vpgl_bundle_adjust_lsqr::jac_camera_rotation(vnl_double_3x3 const & K,
-                                             vnl_vector<double> const & C,
-                                             vnl_vector<double> const & r,
-                                             vnl_vector<double> const & pt,
+vpgl_bundle_adjust_lsqr::jac_camera_rotation(const vnl_double_3x3 & K,
+                                             const vnl_vector<double> & C,
+                                             const vnl_vector<double> & r,
+                                             const vnl_vector<double> & pt,
                                              vnl_matrix<double> & J)
 {
   vnl_double_3 t(pt[0] - C[0], pt[1] - C[1], pt[2] - C[2]);
@@ -355,7 +365,7 @@ vpgl_bundle_adjust_lsqr::jac_camera_rotation(vnl_double_3x3 const & K,
 
 //: Fast conversion of rotation from Rodrigues vector to matrix
 vnl_double_3x3
-vpgl_bundle_adjust_lsqr::rod_to_matrix(vnl_vector<double> const & r)
+vpgl_bundle_adjust_lsqr::rod_to_matrix(const vnl_vector<double> & r)
 {
   double x2 = r[0] * r[0], y2 = r[1] * r[1], z2 = r[2] * r[2];
   double m = x2 + y2 + z2;

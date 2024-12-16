@@ -51,24 +51,25 @@ class vgui_dialog_extensions_impl;
 //   send_order(the_table, the_dressing, has_mayo);
 // \endcode
 
-class vgui_dialog_extensions: public vgui_dialog
+class vgui_dialog_extensions : public vgui_dialog
 {
- public:
-
+public:
   //: Constructor - takes the title of the dialog box.
-  vgui_dialog_extensions(const char* name);
- virtual ~vgui_dialog_extensions();
+  vgui_dialog_extensions(const char * name);
+  virtual ~vgui_dialog_extensions();
 
   //: directory browsers
-  void dir (const char* label, std::string& regexp, std::string& dirpath);
+  void
+  dir(const char * label, std::string & regexp, std::string & dirpath);
 
-  bool ask();
+  bool
+  ask();
 
-  void line_break();
+  void
+  line_break();
 
- protected:
-
-  //vgui_dialog_extensions_impl* impl;
+protected:
+  // vgui_dialog_extensions_impl* impl;
 };
 
 #endif // vgui_dialog_extensions_h_

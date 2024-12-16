@@ -36,77 +36,122 @@ enum vil_border_mode
 template <class imT>
 class vil_border
 {
- public:
+public:
   typedef typename imT::pixel_type pixel_type;
 
- public:
+public:
   //: Default constructor, creates a constant border.
-   vil_border() : constant_value_() {}
+  vil_border()
+    : constant_value_()
+  {}
 
-   //: Set the border kind.
-   void set_kind(vil_border_mode brdr_kind) { border_kind_ = brdr_kind; }
-   //: Get the current border kind.
-   vil_border_mode kind() const { return border_kind_; }
+  //: Set the border kind.
+  void
+  set_kind(vil_border_mode brdr_kind)
+  {
+    border_kind_ = brdr_kind;
+  }
+  //: Get the current border kind.
+  vil_border_mode
+  kind() const
+  {
+    return border_kind_;
+  }
 
-   //: True if border values are constant.
-   inline bool is_constant() const {
-     return border_kind_ == vil_border_constant; }
+  //: True if border values are constant.
+  inline bool
+  is_constant() const
+  {
+    return border_kind_ == vil_border_constant;
+  }
 
   //: If border kind is vil_border_constant, returns the border value.
-  inline const pixel_type& constant_value() const { return constant_value_; }
+  inline const pixel_type &
+  constant_value() const
+  {
+    return constant_value_;
+  }
 
   //: Set the border value if the border kind is vil_border_constant.
-  void set_constant_value (const pixel_type& val) { constant_value_ = val; }
+  void
+  set_constant_value(const pixel_type & val)
+  {
+    constant_value_ = val;
+  }
 
   //: Return read-only reference to pixel at (i,j,p) on the given image.
   // If the pixel falls out of the image range, the border value is returned.
-  inline const pixel_type&
-  operator()(const imT& im, int i, int j, int p = 0) const
+  inline const pixel_type &
+  operator()(const imT & im, int i, int j, int p = 0) const
   {
-    if (im.in_range(i,j,p))
-      return im(i,j,p);
+    if (im.in_range(i, j, p))
+      return im(i, j, p);
 
     return in_border(im, i, j, p);
   }
 
- protected:
-  inline const pixel_type&
-  in_border(const imT& im, int i, int j, int p = 0) const
+protected:
+  inline const pixel_type &
+  in_border(const imT & im, int i, int j, int p = 0) const
   {
     switch (border_kind_)
     {
-    case vil_border_constant:
-      return constant_value_;
-    case vil_border_geodesic:
-      if (i < 0) i = 0; else if (i >= (int)im.ni()) i = im.ni()-1;
-      if (j < 0) j = 0; else if (j >= (int)im.nj()) j = im.nj()-1;
-      if (p < 0) p = 0; else if (p >= (int)im.nplanes()) p = im.nplanes()-1;
-      return im(i,j,p);
-    case vil_border_reflect:
-      if (i < 0) i = -i-1; else if (i >= (int)im.ni()) i = 2*im.ni()-i-1;
-      if (j < 0) j = -j-1; else if (j >= (int)im.nj()) j = 2*im.nj()-j-1;
-      if (p < 0) p = -p-1; else if (p >= (int)im.nplanes()) p = 2*im.nplanes()-p-1;
-      return im(i,j,p);
-    case vil_border_periodic:
-      if (i < 0) i = im.ni()-((-i)%im.ni());
-      else i = i%im.ni();
+      case vil_border_constant:
+        return constant_value_;
+      case vil_border_geodesic:
+        if (i < 0)
+          i = 0;
+        else if (i >= (int)im.ni())
+          i = im.ni() - 1;
+        if (j < 0)
+          j = 0;
+        else if (j >= (int)im.nj())
+          j = im.nj() - 1;
+        if (p < 0)
+          p = 0;
+        else if (p >= (int)im.nplanes())
+          p = im.nplanes() - 1;
+        return im(i, j, p);
+      case vil_border_reflect:
+        if (i < 0)
+          i = -i - 1;
+        else if (i >= (int)im.ni())
+          i = 2 * im.ni() - i - 1;
+        if (j < 0)
+          j = -j - 1;
+        else if (j >= (int)im.nj())
+          j = 2 * im.nj() - j - 1;
+        if (p < 0)
+          p = -p - 1;
+        else if (p >= (int)im.nplanes())
+          p = 2 * im.nplanes() - p - 1;
+        return im(i, j, p);
+      case vil_border_periodic:
+        if (i < 0)
+          i = im.ni() - ((-i) % im.ni());
+        else
+          i = i % im.ni();
 
-      if (j < 0) j = im.nj()-((-j)%im.nj());
-      else j = j%im.nj();
+        if (j < 0)
+          j = im.nj() - ((-j) % im.nj());
+        else
+          j = j % im.nj();
 
-      if (p < 0) p = im.nplanes()-((-p)%im.nplanes());
-      else p = p%im.nplanes();
+        if (p < 0)
+          p = im.nplanes() - ((-p) % im.nplanes());
+        else
+          p = p % im.nplanes();
 
-      return im(i,j,p);
-    default:
-      assert(false);
-      return constant_value_; // To avoid warnings
+        return im(i, j, p);
+      default:
+        assert(false);
+        return constant_value_; // To avoid warnings
     };
   }
 
- private:
-   vil_border_mode border_kind_{vil_border_constant};
-   pixel_type constant_value_;
+private:
+  vil_border_mode border_kind_{ vil_border_constant };
+  pixel_type constant_value_;
 };
 
 //: Provides a pixel accessor which is syntax-compatible with vil_image_view.
@@ -115,30 +160,33 @@ class vil_border
 template <class imT>
 class vil_border_accessor
 {
- public:
+public:
   typedef typename imT::pixel_type pixel_type;
 
- public:
+public:
   //: Constructor.
-  vil_border_accessor(const imT& img, const vil_border<imT>& brdr)
-  : im(img), border(brdr)
+  vil_border_accessor(const imT & img, const vil_border<imT> & brdr)
+    : im(img)
+    , border(brdr)
   {}
 
   //: Returns a const reference on the pixel (i,j,p).
   // If the pixel falls out of the image range, a border value is returned.
-  inline const pixel_type&
+  inline const pixel_type &
   operator()(int i, int j, int p = 0) const
-  { return border(im, i, j, p); }
+  {
+    return border(im, i, j, p);
+  }
 
- private:
-  const imT& im;
+private:
+  const imT & im;
   vil_border<imT> border;
 };
 
 //: Instantiates a border accessor, provided for convenience.
 template <class imT>
 vil_border_accessor<imT>
-vil_border_create_accessor(const imT& im, const vil_border<imT>& border)
+vil_border_create_accessor(const imT & im, const vil_border<imT> & border)
 {
   return vil_border_accessor<imT>(im, border);
 }
@@ -146,7 +194,7 @@ vil_border_create_accessor(const imT& im, const vil_border<imT>& border)
 //: Instantiate a constant border whose type is derived from imT.
 template <class imT>
 inline vil_border<imT>
-vil_border_create_constant(const imT&, typename imT::pixel_type constant_val = 0)
+vil_border_create_constant(const imT &, typename imT::pixel_type constant_val = 0)
 {
   vil_border<imT> border;
   border.set_kind(vil_border_constant);
@@ -157,7 +205,7 @@ vil_border_create_constant(const imT&, typename imT::pixel_type constant_val = 0
 //: Instantiate a geodesic border whose type is derived from imT.
 template <class imT>
 inline vil_border<imT>
-vil_border_create_geodesic(const imT&)
+vil_border_create_geodesic(const imT &)
 {
   vil_border<imT> border;
   border.set_kind(vil_border_geodesic);
@@ -167,7 +215,7 @@ vil_border_create_geodesic(const imT&)
 //: Instantiate a reflect border whose type is derived from imT.
 template <class imT>
 inline vil_border<imT>
-vil_border_create_reflect(const imT&)
+vil_border_create_reflect(const imT &)
 {
   vil_border<imT> border;
   border.set_kind(vil_border_reflect);
@@ -177,7 +225,7 @@ vil_border_create_reflect(const imT&)
 //: Instantiate a reflect border whose type is derived from imT.
 template <class imT>
 inline vil_border<imT>
-vil_border_create_periodic(const imT&)
+vil_border_create_periodic(const imT &)
 {
   vil_border<imT> border;
   border.set_kind(vil_border_periodic);

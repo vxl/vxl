@@ -32,59 +32,71 @@ class vgui_soview2D;
 //  It behaves like an acetate, but is more efficient.
 class vgui_listmanager2D_tableau : public vgui_tableau
 {
- public:
+public:
   //: Constructor - don't use this, use vgui_listmanager2D_tableau_new.
   //  Creates an empty vgui_listmanager2D_tableau.
   vgui_listmanager2D_tableau();
 
   //: Destructor.
- ~vgui_listmanager2D_tableau();
+  ~vgui_listmanager2D_tableau();
 
   //: Returns the type of this tableau ('vgui_listmanager2D_tableau').
-  std::string type_name() const;
+  std::string
+  type_name() const;
 
   //: Add given vgui_displaylist2D_tableau to the end of the list of children.
-  void add(vgui_displaylist2D_tableau_sptr const&);
+  void
+  add(const vgui_displaylist2D_tableau_sptr &);
 
   //: Remove the given vgui_displaylist2D_tableau from the list of children.
-  void remove(vgui_displaylist2D_tableau_sptr const&);
+  void
+  remove(const vgui_displaylist2D_tableau_sptr &);
 
   //: Observers to be notified when a child is added or removed.
   vgui_observable observers;
 
   //: Make child at given index position active/inactive.
-  void set_active(int, bool);
+  void
+  set_active(int, bool);
 
   //: Make child at given index position visible/invisible.
-  void set_visible(int, bool);
+  void
+  set_visible(int, bool);
 
   //: Return true if the child at the given index is active.
-  bool is_active(int);
+  bool
+  is_active(int);
 
   //: Return true if the child at the given index is visible.
-  bool is_visible(int);
+  bool
+  is_visible(int);
 
   //: Handle all events sent to this tableau.
   //  In particular, use draw events to draw the child tableaux.
-  bool handle(const vgui_event&);
+  bool
+  handle(const vgui_event &);
 
   //: Print info on this tableau on cerr.
-  bool help();
+  bool
+  help();
 
   //: Called when a key is pressed inside the rendering area.
   //  Uses key presses '1' to '9' to toggle the child tableau.
-  bool key_press(int /*x*/, int /*y*/, vgui_key key, vgui_modifier);
+  bool
+  key_press(int /*x*/, int /*y*/, vgui_key key, vgui_modifier);
 
   //: Called when the mouse is pressed inside the rendering area.
-  bool mouse_down(int x, int y, vgui_button button, vgui_modifier modifier);
+  bool
+  mouse_down(int x, int y, vgui_button button, vgui_modifier modifier);
 
   //: Called when the mouse is moved inside the rendering area.
-  bool motion(int x, int y);
+  bool
+  motion(int x, int y);
 
- protected:
-
+protected:
   // helper
-  bool index_ok(int);
+  bool
+  index_ok(int);
 
   // data
   std::vector<vgui_parent_child_link> children;
@@ -92,22 +104,28 @@ class vgui_listmanager2D_tableau : public vgui_tableau
   std::vector<bool> visible;
 
   vgui_displaylist2D_tableau_sptr highlight_list;
-  vgui_soview2D *highlight_so;
+  vgui_soview2D * highlight_so;
   vgui_event saved_event_;
 
-  vgui_displaylist2D_tableau_sptr contains_hit(std::vector<unsigned> const& names);
-  void get_hits(float x, float y, std::vector<std::vector<unsigned> >* hits);
-  void find_closest(float x, float y, std::vector<std::vector<unsigned> >* hits,
-                    vgui_soview2D** closest_so,
-                    vgui_displaylist2D_tableau_sptr * closest_display);
+  vgui_displaylist2D_tableau_sptr
+  contains_hit(const std::vector<unsigned> & names);
+  void
+  get_hits(float x, float y, std::vector<std::vector<unsigned>> * hits);
+  void
+  find_closest(float x,
+               float y,
+               std::vector<std::vector<unsigned>> * hits,
+               vgui_soview2D ** closest_so,
+               vgui_displaylist2D_tableau_sptr * closest_display);
 };
 
 //: Creates a smart-pointer to a new vgui_listmanager2D_tableau.
 struct vgui_listmanager2D_tableau_new : public vgui_listmanager2D_tableau_sptr
 {
   //: Creates a smart-pointer to a new empty vgui_listmanager2D_tableau.
-  vgui_listmanager2D_tableau_new() :
-    vgui_listmanager2D_tableau_sptr(new vgui_listmanager2D_tableau) { }
+  vgui_listmanager2D_tableau_new()
+    : vgui_listmanager2D_tableau_sptr(new vgui_listmanager2D_tableau)
+  {}
 };
 
 #endif // vgui_listmanager2D_tableau_h_

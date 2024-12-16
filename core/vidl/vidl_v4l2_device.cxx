@@ -154,7 +154,7 @@ vidl_v4l2_device::vidl_v4l2_device(const char * file)
 #ifdef DEBUG
   std::cerr << "Looking for inputs..." << fd << std::endl;
 #endif
-  for (inp.index = 0; - 1 != xioctl(fd, VIDIOC_ENUMINPUT, &inp); inp.index++)
+  for (inp.index = 0; -1 != xioctl(fd, VIDIOC_ENUMINPUT, &inp); inp.index++)
   {
 #ifdef DEBUG
     std::cerr << "Inserting input..." << std::endl;

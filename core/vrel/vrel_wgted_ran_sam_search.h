@@ -15,29 +15,33 @@
 
 class vrel_wgted_ran_sam_search : public vrel_ran_sam_search
 {
- public:
+public:
   //: Constructor using a non-deterministic random-sampling seed.
-   vrel_wgted_ran_sam_search() : vrel_ran_sam_search() {}
+  vrel_wgted_ran_sam_search()
+    : vrel_ran_sam_search()
+  {}
 
-   //: Constructor using a given random-sampling seed.
-   vrel_wgted_ran_sam_search(int seed)
-       : vrel_ran_sam_search(seed), is_sim_wgt_set_(false) {}
+  //: Constructor using a given random-sampling seed.
+  vrel_wgted_ran_sam_search(int seed)
+    : vrel_ran_sam_search(seed)
+    , is_sim_wgt_set_(false)
+  {}
 
-   ~vrel_wgted_ran_sam_search() override;
+  ~vrel_wgted_ran_sam_search() override;
 
-   // ----------------------------------------
-   //  Main estimation functions
-   // ----------------------------------------
+  // ----------------------------------------
+  //  Main estimation functions
+  // ----------------------------------------
 
-   //: \brief Estimation for an "ordinary" estimation problem.
-   bool estimate(const vrel_estimation_problem *problem,
-                 const vrel_objective *obj_fcn) override;
+  //: \brief Estimation for an "ordinary" estimation problem.
+  bool
+  estimate(const vrel_estimation_problem * problem, const vrel_objective * obj_fcn) override;
 
-   // -----------------------------------------
-   // Access to results and computed parameters
-   // -----------------------------------------
+  // -----------------------------------------
+  // Access to results and computed parameters
+  // -----------------------------------------
 
- protected:
+protected:
   // ------------------------------------------------------------
   //  Random sampling functions.  Don't call directly.  These are
   //  public for test purposes.
@@ -45,25 +49,30 @@ class vrel_wgted_ran_sam_search : public vrel_ran_sam_search
 
   //: Determine the next random sample, filling in the "sample" vector.
   void
-  next_sample( unsigned int taken, unsigned int num_points, std::vector<int>& sample,
-               unsigned int points_per_sample ) override;
+  next_sample(unsigned int taken,
+              unsigned int num_points,
+              std::vector<int> & sample,
+              unsigned int points_per_sample) override;
 
- protected:
-  struct prob_interval {
-    int index_{-1};
-    double lower_{-1.0};
-    double upper_{-1.0};
+protected:
+  struct prob_interval
+  {
+    int index_{ -1 };
+    double lower_{ -1.0 };
+    double upper_{ -1.0 };
 
     prob_interval() = default;
 
-    bool operator< ( const prob_interval& rhs ) const {
+    bool
+    operator<(const prob_interval & rhs) const
+    {
       return this->upper_ < rhs.upper_;
     }
   };
 
   //: store the intervals
   std::vector<prob_interval> intervals_;
-  bool is_sim_wgt_set_{false};
+  bool is_sim_wgt_set_{ false };
 };
 
 #endif

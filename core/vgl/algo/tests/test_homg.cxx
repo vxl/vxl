@@ -568,7 +568,7 @@ test_homg_plane_3d()
 }
 
 inline bool
-collinear(vgl_homg_line_2d<int> const & l1, vgl_homg_line_2d<int> const & l2, vgl_homg_line_2d<int> const & l3)
+collinear(const vgl_homg_line_2d<int> & l1, const vgl_homg_line_2d<int> & l2, const vgl_homg_line_2d<int> & l3)
 {
   return concurrent(l1, l2, l3);
 }
@@ -588,10 +588,10 @@ ratio(vgl_homg_line_2d<int> const & l1, vgl_homg_line_2d<int> const & l2, vgl_ho
 }
 
 inline double
-cross_ratio(vgl_homg_line_2d<int> const & l1,
-            vgl_homg_line_2d<int> const & l2,
-            vgl_homg_line_2d<int> const & l3,
-            vgl_homg_line_2d<int> const & l4)
+cross_ratio(const vgl_homg_line_2d<int> & l1,
+            const vgl_homg_line_2d<int> & l2,
+            const vgl_homg_line_2d<int> & l3,
+            const vgl_homg_line_2d<int> & l4)
 {
   vgl_homg_point_2d<int> p1(l1.a(), l1.b(), l1.c());
   vgl_homg_point_2d<int> p2(l2.a(), l2.b(), l2.c());

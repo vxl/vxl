@@ -36,7 +36,7 @@ struct vgui_viewer3D_tableau_spin
 const void * const vgui_viewer3D_tableau::SPIN_EVENT = "x";
 
 //: Constructor - don't use this, use vgui_viewer3D_tableau_new.
-vgui_viewer3D_tableau::vgui_viewer3D_tableau(vgui_tableau_sptr const & s)
+vgui_viewer3D_tableau::vgui_viewer3D_tableau(const vgui_tableau_sptr & s)
   : vgui_wrapper_tableau(s)
   , c_mouse_rotate(vgui_LEFT)
   , c_mouse_translate(vgui_RIGHT)
@@ -221,7 +221,7 @@ vgui_viewer3D_tableau::handle(const vgui_event & e)
 
   if (this->allow_spinning && this->spinning && event.user == &vgui_viewer3D_tableau::SPIN_EVENT)
   {
-    vgui_viewer3D_tableau_spin const * spindata = (vgui_viewer3D_tableau_spin const *)event.data;
+    const vgui_viewer3D_tableau_spin * spindata = (const vgui_viewer3D_tableau_spin *)event.data;
 
     if (spindata->viewer == this)
     {

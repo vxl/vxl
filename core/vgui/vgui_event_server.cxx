@@ -52,7 +52,7 @@ vgui_event_server_interpose_tableau::handle(const vgui_event & event)
 }
 
 //: Construct a vgui_event_server, which grabs all events intended for tableau t
-vgui_event_server::vgui_event_server(vgui_tableau_sptr const & t)
+vgui_event_server::vgui_event_server(const vgui_tableau_sptr & t)
   : grabber_(nullptr)
 {
   use_event_ = false;

@@ -21,26 +21,38 @@ struct vil_stream_section : public vil_stream
   // skip to position 'begin' in underlying stream and translate seeks,
   // reads and writes relative to that position into seeks, reads and
   // writes in the underlying stream.
-  vil_stream_section(vil_stream *underlying, int begin);
+  vil_stream_section(vil_stream * underlying, int begin);
 
   //:
   // as above, but will not allow seeks, reads or writes past 'end'.
-  vil_stream_section(vil_stream *underlying, int begin, int end);
+  vil_stream_section(vil_stream * underlying, int begin, int end);
 
   // implement virtual vil_stream interface:
-  bool ok() const override { return underlying_->ok(); }
-  vil_streampos write(void const* buf, vil_streampos n) override;
-  vil_streampos read(void* buf, vil_streampos n) override;
-  vil_streampos tell() const override { return current_; } // regardless of what the underlying stream is doing.
-  void seek(vil_streampos position) override;
+  bool
+  ok() const override
+  {
+    return underlying_->ok();
+  }
+  vil_streampos
+  write(const void * buf, vil_streampos n) override;
+  vil_streampos
+  read(void * buf, vil_streampos n) override;
+  vil_streampos
+  tell() const override
+  {
+    return current_;
+  } // regardless of what the underlying stream is doing.
+  void
+  seek(vil_streampos position) override;
 
-  vil_streampos file_size() const override;
+  vil_streampos
+  file_size() const override;
 
- protected:
+protected:
   ~vil_stream_section() override;
 
- private:
-  vil_stream *underlying_;
+private:
+  vil_stream * underlying_;
   vil_streampos begin_;
   vil_streampos end_;
   vil_streampos current_;

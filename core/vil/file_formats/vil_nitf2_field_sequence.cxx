@@ -443,22 +443,22 @@ vil_nitf2_field_sequence::get_field(const std::string & tag) const
 }
 
 // Who needs templated functions when we have macros!
-#define NITF_FIELD_SEQ_GET_VALUE(T)                                                                                    \
-  bool vil_nitf2_field_sequence::get_value(std::string tag, T & out_value) const                                       \
-  {                                                                                                                    \
-    vil_nitf2_field * field = get_field(tag);                                                                          \
-    vil_nitf2_scalar_field * scalar_field = field ? field->scalar_field() : 0;                                         \
-    if (!scalar_field)                                                                                                 \
-    {                                                                                                                  \
-      /*std::cerr << "vil_nitf2_field_sequence::get_value(" << tag << "): scalar field not found.\n";*/                \
-      return false;                                                                                                    \
-    }                                                                                                                  \
-    if (!scalar_field->value(out_value))                                                                               \
-    {                                                                                                                  \
-      std::cerr << "vil_nitf2_field_sequence::get_value(" << tag << ") called with wrong type.\n";                     \
-      return false;                                                                                                    \
-    }                                                                                                                  \
-    return true;                                                                                                       \
+#define NITF_FIELD_SEQ_GET_VALUE(T)                                                                     \
+  bool vil_nitf2_field_sequence::get_value(std::string tag, T & out_value) const                        \
+  {                                                                                                     \
+    vil_nitf2_field * field = get_field(tag);                                                           \
+    vil_nitf2_scalar_field * scalar_field = field ? field->scalar_field() : 0;                          \
+    if (!scalar_field)                                                                                  \
+    {                                                                                                   \
+      /*std::cerr << "vil_nitf2_field_sequence::get_value(" << tag << "): scalar field not found.\n";*/ \
+      return false;                                                                                     \
+    }                                                                                                   \
+    if (!scalar_field->value(out_value))                                                                \
+    {                                                                                                   \
+      std::cerr << "vil_nitf2_field_sequence::get_value(" << tag << ") called with wrong type.\n";      \
+      return false;                                                                                     \
+    }                                                                                                   \
+    return true;                                                                                        \
   }
 
 NITF_FIELD_SEQ_GET_VALUE(int)
@@ -470,30 +470,30 @@ NITF_FIELD_SEQ_GET_VALUE(vil_nitf2_location *)
 NITF_FIELD_SEQ_GET_VALUE(vil_nitf2_date_time)
 NITF_FIELD_SEQ_GET_VALUE(vil_nitf2_tagged_record_sequence)
 
-#define NITF_FIELD_SEQ_GET_ARRAY_VALUE(T)                                                                              \
-  bool vil_nitf2_field_sequence::get_value(                                                                            \
-    std::string tag, const vil_nitf2_index_vector & indexes, T & out_value, bool ignore_extra_indexes) const           \
-  {                                                                                                                    \
-    vil_nitf2_field * field = get_field(tag);                                                                          \
-    if (!field)                                                                                                        \
-    {                                                                                                                  \
-      /*std::cerr << "vil_nitf2_field_sequence::get_value(" << tag << ", const vil_nitf2_index_vector&): tag not       \
-       * found.\n"; */                                                                                                 \
-      return false;                                                                                                    \
-    }                                                                                                                  \
-    vil_nitf2_index_vector trimmed_indexes(indexes);                                                                   \
-    if (ignore_extra_indexes && (int)indexes.size() > field->num_dimensions())                                         \
-    {                                                                                                                  \
-      trimmed_indexes.resize(field->num_dimensions());                                                                 \
-    }                                                                                                                  \
-    if (trimmed_indexes.size() == 0)                                                                                   \
-    {                                                                                                                  \
-      return field->scalar_field() && field->scalar_field()->value(out_value);                                         \
-    }                                                                                                                  \
-    else                                                                                                               \
-    {                                                                                                                  \
-      return field->array_field()->value(trimmed_indexes, out_value);                                                  \
-    }                                                                                                                  \
+#define NITF_FIELD_SEQ_GET_ARRAY_VALUE(T)                                                                        \
+  bool vil_nitf2_field_sequence::get_value(                                                                      \
+    std::string tag, const vil_nitf2_index_vector & indexes, T & out_value, bool ignore_extra_indexes) const     \
+  {                                                                                                              \
+    vil_nitf2_field * field = get_field(tag);                                                                    \
+    if (!field)                                                                                                  \
+    {                                                                                                            \
+      /*std::cerr << "vil_nitf2_field_sequence::get_value(" << tag << ", const vil_nitf2_index_vector&): tag not \
+       * found.\n"; */                                                                                           \
+      return false;                                                                                              \
+    }                                                                                                            \
+    vil_nitf2_index_vector trimmed_indexes(indexes);                                                             \
+    if (ignore_extra_indexes && (int)indexes.size() > field->num_dimensions())                                   \
+    {                                                                                                            \
+      trimmed_indexes.resize(field->num_dimensions());                                                           \
+    }                                                                                                            \
+    if (trimmed_indexes.size() == 0)                                                                             \
+    {                                                                                                            \
+      return field->scalar_field() && field->scalar_field()->value(out_value);                                   \
+    }                                                                                                            \
+    else                                                                                                         \
+    {                                                                                                            \
+      return field->array_field()->value(trimmed_indexes, out_value);                                            \
+    }                                                                                                            \
   }
 
 NITF_FIELD_SEQ_GET_ARRAY_VALUE(int) // expanded below for debugging

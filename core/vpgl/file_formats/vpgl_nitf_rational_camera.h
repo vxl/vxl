@@ -31,48 +31,82 @@
 
 class vpgl_nitf_rational_camera : public vpgl_rational_camera<double>
 {
- public:
+public:
   // note: to be consistent with point coords (x, y)
-  enum geopt_coord { LON, LAT };
-  enum igeolo_order {UL, UR, LR, LL};
+  enum geopt_coord
+  {
+    LON,
+    LAT
+  };
+  enum igeolo_order
+  {
+    UL,
+    UR,
+    LR,
+    LL
+  };
   vpgl_nitf_rational_camera() = default;
 
   //: Construct from a nitf image file
-  vpgl_nitf_rational_camera(std::string const& nitf_image_path,
-                            bool verbose = false);
+  vpgl_nitf_rational_camera(const std::string & nitf_image_path, bool verbose = false);
 
   //: Construct from a nitf image
-  vpgl_nitf_rational_camera(vil_nitf2_image* nift_image,
-                            bool verbose = false);
+  vpgl_nitf_rational_camera(vil_nitf2_image * nift_image, bool verbose = false);
 
   //: Read from nitf
-  bool read(std::string const& nitf_image, bool verbose = false);
-  bool read(vil_nitf2_image* nitf_image, bool verbose = false);
+  bool
+  read(const std::string & nitf_image, bool verbose = false);
+  bool
+  read(vil_nitf2_image * nitf_image, bool verbose = false);
 
-  std::string rational_extension_type() const {return nitf_rational_type_;}
+  std::string
+  rational_extension_type() const
+  {
+    return nitf_rational_type_;
+  }
 
-  std::string image_id() const {return image_id_;}
+  std::string
+  image_id() const
+  {
+    return image_id_;
+  }
 
   //: Geographic coordinates of image corners
-  vnl_double_2 upper_left() const {return ul_;}
-  vnl_double_2 upper_right() const {return ur_;}
-  vnl_double_2 lower_left() const {return ll_;}
-  vnl_double_2 lower_right() const {return lr_;}
+  vnl_double_2
+  upper_left() const
+  {
+    return ul_;
+  }
+  vnl_double_2
+  upper_right() const
+  {
+    return ur_;
+  }
+  vnl_double_2
+  lower_left() const
+  {
+    return ll_;
+  }
+  vnl_double_2
+  lower_right() const
+  {
+    return lr_;
+  }
 
   //: print all camera information
-  void print(std::ostream &ostr = std::cout,
-             vpgl_rational_order output_order =
-                 vpgl_rational_order::VXL) const override;
+  void
+  print(std::ostream & ostr = std::cout, vpgl_rational_order output_order = vpgl_rational_order::VXL) const override;
 
   // extract lat-lon pairs in decimal degreesfrom the igeolo string
-  static int geostr_to_latlon(const char * str, double * lat, double * lon);
+  static int
+  geostr_to_latlon(const char * str, double * lat, double * lon);
 
   // eliminate pointer-based interface
   //                                               igeolo                        lon      lat
-  static void geostr_to_latlon_v2(std::string const& str, std::vector<std::pair<double, double> >& coords);
+  static void
+  geostr_to_latlon_v2(const std::string & str, std::vector<std::pair<double, double>> & coords);
 
- private:
-
+private:
   // data members
   std::string nitf_rational_type_;
   std::string image_id_;

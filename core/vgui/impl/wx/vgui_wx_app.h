@@ -30,22 +30,32 @@ public:
 
   ~vgui_wx_app();
 
-  static vgui_wx_app* instance();
+  static vgui_wx_app *
+  instance();
 
-  static void delete_instance();
+  static void
+  delete_instance();
 
-  bool OnInit(){return true;}
+  bool
+  OnInit()
+  {
+    return true;
+  }
 
-  virtual int OnExit(){
+  virtual int
+  OnExit()
+  {
     return wxApp::OnExit();
   }
 
-  virtual bool OnExceptionInMainLoop(){
+  virtual bool
+  OnExceptionInMainLoop()
+  {
     return false;
   }
 
- private:
-  static vgui_wx_app* instance_;
+private:
+  static vgui_wx_app * instance_;
 };
 
 #endif // vgui_wx_app_h_

@@ -30,29 +30,33 @@
 // default if you use the vgui_shell_tableau.
 class vgui_tview_launcher_tableau : public vgui_tableau
 {
- public:
+public:
   //: Constructor - don't use this, use vgui_tview_launcher_tableau_new.
   vgui_tview_launcher_tableau();
 
   //: Handle all events sent to this tableau.
   //  In particular, use Shift-G events to pop up a tableau tree.
-  bool handle(const vgui_event&);
+  bool
+  handle(const vgui_event &);
 
   //: Returns the type of this tableau ('vgui_tview_launcher_tableau').
-  std::string type_name() const;
+  std::string
+  type_name() const;
 
   //:
-  void get_popup(const vgui_popup_params&, vgui_menu& menu);
+  void
+  get_popup(const vgui_popup_params &, vgui_menu & menu);
 
   //:
-  void go(vgui_adaptor*);
+  void
+  go(vgui_adaptor *);
 
   //:
   vgui_event_condition c_graph;
 
- protected:
+protected:
   //: Destructor - called by vgui_tview_launcher_tableau_sptr.
-  ~vgui_tview_launcher_tableau() { }
+  ~vgui_tview_launcher_tableau() {}
 };
 
 //: Creates a smart-pointer to a vgui_tview_launcher_tableau tableau.
@@ -61,7 +65,9 @@ struct vgui_tview_launcher_tableau_new : public vgui_tview_launcher_tableau_sptr
   typedef vgui_tview_launcher_tableau_sptr base;
 
   //: Constructor - creates a vgui_tview_launcher_tableau.
-  vgui_tview_launcher_tableau_new() : base(new vgui_tview_launcher_tableau) { }
+  vgui_tview_launcher_tableau_new()
+    : base(new vgui_tview_launcher_tableau)
+  {}
 };
 
 #endif // vgui_tview_launcher_tableau_h_

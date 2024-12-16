@@ -41,13 +41,13 @@ vul_file::get_cwd()
 }
 
 bool
-vul_file::change_directory(char const * dirname)
+vul_file::change_directory(const char * dirname)
 {
   return 0 == chdir(dirname);
 }
 
 bool
-vul_file::make_directory(char const * name)
+vul_file::make_directory(const char * name)
 {
 #if defined(_WIN32) && !defined(__CYGWIN__)
   return -1 != mkdir(name);
@@ -57,14 +57,14 @@ vul_file::make_directory(char const * name)
 }
 
 bool
-vul_file::is_directory(char const * fn)
+vul_file::is_directory(const char * fn)
 {
   struct stat fs;
   return stat(fn, &fs) == 0 && (fs.st_mode & S_IFMT) == S_IFDIR;
 }
 
 std::time_t
-vul_file::time_modified(char const * filename)
+vul_file::time_modified(const char * filename)
 {
   struct stat fs;
   if (stat(filename, &fs) != 0)
@@ -85,7 +85,7 @@ vul_file::is_drive(char const * fn)
 // Returns true if successful, or if the directory already exists.
 // Implemented by calling itself recursively on the parent directory.
 bool
-vul_file::make_directory_path(char const * filename)
+vul_file::make_directory_path(const char * filename)
 {
 #if defined(_WIN32) && !defined(__CYGWIN__)
   if (is_directory(filename) || is_drive(filename))
@@ -103,7 +103,7 @@ vul_file::make_directory_path(char const * filename)
 
 
 unsigned long
-vul_file::size(char const * fn)
+vul_file::size(const char * fn)
 {
   struct stat fs;
   if (stat(fn, &fs) == 0)
@@ -113,7 +113,7 @@ vul_file::size(char const * fn)
 }
 
 bool
-vul_file::exists(char const * fn)
+vul_file::exists(const char * fn)
 {
   struct stat fs;
   std::string name(fn);
@@ -130,7 +130,7 @@ vul_file::exists(char const * fn)
 }
 
 std::string
-vul_file::dirname(char const * fn)
+vul_file::dirname(const char * fn)
 {
   std::string self(fn);
 
@@ -147,7 +147,7 @@ vul_file::dirname(char const * fn)
 }
 
 std::string
-vul_file::extension(char const * fn)
+vul_file::extension(const char * fn)
 {
   std::string self(fn);
 
@@ -159,7 +159,7 @@ vul_file::extension(char const * fn)
 }
 
 std::string
-vul_file::strip_directory(char const * fn)
+vul_file::strip_directory(const char * fn)
 {
   std::string self(fn);
 
@@ -175,7 +175,7 @@ vul_file::strip_directory(char const * fn)
 }
 
 std::string
-vul_file::strip_extension(char const * fn)
+vul_file::strip_extension(const char * fn)
 {
   std::string self(fn);
 
@@ -187,7 +187,7 @@ vul_file::strip_extension(char const * fn)
 }
 
 std::string
-vul_file::basename(char const * fn, char const * suffix)
+vul_file::basename(const char * fn, const char * suffix)
 {
   // First strip dir
   std::string self(fn);
@@ -234,7 +234,7 @@ replace(char from, char to, std::string & s)
 // current directory on most operating systems.
 // Takes Posix path separators i.e. '/'
 bool
-vul_file::delete_file_glob(std::string const & file_glob)
+vul_file::delete_file_glob(const std::string & file_glob)
 {
 #if defined(_WIN32) && !defined(__CYGWIN__)
   std::string command = file_glob;
@@ -248,7 +248,7 @@ vul_file::delete_file_glob(std::string const & file_glob)
 
 
 std::string
-vul_file::expand_tilde(char const * vul_filename)
+vul_file::expand_tilde(const char * vul_filename)
 {
   if (!vul_filename || (std::strlen(vul_filename) == 0))
     return "";
@@ -286,7 +286,7 @@ vul_file::expand_tilde(char const * vul_filename)
   if (dir.empty())
   {
     // Was just ~, use getenv(HOME)
-    char const * home_directory = getenv("HOME");
+    const char * home_directory = getenv("HOME");
     if (!home_directory)
       home_directory = "";
     return std::string(home_directory) + fn;
@@ -317,26 +317,26 @@ vul_file::get_cwd(wchar_t * /*dummy*/)
 }
 
 bool
-vul_file::change_directory(wchar_t const * dirname)
+vul_file::change_directory(const wchar_t * dirname)
 {
   return 0 == _wchdir(dirname);
 }
 
 bool
-vul_file::make_directory(wchar_t const * name)
+vul_file::make_directory(const wchar_t * name)
 {
   return -1 != _wmkdir(name);
 }
 
 bool
-vul_file::is_directory(wchar_t const * fn)
+vul_file::is_directory(const wchar_t * fn)
 {
   struct _stat fs;
   return _wstat(fn, &fs) == 0 && (fs.st_mode & S_IFMT) == S_IFDIR;
 }
 
 bool
-vul_file::is_drive(wchar_t const * fn)
+vul_file::is_drive(const wchar_t * fn)
 {
   // a drive string looks like "c:", "z:"
   return fn && iswalpha(fn[0]) && fn[1] == L':' && fn[2] == L'\0';
@@ -345,7 +345,7 @@ vul_file::is_drive(wchar_t const * fn)
 //: Make a writable directory, including any necessary parents.
 // Returns true if successful, or if the directory already exists.
 bool
-vul_file::make_directory_path(wchar_t const * filename)
+vul_file::make_directory_path(const wchar_t * filename)
 {
   if (is_directory(filename) || is_drive(filename))
     return true;
@@ -354,14 +354,14 @@ vul_file::make_directory_path(wchar_t const * filename)
 }
 
 bool
-vul_file::exists(wchar_t const * fn)
+vul_file::exists(const wchar_t * fn)
 {
   struct _stat fs;
   return _wstat(fn, &fs) == 0;
 }
 
 std::wstring
-vul_file::dirname(wchar_t const * fn)
+vul_file::dirname(const wchar_t * fn)
 {
   std::wstring self(fn);
 
@@ -373,7 +373,7 @@ vul_file::dirname(wchar_t const * fn)
 }
 
 std::wstring
-vul_file::extension(wchar_t const * fn)
+vul_file::extension(const wchar_t * fn)
 {
   std::wstring self(fn);
 
@@ -385,7 +385,7 @@ vul_file::extension(wchar_t const * fn)
 }
 
 std::wstring
-vul_file::strip_directory(wchar_t const * fn)
+vul_file::strip_directory(const wchar_t * fn)
 {
   std::wstring self(fn);
 
@@ -397,7 +397,7 @@ vul_file::strip_directory(wchar_t const * fn)
 }
 
 std::wstring
-vul_file::strip_extension(wchar_t const * fn)
+vul_file::strip_extension(const wchar_t * fn)
 {
   std::wstring self(fn);
 
@@ -409,7 +409,7 @@ vul_file::strip_extension(wchar_t const * fn)
 }
 
 std::wstring
-vul_file::basename(wchar_t const * fn, wchar_t const * suffix)
+vul_file::basename(const wchar_t * fn, const wchar_t * suffix)
 {
   // First strip dir
   std::wstring self(fn);

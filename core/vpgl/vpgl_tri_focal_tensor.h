@@ -42,8 +42,7 @@ template <class Type>
 class vpgl_tri_focal_tensor
 {
   // Data Members------------------------------------------------------------
- protected:
-
+protected:
   vbl_array_3d<Type> T_;
 
   // Epipoles
@@ -103,14 +102,10 @@ class vpgl_tri_focal_tensor
                       const vpgl_proj_camera<Type> & c3,
                       vbl_array_3d<Type> T);
 
- public:
-
+public:
   // Constructors/Initializers/Destructors-----------------------------------
 
-  vpgl_tri_focal_tensor()
-  {
-    this->clear();
-  }
+  vpgl_tri_focal_tensor() { this->clear(); }
 
   vpgl_tri_focal_tensor(const vbl_array_3d<Type> & T)
     : T_(T)
@@ -138,11 +133,7 @@ class vpgl_tri_focal_tensor
   }
 
   //: Construct from two remaining cameras, the first camera is already canonical, i.e. [I | 0]
-  vpgl_tri_focal_tensor(const vpgl_proj_camera<Type> & c2,
-                        const vpgl_proj_camera<Type> & c3)
-  {
-    this->set(c2, c3);
-  }
+  vpgl_tri_focal_tensor(const vpgl_proj_camera<Type> & c2, const vpgl_proj_camera<Type> & c3) { this->set(c2, c3); }
 
   //: Construct from three camera matrices
   vpgl_tri_focal_tensor(const vnl_matrix_fixed<Type, 3, 4> & m1,
@@ -153,8 +144,7 @@ class vpgl_tri_focal_tensor
   }
 
   //: Construct from two camera matrices
-  vpgl_tri_focal_tensor(const vnl_matrix_fixed<Type, 3, 4> & m2,
-                        const vnl_matrix_fixed<Type, 3, 4> & m3)
+  vpgl_tri_focal_tensor(const vnl_matrix_fixed<Type, 3, 4> & m2, const vnl_matrix_fixed<Type, 3, 4> & m3)
   {
     this->set(m2, m3);
   }
@@ -166,16 +156,14 @@ class vpgl_tri_focal_tensor
   virtual bool
   compute()
   {
-    return (this->compute_epipoles() &&
-            this->compute_f_matrices() &&
-            this->compute_proj_cameras() &&
+    return (this->compute_epipoles() && this->compute_f_matrices() && this->compute_proj_cameras() &&
             this->compute_f_matrix_23());
   }
 
   // Data Access-------------------------------------------------------------
 
   virtual bool
-  operator==(vpgl_tri_focal_tensor<Type> const & T) const
+  operator==(const vpgl_tri_focal_tensor<Type> & T) const
   {
     for (size_t i = 0; i < 3; ++i)
       for (size_t j = 0; j < 3; ++j)
@@ -206,13 +194,10 @@ class vpgl_tri_focal_tensor
 
   //: set cameras (or camera matrices)
   void
-  set(const vpgl_proj_camera<Type> & c1,
-      const vpgl_proj_camera<Type> & c2,
-      const vpgl_proj_camera<Type> & c3);
+  set(const vpgl_proj_camera<Type> & c1, const vpgl_proj_camera<Type> & c2, const vpgl_proj_camera<Type> & c3);
 
   void
-  set(const vpgl_proj_camera<Type> & c2,
-      const vpgl_proj_camera<Type> & c3)
+  set(const vpgl_proj_camera<Type> & c2, const vpgl_proj_camera<Type> & c3)
   {
     this->set(vpgl_proj_camera<Type>(), c2, c3);
   }
@@ -222,82 +207,70 @@ class vpgl_tri_focal_tensor
       const vnl_matrix_fixed<Type, 3, 4> & m2,
       const vnl_matrix_fixed<Type, 3, 4> & m3)
   {
-    this->set(vpgl_proj_camera<Type>(m1),
-              vpgl_proj_camera<Type>(m2),
-              vpgl_proj_camera<Type>(m3));
+    this->set(vpgl_proj_camera<Type>(m1), vpgl_proj_camera<Type>(m2), vpgl_proj_camera<Type>(m3));
   }
 
   void
-  set(const vnl_matrix_fixed<Type, 3, 4> & m2,
-      const vnl_matrix_fixed<Type, 3, 4> & m3)
+  set(const vnl_matrix_fixed<Type, 3, 4> & m2, const vnl_matrix_fixed<Type, 3, 4> & m3)
   {
-    this->set(vpgl_proj_camera<Type>(),
-              vpgl_proj_camera<Type>(m2),
-              vpgl_proj_camera<Type>(m3));
+    this->set(vpgl_proj_camera<Type>(), vpgl_proj_camera<Type>(m2), vpgl_proj_camera<Type>(m3));
   }
 
   // Data Control------------------------------------------------------------
   //: tri focal tensor point constraint (should be a 3x3 array of all zeros if points correspond)
   virtual vnl_matrix_fixed<Type, 3, 3>
-  point_constraint_3x3(vgl_homg_point_2d<Type> const & point1,
-                       vgl_homg_point_2d<Type> const & point2,
-                       vgl_homg_point_2d<Type> const & point3) const;
+  point_constraint_3x3(const vgl_homg_point_2d<Type> & point1,
+                       const vgl_homg_point_2d<Type> & point2,
+                       const vgl_homg_point_2d<Type> & point3) const;
 
-  //:tri focal tensor scalar point constraint (should == 0 if points correspond)
+  //: tri focal tensor scalar point constraint (should == 0 if points correspond)
   virtual Type
-  point_constraint(vgl_homg_point_2d<Type> const & point1,
-                   vgl_homg_point_2d<Type> const & point2,
-                   vgl_homg_point_2d<Type> const & point3) const;
+  point_constraint(const vgl_homg_point_2d<Type> & point1,
+                   const vgl_homg_point_2d<Type> & point2,
+                   const vgl_homg_point_2d<Type> & point3) const;
 
   //: tri focal tensor line constraint (should be a 3 vector all zeros if lines correspond)
   virtual vnl_vector_fixed<Type, 3>
-  line_constraint_3(vgl_homg_line_2d<Type> const & line1,
-                    vgl_homg_line_2d<Type> const & line2,
-                    vgl_homg_line_2d<Type> const & line3) const;
+  line_constraint_3(const vgl_homg_line_2d<Type> & line1,
+                    const vgl_homg_line_2d<Type> & line2,
+                    const vgl_homg_line_2d<Type> & line3) const;
 
   //: point transfer
   //  point in image 1 corresponding to points in images 2 and 3 and etc.
   virtual vgl_homg_point_2d<Type>
-  image1_transfer(vgl_homg_point_2d<Type> const & point2,
-                  vgl_homg_point_2d<Type> const & point3) const;
+  image1_transfer(const vgl_homg_point_2d<Type> & point2, const vgl_homg_point_2d<Type> & point3) const;
 
   virtual vgl_homg_point_2d<Type>
-  image2_transfer(vgl_homg_point_2d<Type> const & point1,
-                  vgl_homg_point_2d<Type> const & point3) const;
+  image2_transfer(const vgl_homg_point_2d<Type> & point1, const vgl_homg_point_2d<Type> & point3) const;
 
   virtual vgl_homg_point_2d<Type>
-  image3_transfer(vgl_homg_point_2d<Type> const & point1,
-                  vgl_homg_point_2d<Type> const & point2) const;
+  image3_transfer(const vgl_homg_point_2d<Type> & point1, const vgl_homg_point_2d<Type> & point2) const;
 
   //: line transfer
   //  line in image 1 corresponding to lines in images 2 and 3 and etc.
   virtual vgl_homg_line_2d<Type>
-  image1_transfer(vgl_homg_line_2d<Type> const & line2,
-                  vgl_homg_line_2d<Type> const & line3) const;
+  image1_transfer(const vgl_homg_line_2d<Type> & line2, const vgl_homg_line_2d<Type> & line3) const;
 
   virtual vgl_homg_line_2d<Type>
-  image2_transfer(vgl_homg_line_2d<Type> const & line1,
-                  vgl_homg_line_2d<Type> const & line3) const;
+  image2_transfer(const vgl_homg_line_2d<Type> & line1, const vgl_homg_line_2d<Type> & line3) const;
 
   virtual vgl_homg_line_2d<Type>
-  image3_transfer(vgl_homg_line_2d<Type> const & line1,
-                  vgl_homg_line_2d<Type> const & line2) const;
+  image3_transfer(const vgl_homg_line_2d<Type> & line1, const vgl_homg_line_2d<Type> & line2) const;
 
   //: homographies induced by a line
   // homography between images 3 and 1 given a line in image 2 and etc.
   virtual vgl_h_matrix_2d<Type>
-  hmatrix_13(vgl_homg_line_2d<Type> const & line2) const;
+  hmatrix_13(const vgl_homg_line_2d<Type> & line2) const;
 
   virtual vgl_h_matrix_2d<Type>
-  hmatrix_12(vgl_homg_line_2d<Type> const & line3) const;
+  hmatrix_12(const vgl_homg_line_2d<Type> & line3) const;
 
   //: epipoles
   bool
   compute_epipoles();
 
   virtual void
-  get_epipoles(vgl_homg_point_2d<Type> & e12,
-               vgl_homg_point_2d<Type> & e13)
+  get_epipoles(vgl_homg_point_2d<Type> & e12, vgl_homg_point_2d<Type> & e13)
   {
     if (!this->compute_epipoles())
       throw std::runtime_error("vpgl_tri_focal_tensor::get_epipoles "
@@ -398,18 +371,18 @@ class vpgl_tri_focal_tensor
   // Utility Methods---------------------------------------------------------
 
   void
-  get_constraint_lines_image1(vgl_homg_point_2d<Type> const & p2,
-                              vgl_homg_point_2d<Type> const & p3,
+  get_constraint_lines_image1(const vgl_homg_point_2d<Type> & p2,
+                              const vgl_homg_point_2d<Type> & p3,
                               std::vector<vgl_homg_line_2d<Type>> & lines) const;
 
   void
-  get_constraint_lines_image2(vgl_homg_point_2d<Type> const & p1,
-                              vgl_homg_point_2d<Type> const & p3,
+  get_constraint_lines_image2(const vgl_homg_point_2d<Type> & p1,
+                              const vgl_homg_point_2d<Type> & p3,
                               std::vector<vgl_homg_line_2d<Type>> & lines) const;
 
   void
-  get_constraint_lines_image3(vgl_homg_point_2d<Type> const & p1,
-                              vgl_homg_point_2d<Type> const & p2,
+  get_constraint_lines_image3(const vgl_homg_point_2d<Type> & p1,
+                              const vgl_homg_point_2d<Type> & p2,
                               std::vector<vgl_homg_line_2d<Type>> & lines) const;
 
 
@@ -475,8 +448,7 @@ class vpgl_tri_focal_tensor
 
   // INTERNALS---------------------------------------------------------------
 
- private:
-
+private:
 };
 
 //: stream operators

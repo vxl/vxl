@@ -13,7 +13,8 @@
 #endif
 
 // ?
-extern "C" {
+extern "C"
+{
 #define boolean jpeg_boolean
 #include <jpeglib.h>
 #include <jerror.h>

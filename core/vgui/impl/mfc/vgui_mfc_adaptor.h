@@ -34,7 +34,7 @@
 // \endverbatim
 
 #if defined(_MSC_VER)
-#pragma once
+#  pragma once
 #endif
 
 #include <afxwin.h>
@@ -49,9 +49,12 @@
 //  If this adaptor is not being used inside the main window of the application
 //  then you will need to call setup_adaptor().  See vgui_mfc_dialog_impl where
 //  this is done, when an OpenGL area is used in a dialog box.
-class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_mixin
+class vgui_mfc_adaptor
+  : public CView
+  , public vgui_adaptor
+  , public vgui_adaptor_mixin
 {
- public:
+public:
   //: Constructor used by dynamic creation.
   //  kym - this used to be protected, but I changed it to public so I can add
   //  adaptors to dialog boxes.
@@ -59,7 +62,7 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
   DECLARE_DYNCREATE(vgui_mfc_adaptor)
 
   //: Device context for this adaptor.
-  CDC* m_pDC;
+  CDC * m_pDC;
 
   HBITMAP m_pDC_default_bitmap;
 
@@ -68,64 +71,98 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
   // 0. vgui_adaptor implementations
   //--------------------------------
   //: MFC implementation from vgui_adaptor -  returns width of rendering area.
-  unsigned int get_width() const { return m_width; }
+  unsigned int
+  get_width() const
+  {
+    return m_width;
+  }
 
   //: MFC implementation from vgui_adaptor - returns height of rendering area.
-  unsigned int get_height() const { return m_height; }
+  unsigned int
+  get_height() const
+  {
+    return m_height;
+  }
 
   //: MFC implementation from vgui_adaptor - redraws rendering area.
-  void post_redraw();
+  void
+  post_redraw();
 
   //: MFC implementation from vgui_adaptor - redraws overlay buffer.
-  void post_overlay_redraw();
+  void
+  post_overlay_redraw();
 
   //: MFC impl. from vgui_adaptor - swap buffers if using double buffering.
-  void swap_buffers();
+  void
+  swap_buffers();
 
   //: MFC impl. from vgui_adaptor - make this the current GL rendering context.
-  void make_current();
+  void
+  make_current();
 
   //: MFC implementation from vgui_adaptor  - redraw everything now.
-  void draw();
+  void
+  draw();
 
   // Do any idle processing that needs to be done.
   // Return true if idle processing is not complete
-  bool do_idle();
+  bool
+  do_idle();
 
   // 0.5 fsm stuff
   //--------------
   //: Redraws the OpenGL area.
-  void service_redraws();
+  void
+  service_redraws();
 
   //: Change the default popup menu to the given one (not yet implemented).
   void set_default_popup(vgui_menu);
 
   //: Sets timer to dispatch WM_TIMER event to a mainframe every time milliseconds
-  void post_timer(float,int);
+  void
+  post_timer(float, int);
 
   //: Stop timer
-  void kill_timer(int id);
+  void
+  kill_timer(int id);
 
   //: Flags than a child requests idle processing
-  void post_idle_request() { idle_request_posted_ = true; }
+  void
+  post_idle_request()
+  {
+    idle_request_posted_ = true;
+  }
 
   //: Return the default popup menu (not yet implemented).
-  vgui_menu get_popup();
+  vgui_menu
+  get_popup();
 
   //: MFC impl. from vgui_adaptor - set button & modifier to display popup.
-  void bind_popups(vgui_modifier m, vgui_button b) {
+  void
+  bind_popups(vgui_modifier m, vgui_button b)
+  {
     mixin::popup_modifier = m;
     mixin::popup_button = b;
   }
 
   //: MFC impl. from vgui_adaptor - get button & modifier which display popup.
-  void get_popup_bindings(vgui_modifier &m,vgui_button &b) const {
+  void
+  get_popup_bindings(vgui_modifier & m, vgui_button & b) const
+  {
     m = mixin::popup_modifier;
     b = mixin::popup_button;
   }
 
-  virtual vgui_window* get_window() const { return win_; }
-  void set_window( vgui_window* win ) { win_ = win; }
+  virtual vgui_window *
+  get_window() const
+  {
+    return win_;
+  }
+  void
+  set_window(vgui_window * win)
+  {
+    win_ = win;
+  }
 
   // kym stuff
   //----------
@@ -134,18 +171,19 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
   //  function. The first parameter tells it which window this adaptor is
   //  associated with, the other parameters are so we can go back to our old
   //  rendering context when this adaptor is deleted.
-  void setup_adaptor(CWnd* this_cwnd, HDC OldDC, HGLRC oldContext);
+  void
+  setup_adaptor(CWnd * this_cwnd, HDC OldDC, HGLRC oldContext);
 
 
- private:
-  void create_bitmap( int cx, int cy,
-                      CDC*& out_pDC,
-                      HBITMAP& defaultBitmapForDC );
+private:
+  void
+  create_bitmap(int cx, int cy, CDC *& out_pDC, HBITMAP & defaultBitmapForDC);
 
-  HGLRC setup_for_gl( CDC* pDC, DWORD dwFlags );
+  HGLRC
+  setup_for_gl(CDC * pDC, DWORD dwFlags);
 
   //: Device context for the auxiliary buffer used for simulating overlays
-  CDC* m_pDC_aux;
+  CDC * m_pDC_aux;
   //: True if the aux buffer is a copy of the main GL buffer
   bool aux_dc_valid_;
 
@@ -160,9 +198,9 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
   //: True while an idle time has been requested but not implemented.
   bool idle_request_posted_;
 
- protected:
+protected:
   //: The window associated with this adaptor if it is not the main window.
-  CWnd* m_pCWnd;
+  CWnd * m_pCWnd;
 
   //: The previous device context to this one.
   HDC hOldDC;
@@ -172,26 +210,32 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
 
   // 1. MFC stuff -  ClassWizard generated virtual function overrides
   //-------------
- protected:
+protected:
   //: Called by MFC when a draw event is required - overridden to draw this view
-  virtual void OnDraw(CDC* pDC);
+  virtual void
+  OnDraw(CDC * pDC);
 
   //: Called by MFC before the creation of the window attached to this object.
-  virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+  virtual BOOL
+  PreCreateWindow(CREATESTRUCT & cs);
 
-// Implementation
- public:
+  // Implementation
+public:
   virtual ~vgui_mfc_adaptor();
- protected:
+
+protected:
 #ifdef _DEBUG
-  virtual void AssertValid() const;
-  virtual void Dump(CDumpContext& dc) const;
+  virtual void
+  AssertValid() const;
+  virtual void
+  Dump(CDumpContext & dc) const;
 #endif
 
   // Generated message map functions
   //--------------------------------
   //: Handles mouse press/release events.
-  void domouse(vgui_event_type e, UINT nFlags, CPoint point, vgui_button b);
+  void
+  domouse(vgui_event_type e, UINT nFlags, CPoint point, vgui_button b);
 
   //: The Win-OpenGL resource context.
   HGLRC m_hRC;
@@ -202,59 +246,75 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
   //: Height of rendering area.
   int m_height;
 
-  vgui_window* win_;
+  vgui_window * win_;
 
   static vgui_menu last_popup;
 
   //: Called by MFC when the application requests the creation of a window.
-  afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+  afx_msg int
+  OnCreate(LPCREATESTRUCT lpCreateStruct);
 
   //: Called by MFC when the main window has been destroyed.
   //  Note, this function is not called when your adaptor is destroyed
   //  inside a non-main window (eg. a dialog box).
-  afx_msg void OnDestroy();
+  afx_msg void
+  OnDestroy();
 
   //: Called by MFC when the application requests part of the window is redrawn.
-  afx_msg void OnPaint();
+  afx_msg void
+  OnPaint();
 
   //: Called by MFC when the background needs erasing.
-  afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+  afx_msg BOOL
+  OnEraseBkgnd(CDC * pDC);
 
   //: Called by MFC when the application is resized.
-  afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg void
+  OnSize(UINT nType, int cx, int cy);
 
   //: Create the corresponding vgui_event from an MFC event.
-  vgui_event generate_vgui_event(UINT nChar, UINT nRepCnt, UINT nFlags, vgui_event_type evttype);
+  vgui_event
+  generate_vgui_event(UINT nChar, UINT nRepCnt, UINT nFlags, vgui_event_type evttype);
 
   //: Called by MFC when a key is pressed inside the application.
-  afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+  afx_msg void
+  OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
   //: Called by MFC when a key is released inside the application.
-  afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
+  afx_msg void
+  OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 
   //: Called by MFC when the left mouse button is pressed inside the application
-  afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+  afx_msg void
+  OnLButtonDown(UINT nFlags, CPoint point);
 
   //: Called by MFC when left mouse button is released inside the application.
-  afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+  afx_msg void
+  OnLButtonUp(UINT nFlags, CPoint point);
 
   //: Called by MFC when the mouse is moved inside the application.
-  afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+  afx_msg void
+  OnMouseMove(UINT nFlags, CPoint point);
 
   //: Called by MFC when right mouse button is pressed inside the application.
-  afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+  afx_msg void
+  OnRButtonDown(UINT nFlags, CPoint point);
 
   //: Called by MFC when right mouse button is released inside the application.
-  afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+  afx_msg void
+  OnRButtonUp(UINT nFlags, CPoint point);
 
   //: Called by MFC when a user rotates a mouse wheel.
-  afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+  afx_msg BOOL
+  OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 
   //: Called by MFC when middle mouse button is pressed inside the application.
-  afx_msg void OnMButtonDown(UINT nFlags, CPoint point);
+  afx_msg void
+  OnMButtonDown(UINT nFlags, CPoint point);
 
   //: Called by MFC when middle mouse button is released inside the application.
-  afx_msg void OnMButtonUp(UINT nFlags, CPoint point);
+  afx_msg void
+  OnMButtonUp(UINT nFlags, CPoint point);
 
   DECLARE_MESSAGE_MAP()
 };

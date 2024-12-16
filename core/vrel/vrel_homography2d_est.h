@@ -41,67 +41,74 @@
 
 class vrel_homography2d_est : public vrel_estimation_problem
 {
- public:
-
+public:
   //: Constructor from vgl_homg_point_2d's
   //  By default, we want a full 8-DOF homography
-  vrel_homography2d_est( const std::vector< vgl_homg_point_2d<double> > & from_pts,
-                         const std::vector< vgl_homg_point_2d<double> > & to_pts,
-                         unsigned int homog_dof = 8 );
+  vrel_homography2d_est(const std::vector<vgl_homg_point_2d<double>> & from_pts,
+                        const std::vector<vgl_homg_point_2d<double>> & to_pts,
+                        unsigned int homog_dof = 8);
 
   //: Constructor from vnl_vectors
   //  By default, we want a full 8-DOF homography
-  vrel_homography2d_est( std::vector< vnl_vector<double> >  from_pts,
-                         std::vector< vnl_vector<double> >  to_pts,
-                         unsigned int homog_dof = 8 );
+  vrel_homography2d_est(std::vector<vnl_vector<double>> from_pts,
+                        std::vector<vnl_vector<double>> to_pts,
+                        unsigned int homog_dof = 8);
 
   //: Destructor.
   ~vrel_homography2d_est() override;
 
   //: Total number of correspondences.
-  unsigned int num_samples( ) const override;
+  unsigned int
+  num_samples() const override;
 
   //: The degrees of freedom in the residual.
   // Each coordinate of the correspondence pair has Gaussian error, so
   // the Euclidean distance residual has 4 degrees of freedom.
-  unsigned int residual_dof() const override { return 4; }
+  unsigned int
+  residual_dof() const override
+  {
+    return 4;
+  }
 
   //: Generate a parameter estimate from a minimal sample.
-  bool fit_from_minimal_set( const std::vector<int>& point_indices,
-                             vnl_vector<double>& params ) const override;
+  bool
+  fit_from_minimal_set(const std::vector<int> & point_indices, vnl_vector<double> & params) const override;
 
   //: Compute unsigned fit residuals relative to the parameter estimate.
-  void compute_residuals( const vnl_vector<double>& params,
-                          std::vector<double>& residuals ) const override;
+  void
+  compute_residuals(const vnl_vector<double> & params, std::vector<double> & residuals) const override;
 
   //: Weighted least squares parameter estimate.  The normalized covariance is not yet filled in.
-  bool weighted_least_squares_fit( vnl_vector<double>& params,
-                                   vnl_matrix<double>& norm_covar,
-                                   const std::vector<double>* weights=nullptr ) const override;
+  bool
+  weighted_least_squares_fit(vnl_vector<double> & params,
+                             vnl_matrix<double> & norm_covar,
+                             const std::vector<double> * weights = nullptr) const override;
 
   //: Convert a homography to a linear parameter list (for estimation).
   //  Overloaded for specialized reduced-DOF homographies (i.e. affine)
-  virtual void  homog_to_params(const vnl_matrix<double>&  m,
-                                vnl_vector<double>&        p) const;
+  virtual void
+  homog_to_params(const vnl_matrix<double> & m, vnl_vector<double> & p) const;
 
   //: Convert a linear parameter list (from estimation) to a homography.
   //  Overloaded for specialized reduced-DOF homographies (i.e. affine)
-  virtual void  params_to_homog(const vnl_vector<double>&  p,
-                                vnl_matrix<double>&        m) const;
+  virtual void
+  params_to_homog(const vnl_vector<double> & p, vnl_matrix<double> & m) const;
 
- public:  // testing / debugging utility
+public: // testing / debugging utility
   //: \brief Print information as a test utility.
-  void print_points() const;
+  void
+  print_points() const;
 
- protected:
-  void normalize( const std::vector< vnl_vector<double> >& pts,
-                  const std::vector< double >& wgts,
-                  std::vector< vnl_vector<double> > & norm_pts,
-                  vnl_matrix< double > & norm_matrix ) const;
+protected:
+  void
+  normalize(const std::vector<vnl_vector<double>> & pts,
+            const std::vector<double> & wgts,
+            std::vector<vnl_vector<double>> & norm_pts,
+            vnl_matrix<double> & norm_matrix) const;
 
- protected:
-  std::vector< vnl_vector<double> > from_pts_;
-  std::vector< vnl_vector<double> > to_pts_;
+protected:
+  std::vector<vnl_vector<double>> from_pts_;
+  std::vector<vnl_vector<double>> to_pts_;
   unsigned int homog_dof_;
   unsigned int min_num_pts_;
 };

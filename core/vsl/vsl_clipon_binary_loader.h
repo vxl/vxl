@@ -74,19 +74,20 @@
 // To indicate a null pointer (0), the string "VSL_NULL_PTR" is saved
 // to the stream.
 // All loader singletons can be deleted using vsl_delete_all_loaders()
-template<class BaseClass, class BaseClassIO>
+template <class BaseClass, class BaseClassIO>
 class vsl_clipon_binary_loader : public vsl_binary_loader_base
 {
   //: the singleton object
-  static vsl_clipon_binary_loader<BaseClass,BaseClassIO>* instance_;
+  static vsl_clipon_binary_loader<BaseClass, BaseClassIO> * instance_;
 
   //: List of object loaders
-  std::vector<BaseClassIO*> object_io_;
+  std::vector<BaseClassIO *> object_io_;
 
   //: Return index associated with given object name
-  int index_for_name(const std::string& name) const;
+  int
+  index_for_name(const std::string & name) const;
 
- public:
+public:
   //: Constructor
   vsl_clipon_binary_loader() = default;
 
@@ -94,23 +95,32 @@ class vsl_clipon_binary_loader : public vsl_binary_loader_base
   ~vsl_clipon_binary_loader() override;
 
   //: Returns the instance variable for the singleton.
-  static vsl_clipon_binary_loader<BaseClass,BaseClassIO>& instance();
+  static vsl_clipon_binary_loader<BaseClass, BaseClassIO> &
+  instance();
 
   //: Remove all example objects
-  void make_empty();
+  void
+  make_empty();
 
   //: Add example object to list of those that can be loaded
-  void add( const BaseClassIO& b);
+  void
+  add(const BaseClassIO & b);
 
   //: Return current list of individual IO objects
-  const std::vector<BaseClassIO*>& object_io() const { return object_io_; }
+  const std::vector<BaseClassIO *> &
+  object_io() const
+  {
+    return object_io_;
+  }
 
   //: Return IO object for given named class
   //  Aborts if not available
-  const BaseClassIO& object_io(const std::string& name) const;
+  const BaseClassIO &
+  object_io(const std::string & name) const;
 
   //: Return IO object that can deal with given class
-  const BaseClassIO& io_for_class(const BaseClass& b) const;
+  const BaseClassIO &
+  io_for_class(const BaseClass & b) const;
 
   //: Reads object from stream and sets base class pointer
   //  Determines which derived class object on stream belongs
@@ -118,21 +128,24 @@ class vsl_clipon_binary_loader : public vsl_binary_loader_base
   //  (Class must be one given to Loader by the add method).
   //  If is indicates a NULL pointer, b will be set to NULL.
   //  If b not initially NULL, *b will be deleted.
-  void read_object( vsl_b_istream& is, BaseClass*& b);
+  void
+  read_object(vsl_b_istream & is, BaseClass *& b);
 
   //: Writes object to stream given base class pointer
   //  Determines which derived class object is
   //  and calls the appropriate write function.
   //  (Class must be one given to Loader by the add method).
   //  If b==0, a suitable string will be saved
-  void write_object( vsl_b_ostream& is, const BaseClass* b);
+  void
+  write_object(vsl_b_ostream & is, const BaseClass * b);
 
   //: Prints summary of object state to stream given base class pointer
   //  Determines which derived class object is
   //  and calls the appropriate print summary function.
   //  (Class must be one given to Loader by the add method).
   //  If b==0, a suitable string will be saved
-  void print_object_summary( std::ostream& os, const BaseClass* b);
+  void
+  print_object_summary(std::ostream & os, const BaseClass * b);
 };
 
 

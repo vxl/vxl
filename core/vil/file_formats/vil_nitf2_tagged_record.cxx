@@ -280,7 +280,7 @@ VIL_NITF2_TAGGED_RECORD_GET_VALUES(vil_nitf2_long);
 
 vil_nitf2_tagged_record::vil_nitf2_tagged_record()
 
-    = default;
+  = default;
 
 // TO DO: rewrite this method a sequence of unit tests!
 //
@@ -581,10 +581,7 @@ vil_nitf2_tagged_record::write(vil_nitf2_ostream & output)
   return length_written == expected_length;
 }
 
-vil_nitf2_tagged_record::~vil_nitf2_tagged_record()
-{
-  delete m_field_sequence;
-}
+vil_nitf2_tagged_record::~vil_nitf2_tagged_record() { delete m_field_sequence; }
 
 vil_nitf2_field_definition *
 vil_nitf2_field_sequence::find_field_definition(const std::string & tag)

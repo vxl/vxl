@@ -25,27 +25,30 @@ struct vul_redirector_data;
 // and implement `putchunk'.
 class vul_redirector
 {
- public:
+public:
   //: Attach redirector to std::ostream s, so that all future output to s goes through this->putchunk
-  vul_redirector(std::ostream& s);
+  vul_redirector(std::ostream & s);
 
   //: Destroy redirector, restore stream to original.
   virtual ~vul_redirector();
 
   //: The filter function
   // Called with `n' characters in `buf', do with as you like.
-  virtual std::streamsize putchunk(char const* buf, std::streamsize n);
+  virtual std::streamsize
+  putchunk(const char * buf, std::streamsize n);
 
- protected:
+protected:
   //: Put characters to original stream.
   // Useful for derived classes which wish to filter a stream.
-  std::streamsize put_passthru(char const* buf, std::streamsize n);
+  std::streamsize
+  put_passthru(const char * buf, std::streamsize n);
 
   //: Sync original stream.
-  int sync_passthru();
+  int
+  sync_passthru();
 
- private:
-  vul_redirector_data* p;
+private:
+  vul_redirector_data * p;
 };
 
 #endif // vul_redirector_h_

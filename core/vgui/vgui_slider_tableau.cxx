@@ -146,7 +146,7 @@ vgui_slider_tableau::set_value_no_callbacks(float v)
 
 
 void
-vgui_slider_tableau::call_callbacks(std::list<callback_info> const & cbs)
+vgui_slider_tableau::call_callbacks(const std::list<callback_info> & cbs)
 {
   if (!cbs.empty())
   {

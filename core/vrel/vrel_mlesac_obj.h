@@ -32,7 +32,8 @@
 //  each point in the correspondence pair. In general, this should be
 //  set to vrel_estimation_problem::residual_dof().
 
-class vrel_mlesac_obj : public vrel_objective {
+class vrel_mlesac_obj : public vrel_objective
+{
 public:
   //: Constructor.
   //  \a residual_dof is the number of "error random variables" are
@@ -44,27 +45,34 @@ public:
   //  inliers. \a outlier_frac is the initial value of the mixing
   //  parameter for the EM algorithm. It can safely be left at the
   //  default.
-  vrel_mlesac_obj(unsigned int residual_dof, double outlier_sigma = 20.0, double outlier_frac = 0.5 );
+  vrel_mlesac_obj(unsigned int residual_dof, double outlier_sigma = 20.0, double outlier_frac = 0.5);
 
   //: Destructor.
   ~vrel_mlesac_obj() override = default;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   //  \sa vrel_objective::fcn.
-  double fcn(vect_const_iter res_begin, vect_const_iter res_end,
-                     vect_const_iter scale_begin,
-                     vnl_vector<double>* param_vector=nullptr ) const override;
+  double
+  fcn(vect_const_iter res_begin,
+      vect_const_iter res_end,
+      vect_const_iter scale_begin,
+      vnl_vector<double> * param_vector = nullptr) const override;
 
   //: Evaluate the objective function on homoscedastic residuals.
   //  \sa vrel_objective::fcn.
-  double fcn(vect_const_iter begin, vect_const_iter end,
-                     double scale,
-                     vnl_vector<double>* param_vector=nullptr ) const override;
+  double
+  fcn(vect_const_iter begin,
+      vect_const_iter end,
+      double scale,
+      vnl_vector<double> * param_vector = nullptr) const override;
 
   //: True.
   //  The MLESAC algorithm is sensitive to the scale, and requires a prior scale.
-  bool requires_prior_scale() const override
-    { return true; }
+  bool
+  requires_prior_scale() const override
+  {
+    return true;
+  }
 
 protected:
   double outlier_sigma_;

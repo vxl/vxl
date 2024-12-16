@@ -62,7 +62,7 @@ vil_blocked_image_resource::put_blocks(unsigned int start_block_i,
                                        unsigned int end_block_i,
                                        unsigned int start_block_j,
                                        unsigned int end_block_j,
-                                       std::vector<std::vector<vil_image_view_base_sptr>> const & blocks)
+                                       const std::vector<std::vector<vil_image_view_base_sptr>> & blocks)
 {
   for (unsigned int bi = start_block_i; bi <= end_block_i; ++bi)
     for (unsigned int bj = start_block_j; bj <= end_block_j; ++bj)
@@ -99,21 +99,22 @@ vil_blocked_image_resource::glue_blocks_together(
   vil_pixel_format fmt = vil_pixel_format_component_format(this->pixel_format());
   switch (fmt)
   {
-#define GLUE_BLOCK_CASE(FORMAT, T)                                                                                     \
-  case FORMAT: {                                                                                                       \
-    vil_image_view<T> * output_image = new vil_image_view<T>(output_width, output_height, 1, nplanes());               \
-    for (unsigned int bi = 0; bi < blocks.size(); bi++)                                                                \
-    {                                                                                                                  \
-      for (unsigned int bj = 0; bj < blocks[bi].size(); bj++)                                                          \
-      {                                                                                                                \
-        vil_copy_to_window(static_cast<vil_image_view<T> &>(*blocks[bi][bj]), *output_image, curr_i, curr_j);          \
-        curr_j += blocks[bi][bj]->nj();                                                                                \
-      }                                                                                                                \
-      curr_j = 0;                                                                                                      \
-      curr_i += blocks[bi][0]->ni();                                                                                   \
-    }                                                                                                                  \
-    result = output_image;                                                                                             \
-    return result;                                                                                                     \
+#define GLUE_BLOCK_CASE(FORMAT, T)                                                                            \
+  case FORMAT:                                                                                                \
+  {                                                                                                           \
+    vil_image_view<T> * output_image = new vil_image_view<T>(output_width, output_height, 1, nplanes());      \
+    for (unsigned int bi = 0; bi < blocks.size(); bi++)                                                       \
+    {                                                                                                         \
+      for (unsigned int bj = 0; bj < blocks[bi].size(); bj++)                                                 \
+      {                                                                                                       \
+        vil_copy_to_window(static_cast<vil_image_view<T> &>(*blocks[bi][bj]), *output_image, curr_i, curr_j); \
+        curr_j += blocks[bi][bj]->nj();                                                                       \
+      }                                                                                                       \
+      curr_j = 0;                                                                                             \
+      curr_i += blocks[bi][0]->ni();                                                                          \
+    }                                                                                                         \
+    result = output_image;                                                                                    \
+    return result;                                                                                            \
   }
     GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
     GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
@@ -215,13 +216,14 @@ vil_blocked_image_resource::trim_border_blocks(unsigned int i0,
 
       switch (vil_pixel_format_component_format(pixel_format()))
       {
-#define TRIM_BORDER_BLOCK_CASE(FORMAT, T)                                                                              \
-  case FORMAT: {                                                                                                       \
-    vil_image_view<T> currBlock = static_cast<vil_image_view<T> &>(*blocks[bi][bj]);                                   \
-    vil_image_view<T> * croppedBlock = new vil_image_view<T>();                                                        \
-    *croppedBlock = vil_crop(currBlock, bi0, bin - bi0 + 1, bj0, bjn - bj0 + 1);                                       \
-    blocks[bi][bj] = croppedBlock;                                                                                     \
-  }                                                                                                                    \
+#define TRIM_BORDER_BLOCK_CASE(FORMAT, T)                                            \
+  case FORMAT:                                                                       \
+  {                                                                                  \
+    vil_image_view<T> currBlock = static_cast<vil_image_view<T> &>(*blocks[bi][bj]); \
+    vil_image_view<T> * croppedBlock = new vil_image_view<T>();                      \
+    *croppedBlock = vil_crop(currBlock, bi0, bin - bi0 + 1, bj0, bjn - bj0 + 1);     \
+    blocks[bi][bj] = croppedBlock;                                                   \
+  }                                                                                  \
   break
         TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
         TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);

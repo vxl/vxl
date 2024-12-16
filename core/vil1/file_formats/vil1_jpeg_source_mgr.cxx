@@ -141,7 +141,8 @@ vil1_jpeg_skip_input_data(j_decompress_ptr cinfo, long num_bytes)
 //  application must deal with any cleanup that should happen even
 //  for error exit.
 STATIC
-void vil1_jpeg_term_source(j_decompress_ptr /*cinfo*/)
+void
+vil1_jpeg_term_source(j_decompress_ptr /*cinfo*/)
 {
   // no work necessary here
 }

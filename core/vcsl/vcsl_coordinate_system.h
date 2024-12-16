@@ -9,9 +9,9 @@
 // \verbatim
 //  Modifications
 //   2000/06/28 Francois BERTEL Creation. Adapted from IUE
-//   2002/01/22 Peter Vanroose - return type of from_cs_to_standard_units() and from_standard_units_to_cs() changed non-ptr
-//   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
-//   2004/09/17 Peter Vanroose - made dimensionality() non-virtual - it just returns a member and should not be overloaded
+//   2002/01/22 Peter Vanroose - return type of from_cs_to_standard_units() and from_standard_units_to_cs() changed
+//   non-ptr 2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !) 2004/09/17 Peter Vanroose - made
+//   dimensionality() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim
 
 #include <vector>
@@ -25,21 +25,22 @@
 class vcsl_spatial;
 
 //: Abstract coordinate system
-class vcsl_coordinate_system
-  : public vbl_ref_count
+class vcsl_coordinate_system : public vbl_ref_count
 {
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
- protected:
+protected:
   // Default constructor
   vcsl_coordinate_system() = default;
 
- public:
+public:
   // Copy constructor
-  vcsl_coordinate_system(vcsl_coordinate_system const& c)
-    : vbl_ref_count(), axes_(c.axes_) {}
+  vcsl_coordinate_system(const vcsl_coordinate_system & c)
+    : vbl_ref_count()
+    , axes_(c.axes_)
+  {}
 
   // Destructor
   ~vcsl_coordinate_system() override = default;
@@ -49,19 +50,32 @@ class vcsl_coordinate_system
   //***************************************************************************
 
   //: Number of axes
-  int dimensionality() const { return int(axes_.size()); }
+  int
+  dimensionality() const
+  {
+    return int(axes_.size());
+  }
 
   //: Is `i' an index on an axis ?
-  bool valid_axis(unsigned int i) const { return i < axes_.size(); }
+  bool
+  valid_axis(unsigned int i) const
+  {
+    return i < axes_.size();
+  }
 
   //: Return the axis `i'
   //  REQUIRE: valid_axis(i)
-  vcsl_axis_sptr axis(int i) const;
+  vcsl_axis_sptr
+  axis(int i) const;
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
-  virtual const vcsl_spatial *cast_to_spatial() const { return nullptr; }
+  virtual const vcsl_spatial *
+  cast_to_spatial() const
+  {
+    return nullptr;
+  }
 
   //***************************************************************************
   // Conversion
@@ -70,14 +84,14 @@ class vcsl_coordinate_system
   //: Convert `v', expressed with cs units, to standard units
   //  REQUIRE: v.size()==dimensionality()
   vnl_vector<double>
-  from_cs_to_standard_units(const vnl_vector<double> &v) const;
+  from_cs_to_standard_units(const vnl_vector<double> & v) const;
 
   //: Convert `v', expressed with standard units, to cs units
   //  REQUIRE: v.size()==dimensionality()
   vnl_vector<double>
-  from_standard_units_to_cs(const vnl_vector<double> &v) const;
+  from_standard_units_to_cs(const vnl_vector<double> & v) const;
 
- protected:
+protected:
   //***************************************************************************
   // Implementation
   //***************************************************************************

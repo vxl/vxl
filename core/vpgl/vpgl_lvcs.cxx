@@ -417,7 +417,8 @@ vpgl_lvcs::set_utm(int zone, bool south_flag)
               localUTMOrigin_Y_North_,
               localUTMOrigin_Zone_,
               localUTMOrigin_SouthFlag_,
-              zone, south_flag);
+              zone,
+              south_flag);
 }
 
 
@@ -713,8 +714,14 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
       vpgl_utm u;
       int zone;
       bool south_flag;
-      u.transform(local_lat, local_lon, pointout_x, pointout_y, zone, south_flag,
-                  localUTMOrigin_Zone_, localUTMOrigin_SouthFlag_);
+      u.transform(local_lat,
+                  local_lon,
+                  pointout_x,
+                  pointout_y,
+                  zone,
+                  south_flag,
+                  localUTMOrigin_Zone_,
+                  localUTMOrigin_SouthFlag_);
 
       pointout_x -= localUTMOrigin_X_East_;
       pointout_y -= localUTMOrigin_Y_North_;
@@ -753,8 +760,14 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
       vpgl_utm u;
       int zone;
       bool south_flag;
-      u.transform(local_lat, local_lon, pointout_x, pointout_y, zone, south_flag,
-                  localUTMOrigin_Zone_, localUTMOrigin_SouthFlag_);
+      u.transform(local_lat,
+                  local_lon,
+                  pointout_x,
+                  pointout_y,
+                  zone,
+                  south_flag,
+                  localUTMOrigin_Zone_,
+                  localUTMOrigin_SouthFlag_);
 
       pointout_x -= localUTMOrigin_X_East_;
       pointout_y -= localUTMOrigin_Y_North_;
@@ -791,8 +804,14 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
       vpgl_utm u;
       int zone;
       bool south_flag;
-      u.transform(global_lat, global_lon, pointout_x, pointout_y, zone, south_flag,
-                  localUTMOrigin_Zone_, localUTMOrigin_SouthFlag_);
+      u.transform(global_lat,
+                  global_lon,
+                  pointout_x,
+                  pointout_y,
+                  zone,
+                  south_flag,
+                  localUTMOrigin_Zone_,
+                  localUTMOrigin_SouthFlag_);
 
       pointout_x -= localUTMOrigin_X_East_;
       pointout_y -= localUTMOrigin_Y_North_;
@@ -873,7 +892,8 @@ bool
 vpgl_lvcs::save(std::string fname) const
 {
   std::ofstream of(fname.c_str());
-  if (of) {
+  if (of)
+  {
     print(of);
     return true;
   }
@@ -1046,7 +1066,7 @@ operator>>(std::istream & is, vpgl_lvcs & local_coord_sys)
 }
 
 bool
-vpgl_lvcs::operator==(vpgl_lvcs const & r) const
+vpgl_lvcs::operator==(const vpgl_lvcs & r) const
 {
   bool eq = true;
   eq = eq && (this->local_cs_name_ == r.local_cs_name_);

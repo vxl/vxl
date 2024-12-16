@@ -24,25 +24,29 @@
 //  break in addition to the vgui_dialog_impl capabilities (parent class)
 class vgui_dialog_extensions_impl : public vgui_dialog_impl
 {
- public:
+public:
   //: Constructor - create an empty dialog with the given title.
-  vgui_dialog_extensions_impl(const char* dialog_name);
+  vgui_dialog_extensions_impl(const char * dialog_name);
 
   //: Destructor - delete this dialog box.
   virtual ~vgui_dialog_extensions_impl();
 
   //: Add a popup directory browser to the dialog box.
-  void dir_browser(const char*, std::string&, std::string&);
+  void
+  dir_browser(const char *, std::string &, std::string &);
 
   //: Add a line break to the dialog box
-  void line_break();
+  void
+  line_break();
 
   //: Pointer to a GUI widget for a directory browser.
-  virtual void* dir_browser_widget(const char*, std::string&, std::string&);
+  virtual void *
+  dir_browser_widget(const char *, std::string &, std::string &);
 
   //: Display the dialog box with user added line breaks and a layout and collect data from the user.
   // Dialog elements are added next to each other until a line break element is found.
-  virtual bool ask() = 0;
+  virtual bool
+  ask() = 0;
 };
 
 #endif // vgui_dialog_extensions_impl_h_

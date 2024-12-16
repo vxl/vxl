@@ -16,7 +16,7 @@ struct vnl_rosenbrock : public vnl_least_squares_function
   {}
 
   void
-  f(vnl_vector<double> const & x, vnl_vector<double> & y) override
+  f(const vnl_vector<double> & x, vnl_vector<double> & y) override
   {
     TEST("size of x", x.size(), 2);
     TEST("size of y", y.size(), 2);
@@ -25,7 +25,7 @@ struct vnl_rosenbrock : public vnl_least_squares_function
   }
 
   void
-  gradf(vnl_vector<double> const & x, vnl_matrix<double> & J) override
+  gradf(const vnl_vector<double> & x, vnl_matrix<double> & J) override
   {
     TEST("size of x", x.size(), 2);
     TEST("size of J", J.rows() == 2 && J.cols() == 2, true);
@@ -38,23 +38,22 @@ struct vnl_rosenbrock : public vnl_least_squares_function
 
 struct linear_est : public vnl_least_squares_function
 {
-  linear_est(vnl_matrix<double> const &A, vnl_vector<double> b, bool with_grad)
-      : vnl_least_squares_function(A.cols(), A.rows(),
-                                   with_grad ? use_gradient : no_gradient)
-      , A_(A)
-      , b_(std::move(b))
+  linear_est(const vnl_matrix<double> & A, vnl_vector<double> b, bool with_grad)
+    : vnl_least_squares_function(A.cols(), A.rows(), with_grad ? use_gradient : no_gradient)
+    , A_(A)
+    , b_(std::move(b))
   {
     assert(A_.rows() == b_.size());
   }
 
   void
-  f(vnl_vector<double> const & x, vnl_vector<double> & y) override
+  f(const vnl_vector<double> & x, vnl_vector<double> & y) override
   {
     y = A_ * x - b_;
   }
 
   void
-  gradf(vnl_vector<double> const & /*x*/, vnl_matrix<double> & J) override
+  gradf(const vnl_vector<double> & /*x*/, vnl_matrix<double> & J) override
   {
     J = A_;
   }

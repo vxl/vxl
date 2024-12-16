@@ -41,13 +41,13 @@
 vul_arg_base::required_option_type vul_arg_base::is_required;
 
 
-char const *
+const char *
 vul_arg_base::option()
 {
   return option_.c_str();
 }
 
-char const *
+const char *
 vul_arg_base::help()
 {
   return help_.c_str();
@@ -69,7 +69,7 @@ vul_arg_include(vul_arg_info_list & l)
 
 //: Print all args, and usage messages.
 void
-vul_arg_display_usage_and_exit(char const * msg)
+vul_arg_display_usage_and_exit(const char * msg)
 {
   vul_arg_base::display_usage_and_exit(msg);
 }
@@ -113,25 +113,25 @@ vul_arg_base::parse_deprecated(int & argc, char **& argv, bool warn_about_unreco
 }
 
 void
-vul_arg_base::set_help_option(char const * str)
+vul_arg_base::set_help_option(const char * str)
 {
   current_list().set_help_option(str);
 }
 
 void
-vul_arg_base::set_help_precis(char const * str)
+vul_arg_base::set_help_precis(const char * str)
 {
   current_list().set_help_precis(str);
 }
 
 void
-vul_arg_base::set_help_description(char const * str)
+vul_arg_base::set_help_description(const char * str)
 {
   current_list().set_help_description(str);
 }
 
 void
-vul_arg_base::display_usage(char const * msg)
+vul_arg_base::display_usage(const char * msg)
 {
   if (msg)
     std::cerr << "** WARNING ** " << msg << std::endl;
@@ -139,7 +139,7 @@ vul_arg_base::display_usage(char const * msg)
 }
 
 void
-vul_arg_base::display_usage_and_exit(char const * msg)
+vul_arg_base::display_usage_and_exit(const char * msg)
 {
   if (msg)
     std::cerr << "** ERROR ** " << msg << std::endl;
@@ -149,7 +149,7 @@ vul_arg_base::display_usage_and_exit(char const * msg)
 
 // vul_arg_base constructors
 
-vul_arg_base::vul_arg_base(vul_arg_info_list & l, char const * option_string, char const * helpstring, bool required)
+vul_arg_base::vul_arg_base(vul_arg_info_list & l, const char * option_string, const char * helpstring, bool required)
   : set_(false)
   , required_(required)
   , option_(option_string ? option_string : "\0")
@@ -158,7 +158,7 @@ vul_arg_base::vul_arg_base(vul_arg_info_list & l, char const * option_string, ch
   l.add(this);
 }
 
-vul_arg_base::vul_arg_base(char const * option_string, char const * helpstring, bool required)
+vul_arg_base::vul_arg_base(const char * option_string, const char * helpstring, bool required)
   : set_(false)
   , required_(required)
   , option_(option_string ? option_string : "\0")
@@ -171,7 +171,7 @@ vul_arg_base::vul_arg_base(char const * option_string, char const * helpstring, 
 
 //: Change the help operator (defaults to -?)
 void
-vul_arg_info_list::set_help_option(char const * str)
+vul_arg_info_list::set_help_option(const char * str)
 {
   // check that the operator isn't already being used
   for (auto & arg : args_)
@@ -210,7 +210,7 @@ vul_arg_info_list::include(vul_arg_info_list & l)
 //: Display help about each option in the arg list.
 // Note that this function does not exit at the end.
 void
-vul_arg_info_list::display_help(char const * progname)
+vul_arg_info_list::display_help(const char * progname)
 {
   if (progname)
     std::cerr << "Usage: " << progname << ' ';
@@ -440,7 +440,7 @@ vul_arg_info_list::parse(int & argc, char **& argv, bool warn_about_unrecognized
     }
 
 
-    // 5. Some people like a chatty program.
+  // 5. Some people like a chatty program.
 #ifdef DEBUG // fsm: do not print outcome - it looks like an error message.
   if (verbose_)
   {
@@ -610,7 +610,7 @@ settype(vul_arg<bool> & argmt)
 }
 
 VDS void
-print_value(std::ostream & s, vul_arg<bool> const & argmt)
+print_value(std::ostream & s, const vul_arg<bool> & argmt)
 {
   s << (argmt() ? "set" : "not set");
 }
@@ -632,7 +632,7 @@ settype(vul_arg<int> & argmt)
 }
 
 VDS void
-print_value(std::ostream & s, vul_arg<int> const & argmt)
+print_value(std::ostream & s, const vul_arg<int> & argmt)
 {
   s << argmt();
 }
@@ -675,7 +675,7 @@ settype(vul_arg<vxl_int_64> & argmt)
 }
 
 VDS void
-print_value(std::ostream & s, vul_arg<vxl_int_64> const & argmt)
+print_value(std::ostream & s, const vul_arg<vxl_int_64> & argmt)
 {
   s << argmt();
 }
@@ -722,7 +722,7 @@ settype(vul_arg<unsigned> & argmt)
 }
 
 VDS void
-print_value(std::ostream & s, vul_arg<unsigned> const & argmt)
+print_value(std::ostream & s, const vul_arg<unsigned> & argmt)
 {
   s << argmt();
 }
@@ -764,7 +764,7 @@ settype(vul_arg<float> & argmt)
 }
 
 VDS void
-print_value(std::ostream & s, vul_arg<float> const & argmt)
+print_value(std::ostream & s, const vul_arg<float> & argmt)
 {
   s << argmt();
 }
@@ -798,7 +798,7 @@ settype(vul_arg<double> & argmt)
 }
 
 VDS void
-print_value(std::ostream & s, vul_arg<double> const & argmt)
+print_value(std::ostream & s, const vul_arg<double> & argmt)
 {
   s << argmt();
 }
@@ -832,7 +832,7 @@ settype(vul_arg<char *> & argmt)
 }
 
 VDS void
-print_value(std::ostream & s, vul_arg<char *> const & argmt)
+print_value(std::ostream & s, const vul_arg<char *> & argmt)
 {
   s << '\'' << (argmt() ? argmt() : "(null)") << '\'';
 }
@@ -856,19 +856,19 @@ template class vul_arg<char *>;
 
 //: char const *
 VDS void
-settype(vul_arg<char const *> & argmt)
+settype(vul_arg<const char *> & argmt)
 {
   argmt.type_ = "string";
 }
 
 VDS void
-print_value(std::ostream & s, vul_arg<char const *> const & argmt)
+print_value(std::ostream & s, const vul_arg<const char *> & argmt)
 {
   s << '\'' << (argmt() ? argmt() : "(null)") << '\'';
 }
 
 VDS int
-parse(vul_arg<char const *> * argmt, char ** argv)
+parse(vul_arg<const char *> * argmt, char ** argv)
 {
   if (!argv || !argv[0])
   {
@@ -881,7 +881,7 @@ parse(vul_arg<char const *> * argmt, char ** argv)
   return 1;                // it's ok to just grab the pointer.
 }
 
-template class vul_arg<char const *>;
+template class vul_arg<const char *>;
 
 //: std::string
 VDS void
@@ -891,7 +891,7 @@ settype(vul_arg<std::string> & argmt)
 }
 
 VDS void
-print_value(std::ostream & s, vul_arg<std::string> const & argmt)
+print_value(std::ostream & s, const vul_arg<std::string> & argmt)
 {
   s << '\'' << argmt() << '\'';
 }
@@ -928,7 +928,7 @@ settype(vul_arg<std::list<int>> & argmt)
 }
 
 VDS void
-print_value(std::ostream & s, vul_arg<std::list<int>> const & argmt)
+print_value(std::ostream & s, const vul_arg<std::list<int>> & argmt)
 {
   for (const auto i : argmt())
     s << ' ' << i;
@@ -950,7 +950,7 @@ settype(vul_arg<std::vector<int>> & argmt)
 }
 
 VDS void
-print_value(std::ostream & s, vul_arg<std::vector<int>> const & argmt)
+print_value(std::ostream & s, const vul_arg<std::vector<int>> & argmt)
 {
   for (int i : argmt())
     s << ' ' << i;
@@ -978,7 +978,7 @@ settype(vul_arg<std::vector<unsigned>> & argmt)
 }
 
 VDS void
-print_value(std::ostream & s, vul_arg<std::vector<unsigned>> const & argmt)
+print_value(std::ostream & s, const vul_arg<std::vector<unsigned>> & argmt)
 {
   for (unsigned int i : argmt())
     s << ' ' << i;
@@ -1006,7 +1006,7 @@ settype(vul_arg<std::vector<double>> & argmt)
 }
 
 VDS void
-print_value(std::ostream & s, vul_arg<std::vector<double>> const & argmt)
+print_value(std::ostream & s, const vul_arg<std::vector<double>> & argmt)
 {
   for (double i : argmt())
     s << ' ' << i;

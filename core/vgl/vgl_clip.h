@@ -32,18 +32,30 @@ enum vgl_clip_type
 //: clips away the portion where ax+by+c<0. return false if nothing left.
 
 template <class T>
-bool vgl_clip_lineseg_to_line(T &x1, T &y1, // line segment start
-                              T &x2, T &y2, // and end.
-                              T a, T b, T c);
+bool
+vgl_clip_lineseg_to_line(T & x1,
+                         T & y1, // line segment start
+                         T & x2,
+                         T & y2, // and end.
+                         T a,
+                         T b,
+                         T c);
 
 //: clip line ax+by+c=0 to given box. return false if no intersection.
 
 template <class T>
-bool vgl_clip_line_to_box(T a, T b, T c, // line equation ax+by+c=0.
-                          T x1,T y1,     // coordinates of
-                          T x2,T y2,     // box corners.
-                          T &bx, T &by,  // clipped line
-                          T &ex, T &ey); // segment.
+bool
+vgl_clip_line_to_box(T a,
+                     T b,
+                     T c, // line equation ax+by+c=0.
+                     T x1,
+                     T y1, // coordinates of
+                     T x2,
+                     T y2, // box corners.
+                     T & bx,
+                     T & by, // clipped line
+                     T & ex,
+                     T & ey); // segment.
 
 
 //: clip given line to given box, and return resulting line segment
@@ -51,16 +63,12 @@ bool vgl_clip_line_to_box(T a, T b, T c, // line equation ax+by+c=0.
 // \relatesalso vgl_box_2d
 
 template <class T>
-inline
-vgl_line_segment_2d<T> vgl_clip_line_to_box(vgl_line_2d<T> const& l,
-                                            vgl_box_2d<T> const& b)
+inline vgl_line_segment_2d<T>
+vgl_clip_line_to_box(const vgl_line_2d<T> & l, const vgl_box_2d<T> & b)
 {
   T sx, sy, ex, ey;
-  bool r = vgl_clip_line_to_box(l.a(), l.b(), l.c(),
-                                b.min_x(), b.min_y(), b.max_x(), b.max_y(),
-                                sx, sy, ex, ey);
-  return r ? vgl_line_segment_2d<T>(vgl_point_2d<T>(sx, sy),
-                                    vgl_point_2d<T>(ex, ey))
+  bool r = vgl_clip_line_to_box(l.a(), l.b(), l.c(), b.min_x(), b.min_y(), b.max_x(), b.max_y(), sx, sy, ex, ey);
+  return r ? vgl_line_segment_2d<T>(vgl_point_2d<T>(sx, sy), vgl_point_2d<T>(ex, ey))
            : vgl_line_segment_2d<T>(); // uninitialised when no intersection
 }
 
@@ -78,8 +86,7 @@ vgl_line_segment_2d<T> vgl_clip_line_to_box(vgl_line_2d<T> const& l,
 // \relatesalso vgl_polygon
 template <class T>
 vgl_polygon<T>
-vgl_clip( const vgl_polygon<T>& poly1, const vgl_polygon<T>& poly2,
-          vgl_clip_type op = vgl_clip_type_intersect );
+vgl_clip(const vgl_polygon<T> & poly1, const vgl_polygon<T> & poly2, vgl_clip_type op = vgl_clip_type_intersect);
 
 //: Clip a polygon against another polygon.
 //  Same as vgl_clip( const vgl_polygon<T>& poly1, const vgl_polygon<T>& poly2,
@@ -92,7 +99,7 @@ vgl_clip( const vgl_polygon<T>& poly1, const vgl_polygon<T>& poly2,
 // \relatesalso vgl_polygon
 template <class T>
 vgl_polygon<T>
-vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type op, int *p_retval);
+vgl_clip(const vgl_polygon<T> & poly1, const vgl_polygon<T> & poly2, vgl_clip_type op, int * p_retval);
 
 #define VGL_CLIP_INSTANTIATE(T) extern "please include vgl/vgl_clip.hxx instead"
 

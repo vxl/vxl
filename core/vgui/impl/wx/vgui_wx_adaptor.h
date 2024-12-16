@@ -90,27 +90,27 @@ class vgui_wx_adaptor
 
   typedef vgui_adaptor_mixin mixin;
 
- public:
+public:
   // interface for 3.0 replaces 2_8
-vgui_wx_adaptor(wxWindow *parent,
-               wxWindowID id = wxID_ANY,
-               const int* args =wx_adaptor_args,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = 0,
-               const wxString& name = wxGLCanvasName,
-               const wxPalette& palette = wxNullPalette);
+  vgui_wx_adaptor(wxWindow * parent,
+                  wxWindowID id = wxID_ANY,
+                  const int * args = wx_adaptor_args,
+                  const wxPoint & pos = wxDefaultPosition,
+                  const wxSize & size = wxDefaultSize,
+                  long style = 0,
+                  const wxString & name = wxGLCanvasName,
+                  const wxPalette & palette = wxNullPalette);
 
   //: Constructor - used by dynamic creation. version 2_8
-/*
- vgui_wx_adaptor(wxWindow* parent,
-                  wxWindowID id = wxID_ANY,
-                  const wxPoint& pos = wxDefaultPosition,
-                  const wxSize& size = wxDefaultSize,
-                  long style = 0,
-                  const wxString& name = wxT("vgui_wx_adaptor"),
-                  int* attributes = 0);
-*/
+  /*
+   vgui_wx_adaptor(wxWindow* parent,
+                    wxWindowID id = wxID_ANY,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = 0,
+                    const wxString& name = wxT("vgui_wx_adaptor"),
+                    int* attributes = 0);
+  */
   //: Destructor.
   virtual ~vgui_wx_adaptor();
 
@@ -119,108 +119,147 @@ vgui_wx_adaptor(wxWindow *parent,
   //-----------------------------------------------------------------------
 
   //: Return width of rendering area.
-  virtual unsigned int get_width() const {return GetClientSize().GetWidth();}
+  virtual unsigned int
+  get_width() const
+  {
+    return GetClientSize().GetWidth();
+  }
 
   //: Return height of rendering area.
-  virtual unsigned int get_height() const { return GetClientSize().GetHeight();}
+  virtual unsigned int
+  get_height() const
+  {
+    return GetClientSize().GetHeight();
+  }
 
-  virtual double get_scale_factor() const;
+  virtual double
+  get_scale_factor() const;
 
   //: Redraw the rendering area.
-  virtual void post_redraw();
+  virtual void
+  post_redraw();
 
   //: Redraws overlay buffer.
-  virtual void post_overlay_redraw();
+  virtual void
+  post_overlay_redraw();
 
   //: Flags that a child requests idle processing.
-  virtual void post_idle_request();
+  virtual void
+  post_idle_request();
 
   //: ***** What is this for???
-  virtual void post_message(char const *, void const *);
+  virtual void
+  post_message(const char *, const void *);
 
   //: Schedules destruction of parent vgui_window.
-  virtual void post_destroy();
+  virtual void
+  post_destroy();
 
   //: Sets timer 'id' to dispatch a WM_TIMER event every 'timeout' ms.
-  virtual void post_timer(float timeout, int id);
+  virtual void
+  post_timer(float timeout, int id);
 
   //: Stop timer 'id'.
-  virtual void kill_timer(int id);
+  virtual void
+  kill_timer(int id);
 
   //: Bind the given modifier/button combination to the popup menu.
-  virtual void bind_popups(vgui_modifier m, vgui_button b)
+  virtual void
+  bind_popups(vgui_modifier m, vgui_button b)
   {
     mixin::popup_modifier = m;
-    mixin::popup_button   = b;
+    mixin::popup_button = b;
   }
 
   //: Return the modifier/button which displayed the popup menu.
-  virtual void get_popup_bindings(vgui_modifier &m, vgui_button &b) const
+  virtual void
+  get_popup_bindings(vgui_modifier & m, vgui_button & b) const
   {
     m = mixin::popup_modifier;
     b = mixin::popup_button;
   }
   //: ***** Set the window that constructed this
-  void set_window(vgui_wx_window* w) {window_ = w;}
+  void
+  set_window(vgui_wx_window * w)
+  {
+    window_ = w;
+  }
   //: ***** Return window that contains this adaptor.
-  virtual vgui_window* get_window() const { return window_; }
+  virtual vgui_window *
+  get_window() const
+  {
+    return window_;
+  }
 
   //: Swap buffers if using double buffering.
-  virtual void swap_buffers();
+  virtual void
+  swap_buffers();
 
   //: Make this the current GL rendering context.
-  virtual void make_current();
+  virtual void
+  make_current();
 
   //-----------------------------------------------------------------------
   //-----------------------------------------------------------------------
- private:
+private:
   //: Called when canvas is resized.
-  void on_size(wxSizeEvent& event);
+  void
+  on_size(wxSizeEvent & event);
 
   //: Called when a window needs to be repainted.
-  void on_paint(wxPaintEvent& WXUNUSED(event));
+  void
+  on_paint(wxPaintEvent & WXUNUSED(event));
 
   //: Called when the background needs erasing (i.e., before repainting).
-  void on_erase_background(wxEraseEvent& WXUNUSED(event));
+  void
+  on_erase_background(wxEraseEvent & WXUNUSED(event));
 
   //: Helper used by on_key_up/down to reduce code duplication.
-  void on_key(vgui_event& ve, wxKeyEvent& event);
+  void
+  on_key(vgui_event & ve, wxKeyEvent & event);
 
   //: Called when a key is pressed.
-  void on_key_down(wxKeyEvent& event);
+  void
+  on_key_down(wxKeyEvent & event);
 
   //: Called when a key is released.
-  void on_key_up(wxKeyEvent& event);
+  void
+  on_key_up(wxKeyEvent & event);
 
   //: Called when a key is pressed, but carries a translated ascii code.
   //
   // To catch this event after a key_down has been caught, call
   // event.skip() from the on_key_down handler. Note that the char event
   // is always generated after the key_down event in wxWidgets.
-  void on_char(wxKeyEvent& event);
+  void
+  on_char(wxKeyEvent & event);
 
   //: Called for all types of mouse events (e.g., button-up, motion, etc.).
-  void on_mouse_event(wxMouseEvent& event);
+  void
+  on_mouse_event(wxMouseEvent & event);
 
   //: Called when the system becomes idle.
-  void on_idle(wxIdleEvent& event);
+  void
+  on_idle(wxIdleEvent & event);
 
   //: Called when the user tries to close a frame or dialog box.
   // The event can be generated programmatically or when the user tries to
   // close using the window manager (X) or system menu (Windows).
-  void on_close(wxCloseEvent& event);
+  void
+  on_close(wxCloseEvent & event);
 
   //: Called at fixed intervals when using a timer.
-  void on_timer(wxEvent& event);
+  void
+  on_timer(wxEvent & event);
 
   //: Generates a wxPaintEvent for the window to be repainted.
   //  == not implemented ===
-  void invalidate_canvas();
+  void
+  invalidate_canvas();
 
   //-----------------------------------------------------------------------
   //-----------------------------------------------------------------------
- private:
-
+private:
   std::shared_ptr<wxGLContext> context_;
   static vgui_menu last_popup_;
 
@@ -237,9 +276,9 @@ vgui_wx_adaptor(wxWindow *parent,
   bool destroy_posted_;
 
   int last_key_down_;
-  std::map<int,int> ascii_code_;
+  std::map<int, int> ascii_code_;
 
-  vgui_wx_window* window_;
+  vgui_wx_window * window_;
 };
 
 #endif // vgui_wx_adaptor_h_

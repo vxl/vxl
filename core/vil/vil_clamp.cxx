@@ -27,7 +27,7 @@ vil_clamp(const vil_image_resource_sptr & src, double lo, double hi)
 }
 
 
-vil_clamp_image_resource::vil_clamp_image_resource(vil_image_resource_sptr const & src, double lo, double hi)
+vil_clamp_image_resource::vil_clamp_image_resource(const vil_image_resource_sptr & src, double lo, double hi)
   : src_(src)
   , lo_(lo)
   , hi_(hi)
@@ -37,7 +37,7 @@ vil_clamp_image_resource::vil_clamp_image_resource(vil_image_resource_sptr const
 
 //: Extra property information
 bool
-vil_clamp_image_resource::get_property(char const * tag, void * property_value) const
+vil_clamp_image_resource::get_property(const char * tag, void * property_value) const
 {
   if (0 == std::strcmp(tag, vil_property_read_only))
     return property_value ? (*static_cast<bool *>(property_value)) = true : true;
@@ -54,9 +54,9 @@ vil_clamp_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j0, u
 
   switch (vs->pixel_format())
   {
-#define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
-    vil_clamp(static_cast<vil_image_view<T> &>(*vs), static_cast<vil_image_view<T> &>(*vs), T(lo_), T(hi_));           \
+#define macro(F, T)                                                                                          \
+  case F:                                                                                                    \
+    vil_clamp(static_cast<vil_image_view<T> &>(*vs), static_cast<vil_image_view<T> &>(*vs), T(lo_), T(hi_)); \
     break;
 
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)

@@ -12,17 +12,19 @@
 
 
 template <class Type>
-void test_pointset_3d_io_templated()
+void
+test_pointset_3d_io_templated()
 {
   std::cout << "**************************\n"
             << "Testing vgl_pointset_3d_io\n"
             << "**************************\n";
 
-  std::vector<vgl_point_3d<Type> > points;
+  std::vector<vgl_point_3d<Type>> points;
   std::vector<vgl_vector_3d<Type>> normals;
   std::vector<Type> scalars;
 
-  for (size_t i=0; i < 10; i++) {
+  for (size_t i = 0; i < 10; i++)
+  {
     points.push_back(vgl_point_3d<Type>(i, i, i));
     normals.push_back(vgl_vector_3d<Type>(i, i, i));
     scalars.push_back(i);

@@ -26,26 +26,28 @@
 // \sa vil_suppress_non_max_3x3()
 // \relatesalso vil_image_view
 template <class T>
-inline void vil_suppress_non_plateau_3x3(const vil_image_view<T>& src_im,
-                                         vil_image_view<T>& dest_im,
-                                         T threshold=0, T non_max_value=0)
+inline void
+vil_suppress_non_plateau_3x3(const vil_image_view<T> & src_im,
+                             vil_image_view<T> & dest_im,
+                             T threshold = 0,
+                             T non_max_value = 0)
 {
-  unsigned ni=src_im.ni(),nj=src_im.nj();
-  assert(src_im.nplanes()==1);
+  unsigned ni = src_im.ni(), nj = src_im.nj();
+  assert(src_im.nplanes() == 1);
 
-  dest_im.set_size(ni,nj,1);
+  dest_im.set_size(ni, nj, 1);
 
-  std::ptrdiff_t istep = src_im.istep(),jstep=src_im.jstep();
-  std::ptrdiff_t distep = dest_im.istep(),djstep=dest_im.jstep();
-  const T* row = src_im.top_left_ptr()+istep+jstep;
-  T* drow = dest_im.top_left_ptr()+distep+djstep;
-  for (unsigned j=1;j<nj-1;++j,row+=jstep,drow+=djstep)
+  std::ptrdiff_t istep = src_im.istep(), jstep = src_im.jstep();
+  std::ptrdiff_t distep = dest_im.istep(), djstep = dest_im.jstep();
+  const T * row = src_im.top_left_ptr() + istep + jstep;
+  T * drow = dest_im.top_left_ptr() + distep + djstep;
+  for (unsigned j = 1; j < nj - 1; ++j, row += jstep, drow += djstep)
   {
-    const T* pixel = row;
-    T* dpixel = drow;
-    for (unsigned i=1;i<ni-1;++i,pixel+=istep,dpixel+=distep)
+    const T * pixel = row;
+    T * dpixel = drow;
+    for (unsigned i = 1; i < ni - 1; ++i, pixel += istep, dpixel += distep)
     {
-      if (*pixel<threshold || !vil_is_plateau_3x3(pixel,istep,jstep))
+      if (*pixel < threshold || !vil_is_plateau_3x3(pixel, istep, jstep))
         *dpixel = non_max_value;
       else
         *dpixel = *pixel;
@@ -53,10 +55,10 @@ inline void vil_suppress_non_plateau_3x3(const vil_image_view<T>& src_im,
   }
 
   // Border pixels assumed not to be local plateaus
-  vil_fill_row(dest_im,0,non_max_value);
-  vil_fill_row(dest_im,nj-1,non_max_value);
-  vil_fill_col(dest_im,0,non_max_value);
-  vil_fill_col(dest_im,ni-1,non_max_value);
+  vil_fill_row(dest_im, 0, non_max_value);
+  vil_fill_row(dest_im, nj - 1, non_max_value);
+  vil_fill_col(dest_im, 0, non_max_value);
+  vil_fill_col(dest_im, ni - 1, non_max_value);
 }
 
 #endif // vil_suppress_non_plateau_h_

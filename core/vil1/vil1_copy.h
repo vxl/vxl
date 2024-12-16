@@ -17,9 +17,11 @@
 
 //: Copy SRC to DST.
 // Images must be exactly the same dimensions, but datatype isn't matched
-void vil1_copy(vil1_image const& src, vil1_image& DST);
+void
+vil1_copy(const vil1_image & src, vil1_image & DST);
 
 //: Return a memory image copy of SRC.
-vil1_memory_image vil1_copy(vil1_image const& src);
+vil1_memory_image
+vil1_copy(const vil1_image & src);
 
 #endif // vil1_copy_h_

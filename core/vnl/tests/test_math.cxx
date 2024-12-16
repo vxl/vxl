@@ -23,7 +23,7 @@ print_hex(const T p)
   for (int i = (sizeof(p) - 1); i >= 0; --i)
   {
     str << std::setfill('0') << std::setw(2);
-    const auto curr_value = static_cast<short>((reinterpret_cast<unsigned char const *>(&p))[i]);
+    const auto curr_value = static_cast<short>((reinterpret_cast<const unsigned char *>(&p))[i]);
     str << curr_value;
   }
   str << std::dec;
@@ -717,12 +717,12 @@ test_math()
 #endif
   }
 
-#define RETURN_TYPE_TEST(funcname, argtypename, returntypename)                                                        \
-  {                                                                                                                    \
-    const bool test_return_type =                                                                                      \
-      std::is_same<decltype(vnl_math ::funcname(static_cast<argtypename>(123.4))), returntypename>();                  \
-    TEST("vnl_math::" #funcname "<" #argtypename "> returns " #returntypename " type", test_return_type, true);        \
-  }                                                                                                                    \
+#define RETURN_TYPE_TEST(funcname, argtypename, returntypename)                                                 \
+  {                                                                                                             \
+    const bool test_return_type =                                                                               \
+      std::is_same<decltype(vnl_math ::funcname(static_cast<argtypename>(123.4))), returntypename>();           \
+    TEST("vnl_math::" #funcname "<" #argtypename "> returns " #returntypename " type", test_return_type, true); \
+  }                                                                                                             \
   void()
 
   RETURN_TYPE_TEST(isinf, int, bool);

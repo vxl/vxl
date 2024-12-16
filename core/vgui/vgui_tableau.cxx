@@ -100,7 +100,7 @@ vgui_tableau::unref() const
 //: Handle all events sent to this tableau.
 //  Override in subclasses to give the tableau some appearance and behaviour.
 bool
-vgui_tableau::handle(vgui_event const & event)
+vgui_tableau::handle(const vgui_event & event)
 {
   vgui_macro_report_errors;
 
@@ -216,7 +216,7 @@ vgui_tableau::get_bounding_box(float /*low*/[3], float /*high*/[3]) const
 //-----------------------------------------------------------------------------
 //: Post a message event.
 void
-vgui_tableau::post_message(char const * msg, void const * data)
+vgui_tableau::post_message(const char * msg, const void * data)
 {
   std::vector<vgui_tableau_sptr> ps;
   get_parents(&ps);
@@ -304,7 +304,7 @@ vgui_tableau::get_child(unsigned i) const
 //: Add the given tableau to the list of child tableaux.
 //  Virtual overridden by consenting parents.
 bool
-vgui_tableau::add_child(vgui_tableau_sptr const &)
+vgui_tableau::add_child(const vgui_tableau_sptr &)
 {
   return false;
 }
@@ -312,7 +312,7 @@ vgui_tableau::add_child(vgui_tableau_sptr const &)
 //-----------------------------------------------------------------------------
 //: Remove the given tableau from the list of child tableaux.
 bool
-vgui_tableau::remove_child(vgui_tableau_sptr const &)
+vgui_tableau::remove_child(const vgui_tableau_sptr &)
 {
   return false;
 }
@@ -324,7 +324,7 @@ vgui_tableau::remove_child(vgui_tableau_sptr const &)
 //  tableau.
 //  The canonical reason to override this is in order to invalidate caches.
 bool
-vgui_tableau::notify_replaced_child(vgui_tableau_sptr const & /*old_child*/, vgui_tableau_sptr const & /*new_child*/)
+vgui_tableau::notify_replaced_child(const vgui_tableau_sptr & /*old_child*/, const vgui_tableau_sptr & /*new_child*/)
 {
   return true;
 }
@@ -350,7 +350,7 @@ vgui_tableau::add_popup(vgui_menu & /*menu*/)
 //
 // ** this is a mixin method. it does some work for you. **
 void
-vgui_tableau::get_popup(vgui_popup_params const & params, vgui_menu & menu)
+vgui_tableau::get_popup(const vgui_popup_params & params, vgui_menu & menu)
 {
   // extract this tableau's popup menu into 'submenu'.
   vgui_menu submenu;
@@ -393,7 +393,7 @@ vgui_tableau::get_popup(vgui_popup_params const & params, vgui_menu & menu)
 //: Prints pretty name and address of tableau.
 //  eg : pig.jpg[vgui_composite:0xeffff728]
 std::ostream &
-operator<<(std::ostream & os, vgui_tableau_sptr const & t)
+operator<<(std::ostream & os, const vgui_tableau_sptr & t)
 {
   if (t)
     return os << t->pretty_name() << '[' << t->type_name() << ':' << static_cast<const void *>(t.operator->()) << ']';
@@ -414,7 +414,7 @@ vgui_tableau::get_all(std::vector<vgui_tableau_sptr> * v)
 //-----------------------------------------------------------------------------
 //: Returns true if the given address points to a valid tableau.
 bool
-vgui_tableau::exists(vgui_tableau_sptr const & ptr)
+vgui_tableau::exists(const vgui_tableau_sptr & ptr)
 {
   return std::find(all->begin(), all->end(), ptr.operator->()) != all->end();
 }

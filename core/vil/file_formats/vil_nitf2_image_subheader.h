@@ -27,43 +27,62 @@ class vil_nitf2_data_mask_table;
 // etc.
 class vil_nitf2_image_subheader
 {
- public:
-  vil_nitf2_image_subheader( vil_nitf2_classification::file_version version );
+public:
+  vil_nitf2_image_subheader(vil_nitf2_classification::file_version version);
   virtual ~vil_nitf2_image_subheader();
 
   //: Read the image header starting at stream's current position.
   // \returns false if failed
-  virtual bool read( vil_stream* stream );
+  virtual bool
+  read(vil_stream * stream);
 #if 0
   virtual bool write( vil_stream* stream );
 #endif // 0
 
   //: Sets \a out_value to the value of field specified by tag.
   // \returns 0 if such a field is not found or is of the wrong type.
-  template< class T >
-  bool get_property(std::string tag, T& out_value) const
+  template <class T>
+  bool
+  get_property(std::string tag, T & out_value) const
   {
-    return m_field_sequence.get_value( tag, out_value );
+    return m_field_sequence.get_value(tag, out_value);
   }
 
   //: Sets out_value to the value of std::vector field element specified by tag and index.
   // \returns 0 if such a field is not found or is of the wrong type.
-  template< class T >
-  bool get_property(std::string tag, int i, T& out_value) const
+  template <class T>
+  bool
+  get_property(std::string tag, int i, T & out_value) const
   {
-    return m_field_sequence.get_value( tag, i, out_value );
+    return m_field_sequence.get_value(tag, i, out_value);
   }
 
-  unsigned int nplanes() const;
-  unsigned int get_pixels_per_block_x() const;
-  unsigned int get_pixels_per_block_y() const;
-  unsigned int get_num_blocks_x() const;
-  unsigned int get_num_blocks_y() const;
-  unsigned int get_number_of_bits_per_pixel() const;
-  std::string get_image_source() const;
-  std::string get_image_type() const;
-  bool has_data_mask_table() const { return data_mask_table() != nullptr; }
-  const vil_nitf2_data_mask_table* data_mask_table() const { return m_data_mask_table; }
+  unsigned int
+  nplanes() const;
+  unsigned int
+  get_pixels_per_block_x() const;
+  unsigned int
+  get_pixels_per_block_y() const;
+  unsigned int
+  get_num_blocks_x() const;
+  unsigned int
+  get_num_blocks_y() const;
+  unsigned int
+  get_number_of_bits_per_pixel() const;
+  std::string
+  get_image_source() const;
+  std::string
+  get_image_type() const;
+  bool
+  has_data_mask_table() const
+  {
+    return data_mask_table() != nullptr;
+  }
+  const vil_nitf2_data_mask_table *
+  data_mask_table() const
+  {
+    return m_data_mask_table;
+  }
 
   //:
   // Returns true if the ith image band in this image subheader has LUT info
@@ -86,12 +105,13 @@ class vil_nitf2_image_subheader
   // If n_luts is 3, then this plane will be transformed into 3 planes: R, G and B.
   // lut_d[0] shall map to Red, lut_d[1] shall map to Green, and lut_d[2] shall map
   // to Blue.
-  bool get_lut_info( unsigned int band, int& n_luts, int& ne_lut,
-                     std::vector< std::vector< unsigned char > >& lut_d ) const;
+  bool
+  get_lut_info(unsigned int band, int & n_luts, int & ne_lut, std::vector<std::vector<unsigned char>> & lut_d) const;
 
   // I allocate the return value, but you own it after I return it to you
   // so you need to delete it.
-  virtual vil_nitf2_field::field_tree* get_tree( int i = 0 ) const;
+  virtual vil_nitf2_field::field_tree *
+  get_tree(int i = 0) const;
 
   //: Get RPC parameters, if present. User provides rpc_data array.
   // The parameters describe a camera projection based on the
@@ -112,54 +132,79 @@ class vil_nitf2_image_subheader
   //
   //  The ordering of coefficients can vary as indicated by rpc_type
   //  Defined extensions are RPC00A and RPC00B.
-  bool get_rpc_params( std::string& rpc_type, std::string& image_id,
-                       std::string& image_corner_geo_locations,
-                       double* rpc_data ) const;
+  bool
+  get_rpc_params(std::string & rpc_type,
+                 std::string & image_id,
+                 std::string & image_corner_geo_locations,
+                 double * rpc_data) const;
 
   // grid points in row order (11, 12, 21, 22)
-  bool get_ichipb_info(std::pair<double, double>& translation,
-                       std::vector<std::pair<double, double> >& F_grid_points,
-                       std::vector<std::pair<double, double> >& O_grid_points,
-                       double& scale_factor, bool& anamorphic_corr);
+  bool
+  get_ichipb_info(std::pair<double, double> & translation,
+                  std::vector<std::pair<double, double>> & F_grid_points,
+                  std::vector<std::pair<double, double>> & O_grid_points,
+                  double & scale_factor,
+                  bool & anamorphic_corr);
 
   //: Return the elevation and azimuth angles of the sun
   //  \a sun_el --> sun elevation angle
   //  \a sun_az --> sun azimuthal angle
-  bool get_sun_params( double& sun_el, double& sun_az) const;
+  bool
+  get_sun_params(double & sun_el, double & sun_az) const;
 
   //: Extract the date and time
-  bool get_date_time(int& year, int& month, int& day, int& hour, int& min, int& sec) const;
+  bool
+  get_date_time(int & year, int & month, int & day, int & hour, int & min, int & sec) const;
 
   // Offset from ICHIPB or from block offsets in STDIDB or STDIDC,
   // precidenced is ICHIPB < STDIDC < STDIDB
-  bool get_image_offset(double & u_off, double & v_off) const;
-  static const vil_nitf2_field_definitions* get_defs() { return get_field_definitions_21(); }
- protected:
+  bool
+  get_image_offset(double & u_off, double & v_off) const;
+  static const vil_nitf2_field_definitions *
+  get_defs()
+  {
+    return get_field_definitions_21();
+  }
+
+protected:
   vil_nitf2_field_sequence m_field_sequence;
-  vil_nitf2_data_mask_table* m_data_mask_table;
+  vil_nitf2_data_mask_table * m_data_mask_table;
 
   vil_nitf2_classification::file_version m_version;
 
-  static const vil_nitf2_field_definitions* get_field_definitions_21();
-  static const vil_nitf2_field_definitions* get_field_definitions_20();
+  static const vil_nitf2_field_definitions *
+  get_field_definitions_21();
+  static const vil_nitf2_field_definitions *
+  get_field_definitions_20();
 
- private:
-  static void add_shared_field_defs_1( vil_nitf2_field_definitions* defs );
-  static void add_shared_field_defs_2( vil_nitf2_field_definitions* defs );
-  static void add_geo_field_defs( vil_nitf2_field_definitions* defs, const vil_nitf2_classification::file_version& version );
-  static void add_shared_field_defs_3( vil_nitf2_field_definitions* defs );
-  static void add_rpc_definitions();
-  //static void add_rsm_definitions();
-  static void add_USE_definitions();
-  static void add_ICHIPB_definitions();
-  static void add_MPD26A_definitions();
-  static void add_STDIDC_definitions();
-  static void add_STDIDB_definitions();
+private:
+  static void
+  add_shared_field_defs_1(vil_nitf2_field_definitions * defs);
+  static void
+  add_shared_field_defs_2(vil_nitf2_field_definitions * defs);
+  static void
+  add_geo_field_defs(vil_nitf2_field_definitions * defs, const vil_nitf2_classification::file_version & version);
+  static void
+  add_shared_field_defs_3(vil_nitf2_field_definitions * defs);
+  static void
+  add_rpc_definitions();
+  // static void add_rsm_definitions();
+  static void
+  add_USE_definitions();
+  static void
+  add_ICHIPB_definitions();
+  static void
+  add_MPD26A_definitions();
+  static void
+  add_STDIDC_definitions();
+  static void
+  add_STDIDB_definitions();
 
-  static vil_nitf2_field_definitions* s_field_definitions_21;
-  static vil_nitf2_field_definitions* s_field_definitions_20;
+  static vil_nitf2_field_definitions * s_field_definitions_21;
+  static vil_nitf2_field_definitions * s_field_definitions_20;
   // so these static members can be cleaned up when the program is done
   // using nitf files
-  friend void vil_nitf2::cleanup_static_members();
+  friend void
+  vil_nitf2::cleanup_static_members();
 };
 #endif // VIL_NITF2_IMAGE_SUBHEADER_H

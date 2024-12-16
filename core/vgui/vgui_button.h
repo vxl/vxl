@@ -17,13 +17,15 @@
 #endif
 
 //: Enumeration of possible mouse buttons.
-enum vgui_button {
-  vgui_BUTTON_NULL=0,
-  vgui_LEFT  =0x1,
-  vgui_MIDDLE=0x2,
-  vgui_RIGHT =0x4
+enum vgui_button
+{
+  vgui_BUTTON_NULL = 0,
+  vgui_LEFT = 0x1,
+  vgui_MIDDLE = 0x2,
+  vgui_RIGHT = 0x4
 };
 
-std::ostream& operator<<(std::ostream& s, vgui_button b);
+std::ostream &
+operator<<(std::ostream & s, vgui_button b);
 
 #endif // vgui_button_h_

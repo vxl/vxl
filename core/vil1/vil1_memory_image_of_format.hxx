@@ -24,7 +24,7 @@
 template <class T>
 struct vil1_memory_image_of_format : public vil1_memory_image_format
 {
- protected:
+protected:
   // A protection error here means you haven't derived
   // the vil1_memory_image_format<T> for a vil1_memory_image_of<T>
   vil1_memory_image_of_format();
@@ -36,7 +36,7 @@ struct vil1_memory_image_of_format<float> : public vil1_memory_image_format
   vil1_memory_image_of_format()
   {
     components = 1;
-    bits_per_component = sizeof(float)*CHAR_BIT;
+    bits_per_component = sizeof(float) * CHAR_BIT;
     component_format = VIL1_COMPONENT_FORMAT_IEEE_FLOAT;
   }
 };
@@ -47,13 +47,13 @@ struct vil1_memory_image_of_format<double> : public vil1_memory_image_format
   vil1_memory_image_of_format()
   {
     components = 1;
-    bits_per_component = sizeof(double)*CHAR_BIT;
+    bits_per_component = sizeof(double) * CHAR_BIT;
     component_format = VIL1_COMPONENT_FORMAT_IEEE_FLOAT;
   }
 };
 
 template <>
-struct vil1_memory_image_of_format<std::complex<float> > : public vil1_memory_image_format
+struct vil1_memory_image_of_format<std::complex<float>> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
   {
@@ -64,7 +64,7 @@ struct vil1_memory_image_of_format<std::complex<float> > : public vil1_memory_im
 };
 
 template <>
-struct vil1_memory_image_of_format<std::complex<double> > : public vil1_memory_image_format
+struct vil1_memory_image_of_format<std::complex<double>> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
   {
@@ -91,7 +91,7 @@ struct vil1_memory_image_of_format<bool> : public vil1_memory_image_format
   vil1_memory_image_of_format()
   {
     components = 1;
-    bits_per_component = sizeof(bool)*CHAR_BIT; // ugh! this is 32 on gcc -- fsm.
+    bits_per_component = sizeof(bool) * CHAR_BIT; // ugh! this is 32 on gcc -- fsm.
     component_format = VIL1_COMPONENT_FORMAT_UNSIGNED_INT;
   }
 };
@@ -113,7 +113,7 @@ struct vil1_memory_image_of_format<unsigned short> : public vil1_memory_image_fo
   vil1_memory_image_of_format()
   {
     components = 1;
-    bits_per_component = sizeof(short)*CHAR_BIT;
+    bits_per_component = sizeof(short) * CHAR_BIT;
     component_format = VIL1_COMPONENT_FORMAT_UNSIGNED_INT;
   }
 };
@@ -124,7 +124,7 @@ struct vil1_memory_image_of_format<signed short> : public vil1_memory_image_form
   vil1_memory_image_of_format()
   {
     components = 1;
-    bits_per_component = sizeof(short)*CHAR_BIT;
+    bits_per_component = sizeof(short) * CHAR_BIT;
     component_format = VIL1_COMPONENT_FORMAT_SIGNED_INT;
   }
 };
@@ -135,7 +135,7 @@ struct vil1_memory_image_of_format<signed int> : public vil1_memory_image_format
   vil1_memory_image_of_format()
   {
     components = 1;
-    bits_per_component = sizeof(int)*CHAR_BIT;
+    bits_per_component = sizeof(int) * CHAR_BIT;
     component_format = VIL1_COMPONENT_FORMAT_SIGNED_INT;
   }
 };
@@ -146,13 +146,13 @@ struct vil1_memory_image_of_format<unsigned int> : public vil1_memory_image_form
   vil1_memory_image_of_format()
   {
     components = 1;
-    bits_per_component = sizeof(int)*CHAR_BIT;
+    bits_per_component = sizeof(int) * CHAR_BIT;
     component_format = VIL1_COMPONENT_FORMAT_UNSIGNED_INT;
   }
 };
 
 template <>
-struct vil1_memory_image_of_format<vil1_rgb<unsigned char> > : public vil1_memory_image_format
+struct vil1_memory_image_of_format<vil1_rgb<unsigned char>> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
   {
@@ -163,7 +163,7 @@ struct vil1_memory_image_of_format<vil1_rgb<unsigned char> > : public vil1_memor
 };
 
 template <>
-struct vil1_memory_image_of_format<vil1_rgb<vxl_uint_16> > : public vil1_memory_image_format
+struct vil1_memory_image_of_format<vil1_rgb<vxl_uint_16>> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
   {
@@ -174,7 +174,7 @@ struct vil1_memory_image_of_format<vil1_rgb<vxl_uint_16> > : public vil1_memory_
 };
 
 template <>
-struct vil1_memory_image_of_format<vil1_rgb<float> > : public vil1_memory_image_format
+struct vil1_memory_image_of_format<vil1_rgb<float>> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
   {
@@ -185,7 +185,7 @@ struct vil1_memory_image_of_format<vil1_rgb<float> > : public vil1_memory_image_
 };
 
 template <>
-struct vil1_memory_image_of_format<vil1_rgba<float> > : public vil1_memory_image_format
+struct vil1_memory_image_of_format<vil1_rgba<float>> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
   {
@@ -196,7 +196,7 @@ struct vil1_memory_image_of_format<vil1_rgba<float> > : public vil1_memory_image
 };
 
 template <>
-struct vil1_memory_image_of_format<vil1_rgb<double> > : public vil1_memory_image_format
+struct vil1_memory_image_of_format<vil1_rgb<double>> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
   {

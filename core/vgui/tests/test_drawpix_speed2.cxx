@@ -20,8 +20,8 @@
 #endif
 
 // Size of test image
-unsigned const ni = 512;
-unsigned const nj = 512;
+const unsigned ni = 512;
+const unsigned nj = 512;
 
 float g_scale = 1.0f;
 float g_bias = 0.0f;
@@ -46,7 +46,7 @@ struct result_type
 };
 
 std::ostream &
-operator<<(std::ostream & ostr, result_type const & r)
+operator<<(std::ostream & ostr, const result_type & r)
 {
   return ostr << '(' << std::fixed << std::setprecision(2) << std::setw(7) << r.draw << " draw fps, " << std::setw(7)
               << r.total << " total fps)";
@@ -55,7 +55,7 @@ operator<<(std::ostream & ostr, result_type const & r)
 
 template <class InPix, class FramePix>
 inline void
-convert_pixel(InPix const & p, FramePix & fp)
+convert_pixel(const InPix & p, FramePix & fp)
 {
   fp = FramePix(GLubyte(p.R), GLubyte(p.G), GLubyte(p.B), 0);
 }
@@ -70,14 +70,14 @@ map_scale_and_bias(T f)
 
 template <class InPix, class FramePix>
 inline void
-convert_pixel_scale_and_bias(InPix const & p, FramePix & fp)
+convert_pixel_scale_and_bias(const InPix & p, FramePix & fp)
 {
   fp = FramePix(map_scale_and_bias(p.R), map_scale_and_bias(p.G), map_scale_and_bias(p.B), 0);
 }
 
 template <class InPix, class FramePix>
 inline void
-convert_pixel_scale_bias_and_map(InPix const & p, FramePix & fp)
+convert_pixel_scale_bias_and_map(const InPix & p, FramePix & fp)
 {
   fp = FramePix(
     g_mapRbyte[map_scale_and_bias(p.R)], g_mapGbyte[map_scale_and_bias(p.G)], g_mapBbyte[map_scale_and_bias(p.B)], 0);
@@ -206,7 +206,7 @@ struct test_it
   result_type best_result;
   unsigned best_option;
 
-  test_it(std::string const & name, GLenum pack_type, GLenum pix_type);
+  test_it(const std::string & name, GLenum pack_type, GLenum pix_type);
   ~test_it();
   void
   test_pattern(unsigned option);
@@ -214,7 +214,7 @@ struct test_it
 
 
 template <class PixType>
-test_it<PixType>::test_it(std::string const & name, GLenum in_pack_type, GLenum in_pix_type)
+test_it<PixType>::test_it(const std::string & name, GLenum in_pack_type, GLenum in_pix_type)
   : pack_type(in_pack_type)
   , pix_type(in_pix_type)
   , in_pix_name(name)

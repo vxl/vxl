@@ -16,20 +16,28 @@
 //: A vil1_stream implementation using std::fstream
 class vil1_stream_fstream : public vil1_stream
 {
- public:
-  vil1_stream_fstream(char const* filename, char const* mode);
+public:
+  vil1_stream_fstream(const char * filename, const char * mode);
 
   // implement virtual vil1_stream interface:
-  bool ok() const override { return f_.good(); }
-  vil1_streampos write(void const* buf, vil1_streampos n) override;
-  vil1_streampos read(void* buf, vil1_streampos n) override;
-  vil1_streampos tell() const override;
-  void seek(vil1_streampos position) override;
+  bool
+  ok() const override
+  {
+    return f_.good();
+  }
+  vil1_streampos
+  write(const void * buf, vil1_streampos n) override;
+  vil1_streampos
+  read(void * buf, vil1_streampos n) override;
+  vil1_streampos
+  tell() const override;
+  void
+  seek(vil1_streampos position) override;
 
- protected:
+protected:
   ~vil1_stream_fstream() override;
 
- private:
+private:
   std::ios::openmode flags_;
   mutable std::fstream f_;
   int id_;

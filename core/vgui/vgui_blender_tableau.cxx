@@ -26,7 +26,7 @@
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_blender_tableau_new.
 //  Creates a blender with the given image and alpha_ value.
-vgui_blender_tableau::vgui_blender_tableau(char const * file, vgui_range_map_params_sptr const & rmp, float a)
+vgui_blender_tableau::vgui_blender_tableau(const char * file, const vgui_range_map_params_sptr & rmp, float a)
   : renderer_(nullptr)
   , vil_renderer_(nullptr)
   , rmp_(rmp)
@@ -40,7 +40,7 @@ vgui_blender_tableau::vgui_blender_tableau(char const * file, vgui_range_map_par
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_blender_tableau_new.
 //  Creates a blender with the given image and alpha_ value.
-vgui_blender_tableau::vgui_blender_tableau(vil1_image const & img, vgui_range_map_params_sptr const & rmp, float a)
+vgui_blender_tableau::vgui_blender_tableau(const vil1_image & img, const vgui_range_map_params_sptr & rmp, float a)
   : renderer_(nullptr)
   , vil_renderer_(nullptr)
   , rmp_(rmp)
@@ -54,8 +54,8 @@ vgui_blender_tableau::vgui_blender_tableau(vil1_image const & img, vgui_range_ma
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_blender_tableau_new.
 //  Creates a blender with the given image and alpha_ value.
-vgui_blender_tableau::vgui_blender_tableau(vil_image_resource_sptr const & img,
-                                           vgui_range_map_params_sptr const & rmp,
+vgui_blender_tableau::vgui_blender_tableau(const vil_image_resource_sptr & img,
+                                           const vgui_range_map_params_sptr & rmp,
                                            float a)
   : renderer_(nullptr)
   , vil_renderer_(nullptr)
@@ -70,8 +70,8 @@ vgui_blender_tableau::vgui_blender_tableau(vil_image_resource_sptr const & img,
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_blender_tableau_new.
 //  Creates a blender with the given image and alpha_ value.
-vgui_blender_tableau::vgui_blender_tableau(vil_image_view_base const & img,
-                                           vgui_range_map_params_sptr const & rmp,
+vgui_blender_tableau::vgui_blender_tableau(const vil_image_view_base & img,
+                                           const vgui_range_map_params_sptr & rmp,
                                            float a)
   : renderer_(nullptr)
   , vil_renderer_(nullptr)
@@ -123,7 +123,7 @@ vgui_blender_tableau::reread_image()
 //  In particular, use draw events to draw the blended image.
 //  Use '*' and '/' key-press events to change alpha_.
 bool
-vgui_blender_tableau::handle(vgui_event const & e)
+vgui_blender_tableau::handle(const vgui_event & e)
 {
   if (vgui_matrix_state::gl_matrices_are_cleared())
   {

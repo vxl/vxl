@@ -23,18 +23,19 @@ class wx_docview_frame : public wxDocParentFrame
   DECLARE_CLASS(wx_docview_frame)
   DECLARE_EVENT_TABLE()
 
- public:
+public:
   //: Constructor - default.
-  wx_docview_frame(wxDocManager* manager,
-                   wxFrame* parent,
+  wx_docview_frame(wxDocManager * manager,
+                   wxFrame * parent,
                    wxWindowID id,
-                   const wxString& title,
-                   const wxPoint& pos,
-                   const wxSize& size,
+                   const wxString & title,
+                   const wxPoint & pos,
+                   const wxSize & size,
                    long type);
 
   // Event handlers.
-  void OnAbout(wxCommandEvent& event);
+  void
+  OnAbout(wxCommandEvent & event);
 };
 
 #endif // wx_docview_frame_h_

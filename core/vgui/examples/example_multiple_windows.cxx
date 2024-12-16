@@ -39,7 +39,7 @@ vgui_viewer2D_tableau_sptr global_viewer_tab;
 class example_flim_tableau : public vgui_tableau
 {
   bool
-  handle(vgui_event const & e)
+  handle(const vgui_event & e)
   {
     if (e.type == vgui_DESTROY)
     {

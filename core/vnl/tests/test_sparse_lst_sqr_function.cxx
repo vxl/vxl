@@ -18,9 +18,9 @@ public:
   void
   fij(int /*i*/,
       int /*j*/,
-      vnl_vector<double> const & ai,
-      vnl_vector<double> const & bj,
-      vnl_vector<double> const & c,
+      const vnl_vector<double> & ai,
+      const vnl_vector<double> & bj,
+      const vnl_vector<double> & c,
       vnl_vector<double> & eij) override
   {
     eij[0] = (ai[0] * ai[0] - bj[0] * ai[1]) * bj[2] * bj[2] * bj[2] + c[0] * ai[0];
@@ -30,9 +30,9 @@ public:
   void
   jac_Aij(unsigned int /*i*/,
           unsigned int /*j*/,
-          vnl_vector<double> const & ai,
-          vnl_vector<double> const & bj,
-          vnl_vector<double> const & c,
+          const vnl_vector<double> & ai,
+          const vnl_vector<double> & bj,
+          const vnl_vector<double> & c,
           vnl_matrix<double> & Aij) override
   {
     Aij[0][0] = 2.0 * ai[0] * bj[2] * bj[2] * bj[2] + c[0];
@@ -44,9 +44,9 @@ public:
   void
   jac_Bij(unsigned int /*i*/,
           unsigned int /*j*/,
-          vnl_vector<double> const & ai,
-          vnl_vector<double> const & bj,
-          vnl_vector<double> const & /*c*/,
+          const vnl_vector<double> & ai,
+          const vnl_vector<double> & bj,
+          const vnl_vector<double> & /*c*/,
           vnl_matrix<double> & Bij) override
   {
     Bij[0][0] = -ai[1] * bj[2] * bj[2] * bj[2];
@@ -60,9 +60,9 @@ public:
   void
   jac_Cij(unsigned int /*i*/,
           unsigned int /*j*/,
-          vnl_vector<double> const & ai,
-          vnl_vector<double> const & /*bj*/,
-          vnl_vector<double> const & /*c*/,
+          const vnl_vector<double> & ai,
+          const vnl_vector<double> & /*bj*/,
+          const vnl_vector<double> & /*c*/,
           vnl_matrix<double> & Cij) override
   {
     Cij[0][0] = ai[0];
@@ -74,10 +74,10 @@ public:
   void
   compute_weight_ij(int i,
                     int j,
-                    vnl_vector<double> const & /*ai*/,
-                    vnl_vector<double> const & /*bj*/,
-                    vnl_vector<double> const & /*c*/,
-                    vnl_vector<double> const & /*fij*/,
+                    const vnl_vector<double> & /*ai*/,
+                    const vnl_vector<double> & /*bj*/,
+                    const vnl_vector<double> & /*c*/,
+                    const vnl_vector<double> & /*fij*/,
                     double & weight) override
   {
     weight = double((i + 1) * (j + 1)) / (this->number_of_a() * this->number_of_b());

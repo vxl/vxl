@@ -5,9 +5,14 @@
 // \file
 // \author fsm
 
-void vil1_byte_swap(void *, void *);
+void
+vil1_byte_swap(void *, void *);
 
 template <class T>
-inline void vil1_byte_swap(T &x) { vil1_byte_swap(&x, &x + 1); }
+inline void
+vil1_byte_swap(T & x)
+{
+  vil1_byte_swap(&x, &x + 1);
+}
 
 #endif // vil1_byte_swap_h_

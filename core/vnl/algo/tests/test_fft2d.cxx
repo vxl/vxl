@@ -23,16 +23,16 @@
 #include "vnl/vnl_complexify.h"
 #include <vnl/algo/vnl_fft_2d.h>
 
-inline static double
+static inline double
 function(unsigned i, unsigned j)
 {
   return i * j;
 }
 
 void
-test_cplx(vnl_fft_prime_factors<double> const & /*prx*/,
-          vnl_fft_prime_factors<double> const & /*pry*/,
-          vnl_matrix<std::complex<double>> const & M,
+test_cplx(const vnl_fft_prime_factors<double> & /*prx*/,
+          const vnl_fft_prime_factors<double> & /*pry*/,
+          const vnl_matrix<std::complex<double>> & M,
           int dir)
 {
   vnl_matrix<std::complex<double>> fft_matrix = M;

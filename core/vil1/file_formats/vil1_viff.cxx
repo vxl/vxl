@@ -95,7 +95,7 @@ vil1_viff_file_format::make_output_image(vil1_stream * is,
   return new vil1_viff_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
-char const *
+const char *
 vil1_viff_file_format::tag() const
 {
   return vil1_viff_format_tag;
@@ -121,7 +121,7 @@ vil1_viff_generic_image::vil1_viff_generic_image(vil1_stream * is)
 }
 
 bool
-vil1_viff_generic_image::get_property(char const * tag, void * prop) const
+vil1_viff_generic_image::get_property(const char * tag, void * prop) const
 {
   if (0 == std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool *)prop) = true : true;
@@ -132,7 +132,7 @@ vil1_viff_generic_image::get_property(char const * tag, void * prop) const
   return false;
 }
 
-char const *
+const char *
 vil1_viff_generic_image::file_format() const
 {
   return vil1_viff_format_tag;
@@ -159,10 +159,7 @@ vil1_viff_generic_image::vil1_viff_generic_image(vil1_stream * is,
   write_header();
 }
 
-vil1_viff_generic_image::~vil1_viff_generic_image()
-{
-  is_->unref();
-}
+vil1_viff_generic_image::~vil1_viff_generic_image() { is_->unref(); }
 
 bool
 vil1_viff_generic_image::read_header()
@@ -382,7 +379,7 @@ vil1_viff_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys)
 }
 
 bool
-vil1_viff_generic_image::put_section(void const * buf, int x0, int y0, int xs, int ys)
+vil1_viff_generic_image::put_section(const void * buf, int x0, int y0, int xs, int ys)
 {
   assert(x0 >= 0);
   assert(y0 >= 0);
@@ -390,7 +387,7 @@ vil1_viff_generic_image::put_section(void const * buf, int x0, int y0, int xs, i
   assert((y0 + ys) <= height_);
   if (!buf)
     return false; // no storage location given
-  auto const * ob = (unsigned char const *)buf;
+  const auto * ob = (const unsigned char *)buf;
   if ((x0 * bits_per_component_) % 8 != 0)
     std::cerr
       << "vil1_viff_generic_image::put_section(): Warning: x0 should be a multiple of 8 for this type of image\n";
@@ -444,7 +441,9 @@ vil1_viff_generic_image::check_endian()
   return endian_consistent_;
 }
 
-vil1_image vil1_viff_generic_image::get_plane(unsigned int plane) const {
+vil1_image
+vil1_viff_generic_image::get_plane(unsigned int plane) const
+{
   assert((int)plane < planes_);
   std::cerr << "FIXME: this should be an adapter that shifts to the plane asked for\n";
   return const_cast<vil1_viff_generic_image *>(this);

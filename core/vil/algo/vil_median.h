@@ -17,12 +17,13 @@
 //  should be a random access iterator into a container of T such
 //  that the range [values,values+n) is valid.
 template <class T, class Iter>
-inline T vil_sorted_value(const T* im, const std::ptrdiff_t* offset, Iter values,
-                          unsigned n, unsigned r)
+inline T
+vil_sorted_value(const T * im, const std::ptrdiff_t * offset, Iter values, unsigned n, unsigned r)
 {
   Iter v = values;
-  for (unsigned i=0;i<n;++i,++v) *v=im[offset[i]];
-  std::nth_element(values, values+r, values+n);
+  for (unsigned i = 0; i < n; ++i, ++v)
+    *v = im[offset[i]];
+  std::nth_element(values, values + r, values + n);
   return values[r];
 }
 
@@ -33,22 +34,26 @@ inline T vil_sorted_value(const T* im, const std::ptrdiff_t* offset, Iter values
 // \relatesalso vil_image_view
 // \relatesalso vil_structuring_element
 template <class T>
-inline T vil_sorted_value(const vil_image_view<T>& image, unsigned plane,
-                          const vil_structuring_element& element, int i0, int j0,
-                          std::vector<T>& values, double r)
+inline T
+vil_sorted_value(const vil_image_view<T> & image,
+                 unsigned plane,
+                 const vil_structuring_element & element,
+                 int i0,
+                 int j0,
+                 std::vector<T> & values,
+                 double r)
 {
   values.clear();
   std::size_t n = element.p_i().size();
-  for (std::size_t k=0;k<n;++k)
+  for (std::size_t k = 0; k < n; ++k)
   {
-    unsigned int i = i0+element.p_i()[k];
-    unsigned int j = j0+element.p_j()[k];
-    if (i<image.ni() && j<image.nj())
-      values.push_back(image(i,j,plane));
+    unsigned int i = i0 + element.p_i()[k];
+    unsigned int j = j0 + element.p_j()[k];
+    if (i < image.ni() && j < image.nj())
+      values.push_back(image(i, j, plane));
   }
-  std::nth_element(values.begin(),values.begin()+std::size_t(r*(values.size()-1)),
-    values.end());
-  return values[std::size_t(r*(values.size()-1))];
+  std::nth_element(values.begin(), values.begin() + std::size_t(r * (values.size() - 1)), values.end());
+  return values[std::size_t(r * (values.size() - 1))];
 }
 
 //: Computes median value of pixels under structuring element.
@@ -57,8 +62,9 @@ inline T vil_sorted_value(const vil_image_view<T>& image, unsigned plane,
 // \relatesalso vil_image_view
 // \relatesalso vil_structuring_element
 template <class T>
-void vil_median(const vil_image_view<T>& src_image,
-                vil_image_view<T>& dest_image,
-                const vil_structuring_element& element);
+void
+vil_median(const vil_image_view<T> & src_image,
+           vil_image_view<T> & dest_image,
+           const vil_structuring_element & element);
 
 #endif // vil_median_h_

@@ -241,7 +241,7 @@ GL_restore(GLboolean & map_color, GLint alignment, GLint row_length, GLint skip_
 }
 
 bool
-vgui_section_render(void const * pixels,
+vgui_section_render(const void * pixels,
                     unsigned w,
                     unsigned h, // Size of image.
                     float x0,
@@ -304,7 +304,7 @@ vgui_section_render(void const * pixels,
 }
 
 bool
-vgui_view_render(void const * pixels,
+vgui_view_render(const void * pixels,
                  unsigned w,
                  unsigned h, // Size of view
                  float zoomx,

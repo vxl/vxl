@@ -21,14 +21,14 @@ vidl_capture_tableau::type_name() const
 
 
 // Default constructor
-vidl_capture_tableau::vidl_capture_tableau(vgui_tableau_sptr const & child_tableau)
+vidl_capture_tableau::vidl_capture_tableau(const vgui_tableau_sptr & child_tableau)
   : vgui_wrapper_tableau(child_tableau)
   , ostream_(nullptr)
 {}
 
 
 bool
-vidl_capture_tableau::handle(vgui_event const & e)
+vidl_capture_tableau::handle(const vgui_event & e)
 {
   bool handled = false;
   if (child)

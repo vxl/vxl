@@ -52,7 +52,7 @@ struct vul_timer_data
 // for CLK_TCK
 
 
-//#define CLK_TCK _sysconf(3) in <climits> has error
+// #define CLK_TCK _sysconf(3) in <climits> has error
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
 #  include <direct.h> // for sysconf()
