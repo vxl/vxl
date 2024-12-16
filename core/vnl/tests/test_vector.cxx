@@ -1,6 +1,7 @@
 // This is core/vnl/tests/test_vector.cxx
 #include <iostream>
 #include <sstream>
+#include <limits>
 #include "vnl/vnl_math.h"
 #include "vnl/vnl_vector.h"
 #include "vnl/vnl_float_3.h"
