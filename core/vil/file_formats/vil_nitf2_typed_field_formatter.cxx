@@ -416,7 +416,8 @@ vil_nitf2_string_formatter::write_vcl_stream(std::ostream & output, const std::s
   return !output.fail();
 }
 
-bool vil_nitf2_string_formatter::is_valid(std::string /*value*/) const
+bool
+vil_nitf2_string_formatter::is_valid(std::string /*value*/) const
 {
   // to do: check char set
   return true;

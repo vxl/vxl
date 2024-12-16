@@ -17,18 +17,17 @@
 #include "vcsl_unit_sptr.h"
 
 //: Abstract unit associated to the angle dimension
-class vcsl_angle_unit
-  : public vcsl_unit
+class vcsl_angle_unit : public vcsl_unit
 {
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
- protected:
+protected:
   // Default constructor
   vcsl_angle_unit() = default;
 
- public:
+public:
   // Destructor
   ~vcsl_angle_unit() override = default;
 
@@ -39,17 +38,23 @@ class vcsl_angle_unit
   //: Are `this' and `other' compatible units ?
   // (Are they associated to the same dimension ?)
   // Pure virtual function of vcsl_unit
-  bool compatible_units(vcsl_unit_sptr const& other) const override;
+  bool
+  compatible_units(const vcsl_unit_sptr & other) const override;
 
   //: Return the standard unit associated to the dimension of `this'
   // Pure virtual function of vcsl_unit
-  vcsl_unit_sptr standard_unit() const override;
+  vcsl_unit_sptr
+  standard_unit() const override;
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  const vcsl_angle_unit *cast_to_angle_unit() const override { return this; }
+  const vcsl_angle_unit *
+  cast_to_angle_unit() const override
+  {
+    return this;
+  }
 };
 
 #endif // vcsl_angle_unit_h_

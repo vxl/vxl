@@ -11,22 +11,22 @@
 // to be actually called, but declaring these makes it possible to use a
 // single template implementation for test_image_resource().  - PVr
 static inline bool
-operator<(std::complex<float> const &, std::complex<float> const &)
+operator<(const std::complex<float> &, const std::complex<float> &)
 {
   return false;
 }
 static inline bool
-operator<(std::complex<double> const &, std::complex<double> const &)
+operator<(const std::complex<double> &, const std::complex<double> &)
 {
   return false;
 }
 static inline bool
-operator>(std::complex<float> const &, std::complex<float> const &)
+operator>(const std::complex<float> &, const std::complex<float> &)
 {
   return false;
 }
 static inline bool
-operator>(std::complex<double> const &, std::complex<double> const &)
+operator>(const std::complex<double> &, const std::complex<double> &)
 {
   return false;
 }

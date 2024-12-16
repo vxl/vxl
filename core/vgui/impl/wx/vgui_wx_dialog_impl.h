@@ -16,8 +16,8 @@
 #include <string>
 #include <cstddef>
 #include <vgui/internals/vgui_dialog_impl.h>
-class  vgui_wx_adaptor;
-class  vgui_dialog_field;
+class vgui_wx_adaptor;
+class vgui_dialog_field;
 struct vgui_wx_dialog_choice;
 
 #ifdef _MSC_VER
@@ -36,54 +36,66 @@ class wxSizer;
 //-------------------------------------------------------------------------
 class vgui_wx_dialog_impl : public vgui_dialog_impl
 {
- public:
+public:
   //: Constructor - create an empty dialog with the given title.
-  vgui_wx_dialog_impl(const char* name);
+  vgui_wx_dialog_impl(const char * name);
 
- protected:
+protected:
   //: Destructor.
   virtual ~vgui_wx_dialog_impl();
 
   //: Display the dialog box form and collect data from the user.
-  virtual bool ask();
+  virtual bool
+  ask();
 
   //: Create a choice widget.
-  virtual void* choice_field_widget(const char* txt,
-                                    const std::vector<std::string>& labels,
-                                    int& val);
+  virtual void *
+  choice_field_widget(const char * txt, const std::vector<std::string> & labels, int & val);
 
   //: Create the inline_tableau_widget (OpenGL area).
-  virtual void* inline_tableau_widget(const vgui_tableau_sptr tab,
-                                      unsigned int width,
-                                      unsigned int height);
+  virtual void *
+  inline_tableau_widget(const vgui_tableau_sptr tab, unsigned int width, unsigned int height);
 
   //: Set the modality of the dialog box.
-  virtual void modal(bool m) { is_modal_ = m; }
+  virtual void
+  modal(bool m)
+  {
+    is_modal_ = m;
+  }
 
- private:
+private:
   // private helpers
-  void build_wx_dialog();
-  void destroy_wx_dialog();
-  bool has_changed() const;
-  int probe_for_max_label_width();
+  void
+  build_wx_dialog();
+  void
+  destroy_wx_dialog();
+  bool
+  has_changed() const;
+  int
+  probe_for_max_label_width();
 
   // set of helpers to setup the different widgets in the dialog
-  wxSizer* separator_element(int min_width);
-  wxSizer* bool_element     (vgui_dialog_field* field);
-  wxSizer* choice_element   (vgui_dialog_field* field,
-                             vgui_wx_dialog_choice* choices);
-  wxSizer* text_element     (vgui_dialog_field* field);
-  wxSizer* text_with_button_element(vgui_dialog_field* field,
-                                    wxTextCtrl*& text_control,
-                                    const std::string& button,
-                                    int event_id);
-  wxSizer* exit_buttons_element();
+  wxSizer *
+  separator_element(int min_width);
+  wxSizer *
+  bool_element(vgui_dialog_field * field);
+  wxSizer *
+  choice_element(vgui_dialog_field * field, vgui_wx_dialog_choice * choices);
+  wxSizer *
+  text_element(vgui_dialog_field * field);
+  wxSizer *
+  text_with_button_element(vgui_dialog_field * field,
+                           wxTextCtrl *& text_control,
+                           const std::string & button,
+                           int event_id);
+  wxSizer *
+  exit_buttons_element();
 
   //: Title of the dialog widget.
   std::string title_;
 
   //: Pointer to wxWidgets dialog widget.
-  wxDialog* dialog_;
+  wxDialog * dialog_;
 
   //: Element count at the last dialog construction (i.e., ask()).
   std::size_t last_element_count_;
@@ -94,7 +106,7 @@ class vgui_wx_dialog_impl : public vgui_dialog_impl
   //: True if the dialog box is modal (true by default).
   bool is_modal_;
 
-  vgui_wx_adaptor* adaptor_;
+  vgui_wx_adaptor * adaptor_;
 };
 
 #endif // vgui_wx_dialog_impl_h_

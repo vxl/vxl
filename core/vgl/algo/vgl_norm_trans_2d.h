@@ -38,43 +38,42 @@
 #include <vgl/algo/vgl_h_matrix_2d.h>
 
 template <class T>
-class vgl_norm_trans_2d: public vgl_h_matrix_2d<T>
+class vgl_norm_trans_2d : public vgl_h_matrix_2d<T>
 {
- public:
-
+public:
   // Constructors/Initializers/Destructors-------------------------------------
 
   vgl_norm_trans_2d();
-  vgl_norm_trans_2d(const vgl_norm_trans_2d<T>& M);
-  vgl_norm_trans_2d(vnl_matrix_fixed<T,3,3> const& M);
-  vgl_norm_trans_2d(const T* t_matrix);
-  vgl_norm_trans_2d(std::istream& s);
-  vgl_norm_trans_2d(char const* filename);
- ~vgl_norm_trans_2d();
+  vgl_norm_trans_2d(const vgl_norm_trans_2d<T> & M);
+  vgl_norm_trans_2d(const vnl_matrix_fixed<T, 3, 3> & M);
+  vgl_norm_trans_2d(const T * t_matrix);
+  vgl_norm_trans_2d(std::istream & s);
+  vgl_norm_trans_2d(const char * filename);
+  ~vgl_norm_trans_2d();
 
   // Operations----------------------------------------------------------------
 
   //: compute the normalizing transform
-  bool compute_from_points(std::vector<vgl_homg_point_2d<T> > const& points,
-                           bool isotropic = true);
-  bool compute_from_lines(std::vector<vgl_homg_line_2d<T>  > const& lines,
-                          bool isotropic = true);
   bool
-    compute_from_points_and_lines(std::vector<vgl_homg_point_2d<T> > const& pts,
-                                  std::vector<vgl_homg_line_2d<T> > const& lines
-                                  , bool isotropic = true);
+  compute_from_points(const std::vector<vgl_homg_point_2d<T>> & points, bool isotropic = true);
+  bool
+  compute_from_lines(const std::vector<vgl_homg_line_2d<T>> & lines, bool isotropic = true);
+  bool
+  compute_from_points_and_lines(const std::vector<vgl_homg_point_2d<T>> & pts,
+                                const std::vector<vgl_homg_line_2d<T>> & lines,
+                                bool isotropic = true);
 
- protected :
-  //Utility functions
+protected:
+  // Utility functions
 
-  static bool scale_xyroot2(std::vector<vgl_homg_point_2d<T> > const& in,
-                            T& radius);
+  static bool
+  scale_xyroot2(const std::vector<vgl_homg_point_2d<T>> & in, T & radius);
 
-  static void center_of_mass(std::vector<vgl_homg_point_2d<T> > const& points,
-                             T& cx, T& cy);
+  static void
+  center_of_mass(const std::vector<vgl_homg_point_2d<T>> & points, T & cx, T & cy);
 
-  static bool scale_aniostropic(std::vector<vgl_homg_point_2d<T> > const& in,
-                                T& sdx, T& sdy, T& c, T& s);
+  static bool
+  scale_aniostropic(const std::vector<vgl_homg_point_2d<T>> & in, T & sdx, T & sdy, T & c, T & s);
 };
 
 #define VGL_NORM_TRANS_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_norm_trans_2d.hxx first"

@@ -16,8 +16,7 @@
 #include "vcsl_meter_sptr.h"
 
 //: Standard unit associated to the length dimension
-class vcsl_meter
-  : public vcsl_length_unit
+class vcsl_meter : public vcsl_length_unit
 {
   //***************************************************************************
   // Constructors/Destructor
@@ -26,7 +25,7 @@ class vcsl_meter
   // Default constructor
   vcsl_meter() = default;
 
- public:
+public:
   // Destructor
   ~vcsl_meter() override = default;
 
@@ -36,14 +35,19 @@ class vcsl_meter
 
   //: Returns the number of units of `this' equal of the standard_unit for the dimension
   // Pure virtual function of vcsl_unit
-  double units_per_standard_unit() const override { return 1; }
+  double
+  units_per_standard_unit() const override
+  {
+    return 1;
+  }
 
   //***************************************************************************
   // Singleton pattern
   //***************************************************************************
 
   //: Return the reference to the unique vcsl_meter object
-  static vcsl_meter_sptr instance();
+  static vcsl_meter_sptr
+  instance();
 };
 
 #endif // vcsl_meter_h_

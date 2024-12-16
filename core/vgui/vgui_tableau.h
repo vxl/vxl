@@ -82,69 +82,94 @@ struct vgui_tableau_sptr;
 //  webpage to see this done.
 class vgui_tableau : public vgui_parent_child_link_data
 {
- public:
+public:
   //: Constructor - in general you should not use this, use vgui_tableau_new.
   vgui_tableau();
 
   //: Return the name of the tableau.
-  virtual std::string name() const { return file_name(); }
+  virtual std::string
+  name() const
+  {
+    return file_name();
+  }
 
   //: Return the name of a file associated with some tableau below (if meaningful).
-  virtual std::string file_name() const { return "(none)"; }
+  virtual std::string
+  file_name() const
+  {
+    return "(none)";
+  }
 
   //: Used to provide an informative name for printouts, debugging etc.
   //  Often it's type_name() + some representation of the essential state.
-  virtual std::string pretty_name() const { return type_name(); }
+  virtual std::string
+  pretty_name() const
+  {
+    return type_name();
+  }
 
   //: Return name of most derived class (for RTTI purposes).
-  virtual std::string type_name() const;
+  virtual std::string
+  type_name() const;
 
   //: Get the parent tableaux for this tableau.
-  void get_parents (std::vector<vgui_tableau_sptr> *out) const;
+  void
+  get_parents(std::vector<vgui_tableau_sptr> * out) const;
 
   //: Get the child tableaux for this tableau.
-  void get_children(std::vector<vgui_tableau_sptr> *out) const;
+  void
+  get_children(std::vector<vgui_tableau_sptr> * out) const;
 
   //: Get the ith child or return 0.
-  vgui_tableau_sptr get_child(unsigned i) const;
+  vgui_tableau_sptr
+  get_child(unsigned i) const;
 
   //: Add the given tableau to the list of child tableaux.
   //  Virtual overridden by consenting parents.
-  virtual bool add_child(vgui_tableau_sptr const &);
+  virtual bool
+  add_child(const vgui_tableau_sptr &);
 
   //: Remove the given child from the list of child tableaux.
-  virtual bool remove_child(vgui_tableau_sptr const &);
+  virtual bool
+  remove_child(const vgui_tableau_sptr &);
 
   //: Push all tableaux onto the given vector.
-  static void get_all(std::vector<vgui_tableau_sptr> *out);
+  static void
+  get_all(std::vector<vgui_tableau_sptr> * out);
 
   //: Returns true if the given address points to a valid tableau.
-  static bool exists(vgui_tableau_sptr const &);
+  static bool
+  exists(const vgui_tableau_sptr &);
 
   //: Called whenever a child of this tableau is about to be forcibly replaced
-  virtual bool notify_replaced_child(vgui_tableau_sptr const & old_child,
-                                     vgui_tableau_sptr const & new_child);
+  virtual bool
+  notify_replaced_child(const vgui_tableau_sptr & old_child, const vgui_tableau_sptr & new_child);
 
   //: Add the given menu to the popup menu for the tableau.
-  virtual void add_popup(vgui_menu &);
+  virtual void
+  add_popup(vgui_menu &);
 
   //: Get the default popup menu for the tableau.
-  virtual void get_popup(vgui_popup_params const &, vgui_menu &);
+  virtual void
+  get_popup(const vgui_popup_params &, vgui_menu &);
 
   //: Post a message event.
   //  The fact that this is virtual does not imply that you should
   //  go and override it.
-  virtual void post_message(char const *, void const *);
+  virtual void
+  post_message(const char *, const void *);
 
   //: Post a draw event.
   //  The fact that this is virtual does not imply that you should
   //  go and override it.
-  virtual void post_redraw();
+  virtual void
+  post_redraw();
 
   //: Post an overlay-redraw event.
   //  The fact that this is virtual does not imply that you should
   //  go and override it.
-  virtual void post_overlay_redraw();
+  virtual void
+  post_overlay_redraw();
 
   //: Post an idle request event.
   //  The fact that this is virtual does not imply that you should
@@ -160,57 +185,69 @@ class vgui_tableau : public vgui_parent_child_link_data
   //  processing; in this case, it will receive more idle event to
   //  allow it to complete processing.
   //
-  virtual void post_idle_request();
+  virtual void
+  post_idle_request();
 
   //: Handle all events sent to this tableau.
   //  Override in subclass to give the tableau some appearance and behaviour.
-  virtual bool handle(vgui_event const &);
+  virtual bool
+  handle(const vgui_event &);
 
   //: Get the bounding box of this tableau.
   //  If infinite in extent, or nothing is drawn, or you can't be bothered to
   //  implement it, return false.
   //  const. if you need to cache, cast away const.
-  virtual bool get_bounding_box(float low[3], float high[3]) const;
+  virtual bool
+  get_bounding_box(float low[3], float high[3]) const;
 
   //: Called by default handle when it receives a draw event.
-  virtual bool draw();
+  virtual bool
+  draw();
 
   //: Called by default handle when it receives a mouse down event.
-  virtual bool mouse_down(int x, int y, vgui_button, vgui_modifier);
+  virtual bool
+  mouse_down(int x, int y, vgui_button, vgui_modifier);
 
   //: Called by default handle when it receives a mouse up event.
-  virtual bool mouse_up(int x, int y, vgui_button, vgui_modifier);
+  virtual bool
+  mouse_up(int x, int y, vgui_button, vgui_modifier);
 
   //: Called by handle when it receives a mouse motion event.
-  virtual bool motion(int x, int y);
+  virtual bool
+  motion(int x, int y);
 
   //: Called by default handle when it receives a key-press event.
-  virtual bool key_press(int x, int y, vgui_key, vgui_modifier);
+  virtual bool
+  key_press(int x, int y, vgui_key, vgui_modifier);
 
   //: Called by default handle when it receives a '?' pressed event.
-  virtual bool help(); // this is called if '?' is pressed
+  virtual bool
+  help(); // this is called if '?' is pressed
 
   //: Called when the application is otherwise idle.
   // Override if you want to do idle processing.
   // Return false once your idle processing is complete,
   // or if you have no need for more idle processing.
   // Return true if you need more idle processing time.
-  virtual bool idle();
+  virtual bool
+  idle();
 
   //: Increase the reference count by one (for smart pointers).
   //  "const" is for convenience, it is cast away internally.
-  void ref() const;
+  void
+  ref() const;
 
   //: Decrease the reference count by one (for smart pointers).
   //  "const" is for convenience, it is cast away internally.
   //  If the reference count reaches zero then delete the object.
-  void unref() const;
+  void
+  unref() const;
 
- protected:
+protected:
   //: Destructor - called by vgui_tableau_sptr.
   virtual ~vgui_tableau();
 
- private:
+private:
   friend struct vgui_parent_child_link;
   friend struct vgui_parent_child_link_impl;
   friend class vgui_adaptor;
@@ -220,7 +257,8 @@ class vgui_tableau : public vgui_parent_child_link_data
 };
 
 //: Print some indication of what the tableau is.
-std::ostream &operator<<(std::ostream &os, vgui_tableau_sptr const &t);
+std::ostream &
+operator<<(std::ostream & os, const vgui_tableau_sptr & t);
 
 #include "vgui_tableau_sptr.h"
 

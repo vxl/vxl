@@ -38,7 +38,7 @@ enum vil_pixel_format
   VIL_PIXEL_FORMAT_SBYTE = 8,
   VIL_PIXEL_FORMAT_FLOAT = 9,
   VIL_PIXEL_FORMAT_DOUBLE = 10,
-//  VIL_PIXEL_FORMAT_LONG_DOUBLE = 11,
+  //  VIL_PIXEL_FORMAT_LONG_DOUBLE = 11,
   VIL_PIXEL_FORMAT_BOOL = 12,
 
 #if VXL_HAS_INT_64
@@ -67,15 +67,15 @@ enum vil_pixel_format
   VIL_PIXEL_FORMAT_RGBA_SBYTE = 31,
   VIL_PIXEL_FORMAT_RGBA_FLOAT = 32,
   VIL_PIXEL_FORMAT_RGBA_DOUBLE = 33,
-//  VIL_PIXEL_FORMAT_RGBA_LONG_DOUBLE = 34,
+  //  VIL_PIXEL_FORMAT_RGBA_LONG_DOUBLE = 34,
 
-//: std::complex<float> is a scalar for vil's purposes.
+  //: std::complex<float> is a scalar for vil's purposes.
   VIL_PIXEL_FORMAT_COMPLEX_FLOAT = 35,
-//: std::complex<double> is a scalar for vil's purposes.
+  //: std::complex<double> is a scalar for vil's purposes.
   VIL_PIXEL_FORMAT_COMPLEX_DOUBLE = 36,
 
-// Add values here and be careful to keep values in vil_pixel_format.cxx in sync
-// Don't forget to increase the end value. Also add to vil_convert_cast in vil_convert.h
+  // Add values here and be careful to keep values in vil_pixel_format.cxx in sync
+  // Don't forget to increase the end value. Also add to vil_convert_cast in vil_convert.h
 
   VIL_PIXEL_FORMAT_ENUM_END = 37
 };
@@ -84,14 +84,18 @@ enum vil_pixel_format
 //: The pixel format enumeration corresponding to the C++ type.
 //
 template <class T>
-inline vil_pixel_format vil_pixel_format_of(T){return VIL_PIXEL_FORMAT_UNKNOWN;}
+inline vil_pixel_format
+vil_pixel_format_of(T)
+{
+  return VIL_PIXEL_FORMAT_UNKNOWN;
+}
 
 
 //: The C++ type corresponding to an invalid pixel format
 //
 // See vil_pixel_format_type_of.
 //
-typedef void* vil_pixel_format_invalid_type;
+typedef void * vil_pixel_format_invalid_type;
 
 //: The C++ type corresponding to a pixel format enumeration.
 // Use like
@@ -113,69 +117,83 @@ struct vil_pixel_format_type_of
 
 
 //: Get the vil_pixel_format value for a given type.
-#define vil_pixel_format_macro(T,C,V)\
-template <> inline vil_pixel_format vil_pixel_format_of(T /*dummy*/) { return V; }\
-template <> struct vil_pixel_format_type_of<V> { typedef T type; typedef C component_type; }
+#define vil_pixel_format_macro(T, C, V)                    \
+  template <>                                              \
+  inline vil_pixel_format vil_pixel_format_of(T /*dummy*/) \
+  {                                                        \
+    return V;                                              \
+  }                                                        \
+  template <>                                              \
+  struct vil_pixel_format_type_of<V>                       \
+  {                                                        \
+    typedef T type;                                        \
+    typedef C component_type;                              \
+  }
 
 #if VXL_HAS_INT_64
 vil_pixel_format_macro(vxl_uint_64, vxl_uint_64, VIL_PIXEL_FORMAT_UINT_64);
-vil_pixel_format_macro(vxl_int_64,  vxl_int_64,  VIL_PIXEL_FORMAT_INT_64);
+vil_pixel_format_macro(vxl_int_64, vxl_int_64, VIL_PIXEL_FORMAT_INT_64);
 #endif
 vil_pixel_format_macro(vxl_uint_32, vxl_uint_32, VIL_PIXEL_FORMAT_UINT_32);
-vil_pixel_format_macro(vxl_int_32,  vxl_int_32,  VIL_PIXEL_FORMAT_INT_32);
+vil_pixel_format_macro(vxl_int_32, vxl_int_32, VIL_PIXEL_FORMAT_INT_32);
 vil_pixel_format_macro(vxl_uint_16, vxl_uint_16, VIL_PIXEL_FORMAT_UINT_16);
-vil_pixel_format_macro(vxl_int_16,  vxl_int_16,  VIL_PIXEL_FORMAT_INT_16);
-vil_pixel_format_macro(vxl_byte,    vxl_byte,    VIL_PIXEL_FORMAT_BYTE);
-vil_pixel_format_macro(vxl_sbyte,   vxl_sbyte,   VIL_PIXEL_FORMAT_SBYTE);
-vil_pixel_format_macro(float,       float,       VIL_PIXEL_FORMAT_FLOAT);
-vil_pixel_format_macro(double,      double,      VIL_PIXEL_FORMAT_DOUBLE);
-vil_pixel_format_macro(bool,        bool,        VIL_PIXEL_FORMAT_BOOL);
+vil_pixel_format_macro(vxl_int_16, vxl_int_16, VIL_PIXEL_FORMAT_INT_16);
+vil_pixel_format_macro(vxl_byte, vxl_byte, VIL_PIXEL_FORMAT_BYTE);
+vil_pixel_format_macro(vxl_sbyte, vxl_sbyte, VIL_PIXEL_FORMAT_SBYTE);
+vil_pixel_format_macro(float, float, VIL_PIXEL_FORMAT_FLOAT);
+vil_pixel_format_macro(double, double, VIL_PIXEL_FORMAT_DOUBLE);
+vil_pixel_format_macro(bool, bool, VIL_PIXEL_FORMAT_BOOL);
 
 #if VXL_HAS_INT_64
 vil_pixel_format_macro(vil_rgb<vxl_uint_64>, vxl_uint_64, VIL_PIXEL_FORMAT_RGB_UINT_64);
-vil_pixel_format_macro(vil_rgb<vxl_int_64>,  vxl_int_64,  VIL_PIXEL_FORMAT_RGB_INT_64);
+vil_pixel_format_macro(vil_rgb<vxl_int_64>, vxl_int_64, VIL_PIXEL_FORMAT_RGB_INT_64);
 #endif
 vil_pixel_format_macro(vil_rgb<vxl_uint_32>, vxl_uint_32, VIL_PIXEL_FORMAT_RGB_UINT_32);
-vil_pixel_format_macro(vil_rgb<vxl_int_32>,  vxl_int_32,  VIL_PIXEL_FORMAT_RGB_INT_32);
+vil_pixel_format_macro(vil_rgb<vxl_int_32>, vxl_int_32, VIL_PIXEL_FORMAT_RGB_INT_32);
 vil_pixel_format_macro(vil_rgb<vxl_uint_16>, vxl_uint_16, VIL_PIXEL_FORMAT_RGB_UINT_16);
-vil_pixel_format_macro(vil_rgb<vxl_int_16>,  vxl_int_16,  VIL_PIXEL_FORMAT_RGB_INT_16);
-vil_pixel_format_macro(vil_rgb<vxl_byte>,    vxl_byte,    VIL_PIXEL_FORMAT_RGB_BYTE);
-vil_pixel_format_macro(vil_rgb<vxl_sbyte>,   vxl_sbyte,   VIL_PIXEL_FORMAT_RGB_SBYTE);
-vil_pixel_format_macro(vil_rgb<float>,       float,       VIL_PIXEL_FORMAT_RGB_FLOAT);
-vil_pixel_format_macro(vil_rgb<double>,      double,      VIL_PIXEL_FORMAT_RGB_DOUBLE);
+vil_pixel_format_macro(vil_rgb<vxl_int_16>, vxl_int_16, VIL_PIXEL_FORMAT_RGB_INT_16);
+vil_pixel_format_macro(vil_rgb<vxl_byte>, vxl_byte, VIL_PIXEL_FORMAT_RGB_BYTE);
+vil_pixel_format_macro(vil_rgb<vxl_sbyte>, vxl_sbyte, VIL_PIXEL_FORMAT_RGB_SBYTE);
+vil_pixel_format_macro(vil_rgb<float>, float, VIL_PIXEL_FORMAT_RGB_FLOAT);
+vil_pixel_format_macro(vil_rgb<double>, double, VIL_PIXEL_FORMAT_RGB_DOUBLE);
 
 #if VXL_HAS_INT_64
 vil_pixel_format_macro(vil_rgba<vxl_uint_64>, vxl_uint_64, VIL_PIXEL_FORMAT_RGBA_UINT_64);
-vil_pixel_format_macro(vil_rgba<vxl_int_64>,  vxl_int_64,  VIL_PIXEL_FORMAT_RGBA_INT_64);
+vil_pixel_format_macro(vil_rgba<vxl_int_64>, vxl_int_64, VIL_PIXEL_FORMAT_RGBA_INT_64);
 #endif
 vil_pixel_format_macro(vil_rgba<vxl_uint_32>, vxl_uint_32, VIL_PIXEL_FORMAT_RGBA_UINT_32);
-vil_pixel_format_macro(vil_rgba<vxl_int_32>,  vxl_int_32,  VIL_PIXEL_FORMAT_RGBA_INT_32);
+vil_pixel_format_macro(vil_rgba<vxl_int_32>, vxl_int_32, VIL_PIXEL_FORMAT_RGBA_INT_32);
 vil_pixel_format_macro(vil_rgba<vxl_uint_16>, vxl_uint_16, VIL_PIXEL_FORMAT_RGBA_UINT_16);
-vil_pixel_format_macro(vil_rgba<vxl_int_16>,  vxl_int_16,  VIL_PIXEL_FORMAT_RGBA_INT_16);
-vil_pixel_format_macro(vil_rgba<vxl_byte>,    vxl_byte,    VIL_PIXEL_FORMAT_RGBA_BYTE);
-vil_pixel_format_macro(vil_rgba<vxl_sbyte>,   vxl_sbyte,   VIL_PIXEL_FORMAT_RGBA_SBYTE);
-vil_pixel_format_macro(vil_rgba<float>,       float,       VIL_PIXEL_FORMAT_RGBA_FLOAT);
-vil_pixel_format_macro(vil_rgba<double>,      double,      VIL_PIXEL_FORMAT_RGBA_DOUBLE);
+vil_pixel_format_macro(vil_rgba<vxl_int_16>, vxl_int_16, VIL_PIXEL_FORMAT_RGBA_INT_16);
+vil_pixel_format_macro(vil_rgba<vxl_byte>, vxl_byte, VIL_PIXEL_FORMAT_RGBA_BYTE);
+vil_pixel_format_macro(vil_rgba<vxl_sbyte>, vxl_sbyte, VIL_PIXEL_FORMAT_RGBA_SBYTE);
+vil_pixel_format_macro(vil_rgba<float>, float, VIL_PIXEL_FORMAT_RGBA_FLOAT);
+vil_pixel_format_macro(vil_rgba<double>, double, VIL_PIXEL_FORMAT_RGBA_DOUBLE);
 
 vil_pixel_format_macro(std::complex<float>, std::complex<float>, VIL_PIXEL_FORMAT_COMPLEX_FLOAT);
-vil_pixel_format_macro(std::complex<double>,std::complex<double>,VIL_PIXEL_FORMAT_COMPLEX_DOUBLE);
+vil_pixel_format_macro(std::complex<double>, std::complex<double>, VIL_PIXEL_FORMAT_COMPLEX_DOUBLE);
 
 #undef vil_pixel_format_macro
 
 //: Return the number of bytes used by each component of pixel format f
-unsigned vil_pixel_format_sizeof_components(enum vil_pixel_format f);
+unsigned
+vil_pixel_format_sizeof_components(enum vil_pixel_format f);
 
 //: Return the number of components in pixel format f
-unsigned vil_pixel_format_num_components(enum vil_pixel_format f);
+unsigned
+vil_pixel_format_num_components(enum vil_pixel_format f);
 
 //: Return the format of each component of pixel format f
-vil_pixel_format vil_pixel_format_component_format(enum vil_pixel_format f);
+vil_pixel_format
+vil_pixel_format_component_format(enum vil_pixel_format f);
 
 //: Output a pretty string representing the pixel format.
-std::ostream & operator << (std::ostream &os, vil_pixel_format f);
+std::ostream &
+operator<<(std::ostream & os, vil_pixel_format f);
 
 //: Convert a string into a pixel format.
 // This uses the same encoding as operator<<.
-vil_pixel_format vil_pixel_format_from_string(const char * s);
+vil_pixel_format
+vil_pixel_format_from_string(const char * s);
 
 #endif // vil_pixel_format_h_

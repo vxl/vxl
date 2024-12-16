@@ -9,7 +9,9 @@
 // Is `this' invertible at time `time'? Never !
 // REQUIRE: valid_time(time)
 //---------------------------------------------------------------------------
-bool vcsl_perspective::is_invertible(double time) const {
+bool
+vcsl_perspective::is_invertible(double time) const
+{
   // require
   assert(valid_time(time));
   return false;
@@ -55,8 +57,9 @@ vcsl_perspective::execute(const vnl_vector<double> & v, double time) const
 // REQUIRE: is_invertible(time) and v.size()==2
 // The first pre-condition is never true. You can not use this method
 //---------------------------------------------------------------------------
-vnl_vector<double> vcsl_perspective::inverse(const vnl_vector<double> & v,
-                                             double time) const {
+vnl_vector<double>
+vcsl_perspective::inverse(const vnl_vector<double> & v, double time) const
+{
   // require
   assert(is_valid());
   assert((is_invertible(time)) && (v.size() == 2));

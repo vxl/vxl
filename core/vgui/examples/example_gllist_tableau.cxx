@@ -77,7 +77,7 @@ public:
   }
 
   virtual bool
-  handle(vgui_event const & e)
+  handle(const vgui_event & e)
   {
     // pass the event to the shell
     this->child.handle(e);

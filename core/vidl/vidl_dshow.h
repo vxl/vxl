@@ -32,48 +32,59 @@
 struct vidl_dshow
 {
   //: Initialize COM (must be called before using any of these functions).
-  static void initialize_com();
+  static void
+  initialize_com();
 
   //: Get an error description for the given HRESULT.
-  static std::string get_error_text(const char* file, int line, HRESULT hr);
+  static std::string
+  get_error_text(const char * file, int line, HRESULT hr);
 
   //: Register object in Running Object Table (ROT)
-  static void register_in_rot(IUnknown* unknown, DWORD& reg);
+  static void
+  register_in_rot(IUnknown * unknown, DWORD & reg);
 
   //: Remove object from Running Object Table (ROT)
-  static void remove_from_rot(DWORD reg);
+  static void
+  remove_from_rot(DWORD reg);
 
   //: Save filter graph to a *.grf file.
-  static void save_graph_to_file(const CComPtr<IFilterGraph2>& filter_graph,
-                                 const std::string& filename);
+  static void
+  save_graph_to_file(const CComPtr<IFilterGraph2> & filter_graph, const std::string & filename);
 
   //: Load filter graph from a *.grf file.
-  static void load_graph_from_file(const CComPtr<IFilterGraph2>& filter_graph,
-                                   const std::wstring& filename);
+  static void
+  load_graph_from_file(const CComPtr<IFilterGraph2> & filter_graph, const std::wstring & filename);
 
   //: Get GUID name or FOURCC.
-  static std::string get_guid_name(const GUID& guid);
+  static std::string
+  get_guid_name(const GUID & guid);
 
   //: Get multimedia subtype GUID from FOURCC.
-  static GUID get_guid_from_fourcc(const std::string& fourcc);
+  static GUID
+  get_guid_from_fourcc(const std::string & fourcc);
 
   //: Extract information from AM_MEDIA_TYPE object.
-  static void get_media_info(const AM_MEDIA_TYPE& amt,
-                             unsigned int& width,
-                             unsigned int& height,
-                             vidl_pixel_format& pixel_format);
+  static void
+  get_media_info(const AM_MEDIA_TYPE & amt,
+                 unsigned int & width,
+                 unsigned int & height,
+                 vidl_pixel_format & pixel_format);
 
   //: Delete AM_MEDIA_TYPE memory.
-  static void delete_media_type(AM_MEDIA_TYPE& amt);
+  static void
+  delete_media_type(AM_MEDIA_TYPE & amt);
 
   //: Print a list of capture device names (i.e., FriendlyName).
-  static void print_capture_device_names();
+  static void
+  print_capture_device_names();
 
   //: Get a list of capture device names (i.e., FriendlyName).
-  static std::vector<std::string> get_capture_device_names();
+  static std::vector<std::string>
+  get_capture_device_names();
 
   //: Get IMoniker associated with name.
-  static CComPtr<IMoniker> get_capture_device_moniker(const std::string& name);
+  static CComPtr<IMoniker>
+  get_capture_device_moniker(const std::string & name);
 
 #if 0
   static void build_filter_graph(/*CComPtr<ICaptureGraphBuilder2>& graph_builder,*/
@@ -82,28 +93,29 @@ struct vidl_dshow
                                  CComPtr<ISampleGrabber>& sample_grabber);
 #endif
 
-  static void connect_filters(CComPtr<IFilterGraph2>& filter_graph,
-                              CComPtr<IBaseFilter>& source,
-                              CComPtr<IBaseFilter>& target);
+  static void
+  connect_filters(CComPtr<IFilterGraph2> & filter_graph, CComPtr<IBaseFilter> & source, CComPtr<IBaseFilter> & target);
 };
 
 // Some macros to help with error reporting.
-#define DSHOW_GET_ERROR_TEXT(hr) \
-  vidl_dshow::get_error_text(__FILE__,__LINE__,(hr))
+#define DSHOW_GET_ERROR_TEXT(hr) vidl_dshow::get_error_text(__FILE__, __LINE__, (hr))
 
-#define DSHOW_WARN_IF_FAILED(stm) {                                       \
-  HRESULT hr = (stm);                                                     \
-  if FAILED(hr) {                                                         \
-    std::cerr << vidl_dshow_exception(                                     \
-                  vidl_dshow::get_error_text(__FILE__,__LINE__,hr)).what()\
-             << '\n';                                                     \
-  }}
+#define DSHOW_WARN_IF_FAILED(stm)                                                                           \
+  {                                                                                                         \
+    HRESULT hr = (stm);                                                                                     \
+    if FAILED (hr)                                                                                          \
+    {                                                                                                       \
+      std::cerr << vidl_dshow_exception(vidl_dshow::get_error_text(__FILE__, __LINE__, hr)).what() << '\n'; \
+    }                                                                                                       \
+  }
 
-#define DSHOW_ERROR_IF_FAILED(stm) {                     \
-  HRESULT hr = (stm);                                    \
-  if FAILED(hr) {                                        \
-    vidl_exception_error(vidl_dshow_exception(           \
-      vidl_dshow::get_error_text(__FILE__,__LINE__,hr)));\
-  }}
+#define DSHOW_ERROR_IF_FAILED(stm)                                                                    \
+  {                                                                                                   \
+    HRESULT hr = (stm);                                                                               \
+    if FAILED (hr)                                                                                    \
+    {                                                                                                 \
+      vidl_exception_error(vidl_dshow_exception(vidl_dshow::get_error_text(__FILE__, __LINE__, hr))); \
+    }                                                                                                 \
+  }
 
 #endif // vidl_dshow_h_

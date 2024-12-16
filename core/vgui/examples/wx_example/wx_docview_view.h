@@ -26,18 +26,22 @@ class wx_docview_view : public wxView
   DECLARE_DYNAMIC_CLASS(wx_docview_view)
   DECLARE_EVENT_TABLE()
 
- public:
+public:
   wx_docview_view();
   virtual ~wx_docview_view();
 
-  virtual bool OnCreate(wxDocument* doc, long flags);
-  virtual void OnDraw(wxDC* dc);
-  virtual void OnUpdate(wxView* sender, wxObject* hint = 0);
-  virtual bool OnClose(bool delete_window = true);
+  virtual bool
+  OnCreate(wxDocument * doc, long flags);
+  virtual void
+  OnDraw(wxDC * dc);
+  virtual void
+  OnUpdate(wxView * sender, wxObject * hint = 0);
+  virtual bool
+  OnClose(bool delete_window = true);
 
- private:
-  wx_docview_frame* frame_;
-  vgui_wx_adaptor*  canvas_;
+private:
+  wx_docview_frame * frame_;
+  vgui_wx_adaptor * canvas_;
 };
 
 #endif // wx_docview_view_h_

@@ -560,7 +560,7 @@ public:
   my_int(const my_int & i) = default;
   ;
   explicit my_int(int i)
-    : a(i){};
+    : a(i) {};
   my_int
   operator+(const my_int & rhs) const
   {
@@ -581,7 +581,8 @@ public:
     this->a = -this->a;
     return *this;
   }
-  my_int operator*(int s) const
+  my_int
+  operator*(int s) const
   {
     my_int rv;
     rv.a = this->a * s;

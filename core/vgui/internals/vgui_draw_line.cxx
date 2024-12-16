@@ -11,14 +11,14 @@
 //--------------------------------------------------------------------------------
 
 #define dot4(a, b) ((a)[0] * (b)[0] + (a)[1] * (b)[1] + (a)[2] * (b)[2] + (a)[3] * (b)[3])
-#define l_c4(a, x, b, y, ax_plus_by)                                                                                   \
-  {                                                                                                                    \
-    for (int i = 0; i < 4; ++i)                                                                                        \
-      (ax_plus_by)[i] = (a) * (x)[i] + (b) * (y)[i];                                                                   \
+#define l_c4(a, x, b, y, ax_plus_by)                 \
+  {                                                  \
+    for (int i = 0; i < 4; ++i)                      \
+      (ax_plus_by)[i] = (a) * (x)[i] + (b) * (y)[i]; \
   }
 
 bool
-vgui_draw_line(double const T[4][4], double const X[4], double const Y[4])
+vgui_draw_line(const double T[4][4], const double X[4], const double Y[4])
 {
   double T0_X = dot4(T[0], X);
   double T1_X = dot4(T[1], X);
@@ -100,7 +100,7 @@ vgui_draw_line(double const T[4][4], double const X[4], double const Y[4])
 }
 
 bool
-vgui_draw_line(double const P[4][4], double const M[4][4], double const X[4], double const Y[4])
+vgui_draw_line(const double P[4][4], const double M[4][4], const double X[4], const double Y[4])
 {
   double T[4][4];
   vgui_multiply_4x4(P, M, T);
@@ -108,7 +108,7 @@ vgui_draw_line(double const P[4][4], double const M[4][4], double const X[4], do
 }
 
 bool
-vgui_draw_line(double const X[4], double const Y[4])
+vgui_draw_line(const double X[4], const double Y[4])
 {
   double P[4][4];
   glGetDoublev(GL_PROJECTION_MATRIX, &P[0][0]);
@@ -125,21 +125,21 @@ vgui_draw_line(double const X[4], double const Y[4])
 //--------------------------------------------------------------------------------
 
 #define dot3(a, b) ((a)[0] * (b)[0] + (a)[1] * (b)[1] + (a)[2] * (b)[2])
-#define cross3(a, b, c)                                                                                                \
-  {                                                                                                                    \
-    (c)[0] = (a)[1] * (b)[2] - (a)[2] * (b)[1];                                                                        \
-    (c)[1] = (a)[2] * (b)[0] - (a)[0] * (b)[2];                                                                        \
-    (c)[2] = (a)[0] * (b)[1] - (a)[1] * (b)[0];                                                                        \
+#define cross3(a, b, c)                         \
+  {                                             \
+    (c)[0] = (a)[1] * (b)[2] - (a)[2] * (b)[1]; \
+    (c)[1] = (a)[2] * (b)[0] - (a)[0] * (b)[2]; \
+    (c)[2] = (a)[0] * (b)[1] - (a)[1] * (b)[0]; \
   }
-#define add3(a, b, c)                                                                                                  \
-  {                                                                                                                    \
-    for (int i = 0; i < 3; ++i)                                                                                        \
-      (c)[i] = (a)[i] + (b)[i];                                                                                        \
+#define add3(a, b, c)           \
+  {                             \
+    for (int i = 0; i < 3; ++i) \
+      (c)[i] = (a)[i] + (b)[i]; \
   }
-#define sub3(a, b, c)                                                                                                  \
-  {                                                                                                                    \
-    for (int i = 0; i < 3; ++i)                                                                                        \
-      (c)[i] = (a)[i] - (b)[i];                                                                                        \
+#define sub3(a, b, c)           \
+  {                             \
+    for (int i = 0; i < 3; ++i) \
+      (c)[i] = (a)[i] - (b)[i]; \
   }
 #define trace(str) /* { std::cerr << str << std::endl; } */
 
@@ -263,7 +263,7 @@ vgui_draw_line(double const T[4][4], double a, double b, double c)
 }
 
 bool
-vgui_draw_line(double const P[4][4], double const M[4][4], double a, double b, double c)
+vgui_draw_line(const double P[4][4], const double M[4][4], double a, double b, double c)
 {
   double T[4][4];
   vgui_multiply_4x4(P, M, T);

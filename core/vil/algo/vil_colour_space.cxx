@@ -13,7 +13,7 @@
 
 template <class T>
 void
-vil_colour_space_RGB_to_YIQ(T const in[3], T out[3])
+vil_colour_space_RGB_to_YIQ(const T in[3], T out[3])
 {
   out[0] = T(0.299) * in[0] + T(0.587) * in[1] + T(0.114) * in[2];
   out[1] = T(0.595716) * in[0] - T(0.274453) * in[1] - T(0.321263) * in[2];
@@ -22,7 +22,7 @@ vil_colour_space_RGB_to_YIQ(T const in[3], T out[3])
 
 template <class T>
 void
-vil_colour_space_YIQ_to_RGB(T const in[3], T out[3])
+vil_colour_space_YIQ_to_RGB(const T in[3], T out[3])
 {
   out[0] = in[0] + T(0.956296) * in[1] + T(0.621024) * in[2];
   out[1] = in[0] - T(0.272122) * in[1] - T(0.647381) * in[2];
@@ -148,7 +148,7 @@ vil_colour_space_HSV_to_RGB(T h, T s, T v, T * r, T * g, T * b)
 
 template <class T>
 void
-vil_colour_space_RGB_to_YUV(T const in[3], T out[3])
+vil_colour_space_RGB_to_YUV(const T in[3], T out[3])
 {
   out[0] = T(0.299) * in[0] + T(0.587) * in[1] + T(0.114) * in[2];
   out[1] = T(0.492) * (in[2] - out[0]);
@@ -158,7 +158,7 @@ vil_colour_space_RGB_to_YUV(T const in[3], T out[3])
 
 template <class T>
 void
-vil_colour_space_YUV_to_RGB(T const in[3], T out[3])
+vil_colour_space_YUV_to_RGB(const T in[3], T out[3])
 {
   // the coefficient of the inverse are given here to higher precision
   // than typically used.  This allows for more accurate results when
@@ -180,7 +180,7 @@ vil_colour_space_YUV_to_RGB(T const in[3], T out[3])
 // Pr in [-0.5; 0.5]
 template <class T>
 void
-vil_colour_space_RGB_to_YPbPr_601(T const RGB[3], T YPbPr[3])
+vil_colour_space_RGB_to_YPbPr_601(const T RGB[3], T YPbPr[3])
 {
   YPbPr[0] = T(0.299) * RGB[0] + T(0.587) * RGB[1] + T(0.114) * RGB[2];
   YPbPr[1] = T(-0.168736) * RGB[0] - T(0.331264) * RGB[1] + T(0.5) * RGB[2];
@@ -199,7 +199,7 @@ vil_colour_space_RGB_to_YPbPr_601(T const RGB[3], T YPbPr[3])
 // R', G', B' in [0; 1]
 template <class T>
 void
-vil_colour_space_YPbPr_601_to_RGB(T const YPbPr[3], T RGB[3])
+vil_colour_space_YPbPr_601_to_RGB(const T YPbPr[3], T RGB[3])
 {
   RGB[0] = std::max(T(0.0), std::min(T(1.0), (YPbPr[0] + T(1.402) * YPbPr[2])));
   RGB[1] = std::max(T(0.0), std::min(T(1.0), (YPbPr[0] - T(0.344136) * YPbPr[1] - T(0.714136) * YPbPr[2])));
@@ -246,14 +246,14 @@ vil_colour_space_YCbCr_601_to_RGB(const unsigned char YCbCr[3], unsigned char RG
 
 //----------------------------------------------------------------------
 
-#define inst(T)                                                                                                        \
-  template void vil_colour_space_RGB_to_YIQ(T const[3], T[3]);                                                         \
-  template void vil_colour_space_YIQ_to_RGB(T const[3], T[3]);                                                         \
-  template void vil_colour_space_RGB_to_HSV(T, T, T, T *, T *, T *);                                                   \
-  template void vil_colour_space_HSV_to_RGB(T, T, T, T *, T *, T *);                                                   \
-  template void vil_colour_space_RGB_to_YUV(T const[3], T[3]);                                                         \
-  template void vil_colour_space_YUV_to_RGB(T const[3], T[3]);                                                         \
-  template void vil_colour_space_RGB_to_YPbPr_601(T const RGB[3], T YPbPr[3]);                                         \
+#define inst(T)                                                                \
+  template void vil_colour_space_RGB_to_YIQ(T const[3], T[3]);                 \
+  template void vil_colour_space_YIQ_to_RGB(T const[3], T[3]);                 \
+  template void vil_colour_space_RGB_to_HSV(T, T, T, T *, T *, T *);           \
+  template void vil_colour_space_HSV_to_RGB(T, T, T, T *, T *, T *);           \
+  template void vil_colour_space_RGB_to_YUV(T const[3], T[3]);                 \
+  template void vil_colour_space_YUV_to_RGB(T const[3], T[3]);                 \
+  template void vil_colour_space_RGB_to_YPbPr_601(T const RGB[3], T YPbPr[3]); \
   template void vil_colour_space_YPbPr_601_to_RGB(T const YPbPr[3], T RGB[3])
 
 inst(double);

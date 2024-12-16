@@ -19,11 +19,11 @@ vil_block_cache::~vil_block_cache()
   blocks_.clear(); // empty the index
 }
 
-//:add a block to the buffer.
+//: add a block to the buffer.
 bool
 vil_block_cache::add_block(const unsigned & block_index_i,
                            const unsigned & block_index_j,
-                           vil_image_view_base_sptr const & blk)
+                           const vil_image_view_base_sptr & blk)
 {
   // create a cell
 
@@ -56,7 +56,7 @@ vil_block_cache::get_block(const unsigned & block_index_i,
   return found;
 }
 
-//:remove the oldest priority block
+//: remove the oldest priority block
 bool
 vil_block_cache::remove_block()
 {

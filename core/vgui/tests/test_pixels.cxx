@@ -33,11 +33,11 @@ void print_word(GLuint w)
 #endif // 0
 
 static void
-print_binary(char const * fmt, void const * addr, unsigned bytes)
+print_binary(const char * fmt, const void * addr, unsigned bytes)
 {
   if (fmt)
     std::cerr << fmt << " : ";
-  GLubyte const * ptr = (GLubyte const *)addr;
+  const GLubyte * ptr = (const GLubyte *)addr;
 
   for (int i = bytes; i < 4; ++i)
     std::cerr << "--------" << ' ';

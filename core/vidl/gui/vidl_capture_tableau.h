@@ -20,33 +20,39 @@
 //  OpenGL buffer and writes it as a frame of video to a vidl_ostream
 class vidl_capture_tableau : public vgui_wrapper_tableau
 {
- public:
-
+public:
   //: Constructor - don't use this, use vidl_capture_tableau_new.
   //  Takes the single child tableau as a parameter.
-  vidl_capture_tableau(vgui_tableau_sptr const& child);
+  vidl_capture_tableau(const vgui_tableau_sptr & child);
 
   //: Returns the type of this tableau ('vidl_capture_tableau').
-  std::string type_name() const;
+  std::string
+  type_name() const;
 
   //: Handle all events sent to this tableau
-  bool handle( vgui_event const &e);
+  bool
+  handle(const vgui_event & e);
 
   //: Set the output video stream
-  void set_ostream(const vidl_ostream_sptr& os) { ostream_ = os; }
+  void
+  set_ostream(const vidl_ostream_sptr & os)
+  {
+    ostream_ = os;
+  }
 
   //: Prompt the user to set an ostream with a gui dialog
-  void prompt_for_ostream();
+  void
+  prompt_for_ostream();
 
   //: Stop the video capture and close the ostream
-  void close_ostream();
+  void
+  close_ostream();
 
- protected:
+protected:
   //: Destructor - called by vidl_capture_tableau_sptr.
-  ~vidl_capture_tableau() { }
+  ~vidl_capture_tableau() {}
 
   vidl_ostream_sptr ostream_;
-
 };
 
 //: Create a smart-pointer to a vidl_capture_tableau tableau.
@@ -55,8 +61,9 @@ struct vidl_capture_tableau_new : public vidl_capture_tableau_sptr
   typedef vidl_capture_tableau_sptr base;
 
   //: Constructor - takes the single child tableau as a parameter.
-  vidl_capture_tableau_new(vgui_tableau_sptr const& child)
-  : base(new vidl_capture_tableau(child)) { }
+  vidl_capture_tableau_new(const vgui_tableau_sptr & child)
+    : base(new vidl_capture_tableau(child))
+  {}
 };
 
 #endif // vidl_capture_tableau_h_

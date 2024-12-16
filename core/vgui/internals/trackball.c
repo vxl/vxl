@@ -59,7 +59,7 @@
  * simple example, though, so that is left as an Exercise for the
  * Programmer.
  */
-#define TRACKBALLSIZE  0.8f
+#define TRACKBALLSIZE 0.8f
 
 /*
  * Using sqrtf() for float arguments, instead of sqrt(double),
@@ -70,84 +70,86 @@
 /*
  * Local function prototypes (not defined in trackball.h)
  */
-static float tb_project_to_sphere(float, float, float);
-static void normalize_quat(float [4]);
+static float
+tb_project_to_sphere(float, float, float);
+static void
+normalize_quat(float[4]);
 
 void
-vzero(float *v)
+vzero(float * v)
 {
-    v[0] = 0.0;
-    v[1] = 0.0;
-    v[2] = 0.0;
+  v[0] = 0.0;
+  v[1] = 0.0;
+  v[2] = 0.0;
 }
 
 void
-vset(float *v, float x, float y, float z)
+vset(float * v, float x, float y, float z)
 {
-    v[0] = x;
-    v[1] = y;
-    v[2] = z;
+  v[0] = x;
+  v[1] = y;
+  v[2] = z;
 }
 
 void
-vsub(const float *src1, const float *src2, float *dst)
+vsub(const float * src1, const float * src2, float * dst)
 {
-    dst[0] = src1[0] - src2[0];
-    dst[1] = src1[1] - src2[1];
-    dst[2] = src1[2] - src2[2];
+  dst[0] = src1[0] - src2[0];
+  dst[1] = src1[1] - src2[1];
+  dst[2] = src1[2] - src2[2];
 }
 
 void
-vcopy(const float *v1, float *v2)
+vcopy(const float * v1, float * v2)
 {
-    int i;
-    for (i = 0 ; i < 3 ; i++)
-        v2[i] = v1[i];
+  int i;
+  for (i = 0; i < 3; i++)
+    v2[i] = v1[i];
 }
 
 void
-vcross(const float *v1, const float *v2, float *cross)
+vcross(const float * v1, const float * v2, float * cross)
 {
-    float temp[3];
+  float temp[3];
 
-    temp[0] = (v1[1] * v2[2]) - (v1[2] * v2[1]);
-    temp[1] = (v1[2] * v2[0]) - (v1[0] * v2[2]);
-    temp[2] = (v1[0] * v2[1]) - (v1[1] * v2[0]);
-    vcopy(temp, cross);
+  temp[0] = (v1[1] * v2[2]) - (v1[2] * v2[1]);
+  temp[1] = (v1[2] * v2[0]) - (v1[0] * v2[2]);
+  temp[2] = (v1[0] * v2[1]) - (v1[1] * v2[0]);
+  vcopy(temp, cross);
 }
 
 float
-vlength(const float *v)
+vlength(const float * v)
 {
-    return sqrtf(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+  return sqrtf(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 }
 
 void
-vscale(float *v, float div)
+vscale(float * v, float div)
 {
-    v[0] *= div;
-    v[1] *= div;
-    v[2] *= div;
+  v[0] *= div;
+  v[1] *= div;
+  v[2] *= div;
 }
 
 void
-vnormal(float *v)
+vnormal(float * v)
 {
-    vscale(v,1.0f/vlength(v));
+  vscale(v, 1.0f / vlength(v));
 }
 
 float
-vdot(const float *v1, const float *v2)
+vdot(const float * v1, const float * v2)
 {
-    return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2];
+  return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 }
 
 void
-vadd(const float *src1, const float *src2, float *dst)
+vadd(const float * src1, const float * src2, float * dst)
 {
-    dst[0] = src1[0] + src2[0];
-    dst[1] = src1[1] + src2[1];
-    dst[2] = src1[2] + src2[2];
+  dst[0] = src1[0] + src2[0];
+  dst[1] = src1[1] + src2[1];
+  dst[2] = src1[2] + src2[2];
 }
 
 /*
@@ -165,44 +167,47 @@ vadd(const float *src1, const float *src2, float *dst)
 void
 trackball(float q[4], float p1x, float p1y, float p2x, float p2y)
 {
-    float a[3]; /* Axis of rotation */
-    float phi;  /* how much to rotate about axis */
-    float p1[3], p2[3], d[3];
-    float t;
+  float a[3]; /* Axis of rotation */
+  float phi;  /* how much to rotate about axis */
+  float p1[3], p2[3], d[3];
+  float t;
 
-    if (p1x == p2x && p1y == p2y) {
-        /* Zero rotation */
-        vzero(q);
-        q[3] = 1.0;
-        return;
-    }
+  if (p1x == p2x && p1y == p2y)
+  {
+    /* Zero rotation */
+    vzero(q);
+    q[3] = 1.0;
+    return;
+  }
 
-    /*
-     * First, figure out z-coordinates for projection of P1 and P2 to
-     * deformed sphere
-     */
-    vset(p1,p1x,p1y,tb_project_to_sphere(TRACKBALLSIZE,p1x,p1y));
-    vset(p2,p2x,p2y,tb_project_to_sphere(TRACKBALLSIZE,p2x,p2y));
+  /*
+   * First, figure out z-coordinates for projection of P1 and P2 to
+   * deformed sphere
+   */
+  vset(p1, p1x, p1y, tb_project_to_sphere(TRACKBALLSIZE, p1x, p1y));
+  vset(p2, p2x, p2y, tb_project_to_sphere(TRACKBALLSIZE, p2x, p2y));
 
-    /*
-     *  Now, we want the cross product of P1 and P2
-     */
-    vcross(p2,p1,a);
+  /*
+   *  Now, we want the cross product of P1 and P2
+   */
+  vcross(p2, p1, a);
 
-    /*
-     *  Figure out how much to rotate around that axis.
-     */
-    vsub(p1,p2,d);
-    t = vlength(d) / (2.0f*TRACKBALLSIZE);
+  /*
+   *  Figure out how much to rotate around that axis.
+   */
+  vsub(p1, p2, d);
+  t = vlength(d) / (2.0f * TRACKBALLSIZE);
 
-    /*
-     * Avoid problems with out-of-control values...
-     */
-    if (t > 1.0) t = 1.0;
-    if (t < -1.0) t = -1.0;
-    phi = 2.0f * (float)asin(t);
+  /*
+   * Avoid problems with out-of-control values...
+   */
+  if (t > 1.0)
+    t = 1.0;
+  if (t < -1.0)
+    t = -1.0;
+  phi = 2.0f * (float)asin(t);
 
-    axis_to_quat(a,phi,q);
+  axis_to_quat(a, phi, q);
 }
 
 /*
@@ -211,10 +216,10 @@ trackball(float q[4], float p1x, float p1y, float p2x, float p2y)
 void
 axis_to_quat(float a[3], float phi, float q[4])
 {
-    vnormal(a);
-    vcopy(a,q);
-    vscale(q,(float)sin(phi/2.0f));
-    q[3] = (float)cos(phi/2.0f);
+  vnormal(a);
+  vcopy(a, q);
+  vscale(q, (float)sin(phi / 2.0f));
+  q[3] = (float)cos(phi / 2.0f);
 }
 
 /*
@@ -224,12 +229,12 @@ axis_to_quat(float a[3], float phi, float q[4])
 static float
 tb_project_to_sphere(float r, float x, float y)
 {
-    float d = x*x + y*y;
-    r *= r;
-    if (d*2 < r) /* Inside sphere */
-        return sqrtf(r - d);
-    else         /* On hyperbola */
-        return r * 0.5f / sqrtf(d);
+  float d = x * x + y * y;
+  r *= r;
+  if (d * 2 < r) /* Inside sphere */
+    return sqrtf(r - d);
+  else /* On hyperbola */
+    return r * 0.5f / sqrtf(d);
 }
 
 /*
@@ -248,30 +253,31 @@ tb_project_to_sphere(float r, float x, float y)
 void
 add_quats(const float q1[4], const float q2[4], float dest[4])
 {
-    static int count=0;
-    float t1[4], t2[4], t3[4];
-    float tf[4];
+  static int count = 0;
+  float t1[4], t2[4], t3[4];
+  float tf[4];
 
-    vcopy(q1,t1);
-    vscale(t1,q2[3]);
+  vcopy(q1, t1);
+  vscale(t1, q2[3]);
 
-    vcopy(q2,t2);
-    vscale(t2,q1[3]);
+  vcopy(q2, t2);
+  vscale(t2, q1[3]);
 
-    vcross(q2,q1,t3);
-    vadd(t1,t2,tf);
-    vadd(t3,tf,tf);
-    tf[3] = q1[3] * q2[3] - vdot(q1,q2);
+  vcross(q2, q1, t3);
+  vadd(t1, t2, tf);
+  vadd(t3, tf, tf);
+  tf[3] = q1[3] * q2[3] - vdot(q1, q2);
 
-    dest[0] = tf[0];
-    dest[1] = tf[1];
-    dest[2] = tf[2];
-    dest[3] = tf[3];
+  dest[0] = tf[0];
+  dest[1] = tf[1];
+  dest[2] = tf[2];
+  dest[3] = tf[3];
 
-    if (++count > RENORMCOUNT) {
-        count = 0;
-        normalize_quat(dest);
-    }
+  if (++count > RENORMCOUNT)
+  {
+    count = 0;
+    normalize_quat(dest);
+  }
 }
 
 /*
@@ -289,11 +295,12 @@ add_quats(const float q1[4], const float q2[4], float dest[4])
 static void
 normalize_quat(float q[4])
 {
-    int i;
-    float mag;
+  int i;
+  float mag;
 
-    mag = sqrtf(q[0]*q[0] + q[1]*q[1] + q[2]*q[2] + q[3]*q[3]);
-    for (i = 0; i < 4; i++) q[i] /= mag;
+  mag = sqrtf(q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3]);
+  for (i = 0; i < 4; i++)
+    q[i] /= mag;
 }
 
 /*
@@ -303,23 +310,23 @@ normalize_quat(float q[4])
 void
 build_rotmatrix(float m[4][4], const float q[4])
 {
-    m[0][0] = 1.0f - 2.0f * (q[1] * q[1] + q[2] * q[2]);
-    m[0][1] = 2.0f * (q[0] * q[1] - q[2] * q[3]);
-    m[0][2] = 2.0f * (q[2] * q[0] + q[1] * q[3]);
-    m[0][3] = 0.0f;
+  m[0][0] = 1.0f - 2.0f * (q[1] * q[1] + q[2] * q[2]);
+  m[0][1] = 2.0f * (q[0] * q[1] - q[2] * q[3]);
+  m[0][2] = 2.0f * (q[2] * q[0] + q[1] * q[3]);
+  m[0][3] = 0.0f;
 
-    m[1][0] = 2.0f * (q[0] * q[1] + q[2] * q[3]);
-    m[1][1]= 1.0f - 2.0f * (q[2] * q[2] + q[0] * q[0]);
-    m[1][2] = 2.0f * (q[1] * q[2] - q[0] * q[3]);
-    m[1][3] = 0.0f;
+  m[1][0] = 2.0f * (q[0] * q[1] + q[2] * q[3]);
+  m[1][1] = 1.0f - 2.0f * (q[2] * q[2] + q[0] * q[0]);
+  m[1][2] = 2.0f * (q[1] * q[2] - q[0] * q[3]);
+  m[1][3] = 0.0f;
 
-    m[2][0] = 2.0f * (q[2] * q[0] - q[1] * q[3]);
-    m[2][1] = 2.0f * (q[1] * q[2] + q[0] * q[3]);
-    m[2][2] = 1.0f - 2.0f * (q[1] * q[1] + q[0] * q[0]);
-    m[2][3] = 0.0f;
+  m[2][0] = 2.0f * (q[2] * q[0] - q[1] * q[3]);
+  m[2][1] = 2.0f * (q[1] * q[2] + q[0] * q[3]);
+  m[2][2] = 1.0f - 2.0f * (q[1] * q[1] + q[0] * q[0]);
+  m[2][3] = 0.0f;
 
-    m[3][0] = 0.0f;
-    m[3][1] = 0.0f;
-    m[3][2] = 0.0f;
-    m[3][3] = 1.0f;
+  m[3][0] = 0.0f;
+  m[3][1] = 0.0f;
+  m[3][2] = 0.0f;
+  m[3][3] = 1.0f;
 }

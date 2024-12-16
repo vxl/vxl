@@ -22,18 +22,17 @@
 // of the ellipsoid with the equatorial plane. The coordinates of a point are
 // specified by the angles `lat' and `lon', and the distance from the surface
 // of the ellipsoid, `z'.
-class vcsl_geocentric
-  : public vcsl_geographic
+class vcsl_geocentric : public vcsl_geographic
 {
- private:
+private:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
   // Default constructor.
-   vcsl_geocentric() = delete;
+  vcsl_geocentric() = delete;
 
- public:
+public:
   // Destructor
   ~vcsl_geocentric() override = default;
 };

@@ -26,31 +26,49 @@
 
 
 //: QT implementation of vgui_window.
-class vgui_qt_window :
-   public QMainWindow,
-   public vgui_window
+class vgui_qt_window
+  : public QMainWindow
+  , public vgui_window
 {
- public:
-   vgui_qt_window(int w, int h, const vgui_menu& menu, const char* title);
-   vgui_qt_window(int w, int h, const char* title);
+public:
+  vgui_qt_window(int w, int h, const vgui_menu & menu, const char * title);
+  vgui_qt_window(int w, int h, const char * title);
   ~vgui_qt_window() {}
 
-   void set_menubar(const vgui_menu &menu);
+  void
+  set_menubar(const vgui_menu & menu);
 
-   vgui_statusbar* get_statusbar() { return &statusbar; }
-   vgui_adaptor* get_adaptor() { return adaptor; }
+  vgui_statusbar *
+  get_statusbar()
+  {
+    return &statusbar;
+  }
+  vgui_adaptor *
+  get_adaptor()
+  {
+    return adaptor;
+  }
 
-   void show() { QMainWindow::show(); }
-   void hide() { QMainWindow::hide(); }
+  void
+  show()
+  {
+    QMainWindow::show();
+  }
+  void
+  hide()
+  {
+    QMainWindow::hide();
+  }
 
- private:
-   void setup_widget(int w, int h, const char* title);
+private:
+  void
+  setup_widget(int w, int h, const char * title);
 
-   vgui_qt_adaptor*  adaptor ;
-   vgui_qt_statusbar statusbar;
+  vgui_qt_adaptor * adaptor;
+  vgui_qt_statusbar statusbar;
 
-   bool use_menubar;
-   bool use_statusbar;
+  bool use_menubar;
+  bool use_statusbar;
 };
 
 #endif // vgui_qt_window_h_

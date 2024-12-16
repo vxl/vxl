@@ -9,7 +9,7 @@
 // Are `new_axis' a list of unit axes ?
 //---------------------------------------------------------------------------
 bool
-vcsl_rotation::are_unit_axes(list_of_vectors const & new_axis) const
+vcsl_rotation::are_unit_axes(const list_of_vectors & new_axis) const
 {
   constexpr double epsilon = 0.001;
 
@@ -38,7 +38,7 @@ vcsl_rotation::set_static_2d(double new_angle)
 // Set the parameters of a static 3D rotation
 //---------------------------------------------------------------------------
 void
-vcsl_rotation::set_static(double new_angle, vnl_vector<double> const & new_axis)
+vcsl_rotation::set_static(double new_angle, const vnl_vector<double> & new_axis)
 {
   mode_2d_ = false;
   angle_.clear();
@@ -53,7 +53,7 @@ vcsl_rotation::set_static(double new_angle, vnl_vector<double> const & new_axis)
 // REQUIRE: are_unit_axes(new_axis)
 //---------------------------------------------------------------------------
 void
-vcsl_rotation::set_axis(list_of_vectors const & new_axis)
+vcsl_rotation::set_axis(const list_of_vectors & new_axis)
 {
   // require
   assert(are_unit_axes(new_axis));
@@ -157,7 +157,8 @@ vcsl_rotation::quaternion(double time) const
 
     switch (interpolator_[i])
     {
-      case vcsl_linear: {
+      case vcsl_linear:
+      {
         vnl_quaternion<double> q0, q1;
         if (mode_2d_)
         {

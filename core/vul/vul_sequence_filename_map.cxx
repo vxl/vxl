@@ -23,8 +23,8 @@ constexpr bool debug = false;
 
 static struct
 {
-  char const * image_dir;
-  char const * extension;
+  const char * image_dir;
+  const char * extension;
 } dir_ext_pairs[] = { { "pgm/", ".pgm" },   { "ppm/", ".ppm" },   { "jpg/", ".jpg" },   { "jpg/", ".jpeg" },
                       { "jpeg/", ".jpg" },  { "jpeg/", ".jpeg" }, { "tiff/", ".tiff" }, { "mit/", ".mit" },
                       { "viff/", ".viff" }, { "rgb/", ".rgb" } };
@@ -34,7 +34,7 @@ const int num_dir_ext_pairs = sizeof(dir_ext_pairs) / sizeof(dir_ext_pairs[0]);
 // Empty constructor to allow the operator= to be used later.
 vul_sequence_filename_map::vul_sequence_filename_map()
 
-    = default;
+  = default;
 
 vul_sequence_filename_map::vul_sequence_filename_map(std::string seq_template, std::vector<int> indices)
   : seq_template_(std::move(seq_template))
@@ -365,7 +365,7 @@ vul_sequence_filename_map::print(std::ostream & s) const
 }
 
 bool
-vul_sequence_filename_map::filter_dirent(char const * name_string, std::string const & extension)
+vul_sequence_filename_map::filter_dirent(const char * name_string, const std::string & extension)
 {
   static std::size_t expected_length = 0L;
   if (expected_length == 0L)
@@ -378,7 +378,7 @@ vul_sequence_filename_map::filter_dirent(char const * name_string, std::string c
 }
 
 int
-vul_sequence_filename_map::extract_index(char const * name_string)
+vul_sequence_filename_map::extract_index(const char * name_string)
 {
   std::string name_str(name_string);
   std::string index_str = name_str.substr(basename_.size(), name_str.size() - image_extension_.size());

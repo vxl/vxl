@@ -25,29 +25,43 @@ enum vil1_pixel_format_t
   VIL1_COMPLEX     /*!< 1 x W x H x 1 of COMPLEX x 64*/
 };
 
-inline
-const char* vil1_print(vil1_pixel_format_t f)
+inline const char *
+vil1_print(vil1_pixel_format_t f)
 {
   switch (f)
   {
-    case VIL1_PIXEL_FORMAT_UNKNOWN: return "VIL1_PIXEL_FORMAT_UNKNOWN";
-    case VIL1_BYTE: return "VIL1_BYTE";
-    case VIL1_RGB_BYTE: return "VIL1_RGB_BYTE";
-    case VIL1_RGBA_BYTE: return "VIL1_RGBA_BYTE";
-    case VIL1_RGB_UINT16: return "VIL1_RGB_UINT16";
-    case VIL1_RGB_FLOAT: return "VIL1_RGB_FLOAT";
-    case VIL1_RGB_DOUBLE: return "VIL1_RGB_DOUBLE";
-    case VIL1_UINT16: return "VIL1_UINT16";
-    case VIL1_UINT32: return "VIL1_UINT32";
-    case VIL1_FLOAT: return "VIL1_FLOAT";
-    case VIL1_DOUBLE: return "VIL1_DOUBLE";
-    case VIL1_COMPLEX: return "VIL1_COMPLEX";
-    default: return "VIL1_PIXEL_FORMAT_INVALID";
+    case VIL1_PIXEL_FORMAT_UNKNOWN:
+      return "VIL1_PIXEL_FORMAT_UNKNOWN";
+    case VIL1_BYTE:
+      return "VIL1_BYTE";
+    case VIL1_RGB_BYTE:
+      return "VIL1_RGB_BYTE";
+    case VIL1_RGBA_BYTE:
+      return "VIL1_RGBA_BYTE";
+    case VIL1_RGB_UINT16:
+      return "VIL1_RGB_UINT16";
+    case VIL1_RGB_FLOAT:
+      return "VIL1_RGB_FLOAT";
+    case VIL1_RGB_DOUBLE:
+      return "VIL1_RGB_DOUBLE";
+    case VIL1_UINT16:
+      return "VIL1_UINT16";
+    case VIL1_UINT32:
+      return "VIL1_UINT32";
+    case VIL1_FLOAT:
+      return "VIL1_FLOAT";
+    case VIL1_DOUBLE:
+      return "VIL1_DOUBLE";
+    case VIL1_COMPLEX:
+      return "VIL1_COMPLEX";
+    default:
+      return "VIL1_PIXEL_FORMAT_INVALID";
   }
 }
 
 //: Returns one of the `vil1_pixel_format's.
 // A standard RGB RGB RGB image has pixel_type() == VIL1_RGB_BYTE
-vil1_pixel_format_t vil1_pixel_format(vil1_image const &);
+vil1_pixel_format_t
+vil1_pixel_format(const vil1_image &);
 
 #endif // vil1_pixel_h_

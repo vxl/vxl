@@ -50,53 +50,68 @@ template <class T>
 class vgl_fit_sphere_3d
 {
   // Data Members--------------------------------------------------------------
- protected:
-  std::vector<vgl_homg_point_3d<T> > points_;
+protected:
+  std::vector<vgl_homg_point_3d<T>> points_;
   vgl_sphere_3d<T> sphere_lin_;
   vgl_sphere_3d<T> sphere_non_lin_;
 
- public:
-
+public:
   // Constructors/Initializers/Destructors-------------------------------------
 
-   vgl_fit_sphere_3d() = default;
+  vgl_fit_sphere_3d() = default;
 
-   vgl_fit_sphere_3d(std::vector<vgl_point_3d<T> > points);
+  vgl_fit_sphere_3d(std::vector<vgl_point_3d<T>> points);
 
   ~vgl_fit_sphere_3d() = default;
 
   // Operations---------------------------------------------------------------
 
   //: add a point to point set
-  void add_point(vgl_point_3d<T> const &p);
-  void add_point(const T x, const T y, const T z);
+  void
+  add_point(const vgl_point_3d<T> & p);
+  void
+  add_point(const T x, const T y, const T z);
 
   //: clear internal data
-  void clear();
+  void
+  clear();
 
   //: fit a sphere to the stored points using a linear method
   // returns the average distance from the points to the sphere
   // used as an initial condition for Levenberg Marquardt
   // error conditions are reported on outstream
-  T fit_linear(std::ostream* outstream=nullptr);
+  T
+  fit_linear(std::ostream * outstream = nullptr);
 
-  //:fits a sphere to the stored points using a linear method
-  bool fit_linear(const T error_marg, std::ostream* outstream=nullptr);
+  //: fits a sphere to the stored points using a linear method
+  bool
+  fit_linear(const T error_marg, std::ostream * outstream = nullptr);
 
-  //:fits a sphere nonlinearly to the stored points using Levenberg Marquardt
+  //: fits a sphere nonlinearly to the stored points using Levenberg Marquardt
   // returns the average distance from the points to the sphere
-  T fit(std::ostream* outstream=nullptr, bool verbose = false);
+  T
+  fit(std::ostream * outstream = nullptr, bool verbose = false);
 
-  //:fits a sphere nonlinearly to the stored points using Levenberg Marquardt
-  bool fit(const T error_marg, std::ostream* outstream=nullptr, bool verbose = false);
+  //: fits a sphere nonlinearly to the stored points using Levenberg Marquardt
+  bool
+  fit(const T error_marg, std::ostream * outstream = nullptr, bool verbose = false);
 
-// Data Access---------------------------------------------------------------
+  // Data Access---------------------------------------------------------------
 
-  std::vector<vgl_point_3d<T> > get_points() const;
+  std::vector<vgl_point_3d<T>>
+  get_points() const;
 
   //: appropriate fit function should be called first to get the sphere corresponding to the points
-  vgl_sphere_3d<T>& get_sphere_linear_fit() {return sphere_lin_;}
-  vgl_sphere_3d<T>& get_sphere_nonlinear_fit() {return sphere_non_lin_;}
+  vgl_sphere_3d<T> &
+  get_sphere_linear_fit()
+  {
+    return sphere_lin_;
+  }
+  vgl_sphere_3d<T> &
+  get_sphere_nonlinear_fit()
+  {
+    return sphere_non_lin_;
+  }
 };
 
 #define VGL_FIT_SPHERE_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_sphere_3d.hxx first"

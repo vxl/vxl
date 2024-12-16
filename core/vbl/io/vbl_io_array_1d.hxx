@@ -13,8 +13,9 @@
 
 //====================================================================
 //: Binary save self to stream.
-template<class T>
-void vsl_b_write(vsl_b_ostream & os, const vbl_array_1d<T> & p)
+template <class T>
+void
+vsl_b_write(vsl_b_ostream & os, const vbl_array_1d<T> & p)
 {
   constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
@@ -23,16 +24,18 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_array_1d<T> & p)
   vsl_b_write(os, array_size);
   int array_capacity = (int)(p.capacity());
   vsl_b_write(os, array_capacity);
-  for (int i=0; i < array_size; ++i)
+  for (int i = 0; i < array_size; ++i)
     vsl_b_write(os, p[i]);
 }
 
 //====================================================================
 //: Binary load self from stream.
-template<class T>
-void vsl_b_read(vsl_b_istream &is, vbl_array_1d<T> & p)
+template <class T>
+void
+vsl_b_read(vsl_b_istream & is, vbl_array_1d<T> & p)
 {
-  if (!is) return;
+  if (!is)
+    return;
 
   short ver;
   int array_size;
@@ -41,33 +44,34 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_1d<T> & p)
   vsl_b_read(is, ver);
   switch (ver)
   {
-   case 1:
-    vsl_b_read(is, array_size);
-    vsl_b_read(is, array_capacity);
-    p.reserve(array_capacity);
-    for (int i=0; i<array_size; ++i)
-    {
-      vsl_b_read(is, val);
-      p.push_back(val);
-    }
-    break;
+    case 1:
+      vsl_b_read(is, array_size);
+      vsl_b_read(is, array_capacity);
+      p.reserve(array_capacity);
+      for (int i = 0; i < array_size; ++i)
+      {
+        vsl_b_read(is, val);
+        p.push_back(val);
+      }
+      break;
 
-   default:
-    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_array_1d<T>&)\n"
-             << "           Unknown version number "<< ver << '\n';
-    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-    return;
+    default:
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_array_1d<T>&)\n"
+                << "           Unknown version number " << ver << '\n';
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
+      return;
   }
 }
 
 
 //===========================================================================
 //: Output a human readable summary to the stream
-template<class T>
-void vsl_print_summary(std::ostream & os,const vbl_array_1d<T> & p)
+template <class T>
+void
+vsl_print_summary(std::ostream & os, const vbl_array_1d<T> & p)
 {
-  os<<"Length: "<<p.size()<<std::endl;
-  for (unsigned int i =0; i < p.size() && i < 5; i++ )
+  os << "Length: " << p.size() << std::endl;
+  for (unsigned int i = 0; i < p.size() && i < 5; i++)
   {
     os << ' ' << i << ": ";
     vsl_print_summary(os, p[i]);
@@ -77,9 +81,9 @@ void vsl_print_summary(std::ostream & os,const vbl_array_1d<T> & p)
     os << " ...\n";
 }
 
-#define VBL_IO_ARRAY_1D_INSTANTIATE(T) \
-template void vsl_print_summary(std::ostream &, const vbl_array_1d<T > &); \
-template void vsl_b_read(vsl_b_istream &, vbl_array_1d<T > &); \
-template void vsl_b_write(vsl_b_ostream &, const vbl_array_1d<T > &)
+#define VBL_IO_ARRAY_1D_INSTANTIATE(T)                                      \
+  template void vsl_print_summary(std::ostream &, const vbl_array_1d<T> &); \
+  template void vsl_b_read(vsl_b_istream &, vbl_array_1d<T> &);             \
+  template void vsl_b_write(vsl_b_ostream &, const vbl_array_1d<T> &)
 
 #endif // vbl_io_array_1d_hxx_

@@ -59,7 +59,4 @@ vil_viff_xvimage::vil_viff_xvimage(unsigned ncols,
   imagedata = nullptr;
 }
 
-vil_viff_xvimage::vil_viff_xvimage()
-{
-  memset(this, 0, sizeof(vil_viff_xvimage));
-}
+vil_viff_xvimage::vil_viff_xvimage() { memset(this, 0, sizeof(vil_viff_xvimage)); }

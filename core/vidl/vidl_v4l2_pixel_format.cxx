@@ -12,7 +12,7 @@
 
 extern "C"
 {
-//#include <asm/types.h>          /* for videodev2.h */
+// #include <asm/types.h>          /* for videodev2.h */
 #include <sys/time.h>
 #include <linux/videodev2.h>
 };

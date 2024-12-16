@@ -39,58 +39,72 @@ template <class T>
 class vgl_fit_quadric_3d
 {
   // Data Members--------------------------------------------------------------
- protected:
+protected:
   //: fit an ellipsoid  using the linear Allaire method
   // returns the average distance from the points to the quadric
-  std::vector<vgl_homg_point_3d<T> > points_;
+  std::vector<vgl_homg_point_3d<T>> points_;
   vgl_quadric_3d<T> quadric_Taubin_;
   vgl_quadric_3d<T> quadric_Allaire_;
 
- public:
-
+public:
   // Constructors/Initializers/Destructors-------------------------------------
 
-   vgl_fit_quadric_3d() = default;
+  vgl_fit_quadric_3d() = default;
 
-   vgl_fit_quadric_3d(std::vector<vgl_point_3d<T> > points);
+  vgl_fit_quadric_3d(std::vector<vgl_point_3d<T>> points);
 
   ~vgl_fit_quadric_3d() = default;
 
   // Operations---------------------------------------------------------------
 
   //: add a point to point set
-  void add_point(vgl_point_3d<T> const &p);
-  void add_point(const T x, const T y, const T z);
+  void
+  add_point(const vgl_point_3d<T> & p);
+  void
+  add_point(const T x, const T y, const T z);
 
   //: clear internal data
-  void clear();
+  void
+  clear();
 
   //: fit a general quadric to the stored points using the linear Taubin method.
   // No restriction on type.
   // returns the average distance from the points to the quadric.
   // error conditions are reported on outstream, if defined.
-  T fit_linear_Taubin(std::ostream* outstream=nullptr);
+  T
+  fit_linear_Taubin(std::ostream * outstream = nullptr);
 
   //: fit an ellipsoid using the linear Allaire method
   // returns the average distance from the points to the ellipsoid
   // error conditions are reported on outstream, if defined.
-  T fit_ellipsoid_linear_Allaire(std::ostream* outstream=nullptr);
+  T
+  fit_ellipsoid_linear_Allaire(std::ostream * outstream = nullptr);
 
   //: fit a quadric class from the set{ hyperboloid_of_one_sheets,
   //  hyperboloid_of_two_sheets, real_elliptic_cone,
   //  hyperbolic_paraboloid, hyperbolic_cylinder}
   // returns the average distance from the points to the ellipsoid
   // error conditions are reported on outstream, if defined.
-  T fit_saddle_shaped_quadric_linear_Allaire(std::ostream* outstream=nullptr);
+  T
+  fit_saddle_shaped_quadric_linear_Allaire(std::ostream * outstream = nullptr);
 
   // Data Access---------------------------------------------------------------
 
-  std::vector<vgl_point_3d<T> > get_points() const;
+  std::vector<vgl_point_3d<T>>
+  get_points() const;
 
   //: The fit computed by the Taubin method
-  vgl_quadric_3d<T>& quadric_Taubin_fit() {return quadric_Taubin_;}
+  vgl_quadric_3d<T> &
+  quadric_Taubin_fit()
+  {
+    return quadric_Taubin_;
+  }
   //: The fit computed by the Allaire method
-  vgl_quadric_3d<T>& quadric_Allaire_fit() {return quadric_Allaire_;}
+  vgl_quadric_3d<T> &
+  quadric_Allaire_fit()
+  {
+    return quadric_Allaire_;
+  }
 };
 
 #define VGL_FIT_QUADRIC_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_quadric_3d.hxx first"

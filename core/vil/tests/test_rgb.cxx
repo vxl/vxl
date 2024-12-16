@@ -10,7 +10,8 @@
 #include <limits>
 
 template <class T>
-void test_vil_rgb(T)
+void
+test_vil_rgb(T)
 {
   T v = 7.0;
   vil_rgb<T> J0(v);

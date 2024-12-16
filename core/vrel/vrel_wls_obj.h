@@ -18,7 +18,8 @@
 //  class. (See Stewart, "Robust Parameter Estimation in Computer
 //  Vision", SIAM Reviews 41, Sept 1999.)
 
-class vrel_wls_obj : public vrel_objective {
+class vrel_wls_obj : public vrel_objective
+{
 public:
   //: Constructor.
   vrel_wls_obj() = default;
@@ -33,9 +34,8 @@ public:
   //
   // The weights (one per residual) are returned using \a wgt_begin,
   // which should point to an appropriately sized container.
-  virtual void wgt( vect_const_iter res_begin, vect_const_iter res_end,
-                    vect_const_iter scale_begin,
-                    vect_iter wgt_begin ) const = 0;
+  virtual void
+  wgt(vect_const_iter res_begin, vect_const_iter res_end, vect_const_iter scale_begin, vect_iter wgt_begin) const = 0;
 
   //: Computes the weights for homoscedastic residuals.
   // This version is used for homoscedastic data, where each residual
@@ -44,14 +44,14 @@ public:
   //
   // The weights (one per residual) are returned using \a wgt_begin,
   // which should point to an appropriately sized container.
-  virtual void wgt( vect_const_iter begin, vect_const_iter end,
-                    double scale,
-                    vect_iter wgt_begin ) const = 0;
+  virtual void
+  wgt(vect_const_iter begin, vect_const_iter end, double scale, vect_iter wgt_begin) const = 0;
 
   //: The weight of the residual.
   //  \a u is a normalised residual (i.e. u=r/scale). wgt(u) is
   //  normally \f$ (1/u) (\partial{\rho} / \partial{u}) \f$.
-  virtual double wgt( double u ) const = 0;
+  virtual double
+  wgt(double u) const = 0;
 };
 
 #endif // vrel_wls_obj_h_

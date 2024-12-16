@@ -39,20 +39,30 @@ public:
   virtual ~vgui_wx_statusbar();
 
   //: Append given text (of given length) to the status bar.
-  int write(const char* text, int n);
+  int
+  write(const char * text, int n);
 
   //: Append given text to the status bar.
-  int write(const char* text);
+  int
+  write(const char * text);
 
-  vgui_statusbuf* statusbuf(void) const { return statusbuf_; }
+  vgui_statusbuf *
+  statusbuf(void) const
+  {
+    return statusbuf_;
+  }
 
-  void set_widget(wxStatusBar* widget) { widget_ = widget; }
+  void
+  set_widget(wxStatusBar * widget)
+  {
+    widget_ = widget;
+  }
 
 private:
-  wxStatusBar*     widget_;
+  wxStatusBar * widget_;
 
-  vgui_statusbuf*  statusbuf_;
-  std::string       linebuffer_;
+  vgui_statusbuf * statusbuf_;
+  std::string linebuffer_;
 };
 
 #endif // vgui_wx_statusbar_h_

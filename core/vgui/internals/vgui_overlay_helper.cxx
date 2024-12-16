@@ -17,11 +17,11 @@
 #include "vgui/vgui_adaptor.h"
 #include <vgui/internals/vgui_accelerate.h>
 
-#define trace                                                                                                          \
-  if (true)                                                                                                            \
-  {                                                                                                                    \
-  }                                                                                                                    \
-  else                                                                                                                 \
+#define trace \
+  if (true)   \
+  {           \
+  }           \
+  else        \
     std::cerr
 
 vgui_overlay_helper::vgui_overlay_helper(vgui_adaptor * a)
@@ -46,16 +46,13 @@ vgui_overlay_helper::vgui_overlay_helper(vgui_adaptor * a)
   }
 }
 
-vgui_overlay_helper::~vgui_overlay_helper()
-{
-  adaptor = nullptr;
-}
+vgui_overlay_helper::~vgui_overlay_helper() { adaptor = nullptr; }
 
 //--------------------------------------------------------------------------------
 
 // this could be inlined
 bool
-vgui_overlay_helper::dispatch(vgui_event const & e)
+vgui_overlay_helper::dispatch(const vgui_event & e)
 {
   if (e.type == vgui_DRAW)
     return dispatch_draw(e);
@@ -68,7 +65,7 @@ vgui_overlay_helper::dispatch(vgui_event const & e)
 }
 
 bool
-vgui_overlay_helper::dispatch_draw(vgui_event const & e)
+vgui_overlay_helper::dispatch_draw(const vgui_event & e)
 {
   // vgui_macro_warning << "emulation normal redisplay" << endl;
   assert(e.type == vgui_DRAW);
@@ -91,7 +88,7 @@ vgui_overlay_helper::dispatch_draw(vgui_event const & e)
 }
 
 bool
-vgui_overlay_helper::dispatch_other(vgui_event const & e)
+vgui_overlay_helper::dispatch_other(const vgui_event & e)
 {
   // vgui_macro_warning << "emulation other dispatch" << endl;
   assert(e.type != vgui_DRAW && e.type != vgui_DRAW_OVERLAY);
@@ -110,7 +107,7 @@ vgui_overlay_helper::dispatch_other(vgui_event const & e)
 }
 
 bool
-vgui_overlay_helper::dispatch_overlay_draw(vgui_event const & e)
+vgui_overlay_helper::dispatch_overlay_draw(const vgui_event & e)
 {
   // vgui_macro_warning << "emulation overlay redisplay" << endl;
   assert(e.type == vgui_DRAW_OVERLAY);

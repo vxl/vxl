@@ -22,7 +22,7 @@ vcsl_axis::vcsl_axis()
 //---------------------------------------------------------------------------
 // Constructor from dimension. Unit is the standard one. Label is empty
 //---------------------------------------------------------------------------
-vcsl_axis::vcsl_axis(vcsl_dimension_sptr const & new_dimension)
+vcsl_axis::vcsl_axis(const vcsl_dimension_sptr & new_dimension)
 {
   dimension_ = new_dimension;
   unit_ = dimension_->standard_unit();
@@ -32,7 +32,7 @@ vcsl_axis::vcsl_axis(vcsl_dimension_sptr const & new_dimension)
 // Constructor from dimension and unit. Label is empty
 // REQUIRE: new_dimension.compatible_unit(new_unit)
 //---------------------------------------------------------------------------
-vcsl_axis::vcsl_axis(vcsl_dimension_sptr const & new_dimension, vcsl_unit_sptr const & new_unit)
+vcsl_axis::vcsl_axis(const vcsl_dimension_sptr & new_dimension, const vcsl_unit_sptr & new_unit)
 {
   // require
   assert(new_dimension->compatible_unit(new_unit));
@@ -45,7 +45,7 @@ vcsl_axis::vcsl_axis(vcsl_dimension_sptr const & new_dimension, vcsl_unit_sptr c
 // Set the dimension. The unit is set with the standard unit
 //---------------------------------------------------------------------------
 void
-vcsl_axis::set_dimension(vcsl_dimension_sptr const & new_dimension)
+vcsl_axis::set_dimension(const vcsl_dimension_sptr & new_dimension)
 {
   dimension_ = new_dimension;
   unit_ = dimension_->standard_unit();
@@ -56,7 +56,7 @@ vcsl_axis::set_dimension(vcsl_dimension_sptr const & new_dimension)
 // REQUIRE: new_dimension.compatible_unit(new_unit)
 //---------------------------------------------------------------------------
 void
-vcsl_axis::set_dimension_and_unit(vcsl_dimension_sptr const & new_dimension, vcsl_unit_sptr const & new_unit)
+vcsl_axis::set_dimension_and_unit(const vcsl_dimension_sptr & new_dimension, const vcsl_unit_sptr & new_unit)
 {
   // require
   assert(new_dimension->compatible_unit(new_unit));
@@ -70,7 +70,7 @@ vcsl_axis::set_dimension_and_unit(vcsl_dimension_sptr const & new_dimension, vcs
 // REQUIRE dimension()->compatible_unit(new_unit)
 //---------------------------------------------------------------------------
 void
-vcsl_axis::set_unit(vcsl_unit_sptr const & new_unit)
+vcsl_axis::set_unit(const vcsl_unit_sptr & new_unit)
 {
   // require
   assert(dimension()->compatible_unit(new_unit));

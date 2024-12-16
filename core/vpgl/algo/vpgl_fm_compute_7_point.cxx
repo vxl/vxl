@@ -100,7 +100,7 @@ vpgl_fm_compute_7_point::compute(const std::vector<vgl_homg_point_2d<double>> & 
 
 //------------------------------------------------
 std::vector<double>
-vpgl_fm_compute_7_point::get_coeffs(vnl_double_3x3 const & F1, vnl_double_3x3 const & F2)
+vpgl_fm_compute_7_point::get_coeffs(const vnl_double_3x3 & F1, const vnl_double_3x3 & F2)
 {
   // All the following computed with Mapl_norme for oxl/mvl/FMatrixCompute7Point.
   double a = F1(0, 0), j = F2(0, 0), aa = a - j, b = F1(0, 1), k = F2(0, 1), bb = b - k, c = F1(0, 2), l = F2(0, 2),

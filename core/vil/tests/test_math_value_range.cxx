@@ -9,7 +9,8 @@
 #include "vil/vil_math.h"
 
 template <class T>
-void view_cout(const vil_image_view<T>& view)
+void
+view_cout(const vil_image_view<T> & view)
 {
   for (unsigned p = 0; p < view.nplanes(); ++p)
   {
@@ -28,7 +29,7 @@ void view_cout(const vil_image_view<T>& view)
 
 template <class T>
 static void
-_test_math_value_range(std::string type_name, bool test_nan=false)
+_test_math_value_range(std::string type_name, bool test_nan = false)
 {
   std::cout << "************************************************\n"
             << "test math_value_range vil_image_view<" << type_name << ">\n"
@@ -77,9 +78,8 @@ _test_math_value_range(std::string type_name, bool test_nan=false)
   TEST("vil_math_value_range_percentile(): 73 %", val == 73, true);
 
   // Test several percentiles at once
-  std::vector<double> fraction = {0.00, 0.05, 0.10, 0.31, 0.50,
-                                  0.73, 0.90, 0.95, 1.00};
-  std::vector<T> true_values = {1, 5, 10, 31, 50, 73, 90, 95, 100};
+  std::vector<double> fraction = { 0.00, 0.05, 0.10, 0.31, 0.50, 0.73, 0.90, 0.95, 1.00 };
+  std::vector<T> true_values = { 1, 5, 10, 31, 50, 73, 90, 95, 100 };
   size_t nfrac = fraction.size();
 
   std::vector<T> values;
@@ -97,13 +97,13 @@ _test_math_value_range(std::string type_name, bool test_nan=false)
     return;
 
   // pad img with nan values
-  vil_image_view<T> img2(ni+2, nj+2);
+  vil_image_view<T> img2(ni + 2, nj + 2);
   img2.fill(std::numeric_limits<T>::quiet_NaN());
   for (unsigned j = 0; j < nj; ++j)
   {
     for (unsigned i = 0; i < ni; ++i)
     {
-      img2(i+1, j+1) = img(i, j);
+      img2(i + 1, j + 1) = img(i, j);
     }
   }
 

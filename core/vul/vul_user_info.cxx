@@ -29,13 +29,14 @@
 //  std::string shell;
 //  std::string passwd;
 
-void vul_user_info::init(uid_type /*uid*/)
+void
+vul_user_info::init(uid_type /*uid*/)
 {
   std::cerr << "Not implemented\n";
 }
 
 void
-vul_user_info::init(char const * name_)
+vul_user_info::init(const char * name_)
 {
 #if !defined(_WIN32) || defined(__CYGWIN__)
   struct passwd * pw = getpwnam(name_);

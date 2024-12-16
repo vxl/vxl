@@ -15,8 +15,8 @@
 #include <vpgl/algo/vpgl_ray_intersect.h>
 #define ADJUST_DEBUG
 
-vpgl_adjust_lsqr::vpgl_adjust_lsqr(vpgl_rational_camera<double> const & rcam,
-                                   std::vector<vgl_point_2d<double>> const & img_pts,
+vpgl_adjust_lsqr::vpgl_adjust_lsqr(const vpgl_rational_camera<double> & rcam,
+                                   const std::vector<vgl_point_2d<double>> & img_pts,
                                    std::vector<vgl_point_3d<double>> geo_pts,
                                    unsigned num_unknowns,
                                    unsigned num_residuals)
@@ -75,9 +75,9 @@ vpgl_adjust_lsqr::f(const vnl_vector<double> & unknowns, vnl_vector<double> & pr
 // The backprojected image points and their actual 3-d locations.
 //
 static bool
-initial_offsets(vpgl_rational_camera<double> const & initial_rcam,
-                std::vector<vgl_point_2d<double>> const & img_pts,
-                std::vector<vgl_point_3d<double>> const & geo_pts,
+initial_offsets(const vpgl_rational_camera<double> & initial_rcam,
+                const std::vector<vgl_point_2d<double>> & img_pts,
+                const std::vector<vgl_point_3d<double>> & geo_pts,
                 double & xoff,
                 double & yoff,
                 double & zoff)
@@ -114,7 +114,7 @@ initial_offsets(vpgl_rational_camera<double> const & initial_rcam,
 //: A function adjust the rational camera 3-d scales and offsets
 // Returns true if successful, else false
 bool
-vpgl_rational_adjust::adjust(vpgl_rational_camera<double> const & initial_rcam,
+vpgl_rational_adjust::adjust(const vpgl_rational_camera<double> & initial_rcam,
                              std::vector<vgl_point_2d<double>> img_pts,
                              std::vector<vgl_point_3d<double>> geo_pts,
                              vpgl_rational_camera<double> & adj_rcam)

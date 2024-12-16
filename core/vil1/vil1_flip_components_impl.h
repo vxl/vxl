@@ -14,28 +14,59 @@
 //: A view of a B,G,R image as if it were R,G,B (or the other way around)
 class vil1_flip_components_impl : public vil1_image_impl
 {
- public:
-  vil1_flip_components_impl(vil1_image const &base_) : base(base_) { }
+public:
+  vil1_flip_components_impl(const vil1_image & base_)
+    : base(base_)
+  {}
 
-  int planes() const override { return base.planes(); }
-  int width() const override { return base.width(); }
-  int height() const override { return base.height(); }
-  int components() const override { return base.components(); }
-  int bits_per_component() const override { return base.bits_per_component(); }
-  vil1_component_format component_format() const override { return base.component_format(); }
+  int
+  planes() const override
+  {
+    return base.planes();
+  }
+  int
+  width() const override
+  {
+    return base.width();
+  }
+  int
+  height() const override
+  {
+    return base.height();
+  }
+  int
+  components() const override
+  {
+    return base.components();
+  }
+  int
+  bits_per_component() const override
+  {
+    return base.bits_per_component();
+  }
+  vil1_component_format
+  component_format() const override
+  {
+    return base.component_format();
+  }
 
-  vil1_image get_plane(unsigned int p) const override;
+  vil1_image
+  get_plane(unsigned int p) const override;
 
-  bool get_section(void *buf, int x0, int y0, int w, int h) const override;
-  bool put_section(void const *buf, int x0, int y0, int w, int h) override;
+  bool
+  get_section(void * buf, int x0, int y0, int w, int h) const override;
+  bool
+  put_section(const void * buf, int x0, int y0, int w, int h) override;
 
   //: Return the name of the class
-  std::string is_a() const override;
+  std::string
+  is_a() const override;
 
   //: Return true if the name of the class matches the argument
-  bool is_class(std::string const&) const override;
+  bool
+  is_class(const std::string &) const override;
 
- private:
+private:
   vil1_image base;
 };
 

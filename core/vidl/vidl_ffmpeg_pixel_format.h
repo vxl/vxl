@@ -15,18 +15,19 @@
 #include "vidl_pixel_format.h"
 
 #include <vidl/vidl_config.h>
-extern "C" {
+extern "C"
+{
 #if FFMPEG_IN_SEVERAL_DIRECTORIES
-# if LIBAVCODEC_VERSION_MAJOR >= 56
-#   include <libavutil/pixfmt.h>
-# else
-#   ifndef __STDC_CONSTANT_MACROS
-#     define __STDC_CONSTANT_MACROS
-#   endif
-#   include <libavcodec/avcodec.h>
-# endif
+#  if LIBAVCODEC_VERSION_MAJOR >= 56
+#    include <libavutil/pixfmt.h>
+#  else
+#    ifndef __STDC_CONSTANT_MACROS
+#      define __STDC_CONSTANT_MACROS
+#    endif
+#    include <libavcodec/avcodec.h>
+#  endif
 #else
-# include <ffmpeg/avcodec.h>
+#  include <ffmpeg/avcodec.h>
 #endif
 }
 
@@ -35,7 +36,6 @@ extern "C" {
 //  Use a typedef to maintain backward compatibility
 typedef PixelFormat AVPixelFormat;
 #endif
-
 
 
 //: Find the vidl pixel format that matches a FFMPEG one

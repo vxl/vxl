@@ -25,79 +25,92 @@
 
 class vrel_muse_key_type
 {
- public:
-  vrel_muse_key_type( unsigned int k, unsigned int n ) : k_(k), n_(n) {}
+public:
+  vrel_muse_key_type(unsigned int k, unsigned int n)
+    : k_(k)
+    , n_(n)
+  {}
   unsigned int k_;
   unsigned int n_;
 };
 
-bool operator< ( vrel_muse_key_type const& left_t, vrel_muse_key_type const& right_t );
+bool
+operator<(const vrel_muse_key_type & left_t, const vrel_muse_key_type & right_t);
 
 
 class vrel_muse_table_entry
 {
- public:
-   vrel_muse_table_entry() = default;
-   bool initialized_{false};
-   double expected_;
-   double standard_dev_;
-   double muse_t_divisor_;
-   double muse_t_sq_divisor_;
+public:
+  vrel_muse_table_entry() = default;
+  bool initialized_{ false };
+  double expected_;
+  double standard_dev_;
+  double muse_t_divisor_;
+  double muse_t_sq_divisor_;
 };
 
-typedef std::map< vrel_muse_key_type, vrel_muse_table_entry > vrel_muse_map_type;
+typedef std::map<vrel_muse_key_type, vrel_muse_table_entry> vrel_muse_map_type;
 
 
 class vrel_muse_table
 {
- public:
+public:
   //: Constructor.
   //  \a table_size is the size of table (= max number of residuals
   //  pre-computed).
-  vrel_muse_table( unsigned int /* max_n_stored */ ) {}
+  vrel_muse_table(unsigned int /* max_n_stored */) {}
 
-  vrel_muse_table( ) = default;
+  vrel_muse_table() = default;
 
   //: Destructor
   ~vrel_muse_table() = default;
 
   //: Expected value of the kth ordered residual from n samples.
   //  The value is retrieved from the lookup table when possible.
-  double expected_kth( unsigned int k, unsigned int n );
+  double
+  expected_kth(unsigned int k, unsigned int n);
 
   //: Standard deviation of the kth ordered residual from n samples.
   //  The value is retrieved from the lookup table when possible.
-  double standard_dev_kth( unsigned int k, unsigned int n );
+  double
+  standard_dev_kth(unsigned int k, unsigned int n);
 
   //: The divisor for trimmed statistics.
   //  The value is retrieved from the lookup table when possible.
-  double muset_divisor( unsigned int k, unsigned int n );
+  double
+  muset_divisor(unsigned int k, unsigned int n);
 
 
   //: The divisor for trimmed square statistics.
   //  The value is retrieved from the lookup table when possible.
-  double muset_sq_divisor( unsigned int k, unsigned int n );
+  double
+  muset_sq_divisor(unsigned int k, unsigned int n);
 
- private:
-  void calculate_all( unsigned int k, unsigned int n, vrel_muse_table_entry & entry );
+private:
+  void
+  calculate_all(unsigned int k, unsigned int n, vrel_muse_table_entry & entry);
 
   //: Expected value of the kth ordered residual from n samples.
   //  The value is computed "from scratch".
-  double calculate_expected( unsigned int k, unsigned int n ) const;
+  double
+  calculate_expected(unsigned int k, unsigned int n) const;
 
   //: Standard deviation of the kth ordered residual from n samples.
   //  The value is computed "from scratch".
-  double calculate_standard_dev( unsigned int k, unsigned int n, double expected_kth ) const;
+  double
+  calculate_standard_dev(unsigned int k, unsigned int n, double expected_kth) const;
 
   //: The divisor for trimmed statistics.
   //  The value is computed "from scratch".
-  double calculate_divisor( unsigned int k, unsigned int n, double expected_kth ) const;
+  double
+  calculate_divisor(unsigned int k, unsigned int n, double expected_kth) const;
 
   //: The divisor for trimmed squared statistics.
   //  The value is computed "from scratch".
-  double calculate_sq_divisor( unsigned int k, unsigned int n, double expected_kth ) const;
+  double
+  calculate_sq_divisor(unsigned int k, unsigned int n, double expected_kth) const;
 
- private:
+private:
   vrel_muse_map_type table_;
 };
 

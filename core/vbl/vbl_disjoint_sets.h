@@ -26,53 +26,58 @@
 // changed node storage to vbl_array_1d so that delete is fast
 class vbl_disjoint_sets
 {
- public:
-
+public:
   // Create an empty vbl_disjoint_sets data structure
   vbl_disjoint_sets();
-  //: Create a vbl_disjoint_sets data structure with a specified number of elements (with element id's from 0 to count-1)
+  //: Create a vbl_disjoint_sets data structure with a specified number of elements (with element id's from 0 to
+  //: count-1)
   vbl_disjoint_sets(int count);
-  //:Copy constructor
+  //: Copy constructor
   vbl_disjoint_sets(const vbl_disjoint_sets & s);
   //: Destructor
   ~vbl_disjoint_sets();
 
   //: Find the set identifier that an element currently belongs to.
-  int find_set(int element) const;
+  int
+  find_set(int element) const;
 
   //: Combine two sets into one.
   // All elements in those two sets will share the same set id that
   // can be retrieved using find_set.
-  void set_union(int set_id1, int set_id2);
+  void
+  set_union(int set_id1, int set_id2);
 
   // Add a specified number of elements to the data structure.
   // The element id's of the new elements are numbered
   // consequitively starting with the first never-before-used element_id.
-  void add_elements(int num_to_add);
+  void
+  add_elements(int num_to_add);
 
   // Returns the number of elements currently in the data structure.
-  int num_elements() const;
+  int
+  num_elements() const;
 
   //: Returns the number of elements in set specified by set_id
-  int size(int set_id) const;
+  int
+  size(int set_id) const;
 
   //: Returns the number of sets
-  int num_sets() const;
+  int
+  num_sets() const;
 
- private:
-
+private:
   // Internal node data structure used for representing an element
   struct node
   {
     node() = default;
     //: represents the approximate max height of the node in its subtree
-    int rank{0};
-    int index{0};          // The index of the element the node represents
-    node *parent{nullptr}; // The parent node of the node
-    int size{1};           // the number of elements in the set
+    int rank{ 0 };
+    int index{ 0 };           // The index of the element the node represents
+    node * parent{ nullptr }; // The parent node of the node
+    int size{ 1 };            // the number of elements in the set
   };
   int num_elements_; // the number of elements
-  int num_sets_; // the number of sets
+  int num_sets_;     // the number of sets
   //  std::vector<node*> nodes_; // the list of nodes representing the elements
   vbl_array_1d<node> nodes_; // changed to vbl_array since deleting was very slow
 };

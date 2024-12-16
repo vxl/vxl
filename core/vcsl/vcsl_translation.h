@@ -20,10 +20,9 @@
 #include <vnl/vnl_vector.h>
 
 //: Translation transformation
-class vcsl_translation
-  :public vcsl_spatial_transformation
+class vcsl_translation : public vcsl_spatial_transformation
 {
- public:
+public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -41,27 +40,39 @@ class vcsl_translation
   //: Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
   // Pure virtual function of vcsl_spatial_transformation
-  bool is_invertible(double time) const override;
+  bool
+  is_invertible(double time) const override;
 
   //: Is `this' correctly set ?
   // Virtual function of vcsl_spatial_transformation
-  bool is_valid() const override
-  { return vcsl_spatial_transformation::is_valid() &&
-           ((this->duration()==0&&vector_.size()==1) ||
-            this->duration()==vector_.size()); }
+  bool
+  is_valid() const override
+  {
+    return vcsl_spatial_transformation::is_valid() &&
+           ((this->duration() == 0 && vector_.size() == 1) || this->duration() == vector_.size());
+  }
 
   //***************************************************************************
   // Transformation parameters
   //***************************************************************************
 
   //: Set the parameters of a static translation
-  void set_static(vnl_vector<double> const& new_vector);
+  void
+  set_static(const vnl_vector<double> & new_vector);
 
   //: Set the direction vector variation along the time
-  void set_vector(list_of_vectors const&new_vector){vector_=new_vector;}
+  void
+  set_vector(const list_of_vectors & new_vector)
+  {
+    vector_ = new_vector;
+  }
 
   //: Return the angle variation along the time
-  list_of_vectors vector() const { return vector_; }
+  list_of_vectors
+  vector() const
+  {
+    return vector_;
+  }
 
   //***************************************************************************
   // Basic operations
@@ -70,19 +81,20 @@ class vcsl_translation
   //: Image of `v' by `this'
   //  REQUIRE: is_valid()
   // Pure virtual function of vcsl_spatial_transformation
-  vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const override;
+  vnl_vector<double>
+  execute(const vnl_vector<double> & v, double time) const override;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
   // Pure virtual function of vcsl_spatial_transformation
-  vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const override;
+  vnl_vector<double>
+  inverse(const vnl_vector<double> & v, double time) const override;
 
- protected:
+protected:
   //: Compute the value of the parameter at time `time'
-  vnl_vector<double> vector_value(double time) const;
+  vnl_vector<double>
+  vector_value(double time) const;
 
   //: Direction vector variation along the time
   list_of_vectors vector_;

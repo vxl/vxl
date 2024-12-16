@@ -38,74 +38,131 @@
 template <class T>
 class vpgl_generic_camera : public vpgl_camera<T>
 {
- public:
-
+public:
   vpgl_generic_camera();
-  vpgl_generic_camera( vbl_array_2d<vgl_ray_3d<T> > const& rays);
-  vpgl_generic_camera( std::vector<vbl_array_2d<vgl_ray_3d<T> > > const& rays,
-                                              std::vector<int> nrs,   std::vector<int> ncs  );
+  vpgl_generic_camera(const vbl_array_2d<vgl_ray_3d<T>> & rays);
+  vpgl_generic_camera(const std::vector<vbl_array_2d<vgl_ray_3d<T>>> & rays,
+                      std::vector<int> nrs,
+                      std::vector<int> ncs);
   ~vpgl_generic_camera() override = default;
 
-  std::string type_name() const override { return "vpgl_generic_camera"; }
+  std::string
+  type_name() const override
+  {
+    return "vpgl_generic_camera";
+  }
 
-  //: The generic camera interface. u represents image column, v image row. Finds projection using a pyramid search over the rays and so not particularly efficient.
-  void project(const T x, const T y, const T z, T& u, T& v) const override;
+  //: The generic camera interface. u represents image column, v image row. Finds projection using a pyramid search over
+  //: the rays and so not particularly efficient.
+  void
+  project(const T x, const T y, const T z, T & u, T & v) const override;
 
   //: the number of columns (u coordinate) in the ray image
-  unsigned cols(int level) const {return rays_[level].cols();}
-  unsigned cols() const { return rays_[0].cols();}
+  unsigned
+  cols(int level) const
+  {
+    return rays_[level].cols();
+  }
+  unsigned
+  cols() const
+  {
+    return rays_[0].cols();
+  }
 
   //: the number of rows (v coordinate) in the ray image
-  unsigned rows(int level) const {return rays_[level].rows();}
-  unsigned rows() const { return rays_[0].rows();}
+  unsigned
+  rows(int level) const
+  {
+    return rays_[level].rows();
+  }
+  unsigned
+  rows() const
+  {
+    return rays_[0].rows();
+  }
 
   //: the number of pyramid levels
-  unsigned n_levels() {return static_cast<unsigned>(n_levels_);}
+  unsigned
+  n_levels()
+  {
+    return static_cast<unsigned>(n_levels_);
+  }
 
   //: the ray corresponding to a given pixel
-  vgl_ray_3d<T> ray(const T u, const T v) const;
+  vgl_ray_3d<T>
+  ray(const T u, const T v) const;
 
   //: a ray passing through a given 3-d point
-  vgl_ray_3d<T> ray(vgl_point_3d<T> const& p) const;
+  vgl_ray_3d<T>
+  ray(const vgl_point_3d<T> & p) const;
 
   //: the ray index at a given level
-  vbl_array_2d<vgl_ray_3d<T> >& rays(int level) { return rays_[level];}
+  vbl_array_2d<vgl_ray_3d<T>> &
+  rays(int level)
+  {
+    return rays_[level];
+  }
 
   //: the nearest ray origin to the coordinate origin
-  vgl_point_3d<T> min_ray_origin() {return min_ray_origin_;}
-  vgl_vector_3d<T> min_ray_direction() {return min_ray_direction_;}
+  vgl_point_3d<T>
+  min_ray_origin()
+  {
+    return min_ray_origin_;
+  }
+  vgl_vector_3d<T>
+  min_ray_direction()
+  {
+    return min_ray_direction_;
+  }
 
   //: the furthest ray origin from the coordinate origin
-  vgl_point_3d<T> max_ray_origin() {return max_ray_origin_;}
-  vgl_vector_3d<T> max_ray_direction() {return max_ray_direction_;}
+  vgl_point_3d<T>
+  max_ray_origin()
+  {
+    return max_ray_origin_;
+  }
+  vgl_vector_3d<T>
+  max_ray_direction()
+  {
+    return max_ray_direction_;
+  }
 
   //: debug function
-  void print_orig(int level);
+  void
+  print_orig(int level);
 
   //: visualization
-  void print_to_vrml(int level, std::ostream& os);
+  void
+  print_to_vrml(int level, std::ostream & os);
 
   //: legal C++ because the return type is covariant with vpgl_camera<T>*
-  vpgl_generic_camera<T> *clone() const override {
+  vpgl_generic_camera<T> *
+  clone() const override
+  {
     return new vpgl_generic_camera(*this);
   }
 
- protected:
-  void nearest_ray_to_point(vgl_point_3d<T> const& p,
-                            int& nearest_r, int& nearest_c) const;
+protected:
+  void
+  nearest_ray_to_point(const vgl_point_3d<T> & p, int & nearest_r, int & nearest_c) const;
   //: nearest ray at level
-  void nearest_ray(int level, vgl_point_3d<T> const& p,
-                   int start_r, int end_r, int start_c, int end_c,
-                   int& nearest_r, int& nearest_c) const;
+  void
+  nearest_ray(int level,
+              const vgl_point_3d<T> & p,
+              int start_r,
+              int end_r,
+              int start_c,
+              int end_c,
+              int & nearest_r,
+              int & nearest_c) const;
 
   //: refine the projection to sub pixel
-  void refine_projection(int nearest_c, int nearest_r,
-                         vgl_point_3d<T> const& p, T& u, T& v) const;
+  void
+  refine_projection(int nearest_c, int nearest_r, const vgl_point_3d<T> & p, T & u, T & v) const;
 
   //: refine ray
-  void refine_ray_at_point(int nearest_c, int nearest_r,
-                           vgl_point_3d<T> const& p,
-                           vgl_ray_3d<T>& ray) const;
+  void
+  refine_ray_at_point(int nearest_c, int nearest_r, const vgl_point_3d<T> & p, vgl_ray_3d<T> & ray) const;
 
   // === members ===
 
@@ -124,7 +181,7 @@ class vpgl_generic_camera : public vpgl_camera<T>
   //: num cols at each resolution level
   std::vector<int> nc_;
   //: the pyramid
-  std::vector<vbl_array_2d<vgl_ray_3d<T> > > rays_;
+  std::vector<vbl_array_2d<vgl_ray_3d<T>>> rays_;
 };
 
 #endif // vpgl_generic_camera_h_

@@ -12,90 +12,106 @@
 #include "vil_image_resource.h"
 #include "vil_blocked_image_resource_sptr.h"
 
-//:cast to blocked resource if possible
+//: cast to blocked resource if possible
 vil_blocked_image_resource_sptr
-blocked_image_resource(const vil_image_resource_sptr& ir);
+blocked_image_resource(const vil_image_resource_sptr & ir);
 
 class vil_blocked_image_resource : public vil_image_resource
 {
 
- public:
-
+public:
   vil_blocked_image_resource();
   ~vil_blocked_image_resource() override;
 
-  unsigned nplanes() const override =0;
-  unsigned ni() const override = 0;
-  unsigned nj() const override = 0;
+  unsigned
+  nplanes() const override = 0;
+  unsigned
+  ni() const override = 0;
+  unsigned
+  nj() const override = 0;
 
   //: Block size in columns
-  virtual unsigned size_block_i() const = 0;
+  virtual unsigned
+  size_block_i() const = 0;
 
   //: Block size in rows
-  virtual unsigned size_block_j() const = 0;
+  virtual unsigned
+  size_block_j() const = 0;
 
   //: Number of blocks in image width
-  virtual unsigned n_block_i() const;
+  virtual unsigned
+  n_block_i() const;
 
   //: Number of blocks in image height
-  virtual unsigned n_block_j() const;
+  virtual unsigned
+  n_block_j() const;
 
 
-  enum vil_pixel_format pixel_format() const override = 0;
+  enum vil_pixel_format
+  pixel_format() const override = 0;
 
   vil_image_view_base_sptr
-    get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j) const override;
+  get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j) const override;
 
-  bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0) override = 0;
+  bool
+  put_view(const vil_image_view_base & im, unsigned i0, unsigned j0) override = 0;
 
   //: Block access
-  virtual vil_image_view_base_sptr get_block( unsigned  block_index_i,
-                                              unsigned  block_index_j ) const = 0;
+  virtual vil_image_view_base_sptr
+  get_block(unsigned block_index_i, unsigned block_index_j) const = 0;
 
 
   //: the multiple blocks are in col row order, i.e. blocks[i][j]
-  virtual bool get_blocks( unsigned start_block_i, unsigned end_block_i,
-                           unsigned  start_block_j, unsigned end_block_j,
-                           std::vector< std::vector< vil_image_view_base_sptr > >& blocks ) const;
+  virtual bool
+  get_blocks(unsigned start_block_i,
+             unsigned end_block_i,
+             unsigned start_block_j,
+             unsigned end_block_j,
+             std::vector<std::vector<vil_image_view_base_sptr>> & blocks) const;
 
   //: put the block into the resource at the indicated location
-  virtual bool put_block(unsigned  block_index_i,
-                         unsigned  block_index_j,
-                         const vil_image_view_base& view) = 0;
+  virtual bool
+  put_block(unsigned block_index_i, unsigned block_index_j, const vil_image_view_base & view) = 0;
 
 
   //: put multiple blocks in raster order, i.e.,  blocks[i][j]
-  virtual bool put_blocks( unsigned start_block_i, unsigned end_block_i,
-                           unsigned  start_block_j, unsigned end_block_j,
-                           std::vector< std::vector< vil_image_view_base_sptr > > const& blocks );
+  virtual bool
+  put_blocks(unsigned start_block_i,
+             unsigned end_block_i,
+             unsigned start_block_j,
+             unsigned end_block_j,
+             const std::vector<std::vector<vil_image_view_base_sptr>> & blocks);
 
   //: Extra property information
-  bool get_property(char const* tag, void* property_value = nullptr) const override = 0;
+  bool
+  get_property(const char * tag, void * property_value = nullptr) const override = 0;
 
- protected:
-  //Internal functions
-  vil_image_view_base_sptr fill_block(unsigned i0, unsigned icrop,
-                                      unsigned j0, unsigned jcrop,
-                                      vil_image_view_base_sptr& view) const;
+protected:
+  // Internal functions
+  vil_image_view_base_sptr
+  fill_block(unsigned i0, unsigned icrop, unsigned j0, unsigned jcrop, vil_image_view_base_sptr & view) const;
 
   //: Get the offset from the start of the block row for pixel position i
-  bool block_i_offset(unsigned block_i, unsigned i,
-                      unsigned& i_offset) const;
+  bool
+  block_i_offset(unsigned block_i, unsigned i, unsigned & i_offset) const;
 
   //: Get the offset from the start of the block column for pixel position j
-  bool block_j_offset(unsigned block_j, unsigned j,
-                      unsigned& j_offset) const;
+  bool
+  block_j_offset(unsigned block_j, unsigned j, unsigned & j_offset) const;
 
-  bool trim_border_blocks(unsigned i0, unsigned ni,
-                          unsigned j0, unsigned nj,
-                          unsigned start_block_i,
-                          unsigned start_block_j,
-                          std::vector< std::vector< vil_image_view_base_sptr > >& blocks) const;
+  bool
+  trim_border_blocks(unsigned i0,
+                     unsigned ni,
+                     unsigned j0,
+                     unsigned nj,
+                     unsigned start_block_i,
+                     unsigned start_block_j,
+                     std::vector<std::vector<vil_image_view_base_sptr>> & blocks) const;
 
   vil_image_view_base_sptr
-    glue_blocks_together(const std::vector< std::vector< vil_image_view_base_sptr > >& blocks) const;
+  glue_blocks_together(const std::vector<std::vector<vil_image_view_base_sptr>> & blocks) const;
 
- protected:
+protected:
   friend class vil_smart_ptr<vil_blocked_image_resource>;
 };
 

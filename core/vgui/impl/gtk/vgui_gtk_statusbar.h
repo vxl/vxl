@@ -27,22 +27,24 @@
 //  The GTK status bar for the main window of the application.
 class vgui_gtk_statusbar : public vgui_statusbar
 {
- public:
+public:
   //: Constructor, creates a GTK status bar and displays it.
   vgui_gtk_statusbar();
 
   //: Destructor.
- ~vgui_gtk_statusbar();
+  ~vgui_gtk_statusbar();
 
   //: Append given text (of given length) to the status bar.
-  int write(const char* text, int n);
+  int
+  write(const char * text, int n);
 
   //: Append given text to the status bar.
-  int write(const char* text);
+  int
+  write(const char * text);
 
-  GtkWidget *widget;
+  GtkWidget * widget;
   std::string linebuffer;
-  vgui_statusbuf* statusbuf;
+  vgui_statusbuf * statusbuf;
   std::ostream out;
 };
 

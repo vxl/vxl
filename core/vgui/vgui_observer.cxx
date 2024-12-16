@@ -15,13 +15,13 @@ vgui_observer::update()
 }
 
 void
-vgui_observer::update(vgui_message const &)
+vgui_observer::update(const vgui_message &)
 {
   this->update(); // default implementation.
 }
 
 void
-vgui_observer::update(vgui_observable const *)
+vgui_observer::update(const vgui_observable *)
 {
   this->update(); // default implementation.
 }

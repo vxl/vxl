@@ -137,7 +137,7 @@ vgui_char_width(unsigned char c, unsigned size)
 #else
 #  include "vgui/vgui_font_bitmap.h"
 void
-vgui_text_put(char const * str, unsigned int size)
+vgui_text_put(const char * str, unsigned int size)
 {
   vgui_font_bitmap font(vgui_font_bitmap::BITMAP_FONT_8_13);
   font.draw(str);

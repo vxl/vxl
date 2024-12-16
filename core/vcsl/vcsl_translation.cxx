@@ -9,7 +9,9 @@
 // Is `this' invertible at time `time'?
 // REQUIRE: valid_time(time)
 //---------------------------------------------------------------------------
-bool vcsl_translation::is_invertible(double time) const {
+bool
+vcsl_translation::is_invertible(double time) const
+{
   // require
   assert(valid_time(time));
 
@@ -20,7 +22,7 @@ bool vcsl_translation::is_invertible(double time) const {
 // Set the parameters of a static translation
 //---------------------------------------------------------------------------
 void
-vcsl_translation::set_static(vnl_vector<double> const & new_vector)
+vcsl_translation::set_static(const vnl_vector<double> & new_vector)
 {
   vector_.clear();
   vector_.push_back(new_vector);

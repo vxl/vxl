@@ -264,7 +264,7 @@ vil_print_value(std::ostream & os, const vil_rgb<vxl_byte> & value, unsigned)
 //: Explicit overload of print for rgb<sbyte>
 template <>
 void
-vil_print_value(std::ostream & os, vil_rgb<vxl_sbyte> const & value, unsigned)
+vil_print_value(std::ostream & os, const vil_rgb<vxl_sbyte> & value, unsigned)
 {
   int r = int(value.r);
   if (r < 0)
@@ -574,11 +574,11 @@ vil_print_value(std::ostream & os, const vil_rgba<double> & value, unsigned)
 }
 
 void
-vil_print_all(std::ostream & os, vil_image_view_base_sptr const & view)
+vil_print_all(std::ostream & os, const vil_image_view_base_sptr & view)
 {
-#define docase(T)                                                                                                      \
-  case T:                                                                                                              \
-    vil_print_all(os, static_cast<vil_image_view<vil_pixel_format_type_of<T>::type>>(view));                           \
+#define docase(T)                                                                            \
+  case T:                                                                                    \
+    vil_print_all(os, static_cast<vil_image_view<vil_pixel_format_type_of<T>::type>>(view)); \
     break
 
   switch (view->pixel_format())

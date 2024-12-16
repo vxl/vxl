@@ -23,7 +23,7 @@ public:
   front_back_wibbler() {}
 
   bool
-  handle(vgui_event const &);
+  handle(const vgui_event &);
   std::string
   type_name() const
   {
@@ -160,11 +160,11 @@ front_back_wibbler::handle(const vgui_event & e)
 
         std::cerr << "   "
                   << "frame buffer depths:\n";
-#define macro(buf)                                                                                                     \
-  {                                                                                                                    \
-    GLint v;                                                                                                           \
-    glGetIntegerv(GL_##buf##_BITS, &v);                                                                                \
-    std::cerr << "   " << std::setw(3) << v << " " #buf << std::endl;                                                  \
+#define macro(buf)                                                    \
+  {                                                                   \
+    GLint v;                                                          \
+    glGetIntegerv(GL_##buf##_BITS, &v);                               \
+    std::cerr << "   " << std::setw(3) << v << " " #buf << std::endl; \
   }
         // Number of bits per R, G, B, or A component in  the color buffers
         macro(RED);

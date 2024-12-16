@@ -12,7 +12,7 @@
 #include "vgui/vgui_clear_tableau.h"
 
 bool
-operator==(vgui_grid_tableau_data const & a, vgui_grid_tableau_data const & b)
+operator==(const vgui_grid_tableau_data & a, const vgui_grid_tableau_data & b)
 {
   return a.handle == b.handle && a.tab_pos == b.tab_pos && a.is_default == b.is_default &&
          a.time_selected == b.time_selected;
@@ -63,7 +63,7 @@ vgui_grid_tableau::init(unsigned initial_cols, unsigned initial_rows)
 //------------------------------------------------------------------------------
 //: Makes a bitab.
 //------------------------------------------------------------------------------
-vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_sptr const & l, vgui_tableau_sptr const & r)
+vgui_grid_tableau::vgui_grid_tableau(const vgui_tableau_sptr & l, const vgui_tableau_sptr & r)
 {
   init(2, 1);
   add_next(l);
@@ -73,9 +73,9 @@ vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_sptr const & l, vgui_tableau_s
 //------------------------------------------------------------------------------
 //: Makes a tritab.
 //------------------------------------------------------------------------------
-vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_sptr const & l,
-                                     vgui_tableau_sptr const & m,
-                                     vgui_tableau_sptr const & r)
+vgui_grid_tableau::vgui_grid_tableau(const vgui_tableau_sptr & l,
+                                     const vgui_tableau_sptr & m,
+                                     const vgui_tableau_sptr & r)
 {
   init(3, 1);
   add_next(l);
@@ -159,7 +159,7 @@ vgui_grid_tableau::add_default(unsigned col_pos, unsigned row_pos)
 //  new column to the RHS of the grid and adds the new tableau to the top of it.
 //------------------------------------------------------------------------------
 void
-vgui_grid_tableau::add_next(vgui_tableau_sptr const & tab, unsigned & col, unsigned & row)
+vgui_grid_tableau::add_next(const vgui_tableau_sptr & tab, unsigned & col, unsigned & row)
 {
   tabs.push_back(tab);
 
@@ -211,7 +211,7 @@ vgui_grid_tableau::add_next(vgui_tableau_sptr const & tab, unsigned & col, unsig
 }
 
 void
-vgui_grid_tableau::add_next(vgui_tableau_sptr const & tab)
+vgui_grid_tableau::add_next(const vgui_tableau_sptr & tab)
 {
   unsigned row = 0, col = 0;
   if (!row && !col)
@@ -223,7 +223,7 @@ vgui_grid_tableau::add_next(vgui_tableau_sptr const & tab)
 //  Adds the given tableau to the end of the std::list of tableaux.
 //------------------------------------------------------------------------------
 void
-vgui_grid_tableau::add_at(vgui_tableau_sptr const & tab, unsigned col_pos, unsigned row_pos)
+vgui_grid_tableau::add_at(const vgui_tableau_sptr & tab, unsigned col_pos, unsigned row_pos)
 {
   // This function leaks core because a tableau which is replaced by another
   // is still referenced by the smart pointer in `tabs'. why do we need a

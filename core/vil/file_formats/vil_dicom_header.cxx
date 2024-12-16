@@ -204,7 +204,7 @@ vil_dicom_header_format::readHeader(vil_stream & fs)
     readHeaderElements(fs);
 
     info_valid_ = true;
-  }    // End of if (dtype != VIL_DICOM_HEADER_DTUNKNOWN)
+  } // End of if (dtype != VIL_DICOM_HEADER_DTUNKNOWN)
   else // It's not a dicom file, so can't read
   {
     std::cerr << "Unknown file type - not a DICOM file...\n"
@@ -370,7 +370,7 @@ vil_dicom_header_format::determineFileType(vil_stream & fs)
               result = VIL_DICOM_HEADER_DTNON_PART10;
               known = true;
             } // End of else if (element...)
-          }   // End of if (group == VIL_DICOM_HEADER_IDENTIFYINGGROUP)
+          } // End of if (group == VIL_DICOM_HEADER_IDENTIFYINGGROUP)
 
           if (!known)
           {
@@ -385,8 +385,8 @@ vil_dicom_header_format::determineFileType(vil_stream & fs)
           file_endian_ = old_endian;
         }
       } // End of else
-    }   // End of else
-  }     // End of if (fs.ok())
+    } // End of else
+  } // End of if (fs.ok())
   else
   {
     std::cerr << "File not open for reading:\n"
@@ -495,27 +495,27 @@ vil_dicom_header_format::readHeaderElements(vil_stream & fs)
 //================================================================
 
 // These macros will be used a lot of times in the subsequent read* methods
-#  define CASE(X, M, F)                                                                                                \
-    case X:                                                                                                            \
-      data_p = new char[dblock_size + 1]; /* Ensure room for 0 */                                                      \
-      if (data_p)                                                                                                      \
-      {                                                                                                                \
-        fs.read(data_p, dblock_size);                                                                                  \
-        data_p[dblock_size] = 0;                                                                                       \
-        last_read_.M = F(data_p);                                                                                      \
-      }                                                                                                                \
+#  define CASE(X, M, F)                                           \
+    case X:                                                       \
+      data_p = new char[dblock_size + 1]; /* Ensure room for 0 */ \
+      if (data_p)                                                 \
+      {                                                           \
+        fs.read(data_p, dblock_size);                             \
+        data_p[dblock_size] = 0;                                  \
+        last_read_.M = F(data_p);                                 \
+      }                                                           \
       break
 
-#  define CASE_SWP(X, M)                                                                                               \
-    case X:                                                                                                            \
-      data_p = new char[dblock_size + 1]; /* Ensure room for 0 */                                                      \
-      if (data_p)                                                                                                      \
-      {                                                                                                                \
-        fs.read(data_p, dblock_size);                                                                                  \
-        data_p[dblock_size] = 0;                                                                                       \
-        charSwap(data_p, sizeof(vxl_uint_16));                                                                         \
-        last_read_.M = *((vxl_uint_16 *)data_p);                                                                       \
-      }                                                                                                                \
+#  define CASE_SWP(X, M)                                          \
+    case X:                                                       \
+      data_p = new char[dblock_size + 1]; /* Ensure room for 0 */ \
+      if (data_p)                                                 \
+      {                                                           \
+        fs.read(data_p, dblock_size);                             \
+        data_p[dblock_size] = 0;                                  \
+        charSwap(data_p, sizeof(vxl_uint_16));                    \
+        last_read_.M = *((vxl_uint_16 *)data_p);                  \
+      }                                                           \
       break
 
 void
@@ -923,7 +923,7 @@ vil_dicom_header_format::convertValueRepresentation(unsigned int & dblock_size, 
 
       result = true;
     } // End of else if (last...)
-  }   // End of if (last_read_.file_type_ != VIL_DICOM_HEADER_DTUNKNOWN)
+  } // End of if (last_read_.file_type_ != VIL_DICOM_HEADER_DTUNKNOWN)
 
   return result;
 }
@@ -1098,7 +1098,7 @@ vil_dicom_header_format::determineMetaInfo(vil_stream & fs)
         }
 
       } // End of if (tfx_type)
-    }   // End of if (group...)
+    } // End of if (group...)
     else if (group == VIL_DICOM_HEADER_DELIMITERGROUP &&
              (element == VIL_DICOM_HEADER_DLITEM || element == VIL_DICOM_HEADER_DLITEMDELIMITATIONITEM ||
               element == VIL_DICOM_HEADER_DLSEQDELIMITATIONITEM))

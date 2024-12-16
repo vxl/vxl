@@ -49,9 +49,9 @@ local_vsl_b_read(vsl_b_istream & is, TYPE & n)
   vsl_convert_from_arbitrary_length(buf, &n);
 }
 
-#define MACRO_MAKE_INTEGER_READ_WRITE(TYPEIN)                                                                          \
-  void vsl_b_write(vsl_b_ostream & os, TYPEIN n) { local_vsl_b_write<TYPEIN>(os, n); }                                 \
-                                                                                                                       \
+#define MACRO_MAKE_INTEGER_READ_WRITE(TYPEIN)                                          \
+  void vsl_b_write(vsl_b_ostream & os, TYPEIN n) { local_vsl_b_write<TYPEIN>(os, n); } \
+                                                                                       \
   void vsl_b_read(vsl_b_istream & is, TYPEIN & n) { local_vsl_b_read<TYPEIN>(is, n); }
 
 MACRO_MAKE_INTEGER_READ_WRITE(int);
@@ -236,7 +236,8 @@ vsl_b_ostream::os() const
 }
 
 //: Returns true if the underlying stream has its fail bit set.
-bool vsl_b_ostream::operator!() const
+bool
+vsl_b_ostream::operator!() const
 {
   return os_->operator!();
 }
@@ -389,7 +390,8 @@ vsl_b_istream::version_no() const
 }
 
 //: Returns true if the underlying stream has its fail bit set.
-bool vsl_b_istream::operator!() const
+bool
+vsl_b_istream::operator!() const
 {
   return is_->operator!();
 }

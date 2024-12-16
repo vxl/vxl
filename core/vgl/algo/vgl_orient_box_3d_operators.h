@@ -32,15 +32,20 @@ template <class T>
 class vgl_orient_box_3d_operators
 {
   vgl_orient_box_3d_operators() = default; // The default constructor is private
- public:
-
-  static vgl_orient_box_3d<T> minimal_box(vgl_point_3d<T> const& p) {
-    vgl_box_3d<T> bb; bb.add(p); return bb;
+public:
+  static vgl_orient_box_3d<T>
+  minimal_box(const vgl_point_3d<T> & p)
+  {
+    vgl_box_3d<T> bb;
+    bb.add(p);
+    return bb;
   }
 
-  static vgl_orient_box_3d<T> minimal_box(std::vector<vgl_point_3d<T> > const& plist);
+  static vgl_orient_box_3d<T>
+  minimal_box(const std::vector<vgl_point_3d<T>> & plist);
 };
 
-#define VGL_ORIENT_BOX_3D_OPERATORS_INSTANTIATE(T) extern "Please #include <vgl/vgl_orient_box_3d_operators.hxx> instead"
+#define VGL_ORIENT_BOX_3D_OPERATORS_INSTANTIATE(T) \
+  extern "Please #include <vgl/vgl_orient_box_3d_operators.hxx> instead"
 
 #endif // vgl_orient_box_3d_operators_h

@@ -27,7 +27,7 @@ date_and_time()
 }
 
 static void
-read_string(TIFF * tif, ttag_t tag, std::string & stag, std::string const & deflt = "not_defined")
+read_string(TIFF * tif, ttag_t tag, std::string & stag, const std::string & deflt = "not_defined")
 {
   char * adr = nullptr;
   TIFFGetField(tif, tag, &adr);
@@ -84,7 +84,7 @@ write_short_tag(TIFF * tif, ttag_t tag, ushort_tag const & ustag)
 }
 
 static void
-write_long_tag(TIFF * tif, ttag_t tag, ulong_tag const & ultag)
+write_long_tag(TIFF * tif, ttag_t tag, const ulong_tag & ultag)
 {
   if (ultag.valid)
     TIFFSetField(tif, tag, ultag.val);
@@ -163,7 +163,7 @@ vil_tiff_header::read_header()
   vxl_uint_16 * sample_info = nullptr;
   extra_samples.val = 0;
   extra_samples.valid = false;
-  int const ret_extrasamples = TIFFGetField(tif_, TIFFTAG_EXTRASAMPLES, &extra_samples.val, &sample_info);
+  const int ret_extrasamples = TIFFGetField(tif_, TIFFTAG_EXTRASAMPLES, &extra_samples.val, &sample_info);
   if (ret_extrasamples && extra_samples.val > 0)
     extra_samples.valid = true;
 
@@ -389,8 +389,8 @@ vil_tiff_header::compute_pixel_format()
     return false;
   }
 
-  vxl_uint_16 const b = bits_per_sample.val;
-  vxl_uint_16 const bbs = bytes_per_sample();
+  const vxl_uint_16 b = bits_per_sample.val;
+  const vxl_uint_16 bbs = bytes_per_sample();
   nplanes = 1;
   // Let's do the easy case first -- scalar pixels but various types
   if (samples_per_pixel.val == 1)
@@ -498,19 +498,19 @@ vil_tiff_header::compute_pixel_format()
             return false;
         }
       case 3:
-         switch (bbs)
-         {
-         case (sizeof(float)):
-             pix_fmt = VIL_PIXEL_FORMAT_FLOAT;
-             return true;
+        switch (bbs)
+        {
+          case (sizeof(float)):
+            pix_fmt = VIL_PIXEL_FORMAT_FLOAT;
+            return true;
 
-         default:
-             pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
-             return false;
-         }
+          default:
+            pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+            return false;
+        }
       default:
-          pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
-          return false;
+        pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+        return false;
     }
   }
   // Now for regular color images
@@ -521,7 +521,7 @@ vil_tiff_header::compute_pixel_format()
   // separate color bands.
   else if (/*samples_per_pixel.val>1 &&*/ photometric.val == PHOTOMETRIC_RGB && planar_config.val == 1)
   {
-    vxl_uint_16 const s = samples_per_pixel.val;
+    const vxl_uint_16 s = samples_per_pixel.val;
     switch (sample_format.val)
     {
       case 1: // unsigned values
@@ -534,7 +534,8 @@ vil_tiff_header::compute_pixel_format()
               case 3:
                 nplanes = 3;
                 return true;
-              case 4: {
+              case 4:
+              {
                 nplanes = 4;
                 if (extra_samples.valid && extra_samples.val == 1)
                   pix_fmt = VIL_PIXEL_FORMAT_RGBA_BYTE;
@@ -551,7 +552,8 @@ vil_tiff_header::compute_pixel_format()
               case 3:
                 nplanes = 3;
                 return true;
-              case 4: {
+              case 4:
+              {
                 nplanes = 4;
                 // can be RBGA if extra samples and
                 // so shouldn't be treated as a simple multiband image
@@ -649,7 +651,7 @@ vil_tiff_header::compute_pixel_format()
       pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
       return false;
     }
-    vxl_uint_16 const s = samples_per_pixel.val;
+    const vxl_uint_16 s = samples_per_pixel.val;
     switch (b)
     {
       case 16: // only handle 2 byte pixels for now
@@ -659,11 +661,13 @@ vil_tiff_header::compute_pixel_format()
           case 3:
             nplanes = 3;
             return true;
-          case 4: {
+          case 4:
+          {
             nplanes = 4;
             return true;
           }
-          case 8: {
+          case 8:
+          {
             nplanes = 8;
             return true;
           }
@@ -693,7 +697,7 @@ vil_tiff_header::compute_pixel_format()
 
 // Returns false if the pixel format cannot be written
 bool
-vil_tiff_header::parse_pixel_format(vil_pixel_format const & fmt)
+vil_tiff_header::parse_pixel_format(const vil_pixel_format & fmt)
 {
   // Check for supported types
   sample_format.val = 1;
@@ -738,7 +742,7 @@ bool
 vil_tiff_header::set_header(unsigned ni,
                             unsigned nj,
                             unsigned nplns,
-                            vil_pixel_format const & fmt,
+                            const vil_pixel_format & fmt,
                             const unsigned size_block_i,
                             const unsigned size_block_j)
 {
@@ -808,7 +812,7 @@ vil_tiff_header::vil_tiff_header(TIFF * tif,
                                  const unsigned ni,
                                  const unsigned nj,
                                  const unsigned nplanes,
-                                 vil_pixel_format const & fmt,
+                                 const vil_pixel_format & fmt,
                                  const unsigned size_block_i,
                                  const unsigned size_block_j)
 {

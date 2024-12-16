@@ -18,7 +18,7 @@ vil_flip_lr(const vil_image_resource_sptr & src)
   return new vil_flip_lr_image_resource(src);
 }
 
-vil_flip_lr_image_resource::vil_flip_lr_image_resource(vil_image_resource_sptr const & src)
+vil_flip_lr_image_resource::vil_flip_lr_image_resource(const vil_image_resource_sptr & src)
   : src_(src)
 {}
 
@@ -33,8 +33,8 @@ vil_flip_lr_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j0,
 
   switch (vs->pixel_format())
   {
-#define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
+#define macro(F, T) \
+  case F:           \
     return new vil_image_view<T>(vil_flip_lr(static_cast<const vil_image_view<T> &>(*vs)));
 
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
@@ -62,8 +62,8 @@ vil_flip_lr_image_resource::get_view(unsigned i0, unsigned ni, unsigned j0, unsi
 
   switch (vs->pixel_format())
   {
-#define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
+#define macro(F, T) \
+  case F:           \
     return new vil_image_view<T>(vil_flip_lr(static_cast<const vil_image_view<T> &>(*vs)));
 
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
@@ -88,8 +88,8 @@ vil_flip_lr_image_resource::put_view(const vil_image_view_base & im, unsigned i0
     return false;
   switch (im.pixel_format())
   {
-#define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
+#define macro(F, T) \
+  case F:           \
     return src_->put_view(vil_flip_lr(static_cast<const vil_image_view<T> &>(im)), src_->ni() - i0 - im.ni(), j0);
 
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
@@ -112,7 +112,7 @@ vil_flip_ud(const vil_image_resource_sptr & src)
   return new vil_flip_ud_image_resource(src);
 }
 
-vil_flip_ud_image_resource::vil_flip_ud_image_resource(vil_image_resource_sptr const & src)
+vil_flip_ud_image_resource::vil_flip_ud_image_resource(const vil_image_resource_sptr & src)
   : src_(src)
 {}
 
@@ -128,8 +128,8 @@ vil_flip_ud_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j0,
 
   switch (vs->pixel_format())
   {
-#define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
+#define macro(F, T) \
+  case F:           \
     return new vil_image_view<T>(vil_flip_ud(static_cast<const vil_image_view<T> &>(*vs)));
 
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
@@ -157,8 +157,8 @@ vil_flip_ud_image_resource::get_view(unsigned i0, unsigned ni, unsigned j0, unsi
 
   switch (vs->pixel_format())
   {
-#define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
+#define macro(F, T) \
+  case F:           \
     return new vil_image_view<T>(vil_flip_ud(static_cast<const vil_image_view<T> &>(*vs)));
 
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
@@ -183,8 +183,8 @@ vil_flip_ud_image_resource::put_view(const vil_image_view_base & im, unsigned i0
     return false;
   switch (im.pixel_format())
   {
-#define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
+#define macro(F, T) \
+  case F:           \
     return src_->put_view(vil_flip_ud(static_cast<const vil_image_view<T> &>(im)), i0, src_->nj() - j0 - im.nj());
 
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)

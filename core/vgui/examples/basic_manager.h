@@ -21,14 +21,22 @@ class basic_manager : public vgui_wrapper_tableau
 {
   vil1_image img_;
   vgui_image_tableau_sptr itab_;
- public:
-  basic_manager() : vgui_wrapper_tableau() {}
+
+public:
+  basic_manager()
+    : vgui_wrapper_tableau()
+  {}
   ~basic_manager() {}
-  static basic_manager *instance();
-  void quit();
-  void load_image();
-  void init();
-  virtual bool handle(vgui_event const &);
+  static basic_manager *
+  instance();
+  void
+  quit();
+  void
+  load_image();
+  void
+  init();
+  virtual bool
+  handle(const vgui_event &);
 };
 
 #endif // basic_manager_h_

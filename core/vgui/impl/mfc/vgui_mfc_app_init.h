@@ -13,12 +13,12 @@ class vgui_mfc_app;
 // in order to set up the MFC stuff;
 class vgui_mfc_app_init
 {
- public:
+public:
   vgui_mfc_app_init();
   ~vgui_mfc_app_init();
 
- protected:
-  vgui_mfc_app* p;
+protected:
+  vgui_mfc_app * p;
 };
 
 #endif // vgui_mfc_app_init_h_

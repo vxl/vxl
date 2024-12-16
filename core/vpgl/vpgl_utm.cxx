@@ -87,10 +87,8 @@ adjust_lon2(double x) // Angle in radians
       x -= (sign(x) * vnl_math::twopi);
     else if (long(vnl_math::abs(x / (vnl_math::twopi))) < maxlong_as_double)
       x -= long((x / vnl_math::twopi) * vnl_math::twopi);
-    else if (((long)vnl_math::abs(x / (maxlong_as_double * vnl_math::twopi))) <
-             maxlong_as_double)
-      x -= (((long)(x / (maxlong_as_double * vnl_math::twopi))) *
-            (vnl_math::twopi * maxlong_as_double));
+    else if (((long)vnl_math::abs(x / (maxlong_as_double * vnl_math::twopi))) < maxlong_as_double)
+      x -= (((long)(x / (maxlong_as_double * vnl_math::twopi))) * (vnl_math::twopi * maxlong_as_double));
     else if (((long)vnl_math::abs(x / (DBLLONG * vnl_math::twopi))) < maxlong_as_double)
       x -= (((long)(x / (DBLLONG * vnl_math::twopi))) * (vnl_math::twopi * DBLLONG));
     else
@@ -111,10 +109,8 @@ adjust_lat2(double x) // Angle in radians
       x -= (sign(x) * vnl_math::pi);
     else if (((long)vnl_math::abs(x / vnl_math::pi)) < maxlong_as_double)
       x -= ((long)(x / vnl_math::pi)) * vnl_math::pi;
-    else if (((long)vnl_math::abs(x / (maxlong_as_double * vnl_math::pi))) <
-             maxlong_as_double)
-      x -= (((long)(x / (maxlong_as_double * vnl_math::pi))) *
-            (vnl_math::pi * maxlong_as_double));
+    else if (((long)vnl_math::abs(x / (maxlong_as_double * vnl_math::pi))) < maxlong_as_double)
+      x -= (((long)(x / (maxlong_as_double * vnl_math::pi))) * (vnl_math::pi * maxlong_as_double));
     else if (((long)vnl_math::abs(x / (DBLLONG * vnl_math::pi))) < maxlong_as_double)
       x -= (((long)(x / (DBLLONG * vnl_math::pi))) * (vnl_math::pi * DBLLONG));
     else
@@ -165,7 +161,7 @@ UTM_init2(double lat_center2, double r_major, double e, int south_flag)
 
 vpgl_utm::vpgl_utm()
 
-    = default;
+  = default;
 
 vpgl_utm::vpgl_utm(const vpgl_utm & t) = default;
 
@@ -322,14 +318,22 @@ vpgl_utm::transform(double lat, double lon, double & x, double & y, int & utm_zo
 // UTM zone and/or south_flag as input, allowing points near UTM borders
 // and the equator to be transformed in an adjacent UTM system.
 void
-vpgl_utm::transform(double lat, double lon,
-                    double& x, double& y, int& utm_zone, bool& south_flag,
-                    int force_utm_zone, int force_south_flag) const
+vpgl_utm::transform(double lat,
+                    double lon,
+                    double & x,
+                    double & y,
+                    int & utm_zone,
+                    bool & south_flag,
+                    int force_utm_zone,
+                    int force_south_flag) const
 {
   // UTM zone
-  if (force_utm_zone >= 0) {
+  if (force_utm_zone >= 0)
+  {
     utm_zone = force_utm_zone;
-  } else {
+  }
+  else
+  {
     // normalize longitude to [0,360)
     double x = std::fmod(lon + 180.0, 360.0);
     x = (x < 0) ? x + 360 : x;
@@ -338,9 +342,12 @@ vpgl_utm::transform(double lat, double lon,
   }
 
   // UTM north vs. south
-  if (force_south_flag >= 0) {
+  if (force_south_flag >= 0)
+  {
     south_flag = force_south_flag;
-  } else {
+  }
+  else
+  {
     south_flag = lat < 0;
   }
 
@@ -391,10 +398,14 @@ vpgl_utm::transform(double lat, double lon,
 // adjacent UTM coordinate system (utm_zone_out and south_flag_out)
 // Conversion is performed by passing the point through WGS84 coordinates.
 void
-vpgl_utm::utm2utm(double utm_zone_in, bool south_flag_in,
-                  double x_in, double y_in,
-                  double utm_zone_out, bool south_flag_out,
-                  double& x_out, double& y_out) const
+vpgl_utm::utm2utm(double utm_zone_in,
+                  bool south_flag_in,
+                  double x_in,
+                  double y_in,
+                  double utm_zone_out,
+                  bool south_flag_out,
+                  double & x_out,
+                  double & y_out) const
 {
   // test for necessary conversion
   if (utm_zone_in == utm_zone_out && south_flag_in == south_flag_out)
@@ -409,7 +420,7 @@ vpgl_utm::utm2utm(double utm_zone_in, bool south_flag_in,
   this->transform(utm_zone_in, x_in, y_in, lat, lon, south_flag_in);
 
   // convert from WGS84 to utm_out
-  int uz; bool sf;
-  this->transform(lat, lon, x_out, y_out, uz, sf,
-                  utm_zone_out, south_flag_out);
+  int uz;
+  bool sf;
+  this->transform(lat, lon, x_out, y_out, uz, sf, utm_zone_out, south_flag_out);
 }

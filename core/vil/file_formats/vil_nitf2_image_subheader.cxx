@@ -266,7 +266,8 @@ vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions * defs
 {
   switch (version)
   {
-    case vil_nitf2_classification::V_NITF_20: {
+    case vil_nitf2_classification::V_NITF_20:
+    {
       (*defs).field("ICORDS",
                     "Image Coordinate Representation",
                     NITF_ENUM(1,
@@ -292,8 +293,9 @@ vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions * defs
                     new vil_nitf2_field_value_one_of<std::string>("ICORDS", igeolo_icords));
       break;
     }
-    case vil_nitf2_classification::V_NITF_21: {
-      std::vector<std::string> coors = {"U","G","N","S","D"};
+    case vil_nitf2_classification::V_NITF_21:
+    {
+      std::vector<std::string> coors = { "U", "G", "N", "S", "D" };
       (*defs)
         .field("ICORDS",
                "Image Coordinate Representation",
@@ -314,8 +316,8 @@ vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions * defs
                NITF_STR_BCSA(60),
                false,
                nullptr,
-               //new vil_nitf2_field_specified("ICORDS") JLM 11/2024
-               new vil_nitf2_field_value_one_of<std::string>("ICORDS",coors));
+               // new vil_nitf2_field_specified("ICORDS") JLM 11/2024
+               new vil_nitf2_field_value_one_of<std::string>("ICORDS", coors));
       break;
     }
     default:
@@ -739,7 +741,7 @@ vil_nitf2_image_subheader::add_rpc_definitions()
       // As these values are in <+/->n.nnnnnnE<+/->n (exponential) format,
       //   let's just read as strings now and convert into doubles later.
 
-       .repeat(20, vil_nitf2_field_definitions().field("LNC", "Line Number Coefficient", NITF_EXP(6, 1)))
+      .repeat(20, vil_nitf2_field_definitions().field("LNC", "Line Number Coefficient", NITF_EXP(6, 1)))
       .repeat(20, vil_nitf2_field_definitions().field("LDC", "Line Density Coefficient", NITF_EXP(6, 1)))
       .repeat(20, vil_nitf2_field_definitions().field("SNC", "Sample Number Coefficient", NITF_EXP(6, 1)))
       .repeat(20, vil_nitf2_field_definitions().field("SDC", "Sample Density Coefficient", NITF_EXP(6, 1)))
@@ -1289,10 +1291,13 @@ vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
 //      "FI_ROW_11", "FI_ROW_12", "FI_ROW_21", "FI_ROW_22",
 //      "OP_COL_11", "OP_COL_12", "OP_COL_21", "OP_COL_22",
 //      "OP_ROW_11", "OP_ROW_12", "OP_ROW_21", "OP_ROW_22",
-bool vil_nitf2_image_subheader::get_ichipb_info(std::pair<double, double>& translation,
-                                                std::vector<std::pair<double, double> >& F_grid_points,
-                                                std::vector<std::pair<double, double> >& O_grid_points,
-                                                double& scale_factor, bool& anamorphic_corr){
+bool
+vil_nitf2_image_subheader::get_ichipb_info(std::pair<double, double> & translation,
+                                           std::vector<std::pair<double, double>> & F_grid_points,
+                                           std::vector<std::pair<double, double>> & O_grid_points,
+                                           double & scale_factor,
+                                           bool & anamorphic_corr)
+{
   vil_nitf2_tagged_record_sequence isxhd_tres;
   vil_nitf2_tagged_record_sequence::iterator tres_itr;
   this->get_property("IXSHD", isxhd_tres);
@@ -1306,41 +1311,57 @@ bool vil_nitf2_image_subheader::get_ichipb_info(std::pair<double, double>& trans
       int anacor;
       if ((*tres_itr)->get_value("ANAMRPH_CORR", anacor))
         anamorphic_corr = anacor > 0;
-      else return false;
+      else
+        return false;
       bool success = true;
       success = (*tres_itr)->get_value("SCALE_FACTOR", scale_factor);
-      if(!success) return false;
+      if (!success)
+        return false;
 
       std::pair<double, double> f11, f12, f21, f22;
       success = ((*tres_itr)->get_value("FI_ROW_11", f11.second) && (*tres_itr)->get_value("FI_COL_11", f11.first));
-      if(success)
+      if (success)
         translation = f11;
-      else return false;
+      else
+        return false;
 
       success = ((*tres_itr)->get_value("FI_ROW_12", f12.second) && (*tres_itr)->get_value("FI_COL_12", f12.first));
-      if(!success) return false;
+      if (!success)
+        return false;
 
       success = ((*tres_itr)->get_value("FI_ROW_21", f21.second) && (*tres_itr)->get_value("FI_COL_21", f21.first));
-      if(!success) return false;
+      if (!success)
+        return false;
 
       success = ((*tres_itr)->get_value("FI_ROW_22", f22.second) && (*tres_itr)->get_value("FI_COL_22", f22.first));
-      if(!success) return false;
+      if (!success)
+        return false;
 
-      F_grid_points.push_back(f11);F_grid_points.push_back(f12);F_grid_points.push_back(f11);F_grid_points.push_back(f22);
+      F_grid_points.push_back(f11);
+      F_grid_points.push_back(f12);
+      F_grid_points.push_back(f11);
+      F_grid_points.push_back(f22);
 
       std::pair<double, double> o11, o12, o21, o22;
       success = ((*tres_itr)->get_value("OP_ROW_11", o11.second) && (*tres_itr)->get_value("OP_COL_11", o11.first));
-      if(!success) return false;
+      if (!success)
+        return false;
       success = ((*tres_itr)->get_value("OP_ROW_12", o12.second) && (*tres_itr)->get_value("OP_COL_12", o12.first));
-      if(!success) return false;
+      if (!success)
+        return false;
 
       success = ((*tres_itr)->get_value("OP_ROW_21", o21.second) && (*tres_itr)->get_value("OP_COL_21", o21.first));
-      if(!success) return false;
+      if (!success)
+        return false;
 
       success = ((*tres_itr)->get_value("OP_ROW_22", o22.second) && (*tres_itr)->get_value("OP_COL_22", o22.first));
-      if(!success) return false;
+      if (!success)
+        return false;
 
-      F_grid_points.push_back(o11);F_grid_points.push_back(o12);F_grid_points.push_back(o11);F_grid_points.push_back(o22);
+      F_grid_points.push_back(o11);
+      F_grid_points.push_back(o12);
+      F_grid_points.push_back(o11);
+      F_grid_points.push_back(o22);
       return true;
     }
   }

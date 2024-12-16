@@ -38,7 +38,7 @@ vil1_block_cache_image_impl::get_section(void * buf, int x0, int y0, int w, int 
 }
 
 bool
-vil1_block_cache_image_impl::put_section(void const * buf, int x0, int y0, int w, int h)
+vil1_block_cache_image_impl::put_section(const void * buf, int x0, int y0, int w, int h)
 {
   return base.put_section(buf, x0, y0, w, h);
 }
@@ -46,7 +46,7 @@ vil1_block_cache_image_impl::put_section(void const * buf, int x0, int y0, int w
 //--------------------------------------------------------------------------------
 
 bool
-vil1_block_cache_image_impl::get_property(char const * tag, void * out) const
+vil1_block_cache_image_impl::get_property(const char * tag, void * out) const
 {
   if (std::strcmp(tag, "is_blocked") == 0)
     return true;
@@ -79,7 +79,7 @@ vil1_block_cache_image_impl::is_a() const
 
 //: Return true if the name of the class matches the argument
 bool
-vil1_block_cache_image_impl::is_class(std::string const & s) const
+vil1_block_cache_image_impl::is_class(const std::string & s) const
 {
   return s == vil1_block_cache_image_impl::is_a() || vil1_image_impl::is_class(s);
 }

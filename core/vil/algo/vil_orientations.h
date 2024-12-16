@@ -12,10 +12,11 @@
 //: Compute orientation (in radians) and gradient magnitude at each pixel
 //  Images assumed to be single plane
 // \relatesalso vil_image_view
-void vil_orientations(const vil_image_view<float>& grad_i,
-                      const vil_image_view<float>& grad_j,
-                      vil_image_view<float>& orient_im,
-                      vil_image_view<float>& grad_mag);
+void
+vil_orientations(const vil_image_view<float> & grad_i,
+                 const vil_image_view<float> & grad_j,
+                 vil_image_view<float> & orient_im,
+                 vil_image_view<float> & grad_mag);
 
 //: Compute discrete orientation and gradient magnitude at each pixel
 //  Computes orientation at each pixel and scales to range [0,n_orientations-1].
@@ -25,11 +26,12 @@ void vil_orientations(const vil_image_view<float>& grad_i,
 //
 //  Images assumed to be single plane
 // \relatesalso vil_image_view
-void vil_orientations(const vil_image_view<float>& grad_i,
-                      const vil_image_view<float>& grad_j,
-                      vil_image_view<vxl_byte>& orient_im,
-                      vil_image_view<float>& grad_mag,
-                      unsigned n_orientations=256);
+void
+vil_orientations(const vil_image_view<float> & grad_i,
+                 const vil_image_view<float> & grad_j,
+                 vil_image_view<vxl_byte> & orient_im,
+                 vil_image_view<float> & grad_mag,
+                 unsigned n_orientations = 256);
 
 //: Compute discrete orientation and gradient magnitude at edge pixels
 //  Computes orientation at each pixel and scales to range [0,n_orientations].
@@ -41,23 +43,25 @@ void vil_orientations(const vil_image_view<float>& grad_i,
 //
 //  Images assumed to be single plane
 // \relatesalso vil_image_view
-void vil_orientations_at_edges(const vil_image_view<float>& grad_i,
-                               const vil_image_view<float>& grad_j,
-                               vil_image_view<vxl_byte>& orient_im,
-                               vil_image_view<float>& grad_mag,
-                               float grad_threshold,
-                               unsigned n_orientations=255);
+void
+vil_orientations_at_edges(const vil_image_view<float> & grad_i,
+                          const vil_image_view<float> & grad_j,
+                          vil_image_view<vxl_byte> & orient_im,
+                          vil_image_view<float> & grad_mag,
+                          float grad_threshold,
+                          unsigned n_orientations = 255);
 
 //: Compute orientation and gradient magnitude using sobel to get gradients
 // \relatesalso vil_image_view
 template <class T>
-inline void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
-                                        vil_image_view<float>& orient_im,
-                                        vil_image_view<float>& grad_mag)
+inline void
+vil_orientations_from_sobel(const vil_image_view<T> & src_image,
+                            vil_image_view<float> & orient_im,
+                            vil_image_view<float> & grad_mag)
 {
-  vil_image_view<float> grad_i,grad_j;
-  vil_sobel_3x3(src_image,grad_i,grad_j);
-  vil_orientations(grad_i,grad_j,orient_im,grad_mag);
+  vil_image_view<float> grad_i, grad_j;
+  vil_sobel_3x3(src_image, grad_i, grad_j);
+  vil_orientations(grad_i, grad_j, orient_im, grad_mag);
 }
 
 //: Compute discrete orientation and gradient using sobel operations
@@ -69,14 +73,15 @@ inline void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
 //  Images assumed to be single plane
 // \relatesalso vil_image_view
 template <class T>
-inline void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
-                                        vil_image_view<vxl_byte>& orient_im,
-                                        vil_image_view<float>& grad_mag,
-                                        unsigned n_orientations=256)
+inline void
+vil_orientations_from_sobel(const vil_image_view<T> & src_image,
+                            vil_image_view<vxl_byte> & orient_im,
+                            vil_image_view<float> & grad_mag,
+                            unsigned n_orientations = 256)
 {
-  vil_image_view<float> grad_i,grad_j;
-  vil_sobel_3x3(src_image,grad_i,grad_j);
-  vil_orientations(grad_i,grad_j,orient_im,grad_mag,n_orientations);
+  vil_image_view<float> grad_i, grad_j;
+  vil_sobel_3x3(src_image, grad_i, grad_j);
+  vil_orientations(grad_i, grad_j, orient_im, grad_mag, n_orientations);
 }
 
 #endif // vil_orientations_h_

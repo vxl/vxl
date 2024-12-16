@@ -48,27 +48,53 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include "vpgl_camera.h"
-#include "vpgl_rational_camera.h"//for scale and offset class
+#include "vpgl_rational_camera.h" //for scale and offset class
 //======================= RSM region selector =================================
 template <class T>
-class vpgl_region_selector{
- public:
-
- vpgl_region_selector() :rnis_(1), cnis_(1), tnis_(0), minr_(0), maxr_(0),
-    minc_(0), maxc_(0), rssiz_(0.0), cssiz_(0.0) {
+class vpgl_region_selector
+{
+public:
+  vpgl_region_selector()
+    : rnis_(1)
+    , cnis_(1)
+    , tnis_(0)
+    , minr_(0)
+    , maxr_(0)
+    , minc_(0)
+    , maxc_(0)
+    , rssiz_(0.0)
+    , cssiz_(0.0)
+  {
     row_coefs_.resize(10);
     col_coefs_.resize(10);
   }
 
- vpgl_region_selector(std::vector<T> row_coefs, std::vector<T> col_coefs,
-                      size_t minr, size_t maxr, size_t minc, size_t maxc,
-                      size_t rnis, size_t cnis, size_t tnis, size_t rssiz, size_t cssiz):
-  row_coefs_(row_coefs), col_coefs_(col_coefs), minr_(minr), maxr_(maxr),
-    minc_(minc), maxc_(maxc), rnis_(rnis), cnis_(cnis), tnis_(tnis),
-    rssiz_(rssiz), cssiz_(cssiz){
-  }
+  vpgl_region_selector(std::vector<T> row_coefs,
+                       std::vector<T> col_coefs,
+                       size_t minr,
+                       size_t maxr,
+                       size_t minc,
+                       size_t maxc,
+                       size_t rnis,
+                       size_t cnis,
+                       size_t tnis,
+                       size_t rssiz,
+                       size_t cssiz)
+    : row_coefs_(row_coefs)
+    , col_coefs_(col_coefs)
+    , minr_(minr)
+    , maxr_(maxr)
+    , minc_(minc)
+    , maxc_(maxc)
+    , rnis_(rnis)
+    , cnis_(cnis)
+    , tnis_(tnis)
+    , rssiz_(rssiz)
+    , cssiz_(cssiz)
+  {}
 
-  void select(T X, T Y, T Z, size_t& region_row, size_t& region_col) const;
+  void
+  select(T X, T Y, T Z, size_t & region_row, size_t & region_col) const;
   std::vector<T> row_coefs_;
   std::vector<T> col_coefs_;
   size_t minr_;
@@ -82,98 +108,148 @@ class vpgl_region_selector{
   T cssiz_;
 };
 template <class T>
-class vpgl_polycam {
+class vpgl_polycam
+{
 public:
-    //: enumeration for indexing coordinates
-    enum coor_index { X_INDX = 0, Y_INDX, Z_INDX, U_INDX, V_INDX };
-    //: enumeration for indexing polynomials
-    enum poly_index { NEU_U = 0, DEN_U, NEU_V, DEN_V };
-    //: enumeration for computing polys
-    enum poly_comp_index { P_NEU_U = 0, P_DEN_U, P_NEU_V, P_DEN_V };
-    vpgl_polycam();
-    vpgl_polycam(size_t ridx, size_t cidx) : ridx_(ridx), cidx_(cidx) {}
-    vpgl_polycam(size_t ridx, size_t cidx,
-        std::vector<std::vector<int> >const& powers,
-        std::vector<std::vector<T> > const& coeffs,
-        std::vector<vpgl_scale_offset<T> > const& scale_offsets
-    ) :
-        ridx_(ridx), cidx_(cidx), powers_(powers),
-        coeffs_(coeffs), scale_offsets_(scale_offsets) {}
+  //: enumeration for indexing coordinates
+  enum coor_index
+  {
+    X_INDX = 0,
+    Y_INDX,
+    Z_INDX,
+    U_INDX,
+    V_INDX
+  };
+  //: enumeration for indexing polynomials
+  enum poly_index
+  {
+    NEU_U = 0,
+    DEN_U,
+    NEU_V,
+    DEN_V
+  };
+  //: enumeration for computing polys
+  enum poly_comp_index
+  {
+    P_NEU_U = 0,
+    P_DEN_U,
+    P_NEU_V,
+    P_DEN_V
+  };
+  vpgl_polycam();
+  vpgl_polycam(size_t ridx, size_t cidx)
+    : ridx_(ridx)
+    , cidx_(cidx)
+  {}
+  vpgl_polycam(size_t ridx,
+               size_t cidx,
+               const std::vector<std::vector<int>> & powers,
+               const std::vector<std::vector<T>> & coeffs,
+               const std::vector<vpgl_scale_offset<T>> & scale_offsets)
+    : ridx_(ridx)
+    , cidx_(cidx)
+    , powers_(powers)
+    , coeffs_(coeffs)
+    , scale_offsets_(scale_offsets)
+  {}
 
-    size_t ridx() const { return ridx_; }
-    size_t cidx() const { return cidx_; }
+  size_t
+  ridx() const
+  {
+    return ridx_;
+  }
+  size_t
+  cidx() const
+  {
+    return cidx_;
+  }
 
-    //: set RSM polynomial coefficients
-    void set_coefficients(
-        std::vector<T> const& neu_u,
-        std::vector<T> const& den_u,
-        std::vector<T> const& neu_v,
-        std::vector<T> const& den_v
-    );
+  //: set RSM polynomial coefficients
+  void
+  set_coefficients(const std::vector<T> & neu_u,
+                   const std::vector<T> & den_u,
+                   const std::vector<T> & neu_v,
+                   const std::vector<T> & den_v);
 
-    // In the order neu_u, den_u, neu_v, den_v
-    void set_coefficients(std::vector<std::vector<T> > const& RSM_coeffs);
+  // In the order neu_u, den_u, neu_v, den_v
+  void
+  set_coefficients(const std::vector<std::vector<T>> & RSM_coeffs);
 
-    //: get the RSM polynomial coefficients in std vector of vectors
-    // In the order neu_u, den_u, neu_v, den_v
-    std::vector<std::vector<T> > coefficients(
-    ) const;
+  //: get the RSM polynomial coefficients in std vector of vectors
+  // In the order neu_u, den_u, neu_v, den_v
+  std::vector<std::vector<T>>
+  coefficients() const;
 
-    //: set the maximum power of each of x, y, z
-    //  for each of the four polynomials in the order,
-    //  neu_u, den_u, neu_v, den_v
-    void set_powers(std::vector<std::vector<int> >const& powers) {
-        powers_ = powers;
-    }
+  //: set the maximum power of each of x, y, z
+  //  for each of the four polynomials in the order,
+  //  neu_u, den_u, neu_v, den_v
+  void
+  set_powers(const std::vector<std::vector<int>> & powers)
+  {
+    powers_ = powers;
+  }
 
-    void set_powers(
-        std::vector<int> const& neu_u_powers,
-        std::vector<int> const& den_u_powers,
-        std::vector<int> const& neu_v_powers,
-        std::vector<int> const& den_v_powers);
+  void
+  set_powers(const std::vector<int> & neu_u_powers,
+             const std::vector<int> & den_u_powers,
+             const std::vector<int> & neu_v_powers,
+             const std::vector<int> & den_v_powers);
 
-    std::vector<std::vector<int> > powers() const { return powers_; }
+  std::vector<std::vector<int>>
+  powers() const
+  {
+    return powers_;
+  }
 
-    //: set all coordinate scale and offsets
-    void set_scale_offsets(
-        const T x_scale, const T x_off,
-        const T y_scale, const T y_off,
-        const T z_scale, const T z_off,
-        const T u_scale, const T u_off,
-        const T v_scale, const T v_off
-    );
+  //: set all coordinate scale and offsets
+  void
+  set_scale_offsets(const T x_scale,
+                    const T x_off,
+                    const T y_scale,
+                    const T y_off,
+                    const T z_scale,
+                    const T z_off,
+                    const T u_scale,
+                    const T u_off,
+                    const T v_scale,
+                    const T v_off);
 
-    void set_scale_offsets(std::vector<vpgl_scale_offset<T> > const& scale_offsets);
+  void
+  set_scale_offsets(const std::vector<vpgl_scale_offset<T>> & scale_offsets);
 
-    //: get the scale and offsets in a vector
-    std::vector<vpgl_scale_offset<T> > scale_offsets() const
-    {
-        return scale_offsets_;
-    }
-    //: Equality test
-    inline bool operator==(vpgl_polycam<T> const& that) const
-    {
-        return this == &that ||
-            ((this->coefficients() == that.coefficients()) && (this->powers() == that.powers()) &&
-                (this->scale_offsets() == that.scale_offsets()));
-        return true;
-    }
+  //: get the scale and offsets in a vector
+  std::vector<vpgl_scale_offset<T>>
+  scale_offsets() const
+  {
+    return scale_offsets_;
+  }
+  //: Equality test
+  inline bool
+  operator==(const vpgl_polycam<T> & that) const
+  {
+    return this == &that || ((this->coefficients() == that.coefficients()) && (this->powers() == that.powers()) &&
+                             (this->scale_offsets() == that.scale_offsets()));
+    return true;
+  }
 
-    //: The generic camera interface. u represents image column, v image row.
-    void project(const T x, const T y, const T z, T& u, T& v) const;
+  //: The generic camera interface. u represents image column, v image row.
+  void
+  project(const T x, const T y, const T z, T & u, T & v) const;
 
-    //: Project a world point onto the image (vnl interface)
-    vnl_vector_fixed<T, 2> project(vnl_vector_fixed<T, 3> const& world_point) const;
+  //: Project a world point onto the image (vnl interface)
+  vnl_vector_fixed<T, 2>
+  project(const vnl_vector_fixed<T, 3> & world_point) const;
 
-    //: Project a world point onto the image (vgl interface)
-    vgl_point_2d<T> project(vgl_point_3d<T> world_point) const;
+  //: Project a world point onto the image (vgl interface)
+  vgl_point_2d<T>
+  project(vgl_point_3d<T> world_point) const;
 
 private:
-    size_t ridx_;
-    size_t cidx_;
-    std::vector<std::vector<int> > powers_;
-    std::vector<std::vector<T> > coeffs_;
-    std::vector<vpgl_scale_offset<T> > scale_offsets_;
+  size_t ridx_;
+  size_t cidx_;
+  std::vector<std::vector<int>> powers_;
+  std::vector<std::vector<T>> coeffs_;
+  std::vector<vpgl_scale_offset<T>> scale_offsets_;
 };
 //
 //--------------------=== replacement sensor model (RSM)  camera ===-----------------------
@@ -182,100 +258,141 @@ template <class T>
 class vpgl_RSM_camera : public vpgl_camera<T>
 {
 public:
-
   //: default constructor
-    vpgl_RSM_camera() :adj_u_(T(0)), adj_v_(T(0)) {}
+  vpgl_RSM_camera()
+    : adj_u_(T(0))
+    , adj_v_(T(0))
+  {}
 
-  ~vpgl_RSM_camera()  = default;
+  ~vpgl_RSM_camera() = default;
 
-  std::string type_name() const override { return "vpgl_RSM_camera"; }
+  std::string
+  type_name() const override
+  {
+    return "vpgl_RSM_camera";
+  }
 
   //: Clone `this': creation of a new object and initialization
   // legal C++ because the return type is covariant with vpgl_camera<T>*
-  vpgl_RSM_camera<T>* clone() const override;
+  vpgl_RSM_camera<T> *
+  clone() const override;
 
   //: A single polynomial model
-  vpgl_RSM_camera(vpgl_polycam<T> const& pcam):adj_u_(T(0)), adj_v_(T(0)) {
-    std::vector< vpgl_polycam<T> > temp;
+  vpgl_RSM_camera(const vpgl_polycam<T> & pcam)
+    : adj_u_(T(0))
+    , adj_v_(T(0))
+  {
+    std::vector<vpgl_polycam<T>> temp;
     temp.push_back(pcam);
     polycams_.push_back(temp);
   }
   // set region selector
-  vpgl_RSM_camera(vpgl_region_selector<T> const& region_selector) :adj_u_(T(0)), adj_v_(T(0)) {
+  vpgl_RSM_camera(const vpgl_region_selector<T> & region_selector)
+    : adj_u_(T(0))
+    , adj_v_(T(0))
+  {
     region_selector_ = region_selector;
-    polycams_.resize(region_selector.rnis_,std::vector<vpgl_polycam<T> >(region_selector.cnis_));
+    polycams_.resize(region_selector.rnis_, std::vector<vpgl_polycam<T>>(region_selector.cnis_));
   }
 
   //: Set a polycam for a specified region
-  void set_polycam(size_t row, size_t col, vpgl_polycam<T> const& pcam){
-    polycams_[row-1][col-1] = pcam;
+  void
+  set_polycam(size_t row, size_t col, const vpgl_polycam<T> & pcam)
+  {
+    polycams_[row - 1][col - 1] = pcam;
   };
 
   //: Set all polycams       row           col
-  void set_all_polycams(std::vector<std::vector<vpgl_polycam<T> > > const& pcams,
-                        vpgl_region_selector<T> const& region_selector){
+  void
+  set_all_polycams(const std::vector<std::vector<vpgl_polycam<T>>> & pcams,
+                   const vpgl_region_selector<T> & region_selector)
+  {
     region_selector_ = region_selector;
     polycams_ = pcams;
   }
-  std::vector<std::vector<vpgl_polycam<T> > >& polycams() { return polycams_; }
+  std::vector<std::vector<vpgl_polycam<T>>> &
+  polycams()
+  {
+    return polycams_;
+  }
 
   // --- project 3D world point to 2D image point --
 
-    //: The generic camera interface. u represents image column, v image row.
-    void project(const T x, const T y, const T z, T& u, T& v) const override;
+  //: The generic camera interface. u represents image column, v image row.
+  void
+  project(const T x, const T y, const T z, T & u, T & v) const override;
 
-    //: Project a world point onto the image (vnl interface)
-    vnl_vector_fixed<T, 2> project(vnl_vector_fixed<T, 3> const& world_point) const;
+  //: Project a world point onto the image (vnl interface)
+  vnl_vector_fixed<T, 2>
+  project(const vnl_vector_fixed<T, 3> & world_point) const;
 
-    //: Project a world point onto the image (vgl interface)
-    vgl_point_2d<T> project(vgl_point_3d<T> world_point) const;
+  //: Project a world point onto the image (vgl interface)
+  vgl_point_2d<T>
+  project(vgl_point_3d<T> world_point) const;
 
-    vpgl_region_selector<T>& reg_sel() {
-        return region_selector_;
-    }
-    void set_adjustable_parameters(T adj_u, T adj_v) {
-        adj_u_ = adj_u;
-        adj_v_ = adj_v_;
-    }
-    std::pair<T, T> adjustable_parameters() const {
-        std::pair<T, T> ret(adj_u_, adj_v_);
-        return ret;
-    }
+  vpgl_region_selector<T> &
+  reg_sel()
+  {
+    return region_selector_;
+  }
+  void
+  set_adjustable_parameters(T adj_u, T adj_v)
+  {
+    adj_u_ = adj_u;
+    adj_v_ = adj_v_;
+  }
+  std::pair<T, T>
+  adjustable_parameters() const
+  {
+    std::pair<T, T> ret(adj_u_, adj_v_);
+    return ret;
+  }
 
-    size_t n_regions(){
-      return region_selector_.tnis_;
-    }
+  size_t
+  n_regions()
+  {
+    return region_selector_.tnis_;
+  }
+
 protected:
-    T adj_u_; // image column adjustable parameter
-    T adj_v_; // image row adjustable parameter
-    vpgl_region_selector<T> region_selector_;
-    std::vector<std::vector<vpgl_polycam<T> > > polycams_;
+  T adj_u_; // image column adjustable parameter
+  T adj_v_; // image row adjustable parameter
+  vpgl_region_selector<T> region_selector_;
+  std::vector<std::vector<vpgl_polycam<T>>> polycams_;
 };
 
 
 template <class T>
-void vpgl_region_selector<T>::select(T x, T y, T z, size_t& region_row, size_t& region_col) const{
+void
+vpgl_region_selector<T>::select(T x, T y, T z, size_t & region_row, size_t & region_col) const
+{
   // a single region so don't compute
-  if(rnis_ == 1 && cnis_ == 1){
-    region_row =1; region_col =1;
+  if (rnis_ == 1 && cnis_ == 1)
+  {
+    region_row = 1;
+    region_col = 1;
     return;
   }
-  std::vector<T> power_vector = {1.0, x, y, z, x*x, x*y, x*z, y*y, y*z, z*z};
+  std::vector<T> power_vector = { 1.0, x, y, z, x * x, x * y, x * z, y * y, y * z, z * z };
   double rd = 0.0, cd = 0.0;
-  for(size_t i = 0; i<10; ++i){
-    rd += power_vector[i]*row_coefs_[i];
-    cd += power_vector[i]*col_coefs_[i];
+  for (size_t i = 0; i < 10; ++i)
+  {
+    rd += power_vector[i] * row_coefs_[i];
+    cd += power_vector[i] * col_coefs_[i];
   }
-  double rrd = std::floor((rd - minr_)/rssiz_) + 1;
-  double rcd = std::floor((cd - minc_)/cssiz_) + 1;
-  if(rrd < 1.0) rrd = 1.0;
-  if(rrd > rnis_) rrd = rnis_;
-  if(rcd < 1.0) rcd = 1.0;
-  if(rcd > cnis_) rcd = cnis_;
+  double rrd = std::floor((rd - minr_) / rssiz_) + 1;
+  double rcd = std::floor((cd - minc_) / cssiz_) + 1;
+  if (rrd < 1.0)
+    rrd = 1.0;
+  if (rrd > rnis_)
+    rrd = rnis_;
+  if (rcd < 1.0)
+    rcd = 1.0;
+  if (rcd > cnis_)
+    rcd = cnis_;
   region_row = rrd;
   region_col = rcd;
 }
-
 
 
 #define VPGL_RSM_CAMERA_INSTANTIATE(T) extern "please include vgl/vpgl_RSM_camera.hxx first"

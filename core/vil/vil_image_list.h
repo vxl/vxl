@@ -19,34 +19,43 @@
 
 class vil_image_list
 {
- public:
-  vil_image_list(char const* directory):directory_(directory){}
-  ~vil_image_list()= default;
+public:
+  vil_image_list(const char * directory)
+    : directory_(directory)
+  {}
+  ~vil_image_list() = default;
 
   //: finds all the files in the directory, regardless of extension
-  std::vector<std::string> files();
+  std::vector<std::string>
+  files();
 
   //: finds all the image files in the directory, regardless of extension
-  std::vector<vil_image_resource_sptr> resources();
+  std::vector<vil_image_resource_sptr>
+  resources();
 
   //: finds all the blocked image files in the directory, regardless of extension
-  std::vector<vil_image_resource_sptr> blocked_resources();
+  std::vector<vil_image_resource_sptr>
+  blocked_resources();
 
   //: finds all the pyramid files in the directory, regardless of extension
-  std::vector<vil_image_resource_sptr> pyramids();
+  std::vector<vil_image_resource_sptr>
+  pyramids();
 
   //: utility functions
 
   //: checks if the path is a directory
-  static bool vil_is_directory(char const*);
+  static bool
+  vil_is_directory(const char *);
 
-  //:remove a file
-  bool remove_file(std::string& filename );
+  //: remove a file
+  bool
+  remove_file(std::string & filename);
 
   //: cleans the directory, i.e. removes all the files
-  bool clean_directory();
+  bool
+  clean_directory();
 
- private:
+private:
   std::string directory_;
 };
 

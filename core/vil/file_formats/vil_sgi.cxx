@@ -35,9 +35,9 @@ vil_sgi_file_format::make_output_image(vil_stream * vs,
   return new vil_sgi_image(vs, nx, ny, nplanes, format);
 }
 
-char const * vil_sgi_format_tag = "sgi";
+const char * vil_sgi_format_tag = "sgi";
 
-char const *
+const char *
 vil_sgi_file_format::tag() const
 {
   return vil_sgi_format_tag;
@@ -45,7 +45,7 @@ vil_sgi_file_format::tag() const
 
 /////////////////////////////////////////////////////////////////////////////
 
-char const *
+const char *
 vil_sgi_image::file_format() const
 {
   return vil_sgi_format_tag;
@@ -60,7 +60,7 @@ vil_sgi_image::vil_sgi_image(vil_stream * is)
 }
 
 bool
-vil_sgi_image::get_property(char const * /*tag*/, void * /*value*/) const
+vil_sgi_image::get_property(const char * /*tag*/, void * /*value*/) const
 {
   return true;
 }
@@ -95,10 +95,7 @@ vil_sgi_image::vil_sgi_image(vil_stream * vs, unsigned nx, unsigned ny, unsigned
   write_header();
 }
 
-vil_sgi_image::~vil_sgi_image()
-{
-  is_->unref();
-}
+vil_sgi_image::~vil_sgi_image() { is_->unref(); }
 
 unsigned
 vil_sgi_image::nplanes() const

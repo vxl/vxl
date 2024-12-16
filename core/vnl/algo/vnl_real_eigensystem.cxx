@@ -15,7 +15,7 @@
 
 //: Extract eigensystem of non-symmetric matrix M, using the EISPACK routine rg.
 //  Should probably switch to using LAPACK's dgeev to avoid transposing.
-vnl_real_eigensystem::vnl_real_eigensystem(vnl_matrix<double> const & M)
+vnl_real_eigensystem::vnl_real_eigensystem(const vnl_matrix<double> & M)
   : Vreal(M.rows(), M.columns())
   , V(M.rows(), M.columns())
   , D(M.rows())

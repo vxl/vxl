@@ -78,7 +78,7 @@ test_transform_types()
   pp = h(p);
   vgl_homg_point_2d<double> tasp(2.35711, 7.46975, 1.5);
   TEST_NEAR("aspect ratio", length(pp - tasp), 0.0, 1e-05);
-  vnl_matrix_fixed<double,2,3> M;
+  vnl_matrix_fixed<double, 2, 3> M;
   M[0][0] = 0.707107;
   M[0][1] = -0.707107;
   M[0][2] = 1.1;
@@ -272,8 +272,8 @@ test_compute_linear_lines()
             << "linear algorithm using lines ===\n";
   std::vector<vgl_homg_line_2d<double>> lines1, lines2;
   // setup lines in frame 1
-  double const pt7 = vnl_math::sqrt1_2; // sqrt(0.5);
-  double const pt8 = 2.5 / 3;           // 0.866666...
+  const double pt7 = vnl_math::sqrt1_2; // sqrt(0.5);
+  const double pt8 = 2.5 / 3;           // 0.866666...
   vgl_homg_line_2d<double> l10(0.0, 1.0, 100.0), l11(1.0, 0.0, 100.0);
   vgl_homg_line_2d<double> l12(pt7, pt7, 100.0), l13(pt7, -pt7, 100.0);
   vgl_homg_line_2d<double> l14(0.5, pt8, 100.0), l15(-0.5, pt8, 100.0);

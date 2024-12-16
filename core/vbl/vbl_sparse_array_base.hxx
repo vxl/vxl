@@ -15,14 +15,16 @@
 
 //: Empty the sparse matrix.
 template <class T, class Index>
-void vbl_sparse_array_base<T, Index>::clear()
+void
+vbl_sparse_array_base<T, Index>::clear()
 {
   storage_.clear();
 }
 
 //: Return contents of (i).  Assertion failure if not yet filled.
 template <class T, class Index>
-T const & vbl_sparse_array_base<T, Index>::operator () (Index i) const
+const T &
+vbl_sparse_array_base<T, Index>::operator()(Index i) const
 {
   typename Map::const_iterator p = storage_.find(i);
 
@@ -33,7 +35,8 @@ T const & vbl_sparse_array_base<T, Index>::operator () (Index i) const
 
 //: Erase element at location (i). Assertion failure if not yet filled.
 template <class T, class Index>
-void vbl_sparse_array_base<T, Index>::erase (Index i)
+void
+vbl_sparse_array_base<T, Index>::erase(Index i)
 {
   typename Map::iterator p = storage_.find(i);
 
@@ -44,7 +47,8 @@ void vbl_sparse_array_base<T, Index>::erase (Index i)
 
 //: Return the memory address of location (i).  0 if not yet filled.
 template <class T, class Index>
-T* vbl_sparse_array_base<T, Index>::get_addr(Index i)
+T *
+vbl_sparse_array_base<T, Index>::get_addr(Index i)
 {
   typename Map::iterator p = storage_.find(i);
 
@@ -56,24 +60,25 @@ T* vbl_sparse_array_base<T, Index>::get_addr(Index i)
 
 //: Return true if location (i) has been filled.
 template <class T, class Index>
-bool vbl_sparse_array_base<T, Index>::fullp(Index i) const
+bool
+vbl_sparse_array_base<T, Index>::fullp(Index i) const
 {
   return storage_.find(i) != storage_.end();
 }
 
 //: Put a value into location (i).
 template <class T, class Index>
-bool vbl_sparse_array_base<T, Index>::put(Index i, const T& t)
+bool
+vbl_sparse_array_base<T, Index>::put(Index i, const T & t)
 {
   typedef typename Map::iterator iter;
   typedef typename Map::value_type value_type;
-  std::pair<iter,bool> res = storage_.insert(value_type(i,t));
+  std::pair<iter, bool> res = storage_.insert(value_type(i, t));
 
   return res.second;
 }
 
 #undef VBL_SPARSE_ARRAY_BASE_INSTANTIATE
-#define VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T, I) \
-template class vbl_sparse_array_base<T , I >
+#define VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T, I) template class vbl_sparse_array_base<T, I>
 
 #endif // vbl_sparse_array_base_hxx_

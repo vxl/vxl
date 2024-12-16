@@ -25,15 +25,19 @@
 //  stored value with a std::string
 class vgui_dialog_field
 {
- public:
+public:
   std::string label;
 
   // Constructors/Destructors--------------------------------------------------
-  vgui_dialog_field(const char* text) : label(text) {}
+  vgui_dialog_field(const char * text)
+    : label(text)
+  {}
   virtual ~vgui_dialog_field() {}
 
-  virtual std::string current_value() const = 0;
-  virtual bool update_value(const std::string& s) = 0;
+  virtual std::string
+  current_value() const = 0;
+  virtual bool
+  update_value(const std::string & s) = 0;
 };
 
 #endif // vgui_dialog_field_h_

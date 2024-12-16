@@ -14,7 +14,7 @@
 // This is replacing a member template...
 template <class T>
 T
-vnl_real_polynomial_evaluate(double const * a, int n, T const & x)
+vnl_real_polynomial_evaluate(const double * a, int n, const T & x)
 {
   --n;
   T acc = a[n];
@@ -39,10 +39,10 @@ vnl_real_polynomial_evaluate(double const * a, int n, T const & x)
 
 //: Instantiate templates before use
 template double vnl_real_polynomial_evaluate
-SELECT(double)(double const *, int, double const &);
-template std::complex<double> vnl_real_polynomial_evaluate SELECT(std::complex<double>)(double const *,
+SELECT(double)(const double *, int, const double &);
+template std::complex<double> vnl_real_polynomial_evaluate SELECT(std::complex<double>)(const double *,
                                                                                         int,
-                                                                                        std::complex<double> const &);
+                                                                                        const std::complex<double> &);
 
 //: Evaluate polynomial at value x
 double
@@ -54,7 +54,7 @@ vnl_real_polynomial::evaluate(double x) const
 
 //: Evaluate polynomial at complex value x
 std::complex<double>
-vnl_real_polynomial::evaluate(std::complex<double> const & x) const
+vnl_real_polynomial::evaluate(const std::complex<double> & x) const
 {
   return vnl_real_polynomial_evaluate SELECT(std::complex<double>)(coeffs_.data_block(), coeffs_.size(), x);
 }
@@ -70,7 +70,7 @@ vnl_real_polynomial::devaluate(double x) const
 
 //: Evaluate derivative at complex value x. Not implemented.
 std::complex<double>
-vnl_real_polynomial::devaluate(std::complex<double> const & x) const
+vnl_real_polynomial::devaluate(const std::complex<double> & x) const
 {
   return derivative().evaluate(x);
 }
@@ -154,7 +154,8 @@ operator-(const vnl_real_polynomial & f1, const vnl_real_polynomial & f2)
 }
 
 //: Returns polynomial which is product of two polynomials f1(x)*f2(x)
-vnl_real_polynomial operator*(const vnl_real_polynomial & f1, const vnl_real_polynomial & f2)
+vnl_real_polynomial
+operator*(const vnl_real_polynomial & f1, const vnl_real_polynomial & f2)
 {
   const unsigned int d1 = f1.degree();
   const unsigned int d2 = f2.degree();
@@ -171,7 +172,7 @@ vnl_real_polynomial operator*(const vnl_real_polynomial & f1, const vnl_real_pol
 }
 //: Add rhs to this and return *this
 vnl_real_polynomial &
-vnl_real_polynomial::operator+=(vnl_real_polynomial const & rhs)
+vnl_real_polynomial::operator+=(const vnl_real_polynomial & rhs)
 {
   *this = (*this) + rhs;
   return *this;
@@ -179,7 +180,7 @@ vnl_real_polynomial::operator+=(vnl_real_polynomial const & rhs)
 
 //: Subtract rhs from this and return *this
 vnl_real_polynomial &
-vnl_real_polynomial::operator-=(vnl_real_polynomial const & rhs)
+vnl_real_polynomial::operator-=(const vnl_real_polynomial & rhs)
 {
   *this = (*this) - rhs;
   return *this;
@@ -187,7 +188,7 @@ vnl_real_polynomial::operator-=(vnl_real_polynomial const & rhs)
 
 //: multiply rhs with this and return *this
 vnl_real_polynomial &
-vnl_real_polynomial::operator*=(vnl_real_polynomial const & rhs)
+vnl_real_polynomial::operator*=(const vnl_real_polynomial & rhs)
 {
   *this = (*this) * rhs;
   return *this;

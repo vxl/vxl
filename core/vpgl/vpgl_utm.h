@@ -23,40 +23,69 @@
 
 class vpgl_utm
 {
- public:
+public:
   vpgl_utm();
-  vpgl_utm (const vpgl_utm &t);
+  vpgl_utm(const vpgl_utm & t);
   ~vpgl_utm();
-  void SetSpheroidA(double a) { a_ = a; }
-  void SetSpheroidB(double b) { b_ = b; }
+  void
+  SetSpheroidA(double a)
+  {
+    a_ = a;
+  }
+  void
+  SetSpheroidB(double b)
+  {
+    b_ = b;
+  }
 
-  //UTM to LatLon
-  void transform(int utm_zone, double x, double y, double z,
-                 double& lat, double& lon , double& elev,
-                 bool south_flag = false,
-                 double utm_central_meridian = 0) const;
+  // UTM to LatLon
+  void
+  transform(int utm_zone,
+            double x,
+            double y,
+            double z,
+            double & lat,
+            double & lon,
+            double & elev,
+            bool south_flag = false,
+            double utm_central_meridian = 0) const;
 
-  void transform(int utm_zone, double x, double y,
-                 double& lat, double& lon,
-                 bool south_flag = false,
-                 double utm_central_meridian = 0) const;
+  void
+  transform(int utm_zone,
+            double x,
+            double y,
+            double & lat,
+            double & lon,
+            bool south_flag = false,
+            double utm_central_meridian = 0) const;
 
   //: LatLon to UTM
-  void transform(double lat, double lon,
-                 double& x, double& y, int& utm_zone) const;
+  void
+  transform(double lat, double lon, double & x, double & y, int & utm_zone) const;
 
-  void transform(double lat, double lon,
-                 double& x, double& y, int& utm_zone, bool& south_flag,
-                 int force_utm_zone=-1, int force_south_flag=-1) const;
+  void
+  transform(double lat,
+            double lon,
+            double & x,
+            double & y,
+            int & utm_zone,
+            bool & south_flag,
+            int force_utm_zone = -1,
+            int force_south_flag = -1) const;
 
   //: Conversion between different UTM zones
-  void utm2utm(double utm_zone_in, bool south_flag_in,
-               double x_in, double y_in,
-               double utm_zone_out, bool south_flag_out,
-               double& x_out, double& y_out) const;
+  void
+  utm2utm(double utm_zone_in,
+          bool south_flag_in,
+          double x_in,
+          double y_in,
+          double utm_zone_out,
+          bool south_flag_out,
+          double & x_out,
+          double & y_out) const;
 
- private:
-   double a_{6378137}, b_{6356752.31424518};
+private:
+  double a_{ 6378137 }, b_{ 6356752.31424518 };
 };
 
 #endif

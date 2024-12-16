@@ -19,20 +19,25 @@ class vil_stream;
 class CNCSJPCVilIOStream;
 class vil_j2k_file_format : public vil_file_format
 {
- public:
-  vil_j2k_file_format() : compression_ratio_(1){}
-  virtual char const *tag() const;
-  virtual vil_image_resource_sptr make_input_image(vil_stream *vs);
-  virtual
-    vil_image_resource_sptr make_output_image(vil_stream* vs,
-                                              unsigned ni,
-                                              unsigned nj,
-                                              unsigned nplanes,
-                                              enum vil_pixel_format format);
-  //: This compression ratio is set as a target for the ermapper compression algorithm. The default is lossless compression (ratio == 1).
-  void set_compression_ratio(unsigned ratio)
-    {compression_ratio_ = ratio;}
- private:
+public:
+  vil_j2k_file_format()
+    : compression_ratio_(1)
+  {}
+  virtual const char *
+  tag() const;
+  virtual vil_image_resource_sptr
+  make_input_image(vil_stream * vs);
+  virtual vil_image_resource_sptr
+  make_output_image(vil_stream * vs, unsigned ni, unsigned nj, unsigned nplanes, enum vil_pixel_format format);
+  //: This compression ratio is set as a target for the ermapper compression algorithm. The default is lossless
+  //: compression (ratio == 1).
+  void
+  set_compression_ratio(unsigned ratio)
+  {
+    compression_ratio_ = ratio;
+  }
+
+private:
   unsigned compression_ratio_;
 };
 
@@ -62,13 +67,13 @@ class vil_j2k_file_format : public vil_file_format
 //
 class vil_j2k_image : public vil_image_resource
 {
- public:
+public:
   //:
   //  \param filelOrUrl: can either be a local file (eg. /home/beavis/file1.jp2) or
   //  it can be a url to a file hosted on an Image Web Server (eg.
   //  ecwp://www.earthetc.com/images/australia/Sydney.ecw or
   //  ecwp://www.earthetc.com/images/usa/1metercalif.ecw
-  vil_j2k_image( const std::string& fileOrUrl );
+  vil_j2k_image(const std::string & fileOrUrl);
   //:
   //  Read a jpeg 2000 image from a stream containing either a raw j2k codestream
   //  or a jp2 file stream.  is' current position needs to be pointing at the beginning of
@@ -83,43 +88,62 @@ class vil_j2k_image : public vil_image_resource
   //  the official jpeg conformance test files)
   //
   //  also note: Don't use is while I'm trying to use it... it'll screw us both up.
-  vil_j2k_image( vil_stream* is );
-  vil_j2k_image( vil_stream* vs, unsigned ni, unsigned nj,
-                 unsigned nplanes, enum vil_pixel_format format,
-                 unsigned compression_ratio = 1);
+  vil_j2k_image(vil_stream * is);
+  vil_j2k_image(vil_stream * vs,
+                unsigned ni,
+                unsigned nj,
+                unsigned nplanes,
+                enum vil_pixel_format format,
+                unsigned compression_ratio = 1);
   ~vil_j2k_image();
   //: Dimensions:  planes x width x height x components
-  virtual unsigned nplanes() const;
-  virtual unsigned ni() const;
-  virtual unsigned nj() const;
-  virtual enum vil_pixel_format pixel_format() const;
+  virtual unsigned
+  nplanes() const;
+  virtual unsigned
+  ni() const;
+  virtual unsigned
+  nj() const;
+  virtual enum vil_pixel_format
+  pixel_format() const;
   //: returns j2k
-  char const* file_format() const;
-  virtual bool get_property(char const* /* tag */, void* /* property_value */ = 0) const
-    { return false; }
+  const char *
+  file_format() const;
+  virtual bool
+  get_property(const char * /* tag */, void * /* property_value */ = 0) const
+  {
+    return false;
+  }
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                 unsigned j0, unsigned nj) const;
-
-  virtual vil_image_view_base_sptr get_copy_view_decimated(unsigned i0, unsigned ni,
-                                                           unsigned j0, unsigned nj,
-                                                           double i_factor, double j_factor) const;
   virtual vil_image_view_base_sptr
-    get_copy_view_decimated_by_size(unsigned i0, unsigned ni,
-                                    unsigned j0, unsigned nj,
-                                    unsigned int output_width,
-                                    unsigned int output_height) const;
+  get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const;
+
+  virtual vil_image_view_base_sptr
+  get_copy_view_decimated(unsigned i0, unsigned ni, unsigned j0, unsigned nj, double i_factor, double j_factor) const;
+  virtual vil_image_view_base_sptr
+  get_copy_view_decimated_by_size(unsigned i0,
+                                  unsigned ni,
+                                  unsigned j0,
+                                  unsigned nj,
+                                  unsigned int output_width,
+                                  unsigned int output_height) const;
 
 
-  vil_image_view_base_sptr  get_copy_view () const
-    { return get_copy_view( 0, ni(), 0, nj() ); }
+  vil_image_view_base_sptr
+  get_copy_view() const
+  {
+    return get_copy_view(0, ni(), 0, nj());
+  }
 
   //:
   //  Call this after construction to see if you can get valid data from me.
   //  If this returns false, then this image is of no use to you
-  bool is_valid() const { return mFileResource != 0; }
+  bool
+  is_valid() const
+  {
+    return mFileResource != 0;
+  }
 
   //:
   //  When calling get_copy_view(), the function will scale down the output image_view
@@ -127,26 +151,34 @@ class vil_j2k_image : public vil_image_resource
   //  is here to protect you in the case that your code asks for an excessively large
   //  image that will crash your program.  You can turn this checking off with \sa unsetMaxImageDimension()
   //  By default, this value is set to 5000.
-  void setMaxImageDimension( unsigned int widthOrHeight, bool remote = false );
+  void
+  setMaxImageDimension(unsigned int widthOrHeight, bool remote = false);
   //:
   //  Call this if you don't want get_copy_view() to do size checking.
   //  Be warned that jpeg 2000 codestreams can be really big, so you could
   //  cause a program crash.
-  void unsetMaxImageDimension( bool remote = false );
+  void
+  unsetMaxImageDimension(bool remote = false);
 
   //:
   //  Static function that can be used to decode a JPEG2000 codestream
   //  or file (jp2 file).  The stream must start at vs' current position.
-  static vil_image_view_base_sptr s_decode_jpeg_2000( vil_stream* vs,
-                                                      unsigned i0, unsigned ni,
-                                                      unsigned j0, unsigned nj,
-                                                      double i_factor, double j_factor );
   static vil_image_view_base_sptr
-    s_decode_jpeg_2000_by_size( vil_stream* vs,
-                                unsigned i0, unsigned ni,
-                                unsigned j0, unsigned nj,
-                                unsigned int output_width,
-                                unsigned int output_height );
+  s_decode_jpeg_2000(vil_stream * vs,
+                     unsigned i0,
+                     unsigned ni,
+                     unsigned j0,
+                     unsigned nj,
+                     double i_factor,
+                     double j_factor);
+  static vil_image_view_base_sptr
+  s_decode_jpeg_2000_by_size(vil_stream * vs,
+                             unsigned i0,
+                             unsigned ni,
+                             unsigned j0,
+                             unsigned nj,
+                             unsigned int output_width,
+                             unsigned int output_height);
 
 
   //:
@@ -155,43 +187,53 @@ class vil_j2k_image : public vil_image_resource
   //  of a block of lines at a time, thus works for arbitrarily large images.
   //  The num_lines_block parameter is the number of image rows in the
   //  block which is read into memory from the resource
-  static bool s_encode_jpeg2000(vil_stream* vs,
-                                const char* out_filename,
-                                unsigned compression_ratio = 1,
-                                unsigned num_lines_block = 1024,
-                                bool verbose = false);
+  static bool
+  s_encode_jpeg2000(vil_stream * vs,
+                    const char * out_filename,
+                    unsigned compression_ratio = 1,
+                    unsigned num_lines_block = 1024,
+                    bool verbose = false);
 
   //: encode an entire image by loading the input resource from file
   //  Uses the stream-based method of the same name
-  static bool s_encode_jpeg2000(const char* in_filename,
-                                const char* out_filename,
-                                unsigned compression_ratio = 1,
-                                unsigned num_lines_block = 1024,
-                                bool verbose = false);
+  static bool
+  s_encode_jpeg2000(const char * in_filename,
+                    const char * out_filename,
+                    unsigned compression_ratio = 1,
+                    unsigned num_lines_block = 1024,
+                    bool verbose = false);
 
   //: JPEG2K compress the data from the full image view and insert in resource
   // The compression ratio is determined when the resource is created by
   // the file_format class.
-  virtual bool put_view(const vil_image_view_base& im);
+  virtual bool
+  put_view(const vil_image_view_base & im);
 
   //: JPEG2K compress the data from an image view and insert in resource
   // This method cannot be implemented because the J2K SDK does not support
   // compressing arbitrary views. Only inserting strictly successive lines
   // is allowed.
-  virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0){return false;}
+  virtual bool
+  put_view(const vil_image_view_base & im, unsigned i0, unsigned j0)
+  {
+    return false;
+  }
 
   //: JPEG2K compress by inserting an image row (line) at a time.
   //  When the full image has been inserted, the resource is closed
   //  and is no longer valid. The lines must be inserted in strict row order.
-  bool put_line(const vil_image_view_base& im);
+  bool
+  put_line(const vil_image_view_base & im);
 
   //: Check that a view will fit into the data at the given offset.
-  virtual bool view_fits(const vil_image_view_base& im, unsigned i0, unsigned j0);
- protected:
+  virtual bool
+  view_fits(const vil_image_view_base & im, unsigned i0, unsigned j0);
+
+protected:
   //: The ermapper file
-  CNCSFile* mFileResource;
+  CNCSFile * mFileResource;
   //: The ermapper stream
-  CNCSJPCVilIOStream* mStr;
+  CNCSJPCVilIOStream * mStr;
   //:
   //  \sa setMaxImageDimension and \sa unsetMaxImageDimension
   //
@@ -203,12 +245,12 @@ class vil_j2k_image : public vil_image_resource
   //  This is typically a smaller number because of the speed concerns of downloading
   //  a very largeimage
   unsigned int mMaxRemoteDimension;
-  //:file is remote
+  //: file is remote
   bool mRemoteFile;
   //: band information array
-  NCSFileBandInfo* mBandinfo;
+  NCSFileBandInfo * mBandinfo;
   //: the file information block
-  NCSFileViewFileInfoEx* mFinfo;
+  NCSFileViewFileInfoEx * mFinfo;
   //: the current line being written for compression
   unsigned line_index_;
 };

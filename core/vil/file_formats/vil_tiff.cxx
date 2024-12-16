@@ -29,10 +29,10 @@
 #include "vil/vil_image_list.h"
 #include "vil_tiff_header.h"
 #include "vil/vil_exception.h"
-//#define DEBUG
+// #define DEBUG
 
 // Constants
-char const * vil_tiff_format_tag = "tiff";
+const char * vil_tiff_format_tag = "tiff";
 
 static unsigned
 nimg(TIFF * tif)
@@ -161,7 +161,8 @@ vil_tiff_closeproc(thandle_t h)
   return 0;
 }
 
-static toff_t vil_tiff_sizeproc(thandle_t)
+static toff_t
+vil_tiff_sizeproc(thandle_t)
 {
   // TODO
 #ifdef DEBUG
@@ -180,7 +181,9 @@ vil_tiff_mapfileproc(thandle_t, tdata_t *, toff_t *)
   return 0;
 }
 
-static void vil_tiff_unmapfileproc(thandle_t, tdata_t, toff_t) {}
+static void
+vil_tiff_unmapfileproc(thandle_t, tdata_t, toff_t)
+{}
 
 
 static TIFF *
@@ -246,7 +249,7 @@ vil_tiff_file_format::make_input_image(vil_stream * is)
 }
 
 vil_pyramid_image_resource_sptr
-vil_tiff_file_format::make_input_pyramid_image(char const * file)
+vil_tiff_file_format::make_input_pyramid_image(const char * file)
 {
   bool trace = false;
   if (vil_image_list::vil_is_directory(file))
@@ -281,10 +284,10 @@ level_filename(std::string & directory, std::string & filename, unsigned level)
 }
 
 vil_pyramid_image_resource_sptr
-vil_tiff_file_format::make_pyramid_image_from_base(char const * file,
-                                                   vil_image_resource_sptr const & base_image,
+vil_tiff_file_format::make_pyramid_image_from_base(const char * file,
+                                                   const vil_image_resource_sptr & base_image,
                                                    unsigned nlevels,
-                                                   char const * temp_dir)
+                                                   const char * temp_dir)
 {
   { // scope for writing the resources
     vil_pyramid_image_resource_sptr pyr = make_pyramid_output_image(file);
@@ -309,7 +312,7 @@ vil_tiff_file_format::make_pyramid_image_from_base(char const * file,
       for (auto & resc : rescs)
         pyr->put_resource(resc);
     } // close il resources
-  }   // close pyr
+  } // close pyr
 
   // clean up the temporary directory
   vil_image_list vl(temp_dir);
@@ -342,7 +345,7 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream * vs,
   std::string mode("w");
   vxl_uint_64 size_needed = vxl_uint_64(nx) * vxl_uint_64(ny) * vxl_uint_64(nplanes) *
                             vil_pixel_format_sizeof_components(format) * vil_pixel_format_num_components(format);
-  bool const bigtiff_needed = size_needed >= vxl_uint_64(0x7FFFFFFF);
+  const bool bigtiff_needed = size_needed >= vxl_uint_64(0x7FFFFFFF);
   if (bigtiff_needed)
     mode += '8'; // enable bigtiff
   tss->tif = open_tiff(tss, mode.c_str());
@@ -379,7 +382,7 @@ vil_tiff_file_format::make_output_image(vil_stream * vs,
 }
 
 vil_pyramid_image_resource_sptr
-vil_tiff_file_format::make_pyramid_output_image(char const * filename)
+vil_tiff_file_format::make_pyramid_output_image(const char * filename)
 {
   TIFF * out = TIFFOpen(filename, "w");
   if (!out)
@@ -389,7 +392,7 @@ vil_tiff_file_format::make_pyramid_output_image(char const * filename)
   return new vil_tiff_pyramid_resource(tsptr, open_for_reading);
 }
 
-char const *
+const char *
 vil_tiff_file_format::tag() const
 {
   return vil_tiff_format_tag;
@@ -401,7 +404,7 @@ vil_tiff_file_format::tag() const
 /////////////////////////////////////////////////////////////////////////////
 
 
-vil_tiff_image::vil_tiff_image(tif_smart_ptr const & tif_sptr, vil_tiff_header * th, const unsigned nimages)
+vil_tiff_image::vil_tiff_image(const tif_smart_ptr & tif_sptr, vil_tiff_header * th, const unsigned nimages)
   : t_(tif_sptr)
   , h_(th)
   , index_(0)
@@ -409,7 +412,7 @@ vil_tiff_image::vil_tiff_image(tif_smart_ptr const & tif_sptr, vil_tiff_header *
 {}
 
 bool
-vil_tiff_image::get_property(char const * tag, void * value) const
+vil_tiff_image::get_property(const char * tag, void * value) const
 {
   if (std::strcmp(vil_property_quantisation_depth, tag) == 0)
   {
@@ -485,15 +488,12 @@ vil_tiff_image::pixel_format() const
   return h_->pix_fmt;
 }
 
-vil_tiff_image::~vil_tiff_image()
-{
-  delete h_;
-}
+vil_tiff_image::~vil_tiff_image() { delete h_; }
 
 //////
 // Lifted from nitf2.  Maybe generalize to support other file formats
 //////
-char const *
+const char *
 vil_tiff_image::file_format() const
 {
   return vil_tiff_format_tag;
@@ -725,7 +725,7 @@ vil_tiff_image::copy_byte_block(vxl_byte * data, const vxl_uint_32 nbytes, vil_m
 // alignment, because they are already aligned at this point.
 vil_image_view_base_sptr
 vil_tiff_image::view_from_buffer(vil_pixel_format & fmt,
-                                 vil_memory_chunk_sptr const & buf,
+                                 const vil_memory_chunk_sptr & buf,
                                  unsigned samples_per_block,
                                  unsigned bits_per_sample) const
 {
@@ -734,20 +734,21 @@ vil_tiff_image::view_from_buffer(vil_pixel_format & fmt,
   unsigned spp = h_->samples_per_pixel.val;
   switch (fmt)
   {
-#define GET_BLOCK_CASE(FORMAT, T)                                                                                      \
-  case FORMAT: {                                                                                                       \
-    vil_image_view_base_sptr view;                                                                                     \
-    buf_out = tiff_maybe_byte_align_data<T>(                                                                           \
-      buf, samples_per_block, bits_per_sample, samples_per_block * vil_pixel_format_sizeof_components(fmt));           \
-    view = new vil_image_view<T>(buf_out,                                                                              \
-                                 reinterpret_cast<T *>(buf_out->data()),                                               \
-                                 size_block_i(),                                                                       \
-                                 size_block_j(),                                                                       \
-                                 spp,                                                                                  \
-                                 spp,                                                                                  \
-                                 size_block_i() * spp,                                                                 \
-                                 1);                                                                                   \
-    return view;                                                                                                       \
+#define GET_BLOCK_CASE(FORMAT, T)                                                                            \
+  case FORMAT:                                                                                               \
+  {                                                                                                          \
+    vil_image_view_base_sptr view;                                                                           \
+    buf_out = tiff_maybe_byte_align_data<T>(                                                                 \
+      buf, samples_per_block, bits_per_sample, samples_per_block * vil_pixel_format_sizeof_components(fmt)); \
+    view = new vil_image_view<T>(buf_out,                                                                    \
+                                 reinterpret_cast<T *>(buf_out->data()),                                     \
+                                 size_block_i(),                                                             \
+                                 size_block_j(),                                                             \
+                                 spp,                                                                        \
+                                 spp,                                                                        \
+                                 size_block_i() * spp,                                                       \
+                                 1);                                                                         \
+    return view;                                                                                             \
   }
     GET_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
     GET_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
@@ -927,7 +928,7 @@ vil_tiff_image::get_block(unsigned block_index_i, unsigned block_index_j) const
 // interleaved samples. This is an easy case since the tile is a
 // contiguous raster scan.
 vil_image_view_base_sptr
-vil_tiff_image::fill_block_from_tile(vil_memory_chunk_sptr const & buf) const
+vil_tiff_image::fill_block_from_tile(const vil_memory_chunk_sptr & buf) const
 {
   vil_image_view_base_sptr view = nullptr;
 
@@ -948,7 +949,7 @@ vil_tiff_image::fill_block_from_tile(vil_memory_chunk_sptr const & buf) const
 // in bytes is normally size_block_j()*bytes_per_line() but the last strip
 // may be truncated.
 vil_image_view_base_sptr
-vil_tiff_image::fill_block_from_strip(vil_memory_chunk_sptr const & buf) const
+vil_tiff_image::fill_block_from_strip(const vil_memory_chunk_sptr & buf) const
 {
   vil_image_view_base_sptr view = nullptr;
   vxl_uint_32 tl = size_block_j();
@@ -989,9 +990,9 @@ vil_tiff_image::fill_block_from_strip(vil_memory_chunk_sptr const & buf) const
       vil_memory_chunk_sptr out_line_buf;
       switch (fmt)
       {
-#define GET_LINE_CASE(FORMAT, T)                                                                                       \
-  case FORMAT:                                                                                                         \
-    out_line_buf = tiff_maybe_byte_align_data<T>(line_buf, spl, h_->bits_per_sample.val, bytes_expanded_line);         \
+#define GET_LINE_CASE(FORMAT, T)                                                                               \
+  case FORMAT:                                                                                                 \
+    out_line_buf = tiff_maybe_byte_align_data<T>(line_buf, spl, h_->bits_per_sample.val, bytes_expanded_line); \
     break
         GET_LINE_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
         GET_LINE_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
@@ -1090,14 +1091,15 @@ vil_tiff_image::fill_block_from_view(unsigned bi,
   // Cast the pixel type and reinterpret upper_left_ptr as a byte array.
   switch (h_->pix_fmt)
   {
-#define GET_VIEW_PTR(FORMAT, T)                                                                                        \
-  case FORMAT: {                                                                                                       \
-    vil_image_view<T> view = static_cast<const vil_image_view<T> &>(im);                                               \
-    view_istep = view.istep();                                                                                         \
-    view_jstep = view.jstep();                                                                                         \
-    view_pstep = view.planestep();                                                                                     \
-    view_buf = reinterpret_cast<vxl_byte *>(view.top_left_ptr());                                                      \
-  }                                                                                                                    \
+#define GET_VIEW_PTR(FORMAT, T)                                          \
+  case FORMAT:                                                           \
+  {                                                                      \
+    vil_image_view<T> view = static_cast<const vil_image_view<T> &>(im); \
+    view_istep = view.istep();                                           \
+    view_jstep = view.jstep();                                           \
+    view_pstep = view.planestep();                                       \
+    view_buf = reinterpret_cast<vxl_byte *>(view.top_left_ptr());        \
+  }                                                                      \
   break
     GET_VIEW_PTR(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
     GET_VIEW_PTR(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
@@ -1336,7 +1338,7 @@ vil_tiff_pyramid_resource::normalize_scales()
     levels_[i]->scale_ = static_cast<float>(levels_[i]->ni_) / ni0;
 }
 
-//:find the level closest to the specified scale
+//: find the level closest to the specified scale
 tiff_pyramid_level *
 vil_tiff_pyramid_resource::closest(const float scale) const
 {
@@ -1362,9 +1364,11 @@ vil_tiff_pyramid_resource::closest(const float scale) const
   return pl;
 }
 
-vil_tiff_pyramid_resource::vil_tiff_pyramid_resource() : t_(nullptr) {}
+vil_tiff_pyramid_resource::vil_tiff_pyramid_resource()
+  : t_(nullptr)
+{}
 
-vil_tiff_pyramid_resource::vil_tiff_pyramid_resource(tif_smart_ptr const & t, bool read)
+vil_tiff_pyramid_resource::vil_tiff_pyramid_resource(const tif_smart_ptr & t, bool read)
   : read_(read)
   , t_(t)
 {
@@ -1407,7 +1411,7 @@ vil_tiff_pyramid_resource::~vil_tiff_pyramid_resource()
     delete levels_[L];
 }
 
-//:Get a partial view from the image from a specified pyramid level
+//: Get a partial view from the image from a specified pyramid level
 vil_image_view_base_sptr
 vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j, unsigned level) const
 {
@@ -1434,7 +1438,7 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i, unsigned j0,
   return view;
 }
 
-//:Get a partial view from the image in the pyramid closest to scale.
+//: Get a partial view from the image in the pyramid closest to scale.
 // The origin and size parameters are in the coordinate system
 // of the base image. The scale factor is with respect to the base
 // image (base scale = 1.0).
@@ -1457,7 +1461,7 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0,
 //: Put the data in this view back into the image source at specified level.
 // Only can be written once.
 bool
-vil_tiff_pyramid_resource::put_resource(vil_image_resource_sptr const & ir)
+vil_tiff_pyramid_resource::put_resource(const vil_image_resource_sptr & ir)
 {
   unsigned level = this->nlevels();
   unsigned ni = ir->ni(), nj = ir->nj();

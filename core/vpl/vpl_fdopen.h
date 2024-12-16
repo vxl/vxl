@@ -11,6 +11,7 @@
 #include "vpl/vpl_export.h"
 
 //: Turn an open file descriptor (int) into a file stream (FILE *).
-extern VPL_EXPORT std::FILE *vpl_fdopen(int fd, char const *mode);
+extern VPL_EXPORT std::FILE *
+vpl_fdopen(int fd, const char * mode);
 
 #endif

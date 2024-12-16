@@ -14,7 +14,7 @@
 // The mouse position is sent to cout as well as the status bar
 struct example_tableau : public vgui_image_tableau
 {
-  example_tableau(char const * f)
+  example_tableau(const char * f)
     : vgui_image_tableau(f)
   {}
 
@@ -39,7 +39,7 @@ struct example_tableau : public vgui_image_tableau
 // Make a smart-pointer constructor for our tableau.
 struct example_tableau_new : public vgui_image_tableau_sptr
 {
-  example_tableau_new(char const * f)
+  example_tableau_new(const char * f)
     : vgui_image_tableau_sptr(new example_tableau(f))
   {}
 };

@@ -23,72 +23,109 @@
 //: Implementation class for vil1_memory_image.
 class vil1_memory_image_impl : public vil1_image_impl
 {
- public:
-  vil1_memory_image_impl(int planes, int w, int h,
-                         vil1_memory_image_format const& format);
-  vil1_memory_image_impl(int planes, int w, int h, int components, int bits_per_component,
+public:
+  vil1_memory_image_impl(int planes, int w, int h, const vil1_memory_image_format & format);
+  vil1_memory_image_impl(int planes,
+                         int w,
+                         int h,
+                         int components,
+                         int bits_per_component,
                          vil1_component_format component_format);
-  vil1_memory_image_impl(int planes, int w, int h,
-                         vil1_pixel_format_t pixel_format);
-  vil1_memory_image_impl(int w, int h, int components, int bits_per_component,
-                         vil1_component_format component_format);
-  vil1_memory_image_impl(int w, int h,
-                         vil1_pixel_format_t pixel_format);
-  vil1_memory_image_impl(vil1_memory_image_impl const&);
+  vil1_memory_image_impl(int planes, int w, int h, vil1_pixel_format_t pixel_format);
+  vil1_memory_image_impl(int w, int h, int components, int bits_per_component, vil1_component_format component_format);
+  vil1_memory_image_impl(int w, int h, vil1_pixel_format_t pixel_format);
+  vil1_memory_image_impl(const vil1_memory_image_impl &);
 
   ~vil1_memory_image_impl() override;
 
-  int planes() const override { return planes_; }
-  int width() const override { return width_; }
-  int height() const override { return height_; }
-  int components() const override { return components_; }
-  int bits_per_component() const override { return bits_per_component_; }
-  vil1_component_format component_format() const override { return component_format_; }
-  vil1_image get_plane(unsigned int p) const override;
+  int
+  planes() const override
+  {
+    return planes_;
+  }
+  int
+  width() const override
+  {
+    return width_;
+  }
+  int
+  height() const override
+  {
+    return height_;
+  }
+  int
+  components() const override
+  {
+    return components_;
+  }
+  int
+  bits_per_component() const override
+  {
+    return bits_per_component_;
+  }
+  vil1_component_format
+  component_format() const override
+  {
+    return component_format_;
+  }
+  vil1_image
+  get_plane(unsigned int p) const override;
 
-  bool get_section(void* buf, int x0, int y0, int width, int height) const override;
-  bool put_section(void const* buf, int x0, int y0, int width, int height) override;
+  bool
+  get_section(void * buf, int x0, int y0, int width, int height) const override;
+  bool
+  put_section(const void * buf, int x0, int y0, int width, int height) override;
 
-  bool get_property(char const *tag, void *property_value = nullptr) const override;
+  bool
+  get_property(const char * tag, void * property_value = nullptr) const override;
 
-  void resize(int planes, int width, int height);
-  void resize(int planes, int width, int height, int components, int bits_per_component,
-              vil1_component_format format);
+  void
+  resize(int planes, int width, int height);
+  void
+  resize(int planes, int width, int height, int components, int bits_per_component, vil1_component_format format);
 
   //: Return the name of the class;
-  std::string is_a() const override;
+  std::string
+  is_a() const override;
 
   //: Return true if the name of the class matches the argument
-  bool is_class(std::string const&) const override;
+  bool
+  is_class(const std::string &) const override;
 
   //: Constructor from previously allocated memory.
   // This memory is not deallocated on destruction.
-  vil1_memory_image_impl(void *buf, int planes, int w, int h,
-                         vil1_memory_image_format const& format);
+  vil1_memory_image_impl(void * buf, int planes, int w, int h, const vil1_memory_image_format & format);
   //: Constructor from previously allocated memory.
   // This memory is not deallocated on destruction.
-  vil1_memory_image_impl(void *buf, int planes, int w, int h, int components, int bits_per_component,
+  vil1_memory_image_impl(void * buf,
+                         int planes,
+                         int w,
+                         int h,
+                         int components,
+                         int bits_per_component,
                          vil1_component_format component_format);
   //: Constructor from previously allocated memory.
   // This memory is not deallocated on destruction.
-  vil1_memory_image_impl(void *buf, int planes, int w, int h,
-                         vil1_pixel_format_t pixel_format);
+  vil1_memory_image_impl(void * buf, int planes, int w, int h, vil1_pixel_format_t pixel_format);
   //: Constructor from previously allocated memory.
   // This memory is not deallocated on destruction.
-  vil1_memory_image_impl(void *buf, int w, int h, int components, int bits_per_component,
+  vil1_memory_image_impl(void * buf,
+                         int w,
+                         int h,
+                         int components,
+                         int bits_per_component,
                          vil1_component_format component_format);
   //: Constructor from previously allocated memory.
   // This memory is not deallocated on destruction.
-  vil1_memory_image_impl(void *buf, int w, int h,
-                         vil1_pixel_format_t pixel_format);
+  vil1_memory_image_impl(void * buf, int w, int h, vil1_pixel_format_t pixel_format);
 
- protected:
+protected:
   friend class vil1_memory_image;
 
-  void init(void *buf, int planes, int w, int h,
-            vil1_pixel_format_t pixel_format);
-  void init(void *buf, int planes, int w, int h, int components,
-            int bits_per_component, vil1_component_format);
+  void
+  init(void * buf, int planes, int w, int h, vil1_pixel_format_t pixel_format);
+  void
+  init(void * buf, int planes, int w, int h, int components, int bits_per_component, vil1_component_format);
 
   int planes_;
   int width_;
@@ -100,8 +137,8 @@ class vil1_memory_image_impl : public vil1_image_impl
   int bytes_per_pixel_;
   bool is_foreign_buf_; // is the buffer created externally?
 
-  unsigned char* buf_;
-  void*** rows_;
+  unsigned char * buf_;
+  void *** rows_;
 };
 
 #endif // vil1_memory_image_impl_h_

@@ -39,37 +39,45 @@ class vidl_v4l2_istream;
 
 //: Use vgui dialogs to prompt the user for parameters and open an istream
 // Allows the user to select any of the supported istreams
-vidl_istream* vidl_gui_open_istream_dialog();
+vidl_istream *
+vidl_gui_open_istream_dialog();
 
 
 //: Use vgui dialogs to prompt the user for parameters and open an ostream
 // Allows the user to select any of the supported ostreams
-vidl_ostream* vidl_gui_open_ostream_dialog();
+vidl_ostream *
+vidl_gui_open_ostream_dialog();
 
 
 namespace vidl_gui_param_dialog
 {
-  //: Use vgui dialogs to open an image list istream
-  vidl_image_list_istream* image_list_istream();
+//: Use vgui dialogs to open an image list istream
+vidl_image_list_istream *
+image_list_istream();
 
-  //: Use vgui dialogs to open an image list ostream
-  vidl_image_list_ostream* image_list_ostream();
+//: Use vgui dialogs to open an image list ostream
+vidl_image_list_ostream *
+image_list_ostream();
 
-  //: Use vgui dialogs to open a FFMPEG istream
-  vidl_ffmpeg_istream* ffmpeg_istream();
+//: Use vgui dialogs to open a FFMPEG istream
+vidl_ffmpeg_istream *
+ffmpeg_istream();
 
-  //: Use vgui dialogs to open a FFMPEG ostream
-  vidl_ffmpeg_ostream* ffmpeg_ostream();
+//: Use vgui dialogs to open a FFMPEG ostream
+vidl_ffmpeg_ostream *
+ffmpeg_ostream();
 
-  //: Use vgui dialogs to open a dc1394 istream
-  vidl_dc1394_istream* dc1394_istream();
+//: Use vgui dialogs to open a dc1394 istream
+vidl_dc1394_istream *
+dc1394_istream();
 
-  //: Use vgui dialogs to open a v4l2 istream
-  vidl_v4l2_istream* v4l2_istream();
+//: Use vgui dialogs to open a v4l2 istream
+vidl_v4l2_istream *
+v4l2_istream();
 
-  bool update_iidc1394_params(std::vector<vidl_iidc1394_params::
-                              feature_options>& features);
-};
+bool
+update_iidc1394_params(std::vector<vidl_iidc1394_params::feature_options> & features);
+}; // namespace vidl_gui_param_dialog
 
 
 #endif // vidl_gui_param_dialog_h_

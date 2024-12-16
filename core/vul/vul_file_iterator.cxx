@@ -32,7 +32,7 @@ struct vul_file_iterator_data
   handle_type handle_;
 
   std::string found_;
-  char const * name_;
+  const char * name_;
   vul_reg_exp reg_exp_;
   std::string original_dirname_;
 
@@ -42,7 +42,7 @@ struct vul_file_iterator_data
     return _findfirst(const_cast<char *>(dirname), data);
   }
 
-  vul_file_iterator_data(char const * glob);
+  vul_file_iterator_data(const char * glob);
 
   void
   mkname()
@@ -72,7 +72,7 @@ struct vul_file_iterator_data
 
 
   // should be constish, and ret 0 when nuffink
-  char const *
+  const char *
   value()
   {
     if (handle_ == -1L)
@@ -81,7 +81,7 @@ struct vul_file_iterator_data
   }
 
   // Return non-dir part of fn
-  char const *
+  const char *
   value_filename()
   {
     if (handle_ == -1L)
@@ -96,7 +96,7 @@ struct vul_file_iterator_data
   }
 };
 
-vul_file_iterator_data::vul_file_iterator_data(char const * glob)
+vul_file_iterator_data::vul_file_iterator_data(const char * glob)
 {
   original_dirname_ = vul_file::dirname(glob);
   handle_ = find_first((original_dirname_ + "\\*").c_str(), &data_);
@@ -166,10 +166,10 @@ struct vul_file_iterator_data
   DIR * dir_handle_;
   dirent * de_;
   std::string found_;
-  char const * name_;
+  const char * name_;
   vul_reg_exp reg_exp_;
 
-  vul_file_iterator_data(char const * glob);
+  vul_file_iterator_data(const char * glob);
 
   void
   mkname()
@@ -203,7 +203,7 @@ struct vul_file_iterator_data
   }
 
   // should be constish, and ret 0 when nuffink
-  char const *
+  const char *
   value() const
   {
     if (!dir_handle_)
@@ -212,7 +212,7 @@ struct vul_file_iterator_data
   }
 
   // Return non-dir part of fn
-  char const *
+  const char *
   value_filename() const
   {
     if (!dir_handle_)
@@ -227,7 +227,7 @@ struct vul_file_iterator_data
   }
 };
 
-vul_file_iterator_data::vul_file_iterator_data(char const * glob)
+vul_file_iterator_data::vul_file_iterator_data(const char * glob)
 {
   original_dirname_ = vul_file::dirname(glob) + "/";
 
@@ -279,48 +279,43 @@ vul_file_iterator_data::vul_file_iterator_data(char const * glob)
 
 // -----------------------------------------------------------------------------
 
-vul_file_iterator::vul_file_iterator(char const * glob)
+vul_file_iterator::vul_file_iterator(const char * glob)
 {
   p = nullptr;
   reset(glob);
 }
 
-vul_file_iterator::vul_file_iterator(std::string const & glob)
+vul_file_iterator::vul_file_iterator(const std::string & glob)
 {
   p = nullptr;
   reset(glob.c_str());
 }
 
-vul_file_iterator::~vul_file_iterator()
-{
-  delete p;
-}
+vul_file_iterator::~vul_file_iterator() { delete p; }
 
 void
-vul_file_iterator::reset(char const * glob)
+vul_file_iterator::reset(const char * glob)
 {
   delete p;
   p = new vul_file_iterator_data(glob);
 }
 
-char const *
+const char *
 vul_file_iterator::operator()()
 {
   return p->value();
 }
 
-char const *
+const char *
 vul_file_iterator::filename()
 {
   return p->value_filename();
 }
 
-vul_file_iterator::operator bool() const
-{
-  return (p->value() != nullptr) ? true : false;
-}
+vul_file_iterator::operator bool() const { return (p->value() != nullptr) ? true : false; }
 
-bool vul_file_iterator::operator!() const
+bool
+vul_file_iterator::operator!() const
 {
   return (p->value() != nullptr) ? false : true;
 }

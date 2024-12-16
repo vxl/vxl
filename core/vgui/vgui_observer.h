@@ -25,7 +25,7 @@ class vgui_observable;
 //  attached to themselves.
 class vgui_observer
 {
- public:
+public:
   //: Constructor - create a default observable.
   vgui_observer() {}
 
@@ -33,13 +33,16 @@ class vgui_observer
   virtual ~vgui_observer() {}
 
   //: Called by the observable when some event occurs.
-  virtual void update();
+  virtual void
+  update();
 
   //: Called by the observable with a message.
-  virtual void update(vgui_message const &);
+  virtual void
+  update(const vgui_message &);
 
   //: Called by the observable with a message.
-  virtual void update(vgui_observable const *);
+  virtual void
+  update(const vgui_observable *);
 };
 
 #endif // vgui_observer_h_

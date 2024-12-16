@@ -10,7 +10,12 @@
 
 class vrel_muse_table;
 
-enum vrel_muse_type { VREL_MUSE_TRIMMED, VREL_MUSE_TRIMMED_SQUARE, VREL_MUSE_QUANTILE };
+enum vrel_muse_type
+{
+  VREL_MUSE_TRIMMED,
+  VREL_MUSE_TRIMMED_SQUARE,
+  VREL_MUSE_QUANTILE
+};
 
 //: The MUSET (MUSE trimmed) objective function, which should be used instead of LMS.
 //  MUSE is a robust objective function in the spirit of LMS/LTS
@@ -51,85 +56,125 @@ enum vrel_muse_type { VREL_MUSE_TRIMMED, VREL_MUSE_TRIMMED_SQUARE, VREL_MUSE_QUA
 
 class vrel_muset_obj : public vrel_objective
 {
- public:
+public:
   //: Constructor.
   //  \a max_n is the size of the look-up table.
-  vrel_muset_obj( int max_n, bool use_sk_refine=true);
+  vrel_muset_obj(int max_n, bool use_sk_refine = true);
 
   //: Constructor with previously computed table.
   //  \a table will be used as the look-up table.
-  vrel_muset_obj( vrel_muse_table* table, bool use_sk_refine=true);
+  vrel_muset_obj(vrel_muse_table * table, bool use_sk_refine = true);
 
   //: Destructor.
   ~vrel_muset_obj() override;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   //  \sa vrel_objective::fcn.
-  double fcn( vect_const_iter res_begin, vect_const_iter res_end,
-                      vect_const_iter /* scale is unused */,
-                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const override;
+  double
+  fcn(vect_const_iter res_begin,
+      vect_const_iter res_end,
+      vect_const_iter /* scale is unused */,
+      vnl_vector<double> * = nullptr /* param vector is unused */) const override;
 
   //: Evaluate the objective function on homoscedastic residuals.
   //  \sa vrel_objective::fcn.
-  double fcn( vect_const_iter begin, vect_const_iter end,
-                      double = 0 /* scale is unused */,
-                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const override;
+  double
+  fcn(vect_const_iter begin,
+      vect_const_iter end,
+      double = 0 /* scale is unused */,
+      vnl_vector<double> * = nullptr /* param vector is unused */) const override;
 
   //: Computes the MUSE estimate and best value of k
   //  \a begin and \a end give the residuals. \a objective is the
   //  value of the objective function, \a sigma_est is an estimate
   //  of the scale (and is the objective function), and \a best_k
   //  is the value of k that produced the scale estimate.
-  void internal_fcn( vect_const_iter begin, vect_const_iter end,
-                     double& sigma_est, int& best_k ) const;
+  void
+  internal_fcn(vect_const_iter begin, vect_const_iter end, double & sigma_est, int & best_k) const;
 
   //: False.
   //  This MUSE estimator is based on trimmed statistics, and does not
   //  use a scale estimate.
-  bool requires_prior_scale() const override
-    { return false; }
+  bool
+  requires_prior_scale() const override
+  {
+    return false;
+  }
 
   //: True, since MUSE can estimate scale.
   //  \sa vrel_objective::can_estimate_scale.
-  bool can_estimate_scale() const override { return true; }
+  bool
+  can_estimate_scale() const override
+  {
+    return true;
+  }
 
   //: Scale estimate.
-  double scale( vect_const_iter res_begin, vect_const_iter res_end ) const override;
+  double
+  scale(vect_const_iter res_begin, vect_const_iter res_end) const override;
 
   //: Set the minimum fraction of the data that are inliers.
-  void set_min_inlier_fraction( double min_frac=0.25 )
-    {  min_frac_ = min_frac; }
+  void
+  set_min_inlier_fraction(double min_frac = 0.25)
+  {
+    min_frac_ = min_frac;
+  }
 
   //: Set the maximum fraction of the data that could be inliers.
-  void set_max_inlier_fraction( double max_frac=0.95 )
-    {  max_frac_ = max_frac; }
+  void
+  set_max_inlier_fraction(double max_frac = 0.95)
+  {
+    max_frac_ = max_frac;
+  }
 
   //: The increment to use in testing different inlier/outlier fractions.
-  void set_inlier_fraction_increment( double frac_inc=0.05 )
-    {  frac_inc_ = frac_inc; }
+  void
+  set_inlier_fraction_increment(double frac_inc = 0.05)
+  {
+    frac_inc_ = frac_inc;
+  }
 
   //: The minimum fraction of the data that must be inliers.
-  double min_inlier_fraction() const { return min_frac_; }
+  double
+  min_inlier_fraction() const
+  {
+    return min_frac_;
+  }
 
   //: The maximum fraction of the data that could be inliers.
-  double max_inlier_fraction() const { return max_frac_; }
+  double
+  max_inlier_fraction() const
+  {
+    return max_frac_;
+  }
 
   //: The search step for determining the inlier/outlier fraction.
-  double inlier_fraction_increment() const { return frac_inc_; }
+  double
+  inlier_fraction_increment() const
+  {
+    return frac_inc_;
+  }
 
   //: Set the type of MUSE objective function
-  void set_muse_type( vrel_muse_type t = VREL_MUSE_TRIMMED )
-    { muse_type_ = t; }
+  void
+  set_muse_type(vrel_muse_type t = VREL_MUSE_TRIMMED)
+  {
+    muse_type_ = t;
+  }
 
   //: Access the type of MUSE objective function
-  vrel_muse_type muse_type() const { return muse_type_; }
+  vrel_muse_type
+  muse_type() const
+  {
+    return muse_type_;
+  }
 
- protected:
+protected:
   bool use_sk_refine_;
   vrel_muse_type muse_type_;
 
   bool table_owned_;
-  vrel_muse_table* table_;
+  vrel_muse_table * table_;
   double min_frac_;
   double max_frac_;
   double frac_inc_;

@@ -15,19 +15,19 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-vrel_quad_est::
-vrel_quad_est( const std::vector< vgl_point_2d<double> > & from_pts,
-                 const std::vector< vgl_point_2d<double> > & to_pts )
-  : vrel_estimation_problem( 12, 6 /*points to instantiate*/ )
+vrel_quad_est::vrel_quad_est(const std::vector<vgl_point_2d<double>> & from_pts,
+                             const std::vector<vgl_point_2d<double>> & to_pts)
+  : vrel_estimation_problem(12, 6 /*points to instantiate*/)
 {
-  assert( from_pts.size() == to_pts.size() );
+  assert(from_pts.size() == to_pts.size());
 
   constexpr unsigned dim = 2;
   const unsigned size = from_pts.size();
 
   // convert from vector to vnl_vector type
-  vnl_vector<double> pt( dim );
-  for ( unsigned int i=0; i<size; ++i ) {
+  vnl_vector<double> pt(dim);
+  for (unsigned int i = 0; i < size; ++i)
+  {
     pt[0] = from_pts[i].x();
     pt[1] = from_pts[i].y();
     from_pts_[i] = pt;
@@ -37,26 +37,27 @@ vrel_quad_est( const std::vector< vgl_point_2d<double> > & from_pts,
   }
 
   dim_ = dim;
-  quad_dof_ = (dim+1)*dim;
-  min_num_pts_ = dim+1;
+  quad_dof_ = (dim + 1) * dim;
+  min_num_pts_ = dim + 1;
   num_samples_ = size;
 }
 
-vrel_quad_est::vrel_quad_est(const std::vector<vnl_vector<double>> &from_pts,
+vrel_quad_est::vrel_quad_est(const std::vector<vnl_vector<double>> & from_pts,
                              std::vector<vnl_vector<double>> to_pts,
                              unsigned int dim)
-    : vrel_estimation_problem(
-          ((dim + 3) * dim / 2 + 1) * dim /*dof*/,
-          ((dim + 3) * dim / 2 + 1) /*points to instantiate*/),
-      from_pts_(from_pts), to_pts_(std::move(to_pts)) {
+  : vrel_estimation_problem(((dim + 3) * dim / 2 + 1) * dim /*dof*/,
+                            ((dim + 3) * dim / 2 + 1) /*points to instantiate*/)
+  , from_pts_(from_pts)
+  , to_pts_(std::move(to_pts))
+{
   // only deals with 2D for now
-  assert( dim == 2 );
-  assert( from_pts.size() == to_pts.size() );
+  assert(dim == 2);
+  assert(from_pts.size() == to_pts.size());
   const unsigned size = from_pts.size();
 
   dim_ = dim;
-  quad_dof_ = ((dim+3)*dim/2+1)*dim;
-  min_num_pts_ = (dim+3)*dim/2+1;
+  quad_dof_ = ((dim + 3) * dim / 2 + 1) * dim;
+  min_num_pts_ = (dim + 3) * dim / 2 + 1;
   num_samples_ = size;
 }
 
@@ -64,59 +65,55 @@ vrel_quad_est::~vrel_quad_est() = default;
 
 
 unsigned int
-vrel_quad_est::num_samples( ) const
+vrel_quad_est::num_samples() const
 {
   return num_samples_;
 }
 
-inline
-void expand_quad( const vnl_vector<double>& s,
-                  vnl_vector<double>& des,
-                  unsigned ind=0)
+inline void
+expand_quad(const vnl_vector<double> & s, vnl_vector<double> & des, unsigned ind = 0)
 {
   // 1.0
   des(ind++) = 1.0;
 
   // affine term
-  for ( unsigned int i=0; i<s.size(); ++i )
+  for (unsigned int i = 0; i < s.size(); ++i)
     des(ind++) = s(i);
 
   // cross term
-  for ( unsigned int i=0; i<s.size()-1; ++i )
-    for ( unsigned int j=i+1; j<s.size(); ++j )
+  for (unsigned int i = 0; i < s.size() - 1; ++i)
+    for (unsigned int j = i + 1; j < s.size(); ++j)
       des(ind++) = s(i) * s(j);
 
   // quad term
-  for ( unsigned int i=0; i<s.size(); ++i )
-    des(ind++) = s(i)*s(i);
+  for (unsigned int i = 0; i < s.size(); ++i)
+    des(ind++) = s(i) * s(i);
 }
 
-inline
-void copy_to_nth_pos( vnl_vector<double>& des, unsigned c,
-                      const vnl_vector<double>& s )
+inline void
+copy_to_nth_pos(vnl_vector<double> & des, unsigned c, const vnl_vector<double> & s)
 {
-  for ( unsigned int i=0; i<s.size(); ++i )
-    des(c+i) = s(i);
+  for (unsigned int i = 0; i < s.size(); ++i)
+    des(c + i) = s(i);
 }
 
 vnl_matrix<double>
-vrel_quad_est::
-A( const vnl_vector<double>& params ) const
+vrel_quad_est::A(const vnl_vector<double> & params) const
 {
-  vnl_matrix<double> A( dim_, min_num_pts_, 0.0 );
-  for ( unsigned ind=0,i=0; i<min_num_pts_; ++i )
-    for ( unsigned j=0; j<dim_; ++j )
-      A(j, i) = params(ind++);  // filling it column first
+  vnl_matrix<double> A(dim_, min_num_pts_, 0.0);
+  for (unsigned ind = 0, i = 0; i < min_num_pts_; ++i)
+    for (unsigned j = 0; j < dim_; ++j)
+      A(j, i) = params(ind++); // filling it column first
   return A;
 }
 
 vnl_vector<double>
-vrel_quad_est::
-trans( const vnl_vector<double>& params ) const
+vrel_quad_est::trans(const vnl_vector<double> & params) const
 {
-  vnl_vector<double> trans( dim_, 0.0 );
-  for ( unsigned int i=0; i<dim_; ++i ) {
-    trans[i] = params( i );
+  vnl_vector<double> trans(dim_, 0.0);
+  for (unsigned int i = 0; i < dim_; ++i)
+  {
+    trans[i] = params(i);
   }
   return trans;
 }
@@ -127,59 +124,61 @@ trans( const vnl_vector<double>& params ) const
 //  is returned.  Otherwise, params = A^{-1} b and true is returned.
 //
 bool
-vrel_quad_est::
-fit_from_minimal_set( const std::vector<int>& point_indices,
-                      vnl_vector<double>& params ) const
+vrel_quad_est::fit_from_minimal_set(const std::vector<int> & point_indices, vnl_vector<double> & params) const
 {
-  if ( point_indices.size() != min_num_pts_ ) {
+  if (point_indices.size() != min_num_pts_)
+  {
     std::cerr << "vrel_quad_est::fit_from_minimal_sample  The number of point "
-             << "indices must agree with the fit degrees of freedom.\n";
+              << "indices must agree with the fit degrees of freedom.\n";
     return false;
   }
 
-  vnl_matrix<double> A( min_num_pts_,  min_num_pts_, 1.0 );
-  vnl_matrix<double> bs( min_num_pts_, dim_, 0.0 );
-  vnl_vector<double> expanded( min_num_pts_ );
-  for ( unsigned int i=0; i<min_num_pts_; ++i ) {
+  vnl_matrix<double> A(min_num_pts_, min_num_pts_, 1.0);
+  vnl_matrix<double> bs(min_num_pts_, dim_, 0.0);
+  vnl_vector<double> expanded(min_num_pts_);
+  for (unsigned int i = 0; i < min_num_pts_; ++i)
+  {
     int index = point_indices[i];
-    expand_quad( from_pts_[index], expanded );
-    A.set_row( i, expanded );
+    expand_quad(from_pts_[index], expanded);
+    A.set_row(i, expanded);
 
-    const vnl_vector<double>& one_to = to_pts_[index];
-    for ( unsigned int j=0; j<dim_; ++j )
+    const vnl_vector<double> & one_to = to_pts_[index];
+    for (unsigned int j = 0; j < dim_; ++j)
       bs[i][j] = one_to[j];
   }
 
-  vnl_svd<double> svd( A, 1.0e-8 );
-  if ( (unsigned int)svd.rank() < min_num_pts_ ) {
-    return false;    // singular fit --- no error message needed
+  vnl_svd<double> svd(A, 1.0e-8);
+  if ((unsigned int)svd.rank() < min_num_pts_)
+  {
+    return false; // singular fit --- no error message needed
   }
-  else {
-    params.set_size( quad_dof_ );
+  else
+  {
+    params.set_size(quad_dof_);
     vnl_matrix<double> sol;
     sol = svd.inverse() * bs;
-    for ( unsigned int j=0; j<min_num_pts_; ++j )
-      copy_to_nth_pos( params, j*dim_, sol.get_row(j) );
+    for (unsigned int j = 0; j < min_num_pts_; ++j)
+      copy_to_nth_pos(params, j * dim_, sol.get_row(j));
     return true;
   }
 }
 
 
 void
-vrel_quad_est::compute_residuals( const vnl_vector<double>& params,
-                                          std::vector<double>& residuals ) const
+vrel_quad_est::compute_residuals(const vnl_vector<double> & params, std::vector<double> & residuals) const
 {
-  assert( residuals.size() == num_samples_ );
+  assert(residuals.size() == num_samples_);
 
-  vnl_matrix<double> A( dim_, min_num_pts_ );
-  for ( unsigned ind=0,i=0; i<min_num_pts_; ++i )
-    for ( unsigned j=0; j<dim_; ++j )
-      A(j, i) = params(ind++);  // filling it column first
+  vnl_matrix<double> A(dim_, min_num_pts_);
+  for (unsigned ind = 0, i = 0; i < min_num_pts_; ++i)
+    for (unsigned j = 0; j < dim_; ++j)
+      A(j, i) = params(ind++); // filling it column first
 
   vnl_vector<double> diff;
-  vnl_vector<double> expanded( min_num_pts_, 0.0 );
-  for ( unsigned int i=0; i<num_samples_; ++i ) {
-    expand_quad( from_pts_[i], expanded );
+  vnl_vector<double> expanded(min_num_pts_, 0.0);
+  for (unsigned int i = 0; i < num_samples_; ++i)
+  {
+    expand_quad(from_pts_[i], expanded);
     diff = A * expanded;
     diff -= to_pts_[i];
     residuals[i] = diff.two_norm();
@@ -188,54 +187,58 @@ vrel_quad_est::compute_residuals( const vnl_vector<double>& params,
 
 
 bool
-vrel_quad_est::
-weighted_least_squares_fit( vnl_vector<double>& params,
-                            vnl_matrix<double>& norm_covar,
-                            const std::vector<double>* weights ) const
+vrel_quad_est::weighted_least_squares_fit(vnl_vector<double> & params,
+                                          vnl_matrix<double> & norm_covar,
+                                          const std::vector<double> * weights) const
 {
   vnl_matrix<double> sumProds(min_num_pts_, min_num_pts_, 0.0);
   vnl_matrix<double> sumDists(min_num_pts_, dim_, 0.0);
 
   std::vector<double> tmp_wgts;
-  if ( !weights ) {
+  if (!weights)
+  {
     // set weight to one
-    tmp_wgts.resize( num_samples_ );
-    std::fill( tmp_wgts.begin(), tmp_wgts.end(), 1.0 );
+    tmp_wgts.resize(num_samples_);
+    std::fill(tmp_wgts.begin(), tmp_wgts.end(), 1.0);
     weights = &tmp_wgts;
   }
   //  Aside:  this probably would be faster if I used iterators...
 
-  vnl_vector<double> ind_vars( min_num_pts_, 1.0 );
-  for ( unsigned int i=0; i<num_samples_; ++i ) {
+  vnl_vector<double> ind_vars(min_num_pts_, 1.0);
+  for (unsigned int i = 0; i < num_samples_; ++i)
+  {
     // copy first #dim# elements
-    expand_quad( from_pts_[i], ind_vars );
-    for ( unsigned int j=0; j<min_num_pts_; ++j ) {
-      for ( unsigned int k=j; k<min_num_pts_; k++ )
-        sumProds(j,k) += ind_vars[j] * ind_vars[k] * (*weights)[i];
+    expand_quad(from_pts_[i], ind_vars);
+    for (unsigned int j = 0; j < min_num_pts_; ++j)
+    {
+      for (unsigned int k = j; k < min_num_pts_; k++)
+        sumProds(j, k) += ind_vars[j] * ind_vars[k] * (*weights)[i];
 
       // set right hand side
-      for ( unsigned int k=0; k<dim_; ++k )
-        sumDists(j,k) += ind_vars[j] * to_pts_[i][k] * (*weights)[i];
+      for (unsigned int k = 0; k < dim_; ++k)
+        sumDists(j, k) += ind_vars[j] * to_pts_[i][k] * (*weights)[i];
     }
   }
 
-  for ( unsigned int j=1; j<min_num_pts_; j++ )
-    for ( unsigned int k=0; k<j; k++ )
-      sumProds(j,k) = sumProds(k,j);
+  for (unsigned int j = 1; j < min_num_pts_; j++)
+    for (unsigned int k = 0; k < j; k++)
+      sumProds(j, k) = sumProds(k, j);
 
-  vnl_svd<double> svd( sumProds, 1.0e-8 );
-  if ( (unsigned int)svd.rank() < min_num_pts_ ) {
+  vnl_svd<double> svd(sumProds, 1.0e-8);
+  if ((unsigned int)svd.rank() < min_num_pts_)
+  {
     std::cerr << "vrel_quad_est::WeightedLeastSquaresFit --- singularity!\n";
     return false;
   }
-  else {
-    vnl_matrix<double> sumP_inv( svd.inverse() );
+  else
+  {
+    vnl_matrix<double> sumP_inv(svd.inverse());
     vnl_matrix<double> int_result = sumP_inv * sumDists;
     norm_covar = sumP_inv;
 
-    params.set_size( quad_dof_ );
-    for ( unsigned int j=0; j<min_num_pts_; ++j )
-      copy_to_nth_pos( params, j*dim_, int_result.get_row(j) );
+    params.set_size(quad_dof_);
+    for (unsigned int j = 0; j < min_num_pts_; ++j)
+      copy_to_nth_pos(params, j * dim_, int_result.get_row(j));
     return true;
   }
 }

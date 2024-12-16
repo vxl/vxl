@@ -63,8 +63,8 @@ vgui_displaylist3D_tableau::get_hits(float x, float y, std::vector<unsigned> & m
           break;
         }
       } // for  display
-    }   // for  names
-  }     // for  hits
+    } // for  names
+  } // for  hits
 }
 
 bool

@@ -15,24 +15,28 @@
 
 class vpgl_fm_compute_7_point
 {
- public:
+public:
   //: If precondition = true, points are conditioned prior to computation.
-  vpgl_fm_compute_7_point( bool precondition = true )
-   : precondition_(precondition) {}
+  vpgl_fm_compute_7_point(bool precondition = true)
+    : precondition_(precondition)
+  {}
 
   //: Compute from two sets of corresponding points.
   // Put the resulting matrix into fm, return true if successful.
   // Points pr are associated with the RHS of the fundamental matrix
   // while the points pl are associated with the LHS.
-  bool compute( const std::vector< vgl_homg_point_2d<double> >& pr,
-                const std::vector< vgl_homg_point_2d<double> >& pl,
-                std::vector< vpgl_fundamental_matrix<double>* >& fm ) const;
+  bool
+  compute(const std::vector<vgl_homg_point_2d<double>> & pr,
+          const std::vector<vgl_homg_point_2d<double>> & pl,
+          std::vector<vpgl_fundamental_matrix<double> *> & fm) const;
 
- protected:
-  static std::vector<double> get_coeffs( vnl_double_3x3 const& F1,
-                                        vnl_double_3x3 const& F2 );
-  static std::vector<double> solve_quadratic( std::vector<double> v );
-  static std::vector<double> solve_cubic( std::vector<double> v );
+protected:
+  static std::vector<double>
+  get_coeffs(const vnl_double_3x3 & F1, const vnl_double_3x3 & F2);
+  static std::vector<double>
+  solve_quadratic(std::vector<double> v);
+  static std::vector<double>
+  solve_cubic(std::vector<double> v);
   bool precondition_;
 };
 

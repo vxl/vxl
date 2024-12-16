@@ -10,7 +10,7 @@
 #include <cstring>
 #include "vil_mit.h"
 
-static char const * vil_mit_format_tag = "mit";
+static const char * vil_mit_format_tag = "mit";
 
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
@@ -97,7 +97,7 @@ vil_mit_file_format::make_output_image(vil_stream * is,
   return new vil_mit_image(is, ni, nj, nplanes, format);
 }
 
-char const *
+const char *
 vil_mit_file_format::tag() const
 {
   return vil_mit_format_tag;
@@ -119,7 +119,7 @@ vil_mit_image::vil_mit_image(vil_stream * is)
   }
 }
 
-char const *
+const char *
 vil_mit_image::file_format() const
 {
   return vil_mit_format_tag;
@@ -140,13 +140,10 @@ vil_mit_image::vil_mit_image(vil_stream * is,
   write_header();
 }
 
-vil_mit_image::~vil_mit_image()
-{
-  is_->unref();
-}
+vil_mit_image::~vil_mit_image() { is_->unref(); }
 
 bool
-vil_mit_image::get_property(char const * /*tag*/, void * /*prop*/) const
+vil_mit_image::get_property(const char * /*tag*/, void * /*prop*/) const
 {
   // This is not an in-memory image type, nor is it read-only:
   return false;
@@ -165,24 +162,27 @@ vil_mit_image::read_header()
   if (type_ == MIT_UNSIGNED)
   { // gray
     components_ = 1;
-    format_ = bpp == 8 ? VIL_PIXEL_FORMAT_BYTE
-                       : bpp == 16 ? VIL_PIXEL_FORMAT_UINT_16
-                                   : bpp == 32 ? VIL_PIXEL_FORMAT_UINT_32
-                                               : bpp == 1 ? VIL_PIXEL_FORMAT_BOOL : VIL_PIXEL_FORMAT_UNKNOWN;
+    format_ = bpp == 8    ? VIL_PIXEL_FORMAT_BYTE
+              : bpp == 16 ? VIL_PIXEL_FORMAT_UINT_16
+              : bpp == 32 ? VIL_PIXEL_FORMAT_UINT_32
+              : bpp == 1  ? VIL_PIXEL_FORMAT_BOOL
+                          : VIL_PIXEL_FORMAT_UNKNOWN;
   }
   else if (type_ == MIT_SIGNED)
   {
     components_ = 1;
-    format_ = bpp == 8
-                ? VIL_PIXEL_FORMAT_SBYTE
-                : bpp == 16 ? VIL_PIXEL_FORMAT_INT_16 : bpp == 32 ? VIL_PIXEL_FORMAT_INT_32 : VIL_PIXEL_FORMAT_UNKNOWN;
+    format_ = bpp == 8    ? VIL_PIXEL_FORMAT_SBYTE
+              : bpp == 16 ? VIL_PIXEL_FORMAT_INT_16
+              : bpp == 32 ? VIL_PIXEL_FORMAT_INT_32
+                          : VIL_PIXEL_FORMAT_UNKNOWN;
   }
   else if (type_ == MIT_RGB)
   {
     components_ = 3;
-    format_ =
-      bpp == 8 ? VIL_PIXEL_FORMAT_BYTE
-               : bpp == 16 ? VIL_PIXEL_FORMAT_UINT_16 : bpp == 32 ? VIL_PIXEL_FORMAT_UINT_32 : VIL_PIXEL_FORMAT_UNKNOWN;
+    format_ = bpp == 8    ? VIL_PIXEL_FORMAT_BYTE
+              : bpp == 16 ? VIL_PIXEL_FORMAT_UINT_16
+              : bpp == 32 ? VIL_PIXEL_FORMAT_UINT_32
+                          : VIL_PIXEL_FORMAT_UNKNOWN;
   }
   else if (type_ == MIT_FLOAT)
   {
@@ -334,7 +334,7 @@ vil_mit_image::get_copy_view(unsigned int x0, unsigned int xs, unsigned int y0, 
 }
 
 bool
-vil_mit_image::put_view(vil_image_view_base const & buf, unsigned int x0, unsigned int y0)
+vil_mit_image::put_view(const vil_image_view_base & buf, unsigned int x0, unsigned int y0)
 {
   assert(buf.pixel_format() == format_); // pixel formats of image and buffer must match
   if (!view_fits(buf, x0, y0) || buf.nplanes() != components_)

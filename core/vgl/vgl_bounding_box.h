@@ -17,17 +17,21 @@
 
 //: Bounding box for a sphere
 template <class T>
-vgl_box_3d<T>  vgl_bounding_box(vgl_sphere_3d<T> const& sphere);
+vgl_box_3d<T>
+vgl_bounding_box(const vgl_sphere_3d<T> & sphere);
 
 //: Bounding box for a pointset
 template <class T>
-vgl_box_3d<T>  vgl_bounding_box(vgl_pointset_3d<T> const& ptset);
+vgl_box_3d<T>
+vgl_bounding_box(const vgl_pointset_3d<T> & ptset);
 
 //: Bounding box for a cubic spline (based on knots, so not exact)
 template <class T>
-vgl_box_3d<T>  vgl_bounding_box(vgl_cubic_spline_3d<T> const& spline);
+vgl_box_3d<T>
+vgl_bounding_box(const vgl_cubic_spline_3d<T> & spline);
 
 //: bounding box for a polygon
 template <class T>
-vgl_box_2d<T>  vgl_bounding_box(vgl_polygon<T> const& poly);
+vgl_box_2d<T>
+vgl_bounding_box(const vgl_polygon<T> & poly);
 #endif // vgl_bounding_box_h_

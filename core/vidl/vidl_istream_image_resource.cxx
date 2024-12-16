@@ -105,7 +105,7 @@ vidl_istream_image_resource::pixel_format() const
 
 
 bool
-vidl_istream_image_resource::get_property(char const * /*key*/, void * /*value*/) const
+vidl_istream_image_resource::get_property(const char * /*key*/, void * /*value*/) const
 {
   return false;
 }
@@ -155,11 +155,12 @@ vidl_istream_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j0
 
   switch (view->pixel_format())
   {
-#define macro(F, T)                                                                                                    \
-  case F: {                                                                                                            \
-    const vil_image_view<T> & v = static_cast<const vil_image_view<T> &>(*view);                                       \
-    return new vil_image_view<T>(                                                                                      \
-      v.memory_chunk(), &v(i0, j0), ni, nj, v.nplanes(), v.istep(), v.jstep(), v.planestep());                         \
+#define macro(F, T)                                                                            \
+  case F:                                                                                      \
+  {                                                                                            \
+    const vil_image_view<T> & v = static_cast<const vil_image_view<T> &>(*view);               \
+    return new vil_image_view<T>(                                                              \
+      v.memory_chunk(), &v(i0, j0), ni, nj, v.nplanes(), v.istep(), v.jstep(), v.planestep()); \
   }
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
 #if VXL_HAS_INT_64
@@ -179,7 +180,7 @@ vidl_istream_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j0
 
 
 bool
-vidl_istream_image_resource::put_view(vil_image_view_base const & /*view*/, unsigned /*x0*/, unsigned /*y0*/)
+vidl_istream_image_resource::put_view(const vil_image_view_base & /*view*/, unsigned /*x0*/, unsigned /*y0*/)
 {
   std::cerr << "vidl_istream_image_resource::put_view not supported\n";
   return false;
@@ -192,9 +193,10 @@ vidl_istream_image_resource::create_empty_view() const
 {
   switch (format_)
   {
-#define macro(F, T)                                                                                                    \
-  case F: {                                                                                                            \
-    return new vil_image_view<T>(ni_, nj_, np_);                                                                       \
+#define macro(F, T)                              \
+  case F:                                        \
+  {                                              \
+    return new vil_image_view<T>(ni_, nj_, np_); \
   }
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
 #if VXL_HAS_INT_64

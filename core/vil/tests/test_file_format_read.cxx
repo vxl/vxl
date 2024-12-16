@@ -48,7 +48,7 @@ struct Compare
 {
   virtual ~Compare() = default;
   virtual bool
-  operator()(vil_image_view<ImgPixelType> const &, int p, int i, int j, const std::vector<TruePixelType> & pixel)
+  operator()(const vil_image_view<ImgPixelType> &, int p, int i, int j, const std::vector<TruePixelType> & pixel)
     const = 0;
 };
 
@@ -60,7 +60,7 @@ template <class PixelType>
 struct CompareRGB : public Compare<PixelType, vil_rgb<PixelType>>
 {
   bool
-  operator()(vil_image_view<vil_rgb<PixelType>> const & img, int p, int i, int j, const std::vector<PixelType> & pixel)
+  operator()(const vil_image_view<vil_rgb<PixelType>> & img, int p, int i, int j, const std::vector<PixelType> & pixel)
     const override
   {
     return p == 0 && pixel.size() == 3 && img(i, j).r == pixel[0] && img(i, j).g == pixel[1] && img(i, j).b == pixel[2];
@@ -72,7 +72,7 @@ template <class PixelType>
 struct CompareRGBA : public Compare<PixelType, vil_rgba<PixelType>>
 {
   bool
-  operator()(vil_image_view<vil_rgba<PixelType>> const & img, int p, int i, int j, const std::vector<PixelType> & pixel)
+  operator()(const vil_image_view<vil_rgba<PixelType>> & img, int p, int i, int j, const std::vector<PixelType> & pixel)
     const override
   {
     return p == 0 && pixel.size() == 4 && img(i, j).r == pixel[0] && img(i, j).g == pixel[1] &&
@@ -85,7 +85,7 @@ template <class PixelType>
 struct CompareRGBNear : public Compare<PixelType, vil_rgb<PixelType>>
 {
   bool
-  operator()(vil_image_view<vil_rgb<PixelType>> const & img, int p, int i, int j, const std::vector<PixelType> & pixel)
+  operator()(const vil_image_view<vil_rgb<PixelType>> & img, int p, int i, int j, const std::vector<PixelType> & pixel)
     const override
   {
     if (p == 0 && pixel.size() == 3)
@@ -116,7 +116,7 @@ template <class PixelType, int num_planes>
 struct ComparePlanes : public Compare<PixelType, PixelType>
 {
   bool
-  operator()(vil_image_view<PixelType> const & img, int p, int i, int j, const std::vector<PixelType> & pixel)
+  operator()(const vil_image_view<PixelType> & img, int p, int i, int j, const std::vector<PixelType> & pixel)
     const override
   {
     return 0 <= p && p < num_planes && pixel.size() == 1 && img(i, j, p) == pixel[0];
@@ -138,7 +138,7 @@ template <class PixelType>
 struct CompareGreyFloat : public Compare<PixelType, PixelType>
 {
   bool
-  operator()(vil_image_view<PixelType> const & img, int p, int i, int j, const std::vector<PixelType> & pixel)
+  operator()(const vil_image_view<PixelType> & img, int p, int i, int j, const std::vector<PixelType> & pixel)
     const override
   {
     return p == 0 && pixel.size() == 1 && std::fabs(pixel[0] - img(i, j)) <= 1e-6 * std::fabs(pixel[0]);
@@ -150,7 +150,7 @@ template <class PixelType>
 struct CompareGreyNear : public Compare<PixelType, PixelType>
 {
   bool
-  operator()(vil_image_view<PixelType> const & img, int p, int i, int j, const std::vector<PixelType> & pixel)
+  operator()(const vil_image_view<PixelType> & img, int p, int i, int j, const std::vector<PixelType> & pixel)
     const override
   {
     if (p == 0 && pixel.size() == 1)
@@ -258,8 +258,8 @@ read_value(std::istream & fin, bool & pix)
 //
 template <class TruePixelType, class ImgPixelType>
 bool
-CheckPixels(Compare<TruePixelType, ImgPixelType> const & check,
-            char const * true_data_file,
+CheckPixels(const Compare<TruePixelType, ImgPixelType> & check,
+            const char * true_data_file,
             const vil_image_resource_sptr & ir)
 {
   // The true data is an ASCII file consisting of a sequence of
@@ -404,7 +404,7 @@ CheckPixels(Compare<TruePixelType, ImgPixelType> const & check,
 //
 template <class TruePixelType, class ImgPixelType>
 bool
-CheckFile(Compare<TruePixelType, ImgPixelType> const & check, char const * true_data_file, char const * img_data_file)
+CheckFile(const Compare<TruePixelType, ImgPixelType> & check, const char * true_data_file, const char * img_data_file)
 {
   vil_image_resource_sptr ir = vil_load_image_resource((image_base + img_data_file).c_str());
   if (!ir)
@@ -427,9 +427,9 @@ CheckFile(Compare<TruePixelType, ImgPixelType> const & check, char const * true_
 //
 template <class TruePixelType, class ImgPixelType>
 bool
-CheckFormat(Compare<TruePixelType, ImgPixelType> const & check,
-            char const * true_data_file,
-            char const * img_data_file,
+CheckFormat(const Compare<TruePixelType, ImgPixelType> & check,
+            const char * true_data_file,
+            const char * img_data_file,
             vil_file_format * ffmt)
 {
   bool result;

@@ -7,7 +7,7 @@
 #include "vil1/vil1_image.h"
 
 vil1_pixel_format_t
-vil1_pixel_format(vil1_image const & I)
+vil1_pixel_format(const vil1_image & I)
 {
   int c = I.components();
   int b = I.bits_per_component();

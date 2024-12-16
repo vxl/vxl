@@ -23,8 +23,7 @@
 // 2D cartesian coordinate system, parametrized by the focal expressed in
 // meters. The projection is along the z axis. The center of the projection is
 // the origin of the 3D frame. The projection plane is in the half-space z<0.
-class vcsl_perspective
-  :public vcsl_spatial_transformation
+class vcsl_perspective : public vcsl_spatial_transformation
 {
   //***************************************************************************
   // Constructors/Destructor
@@ -33,7 +32,7 @@ class vcsl_perspective
   // Default constructor
   vcsl_perspective() = default;
 
- public:
+public:
   // Destructor
   ~vcsl_perspective() override = default;
 
@@ -44,27 +43,39 @@ class vcsl_perspective
   //: Is `this' invertible at time `time'? Never !
   //  REQUIRE: valid_time(time)
   // Pure virtual function of vcsl_spatial_transformation
-  bool is_invertible(double time) const override;
+  bool
+  is_invertible(double time) const override;
 
   //: Is `this' correctly set ?
   // Virtual function of vcsl_spatial_transformation
-  bool is_valid() const override
-  { return vcsl_spatial_transformation::is_valid() &&
-           ((this->duration()==0&&focal_.size()==1) ||
-            this->duration()==focal_.size()); }
+  bool
+  is_valid() const override
+  {
+    return vcsl_spatial_transformation::is_valid() &&
+           ((this->duration() == 0 && focal_.size() == 1) || this->duration() == focal_.size());
+  }
 
   //***************************************************************************
   // Transformation parameters
   //***************************************************************************
 
   //: Set the focal in meters of a static perspective projection
-  void set_static(double new_focal);
+  void
+  set_static(double new_focal);
 
   //: Set the focal variation along the time in meters
-  void set_focal(list_of_scalars const& new_focal) { focal_=new_focal; }
+  void
+  set_focal(const list_of_scalars & new_focal)
+  {
+    focal_ = new_focal;
+  }
 
   //: Return the focal variation along the time in meters
-  list_of_scalars focal() const { return focal_; }
+  list_of_scalars
+  focal() const
+  {
+    return focal_;
+  }
 
   //***************************************************************************
   // Basic operations
@@ -74,21 +85,21 @@ class vcsl_perspective
   //  REQUIRE: is_valid()
   //  REQUIRE: v.size()==3
   // Pure virtual function of vcsl_spatial_transformation
-  vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const override;
+  vnl_vector<double>
+  execute(const vnl_vector<double> & v, double time) const override;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time) and v.size()==2
   //  The first pre-condition is never true. You can not use this method
   // Pure virtual function of vcsl_spatial_transformation
-  vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const override;
+  vnl_vector<double>
+  inverse(const vnl_vector<double> & v, double time) const override;
 
- protected:
-
+protected:
   //: Compute the parameter at time `time'
-  double focal_value(double time) const;
+  double
+  focal_value(double time) const;
 
   //: Angle variation along the time
   list_of_scalars focal_;

@@ -18,7 +18,7 @@ vil_nitf2_field_definitions * vil_nitf2_header::s_field_definitions_20 = nullptr
 vil_nitf2_field_definitions * vil_nitf2_header::s_field_definitions_21 = nullptr;
 
 vil_nitf2_header::vil_nitf2_header()
-    : m_field_sequence1(*get_field_definitions_1())
+  : m_field_sequence1(*get_field_definitions_1())
 
 {}
 

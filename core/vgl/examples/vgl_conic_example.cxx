@@ -14,7 +14,7 @@ int
 main()
 {
   // Select a point to be used as the centre for the conic (homogeneous notation)
-  vgl_homg_point_2d<double> const centre(1, 2, 1);
+  const vgl_homg_point_2d<double> centre(1, 2, 1);
 
   // circle, centre (1,2), radius 1, orientation irrelevant.
   vgl_conic<double> c(centre, 1, 1, 0);

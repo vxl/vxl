@@ -6,56 +6,66 @@
 // \author  Oxford RRG
 
 #if defined(_MSC_VER)
-#pragma once
+#  pragma once
 #endif
 
 #include <vgui/impl/mfc/vgui_mfc_adaptor.h>
 
 class vgui_mfc_view : public vgui_mfc_adaptor
 {
- protected: // create from serialization only
+protected: // create from serialization only
   vgui_mfc_view();
   DECLARE_DYNCREATE(vgui_mfc_view)
 
   // Attributes
- public:
-  CDocument* GetDocument();
+public:
+  CDocument *
+  GetDocument();
 
   // Operations
- public:
-
+public:
   // Overrides
   // ClassWizard generated virtual function overrides
   //{{AFX_VIRTUAL(CAwfmfcView)
- public:
-  virtual void OnDraw(CDC* pDC);  // overridden to draw this view
-  virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
- protected:
-  virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
-  virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
-  virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
+public:
+  virtual void
+  OnDraw(CDC * pDC); // overridden to draw this view
+  virtual BOOL
+  PreCreateWindow(CREATESTRUCT & cs);
+
+protected:
+  virtual BOOL
+  OnPreparePrinting(CPrintInfo * pInfo);
+  virtual void
+  OnBeginPrinting(CDC * pDC, CPrintInfo * pInfo);
+  virtual void
+  OnEndPrinting(CDC * pDC, CPrintInfo * pInfo);
   //}}AFX_VIRTUAL
 
   // Implementation
- public:
+public:
   virtual ~vgui_mfc_view();
 #ifdef _DEBUG
-  virtual void AssertValid() const;
-  virtual void Dump(CDumpContext& dc) const;
+  virtual void
+  AssertValid() const;
+  virtual void
+  Dump(CDumpContext & dc) const;
 #endif
 
   // Generated message map functions
- protected:
+protected:
   //{{AFX_MSG(vgui_mfc_view)
-  afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+  afx_msg int
+  OnCreate(LPCREATESTRUCT lpCreateStruct);
   //}}AFX_MSG
   DECLARE_MESSAGE_MAP()
 };
 
-#ifndef _DEBUG  // debug version in awfmfcView.cpp
-inline CDocument* vgui_mfc_view::GetDocument()
+#ifndef _DEBUG // debug version in awfmfcView.cpp
+inline CDocument *
+vgui_mfc_view::GetDocument()
 {
-  return (CDocument*)m_pDocument;
+  return (CDocument *)m_pDocument;
 }
 #endif
 

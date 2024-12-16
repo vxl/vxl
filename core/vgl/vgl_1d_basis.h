@@ -99,12 +99,33 @@ class vgl_1d_basis
   // No usable default constructor:
   inline vgl_1d_basis() = default;
 
- public:
-  inline T origin() const { return origin_; }
-  inline T unity() const { return unity_; }
-  inline T inf_pt() const { assert(!affine_); return inf_pt_; }
-  inline bool affine() const { return affine_; }
-  inline bool projective() const { return !affine_; }
+public:
+  inline T
+  origin() const
+  {
+    return origin_;
+  }
+  inline T
+  unity() const
+  {
+    return unity_;
+  }
+  inline T
+  inf_pt() const
+  {
+    assert(!affine_);
+    return inf_pt_;
+  }
+  inline bool
+  affine() const
+  {
+    return affine_;
+  }
+  inline bool
+  projective() const
+  {
+    return !affine_;
+  }
 
   //: Construct from three collinear points (projective basis).
   // It will serve as origin (0,1), unity (1,1) and point at infinity (1,0).
@@ -117,24 +138,27 @@ class vgl_1d_basis
   // just create a new one if you need a different one.
   // Hence it is not possible to read a vgl_basis_1d from stream with >>.
   //
-  vgl_1d_basis(T const& o, T const& u, T const& i);
+  vgl_1d_basis(const T & o, const T & u, const T & i);
 
   //: Construct from two points (affine basis).
   // It will serve as origin (0,1) and unity point (1,1).
   // The points must be different from each other, and not at infinity.
   // This creates an affine basis, i.e., the point at infinity of the basis
   // will be the point at infinity of the line o-u in the source space.
-  vgl_1d_basis(T const& o, T const& u);
+  vgl_1d_basis(const T & o, const T & u);
 
   //: Projection from a point in the source space to a 1-D homogeneous point
-  vgl_homg_point_1d<double> project(T const& p);
+  vgl_homg_point_1d<double>
+  project(const T & p);
 };
 
 //  +-+-+ 1d_basis simple I/O +-+-+
 
 //: Write "<vgl_1d_basis o u i> " to stream
 // \relatesalso vgl_1d_basis
-template <class T> std::ostream& operator<<(std::ostream& s, vgl_1d_basis<T> const&);
+template <class T>
+std::ostream &
+operator<<(std::ostream & s, const vgl_1d_basis<T> &);
 
 #define VGL_1D_BASIS_INSTANTIATE(T) extern "please include vgl/vgl_1d_basis.hxx first"
 

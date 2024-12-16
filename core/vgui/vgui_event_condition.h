@@ -81,7 +81,13 @@ class vgui_event;
 
 struct vgui_event_condition
 {
-  enum event_types { null_event, mouse_event, ascii_char_event, key_event };
+  enum event_types
+  {
+    null_event,
+    mouse_event,
+    ascii_char_event,
+    key_event
+  };
 
   bool on;
   bool pressed;
@@ -92,8 +98,14 @@ struct vgui_event_condition
   event_types how_checked;
 
   //: Initialise event condition and check for impossible events.
-  void init(vgui_key k, vgui_key ascii_char, vgui_button b,
-            vgui_modifier m, bool is_pressed, bool is_on, event_types use_event);
+  void
+  init(vgui_key k,
+       vgui_key ascii_char,
+       vgui_button b,
+       vgui_modifier m,
+       bool is_pressed,
+       bool is_on,
+       event_types use_event);
 
   //: Constructor - create a default event condition.
   // This type of event condition will never be triggered.
@@ -103,23 +115,34 @@ struct vgui_event_condition
   vgui_event_condition(vgui_key ascii_code, bool is_pressed = true);
 
   //: Constructor for a key press event condition (using key and modifier).
-  vgui_event_condition(vgui_key k, vgui_modifier m,  bool is_pressed = true);
+  vgui_event_condition(vgui_key k, vgui_modifier m, bool is_pressed = true);
 
   //: Constructor for a mouse button press event condition.
-  vgui_event_condition(vgui_button b, vgui_modifier m = vgui_MODIFIER_NULL,
-                       bool is_pressed = true);
+  vgui_event_condition(vgui_button b, vgui_modifier m = vgui_MODIFIER_NULL, bool is_pressed = true);
 
-  void enable(bool v = true) { on = v; }
-  void disable(bool v = true) { on = !v; }
+  void
+  enable(bool v = true)
+  {
+    on = v;
+  }
+  void
+  disable(bool v = true)
+  {
+    on = !v;
+  }
 
   //: E.g. if (c_mouse_spin(e))
-  bool operator()(vgui_event const &e) const;
-  bool operator()(vgui_key k, vgui_modifier m) const;
-  bool operator()(vgui_button b, vgui_modifier m) const;
+  bool
+  operator()(const vgui_event & e) const;
+  bool
+  operator()(vgui_key k, vgui_modifier m) const;
+  bool
+  operator()(vgui_button b, vgui_modifier m) const;
 
   //: Text representation such as "shift-middle" or "ctrl-K".
   // If field_width is supplied, pad to that width.
-  std::string as_string(int field_width = 0) const;
+  std::string
+  as_string(int field_width = 0) const;
 };
 
 #endif // vgui_event_condition_h_

@@ -25,13 +25,13 @@
 template <class T>
 class vgl_ellipse_scan_iterator : public vgl_region_scan_iterator
 {
- public:
+public:
   //: Constructor
   //  The ellipse is parameterised by (\a xc, \a yc) (the centre), by \a
   //  rx and \a ry (the radii along the principle axes) and by \a theta,
   //  the rotation of the main axis (in radians) about the centre of the
   //  ellipse w.r.t\. the horizontal direction (X-axis).
-  vgl_ellipse_scan_iterator( T xc, T yc, T rx, T ry, T theta );
+  vgl_ellipse_scan_iterator(T xc, T yc, T rx, T ry, T theta);
 
   //: Destructor
   ~vgl_ellipse_scan_iterator() override;
@@ -39,22 +39,36 @@ class vgl_ellipse_scan_iterator : public vgl_region_scan_iterator
   //: Resets the scan iterator to before the first scan line
   //  After calling this function, next() needs to be called before
   //  startx() and endx() form a valid scan line.
-  void reset() override;
+  void
+  reset() override;
 
   //: Tries to moves to the next scan line.
   //  Returns false if there are no more scan lines.
-  bool next() override;
+  bool
+  next() override;
 
   //: y-coordinate of the current scan line.
-  int  scany() const override { return y_; }
+  int
+  scany() const override
+  {
+    return y_;
+  }
 
   //: Returns starting x-value of the current scan line.
-  int  startx() const override { return start_x_; }
+  int
+  startx() const override
+  {
+    return start_x_;
+  }
 
   //: Returns ending x-value of the current scan line.
-  int  endx() const override { return end_x_; }
+  int
+  endx() const override
+  {
+    return end_x_;
+  }
 
- private:
+private:
   //: Parameters of the ellipse being scan converted.
   //  Centre, squared radii, and angle of rotation about the centre.
   T xc_, yc_, rx_, ry_, theta_;

@@ -35,40 +35,45 @@ public:
     return { -R, -C };
   }
   inline vnl_rnpoly_solve_cmplx
-  operator+(vnl_rnpoly_solve_cmplx const & Y) const
+  operator+(const vnl_rnpoly_solve_cmplx & Y) const
   {
     return { R + Y.R, C + Y.C };
   }
   inline vnl_rnpoly_solve_cmplx
-  operator-(vnl_rnpoly_solve_cmplx const & Y) const
+  operator-(const vnl_rnpoly_solve_cmplx & Y) const
   {
     return { R - Y.R, C - Y.C };
   }
   inline vnl_rnpoly_solve_cmplx &
-  operator+=(vnl_rnpoly_solve_cmplx const & Y)
+  operator+=(const vnl_rnpoly_solve_cmplx & Y)
   {
     R += Y.R;
     C += Y.C;
     return *this;
   }
   inline vnl_rnpoly_solve_cmplx &
-  operator-=(vnl_rnpoly_solve_cmplx const & Y)
+  operator-=(const vnl_rnpoly_solve_cmplx & Y)
   {
     R -= Y.R;
     C -= Y.C;
     return *this;
   }
-  inline vnl_rnpoly_solve_cmplx operator*(vnl_rnpoly_solve_cmplx const & Y) const
+  inline vnl_rnpoly_solve_cmplx
+  operator*(const vnl_rnpoly_solve_cmplx & Y) const
   {
     return { R * Y.R - C * Y.C, R * Y.C + C * Y.R };
   }
   inline vnl_rnpoly_solve_cmplx
-  operator/(vnl_rnpoly_solve_cmplx const & Y) const
+  operator/(const vnl_rnpoly_solve_cmplx & Y) const
   {
     double N = 1.0 / Y.norm();
     return { (R * Y.R + C * Y.C) * N, (C * Y.R - R * Y.C) * N };
   }
-  inline vnl_rnpoly_solve_cmplx operator*(double T) const { return { R * T, C * T }; }
+  inline vnl_rnpoly_solve_cmplx
+  operator*(double T) const
+  {
+    return { R * T, C * T };
+  }
   inline vnl_rnpoly_solve_cmplx &
   operator*=(double T)
   {
@@ -77,7 +82,7 @@ public:
     return *this;
   }
   inline vnl_rnpoly_solve_cmplx &
-  operator*=(vnl_rnpoly_solve_cmplx const & Y)
+  operator*=(const vnl_rnpoly_solve_cmplx & Y)
   {
     double r = R * Y.R - C * Y.C;
     C = R * Y.C + C * Y.R;
@@ -85,7 +90,7 @@ public:
     return *this;
   }
   inline vnl_rnpoly_solve_cmplx &
-  operator/=(vnl_rnpoly_solve_cmplx const & Y)
+  operator/=(const vnl_rnpoly_solve_cmplx & Y)
   {
     return *this = operator/(Y);
   }
@@ -158,7 +163,7 @@ inptbr(std::vector<vnl_rnpoly_solve_cmplx> & p, std::vector<vnl_rnpoly_solve_cmp
 //-----------------------------  POWR  -----------------------
 //: This returns the complex number y raised to the nth degree
 static inline vnl_rnpoly_solve_cmplx
-powr(int n, vnl_rnpoly_solve_cmplx const & y)
+powr(int n, const vnl_rnpoly_solve_cmplx & y)
 {
   vnl_rnpoly_solve_cmplx x(1, 0);
   if (n > 0)
@@ -172,9 +177,9 @@ powr(int n, vnl_rnpoly_solve_cmplx const & y)
 
 
 static void
-initr(std::vector<unsigned int> const & ideg,
-      std::vector<vnl_rnpoly_solve_cmplx> const & p,
-      std::vector<vnl_rnpoly_solve_cmplx> const & q,
+initr(const std::vector<unsigned int> & ideg,
+      const std::vector<vnl_rnpoly_solve_cmplx> & p,
+      const std::vector<vnl_rnpoly_solve_cmplx> & q,
       std::vector<vnl_rnpoly_solve_cmplx> & r,
       std::vector<vnl_rnpoly_solve_cmplx> & pdg,
       std::vector<vnl_rnpoly_solve_cmplx> & qdg)
@@ -207,10 +212,10 @@ degree(int index)
 //: Evaluate the target system component of h.
 //  This is the system of equations that we are trying to find the roots.
 static void
-ffunr(std::vector<double> const & coeff,
-      std::vector<int> const & polyn,
-      std::vector<unsigned int> const & terms,
-      std::vector<vnl_rnpoly_solve_cmplx> const & x,
+ffunr(const std::vector<double> & coeff,
+      const std::vector<int> & polyn,
+      const std::vector<unsigned int> & terms,
+      const std::vector<vnl_rnpoly_solve_cmplx> & x,
       std::vector<vnl_rnpoly_solve_cmplx> & pows,
       std::vector<vnl_rnpoly_solve_cmplx> & f,
       std::vector<vnl_rnpoly_solve_cmplx> & df)
@@ -284,10 +289,10 @@ ffunr(std::vector<double> const & coeff,
 // Evaluate the starting system component of h from a system
 // of equations that we already know the roots. (ex: x^n - 1)
 static void
-gfunr(std::vector<unsigned int> const & ideg,
-      std::vector<vnl_rnpoly_solve_cmplx> const & pdg,
-      std::vector<vnl_rnpoly_solve_cmplx> const & qdg,
-      std::vector<vnl_rnpoly_solve_cmplx> const & pows,
+gfunr(const std::vector<unsigned int> & ideg,
+      const std::vector<vnl_rnpoly_solve_cmplx> & pdg,
+      const std::vector<vnl_rnpoly_solve_cmplx> & qdg,
+      const std::vector<vnl_rnpoly_solve_cmplx> & pows,
       std::vector<vnl_rnpoly_solve_cmplx> & g,
       std::vector<vnl_rnpoly_solve_cmplx> & dg)
 {
@@ -325,17 +330,17 @@ gfunr(std::vector<unsigned int> const & ideg,
 //: This is the routine that traces the curve from the gfunr to the f function
 //  (i.e. Evaluate the continuation function)
 static void
-hfunr(std::vector<unsigned int> const & ideg,
-      std::vector<vnl_rnpoly_solve_cmplx> const & pdg,
-      std::vector<vnl_rnpoly_solve_cmplx> const & qdg,
+hfunr(const std::vector<unsigned int> & ideg,
+      const std::vector<vnl_rnpoly_solve_cmplx> & pdg,
+      const std::vector<vnl_rnpoly_solve_cmplx> & qdg,
       double t,
-      std::vector<vnl_rnpoly_solve_cmplx> const & x,
+      const std::vector<vnl_rnpoly_solve_cmplx> & x,
       std::vector<vnl_rnpoly_solve_cmplx> & h,
       std::vector<vnl_rnpoly_solve_cmplx> & dhx,
       std::vector<vnl_rnpoly_solve_cmplx> & dht,
-      std::vector<int> const & polyn,
-      std::vector<double> const & coeff,
-      std::vector<unsigned int> const & terms)
+      const std::vector<int> & polyn,
+      const std::vector<double> & coeff,
+      const std::vector<unsigned int> & terms)
 {
   assert(ideg.size() == dim_);
   assert(terms.size() == dim_);
@@ -449,9 +454,9 @@ ludcmp(std::vector<vnl_rnpoly_solve_cmplx> & a, std::vector<int> & indx)
 
 // ------------------------- LU Back Substitution -------------------------
 static void
-lubksb(std::vector<vnl_rnpoly_solve_cmplx> const & a,
-       std::vector<int> const & indx,
-       std::vector<vnl_rnpoly_solve_cmplx> const & bb,
+lubksb(const std::vector<vnl_rnpoly_solve_cmplx> & a,
+       const std::vector<int> & indx,
+       const std::vector<vnl_rnpoly_solve_cmplx> & bb,
        std::vector<vnl_rnpoly_solve_cmplx> & b)
 {
   int ii = -1;
@@ -471,7 +476,7 @@ lubksb(std::vector<vnl_rnpoly_solve_cmplx> const & a,
       // A nonzero element was encountered, so from now on we
       // will have to do the sums in the loop above
       if (sum.norm() > 0)
-      ii = i;
+        ii = i;
 
     b[i] = sum;
   }
@@ -491,7 +496,7 @@ lubksb(std::vector<vnl_rnpoly_solve_cmplx> const & a,
 //: Solve a complex system of equations by using l-u decomposition and then back substitution.
 static int
 linnr(std::vector<vnl_rnpoly_solve_cmplx> & dhx,
-      std::vector<vnl_rnpoly_solve_cmplx> const & rhs,
+      const std::vector<vnl_rnpoly_solve_cmplx> & rhs,
       std::vector<vnl_rnpoly_solve_cmplx> & resid)
 {
   std::vector<int> irow(dim_);
@@ -505,7 +510,7 @@ linnr(std::vector<vnl_rnpoly_solve_cmplx> & dhx,
 //-----------------------  XNORM  --------------------
 //: Finds the unit normal of a vector v
 static double
-xnorm(std::vector<vnl_rnpoly_solve_cmplx> const & v)
+xnorm(const std::vector<vnl_rnpoly_solve_cmplx> & v)
 {
   assert(v.size() == dim_);
   double txnorm = 0.0;
@@ -517,15 +522,15 @@ xnorm(std::vector<vnl_rnpoly_solve_cmplx> const & v)
 //---------------------- PREDICT ---------------------
 //: Predict new x vector using Taylor's Expansion.
 static void
-predict(std::vector<unsigned int> const & ideg,
-        std::vector<vnl_rnpoly_solve_cmplx> const & pdg,
-        std::vector<vnl_rnpoly_solve_cmplx> const & qdg,
+predict(const std::vector<unsigned int> & ideg,
+        const std::vector<vnl_rnpoly_solve_cmplx> & pdg,
+        const std::vector<vnl_rnpoly_solve_cmplx> & qdg,
         double step,
         double & t,
         std::vector<vnl_rnpoly_solve_cmplx> & x,
-        std::vector<int> const & polyn,
-        std::vector<double> const & coeff,
-        std::vector<unsigned int> const & terms)
+        const std::vector<int> & polyn,
+        const std::vector<double> & coeff,
+        const std::vector<unsigned int> & terms)
 {
   assert(ideg.size() == dim_);
   assert(terms.size() == dim_);
@@ -578,16 +583,16 @@ predict(std::vector<unsigned int> const & ideg,
 // 2: Didn't converge in 'loop' iterations
 // 3: If the magnitude of x > maxroot
 static int
-correct(std::vector<unsigned int> const & ideg,
+correct(const std::vector<unsigned int> & ideg,
         int loop,
         double eps,
-        std::vector<vnl_rnpoly_solve_cmplx> const & pdg,
-        std::vector<vnl_rnpoly_solve_cmplx> const & qdg,
+        const std::vector<vnl_rnpoly_solve_cmplx> & pdg,
+        const std::vector<vnl_rnpoly_solve_cmplx> & qdg,
         double t,
         std::vector<vnl_rnpoly_solve_cmplx> & x,
-        std::vector<int> const & polyn,
-        std::vector<double> const & coeff,
-        std::vector<unsigned int> const & terms)
+        const std::vector<int> & polyn,
+        const std::vector<double> & coeff,
+        const std::vector<unsigned int> & terms)
 {
   double maxroot = 1000; // Maximum size of root where it is considered heading to infinity
   std::vector<vnl_rnpoly_solve_cmplx> dhx(dim_ * dim_), dht(dim_), h(dim_), resid(dim_);
@@ -630,12 +635,12 @@ correct(std::vector<unsigned int> const & ideg,
 //      4: Singular Jacobian on Path
 static int
 trace(std::vector<vnl_rnpoly_solve_cmplx> & x,
-      std::vector<unsigned int> const & ideg,
-      std::vector<vnl_rnpoly_solve_cmplx> const & pdg,
-      std::vector<vnl_rnpoly_solve_cmplx> const & qdg,
-      std::vector<int> const & polyn,
-      std::vector<double> const & coeff,
-      std::vector<unsigned int> const & terms)
+      const std::vector<unsigned int> & ideg,
+      const std::vector<vnl_rnpoly_solve_cmplx> & pdg,
+      const std::vector<vnl_rnpoly_solve_cmplx> & qdg,
+      const std::vector<int> & polyn,
+      const std::vector<double> & coeff,
+      const std::vector<unsigned int> & terms)
 {
   assert(ideg.size() == dim_);
   assert(terms.size() == dim_);
@@ -733,8 +738,8 @@ trace(std::vector<vnl_rnpoly_solve_cmplx> & x,
 // The new point to start tracing is stored in the x array.
 static void
 strptr(std::vector<unsigned int> & icount,
-       std::vector<unsigned int> const & ideg,
-       std::vector<vnl_rnpoly_solve_cmplx> const & r,
+       const std::vector<unsigned int> & ideg,
+       const std::vector<vnl_rnpoly_solve_cmplx> & r,
        std::vector<vnl_rnpoly_solve_cmplx> & x)
 {
   assert(ideg.size() == dim_);
@@ -759,10 +764,10 @@ strptr(std::vector<unsigned int> & icount,
 
 
 static std::vector<std::vector<vnl_rnpoly_solve_cmplx>>
-Perform_Distributed_Task(std::vector<unsigned int> const & ideg,
-                         std::vector<unsigned int> const & terms,
-                         std::vector<int> const & polyn,
-                         std::vector<double> const & coeff)
+Perform_Distributed_Task(const std::vector<unsigned int> & ideg,
+                         const std::vector<unsigned int> & terms,
+                         const std::vector<int> & polyn,
+                         const std::vector<double> & coeff)
 {
   assert(ideg.size() == dim_);
 

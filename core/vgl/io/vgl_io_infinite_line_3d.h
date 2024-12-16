@@ -17,14 +17,17 @@
 
 //: Binary save vgl_infinite_line_3d to stream.
 template <class T>
-void vsl_b_write(vsl_b_ostream &os, const vgl_infinite_line_3d<T>& v);
+void
+vsl_b_write(vsl_b_ostream & os, const vgl_infinite_line_3d<T> & v);
 
 //: Binary load vgl_infinite_line_3d from stream.
 template <class T>
-void vsl_b_read(vsl_b_istream &is, vgl_infinite_line_3d<T>& v);
+void
+vsl_b_read(vsl_b_istream & is, vgl_infinite_line_3d<T> & v);
 
 //: Print human readable summary of a vgl_infinite_line_3d object to a stream
 template <class T>
-void vsl_print_summary(std::ostream& os,const vgl_infinite_line_3d<T>& v);
+void
+vsl_print_summary(std::ostream & os, const vgl_infinite_line_3d<T> & v);
 
 #endif // #ifndef vgl_io_infinite_line_3d_h_

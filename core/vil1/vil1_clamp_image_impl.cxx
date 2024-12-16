@@ -16,7 +16,7 @@ vil1_clamp_image_impl::get_plane(unsigned int p) const
 }
 
 bool
-vil1_clamp_image_impl::put_section(void const *, int, int, int, int)
+vil1_clamp_image_impl::put_section(const void *, int, int, int, int)
 {
   return false;
 }

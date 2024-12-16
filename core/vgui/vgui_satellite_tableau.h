@@ -87,13 +87,13 @@
 template <class object, class data>
 struct vgui_satellite_tableau_t : public vgui_tableau
 {
-  typedef bool (object::*method)(vgui_event const &, data );
+  typedef bool (object::*method)(const vgui_event &, data);
 
   //: The 'object' type must have a method type_name().
   //  It is used to implement the type_name() methods on the satellites.
-  object *p;
+  object * p;
 
-  method  m;
+  method m;
 
   //: Client data.
   //  The 'data' parameter may seem superfluous because one could
@@ -102,27 +102,45 @@ struct vgui_satellite_tableau_t : public vgui_tableau
   //  is unknown at compile time, or if there are many of them and it
   //  is easier to generate them in code, then the 'data' parameter is
   //  necessary.
-  data    d;
+  data d;
 
   //: Name.
   std::string n;
 
   //: Constructor - don't use this, use vgui_satellite_tableau_t_new.
   //  There is no vgui_satellite_tableau_t_sptr for this tableau.
-  vgui_satellite_tableau_t(object *p_, method m_, data const &d_,
-                           std::string const &n_ = "")
-    : p(p_), m(m_), d(d_), n(n_) { }
+  vgui_satellite_tableau_t(object * p_, method m_, const data & d_, const std::string & n_ = "")
+    : p(p_)
+    , m(m_)
+    , d(d_)
+    , n(n_)
+  {}
 
-  bool handle(vgui_event const &e) { return (p && m) && (p->*m)(e, d); }
+  bool
+  handle(const vgui_event & e)
+  {
+    return (p && m) && (p->*m)(e, d);
+  }
 
-  std::string type_name() const
-  { return std::string("vgui_satellite_tableau_t[") + n + std::string("]"); }
+  std::string
+  type_name() const
+  {
+    return std::string("vgui_satellite_tableau_t[") + n + std::string("]");
+  }
 
   vgui_menu a_menu;
-  void add_popup(vgui_menu &mnu) { mnu.include(a_menu); }
+  void
+  add_popup(vgui_menu & mnu)
+  {
+    mnu.include(a_menu);
+  }
 
- protected:
-  ~vgui_satellite_tableau_t() { p = nullptr; m = nullptr; }
+protected:
+  ~vgui_satellite_tableau_t()
+  {
+    p = nullptr;
+    m = nullptr;
+  }
 };
 
 //----------------------------------------------------------------------------
@@ -132,66 +150,82 @@ struct vgui_satellite_tableau_t : public vgui_tableau
 template <class object>
 struct vgui_satellite_tableau : public vgui_tableau
 {
-  typedef bool (object::*method)(vgui_event const &);
+  typedef bool (object::*method)(const vgui_event &);
 
-  //:The 'object' type must have a method type_name().
+  //: The 'object' type must have a method type_name().
   // It is used to implement the type_name() methods on the satellites.
-  object *p;
+  object * p;
 
-  method  m;
+  method m;
 
   //: Name.
   std::string n;
 
   //: Constructor - don't use this, use vgui_satellite_tableau_new.
   //  There is no vgui_satellite_tableau_sptr for this tableau.
-  vgui_satellite_tableau(object *p_, method m_, std::string const &n_ = "")
-    : p(p_), m(m_), n(n_) { }
+  vgui_satellite_tableau(object * p_, method m_, const std::string & n_ = "")
+    : p(p_)
+    , m(m_)
+    , n(n_)
+  {}
 
-  bool handle(vgui_event const &e) { return (p && m) && (p->*m)(e); }
+  bool
+  handle(const vgui_event & e)
+  {
+    return (p && m) && (p->*m)(e);
+  }
 
-  std::string type_name() const
-  { return std::string("vgui_satellite_tableau[") + n + std::string("]"); }
+  std::string
+  type_name() const
+  {
+    return std::string("vgui_satellite_tableau[") + n + std::string("]");
+  }
 
- protected:
-  ~vgui_satellite_tableau() { p = nullptr; m = nullptr; }
+protected:
+  ~vgui_satellite_tableau()
+  {
+    p = nullptr;
+    m = nullptr;
+  }
 };
 
 //----------------------------------------------------------------------------
 
 template <class object, class data>
-struct vgui_satellite_tableau_t_new : public vgui_tableau_sptr_t<vgui_satellite_tableau_t<object, data> >
+struct vgui_satellite_tableau_t_new : public vgui_tableau_sptr_t<vgui_satellite_tableau_t<object, data>>
 {
   // no vgui_make_sptr: this file must be maintained manually.
   typedef vgui_satellite_tableau_t<object, data> impl;
-  typedef vgui_tableau_sptr_t<impl > base;
+  typedef vgui_tableau_sptr_t<impl> base;
   typedef typename impl::method method;
-  vgui_satellite_tableau_t_new(object *p, method m, data const &d,
-                               std::string const&n=""):base(new impl(p,m,d,n)) {}
+  vgui_satellite_tableau_t_new(object * p, method m, const data & d, const std::string & n = "")
+    : base(new impl(p, m, d, n))
+  {}
 };
 
 //----------------------------------------------------------------------------
 template <class object>
-struct vgui_satellite_tableau_new : public vgui_tableau_sptr_t<vgui_satellite_tableau<object> >
+struct vgui_satellite_tableau_new : public vgui_tableau_sptr_t<vgui_satellite_tableau<object>>
 {
   // no vgui_make_sptr: this file must be maintained manually.
   typedef vgui_satellite_tableau<object> impl;
-  typedef vgui_tableau_sptr_t<impl > base;
+  typedef vgui_tableau_sptr_t<impl> base;
   typedef typename impl::method method;
-  vgui_satellite_tableau_new(object *p, method m, std::string const &n = "")
-    : base(new impl(p, m, n)) { }
+  vgui_satellite_tableau_new(object * p, method m, const std::string & n = "")
+    : base(new impl(p, m, n))
+  {}
 };
 
 //----------------------------------------------------------------------------
 // these could be in the .hxx file but there would be no point to that.
 #undef VGUI_SATELLITE_T_INSTANTIATE
-#define VGUI_SATELLITE_T_INSTANTIATE(C, A) \
-template struct vgui_satellite_tableau_t<C, A >; \
-template struct vgui_satellite_tableau_t_new<C, A >
+#define VGUI_SATELLITE_T_INSTANTIATE(C, A)        \
+  template struct vgui_satellite_tableau_t<C, A>; \
+  template struct vgui_satellite_tableau_t_new<C, A>
 
 #undef VGUI_SATELLITE_INSTANTIATE
-#define VGUI_SATELLITE_INSTANTIATE(C) \
-template struct vgui_satellite_tableau<C >; \
-template struct vgui_satellite_tableau_new<C >
+#define VGUI_SATELLITE_INSTANTIATE(C)        \
+  template struct vgui_satellite_tableau<C>; \
+  template struct vgui_satellite_tableau_new<C>
 
 #endif // vgui_satellite_tableau_h_

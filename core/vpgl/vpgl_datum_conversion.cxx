@@ -31,8 +31,8 @@
 #include "vnl/vnl_math.h"
 
 #define degree_to_rad (vnl_math::pi_over_180) // Degree to rad conv.
-#define dcos(x) std::cos((x)*vnl_math::pi_over_180)
-#define dsin(x) std::sin((x)*vnl_math::pi_over_180)
+#define dcos(x) std::cos((x) * vnl_math::pi_over_180)
+#define dsin(x) std::sin((x) * vnl_math::pi_over_180)
 #define EPSILON 1.0e-12
 
 

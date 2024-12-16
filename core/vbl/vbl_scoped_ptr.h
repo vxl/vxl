@@ -52,25 +52,24 @@
 template <class T>
 class vbl_scoped_ptr
 {
- private:
-  T* ptr_;
+private:
+  T * ptr_;
 
   // not copyable, not assignable.
-  vbl_scoped_ptr( vbl_scoped_ptr const& ) = delete;
-  vbl_scoped_ptr& operator=( vbl_scoped_ptr const& ) = delete;
+  vbl_scoped_ptr(const vbl_scoped_ptr &) = delete;
+  vbl_scoped_ptr &
+  operator=(const vbl_scoped_ptr &) = delete;
 
   typedef vbl_scoped_ptr<T> this_type;
 
 
-
- public:
+public:
   typedef T element_type;
 
   //:
-  explicit vbl_scoped_ptr( T* p = nullptr )
+  explicit vbl_scoped_ptr(T * p = nullptr)
     : ptr_(p) // never throws
-  {
-  }
+  {}
 
   //:
   // T must be complete when this destructor is instantiated.
@@ -80,49 +79,56 @@ class vbl_scoped_ptr
   }
 
   //: Make this own \p p, releasing any existing pointer.
-  void reset( T* p = nullptr ) // never throws
+  void
+  reset(T * p = nullptr) // never throws
   {
     this_type(p).swap(*this);
   }
 
   //:
-  T& operator*() const // never throws
+  T &
+  operator*() const // never throws
   {
     return *ptr_;
   }
 
   //:
-  T* operator->() const // never throws
+  T *
+  operator->() const // never throws
   {
     return ptr_;
   }
 
   //:
-  T* get_pointer() const // never throws
+  T *
+  get_pointer() const // never throws
   {
     return ptr_;
   }
 
-    // implicit conversion to "bool"
+  // implicit conversion to "bool"
 
   //: Safe implicit conversion to bool.
   //
   // This allows for if (sp) type of usage.
-  explicit operator bool () const
+  explicit
+  operator bool() const
   {
     return ptr_ ? true : false;
   }
 
   //:
-  bool operator! () const // never throws
+  bool
+  operator!() const // never throws
   {
     return ptr_ == 0;
   }
 
   //:
-  void swap( vbl_scoped_ptr& b ) // never throws
+  void
+  swap(vbl_scoped_ptr & b) // never throws
   {
-    T* tmp = b.ptr_;
+    T * tmp = b.ptr_;
     b.ptr_ = ptr_;
     ptr_ = tmp;
   }

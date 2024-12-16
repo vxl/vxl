@@ -69,56 +69,79 @@
 template <class T>
 class vgl_conic_2d_regression
 {
- public:
-
+public:
   // Constructors/Initializers/Destructors-------------------------------------
 
   vgl_conic_2d_regression();
 
-  ~vgl_conic_2d_regression()= default;
+  ~vgl_conic_2d_regression() = default;
 
   // Operations----------------------------------------------------------------
 
 
   //: Number of regression points
-  unsigned get_n_pts() const {return npts_;}
+  unsigned
+  get_n_pts() const
+  {
+    return npts_;
+  }
 
   //: clear the regression data
-  void clear_points();
+  void
+  clear_points();
 
-  void add_point(vgl_point_2d<T> const& p);
+  void
+  add_point(const vgl_point_2d<T> & p);
 
-  void remove_point(vgl_point_2d<T> const& p);
+  void
+  remove_point(const vgl_point_2d<T> & p);
 
   //: get the estimated Euclidean error with respect to the fitted conic segment in the original frame
-  T get_rms_error_est(vgl_point_2d<T> const& p) const;
+  T
+  get_rms_error_est(const vgl_point_2d<T> & p) const;
 
   //: get the current Euclidean fitting error in the original frame
-  T get_rms_sampson_error() const { return sampson_error_; } //temporarily
+  T
+  get_rms_sampson_error() const
+  {
+    return sampson_error_;
+  } // temporarily
 
   //: get the current algebraic fitting error in the normalized frame
-  T get_rms_algebraic_error() const;
+  T
+  get_rms_algebraic_error() const;
 
   //: the fitting method
-  bool fit();
+  bool
+  fit();
 
   // Data Access---------------------------------------------------------------
 
-  vgl_conic<T> conic() const { return conic_; }
+  vgl_conic<T>
+  conic() const
+  {
+    return conic_;
+  }
 
   // Debug support
-  void print_pointset(std::ostream& str = std::cout );
- protected:
+  void
+  print_pointset(std::ostream & str = std::cout);
+
+protected:
   // Internals
-  void init();
-  void compute_partial_sums();
-  void fill_scatter_matrix();
-  void set_sampson_error(T a, T b, T c, T d, T e, T f);
+  void
+  init();
+  void
+  compute_partial_sums();
+  void
+  fill_scatter_matrix();
+  void
+  set_sampson_error(T a, T b, T c, T d, T e, T f);
 
   // Data Members--------------------------------------------------------------
 
   //: The current set of points
-  std::vector<vgl_point_2d<T> > points_;
+  std::vector<vgl_point_2d<T>> points_;
 
   //: Size of point set
   unsigned npts_;
@@ -130,8 +153,8 @@ class vgl_conic_2d_regression
   std::vector<T> partial_sums_;
 
   //: The fitting matrices
-  vnl_matrix_fixed<T,3,3> S11_, S12_, S22_;
-  vnl_matrix_fixed<T,3,3> Dinv_;
+  vnl_matrix_fixed<T, 3, 3> S11_, S12_, S22_;
+  vnl_matrix_fixed<T, 3, 3> Dinv_;
 
   //: The fitted conic in the un-normalized frame
   vgl_conic<T> conic_;
@@ -143,7 +166,7 @@ class vgl_conic_2d_regression
   T sampson_error_;
 
   //: Normalized points
-  std::vector<vgl_homg_point_2d<T> > hnorm_points_;
+  std::vector<vgl_homg_point_2d<T>> hnorm_points_;
 };
 
 #define VGL_CONIC_2D_REGRESSION_INSTANTIATE(T) extern "please include vgl/algo/vgl_conic_2d_regression.hxx first"

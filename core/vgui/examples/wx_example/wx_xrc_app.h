@@ -22,7 +22,7 @@ class wx_xrc_frame;
 //-------------------------------------------------------------------------
 class wx_xrc_app : public wxApp
 {
- public:
+public:
   //: Constructor - default.
   wx_xrc_app();
 
@@ -30,13 +30,18 @@ class wx_xrc_app : public wxApp
   virtual ~wx_xrc_app() {}
 
   //: Called on app initialization.
-  virtual bool OnInit();
+  virtual bool
+  OnInit();
 
   //: Provides access to this Apps main frame.
-  wx_xrc_frame* get_main_frame() const { return frame_; }
+  wx_xrc_frame *
+  get_main_frame() const
+  {
+    return frame_;
+  }
 
- private:
-  wx_xrc_frame*  frame_;
+private:
+  wx_xrc_frame * frame_;
 };
 
 //: Implements wx_xrc_app& wxGetApp().

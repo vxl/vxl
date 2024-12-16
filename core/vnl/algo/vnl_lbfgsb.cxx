@@ -67,7 +67,7 @@ vnl_lbfgsb::minimize(vnl_vector<double> & x)
 
   // Verbosity level inside lbfgs implementation.
   // (-1 no o/p, 0 start and end, 1 every iter)
-  long const iprint = trace ? 1 : -1;
+  const long iprint = trace ? 1 : -1;
 
   // Initialize iteration.
   this->num_evaluations_ = 0;

@@ -39,200 +39,298 @@
 template <class T>
 class vil_image_view : public vil_image_view_base
 {
- private:
-
- protected:
+private:
+protected:
   //: Pointer to pixel at origin.
   T * top_left_;
   //: Add this to a pixel pointer to move one column left.
-  std::ptrdiff_t istep_{0};
+  std::ptrdiff_t istep_{ 0 };
   //: Add this to a pixel pointer to move one row down.
-  std::ptrdiff_t jstep_{0};
+  std::ptrdiff_t jstep_{ 0 };
   //: Add this to a pixel pointer to move one plane back.
-  std::ptrdiff_t planestep_{0};
+  std::ptrdiff_t planestep_{ 0 };
 
   //: Reference to actual image data.
   vil_memory_chunk_sptr ptr_;
 
   //: Disconnect this view from the underlying data,
-  void release_memory() { ptr_ = nullptr; }
+  void
+  release_memory()
+  {
+    ptr_ = nullptr;
+  }
 
- public:
+public:
   //: Dflt ctor
   //  Creates an empty one-plane image.
-   vil_image_view() : top_left_(nullptr) {}
+  vil_image_view()
+    : top_left_(nullptr)
+  {}
 
-   //: Create an image of ni x nj pixels in (n_planes * n_interleaved_planes)
-   //planes
-   //  If n_interleaved_planes > 1, the planes are interleaved.
-   //  If n_planes > 1, each plane of pixels is stored contiguously.
-   //  n_planes and n_interleaved_planes should not be both different from 1.
-   //  n_planes * n_interleaved_planes should be 1 unless T is scalar.
-   vil_image_view(unsigned ni, unsigned nj, unsigned n_planes = 1,
-                  unsigned n_interleaved_planes = 1);
+  //: Create an image of ni x nj pixels in (n_planes * n_interleaved_planes)
+  // planes
+  //   If n_interleaved_planes > 1, the planes are interleaved.
+  //   If n_planes > 1, each plane of pixels is stored contiguously.
+  //   n_planes and n_interleaved_planes should not be both different from 1.
+  //   n_planes * n_interleaved_planes should be 1 unless T is scalar.
+  vil_image_view(unsigned ni, unsigned nj, unsigned n_planes = 1, unsigned n_interleaved_planes = 1);
 
-   //: Set this view to look at someone else's memory data.
-   //  If the data goes out of scope then this view could be invalid, and
-   //  there's no way of knowing until it's too late - so take care!
-   vil_image_view(const T *top_left, unsigned ni, unsigned nj, unsigned nplanes,
-                  std::ptrdiff_t i_step, std::ptrdiff_t j_step,
-                  std::ptrdiff_t plane_step);
+  //: Set this view to look at someone else's memory data.
+  //  If the data goes out of scope then this view could be invalid, and
+  //  there's no way of knowing until it's too late - so take care!
+  vil_image_view(const T * top_left,
+                 unsigned ni,
+                 unsigned nj,
+                 unsigned nplanes,
+                 std::ptrdiff_t i_step,
+                 std::ptrdiff_t j_step,
+                 std::ptrdiff_t plane_step);
 
-   //: Set this view to look at another view's data
-   //  Typically used by functions which generate a manipulated view of
-   //  another's image data.
-   //  Need to pass the memory chunk to set up the internal smart ptr
-   //  appropriately
-   vil_image_view(const vil_memory_chunk_sptr &mem_chunk, const T *top_left,
-                  unsigned ni, unsigned nj, unsigned nplanes,
-                  std::ptrdiff_t i_step, std::ptrdiff_t j_step,
-                  std::ptrdiff_t plane_step);
+  //: Set this view to look at another view's data
+  //  Typically used by functions which generate a manipulated view of
+  //  another's image data.
+  //  Need to pass the memory chunk to set up the internal smart ptr
+  //  appropriately
+  vil_image_view(const vil_memory_chunk_sptr & mem_chunk,
+                 const T * top_left,
+                 unsigned ni,
+                 unsigned nj,
+                 unsigned nplanes,
+                 std::ptrdiff_t i_step,
+                 std::ptrdiff_t j_step,
+                 std::ptrdiff_t plane_step);
 
-   //: Copy constructor.
-   // The new object will point to the same underlying image as the rhs.
-   vil_image_view(const vil_image_view<T> &rhs);
+  //: Copy constructor.
+  // The new object will point to the same underlying image as the rhs.
+  vil_image_view(const vil_image_view<T> & rhs);
 
-   //: Construct from various vil_image_view types.
-   // The new object will point to the same underlying image as the rhs
-   // You can assign a vil_image_view<compound_type<T>> to a vil_image_view<T>
-   // in all reasonable cases - the lhs will have as many planes as the rhs has
-   // components. You can assign a vil_image_view<T> to a
-   // vil_image_view<compound_type<T>> when the underlying data is formatted
-   // appropriately and the lhs has as many components as the rhs has planes.
-   // O(1). If the view types are not compatible this object will be set to
-   // empty.
-   vil_image_view(const vil_image_view_base &rhs);
+  //: Construct from various vil_image_view types.
+  // The new object will point to the same underlying image as the rhs
+  // You can assign a vil_image_view<compound_type<T>> to a vil_image_view<T>
+  // in all reasonable cases - the lhs will have as many planes as the rhs has
+  // components. You can assign a vil_image_view<T> to a
+  // vil_image_view<compound_type<T>> when the underlying data is formatted
+  // appropriately and the lhs has as many components as the rhs has planes.
+  // O(1). If the view types are not compatible this object will be set to
+  // empty.
+  vil_image_view(const vil_image_view_base & rhs);
 
-   //: Construct from various vil_image_view types.
-   // The new object will point to the same underlying image as the rhs.
-   //
-   // You can assign a vil_image_view<compound_type<T>> to a vil_image_view<T>
-   // in all reasonable cases - the lhs will have as many planes as the rhs has
-   // components. You can assign a vil_image_view<T> to a
-   // vil_image_view<compound_type<T>> when the underlying data is formatted
-   // appropriately and the lhs has as many components as the rhs has planes.
-   // O(1). \throws vil_exception_pixel_formats_incompatible if view types are
-   // not compatible. Or returns a null image if exceptions are disabled.
-   vil_image_view(const vil_image_view_base_sptr &rhs);
+  //: Construct from various vil_image_view types.
+  // The new object will point to the same underlying image as the rhs.
+  //
+  // You can assign a vil_image_view<compound_type<T>> to a vil_image_view<T>
+  // in all reasonable cases - the lhs will have as many planes as the rhs has
+  // components. You can assign a vil_image_view<T> to a
+  // vil_image_view<compound_type<T>> when the underlying data is formatted
+  // appropriately and the lhs has as many components as the rhs has planes.
+  // O(1). \throws vil_exception_pixel_formats_incompatible if view types are
+  // not compatible. Or returns a null image if exceptions are disabled.
+  vil_image_view(const vil_image_view_base_sptr & rhs);
 
-   //  Destructor
-   ~vil_image_view() override = default;
+  //  Destructor
+  ~vil_image_view() override = default;
 
-   // === Standard container stuff ===
-   // This assumes that the data is arranged contiguously.
-   // Is this assumption good?
+  // === Standard container stuff ===
+  // This assumes that the data is arranged contiguously.
+  // Is this assumption good?
 
-   //: The pixel type of this image
-   typedef T pixel_type;
+  //: The pixel type of this image
+  typedef T pixel_type;
 
-   //: True if data all in one unbroken block and top_left_ptr() is lowest data
-   //address
-   bool is_contiguous() const;
+  //: True if data all in one unbroken block and top_left_ptr() is lowest data
+  // address
+  bool
+  is_contiguous() const;
 
-   // === iterators ===
+  // === iterators ===
 
-   typedef T *iterator;
-   inline iterator begin() {
-     assert(is_contiguous());
-     return top_left_; }
-  inline iterator end  () { assert(is_contiguous()); return top_left_ + size(); }
+  typedef T * iterator;
+  inline iterator
+  begin()
+  {
+    assert(is_contiguous());
+    return top_left_;
+  }
+  inline iterator
+  end()
+  {
+    assert(is_contiguous());
+    return top_left_ + size();
+  }
 
-  typedef T const *const_iterator;
-  inline const_iterator begin() const { assert(is_contiguous()); return top_left_; }
-  inline const_iterator end  () const { assert(is_contiguous()); return top_left_ + size(); }
+  typedef const T * const_iterator;
+  inline const_iterator
+  begin() const
+  {
+    assert(is_contiguous());
+    return top_left_;
+  }
+  inline const_iterator
+  end() const
+  {
+    assert(is_contiguous());
+    return top_left_ + size();
+  }
 
   // === arithmetic indexing stuff ===
 
   //: Pointer to the first (top left in plane 0) pixel.
   //  Note that this is not necessarily the lowest data memory address.
-  inline T * top_left_ptr() { return top_left_; }  // Make origin explicit
+  inline T *
+  top_left_ptr()
+  {
+    return top_left_;
+  } // Make origin explicit
   //: Pointer to the first (top left in plane 0) pixel.
   //  Note that this is not necessarily the lowest data memory address.
-  inline const T * top_left_ptr() const { return top_left_; }
+  inline const T *
+  top_left_ptr() const
+  {
+    return top_left_;
+  }
 
   //: Add this to your pixel pointer to get next i pixel.
   //  Note that istep() may well be negative; see e.g. vil_flip_lr
-  inline std::ptrdiff_t istep() const { return istep_; }
+  inline std::ptrdiff_t
+  istep() const
+  {
+    return istep_;
+  }
   //: Add this to your pixel pointer to get next j pixel.
   //  Note that jstep() may well be negative; see e.g. vil_flip_ud
-  inline std::ptrdiff_t jstep() const { return jstep_; }
+  inline std::ptrdiff_t
+  jstep() const
+  {
+    return jstep_;
+  }
   //: Add this to your pixel pointer to get pixel on next plane.
   //  Note that planestep() may well be negative, e.g. with BMP file images
-  inline std::ptrdiff_t planestep() const { return planestep_; }
+  inline std::ptrdiff_t
+  planestep() const
+  {
+    return planestep_;
+  }
 
   //: Cast to bool is true if pointing at some data.
   /* The old 'safe_bool' did implicit conversions, best practice would be to use explicit operator bool */
-  operator bool() const
-  { return (top_left_ != nullptr)? true : false; }
+  operator bool() const { return (top_left_ != nullptr) ? true : false; }
 
   //: Return false if pointing at some data.
-  bool operator!() const
-  { return (top_left_ != nullptr)? false : true; }
+  bool
+  operator!() const
+  {
+    return (top_left_ != nullptr) ? false : true;
+  }
 
   //: The number of bytes in the data
-  inline unsigned size_bytes() const { return size() * sizeof(T); }
+  inline unsigned
+  size_bytes() const
+  {
+    return size() * sizeof(T);
+  }
 
   //: Smart pointer to the object holding the data for this view
   // Will be a null pointer if this view looks at `third-party' data,
   // e.g. using set_to_memory.
   //
   // Typically used when creating new views of the data
-  inline const vil_memory_chunk_sptr& memory_chunk() const { return ptr_; }
+  inline const vil_memory_chunk_sptr &
+  memory_chunk() const
+  {
+    return ptr_;
+  }
 
   //: Smart pointer to the object holding the data for this view
   // Will be a null pointer if this view looks at `third-party' data,
   // e.g. using set_to_memory
   //
   // Typically used when creating new views of the data
-  inline vil_memory_chunk_sptr& memory_chunk() { return ptr_; }
+  inline vil_memory_chunk_sptr &
+  memory_chunk()
+  {
+    return ptr_;
+  }
 
   // === Ordinary image indexing stuff. ===
 
   //: Return true if (i,j) is a valid index into this buffer.
-  inline bool in_range(int i, int j) const
-  { return (i>-1) && (i<(int)ni_) && (j>-1) && (j<(int)nj_); }
+  inline bool
+  in_range(int i, int j) const
+  {
+    return (i > -1) && (i < (int)ni_) && (j > -1) && (j < (int)nj_);
+  }
 
   //: Return true if (i,j,p) is a valid index into this buffer.
-  inline bool in_range(int i, int j, int p) const
-  { return (i>-1) && (i<(int)ni_) && (j>-1) && (j<(int)nj_)
-           && (p>-1) && (p<(int)nplanes_); }
+  inline bool
+  in_range(int i, int j, int p) const
+  {
+    return (i > -1) && (i < (int)ni_) && (j > -1) && (j < (int)nj_) && (p > -1) && (p < (int)nplanes_);
+  }
 
   //: Return read-only reference to pixel at (i,j) in plane 0.
-  inline const T& operator()(unsigned i, unsigned j) const {
-    assert(i<ni_); assert(j<nj_);
-    return top_left_[jstep_*j+i*istep_]; }
+  inline const T &
+  operator()(unsigned i, unsigned j) const
+  {
+    assert(i < ni_);
+    assert(j < nj_);
+    return top_left_[jstep_ * j + i * istep_];
+  }
 
   //: Return read/write reference to pixel at (i,j) in plane 0.
-  inline T&       operator()(unsigned i, unsigned j) {
-    assert(i<ni_); assert(j<nj_);
-    return top_left_[istep_*i+j*jstep_]; }
+  inline T &
+  operator()(unsigned i, unsigned j)
+  {
+    assert(i < ni_);
+    assert(j < nj_);
+    return top_left_[istep_ * i + j * jstep_];
+  }
 
   //: Return read-only reference to pixel at (i,j) in plane p.
-  inline const T& operator()(unsigned i, unsigned j, unsigned p) const {
-    assert(i<ni_); assert(j<nj_); assert(p<nplanes_);
-    return top_left_[p*planestep_ + j*jstep_ + i*istep_]; }
+  inline const T &
+  operator()(unsigned i, unsigned j, unsigned p) const
+  {
+    assert(i < ni_);
+    assert(j < nj_);
+    assert(p < nplanes_);
+    return top_left_[p * planestep_ + j * jstep_ + i * istep_];
+  }
 
   //: Return read-only reference to pixel at (i,j) in plane p.
-  inline T&       operator()(unsigned i, unsigned j, unsigned p) {
-    assert(i<ni_); assert(j<nj_); assert(p<nplanes_);
-    return top_left_[p*planestep_ + j*jstep_ + i*istep_]; }
+  inline T &
+  operator()(unsigned i, unsigned j, unsigned p)
+  {
+    assert(i < ni_);
+    assert(j < nj_);
+    assert(p < nplanes_);
+    return top_left_[p * planestep_ + j * jstep_ + i * istep_];
+  }
 
   // === image stuff ===
 
   //: resize current planes to ni x nj
   // If already correct size, this function returns quickly
-  void set_size(unsigned ni, unsigned nj) override;
+  void
+  set_size(unsigned ni, unsigned nj) override;
 
   //: resize to ni x nj x nplanes
   // If already correct size, this function returns quickly
-  void set_size(unsigned ni, unsigned nj, unsigned nplanes) override;
+  void
+  set_size(unsigned ni, unsigned nj, unsigned nplanes) override;
 
   //: Make a copy of the data in src and set this to view it
-  void deep_copy(const vil_image_view<T>& src);
+  void
+  deep_copy(const vil_image_view<T> & src);
 
   //: Make empty.
   // Disconnects view from underlying data.
-  inline void clear() { release_memory(); ni_=nj_=nplanes_=0; top_left_=nullptr; istep_=jstep_=planestep_=0; }
+  inline void
+  clear()
+  {
+    release_memory();
+    ni_ = nj_ = nplanes_ = 0;
+    top_left_ = nullptr;
+    istep_ = jstep_ = planestep_ = 0;
+  }
 
   //: Set this view to look at someone else's memory data.
   //  If the data goes out of scope then this view could be invalid, and
@@ -240,54 +338,84 @@ class vil_image_view : public vil_image_view_base
   //
   //  Note that though top_left is passed in as const, the data may be manipulated
   //  through the view.
-  void set_to_memory(const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
-                     std::ptrdiff_t i_step, std::ptrdiff_t j_step, std::ptrdiff_t plane_step);
+  void
+  set_to_memory(const T * top_left,
+                unsigned ni,
+                unsigned nj,
+                unsigned nplanes,
+                std::ptrdiff_t i_step,
+                std::ptrdiff_t j_step,
+                std::ptrdiff_t plane_step);
 
   //: Fill view with given value
-  void fill(T value);
+  void
+  fill(T value);
 
   //: Print a 1-line summary of contents
-  void print(std::ostream&) const override;
+  void
+  print(std::ostream &) const override;
 
   //: Return class name
-  std::string is_a() const override;
+  std::string
+  is_a() const override;
 
   //: True if this is (or is derived from) class s
-  bool is_class(std::string const& s) const override;
+  bool
+  is_class(const std::string & s) const override;
 
   //: Return a description of the concrete data pixel type.
   // The value corresponds directly to pixel_type.
-  inline vil_pixel_format pixel_format() const override { return vil_pixel_format_of(T()); }
+  inline vil_pixel_format
+  pixel_format() const override
+  {
+    return vil_pixel_format_of(T());
+  }
 
   //: True if they share same view of same image data.
   //  This does not do a deep equality on image data. If the images point
   //  to different image data objects that contain identical images, then
   //  the result will still be false.
-  bool operator==(const vil_image_view_base& other) const;
+  bool
+  operator==(const vil_image_view_base & other) const;
 
   //: True if they do not share same view of same image data.
   //  This does not do a deep inequality on image data. If the images point
   //  to different image data objects that contain identical images, then
   //  the result will still be true.
-  inline bool operator!=(const vil_image_view_base& rhs) const { return !operator==(rhs); }
+  inline bool
+  operator!=(const vil_image_view_base & rhs) const
+  {
+    return !operator==(rhs);
+  }
 
   //: Provides an ordering.
   //  Useful for ordered containers.
   //  There is no guaranteed meaning to the less than operator, except that
   //  (a<b && b<a)  is false and  !(a<b) && !(b<a)  is equivalent to  a==b
-  bool operator<(const vil_image_view_base& rhs) const;
+  bool
+  operator<(const vil_image_view_base & rhs) const;
 
   //: Provides an ordering.
-  inline bool operator>=(const vil_image_view_base& rhs) const { return !operator<(rhs); }
+  inline bool
+  operator>=(const vil_image_view_base & rhs) const
+  {
+    return !operator<(rhs);
+  }
 
   //: Provides an ordering.
-  bool operator>(const vil_image_view_base& rhs) const;
+  bool
+  operator>(const vil_image_view_base & rhs) const;
 
   //: Provides an ordering.
-  inline bool operator<=(const vil_image_view_base & rhs) const { return !operator>(rhs); }
+  inline bool
+  operator<=(const vil_image_view_base & rhs) const
+  {
+    return !operator>(rhs);
+  }
 
   //: Copy a view. The rhs and lhs will point to the same image data.
-  const vil_image_view<T>& operator=(const vil_image_view<T>& rhs);
+  const vil_image_view<T> &
+  operator=(const vil_image_view<T> & rhs);
 
   //: Copy a view. The rhs and lhs will point to the same image data.
   // You can assign a vil_image_view<compound_type<T>> to a vil_image_view<T>
@@ -296,7 +424,8 @@ class vil_image_view : public vil_image_view_base
   // when the underlying data is formatted appropriately and the lhs has
   // as many components as the rhs has planes. O(1).
   // If the view types are not compatible this object will be set to empty.
-  const vil_image_view<T>& operator=(const vil_image_view_base & rhs);
+  const vil_image_view<T> &
+  operator=(const vil_image_view_base & rhs);
 
   //: Copy a view. The rhs and lhs will point to the same image data.
   // You can assign a vil_image_view<compound_type<T>> to a vil_image_view<T>
@@ -307,20 +436,24 @@ class vil_image_view : public vil_image_view_base
   // If the view types are not compatible this object will be set to empty.
   // If the pointer is null, this object will be set to empty.
   // See also vil_convert_to_component_order().
-  inline const vil_image_view<T>& operator=(const vil_image_view_base_sptr& rhs)
+  inline const vil_image_view<T> &
+  operator=(const vil_image_view_base_sptr & rhs)
   {
-    if (!rhs) clear();
-    else *this = *rhs;
+    if (!rhs)
+      clear();
+    else
+      *this = *rhs;
     return *this;
   }
 };
 
 //: Print a 1-line summary of contents
 template <class T>
-inline
-std::ostream& operator<<(std::ostream& s, vil_image_view<T> const& im)
+inline std::ostream &
+operator<<(std::ostream & s, const vil_image_view<T> & im)
 {
-  im.print(s); return s;
+  im.print(s);
+  return s;
 }
 
 //: True if the actual images are identical.
@@ -328,7 +461,8 @@ std::ostream& operator<<(std::ostream& s, vil_image_view<T> const& im)
 // The data may be formatted differently in each memory chunk.
 //  O(size).
 // \relatesalso vil_image_view
-template<class T>
-bool vil_image_view_deep_equality(const vil_image_view<T> &lhs, const vil_image_view<T> &rhs);
+template <class T>
+bool
+vil_image_view_deep_equality(const vil_image_view<T> & lhs, const vil_image_view<T> & rhs);
 
 #endif // vil_image_view_h_

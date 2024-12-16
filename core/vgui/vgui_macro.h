@@ -11,7 +11,7 @@
 
 //: Handy gl debugging macro.
 //  Sprinkle through your code, and it will report any accumulated OpenGL errors
-#define vgui_macro_report_errors vgui_macro_error_reporter(__FILE__,__LINE__)
+#define vgui_macro_report_errors vgui_macro_error_reporter(__FILE__, __LINE__)
 
 
 //: Handy for printing warnings stamped with the location of the source line.
@@ -21,6 +21,7 @@
 
 
 // internals
-extern void vgui_macro_error_reporter(char const *FILE, int LINE);
+extern void
+vgui_macro_error_reporter(const char * FILE, int LINE);
 
 #endif // vgui_macro_h_

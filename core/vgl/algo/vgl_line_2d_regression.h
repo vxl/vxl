@@ -28,40 +28,50 @@ template <class T>
 class vgl_line_2d_regression
 {
   // Data members
-  unsigned int npts_;//!< number of points in the regression data
-  vgl_line_2d<T> line_;//!< the fitted line
-  T Sx_, Sy_, Sxx_, Sxy_, Syy_;//!< partial sums
-  double squared_error_;//!< an estimate of the squared error
- public:
+  unsigned int npts_;           //!< number of points in the regression data
+  vgl_line_2d<T> line_;         //!< the fitted line
+  T Sx_, Sy_, Sxx_, Sxy_, Syy_; //!< partial sums
+  double squared_error_;        //!< an estimate of the squared error
+public:
   vgl_line_2d_regression();
   ~vgl_line_2d_regression() = default;
 
   //: The number of points added.
-  inline unsigned int get_n_pts() const { return npts_; }
+  inline unsigned int
+  get_n_pts() const
+  {
+    return npts_;
+  }
 
   //: Add a point to the 2d_regression
-  void increment_partial_sums(const T x, const T y);
+  void
+  increment_partial_sums(const T x, const T y);
 
   //: Remove a point from the 2d_regression
   //
   //  This should be a previously added point, although this cannot be
   //  verified.
-  void decrement_partial_sums(const T x, const T y);
+  void
+  decrement_partial_sums(const T x, const T y);
 
   //: Clear 2d_regression sums
   //
   //  This will reset the object to the freshly constructed state of having
   //  zero points.
-  void clear();
+  void
+  clear();
 
   //: Get fitting error for a given line
-  double get_rms_error(const T a, const T b, const T c);
+  double
+  get_rms_error(const T a, const T b, const T c);
 
   //: Get fitting error for current fitted line
-  double get_rms_error();
+  double
+  get_rms_error();
 
   //: Initialize estimated fitting error
-  void init_rms_error_est();
+  void
+  init_rms_error_est();
 
   //: Get estimated fitting error if the point (x, y) were added to the fit
   //
@@ -73,16 +83,23 @@ class vgl_line_2d_regression
   //  the point set, however, so the point will not affect subsequent
   //  line estimation.
   //
-  double get_rms_error_est(vgl_point_2d<T> const& p, bool increment=true);
+  double
+  get_rms_error_est(const vgl_point_2d<T> & p, bool increment = true);
 
   //: Get the fitted line
-  vgl_line_2d<T> get_line() const { return line_; }
+  vgl_line_2d<T>
+  get_line() const
+  {
+    return line_;
+  }
 
   //: Fit a line to the current point set
-  bool fit();
+  bool
+  fit();
 
   //: Fit a line to the current point set constrained to pass through (x,y).
-  bool fit_constrained(T x, T y);
+  bool
+  fit_constrained(T x, T y);
 };
 
 #define VGL_LINE_2D_REGRESSION_INSTANTIATE(T) extern "please include vgl/algo/vgl_line_2d_regression.hxx first"

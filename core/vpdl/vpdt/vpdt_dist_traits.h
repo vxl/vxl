@@ -17,7 +17,6 @@
 #include <vpdl/vpdt/vpdt_field_traits.h>
 
 
-
 //: The distribution traits class
 //  traits are taken from vpdt_field_traits
 template <class dist>
@@ -33,7 +32,6 @@ struct vpdt_dist_traits
   typedef typename vpdt_field_traits<field_type>::vector_type vector_type;
   //: the data type used for square matrices
   typedef typename vpdt_field_traits<field_type>::matrix_type matrix_type;
-
 };
 
 

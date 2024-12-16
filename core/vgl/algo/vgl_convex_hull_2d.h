@@ -21,17 +21,21 @@
 template <class T>
 class vgl_convex_hull_2d
 {
- public:
-  vgl_convex_hull_2d (std::vector<vgl_point_2d<T> > const& points);
-  ~vgl_convex_hull_2d () = default;
-  vgl_polygon<T>  hull();
+public:
+  vgl_convex_hull_2d(const std::vector<vgl_point_2d<T>> & points);
+  ~vgl_convex_hull_2d() = default;
+  vgl_polygon<T>
+  hull();
   //: the oriented box enclosing the hull with minimum area
-  vgl_oriented_box_2d<T> min_area_enclosing_rectangle();
- private:
+  vgl_oriented_box_2d<T>
+  min_area_enclosing_rectangle();
+
+private:
   vgl_convex_hull_2d() = delete;
   bool hull_valid_;
-  void compute_hull();
-  std::vector<vgl_point_2d<T> > points_;
+  void
+  compute_hull();
+  std::vector<vgl_point_2d<T>> points_;
   vgl_polygon<T> hull_;
 };
 

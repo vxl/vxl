@@ -614,16 +614,16 @@ test_cylinder_3d_closest_point()
   std::cout << "-------------------------------------------------\n"
             << " Testing vgl_closest_point(3-d cylinder):\n"
             << "-------------------------------------------------\n";
-  vgl_vector_3d<double> orient(0.0, 0.0, 1.0);//z axis
+  vgl_vector_3d<double> orient(0.0, 0.0, 1.0); // z axis
   vgl_point_3d<double> cent(0.0, 0.0, 0.0);
   double radius = 1.0;
   // infinite cylinder
   vgl_cylinder_3d<double> c(cent, radius, std::numeric_limits<double>::max());
   vgl_point_3d<double> p(5.0, 5.0, 5.0);
   vgl_point_3d<double> cp = vgl_closest_point(c, p);
-  double sq2over2 = sqrt(2.0)/2.0;
+  double sq2over2 = sqrt(2.0) / 2.0;
   vgl_point_3d<double> gt(sq2over2, sq2over2, 5.0);
-  double er = (cp-gt).length();
+  double er = (cp - gt).length();
   TEST_NEAR("Closest point on cylinder", er, 0.0, 1.e-5);
 }
 

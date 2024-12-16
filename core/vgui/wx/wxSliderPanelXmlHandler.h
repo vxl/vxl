@@ -9,7 +9,6 @@
 //
 
 
-
 #include <wx/xrc/xmlres.h>
 #include <vgui/wx/wxSliderPanel.h>
 
@@ -21,9 +20,11 @@ class WXDLLIMPEXP_XRC wxSliderPanelXmlHandler : public wxXmlResourceHandler
 
 public:
   wxSliderPanelXmlHandler();
-  virtual wxObject *DoCreateResource();
-  virtual bool CanHandle(wxXmlNode *node);
+  virtual wxObject *
+  DoCreateResource();
+  virtual bool
+  CanHandle(wxXmlNode * node);
 };
 
 
-#endif  //wxSliderPanelXmlHandler_h_
+#endif // wxSliderPanelXmlHandler_h_

@@ -32,27 +32,27 @@
 #include <vpgl/vpgl_camera.h>
 
 
-template<typename T>
+template <typename T>
 class vpgl_ray_intersect
 {
- public:
-
+public:
   vpgl_ray_intersect(unsigned dim);
   ~vpgl_ray_intersect() = default;
 
   //: Intersect the rays. return false if intersection fails
   // Note image points are not homogeneous because require
   // finite points to measure projection error
-  bool intersect(std::vector<const vpgl_camera<T>* > const& cams,
-                 std::vector<vgl_point_2d<T> > const& image_pts,
-                 vgl_point_3d<T> const& initial_intersection,
-                 vgl_point_3d<T>& intersection);
+  bool
+  intersect(const std::vector<const vpgl_camera<T> *> & cams,
+            const std::vector<vgl_point_2d<T>> & image_pts,
+            const vgl_point_3d<T> & initial_intersection,
+            vgl_point_3d<T> & intersection);
 
- protected:
-  //members
+protected:
+  // members
   unsigned dim_;
-  std::vector<const vpgl_camera<T>* > f_cameras_; //cameras
-  std::vector<vgl_point_2d<T> > f_image_pts_; //image points
+  std::vector<const vpgl_camera<T> *> f_cameras_; // cameras
+  std::vector<vgl_point_2d<T>> f_image_pts_;      // image points
 };
 
 

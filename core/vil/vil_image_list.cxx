@@ -13,7 +13,7 @@
 
 static bool il_verbose = false;
 bool
-vil_image_list::vil_is_directory(char const * fn)
+vil_image_list::vil_is_directory(const char * fn)
 {
   struct stat fs;
   return stat(fn, &fs) == 0 && (fs.st_mode & S_IFMT) == S_IFDIR;
@@ -27,7 +27,7 @@ vil_image_list::files()
   std::vector<std::string> temp;
   if (!this->vil_is_directory(directory_.c_str()))
     return temp;
-    // This mess should go away soon.
+  // This mess should go away soon.
 #  if defined __MINGW32__
   typedef long handle_type; // works with msvc6
 #  else
@@ -146,7 +146,7 @@ vil_image_list::pyramids()
   }
   return temp;
 }
-//:remove a file
+//: remove a file
 bool
 vil_image_list::remove_file(std::string & filename)
 {
@@ -158,7 +158,7 @@ vil_image_list::remove_file(std::string & filename)
   return std::system(command.c_str()) == 0;
 }
 
-//:removes all files from the directory. sub-directories are not touched
+//: removes all files from the directory. sub-directories are not touched
 bool
 vil_image_list::clean_directory()
 {

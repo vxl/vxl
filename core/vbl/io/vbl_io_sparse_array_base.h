@@ -15,14 +15,17 @@
 
 //: Binary save vbl_sparse_array_base to stream.
 template <class T, class Index>
-void vsl_b_write(vsl_b_ostream &os, const vbl_sparse_array_base<T, Index> & v);
+void
+vsl_b_write(vsl_b_ostream & os, const vbl_sparse_array_base<T, Index> & v);
 
 //: Binary load vbl_sparse_array_base from stream.
 template <class T, class Index>
-void vsl_b_read(vsl_b_istream &is, vbl_sparse_array_base<T, Index> & v);
+void
+vsl_b_read(vsl_b_istream & is, vbl_sparse_array_base<T, Index> & v);
 
 //: Print human readable summary of object to a stream
 template <class T, class Index>
-void vsl_print_summary(std::ostream& os,const vbl_sparse_array_base<T, Index> & b);
+void
+vsl_print_summary(std::ostream & os, const vbl_sparse_array_base<T, Index> & b);
 
 #endif // vbl_io_sparse_array_base_h

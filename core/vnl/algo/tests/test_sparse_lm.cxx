@@ -106,18 +106,22 @@ camera_diff(const vnl_vector<double> & a1, const vnl_vector<double> & a2)
 class bundle_2d : public vnl_sparse_lst_sqr_function
 {
 public:
-  bundle_2d(unsigned int num_cam, unsigned int num_pts, vnl_vector<double> data,
-            const std::vector<std::vector<bool>> &xmask,
-            UseGradient g = use_gradient, UseWeights w = no_weights)
-      : vnl_sparse_lst_sqr_function(num_cam, 3, num_pts, 2, 0, xmask, 1, g, w),
-        data_(std::move(data)) {}
+  bundle_2d(unsigned int num_cam,
+            unsigned int num_pts,
+            vnl_vector<double> data,
+            const std::vector<std::vector<bool>> & xmask,
+            UseGradient g = use_gradient,
+            UseWeights w = no_weights)
+    : vnl_sparse_lst_sqr_function(num_cam, 3, num_pts, 2, 0, xmask, 1, g, w)
+    , data_(std::move(data))
+  {}
 
   void
   fij(int i,
       int j,
-      vnl_vector<double> const & ai,
-      vnl_vector<double> const & bj,
-      vnl_vector<double> const & /*c*/,
+      const vnl_vector<double> & ai,
+      const vnl_vector<double> & bj,
+      const vnl_vector<double> & /*c*/,
       vnl_vector<double> & fxij) override
   {
     double sa = std::sin(ai[0]);
@@ -128,9 +132,9 @@ public:
   void
   jac_Aij(unsigned int /*i*/,
           unsigned int /*j*/,
-          vnl_vector<double> const & ai,
-          vnl_vector<double> const & bj,
-          vnl_vector<double> const & /*c*/,
+          const vnl_vector<double> & ai,
+          const vnl_vector<double> & bj,
+          const vnl_vector<double> & /*c*/,
           vnl_matrix<double> & Aij) override
   {
     double sa = std::sin(ai[0]);
@@ -145,9 +149,9 @@ public:
   void
   jac_Bij(unsigned int /*i*/,
           unsigned int /*j*/,
-          vnl_vector<double> const & ai,
-          vnl_vector<double> const & bj,
-          vnl_vector<double> const & /*c*/,
+          const vnl_vector<double> & ai,
+          const vnl_vector<double> & bj,
+          const vnl_vector<double> & /*c*/,
           vnl_matrix<double> & Bij) override
   {
     double sa = std::sin(ai[0]);
@@ -160,10 +164,10 @@ public:
 
   void
   trace(int /*iteration*/,
-        vnl_vector<double> const & /*a*/,
-        vnl_vector<double> const & /*b*/,
-        vnl_vector<double> const & /*c*/,
-        vnl_vector<double> const & /*e*/) override
+        const vnl_vector<double> & /*a*/,
+        const vnl_vector<double> & /*b*/,
+        const vnl_vector<double> & /*c*/,
+        const vnl_vector<double> & /*e*/) override
   {
     // std::cout << "trace "<<iteration<< " a: "<<a<<std::endl;
   }
@@ -339,19 +343,21 @@ test_prob1()
 class bundle_2d_shared : public vnl_sparse_lst_sqr_function
 {
 public:
-  bundle_2d_shared(unsigned int num_cam, unsigned int num_pts,
+  bundle_2d_shared(unsigned int num_cam,
+                   unsigned int num_pts,
                    vnl_vector<double> data,
-                   const std::vector<std::vector<bool>> &xmask,
+                   const std::vector<std::vector<bool>> & xmask,
                    UseGradient g = use_gradient)
-      : vnl_sparse_lst_sqr_function(num_cam, 3, num_pts, 2, 1, xmask, 1, g),
-        data_(std::move(data)) {}
+    : vnl_sparse_lst_sqr_function(num_cam, 3, num_pts, 2, 1, xmask, 1, g)
+    , data_(std::move(data))
+  {}
 
   void
   fij(int i,
       int j,
-      vnl_vector<double> const & ai,
-      vnl_vector<double> const & bj,
-      vnl_vector<double> const & c,
+      const vnl_vector<double> & ai,
+      const vnl_vector<double> & bj,
+      const vnl_vector<double> & c,
       vnl_vector<double> & fxij) override
   {
     double sa = std::sin(ai[0]);
@@ -363,9 +369,9 @@ public:
   void
   jac_Aij(unsigned int /*i*/,
           unsigned int /*j*/,
-          vnl_vector<double> const & ai,
-          vnl_vector<double> const & bj,
-          vnl_vector<double> const & c,
+          const vnl_vector<double> & ai,
+          const vnl_vector<double> & bj,
+          const vnl_vector<double> & c,
           vnl_matrix<double> & Aij) override
   {
     double sa = std::sin(ai[0]);
@@ -381,9 +387,9 @@ public:
   void
   jac_Bij(unsigned int /*i*/,
           unsigned int /*j*/,
-          vnl_vector<double> const & ai,
-          vnl_vector<double> const & bj,
-          vnl_vector<double> const & c,
+          const vnl_vector<double> & ai,
+          const vnl_vector<double> & bj,
+          const vnl_vector<double> & c,
           vnl_matrix<double> & Bij) override
   {
     double sa = std::sin(ai[0]);
@@ -397,9 +403,9 @@ public:
   void
   jac_Cij(unsigned int /*i*/,
           unsigned int /*j*/,
-          vnl_vector<double> const & ai,
-          vnl_vector<double> const & bj,
-          vnl_vector<double> const & /*c*/,
+          const vnl_vector<double> & ai,
+          const vnl_vector<double> & bj,
+          const vnl_vector<double> & /*c*/,
           vnl_matrix<double> & Cij) override
   {
     double sa = std::sin(ai[0]);
@@ -591,10 +597,10 @@ public:
   void
   compute_weight_ij(int i,
                     int j,
-                    vnl_vector<double> const & /*ai*/,
-                    vnl_vector<double> const & /*bj*/,
-                    vnl_vector<double> const & /*c*/,
-                    vnl_vector<double> const & fij,
+                    const vnl_vector<double> & /*ai*/,
+                    const vnl_vector<double> & /*bj*/,
+                    const vnl_vector<double> & /*c*/,
+                    const vnl_vector<double> & fij,
                     double & weight) override
   {
     int k = residual_indices_(i, j);
@@ -628,10 +634,10 @@ public:
 
   void
   trace(int /*iteration*/,
-        vnl_vector<double> const & /*a*/,
-        vnl_vector<double> const & /*b*/,
-        vnl_vector<double> const & /*c*/,
-        vnl_vector<double> const & /*e*/) override
+        const vnl_vector<double> & /*a*/,
+        const vnl_vector<double> & /*b*/,
+        const vnl_vector<double> & /*c*/,
+        const vnl_vector<double> & /*e*/) override
   {
     // std::cout << "trace "<<iteration<< " a: "<<a<<std::endl;
   }

@@ -50,18 +50,18 @@ struct vpdt_field_traits
 //: The field traits class (vnl_vector_fixed)
 //  This specialization is for fixed length vnl vectors
 template <class T, unsigned int n>
-struct vpdt_field_traits<vnl_vector_fixed<T,n> >
+struct vpdt_field_traits<vnl_vector_fixed<T, n>>
 {
   //: The compile time dimension of the field
   static const unsigned int dimension = n;
   //: The type used for scalar operations
   typedef T scalar_type;
   //: the data type to represent a point in the field
-  typedef vnl_vector_fixed<T,n> field_type;
+  typedef vnl_vector_fixed<T, n> field_type;
   //: the data type used for vectors (difference between points)
-  typedef vnl_vector_fixed<T,n> vector_type;
+  typedef vnl_vector_fixed<T, n> vector_type;
   //: the data type used for square matrices
-  typedef vnl_matrix_fixed<T,n,n> matrix_type;
+  typedef vnl_matrix_fixed<T, n, n> matrix_type;
 
   //: use this to disambiguate templates
   typedef void type_is_vector;
@@ -72,7 +72,7 @@ struct vpdt_field_traits<vnl_vector_fixed<T,n> >
 //  This specialization is for variable length vnl vectors
 //  \note dimension of 0 indicates variable dimension at run time
 template <class T>
-struct vpdt_field_traits<vnl_vector<T> >
+struct vpdt_field_traits<vnl_vector<T>>
 {
   //: The compile time dimension of the field
   static const unsigned int dimension = 0;
@@ -88,7 +88,6 @@ struct vpdt_field_traits<vnl_vector<T> >
   //: use this to disambiguate templates
   typedef void type_is_vector;
 };
-
 
 
 #endif // vpdt_field_traits_h_

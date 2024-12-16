@@ -15,7 +15,7 @@
 #endif
 
 std::ostream &
-vul_printf(std::ostream & s, char const * fmt, ...)
+vul_printf(std::ostream & s, const char * fmt, ...)
 {
   char buf[65536];
 

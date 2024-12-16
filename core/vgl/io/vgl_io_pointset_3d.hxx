@@ -9,34 +9,40 @@
 
 //============================================================================
 //: Binary save self to stream.
-template<class T>
-void vsl_b_write(vsl_b_ostream &os, const vgl_pointset_3d<T> & ptset)
+template <class T>
+void
+vsl_b_write(vsl_b_ostream & os, const vgl_pointset_3d<T> & ptset)
 {
   constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, ptset.has_normals());
   vsl_b_write(os, ptset.has_scalars());
   vsl_b_write(os, ptset.points());
-  if (ptset.has_normals()) {
+  if (ptset.has_normals())
+  {
     vsl_b_write(os, ptset.normals());
   }
-  if (ptset.has_scalars()) {
+  if (ptset.has_scalars())
+  {
     vsl_b_write(os, ptset.scalars());
   }
 }
 
 //============================================================================
 //: Binary load self from stream.
-template<class T>
-void vsl_b_read(vsl_b_istream &is, vgl_pointset_3d<T> & ptset)
+template <class T>
+void
+vsl_b_read(vsl_b_istream & is, vgl_pointset_3d<T> & ptset)
 {
-  if (!is) return;
+  if (!is)
+    return;
 
   short v;
   vsl_b_read(is, v);
   switch (v)
   {
-    case 1: {
+    case 1:
+    {
 
       // normal, scalar boolean flags
       bool has_normals, has_scalars;
@@ -44,18 +50,20 @@ void vsl_b_read(vsl_b_istream &is, vgl_pointset_3d<T> & ptset)
       vsl_b_read(is, has_scalars);
 
       // points
-      std::vector<vgl_point_3d<T> > points;
+      std::vector<vgl_point_3d<T>> points;
       vsl_b_read(is, points);
 
       // normals
-      std::vector<vgl_vector_3d<T> > normals;
-      if (has_normals) {
+      std::vector<vgl_vector_3d<T>> normals;
+      if (has_normals)
+      {
         vsl_b_read(is, normals);
       }
 
       // scalars
       std::vector<T> scalars;
-      if (has_scalars) {
+      if (has_scalars)
+      {
         vsl_b_read(is, scalars);
       }
 
@@ -71,10 +79,11 @@ void vsl_b_read(vsl_b_istream &is, vgl_pointset_3d<T> & ptset)
       break;
     }
 
-    default: {
+    default:
+    {
       std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_pointset_3d<T>&)\n"
                 << "           Unknown version number " << v << '\n';
-      is.is().clear(std::ios::badbit);  // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
   }
@@ -83,17 +92,18 @@ void vsl_b_read(vsl_b_istream &is, vgl_pointset_3d<T> & ptset)
 
 //============================================================================
 //: Output a human readable summary to the stream
-template<class T>
-void vsl_print_summary(std::ostream& os, const vgl_pointset_3d<T> & ptset)
+template <class T>
+void
+vsl_print_summary(std::ostream & os, const vgl_pointset_3d<T> & ptset)
 {
-  os << "vgl_pointset_3d (size: " << ptset.size() << ", normals: "
-     << ptset.has_normals() << ", scalars: " << ptset.has_scalars() << ")";
+  os << "vgl_pointset_3d (size: " << ptset.size() << ", normals: " << ptset.has_normals()
+     << ", scalars: " << ptset.has_scalars() << ")";
 }
 
 
-#define VGL_IO_POINTSET_3D_INSTANTIATE(T) \
-template VGL_EXPORT void vsl_print_summary(std::ostream &, const vgl_pointset_3d<T > &); \
-template VGL_EXPORT void vsl_b_read(vsl_b_istream &, vgl_pointset_3d<T > &); \
-template VGL_EXPORT void vsl_b_write(vsl_b_ostream &, const vgl_pointset_3d<T > &)
+#define VGL_IO_POINTSET_3D_INSTANTIATE(T)                                                 \
+  template VGL_EXPORT void vsl_print_summary(std::ostream &, const vgl_pointset_3d<T> &); \
+  template VGL_EXPORT void vsl_b_read(vsl_b_istream &, vgl_pointset_3d<T> &);             \
+  template VGL_EXPORT void vsl_b_write(vsl_b_ostream &, const vgl_pointset_3d<T> &)
 
-#endif  // vgl_io_pointset_3d_hxx_
+#endif // vgl_io_pointset_3d_hxx_

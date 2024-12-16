@@ -11,20 +11,20 @@ check_pointer(const void *)
 static void
 test_static_const_definition()
 {
-#define ONE_ZERO(Type)                                                                                                 \
-  do                                                                                                                   \
-  {                                                                                                                    \
-    check_pointer(&vnl_numeric_traits<Type>::zero);                                                                    \
-    check_pointer(&vnl_numeric_traits<Type>::one);                                                                     \
-    check_pointer(&vnl_numeric_traits<const Type>::zero);                                                              \
-    check_pointer(&vnl_numeric_traits<const Type>::one);                                                               \
+#define ONE_ZERO(Type)                                    \
+  do                                                      \
+  {                                                       \
+    check_pointer(&vnl_numeric_traits<Type>::zero);       \
+    check_pointer(&vnl_numeric_traits<Type>::one);        \
+    check_pointer(&vnl_numeric_traits<const Type>::zero); \
+    check_pointer(&vnl_numeric_traits<const Type>::one);  \
   } while (false)
-#define ALL(Type)                                                                                                      \
-  ONE_ZERO(Type);                                                                                                      \
-  do                                                                                                                   \
-  {                                                                                                                    \
-    check_pointer(&vnl_numeric_traits<Type>::maxval);                                                                  \
-    check_pointer(&vnl_numeric_traits<const Type>::maxval);                                                            \
+#define ALL(Type)                                           \
+  ONE_ZERO(Type);                                           \
+  do                                                        \
+  {                                                         \
+    check_pointer(&vnl_numeric_traits<Type>::maxval);       \
+    check_pointer(&vnl_numeric_traits<const Type>::maxval); \
   } while (false)
 
   ALL(bool);

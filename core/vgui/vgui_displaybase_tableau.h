@@ -35,9 +35,12 @@ class vgui_event;
 struct vgui_displaybase_tableau_selection_callback
 {
   virtual ~vgui_displaybase_tableau_selection_callback() {}
-  virtual bool select(unsigned iden);
-  virtual bool deselect(unsigned iden);
-  virtual bool deselect_all();
+  virtual bool
+  select(unsigned iden);
+  virtual bool
+  deselect(unsigned iden);
+  virtual bool
+  deselect_all();
 };
 
 //: Struct to maintain grouping information for soviews
@@ -45,7 +48,7 @@ struct vgui_displaybase_tableau_grouping
 {
   // list of objects belonging to this group
   // duplicates entry in main objects list
-  std::vector<vgui_soview*> objects;
+  std::vector<vgui_soview *> objects;
 
   // style that will be used for override features
   vgui_style_sptr style;
@@ -68,67 +71,116 @@ struct vgui_displaybase_tableau_grouping
 //: Tableau with display list functionality, can use any type of soview.
 class vgui_displaybase_tableau : public vgui_tableau
 {
- public:
-
+public:
   //: Constructor - don't use this, use vgui_displaybase_tableau_new.
   vgui_displaybase_tableau();
- ~vgui_displaybase_tableau();
+  ~vgui_displaybase_tableau();
 
   // vgui_tableau methods
-  virtual bool handle(const vgui_event&);
+  virtual bool
+  handle(const vgui_event &);
 
   // vgui_displaybase_tableau methods/data
   GLenum gl_mode;
 
-  void draw_soviews_render();
-  void draw_soviews_select();
+  void
+  draw_soviews_render();
+  void
+  draw_soviews_select();
 
   // selections
-  bool is_selected(unsigned iden);
-  std::vector<unsigned> const & get_selected() const { return selections; }
-  std::vector<vgui_soview*>     get_selected_soviews() const;
-  bool select(unsigned iden);
-  bool deselect(unsigned iden);
-  bool deselect_all();
+  bool
+  is_selected(unsigned iden);
+  const std::vector<unsigned> &
+  get_selected() const
+  {
+    return selections;
+  }
+  std::vector<vgui_soview *>
+  get_selected_soviews() const;
+  bool
+  select(unsigned iden);
+  bool
+  deselect(unsigned iden);
+  bool
+  deselect_all();
 
   // highlighting
-  bool is_highlighted(unsigned iden) const { return iden == highlighted; }
-  unsigned get_highlighted() const { return highlighted; }
-  vgui_soview* get_highlighted_soview();
-  bool highlight(unsigned iden) { highlighted = iden; return true; }
+  bool
+  is_highlighted(unsigned iden) const
+  {
+    return iden == highlighted;
+  }
+  unsigned
+  get_highlighted() const
+  {
+    return highlighted;
+  }
+  vgui_soview *
+  get_highlighted_soview();
+  bool
+  highlight(unsigned iden)
+  {
+    highlighted = iden;
+    return true;
+  }
 
   // Add soview. The user is responsible for avoiding duplicates.
   // In a Debug mode build, a warning is issued when the soview has already been
   // added in a previous call.
-  virtual void add(vgui_soview*);
+  virtual void
+  add(vgui_soview *);
 
   // remove soview (deletes the soview and sets the pointer to null)
-  virtual void remove(vgui_soview*&);
+  virtual void
+  remove(vgui_soview *&);
 
   // removes all soviews from the display and deletes them
-  virtual void clear();
+  virtual void
+  clear();
 
   // grouping
-  void set_current_grouping(std::string t_name) { current_grouping = t_name; }
-  std::string get_current_grouping() const { return current_grouping; }
-  vgui_displaybase_tableau_grouping* get_grouping_ptr( std::string t_name );
-  std::vector< std::string > get_grouping_names();
+  void
+  set_current_grouping(std::string t_name)
+  {
+    current_grouping = t_name;
+  }
+  std::string
+  get_current_grouping() const
+  {
+    return current_grouping;
+  }
+  vgui_displaybase_tableau_grouping *
+  get_grouping_ptr(std::string t_name);
+  std::vector<std::string>
+  get_grouping_names();
 
   //: Attach your own selection callback.
   // You are in charge of deleting it later.
-  void set_selection_callback(vgui_displaybase_tableau_selection_callback* cb);
+  void
+  set_selection_callback(vgui_displaybase_tableau_selection_callback * cb);
 
-  std::vector<vgui_soview*> const &get_all() const { return objects; }
-  std::vector<unsigned>            get_all_ids() const;
+  const std::vector<vgui_soview *> &
+  get_all() const
+  {
+    return objects;
+  }
+  std::vector<unsigned>
+  get_all_ids() const;
 
-  vgui_soview* contains_hit(std::vector<unsigned> hit);
+  vgui_soview *
+  contains_hit(std::vector<unsigned> hit);
 
-  unsigned get_id() const { return id; }
+  unsigned
+  get_id() const
+  {
+    return id;
+  }
 
- protected:
-  std::vector<vgui_soview*> objects;
+protected:
+  std::vector<vgui_soview *> objects;
 
-  std::map< std::string , vgui_displaybase_tableau_grouping > groupings;
+  std::map<std::string, vgui_displaybase_tableau_grouping> groupings;
 
   std::string current_grouping;
 
@@ -137,9 +189,9 @@ class vgui_displaybase_tableau : public vgui_tableau
 
   int gl_display_list;
 
-  vgui_displaybase_tableau_selection_callback* cb_;
+  vgui_displaybase_tableau_selection_callback * cb_;
 
- private:
+private:
   unsigned id;
 };
 
@@ -147,7 +199,9 @@ class vgui_displaybase_tableau : public vgui_tableau
 struct vgui_displaybase_tableau_new : public vgui_displaybase_tableau_sptr
 {
   typedef vgui_displaybase_tableau_sptr base;
-  vgui_displaybase_tableau_new() : base(new vgui_displaybase_tableau()) {}
+  vgui_displaybase_tableau_new()
+    : base(new vgui_displaybase_tableau())
+  {}
 };
 
 #endif // vgui_displaybase_tableau_h_

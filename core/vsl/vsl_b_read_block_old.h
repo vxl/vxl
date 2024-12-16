@@ -13,20 +13,20 @@
 // Users should have no reason to include this file.
 //
 
-#include <iostream>
-#include <vxl_config.h>
-#ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
-#endif
-#include "vsl_binary_io.h"
-#include "vsl_binary_explicit_io.h"
+#  include <iostream>
+#  include <vxl_config.h>
+#  ifdef _MSC_VER
+#    include <vcl_msvc_warnings.h>
+#  endif
+#  include "vsl_binary_io.h"
+#  include "vsl_binary_explicit_io.h"
 
 // Whilst this file should not be used by users, it will likely never be deleted,
 // and will remain in use by a number of files in vsl and vnl/io to provide
 // backwards compatibility. If any of the functions are actually used, a
 // deprecation warning will be sent to cerr.
 
-#include <vcl_compiler.h>
+#  include <vcl_compiler.h>
 
 // The next declaration should be kept with its non-specialist definition.
 // It was this mistake that lead to the full replacement of vsl_b_read_block
@@ -38,7 +38,7 @@
 // \deprecated in favour of vsl_block_binary_read
 template <class T>
 VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
-inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, std::size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream & is, T * begin, std::size_t nelems)
 {
   while (nelems--)
     vsl_b_read(is, *(begin++));
@@ -51,9 +51,9 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, std::size_t nelems
 // \deprecated in favour of vsl_block_binary_read
 template <>
 VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
-inline void vsl_b_read_block_old(vsl_b_istream &is, double* begin, std::size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream & is, double * begin, std::size_t nelems)
 {
-  is.is().read((char*) begin, (unsigned long)(nelems*sizeof(double)));
+  is.is().read((char *)begin, (unsigned long)(nelems * sizeof(double)));
   vsl_swap_bytes((char *)begin, sizeof(double), nelems);
 }
 
@@ -64,9 +64,9 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, double* begin, std::size_t n
 // \deprecated in favour of vsl_block_binary_read
 template <>
 VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
-inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin, std::size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream & is, float * begin, std::size_t nelems)
 {
-  is.is().read((char*) begin, (unsigned long)(nelems*sizeof(float)));
+  is.is().read((char *)begin, (unsigned long)(nelems * sizeof(float)));
   vsl_swap_bytes((char *)begin, sizeof(float), nelems);
 }
 
@@ -79,22 +79,22 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin, std::size_t ne
 // \deprecated in favour of vsl_block_binary_read
 template <>
 VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
-inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, std::size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream & is, int * begin, std::size_t nelems)
 {
-  if (!is) return;
+  if (!is)
+    return;
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)) * nelems];
+    char * block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)) * nelems];
     is.is().read(block, nbytes);
-    std::size_t n_bytes_converted =
-    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete [] block;
+    std::size_t n_bytes_converted = vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
+    delete[] block;
     if (n_bytes_converted != nbytes)
     {
       std::cerr << "\nI/O ERROR: vsl_b_read_block(.., int*,..) :\n"
-               << " Corrupted data stream\n";
+                << " Corrupted data stream\n";
       is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
@@ -110,21 +110,20 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, std::size_t nele
 // \deprecated in favour of vsl_block_binary_read
 template <>
 VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
-inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int* begin, std::size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream & is, unsigned int * begin, std::size_t nelems)
 {
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)) * nelems];
+    char * block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)) * nelems];
     is.is().read(block, nbytes);
-    std::size_t n_bytes_converted =
-    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete [] block;
+    std::size_t n_bytes_converted = vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
+    delete[] block;
     if (n_bytes_converted != nbytes)
     {
       std::cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned int*,..) :\n"
-               << " Corrupted data stream\n";
+                << " Corrupted data stream\n";
       is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
@@ -141,21 +140,20 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int* begin, std::si
 // \deprecated in favour of vsl_block_binary_read
 template <>
 VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
-inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin, std::size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream & is, short * begin, std::size_t nelems)
 {
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)) * nelems];
+    char * block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)) * nelems];
     is.is().read(block, nbytes);
-    std::size_t n_bytes_converted =
-    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete [] block;
+    std::size_t n_bytes_converted = vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
+    delete[] block;
     if (n_bytes_converted != nbytes)
     {
       std::cerr << "\nI/O ERROR: vsl_b_read_block(.., short*,..) :\n"
-               << " Corrupted data stream\n";
+                << " Corrupted data stream\n";
       is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
@@ -172,21 +170,20 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin, std::size_t ne
 // \deprecated in favour of vsl_block_binary_read
 template <>
 VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
-inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned short* begin, std::size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream & is, unsigned short * begin, std::size_t nelems)
 {
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * nelems];
+    char * block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * nelems];
     is.is().read(block, nbytes);
-    std::size_t n_bytes_converted =
-    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete [] block;
+    std::size_t n_bytes_converted = vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
+    delete[] block;
     if (n_bytes_converted != nbytes)
     {
       std::cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned short*,..) :\n"
-               << " Corrupted data stream\n";
+                << " Corrupted data stream\n";
       is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
@@ -203,21 +200,20 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned short* begin, std::
 // \deprecated in favour of vsl_block_binary_read
 template <>
 VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
-inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin, std::size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream & is, long * begin, std::size_t nelems)
 {
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)) * nelems];
+    char * block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)) * nelems];
     is.is().read(block, nbytes);
-    std::size_t n_bytes_converted =
-    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete [] block;
+    std::size_t n_bytes_converted = vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
+    delete[] block;
     if (n_bytes_converted != nbytes)
     {
       std::cerr << "\nI/O ERROR: vsl_b_read_block(.., long*,..) :\n"
-               << " Corrupted data stream\n";
+                << " Corrupted data stream\n";
       is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
@@ -234,21 +230,20 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin, std::size_t nel
 // \deprecated in favour of vsl_block_binary_read
 template <>
 VXL_DEPRECATED_MSG("Will be removed in future versions of VXL, prefer vsl_block_binary_read")
-inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned long* begin, std::size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream & is, unsigned long * begin, std::size_t nelems)
 {
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * nelems];
+    char * block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * nelems];
     is.is().read(block, nbytes);
-    std::size_t n_bytes_converted =
-    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete [] block;
+    std::size_t n_bytes_converted = vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
+    delete[] block;
     if (n_bytes_converted != nbytes)
     {
       std::cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned long*,..) :\n"
-               << " Corrupted data stream\n";
+                << " Corrupted data stream\n";
       is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
   }

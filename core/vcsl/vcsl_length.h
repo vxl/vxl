@@ -18,8 +18,7 @@
 #include "vcsl_unit_sptr.h"
 
 //: Length dimension
-class vcsl_length
-  : public vcsl_dimension
+class vcsl_length : public vcsl_dimension
 {
   //***************************************************************************
   // Constructors/Destructor
@@ -28,7 +27,7 @@ class vcsl_length
   // Default constructor
   vcsl_length() = default;
 
- public:
+public:
   // Destructor
   ~vcsl_length() override = default;
 
@@ -38,18 +37,21 @@ class vcsl_length
 
   //: Is `new_unit' a compatible unit for the dimension ?
   // Pure virtual function of vcsl_dimension
-  bool compatible_unit(vcsl_unit_sptr const& new_unit) const override;
+  bool
+  compatible_unit(const vcsl_unit_sptr & new_unit) const override;
 
   //: Return the standard unit associated to the dimension
   // Pure virtual function of vcsl_dimension
-  vcsl_unit_sptr standard_unit() const override;
+  vcsl_unit_sptr
+  standard_unit() const override;
 
   //***************************************************************************
   // Singleton pattern
   //***************************************************************************
 
   //: Return the reference to the unique vcsl_length object
-  static vcsl_length_sptr instance();
+  static vcsl_length_sptr
+  instance();
 };
 
 #endif // vcsl_length_h_

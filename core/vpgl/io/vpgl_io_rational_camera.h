@@ -8,15 +8,18 @@
 
 //: Binary save camera to stream
 template <class T>
-void vsl_b_write(vsl_b_ostream & os, vpgl_rational_camera<T> const& camera);
+void
+vsl_b_write(vsl_b_ostream & os, const vpgl_rational_camera<T> & camera);
 
 
 //: Binary load camera from stream.
 template <class T>
-void vsl_b_read(vsl_b_istream & is, vpgl_rational_camera<T> &camera);
+void
+vsl_b_read(vsl_b_istream & is, vpgl_rational_camera<T> & camera);
 
 //: Print human readable summary of object to a stream
 template <class T>
-void vsl_print_summary(std::ostream& os,const vpgl_rational_camera<T> & c);
+void
+vsl_print_summary(std::ostream & os, const vpgl_rational_camera<T> & c);
 
 #endif

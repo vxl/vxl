@@ -7,7 +7,8 @@
 #include "vnl/vnl_finite.h"
 
 template <int N>
-void test_finite_int(vnl_finite_int<N>)
+void
+test_finite_int(vnl_finite_int<N>)
 {
   std::cout << "\n --- Testing vnl_finite_int<" << N << "> ---\n";
 

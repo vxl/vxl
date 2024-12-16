@@ -66,7 +66,8 @@ vul_get_time_as_string(vul_time_style style /*default=vul_asc*/)
 
   switch (style)
   {
-    case vul_numeric_msf: {
+    case vul_numeric_msf:
+    {
       // Express as a series of space-separated numbers, most significant first
       // e.g. yyyy mm dd hh mm ss
       // NB Month, day start at 1. Hour, minute, second start at 0.
@@ -80,7 +81,8 @@ vul_get_time_as_string(vul_time_style style /*default=vul_asc*/)
     }
     break;
 
-    default: {
+    default:
+    {
       // Get local time & date using standard asctime() function,
       // Removes the trailing eol that asctime() inserts.
       timestr = std::asctime(time);

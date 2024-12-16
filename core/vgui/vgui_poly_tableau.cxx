@@ -39,7 +39,7 @@
 
 //-----------------------------------------------------------------------------
 vgui_poly_tableau::item::item(vgui_tableau * p,
-                              vgui_tableau_sptr const & c,
+                              const vgui_tableau_sptr & c,
                               float x_,
                               float y_,
                               float w_,
@@ -57,7 +57,7 @@ vgui_poly_tableau::item::item(vgui_tableau * p,
 
 //-----------------------------------------------------------------------------
 void
-vgui_poly_tableau::item::set_vp(GLint const vp[4])
+vgui_poly_tableau::item::set_vp(const GLint vp[4])
 {
   int region[4] = {
     int(vp[0] + x * vp[2]), // x
@@ -73,7 +73,7 @@ vgui_poly_tableau::item::set_vp(GLint const vp[4])
 //-----------------------------------------------------------------------------
 //: Returns true if the given position is inside the boundaries of this item.
 bool
-vgui_poly_tableau::item::inside(GLint const vp[4], int vx, int vy) const
+vgui_poly_tableau::item::inside(const GLint vp[4], int vx, int vy) const
 {
   float rx = float(vx - vp[0]) / vp[2];
   float ry = float(vy - vp[1]) / vp[3];
@@ -146,7 +146,7 @@ vgui_poly_tableau::move(int id, float x, float y, float w, float h)
 //: Replace the tableau with the given ID by the given tableau.
 //  Keep the same ID and do not change the value of 'current'.
 void
-vgui_poly_tableau::replace(int id, vgui_tableau_sptr const & tab)
+vgui_poly_tableau::replace(int id, const vgui_tableau_sptr & tab)
 {
   for (iterator i = begin(); i != end(); ++i)
     if (i->id == id)
@@ -193,7 +193,7 @@ vgui_poly_tableau::set_outline_color(const int id, const int r, const int g, con
 //  x,y,w,h specify a portion of the vgui_poly_tableau's viewport in coordinates
 //  which go from 0 to 1.
 int
-vgui_poly_tableau::add(vgui_tableau_sptr const & t, float x, float y, float w, float h)
+vgui_poly_tableau::add(const vgui_tableau_sptr & t, float x, float y, float w, float h)
 {
   static int counter = 0;
   assert(counter < 1000000); // a million. FIXME.
@@ -212,7 +212,7 @@ vgui_poly_tableau::add(vgui_tableau_sptr const & t, float x, float y, float w, f
 //-----------------------------------------------------------------------------
 //: Misnomer - gets index of the child currently under the pointer's position.
 int
-vgui_poly_tableau::get_active(GLint const vp[4], int wx, int wy) const
+vgui_poly_tableau::get_active(const GLint vp[4], int wx, int wy) const
 {
   int act = -1;
   for (unsigned i = 0; i < sub.size(); ++i)
@@ -232,7 +232,7 @@ vgui_poly_tableau::get_current_id()
 //-----------------------------------------------------------------------------
 //: Sets the child under the pointer to current.
 void
-vgui_poly_tableau::set_current(GLint const vp[4], int index)
+vgui_poly_tableau::set_current(const GLint vp[4], int index)
 {
   if (current == index)
     return;
@@ -263,7 +263,7 @@ vgui_poly_tableau::set_current(GLint const vp[4], int index)
 //-----------------------------------------------------------------------------
 //: Handles events for this tableau and passes unused ones to the correct child.
 bool
-vgui_poly_tableau::handle(GLint const vp[4], vgui_event const & e)
+vgui_poly_tableau::handle(const GLint vp[4], const vgui_event & e)
 {
   // Draw events must go to all children, in the right order.
   if (e.type == vgui_DRAW || e.type == vgui_DRAW_OVERLAY)
@@ -349,7 +349,7 @@ vgui_poly_tableau::type_name() const
 //-----------------------------------------------------------------------------
 //: Handle all events sent to this tableau.
 bool
-vgui_poly_tableau::handle(vgui_event const & e)
+vgui_poly_tableau::handle(const vgui_event & e)
 {
   // Take snapshot of the viewport and scissor areas
   vgui_poly_tableau_vp_sc_snapshot snap;
@@ -399,7 +399,7 @@ vgui_poly_tableau::handle(vgui_event const & e)
 
 //-----------------------------------------------------------------------------
 void
-vgui_poly_tableau::get_popup(vgui_popup_params const & params, vgui_menu & menu)
+vgui_poly_tableau::get_popup(const vgui_popup_params & params, vgui_menu & menu)
 {
   if (params.recurse)
   {

@@ -27,71 +27,103 @@
 //
 class vidl_player_manager : public vgui_wrapper_tableau
 {
- public:
+public:
   vidl_player_manager();
   ~vidl_player_manager();
   //: returns the unique instance of vidl_player_manger
-  static vidl_player_manager *instance();
+  static vidl_player_manager *
+  instance();
 
   //: clean up before the program terminates
-  void quit();
+  void
+  quit();
 
   //: height (in pixels) of the video frame
-  unsigned get_height() const { return height_; }
+  unsigned
+  get_height() const
+  {
+    return height_;
+  }
 
   //: width (in pixels) of the video frame
-  unsigned get_width() const { return width_; }
+  unsigned
+  get_width() const
+  {
+    return width_;
+  }
 
   //: open the input video stream
-  void open_istream();
+  void
+  open_istream();
 
   //: open the output video stream
-  void open_ostream();
+  void
+  open_ostream();
 
   //: close the input video stream
-  void close_istream();
+  void
+  close_istream();
 
   //: close the output video stream
-  void close_ostream();
+  void
+  close_ostream();
 
   //: Pipe the input stream into the output stream
-  void pipe_streams();
+  void
+  pipe_streams();
 
   //: loop through the frames and display
-  void play_video();
+  void
+  play_video();
 
   //: stop at the current frame
-  void pause_video();
+  void
+  pause_video();
 
   //: stop playing and return to the first frame
-  void stop_video();
+  void
+  stop_video();
 
   //: pops up a dialog to indicate what frame to go to
-  void go_to_frame();
+  void
+  go_to_frame();
 
   //: index to the next frame (must be paused)
-  void next_frame();
+  void
+  next_frame();
 
   //: index to the previous frame (must be paused)
-  void prev_frame();
+  void
+  prev_frame();
 
 
   //: get the window of this player
-  vgui_window* get_window() { return win_; }
+  vgui_window *
+  get_window()
+  {
+    return win_;
+  }
 
   //: set the window
-  void set_window(vgui_window* win) { win_=win; }
+  void
+  set_window(vgui_window * win)
+  {
+    win_ = win;
+  }
 
   //: tableau handle function
-  virtual bool handle(const vgui_event&);
+  virtual bool
+  handle(const vgui_event &);
 
- protected:
-  //utility functions
-  void init();
-  void redraw();
+protected:
+  // utility functions
+  void
+  init();
+  void
+  redraw();
 
- private:
-  //flags
+private:
+  // flags
   bool preload_frames_;
   bool play_video_;
 
@@ -100,11 +132,11 @@ class vidl_player_manager : public vgui_wrapper_tableau
   unsigned height_;
   std::unique_ptr<vidl_istream> istream_;
   std::unique_ptr<vidl_ostream> ostream_;
-  vgui_window* win_;
+  vgui_window * win_;
   vgui_viewer2D_tableau_sptr v2D_;
   vgui_image_tableau_sptr itab_;
 
-  static vidl_player_manager *instance_;
+  static vidl_player_manager * instance_;
 };
 
 #endif // vidl_player_manager_h_

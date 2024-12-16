@@ -29,12 +29,14 @@ public:
 
   //: rebind this functor to another distribution type
   template <class other_dist>
-  struct rebind {
+  struct rebind
+  {
     typedef vpdt_dimension_accessor<other_dist> other;
   };
 
   //: The main function
-  bool operator() ( const dist_type& d, return_type& retval ) const
+  bool
+  operator()(const dist_type & d, return_type & retval) const
   {
     retval = d.dimension();
     return true;
@@ -56,12 +58,14 @@ public:
 
   //: rebind this functor to another distribution type
   template <class other_dist>
-  struct rebind {
+  struct rebind
+  {
     typedef vpdt_mean_accessor<other_dist> other;
   };
 
   //: The main function
-  bool operator() ( const dist_type& d, return_type& retval ) const
+  bool
+  operator()(const dist_type & d, return_type & retval) const
   {
     d.compute_mean(retval);
     return true;
@@ -83,12 +87,14 @@ public:
 
   //: rebind this functor to another distribution type
   template <class other_dist>
-  struct rebind {
+  struct rebind
+  {
     typedef vpdt_covar_accessor<other_dist> other;
   };
 
   //: The main function
-  bool operator() ( const dist_type& d, return_type& retval ) const
+  bool
+  operator()(const dist_type & d, return_type & retval) const
   {
     d.compute_covar(retval);
     return true;
@@ -110,12 +116,14 @@ public:
 
   //: rebind this functor to another distribution type
   template <class other_dist>
-  struct rebind {
+  struct rebind
+  {
     typedef vpdt_norm_const_accessor<other_dist> other;
   };
 
   //: The main function
-  bool operator() ( const dist_type& d, return_type& retval ) const
+  bool
+  operator()(const dist_type & d, return_type & retval) const
   {
     retval = d.norm_const();
     return true;

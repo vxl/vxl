@@ -23,7 +23,7 @@
 
 //: XML save vpgl_lvcs to stream.
 // \relatesalso vpgl_lvcs
-void x_write(std::ostream & os, vpgl_lvcs const& v,
-             std::string element_name="vpgl_lvcs");
+void
+x_write(std::ostream & os, const vpgl_lvcs & v, std::string element_name = "vpgl_lvcs");
 
 #endif // vpgl_xio_lvcs_h

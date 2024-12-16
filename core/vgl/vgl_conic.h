@@ -70,9 +70,10 @@
 template <class T>
 class vgl_conic
 {
- public:
-  enum vgl_conic_type {
-    no_type=0,
+public:
+  enum vgl_conic_type
+  {
+    no_type = 0,
     real_ellipse,
     real_circle,
     imaginary_ellipse,
@@ -87,7 +88,7 @@ class vgl_conic
     num_conic_types // is here to enable iterating through this list
   };
 
- private:
+private:
   // DATA MEMBERS
 
   vgl_conic_type type_;
@@ -98,8 +99,12 @@ class vgl_conic
   T e_; //!< coefficient of \a yw
   T f_; //!< coefficient of \a w^2
 
- public:
-  inline vgl_conic_type type() const { return type_; }
+public:
+  inline vgl_conic_type
+  type() const
+  {
+    return type_;
+  }
 
   //: Returns the type of the conic as a string.
   // Possible returned strings are:
@@ -108,37 +113,66 @@ class vgl_conic
   // "real intersecting lines", "complex intersecting lines",
   // "real parallel lines", "complex parallel lines", "coincident lines".
   // The default constructor sets the type to "invalid conic".
-  std::string real_type() const;
+  std::string
+  real_type() const;
 
   //: Returns the internal enum value corresponding to the string argument.
   // Useful for comparison purposes, or for use in "case" statements.
-  static vgl_conic_type type_by_name(std::string const& name);
+  static vgl_conic_type
+  type_by_name(const std::string & name);
 
   //: Converts the conic type from enum (internal representation) to string.
-  static std::string type_by_number(vgl_conic_type type);
+  static std::string
+  type_by_number(vgl_conic_type type);
 
   //: Returns the coefficient of \f$X^2\f$
-  inline T a() const { return  a_; }
+  inline T
+  a() const
+  {
+    return a_;
+  }
 
   //: Returns the coefficient of \f$XY\f$
-  inline T b() const { return  b_; }
+  inline T
+  b() const
+  {
+    return b_;
+  }
 
   //: Returns the coefficient of \f$Y^2\f$
-  inline T c() const { return  c_; }
+  inline T
+  c() const
+  {
+    return c_;
+  }
 
   //: Returns the coefficient of \f$XW\f$
-  inline T d() const { return  d_; }
+  inline T
+  d() const
+  {
+    return d_;
+  }
 
   //: Returns the coefficient of \f$YW\f$
-  inline T e() const { return  e_; }
+  inline T
+  e() const
+  {
+    return e_;
+  }
 
   //: Returns the coefficient of \f$W^2\f$
-  inline T f() const { return  f_; }
+  inline T
+  f() const
+  {
+    return f_;
+  }
 
   // CONSTRUCTORS AND RELATED STUFF
 
   // default constructor
-  vgl_conic() : type_(no_type) {}
+  vgl_conic()
+    : type_(no_type)
+  {}
 #if 0 // The compiler defaults for these are all right
   // copy constructor
   vgl_conic(vgl_conic<T> const& c)
@@ -160,7 +194,7 @@ class vgl_conic
   //: constructor using polynomial coefficients, given as a C array.
   //  The order of the coefficients is: $X^2$, $XY$, $Y^2$, $XW$, $YW$, $W^2$,
   //  where $W$ is the homogeneous coordinate (sometimes denoted by $Z$).
-  vgl_conic(T const coeff[]);
+  vgl_conic(const T coeff[]);
 
   //: constructor using centre, signed radii, and angle.
   //  This constructor can only be used for non-degenerate, real
@@ -176,39 +210,45 @@ class vgl_conic
   //  i.e., is a point at infinity. In that case (rx,ry) is the
   //  top, and theta is an eccentricity parameter (since the centre
   //  already specifies the direction of the symmetry axis).
-  vgl_conic(vgl_homg_point_2d<T> const& c, T rx, T ry, T theta);
+  vgl_conic(const vgl_homg_point_2d<T> & c, T rx, T ry, T theta);
 
   //: set or reset the conic using polynomial coefficients.
   //  The order of the coefficients is: $X^2$, $XY$, $Y^2$, $XW$, $YW$, $W^2$,
   //  where $W$ is the homogeneous coordinate (sometimes denoted by $Z$).
-  void set(T a, T b, T c, T d, T e, T f);
+  void
+  set(T a, T b, T c, T d, T e, T f);
 
   //: comparison operator.
   //  Comparison is on the conic, not the equation coefficients.  Hence two
   //  conics are identical if their coefficient vectors are multiples of
   //  each other.
-  bool operator==(vgl_conic<T> const& c) const;
+  bool
+  operator==(const vgl_conic<T> & c) const;
 
   // UTILITY FUNCTIONS
 
   //: Returns true if this conic is degenerate, i.e., if it consists of 2 lines.
-  bool is_degenerate() const;
+  bool
+  is_degenerate() const;
 
   //: Returns true if a central conic, i.e., an ellipse, circle, or hyperbola.
   //  Also the degenerate versions of these return true.
   //  Returns false if a parabola or two parallel or coinciding lines.
-  bool is_central() const;
+  bool
+  is_central() const;
 
   //: Returns true if the point pt belongs to the conic.
   //  I.e., if it \e exactly satisfies the conic equation.
   //  Beware of rounding for floating point type T! An "almost" returns false!
-  bool contains(vgl_homg_point_2d<T> const& pt) const;
+  bool
+  contains(const vgl_homg_point_2d<T> & pt) const;
 
   //: Returns the list of component lines, when degenerate and real components.
   //  Otherwise returns an empty list.
   //  If two coinciding lines, the list contains two identical elements.
   //  Hence this list always has length 0 or 2.
-  std::list<vgl_homg_line_2d<T> > components() const;
+  std::list<vgl_homg_line_2d<T>>
+  components() const;
 
   // Elementary geometric functions ----------------------------------
 
@@ -222,7 +262,8 @@ class vgl_conic
   //
   //  And for a point inside the conic, it is the set of all polar points of
   //  the lines through the given point. This set happens to be a straight line.
-  vgl_homg_line_2d<T> polar_line(vgl_homg_point_2d<T> const& p) const;
+  vgl_homg_line_2d<T>
+  polar_line(const vgl_homg_point_2d<T> & p) const;
 
   //: Returns the polar point of the given line, w.r.t. this conic.
   //  For a non-degenerate conic, the polar point of a line that intersects the
@@ -234,25 +275,39 @@ class vgl_conic
   //
   //  And for a line not intersecting the conic, it is the common intersection
   //  point (inside the conic) of the polar lines of all points of that line.
-  vgl_homg_point_2d<T>  polar_point(vgl_homg_line_2d<T> const& l) const;
+  vgl_homg_point_2d<T>
+  polar_point(const vgl_homg_line_2d<T> & l) const;
 
   //: Returns the tangent to the conic in the point p, if p is on the conic.
   //  In general, returns the polar line of the point w.r.t. the conic.
-  vgl_homg_line_2d<T> tangent_at(vgl_homg_point_2d<T> const& p) const { return polar_line(p); }
+  vgl_homg_line_2d<T>
+  tangent_at(const vgl_homg_point_2d<T> & p) const
+  {
+    return polar_line(p);
+  }
 
   //: Returns the centre of the conic, or its point at infinity if a parabola.
   // When two intersecting or parallel lines, returns their intersection point.
   // In all cases this is the polar point of the line at infinity.
-  vgl_homg_point_2d<T> centre() const { return polar_point(vgl_homg_line_2d<T>(0,0,1)); }
+  vgl_homg_point_2d<T>
+  centre() const
+  {
+    return polar_point(vgl_homg_line_2d<T>(0, 0, 1));
+  }
 
   //: Returns the curvature of the conic at point p, assuming p is on the conic.
-  double curvature_at(vgl_point_2d<T> const& p) const;
+  double
+  curvature_at(const vgl_point_2d<T> & p) const;
 
   //: Converts the coefficients to a geometric description of an ellipse.
   //  Returns false if the conic is not an ellipse. Double is appropriate
   //  since integer coefficients can produce non-integer ellipse parameters.
-  bool ellipse_geometry(double& xc, double& yc, double& major_axis_length,
-                        double& minor_axis_length, double& angle_in_radians) const;
+  bool
+  ellipse_geometry(double & xc,
+                   double & yc,
+                   double & major_axis_length,
+                   double & minor_axis_length,
+                   double & angle_in_radians) const;
 
   // Functions related to dual space ---------------------------------
 
@@ -260,31 +315,41 @@ class vgl_conic
   //  The homogeneous coordinates of the points belonging to the dual conic
   //  are the coefficients of the equations of all tangents to the original
   //  conic.
-  vgl_conic dual_conic() const;
+  vgl_conic
+  dual_conic() const;
 
   //: Returns the dual or tangential representation of this conic.
-  vgl_conic tangential_form() const { return dual_conic(); }
+  vgl_conic
+  tangential_form() const
+  {
+    return dual_conic();
+  }
 
-  //: Modify this conic by translating it over distance \a x in the \a X direction and distance \a y in the \a Y direction.
-  void translate_by(T x, T y);
+  //: Modify this conic by translating it over distance \a x in the \a X direction and distance \a y in the \a Y
+  //: direction.
+  void
+  translate_by(T x, T y);
 
- private:
+private:
   //--------------------------------------------------------------------------
   //: set conic type from polynomial coefficients and store in member type_
   // This method must be called by all constructors (except the default
   // constructor) and all methods that change the coefficients.
-  void set_type_from_equation();
+  void
+  set_type_from_equation();
 };
 
 //: Write "<vgl_conic aX^2+bXY+cY^2+dXW+eYW+fW^2>" to stream
 // \relatesalso vgl_conic
 template <class T>
-std::ostream&  operator<<(std::ostream& s, vgl_conic<T> const& c);
+std::ostream &
+operator<<(std::ostream & s, const vgl_conic<T> & c);
 
 //: Read a b c d e f from stream
 // \relatesalso vgl_conic
 template <class T>
-std::istream&  operator>>(std::istream& s, vgl_conic<T>& c);
+std::istream &
+operator>>(std::istream & s, vgl_conic<T> & c);
 
 #define VGL_CONIC_INSTANTIATE(T) extern "please include vgl/vgl_conic.hxx first"
 

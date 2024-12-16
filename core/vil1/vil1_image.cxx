@@ -17,7 +17,7 @@ vil1_image::print(std::ostream & s) const
     return s << "[vil1_image: empty]";
 
   s << "[vil1_image: size " << width() << " x " << height();
-  char const * fmt = file_format();
+  const char * fmt = file_format();
   s << ", file format " << (fmt ? fmt : "unknown") << ", components " << components() << ", bits per component "
     << bits_per_component();
 #if 1

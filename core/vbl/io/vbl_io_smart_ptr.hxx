@@ -18,15 +18,16 @@
 
 //=========================================================================
 //: Binary save self to stream.
-template<class T>
-void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
+template <class T>
+void
+vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> & p)
 {
   // write version number
   constexpr short io_version_no = 2;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, p.is_protected());
 
-  if (p.ptr() == nullptr)  // Deal with Null pointers first.
+  if (p.ptr() == nullptr) // Deal with Null pointers first.
   {
     vsl_b_write(os, true);
     vsl_b_write(os, 0ul); // Use 0 to indicate a null pointer.
@@ -53,120 +54,123 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
     // </rant>
     if (!p.is_protected())
     {
-        std::cerr << "vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T>&):"
-                 << " You cannot\nsave unprotected smart pointers before saving"
-                 << " a protected smart pointer\nto the same object. Either do"
-                 << " not save unprotected smart pointers, or\nbe very careful"
-                 << " about the order.\n";
-        std::abort();
+      std::cerr << "vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T>&):"
+                << " You cannot\nsave unprotected smart pointers before saving"
+                << " a protected smart pointer\nto the same object. Either do"
+                << " not save unprotected smart pointers, or\nbe very careful"
+                << " about the order.\n";
+      std::abort();
     }
 
     id = os.add_serialisation_record(p.ptr());
 
-      // Say that this is the first time
-      // that this object is being saved.
-      // This isn't really necessary but
-      // it is useful as an error check
+    // Say that this is the first time
+    // that this object is being saved.
+    // This isn't really necessary but
+    // it is useful as an error check
     vsl_b_write(os, true);
-    vsl_b_write(os, id);     // Save the serial number
-// If you get an error in the next line, it could be because your type T
-// has no vsl_b_write(vsl_b_ostream &,const T*)  defined on it.
-// See the documentation in the .h file to see how to add it.
-    vsl_b_write(os, p.ptr());    // Only save the actual object if it
-                                  //hasn't been saved before to this stream
+    vsl_b_write(os, id);      // Save the serial number
+                              // If you get an error in the next line, it could be because your type T
+                              // has no vsl_b_write(vsl_b_ostream &,const T*)  defined on it.
+                              // See the documentation in the .h file to see how to add it.
+    vsl_b_write(os, p.ptr()); // Only save the actual object if it
+                              // hasn't been saved before to this stream
   }
   else
   {
-      // Say that this is not the first time
-      // that this object is being saved.
-      // This isn't really necessary but
-      // it is useful as an error check
+    // Say that this is not the first time
+    // that this object is being saved.
+    // This isn't really necessary but
+    // it is useful as an error check
 
     vsl_b_write(os, false);
-    vsl_b_write(os, id);         // Save the serial number
+    vsl_b_write(os, id); // Save the serial number
   }
 }
 
 //=====================================================================
 //: Binary load self from stream.
-template<class T>
-void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
+template <class T>
+void
+vsl_b_read(vsl_b_istream & is, vbl_smart_ptr<T> & p)
 {
-  if (!is) return;
+  if (!is)
+    return;
 
   short ver;
   vsl_b_read(is, ver);
   switch (ver)
   {
-   case 1:
-   case 2:
-   {
-    bool is_protected; // true if the smart_ptr is to be
-                       //responsible for the object
-    vsl_b_read(is, is_protected);
+    case 1:
+    case 2:
+    {
+      bool is_protected; // true if the smart_ptr is to be
+                         // responsible for the object
+      vsl_b_read(is, is_protected);
 
-    bool first_time; // true if the object is about to be loaded
-    vsl_b_read(is, first_time);
+      bool first_time; // true if the object is about to be loaded
+      vsl_b_read(is, first_time);
 
-    if (first_time && !is_protected)  // This should have been
-    {                                  //checked during saving
+      if (first_time && !is_protected) // This should have been
+      {                                // checked during saving
+        std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
+                  << "           De-serialisation failure of non-protected smart_ptr\n";
+        is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
+        return;
+      }
+      unsigned long id; // Unique serial number indentifying object
+      vsl_b_read(is, id);
+
+      if (id == 0) // Deal with Null pointers first.
+      {
+        p = nullptr;
+        return;
+      }
+
+      T * pointer = static_cast<T *>(is.get_serialisation_pointer(id));
+      if (first_time != (pointer == nullptr))
+      {
+        // This checks that the saving stream and reading stream
+        // both agree on whether or not this is the first time they
+        // have seen this object.
+        std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
+                  << "           De-serialisation failure\n";
+        is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
+        return;
+      }
+
+      if (pointer == nullptr)
+      {
+        // If you get an error in the next line, it could be because your type T
+        // has no vsl_b_read(vsl_b_istream&,T*&)  defined on it.
+        // See the documentation in the .h file to see how to add it.
+        vsl_b_read(is, pointer);
+        is.add_serialisation_record(id, pointer);
+      }
+
+      p = pointer; // This operator method will set the internal
+                   // pointer in vbl_smart_ptr.
+      if (!is_protected)
+        p.unprotect();
+
+      break;
+    }
+    default:
       std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
-               << "           De-serialisation failure of non-protected smart_ptr\n";
+                << "           Unknown version number " << ver << '\n';
       is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
-    }
-    unsigned long id; // Unique serial number indentifying object
-    vsl_b_read(is, id);
-
-    if (id == 0) // Deal with Null pointers first.
-    {
-      p = nullptr;
-      return;
-    }
-
-    T * pointer = static_cast<T *>( is.get_serialisation_pointer(id));
-    if (first_time != (pointer == nullptr))
-    {
-      // This checks that the saving stream and reading stream
-      // both agree on whether or not this is the first time they
-      // have seen this object.
-      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
-               << "           De-serialisation failure\n";
-      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-
-    if (pointer == nullptr)
-    {
-      // If you get an error in the next line, it could be because your type T
-      // has no vsl_b_read(vsl_b_istream&,T*&)  defined on it.
-      // See the documentation in the .h file to see how to add it.
-      vsl_b_read(is, pointer);
-      is.add_serialisation_record(id, pointer);
-    }
-
-    p = pointer; // This operator method will set the internal
-                 //pointer in vbl_smart_ptr.
-    if (!is_protected)
-      p.unprotect();
-
-    break;
-   }
-   default:
-    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
-             << "           Unknown version number "<< ver << '\n';
-    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-    return;
   }
 }
 
 //=====================================================================
 //: Output a human readable summary to the stream
-template<class T>
-void vsl_print_summary(std::ostream & os,const vbl_smart_ptr<T> & p)
+template <class T>
+void
+vsl_print_summary(std::ostream & os, const vbl_smart_ptr<T> & p)
 {
   if (p.is_protected())
-    os <<"Unprotected ";
+    os << "Unprotected ";
   os << "Smart ptr to ";
   if (p.ptr())
   {
@@ -181,9 +185,9 @@ void vsl_print_summary(std::ostream & os,const vbl_smart_ptr<T> & p)
 
 
 #undef VBL_IO_SMART_PTR_INSTANTIATE
-#define VBL_IO_SMART_PTR_INSTANTIATE(T) \
-template void vsl_print_summary(std::ostream &, const vbl_smart_ptr<T > &); \
-template void vsl_b_read(vsl_b_istream &, vbl_smart_ptr<T > &); \
-template void vsl_b_write(vsl_b_ostream &, const vbl_smart_ptr<T > &)
+#define VBL_IO_SMART_PTR_INSTANTIATE(T)                                      \
+  template void vsl_print_summary(std::ostream &, const vbl_smart_ptr<T> &); \
+  template void vsl_b_read(vsl_b_istream &, vbl_smart_ptr<T> &);             \
+  template void vsl_b_write(vsl_b_ostream &, const vbl_smart_ptr<T> &)
 
 #endif // vbl_io_smart_ptr_hxx_

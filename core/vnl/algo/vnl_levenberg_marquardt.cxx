@@ -16,7 +16,7 @@
 
 // see header
 vnl_vector<double>
-vnl_levenberg_marquardt_minimize(vnl_least_squares_function & f, vnl_vector<double> const & initial_estimate)
+vnl_levenberg_marquardt_minimize(vnl_least_squares_function & f, const vnl_vector<double> & initial_estimate)
 {
   vnl_vector<double> x = initial_estimate;
   vnl_levenberg_marquardt lm(f);
@@ -494,7 +494,7 @@ vnl_levenberg_marquardt::diagnose_outcome(std::ostream & s) const
 
 //: Get INVERSE of covariance at last minimum.
 // Code thanks to Joss Knight (joss@robots.ox.ac.uk)
-vnl_matrix<double> const &
+const vnl_matrix<double> &
 vnl_levenberg_marquardt::get_JtJ()
 {
   if (!set_covariance_)

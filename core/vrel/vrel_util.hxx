@@ -18,27 +18,31 @@
 
 template <class O, class T>
 O
-vrel_util_median_abs_dev_scale( const T& begin,  const T& end, int dof, O* /*dummy*/ )
+vrel_util_median_abs_dev_scale(const T & begin, const T & end, int dof, O * /*dummy*/)
 {
   long count = long(end - begin);
-  assert( count > 0);
+  assert(count > 0);
 
-  if ( count <= dof )
+  if (count <= dof)
     return 0;
 
-  for ( T i=begin; i!=end; ++i ) {
-    *i = vnl_math::abs( *i );
+  for (T i = begin; i != end; ++i)
+  {
+    *i = vnl_math::abs(*i);
   }
-  T loc = begin + ((count-dof)/2 + dof);
-  std::nth_element( begin, loc, end );
-  return O (1.4826 * (1 + 5.0/(count-dof)) * *loc);
+  T loc = begin + ((count - dof) / 2 + dof);
+  std::nth_element(begin, loc, end);
+  return O(1.4826 * (1 + 5.0 / (count - dof)) * *loc);
 }
 
 
 template <class O, class T>
 O
-vrel_util_weighted_scale( const T& residuals_first, const T& residuals_end,
-                          const T& weights_first, int dof, O* /*dummy*/ )
+vrel_util_weighted_scale(const T & residuals_first,
+                         const T & residuals_end,
+                         const T & weights_first,
+                         int dof,
+                         O * /*dummy*/)
 {
   O sum = 0;
   O sum_weights = 0;
@@ -46,44 +50,44 @@ vrel_util_weighted_scale( const T& residuals_first, const T& residuals_end,
 
   T r_itr = residuals_first;
   T w_itr = weights_first;
-  for ( ; r_itr != residuals_end; ++ r_itr, ++ w_itr ) {
-    sum += *w_itr * vnl_math::sqr( *r_itr );
+  for (; r_itr != residuals_end; ++r_itr, ++w_itr)
+  {
+    sum += *w_itr * vnl_math::sqr(*r_itr);
     sum_weights += *w_itr;
     ++num;
   }
-  if ( num <= dof )
+  if (num <= dof)
     return 0;
 
-  O divisor = sum_weights * ( num - dof ) / num;
-  return std::sqrt( sum / divisor );
+  O divisor = sum_weights * (num - dof) / num;
+  return std::sqrt(sum / divisor);
 }
 
 
 template <class T, class Ran>
-void vrel_util_median_and_scale( Ran first, Ran last,
-                                 T& median, T& scale,
-                                 int dof )
+void
+vrel_util_median_and_scale(Ran first, Ran last, T & median, T & scale, int dof)
 {
-  long count = long(last-first);
-  assert( count > 0 );
-  assert( count > dof );
+  long count = long(last - first);
+  assert(count > 0);
+  assert(count > dof);
 
-  Ran loc = first + count/2;
-  std::nth_element( first, loc, last );
+  Ran loc = first + count / 2;
+  std::nth_element(first, loc, last);
   median = *loc;
-  for ( Ran i=first; i!=last; ++i ) {
-    *i = vnl_math::abs(*i-median);
+  for (Ran i = first; i != last; ++i)
+  {
+    *i = vnl_math::abs(*i - median);
   }
   ++loc;
-  std::nth_element( first, loc, last );
-  scale = T(1.4826 * (1 + 5.0/(count-dof)) * *loc);
+  std::nth_element(first, loc, last);
+  scale = T(1.4826 * (1 + 5.0 / (count - dof)) * *loc);
 }
 
 
 template <class T, class InpIter>
-void vrel_util_median_and_scale_copy( InpIter first, InpIter last,
-                                      T& median, T& scale,
-                                      int dof )
+void
+vrel_util_median_and_scale_copy(InpIter first, InpIter last, T & median, T & scale, int dof)
 {
   // FIXME: scratch should be std::vector<
   // std::iterator_traits<InpIter>::value_type >, but this is not
@@ -91,42 +95,43 @@ void vrel_util_median_and_scale_copy( InpIter first, InpIter last,
   // support it for vector iterators.
   //
   std::vector<T> scratch;
-  for ( ; first != last; ++first )
-    scratch.push_back( *first );
-  vrel_util_median_and_scale( scratch.begin(), scratch.end(), median, scale, dof );
+  for (; first != last; ++first)
+    scratch.push_back(*first);
+  vrel_util_median_and_scale(scratch.begin(), scratch.end(), median, scale, dof);
 }
 
 
 template <class T, class Ran>
-void vrel_util_intercept_adjustment( Ran first, Ran last,
-                                     T & center, T & half_width,
-                                     int dof )
+void
+vrel_util_intercept_adjustment(Ran first, Ran last, T & center, T & half_width, int dof)
 {
-  long count = long(last-first);
-  assert( count > dof );
-  std::sort( first, last );
-  int num_in_interval = (count-dof)/2 + dof;
-  if ( num_in_interval > count ) num_in_interval = count;
+  long count = long(last - first);
+  assert(count > dof);
+  std::sort(first, last);
+  int num_in_interval = (count - dof) / 2 + dof;
+  if (num_in_interval > count)
+    num_in_interval = count;
   T min_start = *first;
-  T min_width = *(first+num_in_interval-1) - min_start;
-  Ran start=first+1;
-  Ran end=first+num_in_interval;
-  for ( ; end != last; ++start, ++end ) {
+  T min_width = *(first + num_in_interval - 1) - min_start;
+  Ran start = first + 1;
+  Ran end = first + num_in_interval;
+  for (; end != last; ++start, ++end)
+  {
     T width = *end - *start;
-    if ( width < min_width ) {
+    if (width < min_width)
+    {
       min_start = *start;
       min_width = width;
     }
   }
-  half_width = min_width/2;
+  half_width = min_width / 2;
   center = min_start + half_width;
 }
 
 
 template <class T, class InpIter>
-void vrel_util_intercept_adjustment_copy( InpIter first, InpIter last,
-                                          T & center, T & half_width,
-                                          int dof )
+void
+vrel_util_intercept_adjustment_copy(InpIter first, InpIter last, T & center, T & half_width, int dof)
 {
   // FIXME: scratch should be std::vector<
   // std::iterator_traits<InpIter>::value_type >, but this is not
@@ -134,50 +139,55 @@ void vrel_util_intercept_adjustment_copy( InpIter first, InpIter last,
   // support it for vector iterators.
   //
   std::vector<T> scratch;
-  for ( ; first != last; ++first )
-    scratch.push_back( *first );
-  vrel_util_intercept_adjustment( scratch.begin(), scratch.end(),
-                                  center, half_width, dof );
+  for (; first != last; ++first)
+    scratch.push_back(*first);
+  vrel_util_intercept_adjustment(scratch.begin(), scratch.end(), center, half_width, dof);
 }
 
 
 template <class T, class Ran>
-void vrel_util_intercept_adjust_stats( Ran first, Ran last,
-                                       T & robust_mean, T & robust_std, T & inlier_frac,
-                                       int dof )
+void
+vrel_util_intercept_adjust_stats(Ran first, Ran last, T & robust_mean, T & robust_std, T & inlier_frac, int dof)
 {
-  long count = long(last-first);
-  assert( count >= dof );
+  long count = long(last - first);
+  assert(count >= dof);
   T center, half_width;
-  vrel_util_intercept_adjustment( first, last, center, half_width, dof );
+  vrel_util_intercept_adjustment(first, last, center, half_width, dof);
 
-  T std_dev = half_width * T(1.4826) * T( 1 + 5.0/(count-dof) );
+  T std_dev = half_width * T(1.4826) * T(1 + 5.0 / (count - dof));
   constexpr T mu = 2.5;
   T bound = mu * std_dev;
 
   Ran begin_itr;
-  for ( begin_itr=first; *begin_itr < center-bound; ++begin_itr ) ;
-  Ran end_itr=begin_itr;
+  for (begin_itr = first; *begin_itr < center - bound; ++begin_itr)
+    ;
+  Ran end_itr = begin_itr;
   T sum = *begin_itr;
-  while ( ++end_itr != last && *end_itr <= center+bound ) {
+  while (++end_itr != last && *end_itr <= center + bound)
+  {
     sum += *end_itr;
   }
   long inliers = long(end_itr - begin_itr);
   robust_mean = sum / inliers;
   inlier_frac = T(inliers) / T(count);
 
-  T sum_sq=0;
-  for ( Ran i=begin_itr; i!=end_itr; ++i ) {
-    sum_sq += vnl_math::sqr( *i - robust_mean );
+  T sum_sq = 0;
+  for (Ran i = begin_itr; i != end_itr; ++i)
+  {
+    sum_sq += vnl_math::sqr(*i - robust_mean);
   }
-  robust_std = T( std::sqrt(sum_sq / (inliers-dof)) );
+  robust_std = T(std::sqrt(sum_sq / (inliers - dof)));
 }
 
 
 template <class T, class InpIter>
-void vrel_util_intercept_adjust_stats_copy( InpIter first, InpIter last,
-                                            T & robust_mean, T & robust_std, T & inlier_frac,
-                                            int dof )
+void
+vrel_util_intercept_adjust_stats_copy(InpIter first,
+                                      InpIter last,
+                                      T & robust_mean,
+                                      T & robust_std,
+                                      T & inlier_frac,
+                                      int dof)
 {
   // FIXME: scratch should be std::vector<
   // std::iterator_traits<InpIter>::value_type >, but this is not
@@ -185,65 +195,47 @@ void vrel_util_intercept_adjust_stats_copy( InpIter first, InpIter last,
   // support it for vector iterators.
   //
   std::vector<T> scratch;
-  for ( ; first != last; ++first )
-    scratch.push_back( *first );
-  vrel_util_intercept_adjust_stats( scratch.begin(), scratch.end(),
-                                    robust_mean, robust_std, inlier_frac, dof );
+  for (; first != last; ++first)
+    scratch.push_back(*first);
+  vrel_util_intercept_adjust_stats(scratch.begin(), scratch.end(), robust_mean, robust_std, inlier_frac, dof);
 }
 
 
 // Instantiation macros
 //
 #undef VREL_UTIL_INSTANTIATE_RAN_ITER
-#define VREL_UTIL_INSTANTIATE_RAN_ITER(VALUE_T, RAN_ITER) \
-template VALUE_T \
-vrel_util_median_abs_dev_scale( const RAN_ITER&,  const RAN_ITER&, int dof, VALUE_T* ); \
-template double \
-vrel_util_median_abs_dev_scale( const RAN_ITER&,  const RAN_ITER&, int dof ); \
-template VALUE_T \
-vrel_util_weighted_scale( const RAN_ITER& residuals_first, const RAN_ITER& residuals_end, \
-                          const RAN_ITER& weights_first, int dof, VALUE_T* ); \
-template \
-void vrel_util_median_and_scale( RAN_ITER first, RAN_ITER last, \
-                                 VALUE_T& median, VALUE_T& scale, \
-                                 int dof ); \
-template \
-void vrel_util_median_and_scale_copy( RAN_ITER first, RAN_ITER last, \
-                                      VALUE_T& median, VALUE_T& scale, \
-                                      int dof ); \
-template \
-void vrel_util_intercept_adjustment( RAN_ITER first, RAN_ITER last, \
-                                     VALUE_T & center, VALUE_T & half_width, \
-                                     int dof ); \
-template \
-void vrel_util_intercept_adjustment_copy( RAN_ITER first, RAN_ITER last, \
-                                          VALUE_T & center, VALUE_T & half_width, \
-                                          int dof ); \
-template \
-void vrel_util_intercept_adjust_stats( RAN_ITER first, RAN_ITER last, \
-                                       VALUE_T & robust_mean, VALUE_T & robust_std, VALUE_T & inlier_frac, \
-                                       int dof ); \
-template \
-void vrel_util_intercept_adjust_stats_copy( RAN_ITER first, RAN_ITER last, \
-                                            VALUE_T & robust_mean, VALUE_T & robust_std, VALUE_T & inlier_frac, \
-                                            int dof )
+#define VREL_UTIL_INSTANTIATE_RAN_ITER(VALUE_T, RAN_ITER)                                                              \
+  template VALUE_T vrel_util_median_abs_dev_scale(const RAN_ITER &, const RAN_ITER &, int dof, VALUE_T *);             \
+  template double vrel_util_median_abs_dev_scale(const RAN_ITER &, const RAN_ITER &, int dof);                         \
+  template VALUE_T vrel_util_weighted_scale(const RAN_ITER & residuals_first,                                          \
+                                            const RAN_ITER & residuals_end,                                            \
+                                            const RAN_ITER & weights_first,                                            \
+                                            int dof,                                                                   \
+                                            VALUE_T *);                                                                \
+  template void vrel_util_median_and_scale(RAN_ITER first, RAN_ITER last, VALUE_T & median, VALUE_T & scale, int dof); \
+  template void vrel_util_median_and_scale_copy(                                                                       \
+    RAN_ITER first, RAN_ITER last, VALUE_T & median, VALUE_T & scale, int dof);                                        \
+  template void vrel_util_intercept_adjustment(                                                                        \
+    RAN_ITER first, RAN_ITER last, VALUE_T & center, VALUE_T & half_width, int dof);                                   \
+  template void vrel_util_intercept_adjustment_copy(                                                                   \
+    RAN_ITER first, RAN_ITER last, VALUE_T & center, VALUE_T & half_width, int dof);                                   \
+  template void vrel_util_intercept_adjust_stats(                                                                      \
+    RAN_ITER first, RAN_ITER last, VALUE_T & robust_mean, VALUE_T & robust_std, VALUE_T & inlier_frac, int dof);       \
+  template void vrel_util_intercept_adjust_stats_copy(                                                                 \
+    RAN_ITER first, RAN_ITER last, VALUE_T & robust_mean, VALUE_T & robust_std, VALUE_T & inlier_frac, int dof)
 
 #undef VREL_UTIL_INSTANTIATE_INP_ITER
-#define VREL_UTIL_INSTANTIATE_INP_ITER(VALUE_T, INP_ITER) \
-template VALUE_T \
-vrel_util_weighted_scale( const INP_ITER& residuals_first, const INP_ITER& residuals_end, \
-                          const INP_ITER& weights_first, int dof, VALUE_T* ); \
-template \
-void vrel_util_median_and_scale_copy( INP_ITER first, INP_ITER last, \
-                                      VALUE_T& median, VALUE_T& scale, \
-                                      int dof ); \
-template \
-void vrel_util_intercept_adjustment_copy( INP_ITER first, INP_ITER last, \
-                                          VALUE_T & center, VALUE_T & half_width, \
-                                          int dof ); \
-template \
-void vrel_util_intercept_adjust_stats_copy( INP_ITER first, INP_ITER last, \
-                                            VALUE_T & robust_mean, VALUE_T & robust_std, VALUE_T & inlier_frac, \
-                                            int dof )
+#define VREL_UTIL_INSTANTIATE_INP_ITER(VALUE_T, INP_ITER)                            \
+  template VALUE_T vrel_util_weighted_scale(const INP_ITER & residuals_first,        \
+                                            const INP_ITER & residuals_end,          \
+                                            const INP_ITER & weights_first,          \
+                                            int dof,                                 \
+                                            VALUE_T *);                              \
+  template void vrel_util_median_and_scale_copy(                                     \
+    INP_ITER first, INP_ITER last, VALUE_T & median, VALUE_T & scale, int dof);      \
+  template void vrel_util_intercept_adjustment_copy(                                 \
+    INP_ITER first, INP_ITER last, VALUE_T & center, VALUE_T & half_width, int dof); \
+  template void vrel_util_intercept_adjust_stats_copy(                               \
+    INP_ITER first, INP_ITER last, VALUE_T & robust_mean, VALUE_T & robust_std, VALUE_T & inlier_frac, int dof)
 
 #endif // vrel_util_txx_

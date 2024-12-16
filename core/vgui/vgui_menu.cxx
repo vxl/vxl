@@ -21,7 +21,7 @@ vgui_menu_item::vgui_menu_item()
   short_cut.key = vgui_KEY_NULL;
 }
 
-vgui_menu_item::vgui_menu_item(vgui_menu_item const & that)
+vgui_menu_item::vgui_menu_item(const vgui_menu_item & that)
   : name(that.name)
   , cmnd(that.cmnd)
   , menu(that.menu)
@@ -54,13 +54,10 @@ vgui_menu_item::is_toggle_button() const
 
 //--------------------------------------------------------------------------------
 
-vgui_menu::vgui_menu(vgui_menu const & that)
-{
-  operator=(that);
-}
+vgui_menu::vgui_menu(const vgui_menu & that) { operator=(that); }
 
 vgui_menu &
-vgui_menu::operator=(vgui_menu const & that)
+vgui_menu::operator=(const vgui_menu & that)
 {
   if (this != &that)
   {
@@ -72,9 +69,9 @@ vgui_menu::operator=(vgui_menu const & that)
 
 //--------------------------------------------------------------------------------
 
-#define im_here                                                                                                        \
-  do                                                                                                                   \
-  { /* std::cerr << __FILE__ " : " << __LINE__ << std::endl; */                                                        \
+#define im_here                                                 \
+  do                                                            \
+  { /* std::cerr << __FILE__ " : " << __LINE__ << std::endl; */ \
   } while (false)
 
 void
@@ -90,9 +87,9 @@ vgui_menu::add(std::string const & n, vgui_command_sptr c, vgui_key key, vgui_mo
 }
 
 void
-vgui_menu::add(std::string const & n,
+vgui_menu::add(const std::string & n,
                vgui_menu_callback f,
-               void const * client_data,
+               const void * client_data,
                vgui_key key,
                vgui_modifier modifiers)
 {
@@ -102,7 +99,7 @@ vgui_menu::add(std::string const & n,
 }
 
 void
-vgui_menu::add(std::string const & n, vgui_menu_callback_no_client_data f, vgui_key key, vgui_modifier modifiers)
+vgui_menu::add(const std::string & n, vgui_menu_callback_no_client_data f, vgui_key key, vgui_modifier modifiers)
 {
   im_here;
   vgui_command * cfunc = new vgui_command_cfunc(f);
@@ -110,7 +107,7 @@ vgui_menu::add(std::string const & n, vgui_menu_callback_no_client_data f, vgui_
 }
 
 void
-vgui_menu::add(std::string const & n, vgui_menu const & m, vgui_key key, vgui_modifier modifiers)
+vgui_menu::add(const std::string & n, const vgui_menu & m, vgui_key key, vgui_modifier modifiers)
 {
   im_here;
   vgui_menu_item i;
@@ -130,7 +127,7 @@ vgui_menu::separator()
 }
 
 void
-vgui_menu::include(vgui_menu const & that)
+vgui_menu::include(const vgui_menu & that)
 {
   items.reserve(items.size() + that.items.size());
 
@@ -146,7 +143,7 @@ vgui_menu::include(vgui_menu const & that)
 // This could be a member function, but that would just clutter
 // the interface even more.
 static void
-dump(vgui_menu const & This, std::ostream & os, std::string const & pre)
+dump(const vgui_menu & This, std::ostream & os, const std::string & pre)
 {
   for (unsigned i = 0; i < This.size(); i++)
   {
@@ -189,7 +186,7 @@ dump(vgui_menu const & This, std::ostream & os, std::string const & pre)
 }
 
 std::ostream &
-operator<<(std::ostream & os, vgui_menu const & m)
+operator<<(std::ostream & os, const vgui_menu & m)
 {
   dump(m, os, "  ");
   return os;

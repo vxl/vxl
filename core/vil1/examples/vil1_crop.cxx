@@ -19,8 +19,8 @@ main(int argc, char ** argv)
     std::cerr << "usage: vil1_crop in out x0 y0 width height\n";
     return -1;
   }
-  char const * input_filename = argv[1];
-  char const * output_filename = argv[2];
+  const char * input_filename = argv[1];
+  const char * output_filename = argv[2];
   int x0 = std::stoi(argv[3]);
   int y0 = std::stoi(argv[4]);
   int w = std::stoi(argv[5]);

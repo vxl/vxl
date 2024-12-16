@@ -23,8 +23,8 @@ static unsigned component_size[] = {
   sizeof(vxl_uint_64), //  VIL_PIXEL_FORMAT_UINT_64
   sizeof(vxl_int_64),  //  VIL_PIXEL_FORMAT_INT_64
 #else
-  0,                        //  VIL_PIXEL_FORMAT_UINT_64
-  0,                        //  VIL_PIXEL_FORMAT_INT_64
+  0, //  VIL_PIXEL_FORMAT_UINT_64
+  0, //  VIL_PIXEL_FORMAT_INT_64
 #endif
   sizeof(vxl_uint_32), //  VIL_PIXEL_FORMAT_UINT_32
   sizeof(vxl_int_32),  //  VIL_PIXEL_FORMAT_INT_32
@@ -41,8 +41,8 @@ static unsigned component_size[] = {
   sizeof(vxl_uint_64), //  VIL_PIXEL_FORMAT_RGB_UINT_64
   sizeof(vxl_int_64),  //  VIL_PIXEL_FORMAT_RGB_INT_64
 #else
-  0,                        //  VIL_PIXEL_FORMAT_RGB_UINT_64
-  0,                        //  VIL_PIXEL_FORMAT_RGB_INT_64
+  0, //  VIL_PIXEL_FORMAT_RGB_UINT_64
+  0, //  VIL_PIXEL_FORMAT_RGB_INT_64
 #endif
   sizeof(vxl_uint_32), //  VIL_PIXEL_FORMAT_RGB_UINT_32
   sizeof(vxl_int_32),  //  VIL_PIXEL_FORMAT_RGB_INT_32
@@ -58,8 +58,8 @@ static unsigned component_size[] = {
   sizeof(vxl_uint_64), //  VIL_PIXEL_FORMAT_RGBA_UINT_64
   sizeof(vxl_int_64),  //  VIL_PIXEL_FORMAT_RGBA_INT_64
 #else
-  0,                        //  VIL_PIXEL_FORMAT_RGBA_UINT_64
-  0,                        //  VIL_PIXEL_FORMAT_RGBA_INT_64
+  0, //  VIL_PIXEL_FORMAT_RGBA_UINT_64
+  0, //  VIL_PIXEL_FORMAT_RGBA_INT_64
 #endif
   sizeof(vxl_uint_32), //  VIL_PIXEL_FORMAT_RGBA_UINT_32
   sizeof(vxl_int_32),  //  VIL_PIXEL_FORMAT_RGBA_INT_32
@@ -82,8 +82,8 @@ static unsigned num_components[] = {
   1, //  VIL_PIXEL_FORMAT_UINT_64
   1, //  VIL_PIXEL_FORMAT_INT_64
 #else
-  0,                        //  VIL_PIXEL_FORMAT_UINT_64
-  0,                        //  VIL_PIXEL_FORMAT_INT_64
+  0, //  VIL_PIXEL_FORMAT_UINT_64
+  0, //  VIL_PIXEL_FORMAT_INT_64
 #endif
   1, //  VIL_PIXEL_FORMAT_UINT_32
   1, //  VIL_PIXEL_FORMAT_INT_32
@@ -100,8 +100,8 @@ static unsigned num_components[] = {
   3, //  VIL_PIXEL_FORMAT_RGB_UINT_64
   3, //  VIL_PIXEL_FORMAT_RGB_INT_64
 #else
-  0,                        //  VIL_PIXEL_FORMAT_RGB_UINT_64
-  0,                        //  VIL_PIXEL_FORMAT_RGB_INT_64
+  0, //  VIL_PIXEL_FORMAT_RGB_UINT_64
+  0, //  VIL_PIXEL_FORMAT_RGB_INT_64
 #endif
   3, //  VIL_PIXEL_FORMAT_RGB_UINT_32
   3, //  VIL_PIXEL_FORMAT_RGB_INT_32
@@ -117,8 +117,8 @@ static unsigned num_components[] = {
   4, //  VIL_PIXEL_FORMAT_RGBA_UINT_64
   4, //  VIL_PIXEL_FORMAT_RGBA_INT_64
 #else
-  0,                        //  VIL_PIXEL_FORMAT_RGBA_UINT_64
-  0,                        //  VIL_PIXEL_FORMAT_RGBA_INT_64
+  0, //  VIL_PIXEL_FORMAT_RGBA_UINT_64
+  0, //  VIL_PIXEL_FORMAT_RGBA_INT_64
 #endif
   4, //  VIL_PIXEL_FORMAT_RGBA_UINT_32
   4, //  VIL_PIXEL_FORMAT_RGBA_INT_32

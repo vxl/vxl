@@ -19,6 +19,7 @@
 // shouldn't need to worry about it. This function can be called
 // multiple times, but the real ffmpeg initialization
 // routine will run only once.
-void vidl_ffmpeg_init();
+void
+vidl_ffmpeg_init();
 
 #endif // vidl_ffmpeg_init_h_

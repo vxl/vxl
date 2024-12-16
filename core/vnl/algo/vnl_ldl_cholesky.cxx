@@ -23,7 +23,7 @@
 // slowdown:     7.0    4.6    2.8    1.4   1.18   1.04   1.02
 // \endverbatim
 
-vnl_ldl_cholesky::vnl_ldl_cholesky(vnl_matrix<double> const & M, Operation mode)
+vnl_ldl_cholesky::vnl_ldl_cholesky(const vnl_matrix<double> & M, Operation mode)
   : L_(M)
 {
   long n = M.columns();
@@ -172,7 +172,7 @@ vnl_ldl_cholesky::xt_m_x(const vnl_vector<double> & x) const
 //  The right-hand-side std::vector x may be b,
 //  which will give a fractional increase in speed.
 void
-vnl_ldl_cholesky::solve(vnl_vector<double> const & b, vnl_vector<double> * xp) const
+vnl_ldl_cholesky::solve(const vnl_vector<double> & b, vnl_vector<double> * xp) const
 {
   assert(b.size() == d_.size());
   *xp = b;
@@ -181,7 +181,7 @@ vnl_ldl_cholesky::solve(vnl_vector<double> const & b, vnl_vector<double> * xp) c
 
 //: Solve least squares problem M x = b.
 vnl_vector<double>
-vnl_ldl_cholesky::solve(vnl_vector<double> const & b) const
+vnl_ldl_cholesky::solve(const vnl_vector<double> & b) const
 {
   assert(b.size() == L_.columns());
 

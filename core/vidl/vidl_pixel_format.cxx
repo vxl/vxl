@@ -9,7 +9,7 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-#define vidl_ppi_mac(FMT)                                                                                              \
+#define vidl_ppi_mac(FMT) \
   const std::ptrdiff_t vidl_pixel_pack_of<VIDL_PIXEL_FORMAT_##FMT>::offset[macro_pix_size][num_channels]
 
 // Define the packing order for each packed vidl_pixel_format

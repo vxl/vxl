@@ -57,50 +57,60 @@ class vgl_fit_cylinder_3d
 {
   // Data Members--------------------------------------------------------------
 protected:
-  std::vector<vgl_homg_point_3d<T> > points_;
+  std::vector<vgl_homg_point_3d<T>> points_;
   vgl_cylinder_3d<T> cylinder_;
 
 public:
-
   // Constructors/Initializers/Destructors-------------------------------------
 
   vgl_fit_cylinder_3d() = default;
 
-  vgl_fit_cylinder_3d(std::vector<vgl_point_3d<T> > points);
+  vgl_fit_cylinder_3d(std::vector<vgl_point_3d<T>> points);
 
   ~vgl_fit_cylinder_3d() = default;
 
   // Operations---------------------------------------------------------------
 
   //: add a point to point set
-  void add_point(vgl_point_3d<T> const& p);
-  void add_point(const T x, const T y, const T z);
+  void
+  add_point(const vgl_point_3d<T> & p);
+  void
+  add_point(const T x, const T y, const T z);
 
   //: clear internal data
-  void clear();
+  void
+  clear();
 
   //: fit a cylinder to the stored points using a linear method, where W is known
   // returns the average distance from the points to the cylinder
   // error conditions are reported on outstream
-  T fit(vgl_vector_3d<T> const& W, std::ostream* outstream = nullptr, bool verbose = false);
+  T
+  fit(const vgl_vector_3d<T> & W, std::ostream * outstream = nullptr, bool verbose = false);
 
-  //:fit a cylinder to the stored points using a linear method, where W is known
-  bool fit(vgl_vector_3d<T> const& W, const T error_marg, std::ostream* outstream = nullptr, bool verbose=false);
+  //: fit a cylinder to the stored points using a linear method, where W is known
+  bool
+  fit(const vgl_vector_3d<T> & W, const T error_marg, std::ostream * outstream = nullptr, bool verbose = false);
 
   //: fit a cylinder to the stored points using a linear method, where W
   // is estimated as the eigenvector of the largest eigenvalue of the input pointset
   // returns the average distance from the points to the cylinder
   // error conditions are reported on outstream
-  T fit(std::ostream* outstream = nullptr, bool verbose = false);
+  T
+  fit(std::ostream * outstream = nullptr, bool verbose = false);
 
-  //:fit a cylinder to the stored points using a linear method, where W is computed from the points
-  bool fit(const T error_marg, std::ostream* outstream = nullptr, bool verbose=false);
+  //: fit a cylinder to the stored points using a linear method, where W is computed from the points
+  bool
+  fit(const T error_marg, std::ostream * outstream = nullptr, bool verbose = false);
 
   // Data Access---------------------------------------------------------------
 
-  std::vector<vgl_point_3d<T> > get_points() const;
-  vgl_cylinder_3d<T>& get_cylinder() {return cylinder_;}
-
+  std::vector<vgl_point_3d<T>>
+  get_points() const;
+  vgl_cylinder_3d<T> &
+  get_cylinder()
+  {
+    return cylinder_;
+  }
 };
 
 #define VGL_FIT_CYLINDER_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_cylinder_3d.hxx first"

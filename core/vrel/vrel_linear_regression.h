@@ -47,45 +47,47 @@
 //      z = a_0 + a_1 x + a_2 y + a_3 x^2 + a_4 xy + a_5 y^2
 //  \f]
 
-class vrel_linear_regression : public vrel_estimation_problem {
+class vrel_linear_regression : public vrel_estimation_problem
+{
 public:
   //: Constructor that includes all information in the sample vectors.
   //  For each sample, the first m-1 entries are the independent
   //  variables, and the last entry is the dependent variable.
-  vrel_linear_regression( const std::vector<vnl_vector<double> >& pts,
-                          bool use_intercept=true);
+  vrel_linear_regression(const std::vector<vnl_vector<double>> & pts, bool use_intercept = true);
 
   //: Constructor with data pre-separated into arrays of independent and dependent variables.
-  vrel_linear_regression( const std::vector< vnl_vector<double> >&  ind_vars,
-                          std::vector< double >   dep_vars );
+  vrel_linear_regression(const std::vector<vnl_vector<double>> & ind_vars, std::vector<double> dep_vars);
 
   //: Destructor.
   ~vrel_linear_regression() override;
 
   //: Total number of data points.
-  unsigned int num_samples( ) const override;
+  unsigned int
+  num_samples() const override;
 
   //: Generate a parameter estimate from a minimal sample set.
-  bool fit_from_minimal_set( const std::vector<int>& point_indices,
-                             vnl_vector<double>& params ) const override;
+  bool
+  fit_from_minimal_set(const std::vector<int> & point_indices, vnl_vector<double> & params) const override;
 
   //: Compute signed fit residuals relative to the parameter estimate.
-  void compute_residuals( const vnl_vector<double>& params,
-                          std::vector<double>& residuals ) const override;
+  void
+  compute_residuals(const vnl_vector<double> & params, std::vector<double> & residuals) const override;
 
   //: \brief Weighted least squares parameter estimate.
-  bool weighted_least_squares_fit( vnl_vector<double>& params,
-                                   vnl_matrix<double>& norm_covar,
-                                   const std::vector<double>* weights=nullptr ) const override;
+  bool
+  weighted_least_squares_fit(vnl_vector<double> & params,
+                             vnl_matrix<double> & norm_covar,
+                             const std::vector<double> * weights = nullptr) const override;
 
-public:  // testing / debugging utility
-    //: \brief Print information as a test utility.
-  void print_points() const;
+public: // testing / debugging utility
+        //: \brief Print information as a test utility.
+  void
+  print_points() const;
 
 protected:
-  std::vector<double> rand_vars_;               // e.g. the z or depth values
-  std::vector<vnl_vector<double> > ind_vars_;   // e.g. the image coordinates (plus 1.0
-                                               // for intercept parameters)
+  std::vector<double> rand_vars_;            // e.g. the z or depth values
+  std::vector<vnl_vector<double>> ind_vars_; // e.g. the image coordinates (plus 1.0
+                                             // for intercept parameters)
 };
 
 #endif

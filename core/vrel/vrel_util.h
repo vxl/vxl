@@ -28,7 +28,7 @@
 //
 template <class O, class RanIter>
 O
-vrel_util_median_abs_dev_scale( const RanIter& begin,  const RanIter& end, int dof, O* );
+vrel_util_median_abs_dev_scale(const RanIter & begin, const RanIter & end, int dof, O *);
 
 //: Convenience function.
 // Calls the other vrel_util_median_abs_dev_scale() with a return type
@@ -36,9 +36,9 @@ vrel_util_median_abs_dev_scale( const RanIter& begin,  const RanIter& end, int d
 //
 template <class T>
 double
-vrel_util_median_abs_dev_scale( const T& begin,  const T& end, int dof=1 )
+vrel_util_median_abs_dev_scale(const T & begin, const T & end, int dof = 1)
 {
-  return vrel_util_median_abs_dev_scale( begin,  end, dof, (double*)nullptr );
+  return vrel_util_median_abs_dev_scale(begin, end, dof, (double *)nullptr);
 }
 
 //: \brief Compute the scale using robustly weighted residuals.
@@ -56,8 +56,11 @@ vrel_util_median_abs_dev_scale( const T& begin,  const T& end, int dof=1 )
 //
 template <class O, class InpIter>
 O
-vrel_util_weighted_scale( const InpIter& residuals_first, const InpIter& residuals_end,
-                          const InpIter& weights_first, int dof, O* );
+vrel_util_weighted_scale(const InpIter & residuals_first,
+                         const InpIter & residuals_end,
+                         const InpIter & weights_first,
+                         int dof,
+                         O *);
 
 //: Convenience function.
 // Calls the other vrel_util_weighted_scale() with a return type of
@@ -65,11 +68,12 @@ vrel_util_weighted_scale( const InpIter& residuals_first, const InpIter& residua
 //
 template <class InpIter>
 inline double
-vrel_util_weighted_scale( const InpIter& residuals_first, const InpIter& residuals_end,
-                          const InpIter& weights_first, int dof=1 )
+vrel_util_weighted_scale(const InpIter & residuals_first,
+                         const InpIter & residuals_end,
+                         const InpIter & weights_first,
+                         int dof = 1)
 {
-  return vrel_util_weighted_scale( residuals_first, residuals_end,
-                                   weights_first, dof, (double*)nullptr );
+  return vrel_util_weighted_scale(residuals_first, residuals_end, weights_first, dof, (double *)nullptr);
 }
 
 //: Compute the median and the scale (relative to the median).
@@ -80,9 +84,8 @@ vrel_util_weighted_scale( const InpIter& residuals_first, const InpIter& residua
 //  Random access iterators are required.
 //
 template <class T, class RanIter>
-void vrel_util_median_and_scale( RanIter first, RanIter last,
-                                 T& median, T& scale,
-                                 int dof=1 );
+void
+vrel_util_median_and_scale(RanIter first, RanIter last, T & median, T & scale, int dof = 1);
 
 
 //: Compute the median and the scale (relative to the median).
@@ -91,9 +94,8 @@ void vrel_util_median_and_scale( RanIter first, RanIter last,
 //  copied first, and so is unchanged.
 //
 template <class T, class InpIter>
-void vrel_util_median_and_scale_copy( InpIter first, InpIter last,
-                                      T& median, T& scale,
-                                      int dof=1 );
+void
+vrel_util_median_and_scale_copy(InpIter first, InpIter last, T & median, T & scale, int dof = 1);
 
 
 //: \brief Compute the center and half width of the narrowest interval containing half the points in the residuals.
@@ -107,9 +109,8 @@ void vrel_util_median_and_scale_copy( InpIter first, InpIter last,
 //  signed values.
 //
 template <class T, class RanIter>
-void vrel_util_intercept_adjustment( RanIter first, RanIter last,
-                                     T & center, T & half_width,
-                                     int dof=1 );
+void
+vrel_util_intercept_adjustment(RanIter first, RanIter last, T & center, T & half_width, int dof = 1);
 
 
 //: \brief Compute the center and half width of the narrowest interval containing half the points in the residuals.
@@ -118,17 +119,20 @@ void vrel_util_intercept_adjustment( RanIter first, RanIter last,
 //  copied first, and so is unchanged.
 //
 template <class T, class InpIter>
-void vrel_util_intercept_adjustment_copy( InpIter first, InpIter last,
-                                          T & center, T & half_width,
-                                          int dof=1 );
+void
+vrel_util_intercept_adjustment_copy(InpIter first, InpIter last, T & center, T & half_width, int dof = 1);
 
 
 //: \brief Use the intercept adjustment technique to estimate the robust mean, standard deviation, and inlier fraction.
 //
 template <class T, class RanIter>
-void vrel_util_intercept_adjust_stats( RanIter first, RanIter last,
-                                       T & robust_mean, T & robust_std, T & inlier_frac,
-                                       int dof=1 );
+void
+vrel_util_intercept_adjust_stats(RanIter first,
+                                 RanIter last,
+                                 T & robust_mean,
+                                 T & robust_std,
+                                 T & inlier_frac,
+                                 int dof = 1);
 
 
 //: \brief Use the intercept adjustment technique to estimate the robust mean, standard deviation, and inlier fraction.
@@ -137,12 +141,16 @@ void vrel_util_intercept_adjust_stats( RanIter first, RanIter last,
 //  copied first, and so is unchanged.
 //
 template <class T, class InpIter>
-void vrel_util_intercept_adjust_stats_copy( InpIter first, InpIter last,
-                                            T & robust_mean, T & robust_std, T & inlier_frac,
-                                            int dof=1 );
+void
+vrel_util_intercept_adjust_stats_copy(InpIter first,
+                                      InpIter last,
+                                      T & robust_mean,
+                                      T & robust_std,
+                                      T & inlier_frac,
+                                      int dof = 1);
 
 #if defined(__GNUC__)
-# include "vrel_util.hxx"
+#  include "vrel_util.hxx"
 #endif
 
 #endif // vrel_util_h_

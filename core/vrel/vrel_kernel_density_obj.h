@@ -8,7 +8,12 @@
 
 #include <vrel/vrel_objective.h>
 
-enum vrel_kernel_scale_type { VREL_KERNEL_MAD, VREL_KERNEL_PRIOR, VREL_KERNEL_MUSE };
+enum vrel_kernel_scale_type
+{
+  VREL_KERNEL_MAD,
+  VREL_KERNEL_PRIOR,
+  VREL_KERNEL_MUSE
+};
 
 
 //: Kernel Density objective function.
@@ -26,9 +31,9 @@ enum vrel_kernel_scale_type { VREL_KERNEL_MAD, VREL_KERNEL_PRIOR, VREL_KERNEL_MU
 
 class vrel_kernel_density_obj : public vrel_objective
 {
- public:
+public:
   //: Constructor.
-  vrel_kernel_density_obj(vrel_kernel_scale_type scale_type=VREL_KERNEL_MAD);
+  vrel_kernel_density_obj(vrel_kernel_scale_type scale_type = VREL_KERNEL_MAD);
 
   //: Destructor.
   ~vrel_kernel_density_obj() override = default;
@@ -36,52 +41,67 @@ class vrel_kernel_density_obj : public vrel_objective
   //: Evaluate the objective function on heteroscedastic residuals.
   //  Not implemented.
   //  \sa vrel_objective::fcn.
-  double fcn( vect_const_iter res_begin, vect_const_iter res_end,
-                      vect_const_iter scale_begin,
-                      vnl_vector<double>* param_vector=nullptr ) const override;
+  double
+  fcn(vect_const_iter res_begin,
+      vect_const_iter res_end,
+      vect_const_iter scale_begin,
+      vnl_vector<double> * param_vector = nullptr) const override;
 
   //: Evaluate the objective function on homoscedastic residuals.
   //  prior_scale is needed if the type VREL_KERNEL_PRIOR is used.
   //  \sa vrel_objective::fcn.
-  double fcn( vect_const_iter res_begin, vect_const_iter res_end,
-                      double prior_scale = 0,
-                      vnl_vector<double>* = nullptr) const override;
+  double
+  fcn(vect_const_iter res_begin,
+      vect_const_iter res_end,
+      double prior_scale = 0,
+      vnl_vector<double> * = nullptr) const override;
 
   //: Set the type of the scale.
   //  VREL_KERNEL_MAD uses median absolute deviations to estimate the scale.
   //  VREL_KERNEL_PRIOR uses the prior scale provided.
   //  VREL_KERNEL_MUSE uses MUSE to estimate the scale.
-  virtual void set_scale_type( vrel_kernel_scale_type t = VREL_KERNEL_MAD )
-  { scale_type_ = t; }
+  virtual void
+  set_scale_type(vrel_kernel_scale_type t = VREL_KERNEL_MAD)
+  {
+    scale_type_ = t;
+  }
 
   //: Depends on the scale type used.
   //  \sa vrel_objective::requires_prior_scale.
-  bool requires_prior_scale() const override
-  { return scale_type_ == VREL_KERNEL_PRIOR; }
+  bool
+  requires_prior_scale() const override
+  {
+    return scale_type_ == VREL_KERNEL_PRIOR;
+  }
 
   //: x is set to 0;
-  void fix_x() { fix_x_ = true; }
+  void
+  fix_x()
+  {
+    fix_x_ = true;
+  }
 
   //: The mode of the density estimate which maximizes the estimated kernel density.
   //  The value can be used to shift the estimated parameters.
-  double best_x( vect_const_iter res_begin, vect_const_iter res_end,
-                 double scale = 0 ) const;
- private:
+  double
+  best_x(vect_const_iter res_begin, vect_const_iter res_end, double scale = 0) const;
 
+private:
   //: Calculate the bandwidth.
-  double bandwidth(vect_const_iter res_begin, vect_const_iter res_end,
-                   double prior_scale) const;
+  double
+  bandwidth(vect_const_iter res_begin, vect_const_iter res_end, double prior_scale) const;
 
   //: Given a kernel and the bandwidth, the estimated density of residuals.
-  double kernel_density(vect_const_iter res_begin, vect_const_iter res_end,
-                        double x, double h) const;
+  double
+  kernel_density(vect_const_iter res_begin, vect_const_iter res_end, double x, double h) const;
 
   //: Kernel function K(u).
-  double kernel_function(double u) const;
+  double
+  kernel_function(double u) const;
 
   vrel_kernel_scale_type scale_type_;
 
-  bool fix_x_{false};
+  bool fix_x_{ false };
 };
 
 #endif

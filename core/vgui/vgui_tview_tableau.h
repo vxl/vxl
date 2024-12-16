@@ -27,18 +27,23 @@
 //: Tableau displaying a tableau tree.
 class vgui_tview_tableau : public vgui_wrapper_tableau
 {
- public:
+public:
   //: Constructor - don't use this, use vgui_tview_tableau_new.
-  vgui_tview_tableau(vgui_tableau_sptr const&);
+  vgui_tview_tableau(const vgui_tableau_sptr &);
 
-  bool handle(const vgui_event &);
-  std::string type_name() const;
+  bool
+  handle(const vgui_event &);
+  std::string
+  type_name() const;
 
-  void get_popup(const vgui_popup_params& params, vgui_menu &menu);
+  void
+  get_popup(const vgui_popup_params & params, vgui_menu & menu);
 
 
-  void draw_tableau_icon(float x, float y);
-  void draw_tview_icon(float x, float y);
+  void
+  draw_tableau_icon(float x, float y);
+  void
+  draw_tview_icon(float x, float y);
 
 
   struct icon
@@ -48,9 +53,12 @@ class vgui_tview_tableau : public vgui_wrapper_tableau
     float y;
   };
 
-  void draw_icons(vgui_tableau_sptr const& parent, float x, float y);
-  void add_icons(std::vector<icon>* icons, vgui_tableau_sptr const& parent, float x, float y);
-  vgui_tableau_sptr find_closest_icon(std::vector<icon> const& icons, float x, float y);
+  void
+  draw_icons(const vgui_tableau_sptr & parent, float x, float y);
+  void
+  add_icons(std::vector<icon> * icons, const vgui_tableau_sptr & parent, float x, float y);
+  vgui_tableau_sptr
+  find_closest_icon(const std::vector<icon> & icons, float x, float y);
 
   float spacing;
   float icon_height;
@@ -59,15 +67,17 @@ class vgui_tview_tableau : public vgui_wrapper_tableau
   vgui_tableau_sptr active_icon;
   vgui_tableau_sptr closest_icon;
 
- protected:
- ~vgui_tview_tableau();
+protected:
+  ~vgui_tview_tableau();
 };
 
 //: Create a smart-pointer to a vgui_tview_tableau tableau.
 struct vgui_tview_tableau_new : public vgui_tview_tableau_sptr
 {
   typedef vgui_tview_tableau_sptr base;
-  vgui_tview_tableau_new(vgui_tableau_sptr const& arg1000) : base(new vgui_tview_tableau(arg1000)) { }
+  vgui_tview_tableau_new(const vgui_tableau_sptr & arg1000)
+    : base(new vgui_tview_tableau(arg1000))
+  {}
 };
 
 #endif // vgui_tview_tableau_h_

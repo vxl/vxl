@@ -6,7 +6,7 @@
 #include "testlib/testlib_test.h"
 
 double
-qr_det(vnl_matrix<double> const & M)
+qr_det(const vnl_matrix<double> & M)
 {
   return vnl_qr<double>(M).determinant();
 }

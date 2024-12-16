@@ -31,7 +31,7 @@ struct joe_tab : public vgui_tableau
   ~joe_tab() {}
 
   static void
-  joe_callback(void const * data)
+  joe_callback(const void * data)
   {
     std::cerr << "this is joe_tab::joe_callback(" << data << ")\n";
     if (data)

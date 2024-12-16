@@ -51,84 +51,110 @@ class vgui_dialog_impl;
 //   send_order(the_table, the_dressing, has_mayo);
 // \endcode
 
-typedef void (*vgui_dialog_callback)(void const* client_data);
+typedef void (*vgui_dialog_callback)(const void * client_data);
 typedef void (*vgui_dialog_callback_no_client_data)();
 
 class vgui_dialog
 {
- public:
-
+public:
   //: Constructor - takes the title of the dialog box.
-  vgui_dialog(const char* name);
+  vgui_dialog(const char * name);
   virtual ~vgui_dialog();
 
   // A push button is oftern shown with a label and/or a icon/bitmap
   // and a command is executed when the button is clicked.
-  void pushbutton(vgui_command_sptr cmnd, const char *label, const void* icon);
-  void pushbutton(vgui_dialog_callback_no_client_data f, const char *label, const void* icon);
-  void pushbutton(vgui_dialog_callback f, void const *client_data, const char *label, const void* icon);
+  void
+  pushbutton(vgui_command_sptr cmnd, const char * label, const void * icon);
+  void
+  pushbutton(vgui_dialog_callback_no_client_data f, const char * label, const void * icon);
+  void
+  pushbutton(vgui_dialog_callback f, const void * client_data, const char * label, const void * icon);
 
-  void checkbox(const char*, bool&);
+  void
+  checkbox(const char *, bool &);
 
-  void field(const char*, int&);
-  void field(const char* c, unsigned int& v) { field(c,*reinterpret_cast<int*>(&v)); }
-  void field(const char*, long&);
-  void field(const char*, float&);
-  void field(const char*, double&);
-  void field(const char*, std::string&);
+  void
+  field(const char *, int &);
+  void
+  field(const char * c, unsigned int & v)
+  {
+    field(c, *reinterpret_cast<int *>(&v));
+  }
+  void
+  field(const char *, long &);
+  void
+  field(const char *, float &);
+  void
+  field(const char *, double &);
+  void
+  field(const char *, std::string &);
 
   //: Multiple choice - with two options.
-  void choice(const char* label, const char* option1,
-              const char* option2, int& chosen);
+  void
+  choice(const char * label, const char * option1, const char * option2, int & chosen);
 
   //: Multiple choice - with three options.
-  void choice(const char* label, const char* option1,
-              const char* option2, const char* option3, int& chosen);
+  void
+  choice(const char * label, const char * option1, const char * option2, const char * option3, int & chosen);
 
   //: Multiple choice - with the list of options given.
-  void choice(const char*, const std::vector<std::string>&, int &);
+  void
+  choice(const char *, const std::vector<std::string> &, int &);
 
-  void choice(const char*s, const std::vector<std::string>&v, unsigned &r)
-  { choice(s,v,*reinterpret_cast<int*>(&r)); }
+  void
+  choice(const char * s, const std::vector<std::string> & v, unsigned & r)
+  {
+    choice(s, v, *reinterpret_cast<int *>(&r));
+  }
 
   //: File browsers
-  void file (const char* label, std::string& regexp, std::string& filepath);
+  void
+  file(const char * label, std::string & regexp, std::string & filepath);
 
   //: inline file browser
-  void inline_file(const char* label, std::string& regexp,std::string& filepath);
+  void
+  inline_file(const char * label, std::string & regexp, std::string & filepath);
 
   //: Color chooser
-  void color (const char* label, std::string&);
+  void
+  color(const char * label, std::string &);
 
   //: Inline color chooser
-  void inline_color(const char *label, std::string &);
+  void
+  inline_color(const char * label, std::string &);
 
   //: Text message
-  void message(const char*);
+  void
+  message(const char *);
 
-  void line_break();
+  void
+  line_break();
 
   //: Display a tableau in the dialog
-  void inline_tableau(const vgui_tableau_sptr tab, unsigned width,
-                      unsigned height);
+  void
+  inline_tableau(const vgui_tableau_sptr tab, unsigned width, unsigned height);
 
   //: Set the labels on each button, if 0 that button does not appear.
-  void set_cancel_button(const char* label);
+  void
+  set_cancel_button(const char * label);
 
   //: Set the labels on each button, if 0 that button does not appear.
-  void set_ok_button(const char* label);
+  void
+  set_ok_button(const char * label);
 
   //: A "modal" dialog captures all events sent to the application.
-  void set_modal(const bool);
+  void
+  set_modal(const bool);
 
   //: Display the dialog box and wait for the users response.
   //  Returns true if the user clicks on the 'OK' button and false if the
   //  user clicks on the 'Cancel' button.
-  bool ask();
+  bool
+  ask();
 
- protected:
+protected:
   vgui_dialog() {}
-  vgui_dialog_impl* impl;
+  vgui_dialog_impl * impl;
 };
 
 #endif // vgui_dialog_h_

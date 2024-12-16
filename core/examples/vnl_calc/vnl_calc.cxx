@@ -65,9 +65,9 @@ public:
   }
 };
 
-#define POP2(expr)                                                                                                     \
-  Matrix b = stack.pop();                                                                                              \
-  Matrix a = stack.pop();                                                                                              \
+#define POP2(expr)        \
+  Matrix b = stack.pop(); \
+  Matrix a = stack.pop(); \
   stack.push(expr);
 
 void
@@ -82,12 +82,12 @@ using Matrix = vnl_matrix<double>;
 template class mystack<Matrix>;
 
 void
-print(mystack<Matrix> const & stack, char const * fmt)
+print(const mystack<Matrix> & stack, const char * fmt)
 {
   char buf[4096];
   for (unsigned int k = 0; k < stack.size(); ++k)
   {
-    Matrix const & M = stack[k];
+    const Matrix & M = stack[k];
     for (unsigned int i = 0; i < M.rows(); ++i)
     {
       for (unsigned int j = 0; j < M.cols(); ++j)
@@ -102,7 +102,7 @@ print(mystack<Matrix> const & stack, char const * fmt)
 }
 
 void
-print(mystack<Matrix> const & stack, std::string const & fmt)
+print(const mystack<Matrix> & stack, const std::string & fmt)
 {
   print(stack, fmt.c_str());
 }
@@ -119,12 +119,12 @@ main(int argc, char ** argv)
   for (int i = 1; i < argc; ++i)
   {
     std::string arg = argv[i];
-#define SHIFT                                                                                                          \
-  {                                                                                                                    \
-    if (++i >= argc)                                                                                                   \
-      cantshift(arg);                                                                                                  \
-    else                                                                                                               \
-      arg = argv[i];                                                                                                   \
+#define SHIFT         \
+  {                   \
+    if (++i >= argc)  \
+      cantshift(arg); \
+    else              \
+      arg = argv[i];  \
   }
 
     if (arg[0] >= '0' && arg[0] <= '9')

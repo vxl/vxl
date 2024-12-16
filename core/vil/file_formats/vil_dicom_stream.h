@@ -8,53 +8,60 @@
 
 class vil_stream;
 
-class vil_dicom_stream_producer
-  : public DcmProducer
+class vil_dicom_stream_producer : public DcmProducer
 {
- public:
-  vil_dicom_stream_producer( vil_stream* vs );
+public:
+  vil_dicom_stream_producer(vil_stream * vs);
 
   virtual ~vil_dicom_stream_producer();
 
-  virtual OFBool good() const;
-  virtual OFCondition status() const;
-  virtual OFBool eos() const;
-  virtual Uint32 avail() const;
-  virtual Uint32 read(void *buf, Uint32 buflen);
-  virtual Uint32 skip(Uint32 skiplen);
-  virtual void putback(Uint32 num);
+  virtual OFBool
+  good() const;
+  virtual OFCondition
+  status() const;
+  virtual OFBool
+  eos() const;
+  virtual Uint32
+  avail() const;
+  virtual Uint32
+  read(void * buf, Uint32 buflen);
+  virtual Uint32
+  skip(Uint32 skiplen);
+  virtual void
+  putback(Uint32 num);
 
- private:
-  vil_stream* vs_;
+private:
+  vil_stream * vs_;
 };
 
 
-class vil_dicom_stream_factory
-  : public DcmInputStreamFactory
+class vil_dicom_stream_factory : public DcmInputStreamFactory
 {
- public:
-  vil_dicom_stream_factory( vil_stream* vs );
+public:
+  vil_dicom_stream_factory(vil_stream * vs);
 
   virtual ~vil_dicom_stream_factory();
 
-  virtual DcmInputStream* create() const;
+  virtual DcmInputStream *
+  create() const;
 
-  virtual DcmInputStreamFactory* clone() const
+  virtual DcmInputStreamFactory *
+  clone() const
   {
     return new vil_dicom_stream_factory(*this);
   }
 
- private:
-  vil_stream* vs_;
+private:
+  vil_stream * vs_;
 };
 
-class vil_dicom_stream_input
-  : public DcmInputStream
+class vil_dicom_stream_input : public DcmInputStream
 {
- public:
-  vil_dicom_stream_input( vil_stream* vs );
+public:
+  vil_dicom_stream_input(vil_stream * vs);
   virtual ~vil_dicom_stream_input();
-  virtual DcmInputStreamFactory* newFactory() const;
+  virtual DcmInputStreamFactory *
+  newFactory() const;
 };
 
 #endif // vil_dicom_stream_h_

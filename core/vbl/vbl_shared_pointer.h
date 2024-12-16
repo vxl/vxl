@@ -22,7 +22,9 @@
 struct vbl_shared_pointer_data
 {
   int use_count; //!< number of shared_pointers using object.
-  vbl_shared_pointer_data(int u) : use_count(u) { }
+  vbl_shared_pointer_data(int u)
+    : use_count(u)
+  {}
 };
 
 //: Non-intrusive smart pointers
@@ -35,45 +37,53 @@ struct vbl_shared_pointer_data
 template <class T>
 class vbl_shared_pointer
 {
- public:
+public:
   typedef T element_type;
   typedef vbl_shared_pointer<T> self;
 
   typedef vbl_shared_pointer_data data_t;
 
-  vbl_shared_pointer() : pointer(nullptr) {}
+  vbl_shared_pointer()
+    : pointer(nullptr)
+  {}
 
-  explicit
-  vbl_shared_pointer(T *p) {
-    if (p) {
+  explicit vbl_shared_pointer(T * p)
+  {
+    if (p)
+    {
       pointer = p;
       count_data = new data_t(1);
-    } else {
+    }
+    else
+    {
       pointer = nullptr;
       count_data = nullptr;
     }
   }
 
-  vbl_shared_pointer(self const &that)
-    : pointer( that.pointer ),
-      count_data( that.count_data )
+  vbl_shared_pointer(const self & that)
+    : pointer(that.pointer)
+    , count_data(that.count_data)
   {
     up_ref();
   }
 
-  template<class U> friend class vbl_shared_pointer;
+  template <class U>
+  friend class vbl_shared_pointer;
 
   //: Construct using smart pointer to derived class.
   template <class U>
-  vbl_shared_pointer( vbl_shared_pointer<U> const &that )
-    : pointer( that.pointer ),
-      count_data( that.count_data )
+  vbl_shared_pointer(const vbl_shared_pointer<U> & that)
+    : pointer(that.pointer)
+    , count_data(that.count_data)
   {
     up_ref();
   }
 
   template <class U>
-  self &operator=( vbl_shared_pointer<U> const &that) {
+  self &
+  operator=(const vbl_shared_pointer<U> & that)
+  {
     that.up_ref();
     down_ref();
     pointer = that.pointer;
@@ -110,7 +120,9 @@ class vbl_shared_pointer
     : data(new data_t(new T(v1, v2, v3, v4), 1)) { }
 #endif
 
-  self &operator=(self const &that) {
+  self &
+  operator=(self const & that)
+  {
     that.up_ref();
     down_ref();
     pointer = that.pointer;
@@ -118,53 +130,92 @@ class vbl_shared_pointer
     return *this;
   }
 
-  ~vbl_shared_pointer() {
-    down_ref();
+  ~vbl_shared_pointer() { down_ref(); }
+
+private:
+public:
+  // conversion to bool
+  explicit
+  operator bool() const
+  {
+    return (pointer != 0) ? true : false;
   }
 
- private:
-
- public:
-  // conversion to bool
-  explicit operator bool () const
-    { return (pointer != 0)? true : false; }
-
   // inverse conversion to bool
-  bool operator!() const
-    { return (pointer != 0)? false : true; }
+  bool
+  operator!() const
+  {
+    return (pointer != 0) ? false : true;
+  }
 
   // conversion to pointer
 #if !defined VBL_SHARED_POINTER_OF_NON_COMPOUND // Get rid of warning with vbl_shared_pointer<int>
-  T const *operator->() const { return as_pointer(); }
-  T       *operator->() { return as_pointer(); }
+  T const *
+  operator->() const
+  {
+    return as_pointer();
+  }
+  T *
+  operator->()
+  {
+    return as_pointer();
+  }
 #endif
 
   // conversion to T
-  T const &operator*() const { return *as_pointer(); }
-  T       &operator*() { return *as_pointer(); }
+  const T &
+  operator*() const
+  {
+    return *as_pointer();
+  }
+  T &
+  operator*()
+  {
+    return *as_pointer();
+  }
 
   // relational
-  bool operator!=(self const &that) const { return pointer != that.pointer; }
-  bool operator==(self const &that) const { return pointer == that.pointer; }
-  bool operator< (self const &that) const { return pointer <  that.pointer; }
+  bool
+  operator!=(const self & that) const
+  {
+    return pointer != that.pointer;
+  }
+  bool
+  operator==(const self & that) const
+  {
+    return pointer == that.pointer;
+  }
+  bool
+  operator<(const self & that) const
+  {
+    return pointer < that.pointer;
+  }
 
   // use these if you like, but at your own risk.
-  T *as_pointer() const {
+  T *
+  as_pointer() const
+  {
     return pointer;
   }
-  void up_ref() const {
+  void
+  up_ref() const
+  {
     if (count_data)
-      ++ count_data->use_count;
+      ++count_data->use_count;
   }
-  void down_ref() const {
-    if (count_data && (-- count_data->use_count == 0)) {
+  void
+  down_ref() const
+  {
+    if (count_data && (--count_data->use_count == 0))
+    {
       delete pointer;
       delete count_data;
     }
   }
- private:
-  T *pointer;    //!< pointer to object.
-  data_t *count_data{nullptr};
+
+private:
+  T * pointer; //!< pointer to object.
+  data_t * count_data{ nullptr };
 };
 
 #define VBL_SHARED_POINTER_INSTANTIATE(T) // template class vbl_shared_pointer<T >

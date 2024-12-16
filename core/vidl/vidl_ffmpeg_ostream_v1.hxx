@@ -20,11 +20,12 @@
 #endif
 #include <vil/vil_memory_chunk.h>
 
-extern "C" {
+extern "C"
+{
 #if FFMPEG_IN_SEVERAL_DIRECTORIES
-#include <libavformat/avformat.h>
+#  include <libavformat/avformat.h>
 #else
-#include <ffmpeg/avformat.h>
+#  include <ffmpeg/avformat.h>
 #endif
 }
 
@@ -34,20 +35,20 @@ extern "C" {
 struct vidl_ffmpeg_ostream::pimpl
 {
   pimpl()
-  : fmt_cxt_( 0 ),
-  file_opened_( false ),
-  codec_opened_( false ),
-  cur_frame_( 0 ),
-  video_rc_eq_(NULL)
-  { }
+    : fmt_cxt_(0)
+    , file_opened_(false)
+    , codec_opened_(false)
+    , cur_frame_(0)
+    , video_rc_eq_(NULL)
+  {}
 
 
-  AVFormatContext* fmt_cxt_;
+  AVFormatContext * fmt_cxt_;
   bool file_opened_;
   bool codec_opened_;
   vil_memory_chunk_sptr bit_buf_;
   unsigned int cur_frame_;
-  char* video_rc_eq_;
+  char * video_rc_eq_;
 };
 
 
@@ -55,17 +56,15 @@ struct vidl_ffmpeg_ostream::pimpl
 
 
 //: Constructor
-vidl_ffmpeg_ostream::
-vidl_ffmpeg_ostream()
-  : os_( new vidl_ffmpeg_ostream::pimpl )
+vidl_ffmpeg_ostream::vidl_ffmpeg_ostream()
+  : os_(new vidl_ffmpeg_ostream::pimpl)
 {
   vidl_ffmpeg_init();
 }
 
 
 //: Destructor
-vidl_ffmpeg_ostream::
-~vidl_ffmpeg_ostream()
+vidl_ffmpeg_ostream::~vidl_ffmpeg_ostream()
 {
   close();
   delete os_;
@@ -73,11 +72,10 @@ vidl_ffmpeg_ostream::
 
 
 //: Constructor - opens a stream
-vidl_ffmpeg_ostream::
-vidl_ffmpeg_ostream(const std::string& filename,
-                    const vidl_ffmpeg_ostream_params& params)
-  : os_( new vidl_ffmpeg_ostream::pimpl ),
-    filename_(filename), params_(params)
+vidl_ffmpeg_ostream::vidl_ffmpeg_ostream(const std::string & filename, const vidl_ffmpeg_ostream_params & params)
+  : os_(new vidl_ffmpeg_ostream::pimpl)
+  , filename_(filename)
+  , params_(params)
 {
   vidl_ffmpeg_init();
 }
@@ -85,29 +83,30 @@ vidl_ffmpeg_ostream(const std::string& filename,
 
 //: Open the stream
 bool
-vidl_ffmpeg_ostream::
-open()
+vidl_ffmpeg_ostream::open()
 {
   // Close any open files
   close();
 
   // a raw video packet is the same size as the input image. Others
   // are smaller.
-  os_->bit_buf_ = new vil_memory_chunk( params_.ni_ * params_.nj_ * 3, VIL_PIXEL_FORMAT_BYTE );
+  os_->bit_buf_ = new vil_memory_chunk(params_.ni_ * params_.nj_ * 3, VIL_PIXEL_FORMAT_BYTE);
 
   os_->fmt_cxt_ = av_alloc_format_context();
 
-  AVOutputFormat* file_oformat = 0;
-  if ( params_.file_format_ == vidl_ffmpeg_ostream_params::GUESS ) {
+  AVOutputFormat * file_oformat = 0;
+  if (params_.file_format_ == vidl_ffmpeg_ostream_params::GUESS)
+  {
     file_oformat = guess_format(NULL, filename_.c_str(), NULL);
-    if (!file_oformat) {
-      std::cerr << "ffmpeg: Unable for find a suitable output format for "
-               << filename_ << '\n';
+    if (!file_oformat)
+    {
+      std::cerr << "ffmpeg: Unable for find a suitable output format for " << filename_ << '\n';
       close();
       return false;
     }
   }
-  else {
+  else
+  {
     close();
     return false;
   }
@@ -116,8 +115,9 @@ open()
   os_->fmt_cxt_->nb_streams = 0;
 
   // Create stream
-  AVStream* st = av_new_stream( os_->fmt_cxt_, 1 );
-  if ( !st ) {
+  AVStream * st = av_new_stream(os_->fmt_cxt_, 1);
+  if (!st)
+  {
     std::cerr << "ffmpeg: could not alloc stream\n";
     close();
     return false;
@@ -126,49 +126,48 @@ open()
   os_->fmt_cxt_->nb_streams = 1;
 
 #if LIBAVFORMAT_BUILD <= 4628
-  AVCodecContext *video_enc = &st->codec;
+  AVCodecContext * video_enc = &st->codec;
 #else
-  AVCodecContext *video_enc = st->codec;
+  AVCodecContext * video_enc = st->codec;
 #endif
 
-  if ( std::strcmp(file_oformat->name, "mp4") != 0 ||
-       std::strcmp(file_oformat->name, "mov") != 0 ||
-       std::strcmp(file_oformat->name, "3gp") != 0 )
+  if (std::strcmp(file_oformat->name, "mp4") != 0 || std::strcmp(file_oformat->name, "mov") != 0 ||
+      std::strcmp(file_oformat->name, "3gp") != 0)
     video_enc->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
-  switch ( params_.encoder_ )
+  switch (params_.encoder_)
   {
-   case vidl_ffmpeg_ostream_params::DEFAULT:
-    video_enc->codec_id = file_oformat->video_codec;
-    break;
-   case vidl_ffmpeg_ostream_params::MPEG4:
-    video_enc->codec_id = CODEC_ID_MPEG4;
-    break;
-   case vidl_ffmpeg_ostream_params::MPEG2VIDEO:
-    video_enc->codec_id = CODEC_ID_MPEG2VIDEO;
-    break;
-   case vidl_ffmpeg_ostream_params::MSMPEG4V2:
-    video_enc->codec_id = CODEC_ID_MSMPEG4V2;
-    break;
-   case vidl_ffmpeg_ostream_params::RAWVIDEO:
-    video_enc->codec_id = CODEC_ID_RAWVIDEO;
-    break;
-   case vidl_ffmpeg_ostream_params::LJPEG:
-    video_enc->codec_id = CODEC_ID_LJPEG;
-    break;
-   case vidl_ffmpeg_ostream_params::HUFFYUV:
-    video_enc->codec_id = CODEC_ID_HUFFYUV;
-    break;
-   case vidl_ffmpeg_ostream_params::DVVIDEO:
-    video_enc->codec_id = CODEC_ID_DVVIDEO;
-    break;
-   default:
-    std::cout << "ffmpeg: Unknown encoder type\n";
-    return false;
+    case vidl_ffmpeg_ostream_params::DEFAULT:
+      video_enc->codec_id = file_oformat->video_codec;
+      break;
+    case vidl_ffmpeg_ostream_params::MPEG4:
+      video_enc->codec_id = CODEC_ID_MPEG4;
+      break;
+    case vidl_ffmpeg_ostream_params::MPEG2VIDEO:
+      video_enc->codec_id = CODEC_ID_MPEG2VIDEO;
+      break;
+    case vidl_ffmpeg_ostream_params::MSMPEG4V2:
+      video_enc->codec_id = CODEC_ID_MSMPEG4V2;
+      break;
+    case vidl_ffmpeg_ostream_params::RAWVIDEO:
+      video_enc->codec_id = CODEC_ID_RAWVIDEO;
+      break;
+    case vidl_ffmpeg_ostream_params::LJPEG:
+      video_enc->codec_id = CODEC_ID_LJPEG;
+      break;
+    case vidl_ffmpeg_ostream_params::HUFFYUV:
+      video_enc->codec_id = CODEC_ID_HUFFYUV;
+      break;
+    case vidl_ffmpeg_ostream_params::DVVIDEO:
+      video_enc->codec_id = CODEC_ID_DVVIDEO;
+      break;
+    default:
+      std::cout << "ffmpeg: Unknown encoder type\n";
+      return false;
   }
 
-  AVCodec* codec = avcodec_find_encoder( video_enc->codec_id );
-  if ( !codec )
+  AVCodec * codec = avcodec_find_encoder(video_enc->codec_id);
+  if (!codec)
   {
     std::cerr << "ffmpeg_writer:: couldn't find encoder for " << video_enc->codec_id << '\n';
     return false;
@@ -177,61 +176,61 @@ open()
   video_enc->bit_rate = params_.bit_rate_ * 1000;
   video_enc->bit_rate_tolerance = params_.video_bit_rate_tolerance_;
 #if LIBAVCODEC_BUILD <= 4753
-  video_enc->frame_rate      = int( params_.frame_rate_ * 1000 );
+  video_enc->frame_rate = int(params_.frame_rate_ * 1000);
   video_enc->frame_rate_base = 1000;
 #else
   video_enc->time_base.num = 1000;
-  video_enc->time_base.den = int(params_.frame_rate_*1000);
+  video_enc->time_base.den = int(params_.frame_rate_ * 1000);
 #endif
 
-  if ( codec && codec->supported_framerates )
+  if (codec && codec->supported_framerates)
   {
-    AVRational const* p = codec->supported_framerates;
+    const AVRational * p = codec->supported_framerates;
 #if LIBAVCODEC_BUILD <= 4753
     AVRational req = { video_enc->frame_rate, video_enc->frame_rate_base };
 #else
     AVRational req = { video_enc->time_base.den, video_enc->time_base.num };
 #endif
-    AVRational const* best = NULL;
+    AVRational const * best = NULL;
     AVRational best_error = { INT_MAX, 1 };
-    for (; p->den!=0; p++)
+    for (; p->den != 0; p++)
     {
       AVRational error = av_sub_q(req, *p);
-      if ( error.num < 0 )   error.num *= -1;
-      if ( av_cmp_q( error, best_error ) < 0 )
+      if (error.num < 0)
+        error.num *= -1;
+      if (av_cmp_q(error, best_error) < 0)
       {
-        best_error= error;
-        best= p;
+        best_error = error;
+        best = p;
       }
     }
 #if LIBAVCODEC_BUILD <= 4753
-    video_enc->frame_rate      = best->num;
+    video_enc->frame_rate = best->num;
     video_enc->frame_rate_base = best->den;
 #else
-    video_enc->time_base.den= best->num;
-    video_enc->time_base.num= best->den;
+    video_enc->time_base.den = best->num;
+    video_enc->time_base.num = best->den;
 #endif
   }
 
-  video_enc->width  = params_.ni_;
+  video_enc->width = params_.ni_;
   video_enc->height = params_.nj_;
-  video_enc->sample_aspect_ratio = av_d2q(params_.frame_aspect_ratio_*params_.ni_/params_.nj_, 255);
+  video_enc->sample_aspect_ratio = av_d2q(params_.frame_aspect_ratio_ * params_.ni_ / params_.nj_, 255);
 
   // Our source is packed RGB. Use that if possible.
   video_enc->pix_fmt = PIX_FMT_RGB24;
-  if ( codec && codec->pix_fmts )
+  if (codec && codec->pix_fmts)
   {
-    const enum PixelFormat* p= codec->pix_fmts;
-    for ( ; *p != -1; p++ )
+    const enum PixelFormat * p = codec->pix_fmts;
+    for (; *p != -1; p++)
     {
-      if ( *p == video_enc->pix_fmt )
+      if (*p == video_enc->pix_fmt)
         break;
     }
-    if ( *p == -1 )
+    if (*p == -1)
       video_enc->pix_fmt = codec->pix_fmts[0];
   }
-  else if ( codec && ( codec->id == CODEC_ID_RAWVIDEO ||
-                      codec->id == CODEC_ID_HUFFYUV ) )
+  else if (codec && (codec->id == CODEC_ID_RAWVIDEO || codec->id == CODEC_ID_HUFFYUV))
   {
     // these formats only support the YUV input image formats
     video_enc->pix_fmt = PIX_FMT_YUV420P;
@@ -261,7 +260,7 @@ open()
   video_enc->spatial_cplx_masking = params_.scplx_mask_;
   video_enc->temporal_cplx_masking = params_.tcplx_mask_;
   video_enc->p_masking = params_.p_mask_;
-  video_enc->quantizer_noise_shaping= params_.qns_;
+  video_enc->quantizer_noise_shaping = params_.qns_;
 
   if (params_.use_umv_)
   {
@@ -349,7 +348,7 @@ open()
   video_enc->qcompress = params_.video_qcomp_;
 
   // delete when the stream is closed
-  os_->video_rc_eq_ = new char[params_.video_rc_eq_.length()+1];
+  os_->video_rc_eq_ = new char[params_.video_rc_eq_.length() + 1];
   std::strcpy(os_->video_rc_eq_, params_.video_rc_eq_.c_str());
   video_enc->rc_eq = os_->video_rc_eq_;
 
@@ -360,8 +359,8 @@ open()
   video_enc->rc_max_rate = params_.video_rc_max_rate_;
   video_enc->rc_min_rate = params_.video_rc_min_rate_;
   video_enc->rc_buffer_size = params_.video_rc_buffer_size_;
-  video_enc->rc_buffer_aggressivity= params_.video_rc_buffer_aggressivity_;
-  video_enc->rc_initial_cplx= params_.video_rc_initial_cplx_;
+  video_enc->rc_buffer_aggressivity = params_.video_rc_buffer_aggressivity_;
+  video_enc->rc_initial_cplx = params_.video_rc_initial_cplx_;
   video_enc->i_quant_factor = params_.video_i_qfactor_;
   video_enc->b_quant_factor = params_.video_b_qfactor_;
   video_enc->i_quant_offset = params_.video_i_qoffset_;
@@ -370,15 +369,15 @@ open()
   video_enc->inter_quant_bias = params_.video_inter_quant_bias_;
   video_enc->dct_algo = params_.dct_algo_;
   video_enc->idct_algo = params_.idct_algo_;
-  video_enc->intra_dc_precision= params_.intra_dc_precision_ - 8;
+  video_enc->intra_dc_precision = params_.intra_dc_precision_ - 8;
   video_enc->strict_std_compliance = params_.strict_;
   video_enc->error_rate = params_.error_rate_;
-  video_enc->noise_reduction= params_.noise_reduction_;
-  video_enc->scenechange_threshold= params_.sc_threshold_;
+  video_enc->noise_reduction = params_.noise_reduction_;
+  video_enc->scenechange_threshold = params_.sc_threshold_;
   video_enc->me_range = params_.me_range_;
-  video_enc->coder_type= params_.coder_;
-  video_enc->context_model= params_.context_;
-  video_enc->prediction_method= params_.predictor_;
+  video_enc->coder_type = params_.coder_;
+  video_enc->context_model = params_.context_;
+  video_enc->prediction_method = params_.predictor_;
 #if 0
   // old versions of FFMPEG don't support these
   // so lets ignore them for now
@@ -388,12 +387,12 @@ open()
 
   if (params_.packet_size_)
   {
-    video_enc->rtp_mode= 1;
-    video_enc->rtp_payload_size= params_.packet_size_;
+    video_enc->rtp_mode = 1;
+    video_enc->rtp_payload_size = params_.packet_size_;
   }
 
   if (params_.do_psnr_)
-    video_enc->flags|= CODEC_FLAG_PSNR;
+    video_enc->flags |= CODEC_FLAG_PSNR;
 
   video_enc->me_method = params_.me_method_;
 
@@ -416,9 +415,9 @@ open()
   os_->fmt_cxt_->copyright[0] = '\0';
   os_->fmt_cxt_->comment[0] = '\0';
 
-  std::strncpy( os_->fmt_cxt_->filename, filename_.c_str(), 1023 );
+  std::strncpy(os_->fmt_cxt_->filename, filename_.c_str(), 1023);
 
-  if ( url_fopen( &os_->fmt_cxt_->pb, filename_.c_str(), URL_WRONLY) < 0 )
+  if (url_fopen(&os_->fmt_cxt_->pb, filename_.c_str(), URL_WRONLY) < 0)
   {
     std::cerr << "ffmpeg: couldn't open " << filename_ << " for writing\n";
     close();
@@ -427,17 +426,17 @@ open()
   os_->file_opened_ = true;
 
   AVFormatParameters fmt_param;
-  std::memset( &fmt_param, 0, sizeof(fmt_param) );
-  if ( av_set_parameters( os_->fmt_cxt_, &fmt_param ) < 0 )
+  std::memset(&fmt_param, 0, sizeof(fmt_param));
+  if (av_set_parameters(os_->fmt_cxt_, &fmt_param) < 0)
   {
     std::cerr << "ffmpeg: invalid encoding parameter\n";
     close();
     return false;
   }
 
-  //dump_format( os_->fmt_cxt_, 1, filename_, 1 );
+  // dump_format( os_->fmt_cxt_, 1, filename_, 1 );
 
-  if ( avcodec_open( video_enc, codec ) < 0 )
+  if (avcodec_open(video_enc, codec) < 0)
   {
     std::cerr << "ffmpeg: couldn't open codec\n";
     close();
@@ -445,7 +444,7 @@ open()
   }
   os_->codec_opened_ = true;
 
-  if ( av_write_header( os_->fmt_cxt_ ) < 0 )
+  if (av_write_header(os_->fmt_cxt_) < 0)
   {
     std::cerr << "ffmpeg: couldn't write header\n";
     close();
@@ -458,41 +457,47 @@ open()
 
 //: Close the stream
 void
-vidl_ffmpeg_ostream::
-close()
+vidl_ffmpeg_ostream::close()
 {
   delete os_->video_rc_eq_;
   os_->video_rc_eq_ = NULL;
 
-  if ( os_->fmt_cxt_ ) {
+  if (os_->fmt_cxt_)
+  {
 
-    if ( os_->file_opened_ ) {
-      av_write_trailer( os_->fmt_cxt_ );
-      url_fclose( os_->fmt_cxt_->pb );
+    if (os_->file_opened_)
+    {
+      av_write_trailer(os_->fmt_cxt_);
+      url_fclose(os_->fmt_cxt_->pb);
       os_->file_opened_ = false;
     }
 
-    if ( os_->fmt_cxt_->nb_streams > 0 ) {
-      if ( os_->codec_opened_ ) {
-        for ( unsigned int i = 0; i < os_->fmt_cxt_->nb_streams; ++i ) {
+    if (os_->fmt_cxt_->nb_streams > 0)
+    {
+      if (os_->codec_opened_)
+      {
+        for (unsigned int i = 0; i < os_->fmt_cxt_->nb_streams; ++i)
+        {
 #if LIBAVFORMAT_BUILD <= 4628
-          AVCodecContext* codec = &os_->fmt_cxt_->streams[i]->codec;
+          AVCodecContext * codec = &os_->fmt_cxt_->streams[i]->codec;
 #else
-          AVCodecContext* codec = os_->fmt_cxt_->streams[i]->codec;
+          AVCodecContext * codec = os_->fmt_cxt_->streams[i]->codec;
 #endif
-          if ( codec->stats_in ) {
-            av_freep( codec->stats_in );
+          if (codec->stats_in)
+          {
+            av_freep(codec->stats_in);
           }
-          avcodec_close( codec );
+          avcodec_close(codec);
         }
       }
       os_->codec_opened_ = false;
-      for ( unsigned int i = 0; i < os_->fmt_cxt_->nb_streams; ++i ) {
-        av_free( os_->fmt_cxt_->streams[i] );
+      for (unsigned int i = 0; i < os_->fmt_cxt_->nb_streams; ++i)
+      {
+        av_free(os_->fmt_cxt_->streams[i]);
       }
     }
 
-    av_free( os_->fmt_cxt_ );
+    av_free(os_->fmt_cxt_);
     os_->fmt_cxt_ = 0;
   }
 }
@@ -500,8 +505,7 @@ close()
 
 //: Return true if the stream is open for writing
 bool
-vidl_ffmpeg_ostream::
-is_open() const
+vidl_ffmpeg_ostream::is_open() const
 {
   return os_->file_opened_;
 }
@@ -510,26 +514,25 @@ is_open() const
 //: Write and image to the stream
 // \retval false if the image could not be written
 bool
-vidl_ffmpeg_ostream::
-write_frame(const vidl_frame_sptr& frame)
+vidl_ffmpeg_ostream::write_frame(const vidl_frame_sptr & frame)
 {
-  if (!is_open()) {
+  if (!is_open())
+  {
     // resize to the first frame
-    params_.size(frame->ni(),frame->nj());
+    params_.size(frame->ni(), frame->nj());
     open();
   }
 
 #if LIBAVFORMAT_BUILD <= 4628
-  AVCodecContext* codec = &os_->fmt_cxt_->streams[0]->codec;
+  AVCodecContext * codec = &os_->fmt_cxt_->streams[0]->codec;
 #else
-  AVCodecContext* codec = os_->fmt_cxt_->streams[0]->codec;
+  AVCodecContext * codec = os_->fmt_cxt_->streams[0]->codec;
 #endif
 
-  if ( unsigned( codec->width ) != frame->ni() ||
-       unsigned( codec->height ) != frame->nj() ) {
-    std::cerr << "ffmpeg: Input image has wrong size. Expecting ("
-             << codec->width << 'x' << codec->height << "), got ("
-             << frame->ni() << 'x' << frame->nj() << ")\n";
+  if (unsigned(codec->width) != frame->ni() || unsigned(codec->height) != frame->nj())
+  {
+    std::cerr << "ffmpeg: Input image has wrong size. Expecting (" << codec->width << 'x' << codec->height << "), got ("
+              << frame->ni() << 'x' << frame->nj() << ")\n";
     return false;
   }
 
@@ -537,62 +540,67 @@ write_frame(const vidl_frame_sptr& frame)
   PixelFormat fmt = vidl_pixel_format_to_ffmpeg(frame->pixel_format());
 
   vidl_pixel_format target_fmt = vidl_pixel_format_from_ffmpeg(codec->pix_fmt);
-  static vidl_frame_sptr temp_frame = new vidl_shared_frame(NULL,frame->ni(),frame->nj(),target_fmt);
+  static vidl_frame_sptr temp_frame = new vidl_shared_frame(NULL, frame->ni(), frame->nj(), target_fmt);
 
   AVFrame out_frame;
-  avcodec_get_frame_defaults( &out_frame );
+  avcodec_get_frame_defaults(&out_frame);
 
   // The frame is in the correct format to encode directly
-  if ( codec->pix_fmt == fmt )
+  if (codec->pix_fmt == fmt)
   {
-    avpicture_fill((AVPicture*)&out_frame, (uint8_t*) frame->data(),
-                   fmt, frame->ni(), frame->nj());
+    avpicture_fill((AVPicture *)&out_frame, (uint8_t *)frame->data(), fmt, frame->ni(), frame->nj());
   }
   else
   {
-    if (!temp_frame->data()) {
+    if (!temp_frame->data())
+    {
       unsigned ni = frame->ni();
       unsigned nj = frame->nj();
-      unsigned out_size = vidl_pixel_format_buffer_size(ni,nj,target_fmt);
-      temp_frame = new vidl_memory_chunk_frame(ni, nj, target_fmt,
-                                               new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE));
+      unsigned out_size = vidl_pixel_format_buffer_size(ni, nj, target_fmt);
+      temp_frame =
+        new vidl_memory_chunk_frame(ni, nj, target_fmt, new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE));
     }
     // try conversion with FFMPEG functions
-    if (!vidl_ffmpeg_convert(frame, temp_frame)) {
+    if (!vidl_ffmpeg_convert(frame, temp_frame))
+    {
       // try conversion with vidl functions
-      if (!vidl_convert_frame(*frame, *temp_frame)) {
-        std::cout << "unable to convert " << frame->pixel_format() << " to "<<target_fmt<<std::endl;
+      if (!vidl_convert_frame(*frame, *temp_frame))
+      {
+        std::cout << "unable to convert " << frame->pixel_format() << " to " << target_fmt << std::endl;
         return false;
       }
     }
-    avpicture_fill((AVPicture*)&out_frame, (uint8_t*) temp_frame->data(),
-                   codec->pix_fmt, frame->ni(), frame->nj());
+    avpicture_fill((AVPicture *)&out_frame, (uint8_t *)temp_frame->data(), codec->pix_fmt, frame->ni(), frame->nj());
   }
 
   AVPacket pkt;
-  av_init_packet( &pkt );
+  av_init_packet(&pkt);
   pkt.stream_index = 0;
 
 #if LIBAVCODEC_BUILD <= 4753
-  out_frame.pts = av_rescale( os_->cur_frame_, AV_TIME_BASE*(int64_t)codec->frame_rate_base, codec->frame_rate );
+  out_frame.pts = av_rescale(os_->cur_frame_, AV_TIME_BASE * (int64_t)codec->frame_rate_base, codec->frame_rate);
 #else
   out_frame.pts = os_->cur_frame_;
 #endif
 
-  int ret = avcodec_encode_video( codec, (uint8_t*)os_->bit_buf_->data(), os_->bit_buf_->size(), &out_frame );
+  int ret = avcodec_encode_video(codec, (uint8_t *)os_->bit_buf_->data(), os_->bit_buf_->size(), &out_frame);
 
-  if ( ret ) {
-    pkt.data = (uint8_t*)os_->bit_buf_->data();
+  if (ret)
+  {
+    pkt.data = (uint8_t *)os_->bit_buf_->data();
     pkt.size = ret;
-    if ( codec->coded_frame ) {
+    if (codec->coded_frame)
+    {
       pkt.pts = codec->coded_frame->pts;
     }
-    if ( codec->coded_frame && codec->coded_frame->key_frame ) {
+    if (codec->coded_frame && codec->coded_frame->key_frame)
+    {
       pkt.flags |= PKT_FLAG_KEY;
     }
-    av_interleaved_write_frame( os_->fmt_cxt_, &pkt );
+    av_interleaved_write_frame(os_->fmt_cxt_, &pkt);
   }
-  else {
+  else
+  {
     return false;
   }
 

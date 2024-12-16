@@ -20,17 +20,23 @@
 //: Accelerated OpenGL functions for X11.
 class vgui_accelerate_x11 : public vgui_accelerate
 {
- public:
+public:
   vgui_accelerate_x11();
   virtual ~vgui_accelerate_x11();
 
-  virtual bool vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels );
-  virtual bool vgui_glClear( GLbitfield mask );
-  virtual bool vgui_choose_cache_format( GLenum* format, GLenum* type);
-  virtual bool vgui_copy_aux_to_back();
-  virtual bool vgui_copy_back_to_aux();
- protected:
-  char* aux_buffer;
+  virtual bool
+  vgui_glDrawPixels(GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid * pixels);
+  virtual bool
+  vgui_glClear(GLbitfield mask);
+  virtual bool
+  vgui_choose_cache_format(GLenum * format, GLenum * type);
+  virtual bool
+  vgui_copy_aux_to_back();
+  virtual bool
+  vgui_copy_back_to_aux();
+
+protected:
+  char * aux_buffer;
   int aux_buffer_size;
 
 #ifdef HAS_HERMES

@@ -23,7 +23,7 @@ vil_plane(const vil_image_resource_sptr & src, unsigned p)
   return new vil_plane_image_resource(src, p);
 }
 
-vil_plane_image_resource::vil_plane_image_resource(vil_image_resource_sptr const & gi, unsigned p)
+vil_plane_image_resource::vil_plane_image_resource(const vil_image_resource_sptr & gi, unsigned p)
   : src_(gi)
   , plane_(p)
 {
@@ -39,8 +39,8 @@ vil_plane_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j0, u
 
   switch (vs->pixel_format())
   {
-#define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
+#define macro(F, T) \
+  case F:           \
     return new vil_image_view<T>(vil_plane(static_cast<const vil_image_view<T> &>(*vs), plane_));
 
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
@@ -67,8 +67,8 @@ vil_plane_image_resource::get_view(unsigned i0, unsigned ni, unsigned j0, unsign
 
   switch (vs->pixel_format())
   {
-#define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
+#define macro(F, T) \
+  case F:           \
     return new vil_image_view<T>(vil_plane(static_cast<const vil_image_view<T> &>(*vs), plane_));
 
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
@@ -98,16 +98,17 @@ vil_plane_image_resource::put_view(const vil_image_view_base & im, unsigned i0, 
 
   switch (vs->pixel_format())
   {
-#define macro(F, T)                                                                                                    \
-  case F: {                                                                                                            \
-    const vil_image_view<T> view = static_cast<const vil_image_view<T> &>(im);                                         \
-    vil_image_view<T> plane = vil_plane(static_cast<vil_image_view<T> &>(*vs), plane_);                                \
-    if (view == plane)                                                                                                 \
-      return true; /* If we have already modified the data, do nothing */                                              \
-    for (unsigned j = 0; j < view.nj(); ++j)                                                                           \
-      for (unsigned i = 0; i < view.ni(); ++i)                                                                         \
-        plane(i, j) = view(i, j);                                                                                      \
-    return src_->put_view(*vs, i0, j0);                                                                                \
+#define macro(F, T)                                                                     \
+  case F:                                                                               \
+  {                                                                                     \
+    const vil_image_view<T> view = static_cast<const vil_image_view<T> &>(im);          \
+    vil_image_view<T> plane = vil_plane(static_cast<vil_image_view<T> &>(*vs), plane_); \
+    if (view == plane)                                                                  \
+      return true; /* If we have already modified the data, do nothing */               \
+    for (unsigned j = 0; j < view.nj(); ++j)                                            \
+      for (unsigned i = 0; i < view.ni(); ++i)                                          \
+        plane(i, j) = view(i, j);                                                       \
+    return src_->put_view(*vs, i0, j0);                                                 \
   }
 
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)

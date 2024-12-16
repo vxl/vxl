@@ -20,7 +20,7 @@ vil_image_resource::~vil_image_resource() = default;
 
 
 bool
-vil_image_resource::get_property(char const *, void *) const
+vil_image_resource::get_property(const char *, void *) const
 {
   return false;
 }

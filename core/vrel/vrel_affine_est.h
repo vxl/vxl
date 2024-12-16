@@ -17,49 +17,51 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-class vrel_affine_est : public vrel_estimation_problem {
+class vrel_affine_est : public vrel_estimation_problem
+{
 public:
-  typedef vrel_linear_regression* regression_ptr;
+  typedef vrel_linear_regression * regression_ptr;
   //: Constructor that includes all information in the sample vectors.
   //  For each sample, the first m-1 entries are the independent
   //  variables, and the last entry is the dependent variable.
-  vrel_affine_est( const std::vector< vgl_point_2d<double> > & from_pts,
-                   const std::vector< vgl_point_2d<double> > & to_pts );
+  vrel_affine_est(const std::vector<vgl_point_2d<double>> & from_pts, const std::vector<vgl_point_2d<double>> & to_pts);
 
   //: Constructor with data pre-separated into arrays of independent and dependent variables.
-  vrel_affine_est(const std::vector<vnl_vector<double>> &from_pts,
-                  std::vector<vnl_vector<double>> to_pts, unsigned int dim = 2);
+  vrel_affine_est(const std::vector<vnl_vector<double>> & from_pts,
+                  std::vector<vnl_vector<double>> to_pts,
+                  unsigned int dim = 2);
 
   //: Destructor.
   ~vrel_affine_est() override;
 
   //: Total number of data points.
-  unsigned int num_samples( ) const override;
+  unsigned int
+  num_samples() const override;
 
   //: organize into usual representation
   vnl_vector<double>
-  trans( const vnl_vector<double>& params ) const;
+  trans(const vnl_vector<double> & params) const;
 
   vnl_matrix<double>
-  A( const vnl_vector<double>& params ) const;
+  A(const vnl_vector<double> & params) const;
 
   //: Generate a parameter estimate from a minimal sample set.
-  bool fit_from_minimal_set( const std::vector<int>& point_indices,
-                             vnl_vector<double>& params ) const override;
+  bool
+  fit_from_minimal_set(const std::vector<int> & point_indices, vnl_vector<double> & params) const override;
 
   //: Compute signed fit residuals relative to the parameter estimate.
-  void compute_residuals( const vnl_vector<double>& params,
-                          std::vector<double>& residuals ) const override;
+  void
+  compute_residuals(const vnl_vector<double> & params, std::vector<double> & residuals) const override;
 
   //: \brief Weighted least squares parameter estimate.
-  bool weighted_least_squares_fit( vnl_vector<double>& params,
-                                   vnl_matrix<double>& norm_covar,
-                                   const std::vector<double>* weights=nullptr ) const override;
+  bool
+  weighted_least_squares_fit(vnl_vector<double> & params,
+                             vnl_matrix<double> & norm_covar,
+                             const std::vector<double> * weights = nullptr) const override;
 
 protected:
-
-  std::vector< vnl_vector<double> > from_pts_;
-  std::vector< vnl_vector<double> > to_pts_;
+  std::vector<vnl_vector<double>> from_pts_;
+  std::vector<vnl_vector<double>> to_pts_;
 
   unsigned affine_dof_;
   unsigned min_num_pts_;

@@ -11,7 +11,7 @@
 #include "vgui_multiply_4x4.h"
 
 static void
-fast_null(double const P0[4], double const P1[4], double const P2[4], double f[4])
+fast_null(const double P0[4], const double P1[4], const double P2[4], double f[4])
 {
   f[0] = -P0[1] * P1[2] * P2[3] + P0[1] * P1[3] * P2[2] + P1[1] * P0[2] * P2[3] - P1[1] * P0[3] * P2[2] -
          P2[1] * P0[2] * P1[3] + P2[1] * P0[3] * P1[2];
@@ -24,11 +24,11 @@ fast_null(double const P0[4], double const P1[4], double const P2[4], double f[4
 }
 
 bool
-vgui_back_project_d3d4d4d4d4_d4(double const x[3],
-                                double const P0[4],
-                                double const P1[4],
-                                double const P2[4],
-                                double const pi[4],
+vgui_back_project_d3d4d4d4d4_d4(const double x[3],
+                                const double P0[4],
+                                const double P1[4],
+                                const double P2[4],
+                                const double pi[4],
                                 double X[4])
 {
   // X = ( (x[0] P1.P2 + x[1] P2.P0 + x[2] P0.P1).pi )*
@@ -45,7 +45,7 @@ vgui_back_project_d3d4d4d4d4_d4(double const x[3],
 }
 
 bool
-vgui_back_project_d3d4_d4(double const x[3], double const pi[4], double X[4])
+vgui_back_project_d3d4_d4(const double x[3], const double pi[4], double X[4])
 {
   double P[4][4];
   glGetDoublev(GL_PROJECTION_MATRIX, &P[0][0]);
@@ -59,7 +59,7 @@ vgui_back_project_d3d4_d4(double const x[3], double const pi[4], double X[4])
 }
 
 bool
-vgui_back_project_iid4_d4(int vx, int vy, double const pi[4], double X[4])
+vgui_back_project_iid4_d4(int vx, int vy, const double pi[4], double X[4])
 {
   GLint vp[4];
   vgui_utils::get_glViewport(vp);
@@ -70,7 +70,7 @@ vgui_back_project_iid4_d4(int vx, int vy, double const pi[4], double X[4])
 bool
 vgui_back_project_ii_dd(int vx, int vy, double * x, double * y)
 {
-  double const pi[4] = { 0, 0, 1, 0 };
+  const double pi[4] = { 0, 0, 1, 0 };
   double X[4];
   if (!vgui_back_project_iid4_d4(vx, vy, pi, X))
     return false;

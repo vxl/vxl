@@ -21,10 +21,14 @@
 //  Points outside image return zero.
 // \relatesalso vil_image_view
 template <class imType, class vecType>
-void vil_sample_profile_bilin(vecType* v,
-                              const vil_image_view<imType>& image,
-                              double x0, double y0, double dx, double dy,
-                              int n);
+void
+vil_sample_profile_bilin(vecType * v,
+                         const vil_image_view<imType> & image,
+                         double x0,
+                         double y0,
+                         double dx,
+                         double dy,
+                         int n);
 
 //: Sample along profile, using bilinear interpolation
 //  Profile points are (x0+i.dx,y0+i.dy), where i=[0..n-1].
@@ -33,9 +37,13 @@ void vil_sample_profile_bilin(vecType* v,
 //  Points outside image return NA.
 // \relatesalso vil_image_view
 template <class imType, class vecType>
-void vil_sample_profile_bilin_edgena(vecType* v,
-                                     const vil_image_view<imType>& image,
-                                     double x0, double y0, double dx, double dy,
-                                     int n);
+void
+vil_sample_profile_bilin_edgena(vecType * v,
+                                const vil_image_view<imType> & image,
+                                double x0,
+                                double y0,
+                                double dx,
+                                double dy,
+                                int n);
 
 #endif // vil_sample_profile_bilin_h_

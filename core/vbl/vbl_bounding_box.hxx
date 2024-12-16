@@ -18,12 +18,15 @@
 #endif
 
 template <class T, class DIM_>
-std::ostream& vbl_bounding_box_base<T, DIM_>::print(std::ostream& s) const
+std::ostream &
+vbl_bounding_box_base<T, DIM_>::print(std::ostream & s) const
 {
-  if (empty()) {
+  if (empty())
+  {
     s << "<bbox(empty, " << int(DIM_::value) << " dimensions)>";
   }
-  else {
+  else
+  {
     s << "<bbox(";
     for (int i = 0; i < int(DIM_::value); ++i)
       s << min()[i] << ' ';
@@ -36,20 +39,21 @@ std::ostream& vbl_bounding_box_base<T, DIM_>::print(std::ostream& s) const
 }
 
 template <class T, class DIM_>
-std::ostream& operator << (std::ostream& s, const vbl_bounding_box_base<T,DIM_>& bbox)
+std::ostream &
+operator<<(std::ostream & s, const vbl_bounding_box_base<T, DIM_> & bbox)
 {
   return bbox.print(s);
 }
 
-#define VBL_BOUNDING_BOX_INSTANTIATE(T, DIM) \
-template class vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > >; \
-template class vbl_bounding_box<T , DIM >; \
-template std::ostream& operator << (std::ostream&, vbl_bounding_box_base<T, vbl_bounding_box_DIM< DIM > > const&); \
-/* template bool nested  (vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&, \
-                                     vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&); */ \
-/* template bool disjoint(vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&, \
-                                     vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&); */ \
-/* template bool meet    (vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&, \
-                                     vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&) */
+#define VBL_BOUNDING_BOX_INSTANTIATE(T, DIM)                                                                       \
+  template class vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM>>;                                              \
+  template class vbl_bounding_box<T, DIM>;                                                                         \
+  template std::ostream & operator<<(std::ostream &, vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM>> const &); \
+  /* template bool nested  (vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&,                        \
+                                       vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&); */         \
+  /* template bool disjoint(vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&,                        \
+                                       vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&); */         \
+  /* template bool meet    (vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&,                        \
+                                       vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&) */
 
 #endif // vbl_bounding_box_hxx_

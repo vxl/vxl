@@ -30,20 +30,22 @@
 template <class T>
 class vgui_simple_field : public vgui_dialog_field
 {
- public:
-  vgui_simple_field(const char *text,T &variable_to_modify);
+public:
+  vgui_simple_field(const char * text, T & variable_to_modify);
   ~vgui_simple_field();
 
-  std::string current_value() const;
-  bool update_value(const std::string &);
+  std::string
+  current_value() const;
+  bool
+  update_value(const std::string &);
 
-  T &var;
+  T & var;
 };
 
-typedef vgui_simple_field<bool>   vgui_bool_field;
-typedef vgui_simple_field<int>    vgui_int_field;
-typedef vgui_simple_field<long>   vgui_long_field;
-typedef vgui_simple_field<float>  vgui_float_field;
+typedef vgui_simple_field<bool> vgui_bool_field;
+typedef vgui_simple_field<int> vgui_int_field;
+typedef vgui_simple_field<long> vgui_long_field;
+typedef vgui_simple_field<float> vgui_float_field;
 typedef vgui_simple_field<double> vgui_double_field;
 
 #endif // vgui_simple_field_h_

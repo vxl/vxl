@@ -8,6 +8,7 @@
 
 #include "vil1_image.h"
 
-vil1_image vil1_skip(vil1_image const &, unsigned, unsigned);
+vil1_image
+vil1_skip(const vil1_image &, unsigned, unsigned);
 
 #endif // vil1_skip_h_

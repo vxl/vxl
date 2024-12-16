@@ -35,95 +35,133 @@ class vgui_event;
 //  [a] the DRAW, DRAW_OVERLAY events which are sent to all children.
 class vgui_selector_tableau : public vgui_tableau
 {
- public:
+public:
   //: Constructor - don't use this, use vgui_selector_tableau_new.
   //  Creates an empty composite tableau.
   vgui_selector_tableau();
 
   //: Constructor - don't use this, use vgui_selector_tableau_new.
   //  Takes a vector of child tableaux.
-  vgui_selector_tableau(std::vector<vgui_tableau_sptr> const& children);
+  vgui_selector_tableau(const std::vector<vgui_tableau_sptr> & children);
 
   //: Handle all events sent to this tableau.
   //  Key-press '?' prints info on this file, before being sent to the children.
-  virtual bool handle(const vgui_event&);
+  virtual bool
+  handle(const vgui_event &);
 
   //: Returns the type of this tableau ('vgui_selector_tableau').
-  std::string type_name() const { return "vgui_selector_tableau"; }
+  std::string
+  type_name() const
+  {
+    return "vgui_selector_tableau";
+  }
 
   //: There is no obvious filename, so this just returns the type.
-  std::string file_name() const;
+  std::string
+  file_name() const;
 
   //: Returns a nice version of the name, including info on the children.
-  std::string pretty_name() const;
+  std::string
+  pretty_name() const;
 
   //: Builds a popup menu for the user to select the active child and set visibility.
   //  Over-rides function in vgui_tableau.
-  virtual void get_popup(const vgui_popup_params&, vgui_menu &m);
+  virtual void
+  get_popup(const vgui_popup_params &, vgui_menu & m);
 
   //: Add a tableau to the list of child tableaux.
-  void add(vgui_tableau_sptr const& tab, std::string name = "");
+  void
+  add(const vgui_tableau_sptr & tab, std::string name = "");
 
   //: Remove a tableau from the list of child tableaux.
-  void remove(vgui_tableau_sptr const& tab);
+  void
+  remove(const vgui_tableau_sptr & tab);
 
   //: Remove a tableau from the list of child tableaux by name.
-  bool remove(const std::string name);
+  bool
+  remove(const std::string name);
 
   //: Clear the list of child tableaux.
-  void clear();
+  void
+  clear();
 
   //: Returns a smart pointer to the active tableau
-  vgui_tableau_sptr active_tableau() const;
+  vgui_tableau_sptr
+  active_tableau() const;
 
   //: Returns the name of the active tableau
-  const std::string& active_name() const { return active_child_; }
+  const std::string &
+  active_name() const
+  {
+    return active_child_;
+  }
 
   //: Returns a smart pointer to the tableau with the given name
-  vgui_tableau_sptr get_tableau(const std::string& name) const;
+  vgui_tableau_sptr
+  get_tableau(const std::string & name) const;
 
   //: Make the child tableau with the given name the active child.
-  void set_active(const std::string& name);
+  void
+  set_active(const std::string & name);
 
   //: Toggle the child tableau with the given name between visible/invisible.
-  bool toggle(const std::string& name);
+  bool
+  toggle(const std::string & name);
 
   //: Returns true if the child tableau with the given name is active.
-  bool is_visible(const std::string& name) const;
+  bool
+  is_visible(const std::string & name) const;
 
   //: Move the active tableau to the top of the display list.
-  void active_to_top();
+  void
+  active_to_top();
 
   //: Move the active tableau up one position in the display list.
-  void active_raise();
+  void
+  active_raise();
 
   //: Move the active tableau down one position in the display list.
-  void active_lower();
+  void
+  active_lower();
 
   //: Move the active tableau to the bottom of the display list.
-  void active_to_bottom();
+  void
+  active_to_bottom();
 
   //: Returns the number of children
-  int num_children() const { return child_map_.size(); }
+  int
+  num_children() const
+  {
+    return child_map_.size();
+  }
 
   //: Returns a vector containing the names of all children (in rendering order)
-  const std::vector<std::string>& child_names() const { return render_order_; }
+  const std::vector<std::string> &
+  child_names() const
+  {
+    return render_order_;
+  }
 
   //: for subclasses to add additional menus
-  virtual void add_to_menu(vgui_menu& ){}
+  virtual void
+  add_to_menu(vgui_menu &)
+  {}
 
- protected:
+protected:
   //: Destructor - called by vgui_selector_tableau_sptr.
   virtual ~vgui_selector_tableau();
 
   //: Returns a bounding box large enough to contain all child bounding boxes.
-  bool get_bounding_box(float low[3], float high[3]) const;
+  bool
+  get_bounding_box(float low[3], float high[3]) const;
 
   //: Add to list of child tableaux.
-  bool add_child(vgui_tableau_sptr const& t);
+  bool
+  add_child(const vgui_tableau_sptr & t);
 
   //: Remove given tableau from list of child tableaux.
-  bool remove_child(vgui_tableau_sptr const& );
+  bool
+  remove_child(const vgui_tableau_sptr &);
 
   // data
   // ----
@@ -147,13 +185,16 @@ struct vgui_selector_tableau_new : public vgui_selector_tableau_sptr
   typedef vgui_selector_tableau_sptr base;
 
   //: Constructor - creates a pointer to an empty vgui_selector_tableau.
-  vgui_selector_tableau_new() : base(new vgui_selector_tableau()) { }
+  vgui_selector_tableau_new()
+    : base(new vgui_selector_tableau())
+  {}
 
 
   //: Constructor - creates pointer to a composite with the given children.
   //  Takes a vector of child tableaux.
-  vgui_selector_tableau_new(std::vector<vgui_tableau_sptr> const& children)
-    : base(new vgui_selector_tableau(children)) {}
+  vgui_selector_tableau_new(const std::vector<vgui_tableau_sptr> & children)
+    : base(new vgui_selector_tableau(children))
+  {}
 };
 
 #endif // vgui_selector_tableau_h_

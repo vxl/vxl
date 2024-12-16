@@ -23,8 +23,8 @@
 static bool first_window = true;
 
 void
-vgui_mfc_window::init_window(char const * title,
-                             vgui_menu const & menubar,
+vgui_mfc_window::init_window(const char * title,
+                             const vgui_menu & menubar,
                              bool has_menu,
                              unsigned width,
                              unsigned height,
@@ -63,7 +63,7 @@ vgui_mfc_window::init_window(char const * title,
 }
 
 //: Constructor for window without menubar.
-vgui_mfc_window::vgui_mfc_window(char const * title, unsigned width, unsigned height, int posx, int posy)
+vgui_mfc_window::vgui_mfc_window(const char * title, unsigned width, unsigned height, int posx, int posy)
   : vgui_window()
   , mfcwin(0)
   , statusbar(0)
@@ -72,7 +72,7 @@ vgui_mfc_window::vgui_mfc_window(char const * title, unsigned width, unsigned he
 }
 
 //: Constructor for window with menubar.
-vgui_mfc_window::vgui_mfc_window(unsigned width, unsigned height, vgui_menu const & menubar, char const * title)
+vgui_mfc_window::vgui_mfc_window(unsigned width, unsigned height, const vgui_menu & menubar, const char * title)
   : vgui_window()
   , mfcwin(0)
   , statusbar(0)
@@ -93,7 +93,7 @@ vgui_mfc_window::~vgui_mfc_window()
 
 //: Set menubar and update main window's actual menu
 void
-vgui_mfc_window::set_menubar(vgui_menu const & m)
+vgui_mfc_window::set_menubar(const vgui_menu & m)
 {
   menubar = m;
   vgui_mfc::instance()->utils->set_menu(menubar);

@@ -15,7 +15,7 @@
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_debug_tableau_new.
 //  Takes the one and only child of this tableau.
-vgui_debug_tableau::vgui_debug_tableau(vgui_tableau_sptr const & child_tableau)
+vgui_debug_tableau::vgui_debug_tableau(const vgui_tableau_sptr & child_tableau)
   : vgui_wrapper_tableau(child_tableau)
 {
   verbosity = 1;

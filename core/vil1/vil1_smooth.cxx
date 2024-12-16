@@ -16,7 +16,7 @@
 #include "vil1/vil1_convolve.hxx"
 
 vil1_image
-vil1_smooth_gaussian(vil1_image const & in, double sigma)
+vil1_smooth_gaussian(const vil1_image & in, double sigma)
 {
   // Create 1-D mask:
   double cutoff = 0.01;

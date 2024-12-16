@@ -23,77 +23,114 @@
 // A rotation rotates a point around an axis passing through the origin.
 // For a more general rotation (affine rotation or displacement), see
 // the derived class \b vcsl_displacement
-class vcsl_rotation
-  : public vcsl_spatial_transformation
+class vcsl_rotation : public vcsl_spatial_transformation
 {
- public:
+public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
   //: Default constructor. Sets 3D rotation mode
-   vcsl_rotation() = default;
+  vcsl_rotation() = default;
 
-   // Destructor
-   ~vcsl_rotation() override = default;
+  // Destructor
+  ~vcsl_rotation() override = default;
 
-   //***************************************************************************
-   // Status report
-   //***************************************************************************
+  //***************************************************************************
+  // Status report
+  //***************************************************************************
 
-   //: Is `this' invertible at time `time'?
-   //  REQUIRE: valid_time(time)
-   // Pure virtual function of vcsl_spatial_transformation
-   bool is_invertible(double /*time*/) const override { return true; }
+  //: Is `this' invertible at time `time'?
+  //  REQUIRE: valid_time(time)
+  // Pure virtual function of vcsl_spatial_transformation
+  bool
+  is_invertible(double /*time*/) const override
+  {
+    return true;
+  }
 
-   //: Is `this' correctly set ?
-   // Virtual function of vcsl_spatial_transformation
-   bool is_valid() const override {
-     return vcsl_spatial_transformation::is_valid() &&
-            this->duration() == axis_.size() &&
-            this->duration() == angle_.size(); }
+  //: Is `this' correctly set ?
+  // Virtual function of vcsl_spatial_transformation
+  bool
+  is_valid() const override
+  {
+    return vcsl_spatial_transformation::is_valid() && this->duration() == axis_.size() &&
+           this->duration() == angle_.size();
+  }
 
   //: Are `new_vector' a list of unit vectors ?
-  bool are_unit_axes(list_of_vectors const& new_axis) const;
+  bool
+  are_unit_axes(const list_of_vectors & new_axis) const;
 
   //: Is `this' a 2D rotation ?
-  bool is_2d() const { return mode_2d_; }
+  bool
+  is_2d() const
+  {
+    return mode_2d_;
+  }
 
   //: Is `this' a 3D rotation ?
-  bool is_3d() const { return !mode_2d_; }
+  bool
+  is_3d() const
+  {
+    return !mode_2d_;
+  }
 
   //***************************************************************************
   // Status setting
   //***************************************************************************
 
   //: Set `this' as a 2D rotation
-  void set_2d() { mode_2d_=true; }
+  void
+  set_2d()
+  {
+    mode_2d_ = true;
+  }
 
   //: Set `this' as a 3D rotation
-  void set_3d() { mode_2d_=false; }
+  void
+  set_3d()
+  {
+    mode_2d_ = false;
+  }
 
   //***************************************************************************
   // Transformation parameters
   //***************************************************************************
 
   //: Set the parameters of a static 2D rotation
-  void set_static_2d(double new_angle);
+  void
+  set_static_2d(double new_angle);
 
   //: Set the parameters of a static rotation
-  void set_static(double new_angle, vnl_vector<double> const& new_axis);
+  void
+  set_static(double new_angle, const vnl_vector<double> & new_axis);
 
   //: Set the angle variation along the time in radians
-  void set_angle(list_of_scalars const& new_angle) { angle_=new_angle; }
+  void
+  set_angle(const list_of_scalars & new_angle)
+  {
+    angle_ = new_angle;
+  }
 
   //: Return the angle variation along the time in radians
-  list_of_scalars angle() const { return angle_; }
+  list_of_scalars
+  angle() const
+  {
+    return angle_;
+  }
 
   //: Set the direction vector variation along the time
   //  REQUIRE: are_unit_vectors(new_vector)
-  void set_axis(list_of_vectors const& new_axis);
+  void
+  set_axis(const list_of_vectors & new_axis);
 
   //: Return the direction variation along the time
-  list_of_vectors axis() const { return axis_; }
+  list_of_vectors
+  axis() const
+  {
+    return axis_;
+  }
 
   //***************************************************************************
   // Basic operations
@@ -103,23 +140,24 @@ class vcsl_rotation
   //  REQUIRE: is_valid()
   //  REQUIRE: (is_2d()&&v.size()==2)||(is_3d()&&v.size()==3)
   // Pure virtual function of vcsl_spatial_transformation
-  vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const override;
+  vnl_vector<double>
+  execute(const vnl_vector<double> & v, double time) const override;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
   //  REQUIRE (is_2d()&&v.size()==2)||(is_3d()&&v.size()==3)
   // Pure virtual function of vcsl_spatial_transformation
-  vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const override;
+  vnl_vector<double>
+  inverse(const vnl_vector<double> & v, double time) const override;
 
- protected:
+protected:
   //: Compute the value of the quaternion at time `time'
-  vnl_quaternion<double> quaternion(double time) const;
+  vnl_quaternion<double>
+  quaternion(double time) const;
 
   //: False if `this' is a 3D rotation, true if `this' is a 2D rotation
-  bool mode_2d_{false};
+  bool mode_2d_{ false };
 
   //: Angle variation along the time in radians
   list_of_scalars angle_;

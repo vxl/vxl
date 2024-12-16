@@ -27,84 +27,120 @@ class vgl_line_segment_2d
   //: The other end of the line segment
   vgl_point_2d<Type> point2_;
 
- public:
+public:
   //: Default constructor - does not initialise!
   inline vgl_line_segment_2d() = default;
 
   //: Copy constructor
-  inline vgl_line_segment_2d(vgl_line_segment_2d<Type> const& l)
-    : point1_(l.point1_), point2_(l.point2_) {}
+  inline vgl_line_segment_2d(const vgl_line_segment_2d<Type> & l)
+    : point1_(l.point1_)
+    , point2_(l.point2_)
+  {}
 
   //: Construct from two end points
-  inline vgl_line_segment_2d(vgl_point_2d<Type> const& p1,
-                             vgl_point_2d<Type> const& p2)
-    : point1_(p1), point2_(p2) {}
+  inline vgl_line_segment_2d(const vgl_point_2d<Type> & p1, const vgl_point_2d<Type> & p2)
+    : point1_(p1)
+    , point2_(p2)
+  {}
 
   //: Destructor
   inline ~vgl_line_segment_2d() = default;
 
   //: One end-point of the line segment.
-  inline vgl_point_2d<Type> point1() const { return point1_; } // return a copy
+  inline vgl_point_2d<Type>
+  point1() const
+  {
+    return point1_;
+  } // return a copy
 
   //: The other end-point of the line segment.
-  inline vgl_point_2d<Type> point2() const { return point2_; } // return a copy
+  inline vgl_point_2d<Type>
+  point2() const
+  {
+    return point2_;
+  } // return a copy
 
   //: The equality comparison operator
-  inline bool operator==(vgl_line_segment_2d<Type> const& l) const {
-    return (this==&l) || (point1() == l.point1() && point2() == l.point2())
-                      || (point1() == l.point2() && point2() == l.point1()); }
+  inline bool
+  operator==(const vgl_line_segment_2d<Type> & l) const
+  {
+    return (this == &l) || (point1() == l.point1() && point2() == l.point2()) ||
+           (point1() == l.point2() && point2() == l.point1());
+  }
 
   //: The inequality comparison operator.
-  inline bool operator!=(vgl_line_segment_2d<Type>const& other)const{return !operator==(other);}
+  inline bool
+  operator!=(const vgl_line_segment_2d<Type> & other) const
+  {
+    return !operator==(other);
+  }
 
   // A consistent interface with vgl_line_2d:
 
   //: Parameter a of line a*x + b*y + c = 0
-  Type a() const;
+  Type
+  a() const;
 
   //: Parameter b of line a*x + b*y + c = 0
-  Type b() const;
+  Type
+  b() const;
 
   //: Parameter c of line a*x + b*y + c = 0
-  Type c() const;
+  Type
+  c() const;
 
   //: unit vector describing line direction
-  vgl_vector_2d<Type> direction() const;
+  vgl_vector_2d<Type>
+  direction() const;
 
   //: unit vector orthogonal to line
-  vgl_vector_2d<Type> normal() const;
+  vgl_vector_2d<Type>
+  normal() const;
 
-  vgl_point_2d<Type> mid_point() const;
+  vgl_point_2d<Type>
+  mid_point() const;
 
   //: angle with the oriented horizontal line y=0, measured in radians.
   //  Returns values between -pi and pi.
-  double slope_radians() const;
+  double
+  slope_radians() const;
 
   //: angle with the oriented horizontal line y=0, measured in 360-degrees.
   //  Returns values between -180 and 180.
-  double slope_degrees() const;
+  double
+  slope_degrees() const;
 
   //: Assignment
-  inline void set(vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2) {
-    point1_ = p1; point2_ = p2; }
+  inline void
+  set(const vgl_point_2d<Type> & p1, const vgl_point_2d<Type> & p2)
+  {
+    point1_ = p1;
+    point2_ = p2;
+  }
 
   //: Return a point on the line defined by a scalar parameter \a t.
   // \a t=0.0 corresponds to point1 and \a t=1.0 to point2.
   // 0<t<1 for points on the segment between point1 and point2.
   // t<0 for points on the (infinite) line, outside the segment, and closer to point1 than to point2.
   // t>1 for points on the (infinite) line, outside the segment, and closer to point2 than to point1.
-  inline vgl_point_2d<Type> point_t(const double t) const { return point1() + t*(point2_-point1_); }
+  inline vgl_point_2d<Type>
+  point_t(const double t) const
+  {
+    return point1() + t * (point2_ - point1_);
+  }
 };
 
 //: Write to stream
 // \relatesalso vgl_line_segment_2d
 template <class Type>
-std::ostream&  operator<<(std::ostream& s, const vgl_line_segment_2d<Type>& p);
+std::ostream &
+operator<<(std::ostream & s, const vgl_line_segment_2d<Type> & p);
 
 //: Read from stream
 // \relatesalso vgl_line_segment_2d
 template <class Type>
-std::istream&  operator>>(std::istream& is,  vgl_line_segment_2d<Type>& p);
+std::istream &
+operator>>(std::istream & is, vgl_line_segment_2d<Type> & p);
 
 #define VGL_LINE_SEGMENT_2D_INSTANTIATE(T) extern "please include vgl/vgl_line_segment_2d.hxx first"
 

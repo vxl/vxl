@@ -6,7 +6,7 @@
 #endif
 
 std::FILE *
-vpl_fdopen(int fd, char const * mode)
+vpl_fdopen(int fd, const char * mode)
 {
 #if defined(_WIN32) && !defined(__CYGWIN__)
   return _fdopen(fd, mode);

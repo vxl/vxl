@@ -39,7 +39,7 @@ static void
 expandrow(unsigned char * optr, unsigned char * iptr, int z);
 
 
-char const * vil1_iris_format_tag = "iris";
+const char * vil1_iris_format_tag = "iris";
 
 vil1_image_impl *
 vil1_iris_file_format::make_input_image(vil1_stream * is)
@@ -92,7 +92,7 @@ vil1_iris_file_format::make_output_image(vil1_stream * is,
   return new vil1_iris_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
-char const *
+const char *
 vil1_iris_file_format::tag() const
 {
   return vil1_iris_format_tag;
@@ -100,7 +100,7 @@ vil1_iris_file_format::tag() const
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream * is, char const * imagename)
+vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream * is, const char * imagename)
   : starttab_(nullptr)
   , lengthtab_(nullptr)
   , is_(is)
@@ -111,7 +111,7 @@ vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream * is, char const * 
 }
 
 bool
-vil1_iris_generic_image::get_property(char const * tag, void * prop) const
+vil1_iris_generic_image::get_property(const char * tag, void * prop) const
 {
   if (0 == std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool *)prop) = true : true;
@@ -122,7 +122,7 @@ vil1_iris_generic_image::get_property(char const * tag, void * prop) const
   return false;
 }
 
-char const *
+const char *
 vil1_iris_generic_image::file_format() const
 {
   return vil1_iris_format_tag;
@@ -274,7 +274,9 @@ vil1_iris_generic_image::write_header()
   return is_->write(dummy, 404L) == 404L;
 }
 
-vil1_image vil1_iris_generic_image::get_plane(unsigned int plane) const {
+vil1_image
+vil1_iris_generic_image::get_plane(unsigned int plane) const
+{
   assert((int)plane < planes_);
   std::cerr << __FILE__ ": do something for vil1_iris_generic_image::get_plane\n";
   return nullptr;
@@ -372,7 +374,7 @@ vil1_iris_generic_image::get_section_rle(void * ib, int x0, int y0, int xs, int 
 
 
 bool
-vil1_iris_generic_image::put_section(void const * buf, int x0, int y0, int xs, int ys)
+vil1_iris_generic_image::put_section(const void * buf, int x0, int y0, int xs, int ys)
 {
   int ynul = height_ - y0 - ys;
 

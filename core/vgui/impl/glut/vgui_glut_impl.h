@@ -10,26 +10,33 @@
 
 struct vgui_glut_impl : vgui_toolkit
 {
-  static vgui_glut_impl* instance();
+  static vgui_glut_impl *
+  instance();
 
   vgui_glut_impl();
   ~vgui_glut_impl();
 
-  void init(int &, char **);
-  std::string name() const;
+  void
+  init(int &, char **);
+  std::string
+  name() const;
 
-  vgui_window* produce_window(int width, int height,
-                              vgui_menu const & menubar,
-                              char const* title);
+  vgui_window *
+  produce_window(int width, int height, const vgui_menu & menubar, const char * title);
 
-  vgui_window* produce_window(int width, int height,
-                              char const* title);
+  vgui_window *
+  produce_window(int width, int height, const char * title);
 
-  void run();
-  void run_one_event();
-  void run_till_idle();
-  void quit();
-  void flush();
+  void
+  run();
+  void
+  run_one_event();
+  void
+  run_till_idle();
+  void
+  quit();
+  void
+  flush();
 
 private:
   static int count;
@@ -39,6 +46,7 @@ private:
 // some time in the future.
 struct vgui_command;
 struct vgui_glut_adaptor;
-void vgui_glut_impl_queue_command(vgui_glut_adaptor *, vgui_command *);
+void
+vgui_glut_impl_queue_command(vgui_glut_adaptor *, vgui_command *);
 
 #endif // vgui_glut_impl_h_

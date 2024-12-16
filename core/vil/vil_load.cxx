@@ -46,7 +46,7 @@ vil_load_image_resource_raw(vil_stream * is, bool verbose)
 }
 
 vil_image_resource_sptr
-vil_load_image_resource_raw(char const * filename, bool verbose)
+vil_load_image_resource_raw(const char * filename, bool verbose)
 {
   vil_smart_ptr<vil_stream> is = vil_open(filename, "r");
   vil_image_resource_sptr isp = nullptr;
@@ -68,7 +68,7 @@ vil_load_image_resource_raw(char const * filename, bool verbose)
 }
 
 vil_image_resource_sptr
-vil_load_image_resource(char const * filename, bool verbose)
+vil_load_image_resource(const char * filename, bool verbose)
 {
   vil_image_resource_sptr im = vil_load_image_resource_plugin(filename);
   if (!im)
@@ -80,7 +80,7 @@ vil_load_image_resource(char const * filename, bool verbose)
 
 
 vil_image_resource_sptr
-vil_load_image_resource_plugin(char const * filename)
+vil_load_image_resource_plugin(const char * filename)
 {
   vil_image_resource_plugin im_resource_plugin;
   if (im_resource_plugin.can_be_loaded(filename))
@@ -99,7 +99,7 @@ vil_load_image_resource_plugin(char const * filename)
 }
 
 vil_pyramid_image_resource_sptr
-vil_load_pyramid_resource(char const * directory_or_file, bool verbose)
+vil_load_pyramid_resource(const char * directory_or_file, bool verbose)
 {
   std::list<vil_file_format *> & l = vil_file_format::all();
   for (auto & p : l)
@@ -144,7 +144,7 @@ vil_load(const char * file, bool verbose)
 //
 //
 vil_image_resource_sptr
-vil_load_image_resource_raw(wchar_t const * filename, bool verbose)
+vil_load_image_resource_raw(const wchar_t * filename, bool verbose)
 {
   vil_smart_ptr<vil_stream> is = vil_open(filename, "r");
   vil_image_resource_sptr isp = 0;
@@ -156,7 +156,7 @@ vil_load_image_resource_raw(wchar_t const * filename, bool verbose)
 }
 
 vil_image_resource_sptr
-vil_load_image_resource(wchar_t const * filename, bool verbose)
+vil_load_image_resource(const wchar_t * filename, bool verbose)
 {
   // do not support image resource plugin for the time being
   // vil_image_resource_sptr im = vil_load_image_resource_plugin(filename);

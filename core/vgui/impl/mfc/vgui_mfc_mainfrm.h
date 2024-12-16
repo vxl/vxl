@@ -14,7 +14,7 @@
 // \endverbatim
 
 #if defined(_MSC_VER)
-#pragma once
+#  pragma once
 #endif
 #include "StdAfx.h"
 
@@ -23,39 +23,58 @@ class vgui_mfc_statusbar;
 //: Defines main window of the application.
 class vgui_mfc_mainfrm : public CFrameWnd
 {
- protected:
-  vgui_mfc_statusbar *statusbar;
+protected:
+  vgui_mfc_statusbar * statusbar;
 
- protected: // create from serialization only
+protected: // create from serialization only
   vgui_mfc_mainfrm();
   DECLARE_DYNCREATE(vgui_mfc_mainfrm)
- public:
-  virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-  virtual void process_menus(UINT nID);
- public:
+public:
+  virtual BOOL
+  PreCreateWindow(CREATESTRUCT & cs);
+  virtual void
+  process_menus(UINT nID);
+
+public:
   virtual ~vgui_mfc_mainfrm();
-  virtual void SetStatusBar(vgui_mfc_statusbar *sb) {statusbar = sb;}
-  virtual void UpdateStatusBar(CCmdUI *sb) {OnUpdateStatusBar(sb);}
+  virtual void
+  SetStatusBar(vgui_mfc_statusbar * sb)
+  {
+    statusbar = sb;
+  }
+  virtual void
+  UpdateStatusBar(CCmdUI * sb)
+  {
+    OnUpdateStatusBar(sb);
+  }
 #ifdef _DEBUG
-  virtual void AssertValid() const;
-  virtual void Dump(CDumpContext& dc) const;
+  virtual void
+  AssertValid() const;
+  virtual void
+  Dump(CDumpContext & dc) const;
 #endif
 
-// Generated message map functions
- protected:
+  // Generated message map functions
+protected:
   // Manually added by awf
-  afx_msg void OnClose();
+  afx_msg void
+  OnClose();
   // Manually added by kym
-  BOOL PreTranslateMessage(MSG* pMsg);
+  BOOL
+  PreTranslateMessage(MSG * pMsg);
 
   //: Called when the window is created
-  afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+  afx_msg int
+  OnCreate(LPCREATESTRUCT lpCreateStruct);
   //: Called when a vertical scroll bar sends a signal
-  afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar );
+  afx_msg void
+  OnVScroll(UINT nSBCode, UINT nPos, CScrollBar * pScrollBar);
   //: Called when a horizontal scroll bar sends a signal
-  afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar );
+  afx_msg void
+  OnHScroll(UINT nSBCode, UINT nPos, CScrollBar * pScrollBar);
   //: Updates status bar
-  afx_msg void OnUpdateStatusBar(CCmdUI *sbar);
+  afx_msg void
+  OnUpdateStatusBar(CCmdUI * sbar);
   //: Called when specified timer has expired
   afx_msg void OnTimer(UINT_PTR);
 

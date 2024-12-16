@@ -7,7 +7,7 @@
 #include "vil1/vil1_flipud_impl.h"
 
 vil1_image
-vil1_flipud(vil1_image const & I)
+vil1_flipud(const vil1_image & I)
 {
   return new vil1_flipud_impl(I);
 }

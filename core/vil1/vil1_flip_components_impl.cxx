@@ -46,7 +46,7 @@ vil1_flip_components_impl::get_section(void * buf, int x0, int y0, int w, int h)
 }
 
 bool
-vil1_flip_components_impl::put_section(void const * buf, int x0, int y0, int w, int h)
+vil1_flip_components_impl::put_section(const void * buf, int x0, int y0, int w, int h)
 {
   if (base.components() != 3) // no swapping necessary since not 3 colour cells
     return base.put_section(buf, x0, y0, w, h);
@@ -71,7 +71,7 @@ vil1_flip_components_impl::is_a() const
 
 //: Return true if the name of the class matches the argument
 bool
-vil1_flip_components_impl::is_class(std::string const & s) const
+vil1_flip_components_impl::is_class(const std::string & s) const
 {
   return s == vil1_flip_components_impl::is_a() || vil1_image_impl::is_class(s);
 }

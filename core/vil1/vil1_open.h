@@ -13,6 +13,7 @@
 
 #include "vil1_stream.h"
 
-vil1_stream *vil1_open(char const* what, char const* how = "r");
+vil1_stream *
+vil1_open(const char * what, const char * how = "r");
 
 #endif // vil1_open_h_

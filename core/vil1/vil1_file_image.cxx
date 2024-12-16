@@ -9,13 +9,13 @@
 #include "vil1/vil1_load.h"
 
 bool
-vil1_file_image::load(std::string const & filename, verbosity)
+vil1_file_image::load(const std::string & filename, verbosity)
 {
   return this->load(filename.c_str());
 }
 
 bool
-vil1_file_image::load(char const * filename, verbosity v)
+vil1_file_image::load(const char * filename, verbosity v)
 {
   vil1_image i = vil1_load(filename);
   if (v == verbose)

@@ -18,9 +18,9 @@
 extern bool vgui_glerrors_are_bad;
 
 void
-vgui_macro_error_reporter(char const * FILE, int LINE)
+vgui_macro_error_reporter(const char * FILE, int LINE)
 {
-  static char const * last_file = nullptr;
+  static const char * last_file = nullptr;
   static int last_line = 0;
   static int numerrors = 0;
 

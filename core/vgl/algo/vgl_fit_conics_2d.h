@@ -31,47 +31,70 @@ template <class T>
 class vgl_fit_conics_2d
 {
   // Data Members--------------------------------------------------------------
- protected:
-  std::vector<vgl_point_2d<T> > curve_;
-  std::vector<vgl_conic_segment_2d<T> > segs_;
+protected:
+  std::vector<vgl_point_2d<T>> curve_;
+  std::vector<vgl_conic_segment_2d<T>> segs_;
   unsigned int min_length_;
   T tol_;
- public:
 
+public:
   // Constructors/Initializers/Destructors-------------------------------------
 
-  vgl_fit_conics_2d(const unsigned min_length = 10,
-                    const T tol = 0.01);
+  vgl_fit_conics_2d(const unsigned min_length = 10, const T tol = 0.01);
 
   ~vgl_fit_conics_2d() = default;
 
   // Operations----------------------------------------------------------------
 
   //: set parameters
-  void set_min_fit_length(const unsigned min_fit_length){min_length_ = min_fit_length;}
-  void set_rms_error_tol(const T rms_error_tol){tol_ = rms_error_tol;}
+  void
+  set_min_fit_length(const unsigned min_fit_length)
+  {
+    min_length_ = min_fit_length;
+  }
+  void
+  set_rms_error_tol(const T rms_error_tol)
+  {
+    tol_ = rms_error_tol;
+  }
 
   //: add a point to the curve
-  void add_point(vgl_point_2d<T> const &p);
-  void add_point(const T x, const T y);
+  void
+  add_point(const vgl_point_2d<T> & p);
+  void
+  add_point(const T x, const T y);
 
   //: add an entire curve
-  void add_curve(std::vector<vgl_point_2d<T> > const & curve){curve_=curve;}
+  void
+  add_curve(const std::vector<vgl_point_2d<T>> & curve)
+  {
+    curve_ = curve;
+  }
 
   //: clear internal data
-  void clear();
+  void
+  clear();
 
   //: the fitting method
-  bool fit();
+  bool
+  fit();
 
   // Data Access---------------------------------------------------------------
-  std::vector<vgl_point_2d<T> >& get_points(){return curve_;}
-  std::vector<vgl_conic_segment_2d<T> >& get_conic_segs(){return segs_;}
+  std::vector<vgl_point_2d<T>> &
+  get_points()
+  {
+    return curve_;
+  }
+  std::vector<vgl_conic_segment_2d<T>> &
+  get_conic_segs()
+  {
+    return segs_;
+  }
 
- protected:
+protected:
   //: output a conic that fits from start to end
-  void output(const unsigned start_index, const unsigned end_index,
-              vgl_conic<T> const& conic);
+  void
+  output(const unsigned start_index, const unsigned end_index, const vgl_conic<T> & conic);
 };
 
 #define VGL_FIT_CONICS_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_conics_2d.hxx first"

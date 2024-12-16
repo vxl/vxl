@@ -33,7 +33,7 @@ vgui_projection_inspector::print(std::ostream & strm) const
 //------------------------------------------------------------------------------
 
 bool
-vgui_projection_inspector::back_project(double const x[3], double const p[4], double X[4]) const
+vgui_projection_inspector::back_project(const double x[3], const double p[4], double X[4]) const
 {
   // get total 4x4 projection matrix :
   vnl_double_4x4 T = P * M;
@@ -84,7 +84,7 @@ vgui_projection_inspector::back_project(double const x[3], double const p[4], do
 }
 
 vnl_vector<double>
-vgui_projection_inspector::back_project(vnl_double_2 const & x, vnl_double_4 const & p) const
+vgui_projection_inspector::back_project(const vnl_double_2 & x, const vnl_double_4 & p) const
 {
   vnl_double_3 x_(x[0], x[1], 1.0);
   vnl_double_4 X_ = back_project(x_, p);
@@ -92,7 +92,7 @@ vgui_projection_inspector::back_project(vnl_double_2 const & x, vnl_double_4 con
 }
 
 vnl_vector<double>
-vgui_projection_inspector::back_project(vnl_double_3 const & x, vnl_double_4 const & p) const
+vgui_projection_inspector::back_project(const vnl_double_3 & x, const vnl_double_4 & p) const
 {
   vnl_double_4 X;
   if (!back_project(x.data_block(), p.data_block(), X.data_block()))
@@ -101,14 +101,14 @@ vgui_projection_inspector::back_project(vnl_double_3 const & x, vnl_double_4 con
 }
 
 vnl_vector<double>
-vgui_projection_inspector::back_project(double x, double y, vnl_double_4 const & p) const
+vgui_projection_inspector::back_project(double x, double y, const vnl_double_4 & p) const
 {
   vnl_double_2 xy(x, y);
   return back_project(xy, p);
 }
 
 vnl_vector<double>
-vgui_projection_inspector::back_project(double x, double y, double z, vnl_double_4 const & p) const
+vgui_projection_inspector::back_project(double x, double y, double z, const vnl_double_4 & p) const
 {
   vnl_double_3 xyz(x, y, z);
   return back_project(xyz, p);

@@ -12,7 +12,7 @@
 #include "vil1/vil1_resample.h"
 #include "vil1/vil1_memory_image.h"
 
-vil1_pyramid::vil1_pyramid(vil1_image const & I, cache_strategy cs_)
+vil1_pyramid::vil1_pyramid(const vil1_image & I, cache_strategy cs_)
 {
   cs = cs_;
   levels.push_back(I);
@@ -20,7 +20,8 @@ vil1_pyramid::vil1_pyramid(vil1_image const & I, cache_strategy cs_)
 
 vil1_pyramid::~vil1_pyramid() = default;
 
-vil1_image vil1_pyramid::operator[](unsigned i)
+vil1_image
+vil1_pyramid::operator[](unsigned i)
 {
   while (i >= levels.size())
   {

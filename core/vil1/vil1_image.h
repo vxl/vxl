@@ -28,88 +28,151 @@
 class vil1_image
 {
 
- public:
+public:
 // use this delegation macro for consistency, not convenience.
-#define vil1_image_delegate(m, args, default) { return ptr ? ptr->m args : default; }
+#define vil1_image_delegate(m, args, default) \
+  {                                           \
+    return ptr ? ptr->m args : default;       \
+  }
 
   //: Dimensions:  Planes x W x H x Components
-  int planes() const { vil1_image_delegate(planes, (), 0); }
+  int
+  planes() const
+  {
+    vil1_image_delegate(planes, (), 0);
+  }
 
   //: Dimensions:  Planes x W x H x Components
-  int width() const { vil1_image_delegate(width, (), 0); }
+  int
+  width() const
+  {
+    vil1_image_delegate(width, (), 0);
+  }
 
   //: Dimensions:  Planes x W x H x Components
-  int height() const { vil1_image_delegate(height, (), 0); }
+  int
+  height() const
+  {
+    vil1_image_delegate(height, (), 0);
+  }
 
   //: Dimensions:  Planes x W x H x Components
-  int components() const { vil1_image_delegate(components, (), 0); }
+  int
+  components() const
+  {
+    vil1_image_delegate(components, (), 0);
+  }
 
   //: Format.
-  int bits_per_component() const { vil1_image_delegate(bits_per_component, (), 0); }
+  int
+  bits_per_component() const
+  {
+    vil1_image_delegate(bits_per_component, (), 0);
+  }
 
   //: Format.
-  enum vil1_component_format component_format() const
-  { vil1_image_delegate(component_format, (), VIL1_COMPONENT_FORMAT_UNKNOWN);  }
+  enum vil1_component_format
+  component_format() const
+  {
+    vil1_image_delegate(component_format, (), VIL1_COMPONENT_FORMAT_UNKNOWN);
+  }
 
   //: return the ith plane.
-  vil1_image get_plane(unsigned int p) const { vil1_image_delegate(get_plane, (p), vil1_image()); }
+  vil1_image
+  get_plane(unsigned int p) const
+  {
+    vil1_image_delegate(get_plane, (p), vil1_image());
+  }
 
   //: Copy from image to buf
-  bool get_section(void *buf, int x0, int y0, int wd, int ht) const
-  { vil1_image_delegate(get_section, (buf, x0, y0, wd, ht), false); }
+  bool
+  get_section(void * buf, int x0, int y0, int wd, int ht) const
+  {
+    vil1_image_delegate(get_section, (buf, x0, y0, wd, ht), false);
+  }
 
   //: Copy from buf to image
-  bool put_section(void const *buf, int x0, int y0, int wd, int ht)
-  { vil1_image_delegate(put_section, (buf, x0, y0, wd, ht), false); }
+  bool
+  put_section(const void * buf, int x0, int y0, int wd, int ht)
+  {
+    vil1_image_delegate(put_section, (buf, x0, y0, wd, ht), false);
+  }
 
   //: Getting property information
-  bool get_property(char const *tag, void *property_value = nullptr) const
-  { vil1_image_delegate(get_property, (tag, property_value), false); }
+  bool
+  get_property(const char * tag, void * property_value = nullptr) const
+  {
+    vil1_image_delegate(get_property, (tag, property_value), false);
+  }
 
   //: Setting property information
-  bool set_property(char const *tag, void const *property_value = nullptr)
-  { vil1_image_delegate(set_property, (tag, property_value), false); }
+  bool
+  set_property(const char * tag, const void * property_value = nullptr)
+  {
+    vil1_image_delegate(set_property, (tag, property_value), false);
+  }
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0
-  char const *file_format() const { vil1_image_delegate(file_format, (), "(null)"); }
+  const char *
+  file_format() const
+  {
+    vil1_image_delegate(file_format, (), "(null)");
+  }
 
 #undef vil1_image_delegate
   // -------------------- convenience --------------------
 
   //: Number of rows
-  int rows() const { return height(); }
+  int
+  rows() const
+  {
+    return height();
+  }
   //: Number of columns
-  int cols() const { return width(); }
+  int
+  cols() const
+  {
+    return width();
+  }
 
   //: return size in bytes.
-  int get_size_bytes() const;
+  int
+  get_size_bytes() const;
 
   //: Print a 1-line summary of contents
-  std::ostream& print(std::ostream&) const;
+  std::ostream &
+  print(std::ostream &) const;
 
   //------------ smart-pointer logic --------
 
-  vil1_image(vil1_image_impl *p = nullptr) : ptr(p)
+  vil1_image(vil1_image_impl * p = nullptr)
+    : ptr(p)
   {
     if (ptr)
       ptr->up_ref();
   }
 
-  vil1_image(vil1_image const& that) : ptr(that.ptr) {
+  vil1_image(const vil1_image & that)
+    : ptr(that.ptr)
+  {
     if (ptr)
       ptr->up_ref();
   }
 
   //: Destructor
-  ~vil1_image() {
+  ~vil1_image()
+  {
     if (ptr)
       ptr->down_ref();
     ptr = nullptr; // don't dangle
   }
 
-  vil1_image& operator=(vil1_image const &that) {
-    if (ptr != that.ptr) {
+  vil1_image &
+  operator=(const vil1_image & that)
+  {
+    if (ptr != that.ptr)
+    {
       if (that.ptr)
         that.ptr->up_ref();
       if (ptr)
@@ -119,7 +182,9 @@ class vil1_image
     return *this;
   }
 
-  vil1_image& operator=(vil1_image_impl *p) {
+  vil1_image &
+  operator=(vil1_image_impl * p)
+  {
     if (ptr)
       ptr->down_ref();
     ptr = p;
@@ -129,35 +194,44 @@ class vil1_image
   }
 
   //: equality means equality of implementation, not pixels.
-  bool operator==(vil1_image const &that) const {
+  bool
+  operator==(const vil1_image & that) const
+  {
     return ptr == that.ptr;
   }
 
   //: needed for sorted containers of images.
-  bool operator< (vil1_image const &that) const {
-    return ptr <  that.ptr;
+  bool
+  operator<(const vil1_image & that) const
+  {
+    return ptr < that.ptr;
   }
 
   //: conversion to bool
   /* The old 'safe_bool' did implicit conversions, best practice would be to use explicit operator bool */
-  operator bool () const
-    { return (ptr != nullptr)? true : false; }
+  operator bool() const { return (ptr != nullptr) ? true : false; }
 
   //: inverse conversion to bool
-  bool operator!() const
-    { return (ptr != nullptr)? false : true; }
+  bool
+  operator!() const
+  {
+    return (ptr != nullptr) ? false : true;
+  }
 
   //: use "sptr.impl()" to get a pointer to the impl object.
-  vil1_image_impl *impl() const {
+  vil1_image_impl *
+  impl() const
+  {
     return ptr;
   }
 
- protected:
-  vil1_image_impl *ptr;
+protected:
+  vil1_image_impl * ptr;
 };
 
 //: Print a 1-line summary of contents
-inline std::ostream& operator<<(std::ostream& s, vil1_image const& i)
+inline std::ostream &
+operator<<(std::ostream & s, const vil1_image & i)
 {
   return i.print(s);
 }

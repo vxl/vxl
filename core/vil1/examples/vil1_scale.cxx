@@ -25,9 +25,9 @@ main(int argc, char ** argv)
   }
   int w = std::stoi(argv[1]);
   int h = std::stoi(argv[2]);
-  char const * input_filename = argv[3];
-  char const * output_filename = argv[4];
-  char const * output_format = argv[5];
+  const char * input_filename = argv[3];
+  const char * output_filename = argv[4];
+  const char * output_format = argv[5];
 
   vil1_image in = vil1_load(input_filename);
   if (!in)
@@ -53,7 +53,7 @@ struct pnmscale
   pnmscale() { specxscale = specyscale = specxsize = specysize = specxysize = newpixels = 0; }
 
   void
-  pm_error(char const * msg)
+  pm_error(const char * msg)
   {
     std::cerr << "vil1_scale: ERROR: " << msg << std::endl;
     std::abort();

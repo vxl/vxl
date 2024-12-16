@@ -28,7 +28,7 @@ make_checker_board(unsigned int ni, unsigned int nj, unsigned int s)
 }
 
 static vxl_byte
-interpolator(vil_image_view<vxl_byte> const & view, double x, double y, unsigned p)
+interpolator(const vil_image_view<vxl_byte> & view, double x, double y, unsigned p)
 {
   return static_cast<vxl_byte>(vil_bilin_interp_safe(view, x, y, p));
 }
@@ -46,16 +46,14 @@ test_lens_warp_mapper()
     // make the checkerboard image
     vil_image_view<vxl_byte> cb = make_checker_board(img_size, img_size, 8);
     vil_save(cb, "cb.jpg");
-    std::cout
-        << R"(<DartMeasurementFile name="Checker Board" type="image/jpeg"> )"
-        << "cb.jpg </DartMeasurementFile>" << std::endl;
+    std::cout << R"(<DartMeasurementFile name="Checker Board" type="image/jpeg"> )"
+              << "cb.jpg </DartMeasurementFile>" << std::endl;
 
     vil_image_view<vxl_byte> unwarp_cb(cb.ni(), cb.nj(), 1);
     vpgl_lens_unwarp(cb, unwarp_cb, rd, interpolator);
     vil_save(unwarp_cb, "unwarp_cb.jpg");
-    std::cout
-        << R"(<DartMeasurementFile name="Unwarped Checker Board" type="image/jpeg"> )"
-        << "unwarp_cb.jpg </DartMeasurementFile>" << std::endl;
+    std::cout << R"(<DartMeasurementFile name="Unwarped Checker Board" type="image/jpeg"> )"
+              << "unwarp_cb.jpg </DartMeasurementFile>" << std::endl;
 
     // Pixel coords
     vpgl_calibration_matrix<double> I; // identity
@@ -65,9 +63,8 @@ test_lens_warp_mapper()
     vil_image_view<vxl_byte> warp_cb(cb.ni(), cb.nj(), 1);
     vpgl_lens_warp(unwarp_cb, warp_cb, rd, interpolator);
     vil_save(warp_cb, "warp_cb.jpg");
-    std::cout
-        << R"(<DartMeasurementFile name="Rewarped Checker Board" type="image/jpeg"> )"
-        << "warp_cb.jpg </DartMeasurementFile>" << std::endl;
+    std::cout << R"(<DartMeasurementFile name="Rewarped Checker Board" type="image/jpeg"> )"
+              << "warp_cb.jpg </DartMeasurementFile>" << std::endl;
 
     vil_image_view<vxl_byte> warp2_cb = vpgl_lens_warp_resize(cb, vxl_byte(), rd, interpolator);
     vil_save(warp2_cb, "warp2_cb.jpg");

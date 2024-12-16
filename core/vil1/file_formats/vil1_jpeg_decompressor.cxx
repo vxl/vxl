@@ -11,11 +11,11 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-#define trace                                                                                                          \
-  if (true)                                                                                                            \
-  {                                                                                                                    \
-  }                                                                                                                    \
-  else                                                                                                                 \
+#define trace \
+  if (true)   \
+  {           \
+  }           \
+  else        \
     std::cerr
 
 //: using jpeg decompressor objects :

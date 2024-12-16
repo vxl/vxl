@@ -21,7 +21,7 @@ public:
   ~tab() {}
 
   bool
-  handle(vgui_event const & e)
+  handle(const vgui_event & e)
   {
     if (e.type == vgui_TIMER)
     {
