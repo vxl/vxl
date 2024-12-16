@@ -381,4 +381,3 @@ bool vpgl_equi_rectification::rectify_pair(vpgl_perspective_camera<double> const
 #endif
   return true;
 }
-
