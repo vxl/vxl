@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <cstddef>
 #include <cmath>
+#include <limits>
 #include <iostream>
 
 #include "vnl/vnl_matrix_fixed.h"
