@@ -102,14 +102,14 @@ vul_redirector::sync_passthru()
 }
 
 std::streamsize
-vul_redirector::put_passthru(char const * buf, std::streamsize n)
+vul_redirector::put_passthru(const char * buf, std::streamsize n)
 {
   return p->old_cerrbuf->sputn(buf, n);
 }
 
 //: Default action is just to pass text on the old stream.
 std::streamsize
-vul_redirector::putchunk(char const * buf, std::streamsize n)
+vul_redirector::putchunk(const char * buf, std::streamsize n)
 {
   return put_passthru(buf, n);
 }

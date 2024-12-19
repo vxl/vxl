@@ -27,36 +27,36 @@
 static void
 test_camera_compute_setup()
 {
-    // PART 1: Test the affine camera computation
+  // PART 1: Test the affine camera computation
 
-    vnl_vector_fixed<double, 4> r1(1, 2, 3, 4);
-    vnl_vector_fixed<double, 4> r2(-1, 4, -2, 0);
-    vpgl_affine_camera<double> C1(r1, r2);
-    std::vector<vgl_point_3d<double>> world_pts;
-    world_pts.emplace_back(1, 0, -1);
-    world_pts.emplace_back(6, 1, 2);
-    world_pts.emplace_back(-1, -3, -2);
-    world_pts.emplace_back(0, 0, 2);
-    world_pts.emplace_back(2, -1, -5);
-    world_pts.emplace_back(8, 1, -2);
-    world_pts.emplace_back(-4, -4, 5);
-    world_pts.emplace_back(-1, 3, 4);
-    world_pts.emplace_back(1, 2, -7);
-    std::vector<vgl_point_2d<double>> image_pts;
-    image_pts.reserve(world_pts.size());
-    for (const auto& world_pt : world_pts)
-        image_pts.emplace_back(C1.project(vgl_homg_point_3d<double>(world_pt)));
+  vnl_vector_fixed<double, 4> r1(1, 2, 3, 4);
+  vnl_vector_fixed<double, 4> r2(-1, 4, -2, 0);
+  vpgl_affine_camera<double> C1(r1, r2);
+  std::vector<vgl_point_3d<double>> world_pts;
+  world_pts.emplace_back(1, 0, -1);
+  world_pts.emplace_back(6, 1, 2);
+  world_pts.emplace_back(-1, -3, -2);
+  world_pts.emplace_back(0, 0, 2);
+  world_pts.emplace_back(2, -1, -5);
+  world_pts.emplace_back(8, 1, -2);
+  world_pts.emplace_back(-4, -4, 5);
+  world_pts.emplace_back(-1, 3, 4);
+  world_pts.emplace_back(1, 2, -7);
+  std::vector<vgl_point_2d<double>> image_pts;
+  image_pts.reserve(world_pts.size());
+  for (const auto & world_pt : world_pts)
+    image_pts.emplace_back(C1.project(vgl_homg_point_3d<double>(world_pt)));
 
-    vpgl_affine_camera<double> C1e;
-    vpgl_affine_camera_compute::compute(image_pts, world_pts, C1e);
+  vpgl_affine_camera<double> C1e;
+  vpgl_affine_camera_compute::compute(image_pts, world_pts, C1e);
 
-    std::cerr << "\nTrue camera matrix:\n"
-        << C1.get_matrix() << '\n'
-        << "\nEstimated camera matrix:\n"
-        << C1e.get_matrix() << '\n';
-    TEST_NEAR("vpgl_affine_camera_compute:", (C1.get_matrix() - C1e.get_matrix()).frobenius_norm(), 0, 1);
+  std::cerr << "\nTrue camera matrix:\n"
+            << C1.get_matrix() << '\n'
+            << "\nEstimated camera matrix:\n"
+            << C1e.get_matrix() << '\n';
+  TEST_NEAR("vpgl_affine_camera_compute:", (C1.get_matrix() - C1e.get_matrix()).frobenius_norm(), 0, 1);
 }
-  
+
 
 void
 test_perspective_compute()
@@ -334,62 +334,68 @@ test_compute_affine()
 
   // ==========================test ransac algorithm================================
   // realistic affine camera
-  std::vector<std::vector<double> > A = {
-    {1.4008339964662238,  0.01379357608876183, 0.29176389136913616, 168.94607022009185},
-    {0.21473016282540966, -1.0077720142913837,  -1.01170300092531, 848.158895152373},
-    {0.0, 0.0, 0.0,1.0 } };
+  std::vector<std::vector<double>> A = {
+    { 1.4008339964662238, 0.01379357608876183, 0.29176389136913616, 168.94607022009185 },
+    { 0.21473016282540966, -1.0077720142913837, -1.01170300092531, 848.158895152373 },
+    { 0.0, 0.0, 0.0, 1.0 }
+  };
 
 
   vnl_matrix_fixed<double, 3, 4> m_a;
- 
+
   for (size_t row = 0; row < 3; ++row)
-      for (size_t col = 0; col < 4; ++col)
-          m_a[row][col] = A[row][col];
+    for (size_t col = 0; col < 4; ++col)
+      m_a[row][col] = A[row][col];
 
   std::cout << "True Camera \n" << m_a << std::endl;
   vpgl_affine_camera<double> cam_A(m_a);
 
-  //generate test correspondences
+  // generate test correspondences
   vnl_random rand;
-  std::vector<vgl_point_2d<double> > img_pts;
-  std::vector<vgl_point_3d<double> > wld_pts;
+  std::vector<vgl_point_2d<double>> img_pts;
+  std::vector<vgl_point_3d<double>> wld_pts;
   double x_min = 0.0, x_max = 500.0, inc = 50.0;
   double y_min = 0.0, y_max = 400.0;
   double z_min = 0.0, z_max = 300.0;
-  for (size_t i = 0; i < 100; ++i) {
-      double x = rand.drand32(x_min, x_max);
-      double y = rand.drand32(y_min, y_max);
-      double z = rand.drand32(z_min, z_max);
-      vgl_point_3d<double> wld_pt(x, y, z);
-      vgl_point_2d<double> img_pt = cam_A.project(wld_pt);
-      wld_pts.push_back(wld_pt);
-      img_pts.push_back(img_pt);
+  for (size_t i = 0; i < 100; ++i)
+  {
+    double x = rand.drand32(x_min, x_max);
+    double y = rand.drand32(y_min, y_max);
+    double z = rand.drand32(z_min, z_max);
+    vgl_point_3d<double> wld_pt(x, y, z);
+    vgl_point_2d<double> img_pt = cam_A.project(wld_pt);
+    wld_pts.push_back(wld_pt);
+    img_pts.push_back(img_pt);
   }
   vpgl_affine_camera<double> Crsac;
   vpgl_affine_camera_compute::compute_robust_ransac(img_pts, wld_pts, Crsac);
   std::cout << "Test Camera \n" << Crsac.get_matrix() << std::endl;
   TEST_NEAR("vpgl_affine_camera_compute:", (Crsac.get_matrix() - m_a).frobenius_norm(), 0, 1);
-  double img_sd = 1.5 , wld_sd = 3;
-  std::vector<vgl_point_2d<double> > noisy_img_pts;
-  std::vector<vgl_point_3d<double> > noisy_wld_pts;
-  for (size_t i = 0; i < 100; ++i) {
-      if (i % 3 == 0) {//33% noisy
-          double u_noise = rand.drand32(-img_sd, img_sd);
-          double v_noise = rand.drand32(-img_sd, img_sd);
-          double x_noise = rand.drand32(-wld_sd, wld_sd);
-          double y_noise = rand.drand32(-wld_sd, wld_sd);
-          double z_noise = rand.drand32(-wld_sd, wld_sd);
-          noisy_img_pts.emplace_back(img_pts[i].x() + u_noise, img_pts[i].y() + v_noise);
-          noisy_wld_pts.emplace_back(wld_pts[i].x() + x_noise, wld_pts[i].y() + y_noise, wld_pts[i].z() + z_noise);
-      }else{
+  double img_sd = 1.5, wld_sd = 3;
+  std::vector<vgl_point_2d<double>> noisy_img_pts;
+  std::vector<vgl_point_3d<double>> noisy_wld_pts;
+  for (size_t i = 0; i < 100; ++i)
+  {
+    if (i % 3 == 0)
+    { // 33% noisy
+      double u_noise = rand.drand32(-img_sd, img_sd);
+      double v_noise = rand.drand32(-img_sd, img_sd);
+      double x_noise = rand.drand32(-wld_sd, wld_sd);
+      double y_noise = rand.drand32(-wld_sd, wld_sd);
+      double z_noise = rand.drand32(-wld_sd, wld_sd);
+      noisy_img_pts.emplace_back(img_pts[i].x() + u_noise, img_pts[i].y() + v_noise);
+      noisy_wld_pts.emplace_back(wld_pts[i].x() + x_noise, wld_pts[i].y() + y_noise, wld_pts[i].z() + z_noise);
+    }
+    else
+    {
       noisy_img_pts.push_back(img_pts[i]);
       noisy_wld_pts.push_back(wld_pts[i]);
-      }
+    }
   }
-   vpgl_affine_camera<double> Crsac_with_noise;
-   vpgl_affine_camera_compute::compute_robust_ransac(noisy_img_pts, noisy_wld_pts, Crsac_with_noise);
-   std::cout << "Test Camera With Noise \n" << Crsac_with_noise.get_matrix() << std::endl;
-   TEST_NEAR("vpgl_affine_camera_compute: with noise", (Crsac_with_noise.get_matrix() - m_a).frobenius_norm(), 0, 1);
+  vpgl_affine_camera<double> Crsac_with_noise;
+  vpgl_affine_camera_compute::compute_robust_ransac(noisy_img_pts, noisy_wld_pts, Crsac_with_noise);
+  std::cout << "Test Camera With Noise \n" << Crsac_with_noise.get_matrix() << std::endl;
+  TEST_NEAR("vpgl_affine_camera_compute: with noise", (Crsac_with_noise.get_matrix() - m_a).frobenius_norm(), 0, 1);
 }
 
 

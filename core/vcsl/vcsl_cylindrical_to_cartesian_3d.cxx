@@ -10,7 +10,9 @@
 // Is `this' invertible at time `time'?
 // REQUIRE: valid_time(time)
 //---------------------------------------------------------------------------
-bool vcsl_cylindrical_to_cartesian_3d::is_invertible(double time) const {
+bool
+vcsl_cylindrical_to_cartesian_3d::is_invertible(double time) const
+{
   // require
   assert(valid_time(time));
 
@@ -52,8 +54,8 @@ vcsl_cylindrical_to_cartesian_3d::execute(const vnl_vector<double> & v, double /
 // REQUIRE: v.size()==3
 //---------------------------------------------------------------------------
 vnl_vector<double>
-vcsl_cylindrical_to_cartesian_3d::inverse(const vnl_vector<double> &v,
-                                          double time) const {
+vcsl_cylindrical_to_cartesian_3d::inverse(const vnl_vector<double> & v, double time) const
+{
   // require
   assert(is_valid());
   assert(is_invertible(time));

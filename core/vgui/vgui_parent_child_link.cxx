@@ -248,13 +248,13 @@ vgui_parent_child_link::vgui_parent_child_link(vgui_tableau * p)
   pimpl->acquire();
 }
 
-vgui_parent_child_link::vgui_parent_child_link(vgui_tableau * p, vgui_tableau_sptr const & c)
+vgui_parent_child_link::vgui_parent_child_link(vgui_tableau * p, const vgui_tableau_sptr & c)
 {
   pimpl = new vgui_parent_child_link_impl(p, c.operator->());
   pimpl->acquire();
 }
 
-vgui_parent_child_link::vgui_parent_child_link(vgui_parent_child_link const & that)
+vgui_parent_child_link::vgui_parent_child_link(const vgui_parent_child_link & that)
 {
   pimpl = that.pimpl;
 
@@ -271,7 +271,7 @@ vgui_parent_child_link::~vgui_parent_child_link()
 }
 
 vgui_parent_child_link &
-vgui_parent_child_link::operator=(vgui_parent_child_link const & that)
+vgui_parent_child_link::operator=(const vgui_parent_child_link & that)
 {
   if (pimpl != that.pimpl)
   {
@@ -300,13 +300,13 @@ vgui_parent_child_link::child() const
 }
 
 bool
-vgui_parent_child_link::operator==(vgui_tableau_sptr const & t) const
+vgui_parent_child_link::operator==(const vgui_tableau_sptr & t) const
 {
   return child() == t;
 }
 
 void
-vgui_parent_child_link::assign(vgui_tableau_sptr const & t)
+vgui_parent_child_link::assign(const vgui_tableau_sptr & t)
 {
   if (pimpl)
     pimpl->assign(t.operator->());
@@ -319,7 +319,7 @@ vgui_parent_child_link::assign(vgui_tableau_sptr const & t)
 }
 
 bool
-vgui_parent_child_link::handle(vgui_event const & e)
+vgui_parent_child_link::handle(const vgui_event & e)
 {
   if (!pimpl)
     return false;
@@ -330,28 +330,24 @@ vgui_parent_child_link::handle(vgui_event const & e)
   return c->handle(e);
 }
 
-vgui_parent_child_link::operator bool() const
-{
-  return (pimpl && (pimpl->child() != nullptr)) ? true : false;
-}
+vgui_parent_child_link::operator bool() const { return (pimpl && (pimpl->child() != nullptr)) ? true : false; }
 
-bool vgui_parent_child_link::operator!() const
+bool
+vgui_parent_child_link::operator!() const
 {
   return (pimpl && (pimpl->child() != nullptr)) ? false : true;
 }
 
-vgui_parent_child_link::operator vgui_tableau_sptr() const
-{
-  return pimpl ? pimpl->child() : nullptr;
-}
+vgui_parent_child_link::operator vgui_tableau_sptr() const { return pimpl ? pimpl->child() : nullptr; }
 
-vgui_tableau * vgui_parent_child_link::operator->() const
+vgui_tableau *
+vgui_parent_child_link::operator->() const
 {
   return pimpl ? pimpl->child() : nullptr;
 }
 
 std::ostream &
-operator<<(std::ostream & os, vgui_parent_child_link const & s)
+operator<<(std::ostream & os, const vgui_parent_child_link & s)
 {
   // the reason for the flush() is to get as much stuff as
   // possible printed before an eventual segfault.
@@ -362,7 +358,7 @@ operator<<(std::ostream & os, vgui_parent_child_link const & s)
 //------------------------------------------------------------------------------
 
 void
-vgui_parent_child_link::get_children_of(vgui_tableau_sptr const & tab, std::vector<vgui_tableau_sptr> * children)
+vgui_parent_child_link::get_children_of(const vgui_tableau_sptr & tab, std::vector<vgui_tableau_sptr> * children)
 {
   for (std::set<void *>::iterator i = vgui_parent_child_link_impl::all->begin();
        i != vgui_parent_child_link_impl::all->end();
@@ -375,7 +371,7 @@ vgui_parent_child_link::get_children_of(vgui_tableau_sptr const & tab, std::vect
 }
 
 void
-vgui_parent_child_link::get_parents_of(vgui_tableau_sptr const & tab, std::vector<vgui_tableau_sptr> * parents)
+vgui_parent_child_link::get_parents_of(const vgui_tableau_sptr & tab, std::vector<vgui_tableau_sptr> * parents)
 {
 #if cache_parents
   std::vector<vgui_tableau *> const & vec = tab->vgui_parent_child_link_data::parents;
@@ -394,8 +390,8 @@ vgui_parent_child_link::get_parents_of(vgui_tableau_sptr const & tab, std::vecto
 }
 
 void
-vgui_parent_child_link::replace_child_everywhere(vgui_tableau_sptr const & old_child,
-                                                 vgui_tableau_sptr const & new_child)
+vgui_parent_child_link::replace_child_everywhere(const vgui_tableau_sptr & old_child,
+                                                 const vgui_tableau_sptr & new_child)
 {
 #ifdef DEBUG
   std::cerr << "vgui_parent_child_link::replace_child_everywhere\n"

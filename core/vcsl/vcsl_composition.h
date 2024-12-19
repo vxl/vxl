@@ -24,10 +24,9 @@
 //: Composition of transformations
 // This transformation handles a composition of transformations, that is,
 // at a given time, all the transformations are applied on a given point
-class vcsl_composition
-  :public vcsl_spatial_transformation
+class vcsl_composition : public vcsl_spatial_transformation
 {
- public:
+public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -45,14 +44,20 @@ class vcsl_composition
   //: Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
   // Pure virtual function of vcsl_spatial_transformation
-  bool is_invertible(double time) const override;
+  bool
+  is_invertible(double time) const override;
 
   //: Is `this' correctly set ?
   // Virtual function of vcsl_spatial_transformation
-  bool is_valid() const override;
+  bool
+  is_valid() const override;
 
   //: Return the list of transformations
-  std::vector<vcsl_spatial_transformation_sptr> composition() const { return transformations_; }
+  std::vector<vcsl_spatial_transformation_sptr>
+  composition() const
+  {
+    return transformations_;
+  }
 
   //***************************************************************************
   // Status setting
@@ -60,7 +65,11 @@ class vcsl_composition
 
   //: Set the list of transformations of the composition
   //  The transformations are performed in the order of the list
-  void set_composition(std::vector<vcsl_spatial_transformation_sptr> const& t) { transformations_=t; }
+  void
+  set_composition(const std::vector<vcsl_spatial_transformation_sptr> & t)
+  {
+    transformations_ = t;
+  }
 
   //***************************************************************************
   // Basic operations
@@ -69,16 +78,17 @@ class vcsl_composition
   //: Image of `v' by `this'
   //  REQUIRE: is_valid()
   // Pure virtual function of vcsl_spatial_transformation
-  vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const override;
+  vnl_vector<double>
+  execute(const vnl_vector<double> & v, double time) const override;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
   // Pure virtual function of vcsl_spatial_transformation
-  vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const override;
- protected:
+  vnl_vector<double>
+  inverse(const vnl_vector<double> & v, double time) const override;
+
+protected:
   std::vector<vcsl_spatial_transformation_sptr> transformations_;
 };
 

@@ -8,13 +8,14 @@
 //
 
 //: writes out file, line to stderr and flushes.
-void vul_trace_function(char const *file, int line);
+void
+vul_trace_function(const char * file, int line);
 
 // recompile with DEFINES=-DVBL_TRACE
 #if defined(VBL_TRACE)
-# define vul_trace vul_trace_function(__FILE__, __LINE__)
+#  define vul_trace vul_trace_function(__FILE__, __LINE__)
 #else
-# define vul_trace /* */
+#  define vul_trace /* */
 #endif
 
 #endif // vul_trace_h_

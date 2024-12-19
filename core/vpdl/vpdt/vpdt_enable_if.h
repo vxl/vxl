@@ -15,29 +15,34 @@
 // \endverbatim
 
 
-
 template <bool B, class T = void>
-struct vpdt_enable_if_c {
+struct vpdt_enable_if_c
+{
   typedef T type;
 };
 
 template <class T>
-struct vpdt_enable_if_c<false, T> {};
+struct vpdt_enable_if_c<false, T>
+{};
 
 template <class Cond, class T = void>
-struct vpdt_enable_if : public vpdt_enable_if_c<Cond::value, T> {};
+struct vpdt_enable_if : public vpdt_enable_if_c<Cond::value, T>
+{};
 
 
 template <bool B, class T = void>
-struct vpdt_disable_if_c {
+struct vpdt_disable_if_c
+{
   typedef T type;
 };
 
 template <class T>
-struct vpdt_disable_if_c<true, T> {};
+struct vpdt_disable_if_c<true, T>
+{};
 
 template <class Cond, class T = void>
-struct vpdt_disable_if : public vpdt_disable_if_c<Cond::value, T> {};
+struct vpdt_disable_if : public vpdt_disable_if_c<Cond::value, T>
+{};
 
 
 #endif // vpdt_enable_if_h_

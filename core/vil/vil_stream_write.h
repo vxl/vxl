@@ -21,32 +21,40 @@ class vil_stream;
 
 //:
 // \relatesalso vil_stream
-void vil_stream_write_big_endian_uint_16(vil_stream *, vxl_uint_16);
+void
+vil_stream_write_big_endian_uint_16(vil_stream *, vxl_uint_16);
 //:
 // \relatesalso vil_stream
-void vil_stream_write_little_endian_uint_16(vil_stream *, vxl_uint_16);
+void
+vil_stream_write_little_endian_uint_16(vil_stream *, vxl_uint_16);
 
 //:
 // \relatesalso vil_stream
-void vil_stream_write_big_endian_uint_32(vil_stream *, vxl_uint_32);
+void
+vil_stream_write_big_endian_uint_32(vil_stream *, vxl_uint_32);
 //:
 // \relatesalso vil_stream
-void vil_stream_write_little_endian_uint_32(vil_stream *, vxl_uint_32);
+void
+vil_stream_write_little_endian_uint_32(vil_stream *, vxl_uint_32);
 
 //:
 // \relatesalso vil_stream
-void vil_stream_write_big_endian_int_32(vil_stream *, vxl_int_32);
+void
+vil_stream_write_big_endian_int_32(vil_stream *, vxl_int_32);
 //:
 // \relatesalso vil_stream
-void vil_stream_write_little_endian_int_32(vil_stream *, vxl_int_32);
+void
+vil_stream_write_little_endian_int_32(vil_stream *, vxl_int_32);
 
 #if VXL_HAS_INT_64
 //:
 // \relatesalso vil_stream
-void vil_stream_write_big_endian_uint_64(vil_stream *, vxl_uint_64);
+void
+vil_stream_write_big_endian_uint_64(vil_stream *, vxl_uint_64);
 //:
 // \relatesalso vil_stream
-void vil_stream_write_little_endian_uint_64(vil_stream *, vxl_uint_64);
+void
+vil_stream_write_little_endian_uint_64(vil_stream *, vxl_uint_64);
 #endif
 
 #endif // vil_stream_write_h_

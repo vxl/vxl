@@ -32,7 +32,9 @@ to_hex(std::ostream & os, unsigned char c)
 }
 
 // usage : vil1_print_section image x0 y0 w h
-int main(int argc, char **argv) {
+int
+main(int argc, char ** argv)
+{
   assert(argc == 6);
 
   vil1_image I = vil1_load(argv[1]);

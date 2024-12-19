@@ -20,8 +20,8 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 
 static bool
-cams_near_equal(vpgl_perspective_camera<double> const & c1,
-                vpgl_perspective_camera<double> const & c2,
+cams_near_equal(const vpgl_perspective_camera<double> & c1,
+                const vpgl_perspective_camera<double> & c2,
                 double tolerance)
 {
   vpgl_calibration_matrix<double> K1 = c1.get_calibration(), K2 = c2.get_calibration();

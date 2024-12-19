@@ -24,12 +24,12 @@
 #include <vpdl/vpdt/vpdt_log_probability.h>
 
 //: A Gaussian with variance independent in each dimension
-template<class T, unsigned int n=0>
-class vpdl_gaussian_indep : public vpdl_gaussian_base<T,n>
+template <class T, unsigned int n = 0>
+class vpdl_gaussian_indep : public vpdl_gaussian_base<T, n>
 {
- public:
+public:
   //: the data type used for vectors
-  typedef typename vpdt_field_default<T,n>::type vector;
+  typedef typename vpdt_field_default<T, n>::type vector;
   //: the data type used for matrices
   typedef typename vpdt_field_traits<vector>::matrix_type matrix;
   //: the type used internally for covariance
@@ -39,52 +39,75 @@ class vpdl_gaussian_indep : public vpdl_gaussian_base<T,n>
   // Optionally initialize the dimension for when n==0.
   // Otherwise var_dim is ignored
   vpdl_gaussian_indep(unsigned int var_dim = n)
-  : impl_(var_dim) {}
+    : impl_(var_dim)
+  {}
 
   //: Constructor - from mean and variance
-  vpdl_gaussian_indep(const vector& mean_val, const covar_type& var)
-  : impl_(mean_val,var) {}
+  vpdl_gaussian_indep(const vector & mean_val, const covar_type & var)
+    : impl_(mean_val, var)
+  {}
 
   //: Destructor
   ~vpdl_gaussian_indep() override = default;
 
   //: Create a copy on the heap and return base class pointer
-  vpdl_distribution<T, n> *clone() const override {
-    return new vpdl_gaussian_indep<T,n>(*this);
+  vpdl_distribution<T, n> *
+  clone() const override
+  {
+    return new vpdl_gaussian_indep<T, n>(*this);
   }
 
   //: Return the run time dimension, which does not equal \c n when \c n==0
-  unsigned int dimension() const override { return impl_.dimension(); }
+  unsigned int
+  dimension() const override
+  {
+    return impl_.dimension();
+  }
 
   //: Evaluate the unnormalized density at a point
-  T density(const vector &pt) const override { return impl_.density(pt); }
+  T
+  density(const vector & pt) const override
+  {
+    return impl_.density(pt);
+  }
 
   //: Evaluate the probability density at a point
-  T prob_density(const vector &pt) const override {
-    return vpdt_prob_density(impl_,pt);
+  T
+  prob_density(const vector & pt) const override
+  {
+    return vpdt_prob_density(impl_, pt);
   }
 
   //: Evaluate the log probability density at a point
-  T log_prob_density(const vector &pt) const override {
-    return vpdt_log_prob_density(impl_,pt);
+  T
+  log_prob_density(const vector & pt) const override
+  {
+    return vpdt_log_prob_density(impl_, pt);
   }
 
   //: Compute the gradient of the unnormalized density at a point
   // \return the density at \a pt since it is usually needed as well, and
   //         is often trivial to compute while computing gradient
   // \retval g the gradient vector
-  T gradient_density(const vector &pt, vector &g) const override {
-    return impl_.gradient_density(pt,g);
+  T
+  gradient_density(const vector & pt, vector & g) const override
+  {
+    return impl_.gradient_density(pt, g);
   }
 
   //: The normalization constant for the density
   // When density() is multiplied by this value it becomes prob_density
   // norm_const() is reciprocal of the integral of density over the entire field
-  T norm_const() const override { return impl_.norm_const(); }
+  T
+  norm_const() const override
+  {
+    return impl_.norm_const();
+  }
 
   //: The squared Mahalanobis distance to this point
   // Non-virtual for efficiency
-  T sqr_mahal_dist(const vector& pt) const
+  T
+  sqr_mahal_dist(const vector & pt) const
   {
     return impl_.sqr_mahal_dist(pt);
   }
@@ -92,34 +115,58 @@ class vpdl_gaussian_indep : public vpdl_gaussian_base<T,n>
   //: Evaluate the cumulative distribution function at a point
   // This is the integral of the density function from negative infinity
   // (in all dimensions) to the point in question
-  T cumulative_prob(const vector &pt) const override {
+  T
+  cumulative_prob(const vector & pt) const override
+  {
     return impl_.cumulative_prob(pt);
   }
 
   //: Access the mean directly
-  const vector &mean() const override { return impl_.mean; }
+  const vector &
+  mean() const override
+  {
+    return impl_.mean;
+  }
 
   //: Set the mean
-  void set_mean(const vector &mean_val) override { impl_.mean = mean_val; }
+  void
+  set_mean(const vector & mean_val) override
+  {
+    impl_.mean = mean_val;
+  }
 
   //: Compute the mean of the distribution.
-  void compute_mean(vector &mean_val) const override { mean_val = impl_.mean; }
+  void
+  compute_mean(vector & mean_val) const override
+  {
+    mean_val = impl_.mean;
+  }
 
   //: Access the vector of variance
-  const covar_type& covariance() const { return impl_.covar; }
+  const covar_type &
+  covariance() const
+  {
+    return impl_.covar;
+  }
 
   //: Set the vector of variance
-  void set_covariance(const covar_type& var) { impl_.covar = var; }
+  void
+  set_covariance(const covar_type & var)
+  {
+    impl_.covar = var;
+  }
 
   //: Compute the covariance of the distribution.
   // Should be the diagonal matrix of var_
-  void compute_covar(matrix &covar) const override {
+  void
+  compute_covar(matrix & covar) const override
+  {
     impl_.compute_covar(covar);
   }
 
- protected:
+protected:
   //: the Gaussian implementation from vpdt
-  vpdt_gaussian<vector,covar_type> impl_;
+  vpdt_gaussian<vector, covar_type> impl_;
 };
 
 #endif // vpdl_gaussian_indep_h_

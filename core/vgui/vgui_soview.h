@@ -31,15 +31,21 @@ class vgui_message;
 //  and contains the functionality they have in common.
 class vgui_soview
 {
- public:
+public:
   //: Constructor - create a default soview.
-  vgui_soview() : selectable(true), style(nullptr) { add_id(); }
+  vgui_soview()
+    : selectable(true)
+    , style(nullptr)
+  {
+    add_id();
+  }
 
   //: Destructor - delete this soview.
   virtual ~vgui_soview();
 
   //: Render this soview on the display.
-  virtual void draw() const = 0;
+  virtual void
+  draw() const = 0;
 
   //: Render this soview for selection purposes.
   //
@@ -51,69 +57,106 @@ class vgui_soview
   // determine if the object is in the selection region (e.g. area
   // around mouse pointer).
   //
-  virtual void draw_select() const;
+  virtual void
+  draw_select() const;
 
   //: Calls OpenGL function glLoadName with this soview's id.
-  virtual void load_name() const;
+  virtual void
+  load_name() const;
 
   //: Prints the ID of this soview.
-  virtual std::ostream& print(std::ostream& s) const;
+  virtual std::ostream &
+  print(std::ostream & s) const;
 
   //: This should never be called, derived classes should implement this.
-  virtual std::string type_name() const { return "vgui_soview"; }
+  virtual std::string
+  type_name() const
+  {
+    return "vgui_soview";
+  }
 
   //: Set the style (colour, line width) of the soview.
-  virtual void set_style(const vgui_style_sptr& newstyle) { style = newstyle; }
+  virtual void
+  set_style(const vgui_style_sptr & newstyle)
+  {
+    style = newstyle;
+  }
 
   //: Return the style (colour, line width) of the soview.
-  virtual vgui_style_sptr get_style() const { return style; }
+  virtual vgui_style_sptr
+  get_style() const
+  {
+    return style;
+  }
 
   //: Set the colour of the soview.
-  void set_colour(float r, float g, float b);
+  void
+  set_colour(float r, float g, float b);
 
   //: Set the point radius of the soview.
-  void set_point_size(float s);
+  void
+  set_point_size(float s);
 
   //: Set the line width of the soview.
-  void set_line_width(float w);
+  void
+  set_line_width(float w);
 
   //: Attach given observer to this soview.
-  void attach(vgui_observer*);
+  void
+  attach(vgui_observer *);
 
   //: Detach the given observer from this soview.
-  void detach(vgui_observer*);
+  void
+  detach(vgui_observer *);
 
   //: Get a list of all observers attached to this soview.
-  void get_observers(std::vector<vgui_observer*>&) const;
+  void
+  get_observers(std::vector<vgui_observer *> &) const;
 
   //: Update all observers.
-  virtual void notify() const;
+  virtual void
+  notify() const;
 
   //: Send message to all observers.
-  virtual void notify(vgui_message const &) const;
+  virtual void
+  notify(const vgui_message &) const;
 
   // fsm. new old message model
-  static vgui_DLLDATA const void * const msg_select;
-  static vgui_DLLDATA const void * const msg_deselect;
-  static vgui_DLLDATA const void * const msg_highlight;
-  static vgui_DLLDATA const void * const msg_unhighlight;
+  static const vgui_DLLDATA void * const msg_select;
+  static const vgui_DLLDATA void * const msg_deselect;
+  static const vgui_DLLDATA void * const msg_highlight;
+  static const vgui_DLLDATA void * const msg_unhighlight;
 
   //: Returns the ID of this soview.
-  virtual unsigned get_id() const {return id;}
+  virtual unsigned
+  get_id() const
+  {
+    return id;
+  }
 
   //: Returns a pointer to the vgui_soview, given the ID.
-  static vgui_soview* id_to_object(unsigned id);
+  static vgui_soview *
+  id_to_object(unsigned id);
 
   //: Create a new ID.
-  static unsigned create_id();
+  static unsigned
+  create_id();
 
   //: Return true if it is possible to select this soview.
-  bool get_selectable() const { return selectable; }
+  bool
+  get_selectable() const
+  {
+    return selectable;
+  }
 
   //: Make this soview selectable/non-selectable.
-  void set_selectable( bool s) { selectable= s; }
+  void
+  set_selectable(bool s)
+  {
+    selectable = s;
+  }
 
- protected:
+protected:
   //: ID of this soview.
   unsigned id;
 
@@ -123,12 +166,14 @@ class vgui_soview
   //: Style (colour, line width, etc) of this soview.
   vgui_style_sptr style;
 
- private:
-  void add_id();
+private:
+  void
+  add_id();
   static vgui_DLLDATA unsigned current_id;
 };
 
-inline std::ostream& operator<<(std::ostream& s, const vgui_soview& so)
+inline std::ostream &
+operator<<(std::ostream & s, const vgui_soview & so)
 {
   return so.print(s);
 }

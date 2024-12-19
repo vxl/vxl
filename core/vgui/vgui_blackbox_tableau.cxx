@@ -24,7 +24,7 @@
 #include "vgui/vgui.h"
 #include "vgui/vgui_utils.h"
 
-vgui_blackbox_tableau::vgui_blackbox_tableau(vgui_tableau_sptr const & t)
+vgui_blackbox_tableau::vgui_blackbox_tableau(const vgui_tableau_sptr & t)
   : vgui_wrapper_tableau(t)
   , recording(false)
 {}

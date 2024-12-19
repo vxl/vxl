@@ -30,34 +30,46 @@ struct vgui_tableau_sptr;
 //  An example derived class is vgui_mfc .
 class vgui_toolkit
 {
- public:
+public:
   vgui_toolkit();
   virtual ~vgui_toolkit();
 
-  virtual void init(int &, char **);
-  virtual void uninit();
-  virtual std::string name() const =0;
+  virtual void
+  init(int &, char **);
+  virtual void
+  uninit();
+  virtual std::string
+  name() const = 0;
 
-  virtual vgui_window* produce_window(int width, int height,
-                                      vgui_menu const &menubar,
-                                      char const *title);
+  virtual vgui_window *
+  produce_window(int width, int height, const vgui_menu & menubar, const char * title);
 
-  virtual vgui_window* produce_window(int width, int height,
-                                      char const *title);
+  virtual vgui_window *
+  produce_window(int width, int height, const char * title);
 
-  virtual vgui_dialog_impl* produce_dialog(char const *name);
+  virtual vgui_dialog_impl *
+  produce_dialog(const char * name);
 
-  virtual vgui_dialog_extensions_impl* produce_dialog_extension(char const *name);
+  virtual vgui_dialog_extensions_impl *
+  produce_dialog_extension(const char * name);
 
-  virtual void run() = 0;
-  virtual void run_one_event();
-  virtual void run_till_idle();
-  virtual void flush();
-  virtual void add_event(vgui_event const &);
-  virtual void quit();
+  virtual void
+  run() = 0;
+  virtual void
+  run_one_event();
+  virtual void
+  run_till_idle();
+  virtual void
+  flush();
+  virtual void
+  add_event(const vgui_event &);
+  virtual void
+  quit();
 
-  static vgui_toolkit *lookup(char const *);
-  static std::vector<vgui_toolkit*> *registry();
+  static vgui_toolkit *
+  lookup(const char *);
+  static std::vector<vgui_toolkit *> *
+  registry();
 };
 
 #endif // vgui_toolkit_h_

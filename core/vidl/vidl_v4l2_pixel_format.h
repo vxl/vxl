@@ -15,8 +15,10 @@
 #include "vidl_pixel_format.h"
 
 //: convert from vidl pixel format to v4l2 pixel format
-unsigned int vidl_to_v4l2 (vidl_pixel_format pf);
+unsigned int
+vidl_to_v4l2(vidl_pixel_format pf);
 //: convert from v4l2 pixel format to vidl pixel format
-vidl_pixel_format v4l2_to_vidl(unsigned int pf);
+vidl_pixel_format
+v4l2_to_vidl(unsigned int pf);
 
 #endif // vidl_v4l2_pixel_format_h_

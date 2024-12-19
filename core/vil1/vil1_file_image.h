@@ -16,8 +16,9 @@
 //: Load an image from disk
 class vil1_file_image : public vil1_image
 {
- public:
-  enum verbosity {
+public:
+  enum verbosity
+  {
     silent,
     laconic,
     verbose
@@ -27,14 +28,16 @@ class vil1_file_image : public vil1_image
   vil1_file_image() = default;
 
   //: Attempt to load named file
-  vil1_file_image(char const* filename, verbosity v=verbose) {load(filename,v);}
+  vil1_file_image(const char * filename, verbosity v = verbose) { load(filename, v); }
   //: Attempt to load named file
-  vil1_file_image(std::string const& f, verbosity v=verbose) { load(f, v); }
+  vil1_file_image(const std::string & f, verbosity v = verbose) { load(f, v); }
 
   //: Attempt to load named file
-  bool load(char const* filename, verbosity = verbose);
+  bool
+  load(const char * filename, verbosity = verbose);
   //: Attempt to load named file
-  bool load(std::string const&, verbosity = verbose);
+  bool
+  load(const std::string &, verbosity = verbose);
 };
 
 #endif // vil1_file_image_h_

@@ -21,7 +21,7 @@
 #include "vxl_config.h"
 #undef sprintf // This works around a bug in libintl.h
 
-char const * vil1_pnm_format_tag = "pnm";
+const char * vil1_pnm_format_tag = "pnm";
 
 static inline bool
 iseol(int c)
@@ -60,7 +60,7 @@ vil1_pnm_file_format::make_output_image(vil1_stream * vs,
   return new vil1_pnm_generic_image(vs, planes, width, height, components, bits_per_component, format);
 }
 
-char const *
+const char *
 vil1_pnm_file_format::tag() const
 {
   return vil1_pnm_format_tag;
@@ -76,7 +76,7 @@ vil1_pnm_generic_image::vil1_pnm_generic_image(vil1_stream * vs)
 }
 
 bool
-vil1_pnm_generic_image::get_property(char const * tag, void * prop) const
+vil1_pnm_generic_image::get_property(const char * tag, void * prop) const
 {
   if (0 == std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool *)prop) = true : true;
@@ -87,7 +87,7 @@ vil1_pnm_generic_image::get_property(char const * tag, void * prop) const
   return false;
 }
 
-char const *
+const char *
 vil1_pnm_generic_image::file_format() const
 {
   return vil1_pnm_format_tag;
@@ -202,7 +202,7 @@ ConvertHostToMSB(void * buf, int num_words)
 inline static void
 ConvertMSBToHost(void *, int)
 {}
-inline static void
+static inline void
 ConvertHostToMSB(void *, int)
 {}
 #endif
@@ -289,8 +289,14 @@ vil1_pnm_generic_image::write_header()
   vs_->seek(0L);
 
   char buf[1024];
-  std::snprintf(
-    buf, sizeof(buf), "P%d\n#vil1 pnm image, #c=%u, bpc=%u\n%u %u\n", magic_, components_, bits_per_component_, width_, height_);
+  std::snprintf(buf,
+                sizeof(buf),
+                "P%d\n#vil1 pnm image, #c=%u, bpc=%u\n%u %u\n",
+                magic_,
+                components_,
+                bits_per_component_,
+                width_,
+                height_);
   vs_->write(buf, (vil1_streampos)std::strlen(buf));
   if (magic_ != 1 && magic_ != 4)
   {
@@ -485,11 +491,11 @@ operator<<(vil1_stream & vs, int a)
 }
 
 bool
-vil1_pnm_generic_image::put_section(void const * buf, int x0, int y0, int xs, int ys)
+vil1_pnm_generic_image::put_section(const void * buf, int x0, int y0, int xs, int ys)
 {
-  auto const * ob = (unsigned char const *)buf;
-  auto const * pb = (unsigned short const *)buf;
-  auto const * qb = (unsigned int const *)buf;
+  const auto * ob = (const unsigned char *)buf;
+  const auto * pb = (const unsigned short *)buf;
+  const auto * qb = (const unsigned int *)buf;
 
   if (magic_ > 4) // pgm or ppm raw image
   {
@@ -617,7 +623,9 @@ vil1_pnm_generic_image::put_section(void const * buf, int x0, int y0, int xs, in
   return true;
 }
 
-vil1_image vil1_pnm_generic_image::get_plane(unsigned int plane) const {
+vil1_image
+vil1_pnm_generic_image::get_plane(unsigned int plane) const
+{
   assert(plane == 0);
   return const_cast<vil1_pnm_generic_image *>(this);
 }

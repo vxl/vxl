@@ -15,7 +15,7 @@
 
 //: XML save vgl_vector_3d to stream.
 template <class T>
-void x_write(std::ostream &os, const vgl_vector_3d<T> & v,
-             std::string element_name="vgl_vector_3d");
+void
+x_write(std::ostream & os, const vgl_vector_3d<T> & v, std::string element_name = "vgl_vector_3d");
 
 #endif // vgl_xio_vector_3d_h

@@ -32,7 +32,7 @@ vcsl_spatial::valid_time(double time) const
 // Set the list of parent coordinate system along the time
 //---------------------------------------------------------------------------
 void
-vcsl_spatial::set_parent(std::vector<vcsl_spatial_sptr> const & new_parent)
+vcsl_spatial::set_parent(const std::vector<vcsl_spatial_sptr> & new_parent)
 {
   std::vector<vcsl_spatial_sptr>::iterator i, j;
 

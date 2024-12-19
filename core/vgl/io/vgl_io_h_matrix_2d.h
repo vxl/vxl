@@ -17,10 +17,12 @@
 
 //: Binary save vgl_h_matrix_2d to stream.
 template <class T>
-void vsl_b_write(vsl_b_ostream &os, const vgl_h_matrix_2d<T>& t);
+void
+vsl_b_write(vsl_b_ostream & os, const vgl_h_matrix_2d<T> & t);
 
 //: Binary load vgl_h_matrix_2d from stream.
 template <class T>
-void vsl_b_read(vsl_b_istream &is, vgl_h_matrix_2d<T>& v);
+void
+vsl_b_read(vsl_b_istream & is, vgl_h_matrix_2d<T> & v);
 
 #endif // #ifndef vgl_io_h_matrix_2d_h_

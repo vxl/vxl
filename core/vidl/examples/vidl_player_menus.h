@@ -19,25 +19,38 @@ class vgui_menu;
 //  assembling the menu bar for the main executable
 class vidl_player_menus
 {
- public:
-  static void quit_callback();
+public:
+  static void
+  quit_callback();
 
-  static void open_istream_callback();
-  static void open_ostream_callback();
-  static void close_istream_callback();
-  static void close_ostream_callback();
-  static void pipe_streams_callback();
+  static void
+  open_istream_callback();
+  static void
+  open_ostream_callback();
+  static void
+  close_istream_callback();
+  static void
+  close_ostream_callback();
+  static void
+  pipe_streams_callback();
 
-  static void play_video_callback();
-  static void pause_video_callback();
-  static void next_frame_callback();
-  static void prev_frame_callback();
-  static void go_to_frame_callback();
-  static void stop_video_callback();
+  static void
+  play_video_callback();
+  static void
+  pause_video_callback();
+  static void
+  next_frame_callback();
+  static void
+  prev_frame_callback();
+  static void
+  go_to_frame_callback();
+  static void
+  stop_video_callback();
 
-  static vgui_menu get_menu();
+  static vgui_menu
+  get_menu();
 
- private:
+private:
   vidl_player_menus() {}
 };
 

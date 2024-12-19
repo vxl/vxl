@@ -10,19 +10,20 @@ class vil1_stream;
 
 class vil1_jpeg_compressor
 {
- public:
-  struct jpeg_error_mgr         jerr;
-  struct jpeg_compress_struct   jobj;
-  vil1_stream *stream;
+public:
+  struct jpeg_error_mgr jerr;
+  struct jpeg_compress_struct jobj;
+  vil1_stream * stream;
 
-  vil1_jpeg_compressor(vil1_stream *s);
+  vil1_jpeg_compressor(vil1_stream * s);
 
   // NB. does not delete the stream
   ~vil1_jpeg_compressor();
 
-  bool write_scanline(unsigned line, JSAMPLE const *);
+  bool
+  write_scanline(unsigned line, JSAMPLE const *);
 
- private:
+private:
   bool ready;
 };
 

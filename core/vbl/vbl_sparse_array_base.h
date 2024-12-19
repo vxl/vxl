@@ -36,42 +36,52 @@
 template <class T, class Index>
 class vbl_sparse_array_base
 {
- protected:
+protected:
   //: The type of the storage
-  typedef std::map<Index, T, std::less<Index> > Map;
+  typedef std::map<Index, T, std::less<Index>> Map;
   //: This stores a compact list of the values.
   Map storage_;
 
- public:
-
+public:
   typedef std::size_t size_type;
 
   //: Return contents at (i)
-  T      & operator () (Index i) { return storage_[i]; }
+  T &
+  operator()(Index i)
+  {
+    return storage_[i];
+  }
 
   //: Return contents at (i). Asserts that (i) is non-empty.
-  T const& operator () (Index i) const;
+  const T &
+  operator()(Index i) const;
 
   //: Erase element at location (i). Assertion failure if not yet filled.
-  void erase(Index );
+  void erase(Index);
 
   //: Return true if location (i) has been filled.
-  bool fullp(Index ) const;
+  bool fullp(Index) const;
 
   //: Put a value into location (i).
-  bool put(Index , const T& );
+  bool
+  put(Index, const T &);
 
   //: Return the address of location (i).  0 if not yet filled.
-  T* get_addr(Index);
+  T * get_addr(Index);
 
   //: Empty the sparse matrix.
-  void clear();
+  void
+  clear();
 
   //: The type of iterators into the efficient storage
   typedef typename Map::const_iterator const_iterator;
 
   //: Return number of locations that have been assigned a value using "put".
-  size_type count_nonempty() const { return storage_.size(); }
+  size_type
+  count_nonempty() const
+  {
+    return storage_.size();
+  }
 
   //: The type of objects used to index the sparse array
   typedef Index Index_type;
@@ -85,10 +95,18 @@ class vbl_sparse_array_base
 
   //: A bidirectional iterator pointing at the first non-empty element
   // If the array is empty it points just beyond the end.
-  const_iterator begin() const { return storage_.begin(); }
+  const_iterator
+  begin() const
+  {
+    return storage_.begin();
+  }
 
   //: A bidirectional iterator pointing just beyond last non-empty element.
-  const_iterator end() const { return storage_.end(); }
+  const_iterator
+  end() const
+  {
+    return storage_.end();
+  }
 };
 
 #endif // vbl_sparse_array_base_h_

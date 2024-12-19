@@ -27,25 +27,27 @@
 // allowed to depend upon vnl
 
 
-
+//: qNaN to indicate value Not Available.
+// Don't assume that any VXL functions will do something sensible in the face of NA, unless
+// explicitly documented.
+double
+vil_na(double dummy);
 
 //: qNaN to indicate value Not Available.
 // Don't assume that any VXL functions will do something sensible in the face of NA, unless
 // explicitly documented.
-double   vil_na(double dummy);
-
-//: qNaN to indicate value Not Available.
-// Don't assume that any VXL functions will do something sensible in the face of NA, unless
-// explicitly documented.
-float   vil_na(float dummy);
+float
+vil_na(float dummy);
 
 //: True if parameter is specific NA qNaN.
 // Tests for bit pattern 0x7ff00000000007a2, as used by Octave and R
-bool vil_na_isna(double);
+bool
+vil_na_isna(double);
 
 //: True if parameter is specific NA qNaN.
 // Tests for bit pattern 0x7f8007a2
-bool vil_na_isna(float);
+bool
+vil_na_isna(float);
 
 
 #endif // vil_na_h_

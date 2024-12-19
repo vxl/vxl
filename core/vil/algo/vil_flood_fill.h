@@ -16,21 +16,29 @@
 //: Search along i direction either side for limits of pixels matching v
 //  Fills in all such pixels with new_v.  Returns limits in ilo and ihi
 // \relatesalso vil_image_view
-template<class T>
-inline void vil_flood_fill_row(vil_image_view<T>& image,
-                               unsigned i, unsigned j,
-                               T v, T new_v,
-                               unsigned& ilo, unsigned& ihi)
+template <class T>
+inline void
+vil_flood_fill_row(vil_image_view<T> & image, unsigned i, unsigned j, T v, T new_v, unsigned & ilo, unsigned & ihi)
 {
-  T* row=image.top_left_ptr() + j*image.jstep();
-  unsigned ni1=image.ni()-1;
-  std::ptrdiff_t istep=image.istep();
-  ilo=i;
-  T* p=row+(i-1)*istep;
-  while (ilo>0 && *p==v) { ilo--; *p=new_v; p-=istep; }
-  ihi=i;
-  p=row+(i+1)*istep;
-  while (ihi<ni1 && *p==v) { ihi++; *p=new_v; p+=istep;}
+  T * row = image.top_left_ptr() + j * image.jstep();
+  unsigned ni1 = image.ni() - 1;
+  std::ptrdiff_t istep = image.istep();
+  ilo = i;
+  T * p = row + (i - 1) * istep;
+  while (ilo > 0 && *p == v)
+  {
+    ilo--;
+    *p = new_v;
+    p -= istep;
+  }
+  ihi = i;
+  p = row + (i + 1) * istep;
+  while (ihi < ni1 && *p == v)
+  {
+    ihi++;
+    *p = new_v;
+    p += istep;
+  }
 }
 
 //: Flood fill on a 4-connected region
@@ -40,43 +48,43 @@ inline void vil_flood_fill_row(vil_image_view<T>& image,
 //  Note, currently uses inefficient (x,y) access to image. Could be improved
 //  using fast pointer access to work along the rows.
 // \relatesalso vil_image_view
-template<class T>
-void vil_flood_fill4(vil_image_view<T>& image,
-                     unsigned seed_i, unsigned seed_j,
-                     T v, T new_v)
+template <class T>
+void
+vil_flood_fill4(vil_image_view<T> & image, unsigned seed_i, unsigned seed_j, T v, T new_v)
 {
-  unsigned ni1=image.ni()-1;
-  unsigned nj1=image.nj()-1;
-  std::vector<std::pair<unsigned,unsigned> > q;  // List of points to visit
-  if (seed_i>ni1 || seed_j>nj1) return;  // Seed outside image
+  unsigned ni1 = image.ni() - 1;
+  unsigned nj1 = image.nj() - 1;
+  std::vector<std::pair<unsigned, unsigned>> q; // List of points to visit
+  if (seed_i > ni1 || seed_j > nj1)
+    return; // Seed outside image
 
   // Initialise the queue with the seed
-  q.emplace_back(seed_i,seed_j);
+  q.emplace_back(seed_i, seed_j);
 
-  unsigned k=0;
-  while (k<q.size())
+  unsigned k = 0;
+  while (k < q.size())
   {
-    unsigned i=q[k].first, j=q[k].second;
-    if (image(i,j)==v)
+    unsigned i = q[k].first, j = q[k].second;
+    if (image(i, j) == v)
     {
-      image(i,j)=new_v;
+      image(i, j) = new_v;
       // Search to left and right for limit of this line
-      unsigned ilo,ihi;
-      vil_flood_fill_row(image,i,j,v,new_v,ilo,ihi);
+      unsigned ilo, ihi;
+      vil_flood_fill_row(image, i, j, v, new_v, ilo, ihi);
 
-      if (j>0)
+      if (j > 0)
       {
         // Consider row above
-        for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j-1)==v)
-            q.emplace_back(i1,j-1);
+        for (unsigned i1 = ilo; i1 <= ihi; ++i1)
+          if (image(i1, j - 1) == v)
+            q.emplace_back(i1, j - 1);
       }
-      if (j<nj1)
+      if (j < nj1)
       {
         // Consider row below
-        for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j+1)==v)
-            q.emplace_back(i1,j+1);
+        for (unsigned i1 = ilo; i1 <= ihi; ++i1)
+          if (image(i1, j + 1) == v)
+            q.emplace_back(i1, j + 1);
       }
     }
     k++;
@@ -93,47 +101,51 @@ void vil_flood_fill4(vil_image_view<T>& image,
 //  Note, currently uses inefficient (x,y) access to image. Could be improved
 //  using fast pointer access to work along the rows.
 // \relatesalso vil_image_view
-template<class T>
-void vil_flood_fill4(vil_image_view<T>& image,
-                     unsigned seed_i, unsigned seed_j,
-                     T v, T new_v,
-                     std::vector<vil_chord>& region)
+template <class T>
+void
+vil_flood_fill4(vil_image_view<T> & image,
+                unsigned seed_i,
+                unsigned seed_j,
+                T v,
+                T new_v,
+                std::vector<vil_chord> & region)
 {
   region.resize(0);
-  unsigned ni1=image.ni()-1;
-  unsigned nj1=image.nj()-1;
-  std::vector<std::pair<unsigned,unsigned> > q;  // List of points to visit
-  if (seed_i>ni1 || seed_j>nj1) return;  // Seed outside image
+  unsigned ni1 = image.ni() - 1;
+  unsigned nj1 = image.nj() - 1;
+  std::vector<std::pair<unsigned, unsigned>> q; // List of points to visit
+  if (seed_i > ni1 || seed_j > nj1)
+    return; // Seed outside image
 
   // Initialise the queue with the seed
-  q.emplace_back(seed_i,seed_j);
+  q.emplace_back(seed_i, seed_j);
 
-  unsigned k=0;
-  while (k<q.size())
+  unsigned k = 0;
+  while (k < q.size())
   {
-    unsigned i=q[k].first, j=q[k].second;
-    if (image(i,j)==v)
+    unsigned i = q[k].first, j = q[k].second;
+    if (image(i, j) == v)
     {
-      image(i,j)=new_v;
+      image(i, j) = new_v;
       // Search to left and right for limit of this line
-      unsigned ilo,ihi;
-      vil_flood_fill_row(image,i,j,v,new_v,ilo,ihi);
+      unsigned ilo, ihi;
+      vil_flood_fill_row(image, i, j, v, new_v, ilo, ihi);
 
-      region.emplace_back(ilo,ihi,j);
+      region.emplace_back(ilo, ihi, j);
 
-      if (j>0)
+      if (j > 0)
       {
         // Consider row above
-        for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j-1)==v)
-            q.emplace_back(i1,j-1);
+        for (unsigned i1 = ilo; i1 <= ihi; ++i1)
+          if (image(i1, j - 1) == v)
+            q.emplace_back(i1, j - 1);
       }
-      if (j<nj1)
+      if (j < nj1)
       {
         // Consider row below
-        for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j+1)==v)
-            q.emplace_back(i1,j+1);
+        for (unsigned i1 = ilo; i1 <= ihi; ++i1)
+          if (image(i1, j + 1) == v)
+            q.emplace_back(i1, j + 1);
       }
     }
     k++;
@@ -148,46 +160,48 @@ void vil_flood_fill4(vil_image_view<T>& image,
 //  Note, currently uses inefficient (x,y) access to image. Could be improved
 //  using fast pointer access to work along the rows.
 // \relatesalso vil_image_view
-template<class T>
-void vil_flood_fill8(vil_image_view<T>& image,
-                     unsigned seed_i, unsigned seed_j,
-                     T v, T new_v)
+template <class T>
+void
+vil_flood_fill8(vil_image_view<T> & image, unsigned seed_i, unsigned seed_j, T v, T new_v)
 {
-  unsigned ni1=image.ni()-1;
-  unsigned nj1=image.nj()-1;
-  std::vector<std::pair<unsigned,unsigned> > q;  // List of points to visit
-  if (seed_i>ni1 || seed_j>nj1) return;  // Seed outside image
+  unsigned ni1 = image.ni() - 1;
+  unsigned nj1 = image.nj() - 1;
+  std::vector<std::pair<unsigned, unsigned>> q; // List of points to visit
+  if (seed_i > ni1 || seed_j > nj1)
+    return; // Seed outside image
 
   // Initialise the queue with the seed
-  q.emplace_back(seed_i,seed_j);
+  q.emplace_back(seed_i, seed_j);
 
-  unsigned k=0;
-  while (k<q.size())
+  unsigned k = 0;
+  while (k < q.size())
   {
-    unsigned i=q[k].first, j=q[k].second;
-    if (image(i,j)==v)
+    unsigned i = q[k].first, j = q[k].second;
+    if (image(i, j) == v)
     {
-      image(i,j)=new_v;
+      image(i, j) = new_v;
       // Search to left and right for limit of this line
-      unsigned ilo,ihi;
-      vil_flood_fill_row(image,i,j,v,new_v,ilo,ihi);
+      unsigned ilo, ihi;
+      vil_flood_fill_row(image, i, j, v, new_v, ilo, ihi);
 
       // Expand by one to allow all 8 neighbours to be examined
-      if (ilo>0) ilo--;
-      if (ihi<ni1) ihi++;
-      if (j>0)
+      if (ilo > 0)
+        ilo--;
+      if (ihi < ni1)
+        ihi++;
+      if (j > 0)
       {
         // Consider row above
-        for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j-1)==v)
-            q.emplace_back(i1,j-1);
+        for (unsigned i1 = ilo; i1 <= ihi; ++i1)
+          if (image(i1, j - 1) == v)
+            q.emplace_back(i1, j - 1);
       }
-      if (j<nj1)
+      if (j < nj1)
       {
         // Consider row below
-        for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j+1)==v)
-            q.emplace_back(i1,j+1);
+        for (unsigned i1 = ilo; i1 <= ihi; ++i1)
+          if (image(i1, j + 1) == v)
+            q.emplace_back(i1, j + 1);
       }
     }
     k++;
@@ -204,50 +218,56 @@ void vil_flood_fill8(vil_image_view<T>& image,
 //  Note, currently uses inefficient (x,y) access to image. Could be improved
 //  using fast pointer access to work along the rows.
 // \relatesalso vil_image_view
-template<class T>
-void vil_flood_fill8(vil_image_view<T>& image,
-                     unsigned seed_i, unsigned seed_j,
-                     T v, T new_v,
-                     std::vector<vil_chord>& region)
+template <class T>
+void
+vil_flood_fill8(vil_image_view<T> & image,
+                unsigned seed_i,
+                unsigned seed_j,
+                T v,
+                T new_v,
+                std::vector<vil_chord> & region)
 {
   region.resize(0);
-  unsigned ni1=image.ni()-1;
-  unsigned nj1=image.nj()-1;
-  std::vector<std::pair<unsigned,unsigned> > q;  // List of points to visit
-  if (seed_i>ni1 || seed_j>nj1) return;  // Seed outside image
+  unsigned ni1 = image.ni() - 1;
+  unsigned nj1 = image.nj() - 1;
+  std::vector<std::pair<unsigned, unsigned>> q; // List of points to visit
+  if (seed_i > ni1 || seed_j > nj1)
+    return; // Seed outside image
 
   // Initialise the queue with the seed
-  q.emplace_back(seed_i,seed_j);
+  q.emplace_back(seed_i, seed_j);
 
-  unsigned k=0;
-  while (k<q.size())
+  unsigned k = 0;
+  while (k < q.size())
   {
-    unsigned i=q[k].first, j=q[k].second;
-    if (image(i,j)==v)
+    unsigned i = q[k].first, j = q[k].second;
+    if (image(i, j) == v)
     {
-      image(i,j)=new_v;
+      image(i, j) = new_v;
       // Search to left and right for limit of this line
-      unsigned ilo,ihi;
-      vil_flood_fill_row(image,i,j,v,new_v,ilo,ihi);
+      unsigned ilo, ihi;
+      vil_flood_fill_row(image, i, j, v, new_v, ilo, ihi);
 
-      region.emplace_back(ilo,ihi,j);
+      region.emplace_back(ilo, ihi, j);
 
       // Expand by one to allow all 8 neighbours to be examined
-      if (ilo>0) ilo--;
-      if (ihi<ni1) ihi++;
-      if (j>0)
+      if (ilo > 0)
+        ilo--;
+      if (ihi < ni1)
+        ihi++;
+      if (j > 0)
       {
         // Consider row above
-        for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j-1)==v)
-            q.emplace_back(i1,j-1);
+        for (unsigned i1 = ilo; i1 <= ihi; ++i1)
+          if (image(i1, j - 1) == v)
+            q.emplace_back(i1, j - 1);
       }
-      if (j<nj1)
+      if (j < nj1)
       {
         // Consider row below
-        for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j+1)==v)
-            q.emplace_back(i1,j+1);
+        for (unsigned i1 = ilo; i1 <= ihi; ++i1)
+          if (image(i1, j + 1) == v)
+            q.emplace_back(i1, j + 1);
       }
     }
     k++;

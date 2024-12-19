@@ -9,12 +9,12 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-template<class T>
-std::ostream& operator<< (std::ostream &os, vbl_array_1d<T> const& array)
+template <class T>
+std::ostream &
+operator<<(std::ostream & os, const vbl_array_1d<T> & array)
 {
   os << "vbl_array_1d [";
-  for (typename vbl_array_1d<T>::const_iterator i=array.begin();
-       i < array.end(); ++i)
+  for (typename vbl_array_1d<T>::const_iterator i = array.begin(); i < array.end(); ++i)
     os << ' ' << (*i);
   os << " ]" << std::endl;
 
@@ -23,7 +23,7 @@ std::ostream& operator<< (std::ostream &os, vbl_array_1d<T> const& array)
 
 #undef VBL_ARRAY_1D_INSTANTIATE
 #define VBL_ARRAY_1D_INSTANTIATE(T) \
-template class vbl_array_1d<T >; \
-template std::ostream& operator<< (std::ostream& , vbl_array_1d<T > const& )
+  template class vbl_array_1d<T>;   \
+  template std::ostream & operator<<(std::ostream &, vbl_array_1d<T> const &)
 
 #endif

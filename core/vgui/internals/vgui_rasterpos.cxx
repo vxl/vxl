@@ -11,7 +11,7 @@
 // Purpose : a RasterPos() routine which sets the raster position,
 // even if GL thinks it is invalid.
 void
-vgui_rasterpos4dv(double const X[4])
+vgui_rasterpos4dv(const double X[4])
 {
   // This class will restore the matrix state on exit of this
   // function.

@@ -18,13 +18,17 @@
 //
 //  The local peaks of the output image correspond to corner candidates.
 // \relatesalso vil_image_view
-void vil_corners(const vil_image_view<float>& grad_i,
-                 const vil_image_view<float>& grad_j,
-                 vil_image_view<float>& dest, double k=0.04);
+void
+vil_corners(const vil_image_view<float> & grad_i,
+            const vil_image_view<float> & grad_j,
+            vil_image_view<float> & dest,
+            double k = 0.04);
 
-void vil_corners(const vil_image_view<double>& grad_i,
-                 const vil_image_view<double>& grad_j,
-                 vil_image_view<double>& dest, double k=0.04);
+void
+vil_corners(const vil_image_view<double> & grad_i,
+            const vil_image_view<double> & grad_j,
+            vil_image_view<double> & dest,
+            double k = 0.04);
 
 //: Compute corner strength using Rohr's recommended method
 //  This computes the determinant of the matrix C=g.g'
@@ -32,9 +36,10 @@ void vil_corners(const vil_image_view<double>& grad_i,
 //  g is the vector of first derivatives (gx,gy)'
 //  It relies only on first derivatives.
 // \relatesalso vil_image_view
-void vil_corners_rohr(const vil_image_view<float>& grad_i,
-                      const vil_image_view<float>& grad_j,
-                      vil_image_view<float>& dest);
+void
+vil_corners_rohr(const vil_image_view<float> & grad_i,
+                 const vil_image_view<float> & grad_j,
+                 vil_image_view<float> & dest);
 
 //: Compute Harris corner strength function
 //  At each pixel compute
@@ -44,14 +49,13 @@ void vil_corners_rohr(const vil_image_view<float>& grad_i,
 //
 //  The local peaks of the output image correspond to corner candidates.
 // \relatesalso vil_image_view
-template<class T>
-inline
-void vil_corners(const vil_image_view<T>& src,
-                 vil_image_view<float>& dest, double k=0.04)
+template <class T>
+inline void
+vil_corners(const vil_image_view<T> & src, vil_image_view<float> & dest, double k = 0.04)
 {
-  vil_image_view<float> grad_i,grad_j;
-  vil_sobel_3x3(src,grad_i,grad_j);
-  vil_corners(grad_i,grad_j,dest,k);
+  vil_image_view<float> grad_i, grad_j;
+  vil_sobel_3x3(src, grad_i, grad_j);
+  vil_corners(grad_i, grad_j, dest, k);
 }
 
 //: Compute corner strength using Karl Rohr's recommended method
@@ -60,14 +64,13 @@ void vil_corners(const vil_image_view<T>& src,
 //  g is the vector of first derivatives (gx,gy)'
 //  It relies only on first derivatives.
 // \relatesalso vil_image_view
-template<class T>
-inline
-void vil_corners_rohr(const vil_image_view<T>& src,
-                      vil_image_view<float>& dest)
+template <class T>
+inline void
+vil_corners_rohr(const vil_image_view<T> & src, vil_image_view<float> & dest)
 {
-  vil_image_view<float> grad_i,grad_j;
-  vil_sobel_3x3(src,grad_i,grad_j);
-  vil_corners_rohr(grad_i,grad_j,dest);
+  vil_image_view<float> grad_i, grad_j;
+  vil_sobel_3x3(src, grad_i, grad_j);
+  vil_corners_rohr(grad_i, grad_j, dest);
 }
 
 

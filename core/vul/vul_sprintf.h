@@ -37,19 +37,28 @@ struct vul_sprintf : public std::string
   // So we can't have any of these constructors:
   //   vul_sprintf(std::string const& fmt, ...);
   //   vul_sprintf(std::string fmt, ...);
-  vul_sprintf(char const *fmt, ...);
+  vul_sprintf(const char * fmt, ...);
 
 #ifndef _WIN32
   // assignment
-  vul_sprintf& operator=(std::string const& s)
-  { std::string::operator=(s); return *this; }
-  vul_sprintf& operator=(char const* s)
-  { std::string::operator=(s); return *this; }
+  vul_sprintf &
+  operator=(const std::string & s)
+  {
+    std::string::operator=(s);
+    return *this;
+  }
+  vul_sprintf &
+  operator=(const char * s)
+  {
+    std::string::operator=(s);
+    return *this;
+  }
 #endif
 
-  operator char const* () const { return c_str(); }
+  operator char const *() const { return c_str(); }
 };
 
-std::ostream& operator<<(std::ostream &os, const vul_sprintf& s);
+std::ostream &
+operator<<(std::ostream & os, const vul_sprintf & s);
 
 #endif // vul_sprintf_h_

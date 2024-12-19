@@ -53,7 +53,7 @@ vpgl_camera_transform_f::vpgl_camera_transform_f(
 //: The main function.
 //  Given the parameter vector x, compute the vector of residuals fx.
 void
-vpgl_camera_transform_f::f(vnl_vector<double> const & x, vnl_vector<double> & fx)
+vpgl_camera_transform_f::f(const vnl_vector<double> & x, vnl_vector<double> & fx)
 {
   unsigned dim = get_number_of_unknowns();
 
@@ -140,7 +140,7 @@ vpgl_camera_transform_f::rod_to_matrix(double r0, double r1, double r2)
 
 
 void
-vpgl_camera_transform_f::compute_cams(vnl_vector<double> const & x,
+vpgl_camera_transform_f::compute_cams(const vnl_vector<double> & x,
                                       std::vector<vpgl_perspective_camera<double>> & output_cams)
 {
   // current rotation
@@ -170,7 +170,7 @@ vpgl_camera_transform_f::compute_cams(vnl_vector<double> const & x,
 }
 
 void
-vpgl_camera_transform_f::compute_cams_selective(vnl_vector<double> const & x,
+vpgl_camera_transform_f::compute_cams_selective(const vnl_vector<double> & x,
                                                 std::vector<vpgl_perspective_camera<double>> & output_cams)
 {
   if (minimize_R_)
@@ -1032,7 +1032,7 @@ vpgl_camera_transform::apply_fixed_transformation(const std::vector<vpgl_perspec
 void
 vpgl_camera_transform::K_normalize_img_pts(
   const std::vector<vpgl_perspective_camera<double>> & input_cams,
-  vnl_matrix_fixed<double, 3, 3> const & input_correspondence_covariance,
+  const vnl_matrix_fixed<double, 3, 3> & input_correspondence_covariance,
   const std::vector<std::vector<std::pair<vnl_vector_fixed<double, 2>, unsigned>>> & cam_ids_img_pts,
   std::vector<
     std::vector<std::pair<std::pair<vnl_vector_fixed<double, 3>, vnl_matrix_fixed<double, 3, 3>>, unsigned>>> &

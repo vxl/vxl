@@ -22,17 +22,23 @@ class vgui_statusbar;
 
 class vgui_statusbuf : public std::streambuf
 {
- public:
-  vgui_statusbuf (vgui_statusbar* s) { status = s; }
-  int sync ();
-  int overflow (int ch);
-  int underflow(){return 0;}
-  //int xsputn( char* text, int n);
-  //streamsize xsputn(char* text, streamsize n);
-  //streamsize xsputn(const char* text, streamsize n);
+public:
+  vgui_statusbuf(vgui_statusbar * s) { status = s; }
+  int
+  sync();
+  int
+  overflow(int ch);
+  int
+  underflow()
+  {
+    return 0;
+  }
+  // int xsputn( char* text, int n);
+  // streamsize xsputn(char* text, streamsize n);
+  // streamsize xsputn(const char* text, streamsize n);
 
- private:
-  vgui_statusbar* status;
+private:
+  vgui_statusbar * status;
 };
 
 #endif // vgui_statusbuf_h_

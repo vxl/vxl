@@ -29,37 +29,46 @@ class vgui_message;
 //  attached to themselves.
 class vgui_observable
 {
- public:
+public:
   //: Constructor - create a default observable.
-  vgui_observable() { }
+  vgui_observable() {}
 
   //: Destructor.
   virtual ~vgui_observable();
 
   //: Attach the given observer to receive notify messages.
-  void attach(vgui_observer*);
+  void
+  attach(vgui_observer *);
 
   //: Detach the given observer.
-  void detach(vgui_observer*);
+  void
+  detach(vgui_observer *);
 
   //: Returns a list of all the observers for this observable.
-  void get_observers(std::vector<vgui_observer*>&) const;
+  void
+  get_observers(std::vector<vgui_observer *> &) const;
 
   //: Broadcast an update to all observers of this class.
-  virtual void notify() const;
+  virtual void
+  notify() const;
 
   //: Broadcast a message to all observers of this class.
-  virtual void notify(const vgui_message &) const;
+  virtual void
+  notify(const vgui_message &) const;
 
- private:
+private:
   //: List of all observers for this observable.
-  std::vector<vgui_observer*> observers;
+  std::vector<vgui_observer *> observers;
 
   //: Disallow assignment.
-  vgui_observable(vgui_observable const&) { }
+  vgui_observable(const vgui_observable &) {}
 
   //: Disallow assignment.
-  vgui_observable& operator=(vgui_observable const&) { return *this; }
+  vgui_observable &
+  operator=(const vgui_observable &)
+  {
+    return *this;
+  }
 };
 
 #endif // vgui_observable_h_

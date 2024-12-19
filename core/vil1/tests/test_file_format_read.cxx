@@ -48,8 +48,9 @@ public:
       img_ = i;
   };
 
-  bool operator()(int p, int x, int y,
-                  const std::vector<TruePixelType> &pixel) const override {
+  bool
+  operator()(int p, int x, int y, const std::vector<TruePixelType> & pixel) const override
+  {
     assert(p == 0);
     if (!img_ || pixel.size() != 3)
       return false;
@@ -108,8 +109,9 @@ public:
       img_ = i;
   };
 
-  bool operator()(int p, int x, int y,
-                  const std::vector<TruePixelType> &pixel) const override {
+  bool
+  operator()(int p, int x, int y, const std::vector<TruePixelType> & pixel) const override
+  {
     assert(p == 0);
     if (!img_ || pixel.size() != 1)
       return false;
@@ -137,8 +139,9 @@ public:
       img_ = i;
   };
 
-  bool operator()(int p, int x, int y,
-                  const std::vector<TruePixelType> &pixel) const override {
+  bool
+  operator()(int p, int x, int y, const std::vector<TruePixelType> & pixel) const override
+  {
     assert(p == 0);
     if (!img_ || pixel.size() != 1)
       return false;

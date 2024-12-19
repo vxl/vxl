@@ -25,52 +25,58 @@ struct vbl_triple
   T3 third;
 
   vbl_triple() = default;
-  vbl_triple(T1 const &a, T2 const &b, T3 c)
-    : first (a)
+  vbl_triple(T1 const & a, T2 const & b, T3 c)
+    : first(a)
     , second(b)
-    , third (std::move(c)) { }
+    , third(std::move(c))
+  {}
 
   template <class U1, class U2, class U3>
-  vbl_triple(vbl_triple<U1, U2, U3> const &that)
-    : first (that.first )
+  vbl_triple(const vbl_triple<U1, U2, U3> & that)
+    : first(that.first)
     , second(that.second)
-    , third (that.third ) { }
+    , third(that.third)
+  {}
 };
 
 template <class T1, class T2, class T3>
-inline bool operator==(vbl_triple<T1, T2, T3> const &x, vbl_triple<T1, T2, T3> const &y)
+inline bool
+operator==(const vbl_triple<T1, T2, T3> & x, const vbl_triple<T1, T2, T3> & y)
 {
-  return
-    x.first  == y.first  &&
-    x.second == y.second &&
-    x.third  == y.third;
+  return x.first == y.first && x.second == y.second && x.third == y.third;
 }
 
 template <class T1, class T2, class T3>
-inline bool operator!=(vbl_triple<T1, T2, T3> const &x, vbl_triple<T1, T2, T3> const &y)
-{ return !(x == y); }
-
-template <class T1, class T2, class T3>
-inline bool operator< (vbl_triple<T1, T2, T3> const &x, vbl_triple<T1, T2, T3> const &y)
+inline bool
+operator!=(const vbl_triple<T1, T2, T3> & x, const vbl_triple<T1, T2, T3> & y)
 {
-  return x.first!=y.first ? x.first<y.first :
-    (x.second!=y.second ? x.second<y.second : x.third<y.third);
+  return !(x == y);
 }
 
 template <class T1, class T2, class T3>
-inline vbl_triple<T1, T2, T3> vbl_make_triple(T1 const &x, T2 const &y, T3 const &z)
+inline bool
+operator<(const vbl_triple<T1, T2, T3> & x, const vbl_triple<T1, T2, T3> & y)
+{
+  return x.first != y.first ? x.first < y.first : (x.second != y.second ? x.second < y.second : x.third < y.third);
+}
+
+template <class T1, class T2, class T3>
+inline vbl_triple<T1, T2, T3>
+vbl_make_triple(T1 const & x, T2 const & y, T3 const & z)
 {
   return vbl_triple<T1, T2, T3>(x, y, z);
 }
 
 template <class T1, class T2, class T3>
-inline std::ostream& operator<<(std::ostream& os, vbl_triple<T1, T2, T3> const &x)
+inline std::ostream &
+operator<<(std::ostream & os, const vbl_triple<T1, T2, T3> & x)
 {
   return os << x.first << ' ' << x.second << ' ' << x.third;
 }
 
 template <class T1, class T2, class T3>
-inline std::istream& operator>>(std::istream& os, vbl_triple<T1, T2, T3> &x)
+inline std::istream &
+operator>>(std::istream & os, vbl_triple<T1, T2, T3> & x)
 {
   return os >> x.first >> x.second >> x.third;
 }

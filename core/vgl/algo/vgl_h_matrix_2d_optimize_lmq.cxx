@@ -14,15 +14,15 @@
 #include <vgl/algo/vgl_norm_trans_2d.h>
 
 //: Construct a vgl_h_matrix_2d_optimize_lmq object.
-vgl_h_matrix_2d_optimize_lmq::vgl_h_matrix_2d_optimize_lmq(vgl_h_matrix_2d<double> const & initial_h)
+vgl_h_matrix_2d_optimize_lmq::vgl_h_matrix_2d_optimize_lmq(const vgl_h_matrix_2d<double> & initial_h)
   : vgl_h_matrix_2d_optimize(initial_h)
 {}
 
 //: optimize the normalized projection problem
 bool
-vgl_h_matrix_2d_optimize_lmq::optimize_h(std::vector<vgl_homg_point_2d<double>> const & points1,
-                                         std::vector<vgl_homg_point_2d<double>> const & points2,
-                                         vgl_h_matrix_2d<double> const & h_initial,
+vgl_h_matrix_2d_optimize_lmq::optimize_h(const std::vector<vgl_homg_point_2d<double>> & points1,
+                                         const std::vector<vgl_homg_point_2d<double>> & points2,
+                                         const vgl_h_matrix_2d<double> & h_initial,
                                          vgl_h_matrix_2d<double> & h_optimized)
 {
   projection_lsqf lsq(points1, points2);
@@ -52,8 +52,8 @@ vgl_h_matrix_2d_optimize_lmq::optimize_h(std::vector<vgl_homg_point_2d<double>> 
 }
 
 bool
-vgl_h_matrix_2d_optimize_lmq::optimize_p(std::vector<vgl_homg_point_2d<double>> const & points1,
-                                         std::vector<vgl_homg_point_2d<double>> const & points2,
+vgl_h_matrix_2d_optimize_lmq::optimize_p(const std::vector<vgl_homg_point_2d<double>> & points1,
+                                         const std::vector<vgl_homg_point_2d<double>> & points2,
                                          vgl_h_matrix_2d<double> & H)
 {
   // number of points must be the same
@@ -102,8 +102,8 @@ vgl_h_matrix_2d_optimize_lmq::optimize_p(std::vector<vgl_homg_point_2d<double>> 
 }
 
 bool
-vgl_h_matrix_2d_optimize_lmq::optimize_l(std::vector<vgl_homg_line_2d<double>> const & lines1,
-                                         std::vector<vgl_homg_line_2d<double>> const & lines2,
+vgl_h_matrix_2d_optimize_lmq::optimize_l(const std::vector<vgl_homg_line_2d<double>> & lines1,
+                                         const std::vector<vgl_homg_line_2d<double>> & lines2,
                                          vgl_h_matrix_2d<double> & H)
 {
   // number of lines must be the same
@@ -144,7 +144,7 @@ vgl_h_matrix_2d_optimize_lmq::optimize_l(std::vector<vgl_homg_line_2d<double>> c
   vgl_h_matrix_2d<double> tr1_inv = tr1.get_inverse();
   initial_h_norm = tr2 * initial_h_ * tr1_inv;
   // convert to line form
-  vnl_matrix_fixed<double, 3, 3> const & Mp_init = initial_h_norm.get_matrix();
+  const vnl_matrix_fixed<double, 3, 3> & Mp_init = initial_h_norm.get_matrix();
   vnl_matrix_fixed<double, 3, 3> Ml_init = vnl_inverse_transpose(Mp_init);
   h_initial_line.set(Ml_init);
 
@@ -154,7 +154,7 @@ vgl_h_matrix_2d_optimize_lmq::optimize_l(std::vector<vgl_homg_line_2d<double>> c
 
   // Convert the optimized line transform back to point form.
   vgl_h_matrix_2d<double> h_point_opt;
-  vnl_matrix_fixed<double, 3, 3> const & Ml_opt = h_line_opt.get_matrix();
+  const vnl_matrix_fixed<double, 3, 3> & Ml_opt = h_line_opt.get_matrix();
   vnl_matrix_fixed<double, 3, 3> Mp_opt = vnl_inverse_transpose(Ml_opt);
   h_point_opt.set(Mp_opt);
 
@@ -171,10 +171,10 @@ vgl_h_matrix_2d_optimize_lmq::optimize_l(std::vector<vgl_homg_line_2d<double>> c
 }
 
 bool
-vgl_h_matrix_2d_optimize_lmq::optimize_pl(std::vector<vgl_homg_point_2d<double>> const & points1,
-                                          std::vector<vgl_homg_point_2d<double>> const & points2,
-                                          std::vector<vgl_homg_line_2d<double>> const & lines1,
-                                          std::vector<vgl_homg_line_2d<double>> const & lines2,
+vgl_h_matrix_2d_optimize_lmq::optimize_pl(const std::vector<vgl_homg_point_2d<double>> & points1,
+                                          const std::vector<vgl_homg_point_2d<double>> & points2,
+                                          const std::vector<vgl_homg_line_2d<double>> & lines1,
+                                          const std::vector<vgl_homg_line_2d<double>> & lines2,
                                           vgl_h_matrix_2d<double> & H)
 {
   // number of points must be the same

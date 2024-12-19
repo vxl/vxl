@@ -23,19 +23,27 @@ struct vgui_overlay_helper
   ~vgui_overlay_helper();
 
   // client methods
-  void post_overlay_redraw() { overlay_redraw_posted = true; }
-  bool dispatch(vgui_event const &e);
+  void
+  post_overlay_redraw()
+  {
+    overlay_redraw_posted = true;
+  }
+  bool
+  dispatch(const vgui_event & e);
 
- private:
-  vgui_adaptor *adaptor;
+private:
+  vgui_adaptor * adaptor;
   bool aux_buffer_is_back_buffer;
   bool last_draw_was_overlay;
   bool overlay_redraw_posted;
 
   // these helpers implement dispatch()
-  bool dispatch_draw(vgui_event const &);
-  bool dispatch_other(vgui_event const &);
-  bool dispatch_overlay_draw(vgui_event const &);
+  bool
+  dispatch_draw(const vgui_event &);
+  bool
+  dispatch_other(const vgui_event &);
+  bool
+  dispatch_overlay_draw(const vgui_event &);
 };
 
 #endif // vgui_overlay_helper_h_

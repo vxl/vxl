@@ -13,18 +13,24 @@ class vil1_stream;
 
 struct vil1_bmp_info_header
 {
-  enum { disk_size = 4+4+4+4+4+4 };  // this is what is *on disk*.
-  unsigned compression; // 4
-  unsigned bitmap_size; // 4
-  unsigned horiz_res;   // 4
-  unsigned verti_res;   // 4
-  unsigned colormapsize;// 4
-  unsigned colorcount;  // 4
+  enum
+  {
+    disk_size = 4 + 4 + 4 + 4 + 4 + 4
+  }; // this is what is *on disk*.
+  unsigned compression;  // 4
+  unsigned bitmap_size;  // 4
+  unsigned horiz_res;    // 4
+  unsigned verti_res;    // 4
+  unsigned colormapsize; // 4
+  unsigned colorcount;   // 4
 
   vil1_bmp_info_header();
-  void read(vil1_stream *);
-  void write(vil1_stream *) const;
-  void print(std::ostream &) const;
+  void
+  read(vil1_stream *);
+  void
+  write(vil1_stream *) const;
+  void
+  print(std::ostream &) const;
 };
 
 #endif // vil1_bmp_info_header_h_

@@ -10,15 +10,16 @@
 
 //: Return minimum value of |im[offset[k]]-v0| k=0..n-1
 template <class T1, class T2>
-inline double vil_abs_shuffle_distance(T1 v0, const T2* im,
-                                       const std::ptrdiff_t* offset, unsigned n)
+inline double
+vil_abs_shuffle_distance(T1 v0, const T2 * im, const std::ptrdiff_t * offset, unsigned n)
 {
-  double min_v = im[offset[0]]<v0?(v0-im[offset[0]]):(im[offset[0]]-v0);
-  for (unsigned i=1;i<n;++i)
+  double min_v = im[offset[0]] < v0 ? (v0 - im[offset[0]]) : (im[offset[0]] - v0);
+  for (unsigned i = 1; i < n; ++i)
   {
     T2 v1 = im[offset[i]];
-    double abs_diff = (v0<v1?(v1-v0):(v0-v1));
-    if (abs_diff<min_v) min_v=abs_diff;
+    double abs_diff = (v0 < v1 ? (v1 - v0) : (v0 - v1));
+    if (abs_diff < min_v)
+      min_v = abs_diff;
   }
   return min_v;
 }
@@ -29,22 +30,28 @@ inline double vil_abs_shuffle_distance(T1 v0, const T2* im,
 //  \relatesalso vil_image_view
 //  \relatesalso vil_structuring_element
 template <class T1, class T2>
-inline double vil_abs_shuffle_distance(T1 v0, const vil_image_view<T2>& image,
-                                       unsigned plane,
-                                       const vil_structuring_element& element,
-                                       int i0, int j0)
+inline double
+vil_abs_shuffle_distance(T1 v0,
+                         const vil_image_view<T2> & image,
+                         unsigned plane,
+                         const vil_structuring_element & element,
+                         int i0,
+                         int j0)
 {
-  double min_v=9e99;
+  double min_v = 9e99;
   unsigned n = element.p_i().size();
-  for (unsigned int k=0;k<n;++k)
+  for (unsigned int k = 0; k < n; ++k)
   {
-    unsigned int i = i0+element.p_i()[k];
-    unsigned int j = j0+element.p_j()[k];
-    if (i<image.ni() && j<image.nj())
+    unsigned int i = i0 + element.p_i()[k];
+    unsigned int j = j0 + element.p_j()[k];
+    if (i < image.ni() && j < image.nj())
     {
-      T2 v1 = image(i,j,plane);
-      double abs_diff = (v0<v1?(v1-v0):(v0-v1));
-      if (abs_diff < min_v) { min_v = abs_diff; }
+      T2 v1 = image(i, j, plane);
+      double abs_diff = (v0 < v1 ? (v1 - v0) : (v0 - v1));
+      if (abs_diff < min_v)
+      {
+        min_v = abs_diff;
+      }
     }
   }
   return min_v;
@@ -60,9 +67,10 @@ inline double vil_abs_shuffle_distance(T1 v0, const vil_image_view<T2>& image,
 // \relatesalso vil_image_view
 // \relatesalso vil_structuring_element
 template <class T1, class T2>
-double vil_abs_shuffle_distance(const vil_image_view<T1>& image1,
-                                const vil_image_view<T2>& image2,
-                                const vil_structuring_element& element,
-                                bool include_borders=true);
+double
+vil_abs_shuffle_distance(const vil_image_view<T1> & image1,
+                         const vil_image_view<T2> & image2,
+                         const vil_structuring_element & element,
+                         bool include_borders = true);
 
 #endif // vil_abs_shuffle_distance_h_

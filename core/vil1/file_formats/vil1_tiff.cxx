@@ -29,11 +29,11 @@
 #include <tiffio.h>
 
 // Constants
-char const * vil1_tiff_format_tag = "tiff";
+const char * vil1_tiff_format_tag = "tiff";
 
 // Functions
 static bool
-xxproblem(char const * linefile, char const * msg)
+xxproblem(const char * linefile, const char * msg)
 {
   std::cerr << linefile << "[PROBLEM " << msg << ']';
   return false;
@@ -42,11 +42,11 @@ xxproblem(char const * linefile, char const * msg)
 #define yxproblem(x, l) xproblem(x, l)
 #define problem(x) yxproblem(x, __LINE__)
 
-#define trace                                                                                                          \
-  if (true)                                                                                                            \
-  {                                                                                                                    \
-  }                                                                                                                    \
-  else                                                                                                                 \
+#define trace \
+  if (true)   \
+  {           \
+  }           \
+  else        \
     std::cerr
 
 bool
@@ -117,7 +117,7 @@ vil1_tiff_file_format::make_output_image(vil1_stream * is,
   return new vil1_tiff_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
-char const *
+const char *
 vil1_tiff_file_format::tag() const
 {
   return vil1_tiff_format_tag;
@@ -238,7 +238,8 @@ vil1_tiff_closeproc(thandle_t h)
   return 0;
 }
 
-static toff_t vil1_tiff_sizeproc(thandle_t)
+static toff_t
+vil1_tiff_sizeproc(thandle_t)
 {
   trace << "vil1_tiff_sizeproc\n";
   // TODO
@@ -252,7 +253,9 @@ vil1_tiff_mapfileproc(thandle_t, tdata_t *, toff_t *)
   return 0;
 }
 
-static void vil1_tiff_unmapfileproc(thandle_t, tdata_t, toff_t) {}
+static void
+vil1_tiff_unmapfileproc(thandle_t, tdata_t, toff_t)
+{}
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -263,7 +266,7 @@ vil1_tiff_generic_image::vil1_tiff_generic_image(vil1_stream * is)
 }
 
 bool
-vil1_tiff_generic_image::get_property(char const * tag, void * prop) const
+vil1_tiff_generic_image::get_property(const char * tag, void * prop) const
 {
   unsigned short orientation;
   int orientation_val_ok = TIFFGetField(p->tif, TIFFTAG_ORIENTATION, &orientation);
@@ -289,7 +292,7 @@ vil1_tiff_generic_image::get_property(char const * tag, void * prop) const
 }
 
 bool
-vil1_tiff_generic_image::set_property(char const * tag, const void * prop) const
+vil1_tiff_generic_image::set_property(const char * tag, const void * prop) const
 {
   bool topdown;
   get_property(vil1_property_top_row_first, &topdown);
@@ -301,11 +304,10 @@ vil1_tiff_generic_image::set_property(char const * tag, const void * prop) const
   {
     if (topdown == newprop) // no change necessary
       return true;
-    unsigned short orientation = (topdown && leftright)
-                                   ? ORIENTATION_TOPLEFT
-                                   : (!topdown && leftright)
-                                       ? ORIENTATION_BOTLEFT
-                                       : (topdown && !leftright) ? ORIENTATION_TOPRIGHT : ORIENTATION_BOTRIGHT;
+    unsigned short orientation = (topdown && leftright)    ? ORIENTATION_TOPLEFT
+                                 : (!topdown && leftright) ? ORIENTATION_BOTLEFT
+                                 : (topdown && !leftright) ? ORIENTATION_TOPRIGHT
+                                                           : ORIENTATION_BOTRIGHT;
     TIFFSetField(p->tif, TIFFTAG_ORIENTATION, orientation);
     return true;
   }
@@ -314,11 +316,10 @@ vil1_tiff_generic_image::set_property(char const * tag, const void * prop) const
   {
     if (leftright == newprop) // no change necessary
       return true;
-    unsigned short orientation = (topdown && leftright)
-                                   ? ORIENTATION_TOPLEFT
-                                   : (!topdown && leftright)
-                                       ? ORIENTATION_BOTLEFT
-                                       : (topdown && !leftright) ? ORIENTATION_TOPRIGHT : ORIENTATION_BOTRIGHT;
+    unsigned short orientation = (topdown && leftright)    ? ORIENTATION_TOPLEFT
+                                 : (!topdown && leftright) ? ORIENTATION_BOTLEFT
+                                 : (topdown && !leftright) ? ORIENTATION_TOPRIGHT
+                                                           : ORIENTATION_BOTRIGHT;
     TIFFSetField(p->tif, TIFFTAG_ORIENTATION, orientation);
     return true;
   }
@@ -351,7 +352,7 @@ vil1_tiff_generic_image::~vil1_tiff_generic_image()
   delete p;
 }
 
-char const *
+const char *
 vil1_tiff_generic_image::file_format() const
 {
   return vil1_tiff_format_tag;
@@ -767,7 +768,7 @@ vil1_tiff_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys)
 }
 
 bool
-vil1_tiff_generic_image::put_section(void const * buf, int x0, int y0, int xs, int ys)
+vil1_tiff_generic_image::put_section(const void * buf, int x0, int y0, int xs, int ys)
 {
   // Random access only to strips.
   // Put the nearby strips...
@@ -803,7 +804,9 @@ vil1_tiff_generic_image::put_section(void const * buf, int x0, int y0, int xs, i
   return true;
 }
 
-vil1_image vil1_tiff_generic_image::get_plane(unsigned int plane) const {
+vil1_image
+vil1_tiff_generic_image::get_plane(unsigned int plane) const
+{
   assert(plane == 0);
   return const_cast<vil1_tiff_generic_image *>(this);
 }

@@ -18,14 +18,14 @@ vnl_least_squares_function::dim_warning(unsigned int number_of_unknowns, unsigne
 }
 
 void
-vnl_least_squares_function::gradf(vnl_vector<double> const & /*x*/, vnl_matrix<double> & /*jacobian*/)
+vnl_least_squares_function::gradf(const vnl_vector<double> & /*x*/, vnl_matrix<double> & /*jacobian*/)
 {
   std::cerr << "Warning: gradf() called but not implemented in derived class\n";
 }
 
 //: Compute finite differences gradient using central differences.
 void
-vnl_least_squares_function::fdgradf(vnl_vector<double> const & x, vnl_matrix<double> & jacobian, double stepsize)
+vnl_least_squares_function::fdgradf(const vnl_vector<double> & x, vnl_matrix<double> & jacobian, double stepsize)
 {
   unsigned int dim = x.size();
   unsigned int n = jacobian.rows();
@@ -58,7 +58,7 @@ vnl_least_squares_function::fdgradf(vnl_vector<double> const & x, vnl_matrix<dou
 
 //: Compute finite differences gradient using forward differences.
 void
-vnl_least_squares_function::ffdgradf(vnl_vector<double> const & x, vnl_matrix<double> & jacobian, double stepsize)
+vnl_least_squares_function::ffdgradf(const vnl_vector<double> & x, vnl_matrix<double> & jacobian, double stepsize)
 {
   unsigned int dim = x.size();
   unsigned int n = jacobian.rows();
@@ -87,14 +87,14 @@ vnl_least_squares_function::ffdgradf(vnl_vector<double> const & x, vnl_matrix<do
 
 void
 vnl_least_squares_function::trace(int /* iteration */,
-                                  vnl_vector<double> const & /*x*/,
-                                  vnl_vector<double> const & /*fx*/)
+                                  const vnl_vector<double> & /*x*/,
+                                  const vnl_vector<double> & /*fx*/)
 {
   // This default implementation is empty; overloaded in derived class.
 }
 
 double
-vnl_least_squares_function::rms(vnl_vector<double> const & x)
+vnl_least_squares_function::rms(const vnl_vector<double> & x)
 {
   vnl_vector<double> fx(n_);
   f(x, fx);

@@ -3,7 +3,7 @@
 #define vil_math_sse_hxx_
 
 #ifndef vil_math_h_
-#error "This header cannot be included directly, only through vil_math_.h"
+#  error "This header cannot be included directly, only through vil_math_.h"
 #endif
 
 #include <iostream>
@@ -15,7 +15,7 @@
 
 #include <emmintrin.h>
 #ifdef __SSE3__
-#include <pmmintrin.h>
+#  include <pmmintrin.h>
 #endif
 
 //:
@@ -25,19 +25,21 @@
 // \author Chuck Atkins
 
 //: Compute absolute difference of two 1D images (im_sum = |imA-imB|)
-template<>
-inline void vil_math_image_abs_difference_1d_sse<vxl_byte,vxl_byte,vxl_byte>(
-  const vxl_byte* pxA, const vxl_byte* pxB, vxl_byte* pxD,
-  unsigned len)
+template <>
+inline void
+vil_math_image_abs_difference_1d_sse<vxl_byte, vxl_byte, vxl_byte>(const vxl_byte * pxA,
+                                                                   const vxl_byte * pxB,
+                                                                   vxl_byte * pxD,
+                                                                   unsigned len)
 {
   assert(sizeof(vxl_byte) == 1);
 
   const unsigned ni_d_16 = len >> 4;
   const unsigned ni_m_16 = len & 0x0F;
 
-  const __m128i* pxAxmm = reinterpret_cast<const __m128i*>(pxA);
-  const __m128i* pxBxmm = reinterpret_cast<const __m128i*>(pxB);
-        __m128i* pxDxmm = reinterpret_cast<__m128i*>(pxD);
+  const __m128i * pxAxmm = reinterpret_cast<const __m128i *>(pxA);
+  const __m128i * pxBxmm = reinterpret_cast<const __m128i *>(pxB);
+  __m128i * pxDxmm = reinterpret_cast<__m128i *>(pxD);
 
   // Loop through the first set of pxs in groups of 16
   for (unsigned i = 0; i < ni_d_16; ++i, ++pxAxmm, ++pxBxmm, ++pxDxmm)
@@ -52,7 +54,7 @@ inline void vil_math_image_abs_difference_1d_sse<vxl_byte,vxl_byte,vxl_byte>(
 
     __m128i xmmMax = _mm_max_epu8(xmmA, xmmB);
     __m128i xmmMin = _mm_min_epu8(xmmA, xmmB);
-    __m128i xmmD   = _mm_subs_epu8(xmmMax, xmmMin);
+    __m128i xmmD = _mm_subs_epu8(xmmMax, xmmMin);
 
     _mm_storeu_si128(pxDxmm, xmmD);
   }
@@ -63,9 +65,9 @@ inline void vil_math_image_abs_difference_1d_sse<vxl_byte,vxl_byte,vxl_byte>(
     vxl_byte pxLastA[16];
     vxl_byte pxLastB[16];
     vxl_byte pxLastD[16];
-    __m128i* pxLastAxmm = reinterpret_cast<__m128i*>(pxLastA);
-    __m128i* pxLastBxmm = reinterpret_cast<__m128i*>(pxLastB);
-    __m128i* pxLastDxmm = reinterpret_cast<__m128i*>(pxLastD);
+    __m128i * pxLastAxmm = reinterpret_cast<__m128i *>(pxLastA);
+    __m128i * pxLastBxmm = reinterpret_cast<__m128i *>(pxLastB);
+    __m128i * pxLastDxmm = reinterpret_cast<__m128i *>(pxLastD);
 
     std::memcpy(pxLastA, pxAxmm, ni_m_16);
     std::memcpy(pxLastB, pxBxmm, ni_m_16);
@@ -79,7 +81,7 @@ inline void vil_math_image_abs_difference_1d_sse<vxl_byte,vxl_byte,vxl_byte>(
 
     __m128i xmmMax = _mm_max_epu8(xmmA, xmmB);
     __m128i xmmMin = _mm_min_epu8(xmmA, xmmB);
-    __m128i xmmD   = _mm_subs_epu8(xmmMax, xmmMin);
+    __m128i xmmD = _mm_subs_epu8(xmmMax, xmmMin);
 
     _mm_storeu_si128(pxLastDxmm, xmmD);
     std::memcpy(pxDxmm, pxLastD, ni_m_16);
@@ -88,10 +90,12 @@ inline void vil_math_image_abs_difference_1d_sse<vxl_byte,vxl_byte,vxl_byte>(
 
 
 //: Compute absolute difference of two images (im_sum = |imA-imB|)
-template<>
-inline void vil_math_image_abs_difference_1d_sse<float,float,float>(
-  const float* pxA, const float* pxB, float* pxD,
-  unsigned len)
+template <>
+inline void
+vil_math_image_abs_difference_1d_sse<float, float, float>(const float * pxA,
+                                                          const float * pxB,
+                                                          float * pxD,
+                                                          unsigned len)
 {
   assert(sizeof(float) == 4);
 

@@ -10,14 +10,16 @@
 
 // stream operators
 template <class Type>
-std::ostream& operator<<(std::ostream& s, vgl_conic_segment_2d<Type> const & p)
+std::ostream &
+operator<<(std::ostream & s, const vgl_conic_segment_2d<Type> & p)
 {
   return s << "<vgl_conic_segment_2d " << p.point1() << " to " << p.point2() << "with " << p.conic()
            << (p.is_clockwise() ? ", clockwise" : ", counterclockwise") << " >";
 }
 
 template <class Type>
-std::istream& operator>>(std::istream& s, vgl_conic_segment_2d<Type>& p)
+std::istream &
+operator>>(std::istream & s, vgl_conic_segment_2d<Type> & p)
 {
   vgl_point_2d<Type> p1, p2;
   s >> p1 >> p2;
@@ -28,9 +30,9 @@ std::istream& operator>>(std::istream& s, vgl_conic_segment_2d<Type>& p)
 }
 
 #undef VGL_CONIC_SEGMENT_2D_INSTANTIATE
-#define VGL_CONIC_SEGMENT_2D_INSTANTIATE(Type) \
-template class vgl_conic_segment_2d<Type >;\
-template std::istream& operator>>(std::istream&, vgl_conic_segment_2d<Type >&);\
-template std::ostream& operator<<(std::ostream&, vgl_conic_segment_2d<Type > const&)
+#define VGL_CONIC_SEGMENT_2D_INSTANTIATE(Type)                                      \
+  template class vgl_conic_segment_2d<Type>;                                        \
+  template std::istream & operator>>(std::istream &, vgl_conic_segment_2d<Type> &); \
+  template std::ostream & operator<<(std::ostream &, vgl_conic_segment_2d<Type> const &)
 
 #endif // vgl_conic_segment_2d_hxx_

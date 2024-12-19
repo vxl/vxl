@@ -13,7 +13,7 @@ struct example_object
 {
   vgui_satellite_tableau_new<example_object> a;
   bool
-  handle_a(vgui_event const & e)
+  handle_a(const vgui_event & e)
   {
     std::cerr << "handle_a(): " << e << std::endl;
     return false;
@@ -21,7 +21,7 @@ struct example_object
 
   vgui_satellite_tableau_t_new<example_object, int> b1, b2;
   bool
-  handle_b(vgui_event const &, int d)
+  handle_b(const vgui_event &, int d)
   {
     std::cerr << "handle_b(): " << d << std::endl;
     return false;

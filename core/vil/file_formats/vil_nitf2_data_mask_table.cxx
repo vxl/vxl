@@ -18,8 +18,11 @@ vil_nitf2_data_mask_table::vil_nitf2_data_mask_table(unsigned int num_blocks_x,
                                                      unsigned int num_blocks_y,
                                                      unsigned int num_bands,
                                                      std::string i_mode)
-    : num_blocks_x(num_blocks_x), num_blocks_y(num_blocks_y),
-      num_bands(num_bands), i_mode(std::move(i_mode)) {}
+  : num_blocks_x(num_blocks_x)
+  , num_blocks_y(num_blocks_y)
+  , num_bands(num_bands)
+  , i_mode(std::move(i_mode))
+{}
 
 bool
 vil_nitf2_data_mask_table::parse(vil_stream * stream)

@@ -38,28 +38,44 @@ class vgl_line_2d
   Type b_;
   Type c_;
 
- public:
+public:
   //: Default constructor (Line 1.y==0, the X axis)
-  inline vgl_line_2d() : a_(0), b_(1), c_(0) {}
+  inline vgl_line_2d()
+    : a_(0)
+    , b_(1)
+    , c_(0)
+  {}
 
   //: Construct a vgl_line_2d from its equation, three Types.
   //  The values of a and b should not be both zero.
-  inline vgl_line_2d(Type ta, Type tb, Type tc) :a_(ta),b_(tb),c_(tc) { assert(ta||tb); }
+  inline vgl_line_2d(Type ta, Type tb, Type tc)
+    : a_(ta)
+    , b_(tb)
+    , c_(tc)
+  {
+    assert(ta || tb);
+  }
 
   //: Construct from its equation, a 3-vector.
   //  The values v[0] and v[1] should not be both zero.
-  inline vgl_line_2d(const Type v[3]):a_(v[0]),b_(v[1]),c_(v[2]) { assert(a_||b_); }
+  inline vgl_line_2d(const Type v[3])
+    : a_(v[0])
+    , b_(v[1])
+    , c_(v[2])
+  {
+    assert(a_ || b_);
+  }
 
   //: Construct from homogeneous description of line
   //  The line l should not be the line at infinity.
-  vgl_line_2d (vgl_homg_line_2d<Type> const& l);
+  vgl_line_2d(const vgl_homg_line_2d<Type> & l);
 
   //: Construct from two distinct points (join)
   //  The two points must be distinct!
-  vgl_line_2d (vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2);
+  vgl_line_2d(const vgl_point_2d<Type> & p1, const vgl_point_2d<Type> & p2);
 
   //: Construct from one point and one vector
-  vgl_line_2d (vgl_point_2d<Type> const& p, vgl_vector_2d<Type> const& v);
+  vgl_line_2d(const vgl_point_2d<Type> & p, const vgl_vector_2d<Type> & v);
 
 #if 0 // use compiler defaults for these
   // Default destructor
@@ -71,83 +87,126 @@ class vgl_line_2d
 #endif
 
   //: the comparison operator
-  inline bool operator==(vgl_line_2d<Type> const& l) const
+  inline bool
+  operator==(const vgl_line_2d<Type> & l) const
   {
-    return (this==&l) ||
-           (a()*l.c()==c()*l.a() && b()*l.c()==c()*l.b() && b()*l.a()==a()*l.b());
+    return (this == &l) || (a() * l.c() == c() * l.a() && b() * l.c() == c() * l.b() && b() * l.a() == a() * l.b());
   }
 
-  inline bool operator!=(vgl_line_2d<Type>const& other) const { return !operator==(other); }
+  inline bool
+  operator!=(const vgl_line_2d<Type> & other) const
+  {
+    return !operator==(other);
+  }
 
   //: angle with the horizontal line y=0, measured in radians.
   //  Returns values between -pi and pi, i.e., the lines x-y=0 and y-x=0
   //  return different values (pi/4 and -3pi/4 respectively) although these
   //  lines are identical.
-  double slope_radians() const;
+  double
+  slope_radians() const;
 
   //: angle with the horizontal line y=0, measured in 360-degrees.
   //  Returns values between -180 and 180, i.e., the lines x-y=0 and y-x=0
   //  return different values (45 and -135 respectively) although these
   //  lines are identical.
-  double slope_degrees() const;
+  double
+  slope_degrees() const;
 
   // Data Access-------------------------------------------------------------
 
   //: Parameter a of line a*x + b*y + c = 0
-  inline Type a() const {return a_;}
+  inline Type
+  a() const
+  {
+    return a_;
+  }
   //: Parameter b of line a*x + b*y + c = 0
-  inline Type b() const {return b_;}
+  inline Type
+  b() const
+  {
+    return b_;
+  }
   //: Parameter c of line a*x + b*y + c = 0
-  inline Type c() const {return c_;}
+  inline Type
+  c() const
+  {
+    return c_;
+  }
 
   //: unit vector describing line direction
-  inline vgl_vector_2d<Type> direction() const
-  { return normalized(vgl_vector_2d<Type>(b_,-a_)); }
+  inline vgl_vector_2d<Type>
+  direction() const
+  {
+    return normalized(vgl_vector_2d<Type>(b_, -a_));
+  }
 
   //: unit vector orthogonal to line
-  inline vgl_vector_2d<Type> normal() const
-  { return normalized(vgl_vector_2d<Type>(a_,b_)); }
+  inline vgl_vector_2d<Type>
+  normal() const
+  {
+    return normalized(vgl_vector_2d<Type>(a_, b_));
+  }
 
   //: normalize the line coefficients s.t. a^2 + b^2 = 1
-  bool normalize();
+  bool
+  normalize();
 
   //: Set a b c.
   //  The values of a and b should not be both zero.
   //  Note that it does not make sense to set a, b or c separately
-  inline void set(Type ta, Type tb, Type tc) { assert(ta||tb); a_=ta; b_=tb; c_=tc; }
+  inline void
+  set(Type ta, Type tb, Type tc)
+  {
+    assert(ta || tb);
+    a_ = ta;
+    b_ = tb;
+    c_ = tc;
+  }
 
   //: Return true iff this line is the line at infinity
   //  This always returns "false"
-  inline bool ideal(Type = (Type)0) const { return false; }
+  inline bool
+  ideal(Type = (Type)0) const
+  {
+    return false;
+  }
 
   //: Get two points on the line; normally the intersection with X and Y axes.
   // When the line is parallel to one of these,
   // the point with \a y=1 or \a x=1, resp. are taken.  When the line goes
   // through the origin, the second point is (b, -a).
-  void get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type> &p2) const;
+  void
+  get_two_points(vgl_point_2d<Type> & p1, vgl_point_2d<Type> & p2) const;
 };
 
 #define l vgl_line_2d<Type>
 
 //: Return true iff line is the line at infinity
 // \relatesalso vgl_line_2d
-template <class Type> inline
-bool is_ideal(l const&, Type = (Type)0) { return false; }
+template <class Type>
+inline bool
+is_ideal(const l &, Type = (Type)0)
+{
+  return false;
+}
 
 //: Are three lines concurrent, i.e., do they pass through a common point?
 // \relatesalso vgl_line_2d
-template <class Type> inline
-bool concurrent(l const& l1, l const& l2, l const& l3)
+template <class Type>
+inline bool
+concurrent(const l & l1, const l & l2, const l & l3)
 {
-  return l1.a()*(l2.b()*l3.c()-l3.b()*l2.c())
-        +l2.a()*(l3.b()*l1.c()-l1.b()*l3.c())
-        +l3.a()*(l1.b()*l2.c()-l2.b()*l1.c())==0;
+  return l1.a() * (l2.b() * l3.c() - l3.b() * l2.c()) + l2.a() * (l3.b() * l1.c() - l1.b() * l3.c()) +
+           l3.a() * (l1.b() * l2.c() - l2.b() * l1.c()) ==
+         0;
 }
 
 //: Write line description to stream: "<vgl_line_2d ax+by+c>"
 // \relatesalso vgl_line_2d
 template <class Type>
-std::ostream&  operator<<(std::ostream& s, l const& line);
+std::ostream &
+operator<<(std::ostream & s, const l & line);
 
 //: Read in three line parameters from stream
 //  Either just reads three blank-separated numbers,
@@ -156,7 +215,8 @@ std::ostream&  operator<<(std::ostream& s, l const& line);
 //  or reads a formatted line equation "123x+321y-456=0"
 // \relatesalso vgl_line_2d
 template <class Type>
-std::istream&  operator>>(std::istream& s, l& line);
+std::istream &
+operator>>(std::istream & s, l & line);
 
 #undef l
 

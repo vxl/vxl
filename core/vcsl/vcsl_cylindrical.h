@@ -15,10 +15,9 @@
 #include "vcsl_cylindrical_sptr.h"
 
 //: 3D coordinate system specified by distance rho, angle theta and distance z.
-class vcsl_cylindrical
-  : public vcsl_spatial
+class vcsl_cylindrical : public vcsl_spatial
 {
- public:
+public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -33,7 +32,11 @@ class vcsl_cylindrical
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  const vcsl_cylindrical *cast_to_cylindrical() const override { return this; }
+  const vcsl_cylindrical *
+  cast_to_cylindrical() const override
+  {
+    return this;
+  }
 };
 
 #endif // vcsl_cylindrical_h_

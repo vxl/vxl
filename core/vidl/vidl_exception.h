@@ -35,7 +35,9 @@
 //: Throw an exception indicating a definite problem.
 // If exceptions have been disabled, this function will abort.
 //-------------------------------------------------------------------------
-template <class T> void vidl_exception_error(T exception)
+template <class T>
+void
+vidl_exception_error(T exception)
 {
   std::cerr << "\nERROR: " << exception.what() << std::endl;
 
@@ -50,7 +52,9 @@ template <class T> void vidl_exception_error(T exception)
 //: Throw an exception indicating a potential problem.
 // If exceptions have been disabled, this function will return.
 //-------------------------------------------------------------------------
-template <class T> void vidl_exception_warning(T exception)
+template <class T>
+void
+vidl_exception_warning(T exception)
 {
   std::cerr << "\nWARNING: " << exception.what() << std::endl;
 
@@ -65,21 +69,28 @@ template <class T> void vidl_exception_warning(T exception)
 //: Base class of all vidl exceptions.
 class vidl_exception
 {
- public:
-  explicit vidl_exception(std::string  msg) : msg_(std::move(msg)) {}
+public:
+  explicit vidl_exception(std::string msg)
+    : msg_(std::move(msg))
+  {}
   virtual ~vidl_exception() = default;
 
-  virtual const std::string& what() const { return msg_; }
+  virtual const std::string &
+  what() const
+  {
+    return msg_;
+  }
 
- private:
+private:
   std::string msg_;
 };
 
 //: Base class for all the DShow related vidl exceptions.
 struct vidl_dshow_exception : public vidl_exception
 {
-  explicit vidl_dshow_exception(const std::string& msg)
-    : vidl_exception("DShow: " + msg) {}
+  explicit vidl_dshow_exception(const std::string & msg)
+    : vidl_exception("DShow: " + msg)
+  {}
 };
 
 #endif // vidl_exception_h_

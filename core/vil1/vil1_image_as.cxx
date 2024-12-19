@@ -26,7 +26,7 @@ struct vil1_image_as_impl
 {
   using format = vil1_memory_image_of_format<T>;
   vil1_image image;
-  vil1_image_as_impl(vil1_image const & underlying)
+  vil1_image_as_impl(const vil1_image & underlying)
     : image(underlying)
   {}
   int
@@ -59,7 +59,9 @@ struct vil1_image_as_impl
   {
     return format::component_format;
   }
-  vil1_image get_plane(unsigned int p) const override {
+  vil1_image
+  get_plane(unsigned int p) const override
+  {
     assert(p == 0);
     return const_cast<vil1_image_as_impl *>(this);
   }
@@ -76,7 +78,7 @@ struct vil1_image_as_impl
 
   // This always fails, even if the underlying image is an image-of-T
   bool
-  put_section(void const *, int, int, int, int) override
+  put_section(const void *, int, int, int, int) override
   {
     return false;
   }
@@ -87,7 +89,7 @@ struct vil1_image_as_impl
 
   //: Return true if the name of the class matches the argument
   bool
-  is_class(std::string const &) const override;
+  is_class(const std::string &) const override;
 };
 
 //--------------------------------------------------------------------------------
@@ -421,7 +423,7 @@ vil1_image_as_impl<vxl_byte>::is_a() const
 
 template <>
 bool
-vil1_image_as_impl<vxl_byte>::is_class(std::string const & s) const
+vil1_image_as_impl<vxl_byte>::is_class(const std::string & s) const
 {
   return s == vil1_image_as_impl<vxl_byte>::is_a() || vil1_image_impl::is_class(s);
 }
@@ -430,14 +432,14 @@ vil1_image_as_impl<vxl_byte>::is_class(std::string const & s) const
 template struct vil1_image_as_impl<vxl_byte>;
 
 vil1_image
-vil1_image_as_byte(vil1_image const & image)
+vil1_image_as_byte(const vil1_image & image)
 {
   return vil1_image(new vil1_image_as_impl<vxl_byte>(image));
 }
 
 template <>
 vil1_image
-vil1_image_as(vil1_image const & image, vxl_byte *)
+vil1_image_as(const vil1_image & image, vxl_byte *)
 {
   return vil1_image(new vil1_image_as_impl<vxl_byte>(image));
 }
@@ -487,7 +489,7 @@ vil1_image_as_impl<vxl_uint_16>::is_a() const
 
 template <>
 bool
-vil1_image_as_impl<vxl_uint_16>::is_class(std::string const & s) const
+vil1_image_as_impl<vxl_uint_16>::is_class(const std::string & s) const
 {
   return s == vil1_image_as_impl<vxl_uint_16>::is_a() || vil1_image_impl::is_class(s);
 }
@@ -496,14 +498,14 @@ vil1_image_as_impl<vxl_uint_16>::is_class(std::string const & s) const
 template struct vil1_image_as_impl<vxl_uint_16>;
 
 vil1_image
-vil1_image_as_uint16(vil1_image const & image)
+vil1_image_as_uint16(const vil1_image & image)
 {
   return vil1_image(new vil1_image_as_impl<vxl_uint_16>(image));
 }
 
 template <>
 vil1_image
-vil1_image_as(vil1_image const & image, vxl_uint_16 *)
+vil1_image_as(const vil1_image & image, vxl_uint_16 *)
 {
   return vil1_image(new vil1_image_as_impl<vxl_uint_16>(image));
 }
@@ -554,7 +556,7 @@ vil1_image_as_impl<int>::is_a() const
 
 template <>
 bool
-vil1_image_as_impl<int>::is_class(std::string const & s) const
+vil1_image_as_impl<int>::is_class(const std::string & s) const
 {
   return s == vil1_image_as_impl<int>::is_a() || vil1_image_impl::is_class(s);
 }
@@ -563,14 +565,14 @@ vil1_image_as_impl<int>::is_class(std::string const & s) const
 template struct vil1_image_as_impl<int>;
 
 vil1_image
-vil1_image_as_int(vil1_image const & image)
+vil1_image_as_int(const vil1_image & image)
 {
   return vil1_image(new vil1_image_as_impl<int>(image));
 }
 
 template <>
 vil1_image
-vil1_image_as(vil1_image const & image, int *)
+vil1_image_as(const vil1_image & image, int *)
 {
   return vil1_image(new vil1_image_as_impl<int>(image));
 }
@@ -620,7 +622,7 @@ vil1_image_as_impl<float>::is_a() const
 
 template <>
 bool
-vil1_image_as_impl<float>::is_class(std::string const & s) const
+vil1_image_as_impl<float>::is_class(const std::string & s) const
 {
   return s == vil1_image_as_impl<float>::is_a() || vil1_image_impl::is_class(s);
 }
@@ -629,14 +631,14 @@ vil1_image_as_impl<float>::is_class(std::string const & s) const
 template struct vil1_image_as_impl<float>;
 
 vil1_image
-vil1_image_as_float(vil1_image const & image)
+vil1_image_as_float(const vil1_image & image)
 {
   return vil1_image(new vil1_image_as_impl<float>(image));
 }
 
 template <>
 vil1_image
-vil1_image_as(vil1_image const & image, float *)
+vil1_image_as(const vil1_image & image, float *)
 {
   return vil1_image(new vil1_image_as_impl<float>(image));
 }
@@ -686,7 +688,7 @@ vil1_image_as_impl<double>::is_a() const
 
 template <>
 bool
-vil1_image_as_impl<double>::is_class(std::string const & s) const
+vil1_image_as_impl<double>::is_class(const std::string & s) const
 {
   return s == vil1_image_as_impl<double>::is_a() || vil1_image_impl::is_class(s);
 }
@@ -695,14 +697,14 @@ vil1_image_as_impl<double>::is_class(std::string const & s) const
 template struct vil1_image_as_impl<double>;
 
 vil1_image
-vil1_image_as_double(vil1_image const & image)
+vil1_image_as_double(const vil1_image & image)
 {
   return vil1_image(new vil1_image_as_impl<double>(image));
 }
 
 template <>
 vil1_image
-vil1_image_as(vil1_image const & image, double *)
+vil1_image_as(const vil1_image & image, double *)
 {
   return vil1_image(new vil1_image_as_impl<double>(image));
 }
@@ -754,7 +756,7 @@ vil1_image_as_impl<vil1_rgb<unsigned char>>::is_a() const
 
 template <>
 bool
-vil1_image_as_impl<vil1_rgb<unsigned char>>::is_class(std::string const & s) const
+vil1_image_as_impl<vil1_rgb<unsigned char>>::is_class(const std::string & s) const
 {
   return s == vil1_image_as_impl<vil1_rgb<unsigned char>>::is_a() || vil1_image_impl::is_class(s);
 }
@@ -763,14 +765,14 @@ vil1_image_as_impl<vil1_rgb<unsigned char>>::is_class(std::string const & s) con
 template struct vil1_image_as_impl<vil1_rgb<unsigned char>>;
 
 vil1_image
-vil1_image_as_rgb_byte(vil1_image const & image)
+vil1_image_as_rgb_byte(const vil1_image & image)
 {
   return vil1_image(new vil1_image_as_impl<vil1_rgb<unsigned char>>(image));
 }
 
 template <>
 vil1_image
-vil1_image_as(vil1_image const & image, vil1_rgb<vxl_byte> *)
+vil1_image_as(const vil1_image & image, vil1_rgb<vxl_byte> *)
 {
   return vil1_image(new vil1_image_as_impl<vil1_rgb<vxl_byte>>(image));
 }
@@ -822,7 +824,7 @@ vil1_image_as_impl<vil1_rgb<float>>::is_a() const
 
 template <>
 bool
-vil1_image_as_impl<vil1_rgb<float>>::is_class(std::string const & s) const
+vil1_image_as_impl<vil1_rgb<float>>::is_class(const std::string & s) const
 {
   return s == vil1_image_as_impl<vil1_rgb<float>>::is_a() || vil1_image_impl::is_class(s);
 }
@@ -831,14 +833,14 @@ vil1_image_as_impl<vil1_rgb<float>>::is_class(std::string const & s) const
 template struct vil1_image_as_impl<vil1_rgb<float>>;
 
 vil1_image
-vil1_image_as_rgb_float(vil1_image const & image)
+vil1_image_as_rgb_float(const vil1_image & image)
 {
   return vil1_image(new vil1_image_as_impl<vil1_rgb<float>>(image));
 }
 
 template <>
 vil1_image
-vil1_image_as(vil1_image const & image, vil1_rgb<float> *)
+vil1_image_as(const vil1_image & image, vil1_rgb<float> *)
 {
   return vil1_image(new vil1_image_as_impl<vil1_rgb<float>>(image));
 }
@@ -892,7 +894,7 @@ vil1_image_as_impl<vil1_rgb<vxl_uint_16>>::is_a() const
 
 template <>
 bool
-vil1_image_as_impl<vil1_rgb<vxl_uint_16>>::is_class(std::string const & s) const
+vil1_image_as_impl<vil1_rgb<vxl_uint_16>>::is_class(const std::string & s) const
 {
   return s == vil1_image_as_impl<vil1_rgb<vxl_uint_16>>::is_a() || vil1_image_impl::is_class(s);
 }
@@ -902,14 +904,14 @@ vil1_image_as_impl<vil1_rgb<vxl_uint_16>>::is_class(std::string const & s) const
 template struct vil1_image_as_impl<vil1_rgb<vxl_uint_16>>;
 
 vil1_image
-vil1_image_as_rgb_uint16(vil1_image const & image)
+vil1_image_as_rgb_uint16(const vil1_image & image)
 {
   return vil1_image(new vil1_image_as_impl<vil1_rgb<vxl_uint_16>>(image));
 }
 
 template <>
 vil1_image
-vil1_image_as(vil1_image const & image, vil1_rgb<vxl_uint_16> *)
+vil1_image_as(const vil1_image & image, vil1_rgb<vxl_uint_16> *)
 {
   return vil1_image(new vil1_image_as_impl<vil1_rgb<vxl_uint_16>>(image));
 }

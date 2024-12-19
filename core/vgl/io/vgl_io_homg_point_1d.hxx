@@ -11,8 +11,9 @@
 
 //============================================================================
 //: Binary save self to stream.
-template<class T>
-void vsl_b_write(vsl_b_ostream& os, vgl_homg_point_1d<T> const& p)
+template <class T>
+void
+vsl_b_write(vsl_b_ostream & os, const vgl_homg_point_1d<T> & p)
 {
   constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
@@ -22,42 +23,45 @@ void vsl_b_write(vsl_b_ostream& os, vgl_homg_point_1d<T> const& p)
 
 //============================================================================
 //: Binary load self from stream.
-template<class T>
-void vsl_b_read(vsl_b_istream& is, vgl_homg_point_1d<T> & p)
+template <class T>
+void
+vsl_b_read(vsl_b_istream & is, vgl_homg_point_1d<T> & p)
 {
-  if (!is) return;
+  if (!is)
+    return;
 
   short v;
   vsl_b_read(is, v);
   switch (v)
   {
-   case 1:
-    T x, w;
-    vsl_b_read(is, x);
-    vsl_b_read(is, w);
-    p.set(x,w);
-    break;
+    case 1:
+      T x, w;
+      vsl_b_read(is, x);
+      vsl_b_read(is, w);
+      p.set(x, w);
+      break;
 
-   default:
-    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_homg_point_1d<T>&)\n"
-             << "           Unknown version number "<< v << '\n';
-    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-    return;
+    default:
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_homg_point_1d<T>&)\n"
+                << "           Unknown version number " << v << '\n';
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
+      return;
   }
 }
 
 
 //============================================================================
 //: Output a human readable summary to the stream
-template<class T>
-void vsl_print_summary(std::ostream& os, vgl_homg_point_1d<T> const& p)
+template <class T>
+void
+vsl_print_summary(std::ostream & os, const vgl_homg_point_1d<T> & p)
 {
-  os<<'('<<p.x()<<','<<p.w()<<')';
+  os << '(' << p.x() << ',' << p.w() << ')';
 }
 
-#define VGL_IO_HOMG_POINT_1D_INSTANTIATE(T) \
-template void vsl_print_summary(std::ostream&, vgl_homg_point_1d<T > const&); \
-template void vsl_b_read(vsl_b_istream&, vgl_homg_point_1d<T > &); \
-template void vsl_b_write(vsl_b_ostream&, vgl_homg_point_1d<T > const&)
+#define VGL_IO_HOMG_POINT_1D_INSTANTIATE(T)                                      \
+  template void vsl_print_summary(std::ostream &, vgl_homg_point_1d<T> const &); \
+  template void vsl_b_read(vsl_b_istream &, vgl_homg_point_1d<T> &);             \
+  template void vsl_b_write(vsl_b_ostream &, vgl_homg_point_1d<T> const &)
 
 #endif // vgl_io_homg_point_1d_hxx_

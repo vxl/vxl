@@ -42,8 +42,8 @@ struct vgui_pixel_generates_no_code
 
 
 //: Set an int of unknown size to all-bits-one
-#define SET_FF(x)                                                                                                      \
-  x = 0;                                                                                                               \
+#define SET_FF(x) \
+  x = 0;          \
   x = ~x
 
 //: Clamp float to 0..255
@@ -62,15 +62,15 @@ clamp(double f)
 // Within Code, s is a reference to the source pixel, d to the destination.
 // Remember, vgui_pixel_convert_span is not a function template -- each overload has
 // rather different code.
-#define VGUI_PIXEL_CONVERT_SPAN_DO(S, D, Code)                                                                         \
-  void vgui_pixel_convert_span(S const * src, D * dst, unsigned size)                                                  \
-  {                                                                                                                    \
-    for (unsigned i = 0; i < size; ++i)                                                                                \
-    {                                                                                                                  \
-      S const & s = src[i];                                                                                            \
-      D & d = dst[i];                                                                                                  \
-      Code;                                                                                                            \
-    }                                                                                                                  \
+#define VGUI_PIXEL_CONVERT_SPAN_DO(S, D, Code)                        \
+  void vgui_pixel_convert_span(S const * src, D * dst, unsigned size) \
+  {                                                                   \
+    for (unsigned i = 0; i < size; ++i)                               \
+    {                                                                 \
+      S const & s = src[i];                                           \
+      D & d = dst[i];                                                 \
+      Code;                                                           \
+    }                                                                 \
   }
 
 // SrcType, DstType, Code

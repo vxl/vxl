@@ -16,10 +16,7 @@
 #endif
 
 //: Destructor
-vidl_v4l_istream::~vidl_v4l_istream()
-{
-  close();
-}
+vidl_v4l_istream::~vidl_v4l_istream() { close(); }
 
 //: open a device
 bool

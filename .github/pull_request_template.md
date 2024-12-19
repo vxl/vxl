@@ -31,8 +31,8 @@ of the person or team responsible for reviewing proposed changes. -->
 
 - <!-- [X] or :no_entry_sign: --> Makes breaking changes to the vxl/core/\* API that requires semantic versioning increase
 - <!-- [X] or :no_entry_sign: --> Makes design changes to existing vxl/core\* API that requires semantic versioning increase
-<!-- 
-If either of the above two items is true, 
+<!--
+If either of the above two items is true,
     the vxl/CMakeLists.txt project VERSION needs to bumped to a higher version
     VERSION 2.0.2.0 # defines #VXL_VERSION{,MAJOR,MINOR,PATCH,TWEAK}
     Follow the conventions described at https://semver.org

@@ -75,7 +75,7 @@ vgui_adaptor::get_tableau() const
 //-----------------------------------------------------------------------------
 //: Set the vgui_tableau associated with this adaptor.
 void
-vgui_adaptor::set_tableau(vgui_tableau_sptr const & t)
+vgui_adaptor::set_tableau(const vgui_tableau_sptr & t)
 {
   the_tableau->set_child(t);
 }
@@ -115,7 +115,7 @@ vgui_adaptor::config_dialog()
   static struct
   {
     vgui_modifier mod;
-    char const * str;
+    const char * str;
   } mod_table[] = { { vgui_MODIFIER_NULL, "None" },
                     { vgui_CTRL, "Control" },
                     { vgui_SHIFT, "Shift" },
@@ -127,7 +127,7 @@ vgui_adaptor::config_dialog()
   static struct
   {
     vgui_button but;
-    char const * str;
+    const char * str;
   } but_table[] = {
     { vgui_BUTTON_NULL, "None" }, { vgui_LEFT, "Left" }, { vgui_MIDDLE, "Middle" }, { vgui_RIGHT, "Right" }
   };
@@ -189,7 +189,7 @@ vgui_adaptor::config_dialog()
 //  overlay handling - the derived class must sort that out.
 //  The derived class must also ensure that the correct draw buffer is set.
 bool
-vgui_adaptor::dispatch_to_tableau(vgui_event const & e)
+vgui_adaptor::dispatch_to_tableau(const vgui_event & e)
 {
   vgui_macro_report_errors;
 
@@ -232,7 +232,8 @@ vgui_adaptor::get_window() const
 
 //-----------------------------------------------------------------------------
 //: Bind the given modifier/button combination to the popup menu.
-void vgui_adaptor::bind_popups(vgui_modifier /*m*/, vgui_button /*b*/)
+void
+vgui_adaptor::bind_popups(vgui_modifier /*m*/, vgui_button /*b*/)
 {
   vgui_macro_warning << "bind_popups() not implemented\n";
 }
@@ -253,7 +254,7 @@ vgui_adaptor::swap_buffers()
 
 //-----------------------------------------------------------------------------
 void
-vgui_adaptor::post_message(char const *, void const *)
+vgui_adaptor::post_message(const char *, const void *)
 {
   vgui_macro_warning << "post_message() not implemented\n";
 }

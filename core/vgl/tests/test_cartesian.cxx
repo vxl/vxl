@@ -37,7 +37,7 @@ static void
 test_vector_2d()
 {
   // standard constructor
-  vgl_vector_2d<float> const v(1.5f, 0.625f);
+  const vgl_vector_2d<float> v(1.5f, 0.625f);
   std::cout << v << std::endl;
 
   // default constructor
@@ -1152,19 +1152,19 @@ test_box_3d()
 }
 
 inline bool
-collinear(vgl_line_2d<int> const & l1, vgl_line_2d<int> const & l2, vgl_line_2d<int> const & l3)
+collinear(const vgl_line_2d<int> & l1, const vgl_line_2d<int> & l2, const vgl_line_2d<int> & l3)
 {
   return concurrent(l1, l2, l3);
 }
 
 inline bool
-collinear(float const &, float const &, float const &)
+collinear(const float &, const float &, const float &)
 {
   return true;
 }
 
 inline double
-ratio(vgl_line_2d<int> const & l1, vgl_line_2d<int> const & l2, vgl_line_2d<int> const & l3)
+ratio(const vgl_line_2d<int> & l1, const vgl_line_2d<int> & l2, const vgl_line_2d<int> & l3)
 {
   return (l3.a() - l1.a()) / (l2.a() - l1.a());
 }
@@ -1176,10 +1176,10 @@ ratio(float f1, float f2, float f3)
 }
 
 inline double
-cross_ratio(vgl_line_2d<int> const & l1,
-            vgl_line_2d<int> const & l2,
-            vgl_line_2d<int> const & l3,
-            vgl_line_2d<int> const & l4)
+cross_ratio(const vgl_line_2d<int> & l1,
+            const vgl_line_2d<int> & l2,
+            const vgl_line_2d<int> & l3,
+            const vgl_line_2d<int> & l4)
 {
   vgl_point_2d<int> p1(l1.a() / l1.c(), l1.b() / l1.c());
   vgl_point_2d<int> p2(l2.a() / l2.c(), l2.b() / l2.c());

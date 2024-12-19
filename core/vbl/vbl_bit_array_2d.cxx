@@ -13,7 +13,7 @@
 #include <cassert>
 
 //: Copy constructor
-vbl_bit_array_2d::vbl_bit_array_2d(vbl_bit_array_2d const &that)
+vbl_bit_array_2d::vbl_bit_array_2d(const vbl_bit_array_2d & that)
 
 {
   if (that.data_)
@@ -33,7 +33,7 @@ vbl_bit_array_2d::vbl_bit_array_2d(unsigned int m, unsigned int n, bool v[])
 
 //: Assignment operator
 vbl_bit_array_2d &
-vbl_bit_array_2d::operator=(vbl_bit_array_2d const & that)
+vbl_bit_array_2d::operator=(const vbl_bit_array_2d & that)
 {
   if (num_rows_ != that.num_rows_ || num_cols_ != that.num_cols_)
     resize(that.num_rows_, that.num_cols_);
@@ -114,7 +114,7 @@ vbl_bit_array_2d::index(unsigned int x, unsigned int y, unsigned long & byteinde
 }
 
 bool
-vbl_bit_array_2d::operator==(vbl_bit_array_2d const & a) const
+vbl_bit_array_2d::operator==(const vbl_bit_array_2d & a) const
 {
   if (rows() != a.rows() || cols() != a.cols())
     return false;
@@ -146,7 +146,7 @@ vbl_bit_array_2d::operator()(unsigned int i, unsigned int j)
 }
 
 void
-vbl_bit_array_2d::put(unsigned int i, unsigned int j, bool const & x)
+vbl_bit_array_2d::put(unsigned int i, unsigned int j, const bool & x)
 {
   unsigned long byteindex;
   unsigned int bitindex;

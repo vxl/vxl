@@ -12,13 +12,15 @@
 
 //: make a vil_stream from a filename, an URL, etc.
 // \relatesalso vil_stream
-vil_stream *vil_open(char const* what, char const* how = "r");
+vil_stream *
+vil_open(const char * what, const char * how = "r");
 
 
 #if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 //: make a vil_stream from a filename, an URL, etc.
 // \relatesalso vil_stream
-vil_stream *vil_open(wchar_t const* what, char const* how = "r");
-#endif //defined(_WIN32) && VXL_USE_WIN_WCHAR_T
+vil_stream *
+vil_open(const wchar_t * what, const char * how = "r");
+#endif // defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 
 #endif // vil_open_h_

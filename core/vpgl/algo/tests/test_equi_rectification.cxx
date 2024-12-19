@@ -116,7 +116,7 @@ test_equi_rectification()
   std::vector<vnl_vector_fixed<double, 3>> syn_pts0, syn_pts1 = pts1;
   for (size_t i = 0; i < n; ++i)
   {
-    const vnl_vector_fixed<double, 3>& sp1 = syn_pts1[i];
+    const vnl_vector_fixed<double, 3> & sp1 = syn_pts1[i];
     u1_avg += sp1[0];
     v1_avg += sp1[1];
     vnl_vector_fixed<double, 3> syn_p0;
@@ -160,29 +160,23 @@ test_equi_rectification()
   //
   // **************  the perspective case **************
   //
-  //camera 0
-  double kd[9] = { 8829.15, 0, 1024,
-    0, 8829.15, 766,
-    0, 0, 1 };
+  // camera 0
+  double kd[9] = { 8829.15, 0, 1024, 0, 8829.15, 766, 0, 0, 1 };
   vnl_matrix_fixed<double, 3, 3> Km(kd);
   vpgl_calibration_matrix<double> K(Km);
-  double rd[9] = { 0.640151, -0.758607, 0.121334,
-    -0.453832, -0.500846, -0.737014,
-    0.619873, 0.416735, -0.664898 };
+  double rd[9] = { 0.640151, -0.758607, 0.121334, -0.453832, -0.500846, -0.737014, 0.619873, 0.416735, -0.664898 };
   vnl_matrix_fixed<double, 3, 3> R0m(rd);
   vgl_rotation_3d<double> R0(R0m);
   vgl_vector_3d<double> t0(8.71101, 327.467, 1698.42);
   vpgl_perspective_camera<double> P0(K, R0, t0);
-  //camera 1
-  double rd1[9] = { 0.930967, 0.365021, 0.00776682,
-    0.24488, -0.608493, -0.754831,
-    -0.270803, 0.704625, -0.655873 };
+  // camera 1
+  double rd1[9] = { 0.930967, 0.365021, 0.00776682, 0.24488, -0.608493, -0.754831, -0.270803, 0.704625, -0.655873 };
   vnl_matrix_fixed<double, 3, 3> R1m(rd1);
   vgl_rotation_3d<double> R1(R1m);
   vgl_vector_3d<double> t1(-463.118, 106.98, 2043.14);
   vpgl_perspective_camera<double> P1(K, R1, t1);
-   n = 10;
-  std::vector<vnl_vector_fixed<double, 3> > img_pts0(n), img_pts1(n);
+  n = 10;
+  std::vector<vnl_vector_fixed<double, 3>> img_pts0(n), img_pts1(n);
   img_pts0[0] = vnl_vector_fixed<double, 3>(1776.9489999704870, 648.17236725689770, 1.0);
   img_pts0[1] = vnl_vector_fixed<double, 3>(781.05785925332202, 1041.9915725535539, 1.0);
   img_pts0[2] = vnl_vector_fixed<double, 3>(858.82214875398597, 744.90210438253109, 1.0);
@@ -204,14 +198,17 @@ test_equi_rectification()
   img_pts1[7] = vnl_vector_fixed<double, 3>(723.77964464151125, 468.15050631056698, 1.0);
   img_pts1[8] = vnl_vector_fixed<double, 3>(1433.8532365590522, 587.93200197417616, 1.0);
   img_pts1[9] = vnl_vector_fixed<double, 3>(1500.7921551078598, 228.66788795254868, 1.0);
-  H0.set_identity(); H1.set_identity();
+  H0.set_identity();
+  H1.set_identity();
   good = vpgl_equi_rectification::rectify_pair(P0, P1, img_pts0, img_pts1, H0, H1);
   TEST("perspective rectification rectify success", good, true);
   double y_eq = 0.0;
-  for (size_t i = 0; i < n; ++i) {
+  for (size_t i = 0; i < n; ++i)
+  {
     vnl_vector_fixed<double, 3> p0h = H0 * img_pts0[i];
     vnl_vector_fixed<double, 3> p1h = H1 * img_pts1[i];
-    p0h /= p0h[2]; p1h /= p1h[2];
+    p0h /= p0h[2];
+    p1h /= p1h[2];
     y_eq += fabs(p0h[1] - p1h[1]);
   }
   TEST_NEAR("rows aligned", y_eq, 0.0, 1e-3);

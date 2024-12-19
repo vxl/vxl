@@ -9,6 +9,7 @@
 #include "vil1_image.h"
 
 //: swap the "R" and "B" colour components of an image
-vil1_image vil1_flip_components(vil1_image const &);
+vil1_image
+vil1_flip_components(const vil1_image &);
 
 #endif // vil1_flip_components_h_

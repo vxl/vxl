@@ -57,7 +57,7 @@ vgui_soview2D_point::draw_select() const
   // This will allow a 10000x zoom before the "circle" gets bigger
   // than one pixel. Should be good enough!
   //
-  float const rad = 0.0001f;
+  const float rad = 0.0001f;
   glBegin(GL_POLYGON);
   glVertex2f(x - rad, y - rad);
   glVertex2f(x + rad, y - rad);
@@ -385,7 +385,7 @@ vgui_soview2D_ellipse::translate(float tx, float ty)
 
 //--------------------------------------------------------------------------------//
 
-vgui_soview2D_linestrip::vgui_soview2D_linestrip(unsigned n_, float const * x_, float const * y_)
+vgui_soview2D_linestrip::vgui_soview2D_linestrip(unsigned n_, const float * x_, const float * y_)
   : n(n_)
   , x(new float[n])
   , y(new float[n])
@@ -480,7 +480,7 @@ vgui_soview2D_linestrip::set_size(unsigned nn)
 
 //--------------------------------------------------------------------------------//
 
-vgui_soview2D_polygon::vgui_soview2D_polygon(unsigned n_, float const * x_, float const * y_, bool fill)
+vgui_soview2D_polygon::vgui_soview2D_polygon(unsigned n_, const float * x_, const float * y_, bool fill)
   : n(n_)
   , x(new float[n])
   , y(new float[n])
@@ -589,7 +589,7 @@ vgui_soview2D_polygon::set_size(unsigned nn)
 
 vgui_soview2D_image::vgui_soview2D_image(float in_x,
                                          float in_y,
-                                         vil1_image const & img,
+                                         const vil1_image & img,
                                          bool in_blend,
                                          GLenum format,
                                          GLenum type)
@@ -605,7 +605,7 @@ vgui_soview2D_image::vgui_soview2D_image(float in_x,
 
 vgui_soview2D_image::vgui_soview2D_image(float in_x,
                                          float in_y,
-                                         vil_image_view_base const & img,
+                                         const vil_image_view_base & img,
                                          bool in_blend,
                                          GLenum format,
                                          GLenum type)
@@ -619,10 +619,7 @@ vgui_soview2D_image::vgui_soview2D_image(float in_x,
   buffer_->apply(vil_new_image_resource_of_view(img), (vgui_range_map_params *)nullptr);
 }
 
-vgui_soview2D_image::~vgui_soview2D_image()
-{
-  delete buffer_;
-}
+vgui_soview2D_image::~vgui_soview2D_image() { delete buffer_; }
 
 void
 vgui_soview2D_image::draw() const

@@ -28,61 +28,72 @@
 template <class T>
 class vgl_compute_similarity_3d
 {
- public:
-
+public:
   // Constructors/Initializers/Destructors-------------------------------------
 
-   vgl_compute_similarity_3d() = default;
+  vgl_compute_similarity_3d() = default;
 
-   vgl_compute_similarity_3d(std::vector<vgl_point_3d<T> > const& points1,
-                             std::vector<vgl_point_3d<T> > const& points2);
+  vgl_compute_similarity_3d(const std::vector<vgl_point_3d<T>> & points1, const std::vector<vgl_point_3d<T>> & points2);
 
   ~vgl_compute_similarity_3d() = default;
 
   // Operations---------------------------------------------------------------
 
   //: add a pair of points to point sets
-  void add_points(vgl_point_3d<T> const &p1,
-                  vgl_point_3d<T> const &p2);
+  void
+  add_points(const vgl_point_3d<T> & p1, const vgl_point_3d<T> & p2);
 
   //: clear internal data
-  void clear();
+  void
+  clear();
 
   //: estimates the similarity transformation from the stored points
-  bool estimate();
+  bool
+  estimate();
 
   // Data Access---------------------------------------------------------------
 
   //: Access the estimated rotation
-  const vgl_rotation_3d<T>& rotation() const { return rotation_; }
+  const vgl_rotation_3d<T> &
+  rotation() const
+  {
+    return rotation_;
+  }
 
   //: Access the estimated translation
-  const vgl_vector_3d<T>& translation() const { return translation_; }
+  const vgl_vector_3d<T> &
+  translation() const
+  {
+    return translation_;
+  }
 
   //: Access he estimated scale
-  T scale() const { return scale_; }
+  T
+  scale() const
+  {
+    return scale_;
+  }
 
- protected:
+protected:
   // Internal functions--------------------------------------------------------
 
   //: center all the points at the origin, and return the applied translation
-  void center_points(std::vector<vgl_point_3d<T> >& pts,
-                     vgl_vector_3d<T>& t) const;
+  void
+  center_points(std::vector<vgl_point_3d<T>> & pts, vgl_vector_3d<T> & t) const;
 
   //: normalize the scale of the points, and return the applied scale
   //  The average distance from the origin will be sqrt(3)
-  void scale_points(std::vector<vgl_point_3d<T> >& pts,
-                    T& s) const;
+  void
+  scale_points(std::vector<vgl_point_3d<T>> & pts, T & s) const;
 
   // Data Members--------------------------------------------------------------
-  std::vector<vgl_point_3d<T> > points1_;
-  std::vector<vgl_point_3d<T> > points2_;
+  std::vector<vgl_point_3d<T>> points1_;
+  std::vector<vgl_point_3d<T>> points2_;
   T scale_;
   vgl_rotation_3d<T> rotation_;
   vgl_vector_3d<T> translation_;
 };
 
-#define VGL_COMPUTE_SIMILARITY_3D_INSTANTIATE(T) \
-extern "please include vgl/algo/vgl_compute_similarity_3d.hxx first"
+#define VGL_COMPUTE_SIMILARITY_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_compute_similarity_3d.hxx first"
 
 #endif // vgl_compute_similarity_3d_h_

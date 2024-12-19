@@ -18,19 +18,25 @@
 // on demand and cached for later use.
 struct vil1_pyramid
 {
-  enum cache_strategy {
+  enum cache_strategy
+  {
     none = 0,
     memory = 1,
     blocked = 2 // not implemented. don't try to use it.
   };
 
-  vil1_pyramid(vil1_image const &, cache_strategy = memory);
+  vil1_pyramid(const vil1_image &, cache_strategy = memory);
   ~vil1_pyramid();
 
-  unsigned int size() const { return (unsigned int)(levels.size()); }
-  vil1_image operator[](unsigned i);
+  unsigned int
+  size() const
+  {
+    return (unsigned int)(levels.size());
+  }
+  vil1_image
+  operator[](unsigned i);
 
- private:
+private:
   cache_strategy cs;
   std::vector<vil1_image> levels;
 };

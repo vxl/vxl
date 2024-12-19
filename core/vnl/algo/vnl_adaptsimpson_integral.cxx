@@ -2,7 +2,9 @@
 #include <cmath>
 #include "vnl_adaptsimpson_integral.h"
 
-double vnl_adaptsimpson_integral::int_fnct_(double *x) {
+double
+vnl_adaptsimpson_integral::int_fnct_(double * x)
+{
   return pfnct_->f_(*x);
 }
 

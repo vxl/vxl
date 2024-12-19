@@ -540,18 +540,26 @@ test_ray_intersection_with_covariance()
     TEST("ray_intersection with identity covariance", true, false);
   }
   // define a vertical ray and an oblique ray
-  vgl_point_3d<double> org_v(0,-1,10), org_ob(17.32050807568877, 1, 10);
-  vgl_vector_3d<double> dir_v(0,0,1), dir_ob(-0.8660254037844386, 0., -0.5);
+  vgl_point_3d<double> org_v(0, -1, 10), org_ob(17.32050807568877, 1, 10);
+  vgl_vector_3d<double> dir_v(0, 0, 1), dir_ob(-0.8660254037844386, 0., -0.5);
   vgl_ray_3d<double> rv(org_v, dir_v), rob(org_ob, dir_ob);
-  std::vector<vgl_ray_3d<double> > rays2;
+  std::vector<vgl_ray_3d<double>> rays2;
   rays2.push_back(rv);
   rays2.push_back(rob);
   vnl_matrix<double> cov2(4, 4, 0.0);
-  cov2[0][0] = 4.0;  cov2[0][1] = 2.0;  cov2[0][2] = 2.4;
-  cov2[1][0] = 2.0;  cov2[1][1] = 4.0;  cov2[1][3] = 2.4;
-  cov2[2][0] = 2.4;  cov2[2][2] = 9.0;  cov2[2][3] = 4.5;
-  cov2[3][1] = 2.4;  cov2[3][2] = 4.5;  cov2[3][3] = 9.0;
-  
+  cov2[0][0] = 4.0;
+  cov2[0][1] = 2.0;
+  cov2[0][2] = 2.4;
+  cov2[1][0] = 2.0;
+  cov2[1][1] = 4.0;
+  cov2[1][3] = 2.4;
+  cov2[2][0] = 2.4;
+  cov2[2][2] = 9.0;
+  cov2[2][3] = 4.5;
+  cov2[3][1] = 2.4;
+  cov2[3][2] = 4.5;
+  cov2[3][3] = 9.0;
+
   good = vgl_intersection(rays2, cov2, inter_pt);
   if (good)
   {
@@ -564,29 +572,39 @@ test_ray_intersection_with_covariance()
     TEST("ray_intersection with full covariance", true, false);
   }
   // actual rays and covariance
-  vgl_ray_3d<double> ar0(vgl_point_3d<double>(-257.819382104,873.182301258,3192.74816333),
-                        vgl_vector_3d<double>(0.149555632286,-0.273530553472,-0.950165327282));
-  vgl_ray_3d<double> ar1(vgl_point_3d<double>(189.919618516,595.171579671,3260.55333727),
-                        vgl_vector_3d<double>(0.0146376283173,-0.191729316172,-0.981338682188));
-  vgl_ray_3d<double> ar2(vgl_point_3d<double>(733.466946568,1284.42529721,2971.69358392),
-                        vgl_vector_3d<double>(-0.152573220502,-0.405632760701,-0.901212225745));
-  vgl_ray_3d<double> ar3(vgl_point_3d<double>(878.867145282,-326.953654639,3183.48678489),
-                        vgl_vector_3d<double>(-0.199206937573,0.0912745855339,-0.975697466461));
-  vgl_ray_3d<double> ar4(vgl_point_3d<double>(-312.591711271,-995.439305149,3151.80159156),
-                        vgl_vector_3d<double>(0.166824924534,0.291616277185,-0.941875464929));
-  vgl_ray_3d<double> ar5(vgl_point_3d<double>(513.063046691,-1371.38204909,2978.79327645),
-                        vgl_vector_3d<double>(-0.0850201277225,0.413373253218,-0.906583769657));
-  std::vector<vgl_ray_3d<double> > rays3;
-  rays3.push_back(ar0);   rays3.push_back(ar1);   rays3.push_back(ar2);
-  rays3.push_back(ar3);   rays3.push_back(ar4);   rays3.push_back(ar5);
- 
+  vgl_ray_3d<double> ar0(vgl_point_3d<double>(-257.819382104, 873.182301258, 3192.74816333),
+                         vgl_vector_3d<double>(0.149555632286, -0.273530553472, -0.950165327282));
+  vgl_ray_3d<double> ar1(vgl_point_3d<double>(189.919618516, 595.171579671, 3260.55333727),
+                         vgl_vector_3d<double>(0.0146376283173, -0.191729316172, -0.981338682188));
+  vgl_ray_3d<double> ar2(vgl_point_3d<double>(733.466946568, 1284.42529721, 2971.69358392),
+                         vgl_vector_3d<double>(-0.152573220502, -0.405632760701, -0.901212225745));
+  vgl_ray_3d<double> ar3(vgl_point_3d<double>(878.867145282, -326.953654639, 3183.48678489),
+                         vgl_vector_3d<double>(-0.199206937573, 0.0912745855339, -0.975697466461));
+  vgl_ray_3d<double> ar4(vgl_point_3d<double>(-312.591711271, -995.439305149, 3151.80159156),
+                         vgl_vector_3d<double>(0.166824924534, 0.291616277185, -0.941875464929));
+  vgl_ray_3d<double> ar5(vgl_point_3d<double>(513.063046691, -1371.38204909, 2978.79327645),
+                         vgl_vector_3d<double>(-0.0850201277225, 0.413373253218, -0.906583769657));
+  std::vector<vgl_ray_3d<double>> rays3;
+  rays3.push_back(ar0);
+  rays3.push_back(ar1);
+  rays3.push_back(ar2);
+  rays3.push_back(ar3);
+  rays3.push_back(ar4);
+  rays3.push_back(ar5);
+
   vnl_matrix<double> S(12, 12, 0.0);
-  S[0][0] = 4.30615026551; S[1][1] = 4.30615026551;
-  S[2][2] = 4.09449741908; S[3][3] = 4.09449741908;
-  S[4][4] = 2.76789056644; S[5][5] = 2.76789056644;
-  S[6][6] = 4.12771875827; S[7][7] = 4.12771875827;
-  S[8][8] = 2.60122962302; S[9][9] = 2.60122962302;
-  S[10][10] = 2.53017333169; S[11][11] = 2.53017333169;
+  S[0][0] = 4.30615026551;
+  S[1][1] = 4.30615026551;
+  S[2][2] = 4.09449741908;
+  S[3][3] = 4.09449741908;
+  S[4][4] = 2.76789056644;
+  S[5][5] = 2.76789056644;
+  S[6][6] = 4.12771875827;
+  S[7][7] = 4.12771875827;
+  S[8][8] = 2.60122962302;
+  S[9][9] = 2.60122962302;
+  S[10][10] = 2.53017333169;
+  S[11][11] = 2.53017333169;
   good = vgl_intersection(rays3, S, inter_pt);
   vgl_point_3d<double> agt(237.849, -33.2573, 44.0717);
   double dif = (inter_pt - agt).length();

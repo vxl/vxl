@@ -44,7 +44,7 @@ double mask_gauss_17[1][17] = { { 0.0000,
 
 struct vil1_kernel_info
 {
-  char const * name;
+  const char * name;
   int w;
   int h;
   double * mask;

@@ -10,7 +10,7 @@
 //--------------------------------------------------------------------------------
 
 void
-test_matrix(char const * name, const vnl_matrix<double> & A, double det = 0)
+test_matrix(const char * name, const vnl_matrix<double> & A, double det = 0)
 {
   vnl_qr<double> qr(A);
 
@@ -106,8 +106,8 @@ new_test(T *)
   vnl_matlab_print(std::cout, b, "b");
 
   vnl_qr<T> qr(A);
-  vnl_matrix<T> const & Q = qr.Q();
-  vnl_matrix<T> const & R = qr.R();
+  const vnl_matrix<T> & Q = qr.Q();
+  const vnl_matrix<T> & R = qr.R();
   vnl_vector<T> x = qr.solve(b);
 
   vnl_matlab_print(std::cout, Q, "Q");

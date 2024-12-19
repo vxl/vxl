@@ -32,7 +32,7 @@ extern "You need a later libpng. You should rerun CMake, after setting VXL_FORCE
 
 // Functions
 static bool
-problem(char const * msg)
+problem(const char * msg)
 {
   std::cerr << "[vil1_png: PROBLEM " << msg << ']';
   return false;
@@ -67,7 +67,7 @@ vil1_png_file_format::make_output_image(vil1_stream * is,
   return new vil1_png_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
-char const *
+const char *
 vil1_png_file_format::tag() const
 {
   return vil1_png_format_tag;
@@ -89,7 +89,8 @@ user_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
   f->write(data, (vil1_streampos)length);
 }
 
-static void user_flush_data(png_structp /*png_ptr*/)
+static void
+user_flush_data(png_structp /*png_ptr*/)
 {
   std::cerr << "vil1_png_generic_image::user_flush_data() NYI\n";
 #if 0 // NYI
@@ -107,15 +108,15 @@ static vil1_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
 static bool jmpbuf_ok = false;
 
 // Must be  a macro - setjmp needs its stack frame to live
-#define png_setjmp_on(ACTION)                                                                                          \
-  do                                                                                                                   \
-  {                                                                                                                    \
-    jmpbuf_ok = true;                                                                                                  \
-    if (setjmp(pngtopnm_jmpbuf_struct.jmpbuf) != 0)                                                                    \
-    {                                                                                                                  \
-      problem("png_setjmp_on");                                                                                        \
-      ACTION;                                                                                                          \
-    }                                                                                                                  \
+#define png_setjmp_on(ACTION)                       \
+  do                                                \
+  {                                                 \
+    jmpbuf_ok = true;                               \
+    if (setjmp(pngtopnm_jmpbuf_struct.jmpbuf) != 0) \
+    {                                               \
+      problem("png_setjmp_on");                     \
+      ACTION;                                       \
+    }                                               \
   } while (false);
 #define png_setjmp_off() (jmpbuf_ok = false)
 
@@ -169,7 +170,7 @@ struct vil1_png_structures
     channels = 0;
     ok = false;
 
-    png_setjmp_on(return );
+    png_setjmp_on(return);
 
     if (reading)
       png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, &pngtopnm_jmpbuf_struct, pngtopnm_error_handler, nullptr);
@@ -292,7 +293,7 @@ vil1_png_generic_image::vil1_png_generic_image(vil1_stream * is)
 }
 
 bool
-vil1_png_generic_image::get_property(char const * tag, void * prop) const
+vil1_png_generic_image::get_property(const char * tag, void * prop) const
 {
   if (0 == std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool *)prop) = true : true;
@@ -327,7 +328,7 @@ vil1_png_generic_image::~vil1_png_generic_image()
   vs_->unref();
 }
 
-char const *
+const char *
 vil1_png_generic_image::file_format() const
 {
   return vil1_png_format_tag;
@@ -463,7 +464,7 @@ vil1_png_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
 }
 
 bool
-vil1_png_generic_image::put_section(void const * buf, int x0, int y0, int xs, int ys)
+vil1_png_generic_image::put_section(const void * buf, int x0, int y0, int xs, int ys)
 {
   if (!p->ok)
     return false;
@@ -491,7 +492,9 @@ vil1_png_generic_image::put_section(void const * buf, int x0, int y0, int xs, in
   return true;
 }
 
-vil1_image vil1_png_generic_image::get_plane(unsigned int plane) const {
+vil1_image
+vil1_png_generic_image::get_plane(unsigned int plane) const
+{
   assert(plane == 0);
   return const_cast<vil1_png_generic_image *>(this);
 }

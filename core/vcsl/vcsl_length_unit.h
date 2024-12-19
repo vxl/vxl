@@ -18,18 +18,17 @@
 #include "vcsl_unit_sptr.h"
 
 //: Abstract unit associated to the length dimension
-class vcsl_length_unit
-  : public vcsl_unit
+class vcsl_length_unit : public vcsl_unit
 {
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
- protected:
+protected:
   // Default constructor
   vcsl_length_unit() = default;
 
- public:
+public:
   // Destructor
   ~vcsl_length_unit() override = default;
 
@@ -40,17 +39,23 @@ class vcsl_length_unit
   //: Are `this' and `other' compatible units ?
   // (Are they associated to the same dimension ?)
   // Pure virtual function of vcsl_unit
-  bool compatible_units(vcsl_unit_sptr const& other) const override;
+  bool
+  compatible_units(const vcsl_unit_sptr & other) const override;
 
   //: Return the standard unit associated to the dimension of `this'
   // Pure virtual function of vcsl_unit
-  vcsl_unit_sptr standard_unit() const override;
+  vcsl_unit_sptr
+  standard_unit() const override;
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  const vcsl_length_unit *cast_to_length_unit() const override { return this; }
+  const vcsl_length_unit *
+  cast_to_length_unit() const override
+  {
+    return this;
+  }
 };
 
 #endif // vcsl_length_unit_h_

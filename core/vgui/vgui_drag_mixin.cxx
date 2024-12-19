@@ -17,15 +17,12 @@
 
 static bool debug = false;
 
-vgui_drag_mixin::vgui_drag_mixin()
-{
-  last_down_button_ = vgui_BUTTON_NULL;
-}
+vgui_drag_mixin::vgui_drag_mixin() { last_down_button_ = vgui_BUTTON_NULL; }
 
 vgui_drag_mixin::~vgui_drag_mixin() {}
 
 bool
-vgui_drag_mixin::handle(vgui_event const & event)
+vgui_drag_mixin::handle(const vgui_event & event)
 {
   if ((event.type == vgui_MOTION) && (last_down_button_ != vgui_BUTTON_NULL))
     return mouse_drag(event.wx, event.wy, last_down_button_, event.modifier);

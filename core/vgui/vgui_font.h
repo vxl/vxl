@@ -26,22 +26,25 @@ class vgui_font : public vbl_ref_count
 {
 public:
   //: Constructor - default.
-  vgui_font() { }
+  vgui_font() {}
 
   //: Draw a string of font symbols.
-  virtual void draw(const std::string& str) const = 0;
+  virtual void
+  draw(const std::string & str) const = 0;
 
   //: Draw a string of font symbols.
-  virtual void draw(const std::string& str, unsigned int size) const;
+  virtual void
+  draw(const std::string & str, unsigned int size) const;
 
-//protected:
+  // protected:
   //: Destructor.
-  virtual ~vgui_font() { }
+  virtual ~vgui_font() {}
 
 private:
   // Disable copy constructor and assignment.
-  vgui_font(const vgui_font&);
-  vgui_font& operator=(const vgui_font&);
+  vgui_font(const vgui_font &);
+  vgui_font &
+  operator=(const vgui_font &);
 };
 
 #endif // vgui_font_h_

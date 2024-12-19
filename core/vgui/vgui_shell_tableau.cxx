@@ -18,22 +18,22 @@ vgui_event_condition vgui_shell_tableau_bindings::default_close = vgui_event_con
 vgui_event_condition vgui_shell_tableau_bindings::default_graph = vgui_event_condition(vgui_key('g'), vgui_SHIFT);
 
 
-vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const & t0)
+vgui_shell_tableau::vgui_shell_tableau(const vgui_tableau_sptr & t0)
 {
   init();
   vgui_composite_tableau::add(t0);
 }
 
-vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const & t0, vgui_tableau_sptr const & t1)
+vgui_shell_tableau::vgui_shell_tableau(const vgui_tableau_sptr & t0, const vgui_tableau_sptr & t1)
 {
   init();
   vgui_composite_tableau::add(t0);
   vgui_composite_tableau::add(t1);
 }
 
-vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const & t0,
-                                       vgui_tableau_sptr const & t1,
-                                       vgui_tableau_sptr const & t2)
+vgui_shell_tableau::vgui_shell_tableau(const vgui_tableau_sptr & t0,
+                                       const vgui_tableau_sptr & t1,
+                                       const vgui_tableau_sptr & t2)
 {
   init();
   vgui_composite_tableau::add(t0);
@@ -41,10 +41,10 @@ vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const & t0,
   vgui_composite_tableau::add(t2);
 }
 
-vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const & t0,
-                                       vgui_tableau_sptr const & t1,
-                                       vgui_tableau_sptr const & t2,
-                                       vgui_tableau_sptr const & t3)
+vgui_shell_tableau::vgui_shell_tableau(const vgui_tableau_sptr & t0,
+                                       const vgui_tableau_sptr & t1,
+                                       const vgui_tableau_sptr & t2,
+                                       const vgui_tableau_sptr & t3)
 {
   init();
   vgui_composite_tableau::add(t0);
@@ -126,7 +126,7 @@ vgui_shell_tableau::handle(vgui_event const & e)
 }
 
 void
-vgui_shell_tableau::get_popup(vgui_popup_params const & params, vgui_menu & menu)
+vgui_shell_tableau::get_popup(const vgui_popup_params & params, vgui_menu & menu)
 {
   // add clear tableau
   clear->get_popup(params, menu);

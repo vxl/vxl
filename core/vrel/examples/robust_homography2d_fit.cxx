@@ -32,16 +32,21 @@ main()
   // with 20% gross outliers.
   //
 
-  std::vector< vnl_vector<double> > from_pts;
-  std::vector< vnl_vector<double> > to_pts;
+  std::vector<vnl_vector<double>> from_pts;
+  std::vector<vnl_vector<double>> to_pts;
   vnl_vector<double> p(3);
   double x1, x2, y1, y2, w1, w2;
 
-  while (std::cin >> x1 >> y1 >> w1 >> x2 >> y2 >> w2 ) {
-    p[0] = x1; p[1] = y1; p[2] = w1;
+  while (std::cin >> x1 >> y1 >> w1 >> x2 >> y2 >> w2)
+  {
+    p[0] = x1;
+    p[1] = y1;
+    p[2] = w1;
     from_pts.push_back(p);
 
-    p[0] = x2; p[1] = y2; p[2] = w2;
+    p[0] = x2;
+    p[1] = y2;
+    p[2] = w2;
     to_pts.push_back(p);
   }
 
@@ -49,7 +54,7 @@ main()
   // Construct the problem
   //
 
-  vrel_homography2d_est * hg = new vrel_homography2d_est( from_pts, to_pts );
+  vrel_homography2d_est * hg = new vrel_homography2d_est(from_pts, to_pts);
 
   double max_outlier_frac = 0.5;
   double desired_prob_good = 0.99;
@@ -61,18 +66,19 @@ main()
   //
   {
     int num_dep_res = hg->num_samples_to_instantiate();
-    vrel_objective* lms = new vrel_lms_obj( num_dep_res );
+    vrel_objective * lms = new vrel_lms_obj(num_dep_res);
 
-    auto* ransam = new vrel_ran_sam_search;
+    auto * ransam = new vrel_ran_sam_search;
     ransam->set_trace_level(trace_level);
-    ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
+    ransam->set_sampling_params(max_outlier_frac, desired_prob_good, max_pops);
 
-    if ( !ransam->estimate( hg, lms ) )
+    if (!ransam->estimate(hg, lms))
       std::cout << "LMS failed!!\n";
-    else {
+    else
+    {
       std::cout << "LMS succeeded.\n"
-               << "estimate = " << ransam->params() << std::endl
-               << "scale = " << ransam->scale() << std::endl;
+                << "estimate = " << ransam->params() << std::endl
+                << "scale = " << ransam->scale() << std::endl;
     }
     std::cout << std::endl;
     delete lms;
@@ -83,19 +89,20 @@ main()
   //  RANSAC
   //
   {
-    auto* ransac = new vrel_ransac_obj();
-    hg->set_prior_scale( 1.0 );
+    auto * ransac = new vrel_ransac_obj();
+    hg->set_prior_scale(1.0);
 
-    auto* ransam = new vrel_ran_sam_search;
+    auto * ransam = new vrel_ran_sam_search;
     ransam->set_trace_level(trace_level);
-    ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
+    ransam->set_sampling_params(max_outlier_frac, desired_prob_good, max_pops);
 
-    if ( !ransam->estimate( hg, ransac ) )
+    if (!ransam->estimate(hg, ransac))
       std::cout << "RANSAC failed!!\n";
-    else {
+    else
+    {
       std::cout << "RANSAC succeeded.\n"
-               << "estimate = " << ransam->params() << std::endl
-               << "scale = " << ransam->scale() << std::endl;
+                << "estimate = " << ransam->params() << std::endl
+                << "scale = " << ransam->scale() << std::endl;
     }
     std::cout << std::endl;
     delete ransac;
@@ -107,17 +114,18 @@ main()
   //  MSAC
   //
   {
-    auto* msac = new vrel_trunc_quad_obj();
+    auto * msac = new vrel_trunc_quad_obj();
     auto * ransam = new vrel_ran_sam_search;
     ransam->set_trace_level(trace_level);
-    ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
+    ransam->set_sampling_params(max_outlier_frac, desired_prob_good, max_pops);
 
-    if ( !ransam->estimate( hg, msac ) )
+    if (!ransam->estimate(hg, msac))
       std::cout << "MSAC failed!!\n";
-    else {
+    else
+    {
       std::cout << "MSAC succeeded.\n"
-               << "estimate = " << ransam->params() << std::endl
-               << "scale = " << ransam->scale() << std::endl;
+                << "estimate = " << ransam->params() << std::endl
+                << "scale = " << ransam->scale() << std::endl;
     }
     std::cout << std::endl;
     delete msac;
@@ -129,20 +137,21 @@ main()
   //
   {
     int residual_dof = hg->residual_dof();
-    auto* mlesac = new vrel_mlesac_obj( residual_dof );
+    auto * mlesac = new vrel_mlesac_obj(residual_dof);
 
     hg->set_prior_scale(1.0);
 
     auto * ransam = new vrel_ran_sam_search;
     ransam->set_trace_level(trace_level);
-    ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
+    ransam->set_sampling_params(max_outlier_frac, desired_prob_good, max_pops);
 
-    if ( !ransam->estimate( hg, mlesac ) )
+    if (!ransam->estimate(hg, mlesac))
       std::cout << "MLESAC failed!!\n";
-    else {
+    else
+    {
       std::cout << "MLESAC succeeded.\n"
-               << "estimate = " << ransam->params() << std::endl
-               << "scale = " << ransam->scale() << std::endl;
+                << "estimate = " << ransam->params() << std::endl
+                << "scale = " << ransam->scale() << std::endl;
     }
     std::cout << std::endl;
     delete mlesac;
@@ -155,19 +164,18 @@ main()
   {
     hg->set_no_prior_scale();
 
-    auto* muset = new vrel_muset_obj( from_pts.size()+1 );
+    auto * muset = new vrel_muset_obj(from_pts.size() + 1);
     auto * ransam = new vrel_ran_sam_search;
     ransam->set_trace_level(trace_level);
-    ransam->set_sampling_params( 1 - muset->min_inlier_fraction(),
-                                 desired_prob_good,
-                                 max_pops);
+    ransam->set_sampling_params(1 - muset->min_inlier_fraction(), desired_prob_good, max_pops);
 
-    if ( !ransam->estimate( hg, muset ) )
+    if (!ransam->estimate(hg, muset))
       std::cout << "MUSE failed!!\n";
-    else {
+    else
+    {
       std::cout << "MUSE succeeded.\n"
-               << "estimate = " << ransam->params() << std::endl
-               << "scale = " << ransam->scale() << std::endl;
+                << "estimate = " << ransam->params() << std::endl
+                << "scale = " << ransam->scale() << std::endl;
     }
     std::cout << std::endl;
     delete muset;

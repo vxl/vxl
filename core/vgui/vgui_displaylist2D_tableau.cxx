@@ -83,7 +83,7 @@ vgui_displaylist2D_tableau::get_hits(float x, float y, std::vector<unsigned> & m
 
   for (std::vector<std::vector<unsigned>>::iterator i = hits.begin(); i != hits.end(); ++i)
   {
-    std::vector<unsigned> const & names = *i;
+    const std::vector<unsigned> & names = *i;
 
     if (!names.empty() && names[0] == this->get_id())
     {
@@ -99,7 +99,7 @@ vgui_displaylist2D_tableau::get_hits(float x, float y, std::vector<unsigned> & m
 }
 
 unsigned
-vgui_displaylist2D_tableau::find_closest(float x, float y, std::vector<unsigned> const & hits)
+vgui_displaylist2D_tableau::find_closest(float x, float y, const std::vector<unsigned> & hits)
 {
   unsigned closest = 0;
   float closest_dist = -1; // vnl_numeric_traits<float>::maxval;

@@ -21,13 +21,13 @@
 #include "vgui/vgui_observer.h"
 #include "vgui/vgui_style.h"
 
-#define VGUI_STATIC_OBJECT(T, var)                                                                                     \
-  static T & var()                                                                                                     \
-  {                                                                                                                    \
-    static T * t = 0;                                                                                                  \
-    if (t == 0)                                                                                                        \
-      t = new T();                                                                                                     \
-    return *t;                                                                                                         \
+#define VGUI_STATIC_OBJECT(T, var) \
+  static T & var()                 \
+  {                                \
+    static T * t = 0;              \
+    if (t == 0)                    \
+      t = new T();                 \
+    return *t;                     \
   }
 
 #define AWF_USE_MAP 1
@@ -239,7 +239,7 @@ vgui_soview::notify() const
 }
 
 void
-vgui_soview::notify(vgui_message const & msg) const
+vgui_soview::notify(const vgui_message & msg) const
 {
   std::vector<vgui_observer *> vobs;
   get_observers(vobs);

@@ -15,7 +15,7 @@
 
 //: XML save vgl_point_3d to stream.
 template <class T>
-void x_write(std::ostream &os, const vgl_point_3d<T> & v,
-             std::string element_name="vgl_point_3d");
+void
+x_write(std::ostream & os, const vgl_point_3d<T> & v, std::string element_name = "vgl_point_3d");
 
 #endif // vgl_xio_point_3d_h_

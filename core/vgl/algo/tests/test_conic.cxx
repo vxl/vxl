@@ -28,8 +28,8 @@ sqr(double x)
 
 static void
 testlib_test_assert_near(const std::string & msg,
-                         vgl_homg_point_2d<double> const & p2,
-                         vgl_homg_point_2d<double> const & p1,
+                         const vgl_homg_point_2d<double> & p2,
+                         const vgl_homg_point_2d<double> & p1,
                          double tol = 1e-6)
 {
   double expr = (p1.w() == 0 && p2.w() == 0) ? sqr(p1.x() * p2.y() - p1.y() * p2.x())
@@ -39,8 +39,8 @@ testlib_test_assert_near(const std::string & msg,
 
 static void
 testlib_test_assert_near(const std::string & msg,
-                         vgl_homg_line_2d<double> const & l2,
-                         vgl_homg_line_2d<double> const & l1,
+                         const vgl_homg_line_2d<double> & l2,
+                         const vgl_homg_line_2d<double> & l1,
                          double tol = 1e-6)
 {
   double expr = sqr(l1.a() / l1.b() - l2.a() / l2.b()) + sqr(l1.a() / l1.c() - l2.a() / l2.c()) +
@@ -50,8 +50,8 @@ testlib_test_assert_near(const std::string & msg,
 
 static void
 testlib_test_assert_near(const std::string & msg,
-                         vgl_box_2d<double> const & b1,
-                         vgl_box_2d<double> const & b2,
+                         const vgl_box_2d<double> & b1,
+                         const vgl_box_2d<double> & b2,
                          double tol = 1e-6)
 {
   double expr = sqr(b1.min_x() - b2.min_x()) + sqr(b1.min_y() - b2.min_y()) + sqr(b1.max_x() - b2.max_x()) +
@@ -60,7 +60,7 @@ testlib_test_assert_near(const std::string & msg,
 }
 
 static double
-conic_distance(vgl_conic<double> const & c1, vgl_conic<double> const & c2)
+conic_distance(const vgl_conic<double> & c1, const vgl_conic<double> & c2)
 {
   double k; // multiplicative factor for coefficients
 
@@ -79,8 +79,8 @@ conic_distance(vgl_conic<double> const & c1, vgl_conic<double> const & c2)
   else
     k = 1.0;
 
-#define DO_MAX(x, a)                                                                                                   \
-  if ((a) > (x))                                                                                                       \
+#define DO_MAX(x, a) \
+  if ((a) > (x))     \
   (x) = a
   double expr = std::abs(c1.a() - c2.a() * k);
   DO_MAX(expr, std::abs(c1.b() - c2.b() * k));
@@ -94,8 +94,8 @@ conic_distance(vgl_conic<double> const & c1, vgl_conic<double> const & c2)
 
 static void
 testlib_test_assert_near(const std::string & msg,
-                         vgl_conic<double> const & c2,
-                         vgl_conic<double> const & c1,
+                         const vgl_conic<double> & c2,
+                         const vgl_conic<double> & c1,
                          double tol = 1e-6)
 {
   testlib_test_assert_near(msg, conic_distance(c1, c2), 0.0, tol);
@@ -103,17 +103,17 @@ testlib_test_assert_near(const std::string & msg,
 
 static void
 testlib_test_assert_far(const std::string & msg,
-                        vgl_conic<double> const & c2,
-                        vgl_conic<double> const & c1,
+                        const vgl_conic<double> & c2,
+                        const vgl_conic<double> & c1,
                         double tol = 1e-6)
 {
   testlib_test_assert_far(msg, conic_distance(c1, c2), 0.0, tol);
 }
 
 static void
-check_points_on_conics(vgl_conic<double> const & c1,
-                       vgl_conic<double> const & c2,
-                       std::list<vgl_homg_point_2d<double>> const & pts)
+check_points_on_conics(const vgl_conic<double> & c1,
+                       const vgl_conic<double> & c2,
+                       const std::list<vgl_homg_point_2d<double>> & pts)
 {
   // verify whether each of the intersection points (in pts) really lie on the conics
   auto it = pts.begin();
@@ -153,10 +153,10 @@ static void
 test_conic()
 {
   // "global" variables, actually constants
-  vgl_homg_point_2d<double> const centre(1, 2, 1);
-  vgl_homg_point_2d<double> const direction(4, -3, 0);
-  double const halfpi = vnl_math::pi_over_2;
-  double const pythagoras = std::atan2(4.0, 3.0); // = 0.9273 radians (53.13 degrees)
+  const vgl_homg_point_2d<double> centre(1, 2, 1);
+  const vgl_homg_point_2d<double> direction(4, -3, 0);
+  const double halfpi = vnl_math::pi_over_2;
+  const double pythagoras = std::atan2(4.0, 3.0); // = 0.9273 radians (53.13 degrees)
 
   // 1. Test constructors
   std::cout << "\n\t=== test constructors ===\n";

@@ -22,7 +22,7 @@ vil_pyramid_image_resource::vil_pyramid_image_resource() = default;
 vil_pyramid_image_resource::~vil_pyramid_image_resource() = default;
 
 bool
-vil_pyramid_image_resource::get_property(char const * tag, void * /*value*/) const
+vil_pyramid_image_resource::get_property(const char * tag, void * /*value*/) const
 {
   return std::strcmp(vil_property_pyramid, tag) == 0;
 }
@@ -31,7 +31,7 @@ vil_pyramid_image_resource::get_property(char const * tag, void * /*value*/) con
 //: return a decimated block.  The input is a 2x2 2d array of blocks.
 //  Assume all the data is valid
 static vil_image_view<float>
-decimate_block(std::vector<std::vector<vil_image_view<float>>> const & blocks)
+decimate_block(const std::vector<std::vector<vil_image_view<float>>> & blocks)
 {
   vil_image_view<float> blk = blocks[0][0];
   unsigned int sbi = blk.ni(), sbj = blk.nj();
@@ -122,7 +122,7 @@ convert_multi_plane_from_float(std::vector<vil_image_view<float>> & fblk, vil_im
 }
 
 bool
-vil_pyramid_image_resource::blocked_decimate(vil_blocked_image_resource_sptr const & brsc,
+vil_pyramid_image_resource::blocked_decimate(const vil_blocked_image_resource_sptr & brsc,
                                              vil_blocked_image_resource_sptr & dec_resc)
 {
   if (!brsc)
@@ -195,13 +195,14 @@ vil_pyramid_image_resource::blocked_decimate(vil_blocked_image_resource_sptr con
           // convert back to the orignal pixel format
           switch (fmt)
           {
-#define CONVERT_BLOCK_CASE(FORMAT, T)                                                                                  \
-  case FORMAT: {                                                                                                       \
-    vil_image_view<T> out_blk;                                                                                         \
-    vil_convert_cast(dec_blk, out_blk);                                                                                \
-    if (!dec_resc->put_block(bi / 2, bj / 2, out_blk))                                                                 \
-      return false;                                                                                                    \
-    break;                                                                                                             \
+#define CONVERT_BLOCK_CASE(FORMAT, T)                  \
+  case FORMAT:                                         \
+  {                                                    \
+    vil_image_view<T> out_blk;                         \
+    vil_convert_cast(dec_blk, out_blk);                \
+    if (!dec_resc->put_block(bi / 2, bj / 2, out_blk)) \
+      return false;                                    \
+    break;                                             \
   }
             CONVERT_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
 #if VXL_HAS_INT_64
@@ -222,7 +223,8 @@ vil_pyramid_image_resource::blocked_decimate(vil_blocked_image_resource_sptr con
       return true;
     } // end of nplanes = 1 (grey scale)
     case 3:
-    case 4: {
+    case 4:
+    {
       std::vector<std::vector<std::vector<vil_image_view<float>>>> buf(2);
       std::vector<std::vector<vil_image_view<float>>> nbrhd(2);
       for (unsigned int k = 0; k < 2; ++k)
@@ -299,7 +301,7 @@ vil_pyramid_image_resource::blocked_decimate(vil_blocked_image_resource_sptr con
 }
 
 vil_image_resource_sptr
-vil_pyramid_image_resource::decimate(vil_image_resource_sptr const & resc, char const * filename, char const * format)
+vil_pyramid_image_resource::decimate(const vil_image_resource_sptr & resc, const char * filename, const char * format)
 {
   if (!resc)
     return nullptr;

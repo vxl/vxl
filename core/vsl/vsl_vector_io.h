@@ -15,27 +15,33 @@
 
 //: Write vector to binary stream
 template <class T>
-void vsl_b_write(vsl_b_ostream& s, const std::vector<T>& v);
+void
+vsl_b_write(vsl_b_ostream & s, const std::vector<T> & v);
 
 //: Read vector from binary stream
 template <class T>
-void vsl_b_read(vsl_b_istream& s, std::vector<T>& v);
+void
+vsl_b_read(vsl_b_istream & s, std::vector<T> & v);
 
 //: Print human readable summary of object to a stream
 template <class T>
-void vsl_print_summary(std::ostream & os,const std::vector<T> &v);
+void
+vsl_print_summary(std::ostream & os, const std::vector<T> & v);
 
 
 //: Write vector<bool> to binary stream
 template <>
-void vsl_b_write(vsl_b_ostream& s, const std::vector<bool>& v);
+void
+vsl_b_write(vsl_b_ostream & s, const std::vector<bool> & v);
 
 //: Read vector<bool> from binary stream
 template <>
-void vsl_b_read(vsl_b_istream& s, std::vector<bool>& v);
+void
+vsl_b_read(vsl_b_istream & s, std::vector<bool> & v);
 
 //: Print human readable summary of object to a stream
 template <>
-void vsl_print_summary(std::ostream & os,const std::vector<bool> &v);
+void
+vsl_print_summary(std::ostream & os, const std::vector<bool> & v);
 
 #endif // vsl_vector_io_h_

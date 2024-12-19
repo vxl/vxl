@@ -105,32 +105,33 @@
 
 // ----------------------------------------
 // rational camera order for input/output operations
-enum class vpgl_rational_order {
+enum class vpgl_rational_order
+{
   VXL,
   RPC00B,
   RPC00A,
 };
 
 // conversion to other forms (see vpgl_rational_camera.cxx)
-class vpgl_rational_order_func {
- public:
-  static std::vector<unsigned> to_vector(vpgl_rational_order choice);
-  static std::string to_string(vpgl_rational_order choice);
-  static vpgl_rational_order from_string(std::string const& buf);
+class vpgl_rational_order_func
+{
+public:
+  static std::vector<unsigned>
+  to_vector(vpgl_rational_order choice);
+  static std::string
+  to_string(vpgl_rational_order choice);
+  static vpgl_rational_order
+  from_string(const std::string & buf);
 
   // initializer_list for iteration
   // e.g. "for (auto item : vpgl_rational_order_func::initializer_list) {...}"
-  static constexpr std::array<vpgl_rational_order,3> initializer_list{{
-      vpgl_rational_order::VXL,
-      vpgl_rational_order::RPC00B,
-      vpgl_rational_order::RPC00A
-  }};
+  static constexpr std::array<vpgl_rational_order, 3> initializer_list{
+    { vpgl_rational_order::VXL, vpgl_rational_order::RPC00B, vpgl_rational_order::RPC00A }
+  };
 
- private:
+private:
   vpgl_rational_order_func() = delete;
 };
-
-
 
 
 // ----------------------------------------
@@ -139,41 +140,64 @@ class vpgl_rational_order_func {
 template <class T>
 class vpgl_scale_offset
 {
- public:
-  vpgl_scale_offset() :
-    scale_(1), offset_(0) {}
-  vpgl_scale_offset(const T scale, const T offset) :
-    scale_(scale), offset_(offset) {}
+public:
+  vpgl_scale_offset()
+    : scale_(1)
+    , offset_(0)
+  {}
+  vpgl_scale_offset(const T scale, const T offset)
+    : scale_(scale)
+    , offset_(offset)
+  {}
 
-  //mutators/accessors
-  void set_scale(const T scale) {scale_ = scale;}
-  void set_offset(const T offset) {offset_ = offset;}
-  T scale() const {return scale_;}
-  T offset() const {return offset_;}
+  // mutators/accessors
+  void
+  set_scale(const T scale)
+  {
+    scale_ = scale;
+  }
+  void
+  set_offset(const T offset)
+  {
+    offset_ = offset;
+  }
+  T
+  scale() const
+  {
+    return scale_;
+  }
+  T
+  offset() const
+  {
+    return offset_;
+  }
 
   // normalize a coordinate value
-  T normalize(const T value) const
+  T
+  normalize(const T value) const
   {
-    if (scale_==0)
+    if (scale_ == 0)
       return 0;
     else
-      return (value-offset_)/scale_;
+      return (value - offset_) / scale_;
   }
 
   // un-normalize a coordinate value
-  T un_normalize(const T value) const
+  T
+  un_normalize(const T value) const
   {
-    T temp = value*scale_;
+    T temp = value * scale_;
     return temp + offset_;
   }
   //: Equality test
-  inline bool operator==(vpgl_scale_offset<T> const &that) const
-  { return this == &that ||
-           (this->scale()==that.scale() &&
-            this->offset() == that.offset() );
+  inline bool
+  operator==(const vpgl_scale_offset<T> & that) const
+  {
+    return this == &that || (this->scale() == that.scale() && this->offset() == that.offset());
   }
- private:
-  //members
+
+private:
+  // members
   T scale_;
   T offset_;
 };
@@ -184,236 +208,305 @@ class vpgl_scale_offset
 template <class T>
 class vpgl_rational_camera : public vpgl_camera<T>
 {
- public:
+public:
   //: enumeration for indexing coordinates
-  enum coor_index{X_INDX = 0, Y_INDX, Z_INDX, U_INDX, V_INDX};
+  enum coor_index
+  {
+    X_INDX = 0,
+    Y_INDX,
+    Z_INDX,
+    U_INDX,
+    V_INDX
+  };
   //: enumeration for indexing polynomials
-  enum poly_index{NEU_U = 0, DEN_U, NEU_V, DEN_V};
+  enum poly_index
+  {
+    NEU_U = 0,
+    DEN_U,
+    NEU_V,
+    DEN_V
+  };
 
   //: default constructor
   vpgl_rational_camera();
 
   //: Constructor from 4 coefficient vectors and 5 scale, offset pairs.
-  vpgl_rational_camera(std::vector<T> const& neu_u,
-                       std::vector<T> const& den_u,
-                       std::vector<T> const& neu_v,
-                       std::vector<T> const& den_v,
-                       const T x_scale, const T x_off,
-                       const T y_scale, const T y_off,
-                       const T z_scale, const T z_off,
-                       const T u_scale, const T u_off,
-                       const T v_scale, const T v_off,
-                       vpgl_rational_order input_order = vpgl_rational_order::VXL
-                      );
+  vpgl_rational_camera(const std::vector<T> & neu_u,
+                       const std::vector<T> & den_u,
+                       const std::vector<T> & neu_v,
+                       const std::vector<T> & den_v,
+                       const T x_scale,
+                       const T x_off,
+                       const T y_scale,
+                       const T y_off,
+                       const T z_scale,
+                       const T z_off,
+                       const T u_scale,
+                       const T u_off,
+                       const T v_scale,
+                       const T v_off,
+                       vpgl_rational_order input_order = vpgl_rational_order::VXL);
 
   //: Constructor from 4 coefficient arrays and 5 scale, offset pairs.
-  vpgl_rational_camera(const double* neu_u,
-                       const double* den_u,
-                       const double* neu_v,
-                       const double* den_v,
-                       const T x_scale, const T x_off,
-                       const T y_scale, const T y_off,
-                       const T z_scale, const T z_off,
-                       const T u_scale, const T u_off,
-                       const T v_scale, const T v_off,
-                       vpgl_rational_order input_order = vpgl_rational_order::VXL
-                      );
+  vpgl_rational_camera(const double * neu_u,
+                       const double * den_u,
+                       const double * neu_v,
+                       const double * den_v,
+                       const T x_scale,
+                       const T x_off,
+                       const T y_scale,
+                       const T y_off,
+                       const T z_scale,
+                       const T z_off,
+                       const T u_scale,
+                       const T u_off,
+                       const T v_scale,
+                       const T v_off,
+                       vpgl_rational_order input_order = vpgl_rational_order::VXL);
 
   //: Constructor with everything wrapped up in an array and vector.
-  vpgl_rational_camera(std::vector<std::vector<T> > const& rational_coeffs,
-                       std::vector<vpgl_scale_offset<T> > const& scale_offsets,
-                       vpgl_rational_order input_order = vpgl_rational_order::VXL
-                      );
+  vpgl_rational_camera(const std::vector<std::vector<T>> & rational_coeffs,
+                       const std::vector<vpgl_scale_offset<T>> & scale_offsets,
+                       vpgl_rational_order input_order = vpgl_rational_order::VXL);
 
   //: Constructor with a coefficient matrix
-  vpgl_rational_camera(vnl_matrix_fixed<T, 4, 20> const& rational_coeffs,
-                       std::vector<vpgl_scale_offset<T> > const& scale_offsets,
-                       vpgl_rational_order input_order = vpgl_rational_order::VXL
-                      );
+  vpgl_rational_camera(const vnl_matrix_fixed<T, 4, 20> & rational_coeffs,
+                       const std::vector<vpgl_scale_offset<T>> & scale_offsets,
+                       vpgl_rational_order input_order = vpgl_rational_order::VXL);
 
   ~vpgl_rational_camera() override = default;
 
-  std::string type_name() const override { return "vpgl_rational_camera"; }
+  std::string
+  type_name() const override
+  {
+    return "vpgl_rational_camera";
+  }
 
   //: Clone `this': creation of a new object and initialization
   // legal C++ because the return type is covariant with vpgl_camera<T>*
-  vpgl_rational_camera<T> *clone() const override;
+  vpgl_rational_camera<T> *
+  clone() const override;
 
   //: Equality test
-  inline bool operator==(vpgl_rational_camera<T> const &that) const
-  { return this == &that ||
-      ((this->coefficient_matrix()==that.coefficient_matrix())&&
-       (this->scale_offsets() == that.scale_offsets()) );}
+  inline bool
+  operator==(const vpgl_rational_camera<T> & that) const
+  {
+    return this == &that || ((this->coefficient_matrix() == that.coefficient_matrix()) &&
+                             (this->scale_offsets() == that.scale_offsets()));
+  }
 
   // --- Mutators/Accessors ---
 
   //: set rational polynomial coefficients
-  void set_coefficients(
-      std::vector<T> const& neu_u,
-      std::vector<T> const& den_u,
-      std::vector<T> const& neu_v,
-      std::vector<T> const& den_v,
-      vpgl_rational_order input_order = vpgl_rational_order::VXL
-      );
+  void
+  set_coefficients(const std::vector<T> & neu_u,
+                   const std::vector<T> & den_u,
+                   const std::vector<T> & neu_v,
+                   const std::vector<T> & den_v,
+                   vpgl_rational_order input_order = vpgl_rational_order::VXL);
 
-  void set_coefficients(
-      const double* neu_u,
-      const double* den_u,
-      const double* neu_v,
-      const double* den_v,
-      vpgl_rational_order input_order = vpgl_rational_order::VXL
-      );
+  void
+  set_coefficients(const double * neu_u,
+                   const double * den_u,
+                   const double * neu_v,
+                   const double * den_v,
+                   vpgl_rational_order input_order = vpgl_rational_order::VXL);
 
-  void set_coefficients(
-      std::vector<std::vector<T> > const& rational_coeffs,
-      vpgl_rational_order input_order = vpgl_rational_order::VXL
-      );
+  void
+  set_coefficients(const std::vector<std::vector<T>> & rational_coeffs,
+                   vpgl_rational_order input_order = vpgl_rational_order::VXL);
 
-  void set_coefficients(
-      vnl_matrix_fixed<T, 4, 20> const& rational_coeffs,
-      vpgl_rational_order input_order = vpgl_rational_order::VXL
-      );
+  void
+  set_coefficients(const vnl_matrix_fixed<T, 4, 20> & rational_coeffs,
+                   vpgl_rational_order input_order = vpgl_rational_order::VXL);
 
   //: get the rational polynomial coefficients in a vnl matrix
-  vnl_matrix_fixed<T, 4, 20> coefficient_matrix(
-      vpgl_rational_order output_order = vpgl_rational_order::VXL
-      ) const;
+  vnl_matrix_fixed<T, 4, 20>
+  coefficient_matrix(vpgl_rational_order output_order = vpgl_rational_order::VXL) const;
 
   //: get the rational polynomial coefficients in std vector of vectors
-  std::vector<std::vector<T> > coefficients(
-      vpgl_rational_order output_order = vpgl_rational_order::VXL
-      ) const;
+  std::vector<std::vector<T>>
+  coefficients(vpgl_rational_order output_order = vpgl_rational_order::VXL) const;
 
   //: set all coordinate scale and offsets
-  void set_scale_offsets(const T x_scale, const T x_off,
-                         const T y_scale, const T y_off,
-                         const T z_scale, const T z_off,
-                         const T u_scale, const T u_off,
-                         const T v_scale, const T v_off
-                        );
+  void
+  set_scale_offsets(const T x_scale,
+                    const T x_off,
+                    const T y_scale,
+                    const T y_off,
+                    const T z_scale,
+                    const T z_off,
+                    const T u_scale,
+                    const T u_off,
+                    const T v_scale,
+                    const T v_off);
 
-  void set_scale_offsets(std::vector<vpgl_scale_offset<T> > const& scale_offsets);
+  void
+  set_scale_offsets(const std::vector<vpgl_scale_offset<T>> & scale_offsets);
 
   //: get the scale and offsets in a vector
-  std::vector<vpgl_scale_offset<T> > scale_offsets() const
-    {return scale_offsets_;}
+  std::vector<vpgl_scale_offset<T>>
+  scale_offsets() const
+  {
+    return scale_offsets_;
+  }
 
-  //:set a specific scale value
-  void set_scale(const coor_index coor_index, const T scale)
-    {scale_offsets_[coor_index].set_scale(scale);}
+  //: set a specific scale value
+  void
+  set_scale(const coor_index coor_index, const T scale)
+  {
+    scale_offsets_[coor_index].set_scale(scale);
+  }
 
-  //:set a specific offset value
-  void set_offset(const coor_index coor_index, const T offset)
-    {scale_offsets_[coor_index].set_offset(offset);}
+  //: set a specific offset value
+  void
+  set_offset(const coor_index coor_index, const T offset)
+  {
+    scale_offsets_[coor_index].set_offset(offset);
+  }
 
   //: get a specific scale value
-  T scale(const coor_index coor_index) const
-    {return scale_offsets_[coor_index].scale();}
+  T
+  scale(const coor_index coor_index) const
+  {
+    return scale_offsets_[coor_index].scale();
+  }
 
   //: get a specific offset value
-  T offset(const coor_index coor_index) const
-    {return scale_offsets_[coor_index].offset();}
+  T
+  offset(const coor_index coor_index) const
+  {
+    return scale_offsets_[coor_index].offset();
+  }
 
   //: get a specific scale_offset
-  vpgl_scale_offset<T> scl_off(const coor_index coor_index) const
-    {return scale_offsets_[coor_index];}
+  vpgl_scale_offset<T>
+  scl_off(const coor_index coor_index) const
+  {
+    return scale_offsets_[coor_index];
+  }
 
   // --- Often useful for adjusting the camera ---
 
-  //:set u-v translation offset
-  void set_image_offset(const T u_off, const T v_off)
-    { scale_offsets_[U_INDX].set_offset(u_off);
-      scale_offsets_[V_INDX].set_offset(v_off); }
+  //: set u-v translation offset
+  void
+  set_image_offset(const T u_off, const T v_off)
+  {
+    scale_offsets_[U_INDX].set_offset(u_off);
+    scale_offsets_[V_INDX].set_offset(v_off);
+  }
 
-  //:get u-v translation offset
-  void image_offset(T& u_off, T& v_off) const
-    {u_off = offset(U_INDX); v_off = offset(V_INDX);}
+  //: get u-v translation offset
+  void
+  image_offset(T & u_off, T & v_off) const
+  {
+    u_off = offset(U_INDX);
+    v_off = offset(V_INDX);
+  }
 
-   //:set u-v scale
-  void set_image_scale(const T u_scale, const T v_scale)
-    { scale_offsets_[U_INDX].set_scale(u_scale);
-      scale_offsets_[V_INDX].set_scale(v_scale); }
+  //: set u-v scale
+  void
+  set_image_scale(const T u_scale, const T v_scale)
+  {
+    scale_offsets_[U_INDX].set_scale(u_scale);
+    scale_offsets_[V_INDX].set_scale(v_scale);
+  }
 
-  //:get u-v  scale
-  void image_scale(T& u_scale, T& v_scale)
-    {u_scale = scale(U_INDX); v_scale = scale(V_INDX);}
+  //: get u-v  scale
+  void
+  image_scale(T & u_scale, T & v_scale)
+  {
+    u_scale = scale(U_INDX);
+    v_scale = scale(V_INDX);
+  }
 
   // --- project 3D world point to 2D image point --
 
   //: The generic camera interface. u represents image column, v image row.
-  void project(const T x, const T y, const T z, T &u, T &v) const override;
+  void
+  project(const T x, const T y, const T z, T & u, T & v) const override;
 
   //: Project a world point onto the image (vnl interface)
-  vnl_vector_fixed<T, 2> project(vnl_vector_fixed<T, 3> const& world_point) const;
+  vnl_vector_fixed<T, 2>
+  project(const vnl_vector_fixed<T, 3> & world_point) const;
 
   //: Project a world point onto the image (vgl interface)
-  vgl_point_2d<T> project(vgl_point_3d<T> world_point) const;
+  vgl_point_2d<T>
+  project(vgl_point_3d<T> world_point) const;
 
   // --- print & save camera ---
 
   //: print camera parameters
-  virtual void print(
-      std::ostream& s = std::cout,
-      vpgl_rational_order output_order = vpgl_rational_order::VXL
-      ) const;
+  virtual void
+  print(std::ostream & s = std::cout, vpgl_rational_order output_order = vpgl_rational_order::VXL) const;
 
   //: save camera parameters to a file
-  virtual bool save(
-      std::string cam_path,
-      vpgl_rational_order output_order = vpgl_rational_order::RPC00B
-      ) const;
+  virtual bool
+  save(std::string cam_path, vpgl_rational_order output_order = vpgl_rational_order::RPC00B) const;
 
   //: write PVL (parameter) to output stream
-  virtual void write_pvl(std::ostream& s, vpgl_rational_order output_order) const;
+  virtual void
+  write_pvl(std::ostream & s, vpgl_rational_order output_order) const;
 
   // --- read camera ---
 
   //: read from PVL (parameter value language) file/stream
-  bool read_pvl(std::string cam_path);
-  virtual bool read_pvl(std::istream& istr);
+  bool
+  read_pvl(std::string cam_path);
+  virtual bool
+  read_pvl(std::istream & istr);
 
   //: read from TXT file/stream
-  bool read_txt(std::string cam_path);
-  virtual bool read_txt(std::istream& istr);
+  bool
+  read_txt(std::string cam_path);
+  virtual bool
+  read_txt(std::istream & istr);
 
- protected:
+protected:
   // utilities
-  vnl_vector_fixed<T, 20> power_vector(const T x, const T y, const T z) const;
+  vnl_vector_fixed<T, 20>
+  power_vector(const T x, const T y, const T z) const;
 
   // members
   vnl_matrix_fixed<T, 4, 20> rational_coeffs_;
-  std::vector<vpgl_scale_offset<T> > scale_offsets_;
+  std::vector<vpgl_scale_offset<T>> scale_offsets_;
 };
 
 //: Write to stream
 // \relatesalso vpgl_rational_camera
 template <class T>
-std::ostream& operator<<(std::ostream& s, const vpgl_rational_camera<T>& p);
+std::ostream &
+operator<<(std::ostream & s, const vpgl_rational_camera<T> & p);
 
 //: Read from stream
 // \relatesalso vpgl_rational_camera
 template <class T>
-std::istream& operator>>(std::istream& is, vpgl_rational_camera<T>& p);
+std::istream &
+operator>>(std::istream & is, vpgl_rational_camera<T> & p);
 
 //: Creates a rational camera from a PVL file
 // \relatesalso vpgl_rational_camera
 template <class T>
-vpgl_rational_camera<T>* read_rational_camera(std::string cam_path);
+vpgl_rational_camera<T> *
+read_rational_camera(std::string cam_path);
 
 //: Creates a rational camera from a PVL input stream
 // \relatesalso vpgl_rational_camera
 template <class T>
-vpgl_rational_camera<T>* read_rational_camera(std::istream& istr);
+vpgl_rational_camera<T> *
+read_rational_camera(std::istream & istr);
 
 //: Creates a rational camera from a TXT file
 // \relatesalso vpgl_rational_camera
 template <class T>
-vpgl_rational_camera<T>* read_rational_camera_from_txt(std::string cam_path);
+vpgl_rational_camera<T> *
+read_rational_camera_from_txt(std::string cam_path);
 
 //: Creates a rational camera from a TXT input stream
 // \relatesalso vpgl_rational_camera
 template <class T>
-vpgl_rational_camera<T>* read_rational_camera_from_txt(std::istream& istr);
+vpgl_rational_camera<T> *
+read_rational_camera_from_txt(std::istream & istr);
 
 
 #define VPGL_RATIONAL_CAMERA_INSTANTIATE(T) extern "please include vgl/vpgl_rational_camera.hxx first"

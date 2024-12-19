@@ -11,7 +11,9 @@
 #include <cassert>
 
 //: Dflt ctor
-vil_memory_chunk::vil_memory_chunk() : ref_count_(0) {}
+vil_memory_chunk::vil_memory_chunk()
+  : ref_count_(0)
+{}
 
 //: Allocate n bytes of memory
 vil_memory_chunk::vil_memory_chunk(std::size_t n, vil_pixel_format pixel_form)
@@ -24,10 +26,7 @@ vil_memory_chunk::vil_memory_chunk(std::size_t n, vil_pixel_format pixel_form)
 }
 
 //: Destructor
-vil_memory_chunk::~vil_memory_chunk()
-{
-  delete[] reinterpret_cast<char *>(data_);
-}
+vil_memory_chunk::~vil_memory_chunk() { delete[] reinterpret_cast<char *>(data_); }
 
 //: Copy ctor
 vil_memory_chunk::vil_memory_chunk(const vil_memory_chunk & d)

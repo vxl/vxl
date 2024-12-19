@@ -46,7 +46,7 @@ vil1_load_raw(vil1_stream * is)
 }
 
 vil1_image
-vil1_load_raw(char const * filename)
+vil1_load_raw(const char * filename)
 {
   vil1_stream * is = vil1_open(filename, "r");
   if (is)
@@ -67,7 +67,7 @@ vil1_load_raw(char const * filename)
 }
 
 vil1_image
-vil1_load(char const * filename)
+vil1_load(const char * filename)
 {
   vil1_image i = vil1_load_raw(filename);
   bool top_first = true, bgr = false;

@@ -9,7 +9,7 @@
 // Set the point for a static displacement
 //---------------------------------------------------------------------------
 void
-vcsl_displacement::set_static_point(vnl_vector<double> const & new_point)
+vcsl_displacement::set_static_point(const vnl_vector<double> & new_point)
 {
   point_.clear();
   point_.push_back(new_point);

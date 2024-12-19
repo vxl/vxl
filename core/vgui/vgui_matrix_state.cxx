@@ -125,7 +125,7 @@ vgui_matrix_state::total_transformation()
 
 //: this premultiplies the given matrix by M
 void
-vgui_matrix_state::premultiply(vnl_matrix_fixed<double, 4, 4> const & M, GLenum matrix)
+vgui_matrix_state::premultiply(const vnl_matrix_fixed<double, 4, 4> & M, GLenum matrix)
 {
   // get current (transposed) projection matrix :
   vnl_matrix_fixed<double, 4, 4> P;
@@ -148,7 +148,7 @@ vgui_matrix_state::premultiply(vnl_matrix_fixed<double, 4, 4> const & M, GLenum 
 
 //: This postmultiplies the given matrix by M
 void
-vgui_matrix_state::postmultiply(vnl_matrix_fixed<double, 4, 4> const & M, GLenum matrix)
+vgui_matrix_state::postmultiply(const vnl_matrix_fixed<double, 4, 4> & M, GLenum matrix)
 {
   // set matrix mode :
   if (matrix == GL_PROJECTION || matrix == GL_PROJECTION_MATRIX)

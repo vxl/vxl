@@ -211,32 +211,32 @@ vgui_cache_wizard::get_section(int id,
 // 'pix' is the pixel type supplied by the image.
 // 'wh'  is a string describing the pixel type.
 // uses: 'section_ok', 'image', 'data', 'x', 'y', 'w', 'h', 'allocw', 'alloch'
-#define fsm_macro_begin(pix, wh)                                                                                       \
-  pix * data = new pix[img.width() * img.height()]; /* note: this buffer is w-by-h, not allocw-by-alloch */            \
-  section_ok = img.get_section(data, 0, 0, img.width(), img.height());                                                 \
-  char const * what = wh;                                                                                              \
-  /* bool found = false; */ /* used to allow semicolons after macro calls */                                           \
-  if (false)                                                                                                           \
-  {                                                                                                                    \
+#define fsm_macro_begin(pix, wh)                                                                            \
+  pix * data = new pix[img.width() * img.height()]; /* note: this buffer is w-by-h, not allocw-by-alloch */ \
+  section_ok = img.get_section(data, 0, 0, img.width(), img.height());                                      \
+  char const * what = wh;                                                                                   \
+  /* bool found = false; */ /* used to allow semicolons after macro calls */                                \
+  if (false)                                                                                                \
+  {                                                                                                         \
   }
 
 // 'fmt' is the GLenum format passed to glDrawPixels()
 // 'typ' is the GLenum type passed to glDrawPixels()
 // 'sto' is the pixel type to store the section as. it must agree with 'fmt' and 'typ'.
 // uses: 'what', 'data', 'the_pixels', 'w', 'h'
-#define fsm_macro_magic(fmt, typ, sto)                                                                                 \
-  if (format == fmt && type == typ)                                                                                    \
-  {                                                                                                                    \
-    if (debug)                                                                                                         \
-      std::cerr << __FILE__ ": converting " << what << " image to " #fmt "," #typ " format\n";                         \
-    if (!the_pixels)                                                                                                   \
-      the_pixels = new sto[img.width() * img.height()];                                                                \
-    vgui_pixel_convert_span(data, static_cast<sto *>(the_pixels), img.width() * img.height());                         \
+#define fsm_macro_magic(fmt, typ, sto)                                                         \
+  if (format == fmt && type == typ)                                                            \
+  {                                                                                            \
+    if (debug)                                                                                 \
+      std::cerr << __FILE__ ": converting " << what << " image to " #fmt "," #typ " format\n"; \
+    if (!the_pixels)                                                                           \
+      the_pixels = new sto[img.width() * img.height()];                                        \
+    vgui_pixel_convert_span(data, static_cast<sto *>(the_pixels), img.width() * img.height()); \
   }
 
 // you *must* call this -- to deallocate the temp buffer.
-#define fsm_macro_end                                                                                                  \
-  delete[] data;                                                                                                       \
+#define fsm_macro_end \
+  delete[] data;      \
   assert(section_ok);
 
 void

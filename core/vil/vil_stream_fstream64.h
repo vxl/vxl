@@ -12,34 +12,43 @@
 // \author  rob@stellarscience.com
 // \date 28 Jun 05
 
-#ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
-#endif
-#include "vil_stream.h"
+#  ifdef _MSC_VER
+#    include <vcl_msvc_warnings.h>
+#  endif
+#  include "vil_stream.h"
 
 //: A vil_stream implementation using std::fstream
 class vil_stream_fstream64 : public vil_stream
 {
- public:
-  vil_stream_fstream64(char const* filename, char const* mode);
+public:
+  vil_stream_fstream64(const char * filename, const char * mode);
 
-#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
-  vil_stream_fstream64(wchar_t const* filename, char const* mode);
-#endif
+#  if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
+  vil_stream_fstream64(wchar_t const * filename, char const * mode);
+#  endif
 
   // implement virtual vil_stream interface:
-  bool ok() const { return fd_ != -1; }
-  vil_streampos write(void const* buf, vil_streampos n);
-  vil_streampos read(void* buf, vil_streampos n);
-  vil_streampos tell() const;
-  void seek(vil_streampos position);
+  bool
+  ok() const
+  {
+    return fd_ != -1;
+  }
+  vil_streampos
+  write(const void * buf, vil_streampos n);
+  vil_streampos
+  read(void * buf, vil_streampos n);
+  vil_streampos
+  tell() const;
+  void
+  seek(vil_streampos position);
 
-  vil_streampos file_size() const;
+  vil_streampos
+  file_size() const;
 
- protected:
+protected:
   ~vil_stream_fstream64();
 
- private:
+private:
   int fd_;
   int mode_;
 };

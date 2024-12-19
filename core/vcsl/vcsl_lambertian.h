@@ -18,18 +18,17 @@
 // Coordinate system in which shapes are preserved while scale is nonuniform.
 // Coordinates are specified in terms of x, y, and z, where z is the altitude
 // above the surface of the reference ellipsoid (or sphere).
-class vcsl_lambertian
-  : public vcsl_geographic
+class vcsl_lambertian : public vcsl_geographic
 {
- private:
+private:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
   // Default constructor.
-   vcsl_lambertian() = delete;
+  vcsl_lambertian() = delete;
 
- public:
+public:
   // Destructor
   ~vcsl_lambertian() override = default;
 };

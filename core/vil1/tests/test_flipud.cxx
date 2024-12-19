@@ -9,7 +9,7 @@
 #include "testlib/testlib_test.h"
 
 static void
-p(vil1_image const & m)
+p(const vil1_image & m)
 {
   for (int y = 0; y < m.height(); ++y)
   {

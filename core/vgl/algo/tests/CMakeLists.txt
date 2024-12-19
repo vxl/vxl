@@ -3,7 +3,7 @@
 add_executable( vgl_algo_test_all
   test_driver.cxx
   test_compute_cremona_2d.cxx
-  test_compute_similarity_3d.cxx  
+  test_compute_similarity_3d.cxx
   test_compute_rigid_3d.cxx
   test_conic.cxx
   test_convex_hull_2d.cxx

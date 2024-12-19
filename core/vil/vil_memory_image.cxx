@@ -44,9 +44,9 @@ vil_memory_image::vil_memory_image(unsigned n_i,
 
   switch (vil_pixel_format_component_format(format))
   {
-#define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
-    view_ = new vil_image_view<T>(n_i, n_j, n_planes, n_interleaved_planes);                                           \
+#define macro(F, T)                                                          \
+  case F:                                                                    \
+    view_ = new vil_image_view<T>(n_i, n_j, n_planes, n_interleaved_planes); \
     break;
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
 #if VXL_HAS_INT_64
@@ -70,13 +70,13 @@ vil_memory_image::vil_memory_image(unsigned n_i,
 
 
 //: Create a wrapper around the given image_view
-vil_memory_image::vil_memory_image(vil_image_view_base const & view)
+vil_memory_image::vil_memory_image(const vil_image_view_base & view)
 {
   switch (vil_pixel_format_component_format(view.pixel_format()))
   {
-#define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
-    view_ = new vil_image_view<T>(view);                                                                               \
+#define macro(F, T)                      \
+  case F:                                \
+    view_ = new vil_image_view<T>(view); \
     break;
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
 #if VXL_HAS_INT_64
@@ -110,11 +110,12 @@ vil_memory_image::get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned
 
   switch (view_->pixel_format())
   {
-#define macro(F, T)                                                                                                    \
-  case F: {                                                                                                            \
-    const vil_image_view<T> & v = static_cast<const vil_image_view<T> &>(*view_);                                      \
-    vil_image_view<T> w(v.memory_chunk(), &v(i0, j0), n_i, n_j, v.nplanes(), v.istep(), v.jstep(), v.planestep());     \
-    return new vil_image_view<T>(vil_copy_deep(w));                                                                    \
+#define macro(F, T)                                                                                                \
+  case F:                                                                                                          \
+  {                                                                                                                \
+    const vil_image_view<T> & v = static_cast<const vil_image_view<T> &>(*view_);                                  \
+    vil_image_view<T> w(v.memory_chunk(), &v(i0, j0), n_i, n_j, v.nplanes(), v.istep(), v.jstep(), v.planestep()); \
+    return new vil_image_view<T>(vil_copy_deep(w));                                                                \
   }
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
 #if VXL_HAS_INT_64
@@ -140,11 +141,12 @@ vil_memory_image::get_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j)
 
   switch (view_->pixel_format())
   {
-#define macro(F, T)                                                                                                    \
-  case F: {                                                                                                            \
-    const vil_image_view<T> & v = static_cast<const vil_image_view<T> &>(*view_);                                      \
-    return new vil_image_view<T>(                                                                                      \
-      v.memory_chunk(), &v(i0, j0), n_i, n_j, v.nplanes(), v.istep(), v.jstep(), v.planestep());                       \
+#define macro(F, T)                                                                              \
+  case F:                                                                                        \
+  {                                                                                              \
+    const vil_image_view<T> & v = static_cast<const vil_image_view<T> &>(*view_);                \
+    return new vil_image_view<T>(                                                                \
+      v.memory_chunk(), &v(i0, j0), n_i, n_j, v.nplanes(), v.istep(), v.jstep(), v.planestep()); \
   }
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
 #if VXL_HAS_INT_64
@@ -173,23 +175,24 @@ vil_memory_image::put_view(const vil_image_view_base & im, unsigned i0, unsigned
 
   switch (view_->pixel_format())
   {
-#define macro(F, T)                                                                                                    \
-  case F: {                                                                                                            \
-    vil_image_view<T> & v = static_cast<vil_image_view<T> &>(*view_);                                                  \
-    const vil_image_view<T> & w = static_cast<const vil_image_view<T> &>(im);                                          \
-    if (v.memory_chunk() == w.memory_chunk())                                                                          \
-    {                                                                                                                  \
-      if (&v(i0, j0) != w.top_left_ptr())                                                                              \
-      {                                                                                                                \
-        std::cerr << "ERROR: vil_memory_image::put_view()\n"                                                           \
-                  << "different window from that used in get_view()\n";                                                \
-        std::abort();                                                                                                  \
-      }                                                                                                                \
-      else                                                                                                             \
-        return true; /* The user has already modified the data in place. */                                            \
-    }                                                                                                                  \
-    vil_copy_to_window(w, v, i0, j0);                                                                                  \
-    return true;                                                                                                       \
+#define macro(F, T)                                                           \
+  case F:                                                                     \
+  {                                                                           \
+    vil_image_view<T> & v = static_cast<vil_image_view<T> &>(*view_);         \
+    const vil_image_view<T> & w = static_cast<const vil_image_view<T> &>(im); \
+    if (v.memory_chunk() == w.memory_chunk())                                 \
+    {                                                                         \
+      if (&v(i0, j0) != w.top_left_ptr())                                     \
+      {                                                                       \
+        std::cerr << "ERROR: vil_memory_image::put_view()\n"                  \
+                  << "different window from that used in get_view()\n";       \
+        std::abort();                                                         \
+      }                                                                       \
+      else                                                                    \
+        return true; /* The user has already modified the data in place. */   \
+    }                                                                         \
+    vil_copy_to_window(w, v, i0, j0);                                         \
+    return true;                                                              \
   }
 
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)

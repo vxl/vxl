@@ -188,7 +188,7 @@ vgui_gtk_window::hide()
 }
 
 void
-vgui_gtk_window::set_title(std::string const & title)
+vgui_gtk_window::set_title(const std::string & title)
 {
   gtk_window_set_title(GTK_WINDOW(window), title.c_str());
 }

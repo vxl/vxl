@@ -32,16 +32,15 @@ enum vil_region_finder_connectivity
 // between calls to the region extraction routine, so each region can
 // be extracted only once.
 //
-template <class pix_type, class predicate_type = std::equal_to<pix_type> >
+template <class pix_type, class predicate_type = std::equal_to<pix_type>>
 class vil_region_finder
 {
- public:
+public:
   //:
   typedef vil_image_view<pix_type> image_view;
 
   //: Prepare to extract regions from \a image
-  vil_region_finder( image_view const& image,
-                     vil_region_finder_connectivity conn = vil_region_finder_4_conn );
+  vil_region_finder(const image_view & image, vil_region_finder_connectivity conn = vil_region_finder_4_conn);
 
   //: Extract the region containing (i,j)
   //
@@ -52,9 +51,7 @@ class vil_region_finder
   // This is a simple flood fill algorithm.
   //
   void
-  same_int_region( unsigned i, unsigned j,
-                   std::vector<unsigned>& ri,
-                   std::vector<unsigned>& rj );
+  same_int_region(unsigned i, unsigned j, std::vector<unsigned> & ri, std::vector<unsigned> & rj);
 
 
   //: Extract the region containing (i,j)
@@ -65,27 +62,25 @@ class vil_region_finder
   // This is a simple flood fill algorithm.
   //
   void
-  same_int_region( unsigned i, unsigned j, pix_type p,
-                   std::vector<unsigned>& ri,
-                   std::vector<unsigned>& rj );
+  same_int_region(unsigned i, unsigned j, pix_type p, std::vector<unsigned> & ri, std::vector<unsigned> & rj);
 
   //: The image from which the regions are being extracted
-  image_view const&
+  const image_view &
   image() const;
 
   //: boolean mask on the region
-  vil_image_view<bool> const&  boolean_region_image() const;
+  const vil_image_view<bool> &
+  boolean_region_image() const;
 
- private:
+private:
   //:
   // Marks all pixels as unprocessed, and sets the neighbour deltas
   // based on the requested connectivity.
   //
-  void
-  init( vil_region_finder_connectivity );
+  void init(vil_region_finder_connectivity);
 
   //: The image
-  image_view const image_;
+  const image_view image_;
 
   //: The marks
   vil_image_view<bool> processed_;
@@ -94,7 +89,7 @@ class vil_region_finder
   unsigned num_nbrs_;
 
   //: The deltas to the neighbours.
-  int const (*nbr_delta_)[2];
+  const int (*nbr_delta_)[2];
 
   //: predicate
   predicate_type predi_;

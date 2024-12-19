@@ -26,50 +26,68 @@ struct vidl_ffmpeg_ostream_params;
 
 
 //: A video output stream to an encoded file using FFMPEG
-class VIDL_EXPORT vidl_ffmpeg_ostream
-  : public vidl_ostream
+class VIDL_EXPORT vidl_ffmpeg_ostream : public vidl_ostream
 {
- public:
+public:
   //: Constructor
   vidl_ffmpeg_ostream();
 
   //: Constructor - opens a stream
-  vidl_ffmpeg_ostream(const std::string  & filenam,
-                      const vidl_ffmpeg_ostream_params  & parms);
+  vidl_ffmpeg_ostream(const std::string & filenam, const vidl_ffmpeg_ostream_params & parms);
 
   //: Destructor
   ~vidl_ffmpeg_ostream() override;
 
   //: Open the stream
-  virtual bool open();
+  virtual bool
+  open();
 
   //: Close the stream
-  void close() override;
+  void
+  close() override;
 
   //: Return true if the stream is open for writing
-  bool is_open() const override;
+  bool
+  is_open() const override;
 
   //: Write and image to the stream
   // \retval false if the image could not be written
-  bool write_frame(const vidl_frame_sptr& frame) override;
+  bool
+  write_frame(const vidl_frame_sptr & frame) override;
 
   //: Set the filename
-  void set_filename(const std::string& filenam) { filename_ = filenam; }
+  void
+  set_filename(const std::string & filenam)
+  {
+    filename_ = filenam;
+  }
 
   //: Set the parameters
-  void set_params(const vidl_ffmpeg_ostream_params& parms) { params_ = parms; }
+  void
+  set_params(const vidl_ffmpeg_ostream_params & parms)
+  {
+    params_ = parms;
+  }
 
   //: Access the filename
-  std::string filename() const { return filename_; }
+  std::string
+  filename() const
+  {
+    return filename_;
+  }
 
   //: Access the parameters
-  const vidl_ffmpeg_ostream_params& params() const { return params_; }
+  const vidl_ffmpeg_ostream_params &
+  params() const
+  {
+    return params_;
+  }
 
- private:
+private:
   //: The private implementation (PIMPL) details
   //  This isolates the clients from the ffmpeg details
   struct pimpl;
-  pimpl* os_;
+  pimpl * os_;
 
   //: The filename to open
   std::string filename_;

@@ -1,0 +1,81 @@
+# OPTIONAL pre-commit hooks
+#
+# If you choose to use the pre-commit hooks you need
+# to ensure that a python path has the pre-commit
+# package available.  The following set of commands
+# is one of many ways to install a python enviornment
+# dedicated to running the pre-commit hooks.
+#
+# python3 -m venv .venv
+# source .venv/bin/activate
+# pip3 install pre-commit
+# cd ${VXL_SRC}
+# pre-commit install
+# pre-commit run -a
+#
+# .pre-commit-config.yaml
+# for details see https://pre-commit.com
+# for list of available hooks see https://pre-commit.com/hooks.html
+#
+# Preclude commits that do not conform to various criteria.
+#
+# If a pre-commit check must be skipped then use: `SKIP=check_id git commit` Where `check_id` is the id of the check to
+# be skipped such as `black`.
+
+fail_fast: true
+default_stages: [pre-commit]
+exclude: "v3p\\/|contrib\\/|scripts\\/|\\.fig$|\\.texi$|\\.rc$|\\.nitf$|\\.nsif$|\\.pbm$|\\/file_read_data\\/"
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v5.0.0
+  hooks:
+   - id: check-added-large-files
+     args: ['--maxkb=200']
+     exclude: |
+       (
+       Source/contribDictionary/gdcmPrivateDefaultDicts.cxx|
+       Documentation/watershed.ps
+       )
+   - id: check-ast
+     exclude: "\\/v3p\\/|contrib\\/"
+   - id: check-case-conflict
+   - id: check-illegal-windows-names
+   - id: check-json
+     exclude: "\\/v3p\\/|\\/contrib\\/"
+   - id: check-merge-conflict
+     exclude: "\\/v3p\\/|\\/contrib\\/"
+     args: ['--assume-in-merge']
+   - id: check-toml
+     exclude: "\\/v3p\\/|\\/contrib\\/"
+   - id: check-vcs-permalinks
+     exclude: "\\/v3p\\/|\\/contrib\\/"
+   - id: check-xml
+     exclude: "\\/v3p\\/|\\/contrib\\/"
+   - id: check-yaml
+     exclude: "\\/v3p\\/|\\/contrib\\/"
+   - id: check-shebang-scripts-are-executable
+     exclude: "\\/v3p\\/|\\/contrib\\/"
+   - id: debug-statements
+     exclude: "\\/v3p\\/|\\/contrib\\/"
+   - id: destroyed-symlinks
+   - id: detect-private-key
+   - id: end-of-file-fixer
+     exclude: "\\.(md5|sha|sha512|svg|vtk|vtp)$|^Resources\\/[^\\/]+\\.h$|\\/ColorFiles\\/.+\\.txt$|contrib\\/Input\\/.+$|\\/v3p\\/|\\/contrib\\/"
+   - id: forbid-new-submodules
+   - id: forbid-submodules
+   - id: mixed-line-ending
+     exclude: "\\.(sha|sha512|svg|vtk|vtp)$|\\/v3p\\/|\\/contrib\\/"
+   - id: name-tests-test
+     exclude: "\\/v3p\\/"
+     args: ['--pytest-test-first']
+   - id: no-commit-to-branch
+     args: ['--branch','dashboard','--branch','python-builds','--branch','release','--branch','hooks','--branch', 'main','--branch','master','--pattern','release-*']
+   - id: trailing-whitespace
+     exclude: "\\.(sha|sha512|svg|vtk|vtp)$|\\/v3p\\/|\\/contrib\\/"
+- repo: https://github.com/pre-commit/mirrors-clang-format
+  rev: v19.1.4
+  hooks:
+  - id: clang-format
+    args: ['--style=file']
+    files: '\.(c|cc|h|cxx|hxx)$'
+    exclude: "\\/v3p\\/|\\/contrib\\/"

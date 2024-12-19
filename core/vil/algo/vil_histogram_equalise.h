@@ -10,10 +10,12 @@
 
 //: Apply histogram equalisation to given byte image
 //  \relatesalso vil_image_view
-void vil_histogram_equalise(vil_image_view<vxl_byte>& image);
+void
+vil_histogram_equalise(vil_image_view<vxl_byte> & image);
 
 //: Apply histogram equalisation to given float image
 //  \relatesalso vil_image_view
-void vil_histogram_equalise(vil_image_view<float>& image);
+void
+vil_histogram_equalise(vil_image_view<float> & image);
 
 #endif // vil_histogram_equalise_h_

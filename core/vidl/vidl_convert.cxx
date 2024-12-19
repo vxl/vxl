@@ -40,12 +40,12 @@ namespace
 {
 
 //: Define the function pointer for pixel format conversion functions
-typedef bool (*converter_func)(vidl_frame const & in_frame, vidl_frame & out_frame);
+typedef bool (*converter_func)(const vidl_frame & in_frame, vidl_frame & out_frame);
 
 
 //: Default pixel format conversion - it fails
 bool
-default_conversion(vidl_frame const & in_frame, vidl_frame & out_frame)
+default_conversion(const vidl_frame & in_frame, vidl_frame & out_frame)
 {
   std::cerr << "No routine to convert " << in_frame.pixel_format() << " to " << out_frame.pixel_format() << std::endl;
   return false;
@@ -54,7 +54,7 @@ default_conversion(vidl_frame const & in_frame, vidl_frame & out_frame)
 
 //: Use memcpy when the formats are the same
 bool
-copy_conversion(vidl_frame const & in_frame, vidl_frame & out_frame)
+copy_conversion(const vidl_frame & in_frame, vidl_frame & out_frame)
 {
   assert(in_frame.pixel_format() == out_frame.pixel_format());
   assert(in_frame.size() == out_frame.size());
@@ -72,7 +72,7 @@ struct convert
     defined = false
   };
   static inline bool
-  apply(vidl_frame const & /*in_frame*/, vidl_frame & /*out_frame*/)
+  apply(const vidl_frame & /*in_frame*/, vidl_frame & /*out_frame*/)
   {
     return false;
   }
@@ -84,7 +84,7 @@ struct convert
 
 //: The generic pixel conversion function
 bool
-convert_generic(vidl_frame const & in_frame, vidl_frame & out_frame)
+convert_generic(const vidl_frame & in_frame, vidl_frame & out_frame)
 {
   // create pixel iterators for each frame
   std::unique_ptr<vidl_pixel_iterator> in_pitr(vidl_make_pixel_iterator(in_frame));
@@ -131,7 +131,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24, VIDL_PIXEL_FORMAT_UYVY_422>
     defined = true
   };
   static bool
-  apply(vidl_frame const & in_frame, vidl_frame & out_frame)
+  apply(const vidl_frame & in_frame, vidl_frame & out_frame)
   {
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_RGB_24);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_UYVY_422);
@@ -168,7 +168,7 @@ struct convert<VIDL_PIXEL_FORMAT_UYVY_422, VIDL_PIXEL_FORMAT_RGB_24>
     defined = true
   };
   static bool
-  apply(vidl_frame const & in_frame, vidl_frame & out_frame)
+  apply(const vidl_frame & in_frame, vidl_frame & out_frame)
   {
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_UYVY_422);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_RGB_24);
@@ -205,7 +205,7 @@ struct convert<VIDL_PIXEL_FORMAT_UYVY_422, VIDL_PIXEL_FORMAT_MONO_8>
     defined = true
   };
   static bool
-  apply(vidl_frame const & in_frame, vidl_frame & out_frame)
+  apply(const vidl_frame & in_frame, vidl_frame & out_frame)
   {
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_UYVY_422);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_MONO_8);
@@ -235,7 +235,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24, VIDL_PIXEL_FORMAT_YUYV_422>
     defined = true
   };
   static bool
-  apply(vidl_frame const & in_frame, vidl_frame & out_frame)
+  apply(const vidl_frame & in_frame, vidl_frame & out_frame)
   {
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_RGB_24);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_YUYV_422);
@@ -272,7 +272,7 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_RGB_24>
     defined = true
   };
   static bool
-  apply(vidl_frame const & in_frame, vidl_frame & out_frame)
+  apply(const vidl_frame & in_frame, vidl_frame & out_frame)
   {
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_YUYV_422);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_RGB_24);
@@ -309,7 +309,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24P, VIDL_PIXEL_FORMAT_YUYV_422>
     defined = true
   };
   static bool
-  apply(vidl_frame const & in_frame, vidl_frame & out_frame)
+  apply(const vidl_frame & in_frame, vidl_frame & out_frame)
   {
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_RGB_24P);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_YUYV_422);
@@ -347,7 +347,7 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_RGB_24P>
     defined = true
   };
   static bool
-  apply(vidl_frame const & in_frame, vidl_frame & out_frame)
+  apply(const vidl_frame & in_frame, vidl_frame & out_frame)
   {
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_YUYV_422);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_RGB_24P);
@@ -385,7 +385,7 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_MONO_8>
     defined = true
   };
   static bool
-  apply(vidl_frame const & in_frame, vidl_frame & out_frame)
+  apply(const vidl_frame & in_frame, vidl_frame & out_frame)
   {
     assert(in_frame.pixel_format() == VIDL_PIXEL_FORMAT_YUYV_422);
     assert(out_frame.pixel_format() == VIDL_PIXEL_FORMAT_MONO_8);
@@ -473,7 +473,7 @@ public:
 
   //: Apply the conversion
   bool
-  operator()(vidl_frame const & in_frame, vidl_frame & out_frame) const
+  operator()(const vidl_frame & in_frame, vidl_frame & out_frame) const
   {
     return (*table[in_frame.pixel_format()][out_frame.pixel_format()])(in_frame, out_frame);
   }
@@ -516,7 +516,7 @@ bool intermediate_rgb24_conversion(vidl_frame const& in_frame, vidl_frame& out_f
 // to \p out_frame->pixel_format() and stored in \p out_frame->data()
 // \returns false if the output frame data is not the correct size.
 bool
-vidl_convert_frame(vidl_frame const & in_frame, vidl_frame & out_frame)
+vidl_convert_frame(const vidl_frame & in_frame, vidl_frame & out_frame)
 {
   vidl_pixel_format in_fmt = in_frame.pixel_format();
   vidl_pixel_format out_fmt = out_frame.pixel_format();
@@ -532,7 +532,7 @@ vidl_convert_frame(vidl_frame const & in_frame, vidl_frame & out_frame)
     return false;
 
   // call the appropriate function in the conversion table
-  bool const ret = conversion_table(in_frame, out_frame);
+  const bool ret = conversion_table(in_frame, out_frame);
 
 #if VIDL_HAS_FFMPEG
   // Fall back to the function that utilizes ffmpeg's conversion
@@ -653,7 +653,7 @@ vidl_convert_to_frame(const vil_image_view_base & image)
 // possibly converts the pixel data type
 // always create a deep copy of the data
 bool
-vidl_convert_to_view(vidl_frame const & frame, vil_image_view_base & image, vidl_pixel_color require_color)
+vidl_convert_to_view(const vidl_frame & frame, vil_image_view_base & image, vidl_pixel_color require_color)
 {
   if (frame.pixel_format() == VIDL_PIXEL_FORMAT_UNKNOWN || frame.data() == nullptr)
     return false;
@@ -682,11 +682,12 @@ vidl_convert_to_view(vidl_frame const & frame, vil_image_view_base & image, vidl
     switch (vil_pixel_format_component_format(image.pixel_format()))
     {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#  define macro(F, T)                                                                                                  \
-    case F: {                                                                                                          \
-      vil_image_view<T> & dest_ref = static_cast<vil_image_view<T> &>(image);                                          \
-      vil_convert_cast(wrapper, dest_ref);                                                                             \
-      break;                                                                                                           \
+#  define macro(F, T)                                                         \
+    case F:                                                                   \
+    {                                                                         \
+      vil_image_view<T> & dest_ref = static_cast<vil_image_view<T> &>(image); \
+      vil_convert_cast(wrapper, dest_ref);                                    \
+      break;                                                                  \
     }
 
 #  if VXL_HAS_INT_64
@@ -769,11 +770,12 @@ vidl_convert_to_view(vidl_frame const & frame, vil_image_view_base & image, vidl
   switch (vil_pixel_format_component_format(image.pixel_format()))
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#  define macro(F, T)                                                                                                  \
-    case F: {                                                                                                          \
-      vil_image_view<T> & dest_ref = static_cast<vil_image_view<T> &>(image);                                          \
-      vil_convert_cast(temp, dest_ref);                                                                                \
-      break;                                                                                                           \
+#  define macro(F, T)                                                         \
+    case F:                                                                   \
+    {                                                                         \
+      vil_image_view<T> & dest_ref = static_cast<vil_image_view<T> &>(image); \
+      vil_convert_cast(temp, dest_ref);                                       \
+      break;                                                                  \
     }
 
 #  if VXL_HAS_INT_64
@@ -801,7 +803,7 @@ vidl_convert_to_view(vidl_frame const & frame, vil_image_view_base & image, vidl
 //: Wrap the frame buffer in an image view if supported
 // Returns a null pointer if not possible
 vil_image_view_base_sptr
-vidl_convert_wrap_in_view(vidl_frame const & frame)
+vidl_convert_wrap_in_view(const vidl_frame & frame)
 {
   vidl_pixel_format format = frame.pixel_format();
   vidl_pixel_traits pt = vidl_pixel_format_traits(format);

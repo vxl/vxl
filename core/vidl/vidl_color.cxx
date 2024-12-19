@@ -27,14 +27,14 @@ struct func_ptr
 // Assign an index to each of the pixel data types
 template <class T>
 struct type_index;
-#define vidl_type_index_mac(T, NUM)                                                                                    \
-  template <>                                                                                                          \
-  struct type_index<T>                                                                                                 \
-  {                                                                                                                    \
-    enum                                                                                                               \
-    {                                                                                                                  \
-      index = (NUM)                                                                                                    \
-    };                                                                                                                 \
+#define vidl_type_index_mac(T, NUM) \
+  template <>                       \
+  struct type_index<T>              \
+  {                                 \
+    enum                            \
+    {                               \
+      index = (NUM)                 \
+    };                              \
   }
 
 vidl_type_index_mac(vxl_byte, 0);

@@ -16,45 +16,89 @@ class vil_nitf2_tagged_record_sequence;
 
 class vil_nitf2_scalar_field : public vil_nitf2_field
 {
- public:
-  vil_nitf2_scalar_field(vil_nitf2_field_definition* definition)
-    : vil_nitf2_field(definition) {}
+public:
+  vil_nitf2_scalar_field(vil_nitf2_field_definition * definition)
+    : vil_nitf2_field(definition)
+  {}
 
   ~vil_nitf2_scalar_field() override = default;
 
-  int num_dimensions() const override { return 0; }
+  int
+  num_dimensions() const override
+  {
+    return 0;
+  }
 
   // Sets output argument to the value of field. Subclasses overload the
   // appropriate method to set out parameter and return true. These methods
   // are defined here for the convenience of my callers, so they don't
   // have to downcast to the specific field type.
 #if VXL_HAS_INT_64
-  virtual bool value(vil_nitf2_long&) const { return false; }
+  virtual bool
+  value(vil_nitf2_long &) const
+  {
+    return false;
+  }
 #endif
-  virtual bool value(int&) const { return false; }
-  virtual bool value(double&) const { return false; }
-  virtual bool value(char&) const { return false; }
-  virtual bool value(void*&) const { return false; }
-  virtual bool value(std::string&) const { return false; }
-  virtual bool value(vil_nitf2_location*&) const { return false; }
-  virtual bool value(vil_nitf2_date_time&) const { return false; }
-  virtual bool value(vil_nitf2_tagged_record_sequence&) const { return false; }
+  virtual bool
+  value(int &) const
+  {
+    return false;
+  }
+  virtual bool
+  value(double &) const
+  {
+    return false;
+  }
+  virtual bool
+  value(char &) const
+  {
+    return false;
+  }
+  virtual bool
+  value(void *&) const
+  {
+    return false;
+  }
+  virtual bool
+  value(std::string &) const
+  {
+    return false;
+  }
+  virtual bool
+  value(vil_nitf2_location *&) const
+  {
+    return false;
+  }
+  virtual bool
+  value(vil_nitf2_date_time &) const
+  {
+    return false;
+  }
+  virtual bool
+  value(vil_nitf2_tagged_record_sequence &) const
+  {
+    return false;
+  }
 
   // Attempts to read a scalar field from input stream, using specified
   // definition. Returns field if successfully created.  May set arg
   // error to true even if field is returned; for example, if it's a
   // required (non-blank) field that is all blank. If variable_width
   // is non-negative, it overrides the formatter's field width.
-  static vil_nitf2_scalar_field* read(vil_nitf2_istream& input,
-                                      vil_nitf2_field_definition* definition,
-                                      int variable_width = -1,
-                                      bool* error = nullptr);
+  static vil_nitf2_scalar_field *
+  read(vil_nitf2_istream & input,
+       vil_nitf2_field_definition * definition,
+       int variable_width = -1,
+       bool * error = nullptr);
 
-  field_tree* get_tree() const override;
+  field_tree *
+  get_tree() const override;
 
   // Write to NITF stream. Arg variable_width, if non-negative, overrides
   // formatter's field_width.
-  bool write(vil_nitf2_ostream& output, int variable_width = -1) const;
+  bool
+  write(vil_nitf2_ostream & output, int variable_width = -1) const;
 };
 
 #endif // VIL_NITF2_SCALAR_FIELD_H

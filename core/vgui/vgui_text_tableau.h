@@ -35,64 +35,85 @@
 //  compiled with GLUT.
 class vgui_text_tableau : public vgui_tableau
 {
- public:
+public:
   //: Constructor - don't use this, use vgui_text_tableau_new.
   //  Creates empty text tableau.
   vgui_text_tableau();
 
   //: Remove all text from the display.
-  void clear();
+  void
+  clear();
 
   //: Returns the number of pieces of text displayed in this tableau.
-  unsigned size() const;
+  unsigned
+  size() const;
 
   //: Returns the tableau name ("vgui_text_tableau").
-  std::string type_name() const;
+  std::string
+  type_name() const;
 
   //: Add the given text to the display at the given x,y position.
-  int add(float x, float y, char const *text);
+  int
+  add(float x, float y, const char * text);
 
   //: Add the given std::string to the display at the given x,y position.
-  int add(float x, float y, std::string const &text) { return add(x,y,text.c_str()); }
+  int
+  add(float x, float y, const std::string & text)
+  {
+    return add(x, y, text.c_str());
+  }
 
   //: Set the colour of the text
-  void set_colour(float r, float g, float b);
+  void
+  set_colour(float r, float g, float b);
 
   //: Set the size of the text.
   //
   // This is one of the sizes supported by vgui_text_put.
-  void set_size( unsigned sz );
+  void
+  set_size(unsigned sz);
 
   //: Return the x-coordinate of the text associated to given handle.
-  float get_posx(int hndl) const;
+  float
+  get_posx(int hndl) const;
 
   //: Return the y-coordinate of the text associated to given handle.
-  float get_posy(int hndl) const;
+  float
+  get_posy(int hndl) const;
 
   //: Return the text associated to the given handle.
-  std::string const &get_text(int hndl) const;
+  const std::string &
+  get_text(int hndl) const;
 
   //: Move text associated to given handle to the given x,y position.
-  void move(int hndl, float nx, float ny);
+  void
+  move(int hndl, float nx, float ny);
 
   //: Change the text associated to given handle to the given new text.
-  void change(int hndl, char const *ntext);
+  void
+  change(int hndl, const char * ntext);
 
   //: Change the text associated to given handle to the given new std::string.
-  void change(int hndl, std::string const &ntext) { change(hndl, ntext.c_str()); }
+  void
+  change(int hndl, const std::string & ntext)
+  {
+    change(hndl, ntext.c_str());
+  }
 
   //: Delete text associated to given handle from the display.
-  void remove(int hndl);
+  void
+  remove(int hndl);
 
   //: Handles all events sent to this tableau.
   //  In particular, uses draw events to render the text.
-  bool handle(vgui_event const &);
+  bool
+  handle(const vgui_event &);
 
- protected:
+protected:
   //: Destructor - called by vgui_text_tableau_sptr.
-  ~vgui_text_tableau() { }
+  ~vgui_text_tableau() {}
 
- private:
+private:
   std::vector<float> xs;
   std::vector<float> ys;
   std::vector<float> r_, g_, b_;
@@ -112,7 +133,9 @@ struct vgui_text_tableau_new : public vgui_text_tableau_sptr
   typedef vgui_text_tableau_sptr base;
 
   //: Constructor - creates a default vgui_text_tableau.
-  vgui_text_tableau_new() : base(new vgui_text_tableau()) { }
+  vgui_text_tableau_new()
+    : base(new vgui_text_tableau())
+  {}
 };
 
 #endif // vgui_text_tableau_h_

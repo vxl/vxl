@@ -10,7 +10,7 @@
 using vil1_rgb_cell = vil1_rgb<unsigned char>;
 
 static char *
-as_hex(vil1_rgb_cell const &);
+as_hex(const vil1_rgb_cell &);
 
 int
 main(int /*argc*/, char ** /*argv*/)
@@ -50,7 +50,7 @@ main(int /*argc*/, char ** /*argv*/)
 // This function writes, e.g., vil1_rgb_cell(177,49,97) as "#b13161":
 
 char *
-as_hex(vil1_rgb_cell const & rgb)
+as_hex(const vil1_rgb_cell & rgb)
 {
   // The data members r, g and b of a vil1_rgb_cell are public:
   unsigned char r = rgb.r;

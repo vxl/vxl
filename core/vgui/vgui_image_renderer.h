@@ -37,17 +37,20 @@ class vgui_section_buffer;
 class vgui_image_renderer
 {
   //: Are the range params those used to form the current buffer
-  bool old_range_map_params(vgui_range_map_params_sptr const& rmp);
+  bool
+  old_range_map_params(const vgui_range_map_params_sptr & rmp);
 
   //: Create a buffer if necessary
-  void create_buffer(vgui_range_map_params_sptr const& rmp);
+  void
+  create_buffer(const vgui_range_map_params_sptr & rmp);
 
   //: draw the pixels to the frame buffer
-  void draw_pixels();
+  void
+  draw_pixels();
 
   vil1_image the_image;
 
-  vgui_section_buffer *buffer;
+  vgui_section_buffer * buffer;
 
   //: a cache for the range map params associated with buffer
   vgui_range_map_params_sptr buffer_params;
@@ -55,7 +58,7 @@ class vgui_image_renderer
   //: buffer state variable
   bool valid_buffer;
 
- public:
+public:
   //: Set this to true to use texture mapping for image rendering.
   //  To succeed, it must be set \e before the first \p get_section() is
   //  done on the image, i.e. before the first call to render() is made.
@@ -68,25 +71,34 @@ class vgui_image_renderer
   ~vgui_image_renderer();
 
   //: Attach the renderer to a new vil1_image.
-  void set_image(vil1_image const &);
+  void
+  set_image(const vil1_image &);
 
 
   //: Return the vil1_image that this renderer draws
-  vil1_image get_image() const { return the_image; }
+  vil1_image
+  get_image() const
+  {
+    return the_image;
+  }
 
   //: Tell the renderer that the underlying image has been changed.
-  void reread_image();
+  void
+  reread_image();
 
   //: Renders the image pixels.
-  void render(vgui_range_map_params_sptr const& mp = nullptr);
+  void
+  render(const vgui_range_map_params_sptr & mp = nullptr);
 
   //: Render the pixels in hardware using the glPixelMap with range_map data
   // Note that some OpenGL environments have no graphics hardware
   // but the glPixelMap is still somewhat faster JLM (on a DELL precision)
-  bool render_directly(vgui_range_map_params_sptr const& mp);
+  bool
+  render_directly(const vgui_range_map_params_sptr & mp);
 
   //: Not yet implemented - for future use.
-  void need_resection() const;
+  void
+  need_resection() const;
 };
 
 #endif // vgui_image_renderer_h_

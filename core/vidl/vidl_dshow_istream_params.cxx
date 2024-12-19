@@ -65,7 +65,10 @@ print_help(const CComPtr<IAMVideoProcAmp> & am_video_proc_amp, const std::string
     am_video_proc_amp->Get(prop[prop_tag].key, &val, &flag);
     std::cout << std::setw(w2) << val << std::setw(w2) << min << std::setw(w2) << max << std::setw(w2) << step
               << std::setw(w2) << def << std::setw(w2)
-              << (flag == 0x0001 ? "auto" : flag == 0x0002 ? "manual" : "error") << '\n';
+              << (flag == 0x0001   ? "auto"
+                  : flag == 0x0002 ? "manual"
+                                   : "error")
+              << '\n';
   }
   else
   {

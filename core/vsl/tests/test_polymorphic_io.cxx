@@ -57,7 +57,7 @@ public:
 
   //: Return true if the argument matches this class' identifying string
   virtual bool
-  is_class(std::string const & s) const
+  is_class(const std::string & s) const
   {
     return s == "test_base_class";
   }
@@ -152,7 +152,7 @@ public:
 
   //: Return true if the argument matches this class' or the parent's identifier
   bool
-  is_class(std::string const & s) const override;
+  is_class(const std::string & s) const override;
 };
 
 //: Binary save self to stream.
@@ -185,7 +185,7 @@ test_derived_class::is_a() const
 
 //: Return true if the argument matches this class' or the parent's identifier
 bool
-test_derived_class::is_class(std::string const & s) const
+test_derived_class::is_class(const std::string & s) const
 {
   return s == "test_derived_class" || test_base_class::is_class(s);
 }

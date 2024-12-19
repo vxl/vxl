@@ -29,29 +29,56 @@
 template <class T>
 class vgl_vector_3d
 {
- public:
+public:
   T x_; // Data is public
   T y_;
   T z_;
-  inline T x() const { return x_; }
-  inline T y() const { return y_; }
-  inline T z() const { return z_; }
+  inline T
+  x() const
+  {
+    return x_;
+  }
+  inline T
+  y() const
+  {
+    return y_;
+  }
+  inline T
+  z() const
+  {
+    return z_;
+  }
 
   //: Creates the vector (0,0,0) of zero length.
-  inline vgl_vector_3d() : x_(0) , y_(0) , z_(0) {}
+  inline vgl_vector_3d()
+    : x_(0)
+    , y_(0)
+    , z_(0)
+  {}
 
   //: Creates the vector \a (vx,vy,vz).
-  inline vgl_vector_3d(T vx, T vy, T vz) : x_(vx) , y_(vy) , z_(vz) {}
+  inline vgl_vector_3d(T vx, T vy, T vz)
+    : x_(vx)
+    , y_(vy)
+    , z_(vz)
+  {}
 
   //: Creates the vector \a (vx,vy,vz).
-  inline vgl_vector_3d(const T v[3]) : x_(v[0]), y_(v[1]), z_(v[2]) {}
+  inline vgl_vector_3d(const T v[3])
+    : x_(v[0])
+    , y_(v[1])
+    , z_(v[2])
+  {}
 
   //: Casting constructors
-  vgl_vector_3d(vgl_vector_3d<T> const&) = default;
+  vgl_vector_3d(const vgl_vector_3d<T> &) = default;
 
-  template<typename Other>
-  explicit vgl_vector_3d(vgl_vector_3d<Other> const& other)
-    : x_(other.x()), y_(other.y()), z_(other.z()) {}
+  template <typename Other>
+  explicit vgl_vector_3d(const vgl_vector_3d<Other> & other)
+    : x_(other.x())
+    , y_(other.y())
+    , z_(other.z())
+  {}
 
 #if 0 // The defaults do exactly what they should do...
   //: Copy constructor
@@ -64,21 +91,45 @@ class vgl_vector_3d
 #endif
 
   //: Assignment
-  inline void set(T vx, T vy, T vz) { x_=vx; y_=vy; z_=vz; }
+  inline void
+  set(T vx, T vy, T vz)
+  {
+    x_ = vx;
+    y_ = vy;
+    z_ = vz;
+  }
 
   //: Set \a x, \a y and \a z
-  inline void set (T const v[3]) { x_ = v[0]; y_ = v[1]; z_ = v[2]; }
+  inline void
+  set(const T v[3])
+  {
+    x_ = v[0];
+    y_ = v[1];
+    z_ = v[2];
+  }
 
   //: Comparison
-  inline bool operator==(vgl_vector_3d<T>const& v) const {
-    return x_==v.x() && y_==v.y() && z_==v.z(); }
-  inline bool operator!=(vgl_vector_3d<T>const& v)const{return !operator==(v);}
+  inline bool
+  operator==(const vgl_vector_3d<T> & v) const
+  {
+    return x_ == v.x() && y_ == v.y() && z_ == v.z();
+  }
+  inline bool
+  operator!=(const vgl_vector_3d<T> & v) const
+  {
+    return !operator==(v);
+  }
 
   //: Return the length of this vector.
-  double length() const; // return sqrt( sqr_length() );
+  double
+  length() const; // return sqrt( sqr_length() );
 
   //: Return the squared length of this vector.
-  inline T sqr_length() const { return x()*x()+y()*y()+z()*z(); }
+  inline T
+  sqr_length() const
+  {
+    return x() * x() + y() * y() + z() * z();
+  }
 
 
   //: Read from stream, possibly with formatting
@@ -86,7 +137,8 @@ class vgl_vector_3d
   //  or reads three comma-separated numbers,
   //  or reads three numbers in parenthesized form "(123, 321, 567)"
   // \relatesalso vgl_point_3d
-  std::istream& read(std::istream& is);
+  std::istream &
+  read(std::istream & is);
 };
 
 #define v vgl_vector_3d<T>
@@ -95,122 +147,240 @@ class vgl_vector_3d
 
 //: Write "<vgl_vector_3d x,y,z> " to stream
 // \relatesalso vgl_vector_3d
-template <class T> std::ostream&  operator<<(std::ostream& s, v const& p);
+template <class T>
+std::ostream &
+operator<<(std::ostream & s, const v & p);
 
 //: Read from stream, possibly with formatting
 //  Either just reads three blank-separated numbers,
 //  or reads three comma-separated numbers,
 //  or reads three numbers in parenthesized form "(123, 321, 567)"
 // \relatesalso vgl_vector_3d
-template <class T> std::istream& operator>>(std::istream& s, v& p);
+template <class T>
+std::istream &
+operator>>(std::istream & s, v & p);
 
 
 //  +-+-+ vector_3d geometry and algebra +-+-+
 
 //: Return the length of a vector.
 // \relatesalso vgl_vector_3d
-template <class T> inline double length(v const& a) { return a.length(); }
+template <class T>
+inline double
+length(const v & a)
+{
+  return a.length();
+}
 
 //: Return the squared length of a vector.
 // \relatesalso vgl_vector_3d
-template <class T> inline T sqr_length(v const& a) { return a.sqr_length(); }
+template <class T>
+inline T
+sqr_length(const v & a)
+{
+  return a.sqr_length();
+}
 
 //: c=a+b: add two vectors.
 // \relatesalso vgl_vector_3d
-template <class T> inline v      operator+(v const& a, v const& b) { return v(a.x()+b.x(), a.y()+b.y(), a.z()+b.z()); }
+template <class T>
+inline v
+operator+(const v & a, const v & b)
+{
+  return v(a.x() + b.x(), a.y() + b.y(), a.z() + b.z());
+}
 
 //: c=a-b: subtract two vectors.
 // \relatesalso vgl_vector_3d
-template <class T> inline v      operator-(v const& a, v const& b) { return v(a.x()-b.x(), a.y()-b.y(), a.z()-b.z()); }
+template <class T>
+inline v
+operator-(const v & a, const v & b)
+{
+  return v(a.x() - b.x(), a.y() - b.y(), a.z() - b.z());
+}
 
 //: a+=b: add b to a and return a.
 // \relatesalso vgl_vector_3d
-template <class T> inline v&     operator+=(v& a, v const& b) { a.x_+=b.x_; a.y_+=b.y_; a.z_+=b.z_; return a; }
+template <class T>
+inline v &
+operator+=(v & a, const v & b)
+{
+  a.x_ += b.x_;
+  a.y_ += b.y_;
+  a.z_ += b.z_;
+  return a;
+}
 
 //: a-=b: subtract b from a and return a.
 // \relatesalso vgl_vector_3d
-template <class T> inline v&     operator-=(v& a, v const& b) { a.x_-=b.x_; a.y_-=b.y_; a.z_-=b.z_; return a; }
+template <class T>
+inline v &
+operator-=(v & a, const v & b)
+{
+  a.x_ -= b.x_;
+  a.y_ -= b.y_;
+  a.z_ -= b.z_;
+  return a;
+}
 
 //: +b: unary plus operator (no-op).
 // \relatesalso vgl_vector_3d
-template <class T> inline v      operator+(v const& b) { return b; }
+template <class T>
+inline v
+operator+(const v & b)
+{
+  return b;
+}
 
 //: -a: unary minus operator (additive inverse).
 // \relatesalso vgl_vector_3d
-template <class T> inline v      operator-(v const& b) { return v(-b.x(), -b.y(), -b.z()); }
+template <class T>
+inline v
+operator-(const v & b)
+{
+  return v(-b.x(), -b.y(), -b.z());
+}
 
 //: c=f*b: return a scaled version of the vector.
 // \relatesalso vgl_vector_3d
-template <class T> inline v      operator*(double s, v const& b) { return v(T(s*b.x()), T(s*b.y()), T(s*b.z())); }
+template <class T>
+inline v
+operator*(double s, const v & b)
+{
+  return v(T(s * b.x()), T(s * b.y()), T(s * b.z()));
+}
 
 //: c=a*f: return a scaled version of the vector.
 // \relatesalso vgl_vector_3d
-template <class T> inline v      operator*(v const& a, double s) { return v(T(a.x()*s), T(a.y()*s), T(a.z()*s)); }
+template <class T>
+inline v
+operator*(const v & a, double s)
+{
+  return v(T(a.x() * s), T(a.y() * s), T(a.z() * s));
+}
 
 //: c=b/f: return an inversely scaled version of the vector (scale must be nonzero).
 //  Note that the argument type is double, not T, to avoid rounding errors
 //  when type T has no multiplicative inverses (like T=int).
 // \relatesalso vgl_vector_3d
-template <class T> inline v      operator/(v const& a, double s) { return v(T(a.x()/s), T(a.y()/s), T(a.z()/s)); }
+template <class T>
+inline v
+operator/(const v & a, double s)
+{
+  return v(T(a.x() / s), T(a.y() / s), T(a.z() / s));
+}
 
 //: a*=f: scale the vector.
 // \relatesalso vgl_vector_3d
-template <class T> inline v&     operator*=(v& a, double s) { a.set(T(a.x()*s), T(a.y()*s), T(a.z()*s)); return a; }
+template <class T>
+inline v &
+operator*=(v & a, double s)
+{
+  a.set(T(a.x() * s), T(a.y() * s), T(a.z() * s));
+  return a;
+}
 
 //: a/=f: inversely scale the vector (scale must be nonzero).
 // \relatesalso vgl_vector_3d
-template <class T> inline v&     operator/=(v& a, double s) { a.set(T(a.x()/s), T(a.y()/s), T(a.z()/s)); return a; }
+template <class T>
+inline v &
+operator/=(v & a, double s)
+{
+  a.set(T(a.x() / s), T(a.y() / s), T(a.z() / s));
+  return a;
+}
 
 //: dot product or inner product of two vectors.
 // \relatesalso vgl_vector_3d
-template <class T> inline T      dot_product(v const& a, v const& b) { return a.x()*b.x()+a.y()*b.y()+a.z()*b.z(); }
+template <class T>
+inline T
+dot_product(const v & a, const v & b)
+{
+  return a.x() * b.x() + a.y() * b.y() + a.z() * b.z();
+}
 
 //: dot product or inner product of two vectors.
 // \relatesalso vgl_vector_3d
-template <class T> inline T      inner_product(v const& a, v const& b) { return a.x()*b.x()+a.y()*b.y()+a.z()*b.z(); }
+template <class T>
+inline T
+inner_product(const v & a, const v & b)
+{
+  return a.x() * b.x() + a.y() * b.y() + a.z() * b.z();
+}
 
 //: cross product of two vectors (is orthogonal to both)
 // \relatesalso vgl_vector_3d
-template <class T> inline v      cross_product(v const& a, v const& b)
-{ return v(a.y()*b.z()-a.z()*b.y(), a.z()*b.x()-a.x()*b.z(), a.x()*b.y()-a.y()*b.x()); }
+template <class T>
+inline v
+cross_product(const v & a, const v & b)
+{
+  return v(a.y() * b.z() - a.z() * b.y(), a.z() * b.x() - a.x() * b.z(), a.x() * b.y() - a.y() * b.x());
+}
 
 //: cosine of the angle between two vectors.
 // \relatesalso vgl_vector_3d
-template <class T> inline double cos_angle(v const& a, v const& b) { return inner_product(a,b)/(a.length()*b.length()); }
+template <class T>
+inline double
+cos_angle(const v & a, const v & b)
+{
+  return inner_product(a, b) / (a.length() * b.length());
+}
 
 //: smallest angle between two vectors (in radians, between 0 and Pi).
 // \relatesalso vgl_vector_3d
-template <class T>        double angle(v const& a, v const& b); // return acos(cos_angle(a,b));
+template <class T>
+double
+angle(const v & a, const v & b); // return acos(cos_angle(a,b));
 
 //: are two vectors orthogonal, i.e., is their dot product zero?
 // If the third argument is specified, it is taken as the "tolerance", i.e.
 // in that case this function returns true if the vectors are almost orthogonal.
 // \relatesalso vgl_vector_3d
-template <class T>        bool orthogonal(v const& a, v const& b, double eps=0.0);
+template <class T>
+bool
+orthogonal(const v & a, const v & b, double eps = 0.0);
 
 //: are two vectors parallel, i.e., is one a scalar multiple of the other?
 // If the third argument is specified, it is taken as the "tolerance", i.e.
 // in that case this function returns true if the vectors are almost parallel.
 // \relatesalso vgl_vector_3d
-template <class T>        bool parallel(v const& a, v const& b, double eps=0.0);
+template <class T>
+bool
+parallel(const v & a, const v & b, double eps = 0.0);
 
 //: f=a/b: return the ratio of two vectors, if they are parallel.
 //  (If not, return a "least squares" approximation.)
 //  Note that the return type is double, not T, since the ratio of e.g.
 //  two vgl_vector_3d<int> need not be an int.
 // \relatesalso vgl_vector_3d
-template <class T> inline double operator/(v const& a, v const& b)
-{ return dot_product(a,b)/(double)dot_product(b,b); }
+template <class T>
+inline double
+operator/(const v & a, const v & b)
+{
+  return dot_product(a, b) / (double)dot_product(b, b);
+}
 
 //: Normalise by dividing through by the length, thus returning a length 1 vector.
 //  If a is zero length, return (0,0).
 // \relatesalso vgl_vector_3d
-template <class T> inline v&     normalize(v& a) { double l=a.length(); return l?a/=l:a; }
+template <class T>
+inline v &
+normalize(v & a)
+{
+  double l = a.length();
+  return l ? a /= l : a;
+}
 
 //: Return a normalised version of a.
 //  If a is zero length, return (0,0).
 // \relatesalso vgl_vector_3d
-template <class T> inline v      normalized(v const& a) { double l=a.length(); return l?a/l:a; }
+template <class T>
+inline v
+normalized(const v & a)
+{
+  double l = a.length();
+  return l ? a / l : a;
+}
 
 //: One-parameter family of unit vectors that are orthogonal to \a a, v(s).
 // To get two orthogonal vectors call this function twice with s=0 and
@@ -219,7 +389,9 @@ template <class T> inline v      normalized(v const& a) { double l=a.length(); r
 // \note This function is not continuous near z==0. (Under the Hairy Ball
 // theorem no such smooth function can exist.)
 // \note This vector need not be normalized but it should have non-zero length.
-template <class T> v             orthogonal_vectors(v const& a, double s);
+template <class T>
+v
+orthogonal_vectors(const v & a, double s);
 
 #undef v
 

@@ -7,7 +7,7 @@
 // same dimension ?)
 //---------------------------------------------------------------------------
 bool
-vcsl_length_unit::compatible_units(vcsl_unit_sptr const & other) const
+vcsl_length_unit::compatible_units(const vcsl_unit_sptr & other) const
 {
   return other->cast_to_length_unit() != nullptr;
 }

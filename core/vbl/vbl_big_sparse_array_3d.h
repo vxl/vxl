@@ -47,7 +47,7 @@ typedef vxl_uint_64 ulonglong;
 #elif VXL_HAS_INT_32
 typedef vxl_uint_32 ulonglong;
 #else
-# error "only implemented with 32 and 64-bit ints"
+#  error "only implemented with 32 and 64-bit ints"
 #endif
 
 #ifdef _MSC_VER
@@ -57,47 +57,62 @@ typedef vxl_uint_32 ulonglong;
 template <class T>
 class vbl_big_sparse_array_3d
 {
- protected:
+protected:
   // Data Members--------------------------------------------------------------
-  typedef std::map<ulonglong, T, std::less<ulonglong> > Map;
+  typedef std::map<ulonglong, T, std::less<ulonglong>> Map;
   Map storage_;
 
- public:
+public:
   // Constructors/Destructor---------------------------------------------------
 
   //: Construct a vbl_big_sparse_array_3d
   vbl_big_sparse_array_3d() = default;
- ~vbl_big_sparse_array_3d() = default;
+  ~vbl_big_sparse_array_3d() = default;
 
   // Potentially clunky copy constructor
-  vbl_big_sparse_array_3d(vbl_big_sparse_array_3d<T> const& b) : storage_(b.storage_) {}
+  vbl_big_sparse_array_3d(const vbl_big_sparse_array_3d<T> & b)
+    : storage_(b.storage_)
+  {}
   // Potentially clunky assignment operator
-  vbl_big_sparse_array_3d<T>& operator=(vbl_big_sparse_array_3d<T> const& b)
-  { storage_ = b.storage_; return *this; }
+  vbl_big_sparse_array_3d<T> &
+  operator=(const vbl_big_sparse_array_3d<T> & b)
+  {
+    storage_ = b.storage_;
+    return *this;
+  }
 
   // Operations----------------------------------------------------------------
-  T      & operator() (unsigned, unsigned, unsigned);
-  T const& operator() (unsigned, unsigned, unsigned) const;
+  T &
+  operator()(unsigned, unsigned, unsigned);
+  const T &
+  operator()(unsigned, unsigned, unsigned) const;
 
   //: Has this cell been assigned a value?
-  bool fullp(unsigned, unsigned, unsigned) const;
+  bool
+  fullp(unsigned, unsigned, unsigned) const;
   //: Put a value in a certain cell
-  bool put(unsigned, unsigned, unsigned, T const&);
+  bool
+  put(unsigned, unsigned, unsigned, const T &);
 
   // Computations--------------------------------------------------------------
-  unsigned int count_nonempty() const { return (unsigned int)(storage_.size()); }
+  unsigned int
+  count_nonempty() const
+  {
+    return (unsigned int)(storage_.size());
+  }
 
   // Data Control--------------------------------------------------------------
-  std::ostream& print(std::ostream&) const;
+  std::ostream &
+  print(std::ostream &) const;
 };
 
 template <class T>
-inline std::ostream& operator<<(std::ostream&s,vbl_big_sparse_array_3d<T>const& a)
+inline std::ostream &
+operator<<(std::ostream & s, const vbl_big_sparse_array_3d<T> & a)
 {
   return a.print(s);
 }
 
-#define VBL_BIG_SPARSE_ARRAY_3D_INSTANTIATE(T) \
-extern "Please #include <vbl/vbl_big_sparse_array_3d.hxx> instead"
+#define VBL_BIG_SPARSE_ARRAY_3D_INSTANTIATE(T) extern "Please #include <vbl/vbl_big_sparse_array_3d.hxx> instead"
 
 #endif // vbl_big_sparse_array_3d_h_

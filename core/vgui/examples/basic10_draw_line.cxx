@@ -68,7 +68,7 @@ struct example_tableau : public vgui_easy2D_tableau
 // Make a smart-pointer constructor for our tableau.
 struct example_tableau_new : public vgui_easy2D_tableau_sptr
 {
-  example_tableau_new(vgui_image_tableau_sptr const & i)
+  example_tableau_new(const vgui_image_tableau_sptr & i)
     : vgui_easy2D_tableau_sptr(new example_tableau(i))
   {}
 };

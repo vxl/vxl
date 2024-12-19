@@ -5,7 +5,6 @@
 #include "vgl_window_scan_iterator.h"
 
 #undef VGL_WINDOW_SCAN_ITERATOR_INSTANTIATE
-#define VGL_WINDOW_SCAN_ITERATOR_INSTANTIATE(T) \
-template class vgl_window_scan_iterator<T >
+#define VGL_WINDOW_SCAN_ITERATOR_INSTANTIATE(T) template class vgl_window_scan_iterator<T>
 
 #endif // vgl_window_scan_iterator_hxx_

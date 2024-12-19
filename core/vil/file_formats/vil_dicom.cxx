@@ -43,12 +43,12 @@
 // seem to be a way of telling that this is the case. The DCM library
 // reports that the  TransferSyntax is "LittleEndianImplicit", which isn't helpful.
 // This is a hack to be able to read such files
-//#define MIXED_ENDIAN
+// #define MIXED_ENDIAN
 // Another hack to remove the offset of -1024 needed to calibrate HU. Otherwise
 // this reader converts the image to floating point, which may not be desired.
-//#define NO_OFFSET
+// #define NO_OFFSET
 
-char const * vil_dicom_format_tag = "dicom";
+const char * vil_dicom_format_tag = "dicom";
 
 
 vil_image_resource_sptr
@@ -94,7 +94,7 @@ vil_dicom_file_format::make_output_image(vil_stream * /*vs*/,
 #  endif
 }
 
-char const *
+const char *
 vil_dicom_file_format::tag() const
 {
   return vil_dicom_format_tag;
@@ -165,17 +165,17 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
   if (dset.findAndGetFloat64(DCM_RescaleIntercept, intercept) != EC_Normal)
     intercept = 0;
 
-    // Gather the storage format info
+  // Gather the storage format info
 
-#  define Stringify(v) #  v
-#  define MustRead(func, key, var)                                                                                     \
-    do                                                                                                                 \
-    {                                                                                                                  \
-      if (dset.func(key, var) != EC_Normal)                                                                            \
-      {                                                                                                                \
-        std::cerr << "vil_dicom ERROR: couldn't read " Stringify(key) "; can't handle\n";                              \
-        return;                                                                                                        \
-      }                                                                                                                \
+#  define Stringify(v) #v
+#  define MustRead(func, key, var)                                                        \
+    do                                                                                    \
+    {                                                                                     \
+      if (dset.func(key, var) != EC_Normal)                                               \
+      {                                                                                   \
+        std::cerr << "vil_dicom ERROR: couldn't read " Stringify(key) "; can't handle\n"; \
+        return;                                                                           \
+      }                                                                                   \
     } while (false)
 
   Uint16 bits_alloc, bits_stored, high_bit, pixel_rep;
@@ -219,12 +219,13 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
 
   // Create an image resource to manage the pixel buffer
   //
-#  define DOCASE(fmt)                                                                                                  \
-    case fmt: {                                                                                                        \
-      typedef vil_pixel_format_type_of<fmt>::component_type T;                                                         \
-      pixels_ = vil_new_image_resource_of_view(                                                                        \
-        vil_image_view<T>(pixel_buf, (T *)pixel_buf->data(), ni(), nj(), nplanes(), nplanes(), ni() * nplanes(), 1));  \
-    }                                                                                                                  \
+#  define DOCASE(fmt)                                                                                                 \
+    case fmt:                                                                                                         \
+    {                                                                                                                 \
+      typedef vil_pixel_format_type_of<fmt>::component_type T;                                                        \
+      pixels_ = vil_new_image_resource_of_view(                                                                       \
+        vil_image_view<T>(pixel_buf, (T *)pixel_buf->data(), ni(), nj(), nplanes(), nplanes(), ni() * nplanes(), 1)); \
+    }                                                                                                                 \
     break
 
   switch (pixel_format)
@@ -242,7 +243,7 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
 
 
 bool
-vil_dicom_image::get_property(char const * tag, void * value) const
+vil_dicom_image::get_property(const char * tag, void * value) const
 {
   if (std::strcmp(vil_property_quantisation_depth, tag) == 0)
   {
@@ -263,7 +264,7 @@ vil_dicom_image::get_property(char const * tag, void * value) const
   return false;
 }
 
-char const *
+const char *
 vil_dicom_image::file_format() const
 {
   return vil_dicom_format_tag;
@@ -341,7 +342,7 @@ vil_dicom_image::put_view(const vil_image_view_base & view, unsigned x0, unsigne
 // but if it all gets out of hand, then we will need some derived classes which should attempt to read first
 // ===========================================================================
 
-//:correct known manufacturers drop-offs in header data!
+//: correct known manufacturers drop-offs in header data!
 // For example Hologic encode pixel-size in the imageComment!
 // NB if this section starts bloating, use derived classes which override correct_manufacturer_discrepancies
 void
@@ -390,7 +391,7 @@ vil_dicom_image::correct_manufacturer_discrepancies()
   }
 }
 
-//:try and interpret the Hologic comments section to extract pixel size
+//: try and interpret the Hologic comments section to extract pixel size
 bool
 vil_dicom_image::interpret_hologic_header(float & xpixSize, float & ypixSize)
 {
@@ -1034,7 +1035,7 @@ namespace
 {
 template <class InT>
 void
-convert_src_type(InT const *,
+convert_src_type(const InT *,
                  DcmPixelData * pixels,
                  unsigned num_samples,
                  Uint16 alloc,
@@ -1068,9 +1069,9 @@ convert_src_type(InT const *,
 
 template <class IntType, class OutType>
 void
-rescale_values(IntType const * int_begin, unsigned num_samples, OutType * float_begin, Float64 slope, Float64 intercept)
+rescale_values(const IntType * int_begin, unsigned num_samples, OutType * float_begin, Float64 slope, Float64 intercept)
 {
-  IntType const * const int_end = int_begin + num_samples;
+  const IntType * const int_end = int_begin + num_samples;
   for (; int_begin != int_end; ++int_begin, ++float_begin)
   {
     *float_begin = static_cast<OutType>(*int_begin * slope + intercept);

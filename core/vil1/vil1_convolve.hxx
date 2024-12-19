@@ -9,38 +9,41 @@
 #endif
 
 template <class I1, class I2, class AC, class O>
-void vil1_convolve_separable(I1 const kernel[], unsigned N,
-                             vil1_memory_image_of<I2>& buf,
-                             vil1_memory_image_of<AC>& tmp,
-                             vil1_memory_image_of<O>& out)
+void
+vil1_convolve_separable(I1 const kernel[],
+                        unsigned N,
+                        vil1_memory_image_of<I2> & buf,
+                        vil1_memory_image_of<AC> & tmp,
+                        vil1_memory_image_of<O> & out)
 {
-  vil1_convolve_signal_1d<I1 const> K(kernel, 0, N/2, N);
-  vil1_memory_image_of<I2> const& bufc = buf;
-  vil1_memory_image_of<AC> const& tmpc = tmp;
+  vil1_convolve_signal_1d<I1 const> K(kernel, 0, N / 2, N);
+  const vil1_memory_image_of<I2> & bufc = buf;
+  const vil1_memory_image_of<AC> & tmpc = tmp;
 
   unsigned w = buf.width();
   unsigned h = buf.height();
 
   std::cerr << "convolve x..." << std::flush;
   vil1_convolve_1d_x(K,
-                     vil1_convolve_signal_2d<I2 const>(bufc.row_array(), 0, 0, w,  0, 0, h),
-                     (AC*)nullptr,
-                     vil1_convolve_signal_2d<AC     >(tmp.row_array(), 0, 0, w,  0, 0, h),
-                     vil1_convolve_trim, vil1_convolve_trim);
+                     vil1_convolve_signal_2d<I2 const>(bufc.row_array(), 0, 0, w, 0, 0, h),
+                     (AC *)nullptr,
+                     vil1_convolve_signal_2d<AC>(tmp.row_array(), 0, 0, w, 0, 0, h),
+                     vil1_convolve_trim,
+                     vil1_convolve_trim);
   std::cerr << "done\n"
-           << "convolve y...";
+            << "convolve y...";
   vil1_convolve_1d_y(K,
-                     vil1_convolve_signal_2d<AC const>(tmpc.row_array(), 0, 0, w,  0, 0, h),
-                     (AC*)nullptr,
-                     vil1_convolve_signal_2d<O       >(out.row_array(), 0, 0, w,  0, 0, h),
-                     vil1_convolve_trim, vil1_convolve_trim);
+                     vil1_convolve_signal_2d<AC const>(tmpc.row_array(), 0, 0, w, 0, 0, h),
+                     (AC *)nullptr,
+                     vil1_convolve_signal_2d<O>(out.row_array(), 0, 0, w, 0, 0, h),
+                     vil1_convolve_trim,
+                     vil1_convolve_trim);
   std::cerr << "done\n";
 }
 
 template <class I1, class I2, class AC, class O>
-vil1_image vil1_convolve_separable(vil1_image const & in,
-                                   I1 const* kernel,
-                                   int N, I2*, AC*, O*)
+vil1_image
+vil1_convolve_separable(const vil1_image & in, I1 const * kernel, int N, I2 *, AC *, O *)
 {
   // Copy input image, unless it's already a memory image
   // of the appropriate format.
@@ -65,21 +68,21 @@ vil1_image vil1_convolve_separable(vil1_image const & in,
     out.put_section(outbuf.get_buffer(), 0,0, out.width(), out.height());
   return out;
 #endif
-   return outbuf;
+  return outbuf;
 }
 
 //--------------------------------------------------------------------------------
 
 #undef VIL1_CONVOLVE_INSTANTIATE
-#define VIL1_CONVOLVE_INSTANTIATE(T) \
-template struct vil1_convolve_signal_1d<T >; \
-template struct vil1_convolve_signal_2d<T >; \
-template void vil1_convolve_separable(float const kernel[], unsigned N, \
-                                      vil1_memory_image_of<T >& buf, \
-                                      vil1_memory_image_of<double>& tmp, \
-                                      vil1_memory_image_of<float>& out); \
-template vil1_image vil1_convolve_separable(vil1_image const& in, \
-                                            float const* kernel, \
-                                            int N, T*, double*, float*)
+#define VIL1_CONVOLVE_INSTANTIATE(T)                                        \
+  template struct vil1_convolve_signal_1d<T>;                               \
+  template struct vil1_convolve_signal_2d<T>;                               \
+  template void vil1_convolve_separable(float const kernel[],               \
+                                        unsigned N,                         \
+                                        vil1_memory_image_of<T> & buf,      \
+                                        vil1_memory_image_of<double> & tmp, \
+                                        vil1_memory_image_of<float> & out); \
+  template vil1_image vil1_convolve_separable(                              \
+    vil1_image const & in, float const * kernel, int N, T *, double *, float *)
 
 #endif

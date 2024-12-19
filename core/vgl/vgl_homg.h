@@ -32,22 +32,26 @@
 template <class T>
 class vgl_homg
 {
- public:
+public:
+  //: Standard placeholder for methods that wish to return infinity.
+  static constexpr const T infinity{ std::numeric_limits<T>::infinity() };
 
-//: Standard placeholder for methods that wish to return infinity.
-  static constexpr const T infinity{std::numeric_limits<T>::infinity()};
-
-//: Standard way to test whether a number is indeed infinite.
-  static bool is_infinity(T v) { return std::isinf(v); }
+  //: Standard way to test whether a number is indeed infinite.
+  static bool
+  is_infinity(T v)
+  {
+    return std::isinf(v);
+  }
 
 #ifndef VXL_LEGACY_REMOVE
-// Never used or properly implemented
-//: The tolerance used in "near zero" tests in the vgl_homg subclasses.
+  // Never used or properly implemented
+  //: The tolerance used in "near zero" tests in the vgl_homg subclasses.
   static T infinitesimal_tol;
 
-//: Static method to set the default tolerance used for infinitesimal checks.
-// The default is 1e-12.
-  static void set_infinitesimal_tol(T tol);
+  //: Static method to set the default tolerance used for infinitesimal checks.
+  // The default is 1e-12.
+  static void
+  set_infinitesimal_tol(T tol);
 #endif
 };
 

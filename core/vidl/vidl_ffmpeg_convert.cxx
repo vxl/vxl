@@ -104,7 +104,7 @@ extern "C"
 // If the output frame data is not the correct size new memory
 // will be allocated
 bool
-vidl_ffmpeg_convert(vidl_frame const & in_frame, vidl_frame & out_frame)
+vidl_ffmpeg_convert(const vidl_frame & in_frame, vidl_frame & out_frame)
 {
   AVPixelFormat in_fmt = vidl_pixel_format_to_ffmpeg(in_frame.pixel_format());
 

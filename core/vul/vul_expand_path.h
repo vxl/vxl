@@ -31,18 +31,20 @@
 #include <vxl_config.h>
 
 //: Expand given path.
-std::string vul_expand_path/*cached*/(std::string path);
+std::string vul_expand_path /*cached*/ (std::string path);
 
 //: Expand given path.
-std::string vul_expand_path_uncached (std::string path);
+std::string
+vul_expand_path_uncached(std::string path);
 
 #if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 
 //: Expand given path.
-std::wstring vul_expand_path/*cached*/(std::wstring path);
+std::wstring vul_expand_path /*cached*/ (std::wstring path);
 
 //: Expand given path.
-std::wstring vul_expand_path_uncached (std::wstring path);
+std::wstring
+vul_expand_path_uncached(std::wstring path);
 
 #endif
 

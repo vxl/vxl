@@ -148,9 +148,9 @@ vnl_sparse_lst_sqr_function::vnl_sparse_lst_sqr_function(const std::vector<unsig
 //  pair of i and j.  You do not need to overload this method unless you
 //  want to provide a more efficient implementation for your problem.
 void
-vnl_sparse_lst_sqr_function::f(vnl_vector<double> const & a,
-                               vnl_vector<double> const & b,
-                               vnl_vector<double> const & c,
+vnl_sparse_lst_sqr_function::f(const vnl_vector<double> & a,
+                               const vnl_vector<double> & b,
+                               const vnl_vector<double> & c,
                                vnl_vector<double> & e)
 {
   for (unsigned int i = 0; i < number_of_a(); ++i)
@@ -181,9 +181,9 @@ vnl_sparse_lst_sqr_function::f(vnl_vector<double> const & a,
 //  You do not need to overload this method unless you want to provide
 //  a more efficient implementation for your problem.
 void
-vnl_sparse_lst_sqr_function::jac_blocks(vnl_vector<double> const & a,
-                                        vnl_vector<double> const & b,
-                                        vnl_vector<double> const & c,
+vnl_sparse_lst_sqr_function::jac_blocks(const vnl_vector<double> & a,
+                                        const vnl_vector<double> & b,
+                                        const vnl_vector<double> & c,
                                         std::vector<vnl_matrix<double>> & A,
                                         std::vector<vnl_matrix<double>> & B,
                                         std::vector<vnl_matrix<double>> & C)
@@ -218,9 +218,9 @@ vnl_sparse_lst_sqr_function::jac_blocks(vnl_vector<double> const & a,
 //  You do not need to overload this method unless you want to provide
 //  a more efficient implementation for your problem.
 void
-vnl_sparse_lst_sqr_function::fd_jac_blocks(vnl_vector<double> const & a,
-                                           vnl_vector<double> const & b,
-                                           vnl_vector<double> const & c,
+vnl_sparse_lst_sqr_function::fd_jac_blocks(const vnl_vector<double> & a,
+                                           const vnl_vector<double> & b,
+                                           const vnl_vector<double> & c,
                                            std::vector<vnl_matrix<double>> & A,
                                            std::vector<vnl_matrix<double>> & B,
                                            std::vector<vnl_matrix<double>> & C,
@@ -254,10 +254,10 @@ vnl_sparse_lst_sqr_function::fd_jac_blocks(vnl_vector<double> const & a,
 //  You do not need to overload this method unless you want to provide
 //  a more specialized implementation for your problem.
 void
-vnl_sparse_lst_sqr_function::compute_weights(vnl_vector<double> const & a,
-                                             vnl_vector<double> const & b,
-                                             vnl_vector<double> const & c,
-                                             vnl_vector<double> const & e,
+vnl_sparse_lst_sqr_function::compute_weights(const vnl_vector<double> & a,
+                                             const vnl_vector<double> & b,
+                                             const vnl_vector<double> & c,
+                                             const vnl_vector<double> & e,
                                              vnl_vector<double> & weights)
 {
   for (unsigned int i = 0; i < number_of_a(); ++i)
@@ -285,7 +285,7 @@ vnl_sparse_lst_sqr_function::compute_weights(vnl_vector<double> const & a,
 //  You do not need to overload this method unless you want to provide
 //  a more specialized implementation for your problem.
 void
-vnl_sparse_lst_sqr_function::apply_weights(vnl_vector<double> const & weights, vnl_vector<double> & e)
+vnl_sparse_lst_sqr_function::apply_weights(const vnl_vector<double> & weights, vnl_vector<double> & e)
 {
   for (unsigned int i = 0; i < number_of_a(); ++i)
   {
@@ -307,7 +307,7 @@ vnl_sparse_lst_sqr_function::apply_weights(vnl_vector<double> const & weights, v
 //  You do not need to overload this method unless you want to provide
 //  a more specialized implementation for your problem.
 void
-vnl_sparse_lst_sqr_function::apply_weights(vnl_vector<double> const & weights,
+vnl_sparse_lst_sqr_function::apply_weights(const vnl_vector<double> & weights,
                                            std::vector<vnl_matrix<double>> & A,
                                            std::vector<vnl_matrix<double>> & B,
                                            std::vector<vnl_matrix<double>> & C)
@@ -331,9 +331,9 @@ vnl_sparse_lst_sqr_function::apply_weights(vnl_vector<double> const & weights,
 void
 vnl_sparse_lst_sqr_function::fij(int /*i*/,
                                  int /*j*/,
-                                 vnl_vector<double> const & /*ai*/,
-                                 vnl_vector<double> const & /*bj*/,
-                                 vnl_vector<double> const & /*c*/,
+                                 const vnl_vector<double> & /*ai*/,
+                                 const vnl_vector<double> & /*bj*/,
+                                 const vnl_vector<double> & /*c*/,
                                  vnl_vector<double> & /*f_i_j*/)
 {
   std::cerr << "Warning: fij() called but not implemented in derived class\n";
@@ -343,9 +343,9 @@ vnl_sparse_lst_sqr_function::fij(int /*i*/,
 void
 vnl_sparse_lst_sqr_function::jac_Aij(unsigned int /*i*/,
                                      unsigned int /*j*/,
-                                     vnl_vector<double> const & /*ai*/,
-                                     vnl_vector<double> const & /*bj*/,
-                                     vnl_vector<double> const & /*c*/,
+                                     const vnl_vector<double> & /*ai*/,
+                                     const vnl_vector<double> & /*bj*/,
+                                     const vnl_vector<double> & /*c*/,
                                      vnl_matrix<double> & /*Aij*/)
 {
   std::cerr << "Warning: jac_Aij() called but not implemented in derived class\n";
@@ -355,9 +355,9 @@ vnl_sparse_lst_sqr_function::jac_Aij(unsigned int /*i*/,
 void
 vnl_sparse_lst_sqr_function::jac_Bij(unsigned int /*i*/,
                                      unsigned int /*j*/,
-                                     vnl_vector<double> const & /*ai*/,
-                                     vnl_vector<double> const & /*bj*/,
-                                     vnl_vector<double> const & /*c*/,
+                                     const vnl_vector<double> & /*ai*/,
+                                     const vnl_vector<double> & /*bj*/,
+                                     const vnl_vector<double> & /*c*/,
                                      vnl_matrix<double> & /*Bij*/)
 {
   std::cerr << "Warning: jac_Bij() called but not implemented in derived class\n";
@@ -367,9 +367,9 @@ vnl_sparse_lst_sqr_function::jac_Bij(unsigned int /*i*/,
 void
 vnl_sparse_lst_sqr_function::jac_Cij(unsigned int /*i*/,
                                      unsigned int /*j*/,
-                                     vnl_vector<double> const & /*ai*/,
-                                     vnl_vector<double> const & /*bj*/,
-                                     vnl_vector<double> const & /*c*/,
+                                     const vnl_vector<double> & /*ai*/,
+                                     const vnl_vector<double> & /*bj*/,
+                                     const vnl_vector<double> & /*c*/,
                                      vnl_matrix<double> & /*Cij*/)
 {
   if (num_params_c_ > 0)
@@ -380,9 +380,9 @@ vnl_sparse_lst_sqr_function::jac_Cij(unsigned int /*i*/,
 void
 vnl_sparse_lst_sqr_function::fd_jac_Aij(int i,
                                         int j,
-                                        vnl_vector<double> const & ai,
-                                        vnl_vector<double> const & bj,
-                                        vnl_vector<double> const & c,
+                                        const vnl_vector<double> & ai,
+                                        const vnl_vector<double> & bj,
+                                        const vnl_vector<double> & c,
                                         vnl_matrix<double> & Aij,
                                         double stepsize)
 {
@@ -421,9 +421,9 @@ vnl_sparse_lst_sqr_function::fd_jac_Aij(int i,
 void
 vnl_sparse_lst_sqr_function::fd_jac_Bij(int i,
                                         int j,
-                                        vnl_vector<double> const & ai,
-                                        vnl_vector<double> const & bj,
-                                        vnl_vector<double> const & c,
+                                        const vnl_vector<double> & ai,
+                                        const vnl_vector<double> & bj,
+                                        const vnl_vector<double> & c,
                                         vnl_matrix<double> & Bij,
                                         double stepsize)
 {
@@ -462,9 +462,9 @@ vnl_sparse_lst_sqr_function::fd_jac_Bij(int i,
 void
 vnl_sparse_lst_sqr_function::fd_jac_Cij(int i,
                                         int j,
-                                        vnl_vector<double> const & ai,
-                                        vnl_vector<double> const & bj,
-                                        vnl_vector<double> const & c,
+                                        const vnl_vector<double> & ai,
+                                        const vnl_vector<double> & bj,
+                                        const vnl_vector<double> & c,
                                         vnl_matrix<double> & Cij,
                                         double stepsize)
 {
@@ -509,10 +509,10 @@ vnl_sparse_lst_sqr_function::fd_jac_Cij(int i,
 void
 vnl_sparse_lst_sqr_function::compute_weight_ij(int /*i*/,
                                                int /*j*/,
-                                               vnl_vector<double> const & /*ai*/,
-                                               vnl_vector<double> const & /*bj*/,
-                                               vnl_vector<double> const & /*c*/,
-                                               vnl_vector<double> const & /*fij*/,
+                                               const vnl_vector<double> & /*ai*/,
+                                               const vnl_vector<double> & /*bj*/,
+                                               const vnl_vector<double> & /*c*/,
+                                               const vnl_vector<double> & /*fij*/,
                                                double & weight)
 {
   weight = 1.0;
@@ -522,7 +522,7 @@ vnl_sparse_lst_sqr_function::compute_weight_ij(int /*i*/,
 //: If using weighted least squares, apply the weight to fij.
 //  The default implementation multiplies fij by weight.
 void
-vnl_sparse_lst_sqr_function::apply_weight_ij(int /*i*/, int /*j*/, double const & weight, vnl_vector<double> & fij)
+vnl_sparse_lst_sqr_function::apply_weight_ij(int /*i*/, int /*j*/, const double & weight, vnl_vector<double> & fij)
 {
   fij *= weight;
 }
@@ -533,7 +533,7 @@ vnl_sparse_lst_sqr_function::apply_weight_ij(int /*i*/, int /*j*/, double const 
 void
 vnl_sparse_lst_sqr_function::apply_weight_ij(int /*i*/,
                                              int /*j*/,
-                                             double const & weight,
+                                             const double & weight,
                                              vnl_matrix<double> & Aij,
                                              vnl_matrix<double> & Bij,
                                              vnl_matrix<double> & Cij)
@@ -546,10 +546,10 @@ vnl_sparse_lst_sqr_function::apply_weight_ij(int /*i*/,
 
 void
 vnl_sparse_lst_sqr_function::trace(int /* iteration */,
-                                   vnl_vector<double> const & /*a*/,
-                                   vnl_vector<double> const & /*b*/,
-                                   vnl_vector<double> const & /*c*/,
-                                   vnl_vector<double> const & /*e*/)
+                                   const vnl_vector<double> & /*a*/,
+                                   const vnl_vector<double> & /*b*/,
+                                   const vnl_vector<double> & /*c*/,
+                                   const vnl_vector<double> & /*e*/)
 {
   // This default implementation is empty; overloaded in derived class.
 }

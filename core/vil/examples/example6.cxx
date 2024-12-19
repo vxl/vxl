@@ -21,7 +21,7 @@ view_as_planes(const vil_image_view<vil_rgb<vxl_byte>> & v)
 
   // Image is RGBRGBRGB so i step = 3*v.istep(), jstep=3*v.jstep()
   return vil_image_view<vxl_byte>(v.memory_chunk(),
-                                  reinterpret_cast<vxl_byte const *>(v.top_left_ptr()),
+                                  reinterpret_cast<const vxl_byte *>(v.top_left_ptr()),
                                   v.ni(),
                                   v.nj(),
                                   3,
@@ -39,7 +39,7 @@ view_as_rgb(const vil_image_view<vxl_byte> & v)
   assert(v.istep() == 3 || v.jstep() == 3);
 
   return vil_image_view<vil_rgb<vxl_byte>>(v.memory_chunk(),
-                                           reinterpret_cast<vil_rgb<vxl_byte> const *>(v.top_left_ptr()),
+                                           reinterpret_cast<const vil_rgb<vxl_byte> *>(v.top_left_ptr()),
                                            v.ni(),
                                            v.nj(),
                                            1,

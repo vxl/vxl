@@ -18,20 +18,21 @@
 
 //: Abstract dimension
 // A dimension is a type of quantity to be measured
-class vcsl_dimension
-  : public vbl_ref_count
+class vcsl_dimension : public vbl_ref_count
 {
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
- protected:
+protected:
   // Default constructor
   vcsl_dimension() = default;
 
- public:
+public:
   // Copy constructor
-  vcsl_dimension(vcsl_dimension const&) : vbl_ref_count() {}
+  vcsl_dimension(const vcsl_dimension &)
+    : vbl_ref_count()
+  {}
 
   // Destructor
   ~vcsl_dimension() override = default;
@@ -41,10 +42,12 @@ class vcsl_dimension
   //***************************************************************************
 
   //: Is `new_unit' a compatible unit for the dimension ?
-  virtual bool compatible_unit(vcsl_unit_sptr const& new_unit) const=0;
+  virtual bool
+  compatible_unit(const vcsl_unit_sptr & new_unit) const = 0;
 
   //: Return the standard unit associated to the dimension
-  virtual vcsl_unit_sptr standard_unit() const=0;
+  virtual vcsl_unit_sptr
+  standard_unit() const = 0;
 };
 
 #endif // vcsl_dimension_h_

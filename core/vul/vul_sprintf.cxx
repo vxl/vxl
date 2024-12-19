@@ -16,7 +16,7 @@
 #endif
 #undef vsprintf // this works around a bug in libintl.h
 
-vul_sprintf::vul_sprintf(char const * fmt, ...)
+vul_sprintf::vul_sprintf(const char * fmt, ...)
   : std::string("")
 {
   std::va_list ap;
@@ -34,7 +34,7 @@ vul_sprintf::vul_sprintf(char const * fmt, ...)
 std::ostream &
 operator<<(std::ostream & os, const vul_sprintf & s)
 {
-  return os << (char const *)s;
+  return os << (const char *)s;
 }
 
 //--------------------------------------------------------------------------------

@@ -128,7 +128,7 @@ enum vidl_pixel_arrangement
 struct vidl_pixel_traits
 {
   std::string name;
-  const std::type_info* type;
+  const std::type_info * type;
   unsigned bits_per_pixel;
   unsigned num_channels;
   vidl_pixel_color color;
@@ -139,10 +139,10 @@ struct vidl_pixel_traits
 
 // ***** Start: temporary hack to avoid conflict *****
 #ifdef min
-#undef min
+#  undef min
 #endif
 #ifdef max
-#undef max
+#  undef max
 #endif
 // ***** End: temporary hack to avoid conflict *****
 
@@ -155,61 +155,124 @@ struct vidl_pixel_limits;
 template <>
 struct vidl_pixel_limits<vxl_byte>
 {
-  static inline vxl_byte min() {return 0x00;}
-  static inline vxl_byte max() {return 0xFF;}
-  static inline vxl_byte chroma_zero() {return 0x80;}
+  static inline vxl_byte
+  min()
+  {
+    return 0x00;
+  }
+  static inline vxl_byte
+  max()
+  {
+    return 0xFF;
+  }
+  static inline vxl_byte
+  chroma_zero()
+  {
+    return 0x80;
+  }
 };
 
 template <>
 struct vidl_pixel_limits<bool>
 {
-  static inline bool min() {return false;}
-  static inline bool max() {return true;}
+  static inline bool
+  min()
+  {
+    return false;
+  }
+  static inline bool
+  max()
+  {
+    return true;
+  }
   // chroma zero is not well defined, YUV can't be boolean
-  static inline bool chroma_zero() {return false;}
+  static inline bool
+  chroma_zero()
+  {
+    return false;
+  }
 };
 
 template <>
 struct vidl_pixel_limits<vxl_uint_16>
 {
-  static inline vxl_uint_16 min() {return 0x0000;}
-  static inline vxl_uint_16 max() {return 0xFFFF;}
-  static inline vxl_uint_16 chroma_zero() {return 0x8000;}
+  static inline vxl_uint_16
+  min()
+  {
+    return 0x0000;
+  }
+  static inline vxl_uint_16
+  max()
+  {
+    return 0xFFFF;
+  }
+  static inline vxl_uint_16
+  chroma_zero()
+  {
+    return 0x8000;
+  }
 };
 
 template <>
 struct vidl_pixel_limits<float>
 {
-  static inline float min() {return 0.0f;}
-  static inline float max() {return 1.0f;}
-  static inline float chroma_zero() {return 0.0f;}
+  static inline float
+  min()
+  {
+    return 0.0f;
+  }
+  static inline float
+  max()
+  {
+    return 1.0f;
+  }
+  static inline float
+  chroma_zero()
+  {
+    return 0.0f;
+  }
 };
 
 template <>
 struct vidl_pixel_limits<double>
 {
-  static inline double min() {return 0.0;}
-  static inline double max() {return 1.0;}
-  static inline double chroma_zero() {return 0.0f;}
+  static inline double
+  min()
+  {
+    return 0.0;
+  }
+  static inline double
+  max()
+  {
+    return 1.0;
+  }
+  static inline double
+  chroma_zero()
+  {
+    return 0.0f;
+  }
 };
 
 
 //: Define the color traits for each vidl_pixel_color
 // For now this is just the number of channels
 template <vidl_pixel_color color_type>
-    struct vidl_color_traits_of;
-#define vidl_ct_mac(COL,NC)\
-template <> \
-struct vidl_color_traits_of<VIDL_PIXEL_COLOR_##COL> \
-{\
-  enum { num_channels = (NC) }; \
-}
+struct vidl_color_traits_of;
+#define vidl_ct_mac(COL, NC)                          \
+  template <>                                         \
+  struct vidl_color_traits_of<VIDL_PIXEL_COLOR_##COL> \
+  {                                                   \
+    enum                                              \
+    {                                                 \
+      num_channels = (NC)                             \
+    };                                                \
+  }
 
-vidl_ct_mac( UNKNOWN,  0 );
-vidl_ct_mac( MONO,     1 );
-vidl_ct_mac( RGB,      3 );
-vidl_ct_mac( RGBA,     4 );
-vidl_ct_mac( YUV,      3 );
+vidl_ct_mac(UNKNOWN, 0);
+vidl_ct_mac(MONO, 1);
+vidl_ct_mac(RGB, 3);
+vidl_ct_mac(RGBA, 4);
+vidl_ct_mac(YUV, 3);
 
 #undef vidl_ct_mac
 
@@ -222,51 +285,81 @@ vidl_ct_mac( YUV,      3 );
 // user does not need to worry about enum type clashes.
 template <vidl_pixel_format pix_type>
 struct vidl_pixel_traits_of;
-#define vidl_pt_mac(FMT,NAME,T,BPP,CLR,ARNG,XCS,YCS)\
-template <> \
-struct vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT> \
-{\
-  static inline std::string name() { return NAME; }\
-  typedef T type;\
-  enum { bits_per_pixel = (BPP) };\
-  enum { num_channels = vidl_color_traits_of<VIDL_PIXEL_COLOR_##CLR>::num_channels };\
-  static inline vidl_pixel_color color() { return VIDL_PIXEL_COLOR_##CLR; }\
-  enum { color_idx = VIDL_PIXEL_COLOR_##CLR };\
-  static inline vidl_pixel_arrangement arrangement() { return VIDL_PIXEL_ARRANGE_##ARNG; }\
-  enum { arrangement_idx = VIDL_PIXEL_ARRANGE_##ARNG };\
-  enum { chroma_shift_x = (XCS) };\
-  enum { chroma_shift_y = (YCS) };\
-}
+#define vidl_pt_mac(FMT, NAME, T, BPP, CLR, ARNG, XCS, YCS)                     \
+  template <>                                                                   \
+  struct vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT>                          \
+  {                                                                             \
+    static inline std::string                                                   \
+    name()                                                                      \
+    {                                                                           \
+      return NAME;                                                              \
+    }                                                                           \
+    typedef T type;                                                             \
+    enum                                                                        \
+    {                                                                           \
+      bits_per_pixel = (BPP)                                                    \
+    };                                                                          \
+    enum                                                                        \
+    {                                                                           \
+      num_channels = vidl_color_traits_of<VIDL_PIXEL_COLOR_##CLR>::num_channels \
+    };                                                                          \
+    static inline vidl_pixel_color                                              \
+    color()                                                                     \
+    {                                                                           \
+      return VIDL_PIXEL_COLOR_##CLR;                                            \
+    }                                                                           \
+    enum                                                                        \
+    {                                                                           \
+      color_idx = VIDL_PIXEL_COLOR_##CLR                                        \
+    };                                                                          \
+    static inline vidl_pixel_arrangement                                        \
+    arrangement()                                                               \
+    {                                                                           \
+      return VIDL_PIXEL_ARRANGE_##ARNG;                                         \
+    }                                                                           \
+    enum                                                                        \
+    {                                                                           \
+      arrangement_idx = VIDL_PIXEL_ARRANGE_##ARNG                               \
+    };                                                                          \
+    enum                                                                        \
+    {                                                                           \
+      chroma_shift_x = (XCS)                                                    \
+    };                                                                          \
+    enum                                                                        \
+    {                                                                           \
+      chroma_shift_y = (YCS)                                                    \
+    };                                                                          \
+  }
 
 //            format    name             type         bpp  color    arrange  xcs  ycs
 //            ------    ---------        ----         ---  -------  -------  ---  ---
-vidl_pt_mac( UNKNOWN,  "unknown",       void,        0,   UNKNOWN, UNKNOWN, 0,   0  );
+vidl_pt_mac(UNKNOWN, "unknown", void, 0, UNKNOWN, UNKNOWN, 0, 0);
 
-vidl_pt_mac( RGB_24,   "RGB 24",        vxl_byte,    24,  RGB,     SINGLE,  0,   0  );
-vidl_pt_mac( RGB_24P,  "RGB 24P",       vxl_byte,    24,  RGB,     PLANAR,  0,   0  );
-vidl_pt_mac( BGR_24,   "BGR 24",        vxl_byte,    24,  RGB,     SINGLE,  0,   0  );
-vidl_pt_mac( RGBA_32,  "RGBA 32",       vxl_byte,    32,  RGBA,    SINGLE,  0,   0  );
-vidl_pt_mac( RGBA_32P, "RGBA 32P",      vxl_byte,    32,  RGBA,    PLANAR,  0,   0  );
-vidl_pt_mac( RGB_565,  "RGB 565",       vxl_byte,    16,  RGB,     SINGLE,  0,   0  );
-vidl_pt_mac( RGB_555,  "RGB 555",       vxl_byte,    16,  RGB,     SINGLE,  0,   0  );
+vidl_pt_mac(RGB_24, "RGB 24", vxl_byte, 24, RGB, SINGLE, 0, 0);
+vidl_pt_mac(RGB_24P, "RGB 24P", vxl_byte, 24, RGB, PLANAR, 0, 0);
+vidl_pt_mac(BGR_24, "BGR 24", vxl_byte, 24, RGB, SINGLE, 0, 0);
+vidl_pt_mac(RGBA_32, "RGBA 32", vxl_byte, 32, RGBA, SINGLE, 0, 0);
+vidl_pt_mac(RGBA_32P, "RGBA 32P", vxl_byte, 32, RGBA, PLANAR, 0, 0);
+vidl_pt_mac(RGB_565, "RGB 565", vxl_byte, 16, RGB, SINGLE, 0, 0);
+vidl_pt_mac(RGB_555, "RGB 555", vxl_byte, 16, RGB, SINGLE, 0, 0);
 
-vidl_pt_mac( YUV_444P, "YUV 444P",      vxl_byte,    24,  YUV,     PLANAR,  0,   0  );
-vidl_pt_mac( YUV_422P, "YUV 422P",      vxl_byte,    16,  YUV,     PLANAR,  1,   0  );
-vidl_pt_mac( YUV_420P, "YUV 420P",      vxl_byte,    12,  YUV,     PLANAR,  1,   1  );
-vidl_pt_mac( YVU_420P, "YVU 420P",      vxl_byte,    12,  YUV,     PLANAR,  1,   1  );
-vidl_pt_mac( YUV_411P, "YUV 411P",      vxl_byte,    12,  YUV,     PLANAR,  2,   0  );
-vidl_pt_mac( YUV_410P, "YUV 410P",      vxl_byte,    10,  YUV,     PLANAR,  2,   1  );
-vidl_pt_mac( UYV_444,  "UYV 444",       vxl_byte,    24,  YUV,     SINGLE,  0,   0  );
-vidl_pt_mac( YUYV_422, "YUYV 422",      vxl_byte,    16,  YUV,     PACKED,  1,   0  );
-vidl_pt_mac( UYVY_422, "UYVY 422",      vxl_byte,    16,  YUV,     PACKED,  1,   0  );
-vidl_pt_mac( UYVY_411, "UYVY 411",      vxl_byte,    12,  YUV,     PACKED,  2,   0  );
+vidl_pt_mac(YUV_444P, "YUV 444P", vxl_byte, 24, YUV, PLANAR, 0, 0);
+vidl_pt_mac(YUV_422P, "YUV 422P", vxl_byte, 16, YUV, PLANAR, 1, 0);
+vidl_pt_mac(YUV_420P, "YUV 420P", vxl_byte, 12, YUV, PLANAR, 1, 1);
+vidl_pt_mac(YVU_420P, "YVU 420P", vxl_byte, 12, YUV, PLANAR, 1, 1);
+vidl_pt_mac(YUV_411P, "YUV 411P", vxl_byte, 12, YUV, PLANAR, 2, 0);
+vidl_pt_mac(YUV_410P, "YUV 410P", vxl_byte, 10, YUV, PLANAR, 2, 1);
+vidl_pt_mac(UYV_444, "UYV 444", vxl_byte, 24, YUV, SINGLE, 0, 0);
+vidl_pt_mac(YUYV_422, "YUYV 422", vxl_byte, 16, YUV, PACKED, 1, 0);
+vidl_pt_mac(UYVY_422, "UYVY 422", vxl_byte, 16, YUV, PACKED, 1, 0);
+vidl_pt_mac(UYVY_411, "UYVY 411", vxl_byte, 12, YUV, PACKED, 2, 0);
 
-vidl_pt_mac( MONO_1,   "Mono 1",        bool,        1,   MONO,    SINGLE,  0,   0  );
-vidl_pt_mac( MONO_8,   "Mono 8",        vxl_byte,    8,   MONO,    SINGLE,  0,   0  );
-vidl_pt_mac( MONO_16,  "Mono 16",       vxl_uint_16, 16,  MONO,    SINGLE,  0,   0  );
-vidl_pt_mac( MONO_F32, "Mono float 32", vxl_ieee_32, 32,  MONO,    SINGLE,  0,   0  );
-vidl_pt_mac( RGB_F32,  "RGB float 32",  vxl_ieee_32, 96,  RGB,     SINGLE,  0,   0  );
-vidl_pt_mac( RGB_F32P, "RGB float 32P", vxl_ieee_32, 96,  RGB,     PLANAR,  0,   0  );
+vidl_pt_mac(MONO_1, "Mono 1", bool, 1, MONO, SINGLE, 0, 0);
+vidl_pt_mac(MONO_8, "Mono 8", vxl_byte, 8, MONO, SINGLE, 0, 0);
+vidl_pt_mac(MONO_16, "Mono 16", vxl_uint_16, 16, MONO, SINGLE, 0, 0);
+vidl_pt_mac(MONO_F32, "Mono float 32", vxl_ieee_32, 32, MONO, SINGLE, 0, 0);
+vidl_pt_mac(RGB_F32, "RGB float 32", vxl_ieee_32, 96, RGB, SINGLE, 0, 0);
+vidl_pt_mac(RGB_F32P, "RGB float 32P", vxl_ieee_32, 96, RGB, PLANAR, 0, 0);
 
 #undef vidl_pt_mac
 
@@ -286,18 +379,24 @@ vidl_pt_mac( RGB_F32P, "RGB float 32P", vxl_ieee_32, 96,  RGB,     PLANAR,  0,  
 // \note the offset arrays are defined in vidl_pixel_format.cxx
 template <vidl_pixel_format pix_type>
 struct vidl_pixel_pack_of;
-#define vidl_pp_mac(FMT)\
-template <> \
-struct vidl_pixel_pack_of<VIDL_PIXEL_FORMAT_##FMT> \
-{\
-  enum { macro_pix_size = 1<<vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT>::chroma_shift_x }; \
-  enum { num_channels = vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT>::num_channels }; \
-  static VIDL_EXPORT const std::ptrdiff_t offset[macro_pix_size][num_channels]; \
-}
+#define vidl_pp_mac(FMT)                                                                  \
+  template <>                                                                             \
+  struct vidl_pixel_pack_of<VIDL_PIXEL_FORMAT_##FMT>                                      \
+  {                                                                                       \
+    enum                                                                                  \
+    {                                                                                     \
+      macro_pix_size = 1 << vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT>::chroma_shift_x \
+    };                                                                                    \
+    enum                                                                                  \
+    {                                                                                     \
+      num_channels = vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT>::num_channels          \
+    };                                                                                    \
+    static VIDL_EXPORT const std::ptrdiff_t offset[macro_pix_size][num_channels];         \
+  }
 
-vidl_pp_mac( YUYV_422 );
-vidl_pp_mac( UYVY_422 );
-vidl_pp_mac( UYVY_411 );
+vidl_pp_mac(YUYV_422);
+vidl_pp_mac(UYVY_422);
+vidl_pp_mac(UYVY_411);
 
 #undef vidl_pp_mac
 
@@ -320,7 +419,7 @@ vidl_pixel_format_traits(vidl_pixel_format f);
 
 
 //: Return the typeid of the pixel format datatype
-inline const std::type_info&
+inline const std::type_info &
 vidl_pixel_format_typeid(vidl_pixel_format f)
 {
   return *vidl_pixel_format_traits(f).type;
@@ -376,7 +475,7 @@ vidl_pixel_format_chroma_shift_y(vidl_pixel_format f)
 
 //: Output a pretty string representing the pixel format.
 std::ostream &
-operator << (std::ostream &os, vidl_pixel_format f);
+operator<<(std::ostream & os, vidl_pixel_format f);
 
 
 //: Convert a string into a pixel format.
@@ -389,7 +488,7 @@ vidl_pixel_format_to_string(vidl_pixel_format f)
 
 //: Convert a string into a pixel format.
 vidl_pixel_format
-vidl_pixel_format_from_string(const std::string& s);
+vidl_pixel_format_from_string(const std::string & s);
 
 
 //: Compute the size (in bytes) of a \a ni x \a nj image buffer of pixel format \a f

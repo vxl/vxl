@@ -26,9 +26,9 @@ std::ostream& vbl_sparse_array_2d<T>::print(std::ostream& out) const
 #endif
 
 #undef VBL_SPARSE_ARRAY_2D_INSTANTIATE
-#define VBL_SPARSE_ARRAY_2D_INSTANTIATE(T) \
-VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T, std::pair<unsigned VCL_COMMA unsigned >); \
-template class vbl_sparse_array_2d<T >; \
-/*template std::ostream& operator<< (std::ostream&, const vbl_sparse_array_2d<T > &) */
+#define VBL_SPARSE_ARRAY_2D_INSTANTIATE(T)                                      \
+  VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T, std::pair<unsigned VCL_COMMA unsigned>); \
+  template class vbl_sparse_array_2d<T>;                                        \
+  /*template std::ostream& operator<< (std::ostream&, const vbl_sparse_array_2d<T > &) */
 
 #endif // vbl_sparse_array_2d_hxx_

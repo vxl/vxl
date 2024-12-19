@@ -72,95 +72,167 @@
 template <class Type>
 class vgui_range_map : public vgui_range_map_params
 {
- public:
-  vgui_range_map(vgui_range_map_params const& rmp);
+public:
+  vgui_range_map(const vgui_range_map_params & rmp);
   ~vgui_range_map();
 
   //: Is the pixel type mapable at all
-  bool mapable() const {return mapable_;}
+  bool
+  mapable() const
+  {
+    return mapable_;
+  }
 
   //: Is the pixel type mapable by a lookup table
-  bool table_mapable() const {return table_mapable_;}
+  bool
+  table_mapable() const
+  {
+    return table_mapable_;
+  }
 
   //: Get the number of elements in the mapping tables
-  unsigned map_size() const {return size_;}
+  unsigned
+  map_size() const
+  {
+    return size_;
+  }
 
   // get the software range maps (byte range)
 
   //: Luminance map
-  vbl_array_1d<vxl_byte> Lmap() {return this->compute_byte_table(Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);}
+  vbl_array_1d<vxl_byte>
+  Lmap()
+  {
+    return this->compute_byte_table(Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);
+  }
   //: Red Channel map
-  vbl_array_1d<vxl_byte> Rmap() {return this->compute_byte_table(Type(min_R_), Type(max_R_), gamma_R_, ratio_R_);}
+  vbl_array_1d<vxl_byte>
+  Rmap()
+  {
+    return this->compute_byte_table(Type(min_R_), Type(max_R_), gamma_R_, ratio_R_);
+  }
   //: Green Channel map
-  vbl_array_1d<vxl_byte> Gmap() {return this->compute_byte_table(Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);}
+  vbl_array_1d<vxl_byte>
+  Gmap()
+  {
+    return this->compute_byte_table(Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);
+  }
   //: Blue Channel map
-  vbl_array_1d<vxl_byte> Bmap() {return this->compute_byte_table(Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);}
+  vbl_array_1d<vxl_byte>
+  Bmap()
+  {
+    return this->compute_byte_table(Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);
+  }
   //: Alpha or Infrared Channel map
-  vbl_array_1d<vxl_byte> Xmap() {return this->compute_byte_table(Type(min_X_), Type(max_X_), gamma_X_, ratio_X_);}
+  vbl_array_1d<vxl_byte>
+  Xmap()
+  {
+    return this->compute_byte_table(Type(min_X_), Type(max_X_), gamma_X_, ratio_X_);
+  }
 
   // get the OpenGL hardware range maps (float [0, 1] range)
 
   //: Luminance hardware map
-  vbl_array_1d<float> fLmap() {return this->compute_float_table(Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);}
+  vbl_array_1d<float>
+  fLmap()
+  {
+    return this->compute_float_table(Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);
+  }
   //: Red channel hardware map
-  vbl_array_1d<float> fRmap() {return this->compute_float_table(Type(min_R_), Type(max_R_), gamma_R_, ratio_R_);}
+  vbl_array_1d<float>
+  fRmap()
+  {
+    return this->compute_float_table(Type(min_R_), Type(max_R_), gamma_R_, ratio_R_);
+  }
   //: Green channel hardware map
-  vbl_array_1d<float> fGmap() {return this->compute_float_table(Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);}
+  vbl_array_1d<float>
+  fGmap()
+  {
+    return this->compute_float_table(Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);
+  }
   //: Blue channel hardware map
-  vbl_array_1d<float> fBmap() {return this->compute_float_table(Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);}
+  vbl_array_1d<float>
+  fBmap()
+  {
+    return this->compute_float_table(Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);
+  }
   //: Alpha or Infrared channel hardware map
-  vbl_array_1d<float> fXmap() {return this->compute_float_table(Type(min_X_), Type(max_X_), gamma_X_, ratio_X_);}
+  vbl_array_1d<float>
+  fXmap()
+  {
+    return this->compute_float_table(Type(min_X_), Type(max_X_), gamma_X_, ratio_X_);
+  }
 
   //: Luminance computed map
-  vxl_byte map_L_pixel(const Type pix) {return this->map_pixel_byte(pix, Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);}
+  vxl_byte
+  map_L_pixel(const Type pix)
+  {
+    return this->map_pixel_byte(pix, Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);
+  }
   //: Red channel computed map
-  vxl_byte map_R_pixel(const Type pix) {return this->map_pixel_byte(pix, Type(min_R_), Type(max_R_), gamma_R_, ratio_R_);}
+  vxl_byte
+  map_R_pixel(const Type pix)
+  {
+    return this->map_pixel_byte(pix, Type(min_R_), Type(max_R_), gamma_R_, ratio_R_);
+  }
   //: Green channel computed map
-  vxl_byte map_G_pixel(const Type pix) {return this->map_pixel_byte(pix, Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);}
+  vxl_byte
+  map_G_pixel(const Type pix)
+  {
+    return this->map_pixel_byte(pix, Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);
+  }
   //: Blue channel computed map
-  vxl_byte map_B_pixel(const Type pix) {return this->map_pixel_byte(pix, Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);}
+  vxl_byte
+  map_B_pixel(const Type pix)
+  {
+    return this->map_pixel_byte(pix, Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);
+  }
   //: Alpha or Infrared channel computed map
-  vxl_byte map_X_pixel(const Type pix) {return this->map_pixel_byte(pix, Type(min_X_), Type(max_X_), gamma_X_, ratio_X_);}
+  vxl_byte
+  map_X_pixel(const Type pix)
+  {
+    return this->map_pixel_byte(pix, Type(min_X_), Type(max_X_), gamma_X_, ratio_X_);
+  }
 
   //: offset for potentially signed table index. Zero for unsigned, -maxval for signed.
-  int offset();
+  int
+  offset();
 
- private:
-  vgui_range_map();//never use this
+private:
+  vgui_range_map(); // never use this
   //:
-  void init();
+  void
+  init();
 
   //: Initialize the domain - sanity check and compute ratio_
-  void init_map_domain(const Type min, const Type max,
-                       long double& ratio);
+  void
+  init_map_domain(const Type min, const Type max, long double & ratio);
 
   //: Map a pixel from Type to vxl_byte
-  vxl_byte map_pixel_byte(const Type pix, const Type min, const Type max,
-                          const float gamma, const long double ratio);
+  vxl_byte
+  map_pixel_byte(const Type pix, const Type min, const Type max, const float gamma, const long double ratio);
   //: Map the pixel to the range [0f 1f];
-  float map_pixel_float(const Type pix, const Type min, const Type max,
-                        const float gamma, const long double ratio);
+  float
+  map_pixel_float(const Type pix, const Type min, const Type max, const float gamma, const long double ratio);
 
   //: Initialize the byte mapping table
-  vbl_array_1d<vxl_byte> compute_byte_table(const Type min, const Type max,
-                                            const float gamma,
-                                            const long double ratio);
+  vbl_array_1d<vxl_byte>
+  compute_byte_table(const Type min, const Type max, const float gamma, const long double ratio);
 
   //: Initialize the float mapping table
-  vbl_array_1d<float> compute_float_table(const Type min, const Type max,
-                                          const float gamma,
-                                          const long double ratio);
+  vbl_array_1d<float>
+  compute_float_table(const Type min, const Type max, const float gamma, const long double ratio);
 
-  bool mapable_;           //!< input pixel type can be mapped
-  bool table_mapable_;     //!< input pixel type can be mapped by a table.
-  unsigned size_;          //!< number of elements in the map
-  long double ratio_L_;    //!< scale for computed Luminance mapping
-  long double ratio_R_;    //!< scale for computed red channel mapping
-  long double ratio_G_;    //!< scale for computed green channel mapping
-  long double ratio_B_;    //!< scale for computed blue channel mapping
-  long double ratio_X_;    //!< scale for computed alpha or IR channel mapping
+  bool mapable_;        //!< input pixel type can be mapped
+  bool table_mapable_;  //!< input pixel type can be mapped by a table.
+  unsigned size_;       //!< number of elements in the map
+  long double ratio_L_; //!< scale for computed Luminance mapping
+  long double ratio_R_; //!< scale for computed red channel mapping
+  long double ratio_G_; //!< scale for computed green channel mapping
+  long double ratio_B_; //!< scale for computed blue channel mapping
+  long double ratio_X_; //!< scale for computed alpha or IR channel mapping
 };
 
 #define VGUI_RANGE_MAP_INSTANTIATE(T) extern "please include vgui/vgui_range_map.hxx first"
 
-#endif //vgui_range_map_h
+#endif // vgui_range_map_h

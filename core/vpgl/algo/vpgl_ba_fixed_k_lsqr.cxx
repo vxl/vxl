@@ -39,10 +39,10 @@ vpgl_ba_fixed_k_lsqr::vpgl_ba_fixed_k_lsqr(std::vector<vpgl_calibration_matrix<d
 void
 vpgl_ba_fixed_k_lsqr::jac_Aij(unsigned int i,
                               unsigned int /*j*/,
-                              vnl_double_3x4 const & Pi,
-                              vnl_vector<double> const & ai,
-                              vnl_vector<double> const & bj,
-                              vnl_vector<double> const & /*c*/,
+                              const vnl_double_3x4 & Pi,
+                              const vnl_vector<double> & ai,
+                              const vnl_vector<double> & bj,
+                              const vnl_vector<double> & /*c*/,
                               vnl_matrix<double> & Aij)
 {
   // the translation part
@@ -66,10 +66,10 @@ vpgl_ba_fixed_k_lsqr::jac_Aij(unsigned int i,
 void
 vpgl_ba_fixed_k_lsqr::jac_Bij(unsigned int /*i*/,
                               unsigned int /*j*/,
-                              vnl_double_3x4 const & Pi,
-                              vnl_vector<double> const & /*ai*/,
-                              vnl_vector<double> const & bj,
-                              vnl_vector<double> const & /*c*/,
+                              const vnl_double_3x4 & Pi,
+                              const vnl_vector<double> & /*ai*/,
+                              const vnl_vector<double> & bj,
+                              const vnl_vector<double> & /*c*/,
                               vnl_matrix<double> & Bij)
 {
   jac_inhomg_3d_point(Pi, bj, Bij);
@@ -79,10 +79,10 @@ vpgl_ba_fixed_k_lsqr::jac_Bij(unsigned int /*i*/,
 void
 vpgl_ba_fixed_k_lsqr::jac_Cij(unsigned int /*i*/,
                               unsigned int /*j*/,
-                              vnl_double_3x4 const & /*Pi*/,
-                              vnl_vector<double> const & /*ai*/,
-                              vnl_vector<double> const & /*bj*/,
-                              vnl_vector<double> const & /*c*/,
+                              const vnl_double_3x4 & /*Pi*/,
+                              const vnl_vector<double> & /*ai*/,
+                              const vnl_vector<double> & /*bj*/,
+                              const vnl_vector<double> & /*c*/,
                               vnl_matrix<double> & /*Cij*/)
 {
   // do nothing, c parameters are not used

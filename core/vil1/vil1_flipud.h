@@ -9,6 +9,7 @@
 #include "vil1_image.h"
 
 //: Turn an image upside-down
-vil1_image vil1_flipud(vil1_image const &);
+vil1_image
+vil1_flipud(const vil1_image &);
 
 #endif // vil1_flipud_h_

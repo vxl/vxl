@@ -24,16 +24,23 @@
 //: GTK support for menus.
 class vgui_gtk_utils
 {
- public:
-  static vgui_button translate_button(int button);
-  static vgui_key translate_key(GdkEventKey const *gev);
-  static void set_coordinates(vgui_event &e, const gdouble x, const gdouble y);
-  static void set_modifiers(vgui_event &e, const guint state);
-  static bool is_modifier(GdkEvent const *gev);
+public:
+  static vgui_button
+  translate_button(int button);
+  static vgui_key
+  translate_key(const GdkEventKey * gev);
+  static void
+  set_coordinates(vgui_event & e, const gdouble x, const gdouble y);
+  static void
+  set_modifiers(vgui_event & e, const guint state);
+  static bool
+  is_modifier(const GdkEvent * gev);
 
-  static void add_submenu(GtkWidget *widget, const vgui_menu& menu);
-  static void set_menu(GtkWidget *widget, const vgui_menu& menu, bool is_menubar=false);
-  static GtkAccelGroup *accel_group;
+  static void
+  add_submenu(GtkWidget * widget, const vgui_menu & menu);
+  static void
+  set_menu(GtkWidget * widget, const vgui_menu & menu, bool is_menubar = false);
+  static GtkAccelGroup * accel_group;
 };
 
 #endif // vgui_gtk_utils_h_

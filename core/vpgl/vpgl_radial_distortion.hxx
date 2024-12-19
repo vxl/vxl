@@ -18,11 +18,11 @@
 //  Calls the pure virtual radial distortion function
 template <class T>
 vgl_homg_point_2d<T>
-vpgl_radial_distortion<T>::distort( const vgl_homg_point_2d<T>& point ) const
+vpgl_radial_distortion<T>::distort(const vgl_homg_point_2d<T> & point) const
 {
   vgl_vector_2d<T> r = vgl_point_2d<T>(point) - center_;
   T scale = distort_radius(r.length());
-  return vgl_homg_point_2d<T>(distorted_center_ + scale*r);
+  return vgl_homg_point_2d<T>(distorted_center_ + scale * r);
 }
 
 
@@ -32,8 +32,7 @@ vpgl_radial_distortion<T>::distort( const vgl_homg_point_2d<T>& point ) const
 // calls the radial undistortion function
 template <class T>
 vgl_homg_point_2d<T>
-vpgl_radial_distortion<T>::undistort( const vgl_homg_point_2d<T>& point,
-                                       const vgl_homg_point_2d<T>* init ) const
+vpgl_radial_distortion<T>::undistort(const vgl_homg_point_2d<T> & point, const vgl_homg_point_2d<T> * init) const
 {
   vgl_vector_2d<T> r = vgl_point_2d<T>(point) - distorted_center_;
   T radius = r.length();
@@ -41,7 +40,7 @@ vpgl_radial_distortion<T>::undistort( const vgl_homg_point_2d<T>& point,
   if (init)
     init_r = (vgl_point_2d<T>(*init) - center_).length();
   T scale = undistort_radius(radius, &init_r);
-  return vgl_homg_point_2d<T>(center_ + scale*r);
+  return vgl_homg_point_2d<T>(center_ + scale * r);
 }
 
 
@@ -50,7 +49,7 @@ vpgl_radial_distortion<T>::undistort( const vgl_homg_point_2d<T>& point,
 // if \p init is NULL then \p radius is used as the initial guess
 template <class T>
 T
-vpgl_radial_distortion<T>::undistort_radius( T radius, const T* init) const
+vpgl_radial_distortion<T>::undistort_radius(T radius, const T * init) const
 {
   if (radius == T(0))
     return T(1);
@@ -59,35 +58,38 @@ vpgl_radial_distortion<T>::undistort_radius( T radius, const T* init) const
   if (init)
     result = *init;
 
-  if (has_derivative_){
+  if (has_derivative_)
+  {
     // uses the Newton Method for root finding
     T e = std::numeric_limits<T>::infinity();
     T eps = std::numeric_limits<T>::epsilon();
-    for (unsigned int i=0; i<100 && std::abs(e)>eps ; ++i){
+    for (unsigned int i = 0; i < 100 && std::abs(e) > eps; ++i)
+    {
       T f_result = distort_radius(result);
-      e = radius - f_result*result;
-      result += e/(distort_radius_deriv(result)*result + f_result);
+      e = radius - f_result * result;
+      result += e / (distort_radius_deriv(result) * result + f_result);
     }
   }
-  else{
+  else
+  {
     // uses the Newton Method with finite differences for root finding
     T e = std::numeric_limits<T>::infinity();
     T eps = std::numeric_limits<T>::epsilon();
     T df = T(0.001);
-    for (unsigned int i=0; i<100 && std::abs(e)>eps ; ++i){
+    for (unsigned int i = 0; i < 100 && std::abs(e) > eps; ++i)
+    {
       T f_result = distort_radius(result);
-      T f_result_df = distort_radius(result-df);
-      e = radius - f_result*result;
-      result += e/((f_result - f_result_df)*result/df + f_result);
+      T f_result_df = distort_radius(result - df);
+      e = radius - f_result * result;
+      result += e / ((f_result - f_result_df) * result / df + f_result);
     }
   }
 
-  return result/radius;
+  return result / radius;
 }
 
 // Code for easy instantiation.
 #undef vpgl_RADIAL_DISTORTION_INSTANTIATE
-#define vpgl_RADIAL_DISTORTION_INSTANTIATE(T) \
-template class vpgl_radial_distortion<T >
+#define vpgl_RADIAL_DISTORTION_INSTANTIATE(T) template class vpgl_radial_distortion<T>
 
 #endif // vpgl_radial_distortion_hxx_

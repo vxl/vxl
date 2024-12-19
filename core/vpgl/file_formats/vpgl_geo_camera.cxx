@@ -19,13 +19,15 @@
 #include "vul/vul_file.h"
 
 #if HAS_GEOTIFF
-#include "vil/vil_load.h"
-#include <vil/file_formats/vil_geotiff_header.h>
-#include <vil/file_formats/vil_tiff.h>
-#include <vil/file_formats/vil_nitf2_image.h>
+#  include "vil/vil_load.h"
+#  include <vil/file_formats/vil_geotiff_header.h>
+#  include <vil/file_formats/vil_tiff.h>
+#  include <vil/file_formats/vil_nitf2_image.h>
 #endif
 
-vpgl_geo_camera::vpgl_geo_camera(): sx_(0.0), sy_(0.0)
+vpgl_geo_camera::vpgl_geo_camera()
+  : sx_(0.0)
+  , sy_(0.0)
 {
   trans_matrix_.set_size(4, 4);
   trans_matrix_.fill(0);
@@ -34,7 +36,7 @@ vpgl_geo_camera::vpgl_geo_camera(): sx_(0.0), sy_(0.0)
   scale_tag_ = false;
 }
 
-vpgl_geo_camera::vpgl_geo_camera(vpgl_geo_camera const & rhs)
+vpgl_geo_camera::vpgl_geo_camera(const vpgl_geo_camera & rhs)
   : vpgl_camera<double>(rhs)
   , trans_matrix_(rhs.trans_matrix_)
   , is_utm_(rhs.is_utm_)
@@ -52,8 +54,7 @@ vpgl_geo_camera::vpgl_geo_camera(vpgl_geo_camera const & rhs)
 
 // Load camera from geotiff file
 bool
-vpgl_geo_camera::load_from_geotiff(std::string const& file,
-                                   const vpgl_lvcs *lvcs)
+vpgl_geo_camera::load_from_geotiff(const std::string & file, const vpgl_lvcs * lvcs)
 {
   auto resource = vil_load_image_resource(file.c_str());
   return this->load_from_resource(resource, lvcs);
@@ -61,8 +62,7 @@ vpgl_geo_camera::load_from_geotiff(std::string const& file,
 
 // Load camera from geotiff resource
 bool
-vpgl_geo_camera::load_from_resource(vil_image_resource_sptr const & geotiff_img,
-                                    const vpgl_lvcs* lvcs)
+vpgl_geo_camera::load_from_resource(const vil_image_resource_sptr & geotiff_img, const vpgl_lvcs * lvcs)
 {
   // check if the image is tiff
   auto * geotiff_tiff = dynamic_cast<vil_tiff_image *>(geotiff_img.ptr());
@@ -129,10 +129,10 @@ vpgl_geo_camera::load_from_resource(vil_image_resource_sptr const & geotiff_img,
   this->is_utm_ = false;
   this->set_lvcs(lvcs);
 
-  
 
   // check if the model type is geographic and also the units
-  if (gtif->GCS_WGS84_MET_DEG()){
+  if (gtif->GCS_WGS84_MET_DEG())
+  {
     this->extract_pixel_size();
     return true;
   }
@@ -146,10 +146,10 @@ vpgl_geo_camera::load_from_resource(vil_image_resource_sptr const & geotiff_img,
   }
   else
   {
-    std::cerr
-      << "vpgl_geo_camera::load_from_geotiff -- if UTM only PCS_WGS84_UTM and PCS_NAD83_UTM, if geographic (GCS_WGS_84) "
-         "only linear units in meters, angular units in degrees are supported"
-      << std::endl;
+    std::cerr << "vpgl_geo_camera::load_from_geotiff -- if UTM only PCS_WGS84_UTM and PCS_NAD83_UTM, if geographic "
+                 "(GCS_WGS_84) "
+                 "only linear units in meters, angular units in degrees are supported"
+              << std::endl;
     return false;
   }
 }
@@ -157,7 +157,7 @@ vpgl_geo_camera::load_from_resource(vil_image_resource_sptr const & geotiff_img,
 // static function to initialize geo camera on the heap
 // maintain for backward compatability
 bool
-vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const & geotiff_img,
+vpgl_geo_camera::init_geo_camera(const vil_image_resource_sptr & geotiff_img,
                                  const vpgl_lvcs_sptr & lvcs,
                                  vpgl_geo_camera *& camera)
 {
@@ -197,7 +197,7 @@ bool
 vpgl_geo_camera::load_from_geotransform(std::array<double, 6> geotransform,
                                         int utm_zone,
                                         int northing,
-                                        const vpgl_lvcs *lvcs)
+                                        const vpgl_lvcs * lvcs)
 {
   vnl_matrix_fixed<double, 4, 4> trans_matrix;
   trans_matrix.fill(0);
@@ -439,16 +439,20 @@ vpgl_geo_camera::init_geo_camera(const std::string & tfw_name,
   ifs.close();
   return true;
 }
-void vpgl_geo_camera::extract_pixel_size(){
-  if(is_utm_ && this->scale_tag_){
+void
+vpgl_geo_camera::extract_pixel_size()
+{
+  if (is_utm_ && this->scale_tag_)
+  {
     sx_ = trans_matrix_[0][0];
-    sy_ = fabs(trans_matrix_[1][1]);//can be negative
+    sy_ = fabs(trans_matrix_[1][1]); // can be negative
     return;
   }
   vpgl_lvcs lvcs;
-  if(lvcs_)
+  if (lvcs_)
     lvcs = vpgl_lvcs(*lvcs_);
-  else {
+  else
+  {
     double lon, lat;
     this->img_to_global(0.0, 0.0, lon, lat);
     lvcs = vpgl_lvcs(lat, lon, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
@@ -457,15 +461,12 @@ void vpgl_geo_camera::extract_pixel_size(){
   this->img_to_global(0.0, 0.0, lon0, lat0);
   this->img_to_global(100000.0, 0.0, lonx, latx);
   this->img_to_global(0.0, 100000.0, lony, laty);
-  double dlx0, dlx1, dly0, dly1, dlz ;
-  lvcs.global_to_local(double(lon0), double(lat0), double(0),
-                       vpgl_lvcs::wgs84, dlx0, dly0, dlz);
-  lvcs.global_to_local(double(lonx), double(latx), double(0),
-                       vpgl_lvcs::wgs84, dlx1, dly1, dlz);
-  sx_ = sqrt((dlx1-dlx0)*(dlx1-dlx0) + (dly1-dly0) * (dly1-dly0))/100000.0;
-  lvcs.global_to_local(double(lony), double(laty), double(0),
-                         vpgl_lvcs::wgs84, dlx1, dly1, dlz);
-  sy_ = sqrt((dlx1-dlx0)*(dlx1-dlx0) + (dly1-dly0) * (dly1-dly0))/100000.0;
+  double dlx0, dlx1, dly0, dly1, dlz;
+  lvcs.global_to_local(double(lon0), double(lat0), double(0), vpgl_lvcs::wgs84, dlx0, dly0, dlz);
+  lvcs.global_to_local(double(lonx), double(latx), double(0), vpgl_lvcs::wgs84, dlx1, dly1, dlz);
+  sx_ = sqrt((dlx1 - dlx0) * (dlx1 - dlx0) + (dly1 - dly0) * (dly1 - dly0)) / 100000.0;
+  lvcs.global_to_local(double(lony), double(laty), double(0), vpgl_lvcs::wgs84, dlx1, dly1, dlz);
+  sy_ = sqrt((dlx1 - dlx0) * (dlx1 - dlx0) + (dly1 - dly0) * (dly1 - dly0)) / 100000.0;
 }
 //: transforms a given local 3d world point to global geo coordinates
 void
@@ -779,7 +780,8 @@ vpgl_geo_camera::global_utm_to_img(const double x, const double y, int zone, dou
 
 //: returns the corresponding utm location for the given local position
 void
-vpgl_geo_camera::local_to_utm(const double x, const double y, const double z, double & e, double & n, int & utm_zone) const
+vpgl_geo_camera::local_to_utm(const double x, const double y, const double z, double & e, double & n, int & utm_zone)
+  const
 {
   double lat, lon, gz;
   lvcs_->local_to_global(x, y, z, vpgl_lvcs::wgs84, lon, lat, gz);
@@ -790,7 +792,7 @@ vpgl_geo_camera::local_to_utm(const double x, const double y, const double z, do
 
 // save the camera matrix into a tfw file
 void
-vpgl_geo_camera::save_as_tfw(std::string const & tfw_filename)
+vpgl_geo_camera::save_as_tfw(const std::string & tfw_filename)
 {
   std::ofstream ofs(tfw_filename.c_str());
   ofs.precision(12);
@@ -829,27 +831,33 @@ vpgl_geo_camera::img_four_corners_in_utm(const unsigned ni,
 
 
 bool
-vpgl_geo_camera::operator==(vpgl_geo_camera const & rhs) const
+vpgl_geo_camera::operator==(const vpgl_geo_camera & rhs) const
 {
   return this->trans_matrix_ == rhs.trans_matrix_ && *(this->lvcs_) == *(rhs.lvcs_);
 }
 
 //: Write vpgl_geo_camera to stream
 std::ostream &
-operator<<(std::ostream & s, vpgl_geo_camera const & p)
+operator<<(std::ostream & s, const vpgl_geo_camera & p)
 {
   if (p.lvcs_)
     s << p.trans_matrix_ << '\n' << *(p.lvcs_) << '\n';
   else
     s << p.trans_matrix_ << '\n';
 
-  if (!p.is_utm_) {
+  if (!p.is_utm_)
+  {
     s << "geocam is using wgs84 deg/meters\n";
-  } else {
+  }
+  else
+  {
     s << "geocam is using UTM with zone " << p.utm_zone_ << '\n';
-    if (p.northing_) {
+    if (p.northing_)
+    {
       s << "southern zone\n";
-    } else {
+    }
+    else
+    {
       s << "northern zone\n";
     }
   }
@@ -964,7 +972,8 @@ vpgl_geo_camera::b_read(vsl_b_istream & is)
   vsl_b_read(is, ver);
   switch (ver)
   {
-    case 1: {
+    case 1:
+    {
       unsigned nrows, ncols;
       vsl_b_read(is, nrows);
       vsl_b_read(is, ncols);
@@ -994,8 +1003,7 @@ vpgl_geo_camera::b_read(vsl_b_istream & is)
 
 //: Create a vpgl_geo_camera from a geotiff file
 vpgl_geo_camera
-load_geo_camera_from_geotiff(std::string const& file,
-                             const vpgl_lvcs* lvcs)
+load_geo_camera_from_geotiff(const std::string & file, const vpgl_lvcs * lvcs)
 {
   vpgl_geo_camera camera;
   if (!camera.load_from_geotiff(file, lvcs))
@@ -1005,8 +1013,7 @@ load_geo_camera_from_geotiff(std::string const& file,
 
 //: Create a vpgl_geo_camera from a vil_image_resource_sptr & optional LVCS
 vpgl_geo_camera
-load_geo_camera_from_resource(vil_image_resource_sptr const& geotiff_img,
-                              const vpgl_lvcs* lvcs)
+load_geo_camera_from_resource(const vil_image_resource_sptr & geotiff_img, const vpgl_lvcs * lvcs)
 {
   vpgl_geo_camera camera;
   if (!camera.load_from_resource(geotiff_img, lvcs))
@@ -1021,7 +1028,7 @@ vpgl_geo_camera
 load_geo_camera_from_geotransform(std::array<double, 6> geotransform,
                                   int utm_zone,
                                   int northing,
-                                  const vpgl_lvcs* lvcs)
+                                  const vpgl_lvcs * lvcs)
 {
   vpgl_geo_camera camera;
   if (!camera.load_from_geotransform(geotransform, utm_zone, northing, lvcs))

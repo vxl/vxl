@@ -26,10 +26,10 @@ main(int argc, char ** argv)
   easy2D->set_point_radius(5);
 
   // set A
-  vgl_homg_point_2d<double> const p1(100, 200, 1);
-  vgl_homg_point_2d<double> const p2(200, 200, 1);
-  vgl_homg_point_2d<double> const p3(300, 300, 1);
-  vgl_homg_point_2d<double> const p4(300, 100, 1);
+  const vgl_homg_point_2d<double> p1(100, 200, 1);
+  const vgl_homg_point_2d<double> p2(200, 200, 1);
+  const vgl_homg_point_2d<double> p3(300, 300, 1);
+  const vgl_homg_point_2d<double> p4(300, 100, 1);
   pointsA.push_back(p1);
   pointsA.push_back(p2);
   pointsA.push_back(p3);

@@ -59,7 +59,7 @@ vil_new_image_resource_interleaved(unsigned ni, unsigned nj, unsigned nplanes, v
 // underlying data storage.)
 // \relatesalso vil_image_resource
 vil_image_resource_sptr
-vil_new_image_resource_of_view(vil_image_view_base const & view)
+vil_new_image_resource_of_view(const vil_image_view_base & view)
 {
   return new vil_memory_image(view);
 }
@@ -67,7 +67,7 @@ vil_new_image_resource_of_view(vil_image_view_base const & view)
 //: Make a new image, similar format to the prototype.
 // \relatesalso vil_image_resource
 vil_image_resource_sptr
-vil_new_image_resource(unsigned ni, unsigned nj, vil_image_resource_sptr const & prototype)
+vil_new_image_resource(unsigned ni, unsigned nj, const vil_image_resource_sptr & prototype)
 {
   return vil_new_image_resource(ni, nj, prototype->nplanes(), prototype->pixel_format());
 }
@@ -80,7 +80,7 @@ vil_new_image_resource(vil_stream * os,
                        unsigned nj,
                        unsigned nplanes,
                        vil_pixel_format format,
-                       char const * file_format)
+                       const char * file_format)
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
@@ -105,11 +105,11 @@ vil_new_image_resource(vil_stream * os,
 //: Make a new vil_image_resource, writing to file "filename", size ni x nj, copying pixel format etc from "prototype".
 // \relatesalso vil_image_resource
 vil_image_resource_sptr
-vil_new_image_resource(char const * filename,
+vil_new_image_resource(const char * filename,
                        unsigned ni,
                        unsigned nj,
-                       vil_image_resource_sptr const & prototype,
-                       char const * file_format)
+                       const vil_image_resource_sptr & prototype,
+                       const char * file_format)
 {
 #ifdef VIL_USE_FSTREAM64
   vil_stream_fstream64 * os = new vil_stream_fstream64(filename, "w");
@@ -123,12 +123,12 @@ vil_new_image_resource(char const * filename,
 //: Make a new image.
 // \relatesalso vil_image_resource
 vil_image_resource_sptr
-vil_new_image_resource(char const * filename,
+vil_new_image_resource(const char * filename,
                        unsigned ni,
                        unsigned nj,
                        unsigned nplanes,
                        vil_pixel_format format,
-                       char const * file_format)
+                       const char * file_format)
 {
 #ifdef VIL_USE_FSTREAM64
   vil_stream_fstream64 * os = new vil_stream_fstream64(filename, "w");
@@ -148,8 +148,8 @@ vil_image_resource_sptr
 vil_new_image_resource(vil_stream * os,
                        unsigned ni,
                        unsigned nj,
-                       vil_image_resource_sptr const & prototype,
-                       char const * file_format)
+                       const vil_image_resource_sptr & prototype,
+                       const char * file_format)
 {
   return vil_new_image_resource(
     os, prototype->nplanes(), ni, nj, prototype->pixel_format(), file_format ? file_format : prototype->file_format());
@@ -163,7 +163,7 @@ vil_new_blocked_image_resource(vil_stream * os,
                                vil_pixel_format format,
                                unsigned size_block_i,
                                unsigned size_block_j,
-                               char const * file_format)
+                               const char * file_format)
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
@@ -186,14 +186,14 @@ vil_new_blocked_image_resource(vil_stream * os,
 }
 
 vil_blocked_image_resource_sptr
-vil_new_blocked_image_resource(char const * filename,
+vil_new_blocked_image_resource(const char * filename,
                                unsigned ni,
                                unsigned nj,
                                unsigned nplanes,
                                vil_pixel_format format,
                                unsigned size_block_i,
                                unsigned size_block_j,
-                               char const * file_format)
+                               const char * file_format)
 {
 #ifdef VIL_USE_FSTREAM64
   vil_stream_fstream64 * os = new vil_stream_fstream64(filename, "w");
@@ -217,7 +217,7 @@ vil_new_cached_image_resource(const vil_blocked_image_resource_sptr & bir, const
 }
 
 vil_pyramid_image_resource_sptr
-vil_new_pyramid_image_resource(char const * file_or_directory, char const * file_format)
+vil_new_pyramid_image_resource(const char * file_or_directory, const char * file_format)
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "tiff";
@@ -238,11 +238,11 @@ vil_new_pyramid_image_resource(char const * file_or_directory, char const * file
 }
 
 vil_pyramid_image_resource_sptr
-vil_new_pyramid_image_from_base(char const * filename,
-                                vil_image_resource_sptr const & base_image,
+vil_new_pyramid_image_from_base(const char * filename,
+                                const vil_image_resource_sptr & base_image,
                                 unsigned nlevels,
-                                char const * file_format,
-                                char const * temp_dir)
+                                const char * file_format,
+                                const char * temp_dir)
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "tiff";
@@ -264,12 +264,12 @@ vil_new_pyramid_image_from_base(char const * filename,
 
 // for now there is only one directory based pyramid format
 vil_pyramid_image_resource_sptr
-vil_new_pyramid_image_list_from_base(char const * directory,
-                                     vil_image_resource_sptr const & base_image,
+vil_new_pyramid_image_list_from_base(const char * directory,
+                                     const vil_image_resource_sptr & base_image,
                                      unsigned nlevels,
                                      bool copy_base,
-                                     char const * level_file_format,
-                                     char const * filename)
+                                     const char * level_file_format,
+                                     const char * filename)
 {
   vil_pyramid_image_list_format vpilf;
   return vpilf.make_pyramid_image_from_base(directory, base_image, nlevels, copy_base, level_file_format, filename);
@@ -285,10 +285,11 @@ vil_new_image_view_base_sptr(const vil_image_view_base & src)
   switch (vil_pixel_format_component_format(src.pixel_format()))
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#  define macro(F, T)                                                                                                  \
-    case F: {                                                                                                          \
-      dest = new vil_image_view<T>(src);                                                                               \
-      break;                                                                                                           \
+#  define macro(F, T)                    \
+    case F:                              \
+    {                                    \
+      dest = new vil_image_view<T>(src); \
+      break;                             \
     }
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
 #  if VXL_HAS_INT_64
@@ -316,7 +317,7 @@ vil_new_image_resource(vil_stream * os,
                        unsigned nj,
                        unsigned nplanes,
                        vil_pixel_format format,
-                       wchar_t const * file_format)
+                       const wchar_t * file_format)
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = L"pnm";
@@ -336,11 +337,11 @@ vil_new_image_resource(vil_stream * os,
 //: Make a new vil_image_resource, writing to file "filename", size ni x nj, copying pixel format etc from "prototype".
 // \relatesalso vil_image_resource
 vil_image_resource_sptr
-vil_new_image_resource(wchar_t const * filename,
+vil_new_image_resource(const wchar_t * filename,
                        unsigned ni,
                        unsigned nj,
-                       vil_image_resource_sptr const & prototype,
-                       wchar_t const * file_format)
+                       const vil_image_resource_sptr & prototype,
+                       const wchar_t * file_format)
 {
 #  ifdef VIL_USE_FSTREAM64
   vil_stream_fstream64 * os = new vil_stream_fstream64(filename, "w");
@@ -352,7 +353,7 @@ vil_new_image_resource(wchar_t const * filename,
   wchar_t tag_buffer[size];
   if (!file_format)
   {
-    char const * tag = prototype->file_format();
+    const char * tag = prototype->file_format();
     const int ret = MultiByteToWideChar(CP_ACP, 0, tag, std::strlen(tag), tag_buffer, size);
     assert(ret);
     file_format = tag_buffer; // use the file format of the given resource
@@ -364,12 +365,12 @@ vil_new_image_resource(wchar_t const * filename,
 //: Make a new image.
 // \relatesalso vil_image_resource
 vil_image_resource_sptr
-vil_new_image_resource(wchar_t const * filename,
+vil_new_image_resource(const wchar_t * filename,
                        unsigned ni,
                        unsigned nj,
                        unsigned nplanes,
                        vil_pixel_format format,
-                       wchar_t const * file_format)
+                       const wchar_t * file_format)
 {
 #  ifdef VIL_USE_FSTREAM64
   vil_stream_fstream64 * os = new vil_stream_fstream64(filename, "w");

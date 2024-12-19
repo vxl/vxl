@@ -13,23 +13,23 @@ struct vil1_jpeg_stream_destination_mgr
 {
   struct jpeg_destination_mgr base;
 
-  vil1_stream *stream;           /* target stream */
-  JOCTET * buffer;              /* start of buffer */
+  vil1_stream * stream; /* target stream */
+  JOCTET * buffer;      /* start of buffer */
 };
 
 void
-vil1_jpeg_init_destination (j_compress_ptr cinfo);
+vil1_jpeg_init_destination(j_compress_ptr cinfo);
 
 jpeg_boolean
-vil1_jpeg_empty_output_buffer (j_compress_ptr cinfo);
+vil1_jpeg_empty_output_buffer(j_compress_ptr cinfo);
 
 void
-vil1_jpeg_term_destination (j_compress_ptr cinfo);
+vil1_jpeg_term_destination(j_compress_ptr cinfo);
 
 void
-vil1_jpeg_stream_dst_set (j_compress_ptr cinfo, vil1_stream *vs);
+vil1_jpeg_stream_dst_set(j_compress_ptr cinfo, vil1_stream * vs);
 
 void
-vil1_jpeg_stream_dst_rewind(j_compress_ptr cinfo, vil1_stream *vs);
+vil1_jpeg_stream_dst_rewind(j_compress_ptr cinfo, vil1_stream * vs);
 
 #endif // vil1_jpeg_destination_mgr_h_

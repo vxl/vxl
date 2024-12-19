@@ -28,7 +28,7 @@ vgui_roi_tableau::vgui_roi_tableau()
   cropped_image_ = nullptr;
 }
 
-vgui_roi_tableau::vgui_roi_tableau(vil1_image const & I, char const * t_name, float x, float y, float w, float h)
+vgui_roi_tableau::vgui_roi_tableau(const vil1_image & I, const char * t_name, float x, float y, float w, float h)
   : vgui_tableau()
   , name_(t_name)
 {
@@ -86,7 +86,7 @@ vgui_roi_tableau::set_image(vil1_image const & I)
 
 // derived :
 void
-vgui_roi_tableau::set_image(char const * f)
+vgui_roi_tableau::set_image(const char * f)
 {
   set_image(vil1_load(f ? f : "az32_10.tif"));
 }
@@ -120,7 +120,7 @@ vgui_roi_tableau::get_bounding_box(float low[3], float high[3]) const
 //------------------------------------------------------------------------------
 
 bool
-vgui_roi_tableau::handle(vgui_event const & e)
+vgui_roi_tableau::handle(const vgui_event & e)
 {
   // if GL matrices are zero, set them to something sensible :
   if (vgui_matrix_state::gl_matrices_are_cleared())

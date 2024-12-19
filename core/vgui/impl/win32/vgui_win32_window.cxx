@@ -28,8 +28,8 @@ vgui_win32_window::vgui_win32_window(HINSTANCE hInst,
                                      const char * appName,
                                      int width,
                                      int height,
-                                     vgui_menu const & menubar,
-                                     char const * title)
+                                     const vgui_menu & menubar,
+                                     const char * title)
   : cx_(width)
   , cy_(height)
   , first_show(true)
@@ -41,7 +41,7 @@ vgui_win32_window::vgui_win32_window(HINSTANCE hInst,
   SetMenu(hwnd_, hMenu_);
 }
 
-vgui_win32_window::vgui_win32_window(HINSTANCE hInst, const char * appName, int width, int height, char const * title)
+vgui_win32_window::vgui_win32_window(HINSTANCE hInst, const char * appName, int width, int height, const char * title)
   : cx_(width)
   , cy_(height)
   , first_show(true)
@@ -50,7 +50,7 @@ vgui_win32_window::vgui_win32_window(HINSTANCE hInst, const char * appName, int 
 }
 
 void
-vgui_win32_window::initWindow(HINSTANCE hInst, const char * appName, int width, int height, char const * title)
+vgui_win32_window::initWindow(HINSTANCE hInst, const char * appName, int width, int height, const char * title)
 {
   hMenu_ = NULL;
   hAccel_ = NULL;
@@ -166,7 +166,7 @@ vgui_win32_window::reposition(int x, int y)
 
 // Put the given menu in the menubar (if it exists).
 void
-vgui_win32_window::set_menubar(vgui_menu const & menu)
+vgui_win32_window::set_menubar(const vgui_menu & menu)
 {
   // Remove the existent menu handle if it exists.
   if (hMenu_)

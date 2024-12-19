@@ -28,7 +28,7 @@ vil1_stream_core::read(void * buf, vil1_streampos n)
 }
 
 vil1_streampos
-vil1_stream_core::write(void const * buf, vil1_streampos n)
+vil1_stream_core::write(const void * buf, vil1_streampos n)
 {
   assert(n >= 0);
   vil1_streampos rv = m_transfer((char *)(const_cast<void *>(buf)), curpos_, n, false); // const violation!

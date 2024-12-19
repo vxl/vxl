@@ -25,14 +25,13 @@
 // but each must be of the same type.
 // \tparam dist_t is the type of a component distribution
 // \sa vpdl_mixture
-template<class dist_t>
+template <class dist_t>
 class vpdl_mixture_of
- : public vpdl_multi_cmp_dist<typename vpdt_dist_traits<dist_t>::scalar_type,
-          vpdt_dist_traits<dist_t>::dimension>
+  : public vpdl_multi_cmp_dist<typename vpdt_dist_traits<dist_t>::scalar_type, vpdt_dist_traits<dist_t>::dimension>
 {
   vpdt_mixture_of<dist_t> impl_;
 
- public:
+public:
   //: the data type to represent a point in the field
   typedef typename dist_t::field_type field_type;
   //: define the component type
@@ -56,43 +55,79 @@ class vpdl_mixture_of
   ~vpdl_mixture_of() override = default;
 
   //: Create a copy on the heap and return base class pointer
-  vpdl_distribution<T, n> *clone() const override {
+  vpdl_distribution<T, n> *
+  clone() const override
+  {
     return new vpdl_mixture_of<dist_t>(*this);
   }
 
   //: Return the run time dimension
-  unsigned int dimension() const override { return impl_.dimension(); }
+  unsigned int
+  dimension() const override
+  {
+    return impl_.dimension();
+  }
 
   //: Return the number of components in the mixture
-  unsigned int num_components() const override {
+  unsigned int
+  num_components() const override
+  {
     return impl_.num_components();
   }
 
   //: Access (const) a component distribution of the mixture
-  const dist_t& distribution(unsigned int index) const
-  { return impl_.distribution(index); }
+  const dist_t &
+  distribution(unsigned int index) const
+  {
+    return impl_.distribution(index);
+  }
 
   //: Access a component distribution of the mixture
-  dist_t& distribution(unsigned int index) { return impl_.distribution(index); }
+  dist_t &
+  distribution(unsigned int index)
+  {
+    return impl_.distribution(index);
+  }
 
   //: Return the weight of a component in the mixture
-  T weight(unsigned int index) const { return impl_.weight(index); }
+  T
+  weight(unsigned int index) const
+  {
+    return impl_.weight(index);
+  }
 
   //: Set the weight of a component in the mixture
-  void set_weight(unsigned int index, const T& w) { impl_.set_weight(index,w); }
+  void
+  set_weight(unsigned int index, const T & w)
+  {
+    impl_.set_weight(index, w);
+  }
 
   //: Insert a new component at the end of the vector
-  bool insert(const dist_t& d, const T& wght = T(0))
-  { return impl_.insert(d,wght); }
+  bool
+  insert(const dist_t & d, const T & wght = T(0))
+  {
+    return impl_.insert(d, wght);
+  }
 
   //: Remove the last component in the vector
-  bool remove_last() { return impl_.remove_last(); }
+  bool
+  remove_last()
+  {
+    return impl_.remove_last();
+  }
 
   //: Compute the unnormalized density at this point
-  T density(const vector &pt) const override { return impl_.density(pt); }
+  T
+  density(const vector & pt) const override
+  {
+    return impl_.density(pt);
+  }
 
   //: Compute the probability density at this point
-  T prob_density(const vector &pt) const override {
+  T
+  prob_density(const vector & pt) const override
+  {
     return vpdt_prob_density(impl_, pt);
   }
 
@@ -100,44 +135,72 @@ class vpdl_mixture_of
   // \return the density at \a pt since it is usually needed as well, and
   //         is often trivial to compute while computing gradient
   // \retval g the gradient vector
-  T gradient_density(const vector &pt, vector &g) const override {
-    return impl_.gradient_density(pt,g);
+  T
+  gradient_density(const vector & pt, vector & g) const override
+  {
+    return impl_.gradient_density(pt, g);
   }
 
   //: The probability integrated over a box
-  T box_prob(const vector &min_pt, const vector &max_pt) const override {
+  T
+  box_prob(const vector & min_pt, const vector & max_pt) const override
+  {
     return vpdt_box_prob(impl_, min_pt, max_pt);
   }
 
   //: Evaluate the cumulative distribution function at a point
   // This is the integral of the density function from negative infinity
   // (in all dimensions) to the point in question
-  T cumulative_prob(const vector &pt) const override {
+  T
+  cumulative_prob(const vector & pt) const override
+  {
     return impl_.cumulative_prob(pt);
   }
 
   //: Compute the mean of the distribution.
   // weighted average of the component means
-  void compute_mean(vector &mean) const override { impl_.compute_mean(mean); }
+  void
+  compute_mean(vector & mean) const override
+  {
+    impl_.compute_mean(mean);
+  }
 
   //: Compute the covariance of the distribution.
-  void compute_covar(matrix &covar) const override {
+  void
+  compute_covar(matrix & covar) const override
+  {
     impl_.compute_covar(covar);
   }
 
   //: The normalization constant for the density
   // When density() is multiplied by this value it becomes prob_density
   // norm_const() is reciprocal of the integral of density over the entire field
-  T norm_const() const override { return impl_.norm_const(); }
+  T
+  norm_const() const override
+  {
+    return impl_.norm_const();
+  }
 
   //: Normalize the weights of the components to add to 1.
-  void normalize_weights() { impl_.normalize_weights(); }
+  void
+  normalize_weights()
+  {
+    impl_.normalize_weights();
+  }
 
   //: Sort the components in order of decreasing weight
-  void sort() { impl_.sort(); }
+  void
+  sort()
+  {
+    impl_.sort();
+  }
 
   //: Sort the components in the range \a idx1 to \a idx2 in order of decreasing weight
-  void sort(unsigned int idx1, unsigned int idx2) { impl_.sort(idx1, idx2); }
+  void
+  sort(unsigned int idx1, unsigned int idx2)
+  {
+    impl_.sort(idx1, idx2);
+  }
 
   //: Sort the components using any StrictWeakOrdering function
   // The prototype should be
@@ -147,11 +210,19 @@ class vpdl_mixture_of
   //              const dist_t& d2, const vpdt_dist_traits<dist_t>::scalar_type& w2);
   // \endcode
   template <class comp_type_>
-  void sort(comp_type_ comp) { impl_.sort(comp); }
+  void
+  sort(comp_type_ comp)
+  {
+    impl_.sort(comp);
+  }
 
   //: Sort the components in the range \a idx1 to \a idx2 using any StrictWeakOrdering function
   template <class comp_type_>
-  void sort(comp_type_ comp, unsigned int idx1, unsigned int idx2) { impl_.sort(comp,idx1,idx2); }
+  void
+  sort(comp_type_ comp, unsigned int idx1, unsigned int idx2)
+  {
+    impl_.sort(comp, idx1, idx2);
+  }
 };
 
 

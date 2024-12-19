@@ -17,11 +17,15 @@
 
 class basic_menus
 {
- public:
-  static void quit_callback();
-  static void load_image_callback();
-  static vgui_menu get_menu();
- private:
+public:
+  static void
+  quit_callback();
+  static void
+  load_image_callback();
+  static vgui_menu
+  get_menu();
+
+private:
   basic_menus() {}
 };
 

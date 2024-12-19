@@ -16,9 +16,9 @@
 #include "vnl/vnl_math.h" // for pi
 
 void
-test_opt_orient_pos(vpgl_perspective_camera<double> const & cam,
-                    std::vector<vgl_homg_point_3d<double>> const & world,
-                    std::vector<vgl_point_2d<double>> const & image,
+test_opt_orient_pos(const vpgl_perspective_camera<double> & cam,
+                    const std::vector<vgl_homg_point_3d<double>> & world,
+                    const std::vector<vgl_point_2d<double>> & image,
                     vnl_random & rnd)
 {
   constexpr double max_t_err = 10.0;         // maximum translation error to introduce
@@ -63,9 +63,9 @@ test_opt_orient_pos(vpgl_perspective_camera<double> const & cam,
 }
 
 void
-test_opt_orient_pos_f(vpgl_perspective_camera<double> const & cam,
-                      std::vector<vgl_homg_point_3d<double>> const & world,
-                      std::vector<vgl_point_2d<double>> const & image,
+test_opt_orient_pos_f(const vpgl_perspective_camera<double> & cam,
+                      const std::vector<vgl_homg_point_3d<double>> & world,
+                      const std::vector<vgl_point_2d<double>> & image,
                       vnl_random & rnd)
 {
 

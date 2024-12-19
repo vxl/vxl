@@ -3,7 +3,7 @@
 #include "vgui_glut_adaptor.h"
 #include "vgui/vgui_glut.h"
 
-vgui_glut_window::vgui_glut_window(char const * title, unsigned w, unsigned h, int posx, int posy)
+vgui_glut_window::vgui_glut_window(const char * title, unsigned w, unsigned h, int posx, int posy)
   : vgui_window()
   , glutwin(nullptr)
   , pending_reshape(false)
@@ -82,7 +82,7 @@ vgui_glut_window::reposition(int x, int y)
 }
 
 void
-vgui_glut_window::set_title(std::string const & s)
+vgui_glut_window::set_title(const std::string & s)
 {
   glutSetWindowTitle(s.c_str());
   glutSetIconTitle(s.c_str());

@@ -24,32 +24,38 @@
 // HTTP URL scheme, e.g. \c http://user4:mypassword@webserverthingy.org/file.txt
 class vul_url
 {
- public:
+public:
   //: open a URL
   // If URL is "file://..." open as a file with given mode.
   // If URL is "http://..." open using vul_http_open
   // If URL is "ftp://..." attempt ftp
   // Otherwise assume it is a filename and open with given mode
-  static std::istream* open(const char* url, std::ios::openmode mode=std::ios::in );
+  static std::istream *
+  open(const char * url, std::ios::openmode mode = std::ios::in);
 
   //: Does that URL exist
   // If the URL does not begin with a recognised scheme identifier, the function will
   // treat the parameter as a local filename
-  static bool exists(const char* url);
+  static bool
+  exists(const char * url);
 
   //: Is that a URL
   // as opposed to an ordinary filename.
-  static bool is_url(const char* url);
+  static bool
+  is_url(const char * url);
 
   //: Is that a file
   // i.e. is it a downloadable URL, or a file on disk that isn't a directory.
-  static bool is_file(const char* url);
+  static bool
+  is_file(const char * url);
 
   //: Encode a string of chars into base64 format
-  static std::string encode_base64(const std::string& in);
+  static std::string
+  encode_base64(const std::string & in);
 
   //: Decode a string of chars from base64 format
-  static std::string decode_base64(const std::string& in);
+  static std::string
+  decode_base64(const std::string & in);
 };
 
 #endif // vul_url_h_

@@ -56,61 +56,88 @@
 class vul_awk
 {
 
- public:
+public:
   // Constructors/Destructors--------------------------------------------------
-  enum ModeFlags {
+  enum ModeFlags
+  {
     none = 0x00,
     verbose = 0x01,
     strip_comments = 0x02,
     backslash_continuations = 0x04
   };
 
-  vul_awk(std::istream& s, ModeFlags mode = none);
+  vul_awk(std::istream & s, ModeFlags mode = none);
   ~vul_awk();
 
   // Operations----------------------------------------------------------------
 
-//: Return field i.  Counting starts at 0.
-  char const* operator[] (unsigned i) const {
+  //: Return field i.  Counting starts at 0.
+  const char *
+  operator[](unsigned i) const
+  {
     if (i < fields_.size())
       return fields_[i];
     else
       return nullptr;
   }
 
-//: Return the current "record number", i.e. line number
-  int NR() const { return line_number_; }
+  //: Return the current "record number", i.e. line number
+  int
+  NR() const
+  {
+    return line_number_;
+  }
 
-//: Return the number of fields on this line.
-  int NF() const { return int(fields_.size()); }
+  //: Return the number of fields on this line.
+  int
+  NF() const
+  {
+    return int(fields_.size());
+  }
 
-//: Return the entire line
-  char const* line() const { return (char const*)line_.c_str(); }
+  //: Return the entire line
+  const char *
+  line() const
+  {
+    return (const char *)line_.c_str();
+  }
 
-//: Return the remainder of the line, starting from field_number.
-// (0 is from the first non-whitespace character)
-  char const* line_from(int field_number) const;
+  //: Return the remainder of the line, starting from field_number.
+  // (0 is from the first non-whitespace character)
+  const char *
+  line_from(int field_number) const;
 
-//: Return true if this line is not the last.
-  explicit operator bool () const
-    { return (!done_)? true : false; }
+  //: Return true if this line is not the last.
+  explicit
+  operator bool() const
+  {
+    return (!done_) ? true : false;
+  }
 
-//: Return false if this line is not the last.
-  bool operator!() const
-    { return done_; }
+  //: Return false if this line is not the last.
+  bool
+  operator!() const
+  {
+    return done_;
+  }
 
-//: Advance to the next line
-  vul_awk& operator ++ () { next(); return *this; }
+  //: Advance to the next line
+  vul_awk &
+  operator++()
+  {
+    next();
+    return *this;
+  }
 
-//: Display error message, line number.
-// Also display optional field number and  char within field.
+  //: Display error message, line number.
+  // Also display optional field number and  char within field.
 
-  void error(std::ostream&, char const* message, int field = -1,
-             int char_within_field = 0);
+  void
+  error(std::ostream &, const char * message, int field = -1, int char_within_field = 0);
 
- protected:
+protected:
   // Data Members--------------------------------------------------------------
-  std::istream& fd_;
+  std::istream & fd_;
 
   ModeFlags mode_;
 
@@ -118,7 +145,7 @@ class vul_awk
   std::string line_;
 
   // Copy of last line with null characters at the start of every field
-  char* split_line_;
+  char * split_line_;
   // Pointers to the fields within split_line_;
   std::vector<char *> fields_;
 
@@ -128,10 +155,12 @@ class vul_awk
   // Set to true when the current line is the last one.
   bool done_;
 
-  void next();
+  void
+  next();
 
-  vul_awk(const vul_awk& that);
-  vul_awk& operator=(const vul_awk& that);
+  vul_awk(const vul_awk & that);
+  vul_awk &
+  operator=(const vul_awk & that);
 };
 
 #endif // vul_awk_h_

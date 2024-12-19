@@ -31,18 +31,20 @@ typedef vbl_smart_ptr<vgui_command> vgui_command_sptr;
 class vgui_qt_menu : public QMenu
 {
   Q_OBJECT
- public:
-  vgui_qt_menu(const vgui_menu& menu, QWidget * parent = 0 );
- ~vgui_qt_menu() {}
+public:
+  vgui_qt_menu(const vgui_menu & menu, QWidget * parent = 0);
+  ~vgui_qt_menu() {}
 
- public slots:
-  void upon_trigger(QAction * action) const;
+public slots:
+  void
+  upon_trigger(QAction * action) const;
 
- private:
-  std::map<QAction*, vgui_command_sptr> commands_;
+private:
+  std::map<QAction *, vgui_command_sptr> commands_;
 };
 
 //: Convert a vgui keypress into a QT key press
-QKeySequence vgui_key_to_qt(vgui_key key, vgui_modifier = vgui_MODIFIER_NULL);
+QKeySequence
+vgui_key_to_qt(vgui_key key, vgui_modifier = vgui_MODIFIER_NULL);
 
 #endif // vgui_qt_menu_h_

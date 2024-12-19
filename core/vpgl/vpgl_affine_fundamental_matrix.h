@@ -22,29 +22,30 @@
 template <class T>
 class vpgl_affine_fundamental_matrix : public vpgl_fundamental_matrix<T>
 {
- public:
-
+public:
   // Constructors:----------------------
 
   //: Default constructor creates dummy matrix.
   vpgl_affine_fundamental_matrix();
 
   //: Construct from a fundamental matrix in vnl form.
-  vpgl_affine_fundamental_matrix( const vnl_matrix_fixed<T,3,3>& F );
+  vpgl_affine_fundamental_matrix(const vnl_matrix_fixed<T, 3, 3> & F);
 
   //: Cast up from a regular vpgl_fundamental_matrix.
-  vpgl_affine_fundamental_matrix( const vpgl_fundamental_matrix<T>& fm );
+  vpgl_affine_fundamental_matrix(const vpgl_fundamental_matrix<T> & fm);
 
   //: construct from two affine cameras (Ar, the camera with image points on the right of F, and Al on the left of F)
-  vpgl_affine_fundamental_matrix( const vpgl_affine_camera<T>& Ar, const vpgl_affine_camera<T>& Al);
+  vpgl_affine_fundamental_matrix(const vpgl_affine_camera<T> & Ar, const vpgl_affine_camera<T> & Al);
 
   // Getters and Setters:----------------
 
   //: Form the matrix from 3x3 vnl_fixed_matrix
-  void set_matrix( const vnl_matrix_fixed<T,3,3>& F ) override;
+  void
+  set_matrix(const vnl_matrix_fixed<T, 3, 3> & F) override;
 
   //: Form the matrix from its free parameters. (JLM changed to H&Z convention 11/12/2018)
-  void set_from_params( T a, T b, T c, T d, T e );
+  void
+  set_from_params(T a, T b, T c, T d, T e);
 };
 
 #endif // vpgl_affine_fundamental_matrix_h_

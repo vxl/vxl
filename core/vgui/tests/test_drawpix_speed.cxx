@@ -223,8 +223,8 @@ static struct
 {
   GLenum format;
   GLenum type;
-  char const * nfixed;
-  char const * pretty;
+  const char * nfixed;
+  const char * pretty;
 }
 
 ft_tab[] = { { GL_LUMINANCE, GL_UNSIGNED_BYTE, "LUM   ", "8bit greyscale" },

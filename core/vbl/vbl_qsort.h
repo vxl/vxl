@@ -24,20 +24,20 @@
 #endif
 #include "vbl_sort.h"
 
-#define vbl_qsort_double_ascending  vbl_sort_double_ascending
+#define vbl_qsort_double_ascending vbl_sort_double_ascending
 #define vbl_qsort_double_descending vbl_sort_double_descending
-#define vbl_qsort_int_ascending     vbl_sort_int_ascending
-#define vbl_qsort_int_descending    vbl_sort_int_descending
-#define vbl_qsort_helper            vbl_sort_helper
+#define vbl_qsort_int_ascending vbl_sort_int_ascending
+#define vbl_qsort_int_descending vbl_sort_int_descending
+#define vbl_qsort_helper vbl_sort_helper
 
-typedef int (*vbl_qsort_compare_t)(const void* a, const void* b);
+typedef int (*vbl_qsort_compare_t)(const void * a, const void * b);
 
 //: Sort a C array into ascending order.
 //  Do this using the standard comparison operations for T,
 //  namely operator> and operator==.
 template <class T>
-inline
-void vbl_qsort_ascending(T* base, int n)
+inline void
+vbl_qsort_ascending(T * base, int n)
 {
   std::qsort(base, n, sizeof base[0], vbl_qsort_helper<T>::ascend);
 }
@@ -46,8 +46,8 @@ void vbl_qsort_ascending(T* base, int n)
 //  Do this using the standard comparison operations for T,
 //  namely "operator>" and "operator==".
 template <class T>
-inline
-void vbl_qsort_descending(T* base, int n)
+inline void
+vbl_qsort_descending(T * base, int n)
 {
   std::qsort(base, n, sizeof base[0], vbl_qsort_helper<T>::descend);
 }
@@ -57,8 +57,8 @@ void vbl_qsort_descending(T* base, int n)
 // namely operator> and operator==.  I know STL has a sort,
 // but this is easier, and faster in the 21st century.
 template <class T>
-inline
-void vbl_qsort_ascending(std::vector<T>& v)
+inline void
+vbl_qsort_ascending(std::vector<T> & v)
 {
   std::qsort(&v[0], v.size(), sizeof v[0], vbl_qsort_helper<T>::ascend);
 }
@@ -67,16 +67,16 @@ void vbl_qsort_ascending(std::vector<T>& v)
 // Do this using the standard comparison operations for T,
 // namely "operator>" and "operator==".
 template <class T>
-inline
-void vbl_qsort_descending(std::vector<T>& v)
+inline void
+vbl_qsort_descending(std::vector<T> & v)
 {
   std::qsort(&v[0], v.size(), sizeof v[0], vbl_qsort_helper<T>::descend);
 }
 
 //: Sort STL vector.
 template <class T>
-inline
-void vbl_qsort(std::vector<T>& v, int (*compare)(T const& a, T const& b))
+inline void
+vbl_qsort(std::vector<T> & v, int (*compare)(const T & a, const T & b))
 {
   std::qsort(&v[0], v.size(), sizeof v[0], (vbl_qsort_compare_t)compare);
 }

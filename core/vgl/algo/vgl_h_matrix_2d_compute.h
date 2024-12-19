@@ -32,104 +32,131 @@
 
 class vgl_h_matrix_2d_compute
 {
- public:
-   vgl_h_matrix_2d_compute() = default;
-   virtual ~vgl_h_matrix_2d_compute() = default;
+public:
+  vgl_h_matrix_2d_compute() = default;
+  virtual ~vgl_h_matrix_2d_compute() = default;
 
-   // set this to true for verbose run-time information
-   void verbose(bool v) { verbose_ = v; }
-
-   // fsm
-   virtual int minimum_number_of_correspondences() const = 0;
-
-   // Compute methods :
-   //
-   // Some use point correspondences, some use line
-   // correspondences, some use both. They are implemented
-   // in terms of the pure virtual compute_(p|l|pl) methods.
-
-   //: homography from matched points
-   bool compute(std::vector<vgl_homg_point_2d<double>> const &points1,
-                std::vector<vgl_homg_point_2d<double>> const &points2,
-                vgl_h_matrix_2d<double> &H) {
-     return compute_p(points1, points2, H);
+  // set this to true for verbose run-time information
+  void
+  verbose(bool v)
+  {
+    verbose_ = v;
   }
 
- //: homography from matched lines
-  bool compute(std::vector<vgl_homg_line_2d<double> > const& lines1,
-               std::vector<vgl_homg_line_2d<double> > const& lines2,
-               vgl_h_matrix_2d<double>& H)
+  // fsm
+  virtual int
+  minimum_number_of_correspondences() const = 0;
+
+  // Compute methods :
+  //
+  // Some use point correspondences, some use line
+  // correspondences, some use both. They are implemented
+  // in terms of the pure virtual compute_(p|l|pl) methods.
+
+  //: homography from matched points
+  bool
+  compute(const std::vector<vgl_homg_point_2d<double>> & points1,
+          const std::vector<vgl_homg_point_2d<double>> & points2,
+          vgl_h_matrix_2d<double> & H)
+  {
+    return compute_p(points1, points2, H);
+  }
+
+  //: homography from matched lines
+  bool
+  compute(const std::vector<vgl_homg_line_2d<double>> & lines1,
+          const std::vector<vgl_homg_line_2d<double>> & lines2,
+          vgl_h_matrix_2d<double> & H)
   {
     return compute_l(lines1, lines2, H);
   }
 
- //: homography from matched lines with a weight vector
-  bool compute(std::vector<vgl_homg_line_2d<double> > const& lines1,
-               std::vector<vgl_homg_line_2d<double> > const& lines2,
-               std::vector<double> const& weights,
-               vgl_h_matrix_2d<double>& H)
+  //: homography from matched lines with a weight vector
+  bool
+  compute(const std::vector<vgl_homg_line_2d<double>> & lines1,
+          const std::vector<vgl_homg_line_2d<double>> & lines2,
+          const std::vector<double> & weights,
+          vgl_h_matrix_2d<double> & H)
   {
     return compute_l(lines1, lines2, weights, H);
   }
 
   //: homography from matched points and lines
-  bool compute(std::vector<vgl_homg_point_2d<double> > const& points1,
-               std::vector<vgl_homg_point_2d<double> > const& points2,
-               std::vector<vgl_homg_line_2d<double> > const& lines1,
-               std::vector<vgl_homg_line_2d<double> > const& lines2,
-               vgl_h_matrix_2d<double>& H)
+  bool
+  compute(const std::vector<vgl_homg_point_2d<double>> & points1,
+          const std::vector<vgl_homg_point_2d<double>> & points2,
+          const std::vector<vgl_homg_line_2d<double>> & lines1,
+          const std::vector<vgl_homg_line_2d<double>> & lines2,
+          vgl_h_matrix_2d<double> & H)
   {
     return compute_pl(points1, points2, lines1, lines2, H);
   }
 
   //: homography from matched points - return h_matrix
   vgl_h_matrix_2d<double>
-  compute(std::vector<vgl_homg_point_2d<double> > const& p1,
-          std::vector<vgl_homg_point_2d<double> > const& p2)
-  { vgl_h_matrix_2d<double> H; compute_p(p1, p2, H); return H; }
+  compute(const std::vector<vgl_homg_point_2d<double>> & p1, const std::vector<vgl_homg_point_2d<double>> & p2)
+  {
+    vgl_h_matrix_2d<double> H;
+    compute_p(p1, p2, H);
+    return H;
+  }
 
   //: homography from matched lines - return h_matrix
   vgl_h_matrix_2d<double>
-  compute(std::vector<vgl_homg_line_2d<double> > const& l1,
-          std::vector<vgl_homg_line_2d<double> > const& l2)
-  { vgl_h_matrix_2d<double> H; compute_l(l1, l2, H); return H; }
+  compute(const std::vector<vgl_homg_line_2d<double>> & l1, const std::vector<vgl_homg_line_2d<double>> & l2)
+  {
+    vgl_h_matrix_2d<double> H;
+    compute_l(l1, l2, H);
+    return H;
+  }
 
   //: homography from matched lines with weight vector - return h_matrix
   vgl_h_matrix_2d<double>
-  compute(std::vector<vgl_homg_line_2d<double> > const& l1,
-          std::vector<vgl_homg_line_2d<double> > const& l2,
-          std::vector<double> const& weights)
-  { vgl_h_matrix_2d<double> H; compute_l(l1, l2, weights, H); return H; }
+  compute(const std::vector<vgl_homg_line_2d<double>> & l1,
+          const std::vector<vgl_homg_line_2d<double>> & l2,
+          const std::vector<double> & weights)
+  {
+    vgl_h_matrix_2d<double> H;
+    compute_l(l1, l2, weights, H);
+    return H;
+  }
 
   //: homography from matched points and lines - return h_matrix
   vgl_h_matrix_2d<double>
-  compute(std::vector<vgl_homg_point_2d<double> > const& p1,
-          std::vector<vgl_homg_point_2d<double> > const& p2,
-          std::vector<vgl_homg_line_2d<double> > const& l1,
-          std::vector<vgl_homg_line_2d<double> > const& l2)
-  { vgl_h_matrix_2d<double>  H; compute_pl(p1, p2, l1, l2, H); return H; }
+  compute(const std::vector<vgl_homg_point_2d<double>> & p1,
+          const std::vector<vgl_homg_point_2d<double>> & p2,
+          const std::vector<vgl_homg_line_2d<double>> & l1,
+          const std::vector<vgl_homg_line_2d<double>> & l2)
+  {
+    vgl_h_matrix_2d<double> H;
+    compute_pl(p1, p2, l1, l2, H);
+    return H;
+  }
 
- protected:
-   bool verbose_{false};
-   virtual bool compute_p(std::vector<vgl_homg_point_2d<double>> const &points1,
-                          std::vector<vgl_homg_point_2d<double>> const &points2,
-                          vgl_h_matrix_2d<double> &H) = 0;
+protected:
+  bool verbose_{ false };
+  virtual bool
+  compute_p(const std::vector<vgl_homg_point_2d<double>> & points1,
+            const std::vector<vgl_homg_point_2d<double>> & points2,
+            vgl_h_matrix_2d<double> & H) = 0;
 
-   virtual bool compute_l(std::vector<vgl_homg_line_2d<double>> const &lines1,
-                          std::vector<vgl_homg_line_2d<double>> const &lines2,
-                          vgl_h_matrix_2d<double> &H) = 0;
+  virtual bool
+  compute_l(const std::vector<vgl_homg_line_2d<double>> & lines1,
+            const std::vector<vgl_homg_line_2d<double>> & lines2,
+            vgl_h_matrix_2d<double> & H) = 0;
 
-   virtual bool compute_l(std::vector<vgl_homg_line_2d<double>> const &lines1,
-                          std::vector<vgl_homg_line_2d<double>> const &lines2,
-                          std::vector<double> const &weights,
-                          vgl_h_matrix_2d<double> &H) = 0;
+  virtual bool
+  compute_l(const std::vector<vgl_homg_line_2d<double>> & lines1,
+            const std::vector<vgl_homg_line_2d<double>> & lines2,
+            const std::vector<double> & weights,
+            vgl_h_matrix_2d<double> & H) = 0;
 
-   virtual bool
-   compute_pl(std::vector<vgl_homg_point_2d<double>> const &points1,
-              std::vector<vgl_homg_point_2d<double>> const &points2,
-              std::vector<vgl_homg_line_2d<double>> const &lines1,
-              std::vector<vgl_homg_line_2d<double>> const &lines2,
-              vgl_h_matrix_2d<double> &H) = 0;
+  virtual bool
+  compute_pl(const std::vector<vgl_homg_point_2d<double>> & points1,
+             const std::vector<vgl_homg_point_2d<double>> & points2,
+             const std::vector<vgl_homg_line_2d<double>> & lines1,
+             const std::vector<vgl_homg_line_2d<double>> & lines2,
+             vgl_h_matrix_2d<double> & H) = 0;
 };
 
 #endif // vgl_h_matrix_2d_compute_h_

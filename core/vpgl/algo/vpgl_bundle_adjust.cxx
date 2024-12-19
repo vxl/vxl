@@ -20,12 +20,9 @@
 
 vpgl_bundle_adjust::vpgl_bundle_adjust()
 
-    = default;
+  = default;
 
-vpgl_bundle_adjust::~vpgl_bundle_adjust()
-{
-  delete ba_func_;
-}
+vpgl_bundle_adjust::~vpgl_bundle_adjust() { delete ba_func_; }
 
 //: normalize image points to be mean centered with scale sqrt(2)
 //  \return parameters such that original point are recovered as (ns*x+nx, ns*y+ny)

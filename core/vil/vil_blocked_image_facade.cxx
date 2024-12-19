@@ -11,7 +11,7 @@
 #include "vil/vil_crop.h"
 #include "vil/vil_copy.h"
 
-//#define DEBUG
+// #define DEBUG
 
 static const unsigned vil_size_block_i = 256, vil_size_block_j = 256;
 
@@ -39,14 +39,15 @@ vil_blocked_image_facade::fill_block(vil_image_view_base_sptr & view) const
 {
   switch (vil_pixel_format_component_format(pixel_format()))
   {
-#define FILL_BLOCK_CASE(FORMAT, T)                                                                                     \
-  case FORMAT: {                                                                                                       \
-    vil_image_view<T> * dest = new vil_image_view<T>(sbi_, sbj_, nplanes());                                           \
-    vil_image_view_base_sptr ptr = dest;                                                                               \
-    vil_image_view<T> * src = reinterpret_cast<vil_image_view<T> *>(view.ptr());                                       \
-    vil_copy_to_window<T>(*src, *dest, 0, 0);                                                                          \
-    return dest;                                                                                                       \
-  }                                                                                                                    \
+#define FILL_BLOCK_CASE(FORMAT, T)                                               \
+  case FORMAT:                                                                   \
+  {                                                                              \
+    vil_image_view<T> * dest = new vil_image_view<T>(sbi_, sbj_, nplanes());     \
+    vil_image_view_base_sptr ptr = dest;                                         \
+    vil_image_view<T> * src = reinterpret_cast<vil_image_view<T> *>(view.ptr()); \
+    vil_copy_to_window<T>(*src, *dest, 0, 0);                                    \
+    return dest;                                                                 \
+  }                                                                              \
   break
     FILL_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
     FILL_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
@@ -115,12 +116,13 @@ vil_blocked_image_facade::put_block(unsigned block_index_i, unsigned block_index
   if (needs_trim)
     switch (vil_pixel_format_component_format(pixel_format()))
     {
-#define TRIM_BLOCK_CASE(FORMAT, T)                                                                                     \
-  case FORMAT: {                                                                                                       \
-    const vil_image_view<T> & curr_view = static_cast<const vil_image_view<T> &>(view);                                \
-    vil_image_view<T> cview = vil_crop(curr_view, 0, icrop, 0, jcrop);                                                 \
-    return src_->put_view(cview, i0, j0);                                                                              \
-  }                                                                                                                    \
+#define TRIM_BLOCK_CASE(FORMAT, T)                                                      \
+  case FORMAT:                                                                          \
+  {                                                                                     \
+    const vil_image_view<T> & curr_view = static_cast<const vil_image_view<T> &>(view); \
+    vil_image_view<T> cview = vil_crop(curr_view, 0, icrop, 0, jcrop);                  \
+    return src_->put_view(cview, i0, j0);                                               \
+  }                                                                                     \
   break
       TRIM_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
       TRIM_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
@@ -142,7 +144,7 @@ vil_blocked_image_facade::put_block(unsigned block_index_i, unsigned block_index
 
 
 bool
-vil_blocked_image_facade::get_property(char const * tag, void * value) const
+vil_blocked_image_facade::get_property(const char * tag, void * value) const
 {
   if (std::strcmp(vil_property_quantisation_depth, tag) == 0)
     return src_->get_property(tag, value);

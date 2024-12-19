@@ -6,7 +6,7 @@
 #include "vgui_multiply_4x4.h"
 
 void
-vgui_multiply_4x4(double const A[4][4], double const B[4][4], double M[4][4])
+vgui_multiply_4x4(const double A[4][4], const double B[4][4], double M[4][4])
 {
   for (unsigned i = 0; i < 4; ++i)
   {

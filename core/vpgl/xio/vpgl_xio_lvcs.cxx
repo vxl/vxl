@@ -7,7 +7,7 @@
 
 //=================================================================================
 void
-x_write(std::ostream & os, vpgl_lvcs const & v, std::string element_name)
+x_write(std::ostream & os, const vpgl_lvcs & v, std::string element_name)
 {
   vsl_basic_xml_element xml_element(std::move(element_name));
   xml_element.add_attribute("cs_name", v.cs_name_strings[v.get_cs_name()]);

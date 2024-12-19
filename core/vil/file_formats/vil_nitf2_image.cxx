@@ -24,18 +24,18 @@
 #include "vil_nitf2_des.h"
 
 #if HAS_J2K
-#include "vil_j2k_image.h"
+#  include "vil_j2k_image.h"
 #elif HAS_OPENJPEG2
-#include "vil_openjpeg.h"
+#  include "vil_openjpeg.h"
 #endif
 int debug_level = 0;
 
 //--------------------------------------------------------------------------------
 // class vil_nitf2_file_format
 
-static char const nitf2_string[] = "nitf";
+static const char nitf2_string[] = "nitf";
 
-char const *
+const char *
 vil_nitf2_file_format::tag() const
 {
   return nitf2_string;
@@ -64,20 +64,21 @@ vil_nitf2_file_format::make_output_image(vil_stream * /*vs*/,
   return nullptr;
 }
 vil_pyramid_image_resource_sptr
-vil_nitf2_file_format::make_input_pyramid_image(char const* file) {
+vil_nitf2_file_format::make_input_pyramid_image(const char * file)
+{
   vil_smart_ptr<vil_stream> vs = vil_open(file, "r");
-  if(!vs)
+  if (!vs)
     return nullptr;
   vil_image_resource_sptr imgr = this->make_input_image(vs.as_pointer());
   if (!imgr)
-      return nullptr;
-  vil_nitf2_image* nitfr = reinterpret_cast<vil_nitf2_image*>(imgr.as_pointer());
-  if(!nitfr->is_jpeg_2000_compressed())
+    return nullptr;
+  vil_nitf2_image * nitfr = reinterpret_cast<vil_nitf2_image *>(imgr.as_pointer());
+  if (!nitfr->is_jpeg_2000_compressed())
     return nullptr;
   vil_pyramid_image_resource_sptr pyr = new vil_j2k_nitf2_pyramid_image_resource(imgr);
   return pyr;
 }
-    
+
 //--------------------------------------------------------------------------------
 // class vil_nitf2_image
 
@@ -386,7 +387,7 @@ vil_nitf2_image::file_version() const
   return m_file_header.file_version();
 }
 
-char const *
+const char *
 vil_nitf2_image::file_format() const
 {
   vil_nitf2_classification::file_version v = file_version();
@@ -601,7 +602,7 @@ vil_nitf2_image::get_copy_view_decimated_j2k(unsigned start_i,
   {
 #if HAS_J2K
     s_decode_jpeg_2000 = vil_j2k_image::s_decode_jpeg_2000; // HAS_J2K
-#elif HAS_OPENJPEG2  
+#elif HAS_OPENJPEG2
     s_decode_jpeg_2000 = vil_openjpeg_image::s_decode_jpeg_2000; // HAS OPENJPEG
 #else
     std::cerr << "Cannot decode JPEG 2000 image. The J2K library was not built." << std::endl;
@@ -952,24 +953,25 @@ vil_nitf2_image::get_block(unsigned int block_index_x, unsigned int block_index_
   vil_image_view_base_sptr view = nullptr;
   switch (vil_pixel_format_component_format(image_memory->pixel_format()))
   {
-#define GET_BLOCK_CASE(FORMAT, T)                                                                                      \
-  case FORMAT: {                                                                                                       \
-    T t = (T)0;                                                                                                        \
-    return get_block_vcl_internal(FORMAT,                                                                              \
-                                  image_memory,                                                                        \
-                                  size_block_i(),                                                                      \
-                                  size_block_j(),                                                                      \
-                                  nplanes(),                                                                           \
-                                  i_step,                                                                              \
-                                  j_step,                                                                              \
-                                  plane_step,                                                                          \
-                                  need_to_right_justify,                                                               \
-                                  extra_bits,                                                                          \
-                                  bits_per_pixel_per_band,                                                             \
-                                  data_is_all_blank,                                                                   \
-                                  current_image_header(),                                                              \
-                                  t);                                                                                  \
-  }                                                                                                                    \
+#define GET_BLOCK_CASE(FORMAT, T)                          \
+  case FORMAT:                                             \
+  {                                                        \
+    T t = (T)0;                                            \
+    return get_block_vcl_internal(FORMAT,                  \
+                                  image_memory,            \
+                                  size_block_i(),          \
+                                  size_block_j(),          \
+                                  nplanes(),               \
+                                  i_step,                  \
+                                  j_step,                  \
+                                  plane_step,              \
+                                  need_to_right_justify,   \
+                                  extra_bits,              \
+                                  bits_per_pixel_per_band, \
+                                  data_is_all_blank,       \
+                                  current_image_header(),  \
+                                  t);                      \
+  }                                                        \
   break
 
     GET_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
@@ -1032,7 +1034,7 @@ byte_align_data<bool>(bool * in_data, unsigned int num_samples, unsigned int in_
 }
 
 bool
-vil_nitf2_image::get_property(char const * tag, void * property_value) const
+vil_nitf2_image::get_property(const char * tag, void * property_value) const
 {
   if (std::strcmp(vil_property_size_block_i, tag) == 0)
   {

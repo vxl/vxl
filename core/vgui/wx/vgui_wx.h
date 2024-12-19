@@ -16,10 +16,11 @@
 //: vgui_wx static methods
 class vgui_wx
 {
- public:
+public:
   //: Initialize all vgui_wx XML Resource Handlers
   // Call this right after you call wxXmlResource::Get()->InitAllHandlers();
-  static void InitVguiHandlers();
+  static void
+  InitVguiHandlers();
 };
 
-#endif  //vgui__wx_h_
+#endif // vgui__wx_h_

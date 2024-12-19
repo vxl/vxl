@@ -41,7 +41,7 @@
 #include <vrel/vrel_muset_obj.h>
 
 
-//#define CAMERA_DEBUG
+// #define CAMERA_DEBUG
 //------------------------------------------
 bool
 vpgl_proj_camera_compute::compute(const std::vector<vgl_point_2d<double>> & image_pts,
@@ -157,9 +157,11 @@ vpgl_affine_camera_compute::compute(const std::vector<vgl_point_2d<double>> & im
   camera.set_viewing_distance(10.0 * bb.max_z());
   return true;
 }
-bool vpgl_affine_camera_compute::compute_robust_ransac( const std::vector< vgl_point_2d<double> >& image_pts,
-                            const std::vector< vgl_point_3d<double> >& world_pts,
-                            vpgl_affine_camera<double>& camera ){
+bool
+vpgl_affine_camera_compute::compute_robust_ransac(const std::vector<vgl_point_2d<double>> & image_pts,
+                                                  const std::vector<vgl_point_3d<double>> & world_pts,
+                                                  vpgl_affine_camera<double> & camera)
+{
   assert(image_pts.size() == world_pts.size());
   assert(image_pts.size() > 3);
   size_t n = image_pts.size();
@@ -167,26 +169,28 @@ bool vpgl_affine_camera_compute::compute_robust_ransac( const std::vector< vgl_p
   vgl_norm_trans_2d<double> nt2d;
   vgl_norm_trans_3d<double> nt3d;
   // use standard vgl homg normalization code
-  std::vector<vgl_homg_point_2d<double> > pimg_h;
-  std::vector<vgl_homg_point_3d<double> > pwld_h;
-  for( auto p : image_pts)
+  std::vector<vgl_homg_point_2d<double>> pimg_h;
+  std::vector<vgl_homg_point_3d<double>> pwld_h;
+  for (auto p : image_pts)
     pimg_h.emplace_back(p.x(), p.y(), 1.0);
-  
-  for( auto p : world_pts){
+
+  for (auto p : world_pts)
+  {
     pwld_h.emplace_back(p.x(), p.y(), p.z(), 1.0);
     bb.add(p);
   }
   nt2d.compute_from_points(pimg_h);
   nt3d.compute_from_points(pwld_h);
-  std::vector<vgl_point_2d<double> > img_norm;
-  std::vector<vgl_point_3d<double> > wld_norm;
-  for(size_t i = 0; i<n; ++i){
-    vgl_homg_point_2d<double> pimg_hn  = nt2d*pimg_h[i];
-    vgl_homg_point_3d<double> pwld_hn  = nt3d*pwld_h[i];
+  std::vector<vgl_point_2d<double>> img_norm;
+  std::vector<vgl_point_3d<double>> wld_norm;
+  for (size_t i = 0; i < n; ++i)
+  {
+    vgl_homg_point_2d<double> pimg_hn = nt2d * pimg_h[i];
+    vgl_homg_point_3d<double> pwld_hn = nt3d * pwld_h[i];
     img_norm.emplace_back(pimg_hn.x(), pimg_hn.y());
     wld_norm.emplace_back(pwld_hn.x(), pwld_hn.y(), pwld_hn.z());
   }
-  
+
   // start robust estimation
   vpgl_affine_camera_robust_est hg(wld_norm, img_norm);
   double max_outlier_frac = 0.5;
@@ -197,15 +201,15 @@ bool vpgl_affine_camera_compute::compute_robust_ransac( const std::vector< vgl_p
   vrel_muset_obj muset(wld_norm.size() + 1);
   vrel_ran_sam_search ransam;
   ransam.set_trace_level(trace_level);
-  ransam.set_sampling_params(1 - muset.min_inlier_fraction(),
-                             desired_prob_good,
-                             max_pops);
-  if (!ransam.estimate(&hg, &muset)) {//to cast to parent classes
-      std::cout << "MUSE failed!!\n";
-      return false;
+  ransam.set_sampling_params(1 - muset.min_inlier_fraction(), desired_prob_good, max_pops);
+  if (!ransam.estimate(&hg, &muset))
+  { // to cast to parent classes
+    std::cout << "MUSE failed!!\n";
+    return false;
   }
 #ifdef CAMERA_DEBUG
-  else std::cout << "MUSE succeeded.\n"
+  else
+    std::cout << "MUSE succeeded.\n"
               << "estimate = " << ransam.params() << std::endl
               << "scale = " << ransam.scale() << std::endl;
 #endif
@@ -213,8 +217,8 @@ bool vpgl_affine_camera_compute::compute_robust_ransac( const std::vector< vgl_p
   vpgl_affine_camera<double> CaNorm = hg.Ca();
   vnl_matrix_fixed<double, 3, 4> Mn = CaNorm.get_matrix(), Mu;
   vnl_matrix_fixed<double, 3, 3> sinv = vnl_inverse(nt2d.get_matrix());
-    Mu = sinv * Mn * nt3d.get_matrix();
-    camera.set_matrix(Mu);
+  Mu = sinv * Mn * nt3d.get_matrix();
+  camera.set_matrix(Mu);
   return true;
 }
 //---------------------------------------------------------

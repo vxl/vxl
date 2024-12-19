@@ -37,7 +37,7 @@
 template <class T>
 class vgl_polygon
 {
- public:
+public:
   typedef vgl_point_2d<T> point_t;
 
   typedef std::vector<point_t> sheet_t;
@@ -48,91 +48,138 @@ class vgl_polygon
   vgl_polygon() = default;
 
   //: Construct an empty polygon, setting the number of (empty) sheets
-  explicit vgl_polygon(unsigned int nr_sheets) : sheets_(nr_sheets) {}
+  explicit vgl_polygon(unsigned int nr_sheets)
+    : sheets_(nr_sheets)
+  {}
 
   //: Construct a single-sheet polygon from a list of n points.
   //  More sheets can be added later with the add_contour method.
-  vgl_polygon(point_t const p[], int n);
+  vgl_polygon(const point_t p[], int n);
 
   //: Construct a single-sheet polygon from a list of n points.
   //  More sheets can be added later with the add_contour method.
-  vgl_polygon(T const* x, T const* y, int n);
+  vgl_polygon(const T * x, const T * y, int n);
 
   //: Construct a single-sheet polygon from a list of n points, given in (x,y) pairs.
   //  The x_y array should thus be of size 2*n !
   //  More sheets can be added later with the add_contour method.
-  vgl_polygon(T const x_y[], int n);
+  vgl_polygon(const T x_y[], int n);
 
   //: Construct a single-sheet polygon from a sheet, i.e., a vector of 2D points.
   //  Note: n_sheets is only there to distinguish this from the next constructor for VC6
   //  which seems to have a problem.
-  explicit vgl_polygon(sheet_t const& points, unsigned n_sheets=1) : sheets_(n_sheets,points) {}
+  explicit vgl_polygon(const sheet_t & points, unsigned n_sheets = 1)
+    : sheets_(n_sheets, points)
+  {}
 
   //: Construct by specifying all of its sheets
-  explicit vgl_polygon(std::vector<sheet_t>  sheets) : sheets_(std::move(sheets)) {}
+  explicit vgl_polygon(std::vector<sheet_t> sheets)
+    : sheets_(std::move(sheets))
+  {}
 
   // Copy constructor
-  vgl_polygon(vgl_polygon const& a) : sheets_(a.sheets_) {}
+  vgl_polygon(const vgl_polygon & a)
+    : sheets_(a.sheets_)
+  {}
 
   // Destructor
   ~vgl_polygon() = default;
 
   //: Returns true if \a p(x,y) is inside the polygon, else false
-  bool contains(point_t const& p) const { return contains(p.x(),p.y()); }
+  bool
+  contains(const point_t & p) const
+  {
+    return contains(p.x(), p.y());
+  }
 
-  bool contains(T x, T y) const;
+  bool
+  contains(T x, T y) const;
 
   // creation
 
   //: Add a single sheet to this polygon, specified by the given list of n points.
   // This increments the number of sheets by one.
-  void add_contour(point_t const p[], int n);
+  void
+  add_contour(const point_t p[], int n);
 
   //: Add a single sheet to this polygon, specified by the given list of n points.
   // This increments the number of sheets by one.
-  void add_contour(T const* x, T const* y, int n);
+  void
+  add_contour(const T * x, const T * y, int n);
 
   //: Add a single sheet to this polygon, specified by the given list of n (x,y) pairs.
   //  The x_y array should thus be of size 2*n !
   // This increments the number of sheets by one.
-  void add_contour(T const x_y[], int n);
+  void
+  add_contour(const T x_y[], int n);
 
   //: Set the number of sheets to zero, so the polygon becomes empty
-  void clear() { sheets_.resize(0); }
+  void
+  clear()
+  {
+    sheets_.resize(0);
+  }
 
   //: Add a new (empty) sheet to the polygon.
   // This increments the number of sheets by one.
-  void new_sheet() { sheets_.push_back(sheet_t()); }
+  void
+  new_sheet()
+  {
+    sheets_.push_back(sheet_t());
+  }
 
   //: Add a new point to the last sheet
-  void push_back(T x, T y);
+  void
+  push_back(T x, T y);
 
   //: Add a new point to the last sheet
-  void push_back(point_t const&);
+  void
+  push_back(const point_t &);
 
   //: Add a pre-existing sheet to the polygon
-  void push_back(sheet_t const& s) { sheets_.push_back(s); }
+  void
+  push_back(const sheet_t & s)
+  {
+    sheets_.push_back(s);
+  }
 
-  inline unsigned int num_sheets() const { return (unsigned int)(sheets_.size()); }
+  inline unsigned int
+  num_sheets() const
+  {
+    return (unsigned int)(sheets_.size());
+  }
 
-  inline unsigned int num_vertices() const {
-    unsigned int c=0;
-    for (unsigned int i=0;i<num_sheets();++i) c += (unsigned int)(sheets_[i].size());
+  inline unsigned int
+  num_vertices() const
+  {
+    unsigned int c = 0;
+    for (unsigned int i = 0; i < num_sheets(); ++i)
+      c += (unsigned int)(sheets_[i].size());
     return c;
   }
   //: Get the ith sheet
-  inline sheet_t& operator[](int i) { return sheets_[i]; }
+  inline sheet_t &
+  operator[](int i)
+  {
+    return sheets_[i];
+  }
 
   //: Get the ith sheet
-  inline sheet_t const& operator[](int i) const { return sheets_[i]; }
+  inline const sheet_t &
+  operator[](int i) const
+  {
+    return sheets_[i];
+  }
 
   //: Pretty print
-  std::ostream& print(std::ostream&) const;
+  std::ostream &
+  print(std::ostream &) const;
 
   //: read this polygon from ascii stream
-  std::istream& read(std::istream&);
- protected:
+  std::istream &
+  read(std::istream &);
 
+protected:
   // Data Members--------------------------------------------------------------
   std::vector<sheet_t> sheets_;
 };
@@ -142,14 +189,14 @@ template <class T>
 struct vgl_polygon_sheet_as_array
 {
   int n;
-  T* x;
-  T* y;
+  T * x;
+  T * y;
 
   //: Automatic constructor from a single-sheet polygon
-  vgl_polygon_sheet_as_array(vgl_polygon<T> const& p);
+  vgl_polygon_sheet_as_array(const vgl_polygon<T> & p);
 
   //: Automatic constructor from a polygon sheet
-  vgl_polygon_sheet_as_array(typename vgl_polygon<T>::sheet_t const& p);
+  vgl_polygon_sheet_as_array(const typename vgl_polygon<T>::sheet_t & p);
 
   //: Destructor
   ~vgl_polygon_sheet_as_array();
@@ -163,25 +210,36 @@ struct vgl_polygon_sheet_as_array
 // edge involved in the k-th intersection.  The corresponding intersection
 // point is returned in ip[k].
 template <class T>
-void vgl_selfintersections(vgl_polygon<T> const& p,
-                           std::vector<std::pair<unsigned,unsigned> >& e1,
-                           std::vector<std::pair<unsigned,unsigned> >& e2,
-                           std::vector<vgl_point_2d<T> >& ip);
+void
+vgl_selfintersections(const vgl_polygon<T> & p,
+                      std::vector<std::pair<unsigned, unsigned>> & e1,
+                      std::vector<std::pair<unsigned, unsigned>> & e2,
+                      std::vector<vgl_point_2d<T>> & ip);
 
 // turn the first sheet into counterclockwise polygon
 template <class T>
-vgl_polygon<T> vgl_reorient_polygon(vgl_polygon<T> const &p);
+vgl_polygon<T>
+vgl_reorient_polygon(const vgl_polygon<T> & p);
 
 template <class T>
-bool vgl_polygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T> > verts);
+bool
+vgl_polygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T>> verts);
 
 
 // \relatesalso vgl_polygon
 template <class T>
-std::ostream& operator<< (std::ostream& os, vgl_polygon<T> const& p) { return p.print(os); }
+std::ostream &
+operator<<(std::ostream & os, const vgl_polygon<T> & p)
+{
+  return p.print(os);
+}
 
 template <class T>
-std::istream& operator>> (std::istream& is, vgl_polygon<T>& p) { return p.read(is); }
+std::istream &
+operator>>(std::istream & is, vgl_polygon<T> & p)
+{
+  return p.read(is);
+}
 
 #define VGL_POLYGON_INSTANTIATE(T) extern "please include vgl/vgl_polygon.hxx instead"
 

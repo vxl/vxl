@@ -23,20 +23,22 @@
 
 class vpgl_fm_compute_2_point
 {
- public:
+public:
   //: If precondition = true, points are conditioned prior to computation.
-  vpgl_fm_compute_2_point( bool precondition = true )
-  : precondition_(precondition) {}
+  vpgl_fm_compute_2_point(bool precondition = true)
+    : precondition_(precondition)
+  {}
 
   //: Compute from two sets of corresponding points.
   // Put the resulting matrix into fm, return true if successful.
   // Points pr are associated with the RHS of the fundamental matrix
   // while the points pl are associated with the LHS.
-  bool compute( const std::vector< vgl_homg_point_2d<double> >& pr,
-                const std::vector< vgl_homg_point_2d<double> >& pl,
-                vpgl_fundamental_matrix<double>& fm ) const;
+  bool
+  compute(const std::vector<vgl_homg_point_2d<double>> & pr,
+          const std::vector<vgl_homg_point_2d<double>> & pl,
+          vpgl_fundamental_matrix<double> & fm) const;
 
- protected:
+protected:
   bool precondition_;
 };
 

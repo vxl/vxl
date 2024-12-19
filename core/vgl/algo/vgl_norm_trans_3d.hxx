@@ -17,47 +17,42 @@
 
 //: Default constructor
 template <class T>
-vgl_norm_trans_3d<T>::vgl_norm_trans_3d() : vgl_h_matrix_3d<T>()
-{
-}
+vgl_norm_trans_3d<T>::vgl_norm_trans_3d()
+  : vgl_h_matrix_3d<T>()
+{}
 
 //: Copy constructor
 template <class T>
-vgl_norm_trans_3d<T>::vgl_norm_trans_3d(const vgl_norm_trans_3d<T>& M)
-: vgl_h_matrix_3d<T>(M)
-{
-}
+vgl_norm_trans_3d<T>::vgl_norm_trans_3d(const vgl_norm_trans_3d<T> & M)
+  : vgl_h_matrix_3d<T>(M)
+{}
 
 
 //: Constructor from std::istream
 template <class T>
-vgl_norm_trans_3d<T>::vgl_norm_trans_3d(std::istream& s)
-: vgl_h_matrix_3d<T>(s)
-{
-}
+vgl_norm_trans_3d<T>::vgl_norm_trans_3d(std::istream & s)
+  : vgl_h_matrix_3d<T>(s)
+{}
 
 //: Constructor from file
 template <class T>
-vgl_norm_trans_3d<T>::vgl_norm_trans_3d(char const* filename)
-: vgl_h_matrix_3d<T>(filename)
-{
-}
+vgl_norm_trans_3d<T>::vgl_norm_trans_3d(const char * filename)
+  : vgl_h_matrix_3d<T>(filename)
+{}
 
 //--------------------------------------------------------------
 //: Constructor
 template <class T>
-vgl_norm_trans_3d<T>::vgl_norm_trans_3d(vnl_matrix_fixed<T,4,4> const& M)
-: vgl_h_matrix_3d<T>(M)
-{
-}
+vgl_norm_trans_3d<T>::vgl_norm_trans_3d(const vnl_matrix_fixed<T, 4, 4> & M)
+  : vgl_h_matrix_3d<T>(M)
+{}
 
 //--------------------------------------------------------------
 //: Constructor
 template <class T>
-vgl_norm_trans_3d<T>::vgl_norm_trans_3d(const T* H)
-: vgl_h_matrix_3d<T>(H)
-{
-}
+vgl_norm_trans_3d<T>::vgl_norm_trans_3d(const T * H)
+  : vgl_h_matrix_3d<T>(H)
+{}
 
 //: Destructor
 template <class T>
@@ -72,23 +67,22 @@ vgl_norm_trans_3d<T>::~vgl_norm_trans_3d() = default;
 // 3) Compute the average point radius
 // 4) Complete the normalizing transform
 template <class T>
-bool vgl_norm_trans_3d<T>::
-compute_from_points(std::vector<vgl_homg_point_3d<T> > const& points)
+bool
+vgl_norm_trans_3d<T>::compute_from_points(const std::vector<vgl_homg_point_3d<T>> & points)
 {
   T cx, cy, cz, radius;
   this->center_of_mass(points, cx, cy, cz);
-  vgl_h_matrix_3d<T>::set_identity().set_translation(-cx,-cy,-cz);
-  std::vector<vgl_homg_point_3d<T> > temp;
-  for (typename std::vector<vgl_homg_point_3d<T> >::const_iterator
-       pit = points.begin(); pit != points.end(); pit++)
+  vgl_h_matrix_3d<T>::set_identity().set_translation(-cx, -cy, -cz);
+  std::vector<vgl_homg_point_3d<T>> temp;
+  for (typename std::vector<vgl_homg_point_3d<T>>::const_iterator pit = points.begin(); pit != points.end(); pit++)
   {
     vgl_homg_point_3d<T> p((*this)(*pit));
     temp.push_back(p);
   }
-  //Points might be coincident
+  // Points might be coincident
   if (!this->scale_xyzroot2(temp, radius))
     return false;
-  vgl_h_matrix_3d<T>::set_scale(T(1)/radius);
+  vgl_h_matrix_3d<T>::set_scale(T(1) / radius);
   return true;
 }
 
@@ -96,9 +90,8 @@ compute_from_points(std::vector<vgl_homg_point_3d<T> > const& points)
 // Find the center of a point cloud
 //
 template <class T>
-void vgl_norm_trans_3d<T>::
-center_of_mass(std::vector<vgl_homg_point_3d<T> > const& in,
-               T& cx, T& cy, T& cz)
+void
+vgl_norm_trans_3d<T>::center_of_mass(const std::vector<vgl_homg_point_3d<T>> & in, T & cx, T & cy, T & cz)
 {
   T cog_x = 0;
   T cog_y = 0;
@@ -125,7 +118,7 @@ center_of_mass(std::vector<vgl_homg_point_3d<T> > const& in,
     cog_y /= cog_count;
     cog_z /= cog_count;
   }
-  //output result
+  // output result
   cx = cog_x;
   cy = cog_y;
   cz = cog_z;
@@ -135,8 +128,8 @@ center_of_mass(std::vector<vgl_homg_point_3d<T> > const& in,
 // Find the mean distance of the input pointset. Assumed to have zero mean
 //
 template <class T>
-bool vgl_norm_trans_3d<T>::
-scale_xyzroot2(std::vector<vgl_homg_point_3d<T> > const& in, T& radius)
+bool
+vgl_norm_trans_3d<T>::scale_xyzroot2(const std::vector<vgl_homg_point_3d<T>> & in, T & radius)
 {
   T magnitude = T(0);
   int numfinite = 0;
@@ -155,14 +148,13 @@ scale_xyzroot2(std::vector<vgl_homg_point_3d<T> > const& in, T& radius)
   if (numfinite > 0)
   {
     radius = magnitude / numfinite;
-    return radius>=tol;
+    return radius >= tol;
   }
   return false;
 }
 
 //----------------------------------------------------------------------------
 #undef VGL_NORM_TRANS_3D_INSTANTIATE
-#define VGL_NORM_TRANS_3D_INSTANTIATE(T) \
-template class vgl_norm_trans_3d<T >
+#define VGL_NORM_TRANS_3D_INSTANTIATE(T) template class vgl_norm_trans_3d<T>
 
 #endif // vgl_norm_trans_3d_hxx_

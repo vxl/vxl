@@ -48,7 +48,7 @@ vil_stream_section::~vil_stream_section()
 }
 
 vil_streampos
-vil_stream_section::write(void const * buf, vil_streampos n)
+vil_stream_section::write(const void * buf, vil_streampos n)
 {
   assert(n >= 0); // wouldn't you want to be told?
 

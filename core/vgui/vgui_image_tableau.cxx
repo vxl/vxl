@@ -44,7 +44,7 @@ vgui_image_tableau::vgui_image_tableau()
 
 //-----------------------------------------------------------------------------
 
-vgui_image_tableau::vgui_image_tableau(vil1_image const & I, vgui_range_map_params_sptr const & mp)
+vgui_image_tableau::vgui_image_tableau(const vil1_image & I, const vgui_range_map_params_sptr & mp)
   : vgui_tableau()
   , pixels_centered_(true)
   , renderer_(nullptr)
@@ -55,7 +55,7 @@ vgui_image_tableau::vgui_image_tableau(vil1_image const & I, vgui_range_map_para
 
 //-----------------------------------------------------------------------------
 
-vgui_image_tableau::vgui_image_tableau(vil_image_view_base const & I, vgui_range_map_params_sptr const & mp)
+vgui_image_tableau::vgui_image_tableau(const vil_image_view_base & I, const vgui_range_map_params_sptr & mp)
   : vgui_tableau()
   , pixels_centered_(true)
   , renderer_(nullptr)
@@ -66,7 +66,7 @@ vgui_image_tableau::vgui_image_tableau(vil_image_view_base const & I, vgui_range
 
 //-----------------------------------------------------------------------------
 
-vgui_image_tableau::vgui_image_tableau(vil_image_resource_sptr const & I, vgui_range_map_params_sptr const & mp)
+vgui_image_tableau::vgui_image_tableau(const vil_image_resource_sptr & I, const vgui_range_map_params_sptr & mp)
   : vgui_tableau()
   , pixels_centered_(true)
   , renderer_(nullptr)
@@ -77,7 +77,7 @@ vgui_image_tableau::vgui_image_tableau(vil_image_resource_sptr const & I, vgui_r
 
 //-----------------------------------------------------------------------------
 
-vgui_image_tableau::vgui_image_tableau(char const * f, vgui_range_map_params_sptr const & mp)
+vgui_image_tableau::vgui_image_tableau(const char * f, const vgui_range_map_params_sptr & mp)
   : vgui_tableau()
   , name_(f)
   , pixels_centered_(true)
@@ -158,7 +158,7 @@ vgui_image_tableau::get_image_resource() const
 //-----------------------------------------------------------------------------
 
 void
-vgui_image_tableau::set_image_view(char const * f, vgui_range_map_params_sptr const & mp)
+vgui_image_tableau::set_image_view(const char * f, const vgui_range_map_params_sptr & mp)
 {
   name_ = f;
   vil_image_view_base_sptr img = vil_load(f);
@@ -169,7 +169,7 @@ vgui_image_tableau::set_image_view(char const * f, vgui_range_map_params_sptr co
 //-----------------------------------------------------------------------------
 
 void
-vgui_image_tableau::set_image_view(vil_image_view_base const & I, vgui_range_map_params_sptr const & mp)
+vgui_image_tableau::set_image_view(const vil_image_view_base & I, const vgui_range_map_params_sptr & mp)
 {
   set_image_view(I);
   rmp_ = mp;
@@ -178,7 +178,7 @@ vgui_image_tableau::set_image_view(vil_image_view_base const & I, vgui_range_map
 //-----------------------------------------------------------------------------
 
 void
-vgui_image_tableau::set_image_resource(vil_image_resource_sptr const & I, vgui_range_map_params_sptr const & mp)
+vgui_image_tableau::set_image_resource(const vil_image_resource_sptr & I, const vgui_range_map_params_sptr & mp)
 {
   set_image_resource(I);
   rmp_ = mp;
@@ -187,7 +187,7 @@ vgui_image_tableau::set_image_resource(vil_image_resource_sptr const & I, vgui_r
 //-----------------------------------------------------------------------------
 
 void
-vgui_image_tableau::set_image(vil1_image const & I, vgui_range_map_params_sptr const & mp)
+vgui_image_tableau::set_image(const vil1_image & I, const vgui_range_map_params_sptr & mp)
 {
   set_image(I);
   rmp_ = mp;
@@ -196,7 +196,7 @@ vgui_image_tableau::set_image(vil1_image const & I, vgui_range_map_params_sptr c
 //-----------------------------------------------------------------------------
 
 void
-vgui_image_tableau::set_image_view(vil_image_view_base const & I)
+vgui_image_tableau::set_image_view(const vil_image_view_base & I)
 {
   set_image_resource(vil_new_image_resource_of_view(I));
 }
@@ -204,7 +204,7 @@ vgui_image_tableau::set_image_view(vil_image_view_base const & I)
 //-----------------------------------------------------------------------------
 
 void
-vgui_image_tableau::set_image_resource(vil_image_resource_sptr const & I)
+vgui_image_tableau::set_image_resource(const vil_image_resource_sptr & I)
 {
   if (!vil_renderer_)
     vil_renderer_ = new vgui_vil_image_renderer;
@@ -222,7 +222,7 @@ vgui_image_tableau::set_image_resource(vil_image_resource_sptr const & I)
 //-----------------------------------------------------------------------------
 
 void
-vgui_image_tableau::set_image(vil1_image const & I)
+vgui_image_tableau::set_image(const vil1_image & I)
 {
   if (!renderer_)
     renderer_ = new vgui_image_renderer;
@@ -240,7 +240,7 @@ vgui_image_tableau::set_image(vil1_image const & I)
 //-----------------------------------------------------------------------------
 
 void
-vgui_image_tableau::set_image(char const * f, vgui_range_map_params_sptr const & mp)
+vgui_image_tableau::set_image(const char * f, const vgui_range_map_params_sptr & mp)
 {
   name_ = f;
   vil1_image img = vil1_load(f);
@@ -303,7 +303,7 @@ vgui_image_tableau::get_bounding_box(float low[3], float high[3]) const
 //-----------------------------------------------------------------------------
 
 bool
-vgui_image_tableau::handle(vgui_event const & e)
+vgui_image_tableau::handle(const vgui_event & e)
 {
   if (e.type == vgui_DRAW)
   {
@@ -339,7 +339,7 @@ vgui_image_tableau::handle(vgui_event const & e)
 }
 
 void
-vgui_image_tableau::set_mapping(vgui_range_map_params_sptr const & rmp)
+vgui_image_tableau::set_mapping(const vgui_range_map_params_sptr & rmp)
 {
   rmp_ = rmp;
   this->post_redraw();

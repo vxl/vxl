@@ -42,7 +42,7 @@ vil1_gif_probe(vil1_stream * s)
   return true;
 }
 
-char const *
+const char *
 vil1_gif_file_format::tag() const
 {
   return "gif";
@@ -65,7 +65,7 @@ vil1_gif_file_format::make_output_image(vil1_stream *, int, int, int, int, int, 
 }
 
 bool
-vil1_gif_loader_saver::get_property(char const * tag, void * prop) const
+vil1_gif_loader_saver::get_property(const char * tag, void * prop) const
 {
   if (0 == std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool *)prop) = true : true;
@@ -320,7 +320,7 @@ vil1_gif_loader_saver::~vil1_gif_loader_saver()
   images.clear();
 }
 
-char const *
+const char *
 vil1_gif_loader_saver::file_format() const
 {
   return "gif";
@@ -345,7 +345,7 @@ vil1_gif_loader_saver::get_section(void * buf, int x0, int y0, int w, int h) con
 }
 
 bool
-vil1_gif_loader_saver::put_section(void const * buf, int x0, int y0, int w, int h)
+vil1_gif_loader_saver::put_section(const void * buf, int x0, int y0, int w, int h)
 {
   if (planes() == 1)
     return put_section(0, buf, x0, y0, w, h);

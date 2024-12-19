@@ -21,31 +21,35 @@
 //: Compute bicubic interpolation at (x,y), no bound checks. Requires 1<x<ni-3, 1<y<nj-3
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
 //  No bound checks are done.
-template<class T>
-double vil_bicub_interp_unsafe(double x, double y, const T* data,
-                               std::ptrdiff_t xstep, std::ptrdiff_t ystep);
+template <class T>
+double
+vil_bicub_interp_unsafe(double x, double y, const T * data, std::ptrdiff_t xstep, std::ptrdiff_t ystep);
 
 //: Compute bicubic interpolation at (x,y), no bound checks. Requires 1<x<ni-3, 1<y<nj-3
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
 //  No bound checks are done.
 //  This is a version of vil_bicub_interp_unsafe with the same function
 //  signature as vil_bicub_interp_safe.
-template<class T>
-inline double vil_bicub_interp_unsafe(double x, double y, const T* data,
-                                      int /*nx*/, int /*ny*/,
-                                      std::ptrdiff_t xstep, std::ptrdiff_t ystep)
+template <class T>
+inline double
+vil_bicub_interp_unsafe(double x,
+                        double y,
+                        const T * data,
+                        int /*nx*/,
+                        int /*ny*/,
+                        std::ptrdiff_t xstep,
+                        std::ptrdiff_t ystep)
 {
   return vil_bicub_interp_unsafe(x, y, data, xstep, ystep);
 }
 
 
-
 //: Compute bicubic interpolation at (x,y), no bound checks
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
 //  No bound checks are done.
-template<class T>
-double vil_bicub_interp_raw(double x, double y, const T* data,
-                            std::ptrdiff_t xstep, std::ptrdiff_t ystep);
+template <class T>
+double
+vil_bicub_interp_raw(double x, double y, const T * data, std::ptrdiff_t xstep, std::ptrdiff_t ystep);
 
 
 //: Compute bicubic interpolation at (x,y), no bound checks
@@ -53,10 +57,15 @@ double vil_bicub_interp_raw(double x, double y, const T* data,
 //  No bound checks are done.
 //  This is a version of vil_bicub_interp_raw with the same function
 //  signature as vil_bicub_interp_safe.
-template<class T>
-inline double vil_bicub_interp_raw(double x, double y, const T* data,
-                                   int /*nx*/, int /*ny*/,
-                                   std::ptrdiff_t xstep, std::ptrdiff_t ystep)
+template <class T>
+inline double
+vil_bicub_interp_raw(double x,
+                     double y,
+                     const T * data,
+                     int /*nx*/,
+                     int /*ny*/,
+                     std::ptrdiff_t xstep,
+                     std::ptrdiff_t ystep)
 {
   return vil_bicub_interp_raw(x, y, data, xstep, ystep);
 }
@@ -65,29 +74,30 @@ inline double vil_bicub_interp_raw(double x, double y, const T* data,
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
 //  If (x,y) is outside interpolatable image region, zero is returned.
 //  The safe interpolatable region is [1,nx-2]*[1,ny-2].
-template<class T>
-inline double vil_bicub_interp_safe(double x, double y, const T* data,
-                                    int nx, int ny,
-                                    std::ptrdiff_t xstep, std::ptrdiff_t ystep)
+template <class T>
+inline double
+vil_bicub_interp_safe(double x, double y, const T * data, int nx, int ny, std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
-    if (x<1) return 0.0;
-    if (y<1) return 0.0;
-    if (x>nx-2) return 0.0;
-    if (y>ny-2) return 0.0;
-    return vil_bicub_interp_raw(x,y,data,xstep,ystep);
+  if (x < 1)
+    return 0.0;
+  if (y < 1)
+    return 0.0;
+  if (x > nx - 2)
+    return 0.0;
+  if (y > ny - 2)
+    return 0.0;
+  return vil_bicub_interp_raw(x, y, data, xstep, ystep);
 }
 
 //: Compute bicubic interpolation at (x,y), with bound checks
 //  If (x,y) is outside interpolatable image region, zero is returned.
 //  The safe interpolatable region is [1,view.ni()-2]*[1,view.nj()-2].
 // \relatesalso vil_image_view
-template<class T>
-inline double vil_bicub_interp_safe(const vil_image_view<T> &view,
-                                    double x, double y, unsigned p=0)
+template <class T>
+inline double
+vil_bicub_interp_safe(const vil_image_view<T> & view, double x, double y, unsigned p = 0)
 {
-    return vil_bicub_interp_safe(x, y, &view(0,0,p),
-                                 view.ni(), view.nj(),
-                                 view.istep(), view.jstep());
+  return vil_bicub_interp_safe(x, y, &view(0, 0, p), view.ni(), view.nj(), view.istep(), view.jstep());
 }
 
 //: Compute bicubic interpolation at (x,y), with minimal bound checks
@@ -96,9 +106,9 @@ inline double vil_bicub_interp_safe(const vil_image_view<T> &view,
 //  the code will fail an ASSERT.
 //  The safe interpolatable region is [1,nx-2]*[1,ny-2].
 template <class T>
-inline double vil_bicub_interp(double x, double y, const T *data, int nx,
-                               int ny, std::ptrdiff_t xstep,
-                               std::ptrdiff_t ystep) {
+inline double
+vil_bicub_interp(double x, double y, const T * data, int nx, int ny, std::ptrdiff_t xstep, std::ptrdiff_t ystep)
+{
   assert(x >= 1);
   assert(y >= 1);
   assert(x <= nx - 2);
@@ -111,42 +121,47 @@ inline double vil_bicub_interp(double x, double y, const T *data, int nx,
 //  the code will fail an ASSERT.
 //  The safe interpolatable region is [1,view.ni()-2]*[1,view.nj()-2].
 // \relatesalso vil_image_view
-template<class T>
-inline double vil_bicub_interp(const vil_image_view<T> &view,
-                               double x, double y, unsigned p=0)
+template <class T>
+inline double
+vil_bicub_interp(const vil_image_view<T> & view, double x, double y, unsigned p = 0)
 {
-    return vil_bicub_interp(x, y, &view(0,0,p),
-                            view.ni(), view.nj(),
-                            view.istep(), view.jstep());
+  return vil_bicub_interp(x, y, &view(0, 0, p), view.ni(), view.nj(), view.istep(), view.jstep());
 }
 
 //: Compute bicubic interpolation at (x,y), with bound checks
 //  Image is nx * ny array of Ts. x,y element is data[nx*y+x]
 //  If (x,y) is outside safe interpolatable image region, nearest pixel value is returned.
 //  The safe interpolatable region is [1,nx-2]*[1,ny-2].
-template<class T>
-inline double vil_bicub_interp_safe_extend(double x, double y, const T* data,
-                                           int nx, int ny,
-                                           std::ptrdiff_t xstep, std::ptrdiff_t ystep)
+template <class T>
+inline double
+vil_bicub_interp_safe_extend(double x,
+                             double y,
+                             const T * data,
+                             int nx,
+                             int ny,
+                             std::ptrdiff_t xstep,
+                             std::ptrdiff_t ystep)
 {
-    if (x<1) x= 0.0;
-    if (y<1) y= 0.0;
-    if (x>nx-2) x=nx-1.0;
-    if (y>ny-2) y=ny-1.0;
-    return vil_bicub_interp_raw(x,y,data,xstep,ystep);
+  if (x < 1)
+    x = 0.0;
+  if (y < 1)
+    y = 0.0;
+  if (x > nx - 2)
+    x = nx - 1.0;
+  if (y > ny - 2)
+    y = ny - 1.0;
+  return vil_bicub_interp_raw(x, y, data, xstep, ystep);
 }
 
 //: Compute bicubic interpolation at (x,y), with bound checks
 //  If (x,y) is outside safe interpolatable image region, nearest pixel value is returned.
 //  The safe interpolatable region is [1,view.ni()-2]*[1,view.nj()-2].
 // \relatesalso vil_image_view
-template<class T>
-inline double vil_bicub_interp_safe_extend(const vil_image_view<T> &view,
-                                           double x, double y, unsigned p=0)
+template <class T>
+inline double
+vil_bicub_interp_safe_extend(const vil_image_view<T> & view, double x, double y, unsigned p = 0)
 {
-    return vil_bicub_interp_safe_extend(x, y, &view(0,0,p),
-                                        view.ni(), view.nj(),
-                                        view.istep(), view.jstep());
+  return vil_bicub_interp_safe_extend(x, y, &view(0, 0, p), view.ni(), view.nj(), view.istep(), view.jstep());
 }
 
 #endif // vil_bicub_interp_h_

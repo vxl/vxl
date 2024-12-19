@@ -18,18 +18,17 @@
 // Coordinate system in which a point is specified by a grid zone designation,
 // an x and y coordinate within the grid zone, and z, the height above the
 // surface of the reference ellipsoid
-class vcsl_utm
-  : public vcsl_geographic
+class vcsl_utm : public vcsl_geographic
 {
- private:
+private:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
   // Default constructor.
-   vcsl_utm() = delete;
+  vcsl_utm() = delete;
 
- public:
+public:
   // Destructor
   ~vcsl_utm() override = default;
 };

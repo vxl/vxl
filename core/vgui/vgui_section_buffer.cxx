@@ -59,7 +59,7 @@ namespace
 //
 template <class InT, class OutT>
 bool
-convert_buffer(vil_image_view<InT> const & in, vgui_range_map_params_sptr const & rmp, OutT * out, std::ptrdiff_t hstep)
+convert_buffer(const vil_image_view<InT> & in, const vgui_range_map_params_sptr & rmp, OutT * out, std::ptrdiff_t hstep)
 {
   bool params_but_not_mappable = false;
   if (rmp && rmp->n_components_ == in.nplanes())
@@ -71,14 +71,16 @@ convert_buffer(vil_image_view<InT> const & in, vgui_range_map_params_sptr const 
       int O = rm.offset();
       switch (in.nplanes())
       {
-        case 1: {
+        case 1:
+        {
           vbl_array_1d<vxl_byte> Lmap = rm.Lmap();
           for (unsigned j = 0; j < in.nj(); ++j)
             for (unsigned i = 0; i < in.ni(); ++i)
               vgui_pixel_convert(Lmap[(unsigned)(in(i, j) + O)], *(out + i + j * hstep));
           return true;
         }
-        case 3: {
+        case 3:
+        {
           vbl_array_1d<vxl_byte> Rmap = rm.Rmap();
           vbl_array_1d<vxl_byte> Gmap = rm.Gmap();
           vbl_array_1d<vxl_byte> Bmap = rm.Bmap();
@@ -90,7 +92,8 @@ convert_buffer(vil_image_view<InT> const & in, vgui_range_map_params_sptr const 
                                  *(out + i + j * hstep));
           return true;
         }
-        case 4: {
+        case 4:
+        {
           vbl_array_1d<vxl_byte> Rmap = rm.Rmap();
           vbl_array_1d<vxl_byte> Gmap = rm.Gmap();
           vbl_array_1d<vxl_byte> Bmap = rm.Bmap();
@@ -273,8 +276,8 @@ convert_buffer(vil_image_view<InT> const & in, vgui_range_map_params_sptr const 
 //
 template <class InT>
 bool
-convert_image(vil_image_view<InT> const & in,
-              vgui_range_map_params_sptr const & rmp,
+convert_image(const vil_image_view<InT> & in,
+              const vgui_range_map_params_sptr & rmp,
               void * out,
               std::ptrdiff_t hstep,
               GLenum format,
@@ -381,7 +384,7 @@ vgui_section_buffer::~vgui_section_buffer()
 //                                                  apply (vil image resource)
 
 void
-vgui_section_buffer::apply(vil_image_resource_sptr const & image_in, vgui_range_map_params_sptr const & rmp)
+vgui_section_buffer::apply(const vil_image_resource_sptr & image_in, const vgui_range_map_params_sptr & rmp)
 {
   // In order to display the image, we need to convert the pixels from
   // the input image format to the OpenGL buffer format (given by
@@ -392,18 +395,19 @@ vgui_section_buffer::apply(vil_image_resource_sptr const & image_in, vgui_range_
   // function will figure out the current OpenGL pixel type and call
   // convert_buffer to actually convert the pixels.
 
-#define DoCase(T)                                                                                                      \
-  case T: {                                                                                                            \
-    typedef vil_pixel_format_type_of<T>::type Type;                                                                    \
-    int ni = image_in->ni(), nj = image_in->nj();                                                                      \
-    if (w_ > (ni - x_))                                                                                                \
-      w_ = (ni - x_);                                                                                                  \
-    if (h_ > (nj - y_))                                                                                                \
-      h_ = (nj - y_);                                                                                                  \
-    vil_image_view<Type> img = image_in->get_view(x_, w_, y_, h_);                                                     \
-    assert(img);                                                                                                       \
-    conversion_okay = convert_image(img, rmp, buffer_, allocw_, format_, type_);                                       \
-    break;                                                                                                             \
+#define DoCase(T)                                                                \
+  case T:                                                                        \
+  {                                                                              \
+    typedef vil_pixel_format_type_of<T>::type Type;                              \
+    int ni = image_in->ni(), nj = image_in->nj();                                \
+    if (w_ > (ni - x_))                                                          \
+      w_ = (ni - x_);                                                            \
+    if (h_ > (nj - y_))                                                          \
+      h_ = (nj - y_);                                                            \
+    vil_image_view<Type> img = image_in->get_view(x_, w_, y_, h_);               \
+    assert(img);                                                                 \
+    conversion_okay = convert_image(img, rmp, buffer_, allocw_, format_, type_); \
+    break;                                                                       \
   }
 
   bool conversion_okay = false;
@@ -438,7 +442,7 @@ vgui_section_buffer::apply(vil_image_resource_sptr const & image_in, vgui_range_
 //                                                          apply (vil1 image)
 
 void
-vgui_section_buffer::apply(vil1_image const & image, vgui_range_map_params_sptr const & rmp)
+vgui_section_buffer::apply(const vil1_image & image, const vgui_range_map_params_sptr & rmp)
 {
   // See comment in the other apply().
 
@@ -448,17 +452,18 @@ vgui_section_buffer::apply(vil1_image const & image, vgui_range_map_params_sptr 
   bool conversion_ok = false;
   bool section_ok = false;
 
-#define DoCase(PixelFormat, DataType, NComp)                                                                           \
-  case PixelFormat: {                                                                                                  \
-    DataType * temp_buffer = new DataType[w_ * h_ * NComp];                                                            \
-    section_ok = image.get_section(temp_buffer, x_, y_, w_, h_);                                                       \
-    if (section_ok)                                                                                                    \
-    {                                                                                                                  \
-      vil_image_view<DataType> view(temp_buffer, w_, h_, NComp, NComp, NComp * w_, 1);                                 \
-      conversion_ok = convert_image(view, rmp, buffer_, allocw_, format_, type_);                                      \
-    }                                                                                                                  \
-    delete[] temp_buffer;                                                                                              \
-    break;                                                                                                             \
+#define DoCase(PixelFormat, DataType, NComp)                                           \
+  case PixelFormat:                                                                    \
+  {                                                                                    \
+    DataType * temp_buffer = new DataType[w_ * h_ * NComp];                            \
+    section_ok = image.get_section(temp_buffer, x_, y_, w_, h_);                       \
+    if (section_ok)                                                                    \
+    {                                                                                  \
+      vil_image_view<DataType> view(temp_buffer, w_, h_, NComp, NComp, NComp * w_, 1); \
+      conversion_ok = convert_image(view, rmp, buffer_, allocw_, format_, type_);      \
+    }                                                                                  \
+    delete[] temp_buffer;                                                              \
+    break;                                                                             \
   }
 
   switch (pixel_format)

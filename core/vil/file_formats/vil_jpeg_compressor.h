@@ -14,22 +14,25 @@ class vil_stream;
 
 class vil_jpeg_compressor
 {
- public:
-  struct jpeg_error_mgr         jerr;
-  struct jpeg_compress_struct   jobj;
-  vil_stream *stream;
+public:
+  struct jpeg_error_mgr jerr;
+  struct jpeg_compress_struct jobj;
+  vil_stream * stream;
 
-  vil_jpeg_compressor(vil_stream *s);
+  vil_jpeg_compressor(vil_stream * s);
 
   // NB. does not delete the stream
   ~vil_jpeg_compressor();
 
-  bool write_scanline(unsigned line, JSAMPLE const *);
+  bool
+  write_scanline(unsigned line, JSAMPLE const *);
 
-  void set_quality(int quality);
-  int get_quality() const;
+  void
+  set_quality(int quality);
+  int
+  get_quality() const;
 
- private:
+private:
   bool ready;
   int quality;
 };

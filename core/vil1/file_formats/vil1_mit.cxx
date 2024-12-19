@@ -20,7 +20,7 @@
 #include "vil1/vil1_16bit.h"
 #include "vil1/vil1_property.h"
 
-static char const * vil1_mit_format_tag = "mit";
+static const char * vil1_mit_format_tag = "mit";
 
 #define MIT_UNSIGNED 0x0001
 #define MIT_RGB 0x0002
@@ -99,7 +99,7 @@ vil1_mit_file_format::make_output_image(vil1_stream * is,
   return new vil1_mit_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
-char const *
+const char *
 vil1_mit_file_format::tag() const
 {
   return vil1_mit_format_tag;
@@ -115,7 +115,7 @@ vil1_mit_generic_image::vil1_mit_generic_image(vil1_stream * is)
 }
 
 bool
-vil1_mit_generic_image::get_property(char const * tag, void * prop) const
+vil1_mit_generic_image::get_property(const char * tag, void * prop) const
 {
   if (0 == std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool *)prop) = true : true;
@@ -126,18 +126,21 @@ vil1_mit_generic_image::get_property(char const * tag, void * prop) const
   return false;
 }
 
-char const *
+const char *
 vil1_mit_generic_image::file_format() const
 {
   return vil1_mit_format_tag;
 }
 
-vil1_mit_generic_image::vil1_mit_generic_image(vil1_stream *is, int planes,
-                                               int width, int height,
+vil1_mit_generic_image::vil1_mit_generic_image(vil1_stream * is,
+                                               int planes,
+                                               int width,
+                                               int height,
                                                int components,
                                                int bits_per_component,
                                                vil1_component_format)
-    : is_(is) {
+  : is_(is)
+{
   is_->ref();
   assert(planes == 1);
   width_ = width;
@@ -166,10 +169,7 @@ vil1_mit_generic_image::vil1_mit_generic_image(vil1_stream *is, int planes,
   write_header();
 }
 
-vil1_mit_generic_image::~vil1_mit_generic_image()
-{
-  is_->unref();
-}
+vil1_mit_generic_image::~vil1_mit_generic_image() { is_->unref(); }
 
 bool
 vil1_mit_generic_image::read_header()
@@ -231,7 +231,7 @@ vil1_mit_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
 }
 
 bool
-vil1_mit_generic_image::put_section(void const * buf, int x0, int y0, int xs, int ys)
+vil1_mit_generic_image::put_section(const void * buf, int x0, int y0, int xs, int ys)
 {
   assert(buf != nullptr);
 
@@ -253,7 +253,9 @@ vil1_mit_generic_image::put_section(void const * buf, int x0, int y0, int xs, in
   return true;
 }
 
-vil1_image vil1_mit_generic_image::get_plane(unsigned int plane) const {
+vil1_image
+vil1_mit_generic_image::get_plane(unsigned int plane) const
+{
   assert(plane == 0);
   return const_cast<vil1_mit_generic_image *>(this);
 }

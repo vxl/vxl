@@ -24,11 +24,11 @@ vil1_flipud_impl::get_section(void * buf, int x0, int y0, int w, int h) const
 }
 
 bool
-vil1_flipud_impl::put_section(void const * buf, int x0, int y0, int w, int h)
+vil1_flipud_impl::put_section(const void * buf, int x0, int y0, int w, int h)
 {
   int bs = base.components() * base.bits_per_component() / CHAR_BIT;
   for (int j = 0; j < h; ++j)
-    if (!base.put_section(static_cast<char const *>(buf) + bs * w * (h - 1 - j), x0, y0 + j, w, 1))
+    if (!base.put_section(static_cast<const char *>(buf) + bs * w * (h - 1 - j), x0, y0 + j, w, 1))
       return false;
   return true;
 }
@@ -43,7 +43,7 @@ vil1_flipud_impl::is_a() const
 
 //: Return true if the name of the class matches the argument
 bool
-vil1_flipud_impl::is_class(std::string const & s) const
+vil1_flipud_impl::is_class(const std::string & s) const
 {
   return s == vil1_flipud_impl::is_a() || vil1_image_impl::is_class(s);
 }

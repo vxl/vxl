@@ -53,7 +53,7 @@ vgui_image_renderer::need_resection() const
 //-----------------------------------------------------------------------------
 //: Attach the renderer to a new vil1_image.
 void
-vgui_image_renderer::set_image(vil1_image const & image_)
+vgui_image_renderer::set_image(const vil1_image & image_)
 {
   if (image_ == the_image)
     return; // same image -- do nothing.
@@ -78,7 +78,7 @@ vgui_image_renderer::reread_image()
 }
 
 void
-vgui_image_renderer::create_buffer(vgui_range_map_params_sptr const & rmp)
+vgui_image_renderer::create_buffer(const vgui_range_map_params_sptr & rmp)
 {
   delete buffer;
 
@@ -96,7 +96,7 @@ vgui_image_renderer::draw_pixels()
 }
 
 bool
-vgui_image_renderer::render_directly(vgui_range_map_params_sptr const & rmp)
+vgui_image_renderer::render_directly(const vgui_range_map_params_sptr & rmp)
 {
   // hardware mapping not currently supported for vil1 images
   if (rmp) // test needed to eliminate warning of unused parameter
@@ -107,7 +107,7 @@ vgui_image_renderer::render_directly(vgui_range_map_params_sptr const & rmp)
 //-----------------------------------------------------------------------------
 // draw the image :
 void
-vgui_image_renderer::render(vgui_range_map_params_sptr const & rmp)
+vgui_image_renderer::render(const vgui_range_map_params_sptr & rmp)
 {
   if (!the_image)
     return;
@@ -131,7 +131,7 @@ vgui_image_renderer::render(vgui_range_map_params_sptr const & rmp)
 //: Are the range map params associated with the current buffer out of date?
 //  If so we have to refresh the buffer.
 bool
-vgui_image_renderer::old_range_map_params(vgui_range_map_params_sptr const & rmp)
+vgui_image_renderer::old_range_map_params(const vgui_range_map_params_sptr & rmp)
 {
   // Cases
 

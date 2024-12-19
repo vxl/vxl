@@ -79,7 +79,7 @@ vgui_event_condition::vgui_event_condition(vgui_button b, vgui_modifier m, bool 
 
 //----------------------------------------------------------------------------
 bool
-vgui_event_condition::operator()(vgui_event const & e) const
+vgui_event_condition::operator()(const vgui_event & e) const
 {
   if (!on)
     return false;

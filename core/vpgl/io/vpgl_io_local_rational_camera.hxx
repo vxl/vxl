@@ -10,13 +10,15 @@
 #include <vpgl/io/vpgl_io_lvcs.h>
 
 template <class T>
-void vsl_b_write(vsl_b_ostream & os, vpgl_local_rational_camera<T> const& camera)
+void
+vsl_b_write(vsl_b_ostream & os, const vpgl_local_rational_camera<T> & camera)
 {
-  if (!os) return;
+  if (!os)
+    return;
   unsigned version = 1;
   vsl_b_write(os, version);
   // write rational camera parent
-  vpgl_rational_camera<T> const& rat_cam = static_cast<vpgl_rational_camera<T> const& >(camera);
+  const vpgl_rational_camera<T> & rat_cam = static_cast<const vpgl_rational_camera<T> &>(camera);
   vsl_b_write(os, rat_cam);
   vpgl_lvcs lvcs = camera.lvcs();
   vsl_b_write(os, lvcs);
@@ -24,9 +26,11 @@ void vsl_b_write(vsl_b_ostream & os, vpgl_local_rational_camera<T> const& camera
 
 //: Binary load camera from stream.
 template <class T>
-void vsl_b_read(vsl_b_istream & is, vpgl_local_rational_camera<T> &camera)
+void
+vsl_b_read(vsl_b_istream & is, vpgl_local_rational_camera<T> & camera)
 {
-  if (!is) return;
+  if (!is)
+    return;
   short ver;
   vsl_b_read(is, ver);
   switch (ver)
@@ -45,7 +49,7 @@ void vsl_b_read(vsl_b_istream & is, vpgl_local_rational_camera<T> &camera)
     }
     default:
       std::cerr << "I/O ERROR: vpgl_local_rational_camera::b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< ver << '\n';
+                << "           Unknown version number " << ver << '\n';
       is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
@@ -53,15 +57,16 @@ void vsl_b_read(vsl_b_istream & is, vpgl_local_rational_camera<T> &camera)
 
 //: Print human readable summary of object to a stream
 template <class T>
-void vsl_print_summary(std::ostream& os,const vpgl_local_rational_camera<T> & c)
+void
+vsl_print_summary(std::ostream & os, const vpgl_local_rational_camera<T> & c)
 {
   os << c << '\n';
 }
 
 
-#define VPGL_IO_LOCAL_RATIONAL_CAMERA_INSTANTIATE(T) \
-template void vsl_b_write(vsl_b_ostream & os, vpgl_local_rational_camera<T > const& camera); \
-template void vsl_b_read(vsl_b_istream & is, vpgl_local_rational_camera<T > &camera); \
-template void vsl_print_summary(std::ostream& os,const vpgl_local_rational_camera<T > & b)
+#define VPGL_IO_LOCAL_RATIONAL_CAMERA_INSTANTIATE(T)                                           \
+  template void vsl_b_write(vsl_b_ostream & os, vpgl_local_rational_camera<T> const & camera); \
+  template void vsl_b_read(vsl_b_istream & is, vpgl_local_rational_camera<T> & camera);        \
+  template void vsl_print_summary(std::ostream & os, const vpgl_local_rational_camera<T> & b)
 
 #endif // vpgl_io_local_rational_camera_hxx_

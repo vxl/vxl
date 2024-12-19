@@ -41,7 +41,8 @@
 // Fusiello, Andrea. (1999). Tutorial on Rectification of Stereo Images.
 // The algorithm proceeds in three steps:
 //
-// 1) find the rotation about the camera center that takes the "left" camera (P1) rotation to the "right" camera (P0) rotation
+// 1) find the rotation about the camera center that takes the "left" camera (P1) rotation to the "right" camera (P0)
+// rotation
 //    R10 = R0 * R1^t
 // where P0 = K0[R0 | t0], P1 = K1[R1 | t1]. Here, "right" means on the right side of the essential matrix
 //
@@ -62,7 +63,7 @@
 
 class vpgl_equi_rectification
 {
- public:
+public:
   //: given the affine fundamental matrix and a set of correspondences between
   // the two images, image0 and image1, pts0, pts1, determine the corresponding
   // affine homographies, H0 and H1, that warp each image into a rectified pair.
@@ -70,18 +71,24 @@ class vpgl_equi_rectification
   // its corresponding point on the same row in the other image. Equivalently,
   // an epipolar line in image 1 is the same row as for a given point in image 0.
   // min_scale limits the amount of warping to avoid aliasing
-  static bool rectify_pair(const vpgl_affine_fundamental_matrix<double>& aF,
-                           const std::vector<vnl_vector_fixed<double, 3> >& img_pts0,
-                           const std::vector<vnl_vector_fixed<double, 3> >& img_pts1,
-                           vnl_matrix_fixed<double, 3, 3>& H0, vnl_matrix_fixed<double, 3, 3>& H1,
-                           double min_scale = 0.1);
+  static bool
+  rectify_pair(const vpgl_affine_fundamental_matrix<double> & aF,
+               const std::vector<vnl_vector_fixed<double, 3>> & img_pts0,
+               const std::vector<vnl_vector_fixed<double, 3>> & img_pts1,
+               vnl_matrix_fixed<double, 3, 3> & H0,
+               vnl_matrix_fixed<double, 3, 3> & H1,
+               double min_scale = 0.1);
 
-  //:for convenience, from cameras, but only the fundamental matrix is used in the rectification
-  static bool rectify_pair(vpgl_affine_camera<double> const& A0, vpgl_affine_camera<double> const& A1,
-                           const std::vector<vnl_vector_fixed<double, 3> >& img_pts0,
-                           const std::vector<vnl_vector_fixed<double, 3> >& img_pts1,
-                           vnl_matrix_fixed<double, 3, 3>& H0, vnl_matrix_fixed<double, 3, 3>& H1,
-                           double min_scale = 0.1){
+  //: for convenience, from cameras, but only the fundamental matrix is used in the rectification
+  static bool
+  rectify_pair(const vpgl_affine_camera<double> & A0,
+               const vpgl_affine_camera<double> & A1,
+               const std::vector<vnl_vector_fixed<double, 3>> & img_pts0,
+               const std::vector<vnl_vector_fixed<double, 3>> & img_pts1,
+               vnl_matrix_fixed<double, 3, 3> & H0,
+               vnl_matrix_fixed<double, 3, 3> & H1,
+               double min_scale = 0.1)
+  {
     vpgl_affine_fundamental_matrix<double> aF(A0, A1);
     return rectify_pair(aF, img_pts0, img_pts1, H0, H1, min_scale);
   }
@@ -90,21 +97,24 @@ class vpgl_equi_rectification
   //  epipoles are defined by the essential matrixof the two cameras
   //  the point sets are correspondences between the two images and are used to define
   //  the column skew transform and row offset
-  static bool rectify_pair(vpgl_perspective_camera<double> const& P0,
-                           vpgl_perspective_camera<double> const& P1,
-                           const std::vector<vnl_vector_fixed<double, 3> >& img_pts0,
-                           const std::vector<vnl_vector_fixed<double, 3> >& img_pts1,
-                           vnl_matrix_fixed<double, 3, 3> & H0,
-                           vnl_matrix_fixed<double, 3, 3> & H1);
- private:
+  static bool
+  rectify_pair(const vpgl_perspective_camera<double> & P0,
+               const vpgl_perspective_camera<double> & P1,
+               const std::vector<vnl_vector_fixed<double, 3>> & img_pts0,
+               const std::vector<vnl_vector_fixed<double, 3>> & img_pts1,
+               vnl_matrix_fixed<double, 3, 3> & H0,
+               vnl_matrix_fixed<double, 3, 3> & H1);
+
+private:
   //: affine column transformation with skew used by both rectification methods
-  static bool column_transform(const std::vector<vnl_vector_fixed<double, 3> >& img_pts0,
-                               const std::vector<vnl_vector_fixed<double, 3> >& img_pts1,
-                               vnl_matrix_fixed<double, 3, 3> const& H0,
-                               vnl_matrix_fixed<double, 3, 3> const& H1,
-                               vnl_matrix_fixed<double, 3, 3>& Usqt,
-                               vnl_matrix_fixed<double, 3, 3>& Usqt_inv,
-                               double min_scale = 0.5);
+  static bool
+  column_transform(const std::vector<vnl_vector_fixed<double, 3>> & img_pts0,
+                   const std::vector<vnl_vector_fixed<double, 3>> & img_pts1,
+                   const vnl_matrix_fixed<double, 3, 3> & H0,
+                   const vnl_matrix_fixed<double, 3, 3> & H1,
+                   vnl_matrix_fixed<double, 3, 3> & Usqt,
+                   vnl_matrix_fixed<double, 3, 3> & Usqt_inv,
+                   double min_scale = 0.5);
 
   //: no public constructor - static methods only
   vpgl_equi_rectification() = delete;

@@ -8,7 +8,7 @@
 #include "vgui/vgui_dialog.h"
 
 void
-vgui_error_dialog(char const * msg)
+vgui_error_dialog(const char * msg)
 {
   vgui_dialog d("ERROR");
   d.message(msg);

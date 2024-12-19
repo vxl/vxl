@@ -16,9 +16,9 @@
 class dem_bproj_cost_function : public vnl_cost_function
 {
 public:
-  dem_bproj_cost_function(vil_image_view<float> const & dem_view,
+  dem_bproj_cost_function(const vil_image_view<float> & dem_view,
                           vpgl_geo_camera * geo_cam,
-                          vgl_ray_3d<double> const & ray,
+                          const vgl_ray_3d<double> & ray,
                           bool verbose = false)
     : vnl_cost_function(1)
     , ray_(ray)
@@ -28,7 +28,7 @@ public:
   {}
   //: x is the parameter that runs along the ray, with x=0 at the ray origin
   double
-  f(vnl_vector<double> const & x) override
+  f(const vnl_vector<double> & x) override
   {
     // get the lon and lat values for a given parameter value
     vgl_point_3d<double> org = ray_.origin(), rayp;
@@ -57,7 +57,7 @@ private:
   const vil_image_view<float> * dview_;
   bool verbose_;
 };
-vpgl_backproject_dem::vpgl_backproject_dem(vil_image_resource_sptr const & dem, double zmin, double zmax)
+vpgl_backproject_dem::vpgl_backproject_dem(const vil_image_resource_sptr & dem, double zmin, double zmax)
   : verbose_(false)
   , min_samples_(5000.0)
   , tail_fract_(0.025)
@@ -156,10 +156,10 @@ vpgl_backproject_dem::~vpgl_backproject_dem()
 // the function to backproject onto the dem using vgl objects
 bool
 vpgl_backproject_dem::bproj_dem(const vpgl_camera<double> * cam,
-                                vgl_point_2d<double> const & image_point,
+                                const vgl_point_2d<double> & image_point,
                                 double max_z,
                                 double min_z,
-                                vgl_point_3d<double> const & initial_guess,
+                                const vgl_point_3d<double> & initial_guess,
                                 vgl_point_3d<double> & world_point,
                                 double error_tol)
 {
@@ -222,10 +222,10 @@ vpgl_backproject_dem::bproj_dem(const vpgl_camera<double> * cam,
 
 bool
 vpgl_backproject_dem::bproj_dem(const vpgl_camera<double> * cam,
-                                vnl_double_2 const & image_point,
+                                const vnl_double_2 & image_point,
                                 double max_z,
                                 double min_z,
-                                vnl_double_3 const & initial_guess,
+                                const vnl_double_3 & initial_guess,
                                 vnl_double_3 & world_point,
                                 double error_tol)
 {
@@ -247,11 +247,11 @@ vpgl_backproject_dem::bproj_dem(const vpgl_camera<double> * cam,
 }
 
 bool
-vpgl_backproject_dem::bproj_dem(vpgl_rational_camera<double> const & rcam,
-                                vnl_double_2 const & image_point,
+vpgl_backproject_dem::bproj_dem(const vpgl_rational_camera<double> & rcam,
+                                const vnl_double_2 & image_point,
                                 double max_z,
                                 double min_z,
-                                vnl_double_3 const & initial_guess,
+                                const vnl_double_3 & initial_guess,
                                 vnl_double_3 & world_point,
                                 double error_tol)
 {
@@ -261,11 +261,11 @@ vpgl_backproject_dem::bproj_dem(vpgl_rational_camera<double> const & rcam,
 }
 
 bool
-vpgl_backproject_dem::bproj_dem(vpgl_rational_camera<double> const & rcam,
-                                vgl_point_2d<double> const & image_point,
+vpgl_backproject_dem::bproj_dem(const vpgl_rational_camera<double> & rcam,
+                                const vgl_point_2d<double> & image_point,
                                 double max_z,
                                 double min_z,
-                                vgl_point_3d<double> const & initial_guess,
+                                const vgl_point_3d<double> & initial_guess,
                                 vgl_point_3d<double> & world_point,
                                 double error_tol)
 {

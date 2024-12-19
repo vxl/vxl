@@ -16,7 +16,7 @@
 #include "testlib/testlib_test.h"
 
 // Construct the name of the notes file.
-#define vxl_BUILD_INFO_NOTES                                                                                           \
+#define vxl_BUILD_INFO_NOTES \
   vxl_BUILD_DIR "/Testing/HTML/TestingResults/Sites/" vxl_SITE "/" vxl_BUILD_NAME "/BuildNameNotes.xml"
 
 static std::string
@@ -51,23 +51,23 @@ system_information_print_file(const char * name, std::ostream & os, bool note = 
     std::string buffer;
 
     // Assume the string encoding is ASCII
-    std::map<char, char const *> mapping;
+    std::map<char, const char *> mapping;
     mapping['&'] = "&amp;";
     mapping['<'] = "&lt;";
     mapping['>'] = "&gt;";
 
     // Range of printable characters
-    char const lo(32);
-    char const hi(126);
-    char const cr('\r');
-    char const nl('\n');
+    const char lo(32);
+    const char hi(126);
+    const char cr('\r');
+    const char nl('\n');
 
     while (fin)
     {
       std::getline(fin, buffer);
       for (unsigned i = 0; i < buffer.size(); ++i)
       {
-        char const & c = buffer[i];
+        const char & c = buffer[i];
         // Assume a "\r" at the end or a "\n" at the beginning is due to
         // mixed line-ending conversions not being handled by the
         // stream library, and so suppress them.

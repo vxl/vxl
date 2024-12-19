@@ -11,6 +11,6 @@
 #include <vgui/vgui_wrapper_tableau.h>
 
 class vidl_capture_tableau;
-typedef vgui_tableau_sptr_t<vidl_capture_tableau>  vidl_capture_tableau_sptr;
+typedef vgui_tableau_sptr_t<vidl_capture_tableau> vidl_capture_tableau_sptr;
 
 #endif // vidl_capture_tableau_sptr_h_

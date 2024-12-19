@@ -208,7 +208,7 @@ almost_equal(const vgl_box_3d<T> & b1, const vgl_box_3d<T> & b2)
 
 template <class T>
 inline bool
-almost_equal(vgl_polygon<T> const & p1, vgl_polygon<T> const & p2)
+almost_equal(const vgl_polygon<T> & p1, const vgl_polygon<T> & p2)
 {
   if (p1.num_sheets() != p2.num_sheets())
     return false;

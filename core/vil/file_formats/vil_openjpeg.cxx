@@ -560,7 +560,8 @@ vil_openjpeg_image ::validate_format()
 
   switch (this->impl_->opj_codec_format_)
   {
-    case CODEC_JP2: {
+    case CODEC_JP2:
+    {
       // See specification ISO/IEC 15444-1 Part 1
       unsigned char sig[12] = { 0x00, 0x00, 0x00, 0x0C, 0x6A, 0x50, 0x20, 0x20, 0x0D, 0x0A, 0x87, 0x0A };
       unsigned char sig_file[12];
@@ -576,7 +577,8 @@ vil_openjpeg_image ::validate_format()
       break; // Although supported by OpenJPEG, the JPT codec
              // (JPEG2000 JPIP) is not yet implemented by the
              // vil implementation
-    case CODEC_J2K: {
+    case CODEC_J2K:
+    {
       // See specification ISO/IEC 15444-1 Part 1
       unsigned char sig[2] = { 0xFF, 0x4F };
       unsigned char sig_file[2];
@@ -822,23 +824,28 @@ vil_openjpeg_image ::put_view(const vil_image_view_base & /*im*/, unsigned int /
 
 
 bool
-vil_openjpeg_image ::get_property(char const * /*tag*/, void * /*property_value*/) const
+vil_openjpeg_image ::get_property(const char * /*tag*/, void * /*property_value*/) const
 {
   return false;
 }
 //:
 //  Static function that can be used to decode a JPEG2000 codestream
 //  or file (jp2 file).  The stream must start at vs' current position.
-vil_image_view_base_sptr vil_openjpeg_image::s_decode_jpeg_2000( vil_stream* vs,
-                                                                 unsigned i0, unsigned ni,
-                                                                 unsigned j0, unsigned nj,
-                                                                 double i_factor, double j_factor ){
-    vil_openjpeg_image* jp2_image = new vil_openjpeg_image(vs, VIL_OPENJPEG_J2K);
+vil_image_view_base_sptr
+vil_openjpeg_image::s_decode_jpeg_2000(vil_stream * vs,
+                                       unsigned i0,
+                                       unsigned ni,
+                                       unsigned j0,
+                                       unsigned nj,
+                                       double i_factor,
+                                       double j_factor)
+{
+  vil_openjpeg_image * jp2_image = new vil_openjpeg_image(vs, VIL_OPENJPEG_J2K);
   double max_factor = i_factor;
-  if(j_factor> i_factor)
+  if (j_factor > i_factor)
     max_factor = j_factor;
   int reduction = int(log2(max_factor));
-    vil_image_view_base_sptr view = jp2_image->get_copy_view_reduced(i0, ni, j0, nj, reduction);
+  vil_image_view_base_sptr view = jp2_image->get_copy_view_reduced(i0, ni, j0, nj, reduction);
   delete jp2_image;
   return view;
-  } 
+}

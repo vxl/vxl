@@ -15,14 +15,14 @@
 // \endverbatim
 
 #if defined(_MSC_VER)
-#pragma once
+#  pragma once
 #endif
 
 #ifndef __AFXWIN_H__
-        #error include 'StdAfx.h' before including this file for PCH
+#  error include 'StdAfx.h' before including this file for PCH
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h" // main symbols
 
 //:  Defines CWinApp which initialises all the MFC stuff.
 //
@@ -30,12 +30,15 @@
 //   and only once in the application and initialises all the MFC stuff
 class vgui_mfc_app : public CWinApp
 {
- public:
+public:
   vgui_mfc_app();
 
-  virtual BOOL InitInstance();
-  virtual BOOL Run();
-  virtual BOOL OnIdle( LONG lcount );
+  virtual BOOL
+  InitInstance();
+  virtual BOOL
+  Run();
+  virtual BOOL
+  OnIdle(LONG lcount);
 };
 
 

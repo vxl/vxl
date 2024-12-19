@@ -12,6 +12,7 @@
 #include "vil1_image.h"
 
 //:
-vil1_image vil1_resample(vil1_image const &, int new_width, int new_height);
+vil1_image
+vil1_resample(const vil1_image &, int new_width, int new_height);
 
 #endif // vil1_resample_h_

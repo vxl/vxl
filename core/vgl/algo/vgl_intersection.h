@@ -29,14 +29,15 @@
 //: Return the intersection point of vector of planes.
 // \relatesalso vgl_plane_3d
 template <class T>
-vgl_point_3d<T> vgl_intersection(const std::vector<vgl_plane_3d<T> >& p);
+vgl_point_3d<T>
+vgl_intersection(const std::vector<vgl_plane_3d<T>> & p);
 
 //: Return the intersection line of a set of planes, use list to distinguish from point return
 // \relatesalso vgl_plane_3d
 // \relatesalso vgl_infinite_line_3d
 template <class T>
 vgl_infinite_line_3d<T>
-vgl_intersection(const std::list<vgl_plane_3d<T> >& planes);
+vgl_intersection(const std::list<vgl_plane_3d<T>> & planes);
 
 //: Return the intersection line of a set of weighted planes, use list to distinguish from point return
 // \relatesalso vgl_plane_3d
@@ -44,20 +45,25 @@ vgl_intersection(const std::list<vgl_plane_3d<T> >& planes);
 
 template <class T>
 bool
-vgl_intersection(const std::list<vgl_plane_3d<T> >& planes, std::vector<T> ws, vgl_infinite_line_3d<T>& line, T & residual);
+vgl_intersection(const std::list<vgl_plane_3d<T>> & planes,
+                 std::vector<T> ws,
+                 vgl_infinite_line_3d<T> & line,
+                 T & residual);
 
 //: Return true if the box and polygon intersect in 3-d, regions include boundaries
 // Polygon is represented as an ordered vector of 3-d points
 // \relatesalso vgl_point_3d
 // \relatesalso vgl_box_3d
 template <class T>
-bool vgl_intersection(vgl_box_3d<T> const& b, std::list<vgl_point_3d<T> >& p);
+bool
+vgl_intersection(const vgl_box_3d<T> & b, std::list<vgl_point_3d<T>> & p);
 
 //: Return true if a set of rays produce a well-conditioned solution for their intersection
 // The intersection algorithm finds the 3D point that produces the smallest sum of squared
 // orthogonal distances to each ray.
 template <class T>
-bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& inter_pt);
+bool
+vgl_intersection(const std::vector<vgl_ray_3d<T>> & rays, vgl_point_3d<T> & inter_pt);
 
 //: Return true if a set of rays produce a well-conditioned solution for their intersection
 //  Weight each ray according to a covariance matrix the 2-d orthogonal ray displacement vector,
@@ -67,12 +73,14 @@ bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& 
 //  method.
 //
 template <class T>
-bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vnl_matrix<T> const& covar, vgl_point_3d<T>& inter_pt);
+bool
+vgl_intersection(const std::vector<vgl_ray_3d<T>> & rays, const vnl_matrix<T> & covar, vgl_point_3d<T> & inter_pt);
 
 // special case of two rays
-// also returns the closest distance between the rays 
+// also returns the closest distance between the rays
 template <class T>
-bool vgl_intersection(vgl_ray_3d<T> const& ray0, vgl_ray_3d<T> const& ray1, vgl_point_3d<T>& inter_pt, T& dist);
+bool
+vgl_intersection(const vgl_ray_3d<T> & ray0, const vgl_ray_3d<T> & ray1, vgl_point_3d<T> & inter_pt, T & dist);
 
 #define VGL_ALGO_INTERSECTION_INSTANTIATE(T) extern "please include vgl/algo/vgl_intersection.hxx first"
 

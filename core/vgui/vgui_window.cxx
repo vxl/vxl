@@ -16,7 +16,7 @@
 //------------------------------------------------------------------------------
 
 void
-vgui_window::set_menubar(vgui_menu const &)
+vgui_window::set_menubar(const vgui_menu &)
 {
   vgui_macro_warning << "set_menubar() not implemented for this window\n";
 }
@@ -89,7 +89,7 @@ vgui_window::reposition(int, int)
 }
 
 void
-vgui_window::set_title(std::string const &)
+vgui_window::set_title(const std::string &)
 {
   vgui_macro_warning << "vgui_window::set_title() dummy implementation\n";
 }

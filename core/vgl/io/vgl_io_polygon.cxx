@@ -8,7 +8,7 @@
 //: Binary save self to stream.
 template <class T>
 void
-vsl_b_write(vsl_b_ostream & os, vgl_polygon<T> const & p)
+vsl_b_write(vsl_b_ostream & os, const vgl_polygon<T> & p)
 {
   constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
@@ -22,9 +22,9 @@ vsl_b_write(vsl_b_ostream & os, vgl_polygon<T> const & p)
 }
 
 template void
-vsl_b_write(vsl_b_ostream &, vgl_polygon<float> const &);
+vsl_b_write(vsl_b_ostream &, const vgl_polygon<float> &);
 template void
-vsl_b_write(vsl_b_ostream &, vgl_polygon<double> const &);
+vsl_b_write(vsl_b_ostream &, const vgl_polygon<double> &);
 
 //====================================================================================
 //: Binary load self from stream.
@@ -75,7 +75,7 @@ vsl_b_read(vsl_b_istream &, vgl_polygon<double> &);
 //: Output a human readable summary to the stream
 template <class T>
 void
-vsl_print_summary(std::ostream & os, vgl_polygon<T> const & p)
+vsl_print_summary(std::ostream & os, const vgl_polygon<T> & p)
 {
   os << "Polygon with points defined by sheets :\n";
   for (unsigned int i = 0; i < p.num_sheets(); i++)
@@ -87,6 +87,6 @@ vsl_print_summary(std::ostream & os, vgl_polygon<T> const & p)
 }
 
 template void
-vsl_print_summary(std::ostream &, vgl_polygon<float> const &);
+vsl_print_summary(std::ostream &, const vgl_polygon<float> &);
 template void
-vsl_print_summary(std::ostream &, vgl_polygon<double> const &);
+vsl_print_summary(std::ostream &, const vgl_polygon<double> &);

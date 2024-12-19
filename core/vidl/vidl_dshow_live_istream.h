@@ -40,32 +40,37 @@
 //-------------------------------------------------------------------------
 class sample_grabber_cb : public ISampleGrabberCB
 {
- public:
+public:
   //: Constructor.
   sample_grabber_cb();
 
   // IUnknown interface
-  STDMETHODIMP_(ULONG) AddRef()  { return 1; } // fake ref counting
+  STDMETHODIMP_(ULONG) AddRef() { return 1; }  // fake ref counting
   STDMETHODIMP_(ULONG) Release() { return 2; } // fake ref counting
-  STDMETHODIMP QueryInterface(REFIID riid, void **target);
+  STDMETHODIMP
+  QueryInterface(REFIID riid, void ** target);
 
   // ISampleGrabberCB interface
-  STDMETHODIMP SampleCB(double time, IMediaSample *sample);
-  STDMETHODIMP BufferCB(double time, BYTE* buffer, long buffer_size);
+  STDMETHODIMP
+  SampleCB(double time, IMediaSample * sample);
+  STDMETHODIMP
+  BufferCB(double time, BYTE * buffer, long buffer_size);
 
   // vidl helpers
-  void advance();
-  vidl_frame_sptr current_frame();
+  void
+  advance();
+  vidl_frame_sptr
+  current_frame();
 
- private:
+private:
   // Internal frame buffer information.
   std::vector<unsigned char> buffer_[3];
-  double                    buffer_time_[3];
+  double buffer_time_[3];
 
   // Some status checking flags and counters.
-  unsigned int              busy_index_;
-  unsigned int              curr_index_;
-  unsigned int              next_index_;
+  unsigned int busy_index_;
+  unsigned int curr_index_;
+  unsigned int next_index_;
 
   HANDLE mutex_;
 };
@@ -87,105 +92,162 @@ class sample_grabber_cb : public ISampleGrabberCB
 template <class ParamsObject>
 class vidl_dshow_live_istream : public vidl_istream
 {
- public:
+public:
   //: Constructor - default
   vidl_dshow_live_istream();
 
   //: Constructor - from a string containing a device name.
-  vidl_dshow_live_istream(const std::string& device_name);
+  vidl_dshow_live_istream(const std::string & device_name);
 
   //: Constructor - from a parameter object.
-  vidl_dshow_live_istream(const ParamsObject& params);
+  vidl_dshow_live_istream(const ParamsObject & params);
 
   //: Destructor.
   virtual ~vidl_dshow_live_istream() { close(); }
 
   //: Return true if the stream is open for reading.
   // ***** if closed, should return false
-  virtual bool is_open() const { return is_valid_; }
+  virtual bool
+  is_open() const
+  {
+    return is_valid_;
+  }
 
   //: Return true if the stream is in a valid state.
-  virtual bool is_valid() const { return is_valid_; }
+  virtual bool
+  is_valid() const
+  {
+    return is_valid_;
+  }
 
   //: Return true if the stream support seeking.
-  virtual bool is_seekable() const { return false; }
+  virtual bool
+  is_seekable() const
+  {
+    return false;
+  }
 
   //: Return the number of frames if known
   //  returns -1 for non-seekable streams
-  virtual int num_frames() const { return -1; }
+  virtual int
+  num_frames() const
+  {
+    return -1;
+  }
 
   //: Return the current frame number.
   // ***** through exception ??
-  virtual unsigned int frame_number() const { return 0; }
+  virtual unsigned int
+  frame_number() const
+  {
+    return 0;
+  }
 
   //: Return the width of each frame
-  virtual unsigned int width() const { return buffer_width_; }
+  virtual unsigned int
+  width() const
+  {
+    return buffer_width_;
+  }
 
   //: Return the height of each frame
-  virtual unsigned int height() const { return buffer_height_; }
+  virtual unsigned int
+  height() const
+  {
+    return buffer_height_;
+  }
 
   //: Return the pixel format
-  virtual vidl_pixel_format format() const { return buffer_pixel_format_; }
+  virtual vidl_pixel_format
+  format() const
+  {
+    return buffer_pixel_format_;
+  }
 
   //: Return the frame rate (FPS, 0.0 if unspecified)
   // \todo return a framerate if it is constant for a live video
-  virtual double frame_rate() const { return 0.0; }
+  virtual double
+  frame_rate() const
+  {
+    return 0.0;
+  }
 
   //: Return the duration in seconds (0.0 if unknown)
-  virtual double duration() const { return 0.0; }
+  virtual double
+  duration() const
+  {
+    return 0.0;
+  }
 
   //: Close the stream.
-  virtual void close();
+  virtual void
+  close();
 
   // ***** did we decide to keep the alias?
 
   //: Advance to the next frame (but don't acquire an image).
-  virtual bool advance() { return advance_wait(); }
+  virtual bool
+  advance()
+  {
+    return advance_wait();
+  }
 
   //: Read the next frame from the stream (advance and acquire).
-  virtual vidl_frame_sptr read_frame();
+  virtual vidl_frame_sptr
+  read_frame();
 
   //: Return the current frame in the stream.
-  virtual vidl_frame_sptr current_frame();
+  virtual vidl_frame_sptr
+  current_frame();
 
   //: Seek to the given frame number.
   // ***** throw exception ??
-  virtual bool seek_frame(unsigned int frame_number) { return false; }
+  virtual bool
+  seek_frame(unsigned int frame_number)
+  {
+    return false;
+  }
 
-  void run(void);
-  void pause(void);
-  void stop(void);
+  void
+  run(void);
+  void
+  pause(void);
+  void
+  stop(void);
 
- private:
+private:
   // Disable assignment and copy-construction.
-  vidl_dshow_live_istream(const vidl_dshow_live_istream&);
-  vidl_dshow_live_istream& operator=(const vidl_dshow_live_istream&);
+  vidl_dshow_live_istream(const vidl_dshow_live_istream &);
+  vidl_dshow_live_istream &
+  operator=(const vidl_dshow_live_istream &);
 
   //: Parameters that define the input stream process.
   ParamsObject params_;
 
   //: Connect to a device using its FriendlyName (in params_ object).
-  void connect(void);
+  void
+  connect(void);
 
   //: If hr == S_FALSE, wait for the state change to complete.
-  void wait_for_state_change(HRESULT hr);
+  void
+  wait_for_state_change(HRESULT hr);
 
   //: ***** Callback method...
-  sample_grabber_cb               sample_grabber_callback_;
+  sample_grabber_cb sample_grabber_callback_;
 
   // Handles to the COM interfaces.
-  CComPtr<IFilterGraph2>          filter_graph_;
-  CComPtr<IMoniker>               moniker_;
-  CComPtr<IMediaControl>          media_control_;
+  CComPtr<IFilterGraph2> filter_graph_;
+  CComPtr<IMoniker> moniker_;
+  CComPtr<IMediaControl> media_control_;
 
   // Internal frame buffer information.
-  vidl_frame_sptr           buffer_;
-  unsigned int               buffer_width_;
-  unsigned int               buffer_height_;
-  vidl_pixel_format         buffer_pixel_format_;
+  vidl_frame_sptr buffer_;
+  unsigned int buffer_width_;
+  unsigned int buffer_height_;
+  vidl_pixel_format buffer_pixel_format_;
 
   // Some status checking flags and counters.
-  bool            is_valid_;
+  bool is_valid_;
 
   //: ID in Running Object Table (ROT), for debugging with GraphEdit.
   DWORD register_;
@@ -193,11 +255,14 @@ class vidl_dshow_live_istream : public vidl_istream
   // ***** we're considering removing this from API...
 
   //: Initiate advance and wait for completion; synchronous advance.
-  bool advance_wait();
+  bool
+  advance_wait();
   //: Initiate advance and return immediately; asynchronous advance.
-  bool advance_start();
+  bool
+  advance_start();
   //: Advance to the next frame (but don't acquire an image).
-  bool is_frame_available() const;
+  bool
+  is_frame_available() const;
 };
 
 #endif // vidl_dshow_live_istream_h_

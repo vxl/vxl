@@ -27,6 +27,7 @@
 // \code
 // vul_printf(cout, "%d\n", 12);
 // \endcode
-std::ostream& vul_printf(std::ostream&, char const* fmt, ...);
+std::ostream &
+vul_printf(std::ostream &, const char * fmt, ...);
 
 #endif // vul_printf_h_

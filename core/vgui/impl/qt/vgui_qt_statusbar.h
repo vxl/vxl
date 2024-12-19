@@ -25,22 +25,23 @@
 #include <qmainwindow.h>
 
 //: QT implementation of vgui_statusbar.
-class vgui_qt_statusbar :
-   public vgui_statusbar
+class vgui_qt_statusbar : public vgui_statusbar
 {
- public:
-   vgui_qt_statusbar(QMainWindow *parent);
+public:
+  vgui_qt_statusbar(QMainWindow * parent);
   ~vgui_qt_statusbar();
 
-   int write(const char* text, int n);
-   int write(const char* text);
+  int
+  write(const char * text, int n);
+  int
+  write(const char * text);
 
-   std::string linebuffer;
-   vgui_statusbuf* statusbuf;
-   std::ostream out;
+  std::string linebuffer;
+  vgui_statusbuf * statusbuf;
+  std::ostream out;
 
- private:
-   QMainWindow *parent_;
+private:
+  QMainWindow * parent_;
 };
 
 #endif // VGUI_QT_STATUSBAR_H_

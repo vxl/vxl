@@ -27,4 +27,8 @@
 #include <vrel/vrel_wgted_ran_sam_search.h>
 #include <vrel/vrel_wls_obj.h>
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

@@ -17,24 +17,28 @@
 // directory file_formats. E.g. vil/file_formats/vil_pnm.h etc
 class vil_file_format
 {
- public:
+public:
   virtual ~vil_file_format();
 
   //: Return a character string which uniquely identifies this format.
-  //E.g. "pnm", "jpeg", etc.
-  virtual char const* tag() const = 0;
+  // E.g. "pnm", "jpeg", etc.
+  virtual const char *
+  tag() const = 0;
 
   //: Attempt to make a generic_image which will read from vil_stream vs.
   // Reads enough of vs to determine if it's this format, and if not, returns 0.
   // If it is, returns a subclass of vil_image_resource on which get_section may
   // be applied.
-  virtual vil_image_resource_sptr make_input_image(vil_stream* vs) = 0;
+  virtual vil_image_resource_sptr
+  make_input_image(vil_stream * vs) = 0;
 
   //: Read a pyramid resource from a list of image files in a directory
   //  ... or from an image file_format that supports multiple images per file.
   virtual vil_pyramid_image_resource_sptr
-    make_input_pyramid_image(char const* /*directory_or_file*/)
-    {return nullptr;}
+  make_input_pyramid_image(const char * /*directory_or_file*/)
+  {
+    return nullptr;
+  }
 
   //: Construct a pyramid image resource from a base image.
   //  All levels are stored in the same resource file. Each level has the same
@@ -45,18 +49,22 @@ class vil_file_format
   //  be removed from the directory after completion.  If temp_dir is 0
   //  then the intermediate resources are created in memory.
   virtual vil_pyramid_image_resource_sptr
-    make_pyramid_image_from_base(char const* /*filename*/,
-                                 vil_image_resource_sptr const& /*base_image*/,
-                                 unsigned /*nlevels*/,
-                                 char const* /*temp_dir*/)
-    {return nullptr;}
+  make_pyramid_image_from_base(const char * /*filename*/,
+                               const vil_image_resource_sptr & /*base_image*/,
+                               unsigned /*nlevels*/,
+                               const char * /*temp_dir*/)
+  {
+    return nullptr;
+  }
 
   virtual vil_pyramid_image_resource_sptr
-  make_pyramid_image_from_base(char const * /*directory*/,
-                               vil_image_resource_sptr const & /*base_image*/,
-                               unsigned int /*nlevels*/, bool /*copy_base*/,
-                               char const * /*level_file_format*/,
-                               char const * /*filename*/) {
+  make_pyramid_image_from_base(const char * /*directory*/,
+                               const vil_image_resource_sptr & /*base_image*/,
+                               unsigned int /*nlevels*/,
+                               bool /*copy_base*/,
+                               const char * /*level_file_format*/,
+                               const char * /*filename*/)
+  {
     return nullptr;
   }
 
@@ -65,31 +73,38 @@ class vil_file_format
   // written to it immediately.
   // The width/height etc are explicitly specified, so that file_format implementors
   // know what they need to do...
-  virtual vil_image_resource_sptr make_output_image(vil_stream* /*vs*/,
-                                                    unsigned /*nx*/,
-                                                    unsigned /*ny*/,
-                                                    unsigned /*nplanes*/,
-                                                    enum vil_pixel_format) = 0;
+  virtual vil_image_resource_sptr
+  make_output_image(vil_stream * /*vs*/,
+                    unsigned /*nx*/,
+                    unsigned /*ny*/,
+                    unsigned /*nplanes*/,
+                    enum vil_pixel_format) = 0;
   //: Construct a blocked output image resource
   // Returns a null resource unless the format supports blocking
   virtual vil_blocked_image_resource_sptr
-    make_blocked_output_image(vil_stream* /*vs*/,
-                              unsigned /*nx*/,
-                              unsigned /*ny*/,
-                              unsigned /*nplanes*/,
-                              unsigned /*size_block_i*/,
-                              unsigned /* size_block_j*/,
-                              enum vil_pixel_format)
-    {return nullptr;}
+  make_blocked_output_image(vil_stream * /*vs*/,
+                            unsigned /*nx*/,
+                            unsigned /*ny*/,
+                            unsigned /*nplanes*/,
+                            unsigned /*size_block_i*/,
+                            unsigned /* size_block_j*/,
+                            enum vil_pixel_format)
+  {
+    return nullptr;
+  }
 
   virtual vil_pyramid_image_resource_sptr
-    make_pyramid_output_image(char const* /*file*/)
-    {return nullptr;}
+  make_pyramid_output_image(const char * /*file*/)
+  {
+    return nullptr;
+  }
 
- public:
-  typedef std::list<vil_file_format*>::iterator iterator;
-  static std::list<vil_file_format*>& all();
-  static void add_file_format(vil_file_format* ff);
+public:
+  typedef std::list<vil_file_format *>::iterator iterator;
+  static std::list<vil_file_format *> &
+  all();
+  static void
+  add_file_format(vil_file_format * ff);
 };
 
 #endif // vil_file_format_h_

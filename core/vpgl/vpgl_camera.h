@@ -30,21 +30,34 @@
 template <class T>
 class vpgl_camera : public vbl_ref_count
 {
- public:
-
+public:
   vpgl_camera() = default;
   ~vpgl_camera() override = default;
 
   //: class identity functions for casting
-  virtual std::string type_name() const { return "vpgl_camera"; }
-  std::string is_a() const {return type_name();}
-  bool is_class(std::string const& name) const {return type_name() == name;}
+  virtual std::string
+  type_name() const
+  {
+    return "vpgl_camera";
+  }
+  std::string
+  is_a() const
+  {
+    return type_name();
+  }
+  bool
+  is_class(const std::string & name) const
+  {
+    return type_name() == name;
+  }
 
   //: The generic camera interface. u represents image column, v image row.
-  virtual void project(const T x, const T y, const T z, T& u, T& v) const = 0;
+  virtual void
+  project(const T x, const T y, const T z, T & u, T & v) const = 0;
 
   //: clone *this* polymorphically
-  virtual vpgl_camera<T> *clone() const = 0;
+  virtual vpgl_camera<T> *
+  clone() const = 0;
 };
 
 // convenience typedefs for smart pointers to abstract cameras

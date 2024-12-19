@@ -24,20 +24,24 @@
 
 class vpgl_affine_fm_compute_5_point
 {
- public:
+public:
   //: If precondition = true, points are conditioned prior to computation.
- vpgl_affine_fm_compute_5_point( bool precondition = true, bool verbose = false ) :
-  precondition_(precondition), verbose_(verbose) {}
+  vpgl_affine_fm_compute_5_point(bool precondition = true, bool verbose = false)
+    : precondition_(precondition)
+    , verbose_(verbose)
+  {}
 
   //: Compute from two sets of corresponding points.
   // Put the resulting matrix into fm, return true if successful.
   // Points pr are associated with the RHS of the fundamental matrix
   // while the points pl are associated with the LHS.
   // Note, Euclidan vgl points for affine geometry
-  bool compute( const std::vector< vgl_point_2d<double> >& pr,
-                const std::vector< vgl_point_2d<double> >& pl,
-                vpgl_fundamental_matrix<double>& fm ) const;
- protected:
+  bool
+  compute(const std::vector<vgl_point_2d<double>> & pr,
+          const std::vector<vgl_point_2d<double>> & pl,
+          vpgl_fundamental_matrix<double> & fm) const;
+
+protected:
   bool verbose_;
   bool precondition_;
 };

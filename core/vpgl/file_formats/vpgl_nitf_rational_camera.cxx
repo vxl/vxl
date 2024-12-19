@@ -120,101 +120,101 @@ geostr_to_double(const char * in_string, double * val, vpgl_nitf_rational_camera
   }
   else // DDDdMM'SS"[d]  where [d]=nNsSeEwW
     if (*in_string == 'd')
-  {
-    // get the degrees
-    if (length > 3)
-      return 0;
-    if ((deg = to_int(in_string - length, length)) > maxval || deg < 0)
-      return 0;
-
-    // go past 'd' and spaces
-    ++in_string;
-    while ((*in_string == ' ') || (*in_string == '\t'))
-      ++in_string;
-
-    // get the minutes
-    for (length = 0; std::isdigit(*in_string) && length < 15; ++in_string, ++length) /*nothing*/
-      ;
-    if (length > 14)
-      return 0;
-    if (length > 2)
-      return 0;
-    if ((min = to_int(in_string - length, length)) >= 60 || min < 0)
-      return 0;
-
-    // go past ''' and spaces
-    ++in_string;
-    while ((*in_string == ' ') || (*in_string == '\t'))
-      ++in_string;
-
-    // get the seconds (float)
-    char * temp = new char[2];
-    for (length = 0; (*in_string == '.' || std::isdigit(*in_string)) && length < 15; ++length)
-      ++in_string;
-    if (length > 14)
-      return 0;
-
-    std::strncpy(temp, in_string - length, length);
-    if ((fsec = (float)std::stod(temp)) >= 60.0f || fsec < 0.0f)
-      return 0;
-    delete[] temp;
-
-    // go past '"' and any spaces to the direction
-    ++in_string;
-    while ((*in_string == ' ') || (*in_string == '\t'))
-      ++in_string;
-
-    // calculate value
-    *val = deg;
-    *val += ((double)(min)) / (60.0);
-    *val += ((double)(fsec)) / (3600.0);
-
-    // adjust for the direction
-    if (*in_string == sposdir || *in_string == cposdir)
     {
-    }
-    else if (*in_string == snegdir || *in_string == cnegdir)
-    {
-      *val = -(*val);
-    }
-    else
-      return 0;
+      // get the degrees
+      if (length > 3)
+        return 0;
+      if ((deg = to_int(in_string - length, length)) > maxval || deg < 0)
+        return 0;
 
-    ++in_string;
+      // go past 'd' and spaces
+      ++in_string;
+      while ((*in_string == ' ') || (*in_string == '\t'))
+        ++in_string;
 
-    return static_cast<int>(in_string - orig);
-  }
-  else // DDD.DDDD
-    if (*in_string == ' ' || *in_string == '-' || *in_string == '+' || *in_string == '.' || *in_string == '\0')
-  {
-    char * temp = new char[2];
-    in_string = orig;
+      // get the minutes
+      for (length = 0; std::isdigit(*in_string) && length < 15; ++in_string, ++length) /*nothing*/
+        ;
+      if (length > 14)
+        return 0;
+      if (length > 2)
+        return 0;
+      if ((min = to_int(in_string - length, length)) >= 60 || min < 0)
+        return 0;
 
-    // go past any spaces
-    while ((*in_string == ' ') || (*in_string == '\t'))
+      // go past ''' and spaces
+      ++in_string;
+      while ((*in_string == ' ') || (*in_string == '\t'))
+        ++in_string;
+
+      // get the seconds (float)
+      char * temp = new char[2];
+      for (length = 0; (*in_string == '.' || std::isdigit(*in_string)) && length < 15; ++length)
+        ++in_string;
+      if (length > 14)
+        return 0;
+
+      std::strncpy(temp, in_string - length, length);
+      if ((fsec = (float)std::stod(temp)) >= 60.0f || fsec < 0.0f)
+        return 0;
+      delete[] temp;
+
+      // go past '"' and any spaces to the direction
+      ++in_string;
+      while ((*in_string == ' ') || (*in_string == '\t'))
+        ++in_string;
+
+      // calculate value
+      *val = deg;
+      *val += ((double)(min)) / (60.0);
+      *val += ((double)(fsec)) / (3600.0);
+
+      // adjust for the direction
+      if (*in_string == sposdir || *in_string == cposdir)
+      {
+      }
+      else if (*in_string == snegdir || *in_string == cnegdir)
+      {
+        *val = -(*val);
+      }
+      else
+        return 0;
+
       ++in_string;
 
-    // calculate length of float
-    for (length = 0;
-         (*in_string == '+' || *in_string == '-' || *in_string == '.' || std::isdigit(*in_string)) && length < 15;
-         ++length)
-      ++in_string;
-    if (length > 14)
-      return 0;
+      return static_cast<int>(in_string - orig);
+    }
+    else // DDD.DDDD
+      if (*in_string == ' ' || *in_string == '-' || *in_string == '+' || *in_string == '.' || *in_string == '\0')
+      {
+        char * temp = new char[2];
+        in_string = orig;
 
-    // calculate value of float
-    std::strncpy(temp, in_string - length, length);
-    *val = std::stod(temp);
-    if (std::fabs(*val) > float(maxval))
-      return 0;
-    delete[] temp;
+        // go past any spaces
+        while ((*in_string == ' ') || (*in_string == '\t'))
+          ++in_string;
 
-    ++in_string;
+        // calculate length of float
+        for (length = 0;
+             (*in_string == '+' || *in_string == '-' || *in_string == '.' || std::isdigit(*in_string)) && length < 15;
+             ++length)
+          ++in_string;
+        if (length > 14)
+          return 0;
 
-    return static_cast<int>(in_string - orig);
-  }
-  else
-    return 0;
+        // calculate value of float
+        std::strncpy(temp, in_string - length, length);
+        *val = std::stod(temp);
+        if (std::fabs(*val) > float(maxval))
+          return 0;
+        delete[] temp;
+
+        ++in_string;
+
+        return static_cast<int>(in_string - orig);
+      }
+      else
+        return 0;
 }
 
 //: converts a latlon in_string to doubles
@@ -231,36 +231,43 @@ vpgl_nitf_rational_camera::geostr_to_latlon(const char * str, double * lat, doub
 
   return latstrlen + lonstrlen;
 }
-void vpgl_nitf_rational_camera::geostr_to_latlon_v2(std::string const& str, std::vector<std::pair<double, double> >& coords) {
+void
+vpgl_nitf_rational_camera::geostr_to_latlon_v2(const std::string & str, std::vector<std::pair<double, double>> & coords)
+{
   // separate string into four corner sections: (lat, lon), (lat, lon), (lat, lon), (lat, lon)
-  std::string::const_iterator sit =str.begin();
+  std::string::const_iterator sit = str.begin();
   std::vector<double> latlons;
   size_t inc_lat = 7, inc_lon = 8, inc;
   geopt_coord lat_code = vpgl_nitf_rational_camera::LAT;
   geopt_coord lon_code = vpgl_nitf_rational_camera::LON;
-  //initial condition
+  // initial condition
   size_t start = 0;
   inc = inc_lat;
   geopt_coord code = lat_code;
-  for(size_t k = 0; k<8; ++k){
-      //extract lat or lon substring
+  for (size_t k = 0; k < 8; ++k)
+  {
+    // extract lat or lon substring
     std::string section;
     double val = 0.0;
-    for (size_t cnt = 0; cnt < inc; ++cnt, ++sit) 
-      section.push_back(*sit); 
+    for (size_t cnt = 0; cnt < inc; ++cnt, ++sit)
+      section.push_back(*sit);
     // convert to decimal degrees
     geostr_to_double(section.c_str(), &val, code);
     latlons.push_back(val);
-    //advance to next substring
+    // advance to next substring
     start += inc;
-    if(inc == inc_lat) inc = inc_lon;
-    else inc = inc_lat;
-    if(code ==lat_code) code = lon_code;
-    else code = lat_code;
+    if (inc == inc_lat)
+      inc = inc_lon;
+    else
+      inc = inc_lat;
+    if (code == lat_code)
+      code = lon_code;
+    else
+      code = lat_code;
   }
-  //form pairs
-  for(size_t i = 0; i<8; i+=2)
-    coords.emplace_back(latlons[i+1], latlons[i]);
+  // form pairs
+  for (size_t i = 0; i < 8; i += 2)
+    coords.emplace_back(latlons[i + 1], latlons[i]);
 }
 
 //: Read from a nitf image
@@ -350,7 +357,7 @@ vpgl_nitf_rational_camera::read(vil_nitf2_image * nitf_image, bool verbose)
 
 //: Read from a nitf image file
 bool
-vpgl_nitf_rational_camera::read(std::string const & nitf_image_path, bool verbose)
+vpgl_nitf_rational_camera::read(const std::string & nitf_image_path, bool verbose)
 {
   // first open the nitf image
   vil_image_resource_sptr image = vil_load_image_resource(nitf_image_path.c_str());
@@ -378,7 +385,7 @@ vpgl_nitf_rational_camera::vpgl_nitf_rational_camera(vil_nitf2_image * nitf_imag
   this->read(nitf_image, verbose);
 }
 
-vpgl_nitf_rational_camera::vpgl_nitf_rational_camera(std::string const & nitf_image_path, bool verbose)
+vpgl_nitf_rational_camera::vpgl_nitf_rational_camera(const std::string & nitf_image_path, bool verbose)
 {
   this->read(nitf_image_path, verbose);
 }

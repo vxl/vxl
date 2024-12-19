@@ -34,7 +34,7 @@ basic_manager::init()
 
 // the event handler
 bool
-basic_manager::handle(vgui_event const & e)
+basic_manager::handle(const vgui_event & e)
 {
   if (e.key == 'b')
     vgui::out << "I saw a 'b'\n";

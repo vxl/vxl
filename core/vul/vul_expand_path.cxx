@@ -217,7 +217,7 @@ vul_expand_path_internal(std::string path)
   // expand ~/ or just ~
   if ((path.size() >= 2 && path[0] == '~' && path[1] == '/') || path == "~")
   {
-    char const * HOME = std::getenv("HOME");
+    const char * HOME = std::getenv("HOME");
     if (!HOME)
     {
       // urgh!

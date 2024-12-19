@@ -31,7 +31,7 @@ vpgl_affine_rectification::compute_affine_cam(const std::vector<vgl_point_2d<dou
 }
 
 
-//:Extract the fundamental matrix from affine cameras
+//: Extract the fundamental matrix from affine cameras
 bool
 vpgl_affine_rectification::compute_affine_f(const vpgl_affine_camera<double> * cam1,
                                             const vpgl_affine_camera<double> * cam2,

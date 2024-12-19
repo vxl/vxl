@@ -26,7 +26,7 @@ vgui_command::~vgui_command()
 }
 
 //-----------------------------------------------------------------------------
-vgui_command_cfunc::vgui_command_cfunc(function_pv f, void const * d)
+vgui_command_cfunc::vgui_command_cfunc(function_pv f, const void * d)
   : fn_pv(f)
   , fn(nullptr)
   , data(d)

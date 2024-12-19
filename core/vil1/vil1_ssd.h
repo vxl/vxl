@@ -15,8 +15,7 @@
 // O  : accumulator type
 // \endverbatim
 template <class I1, class I2, class O>
-O vil1_ssd(vil1_memory_image_of<I1> const &,
-           vil1_memory_image_of<I2> const &,
-           O * /*dummy*/);
+O
+vil1_ssd(const vil1_memory_image_of<I1> &, const vil1_memory_image_of<I2> &, O * /*dummy*/);
 
 #endif // vil1_ssd_h_

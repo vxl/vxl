@@ -22,21 +22,41 @@ class vgui_adaptor_tableau : private vgui_tableau
 {
   friend class vgui_adaptor;
 
-  vgui_adaptor_tableau(vgui_adaptor *a);
+  vgui_adaptor_tableau(vgui_adaptor * a);
   ~vgui_adaptor_tableau();
 
-  void set_child(vgui_tableau_sptr const& t) { slot.assign(t); }
-  vgui_parent_child_link get_child() const { return slot; }
-  bool handle(vgui_event const &e) { return slot.handle(e); }
-  std::string type_name() const { return "vgui_adaptor_tableau"; }
+  void
+  set_child(const vgui_tableau_sptr & t)
+  {
+    slot.assign(t);
+  }
+  vgui_parent_child_link
+  get_child() const
+  {
+    return slot;
+  }
+  bool
+  handle(const vgui_event & e)
+  {
+    return slot.handle(e);
+  }
+  std::string
+  type_name() const
+  {
+    return "vgui_adaptor_tableau";
+  }
 
-//even more private:
-  vgui_adaptor *adaptor;
+  // even more private:
+  vgui_adaptor * adaptor;
   vgui_parent_child_link slot;
-  void post_message(char const *, void const *);
-  void post_redraw();
-  void post_overlay_redraw();
-  void post_idle_request();
+  void
+  post_message(const char *, const void *);
+  void
+  post_redraw();
+  void
+  post_overlay_redraw();
+  void
+  post_idle_request();
 };
 
 #endif // vgui_adaptor_tableau_h_

@@ -12,7 +12,8 @@
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 //   2002/01/22 Peter Vanroose - return type of from_local_to_cs() changed from ptr to non-ptr
 //   2002/01/28 Peter Vanroose - std::vector members changed from ptr to non-ptr
-//   2004/09/17 Peter Vanroose - made beat(), parent(), motion() non-virtual: they just return a member and should not be overloaded
+//   2004/09/17 Peter Vanroose - made beat(), parent(), motion() non-virtual: they just return a member and should not
+//   be overloaded
 // \endverbatim
 
 #include <vector>
@@ -38,10 +39,9 @@ class vcsl_spherical;
 // class invariants:
 // (parent_.size()==motion_.size())&&(parent_.size()+1==beat_.size())
 
-class vcsl_spatial
-  :public vcsl_coordinate_system
+class vcsl_spatial : public vcsl_coordinate_system
 {
- public:
+public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -56,44 +56,94 @@ class vcsl_spatial
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  const vcsl_spatial *cast_to_spatial() const override { return this; }
-  virtual const vcsl_cartesian_2d *cast_to_cartesian_2d() const {return nullptr; }
-  virtual const vcsl_polar *cast_to_polar() const {return nullptr; }
-  virtual const vcsl_cartesian_3d *cast_to_cartesian_3d() const {return nullptr; }
-  virtual const vcsl_cylindrical *cast_to_cylindrical() const {return nullptr; }
-  virtual const vcsl_spherical *cast_to_spherical() const {return nullptr; }
+  const vcsl_spatial *
+  cast_to_spatial() const override
+  {
+    return this;
+  }
+  virtual const vcsl_cartesian_2d *
+  cast_to_cartesian_2d() const
+  {
+    return nullptr;
+  }
+  virtual const vcsl_polar *
+  cast_to_polar() const
+  {
+    return nullptr;
+  }
+  virtual const vcsl_cartesian_3d *
+  cast_to_cartesian_3d() const
+  {
+    return nullptr;
+  }
+  virtual const vcsl_cylindrical *
+  cast_to_cylindrical() const
+  {
+    return nullptr;
+  }
+  virtual const vcsl_spherical *
+  cast_to_spherical() const
+  {
+    return nullptr;
+  }
 
   //***************************************************************************
   // Status report
   //***************************************************************************
 
   //: Return the list of time clocks
-  std::vector<double> beat() const { return beat_; }
+  std::vector<double>
+  beat() const
+  {
+    return beat_;
+  }
 
   //: Return the time duration
-  unsigned int duration() const { return (unsigned int)(beat_.size()); }
+  unsigned int
+  duration() const
+  {
+    return (unsigned int)(beat_.size());
+  }
 
   //: Return the list of parent coordinate system along the time
-  std::vector<vcsl_spatial_sptr> parent() const { return parent_; }
+  std::vector<vcsl_spatial_sptr>
+  parent() const
+  {
+    return parent_;
+  }
 
   //: Return the list of transformations along the time
-  std::vector<vcsl_spatial_transformation_sptr> motion() const {return motion_;}
+  std::vector<vcsl_spatial_transformation_sptr>
+  motion() const
+  {
+    return motion_;
+  }
 
   //: Is `time' between the two time bounds ?
-  bool valid_time(double time) const;
+  bool
+  valid_time(double time) const;
 
   //***************************************************************************
   // Status setting
   //***************************************************************************
 
   //: Set the list of time clocks
-  void set_beat(std::vector<double> const& new_beat) { beat_=new_beat; }
+  void
+  set_beat(const std::vector<double> & new_beat)
+  {
+    beat_ = new_beat;
+  }
 
   //: Set the list of parent coordinate system along the time
-  void set_parent(std::vector<vcsl_spatial_sptr> const& new_parent);
+  void
+  set_parent(const std::vector<vcsl_spatial_sptr> & new_parent);
 
   //: Set the list of transformations along the time
-  void set_motion(std::vector<vcsl_spatial_transformation_sptr> const& m) { motion_=m; }
+  void
+  set_motion(const std::vector<vcsl_spatial_transformation_sptr> & m)
+  {
+    motion_ = m;
+  }
 
   //: Set the unique parent and the unique motion
   //
@@ -107,8 +157,8 @@ class vcsl_spatial
   //
   // \param new_parent CS that 'this' is derived from.
   // \param new_motion The transformation from new_parent to 'this'.
-  void set_unique(const vcsl_spatial_sptr &new_parent,
-                  const vcsl_spatial_transformation_sptr &new_motion);
+  void
+  set_unique(const vcsl_spatial_sptr & new_parent, const vcsl_spatial_transformation_sptr & new_motion);
 
   //***************************************************************************
   // Basic operations
@@ -117,56 +167,65 @@ class vcsl_spatial
   //: Return the index of the beat inferior or equal to `time'
   //  REQUIRE: parent().size()!=0
   //  REQUIRE: valid_time(time)
-  virtual int matching_interval(double time) const;
+  virtual int
+  matching_interval(double time) const;
 
   //: Does a path from `this' to `other' exist ?
-  virtual bool path_from_local_to_cs_exists(const vcsl_spatial_sptr &other,
-                                            double time);
+  virtual bool
+  path_from_local_to_cs_exists(const vcsl_spatial_sptr & other, double time);
 
   //: Is `this' an absolute spatial coordinate system at time `time'?
   //  REQUIRE: valid_time(time)
-  virtual bool is_absolute(double time) const;
+  virtual bool
+  is_absolute(double time) const;
 
 
   //: Return v but expressed in the spatial coordinate system `other'
   //  REQUIRE: path_from_local_to_cs_exists(other,time)
-  virtual vnl_vector<double> from_local_to_cs(const vnl_vector<double> &v,
-                                              const vcsl_spatial_sptr &other,
-                                              double time);
+  virtual vnl_vector<double>
+  from_local_to_cs(const vnl_vector<double> & v, const vcsl_spatial_sptr & other, double time);
 
-  virtual void set_graph(const vcsl_graph_sptr &new_graph);
+  virtual void
+  set_graph(const vcsl_graph_sptr & new_graph);
 
- private:
+private:
   // Only used by vcsl_spatial and vcsl_graph
-  void set_reached(const bool &new_reached) { reached_=new_reached; }
-  bool reached() const { return reached_; }
+  void
+  set_reached(const bool & new_reached)
+  {
+    reached_ = new_reached;
+  }
+  bool
+  reached() const
+  {
+    return reached_;
+  }
   friend class vcsl_graph;
 
   //***************************************************************************
   // Implementation
   //***************************************************************************
- protected:
+protected:
   //: Does a path from `this' to `other' exist ?
   // Called only by path_to_cs_exists()
   virtual bool
-  recursive_path_from_local_to_cs_exists(const vcsl_spatial_sptr &other,
-                                         double time);
+  recursive_path_from_local_to_cs_exists(const vcsl_spatial_sptr & other, double time);
   //: Find the sequence of transformations from `this' to `other'
   //  REQUIRE: path.size()==0 and sens.size()==0
   //  REQUIRE: path_from_local_to_cs_exists()
   virtual void
-  path_from_local_to_cs(const vcsl_spatial_sptr &other,
+  path_from_local_to_cs(const vcsl_spatial_sptr & other,
                         double time,
-                        std::vector<vcsl_spatial_transformation_sptr> &path,
-                        VCSL_SPATIAL_VECTOR_BOOL &sens);
+                        std::vector<vcsl_spatial_transformation_sptr> & path,
+                        VCSL_SPATIAL_VECTOR_BOOL & sens);
 
   //: Find the sequence of transformations from `this' to `other'
   //  Called only by path_from_local_to_cs()
   virtual bool
-  recursive_path_from_local_to_cs(const vcsl_spatial_sptr &other,
+  recursive_path_from_local_to_cs(const vcsl_spatial_sptr & other,
                                   double time,
-                                  std::vector<vcsl_spatial_transformation_sptr> &path,
-                                  VCSL_SPATIAL_VECTOR_BOOL &sens);
+                                  std::vector<vcsl_spatial_transformation_sptr> & path,
+                                  VCSL_SPATIAL_VECTOR_BOOL & sens);
 
   //: successive parents of `this' along the time
   std::vector<vcsl_spatial_sptr> parent_;

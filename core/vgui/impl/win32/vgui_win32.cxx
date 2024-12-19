@@ -141,7 +141,7 @@ vgui_win32::uninit()
 }
 
 vgui_window *
-vgui_win32::produce_window(int width, int height, vgui_menu const & menubar, char const * title)
+vgui_win32::produce_window(int width, int height, const vgui_menu & menubar, const char * title)
 {
   vgui_window * a_window = new vgui_win32_window(hInstance_, szAppName_, width, height, menubar, title);
   windows_to_delete.push_back(a_window);
@@ -150,7 +150,7 @@ vgui_win32::produce_window(int width, int height, vgui_menu const & menubar, cha
 }
 
 vgui_window *
-vgui_win32::produce_window(int width, int height, char const * title)
+vgui_win32::produce_window(int width, int height, const char * title)
 {
   vgui_window * a_window = new vgui_win32_window(hInstance_, szAppName_, width, height, title);
   windows_to_delete.push_back(a_window);
@@ -159,7 +159,7 @@ vgui_win32::produce_window(int width, int height, char const * title)
 }
 
 vgui_dialog_impl *
-vgui_win32::produce_dialog(char const * name)
+vgui_win32::produce_dialog(const char * name)
 {
   vgui_window * win = get_current_window();
 
@@ -169,7 +169,7 @@ vgui_win32::produce_dialog(char const * name)
 }
 
 vgui_dialog_extensions_impl *
-vgui_win32::produce_dialog_extension(char const * name)
+vgui_win32::produce_dialog_extension(const char * name)
 {
   // return new vgui_win32_dialog_extension_impl(name);
   return 0;
@@ -239,7 +239,7 @@ vgui_win32::flush()
 // TODO: This function is not called yet.
 // Add event to the event queue.
 void
-vgui_win32::add_event(vgui_event const & e)
+vgui_win32::add_event(const vgui_event & e)
 {
   // PostMessage(); // TODO
 }

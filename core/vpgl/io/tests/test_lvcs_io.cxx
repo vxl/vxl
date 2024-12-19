@@ -41,8 +41,8 @@ _test_lvcs_sptr_wgs84()
 {
   std::string filename = "test_lvcs_sptr_wgs84_io.vsl";
 
-  auto lvcs_sptr = vpgl_lvcs_sptr(new vpgl_lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::wgs84,
-                                                vpgl_lvcs::DEG, vpgl_lvcs::FEET));
+  auto lvcs_sptr =
+    vpgl_lvcs_sptr(new vpgl_lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::FEET));
   std::cout << "vpgl_lvcs_sptr wgs84 : " << *lvcs_sptr;
 
   vsl_b_ofstream os(filename);
@@ -64,8 +64,8 @@ _test_lvcs_sptr_utm()
 {
   std::string filename = "test_lvcs_sptr_utm_io.vsl";
 
-  auto lvcs_sptr = vpgl_lvcs_sptr(new vpgl_lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::utm,
-                                                vpgl_lvcs::DEG, vpgl_lvcs::METERS));
+  auto lvcs_sptr =
+    vpgl_lvcs_sptr(new vpgl_lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::utm, vpgl_lvcs::DEG, vpgl_lvcs::METERS));
   std::cout << "vpgl_lvcs_sptr utm : " << *lvcs_sptr;
 
   vsl_b_ofstream os(filename);

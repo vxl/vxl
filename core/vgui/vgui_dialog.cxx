@@ -23,10 +23,7 @@ vgui_dialog::vgui_dialog(const char * name)
 }
 
 
-vgui_dialog::~vgui_dialog()
-{
-  delete impl;
-}
+vgui_dialog::~vgui_dialog() { delete impl; }
 
 
 bool
@@ -53,7 +50,7 @@ vgui_dialog::pushbutton(vgui_dialog_callback_no_client_data f, const char * labe
 }
 
 void
-vgui_dialog::pushbutton(vgui_dialog_callback f, void const * client_data, const char * label, const void * icon)
+vgui_dialog::pushbutton(vgui_dialog_callback f, const void * client_data, const char * label, const void * icon)
 {
   vgui_command * cfunc = new vgui_command_cfunc(f, client_data);
   pushbutton(cfunc, label, icon);

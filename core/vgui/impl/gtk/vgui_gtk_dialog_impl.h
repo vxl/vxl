@@ -28,34 +28,43 @@ struct vgui_tableau_sptr;
 //: Specialization of vgui_dialog_impl for GTK. Creates a GTK dialog box.
 class vgui_gtk_dialog_impl : public vgui_dialog_impl
 {
- public:
-  vgui_gtk_dialog_impl(const char* name);
+public:
+  vgui_gtk_dialog_impl(const char * name);
   ~vgui_gtk_dialog_impl();
 
-  void* choice_field_widget(const char*, const std::vector<std::string>&, int&);
-  void* inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height);
+  void *
+  choice_field_widget(const char *, const std::vector<std::string> &, int &);
+  void *
+  inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height);
 
   //--------------------------------------------------------------------------------
   //: Changes the modality of the dialog.
   //  True makes the dialog modal (i.e. the dialog 'grabs' all events), this is the default.
   //  False makes the dialog non-modal.
-  void modal(bool m);
+  void
+  modal(bool m);
 
-  void set_ok_button(const char* txt);
-  void set_cancel_button(const char* txt);
+  void
+  set_ok_button(const char * txt);
+  void
+  set_cancel_button(const char * txt);
 
-  bool ask();
+  bool
+  ask();
 
- public:
+public:
   // Status of this dialog box.
-  enum status_type { BUSY,     // user is doing stuff
-                     OK,       // okay button pressed
-                     CANCEL,   // cancel button pressed
-                     CLOSE }; // dialog window closed
+  enum status_type
+  {
+    BUSY,   // user is doing stuff
+    OK,     // okay button pressed
+    CANCEL, // cancel button pressed
+    CLOSE
+  }; // dialog window closed
 
- private:
-  GtkWidget* dialog_window;
-  GtkWidget* vbox;
+private:
+  GtkWidget * dialog_window;
+  GtkWidget * vbox;
 
   status_type dialog_status_;
 

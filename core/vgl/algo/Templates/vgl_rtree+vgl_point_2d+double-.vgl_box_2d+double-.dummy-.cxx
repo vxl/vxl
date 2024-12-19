@@ -11,26 +11,26 @@ using B = vgl_box_2d<double>;
 struct dummy // dummy "namespace", used by some of the rtree methods
 {
   static void
-  init(B &, V const &)
+  init(B &, const V &)
   {}
   static void
-  update(B &, V const &)
+  update(B &, const V &)
   {}
   static void
-  update(B &, B const &)
+  update(B &, const B &)
   {}
   static bool
-  meet(B const &, V const &)
+  meet(const B &, const V &)
   {
     return false;
   }
   static bool
-  meet(B const &, B const &)
+  meet(const B &, const B &)
   {
     return false;
   }
   static float
-  volume(B const &)
+  volume(const B &)
   {
     return 0.0f;
   }

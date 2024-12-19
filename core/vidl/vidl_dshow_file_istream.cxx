@@ -31,10 +31,7 @@ vidl_dshow_file_istream ::vidl_dshow_file_istream(const std::string & filename)
 }
 
 //: Destructor.
-vidl_dshow_file_istream::~vidl_dshow_file_istream(void)
-{
-  close();
-}
+vidl_dshow_file_istream::~vidl_dshow_file_istream(void) { close(); }
 
 //: Open the file specified in params object.
 void

@@ -22,10 +22,9 @@
 #include "vcsl_unit_sptr.h"
 
 //: Axis descriptor: a dimension, a unit, a label
-class vcsl_axis
-  : public vbl_ref_count
+class vcsl_axis : public vbl_ref_count
 {
- public:
+public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -34,22 +33,26 @@ class vcsl_axis
   vcsl_axis();
 
   //: Constructor from dimension. Unit is the standard one. Label is empty
-  explicit vcsl_axis(vcsl_dimension_sptr const& new_dimension);
+  explicit vcsl_axis(const vcsl_dimension_sptr & new_dimension);
 
   //: Constructor from dimension and unit. Label is empty
   //  REQUIRE: new_dimension.compatible_unit(new_unit)
-  vcsl_axis(vcsl_dimension_sptr const& new_dimension,
-            vcsl_unit_sptr const& new_unit);
+  vcsl_axis(const vcsl_dimension_sptr & new_dimension, const vcsl_unit_sptr & new_unit);
 
   //: Constructor from dimension, unit and label
-  vcsl_axis(vcsl_dimension_sptr const& new_dimension,
-            vcsl_unit_sptr const& new_unit,
-            std::string  new_label)
-    : dimension_(new_dimension), unit_(new_unit), label_(std::move(new_label)) {}
+  vcsl_axis(const vcsl_dimension_sptr & new_dimension, const vcsl_unit_sptr & new_unit, std::string new_label)
+    : dimension_(new_dimension)
+    , unit_(new_unit)
+    , label_(std::move(new_label))
+  {}
 
   // Copy constructor
-  vcsl_axis(const vcsl_axis &a)
-    : vbl_ref_count(),dimension_(a.dimension_),unit_(a.unit_),label_(a.label_){}
+  vcsl_axis(const vcsl_axis & a)
+    : vbl_ref_count()
+    , dimension_(a.dimension_)
+    , unit_(a.unit_)
+    , label_(a.label_)
+  {}
 
   // Destructor
   ~vcsl_axis() override = default;
@@ -59,34 +62,52 @@ class vcsl_axis
   //***************************************************************************
 
   //: Return the dimension
-  vcsl_dimension_sptr dimension() const { return dimension_; }
+  vcsl_dimension_sptr
+  dimension() const
+  {
+    return dimension_;
+  }
 
   //: Return the unit of the dimension
-  vcsl_unit_sptr unit() const { return unit_; }
+  vcsl_unit_sptr
+  unit() const
+  {
+    return unit_;
+  }
 
   //: Return the label of the axis
-  std::string label() const { return label_; }
+  std::string
+  label() const
+  {
+    return label_;
+  }
 
   //***************************************************************************
   // Status change
   //***************************************************************************
 
   //: Set the dimension. The unit is set with the standard unit
-  void set_dimension(vcsl_dimension_sptr const& new_dimension);
+  void
+  set_dimension(const vcsl_dimension_sptr & new_dimension);
 
   //: Set the dimension and the unit
   //  REQUIRE: new_dimension.compatible_unit(new_unit)
-  void set_dimension_and_unit(vcsl_dimension_sptr const& new_dimension,
-                              vcsl_unit_sptr const& new_unit);
+  void
+  set_dimension_and_unit(const vcsl_dimension_sptr & new_dimension, const vcsl_unit_sptr & new_unit);
 
   //: Set the unit of the dimension
   //  REQUIRE dimension()->compatible_unit(new_unit)
-  void set_unit(vcsl_unit_sptr const& new_unit);
+  void
+  set_unit(const vcsl_unit_sptr & new_unit);
 
   //: Set the label
-  void set_label(std::string const& new_label) { label_=new_label; }
+  void
+  set_label(const std::string & new_label)
+  {
+    label_ = new_label;
+  }
 
- protected:
+protected:
   //***************************************************************************
   // Implementation
   //***************************************************************************

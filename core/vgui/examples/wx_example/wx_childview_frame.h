@@ -27,21 +27,23 @@ class wx_childview_frame : public wxFrame
 
 public:
   //: Constructor - default.
-  wx_childview_frame(wxWindow* parent,
+  wx_childview_frame(wxWindow * parent,
                      wxWindowID id,
-                     const wxString& title,
-                     const wxPoint& pos,
-                     const wxSize& size,
+                     const wxString & title,
+                     const wxPoint & pos,
+                     const wxSize & size,
                      long type);
 
-  //wxMenu* edit_menu() const { return edit_menu_; }
+  // wxMenu* edit_menu() const { return edit_menu_; }
 
   // Event handlers.
-  void on_about(wxCommandEvent& event);
-  void on_quit (wxCommandEvent& event);
+  void
+  on_about(wxCommandEvent & event);
+  void
+  on_quit(wxCommandEvent & event);
 
 private:
-  vgui_wx_adaptor*  canvas_;
+  vgui_wx_adaptor * canvas_;
 };
 
 #endif // wx_childview_frame_h_

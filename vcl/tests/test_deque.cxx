@@ -4,7 +4,8 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-int test_deque_main(int /*argc*/,char* /*argv*/[])
+int
+test_deque_main(int /*argc*/, char * /*argv*/[])
 {
   using mydeque = std::deque<int>;
   mydeque dq;

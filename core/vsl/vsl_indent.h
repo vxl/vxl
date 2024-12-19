@@ -86,26 +86,31 @@
 // \endverbatim
 
 class vsl_indent
-{
-};
+{};
 
 //: Increments current indent for given stream
-void vsl_indent_inc(std::ostream& os);
+void
+vsl_indent_inc(std::ostream & os);
 
 //: Decrements current indent for given stream
-void vsl_indent_dec(std::ostream& os);
+void
+vsl_indent_dec(std::ostream & os);
 
 //: Set number of spaces per increment step
-void vsl_indent_set_tab(std::ostream& os,int);
+void
+vsl_indent_set_tab(std::ostream & os, int);
 
 //: Number of spaces per increment step
-int vsl_indent_tab(std::ostream& os);
+int
+vsl_indent_tab(std::ostream & os);
 
 //: Set indentation to zero
-void vsl_indent_clear(std::ostream& os);
+void
+vsl_indent_clear(std::ostream & os);
 
 //: Outputs current indent to os
-std::ostream& operator<<(std::ostream& os, const vsl_indent& indent);
+std::ostream &
+operator<<(std::ostream & os, const vsl_indent & indent);
 
 //: Tidy up the internal indent map to remove potential memory leaks
 //  The details of indents for each stream are stored in a static
@@ -113,6 +118,7 @@ std::ostream& operator<<(std::ostream& os, const vsl_indent& indent);
 //  lots of noise in the output of memory leak checkers.
 //  This call empties the map, removing the potential leak.
 //  Pragmatically it is called in the vsl_delete_all_loaders()
-void vsl_indent_clear_all_data();
+void
+vsl_indent_clear_all_data();
 
 #endif // vsl_indent_h_

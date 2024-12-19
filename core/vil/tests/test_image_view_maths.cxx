@@ -10,7 +10,8 @@
 #include "vil/vil_math.h"
 #include "vil/vil_print.h"
 
-constexpr float test_tolerance = 1.9e-6; // NOTE:  1.78814e-06 for optimized code using SSE instruction with limited floating point extension build
+constexpr float test_tolerance =
+  1.9e-6; // NOTE:  1.78814e-06 for optimized code using SSE instruction with limited floating point extension build
 template <class T>
 static void
 test_image_abs_diff(unsigned ni, unsigned nj, T min, T max, T tol)
@@ -99,14 +100,16 @@ test_image_view_maths_byte()
   vil_math_image_product(imA, imB, im_product);
   TEST("Width of im_sum", im_product.ni(), imA.ni());
   TEST("Height of im_sum", im_product.nj(), imA.nj());
-  TEST_NEAR("vil_math_image_product : im_product(5,7)", im_product(5, 7), float(imA(5, 7)) * float(imB(5, 7)), test_tolerance);
+  TEST_NEAR(
+    "vil_math_image_product : im_product(5,7)", im_product(5, 7), float(imA(5, 7)) * float(imB(5, 7)), test_tolerance);
 
 
   vil_image_view<float> im_ratio;
   vil_math_image_ratio(imA, imB, im_ratio);
   TEST("Width of im_ratio", im_ratio.ni(), imA.ni());
   TEST("Height of im_ratio", im_ratio.nj(), imA.nj());
-  TEST_NEAR("vil_math_image_product : im_ratio(5,7)", im_ratio(5, 7), float(imA(5, 7)) / float(imB(5, 7)), test_tolerance);
+  TEST_NEAR(
+    "vil_math_image_product : im_ratio(5,7)", im_ratio(5, 7), float(imA(5, 7)) / float(imB(5, 7)), test_tolerance);
 
   {
     std::cout << "=== vil_math_rms (1 plane) ===" << std::endl;

@@ -41,10 +41,10 @@
 // Both VXL_LITTLE_ENDIAN && VXL_BIG_ENDIAN should be defined
 // One should equal 1 and the other equal 0;
 #if VXL_LITTLE_ENDIAN == VXL_BIG_ENDIAN
-  extern "There is a problem with the ENDIAN indication macros.";
+extern "There is a problem with the ENDIAN indication macros.";
 #endif
-#if VXL_LITTLE_ENDIAN+VXL_BIG_ENDIAN != 1
-  extern "There is a problem with the ENDIAN indication macros.";
+#if VXL_LITTLE_ENDIAN + VXL_BIG_ENDIAN != 1
+extern "There is a problem with the ENDIAN indication macros.";
 #endif
 
 /////////////////////////////////////////////////////////////////////////
@@ -78,9 +78,14 @@
 // Really should check anything that #includes this file.
 
 #if VXL_LITTLE_ENDIAN
-inline void vsl_swap_bytes(char*, unsigned, std::size_t = 1) { return; }
+inline void
+vsl_swap_bytes(char *, unsigned, std::size_t = 1)
+{
+  return;
+}
 #else
-inline void vsl_swap_bytes( char * ptr, unsigned nbyte, std::size_t nelem = 1)
+inline void
+vsl_swap_bytes(char * ptr, unsigned nbyte, std::size_t nelem = 1)
 {
   // If the byte order of the file
   // does not match the intel byte order
@@ -88,11 +93,13 @@ inline void vsl_swap_bytes( char * ptr, unsigned nbyte, std::size_t nelem = 1)
   char temp;
   char *ptr1, *ptr2;
 
-  unsigned nbyte2 = nbyte/2;
-  for (std::size_t n = 0; n < nelem; n++ ) {
+  unsigned nbyte2 = nbyte / 2;
+  for (std::size_t n = 0; n < nelem; n++)
+  {
     ptr1 = ptr;
     ptr2 = ptr1 + nbyte - 1;
-    for (unsigned i = 0; i < nbyte2; i++ ) {
+    for (unsigned i = 0; i < nbyte2; i++)
+    {
       temp = *ptr1;
       *ptr1++ = *ptr2;
       *ptr2-- = temp;
@@ -105,7 +112,8 @@ inline void vsl_swap_bytes( char * ptr, unsigned nbyte, std::size_t nelem = 1)
 //: Perform byte swapping to a buffer
 // Same as vsl_swap_bytes, but saves the results in a buffer.
 // In general use vsl_swap_bytes where possible, because it is faster.
-inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, unsigned nbyte, std::size_t nelem = 1)
+inline void
+vsl_swap_bytes_to_buffer(const char * source, char * dest, unsigned nbyte, std::size_t nelem = 1)
 {
 #if VXL_LITTLE_ENDIAN
   std::memcpy(dest, source, nbyte * nelem);
@@ -117,12 +125,12 @@ inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, unsigned
   // does not match the intel byte order
   // then the bytes should be swapped
 
-  const unsigned nbyte_x_2 = nbyte*2;
+  const unsigned nbyte_x_2 = nbyte * 2;
   dest += nbyte - 1;
 
-  for (std::size_t n = 0; n < nelem; n++ )
+  for (std::size_t n = 0; n < nelem; n++)
   {
-    for (unsigned i = 0; i < nbyte; i++ )
+    for (unsigned i = 0; i < nbyte; i++)
       *dest-- = *source++;
 
     dest += nbyte_x_2;
@@ -133,25 +141,25 @@ inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, unsigned
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define macro( T ) \
-inline const char * vsl_type_string(T /*dummy*/) { return #T; }
-macro (short);
-macro (unsigned short);
-macro (int);
-macro (unsigned int);
-macro (long);
-macro (unsigned long);
-#if VXL_INT_64_IS_LONGLONG
-macro (vxl_int_64);
-macro (vxl_uint_64);
-#endif
-#if 0
+#  define macro(T) \
+    inline const char * vsl_type_string(T /*dummy*/) { return #T; }
+macro(short);
+macro(unsigned short);
+macro(int);
+macro(unsigned int);
+macro(long);
+macro(unsigned long);
+#  if VXL_INT_64_IS_LONGLONG
+macro(vxl_int_64);
+macro(vxl_uint_64);
+#  endif
+#  if 0
 // This test will be replaced with !VCL_PTRDIFF_T_IS_A_STANDARD_TYPE
 // When that macro is working.
 macro(std::ptrdiff_t);
 macro(std::size_t);
-#endif
-#undef macro
+#  endif
+#  undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 
 //: The maximum length of buffer to use with arbitrary length integers
@@ -161,17 +169,17 @@ macro(std::size_t);
 // If you are converting several integers at once, multiply the value by
 // the number of integers.
 #define VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(size_of_type) \
-  ((((size_of_type) * 8)/7) + (((((size_of_type) * 8) % 7) == 0) ? 0: 1))
+  ((((size_of_type) * 8) / 7) + (((((size_of_type) * 8) % 7) == 0) ? 0 : 1))
 
 
 //: Implement arbitrary length conversion for unsigned integers.
 // This function should only be used by this header file.
 // Returns the number of bytes written
 template <class T>
-inline std::size_t vsl_convert_to_arbitrary_length_unsigned_impl(
-  const T* ints, unsigned char *buffer, std::size_t count)
+inline std::size_t
+vsl_convert_to_arbitrary_length_unsigned_impl(const T * ints, unsigned char * buffer, std::size_t count)
 {
-  unsigned char* ptr = buffer;
+  unsigned char * ptr = buffer;
   while (count-- > 0)
   {
     // The inside of this loop is run once per integer
@@ -191,10 +199,10 @@ inline std::size_t vsl_convert_to_arbitrary_length_unsigned_impl(
 // This function should only be used by this header file.
 // Returns the number of bytes written
 template <class T>
-inline std::size_t vsl_convert_to_arbitrary_length_signed_impl(
-  const T* ints, unsigned char *buffer, std::size_t count)
+inline std::size_t
+vsl_convert_to_arbitrary_length_signed_impl(const T * ints, unsigned char * buffer, std::size_t count)
 {
-  unsigned char* ptr = buffer;
+  unsigned char * ptr = buffer;
   while (count-- > 0)
   {
     // The inside of this loop is run once per integer
@@ -213,17 +221,17 @@ inline std::size_t vsl_convert_to_arbitrary_length_signed_impl(
 //: Implement arbitrary length conversion for signed integers.
 // This function should only be used by this header file.
 template <class T>
-inline std::size_t vsl_convert_from_arbitrary_length_signed_impl(
-  const unsigned char* buffer, T *ints, std::size_t count)
+inline std::size_t
+vsl_convert_from_arbitrary_length_signed_impl(const unsigned char * buffer, T * ints, std::size_t count)
 {
-  assert (count != 0);
-  const unsigned char* ptr = buffer;
+  assert(count != 0);
+  const unsigned char * ptr = buffer;
   while (count-- > 0)
   {
     // The inside of this loop is run once per integer
 
     T v = 0; // The value being loaded
-    unsigned char b= *(ptr++);
+    unsigned char b = *(ptr++);
     int bitsLoaded = 0;
     while ((b & 128) == 0)
     {
@@ -234,27 +242,22 @@ inline std::size_t vsl_convert_from_arbitrary_length_signed_impl(
 
     // At the end of the loop, the last seven bits have not been added
     // Now check that number has not and will not overflow
-    int bitsLeft = sizeof(T)*8 - bitsLoaded;
+    int bitsLeft = sizeof(T) * 8 - bitsLoaded;
     if (bitsLeft < 7)
     {
-      if (bitsLeft <= 0 ||
-          b & 64 ?
-          (((signed char)b >> (bitsLeft-1)) != -1) :
-          (((b & 127) >> (bitsLeft-1)) != 0)
-         )
+      if (bitsLeft <= 0 || b & 64 ? (((signed char)b >> (bitsLeft - 1)) != -1) : (((b & 127) >> (bitsLeft - 1)) != 0))
       {
-        std::cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length(.., "
-                 << vsl_type_string(T()) << "*,..)\n"
-                 << "has attempted to convert a number that is too large to fit into a "
-                 << vsl_type_string(T()) << '\n';
+        std::cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length(.., " << vsl_type_string(T()) << "*,..)\n"
+                  << "has attempted to convert a number that is too large to fit into a " << vsl_type_string(T())
+                  << '\n';
         return 0;
       }
     }
 
     // Now add the last 1<=n<=7 bits.
-    *(ints++) = v |            // the stuff found before the final 7 bits
-      ( ((T)(b & 63)) << bitsLoaded) | // the value of the penultimate 6 bits
-      ( ((T)(b & 64)) ? (-64 << bitsLoaded) : 0); // the value of the final bit.
+    *(ints++) = v |                                        // the stuff found before the final 7 bits
+                (((T)(b & 63)) << bitsLoaded) |            // the value of the penultimate 6 bits
+                (((T)(b & 64)) ? (-64 << bitsLoaded) : 0); // the value of the final bit.
   }
   return static_cast<std::size_t>(ptr - buffer);
 }
@@ -262,11 +265,11 @@ inline std::size_t vsl_convert_from_arbitrary_length_signed_impl(
 //: Implement arbitrary length conversion for unsigned integers.
 // This function should only be used by this header file.
 template <class T>
-inline std::size_t vsl_convert_from_arbitrary_length_unsigned_impl(
-  const unsigned char* buffer, T *ints, std::size_t count = 1)
+inline std::size_t
+vsl_convert_from_arbitrary_length_unsigned_impl(const unsigned char * buffer, T * ints, std::size_t count = 1)
 {
-  assert (count != 0);
-  const unsigned char* ptr = buffer;
+  assert(count != 0);
+  const unsigned char * ptr = buffer;
   while (count-- > 0)
   {
     // The inside of this loop is run once per integer
@@ -282,21 +285,20 @@ inline std::size_t vsl_convert_from_arbitrary_length_unsigned_impl(
 
     // At the end of the loop, the last seven bits have not been added
     // First check that number has not and will not overflow
-    int bitsLeft = sizeof(T)*8 - bitsLoaded;
+    int bitsLeft = sizeof(T) * 8 - bitsLoaded;
     if (bitsLeft < 7)
     {
       if (bitsLeft <= 0 || ((b & 127) >> bitsLeft) != 0)
       {
-        std::cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length(.., "
-                 << vsl_type_string(T()) << "*,..)\n"
-                 << "has attempted to convert a number that is too large to fit into a "
-                 << vsl_type_string(T()) << '\n';
+        std::cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length(.., " << vsl_type_string(T()) << "*,..)\n"
+                  << "has attempted to convert a number that is too large to fit into a " << vsl_type_string(T())
+                  << '\n';
         return 0;
       }
     }
 
     // Now add the last 7 bits.
-    *(ints++) = T(v + ( ((T)(b & 127)) << bitsLoaded));
+    *(ints++) = T(v + (((T)(b & 127)) << bitsLoaded));
   }
   return static_cast<std::size_t>(ptr - buffer);
 }
@@ -307,9 +309,8 @@ inline std::size_t vsl_convert_from_arbitrary_length_unsigned_impl(
 // The return value is the number of bytes used.
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * count
-inline std::size_t vsl_convert_to_arbitrary_length(const unsigned long* ints,
-                                                  unsigned char *buffer,
-                                                  std::size_t count = 1)
+inline std::size_t
+vsl_convert_to_arbitrary_length(const unsigned long * ints, unsigned char * buffer, std::size_t count = 1)
 {
   return vsl_convert_to_arbitrary_length_unsigned_impl(ints, buffer, count);
 }
@@ -323,9 +324,8 @@ inline std::size_t vsl_convert_to_arbitrary_length(const unsigned long* ints,
 // \param count  Number of integers expected. Cannot be zero.
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
-inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                                    unsigned long *ints,
-                                                    std::size_t count = 1)
+inline std::size_t
+vsl_convert_from_arbitrary_length(const unsigned char * buffer, unsigned long * ints, std::size_t count = 1)
 {
   return vsl_convert_from_arbitrary_length_unsigned_impl(buffer, ints, count);
 }
@@ -337,9 +337,8 @@ inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer
 // The return value is the number of bytes used.
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)) * count
-inline std::size_t vsl_convert_to_arbitrary_length(const long* ints,
-                                                  unsigned char *buffer,
-                                                  std::size_t count = 1)
+inline std::size_t
+vsl_convert_to_arbitrary_length(const long * ints, unsigned char * buffer, std::size_t count = 1)
 {
   return vsl_convert_to_arbitrary_length_signed_impl(ints, buffer, count);
 }
@@ -353,9 +352,8 @@ inline std::size_t vsl_convert_to_arbitrary_length(const long* ints,
 // \param count  Number of integers expected. Cannot be zero.
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
-inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                                    long *ints,
-                                                    std::size_t count = 1)
+inline std::size_t
+vsl_convert_from_arbitrary_length(const unsigned char * buffer, long * ints, std::size_t count = 1)
 {
   return vsl_convert_from_arbitrary_length_signed_impl(buffer, ints, count);
 }
@@ -367,9 +365,8 @@ inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer
 // The return value is the number of bytes used.
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)) * count
-inline std::size_t vsl_convert_to_arbitrary_length(const unsigned int* ints,
-                                                  unsigned char *buffer,
-                                                  std::size_t count = 1)
+inline std::size_t
+vsl_convert_to_arbitrary_length(const unsigned int * ints, unsigned char * buffer, std::size_t count = 1)
 {
   return vsl_convert_to_arbitrary_length_unsigned_impl(ints, buffer, count);
 }
@@ -384,9 +381,8 @@ inline std::size_t vsl_convert_to_arbitrary_length(const unsigned int* ints,
 // \param count  Number of integers expected. Cannot be zero.
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
-inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                                    unsigned int *ints,
-                                                    std::size_t count = 1)
+inline std::size_t
+vsl_convert_from_arbitrary_length(const unsigned char * buffer, unsigned int * ints, std::size_t count = 1)
 {
   return vsl_convert_from_arbitrary_length_unsigned_impl(buffer, ints, count);
 }
@@ -398,9 +394,8 @@ inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer
 // The return value is the number of bytes used.
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)) * count
-inline std::size_t vsl_convert_to_arbitrary_length(const int* ints,
-                                                  unsigned char *buffer,
-                                                  std::size_t count = 1)
+inline std::size_t
+vsl_convert_to_arbitrary_length(const int * ints, unsigned char * buffer, std::size_t count = 1)
 {
   return vsl_convert_to_arbitrary_length_signed_impl(ints, buffer, count);
 }
@@ -415,9 +410,8 @@ inline std::size_t vsl_convert_to_arbitrary_length(const int* ints,
 // \param count  Number of integers expected. Cannot be zero.
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
-inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                                    int *ints,
-                                                    std::size_t count = 1)
+inline std::size_t
+vsl_convert_from_arbitrary_length(const unsigned char * buffer, int * ints, std::size_t count = 1)
 {
   return vsl_convert_from_arbitrary_length_signed_impl(buffer, ints, count);
 }
@@ -429,9 +423,8 @@ inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer
 // The return value is the number of bytes used.
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * count
-inline std::size_t vsl_convert_to_arbitrary_length(const unsigned short* ints,
-                                                  unsigned char *buffer,
-                                                  std::size_t count = 1)
+inline std::size_t
+vsl_convert_to_arbitrary_length(const unsigned short * ints, unsigned char * buffer, std::size_t count = 1)
 {
   return vsl_convert_to_arbitrary_length_unsigned_impl(ints, buffer, count);
 }
@@ -446,9 +439,8 @@ inline std::size_t vsl_convert_to_arbitrary_length(const unsigned short* ints,
 // \param count  Number of integers expected. Cannot be zero.
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
-inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                                    unsigned short *ints,
-                                                    std::size_t count = 1)
+inline std::size_t
+vsl_convert_from_arbitrary_length(const unsigned char * buffer, unsigned short * ints, std::size_t count = 1)
 {
   return vsl_convert_from_arbitrary_length_unsigned_impl(buffer, ints, count);
 }
@@ -460,9 +452,8 @@ inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer
 // The return value is the number of bytes used.
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)) * count
-inline std::size_t vsl_convert_to_arbitrary_length(const short* ints,
-                                                  unsigned char *buffer,
-                                                  std::size_t count = 1)
+inline std::size_t
+vsl_convert_to_arbitrary_length(const short * ints, unsigned char * buffer, std::size_t count = 1)
 {
   return vsl_convert_to_arbitrary_length_signed_impl(ints, buffer, count);
 }
@@ -477,9 +468,8 @@ inline std::size_t vsl_convert_to_arbitrary_length(const short* ints,
 // \param count  Number of integers expected. Cannot be zero.
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
-inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                                    short *ints,
-                                                    std::size_t count = 1)
+inline std::size_t
+vsl_convert_from_arbitrary_length(const unsigned char * buffer, short * ints, std::size_t count = 1)
 {
   return vsl_convert_from_arbitrary_length_signed_impl(buffer, ints, count);
 }
@@ -495,9 +485,8 @@ inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer
 // \param count  Number of integers expected. Cannot be zero.
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
-inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                                    vxl_uint_64 *ints,
-                                                    std::size_t count = 1)
+inline std::size_t
+vsl_convert_from_arbitrary_length(const unsigned char * buffer, vxl_uint_64 * ints, std::size_t count = 1)
 {
   return vsl_convert_from_arbitrary_length_unsigned_impl(buffer, ints, count);
 }
@@ -509,9 +498,8 @@ inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer
 // \param count  Number of integers expected. Cannot be zero.
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
-inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                                    vxl_int_64 *ints,
-                                                    std::size_t count = 1)
+inline std::size_t
+vsl_convert_from_arbitrary_length(const unsigned char * buffer, vxl_int_64 * ints, std::size_t count = 1)
 {
   return vsl_convert_from_arbitrary_length_signed_impl(buffer, ints, count);
 }
@@ -520,9 +508,8 @@ inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer
 // The return value is the number of bytes used.
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)) * count
-inline std::size_t vsl_convert_to_arbitrary_length(const vxl_int_64* ints,
-                                                  unsigned char *buffer,
-                                                  std::size_t count = 1)
+inline std::size_t
+vsl_convert_to_arbitrary_length(const vxl_int_64 * ints, unsigned char * buffer, std::size_t count = 1)
 {
   return vsl_convert_to_arbitrary_length_signed_impl(ints, buffer, count);
 }
@@ -531,9 +518,8 @@ inline std::size_t vsl_convert_to_arbitrary_length(const vxl_int_64* ints,
 // The return value is the number of bytes used.
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * count
-inline std::size_t vsl_convert_to_arbitrary_length(const vxl_uint_64* ints,
-                                                  unsigned char *buffer,
-                                                  std::size_t count = 1)
+inline std::size_t
+vsl_convert_to_arbitrary_length(const vxl_uint_64 * ints, unsigned char * buffer, std::size_t count = 1)
 {
   return vsl_convert_to_arbitrary_length_unsigned_impl(ints, buffer, count);
 }
@@ -618,11 +604,12 @@ inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer
 //
 // You must use vsl_b_read_uint_16() to read the value saved with this
 // function.
-inline void vsl_b_write_uint_16(vsl_b_ostream& os, unsigned long n )
+inline void
+vsl_b_write_uint_16(vsl_b_ostream & os, unsigned long n)
 {
   assert(n < (1 << 16));
-  vsl_swap_bytes(( char* )&n, sizeof(long) );
-  os.os().write( ( char* )&n, 2 );
+  vsl_swap_bytes((char *)&n, sizeof(long));
+  os.os().write((char *)&n, 2);
 }
 
 //: Read an unsigned int as 16 bits from vsl_b_istream
@@ -632,11 +619,12 @@ inline void vsl_b_write_uint_16(vsl_b_ostream& os, unsigned long n )
 // vsl_binary_io.h will be perfectly adequate.
 //
 // This function will only read values saved using vsl_b_write_uint_16().
-inline void vsl_b_read_uint_16(vsl_b_istream& is, unsigned long& n )
+inline void
+vsl_b_read_uint_16(vsl_b_istream & is, unsigned long & n)
 {
   n = 0;
-  is.is().read( ( char* )&n, 2 );
-  vsl_swap_bytes(( char* )&n, sizeof(long) );
+  is.is().read((char *)&n, 2);
+  vsl_swap_bytes((char *)&n, sizeof(long));
 }
 
 
@@ -651,11 +639,12 @@ inline void vsl_b_read_uint_16(vsl_b_istream& is, unsigned long& n )
 // vsl_binary_io.h will be perfectly adequate.
 //
 // You must vsl_b_read_int_16() to read the value saved with this function.
-inline void vsl_b_write_int_16(vsl_b_ostream& os, long n )
+inline void
+vsl_b_write_int_16(vsl_b_ostream & os, long n)
 {
-  assert(n < 32768 && n >= - 32768);
-  vsl_swap_bytes(( char* )&n, sizeof(long) );
-  os.os().write( ( char* )&n, 2 );
+  assert(n < 32768 && n >= -32768);
+  vsl_swap_bytes((char *)&n, sizeof(long));
+  os.os().write((char *)&n, 2);
 }
 
 //: Read a signed int as 16 bits from vsl_b_istream
@@ -665,17 +654,18 @@ inline void vsl_b_write_int_16(vsl_b_ostream& os, long n )
 // vsl_binary_io.h will be perfectly adequate.
 //
 // This function will only read values saved using vsl_b_write_int_16().
-inline void vsl_b_read_int_16(vsl_b_istream& is, long& n )
+inline void
+vsl_b_read_int_16(vsl_b_istream & is, long & n)
 {
-  is.is().read( ( char* )&n, 2 );
-  if ((*(((unsigned char*)&n)+1) & 128) == 1)
+  is.is().read((char *)&n, 2);
+  if ((*(((unsigned char *)&n) + 1) & 128) == 1)
   {
-    vsl_swap_bytes(( char* )&n, sizeof(long) );
+    vsl_swap_bytes((char *)&n, sizeof(long));
     n |= -65536l;
   }
   else
   {
-    vsl_swap_bytes(( char* )&n, sizeof(long) );
+    vsl_swap_bytes((char *)&n, sizeof(long));
     n &= 65535l;
   }
 }
@@ -691,11 +681,12 @@ inline void vsl_b_read_int_16(vsl_b_istream& is, long& n )
 //
 // You must use vsl_b_read_uint_64() to read the value saved with this
 // function.
-inline void vsl_b_write_uint_64(vsl_b_ostream& os, std::size_t n )
+inline void
+vsl_b_write_uint_64(vsl_b_ostream & os, std::size_t n)
 {
   assert(sizeof(std::size_t) <= 8 || n >> 16 >> 16 >> 16 >> 16 == 0);
-  vsl_swap_bytes(( char* )&n, sizeof(long) );
-  os.os().write( ( char* )&n, 8 );
+  vsl_swap_bytes((char *)&n, sizeof(long));
+  os.os().write((char *)&n, 8);
 }
 
 //: Read a std::size_t as 64 bits from vsl_b_istream
@@ -705,11 +696,12 @@ inline void vsl_b_write_uint_64(vsl_b_ostream& os, std::size_t n )
 // vsl_binary_io.h will be perfectly adequate.
 //
 // This function will only read values saved using vsl_b_write_uint_64().
-inline void vsl_b_read_uint_64(vsl_b_istream& is, std::size_t& n )
+inline void
+vsl_b_read_uint_64(vsl_b_istream & is, std::size_t & n)
 {
   n = 0;
-  is.is().read( ( char* )&n, 8 );
-  vsl_swap_bytes(( char* )&n, sizeof(long) );
+  is.is().read((char *)&n, 8);
+  vsl_swap_bytes((char *)&n, sizeof(long));
 }
 
 

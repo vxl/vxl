@@ -21,41 +21,38 @@ struct AFX_MSGMAP_ENTRY;
 
 struct AFX_MSGMAP
 {
-  const AFX_MSGMAP* pBaseMessageMap;
-  const AFX_MSGMAP_ENTRY* lpEntries;
+  const AFX_MSGMAP * pBaseMessageMap;
+  const AFX_MSGMAP_ENTRY * lpEntries;
 };
 
-#define DECLARE_MESSAGE_MAP() \
-private: \
+#define DECLARE_MESSAGE_MAP()                      \
+private:                                           \
   static const AFX_MSGMAP_ENTRY messageEntries_[]; \
-protected: \
-  static const AFX_MSGMAP messageMap; \
-  virtual const AFX_MSGMAP* GetMessageMap() const;
+                                                   \
+protected:                                         \
+  static const AFX_MSGMAP messageMap;              \
+  virtual const AFX_MSGMAP * GetMessageMap() const;
 
-#define BEGIN_MESSAGE_MAP(theClass, baseClass) \
-  const AFX_MSGMAP* theClass::GetMessageMap() const \
-  { return &theClass::messageMap; } \
-  const AFX_MSGMAP theClass::messageMap = \
-  { &(baseClass::messageMap), \
-   (AFX_MSGMAP_ENTRY*) &(theClass::messageEntries_) }; \
-  const AFX_MSGMAP_ENTRY theClass::messageEntries_[] = \
-  {
+#define BEGIN_MESSAGE_MAP(theClass, baseClass)                                                  \
+  const AFX_MSGMAP * theClass::GetMessageMap() const { return &theClass::messageMap; }          \
+  const AFX_MSGMAP theClass::messageMap = { &(baseClass::messageMap),                           \
+                                            (AFX_MSGMAP_ENTRY *)&(theClass::messageEntries_) }; \
+  const AFX_MSGMAP_ENTRY theClass::messageEntries_[] = {
 
-#define END_MESSAGE_MAP() \
+#define END_MESSAGE_MAP()                   \
     { 0, 0, 0, 0, AfxSig_end, (AFX_PMSG)0 } \
-  };
+  }                                         \
+  ;
 
 enum AfxSig
 {
-   AfxSig_end = 0,     // [marks end of message map]
-   AfxSig_vv,
+  AfxSig_end = 0, // [marks end of message map]
+  AfxSig_vv,
 };
 
-#define ON_COMMAND(id, memberFxn) \
-    { WM_COMMAND, 0, (WORD)id, (WORD)id, AfxSig_vv, (AFX_PMSG)memberFxn },
+#define ON_COMMAND(id, memberFxn) { WM_COMMAND, 0, (WORD)id, (WORD)id, AfxSig_vv, (AFX_PMSG)memberFxn },
 #define ON_WM_CREATE() \
-    { WM_CREATE, 0, 0, 0, AfxSig_is, \
-     (AFX_PMSG)(AFX_PMSGW)(int AFX_MSG_CALL CWnd::*)(LPCREATESTRUCT)OnCreate},
+  { WM_CREATE, 0, 0, 0, AfxSig_is, (AFX_PMSG)(AFX_PMSGW)(int AFX_MSG_CALL CWnd::*)(LPCREATESTRUCT)OnCreate },
 
 class vgui_win32_cmdtarget
 {
@@ -64,14 +61,15 @@ public:
   ~vgui_win32_cmdtarget() {}
 
   // Message handling function
-  virtual BOOL OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam);
+  virtual BOOL
+  OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam);
 
   DECLARE_MESSAGE_MAP()
 };
 
 typedef void (vgui_win32_cmdtarget::*AFX_PMSG)(void);
 
-struct AFX_MSGMAP_ENTRY  // MFC 4.0 format
+struct AFX_MSGMAP_ENTRY // MFC 4.0 format
 {
   UINT nMessage; // windows message
   UINT nCode;    // control code or WM_NOTIFY code

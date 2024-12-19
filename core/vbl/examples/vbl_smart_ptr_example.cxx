@@ -27,14 +27,14 @@ public:
 
   ~example_sp() override { std::cout << "example_sp destructor, refcount=" << get_references() << '\n'; }
 
-  example_sp(example_sp const &)
+  example_sp(const example_sp &)
     : vbl_ref_count()
   {
     std::cout << "example_sp copy constructor, refcount=" << get_references() << '\n';
   }
 
   friend std::ostream &
-  operator<<(std::ostream & os, example_sp const & e)
+  operator<<(std::ostream & os, const example_sp & e)
   {
     int p = e.get_references();
     if (p < 1000)
@@ -106,7 +106,11 @@ class bigmatrix
   vbl_smart_ptr<bigmatrix_impl> impl;
 
 public:
-  double * operator[](unsigned i) { return impl->data[i]; }
+  double *
+  operator[](unsigned i)
+  {
+    return impl->data[i];
+  }
 };
 
 //== end of bigmatrix.h ==//

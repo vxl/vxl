@@ -22,7 +22,7 @@
 
 class vrel_objective
 {
- public:
+public:
   //: The iterators used to pass in values.
   //  Since we don't allow member templates, we have to fix on a
   //  particular type of container for residuals. Using this typedef
@@ -33,7 +33,7 @@ class vrel_objective
   //: The iterators used to pass out values.
   typedef std::vector<double>::iterator vect_iter;
 
- public:
+public:
   vrel_objective() = default;
   virtual ~vrel_objective() = default;
 
@@ -46,9 +46,11 @@ class vrel_objective
   //
   // The number of scale values must, of course, equal the number of
   // residuals.
-  virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end,
-                      vect_const_iter scale_begin,
-                      vnl_vector<double>* param_vector ) const = 0;
+  virtual double
+  fcn(vect_const_iter res_begin,
+      vect_const_iter res_end,
+      vect_const_iter scale_begin,
+      vnl_vector<double> * param_vector) const = 0;
 
   //: Evaluate the objective function on homoscedastic residuals.
   // This version is used for homoscedastic data, where each residual
@@ -61,23 +63,31 @@ class vrel_objective
   // the creation of a vector of equal values. Since the majority of
   // problems assume homoscedastic data, a "convenience" function that
   // avoids the scale vector is useful.
-  virtual double fcn( vect_const_iter begin, vect_const_iter end,
-                      double scale,
-                      vnl_vector<double>* param_vector ) const = 0;
+  virtual double
+  fcn(vect_const_iter begin, vect_const_iter end, double scale, vnl_vector<double> * param_vector) const = 0;
 
   //: True if the objective function must have a prior scale.
   //  For some objective functions, such as RANSAC, an estimated scale
   //  is not enough. The problem must have a prior scale estimate.
-  virtual bool requires_prior_scale() const = 0;
+  virtual bool
+  requires_prior_scale() const = 0;
 
   //: True if the objective function can estimate scale.
   //  Some objective functions, such as MUSE, can provide an accurate
   //  inlier scale estimate.
-  virtual bool can_estimate_scale() const { return false; }
+  virtual bool
+  can_estimate_scale() const
+  {
+    return false;
+  }
 
   //: Scale estimate.
   //  The result is undefined if can_estimate_scale() is false.
-  virtual double scale( vect_const_iter /*res_begin*/, vect_const_iter /*res_end*/ ) const { return 0.0; }
+  virtual double
+  scale(vect_const_iter /*res_begin*/, vect_const_iter /*res_end*/) const
+  {
+    return 0.0;
+  }
 };
 
 #endif

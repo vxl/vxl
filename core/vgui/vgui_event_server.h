@@ -38,26 +38,33 @@ class vgui_event_server_interpose_tableau;
 //   you could use it to get key presses! - kym
 class vgui_event_server
 {
- public:
+public:
   //: Constructor - collects events from the given tableau.
-  vgui_event_server(vgui_tableau_sptr const&);
+  vgui_event_server(const vgui_tableau_sptr &);
 
-  void reset();
+  void
+  reset();
 
   //: Move on to the next event in the event queue.
-  bool next();
+  bool
+  next();
 
-  void set_popup(const vgui_menu&);
+  void
+  set_popup(const vgui_menu &);
 
   //: Returns the last event.
-  vgui_event last_event() { return last_event_; }
+  vgui_event
+  last_event()
+  {
+    return last_event_;
+  }
 
- protected:
- ~vgui_event_server();
+protected:
+  ~vgui_event_server();
 
- private:
+private:
   friend class vgui_event_server_interpose_tableau;
-  vgui_event_server_interpose_tableau* grabber_;
+  vgui_event_server_interpose_tableau * grabber_;
   vgui_tableau_sptr grabber_reference_;
   vgui_event last_event_;
   bool use_event_;

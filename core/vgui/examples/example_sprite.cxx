@@ -23,7 +23,7 @@ struct move_sprite_tableau : public vgui_wrapper_tableau
   {}
 
   bool
-  handle(vgui_event const & e)
+  handle(const vgui_event & e)
   {
     if (left_event(e))
     {

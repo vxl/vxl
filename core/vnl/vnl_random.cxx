@@ -61,11 +61,7 @@ vnl_random::operator=(const vnl_random & r)
   return *this;
 }
 
-vnl_random::vnl_random()
-
-{
-  reseed();
-}
+vnl_random::vnl_random() { reseed(); }
 
 vnl_random::~vnl_random()
 {

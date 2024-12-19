@@ -42,37 +42,56 @@
 template <class T>
 class vil1_memory_image_of : public vil1_memory_image
 {
- public:
+public:
   // The pixel type of this image
   typedef T pixel_type;
 
   // iterators
-  typedef T *iterator;
-  inline iterator begin() { return get_buffer(); }
-  inline iterator end  () { return get_buffer() + rows()*cols(); }
+  typedef T * iterator;
+  inline iterator
+  begin()
+  {
+    return get_buffer();
+  }
+  inline iterator
+  end()
+  {
+    return get_buffer() + rows() * cols();
+  }
 
-  typedef T const *const_iterator;
-  inline const_iterator begin() const { return get_buffer(); }
-  inline const_iterator end  () const { return get_buffer() + rows()*cols(); }
+  typedef const T * const_iterator;
+  inline const_iterator
+  begin() const
+  {
+    return get_buffer();
+  }
+  inline const_iterator
+  end() const
+  {
+    return get_buffer() + rows() * cols();
+  }
 
-  inline unsigned size() const { return rows() * cols(); }
+  inline unsigned
+  size() const
+  {
+    return rows() * cols();
+  }
 
   //: Empty image.
   vil1_memory_image_of();
 
   //: This is a copy constructor, but it doesn't make a new buffer.
-  vil1_memory_image_of(vil1_memory_image_of<T> const &);
+  vil1_memory_image_of(const vil1_memory_image_of<T> &);
 
   //: Copy given image into a memory buffer.
   // If it's already a memory image, do as the copy constructor (above) does.
-  explicit
-  vil1_memory_image_of(vil1_image const& image);
+  explicit vil1_memory_image_of(const vil1_image & image);
 
   //: Construct a w x h image, pixel format is determined from T
   vil1_memory_image_of(int sizex, int sizey);
 
   //: Construct a w x h image, pixel format is determined from T from memory previously created and pointed to by buf
-  vil1_memory_image_of(T *buf, int sizex, int sizey);
+  vil1_memory_image_of(T * buf, int sizex, int sizey);
 #if 0
   //: Make memory imagebuffer, and fill with "value"
   vil1_memory_image_of(int sizex, int sizey, T const& value);
@@ -81,56 +100,103 @@ class vil1_memory_image_of : public vil1_memory_image
   inline ~vil1_memory_image_of() = default;
 
   //: This method hides the operator= in the base class.
-  vil1_memory_image_of<T>& operator=(vil1_memory_image_of<T> const &);
+  vil1_memory_image_of<T> &
+  operator=(const vil1_memory_image_of<T> &);
 
   //: Copy a vil1_image, only if it's in an appropriate format.
   // This routine does not try to guess how to convert images which are
   // not compatible with T.
-  vil1_memory_image_of<T>& operator=(vil1_image const &);
+  vil1_memory_image_of<T> &
+  operator=(const vil1_image &);
 
   //: Load image.
-  void set(vil1_image const& image);
+  void
+  set(const vil1_image & image);
 
   //: These override the methods in the base class.
-  void resize(int width, int height);
- private:
-  // don't try to use this.
-  void resize(int planes, int width, int height);
- public:
+  void
+  resize(int width, int height);
 
+private:
+  // don't try to use this.
+  void
+  resize(int planes, int width, int height);
+
+public:
   // Data Access---------------------------------------------------------------
 
   //: Return read/write reference to pixel at (x,y)
-  inline T&       operator () (int x, int y) { return ((T**)rows0_)[y][x]; }
-  inline T const& operator () (int x, int y) const { return ((T const* const*)rows0_)[y][x]; }
+  inline T &
+  operator()(int x, int y)
+  {
+    return ((T **)rows0_)[y][x];
+  }
+  inline const T &
+  operator()(int x, int y) const
+  {
+    return ((const T * const *)rows0_)[y][x];
+  }
 
   //: Return pointer to raster y.
-  inline T*       operator [] (int y) { return ((T**)rows0_)[y]; }
-  inline T const* operator [] (int y) const { return ((T const* const*)rows0_)[y]; }
+  inline T *
+  operator[](int y)
+  {
+    return ((T **)rows0_)[y];
+  }
+  inline const T *
+  operator[](int y) const
+  {
+    return ((const T * const *)rows0_)[y];
+  }
 
   //: Return pointer to array of rasters. aka known as data_array() for matrices.
-  inline T*        const* row_array() { return (T**)rows0_; }
-  inline T const*  const* row_array() const { return (T**)rows0_; }
+  inline T * const *
+  row_array()
+  {
+    return (T **)rows0_;
+  }
+  inline const T * const *
+  row_array() const
+  {
+    return (T **)rows0_;
+  }
 
   //: Return pointer to the memory buffer.
-  inline T*       get_buffer() { return (T*)rows0_[0]; }
-  inline T const* get_buffer() const { return (T*)rows0_[0]; }
+  inline T *
+  get_buffer()
+  {
+    return (T *)rows0_[0];
+  }
+  inline const T *
+  get_buffer() const
+  {
+    return (T *)rows0_[0];
+  }
 
   //: Return true if (x,y) is a valid index into this buffer
-  inline bool in_range(int x, int y) const { return (0 <= x) && (0 <= y) && (x < width_) && (y < height_); }
+  inline bool
+  in_range(int x, int y) const
+  {
+    return (0 <= x) && (0 <= y) && (x < width_) && (y < height_);
+  }
 
   //: Return true if (x+/-w,y+/-h) are valid indices into this buffer
-  inline bool in_range_window(int x, int y, int w) const {
+  inline bool
+  in_range_window(int x, int y, int w) const
+  {
     return (w <= x) && (w <= y) && (x + w < width_) && (y + w < height_);
   }
 
   //: Return true if the region of size w,h starting at x,y is valid in this buffer.
-  inline bool in_range(int x, int y, unsigned w, unsigned h) const {
-    return (0<=x && x+int(w)<=width_) && (0<=y && y+int(h)<=height_);
+  inline bool
+  in_range(int x, int y, unsigned w, unsigned h) const
+  {
+    return (0 <= x && x + int(w) <= width_) && (0 <= y && y + int(h) <= height_);
   }
 
   //: Fill with given value
-  void fill(T const& );
+  void
+  fill(const T &);
 };
 
 #endif // vil1_memory_image_of_h_

@@ -11,7 +11,7 @@ test_hungarian_algorithm_1()
 {
   // Create input image
   constexpr int cost_val[6][6] = { { 4, 12, 11, 20, 16, 19 }, { 12, 8, 20, 13, 22, 18 }, { 6, 9, 4, 15, 9, 12 },
-                         { 12, 4, 12, 6, 14, 8 },   { 12, 10, 6, 9, 5, 3 },    { 13, 7, 12, 2, 10, 4 } };
+                                   { 12, 4, 12, 6, 14, 8 },   { 12, 10, 6, 9, 5, 3 },    { 13, 7, 12, 2, 10, 4 } };
 
   // Create the cost matrix
   vnl_matrix<int> cost(&cost_val[0][0], 6, 6);
@@ -47,7 +47,7 @@ test_hungarian_algorithm_1()
   TEST_NEAR("total cost", HungarianClassTest.GetTotalCost(), 31, 1e-11);
 
   constexpr double cost_val2[6][6] = { { 2, 3.0, 1, 0.1, 2, 7 }, { 1, 0, 1, 2, 3.0, 4 }, { 0, 0, 9, 5, 4.4, 2 },
-                             { 1, 5, 6, 3, 0, 1 },     { 0, 1, 2, 0, 1, 2 },   { 2, 3, 1, 0.1, 1, 1 } };
+                                       { 1, 5, 6, 3, 0, 1 },     { 0, 1, 2, 0, 1, 2 },   { 2, 3, 1, 0.1, 1, 1 } };
 
   // Create the cost matrix
   vnl_matrix<double> cost2(&cost_val2[0][0], 6, 6);
@@ -90,7 +90,7 @@ test_hungarian_algorithm_1()
 static vnl_random randgen;
 
 static void
-check_solution(std::vector<unsigned> const & assign, unsigned const * solution, unsigned const N)
+check_solution(const std::vector<unsigned> & assign, const unsigned * solution, const unsigned N)
 {
   TEST("  assignment vector size", assign.size(), N);
   bool okay = true;
@@ -112,7 +112,7 @@ check_solution(std::vector<unsigned> const & assign, unsigned const * solution, 
 
 
 static std::vector<unsigned>
-make_up_solution(unsigned const M, unsigned const N)
+make_up_solution(const unsigned M, const unsigned N)
 {
   // True solution
   std::vector<unsigned> true_assn(M);
@@ -138,7 +138,7 @@ make_up_solution(unsigned const M, unsigned const N)
 }
 
 static void
-test_skewed_problem(unsigned const M, unsigned const N)
+test_skewed_problem(const unsigned M, const unsigned N)
 {
   std::cout << "Creating " << M << 'x' << N << " matrix" << std::endl;
   vnl_matrix<double> cost(M, N);
@@ -180,7 +180,7 @@ test_skewed_problem(unsigned const M, unsigned const N)
 
 
 static void
-run_test(vnl_matrix<double> const & cost, unsigned solution[])
+run_test(const vnl_matrix<double> & cost, unsigned solution[])
 {
   {
     std::cout << "Test " << cost.rows() << 'x' << cost.cols() << " matrix" << std::endl;

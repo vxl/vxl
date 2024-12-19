@@ -26,17 +26,17 @@
 
 
 //: Generate the default field type for scalar type T and dimension n
-template <class T, unsigned int n=0>
+template <class T, unsigned int n = 0>
 struct vpdt_field_default
 {
   //: The default field type
-  typedef vnl_vector_fixed<T,n> type;
+  typedef vnl_vector_fixed<T, n> type;
 };
 
 
 //: Generate the default field type for scalar type T and dimension n
 template <class T>
-struct vpdt_field_default<T,1>
+struct vpdt_field_default<T, 1>
 {
   //: The default field type
   typedef T type;
@@ -45,7 +45,7 @@ struct vpdt_field_default<T,1>
 
 //: Generate the default field type for scalar type T and dimension n
 template <class T>
-struct vpdt_field_default<T,0>
+struct vpdt_field_default<T, 0>
 {
   //: The default field type
   typedef vnl_vector<T> type;

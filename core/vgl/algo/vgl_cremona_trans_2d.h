@@ -38,59 +38,80 @@
 template <class T, size_t deg>
 class vgl_cremona_trans_2d
 {
- public:
+public:
   //: default constructor
-   vgl_cremona_trans_2d() = default;
+  vgl_cremona_trans_2d() = default;
 
-   vgl_cremona_trans_2d(vgl_norm_trans_2d<T> const &tr_from,
-                        vgl_norm_trans_2d<T> const &tr_to,
-                        vnl_vector<T> rational_coeffs)
-       : tr_from_(tr_from), tr_to_(tr_to), coeff_(std::move(rational_coeffs)) {}
+  vgl_cremona_trans_2d(const vgl_norm_trans_2d<T> & tr_from,
+                       const vgl_norm_trans_2d<T> & tr_to,
+                       vnl_vector<T> rational_coeffs)
+    : tr_from_(tr_from)
+    , tr_to_(tr_to)
+    , coeff_(std::move(rational_coeffs))
+  {}
 
-   //:set members of a default instance
-   void set(vgl_norm_trans_2d<T> const &tr_from,
-            vgl_norm_trans_2d<T> const &tr_to,
-            vnl_vector<T> const &rational_coeffs) {
-     tr_from_ = tr_from;
-     tr_to_ = tr_to;
-     coeff_ = rational_coeffs;
+  //: set members of a default instance
+  void
+  set(const vgl_norm_trans_2d<T> & tr_from, const vgl_norm_trans_2d<T> & tr_to, const vnl_vector<T> & rational_coeffs)
+  {
+    tr_from_ = tr_from;
+    tr_to_ = tr_to;
+    coeff_ = rational_coeffs;
   }
 
   //: maps from -> to
-  void project(T X, T Y, T& x, T& y) const;
-  vgl_homg_point_2d<T> operator()(vgl_homg_point_2d<T> const& p) const;
-  vgl_point_2d<T> operator()(vgl_point_2d<T> const& p) const;
-
+  void
+  project(T X, T Y, T & x, T & y) const;
+  vgl_homg_point_2d<T>
+  operator()(const vgl_homg_point_2d<T> & p) const;
+  vgl_point_2d<T>
+  operator()(const vgl_point_2d<T> & p) const;
 
 
   // utility functions (static to allow use in other classes)
 
   //: the number of coefficients in a polynomial in X,Y with degree deg
-  static size_t n_coeff();
+  static size_t
+  n_coeff();
 
   //: the monomials in a polynomial in X, Y of degree deg
-  static vnl_vector<T> power_vector(T x, T y);
+  static vnl_vector<T>
+  power_vector(T x, T y);
 
   // Data Members--------------------------------------------------------------
-  vgl_norm_trans_2d<T> tr_from() const { return tr_from_; }
-  vgl_norm_trans_2d<T> tr_to() const { return tr_to_; }
-  vnl_vector<T> coeff() const { return coeff_; }
+  vgl_norm_trans_2d<T>
+  tr_from() const
+  {
+    return tr_from_;
+  }
+  vgl_norm_trans_2d<T>
+  tr_to() const
+  {
+    return tr_to_;
+  }
+  vnl_vector<T>
+  coeff() const
+  {
+    return coeff_;
+  }
 
- protected:
+protected:
   //: normalizing transformations to
   // enable accurate polynomial evaluation
   vgl_norm_trans_2d<T> tr_from_;
- vgl_norm_trans_2d<T> tr_to_;
- // rational coefficients
- // <--------- 4 x n_coeff -------->
- //[ x_neu | x_den | y_neu | y_den ]
- vnl_vector<T> coeff_;
+  vgl_norm_trans_2d<T> tr_to_;
+  // rational coefficients
+  // <--------- 4 x n_coeff -------->
+  //[ x_neu | x_den | y_neu | y_den ]
+  vnl_vector<T> coeff_;
 };
-//:stream operators
+//: stream operators
 template <class T, size_t deg>
-  std::ostream&  operator<<(std::ostream& s, vgl_cremona_trans_2d<T, deg> const& t);
+std::ostream &
+operator<<(std::ostream & s, const vgl_cremona_trans_2d<T, deg> & t);
 template <class T, size_t deg>
-  std::istream&  operator>>(std::istream& s, vgl_cremona_trans_2d<T, deg>& t);
+std::istream &
+operator>>(std::istream & s, vgl_cremona_trans_2d<T, deg> & t);
 
 #define VGL_CREMONA_TRANS_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_cremona_trans_2d.hxx first"
 

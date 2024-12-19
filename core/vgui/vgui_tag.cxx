@@ -17,7 +17,7 @@ static unsigned numtags = 0;
 static vgui_tag_function tags[MAXTAGS + 1];
 
 int
-vgui_tag_add(vgui_tag_function f, char const * /*tk*/)
+vgui_tag_add(vgui_tag_function f, const char * /*tk*/)
 {
   if (f)
   {
@@ -27,7 +27,7 @@ vgui_tag_add(vgui_tag_function f, char const * /*tk*/)
   return numtags;
 }
 
-vgui_tag_function const *
+const vgui_tag_function *
 vgui_tag_list()
 {
   tags[numtags] = nullptr;

@@ -33,40 +33,44 @@ class vil1_image;
 //  one to see the blended image.
 class vgui_blender_tableau : public vgui_tableau
 {
- public:
+public:
   //: Constructor - don't use this, use vgui_blender_tableau_new.
   //  Creates a blender with the given image and alpha value.
-  vgui_blender_tableau(char const* file, vgui_range_map_params_sptr const& rmp = nullptr,
-                       float a=1.0);
+  vgui_blender_tableau(const char * file, const vgui_range_map_params_sptr & rmp = nullptr, float a = 1.0);
 
   //: Constructor - don't use this, use vgui_blender_tableau_new.
   //  Creates a blender with the given image and alpha value.
-  vgui_blender_tableau(vil1_image const& img, vgui_range_map_params_sptr const& rmp = nullptr,
-                       float a=1.0);
+  vgui_blender_tableau(const vil1_image & img, const vgui_range_map_params_sptr & rmp = nullptr, float a = 1.0);
 
   //: Constructor - don't use this, use vgui_blender_tableau_new.
   //  Creates a blender with the given image and alpha value.
-  vgui_blender_tableau(vil_image_view_base const& img,
-                       vgui_range_map_params_sptr const& rmp = nullptr, float a=1.0);
+  vgui_blender_tableau(const vil_image_view_base & img,
+                       const vgui_range_map_params_sptr & rmp = nullptr,
+                       float a = 1.0);
 
   //: Constructor - don't use this, use vgui_blender_tableau_new.
   //  Creates a blender with the given image and alpha value.
-  vgui_blender_tableau(vil_image_resource_sptr const& img,
-                       vgui_range_map_params_sptr const& rmp = nullptr, float a=1.0);
+  vgui_blender_tableau(const vil_image_resource_sptr & img,
+                       const vgui_range_map_params_sptr & rmp = nullptr,
+                       float a = 1.0);
 
   //: Handle all events sent to this tableau.
   //  In particular use draw events to draw the blended image.
   //  Use '/' and '*' key-press events to change alpha.
-  bool handle(vgui_event const &e);
+  bool
+  handle(const vgui_event & e);
 
   //: Return the filename of the loaded image (if it was loaded from file).
-  std::string file_name() const;
+  std::string
+  file_name() const;
 
   //: Return the type of this tableau ('vgui_blender_tableau').
-  std::string type_name() const;
+  std::string
+  type_name() const;
 
   //: Tell the blender that the image pixels have been changed.
-  void reread_image();
+  void
+  reread_image();
 
   //: set the range mapping parameters.
   // image (if it exists) is re-rendered with the map.
@@ -75,22 +79,29 @@ class vgui_blender_tableau : public vgui_tableau
   // invert reverses the map (a negative version of the image)
   // set_mapping should be called before set_image methods to insure
   // the first image display has the requested mapping parameters
-  virtual void set_mapping(vgui_range_map_params_sptr const& rmp)
-  { rmp_ = rmp; }
+  virtual void
+  set_mapping(const vgui_range_map_params_sptr & rmp)
+  {
+    rmp_ = rmp;
+  }
 
-  vgui_range_map_params_sptr map_params(){return rmp_;}
+  vgui_range_map_params_sptr
+  map_params()
+  {
+    return rmp_;
+  }
 
- protected:
+protected:
   //: Image renderer to draw the images.
-  vgui_image_renderer        *renderer_;
-  vgui_vil_image_renderer    *vil_renderer_;
+  vgui_image_renderer * renderer_;
+  vgui_vil_image_renderer * vil_renderer_;
   vgui_range_map_params_sptr rmp_;
 
   //: Amount of this image to display (1.0 for all, 0.0 for none).
   float alpha_;
 
   //: Destructor - called by vgui_blender_tableau_sptr.
- ~vgui_blender_tableau();
+  ~vgui_blender_tableau();
 
   //: Filename (if the image was loaded from a file).
   std::string filename_;
@@ -100,23 +111,28 @@ class vgui_blender_tableau : public vgui_tableau
 struct vgui_blender_tableau_new : public vgui_blender_tableau_sptr
 {
   //: Constructor - create a blender with the given image and alpha value.
-  vgui_blender_tableau_new(char const* file, vgui_range_map_params_sptr const& rmp=nullptr, float a=1.0)
-    : vgui_blender_tableau_sptr(new vgui_blender_tableau(file, rmp, a)) { }
+  vgui_blender_tableau_new(const char * file, const vgui_range_map_params_sptr & rmp = nullptr, float a = 1.0)
+    : vgui_blender_tableau_sptr(new vgui_blender_tableau(file, rmp, a))
+  {}
 
   //: Constructor - create a blender with the given image and alpha value.
-  vgui_blender_tableau_new(vil1_image const& img,
-                           vgui_range_map_params_sptr const& rmp=nullptr, float a=1.0)
-    : vgui_blender_tableau_sptr(new vgui_blender_tableau(img, rmp, a)) { }
+  vgui_blender_tableau_new(const vil1_image & img, const vgui_range_map_params_sptr & rmp = nullptr, float a = 1.0)
+    : vgui_blender_tableau_sptr(new vgui_blender_tableau(img, rmp, a))
+  {}
 
   //: Constructor - create a blender with the given image and alpha value.
-  vgui_blender_tableau_new(vil_image_resource_sptr const& img,
-                           vgui_range_map_params_sptr const& rmp=nullptr, float a=1.0)
-    : vgui_blender_tableau_sptr(new vgui_blender_tableau(img, rmp, a)) { }
+  vgui_blender_tableau_new(const vil_image_resource_sptr & img,
+                           const vgui_range_map_params_sptr & rmp = nullptr,
+                           float a = 1.0)
+    : vgui_blender_tableau_sptr(new vgui_blender_tableau(img, rmp, a))
+  {}
 
   //: Constructor - create a blender with the given image and alpha value.
-  vgui_blender_tableau_new(vil_image_view_base const& img,
-                           vgui_range_map_params_sptr const& rmp=nullptr, float a=1.0)
-    : vgui_blender_tableau_sptr(new vgui_blender_tableau(img, rmp, a)) { }
+  vgui_blender_tableau_new(const vil_image_view_base & img,
+                           const vgui_range_map_params_sptr & rmp = nullptr,
+                           float a = 1.0)
+    : vgui_blender_tableau_sptr(new vgui_blender_tableau(img, rmp, a))
+  {}
 };
 
 #endif // vgui_blender_tableau_h_

@@ -9,7 +9,7 @@
 #include <vnl/algo/vnl_svd.h>
 
 //: only one constructor. X and Y must have dimensions 3 x N
-vpgl_ortho_procrustes::vpgl_ortho_procrustes(vnl_matrix<double> const & X, vnl_matrix<double> const & Y)
+vpgl_ortho_procrustes::vpgl_ortho_procrustes(const vnl_matrix<double> & X, const vnl_matrix<double> & Y)
   : cannot_compute_(false)
   , computed_(false)
   , s_(1.0)

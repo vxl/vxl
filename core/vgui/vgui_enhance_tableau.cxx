@@ -35,7 +35,7 @@ vgui_enhance_tableau::vgui_enhance_tableau()
   , enable_key_bindings(false)
 {}
 
-vgui_enhance_tableau::vgui_enhance_tableau(vgui_tableau_sptr const & t)
+vgui_enhance_tableau::vgui_enhance_tableau(const vgui_tableau_sptr & t)
   : slot1(this, t)
   , slot2(this)
   , enhancing_(false)
@@ -44,7 +44,7 @@ vgui_enhance_tableau::vgui_enhance_tableau(vgui_tableau_sptr const & t)
   , enable_key_bindings(false)
 {}
 
-vgui_enhance_tableau::vgui_enhance_tableau(vgui_tableau_sptr const & t1, vgui_tableau_sptr const & t2)
+vgui_enhance_tableau::vgui_enhance_tableau(const vgui_tableau_sptr & t1, const vgui_tableau_sptr & t2)
   : slot1(this, t1)
   , slot2(this, t2)
   , enhancing_(false)
@@ -56,7 +56,7 @@ vgui_enhance_tableau::vgui_enhance_tableau(vgui_tableau_sptr const & t1, vgui_ta
 vgui_enhance_tableau::~vgui_enhance_tableau() {}
 
 void
-vgui_enhance_tableau::set_child(vgui_tableau_sptr const & t)
+vgui_enhance_tableau::set_child(const vgui_tableau_sptr & t)
 {
   slot1 = vgui_parent_child_link(this, t);
 }

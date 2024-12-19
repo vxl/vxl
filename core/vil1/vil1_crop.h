@@ -9,6 +9,7 @@
 #include "vil1_fwd.h"
 
 //: Crop to a region of SRC.
-vil1_image vil1_crop(const vil1_image& SRC, int x0, int y0, int w, int h);
+vil1_image
+vil1_crop(const vil1_image & SRC, int x0, int y0, int w, int h);
 
 #endif // vil1_crop_h_

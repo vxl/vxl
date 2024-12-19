@@ -8,8 +8,8 @@
 #include "vgui_gl.h"
 #include <vbl/vbl_array_1d.h>
 //: Get the required image view given the state of the viewport and scale
-bool pixel_view(unsigned& i0, unsigned& ni, unsigned& j0, unsigned& nj,
-                float& zoomx, float& zoomy);
+bool
+pixel_view(unsigned & i0, unsigned & ni, unsigned & j0, unsigned & nj, float & zoomx, float & zoomy);
 
 //: Render the pixels onto the frame buffer
 //
@@ -20,32 +20,38 @@ bool pixel_view(unsigned& i0, unsigned& ni, unsigned& j0, unsigned& nj,
 // encode the data encoding in \a pixels. \a pixels is assumed to
 // store a row-ordered set of byte-aligned values.
 //
-bool vgui_section_render(void const *pixels,
-                         unsigned w, unsigned h, // Size of image.
-                         float x0, float y0,  // Region of image
-                         float x1, float y1,  // to render.
-                         GLenum format,
-                         GLenum type ,
-                         bool hardware_map = false,
-                         vbl_array_1d<float>* fLmap=nullptr,
-                         vbl_array_1d<float>* fRmap=nullptr,
-                         vbl_array_1d<float>* fGmap=nullptr,
-                         vbl_array_1d<float>* fBmap=nullptr,
-                         vbl_array_1d<float>* fAmap=nullptr);
+bool
+vgui_section_render(const void * pixels,
+                    unsigned w,
+                    unsigned h, // Size of image.
+                    float x0,
+                    float y0, // Region of image
+                    float x1,
+                    float y1, // to render.
+                    GLenum format,
+                    GLenum type,
+                    bool hardware_map = false,
+                    vbl_array_1d<float> * fLmap = nullptr,
+                    vbl_array_1d<float> * fRmap = nullptr,
+                    vbl_array_1d<float> * fGmap = nullptr,
+                    vbl_array_1d<float> * fBmap = nullptr,
+                    vbl_array_1d<float> * fAmap = nullptr);
 
 
-bool vgui_view_render(void const *pixels,
-                      unsigned w, unsigned h, // Size of image.
-                      float zoomx, float zoomy,
-                      GLenum format,
-                      GLenum type ,
-                      bool hardware_map = false,
-                      vbl_array_1d<float>* fLmap=nullptr,
-                      vbl_array_1d<float>* fRmap=nullptr,
-                      vbl_array_1d<float>* fGmap=nullptr,
-                      vbl_array_1d<float>* fBmap=nullptr,
-                      vbl_array_1d<float>* fAmap=nullptr);
-
+bool
+vgui_view_render(const void * pixels,
+                 unsigned w,
+                 unsigned h, // Size of image.
+                 float zoomx,
+                 float zoomy,
+                 GLenum format,
+                 GLenum type,
+                 bool hardware_map = false,
+                 vbl_array_1d<float> * fLmap = nullptr,
+                 vbl_array_1d<float> * fRmap = nullptr,
+                 vbl_array_1d<float> * fGmap = nullptr,
+                 vbl_array_1d<float> * fBmap = nullptr,
+                 vbl_array_1d<float> * fAmap = nullptr);
 
 
 #endif // vgui_section_render_h_

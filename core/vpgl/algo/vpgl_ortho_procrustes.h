@@ -3,7 +3,8 @@
 #define vpgl_ortho_procrustes_h_
 //:
 // \file
-// \brief Solve min(R,s) ||X-s(RY+t)||, where R is a rotation matrix, X,Y are 3-d points, s is a scalar and t is a translation vector.
+// \brief Solve min(R,s) ||X-s(RY+t)||, where R is a rotation matrix, X,Y are 3-d points, s is a scalar and t is a
+// translation vector.
 // \author J. L. Mundy
 // \date June 29, 2007
 //
@@ -17,30 +18,38 @@
 // between two pointsets, X and Y, where Y is transformed to produce X.
 class vpgl_ortho_procrustes
 {
- public:
+public:
   //: only one constructor X and Y must both have dimensions 3 x N
-  vpgl_ortho_procrustes(vnl_matrix<double> const& X,
-                        vnl_matrix<double> const& Y);
+  vpgl_ortho_procrustes(const vnl_matrix<double> & X, const vnl_matrix<double> & Y);
 
   //: the resulting rotation matrix
-  vgl_rotation_3d<double> R();
+  vgl_rotation_3d<double>
+  R();
 
   //: the resulting translation vector
-  vnl_vector_fixed<double, 3> t();
+  vnl_vector_fixed<double, 3>
+  t();
 
   //: The scale factor, s
-  double s();
+  double
+  s();
 
   //: the residual error
-  double residual_mean_sq_error();
+  double
+  residual_mean_sq_error();
 
   //: successful computation
-  bool compute_ok() const { return !cannot_compute_; }
+  bool
+  compute_ok() const
+  {
+    return !cannot_compute_;
+  }
 
- protected:
+protected:
   //: No default constructor
   vpgl_ortho_procrustes();
-  void compute();
+  void
+  compute();
 
   //: members
   bool cannot_compute_;

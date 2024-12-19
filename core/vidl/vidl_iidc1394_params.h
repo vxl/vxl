@@ -33,116 +33,141 @@
 struct vidl_iidc1394_params
 {
   //: Available data transfer speeds
-  enum speed_t { ISO_SPEED_100= 0,
-                 ISO_SPEED_200,
-                 ISO_SPEED_400,
-                 ISO_SPEED_800,
-                 ISO_SPEED_1600,
-                 ISO_SPEED_3200 };
+  enum speed_t
+  {
+    ISO_SPEED_100 = 0,
+    ISO_SPEED_200,
+    ISO_SPEED_400,
+    ISO_SPEED_800,
+    ISO_SPEED_1600,
+    ISO_SPEED_3200
+  };
 
   //: Return the speed value for a speed setting
-  static unsigned int speed_val(speed_t s);
+  static unsigned int
+  speed_val(speed_t s);
 
   //: Available frame rates
-  enum frame_rate_t { FRAMERATE_1_875= 32,
-                      FRAMERATE_3_75,
-                      FRAMERATE_7_5,
-                      FRAMERATE_15,
-                      FRAMERATE_30,
-                      FRAMERATE_60,
-                      FRAMERATE_120,
-                      FRAMERATE_240 };
+  enum frame_rate_t
+  {
+    FRAMERATE_1_875 = 32,
+    FRAMERATE_3_75,
+    FRAMERATE_7_5,
+    FRAMERATE_15,
+    FRAMERATE_30,
+    FRAMERATE_60,
+    FRAMERATE_120,
+    FRAMERATE_240
+  };
 
   //: Return the frame rate as a floating point value
-  static float frame_rate_val(frame_rate_t r);
+  static float
+  frame_rate_val(frame_rate_t r);
 
   //: Available video modes (format and mode combined)
-  enum video_mode_t { MODE_160x120_YUV444= 64,
-                      MODE_320x240_YUV422,
-                      MODE_640x480_YUV411,
-                      MODE_640x480_YUV422,
-                      MODE_640x480_RGB8,
-                      MODE_640x480_MONO8,
-                      MODE_640x480_MONO16,
-                      MODE_800x600_YUV422,
-                      MODE_800x600_RGB8,
-                      MODE_800x600_MONO8,
-                      MODE_1024x768_YUV422,
-                      MODE_1024x768_RGB8,
-                      MODE_1024x768_MONO8,
-                      MODE_800x600_MONO16,
-                      MODE_1024x768_MONO16,
-                      MODE_1280x960_YUV422,
-                      MODE_1280x960_RGB8,
-                      MODE_1280x960_MONO8,
-                      MODE_1600x1200_YUV422,
-                      MODE_1600x1200_RGB8,
-                      MODE_1600x1200_MONO8,
-                      MODE_1280x960_MONO16,
-                      MODE_1600x1200_MONO16,
-                      MODE_EXIF,
-                      MODE_FORMAT7_0,
-                      MODE_FORMAT7_1,
-                      MODE_FORMAT7_2,
-                      MODE_FORMAT7_3,
-                      MODE_FORMAT7_4,
-                      MODE_FORMAT7_5,
-                      MODE_FORMAT7_6,
-                      MODE_FORMAT7_7 };
+  enum video_mode_t
+  {
+    MODE_160x120_YUV444 = 64,
+    MODE_320x240_YUV422,
+    MODE_640x480_YUV411,
+    MODE_640x480_YUV422,
+    MODE_640x480_RGB8,
+    MODE_640x480_MONO8,
+    MODE_640x480_MONO16,
+    MODE_800x600_YUV422,
+    MODE_800x600_RGB8,
+    MODE_800x600_MONO8,
+    MODE_1024x768_YUV422,
+    MODE_1024x768_RGB8,
+    MODE_1024x768_MONO8,
+    MODE_800x600_MONO16,
+    MODE_1024x768_MONO16,
+    MODE_1280x960_YUV422,
+    MODE_1280x960_RGB8,
+    MODE_1280x960_MONO8,
+    MODE_1600x1200_YUV422,
+    MODE_1600x1200_RGB8,
+    MODE_1600x1200_MONO8,
+    MODE_1280x960_MONO16,
+    MODE_1600x1200_MONO16,
+    MODE_EXIF,
+    MODE_FORMAT7_0,
+    MODE_FORMAT7_1,
+    MODE_FORMAT7_2,
+    MODE_FORMAT7_3,
+    MODE_FORMAT7_4,
+    MODE_FORMAT7_5,
+    MODE_FORMAT7_6,
+    MODE_FORMAT7_7
+  };
 
   //: Available camera features
-  enum feature_t{ FEATURE_BRIGHTNESS,
-                  FEATURE_EXPOSURE,
-                  FEATURE_SHARPNESS,
-                  FEATURE_WHITE_BALANCE,
-                  FEATURE_HUE,
-                  FEATURE_SATURATION,
-                  FEATURE_GAMMA,
-                  FEATURE_SHUTTER,
-                  FEATURE_GAIN,
-                  FEATURE_IRIS,
-                  FEATURE_FOCUS,
-                  FEATURE_TEMPERATURE,
-                  FEATURE_TRIGGER,
-                  FEATURE_TRIGGER_DELAY,
-                  FEATURE_WHITE_SHADING,
-                  FEATURE_FRAME_RATE,
-                  FEATURE_ZOOM,
-                  FEATURE_PAN,
-                  FEATURE_TILT,
-                  FEATURE_OPTICAL_FILTER,
-                  FEATURE_CAPTURE_SIZE,
-                  FEATURE_CAPTURE_QUALITY};
+  enum feature_t
+  {
+    FEATURE_BRIGHTNESS,
+    FEATURE_EXPOSURE,
+    FEATURE_SHARPNESS,
+    FEATURE_WHITE_BALANCE,
+    FEATURE_HUE,
+    FEATURE_SATURATION,
+    FEATURE_GAMMA,
+    FEATURE_SHUTTER,
+    FEATURE_GAIN,
+    FEATURE_IRIS,
+    FEATURE_FOCUS,
+    FEATURE_TEMPERATURE,
+    FEATURE_TRIGGER,
+    FEATURE_TRIGGER_DELAY,
+    FEATURE_WHITE_SHADING,
+    FEATURE_FRAME_RATE,
+    FEATURE_ZOOM,
+    FEATURE_PAN,
+    FEATURE_TILT,
+    FEATURE_OPTICAL_FILTER,
+    FEATURE_CAPTURE_SIZE,
+    FEATURE_CAPTURE_QUALITY
+  };
 
   //: Available feature control modes
-  enum feature_mode_t{ FEATURE_MODE_MANUAL,
-                       FEATURE_MODE_AUTO,
-                       FEATURE_MODE_ONE_PUSH_AUTO};
+  enum feature_mode_t
+  {
+    FEATURE_MODE_MANUAL,
+    FEATURE_MODE_AUTO,
+    FEATURE_MODE_ONE_PUSH_AUTO
+  };
 
   //: Return string describing the mode
-  static std::string video_mode_string(video_mode_t m);
+  static std::string
+  video_mode_string(video_mode_t m);
 
   //: Return string describing the feature
-  static std::string feature_string(feature_t f);
+  static std::string
+  feature_string(feature_t f);
 
   //: Return string describing the feature mode
-  static std::string feature_mode_string(feature_mode_t fm);
+  static std::string
+  feature_mode_string(feature_mode_t fm);
 
   //: Return the format number from the video mode enumeration
-  static unsigned int video_format_val(video_mode_t m);
+  static unsigned int
+  video_format_val(video_mode_t m);
   //: Return the mode number from the video mode enumeration
-  static unsigned int video_mode_val(video_mode_t m);
+  static unsigned int
+  video_mode_val(video_mode_t m);
 
   //: Return the pixel format of the video mode
   // \note Only works for predefined modes (not Format 7 or Exif)
-  static vidl_pixel_format pixel_format(video_mode_t m);
+  static vidl_pixel_format
+  pixel_format(video_mode_t m);
 
   //: Return the image resolution of the video mode
   // \note Only works for predefined modes (not Format 7 or Exif)
-  static bool resolution(video_mode_t m, unsigned& ni, unsigned& nj);
+  static bool
+  resolution(video_mode_t m, unsigned & ni, unsigned & nj);
 
   //: Return the video mode enumeration for a format and mode
-  static video_mode_t video_mode(unsigned int format, unsigned int mode);
+  static video_mode_t
+  video_mode(unsigned int format, unsigned int mode);
 
   //: Describes the valid options for the parameters
   struct valid_options;
@@ -176,24 +201,44 @@ struct vidl_iidc1394_params
   vidl_iidc1394_params();
 
   //: Set the guid
-  vidl_iidc1394_params& guid( vxl_uint_64 the_guid )
-  { guid_ = the_guid; return *this; }
+  vidl_iidc1394_params &
+  guid(vxl_uint_64 the_guid)
+  {
+    guid_ = the_guid;
+    return *this;
+  }
 
   //: Set the speed
-  vidl_iidc1394_params& speed( speed_t s )
-  { speed_ = s; return *this; }
+  vidl_iidc1394_params &
+  speed(speed_t s)
+  {
+    speed_ = s;
+    return *this;
+  }
 
   //: Set b mode
-  vidl_iidc1394_params& b_mode( bool b )
-  { b_mode_ = b; return *this; }
+  vidl_iidc1394_params &
+  b_mode(bool b)
+  {
+    b_mode_ = b;
+    return *this;
+  }
 
   //: Set the frame rate
-  vidl_iidc1394_params& frame_rate( frame_rate_t r )
-  { frame_rate_ = r; return *this; }
+  vidl_iidc1394_params &
+  frame_rate(frame_rate_t r)
+  {
+    frame_rate_ = r;
+    return *this;
+  }
 
   //: Set the video mode
-  vidl_iidc1394_params& video_mode(video_mode_t m)
-  { video_mode_ = m; return *this; }
+  vidl_iidc1394_params &
+  video_mode(video_mode_t m)
+  {
+    video_mode_ = m;
+    return *this;
+  }
 };
 
 
@@ -202,16 +247,16 @@ struct vidl_iidc1394_params
 //: Describes a feature and its set of options
 struct vidl_iidc1394_params::feature_options
 {
-  feature_t       id;
-  bool            available;
-  bool            absolute_capable;
-  bool            readout_capable;
-  bool            on_off_capable;
-  bool            polarity_capable;
-  bool            is_on;
-  feature_mode_t  active_mode;
+  feature_t id;
+  bool available;
+  bool absolute_capable;
+  bool readout_capable;
+  bool on_off_capable;
+  bool polarity_capable;
+  bool is_on;
+  feature_mode_t active_mode;
 
-  std::vector<feature_mode_t>  available_modes;
+  std::vector<feature_mode_t> available_modes;
 
 // FIXME - add trigger options
 #if 0
@@ -222,20 +267,20 @@ struct vidl_iidc1394_params::feature_options
   trigger_source_t   trigger_source;
 #endif
 
-  unsigned int       min;
-  unsigned int       max;
-  unsigned int       value;
-  unsigned int       BU_value;
-  unsigned int       RV_value;
-  unsigned int       B_value;
-  unsigned int       R_value;
-  unsigned int       G_value;
-  unsigned int       target_value;
+  unsigned int min;
+  unsigned int max;
+  unsigned int value;
+  unsigned int BU_value;
+  unsigned int RV_value;
+  unsigned int B_value;
+  unsigned int R_value;
+  unsigned int G_value;
+  unsigned int target_value;
 
-  bool               abs_control;
-  float              abs_value;
-  float              abs_max;
-  float              abs_min;
+  bool abs_control;
+  float abs_value;
+  float abs_max;
+  float abs_min;
 };
 
 //=============================================================================

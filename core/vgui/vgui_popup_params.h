@@ -14,10 +14,16 @@
 
 class vgui_popup_params
 {
- public:
-  vgui_popup_params() : x(-1), y(-1), recurse(true), nested(false), defaults(false) {}
+public:
+  vgui_popup_params()
+    : x(-1)
+    , y(-1)
+    , recurse(true)
+    , nested(false)
+    , defaults(false)
+  {}
   // viewport coordinates of mouse when used to activate popup menu
-  int x,y;
+  int x, y;
   bool recurse;
   bool nested;
   bool defaults;

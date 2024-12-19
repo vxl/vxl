@@ -5,4 +5,4 @@
 #endif
 #include <vrel/vrel_util.hxx>
 
-VREL_UTIL_INSTANTIATE_INP_ITER( double, std::list<double>::iterator );
+VREL_UTIL_INSTANTIATE_INP_ITER(double, std::list<double>::iterator);

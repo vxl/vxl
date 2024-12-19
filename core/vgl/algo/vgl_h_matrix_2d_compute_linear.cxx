@@ -50,8 +50,8 @@ constexpr double DEGENERACY_THRESHOLD = 0.00001; // FSM. see below.
 // allows for ideal points is used.
 bool
 vgl_h_matrix_2d_compute_linear::solve_linear_problem(int equ_count,
-                                                     std::vector<vgl_homg_point_2d<double>> const & p1,
-                                                     std::vector<vgl_homg_point_2d<double>> const & p2,
+                                                     const std::vector<vgl_homg_point_2d<double>> & p1,
+                                                     const std::vector<vgl_homg_point_2d<double>> & p2,
                                                      vgl_h_matrix_2d<double> & H) const
 {
   // transform the point sets and fill the design matrix
@@ -115,8 +115,8 @@ vgl_h_matrix_2d_compute_linear::solve_linear_problem(int equ_count,
 }
 
 bool
-vgl_h_matrix_2d_compute_linear::compute_p(std::vector<vgl_homg_point_2d<double>> const & points1,
-                                          std::vector<vgl_homg_point_2d<double>> const & points2,
+vgl_h_matrix_2d_compute_linear::compute_p(const std::vector<vgl_homg_point_2d<double>> & points1,
+                                          const std::vector<vgl_homg_point_2d<double>> & points2,
                                           vgl_h_matrix_2d<double> & H)
 {
   // number of points must be the same
@@ -160,8 +160,8 @@ vgl_h_matrix_2d_compute_linear::compute_p(std::vector<vgl_homg_point_2d<double>>
 }
 
 bool
-vgl_h_matrix_2d_compute_linear::compute_l(std::vector<vgl_homg_line_2d<double>> const & lines1,
-                                          std::vector<vgl_homg_line_2d<double>> const & lines2,
+vgl_h_matrix_2d_compute_linear::compute_l(const std::vector<vgl_homg_line_2d<double>> & lines1,
+                                          const std::vector<vgl_homg_line_2d<double>> & lines2,
                                           vgl_h_matrix_2d<double> & H)
 {
   // number of lines must be the same
@@ -198,7 +198,7 @@ vgl_h_matrix_2d_compute_linear::compute_l(std::vector<vgl_homg_line_2d<double>> 
     return false;
   // The result is a transform on lines so we need to convert it to
   // a point transform, i.e., hp = hl^-t.
-  vnl_matrix_fixed<double, 3, 3> const & Ml = hl.get_matrix();
+  const vnl_matrix_fixed<double, 3, 3> & Ml = hl.get_matrix();
   vnl_matrix_fixed<double, 3, 3> Mp = vnl_inverse_transpose(Ml);
   hp.set(Mp);
   //
@@ -215,10 +215,10 @@ vgl_h_matrix_2d_compute_linear::compute_l(std::vector<vgl_homg_line_2d<double>> 
 }
 
 bool
-vgl_h_matrix_2d_compute_linear::compute_pl(std::vector<vgl_homg_point_2d<double>> const & points1,
-                                           std::vector<vgl_homg_point_2d<double>> const & points2,
-                                           std::vector<vgl_homg_line_2d<double>> const & lines1,
-                                           std::vector<vgl_homg_line_2d<double>> const & lines2,
+vgl_h_matrix_2d_compute_linear::compute_pl(const std::vector<vgl_homg_point_2d<double>> & points1,
+                                           const std::vector<vgl_homg_point_2d<double>> & points2,
+                                           const std::vector<vgl_homg_line_2d<double>> & lines1,
+                                           const std::vector<vgl_homg_line_2d<double>> & lines2,
                                            vgl_h_matrix_2d<double> & H)
 {
   // number of points must be the same
@@ -282,9 +282,9 @@ vgl_h_matrix_2d_compute_linear::compute_pl(std::vector<vgl_homg_point_2d<double>
 //  case of unweighted least squares.
 //
 bool
-vgl_h_matrix_2d_compute_linear::solve_weighted_least_squares(std::vector<vgl_homg_line_2d<double>> const & l1,
-                                                             std::vector<vgl_homg_line_2d<double>> const & l2,
-                                                             std::vector<double> const & w,
+vgl_h_matrix_2d_compute_linear::solve_weighted_least_squares(const std::vector<vgl_homg_line_2d<double>> & l1,
+                                                             const std::vector<vgl_homg_line_2d<double>> & l2,
+                                                             const std::vector<double> & w,
                                                              vgl_h_matrix_2d<double> & H)
 {
   int Nc = l1.size();
@@ -347,9 +347,9 @@ vgl_h_matrix_2d_compute_linear::solve_weighted_least_squares(std::vector<vgl_hom
 }
 
 bool
-vgl_h_matrix_2d_compute_linear::compute_l(std::vector<vgl_homg_line_2d<double>> const & lines1,
-                                          std::vector<vgl_homg_line_2d<double>> const & lines2,
-                                          std::vector<double> const & weights,
+vgl_h_matrix_2d_compute_linear::compute_l(const std::vector<vgl_homg_line_2d<double>> & lines1,
+                                          const std::vector<vgl_homg_line_2d<double>> & lines2,
+                                          const std::vector<double> & weights,
                                           vgl_h_matrix_2d<double> & H)
 {
   // number of lines must be the same
@@ -381,7 +381,7 @@ vgl_h_matrix_2d_compute_linear::compute_l(std::vector<vgl_homg_line_2d<double>> 
     return false;
   // The result is a transform on lines so we need to convert it to
   // a point transform, i.e., hp = hl^-t.
-  vnl_matrix_fixed<double, 3, 3> const & Ml = hl.get_matrix();
+  const vnl_matrix_fixed<double, 3, 3> & Ml = hl.get_matrix();
   // make sure Ml can be inverted
   if (vnl_det(Ml) == 0.0)
     return false;

@@ -189,9 +189,9 @@ vgui_font_textured::load_bmf_font(const std::string & font_file)
     // &symbol_coords_[i] is of type *texture_coord;
     // swap32 expects a char* as its first argument
     // original code:
-#  if 0  // this causes a compile error when VXL_BIG_ENDIAN is true
+#  if 0 // this causes a compile error when VXL_BIG_ENDIAN is true
     swap32(&symbol_coords_[i], 4);
-#  else  // I *think* this is what the original author had in mind:
+#  else // I *think* this is what the original author had in mind:
     swap32((char *)&symbol_coords_[i].x, 4);
     swap32((char *)&symbol_coords_[i].y, 4);
     swap32((char *)&symbol_coords_[i].width, 4);

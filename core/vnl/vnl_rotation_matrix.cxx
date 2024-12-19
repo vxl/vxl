@@ -3,7 +3,7 @@
 #include "vnl_rotation_matrix.h"
 
 bool
-vnl_rotation_matrix(double const x[3], double ** R)
+vnl_rotation_matrix(const double x[3], double ** R)
 {
   // start with an identity matrix.
   for (unsigned i = 0; i < 3; ++i)
@@ -38,14 +38,14 @@ vnl_rotation_matrix(double const x[3], double ** R)
 }
 
 bool
-vnl_rotation_matrix(double const axis[3], double R[3][3])
+vnl_rotation_matrix(const double axis[3], double R[3][3])
 {
   double * R_[3] = { R[0], R[1], R[2] };
   return vnl_rotation_matrix(axis, R_);
 }
 
 bool
-vnl_rotation_matrix(double const axis[3], double * R0, double * R1, double * R2)
+vnl_rotation_matrix(const double axis[3], double * R0, double * R1, double * R2)
 {
   double * R[3] = { R0, R1, R2 };
   return vnl_rotation_matrix(axis, R);
@@ -61,7 +61,7 @@ vnl_rotation_matrix(vnl_vector_fixed<double, 3> const & axis, vnl_matrix_fixed<d
 }
 
 vnl_matrix_fixed<double, 3, 3>
-vnl_rotation_matrix(vnl_vector_fixed<double, 3> const & axis)
+vnl_rotation_matrix(const vnl_vector_fixed<double, 3> & axis)
 {
   vnl_matrix_fixed<double, 3, 3> R;
   vnl_rotation_matrix(&axis[0], R[0], R[1], R[2]);
@@ -69,13 +69,13 @@ vnl_rotation_matrix(vnl_vector_fixed<double, 3> const & axis)
 }
 
 bool
-vnl_rotation_matrix(vnl_vector<double> const & axis, vnl_matrix<double> & R)
+vnl_rotation_matrix(const vnl_vector<double> & axis, vnl_matrix<double> & R)
 {
   return vnl_rotation_matrix(&axis[0], R.data_array());
 }
 
 vnl_matrix<double>
-vnl_rotation_matrix(vnl_vector<double> const & axis)
+vnl_rotation_matrix(const vnl_vector<double> & axis)
 {
   vnl_matrix<double> R(3, 3);
   vnl_rotation_matrix(&axis[0], R.data_array());

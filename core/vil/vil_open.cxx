@@ -16,13 +16,13 @@
 // not used? #include <vcl_compiler.h>
 
 vil_stream *
-vil_open(char const * what, char const * how)
+vil_open(const char * what, const char * how)
 {
   // check for null pointer or empty strings.
   if (!what || !*what)
     return nullptr;
 
-    // try to open as file first.
+  // try to open as file first.
 #ifdef VIL_USE_FSTREAM64
   vil_stream * is = new vil_stream_fstream64(what, how);
 #else  // VIL_USE_FSTREAM64
@@ -111,13 +111,13 @@ vil_open(char const * what, char const * how)
 //
 //
 vil_stream *
-vil_open(wchar_t const * what, char const * how)
+vil_open(const wchar_t * what, const char * how)
 {
   // check for null pointer or empty strings.
   if (!what || !*what)
     return 0;
 
-    // try to open as file first.
+  // try to open as file first.
 #  ifdef VIL_USE_FSTREAM64
   vil_stream * is = new vil_stream_fstream64(what, how);
 #  else  // VIL_USE_FSTREAM64

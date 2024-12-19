@@ -23,7 +23,7 @@ class vgui_tableau;
 //: Cache of parents of a tableau (makes posting redraws more efficient).
 class vgui_parent_child_link_data
 {
-  std::vector<vgui_tableau*> parents;
+  std::vector<vgui_tableau *> parents;
   friend struct vgui_parent_child_link_impl;
   friend struct vgui_parent_child_link;
 };

@@ -19,8 +19,8 @@ int
 main(int argc, char * argv[])
 {
   // get file name
-  char const * inputFilename = argc > 1 ? argv[1] : "input file: please specify 2 command line arguments";
-  char const * outputFilename = argc > 2 ? argv[2] : "output_file.pnm";
+  const char * inputFilename = argc > 1 ? argv[1] : "input file: please specify 2 command line arguments";
+  const char * outputFilename = argc > 2 ? argv[2] : "output_file.pnm";
 
   // load image --> input image
   vil_image_view<vxl_byte> imageIn;

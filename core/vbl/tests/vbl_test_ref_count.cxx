@@ -12,7 +12,7 @@ class myclass_test2 : public vbl_ref_count
 
 public:
   myclass_test2() = default;
-  myclass_test2(myclass_test2 const & o)
+  myclass_test2(const myclass_test2 & o)
     : vbl_ref_count()
     , value(o.value)
   {}

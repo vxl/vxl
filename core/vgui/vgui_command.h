@@ -21,33 +21,40 @@
 struct vgui_command : public vbl_ref_count
 {
   vgui_command();
-  vgui_command(vgui_command const&) : vbl_ref_count() {}
+  vgui_command(const vgui_command &)
+    : vbl_ref_count()
+  {}
   virtual ~vgui_command();
-  virtual void execute() =0;
+  virtual void
+  execute() = 0;
 };
 
 //: An implementation using a C callback function
 struct vgui_command_cfunc : public vgui_command
 {
-  typedef void (*function_pv)(void const*);
+  typedef void (*function_pv)(const void *);
   typedef void (*function)();
   function_pv fn_pv;
   function fn;
-  void const *data;
+  const void * data;
 
-  vgui_command_cfunc(function_pv, void const *);
+  vgui_command_cfunc(function_pv, const void *);
   vgui_command_cfunc(function);
- ~vgui_command_cfunc();
-  void execute();
+  ~vgui_command_cfunc();
+  void
+  execute();
 };
 
 //: Command for toggle buttons
 struct vgui_command_toggle : public vgui_command
 {
   bool state;
-  vgui_command_toggle(bool v) : state(v) { }
+  vgui_command_toggle(bool v)
+    : state(v)
+  {}
   ~vgui_command_toggle();
-  void execute();
+  void
+  execute();
 };
 
 template <class receiver>
@@ -69,17 +76,23 @@ template <class receiver>
 //  and pass it to a menu.
 struct vgui_command_simple : public vgui_command
 {
-  typedef void (receiver::* action)();
+  typedef void (receiver::*action)();
 
-  vgui_command_simple(receiver* o, action m) : obj(o), mem(m) { }
-  void execute() { (obj->*mem)(); }
+  vgui_command_simple(receiver * o, action m)
+    : obj(o)
+    , mem(m)
+  {}
+  void
+  execute()
+  {
+    (obj->*mem)();
+  }
 
-  receiver* obj;
+  receiver * obj;
   action mem;
 };
 
-#define VGUI_COMMAND_SIMPLE_INSTANTIATE(receiver) \
-template struct vgui_command_simple<receiver >
+#define VGUI_COMMAND_SIMPLE_INSTANTIATE(receiver) template struct vgui_command_simple<receiver>
 
 template <class object_t, class data_t>
 
@@ -88,20 +101,26 @@ struct vgui_command_bound_method : public vgui_command
 {
   typedef void (object_t::*action_t)(data_t);
 
-  vgui_command_bound_method(object_t *o, action_t m, data_t d) : obj(o), mem(m), dat(d) { }
-  void execute() { (obj->*mem)(dat); }
+  vgui_command_bound_method(object_t * o, action_t m, data_t d)
+    : obj(o)
+    , mem(m)
+    , dat(d)
+  {}
+  void
+  execute()
+  {
+    (obj->*mem)(dat);
+  }
 
-  object_t *obj;
+  object_t * obj;
   action_t mem;
   data_t dat;
 };
 
-#define VGUI_COMMAND_BOUND_METHOD_INSTANTIATE(O, D) \
-template struct vgui_command_bound_method<O, D >
+#define VGUI_COMMAND_BOUND_METHOD_INSTANTIATE(O, D) template struct vgui_command_bound_method<O, D>
 
 //----------------------------------------------------------------------
 
-#define INSTANTIATE_VGUI_simple_command(receiver) \
-VGUI_COMMAND_SIMPLE_INSTANTIATE(receiver) /* backwards compat */
+#define INSTANTIATE_VGUI_simple_command(receiver) VGUI_COMMAND_SIMPLE_INSTANTIATE(receiver) /* backwards compat */
 
 #endif // vgui_command_h_

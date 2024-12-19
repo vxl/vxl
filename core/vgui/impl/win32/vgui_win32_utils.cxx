@@ -20,7 +20,7 @@ vgui_win32_utils::instance()
 // Convert a vgui_menu to equivalent MENUTEMPLATE structure used by
 // Win32 function LoadMenuIndirect.
 HMENU
-vgui_win32_utils::vgui_menu_to_win32(vgui_menu const & vguimenu,
+vgui_win32_utils::vgui_menu_to_win32(const vgui_menu & vguimenu,
                                      std::vector<vgui_command_sptr> & callbacks_,
                                      HACCEL * hAccel,
                                      bool isPopup)
@@ -84,7 +84,7 @@ vgui_win32_utils::vgui_menu_to_win32(vgui_menu const & vguimenu,
 
 
 int
-vgui_win32_utils::addMenuItems(vgui_menu const & vguimenu, int offset_in, bool is_popup)
+vgui_win32_utils::addMenuItems(const vgui_menu & vguimenu, int offset_in, bool is_popup)
 {
   static unsigned int max_menuitem_size = 256;
 
@@ -174,7 +174,7 @@ vgui_win32_utils::addMenuItems(vgui_menu const & vguimenu, int offset_in, bool i
 // Convert a vgui_menu to equivalent extended MENUTEMPLATE structure used by
 // Win32 function LoadMenuIndirect.
 HMENU
-vgui_win32_utils::vgui_menu_to_win32ex(vgui_menu const & vguimenu,
+vgui_win32_utils::vgui_menu_to_win32ex(const vgui_menu & vguimenu,
                                        std::vector<vgui_command_sptr> & callbacks_,
                                        HACCEL * hAccel,
                                        bool isPopup)
@@ -247,7 +247,7 @@ vgui_win32_utils::vgui_menu_to_win32ex(vgui_menu const & vguimenu,
 }
 
 int
-vgui_win32_utils::addMenuItemsEx(vgui_menu const & vguimenu, int offset_in, bool is_popup)
+vgui_win32_utils::addMenuItemsEx(const vgui_menu & vguimenu, int offset_in, bool is_popup)
 {
   static unsigned int max_menuitem_size = 256;
 
@@ -372,7 +372,7 @@ vgui_win32_utils::addMenuItemsEx(vgui_menu const & vguimenu, int offset_in, bool
 }
 
 inline void
-vgui_win32_utils::addAccelerator(std::string & menuItemText, vgui_menu_item const & vguimenu, int menuItemId)
+vgui_win32_utils::addAccelerator(std::string & menuItemText, const vgui_menu_item & vguimenu, int menuItemId)
 {
   ACCEL * pa = pAccel + accel_count;
   pa->cmd = menuItemId;

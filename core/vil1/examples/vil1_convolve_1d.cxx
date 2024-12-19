@@ -17,7 +17,7 @@
 int
 main(int argc, char ** argv)
 {
-  int const N = 5;
+  const int N = 5;
   double kernel[2 * N + 1];
 #if 0
   for (int i=-N; i<=N; ++i)
@@ -59,15 +59,15 @@ main(int argc, char ** argv)
     unsigned h = bytes.height();
     vil1_memory_image_of<double> tmp(w, h);
     vil1_memory_image_of<float> smooth(w, h);
-    vil1_convolve_signal_1d<double const> K(kernel, 0, N, 2 * N + 1);
-    vil1_memory_image_of<double> const & tmpc = tmp;
-    vil1_memory_image_of<vxl_byte> const & bytesc = bytes;
+    vil1_convolve_signal_1d<const double> K(kernel, 0, N, 2 * N + 1);
+    const vil1_memory_image_of<double> & tmpc = tmp;
+    const vil1_memory_image_of<vxl_byte> & bytesc = bytes;
 
     for (unsigned j = 0; j < sizeof(option) / sizeof(option[0]); ++j)
     {
       std::cerr << "convolve x..." << std::flush;
       vil1_convolve_1d_x(K,
-                         vil1_convolve_signal_2d<vxl_byte const>(bytesc.row_array(), 0, 0, w, 0, 0, h),
+                         vil1_convolve_signal_2d<const vxl_byte>(bytesc.row_array(), 0, 0, w, 0, 0, h),
                          (double *)nullptr,
                          vil1_convolve_signal_2d<double>(tmp.row_array(), 0, 0, w, 0, 0, h),
                          option[j],
@@ -75,7 +75,7 @@ main(int argc, char ** argv)
       std::cerr << "done\n"
                 << "convolve y..." << std::flush;
       vil1_convolve_1d_y(K,
-                         vil1_convolve_signal_2d<double const>(tmpc.row_array(), 0, 0, w, 0, 0, h),
+                         vil1_convolve_signal_2d<const double>(tmpc.row_array(), 0, 0, w, 0, 0, h),
                          (double *)nullptr,
                          vil1_convolve_signal_2d<float>(smooth.row_array(), 0, 0, w, 0, 0, h),
                          option[j],

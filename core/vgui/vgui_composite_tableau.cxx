@@ -46,7 +46,7 @@ vgui_composite_tableau::vgui_composite_tableau()
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_composite_tableau_new.
 //  Takes 2 children: the first is on top, the second below.
-vgui_composite_tableau::vgui_composite_tableau(vgui_tableau_sptr const & child0, vgui_tableau_sptr const & child1)
+vgui_composite_tableau::vgui_composite_tableau(const vgui_tableau_sptr & child0, const vgui_tableau_sptr & child1)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
   add(child0);
@@ -57,9 +57,9 @@ vgui_composite_tableau::vgui_composite_tableau(vgui_tableau_sptr const & child0,
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_composite_tableau_new.
 // Three children, top to bottom.
-vgui_composite_tableau::vgui_composite_tableau(vgui_tableau_sptr const & child0,
-                                               vgui_tableau_sptr const & child1,
-                                               vgui_tableau_sptr const & child2)
+vgui_composite_tableau::vgui_composite_tableau(const vgui_tableau_sptr & child0,
+                                               const vgui_tableau_sptr & child1,
+                                               const vgui_tableau_sptr & child2)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
   add(child0);
@@ -71,7 +71,7 @@ vgui_composite_tableau::vgui_composite_tableau(vgui_tableau_sptr const & child0,
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_composite_tableau_new.
 // Many children, top to bottom.
-vgui_composite_tableau::vgui_composite_tableau(std::vector<vgui_tableau_sptr> const & the_children)
+vgui_composite_tableau::vgui_composite_tableau(const std::vector<vgui_tableau_sptr> & the_children)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
   for (unsigned int i = 0; i < the_children.size(); ++i)
@@ -207,7 +207,7 @@ vgui_composite_tableau::get_bounding_box(float lo[3], float hi[3]) const
 //: Add to list of child tableaux.
 // virtual
 bool
-vgui_composite_tableau::add_child(vgui_tableau_sptr const & t)
+vgui_composite_tableau::add_child(const vgui_tableau_sptr & t)
 {
   children.push_back(vgui_parent_child_link(this, t));
   active.push_back(true);
@@ -218,7 +218,7 @@ vgui_composite_tableau::add_child(vgui_tableau_sptr const & t)
 //----------------------------------------------------------------------------
 //: Remove given tableau from list of child tableaux.
 void
-vgui_composite_tableau::remove(vgui_tableau_sptr const & t)
+vgui_composite_tableau::remove(const vgui_tableau_sptr & t)
 {
   if (!remove_child(t))
     std::cerr << __FILE__ " : no such child tableau\n";
@@ -236,7 +236,7 @@ vgui_composite_tableau::clear()
 //----------------------------------------------------------------------------
 // virtual
 bool
-vgui_composite_tableau::remove_child(vgui_tableau_sptr const & t)
+vgui_composite_tableau::remove_child(const vgui_tableau_sptr & t)
 {
   std::vector<bool>::iterator ia = active.begin();
   for (std::vector<vgui_parent_child_link>::iterator i = children.begin(); i != children.end(); ++i, ++ia)

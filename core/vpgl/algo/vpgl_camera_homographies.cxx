@@ -7,7 +7,7 @@
 #include "vnl/vnl_vector_fixed.h"
 #include "vnl/vnl_matrix_fixed.h"
 static vgl_h_matrix_3d<double>
-plane_trans(vgl_plane_3d<double> const & plane, vgl_point_3d<double> const & ref_pt)
+plane_trans(const vgl_plane_3d<double> & plane, const vgl_point_3d<double> & ref_pt)
 {
   // get the translation that moves the plane to intersect with the origin
   // note that calling plane.normal() pre-normalizes the vector so
@@ -46,7 +46,7 @@ plane_trans(vgl_plane_3d<double> const & plane, vgl_point_3d<double> const & ref
 }
 
 vgl_h_matrix_2d<double>
-vpgl_camera_homographies::homography_to_camera(vpgl_proj_camera<double> const & cam, vgl_plane_3d<double> const & plane)
+vpgl_camera_homographies::homography_to_camera(const vpgl_proj_camera<double> & cam, const vgl_plane_3d<double> & plane)
 {
   vgl_homg_point_3d<double> hc = cam.camera_center();
   vgl_point_3d<double> cp(hc);
@@ -70,17 +70,17 @@ vpgl_camera_homographies::homography_to_camera(vpgl_proj_camera<double> const & 
 
 //: create a plane projective transformation from the camera image plane to the specified plane
 vgl_h_matrix_2d<double>
-vpgl_camera_homographies::homography_to_camera(vpgl_perspective_camera<double> const & cam,
-                                               vgl_plane_3d<double> const & plane)
+vpgl_camera_homographies::homography_to_camera(const vpgl_perspective_camera<double> & cam,
+                                               const vgl_plane_3d<double> & plane)
 {
-  auto const & pcam = static_cast<vpgl_proj_camera<double> const &>(cam);
+  const auto & pcam = static_cast<const vpgl_proj_camera<double> &>(cam);
   return vpgl_camera_homographies::homography_to_camera(pcam, plane);
 }
 
 //: create a plane projective transformation from the camera image plane to the specified plane
 vgl_h_matrix_2d<double>
-vpgl_camera_homographies::homography_from_camera(vpgl_proj_camera<double> const & cam,
-                                                 vgl_plane_3d<double> const & plane)
+vpgl_camera_homographies::homography_from_camera(const vpgl_proj_camera<double> & cam,
+                                                 const vgl_plane_3d<double> & plane)
 {
   vgl_h_matrix_2d<double> H = vpgl_camera_homographies::homography_to_camera(cam, plane);
   return H.get_inverse();
@@ -88,16 +88,16 @@ vpgl_camera_homographies::homography_from_camera(vpgl_proj_camera<double> const 
 
 //: create a plane projective transformation from the camera image plane to the specified plane
 vgl_h_matrix_2d<double>
-vpgl_camera_homographies::homography_from_camera(vpgl_perspective_camera<double> const & cam,
-                                                 vgl_plane_3d<double> const & plane)
+vpgl_camera_homographies::homography_from_camera(const vpgl_perspective_camera<double> & cam,
+                                                 const vgl_plane_3d<double> & plane)
 {
   vgl_h_matrix_2d<double> H = vpgl_camera_homographies::homography_to_camera(cam, plane);
   return H.get_inverse();
 }
 
 vpgl_perspective_camera<double>
-vpgl_camera_homographies::transform_camera_to_plane(vpgl_perspective_camera<double> const & cam,
-                                                    vgl_plane_3d<double> const & plane)
+vpgl_camera_homographies::transform_camera_to_plane(const vpgl_perspective_camera<double> & cam,
+                                                    const vgl_plane_3d<double> & plane)
 {
   vgl_homg_point_3d<double> hc = cam.camera_center();
   vgl_point_3d<double> cp(hc);
@@ -109,8 +109,8 @@ vpgl_camera_homographies::transform_camera_to_plane(vpgl_perspective_camera<doub
 }
 
 vpgl_proj_camera<double>
-vpgl_camera_homographies::transform_camera_to_plane(vpgl_proj_camera<double> const & cam,
-                                                    vgl_plane_3d<double> const & plane)
+vpgl_camera_homographies::transform_camera_to_plane(const vpgl_proj_camera<double> & cam,
+                                                    const vgl_plane_3d<double> & plane)
 {
   vgl_homg_point_3d<double> hc = cam.camera_center();
   vgl_point_3d<double> cp(hc);
@@ -122,9 +122,9 @@ vpgl_camera_homographies::transform_camera_to_plane(vpgl_proj_camera<double> con
 }
 
 std::vector<vgl_point_3d<double>>
-vpgl_camera_homographies::transform_points_to_plane(vgl_plane_3d<double> const & plane,
-                                                    vgl_point_3d<double> const & ref_point,
-                                                    std::vector<vgl_point_3d<double>> const & pts)
+vpgl_camera_homographies::transform_points_to_plane(const vgl_plane_3d<double> & plane,
+                                                    const vgl_point_3d<double> & ref_point,
+                                                    const std::vector<vgl_point_3d<double>> & pts)
 {
   std::vector<vgl_point_3d<double>> tr_pts;
   vgl_h_matrix_3d<double> Tr = plane_trans(plane, ref_point);

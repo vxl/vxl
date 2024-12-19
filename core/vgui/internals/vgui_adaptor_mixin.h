@@ -17,10 +17,13 @@
 //: Holds the dimensions of the adaptor and the event causing popup menus.
 class vgui_adaptor_mixin
 {
- public:
-  vgui_adaptor_mixin() : width(0), height(0),
-                         popup_button(vgui_RIGHT),
-                         popup_modifier(vgui_MODIFIER_NULL) {}
+public:
+  vgui_adaptor_mixin()
+    : width(0)
+    , height(0)
+    , popup_button(vgui_RIGHT)
+    , popup_modifier(vgui_MODIFIER_NULL)
+  {}
   ~vgui_adaptor_mixin() {}
 
   //: Cached width of adaptor render area.

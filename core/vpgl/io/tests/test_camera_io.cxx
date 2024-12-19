@@ -16,7 +16,7 @@
 #include "vpl/vpl.h"
 #include "vsl/vsl_binary_io.h"
 static double
-camera_diff_norm(vpgl_perspective_camera<double> const & C0, vpgl_perspective_camera<double> const & C1)
+camera_diff_norm(const vpgl_perspective_camera<double> & C0, const vpgl_perspective_camera<double> & C1)
 {
   vnl_matrix_fixed<double, 3, 4> dif = C0.get_matrix() - C1.get_matrix();
   return dif.fro_norm();

@@ -32,38 +32,48 @@ class vidl_istream_image_resource : public vil_image_resource
   unsigned int np_;
   vil_pixel_format format_;
 
- public:
-
-  vidl_istream_image_resource(const vidl_istream_sptr& stream, int frame,
-                              unsigned int ni, unsigned int nj, unsigned int np,
+public:
+  vidl_istream_image_resource(const vidl_istream_sptr & stream,
+                              int frame,
+                              unsigned int ni,
+                              unsigned int nj,
+                              unsigned int np,
                               vil_pixel_format format);
-  vidl_istream_image_resource(const vidl_istream_sptr& stream, int frame);
-  vidl_istream_image_resource(const vidl_istream_sptr& stream);
+  vidl_istream_image_resource(const vidl_istream_sptr & stream, int frame);
+  vidl_istream_image_resource(const vidl_istream_sptr & stream);
   ~vidl_istream_image_resource() override;
 
   //: Dimensions
-  unsigned nplanes() const override;
-  unsigned ni() const override;
-  unsigned nj() const override;
+  unsigned
+  nplanes() const override;
+  unsigned
+  ni() const override;
+  unsigned
+  nj() const override;
 
-  enum vil_pixel_format pixel_format() const override;
+  enum vil_pixel_format
+  pixel_format() const override;
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.
-  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                 unsigned j0, unsigned nj) const override;
+  vil_image_view_base_sptr
+  get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const override;
 
   //: Put the data in this view back into the image source.
-  bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0) override;
+  bool
+  put_view(const vil_image_view_base & im, unsigned i0, unsigned j0) override;
 
-  bool get_property(char const *tag, void *prop = nullptr) const override;
+  bool
+  get_property(const char * tag, void * prop = nullptr) const override;
 
- private:
+private:
   //: try to find the image format and size from the current frame
-  bool find_image_properties();
+  bool
+  find_image_properties();
 
   //: create an empty image of the appropriate type and size
-  vil_image_view_base_sptr create_empty_view() const;
+  vil_image_view_base_sptr
+  create_empty_view() const;
 };
 
 #endif // vidl_istream_image_resource_h_

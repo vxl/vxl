@@ -19,34 +19,32 @@
 
 // Create an identity projection, i.e. (x,y,z) identically maps to (x,y)
 template <class T>
-vpgl_local_rational_camera<T>::vpgl_local_rational_camera():
-  vpgl_rational_camera<T>()
-{
-}
+vpgl_local_rational_camera<T>::vpgl_local_rational_camera()
+  : vpgl_rational_camera<T>()
+{}
 
 //: Constructor from a rational camera and an affine matrix
 template <class T>
-vpgl_local_rational_camera<T>::
-vpgl_local_rational_camera(vpgl_lvcs const& lvcs,
-                           vpgl_rational_camera<T> const& rcam) :
-  vpgl_rational_camera<T>(rcam), lvcs_(lvcs)
-{
-}
+vpgl_local_rational_camera<T>::vpgl_local_rational_camera(const vpgl_lvcs & lvcs, const vpgl_rational_camera<T> & rcam)
+  : vpgl_rational_camera<T>(rcam)
+  , lvcs_(lvcs)
+{}
 
 //: Constructor from a rational camera and a geographic origin
 template <class T>
-vpgl_local_rational_camera<T>::
-vpgl_local_rational_camera(T longitude, T latitude, T elevation,
-                           vpgl_rational_camera<T> const& rcam) :
-  vpgl_rational_camera<T>(rcam),
-  lvcs_(vpgl_lvcs(latitude, longitude, elevation,
-                  vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS))
-{
-}
+vpgl_local_rational_camera<T>::vpgl_local_rational_camera(T longitude,
+                                                          T latitude,
+                                                          T elevation,
+                                                          const vpgl_rational_camera<T> & rcam)
+  : vpgl_rational_camera<T>(rcam)
+  , lvcs_(vpgl_lvcs(latitude, longitude, elevation, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS))
+{}
 
 // clone local rational camera
 template <class T>
-vpgl_local_rational_camera<T> *vpgl_local_rational_camera<T>::clone() const {
+vpgl_local_rational_camera<T> *
+vpgl_local_rational_camera<T>::clone() const
+{
   return new vpgl_local_rational_camera<T>(*this);
 }
 
@@ -55,12 +53,10 @@ vpgl_local_rational_camera<T> *vpgl_local_rational_camera<T>::clone() const {
 
 // set lvcs from lon/lat/elev
 template <class T>
-void vpgl_local_rational_camera<T>::
-set_lvcs(double const& longitude, double const& latitude, double const& elevation)
+void
+vpgl_local_rational_camera<T>::set_lvcs(const double & longitude, const double & latitude, const double & elevation)
 {
-  lvcs_ = vpgl_lvcs(latitude, longitude, elevation,
-                    vpgl_lvcs::wgs84, vpgl_lvcs::DEG,
-                    vpgl_lvcs::METERS);
+  lvcs_ = vpgl_lvcs(latitude, longitude, elevation, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
 }
 
 
@@ -69,9 +65,8 @@ set_lvcs(double const& longitude, double const& latitude, double const& elevatio
 
 // generic interface, x, y, z are in local Cartesian coordinates
 template <class T>
-void vpgl_local_rational_camera<T>::project(
-    const T x, const T y, const T z,
-    T& u, T& v) const
+void
+vpgl_local_rational_camera<T>::project(const T x, const T y, const T z, T & u, T & v) const
 {
   // first, convert to global geographic coordinates
   double lon, lat, gz;
@@ -87,13 +82,11 @@ void vpgl_local_rational_camera<T>::project(
 
 // write camera parameters to output stream as PVL (paramter value language)
 template <class T>
-void vpgl_local_rational_camera<T>::write_pvl(
-    std::ostream& ostr,
-    vpgl_rational_order output_order
-    ) const
+void
+vpgl_local_rational_camera<T>::write_pvl(std::ostream & ostr, vpgl_rational_order output_order) const
 {
   // parent print
-  vpgl_rational_camera<T>::write_pvl(ostr,output_order);
+  vpgl_rational_camera<T>::write_pvl(ostr, output_order);
 
   // append lvcs
   double longitude, latitude, elevation;
@@ -110,7 +103,8 @@ void vpgl_local_rational_camera<T>::write_pvl(
 
 // read from a PVL file stream
 template <class T>
-bool vpgl_local_rational_camera<T>::read_pvl(std::istream& istr)
+bool
+vpgl_local_rational_camera<T>::read_pvl(std::istream & istr)
 {
   // read rational camera
   if (!vpgl_rational_camera<T>::read_pvl(istr))
@@ -121,16 +115,19 @@ bool vpgl_local_rational_camera<T>::read_pvl(std::istream& istr)
   bool has_lvcs = false;
   std::string input;
 
-  while (!istr.eof() && !has_lvcs) {
+  while (!istr.eof() && !has_lvcs)
+  {
     istr >> input;
-    if (input=="lvcs") {
+    if (input == "lvcs")
+    {
       istr >> longitude >> latitude >> elevation;
       has_lvcs = true;
     }
   }
 
-  if (!has_lvcs) {
-    //std::cerr << "error: not a composite rational camera file\n";
+  if (!has_lvcs)
+  {
+    // std::cerr << "error: not a composite rational camera file\n";
     return false;
   }
 
@@ -141,7 +138,8 @@ bool vpgl_local_rational_camera<T>::read_pvl(std::istream& istr)
 
 // read from a TXT file stream
 template <class T>
-bool vpgl_local_rational_camera<T>::read_txt(std::istream& istr)
+bool
+vpgl_local_rational_camera<T>::read_txt(std::istream & istr)
 {
   // read rational camera
   if (!vpgl_rational_camera<T>::read_txt(istr))
@@ -152,16 +150,19 @@ bool vpgl_local_rational_camera<T>::read_txt(std::istream& istr)
   bool has_lvcs = false;
   std::string input;
 
-  while (!istr.eof() && !has_lvcs) {
+  while (!istr.eof() && !has_lvcs)
+  {
     istr >> input;
-    if (input=="lvcs") {
+    if (input == "lvcs")
+    {
       istr >> longitude >> latitude >> elevation;
       has_lvcs = true;
     }
   }
 
-  if (!has_lvcs) {
-    //std::cerr << "error: not a composite rational camera file\n";
+  if (!has_lvcs)
+  {
+    // std::cerr << "error: not a composite rational camera file\n";
     return false;
   }
 
@@ -176,7 +177,8 @@ bool vpgl_local_rational_camera<T>::read_txt(std::istream& istr)
 
 // write to stream
 template <class T>
-std::ostream& operator<<(std::ostream& s, const vpgl_local_rational_camera<T >& c )
+std::ostream &
+operator<<(std::ostream & s, const vpgl_local_rational_camera<T> & c)
 {
   c.print(s);
   return s;
@@ -184,7 +186,8 @@ std::ostream& operator<<(std::ostream& s, const vpgl_local_rational_camera<T >& 
 
 // read from stream
 template <class T>
-std::istream& operator >>(std::istream& s, vpgl_local_rational_camera<T >& c )
+std::istream &
+operator>>(std::istream & s, vpgl_local_rational_camera<T> & c)
 {
   c.read_pvl(s);
   return s;
@@ -192,7 +195,8 @@ std::istream& operator >>(std::istream& s, vpgl_local_rational_camera<T >& c )
 
 // read from a PVL file/stream
 template <class T>
-vpgl_local_rational_camera<T>* read_local_rational_camera(std::string cam_path)
+vpgl_local_rational_camera<T> *
+read_local_rational_camera(std::string cam_path)
 {
   vpgl_local_rational_camera<T> cam;
   if (!cam.read_pvl(cam_path))
@@ -202,7 +206,8 @@ vpgl_local_rational_camera<T>* read_local_rational_camera(std::string cam_path)
 }
 
 template <class T>
-vpgl_local_rational_camera<T>* read_local_rational_camera(std::istream& istr)
+vpgl_local_rational_camera<T> *
+read_local_rational_camera(std::istream & istr)
 {
   vpgl_local_rational_camera<T> cam;
   if (!cam.read_pvl(istr))
@@ -213,7 +218,8 @@ vpgl_local_rational_camera<T>* read_local_rational_camera(std::istream& istr)
 
 // read from a TXT file/stream
 template <class T>
-vpgl_local_rational_camera<T>* read_local_rational_camera_from_txt(std::string cam_path)
+vpgl_local_rational_camera<T> *
+read_local_rational_camera_from_txt(std::string cam_path)
 {
   vpgl_local_rational_camera<T> cam;
   if (!cam.read_txt(cam_path))
@@ -223,7 +229,8 @@ vpgl_local_rational_camera<T>* read_local_rational_camera_from_txt(std::string c
 }
 
 template <class T>
-vpgl_local_rational_camera<T>* read_local_rational_camera_from_txt(std::istream& istr)
+vpgl_local_rational_camera<T> *
+read_local_rational_camera_from_txt(std::istream & istr)
 {
   vpgl_local_rational_camera<T> cam;
   if (!cam.read_txt(istr))
@@ -235,13 +242,13 @@ vpgl_local_rational_camera<T>* read_local_rational_camera_from_txt(std::istream&
 
 // Code for easy instantiation.
 #undef vpgl_LOCAL_RATIONAL_CAMERA_INSTANTIATE
-#define vpgl_LOCAL_RATIONAL_CAMERA_INSTANTIATE(T) \
-template class vpgl_local_rational_camera<T >; \
-template std::ostream& operator<<(std::ostream&, const vpgl_local_rational_camera<T >&); \
-template std::istream& operator>>(std::istream&, vpgl_local_rational_camera<T >&); \
-template vpgl_local_rational_camera<T >* read_local_rational_camera(std::string); \
-template vpgl_local_rational_camera<T >* read_local_rational_camera(std::istream&); \
-template vpgl_local_rational_camera<T >* read_local_rational_camera_from_txt(std::string); \
-template vpgl_local_rational_camera<T >* read_local_rational_camera_from_txt(std::istream&)
+#define vpgl_LOCAL_RATIONAL_CAMERA_INSTANTIATE(T)                                            \
+  template class vpgl_local_rational_camera<T>;                                              \
+  template std::ostream & operator<<(std::ostream &, const vpgl_local_rational_camera<T> &); \
+  template std::istream & operator>>(std::istream &, vpgl_local_rational_camera<T> &);       \
+  template vpgl_local_rational_camera<T> * read_local_rational_camera(std::string);          \
+  template vpgl_local_rational_camera<T> * read_local_rational_camera(std::istream &);       \
+  template vpgl_local_rational_camera<T> * read_local_rational_camera_from_txt(std::string); \
+  template vpgl_local_rational_camera<T> * read_local_rational_camera_from_txt(std::istream &)
 
 #endif // vpgl_local_rational_camera_hxx_

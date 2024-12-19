@@ -17,14 +17,17 @@ class vsl_b_istream;
 
 //: Write array to binary stream
 template <class T, size_t N>
-void vsl_b_write(vsl_b_ostream& os, const std::array<T, N>& v);
+void
+vsl_b_write(vsl_b_ostream & os, const std::array<T, N> & v);
 
 //: Read array from binary stream
 template <class T, size_t N>
-void vsl_b_read(vsl_b_istream& is, std::array<T, N>& v);
+void
+vsl_b_read(vsl_b_istream & is, std::array<T, N> & v);
 
 //: Print human readable summary of array to a stream
 template <class T, size_t N>
-void vsl_print_summary(std::ostream& os, const std::array<T, N>& v);
+void
+vsl_print_summary(std::ostream & os, const std::array<T, N> & v);
 
-#endif  // vsl_array_io_h_
+#endif // vsl_array_io_h_

@@ -29,11 +29,13 @@ class vil_nitf2_field_definitions;
 class vil_nitf2_classification
 {
 public:
-
   // NITF file version
   enum file_version
   {
-    V_UNKNOWN, V_NITF_10, V_NITF_20, V_NITF_21,
+    V_UNKNOWN,
+    V_NITF_10,
+    V_NITF_20,
+    V_NITF_21,
     // If you weren't confused enough already, now we're telling you
     // that NSIF 1.0 is the same as NITF 2.1. It's true though.
     V_NSIF_10 = V_NITF_21
@@ -50,15 +52,16 @@ public:
   // argument below allow the caller to generate the field definitions
   // appropriate to the context, e.g., "F" and "File", respectively,
   // in the case of a file header.
-  static const vil_nitf2_field_definitions* get_field_definitions(
-    const file_version& version,
-    std::string tag_prefix, std::string pretty_name_prefix );
+  static const vil_nitf2_field_definitions *
+  get_field_definitions(const file_version & version, std::string tag_prefix, std::string pretty_name_prefix);
 
   // Like get_field_defintions(), but appends fields to defs instead
   // of returning them.
-  static void add_field_defs(
-    vil_nitf2_field_definitions* defs, const file_version& version,
-    std::string prefix, const std::string& pretty_name_prefix);
+  static void
+  add_field_defs(vil_nitf2_field_definitions * defs,
+                 const file_version & version,
+                 std::string prefix,
+                 const std::string & pretty_name_prefix);
 
 private:
   // Purely static class; don't instantiate.
@@ -66,15 +69,14 @@ private:
 
   // A cache of field definitions, indexed by version, tag_prefix and
   // pretty_name_prefix.
-  typedef std::pair< file_version, std::pair< std::string, std::string> >
-    type_field_defs_key;
-  typedef std::map< type_field_defs_key, vil_nitf2_field_definitions*>
-    type_field_defs_map;
-  static type_field_defs_map & s_field_definitions();
+  typedef std::pair<file_version, std::pair<std::string, std::string>> type_field_defs_key;
+  typedef std::map<type_field_defs_key, vil_nitf2_field_definitions *> type_field_defs_map;
+  static type_field_defs_map &
+  s_field_definitions();
 
   // so these static members can be cleaned up when the program is done
   // using nitf files
   friend class type_field_defs_map_t;
 };
 
-#endif //VIL_NITF2_CLASSIFICATION_H
+#endif // VIL_NITF2_CLASSIFICATION_H

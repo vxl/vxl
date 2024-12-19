@@ -10,7 +10,7 @@
 
 //: Predicate that will sort doubles in ascending order.
 int
-vbl_sort_double_ascending(double const & a, double const & b)
+vbl_sort_double_ascending(const double & a, const double & b)
 {
   if (a < b)
     return -1;
@@ -23,7 +23,7 @@ vbl_sort_double_ascending(double const & a, double const & b)
 
 //: Predicate that will sort in descending order.
 int
-vbl_sort_double_descending(double const & a, double const & b)
+vbl_sort_double_descending(const double & a, const double & b)
 {
   if (a < b)
     return 1;
@@ -36,7 +36,7 @@ vbl_sort_double_descending(double const & a, double const & b)
 
 //: Ascending integers.
 int
-vbl_sort_int_ascending(int const & a, int const & b)
+vbl_sort_int_ascending(const int & a, const int & b)
 {
   if (a < b)
     return -1;

@@ -81,23 +81,27 @@
 // \endcode
 class vgui_message
 {
- public:
-  vgui_message() : from(nullptr), user(nullptr), data(nullptr) {}
+public:
+  vgui_message()
+    : from(nullptr)
+    , user(nullptr)
+    , data(nullptr)
+  {}
 
   //: Pointer to sender.
   //  When the message was broadcast from a vgui_observer
   //  via the notify() method, this will point to the observer.
-  const void *from;
+  const void * from;
 
   //: This field must uniquely identify the type of message sent.
   //  Usually it will point to some static POD somewhere.
-  const void *user;
+  const void * user;
 
   //: Extra data can be packaged into this.
   //  It is up to the sender of the message to ensure that 'data' can be
   //  safely cast to whatever the receiver expects when receiving a message
   //  with a particular value of 'user' set.
-  const void *data;
+  const void * data;
 };
 
 #endif // vgui_message_h_

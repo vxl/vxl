@@ -12,13 +12,14 @@
 //  Applies dilation followed by erosion
 // \relatesalso vil_image_view
 // \relatesalso vil_structuring_element
-inline void vil_binary_closing(const vil_image_view<bool>& src_image,
-                               vil_image_view<bool>& dest_image,
-                               const vil_structuring_element& element)
+inline void
+vil_binary_closing(const vil_image_view<bool> & src_image,
+                   vil_image_view<bool> & dest_image,
+                   const vil_structuring_element & element)
 {
   vil_image_view<bool> dilated_im;
-  vil_binary_dilate(src_image,dilated_im,element);
-  vil_binary_erode(dilated_im,dest_image,element);
+  vil_binary_dilate(src_image, dilated_im, element);
+  vil_binary_erode(dilated_im, dest_image, element);
 }
 
 #endif // vil_binary_closing_h_

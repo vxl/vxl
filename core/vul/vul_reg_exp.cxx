@@ -126,7 +126,7 @@
 
 //: Copies the given regular expression.
 
-vul_reg_exp::vul_reg_exp(vul_reg_exp const & rxp)
+vul_reg_exp::vul_reg_exp(const vul_reg_exp & rxp)
 {
   int ind;
   this->progsize = rxp.progsize;            // Copy regular expression size
@@ -156,7 +156,7 @@ vul_reg_exp::vul_reg_exp(vul_reg_exp const & rxp)
 //: Returns true if two regular expressions have the same compiled program for pattern matching.
 
 bool
-vul_reg_exp::operator==(vul_reg_exp const & rxp) const
+vul_reg_exp::operator==(const vul_reg_exp & rxp) const
 {
   if (this != &rxp)
   {                                               // Same address?
@@ -174,7 +174,7 @@ vul_reg_exp::operator==(vul_reg_exp const & rxp) const
 //: Returns true if have the same compiled regular expressions and the same start and end pointers.
 
 bool
-vul_reg_exp::deep_equal(vul_reg_exp const & rxp) const
+vul_reg_exp::deep_equal(const vul_reg_exp & rxp) const
 {
   int ind = this->progsize;                     // Get regular expression size
   if (ind != rxp.progsize)                      // If different size regexp
@@ -313,10 +313,10 @@ constexpr unsigned char MAGIC = 0234;
 //
 #define UCHARAT(p) ((const unsigned char *)(p))[0]
 
-#define FAIL(m)                                                                                                        \
-  {                                                                                                                    \
-    regerror(m);                                                                                                       \
-    return NULL;                                                                                                       \
+#define FAIL(m)  \
+  {              \
+    regerror(m); \
+    return NULL; \
   }
 #define ISMULT(c) ((c) == '*' || (c) == '+' || (c) == '?')
 #define META "^$.[()|?+*\\"
@@ -415,7 +415,7 @@ regoptail(char *, const char *);
 //: Compile a regular expression into internal code for later pattern matching.
 
 void
-vul_reg_exp::compile(char const * exp)
+vul_reg_exp::compile(const char * exp)
 {
   const char * scan;
   const char * longest;
@@ -451,10 +451,10 @@ vul_reg_exp::compile(char const * exp)
   }
 
   // Allocate space.
-  //#ifndef _WIN32
+  // #ifndef _WIN32
   if (this->program != nullptr)
     delete[] this->program;
-  //#endif
+  // #endif
   this->program = new char[regsize];
   this->progsize = (int)regsize;
 
@@ -746,7 +746,8 @@ regatom(int * flagp)
       ret = regnode(ANY);
       *flagp |= HASWIDTH | SIMPLE;
       break;
-    case '[': {
+    case '[':
+    {
       int rxpclass;
       int rxpclassend;
 
@@ -825,7 +826,8 @@ regatom(int * flagp)
       regc('\0');
       *flagp |= HASWIDTH | SIMPLE;
       break;
-    default: {
+    default:
+    {
       int len;
       char ender;
 
@@ -1012,7 +1014,7 @@ vul_reg_exp::find(std::string const & s)
 // Returns true if found, and sets start and end indexes accordingly.
 
 bool
-vul_reg_exp::find(char const * string)
+vul_reg_exp::find(const char * string)
 {
   const char * s;
 
@@ -1139,7 +1141,8 @@ regmatch(const char * prog)
           return 0;
         reginput++;
         break;
-      case EXACTLY: {
+      case EXACTLY:
+      {
         int len;
         const char * opnd;
 
@@ -1175,7 +1178,8 @@ regmatch(const char * prog)
       case OPEN + 6:
       case OPEN + 7:
       case OPEN + 8:
-      case OPEN + 9: {
+      case OPEN + 9:
+      {
         int no;
         const char * save;
 
@@ -1203,7 +1207,8 @@ regmatch(const char * prog)
       case CLOSE + 6:
       case CLOSE + 7:
       case CLOSE + 8:
-      case CLOSE + 9: {
+      case CLOSE + 9:
+      {
         int no;
         const char * save;
 
@@ -1223,7 +1228,8 @@ regmatch(const char * prog)
         else
           return 0;
       }
-      case BRANCH: {
+      case BRANCH:
+      {
         const char * save;
 
         if (OP(next) != BRANCH) // No choice.
@@ -1244,7 +1250,8 @@ regmatch(const char * prog)
         break;
       }
       case STAR:
-      case PLUS: {
+      case PLUS:
+      {
         char nextch;
         int no;
         const char * save;

@@ -38,7 +38,8 @@ vidl_v4l2_control::new_control(const v4l2_queryctrl & ctr, int f)
     case V4L2_CTRL_TYPE_BOOLEAN:
       return new vidl_v4l2_control_boolean(ctr, f);
       break;
-    case V4L2_CTRL_TYPE_MENU: {
+    case V4L2_CTRL_TYPE_MENU:
+    {
       vidl_v4l2_control_menu * p = new vidl_v4l2_control_menu(ctr, f);
       if (p->n_items() == 0)
       {

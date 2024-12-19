@@ -7,7 +7,7 @@
 
 template <class T>
 bool
-vil1_scale_intensities_image(vil1_image const & base, double scale, double shift, T * buf, int x0, int y0, int w, int h)
+vil1_scale_intensities_image(const vil1_image & base, double scale, double shift, T * buf, int x0, int y0, int w, int h)
 {
   if (!base.get_section(buf, x0, y0, w, h))
     return false;
@@ -20,26 +20,26 @@ vil1_scale_intensities_image(vil1_image const & base, double scale, double shift
 }
 
 #undef VIL1_INSTANTIATE_SCALE_INTENSITIES_IMAGE
-#define VIL1_INSTANTIATE_SCALE_INTENSITIES_IMAGE(T)                                                                    \
-  template bool vil1_scale_intensities_image(                                                                          \
+#define VIL1_INSTANTIATE_SCALE_INTENSITIES_IMAGE(T) \
+  template bool vil1_scale_intensities_image(       \
     vil1_image const & base, double scale, double shift, T * buf, int x0, int y0, int w, int h)
 
 #undef VIL1_SPECIALIZE_SCALE_INTENSITIES_IMAGE_RGB
-#define VIL1_SPECIALIZE_SCALE_INTENSITIES_IMAGE_RGB(T)                                                                 \
-  template <>                                                                                                          \
-  bool vil1_scale_intensities_image(                                                                                   \
-    vil1_image const & base, double scale, double shift, vil1_rgb<T> * buf, int x0, int y0, int w, int h)              \
-  {                                                                                                                    \
-    if (!base.get_section(buf, x0, y0, w, h))                                                                          \
-      return false;                                                                                                    \
-    unsigned size = w * h;                                                                                             \
-    for (unsigned pos = 0; pos < size; ++pos)                                                                          \
-    {                                                                                                                  \
-      buf[pos].r = (T)(buf[pos].r * scale + shift);                                                                    \
-      buf[pos].g = (T)(buf[pos].g * scale + shift);                                                                    \
-      buf[pos].b = (T)(buf[pos].b * scale + shift);                                                                    \
-    }                                                                                                                  \
-    return true;                                                                                                       \
+#define VIL1_SPECIALIZE_SCALE_INTENSITIES_IMAGE_RGB(T)                                                    \
+  template <>                                                                                             \
+  bool vil1_scale_intensities_image(                                                                      \
+    vil1_image const & base, double scale, double shift, vil1_rgb<T> * buf, int x0, int y0, int w, int h) \
+  {                                                                                                       \
+    if (!base.get_section(buf, x0, y0, w, h))                                                             \
+      return false;                                                                                       \
+    unsigned size = w * h;                                                                                \
+    for (unsigned pos = 0; pos < size; ++pos)                                                             \
+    {                                                                                                     \
+      buf[pos].r = (T)(buf[pos].r * scale + shift);                                                       \
+      buf[pos].g = (T)(buf[pos].g * scale + shift);                                                       \
+      buf[pos].b = (T)(buf[pos].b * scale + shift);                                                       \
+    }                                                                                                     \
+    return true;                                                                                          \
   }
 
 VIL1_INSTANTIATE_SCALE_INTENSITIES_IMAGE(vxl_byte);

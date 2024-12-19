@@ -108,13 +108,13 @@ encode_base64(const std::string & in)
 }
 
 
-vil_stream_url::vil_stream_url(char const * url)
+vil_stream_url::vil_stream_url(const char * url)
   : u_(nullptr)
 {
   if (std::strncmp(url, "http://", 7) != 0)
     return; // doesn't look like a URL to me....
 
-  char const * p = url + 7;
+  const char * p = url + 7;
   while (*p && *p != '/')
     ++p;
 
@@ -150,7 +150,7 @@ vil_stream_url::vil_stream_url(char const * url)
     else if (path[k] == '%')
       path.replace(k, 1, "%25");
 
-      // so far so good.
+  // so far so good.
 #ifdef DEBUG
   std::cerr << "auth = \'" << auth << "\'\n"
             << "host = \'" << host << "\'\n"

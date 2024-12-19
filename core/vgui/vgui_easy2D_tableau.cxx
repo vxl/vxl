@@ -57,7 +57,7 @@ vgui_easy2D_tableau::vgui_easy2D_tableau(const char * n)
 }
 
 
-vgui_easy2D_tableau::vgui_easy2D_tableau(vgui_image_tableau_sptr const & i, const char * n)
+vgui_easy2D_tableau::vgui_easy2D_tableau(const vgui_image_tableau_sptr & i, const char * n)
   : image_slot(this, i)
   , image_image(i)
   , name_(n)
@@ -72,7 +72,7 @@ vgui_easy2D_tableau::vgui_easy2D_tableau(vgui_image_tableau_sptr const & i, cons
 }
 
 
-vgui_easy2D_tableau::vgui_easy2D_tableau(vgui_tableau_sptr const & i, const char * n)
+vgui_easy2D_tableau::vgui_easy2D_tableau(const vgui_tableau_sptr & i, const char * n)
   : image_slot(this, i)
   , name_(n)
   , style_(vgui_style::new_style())
@@ -87,7 +87,7 @@ vgui_easy2D_tableau::vgui_easy2D_tableau(vgui_tableau_sptr const & i, const char
 
 
 bool
-vgui_easy2D_tableau::handle(vgui_event const & e)
+vgui_easy2D_tableau::handle(const vgui_event & e)
 {
 #if 0 // event tracker
   if(e.type != vgui_MOTION)
@@ -126,14 +126,14 @@ vgui_easy2D_tableau::type_name() const
 
 //: Set the child tableau to be the given image_tableau.
 void
-vgui_easy2D_tableau::set_image(std::string const & fn)
+vgui_easy2D_tableau::set_image(const std::string & fn)
 {
   image_image->set_image(fn.c_str());
 }
 
 //: Set the child tableau to be the given tableau.
 void
-vgui_easy2D_tableau::set_child(vgui_tableau_sptr const & i)
+vgui_easy2D_tableau::set_child(const vgui_tableau_sptr & i)
 {
   if (i && i->type_name() != "vgui_image_tableau" && i->type_name() != "xcv_image_tableau")
     vgui_macro_warning << "assigning what seems like a non-image to my child : i = " << i << std::endl;
@@ -254,35 +254,35 @@ vgui_easy2D_tableau::add_ellipse(float x, float y, float w, float h, float phi)
 
 //: Add a point with the given projective coordinates.
 vgui_soview2D_point *
-vgui_easy2D_tableau::add_point_3dv(double const p[3])
+vgui_easy2D_tableau::add_point_3dv(const double p[3])
 {
   return add_point(float(p[0] / p[2]), float(p[1] / p[2]));
 }
 
 //: Add a line with the given projective start and end points.
 vgui_soview2D_lineseg *
-vgui_easy2D_tableau::add_line_3dv_3dv(double const p[3], double const q[3])
+vgui_easy2D_tableau::add_line_3dv_3dv(const double p[3], const double q[3])
 {
   return add_line(float(p[0] / p[2]), float(p[1] / p[2]), float(q[0] / q[2]), float(q[1] / q[2]));
 }
 
 //: Add an infinite line with the given projective coordinates.
 vgui_soview2D_infinite_line *
-vgui_easy2D_tableau::add_infinite_line_3dv(double const l[3])
+vgui_easy2D_tableau::add_infinite_line_3dv(const double l[3])
 {
   return add_infinite_line(float(l[0]), float(l[1]), float(l[2]));
 }
 
 //: Add a circle with the given centre (in projective coords) and radius to the display.
 vgui_soview2D_circle *
-vgui_easy2D_tableau::add_circle_3dv(double const point[3], float r)
+vgui_easy2D_tableau::add_circle_3dv(const double point[3], float r)
 {
   return add_circle(float(point[0] / point[2]), float(point[1] / point[2]), r);
 }
 
 //: Add a linestrip with the given n vertices to the display.
 vgui_soview2D_linestrip *
-vgui_easy2D_tableau::add_linestrip(unsigned n, float const * x, float const * y)
+vgui_easy2D_tableau::add_linestrip(unsigned n, const float * x, const float * y)
 {
   vgui_soview2D_linestrip * obj = new vgui_soview2D_linestrip(n, x, y);
 
@@ -292,7 +292,7 @@ vgui_easy2D_tableau::add_linestrip(unsigned n, float const * x, float const * y)
 
 //: Add  polygon with the given n vertices to the display.
 vgui_soview2D_polygon *
-vgui_easy2D_tableau::add_polygon(unsigned n, float const * x, float const * y, bool filled)
+vgui_easy2D_tableau::add_polygon(unsigned n, const float * x, const float * y, bool filled)
 {
   vgui_soview2D_polygon * obj = new vgui_soview2D_polygon(n, x, y, filled);
   add(obj);
@@ -360,7 +360,8 @@ vgui_easy2D_tableau::print_psfile(std::string filename, int reduction_factor, bo
         }
       }
       else if (img.nplanes() == 3) // color image
-      {}
+      {
+      }
       else
         // urgh
         vgui_macro_warning << "Don't know how to handle image with " << img.nplanes() << " planes" << std::endl;
@@ -477,7 +478,7 @@ vgui_easy2D_tableau::print_psfile(std::string filename, int reduction_factor, bo
 
 //: Add an image at the given position to the display.
 vgui_soview2D_image *
-vgui_easy2D_tableau::add_image(float x, float y, vil1_image const & img)
+vgui_easy2D_tableau::add_image(float x, float y, const vil1_image & img)
 {
   // Assume alpha blending is necessary iff there are four components
   // in the image
@@ -491,7 +492,7 @@ vgui_easy2D_tableau::add_image(float x, float y, vil1_image const & img)
 
 //: Add an image at the given position to the display.
 vgui_soview2D_image *
-vgui_easy2D_tableau::add_image(float x, float y, vil_image_view_base const & img)
+vgui_easy2D_tableau::add_image(float x, float y, const vil_image_view_base & img)
 {
   // Assume alpha blending is necessary iff there are four components
   // in the image

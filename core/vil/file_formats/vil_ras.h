@@ -24,20 +24,19 @@ class vil_image_view_base;
 //: Loader for Sun raster files
 class vil_ras_file_format : public vil_file_format
 {
- public:
-  char const* tag() const override;
-  vil_image_resource_sptr make_input_image( vil_stream* vs ) override;
-  vil_image_resource_sptr make_output_image(vil_stream* vs,
-                                                    unsigned ni,
-                                                    unsigned nj,
-                                                    unsigned nplanes,
-                                                    vil_pixel_format format) override;
+public:
+  const char *
+  tag() const override;
+  vil_image_resource_sptr
+  make_input_image(vil_stream * vs) override;
+  vil_image_resource_sptr
+  make_output_image(vil_stream * vs, unsigned ni, unsigned nj, unsigned nplanes, vil_pixel_format format) override;
 };
 
 //: Generic image implementation for Sun raster files
 class vil_ras_image : public vil_image_resource
 {
-  vil_stream* vs_;
+  vil_stream * vs_;
   vxl_uint_32 width_;
   vxl_uint_32 height_;
   unsigned components_;
@@ -50,29 +49,31 @@ class vil_ras_image : public vil_image_resource
   vxl_uint_32 type_;
   vxl_uint_32 map_type_;
   vxl_uint_32 map_length_;
-  vxl_uint_8* col_map_;
+  vxl_uint_8 * col_map_;
 
-  bool read_header();
-  bool write_header();
+  bool
+  read_header();
+  bool
+  write_header();
 
   friend class vil_ras_file_format;
- public:
 
-  vil_ras_image(vil_stream* is);
-  vil_ras_image(vil_stream* is,
-                unsigned ni,
-                unsigned nj,
-                unsigned nplanes,
-                vil_pixel_format format );
+public:
+  vil_ras_image(vil_stream * is);
+  vil_ras_image(vil_stream * is, unsigned ni, unsigned nj, unsigned nplanes, vil_pixel_format format);
   ~vil_ras_image() override;
 
   // Inherit the documentation from vil_image_resource
 
-  unsigned nplanes() const override;
-  unsigned ni() const override;
-  unsigned nj() const override;
+  unsigned
+  nplanes() const override;
+  unsigned
+  ni() const override;
+  unsigned
+  nj() const override;
 
-  vil_pixel_format pixel_format() const override;
+  vil_pixel_format
+  pixel_format() const override;
 
   //: Create a read/write view of a copy of this data.
   //
@@ -83,13 +84,16 @@ class vil_ras_image : public vil_image_resource
   // stored RGB.
   //
   // \return 0 if unable to get view of correct size, or if resource is write-only.
-  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                 unsigned j0, unsigned nj) const override;
+  vil_image_view_base_sptr
+  get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const override;
 
-  bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0) override;
+  bool
+  put_view(const vil_image_view_base & im, unsigned i0, unsigned j0) override;
 
-  char const* file_format() const override;
-  bool get_property(char const *tag, void *prop = nullptr) const override;
+  const char *
+  file_format() const override;
+  bool
+  get_property(const char * tag, void * prop = nullptr) const override;
 };
 
 #endif // vil_ras_file_format_h_

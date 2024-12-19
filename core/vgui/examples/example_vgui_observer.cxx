@@ -23,7 +23,7 @@ struct example_window_title_setter : public vgui_observer
   char ** argv;
   vgui_deck_tableau_sptr deck;
 
-  example_window_title_setter(char ** argv_, vgui_deck_tableau_sptr const & deck_)
+  example_window_title_setter(char ** argv_, const vgui_deck_tableau_sptr & deck_)
     : argv(argv_)
     , deck(deck_)
   {
@@ -58,12 +58,12 @@ struct example_window_title_setter : public vgui_observer
     }
   }
   void
-  update(vgui_message const &)
+  update(const vgui_message &)
   {
     update();
   } // just ignore the message
   void
-  update(vgui_observable const *)
+  update(const vgui_observable *)
   {
     update();
   } // ignore the observable

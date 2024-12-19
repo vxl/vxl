@@ -24,15 +24,12 @@ vgui_adaptor_tableau::vgui_adaptor_tableau(vgui_adaptor * a)
 #endif
 }
 
-vgui_adaptor_tableau::~vgui_adaptor_tableau()
-{
-  std::cerr << "~vgui_adaptor_tableau(this = " << (void *)this << ")\n";
-}
+vgui_adaptor_tableau::~vgui_adaptor_tableau() { std::cerr << "~vgui_adaptor_tableau(this = " << (void *)this << ")\n"; }
 
 //: Take a message (which is invariably being sent from a child tableau), and call the adaptor's post_message(...)
 // method.
 void
-vgui_adaptor_tableau::post_message(char const * msg, void const * data)
+vgui_adaptor_tableau::post_message(const char * msg, const void * data)
 {
   if (adaptor)
     adaptor->post_message(msg, data);

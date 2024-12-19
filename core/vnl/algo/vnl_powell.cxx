@@ -42,7 +42,7 @@ public:
   {}
 
   void
-  init(vnl_vector<double> const & x0, vnl_vector<double> const & dx)
+  init(const vnl_vector<double> & x0, const vnl_vector<double> & dx)
   {
     x0_ = x0;
     dx_ = dx;

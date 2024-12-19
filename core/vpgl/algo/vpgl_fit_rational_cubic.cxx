@@ -8,12 +8,12 @@
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include "vpgl_fit_rational_cubic.h"
 
-vpgl_cubic_lsqr::vpgl_cubic_lsqr(
-    std::vector<vgl_point_2d<double>> const &image_pts,
-    std::vector<vgl_point_3d<double>> ground_pts)
-    : vnl_least_squares_function(80, 2.0 * image_pts.size(),
-                                 vnl_least_squares_function::no_gradient),
-      image_pts_(image_pts), ground_pts_(std::move(ground_pts)) {
+vpgl_cubic_lsqr::vpgl_cubic_lsqr(const std::vector<vgl_point_2d<double>> & image_pts,
+                                 std::vector<vgl_point_3d<double>> ground_pts)
+  : vnl_least_squares_function(80, 2.0 * image_pts.size(), vnl_least_squares_function::no_gradient)
+  , image_pts_(image_pts)
+  , ground_pts_(std::move(ground_pts))
+{
   rational_coeffs_.fill(0.0);
 }
 
@@ -83,7 +83,7 @@ vpgl_cubic_lsqr::project(const double x, const double y, const double z, double 
 }
 
 void
-vpgl_cubic_lsqr::f(vnl_vector<double> const & coeffs, vnl_vector<double> & residuals)
+vpgl_cubic_lsqr::f(const vnl_vector<double> & coeffs, vnl_vector<double> & residuals)
 {
   // unpack the cubic coefficients
   for (size_t j = 0; j < 4; ++j)

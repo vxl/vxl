@@ -28,16 +28,17 @@
 
 class vrel_trunc_quad_obj : public vrel_m_est_obj
 {
- public:
+public:
   //: Constructor.
   //  \a scale_mult * scale is the truncation threshold.
-  vrel_trunc_quad_obj( double scale_mult = 2.0 );
+  vrel_trunc_quad_obj(double scale_mult = 2.0);
 
   //: Destructor.
   ~vrel_trunc_quad_obj() override;
 
   //: The robust loss function for the M-estimator.
-  double rho( double u ) const override;
+  double
+  rho(double u) const override;
 
   //: The robust loss function for the M-estimator.
   //  Overriding the overloaded version rho(u) hides the superclass'
@@ -45,31 +46,40 @@ class vrel_trunc_quad_obj : public vrel_m_est_obj
   //  calls the superclass' version of the same routine.
   //  \a r is the residual and
   //  \a s is the scale for that residual.
-  virtual double rho( double r, double s ) const
-    { return vrel_m_est_obj::rho(r, s); }
+  virtual double
+  rho(double r, double s) const
+  {
+    return vrel_m_est_obj::rho(r, s);
+  }
 
   //: The weight of the residual.
-  double wgt( double u ) const override;
+  double
+  wgt(double u) const override;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   //  Overriding the overloaded version wgt(u) hides the superclass'
   //  implementation of this version of wgt(). This implementation simply
   //  calls the superclass' version of the same routine.
   //  \sa vrel_wls_obj::wgt()
-  void wgt( vect_const_iter res_begin, vect_const_iter res_end,
-                    vect_const_iter scale_begin,
-                    vect_iter wgt_begin ) const override
-    { vrel_m_est_obj::wgt(res_begin, res_end, scale_begin, wgt_begin); }
+  void
+  wgt(vect_const_iter res_begin,
+      vect_const_iter res_end,
+      vect_const_iter scale_begin,
+      vect_iter wgt_begin) const override
+  {
+    vrel_m_est_obj::wgt(res_begin, res_end, scale_begin, wgt_begin);
+  }
 
   //: Computes the weights for homoscedastic residuals.
   //  Overriding the overloaded version wgt(u) hides the superclass'
   //  implementation of this version of wgt(). This implementation simply
   //  calls the superclass' version of the same routine.
   //  \sa vrel_wls_obj::wgt()
-  void wgt( vect_const_iter begin, vect_const_iter end,
-                    double scale,
-                    vect_iter wgt_begin ) const override
-    { vrel_m_est_obj::wgt(begin, end, scale, wgt_begin); }
+  void
+  wgt(vect_const_iter begin, vect_const_iter end, double scale, vect_iter wgt_begin) const override
+  {
+    vrel_m_est_obj::wgt(begin, end, scale, wgt_begin);
+  }
 
   //: The weight of the residual.
   //  Overriding the overloaded version wgt(u) hides the superclass'
@@ -77,33 +87,38 @@ class vrel_trunc_quad_obj : public vrel_m_est_obj
   //  calls the superclass' version of the same routine.
   //  \a r is the residual and
   //  \a s is the scale for that residual.
-  virtual double wgt( double r, double s ) const
-    { return vrel_m_est_obj::wgt(r, s); }
+  virtual double
+  wgt(double r, double s) const
+  {
+    return vrel_m_est_obj::wgt(r, s);
+  }
 
   //: Fast version of the wgt(u) computation.
-  inline double wgt_fast( double u ) const;
+  inline double
+  wgt_fast(double u) const;
 
   //: Fast version of the rho(u) computation.
-  inline double rho_fast( double u ) const;
+  inline double
+  rho_fast(double u) const;
 
 
- private:
+private:
   //: Squared threshold.
   double T_sqr_;
 };
 
 
 inline double
-vrel_trunc_quad_obj::rho_fast( double u ) const
+vrel_trunc_quad_obj::rho_fast(double u) const
 {
-  double u_sqr = u*u;
-  return ( u_sqr < T_sqr_ ) ? u_sqr : T_sqr_;
+  double u_sqr = u * u;
+  return (u_sqr < T_sqr_) ? u_sqr : T_sqr_;
 }
 
 inline double
-vrel_trunc_quad_obj::wgt_fast( double u ) const
+vrel_trunc_quad_obj::wgt_fast(double u) const
 {
-  return ( u*u < T_sqr_ ) ? 1 : 0.0;
+  return (u * u < T_sqr_) ? 1 : 0.0;
 }
 
 #endif // vrel_trunc_quad_obj_h_

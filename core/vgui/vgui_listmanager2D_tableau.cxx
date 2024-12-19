@@ -44,7 +44,7 @@ vgui_listmanager2D_tableau::type_name() const
 
 //: Add a child to the end of the std::list
 void
-vgui_listmanager2D_tableau::add(vgui_displaylist2D_tableau_sptr const & dl)
+vgui_listmanager2D_tableau::add(const vgui_displaylist2D_tableau_sptr & dl)
 {
   children.push_back(vgui_parent_child_link(this, dl));
   active.push_back(true);
@@ -54,7 +54,7 @@ vgui_listmanager2D_tableau::add(vgui_displaylist2D_tableau_sptr const & dl)
 
 //: Remove the given child from the std::list.
 void
-vgui_listmanager2D_tableau::remove(vgui_displaylist2D_tableau_sptr const & t)
+vgui_listmanager2D_tableau::remove(const vgui_displaylist2D_tableau_sptr & t)
 {
   std::vector<bool>::iterator ia = active.begin();
   std::vector<bool>::iterator iv = visible.begin();
@@ -119,7 +119,7 @@ vgui_listmanager2D_tableau::help()
 }
 
 vgui_displaylist2D_tableau_sptr
-vgui_listmanager2D_tableau::contains_hit(std::vector<unsigned> const & names)
+vgui_listmanager2D_tableau::contains_hit(const std::vector<unsigned> & names)
 {
   for (std::vector<vgui_parent_child_link>::iterator i = this->children.begin(); i != this->children.end(); ++i)
   {
@@ -204,7 +204,7 @@ vgui_listmanager2D_tableau::find_closest(float x,
         }
       }
     } // end if std::list valid
-  }   // end for hits
+  } // end for hits
 
   if (*closest_display)
   {

@@ -27,145 +27,212 @@
 template <class T>
 class vbl_array_1d
 {
- public:
+public:
   typedef std::size_t size_type;
   typedef T element_type;
 
- private:
+private:
   element_type *begin_, *end_, *alloc_; // begin_ <= end_ <= alloc_
 
- public:
-  typedef T       *iterator;
-  typedef T const *const_iterator;
+public:
+  typedef T * iterator;
+  typedef const T * const_iterator;
 
-  typedef T       &reference;
-  typedef T const &const_reference;
- public:
+  typedef T & reference;
+  typedef const T & const_reference;
 
-  vbl_array_1d() : begin_(nullptr), end_(nullptr), alloc_(nullptr) { }
+public:
+  vbl_array_1d()
+    : begin_(nullptr)
+    , end_(nullptr)
+    , alloc_(nullptr)
+  {}
 
-  vbl_array_1d(const_iterator b, const_iterator e) {
+  vbl_array_1d(const_iterator b, const_iterator e)
+  {
     std::ptrdiff_t n = e - b;
-    assert(n>=0);
+    assert(n >= 0);
     // alignment guaranteed by 18.4.1.1
-    begin_ = (T*) operator new( n * sizeof(T) );
-    end_   = begin_ + n;
+    begin_ = (T *)operator new(n * sizeof(T));
+    end_ = begin_ + n;
     alloc_ = begin_ + n;
-    for (std::ptrdiff_t i=0; i<n; ++i)
+    for (std::ptrdiff_t i = 0; i < n; ++i)
       new (begin_ + i) T(b[i]);
   }
 
-  vbl_array_1d(vbl_array_1d<T> const &that) {
-    new (this) vbl_array_1d<T>(that.begin_, that.end_);
-  }
+  vbl_array_1d(const vbl_array_1d<T> & that) { new (this) vbl_array_1d<T>(that.begin_, that.end_); }
 
-//: Construct an array with n elements, all equal to v
-  vbl_array_1d(size_type n, const T &v) {
+  //: Construct an array with n elements, all equal to v
+  vbl_array_1d(size_type n, const T & v)
+  {
     // alignment guaranteed by 18.4.1.1
-    begin_ = (T*) operator new( n * sizeof(T) );
-    end_   = begin_ + n;
+    begin_ = (T *)operator new(n * sizeof(T));
+    end_ = begin_ + n;
     alloc_ = begin_ + n;
-    for (size_type i=0; i<n; ++i)
+    for (size_type i = 0; i < n; ++i)
       new (begin_ + i) T(v);
   }
 
 
-  vbl_array_1d<T> &operator=(vbl_array_1d<T> const &that) {
+  vbl_array_1d<T> &
+  operator=(const vbl_array_1d<T> & that)
+  {
     this->~vbl_array_1d();
     new (this) vbl_array_1d<T>(that.begin_, that.end_);
     return *this;
   }
 
-  bool operator==(vbl_array_1d<T> const& that) const {
-    T* i = begin_;
-    T* j = that.begin_;
-    for ( ; i!=end_ && j!=that.end_; ++i, ++j)
-      if (!(*i == *j)) return false;
+  bool
+  operator==(const vbl_array_1d<T> & that) const
+  {
+    T * i = begin_;
+    T * j = that.begin_;
+    for (; i != end_ && j != that.end_; ++i, ++j)
+      if (!(*i == *j))
+        return false;
     return i == end_ && j == that.end_;
   }
 
-  ~vbl_array_1d() {
-    if (begin_) {
+  ~vbl_array_1d()
+  {
+    if (begin_)
+    {
       clear();
-      operator delete( begin_ );
+      operator delete(begin_);
     }
   }
 
-  void reserve(std::ptrdiff_t new_n) {
+  void
+  reserve(std::ptrdiff_t new_n)
+  {
     std::ptrdiff_t n = end_ - begin_;
-    assert(n>=0);
+    assert(n >= 0);
     if (new_n <= n)
       return;
 
     // alignment guaranteed by 18.4.1.1
-    T *new_begin_ = (T*) operator new( new_n * sizeof(T) );
-    T *new_end_   = new_begin_ + n;
-    T *new_alloc_ = new_begin_ + new_n;
+    T * new_begin_ = (T *)operator new(new_n * sizeof(T));
+    T * new_end_ = new_begin_ + n;
+    T * new_alloc_ = new_begin_ + new_n;
 
-    for (std::ptrdiff_t i=0; i<n; ++i) {
+    for (std::ptrdiff_t i = 0; i < n; ++i)
+    {
       new (new_begin_ + i) T(begin_[i]);
       begin_[i].~T();
     }
 
-    operator delete( begin_ );
+    operator delete(begin_);
 
     begin_ = new_begin_;
-    end_   = new_end_;
+    end_ = new_end_;
     alloc_ = new_alloc_;
   }
 
-  void push_back(T const &x) {
+  void
+  push_back(const T & x)
+  {
     if (end_ == alloc_)
-      reserve(2*size() + 1);
+      reserve(2 * size() + 1);
     new (end_) T(x);
     ++end_;
   }
 
-  void pop_back() {
+  void
+  pop_back()
+  {
     end_->~T();
     --end_;
   }
 
-  reference back() { return end_[-1]; }
-  const_reference back() const { return end_[-1]; }
+  reference
+  back()
+  {
+    return end_[-1];
+  }
+  const_reference
+  back() const
+  {
+    return end_[-1];
+  }
 
-  reference front() { return *begin_; }
-  const_reference front() const { return *begin_; }
+  reference
+  front()
+  {
+    return *begin_;
+  }
+  const_reference
+  front() const
+  {
+    return *begin_;
+  }
 
-  void clear() {
-    for (T *p = begin_; p!=end_; ++p)
+  void
+  clear()
+  {
+    for (T * p = begin_; p != end_; ++p)
       p->~T();
     end_ = begin_;
   }
 
-  iterator begin() { return begin_; }
-  iterator end() { return end_; }
+  iterator
+  begin()
+  {
+    return begin_;
+  }
+  iterator
+  end()
+  {
+    return end_;
+  }
 
-  const_iterator begin() const { return begin_; }
-  const_iterator end() const { return end_; }
+  const_iterator
+  begin() const
+  {
+    return begin_;
+  }
+  const_iterator
+  end() const
+  {
+    return end_;
+  }
 
-  bool empty() const { return begin_ == end_; }
-  size_type size() const { return end_ - begin_; }
-  size_type capacity() const { return alloc_ - begin_; }
+  bool
+  empty() const
+  {
+    return begin_ == end_;
+  }
+  size_type
+  size() const
+  {
+    return end_ - begin_;
+  }
+  size_type
+  capacity() const
+  {
+    return alloc_ - begin_;
+  }
 
   //: Get the ith element.
   // #define NDEBUG to turn bounds checking off.
-  reference       operator[](std::ptrdiff_t i)
+  reference
+  operator[](std::ptrdiff_t i)
   {
-    assert (i >= 0 && i < end_ - begin_);
+    assert(i >= 0 && i < end_ - begin_);
     return begin_[i];
   }
 
   //: Get the ith element.
   // #define NDEBUG to turn bounds checking off.
-  const_reference operator[](std::ptrdiff_t i) const
+  const_reference
+  operator[](std::ptrdiff_t i) const
   {
-    assert (i >= 0 && i < end_ - begin_);
+    assert(i >= 0 && i < end_ - begin_);
     return begin_[i];
   }
 };
 
 template <class T>
-std::ostream& operator<<(std::ostream &, vbl_array_1d<T> const &);
+std::ostream &
+operator<<(std::ostream &, const vbl_array_1d<T> &);
 
 #endif // vbl_array_1d_h_

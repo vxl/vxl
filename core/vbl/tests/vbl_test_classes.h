@@ -10,23 +10,28 @@
 
 class base_impl : public vbl_ref_count
 {
- public:
+public:
   static int reftotal;
-  int n{7};
+  int n{ 7 };
 
   base_impl(int nn);
   base_impl();
-  base_impl(base_impl const& x) : vbl_ref_count(), n(x.n) {}
+  base_impl(const base_impl & x)
+    : vbl_ref_count()
+    , n(x.n)
+  {}
   ~base_impl() override;
-  void Print (std::ostream &str) const;
-  static bool checkcount ( int count = 0 );
+  void
+  Print(std::ostream & str) const;
+  static bool
+  checkcount(int count = 0);
 };
 
 //-------------------------------------------------------
 
 class derived_impl : public base_impl
 {
- public:
+public:
   int k;
 };
 

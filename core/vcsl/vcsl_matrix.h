@@ -22,10 +22,9 @@
 #include <vnl/vnl_matrix.h>
 
 //: A coordinate transformation specified by a transformation matrix
-class vcsl_matrix
-  :public vcsl_spatial_transformation
+class vcsl_matrix : public vcsl_spatial_transformation
 {
- public:
+public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -43,36 +42,51 @@ class vcsl_matrix
   //: Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
   // Pure virtual function of vcsl_spatial_transformation
-  bool is_invertible(double time) const override;
+  bool
+  is_invertible(double time) const override;
 
   //: Is `this' correctly set ?
   // Virtual function of vcsl_spatial_transformation
-  bool is_valid() const override
-  { return vcsl_spatial_transformation::is_valid() && this->duration()==matrix_.size(); }
+  bool
+  is_valid() const override
+  {
+    return vcsl_spatial_transformation::is_valid() && this->duration() == matrix_.size();
+  }
 
   //***************************************************************************
   // Transformation parameters
   //***************************************************************************
 
   //: Set the parameters of a static translation
-  void set_static( const vcsl_matrix_param_sptr& new_matrix);
+  void
+  set_static(const vcsl_matrix_param_sptr & new_matrix);
 
   //: Set the direction vector variation along the time
-  void set_matrix(list_of_vcsl_matrix_param_sptr const& m) { matrix_=m; }
+  void
+  set_matrix(const list_of_vcsl_matrix_param_sptr & m)
+  {
+    matrix_ = m;
+  }
 
-  list_of_vcsl_matrix_param_sptr matrix_list() const { return matrix_; }
+  list_of_vcsl_matrix_param_sptr
+  matrix_list() const
+  {
+    return matrix_;
+  }
 
   // Pure virtual function of vcsl_spatial_transformation
-  vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const override;
+  vnl_vector<double>
+  execute(const vnl_vector<double> & v, double time) const override;
 
   // Pure virtual function of vcsl_spatial_transformation
-  vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const override;
+  vnl_vector<double>
+  inverse(const vnl_vector<double> & v, double time) const override;
 
- protected:
-  vnl_matrix<double> param_to_matrix(const vcsl_matrix_param_sptr& from,bool type) const;
-  vnl_matrix<double> matrix_value(double time, bool type) const;
+protected:
+  vnl_matrix<double>
+  param_to_matrix(const vcsl_matrix_param_sptr & from, bool type) const;
+  vnl_matrix<double>
+  matrix_value(double time, bool type) const;
   list_of_vcsl_matrix_param_sptr matrix_;
 };
 

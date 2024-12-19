@@ -27,15 +27,15 @@ static void
 test_geo_camera()
 {
   double x, y, u, v, lx, ly, lz;
-  std::vector<std::tuple<double, double, double, double> > data;
+  std::vector<std::tuple<double, double, double, double>> data;
 
   // WGS84 geotransform
   // https://gdal.org/user/raster_data_model.html#affine-geotransform
   // Xgeo = GT(0) + Xpixel*GT(1) + Yline*GT(2)
   // Ygeo = GT(3) + Xpixel*GT(4) + Yline*GT(5)
-  std::array<double, 6> geotransform = {100.0, 1e-6, 0.0, 30.0, 0.0, -1e-6};
+  std::array<double, 6> geotransform = { 100.0, 1e-6, 0.0, 30.0, 0.0, -1e-6 };
   std::cout << "geotransform for testing: ";
-  for (auto const& v : geotransform)
+  for (const auto & v : geotransform)
     std::cout << v << " ";
   std::cout << std::endl;
 
@@ -46,9 +46,10 @@ test_geo_camera()
 
   data.clear();
   data.push_back(std::make_tuple(100.0, 30.0, 0.0, 0.0));
-  data.push_back(std::make_tuple(100.0 + (50*1e-6), 30.0 - (50*1e-6), 50.0, 50.0));
+  data.push_back(std::make_tuple(100.0 + (50 * 1e-6), 30.0 - (50 * 1e-6), 50.0, 50.0));
 
-  for (auto const& item : data) {
+  for (const auto & item : data)
+  {
     std::tie(x, y, u, v) = item;
     _test_project(cam0, x, y, u, v);
   }
@@ -62,11 +63,11 @@ test_geo_camera()
   data.clear();
   data.push_back(std::make_tuple(0.0, 0.0, 0.0, 0.0));
 
-  lvcs.global_to_local(100.0 + (50*1e-6), 30.0 - (50*1e-6), 0.0,
-                       vpgl_lvcs::wgs84, lx, ly, lz);
+  lvcs.global_to_local(100.0 + (50 * 1e-6), 30.0 - (50 * 1e-6), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
   data.push_back(std::make_tuple(lx, ly, 50.0, 50.0));
 
-  for (auto const& item : data) {
+  for (const auto & item : data)
+  {
     std::tie(x, y, u, v) = item;
     _test_project(cam1, x, y, u, v);
   }

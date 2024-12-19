@@ -49,14 +49,14 @@ struct ushort_tag
 {
   ushort_tag() = default;
   vxl_uint_16 val;
-  bool valid{false};
+  bool valid{ false };
 };
 
 struct ulong_tag
 {
   ulong_tag() = default;
   vxl_uint_32 val;
-  bool valid{false};
+  bool valid{ false };
 };
 
 // The tiff header elements (tags)
@@ -66,21 +66,32 @@ struct ulong_tag
 //  2 - samples are in separate planes (analogous to vil nplanes)
 class vil_tiff_header
 {
- public:
-  vil_tiff_header(TIFF* tif): tif_(tif) {format_supported = read_header();}
+public:
+  vil_tiff_header(TIFF * tif)
+    : tif_(tif)
+  {
+    format_supported = read_header();
+  }
 
-  vil_tiff_header(TIFF* tif, const unsigned ni, const unsigned nj,
-                  const unsigned nplanes, vil_pixel_format const& fmt,
-                  const unsigned size_block_i, const unsigned size_block_j);
-// the baseline tiff header stucture
+  vil_tiff_header(TIFF * tif,
+                  const unsigned ni,
+                  const unsigned nj,
+                  const unsigned nplanes,
+                  const vil_pixel_format & fmt,
+                  const unsigned size_block_i,
+                  const unsigned size_block_j);
+  // the baseline tiff header stucture
   std::string artist;
 
   //**Issue** spec says this should be an array[samples_per_pixel] but
-  //actual multi-sample tiff file headers have this as an
-  //vxl_uint_16 CHECK (JLM)
+  // actual multi-sample tiff file headers have this as an
+  // vxl_uint_16 CHECK (JLM)
   ushort_tag bits_per_sample;
-  vxl_uint_16 bytes_per_sample() const
-  { return bits_per_sample.valid ? static_cast<vxl_uint_16>((bits_per_sample.val + 7)/8) : 0u; }
+  vxl_uint_16
+  bytes_per_sample() const
+  {
+    return bits_per_sample.valid ? static_cast<vxl_uint_16>((bits_per_sample.val + 7) / 8) : 0u;
+  }
 
   ushort_tag cell_length;
 
@@ -88,7 +99,7 @@ class vil_tiff_header
 
   // color_map[index][pixel_sample] index ranges from 0->2^bits_per_sample-1
   // pixel_sample 0->samples_per_pixel -1
-  std::vector<std::vector<vxl_uint_16> >color_map;
+  std::vector<std::vector<vxl_uint_16>> color_map;
   bool color_map_valid;
 
   ushort_tag compression;
@@ -97,17 +108,17 @@ class vil_tiff_header
 
   std::string date_time;
 
-  //Additional samples per pixel, e.g. transparency
+  // Additional samples per pixel, e.g. transparency
   ushort_tag extra_samples;
 
   ushort_tag fill_order;
 
-  //for gray scale data provides a radiometry map, e.g. true reflectance
-  //index ranges from 0->2^bits_per_sample-1
+  // for gray scale data provides a radiometry map, e.g. true reflectance
+  // index ranges from 0->2^bits_per_sample-1
   std::vector<vxl_uint_16> gray_response_curve;
   bool grey_response_curve_valid;
 
-  //the unit of radiometry
+  // the unit of radiometry
   ushort_tag gray_response_unit;
 
   std::string host_computer;
@@ -115,11 +126,13 @@ class vil_tiff_header
 
   ulong_tag image_length;
 
-  //:theoretical from samples per line
-  vxl_uint_32 bytes_per_line() const;
+  //: theoretical from samples per line
+  vxl_uint_32
+  bytes_per_line() const;
 
-  //:As returned by the TIFF library
-  vxl_uint_32 actual_bytes_per_line() const;
+  //: As returned by the TIFF library
+  vxl_uint_32
+  actual_bytes_per_line() const;
 
   ulong_tag image_width;
 
@@ -143,32 +156,38 @@ class vil_tiff_header
 
   ulong_tag rows_per_strip;
 
-  vxl_uint_32 rows_in_strip() const;
+  vxl_uint_32
+  rows_in_strip() const;
 
-  vxl_uint_32 strips_per_image() const
-  { return rows_per_strip.valid ?
-      static_cast<vxl_uint_32>(std::floor(1.0+(image_length.val-1)/rows_per_strip.val)) : 1L;
+  vxl_uint_32
+  strips_per_image() const
+  {
+    return rows_per_strip.valid
+             ? static_cast<vxl_uint_32>(std::floor(1.0 + (image_length.val - 1) / rows_per_strip.val))
+             : 1L;
   }
 
-  //the actual size of the strip in the file
-  vxl_uint_32 actual_bytes_per_strip(const vxl_uint_32 strip_index) const;
+  // the actual size of the strip in the file
+  vxl_uint_32
+  actual_bytes_per_strip(const vxl_uint_32 strip_index) const;
 
-  //the theoretical size based on rows_per_strip and bytes_per_line
-  vxl_uint_32 bytes_per_strip() const;
+  // the theoretical size based on rows_per_strip and bytes_per_line
+  vxl_uint_32
+  bytes_per_strip() const;
 
   ushort_tag sample_format;
   ushort_tag samples_per_pixel;
 
   std::string software;
 
-  //for planar_config = 1
+  // for planar_config = 1
   //[st0|st1|...|strips_per_image-1]
-  //for planar_config = 2
+  // for planar_config = 2
   //[st0|st1|...|strips_per_image-1] ... [st0|st1|...|strips_per_image-1]
-  //          sample 0               ...         samples_per_pixel-1
-  vxl_uint_32* strip_byte_counts;
+  //           sample 0               ...         samples_per_pixel-1
+  vxl_uint_32 * strip_byte_counts;
   bool strip_byte_counts_valid;
-  vxl_uint_32* strip_offsets;
+  vxl_uint_32 * strip_offsets;
   bool strip_offsets_valid;
 
   ushort_tag subfile_type;
@@ -181,59 +200,74 @@ class vil_tiff_header
   float y_resolution;
   bool y_resolution_valid;
 
-  //tiff extension for blocking
+  // tiff extension for blocking
   bool is_tiled_flag;
 
   ulong_tag tile_width;
 
   ulong_tag tile_length;
 
-  //for planar_config = 1
+  // for planar_config = 1
   //[st0|st1|...|tiles_per_image-1]
-  //for planar_config = 2
+  // for planar_config = 2
   //[st0|st1|...|tiles_per_image-1] ... [st0|st1|...|tiles_per_image-1]
-  //          sample 0               ...         samples_per_pixel-1
-  vxl_uint_32*  tile_offsets;
+  //           sample 0               ...         samples_per_pixel-1
+  vxl_uint_32 * tile_offsets;
   bool tile_offsets_valid;
-  vxl_uint_32* tile_byte_counts;
+  vxl_uint_32 * tile_byte_counts;
   bool tile_byte_counts_valid;
 
-  vxl_uint_32 tiles_across() const
-  { return tile_width.valid ?
-      static_cast<vxl_uint_32>(std::floor(1.0+(image_width.val-1)/tile_width.val)) : 0L;
+  vxl_uint_32
+  tiles_across() const
+  {
+    return tile_width.valid ? static_cast<vxl_uint_32>(std::floor(1.0 + (image_width.val - 1) / tile_width.val)) : 0L;
   }
 
-  vxl_uint_32 tiles_down() const
-  { return tile_length.valid ?
-      static_cast<vxl_uint_32>(std::floor(1.0+(image_length.val-1)/tile_length.val)) : 0L;
+  vxl_uint_32
+  tiles_down() const
+  {
+    return tile_length.valid ? static_cast<vxl_uint_32>(std::floor(1.0 + (image_length.val - 1) / tile_length.val))
+                             : 0L;
   }
 
-  vxl_uint_32 tiles_per_image() const {return tiles_across()*tiles_down();}
+  vxl_uint_32
+  tiles_per_image() const
+  {
+    return tiles_across() * tiles_down();
+  }
 
-  vxl_uint_32 bytes_per_tile() const;
+  vxl_uint_32
+  bytes_per_tile() const;
 
   //: the actual number of separate image planes in the tiff image
-  unsigned n_separate_image_planes() const;
+  unsigned
+  n_separate_image_planes() const;
 
   //: the number of encoded bytes in a tile or strip
-  unsigned encoded_bytes_per_block() const;
+  unsigned
+  encoded_bytes_per_block() const;
 
   //: the number of samples in a block
-  unsigned samples_per_line() const;
+  unsigned
+  samples_per_line() const;
 
   //: is the image tiled
-  bool is_tiled() const;
+  bool
+  is_tiled() const;
 
   //: is the image striped (one of these must be true or read failed)
-  bool is_striped() const;
+  bool
+  is_striped() const;
 
 #if HAS_GEOTIFF
-  bool is_GEOTIFF() const;
+  bool
+  is_GEOTIFF() const;
 #endif
 
-  bool need_byte_swap() const {
-    return file_is_big_endian_ != machine_is_big_endian_ &&
-           bits_per_sample.val % 8 != 0;
+  bool
+  need_byte_swap() const
+  {
+    return file_is_big_endian_ != machine_is_big_endian_ && bits_per_sample.val % 8 != 0;
   }
 
   vil_pixel_format pix_fmt;
@@ -243,27 +277,39 @@ class vil_tiff_header
   bool format_supported;
 
   //: the number of images in the file
-  vxl_uint_16  n_images();
+  vxl_uint_16
+  n_images();
 
   //:: a non_standard tag due to gdal. Null string means not defined
-  std::string no_data_value() {return no_data_value_;}
- private:
-  TIFF* tif_;
+  std::string
+  no_data_value()
+  {
+    return no_data_value_;
+  }
+
+private:
+  TIFF * tif_;
   //: read/write mode true for read.
   // returns false if the format cannot be read by current version
-  bool read_header();
-  //:returns false if the format cannot be written by current version
-  bool set_header(unsigned ni, unsigned nj, unsigned nplanes,
-                  vil_pixel_format const& fmt,
-                  const unsigned size_block_i,
-                  const unsigned size_block_j);
-  //:returns false if the format not handled by this reader
-  bool compute_pixel_format();
-  //:returns false if the format not handled by this writer
-  bool parse_pixel_format(vil_pixel_format const& fmt);
+  bool
+  read_header();
+  //: returns false if the format cannot be written by current version
+  bool
+  set_header(unsigned ni,
+             unsigned nj,
+             unsigned nplanes,
+             const vil_pixel_format & fmt,
+             const unsigned size_block_i,
+             const unsigned size_block_j);
+  //: returns false if the format not handled by this reader
+  bool
+  compute_pixel_format();
+  //: returns false if the format not handled by this writer
+  bool
+  parse_pixel_format(const vil_pixel_format & fmt);
   bool file_is_big_endian_;
   bool machine_is_big_endian_;
   std::string no_data_value_;
 };
 
-#endif //vil_tiff_header_h_
+#endif // vil_tiff_header_h_

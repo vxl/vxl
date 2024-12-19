@@ -14,7 +14,8 @@
 //   2002/01/22 Peter Vanroose - return type of lqi(), lvi(), execute() and inverse() changed to non-ptr
 //   2002/01/28 Peter Vanroose - std::vector members beat_ and interpolator_ changed to non-ptr
 //   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
-//   2004/09/17 Peter Vanroose - made beat() and interpolators() non-virtual: they just return a member and should not be overloaded
+//   2004/09/17 Peter Vanroose - made beat() and interpolators() non-virtual: they just return a member and should not
+//   be overloaded
 // \endverbatim
 
 #include <vector>
@@ -28,7 +29,7 @@
 #include <vnl/vnl_quaternion.h>
 
 typedef std::vector<double> list_of_scalars;
-typedef std::vector<vnl_vector<double> > list_of_vectors;
+typedef std::vector<vnl_vector<double>> list_of_vectors;
 
 enum vcsl_interpolator
 {
@@ -45,14 +46,17 @@ class vcsl_spatial_transformation : public vbl_ref_count
   // Constructors/Destructor
   //***************************************************************************
 
- protected:
+protected:
   // Default constructor. Do nothing
   vcsl_spatial_transformation() = default;
 
- public:
+public:
   // Copy constructor
-  vcsl_spatial_transformation(vcsl_spatial_transformation const& x)
-    : vbl_ref_count(), beat_(x.beat_), interpolator_(x.interpolator_) {}
+  vcsl_spatial_transformation(const vcsl_spatial_transformation & x)
+    : vbl_ref_count()
+    , beat_(x.beat_)
+    , interpolator_(x.interpolator_)
+  {}
 
   // Destructor. Do nothing
   ~vcsl_spatial_transformation() override = default;
@@ -62,26 +66,40 @@ class vcsl_spatial_transformation : public vbl_ref_count
   //***************************************************************************
 
   //: Return the list of time clocks
-  std::vector<double> beat() const { return beat_; }
+  std::vector<double>
+  beat() const
+  {
+    return beat_;
+  }
 
   //: Return the time duration
-  unsigned int duration() const { return (unsigned int)(beat_.size()); }
+  unsigned int
+  duration() const
+  {
+    return (unsigned int)(beat_.size());
+  }
 
   //: Return the list of interpolators
-  std::vector<vcsl_interpolator> interpolators() const { return interpolator_; }
+  std::vector<vcsl_interpolator>
+  interpolators() const
+  {
+    return interpolator_;
+  }
 
   //: Is `time' between the two time bounds ?
-  bool valid_time(double time) const;
+  bool
+  valid_time(double time) const;
 
   //: Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
-  virtual bool is_invertible(double time) const=0;
+  virtual bool
+  is_invertible(double time) const = 0;
 
   //: Is `this' correctly set ?
-  virtual bool is_valid() const
+  virtual bool
+  is_valid() const
   {
-    return (duration() == 0 && interpolator_.empty()) ||
-           (duration() == interpolator_.size() + 1);
+    return (duration() == 0 && interpolator_.empty()) || (duration() == interpolator_.size() + 1);
   }
 
   //***************************************************************************
@@ -90,61 +108,63 @@ class vcsl_spatial_transformation : public vbl_ref_count
 
   //: Return the index of the beat inferior or equal to `time'
   //  REQUIRE: valid_time(time)
-  int matching_interval(double time) const;
+  int
+  matching_interval(double time) const;
 
   //: Image of `v' by `this'
   //  REQUIRE: is_valid()
-  virtual vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const=0;
+  virtual vnl_vector<double>
+  execute(const vnl_vector<double> & v, double time) const = 0;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_invertible(time)
   //  REQUIRE: is_valid()
-  virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const=0;
+  virtual vnl_vector<double>
+  inverse(const vnl_vector<double> & v, double time) const = 0;
 
   //***************************************************************************
   // Status setting
   //***************************************************************************
 
   //: Set the list of time clocks
-  void set_beat(std::vector<double> const& new_beat) { beat_=new_beat; }
+  void
+  set_beat(const std::vector<double> & new_beat)
+  {
+    beat_ = new_beat;
+  }
 
   //: Set the list of interpolators
-  void set_interpolators(std::vector<vcsl_interpolator> const& i) { interpolator_=i; }
+  void
+  set_interpolators(const std::vector<vcsl_interpolator> & i)
+  {
+    interpolator_ = i;
+  }
 
   //: Empty the time clock and interpolators, thereby making the transf static
-  void set_static();
+  void
+  set_static();
 
   //***************************************************************************
   // Interpolators
   //***************************************************************************
 
   //: Linear interpolation on scalar values
-  double lsi(double v0,
-             double v1,
-             int index,
-             double time) const;
+  double
+  lsi(double v0, double v1, int index, double time) const;
 
   //: Linear interpolation on vnl_vectors
-  vnl_vector<double> lvi(const vnl_vector<double> &v0,
-                         const vnl_vector<double> &v1,
-                         int index,
-                         double time) const;
+  vnl_vector<double>
+  lvi(const vnl_vector<double> & v0, const vnl_vector<double> & v1, int index, double time) const;
 
   //: Linear interpolation on vnl_matrices
-  vnl_matrix<double> lmi(const vnl_matrix<double> &m0,
-                         const vnl_matrix<double> &m1,
-                         int index,
-                         double time) const;
+  vnl_matrix<double>
+  lmi(const vnl_matrix<double> & m0, const vnl_matrix<double> & m1, int index, double time) const;
 
   //: Linear interpolation on quaternions
-  vnl_quaternion<double> lqi(const vnl_quaternion<double> &v0,
-                             const vnl_quaternion<double> &v1,
-                             int index,
-                             double time) const;
+  vnl_quaternion<double>
+  lqi(const vnl_quaternion<double> & v0, const vnl_quaternion<double> & v1, int index, double time) const;
 
- protected:
+protected:
   //: List of time clocks
   std::vector<double> beat_;
   std::vector<vcsl_interpolator> interpolator_;

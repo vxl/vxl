@@ -50,19 +50,21 @@
 //  The destructor restores that state.
 class vgui_poly_tableau_vp_sc_snapshot
 {
- public:
+public:
   GLint vp[4];
   GLint sc[4];
   bool sc_was_enabled;
 
-  vgui_poly_tableau_vp_sc_snapshot() {
+  vgui_poly_tableau_vp_sc_snapshot()
+  {
     vgui_utils::get_glViewport(vp);
 
     glGetIntegerv(GL_SCISSOR_BOX, sc);
     sc_was_enabled = glIsEnabled(GL_SCISSOR_TEST) == GL_TRUE;
   }
 
-  ~vgui_poly_tableau_vp_sc_snapshot() {
+  ~vgui_poly_tableau_vp_sc_snapshot()
+  {
     // restore viewport :
     vgui_utils::set_glViewport(vp[0], vp[1], vp[2], vp[3]);
 
@@ -78,30 +80,33 @@ class vgui_poly_tableau_vp_sc_snapshot
 
 class vgui_poly_tableau : public vgui_tableau
 {
- public:
+public:
   //: Constructor - don't use this, use vgui_poly_tableau_new.
   vgui_poly_tableau();
 
   //: Returns the type of this tableau ('vgui_poly_tableau').
-  std::string type_name() const;
+  std::string
+  type_name() const;
 
   //: Get popup menu.
-  void get_popup(vgui_popup_params const &, vgui_menu &);
+  void
+  get_popup(const vgui_popup_params &, vgui_menu &);
 
   //: The position, colour, etc of the child tableau.
   struct item
   {
     vgui_parent_child_link tab;
-    float x,y,w,h;
+    float x, y, w, h;
     int outline_color[3];
     int id;
 
-    item() { } // for stl container
-    item(vgui_tableau* p, vgui_tableau_sptr const&c, float x, float y,
-         float w, float h, int id =0);
-    void set_vp(GLint const vp[4]);
+    item() {} // for stl container
+    item(vgui_tableau * p, const vgui_tableau_sptr & c, float x, float y, float w, float h, int id = 0);
+    void
+    set_vp(const GLint vp[4]);
     //: Returns true if the given position is inside the boundaries of this item
-    bool inside(GLint const vp[4], int x, int y) const;
+    bool
+    inside(const GLint vp[4], int x, int y) const;
   };
 
   typedef std::vector<item> container;
@@ -109,62 +114,97 @@ class vgui_poly_tableau : public vgui_tableau
   typedef container::const_iterator const_iterator;
 
   //: Returns the number of items in the list of items.
-  unsigned size() const { return static_cast<unsigned>(sub.size()); }
+  unsigned
+  size() const
+  {
+    return static_cast<unsigned>(sub.size());
+  }
 
   //: Return an iterator pointing to the first item in the list of items.
-  iterator begin() { return sub.begin(); }
+  iterator
+  begin()
+  {
+    return sub.begin();
+  }
 
   //: Return a const iterator pointing to the first item in the list of items.
-  const_iterator begin() const { return sub.begin(); }
+  const_iterator
+  begin() const
+  {
+    return sub.begin();
+  }
 
   //: Return an iterator pointing to the last item in the list of items.
-  iterator end() { return sub.end(); }
+  iterator
+  end()
+  {
+    return sub.end();
+  }
 
   //: Return a const iterator pointing to the last item in the list of items.
-  const_iterator end() const { return sub.end(); }
+  const_iterator
+  end() const
+  {
+    return sub.end();
+  }
 
   //: Erase the item at the given position from the list of items.
-  void erase(iterator );
+  void erase(iterator);
 
   //: Adds the given tableau to the given proportion of the viewport.
   //  x,y,w,h specify a portion of the vgui_poly_tableau's viewport in
   //  coordinates which go from 0 to 1.
   //  Returns handle to child.
-  int add(vgui_tableau_sptr const&, float x, float y, float w, float h);
+  int
+  add(const vgui_tableau_sptr &, float x, float y, float w, float h);
 
   //: Remove subtableau, referred to by handle.
-  void remove(int id);
+  void
+  remove(int id);
 
   //: Move subtableau to a new location.
-  void move(int id, float x, float y, float w, float h);
+  void
+  move(int id, float x, float y, float w, float h);
 
   //: Replace the tableau with the given ID, with the given tableau.
   //  Keep the same ID and do not change the value of 'current'.
-  void replace(int id, vgui_tableau_sptr const& tab);
+  void
+  replace(int id, const vgui_tableau_sptr & tab);
 
   //: Get pointer to tableau from id.
-  vgui_tableau_sptr get(int id) const;
+  vgui_tableau_sptr
+  get(int id) const;
 
   //: Set color to outline tableau.
-  void set_outline_color(const int id, const int r, const int g, const int b);
+  void
+  set_outline_color(const int id, const int r, const int g, const int b);
 
- protected:
+protected:
   //: Destructor - called by vgui_poly_tableau_sptr.
   ~vgui_poly_tableau();
 
   //: Handle all events sent to this tableau.
   //  In particular, use draw events to draw the sub-rectangles.
-  bool handle(vgui_event const &);
+  bool
+  handle(const vgui_event &);
 
   //; Make sure draw events go to all children in the right order.
-  bool handle(GLint const vp[4], vgui_event const &e);
+  bool
+  handle(const GLint vp[4], const vgui_event & e);
 
   //: Misnomer - returns the index of child under the pointer's position.
-  int get_active(GLint const vp[4], int wx, int wy) const;
+  int
+  get_active(const GLint vp[4], int wx, int wy) const;
 
-  int get_current() const { return current; }
-  int get_current_id();
-  void set_current(GLint const vp[4], int index);
+  int
+  get_current() const
+  {
+    return current;
+  }
+  int
+  get_current_id();
+  void
+  set_current(const GLint vp[4], int index);
 
   //: Index of the item currently getting events.
   int current;
@@ -182,7 +222,9 @@ struct vgui_poly_tableau_new : public vgui_poly_tableau_sptr
   typedef vgui_poly_tableau_sptr base;
 
   //: Constructor - create a smart-pointer to an empty vgui_poly_tableau.
-  vgui_poly_tableau_new() : base(new vgui_poly_tableau()) { }
+  vgui_poly_tableau_new()
+    : base(new vgui_poly_tableau())
+  {}
 };
 
 #endif // vgui_poly_tableau_h_

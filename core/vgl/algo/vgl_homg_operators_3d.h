@@ -29,31 +29,35 @@ class vgl_homg_operators_3d
 {
   typedef vgl_homg_line_3d_2_points<Type> vgl_homg_line_3d;
 
- public:
+public:
   //: Get a vnl_vector_fixed representation of a homogeneous object
-  static vnl_vector_fixed<Type,4> get_vector(vgl_homg_point_3d<Type> const& p);
+  static vnl_vector_fixed<Type, 4>
+  get_vector(const vgl_homg_point_3d<Type> & p);
   //: Get a vnl_vector_fixed representation of a homogeneous object
-  static vnl_vector_fixed<Type,4> get_vector(vgl_homg_plane_3d<Type> const& p);
+  static vnl_vector_fixed<Type, 4>
+  get_vector(const vgl_homg_plane_3d<Type> & p);
 
   //: Normalize vgl_homg_point_3d<Type> to unit magnitude
-  static void unitize(vgl_homg_point_3d<Type>& a);
+  static void
+  unitize(vgl_homg_point_3d<Type> & a);
 
-  static double angle_between_oriented_lines(const vgl_homg_line_3d& line1,
-                                             const vgl_homg_line_3d& line2);
+  static double
+  angle_between_oriented_lines(const vgl_homg_line_3d & line1, const vgl_homg_line_3d & line2);
 
   //: Return the Euclidean distance between the points
-  static Type distance(const vgl_homg_point_3d<Type>& point1,
-                       const vgl_homg_point_3d<Type>& point2);
+  static Type
+  distance(const vgl_homg_point_3d<Type> & point1, const vgl_homg_point_3d<Type> & point2);
   //: Return the squared distance between the points
-  static Type distance_squared(const vgl_homg_point_3d<Type>& point1,
-                               const vgl_homg_point_3d<Type>& point2);
+  static Type
+  distance_squared(const vgl_homg_point_3d<Type> & point1, const vgl_homg_point_3d<Type> & point2);
 
   //: True if the points are closer than Euclidean distance d.
-  static bool is_within_distance(const vgl_homg_point_3d<Type>& p1,
-                                 const vgl_homg_point_3d<Type>& p2, double d)
+  static bool
+  is_within_distance(const vgl_homg_point_3d<Type> & p1, const vgl_homg_point_3d<Type> & p2, double d)
   {
-    if (d <= 0) return false;
-    return distance_squared(p1, p2) < d*d;
+    if (d <= 0)
+      return false;
+    return distance_squared(p1, p2) < d * d;
   }
 
   //: Get the square of the perpendicular distance to a plane.
@@ -62,33 +66,37 @@ class vgl_homg_operators_3d
   // \[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2 l_z^2}} \]
   // If either the point or the plane are at infinity an error message is
   // printed and Homg::infinity is returned.
-  static double perp_dist_squared(const vgl_homg_point_3d<Type>& point,
-                                  const vgl_homg_plane_3d<Type>& plane);
-  static double perp_dist_squared(const vgl_homg_plane_3d<Type>& plane,
-                                  const vgl_homg_point_3d<Type>& point)
-  { return perp_dist_squared(point, plane); }
+  static double
+  perp_dist_squared(const vgl_homg_point_3d<Type> & point, const vgl_homg_plane_3d<Type> & plane);
+  static double
+  perp_dist_squared(const vgl_homg_plane_3d<Type> & plane, const vgl_homg_point_3d<Type> & point)
+  {
+    return perp_dist_squared(point, plane);
+  }
 
-  static vgl_homg_point_3d<Type> intersect_line_and_plane(const vgl_homg_line_3d&,
-                                                          const vgl_homg_plane_3d<Type>&);
-#if 0 // not yet implemented
+  static vgl_homg_point_3d<Type>
+  intersect_line_and_plane(const vgl_homg_line_3d &, const vgl_homg_plane_3d<Type> &);
+#if 0  // not yet implemented
   static vgl_homg_point_3d<Type> lines_to_point(const vgl_homg_line_3d& line1,
                                                 const vgl_homg_line_3d& line2);
   static vgl_homg_point_3d<Type> lines_to_point(const std::vector<vgl_homg_line_3d>& line_list);
 #endif // 0
-  static double perp_dist_squared(const vgl_homg_line_3d& line,
-                                  const vgl_homg_point_3d<Type>& point);
-  static double perp_dist_squared(const vgl_homg_point_3d<Type>& point,
-                                  const vgl_homg_line_3d& line)
-  { return perp_dist_squared(line,point); }
-  static vgl_homg_line_3d perp_line_through_point(const vgl_homg_line_3d& line,
-                                                  const vgl_homg_point_3d<Type>& point);
-  static vgl_homg_point_3d<Type> perp_projection(const vgl_homg_line_3d& line,
-                                                 const vgl_homg_point_3d<Type>& point);
-  static vgl_homg_line_3d planes_to_line(const vgl_homg_plane_3d<Type>& plane1,
-                                         const vgl_homg_plane_3d<Type>& plane2);
-  static Type plane_plane_angle(const vgl_homg_plane_3d<Type>& plane1,
-                                const vgl_homg_plane_3d<Type>& plane2);
-#if 0 // not yet implemented
+  static double
+  perp_dist_squared(const vgl_homg_line_3d & line, const vgl_homg_point_3d<Type> & point);
+  static double
+  perp_dist_squared(const vgl_homg_point_3d<Type> & point, const vgl_homg_line_3d & line)
+  {
+    return perp_dist_squared(line, point);
+  }
+  static vgl_homg_line_3d
+  perp_line_through_point(const vgl_homg_line_3d & line, const vgl_homg_point_3d<Type> & point);
+  static vgl_homg_point_3d<Type>
+  perp_projection(const vgl_homg_line_3d & line, const vgl_homg_point_3d<Type> & point);
+  static vgl_homg_line_3d
+  planes_to_line(const vgl_homg_plane_3d<Type> & plane1, const vgl_homg_plane_3d<Type> & plane2);
+  static Type
+  plane_plane_angle(const vgl_homg_plane_3d<Type> & plane1, const vgl_homg_plane_3d<Type> & plane2);
+#if 0  // not yet implemented
   static vgl_homg_line_3d planes_to_line(const std::vector<vgl_homg_plane_3d<Type> >& plane_list);
   static vgl_homg_line_3d points_to_line(const vgl_homg_point_3d<Type>& point1,
                                          const vgl_homg_point_3d<Type>& point2);
@@ -99,17 +107,18 @@ class vgl_homg_operators_3d
                                                  const vgl_homg_point_3d<Type>& );
   static vgl_homg_plane_3d<Type> points_to_plane(const std::vector<vgl_homg_point_3d<Type> >& point_list);
 #endif // 0
-  static vgl_homg_point_3d<Type> intersection(const vgl_homg_plane_3d<Type>&,
-                                              const vgl_homg_plane_3d<Type>&,
-                                              const vgl_homg_plane_3d<Type>&);
-  static vgl_homg_point_3d<Type> intersection(const std::vector<vgl_homg_plane_3d<Type> >&);
+  static vgl_homg_point_3d<Type>
+  intersection(const vgl_homg_plane_3d<Type> &, const vgl_homg_plane_3d<Type> &, const vgl_homg_plane_3d<Type> &);
+  static vgl_homg_point_3d<Type>
+  intersection(const std::vector<vgl_homg_plane_3d<Type>> &);
 
   //: Return the midpoint of the line joining two homogeneous points
-  static vgl_homg_point_3d<Type> midpoint(const vgl_homg_point_3d<Type>& p1,
-                                          const vgl_homg_point_3d<Type>& p2);
+  static vgl_homg_point_3d<Type>
+  midpoint(const vgl_homg_point_3d<Type> & p1, const vgl_homg_point_3d<Type> & p2);
 
   //: Intersect a set of 3D planes to find the least-square point of intersection.
-  static vgl_homg_point_3d<Type> planes_to_point(const std::vector<vgl_homg_plane_3d<Type> >& planes);
+  static vgl_homg_point_3d<Type>
+  planes_to_point(const std::vector<vgl_homg_plane_3d<Type>> & planes);
 
   //-----------------------------------------------------------------------------
   //: Calculates the cross ratio of four collinear points p1, p2, p3 and p4.
@@ -133,48 +142,51 @@ class vgl_homg_operators_3d
   // In this implementation, a least-squares result is calculated when the
   // points are not exactly collinear.
 
-  static double cross_ratio(const vgl_homg_point_3d<Type>& p1,
-                            const vgl_homg_point_3d<Type>& p2,
-                            const vgl_homg_point_3d<Type>& p3,
-                            const vgl_homg_point_3d<Type>& p4);
-  static double cross_ratio(const vgl_homg_plane_3d<Type>& p1,
-                            const vgl_homg_plane_3d<Type>& p2,
-                            const vgl_homg_plane_3d<Type>& p3,
-                            const vgl_homg_plane_3d<Type>& p4);
+  static double
+  cross_ratio(const vgl_homg_point_3d<Type> & p1,
+              const vgl_homg_point_3d<Type> & p2,
+              const vgl_homg_point_3d<Type> & p3,
+              const vgl_homg_point_3d<Type> & p4);
+  static double
+  cross_ratio(const vgl_homg_plane_3d<Type> & p1,
+              const vgl_homg_plane_3d<Type> & p2,
+              const vgl_homg_plane_3d<Type> & p3,
+              const vgl_homg_plane_3d<Type> & p4);
 
   //: Conjugate point of three given collinear points.
   // If cross ratio cr is given (default: -1), the generalized conjugate point
   // returned is such that the cross ratio ((x1,x2;x3,answer)) = cr.
-  static vgl_homg_point_3d<Type> conjugate(const vgl_homg_point_3d<Type>& a,
-                                           const vgl_homg_point_3d<Type>& b,
-                                           const vgl_homg_point_3d<Type>& c,
-                                           double cr = -1.0);
+  static vgl_homg_point_3d<Type>
+  conjugate(const vgl_homg_point_3d<Type> & a,
+            const vgl_homg_point_3d<Type> & b,
+            const vgl_homg_point_3d<Type> & c,
+            double cr = -1.0);
 
   //: compute most orthogonal vector with SVD
-  static vnl_vector_fixed<Type,4> most_orthogonal_vector_svd(const std::vector<vgl_homg_plane_3d<Type> >& planes);
+  static vnl_vector_fixed<Type, 4>
+  most_orthogonal_vector_svd(const std::vector<vgl_homg_plane_3d<Type>> & planes);
 };
 
 //: Homographic transformation of a 3D point through a 4x4 projective transformation matrix
 template <class Type>
-vgl_homg_point_3d<Type> operator*(vnl_matrix_fixed<Type,4,4> const& m,
-                                  vgl_homg_point_3d<Type> const& p);
+vgl_homg_point_3d<Type>
+operator*(const vnl_matrix_fixed<Type, 4, 4> & m, const vgl_homg_point_3d<Type> & p);
 
 //: Project a 3D point to 2D through a 3x4 projective transformation matrix
 template <class Type>
-vgl_homg_point_2d<Type> operator*(vnl_matrix_fixed<Type,3,4> const& m,
-                                  vgl_homg_point_3d<Type> const& p);
+vgl_homg_point_2d<Type>
+operator*(const vnl_matrix_fixed<Type, 3, 4> & m, const vgl_homg_point_3d<Type> & p);
 
 //: Homographic transformation of a 3D plane through a 4x4 projective transformation matrix
 template <class Type>
-vgl_homg_plane_3d<Type> operator*(vnl_matrix_fixed<Type,4,4> const& m,
-                                  vgl_homg_plane_3d<Type> const& p);
+vgl_homg_plane_3d<Type>
+operator*(const vnl_matrix_fixed<Type, 4, 4> & m, const vgl_homg_plane_3d<Type> & p);
 
 //: Backproject a 2D line through a 4x3 projective transformation matrix
 template <class Type>
-vgl_homg_plane_3d<Type> operator*(vnl_matrix_fixed<Type,4,3> const& m,
-                                  vgl_homg_line_2d<Type> const& l);
+vgl_homg_plane_3d<Type>
+operator*(const vnl_matrix_fixed<Type, 4, 3> & m, const vgl_homg_line_2d<Type> & l);
 
-#define VGL_HOMG_OPERATORS_3D_INSTANTIATE(T) \
-        "Please #include <vgl/algo/vgl_homg_operators_3d.hxx>"
+#define VGL_HOMG_OPERATORS_3D_INSTANTIATE(T) "Please #include <vgl/algo/vgl_homg_operators_3d.hxx>"
 
 #endif // vgl_homg_operators_3d_h_

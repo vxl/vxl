@@ -18,6 +18,7 @@
 // There is a possible race condition, in that some other process may
 // open a the temporary file between the time tmpnam creates (and
 // tests) it, and the time the calling program opens it.
-std::string vul_temp_filename( );
+std::string
+vul_temp_filename();
 
 #endif // vul_temp_filename_h_

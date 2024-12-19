@@ -17,7 +17,7 @@
 
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_active_tableau_new
-vgui_active_tableau::vgui_active_tableau(vgui_tableau_sptr const & t, bool name_in_menu)
+vgui_active_tableau::vgui_active_tableau(const vgui_tableau_sptr & t, bool name_in_menu)
   : vgui_wrapper_tableau(t)
   , active_(true)
   , visible_(true)

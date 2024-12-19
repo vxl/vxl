@@ -27,12 +27,15 @@
 #include "vil1_image.h"
 
 //: Load an image from a file, possibly performing expected conversions.
-vil1_image vil1_load(char const* filename);
+vil1_image
+vil1_load(const char * filename);
 
 //: Load raw from stream.
-vil1_image vil1_load_raw(vil1_stream *);
+vil1_image
+vil1_load_raw(vil1_stream *);
 
 //: Load raw from file (convenience).
-vil1_image vil1_load_raw(char const *);
+vil1_image
+vil1_load_raw(const char *);
 
 #endif // vil1_load_h_

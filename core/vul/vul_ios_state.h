@@ -48,28 +48,28 @@
 //: Use RAII to save and restore precision and other state on an iostream
 class vul_ios_state_saver
 {
-  public:
-    explicit  vul_ios_state_saver( std::ios_base &s )
-        : stream_( s ),
-        flags_( s.flags() ),
-        precision_( s.precision() ),
-        width_( s.width() )
-    {}
-    ~vul_ios_state_saver()
-    { this->restore(); }
+public:
+  explicit vul_ios_state_saver(std::ios_base & s)
+    : stream_(s)
+    , flags_(s.flags())
+    , precision_(s.precision())
+    , width_(s.width())
+  {}
+  ~vul_ios_state_saver() { this->restore(); }
 
-    void  restore()
-    {
-      stream_.width(width_);
-      stream_.precision(precision_);
-      stream_.flags(flags_);
-    }
+  void
+  restore()
+  {
+    stream_.width(width_);
+    stream_.precision(precision_);
+    stream_.flags(flags_);
+  }
 
-  private:
-    std::ios_base & stream_;
-    const std::ios::fmtflags flags_;
-    const std::streamsize precision_;
-    const std::streamsize width_;
+private:
+  std::ios_base & stream_;
+  const std::ios::fmtflags flags_;
+  const std::streamsize precision_;
+  const std::streamsize width_;
 };
 
 #endif

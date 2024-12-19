@@ -58,9 +58,9 @@ class vrel_irls
   static constexpr int dflt_max_iterations_ = 25;
   static constexpr int dflt_iterations_for_scale_ = 1;
 
- public:
+public:
   //: Constructor.
-  vrel_irls( int max_iterations = dflt_max_iterations_ );
+  vrel_irls(int max_iterations = dflt_max_iterations_);
 
   //: Destructor.
   ~vrel_irls() = default;
@@ -70,37 +70,48 @@ class vrel_irls
   // -----------------------------------------------------------
 
   //: Set scale estimation and parameters.
-  void set_est_scale( int iterations_for_scale=dflt_iterations_for_scale_,
-                      bool use_weighted_scale=false );
+  void
+  set_est_scale(int iterations_for_scale = dflt_iterations_for_scale_, bool use_weighted_scale = false);
 
   //: Set lower bound of scale estimate
-  void set_scale_lower_bound( double lower_scale );
+  void
+  set_scale_lower_bound(double lower_scale);
 
   //: Set for no scale estimation.
   //  Scale must be initialized or supplied by the problem.
-  void set_no_scale_est( );
+  void
+  set_no_scale_est();
 
   //: Initialize the scale value.
-  void initialize_scale( double scale );
+  void
+  initialize_scale(double scale);
 
   //: Indicate that scale has not been initialized.
-  void reset_scale() { scale_initialized_ = false; }
+  void
+  reset_scale()
+  {
+    scale_initialized_ = false;
+  }
 
   //: Get the scale estimate (or the fixed scale value).
-  double scale() const;
+  double
+  scale() const;
 
   // -----------------------------------------------------------
   // Functions related to the number of iterations and convergence
   // -----------------------------------------------------------
 
   //: Set the maximum number of iterations.
-  void set_max_iterations( int max_iterations=dflt_max_iterations_ );
+  void
+  set_max_iterations(int max_iterations = dflt_max_iterations_);
 
   //: Indicate that a convergence test is to be used.
-  void set_convergence_test( double convergence_tol=dflt_convergence_tol_ );
+  void
+  set_convergence_test(double convergence_tol = dflt_convergence_tol_);
 
   //: Indicate that no convergence test is to be used.
-  void set_no_convergence_test( );
+  void
+  set_no_convergence_test();
 
 
   // ------------------------------------------------------------
@@ -108,12 +119,21 @@ class vrel_irls
   // ------------------------------------------------------------
 
   //: Initialize the parameter estimate.
-  void initialize_params( const vnl_vector<double>& init_params );
+  void
+  initialize_params(const vnl_vector<double> & init_params);
 
   //: Reset the parameters.
-  void reset_params() { params_initialized_ = false; }
+  void
+  reset_params()
+  {
+    params_initialized_ = false;
+  }
 
-  void set_trace_level( int level ) { trace_level_ = level; }
+  void
+  set_trace_level(int level)
+  {
+    trace_level_ = level;
+  }
 
   // ------------------------------------------------------------
   //  Main estimation functions
@@ -133,60 +153,71 @@ class vrel_irls
   //  The loop can end in one of three ways: (a) convergence, (b) the
   //  maximum number of iterations is reached, (c) the weighted
   //  least-squares estimate fails.
-  bool estimate( const vrel_estimation_problem* problem,
-                 const vrel_wls_obj* m_estimator );
+  bool
+  estimate(const vrel_estimation_problem * problem, const vrel_wls_obj * m_estimator);
 
   // ------------------------------------------------------------
   //  Get information about results...
   // ------------------------------------------------------------
 
   //: Get the parameter estimate.
-  const vnl_vector<double>& params() const;
+  const vnl_vector<double> &
+  params() const;
 
   //: Get the cofactor matrix (the covariance matrix /  scale^2).
-  const vnl_matrix<double>& cofactor() const;
+  const vnl_matrix<double> &
+  cofactor() const;
 
   //: Determine if the estimation converged.
-  bool converged() const { return test_converge_ && converged_; }
+  bool
+  converged() const
+  {
+    return test_converge_ && converged_;
+  }
 
   //: The number of iterations that were used.
-  int   iterations_used() const;
+  int
+  iterations_used() const;
 
-    //: \brief Print the residuals.  Used for debugging.
-  void  trace_residuals( const std::vector<double>& residuals ) const;
+  //: \brief Print the residuals.  Used for debugging.
+  void
+  trace_residuals(const std::vector<double> & residuals) const;
 
-    //: \brief Print the IRLS weights.  Used for debugging.
-  void  trace_weights( const std::vector<double>& weights ) const;
+  //: \brief Print the IRLS weights.  Used for debugging.
+  void
+  trace_weights(const std::vector<double> & weights) const;
 
-    //: \brief Print the set of parameters.
-  void  print_params() const;
+  //: \brief Print the set of parameters.
+  void
+  print_params() const;
 
- private:
-  bool has_converged( const std::vector<double>& residuals,
-                      const vrel_wls_obj* m_estimator,
-                      const vrel_estimation_problem* problem,
-                      vnl_vector<double>* params );
+private:
+  bool
+  has_converged(const std::vector<double> & residuals,
+                const vrel_wls_obj * m_estimator,
+                const vrel_estimation_problem * problem,
+                vnl_vector<double> * params);
 
- protected:
+protected:
   //  Parameters
   int max_iterations_;
-  bool test_converge_{true};
+  bool test_converge_{ true };
   double convergence_tol_;
-  bool est_scale_during_{true};
-  bool use_weighted_scale_{true};
+  bool est_scale_during_{ true };
+  bool use_weighted_scale_{ true };
   int iterations_for_scale_est_;
-  double scale_lower_bound_{-1.0};
-  int trace_level_{0};
+  double scale_lower_bound_{ -1.0 };
+  int trace_level_{ 0 };
 
   //  Variables of estimation.
   vnl_vector<double> params_;
   vnl_matrix<double> cofact_;
-  bool params_initialized_{false};
+  bool params_initialized_{ false };
   double scale_;
-  bool scale_initialized_{false};
-  double obj_fcn_{1e256}, prev_obj_fcn_{1e256};
-  bool converged_{false};
-  int iteration_{0};
+  bool scale_initialized_{ false };
+  double obj_fcn_{ 1e256 }, prev_obj_fcn_{ 1e256 };
+  bool converged_{ false };
+  int iteration_{ 0 };
 };
 
 #endif // vrel_irls_h_

@@ -41,46 +41,55 @@ class vgui_mfc_utils
   std::vector<ACCEL> accels;
 
   //: Add keyboard shortcut for this menu item to accelerator table (accels).
-  void add_menu_accelerator(const vgui_menu_item item, const WORD function_id, std::string& the_menu_name);
+  void
+  add_menu_accelerator(const vgui_menu_item item, const WORD function_id, std::string & the_menu_name);
 
- public:
+public:
   //: (Create if necessary and) return singleton instance of this class.
-  static vgui_mfc_utils *instance();
+  static vgui_mfc_utils *
+  instance();
 
   //: Constructor.
-  vgui_mfc_utils() : item_count(0), first_popup(true) {}
+  vgui_mfc_utils()
+    : item_count(0)
+    , first_popup(true)
+  {}
 
   //: Destructor.
   ~vgui_mfc_utils();
 
   //: Create a MFC sub-menu from the given vgui_menu.
-  HMENU add_submenu(const vgui_menu& menu);
+  HMENU
+  add_submenu(const vgui_menu & menu);
 
   //: Sets the menu of the application window
-  void set_menu(const vgui_menu& menu);
+  void
+  set_menu(const vgui_menu & menu);
 
   //: Create popup menu.
-  CMenu *set_popup_menu(const vgui_menu & menu);
+  CMenu *
+  set_popup_menu(const vgui_menu & menu);
 
   //: Delete the callback functions from the last popup menu.
-  void delete_last_popup_menu_callbacks();
+  void
+  delete_last_popup_menu_callbacks();
 
   //: Called within message service routine of vgui_mfc_mainfrm.
-  virtual void menu_dispatcher(UINT nID);
+  virtual void
+  menu_dispatcher(UINT nID);
 
   //: Menu accelerator table - this defines menu shortcuts
   HACCEL AccelTable;
 
- private:
+private:
   //: List of menus to be deleted when we are finished:
-  std::vector<CMenu*> menus_to_be_deleted;
+  std::vector<CMenu *> menus_to_be_deleted;
 
   //: first time a popup menu was created
   bool first_popup;
 
   //: last item_count before a popup menu is created
   int last_item_count;
-
 };
 
 #endif // vgui_mfc_utils_h_

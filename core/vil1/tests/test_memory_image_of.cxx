@@ -19,7 +19,7 @@ static void
 test_memory_image_of()
 {
   std::string tmp_nam = vul_temp_filename() + ".pgm";
-  char const * file_name_2 = !tmp_nam.empty() ? tmp_nam.c_str() : "vil1_test_memory_image_of.pgm";
+  const char * file_name_2 = !tmp_nam.empty() ? tmp_nam.c_str() : "vil1_test_memory_image_of.pgm";
   {
     std::cout << "unsigned char\n";
     vil1_memory_image_of<unsigned char> image(W, H);
@@ -43,7 +43,7 @@ test_memory_image_of()
 #endif
 
   tmp_nam = vul_temp_filename() + ".ppm";
-  char const * file_name_1 = !tmp_nam.empty() ? tmp_nam.c_str() : "vil1_test_memory_image_of.ppm";
+  const char * file_name_1 = !tmp_nam.empty() ? tmp_nam.c_str() : "vil1_test_memory_image_of.ppm";
 
   {
     std::cout << "vil1_rgb_byte\n";

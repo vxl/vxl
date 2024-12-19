@@ -4,7 +4,7 @@
 
 #include "vil1_crop_image_impl.h"
 
-vil1_crop_image_impl::vil1_crop_image_impl(vil1_image const & gi, int x0, int y0, int w, int h)
+vil1_crop_image_impl::vil1_crop_image_impl(const vil1_image & gi, int x0, int y0, int w, int h)
   : gi_(gi)
   , x0_(x0)
   , y0_(y0)
@@ -24,7 +24,7 @@ vil1_crop_image_impl::is_a() const
 
 //: Return true if the name of the class matches the argument
 bool
-vil1_crop_image_impl::is_class(std::string const & s) const
+vil1_crop_image_impl::is_class(const std::string & s) const
 {
   return s == vil1_crop_image_impl::is_a() || vil1_image_impl::is_class(s);
 }

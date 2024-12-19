@@ -20,7 +20,7 @@ vgui_loader_tableau::type_name() const
 }
 
 // Default ctor
-vgui_loader_tableau::vgui_loader_tableau(vgui_tableau_sptr const & child_tableau)
+vgui_loader_tableau::vgui_loader_tableau(const vgui_tableau_sptr & child_tableau)
   : vgui_wrapper_tableau(child_tableau)
   , projectionmatrixloaded(false)
   , modelviewmatrixloaded(false)
@@ -31,7 +31,7 @@ vgui_loader_tableau::vgui_loader_tableau(vgui_tableau_sptr const & child_tableau
 {}
 
 void
-vgui_loader_tableau::set_projection(vnl_matrix_fixed<double, 4, 4> const & m)
+vgui_loader_tableau::set_projection(const vnl_matrix_fixed<double, 4, 4> & m)
 {
   projectionmatrixloaded = true;
   m.transpose().copy_out(projectionmatrixt);
@@ -44,7 +44,7 @@ vgui_loader_tableau::unset_projection()
 }
 
 void
-vgui_loader_tableau::set_modelview(vnl_matrix_fixed<double, 4, 4> const & m)
+vgui_loader_tableau::set_modelview(const vnl_matrix_fixed<double, 4, 4> & m)
 {
   modelviewmatrixloaded = true;
   m.transpose().copy_out(modelviewmatrixt);
@@ -57,7 +57,7 @@ vgui_loader_tableau::unset_modelview()
 }
 
 bool
-vgui_loader_tableau::handle(vgui_event const & e)
+vgui_loader_tableau::handle(const vgui_event & e)
 {
   if (projectionmatrixloaded)
   {

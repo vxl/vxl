@@ -41,7 +41,7 @@
 #endif
 
 #ifndef wxCommandEventHandler // wxWidgets-2.5.3 doesn't define this
-#  define wxCommandEventHandler(func)                                                                                  \
+#  define wxCommandEventHandler(func) \
     (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent(wxCommandEventFunction, &func)
 #endif
 
@@ -375,7 +375,8 @@ vgui_wx_dialog_impl::build_wx_dialog(void)
       }
       break;
 
-      case inline_tabl: { // create variable scope for adaptor
+      case inline_tabl:
+      { // create variable scope for adaptor
         // ***** error if more than one inline tableau in this dialog
         // JLM update constructor to wx 3.0
         vgui_wx_adaptor * adaptor =

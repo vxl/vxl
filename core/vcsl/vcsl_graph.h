@@ -27,10 +27,9 @@
 // Graph where nodes are spatial coordinate systems and arrows are
 // transformations. Only the nodes are in the graph class. The transformations
 // are in the spatial coordinates systems
-class vcsl_graph
-  :public vbl_ref_count
+class vcsl_graph : public vbl_ref_count
 {
- public:
+public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -39,7 +38,10 @@ class vcsl_graph
   vcsl_graph() = default;
 
   // Copy constructor
-  vcsl_graph(vcsl_graph const& x) : vbl_ref_count(), vertices_(x.vertices_) {}
+  vcsl_graph(const vcsl_graph & x)
+    : vbl_ref_count()
+    , vertices_(x.vertices_)
+  {}
 
   // Destructor
   ~vcsl_graph() override = default;
@@ -49,17 +51,26 @@ class vcsl_graph
   //***************************************************************************
 
   //: Number of coordinate systems
-  unsigned int count() const { return (unsigned int)(vertices_.size()); }
+  unsigned int
+  count() const
+  {
+    return (unsigned int)(vertices_.size());
+  }
 
   //***************************************************************************
   // Status report
   //***************************************************************************
 
   //: Has `this' `cs' as node ?
-  bool has(const vcsl_spatial_sptr &cs) const;
+  bool
+  has(const vcsl_spatial_sptr & cs) const;
 
   //: Is `index' valid in the list of the spatial coordinate systems ?
-  bool valid_index(unsigned int index) const { return index < count(); }
+  bool
+  valid_index(unsigned int index) const
+  {
+    return index < count();
+  }
 
   //***************************************************************************
   // Access
@@ -67,15 +78,18 @@ class vcsl_graph
 
   //: Spatial coordinate system number `index'
   //  REQUIRE: valid_index(index)
-  vcsl_spatial_sptr item(unsigned int index) const;
+  vcsl_spatial_sptr
+  item(unsigned int index) const;
 
   //: Add `cs' in `this'
   //  REQUIRE: !has(cs)
-  void put(const vcsl_spatial_sptr &cs);
+  void
+  put(const vcsl_spatial_sptr & cs);
 
   //: Remove `cs' from `this'
   //  REQUIRE: has(cs)
-  void remove(const vcsl_spatial_sptr &cs);
+  void
+  remove(const vcsl_spatial_sptr & cs);
 
   //***************************************************************************
   // Basic operations
@@ -83,10 +97,10 @@ class vcsl_graph
 
   //: Set the flag `reached' to false for each spatial coordinate system.
   //  Used by the search path algorithm
-  void init_vertices() const;
+  void
+  init_vertices() const;
 
- protected:
-
+protected:
   //: Vertices of the graph: all the spatial coordinate systems
   std::vector<vcsl_spatial_sptr> vertices_;
 };

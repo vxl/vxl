@@ -16,6 +16,8 @@
 
 //: Return a single-sheet polygon which is the smallest one containing all given points
 // \relatesalso vgl_polygon
-template <class T> vgl_polygon<T> vgl_convex_hull(std::vector<vgl_point_2d<T> > const& points);
+template <class T>
+vgl_polygon<T>
+vgl_convex_hull(const std::vector<vgl_point_2d<T>> & points);
 
 #endif // vgl_convex_h_

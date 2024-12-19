@@ -63,7 +63,7 @@ vgui_text_tableau::clear()
 }
 
 int
-vgui_text_tableau::add(float x, float y, char const * text)
+vgui_text_tableau::add(float x, float y, const char * text)
 {
   int return_val = first_empty;
   if (first_empty < size())
@@ -137,7 +137,7 @@ vgui_text_tableau::get_posy(int hndl) const
   return ys[hndl];
 }
 
-std::string const &
+const std::string &
 vgui_text_tableau::get_text(int hndl) const
 {
   assert(hndl >= 0);
@@ -165,7 +165,7 @@ vgui_text_tableau::remove(int hndl)
 }
 
 void
-vgui_text_tableau::change(int hndl, char const * ntext)
+vgui_text_tableau::change(int hndl, const char * ntext)
 {
   assert(hndl >= 0);
   assert((unsigned int)hndl < size());
@@ -174,7 +174,7 @@ vgui_text_tableau::change(int hndl, char const * ntext)
 }
 
 bool
-vgui_text_tableau::handle(vgui_event const & e)
+vgui_text_tableau::handle(const vgui_event & e)
 {
   if (e.type != vgui_DRAW)
     return false;

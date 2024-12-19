@@ -16,10 +16,9 @@
 #include "vcsl_spherical_sptr.h"
 
 //: 3D coordinate system specified by distance rho, angles theta and phi.
-class vcsl_spherical
-  : public vcsl_spatial
+class vcsl_spherical : public vcsl_spatial
 {
- public:
+public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -34,7 +33,11 @@ class vcsl_spherical
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  const vcsl_spherical *cast_to_spherical() const override { return this; }
+  const vcsl_spherical *
+  cast_to_spherical() const override
+  {
+    return this;
+  }
 };
 
 #endif // vcsl_spherical_h_

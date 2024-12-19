@@ -31,35 +31,38 @@ class wx_xrc_frame : public wxFrame
   DECLARE_CLASS(wx_xrc_frame)
   DECLARE_EVENT_TABLE()
 
- public:
+public:
   //: Constructor - default.
-  wx_xrc_frame(wxWindow* parent,
+  wx_xrc_frame(wxWindow * parent,
                wxWindowID id,
-               const wxString& title,
-               const wxPoint& pos,
-               const wxSize& size,
+               const wxString & title,
+               const wxPoint & pos,
+               const wxSize & size,
                long type);
 
   //: Destructor
   ~wx_xrc_frame();
 
-  //wxMenu* edit_menu() const { return edit_menu_; }
+  // wxMenu* edit_menu() const { return edit_menu_; }
 
   // Event handlers.
-  void on_about(wxCommandEvent& event);
-  void on_quit (wxCommandEvent& event);
+  void
+  on_about(wxCommandEvent & event);
+  void
+  on_quit(wxCommandEvent & event);
 
-  void move_point(double x, double y);
+  void
+  move_point(double x, double y);
 
- private:
-  vgui_wx_adaptor*  canvas_;
-  wxSliderPanel*  sliders_;
-  vgui_wx_observer* observer_;
+private:
+  vgui_wx_adaptor * canvas_;
+  wxSliderPanel * sliders_;
+  vgui_wx_observer * observer_;
 
   //: Statusbar that vgui writes to.
-  vgui_wx_statusbar* statusbar_;
+  vgui_wx_statusbar * statusbar_;
   vgui_easy2D_tableau_sptr tab_;
-  vgui_soview2D_point* point_;
+  vgui_soview2D_point * point_;
 };
 
 #endif // wx_xrc_frame_h_

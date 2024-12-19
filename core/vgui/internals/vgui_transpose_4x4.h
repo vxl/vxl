@@ -6,6 +6,7 @@
 // .FILE internals/vgui_transpose_4x4.cxx
 // @author fsm
 
-void vgui_transpose_4x4(double A[4][4]);
+void
+vgui_transpose_4x4(double A[4][4]);
 
 #endif // vgui_transpose_4x4_h_

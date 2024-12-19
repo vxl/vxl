@@ -13,7 +13,7 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 
-vil1_skip_image_impl::vil1_skip_image_impl(vil1_image const & underlying, unsigned sx, unsigned sy)
+vil1_skip_image_impl::vil1_skip_image_impl(const vil1_image & underlying, unsigned sx, unsigned sy)
   : base(underlying)
   , skipx(sx)
   , skipy(sy)
@@ -33,13 +33,13 @@ vil1_skip_image_impl::get_plane(unsigned int p) const
 }
 
 bool
-vil1_skip_image_impl::put_section(void const *, int, int, int, int)
+vil1_skip_image_impl::put_section(const void *, int, int, int, int)
 {
   return false;
 }
 
 bool
-vil1_skip_image_impl::get_property(char const *, void *) const
+vil1_skip_image_impl::get_property(const char *, void *) const
 {
   return false;
 }

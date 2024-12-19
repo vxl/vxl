@@ -9,7 +9,6 @@
 //
 
 
-
 #include <wx/xrc/xmlres.h>
 #include <vgui/impl/wx/vgui_wx_adaptor.h>
 
@@ -21,9 +20,11 @@ class WXDLLIMPEXP_XRC vgui_wx_adaptorXmlHandler : public wxXmlResourceHandler
 
 public:
   vgui_wx_adaptorXmlHandler();
-  virtual wxObject *DoCreateResource();
-  virtual bool CanHandle(wxXmlNode *node);
+  virtual wxObject *
+  DoCreateResource();
+  virtual bool
+  CanHandle(wxXmlNode * node);
 };
 
 
-#endif  //vgui_wx_adaptorXmlHandler_h_
+#endif // vgui_wx_adaptorXmlHandler_h_

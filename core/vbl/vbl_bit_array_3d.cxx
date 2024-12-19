@@ -78,7 +78,7 @@ vbl_bit_array_3d::index(unsigned x, unsigned y, unsigned z, unsigned long & byte
 ////////////////////////////////////////////////////////////////////////
 
 std::ostream &
-operator<<(std::ostream & os, vbl_bit_array_3d const & bitarray)
+operator<<(std::ostream & os, const vbl_bit_array_3d & bitarray)
 {
   for (unsigned int i = 0; i < bitarray.row3_count(); ++i)
   {
@@ -111,7 +111,7 @@ vbl_bit_array_3d::construct(unsigned int m, unsigned int n, unsigned int p)
 }
 
 //: Copy constructor
-vbl_bit_array_3d::vbl_bit_array_3d(vbl_bit_array_3d const & that)
+vbl_bit_array_3d::vbl_bit_array_3d(const vbl_bit_array_3d & that)
   : row1_count_(0)
   , row2_count_(0)
   , row3_count_(0)
@@ -135,7 +135,7 @@ vbl_bit_array_3d::vbl_bit_array_3d(unsigned int m, unsigned int n, unsigned int 
 
 //: Assignment operator
 vbl_bit_array_3d &
-vbl_bit_array_3d::operator=(vbl_bit_array_3d const & that)
+vbl_bit_array_3d::operator=(const vbl_bit_array_3d & that)
 {
   if (row1_count_ != that.row1_count() || row2_count_ != that.row2_count() || row3_count_ != that.row3_count())
     resize(that.row1_count_, that.row2_count_, that.row3_count_);
@@ -145,7 +145,7 @@ vbl_bit_array_3d::operator=(vbl_bit_array_3d const & that)
 }
 
 bool
-vbl_bit_array_3d::operator==(vbl_bit_array_3d const & a) const
+vbl_bit_array_3d::operator==(const vbl_bit_array_3d & a) const
 {
   if (row1_count_ != a.row1_count() || row2_count_ != a.row2_count() || row3_count_ != a.row3_count())
     return false;

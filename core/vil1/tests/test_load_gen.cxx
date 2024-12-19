@@ -10,7 +10,7 @@
 #include "testlib/testlib_test.h"
 
 static void
-test_rgb(char const * name, int w, int h, unsigned r, unsigned g, unsigned b)
+test_rgb(const char * name, int w, int h, unsigned r, unsigned g, unsigned b)
 {
   vil1_image i = vil1_load(name);
 
@@ -41,7 +41,7 @@ test_rgb(char const * name, int w, int h, unsigned r, unsigned g, unsigned b)
 }
 
 static void
-test_gray(char const * name, int w, int h, unsigned v)
+test_gray(const char * name, int w, int h, unsigned v)
 {
   vil1_image i = vil1_load(name);
 

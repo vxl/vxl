@@ -12,13 +12,12 @@
 //  Uses fast recursive implementation.
 // \relatesalso vil_image_view
 template <class srcT, class destT, class accumT>
-inline void vil_exp_filter_2d(const vil_image_view<srcT>& src_im,
-                              vil_image_view<destT>& dest_im,
-                              accumT ki, accumT kj)
+inline void
+vil_exp_filter_2d(const vil_image_view<srcT> & src_im, vil_image_view<destT> & dest_im, accumT ki, accumT kj)
 {
   vil_image_view<destT> filtered_im;
-  vil_exp_filter_i(src_im,filtered_im,ki);
-  vil_exp_filter_j(filtered_im,dest_im,kj);
+  vil_exp_filter_i(src_im, filtered_im, ki);
+  vil_exp_filter_j(filtered_im, dest_im, kj);
 }
 
 #endif // vil_exp_filter_2d_h_

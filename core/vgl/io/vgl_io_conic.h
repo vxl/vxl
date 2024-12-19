@@ -11,15 +11,18 @@
 
 //: Binary save vgl_conic to stream.
 template <class T>
-void vsl_b_write(vsl_b_ostream &os, vgl_conic<T> const& p);
+void
+vsl_b_write(vsl_b_ostream & os, const vgl_conic<T> & p);
 
 //: Binary load vgl_conic from stream.
 template <class T>
-void vsl_b_read(vsl_b_istream &is, vgl_conic<T> & p);
+void
+vsl_b_read(vsl_b_istream & is, vgl_conic<T> & p);
 
 //: Print human readable summary of object to a stream
 template <class T>
-void vsl_print_summary(std::ostream& os, vgl_conic<T> const& p);
+void
+vsl_print_summary(std::ostream & os, const vgl_conic<T> & p);
 
 #define VGL_IO_CONIC_INSTANTIATE(T) extern "Please #include <vgl/io/vgl_io_conic.hxx>"
 

@@ -27,10 +27,13 @@ class vgui_wx : public vgui_toolkit
 {
 public:
   //: Singleton method instance.
-  static vgui_wx* instance();
-  static void delete_instance();
+  static vgui_wx *
+  instance();
+  static void
+  delete_instance();
   //: Returns the name of the GUI toolkit ("wx").
-  virtual std::string name() const;
+  virtual std::string
+  name() const;
 
   //: Constructor - default.
   vgui_wx();
@@ -39,47 +42,56 @@ public:
   virtual ~vgui_wx();
 
   //: Initialize the wxWidgets GUI framework.
-  virtual void init(int&, char**);
+  virtual void
+  init(int &, char **);
 
-  virtual void uninit();
+  virtual void
+  uninit();
 
   //: Run the event loop.
-  virtual void run();
+  virtual void
+  run();
 
   //: Run the next event.
-  virtual void run_one_event();
+  virtual void
+  run_one_event();
 
   //: Run until event queue is empty.
-  virtual void run_till_idle();
+  virtual void
+  run_till_idle();
 
   //: Clear all events from the queue.
-  virtual void flush();
+  virtual void
+  flush();
 
   //: Add an event to the queue.
-  virtual void add_event(const vgui_event&);
+  virtual void
+  add_event(const vgui_event &);
 
   //: Quit the application.
-  virtual void quit();
+  virtual void
+  quit();
 
   //: Create a new window with a menubar.
-  virtual vgui_window* produce_window(int width, int height,
-                                      const vgui_menu& menubar,
-                                      const char* title="vgui wx window");
+  virtual vgui_window *
+  produce_window(int width, int height, const vgui_menu & menubar, const char * title = "vgui wx window");
 
   //: Create a new window.
-  virtual vgui_window* produce_window(int width, int height,
-                                      const char* title="vgui wx popup");
+  virtual vgui_window *
+  produce_window(int width, int height, const char * title = "vgui wx popup");
 
   //: Create a new dialog window.
-  virtual vgui_dialog_impl* produce_dialog(const char* name);
+  virtual vgui_dialog_impl *
+  produce_dialog(const char * name);
 
 
   //: True if we are embedding vgui_adaptor into wxWidgets app.
   bool adaptor_embedded_;
-  private:
+
+private:
   //: the singleton instance
-  static vgui_wx* instance_;
-  vgui_wx_window* top_level_window_;
+  static vgui_wx * instance_;
+  vgui_wx_window * top_level_window_;
 };
 
 #endif // vgui_wx_h_

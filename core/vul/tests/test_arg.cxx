@@ -16,7 +16,7 @@
 #endif
 #include "testlib/testlib_test.h"
 
-char const * my_argv_1[] = {
+const char * my_argv_1[] = {
   "progname",     "f", "-int", "3", "g",    "-bool1", "-bool1", "-bool2", "-list1", "1:2,10,21:3:25,-1:-2:-7", "-list2",
   "1.5,-1.5,8.0", "h", "i",    "j", "-req", "100",    nullptr
 };
@@ -26,7 +26,7 @@ int list1_contents[] = { 1, 2, 10, 21, 24, -1, -3, -5, -7 };
 double list2_contents[] = { 1.5, -1.5, 8.0 };
 
 int
-count_my_args(char const * const * my_argv)
+count_my_args(const char * const * my_argv)
 {
   int c = 0;
   for (; *my_argv; ++my_argv)

@@ -32,60 +32,71 @@ class vgui_image_tableau;
 //  a rectangular region.
 class vgui_roi_tableau : public vgui_tableau
 {
- public:
+public:
   //: Data defining a region of interest (position, height and width).
-  typedef struct region_of_interest {
+  typedef struct region_of_interest
+  {
     float sx;
     float sy;
     float width;
     float height;
-  }  ROI;
+  } ROI;
 
- private:
+private:
   ROI roi_;
   vil1_image cropped_image_;
   std::string name_;
 
- public:
+public:
   //: Constructor - don't use this, use vgui_roi_tableau_new.
   vgui_roi_tableau();
 
   //: Constructor - don't use this, use vgui_roi_tableau_new.
-  vgui_roi_tableau(vil1_image const &, char const *, float, float, float, float);
+  vgui_roi_tableau(const vil1_image &, const char *, float, float, float, float);
 
   //: Returns the type of this tableau ('vgui_roi_tableau').
-  std::string type_name() const;
+  std::string
+  type_name() const;
 
   //: Returns the filename of the image (if it knows it).
-  std::string file_name() const;
+  std::string
+  file_name() const;
 
   //: Returns a nice version of the name, including the filename.
-  std::string pretty_name() const;
+  std::string
+  pretty_name() const;
 
   //: Returns the image cropped by the ROI.
-  vil1_image get_image() const;
+  vil1_image
+  get_image() const;
 
   //: Make the given image the underlying image for this tableau.
-  void set_image(vil1_image const &);
+  void
+  set_image(const vil1_image &);
 
   //: Make image loaded from the given filename the image for this tableau.
-  void set_image(char const *);          // <- convenience
+  void
+  set_image(const char *); // <- convenience
 
   //: Width of image (0 if none).
-  unsigned width() const;
+  unsigned
+  width() const;
 
   //: Height of image (0 if none).
-  unsigned height() const;
+  unsigned
+  height() const;
 
   //: Returns the bounding box of the ROI.
-  bool get_bounding_box(float low[3], float high[3]) const;
+  bool
+  get_bounding_box(float low[3], float high[3]) const;
 
- protected:
+protected:
   //: Destructor - called by vgui_roi_tableau_sptr.
   ~vgui_roi_tableau();
 
   //: Handle all events passed to this tableau.
-  bool handle(vgui_event const &e);
+  bool
+  handle(const vgui_event & e);
 };
 
 //: Creates a smart-pointer to a vgui_roi_tableau.
@@ -94,7 +105,9 @@ struct vgui_roi_tableau_new : public vgui_roi_tableau_sptr
   typedef vgui_roi_tableau_sptr base;
 
   //: Constructor - creates a vgui_roi_tableau.
-  vgui_roi_tableau_new() : base(new vgui_roi_tableau()) { }
+  vgui_roi_tableau_new()
+    : base(new vgui_roi_tableau())
+  {}
 };
 
 #endif // vgui_roi_tableau_h_

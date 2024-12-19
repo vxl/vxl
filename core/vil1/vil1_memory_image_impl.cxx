@@ -14,7 +14,7 @@
 #include "vil1/vil1_image.h"
 #include "vil1/vil1_property.h"
 
-vil1_memory_image_impl::vil1_memory_image_impl(int planes, int w, int h, vil1_memory_image_format const & format)
+vil1_memory_image_impl::vil1_memory_image_impl(int planes, int w, int h, const vil1_memory_image_format & format)
 {
   init((void *)nullptr, planes, w, h, format.components, format.bits_per_component, format.component_format);
 }
@@ -48,7 +48,7 @@ vil1_memory_image_impl::vil1_memory_image_impl(int w, int h, vil1_pixel_format_t
   init((void *)nullptr, 1, w, h, pixel_format);
 }
 
-vil1_memory_image_impl::vil1_memory_image_impl(vil1_memory_image_impl const & i)
+vil1_memory_image_impl::vil1_memory_image_impl(const vil1_memory_image_impl & i)
   : vil1_image_impl()
 {
   init((void *)nullptr, i.planes_, i.width_, i.height_, i.components_, i.bits_per_component_, i.component_format_);
@@ -196,7 +196,7 @@ vil1_memory_image_impl::get_section(void * obuf, int x0, int y0, int xs, int ys)
 }
 
 bool
-vil1_memory_image_impl::put_section(void const * ibuf, int x0, int y0, int xs, int ys)
+vil1_memory_image_impl::put_section(const void * ibuf, int x0, int y0, int xs, int ys)
 {
   int bytes_per_row = (width_ * bits_per_component_ * components_ + 7) / 8;
   for (int p = 0; p < planes_; ++p)
@@ -209,27 +209,29 @@ vil1_memory_image_impl::put_section(void const * ibuf, int x0, int y0, int xs, i
 
       for (int y = 0; y < ys; ++y)
       {
-        std::memcpy(buf_ + offset + y * byte_width, (unsigned char const *)ibuf + y * byte_in_width, byte_in_width);
+        std::memcpy(buf_ + offset + y * byte_width, (const unsigned char *)ibuf + y * byte_in_width, byte_in_width);
       }
-      ibuf = (void const *)((char const *)ibuf + byte_in_width * ys);
+      ibuf = (const void *)((const char *)ibuf + byte_in_width * ys);
     }
     else
     {
-      std::memcpy(buf_ + offset, (unsigned char const *)ibuf, bytes_per_row * ys);
-      ibuf = (void const *)((char const *)ibuf + bytes_per_row * ys);
+      std::memcpy(buf_ + offset, (const unsigned char *)ibuf, bytes_per_row * ys);
+      ibuf = (const void *)((const char *)ibuf + bytes_per_row * ys);
     }
   }
 
   return true;
 }
 
-vil1_image vil1_memory_image_impl::get_plane(unsigned int plane) const {
+vil1_image
+vil1_memory_image_impl::get_plane(unsigned int plane) const
+{
   assert(plane == 0);
   return const_cast<vil1_memory_image_impl *>(this);
 }
 
 bool
-vil1_memory_image_impl::get_property(char const * tag, void * property_value) const
+vil1_memory_image_impl::get_property(const char * tag, void * property_value) const
 {
   if (0 == std::strcmp(tag, vil1_property_memory))
     return property_value ? (*(bool *)property_value) = true : true;
@@ -256,7 +258,7 @@ vil1_memory_image_impl::vil1_memory_image_impl(void * buf,
                                                int planes,
                                                int w,
                                                int h,
-                                               vil1_memory_image_format const & format)
+                                               const vil1_memory_image_format & format)
 {
   init(buf, planes, w, h, format.components, format.bits_per_component, format.component_format);
 }
@@ -302,7 +304,7 @@ vil1_memory_image_impl::is_a() const
 
 //: Return true if the name of the class matches the argument
 bool
-vil1_memory_image_impl::is_class(std::string const & s) const
+vil1_memory_image_impl::is_class(const std::string & s) const
 {
   return s == vil1_memory_image_impl::is_a() || vil1_image_impl::is_class(s);
 }

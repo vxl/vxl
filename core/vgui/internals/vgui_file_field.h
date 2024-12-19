@@ -24,18 +24,30 @@
 // in by a file browser, but the default is just a text entry box.
 class vgui_file_field : public vgui_dialog_field
 {
- public:
-  vgui_file_field(const char *txt, std::string& regex, std::string& var_to_modify)
-  : vgui_dialog_field(txt), var_(var_to_modify), regexp_(regex) {}
+public:
+  vgui_file_field(const char * txt, std::string & regex, std::string & var_to_modify)
+    : vgui_dialog_field(txt)
+    , var_(var_to_modify)
+    , regexp_(regex)
+  {}
 
   ~vgui_file_field() {}
 
-  std::string current_value() const { return var_; }
-  bool update_value(std::string const& s) { var_ = s; return true; }
+  std::string
+  current_value() const
+  {
+    return var_;
+  }
+  bool
+  update_value(const std::string & s)
+  {
+    var_ = s;
+    return true;
+  }
 
- private:
-  std::string &var_;
-  std::string &regexp_;
+private:
+  std::string & var_;
+  std::string & regexp_;
 };
 
 #endif // vgui_file_field_h_

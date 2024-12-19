@@ -19,22 +19,24 @@
 // All Gaussian classes represent the mean in the same way,
 // so it is managed in this base class.
 // Derived classes differ in how they represent covariance
-template<class T, unsigned int n=0>
-class vpdl_gaussian_base : public vpdl_distribution<T,n>
+template <class T, unsigned int n = 0>
+class vpdl_gaussian_base : public vpdl_distribution<T, n>
 {
- public:
+public:
   //: the data type used for vectors
-  typedef typename vpdt_field_default<T,n>::type vector;
+  typedef typename vpdt_field_default<T, n>::type vector;
 
 
   //: Destructor
   ~vpdl_gaussian_base() override = default;
 
   //: Access the mean directly
-  virtual const vector& mean() const = 0;
+  virtual const vector &
+  mean() const = 0;
 
   //: Set the mean
-  virtual void set_mean(const vector& mean) = 0;
+  virtual void
+  set_mean(const vector & mean) = 0;
 };
 
 

@@ -20,7 +20,7 @@ vil_crop(const vil_image_resource_sptr & src, unsigned i0, unsigned n_i, unsigne
 }
 
 
-vil_crop_image_resource::vil_crop_image_resource(vil_image_resource_sptr const & gi,
+vil_crop_image_resource::vil_crop_image_resource(const vil_image_resource_sptr & gi,
                                                  unsigned i0,
                                                  unsigned n_i,
                                                  unsigned j0,

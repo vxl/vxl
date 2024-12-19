@@ -37,15 +37,23 @@ enum vgui_event_type
   vgui_EVENT_NULL = 0,
   vgui_ENTER,
   vgui_LEAVE,
-  vgui_BUTTON_DOWN,  /* */ vgui_MOUSE_DOWN = vgui_BUTTON_DOWN, vgui_MOUSE_PRESS = vgui_BUTTON_DOWN,
-  vgui_BUTTON_UP,    /* */ vgui_MOUSE_UP = vgui_BUTTON_UP, vgui_MOUSE_RELEASE = vgui_BUTTON_UP,
-  vgui_MOTION,       /* */ vgui_MOUSE_MOTION = vgui_MOTION,
-  vgui_KEY_PRESS,    /* */ vgui_KEY_DOWN = vgui_KEY_PRESS,
-  vgui_KEY_RELEASE,  /* */ vgui_KEY_UP = vgui_KEY_RELEASE,
+  vgui_BUTTON_DOWN,
+  /* */ vgui_MOUSE_DOWN = vgui_BUTTON_DOWN,
+  vgui_MOUSE_PRESS = vgui_BUTTON_DOWN,
+  vgui_BUTTON_UP,
+  /* */ vgui_MOUSE_UP = vgui_BUTTON_UP,
+  vgui_MOUSE_RELEASE = vgui_BUTTON_UP,
+  vgui_MOTION,
+  /* */ vgui_MOUSE_MOTION = vgui_MOTION,
+  vgui_KEY_PRESS,
+  /* */ vgui_KEY_DOWN = vgui_KEY_PRESS,
+  vgui_KEY_RELEASE,
+  /* */ vgui_KEY_UP = vgui_KEY_RELEASE,
   vgui_RESHAPE,
   vgui_TIMER,
   vgui_DRAW,
-  vgui_DRAW_OVERLAY, /* */ vgui_OVERLAY_DRAW = vgui_DRAW_OVERLAY,
+  vgui_DRAW_OVERLAY,
+  /* */ vgui_OVERLAY_DRAW = vgui_DRAW_OVERLAY,
   vgui_STRING,
   vgui_HSCROLL,
   vgui_VSCROLL,
@@ -56,10 +64,11 @@ enum vgui_event_type
   vgui_FOCUSLOST,
   vgui_WHEEL_UP,
   vgui_WHEEL_DOWN,
-  vgui_EVENT_MAX    // This must be the last entry in the list
+  vgui_EVENT_MAX // This must be the last entry in the list
 };
 
-std::ostream& operator<<(std::ostream& s, vgui_event_type e);
+std::ostream &
+operator<<(std::ostream & s, vgui_event_type e);
 
 //: The vgui_event class encapsulates the events handled by the vgui system.
 //
@@ -79,7 +88,7 @@ std::ostream& operator<<(std::ostream& s, vgui_event_type e);
 // key stroke pressed by the user.
 class vgui_event
 {
- public:
+public:
   //: Constructor - create a default event.
   vgui_event() { init(); }
 
@@ -96,7 +105,8 @@ class vgui_event
   vgui_key key;
 
   //: Convert given key to lower case and use that to set key.
-  void set_key(vgui_key c);
+  void
+  set_key(vgui_key c);
 
   //: Which modifiers are pressed during the event (NULL, CTRL, SHIFT).
   vgui_modifier modifier;
@@ -105,13 +115,13 @@ class vgui_event
   vgui_key ascii_char;
 
   //: Position of the mouse pointer in viewport coordinates when event occurred.
-  int wx,wy;
+  int wx, wy;
 
   //: Timestamp in milliseconds since app started.
   int timestamp;
 
   //: The adaptor from which the event came.
-  vgui_adaptor *origin;
+  vgui_adaptor * origin;
 
   //: If the event is a timer event, this holds the ID.
   // For an event of type vgui_TIMER, this field holds the name
@@ -132,19 +142,25 @@ class vgui_event
   //  The 'user' field must uniquely identify the type of event, in the
   //  sense that once the user field is known, the 'data' field can be
   //  safely cast to point to the client data (type).
-  void const *user;
-  void const *data;
+  const void * user;
+  const void * data;
 
   // methods
-  bool modifier_is_down(int) const;
-  double secs_since(vgui_event const &) const;
-  long usecs_since(vgui_event const &) const;
+  bool
+  modifier_is_down(int) const;
+  double
+  secs_since(const vgui_event &) const;
+  long
+  usecs_since(const vgui_event &) const;
 
- private:
-  void init();
+private:
+  void
+  init();
 };
 
-bool operator==(vgui_event const& a, vgui_event const& b);
-std::ostream& operator<<(std::ostream&, vgui_event const&);
+bool
+operator==(const vgui_event & a, const vgui_event & b);
+std::ostream &
+operator<<(std::ostream &, const vgui_event &);
 
 #endif // vgui_event_h_

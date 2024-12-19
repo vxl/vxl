@@ -22,14 +22,24 @@
 // and/or an icon/bitmap shown on the button.
 class vgui_button_field : public vgui_dialog_field
 {
- public:
-  vgui_button_field(vgui_command_sptr c, const char *txt)
-  : vgui_dialog_field(txt ? txt : ""), cmnd(c) {}
+public:
+  vgui_button_field(vgui_command_sptr c, const char * txt)
+    : vgui_dialog_field(txt ? txt : "")
+    , cmnd(c)
+  {}
 
   ~vgui_button_field() {}
 
-  std::string current_value() const { return "OK"; }
-  bool update_value(const std::string& s) { return true; }
+  std::string
+  current_value() const
+  {
+    return "OK";
+  }
+  bool
+  update_value(const std::string & s)
+  {
+    return true;
+  }
 
   // Pointer to the command to be executed.
   vgui_command_sptr cmnd;

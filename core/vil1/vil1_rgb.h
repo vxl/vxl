@@ -22,8 +22,8 @@
 //   050598 PVr added several operators ( + += - -= (T) ).
 //   290798 AWF Member templates for fancy compilers
 //   140898 David Capel added clamping functions to ensure 0-255 range on bytes and vil1_rgb<byte>
-//   090600 David Capel made clamping functions inline and removed all that partial specialization nonsense from the .hxx file.
-//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+//   090600 David Capel made clamping functions inline and removed all that partial specialization nonsense from the
+//   .hxx file. Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //\endverbatim
 
 #include <iostream>
@@ -48,21 +48,43 @@ struct vil1_rgb
   //: Create grey (v,v,v) vil1_rgb cell from value v.
   // This provides a conversion from T to vil1_rgb<T>, needed by e.g. two constructors in vil1_filter.h.
 
-  inline vil1_rgb(T v):
-    r(v), g(v), b(v) {}
+  inline vil1_rgb(T v)
+    : r(v)
+    , g(v)
+    , b(v)
+  {}
 
   //: Construct a vil1_rgb value.
-  inline vil1_rgb(T red, T green, T blue):
-    r(red), g(green), b(blue) {}
+  inline vil1_rgb(T red, T green, T blue)
+    : r(red)
+    , g(green)
+    , b(blue)
+  {}
 
   // The rgb values
   T r, g, b;
-  inline T R() const { return r; }
-  inline T G() const { return g; }
-  inline T B() const { return b; }
+  inline T
+  R() const
+  {
+    return r;
+  }
+  inline T
+  G() const
+  {
+    return g;
+  }
+  inline T
+  B() const
+  {
+    return b;
+  }
 
-  //:Convert vil1_rgb to gray using standard (.299, .587, .114) weighting.
-  inline T grey() const { return T(r*0.299+0.587*g+0.114*b); }
+  //: Convert vil1_rgb to gray using standard (.299, .587, .114) weighting.
+  inline T
+  grey() const
+  {
+    return T(r * 0.299 + 0.587 * g + 0.114 * b);
+  }
 
   // Who wants this? It's a pain in the ass.
   // ImageProcessing/IIFOperators use this a lot!
@@ -72,29 +94,73 @@ struct vil1_rgb
 #endif
 
   //: equality
-  inline bool operator== (vil1_rgb<T> const&) const;
+  inline bool
+  operator==(const vil1_rgb<T> &) const;
 
   // operators
-  inline vil1_rgb<T>  operator+  (vil1_rgb<T> const& A) const { return vil1_rgb<T>(r+A.r,g+A.g,b+A.b); }
-  inline vil1_rgb<T>  operator-  (vil1_rgb<T> const& A) const { return vil1_rgb<T>(r-A.r,g-A.g,b-A.b); }
-  inline vil1_rgb<T>  operator/  (vil1_rgb<T> const& A) const { return vil1_rgb<T>(r/A.r,g/A.g,b/A.b);}
-  inline vil1_rgb<T>& operator+= (vil1_rgb<T> const& A) { r+=A.r,g+=A.g,b+=A.b; return *this; }
-  inline vil1_rgb<T>& operator-= (vil1_rgb<T> const& A) { r-=A.r,g-=A.g,b-=A.b; return *this; }
-  inline vil1_rgb<T>  operator*  (T A) const { return vil1_rgb<T>(r*A,g*A,b*A); }
-  inline vil1_rgb<T>  operator/  (T A) const { return vil1_rgb<T>(r/A,g/A,b/A); }
-  inline vil1_rgb<T>& operator*= (T A) { r*=A,g*=A,b*=A; return *this; }
-  inline vil1_rgb<T>& operator/= (T A) { r/=A,g/=A,b/=A; return *this; }
+  inline vil1_rgb<T>
+  operator+(const vil1_rgb<T> & A) const
+  {
+    return vil1_rgb<T>(r + A.r, g + A.g, b + A.b);
+  }
+  inline vil1_rgb<T>
+  operator-(const vil1_rgb<T> & A) const
+  {
+    return vil1_rgb<T>(r - A.r, g - A.g, b - A.b);
+  }
+  inline vil1_rgb<T>
+  operator/(const vil1_rgb<T> & A) const
+  {
+    return vil1_rgb<T>(r / A.r, g / A.g, b / A.b);
+  }
+  inline vil1_rgb<T> &
+  operator+=(const vil1_rgb<T> & A)
+  {
+    r += A.r, g += A.g, b += A.b;
+    return *this;
+  }
+  inline vil1_rgb<T> &
+  operator-=(const vil1_rgb<T> & A)
+  {
+    r -= A.r, g -= A.g, b -= A.b;
+    return *this;
+  }
+  inline vil1_rgb<T>
+  operator*(T A) const
+  {
+    return vil1_rgb<T>(r * A, g * A, b * A);
+  }
+  inline vil1_rgb<T>
+  operator/(T A) const
+  {
+    return vil1_rgb<T>(r / A, g / A, b / A);
+  }
+  inline vil1_rgb<T> &
+  operator*=(T A)
+  {
+    r *= A, g *= A, b *= A;
+    return *this;
+  }
+  inline vil1_rgb<T> &
+  operator/=(T A)
+  {
+    r /= A, g /= A, b /= A;
+    return *this;
+  }
 
-  template <class S> inline
-  vil1_rgb(vil1_rgb<S> const& that):
-    r(T(that.r)),
-    g(T(that.g)),
-    b(T(that.b)) { }
-  template <class S> inline
-  vil1_rgb<T>& operator=(vil1_rgb<S> const& that) {
-    r=T(that.r);
-    g=T(that.g);
-    b=T(that.b);
+  template <class S>
+  inline vil1_rgb(const vil1_rgb<S> & that)
+    : r(T(that.r))
+    , g(T(that.g))
+    , b(T(that.b))
+  {}
+  template <class S>
+  inline vil1_rgb<T> &
+  operator=(const vil1_rgb<S> & that)
+  {
+    r = T(that.r);
+    g = T(that.g);
+    b = T(that.b);
     return *this;
   }
 };
@@ -109,8 +175,8 @@ extern vil1_rgb<double> tickle_mi_fancy;
 
 
 template <class T>
-inline
-std::ostream& operator<<(std::ostream& s, vil1_rgb<T> const& rgb)
+inline std::ostream &
+operator<<(std::ostream & s, vil1_rgb<T> const & rgb)
 {
   return s << '[' << rgb.r << ' ' << rgb.g << ' ' << rgb.b << ']';
 }
@@ -119,10 +185,10 @@ std::ostream& operator<<(std::ostream& s, vil1_rgb<T> const& rgb)
 // ** Arithmetic operators
 
 template <class T>
-inline
-bool vil1_rgb<T>::operator== (vil1_rgb<T> const& o) const
+inline bool
+vil1_rgb<T>::operator==(const vil1_rgb<T> & o) const
 {
-  return r==o.r && g==o.g && b==o.b;
+  return r == o.r && g == o.g && b == o.b;
 }
 
 
@@ -149,47 +215,47 @@ vil1_rgb<T> min(vil1_rgb<T> const& a, vil1_rgb<T> const& b)
 #endif
 
 template <class T>
-inline
-vil1_rgb<T> average(vil1_rgb<T> const& a, vil1_rgb<T> const& b)
+inline vil1_rgb<T>
+average(vil1_rgb<T> const & a, vil1_rgb<T> const & b)
 {
-  return vil1_rgb<T>((a.r + b.r)/2, (a.g + b.g)/2, (a.b + b.b)/2);
+  return vil1_rgb<T>((a.r + b.r) / 2, (a.g + b.g) / 2, (a.b + b.b) / 2);
 }
 
 template <class T>
-inline
-vil1_rgb<T> operator+(vil1_rgb<T> const& a, vil1_rgb<T> const& b)
+inline vil1_rgb<T>
+operator+(const vil1_rgb<T> & a, const vil1_rgb<T> & b)
 {
   return vil1_rgb<T>(a.r + b.r, a.g + b.g, a.b + b.b);
 }
 
 template <class T>
-inline
-vil1_rgb<double> operator*(double b, vil1_rgb<T> const& a)
+inline vil1_rgb<double>
+operator*(double b, const vil1_rgb<T> & a)
 {
   return vil1_rgb<double>(a.r * b, a.g * b, a.b * b);
 }
 
 template <class T>
-inline
-vil1_rgb<double> operator*(vil1_rgb<T> const& a, double b)
+inline vil1_rgb<double>
+operator*(const vil1_rgb<T> & a, double b)
 {
   return vil1_rgb<double>(a.r * b, a.g * b, a.b * b);
 }
 
 template <class T>
-inline
-vil1_rgb<double> operator/(vil1_rgb<T> const& a, double b)
+inline vil1_rgb<double>
+operator/(const vil1_rgb<T> & a, double b)
 {
   return vil1_rgb<double>(a.r / b, a.g / b, a.b / b);
 }
 
 template <class T>
-inline
-vil1_rgb<T> vil1_clamp_pixel(vil1_rgb<T> const& b, double range_min , double range_max)
+inline vil1_rgb<T>
+vil1_clamp_pixel(const vil1_rgb<T> & b, double range_min, double range_max)
 {
-  return vil1_rgb<double>(vil1_clamp_pixel(b.r, range_min , range_max),
-                          vil1_clamp_pixel(b.g, range_min , range_max),
-                          vil1_clamp_pixel(b.b, range_min , range_max));
+  return vil1_rgb<double>(vil1_clamp_pixel(b.r, range_min, range_max),
+                          vil1_clamp_pixel(b.g, range_min, range_max),
+                          vil1_clamp_pixel(b.b, range_min, range_max));
 }
 
 #if 0 // capes@robots : These vil1_clamp functions are deprecated. See vil1_clamp.h
@@ -210,9 +276,7 @@ vil1_rgb<unsigned char> vil1_clamp(vil1_rgb<float> const& d, vil1_rgb<unsigned c
 }
 #endif
 
-#define VIL1_RGB_INSTANTIATE(T) \
-extern "you must include vil1/vil1_rgb.hxx first."
-#define VIL1_RGB_INSTANTIATE_LS(T) \
-extern "you must include vil1/vil1_rgb.hxx first."
+#define VIL1_RGB_INSTANTIATE(T) extern "you must include vil1/vil1_rgb.hxx first."
+#define VIL1_RGB_INSTANTIATE_LS(T) extern "you must include vil1/vil1_rgb.hxx first."
 
 #endif // vil1_rgb_h_

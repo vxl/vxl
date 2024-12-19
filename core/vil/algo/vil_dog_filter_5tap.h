@@ -16,14 +16,15 @@
 //  \param dog_im    src_im - smooth_im
 //  \relatesalso vil_image_view
 template <class T>
-void vil_dog_filter_5tap(const vil_image_view<T>& src_im,
-                         vil_image_view<T>& smooth_im,
-                         vil_image_view<T>& dog_im,
-                         double sigma)
+void
+vil_dog_filter_5tap(const vil_image_view<T> & src_im,
+                    vil_image_view<T> & smooth_im,
+                    vil_image_view<T> & dog_im,
+                    double sigma)
 {
   vil_gauss_filter_5tap_params smooth_params(sigma);
-  vil_gauss_filter_5tap(src_im,smooth_im,smooth_params,dog_im);
-  vil_math_image_difference(src_im,smooth_im,dog_im);
+  vil_gauss_filter_5tap(src_im, smooth_im, smooth_params, dog_im);
+  vil_math_image_difference(src_im, smooth_im, dog_im);
 }
 
 #endif

@@ -28,7 +28,7 @@ vil_decimate(const vil_image_resource_sptr & src, unsigned i_factor, unsigned j_
 }
 
 
-vil_decimate_image_resource::vil_decimate_image_resource(vil_image_resource_sptr const & src,
+vil_decimate_image_resource::vil_decimate_image_resource(const vil_image_resource_sptr & src,
                                                          unsigned i_factor,
                                                          unsigned j_factor)
   : src_(src)
@@ -60,17 +60,18 @@ vil_decimate_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j0
 
     switch (src_->pixel_format())
     {
-#define macro(F, T)                                                                                                    \
-  case F: {                                                                                                            \
-    vil_image_view<T> view(ni, nj, src_->nplanes());                                                                   \
-    for (unsigned j = 0; j < nj; ++j)                                                                                  \
-      for (unsigned i = 0; i < ni; ++i)                                                                                \
-      {                                                                                                                \
-        vil_image_view<T> pixel = src_->get_view((i + i0) * i_factor_, 1, (j + j0) * j_factor_, 1);                    \
-        assert((bool)pixel);                                                                                           \
-        vil_copy_to_window(pixel, view, i, j);                                                                         \
-      }                                                                                                                \
-    return new vil_image_view<T>(view);                                                                                \
+#define macro(F, T)                                                                                 \
+  case F:                                                                                           \
+  {                                                                                                 \
+    vil_image_view<T> view(ni, nj, src_->nplanes());                                                \
+    for (unsigned j = 0; j < nj; ++j)                                                               \
+      for (unsigned i = 0; i < ni; ++i)                                                             \
+      {                                                                                             \
+        vil_image_view<T> pixel = src_->get_view((i + i0) * i_factor_, 1, (j + j0) * j_factor_, 1); \
+        assert((bool)pixel);                                                                        \
+        vil_copy_to_window(pixel, view, i, j);                                                      \
+      }                                                                                             \
+    return new vil_image_view<T>(view);                                                             \
   }
 
       macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
@@ -113,8 +114,8 @@ vil_decimate(const vil_image_view_base_sptr & im, unsigned i_factor, unsigned j_
     j_factor = i_factor;
   switch (im->pixel_format())
   {
-#define macro(F, T)                                                                                                    \
-  case F:                                                                                                              \
+#define macro(F, T) \
+  case F:           \
     return new vil_image_view<T>(vil_decimate(static_cast<vil_image_view<T> &>(*im), i_factor, j_factor));
 
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
@@ -159,15 +160,16 @@ vil_decimate_image_resource::put_view(const vil_image_view_base & im, unsigned i
 
     switch (vs->pixel_format())
     {
-#  define macro(F, T)                                                                                                  \
-    case F: {                                                                                                          \
-      const vil_image_view<T> view = static_cast<const vil_image_view<T> &>(im);                                       \
-      vil_image_view<T> decimated = vil_decimate(static_cast<vil_image_view<T> &>(*vs), i_factor_, j_factor_);         \
-      if (view == decimated)                                                                                           \
-        return true; /* If we have already modified the data, do nothing */                                            \
-      assert(view.ni() == decimated.ni() && view.nj() == decimated.nj());                                              \
-      vil_copy_reformat(view, decimated);                                                                              \
-      return src_->put_view(*vs, i0, j0);                                                                              \
+#  define macro(F, T)                                                                                          \
+    case F:                                                                                                    \
+    {                                                                                                          \
+      const vil_image_view<T> view = static_cast<const vil_image_view<T> &>(im);                               \
+      vil_image_view<T> decimated = vil_decimate(static_cast<vil_image_view<T> &>(*vs), i_factor_, j_factor_); \
+      if (view == decimated)                                                                                   \
+        return true; /* If we have already modified the data, do nothing */                                    \
+      assert(view.ni() == decimated.ni() && view.nj() == decimated.nj());                                      \
+      vil_copy_reformat(view, decimated);                                                                      \
+      return src_->put_view(*vs, i0, j0);                                                                      \
     }
 
       macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
@@ -190,18 +192,19 @@ vil_decimate_image_resource::put_view(const vil_image_view_base & im, unsigned i
 
     switch (src_->pixel_format())
     {
-#  define macro(F, T)                                                                                                  \
-    case F: {                                                                                                          \
-      const vil_image_view<T> & view = static_cast<const vil_image_view<T> &>(im);                                     \
-      for (unsigned j = 0; j < im.nj(); ++j)                                                                           \
-        for (unsigned i = 0; i < im.ni(); ++i)                                                                         \
-        {                                                                                                              \
-          vil_image_view<T> pixel = vil_crop(view, i, 1, j, 1);                                                        \
-          assert((bool)pixel);                                                                                         \
-          if (!src_->put_view(pixel, (i0 + i) * i_factor_, (j0 + j) * j_factor_))                                      \
-            return false;                                                                                              \
-        }                                                                                                              \
-      return true;                                                                                                     \
+#  define macro(F, T)                                                              \
+    case F:                                                                        \
+    {                                                                              \
+      const vil_image_view<T> & view = static_cast<const vil_image_view<T> &>(im); \
+      for (unsigned j = 0; j < im.nj(); ++j)                                       \
+        for (unsigned i = 0; i < im.ni(); ++i)                                     \
+        {                                                                          \
+          vil_image_view<T> pixel = vil_crop(view, i, 1, j, 1);                    \
+          assert((bool)pixel);                                                     \
+          if (!src_->put_view(pixel, (i0 + i) * i_factor_, (j0 + j) * j_factor_))  \
+            return false;                                                          \
+        }                                                                          \
+      return true;                                                                 \
     }
 
       macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte) macro(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)

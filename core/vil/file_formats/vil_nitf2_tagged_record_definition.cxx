@@ -127,10 +127,7 @@ vil_nitf2_tagged_record_definition::find(const std::string & name)
   return definition->second;
 }
 
-vil_nitf2_tagged_record_definition::~vil_nitf2_tagged_record_definition()
-{
-  delete m_field_definitions;
-}
+vil_nitf2_tagged_record_definition::~vil_nitf2_tagged_record_definition() { delete m_field_definitions; }
 
 vil_nitf2_tagged_record_definition &
 vil_nitf2_tagged_record_definition::repeat(std::string int_tag, vil_nitf2_field_definitions & field_definitions)

@@ -14,7 +14,7 @@
 #include "vul/vul_file_iterator.h"
 
 static void
-touch(char const * fn)
+touch(const char * fn)
 {
   std::ofstream f(fn);
   f << '.';

@@ -120,7 +120,7 @@ vgui_utils::colour_buffer_to_image()
 
 // write the GL buffer to a file
 void
-vgui_utils::dump_colour_buffer(char const * file)
+vgui_utils::dump_colour_buffer(const char * file)
 {
   vil1_memory_image_of<vil1_rgb<GLubyte>> colour_buffer = vgui_utils::get_image();
   vil1_save(colour_buffer, file);
@@ -338,7 +338,7 @@ vgui_utils::enter_pick_mode(float x, float y, float w, float h)
   if (h == 0)
     h = w;
 
-  static unsigned const HIT_BUFFER_SIZE = 4096;
+  static const unsigned HIT_BUFFER_SIZE = 4096;
   static GLuint buffer[HIT_BUFFER_SIZE];
 
   // define hit buffer
@@ -436,8 +436,8 @@ vgui_utils::process_hits(int num_hits, GLuint * ptr, std::vector<std::vector<uns
 int
 vgui_utils::bits_per_pixel(GLenum format, GLenum type)
 {
-#define M(f, t, size)                                                                                                  \
-  if (format == f && type == t)                                                                                        \
+#define M(f, t, size)           \
+  if (format == f && type == t) \
     return size;
   M(GL_RGB, GL_UNSIGNED_BYTE, 24);
   M(GL_BGR, GL_UNSIGNED_BYTE, 24);

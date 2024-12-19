@@ -30,24 +30,28 @@
 // always tell you that it has a multi-plane single-component view.
 class vil_image_resource
 {
- public:
+public:
   vil_image_resource();
   virtual ~vil_image_resource();
 
   //: Dimensions:  Planes x ni x nj.
   // This concept is treated as a synonym to components.
-  virtual unsigned nplanes() const = 0;
+  virtual unsigned
+  nplanes() const = 0;
   //: Dimensions:  Planes x ni x nj.
   // The number of pixels in each row.
-  virtual unsigned ni() const = 0;
+  virtual unsigned
+  ni() const = 0;
   //: Dimensions:  Planes x ni x nj.
   // The number of pixels in each column.
-  virtual unsigned nj() const = 0;
+  virtual unsigned
+  nj() const = 0;
 
   //: Pixel Format.
   //  A standard RGB RGB RGB of chars image has
   // pixel_format() == VIL_PIXEL_FORMAT_BYTE
-  virtual enum vil_pixel_format pixel_format() const = 0;
+  virtual enum vil_pixel_format
+  pixel_format() const = 0;
 
   //: Create a read/write view of the data.
   // Modifying this view might modify the actual data.
@@ -61,24 +65,32 @@ class vil_image_resource
   // \verbatim
   // vil_reformat(data->get_view(..), window);
   //\endverbatim
-  virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned n_i,
-                                            unsigned j0, unsigned n_j) const
-  { return get_copy_view (i0, n_i, j0, n_j); }
+  virtual vil_image_view_base_sptr
+  get_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j) const
+  {
+    return get_copy_view(i0, n_i, j0, n_j);
+  }
 
   //: Create a read/write view of all the data.
-  vil_image_view_base_sptr get_view() const
-  { return get_view (0, ni(), 0, nj()); }
+  vil_image_view_base_sptr
+  get_view() const
+  {
+    return get_view(0, ni(), 0, nj());
+  }
 
   //: Create a read/write view of a copy of this data.
   // This function will always return a
   // multi-plane scalar-pixel view of the data.
   // \return 0 if unable to get view of correct size, or if resource is write-only.
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
-                                                 unsigned j0, unsigned n_j) const = 0;
+  virtual vil_image_view_base_sptr
+  get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j) const = 0;
 
   //: Create a read/write view of a copy of all the data.
-  vil_image_view_base_sptr get_copy_view() const
-  { return get_copy_view (0, ni(), 0, nj()); }
+  vil_image_view_base_sptr
+  get_copy_view() const
+  {
+    return get_copy_view(0, ni(), 0, nj());
+  }
 
   //: Put the data in this view back into the image source.
   // The view must be of scalar components. Assign your
@@ -86,31 +98,49 @@ class vil_image_resource
   // \return false if failed, because e.g. resource is read-only,
   // format of view is not correct (if it is a compound pixel type, try
   // assigning it to a multi-plane scalar pixel view.)
-  virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0) = 0;
+  virtual bool
+  put_view(const vil_image_view_base & im, unsigned i0, unsigned j0) = 0;
 
   //: Put the data in this view back into the image source at the origin
-  virtual bool put_view(const vil_image_view_base& im)
-  { return put_view(im, 0, 0); }
+  virtual bool
+  put_view(const vil_image_view_base & im)
+  {
+    return put_view(im, 0, 0);
+  }
 
   //: Check that a view will fit into the data at the given offset.
   // This includes checking that the pixel type is scalar.
-  virtual bool view_fits(const vil_image_view_base& im, unsigned i0, unsigned j0);
+  virtual bool
+  view_fits(const vil_image_view_base & im, unsigned i0, unsigned j0);
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0
-  virtual char const* file_format() const { return nullptr; }
+  virtual const char *
+  file_format() const
+  {
+    return nullptr;
+  }
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = nullptr) const =0;
+  virtual bool
+  get_property(const char * tag, void * property_value = nullptr) const = 0;
 
- protected:
+protected:
   // You probably should not use a vil_image_resource in a vbl_smart_ptr, so the
   // ref functions are private
   friend class vil_smart_ptr<vil_image_resource>;
-  void ref() { ++reference_count_; }
-  void unref() {
-    assert(reference_count_>0);
-    if (--reference_count_<=0) delete this;}
+  void
+  ref()
+  {
+    ++reference_count_;
+  }
+  void
+  unref()
+  {
+    assert(reference_count_ > 0);
+    if (--reference_count_ <= 0)
+      delete this;
+  }
   vcl_atomic_count reference_count_;
 };
 

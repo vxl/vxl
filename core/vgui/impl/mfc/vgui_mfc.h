@@ -32,37 +32,50 @@ class vgui_mfc_app;
 // Based upon vgui_gtk.
 class vgui_mfc : public vgui_toolkit
 {
- public:
+public:
   // singleton method
-  static vgui_mfc* instance();
+  static vgui_mfc *
+  instance();
 
-  virtual std::string name() const;
+  virtual std::string
+  name() const;
 
-  virtual void run();
-  virtual void run_one_event();
-  virtual void run_till_idle();
-  virtual void flush();
-  virtual void quit();
-  virtual void add_event(const vgui_event&);
+  virtual void
+  run();
+  virtual void
+  run_one_event();
+  virtual void
+  run_till_idle();
+  virtual void
+  flush();
+  virtual void
+  quit();
+  virtual void
+  add_event(const vgui_event &);
 
-  virtual vgui_window* produce_window(int width, int height, const vgui_menu& menubar,
-                                      const char* title="vgui mfc window");
+  virtual vgui_window *
+  produce_window(int width, int height, const vgui_menu & menubar, const char * title = "vgui mfc window");
 
-  virtual vgui_window* produce_window(int width, int height,
-                                      const char* title="vgui mfc popup");
+  virtual vgui_window *
+  produce_window(int width, int height, const char * title = "vgui mfc popup");
 
-  virtual vgui_dialog_impl* produce_dialog(const char* name);
+  virtual vgui_dialog_impl *
+  produce_dialog(const char * name);
 
-  virtual vgui_dialog_extensions_impl* produce_dialog_extension(const char* name);
+  virtual vgui_dialog_extensions_impl *
+  produce_dialog_extension(const char * name);
 
-  vgui_mfc_utils *utils;
- protected:
+  vgui_mfc_utils * utils;
+
+protected:
   vgui_mfc();
   ~vgui_mfc();
-  void init(int &, char **);
-  void uninit();
-  vgui_mfc_app* theApp_;
-  std::vector<vgui_window*> windows_to_delete;
+  void
+  init(int &, char **);
+  void
+  uninit();
+  vgui_mfc_app * theApp_;
+  std::vector<vgui_window *> windows_to_delete;
 };
 
 #endif // vgui_mfc_h_

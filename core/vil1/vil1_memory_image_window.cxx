@@ -46,7 +46,7 @@ labs(int x)
   return (x > 0) ? x : -x;
 }
 
-//:Return early if difference becomes greater than early_exit_level.
+//: Return early if difference becomes greater than early_exit_level.
 // This is a useful check to have anyway as the default arg of MAXINT avoids
 // accumulator overflow which can easily happen on certain medical and range
 // images.
@@ -98,7 +98,7 @@ vil1_memory_image_window::sum_abs_diff(const vil1_memory_image_of<vxl_byte> & im
   return difference_total;
 }
 
-//:Return early if difference becomes greater than early_exit_level.
+//: Return early if difference becomes greater than early_exit_level.
 // This is a useful check to have anyway as the default arg of MAXINT avoids
 // accumulator overflow which can easily happen on certain medical and range
 // images.

@@ -32,7 +32,7 @@ test_tuple_io()
   std::string x3 = "test";
   std::tuple<int, double, std::string> t_int_double_string_out(x1, x2, x3);
 
-  std::tuple<std::tuple<int> > t_t_int_out(t_int_out);
+  std::tuple<std::tuple<int>> t_t_int_out(t_int_out);
 
   vsl_b_ofstream bfs_out("vsl_tuple_io_test.bvl.tmp");
   TEST("Created vsl_tuple_io_test.bvl.tmp for writing", (!bfs_out), false);
@@ -43,7 +43,7 @@ test_tuple_io()
 
   std::tuple<int> t_int_in;
   std::tuple<int, double, std::string> t_int_double_string_in;
-  std::tuple<std::tuple<int> > t_t_int_in;
+  std::tuple<std::tuple<int>> t_t_int_in;
 
   vsl_b_ifstream bfs_in("vsl_tuple_io_test.bvl.tmp");
   TEST("Opened vsl_tuple_io_test.bvl.tmp for reading", (!bfs_in), false);
@@ -56,7 +56,9 @@ test_tuple_io()
   vpl_unlink("vsl_tuple_io_test.bvl.tmp");
 
   TEST("std::tuple<int> out == std::tuple<int> in", t_int_out, t_int_in);
-  TEST("std::tuple<int, double, std::string> out == std::tuple<int, double, std::string> in", t_int_double_string_out, t_int_double_string_in);
+  TEST("std::tuple<int, double, std::string> out == std::tuple<int, double, std::string> in",
+       t_int_double_string_out,
+       t_int_double_string_in);
   TEST("std::tuple<std::tuple<int> > out == std::tuple<std::tuple<int> > in", t_t_int_out, t_t_int_in);
 
   vsl_print_summary(std::cout, t_int_in);

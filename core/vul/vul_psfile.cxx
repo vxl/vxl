@@ -12,15 +12,15 @@
 #endif
 #include <cassert>
 
-#define RANGE(a, b, c)                                                                                                 \
-  {                                                                                                                    \
-    if ((a) < (b))                                                                                                     \
-      (a) = b;                                                                                                         \
-    if ((a) > (c))                                                                                                     \
-      (a) = c;                                                                                                         \
+#define RANGE(a, b, c) \
+  {                    \
+    if ((a) < (b))     \
+      (a) = b;         \
+    if ((a) > (c))     \
+      (a) = c;         \
   }
 #define in_range(a) ((a) < 0x100)
-#define Hex4bit(a) ((char)(((a) <= 9) ? ((a) + '0') : ((a)-10 + 'a')))
+#define Hex4bit(a) ((char)(((a) <= 9) ? ((a) + '0') : ((a) - 10 + 'a')))
 
 static const float PIX2INCH = 72.0f;
 static bool debug = true;
@@ -58,7 +58,7 @@ static const std::streampos HEADER_START(-1);
 //-----------------------------------------------------------------------------
 //: Default constructor.
 //-----------------------------------------------------------------------------
-vul_psfile::vul_psfile(char const * f, bool dbg)
+vul_psfile::vul_psfile(const char * f, bool dbg)
   : output_filestream(f)
   , fg_r(0)
   , fg_g(0)
@@ -637,7 +637,7 @@ vul_psfile::reset_postscript_header()
 //: Utility program used in point(), line(), ellipse() and circle()
 //-----------------------------------------------------------------------------
 void
-vul_psfile::sobj_rgb_params(char const * obj_str, bool filled)
+vul_psfile::sobj_rgb_params(const char * obj_str, bool filled)
 {
   print_graphics_prolog();
   output_filestream << "\nBegin %I " << obj_str << "\n2 0 0 [] 0 SetB\n"

@@ -14,7 +14,7 @@
 #include <wx/menu.h>
 
 #ifndef wxCommandEventHandler // wxWidgets-2.5.3 doesn't define this
-#  define wxCommandEventHandler(func)                                                                                  \
+#  define wxCommandEventHandler(func) \
     (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent(wxCommandEventFunction, &func)
 #endif
 

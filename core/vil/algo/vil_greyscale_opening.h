@@ -13,13 +13,14 @@
 // \relatesalso vil_image_view
 // \relatesalso vil_structuring_element
 template <class T>
-inline void vil_greyscale_opening(const vil_image_view<T>& src_image,
-                                  vil_image_view<T>& dest_image,
-                                  const vil_structuring_element& element)
+inline void
+vil_greyscale_opening(const vil_image_view<T> & src_image,
+                      vil_image_view<T> & dest_image,
+                      const vil_structuring_element & element)
 {
   vil_image_view<T> eroded_im;
-  vil_greyscale_erode(src_image,eroded_im,element);
-  vil_greyscale_dilate(eroded_im,dest_image,element);
+  vil_greyscale_erode(src_image, eroded_im, element);
+  vil_greyscale_dilate(eroded_im, dest_image, element);
 }
 
 #endif // vil_greyscale_opening_h_

@@ -26,13 +26,14 @@
 
 class vpgl_adjust_lsqr : public vnl_least_squares_function
 {
- public:
+public:
   //: Constructor
   // \note image points are not homogeneous because require finite points to measure projection error
-  vpgl_adjust_lsqr(vpgl_rational_camera<double>  const& rcam,
-                   std::vector<vgl_point_2d<double> > const& img_pts,
-                   std::vector<vgl_point_3d<double> >  geo_pts,
-                   unsigned num_unknowns, unsigned num_residuals);
+  vpgl_adjust_lsqr(const vpgl_rational_camera<double> & rcam,
+                   const std::vector<vgl_point_2d<double>> & img_pts,
+                   std::vector<vgl_point_3d<double>> geo_pts,
+                   unsigned num_unknowns,
+                   unsigned num_residuals);
 
   //: Destructor
   ~vpgl_adjust_lsqr() override = default;
@@ -40,30 +41,33 @@ class vpgl_adjust_lsqr : public vnl_least_squares_function
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  fx has been sized appropriately before the call.
-  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override;
+  void
+  f(const vnl_vector<double> & x, vnl_vector<double> & fx) override;
 
 #if 0
   //: Called after each LM iteration to print debugging etc.
   virtual void trace(int iteration, vnl_vector<double> const& x, vnl_vector<double> const& fx);
 #endif
 
- protected:
+protected:
   unsigned num_corrs_;
   vpgl_rational_camera<double> rcam_;
-  std::vector<vgl_point_2d<double> > img_pts_;
-  std::vector<vgl_point_3d<double> > geo_pts_;
+  std::vector<vgl_point_2d<double>> img_pts_;
+  std::vector<vgl_point_3d<double>> geo_pts_;
 };
 
 class vpgl_rational_adjust
 {
- public:
-  ~vpgl_rational_adjust()= default;
+public:
+  ~vpgl_rational_adjust() = default;
 
-  static bool adjust(vpgl_rational_camera<double> const& initial_rcam,
-                     std::vector<vgl_point_2d<double> > img_pts,
-                     std::vector<vgl_point_3d<double> > geo_pts,
-                     vpgl_rational_camera<double> & adj_rcam);
- protected:
+  static bool
+  adjust(const vpgl_rational_camera<double> & initial_rcam,
+         std::vector<vgl_point_2d<double>> img_pts,
+         std::vector<vgl_point_3d<double>> geo_pts,
+         vpgl_rational_camera<double> & adj_rcam);
+
+protected:
   vpgl_rational_adjust();
 };
 

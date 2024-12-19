@@ -32,19 +32,24 @@
 struct VIDL_EXPORT vidl_ffmpeg_ostream_params
 {
   //: Available video encoders
-  enum encoder_type { DEFAULT,
-                      MPEG4,
-                      MSMPEG4V2,
-                      MPEG2VIDEO,
-                      DVVIDEO,
-                      LJPEG,
-                      RAWVIDEO,
-                      HUFFYUV,
-                      ENCODER_END_MARKER };
+  enum encoder_type
+  {
+    DEFAULT,
+    MPEG4,
+    MSMPEG4V2,
+    MPEG2VIDEO,
+    DVVIDEO,
+    LJPEG,
+    RAWVIDEO,
+    HUFFYUV,
+    ENCODER_END_MARKER
+  };
 
   //: Supported video types
-  enum file_format_type { GUESS // < Guess based on file extension
-    };
+  enum file_format_type
+  {
+    GUESS // < Guess based on file extension
+  };
 
   //: The type of encoder to use (default DEFAULT)
   encoder_type encoder_;
@@ -155,24 +160,45 @@ struct VIDL_EXPORT vidl_ffmpeg_ostream_params
   vidl_ffmpeg_ostream_params();
 
   //: Set the file format
-  vidl_ffmpeg_ostream_params& file_format( file_format_type t )
-  { file_format_ = t; return *this; }
+  vidl_ffmpeg_ostream_params &
+  file_format(file_format_type t)
+  {
+    file_format_ = t;
+    return *this;
+  }
 
   //: Set the video encoder
-  vidl_ffmpeg_ostream_params& encoder( encoder_type t )
-  { encoder_ = t; return *this; }
+  vidl_ffmpeg_ostream_params &
+  encoder(encoder_type t)
+  {
+    encoder_ = t;
+    return *this;
+  }
 
   //: Set the frame rate
-  vidl_ffmpeg_ostream_params& frame_rate( float r )
-  { frame_rate_ = r; return *this; }
+  vidl_ffmpeg_ostream_params &
+  frame_rate(float r)
+  {
+    frame_rate_ = r;
+    return *this;
+  }
 
   //: Set the bit rate
-  vidl_ffmpeg_ostream_params& bit_rate( unsigned r )
-  { bit_rate_ = r; return *this; }
+  vidl_ffmpeg_ostream_params &
+  bit_rate(unsigned r)
+  {
+    bit_rate_ = r;
+    return *this;
+  }
 
   //: Set the size of the frames
-  vidl_ffmpeg_ostream_params& size( unsigned ni, unsigned nj )
-  { ni_ = ni; nj_ = nj; return *this; }
+  vidl_ffmpeg_ostream_params &
+  size(unsigned ni, unsigned nj)
+  {
+    ni_ = ni;
+    nj_ = nj;
+    return *this;
+  }
 };
 
 #endif // vidl_ffmpeg_ostream_params_h_

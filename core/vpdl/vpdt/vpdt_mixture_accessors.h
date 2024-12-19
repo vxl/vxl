@@ -18,10 +18,10 @@
 
 //: A functor to return the number of components in a mixture
 // This is a dummy class for non-mixture types; it always fails
-template <class mixture_type, class Disambiguate=void>
+template <class mixture_type, class Disambiguate = void>
 class vpdt_num_components_accessor
 {
- public:
+public:
   //: the functor return type
   typedef unsigned int return_type;
   //: the distribution operated on by the functor
@@ -31,13 +31,15 @@ class vpdt_num_components_accessor
 
   //: rebind this functor to another distribution type
   template <class other_dist>
-  struct rebind {
+  struct rebind
+  {
     typedef vpdt_num_components_accessor<other_dist> other;
   };
 
   //: The main function
-  bool operator()(const mixture_type & /*mix*/,
-                  return_type & /*retval*/) const {
+  bool
+  operator()(const mixture_type & /*mix*/, return_type & /*retval*/) const
+  {
     return false;
   }
 };
@@ -45,10 +47,9 @@ class vpdt_num_components_accessor
 //
 //: A functor to return the number of components in a mixture
 template <class mixture_type>
-class vpdt_num_components_accessor<mixture_type,
-          typename vpdt_enable_if<vpdt_is_mixture<mixture_type> >::type>
+class vpdt_num_components_accessor<mixture_type, typename vpdt_enable_if<vpdt_is_mixture<mixture_type>>::type>
 {
- public:
+public:
   //: the functor return type
   typedef unsigned int return_type;
   //: the distribution operated on by the functor
@@ -58,12 +59,14 @@ class vpdt_num_components_accessor<mixture_type,
 
   //: rebind this functor to another distribution type
   template <class other_dist>
-  struct rebind {
+  struct rebind
+  {
     typedef vpdt_num_components_accessor<other_dist> other;
   };
 
   //: The main function
-  bool operator() ( const mixture_type& mix, return_type& retval ) const
+  bool
+  operator()(const mixture_type & mix, return_type & retval) const
   {
     retval = mix.num_components();
     return true;
@@ -72,10 +75,10 @@ class vpdt_num_components_accessor<mixture_type,
 
 
 //: A functor to return the weight of the component with given index
-template <class mixture_type, class Disambiguate=void>
+template <class mixture_type, class Disambiguate = void>
 class vpdt_weight_accessor
 {
- public:
+public:
   //: the functor return type
   typedef typename vpdt_dist_traits<mixture_type>::scalar_type return_type;
   //: the distribution operated on by the functor
@@ -85,7 +88,8 @@ class vpdt_weight_accessor
 
   //: rebind this functor to another distribution type
   template <class other_dist>
-  struct rebind {
+  struct rebind
+  {
     typedef vpdt_weight_accessor<other_dist> other;
   };
 
@@ -93,8 +97,9 @@ class vpdt_weight_accessor
   vpdt_weight_accessor(unsigned int index = 0) {}
 
   //: The main function
-  bool operator()(const mixture_type & /*mix*/,
-                  return_type & /*retval*/) const {
+  bool
+  operator()(const mixture_type & /*mix*/, return_type & /*retval*/) const
+  {
     return false;
   }
 };
@@ -102,10 +107,9 @@ class vpdt_weight_accessor
 
 //: A functor to return the weight of the component with given index
 template <class mixture_type>
-class vpdt_weight_accessor<mixture_type,
-          typename vpdt_enable_if<vpdt_is_mixture<mixture_type> >::type>
+class vpdt_weight_accessor<mixture_type, typename vpdt_enable_if<vpdt_is_mixture<mixture_type>>::type>
 {
- public:
+public:
   //: the functor return type
   typedef typename vpdt_dist_traits<mixture_type>::scalar_type return_type;
   //: the distribution operated on by the functor
@@ -115,17 +119,22 @@ class vpdt_weight_accessor<mixture_type,
 
   //: rebind this functor to another distribution type
   template <class other_dist>
-  struct rebind {
+  struct rebind
+  {
     typedef vpdt_weight_accessor<other_dist> other;
   };
 
   //: Constructor
-  vpdt_weight_accessor(unsigned int index = 0) : idx(index) {}
+  vpdt_weight_accessor(unsigned int index = 0)
+    : idx(index)
+  {}
 
   //: The main function
-  bool operator() ( const mixture_type& mix, return_type& retval ) const
+  bool
+  operator()(const mixture_type & mix, return_type & retval) const
   {
-    if (idx < mix.num_components()){
+    if (idx < mix.num_components())
+    {
       retval = mix.weight(idx);
       return true;
     }
@@ -138,10 +147,10 @@ class vpdt_weight_accessor<mixture_type,
 
 
 //: A functor to apply another functor to the component with given index
-template <class mixture_type, class accessor_type, class Disambiguate=void>
+template <class mixture_type, class accessor_type, class Disambiguate = void>
 class vpdt_mixture_accessor
 {
- public:
+public:
   //: the functor return type
   typedef typename accessor_type::return_type return_type;
   //: the distribution operated on by the functor
@@ -151,19 +160,21 @@ class vpdt_mixture_accessor
 
   //: rebind this functor to another distribution type
   template <class other_dist, class other_accessor = accessor_type>
-  struct rebind {
-    typedef vpdt_mixture_accessor<other_dist,other_accessor> other;
+  struct rebind
+  {
+    typedef vpdt_mixture_accessor<other_dist, other_accessor> other;
   };
 
   //: Constructor
   vpdt_mixture_accessor(unsigned int index = 0) {}
 
   //: Constructor
-  vpdt_mixture_accessor(const accessor_type& a, unsigned int index = 0) {}
+  vpdt_mixture_accessor(const accessor_type & a, unsigned int index = 0) {}
 
   //: The main function
-  bool operator()(const mixture_type & /*mix*/,
-                  return_type & /*retval*/) const {
+  bool
+  operator()(const mixture_type & /*mix*/, return_type & /*retval*/) const
+  {
     return false;
   }
 };
@@ -171,10 +182,9 @@ class vpdt_mixture_accessor
 
 //: A functor to apply another functor to the component with given index
 template <class mixture_type, class accessor_type>
-class vpdt_mixture_accessor<mixture_type,accessor_type,
-          typename vpdt_enable_if<vpdt_is_mixture<mixture_type> >::type>
+class vpdt_mixture_accessor<mixture_type, accessor_type, typename vpdt_enable_if<vpdt_is_mixture<mixture_type>>::type>
 {
- public:
+public:
   //: the functor return type
   typedef typename accessor_type::return_type return_type;
   //: the distribution operated on by the functor
@@ -184,23 +194,30 @@ class vpdt_mixture_accessor<mixture_type,accessor_type,
 
   //: rebind this functor to another distribution type
   template <class other_dist, class other_accessor = accessor_type>
-  struct rebind {
-    typedef vpdt_mixture_accessor<other_dist,other_accessor> other;
+  struct rebind
+  {
+    typedef vpdt_mixture_accessor<other_dist, other_accessor> other;
   };
 
   //: Constructor
   vpdt_mixture_accessor(unsigned int index = 0)
-  : accessor(), idx(index) {}
+    : accessor()
+    , idx(index)
+  {}
 
   //: Constructor
-  vpdt_mixture_accessor(const accessor_type& a, unsigned int index = 0)
-  : accessor(a), idx(index) {}
+  vpdt_mixture_accessor(const accessor_type & a, unsigned int index = 0)
+    : accessor(a)
+    , idx(index)
+  {}
 
   //: The main function
-  bool operator() ( const mixture_type& mix, return_type& retval ) const
+  bool
+  operator()(const mixture_type & mix, return_type & retval) const
   {
-    if (idx < mix.num_components()){
-      return accessor(mix.distribution(idx),retval);
+    if (idx < mix.num_components())
+    {
+      return accessor(mix.distribution(idx), retval);
     }
     return false;
   }
@@ -215,10 +232,10 @@ class vpdt_mixture_accessor<mixture_type,accessor_type,
 //: A specialization to make the weight accessor work as a mixture accessor
 template <class mixture_type>
 class vpdt_mixture_accessor<mixture_type,
-          vpdt_weight_accessor<typename mixture_type::component_type>,
-          typename vpdt_enable_if<vpdt_is_mixture<mixture_type> >::type>
+                            vpdt_weight_accessor<typename mixture_type::component_type>,
+                            typename vpdt_enable_if<vpdt_is_mixture<mixture_type>>::type>
 {
- public:
+public:
   //: the accessor type
   typedef vpdt_weight_accessor<typename mixture_type::component_type> accessor_type;
   //: the functor return type
@@ -230,22 +247,27 @@ class vpdt_mixture_accessor<mixture_type,
 
   //: rebind this functor to another distribution type
   template <class other_dist, class other_accessor = accessor_type>
-  struct rebind {
-    typedef vpdt_mixture_accessor<other_dist,other_accessor> other;
+  struct rebind
+  {
+    typedef vpdt_mixture_accessor<other_dist, other_accessor> other;
   };
 
   //: Constructor
   vpdt_mixture_accessor(unsigned int index = 0)
-  : idx(index) {}
+    : idx(index)
+  {}
 
   //: Constructor
   vpdt_mixture_accessor(const accessor_type & /*a*/, unsigned int index = 0)
-      : idx(index) {}
+    : idx(index)
+  {}
 
   //: The main function
-  bool operator() ( const mixture_type& mix, return_type& retval ) const
+  bool
+  operator()(const mixture_type & mix, return_type & retval) const
   {
-    if (idx < mix.num_components()){
+    if (idx < mix.num_components())
+    {
       retval = mix.weight(idx);
       return true;
     }

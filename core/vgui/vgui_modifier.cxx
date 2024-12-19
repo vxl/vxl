@@ -12,7 +12,7 @@
 std::ostream &
 operator<<(std::ostream & s, vgui_modifier m)
 {
-  char const * spc = "";
+  const char * spc = "";
   if (m & vgui_CTRL)
   {
     s << spc << "ctrl";

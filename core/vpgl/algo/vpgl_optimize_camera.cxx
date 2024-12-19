@@ -39,7 +39,7 @@ vpgl_orientation_lsqr::vpgl_orientation_lsqr(const vpgl_calibration_matrix<doubl
 //  The parameters in x are the {wx, wy, wz}
 //  where w is the Rodrigues vector of the rotation.
 void
-vpgl_orientation_lsqr::f(vnl_vector<double> const & x, vnl_vector<double> & fx)
+vpgl_orientation_lsqr::f(const vnl_vector<double> & x, vnl_vector<double> & fx)
 {
   vpgl_perspective_camera<double> cam(K_, c_, vgl_rotation_3d<double>(x));
   for (unsigned int i = 0; i < world_points_.size(); ++i)
@@ -72,7 +72,7 @@ vpgl_orientation_position_lsqr::vpgl_orientation_position_lsqr(
 //  The parameters in x are really two three component vectors {wx, wy, wz, tx, ty, tz}
 //  where w is the Rodrigues vector of the rotation and t is the translation.
 void
-vpgl_orientation_position_lsqr::f(vnl_vector<double> const & x, vnl_vector<double> & fx)
+vpgl_orientation_position_lsqr::f(const vnl_vector<double> & x, vnl_vector<double> & fx)
 {
   assert(x.size() == 6);
   vnl_double_3 w(x[0], x[1], x[2]);
@@ -124,7 +124,7 @@ vpgl_orientation_position_calibration_lsqr::vpgl_orientation_position_calibratio
 //  The parameters in x are really two three component vectors {wx, wy, wz, tx, ty, tz}
 //  where w is the Rodrigues vector of the rotation and t is the translation.
 void
-vpgl_orientation_position_calibration_lsqr::f(vnl_vector<double> const & x, vnl_vector<double> & fx)
+vpgl_orientation_position_calibration_lsqr::f(const vnl_vector<double> & x, vnl_vector<double> & fx)
 {
   assert(x.size() == 10);
   vnl_double_3 w(x[0], x[1], x[2]);
@@ -178,7 +178,7 @@ vpgl_orientation_position_focal_lsqr::vpgl_orientation_position_focal_lsqr(
 //  Fx has been sized appropriately before the call.
 //  The parameters in x are quaternion, translation, focal length {q: x, y, z, r | t: t1, t2, t3 | f}
 void
-vpgl_orientation_position_focal_lsqr::f(vnl_vector<double> const & x, vnl_vector<double> & fx)
+vpgl_orientation_position_focal_lsqr::f(const vnl_vector<double> & x, vnl_vector<double> & fx)
 {
   assert(x.size() == 8);
   vnl_quaternion<double> q(x[0], x[1], x[2], x[3]);
@@ -210,7 +210,7 @@ vpgl_orientation_position_focal_lsqr::f(vnl_vector<double> const & x, vnl_vector
 //: Gradients of the cost-function w.r.t. to the 8 free parameters of x
 //  The eight parameters are quaternions(wx, wy, wz), translation(tx, ty, tz) and focal length (Fx)
 void
-vpgl_orientation_position_focal_lsqr::gradf(vnl_vector<double> const & xvec, vnl_matrix<double> & jacobian)
+vpgl_orientation_position_focal_lsqr::gradf(const vnl_vector<double> & xvec, vnl_matrix<double> & jacobian)
 {
   // norm of unnormalized quaternion
   double norm = sqrt(xvec[0] * xvec[0] + xvec[1] * xvec[1] + xvec[2] * xvec[2] + xvec[3] * xvec[3]);

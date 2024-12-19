@@ -75,10 +75,10 @@ project(const double x,
         const double z,
         double & u,
         double & v,
-        vnl_vector_fixed<double, 20> const & neu_u,
-        vnl_vector_fixed<double, 20> const & den_u,
-        vnl_vector_fixed<double, 20> const & neu_v,
-        vnl_vector_fixed<double, 20> const & den_v)
+        const vnl_vector_fixed<double, 20> & neu_u,
+        const vnl_vector_fixed<double, 20> & den_u,
+        const vnl_vector_fixed<double, 20> & neu_v,
+        const vnl_vector_fixed<double, 20> & den_v)
 {
   vnl_matrix_fixed<double, 4, 20> rational_coeffs;
   for (size_t i = 0; i < 20; ++i)

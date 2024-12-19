@@ -855,7 +855,8 @@ vgui_win32_dialog_impl::DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARA
       PostQuitMessage(0);
       return 1;
 
-    case WM_DRAWITEM: {
+    case WM_DRAWITEM:
+    {
       LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT)lParam;
       // Obtain info of control item
       HDC hDC = lpDIS->hDC;
@@ -1022,7 +1023,8 @@ vgui_win32_dialog_impl::DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARA
       break;
     }
 
-    case WM_COMMAND: {
+    case WM_COMMAND:
+    {
       WORD wCtrlId = LOWORD(wParam);
       if (wCtrlId == IDOK)
       {

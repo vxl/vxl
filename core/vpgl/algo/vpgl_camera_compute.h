@@ -23,21 +23,24 @@
 //: Basic least squares solution for a general projective camera given corresponding world and image points.
 class vpgl_proj_camera_compute
 {
- public:
+public:
   //: Compute from two sets of corresponding points.
   // Put the resulting camera into \p camera
   // \return true if successful.
-  static bool compute( const std::vector< vgl_homg_point_2d<double> >& image_pts,
-                       const std::vector< vgl_homg_point_3d<double> >& world_pts,
-                       vpgl_proj_camera<double>& camera );
+  static bool
+  compute(const std::vector<vgl_homg_point_2d<double>> & image_pts,
+          const std::vector<vgl_homg_point_3d<double>> & world_pts,
+          vpgl_proj_camera<double> & camera);
   //: Compute from two sets of corresponding points.
   // Put the resulting camera into \p camera
   // \return true if successful.
-  static bool compute( const std::vector< vgl_point_2d<double> >& image_pts,
-                       const std::vector< vgl_point_3d<double> >& world_pts,
-                       vpgl_proj_camera<double>& camera );
- private:
-  //:default constructor (is private)
+  static bool
+  compute(const std::vector<vgl_point_2d<double>> & image_pts,
+          const std::vector<vgl_point_3d<double>> & world_pts,
+          vpgl_proj_camera<double> & camera);
+
+private:
+  //: default constructor (is private)
   vpgl_proj_camera_compute() = delete;
 };
 
@@ -45,37 +48,41 @@ class vpgl_proj_camera_compute
 //: Basic least squares solution for an affine camera given corresponding world and image points.
 class vpgl_affine_camera_compute
 {
- public:
+public:
   //: Compute from two sets of corresponding points. (minimum of 4)
   // Put the resulting camera into \p camera
   // \return true if successful.
-  static bool compute( const std::vector< vgl_point_2d<double> >& image_pts,
-                       const std::vector< vgl_point_3d<double> >& world_pts,
-                       vpgl_affine_camera<double>& camera );
+  static bool
+  compute(const std::vector<vgl_point_2d<double>> & image_pts,
+          const std::vector<vgl_point_3d<double>> & world_pts,
+          vpgl_affine_camera<double> & camera);
 
-  //:Compute from correspondences allowing a significant number of invalid matches
+  //: Compute from correspondences allowing a significant number of invalid matches
   // the ransac algorithm uses the MUSE robust estimator,
   // *J. Miller and C. Stewart, MUSE: Robust Surface Fitting using Unbiased Scale Estimates
   // Proc. CVPR  1996
-  static bool compute_robust_ransac( const std::vector< vgl_point_2d<double> >& image_pts,
-                                     const std::vector< vgl_point_3d<double> >& world_pts,
-                                     vpgl_affine_camera<double>& camera );
- private:
+  static bool
+  compute_robust_ransac(const std::vector<vgl_point_2d<double>> & image_pts,
+                        const std::vector<vgl_point_3d<double>> & world_pts,
+                        vpgl_affine_camera<double> & camera);
+
+private:
   vpgl_affine_camera_compute() = delete;
 };
 
 
-//:Various methods for computing a perspective camera
+//: Various methods for computing a perspective camera
 class vpgl_perspective_camera_compute
 {
- public:
+public:
   //: Compute from two sets of corresponding points.
   // Put the resulting camera into \p camera
   // \return true if successful.
-  static bool compute( const std::vector< vgl_point_2d<double> >& image_pts,
-                       const std::vector< vgl_point_3d<double> >& world_pts,
-                       const vpgl_calibration_matrix<double>& K,
-                       vpgl_perspective_camera<double>& camera );
+  static bool
+  compute(const std::vector<vgl_point_2d<double>> & image_pts,
+          const std::vector<vgl_point_3d<double>> & world_pts,
+          const vpgl_calibration_matrix<double> & K,
+          vpgl_perspective_camera<double> & camera);
 
 
   //: Uses the direct linear transform algorithm described in "Multiple
@@ -87,10 +94,11 @@ class vpgl_perspective_camera_compute
   // \returns true if successful.
   // \p err is filled with the two-norm of the projection error vector.
   // \p camera is filled with the perspective decomposition of the projection matrix.
-  static bool compute_dlt ( const std::vector< vgl_point_2d<double> >& image_pts,
-                            const std::vector< vgl_point_3d<double> >& world_pts,
-                            vpgl_perspective_camera<double> &camera,
-                            double &err);
+  static bool
+  compute_dlt(const std::vector<vgl_point_2d<double>> & image_pts,
+              const std::vector<vgl_point_3d<double>> & world_pts,
+              vpgl_perspective_camera<double> & camera,
+              double & err);
 
   //: Compute from two sets of corresponding 2D points (image and ground plane).
   // \param ground_pts are 2D points representing world points with Z=0
@@ -98,21 +106,25 @@ class vpgl_perspective_camera_compute
   // This computation is simpler than the general case above and only requires 4 points
   // Put the resulting camera into \p camera
   // \return true if successful.
-  static bool compute( const std::vector< vgl_point_2d<double> >& image_pts,
-                       const std::vector< vgl_point_2d<double> >& ground_pts,
-                       vpgl_perspective_camera<double>& camera );
+  static bool
+  compute(const std::vector<vgl_point_2d<double>> & image_pts,
+          const std::vector<vgl_point_2d<double>> & ground_pts,
+          vpgl_perspective_camera<double> & camera);
 
- private:
+private:
   vpgl_perspective_camera_compute() = delete;
 };
 
 // ground points are in wgs84: x = longitude (deg), y = latitude (deg), z = elevation(meters)
-class vpgl_rational_camera_compute{
- public:
-  static bool compute( const std::vector< vgl_point_2d<double> >& image_pts,
-                       const std::vector< vgl_point_3d<double> >& ground_pts,
-                       vpgl_rational_camera<double>& camera );
- private:
+class vpgl_rational_camera_compute
+{
+public:
+  static bool
+  compute(const std::vector<vgl_point_2d<double>> & image_pts,
+          const std::vector<vgl_point_3d<double>> & ground_pts,
+          vpgl_rational_camera<double> & camera);
+
+private:
   vpgl_rational_camera_compute() = delete;
 };
 

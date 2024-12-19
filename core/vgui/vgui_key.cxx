@@ -33,7 +33,7 @@ operator<<(std::ostream & s, vgui_key k)
     return s << char(ik);
   else if (ik >= vgui_F1 && ik <= vgui_INSERT)
   {
-    static char const * names[] = {
+    static const char * names[] = {
       "F1",          "F2",        "F3",          "F4", // function keys
       "F5",          "F6",        "F7",          "F8",        "F9",           "F10",
       "F11",         "F12",       "CURSOR_LEFT", "CURSOR_UP", "CURSOR_RIGHT",

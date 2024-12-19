@@ -32,97 +32,127 @@
 //  be changed using PageUp and PageDown
 class vgui_deck_tableau : public vgui_tableau
 {
- public:
+public:
   //: Constructor - don't use this, use vgui_deck_tableau_new.
   //  Make an empty deck
-  vgui_deck_tableau() : index_(-1) {}
+  vgui_deck_tableau()
+    : index_(-1)
+  {}
 
   //: Constructor - don't use this, use vgui_deck_tableau_new.
   //  Make a deck with two children, listed top to bottom
-  vgui_deck_tableau(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1);
+  vgui_deck_tableau(const vgui_tableau_sptr & child0, const vgui_tableau_sptr & child1);
 
   //: Constructor - don't use this, use vgui_deck_tableau_new.
   //  Make a deck with three children, listed top to bottom
-  vgui_deck_tableau(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2);
+  vgui_deck_tableau(const vgui_tableau_sptr & child0,
+                    const vgui_tableau_sptr & child1,
+                    const vgui_tableau_sptr & child2);
 
   //: Add a tableau to the deck
   //  It is placed on top, and made current.
-  void add(vgui_tableau_sptr const& t) { add_child(t); }
+  void
+  add(const vgui_tableau_sptr & t)
+  {
+    add_child(t);
+  }
 
   //: Remove the tableau pointed to by P.
   //  The one below is then made current.
-  void remove(vgui_tableau_sptr const& p);
+  void
+  remove(const vgui_tableau_sptr & p);
 
   //: Return a pointer to the current tableau
-  vgui_tableau_sptr current();
+  vgui_tableau_sptr
+  current();
 
   //: Return a pointer to the tableau at a given location
-  vgui_tableau_sptr get_tableau_at(int);
+  vgui_tableau_sptr
+  get_tableau_at(int);
 
   //: Return number of child tableaux in the deck.
-  int size();
+  int
+  size();
 
   //: Say which tableau is current
-  int index() const {return index_;}
+  int
+  index() const
+  {
+    return index_;
+  }
 
   //: Make a particular tableau current.
-  void index(int);
+  void
+  index(int);
 
   //: Make the top tableau current
-  void begin();
+  void
+  begin();
 
   //: Make the next tableau down the list current
-  void next();
+  void
+  next();
 
   //: Make the next higher tableau current
-  void prev();
+  void
+  prev();
 
   //: Returns the file_name of the active child.
   //  Over-rides function in vgui_tableau.
-  virtual std::string file_name() const;
+  virtual std::string
+  file_name() const;
 
   //: Returns a nice version of the name, including info on the active child.
   //  Over-rides function in vgui_tableau.
-  virtual std::string pretty_name() const;
+  virtual std::string
+  pretty_name() const;
 
   //: Returns the type of this tableau ('vgui_deck_tableau').
   //  Over-rides function in vgui_tableau.
-  virtual std::string type_name() const;
+  virtual std::string
+  type_name() const;
 
   //: Builds a popup menu for the user to select the active child.
   //  Over-rides function in vgui_tableau.
-  virtual void get_popup(const vgui_popup_params&, vgui_menu &m);
+  virtual void
+  get_popup(const vgui_popup_params &, vgui_menu & m);
 
   //: Send info to cerr - called when user presses '?' in the rendering area.
   //  Over-rides function in vgui_tableau.
   //  This function is called by the default handle() function in vgui_tableau.
-  bool help();
+  bool
+  help();
 
   //: Uses PageUp and PageDown events - called when user presses a key.
   //  Over-rides function in vgui_tableau.
   //  This function is called by the default handle() function in vgui_tableau.
-  bool key_press(int x, int y, vgui_key key, vgui_modifier);
+  bool
+  key_press(int x, int y, vgui_key key, vgui_modifier);
 
   //: Conceptually, this is a list on which observers can put themselves.
   vgui_observable observers;
 
- protected:
+protected:
   //: Destructor - called by vgui_deck_tableau_sptr.
   virtual ~vgui_deck_tableau();
 
   //: Handle events by passing to the current child tableau.
-  virtual bool handle(const vgui_event&);
+  virtual bool
+  handle(const vgui_event &);
 
   //: Add a tableau to the deck
   //  It is placed on top, and made current.
   //  Overrides virtual base class method.
-  bool add_child(vgui_tableau_sptr const& t);
+  bool
+  add_child(const vgui_tableau_sptr & t);
 
   //: Remove the given child tableau from the deck.
-  bool remove_child(vgui_tableau_sptr const& );
+  bool
+  remove_child(const vgui_tableau_sptr &);
 
   //: Returns true if given integer could be an index to the list of children.
-  bool index_ok(int) const;
+  bool
+  index_ok(int) const;
 
   // data
   //-----
@@ -140,17 +170,23 @@ struct vgui_deck_tableau_new : public vgui_deck_tableau_sptr
   typedef vgui_deck_tableau_sptr base;
 
   //: Constructor - creates a pointer to an empty vgui_deck_tableau.
-  vgui_deck_tableau_new() : base(new vgui_deck_tableau()) {}
+  vgui_deck_tableau_new()
+    : base(new vgui_deck_tableau())
+  {}
 
   //: Constructor - creates a pointer to a vgui_deck_tableau with two children.
   //  Children are given top to bottom.
-  vgui_deck_tableau_new(vgui_tableau_sptr const& child0,vgui_tableau_sptr const& child1)
-    : base(new vgui_deck_tableau(child0, child1)) {}
+  vgui_deck_tableau_new(const vgui_tableau_sptr & child0, const vgui_tableau_sptr & child1)
+    : base(new vgui_deck_tableau(child0, child1))
+  {}
 
   //: Constructor - creates a pointer to a vgui_deck_tableau with 3 children.
   //  Children are given top to bottom.
-  vgui_deck_tableau_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2)
-    : base(new vgui_deck_tableau(child0, child1, child2)) {}
+  vgui_deck_tableau_new(const vgui_tableau_sptr & child0,
+                        const vgui_tableau_sptr & child1,
+                        const vgui_tableau_sptr & child2)
+    : base(new vgui_deck_tableau(child0, child1, child2))
+  {}
 };
 
 #endif // vgui_deck_tableau_h_

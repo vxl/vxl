@@ -13,7 +13,7 @@
 
 template <class T>
 void
-vil1_colour_space_RGB_to_YIQ(T const in[3], T out[3])
+vil1_colour_space_RGB_to_YIQ(const T in[3], T out[3])
 {
   out[0] = T(0.299) * in[0] + T(0.587) * in[1] + T(0.114) * in[2];
   out[1] = T(0.596) * in[0] - T(0.275) * in[1] - T(0.321) * in[2];
@@ -139,9 +139,9 @@ vil1_colour_space_HSV_to_RGB(T h, T s, T v, T * r, T * g, T * b)
 
 //----------------------------------------------------------------------
 
-#define inst(T)                                                                                                        \
-  template void vil1_colour_space_RGB_to_YIQ(T const[3], T[3]);                                                        \
-  template void vil1_colour_space_RGB_to_HSV(T, T, T, T *, T *, T *);                                                  \
+#define inst(T)                                                       \
+  template void vil1_colour_space_RGB_to_YIQ(T const[3], T[3]);       \
+  template void vil1_colour_space_RGB_to_HSV(T, T, T, T *, T *, T *); \
   template void vil1_colour_space_HSV_to_RGB(T, T, T, T *, T *, T *)
 
 inst(double);

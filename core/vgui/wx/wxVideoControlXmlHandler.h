@@ -9,7 +9,6 @@
 //
 
 
-
 #include <wx/xrc/xmlres.h>
 #include <vgui/wx/wxVideoControl.h>
 
@@ -21,9 +20,11 @@ class WXDLLIMPEXP_XRC wxVideoControlXmlHandler : public wxXmlResourceHandler
 
 public:
   wxVideoControlXmlHandler();
-  virtual wxObject *DoCreateResource();
-  virtual bool CanHandle(wxXmlNode *node);
+  virtual wxObject *
+  DoCreateResource();
+  virtual bool
+  CanHandle(wxXmlNode * node);
 };
 
 
-#endif  //wxVideoControlXmlHandler_h_
+#endif // wxVideoControlXmlHandler_h_

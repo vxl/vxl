@@ -18,39 +18,46 @@
 
 class vgl_h_matrix_2d_optimize_lmq : public vgl_h_matrix_2d_optimize
 {
- public:
+public:
   //: Constructor from initial homography to be optimized
-  vgl_h_matrix_2d_optimize_lmq(vgl_h_matrix_2d<double> const& initial_h);
+  vgl_h_matrix_2d_optimize_lmq(const vgl_h_matrix_2d<double> & initial_h);
 
-  int minimum_number_of_correspondences() const override { return 5; }
+  int
+  minimum_number_of_correspondences() const override
+  {
+    return 5;
+  }
 
- protected: // -- internal utilities --
-
-  //:the main routine for carrying out the optimization. (used by the others)
-  bool optimize_h(std::vector<vgl_homg_point_2d<double> > const& points1,
-                  std::vector<vgl_homg_point_2d<double> > const& points2,
-                  vgl_h_matrix_2d<double> const& h_initial,
-                  vgl_h_matrix_2d<double>& h_optimized);
+protected: // -- internal utilities --
+  //: the main routine for carrying out the optimization. (used by the others)
+  bool
+  optimize_h(const std::vector<vgl_homg_point_2d<double>> & points1,
+             const std::vector<vgl_homg_point_2d<double>> & points2,
+             const vgl_h_matrix_2d<double> & h_initial,
+             vgl_h_matrix_2d<double> & h_optimized);
 
   //: compute from matched points
 
-  bool optimize_p(std::vector<vgl_homg_point_2d<double> > const& points1,
-                  std::vector<vgl_homg_point_2d<double> > const& points2,
-                  vgl_h_matrix_2d<double>& H) override;
+  bool
+  optimize_p(const std::vector<vgl_homg_point_2d<double>> & points1,
+             const std::vector<vgl_homg_point_2d<double>> & points2,
+             vgl_h_matrix_2d<double> & H) override;
 
-  //:compute from matched lines
+  //: compute from matched lines
 
-  bool optimize_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
-                  std::vector<vgl_homg_line_2d<double> > const& lines2,
-                  vgl_h_matrix_2d<double>& H) override;
+  bool
+  optimize_l(const std::vector<vgl_homg_line_2d<double>> & lines1,
+             const std::vector<vgl_homg_line_2d<double>> & lines2,
+             vgl_h_matrix_2d<double> & H) override;
 
-  //:compute from matched points and lines
+  //: compute from matched points and lines
 
-  bool optimize_pl(std::vector<vgl_homg_point_2d<double> > const& points1,
-                   std::vector<vgl_homg_point_2d<double> > const& points2,
-                   std::vector<vgl_homg_line_2d<double> > const& lines1,
-                   std::vector<vgl_homg_line_2d<double> > const& lines2,
-                   vgl_h_matrix_2d<double>& H) override;
+  bool
+  optimize_pl(const std::vector<vgl_homg_point_2d<double>> & points1,
+              const std::vector<vgl_homg_point_2d<double>> & points2,
+              const std::vector<vgl_homg_line_2d<double>> & lines1,
+              const std::vector<vgl_homg_line_2d<double>> & lines2,
+              vgl_h_matrix_2d<double> & H) override;
 };
 
 #endif // vgl_h_matrix_2d_optimize_lmq_h_

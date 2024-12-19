@@ -38,98 +38,141 @@ template <class T>
 class vgl_h_matrix_2d
 {
   // Data Members--------------------------------------------------------------
- protected:
-  vnl_matrix_fixed<T,3,3> t12_matrix_;
+protected:
+  vnl_matrix_fixed<T, 3, 3> t12_matrix_;
 
- public:
-
+public:
   // Constructors/Initializers/Destructors-------------------------------------
 
   vgl_h_matrix_2d() = default;
- ~vgl_h_matrix_2d() = default;
+  ~vgl_h_matrix_2d() = default;
   //: Copy constructor
-  vgl_h_matrix_2d(vgl_h_matrix_2d<T> const& M) : t12_matrix_(M.get_matrix()) {}
+  vgl_h_matrix_2d(const vgl_h_matrix_2d<T> & M)
+    : t12_matrix_(M.get_matrix())
+  {}
   //: Constructor from a 3x3 matrix, and implicit cast from vnl_matrix_fixed<T,3,3>
-  vgl_h_matrix_2d(vnl_matrix_fixed<T,3,3> const& M) : t12_matrix_(M) {}
+  vgl_h_matrix_2d(const vnl_matrix_fixed<T, 3, 3> & M)
+    : t12_matrix_(M)
+  {}
   //: Construct an affine vgl_h_matrix_2d from 2x2 M and 2x1 m.
-  vgl_h_matrix_2d(vnl_matrix_fixed<T,2,2> const& M,
-                  vnl_vector_fixed<T,2> const& m);
+  vgl_h_matrix_2d(const vnl_matrix_fixed<T, 2, 2> & M, const vnl_vector_fixed<T, 2> & m);
   //: Constructor from 3x3 C-array
-  explicit vgl_h_matrix_2d(T const* M) : t12_matrix_(M) {}
+  explicit vgl_h_matrix_2d(const T * M)
+    : t12_matrix_(M)
+  {}
   //: Constructor from istream
-  explicit vgl_h_matrix_2d(std::istream& s);
+  explicit vgl_h_matrix_2d(std::istream & s);
   //: Constructor from file
-  explicit vgl_h_matrix_2d(char const* filename);
+  explicit vgl_h_matrix_2d(const char * filename);
   //: Constructor - calculate homography between two sets of 2D points (minimum 4)
-  vgl_h_matrix_2d(std::vector<vgl_homg_point_2d<T> > const& points1,
-                  std::vector<vgl_homg_point_2d<T> > const& points2);
+  vgl_h_matrix_2d(const std::vector<vgl_homg_point_2d<T>> & points1, const std::vector<vgl_homg_point_2d<T>> & points2);
 
   // Operations----------------------------------------------------------------
 
   //: Return the transformed point given by $q = {\tt H} p$
-  vgl_homg_point_2d<T> operator()(vgl_homg_point_2d<T> const& p) const;
+  vgl_homg_point_2d<T>
+  operator()(const vgl_homg_point_2d<T> & p) const;
   //: Return the transformed point given by $q = {\tt H} p$
-  vgl_homg_point_2d<T> operator*(vgl_homg_point_2d<T> const& p) const { return (*this)(p);}
+  vgl_homg_point_2d<T>
+  operator*(const vgl_homg_point_2d<T> & p) const
+  {
+    return (*this)(p);
+  }
 
-  bool operator==(vgl_h_matrix_2d<T> const& M) const { return t12_matrix_ == M.get_matrix(); }
+  bool
+  operator==(const vgl_h_matrix_2d<T> & M) const
+  {
+    return t12_matrix_ == M.get_matrix();
+  }
 
   //: Return the transformed line given by $m = {\tt H} l$
-  vgl_homg_line_2d<T> preimage(vgl_homg_line_2d<T> const& l) const;
-  vgl_homg_line_2d<T> correlation(vgl_homg_point_2d<T> const& p) const;
-  vgl_homg_point_2d<T> correlation(vgl_homg_line_2d<T> const& l) const;
+  vgl_homg_line_2d<T>
+  preimage(const vgl_homg_line_2d<T> & l) const;
+  vgl_homg_line_2d<T>
+  correlation(const vgl_homg_point_2d<T> & p) const;
+  vgl_homg_point_2d<T>
+  correlation(const vgl_homg_line_2d<T> & l) const;
 
   //: assumed to be a point conic
-  vgl_conic<T> operator() (vgl_conic<T> const& C) const;
+  vgl_conic<T>
+  operator()(const vgl_conic<T> & C) const;
 
   // these operations require taking an inverse
 
   //: Return the transformed point given by $p = {\tt H}^{-1} q$
-  vgl_homg_point_2d<T> preimage(vgl_homg_point_2d<T> const& q) const;
+  vgl_homg_point_2d<T>
+  preimage(const vgl_homg_point_2d<T> & q) const;
   //: Return the transformed line given by $m = {\tt H}^{-1} l$
-  vgl_homg_line_2d<T> operator()(vgl_homg_line_2d<T> const& l) const;
+  vgl_homg_line_2d<T>
+  operator()(const vgl_homg_line_2d<T> & l) const;
   //: Return the transformed line given by $m = {\tt H}^{-1} l$
-  vgl_homg_line_2d<T> operator*(vgl_homg_line_2d<T> const& l) const { return (*this)(l);}
+  vgl_homg_line_2d<T>
+  operator*(const vgl_homg_line_2d<T> & l) const
+  {
+    return (*this)(l);
+  }
   //: assumed to be a point conic
-  vgl_conic<T> preimage(vgl_conic<T> const& C) const;
+  vgl_conic<T>
+  preimage(const vgl_conic<T> & C) const;
 
-  //:composition (*this) * H
-  vgl_h_matrix_2d<T> operator*(vgl_h_matrix_2d<T> const& H) const
-  { return vgl_h_matrix_2d<T>(t12_matrix_ * H.t12_matrix_); }
+  //: composition (*this) * H
+  vgl_h_matrix_2d<T>
+  operator*(const vgl_h_matrix_2d<T> & H) const
+  {
+    return vgl_h_matrix_2d<T>(t12_matrix_ * H.t12_matrix_);
+  }
 
   // Data Access---------------------------------------------------------------
 
   //: Return the 3x3 homography matrix
-  vnl_matrix_fixed<T,3,3> const& get_matrix() const { return t12_matrix_; }
+  const vnl_matrix_fixed<T, 3, 3> &
+  get_matrix() const
+  {
+    return t12_matrix_;
+  }
   //: Fill M with contents of the 3x3 homography matrix
-  void get(vnl_matrix_fixed<T,3,3>* M) const;
+  void
+  get(vnl_matrix_fixed<T, 3, 3> * M) const;
 
   //: Fill M with contents of the 3x3 homography matrix
-  void get(T *M) const;
+  void
+  get(T * M) const;
   //: Return an element from the 3x3 homography matrix
-  T get(unsigned int row_index, unsigned int col_index) const;
+  T
+  get(unsigned int row_index, unsigned int col_index) const;
   //: Return the inverse homography
-  vgl_h_matrix_2d get_inverse() const;
+  vgl_h_matrix_2d
+  get_inverse() const;
 
   //: Set an element of the 3x3 homography matrix
-  vgl_h_matrix_2d& set (unsigned int row_index, unsigned int col_index, T value)
-  { t12_matrix_[row_index][col_index]=value; return *this; }
+  vgl_h_matrix_2d &
+  set(unsigned int row_index, unsigned int col_index, T value)
+  {
+    t12_matrix_[row_index][col_index] = value;
+    return *this;
+  }
 
   //: Set to 3x3 row-stored matrix
-  vgl_h_matrix_2d& set(T const* M);
+  vgl_h_matrix_2d &
+  set(const T * M);
   //: Set to given 3x3 matrix
-  vgl_h_matrix_2d& set(vnl_matrix_fixed<T,3,3> const& M);
+  vgl_h_matrix_2d &
+  set(const vnl_matrix_fixed<T, 3, 3> & M);
 
   // various affine transformations that set the corresponding parts of the matrix
 
   //: initialize the transformation to identity
-  vgl_h_matrix_2d& set_identity();
+  vgl_h_matrix_2d &
+  set_identity();
 
   //: set H[0][2] = tx and H[1][2] = ty, other elements unaltered
-  vgl_h_matrix_2d& set_translation(T tx, T ty);
+  vgl_h_matrix_2d &
+  set_translation(T tx, T ty);
 
   //: the upper 2x2 part of the matrix is replaced by a rotation matrix.
   //  rotation angle theta is in radians
-  vgl_h_matrix_2d& set_rotation(T theta);
+  vgl_h_matrix_2d &
+  set_rotation(T theta);
 
   //: compose the current transform with a uniform scaling transformation, S.
   // $S = \left[ \begin{array}{ccc}
@@ -137,7 +180,8 @@ class vgl_h_matrix_2d
   //                                0 & s & 0 \\%
   //                                0 & 0 & 1
   // \end{array}\right]$                         , Ts = S*T.
-  vgl_h_matrix_2d& set_scale(T scale);
+  vgl_h_matrix_2d &
+  set_scale(T scale);
 
   //: set the transform to a similarity mapping
   // Sim $ = \left[\begin{array}{ccc}
@@ -145,7 +189,8 @@ class vgl_h_matrix_2d
   //         \sin(\theta) &  \cos(\theta) & ty \\%
   //         0            &  0            & 1
   // \end{array}\right]$
-  vgl_h_matrix_2d& set_similarity(T s, T theta, T tx, T ty);
+  vgl_h_matrix_2d &
+  set_similarity(T s, T theta, T tx, T ty);
 
   //: compose the transform with diagonal aspect ratio transform.
   // $A = \left[ \begin{array}{ccc}
@@ -153,7 +198,8 @@ class vgl_h_matrix_2d
   //                                 0 & a & 0 \\%
   //                                 0 & 0 & 1
   // \end{array}\right]$                         , Ta = A*T.
-  vgl_h_matrix_2d& set_aspect_ratio(T aspect_ratio);
+  vgl_h_matrix_2d &
+  set_aspect_ratio(T aspect_ratio);
 
 
   //: set the transform to a general affine transform matrix
@@ -162,11 +208,15 @@ class vgl_h_matrix_2d
   //                           a10 & a11 & a12 \\%
   //                           0   & 0   & 1
   // \end{array}\right]$
-  vgl_h_matrix_2d& set_affine(vnl_matrix_fixed<T,2,3> const& M23);
+  vgl_h_matrix_2d &
+  set_affine(const vnl_matrix_fixed<T, 2, 3> & M23);
 
-  bool is_rotation() const;
-  bool is_euclidean() const;
-  bool is_identity() const;
+  bool
+  is_rotation() const;
+  bool
+  is_euclidean() const;
+  bool
+  is_identity() const;
 
   //: transformation to projective basis (canonical frame)
   // Compute the homography that takes the input set of points to the
@@ -179,39 +229,53 @@ class vgl_h_matrix_2d
   //                   0  &   1  &   0  &   1  \\%
   //                   0  &   0  &   1  &   1
   // \end{array}$
-  bool projective_basis(std::vector<vgl_homg_point_2d<T> > const& four_points);
+  bool
+  projective_basis(const std::vector<vgl_homg_point_2d<T>> & four_points);
 
   //: transformation to projective basis (canonical frame)
   // Compute the homography that takes the input set of lines to the canonical
   // frame.  The lines act as the dual projective basis for the canonical
   // coordinate system.  In the canonical frame the lines have equations:
   // x=0; y=0; w=0; x+y+w=0.  (The third line is the line at infinity.)
-  bool projective_basis(std::vector<vgl_homg_line_2d<T> > const& four_lines
-                       );
+  bool
+  projective_basis(const std::vector<vgl_homg_line_2d<T>> & four_lines);
 
   // ---------- extract components as transformations ----------
 
   //: corresponds to rotation for Euclidean transformations
-  vgl_h_matrix_2d<T> get_upper_2x2() const;
+  vgl_h_matrix_2d<T>
+  get_upper_2x2() const;
   //: corresponds to rotation for Euclidean transformations
-  vnl_matrix_fixed<T,2,2> get_upper_2x2_matrix() const;
+  vnl_matrix_fixed<T, 2, 2>
+  get_upper_2x2_matrix() const;
 
   //: corresponds to translation for affine transformations
-  vgl_homg_point_2d<T> get_translation() const;
+  vgl_homg_point_2d<T>
+  get_translation() const;
   //: corresponds to translation for affine transformations
-  vnl_vector_fixed<T,2> get_translation_vector() const;
+  vnl_vector_fixed<T, 2>
+  get_translation_vector() const;
 
   //: Read H from std::istream
-  bool read(std::istream& s);
+  bool
+  read(std::istream & s);
   //: Read H from file
-  bool read(char const* filename);
+  bool
+  read(const char * filename);
 };
 
 //: Print H on std::ostream
-template <class T> std::ostream& operator<<(std::ostream& s, vgl_h_matrix_2d<T> const& H);
+template <class T>
+std::ostream &
+operator<<(std::ostream & s, const vgl_h_matrix_2d<T> & H);
 //: Read H from std::istream
-template <class T> std::istream& operator>>(std::istream& s, vgl_h_matrix_2d<T>&       H)
-{ H.read(s); return s; }
+template <class T>
+std::istream &
+operator>>(std::istream & s, vgl_h_matrix_2d<T> & H)
+{
+  H.read(s);
+  return s;
+}
 
 #define VGL_H_MATRIX_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_2d.hxx first"
 

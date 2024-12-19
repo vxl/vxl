@@ -80,14 +80,14 @@ vgui_event::modifier_is_down(int mods) const
 
 //----------------------------------------------------------------------------
 double
-vgui_event::secs_since(vgui_event const & e) const
+vgui_event::secs_since(const vgui_event & e) const
 {
   return (this->timestamp - e.timestamp) * 1e-3;
 }
 
 //----------------------------------------------------------------------------
 long
-vgui_event::usecs_since(vgui_event const & e) const
+vgui_event::usecs_since(const vgui_event & e) const
 {
   return long(this->timestamp - e.timestamp) * 1000;
 }
@@ -96,15 +96,12 @@ vgui_event::usecs_since(vgui_event const & e) const
 static struct
 {
   vgui_event_type t;
-  char const * name;
+  const char * name;
 } fsm_event_table[] = {
 #if defined(macro)
 #  error blah
 #endif
-#define macro(e)                                                                                                       \
-  {                                                                                                                    \
-    vgui_##e, #e                                                                                                       \
-  }
+#define macro(e) { vgui_##e, #e }
   // doing it this way means we don't rely on the event types being
   // enummed in any particular order (the code had that particular
   // bug before I changed it). fsm.
@@ -127,7 +124,7 @@ operator<<(std::ostream & s, vgui_event_type t)
 
 //-----------------------------------------------------------------------------
 std::ostream &
-operator<<(std::ostream & s, vgui_event const & e)
+operator<<(std::ostream & s, const vgui_event & e)
 {
   s << "[type:" << e.type;
   if (e.key != vgui_KEY_NULL)
@@ -150,7 +147,7 @@ operator<<(std::ostream & s, vgui_event const & e)
 //  moreover, the compiler-generated one wouldn't need to be
 //  updated when the fields are changed. fsm.
 bool
-operator==(vgui_event const & a, vgui_event const & b)
+operator==(const vgui_event & a, const vgui_event & b)
 {
   return a.type == b.type && a.button == b.button && a.key == b.key && a.modifier == b.modifier && a.wx == b.wx &&
          a.wy == b.wy && a.origin == b.origin && a.timer_id == b.timer_id && a.str == b.str && a.user == b.user &&

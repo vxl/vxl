@@ -47,22 +47,23 @@ class vil1_image;
 //
 class vgui_section_buffer
 {
- public:
+public:
   //: Create a \a w by \a h buffer
   //
   // The buffer will be used to hold the GL pixels from (x,y) to
   // (x+w-1, y+w-1) from the input image. (The input image is given
   // via the apply() function).
   //
-  vgui_section_buffer( unsigned x, unsigned y,
-                       unsigned w, unsigned h,
-                       GLenum format_ = GL_NONE,
-                       GLenum type_ = GL_NONE );
+  vgui_section_buffer(unsigned x, unsigned y, unsigned w, unsigned h, GLenum format_ = GL_NONE, GLenum type_ = GL_NONE);
 
   ~vgui_section_buffer();
 
-  void set_zoom(float zoomx, float zoomy)
-    {zoomx_ = zoomx; zoomy_ = zoomy;}
+  void
+  set_zoom(float zoomx, float zoomy)
+  {
+    zoomx_ = zoomx;
+    zoomy_ = zoomy;
+  }
   //: These methods take arguments in original image coordinates and return false on failure.
   // See .cxx file for more details.
 
@@ -72,7 +73,8 @@ class vgui_section_buffer
   //
   // It will return false on failure.
   //
-  bool draw_as_image( float xlo, float ylo, float xhi, float yhi ) const;
+  bool
+  draw_as_image(float xlo, float ylo, float xhi, float yhi) const;
 
   //: Draw a the border of a section of the image.
   //
@@ -80,39 +82,51 @@ class vgui_section_buffer
   //
   // It will return false on failure.
   //
-  bool draw_as_rectangle( float xlo, float ylo, float xhi, float yhi ) const;
+  bool
+  draw_as_rectangle(float xlo, float ylo, float xhi, float yhi) const;
 
   //: Convenience method to draw the whole image.
-  bool draw_as_image() const;
+  bool
+  draw_as_image() const;
 
   //: Draw a precomputed viewport image section using view rendering.
   // Supports redrawing only visible section during overlay redraw
-  bool draw_viewport_as_image() const;
+  bool
+  draw_viewport_as_image() const;
 
   //: Convenience method to draw the whole image.
-  bool draw_as_rectangle() const;
+  bool
+  draw_as_rectangle() const;
 
   //: Grab a section from the given image.
-  void apply( vil1_image const & ,
-              vgui_range_map_params_sptr const& );
+  void
+  apply(const vil1_image &, const vgui_range_map_params_sptr &);
 
   //: Grab a section from the given resource.
-  void apply( vil_image_resource_sptr const&,
-              vgui_range_map_params_sptr const& );
+  void
+  apply(const vil_image_resource_sptr &, const vgui_range_map_params_sptr &);
 
-  unsigned width () const { return w_; }
-  unsigned height() const { return h_; }
+  unsigned
+  width() const
+  {
+    return w_;
+  }
+  unsigned
+  height() const
+  {
+    return h_;
+  }
 
- private:
+private:
   // fsm: I want these to be GLenums. Please don't make them ints.
   GLenum format_;
   GLenum type_;
 
   // These fields describe where in the image the section comes from,
   // how big it is and its resolution.
-  unsigned x_, y_;          // starting position in original image.
-  unsigned w_, h_;          // no of columns and rows (in the section).
-  float zoomx_, zoomy_;     // zoom factor when rendering
+  unsigned x_, y_;      // starting position in original image.
+  unsigned w_, h_;      // no of columns and rows (in the section).
+  float zoomx_, zoomy_; // zoom factor when rendering
   // actual width and height allocated.
   // The actual buffer was bigger than the requested one in the old
   // code when images could be rendered as a texture. It's here in
@@ -120,7 +134,7 @@ class vgui_section_buffer
   unsigned allocw_, alloch_;
 
   //: Pointer to pixel buffer, as given to glDrawPixels() or glTexImage2D().
-  void* buffer_;
+  void * buffer_;
 
   //: Did the last apply() work?
   bool buffer_ok_;

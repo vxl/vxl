@@ -32,7 +32,7 @@ vgui_tview_tableau::type_name() const
 }
 
 
-vgui_tview_tableau::vgui_tview_tableau(vgui_tableau_sptr const & t)
+vgui_tview_tableau::vgui_tview_tableau(const vgui_tableau_sptr & t)
   : vgui_wrapper_tableau(t)
   , spacing(10)
   , icon_height(2)
@@ -107,7 +107,7 @@ vgui_tview_tableau::draw_tview_icon(float x, float y)
 
 
 void
-vgui_tview_tableau::draw_icons(vgui_tableau_sptr const & parent, float x, float y)
+vgui_tview_tableau::draw_icons(const vgui_tableau_sptr & parent, float x, float y)
 {
   std::vector<vgui_tableau_sptr> children;
   parent->get_children(&children);
@@ -224,7 +224,7 @@ vgui_tview_tableau::draw_icons(vgui_tableau_sptr const & parent, float x, float 
 
 void
 vgui_tview_tableau::add_icons(std::vector<vgui_tview_tableau::icon> * icons,
-                              vgui_tableau_sptr const & parent,
+                              const vgui_tableau_sptr & parent,
                               float x,
                               float y)
 {
@@ -258,7 +258,7 @@ vgui_tview_tableau::add_icons(std::vector<vgui_tview_tableau::icon> * icons,
 }
 
 vgui_tableau_sptr
-vgui_tview_tableau::find_closest_icon(std::vector<vgui_tview_tableau::icon> const & icons, float ix, float iy)
+vgui_tview_tableau::find_closest_icon(const std::vector<vgui_tview_tableau::icon> & icons, float ix, float iy)
 {
 #ifdef DEBUG
   std::cerr << "vgui_tview_tableau::find_closest_icon() number of icons = " << icons.size() << '\n';

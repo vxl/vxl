@@ -17,19 +17,21 @@
 #include <vcl_compiler.h>
 
 template <class T>
-double vgl_vector_3d<T>::length() const
+double
+vgl_vector_3d<T>::length() const
 {
-  return std::sqrt( 0.0+sqr_length() );
+  return std::sqrt(0.0 + sqr_length());
 }
 
-template<class T>
-double angle(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b)
+template <class T>
+double
+angle(const vgl_vector_3d<T> & a, const vgl_vector_3d<T> & b)
 {
-  double ca = cos_angle(a,b);
+  double ca = cos_angle(a, b);
   // Deal with numerical errors giving values slightly outside range.
-  if (ca>=-1.0)
+  if (ca >= -1.0)
   {
-    if (ca<=1.0)
+    if (ca <= 1.0)
       return std::acos(ca);
     else
       return 0;
@@ -39,72 +41,79 @@ double angle(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b)
 }
 
 template <class T>
-bool orthogonal(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b, double eps)
+bool
+orthogonal(const vgl_vector_3d<T> & a, const vgl_vector_3d<T> & b, double eps)
 {
-  T dot = dot_product(a,b); // should be zero
-  if (eps <= 0 || dot == T(0)) return dot == T(0);
+  T dot = dot_product(a, b); // should be zero
+  if (eps <= 0 || dot == T(0))
+    return dot == T(0);
   eps *= eps * a.sqr_length() * b.sqr_length();
   dot *= dot;
   return dot < eps;
 }
 
 template <class T>
-bool parallel(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b, double eps)
+bool
+parallel(const vgl_vector_3d<T> & a, const vgl_vector_3d<T> & b, double eps)
 {
-  double cross = cross_product(a,b).sqr_length(); // should be zero
-  if (eps <= 0 || cross == 0.0) return cross == 0.0;
+  double cross = cross_product(a, b).sqr_length(); // should be zero
+  if (eps <= 0 || cross == 0.0)
+    return cross == 0.0;
   eps *= eps * a.sqr_length() * b.sqr_length();
   return cross < eps;
 }
 
 template <class T>
-vgl_vector_3d<T> orthogonal_vectors(vgl_vector_3d<T> const& a, double s)
+vgl_vector_3d<T>
+orthogonal_vectors(const vgl_vector_3d<T> & a, double s)
 {
-  assert(a.length()>0.0);
+  assert(a.length() > 0.0);
 
   // enforce parameter range
-  if (s<0.0) s=0.0;
-  if (s>1.0) s = 1.0;
+  if (s < 0.0)
+    s = 0.0;
+  if (s > 1.0)
+    s = 1.0;
   double tol = static_cast<double>(vgl_tolerance<T>::position);
   double nx = static_cast<double>(a.x_);
   double ny = static_cast<double>(a.y_);
   double nz = static_cast<double>(a.z_);
-  double two_pi = 2*std::acos(-1.0);
-  double co = std::cos(two_pi*s);
-  double si = std::sin(two_pi*s);
+  double two_pi = 2 * std::acos(-1.0);
+  double co = std::cos(two_pi * s);
+  double si = std::sin(two_pi * s);
 
   double mnz = std::fabs(nz);
-  if (mnz>tol)  // General case
+  if (mnz > tol) // General case
   {
-    double rx = nx/nz;
-    double ry = ny/nz;
-    double q = co*rx +si*ry;
-    double a = 1.0/std::sqrt(1+q*q);
-    T vx = static_cast<T>(a*co);
-    T vy = static_cast<T>(a*si);
-    T vz = -static_cast<T>(rx*vx + ry*vy);
+    double rx = nx / nz;
+    double ry = ny / nz;
+    double q = co * rx + si * ry;
+    double a = 1.0 / std::sqrt(1 + q * q);
+    T vx = static_cast<T>(a * co);
+    T vy = static_cast<T>(a * si);
+    T vz = -static_cast<T>(rx * vx + ry * vy);
     return vgl_vector_3d<T>(vx, vy, vz);
   }
-  else  // Special cases, nz ~ 0
+  else // Special cases, nz ~ 0
   {
     double mny = std::fabs(ny);
-    if (mny>tol)
+    if (mny > tol)
     {
-      double r = nx/ny;
-      double a = 1/std::sqrt(1+co*co*r*r);
-      T vx = static_cast<T>(a*co);
-      T vz = static_cast<T>(a*si);
-      T vy = -static_cast<T>(a*co*r);
+      double r = nx / ny;
+      double a = 1 / std::sqrt(1 + co * co * r * r);
+      T vx = static_cast<T>(a * co);
+      T vz = static_cast<T>(a * si);
+      T vy = -static_cast<T>(a * co * r);
       return vgl_vector_3d<T>(vx, vy, vz);
     }
     else
     {
       // assume mnx>tol provided that input vector was not null
-      double r = ny/nx;
-      double a = 1/std::sqrt(1+co*co*r*r);
-      T vy = static_cast<T>(a*co);
-      T vz = static_cast<T>(a*si);
-      T vx = -static_cast<T>(a*co*r);
+      double r = ny / nx;
+      double a = 1 / std::sqrt(1 + co * co * r * r);
+      T vy = static_cast<T>(a * co);
+      T vz = static_cast<T>(a * si);
+      T vx = -static_cast<T>(a * co * r);
       return vgl_vector_3d<T>(vx, vy, vz);
     }
   }
@@ -112,9 +121,10 @@ vgl_vector_3d<T> orthogonal_vectors(vgl_vector_3d<T> const& a, double s)
 
 //: Write "<vgl_vector_3d x,y,z> " to stream
 template <class T>
-std::ostream&  operator<<(std::ostream& s, vgl_vector_3d<T> const& p)
+std::ostream &
+operator<<(std::ostream & s, const vgl_vector_3d<T> & p)
 {
-  return s << "<vgl_vector_3d "<< p.x() << ',' << p.y() << ',' << p.z() << "> ";
+  return s << "<vgl_vector_3d " << p.x() << ',' << p.y() << ',' << p.z() << "> ";
 }
 
 //: Read from stream, possibly with formatting
@@ -123,59 +133,89 @@ std::ostream&  operator<<(std::ostream& s, vgl_vector_3d<T> const& p)
 //  or reads three numbers in parenthesized form "(123, 321, 567)"
 // \relatesalso vgl_vector_3d
 template <class T>
-std::istream& vgl_vector_3d<T>::read(std::istream& is)
+std::istream &
+vgl_vector_3d<T>::read(std::istream & is)
 {
-  if (! is.good()) return is; // (TODO: should throw an exception)
+  if (!is.good())
+    return is; // (TODO: should throw an exception)
   bool paren = false;
   T tx, ty, tz;
   is >> std::ws; // jump over any leading whitespace
-  if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
+  if (is.eof())
+    return is; // nothing to be set because of EOF (TODO: should throw an exception)
   char c = is.peek();
-  if (c == '(') { is.ignore(); paren=true; }
-  if(paren){
+  if (c == '(')
+  {
+    is.ignore();
+    paren = true;
+  }
+  if (paren)
+  {
     is >> std::ws >> tx >> std::ws;
-    if (is.eof()) return is;
-    if (is.peek() == ',') is.ignore();
+    if (is.eof())
+      return is;
+    if (is.peek() == ',')
+      is.ignore();
     is >> std::ws >> ty >> std::ws;
-    if (is.eof()) return is;
-    if (is.peek() == ',') is.ignore();
+    if (is.eof())
+      return is;
+    if (is.peek() == ',')
+      is.ignore();
     is >> std::ws >> tz >> std::ws;
-    if (is.eof()) return is;
-    if (is.peek() == ')') is.ignore();
-    else return is; // closing parenthesis is missing (TODO: throw an exception)
-  }else if( c == '<'){
+    if (is.eof())
+      return is;
+    if (is.peek() == ')')
+      is.ignore();
+    else
+      return is; // closing parenthesis is missing (TODO: throw an exception)
+  }
+  else if (c == '<')
+  {
     std::string temp;
     is >> temp >> std::ws; // read <vgl_vector_3d
-    is >> tx >>  std::ws;
+    is >> tx >> std::ws;
     c = is.peek();
-    if(c != ','){
+    if (c != ',')
+    {
       std::cout << "Invalid syntax: >> vgl_vector_3d" << std::endl;
       set(0.0, 0.0, 0.0);
       return is;
-    }else is.ignore();
+    }
+    else
+      is.ignore();
     is >> ty >> std::ws;
     c = is.peek();
-    if(c != ','){
+    if (c != ',')
+    {
       std::cout << "Invalid syntax: >> vgl_vector_3d" << std::endl;
       set(0.0, 0.0, 0.0);
       return is;
-    }else is.ignore();
+    }
+    else
+      is.ignore();
     is >> tz >> std::ws;
-    if(is.peek() != '>'){
+    if (is.peek() != '>')
+    {
       std::cout << "Invalid syntax: >> vgl_vector_3d" << std::endl;
-      set(0.0, 0.0,0.0);
+      set(0.0, 0.0, 0.0);
       return is;
-    }else is.ignore();
-  }else{
-          is >> tx >> std::ws;
-        c = is.peek();
-        if(c == ',') is.ignore();
-        is >> std::ws >> ty >> std::ws;
-        c = is.peek();
-        if(c == ',') is.ignore();
+    }
+    else
+      is.ignore();
+  }
+  else
+  {
+    is >> tx >> std::ws;
+    c = is.peek();
+    if (c == ',')
+      is.ignore();
+    is >> std::ws >> ty >> std::ws;
+    c = is.peek();
+    if (c == ',')
+      is.ignore();
     is >> std::ws >> tz >> std::ws;
   }
-  set(tx,ty,tz);
+  set(tx, ty, tz);
   return is;
 }
 
@@ -185,37 +225,38 @@ std::istream& vgl_vector_3d<T>::read(std::istream& is)
 //  or reads three numbers in parenthesized form "(123, 321, 567)"
 // \relatesalso vgl_vector_3d
 template <class T>
-std::istream&  operator>>(std::istream& is, vgl_vector_3d<T>& p)
+std::istream &
+operator>>(std::istream & is, vgl_vector_3d<T> & p)
 {
   return p.read(is);
 }
 
 #undef VGL_VECTOR_3D_INSTANTIATE
-#define VGL_VECTOR_3D_INSTANTIATE(T) \
-template class vgl_vector_3d<T >;\
-/*template vgl_vector_3d<T >  operator+         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */\
-/*template vgl_vector_3d<T >  operator-         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */\
-/*template vgl_vector_3d<T >& operator+=        (vgl_vector_3d<T >&, vgl_vector_3d<T > const&); */\
-/*template vgl_vector_3d<T >& operator-=        (vgl_vector_3d<T >&, vgl_vector_3d<T > const&); */\
-/*template vgl_vector_3d<T >  operator+         (vgl_vector_3d<T > const&); */\
-/*template vgl_vector_3d<T >  operator-         (vgl_vector_3d<T > const&); */\
-/*template vgl_vector_3d<T >  operator*         (double, vgl_vector_3d<T > const&); */\
-/*template vgl_vector_3d<T >  operator*         (vgl_vector_3d<T > const&, double); */\
-/*template vgl_vector_3d<T >  operator/         (vgl_vector_3d<T > const&, double); */\
-/*template vgl_vector_3d<T >& operator*=        (vgl_vector_3d<T >&, double); */\
-/*template vgl_vector_3d<T >& operator/=        (vgl_vector_3d<T >&, double); */\
-/*template T                  dot_product       (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */\
-/*template T                  inner_product     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */\
-/*template vgl_vector_3d<T >  cross_product     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */\
-/*template double             cos_angle         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */\
-template               double             angle             (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&);\
-template               bool               orthogonal        (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&, double);\
-template               bool               parallel          (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&, double);\
-template               vgl_vector_3d<T >  orthogonal_vectors(vgl_vector_3d<T > const&, double);\
-/*template double             operator/         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */\
-/*template vgl_vector_3d<T >& normalize         (vgl_vector_3d<T >&); */\
-/*template vgl_vector_3d<T >  normalized        (vgl_vector_3d<T > const&); */\
-template               std::ostream&       operator<<        (std::ostream&, vgl_vector_3d<T >const&);\
-template               std::istream&       operator>>        (std::istream&, vgl_vector_3d<T >&)
+#define VGL_VECTOR_3D_INSTANTIATE(T)                                                                       \
+  template class vgl_vector_3d<T>;                                                                         \
+  /*template vgl_vector_3d<T >  operator+         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */ \
+  /*template vgl_vector_3d<T >  operator-         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */ \
+  /*template vgl_vector_3d<T >& operator+=        (vgl_vector_3d<T >&, vgl_vector_3d<T > const&); */       \
+  /*template vgl_vector_3d<T >& operator-=        (vgl_vector_3d<T >&, vgl_vector_3d<T > const&); */       \
+  /*template vgl_vector_3d<T >  operator+         (vgl_vector_3d<T > const&); */                           \
+  /*template vgl_vector_3d<T >  operator-         (vgl_vector_3d<T > const&); */                           \
+  /*template vgl_vector_3d<T >  operator*         (double, vgl_vector_3d<T > const&); */                   \
+  /*template vgl_vector_3d<T >  operator*         (vgl_vector_3d<T > const&, double); */                   \
+  /*template vgl_vector_3d<T >  operator/         (vgl_vector_3d<T > const&, double); */                   \
+  /*template vgl_vector_3d<T >& operator*=        (vgl_vector_3d<T >&, double); */                         \
+  /*template vgl_vector_3d<T >& operator/=        (vgl_vector_3d<T >&, double); */                         \
+  /*template T                  dot_product       (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */ \
+  /*template T                  inner_product     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */ \
+  /*template vgl_vector_3d<T >  cross_product     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */ \
+  /*template double             cos_angle         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */ \
+  template double angle(vgl_vector_3d<T> const &, vgl_vector_3d<T> const &);                               \
+  template bool orthogonal(vgl_vector_3d<T> const &, vgl_vector_3d<T> const &, double);                    \
+  template bool parallel(vgl_vector_3d<T> const &, vgl_vector_3d<T> const &, double);                      \
+  template vgl_vector_3d<T> orthogonal_vectors(vgl_vector_3d<T> const &, double);                          \
+  /*template double             operator/         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */ \
+  /*template vgl_vector_3d<T >& normalize         (vgl_vector_3d<T >&); */                                 \
+  /*template vgl_vector_3d<T >  normalized        (vgl_vector_3d<T > const&); */                           \
+  template std::ostream & operator<<(std::ostream &, vgl_vector_3d<T> const &);                            \
+  template std::istream & operator>>(std::istream &, vgl_vector_3d<T> &)
 
 #endif // vgl_vector_3d_hxx_

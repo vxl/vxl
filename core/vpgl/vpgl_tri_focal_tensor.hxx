@@ -29,7 +29,7 @@ template <class Type>
 void
 vpgl_tri_focal_tensor<Type>::clear_tensor()
 {
-  T_.resize(3,3,3);
+  T_.resize(3, 3, 3);
   T_.fill(Type(0));
   for (size_t i = 0; i < 3; ++i)
     T_[i][i][i] = Type(1);
@@ -88,8 +88,7 @@ vpgl_tri_focal_tensor<Type>::normalize()
   {
     std::ostringstream buffer;
     buffer << "vpgl_tri_focal_tensor::normalize - "
-           << "cannot normalize, Frobenius norm too low - "
-           << s << " < " << ptol;
+           << "cannot normalize, Frobenius norm too low - " << s << " < " << ptol;
     throw std::runtime_error(buffer.str());
   }
   for (size_t i = 0; i < 3; ++i)
@@ -284,9 +283,9 @@ vpgl_tri_focal_tensor<Type>::dot3t(const vnl_vector_fixed<Type, 3> & v) const
 //: Compute ${\tt M}_{rs} = x_i(x'_j epsilon_{jpr}) (x''_k epsilon+{kqs})T_{ipq)$.
 template <class Type>
 vnl_matrix_fixed<Type, 3, 3>
-vpgl_tri_focal_tensor<Type>::point_constraint_3x3(vgl_homg_point_2d<Type> const & point1,
-                                                  vgl_homg_point_2d<Type> const & point2,
-                                                  vgl_homg_point_2d<Type> const & point3) const
+vpgl_tri_focal_tensor<Type>::point_constraint_3x3(const vgl_homg_point_2d<Type> & point1,
+                                                  const vgl_homg_point_2d<Type> & point2,
+                                                  const vgl_homg_point_2d<Type> & point3) const
 {
   Type z = Type(0);
   vnl_vector_fixed<Type, 3> x(z), xp(z), xpp(z);
@@ -327,9 +326,9 @@ vpgl_tri_focal_tensor<Type>::point_constraint_3x3(vgl_homg_point_2d<Type> const 
 
 template <class Type>
 Type
-vpgl_tri_focal_tensor<Type>::point_constraint(vgl_homg_point_2d<Type> const & point1,
-                                              vgl_homg_point_2d<Type> const & point2,
-                                              vgl_homg_point_2d<Type> const & point3) const
+vpgl_tri_focal_tensor<Type>::point_constraint(const vgl_homg_point_2d<Type> & point1,
+                                              const vgl_homg_point_2d<Type> & point2,
+                                              const vgl_homg_point_2d<Type> & point3) const
 {
   Type z = Type(0);
   vnl_vector_fixed<Type, 3> m(z), mp(z), mpp(z);
@@ -363,9 +362,9 @@ vpgl_tri_focal_tensor<Type>::point_constraint(vgl_homg_point_2d<Type> const & po
 
 template <class Type>
 vnl_vector_fixed<Type, 3>
-vpgl_tri_focal_tensor<Type>::line_constraint_3(vgl_homg_line_2d<Type> const & line1,
-                                               vgl_homg_line_2d<Type> const & line2,
-                                               vgl_homg_line_2d<Type> const & line3) const
+vpgl_tri_focal_tensor<Type>::line_constraint_3(const vgl_homg_line_2d<Type> & line1,
+                                               const vgl_homg_line_2d<Type> & line2,
+                                               const vgl_homg_line_2d<Type> & line3) const
 {
   Type z = Type(0);
   vnl_vector_fixed<Type, 3> l(z), lp(z), lpp(z);
@@ -400,7 +399,7 @@ vpgl_tri_focal_tensor<Type>::line_constraint_3(vgl_homg_line_2d<Type> const & li
 
 template <class Type>
 vgl_h_matrix_2d<Type>
-vpgl_tri_focal_tensor<Type>::hmatrix_13(vgl_homg_line_2d<Type> const & line2) const
+vpgl_tri_focal_tensor<Type>::hmatrix_13(const vgl_homg_line_2d<Type> & line2) const
 {
   vnl_vector_fixed<Type, 3> l2(line2.a(), line2.b(), line2.c());
   return vgl_h_matrix_2d<Type>(dot2t(l2));
@@ -408,7 +407,7 @@ vpgl_tri_focal_tensor<Type>::hmatrix_13(vgl_homg_line_2d<Type> const & line2) co
 
 template <class Type>
 vgl_h_matrix_2d<Type>
-vpgl_tri_focal_tensor<Type>::hmatrix_12(vgl_homg_line_2d<Type> const & line3) const
+vpgl_tri_focal_tensor<Type>::hmatrix_12(const vgl_homg_line_2d<Type> & line3) const
 {
   vnl_vector_fixed<Type, 3> l3(line3.a(), line3.b(), line3.c());
   return vgl_h_matrix_2d<Type>(dot3t(l3)); // do3->dot3t from oxl/mvl/TriTensor
@@ -570,8 +569,8 @@ vpgl_tri_focal_tensor<Type>::premultiply3(const vnl_matrix<Type> & M) const
 
 template <class Type>
 vgl_homg_line_2d<Type>
-vpgl_tri_focal_tensor<Type>::image1_transfer(vgl_homg_line_2d<Type> const & line2,
-                                             vgl_homg_line_2d<Type> const & line3) const
+vpgl_tri_focal_tensor<Type>::image1_transfer(const vgl_homg_line_2d<Type> & line2,
+                                             const vgl_homg_line_2d<Type> & line3) const
 {
   vnl_vector_fixed<Type, 3> l1(0.0, 0.0, 0.0);
   vnl_vector_fixed<Type, 3> l2(line2.a(), line2.b(), line2.c());
@@ -587,8 +586,8 @@ vpgl_tri_focal_tensor<Type>::image1_transfer(vgl_homg_line_2d<Type> const & line
 
 template <class Type>
 vgl_homg_line_2d<Type>
-vpgl_tri_focal_tensor<Type>::image2_transfer(vgl_homg_line_2d<Type> const & line1,
-                                             vgl_homg_line_2d<Type> const & line3) const
+vpgl_tri_focal_tensor<Type>::image2_transfer(const vgl_homg_line_2d<Type> & line1,
+                                             const vgl_homg_line_2d<Type> & line3) const
 {
   vnl_vector_fixed<Type, 3> l1(line1.a(), line1.b(), line1.c());
   vnl_vector_fixed<Type, 3> l3(line3.a(), line3.b(), line3.c());
@@ -598,8 +597,8 @@ vpgl_tri_focal_tensor<Type>::image2_transfer(vgl_homg_line_2d<Type> const & line
 
 template <class Type>
 vgl_homg_line_2d<Type>
-vpgl_tri_focal_tensor<Type>::image3_transfer(vgl_homg_line_2d<Type> const & line1,
-                                             vgl_homg_line_2d<Type> const & line2) const
+vpgl_tri_focal_tensor<Type>::image3_transfer(const vgl_homg_line_2d<Type> & line1,
+                                             const vgl_homg_line_2d<Type> & line2) const
 {
   vnl_vector_fixed<Type, 3> l1(line1.a(), line1.b(), line1.c());
   vnl_vector_fixed<Type, 3> l2(line2.a(), line2.b(), line2.c());
@@ -609,8 +608,8 @@ vpgl_tri_focal_tensor<Type>::image3_transfer(vgl_homg_line_2d<Type> const & line
 
 template <class Type>
 void
-vpgl_tri_focal_tensor<Type>::get_constraint_lines_image1(vgl_homg_point_2d<Type> const & p2,
-                                                         vgl_homg_point_2d<Type> const & p3,
+vpgl_tri_focal_tensor<Type>::get_constraint_lines_image1(const vgl_homg_point_2d<Type> & p2,
+                                                         const vgl_homg_point_2d<Type> & p3,
                                                          std::vector<vgl_homg_line_2d<Type>> & lines) const
 {
   // use the same notation as the output of tr_hartley_equation.
@@ -628,14 +627,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image1(vgl_homg_point_2d<Type>
   /* 0 */
 
   {
-    Type lx = x2 * y3 * T_(0, 1, 0) - y2 * y3 * T_(0, 0, 0)
-            - x2 * x3 * T_(0, 1, 1) + y2 * x3 * T_(0, 0, 1);
+    Type lx = x2 * y3 * T_(0, 1, 0) - y2 * y3 * T_(0, 0, 0) - x2 * x3 * T_(0, 1, 1) + y2 * x3 * T_(0, 0, 1);
 
-    Type ly = x2 * y3 * T_(1, 1, 0) - y2 * y3 * T_(1, 0, 0)
-            - x2 * x3 * T_(1, 1, 1) + y2 * x3 * T_(1, 0, 1);
+    Type ly = x2 * y3 * T_(1, 1, 0) - y2 * y3 * T_(1, 0, 0) - x2 * x3 * T_(1, 1, 1) + y2 * x3 * T_(1, 0, 1);
 
-    Type lz = x2 * y3 * T_(2, 1, 0) - y2 * y3 * T_(2, 0, 0)
-            - x2 * x3 * T_(2, 1, 1) + y2 * x3 * T_(2, 0, 1);
+    Type lz = x2 * y3 * T_(2, 1, 0) - y2 * y3 * T_(2, 0, 0) - x2 * x3 * T_(2, 1, 1) + y2 * x3 * T_(2, 0, 1);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -643,14 +639,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image1(vgl_homg_point_2d<Type>
 
   /* 1 */
   {
-    Type lx = x2 * z3 * T_(0, 1, 0) - y2 * z3 * T_(0, 0, 0)
-            - x2 * x3 * T_(0, 1, 2) + y2 * x3 * T_(0, 0, 2);
+    Type lx = x2 * z3 * T_(0, 1, 0) - y2 * z3 * T_(0, 0, 0) - x2 * x3 * T_(0, 1, 2) + y2 * x3 * T_(0, 0, 2);
 
-    Type ly = x2 * z3 * T_(1, 1, 0) - y2 * z3 * T_(1, 0, 0)
-            - x2 * x3 * T_(1, 1, 2) + y2 * x3 * T_(1, 0, 2);
+    Type ly = x2 * z3 * T_(1, 1, 0) - y2 * z3 * T_(1, 0, 0) - x2 * x3 * T_(1, 1, 2) + y2 * x3 * T_(1, 0, 2);
 
-    Type lz = x2 * z3 * T_(2, 1, 0) - y2 * z3 * T_(2, 0, 0)
-            - x2 * x3 * T_(2, 1, 2) + y2 * x3 * T_(2, 0, 2);
+    Type lz = x2 * z3 * T_(2, 1, 0) - y2 * z3 * T_(2, 0, 0) - x2 * x3 * T_(2, 1, 2) + y2 * x3 * T_(2, 0, 2);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -658,14 +651,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image1(vgl_homg_point_2d<Type>
 
   /* 2 */
   {
-    Type lx = x2 * z3 * T_(0, 1, 1) - y2 * z3 * T_(0, 0, 1)
-            - x2 * y3 * T_(0, 1, 2) + y2 * y3 * T_(0, 0, 2);
+    Type lx = x2 * z3 * T_(0, 1, 1) - y2 * z3 * T_(0, 0, 1) - x2 * y3 * T_(0, 1, 2) + y2 * y3 * T_(0, 0, 2);
 
-    Type ly = x2 * z3 * T_(1, 1, 1) - y2 * z3 * T_(1, 0, 1)
-            - x2 * y3 * T_(1, 1, 2) + y2 * y3 * T_(1, 0, 2);
+    Type ly = x2 * z3 * T_(1, 1, 1) - y2 * z3 * T_(1, 0, 1) - x2 * y3 * T_(1, 1, 2) + y2 * y3 * T_(1, 0, 2);
 
-    Type lz = x2 * z3 * T_(2, 1, 1) - y2 * z3 * T_(2, 0, 1)
-            - x2 * y3 * T_(2, 1, 2) + y2 * y3 * T_(2, 0, 2);
+    Type lz = x2 * z3 * T_(2, 1, 1) - y2 * z3 * T_(2, 0, 1) - x2 * y3 * T_(2, 1, 2) + y2 * y3 * T_(2, 0, 2);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -673,14 +663,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image1(vgl_homg_point_2d<Type>
 
   /* 3 */
   {
-    Type lx = x2 * y3 * T_(0, 2, 0) - z2 * y3 * T_(0, 0, 0)
-            - x2 * x3 * T_(0, 2, 1) + z2 * x3 * T_(0, 0, 1);
+    Type lx = x2 * y3 * T_(0, 2, 0) - z2 * y3 * T_(0, 0, 0) - x2 * x3 * T_(0, 2, 1) + z2 * x3 * T_(0, 0, 1);
 
-    Type ly = x2 * y3 * T_(1, 2, 0) - z2 * y3 * T_(1, 0, 0)
-            - x2 * x3 * T_(1, 2, 1) + z2 * x3 * T_(1, 0, 1);
+    Type ly = x2 * y3 * T_(1, 2, 0) - z2 * y3 * T_(1, 0, 0) - x2 * x3 * T_(1, 2, 1) + z2 * x3 * T_(1, 0, 1);
 
-    Type lz = x2 * y3 * T_(2, 2, 0) - z2 * y3 * T_(2, 0, 0)
-            - x2 * x3 * T_(2, 2, 1) + z2 * x3 * T_(2, 0, 1);
+    Type lz = x2 * y3 * T_(2, 2, 0) - z2 * y3 * T_(2, 0, 0) - x2 * x3 * T_(2, 2, 1) + z2 * x3 * T_(2, 0, 1);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -688,14 +675,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image1(vgl_homg_point_2d<Type>
 
   /* 4 */
   {
-    Type lx = x2 * z3 * T_(0, 2, 0) - z2 * z3 * T_(0, 0, 0)
-            - x2 * x3 * T_(0, 2, 2) + z2 * x3 * T_(0, 0, 2);
+    Type lx = x2 * z3 * T_(0, 2, 0) - z2 * z3 * T_(0, 0, 0) - x2 * x3 * T_(0, 2, 2) + z2 * x3 * T_(0, 0, 2);
 
-    Type ly = x2 * z3 * T_(1, 2, 0) - z2 * z3 * T_(1, 0, 0)
-            - x2 * x3 * T_(1, 2, 2) + z2 * x3 * T_(1, 0, 2);
+    Type ly = x2 * z3 * T_(1, 2, 0) - z2 * z3 * T_(1, 0, 0) - x2 * x3 * T_(1, 2, 2) + z2 * x3 * T_(1, 0, 2);
 
-    Type lz = x2 * z3 * T_(2, 2, 0) - z2 * z3 * T_(2, 0, 0)
-            - x2 * x3 * T_(2, 2, 2) + z2 * x3 * T_(2, 0, 2);
+    Type lz = x2 * z3 * T_(2, 2, 0) - z2 * z3 * T_(2, 0, 0) - x2 * x3 * T_(2, 2, 2) + z2 * x3 * T_(2, 0, 2);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -703,14 +687,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image1(vgl_homg_point_2d<Type>
 
   /* 5 */
   {
-    Type lx = x2 * z3 * T_(0, 2, 1) - z2 * z3 * T_(0, 0, 1)
-            - x2 * y3 * T_(0, 2, 2) + z2 * y3 * T_(0, 0, 2);
+    Type lx = x2 * z3 * T_(0, 2, 1) - z2 * z3 * T_(0, 0, 1) - x2 * y3 * T_(0, 2, 2) + z2 * y3 * T_(0, 0, 2);
 
-    Type ly = x2 * z3 * T_(1, 2, 1) - z2 * z3 * T_(1, 0, 1)
-            - x2 * y3 * T_(1, 2, 2) + z2 * y3 * T_(1, 0, 2);
+    Type ly = x2 * z3 * T_(1, 2, 1) - z2 * z3 * T_(1, 0, 1) - x2 * y3 * T_(1, 2, 2) + z2 * y3 * T_(1, 0, 2);
 
-    Type lz = x2 * z3 * T_(2, 2, 1) - z2 * z3 * T_(2, 0, 1)
-            - x2 * y3 * T_(2, 2, 2) + z2 * y3 * T_(2, 0, 2);
+    Type lz = x2 * z3 * T_(2, 2, 1) - z2 * z3 * T_(2, 0, 1) - x2 * y3 * T_(2, 2, 2) + z2 * y3 * T_(2, 0, 2);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -718,14 +699,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image1(vgl_homg_point_2d<Type>
 
   /* 6 */
   {
-    Type lx = y2 * y3 * T_(0, 2, 0) - z2 * y3 * T_(0, 1, 0)
-            - y2 * x3 * T_(0, 2, 1) + z2 * x3 * T_(0, 1, 1);
+    Type lx = y2 * y3 * T_(0, 2, 0) - z2 * y3 * T_(0, 1, 0) - y2 * x3 * T_(0, 2, 1) + z2 * x3 * T_(0, 1, 1);
 
-    Type ly = y2 * y3 * T_(1, 2, 0) - z2 * y3 * T_(1, 1, 0)
-            - y2 * x3 * T_(1, 2, 1) + z2 * x3 * T_(1, 1, 1);
+    Type ly = y2 * y3 * T_(1, 2, 0) - z2 * y3 * T_(1, 1, 0) - y2 * x3 * T_(1, 2, 1) + z2 * x3 * T_(1, 1, 1);
 
-    Type lz = y2 * y3 * T_(2, 2, 0) - z2 * y3 * T_(2, 1, 0)
-            - y2 * x3 * T_(2, 2, 1) + z2 * x3 * T_(2, 1, 1);
+    Type lz = y2 * y3 * T_(2, 2, 0) - z2 * y3 * T_(2, 1, 0) - y2 * x3 * T_(2, 2, 1) + z2 * x3 * T_(2, 1, 1);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -733,14 +711,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image1(vgl_homg_point_2d<Type>
 
   /* 7 */
   {
-    Type lx = y2 * z3 * T_(0, 2, 0) - z2 * z3 * T_(0, 1, 0)
-            - y2 * x3 * T_(0, 2, 2) + z2 * x3 * T_(0, 1, 2);
+    Type lx = y2 * z3 * T_(0, 2, 0) - z2 * z3 * T_(0, 1, 0) - y2 * x3 * T_(0, 2, 2) + z2 * x3 * T_(0, 1, 2);
 
-    Type ly = y2 * z3 * T_(1, 2, 0) - z2 * z3 * T_(1, 1, 0)
-            - y2 * x3 * T_(1, 2, 2) + z2 * x3 * T_(1, 1, 2);
+    Type ly = y2 * z3 * T_(1, 2, 0) - z2 * z3 * T_(1, 1, 0) - y2 * x3 * T_(1, 2, 2) + z2 * x3 * T_(1, 1, 2);
 
-    Type lz = y2 * z3 * T_(2, 2, 0) - z2 * z3 * T_(2, 1, 0)
-            - y2 * x3 * T_(2, 2, 2) + z2 * x3 * T_(2, 1, 2);
+    Type lz = y2 * z3 * T_(2, 2, 0) - z2 * z3 * T_(2, 1, 0) - y2 * x3 * T_(2, 2, 2) + z2 * x3 * T_(2, 1, 2);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -748,14 +723,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image1(vgl_homg_point_2d<Type>
 
   /* 8 */
   {
-    Type lx = y2 * z3 * T_(0, 2, 1) - z2 * z3 * T_(0, 1, 1)
-            - y2 * y3 * T_(0, 2, 2) + z2 * y3 * T_(0, 1, 2);
+    Type lx = y2 * z3 * T_(0, 2, 1) - z2 * z3 * T_(0, 1, 1) - y2 * y3 * T_(0, 2, 2) + z2 * y3 * T_(0, 1, 2);
 
-    Type ly = y2 * z3 * T_(1, 2, 1) - z2 * z3 * T_(1, 1, 1)
-            - y2 * y3 * T_(1, 2, 2) + z2 * y3 * T_(1, 1, 2);
+    Type ly = y2 * z3 * T_(1, 2, 1) - z2 * z3 * T_(1, 1, 1) - y2 * y3 * T_(1, 2, 2) + z2 * y3 * T_(1, 1, 2);
 
-    Type lz = y2 * z3 * T_(2, 2, 1) - z2 * z3 * T_(2, 1, 1)
-            - y2 * y3 * T_(2, 2, 2) + z2 * y3 * T_(2, 1, 2);
+    Type lz = y2 * z3 * T_(2, 2, 1) - z2 * z3 * T_(2, 1, 1) - y2 * y3 * T_(2, 2, 2) + z2 * y3 * T_(2, 1, 2);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -764,8 +736,8 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image1(vgl_homg_point_2d<Type>
 
 template <class Type>
 void
-vpgl_tri_focal_tensor<Type>::get_constraint_lines_image2(vgl_homg_point_2d<Type> const & p1,
-                                                         vgl_homg_point_2d<Type> const & p3,
+vpgl_tri_focal_tensor<Type>::get_constraint_lines_image2(const vgl_homg_point_2d<Type> & p1,
+                                                         const vgl_homg_point_2d<Type> & p3,
                                                          std::vector<vgl_homg_line_2d<Type>> & lines) const
 {
   Type x1 = p1.x();
@@ -780,13 +752,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image2(vgl_homg_point_2d<Type>
 
   /* 0 */
   {
-    Type lx = x1 * y3 * T_(0, 1, 0) - x1 * x3 * T_(0, 1, 1)
-            + y1 * y3 * T_(1, 1, 0) - y1 * x3 * T_(1, 1, 1)
-            + z1 * y3 * T_(2, 1, 0) - z1 * x3 * T_(2, 1, 1);
+    Type lx = x1 * y3 * T_(0, 1, 0) - x1 * x3 * T_(0, 1, 1) + y1 * y3 * T_(1, 1, 0) - y1 * x3 * T_(1, 1, 1) +
+              z1 * y3 * T_(2, 1, 0) - z1 * x3 * T_(2, 1, 1);
 
-    Type ly = -x1 * y3 * T_(0, 0, 0) + x1 * x3 * T_(0, 0, 1)
-            - y1 * y3 * T_(1, 0, 0) + y1 * x3 * T_(1, 0, 1)
-            - z1 * y3 * T_(2, 0, 0) + z1 * x3 * T_(2, 0, 1);
+    Type ly = -x1 * y3 * T_(0, 0, 0) + x1 * x3 * T_(0, 0, 1) - y1 * y3 * T_(1, 0, 0) + y1 * x3 * T_(1, 0, 1) -
+              z1 * y3 * T_(2, 0, 0) + z1 * x3 * T_(2, 0, 1);
 
     Type lz = 0;
 
@@ -796,13 +766,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image2(vgl_homg_point_2d<Type>
 
   /* 1 */
   {
-    Type lx = x1 * z3 * T_(0, 1, 0) - x1 * x3 * T_(0, 1, 2)
-            + y1 * z3 * T_(1, 1, 0) - y1 * x3 * T_(1, 1, 2)
-            + z1 * z3 * T_(2, 1, 0) - z1 * x3 * T_(2, 1, 2);
+    Type lx = x1 * z3 * T_(0, 1, 0) - x1 * x3 * T_(0, 1, 2) + y1 * z3 * T_(1, 1, 0) - y1 * x3 * T_(1, 1, 2) +
+              z1 * z3 * T_(2, 1, 0) - z1 * x3 * T_(2, 1, 2);
 
-    Type ly = -x1 * z3 * T_(0, 0, 0) + x1 * x3 * T_(0, 0, 2)
-            - y1 * z3 * T_(1, 0, 0) + y1 * x3 * T_(1, 0, 2)
-            - z1 * z3 * T_(2, 0, 0) + z1 * x3 * T_(2, 0, 2);
+    Type ly = -x1 * z3 * T_(0, 0, 0) + x1 * x3 * T_(0, 0, 2) - y1 * z3 * T_(1, 0, 0) + y1 * x3 * T_(1, 0, 2) -
+              z1 * z3 * T_(2, 0, 0) + z1 * x3 * T_(2, 0, 2);
 
     Type lz = 0;
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
@@ -811,13 +779,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image2(vgl_homg_point_2d<Type>
 
   /* 2 */
   {
-    Type lx = x1 * z3 * T_(0, 1, 1) - x1 * y3 * T_(0, 1, 2)
-            + y1 * z3 * T_(1, 1, 1) - y1 * y3 * T_(1, 1, 2)
-            + z1 * z3 * T_(2, 1, 1) - z1 * y3 * T_(2, 1, 2);
+    Type lx = x1 * z3 * T_(0, 1, 1) - x1 * y3 * T_(0, 1, 2) + y1 * z3 * T_(1, 1, 1) - y1 * y3 * T_(1, 1, 2) +
+              z1 * z3 * T_(2, 1, 1) - z1 * y3 * T_(2, 1, 2);
 
-    Type ly = -x1 * z3 * T_(0, 0, 1) + x1 * y3 * T_(0, 0, 2)
-            - y1 * z3 * T_(1, 0, 1) + y1 * y3 * T_(1, 0, 2)
-            - z1 * z3 * T_(2, 0, 1) + z1 * y3 * T_(2, 0, 2);
+    Type ly = -x1 * z3 * T_(0, 0, 1) + x1 * y3 * T_(0, 0, 2) - y1 * z3 * T_(1, 0, 1) + y1 * y3 * T_(1, 0, 2) -
+              z1 * z3 * T_(2, 0, 1) + z1 * y3 * T_(2, 0, 2);
 
     Type lz = 0;
 
@@ -827,15 +793,13 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image2(vgl_homg_point_2d<Type>
 
   /* 3 */
   {
-    Type lx = x1 * y3 * T_(0, 2, 0) - x1 * x3 * T_(0, 2, 1)
-            + y1 * y3 * T_(1, 2, 0) - y1 * x3 * T_(1, 2, 1)
-            + z1 * y3 * T_(2, 2, 0) - z1 * x3 * T_(2, 2, 1);
+    Type lx = x1 * y3 * T_(0, 2, 0) - x1 * x3 * T_(0, 2, 1) + y1 * y3 * T_(1, 2, 0) - y1 * x3 * T_(1, 2, 1) +
+              z1 * y3 * T_(2, 2, 0) - z1 * x3 * T_(2, 2, 1);
 
     Type ly = 0;
 
-    Type lz = -x1 * y3 * T_(0, 0, 0) + x1 * x3 * T_(0, 0, 1)
-            - y1 * y3 * T_(1, 0, 0) + y1 * x3 * T_(1, 0, 1)
-            - z1 * y3 * T_(2, 0, 0) + z1 * x3 * T_(2, 0, 1);
+    Type lz = -x1 * y3 * T_(0, 0, 0) + x1 * x3 * T_(0, 0, 1) - y1 * y3 * T_(1, 0, 0) + y1 * x3 * T_(1, 0, 1) -
+              z1 * y3 * T_(2, 0, 0) + z1 * x3 * T_(2, 0, 1);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -843,15 +807,13 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image2(vgl_homg_point_2d<Type>
 
   /* 4 */
   {
-    Type lx = x1 * z3 * T_(0, 2, 0) - x1 * x3 * T_(0, 2, 2)
-            + y1 * z3 * T_(1, 2, 0) - y1 * x3 * T_(1, 2, 2)
-            + z1 * z3 * T_(2, 2, 0) - z1 * x3 * T_(2, 2, 2);
+    Type lx = x1 * z3 * T_(0, 2, 0) - x1 * x3 * T_(0, 2, 2) + y1 * z3 * T_(1, 2, 0) - y1 * x3 * T_(1, 2, 2) +
+              z1 * z3 * T_(2, 2, 0) - z1 * x3 * T_(2, 2, 2);
 
     Type ly = 0;
 
-    Type lz = -x1 * z3 * T_(0, 0, 0) + x1 * x3 * T_(0, 0, 2)
-            - y1 * z3 * T_(1, 0, 0) + y1 * x3 * T_(1, 0, 2)
-            - z1 * z3 * T_(2, 0, 0) + z1 * x3 * T_(2, 0, 2);
+    Type lz = -x1 * z3 * T_(0, 0, 0) + x1 * x3 * T_(0, 0, 2) - y1 * z3 * T_(1, 0, 0) + y1 * x3 * T_(1, 0, 2) -
+              z1 * z3 * T_(2, 0, 0) + z1 * x3 * T_(2, 0, 2);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -859,15 +821,13 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image2(vgl_homg_point_2d<Type>
 
   /* 5 */
   {
-    Type lx = x1 * z3 * T_(0, 2, 1) - x1 * y3 * T_(0, 2, 2)
-            + y1 * z3 * T_(1, 2, 1) - y1 * y3 * T_(1, 2, 2)
-            + z1 * z3 * T_(2, 2, 1) - z1 * y3 * T_(2, 2, 2);
+    Type lx = x1 * z3 * T_(0, 2, 1) - x1 * y3 * T_(0, 2, 2) + y1 * z3 * T_(1, 2, 1) - y1 * y3 * T_(1, 2, 2) +
+              z1 * z3 * T_(2, 2, 1) - z1 * y3 * T_(2, 2, 2);
 
     Type ly = 0;
 
-    Type lz = -x1 * z3 * T_(0, 0, 1) + x1 * y3 * T_(0, 0, 2)
-            - y1 * z3 * T_(1, 0, 1) + y1 * y3 * T_(1, 0, 2)
-            - z1 * z3 * T_(2, 0, 1) + z1 * y3 * T_(2, 0, 2);
+    Type lz = -x1 * z3 * T_(0, 0, 1) + x1 * y3 * T_(0, 0, 2) - y1 * z3 * T_(1, 0, 1) + y1 * y3 * T_(1, 0, 2) -
+              z1 * z3 * T_(2, 0, 1) + z1 * y3 * T_(2, 0, 2);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -877,13 +837,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image2(vgl_homg_point_2d<Type>
   {
     Type lx = 0;
 
-    Type ly = x1 * y3 * T_(0, 2, 0) - x1 * x3 * T_(0, 2, 1)
-            + y1 * y3 * T_(1, 2, 0) - y1 * x3 * T_(1, 2, 1)
-            + z1 * y3 * T_(2, 2, 0) - z1 * x3 * T_(2, 2, 1);
+    Type ly = x1 * y3 * T_(0, 2, 0) - x1 * x3 * T_(0, 2, 1) + y1 * y3 * T_(1, 2, 0) - y1 * x3 * T_(1, 2, 1) +
+              z1 * y3 * T_(2, 2, 0) - z1 * x3 * T_(2, 2, 1);
 
-    Type lz = -x1 * y3 * T_(0, 1, 0) + x1 * x3 * T_(0, 1, 1)
-            - y1 * y3 * T_(1, 1, 0) + y1 * x3 * T_(1, 1, 1)
-            - z1 * y3 * T_(2, 1, 0) + z1 * x3 * T_(2, 1, 1);
+    Type lz = -x1 * y3 * T_(0, 1, 0) + x1 * x3 * T_(0, 1, 1) - y1 * y3 * T_(1, 1, 0) + y1 * x3 * T_(1, 1, 1) -
+              z1 * y3 * T_(2, 1, 0) + z1 * x3 * T_(2, 1, 1);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -893,13 +851,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image2(vgl_homg_point_2d<Type>
   {
     Type lx = 0;
 
-    Type ly = x1 * z3 * T_(0, 2, 0) - x1 * x3 * T_(0, 2, 2)
-            + y1 * z3 * T_(1, 2, 0) - y1 * x3 * T_(1, 2, 2)
-            + z1 * z3 * T_(2, 2, 0) - z1 * x3 * T_(2, 2, 2);
+    Type ly = x1 * z3 * T_(0, 2, 0) - x1 * x3 * T_(0, 2, 2) + y1 * z3 * T_(1, 2, 0) - y1 * x3 * T_(1, 2, 2) +
+              z1 * z3 * T_(2, 2, 0) - z1 * x3 * T_(2, 2, 2);
 
-    Type lz = -x1 * z3 * T_(0, 1, 0) + x1 * x3 * T_(0, 1, 2)
-            - y1 * z3 * T_(1, 1, 0) + y1 * x3 * T_(1, 1, 2)
-            - z1 * z3 * T_(2, 1, 0) + z1 * x3 * T_(2, 1, 2);
+    Type lz = -x1 * z3 * T_(0, 1, 0) + x1 * x3 * T_(0, 1, 2) - y1 * z3 * T_(1, 1, 0) + y1 * x3 * T_(1, 1, 2) -
+              z1 * z3 * T_(2, 1, 0) + z1 * x3 * T_(2, 1, 2);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -909,13 +865,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image2(vgl_homg_point_2d<Type>
   {
     Type lx = 0;
 
-    Type ly = x1 * z3 * T_(0, 2, 1) - x1 * y3 * T_(0, 2, 2)
-            + y1 * z3 * T_(1, 2, 1) - y1 * y3 * T_(1, 2, 2)
-            + z1 * z3 * T_(2, 2, 1) - z1 * y3 * T_(2, 2, 2);
+    Type ly = x1 * z3 * T_(0, 2, 1) - x1 * y3 * T_(0, 2, 2) + y1 * z3 * T_(1, 2, 1) - y1 * y3 * T_(1, 2, 2) +
+              z1 * z3 * T_(2, 2, 1) - z1 * y3 * T_(2, 2, 2);
 
-    Type lz = -x1 * z3 * T_(0, 1, 1) + x1 * y3 * T_(0, 1, 2)
-            - y1 * z3 * T_(1, 1, 1) + y1 * y3 * T_(1, 1, 2)
-            - z1 * z3 * T_(2, 1, 1) + z1 * y3 * T_(2, 1, 2);
+    Type lz = -x1 * z3 * T_(0, 1, 1) + x1 * y3 * T_(0, 1, 2) - y1 * z3 * T_(1, 1, 1) + y1 * y3 * T_(1, 1, 2) -
+              z1 * z3 * T_(2, 1, 1) + z1 * y3 * T_(2, 1, 2);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -924,8 +878,8 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image2(vgl_homg_point_2d<Type>
 
 template <class Type>
 void
-vpgl_tri_focal_tensor<Type>::get_constraint_lines_image3(vgl_homg_point_2d<Type> const & p1,
-                                                         vgl_homg_point_2d<Type> const & p2,
+vpgl_tri_focal_tensor<Type>::get_constraint_lines_image3(const vgl_homg_point_2d<Type> & p1,
+                                                         const vgl_homg_point_2d<Type> & p2,
                                                          std::vector<vgl_homg_line_2d<Type>> & lines) const
 {
   // use the same notation as the output of tr_hartley_equation.
@@ -941,13 +895,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image3(vgl_homg_point_2d<Type>
 
   /* 0 */
   {
-    Type lx = -x1 * x2 * T_(0, 1, 1) + x1 * y2 * T_(0, 0, 1)
-            - y1 * x2 * T_(1, 1, 1) + y1 * y2 * T_(1, 0, 1)
-            - z1 * x2 * T_(2, 1, 1) + z1 * y2 * T_(2, 0, 1);
+    Type lx = -x1 * x2 * T_(0, 1, 1) + x1 * y2 * T_(0, 0, 1) - y1 * x2 * T_(1, 1, 1) + y1 * y2 * T_(1, 0, 1) -
+              z1 * x2 * T_(2, 1, 1) + z1 * y2 * T_(2, 0, 1);
 
-    Type ly = x1 * x2 * T_(0, 1, 0) - x1 * y2 * T_(0, 0, 0)
-            + y1 * x2 * T_(1, 1, 0) - y1 * y2 * T_(1, 0, 0)
-            + z1 * x2 * T_(2, 1, 0) - z1 * y2 * T_(2, 0, 0);
+    Type ly = x1 * x2 * T_(0, 1, 0) - x1 * y2 * T_(0, 0, 0) + y1 * x2 * T_(1, 1, 0) - y1 * y2 * T_(1, 0, 0) +
+              z1 * x2 * T_(2, 1, 0) - z1 * y2 * T_(2, 0, 0);
 
     Type lz = 0;
 
@@ -957,15 +909,13 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image3(vgl_homg_point_2d<Type>
 
   /* 1 */
   {
-    Type lx = -x1 * x2 * T_(0, 1, 2) + x1 * y2 * T_(0, 0, 2)
-            - y1 * x2 * T_(1, 1, 2) + y1 * y2 * T_(1, 0, 2)
-            - z1 * x2 * T_(2, 1, 2) + z1 * y2 * T_(2, 0, 2);
+    Type lx = -x1 * x2 * T_(0, 1, 2) + x1 * y2 * T_(0, 0, 2) - y1 * x2 * T_(1, 1, 2) + y1 * y2 * T_(1, 0, 2) -
+              z1 * x2 * T_(2, 1, 2) + z1 * y2 * T_(2, 0, 2);
 
     Type ly = 0;
 
-    Type lz = x1 * x2 * T_(0, 1, 0) - x1 * y2 * T_(0, 0, 0)
-            + y1 * x2 * T_(1, 1, 0) - y1 * y2 * T_(1, 0, 0)
-            + z1 * x2 * T_(2, 1, 0) - z1 * y2 * T_(2, 0, 0);
+    Type lz = x1 * x2 * T_(0, 1, 0) - x1 * y2 * T_(0, 0, 0) + y1 * x2 * T_(1, 1, 0) - y1 * y2 * T_(1, 0, 0) +
+              z1 * x2 * T_(2, 1, 0) - z1 * y2 * T_(2, 0, 0);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -975,13 +925,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image3(vgl_homg_point_2d<Type>
   {
     Type lx = 0;
 
-    Type ly = -x1 * x2 * T_(0, 1, 2) + x1 * y2 * T_(0, 0, 2)
-            - y1 * x2 * T_(1, 1, 2) + y1 * y2 * T_(1, 0, 2)
-            - z1 * x2 * T_(2, 1, 2) + z1 * y2 * T_(2, 0, 2);
+    Type ly = -x1 * x2 * T_(0, 1, 2) + x1 * y2 * T_(0, 0, 2) - y1 * x2 * T_(1, 1, 2) + y1 * y2 * T_(1, 0, 2) -
+              z1 * x2 * T_(2, 1, 2) + z1 * y2 * T_(2, 0, 2);
 
-    Type lz = x1 * x2 * T_(0, 1, 1) - x1 * y2 * T_(0, 0, 1)
-            + y1 * x2 * T_(1, 1, 1) - y1 * y2 * T_(1, 0, 1)
-            + z1 * x2 * T_(2, 1, 1) - z1 * y2 * T_(2, 0, 1);
+    Type lz = x1 * x2 * T_(0, 1, 1) - x1 * y2 * T_(0, 0, 1) + y1 * x2 * T_(1, 1, 1) - y1 * y2 * T_(1, 0, 1) +
+              z1 * x2 * T_(2, 1, 1) - z1 * y2 * T_(2, 0, 1);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -989,13 +937,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image3(vgl_homg_point_2d<Type>
 
   /* 3 */
   {
-    Type lx = -x1 * x2 * T_(0, 2, 1) + x1 * z2 * T_(0, 0, 1)
-            - y1 * x2 * T_(1, 2, 1) + y1 * z2 * T_(1, 0, 1)
-            - z1 * x2 * T_(2, 2, 1) + z1 * z2 * T_(2, 0, 1);
+    Type lx = -x1 * x2 * T_(0, 2, 1) + x1 * z2 * T_(0, 0, 1) - y1 * x2 * T_(1, 2, 1) + y1 * z2 * T_(1, 0, 1) -
+              z1 * x2 * T_(2, 2, 1) + z1 * z2 * T_(2, 0, 1);
 
-    Type ly = x1 * x2 * T_(0, 2, 0) - x1 * z2 * T_(0, 0, 0)
-            + y1 * x2 * T_(1, 2, 0) - y1 * z2 * T_(1, 0, 0)
-            + z1 * x2 * T_(2, 2, 0) - z1 * z2 * T_(2, 0, 0);
+    Type ly = x1 * x2 * T_(0, 2, 0) - x1 * z2 * T_(0, 0, 0) + y1 * x2 * T_(1, 2, 0) - y1 * z2 * T_(1, 0, 0) +
+              z1 * x2 * T_(2, 2, 0) - z1 * z2 * T_(2, 0, 0);
 
     Type lz = 0;
 
@@ -1005,15 +951,13 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image3(vgl_homg_point_2d<Type>
 
   /* 4 */
   {
-    Type lx = -x1 * x2 * T_(0, 2, 2) + x1 * z2 * T_(0, 0, 2)
-            - y1 * x2 * T_(1, 2, 2) + y1 * z2 * T_(1, 0, 2)
-            - z1 * x2 * T_(2, 2, 2) + z1 * z2 * T_(2, 0, 2);
+    Type lx = -x1 * x2 * T_(0, 2, 2) + x1 * z2 * T_(0, 0, 2) - y1 * x2 * T_(1, 2, 2) + y1 * z2 * T_(1, 0, 2) -
+              z1 * x2 * T_(2, 2, 2) + z1 * z2 * T_(2, 0, 2);
 
     Type ly = 0;
 
-    Type lz = x1 * x2 * T_(0, 2, 0) - x1 * z2 * T_(0, 0, 0)
-            + y1 * x2 * T_(1, 2, 0) - y1 * z2 * T_(1, 0, 0)
-            +  z1 * x2 * T_(2, 2, 0) - z1 * z2 * T_(2, 0, 0);
+    Type lz = x1 * x2 * T_(0, 2, 0) - x1 * z2 * T_(0, 0, 0) + y1 * x2 * T_(1, 2, 0) - y1 * z2 * T_(1, 0, 0) +
+              z1 * x2 * T_(2, 2, 0) - z1 * z2 * T_(2, 0, 0);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -1023,26 +967,22 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image3(vgl_homg_point_2d<Type>
   {
     Type lx = 0;
 
-    Type ly = -x1 * x2 * T_(0, 2, 2) + x1 * z2 * T_(0, 0, 2)
-            - y1 * x2 * T_(1, 2, 2) + y1 * z2 * T_(1, 0, 2)
-            - z1 * x2 * T_(2, 2, 2) + z1 * z2 * T_(2, 0, 2);
+    Type ly = -x1 * x2 * T_(0, 2, 2) + x1 * z2 * T_(0, 0, 2) - y1 * x2 * T_(1, 2, 2) + y1 * z2 * T_(1, 0, 2) -
+              z1 * x2 * T_(2, 2, 2) + z1 * z2 * T_(2, 0, 2);
 
-    Type lz = x1 * x2 * T_(0, 2, 1) - x1 * z2 * T_(0, 0, 1)
-            + y1 * x2 * T_(1, 2, 1) - y1 * z2 * T_(1, 0, 1)
-            + z1 * x2 * T_(2, 2, 1) - z1 * z2 * T_(2, 0, 1);
+    Type lz = x1 * x2 * T_(0, 2, 1) - x1 * z2 * T_(0, 0, 1) + y1 * x2 * T_(1, 2, 1) - y1 * z2 * T_(1, 0, 1) +
+              z1 * x2 * T_(2, 2, 1) - z1 * z2 * T_(2, 0, 1);
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
   }
 
   /* 6 */
   {
-    Type lx = -x1 * y2 * T_(0, 2, 1) + x1 * z2 * T_(0, 1, 1)
-            - y1 * y2 * T_(1, 2, 1) + y1 * z2 * T_(1, 1, 1)
-            - z1 * y2 * T_(2, 2, 1) + z1 * z2 * T_(2, 1, 1);
+    Type lx = -x1 * y2 * T_(0, 2, 1) + x1 * z2 * T_(0, 1, 1) - y1 * y2 * T_(1, 2, 1) + y1 * z2 * T_(1, 1, 1) -
+              z1 * y2 * T_(2, 2, 1) + z1 * z2 * T_(2, 1, 1);
 
-    Type ly = x1 * y2 * T_(0, 2, 0) - x1 * z2 * T_(0, 1, 0)
-            + y1 * y2 * T_(1, 2, 0) - y1 * z2 * T_(1, 1, 0)
-            + z1 * y2 * T_(2, 2, 0) - z1 * z2 * T_(2, 1, 0);
+    Type ly = x1 * y2 * T_(0, 2, 0) - x1 * z2 * T_(0, 1, 0) + y1 * y2 * T_(1, 2, 0) - y1 * z2 * T_(1, 1, 0) +
+              z1 * y2 * T_(2, 2, 0) - z1 * z2 * T_(2, 1, 0);
 
     Type lz = 0;
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
@@ -1051,15 +991,13 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image3(vgl_homg_point_2d<Type>
 
   /* 7 */
   {
-    Type lx = -x1 * y2 * T_(0, 2, 2) + x1 * z2 * T_(0, 1, 2)
-            - y1 * y2 * T_(1, 2, 2) + y1 * z2 * T_(1, 1, 2)
-            - z1 * y2 * T_(2, 2, 2) + z1 * z2 * T_(2, 1, 2);
+    Type lx = -x1 * y2 * T_(0, 2, 2) + x1 * z2 * T_(0, 1, 2) - y1 * y2 * T_(1, 2, 2) + y1 * z2 * T_(1, 1, 2) -
+              z1 * y2 * T_(2, 2, 2) + z1 * z2 * T_(2, 1, 2);
 
     Type ly = 0;
 
-    Type lz = x1 * y2 * T_(0, 2, 0) - x1 * z2 * T_(0, 1, 0)
-            + y1 * y2 * T_(1, 2, 0) - y1 * z2 * T_(1, 1, 0)
-            + z1 * y2 * T_(2, 2, 0) - z1 * z2 * T_(2, 1, 0);
+    Type lz = x1 * y2 * T_(0, 2, 0) - x1 * z2 * T_(0, 1, 0) + y1 * y2 * T_(1, 2, 0) - y1 * z2 * T_(1, 1, 0) +
+              z1 * y2 * T_(2, 2, 0) - z1 * z2 * T_(2, 1, 0);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -1069,13 +1007,11 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image3(vgl_homg_point_2d<Type>
   {
     Type lx = 0;
 
-    Type ly = -x1 * y2 * T_(0, 2, 2) + x1 * z2 * T_(0, 1, 2)
-            - y1 * y2 * T_(1, 2, 2) + y1 * z2 * T_(1, 1, 2)
-            - z1 * y2 * T_(2, 2, 2) + z1 * z2 * T_(2, 1, 2);
+    Type ly = -x1 * y2 * T_(0, 2, 2) + x1 * z2 * T_(0, 1, 2) - y1 * y2 * T_(1, 2, 2) + y1 * z2 * T_(1, 1, 2) -
+              z1 * y2 * T_(2, 2, 2) + z1 * z2 * T_(2, 1, 2);
 
-    Type lz = x1 * y2 * T_(0, 2, 1) - x1 * z2 * T_(0, 1, 1)
-            + y1 * y2 * T_(1, 2, 1) - y1 * z2 * T_(1, 1, 1)
-            + z1 * y2 * T_(2, 2, 1) - z1 * z2 * T_(2, 1, 1);
+    Type lz = x1 * y2 * T_(0, 2, 1) - x1 * z2 * T_(0, 1, 1) + y1 * y2 * T_(1, 2, 1) - y1 * z2 * T_(1, 1, 1) +
+              z1 * y2 * T_(2, 2, 1) - z1 * z2 * T_(2, 1, 1);
 
     if (!(lx == Type(0) && ly == Type(0) && lz == Type(0)))
       lines.push_back(vgl_homg_line_2d<Type>(lx, ly, lz));
@@ -1084,8 +1020,8 @@ vpgl_tri_focal_tensor<Type>::get_constraint_lines_image3(vgl_homg_point_2d<Type>
 
 template <class Type>
 vgl_homg_point_2d<Type>
-vpgl_tri_focal_tensor<Type>::image1_transfer(vgl_homg_point_2d<Type> const & point2,
-                                             vgl_homg_point_2d<Type> const & point3) const
+vpgl_tri_focal_tensor<Type>::image1_transfer(const vgl_homg_point_2d<Type> & point2,
+                                             const vgl_homg_point_2d<Type> & point3) const
 {
   std::vector<vgl_homg_line_2d<Type>> constraint_lines(9);
   get_constraint_lines_image1(point2, point3, constraint_lines);
@@ -1094,8 +1030,8 @@ vpgl_tri_focal_tensor<Type>::image1_transfer(vgl_homg_point_2d<Type> const & poi
 
 template <class Type>
 vgl_homg_point_2d<Type>
-vpgl_tri_focal_tensor<Type>::image2_transfer(vgl_homg_point_2d<Type> const & point1,
-                                             vgl_homg_point_2d<Type> const & point3) const
+vpgl_tri_focal_tensor<Type>::image2_transfer(const vgl_homg_point_2d<Type> & point1,
+                                             const vgl_homg_point_2d<Type> & point3) const
 {
   std::vector<vgl_homg_line_2d<Type>> constraint_lines(9);
   get_constraint_lines_image2(point1, point3, constraint_lines);
@@ -1104,8 +1040,8 @@ vpgl_tri_focal_tensor<Type>::image2_transfer(vgl_homg_point_2d<Type> const & poi
 
 template <class Type>
 vgl_homg_point_2d<Type>
-vpgl_tri_focal_tensor<Type>::image3_transfer(vgl_homg_point_2d<Type> const & point1,
-                                             vgl_homg_point_2d<Type> const & point2) const
+vpgl_tri_focal_tensor<Type>::image3_transfer(const vgl_homg_point_2d<Type> & point1,
+                                             const vgl_homg_point_2d<Type> & point2) const
 {
   std::vector<vgl_homg_line_2d<Type>> constraint_lines(9);
   get_constraint_lines_image3(point1, point2, constraint_lines);
@@ -1195,8 +1131,7 @@ vpgl_tri_focal_tensor<Type>::compute_f_matrices()
   if (!this->compute_epipoles())
   {
     std::cerr << "vpgl_tri_focal_tensor::compute_f_matrices - "
-              << "cannot compute fundamental matrices, invalid epipoles"
-              << std::endl;
+              << "cannot compute fundamental matrices, invalid epipoles" << std::endl;
     return false;
   }
 
@@ -1324,9 +1259,9 @@ within_scale(const vpgl_tri_focal_tensor<Type> & T1, const vpgl_tri_focal_tensor
 
 // Code for easy instantiation.
 #undef vpgl_TRI_FOCAL_TENSOR_INSTANTIATE
-#define vpgl_TRI_FOCAL_TENSOR_INSTANTIATE(Type)                                                                        \
-  template class vpgl_tri_focal_tensor<Type>;                                                                          \
-  template std::ostream & operator<<(std::ostream &, const vpgl_tri_focal_tensor<Type> &);                             \
-  template std::istream & operator>>(std::istream &, vpgl_tri_focal_tensor<Type> &);                                   \
+#define vpgl_TRI_FOCAL_TENSOR_INSTANTIATE(Type)                                            \
+  template class vpgl_tri_focal_tensor<Type>;                                              \
+  template std::ostream & operator<<(std::ostream &, const vpgl_tri_focal_tensor<Type> &); \
+  template std::istream & operator>>(std::istream &, vpgl_tri_focal_tensor<Type> &);       \
   template bool within_scale(const vpgl_tri_focal_tensor<Type> &, const vpgl_tri_focal_tensor<Type> &);
 #endif // vpgl_tri_focal_tensor_hxx_

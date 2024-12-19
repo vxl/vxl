@@ -24,14 +24,15 @@
 //  the parent class vgl_h_matrix_1d_compute.
 class vgl_h_matrix_1d_compute_3point : public vgl_h_matrix_1d_compute
 {
- public:
-   vgl_h_matrix_1d_compute_3point() = default;
-   ~vgl_h_matrix_1d_compute_3point() override = default;
- protected:
+public:
+  vgl_h_matrix_1d_compute_3point() = default;
+  ~vgl_h_matrix_1d_compute_3point() override = default;
+
+protected:
   bool
-    compute_cool_homg(const std::vector<vgl_homg_point_1d<double> > & points1,
-                      const std::vector<vgl_homg_point_1d<double> > & points2,
-                      vgl_h_matrix_1d<double>& H) override;
+  compute_cool_homg(const std::vector<vgl_homg_point_1d<double>> & points1,
+                    const std::vector<vgl_homg_point_1d<double>> & points2,
+                    vgl_h_matrix_1d<double> & H) override;
 };
 
 #endif // vgl_h_matrix_1d_compute_3point_h_

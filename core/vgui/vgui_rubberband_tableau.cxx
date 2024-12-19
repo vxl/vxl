@@ -24,14 +24,14 @@
 vgui_rubberband_tableau::object_type vgui_rubberband_tableau::obj_type = none_enum;
 
 #ifdef __GNUC__ /* __FUNCTION__ is a GNU extension */
-#  define function_macro                                                                                               \
-    {                                                                                                                  \
-      std::cerr << __FUNCTION__ << " not yet implemented\n";                                                           \
+#  define function_macro                                     \
+    {                                                        \
+      std::cerr << __FUNCTION__ << " not yet implemented\n"; \
     }
 #else
-#  define function_macro                                                                                               \
-    {                                                                                                                  \
-      std::cerr << __FILE__ " : " << __LINE__ << " not yet implemented\n";                                             \
+#  define function_macro                                                   \
+    {                                                                      \
+      std::cerr << __FILE__ " : " << __LINE__ << " not yet implemented\n"; \
     }
 #endif
 void
@@ -73,13 +73,13 @@ vgui_rubberband_easy2D_client::add_circle(float x, float y, float r)
 }
 
 void
-vgui_rubberband_easy2D_client::add_linestrip(int n, float const * x, float const * y)
+vgui_rubberband_easy2D_client::add_linestrip(int n, const float * x, const float * y)
 {
   easy->add_linestrip(n, x, y);
 }
 
 void
-vgui_rubberband_easy2D_client::add_polygon(int n, float const * x, float const * y)
+vgui_rubberband_easy2D_client::add_polygon(int n, const float * x, const float * y)
 {
   easy->add_polygon(n, x, y);
 }
@@ -324,7 +324,7 @@ vgui_rubberband_tableau::draw_linestrip(float px, float py)
 
 
 bool
-vgui_rubberband_tableau::handle_point(vgui_event const & e, float ix, float iy)
+vgui_rubberband_tableau::handle_point(const vgui_event & e, float ix, float iy)
 {
   if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
   {
@@ -344,7 +344,7 @@ vgui_rubberband_tableau::handle_point(vgui_event const & e, float ix, float iy)
 }
 
 bool
-vgui_rubberband_tableau::handle_line(vgui_event const & e, float ix, float iy)
+vgui_rubberband_tableau::handle_line(const vgui_event & e, float ix, float iy)
 {
   if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
   {
@@ -364,7 +364,7 @@ vgui_rubberband_tableau::handle_line(vgui_event const & e, float ix, float iy)
 }
 
 bool
-vgui_rubberband_tableau::handle_infinite_line(vgui_event const & e, float ix, float iy)
+vgui_rubberband_tableau::handle_infinite_line(const vgui_event & e, float ix, float iy)
 {
   if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
   {
@@ -386,7 +386,7 @@ vgui_rubberband_tableau::handle_infinite_line(vgui_event const & e, float ix, fl
 }
 
 bool
-vgui_rubberband_tableau::handle_circle(vgui_event const & e, float ix, float iy)
+vgui_rubberband_tableau::handle_circle(const vgui_event & e, float ix, float iy)
 {
   if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
   {
@@ -413,7 +413,7 @@ vgui_rubberband_tableau::handle_circle(vgui_event const & e, float ix, float iy)
 }
 
 bool
-vgui_rubberband_tableau::handle_polygon(vgui_event const & e, float ix, float iy)
+vgui_rubberband_tableau::handle_polygon(const vgui_event & e, float ix, float iy)
 {
   unsigned n = x_coords.size();
   assert(n == y_coords.size());
@@ -455,7 +455,7 @@ vgui_rubberband_tableau::handle_polygon(vgui_event const & e, float ix, float iy
 }
 
 bool
-vgui_rubberband_tableau::handle_box(vgui_event const & e, float ix, float iy)
+vgui_rubberband_tableau::handle_box(const vgui_event & e, float ix, float iy)
 {
   if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
   {
@@ -474,7 +474,7 @@ vgui_rubberband_tableau::handle_box(vgui_event const & e, float ix, float iy)
 }
 
 bool
-vgui_rubberband_tableau::handle_linestrip(vgui_event const & e, float ix, float iy)
+vgui_rubberband_tableau::handle_linestrip(const vgui_event & e, float ix, float iy)
 {
   unsigned n = x_coords.size();
   assert(n == y_coords.size());
@@ -506,7 +506,7 @@ vgui_rubberband_tableau::handle_linestrip(vgui_event const & e, float ix, float 
 }
 
 bool
-vgui_rubberband_tableau::handle(vgui_event const & e)
+vgui_rubberband_tableau::handle(const vgui_event & e)
 {
   if (e.origin)
     e.origin->make_current();

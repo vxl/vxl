@@ -19,10 +19,9 @@
 #include "vcsl_scale_sptr.h"
 
 //: Scale transformation
-class vcsl_scale
-  : public vcsl_spatial_transformation
+class vcsl_scale : public vcsl_spatial_transformation
 {
- public:
+public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -40,27 +39,39 @@ class vcsl_scale
   //: Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
   // Pure virtual function of vcsl_spatial_transformation
-  bool is_invertible(double time) const override;
+  bool
+  is_invertible(double time) const override;
 
   //: Is `this' correctly set ?
   // Virtual function of vcsl_spatial_transformation
-  bool is_valid() const override
-  { return vcsl_spatial_transformation::is_valid() &&
-           ((this->duration()==0&&scale_.size()==1) ||
-             this->duration()==scale_.size()); }
+  bool
+  is_valid() const override
+  {
+    return vcsl_spatial_transformation::is_valid() &&
+           ((this->duration() == 0 && scale_.size() == 1) || this->duration() == scale_.size());
+  }
 
   //***************************************************************************
   // Transformation parameters
   //***************************************************************************
 
   //: Set the scale value of a static scale
-  void set_static(double new_scale);
+  void
+  set_static(double new_scale);
 
   //: Set the scale variation along the time
-  void set_scale(std::vector<double> const& new_scale) { scale_=new_scale; }
+  void
+  set_scale(const std::vector<double> & new_scale)
+  {
+    scale_ = new_scale;
+  }
 
   //: Return the scale variation along the time
-  std::vector<double> scale() const { return scale_; }
+  std::vector<double>
+  scale() const
+  {
+    return scale_;
+  }
 
   //***************************************************************************
   // Basic operations
@@ -69,20 +80,20 @@ class vcsl_scale
   //: Image of `v' by `this'
   //  REQUIRE: is_valid()
   // Pure virtual function of vcsl_spatial_transformation
-  vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const override;
+  vnl_vector<double>
+  execute(const vnl_vector<double> & v, double time) const override;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
   // Pure virtual function of vcsl_spatial_transformation
-  vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const override;
+  vnl_vector<double>
+  inverse(const vnl_vector<double> & v, double time) const override;
 
- protected:
-
+protected:
   //: Compute the value of the parameter at time `time'
-  double scale_value(double time) const;
+  double
+  scale_value(double time) const;
 
   //: Scale variation along the time
   std::vector<double> scale_;

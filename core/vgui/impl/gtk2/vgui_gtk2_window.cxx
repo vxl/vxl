@@ -189,7 +189,7 @@ vgui_gtk2_window::reshape(unsigned w, unsigned h)
 }
 
 void
-vgui_gtk2_window::set_title(std::string const & title)
+vgui_gtk2_window::set_title(const std::string & title)
 {
   gtk_window_set_title(GTK_WINDOW(window), title.c_str());
 }

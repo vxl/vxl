@@ -13,7 +13,7 @@
 #include "vil/vil_load.h"
 #include "vpgl/vpgl_camera.h"
 //
-//#define test_enabled
+// #define test_enabled
 static void
 test_backproject_dem()
 {

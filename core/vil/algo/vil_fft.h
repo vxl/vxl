@@ -15,9 +15,9 @@
 //: Perform in place forward FFT.
 // \relatesalso vil_image_view
 // \relatesalso vil_fft_2d_bwd
-template<class T>
+template <class T>
 void
-vil_fft_2d_fwd (vil_image_view<std::complex<T> > & img);
+vil_fft_2d_fwd(vil_image_view<std::complex<T>> & img);
 
 //: Perform in place backward FFT.
 // Unlike vnl_fft_2d, scaling is done properly, so using
@@ -25,8 +25,8 @@ vil_fft_2d_fwd (vil_image_view<std::complex<T> > & img);
 // image.
 // \relatesalso vil_image_view
 // \relatesalso vil_fft_2d_fwd
-template<class T>
+template <class T>
 void
-vil_fft_2d_bwd (vil_image_view<std::complex<T> > & img);
+vil_fft_2d_bwd(vil_image_view<std::complex<T>> & img);
 
 #endif // vil_fft_h_

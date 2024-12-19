@@ -7,7 +7,7 @@
 // same dimension ?)
 //---------------------------------------------------------------------------
 bool
-vcsl_angle_unit::compatible_units(vcsl_unit_sptr const & other) const
+vcsl_angle_unit::compatible_units(const vcsl_unit_sptr & other) const
 {
   return other->cast_to_angle_unit() != nullptr;
 }

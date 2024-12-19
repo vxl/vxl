@@ -32,7 +32,7 @@ test_url()
 
             << "======== base64 stuff ===========\n";
 
-  unsigned const nTests = 300;
+  const unsigned nTests = 300;
   std::string data;
   bool correct_size = true;
   bool correct_decode = true;

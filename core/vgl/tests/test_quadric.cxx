@@ -10,7 +10,7 @@
 #include <vgl/vgl_tolerance.h>
 // multiply square matrices
 static std::vector<std::vector<double>>
-mul(std::vector<std::vector<double>> const & a, std::vector<std::vector<double>> const & b)
+mul(const std::vector<std::vector<double>> & a, const std::vector<std::vector<double>> & b)
 {
   size_t N = a.size();
   std::vector<std::vector<double>> out(N, std::vector<double>(N, 0.0));
@@ -25,7 +25,7 @@ mul(std::vector<std::vector<double>> const & a, std::vector<std::vector<double>>
   return out;
 }
 static std::vector<std::vector<double>>
-transform_quadric(std::vector<std::vector<double>> const & T, std::vector<std::vector<double>> const & Q)
+transform_quadric(const std::vector<std::vector<double>> & T, const std::vector<std::vector<double>> & Q)
 {
   std::vector<std::vector<double>> Tt(4, std::vector<double>(4, 0.0));
   for (size_t r = 0; r < 4; ++r)

@@ -27,44 +27,56 @@ template <class T>
 class vgl_fit_plane_3d
 {
   // Data Members--------------------------------------------------------------
- protected:
-  std::vector<vgl_homg_point_3d<T> > points_;
+protected:
+  std::vector<vgl_homg_point_3d<T>> points_;
   vgl_homg_plane_3d<T> plane_;
 
- public:
-
+public:
   // Constructors/Initializers/Destructors-------------------------------------
 
-   vgl_fit_plane_3d() = default;
+  vgl_fit_plane_3d() = default;
 
-   vgl_fit_plane_3d(std::vector<vgl_homg_point_3d<T> > points);
+  vgl_fit_plane_3d(std::vector<vgl_homg_point_3d<T>> points);
 
   ~vgl_fit_plane_3d() = default;
 
   // Operations---------------------------------------------------------------
 
   //: add a point to point set
-  void add_point(vgl_homg_point_3d<T> const &p);
-  void add_point(const T x, const T y, const T z);
+  void
+  add_point(const vgl_homg_point_3d<T> & p);
+  void
+  add_point(const T x, const T y, const T z);
 
   //: clear internal data
-  void clear();
+  void
+  clear();
 
-  //:fits a plane to the stored points
+  //: fits a plane to the stored points
   // report issues over an ostream if declared
-  bool fit(const T error_marg, std::ostream* outstream=nullptr);
+  bool
+  fit(const T error_marg, std::ostream * outstream = nullptr);
 
-  //:fits a plane returning the smallest singular value
-  //:of the data scatter matrix decomposition, a measure
-  //:of variance in the direction of the plane normal
-  T fit(std::ostream* outstream=nullptr);
+  //: fits a plane returning the smallest singular value
+  //: of the data scatter matrix decomposition, a measure
+  //: of variance in the direction of the plane normal
+  T
+  fit(std::ostream * outstream = nullptr);
 
   // Data Access---------------------------------------------------------------
 
-  std::vector<vgl_homg_point_3d<T> >& get_points(){return points_;}
+  std::vector<vgl_homg_point_3d<T>> &
+  get_points()
+  {
+    return points_;
+  }
 
   //: first fit() should be called to get the plane computed
-  vgl_homg_plane_3d<T>& get_plane() {return plane_;}
+  vgl_homg_plane_3d<T> &
+  get_plane()
+  {
+    return plane_;
+  }
 };
 
 #define VGL_FIT_PLANE_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_plane_3d.hxx first"

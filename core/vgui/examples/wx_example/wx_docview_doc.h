@@ -26,15 +26,20 @@ class wx_docview_doc : public wxDocument
 {
   DECLARE_DYNAMIC_CLASS(wx_docview_doc)
 
- public:
+public:
   wx_docview_doc();
-  virtual ~wx_docview_doc() { }
+  virtual ~wx_docview_doc() {}
 
-  virtual bool OnCreate(const wxString& path, long flags);
+  virtual bool
+  OnCreate(const wxString & path, long flags);
 
-  vgui_tableau_sptr tableau() { return tableau_; }
+  vgui_tableau_sptr
+  tableau()
+  {
+    return tableau_;
+  }
 
- private:
+private:
   vgui_tableau_sptr tableau_;
 };
 

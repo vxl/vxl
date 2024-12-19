@@ -21,7 +21,7 @@
 #include "vil1/vil1_memory_image.h"
 
 void
-vil1_copy(vil1_image const & in, vil1_image & out)
+vil1_copy(const vil1_image & in, vil1_image & out)
 {
 #define assert_dimension_equal(dim) assert(in.dim() == out.dim())
   assert_dimension_equal(height);
@@ -54,7 +54,7 @@ vil1_copy(vil1_image const & in, vil1_image & out)
 }
 
 vil1_memory_image
-vil1_copy(vil1_image const & src)
+vil1_copy(const vil1_image & src)
 {
   vil1_memory_image dst(
     src.planes(), src.width(), src.height(), src.components(), src.bits_per_component(), src.component_format());

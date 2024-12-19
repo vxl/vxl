@@ -23,19 +23,19 @@ struct vpdt_mog_fitness
   typedef typename gaussian_type::metric_type Metric;
   typedef typename vpdt_dist_traits<gaussian_type>::scalar_type T;
 
-  static bool order (const gaussian_type& g1, const T& w1,
-                     const gaussian_type& g2, const T& w2)
+  static bool
+  order(const gaussian_type & g1, const T & w1, const gaussian_type & g2, const T & w2)
   {
     const unsigned int d = g1.dimension();
     assert(d == g2.dimension());
-    T w1_2 = w1*w1, w2_2 = w2*w2;
+    T w1_2 = w1 * w1, w2_2 = w2 * w2;
     T v1 = w1_2, v2 = w2_2;
-    for (unsigned int i=1; i<d; ++i){
+    for (unsigned int i = 1; i < d; ++i)
+    {
       v1 *= w1_2;
       v2 *= w2_2;
     }
-    return v1/Metric::covar_det(g1.mean,g1.covar) >
-    v2/Metric::covar_det(g2.mean,g2.covar);
+    return v1 / Metric::covar_det(g1.mean, g1.covar) > v2 / Metric::covar_det(g2.mean, g2.covar);
   }
 };
 
@@ -45,7 +45,10 @@ template <class T1, class T2>
 struct vpdt_is_equal;
 //: helper class to check that two types are equal
 template <class T>
-struct vpdt_is_equal<T,T> { typedef void type; };
+struct vpdt_is_equal<T, T>
+{
+  typedef void type;
+};
 
 
 //: The Stauffer-Grimson ordering function of mixture component fitness
@@ -53,14 +56,14 @@ struct vpdt_is_equal<T,T> { typedef void type; };
 template <class gaussian_type>
 struct vpdt_mog_fitness<gaussian_type,
                         typename vpdt_is_equal<typename vpdt_dist_traits<gaussian_type>::scalar_type,
-                                               typename gaussian_type::covar_type>::type >
+                                               typename gaussian_type::covar_type>::type>
 {
   typedef typename vpdt_dist_traits<gaussian_type>::scalar_type T;
 
-  static bool order (const gaussian_type& g1, const T& w1,
-                     const gaussian_type& g2, const T& w2)
+  static bool
+  order(const gaussian_type & g1, const T & w1, const gaussian_type & g2, const T & w2)
   {
-    return w1*w1/g1.covar > w2*w2/g2.covar;
+    return w1 * w1 / g1.covar > w2 * w2 / g2.covar;
   }
 };
 

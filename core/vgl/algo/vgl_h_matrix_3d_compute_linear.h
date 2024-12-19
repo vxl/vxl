@@ -10,7 +10,8 @@
 // to calculate the homography which relates at least five 3D point correspondences.
 // no four of them should be co-planar
 //
-// NOTE: the constructor of vgl_h_matrix_3d should not be used in itself as it does not standardize the point sets before
+// NOTE: the constructor of vgl_h_matrix_3d should not be used in itself as it does not standardize the point sets
+// before
 //       constructing the design matrix (which is the matrix that is decomposed using SVD)
 //       the following class standardize the point sets and adjusts H accordingly
 //
@@ -28,21 +29,27 @@
 
 class vgl_h_matrix_3d_compute_linear : public vgl_h_matrix_3d_compute
 {
- protected:
+protected:
   //: compute from matched points
 
-  bool compute_p(std::vector<vgl_homg_point_3d<double> > const& points1,
-                 std::vector<vgl_homg_point_3d<double> > const& points2,
-                 vgl_h_matrix_3d<double>& H) override;
+  bool
+  compute_p(const std::vector<vgl_homg_point_3d<double>> & points1,
+            const std::vector<vgl_homg_point_3d<double>> & points2,
+            vgl_h_matrix_3d<double> & H) override;
 
-  //:Assumes all corresponding points have equal weight
-  bool solve_linear_problem(std::vector<vgl_homg_point_3d<double> > const& p1,
-                            std::vector<vgl_homg_point_3d<double> > const& p2,
-                            vgl_h_matrix_3d<double>& H);
+  //: Assumes all corresponding points have equal weight
+  bool
+  solve_linear_problem(const std::vector<vgl_homg_point_3d<double>> & p1,
+                       const std::vector<vgl_homg_point_3d<double>> & p2,
+                       vgl_h_matrix_3d<double> & H);
 
- public:
-   vgl_h_matrix_3d_compute_linear() = default;
-   int minimum_number_of_correspondences() const override { return 5; }
+public:
+  vgl_h_matrix_3d_compute_linear() = default;
+  int
+  minimum_number_of_correspondences() const override
+  {
+    return 5;
+  }
 };
 
 #endif // vgl_h_matrix_3d_compute_linear_h_

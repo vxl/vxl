@@ -38,33 +38,64 @@ class vgui_matrix_state
   double M[16]; // modelview
   bool restore_on_destroy;
 
- public:
+public:
   vgui_matrix_state(bool save_now_restore_on_destroy = true);
   ~vgui_matrix_state();
 
-  void save();
-  void restore() const;
-  void print(std::ostream& );
+  void
+  save();
+  void
+  restore() const;
+  void
+  print(std::ostream &);
 
   // set
-  static void identity_gl_matrices(); // set both matrices to the identity.
-  static void clear_gl_matrices();    // set both matrices to zero.
-  static void zero_out_gl_matrices() { clear_gl_matrices(); }
+  static void
+  identity_gl_matrices(); // set both matrices to the identity.
+  static void
+  clear_gl_matrices(); // set both matrices to zero.
+  static void
+  zero_out_gl_matrices()
+  {
+    clear_gl_matrices();
+  }
 
   // query
-  static bool gl_matrices_are_cleared();
-  static vnl_matrix_fixed<double,4,4> projection_matrix();
-  static vnl_matrix_fixed<double,4,4> modelview_matrix();
-  static vnl_matrix_fixed<double,4,4> total_transformation();
+  static bool
+  gl_matrices_are_cleared();
+  static vnl_matrix_fixed<double, 4, 4>
+  projection_matrix();
+  static vnl_matrix_fixed<double, 4, 4>
+  modelview_matrix();
+  static vnl_matrix_fixed<double, 4, 4>
+  total_transformation();
 
   // Projection matrices
-  static void premultiply(vnl_matrix_fixed<double,4,4> const &,GLenum );
-  static void premultiply_projection(vnl_matrix_fixed<double,4,4> const &M) { premultiply(M,GL_PROJECTION); }
-  static void premultiply_modelview (vnl_matrix_fixed<double,4,4> const &M) { premultiply(M,GL_MODELVIEW); }
+  static void
+  premultiply(const vnl_matrix_fixed<double, 4, 4> &, GLenum);
+  static void
+  premultiply_projection(const vnl_matrix_fixed<double, 4, 4> & M)
+  {
+    premultiply(M, GL_PROJECTION);
+  }
+  static void
+  premultiply_modelview(const vnl_matrix_fixed<double, 4, 4> & M)
+  {
+    premultiply(M, GL_MODELVIEW);
+  }
 
-  static void postmultiply(const vnl_matrix_fixed<double,4,4> &M,GLenum matrix);
-  static void postmultiply_projection(vnl_matrix_fixed<double,4,4> const &M) { postmultiply(M,GL_PROJECTION); }
-  static void postmultiply_modelview (vnl_matrix_fixed<double,4,4> const &M) { postmultiply(M,GL_MODELVIEW); }
+  static void
+  postmultiply(const vnl_matrix_fixed<double, 4, 4> & M, GLenum matrix);
+  static void
+  postmultiply_projection(const vnl_matrix_fixed<double, 4, 4> & M)
+  {
+    postmultiply(M, GL_PROJECTION);
+  }
+  static void
+  postmultiply_modelview(const vnl_matrix_fixed<double, 4, 4> & M)
+  {
+    postmultiply(M, GL_MODELVIEW);
+  }
 };
 
 #endif // vgui_matrix_state_h_

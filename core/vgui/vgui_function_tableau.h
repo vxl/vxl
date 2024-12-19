@@ -27,48 +27,83 @@
 //   it will be called every time a draw event occurs in this tableau.
 class vgui_function_tableau : public vgui_tableau
 {
- public:
-  typedef bool (*function)(const vgui_event&);
+public:
+  typedef bool (*function)(const vgui_event &);
 
   //: Constructor - don't use this, use vgui_function_tableau_new.
   //  Creates a default vgui_function tableau.
   vgui_function_tableau();
 
   //: Returns the type of this tableau ('vgui_function_tableau').
-  std::string type_name() const { return "vgui_function_tableau"; }
+  std::string
+  type_name() const
+  {
+    return "vgui_function_tableau";
+  }
 
   //: Call the given function when a draw event occurs.
-  void draw(function f) {draw_ = f;}
-  virtual bool draw();
+  void
+  draw(function f)
+  {
+    draw_ = f;
+  }
+  virtual bool
+  draw();
 
   //: Call the given function when a mouse up event occurs.
-  void mouse_up(function f) {mouse_up_ = f;}
-  virtual bool mouse_up(int x, int y, vgui_button, vgui_modifier);
+  void
+  mouse_up(function f)
+  {
+    mouse_up_ = f;
+  }
+  virtual bool
+  mouse_up(int x, int y, vgui_button, vgui_modifier);
 
   //: Call the given function when a mouse down event occurs.
-  void mouse_down(function f) {mouse_down_ = f;}
-  virtual bool mouse_down(int x, int y, vgui_button, vgui_modifier);
+  void
+  mouse_down(function f)
+  {
+    mouse_down_ = f;
+  }
+  virtual bool
+  mouse_down(int x, int y, vgui_button, vgui_modifier);
 
   //: Call the given function when a mouse motion event occurs.
-  void motion(function f) {motion_ = f;}
-  virtual bool motion(int x, int y);
+  void
+  motion(function f)
+  {
+    motion_ = f;
+  }
+  virtual bool
+  motion(int x, int y);
 
   //: Call the given function when a key is pressed by the user.
-  void key_press(function f) {key_press_ = f;}
-  virtual bool key_press(int x, int y, vgui_key, vgui_modifier);
+  void
+  key_press(function f)
+  {
+    key_press_ = f;
+  }
+  virtual bool
+  key_press(int x, int y, vgui_key, vgui_modifier);
 
   //: Call the given function when the '?' or 'help' key is pressed by the user.
-  void help(function f) {help_ = f;}
-  virtual bool help();
+  void
+  help(function f)
+  {
+    help_ = f;
+  }
+  virtual bool
+  help();
 
   static vgui_DLLDATA bool redraw;
 
- protected:
+protected:
   //: Destructor - called by vgui_function_tableau_sptr.
- ~vgui_function_tableau();
+  ~vgui_function_tableau();
 
   //: Handle all events by passing them to the appropriate functions.
-  bool handle(const vgui_event&);
+  bool
+  handle(const vgui_event &);
 
   function draw_;
   function mouse_up_;
@@ -82,8 +117,9 @@ class vgui_function_tableau : public vgui_tableau
 struct vgui_function_tableau_new : public vgui_function_tableau_sptr
 {
   //: Constructor - create a default vgui_function_tableau.
-  vgui_function_tableau_new( )
-    : vgui_function_tableau_sptr(new vgui_function_tableau) { }
+  vgui_function_tableau_new()
+    : vgui_function_tableau_sptr(new vgui_function_tableau)
+  {}
 };
 
 #endif // vgui_function_tableau_h_

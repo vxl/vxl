@@ -779,14 +779,14 @@ vgui_glut_adaptor::menustatus_callback(int status, int x, int y)
 }
 
 // dispatch macro which works in all other cases :
-#define implement_static_callback(name, proto, args)                                                                   \
-  void vgui_glut_adaptor::name##_callback proto                                                                        \
-  {                                                                                                                    \
-    vgui_glut_adaptor * v = get_adaptor(glutGetWindow());                                                              \
-    if (v)                                                                                                             \
-      v->name args;                                                                                                    \
-    else                                                                                                               \
-      std::abort();                                                                                                    \
+#define implement_static_callback(name, proto, args)      \
+  void vgui_glut_adaptor::name##_callback proto           \
+  {                                                       \
+    vgui_glut_adaptor * v = get_adaptor(glutGetWindow()); \
+    if (v)                                                \
+      v->name args;                                       \
+    else                                                  \
+      std::abort();                                       \
   }
 
 implement_static_callback(display, (), ());

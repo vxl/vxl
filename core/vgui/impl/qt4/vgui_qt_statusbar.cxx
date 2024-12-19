@@ -10,10 +10,7 @@ vgui_qt_statusbar::vgui_qt_statusbar(QMainWindow * parent)
 {}
 
 
-vgui_qt_statusbar::~vgui_qt_statusbar()
-{
-  delete statusbuf;
-}
+vgui_qt_statusbar::~vgui_qt_statusbar() { delete statusbuf; }
 
 // static int context_id = 1;
 

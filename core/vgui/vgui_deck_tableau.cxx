@@ -23,7 +23,7 @@ static bool debug = false;
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_deck_tableau_new.
 //  Make a deck with two children, listed top to bottom.
-vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const & child0, vgui_tableau_sptr const & child1)
+vgui_deck_tableau::vgui_deck_tableau(const vgui_tableau_sptr & child0, const vgui_tableau_sptr & child1)
   : index_(-1)
 {
   add(child0);
@@ -33,9 +33,9 @@ vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const & child0, vgui_tabl
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_deck_tableau_new.
 //  Make a deck with three children, listed top to bottom.
-vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const & child0,
-                                     vgui_tableau_sptr const & child1,
-                                     vgui_tableau_sptr const & child2)
+vgui_deck_tableau::vgui_deck_tableau(const vgui_tableau_sptr & child0,
+                                     const vgui_tableau_sptr & child1,
+                                     const vgui_tableau_sptr & child2)
   : index_(-1)
 {
   add(child0);
@@ -123,7 +123,7 @@ vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier)
 //  It is placed on top and made current.
 //  Override virtual base class method.
 bool
-vgui_deck_tableau::add_child(vgui_tableau_sptr const & t)
+vgui_deck_tableau::add_child(const vgui_tableau_sptr & t)
 {
   children.push_back(vgui_parent_child_link(this, t));
   index_ = size() - 1;
@@ -135,7 +135,7 @@ vgui_deck_tableau::add_child(vgui_tableau_sptr const & t)
 //----------------------------------------------------------------------------
 //: Remove the given child tableau from the deck.
 void
-vgui_deck_tableau::remove(vgui_tableau_sptr const & t)
+vgui_deck_tableau::remove(const vgui_tableau_sptr & t)
 {
   if (!remove_child(t))
     std::cerr << __FILE__ " no such child tableau : " << t << std::endl;
@@ -145,7 +145,7 @@ vgui_deck_tableau::remove(vgui_tableau_sptr const & t)
 //: Remove the given child tableau from the deck.
 //  Override virtual base class  method
 bool
-vgui_deck_tableau::remove_child(vgui_tableau_sptr const & t)
+vgui_deck_tableau::remove_child(const vgui_tableau_sptr & t)
 {
   for (std::vector<vgui_parent_child_link>::iterator i = children.begin(); i != children.end(); ++i)
     if ((*i) == t)

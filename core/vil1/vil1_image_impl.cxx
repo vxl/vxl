@@ -15,19 +15,21 @@
 
 //--------------------------------------------------------------------------------
 
-vil1_image vil1_image_impl::get_plane(unsigned int p) const {
+vil1_image
+vil1_image_impl::get_plane(unsigned int p) const
+{
   assert((int)p < planes());
   return nullptr; // since this function has to be overloaded
 }
 
 bool
-vil1_image_impl::get_property(char const *, void *) const
+vil1_image_impl::get_property(const char *, void *) const
 {
   return false;
 }
 
 bool
-vil1_image_impl::set_property(char const *, void const *) const
+vil1_image_impl::set_property(const char *, const void *) const
 {
   return false;
 }
@@ -39,7 +41,7 @@ vil1_image_impl::get_section(void * /*buf*/, int /*x0*/, int /*y0*/, int /*width
 }
 
 bool
-vil1_image_impl::put_section(void const * /*buf*/, int /*x0*/, int /*y0*/, int /*width*/, int /*height*/)
+vil1_image_impl::put_section(const void * /*buf*/, int /*x0*/, int /*y0*/, int /*width*/, int /*height*/)
 {
   return false;
 }

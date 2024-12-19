@@ -15,27 +15,30 @@
 
 #include "vgui_font.h"
 #include "vgui_gl.h"
-template <typename T> class vil_image_view;
+template <typename T>
+class vil_image_view;
 
 //-------------------------------------------------------------------------
 //: vgui_font derived class that uses textured fonts.
 //-------------------------------------------------------------------------
 class vgui_font_textured : public vgui_font
 {
- public:
+public:
 #if 0
   // Default constructor
   vgui_font_textured();
 #endif
 
   //: Constructor - from a font file (BMF font file only, for now).
-  vgui_font_textured(const std::string& font_file);
+  vgui_font_textured(const std::string & font_file);
 
   //: Draw a string of font symbols.
-  virtual void draw(const std::string& str) const;
+  virtual void
+  draw(const std::string & str) const;
 
   //: Draw a string of font symbols.
-  virtual void draw(const std::string& str, unsigned int size) const;
+  virtual void
+  draw(const std::string & str, unsigned int size) const;
 
 #if 0
  protected:
@@ -44,7 +47,7 @@ class vgui_font_textured : public vgui_font
   //: Destructor.
   virtual ~vgui_font_textured();
 
- private:
+private:
   //: Type to store symbol location in texture.
   struct texture_coord
   {
@@ -52,16 +55,20 @@ class vgui_font_textured : public vgui_font
   };
 
   //: Load font from BMF file.
-  bool load_bmf_font(const std::string &font_file);
+  bool
+  load_bmf_font(const std::string & font_file);
 
   //: Load OpenGL texture for all symbols.
-  void load_texture(const vil_image_view<GLubyte>& image);
+  void
+  load_texture(const vil_image_view<GLubyte> & image);
 
   //: Create OpenGL display list for each symbol.
-  void create_display_lists();
+  void
+  create_display_lists();
 
   //: Draw symbol using OpenGL texture map primitives.
-  void gl_draw(unsigned int i) const;
+  void
+  gl_draw(unsigned int i) const;
 
   //: 256 symbol data
   texture_coord symbol_coords_[256];

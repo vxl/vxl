@@ -19,12 +19,15 @@
 
 //: Write array to binary stream
 template <class T, size_t N>
-void vsl_b_write(vsl_b_ostream& os, const std::array<T, N>& arr) {
+void
+vsl_b_write(vsl_b_ostream & os, const std::array<T, N> & arr)
+{
 
   constexpr short version_no = 1;
   vsl_b_write(os, version_no);
 
-  if (N != 0) {
+  if (N != 0)
+  {
     vsl_block_binary_write(os, &arr.front(), N);
   }
 }
@@ -32,8 +35,11 @@ void vsl_b_write(vsl_b_ostream& os, const std::array<T, N>& arr) {
 
 //: Read array from binary stream
 template <class T, size_t N>
-void vsl_b_read(vsl_b_istream& is, std::array<T, N>& arr) {
-  if (!is) return;
+void
+vsl_b_read(vsl_b_istream & is, std::array<T, N> & arr)
+{
+  if (!is)
+    return;
 
   short io_version_no;
   vsl_b_read(is, io_version_no);
@@ -41,7 +47,8 @@ void vsl_b_read(vsl_b_istream& is, std::array<T, N>& arr) {
   {
     case 1:
     {
-      if (N != 0) {
+      if (N != 0)
+      {
         vsl_block_binary_read(is, &arr.front(), N);
       }
       break;
@@ -49,8 +56,8 @@ void vsl_b_read(vsl_b_istream& is, std::array<T, N>& arr) {
     default:
     {
       std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, std::array<T, N>&), "
-                << "Unknown version number "<< io_version_no << std::endl;
-      is.is().clear(std::ios::badbit);  // Set an unrecoverable IO error on stream
+                << "Unknown version number " << io_version_no << std::endl;
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
   }
@@ -59,7 +66,8 @@ void vsl_b_read(vsl_b_istream& is, std::array<T, N>& arr) {
 
 //: Print human readable summary of array to a stream
 template <class T, size_t N>
-void vsl_print_summary(std::ostream& os, const std::array<T, N>& arr)
+void
+vsl_print_summary(std::ostream & os, const std::array<T, N> & arr)
 {
   os << vsl_indent() << "Array length: " << N << std::endl;
   for (size_t i = 0; i < N && i < 5; ++i)
@@ -76,9 +84,9 @@ void vsl_print_summary(std::ostream& os, const std::array<T, N>& arr)
 
 
 #undef VSL_ARRAY_IO_INSTANTIATE
-#define VSL_ARRAY_IO_INSTANTIATE(T, N) \
-template void vsl_print_summary<T, N>(std::ostream& os, const std::array<T, N>& v); \
-template void vsl_b_write<T, N>(vsl_b_ostream& os, const std::array<T, N>& v); \
-template void vsl_b_read<T, N>(vsl_b_istream& is, std::array<T, N>& v)
+#define VSL_ARRAY_IO_INSTANTIATE(T, N)                                                  \
+  template void vsl_print_summary<T, N>(std::ostream & os, const std::array<T, N> & v); \
+  template void vsl_b_write<T, N>(vsl_b_ostream & os, const std::array<T, N> & v);      \
+  template void vsl_b_read<T, N>(vsl_b_istream & is, std::array<T, N> & v)
 
-#endif  // vsl_array_io_hxx_
+#endif // vsl_array_io_hxx_

@@ -13,7 +13,7 @@
 // \endverbatim
 
 #if defined(_MSC_VER)
-#pragma once
+#  pragma once
 #endif
 
 class vgui_tableau;
@@ -21,30 +21,37 @@ class vgui_tableau;
 //: Defines a main application document.
 class vgui_mfc_doc : public CDocument
 {
- protected:
+protected:
   //: we store our main tableau in the document - the adaptor(s) view this tableau.
-  vgui_tableau* tableau;
+  vgui_tableau * tableau;
 
- protected: // create from serialization only
+protected: // create from serialization only
   vgui_mfc_doc();
   DECLARE_DYNCREATE(vgui_mfc_doc)
 
-// Operations
- public:
-  vgui_tableau* get_tableau() { return tableau; }
-// Overrides
+  // Operations
+public:
+  vgui_tableau *
+  get_tableau()
+  {
+    return tableau;
+  }
+  // Overrides
   // ClassWizard generated virtual function overrides
   //{{AFX_VIRTUAL(vgui_mfc_doc)
- public:
-  virtual void Serialize(CArchive& ar);
+public:
+  virtual void
+  Serialize(CArchive & ar);
   //}}AFX_VIRTUAL
 
-// Implementation
- public:
+  // Implementation
+public:
   virtual ~vgui_mfc_doc();
 #ifdef _DEBUG
-  virtual void AssertValid() const;
-  virtual void Dump(CDumpContext& dc) const;
+  virtual void
+  AssertValid() const;
+  virtual void
+  Dump(CDumpContext & dc) const;
 #endif
 };
 

@@ -17,8 +17,7 @@
 #include "vcsl_cylindrical_to_cartesian_3d_sptr.h"
 
 //: Convert 3D cartesian coordinates to cylindrical coordinates
-class vcsl_cylindrical_to_cartesian_3d
-  : public vcsl_spatial_transformation
+class vcsl_cylindrical_to_cartesian_3d : public vcsl_spatial_transformation
 {
   //***************************************************************************
   // Constructors/Destructor
@@ -27,7 +26,7 @@ class vcsl_cylindrical_to_cartesian_3d
   // Default constructor
   vcsl_cylindrical_to_cartesian_3d() = default;
 
- public:
+public:
   // Destructor
   ~vcsl_cylindrical_to_cartesian_3d() override = default;
 
@@ -38,12 +37,17 @@ class vcsl_cylindrical_to_cartesian_3d
   //: Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
   // Pure virtual function of vcsl_spatial_transformation
-  bool is_invertible(double time) const override;
+  bool
+  is_invertible(double time) const override;
 
   //: Is `this' correctly set ?
   //  Always true.
   // Virtual function of vcsl_spatial_transformation
-  bool is_valid() const override { return true; }
+  bool
+  is_valid() const override
+  {
+    return true;
+  }
 
   //***************************************************************************
   // Basic operations
@@ -53,23 +57,24 @@ class vcsl_cylindrical_to_cartesian_3d
   //  REQUIRE: is_valid()
   //  REQUIRE: v.size()==3
   // Pure virtual function of vcsl_spatial_transformation
-  vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const override;
+  vnl_vector<double>
+  execute(const vnl_vector<double> & v, double time) const override;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
   //  REQUIRE: v.size()==3
   // Pure virtual function of vcsl_spatial_transformation
-  vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const override;
+  vnl_vector<double>
+  inverse(const vnl_vector<double> & v, double time) const override;
 
   //***************************************************************************
   // Singleton pattern
   //***************************************************************************
 
   //: Return the reference to the unique vcsl_length object
-  static vcsl_cylindrical_to_cartesian_3d_sptr instance();
+  static vcsl_cylindrical_to_cartesian_3d_sptr
+  instance();
 };
 
 #endif // vcsl_cylindrical_to_cartesian_3d_h_

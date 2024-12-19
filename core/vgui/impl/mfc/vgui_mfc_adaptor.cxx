@@ -178,7 +178,8 @@ vgui_mfc_adaptor::swap_buffers()
 }
 
 //: Change the default popup menu to the given one (not yet implemented).
-void vgui_mfc_adaptor::set_default_popup(vgui_menu)
+void
+vgui_mfc_adaptor::set_default_popup(vgui_menu)
 {
   std::cerr << "vgui_mfc_adaptor::set_default_popup\n";
 }

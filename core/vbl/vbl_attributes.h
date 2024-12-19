@@ -17,59 +17,74 @@
 
 //: minimum element value
 template <class T>
-T minval(vbl_array_1d<T> const& in);
+T
+minval(const vbl_array_1d<T> & in);
 //: maximum element value
 template <class T>
-T maxval(vbl_array_1d<T> const& in);
+T
+maxval(const vbl_array_1d<T> & in);
 //: min max bounds
 template <class T>
-void bounds(vbl_array_1d<T> const& in, T& min, T& max);
+void
+bounds(const vbl_array_1d<T> & in, T & min, T & max);
 //: mean of element values
 template <class T>
-T mean(vbl_array_1d<T> const& in);
+T
+mean(const vbl_array_1d<T> & in);
 //: median of element values
 // Actually, the "left median" is returned:
 // it's always a value from the array, which for even-sized arrays is a
 // "left-biased" or better said, a "smaller-biased" middle entry from the array.
 template <class T>
-T median(vbl_array_1d<T> const& in);
+T
+median(const vbl_array_1d<T> & in);
 
 //: minimum element value
 template <class T>
-T minval(vbl_array_2d<T> const& in);
+T
+minval(const vbl_array_2d<T> & in);
 //: maximum element value
 template <class T>
-T maxval(vbl_array_2d<T> const& in);
+T
+maxval(const vbl_array_2d<T> & in);
 //: min max bounds
 template <class T>
-void bounds(vbl_array_2d<T> const& in, T& min, T& max);
+void
+bounds(const vbl_array_2d<T> & in, T & min, T & max);
 //: mean of element values
 template <class T>
-T mean(vbl_array_2d<T> const& in);
+T
+mean(const vbl_array_2d<T> & in);
 //: median of element values
 // Actually, the "left median" is returned:
 // it's always a value from the array, which for even-sized arrays is a
 // "left-biased" or better said, a "smaller-biased" middle entry from the array.
 template <class T>
-T median(vbl_array_2d<T> const& in);
+T
+median(const vbl_array_2d<T> & in);
 
 //: minimum element value
 template <class T>
-T minval(vbl_array_3d<T> const& in);
+T
+minval(const vbl_array_3d<T> & in);
 //: maximum element value
 template <class T>
-T maxval(vbl_array_3d<T> const& in);
+T
+maxval(const vbl_array_3d<T> & in);
 //: min max bounds
 template <class T>
-void bounds(vbl_array_3d<T> const& in, T& min, T& max);
+void
+bounds(const vbl_array_3d<T> & in, T & min, T & max);
 //: mean of element values
 template <class T>
-T mean(vbl_array_3d<T> const& in);
+T
+mean(const vbl_array_3d<T> & in);
 //: median of element values
 // Actually, the "left median" is returned:
 // it's always a value from the array, which for even-sized arrays is a
 // "left-biased" or better said, a "smaller-biased" middle entry from the array.
 template <class T>
-T median(vbl_array_3d<T> const& in);
+T
+median(const vbl_array_3d<T> & in);
 
 #endif // vbl_attributes_h_

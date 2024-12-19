@@ -46,12 +46,12 @@ vil_jpeg_file_probe(vil_stream * vs)
 }
 
 // static data
-static char const jpeg_string[] = "jpeg";
+static const char jpeg_string[] = "jpeg";
 
 //--------------------------------------------------------------------------------
 // class vil_jpeg_file_format
 
-char const *
+const char *
 vil_jpeg_file_format::tag() const
 {
   return jpeg_string;
@@ -93,7 +93,7 @@ vil_jpeg_image::vil_jpeg_image(vil_stream * s)
 }
 
 bool
-vil_jpeg_image::get_property(char const * /*tag*/, void * /*prop*/) const
+vil_jpeg_image::get_property(const char * /*tag*/, void * /*prop*/) const
 {
   // This is not an in-memory image type, nor is it read-only:
   return false;
@@ -223,7 +223,7 @@ vil_jpeg_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned
     assert(view2.istep() == jc->jobj.input_components); // bytes per pixel in the section
     for (unsigned int j = 0; j < view2.nj(); ++j)
     {
-      auto const * scanline = (JSAMPLE const *)&view2(0, j);
+      const auto * scanline = (JSAMPLE const *)&view2(0, j);
       if (!jc->write_scanline(y0 + j, scanline))
         return false;
     }
@@ -297,7 +297,7 @@ vil_jpeg_image::pixel_format() const
 }
 
 
-char const *
+const char *
 vil_jpeg_image::file_format() const
 {
   return jpeg_string;

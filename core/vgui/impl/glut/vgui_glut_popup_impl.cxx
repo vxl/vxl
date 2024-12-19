@@ -68,7 +68,7 @@ vgui_glut_popup_impl::~vgui_glut_popup_impl()
 }
 
 void
-vgui_glut_popup_impl::build(vgui_menu const & m)
+vgui_glut_popup_impl::build(const vgui_menu & m)
 {
   // clear();
 
@@ -83,7 +83,7 @@ vgui_glut_popup_impl::build(vgui_menu const & m)
 }
 
 void
-vgui_glut_popup_impl::build_internal(vgui_menu const & m)
+vgui_glut_popup_impl::build_internal(const vgui_menu & m)
 {
   int old_id = glutGetMenu();
   // vgui_macro_warning << "before\n";

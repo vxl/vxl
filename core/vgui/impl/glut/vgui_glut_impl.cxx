@@ -67,7 +67,7 @@ vgui_glut_impl::name() const
 }
 
 vgui_window *
-vgui_glut_impl::produce_window(int width, int height, vgui_menu const & menubar, char const * title)
+vgui_glut_impl::produce_window(int width, int height, const vgui_menu & menubar, const char * title)
 {
   vgui_glut_window * win = new vgui_glut_window(title, width, height);
   win->menubar = menubar;
@@ -75,7 +75,7 @@ vgui_glut_impl::produce_window(int width, int height, vgui_menu const & menubar,
 }
 
 vgui_window *
-vgui_glut_impl::produce_window(int width, int height, char const * title)
+vgui_glut_impl::produce_window(int width, int height, const char * title)
 {
   return new vgui_glut_window(title, width, height);
 }
@@ -108,7 +108,7 @@ vgui_glut_impl::produce_window(int width, int height, char const * title)
 //       [user code]
 //       ...
 
-static int const internal_label = 1234;
+static const int internal_label = 1234;
 static std::jmp_buf internal_buf;
 
 // This function is the idle callback used
@@ -190,7 +190,7 @@ vgui_glut_impl_process_command_queue()
     if (old_win != a->get_id())
       glutSetWindow(a->get_id());
 
-      // execute the command.
+    // execute the command.
 #ifdef DEBUG
     std::cerr << "cmnd = " << (void *)vgui_glut_impl_adaptor_menu_command << std::endl;
 #endif

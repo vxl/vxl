@@ -27,7 +27,7 @@ vgui_toolkit::registry()
 }
 
 vgui_toolkit *
-vgui_toolkit::lookup(char const * name)
+vgui_toolkit::lookup(const char * name)
 {
   std::vector<vgui_toolkit *> * vv = registry();
   for (unsigned int i = 0; i < vv->size(); ++i)
@@ -67,28 +67,28 @@ vgui_toolkit::init(int &, char **)
 
 
 vgui_window *
-vgui_toolkit::produce_window(int /*width*/, int /*height*/, vgui_menu const & /*menubar*/, char const * /*title*/)
+vgui_toolkit::produce_window(int /*width*/, int /*height*/, const vgui_menu & /*menubar*/, const char * /*title*/)
 {
   vgui_macro_warning << "no implementation of produce_window supplied\n";
   return nullptr;
 }
 
 vgui_window *
-vgui_toolkit::produce_window(int /*width*/, int /*height*/, char const * /*title*/)
+vgui_toolkit::produce_window(int /*width*/, int /*height*/, const char * /*title*/)
 {
   vgui_macro_warning << "no implementation of produce_window supplied\n";
   return nullptr;
 }
 
 vgui_dialog_impl *
-vgui_toolkit::produce_dialog(char const *)
+vgui_toolkit::produce_dialog(const char *)
 {
   vgui_macro_warning << "no implementation of produce_dialog supplied\n";
   return nullptr;
 }
 
 vgui_dialog_extensions_impl *
-vgui_toolkit::produce_dialog_extension(char const *)
+vgui_toolkit::produce_dialog_extension(const char *)
 {
   vgui_macro_warning << "no implementation of produce_dialog supplied\n";
   return nullptr;
@@ -128,7 +128,7 @@ vgui_toolkit::flush()
 }
 
 void
-vgui_toolkit::add_event(vgui_event const &)
+vgui_toolkit::add_event(const vgui_event &)
 {
   vgui_macro_warning << "no implementation of add_event supplied\n";
 }

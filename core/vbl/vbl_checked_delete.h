@@ -23,24 +23,24 @@
 
 //: Checks that T is complete and deletes x.
 // Not to be used on arrays!
-template<class T>
-inline
-void vbl_checked_delete(T * x)
+template <class T>
+inline void
+vbl_checked_delete(T * x)
 {
-    // intentionally complex - simplification causes regressions
-    typedef char type_must_be_complete[ sizeof(T)? 1: -1 ];
-    (void) sizeof(type_must_be_complete);
-    delete x;
+  // intentionally complex - simplification causes regressions
+  typedef char type_must_be_complete[sizeof(T) ? 1 : -1];
+  (void)sizeof(type_must_be_complete);
+  delete x;
 }
 
 //: Checks that T is complete and array deletes x.
-template<class T>
-inline
-void vbl_checked_delete_array(T * x)
+template <class T>
+inline void
+vbl_checked_delete_array(T * x)
 {
-    typedef char type_must_be_complete[ sizeof(T)? 1: -1 ];
-    (void) sizeof(type_must_be_complete);
-    delete [] x;
+  typedef char type_must_be_complete[sizeof(T) ? 1 : -1];
+  (void)sizeof(type_must_be_complete);
+  delete[] x;
 }
 
-#endif  // vbl_checked_delete_h_
+#endif // vbl_checked_delete_h_

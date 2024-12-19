@@ -12,7 +12,7 @@
 #endif
 
 vil_stream_core::vil_stream_core(unsigned block_size)
-    : blocksize_(block_size)
+  : blocksize_(block_size)
 
 {}
 
@@ -40,7 +40,7 @@ vil_stream_core::read(void * buf, vil_streampos n)
 //--------------------------------------------------------------------------------
 
 vil_streampos
-vil_stream_core::write(void const * buf, vil_streampos n)
+vil_stream_core::write(const void * buf, vil_streampos n)
 {
   assert(n >= 0);
   vil_streampos rv = m_transfer(static_cast<char *>(const_cast<void *>(buf)), curpos_, n, false);

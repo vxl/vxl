@@ -22,8 +22,7 @@
 // specified by the angles `lat' and `lon', and the distance from the surface
 // of the ellipsoid, `z'.
 
-class vcsl_geodetic
-  : public vcsl_geographic
+class vcsl_geodetic : public vcsl_geographic
 {
   //***************************************************************************
   // Constructors/Destructor
@@ -32,7 +31,7 @@ class vcsl_geodetic
   // Default constructor.
   vcsl_geodetic() = default;
 
- public:
+public:
   // Destructor
   ~vcsl_geodetic() override = default;
 };

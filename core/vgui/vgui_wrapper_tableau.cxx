@@ -17,7 +17,7 @@ vgui_wrapper_tableau::vgui_wrapper_tableau()
   : child(this)
 {}
 
-vgui_wrapper_tableau::vgui_wrapper_tableau(vgui_tableau_sptr const & n)
+vgui_wrapper_tableau::vgui_wrapper_tableau(const vgui_tableau_sptr & n)
   : child(this, n)
 {}
 
@@ -42,7 +42,7 @@ vgui_wrapper_tableau::file_name() const
 }
 
 bool
-vgui_wrapper_tableau::add_child(vgui_tableau_sptr const & c)
+vgui_wrapper_tableau::add_child(const vgui_tableau_sptr & c)
 {
   if (child)
   {
@@ -57,7 +57,7 @@ vgui_wrapper_tableau::add_child(vgui_tableau_sptr const & c)
 }
 
 bool
-vgui_wrapper_tableau::remove_child(vgui_tableau_sptr const & c)
+vgui_wrapper_tableau::remove_child(const vgui_tableau_sptr & c)
 {
   if (child.child() != c)
   {
@@ -72,7 +72,7 @@ vgui_wrapper_tableau::remove_child(vgui_tableau_sptr const & c)
 }
 
 bool
-vgui_wrapper_tableau::handle(vgui_event const & e)
+vgui_wrapper_tableau::handle(const vgui_event & e)
 {
   return child && child->handle(e);
 }

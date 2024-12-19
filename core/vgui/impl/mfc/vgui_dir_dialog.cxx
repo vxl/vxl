@@ -140,9 +140,9 @@
 
 // If you don't want this as part of your project (eg to put in a library) remove
 // the above #include "stdafx.h" and uncomment the following 3 lines:
-//#define VC_EXTRALEAN        // Exclude rarely-used stuff from Windows headers
-//#include <afxwin.h>         // MFC core and standard components
-//#include <afxext.h>         // MFC extensions
+// #define VC_EXTRALEAN        // Exclude rarely-used stuff from Windows headers
+// #include <afxwin.h>         // MFC core and standard components
+// #include <afxext.h>         // MFC extensions
 
 #include <Dlgs.h>     // For file dialog control IDs
 #include <imagehlp.h> // For ::MakeSureDirectoryPathExists()

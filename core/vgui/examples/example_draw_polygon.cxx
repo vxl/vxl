@@ -47,14 +47,15 @@ struct example_polygon_tableau : public vgui_tableau
   }
 
   bool
-  handle(vgui_event const & e)
+  handle(const vgui_event & e)
   {
     unsigned n = x.size();
     assert(n == y.size());
 
     switch (e.type)
     {
-      case vgui_DRAW: {
+      case vgui_DRAW:
+      {
         glColor3f(1, 1, 1);
 
         // draw edges
@@ -90,7 +91,8 @@ struct example_polygon_tableau : public vgui_tableau
         return true;
       }
 
-      case vgui_MOTION: {
+      case vgui_MOTION:
+      {
         if (v == -1)
           return false;
         vgui_projection_inspector pi;
@@ -103,7 +105,8 @@ struct example_polygon_tableau : public vgui_tableau
         return true;
       }
 
-      case vgui_BUTTON_DOWN: {
+      case vgui_BUTTON_DOWN:
+      {
         if (v >= 0)
           return false;
         vgui_projection_inspector pi;

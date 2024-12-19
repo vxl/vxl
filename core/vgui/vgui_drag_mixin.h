@@ -36,7 +36,7 @@ class vgui_drag_mixin
   //: Mouse button the user is pressing (vgui_BUTTON_NULL if none is pressed).
   vgui_button last_down_button_;
 
- public:
+public:
   //: Constructor - create a default vgui_drag_mixin.
   vgui_drag_mixin(void);
 
@@ -44,10 +44,12 @@ class vgui_drag_mixin
   virtual ~vgui_drag_mixin(void);
 
   //: Look for drag events and pass them to mouse_drag().
-  virtual bool handle(vgui_event const&);
+  virtual bool
+  handle(const vgui_event &);
 
   //: Called when the user is dragging the mouse.
-  virtual bool mouse_drag(int, int, vgui_button, vgui_modifier);
+  virtual bool
+  mouse_drag(int, int, vgui_button, vgui_modifier);
 };
 
 #endif // vgui_drag_mixin_h_

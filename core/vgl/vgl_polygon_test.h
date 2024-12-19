@@ -12,7 +12,8 @@
 //: return true iff (x, y) is inside (or on boundary of) the given n-gon.
 // \relatesalso vgl_polygon
 template <class T>
-bool vgl_polygon_test_inside(T const *xs, T const *ys, unsigned n, T x, T y);
+bool
+vgl_polygon_test_inside(const T * xs, const T * ys, unsigned n, T x, T y);
 
 #define VGL_POLYGON_TEST_INSTANTIATE(T) extern "please include vgl/vgl_polygon_test.hxx instead"
 

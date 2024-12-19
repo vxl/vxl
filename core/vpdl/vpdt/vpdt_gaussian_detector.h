@@ -19,7 +19,7 @@
 template <class gaussian_type>
 class vpdt_gaussian_mthresh_detector
 {
- public:
+public:
   //: the functor return type
   typedef bool return_type;
   //: the functor return type
@@ -33,12 +33,14 @@ class vpdt_gaussian_mthresh_detector
   typedef typename vpdt_field_traits<F>::scalar_type T;
 
   //: Constructor
-  vpdt_gaussian_mthresh_detector(const T& thresh=T(2.5))
-  : sqr_threshold(thresh*thresh) {}
+  vpdt_gaussian_mthresh_detector(const T & thresh = T(2.5))
+    : sqr_threshold(thresh * thresh)
+  {}
 
   //: The main function
   // \retval true if the Mahalanobis distance is less than the threshold
-  bool operator() (const gaussian_type& g, const F& sample, bool& result) const
+  bool
+  operator()(const gaussian_type & g, const F & sample, bool & result) const
   {
     result = g.sqr_mahal_dist(sample) < sqr_threshold;
     return true;

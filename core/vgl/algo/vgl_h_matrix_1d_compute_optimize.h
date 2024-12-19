@@ -18,13 +18,15 @@
 
 class vgl_h_matrix_1d_compute_optimize : public vgl_h_matrix_1d_compute
 {
- public:
-   vgl_h_matrix_1d_compute_optimize() = default;
-   ~vgl_h_matrix_1d_compute_optimize() override = default;
- protected:
-  bool compute_cool_homg(const std::vector<vgl_homg_point_1d<double> >& points1,
-                         const std::vector<vgl_homg_point_1d<double> >& points2,
-                         vgl_h_matrix_1d<double>& H) override;
+public:
+  vgl_h_matrix_1d_compute_optimize() = default;
+  ~vgl_h_matrix_1d_compute_optimize() override = default;
+
+protected:
+  bool
+  compute_cool_homg(const std::vector<vgl_homg_point_1d<double>> & points1,
+                    const std::vector<vgl_homg_point_1d<double>> & points2,
+                    vgl_h_matrix_1d<double> & H) override;
 };
 
 typedef vgl_h_matrix_1d_compute_optimize vgl_h_matrix_1d_computeOptimise1;

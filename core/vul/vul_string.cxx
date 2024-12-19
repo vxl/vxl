@@ -249,7 +249,7 @@ vul_string_right_trim(std::string & sr, const char * rem)
 }
 
 int
-vul_string_atoi(std::string const & s)
+vul_string_atoi(const std::string & s)
 {
   int return_value = 0; // Default value in case of failed conversion
   try
@@ -265,7 +265,7 @@ vul_string_atoi(std::string const & s)
 }
 
 double
-vul_string_atof(std::string const & s)
+vul_string_atof(const std::string & s)
 {
   double return_value = 0.0;
   try
@@ -286,7 +286,7 @@ vul_string_atof(std::string const & s)
 // k=10^3, kb=2^10, M=10^6, Mb=2^20, G=10^9, Gb=2^30, T=10^12, Tb=2^40
 // If parse fails, return 0.0;
 double
-vul_string_atof_withsuffix(std::string const & s)
+vul_string_atof_withsuffix(const std::string & s)
 {
   std::istringstream ss(s);
   double d;
@@ -518,9 +518,9 @@ vul_string_expand_var(std::string & str)
 #  if __has_cpp_attribute(fallthrough)
         [[fallthrough]]; // C++17
 #  elif __has_cpp_attribute(gnu::fallthrough)
-        [[gnu::fallthrough]] // C++11 and C++14;
+      [[gnu::fallthrough]] // C++11 and C++14;
 #  elif __has_cpp_attribute(clang::fallthrough)
-        [[clang::fallthrough]] // C++11 and C++14;
+      [[clang::fallthrough]] // C++11 and C++14;
 #  endif
 #endif
       case in_var: // in a non-bracketed variable
@@ -610,8 +610,8 @@ vul_string_escape_ctrl_chars(const std::string & in)
 {
   std::string out;
 
-  const static std::string special("\t\v\b\r\f\a\\");
-  const static std::string special_tr("tvbrfa\\");
+  static const std::string special("\t\v\b\r\f\a\\");
+  static const std::string special_tr("tvbrfa\\");
 
   for (char it : in)
   {

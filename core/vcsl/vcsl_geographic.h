@@ -24,18 +24,17 @@
 // (Snyder, John P., "Map Projections Used by the U.S. Geological Survey,"
 // Geological Survey Bulletin 1532, U.S. Government Printing Office,
 // Washington, 1982.) for further detail on most of these coordinate systems.
-class vcsl_geographic
-  :public vcsl_spatial
+class vcsl_geographic : public vcsl_spatial
 {
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
- protected:
+protected:
   // Default constructor
   vcsl_geographic();
 
- public:
+public:
   // Destructor
   ~vcsl_geographic() override = default;
 
@@ -44,16 +43,24 @@ class vcsl_geographic
   //***************************************************************************
 
   //: Return the spheroid
-  vcsl_spheroid_sptr spheroid() const { return spheroid_; }
+  vcsl_spheroid_sptr
+  spheroid() const
+  {
+    return spheroid_;
+  }
 
   //***************************************************************************
   // Status setting
   //***************************************************************************
 
   //: Set the spheroid
-  void set_spheroid(vcsl_spheroid_sptr const& s) { spheroid_=s; }
+  void
+  set_spheroid(const vcsl_spheroid_sptr & s)
+  {
+    spheroid_ = s;
+  }
 
- protected:
+protected:
   //***************************************************************************
   // Implementation
   //***************************************************************************

@@ -26,15 +26,15 @@
 
 // Only check-in false:
 static const bool debug = false;
-#define trace                                                                                                          \
-  if (true)                                                                                                            \
-  {                                                                                                                    \
-  }                                                                                                                    \
-  else                                                                                                                 \
+#define trace \
+  if (true)   \
+  {           \
+  }           \
+  else        \
     std::cerr
 
-//#define RENDER_TIMER
-// limit on buffer size 25 Mpix
+// #define RENDER_TIMER
+//  limit on buffer size 25 Mpix
 static const unsigned buf_limit = 25000000;
 
 vgui_vil_image_renderer::vgui_vil_image_renderer()
@@ -52,13 +52,10 @@ vgui_vil_image_renderer::vgui_vil_image_renderer()
 {}
 
 
-vgui_vil_image_renderer::~vgui_vil_image_renderer()
-{
-  delete buffer_;
-}
+vgui_vil_image_renderer::~vgui_vil_image_renderer() { delete buffer_; }
 
 void
-vgui_vil_image_renderer::set_image_resource(vil_image_resource_sptr const & image)
+vgui_vil_image_renderer::set_image_resource(const vil_image_resource_sptr & image)
 {
   // delete old buffer. we could try to reuse it.
   delete buffer_;
@@ -88,7 +85,7 @@ vgui_vil_image_renderer::reread_image()
 }
 
 void
-vgui_vil_image_renderer::create_buffer(vgui_range_map_params_sptr const & rmp)
+vgui_vil_image_renderer::create_buffer(const vgui_range_map_params_sptr & rmp)
 {
   delete buffer_;
   unsigned ni = the_image_->ni(), nj = the_image_->nj();
@@ -120,7 +117,7 @@ vgui_vil_image_renderer::create_buffer(vgui_range_map_params_sptr const & rmp)
 }
 //: creates a buffer for a portion of the image
 void
-vgui_vil_image_renderer::create_buffer(vgui_range_map_params_sptr const & rmp,
+vgui_vil_image_renderer::create_buffer(const vgui_range_map_params_sptr & rmp,
                                        unsigned x0,
                                        unsigned y0,
                                        unsigned x1,
@@ -138,10 +135,10 @@ vgui_vil_image_renderer::create_buffer(vgui_range_map_params_sptr const & rmp,
 }
 // Create a buffer corresponding to a pyramid zoom level
 void
-vgui_vil_image_renderer::create_buffer(vgui_range_map_params_sptr const & rmp,
+vgui_vil_image_renderer::create_buffer(const vgui_range_map_params_sptr & rmp,
                                        float zoomx,
                                        float zoomy,
-                                       vil_image_resource_sptr const & ir)
+                                       const vil_image_resource_sptr & ir)
 {
   delete buffer_;
   buffer_ = nullptr;
@@ -164,7 +161,7 @@ vgui_vil_image_renderer::draw_pixels()
 
 
 bool
-vgui_vil_image_renderer::render_directly(vgui_range_map_params_sptr const & rmp)
+vgui_vil_image_renderer::render_directly(const vgui_range_map_params_sptr & rmp)
 {
   if (!rmp)
     return false;
@@ -228,7 +225,8 @@ vgui_vil_image_renderer::render_directly(vgui_range_map_params_sptr const & rmp)
 #endif
   switch (format)
   {
-    case VIL_PIXEL_FORMAT_BYTE: {
+    case VIL_PIXEL_FORMAT_BYTE:
+    {
       vgui_range_map<unsigned char> rm(*rmp);
       switch (the_image_->nplanes())
       {
@@ -275,14 +273,14 @@ vgui_vil_image_renderer::render_directly(vgui_range_map_params_sptr const & rmp)
           else // use hardware to render
             if (vbuf_ &&
                 vgui_view_render(vbuf_->data(), sni_, snj_, zx_, zy_, GL_LUMINANCE, GL_UNSIGNED_BYTE, hmap, &fLmap))
-          {
+            {
 #ifdef RENDER_TIMER
-            std::cout << "Directly Byte Luminance Rendered in " << t.real() << "msecs\n";
+              std::cout << "Directly Byte Luminance Rendered in " << t.real() << "msecs\n";
 #endif
-            valid_buffer_ = false;
-            buffer_params_ = rmp;
-            return true;
-          }
+              valid_buffer_ = false;
+              buffer_params_ = rmp;
+              return true;
+            }
           return false;
         } // end of 8 bit grey scale
 
@@ -332,14 +330,14 @@ vgui_vil_image_renderer::render_directly(vgui_range_map_params_sptr const & rmp)
             if (vbuf_ &&
                 vgui_view_render(
                   vbuf_->data(), sni_, snj_, zx_, zy_, GL_RGB, GL_UNSIGNED_BYTE, hmap, nullptr, &fRmap, &fGmap, &fBmap))
-          {
+            {
 #ifdef RENDER_TIMER
-            std::cout << "Directly Byte RGB Rendered in " << t.real() << "msecs\n";
+              std::cout << "Directly Byte RGB Rendered in " << t.real() << "msecs\n";
 #endif
-            valid_buffer_ = false;
-            buffer_params_ = rmp;
-            return true;
-          }
+              valid_buffer_ = false;
+              buffer_params_ = rmp;
+              return true;
+            }
           return false;
         } // end of 8 bit RGB
 
@@ -387,7 +385,8 @@ vgui_vil_image_renderer::render_directly(vgui_range_map_params_sptr const & rmp)
       vgui_range_map<unsigned short> rm(*rmp);
       switch (the_image_->nplanes())
       {
-        case 1: {
+        case 1:
+        {
           vbl_array_1d<float> fLmap = rm.fLmap();
           if (!fLmap.size())
             return false;
@@ -431,14 +430,14 @@ vgui_vil_image_renderer::render_directly(vgui_range_map_params_sptr const & rmp)
           else // use hardware
             if (vbuf_ &&
                 vgui_view_render(vbuf_->data(), sni_, snj_, zx_, zy_, GL_LUMINANCE, GL_UNSIGNED_SHORT, hmap, &fLmap))
-          {
+            {
 #ifdef RENDER_TIMER
-            std::cout << "ushort Luminance Map Hardware Rendered in " << t.real() << "msecs\n";
+              std::cout << "ushort Luminance Map Hardware Rendered in " << t.real() << "msecs\n";
 #endif
-            valid_buffer_ = false;
-            buffer_params_ = rmp;
-            return true;
-          }
+              valid_buffer_ = false;
+              buffer_params_ = rmp;
+              return true;
+            }
           return false;
         } // end of case uint_16, 1 plane
 
@@ -475,17 +474,17 @@ vgui_vil_image_renderer::render_directly(vgui_range_map_params_sptr const & rmp)
         } // end of case uint_16, 4 plane
         default:
           return false;
-      }             // end of uint_16, switch on planes
+      } // end of uint_16, switch on planes
       return false; // this statement is never reached
-    }               // end of uint_16
+    } // end of uint_16
     default:
       return false;
-  }             // end of switch on format
+  } // end of switch on format
   return false; // this statement is never reached
 }
 
 void
-vgui_vil_image_renderer::render(vgui_range_map_params_sptr const & rmp)
+vgui_vil_image_renderer::render(const vgui_range_map_params_sptr & rmp)
 {
   if (!the_image_)
     return;
@@ -509,7 +508,7 @@ vgui_vil_image_renderer::render(vgui_range_map_params_sptr const & rmp)
 //: Are the range map params associated with the current buffer out of date?
 //  If so we have to refresh the buffer.
 bool
-vgui_vil_image_renderer::old_range_map_params(vgui_range_map_params_sptr const & rmp)
+vgui_vil_image_renderer::old_range_map_params(const vgui_range_map_params_sptr & rmp)
 {
   // Cases
 
