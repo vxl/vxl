@@ -87,7 +87,7 @@ template <class T, unsigned int n>
 vnl_vector_fixed<T, n> &
 vnl_vector_fixed<T, n>::update(const vnl_vector<T> & v, unsigned int start)
 {
-  size_type stop = start + v.size();
+  const size_type stop = start + v.size();
   assert(stop <= n);
   for (size_type i = start; i < stop; i++)
     this->data_[i] = v[i - start];

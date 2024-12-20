@@ -132,7 +132,7 @@ vnl_random::normal()
       y = drand32(-1.0, 1.0);
       r2 = x * x + y * y;
     } while (r2 >= 1.0 || r2 == 0.0);
-    double fac = std::sqrt(-2.0 * std::log(r2) / r2);
+    const double fac = std::sqrt(-2.0 * std::log(r2) / r2);
     mz_previous_normal = x * fac;
     mz_previous_normal_flag = 1;
     return y * fac;
@@ -164,7 +164,7 @@ vnl_random::normal64()
       y = drand64(-1.0, 1.0);
       r2 = x * x + y * y;
     } while (r2 >= 1.0 || r2 == 0.0);
-    double fac = std::sqrt(-2.0 * std::log(r2) / r2);
+    const double fac = std::sqrt(-2.0 * std::log(r2) / r2);
     mz_previous_normal = x * fac;
     mz_previous_normal_flag = 1;
     return y * fac;
@@ -174,8 +174,8 @@ vnl_random::normal64()
 unsigned long
 vnl_random::lrand32()
 {
-  unsigned long p1 = mz_array[(vnl_random_array_size + mz_array_position - mz_previous1) % vnl_random_array_size];
-  unsigned long p2 = (p1 - mz_array[mz_array_position] - mz_borrow) & 0xffffffff;
+  const unsigned long p1 = mz_array[(vnl_random_array_size + mz_array_position - mz_previous1) % vnl_random_array_size];
+  const unsigned long p2 = (p1 - mz_array[mz_array_position] - mz_borrow) & 0xffffffff;
   if (p2 < p1)
     mz_borrow = 0;
   if (p2 > p1)
@@ -193,8 +193,8 @@ vnl_random::lrand32(int lower, int upper)
   // Note: we have to reject some numbers otherwise we get a very slight bias
   // towards the lower part of the range lower - upper. See below
 
-  unsigned long range = upper - lower + 1;
-  unsigned long denom = 0xffffffff / range;
+  const unsigned long range = upper - lower + 1;
+  const unsigned long denom = 0xffffffff / range;
   unsigned long ran;
   while ((ran = lrand32()) >= denom * range)
     ;
@@ -212,8 +212,8 @@ vnl_random::lrand32(int lower, int upper, int & count)
   // version of the above function that returns the number of lrand32()
   // calls made.
 
-  unsigned long range = upper - lower + 1;
-  unsigned long denom = 0xffffffff / range;
+  const unsigned long range = upper - lower + 1;
+  const unsigned long denom = 0xffffffff / range;
   unsigned long ran;
   count = 1;
   while ((ran = lrand32()) >= denom * range)

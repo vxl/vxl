@@ -21,10 +21,10 @@ vnl_fit_parabola(double xa, double xb, double xc, double fa, double fb, double f
   // Effectively shift origin to (xb,fb)
   // Parabola is then y=a*x*x+b*x
   // Centre is then at -b/2a = p/q in the following
-  double x1 = xa - xb;
-  double f1 = fa - fb;
-  double x2 = xc - xb;
-  double f2 = fc - fb;
+  const double x1 = xa - xb;
+  const double f1 = fa - fb;
+  const double x2 = xc - xb;
+  const double f2 = fc - fb;
   p = x2 * x2 * f1 - x1 * x1 * f2;
   q = 2 * (x2 * f1 - x1 * f2);
 }

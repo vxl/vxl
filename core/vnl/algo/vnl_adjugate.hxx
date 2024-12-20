@@ -22,7 +22,7 @@ template <class T>
 void
 vnl_adjugate(const vnl_matrix<T> & A, vnl_matrix<T> * out)
 {
-  int n = A.rows();
+  const int n = A.rows();
   A.assert_size(n, n);
   out->assert_size(n, n);
 

@@ -332,7 +332,7 @@ vnl_fastops::inc_X_by_AtA(vnl_matrix<double> & X, const vnl_matrix<double> & A)
       x[i][i] += (a[0][i] * a[0][i] + a[1][i] * a[1][i]);
       for (unsigned int j = i + 1; j < n; ++j)
       {
-        double accum = (a[0][i] * a[0][j] + a[1][i] * a[1][j]);
+        const double accum = (a[0][i] * a[0][j] + a[1][i] * a[1][j]);
         x[i][j] += accum;
         x[j][i] += accum;
       }
@@ -605,7 +605,7 @@ vnl_fastops::dec_X_by_AtA(vnl_matrix<double> & X, const vnl_matrix<double> & A)
       x[i][i] -= (a[0][i] * a[0][i] + a[1][i] * a[1][i]);
       for (unsigned int j = i + 1; j < n; ++j)
       {
-        double accum = (a[0][i] * a[0][j] + a[1][i] * a[1][j]);
+        const double accum = (a[0][i] * a[0][j] + a[1][i] * a[1][j]);
         x[i][j] -= accum;
         x[j][i] -= accum;
       }

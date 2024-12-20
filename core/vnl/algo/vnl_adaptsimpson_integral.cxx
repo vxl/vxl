@@ -25,12 +25,12 @@ vnl_adaptsimpson_integral::adaptivesimpson(double (*f)(double *),
                                            int level,
                                            int level_max)
 {
-  double h = b - a;
+  const double h = b - a;
   double c = 0.5 * (a + b);
-  double one_simpson = h * (f(&a) + 4.0 * f(&c) + f(&b)) / 6.0;
+  const double one_simpson = h * (f(&a) + 4.0 * f(&c) + f(&b)) / 6.0;
   double d = 0.5 * (a + c);
   double e = 0.5 * (c + b);
-  double two_simpson = h * (f(&a) + 4.0 * f(&d) + 2.0 * f(&c) + 4.0 * f(&e) + f(&b)) / 12.0;
+  const double two_simpson = h * (f(&a) + 4.0 * f(&d) + 2.0 * f(&c) + 4.0 * f(&e) + f(&b)) / 12.0;
   /* Check for level */
   double result;
   if (level + 1 >= level_max)
@@ -46,8 +46,8 @@ vnl_adaptsimpson_integral::adaptivesimpson(double (*f)(double *),
     /* Divide further */
     else
     {
-      double left_simpson = adaptivesimpson(f, a, c, eps / 2.0, level + 1, level_max);
-      double right_simpson = adaptivesimpson(f, c, b, eps / 2.0, level + 1, level_max);
+      const double left_simpson = adaptivesimpson(f, a, c, eps / 2.0, level + 1, level_max);
+      const double right_simpson = adaptivesimpson(f, c, b, eps / 2.0, level + 1, level_max);
       result = left_simpson + right_simpson;
     }
   }

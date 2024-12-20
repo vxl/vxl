@@ -17,7 +17,7 @@ template <class T>
 vnl_vector<T>
 vnl_diag_matrix<T>::solve(const vnl_vector<T> & b) const
 {
-  unsigned len = diagonal_.size();
+  const unsigned len = diagonal_.size();
   vnl_vector<T> ret(len);
   for (unsigned i = 0; i < len; ++i)
     ret[i] = b[i] / diagonal_[i];
@@ -29,7 +29,7 @@ template <class T>
 void
 vnl_diag_matrix<T>::solve(const vnl_vector<T> & b, vnl_vector<T> * out) const
 {
-  unsigned len = diagonal_.size();
+  const unsigned len = diagonal_.size();
   for (unsigned i = 0; i < len; ++i)
     (*out)[i] = b[i] / diagonal_[i];
 }

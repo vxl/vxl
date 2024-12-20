@@ -24,7 +24,7 @@ vnl_fft_base<D, T>::transform(std::complex<T> * signal, int dir)
     int N3 = 1; // n[i+1] n[i+2] ... n[D-1]
     for (int j = 0; j < D; ++j)
     {
-      int d = factors_[j].number();
+      const int d = factors_[j].number();
       if (j < i)
         N1 *= d;
       if (j == i)

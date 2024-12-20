@@ -332,7 +332,7 @@ public:
   unsigned int
   number_of_residuals(int i, int j) const
   {
-    int k = residual_indices_(i, j);
+    const int k = residual_indices_(i, j);
     if (k < 0)
       return 0;
     else

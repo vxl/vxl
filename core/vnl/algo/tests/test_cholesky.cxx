@@ -20,17 +20,17 @@ test_cholesky()
   I.set_identity();
 
   {
-    vnl_cholesky chol(A);
+    const vnl_cholesky chol(A);
     std::cout << "cholesky inverse:\n" << chol.inverse() << '\n' << "direct inverse:\n" << vnl_inverse(A) << '\n';
     testlib_test_assert_near("vnl_inverse() ~= cholesky.inverse()", (chol.inverse() - vnl_inverse(A)).fro_norm());
   }
   {
-    vnl_cholesky chol(A);
+    const vnl_cholesky chol(A);
     testlib_test_assert_near("Ai * A - I", (chol.inverse() * A - I).fro_norm());
     testlib_test_assert_near("Ai * A - I", (A * chol.inverse() - I).fro_norm());
   }
   {
-    vnl_cholesky chol(A, vnl_cholesky::estimate_condition);
+    const vnl_cholesky chol(A, vnl_cholesky::estimate_condition);
     testlib_test_assert_near("Ai * A - I", (chol.inverse() * A - I).fro_norm());
     testlib_test_assert_near("Ai * A - I", (A * chol.inverse() - I).fro_norm());
   }
@@ -40,8 +40,8 @@ test_cholesky()
     vnl_vector<double> x0(3);
     test_util_fill_random(x0.begin(), x0.end(), rng);
     b = A * x0;
-    vnl_cholesky chol(A);
-    vnl_vector<double> x = chol.solve(b);
+    const vnl_cholesky chol(A);
+    const vnl_vector<double> x = chol.solve(b);
     testlib_test_assert_near("Solve Ax=b", (x - x0).one_norm(), 0, 1e-6);
   }
 }

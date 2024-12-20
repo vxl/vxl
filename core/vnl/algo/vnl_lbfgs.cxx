@@ -65,7 +65,7 @@ vnl_lbfgs::minimize(vnl_vector<double> & x)
               << (w.size() / 128.0 / 1024.0) << " MB], ErrorScale = " << f_->reported_error(1)
               << ", xnorm = " << x.magnitude() << std::endl;
 
-  bool we_trace = (verbose_ && !trace);
+  const bool we_trace = (verbose_ && !trace);
 
   if (we_trace)
     std::cerr << "vnl_lbfgs: ";
@@ -114,8 +114,8 @@ vnl_lbfgs::minimize(vnl_vector<double> & x)
       if (verbose_)
       {
         int l = n;
-        int limit = 100;
-        int limit_tail = 10;
+        const int limit = 100;
+        const int limit_tail = 10;
         if (l > limit + limit_tail)
         {
           std::cerr << " [ Showing only first " << limit << " components ]\n";

@@ -27,7 +27,7 @@ test_real_npolynomial()
   for (unsigned int i = 0; i < 4; ++i)
     expo_2(i, 1) = expo_2(3 - i, 0) = i;
 
-  vnl_real_npolynomial f0(coef_0, expo_0);
+  const vnl_real_npolynomial f0(coef_0, expo_0);
   vnl_real_npolynomial f1(coef_1, expo_1);
   vnl_real_npolynomial f2(coef_2, expo_2);
 

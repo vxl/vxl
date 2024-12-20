@@ -13,8 +13,8 @@
 template <class T>
 vnl_fortran_copy<T>::vnl_fortran_copy(const vnl_matrix<T> & M)
 {
-  unsigned n = M.rows();
-  unsigned p = M.columns();
+  const unsigned n = M.rows();
+  const unsigned p = M.columns();
 
   data = vnl_c_vector<T>::allocate_T(sz = n * p);
   T * d = data;

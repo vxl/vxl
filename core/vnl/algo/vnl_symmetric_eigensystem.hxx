@@ -110,8 +110,8 @@ vnl_symmetric_eigensystem_compute(const vnl_matrix<T> & A, vnl_matrix<T> & V, vn
   vnl_vector<double> work2(n);
   vnl_vector<double> Vvec(n * n);
 
-  long want_eigenvectors = 1;
-  long ierr = 0;
+  const long want_eigenvectors = 1;
+  const long ierr = 0;
 
   // No need to transpose A, 'cos it's symmetric...
   v3p_netlib_rs_(&n, &n, Ad.data_block(), &Dd[0], &want_eigenvectors, &Vvec[0], &work1[0], &work2[0], &ierr);
@@ -172,7 +172,7 @@ vnl_symmetric_eigensystem<T>::solve(const vnl_vector<T> & b)
 {
   // vnl_vector<T> ret(b.length());
   // FastOps::AtB(V, b, &ret);
-  vnl_vector<T> ret(b * V); // same as V.transpose()*b
+  const vnl_vector<T> ret(b * V); // same as V.transpose()*b
 
   vnl_vector<T> tmp(b.size());
   D.solve(ret, &tmp);
@@ -195,7 +195,7 @@ template <class T>
 vnl_matrix<T>
 vnl_symmetric_eigensystem<T>::pinverse() const
 {
-  unsigned n = D.rows();
+  const unsigned n = D.rows();
   vnl_diag_matrix<T> invD(n);
   for (unsigned i = 0; i < n; ++i)
     if (D(i, i) == 0)
@@ -212,7 +212,7 @@ template <class T>
 vnl_matrix<T>
 vnl_symmetric_eigensystem<T>::square_root() const
 {
-  unsigned n = D.rows();
+  const unsigned n = D.rows();
   vnl_diag_matrix<T> sqrtD(n);
   for (unsigned i = 0; i < n; ++i)
     if (D(i, i) < 0)
@@ -230,7 +230,7 @@ template <class T>
 vnl_matrix<T>
 vnl_symmetric_eigensystem<T>::inverse_square_root() const
 {
-  unsigned n = D.rows();
+  const unsigned n = D.rows();
   vnl_diag_matrix<T> inv_sqrtD(n);
   for (unsigned i = 0; i < n; ++i)
     if (D(i, i) <= 0)

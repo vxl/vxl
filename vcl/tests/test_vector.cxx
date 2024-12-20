@@ -34,7 +34,7 @@ test_vector_main(int /*argc*/, char * /*argv*/[])
     m.push_back(1);
     m.push_back(2);
 
-    for (int & p : m)
+    for (const int & p : m)
       std::cout << p << std::endl;
   }
   {

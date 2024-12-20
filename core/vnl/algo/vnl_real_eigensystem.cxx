@@ -20,7 +20,7 @@ vnl_real_eigensystem::vnl_real_eigensystem(const vnl_matrix<double> & M)
   , V(M.rows(), M.columns())
   , D(M.rows())
 {
-  long n = M.rows();
+  const long n = M.rows();
   assert(n == (int)(M.columns()));
 
   vnl_fortran_copy<double> mf(M);
@@ -32,7 +32,7 @@ vnl_real_eigensystem::vnl_real_eigensystem(const vnl_matrix<double> & M)
   vnl_matrix<double> devout(n, n);
 
   long ierr = 0;
-  long matz = 1;
+  const long matz = 1;
   v3p_netlib_rg_(&n,
                  &n,
                  mf,

@@ -12,7 +12,7 @@ test_vector_fixed_ref()
     const double numbers[4]{ 0, 11, 22, 33 };
     vnl_vector<double> v{ numbers, 4 };
     // vnl_vector_ref(numbers, 4); // Should fail to compile due to const double numbers
-    vnl_vector_ref<double> memory_access_vnl_ref{ v.size(), v.data_block() };
+    const vnl_vector_ref<double> memory_access_vnl_ref{ v.size(), v.data_block() };
     const vnl_vector_ref<double> const_cpprefvector{ memory_access_vnl_ref };
 
     const_cpprefvector.as_ref();
@@ -74,7 +74,7 @@ test_vector_fixed_ref()
 
   // fixed_ref_const
   const vf & cvf = vec;
-  vfrc cref(cvf);
+  const vfrc cref(cvf);
   // check address
   for (i = 0; i < size; ++i)
   {
@@ -84,7 +84,7 @@ test_vector_fixed_ref()
 
   // fixed_ref (non-const)
   // wrap around vec
-  vfr ref(vec);
+  const vfr ref(vec);
   // check address
   for (i = 0; i < size; ++i)
   {
@@ -99,7 +99,7 @@ test_vector_fixed_ref()
   {
     //    assign from const vfr
     std::generate(other.begin(), other.end(), std::rand);
-    vfrc cref(other);
+    const vfrc cref(other);
     ref = cref;
     TEST("assign_const_ref", ref, other);
     // test different addresses
@@ -113,16 +113,16 @@ test_vector_fixed_ref()
     vf b;
     std::generate(a.begin(), a.end(), std::rand);
     std::generate(b.begin(), b.end(), std::rand);
-    vfrc arefc(a);
-    vfrc brefc(b);
-    vf mc = arefc + brefc;
+    const vfrc arefc(a);
+    const vfrc brefc(b);
+    const vf mc = arefc + brefc;
 
-    vfr aref(a);
-    vfr bref(b);
-    vf m = aref + bref;
+    const vfr aref(a);
+    const vfr bref(b);
+    const vf m = aref + bref;
 
-    vf m2 = arefc + bref;
-    vf m3 = arefc + brefc;
+    const vf m2 = arefc + bref;
+    const vf m3 = arefc + brefc;
     TEST("plus", mc, m);
     TEST("plus", mc, m2);
     TEST("plus", mc, m3);
@@ -133,16 +133,16 @@ test_vector_fixed_ref()
     vf b;
     std::generate(a.begin(), a.end(), std::rand);
     std::generate(b.begin(), b.end(), std::rand);
-    vfrc arefc(a);
-    vfrc brefc(b);
-    vf mc = arefc + brefc;
+    const vfrc arefc(a);
+    const vfrc brefc(b);
+    const vf mc = arefc + brefc;
 
-    vfr aref(a);
-    vfr bref(b);
-    vf m = aref + bref;
+    const vfr aref(a);
+    const vfr bref(b);
+    const vf m = aref + bref;
 
-    vf m2 = arefc + bref;
-    vf m3 = arefc + brefc;
+    const vf m2 = arefc + bref;
+    const vf m3 = arefc + brefc;
     TEST("plus", mc, m);
     TEST("plus", mc, m2);
     TEST("plus", mc, m3);

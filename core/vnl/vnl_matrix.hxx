@@ -669,8 +669,8 @@ template <class T>
 vnl_matrix<T> &
 vnl_matrix<T>::update(const vnl_matrix<T> & m, unsigned top, unsigned left)
 {
-  unsigned int bottom = top + m.num_rows;
-  unsigned int right = left + m.num_cols;
+  const unsigned int bottom = top + m.num_rows;
+  const unsigned int right = left + m.num_cols;
 #ifndef NDEBUG
   if (this->num_rows < bottom || this->num_cols < right)
     vnl_error_matrix_dimension("update", bottom, right, m.num_rows, m.num_cols);
@@ -749,7 +749,7 @@ cos_angle(const vnl_matrix<T> & a, const vnl_matrix<T> & b)
   typedef typename vnl_numeric_traits<Abs_t>::real_t abs_r;
 
   T ab = inner_product(a, b);
-  Abs_t a_b = (Abs_t)std::sqrt((abs_r)vnl_math::abs(inner_product(a, a) * inner_product(b, b)));
+  const Abs_t a_b = (Abs_t)std::sqrt((abs_r)vnl_math::abs(inner_product(a, a) * inner_product(b, b)));
 
   return T(ab / a_b);
 }
@@ -845,7 +845,7 @@ vnl_matrix<T>::normalize_rows()
 
     if (norm != 0)
     {
-      abs_real_t scale = abs_real_t(1) / (std::sqrt((abs_real_t)norm));
+      const abs_real_t scale = abs_real_t(1) / (std::sqrt((abs_real_t)norm));
       for (unsigned int j = 0; j < this->num_cols; ++j)
         this->data[i][j] = T(Real_t(this->data[i][j]) * scale);
     }
@@ -870,7 +870,7 @@ vnl_matrix<T>::normalize_columns()
 
     if (norm != 0)
     {
-      abs_real_t scale = abs_real_t(1) / (std::sqrt((abs_real_t)norm));
+      const abs_real_t scale = abs_real_t(1) / (std::sqrt((abs_real_t)norm));
       for (unsigned int i = 0; i < this->num_rows; i++)
         this->data[i][j] = T(Real_t(this->data[i][j]) * scale);
     }
@@ -1182,7 +1182,7 @@ vnl_matrix<T>::is_identity(double tol) const
     for (unsigned int j = 0; j < this->columns(); ++j)
     {
       T xm = (*this)(i, j);
-      abs_t absdev = (i == j) ? vnl_math::abs(xm - one) : vnl_math::abs(xm);
+      const abs_t absdev = (i == j) ? vnl_math::abs(xm - one) : vnl_math::abs(xm);
       if (absdev > tol)
         return false;
     }
@@ -1296,7 +1296,7 @@ vnl_matrix<T>::read_ascii(std::istream & s)
     return false;
   }
 
-  bool size_known = (this->rows() != 0);
+  const bool size_known = (this->rows() != 0);
 
   if (size_known)
   {
@@ -1307,7 +1307,7 @@ vnl_matrix<T>::read_ascii(std::istream & s)
     return s.good() || s.eof();
   }
 
-  bool debug = false;
+  const bool debug = false;
 
   std::vector<T> first_row_vals;
   if (debug)
@@ -1318,7 +1318,7 @@ vnl_matrix<T>::read_ascii(std::istream & s)
     // Clear whitespace, looking for a newline
     while (true)
     {
-      int c = s.get();
+      const int c = s.get();
       if (c == EOF)
         goto loademup;
       if (!std::isspace(c))
@@ -1343,7 +1343,7 @@ vnl_matrix<T>::read_ascii(std::istream & s)
       goto loademup;
   }
 loademup:
-  std::size_t colz = first_row_vals.size();
+  const std::size_t colz = first_row_vals.size();
 
   if (debug)
     std::cerr << colz << " cols, ";
@@ -1397,7 +1397,7 @@ loademup:
     row_vals.push_back(row);
   }
 
-  std::size_t rowz = row_vals.size();
+  const std::size_t rowz = row_vals.size();
 
   if (debug)
     std::cerr << rowz << " rows.\n";
@@ -1528,7 +1528,7 @@ int
 vnl_inplace_transpose(doublereal * a, unsigned m, unsigned n, char * move, unsigned iwrk)
 {
   doublereal b, c;
-  int k = m * n - 1;
+  const int k = m * n - 1;
   int iter, i1, i2, im, i1c, i2c, ncount, max_;
 
   // *****
@@ -1657,12 +1657,12 @@ template <class T>
 vnl_matrix<T> &
 vnl_matrix<T>::inplace_transpose()
 {
-  unsigned m = rows();
-  unsigned n = columns();
-  unsigned iwrk = (m + n) / 2;
+  const unsigned m = rows();
+  const unsigned n = columns();
+  const unsigned iwrk = (m + n) / 2;
   std::vector<char> move(iwrk);
 
-  int iok = ::vnl_inplace_transpose(data_block(), n, m, &move[0], iwrk);
+  const int iok = ::vnl_inplace_transpose(data_block(), n, m, &move[0], iwrk);
   if (iok != 0)
     std::cerr << __FILE__ " : inplace_transpose() -- iok = " << iok << '\n';
 

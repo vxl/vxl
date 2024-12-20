@@ -15,7 +15,7 @@ double
 vnl_chi_squared_cumulative(T chisq, long dof)
 {
   double cdf;
-  double chisqr = chisq;
+  const double chisqr = chisq;
   v3p_netlib_dchscdf_(&chisqr, &dof, &cdf);
   return cdf;
 }
@@ -41,9 +41,9 @@ vnl_chi_squared_statistic_1(const T * A, const T * B, int n, bool normalize)
     for (int i = 0; i < n; ++i)
       if (A[i])
       {
-        double a = double(A[i]) / sumA;
-        double b = double(B[i]) / sumB;
-        double tmp = a - b;
+        const double a = double(A[i]) / sumA;
+        const double b = double(B[i]) / sumB;
+        const double tmp = a - b;
         sum += tmp * tmp / a;
       }
   }
@@ -52,7 +52,7 @@ vnl_chi_squared_statistic_1(const T * A, const T * B, int n, bool normalize)
     for (int i = 0; i < n; ++i)
       if (A[i])
       {
-        double tmp = A[i] - B[i];
+        const double tmp = A[i] - B[i];
         sum += tmp * tmp / A[i];
       }
   }
@@ -86,9 +86,9 @@ vnl_chi_squared_statistic_12(const T * A, const T * B, int n, bool normalize)
     for (int i = 0; i < n; ++i)
       if (A[i] || B[i])
       {
-        double a = double(A[i]) / sumA;
-        double b = double(B[i]) / sumB;
-        double tmp = a - b;
+        const double a = double(A[i]) / sumA;
+        const double b = double(B[i]) / sumB;
+        const double tmp = a - b;
         sum += tmp * tmp / (a + b);
       }
   }
@@ -97,7 +97,7 @@ vnl_chi_squared_statistic_12(const T * A, const T * B, int n, bool normalize)
     for (int i = 0; i < n; ++i)
       if (A[i] || B[i])
       {
-        double tmp = A[i] - B[i];
+        const double tmp = A[i] - B[i];
         sum += tmp * tmp / (A[i] + B[i]);
       }
   }

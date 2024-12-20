@@ -76,9 +76,9 @@ test_sparse_lu()
   TEST_NEAR("solution of mat5 example", xp[2], 3, 1.e-03);
 
   // test matrix derived from Poisson birth-death queue
-  double s = -0.01;
-  double l = 0.5;
-  double m = 0.5;
+  const double s = -0.01;
+  const double l = 0.5;
+  const double m = 0.5;
   vnl_sparse_matrix<double> S(6, 6);
   S(0, 0) = s + l;
   S(0, 1) = -l;
@@ -109,10 +109,10 @@ test_sparse_lu()
   TEST_NEAR("test solution of birth-death matrix", xbd[2], 1.06622, 1.e-04);
   det = lubd.determinant();
   std::cout << "birth-death determinant = " << det << '\n';
-  double cond = lubd.rcond();
+  const double cond = lubd.rcond();
   std::cout << "birth-death condition number = " << cond << '\n';
   TEST_NEAR("birth-death matrix condition number", cond, 0.03756, 1.e-04);
-  double upbnd = lubd.max_error_bound();
+  const double upbnd = lubd.max_error_bound();
   std::cout << "birth-death upper error bound = " << upbnd << '\n';
   TEST_NEAR("birth-death upper error", upbnd, 5.923e-015, 1.e-016);
 }

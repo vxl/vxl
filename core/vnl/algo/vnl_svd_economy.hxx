@@ -32,7 +32,7 @@ vnl_svd_economy<real_t>::vnl_svd_economy(vnl_matrix<real_t> const & M)
 {
   vnl_fortran_copy<real_t> X(M);
 
-  int mm = std::min(m_ + 1L, n_);
+  const int mm = std::min(m_ + 1L, n_);
 
   // Make workspace vectors.
   vnl_vector<real_t> work(m_, real_t(0));
@@ -41,7 +41,7 @@ vnl_svd_economy<real_t>::vnl_svd_economy(vnl_matrix<real_t> const & M)
   vnl_vector<real_t> espace(n_, real_t(0));
 
   // Call Linpack SVD
-  long ldu = 0;
+  const long ldu = 0;
   long info = 0;
   constexpr long job = 01; // no U, n svs in V (i.e. super-economy size)
   vnl_linpack_svdc_economy((real_t *)X,

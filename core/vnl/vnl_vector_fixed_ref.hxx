@@ -50,7 +50,7 @@ template <class T, unsigned int n>
 const vnl_vector_fixed_ref<T, n> &
 vnl_vector_fixed_ref<T, n>::update(const vnl_vector<T> & v, unsigned int start) const
 {
-  size_type stop = start + v.size();
+  const size_type stop = start + v.size();
   assert(stop <= n);
   for (size_type i = start; i < stop; i++)
     this->data_block()[i] = v[i - start];

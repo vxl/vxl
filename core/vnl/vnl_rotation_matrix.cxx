@@ -12,7 +12,7 @@ vnl_rotation_matrix(const double x[3], double ** R)
 
   // normalize x to a unit vector u, of norm 'angle'.
   double u[3] = { x[0], x[1], x[2] };
-  double angle = std::sqrt(u[0] * u[0] + u[1] * u[1] + u[2] * u[2]);
+  const double angle = std::sqrt(u[0] * u[0] + u[1] * u[1] + u[2] * u[2]);
   if (angle == 0)
     return true;
   u[0] /= angle;
@@ -20,13 +20,13 @@ vnl_rotation_matrix(const double x[3], double ** R)
   u[2] /= angle;
 
   // add (cos(angle)-1)*(1 - u u').
-  double cos_angle = std::cos(angle);
+  const double cos_angle = std::cos(angle);
   for (unsigned i = 0; i < 3; ++i)
     for (unsigned j = 0; j < 3; ++j)
       R[i][j] += (cos_angle - 1) * ((i == j ? 1 : 0) - u[i] * u[j]);
 
   // add sin(angle) * [u]
-  double sin_angle = std::sin(angle);
+  const double sin_angle = std::sin(angle);
   /* */ R[0][1] -= sin_angle * u[2];
   R[0][2] += sin_angle * u[1];
   R[1][0] += sin_angle * u[2]; /* */
