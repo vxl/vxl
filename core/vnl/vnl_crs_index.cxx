@@ -64,7 +64,7 @@ vnl_crs_index::sparse_row(int i) const
   sparse_vector row;
   for (int j = row_ptr_[i]; j < row_ptr_[i + 1]; ++j)
   {
-    row.push_back(idx_pair(j, col_idx_[j]));
+    row.emplace_back(j, col_idx_[j]);
   }
   return row;
 }
@@ -80,7 +80,7 @@ vnl_crs_index::sparse_col(int j) const
   {
     int idx = (*this)(i, j);
     if (idx >= 0)
-      col.push_back(idx_pair(idx, i));
+      col.emplace_back(idx, i);
   }
 
   return col;
