@@ -274,7 +274,7 @@ vnl_ldl_cholesky::inverse() const
   if (num_dims_rank_def_)
   {
     std::cerr << "vnl_ldl_cholesky: Calling inverse() on rank-deficient matrix\n";
-    return vnl_matrix<double>();
+    return {};
   }
 
   unsigned int n = d_.size();
