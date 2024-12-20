@@ -16,7 +16,7 @@
 inline vnl_rational
 vnl_sqrt(vnl_rational x)
 {
-  return vnl_rational(std::sqrt(double(x)));
+  return { std::sqrt(double(x)) };
 }
 
 namespace
