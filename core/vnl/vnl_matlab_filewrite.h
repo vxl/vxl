@@ -57,7 +57,7 @@ public:
 
 protected:
   std::string basename_;
-  int variable_int_;
+  int variable_int_{ 0 };
   std::fstream out_;
 
   std::string

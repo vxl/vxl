@@ -17,8 +17,7 @@
 template <class T>
 vnl_scatter_3x3<T>::vnl_scatter_3x3()
   : base(T(0))
-  , symmetricp(true)
-  , eigenvectors_currentp(false)
+
 {}
 
 template <class T>

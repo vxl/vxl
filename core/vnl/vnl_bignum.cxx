@@ -17,9 +17,7 @@ using Data = unsigned short;
 //: Creates a vnl_bignum from a single-precision floating point number.
 
 vnl_bignum::vnl_bignum(float f)
-  : count(0)
-  , sign(1)
-  , data(nullptr)
+
 {
   double d = f;
   if (d < 0.0)
@@ -55,9 +53,7 @@ vnl_bignum::vnl_bignum(float f)
 //: Creates a vnl_bignum from a double floating point number.
 
 vnl_bignum::vnl_bignum(double d)
-  : count(0)
-  , sign(1)
-  , data(nullptr)
+
 {
   if (d < 0.0)
   {         // Get sign of d
@@ -92,9 +88,7 @@ vnl_bignum::vnl_bignum(double d)
 //: Creates a vnl_bignum from a "long double" floating point number.
 
 vnl_bignum::vnl_bignum(long double d)
-  : count(0)
-  , sign(1)
-  , data(nullptr)
+
 {
   if (d < 0.0)
   {         // Get sign of d
@@ -318,9 +312,7 @@ is_minus_inf(const char * s, std::istream ** is = nullptr)
 //: Creates a vnl_bignum from the character string representation.
 
 vnl_bignum::vnl_bignum(const char * s)
-  : count(0)
-  , sign(1)
-  , data(nullptr)
+
 {
   // decimal:     "^ *[-+]?[1-9][0-9]*$"
   // exponential: "^ *[-+]?[1-9][0-9]*[eE][+]?[0-9]+$"
