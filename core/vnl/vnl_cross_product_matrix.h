@@ -40,11 +40,7 @@ public:
   ~vnl_cross_product_matrix() = default;
 
   vnl_cross_product_matrix &
-  operator=(const vnl_cross_product_matrix & that)
-  {
-    base::operator=(that);
-    return *this;
-  }
+  operator=(const vnl_cross_product_matrix & that) = default;
 
   //: Construct a vnl_cross_product_matrix from a C-array of 3 doubles.
   //  Overrides a method in vnl_matrix.

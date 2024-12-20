@@ -848,11 +848,7 @@ public:
 
   //: Assignment
   inline Base &
-  operator=(const Base & x)
-  {
-    val_ = x.val_;
-    return *this;
-  }
+  operator=(const Base & x) = default;
   inline Base &
   operator=(const Scalar & n)
   {
