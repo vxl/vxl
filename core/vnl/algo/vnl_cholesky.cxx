@@ -95,7 +95,7 @@ vnl_cholesky::inverse() const
   if (num_dims_rank_def_)
   {
     std::cerr << "vnl_cholesky: Calling inverse() on rank-deficient matrix\n";
-    return vnl_matrix<double>();
+    return {};
   }
 
   long n = A_.columns();

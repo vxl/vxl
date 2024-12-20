@@ -198,7 +198,7 @@ public:
   inline vnl_rational
   operator-() const
   {
-    return vnl_rational(-num_, den_);
+    return { -num_, den_ };
   }
   //: Unary plus - returns the current rational.
   inline vnl_rational
@@ -216,7 +216,7 @@ public:
   inline vnl_rational
   abs() const
   {
-    return vnl_rational(num_ < 0 ? -num_ : num_, den_);
+    return { num_ < 0 ? -num_ : num_, den_ };
   }
   //: Replaces rational with 1/rational and returns it.
   //  Inverting 0 gives +Inf, inverting +-Inf gives 0.

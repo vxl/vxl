@@ -191,7 +191,7 @@ public:
     if (sign_ == ' ')
       return *this;
     else
-      return vnl_decnum(sign_ == '-' ? '+' : '-', data_, exp_);
+      return { sign_ == '-' ? '+' : '-', data_, exp_ };
   }
 
   //: Left "bit" shift operator (actually: digit shift, or exponent translation)

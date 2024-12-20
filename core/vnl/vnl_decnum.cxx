@@ -332,7 +332,7 @@ vnl_decnum::plus(const std::string & a, const std::string & b, long exp)
   }
   if (carry)
     result.insert(result.begin(), '1');
-  return vnl_decnum('+', result, exp);
+  return { '+', result, exp };
 }
 
 // Returns the difference of the two first arguments (interpreted as mantissas with the same exponent).
@@ -373,7 +373,7 @@ vnl_decnum::minus(const std::string & a, const std::string & b, long exp)
   if (na)
     result.erase(0, na);
   assert(carry == 0);
-  return vnl_decnum('+', result, exp);
+  return { '+', result, exp };
 }
 
 vnl_decnum
@@ -531,7 +531,7 @@ vnl_decnum::operator/(const vnl_decnum & r) const
   else if (r.data() == "NaN")
     return r;
   else if (data_ == "Inf" && r.data() == "Inf")
-    return vnl_decnum("NaN");
+    return { "NaN" };
   else if (r.data() == "Inf")
     return vnl_decnum(0L);
   else if (data_ == "Inf")
@@ -542,7 +542,7 @@ vnl_decnum::operator/(const vnl_decnum & r) const
   if (r == 1L)
     return *this;
   if (operator==(r))
-    return vnl_decnum('+', "1", 0L);
+    return { '+', "1", 0L };
   std::string a = data_;
   std::string b = r.data();
   int na = int(a.length());
@@ -579,14 +579,14 @@ vnl_decnum::operator%(const vnl_decnum & r) const
   else if (r.data() == "NaN")
     return r;
   else if (r.data() == "Inf")
-    return vnl_decnum("NaN");
+    return { "NaN" };
   else if (data_ == "Inf")
     return *this;
 
   if (r == vnl_decnum("1"))
-    return vnl_decnum("0");
+    return { "0" };
   if (operator==(r))
-    return vnl_decnum("0");
+    return { "0" };
   std::string a = data_;
   std::string b = r.data();
   int na = int(a.length());
@@ -605,7 +605,7 @@ vnl_decnum::operator%(const vnl_decnum & r) const
   if (na == 0)
     return vnl_decnum(0L);
   else
-    return vnl_decnum(sign_, a, exp_);
+    return { sign_, a, exp_ };
 }
 
 // See also the constructor from std::string.

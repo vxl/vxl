@@ -22,7 +22,7 @@ std::string
 vnl_matlab_filewrite::make_var_name(const char * variable_name)
 {
   if (variable_name)
-    return std::string(variable_name);
+    return { variable_name };
   else
   {
     std::stringstream ss;
