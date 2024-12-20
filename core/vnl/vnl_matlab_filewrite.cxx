@@ -11,7 +11,7 @@
 
 vnl_matlab_filewrite::vnl_matlab_filewrite(const char * file_name, const char * basename)
   : basename_(basename ? basename : "targetvar")
-  , variable_int_(0)
+
 {
   out_.open(file_name, std::ios::out | std::ios::binary);
   if (out_.bad())

@@ -27,8 +27,7 @@ public:
   //: Initialize a powell with the given cost function
   vnl_powell(vnl_cost_function * functor)
     : functor_(functor)
-    , linmin_xtol_(1e-4)
-    , initial_step_(1.0)
+
   {}
 
   //: Run minimization, place result in x.
@@ -62,10 +61,10 @@ protected:
   }
 
   //: Tolerance on line search parameter step
-  double linmin_xtol_;
+  double linmin_xtol_{ 1e-4 };
 
   //: Initial step when bracketing minima along a line
-  double initial_step_;
+  double initial_step_{ 1.0 };
 };
 
 #endif // vnl_powell_h_

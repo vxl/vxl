@@ -69,9 +69,7 @@ implement_read_complex_data(float) implement_read_complex_data(double)
 
   vnl_matlab_readhdr::vnl_matlab_readhdr(std::istream & s_)
   : s(s_)
-  , varname(nullptr)
-  , data_read(false)
-  , need_swap(false)
+
 {
   read_hdr();
 }

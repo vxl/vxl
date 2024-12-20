@@ -17,21 +17,13 @@ vnl_random::linear_congruential_lrand32()
 //: Construct with seed
 vnl_random::vnl_random(unsigned long seed)
   : linear_congruential_previous(seed)
-  , mz_array_position(0UL)
-  , mz_borrow(0)
-  , mz_previous_normal_flag(0)
+
 {
   reseed(seed);
 }
 
 //: Construct with seed
-vnl_random::vnl_random(unsigned long seed[vnl_random_array_size])
-  : mz_array_position(0UL)
-  , mz_borrow(0)
-  , mz_previous_normal_flag(0)
-{
-  reseed(seed);
-}
+vnl_random::vnl_random(unsigned long seed[vnl_random_array_size]) { reseed(seed); }
 
 vnl_random::vnl_random(const vnl_random & r)
   : linear_congruential_previous(r.linear_congruential_previous)
