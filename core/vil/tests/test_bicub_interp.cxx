@@ -22,9 +22,7 @@ test_bicub_interp_byte()
     for (unsigned int i = 0; i < image0.ni(); ++i)
       image0(i, j) = vxl_byte(i + j * 10);
 
-  double v;
-
-  v = vil_bicub_interp(image0, 3, 3);
+  double v = vil_bicub_interp(image0, 3, 3);
   TEST_NEAR("vil_bicub_interp at grid point", v, 33, 1e-8);
   v = vil_bicub_interp(image0, 2.4, 3);
   TEST_NEAR("vil_bicub_interp at off-grid point", v, 32.4, 1e-8);

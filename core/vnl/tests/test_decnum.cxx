@@ -447,7 +447,8 @@ run_large_division_tests()
 {
   std::cout << "\nStarting large division tests:\n";
 
-  vnl_decnum a("10000000"), b("10000001");
+  vnl_decnum a("10000000");
+  vnl_decnum b("10000001");
   b *= a;
   vnl_decnum c = b / 10000001;
   std::cout << b << " / 10000001 = " << c << ", must be 10000000\n";
@@ -531,8 +532,11 @@ run_addition_subtraction_tests()
 {
   std::cout << "\nStarting addition, subtraction tests:\n";
 
-  long i, j;
-  vnl_decnum bi, bj, bij;
+  long i;
+  long j;
+  vnl_decnum bi;
+  vnl_decnum bj;
+  vnl_decnum bij;
 
   {
     for (i = 1; i < 0xffff; i *= -3)
@@ -559,8 +563,10 @@ run_addition_subtraction_tests()
 
   vnl_decnum b0(0L);
   vnl_decnum zillion("1000000000000000000000000000000000000");
-  vnl_decnum b1000000(1000000L), b1000000000000("1000000000000");
-  vnl_decnum p_inf("+Inf"), m_inf("-Inf");
+  vnl_decnum b1000000(1000000L);
+  vnl_decnum b1000000000000("1000000000000");
+  vnl_decnum p_inf("+Inf");
+  vnl_decnum m_inf("-Inf");
 
   TEST("-p_inf == m_inf", -p_inf, m_inf);
   TEST("-m_inf == p_inf", -m_inf, p_inf);
@@ -686,8 +692,12 @@ run_multiplication_tests()
 {
   std::cout << "\nStarting multiplication tests:\n";
 
-  vnl_decnum b0(0L), b1000(1000L), b1000000(1000000L), zillion("1000000000000000000");
-  vnl_decnum p_inf("+Inf"), m_inf("-Inf");
+  vnl_decnum b0(0L);
+  vnl_decnum b1000(1000L);
+  vnl_decnum b1000000(1000000L);
+  vnl_decnum zillion("1000000000000000000");
+  vnl_decnum p_inf("+Inf");
+  vnl_decnum m_inf("-Inf");
 
   TEST("b0*b0 == b0", b0 * b0, b0);
   TEST("b0*b1000 == b0", b0 * b1000, b0);
@@ -708,7 +718,8 @@ static void
 run_left_shift_tests()
 {
   vnl_decnum b1(1L);
-  vnl_decnum p_inf("+Inf"), m_inf("-Inf");
+  vnl_decnum p_inf("+Inf");
+  vnl_decnum m_inf("-Inf");
 
   // left shift
   TEST("int(b1) == 1", int(b1), 1);
@@ -738,7 +749,8 @@ static void
 run_right_shift_tests()
 {
   vnl_decnum b2("1e78");
-  vnl_decnum p_inf("+Inf"), m_inf("-Inf");
+  vnl_decnum p_inf("+Inf");
+  vnl_decnum m_inf("-Inf");
 
   // right shift
   TEST("b2 == vnl_decnum(\"1e78\")", b2, vnl_decnum("1e78"));
@@ -772,7 +784,8 @@ run_normalisation_tests()
 {
   std::cout << "\nStarting normalisation tests:\n";
 
-  vnl_decnum a("-1e10"), b = a;
+  vnl_decnum a("-1e10");
+  vnl_decnum b = a;
   TEST("a stored as -1e10", a.data(), "1");
   TEST("b stored as -1e10", b.data(), "1");
   a += 1L;

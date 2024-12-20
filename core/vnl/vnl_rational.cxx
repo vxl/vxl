@@ -19,7 +19,10 @@ makeNumDen(FloatingType d, int_type & num_, int_type & den_)
     d = -d;
 
   // Continued fraction approximation of abs(d): recursively determined
-  int_type den = 0L, num = 1L, prev_den = 1L, prev_num = 0L;
+  int_type den = 0L;
+  int_type num = 1L;
+  int_type prev_den = 1L;
+  int_type prev_num = 0L;
 
   while (d * num < 1e9 && d * den < 1e9)
   {
@@ -58,7 +61,8 @@ vnl_rational &
 vnl_rational::operator*=(const vnl_rational & r)
 {
   assert(num_ != 0 || den_ != 0); // 0 * Inf is undefined
-  int_type a = vnl_rational::gcd(r.numerator(), den_), b = vnl_rational::gcd(r.denominator(), num_);
+  int_type a = vnl_rational::gcd(r.numerator(), den_);
+  int_type b = vnl_rational::gcd(r.denominator(), num_);
   num_ /= b;
   den_ /= a;
   a = r.numerator() / a;
@@ -106,13 +110,15 @@ vnl_rational &
 vnl_rational::operator/=(const vnl_rational & r)
 {
   assert(num_ != 0 || den_ != 0); // 0/0, Inf/Inf undefined
-  int_type a = vnl_rational::gcd(r.numerator(), num_), b = vnl_rational::gcd(r.denominator(), den_);
+  int_type a = vnl_rational::gcd(r.numerator(), num_);
+  int_type b = vnl_rational::gcd(r.denominator(), den_);
   num_ /= a;
   den_ /= b;
   a = r.numerator() / a;
   b = r.denominator() / b;
   // find out whether overflow would occur; in that case, return approximate result
-  double n = double(b) * double(num_), d = double(a) * double(den_);
+  double n = double(b) * double(num_);
+  double d = double(a) * double(den_);
   if (n < maxint_as_double && d < maxint_as_double)
   {
     num_ *= b;

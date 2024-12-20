@@ -109,13 +109,16 @@ test_vector_fixed_ref()
   // arithmetic
   {
     // plus
-    vf a, b;
+    vf a;
+    vf b;
     std::generate(a.begin(), a.end(), std::rand);
     std::generate(b.begin(), b.end(), std::rand);
-    vfrc arefc(a), brefc(b);
+    vfrc arefc(a);
+    vfrc brefc(b);
     vf mc = arefc + brefc;
 
-    vfr aref(a), bref(b);
+    vfr aref(a);
+    vfr bref(b);
     vf m = aref + bref;
 
     vf m2 = arefc + bref;
@@ -126,13 +129,16 @@ test_vector_fixed_ref()
   }
   {
     // times
-    vf a, b;
+    vf a;
+    vf b;
     std::generate(a.begin(), a.end(), std::rand);
     std::generate(b.begin(), b.end(), std::rand);
-    vfrc arefc(a), brefc(b);
+    vfrc arefc(a);
+    vfrc brefc(b);
     vf mc = arefc + brefc;
 
-    vfr aref(a), bref(b);
+    vfr aref(a);
+    vfr bref(b);
     vf m = aref + bref;
 
     vf m2 = arefc + bref;

@@ -19,8 +19,10 @@ doublify(const std::complex<float> & z)
 int
 test_complex_main(int /*argc*/, char * /*argv*/[])
 {
-  std::complex<double> dc1(1.1, 1.2), dc2(2.1, 2.2);
-  std::complex<float> fc1(1.1f, 1.2f), fc2(2.1f, 2.2f);
+  std::complex<double> dc1(1.1, 1.2);
+  std::complex<double> dc2(2.1, 2.2);
+  std::complex<float> fc1(1.1f, 1.2f);
+  std::complex<float> fc2(2.1f, 2.2f);
 
   std::cout << dc1 << " + " << dc2 << " = " << (dc1 + dc2) << std::endl
             << fc1 << " + " << fc2 << " = " << (fc1 + fc2) << std::endl;

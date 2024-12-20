@@ -564,7 +564,8 @@ vnl_bignum::operator/=(const vnl_bignum & b)
   if (b.count == 0)
     return (*this) = (this->sign < 0 ? vnl_bignum("-Inf") : vnl_bignum("+Inf"));
 
-  vnl_bignum quot, r;        // Quotient and remainder
+  vnl_bignum quot;
+  vnl_bignum r;              // Quotient and remainder
   divide(*this, b, quot, r); // Call divide fn
   return (*this) = quot;
 }
@@ -584,7 +585,8 @@ vnl_bignum::operator%=(const vnl_bignum & b)
   if (b.count == 0)
     return (*this) = 0L; // convention: remainder is 0
 
-  vnl_bignum remain, q;        // Quotient and remainder
+  vnl_bignum remain;
+  vnl_bignum q;                // Quotient and remainder
   divide(*this, b, q, remain); // divide by b and save remainder
   return (*this) = remain;     // shallow swap on return
 }
@@ -673,7 +675,8 @@ operator<<(std::ostream & os, const vnl_bignum & b)
   }
   if (d.is_infinity())
     return os << "Inf";
-  vnl_bignum q, r;                           // Temp quotient and remainder
+  vnl_bignum q;
+  vnl_bignum r;                              // Temp quotient and remainder
   char * cbuf = new char[5 * (b.count + 1)]; // Temp character buffer
   Counter i = 0;
   do
@@ -708,7 +711,8 @@ vnl_bignum_to_string(std::string & s, const vnl_bignum & b)
   }
   if (d.is_infinity())
     return s += "Inf";
-  vnl_bignum q, r; // Temp quotient and remainder
+  vnl_bignum q;
+  vnl_bignum r; // Temp quotient and remainder
   do
   {                                                 // repeat:
     divide(d, 10L, q, r);                           //   Divide vnl_bignum by ten
@@ -977,7 +981,8 @@ vnl_bignum::trim()
 void
 add(const vnl_bignum & b1, const vnl_bignum & b2, vnl_bignum & sum)
 {
-  const vnl_bignum *bmax, *bmin; // Determine which of the two
+  const vnl_bignum * bmax;
+  const vnl_bignum * bmin; // Determine which of the two
   if (b1.count >= b2.count)
   {             //   addends has the most
     bmax = &b1; //   data.
@@ -989,7 +994,8 @@ add(const vnl_bignum & b1, const vnl_bignum & b2, vnl_bignum & sum)
     bmin = &b1;
   }
   sum.resize(bmax->count); // Allocate data for their sum
-  unsigned long temp, carry = 0;
+  unsigned long temp;
+  unsigned long carry = 0;
   Counter i = 0;
   if (b1.data)
   {
@@ -1134,14 +1140,13 @@ multiply_aux(const vnl_bignum & b, Data d, vnl_bignum & prod, Counter i)
   }
   if (d != 0)
   { // if d == 0, nothing to do
-    unsigned long temp;
     Data carry = 0;
 
     Counter j = 0;
     for (; j < b.count; j++)
     {
       // for each of b's data elements, multiply times d and add running product
-      temp = (unsigned long)b.data[j] * (unsigned long)d + (unsigned long)prod.data[i + j] + carry;
+      unsigned long temp = (unsigned long)b.data[j] * (unsigned long)d + (unsigned long)prod.data[i + j] + carry;
       prod.data[i + j] = Data(temp % 0x10000L); //   store result in product
       carry = Data(temp / 0x10000L);            //   keep track of carry
     }
@@ -1266,26 +1271,26 @@ multiply_subtract(vnl_bignum & u, const vnl_bignum & v, Data q_hat, Counter j)
   // correct number of times or one too large.
 
   if (q_hat == 0)
-    return q_hat;  // if q_hat 0, nothing to do
-  vnl_bignum rslt; // create a temporary vnl_bignum
-  Counter tmpcnt;
+    return q_hat;            // if q_hat 0, nothing to do
+  vnl_bignum rslt;           // create a temporary vnl_bignum
   rslt.resize(v.count + 1u); // allocate data for it
 
   // simultaneous computation of u - v*q_hat
-  unsigned long prod, diff;
-  Data carry = 0, borrow = 0;
+  unsigned long diff;
+  Data carry = 0;
+  Data borrow = 0;
   Counter i = 0;
   for (; i < v.count; ++i)
   {
     // for each digit of v, multiply it by q_hat and subtract the result
-    prod = (unsigned long)v.data[i] * (unsigned long)q_hat + carry;
+    unsigned long prod = (unsigned long)v.data[i] * (unsigned long)q_hat + carry;
     diff = (unsigned long)u.data[u.count - v.count - 1 - j + i] + (0x10000L - (unsigned long)borrow);
     diff -= (unsigned long)Data(prod);       //   form proper digit of u
     rslt.data[i] = Data(diff);               //   save the result
     borrow = (diff / 0x10000L == 0) ? 1 : 0; //   keep track of any borrows
     carry = Data(prod / 0x10000L);           //   keep track of carries
   }
-  tmpcnt = Counter(u.count - v.count + i - j - 1);
+  Counter tmpcnt = Counter(u.count - v.count + i - j - 1);
   diff = (unsigned long)u.data[tmpcnt] //  special case for the last digit
          + (0x10000L - (unsigned long)borrow);
   diff -= (unsigned long)carry;
@@ -1299,10 +1304,9 @@ multiply_subtract(vnl_bignum & u, const vnl_bignum & v, Data q_hat, Counter j)
   {
     q_hat--;
     carry = 0;
-    unsigned long sum;
     for (i = 0; i < v.count; ++i)
     {
-      sum = (unsigned long)rslt.data[i] + (unsigned long)v.data[i] + carry;
+      unsigned long sum = (unsigned long)rslt.data[i] + (unsigned long)v.data[i] + carry;
       carry = Data(sum / 0x10000L);
       u.data[u.count - v.count + i - 1 - j] = Data(sum);
     }

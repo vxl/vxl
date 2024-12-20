@@ -84,8 +84,10 @@ vnl_discrete_diff_sym(vnl_least_squares_function * lsf,
   assert(n == h.size());
   assert(n == x.size());
 
-  vnl_vector<double> xp(n), xm(n);
-  vnl_vector<double> yp(m), ym(m);
+  vnl_vector<double> xp(n);
+  vnl_vector<double> xm(n);
+  vnl_vector<double> yp(m);
+  vnl_vector<double> ym(m);
 
   for (unsigned j = 0; j < n; j++)
   {

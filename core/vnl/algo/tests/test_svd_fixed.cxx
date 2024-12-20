@@ -170,7 +170,6 @@ test_speed(vnl_random & rng)
     ms_stack = ((timer_04 - timer_03) * 1000) / CLOCKS_PER_SEC;
     std::cout << "vnl_svd_fixed time for 10000 3x3 inversions: " << ms_stack << "ms." << std::endl;
   }
-  int ms_nosvd;
   {
     double sum = 0;
     const std::clock_t timer_05 = std::clock();
@@ -181,7 +180,7 @@ test_speed(vnl_random & rng)
       sum += vnl_inverse(A).fro_norm();
     }
     const std::clock_t timer_06 = std::clock();
-    ms_nosvd = ((timer_06 - timer_05) * 1000) / CLOCKS_PER_SEC;
+    int ms_nosvd = ((timer_06 - timer_05) * 1000) / CLOCKS_PER_SEC;
     std::cout << "(c.f. vnl_inverse no-SVD time for 10000 3x3 inversions: " << ms_nosvd << "ms.)" << std::endl;
   }
   std::cout << "Stack Memory Time: " << ms_stack << " vs. Heap Memory Time: " << ms_heap << std::endl;

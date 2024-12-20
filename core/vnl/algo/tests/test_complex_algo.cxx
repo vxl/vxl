@@ -53,8 +53,12 @@ test_matrix_inverse()
 static void
 test_generalized_schur()
 {
-  vnl_matrix<std::complex<float>> A(4, 4, 0.0f), B(4, 4, 0.0f), L(4, 4, 1.0f), R(4, 4, 1.0f);
-  vnl_vector<std::complex<float>> a(4, 0.0f), b(4, 0.0f);
+  vnl_matrix<std::complex<float>> A(4, 4, 0.0f);
+  vnl_matrix<std::complex<float>> B(4, 4, 0.0f);
+  vnl_matrix<std::complex<float>> L(4, 4, 1.0f);
+  vnl_matrix<std::complex<float>> R(4, 4, 1.0f);
+  vnl_vector<std::complex<float>> a(4, 0.0f);
+  vnl_vector<std::complex<float>> b(4, 0.0f);
   bool r = vnl_generalized_schur(&A, &B, &a, &b, &L, &R);
   TEST("vnl_complex_generalized_schur", r, true);
 }

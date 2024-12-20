@@ -354,7 +354,8 @@ vnl_svd<T>::solve(const vnl_vector<T> & y) const
 
   for (unsigned i = 0; i < x.size(); i++)
   { // multiply with diagonal 1/W
-    T weight = W_(i, i), zero_(0);
+    T weight = W_(i, i);
+    T zero_(0);
     if (weight != zero_)
       x[i] /= weight;
     else
