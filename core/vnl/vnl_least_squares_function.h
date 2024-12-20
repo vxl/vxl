@@ -40,7 +40,7 @@ public:
     no_gradient,
     use_gradient
   };
-  bool failure;
+  bool failure{ false };
 
   //: Construct vnl_least_squares_function.
   // Passing number of parameters (unknowns, domain dimension) and number of
@@ -50,8 +50,7 @@ public:
   vnl_least_squares_function(unsigned int number_of_unknowns,
                              unsigned int number_of_residuals,
                              UseGradient g = use_gradient)
-    : failure(false)
-    , p_(number_of_unknowns)
+    : p_(number_of_unknowns)
     , n_(number_of_residuals)
     , use_gradient_(g == use_gradient)
   {

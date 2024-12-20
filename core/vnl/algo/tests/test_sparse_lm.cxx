@@ -603,7 +603,7 @@ public:
                    const std::vector<std::vector<bool>> & xmask,
                    UseGradient g = use_gradient)
     : bundle_2d(num_cam, num_pts, data, xmask, g, use_weights)
-    , scale2_(1.0)
+
   {}
 
   void
@@ -660,7 +660,7 @@ public:
     // std::cout << "trace "<<iteration<< " a: "<<a<<std::endl;
   }
 
-  double scale2_;
+  double scale2_{ 1.0 };
 };
 
 

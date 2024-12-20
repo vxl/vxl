@@ -15,7 +15,7 @@
 vnl_decnum::vnl_decnum(const std::string & r)
   : sign_('+')
   , data_("")
-  , exp_(0L)
+
 {
   long exp = 0L;
   const char * p = r.c_str();
@@ -78,7 +78,7 @@ vnl_decnum::vnl_decnum(const std::string & r)
 vnl_decnum::vnl_decnum(unsigned long r)
   : sign_('+')
   , data_("")
-  , exp_(0L)
+
 {
   if (r == 0)
     sign_ = ' ';

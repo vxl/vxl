@@ -14,16 +14,8 @@ vnl_sparse_lu::~vnl_sparse_lu() { spDestroy(pmatrix_); }
 //: constructor - controls if condition information is computed
 vnl_sparse_lu::vnl_sparse_lu(const vnl_sparse_matrix<double> & M, operation mode)
   : A_(M)
-  , factored_(false)
-  , condition_computed_(false)
   , mode_(mode)
-  , norm_(0)
-  , rcond_(0)
-  , largest_(0)
-  , pivot_thresh_(0)
-  , absolute_thresh_(0)
-  , diag_pivoting_(1)
-  , pmatrix_(nullptr)
+
 {
   int n = (int)M.columns();
   assert(n == (int)(M.rows()));

@@ -215,8 +215,7 @@ public:
   // Converting constructor template for any integer type.
   template <typename T, typename SFINAE = typename std::enable_if<std::is_integral<T>::value>::type>
   vnl_bignum(const T arg)
-    : count(0)
-    , data(nullptr)
+
   {
     const constructor_helper<T> helper{ arg };
     auto l = helper.absolute_value;

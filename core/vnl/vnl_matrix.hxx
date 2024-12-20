@@ -123,9 +123,7 @@
 //: Default constructor creates an empty matrix of size 0,0.
 template <class T>
 vnl_matrix<T>::vnl_matrix()
-  : num_rows(0)
-  , num_cols(0)
-  , data(nullptr)
+  : data(nullptr)
 {}
 
 //: Creates a matrix with given number of rows and columns.

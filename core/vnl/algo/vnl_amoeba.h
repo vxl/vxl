@@ -137,7 +137,7 @@ public:
 protected:
   vnl_cost_function * fptr;
   double end_error_;
-  int num_evaluations_;
+  int num_evaluations_{ 0 };
 };
 
 // Private struct needs to be declared in the header file
