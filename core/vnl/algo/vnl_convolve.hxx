@@ -116,7 +116,7 @@ vnl_vector<T>
 vnl_convolve(const vnl_vector<T> & v1, const vnl_vector<T> & v2, int use_fft)
 {
   // Quick return if possible:
-  if (v1.size() == 0 || v2.size() == 0)
+  if (v1.empty() || v2.empty())
     return vnl_vector<T>(0);
   if (v1.size() == 1)
     return v2 * v1[0];
@@ -143,7 +143,7 @@ vnl_vector<U>
 vnl_convolve(const vnl_vector<T1> & v1, const vnl_vector<T2> & v2, U *, int use_fft)
 {
   // Quick return if possible:
-  if (v1.size() == 0 || v2.size() == 0)
+  if (v1.empty() || v2.empty())
     return vnl_vector<U>(0);
 
   if (use_fft != 0)
