@@ -76,9 +76,9 @@ public:
   }
 
 private:
-  vcl_atomic_count(const vcl_atomic_count &);
+  vcl_atomic_count(const vcl_atomic_count &) = delete;
   vcl_atomic_count &
-  operator=(const vcl_atomic_count &);
+  operator=(const vcl_atomic_count &) = delete;
 
   mutable pthread_mutex_t mutex_;
   long value_;
