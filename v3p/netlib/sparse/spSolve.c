@@ -62,7 +62,7 @@ static void SolveComplexMatrix( MatrixPtr,
                         RealVector, RealVector, RealVector, RealVector );
 static void SolveComplexTransposedMatrix( MatrixPtr,
                         RealVector, RealVector, RealVector, RealVector );
-#elseif spCOMPLEX
+#elif spCOMPLEX
 static void SolveComplexMatrix( MatrixPtr, RealVector, RealVector );
 static void SolveComplexTransposedMatrix( MatrixPtr,
                         RealVector, RealVector );
