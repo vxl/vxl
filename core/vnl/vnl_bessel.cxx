@@ -24,7 +24,7 @@ vnl_bessel(unsigned n_max, double x, vnl_vector<double> & J)
     J[0] = 1.0;
     return;
   }
-  int nhi = 2 * ((std::max(int(n_max), int(x)) + 15) / 2 + 1);
+  const int nhi = 2 * ((std::max(int(n_max), int(x)) + 15) / 2 + 1);
   vnl_vector<double> j(nhi + 1);
   j[nhi] = 0.0;
   j[nhi - 1] = 1.0;
@@ -50,7 +50,7 @@ vnl_bessel0(double x)
 {
   if (x == 0)
     return 1.0;
-  int nhi = 2 * ((int(x) + 15) / 2); // Even
+  const int nhi = 2 * ((int(x) + 15) / 2); // Even
   double j3 = 0.0;
   double j2 = 1.0;
   double j0 = j2;
@@ -58,7 +58,7 @@ vnl_bessel0(double x)
   for (int i = nhi; i >= 0; i -= 2)
   {
     // j0 is i-th term, j1 is i+1-th etc
-    double j1 = 2 * (i + 2) * j2 / x - j3;
+    const double j1 = 2 * (i + 2) * j2 / x - j3;
     j0 = 2 * (i + 1) * j1 / x - j2;
     even_sum += j0;
     j3 = j1;
@@ -82,7 +82,7 @@ vnl_bessel(unsigned n, double x)
       return 0.0;
   }
 
-  int nhi = 2 * ((std::max(int(n), int(x)) + 15) / 2 + 1);
+  const int nhi = 2 * ((std::max(int(n), int(x)) + 15) / 2 + 1);
   double j3 = 0.0;
   double j2 = 1.0;
   double j0 = j2;
@@ -91,7 +91,7 @@ vnl_bessel(unsigned n, double x)
   for (int i = nhi; i >= 0; i -= 2)
   {
     // j0 is i-th term, j1 is i+1-th etc
-    double j1 = 2 * (i + 2) * j2 / x - j3;
+    const double j1 = 2 * (i + 2) * j2 / x - j3;
     j0 = 2 * (i + 1) * j1 / x - j2;
     even_sum += j0;
     j3 = j1;

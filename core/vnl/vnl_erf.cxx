@@ -139,7 +139,7 @@ vnl_erfc(double x)
   //
   //  Latest modification: March 19, 1990
 
-  double y = std::abs(x);
+  const double y = std::abs(x);
   // ------------------------------------------------------------------
   //  Evaluate  erfc  for  |X| <= 0.46875
   // ------------------------------------------------------------------

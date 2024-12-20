@@ -293,8 +293,8 @@ template <class T, unsigned nrows, unsigned ncols>
 void
 vnl_matrix_fixed<T, nrows, ncols>::extract(vnl_matrix<T> & sub_matrix, unsigned top, unsigned left) const
 {
-  unsigned int rowz = sub_matrix.rows();
-  unsigned int colz = sub_matrix.cols();
+  const unsigned int rowz = sub_matrix.rows();
+  const unsigned int colz = sub_matrix.cols();
 #ifndef NDEBUG
   unsigned int bottom = top + rowz;
   unsigned int right = left + colz;
@@ -353,7 +353,7 @@ vnl_matrix_fixed<T, nrows, ncols>::normalize_rows()
     if (norm != 0)
     {
       typedef typename vnl_numeric_traits<abs_t>::real_t real_t;
-      real_t scale = real_t(1) / std::sqrt((real_t)norm);
+      const real_t scale = real_t(1) / std::sqrt((real_t)norm);
       for (unsigned int j = 0; j < ncols; ++j)
       {
         // FIXME need correct rounding here
@@ -378,7 +378,7 @@ vnl_matrix_fixed<T, nrows, ncols>::normalize_columns()
     if (norm != 0)
     {
       typedef typename vnl_numeric_traits<abs_t>::real_t real_t;
-      real_t scale = real_t(1) / std::sqrt((real_t)norm);
+      const real_t scale = real_t(1) / std::sqrt((real_t)norm);
       for (unsigned int i = 0; i < nrows; ++i)
       {
         // FIXME need correct rounding here
@@ -665,7 +665,7 @@ vnl_matrix_fixed<T, nrows, ncols>::is_identity(double tol) const
     for (unsigned int j = 0; j < ncols; ++j)
     {
       T xm = this->data_[i][j];
-      abs_t absdev = (i == j) ? vnl_math::abs(xm - one) : vnl_math::abs(xm);
+      const abs_t absdev = (i == j) ? vnl_math::abs(xm - one) : vnl_math::abs(xm);
       if (absdev > tol)
         return false;
     }

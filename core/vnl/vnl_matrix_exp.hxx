@@ -22,7 +22,7 @@ vnl_matrix_exp(const Matrix & X, Matrix & expX, double max_err)
   assert(X.cols() == expX.cols());
   assert(max_err > 0);
 
-  double norm_X = X.operator_inf_norm();
+  const double norm_X = X.operator_inf_norm();
 #ifdef DEBUG
   std::cerr << "norm_X = " << norm_X << std::endl;
 #endif
@@ -40,7 +40,7 @@ vnl_matrix_exp(const Matrix & X, Matrix & expX, double max_err)
 
     if (norm_X < n)
     {
-      double err_bound = norm_acc_bound / (1 - norm_X / n);
+      const double err_bound = norm_acc_bound / (1 - norm_X / n);
 #ifdef DEBUG
       std::cerr << "err_bound = " << err_bound << std::endl;
 #endif

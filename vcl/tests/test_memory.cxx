@@ -77,7 +77,7 @@ test_memory_main(int /*argc*/, char * /*argv*/[])
 
     pa1 = std::move(pa3);
 
-    int copied = function_call(std::move(pa2));
+    const int copied = function_call(std::move(pa2));
     ASSERT(copied, "auto_ptr did not receive ownership in called function");
     // can not access pa2 after being moved: ASSERT(!pa2.get(), "auto_ptr did not release ownership to called
     // function");
@@ -93,12 +93,12 @@ test_memory_main(int /*argc*/, char * /*argv*/[])
   // reset instance count for shared pointer tests
   instances = 0;
   {
-    std::shared_ptr<A> spa0;
-    std::shared_ptr<A> spa1(new A());
-    std::shared_ptr<B> spb1(new B());
-    std::shared_ptr<A> spa2(new B());
-    std::shared_ptr<A> spa3(spb1);
-    std::weak_ptr<A> wpa1(spa1);
+    const std::shared_ptr<A> spa0;
+    const std::shared_ptr<A> spa1(new A());
+    const std::shared_ptr<B> spb1(new B());
+    const std::shared_ptr<A> spa2(new B());
+    const std::shared_ptr<A> spa3(spb1);
+    const std::weak_ptr<A> wpa1(spa1);
 
     A * ptr = get_A(*spa1);
     ASSERT(ptr == spa1.get(), "shared_ptr does not return correct object when dereferenced");

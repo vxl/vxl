@@ -135,7 +135,7 @@ next(const char *& s, std::istream ** is)
 {
   if (!is || *s)
   {
-    char c = *s;
+    const char c = *s;
     if (c)
       ++rt_pos, ++s;
     return c;
@@ -501,8 +501,8 @@ vnl_bignum::operator+(const vnl_bignum & b) const
     sum.sign = this->sign; // Attach proper sign
   }
   else
-  {                                    // Else different signs
-    int mag = magnitude_cmp(*this, b); // Determine relative sizes
+  {                                          // Else different signs
+    const int mag = magnitude_cmp(*this, b); // Determine relative sizes
     if (mag > 0)
     {                          // If abs(*this) > abs(b)
       subtract(*this, b, sum); //   sum = *this - b
@@ -736,7 +736,7 @@ vnl_bignum_from_string(vnl_bignum & b, const std::string & s)
 
 vnl_bignum::operator short() const
 {
-  int j = this->operator int();
+  const int j = this->operator int();
   return (short)j;
 }
 
@@ -1026,7 +1026,7 @@ increment(vnl_bignum & bnum)
   unsigned long carry = 1;
   while (i < bnum.count && carry)
   { // increment, element by element.
-    unsigned long temp = (unsigned long)bnum.data[i] + carry;
+    const unsigned long temp = (unsigned long)bnum.data[i] + carry;
     carry = temp / 0x10000L;
     bnum.data[i] = (Data)temp;
     ++i;
@@ -1072,7 +1072,7 @@ decrement(vnl_bignum & bnum)
   unsigned long borrow = 1;
   while (i < bnum.count && borrow)
   { // decrement, element by element.
-    unsigned long temp = (unsigned long)bnum.data[i] + 0x10000L - borrow;
+    const unsigned long temp = (unsigned long)bnum.data[i] + 0x10000L - borrow;
     borrow = (temp / 0x10000L == 0); // Did we have to borrow?
     bnum.data[i] = (Data)temp;       // Reduce modulo radix and save
     ++i;
@@ -1138,7 +1138,7 @@ multiply_aux(const vnl_bignum & b, Data d, vnl_bignum & prod, Counter i)
     for (; j < b.count; j++)
     {
       // for each of b's data elements, multiply times d and add running product
-      unsigned long temp = (unsigned long)b.data[j] * (unsigned long)d + (unsigned long)prod.data[i + j] + carry;
+      const unsigned long temp = (unsigned long)b.data[j] * (unsigned long)d + (unsigned long)prod.data[i + j] + carry;
       prod.data[i + j] = Data(temp % 0x10000L); //   store result in product
       carry = Data(temp / 0x10000L);            //   keep track of carry
     }
@@ -1157,13 +1157,13 @@ multiply_aux(const vnl_bignum & b, Data d, vnl_bignum & prod, Counter i)
 Data
 normalize(const vnl_bignum & b1, const vnl_bignum & b2, vnl_bignum & u, vnl_bignum & v)
 {
-  Data d = Data(0x10000L / ((unsigned long)(b2.data[b2.count - 1]) + 1L)); // Calculate normalization factor.
-  u.resize(b1.count + 1);                                                  // Get data for u (plus extra)
-  v.resize(b2.count);                                                      // Get data for v
-  u.data[b1.count] = 0;                                                    // Set u's leading digit to 0
-  multiply_aux(b1, d, u, 0);                                               // u = b1 * d
-  multiply_aux(b2, d, v, 0);                                               // v = b2 * d
-  return d;                                                                // return normalization factor
+  const Data d = Data(0x10000L / ((unsigned long)(b2.data[b2.count - 1]) + 1L)); // Calculate normalization factor.
+  u.resize(b1.count + 1);                                                        // Get data for u (plus extra)
+  v.resize(b2.count);                                                            // Get data for v
+  u.data[b1.count] = 0;                                                          // Set u's leading digit to 0
+  multiply_aux(b1, d, u, 0);                                                     // u = b1 * d
+  multiply_aux(b2, d, v, 0);                                                     // v = b2 * d
+  return d;                                                                      // return normalization factor
 }
 
 //: divide a vnl_bignum by a "single digit"
@@ -1275,14 +1275,14 @@ multiply_subtract(vnl_bignum & u, const vnl_bignum & v, Data q_hat, Counter j)
   for (; i < v.count; ++i)
   {
     // for each digit of v, multiply it by q_hat and subtract the result
-    unsigned long prod = (unsigned long)v.data[i] * (unsigned long)q_hat + carry;
+    const unsigned long prod = (unsigned long)v.data[i] * (unsigned long)q_hat + carry;
     diff = (unsigned long)u.data[u.count - v.count - 1 - j + i] + (0x10000L - (unsigned long)borrow);
     diff -= (unsigned long)Data(prod);       //   form proper digit of u
     rslt.data[i] = Data(diff);               //   save the result
     borrow = (diff / 0x10000L == 0) ? 1 : 0; //   keep track of any borrows
     carry = Data(prod / 0x10000L);           //   keep track of carries
   }
-  Counter tmpcnt = Counter(u.count - v.count + i - j - 1);
+  const Counter tmpcnt = Counter(u.count - v.count + i - j - 1);
   diff = (unsigned long)u.data[tmpcnt] //  special case for the last digit
          + (0x10000L - (unsigned long)borrow);
   diff -= (unsigned long)carry;
@@ -1298,7 +1298,7 @@ multiply_subtract(vnl_bignum & u, const vnl_bignum & v, Data q_hat, Counter j)
     carry = 0;
     for (i = 0; i < v.count; ++i)
     {
-      unsigned long sum = (unsigned long)rslt.data[i] + (unsigned long)v.data[i] + carry;
+      const unsigned long sum = (unsigned long)rslt.data[i] + (unsigned long)v.data[i] + carry;
       carry = Data(sum / 0x10000L);
       u.data[u.count - v.count + i - 1 - j] = Data(sum);
     }
@@ -1324,13 +1324,13 @@ divide(const vnl_bignum & b1, const vnl_bignum & b2, vnl_bignum & q, vnl_bignum 
   // Note that q or r may *not* be identical to either b1 or b2 !
   assert(&b1 != &q && &b2 != &q && &b1 != &r && &b2 != &r);
   q = r = 0L;
-  if (b1 == 0L)                    // If divisor is zero
-    return;                        //   return zero quotient and remainder
-  int mag = magnitude_cmp(b1, b2); // Compare magnitudes
-  if (mag < 0)                     // if abs(b1) < abs(b2)
-    r = b1;                        //   return zero quotient, b1 remainder
-  else if (mag == 0)               // if abs(b1) == abs(b2)
-    q = 1L;                        //   quotient is 1, remainder is 0
+  if (b1 == 0L)                          // If divisor is zero
+    return;                              //   return zero quotient and remainder
+  const int mag = magnitude_cmp(b1, b2); // Compare magnitudes
+  if (mag < 0)                           // if abs(b1) < abs(b2)
+    r = b1;                              //   return zero quotient, b1 remainder
+  else if (mag == 0)                     // if abs(b1) == abs(b2)
+    q = 1L;                              //   quotient is 1, remainder is 0
   else
   {                                     // otherwise abs(b1) > abs(b2), so divide
     q.resize(b1.count + 1u - b2.count); // Allocate quotient
@@ -1348,7 +1348,7 @@ divide(const vnl_bignum & b1, const vnl_bignum & b2, vnl_bignum & q, vnl_bignum 
       std::cerr << "vnl_bignum::divide: b2 =";
       b2.dump(std::cerr);
 #endif
-      Data d = normalize(b1, b2, u, v); // Set u = b1*d, v = b2*d
+      Data const d = normalize(b1, b2, u, v); // Set u = b1*d, v = b2*d
 #ifdef DEBUG
       std::cerr << "vnl_bignum::divide: d = " << d << std::hex << " (0x" << d << ")\n" << std::dec;
       std::cerr << "vnl_bignum::divide: u = ";
@@ -1358,9 +1358,9 @@ divide(const vnl_bignum & b1, const vnl_bignum & b2, vnl_bignum & q, vnl_bignum 
 #endif
       Counter j = 0;
       while (j <= b1.count - b2.count)
-      {                                       // Main division loop
-        Data q_hat = estimate_q_hat(u, v, j); // Estimate # times v divides u
-        q.data[q.count - 1 - j] =             // Do division, get true answ.
+      {                                             // Main division loop
+        const Data q_hat = estimate_q_hat(u, v, j); // Estimate # times v divides u
+        q.data[q.count - 1 - j] =                   // Do division, get true answ.
           multiply_subtract(u, v, q_hat, j);
         j++;
 #ifdef DEBUG
@@ -1399,9 +1399,9 @@ left_shift(const vnl_bignum & b1, int l)
   vnl_bignum rslt;                                    // result of shift
   rslt.sign = b1.sign;                                // result follows sign of input
   auto growth = Counter(l / 16);                      // # of words rslt will grow by
-  Data shift = Data(l % 16);                          // amount to actually shift
-  Data rshift = Data(16 - shift);                     // amount to shift next word by
-  Data carry = Data(                                  // value that will be shifted
+  const Data shift = Data(l % 16);                    // amount to actually shift
+  const Data rshift = Data(16 - shift);               // amount to shift next word by
+  const Data carry = Data(                            // value that will be shifted
     b1.data[b1.count - 1] >> (16 - shift));           // out end of current array
   rslt.resize(b1.count + growth + (carry ? 1u : 0u)); // allocate new data array
   Counter i = 0;
@@ -1422,8 +1422,8 @@ left_shift(const vnl_bignum & b1, int l)
       rslt.data[i] = (b1.data[i - growth] << shift) // do like the rest
                      + (b1.data[i - 1 - growth] >> rshift);
   }
-  vnl_bignum & result = *((vnl_bignum *)&rslt); // same physical object
-  return result;                                // shallow swap on return
+  const vnl_bignum & result = *((vnl_bignum *)&rslt); // same physical object
+  return result;                                      // shallow swap on return
 }
 
 //: right shift (arithmetic) non-infinite vnl_bignum by positive number.
@@ -1433,15 +1433,15 @@ left_shift(const vnl_bignum & b1, int l)
 vnl_bignum
 right_shift(const vnl_bignum & b1, int l)
 {
-  vnl_bignum rslt;                                   // result of shift
-  auto shrinkage = Counter(l / 16);                  // # of words rslt will shrink
-  Data shift = Data(l % 16);                         // amount to actually shift
-  Data dregs = Data(b1.data[b1.count - 1] >> shift); // high end data to save
+  vnl_bignum rslt;                                         // result of shift
+  auto shrinkage = Counter(l / 16);                        // # of words rslt will shrink
+  const Data shift = Data(l % 16);                         // amount to actually shift
+  const Data dregs = Data(b1.data[b1.count - 1] >> shift); // high end data to save
   if (shrinkage + (dregs == 0) < b1.count)
   {                                                           // if not all data shifted out
     rslt.sign = b1.sign;                                      // rslt follows sign of input
     rslt.resize(b1.count - shrinkage - (dregs == 0 ? 1 : 0)); // allocate new data
-    Data lshift = Data(16 - shift);                           // amount to shift high word
+    const Data lshift = Data(16 - shift);                     // amount to shift high word
     Counter i = 0;
     while (i < rslt.count - 1)
     {                                                         // shift current word
@@ -1456,6 +1456,6 @@ right_shift(const vnl_bignum & b1, int l)
       rslt.data[i] = (b1.data[i + shrinkage] >> shift) + (b1.data[i + shrinkage + 1u] << lshift);
     }
   }
-  vnl_bignum & result = *((vnl_bignum *)&rslt); // same physical object
-  return result;                                // shallow swap on return
+  const vnl_bignum & result = *((vnl_bignum *)&rslt); // same physical object
+  return result;                                      // shallow swap on return
 }

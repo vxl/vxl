@@ -66,7 +66,7 @@ public:
   inline vnl_rnpoly_solve_cmplx
   operator/(const vnl_rnpoly_solve_cmplx & Y) const
   {
-    double N = 1.0 / Y.norm();
+    const double N = 1.0 / Y.norm();
     return { (R * Y.R + C * Y.C) * N, (C * Y.R - R * Y.C) * N };
   }
   inline vnl_rnpoly_solve_cmplx
@@ -84,7 +84,7 @@ public:
   inline vnl_rnpoly_solve_cmplx &
   operator*=(const vnl_rnpoly_solve_cmplx & Y)
   {
-    double r = R * Y.R - C * Y.C;
+    const double r = R * Y.R - C * Y.C;
     C = R * Y.C + C * Y.R;
     R = r;
     return *this;
@@ -156,7 +156,7 @@ inptbr(std::vector<vnl_rnpoly_solve_cmplx> & p, std::vector<vnl_rnpoly_solve_cmp
   q.resize(dim_);
   for (unsigned int j = 0; j < dim_; ++j)
   {
-    int jj = j % 10;
+    const int jj = j % 10;
     p[j] = pp[jj];
     q[j] = qq[jj];
   }
@@ -248,7 +248,7 @@ ffunr(const std::vector<double> & coeff,
       vnl_rnpoly_solve_cmplx tmp(1, 0);
       for (unsigned int k = 0; k < dim_; ++k) // For each variable
       {
-        int index = polyn[i * dim_ * max_nterms_ + j * dim_ + k];
+        const int index = polyn[i * dim_ * max_nterms_ + j * dim_ + k];
         if (index >= 0)
           tmp *= pows[index];
       }
@@ -266,12 +266,12 @@ ffunr(const std::vector<double> & coeff,
           vnl_rnpoly_solve_cmplx tmp = vnl_rnpoly_solve_cmplx(1, 0);
           for (int k = dim_ - 1; k >= 0; k--) // Over each variable in each term
           {
-            int index = polyn[i * dim_ * max_nterms_ + j * dim_ + k];
+            const int index = polyn[i * dim_ * max_nterms_ + j * dim_ + k];
             if (index >= 0)
             {
               if (k == l)
               {
-                int deg = degree(index);
+                const int deg = degree(index);
                 if (deg > 1)
                   tmp *= pows[index - 1];
                 tmp *= (double)deg;
@@ -317,7 +317,7 @@ gfunr(const std::vector<unsigned int> & ideg,
 
   for (unsigned int j = 0; j < dim_; ++j)
   {
-    int index = j * max_deg_ + ideg[j] - 1;
+    const int index = j * max_deg_ + ideg[j] - 1;
     pxdg[j] = pdg[j] * pows[index];
   }
 
@@ -364,7 +364,7 @@ hfunr(const std::vector<unsigned int> & ideg,
   assert(dg.size() == dim_);
   assert(df.size() == dim_ * dim_);
 
-  double onemt = 1.0 - t;
+  const double onemt = 1.0 - t;
   for (unsigned int j = 0; j < dim_; ++j)
   {
     for (unsigned int i = 0; i < dim_; ++i)
@@ -390,7 +390,7 @@ ludcmp(std::vector<vnl_rnpoly_solve_cmplx> & a, std::vector<int> & indx)
     double big = 0.0;
     for (unsigned int j = 0; j < dim_; ++j)
     {
-      double temp = a[i * dim_ + j].norm();
+      const double temp = a[i * dim_ + j].norm();
       if (temp > big)
         big = temp;
     }
@@ -416,7 +416,7 @@ ludcmp(std::vector<vnl_rnpoly_solve_cmplx> & a, std::vector<int> & indx)
         a[i * dim_ + j] -= a[i * dim_ + k] * a[k * dim_ + j];
 
       // Is the figure of merit for the pivot better than the best so far?
-      double rdum = vv[i] * a[i * dim_ + j].norm();
+      const double rdum = vv[i] * a[i * dim_ + j].norm();
       if (rdum >= big)
       {
         big = rdum;
@@ -430,7 +430,7 @@ ludcmp(std::vector<vnl_rnpoly_solve_cmplx> & a, std::vector<int> & indx)
       // Yes, do so...
       for (unsigned int k = 0; k < dim_; ++k)
       {
-        vnl_rnpoly_solve_cmplx dum = a[imax * dim_ + k];
+        const vnl_rnpoly_solve_cmplx dum = a[imax * dim_ + k];
         a[imax * dim_ + k] = a[j * dim_ + k];
         a[j * dim_ + k] = dum;
       }
@@ -447,7 +447,7 @@ ludcmp(std::vector<vnl_rnpoly_solve_cmplx> & a, std::vector<int> & indx)
     // Now, finally, divide by the pivot element
     if (j + 1 != dim_)
     {
-      vnl_rnpoly_solve_cmplx dum = vnl_rnpoly_solve_cmplx(1, 0) / ajj;
+      const vnl_rnpoly_solve_cmplx dum = vnl_rnpoly_solve_cmplx(1, 0) / ajj;
 
       // If the pivot element is zero the matrix is singular.
       for (unsigned int i = j + 1; i < dim_; ++i)
@@ -471,7 +471,7 @@ lubksb(const std::vector<vnl_rnpoly_solve_cmplx> & a,
 
   for (unsigned int i = 0; i < dim_; ++i)
   {
-    int ip = indx[i];
+    const int ip = indx[i];
     vnl_rnpoly_solve_cmplx sum = b[ip];
     b[ip] = b[i];
 
@@ -542,10 +542,10 @@ predict(const std::vector<unsigned int> & ideg,
   assert(terms.size() == dim_);
   assert(x.size() == dim_);
 
-  double maxdt = .2; // Maximum change in t for a given step.  If dt is
-                     // too large, there seems to be greater chance of
-                     // jumping to another path.  Set this to 1 if you
-                     // don't care.
+  const double maxdt = .2; // Maximum change in t for a given step.  If dt is
+                           // too large, there seems to be greater chance of
+                           // jumping to another path.  Set this to 1 if you
+                           // don't care.
   std::vector<vnl_rnpoly_solve_cmplx> dht(dim_);
   std::vector<vnl_rnpoly_solve_cmplx> dhx(dim_ * dim_);
   std::vector<vnl_rnpoly_solve_cmplx> dz(dim_);
@@ -604,7 +604,7 @@ correct(const std::vector<unsigned int> & ideg,
         const std::vector<double> & coeff,
         const std::vector<unsigned int> & terms)
 {
-  double maxroot = 1000; // Maximum size of root where it is considered heading to infinity
+  const double maxroot = 1000; // Maximum size of root where it is considered heading to infinity
   std::vector<vnl_rnpoly_solve_cmplx> dhx(dim_ * dim_);
   std::vector<vnl_rnpoly_solve_cmplx> dht(dim_);
   std::vector<vnl_rnpoly_solve_cmplx> h(dim_);
@@ -625,7 +625,7 @@ correct(const std::vector<unsigned int> & ideg,
     for (unsigned int j = 0; j < dim_; ++j)
       x[j] -= resid[j];
 
-    double xresid = xnorm(resid);
+    const double xresid = xnorm(resid);
     if (xresid < eps)
       return 0;
     if (xresid > maxroot)
@@ -659,16 +659,16 @@ trace(std::vector<vnl_rnpoly_solve_cmplx> & x,
   assert(terms.size() == dim_);
   assert(x.size() == dim_);
 
-  int maxns = 500; // Maximum number of path steps
-  int maxit = 5;   // Maximum number of iterations to correct a step.
-                   // For each step, Newton-Raphson is used to correct
-                   // the step.  This should be at least 3 to improve
-                   // the chances of convergence. If function is well
-                   // behaved, fewer than maxit steps will be needed
+  const int maxns = 500; // Maximum number of path steps
+  const int maxit = 5;   // Maximum number of iterations to correct a step.
+                         // For each step, Newton-Raphson is used to correct
+                         // the step.  This should be at least 3 to improve
+                         // the chances of convergence. If function is well
+                         // behaved, fewer than maxit steps will be needed
 
   double eps = 0;                               // epsilon value used in correct
-  double epsilonS = 1.0e-3 * epsilonB;          // smallest path step for t>.95
-  double stepmin = 1.0e-5 * stepinit;           // Minimum stepsize allowed
+  const double epsilonS = 1.0e-3 * epsilonB;    // smallest path step for t>.95
+  const double stepmin = 1.0e-5 * stepinit;     // Minimum stepsize allowed
   double step = stepinit;                       // stepsize
   double t = 0.0;                               // Continuation parameter 0<t<1
   double oldt = 0.0;                            // The previous t value
@@ -699,11 +699,11 @@ trace(std::vector<vnl_rnpoly_solve_cmplx> & x,
 #ifdef DEBUG
       std::cout << "path converged\n" << std::flush;
 #endif
-      double factor = (1.0 - oldt) / (t - oldt);
+      double const factor = (1.0 - oldt) / (t - oldt);
       for (unsigned int j = 0; j < dim_; ++j)
         x[j] = oldx[j] + (x[j] - oldx[j]) * factor;
       t = 1.0;
-      int cflag = correct(ideg, 10 * maxit, final_eps, pdg, qdg, t, x, polyn, coeff, terms);
+      const int cflag = correct(ideg, 10 * maxit, final_eps, pdg, qdg, t, x, polyn, coeff, terms);
       if ((cflag == 0) || (cflag == 2))
         return 1; // Final Correction converged
       else if (cflag == 3)
@@ -713,7 +713,7 @@ trace(std::vector<vnl_rnpoly_solve_cmplx> & x,
     }
 
     // Newton's method brings us back to the curve
-    int cflag = correct(ideg, maxit, eps, pdg, qdg, t, x, polyn, coeff, terms);
+    const int cflag = correct(ideg, maxit, eps, pdg, qdg, t, x, polyn, coeff, terms);
     if (cflag == 0)
     {
       // Successful step
@@ -770,7 +770,7 @@ strptr(std::vector<unsigned int> & icount,
 
   for (unsigned int j = 0; j < dim_; ++j)
   {
-    double angle = twopi / ideg[j] * icount[j];
+    const double angle = twopi / ideg[j] * icount[j];
     x[j] = r[j] * vnl_rnpoly_solve_cmplx(std::cos(angle), std::sin(angle));
   }
 }
@@ -886,7 +886,7 @@ vnl_rnpoly_solve::Read_Input(std::vector<unsigned int> & ideg,
       coeff[i * max_nterms_ + k] = ps_[i]->coeffs_(k);
       for (unsigned int j = 0; j < dim_; j++)
       {
-        int deg = ps_[i]->polyn_(k, j);
+        const int deg = ps_[i]->polyn_(k, j);
         polyn[i * dim_ * max_nterms_ + k * dim_ + j] = deg ? int(j * max_deg_) + deg - 1 : -1;
       }
     }

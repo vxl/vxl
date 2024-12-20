@@ -21,7 +21,7 @@ test_finite_int(vnl_finite_int<N>)
   }
   if (N <= 1000)
   { // calculating multiplicative order is time consuming
-    unsigned int m = vnl_finite_int<N>(2).multiplicative_order();
+    const unsigned int m = vnl_finite_int<N>(2).multiplicative_order();
     std::cout << "Order of 2 in Z_" << N << " is ";
     if (m == (unsigned int)(-1))
       std::cout << "invalid\n";
@@ -32,27 +32,27 @@ test_finite_int(vnl_finite_int<N>)
   std::cout << "\nStarting constructor tests:\n";
 
   {
-    vnl_finite_int<N> b(0);
+    const vnl_finite_int<N> b(0);
     TEST("vnl_finite_int<N> b(0);", b, 0);
   }
   {
-    vnl_finite_int<N> b(1);
+    const vnl_finite_int<N> b(1);
     TEST("vnl_finite_int<N> b(1);", b, 1);
   }
   {
-    vnl_finite_int<N> b(-1);
+    const vnl_finite_int<N> b(-1);
     TEST("vnl_finite_int<N> b(-1);", b, -1);
   }
   {
-    vnl_finite_int<N> b(-1);
+    const vnl_finite_int<N> b(-1);
     TEST("b == N-1;", b, N - 1);
   }
   {
-    vnl_finite_int<N> b(111);
+    const vnl_finite_int<N> b(111);
     TEST("vnl_finite_int<N> b(111);", b, 111);
   }
   {
-    vnl_finite_int<N> b(-99);
+    const vnl_finite_int<N> b(-99);
     TEST("vnl_finite_int<N> b(-99);", b, -99);
   }
 
@@ -65,7 +65,7 @@ test_finite_int(vnl_finite_int<N>)
   b1 = -77;
   TEST("vnl_finite_int<N> b1; b1 = -77;", b1, 11 * N - 77);
 
-  vnl_finite_int<N> b5 = 4321;
+  const vnl_finite_int<N> b5 = 4321;
   b1 = b5;
   TEST("b1 = b5", b1, b5);
 
@@ -76,7 +76,7 @@ test_finite_int(vnl_finite_int<N>)
   TEST("unary plus", +b5, b5);
 
   std::cout << "\nStarting logical comparison tests:\n";
-  vnl_finite_int<N> b0 = 0;
+  const vnl_finite_int<N> b0 = 0;
   std::cout << "b0=" << b0 << '\n';
   b1 = 1;
   std::cout << "b1=" << b1 << '\n';
@@ -134,7 +134,7 @@ test_finite_int(vnl_finite_int<N>)
   }
   std::cout << std::endl;
 
-  vnl_finite_int<N> b1000(1000);
+  const vnl_finite_int<N> b1000(1000);
 
   TEST("-b0 == b0", -b0, b0);
   TEST("-b1000 == (-1)*b1000", -b1000, (-1) * b1000);
@@ -164,7 +164,7 @@ test_finite_int(vnl_finite_int<N>)
   TEST("b0*b0 == b0", b0 * b0, b0);
   TEST("b0*b1000 == b0", b0 * b1000, b0);
   TEST("b1000*b0 == b0", b1000 * b0, b0);
-  vnl_finite_int<N> b1000000(1000000);
+  const vnl_finite_int<N> b1000000(1000000);
   TEST("b1000*b1000 == b1000000", b1000 * b1000, b1000000);
   TEST("b1000*b1000000 == b1000000*b1000", b1000 * b1000000, b1000000 * b1000);
 
@@ -228,7 +228,7 @@ test_finite_poly(vnl_finite_int_poly<N, M>, const std::string & s)
 
   std::cout << "\nStarting constructor tests:\n";
 
-  vnl_finite_int_poly<N, M> b0;
+  const vnl_finite_int_poly<N, M> b0;
   std::cout << b0 << '\n';
   TEST("vnl_finite_int_poly<N,M> b0;", b0, 0);
   std::vector<vnl_finite_int<N>> p(1);
@@ -238,7 +238,7 @@ test_finite_poly(vnl_finite_int_poly<N, M>, const std::string & s)
   TEST("vnl_finite_int_poly<N,M> b(p);", b, 1);
 
   std::cout << "\nStarting assignment tests:\n";
-  vnl_finite_int<N> b1 = 2;
+  const vnl_finite_int<N> b1 = 2;
   b = b1;
   TEST("vnl_finite_int<N> b1; b = b1;", b, 2);
 
@@ -262,9 +262,9 @@ test_finite_poly(vnl_finite_int_poly<N, M>, const std::string & s)
         v1[m] = i + m;
         v2[m] = j + m, v3[m] = i + j + 2 * m;
       }
-      vnl_finite_int_poly<N, M> p1(v1);
-      vnl_finite_int_poly<N, M> p2(v2);
-      vnl_finite_int_poly<N, M> p3(v3);
+      const vnl_finite_int_poly<N, M> p1(v1);
+      const vnl_finite_int_poly<N, M> p2(v2);
+      const vnl_finite_int_poly<N, M> p3(v3);
 #ifdef DEBUG
       std::cout << p3 << "\n      ";
 #endif
@@ -292,13 +292,13 @@ test_finite_poly(vnl_finite_int_poly<N, M>, const std::string & s)
   testlib_test_perform(true);
 
   mod_p.pop_back();
-  vnl_finite_int_poly<N, M> irred = mod_p;
+  const vnl_finite_int_poly<N, M> irred = mod_p;
   std::cout << "X^" << M << " = " << irred << '\n';
 
   std::vector<vnl_finite_int<N>> v(M);
   for (int m = 0; m < M; ++m)
     v[m] = m + 1 + m * m;
-  vnl_finite_int_poly<N, M> f(v);
+  const vnl_finite_int_poly<N, M> f(v);
   std::cout << "f(X) = " << f << '\n';
   for (int m = 0; m < M; ++m)
     v[m] = m + 1 - m * m;
@@ -334,11 +334,11 @@ test_finite()
   test_finite_int(vnl_finite_int<2>(0));
   test_finite_int(vnl_finite_int<3>(0));
   test_finite_int(vnl_finite_int<4>(0)); // not a field
-  vnl_finite_int<4> b4 = 2;
+  const vnl_finite_int<4> b4 = 2;
   TEST("2*2=0 mod 4", b4 * b4, 0);       // zero divisor
   test_finite_int(vnl_finite_int<5>(0)); // Fermat prime
   test_finite_int(vnl_finite_int<6>(0));
-  vnl_finite_int<6> b6 = 2;
+  const vnl_finite_int<6> b6 = 2;
   TEST("2*3=0 mod 6", b6 * 3, 0);        // zero divisor
   test_finite_int(vnl_finite_int<7>(0)); // Mersenne prime
   test_finite_int(vnl_finite_int<8>(0));
@@ -347,12 +347,12 @@ test_finite()
   test_finite_int(vnl_finite_int<17>(0));  // Fermat prime
   test_finite_int(vnl_finite_int<31>(0));  // Mersenne prime
   test_finite_int(vnl_finite_int<100>(0)); // non-prime square
-  vnl_finite_int<100> b100 = 20;
+  const vnl_finite_int<100> b100 = 20;
   TEST("25*20=0 mod 100", 25 * b100, 0);   // zero divisor
   test_finite_int(vnl_finite_int<243>(0)); // high prime power
   test_finite_int(vnl_finite_int<256>(0)); // high power of 2
   test_finite_int(vnl_finite_int<432>(0)); // high combined power of 2 and 3
-  vnl_finite_int<432> b432 = 180;
+  const vnl_finite_int<432> b432 = 180;
   TEST("180*12=0 mod 432", b432 * 12, 0);      // zero divisor
   test_finite_int(vnl_finite_int<257>(0));     // Fermat prime
   test_finite_int(vnl_finite_int<0x10001>(0)); // Fermat prime

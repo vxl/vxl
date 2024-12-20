@@ -79,7 +79,7 @@ vnl_real_polynomial::devaluate(const std::complex<double> & x) const
 double
 vnl_real_polynomial::evaluate_integral(double x) const
 {
-  int d = coeffs_.size() - 1;
+  const int d = coeffs_.size() - 1;
   const double * f = coeffs_.data_block();
   double sum = 0.0;
   int di = 1;
@@ -199,13 +199,13 @@ vnl_real_polynomial::operator*=(const vnl_real_polynomial & rhs)
 double
 vnl_rms_difference(const vnl_real_polynomial & f1, const vnl_real_polynomial & f2, double x1, double x2)
 {
-  double dx = std::fabs(x2 - x1);
+  const double dx = std::fabs(x2 - x1);
   if (dx == 0.0)
     return 0;
 
-  vnl_real_polynomial df = f2 - f1;
-  vnl_real_polynomial df2 = df * df;
-  double area = std::fabs(df2.evaluate_integral(x1, x2));
+  const vnl_real_polynomial df = f2 - f1;
+  const vnl_real_polynomial df2 = df * df;
+  const double area = std::fabs(df2.evaluate_integral(x1, x2));
   return std::sqrt(area / dx);
 }
 
@@ -213,7 +213,7 @@ vnl_rms_difference(const vnl_real_polynomial & f1, const vnl_real_polynomial & f
 vnl_real_polynomial
 vnl_real_polynomial::derivative() const
 {
-  int d = degree();
+  const int d = degree();
   vnl_vector<double> cd(d);
   for (int i = d - 1, di = 1; i >= 0; --i, ++di)
     cd[i] = coeffs_[i] * di;
@@ -225,7 +225,7 @@ vnl_real_polynomial::derivative() const
 vnl_real_polynomial
 vnl_real_polynomial::primitive() const
 {
-  int d = coeffs_.size(); // degree+1
+  const int d = coeffs_.size(); // degree+1
   vnl_vector<double> cd(d + 1);
   cd[d] = 0.0; // constant term
   for (int i = d - 1, di = 1; i >= 0; --i, ++di)
@@ -236,7 +236,7 @@ vnl_real_polynomial::primitive() const
 void
 vnl_real_polynomial::print(std::ostream & os) const
 {
-  int d = degree();
+  const int d = degree();
   bool first_coeff = true; // to avoid '+' in front of equation
 
   for (int i = 0; i <= d; ++i)

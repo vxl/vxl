@@ -11,7 +11,7 @@ template <class T>
 vnl_matrix<T>
 vnl_orthogonal_complement(const vnl_vector<T> & v)
 {
-  unsigned n = v.size();
+  const unsigned n = v.size();
   vnl_matrix<T> tmp(1, n);
   tmp.set_row(0, v);
   return vnl_svd<T>(tmp).V().extract(n, n - 1, 0, 1);

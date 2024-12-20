@@ -16,7 +16,7 @@ normalize(vnl_vector<double> & a, vnl_vector<double> & b)
 {
   double x_mean = 0.0;
   double y_mean = 0.0;
-  unsigned int num_pts = b.size() / 2;
+  const unsigned int num_pts = b.size() / 2;
   for (unsigned int i = 0; i < num_pts; ++i)
   {
     x_mean += b[2 * i];
@@ -34,8 +34,8 @@ normalize(vnl_vector<double> & a, vnl_vector<double> & b)
   // translate cameras
   for (unsigned int i = 0; i < a.size() / 3; ++i)
   {
-    double sa = std::sin(a[3 * i]);
-    double ca = std::cos(a[3 * i]);
+    const double sa = std::sin(a[3 * i]);
+    const double ca = std::cos(a[3 * i]);
     a[3 * i + 1] += ca * x_mean - sa * y_mean;
     a[3 * i + 2] += sa * x_mean + ca * y_mean;
   }
@@ -60,17 +60,17 @@ normalize(vnl_vector<double> & a, vnl_vector<double> & b)
   }
 
   // use the vector between the first two points for orientation
-  double dx = b[0] - b[2];
-  double dy = b[1] - b[3];
-  double angle = -std::atan2(dy, dx);
-  double sa = std::sin(angle);
-  double ca = std::cos(angle);
+  const double dx = b[0] - b[2];
+  const double dy = b[1] - b[3];
+  const double angle = -std::atan2(dy, dx);
+  const double sa = std::sin(angle);
+  const double ca = std::cos(angle);
 
   // rotate points
   for (unsigned int i = 0; i < num_pts; ++i)
   {
-    double v1 = ca * b[2 * i] - sa * b[2 * i + 1];
-    double v2 = sa * b[2 * i] + ca * b[2 * i + 1];
+    const double v1 = ca * b[2 * i] - sa * b[2 * i + 1];
+    const double v2 = sa * b[2 * i] + ca * b[2 * i + 1];
     b[2 * i] = v1;
     b[2 * i + 1] = v2;
   }
@@ -125,8 +125,8 @@ public:
       const vnl_vector<double> & /*c*/,
       vnl_vector<double> & fxij) override
   {
-    double sa = std::sin(ai[0]);
-    double ca = std::cos(ai[0]);
+    const double sa = std::sin(ai[0]);
+    const double ca = std::cos(ai[0]);
     fxij[0] = (ca * bj[0] - sa * bj[1] + ai[1]) / (sa * bj[0] + ca * bj[1] + ai[2]) - data_[residual_indices_(i, j)];
   }
 
@@ -138,9 +138,9 @@ public:
           const vnl_vector<double> & /*c*/,
           vnl_matrix<double> & Aij) override
   {
-    double sa = std::sin(ai[0]);
-    double ca = std::cos(ai[0]);
-    double denom = (sa * bj[0] + ca * bj[1] + ai[2]);
+    const double sa = std::sin(ai[0]);
+    const double ca = std::cos(ai[0]);
+    const double denom = (sa * bj[0] + ca * bj[1] + ai[2]);
     Aij[0][0] =
       -((sa * bj[0] + ca * bj[1]) + (ca * bj[0] - sa * bj[1] + ai[1]) * (ca * bj[0] - sa * bj[1]) / denom) / denom;
     Aij[0][1] = 1 / denom;
@@ -155,10 +155,10 @@ public:
           const vnl_vector<double> & /*c*/,
           vnl_matrix<double> & Bij) override
   {
-    double sa = std::sin(ai[0]);
-    double ca = std::cos(ai[0]);
-    double denom = (sa * bj[0] + ca * bj[1] + ai[2]);
-    double numer = (ca * bj[0] - sa * bj[1] + ai[1]);
+    const double sa = std::sin(ai[0]);
+    const double ca = std::cos(ai[0]);
+    const double denom = (sa * bj[0] + ca * bj[1] + ai[2]);
+    const double numer = (ca * bj[0] - sa * bj[1] + ai[1]);
     Bij[0][0] = (ca - sa * numer / denom) / denom;
     Bij[0][1] = (-sa - ca * numer / denom) / denom;
   }
@@ -180,7 +180,7 @@ public:
 void
 test_prob1()
 {
-  std::vector<bool> null_row(25, true);
+  const std::vector<bool> null_row(25, true);
   std::vector<std::vector<bool>> mask(4, null_row);
 
   const double a_data[] = { 0.0, 0.0, 0.0, 0.8, 10.0, 8.0, -0.7, -8.5, 8.5, 0.4, 4.0, 4.0 };
@@ -192,7 +192,7 @@ test_prob1()
   vnl_vector<double> a(a_data, 12);
   vnl_vector<double> b(b_data, 50);
   vnl_vector<double> proj(100, 0.0);
-  vnl_vector<double> c;
+  const vnl_vector<double> c;
 
   // create a generator function with ideal data and zeros for all projections
   // the residuals of this functions are the ideal project points
@@ -236,8 +236,8 @@ test_prob1()
     std::cout << a << '|' << b << '\n' << pa << '|' << pb << std::endl;
 #endif
 
-    double rms_error_a = camera_diff(a, pa).rms();
-    double rms_error_b = (b - pb).rms();
+    double const rms_error_a = camera_diff(a, pa).rms();
+    const double rms_error_b = (b - pb).rms();
     std::cout << "RMS camera error: " << rms_error_a << "\nRMS points error: " << rms_error_b << std::endl;
     TEST("convergence with all projections", rms_error_a + rms_error_b < 1e-10, true);
   }
@@ -259,13 +259,13 @@ test_prob1()
   mask[2][12] = false;
 
   // create a subset of projections based on the mask
-  vnl_crs_index crs(mask);
+  const vnl_crs_index crs(mask);
   vnl_vector<double> proj2(crs.num_non_zero());
   for (int i = 0; i < crs.num_rows(); ++i)
   {
     for (int j = 0; j < crs.num_cols(); ++j)
     {
-      int k = crs(i, j);
+      const int k = crs(i, j);
       if (k >= 0)
         proj2[k] = proj[i * crs.num_cols() + j];
     }
@@ -293,8 +293,8 @@ test_prob1()
     // first two points is on the x-axis
     normalize(pa, pb);
 
-    double rms_error_a = camera_diff(a, pa).rms();
-    double rms_error_b = (b - pb).rms();
+    const double rms_error_a = camera_diff(a, pa).rms();
+    const double rms_error_b = (b - pb).rms();
     std::cout << "RMS camera error: " << rms_error_a << "\nRMS points error: " << rms_error_b << std::endl;
     TEST("convergence with missing projections", rms_error_a + rms_error_b < 1e-10, true);
   }
@@ -331,8 +331,8 @@ test_prob1()
     // first two points is on the x-axis
     normalize(pa, pb);
 
-    double rms_error_a = camera_diff(a, pa).rms();
-    double rms_error_b = (b - pb).rms();
+    const double rms_error_a = camera_diff(a, pa).rms();
+    const double rms_error_b = (b - pb).rms();
     std::cout << "RMS camera error: " << rms_error_a << "\nRMS points error: " << rms_error_a << std::endl;
     TEST("convergence with missing projections and noise", rms_error_a < 1e-4 && rms_error_b < 1e-4, true);
   }
@@ -369,8 +369,8 @@ public:
       const vnl_vector<double> & c,
       vnl_vector<double> & fxij) override
   {
-    double sa = std::sin(ai[0]);
-    double ca = std::cos(ai[0]);
+    const double sa = std::sin(ai[0]);
+    const double ca = std::cos(ai[0]);
     fxij[0] =
       c[0] * (ca * bj[0] - sa * bj[1] + ai[1]) / (sa * bj[0] + ca * bj[1] + ai[2]) - data_[residual_indices_(i, j)];
   }
@@ -383,9 +383,9 @@ public:
           const vnl_vector<double> & c,
           vnl_matrix<double> & Aij) override
   {
-    double sa = std::sin(ai[0]);
-    double ca = std::cos(ai[0]);
-    double denom = (sa * bj[0] + ca * bj[1] + ai[2]);
+    const double sa = std::sin(ai[0]);
+    const double ca = std::cos(ai[0]);
+    const double denom = (sa * bj[0] + ca * bj[1] + ai[2]);
     Aij[0][0] = -c[0] *
                 ((sa * bj[0] + ca * bj[1]) + (ca * bj[0] - sa * bj[1] + ai[1]) * (ca * bj[0] - sa * bj[1]) / denom) /
                 denom;
@@ -401,10 +401,10 @@ public:
           const vnl_vector<double> & c,
           vnl_matrix<double> & Bij) override
   {
-    double sa = std::sin(ai[0]);
-    double ca = std::cos(ai[0]);
-    double denom = (sa * bj[0] + ca * bj[1] + ai[2]);
-    double numer = c[0] * (ca * bj[0] - sa * bj[1] + ai[1]);
+    const double sa = std::sin(ai[0]);
+    const double ca = std::cos(ai[0]);
+    const double denom = (sa * bj[0] + ca * bj[1] + ai[2]);
+    const double numer = c[0] * (ca * bj[0] - sa * bj[1] + ai[1]);
     Bij[0][0] = (c[0] * ca - sa * numer / denom) / denom;
     Bij[0][1] = (-c[0] * sa - ca * numer / denom) / denom;
   }
@@ -417,9 +417,9 @@ public:
           const vnl_vector<double> & /*c*/,
           vnl_matrix<double> & Cij) override
   {
-    double sa = std::sin(ai[0]);
-    double ca = std::cos(ai[0]);
-    double denom = (sa * bj[0] + ca * bj[1] + ai[2]);
+    const double sa = std::sin(ai[0]);
+    const double ca = std::cos(ai[0]);
+    const double denom = (sa * bj[0] + ca * bj[1] + ai[2]);
     Cij[0][0] = (ca * bj[0] - sa * bj[1] + ai[1]) / denom;
   }
 
@@ -430,7 +430,7 @@ public:
 void
 test_prob2()
 {
-  std::vector<bool> null_row(25, true);
+  const std::vector<bool> null_row(25, true);
   std::vector<std::vector<bool>> mask(4, null_row);
 
   const double a_data[] = { 0.0, 0.0, 0.0, 0.8, 10.0, 8.0, -0.7, -8.5, 8.5, 0.4, 4.0, 4.0 };
@@ -441,7 +441,7 @@ test_prob2()
 
   vnl_vector<double> a(a_data, 12);
   vnl_vector<double> b(b_data, 50);
-  vnl_vector<double> c(1, 1.5);
+  const vnl_vector<double> c(1, 1.5);
   vnl_vector<double> proj(100, 0.0);
 
   // create a generator function with ideal data and zeros for all projections
@@ -477,9 +477,9 @@ test_prob2()
     // first two points is on the x-axis
     normalize(pa, pb);
 
-    double rms_error_a = camera_diff(a, pa).rms();
-    double rms_error_b = (b - pb).rms();
-    double rms_error_c = (c - pc).rms();
+    const double rms_error_a = camera_diff(a, pa).rms();
+    const double rms_error_b = (b - pb).rms();
+    const double rms_error_c = (c - pc).rms();
     std::cout << "RMS camera error: " << rms_error_a << "\nRMS points error: " << rms_error_b
               << "\nRMS globals error: " << rms_error_c << std::endl;
     TEST("w/ globals: convergence with all projections", rms_error_a + rms_error_b + rms_error_c < 1e-10, true);
@@ -504,13 +504,13 @@ test_prob2()
   mask[2][12] = false;
 
   // create a subset of projections based on the mask
-  vnl_crs_index crs(mask);
+  const vnl_crs_index crs(mask);
   vnl_vector<double> proj2(crs.num_non_zero());
   for (int i = 0; i < crs.num_rows(); ++i)
   {
     for (int j = 0; j < crs.num_cols(); ++j)
     {
-      int k = crs(i, j);
+      const int k = crs(i, j);
       if (k >= 0)
         proj2[k] = proj[i * crs.num_cols() + j];
     }
@@ -538,9 +538,9 @@ test_prob2()
     // first two points is on the x-axis
     normalize(pa, pb);
 
-    double rms_error_a = camera_diff(a, pa).rms();
-    double rms_error_b = (b - pb).rms();
-    double rms_error_c = (c - pc).rms();
+    const double rms_error_a = camera_diff(a, pa).rms();
+    const double rms_error_b = (b - pb).rms();
+    const double rms_error_c = (c - pc).rms();
     std::cout << "RMS camera error: " << rms_error_a << "\nRMS points error: " << rms_error_b
               << "\nRMS globals error: " << rms_error_c << std::endl;
     TEST("w/ globals: convergence with missing projections", rms_error_a + rms_error_b + rms_error_c < 1e-10, true);
@@ -577,10 +577,10 @@ test_prob2()
     // first two points is on the x-axis
     normalize(pa, pb);
 
-    double rms_error_a = camera_diff(a, pa).rms();
+    const double rms_error_a = camera_diff(a, pa).rms();
     ;
-    double rms_error_b = (b - pb).rms();
-    double rms_error_c = (c - pc).rms();
+    const double rms_error_b = (b - pb).rms();
+    const double rms_error_c = (c - pc).rms();
     std::cout << "RMS camera error: " << rms_error_a << "\nRMS points error: " << rms_error_b
               << "\nRMS globals error: " << rms_error_c << std::endl;
     TEST("w/ globals: convergence with missing projections and noise",
@@ -621,9 +621,9 @@ public:
                     const vnl_vector<double> & fij,
                     double & weight) override
   {
-    int k = residual_indices_(i, j);
+    const int k = residual_indices_(i, j);
     assert(k >= 0);
-    double ek2 = fij.squared_magnitude();
+    const double ek2 = fij.squared_magnitude();
     weight = std::sqrt(mest(k, ek2));
   }
 
@@ -635,7 +635,7 @@ public:
       return 0.0;
     else
     {
-      double tmp = 1 - ek2 / scale2_;
+      const double tmp = 1 - ek2 / scale2_;
       return tmp * tmp;
     }
   }
@@ -667,7 +667,7 @@ public:
 void
 test_prob3()
 {
-  std::vector<bool> null_row(25, true);
+  const std::vector<bool> null_row(25, true);
   std::vector<std::vector<bool>> mask(4, null_row);
 
   const double a_data[] = { 0.0, 0.0, 0.0, 0.8, 10.0, 8.0, -0.7, -8.5, 8.5, 0.4, 4.0, 4.0 };
@@ -679,13 +679,13 @@ test_prob3()
   vnl_vector<double> a(a_data, 12);
   vnl_vector<double> b(b_data, 50);
   vnl_vector<double> proj(100, 0.0);
-  vnl_vector<double> c;
+  const vnl_vector<double> c;
 
   // initial perturbed parameters, add random gaussian noise
   vnl_vector<double> init_a(a_data, 12);
   vnl_vector<double> init_b(b_data, 50);
-  double sigma_pos = 1.0;
-  double sigma_ang = 0.1;
+  const double sigma_pos = 1.0;
+  const double sigma_ang = 0.1;
   vnl_random rnd(1234);
   for (unsigned i = 0; i < init_a.size() / 3; ++i)
   {
@@ -720,10 +720,10 @@ test_prob3()
     bj[0] = -2;
     bj[1] = 10000;
     func.fij(0, 0, ai, bj, c, fxij);
-    double e2 = fxij.squared_magnitude();
-    double m1 = func.mest(0, e2);
-    double dm1 = func.d_mest(0, e2);
-    double dm2 = (func.mest(0, e2 + 1e-8) - m1) / (1e-8);
+    const double e2 = fxij.squared_magnitude();
+    const double m1 = func.mest(0, e2);
+    const double dm1 = func.d_mest(0, e2);
+    const double dm2 = (func.mest(0, e2 + 1e-8) - m1) / (1e-8);
     TEST_NEAR("derive mest = finite diff", dm1, dm2, 1e-4);
     std::cout << fxij << std::endl;
     func.jac_Aij(0, 0, ai, bj, c, A1);
@@ -764,8 +764,8 @@ test_prob3()
     std::cout << a << '|' << b << '\n' << pa << '|' << pb << std::endl;
 #endif
 
-    double rms_error_a = camera_diff(a, pa).rms();
-    double rms_error_b = (b - pb).rms();
+    double const rms_error_a = camera_diff(a, pa).rms();
+    const double rms_error_b = (b - pb).rms();
     std::cout << "RMS camera error: " << rms_error_a << "\nRMS points error: " << rms_error_b << std::endl;
     TEST("robust convergence with all projections", rms_error_a + rms_error_b < 1e-10, true);
   }
@@ -790,13 +790,13 @@ test_prob3()
   proj[33] -= 20.0;
 
   // create a subset of projections based on the mask
-  vnl_crs_index crs(mask);
+  const vnl_crs_index crs(mask);
   vnl_vector<double> proj2(crs.num_non_zero());
   for (int i = 0; i < crs.num_rows(); ++i)
   {
     for (int j = 0; j < crs.num_cols(); ++j)
     {
-      int k = crs(i, j);
+      const int k = crs(i, j);
       if (k >= 0)
         proj2[k] = proj[i * crs.num_cols() + j];
     }
@@ -822,8 +822,8 @@ test_prob3()
     // first two points is on the x-axis
     normalize(pa, pb);
 
-    double rms_error_a = camera_diff(a, pa).rms();
-    double rms_error_b = (b - pb).rms();
+    const double rms_error_a = camera_diff(a, pa).rms();
+    const double rms_error_b = (b - pb).rms();
     std::cout << "RMS camera error: " << rms_error_a << "\nRMS points error: " << rms_error_b << std::endl;
     TEST("convergence with missing projections", rms_error_a + rms_error_b < 1e-10, true);
   }
@@ -854,8 +854,8 @@ test_prob3()
     // first two points is on the x-axis
     normalize(pa, pb);
 
-    double rms_error_a = camera_diff(a, pa).rms();
-    double rms_error_b = (b - pb).rms();
+    const double rms_error_a = camera_diff(a, pa).rms();
+    const double rms_error_b = (b - pb).rms();
     std::cout << "RMS camera error: " << rms_error_a << "\nRMS points error: " << rms_error_b << std::endl;
     TEST("convergence with missing projections and noise", rms_error_a < 1e-4 && rms_error_b < 1e-4, true);
   }

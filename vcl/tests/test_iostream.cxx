@@ -34,7 +34,7 @@ test_iostream_main(int /*argc*/, char * /*argv*/[])
   // I/O formatting
   std::cin.flags(std::ios::skipws | std::ios::boolalpha);
   std::cout.unsetf(std::ios::dec);
-  std::ios::fmtflags flgs =
+  const std::ios::fmtflags flgs =
     std::cout.setf(std::ios::uppercase | std::ios::showbase | std::ios::showpos | std::ios::showpoint);
   std::cout.setf(std::ios::oct, std::ios::basefield);
   std::cout.setf(std::ios::scientific, std::ios::floatfield);
@@ -120,7 +120,7 @@ test_iostream_main(int /*argc*/, char * /*argv*/[])
     std::cin >> bb;
   }
 
-  std::stringstream s(std::ios::in | std::ios::out | std::ios::binary);
+  const std::stringstream s(std::ios::in | std::ios::out | std::ios::binary);
 
   return !s;
 }

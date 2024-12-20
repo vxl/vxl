@@ -65,7 +65,7 @@ vnl_quaternion<T>::vnl_quaternion(T tx, T ty, T tz, T rea)
 template <class T>
 vnl_quaternion<T>::vnl_quaternion(const vnl_vector_fixed<T, 3> & Axis, double Angle)
 {
-  double a = Angle * 0.5; // half angle
+  const double a = Angle * 0.5; // half angle
   T s = T(std::sin(a));
   for (int i = 0; i < 3; i++)             // imaginary vector is sine of
     this->operator[](i) = T(s * Axis(i)); // half angle multiplied with axis
@@ -104,13 +104,13 @@ vnl_quaternion<T>::vnl_quaternion(const vnl_vector_fixed<T, 4> & vec)
 template <class T>
 vnl_quaternion<T>::vnl_quaternion(const vnl_matrix_fixed<T, 3, 3> & rot)
 {
-  double d0 = rot(0, 0);
-  double d1 = rot(1, 1);
-  double d2 = rot(2, 2);
-  double xx = 1.0 + d0 - d1 - d2; // from the diagonal of the rotation
-  double yy = 1.0 - d0 + d1 - d2; // matrix, find the terms in
-  double zz = 1.0 - d0 - d1 + d2; // each Quaternion component
-  double rr = 1.0 + d0 + d1 + d2; // (using the fact that rr+xx+yy+zz=4)
+  const double d0 = rot(0, 0);
+  const double d1 = rot(1, 1);
+  const double d2 = rot(2, 2);
+  const double xx = 1.0 + d0 - d1 - d2; // from the diagonal of the rotation
+  const double yy = 1.0 - d0 + d1 - d2; // matrix, find the terms in
+  const double zz = 1.0 - d0 - d1 + d2; // each Quaternion component
+  const double rr = 1.0 + d0 + d1 + d2; // (using the fact that rr+xx+yy+zz=4)
 
   double max = rr; // find the maximum of all terms;
   if (xx > max)
@@ -165,9 +165,9 @@ vnl_quaternion<T>::vnl_quaternion(const vnl_matrix_fixed<T, 3, 3> & rot)
 template <class T>
 vnl_quaternion<T>::vnl_quaternion(T theta_X, T theta_Y, T theta_Z)
 {
-  vnl_quaternion<T> Rx(T(std::sin(double(theta_X) * 0.5)), 0, 0, T(std::cos(double(theta_X) * 0.5)));
-  vnl_quaternion<T> Ry(0, T(std::sin(double(theta_Y) * 0.5)), 0, T(std::cos(double(theta_Y) * 0.5)));
-  vnl_quaternion<T> Rz(0, 0, T(std::sin(double(theta_Z) * 0.5)), T(std::cos(double(theta_Z) * 0.5)));
+  const vnl_quaternion<T> Rx(T(std::sin(double(theta_X) * 0.5)), 0, 0, T(std::cos(double(theta_X) * 0.5)));
+  const vnl_quaternion<T> Ry(0, T(std::sin(double(theta_Y) * 0.5)), 0, T(std::cos(double(theta_Y) * 0.5)));
+  const vnl_quaternion<T> Rz(0, 0, T(std::sin(double(theta_Z) * 0.5)), T(std::cos(double(theta_Z) * 0.5)));
   *this = Rz * Ry * Rx;
 }
 
@@ -307,8 +307,8 @@ vnl_quaternion<T>::operator*(const vnl_quaternion<T> & rhs) const
 {
   T r1 = this->real(); // real and img parts of args
   T r2 = rhs.real();
-  vnl_vector_fixed<T, 3> i1 = this->imaginary();
-  vnl_vector_fixed<T, 3> i2 = rhs.imaginary();
+  const vnl_vector_fixed<T, 3> i1 = this->imaginary();
+  const vnl_vector_fixed<T, 3> i2 = rhs.imaginary();
   T real_v = (r1 * r2) - ::dot_product(i1, i2); // real&img of product q1*q2
   vnl_vector_fixed<T, 3> img = vnl_cross_3d(i1, i2);
   img += (i2 * r1) + (i1 * r2);
@@ -324,8 +324,8 @@ vnl_vector_fixed<T, 3>
 vnl_quaternion<T>::rotate(const vnl_vector_fixed<T, 3> & v) const
 {
   T rea = this->real();
-  vnl_vector_fixed<T, 3> i = this->imaginary();
-  vnl_vector_fixed<T, 3> i_x_v(vnl_cross_3d(i, v));
+  const vnl_vector_fixed<T, 3> i = this->imaginary();
+  const vnl_vector_fixed<T, 3> i_x_v(vnl_cross_3d(i, v));
   return v + i_x_v * T(2 * rea) - vnl_cross_3d(i_x_v, i) * T(2);
 }
 

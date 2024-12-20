@@ -18,7 +18,7 @@ template <class T>
 vnl_sym_matrix<T> &
 vnl_sym_matrix<T>::update(const vnl_sym_matrix<T> & m, unsigned diagonal_start)
 {
-  unsigned int end_val = diagonal_start + m.nn_;
+  const unsigned int end_val = diagonal_start + m.nn_;
 #if VNL_CONFIG_CHECK_BOUNDS && (!defined NDEBUG)
   if (this->nn_ < end_val)
     vnl_error_matrix_dimension("vnl_sym_matrix::update", end_val, end_val, m.nn_, m.nn_);
@@ -35,7 +35,7 @@ template <class T>
 void
 vnl_sym_matrix<T>::swap(vnl_sym_matrix<T> & m) noexcept
 {
-  unsigned nn = nn_;
+  const unsigned nn = nn_;
   T ** index = index_;
   T * data = data_;
   nn_ = m.nn_;

@@ -158,11 +158,11 @@ vnl_sparse_lst_sqr_function::f(const vnl_vector<double> & a,
     // This is semi const incorrect - there is no vnl_vector_ref_const
     const vnl_vector_ref<double> ai(number_of_params_a(i), const_cast<double *>(a.data_block()) + index_a(i));
 
-    vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
+    const vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
     for (auto & r_itr : row)
     {
-      unsigned int j = r_itr.second;
-      unsigned int k = r_itr.first;
+      const unsigned int j = r_itr.second;
+      const unsigned int k = r_itr.first;
       // This is semi const incorrect - there is no vnl_vector_ref_const
       const vnl_vector_ref<double> bj(number_of_params_b(j), const_cast<double *>(b.data_block()) + index_b(j));
       vnl_vector_ref<double> eij(number_of_residuals(k), e.data_block() + index_e(k));
@@ -193,11 +193,11 @@ vnl_sparse_lst_sqr_function::jac_blocks(const vnl_vector<double> & a,
     // This is semi const incorrect - there is no vnl_vector_ref_const
     const vnl_vector_ref<double> ai(number_of_params_a(i), const_cast<double *>(a.data_block()) + index_a(i));
 
-    vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
+    const vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
     for (auto & r_itr : row)
     {
-      unsigned int j = r_itr.second;
-      unsigned int k = r_itr.first;
+      const unsigned int j = r_itr.second;
+      const unsigned int k = r_itr.first;
       // This is semi const incorrect - there is no vnl_vector_ref_const
       const vnl_vector_ref<double> bj(number_of_params_b(j), const_cast<double *>(b.data_block()) + index_b(j));
 
@@ -231,11 +231,11 @@ vnl_sparse_lst_sqr_function::fd_jac_blocks(const vnl_vector<double> & a,
     // This is semi const incorrect - there is no vnl_vector_ref_const
     const vnl_vector_ref<double> ai(number_of_params_a(i), const_cast<double *>(a.data_block()) + index_a(i));
 
-    vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
+    const vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
     for (auto & r_itr : row)
     {
-      unsigned int j = r_itr.second;
-      unsigned int k = r_itr.first;
+      const unsigned int j = r_itr.second;
+      const unsigned int k = r_itr.first;
       // This is semi const incorrect - there is no vnl_vector_ref_const
       const vnl_vector_ref<double> bj(number_of_params_b(j), const_cast<double *>(b.data_block()) + index_b(j));
 
@@ -265,11 +265,11 @@ vnl_sparse_lst_sqr_function::compute_weights(const vnl_vector<double> & a,
     // This is semi const incorrect - there is no vnl_vector_ref_const
     const vnl_vector_ref<double> ai(number_of_params_a(i), const_cast<double *>(a.data_block()) + index_a(i));
 
-    vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
+    const vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
     for (auto & r_itr : row)
     {
-      unsigned int j = r_itr.second;
-      unsigned int k = r_itr.first;
+      const unsigned int j = r_itr.second;
+      const unsigned int k = r_itr.first;
       // This is semi const incorrect - there is no vnl_vector_ref_const
       const vnl_vector_ref<double> bj(number_of_params_b(j), const_cast<double *>(b.data_block()) + index_b(j));
       const vnl_vector_ref<double> eij(number_of_residuals(k), const_cast<double *>(e.data_block() + index_e(k)));
@@ -289,11 +289,11 @@ vnl_sparse_lst_sqr_function::apply_weights(const vnl_vector<double> & weights, v
 {
   for (unsigned int i = 0; i < number_of_a(); ++i)
   {
-    vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
+    const vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
     for (auto & r_itr : row)
     {
-      unsigned int j = r_itr.second;
-      unsigned int k = r_itr.first;
+      const unsigned int j = r_itr.second;
+      const unsigned int k = r_itr.first;
       vnl_vector_ref<double> eij(number_of_residuals(k), e.data_block() + index_e(k));
       apply_weight_ij(i, j, weights[k], eij);
     }
@@ -314,11 +314,11 @@ vnl_sparse_lst_sqr_function::apply_weights(const vnl_vector<double> & weights,
 {
   for (unsigned int i = 0; i < number_of_a(); ++i)
   {
-    vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
+    const vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
     for (auto & r_itr : row)
     {
-      unsigned int j = r_itr.second;
-      unsigned int k = r_itr.first;
+      const unsigned int j = r_itr.second;
+      const unsigned int k = r_itr.first;
       apply_weight_ij(i, j, weights[k], A[k], B[k], C[k]);
     }
   }
@@ -400,14 +400,14 @@ vnl_sparse_lst_sqr_function::fd_jac_Aij(int i,
   for (unsigned int ii = 0; ii < dim; ++ii)
   {
     // calculate f just to the right of ai[ii]
-    double tplus = tai[ii] = ai[ii] + stepsize;
+    const double tplus = tai[ii] = ai[ii] + stepsize;
     this->fij(i, j, tai, bj, c, fplus);
 
     // calculate f just to the left of ai[ii]
-    double tminus = tai[ii] = ai[ii] - stepsize;
+    const double tminus = tai[ii] = ai[ii] - stepsize;
     this->fij(i, j, tai, bj, c, fminus);
 
-    double h = 1.0 / (tplus - tminus);
+    const double h = 1.0 / (tplus - tminus);
     for (unsigned int jj = 0; jj < n; ++jj)
       Aij(jj, ii) = (fplus[jj] - fminus[jj]) * h;
 
@@ -441,14 +441,14 @@ vnl_sparse_lst_sqr_function::fd_jac_Bij(int i,
   for (unsigned int ii = 0; ii < dim; ++ii)
   {
     // calculate f just to the right of bj[ii]
-    double tplus = tbj[ii] = bj[ii] + stepsize;
+    const double tplus = tbj[ii] = bj[ii] + stepsize;
     this->fij(i, j, ai, tbj, c, fplus);
 
     // calculate f just to the left of bj[ii]
-    double tminus = tbj[ii] = bj[ii] - stepsize;
+    const double tminus = tbj[ii] = bj[ii] - stepsize;
     this->fij(i, j, ai, tbj, c, fminus);
 
-    double h = 1.0 / (tplus - tminus);
+    const double h = 1.0 / (tplus - tminus);
     for (unsigned int jj = 0; jj < n; ++jj)
       Bij(jj, ii) = (fplus[jj] - fminus[jj]) * h;
 
@@ -486,14 +486,14 @@ vnl_sparse_lst_sqr_function::fd_jac_Cij(int i,
   for (unsigned int ii = 0; ii < dim; ++ii)
   {
     // calculate f just to the right of c[ii]
-    double tplus = tc[ii] = c[ii] + stepsize;
+    const double tplus = tc[ii] = c[ii] + stepsize;
     this->fij(i, j, ai, bj, tc, fplus);
 
     // calculate f just to the left of c[ii]
-    double tminus = tc[ii] = c[ii] - stepsize;
+    const double tminus = tc[ii] = c[ii] - stepsize;
     this->fij(i, j, ai, bj, tc, fminus);
 
-    double h = 1.0 / (tplus - tminus);
+    const double h = 1.0 / (tplus - tminus);
     for (unsigned int jj = 0; jj < n; ++jj)
       Cij(jj, ii) = (fplus[jj] - fminus[jj]) * h;
 

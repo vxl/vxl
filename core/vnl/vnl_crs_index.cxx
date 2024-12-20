@@ -44,7 +44,7 @@ vnl_crs_index::operator()(int i, int j) const
     if (j < col_idx_[low] || j > col_idx_[high])
       return -1; // element is zero (no index)
 
-    int mid = (low + high) >> 1; //(low+high)/2;
+    const int mid = (low + high) >> 1; //(low+high)/2;
     if (j < (int)col_idx_[mid])
       high = mid - 1;
     else if (j > (int)col_idx_[mid])
@@ -78,7 +78,7 @@ vnl_crs_index::sparse_col(int j) const
   sparse_vector col;
   for (int i = 0; i < num_rows(); ++i)
   {
-    int idx = (*this)(i, j);
+    const int idx = (*this)(i, j);
     if (idx >= 0)
       col.emplace_back(idx, i);
   }

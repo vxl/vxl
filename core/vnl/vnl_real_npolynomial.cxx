@@ -183,7 +183,7 @@ vnl_real_npolynomial::operator-() const
   for (unsigned int i = 0; i < nterms_; ++i)
     coef(i) = -coeffs_(i);
 
-  vnl_matrix<unsigned int> poly = polyn_;
+  const vnl_matrix<unsigned int> poly = polyn_;
 
   return vnl_real_npolynomial(coef, poly);
 }
@@ -280,7 +280,7 @@ vnl_real_npolynomial::operator*(double P) const
   for (unsigned int i = 0; i < nterms_; ++i)
     coef(i) = coeffs_(i) * P;
 
-  vnl_matrix<unsigned int> poly = polyn_;
+  const vnl_matrix<unsigned int> poly = polyn_;
 
   return vnl_real_npolynomial(coef, poly);
 }

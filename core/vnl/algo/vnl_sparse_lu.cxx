@@ -17,7 +17,7 @@ vnl_sparse_lu::vnl_sparse_lu(const vnl_sparse_matrix<double> & M, operation mode
   , mode_(mode)
 
 {
-  int n = (int)M.columns();
+  const int n = (int)M.columns();
   assert(n == (int)(M.rows()));
   int error = 0;
   pmatrix_ = spCreate(n, 0, &error);
@@ -30,9 +30,9 @@ vnl_sparse_lu::vnl_sparse_lu(const vnl_sparse_matrix<double> & M, operation mode
   spElement * pelement = nullptr;
   for (A_.reset(); A_.next();)
   {
-    int r = A_.getrow();
-    int c = A_.getcolumn();
-    double v = A_.value();
+    const int r = A_.getrow();
+    const int c = A_.getcolumn();
+    const double v = A_.value();
     pelement = spGetElement(pmatrix_, r + 1, c + 1);
     if (pelement == nullptr)
     {
@@ -74,7 +74,7 @@ vnl_sparse_lu::solve(const vnl_vector<double> & b, vnl_vector<double> * x)
     std::cout << "In vnl_sparse_lu::solve(..) - matrix not defined\n";
     return;
   }
-  unsigned n = b.size();
+  const unsigned n = b.size();
   assert(n == A_.columns());
   auto * rhs = new spREAL[n + 1];
   for (unsigned i = 0; i < n; ++i)
@@ -134,7 +134,7 @@ vnl_sparse_lu::solve_transpose(const vnl_vector<double> & b, vnl_vector<double> 
     std::cout << "In vnl_sparse_lu::solve(..) - matrix not defined\n";
     return;
   }
-  unsigned n = b.size();
+  const unsigned n = b.size();
   assert(n == A_.columns());
   auto * rhs = new spREAL[n + 1];
   for (unsigned i = 0; i < n; ++i)
@@ -248,7 +248,7 @@ vnl_sparse_lu::max_error_bound()
       return 0;
     factored_ = true;
   }
-  double roundoff = spRoundoff(pmatrix_, largest_);
+  const double roundoff = spRoundoff(pmatrix_, largest_);
   if (rcond_ > 0)
     return roundoff / rcond_;
   return 0;

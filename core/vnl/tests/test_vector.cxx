@@ -186,7 +186,7 @@ vnl_vector_test_int()
     int v3values[] = { 0, 0, 1 };
     vnl_vector<int> v1(3, 3, v1values);
     vnl_vector<int> v2(3, 3, v2values);
-    vnl_vector<int> v3(3, 3, v3values);
+    const vnl_vector<int> v3(3, 3, v3values);
     TEST(
       "dot_product(v1,v2)", (dot_product(v1, v2) == 0 && dot_product(v1, v3) == 0 && dot_product(v2, v3) == 0), true);
     TEST(
@@ -195,7 +195,7 @@ vnl_vector_test_int()
     TEST("vnl_cross_3d(v1,v2)", vnl_cross_3d(v1, v2), v3);
     TEST("vnl_cross_3d(v2,v3)", vnl_cross_3d(v2, v3), v1);
     TEST("vnl_cross_3d(v1,v3)", vnl_cross_3d(v1, v3), -v2);
-    vnl_vector<int> vv(2, 0);
+    const vnl_vector<int> vv(2, 0);
     v1 = vv;
     v1[0] = 1;
     v2 = vv;
@@ -205,7 +205,7 @@ vnl_vector_test_int()
 
   {
     int vvalues[] = { 1, 2, 3 };
-    vnl_vector<int> v(3, 3, vvalues);
+    const vnl_vector<int> v(3, 3, vvalues);
     vnl_matrix<int> m = outer_product(v, v);
     TEST("outer_product",
          (m(0, 0) == 1 && m(0, 1) == 2 && m(0, 2) == 3 && m(1, 0) == 2 && m(1, 1) == 4 && m(1, 2) == 6 &&
@@ -214,7 +214,7 @@ vnl_vector_test_int()
   }
   {
     int vvalues[] = { 1, 0, 0, 0 };
-    vnl_vector<int> v(4, 4, vvalues);
+    const vnl_vector<int> v(4, 4, vvalues);
     TEST("v.squared_magnitude", (v.squared_magnitude() == 1), true);
     TEST("v.magnitude", (v.magnitude() == 1), true);
     // normalize not sensible for ints
@@ -245,7 +245,7 @@ vnl_vector_test_int()
 
   {
     int vvalues[] = { 0, 1, 2, 3 };
-    vnl_vector<int> v(4, 4, vvalues);
+    const vnl_vector<int> v(4, 4, vvalues);
     vnl_vector<int> v_temp;
 
     //
@@ -286,7 +286,7 @@ vnl_vector_test_int()
   {
     int vvalues[] = { 0, 1, 2, 3 };
     vnl_vector<int> v(4, 4, vvalues);
-    vnl_vector<int> v_temp = v;
+    const vnl_vector<int> v_temp = v;
 
     //
     // Check special cases
@@ -320,9 +320,9 @@ vnl_vector_test_int()
 
   { // test operator-() on unsigned values
     unsigned int vvalues[] = { 1, 2, 3, 4 };
-    int out_values[] = { -1, -2, -3, -4 };
+    const int out_values[] = { -1, -2, -3, -4 };
 
-    vnl_vector<unsigned int> unsigned_v(4, 4, vvalues);
+    const vnl_vector<unsigned int> unsigned_v(4, 4, vvalues);
     const vnl_vector<int> minus_v1 = -unsigned_v;
     const vnl_vector<int> minus_v2 = unsigned_v.operator-();
     TEST("unsigned_v.operator-()",
@@ -337,9 +337,9 @@ vnl_vector_test_int()
 
   { // test operator-() on unsigned values
     unsigned int vvalues[] = { 1, 2, 3, 4 };
-    int out_values[] = { -1, -2, -3, -4 };
+    const int out_values[] = { -1, -2, -3, -4 };
 
-    vnl_vector_fixed<unsigned int, 4> unsigned_v(vvalues);
+    const vnl_vector_fixed<unsigned int, 4> unsigned_v(vvalues);
     const vnl_vector_fixed<int, 4> minus_v1 = -unsigned_v;
     const vnl_vector_fixed<int, 4> minus_v2 = unsigned_v.operator-();
     TEST("unsigned_v.operator-()",
@@ -494,7 +494,7 @@ vnl_vector_test_float()
     TEST("vnl_cross_3d(v1,v2)", vnl_cross_3d(v1, v2), v3);
     TEST("vnl_cross_3d(v2,v3)", vnl_cross_3d(v2, v3), v1);
     TEST("vnl_cross_3d(v1,v3)", vnl_cross_3d(v1, v3), -v2);
-    vnl_vector<float> vv(2, 0);
+    const vnl_vector<float> vv(2, 0);
     v1 = vv;
     v1[0] = 1;
     v2 = vv;
@@ -503,8 +503,8 @@ vnl_vector_test_float()
   }
 
   {
-    vnl_float_3 v(1.f, 2.f, 3.f);
-    vnl_float_4 v2(1.f, 2.f, 3.f, 4.f);
+    const vnl_float_3 v(1.f, 2.f, 3.f);
+    const vnl_float_4 v2(1.f, 2.f, 3.f, 4.f);
     vnl_matrix_fixed<float, 3, 4> m = outer_product(v, v2);
     TEST("outer_product -> fixed 3 x fixed 4",
          (m(0, 0) == 1 && m(0, 1) == 2 && m(0, 2) == 3 && m(0, 3) == 4 && m(1, 0) == 2 && m(1, 1) == 4 &&
@@ -658,13 +658,13 @@ void
 vnl_vector_test_matrix()
 {
   int mvalues[] = { 1, 2, 3, 4, 5, 6 }; // product with matrices
-  vnl_matrix<int> m(2, 3, 6, mvalues);
+  const vnl_matrix<int> m(2, 3, 6, mvalues);
 
   int v2values[] = { 1, 0 };
   int v3values[] = { 1, 0, 0 };
   vnl_vector<int> v;
-  vnl_vector<int> v2(2, 2, v2values);
-  vnl_vector<int> v3(3, 3, v3values);
+  const vnl_vector<int> v2(2, 2, v2values);
+  const vnl_vector<int> v3(3, 3, v3values);
   TEST("v.pre_multiply(m)", ((v = v3), (v.pre_multiply(m)), (v.size() == 2 && v(0) == 1 && v(1) == 4)), true);
   TEST("v.post_multiply(m)",
        ((v = v2), (v.post_multiply(m)), (v.size() == 3 && v(0) == 1 && v(1) == 2 && v(2) == 3)),
@@ -729,7 +729,7 @@ static void
 vnl_vector_test_io()
 {
   double expected_data[] = { 1.0, 2.0, 3.0 };
-  vnl_vector<double> expected(expected_data, 3);
+  const vnl_vector<double> expected(expected_data, 3);
   {
     std::stringstream ss;
     ss << "";
