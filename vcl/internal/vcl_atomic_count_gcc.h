@@ -56,9 +56,9 @@ public:
   operator long() const { return __exchange_and_add(&value_, 0); }
 
 private:
-  vcl_atomic_count(const vcl_atomic_count &);
+  vcl_atomic_count(const vcl_atomic_count &) = delete;
   vcl_atomic_count &
-  operator=(const vcl_atomic_count &);
+  operator=(const vcl_atomic_count &) = delete;
 
   mutable _Atomic_word value_;
 };

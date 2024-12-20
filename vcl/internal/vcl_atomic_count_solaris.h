@@ -44,9 +44,9 @@ public:
   operator uint32_t() const { return static_cast<const uint32_t volatile &>(value_); }
 
 private:
-  vcl_atomic_count(const vcl_atomic_count &);
+  vcl_atomic_count(const vcl_atomic_count &) = delete;
   vcl_atomic_count &
-  operator=(const vcl_atomic_count &);
+  operator=(const vcl_atomic_count &) = delete;
 
   uint32_t value_;
 };
