@@ -109,7 +109,8 @@ public:
   double
   f(const vnl_vector<double> & x) override
   {
-    double u = x[0] - x[1] * x[1], v = x[1] - 1;
+    double u = x[0] - x[1] * x[1];
+    double v = x[1] - 1;
     return u * u + v * v + 1;
   }
   void
@@ -240,8 +241,13 @@ test_discrete_diff()
 static void
 test_generalized_schur()
 {
-  vnl_matrix<float> A(4, 4, 0.0f), B(4, 4, 0.0f), L(4, 4, 1.0f), R(4, 4, 1.0f);
-  vnl_vector<float> ar(4, 0.0f), ai(4, 0.0f), b(4, 0.0f);
+  vnl_matrix<float> A(4, 4, 0.0f);
+  vnl_matrix<float> B(4, 4, 0.0f);
+  vnl_matrix<float> L(4, 4, 1.0f);
+  vnl_matrix<float> R(4, 4, 1.0f);
+  vnl_vector<float> ar(4, 0.0f);
+  vnl_vector<float> ai(4, 0.0f);
+  vnl_vector<float> b(4, 0.0f);
   bool r = vnl_generalized_schur(&A, &B, &ar, &ai, &b, &L, &R);
   TEST("vnl_generalized_schur", r, true);
 }

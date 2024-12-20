@@ -98,8 +98,14 @@ test_fft_1d(int n)
     }
   TEST("test backward C-array", test_Ptr, true);
 
-  double fArrayRealError = 0.0, fArrayImagError = 0.0, fVecRealError = 0.0, fVecImagError = 0.0, fPtrRealError = 0.0,
-         fPtrImagError = 0.0, fFwdRealError = 0.0, fFwdImagError = 0.0;
+  double fArrayRealError = 0.0;
+  double fArrayImagError = 0.0;
+  double fVecRealError = 0.0;
+  double fVecImagError = 0.0;
+  double fPtrRealError = 0.0;
+  double fPtrImagError = 0.0;
+  double fFwdRealError = 0.0;
+  double fFwdImagError = 0.0;
 
   for (int iC = 0; iC < n; iC++)
   {

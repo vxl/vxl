@@ -37,7 +37,8 @@ template <class T, unsigned int R, unsigned int C>
 vnl_svd_fixed<T, R, C>::vnl_svd_fixed(vnl_matrix_fixed<T, R, C> const & M, double zero_out_tol)
 {
   {
-    const long n = R, p = C;
+    const long n = R;
+    const long p = C;
     const unsigned mm = std::min(R + 1u, C);
 
     // Copy source matrix into fortran storage
@@ -320,7 +321,8 @@ vnl_svd_fixed<T, R, C>::solve(const vnl_vector_fixed<T, R> & y) const
 
   for (unsigned i = 0; i < C; i++)
   { // multiply with diagonal 1/W
-    T weight = W_(i, i), zero_(0);
+    T weight = W_(i, i);
+    T zero_(0);
     if (weight != zero_)
       x[i] /= weight;
     else

@@ -11,7 +11,8 @@ print_roots(vnl_rnpoly_solve & solver)
   std::vector<vnl_vector<double> *> im = solver.imag();
   const unsigned int dim = re[0]->size();
   std::cout << "Roots are:" << std::endl;
-  std::vector<vnl_vector<double> *>::iterator rp, ip;
+  std::vector<vnl_vector<double> *>::iterator rp;
+  std::vector<vnl_vector<double> *>::iterator ip;
   for (rp = re.begin(), ip = im.begin(); rp != re.end(); ++rp, ++ip)
   {
     for (unsigned int i = 0; i < dim; ++i)
@@ -56,7 +57,8 @@ unit_circles_intersect()
   poly2 = poly2 + monom3;
   std::cout << poly2; // (X-1)^2 +Y^2 -1 = X^2 -2X +Y^2
 
-  std::vector<vnl_vector<double> *>::iterator rp, ip;
+  std::vector<vnl_vector<double> *>::iterator rp;
+  std::vector<vnl_vector<double> *>::iterator ip;
 
   std::vector<vnl_real_npolynomial *> l(1, &poly1);
   l.push_back(&poly2);
@@ -98,7 +100,8 @@ ellipses_intersect()
   vnl_real_npolynomial poly4(f1, p1);
   std::cout << poly4; // 2 X^2 +Y^2 -1
 
-  std::vector<vnl_vector<double> *>::iterator rp, ip;
+  std::vector<vnl_vector<double> *>::iterator rp;
+  std::vector<vnl_vector<double> *>::iterator ip;
 
   std::vector<vnl_real_npolynomial *> l(1, &poly3);
   l.push_back(&poly4);
@@ -218,7 +221,8 @@ scaled_fourth_degree()
   std::vector<vnl_vector<double> *> imagVal = solver.imag();
 
   // Scale back the roots:
-  std::vector<vnl_vector<double> *>::iterator rp, ip;
+  std::vector<vnl_vector<double> *>::iterator rp;
+  std::vector<vnl_vector<double> *>::iterator ip;
   for (rp = realVal.begin(), ip = imagVal.begin(); rp != realVal.end(); ++rp, ++ip)
   {
     for (unsigned int i = 0; i < dim; ++i)

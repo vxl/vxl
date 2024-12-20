@@ -14,7 +14,8 @@ template <class T>
 double
 vnl_chi_squared_cumulative(T chisq, long dof)
 {
-  double cdf, chisqr = chisq;
+  double cdf;
+  double chisqr = chisq;
   v3p_netlib_dchscdf_(&chisqr, &dof, &cdf);
   return cdf;
 }

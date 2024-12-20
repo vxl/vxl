@@ -385,8 +385,6 @@ hierarchy_brackets(std::string & expr, unsigned long s, int l)
 node
 build_tree(const std::string & expr, unsigned long s, int l)
 {
-  int i, j;
-  node n;
   // expr[s]--expr[s+l-1] is any of:
   //  (number)
   //  function()
@@ -400,7 +398,8 @@ build_tree(const std::string & expr, unsigned long s, int l)
     ErrorExit(expr, "empty block", s);
   if (expr[s] == ')')
     ErrorExit(expr, "empty ()", s);
-  j = blocklength(expr, s, l);
+  int j = blocklength(expr, s, l);
+  node n;
   if (j == l && expr[s] >= '0' && expr[s] <= '9')
   { // number
     n.func1 = nullptr;
@@ -438,6 +437,7 @@ build_tree(const std::string & expr, unsigned long s, int l)
       ErrorExit(expr, "unknown function call", s);
     n.param1 = new node();
     n.param2 = nullptr;
+    int i;
     for (i = j; i < l - 1; ++i)
       if (expr[s + i] == ',')
         break;

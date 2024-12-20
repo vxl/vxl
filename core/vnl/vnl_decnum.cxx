@@ -237,7 +237,10 @@ vnl_decnum::comp(const std::string & a, const std::string & b)
 #ifdef DEBUG
   std::cerr << "Entering vnl_decnum::comp with " << a << " and " << b << '\n';
 #endif
-  int i, na = int(a.length()), nb = int(b.length()), nc = na < nb ? na : nb;
+  int i;
+  int na = int(a.length());
+  int nb = int(b.length());
+  int nc = na < nb ? na : nb;
   for (i = 0; i < nc; ++i)
   {
     if (a.c_str()[i] < b.c_str()[i])
@@ -297,7 +300,9 @@ vnl_decnum::plus(const std::string & a, const std::string & b, long exp)
   std::cerr << "Entering vnl_decnum::plus with " << a << " and " << b << '\n';
 #endif
   std::string result = "";
-  int na = int(a.length()), nb = int(b.length()), carry = 0;
+  int na = int(a.length());
+  int nb = int(b.length());
+  int carry = 0;
   for (--na, --nb; na >= 0 && nb >= 0; --na, --nb)
   {
     char c = a.c_str()[na] + (b.c_str()[nb] - '0') + carry;
@@ -341,7 +346,9 @@ vnl_decnum::minus(const std::string & a, const std::string & b, long exp)
   std::cerr << "Entering vnl_decnum::minus with " << a << " and " << b << '\n';
 #endif
   std::string result = "";
-  int na = int(a.length()), nb = int(b.length()), carry = 0;
+  int na = int(a.length());
+  int nb = int(b.length());
+  int carry = 0;
   assert(na >= nb);
   for (--na, --nb; na >= 0 && nb >= 0; --na, --nb)
   {
@@ -426,7 +433,9 @@ vnl_decnum::mult(const std::string & a, char b)
   std::cerr << "Entering vnl_decnum::mult with " << a << " and " << b << '\n';
 #endif
   std::string result = "";
-  int na = int(a.length()), carry = 0, bb = b - '0';
+  int na = int(a.length());
+  int carry = 0;
+  int bb = b - '0';
   assert(bb >= 0 && bb <= 9);
   for (--na; na >= 0; --na)
   {
@@ -483,7 +492,8 @@ vnl_decnum::div(const std::string & a, std::string & b)
 #ifdef DEBUG
   std::cerr << "Entering vnl_decnum::div with " << a << " and " << b << '\n';
 #endif
-  int na = int(a.length()), nb = int(b.length());
+  int na = int(a.length());
+  int nb = int(b.length());
   assert(na >= nb);
   if (comp(a, b))
     ++nb;
@@ -533,8 +543,10 @@ vnl_decnum::operator/(const vnl_decnum & r) const
     return *this;
   if (operator==(r))
     return vnl_decnum('+', "1", 0L);
-  std::string a = data_, b = r.data();
-  int na = int(a.length()), nb = int(b.length());
+  std::string a = data_;
+  std::string b = r.data();
+  int na = int(a.length());
+  int nb = int(b.length());
   vnl_decnum result(0L);
   while (na > nb || (na == nb && !comp(a, b)))
   {
@@ -575,8 +587,10 @@ vnl_decnum::operator%(const vnl_decnum & r) const
     return vnl_decnum("0");
   if (operator==(r))
     return vnl_decnum("0");
-  std::string a = data_, b = r.data();
-  int na = int(a.length()), nb = int(b.length());
+  std::string a = data_;
+  std::string b = r.data();
+  int na = int(a.length());
+  int nb = int(b.length());
   while (na > nb || (na == nb && !comp(a, b)))
   {
     std::string c = b;

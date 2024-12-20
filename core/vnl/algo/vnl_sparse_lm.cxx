@@ -94,10 +94,14 @@ vnl_sparse_lm::minimize(vnl_vector<double> & a,
     return false;
 
   //: Systems to solve will be Sc*dc=sec and Sa*da=sea
-  vnl_matrix<double> Sc(size_c_, size_c_), Sa(size_a_, size_a_);
-  vnl_vector<double> sec(size_c_), sea(size_a_);
+  vnl_matrix<double> Sc(size_c_, size_c_);
+  vnl_matrix<double> Sa(size_a_, size_a_);
+  vnl_vector<double> sec(size_c_);
+  vnl_vector<double> sea(size_a_);
   // update vectors
-  vnl_vector<double> da(size_a_), db(size_b_), dc(size_c_);
+  vnl_vector<double> da(size_a_);
+  vnl_vector<double> db(size_b_);
+  vnl_vector<double> dc(size_c_);
 
 
   // mu is initialized now because the compiler produces warnings -MM
@@ -252,8 +256,11 @@ vnl_sparse_lm::minimize(vnl_vector<double> & a,
       }
 
       // compute updated parameters and residuals of the new parameters
-      vnl_vector<double> new_a(a - da), new_b(b - db), new_c(c - dc);
-      vnl_vector<double> new_e(e_.size()), new_weights(weights_.size());
+      vnl_vector<double> new_a(a - da);
+      vnl_vector<double> new_b(b - db);
+      vnl_vector<double> new_c(c - dc);
+      vnl_vector<double> new_e(e_.size());
+      vnl_vector<double> new_weights(weights_.size());
       f_->f(new_a, new_b, new_c, new_e); // compute the new residual vector
       ++num_evaluations_;
 

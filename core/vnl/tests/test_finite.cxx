@@ -106,7 +106,9 @@ test_finite_int(vnl_finite_int<N>)
 
   std::cout << "\nStarting addition, subtraction tests:\n";
 
-  vnl_finite_int<N> bi, bj, bij;
+  vnl_finite_int<N> bi;
+  vnl_finite_int<N> bj;
+  vnl_finite_int<N> bij;
   std::cout << " for (i = 1; i < 1000; i *= 3)\n"
             << "   for (j = 1; j < 1000; j *= 3)\n      ";
 
@@ -252,7 +254,9 @@ test_finite_poly(vnl_finite_int_poly<N, M>, const std::string & s)
   {
     for (int j = 1000; j > 0; j /= 3)
     {
-      std::vector<vnl_finite_int<N>> v1(M), v2(M), v3(M);
+      std::vector<vnl_finite_int<N>> v1(M);
+      std::vector<vnl_finite_int<N>> v2(M);
+      std::vector<vnl_finite_int<N>> v3(M);
       for (int m = 0; m < M; ++m)
       {
         v1[m] = i + m;

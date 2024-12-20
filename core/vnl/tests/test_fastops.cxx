@@ -10,8 +10,10 @@ void
 test_fastops()
 {
   // The data to work with
-  vnl_matrix<double> result_m, X;
-  vnl_vector<double> result_v, Y;
+  vnl_matrix<double> result_m;
+  vnl_matrix<double> X;
+  vnl_vector<double> result_v;
+  vnl_vector<double> Y;
   vnl_matrix<double> id1x1(1, 1);
   id1x1.set_identity();
   vnl_matrix<double> id2x2(2, 2);
@@ -32,7 +34,8 @@ test_fastops()
   vnl_vector<double> v2(data, 2);
   vnl_vector<double> v3(data, 3);
   vnl_vector<double> v10(data, 10);
-  vnl_matrix<double> m10x2(10, 2), m2x10(2, 10);
+  vnl_matrix<double> m10x2(10, 2);
+  vnl_matrix<double> m2x10(2, 10);
   for (unsigned int i = 0; i < 10; ++i)
     for (unsigned int j = 0; j < 2; ++j)
       m10x2[i][j] = m2x10[j][i] = (i + 1) * 1.5 + (j + 1) * (j + i);

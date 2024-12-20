@@ -15,10 +15,13 @@ const double dtol = 16 * std::numeric_limits<double>::epsilon();
 static void
 test_operators()
 {
-  vnl_quaternion<double> a(0, 0, 0, 1), b(2, 2, 2, 2), c, d(2, 2, 2, 3), e(1, 2, 3, 4);
+  vnl_quaternion<double> a(0, 0, 0, 1);
+  vnl_quaternion<double> b(2, 2, 2, 2);
+  vnl_quaternion<double> d(2, 2, 2, 3);
+  vnl_quaternion<double> e(1, 2, 3, 4);
   TEST("!=", a != b, true);
   TEST("==", a == a, true);
-  c = a + b;
+  vnl_quaternion<double> c = a + b;
   TEST("+", c, d);
   TEST(".x()", e.x(), 1.0);
   TEST(".y()", e.y(), 2.0);
@@ -150,7 +153,9 @@ test_rotation_matrix_and_euler_angles()
 
     // Use vnl_rotation_matrix() with euler angles.
     {
-      vnl_vector<double> ex(3), ey(3), ez(3);
+      vnl_vector<double> ex(3);
+      vnl_vector<double> ey(3);
+      vnl_vector<double> ez(3);
       ex[0] = 1.0;
       ex[1] = 0.0;
       ex[2] = 0.0;
@@ -187,7 +192,9 @@ test_rotation_matrix_and_euler_angles()
 static void
 test_rotations()
 {
-  vnl_vector_fixed<double, 3> p1(2, 2, 2), p2(1, 0, 0), p3(0, 1, 0);
+  vnl_vector_fixed<double, 3> p1(2, 2, 2);
+  vnl_vector_fixed<double, 3> p2(1, 0, 0);
+  vnl_vector_fixed<double, 3> p3(0, 1, 0);
   vnl_vector_fixed<double, 3> e0(0, 0, 0);
   vnl_quaternion<double> q0(0, 0, 0, 0);
   TEST_NEAR("rotate p1 using q0", vnl_vector_ssd(q0.rotate(p1), p1), 0.0, 1e-8);

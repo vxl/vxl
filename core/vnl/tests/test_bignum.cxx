@@ -670,7 +670,6 @@ run_division_tests()
   TEST("vnl_bignum(\"+Inf\")/(-1L)", vnl_bignum("+Inf") / (-1L), vnl_bignum("-Inf"));
   TEST("vnl_bignum(-1L)/0L", vnl_bignum(-1L) / 0L, vnl_bignum("-Inf"));
 
-  long i, j, k, l;
   long div_errors = 0;
   long mod_errors = 0;
 
@@ -678,15 +677,15 @@ run_division_tests()
             << "   for (j = 0x7ffffff; j > 0; j /= 0x10)\n"
             << "     for (k = 1; k < 17; ++k)\n"
             << "       for (l = 1; l < 17; ++l)\n         ";
-  for (i = 0xffffff; i > 0; i /= 0x10)
+  for (long i = 0xffffff; i > 0; i /= 0x10)
   {
     std::cout.put('.');
     std::cout.flush();
-    for (j = 0x7ffffff; j > 0; j /= 0x10)
+    for (long j = 0x7ffffff; j > 0; j /= 0x10)
     {
-      for (k = 1; k < 17; ++k)
+      for (long k = 1; k < 17; ++k)
       {
-        for (l = 1; l < 17; ++l)
+        for (long l = 1; l < 17; ++l)
         {
           vnl_bignum b1(i + k);
           vnl_bignum b2(j + l);
@@ -742,7 +741,8 @@ run_large_division_tests()
 {
   std::cout << "\nStarting large division tests:\n";
 
-  vnl_bignum a("10000000"), b("10000001");
+  vnl_bignum a("10000000");
+  vnl_bignum b("10000001");
   b *= a;
   vnl_bignum c = b / 10000001;
   std::cout << b << " / 10000001 = " << c << ", must be 10000000\n";
@@ -839,24 +839,22 @@ run_addition_subtraction_tests()
 {
   std::cout << "\nStarting addition, subtraction tests:\n";
 
-  long i, j;
   long add_errors = 0;
   long sub_errors = 0;
-  vnl_bignum bi, bj, bij;
 
   std::cout << " for (i = 1; i < 0xfffffff;  i *= 3)\n"
             << "   for (j = 1; j < 0xfffffff; j *= 3)\n      ";
 
   {
-    for (i = 1; i < 0xfffffff; i *= 3)
+    for (long i = 1; i < 0xfffffff; i *= 3)
     {
       std::cout.put('.');
       std::cout.flush();
-      for (j = 1; j < 0xfffffff; j *= 3)
+      for (long j = 1; j < 0xfffffff; j *= 3)
       {
-        bi = i;
-        bj = j;
-        bij = vnl_bignum(i + j);
+        vnl_bignum bi = i;
+        vnl_bignum bj = j;
+        vnl_bignum bij = vnl_bignum(i + j);
         if (bi + bj != bij)
         {
           TEST("bi + bj == vnl_bignum(i + j)", false, true);
@@ -879,8 +877,10 @@ run_addition_subtraction_tests()
 
   vnl_bignum b0(0L);
   vnl_bignum zillion("1000000000000000000");
-  vnl_bignum b1000(1000L), b1000000(1000000L);
-  vnl_bignum p_inf("+Inf"), m_inf("-Inf");
+  vnl_bignum b1000(1000L);
+  vnl_bignum b1000000(1000000L);
+  vnl_bignum p_inf("+Inf");
+  vnl_bignum m_inf("-Inf");
 
   TEST("-b0 == b0", -b0, b0);
   TEST("-p_inf == m_inf", -p_inf, m_inf);
@@ -1012,8 +1012,12 @@ run_multiplication_tests()
 {
   std::cout << "\nStarting multiplication tests:\n";
 
-  vnl_bignum b0(0L), b1000(1000L), b1000000(1000000L), zillion("1000000000000000000");
-  vnl_bignum p_inf("+Inf"), m_inf("-Inf");
+  vnl_bignum b0(0L);
+  vnl_bignum b1000(1000L);
+  vnl_bignum b1000000(1000000L);
+  vnl_bignum zillion("1000000000000000000");
+  vnl_bignum p_inf("+Inf");
+  vnl_bignum m_inf("-Inf");
 
   TEST("b0*b0 == b0", b0 * b0, b0);
   TEST("b0*b1000 == b0", b0 * b1000, b0);
@@ -1034,7 +1038,8 @@ static void
 run_left_shift_tests()
 {
   vnl_bignum b1(1L);
-  vnl_bignum p_inf("+Inf"), m_inf("-Inf");
+  vnl_bignum p_inf("+Inf");
+  vnl_bignum m_inf("-Inf");
 
   // left shift
   TEST("int(b1) == 1", int(b1), 1);
@@ -1084,7 +1089,8 @@ static void
 run_right_shift_tests()
 {
   vnl_bignum b2("4294967296");
-  vnl_bignum p_inf("+Inf"), m_inf("-Inf");
+  vnl_bignum p_inf("+Inf");
+  vnl_bignum m_inf("-Inf");
 
   // right shift
   TEST("b2 == vnl_bignum(\"4294967296\")", b2, vnl_bignum("4294967296"));

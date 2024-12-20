@@ -53,12 +53,12 @@ vnl_bessel0(double x)
   int nhi = 2 * ((int(x) + 15) / 2); // Even
   double j3 = 0.0;
   double j2 = 1.0;
-  double j0 = j2, j1;
+  double j0 = j2;
   double even_sum = j2;
   for (int i = nhi; i >= 0; i -= 2)
   {
     // j0 is i-th term, j1 is i+1-th etc
-    j1 = 2 * (i + 2) * j2 / x - j3;
+    double j1 = 2 * (i + 2) * j2 / x - j3;
     j0 = 2 * (i + 1) * j1 / x - j2;
     even_sum += j0;
     j3 = j1;
@@ -85,13 +85,13 @@ vnl_bessel(unsigned n, double x)
   int nhi = 2 * ((std::max(int(n), int(x)) + 15) / 2 + 1);
   double j3 = 0.0;
   double j2 = 1.0;
-  double j0 = j2, j1;
+  double j0 = j2;
   double even_sum = j2;
   double jn = j0;
   for (int i = nhi; i >= 0; i -= 2)
   {
     // j0 is i-th term, j1 is i+1-th etc
-    j1 = 2 * (i + 2) * j2 / x - j3;
+    double j1 = 2 * (i + 2) * j2 / x - j3;
     j0 = 2 * (i + 1) * j1 / x - j2;
     even_sum += j0;
     j3 = j1;

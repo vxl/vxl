@@ -280,12 +280,12 @@ vnl_hungarian_algorithm<T>::Step_4()
   // Find an uncovered zero
   // This loop will exit with a goto step_five or step_six.
 
-  unsigned i, j; // row and column of the uncovered zero, if any.
-  for (i = 0; i < m_N; ++i)
+  // row and column of the uncovered zero, if any.
+  for (unsigned i = 0; i < m_N; ++i)
   {
     if (!m_R_cov[i])
     {
-      for (j = 0; j < m_N; ++j)
+      for (unsigned j = 0; j < m_N; ++j)
       {
 #ifdef DEBUG
         std::cout << m_Cost(i, j) << std::endl;
@@ -342,7 +342,8 @@ vnl_hungarian_algorithm<T>::Step_5()
 {
   unsigned i = m_Z0_r;
   unsigned j = m_Z0_c;
-  std::vector<unsigned> rows, cols;
+  std::vector<unsigned> rows;
+  std::vector<unsigned> cols;
 
   while (true)
   {

@@ -44,7 +44,8 @@ test_matrix_fixed_ref()
   typedef vnl_matrix_fixed_ref<double, rows, cols> mfr;
   typedef vnl_matrix_fixed_ref_const<double, rows, cols> mfrc;
 
-  unsigned int i, j;
+  unsigned int i;
+  unsigned int j;
   mf mat; // copy in
   for (i = 0; i < rows; ++i)
     for (j = 0; j < cols; ++j)
@@ -135,13 +136,16 @@ test_matrix_fixed_ref()
   // arithmetic
   {
     // plus
-    mf a, b;
+    mf a;
+    mf b;
     std::generate(a.begin(), a.end(), std::rand);
     std::generate(b.begin(), b.end(), std::rand);
-    mfrc arefc(a), brefc(b);
+    mfrc arefc(a);
+    mfrc brefc(b);
     mf mc = arefc + brefc;
 
-    mfr aref(a), bref(b);
+    mfr aref(a);
+    mfr bref(b);
     mf m = aref + bref;
 
     mf m2 = arefc + bref;
@@ -152,13 +156,16 @@ test_matrix_fixed_ref()
   }
   {
     // times
-    mf a, b;
+    mf a;
+    mf b;
     std::generate(a.begin(), a.end(), std::rand);
     std::generate(b.begin(), b.end(), std::rand);
-    mfrc arefc(a), brefc(b);
+    mfrc arefc(a);
+    mfrc brefc(b);
     mf mc = arefc + brefc;
 
-    mfr aref(a), bref(b);
+    mfr aref(a);
+    mfr bref(b);
     mf m = aref + bref;
 
     mf m2 = arefc + bref;

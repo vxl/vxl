@@ -177,7 +177,9 @@ void
 run_for_size(unsigned m, unsigned n, T /*dummy*/, const char * type, const char * size, vnl_random & rng)
 {
   constexpr unsigned n_data = 10;
-  std::vector<vnl_vector<T>> x(n_data), y(n_data), z(n_data);
+  std::vector<vnl_vector<T>> x(n_data);
+  std::vector<vnl_vector<T>> y(n_data);
+  std::vector<vnl_vector<T>> z(n_data);
   std::vector<T> v(n_data);
   vnl_matrix<T> A(m, n);
 

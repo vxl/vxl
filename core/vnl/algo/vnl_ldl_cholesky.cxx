@@ -240,8 +240,9 @@ vnl_ldl_cholesky::update(const vnl_matrix<double> & W0)
   assert(W0.rows() == n);
   unsigned r = W0.columns();
 
-  vnl_matrix<double> W(W0);               // Workspace
-  vnl_vector<double> a(r, 1.0), gamma(r); // Workspace
+  vnl_matrix<double> W(W0); // Workspace
+  vnl_vector<double> a(r, 1.0);
+  vnl_vector<double> gamma(r); // Workspace
   for (unsigned j = 0; j < n; ++j)
   {
     double * Wj = W[j];

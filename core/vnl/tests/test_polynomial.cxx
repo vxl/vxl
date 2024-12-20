@@ -10,7 +10,8 @@
 void
 test_polynomial_double()
 {
-  vnl_polynomial<double> f1(3), f2(4);
+  vnl_polynomial<double> f1(3);
+  vnl_polynomial<double> f2(4);
 
   for (int i = 0; i <= f1.degree(); ++i)
     f1[i] = 4.0 - i; // f1 = X^3 +2 X^2 +3 X + 4
@@ -157,7 +158,8 @@ test_polynomial_double()
 void
 test_polynomial_long()
 {
-  vnl_polynomial<long> f1(3), f2(4);
+  vnl_polynomial<long> f1(3);
+  vnl_polynomial<long> f2(4);
 
   for (int i = 0; i <= f1.degree(); ++i)
     f1[i] = 4 - i; // f1 = X^3 +2 X^2 +3 X + 4
@@ -274,7 +276,8 @@ test_polynomial_long()
 void
 test_polynomial_rational()
 {
-  vnl_polynomial<vnl_rational> f1(3), f2(4);
+  vnl_polynomial<vnl_rational> f1(3);
+  vnl_polynomial<vnl_rational> f2(4);
 
   for (int i = 0; i <= f1.degree(); ++i)
     f1[i] = vnl_rational(1, 4 - i); // f1 = X^3 +1/2 X^2 +1/3 X + 1/4
@@ -443,7 +446,8 @@ test_polynomial_rational()
 void
 test_polynomial_decnum()
 {
-  vnl_polynomial<vnl_decnum> f1(3), f2(4);
+  vnl_polynomial<vnl_decnum> f1(3);
+  vnl_polynomial<vnl_decnum> f2(4);
 
   for (int i = 0; i <= f1.degree(); ++i)
     f1[i] = 4 - i; // f1 = X^3 +2 X^2 +3 X + 4

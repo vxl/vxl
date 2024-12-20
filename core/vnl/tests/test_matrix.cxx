@@ -448,7 +448,9 @@ test_float()
        true);
 
   // additional tests
-  vnl_matrix<float> m0, m1, m2;
+  vnl_matrix<float> m0;
+  vnl_matrix<float> m1;
+  vnl_matrix<float> m2;
   float mvalues[] = { 0, -2, 2, 0 };
   vnl_matrix<float> m(2, 2, 4, mvalues);
   m0 = m;
