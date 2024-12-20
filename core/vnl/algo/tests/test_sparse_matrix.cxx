@@ -183,7 +183,8 @@ doTest5()
   // A * x = lambda * B * x
   // test that B = identity produces same answers as
   // A * x = lambda * x
-  vnl_sparse_matrix<double> ms(n, n), bIdentity(n, n);
+  vnl_sparse_matrix<double> ms(n, n);
+  vnl_sparse_matrix<double> bIdentity(n, n);
   vnl_matrix<double> md(n, n);
   md = 0.0; // Initialise to all zeros
   // The matrix must be symmetric

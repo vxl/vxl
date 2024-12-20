@@ -21,8 +21,7 @@
 int
 test_string_main(int /*argc*/, char * /*argv*/[])
 {
-  std::string fred;
-  fred = "fred";
+  std::string fred = "fred";
 
   AssertEq("fred");
 

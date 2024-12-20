@@ -443,7 +443,8 @@ public:
     {
       // calculate gen_^h
       unsigned int g = h;
-      Base y = 1, z = gen_;
+      Base y = 1;
+      Base z = gen_;
       while (g > 0)
       {
         if (g % 2)
@@ -476,7 +477,8 @@ public:
       return 1;
     if (r == 1)
       return *this;
-    Base y = 1, z = *this;
+    Base y = 1;
+    Base z = *this;
     int s = r;
     while (s != 0)
     {

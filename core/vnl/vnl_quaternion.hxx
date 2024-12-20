@@ -104,7 +104,9 @@ vnl_quaternion<T>::vnl_quaternion(const vnl_vector_fixed<T, 4> & vec)
 template <class T>
 vnl_quaternion<T>::vnl_quaternion(const vnl_matrix_fixed<T, 3, 3> & rot)
 {
-  double d0 = rot(0, 0), d1 = rot(1, 1), d2 = rot(2, 2);
+  double d0 = rot(0, 0);
+  double d1 = rot(1, 1);
+  double d2 = rot(2, 2);
   double xx = 1.0 + d0 - d1 - d2; // from the diagonal of the rotation
   double yy = 1.0 - d0 + d1 - d2; // matrix, find the terms in
   double zz = 1.0 - d0 - d1 + d2; // each Quaternion component
@@ -235,8 +237,16 @@ template <class T>
 vnl_matrix_fixed<T, 3, 3>
 vnl_quaternion<T>::rotation_matrix_transpose() const
 {
-  T x2 = x() * x(), xy = x() * y(), rx = r() * x(), y2 = y() * y(), yz = y() * z(), ry = r() * y(), z2 = z() * z(),
-    zx = z() * x(), rz = r() * z(), r2 = r() * r();
+  T x2 = x() * x();
+  T xy = x() * y();
+  T rx = r() * x();
+  T y2 = y() * y();
+  T yz = y() * z();
+  T ry = r() * y();
+  T z2 = z() * z();
+  T zx = z() * x();
+  T rz = r() * z();
+  T r2 = r() * r();
   vnl_matrix_fixed<T, 3, 3> rot;
   rot(0, 0) = r2 + x2 - y2 - z2; // fill diagonal terms
   rot(1, 1) = r2 - x2 + y2 - z2;

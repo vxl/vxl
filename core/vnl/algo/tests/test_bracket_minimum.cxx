@@ -35,8 +35,12 @@ void
 test_bracket_minimum()
 {
   bm_square1 f1;
-  double a = 5, b = 6, c;
-  double fa, fb, fc;
+  double a = 5;
+  double b = 6;
+  double c;
+  double fa;
+  double fb;
+  double fc;
 
   vnl_bracket_minimum(f1, a, b, c, fa, fb, fc);
 

@@ -573,7 +573,8 @@ operator<<(std::ostream & s, const vnl_rational & r)
 inline std::istream &
 operator>>(std::istream & s, vnl_rational & r)
 {
-  vnl_rational::int_type n, d;
+  vnl_rational::int_type n;
+  vnl_rational::int_type d;
   s >> n >> d;
   r.set(n, d);
   return s;

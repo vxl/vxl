@@ -109,7 +109,8 @@ vnl_rnpoly_solve::realroots(double tol)
 {
   tol *= tol; // squared tolerance
   std::vector<vnl_vector<double> *> rr;
-  auto rp = r_.begin(), ip = i_.begin();
+  auto rp = r_.begin();
+  auto ip = i_.begin();
   for (; rp != r_.end() && ip != i_.end(); ++rp, ++ip)
     if ((*ip)->squared_magnitude() < tol)
       rr.push_back(*rp);
@@ -126,7 +127,8 @@ vnl_rnpoly_solve::realroots(double tol)
 static void
 inptbr(std::vector<vnl_rnpoly_solve_cmplx> & p, std::vector<vnl_rnpoly_solve_cmplx> & q)
 {
-  vnl_rnpoly_solve_cmplx pp[10], qq[10];
+  vnl_rnpoly_solve_cmplx pp[10];
+  vnl_rnpoly_solve_cmplx qq[10];
 
   pp[0] = vnl_rnpoly_solve_cmplx(.12324754231, .76253746298);
   pp[1] = vnl_rnpoly_solve_cmplx(.93857838950, -.99375892810);
@@ -299,7 +301,8 @@ gfunr(const std::vector<unsigned int> & ideg,
   assert(ideg.size() == dim_);
   assert(g.size() == dim_);
   assert(dg.size() == dim_);
-  std::vector<vnl_rnpoly_solve_cmplx> pxdgm1(dim_), pxdg(dim_);
+  std::vector<vnl_rnpoly_solve_cmplx> pxdgm1(dim_);
+  std::vector<vnl_rnpoly_solve_cmplx> pxdg(dim_);
 
   for (unsigned int j = 0; j < dim_; ++j)
   {
@@ -348,7 +351,10 @@ hfunr(const std::vector<unsigned int> & ideg,
   assert(h.size() == dim_);
   assert(dht.size() == dim_);
   assert(dhx.size() == dim_ * dim_);
-  std::vector<vnl_rnpoly_solve_cmplx> df(dim_ * dim_), dg(dim_), f(dim_), g(dim_);
+  std::vector<vnl_rnpoly_solve_cmplx> df(dim_ * dim_);
+  std::vector<vnl_rnpoly_solve_cmplx> dg(dim_);
+  std::vector<vnl_rnpoly_solve_cmplx> f(dim_);
+  std::vector<vnl_rnpoly_solve_cmplx> g(dim_);
   std::vector<vnl_rnpoly_solve_cmplx> pows; //  powers of variables [dim_ equations] [max_deg_ possible powers]
 
   ffunr(coeff, polyn, terms, x, pows, f, df);
@@ -540,7 +546,11 @@ predict(const std::vector<unsigned int> & ideg,
                      // too large, there seems to be greater chance of
                      // jumping to another path.  Set this to 1 if you
                      // don't care.
-  std::vector<vnl_rnpoly_solve_cmplx> dht(dim_), dhx(dim_ * dim_), dz(dim_), h(dim_), rhs(dim_);
+  std::vector<vnl_rnpoly_solve_cmplx> dht(dim_);
+  std::vector<vnl_rnpoly_solve_cmplx> dhx(dim_ * dim_);
+  std::vector<vnl_rnpoly_solve_cmplx> dz(dim_);
+  std::vector<vnl_rnpoly_solve_cmplx> h(dim_);
+  std::vector<vnl_rnpoly_solve_cmplx> rhs(dim_);
   // Call the continuation function that we are tracing
   hfunr(ideg, pdg, qdg, t, x, h, dhx, dht, polyn, coeff, terms);
 
@@ -595,7 +605,10 @@ correct(const std::vector<unsigned int> & ideg,
         const std::vector<unsigned int> & terms)
 {
   double maxroot = 1000; // Maximum size of root where it is considered heading to infinity
-  std::vector<vnl_rnpoly_solve_cmplx> dhx(dim_ * dim_), dht(dim_), h(dim_), resid(dim_);
+  std::vector<vnl_rnpoly_solve_cmplx> dhx(dim_ * dim_);
+  std::vector<vnl_rnpoly_solve_cmplx> dht(dim_);
+  std::vector<vnl_rnpoly_solve_cmplx> h(dim_);
+  std::vector<vnl_rnpoly_solve_cmplx> resid(dim_);
 
   assert(ideg.size() == dim_);
   assert(terms.size() == dim_);
@@ -772,7 +785,12 @@ Perform_Distributed_Task(const std::vector<unsigned int> & ideg,
   assert(ideg.size() == dim_);
 
   std::vector<std::vector<vnl_rnpoly_solve_cmplx>> sols;
-  std::vector<vnl_rnpoly_solve_cmplx> pdg, qdg, p, q, r, x;
+  std::vector<vnl_rnpoly_solve_cmplx> pdg;
+  std::vector<vnl_rnpoly_solve_cmplx> qdg;
+  std::vector<vnl_rnpoly_solve_cmplx> p;
+  std::vector<vnl_rnpoly_solve_cmplx> q;
+  std::vector<vnl_rnpoly_solve_cmplx> r;
+  std::vector<vnl_rnpoly_solve_cmplx> x;
   std::vector<unsigned int> icount(dim_, 1);
   icount[0] = 0;
   bool solflag; // flag used to remember if a root is found
@@ -893,7 +911,8 @@ vnl_rnpoly_solve::~vnl_rnpoly_solve()
 bool
 vnl_rnpoly_solve::compute()
 {
-  std::vector<unsigned int> ideg, terms;
+  std::vector<unsigned int> ideg;
+  std::vector<unsigned int> terms;
   std::vector<int> polyn;
   std::vector<double> coeff;
 

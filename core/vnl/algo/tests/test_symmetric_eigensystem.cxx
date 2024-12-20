@@ -81,7 +81,9 @@ test_symmetric_eigensystem()
   }
 
   { // test I with specialised 3x3 version
-    double l1, l2, l3;
+    double l1;
+    double l2;
+    double l3;
     vnl_symmetric_eigensystem_compute_eigenvals(1.0, 0.0, 0.0, 1.0, 0.0, 1.0, l1, l2, l3);
     std::cout << "Eigenvals: " << l1 << ' ' << l2 << ' ' << l3 << std::endl;
     TEST("Correct eigenvalues for I", l1 == 1.0 && l2 == 1.0 && l3 == 1.0, true);
@@ -93,7 +95,12 @@ test_symmetric_eigensystem()
     double fixed_data[n][3];
     unsigned int fixed_time = 0;
     {
-      double M11, M12, M13, M22, M23, M33;
+      double M11;
+      double M12;
+      double M13;
+      double M22;
+      double M23;
+      double M33;
       // Generate a random system
       vnl_random rng(5);
 
@@ -117,7 +124,8 @@ test_symmetric_eigensystem()
     {
       // Generate same random system
       vnl_random rng(5);
-      vnl_double_3x3 M, evecs;
+      vnl_double_3x3 M;
+      vnl_double_3x3 evecs;
       vnl_double_3 evals;
 
       for (auto & c : netlib_data)
@@ -155,7 +163,9 @@ test_symmetric_eigensystem()
   }
 
   {
-    double v1, v2, v3;
+    double v1;
+    double v2;
+    double v3;
     vnl_symmetric_eigensystem_compute_eigenvals(4199.0, 0.0, 0.0, 4199.0, 0.0, 4801.0, v1, v2, v3);
     TEST_NEAR("Numerically difficult values are ok v1", v1, 4199, 1e-3);
     TEST_NEAR("Numerically difficult values are ok v2", v2, 4199, 1e-3);

@@ -32,11 +32,9 @@ test_cstdio_main(int argc, char * argv[])
 
   bool fail = false; // global status of the test suite
 
-  int rc; // return code
-
   // Close the standard input. All reads from
   // stdin should fail after this.
-  rc = std::fclose(stdin);
+  int rc = std::fclose(stdin);
   ASSERT(rc == 0, "couldn't close standard input");
 
   rc = std::getchar();

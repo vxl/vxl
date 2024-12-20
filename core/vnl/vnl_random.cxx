@@ -131,7 +131,9 @@ vnl_random::normal()
   }
   else
   {
-    double x, y, r2;
+    double x;
+    double y;
+    double r2;
     do
     {
       x = drand32(-1.0, 1.0);
@@ -161,7 +163,9 @@ vnl_random::normal64()
   }
   else
   {
-    double x, y, r2;
+    double x;
+    double y;
+    double r2;
     do
     {
       x = drand64(-1.0, 1.0);

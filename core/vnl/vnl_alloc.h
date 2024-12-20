@@ -96,18 +96,15 @@ public:
   static void *
   allocate(std::size_t n)
   {
-    obj ** my_free_list;
-    obj * result;
-
     if (n > VNL_ALLOC_MAX_BYTES)
     {
       return (void *)new char[n];
     }
-    my_free_list = free_list + FREELIST_INDEX(n);
+    obj ** my_free_list = free_list + FREELIST_INDEX(n);
     // Acquire the lock here with a constructor call.
     // This ensures that it is released in exit or during stack
     // unwinding.
-    result = *my_free_list;
+    obj * result = *my_free_list;
     if (result == nullptr)
     {
       void * r = refill(ROUND_UP(n));
@@ -122,14 +119,13 @@ public:
   deallocate(void * p, std::size_t n)
   {
     obj * q = (obj *)p;
-    obj ** my_free_list;
 
     if (n > VNL_ALLOC_MAX_BYTES)
     {
       delete[] (char *)p;
       return;
     }
-    my_free_list = free_list + FREELIST_INDEX(n);
+    obj ** my_free_list = free_list + FREELIST_INDEX(n);
     q->free_list_link = *my_free_list;
     *my_free_list = q;
   }

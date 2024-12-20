@@ -101,7 +101,11 @@ test_converting_constructors()
 static void
 test_operators()
 {
-  vnl_rational a(-5L), b(7, -1), c, d(3, 7), e(2, 0);
+  vnl_rational a(-5L);
+  vnl_rational b(7, -1);
+  vnl_rational c;
+  vnl_rational d(3, 7);
+  vnl_rational e(2, 0);
   vnl_rational z_default;
   TEST("==", z_default == 0L, true);
 
@@ -235,17 +239,22 @@ test_infinite()
 static void
 test_frac()
 {
-  vnl_rational r(-15, -20), s(1234321L, -1111111L), p;
+  vnl_rational r(-15, -20);
+  vnl_rational s(1234321L, -1111111L);
   TEST("vnl_math::isfinite", vnl_math::isfinite(r), true);
   TEST("vnl_math::isnan", vnl_math::isnan(r), false);
   TEST("simplify", r.numerator() == 3 && r.denominator() == 4, true);
   TEST("sign in numerator", s.numerator() == -1234321L && s.denominator() == 1111111L, true);
   // All 5-digit numbers below are prime numbers, and small enough so that the multiplications in the constructors do
   // not overflow
-  long p1 = 46309L, p2 = 46349L, p3 = 46327L, p4 = 46337L, p5 = 46351L;
+  long p1 = 46309L;
+  long p2 = 46349L;
+  long p3 = 46327L;
+  long p4 = 46337L;
+  long p5 = 46351L;
   r = vnl_rational(p1 * p2, p3 * p4);
   s = vnl_rational(p3 * p4, p1 * p5);
-  p = r * s;
+  vnl_rational p = r * s;
   TEST("large multiplication without overflow", p.numerator() == p2 && p.denominator() == p5, true);
   r = vnl_rational(p1 * p2, p3 * p4);
   s = vnl_rational(p1 * p5, p3 * p4);
@@ -265,18 +274,26 @@ test_frac()
 static void
 test_long_64()
 {
-  long l1 = 1234321234321L, l2 = 2 * l1, l3 = 123456787654321L, l4 = l3 + 1;
-  vnl_rational r(-l1, -l2) /* denom = 2*num */, s(l3, -l4) /* relatively prime */, p;
+  long l1 = 1234321234321L;
+  long l2 = 2 * l1;
+  long l3 = 123456787654321L;
+  long l4 = l3 + 1;
+  vnl_rational r(-l1, -l2) /* denom = 2*num */;
+  vnl_rational s(l3, -l4) /* relatively prime */;
   TEST("vnl_math::isfinite", vnl_math::isfinite(r), true);
   TEST("vnl_math::isnan", vnl_math::isnan(s), false);
   TEST("simplify", r.numerator() == 1 && r.denominator() == 2, true);
   TEST("sign in numerator", s.numerator() == -l3 && s.denominator() == l4, true);
   // The 10-digit numbers below are prime numbers, and small enough so that the multiplications in the constructors do
   // not overflow (at least, on systems where "long" is 64 bit)
-  long p1 = 1999999117L, p2 = 1999999121L, p3 = 1999999151L, p4 = 1999999171L, p5 = 1999999207L;
+  long p1 = 1999999117L;
+  long p2 = 1999999121L;
+  long p3 = 1999999151L;
+  long p4 = 1999999171L;
+  long p5 = 1999999207L;
   r = vnl_rational(p1 * p2, p3 * p4);
   s = vnl_rational(p4 * p3, p1 * p5);
-  p = r * s;
+  vnl_rational p = r * s;
   TEST("large multiplication without overflow", p.numerator() == p2 && p.denominator() == p5, true);
   r = vnl_rational(p1 * p2, p3 * p4);
   s = vnl_rational(p1 * p5, p4 * p3);
@@ -334,7 +351,8 @@ test_sqrt()
   vnl_rational d(16, 9);
   TEST("sqrt", vnl_sqrt(d), vnl_rational(4, 3));
   d = vnl_sqrt(vnl_rational(2L));
-  double sqrt2 = std::sqrt(2.0), sqrt_2 = double(d);
+  double sqrt2 = std::sqrt(2.0);
+  double sqrt_2 = double(d);
   std::cout << "Best rational approximation of sqrt(2): " << d << " = " << sqrt_2 << '\n'
             << "Compare this with sqrt(2) in 20 decimals:                     " << sqrt2 << std::endl;
   TEST("sqrt(2)", sqrt2 - sqrt_2 < 1e-18 && sqrt_2 - sqrt2 < 1e-18, true);

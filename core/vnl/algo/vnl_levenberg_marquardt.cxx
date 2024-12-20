@@ -294,7 +294,6 @@ vnl_levenberg_marquardt::lmder_lsqfun(long * n,    // I   Number of residuals
       vnl_matrix<double> finite_jac(*p, *n, 0.0);
       vnl_vector<double> wa1(*n);
       long info = 1;
-      double diff;
       f->f(ref_x, feval);
       v3p_netlib_fdjac2_(lmdif_lsqfun,
                          n,
@@ -311,7 +310,7 @@ vnl_levenberg_marquardt::lmder_lsqfun(long * n,    // I   Number of residuals
       for (unsigned i = 0; i < ref_fJ.cols(); ++i)
         for (unsigned j = 0; j < ref_fJ.rows(); ++j)
         {
-          diff = ref_fJ(j, i) - finite_jac(j, i);
+          double diff = ref_fJ(j, i) - finite_jac(j, i);
           diff = diff * diff;
           if (diff > self->epsfcn)
           {
@@ -361,7 +360,9 @@ vnl_levenberg_marquardt::minimize_using_gradient(vnl_vector<double> & x)
 
   double factor = 100;
   long nprint = 1;
-  long mode = 1, nfev, njev;
+  long mode = 1;
+  long nfev;
+  long njev;
 
   vnl_vector<double> diag(n, 0);
   vnl_vector<double> qtf(n, 0);

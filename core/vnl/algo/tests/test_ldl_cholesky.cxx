@@ -76,7 +76,9 @@ test_ldl_cholesky()
   }
 
   {
-    vnl_vector<double> b(3), x0(3), x;
+    vnl_vector<double> b(3);
+    vnl_vector<double> x0(3);
+    vnl_vector<double> x;
     test_util_fill_random(x0.begin(), x0.end(), rng);
     b = A * x0;
     vnl_ldl_cholesky chol(A);
@@ -84,7 +86,9 @@ test_ldl_cholesky()
     TEST_NEAR("Solve Ax=b", (x - x0).one_norm(), 0, 1e-6);
   }
   {
-    vnl_vector<double> b(3), x0(3), x;
+    vnl_vector<double> b(3);
+    vnl_vector<double> x0(3);
+    vnl_vector<double> x;
     test_util_fill_random(x0.begin(), x0.end(), rng);
     vnl_ldl_cholesky chol(A);
     b = chol.lower_triangle() * x0;

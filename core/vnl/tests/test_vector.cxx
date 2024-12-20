@@ -662,7 +662,9 @@ vnl_vector_test_matrix()
 
   int v2values[] = { 1, 0 };
   int v3values[] = { 1, 0, 0 };
-  vnl_vector<int> v, v2(2, 2, v2values), v3(3, 3, v3values);
+  vnl_vector<int> v;
+  vnl_vector<int> v2(2, 2, v2values);
+  vnl_vector<int> v3(3, 3, v3values);
   TEST("v.pre_multiply(m)", ((v = v3), (v.pre_multiply(m)), (v.size() == 2 && v(0) == 1 && v(1) == 4)), true);
   TEST("v.post_multiply(m)",
        ((v = v2), (v.post_multiply(m)), (v.size() == 3 && v(0) == 1 && v(1) == 2 && v(2) == 3)),

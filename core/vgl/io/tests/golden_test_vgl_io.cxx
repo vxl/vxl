@@ -78,8 +78,7 @@ template <class T>
 bool
 almost_equal_helper(const T & real1, const T & real2)
 {
-  bool result;
-  T max, min, factor;
+  T max, min;
   if (real1 < real2)
   {
     min = real1;
@@ -90,8 +89,8 @@ almost_equal_helper(const T & real1, const T & real2)
     min = real2;
     max = real1;
   }
-  factor = epsilon(min);
-  result = ((max - min) <= factor * (max > 0 ? max : -max));
+  T factor = epsilon(min);
+  bool result = ((max - min) <= factor * (max > 0 ? max : -max));
   if (!result)
   {
     std::cout << factor << " : " << min << " -- " << max << " -- " << (max > 0 ? max : -max) << " -- " << max - min

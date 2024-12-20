@@ -29,9 +29,8 @@ test_operators()
 {
   std::complex<double> a(-5.);
   std::complex<double> b(7., -1.);
-  std::complex<double> c;
   // Numerically deterministic double precision
-  c = a + b;
+  std::complex<double> c = a + b;
   TEST("sum", c, std::complex<double>(2., -1.));
   c = a - b;
   TEST("difference", c, std::complex<double>(-12., 1.));
@@ -115,7 +114,8 @@ TESTMAIN(test_complex);
 std::complex<double>
 tc_acos(std::complex<double> x)
 {
-  double a = std::real(x), b = std::imag(x);
+  double a = std::real(x);
+  double b = std::imag(x);
   // special cases:
   if (b == 0 && a > 1)
     return { 0.0, std::log(a + std::sqrt(a * a - 1)) }; // == acosh(a)
@@ -128,7 +128,8 @@ tc_acos(std::complex<double> x)
   double q = (a * a - 1) * (a * a - 1) + b * b * (b * b + 2 * a * a + 2);
   double t = 0.5 * (1 + a * a + b * b - std::sqrt(q));
   // this $t = \cos^2(c)$ solves the latter biquadratic equation and lies in [0,1].
-  double aa = a / std::sqrt(t), bb = b / std::sqrt(1 - t);
+  double aa = a / std::sqrt(t);
+  double bb = b / std::sqrt(1 - t);
   double r_real = std::acos(std::sqrt(t));
   double r_imag = std::log(std::fabs(aa - bb));
   return { r_real, r_imag };

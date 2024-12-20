@@ -42,7 +42,8 @@ test_convolve()
   TEST_NEAR("vnl_convolve() with_fft(8)", (r8 - r1).two_norm(), 0.0, 1e-6);
 
   // TIMING TEST on a very long convolution:
-  vnl_vector<double> l(10000), k3(2000);
+  vnl_vector<double> l(10000);
+  vnl_vector<double> k3(2000);
   vnl_random rng;
   test_util_fill_random(l.begin(), l.end(), rng);
   test_util_fill_random(k3.begin(), k3.end(), rng);

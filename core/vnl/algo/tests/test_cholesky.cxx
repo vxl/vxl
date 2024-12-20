@@ -36,11 +36,12 @@ test_cholesky()
   }
 
   {
-    vnl_vector<double> b(3), x0(3), x;
+    vnl_vector<double> b(3);
+    vnl_vector<double> x0(3);
     test_util_fill_random(x0.begin(), x0.end(), rng);
     b = A * x0;
     vnl_cholesky chol(A);
-    x = chol.solve(b);
+    vnl_vector<double> x = chol.solve(b);
     testlib_test_assert_near("Solve Ax=b", (x - x0).one_norm(), 0, 1e-6);
   }
 }

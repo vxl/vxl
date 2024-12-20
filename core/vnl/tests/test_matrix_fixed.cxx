@@ -385,11 +385,10 @@ test_float()
        true);
 
   // additional tests
-  vnl_float_2x2 m1, m2;
   float mvalues[] = { 0, -2, 2, 0 };
   vnl_float_2x2 m(mvalues);
-  m1 = m;
-  m2 = m;
+  vnl_float_2x2 m1 = m;
+  vnl_float_2x2 m2 = m;
   vnl_matrix<float> m3;
   TEST("m(i,j)", (m(0, 0) == 0 && m(0, 1) == -2 && m(1, 0) == 2 && m(1, 1) == 0), true);
   TEST("m.max_value()", m.max_value(), 2);
