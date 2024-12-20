@@ -338,7 +338,7 @@ public:
   inline vnl_bignum
   operator++(int)
   {
-    vnl_bignum b = (*this);
+    const vnl_bignum b = (*this);
     operator++();
     return b;
   }
@@ -346,7 +346,7 @@ public:
   inline vnl_bignum
   operator--(int)
   {
-    vnl_bignum b = (*this);
+    const vnl_bignum b = (*this);
     operator--();
     return b;
   }

@@ -53,8 +53,8 @@ vnl_polynomial<T>
 vnl_polynomial<T>::operator+(const vnl_polynomial<T> & f) const
 {
   // Degree of result is (at most) the maximum of the two input degrees:
-  int d = degree();
-  int d2 = f.degree(); // any or both of these might be -1 !
+  const int d = degree();
+  const int d2 = f.degree(); // any or both of these might be -1 !
   std::vector<T> sum = coeffs_;
   for (int i = 0; i <= d && i <= d2; ++i)
     sum[i] += f[i];
@@ -71,9 +71,9 @@ template <class T>
 vnl_polynomial<T>
 vnl_polynomial<T>::operator*(const vnl_polynomial<T> & f) const
 {
-  int d1 = degree();
-  int d2 = f.degree();
-  int d = d1 + d2;
+  const int d1 = degree();
+  const int d2 = f.degree();
+  const int d = d1 + d2;
   if (d1 < 0 || d2 < 0)
     return vnl_polynomial<T>(); // one of the factors is zero
   std::vector<T> prod(d + 1, T(0));
@@ -90,9 +90,9 @@ template <class T>
 vnl_polynomial<T>
 vnl_polynomial<T>::operator/(const vnl_polynomial<T> & f) const
 {
-  int d1 = degree();
-  int d2 = f.degree();
-  int d = d1 - d2;                  // d will be the degree of the quotient
+  const int d1 = degree();
+  const int d2 = f.degree();
+  const int d = d1 - d2;            // d will be the degree of the quotient
   assert(d2 >= 0 && f[d2] != T(0)); // denominator should not be zero
   if (d < 0)
     return vnl_polynomial<T>(); // nominator is zero, or denominator has higher degree than nominator
@@ -114,11 +114,11 @@ template <class T>
 vnl_polynomial<T>
 vnl_polynomial<T>::operator%(const vnl_polynomial<T> & f) const
 {
-  vnl_polynomial<T> quot = operator/(f);
+  const vnl_polynomial<T> quot = operator/(f);
   if (quot.degree() < 0)
     return *this;
   vnl_polynomial<T> prod = f * quot;
-  int n = f.degree(); // size of the result, i.e., one more than degree of the result
+  const int n = f.degree(); // size of the result, i.e., one more than degree of the result
   std::vector<T> diff;
   for (int i = 0; i < n; ++i)
     diff.push_back(coeffs_[i] - prod[i]);

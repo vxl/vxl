@@ -50,7 +50,7 @@ double
 vnl_brent_minimizer::minimize_given_bounds(double ax, double bx, double cx)
 {
   vnl_brent_minimizer_func f(*f_);
-  double fb = f(bx);
+  const double fb = f(bx);
 
   return minimize_given_bounds_and_one_f(ax, bx, cx, fb);
 }
@@ -140,7 +140,7 @@ vnl_brent_minimizer::minimize_given_bounds_and_one_f(double ax, double bx, doubl
     }
 
     // Perform the function evaluation
-    double fu = f(u);
+    const double fu = f(u);
 
     // Update our current bounds
     if (fu <= fx)
@@ -289,7 +289,7 @@ vnl_brent_minimizer::minimize_given_bounds_and_all_f(double ax, double bx, doubl
     }
 
     // Perform the function evaluation
-    double fu = f(u);
+    const double fu = f(u);
 
     // Update our current bounds
     if (fu <= fx)

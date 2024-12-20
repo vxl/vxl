@@ -47,9 +47,9 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const & M, double zero_out_tol)
   assert(n_ > 0);
 
   {
-    long n = M.rows();
-    long p = M.columns();
-    long mm = std::min(n + 1L, p);
+    const long n = M.rows();
+    const long p = M.columns();
+    const long mm = std::min(n + 1L, p);
 
     // Copy source matrix into fortran storage
     // SVD is slow, don't worry about the cost of this transpose.
@@ -144,9 +144,9 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const & M, double zero_out_tol)
   {
     // Test that recomposed matrix == M
     typedef typename vnl_numeric_traits<T>::abs_t abs_t;
-    abs_t recomposition_residual = std::abs((recompose() - M).fro_norm());
-    abs_t n = std::abs(M.fro_norm());
-    abs_t thresh = abs_t(m_) * abs_t(vnl_math::eps) * n;
+    const abs_t recomposition_residual = std::abs((recompose() - M).fro_norm());
+    const abs_t n = std::abs(M.fro_norm());
+    const abs_t thresh = abs_t(m_) * abs_t(vnl_math::eps) * n;
     if (recomposition_residual > thresh)
     {
       std::cerr << "vnl_svd<T>::vnl_svd<T>() -- Warning, recomposition_residual = " << recomposition_residual
@@ -399,7 +399,7 @@ template <class T>
 vnl_matrix<T>
 vnl_svd<T>::nullspace() const
 {
-  int k = rank();
+  const int k = rank();
   if (k == n_)
     std::cerr << "vnl_svd<T>::nullspace() -- Matrix is full rank." << last_tol_ << std::endl;
   return nullspace(n_ - k);
@@ -420,7 +420,7 @@ template <class T>
 vnl_matrix<T>
 vnl_svd<T>::left_nullspace() const
 {
-  int k = rank();
+  const int k = rank();
   if (k == n_)
     std::cerr << "vnl_svd<T>::left_nullspace() -- Matrix is full rank." << last_tol_ << std::endl;
   return U_.extract(U_.rows(), n_ - k, 0, k);
@@ -458,7 +458,7 @@ vnl_vector<T>
 vnl_svd<T>::left_nullvector() const
 {
   vnl_vector<T> ret(m_);
-  int col = std::min(m_, n_) - 1;
+  const int col = std::min(m_, n_) - 1;
   for (int i = 0; i < m_; ++i)
     ret(i) = U_(i, col);
   return ret;

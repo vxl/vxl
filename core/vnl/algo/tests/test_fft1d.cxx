@@ -34,7 +34,7 @@ test_fft_1d(int n)
 
   // calculate prime factors for this size array
   //============================================
-  vnl_fft_prime_factors<double> oPFx(n);
+  const vnl_fft_prime_factors<double> oPFx(n);
   if (!oPFx)
   {
     std::cerr << "cannot decompose X-size " << n << ")into the form (2^P)(3^Q)(5^R)\n";

@@ -39,8 +39,8 @@ vnl_discrete_diff_fwd(vnl_least_squares_function * lsf,
                       const vnl_vector<double> & y,
                       vnl_matrix<double> & J)
 {
-  unsigned m = J.rows();
-  unsigned n = J.columns();
+  const unsigned m = J.rows();
+  const unsigned n = J.columns();
   assert(m == lsf->get_number_of_residuals());
   assert(m == y.size());
   assert(n == lsf->get_number_of_unknowns());
@@ -77,8 +77,8 @@ vnl_discrete_diff_sym(vnl_least_squares_function * lsf,
                       const vnl_vector<double> & x,
                       vnl_matrix<double> & J)
 {
-  unsigned m = J.rows();
-  unsigned n = J.columns();
+  const unsigned m = J.rows();
+  const unsigned n = J.columns();
   assert(m == lsf->get_number_of_residuals());
   assert(n == lsf->get_number_of_unknowns());
   assert(n == h.size());
@@ -114,8 +114,8 @@ vnl_discrete_diff_sym(vnl_least_squares_function * lsf,
 void
 vnl_discrete_diff_test_lsf(vnl_least_squares_function * lsf, const vnl_vector<double> & x)
 {
-  unsigned int m = lsf->get_number_of_residuals();
-  unsigned int n = lsf->get_number_of_unknowns();
+  const unsigned int m = lsf->get_number_of_residuals();
+  const unsigned int n = lsf->get_number_of_unknowns();
   assert(x.size() == n);
 
   vnl_matrix<double> J1(m, n);
@@ -124,9 +124,9 @@ vnl_discrete_diff_test_lsf(vnl_least_squares_function * lsf, const vnl_vector<do
   vnl_matrix<double> J2(m, n);
   vnl_discrete_diff_sym(lsf, 0.0001, x, J2);
 
-  double e = (J1 - J2).fro_norm();
+  const double e = (J1 - J2).fro_norm();
   // assert(e <= 1e-3);
-  double t = cos_angle(J1, J2);
+  const double t = cos_angle(J1, J2);
   // assert(t >= 0.99);
 
   std::cerr << __FILE__ ": e = " << e << std::endl << __FILE__ ": t = " << t << std::endl;

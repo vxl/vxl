@@ -52,7 +52,7 @@ template <class T>
 T
 vnl_determinant(const vnl_matrix<T> & M, bool balance)
 {
-  unsigned n = M.rows();
+  const unsigned n = M.rows();
   assert(M.cols() == n);
 
   switch (n)
@@ -76,7 +76,7 @@ vnl_determinant(const vnl_matrix<T> & M, bool balance)
           // normalize rows.
           for (unsigned int i = 0; i < n; ++i)
           {
-            abs_t rn = tmp.get_row(i).rms();
+            const abs_t rn = tmp.get_row(i).rms();
             if (rn > 0)
             {
               scalings *= rn;
@@ -86,7 +86,7 @@ vnl_determinant(const vnl_matrix<T> & M, bool balance)
           // normalize columns.
           for (unsigned int i = 0; i < n; ++i)
           {
-            abs_t rn = tmp.get_column(i).rms();
+            const abs_t rn = tmp.get_column(i).rms();
             if (rn > 0)
             {
               scalings *= rn;

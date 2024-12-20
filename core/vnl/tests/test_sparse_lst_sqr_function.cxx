@@ -88,7 +88,7 @@ public:
 static void
 test_sparse_lst_sqr_function()
 {
-  std::vector<bool> null_row(4, false);
+  const std::vector<bool> null_row(4, false);
   std::vector<std::vector<bool>> mask(3, null_row);
 
   //        |1 1 0 0|
@@ -207,12 +207,12 @@ test_sparse_lst_sqr_function()
   my_func.apply_weights(weights, wf);
   my_func.apply_weights(weights, wA, wB, wC);
 
-  double w_norm = my_func.number_of_a() * my_func.number_of_b();
+  const double w_norm = my_func.number_of_a() * my_func.number_of_b();
   for (unsigned int i = 0; i < my_func.number_of_a(); ++i)
   {
     for (unsigned int j = 0; j < my_func.number_of_b(); ++j)
     {
-      int k = my_func.residual_indices()(i, j);
+      const int k = my_func.residual_indices()(i, j);
       if (k < 0)
         continue;
       TEST_NEAR("valid weights", weights[k], double((i + 1) * (j + 1)) / w_norm, 1e-10);

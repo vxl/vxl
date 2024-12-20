@@ -238,9 +238,9 @@ vnl_decnum::comp(const std::string & a, const std::string & b)
   std::cerr << "Entering vnl_decnum::comp with " << a << " and " << b << '\n';
 #endif
   int i;
-  int na = int(a.length());
-  int nb = int(b.length());
-  int nc = na < nb ? na : nb;
+  const int na = int(a.length());
+  const int nb = int(b.length());
+  const int nc = na < nb ? na : nb;
   for (i = 0; i < nc; ++i)
   {
     if (a.c_str()[i] < b.c_str()[i])
@@ -262,7 +262,7 @@ vnl_decnum::operator<(const vnl_decnum & r) const
 #ifdef DEBUG
   std::cerr << "Entering vnl_decnum::operator< with " << data_ << " and " << r.data() << '\n';
 #endif
-  std::string rs = r.data();
+  std::string const rs = r.data();
   if (data_ == "NaN" || rs == "NaN")
     return false; // NaN compares to nothing!
   else if (operator==(r))
@@ -435,7 +435,7 @@ vnl_decnum::mult(const std::string & a, char b)
   std::string result = "";
   int na = int(a.length());
   int carry = 0;
-  int bb = b - '0';
+  const int bb = b - '0';
   assert(bb >= 0 && bb <= 9);
   for (--na; na >= 0; --na)
   {
@@ -466,7 +466,7 @@ vnl_decnum::operator*(const vnl_decnum & r) const
            : (sign_ == ' ' || r.sign() == ' ') ? vnl_decnum("NaN")
                                                : vnl_decnum("-Inf");
 
-  int sign = (sign_ == ' ' ? 0 : sign_ == '-' ? -1 : 1) * (r.sign() == ' ' ? 0 : r.sign() == '-' ? -1 : 1);
+  const int sign = (sign_ == ' ' ? 0 : sign_ == '-' ? -1 : 1) * (r.sign() == ' ' ? 0 : r.sign() == '-' ? -1 : 1);
   vnl_decnum result(0L);
   if (sign == 0)
     return result;
@@ -492,7 +492,7 @@ vnl_decnum::div(const std::string & a, std::string & b)
 #ifdef DEBUG
   std::cerr << "Entering vnl_decnum::div with " << a << " and " << b << '\n';
 #endif
-  int na = int(a.length());
+  int const na = int(a.length());
   int nb = int(b.length());
   assert(na >= nb);
   if (comp(a, b))
@@ -506,7 +506,7 @@ vnl_decnum::div(const std::string & a, std::string & b)
   std::string c = b;
   for (; u[0] < '9'; u[0]++)
   {
-    vnl_decnum d = plus(c, b, 0L);
+    const vnl_decnum d = plus(c, b, 0L);
     if (vnl_decnum(a) < d)
     {
       b = c;
@@ -544,24 +544,24 @@ vnl_decnum::operator/(const vnl_decnum & r) const
   if (operator==(r))
     return { '+', "1", 0L };
   std::string a = data_;
-  std::string b = r.data();
+  const std::string b = r.data();
   int na = int(a.length());
-  int nb = int(b.length());
+  const int nb = int(b.length());
   vnl_decnum result(0L);
   while (na > nb || (na == nb && !comp(a, b)))
   {
     std::string c = b;
-    std::string d = div(a, c);
+    const std::string d = div(a, c);
 #ifdef DEBUG
     std::cerr << "vnl_decnum::div returns " << d << '\n';
 #endif
     result += vnl_decnum(d);
-    vnl_decnum m = vnl_decnum(a) - vnl_decnum(c);
+    const vnl_decnum m = vnl_decnum(a) - vnl_decnum(c);
     a = m.data();
     na = a.length();
   }
   result <<= (exp_ - r.exp());
-  int sign = (sign_ == '-' ? -1 : 1) * (r.sign() == '-' ? -1 : 1);
+  const int sign = (sign_ == '-' ? -1 : 1) * (r.sign() == '-' ? -1 : 1);
   return sign == -1 ? -result : result;
 }
 
@@ -588,17 +588,17 @@ vnl_decnum::operator%(const vnl_decnum & r) const
   if (operator==(r))
     return { "0" };
   std::string a = data_;
-  std::string b = r.data();
+  const std::string b = r.data();
   int na = int(a.length());
-  int nb = int(b.length());
+  const int nb = int(b.length());
   while (na > nb || (na == nb && !comp(a, b)))
   {
     std::string c = b;
-    std::string d = div(a, c);
+    const std::string d = div(a, c);
 #ifdef DEBUG
     std::cerr << "vnl_decnum::div returns " << d << '\n';
 #endif
-    vnl_decnum m = vnl_decnum(a) - vnl_decnum(c);
+    vnl_decnum const m = vnl_decnum(a) - vnl_decnum(c);
     a = m.data();
     na = a.length();
   }
@@ -681,8 +681,8 @@ vnl_decnum::compactify()
     exp_ = 0L;
     return *this;
   }
-  unsigned long n = data_.find_last_not_of('0') + 1;
-  unsigned long l = data_.length();
+  const unsigned long n = data_.find_last_not_of('0') + 1;
+  const unsigned long l = data_.length();
   if (n < l)
   { // at least one trailing zero is found
     exp_ += l - n;

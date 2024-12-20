@@ -224,7 +224,7 @@ public:
     }
     else
     {
-      int v = val_;
+      const int v = val_;
       operator+=(v);
       operator*=(r / 2);
       if (r % 2)
@@ -242,7 +242,7 @@ public:
     else
       lp1_ = 0;
     // This rather complicated implementation is necessary to avoid integer overflow
-    unsigned int s = int(r);
+    const unsigned int s = int(r);
     if (N <= 0x7fff || (val_ <= 0x7fff && s <= 0x7fff))
     {
       val_ *= s;
@@ -251,7 +251,7 @@ public:
     }
     else
     {
-      int v = val_;
+      const int v = val_;
       operator+=(v);
       operator*=(s / 2);
       if (s % 2)
@@ -269,10 +269,10 @@ public:
     static unsigned int t_ = 0; // cached value
     if (t_ != 0)
       return t_;
-    std::vector<unsigned int> d = decompose();
+    const std::vector<unsigned int> d = decompose();
     t_ = 1;
     unsigned int p = 1;
-    for (unsigned int i : d)
+    for (const unsigned int i : d)
     {
       if (p != i)
         t_ *= i - 1;
@@ -291,12 +291,12 @@ public:
     assert(is_unit());
     if (val_ == 1)
       return *this;
-    Base z = smallest_generator();
+    const Base z = smallest_generator();
     if (z != 1)
       return exp(Base::totient() - log());
     for (unsigned int r = 1; r <= N / 2; ++r)
     {
-      unsigned int t = int(*this * int(r));
+      const unsigned int t = int(*this * int(r));
       if (t == 1)
         return r;
       else if (t == N - 1)
@@ -379,7 +379,7 @@ public:
   static inline bool
   is_field()
   {
-    std::vector<unsigned int> d = Base::decompose();
+    const std::vector<unsigned int> d = Base::decompose();
     return d.size() == 1;
   }
 
@@ -438,7 +438,7 @@ public:
       return gen_;
     if (N == 2)
       return gen_ = 1;
-    unsigned int h = Base::totient() / 2; // note that totient() is always even
+    const unsigned int h = Base::totient() / 2; // note that totient() is always even
     for (gen_ = 2; gen_ != 0; ++gen_)
     {
       // calculate gen_^h
@@ -500,7 +500,7 @@ public:
       return -1; // should actually return minus infinity
     if (lp1_ != 0)
       return lp1_ - 1;
-    Base z = smallest_generator();
+    const Base z = smallest_generator();
     assert(N == 2 || z != 1); // otherwise, the units of this ring do not form a cyclic group
     Base y = 1;
     for (lp1_ = 1; lp1_ <= N; ++lp1_)
@@ -528,7 +528,7 @@ public:
     unsigned int l1 = n;
     while (l != 0)
     {
-      unsigned int t = l;
+      const unsigned int t = l;
       l = l1 % l;
       l1 = t;
     }
@@ -973,7 +973,7 @@ public:
     {
       assert(p.size() == M + 1 && p[M].is_unit()); // must be of effective degree M
       // Now set poly_, thereby making the coefficient poly_[M] equal to -1.
-      Scalar f = -1 / p[M];
+      const Scalar f = -1 / p[M];
       for (int m = 0; m <= M; ++m)
         poly_[m] = f * p[m];
     }
@@ -984,7 +984,7 @@ public:
   Base &
   operator*=(const Base & r)
   {
-    Base x = *this;
+    const Base x = *this;
     *this = r;
     *this *= x[0];
     while (val_.size() < M)

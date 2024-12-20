@@ -134,9 +134,9 @@ vnl_svd_fixed<T, R, C>::vnl_svd_fixed(vnl_matrix_fixed<T, R, C> const & M, doubl
   {
     // Test that recomposed matrix == M
     typedef typename vnl_numeric_traits<T>::abs_t abs_t;
-    abs_t recomposition_residual = std::abs((recompose() - M).fro_norm());
-    abs_t n = std::abs(M.fro_norm());
-    abs_t thresh = abs_t(R) * abs_t(vnl_math::eps) * n;
+    const abs_t recomposition_residual = std::abs((recompose() - M).fro_norm());
+    const abs_t n = std::abs(M.fro_norm());
+    const abs_t thresh = abs_t(R) * abs_t(vnl_math::eps) * n;
     if (recomposition_residual > thresh)
     {
       std::cerr << "vnl_svd_fixed<T>::vnl_svd_fixed<T>() -- Warning, recomposition_residual = "
@@ -358,7 +358,7 @@ template <class T, unsigned int R, unsigned int C>
 vnl_matrix<T>
 vnl_svd_fixed<T, R, C>::nullspace() const
 {
-  int k = rank();
+  const int k = rank();
   if (k == C)
     std::cerr << "vnl_svd_fixed<T>::nullspace() -- Matrix is full rank." << last_tol_ << std::endl;
   return nullspace(C - k);
@@ -379,7 +379,7 @@ template <class T, unsigned int R, unsigned int C>
 vnl_matrix<T>
 vnl_svd_fixed<T, R, C>::left_nullspace() const
 {
-  int k = rank();
+  const int k = rank();
   if (k == C)
     std::cerr << "vnl_svd_fixed<T>::left_nullspace() -- Matrix is full rank." << last_tol_ << std::endl;
   return U_.extract(U_.rows(), C - k, 0, k);

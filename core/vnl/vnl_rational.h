@@ -223,7 +223,7 @@ public:
   vnl_rational &
   invert()
   {
-    int_type t = num_;
+    const int_type t = num_;
     num_ = den_;
     den_ = t;
     normalize();
@@ -350,7 +350,7 @@ public:
   inline vnl_rational
   operator++(int)
   {
-    vnl_rational b = *this;
+    const vnl_rational b = *this;
     num_ += den_;
     return b;
   }
@@ -358,7 +358,7 @@ public:
   inline vnl_rational
   operator--(int)
   {
-    vnl_rational b = *this;
+    const vnl_rational b = *this;
     num_ -= den_;
     return b;
   }
@@ -464,21 +464,21 @@ public:
   inline int_type
   floor() const
   {
-    int_type t = truncate();
+    const int_type t = truncate();
     return num_ < 0L && (num_ % den_) != 0 ? t - 1 : t;
   }
   //: Converts rational value to integer by truncating towards positive infinity.
   inline int_type
   ceil() const
   {
-    int_type t = truncate();
+    const int_type t = truncate();
     return num_ > 0L && (num_ % den_) != 0 ? t + 1 : t;
   }
   //: Rounds rational to nearest integer.
   inline int_type
   round() const
   {
-    int_type t = truncate();
+    const int_type t = truncate();
     if (num_ < 0)
       return ((-num_) % den_) >= 0.5 * den_ ? t - 1 : t;
     else
@@ -490,7 +490,7 @@ public:
   inline
   operator T() const
   {
-    int_type t = truncate();
+    const int_type t = truncate();
     auto r = static_cast<T>(t);
     assert(r == t); // abort on underflow or overflow
     return r;
@@ -518,7 +518,7 @@ public:
   {
     while (l2 != 0)
     {
-      int_type t = l2;
+      const int_type t = l2;
       l2 = l1 % l2;
       l1 = t;
     }
@@ -544,7 +544,7 @@ private:
     } // +-Inf
     if (num_ != 1 && num_ != -1 && den_ != 1)
     {
-      int_type common = vnl_rational::gcd(num_, den_);
+      const int_type common = vnl_rational::gcd(num_, den_);
       if (common != 1)
       {
         num_ /= common;

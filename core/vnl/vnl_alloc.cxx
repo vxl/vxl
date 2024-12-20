@@ -10,7 +10,7 @@ vnl_alloc::chunk_alloc(std::size_t size, int & nobjs)
 {
   char * result;
   std::size_t total_bytes = size * nobjs;
-  std::size_t bytes_left = end_free - start_free;
+  const std::size_t bytes_left = end_free - start_free;
 
   if (bytes_left >= total_bytes)
   {
@@ -28,7 +28,7 @@ vnl_alloc::chunk_alloc(std::size_t size, int & nobjs)
   }
   else
   {
-    std::size_t bytes_to_get = 2 * total_bytes + ROUND_UP(heap_size >> 4);
+    const std::size_t bytes_to_get = 2 * total_bytes + ROUND_UP(heap_size >> 4);
     // Try to make use of the left-over piece.
     if (bytes_left > 0)
     {
@@ -113,7 +113,7 @@ vnl_alloc::reallocate(void * p, std::size_t old_sz, std::size_t new_sz)
   if (ROUND_UP(old_sz) == ROUND_UP(new_sz))
     return p;
   void * result = allocate(new_sz);
-  std::size_t copy_sz = new_sz > old_sz ? old_sz : new_sz;
+  const std::size_t copy_sz = new_sz > old_sz ? old_sz : new_sz;
   std::memcpy(result, p, copy_sz);
   deallocate(p, old_sz);
   return result;

@@ -9,7 +9,7 @@
 int
 test_preprocessor_main(int /*argc*/, char * /*argv*/[])
 {
-  int result = 0;
+  const int result = 0;
   std::cout << "VXL version identified as: " << VXL_VERSION_MAJOR << "." << VXL_VERSION_MINOR << "."
             << VXL_VERSION_PATCH;
 

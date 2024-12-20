@@ -10,8 +10,8 @@ vnl_rank_row_reduce(const vnl_matrix<T> & mat, vnl_rank_pivot_type t)
 {
   vnl_matrix<T> a = mat;
   bool changed = true;
-  unsigned int m = a.rows();
-  unsigned int n = a.columns();
+  const unsigned int m = a.rows();
+  const unsigned int n = a.columns();
   while (changed)
   {
     changed = false;
@@ -73,8 +73,8 @@ vnl_rank_column_reduce(const vnl_matrix<T> & mat, vnl_rank_pivot_type t)
 {
   vnl_matrix<T> a = mat;
   bool changed = true;
-  unsigned int m = a.rows();
-  unsigned int n = a.columns();
+  const unsigned int m = a.rows();
+  const unsigned int n = a.columns();
   while (changed)
   {
     changed = false;
@@ -136,8 +136,8 @@ vnl_rank_row_column_reduce(const vnl_matrix<T> & mat, vnl_rank_pivot_type t)
 {
   vnl_matrix<T> a = mat;
   bool changed = true;
-  unsigned int m = a.rows();
-  unsigned int n = a.columns();
+  const unsigned int m = a.rows();
+  const unsigned int n = a.columns();
   while (changed)
   {
     changed = false;

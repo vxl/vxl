@@ -94,9 +94,9 @@ doTest2()
       m2(i, (i + n - 3) % n) = 1.0;
     }
 
-    vnl_sparse_matrix<double> prod = m1 * m2;
+    const vnl_sparse_matrix<double> prod = m1 * m2;
 
-    std::clock_t tn = std::clock();
+    const std::clock_t tn = std::clock();
     std::cout << n << ' ' << tn - t << std::endl;
     t = tn;
   }
@@ -166,10 +166,10 @@ doTest4()
   // Report 'em.
   for (unsigned i = 0; i < nvals; i++)
   {
-    double dense = ed.D(i, i);
-    double sparse = es.get_eigenvalue(i);
+    const double dense = ed.D(i, i);
+    const double sparse = es.get_eigenvalue(i);
     std::cout << "Dense[" << i << "] : " << dense << '\n' << "Sparse[" << i << "]: " << sparse << std::endl;
-    double err = sparse - dense;
+    const double err = sparse - dense;
     TEST_NEAR("vnl_sparse_symmetric_eigensystem eigenvalue difference", err, 0.0, 1e-10);
   }
 }
@@ -207,10 +207,10 @@ doTest5()
   // Report 'em.
   for (unsigned i = 0; i < nvals; i++)
   {
-    double dense = ed.D(i, i);
-    double sparse = es.get_eigenvalue(i);
+    const double dense = ed.D(i, i);
+    const double sparse = es.get_eigenvalue(i);
     std::cout << "Dense[" << i << "] : " << dense << '\n' << "Sparse[" << i << "]: " << sparse << std::endl;
-    double err = sparse - dense;
+    const double err = sparse - dense;
     TEST_NEAR("vnl_sparse_symmetric_eigensystem eigenvalue difference", err, 0.0, 1e-10);
   }
 }
@@ -252,7 +252,7 @@ doTest6()
   vnl_sparse_symmetric_eigensystem sse;
 
   // can't get all eigenvals because 0 < evCount < numLanzcosVectors < matOrd
-  int evCount = matOrd - 1;
+  const int evCount = matOrd - 1;
 
   // vnl_generalized_eigensystem always does algebraic smallest to largest
   TEST("vnl_sparse_symmetric_eigensystem::CalculateNPairs(A,B) succeeded",
@@ -280,9 +280,9 @@ doTest6()
   // Report eVals.
   for (int i = 0; i < evCount; ++i)
   {
-    double dense = gev.D(i, i);
-    double sparse = sse.get_eigenvalue(i);
-    double err = sparse - dense;
+    const double dense = gev.D(i, i);
+    const double sparse = sse.get_eigenvalue(i);
+    const double err = sparse - dense;
     TEST_NEAR("vnl_sparse_symmetric_eigensystem general case eigenvalue difference", err, 0.0, 1e-10);
   }
 
@@ -290,8 +290,8 @@ doTest6()
   std::cout << "Eigenvectors:" << std::endl;
   for (int evIx = 0; evIx < evCount; evIx++)
   {
-    double errSameSign = (sse.get_eigenvector(evIx) - gev.V.get_column(evIx)).two_norm();
-    double errOppSign = (sse.get_eigenvector(evIx) + gev.V.get_column(evIx)).two_norm();
+    const double errSameSign = (sse.get_eigenvector(evIx) - gev.V.get_column(evIx)).two_norm();
+    const double errOppSign = (sse.get_eigenvector(evIx) + gev.V.get_column(evIx)).two_norm();
     TEST_NEAR("vnl_sparse_symmetric_eigensystem general case eigenvector difference",
               errSameSign < errOppSign ? errSameSign : errOppSign,
               0.0,

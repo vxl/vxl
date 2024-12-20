@@ -16,7 +16,7 @@ int
 test_sstream_main(int /*argc*/, char * /*argv*/[])
 {
   int status = 0;
-  std::string x = "fred";
+  const std::string x = "fred";
   std::istringstream ss(x);
 
   std::string fred;

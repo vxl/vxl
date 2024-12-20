@@ -14,7 +14,7 @@ template <typename FloatingType>
 inline void
 makeNumDen(FloatingType d, int_type & num_, int_type & den_)
 {
-  bool sign = d < 0;
+  const bool sign = d < 0;
   if (sign)
     d = -d;
 
@@ -26,8 +26,8 @@ makeNumDen(FloatingType d, int_type & num_, int_type & den_)
 
   while (d * num < 1e9 && d * den < 1e9)
   {
-    int_type a = static_cast<int_type>(d); // integral part of d
-    d -= a;                                // certainly >= 0
+    const int_type a = static_cast<int_type>(d); // integral part of d
+    d -= a;                                      // certainly >= 0
     int_type temp = num;
     num = a * num + prev_num;
     prev_num = temp;
@@ -68,8 +68,8 @@ vnl_rational::operator*=(const vnl_rational & r)
   a = r.numerator() / a;
   b = r.denominator() / b;
   // find out whether overflow would occur; in that case, return approximate result
-  double n = double(a) * double(num_);
-  double d = double(b) * double(den_);
+  const double n = double(a) * double(num_);
+  const double d = double(b) * double(den_);
   if (n < maxint_as_double && d < maxint_as_double)
   {
     num_ *= a;
@@ -87,11 +87,11 @@ vnl_rational::operator*=(const vnl_rational & r)
 vnl_rational &
 vnl_rational::operator*=(int_type r)
 {
-  int_type a = vnl_rational::gcd(r, den_);
+  const int_type a = vnl_rational::gcd(r, den_);
   den_ /= a;
   r /= a;
   // find out whether overflow would occur; in that case, return approximate result
-  double n = double(r) * double(num_);
+  const double n = double(r) * double(num_);
   if (n < maxint_as_double)
   {
     num_ *= r;
@@ -117,8 +117,8 @@ vnl_rational::operator/=(const vnl_rational & r)
   a = r.numerator() / a;
   b = r.denominator() / b;
   // find out whether overflow would occur; in that case, return approximate result
-  double n = double(b) * double(num_);
-  double d = double(a) * double(den_);
+  const double n = double(b) * double(num_);
+  const double d = double(a) * double(den_);
   if (n < maxint_as_double && d < maxint_as_double)
   {
     num_ *= b;
@@ -138,11 +138,11 @@ vnl_rational &
 vnl_rational::operator/=(int_type r)
 {
   assert(num_ != 0 || r != 0); // 0/0 undefined
-  int_type a = vnl_rational::gcd(r, num_);
+  const int_type a = vnl_rational::gcd(r, num_);
   num_ /= a;
   r /= a;
   // find out whether overflow would occur; in that case, return approximate result
-  double d = double(r) * double(den_);
+  const double d = double(r) * double(den_);
   if (d < maxint_as_double)
   {
     den_ *= r;

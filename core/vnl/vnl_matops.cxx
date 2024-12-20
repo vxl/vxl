@@ -61,7 +61,7 @@ vnl_matops::vcat(const vnl_matrix<double> & A, const vnl_matrix<double> & B)
 double
 vnl_matops::homg_diff(const vnl_matrix<double> & A, const vnl_matrix<double> & B)
 {
-  vnl_matrix<double> ratio = element_quotient(A, B);
+  const vnl_matrix<double> ratio = element_quotient(A, B);
 
   return (ratio - ratio.mean()).fro_norm();
 }

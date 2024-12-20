@@ -19,7 +19,7 @@ test_polynomial_double()
   {
     std::stringstream testStream;
     testStream << f1;
-    std::string expected = " X^3 +2 X^2 +3 X +4";
+    const std::string expected = " X^3 +2 X^2 +3 X +4";
     TEST("f1 prints as X^3 +2 X^2 +3 X +4", testStream.str(), expected);
   }
 
@@ -71,9 +71,9 @@ test_polynomial_double()
   std::cout << "f1%f2 =" << f3 << std::endl;
   TEST("f1%f2", f3, f1);
 
-  vnl_polynomial<double> f1d = f1.derivative();
+  const vnl_polynomial<double> f1d = f1.derivative();
   std::cout << "f1d =" << f1d << std::endl;
-  vnl_polynomial<double> f2d = f2.derivative();
+  const vnl_polynomial<double> f2d = f2.derivative();
   std::cout << "f2d =" << f2d << std::endl;
 
   f3 = f1 * f2;
@@ -84,7 +84,7 @@ test_polynomial_double()
   std::cout << "f3d =" << f3.derivative() << std::endl;
   TEST("Derivative", f3.derivative(), f1d * f2 + f2d * f1);
 
-  vnl_polynomial<double> f3p = (f1d * f2 + f2d * f1).primitive();
+  const vnl_polynomial<double> f3p = (f1d * f2 + f2d * f1).primitive();
   std::cout << "f3p =" << f3p << std::endl;
 
   TEST("Primitive", f3p, f3 - f3.evaluate(0.0));
@@ -115,42 +115,42 @@ test_polynomial_double()
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " X +1";
+    const std::string expected = " X +1";
     TEST("f4 prints as X +1", testStream.str(), expected);
   }
   f4 *= 2.0; // f4 = 2 X + 2
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " 2 X +2";
+    const std::string expected = " 2 X +2";
     TEST("f4 prints as 2 X +2", testStream.str(), expected);
   }
   f4 = -f4; // f4 = -2 X - 2
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " -2 X -2";
+    const std::string expected = " -2 X -2";
     TEST("f4 prints as -2 X -2", testStream.str(), expected);
   }
   f4[1] = 1; // f4 = X - 2
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " X -2";
+    const std::string expected = " X -2";
     TEST("f4 prints as X -2", testStream.str(), expected);
   }
   f4[0] = 0; // f4 = X
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " X";
+    const std::string expected = " X";
     TEST("f4 prints as X", testStream.str(), expected);
   }
   f4[1] = 0; // f4 = 0
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " 0";
+    const std::string expected = " 0";
     TEST("f4 prints as 0", testStream.str(), expected);
   }
 }
@@ -167,7 +167,7 @@ test_polynomial_long()
   {
     std::stringstream testStream;
     testStream << f1;
-    std::string expected = " X^3 +2 X^2 +3 X +4";
+    const std::string expected = " X^3 +2 X^2 +3 X +4";
     TEST("f1 prints as X^3 +2 X^2 +3 X +4", testStream.str(), expected);
   }
 
@@ -200,9 +200,9 @@ test_polynomial_long()
   TEST("f2(x)-f1(x)", f2.evaluate(302L) - f1.evaluate(302L), f3.evaluate(302L));
   TEST("f2-f1", f3.degree() == 4 && f3[4] == 1 && f3[3] == 2 && f3[2] == 3 && f3[1] == 4 && f3[0] == 5, true);
 
-  vnl_polynomial<long> f1d = f1.derivative();
+  const vnl_polynomial<long> f1d = f1.derivative();
   std::cout << "f1d =" << f1d << std::endl;
-  vnl_polynomial<long> f2d = f2.derivative();
+  const vnl_polynomial<long> f2d = f2.derivative();
   std::cout << "f2d =" << f2d << std::endl;
 
   f3 = f1 * f2;
@@ -213,7 +213,7 @@ test_polynomial_long()
   std::cout << "f3d =" << f3.derivative() << std::endl;
   TEST("Derivative", f3.derivative(), f1d * f2 + f2d * f1);
 
-  vnl_polynomial<long> f3p = (f1d * f2 + f2d * f1).primitive();
+  const vnl_polynomial<long> f3p = (f1d * f2 + f2d * f1).primitive();
   std::cout << "f3p =" << f3p << std::endl;
 
   TEST("Polynomial of degree 0", vnl_polynomial<long>(12L).evaluate(302L), 12L);
@@ -233,42 +233,42 @@ test_polynomial_long()
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " X +1";
+    const std::string expected = " X +1";
     TEST("f4 prints as X +1", testStream.str(), expected);
   }
   f4 *= 2L; // f4 = 2 X + 2
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " 2 X +2";
+    const std::string expected = " 2 X +2";
     TEST("f4 prints as 2 X +2", testStream.str(), expected);
   }
   f4 = -f4; // f4 = -2 X - 2
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " -2 X -2";
+    const std::string expected = " -2 X -2";
     TEST("f4 prints as -2 X -2", testStream.str(), expected);
   }
   f4[1] = 1L; // f4 = X - 2
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " X -2";
+    const std::string expected = " X -2";
     TEST("f4 prints as X -2", testStream.str(), expected);
   }
   f4[0] = 0L; // f4 = X
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " X";
+    const std::string expected = " X";
     TEST("f4 prints as X", testStream.str(), expected);
   }
   f4[1] = 0L; // f4 = 0
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " 0";
+    const std::string expected = " 0";
     TEST("f4 prints as 0", testStream.str(), expected);
   }
 }
@@ -285,7 +285,7 @@ test_polynomial_rational()
   {
     std::stringstream testStream;
     testStream << f1;
-    std::string expected = " X^3 +1/2 X^2 +1/3 X +1/4";
+    const std::string expected = " X^3 +1/2 X^2 +1/3 X +1/4";
     TEST("f1 prints as X^3 +1/2 X^2 +1/3 X +1/4", testStream.str(), expected);
   }
 
@@ -358,9 +358,9 @@ test_polynomial_rational()
   std::cout << "f1%f2 =" << f3 << std::endl;
   TEST("f1%f2", f3, f1);
 
-  vnl_polynomial<vnl_rational> f1d = f1.derivative();
+  const vnl_polynomial<vnl_rational> f1d = f1.derivative();
   std::cout << "f1d =" << f1d << std::endl;
-  vnl_polynomial<vnl_rational> f2d = f2.derivative();
+  const vnl_polynomial<vnl_rational> f2d = f2.derivative();
   std::cout << "f2d =" << f2d << std::endl;
 
   f3 = f1 * f2;
@@ -372,7 +372,7 @@ test_polynomial_rational()
   std::cout << "f3d =" << f3.derivative() << std::endl;
   TEST("Derivative", f3.derivative(), f1d * f2 + f2d * f1);
 
-  vnl_polynomial<vnl_rational> f3p = (f1d * f2 + f2d * f1).primitive();
+  const vnl_polynomial<vnl_rational> f3p = (f1d * f2 + f2d * f1).primitive();
   std::cout << "f3p =" << f3p << std::endl;
 
   TEST("Primitive", f3p, f3 - f3.evaluate(0));
@@ -403,42 +403,42 @@ test_polynomial_rational()
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " X +1/1";
+    const std::string expected = " X +1/1";
     TEST("f4 prints as X +1/1", testStream.str(), expected);
   }
   f4 *= vnl_rational(2); // f4 = 2 X + 2
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " 2/1 X +2/1";
+    const std::string expected = " 2/1 X +2/1";
     TEST("f4 prints as 2/1 X +2/1", testStream.str(), expected);
   }
   f4 = -f4; // f4 = -2 X - 2
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " -2/1 X -2/1";
+    const std::string expected = " -2/1 X -2/1";
     TEST("f4 prints as -2/1 X -2/1", testStream.str(), expected);
   }
   f4[1] = 1; // f4 = X - 2
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " X -2/1";
+    const std::string expected = " X -2/1";
     TEST("f4 prints as X -2/1", testStream.str(), expected);
   }
   f4[0] = 0; // f4 = X
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " X";
+    const std::string expected = " X";
     TEST("f4 prints as X", testStream.str(), expected);
   }
   f4[1] = 0; // f4 = 0
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " 0";
+    const std::string expected = " 0";
     TEST("f4 prints as 0", testStream.str(), expected);
   }
 }
@@ -455,7 +455,7 @@ test_polynomial_decnum()
   {
     std::stringstream testStream;
     testStream << f1;
-    std::string expected = " X^3 +2 X^2 +3 X +4";
+    const std::string expected = " X^3 +2 X^2 +3 X +4";
     TEST("f1 prints as X^3 +2 X^2 +3 X +4", testStream.str(), expected);
   }
 
@@ -488,9 +488,9 @@ test_polynomial_decnum()
   TEST("f2(x)-f1(x)", f2.evaluate("35e19") - f1.evaluate("35e19"), f3.evaluate("35e19"));
   TEST("f2-f1", f3.degree() == 4 && f3[4] == 1 && f3[3] == 2 && f3[2] == 3 && f3[1] == 4 && f3[0] == 5, true);
 
-  vnl_polynomial<vnl_decnum> f1d = f1.derivative();
+  const vnl_polynomial<vnl_decnum> f1d = f1.derivative();
   std::cout << "f1d =" << f1d << std::endl;
-  vnl_polynomial<vnl_decnum> f2d = f2.derivative();
+  const vnl_polynomial<vnl_decnum> f2d = f2.derivative();
   std::cout << "f2d =" << f2d << std::endl;
 
   f3 = f1 * f2;
@@ -501,7 +501,7 @@ test_polynomial_decnum()
   std::cout << "f3d =" << f3.derivative() << std::endl;
   TEST("Derivative", f3.derivative(), f1d * f2 + f2d * f1);
 
-  vnl_polynomial<vnl_decnum> f3p = (f1d * f2 + f2d * f1).primitive();
+  const vnl_polynomial<vnl_decnum> f3p = (f1d * f2 + f2d * f1).primitive();
   std::cout << "f3p =" << f3p << std::endl;
 
   TEST("Polynomial of degree 0", vnl_polynomial<vnl_decnum>("12").evaluate("35e19"), vnl_decnum("12"));
@@ -521,42 +521,42 @@ test_polynomial_decnum()
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " X +1";
+    const std::string expected = " X +1";
     TEST("f4 prints as X +1", testStream.str(), expected);
   }
   f4 *= vnl_decnum("2"); // f4 = 2 X + 2
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " 2 X +2";
+    const std::string expected = " 2 X +2";
     TEST("f4 prints as 2 X +2", testStream.str(), expected);
   }
   f4 = -f4; // f4 = -2 X - 2
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " -2 X -2";
+    const std::string expected = " -2 X -2";
     TEST("f4 prints as -2 X -2", testStream.str(), expected);
   }
   f4[1] = 1L; // f4 = X - 2
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " X -2";
+    const std::string expected = " X -2";
     TEST("f4 prints as X -2", testStream.str(), expected);
   }
   f4[0] = 0L; // f4 = X
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " X";
+    const std::string expected = " X";
     TEST("f4 prints as X", testStream.str(), expected);
   }
   f4[1] = 0L; // f4 = 0
   {
     std::stringstream testStream;
     testStream << f4;
-    std::string expected = " 0";
+    const std::string expected = " 0";
     TEST("f4 prints as 0", testStream.str(), expected);
   }
 }

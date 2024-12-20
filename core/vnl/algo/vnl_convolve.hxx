@@ -15,7 +15,7 @@ inline vnl_vector<U>
 vnl_convolve_cyclic_using_fft(const vnl_vector<T1> & v1, const vnl_vector<T2> & v2, U *)
 {
   assert(v1.size() == v2.size());
-  unsigned int n = v1.size();
+  const unsigned int n = v1.size();
 
   typedef std::complex<double> C;
   vnl_vector<C> w1(n, C(0));
@@ -50,7 +50,7 @@ vnl_vector<U>
 vnl_convolve_cyclic(const vnl_vector<T1> & v1, const vnl_vector<T2> & v2, U *, bool use_fft)
 {
   assert(v1.size() == v2.size());
-  unsigned int n = v1.size();
+  const unsigned int n = v1.size();
 
   // Quick return if possible:
   if (n == 0)
@@ -126,7 +126,7 @@ vnl_convolve(const vnl_vector<T> & v1, const vnl_vector<T> & v2, int use_fft)
   if (use_fft != 0)
     return vnl_convolve_using_fft(v1, v2, (T *)nullptr, use_fft);
 
-  unsigned int n = v1.size() + v2.size() - 1;
+  const unsigned int n = v1.size() + v2.size() - 1;
   vnl_vector<T> ret(n, (T)0); // all elements already initialized to zero
   for (unsigned int k = 0; k < v1.size(); ++k)
     for (unsigned int i = 0; i <= k && i < v2.size(); ++i)
@@ -149,7 +149,7 @@ vnl_convolve(const vnl_vector<T1> & v1, const vnl_vector<T2> & v2, U *, int use_
   if (use_fft != 0)
     return vnl_convolve_using_fft(v1, v2, (U *)nullptr, use_fft);
 
-  unsigned int n = v1.size() + v2.size() - 1;
+  const unsigned int n = v1.size() + v2.size() - 1;
   vnl_vector<U> ret(n, (U)0); // all elements already initialized to zero
   for (unsigned int k = 0; k < v1.size(); ++k)
     for (unsigned int i = 0; i <= k && i < v2.size(); ++i)

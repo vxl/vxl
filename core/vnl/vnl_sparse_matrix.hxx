@@ -73,8 +73,8 @@ vnl_sparse_matrix<T>::mult(const vnl_sparse_matrix<T> & rhs, vnl_sparse_matrix<T
   assert(rhs.rows() == columns());
   assert(this != &result); // make sure not to overwrite *this
   assert(&rhs != &result); // make sure not to overwrite rhs
-  unsigned int result_rows = rows();
-  unsigned int result_cols = rhs.columns();
+  const unsigned int result_rows = rows();
+  const unsigned int result_cols = rhs.columns();
 
   // Early return: empty result matrix
   if (result_rows <= 0 || result_cols <= 0)
@@ -160,7 +160,7 @@ vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols, const T * p, 
   assert(prows == columns());
 
   // Clear q matrix.
-  int size = rows() * pcols;
+  const int size = rows() * pcols;
   for (int temp = 0; temp < size; temp++)
     q[temp] = T(0);
 
@@ -625,7 +625,7 @@ template <class T>
 void
 vnl_sparse_matrix<T>::resize(int r, int c)
 {
-  unsigned int oldCs = cs_;
+  const unsigned int oldCs = cs_;
 
   rs_ = r;
   cs_ = c;
@@ -940,12 +940,12 @@ vnl_sparse_matrix<T>::normalize_rows()
     // Iterate over the row
     for (typename row::iterator col_iter = this_row.begin(); col_iter != this_row.end(); ++col_iter)
     {
-      vnl_sparse_matrix_pair<T> & entry = *col_iter;
+      const vnl_sparse_matrix_pair<T> & entry = *col_iter;
       norm += vnl_math::squared_magnitude(entry.second);
     }
     if (norm != 0)
     {
-      abs_real_t scale = abs_real_t(1) / (std::sqrt((abs_real_t)norm));
+      const abs_real_t scale = abs_real_t(1) / (std::sqrt((abs_real_t)norm));
       // Iterate again over the row
       for (typename row::iterator col_iter = this_row.begin(); col_iter != this_row.end(); ++col_iter)
       {

@@ -10,8 +10,8 @@
 extern "C" void
 test_matrix_update()
 {
-  unsigned nr = 5;
-  unsigned nc = 7;
+  const unsigned nr = 5;
+  const unsigned nc = 7;
   vnl_matrix<double> M(nr, nc);
   vnl_matrix<double> true_M(nr, nc);
   vnl_matrix<double> Ma(nr, 1);

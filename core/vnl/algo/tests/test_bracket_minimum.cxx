@@ -26,7 +26,7 @@ struct bm_quartic1 : public vnl_cost_function
   double
   f(const vnl_vector<double> & x) override
   {
-    double y = (2 - x[0]) * (2 - x[0]);
+    const double y = (2 - x[0]) * (2 - x[0]);
     return y * y + 10;
   }
 };
