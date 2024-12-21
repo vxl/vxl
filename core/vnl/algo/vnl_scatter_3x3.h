@@ -73,8 +73,8 @@ public:
   }
 
 protected:
-  bool symmetricp;
-  bool eigenvectors_currentp;
+  bool symmetricp{ true };
+  bool eigenvectors_currentp{ false };
   vnl_matrix_fixed<T, 3, 3> V_;
   vnl_vector_fixed<T, 3> D;
 };

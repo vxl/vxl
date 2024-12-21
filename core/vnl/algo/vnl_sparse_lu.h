@@ -106,15 +106,15 @@ protected:
   est_condition();
   // Data Members--------------------------------------------------------------
   vnl_sparse_matrix<double> A_;
-  bool factored_;
-  bool condition_computed_;
+  bool factored_{ false };
+  bool condition_computed_{ false };
   operation mode_;
-  double norm_;
-  double rcond_;
-  double largest_;
-  double pivot_thresh_;
-  double absolute_thresh_;
-  int diag_pivoting_;
+  double norm_{ 0 };
+  double rcond_{ 0 };
+  double largest_{ 0 };
+  double pivot_thresh_{ 0 };
+  double absolute_thresh_{ 0 };
+  int diag_pivoting_{ 1 };
 
 private:
   //: Copy constructor - privatised to avoid it being used
@@ -126,7 +126,7 @@ private:
   //
   // We don't use the typedef spMatrix directly here to avoid exposing
   // the implementation detail (sparse/spMatrix.h) to the user.
-  void * pmatrix_;
+  void * pmatrix_{ nullptr };
 };
 
 #endif // vnl_sparse_lu_h_

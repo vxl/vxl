@@ -162,7 +162,7 @@ vnl_matlab_print_scalar(std::complex<double> v, char * buf, size_t buf_len, vnl_
       std::abort();
   }
 
-  double r = std::real(v);
+  const double r = std::real(v);
   double i = std::imag(v);
 
   char fmt[1024];
@@ -271,7 +271,7 @@ vnl_matlab_print_scalar(std::complex<float> v, char * buf, size_t buf_len, vnl_m
       std::abort();
   }
 
-  float r = std::real(v);
+  const float r = std::real(v);
   float i = std::imag(v);
 
   char fmt[1024];

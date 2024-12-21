@@ -35,11 +35,11 @@ vnl_complex_eigensystem::compute(const vnl_matrix<std::complex<double>> & A, boo
   long work_space = 10 * N;
   vnl_vector<std::complex<double>> work(work_space);
 
-  long rwork_space = 2 * N;
+  const long rwork_space = 2 * N;
   vnl_vector<double> rwork(rwork_space);
 
   long info;
-  long tmpN = N;
+  const long tmpN = N;
   v3p_netlib_zgeev_(right ? "V" : "N",                // jobvl
                     left ? "V" : "N",                 // jobvr
                     &tmpN,                            // n

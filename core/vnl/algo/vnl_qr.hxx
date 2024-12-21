@@ -42,14 +42,14 @@ vnl_qr<T>::vnl_qr(vnl_matrix<T> const & M)
   assert(!M.empty());
 
   // Fill transposed O/P matrix
-  long c = M.columns();
-  long r = M.rows();
+  const long c = M.columns();
+  const long r = M.rows();
   for (int i = 0; i < r; ++i)
     for (int j = 0; j < c; ++j)
       qrdc_out_(j, i) = M(i, j);
 
-  long do_pivot = 0; // Enable[!=0]/disable[==0] pivoting.
-  jpvt_.fill(0);     // Allow all columns to be pivoted if pivoting is enabled.
+  const long do_pivot = 0; // Enable[!=0]/disable[==0] pivoting.
+  jpvt_.fill(0);           // Allow all columns to be pivoted if pivoting is enabled.
 
   vnl_vector<T> work(M.rows());
   vnl_linpack_qrdc(qrdc_out_.data_block(), // On output, UT is R, below diag is mangled Q
@@ -78,7 +78,7 @@ template <class T>
 T
 vnl_qr<T>::determinant() const
 {
-  int m = std::min((int)qrdc_out_.columns(), (int)qrdc_out_.rows());
+  const int m = std::min((int)qrdc_out_.columns(), (int)qrdc_out_.rows());
   T det = qrdc_out_(0, 0);
 
   for (int i = 1; i < m; ++i)
@@ -92,10 +92,10 @@ template <class T>
 const vnl_matrix<T> &
 vnl_qr<T>::Q() const
 {
-  int m = qrdc_out_.columns(); // column-major storage
-  int n = qrdc_out_.rows();
+  const int m = qrdc_out_.columns(); // column-major storage
+  const int n = qrdc_out_.rows();
 
-  bool verbose = false;
+  const bool verbose = false;
 
   if (!Q_)
   {
@@ -140,7 +140,7 @@ vnl_qr<T>::Q() const
       // or Q -= (2/v'*v) v (v'Q)
       if (sq > abs_t(0))
       {
-        abs_t scale = abs_t(2) / sq;
+        const abs_t scale = abs_t(2) / sq;
         // w = (2/v'*v) v' Q
         for (int i = k; i < m; ++i)
         {
@@ -169,8 +169,8 @@ vnl_qr<T>::R() const
 {
   if (!R_)
   {
-    int m = qrdc_out_.columns(); // column-major storage
-    int n = qrdc_out_.rows();
+    const int m = qrdc_out_.columns(); // column-major storage
+    const int n = qrdc_out_.rows();
     R_ = new vnl_matrix<T>(m, n);
     vnl_matrix<T> & Rmatr = *R_;
 
@@ -271,7 +271,7 @@ template <class T>
 vnl_matrix<T>
 vnl_qr<T>::inverse() const
 {
-  unsigned int r = qrdc_out_.columns();
+  const unsigned int r = qrdc_out_.columns();
   assert(r > 0 && r == qrdc_out_.rows());
   vnl_matrix<T> inv(r, r);
 
@@ -280,7 +280,7 @@ vnl_qr<T>::inverse() const
   for (unsigned int i = 0; i < r; ++i)
   {
     rhs(i) = T(1);
-    vnl_vector<T> col = this->solve(rhs); // returns i-th column of inverse
+    const vnl_vector<T> col = this->solve(rhs); // returns i-th column of inverse
     inv.set_column(i, col);
     rhs(i) = T(0);
   }
@@ -291,7 +291,7 @@ template <class T>
 vnl_matrix<T>
 vnl_qr<T>::tinverse() const
 {
-  unsigned int r = qrdc_out_.columns();
+  const unsigned int r = qrdc_out_.columns();
   assert(r > 0 && r == qrdc_out_.rows());
   vnl_matrix<T> tinv(r, r);
 
@@ -300,7 +300,7 @@ vnl_qr<T>::tinverse() const
   for (unsigned int i = 0; i < r; ++i)
   {
     rhs(i) = T(1);
-    vnl_vector<T> col = this->solve(rhs); // returns i-th column of inverse
+    const vnl_vector<T> col = this->solve(rhs); // returns i-th column of inverse
     tinv.set_row(i, col);
     rhs(i) = T(0);
   }
@@ -312,14 +312,14 @@ vnl_matrix<T>
 vnl_qr<T>::solve(const vnl_matrix<T> & rhs) const
 {
   assert(rhs.rows() == qrdc_out_.columns()); // column-major storage
-  int c = qrdc_out_.rows();
-  int n = rhs.columns();
+  const int c = qrdc_out_.rows();
+  const int n = rhs.columns();
   vnl_matrix<T> result(c, n);
 
   for (int i = 0; i < n; ++i)
   {
-    vnl_vector<T> b = rhs.get_column(i);
-    vnl_vector<T> col = this->solve(b); // returns i-th column of result
+    const vnl_vector<T> b = rhs.get_column(i);
+    const vnl_vector<T> col = this->solve(b); // returns i-th column of result
     result.set_column(i, col);
   }
   return result;

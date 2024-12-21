@@ -67,7 +67,7 @@ do_rosenbrock_test(bool with_grad)
 {
   vnl_rosenbrock f(with_grad);
 
-  vnl_double_2 x0(2.7, -1.3);
+  const vnl_double_2 x0(2.7, -1.3);
   std::cout << "x0 = " << x0 << std::endl;
 
   vnl_levenberg_marquardt lm(f);
@@ -80,7 +80,7 @@ do_rosenbrock_test(bool with_grad)
   lm.diagnose_outcome(std::cout);
   std::cout << "x1 = " << x1 << std::endl;
 
-  double err = std::abs(x1[0] - 1) + std::abs(x1[1] - 1);
+  const double err = std::abs(x1[0] - 1) + std::abs(x1[1] - 1);
   std::cout << "err = " << err << std::endl;
   TEST_NEAR("converged to (1, 1)", err, 0.0, 1e-10);
 }
@@ -134,7 +134,7 @@ do_linear_test(bool with_grad)
   true_cov(0, 1) = 75;
   true_cov(1, 1) = 1384.14;
 
-  vnl_matrix<double> covar = lm.get_JtJ();
+  const vnl_matrix<double> covar = lm.get_JtJ();
   std::cout << "Cov(x) =\n" << covar << std::endl;
   TEST_NEAR("covariance approximation", (true_cov - covar).array_two_norm(), 0, 1e-5);
 }

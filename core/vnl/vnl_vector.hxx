@@ -250,7 +250,7 @@ template <class T>
 bool
 vnl_vector<T>::read_ascii(std::istream & s)
 {
-  bool size_known = (this->size() != 0);
+  const bool size_known = (this->size() != 0);
   if (size_known)
   {
     for (size_t i = 0; i < this->size(); ++i)
@@ -479,7 +479,7 @@ template <class T>
 vnl_vector<T> &
 vnl_vector<T>::update(const vnl_vector<T> & v, size_t start)
 {
-  size_t stop = start + v.size();
+  const size_t stop = start + v.size();
 #ifndef NDEBUG
   if (stop > this->num_elmts)
     vnl_error_vector_dimension("update", stop - start, v.size());
@@ -709,8 +709,8 @@ cos_angle(const vnl_vector<T> & a, const vnl_vector<T> & b)
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
   typedef typename vnl_numeric_traits<abs_t>::real_t abs_r;
 
-  real_t ab = inner_product(a, b);
-  real_t a_b = static_cast<real_t>(std::sqrt(abs_r(a.squared_magnitude() * b.squared_magnitude())));
+  const real_t ab = inner_product(a, b);
+  const real_t a_b = static_cast<real_t>(std::sqrt(abs_r(a.squared_magnitude() * b.squared_magnitude())));
   return T(ab / a_b);
 }
 

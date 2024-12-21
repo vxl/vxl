@@ -113,9 +113,9 @@ public:                        \
 private:
   std::istream & s;
   vnl_matlab_header hdr;
-  char * varname;
-  bool data_read;
-  bool need_swap;
+  char * varname{ nullptr };
+  bool data_read{ false };
+  bool need_swap{ false };
   void
   read_hdr(); // internal work routine
 };

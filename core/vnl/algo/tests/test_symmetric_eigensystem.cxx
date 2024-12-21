@@ -26,11 +26,11 @@ test_symmetric_eigensystem()
     13.9254, -2.4446, 20.2380, 3.6702,  -0.2282, 28.6779, 13.7049, 1.3659,  3.6702,  12.5273, -1.6045, 3.9419,
     -2.4446, 3.6702,  -0.2282, -1.6045, 3.9419,  2.5821,  20.2380, -0.2282, 28.6779, 3.9419,  2.5821,  44.0636,
   };
-  vnl_matrix<double> S(Sdata, 6, 6);
+  const vnl_matrix<double> S(Sdata, 6, 6);
 
   {
-    vnl_symmetric_eigensystem<double> eig(S);
-    vnl_matrix<double> res = eig.recompose() - S;
+    const vnl_symmetric_eigensystem<double> eig(S);
+    const vnl_matrix<double> res = eig.recompose() - S;
     std::cout << "V'*D*V - S = " << res << std::endl << "residual = " << res.fro_norm() << std::endl;
     TEST_NEAR("recompose residual", res.fro_norm(), 0.0, 1e-12);
 
@@ -44,11 +44,11 @@ test_symmetric_eigensystem()
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, -1, 0, 0, 0, 0, 2, 0, 0,
   };
 
-  vnl_matrix<double> C(Cdata, 6, 6);
+  const vnl_matrix<double> C(Cdata, 6, 6);
 
   {
-    vnl_symmetric_eigensystem<double> eig(C);
-    vnl_matrix<double> res = eig.recompose() - C;
+    const vnl_symmetric_eigensystem<double> eig(C);
+    const vnl_matrix<double> res = eig.recompose() - C;
     std::cout << "V'*D*V - C = " << res << std::endl << "residual = " << res.fro_norm() << std::endl;
     TEST_NEAR("recompose residual", res.fro_norm(), 0.0, 1e-12);
 
@@ -61,14 +61,14 @@ test_symmetric_eigensystem()
   {
     // Generate a random system
     vnl_random rng;
-    int n = 6;
-    int s = 10;
+    const int n = 6;
+    const int s = 10;
     vnl_matrix<double> D_rand(s, n);
     for (int i = 0; i < s; ++i)
       for (int j = 0; j < n; ++j)
         D_rand(i, j) = 1.0 + 2.0 * rng.normal64();
 
-    vnl_matrix<double> S = D_rand.transpose() * D_rand;
+    const vnl_matrix<double> S = D_rand.transpose() * D_rand;
     vnl_matrix<double> evecs(n, n);
     vnl_vector<double> evals(n);
     vnl_symmetric_eigensystem_compute(S, evecs, evals);
@@ -81,7 +81,9 @@ test_symmetric_eigensystem()
   }
 
   { // test I with specialised 3x3 version
-    double l1, l2, l3;
+    double l1;
+    double l2;
+    double l3;
     vnl_symmetric_eigensystem_compute_eigenvals(1.0, 0.0, 0.0, 1.0, 0.0, 1.0, l1, l2, l3);
     std::cout << "Eigenvals: " << l1 << ' ' << l2 << ' ' << l3 << std::endl;
     TEST("Correct eigenvalues for I", l1 == 1.0 && l2 == 1.0 && l3 == 1.0, true);
@@ -93,7 +95,12 @@ test_symmetric_eigensystem()
     double fixed_data[n][3];
     unsigned int fixed_time = 0;
     {
-      double M11, M12, M13, M22, M23, M33;
+      double M11;
+      double M12;
+      double M13;
+      double M22;
+      double M23;
+      double M33;
       // Generate a random system
       vnl_random rng(5);
 
@@ -117,7 +124,8 @@ test_symmetric_eigensystem()
     {
       // Generate same random system
       vnl_random rng(5);
-      vnl_double_3x3 M, evecs;
+      vnl_double_3x3 M;
+      vnl_double_3x3 evecs;
       vnl_double_3 evals;
 
       for (auto & c : netlib_data)
@@ -155,7 +163,9 @@ test_symmetric_eigensystem()
   }
 
   {
-    double v1, v2, v3;
+    double v1;
+    double v2;
+    double v3;
     vnl_symmetric_eigensystem_compute_eigenvals(4199.0, 0.0, 0.0, 4199.0, 0.0, 4801.0, v1, v2, v3);
     TEST_NEAR("Numerically difficult values are ok v1", v1, 4199, 1e-3);
     TEST_NEAR("Numerically difficult values are ok v2", v2, 4199, 1e-3);

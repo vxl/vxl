@@ -139,7 +139,7 @@ public:
             : r > 0 ? '+'
                     : ' ')
   {
-    vnl_decnum d((unsigned long)(r < 0 ? -r : r));
+    const vnl_decnum d((unsigned long)(r < 0 ? -r : r));
     data_ = d.data();
     exp_ = d.exp();
   }
@@ -148,7 +148,7 @@ public:
   explicit vnl_decnum(unsigned int r)
     : sign_(r > 0 ? '+' : ' ')
   {
-    vnl_decnum d((unsigned long)r);
+    const vnl_decnum d((unsigned long)r);
     data_ = d.data();
     exp_ = d.exp();
   }
@@ -159,7 +159,7 @@ public:
             : r > 0 ? '+'
                     : ' ')
   {
-    vnl_decnum d((unsigned long)(r < 0 ? -r : r));
+    const vnl_decnum d((unsigned long)(r < 0 ? -r : r));
     data_ = d.data();
     exp_ = d.exp();
   }
@@ -191,7 +191,7 @@ public:
     if (sign_ == ' ')
       return *this;
     else
-      return vnl_decnum(sign_ == '-' ? '+' : '-', data_, exp_);
+      return { sign_ == '-' ? '+' : '-', data_, exp_ };
   }
 
   //: Left "bit" shift operator (actually: digit shift, or exponent translation)
@@ -737,7 +737,7 @@ public:
   inline vnl_decnum
   operator++(int)
   {
-    vnl_decnum b = (*this);
+    const vnl_decnum b = (*this);
     operator++();
     return b;
   }
@@ -745,7 +745,7 @@ public:
   inline vnl_decnum
   operator--(int)
   {
-    vnl_decnum b = (*this);
+    const vnl_decnum b = (*this);
     operator--();
     return b;
   }

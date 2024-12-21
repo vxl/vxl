@@ -28,7 +28,7 @@ squared_magnitude(const std::complex<vnl_rational> & x)
 vnl_rational
 abs(const std::complex<vnl_rational> & x)
 {
-  return vnl_rational(std::sqrt(double(x.real() * x.real() + x.imag() * x.imag())));
+  return { std::sqrt(double(x.real() * x.real() + x.imag() * x.imag())) };
 }
 } // namespace vnl_math
 

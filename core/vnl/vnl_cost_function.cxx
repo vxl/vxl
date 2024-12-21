@@ -50,16 +50,16 @@ void
 vnl_cost_function::fdgradf(const vnl_vector<double> & x, vnl_vector<double> & gradient, double stepsize)
 {
   vnl_vector<double> tx = x;
-  double h = stepsize;
+  const double h = stepsize;
   for (int i = 0; i < dim; ++i)
   {
-    double tplus = x[i] + h;
+    const double tplus = x[i] + h;
     tx[i] = tplus;
-    double fplus = this->f(tx);
+    const double fplus = this->f(tx);
 
-    double tminus = x[i] - h;
+    const double tminus = x[i] - h;
     tx[i] = tminus;
-    double fminus = this->f(tx);
+    const double fminus = this->f(tx);
 
     gradient[i] = (fplus - fminus) / (tplus - tminus);
     tx[i] = x[i];

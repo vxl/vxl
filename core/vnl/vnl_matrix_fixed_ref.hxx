@@ -197,7 +197,7 @@ vnl_matrix_fixed_ref<T, nrows, ncols>::normalize_rows() const
     if (norm != 0)
     {
       typedef typename vnl_numeric_traits<Abs_t>::real_t real_t;
-      real_t scale = real_t(1) / std::sqrt((real_t)norm);
+      const real_t scale = real_t(1) / std::sqrt((real_t)norm);
       for (unsigned int j = 0; j < ncols; j++)
       {
         // FIXME need correct rounding here
@@ -223,7 +223,7 @@ vnl_matrix_fixed_ref<T, nrows, ncols>::normalize_columns() const
     if (norm != 0)
     {
       typedef typename vnl_numeric_traits<Abs_t>::real_t real_t;
-      real_t scale = real_t(1) / std::sqrt((real_t)norm);
+      const real_t scale = real_t(1) / std::sqrt((real_t)norm);
       for (unsigned int i = 0; i < nrows; i++)
       {
         // FIXME need correct rounding here
@@ -417,7 +417,7 @@ vnl_matrix_fixed_ref_const<T, nrows, ncols>::is_identity(double tol) const
     for (unsigned int j = 0; j < ncols; ++j)
     {
       T xm = (*this)(i, j);
-      abs_t absdev = (i == j) ? vnl_math::abs(xm - one) : vnl_math::abs(xm);
+      const abs_t absdev = (i == j) ? vnl_math::abs(xm - one) : vnl_math::abs(xm);
       if (absdev > tol)
         return false;
     }

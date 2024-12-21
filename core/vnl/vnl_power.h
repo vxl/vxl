@@ -45,7 +45,7 @@ vnl_power(const vnl_matrix_fixed<T, d, d> & m, int n)
     return vnl_inverse(vnl_power(m, -n));
   else
   {
-    vnl_matrix_fixed<T, d, d> r = vnl_power(m, n / 2);
+    const vnl_matrix_fixed<T, d, d> r = vnl_power(m, n / 2);
     return n % 2 == 0 ? r * r : r * r * m;
   }
 }
@@ -81,7 +81,7 @@ vnl_power(const vnl_matrix<T> & m, int n)
     return vnl_power(vnl_matrix_fixed<T, 4, 4>(m), n).as_ref();
   else
   {
-    vnl_matrix<T> r = vnl_power(m, n / 2);
+    const vnl_matrix<T> r = vnl_power(m, n / 2);
     return n % 2 == 0 ? r * r : r * r * m;
   }
 }

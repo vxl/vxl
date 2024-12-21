@@ -11,7 +11,7 @@
 
 vnl_matlab_filewrite::vnl_matlab_filewrite(const char * file_name, const char * basename)
   : basename_(basename ? basename : "targetvar")
-  , variable_int_(0)
+
 {
   out_.open(file_name, std::ios::out | std::ios::binary);
   if (out_.bad())
@@ -22,7 +22,7 @@ std::string
 vnl_matlab_filewrite::make_var_name(const char * variable_name)
 {
   if (variable_name)
-    return std::string(variable_name);
+    return { variable_name };
   else
   {
     std::stringstream ss;

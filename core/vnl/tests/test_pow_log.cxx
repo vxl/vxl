@@ -16,9 +16,9 @@ int_pow(int a, unsigned int b)
     return a;
   else
   {
-    long asquare = static_cast<long>(a) * static_cast<long>(a);
-    long r1 = static_cast<long>(int_pow(static_cast<int>(asquare), b / 2));
-    long r2 = static_cast<long>(int_pow(a, b % 2));
+    const long asquare = static_cast<long>(a) * static_cast<long>(a);
+    const long r1 = static_cast<long>(int_pow(static_cast<int>(asquare), b / 2));
+    const long r2 = static_cast<long>(int_pow(a, b % 2));
     return static_cast<int>(r1 * r2);
   }
 }

@@ -19,7 +19,7 @@ vnl_nonlinear_minimizer::~vnl_nonlinear_minimizer() = default;
 const vnl_matrix<double> &
 vnl_nonlinear_minimizer::get_covariance()
 {
-  static vnl_matrix<double> null;
+  static const vnl_matrix<double> null;
   return null;
 }
 

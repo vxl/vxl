@@ -17,8 +17,7 @@
 template <class T>
 vnl_scatter_3x3<T>::vnl_scatter_3x3()
   : base(T(0))
-  , symmetricp(true)
-  , eigenvectors_currentp(false)
+
 {}
 
 template <class T>
@@ -97,8 +96,8 @@ template <class T>
 void
 vnl_scatter_3x3<T>::compute_eigensystem()
 {
-  vnl_scatter_3x3<T> & S = *this;
-  vnl_matrix<T> M = S.as_matrix();
+  const vnl_scatter_3x3<T> & S = *this;
+  const vnl_matrix<T> M = S.as_matrix();
   if (symmetricp)
   {
     vnl_symmetric_eigensystem_compute(M, V_.as_ref().non_const(), D.as_ref().non_const());

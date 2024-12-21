@@ -339,7 +339,7 @@ public:
   set_adjustable_parameters(T adj_u, T adj_v)
   {
     adj_u_ = adj_u;
-    adj_v_ = adj_v_;
+    adj_v_ = adj_v;
   }
   std::pair<T, T>
   adjustable_parameters() const

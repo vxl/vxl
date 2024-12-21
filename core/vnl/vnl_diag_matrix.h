@@ -343,7 +343,7 @@ template <class T>
 vnl_matrix<T>
 vnl_diag_matrix<T>::as_matrix() const
 {
-  unsigned len = diagonal_.size();
+  const unsigned len = diagonal_.size();
   vnl_matrix<T> ret(len, len);
   for (unsigned i = 0; i < len; ++i)
   {
@@ -363,7 +363,7 @@ template <class T>
 inline vnl_diag_matrix<T> &
 vnl_diag_matrix<T>::invert_in_place()
 {
-  unsigned len = diagonal_.size();
+  const unsigned len = diagonal_.size();
   T * d = data_block();
   T one = T(1);
   for (unsigned i = 0; i < len; ++i)
@@ -378,7 +378,7 @@ vnl_diag_matrix<T>::determinant() const
 {
   T det = T(1);
   const T * d = data_block();
-  unsigned len = diagonal_.size();
+  const unsigned len = diagonal_.size();
   for (unsigned i = 0; i < len; ++i)
     det *= d[i];
   return det;

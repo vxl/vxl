@@ -27,8 +27,8 @@ vnl_least_squares_function::gradf(const vnl_vector<double> & /*x*/, vnl_matrix<d
 void
 vnl_least_squares_function::fdgradf(const vnl_vector<double> & x, vnl_matrix<double> & jacobian, double stepsize)
 {
-  unsigned int dim = x.size();
-  unsigned int n = jacobian.rows();
+  const unsigned int dim = x.size();
+  const unsigned int n = jacobian.rows();
   assert(dim == get_number_of_unknowns());
   assert(n == get_number_of_residuals());
   assert(dim == jacobian.columns());
@@ -39,14 +39,14 @@ vnl_least_squares_function::fdgradf(const vnl_vector<double> & x, vnl_matrix<dou
   for (unsigned int i = 0; i < dim; ++i)
   {
     // calculate f just to the right of x[i]
-    double tplus = tx[i] = x[i] + stepsize;
+    const double tplus = tx[i] = x[i] + stepsize;
     this->f(tx, fplus);
 
     // calculate f just to the left of x[i]
-    double tminus = tx[i] = x[i] - stepsize;
+    const double tminus = tx[i] = x[i] - stepsize;
     this->f(tx, fminus);
 
-    double h = 1.0 / (tplus - tminus);
+    const double h = 1.0 / (tplus - tminus);
     for (unsigned int j = 0; j < n; ++j)
       jacobian(j, i) = (fplus[j] - fminus[j]) * h;
 
@@ -60,8 +60,8 @@ vnl_least_squares_function::fdgradf(const vnl_vector<double> & x, vnl_matrix<dou
 void
 vnl_least_squares_function::ffdgradf(const vnl_vector<double> & x, vnl_matrix<double> & jacobian, double stepsize)
 {
-  unsigned int dim = x.size();
-  unsigned int n = jacobian.rows();
+  const unsigned int dim = x.size();
+  const unsigned int n = jacobian.rows();
   assert(dim == get_number_of_unknowns());
   assert(n == get_number_of_residuals());
   assert(dim == jacobian.columns());
@@ -73,10 +73,10 @@ vnl_least_squares_function::ffdgradf(const vnl_vector<double> & x, vnl_matrix<do
   for (unsigned int i = 0; i < dim; ++i)
   {
     // calculate f just to the right of x[i]
-    double tplus = tx[i] = x[i] + stepsize;
+    const double tplus = tx[i] = x[i] + stepsize;
     this->f(tx, fplus);
 
-    double h = 1.0 / (tplus - x[i]);
+    const double h = 1.0 / (tplus - x[i]);
     for (unsigned int j = 0; j < n; ++j)
       jacobian(j, i) = (fplus[j] - fcentre[j]) * h;
 

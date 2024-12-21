@@ -4,7 +4,7 @@
 int
 vnl_determinant(const vnl_matrix<int> & M, bool balance)
 {
-  unsigned n = M.rows();
+  const unsigned n = M.rows();
   assert(M.cols() == n);
 
   switch (n)

@@ -49,7 +49,7 @@ void
 vnl_hungarian_algorithm<T>::clear_vector(std::vector<bool> & v)
 {
   typedef std::vector<bool>::iterator iter;
-  iter end = v.end();
+  const iter end = v.end();
   for (iter i = v.begin(); i != end; ++i)
   {
     *i = false;
@@ -280,12 +280,12 @@ vnl_hungarian_algorithm<T>::Step_4()
   // Find an uncovered zero
   // This loop will exit with a goto step_five or step_six.
 
-  unsigned i, j; // row and column of the uncovered zero, if any.
-  for (i = 0; i < m_N; ++i)
+  // row and column of the uncovered zero, if any.
+  for (unsigned i = 0; i < m_N; ++i)
   {
     if (!m_R_cov[i])
     {
-      for (j = 0; j < m_N; ++j)
+      for (unsigned j = 0; j < m_N; ++j)
       {
 #ifdef DEBUG
         std::cout << m_Cost(i, j) << std::endl;
@@ -342,7 +342,8 @@ vnl_hungarian_algorithm<T>::Step_5()
 {
   unsigned i = m_Z0_r;
   unsigned j = m_Z0_c;
-  std::vector<unsigned> rows, cols;
+  std::vector<unsigned> rows;
+  std::vector<unsigned> cols;
 
   while (true)
   {
@@ -387,8 +388,8 @@ vnl_hungarian_algorithm<T>::Step_5()
   // the series.
   for (unsigned idx = 0; idx < rows.size(); ++idx)
   {
-    unsigned i = rows[idx];
-    unsigned j = cols[idx];
+    const unsigned i = rows[idx];
+    const unsigned j = cols[idx];
     if (m_M(i, j) == STAR)
     {
       m_M(i, j) = NORMAL; // unstar each starred zero
@@ -475,7 +476,7 @@ template <class T>
 void
 vnl_hungarian_algorithm<T>::Step_done()
 {
-  std::vector<unsigned> assign(m_Cost_in.rows(), (unsigned int)(-1));
+  const std::vector<unsigned> assign(m_Cost_in.rows(), (unsigned int)(-1));
   m_AssignmentVector = assign;
 
   // Find the stars and generate the resulting assignment. Only

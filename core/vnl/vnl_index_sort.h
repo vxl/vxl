@@ -55,7 +55,7 @@ public:
   vector_sort_in_place(SortVectorType & values, SortVectorIndexType & indices)
   {
     vector_sort(values, indices);
-    SortVectorType tmpValues(values);
+    const SortVectorType tmpValues(values);
 
     // gets values and indices from sorted indices
     reindexValues(tmpValues, indices, values);

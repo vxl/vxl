@@ -60,7 +60,7 @@ vnl_cholesky::solve(const vnl_vector<double> & b, vnl_vector<double> * x) const
   assert(b.size() == A_.columns());
 
   *x = b;
-  long n = A_.columns();
+  const long n = A_.columns();
   v3p_netlib_dposl_(A_.data_block(), &n, &n, x->data_block());
 }
 
@@ -70,7 +70,7 @@ vnl_cholesky::solve(const vnl_vector<double> & b) const
 {
   assert(b.size() == A_.columns());
 
-  long n = A_.columns();
+  const long n = A_.columns();
   vnl_vector<double> ret = b;
   v3p_netlib_dposl_(A_.data_block(), &n, &n, ret.data_block());
   return ret;
@@ -80,10 +80,10 @@ vnl_cholesky::solve(const vnl_vector<double> & b) const
 double
 vnl_cholesky::determinant() const
 {
-  long n = A_.columns();
+  const long n = A_.columns();
   vnl_matrix<double> I = A_;
   double det[2];
-  long job = 10;
+  const long job = 10;
   v3p_netlib_dpodi_(I.data_block(), &n, &n, det, &job);
   return det[0] * std::pow(10.0, det[1]);
 }
@@ -95,12 +95,12 @@ vnl_cholesky::inverse() const
   if (num_dims_rank_def_)
   {
     std::cerr << "vnl_cholesky: Calling inverse() on rank-deficient matrix\n";
-    return vnl_matrix<double>();
+    return {};
   }
 
-  long n = A_.columns();
+  const long n = A_.columns();
   vnl_matrix<double> I = A_;
-  long job = 01;
+  const long job = 01;
   v3p_netlib_dpodi_(I.data_block(), &n, &n, nullptr, &job);
 
   // Copy lower triangle into upper
@@ -115,7 +115,7 @@ vnl_cholesky::inverse() const
 vnl_matrix<double>
 vnl_cholesky::lower_triangle() const
 {
-  unsigned n = A_.columns();
+  const unsigned n = A_.columns();
   vnl_matrix<double> L(n, n);
   // Zap upper triangle and transpose
   for (unsigned i = 0; i < n; ++i)
@@ -135,7 +135,7 @@ vnl_cholesky::lower_triangle() const
 vnl_matrix<double>
 vnl_cholesky::upper_triangle() const
 {
-  unsigned n = A_.columns();
+  const unsigned n = A_.columns();
   vnl_matrix<double> U(n, n);
   // Zap lower triangle and transpose
   for (unsigned i = 0; i < n; ++i)

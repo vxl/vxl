@@ -70,7 +70,7 @@ public:
   minimize(vnl_vector_fixed<double, 1> & x)
   {
     vnl_vector<double> y = x.extract(1);
-    bool b = minimize(y);
+    const bool b = minimize(y);
     x = y;
     return b;
   }
@@ -78,7 +78,7 @@ public:
   minimize(vnl_vector_fixed<double, 2> & x)
   {
     vnl_vector<double> y = x.extract(2);
-    bool b = minimize(y);
+    const bool b = minimize(y);
     x = y;
     return b;
   }
@@ -86,7 +86,7 @@ public:
   minimize(vnl_vector_fixed<double, 3> & x)
   {
     vnl_vector<double> y = x.extract(3);
-    bool b = minimize(y);
+    const bool b = minimize(y);
     x = y;
     return b;
   }
@@ -94,7 +94,7 @@ public:
   minimize(vnl_vector_fixed<double, 4> & x)
   {
     vnl_vector<double> y = x.extract(4);
-    bool b = minimize(y);
+    const bool b = minimize(y);
     x = y;
     return b;
   }
