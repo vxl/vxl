@@ -93,7 +93,7 @@ void msm_curve::config_from_stream(std::istream& is)
   name_= props.get_optional_property("name","");
   open_=vul_string_to_bool(props.get_optional_property("open","true"));
 
-  index_.empty();
+  index_.clear();
   std::istringstream ss1(props.get_required_property("indices"));
   mbl_parse_int_list(ss1, std::back_inserter(index_), unsigned());
 
