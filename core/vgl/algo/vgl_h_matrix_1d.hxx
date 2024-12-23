@@ -141,15 +141,6 @@ vgl_h_matrix_1d<T>::get(vnl_matrix_fixed<T, 2, 2> * H) const
   *H = t12_matrix_;
 }
 
-#if !VXL_LEGACY_FUTURE_REMOVE
-template <class T>
-VXL_DEPRECATED_MSG("Will be removed in future versions of VXL")
-void vgl_h_matrix_1d<T>::get(vnl_matrix<T> * H) const
-{
-  *H = t12_matrix_.as_ref(); // size 2x2
-}
-#endif
-
 template <class T>
 vgl_h_matrix_1d<T> &
 vgl_h_matrix_1d<T>::set(const T * H)
