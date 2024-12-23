@@ -461,7 +461,9 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
     if (sitr->second == IMAGE_SUBHEADER_TREs_RSM_TREs_OVRFL)
       ixshd_tres = ovfl_ixshd_tres_[sitr->first];
     else if (sitr->second == IMAGE_SUBHEADER_TREs_RSM_TREs)
-      hdr_ixshd_tres_ = hdr_ixshd_tres_;
+    {
+      // avoid self assignment hdr_ixshd_tres_ = hdr_ixshd_tres_;
+    }
     else
     {
       tre_str << "INVALID or missing TREs for IMAGE SUBHEADER " << sitr->first << std::endl;
