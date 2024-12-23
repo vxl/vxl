@@ -109,7 +109,7 @@ inline void msm_elements_from_pts_used(
   used.resize(pts_used.size());
   for (unsigned i=0;i<pts_used.size();++i)
   {
-    used[i].empty();
+    used[i].clear();
     used[i].reserve(2*pts_used[i].size());
     for (unsigned j=0;j<pts_used[i].size();++j)
     {
