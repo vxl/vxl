@@ -475,21 +475,6 @@ vgl_h_matrix_2d<T>::set_affine(const vnl_matrix_fixed<T, 2, 3> & M23)
   return *this;
 }
 
-#if !VXL_LEGACY_FUTURE_REMOVE
-template <class T>
-VXL_DEPRECATED_MSG("Will be removed in future versions of VXL")
-vgl_h_matrix_2d<T> & vgl_h_matrix_2d<T>::set_affine(vnl_matrix<T> const & M23)
-{
-  assert(M23.rows() == 2 && M23.columns() == 3);
-  for (unsigned r = 0; r < 2; ++r)
-    for (unsigned c = 0; c < 3; ++c)
-      t12_matrix_[r][c] = M23[r][c];
-  t12_matrix_[2][0] = T(0);
-  t12_matrix_[2][1] = T(0);
-  t12_matrix_[2][2] = T(1);
-  return *this;
-}
-#endif
 
 template <class T>
 vgl_h_matrix_2d<T>
