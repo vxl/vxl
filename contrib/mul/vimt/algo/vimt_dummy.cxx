@@ -7,3 +7,18 @@
 #ifdef _MSC_VER
 char * vimt_algo_dummy = "dummy";
 #endif
+
+namespace vimt_algo_dummy
+{
+
+void __dummy()
+{
+  /*
+   * At leaset 1 symbol is needed in every compilation unit
+   * to avoid linking error that occurs in empty archive
+   * files for some compilers
+   */
+   return;
+}
+
+}
