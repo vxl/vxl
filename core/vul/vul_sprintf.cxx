@@ -21,9 +21,9 @@ vul_sprintf::vul_sprintf(const char * fmt, ...)
 {
   std::va_list ap;
   va_start(ap, fmt);
-
-  char s[65536];
-  std::vsprintf(s, fmt, ap);
+  constexpr unsigned int max_buff_size = 65536;
+  char s[max_buff_size];
+  std::vsnprintf(s, max_buff_size, fmt, ap);
   if (std::strlen(s) >= sizeof s)
     std::cerr << __FILE__ ": WARNING! Possible memory corruption after call to vsprintf()\n";
   std::string::operator=(s);

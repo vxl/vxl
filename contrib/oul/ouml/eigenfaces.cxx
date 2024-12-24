@@ -320,7 +320,8 @@ void EigenFace::save_as_images(int width, int height)
 
   Image im(width, height);
   std::vector<vnl_vector<double> *>::iterator iter;
-  char name[100];
+  constexpr unsigned int max_name_len = 100;
+  char name[max_name_len];
   int index=0;
   for (iter=eigenvectors.begin(); iter!=eigenvectors.end(); iter++)
   {
@@ -330,7 +331,7 @@ void EigenFace::save_as_images(int width, int height)
       for (int j=0; j<height; j++)
         im[i][j] = (unsigned char)
           (((**iter)[i+j*width]-min)/(max-min)*255);
-    std::sprintf(name, "eigenface%03d.pgm", index++);
+    std::snprintf(name, max_name_len,"eigenface%03d.pgm", index++);
     vil1_save(im, name);
   }
 }
@@ -507,12 +508,13 @@ char *EigenFace::classify(Image *im, double threshold, int k, int dim)
 
 void EigenFace::output_xgobi(char *basefile)
 {
-  char filenames[200];
-  std::sprintf(filenames, "%s.dat", basefile);
+  constexpr unsigned int max_name_len = 200;
+  char filenames[max_name_len];
+  std::snprintf(filenames, max_name_len, "%s.dat", basefile);
   std::ofstream datfile(filenames);
-  std::sprintf(filenames, "%s.glyphs", basefile);
+  std::snprintf(filenames, max_name_len,"%s.glyphs", basefile);
   std::ofstream glyphs(filenames);
-  std::sprintf(filenames, "%s.row", basefile);
+  std::snprintf(filenames, max_name_len,"%s.row", basefile);
   std::ofstream rowfile(filenames);
   std::map<char*, int, ImageDatabase::ltstr> glyphmap;
   int glyphnum=1;

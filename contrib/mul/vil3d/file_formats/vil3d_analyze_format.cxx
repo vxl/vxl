@@ -88,8 +88,9 @@ void vil3d_analyze_header::Dimensions::reset()
 
 void vil3d_analyze_header::History::reset()
 {
+
   std::memset(this, (char)0, sizeof(*this));
-  std::sprintf(descrip," VXL generated file, some data fields may be missing");
+  std::snprintf(descrip,max_descrip_length," VXL generated file, some data fields may be missing");
 }
 
 

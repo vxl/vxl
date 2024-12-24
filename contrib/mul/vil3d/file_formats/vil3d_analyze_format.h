@@ -72,8 +72,10 @@ class vil3d_analyze_header
   // optional
   class History
   {
-   public :
-    char descrip[80];
+    private:
+    static constexpr unsigned int max_descrip_length = 80;
+    public :
+    char descrip[max_descrip_length];
     char aux_file[24];
     char orient;
     char originator[10];

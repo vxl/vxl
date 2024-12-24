@@ -67,7 +67,9 @@ void
 rgrl_debug_feature_iteration_save_matches::
 execute(const rgrl_object* caller, const rgrl_event & event )
 {
-  static char stage_buffer[31], iter_buffer[31];
+  constexpr unsigned int max_buffer_len= 31;
+  static char stage_buffer[max_buffer_len];
+  static char iter_buffer[max_buffer_len];
   const auto* reg_engine =
     dynamic_cast<const rgrl_feature_based_registration*>(caller);
   if ( !reg_engine ) {
@@ -80,11 +82,11 @@ execute(const rgrl_object* caller, const rgrl_event & event )
 
   // current stage
   const int stage = reg_engine->current_stage();
-  std::sprintf( stage_buffer, "%02d", stage );
+  std::snprintf( stage_buffer,max_buffer_len, "%02d", stage );
   std::cout <<"Current stage = " << stage << std::endl;
   // current ieration of this stage
   const int iteration = reg_engine->iterations_at_current_stage();
-  std::sprintf( iter_buffer, "%02d", iteration );
+  std::snprintf( iter_buffer,max_buffer_len, "%02d", iteration );
   std::cout <<"Current iteration = " << iteration << std::endl;
 
   // current transformation
