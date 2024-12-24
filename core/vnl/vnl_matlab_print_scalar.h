@@ -32,12 +32,12 @@ vnl_matlab_print_scalar_declare(std::complex<float>);
 vnl_matlab_print_scalar_declare(std::complex<double>);
 vnl_matlab_print_scalar_declare(std::complex<long double>);
 
-
+#if !VXL_LEGACY_FUTURE_REMOVE
 //: print real or complex scalar into character buffer.
 // These variants are deprecated because the buffer size is not provided
-#define vnl_matlab_print_scalar_declare_old(T)            \
-  VNL_EXPORT VXL_DEPRECATED void vnl_matlab_print_scalar( \
-    T v, char * buf, vnl_matlab_print_format = vnl_matlab_print_format_default)
+#  define vnl_matlab_print_scalar_declare_old(T)            \
+    VNL_EXPORT VXL_DEPRECATED void vnl_matlab_print_scalar( \
+      T v, char * buf, vnl_matlab_print_format = vnl_matlab_print_format_default)
 
 // Even with a function template we would have to
 // forward declare all the specializations anyway.
@@ -50,6 +50,7 @@ vnl_matlab_print_scalar_declare_old(std::complex<float>);
 vnl_matlab_print_scalar_declare_old(std::complex<double>);
 vnl_matlab_print_scalar_declare_old(std::complex<long double>);
 
+#endif
 
 //: print scalar to std::ostream.
 template <class T>
