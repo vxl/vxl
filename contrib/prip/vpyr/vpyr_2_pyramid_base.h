@@ -70,6 +70,7 @@ struct vmap_simple_data
   void set_level(vmap_level_index l) {}
 };
 
+#if 0 // Invalid implementation that is not used since 2004
 //: Data associated to each element duplicated at level.
 template <class D>
 struct vmap_replicated_data
@@ -78,7 +79,7 @@ struct vmap_replicated_data
   std::vector<value_type> d;
   vmap_replicated_data()
   {
-    d.push_back(this->ReturnType()) ;
+    d.push_back(this->ReturnType()) ; // This line of code is invalid No ReturnType() funciton implemented
   }
   value_type & data(vmap_level_index arg_level)
   {
@@ -94,7 +95,7 @@ struct vmap_replicated_data
     while (d.size()<l) d.push_back(d.last()) ;
   }
 };
-
+#endif
 //: the dart class of a 2-pyramid base level.
 class vpyr_2_pyramid_base_dart : public vmap_2_map_dart
 {
