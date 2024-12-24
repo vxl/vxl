@@ -161,7 +161,10 @@ test_numeric_traits()
   TEST("vnl_numeric_traits<char>::maxval must be at least 127", cm >= 127, true);
   TEST("vnl_numeric_traits<signed char>::maxval must be at least 127", scm >= 127, true);
   TEST("vnl_numeric_traits<unsigned char>::maxval must be larger than that", ucm > scm, true);
+  /* always true comparison of constant 32767 with expression of type 'unsigned char' is always true
+   * at compiletime, and throws a warning.
   TEST("vnl_numeric_traits<short>::maxval must be larger than that", sm > ucm, true);
+  */
   TEST("vnl_numeric_traits<int>::maxval must be at least as large", im >= sm, true);
   TEST("vnl_numeric_traits<unsigned short>::maxval must be larger than <short>", usm > sm, true);
   TEST(
