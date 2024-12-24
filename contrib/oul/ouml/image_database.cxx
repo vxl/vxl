@@ -81,8 +81,9 @@ void ImageDatabase::clear()
 
 bool ImageDatabase::save(const char *name, const char *imagetype)
 {
-  char dirname[200];
-  std::sprintf(dirname, "%s.d", name);
+  constexpr unsigned int max_len = 200;
+  char dirname[max_len];
+  std::snprintf(dirname, max_len,"%s.d", name);
 
   int err;
 
@@ -104,8 +105,9 @@ bool ImageDatabase::save(const char *name, const char *imagetype)
   int index=0;
   for (auto & i : *this)
   {
-    char filename[200];
-    std::sprintf(filename, "%s/%s_%03d.%s", dirname, i.first, index++, imagetype);
+    constexpr unsigned int max_len = 200;
+    char filename[max_len];
+    std::snprintf(filename,max_len, "%s/%s_%03d.%s", dirname, i.first, index++, imagetype);
     vil1_save(*(i.second), filename);
 
     std::printf("db: %s %s\n", i.first, filename);

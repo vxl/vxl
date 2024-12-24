@@ -17,11 +17,12 @@
 std::ostream &
 vul_printf(std::ostream & s, const char * fmt, ...)
 {
-  char buf[65536];
+  constexpr unsigned int max_buff_size = 65536;
+  char buf[max_buff_size];
 
   std::va_list ap;
   va_start(ap, fmt);
-  std::vsprintf(buf, fmt, ap);
+  std::vsnprintf(buf, max_buff_size, fmt, ap);
   va_end(ap);
 
   return s << buf;
