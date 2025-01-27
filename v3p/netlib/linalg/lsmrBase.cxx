@@ -448,7 +448,7 @@ Solve( unsigned int m, unsigned int n, const double * b, double * x )
 
           for( unsigned int localOrthoCount =0; localOrthoCount<localOrthoLimit;
                ++localOrthoCount) {
-            double d = std::inner_product(v,v+n,localV+n*localOrthoCount,0.0);
+            double const d = std::inner_product(v,v+n,localV+n*localOrthoCount,0.0);
             daxpy( n, -d, localV+localOrthoCount*n, v );
           }
         }
