@@ -3,6 +3,7 @@
 #include <math.h>
 #include "vnl/vnl_math.h"
 #include <algorithm>
+#include <limits>
 
 //
 // given a vector of z height values (zvals) find a set of clusters with values
