@@ -986,20 +986,34 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::set_shadow_context_data(){
 }
 
 
+// overlay sun direction line on rectified image
 template <class CAM_T, class PIX_T>
-void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::display_sun_dir_rect_bviews(){
-  bool null_sun_dir_vectors = (sun_dir_3d_0_ == vgl_vector_3d<float>(0.0f, 0.0f, 0.0f));
-  null_sun_dir_vectors = null_sun_dir_vectors || (sun_dir_3d_1_ == vgl_vector_3d<float>(0.0f, 0.0f, 0.0f));
-  bool shadow_context_enabled = !null_sun_dir_vectors;
-  if(!shadow_context_enabled)
-    return;// no shadow information
-  double pmaxd = std::pow(2.0, params_.effective_bits_per_pixel_)-1.0;
-  PIX_T pmax = static_cast<PIX_T>(pmaxd);
-  int ni = rect_bview0_.ni(), nj = rect_bview0_.nj();
+vil_image_view<PIX_T> bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::overlay_sun_dir(
+    const vil_image_view<PIX_T>& rect_view,
+    const vgl_vector_2d<float>& sun_dir,
+    PIX_T line_value
+)
+{
+  // image size
+  int ni = rect_view.ni(), nj = rect_view.nj();
+  if ((ni == 0) || (nj == 0)) {
+    throw std::runtime_error("overlay_sun_dir failed, empty rectified image");
+  }
+
+  // check for null sun vector
+  if (sun_dir == vgl_vector_2d<float>(0.0f, 0.0f)) {
+    throw std::runtime_error("overlay_sun_dir failed, empty sun_dir vector");
+  }
+
+  // copy image
+  vil_image_view<PIX_T> result;
+  result.deep_copy(rect_view);
+
   // center of image
   float xs = ni/2.0f, ys = nj/2.0f;
+
   // assume the image is at least 200x200 pixels
-  float dx = 100.0f*sun_dir_0_.x(), dy = 100.0f*sun_dir_0_.y();
+  float dx = 100.0f*sun_dir.x(), dy = 100.0f*sun_dir.y();
   float xe = xs+dx, ye = ys+dy;
   float x, y;
   bool init = true;
@@ -1008,18 +1022,10 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::display_sun_dir_rect_bviews(){
      int xi = (int)x, yi = (int)y; //convert the pixel location to integer
      if(xi<0) xi = 0; if(xi>=ni) xi = ni-1;
      if(yi<0) yi = 0; if(yi>=nj) yi = nj-1;
-     rect_bview0_(xi, yi) = pmax;
+     result(xi, yi) = line_value;
    }
-  dx = 100.0f*sun_dir_1_.x(); dy = 100.0f*sun_dir_1_.y();
-  xe = xs+dx; ye = ys+dy;
-  init = true;
-  while (brip_line_generator::generate(init, xs, ys, xe, ye, x, y))
-   {
-     int xi = (int)x, yi = (int)y; //convert the pixel location to integer
-     if(xi<0) xi = 0; if(xi>=ni) xi = ni-1;
-     if(yi<0) yi = 0; if(yi>=nj) yi = nj-1;
-     rect_bview1_(xi, yi) = pmax;
-   }
+
+  return result;
 }
 
 
