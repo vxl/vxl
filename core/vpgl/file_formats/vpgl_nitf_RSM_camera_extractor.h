@@ -66,7 +66,7 @@ struct rsm_metadata
   bool sun_elevation_valid = false;
 };
 
-struct adjustable_parameter_metadata
+struct RSM_ECA_adjustable_parameter_metadata
 {
   void
   print(std::ostream & os);
@@ -74,6 +74,7 @@ struct adjustable_parameter_metadata
   size_t num_adj_params_ = 0;
   size_t num_original_adj_params_ = 0;
   size_t num_independent_subgroups_ = 0;
+  bool unmodeled_error = false;
   // local coordinate system
   vnl_vector_fixed<double, 3> translation_;
   vnl_matrix_fixed<double, 3, 3> rotation_;
@@ -93,6 +94,59 @@ struct adjustable_parameter_metadata
   std::vector<std::vector<std::pair<double, double>>> correlation_segments_;
   // mapping matrix (phi)
   vnl_matrix<double> phi_;
+};
+
+struct RSM_ECB_adjustable_parameter_metadata
+{
+  void
+  print(std::ostream & os);
+  bool defined_ = false;
+  bool unmodeled_error_ = false;
+  size_t num_active_adj_params_ = 0;
+  size_t num_original_adj_params_ = 0;
+  size_t num_independent_subgroups_ = 0;
+  bool image_adjustable_params_ = false;
+  bool rect_local_coordinate_system_ = false;
+  bool basis_option_ = false;
+
+  size_t n_image_adjustable_params_ = 0;
+  size_t n_image_row_adjustable_params_ = 0;
+  size_t n_image_col_adjustable_params_ = 0;
+
+  //    param id               xpower ypower   zpower
+  std::map<size_t, std::tuple<size_t, size_t, size_t> >image_row_xyz_powers_;
+  std::map<size_t, std::tuple<size_t, size_t, size_t> > image_col_xyz_powers_;
+  bool ground_adjustable_params_ = false;
+  size_t n_ground_adjustable_params_ = 0;
+  std::vector<size_t> ground_adjust_param_idx_;
+
+  size_t n_basis_adjustable_params_ = 0;
+  vnl_matrix<double> A_matrix_;
+
+  std::map<size_t, vnl_matrix<double> > independent_covar_;
+  std::vector<int> correlation_domain_flags_;
+  //    indep. id                      A      alpha    beta    T
+  std::map<size_t, std::tuple<double, double, double, double > > corr_analytic_functions_;
+  //    indep. id                      cor_seg  tau_seg
+  std::map<size_t, std::vector<std::pair<double, double> > > corr_piecewise_functions_;
+
+  vnl_matrix<double> mapping_matrix_;
+    
+  //coord index(x-0,y-1,z-2) offset scale
+  std::map<size_t, std::pair<double, double> > xyz_norm_;
+
+  // local rectanglular coordinate system
+  vnl_vector_fixed<double, 3> rect_translation_;
+  vnl_matrix_fixed<double, 3, 3> rect_rotation_;
+
+  // unmodeled error
+  std::tuple<double, double, double> unmodeled_row_variance_;
+  std::tuple<double, double, double> unmodeled_col_variance_;
+  bool unmodeled_anaytic = true;
+  std::tuple<double, double, double, double > unmodeled_row_analytic_function_;
+  std::tuple<double, double, double, double > unmodeled_col_analytic_function_;
+  std::vector<std::pair<double, double> > unmodeled_row_piecewise_function_;
+  std::vector<std::pair<double, double> > unmodeled_col_piecewise_function_;
 };
 
 class vpgl_nitf_RSM_camera_extractor
@@ -218,12 +272,12 @@ public:
   // adjustable parameters defined for the RSM, e.g. image offset correction
   // the metadata also supplies apriori error covariance for the defined adjustable
   // parameters
-  adjustable_parameter_metadata
-  adjustable_parameter_data(size_t image_subheader_index = 0)
+  RSM_ECA_adjustable_parameter_metadata
+      RSM_ECA_adjustable_parameter_data(size_t image_subheader_index = 0)
   {
-    adjustable_parameter_metadata ret;
-    if (adj_param_data_.count(image_subheader_index) > 0)
-      return adj_param_data_[image_subheader_index];
+    RSM_ECA_adjustable_parameter_metadata ret;
+    if (RSM_ECA_adj_param_data_.count(image_subheader_index) > 0)
+      return RSM_ECA_adj_param_data_[image_subheader_index];
     std::cout << "image_subheader index " << image_subheader_index << " has no adjustable parameter data" << std::endl;
     return ret;
   }
@@ -291,7 +345,8 @@ private:
   std::map<size_t, vpgl_RSM_camera<double>> RSM_cams_;
 
   // storage of adjustable parameter metadata associated with each image subheader
-  std::map<size_t, adjustable_parameter_metadata> adj_param_data_;
+  std::map<size_t, RSM_ECA_adjustable_parameter_metadata>  RSM_ECA_adj_param_data_;
+  std::map<size_t, RSM_ECB_adjustable_parameter_metadata>  RSM_ECB_adj_param_data_;
 
   // Flags indicating if various required TRE groups are present
   bool RSMIDA = false, RSMPIA = false, RSMPCA = false, RSMECA = false, RSMECB = false;

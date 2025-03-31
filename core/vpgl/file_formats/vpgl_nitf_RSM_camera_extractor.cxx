@@ -9,7 +9,7 @@
 #include <limits>
 
 void
-adjustable_parameter_metadata::print(std::ostream & os)
+RSM_ECA_adjustable_parameter_metadata::print(std::ostream & os)
 {
   if (!defined_)
     return;
@@ -958,7 +958,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         // =======================================
         nitf_tre<std::string> nt("RSMECA", tre_str);
         // =========================================
-        adjustable_parameter_metadata & apdata = adj_param_data_[head_idx];
+        RSM_ECA_adjustable_parameter_metadata & apdata = RSM_ECA_adj_param_data_[head_idx];
 
         nitf_tre<std::string> nt0("IID", false, false);
         nt0.get_append(tres_itr, tre_str, v);
@@ -989,10 +989,11 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         nitf_tre<int> nt7("IGN", opt, false);
         nt7.get_append(tres_itr, tre_str, v);
         int n_indp = 0;
-        nt7.get(tres_itr, n_indp);
+        
 
         if (!opt)
         {
+            nt7.get(tres_itr, n_indp);
           apdata.num_adj_params_ = npar;
           apdata.num_original_adj_params_ = nparo;
           apdata.num_independent_subgroups_ = n_indp;
@@ -1485,6 +1486,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         // =======================================
         nitf_tre<std::string> nt("RSMECB", tre_str);
         // =========================================
+        RSM_ECB_adjustable_parameter_metadata & apdata = RSM_ECB_adj_param_data_[head_idx];
         nitf_tre<std::string> nt0("IID", false, false);
         nt0.get_append(tres_itr, tre_str, v);
 
@@ -1496,51 +1498,317 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
 
         nitf_tre<std::string> nt3("INCLIC", false, false);
         nt3.get_append(tres_itr, tre_str, v);
+        // Indirect Error Covariance Values Required
+        bool ICreq = (nt3.value_ == "Y");
 
-        nitf_tre<std::string> nt4("INCLUC", true, false);
+        nitf_tre<std::string> nt4("INCLUC", false, false);
         nt4.get_append(tres_itr, tre_str, v);
+        // Unmodeled Indirect Error Covariance Values Required
+        bool UCreq = (nt4.value_ == "Y");
+        apdata.unmodeled_error_ = UCreq;
 
-        bool opt = (nt3.value_ != "Y");
-
+        // not optional for IC required values, i.e. optional = false;
+        bool opt = !ICreq;
+        int nparo = 0;
         nitf_tre<int> nt5("NPARO", opt, false);
         nt5.get_append(tres_itr, tre_str, v);
+        nt5.get(tres_itr, nparo);
+        apdata.num_original_adj_params_ = nparo;
 
+        int n_indp = 0;
         nitf_tre<int> nt5a("IGN", opt, false);
         nt5a.get_append(tres_itr, tre_str, v);
-
+        if (!opt) {
+            n_indp = nt5a.value_;
+            apdata.num_independent_subgroups_ = n_indp;
+        }
+        
         nitf_tre<std::string> nt6("CVDATE", opt, false);
         nt6.get_append(tres_itr, tre_str, v);
-
+        
+        int npar = 0;
         nitf_tre<int> nt7("NPAR", opt, false);
         nt7.get_append(tres_itr, tre_str, v);
-
+        if(!opt){
+          npar = nt7.value_;
+          apdata.num_active_adj_params_ = npar;   
+        }
         nitf_tre<std::string> nt8("APTYP", opt, false);
         nt8.get_append(tres_itr, tre_str, v);
-
+        bool Iadj = (nt8.value_ == "I");
+        bool Gadj = (nt8.value_ == "G");
+        apdata.image_adjustable_params_  = Iadj;
+        apdata.ground_adjustable_params_ = Gadj;
+      
         nitf_tre<std::string> nt9("LOCTYP", opt, false);
         nt9.get_append(tres_itr, tre_str, v);
+        apdata.rect_local_coordinate_system_ = (nt9.value_ == "R");
 
+        // the scale offsets apply to both R and not R coordinate systems
+        double noffx, noffy, noffz, nsfx, nsfy, nsfz;
         nitf_tre<std::string> nt10("NSFX", opt, false);
         nt10.get_append(tres_itr, tre_str, v);
-
+        ASC_double(nt10.value_, nsfx);
+          
         nitf_tre<std::string> nt11("NSFY", opt, false);
         nt11.get_append(tres_itr, tre_str, v);
-
+        ASC_double(nt11.value_, nsfy);
+        
         nitf_tre<std::string> nt12("NSFZ", opt, false);
         nt12.get_append(tres_itr, tre_str, v);
+        ASC_double(nt12.value_, nsfz);
 
         nitf_tre<std::string> nt13("NOFFX", opt, false);
         nt13.get_append(tres_itr, tre_str, v);
+        ASC_double(nt13.value_, noffx);
 
         nitf_tre<std::string> nt14("NOFFY", opt, false);
         nt14.get_append(tres_itr, tre_str, v);
+        ASC_double(nt14.value_, noffy);
 
         nitf_tre<std::string> nt15("NOFFZ", opt, false);
         nt15.get_append(tres_itr, tre_str, v);
+        ASC_double(nt14.value_, noffz);
+        apdata.xyz_norm_[0] = std::pair<double, double> (noffx, nsfx);
+        apdata.xyz_norm_[1] = std::pair<double, double>(noffy, nsfy);
+        apdata.xyz_norm_[2] = std::pair<double, double>(noffz, nsfz);
+        bool optR = (nt9.value_ != "R");
+        opt = optR || !ICreq;
+        double xuol, yuol, zuol;
+        std::string s;
+        nitf_tre<std::string> nt16("XUOL", opt, false);
+        nt16.get_append(tres_itr, tre_str, v);
+        nt16.get(tres_itr, s);
+        ASC_double(s, xuol);
+
+        nitf_tre<std::string> nt17("YUOL", opt, false);
+        nt17.get_append(tres_itr, tre_str, v);
+        nt17.get(tres_itr, s);
+        ASC_double(s, yuol);
+
+        nitf_tre<std::string> nt18("ZUOL", opt, false);
+        nt18.get_append(tres_itr, tre_str, v);
+        nt18.get(tres_itr, s);
+        ASC_double(s, zuol);
+        apdata.rect_translation_[0]=xuol;
+        apdata.rect_translation_[1] = yuol;
+        apdata.rect_translation_[2] = zuol;
+        vnl_matrix_fixed<double, 3, 3> m ;
+
+        nitf_tre<std::string> nt19("XUXL", opt, false);
+        nt19.get_append(tres_itr, tre_str, v);
+        if (!opt)
+        {
+            nt19.get(tres_itr, s);
+            ASC_double(s, m[0][0]);
+        }
+
+        nitf_tre<std::string> nt20("XUYL", opt, false);
+        nt13.get_append(tres_itr, tre_str, v);
+        if (!opt)
+        {
+            nt20.get(tres_itr, s);
+            ASC_double(s, m[0][1]);
+        }
+
+        nitf_tre<std::string> nt21("XUZL", opt, false);
+        nt14.get_append(tres_itr, tre_str, v);
+        if (!opt)
+        {
+            nt21.get(tres_itr, s);
+            ASC_double(s, m[0][2]);
+        }
+
+        nitf_tre<std::string> nt22("YUXL", opt, false);
+        nt15.get_append(tres_itr, tre_str, v);
+        if (!opt)
+        {
+            nt22.get(tres_itr, s);
+            ASC_double(s, m[1][0]);
+        }
+
+        nitf_tre<std::string> nt23("YUYL", opt, false);
+        nt16.get_append(tres_itr, tre_str, v);
+        if (!opt)
+        {
+            nt23.get(tres_itr, s);
+            ASC_double(s, m[1][1]);
+        }
+
+        nitf_tre<std::string> nt24("YUZL", opt, false);
+        nt17.get_append(tres_itr, tre_str, v);
+        if (!opt)
+        {
+            nt24.get(tres_itr, s);
+            ASC_double(s, m[1][2]);
+        }
+
+        nitf_tre<std::string> nt25("ZUXL", opt, false);
+        nt18.get_append(tres_itr, tre_str, v);
+        if (!opt)
+        {
+            nt25.get(tres_itr, s);
+            ASC_double(s, m[2][0]);
+        }
+
+        nitf_tre<std::string> nt26("ZUYL", opt, false);
+        nt19.get_append(tres_itr, tre_str, v);
+        if (!opt)
+        {
+            nt26.get(tres_itr, s);
+            ASC_double(s, m[2][1]);
+        }
+
+        nitf_tre<std::string> nt27("ZUZL", opt, false);
+        nt27.get_append(tres_itr, tre_str, v);
+        if (!opt)
+        {
+            nt27.get(tres_itr, s);
+            ASC_double(s, m[2][2]);
+        }
+        if(!opt)
+        apdata.rect_rotation_ = m;
+
+        nitf_tre<std::string> nt28("APBASE", !Iadj, false);
+        nt28.get_append(tres_itr, tre_str, v);
+        bool Breq = nt28.value_ == "Y";
+        apdata.basis_option_ = Breq;
+
+
+        opt = !Iadj || !ICreq;
+        nitf_tre<int> nt29("NISAP", opt, false);
+        nt29.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+            int nipar= nt29.value_;
+            apdata.n_image_adjustable_params_ = nipar;
+        }
+
+        int nrow =0, ncol =0;
+        nitf_tre<int> nt30("NISAPR", opt, false);
+        nt30.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+            nt30.get(tres_itr,nrow);
+            apdata.n_image_row_adjustable_params_ = nrow;
+        }
+        std::vector<int> xpr, ypr, zpr;        
+        nitf_tre<int> nt31("XPWRR", "vector", opt, false);
+        nt31.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+          nt31.get(tres_itr, xpr);
+        }
+        nitf_tre<int> nt32("YPWRR", "vector", opt, false);
+        nt32.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+          nt32.get(tres_itr, ypr);
+        }
+        nitf_tre<int> nt33("ZPWRR", "vector", opt, false);
+        nt33.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+          nt33.get(tres_itr, zpr);
+        }
+
+        if(!opt){
+          for (size_t r = 0; r < nrow; ++r) {
+            std::tuple<size_t, size_t, size_t> pows(xpr[r], ypr[r], zpr[r]);
+            apdata.image_row_xyz_powers_[r] = pows;
+          }
+        }
+
+        nitf_tre<int> nt34("NISAPC", opt, false);
+        nt34.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+            ncol = nt34.value_;
+            apdata.n_image_col_adjustable_params_ = ncol;
+        }
+
+        std::vector<int> xpc, ypc, zpc;        
+        nitf_tre<int> nt35("XPWRC", "vector", opt, false);
+        nt35.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+          nt35.get(tres_itr, xpc);
+        }
+        nitf_tre<int> nt36("YPWRC", "vector", opt, false);
+        nt36.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+          nt36.get(tres_itr, ypc);
+        }
+        nitf_tre<int> nt37("ZPWRC", "vector", opt, false);
+        nt37.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+          nt37.get(tres_itr, zpc);
+        }
+
+        if(!opt){
+          for (size_t c = 0; c < nrow; ++c) {
+            std::tuple<size_t, size_t, size_t> pows(xpc[c], ypc[c], zpc[c]);
+            apdata.image_col_xyz_powers_[c] = pows;
+          }
+        }
+
+        // ground adjustable parameters
+        opt = !Gadj || !ICreq;
+        std::cout << "Gadj " << Gadj << " ICreq " << ICreq << ' ' << opt << std::endl;
+        int n_ground = 0;
+        nitf_tre<int> nt38("NGSAP", opt, false);
+        nt38.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+            n_ground = nt38.value_;
+            apdata.n_ground_adjustable_params_ = n_ground;
+        }
+        std::vector<int> gsids;
+        nitf_tre<int> nt39("GSAPID", opt, false);
+        nt39.get_append(tres_itr, tre_str, v);
+        if(!opt){
+          nt39.get(tres_itr, gsids);
+          if (gsids.size() != n_ground)
+            return false;
+          for(size_t i = 0; i<n_ground; ++i)
+            apdata.ground_adjust_param_idx_[i] = gsids[i];
+        }
+        opt = !ICreq || !Breq;
+        int n_basis = 0;
+        nitf_tre<int> nt40("NBASIS", opt, false);
+        nt40.get_append(tres_itr, tre_str, v);
+        if(!opt){
+          n_basis = nt40.value_;
+          apdata.n_basis_adjustable_params_ = n_basis;
+          apdata.A_matrix_.set_size(npar, n_basis);
+        }
+        
+        std::vector<std::string> Avals;
+        nitf_tre<std::string> nt41("AEL", "vector", opt, false);
+        nt41.get_append(tres_itr, tre_str, v);
+        if(!opt){
+            nt41.get(tres_itr, Avals);
+          int idx = 0;
+          for(size_t r = 0; r<npar; ++r)
+            for(size_t c = 0; c<n_basis; ++c){
+              double val;
+              ASC_double(Avals[idx], val);
+              apdata.A_matrix_[r][c] = val;
+              idx++;
+            }
+        }
+
+        std::vector<std::string> Mvals;
+        apdata.mapping_matrix_.set_size(npar, nparo);
+        nitf_tre<std::string> nt42("MAP", "vector", opt, false);
+        nt42.get_append(tres_itr, tre_str, v);
+        if(!opt){
+            nt42.get(tres_itr, Mvals);
+          int idx = 0;
+          for(size_t r = 0; r<npar; ++r)
+            for(size_t c = 0; c<nparo; ++c){
+              double val;
+              ASC_double(Mvals[idx], val);
+              apdata.mapping_matrix_[r][c] = val;
+              idx++;
+            }
+        }
 
         RSMECB = true;
       }
-
+      
       if (type == "RSMAPA")
       { // looking for "RSMAPA..."
         // =======================================
@@ -2251,3 +2519,123 @@ vpgl_nitf_RSM_camera_extractor::print_file_header_summary()
     }
   }
 }
+// BACKUP
+#if 0
+        opt = !ICreq;
+        std::vector<int> nopg;
+        nitf_tre<int> nt42("NUMOPG", "vector",opt, false);
+        nt42.get_append(tres_itr, tre_str, v);
+        if(!opt){
+            nopg = nt42.values_;
+            
+            }
+        
+
+        std::vector<std::string> err_vals;
+        
+        nitf_tre<std::string> nt43("ERRCVG", opt, false);
+        nt43.get_append(tres_itr, tre_str, v);
+        if(!opt){
+          nt43.get(tres_itr, err_vals);
+          for (size_t ig = 0; ig < n_indp&&false; ++ig) {
+              size_t idx = 0;
+              size_t dim = 0; //nopg[ig];
+              vnl_matrix<double> cvar(dim, dim, 0.0);
+              for (size_t r = 0; r < dim; ++r)
+                for( size_t c = r; c<dim; ++c){
+                  double val;
+                  ASC_double(err_vals[idx], val);
+                  cvar[r][c] = val;
+                  if(r != c)
+                    cvar[c][r] = val;
+                  idx++;
+                }//r,c
+              apdata.independent_covar_[ig]=cvar;
+          }// ig
+        }//opt
+
+
+        std::vector<int> domain_flgs;
+        nitf_tre<int> nt44("TCDF", "vector", opt, false);
+        nt44.get_append(tres_itr, tre_str, v);
+        if(!opt){
+            nt44.get(tres_itr, domain_flgs);
+          apdata.correlation_domain_flags_ = domain_flgs;
+        }
+
+        std::vector<std::string> corr_types;
+        nitf_tre<std::string> nt45("ACSMC", "vector", opt, false);
+        nt45.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+            nt45.get(tres_itr, corr_types);
+        }
+        
+
+        std::vector<double> A, alpha, beta, T;
+        std::vector<int> nseg;
+        std::vector<double> corseg, tauseg;
+        std::cout << opt << std::endl;
+
+        nitf_tre<int> nt46("NCSEG", "vector",opt, false);
+        nt46.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+            nseg = nt46.values_;
+        }
+        
+      
+        std::vector<std::string> cvals;
+        nitf_tre<std::string> nt47("CORSEG", "vector", opt, false);
+        nt47.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+            cvals=nt47.values_;
+          for (size_t i = 0; i < cvals.size(); ++i ){
+            double val; 
+            ASC_double(cvals[i], val);
+            corseg.push_back(val);
+          }
+        }
+        std::vector<std::string> tvals;
+        nitf_tre<std::string> nt48("TAUSEG", "vector", opt, false);
+        nt48.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+            tvals = nt47.values_;
+          for (size_t i = 0; i < tvals.size(); ++i) {
+            double val;
+            ASC_double(tvals[i], val);
+            tauseg.push_back(val);
+          }
+        }
+#endif
+#if 0
+        std::vector<std::string> ACvals;
+        nitf_tre<std::string> nt49("AC", "vector", opt, false);
+        nt49.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+            nt49.get(tres_itr, ACvals);
+          for (size_t i = 0; i < ACvals.size(); ++i) {
+            double val;
+            ASC_double(ACvals[i], val);
+            A.push_back(val);
+          }
+        }
+
+        std::vector<std::string> alpha_vals;
+        nitf_tre<std::string> nt50("ALPC", "vector", opt, false);
+        nt50.get_append(tres_itr, tre_str, v);
+        if (!opt) {
+          nt50.get(tres_itr, alpha_vals);
+          for (size_t i = 0; i < alpha_vals.size(); ++i) {
+            double val;
+            ASC_double(alpha_vals[i], val);
+            alpha.push_back(val);
+          }
+        }
+
+        for (size_t ig = 0; ig < n_indp; ++ig) {
+            bool functional_form = (corr_types[ig] == "Y");
+            double A=0.0, alpha=0.0, beta=0.0, T=0.0;
+            if (functional_form) {
+
+            }
+        }
+#endif
