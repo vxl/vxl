@@ -50,7 +50,7 @@ struct nitf_tre
   bool
   get_append(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, std::ostream & os, bool verbose = false)
   {
-
+      
     bool good = get(tres_itr, verbose);
     if (!good)
     {

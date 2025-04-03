@@ -74,7 +74,7 @@ struct RSM_ECA_adjustable_parameter_metadata
   size_t num_adj_params_ = 0;
   size_t num_original_adj_params_ = 0;
   size_t num_independent_subgroups_ = 0;
-  bool unmodeled_error = false;
+  bool unmodeled_error_ = false;
   // local coordinate system
   vnl_vector_fixed<double, 3> translation_;
   vnl_matrix_fixed<double, 3, 3> rotation_;
@@ -94,6 +94,13 @@ struct RSM_ECA_adjustable_parameter_metadata
   std::vector<std::vector<std::pair<double, double>>> correlation_segments_;
   // mapping matrix (phi)
   vnl_matrix<double> phi_;
+
+  // unmodeled error
+  double unmodeled_row_variance_;
+  double unmodeled_col_variance_;
+  double unmodeled_row_col_variance_;
+  std::tuple<size_t, std::vector<std::pair<double, double> > > unmodeled_row_correlation_;
+  std::tuple<size_t, std::vector<std::pair<double, double> > > unmodeled_col_correlation_;
 };
 
 struct RSM_ECB_adjustable_parameter_metadata
@@ -107,28 +114,30 @@ struct RSM_ECB_adjustable_parameter_metadata
   size_t num_independent_subgroups_ = 0;
   bool image_adjustable_params_ = false;
   bool rect_local_coordinate_system_ = false;
-  bool basis_option_ = false;
 
   size_t n_image_adjustable_params_ = 0;
   size_t n_image_row_adjustable_params_ = 0;
   size_t n_image_col_adjustable_params_ = 0;
 
   //    param id               xpower ypower   zpower
-  std::map<size_t, std::tuple<size_t, size_t, size_t> >image_row_xyz_powers_;
+  std::map<size_t, std::tuple<size_t, size_t, size_t> > image_row_xyz_powers_;
   std::map<size_t, std::tuple<size_t, size_t, size_t> > image_col_xyz_powers_;
   bool ground_adjustable_params_ = false;
   size_t n_ground_adjustable_params_ = 0;
   std::vector<size_t> ground_adjust_param_idx_;
 
+  bool basis_option_ = false;
   size_t n_basis_adjustable_params_ = 0;
   vnl_matrix<double> A_matrix_;
 
+  //    indep. id   covariance submatrix
   std::map<size_t, vnl_matrix<double> > independent_covar_;
-  std::vector<int> correlation_domain_flags_;
-  //    indep. id                      A      alpha    beta    T
+  //    indep. id 0 - all time, 1 - between images, 2 - within image
+  std::map<size_t, int> correlation_domain_flags_;
+  //    indep. id               A      alpha    beta    T
   std::map<size_t, std::tuple<double, double, double, double > > corr_analytic_functions_;
-  //    indep. id                      cor_seg  tau_seg
-  std::map<size_t, std::vector<std::pair<double, double> > > corr_piecewise_functions_;
+  //    indep. id             n_segments                  cor_seg  tau_seg
+  std::map<size_t, std::tuple<size_t, std::vector<std::pair<double, double> > > > corr_piecewise_functions_;
 
   vnl_matrix<double> mapping_matrix_;
     
@@ -140,13 +149,15 @@ struct RSM_ECB_adjustable_parameter_metadata
   vnl_matrix_fixed<double, 3, 3> rect_rotation_;
 
   // unmodeled error
-  std::tuple<double, double, double> unmodeled_row_variance_;
-  std::tuple<double, double, double> unmodeled_col_variance_;
-  bool unmodeled_anaytic = true;
+  double unmodeled_row_variance_;
+  double unmodeled_col_variance_;
+  double unmodeled_row_col_variance_;
+
+  bool unmodeled_analytic_ = true;
   std::tuple<double, double, double, double > unmodeled_row_analytic_function_;
   std::tuple<double, double, double, double > unmodeled_col_analytic_function_;
-  std::vector<std::pair<double, double> > unmodeled_row_piecewise_function_;
-  std::vector<std::pair<double, double> > unmodeled_col_piecewise_function_;
+  std::tuple<size_t, std::vector<std::pair<double, double> > > unmodeled_row_piecewise_function_;
+  std::tuple<size_t, std::vector<std::pair<double, double> > >unmodeled_col_piecewise_function_;
 };
 
 class vpgl_nitf_RSM_camera_extractor
@@ -181,16 +192,16 @@ public:
   }
 
 
-  //: number of image subheaders that contain RSM camera TREs
-  //  a return of 0 indicates no RSM data
-  size_t
+  //: indices of subheaders that contain RSM camera TREs
+  //  a return vector of size 0 indicates no RSM data
+  std::vector<size_t>
   nitf_header_contains_RSM_tres() const
   {
-    size_t n_RSM = 0;
+    std::vector<size_t> ret;
     for (auto itr = nitf_status_.begin(); itr != nitf_status_.end(); ++itr)
       if (itr->second != INVALID && itr->second != IMAGE_SUBHEADER_TREs_ONLY)
-        n_RSM++;
-    return n_RSM;
+        ret.push_back(itr->first);
+    return ret;
   }
 
   //: read NITF2.1 tagged record extensions (tres) from header
@@ -244,7 +255,8 @@ public:
       return RSM_cams_[image_subheader_index];
 
     std::cout << "image_subheader index " << image_subheader_index << " has no RSM metadata" << std::endl;
-    // note:f ret.n_regions() == 0 to test invalidity
+    // note: ret.n_regions() == 0 to test invalidity
+    // a RSM camera has 1 or more polynomial regions
     return ret;
   }
   // in case of multiple image subheaders associated with RSM cameras
@@ -271,14 +283,21 @@ public:
   }
   // adjustable parameters defined for the RSM, e.g. image offset correction
   // the metadata also supplies apriori error covariance for the defined adjustable
-  // parameters
+  // parameters. If not available, meta.defined_ = false;
   RSM_ECA_adjustable_parameter_metadata
       RSM_ECA_adjustable_parameter_data(size_t image_subheader_index = 0)
   {
     RSM_ECA_adjustable_parameter_metadata ret;
     if (RSM_ECA_adj_param_data_.count(image_subheader_index) > 0)
       return RSM_ECA_adj_param_data_[image_subheader_index];
-    std::cout << "image_subheader index " << image_subheader_index << " has no adjustable parameter data" << std::endl;
+    return ret;
+  }
+  RSM_ECB_adjustable_parameter_metadata
+      RSM_ECB_adjustable_parameter_data(size_t image_subheader_index = 0)
+  {
+    RSM_ECB_adjustable_parameter_metadata ret;
+    if (RSM_ECB_adj_param_data_.count(image_subheader_index) > 0)
+      return RSM_ECB_adj_param_data_[image_subheader_index];
     return ret;
   }
   // describe the layout of the file header in terms of number of image

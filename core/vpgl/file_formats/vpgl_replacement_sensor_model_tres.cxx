@@ -5,7 +5,13 @@
 #include <vil/file_formats/vil_nitf2_field_definition.h>
 #include <vil/file_formats/vil_nitf2_typed_field_formatter.h>
 #include <string>
-/// covariance matrix number of elements functor
+
+//=================================================
+// Custom Field Functors Needed to Parse RSM TREs
+//=================================================
+
+// covariance matrix number of elements functor
+// input: integer tag  output value: (n+1)*n/2
 template <class T>
 class vil_nitf2_field_covar_size : public vil_nitf2_field_functor<T>
 {
@@ -36,6 +42,7 @@ private:
 };
 
 // produce the product of values at each of two tags
+// inputs: T v1,v2 at tag1, tag2  output value: T v1*v2
 template <class T>
 class vil_nitf2_field_product_size : public vil_nitf2_field_functor<T>
 {
@@ -71,6 +78,7 @@ private:
 };
 
 // repeat count functor
+// input: int v at tag output: result = v
 template <class T>
 class vil_nitf2_repeat_count : public vil_nitf2_field_functor<int>
 {
@@ -97,7 +105,8 @@ private:
   std::string tag;
 };
 
-// conditional repeat
+// conditional repeat with negation flag to repeat if "N"
+// input: string s in {"Y", "N"}, bool negation  value:1 if "Y" && false || "N" && true
 template <class T>
 class vil_nitf2_conditional_repeat : public vil_nitf2_field_functor<int>
 {
@@ -165,8 +174,6 @@ public:
         bool eq1 = tval1 == val1;
         bool eq2 = tval2 == val2;
         result = eq1 && eq2;
-        if(tag2 == "ACSMC")
-         std::cout << "BOTH TAGS " << tag1 << ' ' << tval1 << ' ' << tag2 << ' ' << tval2 << ' ' << result << std::endl;
         return true;
     }
     // failed to get one or both of the tag values
@@ -462,6 +469,8 @@ vpgl_replacement_sensor_model_tres::define_RSMECA()
 #define IND_APBASE_Y new vil_nitf2_field_value_both_equal<std::string>("INCLIC", "Y","APBASE", "Y")
 #define IND_ACSMC_Y new vil_nitf2_field_value_both_equal<std::string>("INCLIC", "Y","ACSMC", "Y")
 #define IND_ACSMC_N new vil_nitf2_field_value_both_equal<std::string>("INCLIC", "Y","ACSMC", "N")
+#define IND_UACSMC_Y new vil_nitf2_field_value_both_equal<std::string>("INCLUC", "Y","UACSMC", "Y")
+#define IND_UACSMC_N new vil_nitf2_field_value_both_equal<std::string>("INCLUC", "Y","UACSMC", "N")
 
 
 void
@@ -527,11 +536,13 @@ vpgl_replacement_sensor_model_tres::define_RSMECB()
               .field("ERRCVG", "Error Covariance", NITF_STR_BCS(21), false, nullptr, INDCVDEF))
       .field("TCDF", "Correlation Flag", NITF_INT(1), false, nullptr, INDCVDEF)
       .field("ACSMC", "Correlation Option", NITF_STR_BCS(1), false, nullptr, INDCVDEF)
+         //                                                 == "Y"
       .repeat(new vil_nitf2_conditional_repeat<int>("ACSMC", false), vil_nitf2_field_definitions()
          .field("AC", "Correlation A", NITF_STR_BCS(21), false, nullptr, IND_ACSMC_Y)
          .field("ALPC", "Correlation Alpha", NITF_STR_BCS(21), false, nullptr, IND_ACSMC_Y)
          .field("BETC", "Correlation Beta", NITF_STR_BCS(21), false, nullptr, IND_ACSMC_Y)
          .field("TC", "Correlation T", NITF_STR_BCS(21), false, nullptr, IND_ACSMC_Y))
+         //                                                 == "N"
       .repeat(new vil_nitf2_conditional_repeat<int>("ACSMC", true), vil_nitf2_field_definitions()
          .field("NCSEG", "Number of Corr. Segments", NITF_INT(1), false, nullptr, IND_ACSMC_N)
          .repeat("NCSEG",vil_nitf2_field_definitions().field("CORSEG", "Correlation ", NITF_STR_BCS(21), false, nullptr, IND_ACSMC_N)
@@ -544,7 +555,28 @@ vpgl_replacement_sensor_model_tres::define_RSMECB()
       .field("URR", "Unmodeled. Row Var.",     NITF_STR_BCS(21), false, nullptr, INDUCDEF)
       .field("URC", "Unmodeled. Row-Col Var.", NITF_STR_BCS(21), false, nullptr, INDUCDEF)
       .field("UCC", "Unmodeled. Col-Col Var.", NITF_STR_BCS(21), false, nullptr, INDUCDEF)
-      .field("UACSMC", "Unmodeled CSM Option", NITF_STR_BCSA(1), false, nullptr, INDCVDEF)
+      .field("UACSMC", "Unmodeled CSM Option", NITF_STR_BCSA(1), false, nullptr, INDUCDEF)
+      //
+      //                                                      == N
+      .repeat(new vil_nitf2_conditional_repeat<int>("UACSMC", true), vil_nitf2_field_definitions()
+        .field("UNCSR", "Number of row corr segments", NITF_INT(1), false, nullptr, IND_UACSMC_N)
+           .repeat("UNCSR",vil_nitf2_field_definitions()
+               .field("UCORSR", "row corr value for seg", NITF_STR_BCS(21), false, nullptr, IND_UACSMC_N)
+               .field("UTAUSR", "row tau value for seg", NITF_STR_BCS(21), false, nullptr, IND_UACSMC_N))
+        .field("UNCSC", "Number of col corr segments", NITF_INT(1), false, nullptr, IND_UACSMC_N)
+           .repeat("UNCSC",vil_nitf2_field_definitions()
+              .field("UCORSC", "col corr value for seg", NITF_STR_BCS(21), false, nullptr, IND_UACSMC_N)
+                   .field("UTAUSC", "col tau value for seg", NITF_STR_BCS(21), false, nullptr, IND_UACSMC_N)))
+       //                                                   == Y
+      .repeat(new vil_nitf2_conditional_repeat<int>("UACSMC", false), vil_nitf2_field_definitions()
+        .field("UACR",   "A for row corr function", NITF_STR_BCS(21), false, nullptr, IND_UACSMC_Y)
+        .field("UALPCR", "alpha for row corr function", NITF_STR_BCS(21), false, nullptr, IND_UACSMC_Y)
+        .field("UBETCR", "beta for row corr function", NITF_STR_BCS(21), false, nullptr, IND_UACSMC_Y)
+        .field("UTCR",   "T for row corr function", NITF_STR_BCS(21), false, nullptr, IND_UACSMC_Y)
+        .field("UACC",   "A for col corr function", NITF_STR_BCS(21), false, nullptr, IND_UACSMC_Y)
+        .field("UALPCC", "alpha for col corr function", NITF_STR_BCS(21), false, nullptr, IND_UACSMC_Y)
+        .field("UBETCC", "beta for col corr function", NITF_STR_BCS(21), false, nullptr, IND_UACSMC_Y)
+        .field("UTCC",   "T for row corr function", NITF_STR_BCS(21), false, nullptr, IND_UACSMC_Y))
 
       .end();
 
