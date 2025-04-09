@@ -6,6 +6,7 @@
 // \brief: Define nitf2.1 tagged record extenstions for the replacement sensor model (RSM)
 // \author J. L. Mundy
 // \date October 2023
+// Added RSMECB - April 2025
 //
 #include <string>
 #ifdef _MSC_VER
@@ -50,7 +51,7 @@ struct nitf_tre
   bool
   get_append(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, std::ostream & os, bool verbose = false)
   {
-
+      
     bool good = get(tres_itr, verbose);
     if (!good)
     {
