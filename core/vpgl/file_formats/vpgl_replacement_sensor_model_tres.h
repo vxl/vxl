@@ -6,6 +6,7 @@
 // \brief: Define nitf2.1 tagged record extenstions for the replacement sensor model (RSM)
 // \author J. L. Mundy
 // \date October 2023
+// Added RSMECB - April 2025
 //
 #include <string>
 #ifdef _MSC_VER
