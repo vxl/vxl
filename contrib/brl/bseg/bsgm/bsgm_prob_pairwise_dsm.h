@@ -535,6 +535,10 @@ class bsgm_prob_pairwise_dsm
       prob_ptset_.clear();
       rectify_windows();
     }
+
+    // compute invalid masks
+    this->compute_invalid_masks();
+
     // compute forward disparity & height
     this->compute_disparity_fwd();
     this->compute_height_fwd(false);  // false -> don't compute fwd heightmap
