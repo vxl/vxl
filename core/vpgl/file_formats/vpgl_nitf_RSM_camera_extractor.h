@@ -35,6 +35,7 @@ struct image_time
 struct rsm_metadata
 {
   bool any_valid = false;
+  // sensor information
   std::string platform_name_;
   bool platform_name_valid = false;
   std::string image_iid1_;
@@ -45,21 +46,27 @@ struct rsm_metadata
   bool acquisition_time_valid = false;
   std::string image_type_;
   bool image_type_valid = false;
+  // 3-d geographic bounds
   std::string igeolo_;
   bool igeolo_valid = false;
+  // RSM validity volume
+  bool polytope_valid = false;
+  std::map<size_t, vgl_point_3d<double> > polytope_;
+  bool bounding_box_valid = false;
+  vgl_box_3d<double> bounding_box_;
+  // image ground footprint
   bool xy_corners_valid = false;
-  bool xyz_corners_valid = false;
   vgl_point_2d<double> upper_left_;
   vgl_point_2d<double> upper_right_;
   vgl_point_2d<double> lower_left_;
   vgl_point_2d<double> lower_right_;
-  vgl_box_3d<double> bounding_box_;
-  bool bounding_box_valid = false;
   vgl_polygon<double> footprint_;
+  // image coordinates
   //       x => column y => row
   vgl_point_2d<double> min_image_corner_;
   bool image_corners_valid = false;
   vgl_point_2d<double> max_image_corner_;
+  // sun angles
   double sun_azimuth_radians_ = 0.0;
   bool sun_azimuth_valid = false;
   double sun_elevation_radians_ = 0.0;
@@ -342,6 +349,10 @@ private:
   bool
   process_igeolo(size_t image_subheader_index);
 
+  // extract the ground polytope, 8 3-D vertices bounding RSM validity
+  bool
+    process_polytope(size_t image_subheader_index);
+    
   // data members
   // tres extracted from potentially multiple image subheaders
   // a map is used since not all data segments are present for each subheader
