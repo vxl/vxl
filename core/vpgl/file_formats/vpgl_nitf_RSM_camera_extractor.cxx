@@ -244,6 +244,12 @@ vpgl_nitf_RSM_camera_extractor::process_igeolo(size_t image_subheader_index)
   meta.footprint_ = vgl_polygon<double>(sheet);
   return true;
 }
+static double r2d(double vrad, bool zero_to_360){
+  double ret = 57.2957795130823*vrad;
+  if(zero_to_360 && ret > 180.0)
+    ret -= 360.0;
+  return ret;
+}
 // the polytope vertices are (radians, radians, meters)
 bool vpgl_nitf_RSM_camera_extractor::process_polytope(size_t image_subheader_index){
   if (rsm_meta_.count(image_subheader_index) == 0)
@@ -252,23 +258,35 @@ bool vpgl_nitf_RSM_camera_extractor::process_polytope(size_t image_subheader_ind
     return false;
   }
   rsm_metadata& meta = rsm_meta_[image_subheader_index];
+  bool zero_to_360 = (meta.ground_domain_=="H");//avoid +-180 cut
+  bool local = (meta.ground_domain_ == "R");
   std::map<size_t, vgl_point_3d<double> >& polyt =  meta.polytope_;
 
   // convert radians to decimal degrees.
   if (meta.polytope_.size() != 8)
       return false;
-  double r2d = 57.2957795130823;
+
   // axis-aligned bounding box (deg, deg, meters)
   double xmin = std::numeric_limits<double>::max(), xmax = -xmin;
   double ymin = xmin, ymax = -xmin;
   double zmin = xmin, zmax = -xmin;
-  for (size_t i = 1; i <= 8; ++i) {
+  if(!local){//geodetic coordinates{
+    for (size_t i = 1; i <= 8; ++i) {
       vgl_point_3d<double>& p = polyt[i];
-      double x_deg = p.x() * r2d, y_deg = p.y() * r2d;
+      double x_deg = r2d(p.x(),zero_to_360) , y_deg = r2d(p.y(),zero_to_360);
       p.set(x_deg, y_deg, p.z());
       if(x_deg<xmin) xmin = x_deg; if(x_deg>xmax) xmax = x_deg;
       if(y_deg<ymin) ymin = y_deg; if(y_deg>ymax) ymax = y_deg;
       if(p.z()<zmin) zmin = p.z(); if(p.z()>zmax) zmax = p.z();
+    }
+  }else{//local Cartesian coordinates
+    for (size_t i = 1; i <= 8; ++i) {
+      vgl_point_3d<double>& p = polyt[i];
+      double x = p.x(), y = p.y(), z = p.z();
+      if(x<xmin) xmin = x; if(x>xmax) xmax = x;
+      if(y<ymin) ymin = y; if(y>ymax) ymax = y;
+      if(z<zmin) zmin = z; if(z>zmax) zmax = z;
+    }
   }
   meta.polytope_valid = true;
   vgl_point_3d<double> pmin(xmin, ymin, zmin), pmax(xmax, ymax, zmax);
@@ -277,7 +295,7 @@ bool vpgl_nitf_RSM_camera_extractor::process_polytope(size_t image_subheader_ind
   meta.bounding_box_valid = true;
 
   // polytope vertex indices at image corners
-  unsigned  UL = 1,    UR = 3,    LL = 2,    LR = 4 ;
+  unsigned UL = 3, UR = 4, LL = 1, LR = 2;
   meta.upper_left_.set( polyt[UL].x(), polyt[UL].y() );
   meta.upper_right_.set(polyt[UR].x(), polyt[UR].y() );
   meta.lower_left_.set( polyt[LL].x(), polyt[LL].y() );
@@ -696,45 +714,92 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
 
         nitf_tre<std::string> nt15("GRNDD", false, false);
         nt15.get_append(tres_itr, tre_str, v);
-
+        mdata.ground_domain_valid = true;
+        mdata.ground_domain_ = nt15.value_;
         bool opt = (nt15.value_ == "G") || (nt15.value_ == "H");
+        std::string s;
+        double xuor, yuor, zuor;
+        vnl_matrix_fixed<double, 3, 3> & m = mdata.rotation_;
 
         nitf_tre<double> nt16("XUOR", opt, false);
         nt16.get_append(tres_itr, tre_str, v);
-
+        nt16.get(tres_itr, xuor);
+        
         nitf_tre<double> nt17("YUOR", opt, false);
         nt17.get_append(tres_itr, tre_str, v);
-
+        nt17.get(tres_itr, yuor);
+        
         nitf_tre<double> nt18("ZUOR", opt, false);
         nt18.get_append(tres_itr, tre_str, v);
-
+        nt18.get(tres_itr, zuor);
+        
+        if (!opt)
+          {
+            mdata.translation_[0] = xuor;
+            mdata.translation_[1] = yuor;
+            mdata.translation_[2] = zuor;
+          }
         nitf_tre<double> nt19("XUXR", opt, false);
         nt19.get_append(tres_itr, tre_str, v);
+        if (!opt)
+          {
+            nt19.get(tres_itr, m[0][0]);
+          }
 
         nitf_tre<double> nt20("XUYR", opt, false);
         nt20.get_append(tres_itr, tre_str, v);
+        if (!opt)
+          {
+            nt20.get(tres_itr, m[1][0]);
+          }
 
         nitf_tre<double> nt21("XUZR", opt, false);
         nt21.get_append(tres_itr, tre_str, v);
-
+        if (!opt)
+          {
+            nt21.get(tres_itr, m[2][0]);
+          }
         nitf_tre<double> nt22("YUXR", opt, false);
         nt22.get_append(tres_itr, tre_str, v);
-
+        if (!opt)
+          {
+            nt22.get(tres_itr, m[0][1]);
+          }
         nitf_tre<double> nt23("YUYR", opt, false);
         nt23.get_append(tres_itr, tre_str, v);
+        if (!opt)
+          {
+            nt23.get(tres_itr, m[1][1]);
+          }
 
         nitf_tre<double> nt24("YUZR", opt, false);
         nt24.get_append(tres_itr, tre_str, v);
+        if (!opt)
+          {
+            nt24.get(tres_itr, m[2][1]);
+          }
 
         nitf_tre<double> nt25("ZUXR", opt, false);
         nt25.get_append(tres_itr, tre_str, v);
+        if (!opt)
+          {
+            nt25.get(tres_itr, m[0][2]);
+          }
 
         nitf_tre<double> nt26("ZUYR", opt, false);
         nt26.get_append(tres_itr, tre_str, v);
-
+        if (!opt)
+          {
+            nt26.get(tres_itr, m[1][2]);
+          }
+        
         nitf_tre<double> nt27("ZUZR", opt, false);
         nt27.get_append(tres_itr, tre_str, v);
-
+        if (!opt)
+          {
+            nt27.get(tres_itr, m[2][2]);
+            mdata.local_transform_valid = true;
+          }
         
         double x, y, z;
         nitf_tre<double> nt28("V1X", false, false);
@@ -1473,7 +1538,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           if (!opt)
             {
               nt39.get(tres_itr, s);
-              ASC_int(s, idx["ICZ"]);
+              ASC_int(s, idx["ICZZ"]);
             }
           
           nitf_tre<std::string> nt40("GXO", opt, false);

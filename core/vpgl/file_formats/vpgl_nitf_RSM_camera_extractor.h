@@ -26,6 +26,7 @@
 #include <vgl/vgl_polygon.h>
 #include <vpgl_replacement_sensor_model_tres.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_math.h>
 #include <fstream>
 struct image_time
 {
@@ -46,6 +47,14 @@ struct rsm_metadata
   bool acquisition_time_valid = false;
   std::string image_type_;
   bool image_type_valid = false;
+
+  bool ground_domain_valid = false;
+  std::string ground_domain_;
+  // local coordinate system (ground domain = "R")
+  bool local_transform_valid = false;
+  vnl_vector_fixed<double, 3> translation_;
+  vnl_matrix_fixed<double, 3, 3> rotation_;
+
   // 3-d geographic bounds
   std::string igeolo_;
   bool igeolo_valid = false;
@@ -276,6 +285,32 @@ public:
     auto iter = RSM_cams_.begin();
     return iter->first;
   }
+#if 0 // for debug purposes
+  // which polytope verts project to image corners
+  bool set_footprint_bounds(){
+    if (RSM_cams_.size() == 0)
+      return false;
+    unsigned UL = 3, UR = 4, LL = 1, LR = 2;
+    int idx = first_index_with_RSM();
+    vpgl_RSM_camera<double>& rcam = RSM_camera(idx);
+    std::map<size_t, vgl_point_2d<double> > img_pts;
+    std::map<size_t, vgl_point_3d<double> >& ptp = rsm_meta_[idx].polytope_;
+    if(!rsm_meta_[idx].local_transform_valid){
+      //polytope vertices are in degrees
+      //convert to radians
+      double rad_per_deg = 1.0/vnl_math::deg_per_rad;
+      for(int i = 1; i<=4; ++i){
+        vgl_point_3d<double>& p = ptp[i];
+        double x_rad = p.x()*rad_per_deg;
+        double y_rad = p.y()*rad_per_deg;
+        double z = p.z();
+        double u, v;
+        rcam.project(x_rad, y_rad, z, u, v);
+        img_pts[i].x() = u; img_pts[i].y() = v;
+      }
+    }
+  }
+#endif
   //: extracted metadata contained in the image subheader including some RSM-related info
   // default header index 0
   rsm_metadata
