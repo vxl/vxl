@@ -64,6 +64,9 @@ struct dtime
   //: compute t1 - t0 in seconds
   static int time_diff(dtime const& t0, dtime const& t1);
 
+  //: order on time in seconds
+  static bool time_less(dtime const& ta, dtime const& tb);
+
   unsigned year_;
   unsigned month_;
   unsigned day_;
