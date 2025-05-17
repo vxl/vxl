@@ -43,6 +43,8 @@ struct rsm_metadata
   bool image_iid1_valid = false;
   std::string image_iid2_;
   bool image_iid2_valid = false;
+  bool sid_valid = false;
+  std::string sid_;
   std::vector<int> acquisition_time_;
   bool acquisition_time_valid = false;
   std::string image_type_;
@@ -103,7 +105,7 @@ struct RSM_ECA_adjustable_parameter_metadata
 
   //== independent segment time correlation parameters ==
   //   flag indicating type of correlation
-  // 0 - all time;  1 - time between images;  2 -time within image
+  // 0 - all time within and between images;  1 - time between images;  2 -time within image
   std::vector<size_t> correlation_flags_;
   //                 correlation piecewise segments
   //                           correlation    tau

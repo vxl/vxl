@@ -295,7 +295,9 @@ bool vpgl_nitf_RSM_camera_extractor::process_polytope(size_t image_subheader_ind
   meta.bounding_box_valid = true;
 
   // polytope vertex indices at image corners
-  unsigned UL = 3, UR = 4, LL = 1, LR = 2;
+  // doesn't seem to have a fixed relation to
+  // polytope vertices in the test examples.
+  unsigned UL = 1, UR = 3, LL = 2, LR = 4;
   meta.upper_left_.set( polyt[UL].x(), polyt[UL].y() );
   meta.upper_right_.set(polyt[UR].x(), polyt[UR].y() );
   meta.lower_left_.set( polyt[LL].x(), polyt[LL].y() );
@@ -678,8 +680,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
 
         nitf_tre<std::string> nt3("SID", false, true);
         nt3.get_append(tres_itr, tre_str, v);
+        if(nt3.get(tres_itr, mdata.sid_))
+           mdata.sid_valid = true;
 
-        nitf_tre<std::string> nt4("STID", false, true);
+           nitf_tre<std::string> nt4("STID", false, true);
         nt4.get_append(tres_itr, tre_str, v);
 
         nitf_tre<int> nt5("YEAR", false, true);
@@ -1149,14 +1153,18 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         // =======================================
         nitf_tre<std::string> nt("RSMPIA", tre_str);
         // =========================================
+        rsm_metadata & meta = rsm_meta_[sitr->first];
         nitf_tre<std::string> nt1("EDITION", false, false);
         nt1.get_append(tres_itr, tre_str, v);
         nitf_tre<double> nt2("R0", false, false);
         nt2.get_append(tres_itr, tre_str, v);
+
         nitf_tre<double> nt3("RX", false, false);
         nt3.get_append(tres_itr, tre_str, v);
+          
         nitf_tre<double> nt4("RY", false, false);
         nt4.get_append(tres_itr, tre_str, v);
+
         nitf_tre<double> nt5("RZ", false, false);
         nt5.get_append(tres_itr, tre_str, v);
         nitf_tre<double> nt6("RXX", false, false);
@@ -1173,10 +1181,13 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         nt11.get_append(tres_itr, tre_str, v);
         nitf_tre<double> nt12("C0", false, false);
         nt12.get_append(tres_itr, tre_str, v);
+
         nitf_tre<double> nt13("CX", false, false);
         nt13.get_append(tres_itr, tre_str, v);
+
         nitf_tre<double> nt14("CY", false, false);
         nt14.get_append(tres_itr, tre_str, v);
+        
         nitf_tre<double> nt15("CZ", false, false);
         nt15.get_append(tres_itr, tre_str, v);
         nitf_tre<double> nt16("CXX", false, false);
@@ -1738,7 +1749,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
                   segments.push_back(pr);
                 }
               corsegs[i] = segments;
-              offset += n_vars;
+              offset += n_upper_diag;
               corr_offset += ncseg[i];
             }
           nitf_tre<double> nt62("MAP", "vector", opt, false);
