@@ -683,7 +683,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         if(nt3.get(tres_itr, mdata.sid_))
            mdata.sid_valid = true;
 
-           nitf_tre<std::string> nt4("STID", false, true);
+        nitf_tre<std::string> nt4("STID", false, true);
         nt4.get_append(tres_itr, tre_str, v);
 
         nitf_tre<int> nt5("YEAR", false, true);
