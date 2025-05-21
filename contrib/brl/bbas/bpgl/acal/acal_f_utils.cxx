@@ -533,4 +533,10 @@ int dtime::time_diff(dtime const& t0, dtime const& t1)
   int second_dif = (t1.seconds_-t0.seconds_);       //seconds
   return (year_dif + month_dif + day_dif + hour_dif + minute_dif + second_dif);
 }
-
+bool dtime::time_less(dtime const& ta, dtime const& tb){
+  unsigned y = 0, m = 0, d = 0, h = 0, mi = 0, s = 0;
+  dtime zero(y, m, d, h, mi, s);
+  int ta_sec = time_diff(zero, ta);
+  int tb_sec = time_diff(zero, tb);
+  return ta_sec < tb_sec;
+}
