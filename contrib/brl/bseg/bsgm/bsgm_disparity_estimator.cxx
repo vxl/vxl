@@ -24,7 +24,7 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
   long long int cost_volume_width,
   long long int cost_volume_height,
   long long int num_disparities,
-  // optional shadow processing 
+  // optional shadow processing
   vil_image_view<float> const& shadow_step_prob,
   vil_image_view<float> const& shadow_prob,
   vgl_vector_2d<float> const& sun_dir_tar):
@@ -67,7 +67,7 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
   if(params_.use_shadow_step_p2_adjustment)
     std::cout << "shadow_step P2 adjust" << std::endl;
   else if(params_.use_gradient_weighted_smoothing)
-    std::cout << "dir grad P2 adjust" << std::endl;  
+    std::cout << "dir grad P2 adjust" << std::endl;
 #endif
   // Setup any necessary cost volumes
   setup_cost_volume( fused_cost_data_, fused_cost_, num_disparities );
@@ -247,7 +247,7 @@ bsgm_disparity_estimator::run_multi_dp(
   //sun dir mag>0 required for shadow dynamic program
   auto bias_weight = params_.bias_weight;
   float mag = sun_dir_tar_.length();
-  if(mag > 0.0f) 
+  if(mag > 0.0f)
     sun_dir_tar_/=mag;
 
   auto bias_dir = sun_dir_tar_;
@@ -362,7 +362,7 @@ bsgm_disparity_estimator::run_multi_dp(
     for( int x = 0; x < w_; x++ )
       for( int d = 0; d < num_disparities_; d++ )
         total_cost[y][x][d] = 0;
-  
+
   // Setup buffers
   std::vector<unsigned short> dir_cost_cur( row_size, (unsigned short)0 );
   std::vector<unsigned short> dir_cost_prev( row_size, (unsigned short)0 );
@@ -518,6 +518,13 @@ bsgm_disparity_estimator::run_multi_dp(
     int x_inc = (x_start < x_end) ? 1 : -1;
     int y_inc = (y_start < y_end) ? 1 : -1;
 
+    // Validate x and y indices
+    if (x_start < 0 || x_start >= w_ || y_start < 0 || y_start >= h_ ||
+        x_end < 0 || x_end >= w_ || y_end < 0 || y_end >= h_) {
+      throw std::runtime_error("Invalid start index");
+    }
+
+
     // Initialize previous row
     for( long long int v = 0; v < row_size; v++ )
       dir_cost_prev[v] = 0;
@@ -563,7 +570,7 @@ bsgm_disparity_estimator::run_multi_dp(
           // In shadow, limit the dynamic program direction to that closest to opposite the sun ray dir
           // that is, update total cost along the direction towards the shadow casting step discontinuity from outside the shadow
           int dc = shad_step_dp_dir_code;
-          
+
           float pthr = params_.shad_shad_stp_prob_thresh;
           float adjw = params_.adj_dir_weight;
           // include dc and dp directions on each side of dc otherwise skip the current dp direction
@@ -571,7 +578,7 @@ bsgm_disparity_estimator::run_multi_dp(
             continue;
           else if((shadow_prob_(x,y) > pthr)&& (dir != dc))
             continue;
-                                                
+
           // weight the effect of adjacent directions compared to the direction most aginst
           // the sun ray direction
           if(dir == dc) adj_weight = 1.0f;
@@ -584,7 +591,7 @@ bsgm_disparity_estimator::run_multi_dp(
             suppress_appearance = (sp > pthr) || (shadow_prob_(x,y) > pthr);
           else
             suppress_appearance = (shadow_prob_(x,y) > pthr);
-        }          
+        }
 
         // Compute the directional smoothing cost and add to total
         if( dy == 0 )
@@ -631,7 +638,7 @@ bsgm_disparity_estimator::compute_dir_cost(
   int prev_offset = cur_min_disparity - prev_min_disparity;
 
   const unsigned short* prc = prev_row_cost;
-  
+
   // Compute jump cost from best previous disparity with p2 penalty
   unsigned short min_prev_cost = *prc; prc++;
   std::tuple<float, float, float, float, float> cst;
@@ -658,7 +665,7 @@ bsgm_disparity_estimator::compute_dir_cost(
       unsigned short prc_d = *prc;
       best_cost = prc_d < best_cost ? prc_d: best_cost;
     }
-    
+
     // ...and +/- 1 disparity with P1 cost
     // -1
     if( d_off > 0 && d_off <= num_disparities_ ){
@@ -682,7 +689,7 @@ bsgm_disparity_estimator::compute_dir_cost(
       *tc += (*crc);
     }
   }// end of disparity loop
-} 
+}
 
 //-------------------------------------------------------------------
 void
