@@ -524,7 +524,6 @@ bsgm_disparity_estimator::run_multi_dp(
       throw std::runtime_error("Invalid start index");
     }
 
-
     // Initialize previous row
     for( long long int v = 0; v < row_size; v++ )
       dir_cost_prev[v] = 0;
