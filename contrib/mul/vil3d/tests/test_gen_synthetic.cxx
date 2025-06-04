@@ -21,7 +21,7 @@
 template <class T>
 inline bool all_pixels_are(const vil3d_image_view<T> & im, T v)
 {
-  return std::find_if(im.begin(), im.end(), std::bind2nd(std::not_equal_to<T>(), v))==im.end();
+  return std::find_if(im.begin(), im.end(), [v](const T& x) { return x != v; })==im.end();
 }
 void test_gen_synthetic( )
 {

@@ -24,7 +24,7 @@ static void test_stl_sequence()
   std::vector<double> y;
 
   mbl_stl_sequence_n(std::back_inserter(y), n,
-    std::bind1st(std::plus<unsigned>(), 1u), 0u);
+      [](unsigned x) { return x + 1u; }, 0u);
 
   TEST("Generate incremental sequence using mbl_stl_sequence_n", y, x);
 

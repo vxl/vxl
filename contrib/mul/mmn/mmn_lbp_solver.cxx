@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 #include <algorithm>
 #include <functional>
 #include <iterator>
@@ -175,7 +176,10 @@ double mmn_lbp_solver::operator()(const std::vector<vnl_vector<double> >& node_c
             case eRANDOM_SERIAL:
             default:
             {
-                std::random_shuffle(random_indices.begin(),random_indices.end());
+                std::random_device rd;
+                std::mt19937 gen(rd());
+                std::shuffle(random_indices.begin(), random_indices.end(), gen);
+
                 //Randomise the order of inter-node messages
                 //May help avoid looping
                 for (unsigned knode=0; knode<nnodes_;++knode)
@@ -415,7 +419,8 @@ void mmn_lbp_solver::renormalise_log(vnl_vector<double >& logMessageVec)
     double logAlpha=std::log(alpha);
     std::transform(logMessageVec.begin(),logMessageVec.end(),
                   logMessageVec.begin(),
-                  std::bind2nd(std::plus<double>(),logAlpha));
+                  [logAlpha](double x) { return x + logAlpha; }
+    );
 }
 
 bool mmn_lbp_solver::continue_propagation(std::vector<unsigned>& x)
@@ -434,7 +439,8 @@ bool mmn_lbp_solver::continue_propagation(std::vector<unsigned>& x)
     }
     else if (cycle_detection_count_<2 &&
              std::count_if(max_delta_history_.begin(),max_delta_history_.end(),
-                          std::bind1st(std::less<double >(),max_delta_))
+                          [this](double x) { return this->max_delta_ < x; }
+             )
              == int(max_delta_history_.size()))
     {
         retstate =true; //delta is definitely decreasing so keep going unless we've had >2 cycles already

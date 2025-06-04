@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>    // for std::random_device and std::mt19937
 #include <algorithm>
 #include <iterator>
 #include <sstream>
@@ -158,7 +159,10 @@ std::pair<bool,double> mmn_diffusion_solver::operator()(const std::vector<vnl_ve
     do
     {
         max_delta_=-1.0;
-        std::random_shuffle(random_indices.begin(),random_indices.end());
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::shuffle(random_indices.begin(), random_indices.end(), gen);
+
         //Randomise the order of pencils
         for (unsigned knode=0; knode<nnodes_;++knode)
         {
