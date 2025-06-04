@@ -415,6 +415,7 @@ void clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::gradf(vnl_vector<
         gradient[num_vars_] += (-wtInv); //dg/db, last term is for constant
     }
     //And multiply everything by 2sigma^2
-    std::transform(gradient.begin(),gradient.end(),gradient.begin(),
-                  std::bind2nd(std::multiplies<double>(),2.0*var_));
+    std::transform(gradient.begin(), gradient.end(), gradient.begin(),
+                [var=2.0*var_](double x) { return x * var; });
+
 }
