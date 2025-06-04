@@ -134,11 +134,14 @@ void calc_image_sizes(
 
   // Add margins.
   std::transform(max_size_k.begin(), max_size_k.end(), max_size_k.begin(),
-                std::bind2nd(std::plus<unsigned>(),margin));
+                [margin](unsigned x) { return x + margin; }
+  );
   std::transform(max_size_j.begin(), max_size_j.end(), max_size_j.begin(),
-                std::bind2nd(std::plus<unsigned>(),margin));
+                [margin](unsigned x) { return x + margin; }
+  );
   std::transform(max_size_i.begin(), max_size_i.end(), max_size_i.begin(),
-                std::bind2nd(std::plus<unsigned>(),margin));
+                [margin](unsigned x) { return x + margin; }
+  );
 
   // Sum these max sizes to find the position of each input image, in the output image.
 

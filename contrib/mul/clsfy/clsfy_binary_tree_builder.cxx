@@ -6,7 +6,8 @@
 
 #include <iostream>
 #include <string>
-#include <algorithm>
+#include <random>       // for std::mt19937, std::random_device
+#include <algorithm>    // for std::shuffle
 #include <numeric>
 #include <iterator>
 #include <cstddef>
@@ -513,7 +514,11 @@ void  clsfy_binary_tree_builder::randomise_parameters(unsigned  /*ndimsUsed*/,
     // In fact it shuffles all indices (in case the random subset does not produce a split)
     param_indices.resize(base_indices_.size());
 
-    std::random_shuffle(base_indices_.begin(),base_indices_.end(),random_sampler_);
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::shuffle(base_indices_.begin(), base_indices_.end(), gen);
+
+
     std::copy(base_indices_.begin(),base_indices_.end(),
              param_indices.begin());
 }
