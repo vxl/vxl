@@ -229,7 +229,7 @@ public:
       buf[i] = Data(l);      // Peel off lower order bits
 
       // NOTE: shifting by more than number of bits results in all zeros
-      constexpr int maxbits = sizeof(l) * 8;
+      constexpr int maxbits = sizeof(l) * 8 - 1;
       l >>= std::min(16, maxbits); // Shift next bits into place
       i++;
     }
