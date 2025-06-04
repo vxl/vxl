@@ -185,7 +185,8 @@ if(TIFF_FOUND)
 endif()
 
 # Let users decide if they should include DCMTK since we don't build against all versions.
-option(VXL_USE_DCMTK "" TRUE)
+# VXL_USE_DCMTK is off by default, and may only work with older versions of DCMTK
+option(VXL_USE_DCMTK "Provide DCMTK support for fileio of dicom files" OFF)
 mark_as_advanced(VXL_USE_DCMTK)
 set( HAS_DCMTK 0 )
 if (VXL_USE_DCMTK)
