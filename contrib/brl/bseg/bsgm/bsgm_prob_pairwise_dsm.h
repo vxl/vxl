@@ -507,7 +507,7 @@ class bsgm_prob_pairwise_dsm
   // Note that in the window mode, only the 3-d pointset with a probability scalar is
   // computed -- no heightmaps are produced. If with_consistency_check is false then
   // no point probabilities are computed and the value is always 1.1 indicating invalid.
-  bool process_with_windows(bool& first_window = true,
+  bool process_with_windows(bool first_window = true,
                             bool with_consistency_check = false,
                             bool print_timing = false)
   {
