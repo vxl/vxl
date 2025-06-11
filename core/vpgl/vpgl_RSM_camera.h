@@ -49,6 +49,89 @@
 #include <vnl/vnl_vector_fixed.h>
 #include "vpgl_camera.h"
 #include "vpgl_rational_camera.h" //for scale and offset class
+
+
+//========================= RSM ground domain =================================
+// Convert from WGS84 lon (degrees), lat (degrees), elevation (meters) to
+// RSM ground domain coordinates. Ground domain may be a geodetic ("G" or "H")
+// or a local retangular ("R") coordinate system.
+
+// ground domain identifier & functions
+enum class vpgl_ground_domain_id
+{
+  G,
+  H,
+  R,
+};
+
+class vpgl_ground_domain_id_func
+{
+public:
+  static std::string
+  to_string(vpgl_ground_domain_id id);
+  static vpgl_ground_domain_id
+  from_string(const std::string & buf);
+
+private:
+  vpgl_ground_domain_id_func() = delete;
+};
+
+std::ostream &
+operator<<(std::ostream & os, const vpgl_ground_domain_id & id);
+
+// ground domain
+template <class T>
+class vpgl_ground_domain
+{
+public:
+
+  // constructors
+  vpgl_ground_domain()
+  {}
+
+  vpgl_ground_domain(vpgl_ground_domain_id id)
+    : id_(id)
+  {}
+
+  vpgl_ground_domain(std::string id)
+    : id_(vpgl_ground_domain_id_func::from_string(id))
+  {}
+
+  // reset
+  void
+  reset();
+
+  // convert world WGS84 coordinate to ground domain coordinate
+  void
+  world_to_ground(const T lon_deg, const T lat_deg, const T elev_m,
+                  T & x, T & y, T & z) const;
+
+  vnl_vector_fixed<T, 3>
+  world_to_ground(const vnl_vector_fixed<T, 3> & world_point) const;
+
+  vgl_point_3d<T>
+  world_to_ground(const vgl_point_3d<T> & world_point) const;
+
+  // print
+  std::ostream &
+  print(std::ostream& os) const;
+
+  // properties
+  vpgl_ground_domain_id id_ = vpgl_ground_domain_id::G;
+  vnl_vector_fixed<T, 3> translation_{0, 0, 0};
+  vnl_matrix_fixed<T, 3, 3> rotation_{vnl_matrix_fixed<T, 3, 3>().set_identity()};
+
+};
+
+// ground_domain operator<<
+template <class T>
+std::ostream &
+operator<<(std::ostream & os, const vpgl_ground_domain<T> & gd)
+{
+  return gd.print(os);
+}
+
+
 //======================= RSM region selector =================================
 template <class T>
 class vpgl_region_selector
@@ -107,6 +190,9 @@ public:
   T rssiz_;
   T cssiz_;
 };
+
+
+//================================ POLYCAM ====================================
 template <class T>
 class vpgl_polycam
 {
@@ -295,6 +381,19 @@ public:
     polycams_.resize(region_selector.rnis_, std::vector<vpgl_polycam<T>>(region_selector.cnis_));
   }
 
+  // ground domain
+  void
+  set_ground_domain(const vpgl_ground_domain<T> & ground_domain)
+  {
+    ground_domain_ = ground_domain;
+  }
+
+  vpgl_ground_domain<T>
+  ground_domain() const
+  {
+    return ground_domain_;
+  }
+
   //: Set a polycam for a specified region
   void
   set_polycam(size_t row, size_t col, const vpgl_polycam<T> & pcam)
@@ -357,6 +456,7 @@ public:
 protected:
   T adj_u_; // image column adjustable parameter
   T adj_v_; // image row adjustable parameter
+  vpgl_ground_domain<T> ground_domain_;
   vpgl_region_selector<T> region_selector_;
   std::vector<std::vector<vpgl_polycam<T>>> polycams_;
 };

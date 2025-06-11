@@ -1557,12 +1557,10 @@ vpgl_affine_camera_convert::convert(const vpgl_RSM_camera<double> & camera_in,
     double y = rng.drand64(min_y, max_y);
     double z = rng.drand64(min_z, max_z);
     world_pts.emplace_back(x, y, z);
-    // convert to lon, lat, elev in (rad, rad, meters)
+    // convert to lon, lat, elev in (deg, deg, meters)
     double X, Y, Z;
     lvcs.local_to_global(x, y, z, vpgl_lvcs::wgs84, X, Y, Z);
-    // convert to radians
-    X /= vnl_math::deg_per_rad;
-    Y /= vnl_math::deg_per_rad;
+    // camera projection
     double u, v;
     camera_in.project(X, Y, Z, u, v);
     image_pts.emplace_back(u, v);
@@ -1632,9 +1630,8 @@ vpgl_rational_camera_convert::convert(vpgl_RSM_camera<double> const & camera_in,
     double y = rng.drand64(min_y, max_y);
     double z = rng.drand64(min_z, max_z);
     world_pts.emplace_back(x, y, z);
-    double X = x / vnl_math::deg_per_rad, Y = y / vnl_math::deg_per_rad;
     double u, v;
-    camera_in.project(X, Y, z, u, v);
+    camera_in.project(x, y, z, u, v);
     image_pts.emplace_back(u, v);
   }
   return vpgl_rational_camera_compute::compute(image_pts, world_pts, camera_out);
