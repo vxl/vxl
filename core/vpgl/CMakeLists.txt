@@ -25,6 +25,7 @@ set( vpgl_sources
   vpgl_rational_camera.h           vpgl_rational_camera.hxx
                                    vpgl_rational_camera.cxx
   vpgl_RSM_camera.h                vpgl_RSM_camera.hxx
+                                   vpgl_RSM_camera.cxx
   vpgl_local_rational_camera.h     vpgl_local_rational_camera.hxx
   vpgl_generic_camera.h            vpgl_generic_camera.hxx
   vpgl_dll.h

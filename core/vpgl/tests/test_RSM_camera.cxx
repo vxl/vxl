@@ -9,6 +9,139 @@
 #include "vnl/vnl_math.h"
 #include "vpgl/vpgl_RSM_camera.h"
 
+// ----- GROUND DOMAIN -----
+
+// create ground domain
+// - "G" geodetic ground domain with longitude on range (-pi, pi)
+// - "H" geodetic ground domain with longitude on range (0, 2pi)
+// - "R-identity" rectangular ground domain with identity transform
+// - "R" rectangular ground domain
+vpgl_ground_domain<double>
+create_ground_domain(std::string ground_domain_id)
+{
+  if (ground_domain_id == "R-transform")
+  {
+    // rectangular transformation
+    vnl_vector_fixed<double, 3> translation;
+    translation[0] = -2.42965895449297E+06;  // RSMIDA.XUOR
+    translation[1] = -4.76049894293300E+06;  // RSMIDA.YUOR
+    translation[2] = +3.46898407315533E+06;  // RSMIDA.ZUOR
+
+    vnl_matrix_fixed<double, 3, 3> rotation;
+    rotation[0][0] = +8.90233155120443E-01;  // RSMIDA.XUXR
+    rotation[1][0] = +2.50327118321895E-01;  // RSMIDA.XUYR
+    rotation[2][0] = -3.80553890213932E-01;  // RSMIDA.XUZR
+
+    rotation[0][1] = -4.55502457571841E-01;  // RSMIDA.YUXR
+    rotation[1][1] = +4.86367706250322E-01;  // RSMIDA.YUYR
+    rotation[2][1] = -7.45629911861651E-01;  // RSMIDA.YUZR
+
+    rotation[0][2] = -1.56226448294838E-03;  // RSMIDA.ZUXR
+    rotation[1][2] = +8.37127701219746E-01;  // RSMIDA.ZUYR
+    rotation[2][2] = +5.47005275276417E-01;  // RSMIDA.ZUZR
+
+    // create ground domain
+    auto gd = vpgl_ground_domain<double>("R");
+    gd.translation_ = translation;
+    gd.rotation_ = rotation;
+    return gd;
+  }
+  else
+  {
+    return vpgl_ground_domain<double>(ground_domain_id.substr(0, 1));
+  }
+}
+
+// ground domain coordinates
+// - [lon (deg), lat (deg), elev (meters)]
+// - [lon (rad), lat (rad), elev (meters)] with lon on range (-pi, pi)
+// - [lon (rad), lat (rad), elev (meters)] with lon on range (0, 2pi)
+// - Earth centered Earth fixed (ECEF) coordinate
+// - Rectangular coordinate
+static std::vector<std::vector<std::vector<double> > >
+create_ground_domain_coords()
+{
+  std::vector<std::vector<std::vector<double> > > data = {
+    {
+      {-117.0386236785, 33.1616263666, -500},
+      {-2.04270933519924, 0.578779565419217, -500},
+      {4.240475971980347, 0.578779565419217, -500},
+      {-2429458.222842, -4760144.758575, 3468704.785650},
+      {17.802446, -11.286898, -493.251402},
+    },
+    {
+      {-117.0388169203, 33.1617298457, 0},
+      {-2.04271270789735, 0.578781371463418, 0},
+      {4.240472599282237, 0.578781371463418, 0},
+      {-2429661.700896, -4760503.788871, 3468987.894357},
+      {-0.243572, 0.154427, 6.748648},
+    },
+    {
+      {-117.0390101313, 33.1618333074, 500},
+      {-2.04271608007467, 0.578783177217907, 500},
+      {4.240469227104916, 0.578783177217907, 500},
+      {-2429865.178922, -4760862.819116, 3469271.003024},
+      {-18.289589, 11.595750, 506.748627},
+    },
+  };
+  return data;
+}
+
+// test single ground domain coordinate conversion
+static void
+_test_ground_domain(vpgl_ground_domain<double> gd,
+                    std::vector<double> lon_lat_elev,
+                    std::vector<double> xyz,
+                    double xtol, double ytol, double ztol)
+{
+  double lon = lon_lat_elev[0], lat = lon_lat_elev[1], elev = lon_lat_elev[2];
+  double x = xyz[0], y = xyz[1], z = xyz[2];
+
+  double _x, _y, _z;
+  gd.world_to_ground(lon, lat, elev, _x, _y, _z);
+
+  std::cout << "(" << lon << "," << lat << "," << elev << ") -> "
+            << "(" << x << "," << y << "," << z << ")\n"
+            << "result = (" << _x << "," << _y << "," << _z << ")\n";
+
+  TEST_NEAR("x", _x, x, xtol);
+  TEST_NEAR("y", _y, y, ytol);
+  TEST_NEAR("z", _z, z, ztol);
+}
+
+// test ground domain
+static void
+test_ground_domain(std::string ground_domain_id)
+{
+  // tolerance
+  double rtol = 1e-8, mtol = 1e-4;
+  double xtol, ytol, ztol;
+  if (ground_domain_id.substr(0, 1) == "R")
+    xtol = ytol = ztol = mtol;
+  else
+    xtol = ytol = rtol; ztol = mtol;
+
+  // test coordinates
+  auto coords = create_ground_domain_coords();
+  size_t result_idx;
+  if (ground_domain_id == "R-transform")
+    result_idx = 4;
+  else if (ground_domain_id == "R-identity")
+    result_idx = 3;
+  else if (ground_domain_id == "H")
+    result_idx = 2;
+  else
+    result_idx = 1;
+
+  // run test
+  std::cout << "\n===== Ground domain " << ground_domain_id << " =====\n";
+  auto gd = create_ground_domain(ground_domain_id);
+  std::cout << gd << "\n";
+  for (auto const& item : coords) {
+    _test_ground_domain(gd, item[0], item[result_idx], xtol, ytol, ztol);
+  }
+}
+
 
 // ----- REGION SELECTOR -----
 
@@ -409,6 +542,12 @@ test_RSM_camera()
   // increase std::cout precision
   auto flags = std::cout.flags();
   std::cout << std::setprecision(12);
+
+  // ground domain
+  test_ground_domain("G");
+  test_ground_domain("H");
+  test_ground_domain("R-identity");
+  test_ground_domain("R-transform");
 
   // region selector
   test_region_selector();
