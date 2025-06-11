@@ -17,6 +17,7 @@ DECLARE(test_utm);
 DECLARE(test_tri_focal_tensor);
 DECLARE(test_affine_tri_focal_tensor);
 DECLARE(test_affine_fundamental_matrix);
+DECLARE(test_RSM_camera);
 
 void
 register_tests()
@@ -38,6 +39,7 @@ register_tests()
   REGISTER(test_tri_focal_tensor);
   REGISTER(test_affine_tri_focal_tensor);
   REGISTER(test_affine_fundamental_matrix);
+  REGISTER(test_RSM_camera);
 }
 
 DEFINE_MAIN;
