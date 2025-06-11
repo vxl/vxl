@@ -18,6 +18,7 @@ add_executable( vpgl_test_all
   test_tri_focal_tensor.cxx
   test_affine_fundamental_matrix.cxx
   test_affine_tri_focal_tensor.cxx
+  test_RSM_camera.cxx
 )
 
 target_link_libraries( vpgl_test_all ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}testlib )
@@ -39,6 +40,8 @@ add_test( NAME vpgl_test_utm COMMAND $<TARGET_FILE:vpgl_test_all> test_utm)
 add_test( NAME vpgl_test_tri_focal_tensor COMMAND $<TARGET_FILE:vpgl_test_all> test_tri_focal_tensor)
 add_test( NAME vpgl_test_affine_fundamental_matrix COMMAND $<TARGET_FILE:vpgl_test_all> test_affine_fundamental_matrix)
 add_test( NAME vpgl_test_affine_tri_focal_tensor COMMAND $<TARGET_FILE:vpgl_test_all> test_affine_tri_focal_tensor)
+add_test( NAME vpgl_test_RSM_camera COMMAND $<TARGET_FILE:vpgl_test_all> test_RSM_camera)
+
 set( HAS_GEOTIFF 0 )
 include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
 if(GEOTIFF_FOUND)

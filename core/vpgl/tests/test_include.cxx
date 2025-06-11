@@ -16,6 +16,7 @@
 #include "vpgl/vpgl_proj_camera.h"
 #include "vpgl/vpgl_radial_distortion.h"
 #include "vpgl/vpgl_rational_camera.h"
+#include "vpgl/vpgl_RSM_camera.h"
 
 #include "vpgl/vpgl_datum_conversion.h"
 #include "vpgl/vpgl_earth_constants.h"
