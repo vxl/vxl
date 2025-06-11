@@ -381,6 +381,19 @@ public:
     polycams_.resize(region_selector.rnis_, std::vector<vpgl_polycam<T>>(region_selector.cnis_));
   }
 
+  // ground domain
+  void
+  set_ground_domain(const vpgl_ground_domain<T> & ground_domain)
+  {
+    ground_domain_ = ground_domain;
+  }
+
+  vpgl_ground_domain<T>
+  ground_domain() const
+  {
+    return ground_domain_;
+  }
+
   //: Set a polycam for a specified region
   void
   set_polycam(size_t row, size_t col, const vpgl_polycam<T> & pcam)
@@ -443,6 +456,7 @@ public:
 protected:
   T adj_u_; // image column adjustable parameter
   T adj_v_; // image row adjustable parameter
+  vpgl_ground_domain<T> ground_domain_;
   vpgl_region_selector<T> region_selector_;
   std::vector<std::vector<vpgl_polycam<T>>> polycams_;
 };

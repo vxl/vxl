@@ -325,10 +325,19 @@ template <class T>
 void
 vpgl_RSM_camera<T>::project(const T x, const T y, const T z, T & u, T & v) const
 {
+  // world to ground domain
+  T xgd, ygd, zgd;
+  ground_domain_.world_to_ground(x, y, z, xgd, ygd, zgd);
+
+  // select polycam
   size_t row, col;
-  region_selector_.select(x, y, z, row, col);
+  region_selector_.select(xgd, ygd, zgd, row, col);
+
+  // polycam project
   T uu, vv;
-  polycams_[row - 1][col - 1].project(x, y, z, uu, vv);
+  polycams_[row - 1][col - 1].project(xgd, ygd, zgd, uu, vv);
+
+  // adjust
   u = uu - adj_u_;
   v = vv - adj_v_;
 }
