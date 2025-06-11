@@ -283,8 +283,6 @@ test_replacement_sensor_model_camera_approx_affine()
 {
 #if HAS_GEOTIFF // Requires GEOTIFF to succeed
   vpgl_RSM_camera<double> rsm_cam = construct_replacement_sensor_model();
-  if (rsm_cam.reg_sel().maxr_ == 0)
-    return;
   // define lvcs
   vpgl_lvcs lvcs(33.315252, 44.366044, 35.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   // a 500x500x100 roi centered at the lvcs origin
@@ -305,8 +303,6 @@ test_replacement_sensor_model_camera_approx_affine()
   {
     double X, Y, Z;
     lvcs.local_to_global(test_pt.x(), test_pt.y(), test_pt.z(), vpgl_lvcs::wgs84, X, Y, Z);
-    X /= vnl_math::deg_per_rad;
-    Y /= vnl_math::deg_per_rad;
     vgl_point_3d<double> tpg(X, Y, Z);
     vgl_point_2d<double> img_pt1 = rsm_cam.project(tpg);
     vgl_point_2d<double> img_pt2 = ac.project(test_pt);
@@ -479,11 +475,8 @@ test_rational_camera_convert()
     double x = rng.drand64(min_x, max_x); // sample in local coords
     double y = rng.drand64(min_y, max_y);
     double z = rng.drand64(min_z, max_z);
-    // convert to radians
-    double X = x / vnl_math::deg_per_rad, Y = y / vnl_math::deg_per_rad;
-
     double uRSM, vRSM, uRPC, vRPC;
-    rsm_cam.project(X, Y, z, uRSM, vRSM);
+    rsm_cam.project(x, y, z, uRSM, vRSM);
     rcam.project(x, y, z, uRPC, vRPC);
     double eru = fabs(uRPC - uRSM), erv = fabs(vRPC - vRSM);
     double er = eru + erv;
