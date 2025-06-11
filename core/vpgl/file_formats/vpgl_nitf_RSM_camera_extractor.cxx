@@ -3203,6 +3203,16 @@ vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
       return false;
     }
       process_polytope(image_subheader_index);
+
+    // ground domain
+    const auto& meta = rsm_meta_[image_subheader_index];
+    auto gd = vpgl_ground_domain<double>(meta.ground_domain_);
+    if (meta.ground_domain_ == "R") {
+      gd.translation_ = meta.translation_;
+      gd.rotation_ = meta.rotation_;
+    }
+    RSM_cams_[image_subheader_index].set_ground_domain(gd);
+
   } // image headers
   return true;
 }
