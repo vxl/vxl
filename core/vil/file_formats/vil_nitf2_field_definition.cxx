@@ -27,6 +27,12 @@ vil_nitf2_field_definition_node::repeat_node()
   return is_repeat_node() ? (vil_nitf2_field_definition_repeat_node *)this : nullptr;
 }
 
+vil_nitf2_field_definition_condition_node *
+vil_nitf2_field_definition_node::condition_node()
+{
+  return is_condition_node() ? (vil_nitf2_field_definition_condition_node *)this : nullptr;
+}
+
 //==============================================================================
 // Class vil_nitf2_field_definition
 
@@ -127,6 +133,15 @@ vil_nitf2_field_definitions::repeat(vil_nitf2_field_functor<int> * repeat_functo
   return *this;
 }
 
+vil_nitf2_field_definitions &
+vil_nitf2_field_definitions::condition(vil_nitf2_field_functor<bool> * condition_functor,
+                                       vil_nitf2_field_definitions & field_definitions)
+{
+  push_back(
+    new vil_nitf2_field_definition_condition_node(condition_functor, new vil_nitf2_field_definitions(field_definitions)));
+  return *this;
+}
+
 vil_nitf2_field_definitions::~vil_nitf2_field_definitions()
 {
   for (auto & it : *this)
@@ -148,5 +163,23 @@ vil_nitf2_field_definition_repeat_node::copy() const
 vil_nitf2_field_definition_repeat_node::~vil_nitf2_field_definition_repeat_node()
 {
   delete repeat_functor;
+  delete field_definitions;
+}
+
+//==============================================================================
+// Class vil_nitf2_field_definition_condition_node
+
+vil_nitf2_field_definition_node *
+vil_nitf2_field_definition_condition_node::copy() const
+{
+  return new vil_nitf2_field_definition_condition_node(
+      condition_functor ? condition_functor->copy() : nullptr,
+      new vil_nitf2_field_definitions(*field_definitions)
+    );
+};
+
+vil_nitf2_field_definition_condition_node::~vil_nitf2_field_definition_condition_node()
+{
+  delete condition_functor;
   delete field_definitions;
 }

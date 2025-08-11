@@ -112,6 +112,22 @@ vil_nitf2_tagged_record_definition::repeat(vil_nitf2_field_functor<int> * repeat
   return *this;
 }
 
+vil_nitf2_tagged_record_definition &
+vil_nitf2_tagged_record_definition::condition(vil_nitf2_field_functor<bool> * condition_functor,
+                                              vil_nitf2_field_definitions & field_definitions)
+{
+  if (m_definition_completed)
+  {
+    std::cerr << "vil_nitf2_tagged_record_definition:condition() failed; definition already complete.";
+  }
+  else
+  {
+    m_field_definitions->push_back(
+      new vil_nitf2_field_definition_condition_node(condition_functor, new vil_nitf2_field_definitions(field_definitions)));
+  }
+  return *this;
+}
+
 void
 vil_nitf2_tagged_record_definition::end()
 {

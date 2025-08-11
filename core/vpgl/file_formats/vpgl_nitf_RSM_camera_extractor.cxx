@@ -704,16 +704,16 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         nitf_tre<double> nt10("SECOND", false, true);
         nt10.get_append(tres_itr, tre_str, v);
 
-        nitf_tre<int> nt11("NRG", false, true);
+        nitf_tre<int> nt11("NRG", true, false);
         nt11.get_append(tres_itr, tre_str, v);
 
-        nitf_tre<int> nt12("NCG", false, true);
+        nitf_tre<int> nt12("NCG", true, false);
         nt12.get_append(tres_itr, tre_str, v);
 
-        nitf_tre<double> nt13("TRG", false, true);
+        nitf_tre<double> nt13("TRG", true, false);
         nt13.get_append(tres_itr, tre_str, v);
 
-        nitf_tre<double> nt14("TCG", false, true);
+        nitf_tre<double> nt14("TCG", true, false);
         nt14.get_append(tres_itr, tre_str, v);
 
         nitf_tre<std::string> nt15("GRNDD", false, false);

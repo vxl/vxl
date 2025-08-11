@@ -69,7 +69,11 @@ public:
   vil_nitf2_tagged_record_definition &
   repeat(int repeat_count, vil_nitf2_field_definitions & field_definitions);
 
-  //: Declares that definition is finished, preventing further invocations of field() or repeat().
+  //: Define a condition node. Assumes ownership of pointer argument.
+  vil_nitf2_tagged_record_definition &
+  condition(vil_nitf2_field_functor<bool> * condition_functor, vil_nitf2_field_definitions & field_definitions);
+
+  //: Declares that definition is finished, preventing further invocations of field(), repeat(), or condition().
   void
   end();
 
