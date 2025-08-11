@@ -62,6 +62,15 @@ vil_nitf2_field_sequence::create_array_fields(const vil_nitf2_field_definitions 
         return false;
       }
     }
+    else if (node && node->is_condition_node())
+    {
+      // pass through create_array_fields to nested nodes
+      vil_nitf2_field_definition_condition_node * condition_node = node->condition_node();
+      if (!create_array_fields(condition_node->field_definitions, num_dimensions))
+      {
+        return false;
+      }
+    }
     else
     {
       std::cerr << "vil_nitf2_field_sequence::create_array_fields(): unsupported node type!\n";
@@ -99,6 +108,12 @@ vil_nitf2_field_sequence::set_array_fields_dimension(const vil_nitf2_field_defin
       // recursively set dimension vector fields
       vil_nitf2_field_definition_repeat_node * repeat_node = node->repeat_node();
       set_array_fields_dimension(repeat_node->field_definitions, index, repeat_count);
+    }
+    else if (node && node->is_condition_node())
+    {
+      // pass through set_array_fields_dimension to nested nodes
+      vil_nitf2_field_definition_condition_node * condition_node = node->condition_node();
+      set_array_fields_dimension(condition_node->field_definitions, index, repeat_count);
     }
     else
     {
@@ -286,6 +301,32 @@ vil_nitf2_field_sequence::read(vil_nitf2_istream & input,
       }
       VIL_NITF2_LOG(log_debug) << nesting_level_indicator << "End repeating fields." << std::endl;
     }
+    else if (node && node->is_condition_node())
+    {
+      vil_nitf2_field_definition_condition_node * condition_node = node->condition_node();
+
+      // evaluate condition
+      bool condition = false;
+      bool conditionValid = (condition_node->condition_functor != nullptr) &&
+                            (*condition_node->condition_functor)(this, indexes, condition);
+      if (!conditionValid)
+      {
+        std::cerr << "vil_nitf2_field_sequence::read(): "
+                  << "Cannot evaluate condition_functor in condition_node\n";
+        return false;
+      }
+
+      // read nested fields if condition is met
+      if (condition && condition_node->field_definitions)
+      {
+        VIL_NITF2_LOG(log_debug) << "Conditional block" << std::endl;
+        if (!read(input, condition_node->field_definitions, indexes))
+        {
+          return false;
+        }
+        VIL_NITF2_LOG(log_debug) << "End conditional block" << std::endl;
+      }
+    }
     else
     {
       std::cerr << "vil_nitf2_tagged_record::read(): unsupported node.\n";
@@ -413,6 +454,27 @@ vil_nitf2_field_sequence::write(vil_nitf2_ostream & output,
           nested_indexes.push_back(i);
           this->write(output, repeat_node->field_definitions, nested_indexes);
         }
+      }
+    }
+    else if (node && node->is_condition_node())
+    {
+      vil_nitf2_field_definition_condition_node * condition_node = node->condition_node();
+
+      // evaluate condition
+      bool condition = false;
+      bool conditionValid = (condition_node->condition_functor != nullptr) &&
+                            (*condition_node->condition_functor)(this, indexes, condition);
+      if (!conditionValid)
+      {
+        std::cerr << "vil_nitf2_field_sequence::write(): "
+                  << "Cannot evaluate condition_functor in condition_node\n";
+        return false;
+      }
+
+      // write nested fields if condition is met
+      if (condition && condition_node->field_definitions)
+      {
+        this->write(output, condition_node->field_definitions, indexes);
       }
     }
     else

@@ -36,6 +36,7 @@
 
 class vil_nitf2_field_definition;
 class vil_nitf2_field_definition_repeat_node;
+class vil_nitf2_field_definition_condition_node;
 class vil_nitf2_field_formatter;
 
 //-----------------------------------------------------------------------------
@@ -48,7 +49,8 @@ public:
   enum node_type
   {
     type_field,
-    type_repeat
+    type_repeat,
+    type_condition
   };
   vil_nitf2_field_definition_node(node_type type)
     : type(type)
@@ -66,12 +68,19 @@ public:
   {
     return type == type_repeat;
   }
+  bool
+  is_condition_node() const
+  {
+    return type == type_condition;
+  }
 
   // Downcast methods. Return 0 if conversion fails.
   vil_nitf2_field_definition *
   field_definition();
   vil_nitf2_field_definition_repeat_node *
   repeat_node();
+  vil_nitf2_field_definition_condition_node *
+  condition_node();
 
   // Virtual copy method
   virtual vil_nitf2_field_definition_node *
@@ -171,6 +180,12 @@ public:
     return repeat(new vil_nitf2_field_value<int>(intTag), field_definitions);
   }
 
+  // Define a condition node and add it to this list of definitions,
+  // returning the current list. Assumes ownership of pointer argument.
+  vil_nitf2_field_definitions &
+  condition(vil_nitf2_field_functor<bool> * condition_functor,
+            vil_nitf2_field_definitions & field_definitions);
+
   // Copy constructor
   vil_nitf2_field_definitions(const vil_nitf2_field_definitions &);
 
@@ -207,5 +222,33 @@ public:
   vil_nitf2_field_definition_node *
   copy() const override;
 };
+
+//-----------------------------------------------------------------------------
+// Represents a set of fields that is conditional based on a functor
+// (i.e., set of fields may or may not be present based on condition)
+//
+class vil_nitf2_field_definition_condition_node : public vil_nitf2_field_definition_node
+{
+public:
+  // Construct a condition node. Assumes ownership of pointer arguments.
+  vil_nitf2_field_definition_condition_node(vil_nitf2_field_functor<bool> * condition_functor,
+                                            vil_nitf2_field_definitions * field_definitions)
+    : vil_nitf2_field_definition_node(type_condition)
+    , condition_functor(condition_functor)
+    , field_definitions(field_definitions)
+  {}
+
+  // Member variables
+  vil_nitf2_field_functor<bool> * condition_functor;
+  vil_nitf2_field_definitions * field_definitions;
+
+  // Destructor
+  ~vil_nitf2_field_definition_condition_node() override;
+
+  // Copy method
+  vil_nitf2_field_definition_node *
+  copy() const override;
+};
+
 
 #endif // VIL_NITF2_FIELD_DEFINITION_H
