@@ -8,9 +8,10 @@
 #include <map>
 #include <set>
 #include <iostream>
-#include  <fstream>
+#include <fstream>
 #include <sstream>
 #include <utility>
+#include <mutex>
 
 #include <vul/vul_timer.h>
 #include <vnl/vnl_math.h>
@@ -32,7 +33,6 @@
 // \brief An implementation of the semi-global matching stereo algorithm.
 // \author Thomas Pollard
 // \date April 17, 2016
-
 
 //: A struct containing miscellaneous SGM parameters
 struct bsgm_disparity_estimator_params
@@ -186,7 +186,7 @@ class bsgm_disparity_estimator
   long long int w_, h_;
 
   //: Number of disparities to search over.
-  long long int num_disparities_;
+  unsigned long long int num_disparities_;
 
   //: All appearance and smoothing costs will be normalized to discrete
   // values such that this unit corresponds to 1.0 standard deviation of
@@ -277,6 +277,96 @@ class bsgm_disparity_estimator
     const vil_image_view<float>& grad_y,
     const vil_image_view<int>& min_disparity);
 
+  void run_multi_dp_opt(
+    const std::vector< std::vector<unsigned char*> >& app_cost,
+    std::vector< std::vector<unsigned short*> >& total_cost,
+    const vil_image_view<bool>& invalid_target,
+    const vil_image_view<float>& grad_x,
+    const vil_image_view<float>& grad_y,
+    const vil_image_view<int>& min_disparity
+  );
+
+  // Necessary arguments utilized by all specialized directional DP functions
+  struct dp_args {
+    const float bias_weight;
+    const float mag;
+    const vgl_vector_2d<float>& bias_dir;
+    const bool using_bias;
+    const bool shad_step_dynamic_prog;
+    const std::vector<vil_image_view<float>>& deriv_img;
+    const unsigned short p1;
+    const float p2_min;
+    const float p2_max;
+    const unsigned short p2;
+    const int shad_step_dp_dir_code;
+    const std::vector<std::pair<int, int>>& adj_dirs;
+
+    // These are dependent on direction of DP sweep
+    int dir;
+    int deriv_idx;
+  };
+
+  std::vector<std::mutex> cost_mutexes;
+
+  //: Run the dynamic programming that SGM uses in horizontal sweep
+  void run_horizontal_dp(
+    const std::vector< std::vector<unsigned char*> >& app_cost,
+    std::vector< std::vector<unsigned short*> >& total_cost,
+    const vil_image_view<bool>& invalid_target,
+    const vil_image_view<int>& min_disparity,
+    bool move_right,
+    const dp_args& args
+  );
+  
+  //: Run the dynamic programming that SGM uses in vertical sweep
+  void run_vertical_dp(
+    const std::vector< std::vector<unsigned char*> >& app_cost,
+    std::vector< std::vector<unsigned short*> >& total_cost,
+    const vil_image_view<bool>& invalid_target,
+    const vil_image_view<int>& min_disparity,
+    bool move_down,
+    const dp_args& args
+  );
+
+  //: Run the dynamic programming that SGM uses in diagonal sweep
+  void run_diag_dp(
+    const std::vector< std::vector<unsigned char*> >& app_cost,
+    std::vector< std::vector<unsigned short*> >& total_cost,
+    const vil_image_view<bool>& invalid_target,
+    const vil_image_view<int>& min_disparity,
+    bool move_right,
+    bool move_down,
+    const dp_args& args
+  );
+
+  // Calculate directional weight if necessary
+  // deprecated method to reduce shadow overhang
+  inline float calc_dir_weight(float dx, float dy, const dp_args& args) {  
+    float dir_weight = 1.0f;
+    if (args.using_bias) {
+      vgl_vector_2d<float> dp_dir(dx, dy);
+      dp_dir = normalize(dp_dir);
+      dp_dir *= -1.0f; //low interpolation weight in shadow direction
+      float cosa = dot_product(dp_dir, args.bias_dir);
+      dir_weight = 1.0f - args.bias_weight * 0.5f * (1.0f - cosa);
+      //std::cout << "in dynamic program: (dx dy) ("<< dx << ' ' << dy << ") dp_dir "<< dp_dir << " bias dir " << bias_dir << " cosa = " << cosa << " dir weight = " << dir_weight << std::endl;
+    }
+    return dir_weight;
+  }
+
+  // Processes an (x, y) position during a directional sweep for SGM.
+  // Returns the disparity with the minimum cost value for that position
+  inline long long process_pos(
+    long long x, long long y,
+    int dx, int dy,
+    float dir_weight, 
+    const std::vector<unsigned short>& prev_pos_cost,
+    std::vector<unsigned short>& cur_pos_cost,
+    long long prev_min_d,
+    const vil_image_view<int>& min_disparity,
+    const dp_args& args
+  );
+
   //: Pixel-wise directional cost
   inline void compute_dir_cost(
     const unsigned short* prev_row_cost,
@@ -289,7 +379,7 @@ class bsgm_disparity_estimator
     int cur_min_disparity,
     bool suppress_appearance = false,
     float adj_weight = 0.0f
-    );
+  );
 
   //: Extract the min cost disparity at each pixel, using quadratic
   // interpolation if specified
@@ -658,9 +748,30 @@ bool bsgm_disparity_estimator::compute(
 
   // Run the multi-directional dynamic programming to obtain a total cost
   // volume incorporating appearance + smoothing.
-  run_multi_dp(
+  run_multi_dp_opt(
     *active_app_cost_, total_cost_,
-    invalid_tar, grad_x_tar_cropped, grad_y_tar_cropped, min_disp);
+    invalid_tar, grad_x_tar_cropped, grad_y_tar_cropped, min_disp
+  );
+  // std::vector<unsigned short> simd_cost = total_cost_data_;
+
+  // run_multi_dp(
+  //   *active_app_cost_, total_cost_,
+  //   invalid_tar, grad_x_tar_cropped, grad_y_tar_cropped, min_disp);
+  
+  // long long idx = 0;
+  // bool found_diff = false;
+  // for(long long y = 0; y < h_; y++) {
+  //   for(long long x = 0; x < w_; x++) {
+  //     for(long long d = 0; d < num_disparities_; d++) {
+  //       if(total_cost_data_[idx] != simd_cost[idx]) {
+  //         found_diff = true;
+  //         std::cout << "Got differing values for cost at (" << x << ", " << y << ", " << d << "): parallelized version gave " << simd_cost[idx] << ", while serial version gave " << total_cost_data_[idx] << std::endl;
+  //       }
+  //     }
+  //   }
+  // }
+  // if(!found_diff)
+  //   std::cout << "Found no differences between both implementations' output!" << std::endl;
 
   if (params_.print_timing)
     print_time("Dynamic programming", timer);
