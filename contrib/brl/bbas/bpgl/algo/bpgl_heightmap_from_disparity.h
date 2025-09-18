@@ -97,7 +97,14 @@ class bpgl_heightmap
         vil_image_view<T>& heightmap_output,
         vil_image_view<T>& scalar_output,
         vil_image_view<T>& radial_std_dev);
+    // accelerated heightmap computation
 
+    void fast_heightmap_from_pointset(
+    const vgl_pointset_3d<T>& ptset,
+    vil_image_view<T>& heightmap_output,
+    vil_image_view<T>& scalar_output,
+    vil_image_view<T>& radial_std_dev);
+    
     //: compute heightmap from triangulated image
     void heightmap_from_tri(
         const vil_image_view<T>& tri_3d,
@@ -121,7 +128,8 @@ class bpgl_heightmap
         std::map<size_t, std::pair<size_t, size_t> > & pt_indx_to_pix,
         bpgl_surface_type & heightmap_stype);
 
-  private:
+    std::pair<size_t, size_t>  heightmap_dimensions();
+ private:
 
     // compute pointset from triangulated image & scalar input
     // scalar usage controlled by "ignore_scalar" flag

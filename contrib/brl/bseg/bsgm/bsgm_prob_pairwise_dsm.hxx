@@ -374,7 +374,8 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_height(const CAM_T& cam, cons
   ostr << ptset;
   ostr.close();
 #endif
-  bh.heightmap_from_pointset(ptset, heightmap);
+  // jlm only used to get hmap dimensions
+  //  bh.heightmap_from_pointset(ptset, heightmap);
 }
 
 // shift camera to match window
@@ -429,9 +430,15 @@ void bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_height_fwd(bool compute_hmap)
   if (compute_hmap){
     this->compute_height(rect_cam0_window, rect_cam1_window, disparity_fwd_,
                          tri_3d_fwd_, ptset_fwd_, heightmap_fwd_);//initializes pt_index_to_pix_
-#if 1
-    dsm_grid_stype_.set_size(bpgl_surface_type::DSM, heightmap_fwd_.ni(), heightmap_fwd_.nj());
+
+    //dsm_grid_stype_.set_size(bpgl_surface_type::DSM, heightmap_fwd_.ni(), heightmap_fwd_.nj());
+
     auto bh = this->get_bpgl_heightmap();
+    std::pair<size_t, size_t> dims = bh.heightmap_dimensions();
+    dsm_grid_stype_.set_size(bpgl_surface_type::DSM,dims.first, dims.second);
+
+#if 1// !!! don't fill in shadow and shadow step information - PREVENT USE !!!
+    //    auto bh = this->get_bpgl_heightmap();
     bh.surface_type_from_pointset(ptset_fwd_, rect_target_stype_, pt_index_to_pix_, dsm_grid_stype_);
 #endif
   } else {
@@ -500,7 +507,8 @@ bool bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_prob(bool compute_prob_height
 
   size_t n = ptset_fwd_.size();
   prob_ptset_.clear();
-
+  vul_timer t;
+  float geocon = 0.0, hg = 0.0;
   bvgl_k_nearest_neighbors_3d<float> knn(ptset_rev_);
   for (size_t i = 0; i<n; ++i) {
     const vgl_point_3d<float>& p = ptset_fwd_.p(i);
@@ -515,13 +523,15 @@ bool bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_prob(bool compute_prob_height
     prob_ptset_.add_point_with_scalar(p, prob);
 
     // assign knn probability to rectified image space geometric consistency
+#if 0
     std::pair<size_t, size_t>& pr = pt_index_to_pix_[i];
     size_t ii = pr.first, jj = pr.second;
     if(ii>=rect_target_stype_.ni() || jj >= rect_target_stype_.nj())
       continue;
     rect_target_stype_.p(ii, jj, bpgl_surface_type::GEOMETRIC_CONSISTENCY)=prob;
+#endif
   }
-
+  geocon = t.real(); t.mark();
   // check size
   n = prob_ptset_.size();
   if (n == 0) {
@@ -532,13 +542,20 @@ bool bsgm_prob_pairwise_dsm<CAM_T, PIX_T>::compute_prob(bool compute_prob_height
   // convert pointset to images
   if (compute_prob_heightmap) {
     auto bh = this->get_bpgl_heightmap();
-    bh.heightmap_from_pointset(prob_ptset_, prob_heightmap_z_,
+#if 0 // array index and reuse nearest neighbors
+    bh.fast_heightmap_from_pointset(prob_ptset_, prob_heightmap_z_,
                                prob_heightmap_prob_, radial_std_dev_image_);
-
+#else // original
+    bh.heightmap_from_pointset(prob_ptset_, prob_heightmap_z_,
+        prob_heightmap_prob_, radial_std_dev_image_);
+#endif
+    hg = t.real(); t.mark();
     // assign knn  probabilty as grid space geometric consistency
     dsm_grid_stype_.apply(prob_heightmap_prob_, bpgl_surface_type::GEOMETRIC_CONSISTENCY);
 
   }
+
+  std::cout << "tgeo, th " << geocon << ' ' << hg << std::endl;
   return true;
 }
 

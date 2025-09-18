@@ -56,7 +56,7 @@
 #include <bpgl/algo/bpgl_surface_type.h>
 #include <bsta/bsta_histogram.h>
 #include "bsgm_disparity_estimator.h" // for disparity_estimator_params
-
+#include <vul/vul_timer.h>
 
 struct pairwise_params
 {
@@ -457,6 +457,7 @@ class bsgm_prob_pairwise_dsm
       throw std::runtime_error("Can't apply window processing using this process method");
       return false;
     }
+    float d1=0.0, h1=0.0, d2=0.0, h2=0.0, tp = 0.0;
     // rectification
     this->rectify();
 
@@ -472,20 +473,22 @@ class bsgm_prob_pairwise_dsm
     // shadow weighted dynamic program
     // and other context uses
     this->set_shadow_context_data();
-
+    vul_timer t;
     // compute forward disparity & height
     this->compute_disparity_fwd();
+    d1 = t.real(); t.mark();
 
     this->compute_height_fwd(compute_fwd_rev_ptsets_hmaps);
+    h1 = t.real(); t.mark();
 
     // consistency check & probabilistic analysis
 
     if (with_consistency_check) {
+
       this->compute_disparity_rev();
-
+      d2 = t.real(); t.mark();
       this->compute_height_rev(compute_fwd_rev_ptsets_hmaps);
-
-
+      h2 = t.real(); t.mark();
       if (knn_consistency) {
         if (!compute_prob(true))  // true -> compute prob heightmap
            return false;
@@ -493,7 +496,8 @@ class bsgm_prob_pairwise_dsm
         this->compute_xyz_prob(true);  // true -> compute prob heightmap
       }
     } else this->compute_ptset();
-
+    tp = t.real(); t.mark();
+    std::cout << "d1, h1, d2, h2, tp "<< d1 << ' '<< h1 << ' '<< d2 << ' '<< h2 << ' '<< tp << std::endl;
     return true;
   }
 
