@@ -355,8 +355,9 @@ namespace bpgl_fast_gridding
       if (min_neighbors > max_neighbors) {
         throw std::runtime_error("Invalid neighbor range");
       }
+# if print_timing
       vul_timer tt;
-      
+#endif
       // the point grid index slightly faster than knn. Simpler to further parallelize
       std::vector<std::vector<std::vector<std::tuple<uint32_t, vgl_point_2d<T>, DATA_T> > > > index;
       
