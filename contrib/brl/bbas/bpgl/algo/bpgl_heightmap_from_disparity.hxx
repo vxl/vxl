@@ -257,12 +257,7 @@ void bpgl_heightmap<T>::fast_heightmap_from_pointset(
   if (ptset.npts() < min_neighbors_) {
     throw std::runtime_error("Not enough points in pointset for interpolation");
   }
-#if 0
-  std::string path = "D:/tests/buenos_aires/New folder/ptset_3d.txt";
-  std::ofstream os(path.c_str());
-  os << ptset;
-  os.close();
-#endif
+
   // pointset as vectors
   std::vector<vgl_point_2d<T> > triangulated_xy;
   // combined z and prob
