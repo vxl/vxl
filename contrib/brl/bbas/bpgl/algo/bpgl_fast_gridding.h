@@ -28,12 +28,39 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
+#define print_timing 0
+
+// use grid index to find nearest neighbors indexing uses restricted grid neighborhoods
+// to save time and uses templates to avoid conditional statements  determining
+// the type of data being processed. Can process 1, 2 or 3 heightmaps during indexing
+// by specifying appropriate template arguments. For example for two heightmaps:
+//
+//       scalar type         input data type
+//image_data<float, std::pair<float, float>,
+//           std::pair<vil_image_view<float>, vil_image_view<float> > >& out =
+//                           output image pair
+//
+//                    scalar type    input data type       function output type
+//    grid_data_2d_array<float, std::pair<float, float>, std::pair<float, float>,
+//                       std::pair<vil_image_view<float>, vil_image_view<float> > >
+//                                      output image pair
+//                        (
+//
+//                             ptset, zvalues, upper_left, ni, nj, grid_spacing
+// 
+//                        );
 namespace bpgl_fast_gridding
 {
+  // 
+  // typical processing uses inverse distances and probabilities as weights
+  // but weighting computation is general. These interpolation functions 
+  // could use hardware acceleration for additional speed but in the 
+  // current implementation, weighted summation takes only 1/3 of time
+  // 
   template<class T, class DATA_T> 
     inline DATA_T weighted_sum(std::vector<DATA_T> const& data, std::vector<T> const& weights); 
   // overloading the function
-  // with data value pair
+  // with pair of data values, e.g. inverse distance and probability
   template<class T>
     inline std::pair<T, T> weighted_sum(std::vector<std::pair<T, T>> const& data, std::vector<T> const& weights) {
     size_t n = weights.size();
@@ -101,7 +128,7 @@ namespace bpgl_fast_gridding
   // predicate for sorting  
   static bool ptless(std::pair< uint32_t, float> const a, std::pair<uint32_t, float > const b) { return a.second < b.second; }
   
-  // index for griding points
+  // 2-d index for griding points
   template<class T, class DATA_T>
   inline  void grid_neighbor_indices_2d(std::vector<vgl_point_2d<T> > const& pts_2d,
          std::vector<DATA_T> const& vals, vgl_point_2d<T> const& upper_left,
@@ -128,8 +155,9 @@ namespace bpgl_fast_gridding
       nbd = nbrd_2;
     size_t n = pts_2d.size();
 
+# if print_timing
     vul_timer t;
-
+#endif
     // set up grid 
     // points are (upper left_x + step_size(0,ni-1))  and (upper_left y - step_size*y(0,nj-1))
     for (size_t k = 0; k < pts_2d.size(); ++k) {
@@ -151,12 +179,15 @@ namespace bpgl_fast_gridding
       }
     }
 
-    std::cout << "PHASE I COMPLETE " << t.real() << std::endl;
-    t.mark();
-    // second pass to keep n closest to center
-    // points are now placed in grid cells but may be more than the
-    // required number. Compute city block distance and retain
-    // the required number closest to the cell center
+#if print_timing
+        std::cout << "PHASE I COMPLETE " << t.real() << std::endl;
+        t.mark();
+#endif
+    
+    // second pass to keep n data values closest to grid cell center
+    // after first phase, points are now placed in grid cells
+    // but may be more than the required number. Compute city block
+    // distance and retain the required number closest to the cell center
     for(size_t j = 0; j<nj; ++j)
       for (size_t i = 0; i < ni; ++i) {
         float x0 = ulx + step_size * i, y0 = uly - step_size * j;
@@ -174,178 +205,16 @@ namespace bpgl_fast_gridding
         for (size_t c = 0; c < max_nbrs && c < closest.size(); ++c)
           index[j][i].push_back(indices_cp[closest[c].first]);
       }
-    std::cout << "PHASE I and PHASE II COMPLETE " << t.real() << std::endl;
-  };
-#if 0
-  //: Inverse distance interpolation class
-  // invalid_val: Value to return when interpolation is not appropriate
-  // dist_eps: The smallest meaningful distance of input points. Must be > 0.
-  template<class T, class DATA_T, class OUT_T>
-    class tuple_inverse_distance_interp
-  {
-  public:
-    
-    // constructors
-    tuple_inverse_distance_interp() = default;
-    
-  tuple_inverse_distance_interp(
-                                T invalid_val,
-                                T dist_eps) :
-    invalid_val_(invalid_val),
-      dist_eps_(dist_eps)
-      {}
-    
-    // accessors
-    float invalid_val() const { return invalid_val_; }
-    void invalid_val(float x) { invalid_val_ = x; }
-    
-    float dist_eps() const { return dist_eps_; }
-    void dist_eps(float x) { dist_eps_ = x; }
-    
-    // interpolation operator
-    OUT_T operator() (
-      vgl_point_2d<T> interp_loc,
-      std::vector<std::tuple<uint32_t, vgl_point_2d<T>, DATA_T> > const& neighbor_data,
-      float max_dist = vnl_numeric_traits<T>::maxval
-                       ) const
-    {
-      T weight_sum(0);
-      const unsigned num_neighbors = neighbor_data.size();
-      std::vector<T> weights;
-      std::vector<DATA_T> data;
-      for (unsigned i = 0; i < num_neighbors; ++i) {
-        // distance between the point and the cell center.
-        float dist = (std::get<1>(neighbor_data[i]) - interp_loc).length();
-        if (dist <= max_dist) {
-          if (dist < this->dist_eps_) {
-            dist = this->dist_eps_;
-          }
-          // assemble weights and data to be weighted
-          float weight = 1.0 / dist;
-          weights.push_back(weight);
-          data.push_back(std::get<2>(neighbor_data[i]));
-        }
-      }
-      return weighted_sum<T>(data, weights);
-    }
-    
-  private:
-    
-    // parameters with defaults
-    float dist_eps_ = 1e-5;
-    
-  };
-
-  // class using parallel vector arithmetic
-  template<class T, class DATA_T>
-    class AVX_512_inverse_distance_interp
-  {
-  public:
-    
-    
-    // constructors
-    AVX_512_inverse_distance_interp() = default;
-    
-  AVX_512_inverse_distance_interp(
-                                  DATA_T invalid_val,
-                                  T dist_eps) :
-    invalid_val_(invalid_val),
-      dist_eps_(dist_eps)
-      {}
-    
-    // accessors
-    DATA_T invalid_val() const { return invalid_val_; }
-    void invalid_val(DATA_T x) { invalid_val_ = x; }
-    
-    T dist_eps() const { return dist_eps_; }
-    void dist_eps(T x) { dist_eps_ = x; }
-    
-    // interpolation operator
-    DATA_T operator() (
-                       vgl_point_2d<T> interp_loc,
-                       std::vector<vgl_point_2d<T> > const& neighbor_locs,
-                       std::vector<DATA_T> const& neighbor_vals,
-                       T max_dist = vnl_numeric_traits<T>::maxval
-                       ) const
-    {
-      unsigned num_neighbors = neighbor_locs.size();
-      if (num_neighbors > 8)
-        throw std::runtime_error("AVX 512 handles a maximum of 8 points_2d");
-      
-      // load neighbor locations and  values to be interpolated into registers
-      const float* raw_locs = reinterpret_cast<const float*>(neighbor_locs.data());
-      __m512 pdata = _mm512_loadu_ps(raw_locs);
-      const float* raw_vals = reinterpret_cast<const float*>(neighbor_vals.data());
-      __m512 vdata = _mm512_loadu_ps(raw_vals);
-      
-      // set mask for number of neighbors
-      __mmask16 nbr_mask = static_cast<__mmask16>((1U << 2* num_neighbors) - 1);
-      // zero out portions of the registers not occupied with data
-      __m512 masked_nbrs = _mm512_maskz_mov_ps(nbr_mask, pdata);
-      __m512 masked_vals = _mm512_maskz_mov_ps(nbr_mask, vdata);
-      
-      // fill in copies of the grid cell center location to subtract from neighbor locations
-      alignas(64) float loc_data[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-      for (int i = 0; i < num_neighbors; ++i) {
-        loc_data[2 * i] = interp_loc.x(); // even index
-        loc_data[2 * i + 1] = interp_loc.y(); // odd index
-      }
-      __m512 locd =  _mm512_load_ps(loc_data);
-      
-      // subtract the grid center from neighbor locations
-      __m512 vresult = _mm512_sub_ps(pdata, locd);
-      
-      
-      // Now collect the x and y locations as separate arrays for computing distance magnitude
-      __m512i idx_a = _mm512_set_epi32(14, 12, 10, 8, 6, 4, 2, 0,
-                                       14, 12, 10, 8, 6, 4, 2, 0);
-      __m512i idx_b = _mm512_set_epi32(15, 13, 11, 9, 7, 5, 3, 1,
-                                       15, 13, 11, 9, 7, 5, 3, 1);
-      
-      // vector a contains x coordinate differences and vector b contains y coordinate differences
-      __m512 a = _mm512_permutexvar_ps(idx_a, vresult);
-      __m512 b = _mm512_permutexvar_ps(idx_b, vresult);
-      
-      // Compute sqrt(a² + b²)
-      __m512 a2 = _mm512_mul_ps(a, a);
-      __m512 b2 = _mm512_mul_ps(b, b);
-      __m512 sum = _mm512_add_ps(a2, b2);
-      __m512 mag_result = _mm512_sqrt_ps(sum);
-      
-      // Clip the distance magnitudes within bounds
-      __m512 mvlow = _mm512_set1_ps(dist_eps_);
-      __m512 mvhi = _mm512_set1_ps(max_dist);
-      __m512 clipped = _mm512_max_ps(mvlow, _mm512_min_ps(mag_result, mvhi));
-      __m512 reciprocal = _mm512_rcp14_ps(clipped);
-      
-      // mask the result to the number of weights (neighbors)
-      __mmask16 result_mask = static_cast<__mmask16>((1U << num_neighbors) - 1);
-      __m512 masked_weight_result = _mm512_maskz_mov_ps(result_mask, reciprocal);
-      // sum of the weights
-      float total_weight = _mm512_reduce_add_ps(masked_weight_result);
-      
-      // multiply the weights by the values to be interpolated
-      __m512 weighted_vals = _mm512_mul_ps(masked_weight_result, vdata);
-      
-      // sum the result
-      float total_weighted_sum = _mm512_reduce_add_ps(weighted_vals);
-      
-      // the interpolated value
-      return total_weighted_sum / total_weight;
-    }
-    
-  private:
-    
-    // parameters with defaults
-    DATA_T invalid_val_ = DATA_T(NAN);
-    T dist_eps_ = 1e-5;
-  };
+#if print_timing
+      std::cout << "PHASE I and PHASE II COMPLETE " << t.real() << std::endl;
 #endif
+  };
 
-
+  // a helper class to enable partial specialization of templates
   template <class T, class DATA_T, class OUT_T>
   struct interp;
 
+  // output type is same as DATA_T
   template <class T, class DATA_T>
   struct interp<T, DATA_T, DATA_T> {
       DATA_T operator()(
@@ -369,7 +238,8 @@ namespace bpgl_fast_gridding
           return weighted_sum<T>(data, weights);
       }
   };
-// specialize to all three heightmaps at once
+  // specialize to all three heightmaps at once so output
+  // type is a triple of scalar values e.g. z, probability, radial distance
   template <class T>
   struct interp<T, std::pair<T, T>, std::tuple<T, T, T> > {
       std::tuple<T, T, T> operator() (
@@ -395,7 +265,6 @@ namespace bpgl_fast_gridding
           return weighted_sum<T>(data, weights);
       }
   };
-
 
 
   // output structure to hold multiple types of output data
@@ -494,13 +363,15 @@ namespace bpgl_fast_gridding
       grid_neighbor_indices_2d<T, DATA_T>(data_in_loc, data_in, out_upper_left,
               out_ni, out_nj, max_neighbors, step_size, nbrhood_radius, index);
       
+#if print_timing
       std::cout << "total index time " << tt.real() << std::endl;
-      tt.mark();
+        tt.mark();
+#endif
       
       // loop across all grid values and setup data for interpolation
       image_data<T, OUT_T, IDATA_T> gridded;
       gridded.set_size(out_ni, out_nj);
-      tt.mark();
+
       for (unsigned j=0; j<out_nj; ++j) {
         for (unsigned i=0; i<out_ni; ++i) {
 
@@ -518,10 +389,11 @@ namespace bpgl_fast_gridding
           
         }//end i
       }// end j
+#if print_timing
       std::cout << "Interpolation time " << tt.real() << std::endl;
+#endif
       return gridded;
     }
-  //// END ARRAY VERSION
   
 } // end namespace
 #endif
