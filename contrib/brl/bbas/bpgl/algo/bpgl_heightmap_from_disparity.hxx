@@ -278,16 +278,7 @@ void bpgl_heightmap<T>::fast_heightmap_from_pointset(
   T max_dist = neighbor_dist_factor_ * ground_sample_distance_;
 
   int nbrhood_radius = int(neighbor_dist_factor_); 
-#if 0
-  bpgl_fast_gridding::image_data<T, std::pair<T, T>, std::pair<vil_image_view<T>, vil_image_view<T> > > idat = bpgl_fast_gridding::grid_data_2d_array<T, std::pair<T, T>, std::pair<T, T>, std::pair<vil_image_view<T>, vil_image_view<T> >  >(
-        triangulated_xy, height_prob_vals,
-        upper_left, ni, nj, ground_sample_distance_,
-        min_neighbors_, max_neighbors_, nbrhood_radius);
 
-  std::pair<vil_image_view<T>, vil_image_view<T> > imgs = idat.image_dat_;
-  heightmap_output = imgs.first;
-  scalar_output = imgs.second;
-#endif 
   //=============================
 
   bpgl_fast_gridding::image_data<T, std::tuple<T, T, T>, std::tuple<vil_image_view<T>, vil_image_view<T>, vil_image_view<T> > >& idat =
@@ -320,42 +311,6 @@ void bpgl_heightmap<T>::fast_heightmap_from_pointset(
       }
     }
   }
-  
-#if 0
-  radial_std_dev.set_size(ni, nj);
-  radial_std_dev.fill(NAN);
-
-  std::vector<vgl_point_2d<T> > pts_2d;
-  for (size_t i = 0; i < ptset.size(); ++i)
-      pts_2d.emplace_back(ptset.p(i).x(), ptset.p(i).y());
-
-  bvgl_k_nearest_neighbors_2d<T> knn(pts_2d);
-  if (!knn.is_valid()) {
-      throw std::runtime_error("KNN initialization failure");
-  }
-
-  for (size_t j = 0; j < nj; ++j)
-      for (size_t i = 0; i < ni; ++i) {
-          vgl_point_2d<T> loc(upper_left.x() + i * ground_sample_distance_, upper_left.y() - j * ground_sample_distance_);
-          std::vector<vgl_point_2d<T> > neighbor_locs;
-          std::vector<unsigned> neighbor_indices;
-          if (!knn.knn(loc, max_neighbors_, neighbor_locs, neighbor_indices, max_dist)) {
-              throw std::runtime_error("KNN failed to return neighbors");
-          }
-          size_t nn = neighbor_indices.size();
-          if (nn < min_neighbors_)
-              continue;
-          T var_sum = T(0), p_sum = T(0);
-          for (size_t k = 0; k < nn; ++k) {
-              T prob = ptset.sc(neighbor_indices[k]);
-              T d = vgl_distance<T>(loc, neighbor_locs[k]);
-              var_sum += prob * d * d;
-              p_sum += prob;
-          }
-          T std_dev = sqrt(var_sum / p_sum);
-          radial_std_dev(i, j) = std_dev;
-      }
-#endif
 }
 
 template<class T>
