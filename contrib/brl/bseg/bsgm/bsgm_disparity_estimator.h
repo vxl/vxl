@@ -12,6 +12,9 @@
 #include <sstream>
 #include <utility>
 #include <mutex>
+#include <immintrin.h>
+#include <chrono>
+#include <signal.h>
 
 #include <vul/vul_timer.h>
 #include <vnl/vnl_math.h>
@@ -201,6 +204,8 @@ class bsgm_disparity_estimator
   std::vector<unsigned short> total_cost_data_;
   std::vector<unsigned char> fused_cost_data_;
 
+  const int NUM_COST_ELEMS = sizeof(__m512i) / sizeof(unsigned short);
+
   //: Convenience image of pointers into the cost volumes
   std::vector< std::vector< unsigned short* > > total_cost_;
   std::vector< std::vector< unsigned char* > > fused_cost_;
@@ -300,10 +305,6 @@ class bsgm_disparity_estimator
     const unsigned short p2;
     const int shad_step_dp_dir_code;
     const std::vector<std::pair<int, int>>& adj_dirs;
-
-    // These are dependent on direction of DP sweep
-    int dir;
-    int deriv_idx;
   };
 
   std::vector<std::mutex> cost_mutexes;
@@ -354,17 +355,20 @@ class bsgm_disparity_estimator
     return dir_weight;
   }
 
+  inline void min_vecs_simd(unsigned short* a, const unsigned short* b, int start, int end, unsigned short offset);
+
   // Processes an (x, y) position during a directional sweep for SGM.
-  // Returns the disparity with the minimum cost value for that position
-  inline long long process_pos(
+  // Returns the minimum cost value across all disparities for that position
+  unsigned short process_pos(
     long long x, long long y,
     int dx, int dy,
     float dir_weight, 
     const std::vector<unsigned short>& prev_pos_cost,
     std::vector<unsigned short>& cur_pos_cost,
-    long long prev_min_d,
+    long long prev_min,
     const vil_image_view<int>& min_disparity,
-    const dp_args& args
+    const dp_args& args,
+    int dir, int deriv_idx
   );
 
   //: Pixel-wise directional cost
@@ -748,27 +752,40 @@ bool bsgm_disparity_estimator::compute(
 
   // Run the multi-directional dynamic programming to obtain a total cost
   // volume incorporating appearance + smoothing.
+  auto opt_start = std::chrono::high_resolution_clock::now();
   run_multi_dp_opt(
     *active_app_cost_, total_cost_,
     invalid_tar, grad_x_tar_cropped, grad_y_tar_cropped, min_disp
   );
-  // std::vector<unsigned short> simd_cost = total_cost_data_;
+  auto opt_end = std::chrono::high_resolution_clock::now();
+  auto opt_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(opt_end- opt_start).count();
+  std::vector<unsigned short> simd_cost = total_cost_data_;
 
+  auto start = std::chrono::high_resolution_clock::now();
   // run_multi_dp(
   //   *active_app_cost_, total_cost_,
-  //   invalid_tar, grad_x_tar_cropped, grad_y_tar_cropped, min_disp);
+  //   invalid_tar, grad_x_tar_cropped, grad_y_tar_cropped, min_disp
+  // );
+  auto end = std::chrono::high_resolution_clock::now();
+  auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+  std::cout << "Optimized version took " << opt_elapsed << " ms, original took " << elapsed << " ms" << std::endl;
   
   // long long idx = 0;
   // bool found_diff = false;
   // for(long long y = 0; y < h_; y++) {
   //   for(long long x = 0; x < w_; x++) {
-  //     for(long long d = 0; d < num_disparities_; d++) {
+  //     for(long long d = 0; d < num_disparities_; d++, idx++) {
   //       if(total_cost_data_[idx] != simd_cost[idx]) {
   //         found_diff = true;
-  //         std::cout << "Got differing values for cost at (" << x << ", " << y << ", " << d << "): parallelized version gave " << simd_cost[idx] << ", while serial version gave " << total_cost_data_[idx] << std::endl;
+  //         std::cout << "Got differing values for cost at (" << x << ", " << y << ", " << d << "): optimized version gave " << simd_cost[idx] << ", while serial version gave " << total_cost_data_[idx] << std::endl;
+  //         break;
   //       }
   //     }
+  //     if(found_diff)
+  //       break;
   //   }
+  //   if(found_diff)
+  //     break;
   // }
   // if(!found_diff)
   //   std::cout << "Found no differences between both implementations' output!" << std::endl;
