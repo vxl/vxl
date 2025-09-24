@@ -262,7 +262,7 @@ void bpgl_heightmap<T>::fast_heightmap_from_pointset(
   std::vector<vgl_point_2d<T> > triangulated_xy;
   // combined z and prob
   std::vector<std::pair<T, T> > height_prob_vals;
-  std::vector<T>& probs = ptset.scalars();
+  const std::vector<T>& probs = ptset.scalars();
   size_t i = 0;
   for (const auto& point_3d : ptset.points()) {
     vgl_point_2d<T> point_2d(point_3d.x(), point_3d.y());
@@ -281,7 +281,7 @@ void bpgl_heightmap<T>::fast_heightmap_from_pointset(
 
   //=============================
 
-  bpgl_fast_gridding::image_data<T, std::tuple<T, T, T>, std::tuple<vil_image_view<T>, vil_image_view<T>, vil_image_view<T> > >& idat =
+  bpgl_fast_gridding::image_data<T, std::tuple<T, T, T>, std::tuple<vil_image_view<T>, vil_image_view<T>, vil_image_view<T> > > const& idat =
       bpgl_fast_gridding::grid_data_2d_array<T, std::pair<T, T>, std::tuple<T, T, T>, std::tuple<vil_image_view<T>, vil_image_view<T>, vil_image_view<T> > >(
       triangulated_xy, height_prob_vals,
       upper_left, ni, nj, ground_sample_distance_,
