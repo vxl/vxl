@@ -281,7 +281,7 @@ void bpgl_heightmap<T>::fast_heightmap_from_pointset(
 
   //=============================
 
-  bpgl_fast_gridding::image_data<T, std::tuple<T, T, T>, std::tuple<vil_image_view<T>, vil_image_view<T>, vil_image_view<T> > >& idat =
+  bpgl_fast_gridding::image_data<T, std::tuple<T, T, T>, std::tuple<vil_image_view<T>, vil_image_view<T>, vil_image_view<T> > > const& idat =
       bpgl_fast_gridding::grid_data_2d_array<T, std::pair<T, T>, std::tuple<T, T, T>, std::tuple<vil_image_view<T>, vil_image_view<T>, vil_image_view<T> > >(
       triangulated_xy, height_prob_vals,
       upper_left, ni, nj, ground_sample_distance_,
