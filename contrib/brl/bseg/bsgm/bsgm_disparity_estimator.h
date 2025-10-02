@@ -31,11 +31,28 @@
 #include <vil/algo/vil_binary_erode.h>
 #include <vil/algo/vil_gauss_reduce.h>
 #include "bsgm_error_checking.h"
+#include "aligned_allocator.hxx"
 //:
 // \file
 // \brief An implementation of the semi-global matching stereo algorithm.
 // \author Thomas Pollard
 // \date April 17, 2016
+
+// Compiler-agnostic macros
+#define STRINGIFY(x) #x
+#if defined(__clang__)
+    #define UNROLL(N) _Pragma(STRINGIFY(clang loop unroll_count(N)))
+    #define INLINE __attribute__((always_inline))
+#elif defined(__GNUC__)
+    #define UNROLL(N) _Pragma(STRINGIFY(GCC unroll N))
+    #define INLINE __attribute__((always_inline))
+#elif defined(_MSC_VER)
+    #define UNROLL(N) 
+    #define INLINE [[msvc::forceinline]]
+#else
+    #define UNROLL(N)
+    #define INLINE
+#endif
 
 //: A struct containing miscellaneous SGM parameters
 struct bsgm_disparity_estimator_params
@@ -52,6 +69,7 @@ struct bsgm_disparity_estimator_params
   // since discontinuities in depth are often manifested as intensity discontinuities
   // the cost of a disparity change greater than 1 is lowered by dividing P2 by the
   // magnitude of the x gradient.
+  // Overridden by inclusion of P2 shadow adjustment
   bool use_gradient_weighted_smoothing;
 
   //: In gradient-weighted smoothing, gradients beyond this magnitude are
@@ -81,17 +99,17 @@ struct bsgm_disparity_estimator_params
   // 0 to disable biasing. (deprecated, supplanted by adj_dir_weight)
   float bias_weight;
   
-  //: Under shadow step and shadow control of the dynamic program
-  //  scan with prior cost empthasized in the scan direction opposite to the sun rays,
+  //: Under shadow step and shadow control of the dynamic program,
+  //  scan with prior cost emphasized in the scan direction opposite to the sun rays,
   //  also include directions to each side of this primary direction with weight
   //  defined by "adj_dir_weight" in the interval (0, 1) 
   float adj_dir_weight;
 
-  //: suppress appearance cost in dynamic program for both shadow and shadow step
-  // pixels otherwise only suppress in shadow
+  //: Suppress appearance cost in dynamic program for both shadow and shadow step
+  // pixels, otherwise only suppress in shadow
   bool app_supress_shadow_shad_step;
 
-  //: threhold for considering either shadow or shadow step active
+  //: Threhold for considering either shadow or shadow step active
   float shad_shad_stp_prob_thresh;
 
   //: Appearance costs computed by different algorithms are statically fused
@@ -137,6 +155,48 @@ struct bsgm_disparity_estimator_params
 // output parameters
 std::ostream& operator<<(std::ostream& os, const bsgm_disparity_estimator_params& params);
 
+// Enum type representing the different various directions that the BSGM dynamic
+// program makes sweeps across the image in
+typedef enum {
+  // = = =
+  // X X X
+  // = = =
+  RIGHT, LEFT,
+  // X = =
+  // = X =
+  // = = X
+  DIAG_NWSE, DIAG_SENW,
+  // = X =
+  // = X =
+  // = X =
+  DOWN, UP,
+  // = = X
+  // = X =
+  // X = =
+  DIAG_NESW, DIAG_SWNE,
+  // X = =      = = =
+  // = X X  or  X X =
+  // = = =      = = X
+  DIAG_NWSE_FLAT, DIAG_SENW_FLAT,
+  // = X =      X = =
+  // = X =  or  = X =
+  // = = X      = X =
+  DIAG_NWSE_STEEP, DIAG_SENW_STEEP,
+  // = X =      = = X
+  // = X =  or  = X =
+  // X = =      = X =
+  DIAG_NESW_STEEP, DIAG_SWNE_STEEP,
+  // = = X      = = =
+  // X X =  or  = X X
+  // = = =      X = =
+  DIAG_NESW_FLAT, DIAG_SWNE_FLAT,
+  INVALID_DIR
+} DIRECTION;
+
+// Metadata/types related to alignment for SIMD types
+#define ALIGN Alignment::AVX512
+template <typename T>
+using aligned_vector = std::vector<T, AlignedAllocator<T, ALIGN>>;
 
 class bsgm_disparity_estimator
 {
@@ -201,16 +261,13 @@ class bsgm_disparity_estimator
 
   //: Raw storage for the cost volumes
   // Element x,y,d is at location y*w_*num_disparities + x*num_disparities + d
-  std::vector<unsigned short> total_cost_data_;
-  std::vector<unsigned char> fused_cost_data_;
-
-  const int NUM_COST_ELEMS = sizeof(__m512i) / sizeof(unsigned short);
+  aligned_vector<unsigned short> total_cost_data_;
+  aligned_vector<unsigned char> fused_cost_data_;
+  aligned_vector<unsigned short> dir_cost_data_;
 
   //: Convenience image of pointers into the cost volumes
-  std::vector< std::vector< unsigned short* > > total_cost_;
-  std::vector< std::vector< unsigned char* > > fused_cost_;
-
-  std::vector< std::vector< unsigned char* > >* active_app_cost_;
+  std::vector<std::vector<unsigned short*>> total_cost_;
+  std::vector<std::vector<unsigned char*>> fused_cost_;
 
   //: shadow step probability in rectified image space
   vil_image_view<float> shadow_step_prob_;
@@ -223,29 +280,46 @@ class bsgm_disparity_estimator
 
   vil_image_view<unsigned short> img_tar_;
 
+  int64_t total_simd_elapsed;
+  using cost_alloc_t = typename decltype(total_cost_data_)::allocator_type;
+  static constexpr int NUM_COST_ELEMS_PER_ALIGN = cost_alloc_t::alignment / sizeof(cost_alloc_t::value_type);
+
   //
   // Sub-routines called by SGM in order
   //
   // compute shadow info, in case not supplied externally
   template <class T>
-  void compute_shadow_prob(const vil_image_view<T>& img_target, vil_image_view<bool> const& invalid_target){
+  void compute_shadow_prob(const vil_image_view<T>& img_target, vil_image_view<bool> const& invalid_target) {
     size_t w = img_target.ni(), h = img_target.nj();
     shadow_prob_.set_size(w, h);
     shadow_prob_.fill(0.0f);
-    for(size_t y = 0; y<h; ++y)
-      for(size_t x = 0; x<w; ++x)
-        if(img_target(x, y)<params_.shadow_thresh)
-          shadow_prob_(x,y) = 1.0f;
+    for(size_t y = 0; y < h; ++y)
+      for(size_t x = 0; x < w; ++x)
+        if(img_target(x, y) < params_.shadow_thresh)
+          shadow_prob_(x, y) = 1.0f;
   }
   //: Allocate and setup cost volumes based on current w_ and h_
+  template <typename T>
   void setup_cost_volume(
-    std::vector<unsigned char>& cost_data,
-    std::vector< std::vector< unsigned char* > >& cost,
-    long long int depth );
-  void setup_cost_volume(
-    std::vector<unsigned short>& cost_data,
-    std::vector< std::vector< unsigned short* > >& cost,
-    long long int depth );
+    aligned_vector<T>& cost_data,
+    std::vector<std::vector<T*>>& cost,
+    long long int depth
+  ) {
+    // Align depth such that each column of `depth` cost elements is aligned 
+    // to the alignment of `cost_data`
+    // Takes ceiling w.r.t. NUM_COST_ELEMS_PER_ALIGN, assuming it's a power of 2
+    depth = (depth + NUM_COST_ELEMS_PER_ALIGN - 1) & ~(NUM_COST_ELEMS_PER_ALIGN - 1);
+
+    cost_data.resize(w_*h_*depth);
+    cost.resize(h_);
+
+    long long int idx = 0;
+    for(int y = 0; y < h_; y++) {
+      cost[y].resize(w_);
+      for(int x = 0; x < w_; x++, idx += depth)
+        cost[y][x] = &cost_data[idx];
+    }
+  }
   
   //: Compute appearance data costs
   template <class T>
@@ -307,54 +381,6 @@ class bsgm_disparity_estimator
     const std::vector<std::pair<int, int>>& adj_dirs;
   };
 
-  std::vector<std::mutex> cost_mutexes;
-
-  //: Run the dynamic programming that SGM uses in horizontal sweep
-  void run_horizontal_dp(
-    const std::vector< std::vector<unsigned char*> >& app_cost,
-    std::vector< std::vector<unsigned short*> >& total_cost,
-    const vil_image_view<bool>& invalid_target,
-    const vil_image_view<int>& min_disparity,
-    bool move_right,
-    const dp_args& args
-  );
-  
-  //: Run the dynamic programming that SGM uses in vertical sweep
-  void run_vertical_dp(
-    const std::vector< std::vector<unsigned char*> >& app_cost,
-    std::vector< std::vector<unsigned short*> >& total_cost,
-    const vil_image_view<bool>& invalid_target,
-    const vil_image_view<int>& min_disparity,
-    bool move_down,
-    const dp_args& args
-  );
-
-  //: Run the dynamic programming that SGM uses in diagonal sweep
-  void run_diag_dp(
-    const std::vector< std::vector<unsigned char*> >& app_cost,
-    std::vector< std::vector<unsigned short*> >& total_cost,
-    const vil_image_view<bool>& invalid_target,
-    const vil_image_view<int>& min_disparity,
-    bool move_right,
-    bool move_down,
-    const dp_args& args
-  );
-
-  // Calculate directional weight if necessary
-  // deprecated method to reduce shadow overhang
-  inline float calc_dir_weight(float dx, float dy, const dp_args& args) {  
-    float dir_weight = 1.0f;
-    if (args.using_bias) {
-      vgl_vector_2d<float> dp_dir(dx, dy);
-      dp_dir = normalize(dp_dir);
-      dp_dir *= -1.0f; //low interpolation weight in shadow direction
-      float cosa = dot_product(dp_dir, args.bias_dir);
-      dir_weight = 1.0f - args.bias_weight * 0.5f * (1.0f - cosa);
-      //std::cout << "in dynamic program: (dx dy) ("<< dx << ' ' << dy << ") dp_dir "<< dp_dir << " bias dir " << bias_dir << " cosa = " << cosa << " dir weight = " << dir_weight << std::endl;
-    }
-    return dir_weight;
-  }
-
   inline void min_vecs_simd(unsigned short* a, const unsigned short* b, int start, int end, unsigned short offset);
 
   // Processes an (x, y) position during a directional sweep for SGM.
@@ -393,7 +419,8 @@ class bsgm_disparity_estimator
     const vil_image_view<bool>& invalid_target,
     float invalid_disparity,
     vil_image_view<float>& disp_img,
-    vil_image_view<unsigned short>& disp_cost );
+    vil_image_view<unsigned short>& disp_cost
+  );
 
 
   //
@@ -419,6 +446,78 @@ class bsgm_disparity_estimator
 
   //: Disable default constructor
   bsgm_disparity_estimator()= default;
+
+  void run_opt_and_check(
+    const vil_image_view<bool>& invalid_tar,
+    const vil_image_view<int>& min_disp,
+    vil_image_view<float> grad_x_tar_cropped, 
+    vil_image_view<float> grad_y_tar_cropped,
+    const aligned_vector<unsigned short>& true_cost,
+    const aligned_vector<unsigned short>& true_dir_cost,
+    int64_t orig_elapsed
+  ) {
+    auto opt_start = std::chrono::high_resolution_clock::now();
+    total_simd_elapsed = 0;
+    run_multi_dp_opt(
+      fused_cost_, total_cost_,
+      invalid_tar, grad_x_tar_cropped, grad_y_tar_cropped, min_disp
+    );
+    auto opt_end = std::chrono::high_resolution_clock::now();
+    auto opt_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(opt_end - opt_start).count();
+
+    double ratio = (double) orig_elapsed / opt_elapsed;
+    std::printf("Optimized version took %ld ms, %.2fx %s\n", opt_elapsed, ratio >= 1 ? ratio : 1/ratio, ratio >= 1 ? "faster" : "slower");
+    std::printf("SIMD instructions took %.2f ms\n", total_simd_elapsed * 1e-6);
+
+    int aligned_disparities = (num_disparities_ + NUM_COST_ELEMS_PER_ALIGN - 1) & ~(NUM_COST_ELEMS_PER_ALIGN - 1);
+    bool found_diff = false;
+    for(long long y = 0; y < h_; y++) {
+      for(long long x = 0; x < w_; x++) {
+        for(long long d = 0; d < aligned_disparities; d++) {
+          for(int dir = 0; dir < 8; dir += 2) {
+            long long idx = ((dir * h_ + y) * w_ + x) * aligned_disparities + d;
+            if(d < num_disparities_ && dir_cost_data_[idx] != true_dir_cost[idx]) {
+              found_diff = true;
+              std::printf(
+                "Got differing values for dir cost at (%ld, %ld, %ld, %d): optimized version gave %u, while original version gave %u",
+                x, y, d, dir, dir_cost_data_[idx], true_dir_cost[idx]
+              );
+              break;
+            }
+          }
+          if(found_diff)
+            break;
+        }
+        if(found_diff)
+          break;
+      }
+      if(found_diff)
+          break;
+    }
+    
+    long long idx = 0;
+    found_diff = false;
+    for(long long y = 0; y < h_; y++) {
+      for(long long x = 0; x < w_; x++) {
+        for(long long d = 0; d < aligned_disparities; d++, idx++) {
+          if(d < num_disparities_ && total_cost_data_[idx] != true_cost[idx]) {
+            found_diff = true;
+            std::printf(
+              "Got differing values for cost at (%ld, %ld, %ld): optimized version gave %u, while original version gave %u",
+              x, y, d, total_cost_data_[idx], true_cost[idx]
+            );
+            break;
+          }
+        }
+        if(found_diff)
+          break;
+      }
+      if(found_diff)
+        break;
+    }
+    if(!found_diff)
+      std::cout << "Found no differences between both implementations' output!" << std::endl;
+  }
 };
 
 //-----------------------------------------------------------------------
@@ -732,8 +831,6 @@ bool bsgm_disparity_estimator::compute(
       print_time("XGradient appearance cost", timer);
   }
 
-  active_app_cost_ = &fused_cost_;
-
   // Crop the target gradient images before passing them to run_multi_dp
   // so that they are the same size as the cost volume.
   vil_image_view<float> grad_x_tar_cropped, grad_y_tar_cropped;
@@ -750,45 +847,25 @@ bool bsgm_disparity_estimator::compute(
                                   target_window.height());
   }
 
+// #if defined(DEBUG_BUILD) && !defined(__SANITIZE_ADDRESS__)
+  raise(SIGTRAP); // Stop GDB artifically, as if with a breakpoint
+// #endif
+
   // Run the multi-directional dynamic programming to obtain a total cost
   // volume incorporating appearance + smoothing.
-  auto opt_start = std::chrono::high_resolution_clock::now();
-  run_multi_dp_opt(
-    *active_app_cost_, total_cost_,
+  auto start = std::chrono::high_resolution_clock::now();
+  run_multi_dp(
+    fused_cost_, total_cost_,
     invalid_tar, grad_x_tar_cropped, grad_y_tar_cropped, min_disp
   );
-  auto opt_end = std::chrono::high_resolution_clock::now();
-  auto opt_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(opt_end- opt_start).count();
-  std::vector<unsigned short> simd_cost = total_cost_data_;
-
-  auto start = std::chrono::high_resolution_clock::now();
-  // run_multi_dp(
-  //   *active_app_cost_, total_cost_,
-  //   invalid_tar, grad_x_tar_cropped, grad_y_tar_cropped, min_disp
-  // );
   auto end = std::chrono::high_resolution_clock::now();
   auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-  std::cout << "Optimized version took " << opt_elapsed << " ms, original took " << elapsed << " ms" << std::endl;
+  std::cout << "Original took " << elapsed << " ms" << std::endl;
+  aligned_vector<unsigned short> true_cost = total_cost_data_;
+  aligned_vector<unsigned short> true_dir_cost = dir_cost_data_;
   
-  // long long idx = 0;
-  // bool found_diff = false;
-  // for(long long y = 0; y < h_; y++) {
-  //   for(long long x = 0; x < w_; x++) {
-  //     for(long long d = 0; d < num_disparities_; d++, idx++) {
-  //       if(total_cost_data_[idx] != simd_cost[idx]) {
-  //         found_diff = true;
-  //         std::cout << "Got differing values for cost at (" << x << ", " << y << ", " << d << "): optimized version gave " << simd_cost[idx] << ", while serial version gave " << total_cost_data_[idx] << std::endl;
-  //         break;
-  //       }
-  //     }
-  //     if(found_diff)
-  //       break;
-  //   }
-  //   if(found_diff)
-  //     break;
-  // }
-  // if(!found_diff)
-  //   std::cout << "Found no differences between both implementations' output!" << std::endl;
+  run_opt_and_check(invalid_tar, min_disp, grad_x_tar_cropped, grad_y_tar_cropped, true_cost, true_dir_cost, elapsed);  
+  total_cost_data_ = true_cost;
 
   if (params_.print_timing)
     print_time("Dynamic programming", timer);
