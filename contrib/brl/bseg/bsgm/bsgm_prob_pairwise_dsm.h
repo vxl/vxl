@@ -40,6 +40,9 @@
 #include <vector>
 #include <map>
 #include <math.h>
+#include <fcntl.h>
+#include <unistd.h>
+
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -56,6 +59,7 @@
 #include <bpgl/algo/bpgl_surface_type.h>
 #include <bsta/bsta_histogram.h>
 #include "bsgm_disparity_estimator.h" // for disparity_estimator_params
+
 #include <vul/vul_timer.h>
 
 struct pairwise_params
@@ -455,7 +459,8 @@ class bsgm_prob_pairwise_dsm
   {
     // for time measurement
     vul_timer t;
-    float t_rect, t_disp_fwd, t_hmap_fwd, t_disp_rev, t_hmap_rev, t_prob;
+    long t_rect, t_disp_fwd, t_hmap_fwd, t_disp_rev, t_hmap_rev, t_prob;
+    params_.print_dsm_timing_ = true;
       
     // check if not in window mode
     bool window_mode = !target_window_.is_empty();
@@ -524,10 +529,21 @@ class bsgm_prob_pairwise_dsm
     } else this->compute_ptset();
 
     if(params_.print_dsm_timing_){
-      std::cout << "rect, disp_fwd, hmap_fwd, disp_rev, hmap_rev, prob " <<
-        t_rect << ' ' << t_disp_fwd << ' ' << t_hmap_fwd << ' '<< t_disp_rev << ' ' 
-                << t_hmap_rev << ' ' << t_prob << std::endl;
-   }
+      // TODO: for debugging
+      std::printf(
+        "rect=%ldms, disp_fwd=%ldms, hmap_fwd=%ldms, disp_rev=%ldms, hmap_rev=%ldms, prob=%ldms\n",
+        t_rect, t_disp_fwd, t_hmap_fwd, t_disp_rev, t_hmap_rev, t_prob
+      );
+      std::ostringstream oss;
+      oss << t_rect << "," << t_disp_fwd << "," << t_hmap_fwd << "," << t_disp_rev << "," << t_hmap_rev << "," << t_prob << "\n";
+      std::string result = oss.str();
+      
+      int fd = open("/host/times.csv", O_WRONLY | O_CREAT | O_APPEND, 0666);
+      if(fd < 0)
+        perror("open");
+      else if(write(fd, result.c_str(), result.size()) < 0)
+        perror("write");
+    }
     return true;
   }
 

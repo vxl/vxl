@@ -1,3 +1,8 @@
+// This is brl/bseg/bsgm/aligned_allocator.hxx
+// TODO: move to location of generic SIMD header / use it
+#ifndef aligned_allocator_h_
+#define aligned_allocator_h_
+
 #include <cstddef>
 #include <cstdlib>
 #include <cerrno>
@@ -8,6 +13,14 @@
 #ifdef __SSE__
     #include <immintrin.h>
 #endif
+
+//:
+// \file
+// \brief A portable alignment-respecting allocator implementation for SIMD support
+// \author Nathan Harbison
+// \date October 3, 2025
+//
+// \endverbatim
 
 enum Alignment : size_t {
     DEFAULT = sizeof(void*),
@@ -111,3 +124,5 @@ operator== (const AlignedAllocator<T, TAlign>&, const AlignedAllocator<U, UAlign
 
 template <typename T, Alignment TAlign, typename U, Alignment UAlign>
 inline bool operator!= (const AlignedAllocator<T, TAlign>&, const AlignedAllocator<U, UAlign>&) noexcept { return true; }
+
+#endif // aligned_allocator_h_

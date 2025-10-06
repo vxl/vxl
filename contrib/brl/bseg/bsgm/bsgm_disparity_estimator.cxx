@@ -3,11 +3,8 @@
 #include <iomanip>
 #include <algorithm>
 #include <sstream>
-#include <thread>
-#include <climits>
 #include <array>
 #include <functional>
-#include <immintrin.h>
 #include <vul/vul_file.h>
 #include "vil/vil_save.h"
 #include "vil/vil_convert.h"
@@ -32,7 +29,8 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
   // optional shadow processing
   vil_image_view<float> const& shadow_step_prob,
   vil_image_view<float> const& shadow_prob,
-  vgl_vector_2d<float> const& sun_dir_tar):
+  vgl_vector_2d<float> const& sun_dir_tar
+):
     params_( params ),
     w_( cost_volume_width ),
     h_( cost_volume_height ),
@@ -45,7 +43,6 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
     shadow_prob_(shadow_prob),
     sun_dir_tar_(sun_dir_tar)
 {
-
   // Validate inputs
   if (cost_volume_width < 0 || cost_volume_height < 0 || num_disparities < 0) {
     std::ostringstream buffer;
@@ -58,8 +55,7 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
 
   // Check cost volume size
   long long int cost_volume_size = cost_volume_width * cost_volume_height * num_disparities;
-  if (cost_volume_size < 0 ||
-      size_t(cost_volume_size) > total_cost_data_.max_size()) {
+  if (cost_volume_size < 0 || size_t(cost_volume_size) > total_cost_data_.max_size()) {
     std::ostringstream buffer;
     buffer << "Cannot construct bsgm_disparity_estimator - cost volume is too large." << std::endl
            << "width = " << cost_volume_width << std::endl
@@ -70,15 +66,21 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
   }
 
   // Setup any necessary cost volumes
-  setup_cost_volume(fused_cost_data_, fused_cost_, num_disparities);
-  setup_cost_volume(total_cost_data_, total_cost_, num_disparities);
-  dir_cost_data_.resize(8 * h_ * w_ * ((num_disparities_ + NUM_COST_ELEMS_PER_ALIGN - 1) & ~(NUM_COST_ELEMS_PER_ALIGN - 1)));
+  std::ostringstream oss;
+  oss << "Volumes initialization (" << w_ * h_ * ALIGN_UP(num_disparities_, NUM_COST_ELEMS_PER_ALIGN) << " bytes)";
+  vul_timer t; t.mark();
+  setup_cost_volume(fused_cost_data_, fused_cost_, w_, h_, ALIGN_UP(num_disparities_, NUM_COST_ELEMS_PER_ALIGN));
+  setup_cost_volume(total_cost_data_, total_cost_, w_, h_, ALIGN_UP(num_disparities_, NUM_COST_ELEMS_PER_ALIGN));
+  print_time(oss.str(), t);
+  
+  // TODO: for debugging
+  dir_cost_data_.resize(8 * h_ * w_ * ALIGN_UP(num_disparities_, NUM_COST_ELEMS_PER_ALIGN)); 
+  print_time("Debug volume initialization", t);
 }
 
 
 //----------------------------------------------------------------------------
-bsgm_disparity_estimator::~bsgm_disparity_estimator()
-= default;
+bsgm_disparity_estimator::~bsgm_disparity_estimator() = default;
 
 //----------------------------------------------------------------------------
 
@@ -86,10 +88,10 @@ void bsgm_disparity_estimator::compute_xgrad_data(
   const vil_image_view<float>& grad_x_tar,
   const vil_image_view<float>& grad_x_ref,
   const vil_image_view<bool>& invalid_tar,
-  std::vector< std::vector< unsigned char* > >& app_cost,
+  std::vector<std::vector<unsigned char*>>& app_cost,
   const vil_image_view<int>& min_disparity,
-  const vgl_box_2d<int>& target_window)
-{
+  const vgl_box_2d<int>& target_window
+) {
   // target and reference images have same size
   int ni = static_cast<int>(grad_x_tar.ni()), nj = static_cast<int>(grad_x_tar.nj());
 
@@ -100,8 +102,7 @@ void bsgm_disparity_estimator::compute_xgrad_data(
   if (target_window.is_empty()) {
     img_start_x = 0;
     img_start_y = 0;
-  }
-  else {
+  } else {
     img_start_x = target_window.min_x();
     img_start_y = target_window.min_y();
   }
@@ -111,13 +112,11 @@ void bsgm_disparity_estimator::compute_xgrad_data(
   // (keep track of SGM cost volume indices, and the corresponding target image indices)
   for (int cost_y = 0, img_y = img_start_y; cost_y < h_; cost_y++, img_y++) {
     for (int cost_x = 0, img_x = img_start_x; cost_x < w_; cost_x++, img_x++) {
-
       unsigned char* ac = app_cost[cost_y][cost_x];
 
       // If invalid pixel, fill with 255
       if (invalid_tar(cost_x, cost_y)) {
-        for (int d = 0; d < num_disparities_; d++, ac++)
-          *ac = 255;
+        memset(ac, 0xFF, num_disparities_ * sizeof(unsigned char));
         continue;
       }
 
@@ -126,33 +125,28 @@ void bsgm_disparity_estimator::compute_xgrad_data(
       for (int d = 0; d < num_disparities_; d++, img_x2++, ac++) {
 
         // Check valid match pixel
-        /* if (img_x2 < 0 || img_x2 >= w_) */
         if (img_x2 < 0 || img_x2 >= ni)
-          *ac = 255;
-
+          *ac = UCHAR_MAX;
         // Compare gradient intensities
         else {
-
           // gradient comparison
-          float g = grad_norm * fabs(grad_x_tar(img_x, img_y)
-                                     - grad_x_ref(img_x2, img_y));
+          float g = grad_norm * fabs(grad_x_tar(img_x, img_y) - grad_x_ref(img_x2, img_y));
           // weighted update of appearance cost
-          float ac_new = (float)(*ac) + params_.xgrad_weight * g;
-          *ac = (unsigned char)(ac_new > 255.0f ? 255.0f : ac_new);
+          float ac_new = *ac + params_.xgrad_weight * g;
+          *ac = (unsigned char) std::min(ac_new, (float) UCHAR_MAX);
         }
-
-      } //d
-    } //j
-  } //i
+      } // d
+    } // j
+  } // i
 }
 
 //----------------------------------------------------------------------------
-void
-bsgm_disparity_estimator::write_cost_debug_imgs(
+void bsgm_disparity_estimator::write_cost_debug_imgs(
   const std::string& out_dir,
-  bool write_total_cost )
-{
-  if( fused_cost_.size() == 0 ) return;
+  bool write_total_cost
+) {
+  if(fused_cost_.size() == 0)
+    return;
 
   // total cost maximum
   float total_cost_scale = 1.0f;
@@ -163,34 +157,31 @@ bsgm_disparity_estimator::write_cost_debug_imgs(
     //           << "TOTAL COST SCALE " << total_cost_scale << std::endl;
   }
 
-  vil_image_view<vxl_byte> vis_img( w_, h_ );
+  vil_image_view<vxl_byte> vis_img(w_, h_);
 
-  for( int d = 0; d < num_disparities_; d++ ){
-
+  for(int d = 0; d < num_disparities_; d++) {
     // Gather costs for each disparity slice
-    if( write_total_cost ){
-      for( int y = 0; y < h_; y++ )
-        for( int x = 0; x < w_; x++ )
-          vis_img(x,y) = (unsigned char)std::min( 255.0f,
-            total_cost_scale*total_cost_[y][x][d] );
-
+    if(write_total_cost) {
+      for(int y = 0; y < h_; y++)
+        for(int x = 0; x < w_; x++)
+          vis_img(x, y) = (unsigned char) std::min(255.0f, total_cost_scale * total_cost_[y][x][d]);
     } else {
-      for( int y = 0; y < h_; y++ )
-        for( int x = 0; x < w_; x++ )
-          vis_img(x,y) = fused_cost_[y][x][d];
+      for(int y = 0; y < h_; y++)
+        for(int x = 0; x < w_; x++)
+          vis_img(x, y) = fused_cost_[y][x][d];
     }
 
     // Write slice image
     std::stringstream dss;
-    dss << out_dir << '/'
-      << std::setfill( '0' ) << std::setw(3) << d << ".png";
-    vil_save( vis_img, dss.str().c_str() );
+    dss << out_dir << '/' << std::setfill('0') << std::setw(3) << d << ".png";
+    vil_save(vis_img, dss.str().c_str());
   }
 }
 
-int x, y, dir;
+int x, y, dir; // TODO: for debugging
 
 //-------------------------------------------------------------------------
+// TODO: for debugging
 void
 bsgm_disparity_estimator::run_multi_dp(
   const std::vector< std::vector<unsigned char*> >&  /*app_cost*/,
@@ -584,6 +575,7 @@ bsgm_disparity_estimator::run_multi_dp(
 
 
 //--------------------------------------------------------------------
+// TODO: for debugging
 void
 bsgm_disparity_estimator::compute_dir_cost(
   const unsigned short* prev_row_cost,
@@ -666,6 +658,7 @@ bsgm_disparity_estimator::compute_dir_cost(
   }// end of disparity loop
 }
 
+// TODO: for debugging
 void print_m512i_epu16(__m512i v, bool newline = true) {
     alignas(64) unsigned short vals[32];
     _mm512_store_si512(vals, v);
@@ -678,6 +671,7 @@ void print_m512i_epu16(__m512i v, bool newline = true) {
       std::printf("\n");
 }
 
+// TODO: for debugging
 unsigned short get_m512i_epu16_elem(__m512i v, int ind) {
     alignas(64) unsigned short vals[32];
     _mm512_store_si512(vals, v);
@@ -692,14 +686,13 @@ inline __m512i fill_mm_seq() {
 }
 
 void bsgm_disparity_estimator::run_multi_dp_opt(
-  const std::vector< std::vector<unsigned char*> >& /*app_cost*/,
-  std::vector< std::vector<unsigned short*> >& /*total_cost*/,
+  const std::vector<std::vector<unsigned char*>>& app_cost,
+  std::vector<std::vector<unsigned short*>>& total_cost,
   const vil_image_view<bool>& invalid_tar,
   const vil_image_view<float>& grad_x,
   const vil_image_view<float>& grad_y,
   const vil_image_view<int>& min_disparity
 ) {
-  std::cout << "Image has dimensions " << w_ << "x" << h_ << " with " << num_disparities_ << " disparities" << std::endl;
   int num_dirs = params_.use_16_directions ? 16 : 8;
   float sqrt2norm = 1.0f / sqrt(2.0f);
   float grad_norm = 1.0f / params_.max_grad;
@@ -718,7 +711,6 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
   // Compute directional derivatives used for gradient-weighted smoothing
   std::vector<vil_image_view<float>> deriv_img(4);
   if(params_.use_gradient_weighted_smoothing) {
-    std::cout << "Uses gradient weighted smoothing" << std::endl;
     for(int g = 0; g < 4; g++)
       deriv_img[g] = vil_image_view<float>(w_, h_);
 
@@ -833,7 +825,7 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
 
   // Align number of disparities + 1 (+ 1 because for each column, we also store 
   // the minimum cost for that position) accordingly
-  int aligned_disparities = (num_disparities_ + NUM_COST_ELEMS_PER_ALIGN) & ~(NUM_COST_ELEMS_PER_ALIGN - 1);
+  const int aligned_disparities = ALIGN_UP(num_disparities_ + 1, NUM_COST_ELEMS_PER_ALIGN);
   // Organized by direction, then column, then disparity; in other words, for an even or odd direction 
   // index `dir`, column `x`, and disparity `d`, the position (x, d, dir) is accessed at:
   // (dir/2) * w_ * aligned_disparities + x * aligned_disparities + d.
@@ -842,9 +834,25 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
 
   // Lambda that processes each position along a given forward/backward sweep
   std::function<void(int, int, bool)> process_pos = [&](int x, int y, bool forward) {
-    int dir_start = forward ? 0 : 1;
-    UNROLL(4)
-    for(int dir = dir_start; dir < 8; dir += 2) {
+    int dir_offset = forward ? 0 : 1;
+
+    // Quit early if invalid pixel
+    if(invalid_tar(x, y)) {
+      for(int dir_iter = 0; dir_iter < 4; dir_iter++)
+        memset(&dir_cost_cur[(dir_iter * w_ + x) * aligned_disparities], 0, aligned_disparities * sizeof(unsigned short));
+      return;
+    }
+
+    for(int dir_iter = 0; dir_iter < 4; dir_iter++) {
+      int dir = 2 * dir_iter + dir_offset;
+
+      // Skip invalid adjacent positions
+      if(x + dxs[dir] < 0 || x + dxs[dir] >= w_ ||
+         y + dys[dir] < 0 || y + dys[dir] >= h_) {
+        memset(&dir_cost_cur[(dir_iter * w_ + x) * aligned_disparities], 0, aligned_disparities * sizeof(unsigned short));
+        continue;
+      }
+
       // If configured, compute p2 values based on shadow data
       // shadow_step prob image and sun ray direction must be valid
       bool suppress_appearance = false;
@@ -862,10 +870,13 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
         DIRECTION dc = shad_step_dp_dir_code;
         bool ssp_greater = ssp > params_.shad_shad_stp_prob_thresh;
         bool sp_greater = shadow_prob_(x, y) > params_.shad_shad_stp_prob_thresh;
-        if(params_.adj_dir_weight > 0.0f && sp_greater && (dir != dc && dir != adj_dirs[dc].first && dir != adj_dirs[dc].second))
+        if(params_.adj_dir_weight > 0.0f && sp_greater && (dir != dc && dir != adj_dirs[dc].first && dir != adj_dirs[dc].second)) {
+          memset(&dir_cost_cur[(dir_iter * w_ + x) * aligned_disparities], 0, aligned_disparities * sizeof(unsigned short));
           continue;
-        else if (sp_greater && dir != dc)
+        } else if (sp_greater && dir != dc) {
+          memset(&dir_cost_cur[(dir_iter * w_ + x) * aligned_disparities], 0, aligned_disparities * sizeof(unsigned short));
           continue;
+        }
 
         // Weight the effect of the direction most against the sun ray direction
         if(dir == dc)
@@ -887,25 +898,28 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
       const int prev_pos_offset = cost_offset + (x + dxs[dir]) * aligned_disparities;
       const int disp_offset = min_disparity(x, y) - min_disparity(x + dxs[dir], y + dys[dir]);
 
-      const unsigned short* ppc = ((dys[dir] == 0) ? &dir_cost_cur[prev_pos_offset] : &dir_cost_prev[prev_pos_offset]) + disp_offset; // previous position cost
-      unsigned short* cpc = &dir_cost_cur[cost_offset + x * aligned_disparities]; // current position cost
-      const unsigned char* cac = fused_cost_[y][x]; // current application cost
-      unsigned short* tc = total_cost_[y][x]; // total cost
+      // Costs per disparity at previous (w.r.t `dir`) position, offset to align with the current position cost
+      const unsigned short* ppc = ((dys[dir] == 0) ? &dir_cost_cur[prev_pos_offset] : &dir_cost_prev[prev_pos_offset]) + disp_offset;
+      unsigned short* cpc = &dir_cost_cur[cost_offset + x * aligned_disparities]; // Current position costs per disparity
+      const unsigned char* cac = app_cost[y][x]; // Current position application cost
+      unsigned short* tc = total_cost[y][x]; // Current position total cost
 
       // Set-up constants (broadcasted across each vector)
       const __m512i min_prev_cost = _mm512_set1_epi16(ppc[num_disparities_]);
       const __m512i p1_block = _mm512_set1_epi16(p1);
       const __m512i p2_block = _mm512_set1_epi16(p2);
       const __m512i cmp_bounds[6] = {
-        _mm512_setzero_si512(), _mm512_set1_epi16(num_disparities_), // TODO: verify that it fits in a short
+        _mm512_setzero_si512(), _mm512_set1_epi16(num_disparities_), // NOTE: we assume this `num_disparities_` fits into 16 bits
         _mm512_set1_epi16(1), _mm512_set1_epi16(num_disparities_+1),
-        _mm512_set1_epi16(-1), _mm512_set1_epi16(num_disparities_-1)
+        _mm512_set1_epi16(-1), _mm512_set1_epi16(num_disparities_-1),
       };
+      const __m512i max_app_cost = _mm512_set1_epi16(UCHAR_MAX);
+      const __m512 adj_weight_block = _mm512_set1_ps(adj_weight);
 
       // Set-up vectorized iteration variables
       __m512i min_costs = _mm512_set1_epi16(USHRT_MAX);
       __m512i d_block = fill_mm_seq();
-      __m512i d_off_block = _mm512_add_epi16(d_block, _mm512_set1_epi16((short) disp_offset));  // TODO: verify fits in short?
+      __m512i d_off_block = _mm512_add_epi16(d_block, _mm512_set1_epi16(disp_offset));  // NOTE: we assume this value fits into 16 bits
       __m512i d_iter = _mm512_set1_epi16(NUM_COST_ELEMS_PER_ALIGN);
       for(int d = 0; d < num_disparities_; d += NUM_COST_ELEMS_PER_ALIGN) {
         // `d_off` stores the index into the previous cost vector
@@ -940,7 +954,7 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
         // so that best previous cost dominates.
         __m512i cpc_data = _mm512_sub_epi16(best_costs, min_prev_cost);
         if(suppress_appearance) {
-          cpc_data = _mm512_add_epi16(_mm512_set1_epi16(255), cpc_data);
+          cpc_data = _mm512_add_epi16(max_app_cost, cpc_data);
           _mm512_store_si512(&cpc[d], cpc_data);
           // cpc[d] = vxl_byte(255) + best_cost - min_prev_cost;
 
@@ -950,8 +964,8 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
           __m256i cpc_hi16 = _mm512_extracti64x4_epi64(cpc_data, 1);
           __m512 cpc_lo16f = _mm512_cvtepi32_ps(_mm512_cvtepu16_epi32(cpc_lo16)); // Convert each half to floats
           __m512 cpc_hi16f = _mm512_cvtepi32_ps(_mm512_cvtepu16_epi32(cpc_hi16));
-          __m512 prod_lo16f = _mm512_mul_ps(cpc_lo16f, _mm512_set1_ps(adj_weight)); // Multiply each half by `adj_weight`
-          __m512 prod_hi16f = _mm512_mul_ps(cpc_hi16f, _mm512_set1_ps(adj_weight));
+          __m512 prod_lo16f = _mm512_mul_ps(cpc_lo16f, adj_weight_block); // Multiply each half by `adj_weight`
+          __m512 prod_hi16f = _mm512_mul_ps(cpc_hi16f, adj_weight_block);
           __m256i prod_lo16 = _mm512_cvtepi32_epi16(_mm512_cvtps_epi32(prod_lo16f)); // Convert each half back to shorts
           __m256i prod_hi16 = _mm512_cvtepi32_epi16(_mm512_cvtps_epi32(prod_hi16f));
           __m512i prod = _mm512_inserti64x4(_mm512_castsi256_si512(prod_lo16), prod_hi16, 1); // Combine into one block
@@ -974,6 +988,7 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
           _mm512_store_si512(&tc[d], tc_data);
           // tc[d] += cpc[d];
         }
+        // TODO: for debugging
         // memcpy(&dir_cost_data_[((dir * h_ + y) * w_ + x) * aligned_disparities + d], &cpc[d], NUM_COST_ELEMS_PER_ALIGN * sizeof(unsigned short));
 
         // int SEARCH_D = 0;
@@ -994,10 +1009,6 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
         // Update minimum cost for this position and direction (masking off any d-values beyond `num_disparities_`)
         __mmask32 valid_mask_d = _mm512_cmplt_epi16_mask(d_block, cmp_bounds[1]);
         min_costs = _mm512_mask_min_epu16(min_costs, valid_mask_d, min_costs, cpc_data);
-        // if(x == 319 && y == 31 && dir == 0) {
-        //   print_m512i_epu16(min_costs);
-        //   print_m512i_epu16(_mm512_load_si512(&cpc[d]));
-        // }
         
         // Update iter variables
         d_block = _mm512_add_epi16(d_block, d_iter);
@@ -1010,8 +1021,6 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
       __m128i min_costs4 = _mm_min_epu16(min_costs8, _mm_srli_si128(min_costs8, 4*sizeof(unsigned short)));
       __m128i min_costs2 = _mm_min_epu16(min_costs4, _mm_srli_si128(min_costs4, 2*sizeof(unsigned short)));
       __m128i min_cost1 = _mm_min_epu16(min_costs2, _mm_srli_si128(min_costs2, 1*sizeof(unsigned short)));
-      // if(x == 319 && y == 31 && dir == 0)
-      //   std::printf("min at (%d, %d, dir=%d): %u\n", x, y, dir, _mm_extract_epi16(min_cost1, 0));
       cpc[num_disparities_] = _mm_extract_epi16(min_cost1, 0); // store min cost
     }
   };
@@ -1020,15 +1029,8 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
   // X X X ↘ ↓ ↙ X X
   // X X X → - - - -
   for(int y = 0; y < h_; y++) {
-    for(int x = 0; x < w_; x++) {
-      // Quit early if invalid pixel
-      if(invalid_tar(x, y))
-        UNROLL(4)
-        for(int dir = 0; dir < 8; dir += 2)
-          memset(&dir_cost_cur[((dir/2) * w_ + x) * aligned_disparities], 0, aligned_disparities * sizeof(unsigned short));
-      else
-        process_pos(x, y, true);
-    }
+    for(int x = 0; x < w_; x++)
+      process_pos(x, y, true);
     // Set previous row to the current row
     dir_cost_prev.swap(dir_cost_cur);
     // Note: we don't spend time to reset the current row's values to 0, as the code 
@@ -1041,365 +1043,85 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
   // X X ↗ ↑ ↖ X X X
   std::fill(dir_cost_prev.begin(), dir_cost_prev.end(), 0);
   for(int y = h_-1; y >= 0; y--) {
-    for(int x = w_-1; x >= 0; x--) {
-      // Quit early if invalid pixel
-      if(invalid_tar(x, y))
-        UNROLL(4)
-        for(int dir = 1; dir < 8; dir += 2)
-          memset(&dir_cost_cur[((dir/2) * w_ + x) * aligned_disparities], 0, aligned_disparities * sizeof(unsigned short));
-      else
-        process_pos(x, y, false);
-    }
+    for(int x = w_-1; x >= 0; x--)
+      process_pos(x, y, false);
     // Set current row to previous
     dir_cost_prev.swap(dir_cost_cur);
   }
 }
 
-#define ALIGN_DOWN(x)     (((x)) & ~(sizeof(__m512i) - 1))                          // round down by sizeof(__m512i)
-#define ALIGN_UP(x)       ((((x)) + sizeof(__m512i) - 1) & ~(sizeof(__m512i) - 1))  // round up by sizeof(__m512i)
-#define ALIGN_DOWN_PTR(p) ((void*)ALIGN_DOWN((uintptr_t)(p)))
-#define ALIGN_UP_PTR(p)   ((void*)ALIGN_UP((uintptr_t)(p)))
-
-// Computes the minimum element-wise between two vectors between the start and end index, using SIMD AVX512.
-// Equivalently, the method can be rewritten in C++ as:
-// for(int i = start; i < end; i++) {
-//   vec1[i] = std::min(vec1[i], vec2[i] + offset);
-// }
-void bsgm_disparity_estimator::min_vecs_simd(unsigned short* vec1, const unsigned short* vec2, int start, int end, unsigned short offset) {
-  // Align the start and end addresses of vec1 (and vec2 accordingly) to allow for aligned loads and stores of vec1
-  unsigned short* a = (unsigned short*) ALIGN_DOWN_PTR(&vec1[start]);
-  std::ptrdiff_t num_before_unaligned_start = &vec1[start] - a;
-  const unsigned short* b = &vec2[start] - num_before_unaligned_start;
-  __mmask32 start_mask = num_before_unaligned_start ? (~0U << num_before_unaligned_start) : 0;
-
-  unsigned short* vec1_aligned_end = (unsigned short*) ALIGN_UP_PTR(&vec1[end]);
-  std::ptrdiff_t num_after_unaligned_end = vec1_aligned_end - &vec1[end];
-  __mmask32 end_mask = num_after_unaligned_end ? (~0U >> num_after_unaligned_end) : 0;
-
-  __m512i offset_simd = _mm512_set1_epi16(offset);
-
-  // If &vec1[start] was unaligned, perform operation with masked store
-  if(start_mask) {
-    __m512i vec1_data = _mm512_load_si512(a);
-    __m512i vec2_data = _mm512_loadu_si512(b);
-    _mm512_mask_storeu_epi16(a, start_mask, _mm512_min_epu16(vec1_data, _mm512_add_epi16(vec2_data, offset_simd)));
-    a += NUM_COST_ELEMS_PER_ALIGN; b += NUM_COST_ELEMS_PER_ALIGN;
-  }
-
-  for(; a + NUM_COST_ELEMS_PER_ALIGN < &vec1[end]; a += NUM_COST_ELEMS_PER_ALIGN, b += NUM_COST_ELEMS_PER_ALIGN) {
-    __m512i vec1_data = _mm512_load_si512(a);
-    __m512i vec2_data = _mm512_loadu_si512(b);
-    _mm512_store_si512(a, _mm512_min_epu16(vec1_data, _mm512_add_epi16(vec2_data, offset_simd)));
-  }
-
-  // If &vec1[end] was unaligned, perform operation with masked store
-  if(end_mask) {
-    __m512i vec1_data = _mm512_load_si512(a);
-    __m512i vec2_data = _mm512_loadu_si512(b);
-    _mm512_mask_storeu_epi16(a, end_mask, _mm512_min_epu16(vec1_data, _mm512_add_epi16(vec2_data, offset_simd)));
-  }
-}
-
-unsigned short bsgm_disparity_estimator::process_pos(
-  long long x, long long y,
-  int dx, int dy,
-  float dir_weight, 
-  const std::vector<unsigned short>& prev_pos_cost,
-  std::vector<unsigned short>& cur_pos_cost,
-  long long prev_min,
-  const vil_image_view<int>& min_disparity,
-  const dp_args& args,
-  int dir, int deriv_idx
-) {
-  unsigned short p2 = args.p2;
-
-  // If configured, compute a P2 weight based on local gradient
-  if(!args.shad_step_dynamic_prog && params_.use_gradient_weighted_smoothing){
-    float g = args.deriv_img[deriv_idx](x, y);
-    p2 = (unsigned short)(args.p2_max + (args.p2_min - args.p2_max) * g);
-  }
-  // If configured, compute p1, p2 values based on shadow data
-  // shadow_step prob image and sun ray direction must be valid
-  bool suppress_appearance = false;
-  float adj_weight = 0.0f;
-  if(params_.use_shadow_step_p2_adjustment && shadow_step_prob_ && args.mag > 0.0f){
-    // probability of a height discontinuity casting a shadow
-    float sp = shadow_step_prob_(x, y);
-    // enhance probability
-    float ss = sp * 1.5;
-    if(ss > 1.0)
-      ss = 1.0;
-    // decrease p2 over shadow step interval
-    p2 = args.p2_max + (args.p2_min - args.p2_max) * ss;
-
-    // In shadow, limit the dynamic program direction to that closest to opposite the sun ray dir
-    // that is, update total cost along the direction towards the shadow casting step discontinuity from outside the shadow
-    int dc = args.shad_step_dp_dir_code;
-
-    float pthr = params_.shad_shad_stp_prob_thresh;
-    float adjw = params_.adj_dir_weight;
-    // include dc and dp directions on each side of dc otherwise skip the current dp direction
-    if(adjw > 0.0f && (shadow_prob_(x, y) > pthr) && ((dir != dc) && (dir != args.adj_dirs[dc].first) && (dir != args.adj_dirs[dc].second)))
-      return 0;
-    else if((shadow_prob_(x, y) > pthr) && (dir != dc))
-      return 0;
-
-    // weight the effect of adjacent directions compared to the direction most aginst
-    // the sun ray direction
-    if(dir == dc) 
-      adj_weight = 1.0f;
-    else if(dir == args.adj_dirs[dc].first || dir == args.adj_dirs[dc].second)
-      adj_weight = adjw;
-
-    // suppress appearance cost
-    suppress_appearance = false;
-    if(params_.app_supress_shadow_shad_step)
-      suppress_appearance = (sp > pthr) || (shadow_prob_(x, y) > pthr);
-    else
-      suppress_appearance = (shadow_prob_(x, y) > pthr);
-  }
-  
-  unsigned short p1 = args.p1 * dir_weight;
-  p2 *= dir_weight;
-
-  auto simd_start = std::chrono::high_resolution_clock::now();
-  // Penalization of moving from the best guess for the previous position's disparity (i.e.
-  // that with minimum cost) to a disparity at this position
-  const unsigned short jump_cost = prev_min + p2;
-  // Compute the offset the aligns previous and current disparities
-  // Each (x, y)'s column in the cost volume starts at their minimum disparity
-  const int prev_offset = min_disparity(x, y) - min_disparity(x + dx, y + dy);
-
-  // Start and end of intersection of disparity values of current and previous position
-  const int start_same = std::max(0, -prev_offset); 
-  const int end_same = std::min(num_disparities_, num_disparities_-prev_offset);
-  // Start and end of intersection of disparity values of current position and those
-  // of the previous position shifted down by 1
-  const int start_m1 = std::max(0, 1-prev_offset);
-  const int end_m1 = std::min(num_disparities_, num_disparities_+1-prev_offset);
-  // Start and end of intersection of disparity values of current position and those
-  // of the previous position shifted up by 1
-  const int start_p1 = std::max(0, -1-prev_offset);
-  const int end_p1 = std::min(num_disparities_, num_disparities_-1-prev_offset);
-
-  // Determine pointers to iterate through
-  const unsigned short* ppc = &prev_pos_cost[prev_offset];
-  unsigned short* cpc = &cur_pos_cost[0];
-  const unsigned char* aac = fused_cost_[y][x];
-  unsigned short* tc = total_cost_[y][x];
-
-  // The best cost for each disparity is the min of the jump with cost P2...
-  std::fill(cur_pos_cost.begin(), cur_pos_cost.end(), jump_cost);
-
-  // ...the min of no disparity change with 0 cost...
-  min_vecs_simd(cpc, ppc, start_same, end_same, 0);
-
-  // ...and -1 disparity with P1 cost...
-  min_vecs_simd(cpc, ppc-1, start_m1, end_m1, p1);
-
-  // ...and +1 disparity with P1 cost
-  min_vecs_simd(cpc, ppc+1, start_p1, end_p1, p1);
-  
-  __m512i min_costs = _mm512_set1_epi16(USHRT_MAX);
-  // Add the appearance cost and subtract off lowest cost to prevent
-  // numerical overflow. Appearance cost is constant if suppressed
-  // so that best previous cost dominates.
-  __mmask32 end_mask = ~0U >> (NUM_COST_ELEMS_PER_ALIGN - (num_disparities_ & (NUM_COST_ELEMS_PER_ALIGN - 1)));
-  int last_aligned_d = num_disparities_ & ~(NUM_COST_ELEMS_PER_ALIGN - 1); // rounds down, only works for power of 2
-  if(suppress_appearance) {
-    // The following is equivalent to this C++ code:
-    // for(int d = 0; d < num_disparities_; d++) {
-    //   cpc[d] += vxl_byte(255) - prev_min;
-    //   min_cost = std::min(min_cost, cpc[d]);
-    //   tc[d] += cpc[d] * adj_weight;
-    // }
-    __m512i offset = _mm512_set1_epi16(vxl_byte(255) - prev_min);
-    __m512 weight = _mm512_set1_ps(adj_weight);
-    for(int d = 0; d + NUM_COST_ELEMS_PER_ALIGN < num_disparities_; d += NUM_COST_ELEMS_PER_ALIGN) {
-      __m512i cpc_data = _mm512_loadu_si512(&cpc[d]);
-      cpc_data = _mm512_add_epi16(cpc_data, offset);
-      _mm512_storeu_si512(&cpc[d], cpc_data);
-      // cpc[d] += vxl_byte(255) - prev_min;
-
-      min_costs = _mm512_min_epu16(min_costs, cpc_data);
-      // min_cost = std::min(min_cost, cpc[d]);
-
-      // The following allows us to multiply our current position costs (16-bit unsigned shorts) 
-      // by `adj_weight` (a 32-bit float)
-      __m256i cpc_lo16 = _mm512_castsi512_si256(cpc_data);  // Split cpc data in half since floats are twice in size
-      __m256i cpc_hi16 = _mm512_extracti64x4_epi64(cpc_data, 1);
-      __m512 cpc_lo16f = _mm512_cvtepi32_ps(_mm512_cvtepu16_epi32(cpc_lo16)); // Convert each half to floats
-      __m512 cpc_hi16f = _mm512_cvtepi32_ps(_mm512_cvtepu16_epi32(cpc_hi16));
-      __m512 prod_lo16f = _mm512_mul_ps(cpc_lo16f, weight); // Multiply each half by `adj_weight`
-      __m512 prod_hi16f = _mm512_mul_ps(cpc_hi16f, weight);
-      __m256i prod_lo16 = _mm512_cvtepi32_epi16(_mm512_cvtps_epi32(prod_lo16f)); // Convert each half back to shorts
-      __m256i prod_hi16 = _mm512_cvtepi32_epi16(_mm512_cvtps_epi32(prod_hi16f));
-      __m512i prod = _mm512_inserti64x4(_mm512_castsi256_si512(prod_lo16), prod_hi16, 1); // Combine into one block
-      // unsigned short prod = cpc[d] * adj_weight
-
-      __m512i tc_data = _mm512_loadu_si512(&tc[d]);
-      tc_data = _mm512_add_epi16(tc_data, prod);
-      _mm512_storeu_si512(&tc[d], tc_data);
-      // tc[d] += prod;
-    }
-
-    if(end_mask) {
-      __m512i cpc_data = _mm512_loadu_si512(&cpc[last_aligned_d]);
-      cpc_data = _mm512_add_epi16(cpc_data, offset);
-      _mm512_mask_storeu_epi16(&cpc[last_aligned_d], end_mask, cpc_data);
-
-      min_costs = _mm512_mask_min_epu16(min_costs, end_mask, min_costs, cpc_data);
-
-      __m256i cpc_lo16 = _mm512_castsi512_si256(cpc_data);
-      __m256i cpc_hi16 = _mm512_extracti64x4_epi64(cpc_data, 1);
-      __m512 cpc_lo16f = _mm512_cvtepi32_ps(_mm512_cvtepu16_epi32(cpc_lo16));
-      __m512 cpc_hi16f = _mm512_cvtepi32_ps(_mm512_cvtepu16_epi32(cpc_hi16));
-      __m512 prod_lo16f = _mm512_mul_ps(cpc_lo16f, weight);
-      __m512 prod_hi16f = _mm512_mul_ps(cpc_hi16f, weight);
-      __m256i prod_lo16 = _mm512_cvtepi32_epi16(_mm512_cvtps_epi32(prod_lo16f));
-      __m256i prod_hi16 = _mm512_cvtepi32_epi16(_mm512_cvtps_epi32(prod_hi16f));
-      __m512i prod = _mm512_inserti64x4(_mm512_castsi256_si512(prod_lo16), prod_hi16, 1);
-
-      __m512i tc_data = _mm512_loadu_si512(&tc[last_aligned_d]);
-      tc_data = _mm512_add_epi16(tc_data, prod);
-      _mm512_mask_storeu_epi16(&tc[last_aligned_d], end_mask, tc_data);
-    }
-  } else {
-    // The following is equivalent to this C++ code:
-    // for(int d = 0; d < num_disparities_; d++) {
-    //   cpc[d] += aac[d] - prev_min;
-    //   min_cost = std::min(min_cost, cpc[d]);
-    //   tc[d] += cpc[d];
-    // }
-    __m512i offset = _mm512_set1_epi16(-prev_min);
-    for(int d = 0; d + NUM_COST_ELEMS_PER_ALIGN < num_disparities_; d += NUM_COST_ELEMS_PER_ALIGN) {
-      __m512i cpc_data = _mm512_loadu_si512(&cpc[d]);
-      // Appearance cost is stored as an unsigned char, though our total cost is an unsigned short.
-      // Load 32 unsigned 8-bit values, and convert to 16 bit
-      __m512i aac_data = _mm512_cvtepu8_epi16(_mm256_loadu_si256((__m256i*) &aac[d]));
-      cpc_data = _mm512_add_epi16(cpc_data, _mm512_add_epi16(aac_data, offset));
-      _mm512_storeu_si512(&cpc[d], cpc_data);
-      // cpc[d] += aac[d] - prev_min;
-
-      min_costs = _mm512_min_epu16(min_costs, cpc_data);
-      // min_cost = std::min(min_cost, cpc[d]);
-
-      __m512i tc_data = _mm512_loadu_si512(&tc[d]);
-      tc_data = _mm512_add_epi16(tc_data, cpc_data);
-      _mm512_storeu_si512(&tc[d], tc_data);
-      // tc[d] += cpc[d];
-    }
-
-    if(end_mask) {
-      __m512i cpc_data = _mm512_loadu_si512(&cpc[last_aligned_d]);
-      __m512i aac_data = _mm512_cvtepu8_epi16(_mm256_loadu_si256((__m256i*) &aac[last_aligned_d]));
-      cpc_data = _mm512_add_epi16(cpc_data, _mm512_add_epi16(aac_data, offset));
-      _mm512_mask_storeu_epi16(&cpc[last_aligned_d], end_mask, cpc_data);
-
-      min_costs = _mm512_mask_min_epu16(min_costs, end_mask, min_costs, cpc_data);
-
-      __m512i tc_data = _mm512_loadu_si512(&tc[last_aligned_d]);
-      tc_data = _mm512_add_epi16(tc_data, cpc_data);
-      _mm512_mask_storeu_epi16(&tc[last_aligned_d], end_mask, tc_data);
-    }
-  }
-
-  // Reduce min costs to find minimum across values packed into vector
-  __m256i min_costs16 = _mm256_min_epu16(_mm512_castsi512_si256(min_costs), _mm512_extracti64x4_epi64(min_costs, 1));
-  __m128i min_costs8 = _mm_min_epu16(_mm256_castsi256_si128(min_costs16), _mm256_extracti32x4_epi32(min_costs16, 1));
-  __m128i min_costs4 = _mm_min_epu16(min_costs8, _mm_srli_si128(min_costs8, 4*sizeof(unsigned short)));
-  __m128i min_costs2 = _mm_min_epu16(min_costs4, _mm_srli_si128(min_costs4, 2*sizeof(unsigned short)));
-  __m128i min_cost1 = _mm_min_epu16(min_costs2, _mm_srli_si128(min_costs2, 1*sizeof(unsigned short)));
-  unsigned short min = _mm_extract_epi16(min_cost1, 0);
-
-  auto simd_end = std::chrono::high_resolution_clock::now();
-  total_simd_elapsed += std::chrono::duration_cast<std::chrono::nanoseconds>(simd_end- simd_start).count();
-
-  return min;
-}
-
 //-------------------------------------------------------------------
-void
-bsgm_disparity_estimator::compute_best_disparity_img(
-  const std::vector< std::vector< unsigned short* > >& total_cost,
+void bsgm_disparity_estimator::compute_best_disparity_img(
+  const std::vector<std::vector<unsigned short*>>& total_cost,
   const vil_image_view<int>& min_disparity,
   const vil_image_view<bool>& invalid_tar,
   float invalid_disparity,
   vil_image_view<float>& disp_img,
-  vil_image_view<unsigned short>& disp_cost )
-{
-  disp_img.set_size( w_, h_ );
-  disp_cost.set_size( w_, h_ );
+  vil_image_view<unsigned short>& disp_cost
+) {
+  disp_img.set_size(w_, h_);
+  disp_cost.set_size(w_, h_);
 
-  for( int y = 0; y < h_; y++ ){
-    for( int x = 0; x < w_; x++ ){
-
+  for(int y = 0; y < h_; y++) {
+    for(int x = 0; x < w_; x++) {
       // Quit early for invalid pixel
-      if( invalid_tar(x,y) ){
-        disp_img(x,y) = invalid_disparity;
-        disp_cost(x,y) = 65535;
+      if(invalid_tar(x, y)) {
+        disp_img(x, y) = invalid_disparity;
+        disp_cost(x, y) = USHRT_MAX;
         continue;
       }
 
+      // Find the min cost index for each pixel
       unsigned short min_cost = total_cost[y][x][0];
       int min_cost_idx = 0;
-
-      // Find the min cost index for each pixel
-      for( int d = 1; d < num_disparities_; d++ ){
-        if( total_cost[y][x][d] < min_cost ){
+      for(int d = 1; d < num_disparities_; d++) {
+        if(total_cost[y][x][d] < min_cost) {
           min_cost = total_cost[y][x][d];
           min_cost_idx = d;
         }
       }
-
-      disp_cost(x,y) = min_cost;
+      disp_cost(x, y) = min_cost;
 
       // If no quadratic interpolation just record the min index
-      disp_img(x,y) = (float)min_cost_idx;
+      disp_img(x, y) = (float) min_cost_idx;
 
       // Use quadratic interpolation to obtain sub-pixel estimate if specified
-      if( params_.perform_quadratic_interp ){
-
+      if(params_.perform_quadratic_interp) {
         // In rare case of min cost disparity at an end point, set disparity
         // to end point +/-0.5 to ensure a continuous range of disparities
-        if( min_cost_idx == 0 )
-          disp_img(x,y) = 0.5f;
-        else if( min_cost_idx == num_disparities_-1 )
-          disp_img(x,y) = num_disparities_-1.5f;
-
+        if(min_cost_idx == 0)
+          disp_img(x, y) = 0.5f;
+        else if(min_cost_idx == num_disparities_-1)
+          disp_img(x, y) = num_disparities_-1.5f;
         // In the typical case pick cost samples on either side of the min
         // disparity, fit a quadratic, and solve for the min
         else {
-
-          auto c1 = (float)total_cost[y][x][min_cost_idx-1];
-          auto c2 = (float)total_cost[y][x][min_cost_idx];
-          auto c3 = (float)total_cost[y][x][min_cost_idx+1];
+          float c1 = (float)total_cost[y][x][min_cost_idx-1];
+          float c2 = (float)total_cost[y][x][min_cost_idx];
+          float c3 = (float)total_cost[y][x][min_cost_idx+1];
 
           // This finds the min of the quadratic without explicitly computing
           // the whole quadratic.  Note the min will necessarily be within
           // +/- 0.5 of the integer minimum.
           float denom = c1 + c3 - (2*c2);
-          if( denom > 0.0f  )
-            disp_img(x,y) += (c1-c3)/(2*denom);
+          if(denom > 0.0f)
+            disp_img(x, y) += (c1-c3)/(2*denom);
         }
       }
 
       // Add in the min disparity to make it an absolute disparity
-      disp_img(x,y) += min_disparity(x,y);
-    } //x
-  } //y
+      disp_img(x, y) += min_disparity(x, y);
+    } // x
+  } // y
 }
 
-
-
 //----------------------------------------------------------------------
-vgl_box_2d<int>
-bsgm_disparity_estimator::add_margin_to_window(
+vgl_box_2d<int> bsgm_disparity_estimator::add_margin_to_window(
   const vgl_box_2d<int>& target_window,
   int margin,
   int ni,
-  int nj)
-{
+  int nj
+) {
   int minx = target_window.min_x() - margin;
   int miny = target_window.min_y() - margin;
   int maxx = target_window.max_x() + margin;
@@ -1415,12 +1137,10 @@ bsgm_disparity_estimator::add_margin_to_window(
 }
 
 //----------------------------------------------------------------------
-void
-bsgm_disparity_estimator::print_time(
-  const char* name,
+void bsgm_disparity_estimator::print_time(
+  const std::string name,
   vul_timer& timer
- )
-{
+) {
   std::cerr << name << ": " << timer.real() << " ms\n";
   timer.mark();
 }
@@ -1429,8 +1149,7 @@ bsgm_disparity_estimator::print_time(
 
 //-----------------------------------------------------------------------
 // output parameters
-std::ostream& operator<<(std::ostream& os, const bsgm_disparity_estimator_params& params)
-{
+std::ostream& operator<<(std::ostream& os, const bsgm_disparity_estimator_params& params) {
   os << "BSGM Disparity Estimator Parameters:" << std::endl
      << "use_16_directions:               " << params.use_16_directions << std::endl
      << "p1_scale:                        " << params.p1_scale << std::endl

@@ -11,10 +11,8 @@
 #include <fstream>
 #include <sstream>
 #include <utility>
-#include <mutex>
-#include <immintrin.h>
-#include <chrono>
-#include <signal.h>
+#include <climits>
+#include <immintrin.h> // TODO: move to generic SIMD header
 
 #include <vul/vul_timer.h>
 #include <vnl/vnl_math.h>
@@ -37,22 +35,22 @@
 // \brief An implementation of the semi-global matching stereo algorithm.
 // \author Thomas Pollard
 // \date April 17, 2016
+// \verbatim
+//  Modifications
+//   Oct. 3 2025
+//   Nathan Harbison - cleaned up class and rewrote core semi-global 
+//   matching algorithm to utilize SIMD
+// \endverbatim
 
-// Compiler-agnostic macros
-#define STRINGIFY(x) #x
-#if defined(__clang__)
-    #define UNROLL(N) _Pragma(STRINGIFY(clang loop unroll_count(N)))
-    #define INLINE __attribute__((always_inline))
-#elif defined(__GNUC__)
-    #define UNROLL(N) _Pragma(STRINGIFY(GCC unroll N))
-    #define INLINE __attribute__((always_inline))
-#elif defined(_MSC_VER)
-    #define UNROLL(N) 
-    #define INLINE [[msvc::forceinline]]
-#else
-    #define UNROLL(N)
-    #define INLINE
-#endif
+// Alignment helpers, rounds up or down by `align`, given that it is a power of 2
+inline long long ALIGN_DOWN(long long x, long long align) {
+  assert(align != 0 && (align & (align - 1)) == 0); // must be power of 2
+  return x & ~(align - 1);
+}
+inline long long ALIGN_UP(long long x, long long align) {
+  assert(align != 0 && (align & (align - 1)) == 0); // must be power of 2
+  return (x + align - 1) & ~(align - 1);
+}
 
 //: A struct containing miscellaneous SGM parameters
 struct bsgm_disparity_estimator_params
@@ -69,7 +67,6 @@ struct bsgm_disparity_estimator_params
   // since discontinuities in depth are often manifested as intensity discontinuities
   // the cost of a disparity change greater than 1 is lowered by dividing P2 by the
   // magnitude of the x gradient.
-  // Overridden by inclusion of P2 shadow adjustment
   bool use_gradient_weighted_smoothing;
 
   //: In gradient-weighted smoothing, gradients beyond this magnitude are
@@ -190,7 +187,7 @@ typedef enum {
   // X X =  or  = X X
   // = = =      X = =
   DIAG_NESW_FLAT, DIAG_SWNE_FLAT,
-  INVALID_DIR
+  INVALID_DIR = -1
 } DIRECTION;
 
 // Metadata/types related to alignment for SIMD types
@@ -198,8 +195,7 @@ typedef enum {
 template <typename T>
 using aligned_vector = std::vector<T, AlignedAllocator<T, ALIGN>>;
 
-class bsgm_disparity_estimator
-{
+class bsgm_disparity_estimator {
  public:
 
   //: Construct from parameters
@@ -212,7 +208,8 @@ class bsgm_disparity_estimator
     // must be defined if use_shadow_step_p2_adjustment = true,
     vil_image_view<float> const& shadow_step_prob = vil_image_view<float>(),
     vil_image_view<float> const& shadow_prob = vil_image_view<float>(),
-    vgl_vector_2d<float> const& sun_dir_tar = vgl_vector_2d<float>(0.0f, 0.0f));
+    vgl_vector_2d<float> const& sun_dir_tar = vgl_vector_2d<float>(0.0f, 0.0f)
+  );
   //: Destructor
   ~bsgm_disparity_estimator();
 
@@ -232,13 +229,15 @@ class bsgm_disparity_estimator
     float dynamic_range_factor = 1.0f,
     bool skip_error_check = false,
     const vgl_box_2d<int>& target_window = vgl_box_2d<int>(),
-    vgl_box_2d<int> reference_window = vgl_box_2d<int>());
+    vgl_box_2d<int> reference_window = vgl_box_2d<int>()
+  );
 
   //: Write out the appearance or total cost volume as a set of images for
   // debugging
   void write_cost_debug_imgs(
     const std::string& out_dir,
-    bool write_total_cost = false );
+    bool write_total_cost = false
+  );
 
  protected:
 
@@ -246,24 +245,27 @@ class bsgm_disparity_estimator
   bsgm_disparity_estimator_params params_;
 
   //: Size of cost volume
-  long long int w_, h_;
+  const long long w_, h_;
 
   //: Number of disparities to search over.
-  unsigned long long int num_disparities_;
+  const unsigned long long num_disparities_;
 
   //: All appearance and smoothing costs will be normalized to discrete
   // values such that this unit corresponds to 1.0 standard deviation of
   // expected appearance error.
-  unsigned char cost_unit_;
+  const unsigned char cost_unit_;
 
   //: Hard-coded internal P1, P2 costs, as a scale factor of the cost_unit
-  float p1_base_, p2_min_base_, p2_max_base_;
+  const float p1_base_, p2_min_base_, p2_max_base_;
 
   //: Raw storage for the cost volumes
   // Element x,y,d is at location y*w_*num_disparities + x*num_disparities + d
   aligned_vector<unsigned short> total_cost_data_;
   aligned_vector<unsigned char> fused_cost_data_;
-  aligned_vector<unsigned short> dir_cost_data_;
+  aligned_vector<unsigned short> dir_cost_data_; // TODO: for debugging
+  
+  using cost_alloc_t = typename decltype(total_cost_data_)::allocator_type;
+  static constexpr int NUM_COST_ELEMS_PER_ALIGN = cost_alloc_t::alignment / sizeof(cost_alloc_t::value_type);
 
   //: Convenience image of pointers into the cost volumes
   std::vector<std::vector<unsigned short*>> total_cost_;
@@ -277,12 +279,6 @@ class bsgm_disparity_estimator
 
   //: sun direction in rectified image space
   vgl_vector_2d<float> sun_dir_tar_;
-
-  vil_image_view<unsigned short> img_tar_;
-
-  int64_t total_simd_elapsed;
-  using cost_alloc_t = typename decltype(total_cost_data_)::allocator_type;
-  static constexpr int NUM_COST_ELEMS_PER_ALIGN = cost_alloc_t::alignment / sizeof(cost_alloc_t::value_type);
 
   //
   // Sub-routines called by SGM in order
@@ -298,25 +294,21 @@ class bsgm_disparity_estimator
         if(img_target(x, y) < params_.shadow_thresh)
           shadow_prob_(x, y) = 1.0f;
   }
-  //: Allocate and setup cost volumes based on current w_ and h_
+
+  //: Allocate and setup cost volumes based on given dimensions, arranged first by depth, then w, then h
   template <typename T>
   void setup_cost_volume(
     aligned_vector<T>& cost_data,
     std::vector<std::vector<T*>>& cost,
-    long long int depth
+    long long w, long long h, long long depth
   ) {
-    // Align depth such that each column of `depth` cost elements is aligned 
-    // to the alignment of `cost_data`
-    // Takes ceiling w.r.t. NUM_COST_ELEMS_PER_ALIGN, assuming it's a power of 2
-    depth = (depth + NUM_COST_ELEMS_PER_ALIGN - 1) & ~(NUM_COST_ELEMS_PER_ALIGN - 1);
+    cost_data.resize(w * h * depth);
+    cost.resize(h);
 
-    cost_data.resize(w_*h_*depth);
-    cost.resize(h_);
-
-    long long int idx = 0;
-    for(int y = 0; y < h_; y++) {
-      cost[y].resize(w_);
-      for(int x = 0; x < w_; x++, idx += depth)
+    long long idx = 0;
+    for(int y = 0; y < h; y++) {
+      cost[y].resize(w);
+      for(int x = 0; x < w; x++, idx += depth)
         cost[y][x] = &cost_data[idx];
     }
   }
@@ -327,27 +319,30 @@ class bsgm_disparity_estimator
     const vil_image_view<T>& img_target,
     const vil_image_view<T>& img_ref,
     const vil_image_view<bool>& invalid_target,
-    std::vector< std::vector< unsigned char* > >& app_cost,
+    std::vector<std::vector<unsigned char*>>& app_cost,
     const vil_image_view<int>& min_disparity,
     const vgl_box_2d<int>& target_window = vgl_box_2d<int>(),
-    const vgl_box_2d<int>& reference_window = vgl_box_2d<int>());
+    const vgl_box_2d<int>& reference_window = vgl_box_2d<int>()
+  );
 
   void compute_xgrad_data(
     const vil_image_view<float>& grad_x_target,
     const vil_image_view<float>& grad_x_ref,
     const vil_image_view<bool>& invalid_target,
-    std::vector< std::vector< unsigned char* > >& app_cost,
+    std::vector<std::vector<unsigned char*>>& app_cost,
     const vil_image_view<int>& min_disparity,
-    const vgl_box_2d<int>& target_window = vgl_box_2d<int>());
+    const vgl_box_2d<int>& target_window = vgl_box_2d<int>()
+  );
 
   void compute_shadow_data(
     const vil_image_view<bool>& invalid_target,
-    //std::vector< std::vector< unsigned char* > >& app_cost,
-    std::vector< std::vector< unsigned short* > >& app_cost,
+    std::vector<std::vector<unsigned short*>>& app_cost,
     const vil_image_view<int>& min_disparity,
-    const vgl_box_2d<int>& target_window = vgl_box_2d<int>());
+    const vgl_box_2d<int>& target_window = vgl_box_2d<int>()
+  );
 
   //: Run the multi-directional dynamic programming that SGM uses
+  // TODO: for debugging
   void run_multi_dp(
     const std::vector< std::vector<unsigned char*> >& app_cost,
     std::vector< std::vector<unsigned short*> >& total_cost,
@@ -365,39 +360,8 @@ class bsgm_disparity_estimator
     const vil_image_view<int>& min_disparity
   );
 
-  // Necessary arguments utilized by all specialized directional DP functions
-  struct dp_args {
-    const float bias_weight;
-    const float mag;
-    const vgl_vector_2d<float>& bias_dir;
-    const bool using_bias;
-    const bool shad_step_dynamic_prog;
-    const std::vector<vil_image_view<float>>& deriv_img;
-    const unsigned short p1;
-    const float p2_min;
-    const float p2_max;
-    const unsigned short p2;
-    const int shad_step_dp_dir_code;
-    const std::vector<std::pair<int, int>>& adj_dirs;
-  };
-
-  inline void min_vecs_simd(unsigned short* a, const unsigned short* b, int start, int end, unsigned short offset);
-
-  // Processes an (x, y) position during a directional sweep for SGM.
-  // Returns the minimum cost value across all disparities for that position
-  unsigned short process_pos(
-    long long x, long long y,
-    int dx, int dy,
-    float dir_weight, 
-    const std::vector<unsigned short>& prev_pos_cost,
-    std::vector<unsigned short>& cur_pos_cost,
-    long long prev_min,
-    const vil_image_view<int>& min_disparity,
-    const dp_args& args,
-    int dir, int deriv_idx
-  );
-
   //: Pixel-wise directional cost
+  // TODO: for debugging
   inline void compute_dir_cost(
     const unsigned short* prev_row_cost,
     const unsigned char* cur_app_cost,
@@ -422,31 +386,35 @@ class bsgm_disparity_estimator
     vil_image_view<unsigned short>& disp_cost
   );
 
-
   //
   // Other
   //
 
   template <class srcT, class destT>
-  void gradient_inside_window(vil_image_view<srcT> const& img,
-                              vgl_box_2d<int> const& window,
-                              vil_image_view<destT>& grad_i,
-                              vil_image_view<destT>& grad_j);
+  void gradient_inside_window(
+    vil_image_view<srcT> const& img,
+    vgl_box_2d<int> const& window,
+    vil_image_view<destT>& grad_i,
+    vil_image_view<destT>& grad_j
+  );
 
   vgl_box_2d<int> add_margin_to_window(
     const vgl_box_2d<int>& target_window,
     int margin,
     int ni,
-    int nj);
+    int nj
+  );
 
   //: Convenience function for printing time since last call to this function
   void print_time(
-    const char* name,
-    vul_timer& timer );
+    const std::string name,
+    vul_timer& timer
+  );
 
   //: Disable default constructor
-  bsgm_disparity_estimator()= default;
+  bsgm_disparity_estimator() = default;
 
+  // TODO: for debugging
   void run_opt_and_check(
     const vil_image_view<bool>& invalid_tar,
     const vil_image_view<int>& min_disp,
@@ -456,19 +424,16 @@ class bsgm_disparity_estimator
     const aligned_vector<unsigned short>& true_dir_cost,
     int64_t orig_elapsed
   ) {
-    auto opt_start = std::chrono::high_resolution_clock::now();
-    total_simd_elapsed = 0;
+    vul_timer timer; timer.mark();
     run_multi_dp_opt(
       fused_cost_, total_cost_,
       invalid_tar, grad_x_tar_cropped, grad_y_tar_cropped, min_disp
     );
-    auto opt_end = std::chrono::high_resolution_clock::now();
-    auto opt_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(opt_end - opt_start).count();
-
+    auto opt_elapsed = timer.real();
     double ratio = (double) orig_elapsed / opt_elapsed;
     std::printf("Optimized version took %ld ms, %.2fx %s\n", opt_elapsed, ratio >= 1 ? ratio : 1/ratio, ratio >= 1 ? "faster" : "slower");
-    std::printf("SIMD instructions took %.2f ms\n", total_simd_elapsed * 1e-6);
 
+    timer.mark();
     int aligned_disparities = (num_disparities_ + NUM_COST_ELEMS_PER_ALIGN - 1) & ~(NUM_COST_ELEMS_PER_ALIGN - 1);
     bool found_diff = false;
     for(long long y = 0; y < h_; y++) {
@@ -479,7 +444,30 @@ class bsgm_disparity_estimator
             if(d < num_disparities_ && dir_cost_data_[idx] != true_dir_cost[idx]) {
               found_diff = true;
               std::printf(
-                "Got differing values for dir cost at (%ld, %ld, %ld, %d): optimized version gave %u, while original version gave %u",
+                "Got differing values for dir cost at (%ld, %ld, %ld, %d): optimized version gave %u, while original version gave %u\n",
+                x, y, d, dir, dir_cost_data_[idx], true_dir_cost[idx]
+              );
+              break;
+            }
+          }
+          if(found_diff)
+            break;
+        }
+        if(found_diff)
+          break;
+      }
+      if(found_diff)
+          break;
+    }
+    for(long long y = h_-1; y >= 0; y--) {
+      for(long long x = w_-1; x >= 0; x--) {
+        for(long long d = 0; d < aligned_disparities; d++) {
+          for(int dir = 1; dir < 8; dir += 2) {
+            long long idx = ((dir * h_ + y) * w_ + x) * aligned_disparities + d;
+            if(d < num_disparities_ && dir_cost_data_[idx] != true_dir_cost[idx]) {
+              found_diff = true;
+              std::printf(
+                "Got differing values for dir cost at (%ld, %ld, %ld, %d): optimized version gave %u, while original version gave %u\n",
                 x, y, d, dir, dir_cost_data_[idx], true_dir_cost[idx]
               );
               break;
@@ -503,7 +491,7 @@ class bsgm_disparity_estimator
           if(d < num_disparities_ && total_cost_data_[idx] != true_cost[idx]) {
             found_diff = true;
             std::printf(
-              "Got differing values for cost at (%ld, %ld, %ld): optimized version gave %u, while original version gave %u",
+              "Got differing values for cost at (%ld, %ld, %ld): optimized version gave %u, while original version gave %u\n",
               x, y, d, total_cost_data_[idx], true_cost[idx]
             );
             break;
@@ -517,17 +505,18 @@ class bsgm_disparity_estimator
     }
     if(!found_diff)
       std::cout << "Found no differences between both implementations' output!" << std::endl;
+    std::cout << "Checking took " << timer.real() << "ms" << std::endl;
   }
 };
 
 //-----------------------------------------------------------------------
 template <class srcT, class destT>
 void bsgm_disparity_estimator::gradient_inside_window(
-    vil_image_view<srcT> const& img,
-    vgl_box_2d<int> const& window,
-    vil_image_view<destT>& grad_i,
-    vil_image_view<destT>& grad_j)
-{
+  vil_image_view<srcT> const& img,
+  vgl_box_2d<int> const& window,
+  vil_image_view<destT>& grad_i,
+  vil_image_view<destT>& grad_j
+) {
   // TODO: Avoid unnecessary copies, make this more efficient
 
   /* vil_image_resource_sptr img_sptr = vil_new_image_resource_of_view(img); */
@@ -538,9 +527,10 @@ void bsgm_disparity_estimator::gradient_inside_window(
 
   // crop image data inside window
   vil_image_view<srcT> img_cropped = vil_crop(
-      img,
-      window.min_x(), window.width(),
-      window.min_y(), window.height());
+    img,
+    window.min_x(), window.width(),
+    window.min_y(), window.height()
+  );
 
   // get gradient data within window
   vil_image_view<destT> grad_i_cropped, grad_j_cropped;
@@ -568,8 +558,8 @@ void bsgm_disparity_estimator::compute_census_data(
   std::vector< std::vector< unsigned char* > >& app_cost,
   const vil_image_view<int>& min_disparity,
   const vgl_box_2d<int>& target_window,
-  const vgl_box_2d<int>& reference_window)
-{
+  const vgl_box_2d<int>& reference_window
+) {
   vul_timer t;
 
   // target and reference images have same size
@@ -581,8 +571,7 @@ void bsgm_disparity_estimator::compute_census_data(
   if (target_window.is_empty()) {
     img_start_x = 0;
     img_start_y = 0;
-  }
-  else {
+  } else {
     img_start_x = target_window.min_x();
     img_start_y = target_window.min_y();
 
@@ -591,19 +580,19 @@ void bsgm_disparity_estimator::compute_census_data(
     ref_window_with_margin = add_margin_to_window(reference_window, params_.census_rad, ni, nj);
   }
 
-  int census_diam = 2*params_.census_rad + 1;
-  if( census_diam > 7 ) census_diam = 7;
-  if( census_diam < 3 ) census_diam = 3;
-  float census_norm = 8.0f*cost_unit_/(float)(census_diam*census_diam);
+  int census_diam = std::max(3, std::min(2 * params_.census_rad + 1, 7));
+  float census_norm = 8.0f * cost_unit_ / (float) (census_diam * census_diam);
   bool only_32_bits = census_diam <= 5;
 
   // Compute census images
   vil_image_view<vxl_uint_64> census_tar, census_ref;
   vil_image_view<vxl_uint_64> census_conf_tar, census_conf_ref;
   bsgm_compute_census_img(
-    img_tar, census_diam, census_tar, census_conf_tar, params_.census_tol, tar_window_with_margin);
+    img_tar, census_diam, census_tar, census_conf_tar, params_.census_tol, tar_window_with_margin
+  );
   bsgm_compute_census_img(
-    img_ref, census_diam, census_ref, census_conf_ref, params_.census_tol, ref_window_with_margin);
+    img_ref, census_diam, census_ref, census_conf_ref, params_.census_tol, ref_window_with_margin
+  );
 
   // timer report
   if (params_.print_timing)
@@ -613,19 +602,17 @@ void bsgm_disparity_estimator::compute_census_data(
 
   // Construct a bit-set look-up table for use later
   unsigned char bit_set_table[256];
-  bsgm_generate_bit_set_lut( bit_set_table );
+  bsgm_generate_bit_set_lut(bit_set_table);
 
   // Compute the appearance cost volume
   // (keep track of SGM cost volume indices, and the corresponding target image indices)
   for (int cost_y = 0, img_y = img_start_y; cost_y < h_; cost_y++, img_y++) {
     for (int cost_x = 0, img_x = img_start_x; cost_x < w_; cost_x++, img_x++) {
-
       unsigned char* ac = app_cost[cost_y][cost_x];
 
-      // If invalid pixel, fill with 255
+      // If invalid pixel, fill with max value
       if (invalid_tar(cost_x, cost_y)) {
-        for( int d = 0; d < num_disparities_; d++, ac++ )
-          *ac = 255;
+        memset(ac, 0xFF, num_disparities_ * sizeof(unsigned char));
         continue;
       }
 
@@ -636,39 +623,32 @@ void bsgm_disparity_estimator::compute_census_data(
       // Compute all costs
       int img_x2 = img_x + min_disparity(cost_x, cost_y);
       for (int d = 0; d < num_disparities_; d++, img_x2++, ac++) {
-
         // Check valid match pixel
-        /* if (img_x2 < 0 || img_x2 >= w_) */
         if (img_x2 < 0 || img_x2 >= ni)
-          *ac = 255;
-
+          *ac = UCHAR_MAX;
         // Compare census values using hamming distance
         else {
-
           // reference census values
           vxl_uint_64 cen_r = census_ref(img_x2, img_y);
           vxl_uint_64 conf_r = census_conf_ref(img_x2, img_y);
 
           // census comparison
           unsigned long long int cen_diff =
-            bsgm_compute_diff_string( cen_t, cen_r, conf_t, conf_r );
+            bsgm_compute_diff_string(cen_t, cen_r, conf_t, conf_r);
 
           unsigned char ham =
-            bsgm_compute_hamming_lut( cen_diff, bit_set_table, only_32_bits );
+            bsgm_compute_hamming_lut(cen_diff, bit_set_table, only_32_bits);
 
-          float ham_norm = census_norm*ham;
+          float ham_norm = census_norm * ham;
           // weighted update of appearance cost
-          float ac_new = (float)(*ac) + params_.census_weight*ham_norm;
-
-          *ac = (unsigned char)( ac_new > 255.0f ? 255.0f : ac_new );
+          float ac_new = *ac + params_.census_weight * ham_norm;
+          *ac = (unsigned char) std::min(ac_new, (float) UCHAR_MAX);
         }
-
-      } //d
-    } //j
-  } //i
+      } // d
+    } // j
+  } // i
   if (params_.print_timing)
     print_time("Census appearance cost", t);
-  /* std::cout << "" << t.real() << " msec." << std::endl; */
 }
 
 //----------------------------------------------------------------------------
@@ -683,15 +663,14 @@ bool bsgm_disparity_estimator::compute(
   float dynamic_range_factor,
   bool skip_error_check,
   const vgl_box_2d<int>& target_window,
-  vgl_box_2d<int> reference_window)
-{
+  vgl_box_2d<int> reference_window
+) {
   // validate target image is big enough for the cost volume
   if (target_window.is_empty()) {
     if (img_tar.ni() != w_ || img_tar.nj() != h_){
       throw std::runtime_error("target image not the same size as cost volume");
     }
-  }
-  else {
+  } else {
     // sgm cost volume should have same size as target window
     if (target_window.width() != w_ || target_window.height() != h_){
       throw std::runtime_error("target window not the same size as cost volume");
@@ -725,7 +704,6 @@ bool bsgm_disparity_estimator::compute(
   if (min_disp.ni() != w_ || min_disp.nj() != h_){
     throw std::runtime_error("minimum disparity different shape than cost volume");
   }
-  img_tar_ = img_tar;
 
   // disparity image
   disp_tar.set_size(w_, h_);
@@ -735,34 +713,39 @@ bool bsgm_disparity_estimator::compute(
   long long int num_voxels = w_ * h_ * num_disparities_;
 
   // determine appearance scale factor
-  float gscale = 1.0f; //SW18 has gscale = 0.32f
+  float gscale = 1.0f; // SW18 has gscale = 0.32f
   T app_scale = std::numeric_limits<T>::max();
-  if( app_scale> T(255)){
-    params_.census_tol *=dynamic_range_factor;//SW18 has params_.census_tol *=20
+  if(app_scale > T(255)){
+    params_.census_tol *= dynamic_range_factor; // SW18 has params_.census_tol *= 20
     gscale = 1.0f/dynamic_range_factor;
   }
   // shadow info - (if commented out, input from prob_pairwise_dsm instead of local computation)
   //compute_shadow_prob(img_tar, invalid_tar);
 
-  // Compute census appearance cost volume data.
-  if (params_.census_weight > 0.0f) {
-    compute_census_data<T>(img_tar, img_ref, invalid_tar, fused_cost_,
-                           min_disp, target_window, reference_window);
+  vul_timer total_timer;
+  if (params_.print_timing) {
+    total_timer.mark();
   }
 
-  vul_timer timer, total_timer;
+  // Compute census appearance cost volume data.
+  if (params_.census_weight > 0.0f) {
+    compute_census_data<T>(
+      img_tar, img_ref, invalid_tar, fused_cost_,
+      min_disp, target_window, reference_window
+    );
+  }
+  
+  vul_timer timer;
   if (params_.print_timing) {
-    timer.mark(); total_timer.mark();
+    timer.mark();
   }
 
   // Compute gradient appearance cost volume data.
   vil_image_view<float> grad_x_tar, grad_y_tar;
   if (params_.use_gradient_weighted_smoothing || params_.xgrad_weight > 0.0f) {
-
     if (target_window.is_empty()) {
       vil_sobel_3x3<T, float>(img_tar, grad_x_tar, grad_y_tar);
-    }
-    else {
+    } else {
       // xgrad computed with 3x3 kernel, so need a margin of 1 pixel
       vgl_box_2d<int> tar_window_with_xgrad_margin = add_margin_to_window(target_window, 1, ni, nj);
 
@@ -779,8 +762,10 @@ bool bsgm_disparity_estimator::compute(
 
       // get full sized gradient images, uninitialized outside of the target window
       /* vil_sobel_3x3<T, float>(img_tar, tar_window_with_xgrad_margin, grad_x_tar, grad_y_tar); */
-      gradient_inside_window(img_tar, tar_window_with_xgrad_margin,
-                             grad_x_tar, grad_y_tar);
+      gradient_inside_window(
+        img_tar, tar_window_with_xgrad_margin,
+        grad_x_tar, grad_y_tar
+      );
     }
 
     if (app_scale > T(255)) {
@@ -795,8 +780,7 @@ bool bsgm_disparity_estimator::compute(
     vil_image_view<float> grad_x_ref, grad_y_ref;
     if (target_window.is_empty()) {
       vil_sobel_3x3<T,float>(img_ref, grad_x_ref, grad_y_ref);
-    }
-    else {
+    } else {
       // xgrad computed with 3x3 kernel, so need a margin of 1 pixel
       vgl_box_2d<int> ref_window_with_xgrad_margin = add_margin_to_window(reference_window, 1, ni, nj);
 
@@ -813,8 +797,10 @@ bool bsgm_disparity_estimator::compute(
 
       // get full sized gradient images, uninitialized outside of the target window
       /* vil_sobel_3x3<T,float>(img_ref, ref_window_with_xgrad_margin, grad_x_ref, grad_y_ref); */
-      gradient_inside_window(img_ref, ref_window_with_xgrad_margin,
-                             grad_x_ref, grad_y_ref);
+      gradient_inside_window(
+        img_ref, ref_window_with_xgrad_margin,
+        grad_x_ref, grad_y_ref
+      );
     }
 
     if (app_scale > T(255)) {
@@ -825,8 +811,10 @@ bool bsgm_disparity_estimator::compute(
     if (params_.print_timing)
       print_time("Reference gradient image", timer);
 
-    compute_xgrad_data(grad_x_tar, grad_x_ref, invalid_tar, fused_cost_,
-                       min_disp, target_window);
+    compute_xgrad_data(
+      grad_x_tar, grad_x_ref, invalid_tar, fused_cost_,
+      min_disp, target_window
+    );
     if (params_.print_timing)
       print_time("XGradient appearance cost", timer);
   }
@@ -837,71 +825,77 @@ bool bsgm_disparity_estimator::compute(
   if (target_window.is_empty()) {
     grad_x_tar_cropped = grad_x_tar;
     grad_y_tar_cropped = grad_y_tar;
+  } else {
+    grad_x_tar_cropped = vil_crop(
+      grad_x_tar, target_window.min_x(),
+      target_window.width(), target_window.min_y(),
+      target_window.height()
+    );
+    grad_y_tar_cropped = vil_crop(
+      grad_y_tar, target_window.min_x(),
+      target_window.width(), target_window.min_y(),
+      target_window.height()
+    );
   }
-  else {
-    grad_x_tar_cropped = vil_crop(grad_x_tar, target_window.min_x(),
-                                  target_window.width(), target_window.min_y(),
-                                  target_window.height());
-    grad_y_tar_cropped = vil_crop(grad_y_tar, target_window.min_x(),
-                                  target_window.width(), target_window.min_y(),
-                                  target_window.height());
-  }
-
-// #if defined(DEBUG_BUILD) && !defined(__SANITIZE_ADDRESS__)
-  raise(SIGTRAP); // Stop GDB artifically, as if with a breakpoint
-// #endif
 
   // Run the multi-directional dynamic programming to obtain a total cost
   // volume incorporating appearance + smoothing.
-  auto start = std::chrono::high_resolution_clock::now();
-  run_multi_dp(
+  // TODO: for debugging
+  // vul_timer t; t.mark();
+  run_multi_dp_opt(
     fused_cost_, total_cost_,
     invalid_tar, grad_x_tar_cropped, grad_y_tar_cropped, min_disp
   );
-  auto end = std::chrono::high_resolution_clock::now();
-  auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-  std::cout << "Original took " << elapsed << " ms" << std::endl;
-  aligned_vector<unsigned short> true_cost = total_cost_data_;
-  aligned_vector<unsigned short> true_dir_cost = dir_cost_data_;
+  // TODO: for debugging
+  // auto elapsed = t.real();
+  // std::cout << "Original took " << elapsed << " ms" << std::endl;
+  // aligned_vector<unsigned short> true_cost = total_cost_data_;
+  // aligned_vector<unsigned short> true_dir_cost = dir_cost_data_;
   
-  run_opt_and_check(invalid_tar, min_disp, grad_x_tar_cropped, grad_y_tar_cropped, true_cost, true_dir_cost, elapsed);  
-  total_cost_data_ = true_cost;
+  // run_opt_and_check(invalid_tar, min_disp, grad_x_tar_cropped, grad_y_tar_cropped, true_cost, true_dir_cost, elapsed);  
+  // total_cost_data_ = true_cost;
 
   if (params_.print_timing)
     print_time("Dynamic programming", timer);
 
   // Find the lowest total cost disparity for each pixel, do quadratic
   // interpolation if configured.
-  vil_image_view<unsigned short> disp_cost ;
-  compute_best_disparity_img( total_cost_, min_disp,
-    invalid_tar, invalid_disp, disp_tar, disp_cost );
+  vil_image_view<unsigned short> disp_cost;
+  compute_best_disparity_img(
+    total_cost_, min_disp, invalid_tar, invalid_disp, disp_tar, disp_cost
+  );
 
   // Median filter to remove speckles
-  vil_structuring_element se; se.set_to_disk( 1.9 );
-  vil_image_view<float> disp2( w_, h_ );
-  vil_median( disp_tar, disp2, se );
-  disp_tar.deep_copy( disp2 );
+  vil_structuring_element se; 
+  se.set_to_disk(1.9);
+  vil_image_view<float> disp2(w_, h_);
+  vil_median(disp_tar, disp2, se);
+  disp_tar.deep_copy(disp2);
 
   if (params_.print_timing)
     print_time("Disparity map extraction", timer);
 
   // Find and fix errors if configured.
   if (!skip_error_check) {
-
-    if(sun_dir_tar_.length()==0.0){
-      bsgm_check_shadows<T>(disp_tar, img_tar, invalid_disp,
-                            params_.shadow_thresh, target_window);
-    }
-      
+    if(sun_dir_tar_.length() == 0.0) {
+      bsgm_check_shadows<T>(
+        disp_tar, img_tar, invalid_disp,
+        params_.shadow_thresh, target_window
+      );
+    }  
     
-    if ( params_.error_check_mode > 0) {
-      bsgm_check_nonunique<T>( disp_tar, disp_cost,
-        img_tar, invalid_disp, params_.shadow_thresh, 1, target_window);
+    if (params_.error_check_mode > 0) {
+      bsgm_check_nonunique<T>(
+        disp_tar, disp_cost, img_tar, invalid_disp, 
+        params_.shadow_thresh, 1, target_window
+      );
     }
 
-    if ( params_.error_check_mode > 1 ) {
-      bsgm_interpolate_errors<T>( disp_tar, invalid_tar,
-        img_tar, invalid_disp, params_.shadow_thresh, target_window);
+    if (params_.error_check_mode > 1) {
+      bsgm_interpolate_errors<T>(
+        disp_tar, invalid_tar, img_tar, 
+        invalid_disp, params_.shadow_thresh, target_window
+      );
     }
 
     if (params_.print_timing)
@@ -913,7 +907,5 @@ bool bsgm_disparity_estimator::compute(
 
   return true;
 }
-
-
 
 #endif // bsgm_disparity_estimator_h_
