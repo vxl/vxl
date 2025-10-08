@@ -20,6 +20,15 @@
 #include <brip/brip_line_generator.h>
 #include <bsta/bsta_histogram.h>
 
+// ----------------------------------------------------------------------------
+// Initialize static members
+constexpr size_t START_SIZE = 4000000000; // estimated max of 4 billion, for image sizes 2000x2000 with 1000 disparities
+unsigned char* bsgm_disparity_estimator::fused_cost_data_ = static_cast<unsigned char*>(alloc_aligned_mem(START_SIZE * sizeof(*fused_cost_data_), ALIGN));
+unsigned short* bsgm_disparity_estimator::total_cost_data_ = static_cast<unsigned short*>(alloc_aligned_mem(START_SIZE * sizeof(*total_cost_data_), ALIGN));
+unsigned short* bsgm_disparity_estimator::dir_cost_data_ = static_cast<unsigned short*>(alloc_aligned_mem(8 * START_SIZE * sizeof(*dir_cost_data_), ALIGN)); // TODO: for debugging
+size_t bsgm_disparity_estimator::total_volume_size_ = START_SIZE;
+std::mutex bsgm_disparity_estimator::static_cost_mutex_;
+
 //----------------------------------------------------------------------------
 bsgm_disparity_estimator::bsgm_disparity_estimator(
   const bsgm_disparity_estimator_params& params,
@@ -31,17 +40,19 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
   vil_image_view<float> const& shadow_prob,
   vgl_vector_2d<float> const& sun_dir_tar
 ):
-    params_( params ),
-    w_( cost_volume_width ),
-    h_( cost_volume_height ),
-    num_disparities_( num_disparities ),
-    cost_unit_( 64 ),
-    p1_base_( 1.0f ),
-    p2_min_base_( 1.0f ),
-    p2_max_base_( 8.0f ),
+    params_(params),
+    w_(cost_volume_width),
+    h_(cost_volume_height),
+    num_disparities_(num_disparities),
+    cost_unit_(64),
+    p1_base_(1.0f),
+    p2_min_base_(1.0f),
+    p2_max_base_(8.0f),
     shadow_step_prob_(shadow_step_prob),
     shadow_prob_(shadow_prob),
-    sun_dir_tar_(sun_dir_tar)
+    sun_dir_tar_(sun_dir_tar),
+    aligned_disparities_(ALIGN_UP(num_disparities_, NUM_TC_ELEMS)),
+    volume_size_(w_ * h_ * aligned_disparities_)
 {
   // Validate inputs
   if (cost_volume_width < 0 || cost_volume_height < 0 || num_disparities < 0) {
@@ -52,30 +63,33 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
            << "num_disparities = " << num_disparities << std::endl;
     throw std::runtime_error(buffer.str());
   }
-
-  // Check cost volume size
-  long long int cost_volume_size = cost_volume_width * cost_volume_height * num_disparities;
-  if (cost_volume_size < 0 || size_t(cost_volume_size) > total_cost_data_.max_size()) {
-    std::ostringstream buffer;
-    buffer << "Cannot construct bsgm_disparity_estimator - cost volume is too large." << std::endl
-           << "width = " << cost_volume_width << std::endl
-           << "height = " << cost_volume_height << std::endl
-           << "num_disparities = " << num_disparities << std::endl;
-    std::cout << buffer.str() << std::endl;
-    throw std::runtime_error(buffer.str());
-  }
-
-  // Setup any necessary cost volumes
-  std::ostringstream oss;
-  oss << "Volumes initialization (" << w_ * h_ * ALIGN_UP(num_disparities_, NUM_COST_ELEMS_PER_ALIGN) << " bytes)";
-  vul_timer t; t.mark();
-  setup_cost_volume(fused_cost_data_, fused_cost_, w_, h_, ALIGN_UP(num_disparities_, NUM_COST_ELEMS_PER_ALIGN));
-  setup_cost_volume(total_cost_data_, total_cost_, w_, h_, ALIGN_UP(num_disparities_, NUM_COST_ELEMS_PER_ALIGN));
-  print_time(oss.str(), t);
   
-  // TODO: for debugging
-  dir_cost_data_.resize(8 * h_ * w_ * ALIGN_UP(num_disparities_, NUM_COST_ELEMS_PER_ALIGN)); 
-  print_time("Debug volume initialization", t);
+  // Setup any necessary cost volumes
+  vul_timer t; 
+  if(params_.print_timing)
+    t.mark();
+  // Increase size of cost volume allocations, if needed
+  if(volume_size_ > total_volume_size_) {
+    free_aligned_mem(fused_cost_data_);
+    free_aligned_mem(total_cost_data_);
+    free_aligned_mem(dir_cost_data_); // TODO: for debugging
+    try {
+      fused_cost_data_ = static_cast<unsigned char*>(alloc_aligned_mem(volume_size_ * sizeof(*fused_cost_data_), ALIGN));
+      total_cost_data_ = static_cast<unsigned short*>(alloc_aligned_mem(volume_size_ * sizeof(*total_cost_data_), ALIGN));
+      dir_cost_data_ = static_cast<unsigned short*>(alloc_aligned_mem(8 * volume_size_ * sizeof(*total_cost_data_), ALIGN)); // TODO: for debugging
+    } catch(std::bad_alloc) {
+      std::ostringstream buffer;
+      buffer << "Cannot construct bsgm_disparity_estimator - cost volume is too large." << std::endl
+             << "width = " << cost_volume_width << std::endl
+             << "height = " << cost_volume_height << std::endl
+             << "num_disparities = " << num_disparities << std::endl;
+      std::cout << buffer.str() << std::endl;
+      throw std::runtime_error(buffer.str());
+    }
+    total_volume_size_ = volume_size_;
+  }
+  if(params_.print_timing)
+    print_time(t, "Volumes allocation (%ld bytes)", volume_size_ * (sizeof(*fused_cost_data_) + sizeof(*total_cost_data_)));
 }
 
 
@@ -83,7 +97,6 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
 bsgm_disparity_estimator::~bsgm_disparity_estimator() = default;
 
 //----------------------------------------------------------------------------
-
 void bsgm_disparity_estimator::compute_xgrad_data(
   const vil_image_view<float>& grad_x_tar,
   const vil_image_view<float>& grad_x_ref,
@@ -145,16 +158,14 @@ void bsgm_disparity_estimator::write_cost_debug_imgs(
   const std::string& out_dir,
   bool write_total_cost
 ) {
-  if(fused_cost_.size() == 0)
+  if(volume_size_ == 0)
     return;
 
   // total cost maximum
   float total_cost_scale = 1.0f;
   if (write_total_cost) {
-    auto max_total_cost = *std::max_element(total_cost_data_.begin(), total_cost_data_.end());
+    auto max_total_cost = *std::max_element(total_cost_data_, total_cost_data_ + volume_size_);
     total_cost_scale = 255.0f / float(max_total_cost);
-    // std::cout << "MAX TOTAL COST " << max_total_cost << std::endl
-    //           << "TOTAL COST SCALE " << total_cost_scale << std::endl;
   }
 
   vil_image_view<vxl_byte> vis_img(w_, h_);
@@ -644,10 +655,9 @@ bsgm_disparity_estimator::compute_dir_cost(
       *tc += (*crc);
     }
 
-    // int aligned_disparities = (num_disparities_ + NUM_COST_ELEMS_PER_ALIGN) & ~(NUM_COST_ELEMS_PER_ALIGN - 1);
-    // dir_cost_data_[((dir * h_ + y) * w_ + x) * aligned_disparities + d] = *crc;
-    // if(x == 319 && y == 31 && d == 0) {
-    //   std::printf("(%d, %d, %d, %d): best_cost=%u, cpc=%u, tc=%u, min_prev_cost=%u\n", x, y, d, dir, best_cost, *crc, *tc, min_prev_cost);
+    // dir_cost_data_[((dir * h_ + y) * w_ + x) * aligned_disparities_ + d] = *crc;
+    // if(x == 349 && y == 24 && d == 0) {
+    //   std::printf("(%d, %d, %d, %d): best_cost=%u, cac=%u, cpc=%u, tc=%u, min_prev_cost=%u\n", x, y, d, dir, best_cost, *cac, *crc, *tc, min_prev_cost);
     //   // std::printf(
     //   //   "(+0: %d used=%d) (-1: %d used=%d) (+1: %d used=%d)\n", 
     //   //   *prc, d_off >= 0 && d_off < num_disparities_,
@@ -794,9 +804,6 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
   float p2_min = 0.5 * p2_min_base_ * cost_unit_ * params_.p2_scale;
   auto p2 = (unsigned short) p2_max;
 
-  // Initialize total cost
-  std::fill(total_cost_data_.begin(), total_cost_data_.end(), 0);
-
   // Calculate direction and/or position specific data
   // Index of relevant derivative in `deriv_img` for the corresponding direction
   constexpr int deriv_idxs[16] = {0, 0, 2, 2, 1, 1, 3, 3, 0, 0, 1, 1, 1, 1, 0, 0};
@@ -825,12 +832,12 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
 
   // Align number of disparities + 1 (+ 1 because for each column, we also store 
   // the minimum cost for that position) accordingly
-  const int aligned_disparities = ALIGN_UP(num_disparities_ + 1, NUM_COST_ELEMS_PER_ALIGN);
+  const int aligned_disps_p1 = ALIGN_UP(num_disparities_ + 1, NUM_TC_ELEMS);
   // Organized by direction, then column, then disparity; in other words, for an even or odd direction 
   // index `dir`, column `x`, and disparity `d`, the position (x, d, dir) is accessed at:
-  // (dir/2) * w_ * aligned_disparities + x * aligned_disparities + d.
-  aligned_vector<unsigned short> dir_cost_cur((num_dirs / 2) * w_ * aligned_disparities, 0);
-  aligned_vector<unsigned short> dir_cost_prev((num_dirs / 2) * w_ * aligned_disparities, 0);
+  // (dir/2) * w_ * aligned_disps_p1 + x * aligned_disps_p1 + d.
+  aligned_vector<unsigned short> dir_cost_cur((num_dirs / 2) * w_ * aligned_disps_p1, 0);
+  aligned_vector<unsigned short> dir_cost_prev((num_dirs / 2) * w_ * aligned_disps_p1, 0);
 
   // Lambda that processes each position along a given forward/backward sweep
   std::function<void(int, int, bool)> process_pos = [&](int x, int y, bool forward) {
@@ -839,7 +846,7 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
     // Quit early if invalid pixel
     if(invalid_tar(x, y)) {
       for(int dir_iter = 0; dir_iter < 4; dir_iter++)
-        memset(&dir_cost_cur[(dir_iter * w_ + x) * aligned_disparities], 0, aligned_disparities * sizeof(unsigned short));
+        memset(&dir_cost_cur[(dir_iter * w_ + x) * aligned_disps_p1], 0, aligned_disps_p1 * sizeof(unsigned short));
       return;
     }
 
@@ -849,7 +856,7 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
       // Skip invalid adjacent positions
       if(x + dxs[dir] < 0 || x + dxs[dir] >= w_ ||
          y + dys[dir] < 0 || y + dys[dir] >= h_) {
-        memset(&dir_cost_cur[(dir_iter * w_ + x) * aligned_disparities], 0, aligned_disparities * sizeof(unsigned short));
+        memset(&dir_cost_cur[(dir_iter * w_ + x) * aligned_disps_p1], 0, aligned_disps_p1 * sizeof(unsigned short));
         continue;
       }
 
@@ -871,10 +878,10 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
         bool ssp_greater = ssp > params_.shad_shad_stp_prob_thresh;
         bool sp_greater = shadow_prob_(x, y) > params_.shad_shad_stp_prob_thresh;
         if(params_.adj_dir_weight > 0.0f && sp_greater && (dir != dc && dir != adj_dirs[dc].first && dir != adj_dirs[dc].second)) {
-          memset(&dir_cost_cur[(dir_iter * w_ + x) * aligned_disparities], 0, aligned_disparities * sizeof(unsigned short));
+          memset(&dir_cost_cur[(dir_iter * w_ + x) * aligned_disps_p1], 0, aligned_disps_p1 * sizeof(unsigned short));
           continue;
         } else if (sp_greater && dir != dc) {
-          memset(&dir_cost_cur[(dir_iter * w_ + x) * aligned_disparities], 0, aligned_disparities * sizeof(unsigned short));
+          memset(&dir_cost_cur[(dir_iter * w_ + x) * aligned_disps_p1], 0, aligned_disps_p1 * sizeof(unsigned short));
           continue;
         }
 
@@ -894,13 +901,13 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
         p2 = (unsigned short) (p2_max - (p2_max - p2_min) * g);
       }
 
-      const int cost_offset = aligned_disparities * w_ * (dir / 2);
-      const int prev_pos_offset = cost_offset + (x + dxs[dir]) * aligned_disparities;
+      const int cost_offset = aligned_disps_p1 * w_ * (dir / 2);
+      const int prev_pos_offset = cost_offset + (x + dxs[dir]) * aligned_disps_p1;
       const int disp_offset = min_disparity(x, y) - min_disparity(x + dxs[dir], y + dys[dir]);
 
       // Costs per disparity at previous (w.r.t `dir`) position, offset to align with the current position cost
       const unsigned short* ppc = ((dys[dir] == 0) ? &dir_cost_cur[prev_pos_offset] : &dir_cost_prev[prev_pos_offset]) + disp_offset;
-      unsigned short* cpc = &dir_cost_cur[cost_offset + x * aligned_disparities]; // Current position costs per disparity
+      unsigned short* cpc = &dir_cost_cur[cost_offset + x * aligned_disps_p1]; // Current position costs per disparity
       const unsigned char* cac = app_cost[y][x]; // Current position application cost
       unsigned short* tc = total_cost[y][x]; // Current position total cost
 
@@ -920,8 +927,8 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
       __m512i min_costs = _mm512_set1_epi16(USHRT_MAX);
       __m512i d_block = fill_mm_seq();
       __m512i d_off_block = _mm512_add_epi16(d_block, _mm512_set1_epi16(disp_offset));  // NOTE: we assume this value fits into 16 bits
-      __m512i d_iter = _mm512_set1_epi16(NUM_COST_ELEMS_PER_ALIGN);
-      for(int d = 0; d < num_disparities_; d += NUM_COST_ELEMS_PER_ALIGN) {
+      __m512i d_iter = _mm512_set1_epi16(NUM_TC_ELEMS);
+      for(int d = 0; d < num_disparities_; d += NUM_TC_ELEMS) {
         // `d_off` stores the index into the previous cost vector
         // const int d_off = d + prev_offset;
 
@@ -989,21 +996,21 @@ void bsgm_disparity_estimator::run_multi_dp_opt(
           // tc[d] += cpc[d];
         }
         // TODO: for debugging
-        // memcpy(&dir_cost_data_[((dir * h_ + y) * w_ + x) * aligned_disparities + d], &cpc[d], NUM_COST_ELEMS_PER_ALIGN * sizeof(unsigned short));
+        // memcpy(&dir_cost_data_[((dir * h_ + y) * w_ + x) * aligned_disparities_ + d], &cpc[d], NUM_TC_ELEMS * sizeof(unsigned short));
 
         // int SEARCH_D = 0;
-        // if(x == 319 && y == 31 && d <= SEARCH_D && SEARCH_D < d + NUM_COST_ELEMS_PER_ALIGN) {
+        // if(x == 349 && y == 24 && d <= SEARCH_D && SEARCH_D < d + NUM_TC_ELEMS) {
         //   std::printf(
-        //     "(%d, %d, %d, %d): best_cost=%u, cpc=%u, tc=%u, min_prev_cost=%u/%u\n", 
-        //     x, y, SEARCH_D, dir, get_m512i_epu16_elem(best_costs, SEARCH_D % NUM_COST_ELEMS_PER_ALIGN), 
-        //     cpc[SEARCH_D], tc[SEARCH_D], ppc[num_disparities_], *std::min_element(ppc, &ppc[num_disparities_-1])
+        //     "(%d, %d, %d, %d): best_cost=%u, cac=%u, cpc=%u, tc=%u, min_prev_cost=%u/%u\n", 
+        //     x, y, SEARCH_D, dir, get_m512i_epu16_elem(best_costs, SEARCH_D % NUM_TC_ELEMS), 
+        //     cac[SEARCH_D], cpc[SEARCH_D], tc[SEARCH_D], ppc[num_disparities_], *std::min_element(ppc, &ppc[num_disparities_-1])
         //   );
-        //   std::printf(
-        //     "(+0: %d used=%d) (-1: %d used=%d) (+1: %d used=%d)\n", 
-        //     get_m512i_epu16_elem(_mm512_loadu_si512(&ppc[d]), SEARCH_D % NUM_COST_ELEMS_PER_ALIGN), (valid_same >> (SEARCH_D % NUM_COST_ELEMS_PER_ALIGN)) & 1,
-        //     get_m512i_epu16_elem(_mm512_loadu_si512(&ppc[d-1]), SEARCH_D % NUM_COST_ELEMS_PER_ALIGN), (valid_m1 >> (SEARCH_D % NUM_COST_ELEMS_PER_ALIGN)) & 1,
-        //     get_m512i_epu16_elem(_mm512_loadu_si512(&ppc[d+1]), SEARCH_D % NUM_COST_ELEMS_PER_ALIGN), (valid_p1 >> (SEARCH_D % NUM_COST_ELEMS_PER_ALIGN)) & 1
-        //   );
+        //   // std::printf(
+        //   //   "(+0: %d used=%d) (-1: %d used=%d) (+1: %d used=%d)\n", 
+        //   //   get_m512i_epu16_elem(_mm512_loadu_si512(&ppc[d]), SEARCH_D % NUM_TC_ELEMS), (valid_same >> (SEARCH_D % NUM_TC_ELEMS)) & 1,
+        //   //   get_m512i_epu16_elem(_mm512_loadu_si512(&ppc[d-1]), SEARCH_D % NUM_TC_ELEMS), (valid_m1 >> (SEARCH_D % NUM_TC_ELEMS)) & 1,
+        //   //   get_m512i_epu16_elem(_mm512_loadu_si512(&ppc[d+1]), SEARCH_D % NUM_TC_ELEMS), (valid_p1 >> (SEARCH_D % NUM_TC_ELEMS)) & 1
+        //   // );
         // }
 
         // Update minimum cost for this position and direction (masking off any d-values beyond `num_disparities_`)
@@ -1114,38 +1121,6 @@ void bsgm_disparity_estimator::compute_best_disparity_img(
     } // x
   } // y
 }
-
-//----------------------------------------------------------------------
-vgl_box_2d<int> bsgm_disparity_estimator::add_margin_to_window(
-  const vgl_box_2d<int>& target_window,
-  int margin,
-  int ni,
-  int nj
-) {
-  int minx = target_window.min_x() - margin;
-  int miny = target_window.min_y() - margin;
-  int maxx = target_window.max_x() + margin;
-  int maxy = target_window.max_y() + margin;
-
-  // clip to image bounds (end of window exclusive)
-  minx = std::max(minx, 0);
-  miny = std::max(miny, 0);
-  maxx = std::min(maxx, ni);
-  maxy = std::min(maxy, nj);
-
-  return vgl_box_2d<int>(minx, maxx, miny, maxy);
-}
-
-//----------------------------------------------------------------------
-void bsgm_disparity_estimator::print_time(
-  const std::string name,
-  vul_timer& timer
-) {
-  std::cerr << name << ": " << timer.real() << " ms\n";
-  timer.mark();
-}
-
-
 
 //-----------------------------------------------------------------------
 // output parameters

@@ -365,7 +365,7 @@ void bpgl_heightmap<T>::heightmap_from_pointset(
       radial_std_dev(i,j) = std_dev;
     }
   t_rad = t.real();
-  std::cout << "tzprob, trad " << t_h_ << ' ' << t_rad << std::endl;
+  // std::cout << "tzprob, trad " << t_h_ << ' ' << t_rad << std::endl;
 }
 
 template<class T>
