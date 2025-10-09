@@ -30,6 +30,7 @@ size_t bsgm_disparity_estimator::total_volume_size_ = START_SIZE;
 std::mutex bsgm_disparity_estimator::static_cost_mutex_;
 
 //----------------------------------------------------------------------------
+int num_computes = 0;
 bsgm_disparity_estimator::bsgm_disparity_estimator(
   const bsgm_disparity_estimator_params& params,
   long long int cost_volume_width,
@@ -65,9 +66,8 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
   }
   
   // Setup any necessary cost volumes
-  vul_timer t; 
   if(params_.print_timing)
-    t.mark();
+    sect_timer.reset_all_timers();
   // Increase size of cost volume allocations, if needed
   if(volume_size_ > total_volume_size_) {
     free_aligned_mem(fused_cost_data_);
@@ -89,7 +89,7 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
     total_volume_size_ = volume_size_;
   }
   if(params_.print_timing)
-    print_time(t, "Volumes allocation (%ld bytes)", volume_size_ * (sizeof(*fused_cost_data_) + sizeof(*total_cost_data_)));
+    sect_timer.record_time(false, "vol alloc");
 }
 
 

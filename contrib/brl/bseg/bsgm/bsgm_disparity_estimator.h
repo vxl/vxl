@@ -13,7 +13,6 @@
 #include <utility>
 #include <mutex>
 #include <climits>
-#include <stdarg.h>
 #include <immintrin.h> // TODO: move to generic SIMD header
 
 #include <vul/vul_timer.h>
@@ -32,6 +31,8 @@
 #include <vil/algo/vil_gauss_reduce.h>
 #include "bsgm_error_checking.h"
 #include "aligned_allocator.hxx"
+#include "section_timer.hxx"
+
 //:
 // \file
 // \brief An implementation of the semi-global matching stereo algorithm.
@@ -262,8 +263,8 @@ class bsgm_disparity_estimator {
   
   //: The number of elements of the cost volume that can fit in the
   // largest supported SIMD vector
-  static constexpr size_t NUM_TC_ELEMS = NUM_ELEMS_PER_ALIGN(*total_cost_data_);
-  static constexpr size_t NUM_AC_ELEMS = NUM_ELEMS_PER_ALIGN(*fused_cost_data_);
+  static constexpr size_t NUM_TC_ELEMS = NUM_ELEMS_PER_ALIGN(unsigned short);
+  static constexpr size_t NUM_AC_ELEMS = NUM_ELEMS_PER_ALIGN(unsigned char);
   
   //: The number of disparities, aligned to `NUM_TC_ELEMS`
   const size_t aligned_disparities_;
@@ -402,6 +403,8 @@ class bsgm_disparity_estimator {
   // Other
   //
 
+  SectionTimer sect_timer;
+
   template <class srcT, class destT>
   void gradient_inside_window(
     vil_image_view<srcT> const& img,
@@ -455,27 +458,6 @@ class bsgm_disparity_estimator {
     maxy = std::min(maxy, nj);
 
     return vgl_box_2d<int>(minx, maxx, miny, maxy);
-  }
-
-  //: Convenience function for printing time since last call to this function
-  // Implementation based on https://stackoverflow.com/a/26221725
-  void print_time(vul_timer& timer, const char* format, ...) {
-    // Determine space needed for the formatted string
-    va_list args;
-    va_start(args, format);
-    int size_s = std::vsnprintf(nullptr, 0, format, args) + 1; // Extra space for '\0'
-    va_end(args);
-    if(size_s <= 0)
-      throw std::runtime_error("Error during formatting.");
-    
-    // Create formatted string
-    size_t size = static_cast<size_t>(size_s);
-    std::unique_ptr<char[]> buf(new char[size]);
-    va_start(args, format);
-    std::vsnprintf(buf.get(), size, format, args);
-    va_end(args);
-    std::cerr << std::string(buf.get(), buf.get() + size - 1) << ": " << timer.real() << " ms\n";
-    timer.mark();
   }
 
   //: Disable default constructor
@@ -622,7 +604,7 @@ void bsgm_disparity_estimator::compute_census_data(
 
   // timer report
   if (params_.print_timing)
-    print_time(t, "Census images");
+    sect_timer.record_time(false, "census imgs");
   /* std::cout << "compute census images " << t.real() << " msec." << std::endl; */
   /* t.mark(); */
 
@@ -674,10 +656,11 @@ void bsgm_disparity_estimator::compute_census_data(
     } // j
   } // i
   if (params_.print_timing)
-    print_time(t, "Census appearance cost");
+    sect_timer.record_time(false, "census cost");
 }
 
 //----------------------------------------------------------------------------
+extern int num_computes;
 template <class T>
 bool bsgm_disparity_estimator::compute(
   const vil_image_view<T>& img_tar,
@@ -692,6 +675,7 @@ bool bsgm_disparity_estimator::compute(
   vgl_box_2d<int> reference_window
 ) {
   std::unique_lock<std::mutex> lk(static_cost_mutex_); // Lock access to cost volume for duration of function
+  num_computes++;
 
   // validate target image is big enough for the cost volume
   if (target_window.is_empty()) {
@@ -733,17 +717,15 @@ bool bsgm_disparity_estimator::compute(
     throw std::runtime_error("minimum disparity different shape than cost volume");
   }
 
-  // Initialize and set up cost volumes / convenience image
-  vul_timer total_timer, timer;
-  if (params_.print_timing) {
-    total_timer.mark(); timer.mark();
-  }
+  if (params_.print_timing)
+    sect_timer.reset_timer();
 
+  // Initialize and set up cost volumes / convenience image
   setup_cost_volume(fused_cost_data_, fused_cost_, w_, h_, aligned_disparities_);
   setup_cost_volume(total_cost_data_, total_cost_, w_, h_, aligned_disparities_);
 
   if (params_.print_timing)
-    print_time(timer, "Cost volume initialization");
+    sect_timer.record_time(false, "vol init");
 
   // disparity image
   disp_tar.set_size(w_, h_);
@@ -769,10 +751,6 @@ bool bsgm_disparity_estimator::compute(
       img_tar, img_ref, invalid_tar, fused_cost_,
       min_disp, target_window, reference_window
     );
-  }
-  
-  if (params_.print_timing) {
-    timer.mark(); // mark to ignore census data cost
   }
 
   // Compute gradient appearance cost volume data.
@@ -809,7 +787,7 @@ bool bsgm_disparity_estimator::compute(
     }
 
     if (params_.print_timing)
-      print_time(timer, "Target gradient image");
+      sect_timer.record_time(false, "target grad");
 
     // Reference gradients
     vil_image_view<float> grad_x_ref, grad_y_ref;
@@ -844,14 +822,14 @@ bool bsgm_disparity_estimator::compute(
     }
 
     if (params_.print_timing)
-      print_time(timer, "Reference gradient image");
+      sect_timer.record_time(false, "ref grad");
 
     compute_xgrad_data(
       grad_x_tar, grad_x_ref, invalid_tar, fused_cost_,
       min_disp, target_window
     );
     if (params_.print_timing)
-      print_time(timer, "XGradient appearance cost");
+      sect_timer.record_time(false, "xgrad cost");
   }
 
   // Crop the target gradient images before passing them to run_multi_dp
@@ -904,7 +882,7 @@ bool bsgm_disparity_estimator::compute(
 #endif
 
   if (params_.print_timing)
-    print_time(timer, "Dynamic programming");
+    sect_timer.record_time(false, "dp");
 
   // Find the lowest total cost disparity for each pixel, do quadratic
   // interpolation if configured.
@@ -921,7 +899,7 @@ bool bsgm_disparity_estimator::compute(
   disp_tar.deep_copy(disp2);
 
   if (params_.print_timing)
-    print_time(timer, "Disparity map extraction");
+    sect_timer.record_time(false, "disp map");
 
   // Find and fix errors if configured.
   if (!skip_error_check) {
@@ -945,13 +923,14 @@ bool bsgm_disparity_estimator::compute(
         invalid_disp, params_.shadow_thresh, target_window
       );
     }
-
-    if (params_.print_timing)
-      print_time(timer, "Consistency check");
   }
 
-  if (params_.print_timing)
-    print_time(total_timer, "TOTAL COMPUTE TIME");
+  if (params_.print_timing) {
+    if(num_computes % 2 == 0)
+      sect_timer.print_summary("/host/times_disp_calc.csv", true);
+    else
+      sect_timer.print_summary();
+  }
 
   return true;
 }

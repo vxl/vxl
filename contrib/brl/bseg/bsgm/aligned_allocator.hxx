@@ -67,14 +67,7 @@ inline void* alloc_aligned_mem(size_t size, size_t alignment) {
     return ptr;
 #else
     // Manual implementation
-    if(alignment <= alignof(std::max_align_t)) {
-        // Alignment can be satisfied by malloc
-        void* ptr = malloc(size);
-        if(!ptr)
-            throw std::bad_alloc();
-        return ptr;
-    }
-    // Otherwise, we'll offset the returned allocation to have the 
+    // We'll offset the returned allocation to have the 
     // requested alignment and store this offset before the allocation, 
     // so that we can determine the right pointer to pass to free 
     // when deallocating.

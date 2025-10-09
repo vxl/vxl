@@ -155,7 +155,7 @@ struct pairwise_params
 
   bool fast_heightmaps_ = false;
 
-  bool print_dsm_timing_ = false;
+  bool print_timing_ = false;
 };
 
 
@@ -457,10 +457,7 @@ class bsgm_prob_pairwise_dsm
   bool process(bool with_consistency_check = true, bool knn_consistency = true,
                bool compute_fwd_rev_ptsets_hmaps = true)
   {
-    // for time measurement
-    vul_timer t;
-    long t_rect, t_disp_fwd, t_hmap_fwd, t_disp_rev, t_hmap_rev, t_prob;
-    params_.print_dsm_timing_ = true;
+    SectionTimer t; // for time measurement
       
     // check if not in window mode
     bool window_mode = !target_window_.is_empty();
@@ -468,13 +465,11 @@ class bsgm_prob_pairwise_dsm
       throw std::runtime_error("Can't apply window processing using this process method");
       return false;
     }
-    float d1=0.0, h1=0.0, d2=0.0, h2=0.0, tp = 0.0;
     // rectification
     this->rectify();
 
-    if(params_.print_dsm_timing_){
-      t_rect = t.real(); t.mark();
-    }
+    if(params_.print_timing_)
+      t.record_time(false, "rect");
       
     // determine disparity range for individual pairs
     // depends on view angle separation and max_height_
@@ -492,57 +487,39 @@ class bsgm_prob_pairwise_dsm
     // compute forward disparity & height
     this->compute_disparity_fwd();
 
-    if(params_.print_dsm_timing_){
-      t_disp_fwd = t.real(); t.mark();
-    }
-
+    if(params_.print_timing_)
+      t.record_time(false, "disp fwd");
 
     this->compute_height_fwd(compute_fwd_rev_ptsets_hmaps);
 
-    if(params_.print_dsm_timing_){
-      t_hmap_fwd = t.real(); t.mark();
-    }
+    if(params_.print_timing_)
+      t.record_time(false, "hmap fwd");
+    
     // consistency check & probabilistic analysis
-
     if (with_consistency_check) {
       this->compute_disparity_rev();
 
-      if(params_.print_dsm_timing_){
-      t_disp_rev = t.real(); t.mark();
-      }
+      if(params_.print_timing_)
+        t.record_time(false, "disp rev");
 
       this->compute_height_rev(compute_fwd_rev_ptsets_hmaps);
 
-      if(params_.print_dsm_timing_){
-        t_hmap_rev = t.real(); t.mark();
+      if(params_.print_timing_)
+        t.record_time(false, "hmap rev");
 
-      }
       if (knn_consistency) {
         if (!compute_prob(true))  // true -> compute prob heightmap
            return false;
-        if(params_.print_dsm_timing_){
-          t_prob = t.real(); t.mark();
-    }
+        if(params_.print_timing_)
+          t.record_time(false, "prob");
       } else {
         this->compute_xyz_prob(true);  // true -> compute prob heightmap
       }
-    } else this->compute_ptset();
+    } else 
+      this->compute_ptset();
 
-    if(params_.print_dsm_timing_){
-      // TODO: for debugging
-      std::printf(
-        "rect=%ldms, disp_fwd=%ldms, hmap_fwd=%ldms, disp_rev=%ldms, hmap_rev=%ldms, prob=%ldms\n",
-        t_rect, t_disp_fwd, t_hmap_fwd, t_disp_rev, t_hmap_rev, t_prob
-      );
-      std::ostringstream oss;
-      oss << t_rect << "," << t_disp_fwd << "," << t_hmap_fwd << "," << t_disp_rev << "," << t_hmap_rev << "," << t_prob << "\n";
-      std::string result = oss.str();
-      
-      int fd = open("/host/times.csv", O_WRONLY | O_CREAT | O_APPEND, 0666);
-      if(fd < 0)
-        perror("open");
-      else if(write(fd, result.c_str(), result.size()) < 0)
-        perror("write");
+    if(params_.print_timing_) {
+      t.print_summary("/host/times_stereo.csv", true);
     }
     return true;
   }
@@ -570,7 +547,7 @@ class bsgm_prob_pairwise_dsm
     /* } */
 
     // tell disparity estimator to also print timing estimates
-    params_.de_params_.print_timing = print_timing;
+    params_.print_timing_ = print_timing;
 
     vul_timer t;
     // rectification
