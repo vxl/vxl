@@ -11,6 +11,7 @@
 #include <fstream>
 #include <sstream>
 #include <utility>
+#include <memory>
 #include <mutex>
 #include <climits>
 #include <immintrin.h> // TODO: move to generic SIMD header
@@ -226,6 +227,14 @@ class bsgm_disparity_estimator {
     bool write_total_cost = false
   );
 
+  //: Explicitly frees the cost volumes, if needed before the lifetime of 
+  // encapsulating smart pointers end
+  static void free_cost_volumes() {
+    total_cost_data_.reset();
+    fused_cost_data_.reset();
+    dir_cost_data_.reset(); // TODO: for debugging
+  }
+
  protected:
 
   //: Copy of the input params
@@ -247,19 +256,14 @@ class bsgm_disparity_estimator {
 
   //: Raw storage for the cost volumes
   // Element x,y,d is at location y*w_*num_disparities + x*num_disparities + d
-  // Declared static such that the cost volume is reused across instances, reducing 
-  // time for reallocation
-  // Note: This is **NOT** thread-safe - only one thread of a given process should ever
-  // be performing SGM, on said cost volumes, at a time. This is enforced by the
-  // global cost volume mutex.
-  static unsigned short* total_cost_data_;
-  static unsigned char* fused_cost_data_;
-  static unsigned short* dir_cost_data_;
-
-  static std::mutex static_cost_mutex_;
+  // Declared `static` and `thread_local` such that the cost volume is reused 
+  // across instances constructed within the same thread, removing any reallocation time
+  static thread_local std::unique_ptr<unsigned short[], void(*)(void*)> total_cost_data_;
+  static thread_local std::unique_ptr<unsigned char[], void(*)(void*)> fused_cost_data_;
+  static thread_local std::unique_ptr<unsigned short[], void(*)(void*)> dir_cost_data_; // TODO: for debugging
 
   //: The size of the cost volume allocation, by number of elements
-  static size_t total_volume_size_;
+  static thread_local size_t total_volume_size_;
   
   //: The number of elements of the cost volume that can fit in the
   // largest supported SIMD vector
@@ -323,6 +327,15 @@ class bsgm_disparity_estimator {
         }
       }
     }
+  }
+
+  template <typename T, typename U>
+  inline void setup_cost_volume(
+    std::unique_ptr<T[], U>& cost_data, 
+    std::vector<std::vector<T*>>& cost,
+    size_t w, size_t h, size_t depth
+  ) {
+    setup_cost_volume(cost_data.get(), cost, w, h, depth);
   }
   
   //: Compute appearance data cost using census
@@ -674,7 +687,6 @@ bool bsgm_disparity_estimator::compute(
   const vgl_box_2d<int>& target_window,
   vgl_box_2d<int> reference_window
 ) {
-  std::unique_lock<std::mutex> lk(static_cost_mutex_); // Lock access to cost volume for duration of function
   num_computes++;
 
   // validate target image is big enough for the cost volume
@@ -864,14 +876,14 @@ bool bsgm_disparity_estimator::compute(
 
   unsigned short* true_cost = static_cast<unsigned short*>(alloc_aligned_mem(volume_size_ * sizeof(unsigned short), ALIGN));
   unsigned short* true_dir_cost = static_cast<unsigned short*>(alloc_aligned_mem(8 * volume_size_ * sizeof(unsigned short), ALIGN));
-  memcpy(true_cost, total_cost_data_, volume_size_ * sizeof(unsigned short));
-  memset(total_cost_data_, 0, volume_size_ * sizeof(unsigned short));
-  memcpy(true_dir_cost, dir_cost_data_, 8 * volume_size_ * sizeof(unsigned short));
+  memcpy(true_cost, total_cost_data_.get(), volume_size_ * sizeof(unsigned short));
+  memset(total_cost_data_.get(), 0, volume_size_ * sizeof(unsigned short));
+  memcpy(true_dir_cost, dir_cost_data_.get(), 8 * volume_size_ * sizeof(unsigned short));
   // aligned_vector<unsigned short> true_cost = total_cost_data_;
   // aligned_vector<unsigned short> true_dir_cost = dir_cost_data_;
   
   run_opt_and_check(invalid_tar, min_disp, grad_x_tar_cropped, grad_y_tar_cropped, true_cost, true_dir_cost, elapsed);  
-  memcpy(total_cost_data_, true_cost, volume_size_ * sizeof(unsigned short));
+  memcpy(total_cost_data_.get(), true_cost, volume_size_ * sizeof(unsigned short));
   free_aligned_mem(true_cost);
   free_aligned_mem(true_dir_cost);
 #else

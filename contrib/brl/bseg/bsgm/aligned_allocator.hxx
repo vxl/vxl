@@ -86,6 +86,8 @@ inline void* alloc_aligned_mem(size_t size, size_t alignment) {
 
 // Frees an aligned memory allocation
 inline void free_aligned_mem(void* p) noexcept { 
+    if(!p)
+        return;
 #if defined(__SSE__)
     _mm_free(p);
 #elif (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE >= 200112L) || defined(_ISOC11_SOURCE) || __cplusplus >= 201703L

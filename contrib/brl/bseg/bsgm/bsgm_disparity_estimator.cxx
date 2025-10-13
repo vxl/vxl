@@ -23,11 +23,10 @@
 // ----------------------------------------------------------------------------
 // Initialize static members
 constexpr size_t START_SIZE = 4000000000; // estimated max of 4 billion, for image sizes 2000x2000 with 1000 disparities
-unsigned char* bsgm_disparity_estimator::fused_cost_data_ = static_cast<unsigned char*>(alloc_aligned_mem(START_SIZE * sizeof(*fused_cost_data_), ALIGN));
-unsigned short* bsgm_disparity_estimator::total_cost_data_ = static_cast<unsigned short*>(alloc_aligned_mem(START_SIZE * sizeof(*total_cost_data_), ALIGN));
-unsigned short* bsgm_disparity_estimator::dir_cost_data_ = static_cast<unsigned short*>(alloc_aligned_mem(8 * START_SIZE * sizeof(*dir_cost_data_), ALIGN)); // TODO: for debugging
-size_t bsgm_disparity_estimator::total_volume_size_ = START_SIZE;
-std::mutex bsgm_disparity_estimator::static_cost_mutex_;
+thread_local std::unique_ptr<unsigned char[], void(*)(void*)> bsgm_disparity_estimator::fused_cost_data_(nullptr, free_aligned_mem);
+thread_local std::unique_ptr<unsigned short[], void(*)(void*)> bsgm_disparity_estimator::total_cost_data_(nullptr, free_aligned_mem);
+thread_local std::unique_ptr<unsigned short[], void(*)(void*)> bsgm_disparity_estimator::dir_cost_data_(nullptr, free_aligned_mem); // TODO: for debugging
+thread_local size_t bsgm_disparity_estimator::total_volume_size_ = 0;
 
 //----------------------------------------------------------------------------
 int num_computes = 0;
@@ -70,13 +69,11 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
     sect_timer.reset_all_timers();
   // Increase size of cost volume allocations, if needed
   if(volume_size_ > total_volume_size_) {
-    free_aligned_mem(fused_cost_data_);
-    free_aligned_mem(total_cost_data_);
-    free_aligned_mem(dir_cost_data_); // TODO: for debugging
+    size_t alloc_size = std::max(volume_size_, START_SIZE);
     try {
-      fused_cost_data_ = static_cast<unsigned char*>(alloc_aligned_mem(volume_size_ * sizeof(*fused_cost_data_), ALIGN));
-      total_cost_data_ = static_cast<unsigned short*>(alloc_aligned_mem(volume_size_ * sizeof(*total_cost_data_), ALIGN));
-      dir_cost_data_ = static_cast<unsigned short*>(alloc_aligned_mem(8 * volume_size_ * sizeof(*total_cost_data_), ALIGN)); // TODO: for debugging
+      fused_cost_data_.reset(static_cast<unsigned char*>(alloc_aligned_mem(alloc_size * sizeof(decltype(fused_cost_data_)::element_type), ALIGN)));
+      total_cost_data_.reset(static_cast<unsigned short*>(alloc_aligned_mem(alloc_size * sizeof(decltype(total_cost_data_)::element_type), ALIGN)));
+      dir_cost_data_.reset(static_cast<unsigned short*>(alloc_aligned_mem(8 * alloc_size * sizeof(decltype(dir_cost_data_)::element_type), ALIGN))); // TODO: for debugging
     } catch(std::bad_alloc) {
       std::ostringstream buffer;
       buffer << "Cannot construct bsgm_disparity_estimator - cost volume is too large." << std::endl
@@ -86,7 +83,7 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
       std::cout << buffer.str() << std::endl;
       throw std::runtime_error(buffer.str());
     }
-    total_volume_size_ = volume_size_;
+    total_volume_size_ = alloc_size;
   }
   if(params_.print_timing)
     sect_timer.record_time(false, "vol alloc");
@@ -164,7 +161,7 @@ void bsgm_disparity_estimator::write_cost_debug_imgs(
   // total cost maximum
   float total_cost_scale = 1.0f;
   if (write_total_cost) {
-    auto max_total_cost = *std::max_element(total_cost_data_, total_cost_data_ + volume_size_);
+    auto max_total_cost = *std::max_element(total_cost_data_.get(), total_cost_data_.get() + volume_size_);
     total_cost_scale = 255.0f / float(max_total_cost);
   }
 
