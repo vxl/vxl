@@ -52,15 +52,13 @@
 #include <vgl/vgl_pointset_3d.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_new.h>
-#include <vul/vul_timer.h>
+#include <vul/section_timer.hxx>
 #include <bpgl/algo/bpgl_rectify_image_pair.h>
 #include <bpgl/algo/bpgl_heightmap_from_disparity.h>
 #include <bpgl/algo/bpgl_gridding.h>
 #include <bpgl/algo/bpgl_surface_type.h>
 #include <bsta/bsta_histogram.h>
 #include "bsgm_disparity_estimator.h" // for disparity_estimator_params
-
-#include <vul/vul_timer.h>
 
 struct pairwise_params
 {
@@ -454,16 +452,17 @@ class bsgm_prob_pairwise_dsm
   // forward and reverse 3-d points using a kd-tree index. Otherwise,
   // 3-d points are matched according to the disparity location in
   // the reverse xyz image
-  bool process(bool with_consistency_check = true, bool knn_consistency = true,
-               bool compute_fwd_rev_ptsets_hmaps = true)
-  {
+  bool process(
+    bool with_consistency_check = true, 
+    bool knn_consistency = true,
+    bool compute_fwd_rev_ptsets_hmaps = true
+  ) {
     SectionTimer t; // for time measurement
       
     // check if not in window mode
     bool window_mode = !target_window_.is_empty();
     if (window_mode) {
       throw std::runtime_error("Can't apply window processing using this process method");
-      return false;
     }
     // rectification
     this->rectify();
@@ -510,17 +509,25 @@ class bsgm_prob_pairwise_dsm
       if (knn_consistency) {
         if (!compute_prob(true))  // true -> compute prob heightmap
            return false;
+        
         if(params_.print_timing_)
           t.record_time(false, "prob");
       } else {
         this->compute_xyz_prob(true);  // true -> compute prob heightmap
+
+        if(params_.print_timing_)
+          t.record_time(false, "prob");
       }
-    } else 
+    } else {
       this->compute_ptset();
 
-    if(params_.print_timing_) {
-      t.print_summary("/host/times_stereo.csv", true);
+      if(params_.print_timing_)
+          t.record_time(false, "ptset");
     }
+
+    if(params_.print_timing_)
+      t.print_summary("/host/times_stereo.csv", true); // TODO: for debugging
+
     return true;
   }
 
@@ -534,56 +541,73 @@ class bsgm_prob_pairwise_dsm
   // Note that in the window mode, only the 3-d pointset with a probability scalar is
   // computed -- no heightmaps are produced. If with_consistency_check is false then
   // no point probabilities are computed and the value is always 1.1 indicating invalid.
-  bool process_with_windows(bool first_window = true,
-                            bool with_consistency_check = false,
-                            bool print_timing = false)
-  {
+  bool process_with_windows(
+    bool first_window = true,
+    bool with_consistency_check = false,
+    bool print_timing = false
+  ) {
     // check if not in window mode
     bool not_window_mode = target_window_.is_empty();
 
-    /* if (not_window_mode) { */
-    /*   throw std::runtime_error("Can't apply window processing without target window set"); */
-    /*   return false; */
-    /* } */
+    if (not_window_mode) {
+       throw std::runtime_error("Can't apply window processing without target window set");
+    }
 
-    // tell disparity estimator to also print timing estimates
-    params_.print_timing_ = print_timing;
+    SectionTimer t; // for time measurement
 
-    vul_timer t;
     // rectification
     if (first_window) {
       this->rectify();
-      if (print_timing) {
-        std::cout << "rectification(" << rect_bview0_.ni() << " x "
-                  << rect_bview0_.nj() << ") in " << t.real() / 1000.0
-                  << " sec." << std::endl;
-      }
+      if (params_.print_timing_)
+        t.record_time(false, "rect");
     } else {
       prob_ptset_.clear();
       rectify_windows();
     }
+
+    if (params_.print_timing_)
+      t.reset_timer();
 
     // compute invalid masks
     this->compute_invalid_masks();
 
     // compute forward disparity & height
     this->compute_disparity_fwd();
+
+    if(params_.print_timing_)
+      t.record_time(false, "disp fwd");
+
     this->compute_height_fwd(false);  // false -> don't compute fwd heightmap
-    if (print_timing)
-        std::cout << "forward disparity and xyz img in " << t.real() / 1000.0 << " sec." << std::endl;
+    
+    if(params_.print_timing_)
+      t.record_time(false, "hmap fwd");
+    
     if (with_consistency_check) {
       // consistency check & probabilistic analysis
-      t.mark();
       this->compute_disparity_rev();
+
+      if(params_.print_timing_)
+        t.record_time(false, "disp rev");
+
       this->compute_height_rev(false);  // false -> don't compute reverse heightmap
+
+      if(params_.print_timing_)
+        t.record_time(false, "hmap rev");
+
       this->compute_xyz_prob(false);  // false->don't compute heightmap, just prob pointset
-      if (print_timing)
-        std::cout << "reverse disparity and prob ptset in " << t.real() / 1000.0 << " sec." << std::endl;
+      
+      if(params_.print_timing_)
+          t.record_time(false, "prob ptset");
     } else {
       this->compute_ptset();
-      if (print_timing)
-        std::cout << "non probabilistic ptset in " << t.real() / 1000.0 << " sec." << std::endl;
+      
+      if(params_.print_timing_)
+          t.record_time(false, "ptset");
     }
+
+    if(params_.print_timing_)
+      t.print_summary();
+
     return true;
   }
 

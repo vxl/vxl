@@ -38,9 +38,11 @@ bool bsgm_compute_census_img(
   const vgl_box_2d<int>& crop_window = vgl_box_2d<int>())
 {
 
-  // Can't handle bigger patch sizes with current implementation.
-  if( nbhd_diam > 7 ) return false;
-  int nbhd_rad = (nbhd_diam-1)/2;
+  // Can't handle bigger patch sizes with current implementation
+  // (bit-size representation of patch doesn't fit into 64 bits).
+  if(nbhd_diam > 7)
+    return false;
+  int nbhd_rad = (nbhd_diam - 1) / 2;
 
   // Iteration bounds
   int start_x, start_y, stop_x, stop_y;
@@ -65,18 +67,16 @@ bool bsgm_compute_census_img(
     stop_y = std::min(stop_y, nj - nbhd_rad);
   }
 
-  census.set_size( width, height );
-  census_conf.set_size( width, height );
+  census.set_size(width, height);
+  census_conf.set_size(width, height); 
 
   // Iterate over each pixel
   T max_val = std::numeric_limits<T>::max();
   for (int y = start_y; y < stop_y; y++) {
     for (int x = start_x; x < stop_x; x++) {
       T img_xy = img(x, y);
-      T center_max = T( std::min<T>( max_val, img_xy + tol ) );
-      T center_min = 0;
-      if (img_xy > tol)
-        center_min = T(std::max<T>(0, img_xy - tol));
+      T center_max = T(std::min<T>(max_val, img_xy + tol));
+      T center_min = T(std::max<T>(0, img_xy - tol));
 
       unsigned long long cen = 0;
       unsigned long long conf = 0;
@@ -89,12 +89,14 @@ bool bsgm_compute_census_img(
           // Record the sign of the sample-to-center difference in a bit at
           // each pixel in a patch.
           cen <<= 1;
-          if( *img_x2y2 < img_xy ) cen++;
+          if(*img_x2y2 < img_xy)
+            cen++;
 
           // Also record whether the pixel differs significantly from the
           // center in a separate "confidence" bit
           conf <<= 1;
-          if( *img_x2y2 <= center_min || *img_x2y2 >= center_max ) conf++;
+          if(*img_x2y2 <= center_min || *img_x2y2 >= center_max) 
+            conf++;
         }
       }
       census(x, y) = cen;
@@ -102,20 +104,20 @@ bool bsgm_compute_census_img(
     }
   }
   return true;
-};
+}
 
 //: Find the difference between two census bit-strings with confidences
 inline unsigned long long bsgm_compute_diff_string(
-  unsigned long long int cen1,
-  unsigned long long int cen2,
-  unsigned long long int conf1,
-  unsigned long long int conf2 )
-{
+  unsigned long long cen1,
+  unsigned long long cen2,
+  unsigned long long conf1,
+  unsigned long long conf2
+) {
   // Differences between the two bit strings
-  unsigned long long int d = cen1^cen2;
+  unsigned long long d = cen1 ^ cen2;
 
   // Bits where at least one string is confident
-  unsigned long long int c = conf1|conf2;
+  unsigned long long c = conf1 | conf2;
 
   // Take only confident different bits
   return d&c;
@@ -128,42 +130,44 @@ inline unsigned long long bsgm_compute_diff_string(
 
 //: Compute the hamming distance of a difference bit-string using Brian
 // Kernighan's algorithm.
-inline unsigned char bsgm_compute_hamming_bk(
-  unsigned long long int diff )
-{
+inline unsigned char bsgm_compute_hamming_bk(unsigned long long diff) {
   unsigned char ham = 0;
-  while( diff ){
+  while(diff) {
     ++ham;
-    diff &= diff-1;
+    diff &= diff - 1;
   }
-
   return ham;
 }
 
 //: Compute the hamming distance of a difference bit-string using a bit-set
 // look-up table.
 inline unsigned char bsgm_compute_hamming_lut(
-  unsigned long long int diff,
+  unsigned long long diff,
   unsigned char* lut,
-  bool only_32_bits = false )
-{
-  if( only_32_bits ) return
-    lut[diff & 0xff] +
-    lut[(diff >> 8) & 0xff] +
-    lut[(diff >> 16) & 0xff] +
-    lut[(diff >> 24) & 0xff];
+  bool only_32_bits = false
+) {
+  if(only_32_bits) 
+    return lut[diff & 0xff] +
+           lut[(diff >> 8) & 0xff] +
+           lut[(diff >> 16) & 0xff] +
+           lut[(diff >> 24) & 0xff];
 
-  else return
-    lut[diff & 0xff] +
-    lut[(diff >> 8) & 0xff] +
-    lut[(diff >> 16) & 0xff] +
-    lut[(diff >> 24) & 0xff] +
-    lut[(diff >> 32) & 0xff] +
-    lut[(diff >> 40) & 0xff] +
-    lut[(diff >> 48) & 0xff] +
-    lut[(diff >> 54) & 0xff];
+  else 
+    return lut[diff & 0xff] +
+           lut[(diff >> 8) & 0xff] +
+           lut[(diff >> 16) & 0xff] +
+           lut[(diff >> 24) & 0xff] +
+           lut[(diff >> 32) & 0xff] +
+           lut[(diff >> 40) & 0xff] +
+           lut[(diff >> 48) & 0xff] +
+           lut[(diff >> 54) & 0xff];
 }
 
-void bsgm_generate_bit_set_lut(unsigned char* lut );
+//: Generate a bit-set look-up table for a pre-allocated array of size 256
+inline void bsgm_generate_bit_set_lut(unsigned char lut[256]) {
+  lut[0] = 0;
+  for (int b = 0; b < 256; b++)
+    lut[b] = (b & 1) + lut[b/2];
+}
 
 #endif // bsgm_census_h

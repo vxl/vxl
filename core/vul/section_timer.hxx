@@ -1,5 +1,5 @@
-// This is brl/bseg/bsgm/section_timer.hxx
-// TODO: move to location for utilities
+// This is core/vul/section_timer.hxx
+
 #ifndef section_timer_h_
 #define section_timer_h_
 
@@ -13,7 +13,7 @@
 #include <memory>
 #include <sstream>
 
-#include <vul/vul_timer.h>
+#include "vul_timer.h"
 
 //: A convenience class to profile a section of code and its 
 //  immediate subsections

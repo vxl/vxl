@@ -5,20 +5,11 @@
 #include <sstream>
 #include <array>
 #include <functional>
-#include <vul/vul_file.h>
-#include "vil/vil_save.h"
-#include "vil/vil_convert.h"
 
-#include "bsgm_disparity_estimator.h"
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
-#include <vgl_line_segment_2d.h>
-#include <vgl/vgl_distance.h>
-#include <vil/algo/vil_sobel_3x3.h>
-#include <vil/algo/vil_blob.h>
+#include <vul/aligned_memory.hxx>
+#include <vil/vil_save.h>
 #include "bsgm_error_checking.h"
-#include <brip/brip_line_generator.h>
-#include <bsta/bsta_histogram.h>
+#include "bsgm_disparity_estimator.h"
 
 // ----------------------------------------------------------------------------
 // Initialize static members
@@ -71,9 +62,9 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
   if(volume_size_ > total_volume_size_) {
     size_t alloc_size = std::max(volume_size_, START_SIZE);
     try {
-      fused_cost_data_.reset(static_cast<unsigned char*>(alloc_aligned_mem(alloc_size * sizeof(decltype(fused_cost_data_)::element_type), ALIGN)));
-      total_cost_data_.reset(static_cast<unsigned short*>(alloc_aligned_mem(alloc_size * sizeof(decltype(total_cost_data_)::element_type), ALIGN)));
-      dir_cost_data_.reset(static_cast<unsigned short*>(alloc_aligned_mem(8 * alloc_size * sizeof(decltype(dir_cost_data_)::element_type), ALIGN))); // TODO: for debugging
+      fused_cost_data_.reset(static_cast<unsigned char*>(alloc_aligned_mem(alloc_size * sizeof(decltype(fused_cost_data_)::element_type), SIMD_ALIGN)));
+      total_cost_data_.reset(static_cast<unsigned short*>(alloc_aligned_mem(alloc_size * sizeof(decltype(total_cost_data_)::element_type), SIMD_ALIGN)));
+      dir_cost_data_.reset(static_cast<unsigned short*>(alloc_aligned_mem(8 * alloc_size * sizeof(decltype(dir_cost_data_)::element_type), SIMD_ALIGN))); // TODO: for debugging
     } catch(std::bad_alloc) {
       std::ostringstream buffer;
       buffer << "Cannot construct bsgm_disparity_estimator - cost volume is too large." << std::endl
@@ -686,7 +677,7 @@ unsigned short get_m512i_epu16_elem(__m512i v, int ind) {
 }
 
 inline __m512i fill_mm_seq() {
-  alignas(ALIGN) unsigned short temp[sizeof(__m512i) / sizeof(unsigned short)];
+  alignas(SIMD_ALIGN) unsigned short temp[sizeof(__m512i) / sizeof(unsigned short)];
   for(int i = 0; i < sizeof(__m512i) / sizeof(unsigned short); i++)
     temp[i] = i;
   return _mm512_load_si512(temp);
@@ -1087,7 +1078,7 @@ void bsgm_disparity_estimator::compute_best_disparity_img(
       disp_cost(x, y) = min_cost;
 
       // If no quadratic interpolation just record the min index
-      disp_img(x, y) = (float) min_cost_idx;
+      disp_img(x, y) = static_cast<float>(min_cost_idx);
 
       // Use quadratic interpolation to obtain sub-pixel estimate if specified
       if(params_.perform_quadratic_interp) {
@@ -1100,14 +1091,14 @@ void bsgm_disparity_estimator::compute_best_disparity_img(
         // In the typical case pick cost samples on either side of the min
         // disparity, fit a quadratic, and solve for the min
         else {
-          float c1 = (float)total_cost[y][x][min_cost_idx-1];
-          float c2 = (float)total_cost[y][x][min_cost_idx];
-          float c3 = (float)total_cost[y][x][min_cost_idx+1];
+          float c1 = static_cast<float>(total_cost[y][x][min_cost_idx-1]);
+          float c2 = static_cast<float>(total_cost[y][x][min_cost_idx]);
+          float c3 = static_cast<float>(total_cost[y][x][min_cost_idx+1]);
 
           // This finds the min of the quadratic without explicitly computing
           // the whole quadratic.  Note the min will necessarily be within
           // +/- 0.5 of the integer minimum.
-          float denom = c1 + c3 - (2*c2);
+          float denom = c1 + c3 - (2 * c2);
           if(denom > 0.0f)
             disp_img(x, y) += (c1-c3)/(2*denom);
         }

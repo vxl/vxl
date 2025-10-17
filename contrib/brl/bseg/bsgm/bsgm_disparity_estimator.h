@@ -16,7 +16,8 @@
 #include <climits>
 #include <immintrin.h> // TODO: move to generic SIMD header
 
-#include <vul/vul_timer.h>
+#include <vul/section_timer.hxx>
+#include <vul/aligned_allocator.hxx>
 #include <vnl/vnl_math.h>
 #include <vil/vil_crop.h>
 #include <vil/vil_copy.h>
@@ -24,12 +25,12 @@
 #include <vil/vil_math.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_vector_2d.h>
-#include "bsgm_census.h"
 #include <vil/algo/vil_sobel_3x3.h>
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/algo/vil_median.h>
 #include <vil/algo/vil_binary_erode.h>
 #include <vil/algo/vil_gauss_reduce.h>
+#include "bsgm_census.h"
 #include "bsgm_error_checking.h"
 #include "aligned_allocator.hxx"
 #include "section_timer.hxx"
@@ -50,96 +51,76 @@
 struct bsgm_disparity_estimator_params {
   //: Use 16 directions in the dynamic programming, otherwise 8.  This
   // roughly doubles computation time.
-  bool use_16_directions;
+  bool use_16_directions = false;
 
   //: Scale the internally set P1, P2 smoothing parameters.
-  float p1_scale;
-  float p2_scale;
+  float p1_scale = 1.0f;
+  float p2_scale = 1.0f;
 
   //: Use gradient-weighted P2 smoothing, as suggested in paper.
   // since discontinuities in depth are often manifested as intensity discontinuities
   // the cost of a disparity change greater than 1 is lowered by dividing P2 by the
   // magnitude of the x gradient.
-  bool use_gradient_weighted_smoothing;
+  bool use_gradient_weighted_smoothing = true;
 
   //: In gradient-weighted smoothing, gradients beyond this magnitude are
   // truncated.
-  float max_grad;
+  float max_grad = 32.0f;
 
   //: Adjust the value of P2 based on the probability of shadow step response
-  bool use_shadow_step_p2_adjustment;
+  bool use_shadow_step_p2_adjustment = false;
 
   //: Use quadratic interpolation to obtain sub-pixel estimates of final
   // disparity map.
-  bool perform_quadratic_interp;
+  bool perform_quadratic_interp = true;
 
   //: Mode for finding and fixing errors in the disparity map
   // 0 raw disparity map
   // 1 bad pixels flagged
   // 2 bad pixels interpolated over
-  int error_check_mode;
+  int error_check_mode = 1;
 
   //: When set > 0, pixels below this threshold will be flagged as invalid
   // applied for any error_check_mode
-  unsigned short shadow_thresh;
+  unsigned short shadow_thresh = 0;
 
   //: Set "bias_weight" to the range (0.0,1.0] to bias the SGM directional average
   // against the sun_dir_tar_ vector.  Use this if smoothing from certain
   // directions (i.e. sun angle for satellite imagery) is unreliable.  Set to
   // 0 to disable biasing. (deprecated, supplanted by adj_dir_weight)
-  float bias_weight;
+  float bias_weight = 0.0f;
   
   //: Under shadow step and shadow control of the dynamic program,
   // scan with prior cost emphasized in the scan direction opposite to the sun rays,
   // also include directions to each side of this primary direction with weight
   // defined by "adj_dir_weight" in the interval (0, 1) 
-  float adj_dir_weight;
+  float adj_dir_weight = 0.25f;
 
   //: Suppress appearance cost in dynamic program for both shadow and shadow step
   // pixels, otherwise only suppress in shadow
-  bool app_supress_shadow_shad_step;
+  bool app_supress_shadow_shad_step = false;
 
-  //: Threhold for considering either shadow or shadow step active
-  float shad_shad_stp_prob_thresh;
+  //: Threshold for considering either shadow or shadow step active
+  float shad_shad_stp_prob_thresh = 0.5f;
 
   //: Appearance costs computed by different algorithms are statically fused
   // using these weights. Set any to <= 0 to prevent computation.
-  float census_weight;
-  float xgrad_weight;
+  float census_weight = 0.3f;
+  float xgrad_weight = 0.7f;
 
   //: Pixel differences less than this magnitude are not considered in the
   // census computation.  Increase to prevent errors from sensor noise.
   // Set to 0 for textbook census implementation.
-  int census_tol;
+  int census_tol = 2;
 
   //: The length of the census kernel will be 2*census_rad+1. Must be 1,2,or 3.
-  int census_rad;
+  int census_rad = 2;
 
   //: Print detailed timing information to cerr.
-  bool print_timing;
+  bool print_timing = false;
 
   //: Default parameters
-  bsgm_disparity_estimator_params():
-    use_16_directions(false),
-    p1_scale(1.0f),
-    p2_scale(1.0f),
-    use_gradient_weighted_smoothing(true),
-    use_shadow_step_p2_adjustment(false),
-    max_grad(32.0f),
-    perform_quadratic_interp(true),
-    error_check_mode(1),
-    shadow_thresh(0),
-    bias_weight(0.0f),
-    adj_dir_weight(0.25f),
-    //adj_dir_weight(0.0f),
-    app_supress_shadow_shad_step(false),
-    shad_shad_stp_prob_thresh(0.5f),
-    census_weight(0.3f),
-    xgrad_weight(0.7f),
-    census_tol(2),
-    census_rad(2),
-    print_timing(false)
-    {}
+  bsgm_disparity_estimator_params() = default;
 };
 
 // Output operator for parameters
@@ -267,8 +248,8 @@ class bsgm_disparity_estimator {
   
   //: The number of elements of the cost volume that can fit in the
   // largest supported SIMD vector
-  static constexpr size_t NUM_TC_ELEMS = NUM_ELEMS_PER_ALIGN(unsigned short);
-  static constexpr size_t NUM_AC_ELEMS = NUM_ELEMS_PER_ALIGN(unsigned char);
+  static constexpr size_t NUM_TC_ELEMS = NUM_PER_SIMD_VEC(unsigned short);
+  static constexpr size_t NUM_AC_ELEMS = NUM_PER_SIMD_VEC(unsigned char);
   
   //: The number of disparities, aligned to `NUM_TC_ELEMS`
   const size_t aligned_disparities_;
@@ -314,7 +295,7 @@ class bsgm_disparity_estimator {
     std::vector<std::vector<T*>>& cost,
     size_t w, size_t h, size_t depth
   ) {
-    size_t num_elems = ALIGN / sizeof(T);
+    constexpr size_t num_elems = NUM_PER_SIMD_VEC(T);
 
     cost.resize(h);
     size_t idx = 0;
@@ -874,8 +855,8 @@ bool bsgm_disparity_estimator::compute(
   auto elapsed = t.real();
   std::cout << "Original took " << elapsed << " ms" << std::endl;
 
-  unsigned short* true_cost = static_cast<unsigned short*>(alloc_aligned_mem(volume_size_ * sizeof(unsigned short), ALIGN));
-  unsigned short* true_dir_cost = static_cast<unsigned short*>(alloc_aligned_mem(8 * volume_size_ * sizeof(unsigned short), ALIGN));
+  unsigned short* true_cost = static_cast<unsigned short*>(alloc_aligned_mem(volume_size_ * sizeof(unsigned short), SIMD_ALIGN));
+  unsigned short* true_dir_cost = static_cast<unsigned short*>(alloc_aligned_mem(8 * volume_size_ * sizeof(unsigned short), SIMD_ALIGN));
   memcpy(true_cost, total_cost_data_.get(), volume_size_ * sizeof(unsigned short));
   memset(total_cost_data_.get(), 0, volume_size_ * sizeof(unsigned short));
   memcpy(true_dir_cost, dir_cost_data_.get(), 8 * volume_size_ * sizeof(unsigned short));
@@ -939,7 +920,7 @@ bool bsgm_disparity_estimator::compute(
 
   if (params_.print_timing) {
     if(num_computes % 2 == 0)
-      sect_timer.print_summary("/host/times_disp_calc.csv", true);
+      sect_timer.print_summary("/host/times_disp_calc.csv", true); // TODO: for debugging
     else
       sect_timer.print_summary();
   }

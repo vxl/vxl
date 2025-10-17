@@ -319,13 +319,10 @@ void bpgl_heightmap<T>::heightmap_from_pointset(
         vil_image_view<T>& heightmap_output,
         vil_image_view<T>& scalar_output,
         vil_image_view<T>& radial_std_dev){
-  vul_timer t;
-  float t_h_ = 0.0f, t_rad = 0;
   _heightmap_from_pointset(ptset,
                            heightmap_output,
                            scalar_output,
                            false);
-  t_h_ = t.real(); t.mark();
   vgl_point_2d<T> upper_left(heightmap_bounds_.min_x(), heightmap_bounds_.max_y());
   size_t ni = heightmap_output.ni(), nj = heightmap_output.nj();
   // maximum neighbor distance
@@ -364,8 +361,6 @@ void bpgl_heightmap<T>::heightmap_from_pointset(
       T std_dev = sqrt(var_sum/p_sum);
       radial_std_dev(i,j) = std_dev;
     }
-  t_rad = t.real();
-  // std::cout << "tzprob, trad " << t_h_ << ' ' << t_rad << std::endl;
 }
 
 template<class T>
