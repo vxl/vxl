@@ -416,6 +416,6 @@ void clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::gradf(vnl_vector<
     }
     //And multiply everything by 2sigma^2
     std::transform(gradient.begin(), gradient.end(), gradient.begin(),
-                [var=2.0*var_](double x) { return x * var; });
+                [this](double x) { return x * 2.0 * this->var_; });
 
 }
