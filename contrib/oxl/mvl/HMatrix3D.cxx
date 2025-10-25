@@ -105,9 +105,9 @@ HomgLine3D HMatrix3D::transform(const HomgLine3D& l1) const
 std::ostream& operator<<(std::ostream& s, const HMatrix3D& h)
 {
   if (HomgPrettyPrint::pretty)
-    return vnl_matlab_print(s, (vnl_matrix<double> const&)h, "");
+    return vnl_matlab_print(s, h.as_matrix(), "");
   else
-    return s << (vnl_matrix<double> const&)h;
+    return s << h.as_matrix();
 }
 
 //: Load H from ASCII file.

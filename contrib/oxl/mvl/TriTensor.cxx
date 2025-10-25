@@ -2029,8 +2029,8 @@ void TriTensor::compute_P_matrices(const vnl_double_3& x, double alpha, double b
   vnl_double_3x3 Te3 = dot3t(e3.as_ref());
   vnl_double_3x3 TTe2 = dot2t(e2.as_ref());
 
-  MATLABPRINT((vnl_matrix<double> const&/*2.7*/)Te3);
-  MATLABPRINT((vnl_matrix<double> const&/*2.7*/)TTe2);
+  MATLABPRINT(Te3.as_matrix());
+  MATLABPRINT(TTe2.as_matrix());
 
   vnl_double_3x3 M = vnl_identity_3x3() - OuterProduct3x3(e3,e3);
 
