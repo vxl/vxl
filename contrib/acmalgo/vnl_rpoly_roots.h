@@ -1,4 +1,4 @@
-// This is core/vnl/algo/vnl_rpoly_roots.h
+// This is core/acmalgo/vnl_rpoly_roots.h
 #ifndef vnl_rpoly_roots_h_
 #define vnl_rpoly_roots_h_
 //:

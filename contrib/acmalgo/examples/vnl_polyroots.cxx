@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include "vnl/vnl_vector.h"
-#include <vnl/algo/vnl_rpoly_roots.h>
+#include <acmalgo/vnl_rpoly_roots.h>
 
 int
 main(int argc, char * argv[])

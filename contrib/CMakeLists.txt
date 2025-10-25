@@ -56,6 +56,8 @@ if( EXISTS ${VXL_ROOT_SOURCE_DIR}/contrib/cul/CMakeLists.txt )
     mark_as_advanced(VXL_BUILD_CUL)
 endif()
 
+include_directories(${VXL_ROOT_SOURCE_DIR}/contrib)
+add_subdirectory(acmalgo)
 
 if(VXL_BUILD_MUL)
   add_subdirectory(mul)

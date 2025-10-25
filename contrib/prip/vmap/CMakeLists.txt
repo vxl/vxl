@@ -28,7 +28,7 @@ set(vmap_sources
 )
 
 vxl_add_library(LIBRARY_NAME vmap LIBRARY_SOURCES ${vmap_sources})
-target_link_libraries(vmap ${VXL_LIB_PREFIX}vcl)
+target_link_libraries(vmap ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vnl_acmalgo)
 
 #if(BUILD_TESTING)
   add_subdirectory(tests)

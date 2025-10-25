@@ -15,6 +15,8 @@
 #include <vnl/algo/vnl_netlib.h> // rpoly_()
 #include "vnl/vnl_real_polynomial.h"
 
+#include "toms/rpoly.h"
+
 // - The constructor calculates the roots.  This is the most efficient interface
 // as all the result variables are initialized to the correct size.
 // The polynomial is $ a[0] x^d + a[1] x^{d-1} + \cdots + a[d] = 0 $.

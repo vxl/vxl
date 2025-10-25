@@ -1,5 +1,5 @@
 #include "vnl/vnl_real_polynomial.h"
-#include <vnl/algo/vnl_rpoly_roots.h>
+#include <acmalgo/vnl_rpoly_roots.h>
 #include "testlib/testlib_test.h"
 
 void
