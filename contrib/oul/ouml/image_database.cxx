@@ -81,13 +81,11 @@ void ImageDatabase::clear()
 
 bool ImageDatabase::save(const char *name, const char *imagetype)
 {
-  constexpr unsigned int max_len = 200;
-  char dirname[max_len];
-  std::snprintf(dirname, max_len,"%s.d", name);
+  constexpr unsigned int max_dirname_len = 200;
+  char dirname[max_dirname_len];
+  std::snprintf(dirname, max_dirname_len,"%s.d", name);
 
-  int err;
-
-  err = vpl_mkdir( dirname, 0755 );
+  int err = vpl_mkdir( dirname, 0755 );
   if (err != 0 && err != EEXIST)
   {
     std::cerr << "can't open directory " << dirname << std::endl;
@@ -105,9 +103,9 @@ bool ImageDatabase::save(const char *name, const char *imagetype)
   int index=0;
   for (auto & i : *this)
   {
-    constexpr unsigned int max_len = 200;
-    char filename[max_len];
-    std::snprintf(filename,max_len, "%s/%s_%03d.%s", dirname, i.first, index++, imagetype);
+    constexpr unsigned int max_path_len = max_dirname_len + 200;
+    char filename[max_path_len];
+    std::snprintf(filename,max_path_len, "%s/%s_%03d.%s", dirname, i.first, index++, imagetype);
     vil1_save(*(i.second), filename);
 
     std::printf("db: %s %s\n", i.first, filename);
