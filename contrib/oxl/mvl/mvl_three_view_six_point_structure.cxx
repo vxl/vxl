@@ -12,7 +12,7 @@
 #endif
 
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/algo/vnl_rpoly_roots.h>
+#include <acmalgo/vnl_rpoly_roots.h>
 
 #include <mvl/mvl_five_point_camera_pencil.h>
 #include <mvl/mvl_six_point_design_matrix_row.h>

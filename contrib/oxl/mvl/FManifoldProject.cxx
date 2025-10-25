@@ -8,7 +8,7 @@
 #include "vnl/vnl_double_2x2.h"
 #include "vnl/vnl_double_4.h"
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vnl/algo/vnl_rpoly_roots.h>
+#include <acmalgo/vnl_rpoly_roots.h>
 #include "vnl/vnl_real_polynomial.h"
 #include <vnl/algo/vnl_svd.h>
 #include "vnl/vnl_diag_matrix.h"

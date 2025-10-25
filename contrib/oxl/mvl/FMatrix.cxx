@@ -19,7 +19,7 @@
 #include "vnl/vnl_double_3.h"
 #include "vnl/vnl_cross_product_matrix.h"
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/algo/vnl_rpoly_roots.h>
+#include <acmalgo/vnl_rpoly_roots.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 
 #include <mvl/HomgOperator2D.h>

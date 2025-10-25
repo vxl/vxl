@@ -5,7 +5,7 @@
 // \file
 
 #include "bsta_beta.h"
-#include <vnl/algo/vnl_rpoly_roots.h>
+#include <acmalgo/vnl_rpoly_roots.h>
 #include <vnl/vnl_beta.h>
 #include <vnl/vnl_bignum.h>
 

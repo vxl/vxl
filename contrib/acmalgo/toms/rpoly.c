@@ -1,4 +1,6 @@
+#define V3P_NETLIB_SRC /* Needed for defining f2c aliases */
 #include "v3p_netlib.h"
+#include "rpoly.h"
 
 #undef abs
 #undef min
