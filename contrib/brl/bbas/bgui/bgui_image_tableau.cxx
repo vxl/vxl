@@ -222,6 +222,7 @@ get_pixel_info_from_image(const int x, const int y,
       else
         std::sprintf(msg, "(%d, %d)   (uint16)[ R=%d,G=%d,B=%d]", x, y,
                     v(0,0).R(), v(0,0).G(),v(0,0).B() );
+      return;
     }
     else if (n_p==4)
     {
