@@ -29,7 +29,7 @@ vidl_v4l2_control::new_control(const v4l2_queryctrl & ctr, int f)
       || (ctr.flags & V4L2_CTRL_FLAG_INACTIVE)
 #endif
   )
-    return 0;
+    return nullptr;
   switch (ctr.type)
   {
     case V4L2_CTRL_TYPE_INTEGER:
@@ -44,7 +44,7 @@ vidl_v4l2_control::new_control(const v4l2_queryctrl & ctr, int f)
       if (p->n_items() == 0)
       {
         delete p;
-        p = 0;
+        p = nullptr;
       }
       return p;
     }
@@ -56,7 +56,7 @@ vidl_v4l2_control::new_control(const v4l2_queryctrl & ctr, int f)
       break;
   }
 
-  return 0;
+  return nullptr;
 }
 
 void

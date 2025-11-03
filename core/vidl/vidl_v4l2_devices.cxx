@@ -77,7 +77,7 @@ vidl_v4l2_devices::load_devices(const char * dirname)
   struct dirent * ep;
   dp = opendir(dirname);
   char filename[200];
-  if (dp != NULL)
+  if (dp != nullptr)
   {
     while ((ep = readdir(dp)))
     {

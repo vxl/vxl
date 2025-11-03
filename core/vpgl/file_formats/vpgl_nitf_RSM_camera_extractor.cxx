@@ -512,7 +512,7 @@ vpgl_nitf_RSM_camera_extractor::init(vil_nitf2_image * nitf_image, bool verbose)
   for (unsigned header_idx = 0; header_idx < headers.size(); ++header_idx)
   {
     vil_nitf2_image_subheader * hdr = headers[header_idx];
-    if (hdr == std::nullptr_t(0))
+    if (hdr == std::nullptr_t(nullptr))
       return false;
     bool header_has_tres = false, header_has_RSM = false, overflow_has_RSM = false;
     int ixsofl = -1;

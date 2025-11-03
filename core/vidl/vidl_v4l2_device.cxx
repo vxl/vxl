@@ -131,7 +131,7 @@ vidl_v4l2_device::vidl_v4l2_device(const char * file)
   ref_count_ = 0;
   dev_name_ = file;
   fd = -1;
-  buffers = NULL;
+  buffers = nullptr;
   n_buffers = 0;
   capturing = false;
   last_error = "";
@@ -492,14 +492,14 @@ vidl_v4l2_device::init_mmap(int reqbuf)
     {
       last_error = "v4l2_device -> VIDIOC_QUERYBUF";
       std::free(buffers);
-      buffers = NULL;
+      buffers = nullptr;
       return false;
     }
 
 #if 0
     buffers[n_buffers].length = buf.length;
 #endif
-    buffers[n_buffers].start = mmap(NULL /* start anywhere */,
+    buffers[n_buffers].start = mmap(nullptr /* start anywhere */,
                                     buffers[n_buffers].buf.length,
                                     PROT_READ | PROT_WRITE /* required */,
                                     MAP_SHARED /* recommended */,
@@ -510,7 +510,7 @@ vidl_v4l2_device::init_mmap(int reqbuf)
     {
       last_error = "v4l2_device -> mmap";
       std::free(buffers);
-      buffers = NULL;
+      buffers = nullptr;
       return false;
     }
   }
@@ -606,7 +606,7 @@ vidl_v4l2_device::read_frame()
     tv.tv_sec = 5;
     tv.tv_usec = 0;
 
-    r = select(fd + 1, &fds, NULL, NULL, &tv);
+    r = select(fd + 1, &fds, nullptr, nullptr, &tv);
     if (-1 == r)
     {
       if (EINTR == errno)
@@ -675,7 +675,7 @@ vidl_v4l2_device::uninit_mmap()
       return false;
     }
   std::free(buffers);
-  buffers = NULL;
+  buffers = nullptr;
   n_buffers = 0;
   return true;
 }

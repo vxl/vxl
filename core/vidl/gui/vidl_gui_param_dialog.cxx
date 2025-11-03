@@ -227,14 +227,14 @@ ffmpeg_istream()
 
   dlg.file("Filename:", ext, image_filename);
   if (!dlg.ask())
-    return NULL;
+    return nullptr;
 
   vidl_ffmpeg_istream * i_stream = new vidl_ffmpeg_istream(image_filename);
   if (!i_stream || !i_stream->is_open())
   {
     vgui_error_dialog("Failed to open the input stream");
     delete i_stream;
-    return NULL;
+    return nullptr;
   }
   return i_stream;
 
@@ -274,7 +274,7 @@ ffmpeg_ostream()
   dlg.field("bit rate", params.bit_rate_);
 
   if (!dlg.ask())
-    return NULL;
+    return nullptr;
 
   params.encoder(vidl_ffmpeg_ostream_params::encoder_type(enc_choice));
 
@@ -284,7 +284,7 @@ ffmpeg_ostream()
   {
     vgui_error_dialog("Failed to create ffmpeg output stream");
     delete o_stream;
-    return NULL;
+    return nullptr;
   }
   return o_stream;
 
@@ -308,7 +308,7 @@ v4l2_istream()
   if (devs.size() == 0)
   {
     vgui_error_dialog("No video devices found");
-    return NULL;
+    return nullptr;
   }
   else if (devs.size() > 1)
   {
@@ -322,7 +322,7 @@ v4l2_istream()
     }
     dlg.choice("Device", video_names, device_id);
     if (!dlg.ask())
-      return NULL;
+      return nullptr;
   }
   // Select Input
   int input_id = 0;
@@ -336,31 +336,31 @@ v4l2_istream()
     }
     dlg.choice("Input", input_names, input_id);
     if (!dlg.ask())
-      return NULL;
+      return nullptr;
   }
   // Selecting input
   if (!devs(device_id).set_input(input_id))
   {
     vgui_error_dialog("Input not set");
-    return NULL;
+    return nullptr;
   }
   // Has a valid format been detected?
   if (!devs(device_id).format_is_set())
   {
     vgui_error_dialog("A valid format has not been detected");
-    return NULL;
+    return nullptr;
   }
   // Set width and height
   if (!devs(device_id).set_v4l2_format(devs(device_id).get_v4l2_format(), 640, 480))
   { // could w,h be changed?
     vgui_error_dialog("Size 640x480 not possible");
-    return NULL;
+    return nullptr;
   }
   // checking if device is ok for capturing
   if (!devs(device_id))
   {
     vgui_error_dialog(("Error in device: " + devs(device_id).get_error()).c_str());
-    return NULL;
+    return nullptr;
   }
 
   vidl_v4l2_istream * i_stream = new vidl_v4l2_istream(devs(device_id));
@@ -368,7 +368,7 @@ v4l2_istream()
   {
     vgui_error_dialog("Failed to create input stream");
     delete i_stream;
-    return NULL;
+    return nullptr;
   }
   return i_stream;
 #else  // VIDL_HAS_VIDEODEV2
