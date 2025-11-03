@@ -42,7 +42,7 @@ vidl_v4l2_istream::update_frame()
   else
   {
     std::cout << "No Buf!" << std::endl;
-    cur_frame_ = 0;
+    cur_frame_ = nullptr;
   }
 }
 
@@ -58,7 +58,7 @@ vidl_v4l2_istream::advance()
   if (!dev.is_capturing())
     if (!dev.start_capturing())
       return false;
-  if (cur_frame_ != 0 && dev.read_frame())
+  if (cur_frame_ != nullptr && dev.read_frame())
   {
     frame_number_++;
     return true;

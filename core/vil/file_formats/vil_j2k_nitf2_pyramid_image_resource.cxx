@@ -23,7 +23,7 @@ scale_at_level(unsigned level)
 vil_j2k_nitf2_pyramid_image_resource::vil_j2k_nitf2_pyramid_image_resource(const vil_image_resource_sptr & nitf2)
   : nitf2_sptr_(nitf2)
 {
-  ptr_ = 0;
+  ptr_ = nullptr;
   if (!nitf2_sptr_)
     return;
   std::string fmt = nitf2_sptr_->file_format();
@@ -115,7 +115,7 @@ vil_j2k_nitf2_pyramid_image_resource::get_copy_view(unsigned i0,
                                                     unsigned level) const
 {
   if (!ptr_ || !(ptr_->is_jpeg_2000_compressed()))
-    return 0;
+    return nullptr;
   if (level > this->nlevels())
     level = this->nlevels() - 1;
   double s = scale_at_level(level);
@@ -153,7 +153,7 @@ vil_j2k_nitf2_pyramid_image_resource::get_resource(const unsigned level) const
 {
   if (level == 0)
     return nitf2_sptr_;
-  return 0;
+  return nullptr;
 }
 
 //: for debug purposes
