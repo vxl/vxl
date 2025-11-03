@@ -20,7 +20,7 @@ namespace
 template <class T1, class T2>
 struct func_ptr
 {
-  typedef void (*type)(const T1 * in, T2 * out);
+  using type = void (*)(const T1 * in, T2 * out);
 };
 
 
@@ -73,11 +73,11 @@ struct table_init
     const auto out_fmt = vidl_pixel_format(Fmt_Code % VIDL_PIXEL_FORMAT_ENUM_END);
     auto in_color = static_cast<vidl_pixel_color>(vidl_pixel_traits_of<in_fmt>::color_idx);
     auto out_color = static_cast<vidl_pixel_color>(vidl_pixel_traits_of<out_fmt>::color_idx);
-    typedef typename vidl_pixel_traits_of<in_fmt>::type in_type;
-    typedef typename vidl_pixel_traits_of<out_fmt>::type out_type;
+    using in_type = typename vidl_pixel_traits_of<in_fmt>::type;
+    using out_type = typename vidl_pixel_traits_of<out_fmt>::type;
     unsigned in_type_num = type_index<in_type>::index;
     unsigned out_type_num = type_index<out_type>::index;
-    typedef typename func_ptr<in_type, out_type>::type fptr;
+    using fptr = typename func_ptr<in_type, out_type>::type;
     table_entry_init<static_cast<vidl_pixel_color>(vidl_pixel_traits_of<in_fmt>::color_idx),
                      static_cast<vidl_pixel_color>(vidl_pixel_traits_of<out_fmt>::color_idx),
                      fptr>::set_entry(table[in_color][out_color][in_type_num][out_type_num]);
@@ -97,11 +97,11 @@ struct table_init<0>
     const auto out_fmt = vidl_pixel_format(0);
     auto in_color = static_cast<vidl_pixel_color>(vidl_pixel_traits_of<in_fmt>::color_idx);
     auto out_color = static_cast<vidl_pixel_color>(vidl_pixel_traits_of<out_fmt>::color_idx);
-    typedef vidl_pixel_traits_of<in_fmt>::type in_type;
-    typedef vidl_pixel_traits_of<out_fmt>::type out_type;
+    using in_type = vidl_pixel_traits_of<in_fmt>::type;
+    using out_type = vidl_pixel_traits_of<out_fmt>::type;
     unsigned in_type_num = type_index<in_type>::index;
     unsigned out_type_num = type_index<out_type>::index;
-    typedef func_ptr<in_type, out_type>::type fptr;
+    using fptr = func_ptr<in_type, out_type>::type;
     table_entry_init<static_cast<vidl_pixel_color>(vidl_pixel_traits_of<in_fmt>::color_idx),
                      static_cast<vidl_pixel_color>(vidl_pixel_traits_of<out_fmt>::color_idx),
                      fptr>::set_entry(table[in_color][out_color][in_type_num][out_type_num]);
@@ -117,7 +117,7 @@ struct type_table_init
   static inline void
   populate(const std::type_info * type_table[num_types])
   {
-    typedef typename vidl_pixel_traits_of<static_cast<vidl_pixel_format>(Fmt)>::type dtype;
+    using dtype = typename vidl_pixel_traits_of<static_cast<vidl_pixel_format>(Fmt)>::type;
     type_table[type_index<dtype>::index] = &typeid(dtype);
     type_table_init<Fmt - 1>::populate(type_table);
   }
@@ -131,7 +131,7 @@ struct type_table_init<0>
   static inline void
   populate(const std::type_info * type_table[num_types])
   {
-    typedef vidl_pixel_traits_of<static_cast<vidl_pixel_format>(0)>::type dtype;
+    using dtype = vidl_pixel_traits_of<static_cast<vidl_pixel_format>(0)>::type;
     type_table[type_index<dtype>::index] = &typeid(dtype);
   }
 };

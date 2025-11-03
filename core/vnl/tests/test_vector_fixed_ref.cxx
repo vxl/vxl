@@ -58,9 +58,9 @@ test_vector_fixed_ref()
     TEST("test_front_back_const.back()", test_front_back_const.back(), 44);
   }
 
-  typedef vnl_vector_fixed<double, size> vf;
-  typedef vnl_vector_fixed_ref<double, size> vfr;
-  typedef vnl_vector_fixed_ref_const<double, size> vfrc;
+  using vf = vnl_vector_fixed<double, size>;
+  using vfr = vnl_vector_fixed_ref<double, size>;
+  using vfrc = vnl_vector_fixed_ref_const<double, size>;
 
   int i;
   vf vec; // copy in

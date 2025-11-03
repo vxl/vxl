@@ -96,7 +96,7 @@ test_vnl_index_sort()
   using IndexVectorType = vnl_vector<RankValType>;
   using IndexMatrixType = vnl_matrix<RankValType>;
 
-  typedef vnl_index_sort<MeasurementValueType, RankValType> IndexSortType;
+  using IndexSortType = vnl_index_sort<MeasurementValueType, RankValType>;
 
   int caughtError = 0;
 

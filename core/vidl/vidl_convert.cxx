@@ -40,7 +40,7 @@ namespace
 {
 
 //: Define the function pointer for pixel format conversion functions
-typedef bool (*converter_func)(const vidl_frame & in_frame, vidl_frame & out_frame);
+using converter_func = bool (*)(const vidl_frame & in_frame, vidl_frame & out_frame);
 
 
 //: Default pixel format conversion - it fails

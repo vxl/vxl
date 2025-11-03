@@ -232,7 +232,7 @@ test_gaussian_sphere_type(T epsilon, const std::string & type_name)
     vnl_vector_fixed<T, 2> mean2(mean[0], mean[1]);
     vpdl_gaussian_sphere<T, 2> gauss2(mean2, var);
     vnl_vector_fixed<T, 2> test1_2(T(3), T(3)), test2_2(T(-1), T(1));
-    typedef vpdl_distribution<T, 2> base2;
+    using base2 = vpdl_distribution<T, 2>;
     TEST_NEAR(("box probability (base==derived) <" + type_name + "> even dim").c_str(),
               gauss2.base2::box_prob(test2_2, test1_2),
               gauss2.box_prob(test2_2, test1_2),

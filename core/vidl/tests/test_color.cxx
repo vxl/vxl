@@ -11,14 +11,14 @@
 
 //: Define the function pointer for pixel format conversion functions
 // These are the functions that use types other than vxl_byte
-typedef void (*vidl_color_conv_fptr_8_16)(const vxl_byte * in, vxl_uint_16 * out);
-typedef void (*vidl_color_conv_fptr_16_8)(const vxl_uint_16 * in, vxl_byte * out);
-typedef void (*vidl_color_conv_fptr_16_16)(const vxl_uint_16 * in, vxl_uint_16 * out);
-typedef void (*vidl_color_conv_fptr_8_1)(const vxl_byte * in, bool * out);
-typedef void (*vidl_color_conv_fptr_1_8)(const bool * in, vxl_byte * out);
-typedef void (*vidl_color_conv_fptr_1_16)(const bool * in, vxl_uint_16 * out);
-typedef void (*vidl_color_conv_fptr_16_1)(const vxl_uint_16 * in, bool * out);
-typedef void (*vidl_color_conv_fptr_1_1)(const bool * in, bool * out);
+using vidl_color_conv_fptr_8_16 = void (*)(const vxl_byte * in, vxl_uint_16 * out);
+using vidl_color_conv_fptr_16_8 = void (*)(const vxl_uint_16 * in, vxl_byte * out);
+using vidl_color_conv_fptr_16_16 = void (*)(const vxl_uint_16 * in, vxl_uint_16 * out);
+using vidl_color_conv_fptr_8_1 = void (*)(const vxl_byte * in, bool * out);
+using vidl_color_conv_fptr_1_8 = void (*)(const bool * in, vxl_byte * out);
+using vidl_color_conv_fptr_1_16 = void (*)(const bool * in, vxl_uint_16 * out);
+using vidl_color_conv_fptr_16_1 = void (*)(const vxl_uint_16 * in, bool * out);
+using vidl_color_conv_fptr_1_1 = void (*)(const bool * in, bool * out);
 
 static void
 test_color()
