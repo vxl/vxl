@@ -31,7 +31,7 @@ vil1_image
 vil1_resample_image_impl::get_plane(unsigned int p) const
 {
   vil1_image_impl * i = new vil1_resample_image_impl(base.get_plane(p), new_width, new_height);
-  return vil1_image(i);
+  return { i };
 }
 
 bool

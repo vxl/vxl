@@ -134,8 +134,8 @@ vpgl_fm_compute_7_point::solve_quadratic(std::vector<double> v)
   if (d > -1e-5 && d < 0)
     d = 0.0;
 
-  if (d < 0.0)                    // doesn't work for compl_normex roots
-    return std::vector<double>(); // empty list
+  if (d < 0.0) // doesn't work for compl_normex roots
+    return {}; // empty list
 
   double q = -0.5 * (b + s * std::sqrt(d));
   std::vector<double> l;

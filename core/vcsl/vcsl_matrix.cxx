@@ -93,7 +93,7 @@ vcsl_matrix::matrix_value(double time, bool type) const
         break;
     }
   }
-  return vnl_matrix<double>(); // never reached if asserts are in effect
+  return {}; // never reached if asserts are in effect
 }
 
 vnl_matrix<double>

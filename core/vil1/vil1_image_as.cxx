@@ -434,14 +434,14 @@ template struct vil1_image_as_impl<vxl_byte>;
 vil1_image
 vil1_image_as_byte(const vil1_image & image)
 {
-  return vil1_image(new vil1_image_as_impl<vxl_byte>(image));
+  return { new vil1_image_as_impl<vxl_byte>(image) };
 }
 
 template <>
 vil1_image
 vil1_image_as(const vil1_image & image, vxl_byte *)
 {
-  return vil1_image(new vil1_image_as_impl<vxl_byte>(image));
+  return { new vil1_image_as_impl<vxl_byte>(image) };
 }
 
 //--------------------------------------------------------------------------------
@@ -500,14 +500,14 @@ template struct vil1_image_as_impl<vxl_uint_16>;
 vil1_image
 vil1_image_as_uint16(const vil1_image & image)
 {
-  return vil1_image(new vil1_image_as_impl<vxl_uint_16>(image));
+  return { new vil1_image_as_impl<vxl_uint_16>(image) };
 }
 
 template <>
 vil1_image
 vil1_image_as(const vil1_image & image, vxl_uint_16 *)
 {
-  return vil1_image(new vil1_image_as_impl<vxl_uint_16>(image));
+  return { new vil1_image_as_impl<vxl_uint_16>(image) };
 }
 
 
@@ -567,14 +567,14 @@ template struct vil1_image_as_impl<int>;
 vil1_image
 vil1_image_as_int(const vil1_image & image)
 {
-  return vil1_image(new vil1_image_as_impl<int>(image));
+  return { new vil1_image_as_impl<int>(image) };
 }
 
 template <>
 vil1_image
 vil1_image_as(const vil1_image & image, int *)
 {
-  return vil1_image(new vil1_image_as_impl<int>(image));
+  return { new vil1_image_as_impl<int>(image) };
 }
 
 //--------------------------------------------------------------------------------
@@ -633,14 +633,14 @@ template struct vil1_image_as_impl<float>;
 vil1_image
 vil1_image_as_float(const vil1_image & image)
 {
-  return vil1_image(new vil1_image_as_impl<float>(image));
+  return { new vil1_image_as_impl<float>(image) };
 }
 
 template <>
 vil1_image
 vil1_image_as(const vil1_image & image, float *)
 {
-  return vil1_image(new vil1_image_as_impl<float>(image));
+  return { new vil1_image_as_impl<float>(image) };
 }
 
 //--------------------------------------------------------------------------------
@@ -699,14 +699,14 @@ template struct vil1_image_as_impl<double>;
 vil1_image
 vil1_image_as_double(const vil1_image & image)
 {
-  return vil1_image(new vil1_image_as_impl<double>(image));
+  return { new vil1_image_as_impl<double>(image) };
 }
 
 template <>
 vil1_image
 vil1_image_as(const vil1_image & image, double *)
 {
-  return vil1_image(new vil1_image_as_impl<double>(image));
+  return { new vil1_image_as_impl<double>(image) };
 }
 
 //--------------------------------------------------------------------------------
@@ -767,14 +767,14 @@ template struct vil1_image_as_impl<vil1_rgb<unsigned char>>;
 vil1_image
 vil1_image_as_rgb_byte(const vil1_image & image)
 {
-  return vil1_image(new vil1_image_as_impl<vil1_rgb<unsigned char>>(image));
+  return { new vil1_image_as_impl<vil1_rgb<unsigned char>>(image) };
 }
 
 template <>
 vil1_image
 vil1_image_as(const vil1_image & image, vil1_rgb<vxl_byte> *)
 {
-  return vil1_image(new vil1_image_as_impl<vil1_rgb<vxl_byte>>(image));
+  return { new vil1_image_as_impl<vil1_rgb<vxl_byte>>(image) };
 }
 
 //--------------------------------------------------------------------------------
@@ -835,14 +835,14 @@ template struct vil1_image_as_impl<vil1_rgb<float>>;
 vil1_image
 vil1_image_as_rgb_float(const vil1_image & image)
 {
-  return vil1_image(new vil1_image_as_impl<vil1_rgb<float>>(image));
+  return { new vil1_image_as_impl<vil1_rgb<float>>(image) };
 }
 
 template <>
 vil1_image
 vil1_image_as(const vil1_image & image, vil1_rgb<float> *)
 {
-  return vil1_image(new vil1_image_as_impl<vil1_rgb<float>>(image));
+  return { new vil1_image_as_impl<vil1_rgb<float>>(image) };
 }
 
 
@@ -906,12 +906,12 @@ template struct vil1_image_as_impl<vil1_rgb<vxl_uint_16>>;
 vil1_image
 vil1_image_as_rgb_uint16(const vil1_image & image)
 {
-  return vil1_image(new vil1_image_as_impl<vil1_rgb<vxl_uint_16>>(image));
+  return { new vil1_image_as_impl<vil1_rgb<vxl_uint_16>>(image) };
 }
 
 template <>
 vil1_image
 vil1_image_as(const vil1_image & image, vil1_rgb<vxl_uint_16> *)
 {
-  return vil1_image(new vil1_image_as_impl<vil1_rgb<vxl_uint_16>>(image));
+  return { new vil1_image_as_impl<vil1_rgb<vxl_uint_16>>(image) };
 }

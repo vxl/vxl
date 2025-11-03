@@ -62,7 +62,7 @@ vil1_load_raw(const char * filename)
   else
   {
     std::cerr << __FILE__ ": Failed to load [" << filename << "]\n";
-    return vil1_image();
+    return {};
   }
 }
 

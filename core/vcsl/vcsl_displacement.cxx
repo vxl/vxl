@@ -120,5 +120,5 @@ vcsl_displacement::vector_value(double time) const
         break;
     }
   }
-  return vnl_vector<double>(); // never reached if asserts are in effect
+  return {}; // never reached if asserts are in effect
 }
