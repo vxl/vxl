@@ -122,8 +122,8 @@ vil_nitf2_tagged_record_definition::condition(vil_nitf2_field_functor<bool> * co
   }
   else
   {
-    m_field_definitions->push_back(
-      new vil_nitf2_field_definition_condition_node(condition_functor, new vil_nitf2_field_definitions(field_definitions)));
+    m_field_definitions->push_back(new vil_nitf2_field_definition_condition_node(
+      condition_functor, new vil_nitf2_field_definitions(field_definitions)));
   }
   return *this;
 }

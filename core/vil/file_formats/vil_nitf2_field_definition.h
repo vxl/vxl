@@ -183,8 +183,7 @@ public:
   // Define a condition node and add it to this list of definitions,
   // returning the current list. Assumes ownership of pointer argument.
   vil_nitf2_field_definitions &
-  condition(vil_nitf2_field_functor<bool> * condition_functor,
-            vil_nitf2_field_definitions & field_definitions);
+  condition(vil_nitf2_field_functor<bool> * condition_functor, vil_nitf2_field_definitions & field_definitions);
 
   // Copy constructor
   vil_nitf2_field_definitions(const vil_nitf2_field_definitions &);

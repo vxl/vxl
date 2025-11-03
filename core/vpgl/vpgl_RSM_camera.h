@@ -84,10 +84,8 @@ template <class T>
 class vpgl_ground_domain
 {
 public:
-
   // constructors
-  vpgl_ground_domain()
-  {}
+  vpgl_ground_domain() {}
 
   vpgl_ground_domain(vpgl_ground_domain_id id)
     : id_(id)
@@ -103,8 +101,7 @@ public:
 
   // convert world WGS84 coordinate to ground domain coordinate
   void
-  world_to_ground(const T lon_deg, const T lat_deg, const T elev_m,
-                  T & x, T & y, T & z) const;
+  world_to_ground(const T lon_deg, const T lat_deg, const T elev_m, T & x, T & y, T & z) const;
 
   vnl_vector_fixed<T, 3>
   world_to_ground(const vnl_vector_fixed<T, 3> & world_point) const;
@@ -114,13 +111,12 @@ public:
 
   // print
   std::ostream &
-  print(std::ostream& os) const;
+  print(std::ostream & os) const;
 
   // properties
   vpgl_ground_domain_id id_ = vpgl_ground_domain_id::G;
-  vnl_vector_fixed<T, 3> translation_{0, 0, 0};
-  vnl_matrix_fixed<T, 3, 3> rotation_{vnl_matrix_fixed<T, 3, 3>().set_identity()};
-
+  vnl_vector_fixed<T, 3> translation_{ 0, 0, 0 };
+  vnl_matrix_fixed<T, 3, 3> rotation_{ vnl_matrix_fixed<T, 3, 3>().set_identity() };
 };
 
 // ground_domain operator<<

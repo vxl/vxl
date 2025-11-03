@@ -519,7 +519,9 @@ vil_tiff_header::compute_pixel_format()
   // pretends the samples are in different planes.
   // The current implementation can't handle planar_config ==2, which is
   // separate color bands.
-  else if (/*samples_per_pixel.val>1 &&*/ (photometric.val == PHOTOMETRIC_RGB || photometric.val == PHOTOMETRIC_MINISBLACK) && planar_config.val == 1)
+  else if (/*samples_per_pixel.val>1 &&*/ (photometric.val == PHOTOMETRIC_RGB ||
+                                           photometric.val == PHOTOMETRIC_MINISBLACK) &&
+           planar_config.val == 1)
   {
     const vxl_uint_16 s = samples_per_pixel.val;
     switch (sample_format.val)
