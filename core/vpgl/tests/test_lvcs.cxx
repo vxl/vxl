@@ -462,7 +462,7 @@ test_lvcs()
   double orig_lat = 38.982859, orig_lon = -117.057278, orig_elev = 1670;
   double orig_easting = 495039.001, orig_northing = 4314875.991;
   int orig_utm_zone = 11;
-  bool orig_south_flag = 0;
+  bool orig_south_flag = false;
 
   // results
   double x, y, z;
@@ -565,13 +565,13 @@ test_lvcs()
   orig_lat = 0.001, orig_lon = -72.0001, orig_elev = 1000;
 
   // default 18-north
-  test_lvcs_force(orig_lat, orig_lon, orig_elev, 833967.414, 110.683, 18, 0, meter_tol, degree_tol);
+  test_lvcs_force(orig_lat, orig_lon, orig_elev, 833967.414, 110.683, 18, false, meter_tol, degree_tol);
   // force 19-north
-  test_lvcs_force(orig_lat, orig_lon, orig_elev, 166010.300, 110.683, 19, 0, meter_tol, degree_tol);
+  test_lvcs_force(orig_lat, orig_lon, orig_elev, 166010.300, 110.683, 19, false, meter_tol, degree_tol);
   // force 18-south
-  test_lvcs_force(orig_lat, orig_lon, orig_elev, 833967.414, 10e6 + 110.683, 18, 1, meter_tol, degree_tol);
+  test_lvcs_force(orig_lat, orig_lon, orig_elev, 833967.414, 10e6 + 110.683, 18, true, meter_tol, degree_tol);
   // force 19-south
-  test_lvcs_force(orig_lat, orig_lon, orig_elev, 166010.300, 10e6 + 110.683, 19, 1, meter_tol, degree_tol);
+  test_lvcs_force(orig_lat, orig_lon, orig_elev, 166010.300, 10e6 + 110.683, 19, true, meter_tol, degree_tol);
 
 
   // ----- Prime Meridian/Equator -----
