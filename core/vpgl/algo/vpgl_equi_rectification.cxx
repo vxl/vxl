@@ -4,7 +4,7 @@
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include "vgl/vgl_homg_point_2d.h"
 #include "vgl/vgl_tolerance.h"
-#include <math.h>
+#include <cmath>
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_inverse.h>
 #include <vpgl/vpgl_essential_matrix.h>
