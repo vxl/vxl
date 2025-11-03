@@ -3,6 +3,6 @@
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
-typedef std::pair<int, int> pii;
-typedef std::less<std::pair<int, int>> comp;
+using pii = std::pair<int, int>;
+using comp = std::less<std::pair<int, int>>;
 VSL_MAP_IO_INSTANTIATE(pii, unsigned, comp);

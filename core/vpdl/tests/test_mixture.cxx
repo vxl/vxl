@@ -20,7 +20,7 @@ fit_gaussian(typename std::vector<vnl_vector_fixed<T, 3>>::const_iterator begin,
   vnl_vector_fixed<T, 3> mean(T(0));
   vnl_matrix_fixed<T, 3, 3> covar(T(0));
   unsigned int count = 0;
-  typedef typename std::vector<vnl_vector_fixed<T, 3>>::const_iterator vitr;
+  using vitr = typename std::vector<vnl_vector_fixed<T, 3>>::const_iterator;
   for (vitr i = begin; i != end; ++i)
   {
     mean += *i;

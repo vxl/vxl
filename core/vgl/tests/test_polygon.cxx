@@ -175,7 +175,7 @@ test_self_intersection()
     p.push_back(0.5, 2.5);
 
     // the correct solutions, but order may be incorrect
-    typedef std::pair<unsigned, unsigned> upair;
+    using upair = std::pair<unsigned, unsigned>;
     std::vector<upair> e1s(5), e2s(5);
     std::vector<vgl_point_2d<double>> ips(5);
     e1s[0] = upair(0, 0);
@@ -232,7 +232,7 @@ test_self_intersection()
     p.push_back(0.0, 3.0);
 
     // the correct solutions, but order may be incorrect
-    typedef std::pair<unsigned, unsigned> upair;
+    using upair = std::pair<unsigned, unsigned>;
     std::vector<upair> e1s(12), e2s(12);
     std::vector<vgl_point_2d<double>> ips(12);
     e1s[0] = upair(0, 0);

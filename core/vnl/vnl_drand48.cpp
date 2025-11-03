@@ -39,7 +39,7 @@ typedef union
   } parts;
 } ieee_double_shape_type;
 #elif VXL_LITTLE_ENDIAN
-typedef union
+using ieee_double_shape_type = union
 {
   double value;
   struct
@@ -47,7 +47,7 @@ typedef union
     std::uint32_t lsw;
     std::uint32_t msw;
   } parts;
-} ieee_double_shape_type;
+};
 #else
 #  error "ENDIAN of system not configured"
 #endif

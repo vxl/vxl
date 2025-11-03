@@ -12,13 +12,13 @@
 
 constexpr int default_tab = 2;
 
-typedef std::pair<int, int> indent_data_type;
+using indent_data_type = std::pair<int, int>;
 
 // Get pointer to tab and indent data for os
 indent_data_type *
 indent_data(std::ostream & os)
 {
-  typedef std::map<void *, indent_data_type, std::less<void *>> maps2i_type;
+  using maps2i_type = std::map<void *, indent_data_type, std::less<void *>>;
   // Global record of tab information for streams.
   // Allows data to persist beyond the lifetime of the indent object itself,
   // which may be mercifully brief

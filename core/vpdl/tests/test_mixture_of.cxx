@@ -58,7 +58,7 @@ test_mixture_of_type(T epsilon, const std::string & type_name)
     vpdl_gaussian_indep<T, 3> gauss2(mean2, var2);
     vpdl_gaussian_indep<T, 3> gauss3(mean3, var3);
 
-    typedef vpdl_gaussian_indep<T, 3> dist_t;
+    using dist_t = vpdl_gaussian_indep<T, 3>;
     vpdl_mixture_of<dist_t> mixture;
 
     TEST(("initial num_components <" + type_name + ">").c_str(), mixture.num_components(), 0);
@@ -138,7 +138,7 @@ test_mixture_of_type(T epsilon, const std::string & type_name)
     vpdl_gaussian<T, 1> gauss2(mean2[0], var2[0]);
     vpdl_gaussian<T, 1> gauss3(mean3[0], var3[0]);
 
-    typedef vpdl_gaussian<T, 1> dist_t;
+    using dist_t = vpdl_gaussian<T, 1>;
     vpdl_mixture_of<dist_t> mixture;
 
     TEST(("initial num_components <" + type_name + ">").c_str(), mixture.num_components(), 0);

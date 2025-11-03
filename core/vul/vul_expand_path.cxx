@@ -372,7 +372,7 @@ vul_expand_path_internal(std::string path)
   return path;
 }
 
-typedef std::map<std::string, std::string, std::less<std::string>> map_t;
+using map_t = std::map<std::string, std::string, std::less<std::string>>;
 
 std::string
 vul_expand_path(std::string path)

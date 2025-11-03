@@ -1,3 +1,3 @@
 #include "vsl/vsl_pair_io.hxx"
-typedef std::pair<unsigned int, unsigned int> pair_uu;
+using pair_uu = std::pair<unsigned int, unsigned int>;
 VSL_PAIR_IO_INSTANTIATE(pair_uu, int);

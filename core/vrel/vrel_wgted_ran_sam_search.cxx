@@ -62,7 +62,7 @@ vrel_wgted_ran_sam_search::next_sample(unsigned int taken,
                                        std::vector<int> & sample,
                                        unsigned int points_per_sample)
 {
-  typedef std::vector<prob_interval>::iterator interval_iter;
+  using interval_iter = std::vector<prob_interval>::iterator;
 
   if (generate_all_ || !is_sim_wgt_set_)
   {

@@ -6,5 +6,5 @@
 #include <vrel/vrel_util.hxx>
 
 // Apply explicit instantiation
-typedef std::vector<double>::iterator Iter;
+using Iter = std::vector<double>::iterator;
 VREL_UTIL_INSTANTIATE_RAN_ITER(double, Iter);
