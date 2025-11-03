@@ -155,7 +155,7 @@ vul_file::extension(const char * fn)
   if (dot_index != std::string::npos)
     return self.substr(dot_index, std::string::npos);
   else
-    return std::string();
+    return {};
 }
 
 std::string

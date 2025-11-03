@@ -538,7 +538,7 @@ calc(node * n)
     return n->func1(calc((node *)n->param2));
   else
     ErrorExit("", "This should not happen!", 0L);
-  return vnl_decnum("0"); // never reached...
+  return { "0" }; // never reached...
 }
 
 int

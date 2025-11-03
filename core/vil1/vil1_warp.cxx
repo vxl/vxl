@@ -49,6 +49,6 @@ vil1_warp(const vil1_image & in,
   else
   {
     assert(0);
-    return vil1_image();
+    return {};
   }
 }

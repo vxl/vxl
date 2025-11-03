@@ -48,7 +48,7 @@ create_ground_domain(std::string ground_domain_id)
   }
   else
   {
-    return vpgl_ground_domain<double>(ground_domain_id.substr(0, 1));
+    return { ground_domain_id.substr(0, 1) };
   }
 }
 
@@ -204,7 +204,7 @@ create_region_selector()
   };
 
   // initialize region selector
-  return vpgl_region_selector<double>(row_coefs, col_coefs, minr, maxr, minc, maxc, rnis, cnis, tnis, rssiz, cssiz);
+  return { row_coefs, col_coefs, minr, maxr, minc, maxc, rnis, cnis, tnis, rssiz, cssiz };
 }
 
 // test region selector

@@ -63,7 +63,7 @@ vcsl_perspective::inverse(const vnl_vector<double> & v, double time) const
   // require
   assert(is_valid());
   assert((is_invertible(time)) && (v.size() == 2));
-  return vnl_vector<double>(); // To avoid compilation warning/error message
+  return {}; // To avoid compilation warning/error message
 }
 
 //---------------------------------------------------------------------------

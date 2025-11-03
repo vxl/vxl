@@ -85,9 +85,9 @@ vcsl_rotation::execute(const vnl_vector<double> & v, double time) const
     result = v;
   result = q.rotate(result);
   if (mode_2d_)
-    return vnl_vector<double>(result.data_block(), 2);
+    return { result.data_block(), 2 };
   else
-    return vnl_vector<double>(result.data_block(), 3);
+    return { result.data_block(), 3 };
 }
 
 //---------------------------------------------------------------------------
@@ -117,9 +117,9 @@ vcsl_rotation::inverse(const vnl_vector<double> & v, double time) const
   vnl_quaternion<double> q = quaternion(time);
   result = q.conjugate().rotate(result);
   if (mode_2d_)
-    return vnl_vector<double>(result.data_block(), 2);
+    return { result.data_block(), 2 };
   else
-    return vnl_vector<double>(result.data_block(), 3);
+    return { result.data_block(), 3 };
 }
 
 //---------------------------------------------------------------------------

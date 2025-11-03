@@ -95,7 +95,7 @@ vil_load_image_resource_plugin(const char * filename)
         return im;
     }
   }
-  return vil_image_resource_sptr(nullptr);
+  return { nullptr };
 }
 
 vil_pyramid_image_resource_sptr

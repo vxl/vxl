@@ -66,7 +66,7 @@ polynomial(char * txt)
     coef.insert(coef.begin(), 1, onecoef);
   while (!coef.empty() && coef.back() == 0.0)
     coef.pop_back(); // highest order coeff should not be zero!
-  return vnl_polynomial<double>(coef);
+  return { coef };
 }
 
 int

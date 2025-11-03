@@ -136,8 +136,8 @@ vcsl_spatial_transformation::lqi(const vnl_quaternion<double> & v0,
   double coef1 = std::sin((1 - t) * angle) * invsin;
   double coef2 = std::sin(t * angle) * invsin;
 
-  return vnl_quaternion<double>(v0.x() * coef1 + v1.x() * coef2,
-                                v0.y() * coef1 + v1.y() * coef2,
-                                v0.z() * coef1 + v1.z() * coef2,
-                                v0.r() * coef1 + v1.r() * coef2);
+  return { v0.x() * coef1 + v1.x() * coef2,
+           v0.y() * coef1 + v1.y() * coef2,
+           v0.z() * coef1 + v1.z() * coef2,
+           v0.r() * coef1 + v1.r() * coef2 };
 }

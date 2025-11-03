@@ -1417,7 +1417,7 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i, unsigned j0,
 {
   unsigned nl = this->nlevels();
   if (level >= nl)
-    return vil_image_view_base_sptr();
+    return {};
   vil_image_resource_sptr resc = this->get_resource(level);
   // scale input coordinates to the scale of the level
   float scale = levels_[level]->scale_;
