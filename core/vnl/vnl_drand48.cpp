@@ -13,7 +13,7 @@
  * to anyone/anything when using this software.
  */
 
-#include <math.h>
+#include <cmath>
 #include <cstdint>
 #include "vxl_config.h"
 #include "vnl_drand48.h"
