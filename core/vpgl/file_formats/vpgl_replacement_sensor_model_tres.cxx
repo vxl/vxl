@@ -64,7 +64,7 @@ public:
     int value1, value2;
     bool success = record->get_value(tag1, indexes, value1, true);
     success = success && record->get_value(tag2, indexes, value2, true);
-    
+
     if (!success)
       return false;
     // number of elements in the upper diagonal section
@@ -112,7 +112,8 @@ class vil_nitf2_conditional_repeat : public vil_nitf2_field_functor<int>
 {
 public:
   vil_nitf2_conditional_repeat(std::string tag, bool negation)
-    : tag(std::move(tag)), negation(std::move(negation))
+    : tag(std::move(tag))
+    , negation(std::move(negation))
   {}
 
   vil_nitf2_field_functor<int> *
@@ -128,13 +129,13 @@ public:
     std::string condition;
     bool success = record->get_value(tag, indexes, condition, true);
     if (condition == "Y" && negation)
-        value = T(0);
-    else if(condition == "Y" && !negation)
-        value = T(1);
-    else if(condition == "N" && negation)
-        value = T(1);
-    else if(condition == "N" && !negation)
-        value = T(0);
+      value = T(0);
+    else if (condition == "Y" && !negation)
+      value = T(1);
+    else if (condition == "N" && negation)
+      value = T(1);
+    else if (condition == "N" && !negation)
+      value = T(0);
     return success;
   }
 
@@ -151,15 +152,17 @@ class vil_nitf2_field_value_both_equal : public vil_nitf2_field_functor<bool>
 {
 public:
   /// Constructor to specify a std::vector of acceptable values
-  vil_nitf2_field_value_both_equal(T tag1, T val1,
-                                   T tag2, T val2)
-    : tag1(std::move(tag1)), val1(std::move(val1)),
-      tag2(std::move(tag2)), val2(std::move(val2))
+  vil_nitf2_field_value_both_equal(T tag1, T val1, T tag2, T val2)
+    : tag1(std::move(tag1))
+    , val1(std::move(val1))
+    , tag2(std::move(tag2))
+    , val2(std::move(val2))
   {}
   // clone the functor
-  vil_nitf2_field_functor<bool>* copy() const override
+  vil_nitf2_field_functor<bool> *
+  copy() const override
   {
-      return new vil_nitf2_field_value_both_equal(tag1, val1, tag2, val2);
+    return new vil_nitf2_field_value_both_equal(tag1, val1, tag2, val2);
   }
   // determines if both tags have the specified value
   bool
@@ -169,16 +172,17 @@ public:
     T tval1, tval2;
     bool good1 = record->get_value(tag1, indexes, tval1, true);
     bool good2 = record->get_value(tag2, indexes, tval2, true);
-    if(good1 && good2)
+    if (good1 && good2)
     {
-        bool eq1 = tval1 == val1;
-        bool eq2 = tval2 == val2;
-        result = eq1 && eq2;
-        return true;
+      bool eq1 = tval1 == val1;
+      bool eq2 = tval2 == val2;
+      result = eq1 && eq2;
+      return true;
     }
     // failed to get one or both of the tag values
     return false;
   }
+
 protected:
   T tag1;
   T val1;
@@ -285,26 +289,26 @@ vpgl_replacement_sensor_model_tres::define_RSMPCA()
   if (!trp)
   {
     vil_nitf2_tagged_record_definition::define("RSMPCA", "Replacement Sensor Model Polynomial Coefficients")
-          .field("IID", "Image Identifier", NITF_STR(80), true)
-          .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
-          .field("RSN", "Row Section Number", NITF_INT(3, false))
-          .field("CSN", "Column Section Number", NITF_INT(3, false))
-          .field("RFEP", "Row Fitting Error", NITF_EXP(14, 2), true)
-          .field("CFEP", "Col. Fitting Error", NITF_EXP(14, 2), true)
-          .field("RNRMO", "Row Normalization Offset", NITF_EXP(14, 2))
-          .field("CNRMO", "Col. Normalization Offset", NITF_EXP(14, 2))
-          .field("XNRMO", "X Normalization Offset", NITF_EXP(14, 2))
-          .field("YNRMO", "Y. Normalization Offset", NITF_EXP(14, 2))
-          .field("ZNRMO", "Z. Normalization Offset", NITF_EXP(14, 2))
-          .field("RNRMSF", "Row. Normalization Scale Factor", NITF_EXP(14, 2))
-          .field("CNRMSF", "Col. Normalization Scale Factor", NITF_EXP(14, 2))
-          .field("XNRMSF", "X. Normalization Scale Factor", NITF_EXP(14, 2))
-          .field("YNRMSF", "Y. Normalization Scale Factor", NITF_EXP(14, 2))
-          .field("ZNRMSF", "Z. Normalization Scale Factor", NITF_EXP(14, 2))
-          .field("RNPWRX", "Row Numerator max power of X", NITF_INT(1, false))
-          .field("RNPWRY", "Row Numerator max power of Y", NITF_INT(1, false))
-          .field("RNPWRZ", "Row Numerator max power of Z", NITF_INT(1, false))
-          .field("RNTRMS", "Row Numerator polynomial number of terms", NITF_INT(3, false))
+      .field("IID", "Image Identifier", NITF_STR(80), true)
+      .field("EDITION", "Association with Image", NITF_STR_BCSA(40))
+      .field("RSN", "Row Section Number", NITF_INT(3, false))
+      .field("CSN", "Column Section Number", NITF_INT(3, false))
+      .field("RFEP", "Row Fitting Error", NITF_EXP(14, 2), true)
+      .field("CFEP", "Col. Fitting Error", NITF_EXP(14, 2), true)
+      .field("RNRMO", "Row Normalization Offset", NITF_EXP(14, 2))
+      .field("CNRMO", "Col. Normalization Offset", NITF_EXP(14, 2))
+      .field("XNRMO", "X Normalization Offset", NITF_EXP(14, 2))
+      .field("YNRMO", "Y. Normalization Offset", NITF_EXP(14, 2))
+      .field("ZNRMO", "Z. Normalization Offset", NITF_EXP(14, 2))
+      .field("RNRMSF", "Row. Normalization Scale Factor", NITF_EXP(14, 2))
+      .field("CNRMSF", "Col. Normalization Scale Factor", NITF_EXP(14, 2))
+      .field("XNRMSF", "X. Normalization Scale Factor", NITF_EXP(14, 2))
+      .field("YNRMSF", "Y. Normalization Scale Factor", NITF_EXP(14, 2))
+      .field("ZNRMSF", "Z. Normalization Scale Factor", NITF_EXP(14, 2))
+      .field("RNPWRX", "Row Numerator max power of X", NITF_INT(1, false))
+      .field("RNPWRY", "Row Numerator max power of Y", NITF_INT(1, false))
+      .field("RNPWRZ", "Row Numerator max power of Z", NITF_INT(1, false))
+      .field("RNTRMS", "Row Numerator polynomial number of terms", NITF_INT(3, false))
       .repeat("RNTRMS",
               vil_nitf2_field_definitions().field("RNPCF", "Row Neumerator Polynomial Coefficients", NITF_EXP(14, 2)))
       .field("RDPWRX", "Row Denominator max power of X", NITF_INT(1, false))
@@ -384,91 +388,90 @@ vpgl_replacement_sensor_model_tres::define_RSMECA()
       .field("INCLIC", "Indirect Covariance Flag", NITF_STR_BCS(1))
       .field("INCLUC", "Unmodeled Error Covariance Flag", NITF_STR_BCS(1))
 
-      .condition(INCLIC_Y, vil_nitf2_field_definitions()
-        .field("NPAR", "Number Original Adjustable Params", NITF_INT(2, false))
-        .field("NPARO", "Number Original Adjustable Params", NITF_INT(2, false))
-        .field("IGN", "Number Independent Subgroups", NITF_INT(2, false))
-        .field("CVDATE", "Version Date", NITF_STR_BCSA(8), true)
-        .field("XUOL", "Local Coordinate Origin (XUOL)", NITF_STR_BCS(21))
-        .field("YUOL", "Local Coordinate Origin (YUOL)", NITF_STR_BCS(21))
-        .field("ZUOL", "Local Coordinate Origin (ZUOL)", NITF_STR_BCS(21))
-        .field("XUXL", "Local Coordinate Unit Vector (XUXL)", NITF_STR_BCS(21))
-        .field("XUYL", "Local Coordinate Unit Vector (XUYL)", NITF_STR_BCS(21))
-        .field("XUZL", "Local Coordinate Unit Vector (XUZL)", NITF_STR_BCS(21))
-        .field("YUXL", "Local Coordinate Unit Vector (YUXL)", NITF_STR_BCS(21))
-        .field("YUYL", "Local Coordinate Unit Vector (YUYL)", NITF_STR_BCS(21))
-        .field("YUZL", "Local Coordinate Unit Vector (YUZL)", NITF_STR_BCS(21))
-        .field("ZUXL", "Local Coordinate Unit Vector (ZUXL)", NITF_STR_BCS(21))
-        .field("ZUYL", "Local Coordinate Unit Vector (ZUYL)", NITF_STR_BCS(21))
-        .field("ZUZL", "Local Coordinate Unit Vector (ZUZL)", NITF_STR_BCS(21))
-        .field("IRO", "Image AdjP Row Const. Index", NITF_STR_BCS(2), true)
-        .field("IRX", "Image AdjP Row X Index", NITF_STR_BCS(2), true)
-        .field("IRY", "Image AdjP Row Y Index", NITF_STR_BCS(2), true)
-        .field("IRZ", "Image AdjP Row Z Index", NITF_STR_BCS(2), true)
-        .field("IRXX", "Image AdjP Row X^2 Index", NITF_STR_BCS(2), true)
-        .field("IRXY", "Image AdjP Row XY Index", NITF_STR_BCS(2), true)
-        .field("IRXZ", "Image AdjP Row XZ Index", NITF_STR_BCS(2), true)
-        .field("IRYY", "Image AdjP Row Y^2 Index", NITF_STR_BCS(2), true)
-        .field("IRYZ", "Image AdjP Row YZ Index", NITF_STR_BCS(2), true)
-        .field("IRZZ", "Image AdjP Row Z^2 Index", NITF_STR_BCS(2), true)
-        .field("ICO", "Image AdjP Row Const. Index", NITF_STR_BCS(2), true)
-        .field("ICX", "Image AdjP Row X Index", NITF_STR_BCS(2), true)
-        .field("ICY", "Image AdjP Row Y Index", NITF_STR_BCS(2), true)
-        .field("ICZ", "Image AdjP Row Z Index", NITF_STR_BCS(2), true)
-        .field("ICXX", "Image AdjP Row X^2 Index", NITF_STR_BCS(2), true)
-        .field("ICXY", "Image AdjP Row XY Index", NITF_STR_BCS(2), true)
-        .field("ICXZ", "Image AdjP Row XZ Index", NITF_STR_BCS(2), true)
-        .field("ICYY", "Image AdjP Row Y^2 Index", NITF_STR_BCS(2), true)
-        .field("ICYZ", "Image AdjP Row YZ Index", NITF_STR_BCS(2), true)
-        .field("ICZZ", "Image AdjP Row Z^2 Index", NITF_STR_BCS(2), true)
-        .field("GXO", "Ground AdjP X Const. Index", NITF_STR_BCS(2), true)
-        .field("GYO", "Ground AdjP Y Const. Index", NITF_STR_BCS(2), true)
-        .field("GZO", "Ground AdjP Z Const. Index", NITF_STR_BCS(2), true)
-        .field("GXR", "X Ground Rotation Index", NITF_STR_BCS(2), true)
-        .field("GYR", "Y Ground Rotation Index", NITF_STR_BCS(2), true)
-        .field("GZR", "Z Ground Rotation Index", NITF_STR_BCS(2), true)
-        .field("GS", " Ground Scale Index", NITF_STR_BCS(2), true)
-        .field("GXX", "Ground X Adj.Prop. X Index", NITF_STR_BCS(2), true)
-        .field("GXY", "Ground X Adj.Prop. Y Index", NITF_STR_BCS(2), true)
-        .field("GXZ", "Ground X Adj.Prop. Z Index", NITF_STR_BCS(2), true)
-        .field("GYX", "Ground Y Adj.Prop. X Index", NITF_STR_BCS(2), true)
-        .field("GYY", "Ground Y Adj.Prop. Y Index", NITF_STR_BCS(2), true)
-        .field("GYZ", "Ground Y Adj.Prop. Z Index", NITF_STR_BCS(2), true)
-        .field("GZX", "Ground Z Adj.Prop. X Index", NITF_STR_BCS(2), true)
-        .field("GZY", "Ground Z Adj.Prop. Y Index", NITF_STR_BCS(2), true)
-        .field("GZZ", "Ground Z Adj.Prop. Z Index", NITF_STR_BCS(2), true)
-        .repeat("IGN", vil_nitf2_field_definitions()
-          .field("NUMOPG", "Number of Original Adj. Parameters", NITF_INT(2, false))
-          .repeat(new vil_nitf2_field_covar_size<int>("NUMOPG"), vil_nitf2_field_definitions()
-            .field("ERRCVG", "Error Covariance", NITF_EXP(14, 2))
-          )
-          .field("TCDF", "Time correlation domain flag", NITF_INT(1, false))
-          .field("NCSEG", "Number of Correlation Segments", NITF_INT(1, false))
-          .repeat("NCSEG", vil_nitf2_field_definitions()
-            .field("CORSEG", "Segment Correlation Value", NITF_EXP(14, 2))
-            .field("TAUSEG", "Segment Tau Value", NITF_EXP(14, 2))
-          )
-        )
-        .repeat(new vil_nitf2_field_product_size<int>("NPAR", "NPARO"), vil_nitf2_field_definitions()
-          .field("MAP", "Mapping Matrix Element", NITF_EXP(14, 2))
-        )
-      ) // end INCLIC_Y
+      .condition(INCLIC_Y,
+                 vil_nitf2_field_definitions()
+                   .field("NPAR", "Number Original Adjustable Params", NITF_INT(2, false))
+                   .field("NPARO", "Number Original Adjustable Params", NITF_INT(2, false))
+                   .field("IGN", "Number Independent Subgroups", NITF_INT(2, false))
+                   .field("CVDATE", "Version Date", NITF_STR_BCSA(8), true)
+                   .field("XUOL", "Local Coordinate Origin (XUOL)", NITF_STR_BCS(21))
+                   .field("YUOL", "Local Coordinate Origin (YUOL)", NITF_STR_BCS(21))
+                   .field("ZUOL", "Local Coordinate Origin (ZUOL)", NITF_STR_BCS(21))
+                   .field("XUXL", "Local Coordinate Unit Vector (XUXL)", NITF_STR_BCS(21))
+                   .field("XUYL", "Local Coordinate Unit Vector (XUYL)", NITF_STR_BCS(21))
+                   .field("XUZL", "Local Coordinate Unit Vector (XUZL)", NITF_STR_BCS(21))
+                   .field("YUXL", "Local Coordinate Unit Vector (YUXL)", NITF_STR_BCS(21))
+                   .field("YUYL", "Local Coordinate Unit Vector (YUYL)", NITF_STR_BCS(21))
+                   .field("YUZL", "Local Coordinate Unit Vector (YUZL)", NITF_STR_BCS(21))
+                   .field("ZUXL", "Local Coordinate Unit Vector (ZUXL)", NITF_STR_BCS(21))
+                   .field("ZUYL", "Local Coordinate Unit Vector (ZUYL)", NITF_STR_BCS(21))
+                   .field("ZUZL", "Local Coordinate Unit Vector (ZUZL)", NITF_STR_BCS(21))
+                   .field("IRO", "Image AdjP Row Const. Index", NITF_STR_BCS(2), true)
+                   .field("IRX", "Image AdjP Row X Index", NITF_STR_BCS(2), true)
+                   .field("IRY", "Image AdjP Row Y Index", NITF_STR_BCS(2), true)
+                   .field("IRZ", "Image AdjP Row Z Index", NITF_STR_BCS(2), true)
+                   .field("IRXX", "Image AdjP Row X^2 Index", NITF_STR_BCS(2), true)
+                   .field("IRXY", "Image AdjP Row XY Index", NITF_STR_BCS(2), true)
+                   .field("IRXZ", "Image AdjP Row XZ Index", NITF_STR_BCS(2), true)
+                   .field("IRYY", "Image AdjP Row Y^2 Index", NITF_STR_BCS(2), true)
+                   .field("IRYZ", "Image AdjP Row YZ Index", NITF_STR_BCS(2), true)
+                   .field("IRZZ", "Image AdjP Row Z^2 Index", NITF_STR_BCS(2), true)
+                   .field("ICO", "Image AdjP Row Const. Index", NITF_STR_BCS(2), true)
+                   .field("ICX", "Image AdjP Row X Index", NITF_STR_BCS(2), true)
+                   .field("ICY", "Image AdjP Row Y Index", NITF_STR_BCS(2), true)
+                   .field("ICZ", "Image AdjP Row Z Index", NITF_STR_BCS(2), true)
+                   .field("ICXX", "Image AdjP Row X^2 Index", NITF_STR_BCS(2), true)
+                   .field("ICXY", "Image AdjP Row XY Index", NITF_STR_BCS(2), true)
+                   .field("ICXZ", "Image AdjP Row XZ Index", NITF_STR_BCS(2), true)
+                   .field("ICYY", "Image AdjP Row Y^2 Index", NITF_STR_BCS(2), true)
+                   .field("ICYZ", "Image AdjP Row YZ Index", NITF_STR_BCS(2), true)
+                   .field("ICZZ", "Image AdjP Row Z^2 Index", NITF_STR_BCS(2), true)
+                   .field("GXO", "Ground AdjP X Const. Index", NITF_STR_BCS(2), true)
+                   .field("GYO", "Ground AdjP Y Const. Index", NITF_STR_BCS(2), true)
+                   .field("GZO", "Ground AdjP Z Const. Index", NITF_STR_BCS(2), true)
+                   .field("GXR", "X Ground Rotation Index", NITF_STR_BCS(2), true)
+                   .field("GYR", "Y Ground Rotation Index", NITF_STR_BCS(2), true)
+                   .field("GZR", "Z Ground Rotation Index", NITF_STR_BCS(2), true)
+                   .field("GS", " Ground Scale Index", NITF_STR_BCS(2), true)
+                   .field("GXX", "Ground X Adj.Prop. X Index", NITF_STR_BCS(2), true)
+                   .field("GXY", "Ground X Adj.Prop. Y Index", NITF_STR_BCS(2), true)
+                   .field("GXZ", "Ground X Adj.Prop. Z Index", NITF_STR_BCS(2), true)
+                   .field("GYX", "Ground Y Adj.Prop. X Index", NITF_STR_BCS(2), true)
+                   .field("GYY", "Ground Y Adj.Prop. Y Index", NITF_STR_BCS(2), true)
+                   .field("GYZ", "Ground Y Adj.Prop. Z Index", NITF_STR_BCS(2), true)
+                   .field("GZX", "Ground Z Adj.Prop. X Index", NITF_STR_BCS(2), true)
+                   .field("GZY", "Ground Z Adj.Prop. Y Index", NITF_STR_BCS(2), true)
+                   .field("GZZ", "Ground Z Adj.Prop. Z Index", NITF_STR_BCS(2), true)
+                   .repeat("IGN",
+                           vil_nitf2_field_definitions()
+                             .field("NUMOPG", "Number of Original Adj. Parameters", NITF_INT(2, false))
+                             .repeat(new vil_nitf2_field_covar_size<int>("NUMOPG"),
+                                     vil_nitf2_field_definitions().field("ERRCVG", "Error Covariance", NITF_EXP(14, 2)))
+                             .field("TCDF", "Time correlation domain flag", NITF_INT(1, false))
+                             .field("NCSEG", "Number of Correlation Segments", NITF_INT(1, false))
+                             .repeat("NCSEG",
+                                     vil_nitf2_field_definitions()
+                                       .field("CORSEG", "Segment Correlation Value", NITF_EXP(14, 2))
+                                       .field("TAUSEG", "Segment Tau Value", NITF_EXP(14, 2))))
+                   .repeat(new vil_nitf2_field_product_size<int>("NPAR", "NPARO"),
+                           vil_nitf2_field_definitions().field(
+                             "MAP", "Mapping Matrix Element", NITF_EXP(14, 2)))) // end INCLIC_Y
 
-      .condition(INCLUC_Y, vil_nitf2_field_definitions()
-        .field("URR", "Unmodeled. Row Var.", NITF_STR_BCS(21))
-        .field("URC", "Unmodeled. Row-Col Var.", NITF_STR_BCS(21))
-        .field("UCC", "Unmodeled. Col-Col Var.", NITF_STR_BCS(21))
-        .field("UNCSR", "Number of Corr. Segments Row", NITF_INT(1, false))
-        .repeat("UNCSR", vil_nitf2_field_definitions()
-          .field("UCORSR", "Segment Correlation", NITF_STR_BCS(21))
-          .field("UTAUSR", "Segment Correlation", NITF_STR_BCS(21))
-        )
-        .field("UNCSC", "Number of Corr. Segments Col", NITF_INT(1, false))
-        .repeat("UNCSC", vil_nitf2_field_definitions()
-          .field("UCORSC", "Segment Correlation", NITF_STR_BCS(21))
-          .field("UTAUSC", "Segment Correlation", NITF_STR_BCS(21))
-        )
-      ) // end INCLUC_Y
+      .condition(INCLUC_Y,
+                 vil_nitf2_field_definitions()
+                   .field("URR", "Unmodeled. Row Var.", NITF_STR_BCS(21))
+                   .field("URC", "Unmodeled. Row-Col Var.", NITF_STR_BCS(21))
+                   .field("UCC", "Unmodeled. Col-Col Var.", NITF_STR_BCS(21))
+                   .field("UNCSR", "Number of Corr. Segments Row", NITF_INT(1, false))
+                   .repeat("UNCSR",
+                           vil_nitf2_field_definitions()
+                             .field("UCORSR", "Segment Correlation", NITF_STR_BCS(21))
+                             .field("UTAUSR", "Segment Correlation", NITF_STR_BCS(21)))
+                   .field("UNCSC", "Number of Corr. Segments Col", NITF_INT(1, false))
+                   .repeat("UNCSC",
+                           vil_nitf2_field_definitions()
+                             .field("UCORSC", "Segment Correlation", NITF_STR_BCS(21))
+                             .field("UTAUSC", "Segment Correlation", NITF_STR_BCS(21)))) // end INCLUC_Y
 
       .end();
   }
@@ -498,115 +501,113 @@ vpgl_replacement_sensor_model_tres::define_RSMECB()
       .field("INCLIC", "Indirect Covariance Flag", NITF_STR_BCS(1))
       .field("INCLUC", "Unmodeled Error Covariance Flag", NITF_STR_BCS(1))
 
-      .condition(INCLIC_Y, vil_nitf2_field_definitions()
-        .field("NPARO", "Number Original Adjustable Params", NITF_INT(2, false))
-        .field("IGN", "Number Independent Subgroups", NITF_INT(2, false))
-        .field("CVDATE", "Version Date", NITF_STR_BCSA(8), true)
-        .field("NPAR", "Number Active Adjustable Params", NITF_INT(2, false))
-        .field("APTYP", "Adjustable Parameter Type", NITF_STR_BCS(1))
-        .field("LOCTYP", "Local Coordinate System Id", NITF_STR_BCS(1))
-        .field("NSFX", "Normalization Scale Factor for X", NITF_STR_BCS(21))
-        .field("NSFY", "Normalization Scale Factor for Y", NITF_STR_BCS(21))
-        .field("NSFZ", "Normalization Scale Factor for Z", NITF_STR_BCS(21))
-        .field("NOFFX", "Normalization Offset for X", NITF_STR_BCS(21))
-        .field("NOFFY", "Normalization Offset for Y", NITF_STR_BCS(21))
-        .field("NOFFZ", "Normalization Offset for Z", NITF_STR_BCS(21))
-        .condition(LOCTYP_R, vil_nitf2_field_definitions()
-          .field("XUOL", "Local Coordinate Origin (XUOL)", NITF_STR_BCS(21))
-          .field("YUOL", "Local Coordinate Origin (YUOL)", NITF_STR_BCS(21))
-          .field("ZUOL", "Local Coordinate Origin (ZUOL)", NITF_STR_BCS(21))
-          .field("XUXL", "Local Coordinate Unit Vector (XUXL)", NITF_STR_BCS(21))
-          .field("XUYL", "Local Coordinate Unit Vector (XUYL)", NITF_STR_BCS(21))
-          .field("XUZL", "Local Coordinate Unit Vector (XUZL)", NITF_STR_BCS(21))
-          .field("YUXL", "Local Coordinate Unit Vector (YUXL)", NITF_STR_BCS(21))
-          .field("YUYL", "Local Coordinate Unit Vector (YUYL)", NITF_STR_BCS(21))
-          .field("YUZL", "Local Coordinate Unit Vector (YUZL)", NITF_STR_BCS(21))
-          .field("ZUXL", "Local Coordinate Unit Vector (ZUXL)", NITF_STR_BCS(21))
-          .field("ZUYL", "Local Coordinate Unit Vector (ZUYL)", NITF_STR_BCS(21))
-          .field("ZUZL", "Local Coordinate Unit Vector (ZUZL)", NITF_STR_BCS(21))
-        )
-        .field("APBASE", "Basis Option", NITF_STR_BCS(1))
-        .condition(APTYP_I, vil_nitf2_field_definitions()
-          .field("NISAP", "Number Img Space APs", NITF_INT(2))
-          .field("NISAPR", "Number Row Img Space APs", NITF_INT(2))
-          .repeat("NISAPR", vil_nitf2_field_definitions()
-            .field("XPWRR", "Row Parameter Power of X", NITF_INT(1))
-            .field("YPWRR", "Row Parameter Power of Y", NITF_INT(1))
-            .field("ZPWRR", "Row Parameter Power of Z", NITF_INT(1))
-          )
-          .field("NISAPC", "Number Col. Img Space APs", NITF_INT(2))
-          .repeat("NISAPC",  vil_nitf2_field_definitions()
-            .field("XPWRC", "Col Parameter Power of X", NITF_INT(1))
-            .field("YPWRC", "Col Parameter Power of Y", NITF_INT(1))
-            .field("ZPWRC", "Col Parameter Power of Z", NITF_INT(1))
-          )
-        )
-        .condition(APTYP_G, vil_nitf2_field_definitions()
-          .field("NGSAP", "Number Gnd Space APs", NITF_INT(2, false))
-          .repeat("NGSAP", vil_nitf2_field_definitions()
-            .field("GSAPID", "Gnd Space Param. id", NITF_INT(4, false))
-          )
-        )
-        .condition(APBASE_Y, vil_nitf2_field_definitions()
-          .field("NBASIS", "Number Basis APs", NITF_INT(2, false))
-          .repeat(new vil_nitf2_field_product_size<int>("NPAR", "NBASIS"), vil_nitf2_field_definitions()
-            .field("AEL", "Matrix A Element", NITF_STR_BCS(21))
-          )
-        )
-        .repeat("IGN", vil_nitf2_field_definitions()
-          .field("NUMOPG", "Number of Corr. Segments", NITF_INT(2))
-          .repeat(new vil_nitf2_field_covar_size<int>("NUMOPG"), vil_nitf2_field_definitions()
-            .field("ERRCVG", "Error Covariance", NITF_STR_BCS(21))
-          )
-          .field("TCDF", "Correlation Flag", NITF_INT(1))
-          .field("ACSMC", "Correlation Option", NITF_STR_BCS(1))
-          .condition(ACSMC_N, vil_nitf2_field_definitions()
-            .field("NCSEG", "Number of Corr. Segments", NITF_INT(1))
-            .repeat("NCSEG",vil_nitf2_field_definitions()
-              .field("CORSEG", "Correlation ", NITF_STR_BCS(21))
-              .field("TAUSEG", "Covar. Time", NITF_STR_BCS(21))
-            )
-          )
-          .condition(ACSMC_Y, vil_nitf2_field_definitions()
-            .field("AC", "Correlation A", NITF_STR_BCS(21))
-            .field("ALPC", "Correlation Alpha", NITF_STR_BCS(21))
-            .field("BETC", "Correlation Beta", NITF_STR_BCS(21))
-            .field("TC", "Correlation T", NITF_STR_BCS(21))
-          )
-        )
-        .repeat(new vil_nitf2_field_product_size<int>("NPAR", "NPARO"), vil_nitf2_field_definitions()
-          .field("MAP", "Mapping Matrix", NITF_STR_BCS(21))
-        )
-      ) // end INCLIC_Y
+      .condition(
+        INCLIC_Y,
+        vil_nitf2_field_definitions()
+          .field("NPARO", "Number Original Adjustable Params", NITF_INT(2, false))
+          .field("IGN", "Number Independent Subgroups", NITF_INT(2, false))
+          .field("CVDATE", "Version Date", NITF_STR_BCSA(8), true)
+          .field("NPAR", "Number Active Adjustable Params", NITF_INT(2, false))
+          .field("APTYP", "Adjustable Parameter Type", NITF_STR_BCS(1))
+          .field("LOCTYP", "Local Coordinate System Id", NITF_STR_BCS(1))
+          .field("NSFX", "Normalization Scale Factor for X", NITF_STR_BCS(21))
+          .field("NSFY", "Normalization Scale Factor for Y", NITF_STR_BCS(21))
+          .field("NSFZ", "Normalization Scale Factor for Z", NITF_STR_BCS(21))
+          .field("NOFFX", "Normalization Offset for X", NITF_STR_BCS(21))
+          .field("NOFFY", "Normalization Offset for Y", NITF_STR_BCS(21))
+          .field("NOFFZ", "Normalization Offset for Z", NITF_STR_BCS(21))
+          .condition(LOCTYP_R,
+                     vil_nitf2_field_definitions()
+                       .field("XUOL", "Local Coordinate Origin (XUOL)", NITF_STR_BCS(21))
+                       .field("YUOL", "Local Coordinate Origin (YUOL)", NITF_STR_BCS(21))
+                       .field("ZUOL", "Local Coordinate Origin (ZUOL)", NITF_STR_BCS(21))
+                       .field("XUXL", "Local Coordinate Unit Vector (XUXL)", NITF_STR_BCS(21))
+                       .field("XUYL", "Local Coordinate Unit Vector (XUYL)", NITF_STR_BCS(21))
+                       .field("XUZL", "Local Coordinate Unit Vector (XUZL)", NITF_STR_BCS(21))
+                       .field("YUXL", "Local Coordinate Unit Vector (YUXL)", NITF_STR_BCS(21))
+                       .field("YUYL", "Local Coordinate Unit Vector (YUYL)", NITF_STR_BCS(21))
+                       .field("YUZL", "Local Coordinate Unit Vector (YUZL)", NITF_STR_BCS(21))
+                       .field("ZUXL", "Local Coordinate Unit Vector (ZUXL)", NITF_STR_BCS(21))
+                       .field("ZUYL", "Local Coordinate Unit Vector (ZUYL)", NITF_STR_BCS(21))
+                       .field("ZUZL", "Local Coordinate Unit Vector (ZUZL)", NITF_STR_BCS(21)))
+          .field("APBASE", "Basis Option", NITF_STR_BCS(1))
+          .condition(APTYP_I,
+                     vil_nitf2_field_definitions()
+                       .field("NISAP", "Number Img Space APs", NITF_INT(2))
+                       .field("NISAPR", "Number Row Img Space APs", NITF_INT(2))
+                       .repeat("NISAPR",
+                               vil_nitf2_field_definitions()
+                                 .field("XPWRR", "Row Parameter Power of X", NITF_INT(1))
+                                 .field("YPWRR", "Row Parameter Power of Y", NITF_INT(1))
+                                 .field("ZPWRR", "Row Parameter Power of Z", NITF_INT(1)))
+                       .field("NISAPC", "Number Col. Img Space APs", NITF_INT(2))
+                       .repeat("NISAPC",
+                               vil_nitf2_field_definitions()
+                                 .field("XPWRC", "Col Parameter Power of X", NITF_INT(1))
+                                 .field("YPWRC", "Col Parameter Power of Y", NITF_INT(1))
+                                 .field("ZPWRC", "Col Parameter Power of Z", NITF_INT(1))))
+          .condition(
+            APTYP_G,
+            vil_nitf2_field_definitions()
+              .field("NGSAP", "Number Gnd Space APs", NITF_INT(2, false))
+              .repeat("NGSAP",
+                      vil_nitf2_field_definitions().field("GSAPID", "Gnd Space Param. id", NITF_INT(4, false))))
+          .condition(APBASE_Y,
+                     vil_nitf2_field_definitions()
+                       .field("NBASIS", "Number Basis APs", NITF_INT(2, false))
+                       .repeat(new vil_nitf2_field_product_size<int>("NPAR", "NBASIS"),
+                               vil_nitf2_field_definitions().field("AEL", "Matrix A Element", NITF_STR_BCS(21))))
+          .repeat("IGN",
+                  vil_nitf2_field_definitions()
+                    .field("NUMOPG", "Number of Corr. Segments", NITF_INT(2))
+                    .repeat(new vil_nitf2_field_covar_size<int>("NUMOPG"),
+                            vil_nitf2_field_definitions().field("ERRCVG", "Error Covariance", NITF_STR_BCS(21)))
+                    .field("TCDF", "Correlation Flag", NITF_INT(1))
+                    .field("ACSMC", "Correlation Option", NITF_STR_BCS(1))
+                    .condition(ACSMC_N,
+                               vil_nitf2_field_definitions()
+                                 .field("NCSEG", "Number of Corr. Segments", NITF_INT(1))
+                                 .repeat("NCSEG",
+                                         vil_nitf2_field_definitions()
+                                           .field("CORSEG", "Correlation ", NITF_STR_BCS(21))
+                                           .field("TAUSEG", "Covar. Time", NITF_STR_BCS(21))))
+                    .condition(ACSMC_Y,
+                               vil_nitf2_field_definitions()
+                                 .field("AC", "Correlation A", NITF_STR_BCS(21))
+                                 .field("ALPC", "Correlation Alpha", NITF_STR_BCS(21))
+                                 .field("BETC", "Correlation Beta", NITF_STR_BCS(21))
+                                 .field("TC", "Correlation T", NITF_STR_BCS(21))))
+          .repeat(new vil_nitf2_field_product_size<int>("NPAR", "NPARO"),
+                  vil_nitf2_field_definitions().field("MAP", "Mapping Matrix", NITF_STR_BCS(21)))) // end INCLIC_Y
 
-      .condition(INCLUC_Y, vil_nitf2_field_definitions()
-        .field("URR", "Unmodeled. Row Var.", NITF_STR_BCS(21))
-        .field("URC", "Unmodeled. Row-Col Var.", NITF_STR_BCS(21))
-        .field("UCC", "Unmodeled. Col-Col Var.", NITF_STR_BCS(21))
-        .field("UACSMC", "Unmodeled CSM Option", NITF_STR_BCSA(1))
-        .condition(UACSMC_N, vil_nitf2_field_definitions()
-          .field("UNCSR", "Number of row corr segments", NITF_INT(1))
-          .repeat("UNCSR", vil_nitf2_field_definitions()
-            .field("UCORSR", "row corr value for seg", NITF_STR_BCS(21))
-            .field("UTAUSR", "row tau value for seg", NITF_STR_BCS(21))
-          )
-          .field("UNCSC", "Number of col corr segments", NITF_INT(1))
-          .repeat("UNCSC", vil_nitf2_field_definitions()
-            .field("UCORSC", "col corr value for seg", NITF_STR_BCS(21))
-            .field("UTAUSC", "col tau value for seg", NITF_STR_BCS(21))
-          )
-        )
-        .condition(UACSMC_Y, vil_nitf2_field_definitions()
-          .field("UACR",   "A for row corr function", NITF_STR_BCS(21))
-          .field("UALPCR", "alpha for row corr function", NITF_STR_BCS(21))
-          .field("UBETCR", "beta for row corr function", NITF_STR_BCS(21))
-          .field("UTCR",   "T for row corr function", NITF_STR_BCS(21))
-          .field("UACC",   "A for col corr function", NITF_STR_BCS(21))
-          .field("UALPCC", "alpha for col corr function", NITF_STR_BCS(21))
-          .field("UBETCC", "beta for col corr function", NITF_STR_BCS(21))
-          .field("UTCC",   "T for row corr function", NITF_STR_BCS(21))
-        )
-      ) // end INCLUC_Y
+      .condition(INCLUC_Y,
+                 vil_nitf2_field_definitions()
+                   .field("URR", "Unmodeled. Row Var.", NITF_STR_BCS(21))
+                   .field("URC", "Unmodeled. Row-Col Var.", NITF_STR_BCS(21))
+                   .field("UCC", "Unmodeled. Col-Col Var.", NITF_STR_BCS(21))
+                   .field("UACSMC", "Unmodeled CSM Option", NITF_STR_BCSA(1))
+                   .condition(UACSMC_N,
+                              vil_nitf2_field_definitions()
+                                .field("UNCSR", "Number of row corr segments", NITF_INT(1))
+                                .repeat("UNCSR",
+                                        vil_nitf2_field_definitions()
+                                          .field("UCORSR", "row corr value for seg", NITF_STR_BCS(21))
+                                          .field("UTAUSR", "row tau value for seg", NITF_STR_BCS(21)))
+                                .field("UNCSC", "Number of col corr segments", NITF_INT(1))
+                                .repeat("UNCSC",
+                                        vil_nitf2_field_definitions()
+                                          .field("UCORSC", "col corr value for seg", NITF_STR_BCS(21))
+                                          .field("UTAUSC", "col tau value for seg", NITF_STR_BCS(21))))
+                   .condition(UACSMC_Y,
+                              vil_nitf2_field_definitions()
+                                .field("UACR", "A for row corr function", NITF_STR_BCS(21))
+                                .field("UALPCR", "alpha for row corr function", NITF_STR_BCS(21))
+                                .field("UBETCR", "beta for row corr function", NITF_STR_BCS(21))
+                                .field("UTCR", "T for row corr function", NITF_STR_BCS(21))
+                                .field("UACC", "A for col corr function", NITF_STR_BCS(21))
+                                .field("UALPCC", "alpha for col corr function", NITF_STR_BCS(21))
+                                .field("UBETCC", "beta for col corr function", NITF_STR_BCS(21))
+                                .field("UTCC", "T for row corr function", NITF_STR_BCS(21)))) // end INCLUC_Y
 
       .end();
   }

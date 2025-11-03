@@ -32,8 +32,7 @@ vpgl_ground_domain<T>::reset()
 // convert geodetic to Earth Centered Earth Fixed (ECEF) coordinate
 template <class T>
 void
-geodetic_to_ecef(const T lon_deg, const T lat_deg, const T elev,
-                 T & x, T & y, T & z)
+geodetic_to_ecef(const T lon_deg, const T lat_deg, const T elev, T & x, T & y, T & z)
 {
   // longitude in radians
   double lambda = lon_deg / vnl_math::deg_per_rad;
@@ -45,12 +44,12 @@ geodetic_to_ecef(const T lon_deg, const T lat_deg, const T elev,
 
   // ellipsoid radius of curvature at (lon, lat)
   double a = GRS84_a, b = GRS84_b;
-  double rad_curv = (a*a) / sqrt((a*a*cp*cp) + (b*b*sp*sp));
+  double rad_curv = (a * a) / sqrt((a * a * cp * cp) + (b * b * sp * sp));
 
   // ECEF coordinates
   x = (rad_curv + elev) * cp * cl;
   y = (rad_curv + elev) * cp * sl;
-  z = (rad_curv * ((b*b) / (a*a)) + elev) * sp;
+  z = (rad_curv * ((b * b) / (a * a)) + elev) * sp;
 }
 
 // convert world WGS84 coordinate to ground domain coordinate
@@ -60,8 +59,7 @@ geodetic_to_ecef(const T lon_deg, const T lat_deg, const T elev,
 // - elevation in meters
 template <class T>
 void
-vpgl_ground_domain<T>::world_to_ground(const T lon_deg, const T lat_deg, const T elev_m,
-                                       T & x, T & y, T & z) const
+vpgl_ground_domain<T>::world_to_ground(const T lon_deg, const T lat_deg, const T elev_m, T & x, T & y, T & z) const
 {
   // process inputs according to id_
   switch (id_)
@@ -74,7 +72,8 @@ vpgl_ground_domain<T>::world_to_ground(const T lon_deg, const T lat_deg, const T
     case vpgl_ground_domain_id::H:
     {
       x = lon_deg / vnl_math::deg_per_rad;
-      if ((id_ == vpgl_ground_domain_id::H) && (x < 0)) {
+      if ((id_ == vpgl_ground_domain_id::H) && (x < 0))
+      {
         x += vnl_math::twopi;
       }
       y = lat_deg / vnl_math::deg_per_rad;
@@ -106,8 +105,7 @@ vnl_vector_fixed<T, 3>
 vpgl_ground_domain<T>::world_to_ground(const vnl_vector_fixed<T, 3> & world_point) const
 {
   vnl_vector_fixed<T, 3> gd_point;
-  this->world_to_ground(world_point[0], world_point[1], world_point[2],
-                        gd_point[0], gd_point[1], gd_point[2]);
+  this->world_to_ground(world_point[0], world_point[1], world_point[2], gd_point[0], gd_point[1], gd_point[2]);
   return gd_point;
 }
 
@@ -117,20 +115,19 @@ vgl_point_3d<T>
 vpgl_ground_domain<T>::world_to_ground(const vgl_point_3d<T> & world_point) const
 {
   T x, y, z;
-  this->world_to_ground(world_point.x(), world_point.y(), world_point.z(),
-                        x, y, z);
+  this->world_to_ground(world_point.x(), world_point.y(), world_point.z(), x, y, z);
   return vgl_point_3d<T>(x, y, z);
 }
 
 // print ground domain
 template <class T>
 std::ostream &
-vpgl_ground_domain<T>::print(std::ostream& os) const
+vpgl_ground_domain<T>::print(std::ostream & os) const
 {
   os << "<vpgl_ground_domain \"" << id_ << "\"";
-  if (id_ == vpgl_ground_domain_id::R) {
-    os << "\ntranslation=" << translation_
-       << "\nrotation=" << rotation_;
+  if (id_ == vpgl_ground_domain_id::R)
+  {
+    os << "\ntranslation=" << translation_ << "\nrotation=" << rotation_;
   }
   os << ">";
   return os;
@@ -363,10 +360,10 @@ vpgl_RSM_camera<T>::project(vgl_point_3d<T> world_point) const
 }
 // Code for easy instantiation.
 #undef vpgl_RSM_CAMERA_INSTANTIATE
-#define vpgl_RSM_CAMERA_INSTANTIATE(T) \
-  template class vpgl_scale_offset<T>; \
+#define vpgl_RSM_CAMERA_INSTANTIATE(T)  \
+  template class vpgl_scale_offset<T>;  \
   template class vpgl_ground_domain<T>; \
-  template class vpgl_polycam<T>;      \
+  template class vpgl_polycam<T>;       \
   template class vpgl_RSM_camera<T>
 
 #endif // vpgl_RSM_camera_hxx_

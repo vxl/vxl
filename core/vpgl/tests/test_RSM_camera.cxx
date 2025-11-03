@@ -23,22 +23,22 @@ create_ground_domain(std::string ground_domain_id)
   {
     // rectangular transformation
     vnl_vector_fixed<double, 3> translation;
-    translation[0] = -2.42965895449297E+06;  // RSMIDA.XUOR
-    translation[1] = -4.76049894293300E+06;  // RSMIDA.YUOR
-    translation[2] = +3.46898407315533E+06;  // RSMIDA.ZUOR
+    translation[0] = -2.42965895449297E+06; // RSMIDA.XUOR
+    translation[1] = -4.76049894293300E+06; // RSMIDA.YUOR
+    translation[2] = +3.46898407315533E+06; // RSMIDA.ZUOR
 
     vnl_matrix_fixed<double, 3, 3> rotation;
-    rotation[0][0] = +8.90233155120443E-01;  // RSMIDA.XUXR
-    rotation[1][0] = +2.50327118321895E-01;  // RSMIDA.XUYR
-    rotation[2][0] = -3.80553890213932E-01;  // RSMIDA.XUZR
+    rotation[0][0] = +8.90233155120443E-01; // RSMIDA.XUXR
+    rotation[1][0] = +2.50327118321895E-01; // RSMIDA.XUYR
+    rotation[2][0] = -3.80553890213932E-01; // RSMIDA.XUZR
 
-    rotation[0][1] = -4.55502457571841E-01;  // RSMIDA.YUXR
-    rotation[1][1] = +4.86367706250322E-01;  // RSMIDA.YUYR
-    rotation[2][1] = -7.45629911861651E-01;  // RSMIDA.YUZR
+    rotation[0][1] = -4.55502457571841E-01; // RSMIDA.YUXR
+    rotation[1][1] = +4.86367706250322E-01; // RSMIDA.YUYR
+    rotation[2][1] = -7.45629911861651E-01; // RSMIDA.YUZR
 
-    rotation[0][2] = -1.56226448294838E-03;  // RSMIDA.ZUXR
-    rotation[1][2] = +8.37127701219746E-01;  // RSMIDA.ZUYR
-    rotation[2][2] = +5.47005275276417E-01;  // RSMIDA.ZUZR
+    rotation[0][2] = -1.56226448294838E-03; // RSMIDA.ZUXR
+    rotation[1][2] = +8.37127701219746E-01; // RSMIDA.ZUYR
+    rotation[2][2] = +5.47005275276417E-01; // RSMIDA.ZUZR
 
     // create ground domain
     auto gd = vpgl_ground_domain<double>("R");
@@ -58,30 +58,30 @@ create_ground_domain(std::string ground_domain_id)
 // - [lon (rad), lat (rad), elev (meters)] with lon on range (0, 2pi)
 // - Earth centered Earth fixed (ECEF) coordinate
 // - Rectangular coordinate
-static std::vector<std::vector<std::vector<double> > >
+static std::vector<std::vector<std::vector<double>>>
 create_ground_domain_coords()
 {
-  std::vector<std::vector<std::vector<double> > > data = {
+  std::vector<std::vector<std::vector<double>>> data = {
     {
-      {-117.0386236785, 33.1616263666, -500},
-      {-2.04270933519924, 0.578779565419217, -500},
-      {4.240475971980347, 0.578779565419217, -500},
-      {-2429458.222842, -4760144.758575, 3468704.785650},
-      {17.802446, -11.286898, -493.251402},
+      { -117.0386236785, 33.1616263666, -500 },
+      { -2.04270933519924, 0.578779565419217, -500 },
+      { 4.240475971980347, 0.578779565419217, -500 },
+      { -2429458.222842, -4760144.758575, 3468704.785650 },
+      { 17.802446, -11.286898, -493.251402 },
     },
     {
-      {-117.0388169203, 33.1617298457, 0},
-      {-2.04271270789735, 0.578781371463418, 0},
-      {4.240472599282237, 0.578781371463418, 0},
-      {-2429661.700896, -4760503.788871, 3468987.894357},
-      {-0.243572, 0.154427, 6.748648},
+      { -117.0388169203, 33.1617298457, 0 },
+      { -2.04271270789735, 0.578781371463418, 0 },
+      { 4.240472599282237, 0.578781371463418, 0 },
+      { -2429661.700896, -4760503.788871, 3468987.894357 },
+      { -0.243572, 0.154427, 6.748648 },
     },
     {
-      {-117.0390101313, 33.1618333074, 500},
-      {-2.04271608007467, 0.578783177217907, 500},
-      {4.240469227104916, 0.578783177217907, 500},
-      {-2429865.178922, -4760862.819116, 3469271.003024},
-      {-18.289589, 11.595750, 506.748627},
+      { -117.0390101313, 33.1618333074, 500 },
+      { -2.04271608007467, 0.578783177217907, 500 },
+      { 4.240469227104916, 0.578783177217907, 500 },
+      { -2429865.178922, -4760862.819116, 3469271.003024 },
+      { -18.289589, 11.595750, 506.748627 },
     },
   };
   return data;
@@ -92,7 +92,9 @@ static void
 _test_ground_domain(vpgl_ground_domain<double> gd,
                     std::vector<double> lon_lat_elev,
                     std::vector<double> xyz,
-                    double xtol, double ytol, double ztol)
+                    double xtol,
+                    double ytol,
+                    double ztol)
 {
   double lon = lon_lat_elev[0], lat = lon_lat_elev[1], elev = lon_lat_elev[2];
   double x = xyz[0], y = xyz[1], z = xyz[2];
@@ -119,7 +121,8 @@ test_ground_domain(std::string ground_domain_id)
   if (ground_domain_id.substr(0, 1) == "R")
     xtol = ytol = ztol = mtol;
   else
-    xtol = ytol = rtol; ztol = mtol;
+    xtol = ytol = rtol;
+  ztol = mtol;
 
   // test coordinates
   auto coords = create_ground_domain_coords();
@@ -137,7 +140,8 @@ test_ground_domain(std::string ground_domain_id)
   std::cout << "\n===== Ground domain " << ground_domain_id << " =====\n";
   auto gd = create_ground_domain(ground_domain_id);
   std::cout << gd << "\n";
-  for (auto const& item : coords) {
+  for (const auto & item : coords)
+  {
     _test_ground_domain(gd, item[0], item[result_idx], xtol, ytol, ztol);
   }
 }
@@ -147,9 +151,7 @@ test_ground_domain(std::string ground_domain_id)
 
 // test region selector "select"
 static void
-_test_region_selector(vpgl_region_selector<double> selector,
-                      std::array<double, 3> xyz,
-                      std::array<size_t, 2> rc)
+_test_region_selector(vpgl_region_selector<double> selector, std::array<double, 3> xyz, std::array<size_t, 2> rc)
 {
   double x = xyz[0], y = xyz[1], z = xyz[2];
   size_t r = rc[0], c = rc[1];
@@ -170,17 +172,10 @@ static vpgl_region_selector<double>
 create_region_selector()
 {
   // RSMIDA
-  size_t minr = 0,
-         maxr = 9292,
-         minc = 0,
-         maxc = 9122;
+  size_t minr = 0, maxr = 9292, minc = 0, maxc = 9122;
 
   // RSMPIA
-  size_t rnis = 2,
-         cnis = 2,
-         tnis = 4,
-         rssiz = 4646,
-         cssiz = 4561;
+  size_t rnis = 2, cnis = 2, tnis = 4, rssiz = 4646, cssiz = 4561;
 
   std::vector<double> row_coefs = {
     -1.37241587646741E+10, // R0
@@ -209,9 +204,7 @@ create_region_selector()
   };
 
   // initialize region selector
-  return vpgl_region_selector<double>(row_coefs, col_coefs,
-                                      minr, maxr, minc, maxc,
-                                      rnis, cnis, tnis, rssiz, cssiz);
+  return vpgl_region_selector<double>(row_coefs, col_coefs, minr, maxr, minc, maxc, rnis, cnis, tnis, rssiz, cssiz);
 }
 
 // test region selector
@@ -220,24 +213,25 @@ test_region_selector()
 {
   // test data: (lon_rad, lat_rad, elev_m) -> (row, col)
   // ground domain "H" using longitude on range (0, 2*pi)
-  std::vector<std::pair<std::array<double, 3>, std::array<size_t, 2> > > data = {
-    {{4.2404725993, 0.5787813715, 0}, {1, 1}},  // 0, 0
-    {{4.2405416897, 0.5787811963, 0}, {1, 1}},  // 1024, 0
-    {{4.2406112558, 0.5788392388, 0}, {1, 1}},  // 2048, 1024
-    {{4.2406811481, 0.5788975452, 0}, {1, 1}},  // 3072, 2048
-    {{4.2407513729, 0.5789561208, 0}, {1, 1}},  // 4096, 3072
-    {{4.2408219371, 0.5790149710, 0}, {2, 1}},  // 5120, 4096
-    {{4.2408928473, 0.5790741013, 0}, {2, 2}},  // 6144, 5120
-    {{4.2409641106, 0.5791335174, 0}, {2, 2}},  // 7168, 6144
-    {{4.2410357339, 0.5791932251, 0}, {2, 2}},  // 8192, 7168
-    {{4.2411077246, 0.5792532304, 0}, {2, 2}},  // 9216, 8192
-    {{4.2411800193, 0.5793134802, 0}, {2, 2}},  // 10239*, 9215*
+  std::vector<std::pair<std::array<double, 3>, std::array<size_t, 2>>> data = {
+    { { 4.2404725993, 0.5787813715, 0 }, { 1, 1 } }, // 0, 0
+    { { 4.2405416897, 0.5787811963, 0 }, { 1, 1 } }, // 1024, 0
+    { { 4.2406112558, 0.5788392388, 0 }, { 1, 1 } }, // 2048, 1024
+    { { 4.2406811481, 0.5788975452, 0 }, { 1, 1 } }, // 3072, 2048
+    { { 4.2407513729, 0.5789561208, 0 }, { 1, 1 } }, // 4096, 3072
+    { { 4.2408219371, 0.5790149710, 0 }, { 2, 1 } }, // 5120, 4096
+    { { 4.2408928473, 0.5790741013, 0 }, { 2, 2 } }, // 6144, 5120
+    { { 4.2409641106, 0.5791335174, 0 }, { 2, 2 } }, // 7168, 6144
+    { { 4.2410357339, 0.5791932251, 0 }, { 2, 2 } }, // 8192, 7168
+    { { 4.2411077246, 0.5792532304, 0 }, { 2, 2 } }, // 9216, 8192
+    { { 4.2411800193, 0.5793134802, 0 }, { 2, 2 } }, // 10239*, 9215*
   };
 
   // run tests
   std::cout << "\n===== Region selector =====\n";
   auto selector = create_region_selector();
-  for (auto const& item : data) {
+  for (const auto & item : data)
+  {
     _test_region_selector(selector, item.first, item.second);
   }
 }
@@ -251,18 +245,18 @@ create_polycam_rect()
 {
   // RSMPCA
   std::vector<vpgl_scale_offset<double>> scale_offsets = {
-    {+3.11793659470231E+03, +2.65571142640788E+03}, // XNRMSF, XNRMO
-    {+2.96084811268529E+03, +2.40732324869712E+03}, // YNRMSF, YNRMO
-    {+1.00233148808220E+03, -2.33161661728923E+00}, // ZNRMSF, ZNRMO
-    {+5.49720000000000E+03, +4.56100000000000E+03}, // CNRMSF, CNRMO
-    {+5.59920000000000E+03, +4.64600000000000E+03}, // RNRMSF, RNRMO
+    { +3.11793659470231E+03, +2.65571142640788E+03 }, // XNRMSF, XNRMO
+    { +2.96084811268529E+03, +2.40732324869712E+03 }, // YNRMSF, YNRMO
+    { +1.00233148808220E+03, -2.33161661728923E+00 }, // ZNRMSF, ZNRMO
+    { +5.49720000000000E+03, +4.56100000000000E+03 }, // CNRMSF, CNRMO
+    { +5.59920000000000E+03, +4.64600000000000E+03 }, // RNRMSF, RNRMO
   };
 
   std::vector<std::vector<int>> powers = {
-    {1, 1, 1}, // CNPWRX, CNPWRY, CNPWRZ
-    {1, 1, 1}, // CDPWRX, CDPWRY, CDPWRZ
-    {1, 1, 1}, // RNPWRX, RNPWRY, RNPWRZ
-    {1, 1, 1}, // RDPWRX, RDPWRY, RDPWRZ
+    { 1, 1, 1 }, // CNPWRX, CNPWRY, CNPWRZ
+    { 1, 1, 1 }, // CDPWRX, CDPWRY, CDPWRZ
+    { 1, 1, 1 }, // RNPWRX, RNPWRY, RNPWRZ
+    { 1, 1, 1 }, // RDPWRX, RDPWRY, RDPWRZ
   };
 
   auto CNPCF = std::vector<double>(8, 0.0);
@@ -272,10 +266,10 @@ create_polycam_rect()
   CNPCF[4] = +3.60340008196375E-01;
 
   auto CDPCF = std::vector<double>(8, 0.0);
-  CDPCF[0]= +1.00000000000000E+00;
-  CDPCF[1]= +5.02862720498340E-02;
-  CDPCF[2]= -3.02226608402894E-02;
-  CDPCF[4]= -4.48001662401429E-01;
+  CDPCF[0] = +1.00000000000000E+00;
+  CDPCF[1] = +5.02862720498340E-02;
+  CDPCF[2] = -3.02226608402894E-02;
+  CDPCF[4] = -4.48001662401429E-01;
 
   auto RNPCF = std::vector<double>(8, 0.0);
   RNPCF[0] = +4.63481151803541E-01;
@@ -289,7 +283,7 @@ create_polycam_rect()
   RDPCF[2] = -3.02226608403966E-02;
   RDPCF[4] = -4.48001662401358E-01;
 
-  std::vector<std::vector<double>> coeffs = {CNPCF, CDPCF, RNPCF, RDPCF};
+  std::vector<std::vector<double>> coeffs = { CNPCF, CDPCF, RNPCF, RDPCF };
 
   // initialize polycam
   return vpgl_polycam<double>(1, 1, powers, coeffs, scale_offsets);
@@ -297,28 +291,28 @@ create_polycam_rect()
 
 // test coordinates in rectangular ground domain
 // {lon_deg, lat_deg, elev_m}, {x_rect, y_rect, z_rect}, {u, v}
-static std::vector<std::vector<std::vector<double> > >
+static std::vector<std::vector<std::vector<double>>>
 create_coords_rect()
 {
-  std::vector<std::vector<std::vector<double> > > coords{
-    {{-117.02719568, 33.17020003, 0}, {1081.953217, 941.641878, 6.588443}, {2610, 2994}},
-    {{-117.03119771, 33.18429170, 0}, {705.641227, 2503.781141, 6.219689}, {7091, 1995}},
-    {{-117.00590098, 33.17798445, 0}, {3066.295151, 1809.120255, 5.757182}, {4901, 8287}},
-    {{-117.00460320, 33.17908728, 0}, {3187.063711, 1931.696404, 5.662121}, {5229, 8607}},
-    {{-117.03541506, 33.18205237, 0}, {312.810150, 2254.668096, 6.343963}, {6410, 887}},
-    {{-117.02750809, 33.17830643, 0}, {1051.038729, 1840.643992, 6.397982}, {5149, 2936}},
-    {{-117.03719018, 33.16317745, 0}, {151.200618, 160.988480, 6.745030}, {449, 422}},
-    {{-117.01476467, 33.16645820, 350}, {2242.425984, 529.035918, 356.333541}, {1676, 7218}},
-    {{-117.02436681, 33.18640237, -150}, {1342.178538, 2739.062627, -143.979161}, {7208, 3508}},
-    {{-117.02801139, 33.17715898, 200}, {1004.381186, 1713.344492, 206.440932}, {5259, 3109}},
-    {{-117.03878450, 33.16924395, 100}, {1.225252, 833.541210, 106.695078}, {2453, 14}},
-    {{-117.02261539, 33.16302301, -50}, {1510.768136, 146.511297, -43.431599}, {398, 4024}},
-    {{-117.02975285, 33.17217737, -250}, {842.977143, 1160.429414, -243.411437}, {2918, 2084}},
-    {{-117.00941214, 33.17111665, -450}, {2740.269250, 1046.648427, -443.924287}, {2385, 6127}},
-    {{-117.00408316, 33.17647492, -275}, {3236.062515, 1642.002735, -269.281494}, {3966, 7742}},
-    {{-117.02974527, 33.17974551, 25}, {842.081550, 1999.846652, 31.381064}, {5686, 2394}},
-    {{-117.03860157, 33.16831576, 475}, {18.481759, 730.671321, 481.707579}, {2590, 128}},
-    {{-117.03262886, 33.16858343, 0}, {575.528881, 761.360585, 6.678099}, {2123, 1603}},
+  std::vector<std::vector<std::vector<double>>> coords{
+    { { -117.02719568, 33.17020003, 0 }, { 1081.953217, 941.641878, 6.588443 }, { 2610, 2994 } },
+    { { -117.03119771, 33.18429170, 0 }, { 705.641227, 2503.781141, 6.219689 }, { 7091, 1995 } },
+    { { -117.00590098, 33.17798445, 0 }, { 3066.295151, 1809.120255, 5.757182 }, { 4901, 8287 } },
+    { { -117.00460320, 33.17908728, 0 }, { 3187.063711, 1931.696404, 5.662121 }, { 5229, 8607 } },
+    { { -117.03541506, 33.18205237, 0 }, { 312.810150, 2254.668096, 6.343963 }, { 6410, 887 } },
+    { { -117.02750809, 33.17830643, 0 }, { 1051.038729, 1840.643992, 6.397982 }, { 5149, 2936 } },
+    { { -117.03719018, 33.16317745, 0 }, { 151.200618, 160.988480, 6.745030 }, { 449, 422 } },
+    { { -117.01476467, 33.16645820, 350 }, { 2242.425984, 529.035918, 356.333541 }, { 1676, 7218 } },
+    { { -117.02436681, 33.18640237, -150 }, { 1342.178538, 2739.062627, -143.979161 }, { 7208, 3508 } },
+    { { -117.02801139, 33.17715898, 200 }, { 1004.381186, 1713.344492, 206.440932 }, { 5259, 3109 } },
+    { { -117.03878450, 33.16924395, 100 }, { 1.225252, 833.541210, 106.695078 }, { 2453, 14 } },
+    { { -117.02261539, 33.16302301, -50 }, { 1510.768136, 146.511297, -43.431599 }, { 398, 4024 } },
+    { { -117.02975285, 33.17217737, -250 }, { 842.977143, 1160.429414, -243.411437 }, { 2918, 2084 } },
+    { { -117.00941214, 33.17111665, -450 }, { 2740.269250, 1046.648427, -443.924287 }, { 2385, 6127 } },
+    { { -117.00408316, 33.17647492, -275 }, { 3236.062515, 1642.002735, -269.281494 }, { 3966, 7742 } },
+    { { -117.02974527, 33.17974551, 25 }, { 842.081550, 1999.846652, 31.381064 }, { 5686, 2394 } },
+    { { -117.03860157, 33.16831576, 475 }, { 18.481759, 730.671321, 481.707579 }, { 2590, 128 } },
+    { { -117.03262886, 33.16858343, 0 }, { 575.528881, 761.360585, 6.678099 }, { 2123, 1603 } },
   };
   return coords;
 }
@@ -332,18 +326,18 @@ create_polycam_geodetic(std::string ground_domain_id)
 
   // RSMPCA
   std::vector<vpgl_scale_offset<double>> scale_offsets = {
-    {+5.83421668078010E-04, XNRMO}, // XNRMSF, XNRMO
-    {+4.66059641384187E-04, +5.79158321291012E-01}, // YNRMSF, YNRMO
-    {+1.00000000000186E+03, -6.74864824209362E+00}, // ZNRMSF, ZNRMO
-    {+5.49720000000000E+03, +4.56100000000000E+03}, // CNRMSF, CNRMO
-    {+5.59920000000000E+03, +4.64600000000000E+03}, // RNRMSF, RNRMO
+    { +5.83421668078010E-04, XNRMO },                 // XNRMSF, XNRMO
+    { +4.66059641384187E-04, +5.79158321291012E-01 }, // YNRMSF, YNRMO
+    { +1.00000000000186E+03, -6.74864824209362E+00 }, // ZNRMSF, ZNRMO
+    { +5.49720000000000E+03, +4.56100000000000E+03 }, // CNRMSF, CNRMO
+    { +5.59920000000000E+03, +4.64600000000000E+03 }, // RNRMSF, RNRMO
   };
 
   std::vector<std::vector<int>> powers = {
-    {3, 3, 3}, // CNPWRX, CNPWRY, CNPWRZ
-    {3, 3, 3}, // CDPWRX, CDPWRY, CDPWRZ
-    {3, 3, 3}, // RNPWRX, RNPWRY, RNPWRZ
-    {3, 3, 3}, // RDPWRX, RDPWRY, RDPWRZ
+    { 3, 3, 3 }, // CNPWRX, CNPWRY, CNPWRZ
+    { 3, 3, 3 }, // CDPWRX, CDPWRY, CDPWRZ
+    { 3, 3, 3 }, // RNPWRX, RNPWRY, RNPWRZ
+    { 3, 3, 3 }, // RDPWRX, RDPWRY, RDPWRZ
   };
 
   auto CNPCF = std::vector<double>(64, 0.0);
@@ -434,7 +428,7 @@ create_polycam_geodetic(std::string ground_domain_id)
   RDPCF[36] = +1.40009993944189E-05;
   RDPCF[48] = +2.53076939483868E-05;
 
-  std::vector<std::vector<double>> coeffs = {CNPCF, CDPCF, RNPCF, RDPCF};
+  std::vector<std::vector<double>> coeffs = { CNPCF, CDPCF, RNPCF, RDPCF };
 
   // initialize polycam
   return vpgl_polycam<double>(1, 1, powers, coeffs, scale_offsets);
@@ -442,36 +436,38 @@ create_polycam_geodetic(std::string ground_domain_id)
 
 // test coordinates in geodetic ground domain
 // {lon_deg, lat_deg, elev_m}, {lon_rad, lat_rad, elev_m}, {u, v}
-static std::vector<std::vector<std::vector<double> > >
+static std::vector<std::vector<std::vector<double>>>
 create_coords_geodetic(std::string ground_domain_id)
 {
-  std::vector<std::vector<std::vector<double> > > coords{
-    {{-117.02206729, 33.17258376, 0}, {-2.0424203717, 0.5789708080, 0.0}, {3329, 4294}},
-    {{-117.01467863, 33.17967653, 0}, {-2.0422914152, 0.5790946002, 0.0}, {5484, 6166}},
-    {{-117.00795867, 33.17994699, 0}, {-2.0421741298, 0.5790993206, 0.0}, {5517, 7808}},
-    {{-117.02662957, 33.16689753, 0}, {-2.0424999984, 0.5788715645, 0.0}, {1589, 3128}},
-    {{-117.01567762, 33.17521761, 0}, {-2.0423088509, 0.5790167774, 0.0}, {4111, 5893}},
-    {{-117.03857234, 33.17523722, 0}, {-2.0427084390, 0.5790171197, 0.0}, {4246, 55}},
-    {{-117.00829643, 33.18434521, 0}, {-2.0421800247, 0.5791760840, 0.0}, {6880, 7761}},
-    {{-117.03713606, 33.16335494, 0}, {-2.0426833713, 0.5788097347, 0.0}, {504, 436}},
-    {{-117.01432909, 33.18788889, 0}, {-2.0422853145, 0.5792379329, 0.0}, {8055, 6304}},
-    {{-117.03377254, 33.18717004, 0}, {-2.0426246668, 0.5792253867, 0.0}, {8052, 1323}},
-    {{-117.03344850, 33.16318601, 0}, {-2.0426190111, 0.5788067864, 0.0}, {452, 1387}},
-    {{-117.01733827, 33.16397381, 425}, {-2.0423378346, 0.5788205360, 425.0}, {819, 6734}},
-    {{-117.00722322, 33.17719353, 275}, {-2.0421612938, 0.5790512636, 275.0}, {5297, 9100}},
-    {{-117.03740164, 33.17801722, 225}, {-2.0426880066, 0.5790656398, 225.0}, {5711, 431}},
-    {{-117.03795063, 33.16734085, 100}, {-2.0426975882, 0.5788793019, 100.0}, {1824, 244}},
-    {{-117.01591060, 33.17653480, -125}, {-2.0423129171, 0.5790397666, -125.0}, {4286, 5521}},
-    {{-117.03543247, 33.16280543, -200}, {-2.0426536381, 0.5788001439, -200.0}, {318, 785}},
-    {{-117.03197105, 33.18881664, -300}, {-2.0425932249, 0.5792541252, -300.0}, {7531, 1551}},
-    {{-117.01352899, 33.18081351, -325}, {-2.0422713501, 0.5791144443, -325.0}, {5103, 5605}},
-    {{-117.00701383, 33.16155285, -450}, {-2.0421576392, 0.5787782823, -450.0}, {0, 6558}},
+  std::vector<std::vector<std::vector<double>>> coords{
+    { { -117.02206729, 33.17258376, 0 }, { -2.0424203717, 0.5789708080, 0.0 }, { 3329, 4294 } },
+    { { -117.01467863, 33.17967653, 0 }, { -2.0422914152, 0.5790946002, 0.0 }, { 5484, 6166 } },
+    { { -117.00795867, 33.17994699, 0 }, { -2.0421741298, 0.5790993206, 0.0 }, { 5517, 7808 } },
+    { { -117.02662957, 33.16689753, 0 }, { -2.0424999984, 0.5788715645, 0.0 }, { 1589, 3128 } },
+    { { -117.01567762, 33.17521761, 0 }, { -2.0423088509, 0.5790167774, 0.0 }, { 4111, 5893 } },
+    { { -117.03857234, 33.17523722, 0 }, { -2.0427084390, 0.5790171197, 0.0 }, { 4246, 55 } },
+    { { -117.00829643, 33.18434521, 0 }, { -2.0421800247, 0.5791760840, 0.0 }, { 6880, 7761 } },
+    { { -117.03713606, 33.16335494, 0 }, { -2.0426833713, 0.5788097347, 0.0 }, { 504, 436 } },
+    { { -117.01432909, 33.18788889, 0 }, { -2.0422853145, 0.5792379329, 0.0 }, { 8055, 6304 } },
+    { { -117.03377254, 33.18717004, 0 }, { -2.0426246668, 0.5792253867, 0.0 }, { 8052, 1323 } },
+    { { -117.03344850, 33.16318601, 0 }, { -2.0426190111, 0.5788067864, 0.0 }, { 452, 1387 } },
+    { { -117.01733827, 33.16397381, 425 }, { -2.0423378346, 0.5788205360, 425.0 }, { 819, 6734 } },
+    { { -117.00722322, 33.17719353, 275 }, { -2.0421612938, 0.5790512636, 275.0 }, { 5297, 9100 } },
+    { { -117.03740164, 33.17801722, 225 }, { -2.0426880066, 0.5790656398, 225.0 }, { 5711, 431 } },
+    { { -117.03795063, 33.16734085, 100 }, { -2.0426975882, 0.5788793019, 100.0 }, { 1824, 244 } },
+    { { -117.01591060, 33.17653480, -125 }, { -2.0423129171, 0.5790397666, -125.0 }, { 4286, 5521 } },
+    { { -117.03543247, 33.16280543, -200 }, { -2.0426536381, 0.5788001439, -200.0 }, { 318, 785 } },
+    { { -117.03197105, 33.18881664, -300 }, { -2.0425932249, 0.5792541252, -300.0 }, { 7531, 1551 } },
+    { { -117.01352899, 33.18081351, -325 }, { -2.0422713501, 0.5791144443, -325.0 }, { 5103, 5605 } },
+    { { -117.00701383, 33.16155285, -450 }, { -2.0421576392, 0.5787782823, -450.0 }, { 0, 6558 } },
   };
 
   // convert lon_rad to "H" coordinates on range (0, 2pi)
-  if (ground_domain_id == "H") {
-    for (auto & item : coords) {
-      double& lon_rad = item[1][0];
+  if (ground_domain_id == "H")
+  {
+    for (auto & item : coords)
+    {
+      double & lon_rad = item[1][0];
       lon_rad = lon_rad < 0 ? lon_rad + vnl_math::twopi : lon_rad;
     }
   }
@@ -490,7 +486,7 @@ create_polycam(std::string ground_domain_id)
 }
 
 // coords selector
-static std::vector<std::vector<std::vector<double> > >
+static std::vector<std::vector<std::vector<double>>>
 create_coords(std::string ground_domain_id)
 {
   if (ground_domain_id == "R")
@@ -501,10 +497,7 @@ create_coords(std::string ground_domain_id)
 
 // test projection of single coordinate via polycam
 static void
-_test_polycam(vpgl_polycam<double> cam,
-              std::vector<double> xyz,
-              std::vector<double> uv,
-              double tol=0.002)
+_test_polycam(vpgl_polycam<double> cam, std::vector<double> xyz, std::vector<double> uv, double tol = 0.002)
 {
   double x = xyz[0], y = xyz[1], z = xyz[2];
   size_t u = uv[0], v = uv[1];
@@ -527,7 +520,8 @@ test_polycam(std::string ground_domain_id)
   std::cout << "\n===== Polycam " << ground_domain_id << " =====\n";
   auto cam = create_polycam(ground_domain_id);
   auto coords = create_coords(ground_domain_id);
-  for (auto const& item : coords) {
+  for (const auto & item : coords)
+  {
     _test_polycam(cam, item[1], item[2]);
   }
 }
@@ -552,10 +546,7 @@ create_camera(std::string ground_domain_id)
 
 // test single coordinate projection via RSM camera
 static void
-_test_camera(vpgl_RSM_camera<double> cam,
-             std::vector<double> lon_lat_elev,
-             std::vector<double> uv,
-             double tol=0.002)
+_test_camera(vpgl_RSM_camera<double> cam, std::vector<double> lon_lat_elev, std::vector<double> uv, double tol = 0.002)
 {
   double lon = lon_lat_elev[0], lat = lon_lat_elev[1], elev = lon_lat_elev[2];
   size_t u = uv[0], v = uv[1];
@@ -578,7 +569,8 @@ test_camera(std::string ground_domain_id)
   std::cout << "\n===== RSM Camera " << ground_domain_id << " =====\n";
   auto cam = create_camera(ground_domain_id);
   auto coords = create_coords(ground_domain_id);
-  for (auto const& item : coords) {
+  for (const auto & item : coords)
+  {
     _test_camera(cam, item[0], item[2]);
   }
 }
