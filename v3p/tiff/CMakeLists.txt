@@ -134,7 +134,6 @@ if(NOT VXL_USING_NATIVE_TIFF)
   vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffconf.h.in
     ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h v3p/tiff )
 
-  include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
 
   if(UNIX)
     set( tiff_sources ${tiff_sources}
@@ -167,6 +166,7 @@ if(NOT VXL_USING_NATIVE_TIFF)
   endif()
   vxl_add_library(
       LIBRARY_NAME tiff
+      HEADER_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}"
       LIBRARY_SOURCES ${tiff_sources}
       DISABLE_MSVC_MP
   )
