@@ -13,9 +13,6 @@
 vrel_estimation_problem::vrel_estimation_problem(unsigned int dof, unsigned int num_samples_for_fit)
   : dof_(dof)
   , num_samples_for_fit_(num_samples_for_fit)
-  , scale_type_(NONE)
-  , single_scale_(0)
-  , multiple_scales_(nullptr)
 {}
 
 vrel_estimation_problem::vrel_estimation_problem()

@@ -39,9 +39,6 @@ vul_sequence_filename_map::vul_sequence_filename_map()
 vul_sequence_filename_map::vul_sequence_filename_map(std::string seq_template, std::vector<int> indices)
   : seq_template_(std::move(seq_template))
   , indices_(std::move(indices))
-  , start_(-1)
-  , step_(-1)
-  , end_(-1)
 {
   parse();
 }
@@ -59,9 +56,7 @@ vul_sequence_filename_map::vul_sequence_filename_map(std::string seq_template, i
 
 vul_sequence_filename_map::vul_sequence_filename_map(std::string seq_template, int step)
   : seq_template_(std::move(seq_template))
-  , start_(-1)
   , step_(step)
-  , end_(-1)
 {
   parse();
 }

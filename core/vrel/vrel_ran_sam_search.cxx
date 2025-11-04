@@ -30,13 +30,9 @@ vrel_ran_sam_search::vrel_ran_sam_search()
 }
 
 vrel_ran_sam_search::vrel_ran_sam_search(int seed)
-  : generate_all_(false)
-  , generator_(new vnl_random(seed))
+  : generator_(new vnl_random(seed))
   , own_generator_(true)
   , params_(0)
-  , scale_(0)
-  , samples_to_take_(0)
-  , trace_level_(0)
 {
   set_sampling_params();
 }

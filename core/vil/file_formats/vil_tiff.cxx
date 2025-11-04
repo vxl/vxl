@@ -92,7 +92,7 @@ struct tif_stream_structures
 {
   tif_stream_structures(vil_stream * vs_)
     : vs(vs_)
-    , filesize(0) /*, sample_format( SAMPLEFORMAT_VOID ), buf(0) */
+  /*, sample_format( SAMPLEFORMAT_VOID ), buf(0) */
   {
     if (vs)
       vs->ref();
@@ -106,7 +106,7 @@ struct tif_stream_structures
 
   TIFF * tif;
   vil_stream * vs;
-  vil_streampos filesize;
+  vil_streampos filesize{ 0 };
 };
 
 static tsize_t
