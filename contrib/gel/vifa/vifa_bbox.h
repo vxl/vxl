@@ -19,8 +19,8 @@
 #include <vul/vul_timestamp.h>
 
 
-class vifa_bbox : public vul_timestamp,
-                  public vbl_ref_count,
+class vifa_bbox : public vbl_ref_count,
+                  public vul_timestamp,
                   public vgl_box_2d<double>
 {
  public:

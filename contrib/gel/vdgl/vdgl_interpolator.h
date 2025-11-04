@@ -24,8 +24,8 @@
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
 
-class vdgl_interpolator : public vul_timestamp,
-                          public vbl_ref_count
+class vdgl_interpolator : public vbl_ref_count,
+                          public vul_timestamp
 {
    // PUBLIC INTERFACE----------------------------------------------------------
  public:

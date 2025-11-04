@@ -26,8 +26,8 @@
 #include <vsl/vsl_binary_io.h>
 #include <vul/vul_timestamp.h>
 
-class vdgl_edgel_chain : public vul_timestamp,
-                         public vbl_ref_count
+class vdgl_edgel_chain : public vbl_ref_count,
+                         public vul_timestamp
 {
   // PUBLIC INTERFACE----------------------------------------------------------
  public:

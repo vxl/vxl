@@ -31,9 +31,9 @@
 
 
 //: Container holding parameters for common intensity face attribute computations.
-class vifa_int_face_attr_common_params : public gevd_param_mixin,
-                     public vul_timestamp,
-                     public vbl_ref_count
+class vifa_int_face_attr_common_params : public vbl_ref_count,
+                                         public gevd_param_mixin,
+                                         public vul_timestamp
 {
  protected:
   vdgl_fit_lines_params_sptr    fitter_params_;

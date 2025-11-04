@@ -31,7 +31,7 @@
 
 //: A bounding box for 2d spatial objects
 
-class vsol_box_2d : public vsol_box, public vbl_ref_count, public vul_timestamp
+class vsol_box_2d : public vbl_ref_count, public vsol_box, public vul_timestamp
 {
  protected:
   vbl_bounding_box<double,2> box_;

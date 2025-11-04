@@ -9,7 +9,7 @@
 // \date Jan 13, 2014
 
 #include <utility>
-#include <vpgl/vpgl_proj_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

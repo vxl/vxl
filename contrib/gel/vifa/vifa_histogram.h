@@ -26,8 +26,8 @@
 #include <vbl/vbl_smart_ptr.h>
 #include <vul/vul_timestamp.h>
 
-class vifa_histogram : public vul_timestamp,
-                       public vbl_ref_count
+class vifa_histogram : public vbl_ref_count,
+                       public vul_timestamp
 {
   enum histogram_type{HISTOGRAM=0, CONTRAST_HIST, NUM_TYPES};
  protected:

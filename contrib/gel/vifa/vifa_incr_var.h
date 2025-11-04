@@ -32,7 +32,7 @@
 // The vifa_incr_var class is used to accumulate the mean & variance of a data
 // set incrementally, one data sample at a time.
 
-class vifa_incr_var : public vul_timestamp, public vbl_ref_count
+class vifa_incr_var : public vbl_ref_count, public vul_timestamp
 {
  protected:
   //: The current mean of the data set

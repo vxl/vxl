@@ -117,7 +117,7 @@ public:
   }
 
   bool
-  operator==(const vbl_batch_compact_multimap & rhs)
+  operator==(const vbl_batch_compact_multimap & rhs) const
   {
     return keys_ == rhs.keys_ && indices_ == rhs.indices_ && values_ == rhs.values_;
   }

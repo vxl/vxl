@@ -60,6 +60,9 @@ class clsfy_classifier_1d
   //: Equality operator for 1d classifiers
   virtual bool operator==(const clsfy_classifier_1d& x) const = 0;
 
+  //: Inequality operator for 1d classifiers
+  bool operator!=(const clsfy_classifier_1d& other) const { return !(*this == other); }
+
   //: Name of the class
   virtual std::string is_a() const;
 
