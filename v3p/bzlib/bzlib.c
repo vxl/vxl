@@ -28,10 +28,16 @@
      bzBuffToBuffDecompress.  Fixed.
 */
 
+//needed for fdopen
+#if defined(_WIN32)
+#  define fdopen _fdopen
+#else
+#  define _POSIX_C_SOURCE 200809L
+#endif
+
+#include <stdio.h>
+#include <unistd.h>
 #include "bzlib_private.h"
-
-#include <stdio.h> //needed for fdopen
-
 
 /*---------------------------------------------------*/
 /*--- Compression stuff                           ---*/
