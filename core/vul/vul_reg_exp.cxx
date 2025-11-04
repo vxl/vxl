@@ -253,21 +253,24 @@ vul_reg_exp::deep_equal(const vul_reg_exp & rxp) const
 //
 
 // definition   number  opnd?   meaning
-#define END 0     // no   End of program.
-#define BOL 1     // no   Match "" at beginning of line.
-#define EOL 2     // no   Match "" at end of line.
-#define ANY 3     // no   Match any one character.
-#define ANYOF 4   // str  Match any character in this string.
-#define ANYBUT 5  // str  Match any character not in this string.
-#define BRANCH 6  // node Match this alternative, or the next...
-#define BACK 7    // no   Match "", "next" ptr points backward.
-#define EXACTLY 8 // str  Match this string.
-#define NOTHING 9 // no   Match empty string.
-#define STAR 10   // node Match this (simple) thing 0 or more times.
-#define PLUS 11   // node Match this (simple) thing 1 or more times.
-#define OPEN 20   // no   Mark this point in input as start of #n.
-// OPEN+1 is number 1, etc.
-#define CLOSE 30 // no   Analogous to OPEN.
+enum
+{
+  END = 0,     // no   End of program.
+  BOL = 1,     // no   Match "" at beginning of line.
+  EOL = 2,     // no   Match "" at end of line.
+  ANY = 3,     // no   Match any one character.
+  ANYOF = 4,   // str  Match any character in this string.
+  ANYBUT = 5,  // str  Match any character not in this string.
+  BRANCH = 6,  // node Match this alternative, or the next...
+  BACK = 7,    // no   Match "", "next" ptr points backward.
+  EXACTLY = 8, // str  Match this string.
+  NOTHING = 9, // no   Match empty string.
+  STAR = 10,   // node Match this (simple) thing 0 or more times.
+  PLUS = 11,   // node Match this (simple) thing 1 or more times.
+  OPEN = 20,   // no   Mark this point in input as start of #n.
+  // OPEN+1 is number 1, etc.
+  CLOSE = 30 // no   Analogous to OPEN.
+};
 
 //
 // Opcode notes:
@@ -324,10 +327,13 @@ constexpr unsigned char MAGIC = 0234;
 //
 // Flags to be passed up and down.
 //
-#define HASWIDTH 01 // Known never to match null string.
-#define SIMPLE 02   // Simple enough to be STAR/PLUS operand.
-#define SPSTART 04  // Starts with * or +.
-#define WORST 0     // Worst case.
+enum
+{
+  HASWIDTH = 01, // Known never to match null string.
+  SIMPLE = 02,   // Simple enough to be STAR/PLUS operand.
+  SPSTART = 04,  // Starts with * or +.
+  WORST = 0      // Worst case.
+};
 
 
 //: Return an expression that will match precisely c

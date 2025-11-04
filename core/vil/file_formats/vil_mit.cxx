@@ -24,28 +24,43 @@ static const char * vil_mit_format_tag = "mit";
 #include "vil/vil_stream_write.h"
 #include "vil/vil_exception.h"
 
-#define MIT_UNSIGNED 0x0001
-#define MIT_RGB 0x0002
-#define MIT_HSB 0x0003
-#define MIT_CAP 0x0004
-#define MIT_SIGNED 0x0005
-#define MIT_FLOAT 0x0006
-#define MIT_EDGE 0x0007
+enum
+{
+  MIT_UNSIGNED = 0x0001,
+  MIT_RGB = 0x0002,
+  MIT_HSB = 0x0003,
+  MIT_CAP = 0x0004,
+  MIT_SIGNED = 0x0005,
+  MIT_FLOAT = 0x0006,
+  MIT_EDGE = 0x0007
+};
 
-#define MIT_UCOMPLEX 0x0101
-#define MIT_SCOMPLEX 0x0105
-#define MIT_FCOMPLEX 0x0106
+enum
+{
+  MIT_UCOMPLEX = 0x0101,
+  MIT_SCOMPLEX = 0x0105,
+  MIT_FCOMPLEX = 0x0106
+};
 
-#define MIT_UNSIGNED_E 0x0201
-#define MIT_SIGNED_E 0x0205
-#define MIT_FLOAT_E 0x0206
+enum
+{
+  MIT_UNSIGNED_E = 0x0201,
+  MIT_SIGNED_E = 0x0205,
+  MIT_FLOAT_E = 0x0206
+};
 
-#define MIT_UCOMPLEX_E 0x0301
-#define MIT_SCOMPLEX_E 0x0305
-#define MIT_FCOMPLEX_E 0x0306
+enum
+{
+  MIT_UCOMPLEX_E = 0x0301,
+  MIT_SCOMPLEX_E = 0x0305,
+  MIT_FCOMPLEX_E = 0x0306
+};
 
-#define EDGE_HOR 0200 /* Edge direction codes */
-#define EDGE_VER 0100
+enum
+{
+  EDGE_HOR = 0200, /* Edge direction codes */
+  EDGE_VER = 0100
+};
 
 // The mit image format is encoded (in little-endian format) as follows :
 //   2 bytes : magic number

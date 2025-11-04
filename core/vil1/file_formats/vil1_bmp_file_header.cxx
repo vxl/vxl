@@ -15,8 +15,11 @@
 
 // The signature consists of the two bytes 42, 4D in that order.
 // It is not supposed to be read as a 16-bit integer.
-#define BMP_SIGNATURE_BYTE_0 0x42
-#define BMP_SIGNATURE_BYTE_1 0x4D
+enum
+{
+  BMP_SIGNATURE_BYTE_0 = 0x42,
+  BMP_SIGNATURE_BYTE_1 = 0x4D
+};
 
 vil1_bmp_file_header::vil1_bmp_file_header()
 {

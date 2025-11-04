@@ -11,7 +11,10 @@
 #include "vsl/vsl_array_io.hxx"
 
 
-#define VSL_TEST_ARRAY_N 10
+enum
+{
+  VSL_TEST_ARRAY_N = 10
+};
 
 
 void

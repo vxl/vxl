@@ -20,7 +20,10 @@
 #define DBLLONG 4.61168601e18
 #define EPSLN 1.0e-10
 #define D2R 1.745329251994328e-2
-#define MAX_VAL 4
+enum
+{
+  MAX_VAL = 4
+};
 
 // *****************************************************************************
 // NAME UNIVERSAL TRANSVERSE MERCATOR - GEODETIC
