@@ -343,7 +343,7 @@ golden_test_vgl_io(bool save_file)
   vgl_polygon<float> polygon_out(3), polygon_in;
   for (int i = 0; i < 3; i++)
     for (int j = 0; j < 5; j++)
-      polygon_out[i].push_back(vgl_point_2d<float>(i + j / 10.0f, i - j / 10.0f));
+      polygon_out[i].emplace_back(i + j / 10.0f, i - j / 10.0f);
 
   // Save if option set
   if (save_file)

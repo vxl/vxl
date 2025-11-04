@@ -287,7 +287,7 @@ vil_blob_labels_to_regions(const vil_image_view<unsigned> & src_label, std::vect
       // Find end of chord.
       while (++i < ni && src_label(i, j) == label)
         ;
-      dest_regions[label - 1].push_back(vil_chord(i_start, i - 1, j));
+      dest_regions[label - 1].emplace_back(i_start, i - 1, j);
     }
 }
 
@@ -311,6 +311,6 @@ vil_blob_labels_to_pixel_lists(const vil_image_view<unsigned> & src_label,
       // Make sure there is a pixel list for this label.
       if (label > dest_pixel_lists.size())
         dest_pixel_lists.resize(label);
-      dest_pixel_lists[label - 1].push_back(std::make_pair(i, j));
+      dest_pixel_lists[label - 1].emplace_back(i, j);
     }
 }
