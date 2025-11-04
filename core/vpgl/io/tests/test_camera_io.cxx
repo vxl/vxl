@@ -86,7 +86,7 @@ test_camera_io()
   vnl_double_3 axis(0.0, 1.0, 0.0);
   vgl_h_matrix_3d<double> R;
   R.set_identity().set_rotation_about_axis(axis, theta);
-  vpgl_perspective_camera<double> * percam = new vpgl_perspective_camera<double>(K, center, vgl_rotation_3d<double>(R));
+  auto * percam = new vpgl_perspective_camera<double>(K, center, vgl_rotation_3d<double>(R));
   cam = percam;
   vsl_b_ofstream bp_outper("test_perspective_camera_io.tmp");
   vsl_b_write(bp_outper, cam);

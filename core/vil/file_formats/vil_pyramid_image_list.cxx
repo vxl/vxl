@@ -164,7 +164,7 @@ vil_pyramid_image_list::vil_pyramid_image_list(const std::vector<vil_image_resou
     vil_blocked_image_resource_sptr brsc = blocked_image_resource(image);
     if (!brsc)
       brsc = new vil_blocked_image_facade(image);
-    vil_cached_image_resource * cimr = new vil_cached_image_resource(brsc, 100);
+    auto * cimr = new vil_cached_image_resource(brsc, 100);
     vil_image_resource_sptr ir = (vil_image_resource *)cimr;
     auto * level = new pyramid_level(ir);
     levels_.push_back(level);

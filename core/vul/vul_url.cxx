@@ -71,7 +71,7 @@ vul_http_open(const char * url)
 
   // port?
   if (!host.empty())
-    for (unsigned int i = (unsigned int)(host.size() - 1); i > 0; --i)
+    for (auto i = (unsigned int)(host.size() - 1); i > 0; --i)
       if (host[i] == ':')
       {
         port = std::stoi(host.c_str() + i + 1);
@@ -463,7 +463,7 @@ vul_url::open(const char * url, std::ios::openmode mode)
   // check for null pointer or empty strings.
   if (!url || !*url)
     return nullptr;
-  unsigned int l = (unsigned int)std::strlen(url);
+  auto l = (unsigned int)std::strlen(url);
 
   // check for filenames beginning "file:".
   if (l > 7 && std::strncmp(url, "file://", 7) == 0)
@@ -495,7 +495,7 @@ vul_url::exists(const char * url)
   // check for null pointer or empty strings.
   if (!url || !*url)
     return false;
-  unsigned int l = (unsigned int)std::strlen(url);
+  auto l = (unsigned int)std::strlen(url);
 
   // check for filenames beginning "file:".
   if (l > 7 && std::strncmp(url, "file://", 7) == 0)
@@ -525,7 +525,7 @@ vul_url::is_url(const char * url)
   // check for null pointer or empty strings.
   if (!url || !*url)
     return false;
-  unsigned int l = (unsigned int)std::strlen(url);
+  auto l = (unsigned int)std::strlen(url);
 
   // check for filenames beginning "file:".
   if (l > 7 && std::strncmp(url, "file://", 7) == 0)
@@ -599,7 +599,7 @@ vul_url::encode_base64(const std::string & in)
 {
   std::string out;
   unsigned int i = 0, line_octets = 0;
-  const unsigned int l = (unsigned int)(in.size());
+  const auto l = (unsigned int)(in.size());
   char data[3];
   while (i <= l)
   {
@@ -682,7 +682,7 @@ vul_url::decode_base64(const std::string & in)
   char data[3];
 
   unsigned int i = 0;
-  const unsigned int l = (unsigned int)(in.size());
+  const auto l = (unsigned int)(in.size());
   std::string out;
   while (i < l)
   {

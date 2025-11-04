@@ -840,7 +840,7 @@ vil_openjpeg_image::s_decode_jpeg_2000(vil_stream * vs,
                                        double i_factor,
                                        double j_factor)
 {
-  vil_openjpeg_image * jp2_image = new vil_openjpeg_image(vs, VIL_OPENJPEG_J2K);
+  auto * jp2_image = new vil_openjpeg_image(vs, VIL_OPENJPEG_J2K);
   double max_factor = i_factor;
   if (j_factor > i_factor)
     max_factor = j_factor;

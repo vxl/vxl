@@ -44,8 +44,7 @@ vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition(std::stri
 vil_nitf2_tagged_record_definition &
 vil_nitf2_tagged_record_definition::define(std::string name, std::string pretty_name)
 {
-  vil_nitf2_tagged_record_definition * definition =
-    new vil_nitf2_tagged_record_definition(name, std::move(pretty_name));
+  auto * definition = new vil_nitf2_tagged_record_definition(name, std::move(pretty_name));
   if (all_definitions().find(name) != all_definitions().end())
   {
     throw("vil_nitf2_tagged_record_definition already defined.");
@@ -83,14 +82,14 @@ vil_nitf2_tagged_record_definition::field(std::string tag,
   }
   else
   {
-    vil_nitf2_field_definition * field_definition = new vil_nitf2_field_definition(std::move(tag),
-                                                                                   std::move(pretty_name),
-                                                                                   formatter,
-                                                                                   blanks_ok,
-                                                                                   width_functor,
-                                                                                   condition_functor,
-                                                                                   std::move(units),
-                                                                                   std::move(description));
+    auto * field_definition = new vil_nitf2_field_definition(std::move(tag),
+                                                             std::move(pretty_name),
+                                                             formatter,
+                                                             blanks_ok,
+                                                             width_functor,
+                                                             condition_functor,
+                                                             std::move(units),
+                                                             std::move(description));
     m_field_definitions->push_back(field_definition);
   }
   return *this;

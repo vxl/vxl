@@ -1282,7 +1282,7 @@ multiply_subtract(vnl_bignum & u, const vnl_bignum & v, Data q_hat, Counter j)
     borrow = (diff / 0x10000L == 0) ? 1 : 0; //   keep track of any borrows
     carry = Data(prod / 0x10000L);           //   keep track of carries
   }
-  const Counter tmpcnt = Counter(u.count - v.count + i - j - 1);
+  const auto tmpcnt = Counter(u.count - v.count + i - j - 1);
   diff = (unsigned long)u.data[tmpcnt] //  special case for the last digit
          + (0x10000L - (unsigned long)borrow);
   diff -= (unsigned long)carry;

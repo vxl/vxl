@@ -113,7 +113,7 @@ static tsize_t
 vil_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
 {
   auto * p = (tif_stream_structures *)h;
-  long long no = static_cast<long long>(n);
+  auto no = static_cast<long long>(n);
   if (no > p->filesize)
     p->filesize = n;
   // there should be no problem with this case because n
