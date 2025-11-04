@@ -24,9 +24,9 @@
 
 
 //: Container holding parameters for grouping polygons
-class vifa_group_pgram_params : public gevd_param_mixin,
-                                public vul_timestamp,
-                                public vbl_ref_count
+class vifa_group_pgram_params : public vbl_ref_count,
+                                public gevd_param_mixin,
+                                public vul_timestamp
 {
   float  angle_increment_;
   int    max_suppress_radius_;

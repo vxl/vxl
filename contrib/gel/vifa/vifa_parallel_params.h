@@ -24,9 +24,9 @@
 #define DEFAULT_NBUCKETS  60
 
 
-class vifa_parallel_params : public gevd_param_mixin,
-               public vul_timestamp,
-               public vbl_ref_count
+class vifa_parallel_params : public vbl_ref_count,
+                             public gevd_param_mixin,
+                             public vul_timestamp
 {
  public:
   float  min_angle;

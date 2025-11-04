@@ -30,13 +30,13 @@ public:
   typedef typename vpdt_field_traits<field_type>::scalar_type T;
 
   //: Constructor
-  vpdt_num_obs<dist_t>()
+  vpdt_num_obs()
     : dist_t()
     , num_observations(T(0))
   {}
 
   //: Constructor - somewhat like a copy constructor
-  vpdt_num_obs<dist_t>(const dist_t & d, const T & n_obs = T(0))
+  vpdt_num_obs(const dist_t & d, const T & n_obs = T(0))
     : dist_t(d)
     , num_observations(n_obs)
   {}

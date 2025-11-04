@@ -24,9 +24,9 @@
 
 
 //: Container holding parameters for collinearizing lines
-class vifa_coll_lines_params : public gevd_param_mixin,
-                               public vul_timestamp,
-                               public vbl_ref_count
+class vifa_coll_lines_params : public vbl_ref_count,
+                               public gevd_param_mixin,
+                               public vul_timestamp
 {
   float midpt_distance_;
   float angle_tolerance_;

@@ -36,9 +36,9 @@
 #include <gevd/gevd_param_mixin.h>
 
 
-class vifa_norm_params : public gevd_param_mixin,
-             public vul_timestamp,
-             public vbl_ref_count
+class vifa_norm_params : public vbl_ref_count,
+                         public gevd_param_mixin,
+                         public vul_timestamp
 {
  public:
   //: x-coordinate of low point (i == intensity)

@@ -103,7 +103,7 @@ public:
 
 
   bool
-  operator==(const vbl_batch_multimap & rhs)
+  operator==(const vbl_batch_multimap & rhs) const
   {
     return data_ == rhs.data_;
   }

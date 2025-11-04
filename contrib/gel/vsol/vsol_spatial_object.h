@@ -15,7 +15,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <vsol/vsol_flags_id.h>
 
-class vsol_spatial_object : public vul_timestamp, public vbl_ref_count, public vsol_flags_id
+class vsol_spatial_object : public vbl_ref_count, public vul_timestamp, public vsol_flags_id
 {
  public:
   // Constructors/Destructor---------------------------------------------------
