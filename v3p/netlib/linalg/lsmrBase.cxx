@@ -287,7 +287,7 @@ Solve( unsigned int m, unsigned int n, const double * b, double * x )
 
   // Initialize.
 
-  unsigned int const localVecs = std::min( localSize, std::min( m,n ) );
+  const unsigned int localVecs = std::min({ localSize, m, n });
 
   if( this->nout )
     {
