@@ -10,7 +10,7 @@ Checks: <
   modernize-macro-to-enum,
   modernize-make-shared,
   -modernize-make-unique,
-  -modernize-min-max-use-initializer-list,
+   modernize-min-max-use-initializer-list,
   modernize-pass-by-value,
    modernize-raw-string-literal,
    modernize-redundant-void-arg,

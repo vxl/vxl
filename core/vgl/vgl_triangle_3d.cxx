@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <limits>
 #include "vgl_triangle_3d.h"
 //:
@@ -239,9 +240,9 @@ same_side(const vgl_point_3d<double> & A,
   double e_dot = dot_product(e, n);
 
   if (std::abs(d_dot) < std::sqrt(std::numeric_limits<double>::epsilon()) *
-                          std::max(1.0e-100,
-                                   std::max(std::sqrt(A.x() * A.x() + A.y() * A.y() + A.z() * A.z()),
-                                            std::sqrt(D.x() * D.x() + D.y() * D.y() + D.z() * D.z()))))
+                          std::max({ 1.0e-100,
+                                     std::sqrt(A.x() * A.x() + A.y() * A.y() + A.z() * A.z()),
+                                     std::sqrt(D.x() * D.x() + D.y() * D.y() + D.z() * D.z()) }))
   {
     return Coplanar;
   }
