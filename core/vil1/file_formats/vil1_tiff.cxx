@@ -129,8 +129,6 @@ struct vil1_tiff_structures
 {
   vil1_tiff_structures(vil1_stream * vs_)
     : vs(vs_)
-    , filesize(0)
-    , buf(nullptr)
   {
     if (vs)
       vs->ref();
@@ -144,7 +142,7 @@ struct vil1_tiff_structures
 
   TIFF * tif;
   vil1_stream * vs;
-  int filesize;
+  int filesize{ 0 };
 
   unsigned long tilewidth;
   unsigned long tileheight;
@@ -161,7 +159,7 @@ struct vil1_tiff_structures
   bool compressed;
   bool jumbo_strips;
 
-  unsigned char * buf;
+  unsigned char * buf{ nullptr };
 };
 
 #if 0 // commented out

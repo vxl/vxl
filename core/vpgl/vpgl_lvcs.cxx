@@ -167,9 +167,6 @@ vpgl_lvcs::vpgl_lvcs(double orig_lat,
   , localCSOriginElev_(orig_elev)
   , geo_angle_unit_(ang_unit)
   , localXYZUnit_(len_unit)
-  , lox_(0)
-  , loy_(0)
-  , theta_(0)
 {
   double local_to_meters, local_to_feet, local_to_radians, local_to_degrees;
   this->get_angle_conversions(local_to_radians, local_to_degrees);

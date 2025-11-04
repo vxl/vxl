@@ -118,14 +118,14 @@ public:
 
 private:
   opj_dparameters_t params_;
-  opj_codec_t * codec_;
-  opj_image_t * image_;
-  opj_stream_t * stream_;
+  opj_codec_t * codec_{ nullptr };
+  opj_image_t * image_{ nullptr };
+  opj_stream_t * stream_{ nullptr };
   opj_header header_;
   OPJ_CODEC_FORMAT opj_codec_format_;
 
-  bool error_;
-  bool silent_;
+  bool error_{ false };
+  bool silent_{ false };
 
   bool
   init_decoder(unsigned int reduction);
@@ -187,12 +187,7 @@ struct vil_openjpeg_image_impl
 
 
 vil_openjpeg_decoder ::vil_openjpeg_decoder(OPJ_CODEC_FORMAT opj_codec_format)
-  : codec_(nullptr)
-  , image_(nullptr)
-  , stream_(nullptr)
-  , opj_codec_format_(opj_codec_format)
-  , error_(false)
-  , silent_(false)
+  : opj_codec_format_(opj_codec_format)
 {
   std::memset(&this->params_, 0, sizeof(opj_dparameters_t));
   std::memset(&this->header_, 0, sizeof(opj_header));
