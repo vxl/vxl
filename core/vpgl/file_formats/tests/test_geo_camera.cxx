@@ -45,8 +45,8 @@ test_geo_camera()
   std::cout << "geo_camera: WGS84 without LVCS:\n" << cam0 << std::endl;
 
   data.clear();
-  data.push_back(std::make_tuple(100.0, 30.0, 0.0, 0.0));
-  data.push_back(std::make_tuple(100.0 + (50 * 1e-6), 30.0 - (50 * 1e-6), 50.0, 50.0));
+  data.emplace_back(100.0, 30.0, 0.0, 0.0);
+  data.emplace_back(100.0 + (50 * 1e-6), 30.0 - (50 * 1e-6), 50.0, 50.0);
 
   for (const auto & item : data)
   {
@@ -61,10 +61,10 @@ test_geo_camera()
   std::cout << "geo_camera: WGS84 with LVCS:\n" << cam1 << "\n";
 
   data.clear();
-  data.push_back(std::make_tuple(0.0, 0.0, 0.0, 0.0));
+  data.emplace_back(0.0, 0.0, 0.0, 0.0);
 
   lvcs.global_to_local(100.0 + (50 * 1e-6), 30.0 - (50 * 1e-6), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
-  data.push_back(std::make_tuple(lx, ly, 50.0, 50.0));
+  data.emplace_back(lx, ly, 50.0, 50.0);
 
   for (const auto & item : data)
   {
