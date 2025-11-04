@@ -68,7 +68,7 @@ encode_base64(const std::string & in)
 {
   std::string out;
   unsigned int i = 0, line_octets = 0;
-  const unsigned int l = (unsigned int)(in.size());
+  const auto l = (unsigned int)(in.size());
   char data[3];
   while (i < l)
   {
@@ -133,7 +133,7 @@ vil1_stream_url::vil1_stream_url(const char * url)
 
   // port?
   if (!host.empty())
-    for (unsigned int i = (unsigned int)(host.size() - 1); i > 0; --i)
+    for (auto i = (unsigned int)(host.size() - 1); i > 0; --i)
       if (host[i] == ':')
       {
         port = std::stoi(host.c_str() + i + 1);

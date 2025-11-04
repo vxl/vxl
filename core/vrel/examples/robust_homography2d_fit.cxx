@@ -54,7 +54,7 @@ main()
   // Construct the problem
   //
 
-  vrel_homography2d_est * hg = new vrel_homography2d_est(from_pts, to_pts);
+  auto * hg = new vrel_homography2d_est(from_pts, to_pts);
 
   double max_outlier_frac = 0.5;
   double desired_prob_good = 0.99;

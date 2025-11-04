@@ -72,7 +72,7 @@ vil_nitf2_file_format::make_input_pyramid_image(const char * file)
   vil_image_resource_sptr imgr = this->make_input_image(vs.as_pointer());
   if (!imgr)
     return nullptr;
-  vil_nitf2_image * nitfr = reinterpret_cast<vil_nitf2_image *>(imgr.as_pointer());
+  auto * nitfr = reinterpret_cast<vil_nitf2_image *>(imgr.as_pointer());
   if (!nitfr->is_jpeg_2000_compressed())
     return nullptr;
   vil_pyramid_image_resource_sptr pyr = new vil_j2k_nitf2_pyramid_image_resource(imgr);
@@ -956,7 +956,7 @@ vil_nitf2_image::get_block(unsigned int block_index_x, unsigned int block_index_
 #define GET_BLOCK_CASE(FORMAT, T)                          \
   case FORMAT:                                             \
   {                                                        \
-    T t = (T)0;                                            \
+    auto t = (T)0;                                         \
     return get_block_vcl_internal(FORMAT,                  \
                                   image_memory,            \
                                   size_block_i(),          \

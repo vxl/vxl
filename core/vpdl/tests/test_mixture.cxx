@@ -21,7 +21,7 @@ fit_gaussian(typename std::vector<vnl_vector_fixed<T, 3>>::const_iterator begin,
   vnl_matrix_fixed<T, 3, 3> covar(T(0));
   unsigned int count = 0;
   using vitr = typename std::vector<vnl_vector_fixed<T, 3>>::const_iterator;
-  for (vitr i = begin; i != end; ++i)
+  for (auto i = begin; i != end; ++i)
   {
     mean += *i;
     covar += outer_product(*i, *i);
@@ -111,7 +111,7 @@ test_mixture_type(T epsilon, const std::string & type_name)
     TEST(("num_components after insert <" + type_name + ">").c_str(), valid, true);
 
     const vpdl_distribution<T, 3> & dist1 = mixture.distribution(0);
-    const vpdl_gaussian_sphere<T, 3> * dist1_ptr = dynamic_cast<const vpdl_gaussian_sphere<T, 3> *>(&dist1);
+    const auto * dist1_ptr = dynamic_cast<const vpdl_gaussian_sphere<T, 3> *>(&dist1);
     TEST(("distribution access <" + type_name + ">").c_str(),
          dist1_ptr && dist1_ptr->mean() == gauss1.mean() && dist1_ptr->covariance() == gauss1.covariance(),
          true);
@@ -135,8 +135,7 @@ test_mixture_type(T epsilon, const std::string & type_name)
     mixture.remove_last();
     mixture.remove_last();
     mixture.remove_last();
-    const vpdl_gaussian_indep<T, 3> * gauss_indep =
-      dynamic_cast<const vpdl_gaussian_indep<T, 3> *>(&mixture2.distribution(0));
+    const auto * gauss_indep = dynamic_cast<const vpdl_gaussian_indep<T, 3> *>(&mixture2.distribution(0));
     TEST(("copy constructor <" + type_name + ">").c_str(),
          mixture2.num_components() == 3 && mixture2.weight(1) == T(0.15) && gauss_indep != nullptr,
          true);
@@ -195,7 +194,7 @@ test_mixture_type(T epsilon, const std::string & type_name)
     TEST(("num_components after insert <" + type_name + ">").c_str(), valid, true);
 
     const vpdl_distribution<T, 1> & dist1 = mixture.distribution(0);
-    const vpdl_gaussian<T, 1> * dist1_ptr = dynamic_cast<const vpdl_gaussian<T, 1> *>(&dist1);
+    const auto * dist1_ptr = dynamic_cast<const vpdl_gaussian<T, 1> *>(&dist1);
     TEST(("distribution access <" + type_name + ">").c_str(),
          dist1_ptr && dist1_ptr->mean() == gauss1.mean() && dist1_ptr->covariance() == gauss1.covariance(),
          true);
@@ -219,7 +218,7 @@ test_mixture_type(T epsilon, const std::string & type_name)
     mixture.remove_last();
     mixture.remove_last();
     mixture.remove_last();
-    const vpdl_gaussian<T, 1> * gaussian = dynamic_cast<const vpdl_gaussian<T, 1> *>(&mixture2.distribution(0));
+    const auto * gaussian = dynamic_cast<const vpdl_gaussian<T, 1> *>(&mixture2.distribution(0));
     TEST(("copy constructor <" + type_name + ">").c_str(),
          mixture2.num_components() == 3 && mixture2.weight(1) == T(0.15) && gaussian != nullptr,
          true);
@@ -287,7 +286,7 @@ test_mixture_type(T epsilon, const std::string & type_name)
     TEST(("dimension after insert <" + type_name + ">").c_str(), mixture.dimension(), 3);
 
     const vpdl_distribution<T> & dist1 = mixture.distribution(0);
-    const vpdl_gaussian_sphere<T> * dist1_ptr = dynamic_cast<const vpdl_gaussian_sphere<T> *>(&dist1);
+    const auto * dist1_ptr = dynamic_cast<const vpdl_gaussian_sphere<T> *>(&dist1);
     TEST(("distribution access <" + type_name + ">").c_str(),
          dist1_ptr && dist1_ptr->mean() == gauss1.mean() && dist1_ptr->covariance() == gauss1.covariance(),
          true);
@@ -311,8 +310,7 @@ test_mixture_type(T epsilon, const std::string & type_name)
     mixture.remove_last();
     mixture.remove_last();
     mixture.remove_last();
-    const vpdl_gaussian_indep<T> * gauss_indep =
-      dynamic_cast<const vpdl_gaussian_indep<T> *>(&mixture2.distribution(0));
+    const auto * gauss_indep = dynamic_cast<const vpdl_gaussian_indep<T> *>(&mixture2.distribution(0));
     TEST(("copy constructor <" + type_name + ">").c_str(),
          mixture2.num_components() == 3 && mixture2.weight(1) == T(0.15) && mixture2.dimension() == 3 && gauss_indep,
          true);

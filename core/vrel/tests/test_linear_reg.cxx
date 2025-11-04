@@ -113,7 +113,7 @@ test_linear_reg()
   delete lr2;
   testlib_test_perform(true);
   testlib_test_begin("dtor (3)");
-  vrel_linear_regression * lr3 = new vrel_linear_regression(ind_vars, rand_vars);
+  auto * lr3 = new vrel_linear_regression(ind_vars, rand_vars);
   delete lr3;
   testlib_test_perform(true);
   lr3 = new vrel_linear_regression(ind_vars, rand_vars);

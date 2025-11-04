@@ -102,7 +102,7 @@ vil_j2k_nitf2_pyramid_image_resource::nlevels() const
   if (scale <= 1.0)
     return 1;
   double lscale = std::log(scale);
-  unsigned nlev = static_cast<unsigned>(lscale / std::log(2.0));
+  auto nlev = static_cast<unsigned>(lscale / std::log(2.0));
   return nlev;
 }
 
@@ -140,7 +140,7 @@ vil_j2k_nitf2_pyramid_image_resource::get_copy_view(unsigned i0,
     return this->get_copy_view(i0, n_i, j0, n_j, 0);
   }
   float f_lev = -std::log(scale) / std::log(2.0f);
-  unsigned level = static_cast<unsigned>(f_lev);
+  auto level = static_cast<unsigned>(f_lev);
   if (level > this->nlevels())
     level = this->nlevels() - 1;
   actual_scale = scale_at_level(level);
