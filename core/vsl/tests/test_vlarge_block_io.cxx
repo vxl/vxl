@@ -15,8 +15,8 @@
 void
 free_blocks(std::vector<void *> & blocks)
 {
-  for (unsigned i = 0, n = blocks.size(); i != n; ++i)
-    std::free(blocks[i]);
+  for (auto & block : blocks)
+    std::free(block);
 }
 
 // scale should be 0 or 1.

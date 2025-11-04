@@ -85,9 +85,8 @@ void
 print(const mystack<Matrix> & stack, const char * fmt)
 {
   char buf[4096];
-  for (unsigned int k = 0; k < stack.size(); ++k)
+  for (const auto & M : stack)
   {
-    const Matrix & M = stack[k];
     for (unsigned int i = 0; i < M.rows(); ++i)
     {
       for (unsigned int j = 0; j < M.cols(); ++j)

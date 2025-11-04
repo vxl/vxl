@@ -52,9 +52,9 @@ test_sparse_array_io()
     // check every key/data pair, require same order too.
     auto s = v_in.begin();
     // N.B. relies on sensible == operator for <T>
-    for (auto r = v_out.begin(); r != v_out.end(); ++r)
+    for (const auto & r : v_out)
     {
-      if (!((*s).first == (*r).first) || !((*s).second == (*r).second))
+      if (!((*s).first == r.first) || !((*s).second == r.second))
         test_result = false;
       s++;
     }

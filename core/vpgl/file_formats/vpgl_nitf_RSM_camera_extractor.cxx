@@ -22,10 +22,10 @@ RSM_ECA_adjustable_parameter_metadata::print(std::ostream & os)
   os << "local coordinate system origin (ECEF)" << translation_ << std::endl;
   os << "local coordinate system rotation (rel. ECEF)\n" << rotation_ << std::endl;
   os << "adjustable parameter covariance indices I* image space, G* ground space:" << std::endl;
-  for (auto itr = covar_index_.begin(); itr != covar_index_.end(); ++itr)
+  for (auto & itr : covar_index_)
   {
-    if (itr->second > 0)
-      os << itr->first << ' ' << itr->second << std::endl;
+    if (itr.second > 0)
+      os << itr.first << ' ' << itr.second << std::endl;
   }
   os << "\nIndependent subgroup covariance and correlation data:" << std::endl;
   for (size_t i = 0; i < independent_subgroup_covariance_.size(); ++i)
@@ -34,8 +34,8 @@ RSM_ECA_adjustable_parameter_metadata::print(std::ostream & os)
     os << independent_subgroup_covariance_[i] << std::endl;
     os << "correlation flag (" << correlation_flags_[i] << ")" << std::endl;
     os << "(cor. tau) piecewise correlation segments " << std::endl;
-    for (size_t s = 0; s < correlation_segments_[i].size(); ++s)
-      os << correlation_segments_[i][s].first << "  " << correlation_segments_[i][s].second << std::endl;
+    for (auto & s : correlation_segments_[i])
+      os << s.first << "  " << s.second << std::endl;
   }
   os << "\nMapping matrix (phi)\n" << phi_ << std::endl;
   if (unmodeled_error_)
@@ -82,13 +82,15 @@ RSM_ECB_adjustable_parameter_metadata::print(std::ostream & os)
     os << "N image row adjustable params " << n_image_row_adjustable_params_ << std::endl;
     os << "N image col adjustable params " << n_image_col_adjustable_params_ << std::endl;
     os << " image parameter id     x   y   z  power" << std::endl;
-    for (auto itr = image_row_xyz_powers_.begin(); itr != image_row_xyz_powers_.end(); ++itr)
-      os << "row " << std::setw(3) << itr->first << "                 " << std::get<0>(itr->second) << "   "
-         << std::get<1>(itr->second) << "   " << std::get<2>(itr->second) << std::endl;
+    for (auto & image_row_xyz_power : image_row_xyz_powers_)
+      os << "row " << std::setw(3) << image_row_xyz_power.first << "                 "
+         << std::get<0>(image_row_xyz_power.second) << "   " << std::get<1>(image_row_xyz_power.second) << "   "
+         << std::get<2>(image_row_xyz_power.second) << std::endl;
 
-    for (auto itr = image_col_xyz_powers_.begin(); itr != image_col_xyz_powers_.end(); ++itr)
-      os << "col " << std::setw(3) << itr->first << "                 " << std::get<0>(itr->second) << "   "
-         << std::get<1>(itr->second) << "   " << std::get<2>(itr->second) << std::endl;
+    for (auto & image_col_xyz_power : image_col_xyz_powers_)
+      os << "col " << std::setw(3) << image_col_xyz_power.first << "                 "
+         << std::get<0>(image_col_xyz_power.second) << "   " << std::get<1>(image_col_xyz_power.second) << "   "
+         << std::get<2>(image_col_xyz_power.second) << std::endl;
   }
   if (ground_adjustable_params_)
   {
@@ -637,10 +639,10 @@ vpgl_nitf_RSM_camera_extractor::vpgl_nitf_RSM_camera_extractor(const std::string
     RSM_defined_ = true;
   if (RSM_defined_)
   {
-    for (auto itr = nitf_status_.begin(); itr != nitf_status_.end(); ++itr)
+    for (auto & nitf_statu : nitf_status_)
     {
-      if (itr->second != INVALID && itr->second != IMAGE_SUBHEADER_TREs_ONLY)
-        RSM_cams_[itr->first] = vpgl_RSM_camera<double>();
+      if (nitf_statu.second != INVALID && nitf_statu.second != IMAGE_SUBHEADER_TREs_ONLY)
+        RSM_cams_[nitf_statu.first] = vpgl_RSM_camera<double>();
     }
   }
 }
@@ -655,10 +657,10 @@ vpgl_nitf_RSM_camera_extractor::vpgl_nitf_RSM_camera_extractor(vil_nitf2_image *
     RSM_defined_ = true;
   if (RSM_defined_)
   {
-    for (auto itr = nitf_status_.begin(); itr != nitf_status_.end(); ++itr)
+    for (auto & nitf_statu : nitf_status_)
     {
-      if (itr->second != INVALID && itr->second != IMAGE_SUBHEADER_TREs_ONLY)
-        RSM_cams_[itr->first] = vpgl_RSM_camera<double>();
+      if (nitf_statu.second != INVALID && nitf_statu.second != IMAGE_SUBHEADER_TREs_ONLY)
+        RSM_cams_[nitf_statu.first] = vpgl_RSM_camera<double>();
     }
   }
 }
@@ -673,21 +675,21 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
   // Check through the TREs to find ""
   bool v = verbose;
   // first look through the header tres
-  for (auto sitr = nitf_status_.begin(); sitr != nitf_status_.end(); ++sitr)
+  for (auto & nitf_statu : nitf_status_)
   {
-    if (sitr->second == IMAGE_SUBHEADER_TREs_ONLY)
+    if (nitf_statu.second == IMAGE_SUBHEADER_TREs_ONLY)
       continue;
-    size_t head_idx = sitr->first;
-    vil_nitf2_tagged_record_sequence & ixshd_tres = hdr_ixshd_tres_[sitr->first];
-    if (sitr->second == IMAGE_SUBHEADER_TREs_RSM_TREs_OVRFL)
-      ixshd_tres = ovfl_ixshd_tres_[sitr->first];
-    else if (sitr->second == IMAGE_SUBHEADER_TREs_RSM_TREs)
+    size_t head_idx = nitf_statu.first;
+    vil_nitf2_tagged_record_sequence & ixshd_tres = hdr_ixshd_tres_[nitf_statu.first];
+    if (nitf_statu.second == IMAGE_SUBHEADER_TREs_RSM_TREs_OVRFL)
+      ixshd_tres = ovfl_ixshd_tres_[nitf_statu.first];
+    else if (nitf_statu.second == IMAGE_SUBHEADER_TREs_RSM_TREs)
     {
       // avoid self assignment hdr_ixshd_tres_ = hdr_ixshd_tres_;
     }
     else
     {
-      tre_str << "INVALID or missing TREs for IMAGE SUBHEADER " << sitr->first << std::endl;
+      tre_str << "INVALID or missing TREs for IMAGE SUBHEADER " << nitf_statu.first << std::endl;
       continue;
     }
     RSMIDA = false;
@@ -701,7 +703,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
     RSMAPA = false;
     RSMAPB = false;
     RSMGGA = false;
-    tre_str << "======RSM DATA FOR IMAGE SUBHEADER " << sitr->first << std::endl;
+    tre_str << "======RSM DATA FOR IMAGE SUBHEADER " << nitf_statu.first << std::endl;
     for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr)
     {
       std::string type = (*tres_itr)->name();
@@ -712,7 +714,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         // Start TRE section =====================
         nitf_tre<std::string> st("RSMIDA", tre_str);
         //=======================================
-        rsm_metadata & mdata = rsm_meta_[sitr->first];
+        rsm_metadata & mdata = rsm_meta_[nitf_statu.first];
         // RSMIDA TREs
         nitf_tre<std::string> nt0("IID", false, true);
         nt0.get_append(tres_itr, tre_str, v);
@@ -1197,7 +1199,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         // =======================================
         nitf_tre<std::string> nt("RSMPIA", tre_str);
         // =========================================
-        rsm_metadata & meta = rsm_meta_[sitr->first];
+        rsm_metadata & meta = rsm_meta_[nitf_statu.first];
         nitf_tre<std::string> nt1("EDITION", false, false);
         nt1.get_append(tres_itr, tre_str, v);
         nitf_tre<double> nt2("R0", false, false);
@@ -1862,10 +1864,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         if (!opt)
         {
           nt67.get(tres_itr, ucorsrs);
-          for (size_t r = 0; r < ucorsrs.size(); ++r)
+          for (const auto & r : ucorsrs)
           {
             double val;
-            ASC_double(ucorsrs[r], val);
+            ASC_double(r, val);
             ucorsr.push_back(val);
           }
         }
@@ -1876,10 +1878,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         if (!opt)
         {
           nt68.get(tres_itr, utausrs);
-          for (size_t r = 0; r < utausrs.size(); ++r)
+          for (const auto & r : utausrs)
           {
             double val;
-            ASC_double(utausrs[r], val);
+            ASC_double(r, val);
             utausr.push_back(val);
           }
         }
@@ -1897,10 +1899,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         if (!opt)
         {
           nt70.get(tres_itr, ucorscs);
-          for (size_t c = 0; c < ucorscs.size(); ++c)
+          for (const auto & c : ucorscs)
           {
             double val;
-            ASC_double(ucorscs[c], val);
+            ASC_double(c, val);
             ucorsc.push_back(val);
           }
         }
@@ -1911,10 +1913,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         if (!opt)
         {
           nt71.get(tres_itr, utauscs);
-          for (size_t c = 0; c < utauscs.size(); ++c)
+          for (const auto & c : utauscs)
           {
             double val;
-            ASC_double(utauscs[c], val);
+            ASC_double(c, val);
             utausc.push_back(val);
           }
         }
@@ -2352,10 +2354,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         if (!opt)
         {
           nt47.get(tres_itr, corsegs);
-          for (size_t s = 0; s < corsegs.size(); ++s)
+          for (const auto & corseg : corsegs)
           {
             double val;
-            ASC_double(corsegs[s], val);
+            ASC_double(corseg, val);
             corseg_vals.push_back(val);
           }
         }
@@ -2367,10 +2369,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         if (!opt)
         {
           nt48.get(tres_itr, tausegs);
-          for (size_t s = 0; s < tausegs.size(); ++s)
+          for (const auto & tauseg : tausegs)
           {
             double val;
-            ASC_double(tausegs[s], val);
+            ASC_double(tauseg, val);
             tauseg_vals.push_back(val);
           }
         }
@@ -2381,10 +2383,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         if (!opt)
         {
           nt49.get(tres_itr, Acs);
-          for (size_t s = 0; s < Acs.size(); ++s)
+          for (const auto & Ac : Acs)
           {
             double val;
-            ASC_double(Acs[s], val);
+            ASC_double(Ac, val);
             Acoef_vals.push_back(val);
           }
         }
@@ -2395,10 +2397,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         if (!opt)
         {
           nt50.get(tres_itr, alphs);
-          for (size_t s = 0; s < alphs.size(); ++s)
+          for (const auto & alph : alphs)
           {
             double val;
-            ASC_double(alphs[s], val);
+            ASC_double(alph, val);
             alpha_vals.push_back(val);
           }
         }
@@ -2410,10 +2412,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         if (!opt)
         {
           nt51.get(tres_itr, bets);
-          for (size_t s = 0; s < bets.size(); ++s)
+          for (const auto & bet : bets)
           {
             double val;
-            ASC_double(bets[s], val);
+            ASC_double(bet, val);
             beta_vals.push_back(val);
           }
         }
@@ -2425,10 +2427,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         if (!opt)
         {
           nt52.get(tres_itr, Tcs);
-          for (size_t s = 0; s < Tcs.size(); ++s)
+          for (const auto & Tc : Tcs)
           {
             double val;
-            ASC_double(Tcs[s], val);
+            ASC_double(Tc, val);
             T_vals.push_back(val);
           }
         }
@@ -2614,10 +2616,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           if (!opt)
           {
             nt67.get(tres_itr, ucorsrs);
-            for (size_t r = 0; r < ucorsrs.size(); ++r)
+            for (const auto & r : ucorsrs)
             {
               double val;
-              ASC_double(ucorsrs[r], val);
+              ASC_double(r, val);
               ucorsr.push_back(val);
             }
           }
@@ -2628,10 +2630,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           if (!opt)
           {
             nt68.get(tres_itr, utausrs);
-            for (size_t r = 0; r < utausrs.size(); ++r)
+            for (const auto & r : utausrs)
             {
               double val;
-              ASC_double(utausrs[r], val);
+              ASC_double(r, val);
               utausr.push_back(val);
             }
           }
@@ -2651,10 +2653,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           if (!opt)
           {
             nt70.get(tres_itr, ucorscs);
-            for (size_t c = 0; c < ucorscs.size(); ++c)
+            for (const auto & c : ucorscs)
             {
               double val;
-              ASC_double(ucorscs[c], val);
+              ASC_double(c, val);
               ucorsc.push_back(val);
             }
           }
@@ -2665,10 +2667,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           if (!opt)
           {
             nt71.get(tres_itr, utauscs);
-            for (size_t c = 0; c < utauscs.size(); ++c)
+            for (const auto & c : utauscs)
             {
               double val;
-              ASC_double(utauscs[c], val);
+              ASC_double(c, val);
               utausc.push_back(val);
             }
           }
@@ -2746,9 +2748,9 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
 bool
 vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
 {
-  for (auto itr = RSM_cams_.begin(); itr != RSM_cams_.end(); ++itr)
+  for (auto & RSM_cam : RSM_cams_)
   {
-    size_t image_subheader_index = itr->first;
+    size_t image_subheader_index = RSM_cam.first;
     vil_nitf2_tagged_record_sequence & ixshd_tres = hdr_ixshd_tres_[image_subheader_index];
     if (nitf_status_[image_subheader_index] == IMAGE_SUBHEADER_TREs_RSM_TREs_OVRFL)
       ixshd_tres = ovfl_ixshd_tres_[image_subheader_index];
@@ -3362,9 +3364,9 @@ vpgl_nitf_RSM_camera_extractor::print_file_header_summary()
     std::cout << "NITF2.1 File has " << n << " image subheaders" << std::endl;
 
   std::vector<int> inv;
-  for (auto itr = nitf_status_.begin(); itr != nitf_status_.end(); ++itr)
-    if (itr->second == INVALID)
-      inv.push_back(itr->first);
+  for (auto & nitf_statu : nitf_status_)
+    if (nitf_statu.second == INVALID)
+      inv.push_back(nitf_statu.first);
   int ni = inv.size();
   if (ni > 0)
   {
@@ -3379,24 +3381,25 @@ vpgl_nitf_RSM_camera_extractor::print_file_header_summary()
     }
   }
 
-  for (auto itr = nitf_status_.begin(); itr != nitf_status_.end(); ++itr)
+  for (auto & nitf_statu : nitf_status_)
   {
-    if (itr->second == INVALID)
+    if (nitf_statu.second == INVALID)
       continue;
-    if (itr->second == IMAGE_SUBHEADER_TREs_ONLY)
+    if (nitf_statu.second == IMAGE_SUBHEADER_TREs_ONLY)
     {
-      std::cout << "Image " << itr->first << " has image TREs in the subheader but no RSM information" << std::endl;
-      continue;
-    }
-    else if (itr->second == IMAGE_SUBHEADER_TREs_RSM_TREs)
-    {
-      std::cout << "Image " << itr->first << " has both image TREs in the subheader as well as RSM information"
+      std::cout << "Image " << nitf_statu.first << " has image TREs in the subheader but no RSM information"
                 << std::endl;
       continue;
     }
-    else if (itr->second == IMAGE_SUBHEADER_TREs_RSM_TREs_OVRFL)
+    else if (nitf_statu.second == IMAGE_SUBHEADER_TREs_RSM_TREs)
     {
-      std::cout << "Image " << itr->first
+      std::cout << "Image " << nitf_statu.first << " has both image TREs in the subheader as well as RSM information"
+                << std::endl;
+      continue;
+    }
+    else if (nitf_statu.second == IMAGE_SUBHEADER_TREs_RSM_TREs_OVRFL)
+    {
+      std::cout << "Image " << nitf_statu.first
                 << " has image TREs in the subheader and RSM information is present in the overflow section"
                 << std::endl;
       continue;

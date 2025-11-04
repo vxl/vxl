@@ -89,18 +89,18 @@ proj_test()
   test_pts.push_back(vgl_point_3d<double>(-1.5, -2.1, 10.0) + offset);
   test_pts.push_back(vgl_point_3d<double>(0.1, 0.7, 5.8) + offset);
 
-  for (std::vector<vgl_point_3d<double>>::const_iterator pit = test_pts.begin(); pit != test_pts.end(); ++pit)
+  for (const auto & test_pt : test_pts)
   {
     // first project using perspective camera
-    vgl_point_2d<double> p2d = pcam.project(*pit);
+    vgl_point_2d<double> p2d = pcam.project(test_pt);
     // project same point using generic camera
     double u, v;
-    gcam.project(pit->x(), pit->y(), pit->z(), u, v);
+    gcam.project(test_pt.x(), test_pt.y(), test_pt.z(), u, v);
     std::stringstream testname;
-    testname << "Projection of test point " << *pit << ": u" << std::endl;
+    testname << "Projection of test point " << test_pt << ": u" << std::endl;
     TEST_NEAR(testname.str().c_str(), u, p2d.x(), 1e-3);
     testname.str("");
-    testname << "Projection of test point " << *pit << ": v" << std::endl;
+    testname << "Projection of test point " << test_pt << ": v" << std::endl;
     TEST_NEAR(testname.str().c_str(), v, p2d.y(), 1e-3);
   }
 
@@ -123,30 +123,30 @@ proj_test()
   test_pts1.emplace_back(639.5, 479.5);
   test_pts1.emplace_back(638.5, 479.5);
 
-  for (std::vector<vgl_point_2d<double>>::const_iterator pit = test_pts1.begin(); pit != test_pts1.end(); ++pit)
+  for (auto pit : test_pts1)
   {
-    double u = pit->x(), v = pit->y();
+    double u = pit.x(), v = pit.y();
     vgl_ray_3d<double> ray = pcam.backproject_ray(u, v);
     vgl_ray_3d<double> r = gcam.ray(u, v);
 
     std::cout << std::endl;
     std::stringstream testname;
-    testname << "Ray origin for test point " << *pit << ": x" << std::endl;
+    testname << "Ray origin for test point " << pit << ": x" << std::endl;
     TEST_NEAR(testname.str().c_str(), r.origin().x(), ray.origin().x(), 1e-3);
     testname.str("");
-    testname << "Ray origin for test point " << *pit << ": y" << std::endl;
+    testname << "Ray origin for test point " << pit << ": y" << std::endl;
     TEST_NEAR(testname.str().c_str(), r.origin().y(), ray.origin().y(), 1e-3);
     testname.str("");
-    testname << "Ray origin for test point " << *pit << ": z" << std::endl;
+    testname << "Ray origin for test point " << pit << ": z" << std::endl;
     TEST_NEAR(testname.str().c_str(), r.origin().z(), ray.origin().z(), 1e-3);
     testname.str("");
-    testname << "Ray direction for test point " << *pit << ": dx" << std::endl;
+    testname << "Ray direction for test point " << pit << ": dx" << std::endl;
     TEST_NEAR(testname.str().c_str(), r.direction().x(), ray.direction().x(), 1e-3);
     testname.str("");
-    testname << "Ray direction for test point " << *pit << ": dy" << std::endl;
+    testname << "Ray direction for test point " << pit << ": dy" << std::endl;
     TEST_NEAR(testname.str().c_str(), r.direction().y(), ray.direction().y(), 1e-3);
     testname.str("");
-    testname << "Ray direction for test point " << *pit << ": dz" << std::endl;
+    testname << "Ray direction for test point " << pit << ": dz" << std::endl;
     TEST_NEAR(testname.str().c_str(), r.direction().z(), ray.direction().z(), 1e-3);
   }
 }
