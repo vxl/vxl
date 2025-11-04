@@ -173,14 +173,14 @@ public:
   {}
 
   // implement pure virtual methods
-  virtual vpgl_camera<double> *
-  clone() const
+  vpgl_camera<double> *
+  clone() const override
   {
     return nullptr;
   }
 
-  virtual void
-  project(const double x, const double y, const double z, double & u, double & v) const
+  void
+  project(const double x, const double y, const double z, double & u, double & v) const override
   {
     // first, convert local to global geographic coordinates
     double lon, lat, gz;
