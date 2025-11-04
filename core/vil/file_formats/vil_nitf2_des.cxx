@@ -124,8 +124,7 @@ vil_nitf2_des::add_shared_field_defs_2(vil_nitf2_field_definitions * defs, int d
            NITF_TRES(),
            false,
            new vil_nitf2_max_field_value_plus_offset_and_threshold("DESSHL", data_width, 0, -1),
-           new vil_nitf2_field_value_one_of<std::string>("DESID", "TRE_OVERFLOW"))
-    .end();
+           new vil_nitf2_field_value_one_of<std::string>("DESID", "TRE_OVERFLOW"));
 }
 
 vil_nitf2_field::field_tree *

@@ -197,14 +197,14 @@ class imesh_vertex_array : public imesh_vertex_array_base
 
  public:
   //: Default Constructor
-  imesh_vertex_array<d>() = default;
+  imesh_vertex_array() = default;
 
   //: Constructor (from size)
-  imesh_vertex_array<d>(unsigned int size)
+  imesh_vertex_array(unsigned int size)
   : verts_(size) {}
 
   //: Constructor (from vector)
-  imesh_vertex_array<d>(const std::vector<imesh_vertex<d> >& verts)
+  imesh_vertex_array(const std::vector<imesh_vertex<d> >& verts)
   : verts_(verts) {}
 
   //: Produce a clone of this object (dynamic copy)

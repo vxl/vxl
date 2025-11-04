@@ -89,11 +89,17 @@ class imesh_half_edge_set
     // Mesh Face Iterators - each half edge touches the same face
 
     //: An iterator of half edges adjacent to a face
-    class f_iterator : public std::iterator<std::forward_iterator_tag,imesh_half_edge>
+    class f_iterator
     {
       friend class f_const_iterator;
       friend class v_iterator;
       public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type        = imesh_half_edge;
+        using difference_type   = std::ptrdiff_t;
+        using pointer           = value_type*;
+        using reference         = value_type&;
+
         //: Constructor
         f_iterator(unsigned int hei, imesh_half_edge_set& edge_set)
           :half_edge_index_(hei), edge_set_(edge_set) {}
@@ -155,11 +161,17 @@ class imesh_half_edge_set
     };
 
     //: A const iterator of half edges adjacent to a face
-    class f_const_iterator : public std::iterator<std::forward_iterator_tag,imesh_half_edge>
+    class f_const_iterator
     {
         friend class f_iterator;
         friend class v_const_iterator;
       public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type        = imesh_half_edge;
+        using difference_type   = std::ptrdiff_t;
+        using pointer           = value_type*;
+        using reference         = value_type&;
+
         //: Constructor
         f_const_iterator(unsigned int hei, const imesh_half_edge_set& edge_set)
           :half_edge_index_(hei), edge_set_(edge_set) {}
@@ -218,11 +230,17 @@ class imesh_half_edge_set
     // Mesh Vertex Iterators - each half edge touches the same vertex
 
     //: An iterator of half edges adjacent to a vertex
-    class v_iterator : public std::iterator<std::forward_iterator_tag,imesh_half_edge>
+    class v_iterator
     {
         friend class v_const_iterator;
         friend class f_iterator;
       public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type        = imesh_half_edge;
+        using difference_type   = std::ptrdiff_t;
+        using pointer           = value_type*;
+        using reference         = value_type&;
+
         //: Constructor
         v_iterator(unsigned int hei, imesh_half_edge_set& edge_set)
           :half_edge_index_(hei), edge_set_(edge_set) {}
@@ -285,11 +303,17 @@ class imesh_half_edge_set
     };
 
     //: A const iterator of half edges adjacent to a vertex
-    class v_const_iterator : public std::iterator<std::forward_iterator_tag,imesh_half_edge>
+    class v_const_iterator
     {
         friend class v_iterator;
         friend class f_const_iterator;
       public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type        = imesh_half_edge;
+        using difference_type   = std::ptrdiff_t;
+        using pointer           = value_type*;
+        using reference         = value_type&;
+
         //: Constructor
         v_const_iterator(unsigned int hei, const imesh_half_edge_set& edge_set)
           :half_edge_index_(hei), edge_set_(edge_set) {}

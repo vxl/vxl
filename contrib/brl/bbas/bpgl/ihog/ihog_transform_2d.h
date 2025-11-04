@@ -23,7 +23,7 @@
 #endif
 
 //: A quadrilateral region of an image
-class ihog_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count
+class ihog_transform_2d : public vbl_ref_count, public vgl_h_matrix_2d<double>
 {
  public:
   //: Defines form of transformation

@@ -91,10 +91,10 @@ class bsta_mixture : public bsta_distribution<typename dist_::math_type,
 
  public:
   // Default Constructor
-  bsta_mixture<dist_>() = default;
+  bsta_mixture() = default;
 
   // Copy Constructor
-  bsta_mixture<dist_>(const bsta_mixture<dist_>& other)
+  bsta_mixture(const bsta_mixture<dist_>& other)
     : components_(other.components_.size(),nullptr)
   {
     // deep copy of the data
@@ -104,7 +104,7 @@ class bsta_mixture : public bsta_distribution<typename dist_::math_type,
   }
 
   // Destructor
-  ~bsta_mixture<dist_>()
+  ~bsta_mixture()
   {
     for (unsigned int i=0; i<components_.size(); ++i){
       delete components_[i];

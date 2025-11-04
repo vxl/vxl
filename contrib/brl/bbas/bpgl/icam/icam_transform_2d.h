@@ -14,7 +14,7 @@
 #include <vnl/vnl_double_2x3.h>
 
 //: A quadrilateral region of an image
-class icam_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count
+class icam_transform_2d : public vbl_ref_count, public vgl_h_matrix_2d<double>
 {
  public:
   //: Defines form of transformation

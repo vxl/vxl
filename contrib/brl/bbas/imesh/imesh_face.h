@@ -243,13 +243,13 @@ class imesh_regular_face_array : public imesh_face_array_base
 
  public:
   //: Default Constructor
-  imesh_regular_face_array<s>() = default;
+  imesh_regular_face_array() = default;
 
   //: Constructor
-  imesh_regular_face_array<s>(unsigned int size) : faces_(size) {}
+  imesh_regular_face_array(unsigned int size) : faces_(size) {}
 
   //: Constructor (from a vector)
-  imesh_regular_face_array<s>(const std::vector<imesh_regular_face<s> >& faces) : faces_(faces) {}
+  imesh_regular_face_array(const std::vector<imesh_regular_face<s> >& faces) : faces_(faces) {}
 
   //: returns the number of vertices per face if the same for all faces
   //  Returns zero otherwise

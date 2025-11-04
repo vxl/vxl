@@ -87,10 +87,10 @@ class bsta_mixture_fixed : public bsta_distribution<typename dist_::math_type,
 
  public:
   // Default Constructor
-  bsta_mixture_fixed<dist_,s>() : num_components_(0) {}
+  bsta_mixture_fixed() : num_components_(0) {}
 
   // Copy Constructor
-  bsta_mixture_fixed<dist_,s>(const bsta_mixture_fixed<dist_,s>& other)
+  bsta_mixture_fixed(const bsta_mixture_fixed<dist_,s>& other)
   : num_components_(other.num_components_)
   {
     // deep copy of the data
@@ -100,7 +100,7 @@ class bsta_mixture_fixed : public bsta_distribution<typename dist_::math_type,
   }
 
   // Destructor
-  ~bsta_mixture_fixed<dist_,s>()
+  ~bsta_mixture_fixed()
   = default;
 
   //: Assignment operator

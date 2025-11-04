@@ -1011,8 +1011,14 @@ private:
     std::string bitmask;
   };
 
-  struct Iterator : std::iterator<std::forward_iterator_tag, std::vector<unsigned> >
+  struct Iterator
   {
+    using iterator_category = std::forward_iterator_tag;
+    using value_type        = std::vector<unsigned>;
+    using difference_type   = std::ptrdiff_t;
+    using pointer           = value_type*;
+    using reference         = value_type&;
+
     Combinator asg_;
 
     typedef Iterator self_type;
@@ -1027,9 +1033,14 @@ private:
     bool operator!=(const self_type& rhs) const { return !(*this == rhs); }
   };
 
-  struct ConstIterator : std::iterator<std::forward_iterator_tag, std::vector<unsigned>,
-      std::ptrdiff_t, const std::vector<unsigned>*, const std::vector<unsigned>& >
+  struct ConstIterator
   {
+    using iterator_category = std::forward_iterator_tag;
+    using value_type        = std::vector<unsigned>;
+    using difference_type   = std::ptrdiff_t;
+    using pointer           = const value_type*;
+    using reference         = const value_type&;
+
     Combinator asg_;
 
     typedef ConstIterator self_type;

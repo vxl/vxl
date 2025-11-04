@@ -18,7 +18,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-class sdet_fit_conics_params : public gevd_param_mixin, public vbl_ref_count
+class sdet_fit_conics_params : public vbl_ref_count, public gevd_param_mixin
 {
  public:
   sdet_fit_conics_params(int  min_fit_length = 10,

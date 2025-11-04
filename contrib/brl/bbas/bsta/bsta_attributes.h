@@ -33,10 +33,10 @@ class bsta_num_obs : public dist_
   typedef dist_ contained_type;
 
   //: Constructor
-  bsta_num_obs<dist_>() : dist_(), num_observations(T(0)) {}
+  bsta_num_obs() : dist_(), num_observations(T(0)) {}
 
   //: Constructor - somewhat like a copy constructor
-  bsta_num_obs<dist_>(const dist_& d, const T& n_obs = T(0))
+  bsta_num_obs(const dist_& d, const T& n_obs = T(0))
     : dist_(d), num_observations(n_obs) {}
 
   //: The number of observations
@@ -73,10 +73,10 @@ class bsta_vsum_num_obs : public dist_
   typedef dist_ contained_type;
 
   //: Constructor
-  bsta_vsum_num_obs<dist_>() : dist_(), num_observations(T(0)), vector_sum(vect_t(T(0))) {}
+  bsta_vsum_num_obs() : dist_(), num_observations(T(0)), vector_sum(vect_t(T(0))) {}
 
   //: Constructor - somewhat like a copy constructor
-  bsta_vsum_num_obs<dist_>(const dist_& d, const vect_t & vsum = vect_t(T(0)), const T& n_obs = T(0))
+  bsta_vsum_num_obs(const dist_& d, const vect_t & vsum = vect_t(T(0)), const T& n_obs = T(0))
   : dist_(d), num_observations(n_obs), vector_sum(vsum) {}
 
   //: The number of observations

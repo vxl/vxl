@@ -26,32 +26,32 @@ class vpgl_poly_radial_distortion : public vpgl_radial_distortion<T>
 {
 public:
   //: Constructor
-  vpgl_poly_radial_distortion<T, n>(const vgl_point_2d<T> & center, const T * k)
+  vpgl_poly_radial_distortion(const vgl_point_2d<T> & center, const T * k)
     : vpgl_radial_distortion<T>(center, true)
   {
     set_coefficients(k);
   }
 
   //: Constructor
-  vpgl_poly_radial_distortion<T, n>(const vgl_point_2d<T> & center,
-                                    const vgl_point_2d<T> & distorted_center,
-                                    const T * k)
+  vpgl_poly_radial_distortion(const vgl_point_2d<T> & center,
+                              const vgl_point_2d<T> & distorted_center,
+                              const T * k)
     : vpgl_radial_distortion<T>(center, distorted_center, true)
   {
     set_coefficients(k);
   }
 
   //: Constructor
-  vpgl_poly_radial_distortion<T, n>(const vgl_point_2d<T> & center, const std::vector<T> & k)
+  vpgl_poly_radial_distortion(const vgl_point_2d<T> & center, const std::vector<T> & k)
     : vpgl_radial_distortion<T>(center, true)
   {
     set_coefficients(k);
   }
 
   //: Constructor
-  vpgl_poly_radial_distortion<T, n>(const vgl_point_2d<T> & center,
-                                    const vgl_point_2d<T> & distorted_center,
-                                    const std::vector<T> & k)
+  vpgl_poly_radial_distortion(const vgl_point_2d<T> & center,
+                              const vgl_point_2d<T> & distorted_center,
+                              const std::vector<T> & k)
     : vpgl_radial_distortion<T>(center, distorted_center, true)
   {
     set_coefficients(k);

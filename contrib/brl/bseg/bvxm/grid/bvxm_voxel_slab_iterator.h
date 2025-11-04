@@ -44,10 +44,15 @@ class bvxm_voxel_slab_iterator_base
 
 template <class T>
 
-class bvxm_voxel_slab_iterator : public bvxm_voxel_slab_iterator_base<T>,
-  public std::iterator<std::bidirectional_iterator_tag, T>
+class bvxm_voxel_slab_iterator : public bvxm_voxel_slab_iterator_base<T>
 {
  public:
+  using iterator_category = std::bidirectional_iterator_tag;
+  using value_type        = T;
+  using difference_type   = std::ptrdiff_t;
+  using pointer           = value_type*;
+  using reference         = value_type&;
+
   bvxm_voxel_slab_iterator()
     : bvxm_voxel_slab_iterator_base<T>() {}
 
@@ -79,10 +84,15 @@ class bvxm_voxel_slab_iterator : public bvxm_voxel_slab_iterator_base<T>,
 
 
 template <class T>
-class bvxm_voxel_slab_const_iterator : public bvxm_voxel_slab_iterator_base<T>,
-                                       public std::iterator<std::bidirectional_iterator_tag, T>
+class bvxm_voxel_slab_const_iterator : public bvxm_voxel_slab_iterator_base<T>
 {
  public:
+  using iterator_category = std::bidirectional_iterator_tag;
+  using value_type        = T;
+  using difference_type   = std::ptrdiff_t;
+  using pointer           = value_type*;
+  using reference         = value_type&;
+
   bvxm_voxel_slab_const_iterator() : bvxm_voxel_slab_iterator_base<T>() {}
 
   bvxm_voxel_slab_const_iterator(bvxm_voxel_storage<T> *storage,

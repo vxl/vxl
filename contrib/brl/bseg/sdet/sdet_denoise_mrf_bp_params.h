@@ -18,7 +18,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-class sdet_denoise_mrf_bp_params : public gevd_param_mixin, public vbl_ref_count
+class sdet_denoise_mrf_bp_params : public vbl_ref_count, public gevd_param_mixin
 {
  public:
 

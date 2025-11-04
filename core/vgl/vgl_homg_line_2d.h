@@ -61,7 +61,7 @@ public:
   }
 
   //: Construct from non-homogeneous line
-  vgl_homg_line_2d<T>(const vgl_line_2d<T> & p);
+  vgl_homg_line_2d(const vgl_line_2d<T> & p);
 
   //: Construct from two distinct points (join)
   //  The two points must be distinct!
