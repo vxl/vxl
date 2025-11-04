@@ -26,10 +26,12 @@ extern "You need a later libpng. You should rerun CMake, after setting VXL_FORCE
 
 #include "vxl_config.h"
 
-// Constants
-#define SIG_CHECK_SIZE 4
+  // Constants
+  enum {
+    SIG_CHECK_SIZE = 4
+  };
 
-  char const * vil_png_format_tag = "png";
+const char * vil_png_format_tag = "png";
 
 // Functions
 static bool

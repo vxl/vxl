@@ -24,7 +24,10 @@
 // Implement a jpeg_destination_manager for vil1_stream *.
 // Adapted by fsm from the FILE * version in jdatadst.c
 
-#define vil1_jpeg_OUTPUT_BUF_SIZE 4096 // choose an efficiently fwrite'able size
+enum
+{
+  vil1_jpeg_OUTPUT_BUF_SIZE = 4096 // choose an efficiently fwrite'able size
+};
 using vil1_jpeg_dstptr = vil1_jpeg_stream_destination_mgr *;
 
 

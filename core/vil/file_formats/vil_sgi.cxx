@@ -7,7 +7,10 @@
 #include "vil_sgi.h"
 
 #define where (std::cerr << __FILE__ " : " << __LINE__ << " : ")
-#define SGI_HDR_SIZE 512
+enum
+{
+  SGI_HDR_SIZE = 512
+};
 
 //--------------------------------------------------------------------------------
 

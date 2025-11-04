@@ -12,8 +12,11 @@
 #include "vil/vil_stream_read.h"
 
 // The magic number for SGI images
-#define SGI_SIGNATURE_BYTE_0 0x01
-#define SGI_SIGNATURE_BYTE_1 0xDA
+enum
+{
+  SGI_SIGNATURE_BYTE_0 = 0x01,
+  SGI_SIGNATURE_BYTE_1 = 0xDA
+};
 
 vil_sgi_file_header::vil_sgi_file_header()
 {
