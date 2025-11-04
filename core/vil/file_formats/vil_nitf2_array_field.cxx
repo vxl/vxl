@@ -91,9 +91,9 @@ std::string
 index_string(const vil_nitf2_index_vector & indices)
 {
   std::string ret_val = "";
-  for (unsigned int i = 0; i < indices.size(); i++)
+  for (int indice : indices)
   {
-    ret_val += "[" + int_to_string(indices[i]) + "]";
+    ret_val += "[" + int_to_string(indice) + "]";
   }
   return ret_val;
 }

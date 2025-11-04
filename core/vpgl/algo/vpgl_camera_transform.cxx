@@ -237,10 +237,10 @@ vpgl_camera_transform::normalize_img_pts(
 
   for (const auto & cam_ids_img_pt : cam_ids_img_pts)
   {
-    for (unsigned i = 0; i < cam_ids_img_pt.size(); i++)
+    for (const auto & i : cam_ids_img_pt)
     {
-      double x = cam_ids_img_pt[i].first[0];
-      double y = cam_ids_img_pt[i].first[1];
+      double x = i.first[0];
+      double y = i.first[1];
       nx += x;
       ny += y;
       ns += x * x + y * y;
@@ -256,14 +256,14 @@ vpgl_camera_transform::normalize_img_pts(
   for (const auto & cam_ids_img_pt : cam_ids_img_pts)
   {
     std::vector<std::pair<vnl_vector_fixed<double, 2>, unsigned>> cam_pts;
-    for (unsigned i = 0; i < cam_ids_img_pt.size(); i++)
+    for (const auto & i : cam_ids_img_pt)
     {
-      double x = cam_ids_img_pt[i].first[0];
-      double y = cam_ids_img_pt[i].first[1];
+      double x = i.first[0];
+      double y = i.first[1];
       vnl_vector_fixed<double, 2> new_pt;
       new_pt[0] = (x - nx) / ns;
       new_pt[1] = (y - ny) / ns;
-      std::pair<vnl_vector_fixed<double, 2>, unsigned> pair(new_pt, cam_ids_img_pt[i].second);
+      std::pair<vnl_vector_fixed<double, 2>, unsigned> pair(new_pt, i.second);
       cam_pts.push_back(pair);
     }
     cam_ids_norm_img_pts.push_back(cam_pts);
@@ -494,15 +494,15 @@ vpgl_camera_transform::compute_initial_transformation(
   for (auto & cam_ids_norm_img_pt : cam_ids_norm_img_pts)
   {
     std::vector<std::pair<vnl_vector_fixed<double, 3>, unsigned>> cam_pts;
-    for (unsigned i = 0; i < cam_ids_norm_img_pt.size(); i++)
+    for (auto & i : cam_ids_norm_img_pt)
     {
       vnl_vector_fixed<double, 3> pt;
-      pt[0] = cam_ids_norm_img_pt[i].first[0];
-      pt[1] = cam_ids_norm_img_pt[i].first[1];
+      pt[0] = i.first[0];
+      pt[1] = i.first[1];
       pt[2] = 1.0;
       vnl_vector_fixed<double, 3> cam_pt;
-      cam_pt = input_cam_K_invs[cam_ids_norm_img_pt[i].second] * pt;
-      std::pair<vnl_vector_fixed<double, 3>, unsigned> pair(cam_pt, cam_ids_norm_img_pt[i].second);
+      cam_pt = input_cam_K_invs[i.second] * pt;
+      std::pair<vnl_vector_fixed<double, 3>, unsigned> pair(cam_pt, i.second);
       cam_pts.push_back(pair);
     }
     cam_ids_norm_cam_pts.push_back(cam_pts);
@@ -673,15 +673,15 @@ vpgl_camera_transform::compute_initial_transformation_t(
   for (auto & cam_ids_norm_img_pt : cam_ids_norm_img_pts)
   {
     std::vector<std::pair<vnl_vector_fixed<double, 3>, unsigned>> cam_pts;
-    for (unsigned i = 0; i < cam_ids_norm_img_pt.size(); i++)
+    for (auto & i : cam_ids_norm_img_pt)
     {
       vnl_vector_fixed<double, 3> pt;
-      pt[0] = cam_ids_norm_img_pt[i].first[0];
-      pt[1] = cam_ids_norm_img_pt[i].first[1];
+      pt[0] = i.first[0];
+      pt[1] = i.first[1];
       pt[2] = 1.0;
       vnl_vector_fixed<double, 3> cam_pt;
-      cam_pt = input_cam_K_invs[cam_ids_norm_img_pt[i].second] * pt;
-      std::pair<vnl_vector_fixed<double, 3>, unsigned> pair(cam_pt, cam_ids_norm_img_pt[i].second);
+      cam_pt = input_cam_K_invs[i.second] * pt;
+      std::pair<vnl_vector_fixed<double, 3>, unsigned> pair(cam_pt, i.second);
       cam_pts.push_back(pair);
     }
     cam_ids_norm_cam_pts.push_back(cam_pts);
@@ -858,15 +858,15 @@ vpgl_camera_transform::compute_initial_transformation_R(
   for (auto & cam_ids_norm_img_pt : cam_ids_norm_img_pts)
   {
     std::vector<std::pair<vnl_vector_fixed<double, 3>, unsigned>> cam_pts;
-    for (unsigned i = 0; i < cam_ids_norm_img_pt.size(); i++)
+    for (auto & i : cam_ids_norm_img_pt)
     {
       vnl_vector_fixed<double, 3> pt;
-      pt[0] = cam_ids_norm_img_pt[i].first[0];
-      pt[1] = cam_ids_norm_img_pt[i].first[1];
+      pt[0] = i.first[0];
+      pt[1] = i.first[1];
       pt[2] = 1.0;
       vnl_vector_fixed<double, 3> cam_pt;
-      cam_pt = input_cam_K_invs[cam_ids_norm_img_pt[i].second] * pt;
-      std::pair<vnl_vector_fixed<double, 3>, unsigned> pair(cam_pt, cam_ids_norm_img_pt[i].second);
+      cam_pt = input_cam_K_invs[i.second] * pt;
+      std::pair<vnl_vector_fixed<double, 3>, unsigned> pair(cam_pt, i.second);
       cam_pts.push_back(pair);
     }
     cam_ids_norm_cam_pts.push_back(cam_pts);
@@ -1054,24 +1054,23 @@ vpgl_camera_transform::K_normalize_img_pts(
   for (const auto & cam_ids_img_pt : cam_ids_img_pts)
   {
     std::vector<std::pair<std::pair<vnl_vector_fixed<double, 3>, vnl_matrix_fixed<double, 3, 3>>, unsigned>> cam_pts;
-    for (unsigned i = 0; i < cam_ids_img_pt.size(); i++)
+    for (const auto & i : cam_ids_img_pt)
     {
       vnl_vector_fixed<double, 3> pt;
-      pt[0] = cam_ids_img_pt[i].first[0];
-      pt[1] = cam_ids_img_pt[i].first[1];
+      pt[0] = i.first[0];
+      pt[1] = i.first[1];
       pt[2] = 1.0;
       vnl_vector_fixed<double, 3> cam_pt;
-      cam_pt = input_cam_K_invs[cam_ids_img_pt[i].second] * pt;
+      cam_pt = input_cam_K_invs[i.second] * pt;
       // std::pair<vnl_vector_fixed<double, 3>, unsigned> pair(cam_pt, cam_ids_img_pts[j][i].second);
 
       // also compute the covariance matrix of the normalized point using error propagation
-      vnl_matrix_fixed<double, 3, 3> KinvT = input_cam_K_invs[cam_ids_img_pt[i].second].transpose();
+      vnl_matrix_fixed<double, 3, 3> KinvT = input_cam_K_invs[i.second].transpose();
       vnl_matrix_fixed<double, 3, 3> temp = input_correspondence_covariance * KinvT;
-      vnl_matrix_fixed<double, 3, 3> correspondence_covariance = input_cam_K_invs[cam_ids_img_pt[i].second] * temp;
+      vnl_matrix_fixed<double, 3, 3> correspondence_covariance = input_cam_K_invs[i.second] * temp;
 
       std::pair<vnl_vector_fixed<double, 3>, vnl_matrix_fixed<double, 3, 3>> pair(cam_pt, correspondence_covariance);
-      std::pair<std::pair<vnl_vector_fixed<double, 3>, vnl_matrix_fixed<double, 3, 3>>, unsigned> pair2(
-        pair, cam_ids_img_pt[i].second);
+      std::pair<std::pair<vnl_vector_fixed<double, 3>, vnl_matrix_fixed<double, 3, 3>>, unsigned> pair2(pair, i.second);
 
       cam_pts.push_back(pair2);
     }
@@ -1105,19 +1104,19 @@ vpgl_camera_transform::compute_covariance(
   // for each 3d point
   for (const auto & cam_ids_img_pt : cam_ids_img_pts)
     // for each frame
-    for (unsigned i = 0; i < cam_ids_img_pt.size(); i++)
+    for (const auto & i : cam_ids_img_pt)
     {
       // std::cout << "pt: " << cam_ids_img_pts[j][i].first.first << " from cam: " << cam_ids_img_pts[j][i].second <<
       // std::endl;
-      if (cam_ids_img_pt[i].second == cam_i)
+      if (i.second == cam_i)
       {
-        cam_i_pts.push_back(cam_ids_img_pt[i].first.first);
-        cam_i_pts_cov.push_back(cam_ids_img_pt[i].first.second);
+        cam_i_pts.push_back(i.first.first);
+        cam_i_pts_cov.push_back(i.first.second);
       }
-      if (cam_ids_img_pt[i].second == cam_j)
+      if (i.second == cam_j)
       {
-        cam_j_pts.push_back(cam_ids_img_pt[i].first.first);
-        cam_j_pts_cov.push_back(cam_ids_img_pt[i].first.second);
+        cam_j_pts.push_back(i.first.first);
+        cam_j_pts_cov.push_back(i.first.second);
       }
     }
 
