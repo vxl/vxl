@@ -622,7 +622,7 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
         int mask_j = jj - js;
         if (mask[mask_j][mask_i] && ii >= 0 && jj >= 0 && ii < ni && jj < nj) {
           float val = score*kernel[mask_j][mask_i];
-          unsigned int pix_val = (unsigned int)(val*volm_io::SCALE_VALUE) + 1;  // scale it
+          unsigned int pix_val = (unsigned int)(val*static_cast<float>(volm_io::SCALE_VALUE)) + 1;  // scale it
           if (img(ii,jj) > 0)
             img(ii,jj) = (img(ii,jj)+pix_val)/2;  // overwrites whatever values was in the image
           else
@@ -654,7 +654,7 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
         if (mask[mask_j][mask_i] && ii >= 0 && jj >= 0 && ii < ni && jj < nj) {
           float val = score*kernel[mask_j][mask_i];
           //unsigned int pix_val = (unsigned int)(val*volm_io::SCALE_VALUE) + 1;  // scale it
-          unsigned char pix_val = (unsigned char)(val*volm_io::SCALE_VALUE) + 1;
+          unsigned char pix_val = (unsigned char)(val*static_cast<float>(volm_io::SCALE_VALUE)) + 1;
 #if 0
           if (pix_val < volm_io::UNKNOWN) {
             pix_val = volm_io::STRONG_NEGATIVE;

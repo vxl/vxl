@@ -42,18 +42,18 @@ class sdet_sel : public sdet_sel_base
 public:
 
   //: constructor
-  sdet_sel<curve_model>(sdet_edgemap_sptr edgemap,
-                         sdet_curvelet_map& cvlet_map,
-                         sdet_edgel_link_graph& edge_link_graph,
-                         sdet_curve_fragment_graph& curve_frag_graph,
-                         sdet_curvelet_params cvlet_params=sdet_curvelet_params()) :
+  sdet_sel(sdet_edgemap_sptr edgemap,
+           sdet_curvelet_map& cvlet_map,
+           sdet_edgel_link_graph& edge_link_graph,
+           sdet_curve_fragment_graph& curve_frag_graph,
+           sdet_curvelet_params cvlet_params=sdet_curvelet_params()) :
       sdet_sel_base(edgemap, cvlet_map, edge_link_graph, curve_frag_graph, cvlet_params)
   {
     curvelet_map_.params_.C_type = curve_model().type; //set the right curvelet type
   }
 
   //: destructor
-  ~sdet_sel<curve_model>() override= default;
+  ~sdet_sel() override= default;
 
   //: form a curve hypothesis of the appropriate model given a pair of edgels
   inline curve_model* form_a_hypothesis(sdet_edgel* ref_e, sdet_edgel* e2, bool &ref_first,

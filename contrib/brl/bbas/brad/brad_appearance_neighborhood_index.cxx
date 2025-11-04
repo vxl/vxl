@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
+#include <random>
 #include "brad_appearance_neighborhood_index.h"
 #include "vnl/vnl_math.h"
 
@@ -146,7 +147,9 @@ void brad_appearance_neighborhood_index::compute_index(){
   std::vector<unsigned> img_index(n);
   for(unsigned i = 0; i<n; ++i)
     img_index[i]=i;
-  std::random_shuffle( img_index.begin(), img_index.end());
+  std::random_device rd;
+  std::mt19937 g(rd());
+  std::shuffle(img_index.begin(), img_index.end(), g);
   std::vector<unsigned> targets;
   // iterate over the image collection until all target candidates are exhausted
   unsigned ptr = 0;

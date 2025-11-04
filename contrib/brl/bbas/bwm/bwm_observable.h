@@ -28,7 +28,7 @@
 #include <vpgl/vpgl_lvcs.h>
 
 
-class bwm_observable : public vgui_observable, public vbl_ref_count
+class bwm_observable : public vbl_ref_count, public vgui_observable
 {
  public:
 

@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <algorithm>
+#include <random>
 #include "sdet_texture_classifier.h"
 //
 #include <brip/brip_vil_float_ops.h>
@@ -493,7 +494,9 @@ bool sdet_texture_classifier::compute_training_data(std::string const& category,
     }
   }
   // now shuffle and retrieve first n_samples_ elements
-  std::random_shuffle(pixels.begin(), pixels.end());
+  std::random_device rd;
+  std::mt19937 g(rd());
+  std::shuffle(pixels.begin(), pixels.end(), g);
   for (unsigned kkk = 0; kkk < n_samples_; kkk++) {
     int i = pixels[kkk].first;
     int j = pixels[kkk].second;

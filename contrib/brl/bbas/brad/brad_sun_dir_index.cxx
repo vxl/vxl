@@ -22,7 +22,7 @@ brad_sun_dir_index::brad_sun_dir_index(double longitude_deg, double latitude_deg
   hist_.mean(mean_az, mean_el);
   vnl_matrix_fixed<double, 2, 2> covar = hist_.covariance_matrix();
   // the eigensystem of the covariance matrix
-  vnl_symmetric_eigensystem<double> es(covar);
+  vnl_symmetric_eigensystem<double> es(covar.as_ref());
   vnl_vector<double> major_v = es.get_eigenvector(1);
   double major_sd = std::sqrt(es.get_eigenvalue(1));
   //the extent of each bin along the max eigenvector direction
@@ -101,7 +101,7 @@ std::vector<vnl_double_3> brad_sun_dir_index::major_path()
   hist_.mean(mean_az, mean_el);
   vnl_matrix_fixed<double, 2, 2> covar = hist_.covariance_matrix();
   // the eigensystem of the covariance matrix
-  vnl_symmetric_eigensystem<double> es(covar);
+  vnl_symmetric_eigensystem<double> es(covar.as_ref());
   vnl_vector<double> major_v = es.get_eigenvector(1);
   double major_sd = std::sqrt(es.get_eigenvalue(1));
   //the extent of each bin along the max eigenvector direction

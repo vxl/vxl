@@ -165,10 +165,10 @@ class brdb_value_t : public brdb_value
 {
  public:
   //: Default Constructor
-  brdb_value_t<T>() = default;
+  brdb_value_t() = default;
 
   //: Constructor
-  explicit brdb_value_t<T>(T  value)
+  explicit brdb_value_t(T value)
    : value_(std::move(value)) {}
 
   //: Return the string identifying this class

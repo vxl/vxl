@@ -14,7 +14,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_point_3d.h>
 
-class bugl_normal_point_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_count
+class bugl_normal_point_3d : public vbl_ref_count, public bugl_gaussian_point_3d<double>
 {
  public:
   bugl_normal_point_3d() = default;

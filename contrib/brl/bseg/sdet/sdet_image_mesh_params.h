@@ -19,7 +19,7 @@
 #endif
 #include <vgl/vgl_point_2d.h>
 
-class sdet_image_mesh_params : public gevd_param_mixin, public vbl_ref_count
+class sdet_image_mesh_params : public vbl_ref_count, public gevd_param_mixin
 {
  public:
   sdet_image_mesh_params(float smooth=1.0f, float thresh=2.0f,

@@ -16,7 +16,7 @@
 
 //: a specification of template class bugl_gaussian_point_2d
 //
-class bugl_normal_point_2d: public bugl_gaussian_point_2d<double>, public vbl_ref_count
+class bugl_normal_point_2d: public vbl_ref_count, public bugl_gaussian_point_2d<double>
 {
  public:
   bugl_normal_point_2d(vgl_point_2d<double> &p, vnl_matrix_fixed<double,2,2> &s)

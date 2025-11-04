@@ -93,8 +93,8 @@ class sdet_neighbor_less
   vnl_vector<double> query_;
 };
 
-class sdet_texture_classifier : public sdet_texture_classifier_params,
-                                public vbl_ref_count
+class sdet_texture_classifier : public vbl_ref_count,
+                                public sdet_texture_classifier_params
 {
  public:
   //: constructor from parameter block

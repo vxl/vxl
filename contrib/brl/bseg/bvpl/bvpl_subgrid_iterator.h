@@ -56,10 +56,15 @@ class bvpl_subgrid_iterator_base : public vbl_ref_count
 };
 
 template <class T>
-class bvpl_subgrid_iterator : public bvpl_subgrid_iterator_base,
-  public std::iterator<std::bidirectional_iterator_tag, T>
+class bvpl_subgrid_iterator : public bvpl_subgrid_iterator_base
 {
  public:
+  using iterator_category = std::bidirectional_iterator_tag;
+  using value_type        = T;
+  using difference_type   = std::ptrdiff_t;
+  using pointer           = value_type*;
+  using reference         = value_type&;
+
   bvpl_subgrid_iterator()
     : bvpl_subgrid_iterator_base() {}
 
