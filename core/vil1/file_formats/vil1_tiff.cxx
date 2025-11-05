@@ -266,7 +266,7 @@ vil1_tiff_generic_image::vil1_tiff_generic_image(vil1_stream * is)
 bool
 vil1_tiff_generic_image::get_property(const char * tag, void * prop) const
 {
-  unsigned short orientation;
+  unsigned short orientation = 0;
   int orientation_val_ok = TIFFGetField(p->tif, TIFFTAG_ORIENTATION, &orientation);
   if (orientation_val_ok != 1)
   {
@@ -292,9 +292,9 @@ vil1_tiff_generic_image::get_property(const char * tag, void * prop) const
 bool
 vil1_tiff_generic_image::set_property(const char * tag, const void * prop) const
 {
-  bool topdown;
+  bool topdown = false;
   get_property(vil1_property_top_row_first, &topdown);
-  bool leftright;
+  bool leftright = false;
   get_property(vil1_property_left_first, &leftright);
   const bool newprop = prop ? (*(const bool *)prop) : true; // default is to set the property
 
@@ -380,10 +380,10 @@ vil1_tiff_generic_image::read_header()
   TIFFPrintDirectory(p->tif, stderr);
 #endif
 
-  unsigned short bitspersample;
+  unsigned short bitspersample = 0;
   TIFFGetField(p->tif, TIFFTAG_BITSPERSAMPLE, &bitspersample);
 
-  unsigned short samplesperpixel;
+  unsigned short samplesperpixel = 0;
   // assume one sample per pixel if not in tiff file
   if (!TIFFGetField(p->tif, TIFFTAG_SAMPLESPERPIXEL, &samplesperpixel))
     samplesperpixel = 1;
@@ -407,11 +407,11 @@ vil1_tiff_generic_image::read_header()
       return false;
   }
 
-  unsigned long width;
+  unsigned long width = 0;
   TIFFGetField(p->tif, TIFFTAG_IMAGEWIDTH, &width);
   this->width_ = width;
 
-  unsigned long height;
+  unsigned long height = 0;
   TIFFGetField(p->tif, TIFFTAG_IMAGELENGTH, &height);
   this->height_ = height;
 

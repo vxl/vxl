@@ -213,7 +213,7 @@ vul_http_open(const char * url)
   // read from socket into memory.
   std::string contents;
   {
-    int n;
+    int n = 0;
 #if defined(_WIN32) && !defined(__CYGWIN__)
     while ((n = recv(tcp_socket, buffer, sizeof buffer, 0)) > 0)
     {
@@ -420,7 +420,7 @@ vul_http_exists(const char * url)
   // read from socket into memory.
   std::string contents;
   {
-    int n;
+    int n = 0;
 #if defined(_WIN32) && !defined(__CYGWIN__)
     if ((n = recv(tcp_socket, buffer, sizeof buffer, 0)) > 0)
     {
@@ -649,7 +649,7 @@ get_next_char(const std::string & in, unsigned int * i)
 {
   while (*i < in.size())
   {
-    char c;
+    char c = 0;
     c = in[(*i)++];
 
     if (c == '+')
@@ -678,7 +678,7 @@ get_next_char(const std::string & in, unsigned int * i)
 std::string
 vul_url::decode_base64(const std::string & in)
 {
-  int c;
+  int c = 0;
   char data[3];
 
   unsigned int i = 0;

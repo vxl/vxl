@@ -57,7 +57,7 @@ main1()
   std::list<example_sp_sptr> l;
 
   std::cout << "example_sp starts\n";
-  example_sp * ptr;
+  example_sp * ptr = nullptr;
   {
     example_sp_sptr sp; // refcount not incremented: no assignment yet
     std::cout << "example_sp_sptr created\n";

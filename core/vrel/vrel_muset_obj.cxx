@@ -10,6 +10,7 @@
 #endif
 #include <cassert>
 #include "vnl/vnl_math.h"
+#include <cmath>
 #include <vrel/vrel_muse_table.h>
 
 vrel_muset_obj::vrel_muset_obj(int max_n, bool use_sk_refine)
@@ -50,8 +51,8 @@ vrel_muset_obj::fcn(vect_const_iter begin,
                     vect_const_iter /*scale begin*/,
                     vnl_vector<double> * /*param_vector*/) const
 {
-  double sigma;
-  int best_k;
+  double sigma = NAN;
+  int best_k = 0;
   internal_fcn(begin, end, sigma, best_k);
   return sigma;
 }
@@ -63,8 +64,8 @@ vrel_muset_obj::fcn(vect_const_iter begin,
                     double /*scale*/,
                     vnl_vector<double> * /*param_vector*/) const
 {
-  double sigma;
-  int best_k;
+  double sigma = NAN;
+  int best_k = 0;
   internal_fcn(begin, end, sigma, best_k);
   return sigma;
 }
@@ -73,8 +74,8 @@ vrel_muset_obj::fcn(vect_const_iter begin,
 double
 vrel_muset_obj::scale(vect_const_iter begin, vect_const_iter end) const
 {
-  double sigma;
-  int best_k;
+  double sigma = NAN;
+  int best_k = 0;
   internal_fcn(begin, end, sigma, best_k);
   return sigma;
 }

@@ -85,7 +85,7 @@ _test_math_value_range(std::string type_name, bool test_nan = false)
   std::vector<T> values;
   vil_math_value_range_percentiles(img, fraction, values);
   std::cout << "true_value, value:\n";
-  for (size_t f; f < nfrac; ++f)
+  for (size_t f = 0; f < nfrac; ++f)
   {
     std::cout << true_values[f] << "," << values[f] << "\n";
   }
@@ -114,7 +114,7 @@ _test_math_value_range(std::string type_name, bool test_nan = false)
   std::vector<T> values2;
   vil_math_value_range_percentiles(img2, fraction, values2, true);
   std::cout << "true_value, value:\n";
-  for (size_t f; f < nfrac; ++f)
+  for (size_t f = 0; f < nfrac; ++f)
   {
     std::cout << true_values[f] << "," << values2[f] << "\n";
   }

@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -14,8 +16,8 @@
 static void
 test_rational_camera()
 {
-  bool good;
-  double eu, ev;
+  bool good = false;
+  double eu = NAN, ev = NAN;
 
   // Test indentity camera
   vpgl_rational_camera<double> icam; // default constructor

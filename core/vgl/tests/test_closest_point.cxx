@@ -1,5 +1,7 @@
 // Some tests for vgl_closest_point
 // Peter Vanroose, 5 June 2003
+#include <cmath>
+
 #include <iostream>
 #include <cmath>
 #include <limits>
@@ -222,7 +224,7 @@ test_line_3d_2_points_closest_point_t()
 
   vgl_point_3d<double> p, q, r;
   vgl_line_3d_2_points<double> l;
-  double t;
+  double t = NAN;
 
   // test for coincident
   p.set(3, 4, -1);
@@ -341,7 +343,7 @@ testPoly2DClosestPoint()
 {
   double poly_x[] = { 0.0, 0.0, 2.0, 2.0 };
   double poly_y[] = { 0.0, 1.0, 1.0, 0.0 }; // rectangle
-  double px, py;
+  double px = NAN, py = NAN;
 
   // test for coincident with non-closed polygon
   int idx = vgl_closest_point_to_non_closed_polygon(px, py, poly_x, poly_y, 4, 1.5, 1.0);
@@ -378,7 +380,7 @@ testPoly3DClosestPoint()
   double poly_x[] = { 0.0, 0.0, 2.0, 2.0 };
   double poly_y[] = { 0.0, 0.0, 2.0, 2.0 };
   double poly_z[] = { 0.0, 1.0, 1.0, 0.0 }; // rectangle
-  double px, py, pz;
+  double px = NAN, py = NAN, pz = NAN;
 
   // test for coincident with non-closed polygon
   int idx = vgl_closest_point_to_non_closed_polygon(px, py, pz, poly_x, poly_y, poly_z, 4, 1.5, 1.5, 1.0);

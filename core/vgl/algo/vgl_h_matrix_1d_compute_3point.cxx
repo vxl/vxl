@@ -1,5 +1,7 @@
 // This is core/vgl/algo/vgl_h_matrix_1d_compute_3point.cxx
 #include "vgl_h_matrix_1d_compute_3point.h"
+#include <cmath>
+
 #include <cassert>
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
@@ -25,7 +27,7 @@ direct_compute(double T[2][2],
                double q23)
 {
   double A[2][2], B[2][2];
-  double t;
+  double t = NAN;
 
   t = +(p22 * p13 - p12 * p23);
   A[0][0] = t * p11;

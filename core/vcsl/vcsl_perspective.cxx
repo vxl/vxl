@@ -1,5 +1,7 @@
 // This is core/vcsl/vcsl_perspective.cxx
 #include "vcsl_perspective.h"
+#include <cmath>
+
 #include <cassert>
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
@@ -40,8 +42,8 @@ vcsl_perspective::execute(const vnl_vector<double> & v, double time) const
   assert(v.size() == 3);
   assert(v[2] < 0);
 
-  double f;
-  double lambda;
+  double f = NAN;
+  double lambda = NAN;
 
   vnl_vector<double> result(2);
   f = focal_value(time);

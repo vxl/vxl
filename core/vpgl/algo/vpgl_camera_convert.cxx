@@ -18,6 +18,7 @@
 #include "vnl/vnl_vector_fixed.h"
 #include "vnl/vnl_matrix_fixed.h"
 #include "vnl/vnl_random.h"
+#include <cmath>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_qr.h>
 #include <vgl/algo/vgl_rotation_3d.h>
@@ -468,7 +469,7 @@ vpgl_perspective_camera_convert::convert(const vpgl_rational_camera<double> & ra
   for (unsigned i = 0; i < N; ++i)
   {
     vgl_point_3d<double> nwp = norm_world_pts[i];
-    double U, V;
+    double U = NAN, V = NAN;
     camera.project(nwp.x(), nwp.y(), nwp.z(), U, V);
     vgl_point_2d<double> ip = image_pts[i];
     double error = std::sqrt((ip.x() - U) * (ip.x() - U) + (ip.y() - V) * (ip.y() - V));
@@ -522,7 +523,7 @@ vpgl_perspective_camera_convert::convert_local(const vpgl_rational_camera<double
         vgl_point_3d<double> wc(approximation_volume.min_x() * cx + approximation_volume.max_x() * (1 - cx),
                                 approximation_volume.min_y() * cy + approximation_volume.max_y() * (1 - cy),
                                 approximation_volume.min_z() * cz + approximation_volume.max_z() * (1 - cz));
-        double lcx, lcy, lcz;
+        double lcx = NAN, lcy = NAN, lcz = NAN;
         lvcs_converter.global_to_local(wc.x(), wc.y(), wc.z(), vpgl_lvcs::wgs84, lcx, lcy, lcz);
         vgl_point_3d<double> wc_loc(lcx, lcy, lcz);
         if (cx == 0 && cy == 0 && cz == 0)
@@ -611,7 +612,7 @@ vpgl_perspective_camera_convert::convert_local(const vpgl_rational_camera<double
     norm_image_pts.push_back(nip);
 
     // Convert to local coords.
-    double lcx, lcy, lcz;
+    double lcx = NAN, lcy = NAN, lcz = NAN;
     lvcs_converter.global_to_local(wp.x(), wp.y(), wp.z(), vpgl_lvcs::wgs84, lcx, lcy, lcz);
     vgl_homg_point_3d<double> wp_loc(lcx, lcy, lcz);
 
@@ -649,7 +650,7 @@ vpgl_perspective_camera_convert::convert_local(const vpgl_rational_camera<double
   for (unsigned i = 0; i < N; ++i)
   {
     vgl_point_3d<double> nwp = norm_world_pts[i];
-    double U, V;
+    double U = NAN, V = NAN;
     camera.project(nwp.x(), nwp.y(), nwp.z(), U, V);
     vgl_point_2d<double> ip = image_pts[i];
     double error = std::sqrt((ip.x() - U) * (ip.x() - U) + (ip.y() - V) * (ip.y() - V));
@@ -832,7 +833,7 @@ vpgl_generic_camera_convert::convert(const vpgl_local_rational_camera<double> & 
   double el_high = zoff + zscl / 2;
   double lon = rat_cam.offset(vpgl_rational_camera<double>::X_INDX);
   double lat = rat_cam.offset(vpgl_rational_camera<double>::Y_INDX);
-  double x, y, z_low, z_high;
+  double x = NAN, y = NAN, z_low = NAN, z_high = NAN;
   // convert high and low elevations to local z values
   rat_cam.lvcs().global_to_local(lon, lat, el_low, vpgl_lvcs::wgs84, x, y, z_low, vpgl_lvcs::DEG);
   rat_cam.lvcs().global_to_local(lon, lat, el_high, vpgl_lvcs::wgs84, x, y, z_high, vpgl_lvcs::DEG);
@@ -1462,7 +1463,7 @@ vpgl_generic_camera_convert::convert(vpgl_geo_camera & geocam,
   for (int j = 0; j < nj; ++j)
     for (int i = 0; i < ni; ++i)
     {
-      double x, y, z;
+      double x = NAN, y = NAN, z = NAN;
       geocam.backproject(i * scale, j * scale, x, y, z);
       org.set(x, y, height);
       rays[j][i].set(org, dir);
@@ -1491,7 +1492,7 @@ vpgl_generic_camera_convert::convert(vpgl_geo_camera & geocam,
   for (int j = 0; j < nj; ++j)
     for (int i = 0; i < ni; ++i)
     {
-      double x, y, z;
+      double x = NAN, y = NAN, z = NAN;
       geocam.backproject(i * scale, j * scale, x, y, z);
       org.set(x, y, height);
       rays[j][i].set(org, dir);
@@ -1522,7 +1523,7 @@ vpgl_affine_camera_convert::convert(const vpgl_local_rational_camera<double> & c
     double y = rng.drand64(min_y, max_y);
     double z = rng.drand64(min_z, max_z);
     world_pts.emplace_back(x, y, z);
-    double u, v;
+    double u = NAN, v = NAN;
     camera_in.project(x, y, z, u, v); // local rational camera has an lvcs, so it handles, local coord to global to
                                       // image point projection internally
     image_pts.emplace_back(u, v);
@@ -1558,10 +1559,10 @@ vpgl_affine_camera_convert::convert(const vpgl_RSM_camera<double> & camera_in,
     double z = rng.drand64(min_z, max_z);
     world_pts.emplace_back(x, y, z);
     // convert to lon, lat, elev in (deg, deg, meters)
-    double X, Y, Z;
+    double X = NAN, Y = NAN, Z = NAN;
     lvcs.local_to_global(x, y, z, vpgl_lvcs::wgs84, X, Y, Z);
     // camera projection
-    double u, v;
+    double u = NAN, v = NAN;
     camera_in.project(X, Y, Z, u, v);
     image_pts.emplace_back(u, v);
   }
@@ -1630,7 +1631,7 @@ vpgl_rational_camera_convert::convert(vpgl_RSM_camera<double> const & camera_in,
     double y = rng.drand64(min_y, max_y);
     double z = rng.drand64(min_z, max_z);
     world_pts.emplace_back(x, y, z);
-    double u, v;
+    double u = NAN, v = NAN;
     camera_in.project(x, y, z, u, v);
     image_pts.emplace_back(u, v);
   }

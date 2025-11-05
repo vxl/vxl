@@ -26,7 +26,7 @@ static void
 test_camera_io()
 {
   std::cout << "Testing base camera io" << std::endl;
-  vpgl_camera<double> *cam, *cam_r;
+  vpgl_camera<double> *cam = nullptr, *cam_r = nullptr;
   //===========   proj_camera ==================
   // Some matrices for testing.
   double random_list[12] = { 10.6, 1.009, .676, .5, -13, -10, 8, 5, 88, -2, -100, 11 };

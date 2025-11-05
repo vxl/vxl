@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include <iostream>
 #include <cmath>
 #include "vrel_misc.h"
@@ -12,7 +14,7 @@
 double
 vrel_misc_erfcc(double x)
 {
-  double t, z, ans;
+  double t = NAN, z = NAN, ans = NAN;
 
   z = std::fabs(x);
   t = 1.0 / (1.0 + 0.5 * z);
@@ -58,8 +60,8 @@ vrel_misc_erfcc(double x)
 double
 vrel_misc_gaussian_cdf_inv(double p)
 {
-  double dp, dx, dt, ddq, dq;
-  int newt;
+  double dp = NAN, dx = NAN, dt = NAN, ddq = NAN, dq = NAN;
+  int newt = 0;
 
   dp = (p <= 0.5) ? p : 1.0 - p; // make between 0 and 0.5
 

@@ -10,6 +10,7 @@
 #include "vnl/vnl_vector_fixed.h"
 #include "vnl/vnl_matrix_fixed.h"
 #include "vnl/vnl_random.h"
+#include <cmath>
 #include <vpgl/algo/vpgl_fit_rational_cubic.h>
 
 static vnl_vector_fixed<double, 20>
@@ -146,7 +147,7 @@ test_fit_rational_cubic()
     double z = 2.0 * rng.drand64() - 1.0;
     vgl_point_3d<double> p3d(x, y, z);
     ground_pts.push_back(p3d);
-    double u, v;
+    double u = NAN, v = NAN;
     project(x, y, z, u, v, neu_u, den_u, neu_v, den_v);
     image_pts.emplace_back(u, v);
   }
@@ -267,7 +268,7 @@ test_fit_rational_cubic()
     double z = 2.0 * rng.drand64() - 1.0;
     vgl_point_3d<double> p3d(x, y, z);
     ground_pts.push_back(p3d);
-    double u, v;
+    double u = NAN, v = NAN;
     project(x, y, z, u, v, neu_u, den_u, neu_v, den_v);
     image_pts.emplace_back(u, v);
   }

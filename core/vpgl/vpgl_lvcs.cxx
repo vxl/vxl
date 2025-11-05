@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include <string>
 #include <cstring>
 #include <fstream>
@@ -125,7 +127,7 @@ vpgl_lvcs::vpgl_lvcs(double orig_lat,
   , loy_(loy)
   , theta_(theta)
 {
-  double local_to_meters, local_to_feet, local_to_radians, local_to_degrees;
+  double local_to_meters = NAN, local_to_feet = NAN, local_to_radians = NAN, local_to_degrees = NAN;
   this->get_angle_conversions(local_to_radians, local_to_degrees);
   this->get_length_conversions(local_to_meters, local_to_feet);
 
@@ -168,7 +170,7 @@ vpgl_lvcs::vpgl_lvcs(double orig_lat,
   , geo_angle_unit_(ang_unit)
   , localXYZUnit_(len_unit)
 {
-  double local_to_meters, local_to_feet, local_to_radians, local_to_degrees;
+  double local_to_meters = NAN, local_to_feet = NAN, local_to_radians = NAN, local_to_degrees = NAN;
   this->get_angle_conversions(local_to_radians, local_to_degrees);
   this->get_length_conversions(local_to_meters, local_to_feet);
 
@@ -215,7 +217,7 @@ vpgl_lvcs::vpgl_lvcs(double lat_low,
   localCSOriginLat_ = average_lat;
   localCSOriginLon_ = average_lon;
 
-  double local_to_meters, local_to_feet, local_to_radians, local_to_degrees;
+  double local_to_meters = NAN, local_to_feet = NAN, local_to_radians = NAN, local_to_degrees = NAN;
   this->get_angle_conversions(local_to_radians, local_to_degrees);
   this->get_length_conversions(local_to_meters, local_to_feet);
 
@@ -269,10 +271,10 @@ vpgl_lvcs::degrees_to_dms(double geoval, int & degrees, int & minutes, double & 
 void
 vpgl_lvcs::compute_scale()
 {
-  double wgs84_phi, wgs84_lamda, wgs84_hgt; // WGS84 coords of the origin
-  double grs84_x, grs84_y, grs84_z;         // GRS84 coords of the origin
-  double grs84_x1, grs84_y1, grs84_z1;
-  double to_meters, to_feet, to_radians, to_degrees;
+  double wgs84_phi = NAN, wgs84_lamda = NAN, wgs84_hgt = NAN; // WGS84 coords of the origin
+  double grs84_x = NAN, grs84_y = NAN, grs84_z = NAN;         // GRS84 coords of the origin
+  double grs84_x1 = NAN, grs84_y1 = NAN, grs84_z1 = NAN;
+  double to_meters = NAN, to_feet = NAN, to_radians = NAN, to_degrees = NAN;
   this->get_angle_conversions(to_radians, to_degrees);
   this->get_length_conversions(to_meters, to_feet);
   // Convert origin to WGS84
@@ -400,7 +402,7 @@ vpgl_lvcs::compute_scale()
 void
 vpgl_lvcs::set_utm(int zone, bool south_flag)
 {
-  double local_to_radians, local_to_degrees;
+  double local_to_radians = NAN, local_to_degrees = NAN;
   this->get_angle_conversions(local_to_radians, local_to_degrees);
 
   // use the force_utm_zone/force_south_flag form of vpgl_utm::transform
@@ -439,12 +441,12 @@ vpgl_lvcs::local_to_global(const double pointin_x,
                            AngUnits output_ang_unit,
                            LenUnits output_len_unit) const
 {
-  double local_to_meters, local_to_feet, local_to_radians, local_to_degrees;
+  double local_to_meters = NAN, local_to_feet = NAN, local_to_radians = NAN, local_to_degrees = NAN;
   this->get_angle_conversions(local_to_radians, local_to_degrees);
   this->get_length_conversions(local_to_meters, local_to_feet);
 
-  double local_lat, local_lon, local_elev;
-  double global_lat, global_lon, global_elev;
+  double local_lat = NAN, local_lon = NAN, local_elev = NAN;
+  double global_lat = NAN, global_lon = NAN, global_elev = NAN;
 
   // First apply transform to align axes with compass.
   double aligned_x = pointin_x;
@@ -631,11 +633,11 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
                            AngUnits input_ang_unit,
                            LenUnits input_len_unit) const
 {
-  double local_to_meters, local_to_feet, local_to_radians, local_to_degrees;
+  double local_to_meters = NAN, local_to_feet = NAN, local_to_radians = NAN, local_to_degrees = NAN;
   this->get_angle_conversions(local_to_radians, local_to_degrees);
   this->get_length_conversions(local_to_meters, local_to_feet);
-  double global_lat, global_lon, global_elev;
-  double local_lat, local_lon, local_elev;
+  double global_lat = NAN, global_lon = NAN, global_elev = NAN;
+  double local_lat = NAN, local_lon = NAN, local_elev = NAN;
 
   global_lat = pointin_lat;
   global_lon = pointin_lon;
@@ -709,8 +711,8 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
       nad27n_to_wgs84(global_lat, global_lon, global_elev, &local_lat, &local_lon, &local_elev);
 
       vpgl_utm u;
-      int zone;
-      bool south_flag;
+      int zone = 0;
+      bool south_flag = false;
       u.transform(local_lat,
                   local_lon,
                   pointout_x,
@@ -755,8 +757,8 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
       wgs72_to_wgs84(global_lat, global_lon, global_elev, &local_lat, &local_lon, &local_elev);
 
       vpgl_utm u;
-      int zone;
-      bool south_flag;
+      int zone = 0;
+      bool south_flag = false;
       u.transform(local_lat,
                   local_lon,
                   pointout_x,
@@ -799,8 +801,8 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
     else if (local_cs_name_ == vpgl_lvcs::utm)
     {
       vpgl_utm u;
-      int zone;
-      bool south_flag;
+      int zone = 0;
+      bool south_flag = false;
       u.transform(global_lat,
                   global_lon,
                   pointout_x,
@@ -937,7 +939,7 @@ vpgl_lvcs::read(std::istream & strm)
 
   if (local_cs_name_ == vpgl_lvcs::utm)
   {
-    double local_to_meters, local_to_feet, local_to_radians, local_to_degrees;
+    double local_to_meters = NAN, local_to_feet = NAN, local_to_radians = NAN, local_to_degrees = NAN;
     this->get_angle_conversions(local_to_radians, local_to_degrees);
     this->get_length_conversions(local_to_meters, local_to_feet);
 
@@ -1004,7 +1006,7 @@ vpgl_lvcs::local_transform(double & x, double & y) const
   double yo = y - loy_;
 
   // Rotate about that point to align y with north.
-  double ct, st;
+  double ct = NAN, st = NAN;
   if (std::fabs(theta) < 1e-5)
   {
     ct = 1.0;
@@ -1029,7 +1031,7 @@ vpgl_lvcs::inverse_local_transform(double & x, double & y) const
     theta = theta_ * DEGREES_TO_RADIANS;
 
   // Rotate about that point to align y with north.
-  double ct, st;
+  double ct = NAN, st = NAN;
   if (std::fabs(theta) < 1e-5)
   {
     ct = 1.0;
@@ -1109,8 +1111,8 @@ vpgl_lvcs::b_read(vsl_b_istream & is)
 {
   if (!is)
     return;
-  int val;
-  short ver;
+  int val = 0;
+  short ver = 0;
   vsl_b_read(is, ver);
   switch (ver)
   {

@@ -35,7 +35,7 @@ bool
 vil_geotiff_header::gtif_tiepoints(std::vector<std::vector<double>> & tiepoints)
 {
   double * points = nullptr;
-  short count;
+  short count = 0;
   if (TIFFGetField(tif_, GTIFF_TIEPOINTS, &count, &points) < 0)
     return false;
 
@@ -62,8 +62,8 @@ vil_geotiff_header::gtif_tiepoints(std::vector<std::vector<double>> & tiepoints)
 bool
 vil_geotiff_header::gtif_pixelscale(double & scale_x, double & scale_y, double & scale_z)
 {
-  double * data;
-  short count;
+  double * data = nullptr;
+  short count = 0;
   if (TIFFGetField(tif_, GTIFF_PIXELSCALE, &count, &data))
   {
     assert(count == 3);
@@ -79,7 +79,7 @@ vil_geotiff_header::gtif_pixelscale(double & scale_x, double & scale_y, double &
 bool
 vil_geotiff_header::gtif_trans_matrix(double *& trans_matrix)
 {
-  short count;
+  short count = 0;
   if (TIFFGetField(tif_, GTIFF_TRANSMATRIX, &count, &trans_matrix))
   {
     assert(count == 16);
@@ -92,7 +92,7 @@ vil_geotiff_header::gtif_trans_matrix(double *& trans_matrix)
 bool
 vil_geotiff_header::gtif_modeltype(modeltype_t & type)
 {
-  geocode_t model;
+  geocode_t model = 0;
   if (!GTIFKeyGet(gtif_, GTModelTypeGeoKey, &model, 0, 1))
   {
     std::cerr << "NO Model Type defined!!!!\n";
@@ -108,7 +108,7 @@ vil_geotiff_header::gtif_modeltype(modeltype_t & type)
 bool
 vil_geotiff_header::gtif_rastertype(rastertype_t & type)
 {
-  geocode_t raster;
+  geocode_t raster = 0;
   if (!GTIFKeyGet(gtif_, GTRasterTypeGeoKey, &raster, 0, 1))
   {
     std::cerr << "NO Raster Type, failure!!!!\n";
@@ -124,7 +124,7 @@ vil_geotiff_header::gtif_rastertype(rastertype_t & type)
 bool
 vil_geotiff_header::geounits(geounits_t & units)
 {
-  short nGeogUOMLinear;
+  short nGeogUOMLinear = 0;
   if (!GTIFKeyGet(gtif_, GeogLinearUnitsGeoKey, &nGeogUOMLinear, 0, 1))
   {
     std::cerr << "NO GEOUNITS, failure!!!!\n";
@@ -143,9 +143,9 @@ vil_geotiff_header::PCS_WGS84_UTM_zone(int & zone, GTIF_HEMISPH & hemisph) // he
   modeltype_t type;
   if (gtif_modeltype(type) && type == ModelTypeProjected)
   {
-    void * value;
-    int size;
-    int length;
+    void * value = nullptr;
+    int size = 0;
+    int length = 0;
     tagtype_t ttype;
     bool status = get_key_value(ProjectedCSTypeGeoKey, &value, size, length, ttype);
     if (!status)
@@ -200,12 +200,12 @@ vil_geotiff_header::GCS_WGS84_MET_DEG()
   modeltype_t type;
   if (gtif_modeltype(type) && type == ModelTypeGeographic)
   {
-    void * value;
-    int size;
-    int length;
+    void * value = nullptr;
+    int size = 0;
+    int length = 0;
     tagtype_t ttype;
-    bool status;
-    short * val;
+    bool status = false;
+    short * val = nullptr;
 
     // confirm linear units (optional) are in meters
     status = get_key_value(GeogLinearUnitsGeoKey, &value, size, length, ttype);
@@ -257,9 +257,9 @@ vil_geotiff_header::PCS_NAD83_UTM_zone(int & zone, GTIF_HEMISPH & hemisph)
   modeltype_t type;
   if (gtif_modeltype(type) && type == ModelTypeProjected)
   {
-    void * value;
-    int size;
-    int length;
+    void * value = nullptr;
+    int size = 0;
+    int length = 0;
     tagtype_t ttype;
     bool status = get_key_value(ProjectedCSTypeGeoKey, &value, size, length, ttype);
     if (!status)

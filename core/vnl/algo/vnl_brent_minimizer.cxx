@@ -5,6 +5,7 @@
 #include <cassert>
 #include <iostream>
 #include <algorithm>
+#include <cmath>
 #include <vnl/algo/vnl_brent_minimizer.h>
 #include <vnl/algo/vnl_bracket_minimum.h>
 
@@ -72,10 +73,10 @@ vnl_brent_minimizer::minimize_given_bounds_and_one_f(double ax, double bx, doubl
   // Note that *f_ takes a vector input - f converts a scalar to a vector
   vnl_brent_minimizer_func f(*f_);
 
-  double x = bx; // Current best estimate of minimum
-  double w = x;  // Next best point
-  double v = w;  // Third best point
-  double u;      // Most recently evaluated point
+  double x = bx;  // Current best estimate of minimum
+  double w = x;   // Next best point
+  double v = w;   // Third best point
+  double u = NAN; // Most recently evaluated point
 
   // Function evaluations at these points
   double fx = fb;
@@ -208,10 +209,10 @@ vnl_brent_minimizer::minimize_given_bounds_and_all_f(double ax, double bx, doubl
 
   double x = bx; // Current best estimate of minimum
   double fx = fb;
-  double w;
-  double fw; // Next best point
-  double v;
-  double fv; // Third best point
+  double w = NAN;
+  double fw = NAN; // Next best point
+  double v = NAN;
+  double fv = NAN; // Third best point
 
   if (fa < fc)
   {
@@ -228,7 +229,7 @@ vnl_brent_minimizer::minimize_given_bounds_and_all_f(double ax, double bx, doubl
     fv = fa;
   }
 
-  double u;
+  double u = NAN;
   // Most recently evaluated point and its value
 
   double m = 0.5 * (ax + cx);             // Midpoint of (a,c)
@@ -340,9 +341,9 @@ vnl_brent_minimizer::minimize(double x)
 {
   double ax = x - 1.0;
   double cx = x + 1.0;
-  double fa;
-  double fx;
-  double fc;
+  double fa = NAN;
+  double fx = NAN;
+  double fc = NAN;
   vnl_bracket_minimum(*f_, ax, x, cx, fa, fx, fc);
 
   return minimize_given_bounds_and_all_f(ax, x, cx, fa, fx, fc);

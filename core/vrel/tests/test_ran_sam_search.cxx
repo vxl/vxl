@@ -251,7 +251,7 @@ test_ran_sam_search()
   //
   //  Actually running the random sampler ...
   //
-  bool ok;
+  bool ok = false;
   // int trace_level=0;
   TEST("estimate succeed", ransam->estimate(lr, lms), true);
   vnl_vector<double> est_params = ransam->params();

@@ -84,7 +84,7 @@ vnl_matrix<double>
 vrel_affine_est::A(const vnl_vector<double> & params) const
 {
   vnl_matrix<double> A(min_num_pts_ - 1, min_num_pts_ - 1, 0.0);
-  unsigned index;
+  unsigned index = 0;
   for (unsigned int i = 0; i < min_num_pts_ - 1; ++i)
   {
     index = i * min_num_pts_;

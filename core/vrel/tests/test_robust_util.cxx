@@ -7,6 +7,7 @@
 #endif
 #include "vnl/vnl_math.h"
 
+#include <cmath>
 #include <vrel/vrel_util.h>
 #include "testlib/testlib_test.h"
 
@@ -62,7 +63,7 @@ test_robust_util()
   double test_arr4[] = { -1.0, -2.0, 1.2, -4.0, -1.5, -11.0, 14.1, 2.2, 56.0, -2.4,
                          3.1,  1.1,  2.1, -2.1, -0.8, 0.6,   13.1, 6.2, 55.8 };
   std::vector<double> test_vect4(test_arr4, test_arr4 + 18);
-  double median, scale;
+  double median = NAN, scale = NAN;
   constexpr double corr_median = 1.1;
   dof = 1;
   const double corr_scale = 3.2 * (1.0 + 5.0 / (18.0 - dof)) * 1.4826;
@@ -78,7 +79,7 @@ test_robust_util()
   //
   double test_arr2[] = { -1.0, -2.0, 1.2, -4.0, -1.5, -11.0, 14.1, 2.2, -56.0, -2.4, 3.1, 1.1, 2.1, -2.1, -0.8, 0.6 };
   std::vector<double> test_vect2(test_arr2, test_arr2 + 16);
-  double center, half_width;
+  double center = NAN, half_width = NAN;
   const double corr_center = -0.45, corr_half_width = 1.65;
   vrel_util_intercept_adjustment(test_vect2.begin(), test_vect2.end(), center, half_width, 1);
   TEST_NEAR("vrel_util_intercept_adjustment_copy --- correct?", center, corr_center, 1e-6);
@@ -91,7 +92,7 @@ test_robust_util()
   //
   //  vrel_util_intercept_adjust_stats
   //
-  double mean, std, frac;
+  double mean = NAN, std = NAN, frac = NAN;
   double test_arr3[] = { -1.0, -2.0, 1.2, -4.0, -1.5, -11.0, 14.1, 2.2, -56.0, -2.4, 3.1, 1.1, 2.1, -2.1, -0.8, 0.6 };
   std::vector<double> test_vec3(test_arr3, test_arr3 + 16);
   const double corr_mean = -0.2692307, corr_std = 2.140632, corr_frac = 0.8125;

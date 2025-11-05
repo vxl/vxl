@@ -11,6 +11,7 @@
 #include "vil/vil_load.h"
 #include "vil/vil_save.h"
 #include "vil/vil_image_view.h"
+#include <cmath>
 #include <vil/algo/vil_normalised_correlation_2d.h>
 #include "vil/vil_convert.h"
 
@@ -43,7 +44,7 @@ main(int argc, char ** argv)
   // Create a normalised kernel image
   vil_image_view<float> kernel_image;
   vil_convert_cast(kernel_im_byte, kernel_image);
-  float mean, var;
+  float mean = NAN, var = NAN;
   vil_math_mean_and_variance(mean, var, kernel_image, 0);
   double ks = 1.0 / std::sqrt(var);
   vil_math_scale_and_offset_values(kernel_image, ks, -ks * mean);
@@ -53,7 +54,7 @@ main(int argc, char ** argv)
   vil_normalised_correlation_2d(src_im, dest_image, kernel_image, double());
 
   // Stretch range to [0,255]
-  float min_v, max_v;
+  float min_v = NAN, max_v = NAN;
   vil_math_value_range(dest_image, min_v, max_v);
   double s = 255 / (max_v - min_v);
   vil_math_scale_and_offset_values(dest_image, s, -s * min_v);

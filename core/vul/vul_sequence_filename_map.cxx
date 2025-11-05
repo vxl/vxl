@@ -130,7 +130,7 @@ vul_sequence_filename_map::parse()
       temp.erase(re.start(0));
     }
     // This should have the form "img.%03d" or "img.###". Split it into basename and index format
-    std::size_t pos;
+    std::size_t pos = 0;
     if ((pos = bt.find('%')) != std::string::npos)
       index_format_ = bt.substr(pos);
     else if ((pos = bt.find('#')) != std::string::npos)

@@ -311,7 +311,7 @@ vul_psfile::print_greyscale_image(const unsigned char * buffer, int sizex, int s
     int countrow = 0;
     for (int i = 0; i < new_width; i++)
     {
-      int index;
+      int index = 0;
 
       if (reduction_factor == 1)
         index = int(*(buffer + width * j + i));
@@ -470,7 +470,7 @@ vul_psfile::print_color_image(const unsigned char * data, int sizex, int sizey)
       for (int c = 0; c < bytes_per_pixel; ++c)
       {
         // get RGB hex index.
-        int index;
+        int index = 0;
 
         if (reduction_factor == 1)
           index = int(*(data + (sizex * j + i) * bytes_per_pixel + c));

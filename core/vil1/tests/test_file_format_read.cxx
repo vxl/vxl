@@ -178,10 +178,10 @@ test(const char * true_data_file, const CheckPixel & check)
   //        plane1pix1comp1 plane1pix1comp2 ... plane1pixNcompC ... planePpix1comp1 ... planePpixNcompC
   //      where N = width*height
 
-  int num_planes;
-  int num_comp;
-  int width;
-  int height;
+  int num_planes = 0;
+  int num_comp = 0;
+  int width = 0;
+  int height = 0;
 
   std::ifstream fin((image_base + true_data_file).c_str());
   if (!(fin >> num_planes >> num_comp >> width >> height))

@@ -1,5 +1,6 @@
 #include "vpgl_nitf_RSM_camera_extractor.h"
 #include "vpgl_nitf_rational_camera.h"
+#include <cmath>
 #include <vpgl/vpgl_affine_camera.h>
 #include <vil/vil_load.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
@@ -185,7 +186,7 @@ public:
   project(const double x, const double y, const double z, double & u, double & v) const override
   {
     // first, convert local to global geographic coordinates
-    double lon, lat, gz;
+    double lon = NAN, lat = NAN, gz = NAN;
     lvcs_.local_to_global(x, y, z, vpgl_lvcs::wgs84, lon, lat, gz);
     // convert to radians
     double lon_rad = lon / vnl_math::deg_per_rad, lat_rad = lat / vnl_math::deg_per_rad;
@@ -367,7 +368,7 @@ vpgl_nitf_RSM_camera_extractor::determine_header_status(vil_nitf2_image_subheade
                                                         bool & header_has_RSM,
                                                         int & ixsofl)
 {
-  int ixshdl;
+  int ixshdl = 0;
   vil_nitf2_tagged_record_sequence::const_iterator tres_itr;
   header_has_tres = false;
   header_has_RSM = false;
@@ -769,7 +770,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         mdata.ground_domain_ = nt15.value_;
         bool opt = (nt15.value_ == "G") || (nt15.value_ == "H");
         std::string s;
-        double xuor, yuor, zuor;
+        double xuor = NAN, yuor = NAN, zuor = NAN;
         vnl_matrix_fixed<double, 3, 3> & m = mdata.rotation_;
 
         nitf_tre<double> nt16("XUOR", opt, false);
@@ -852,7 +853,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           mdata.local_transform_valid = true;
         }
 
-        double x, y, z;
+        double x = NAN, y = NAN, z = NAN;
         nitf_tre<double> nt28("V1X", false, false);
         nt28.get_append(tres_itr, tre_str, v);
         nt28.get(tres_itr, x);
@@ -1340,7 +1341,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         nitf_tre<std::string> nt8("CVDATE", opt, false);
         nt8.get_append(tres_itr, tre_str, v);
 
-        double xuol, yuol, zuol;
+        double xuol = NAN, yuol = NAN, zuol = NAN;
         std::string s;
         nitf_tre<std::string> nt9("XUOL", opt, false);
         nt9.get_append(tres_itr, tre_str, v);
@@ -1816,7 +1817,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           apdata.phi_ = phi;
         }
         opt = !UCreq;
-        double urr;
+        double urr = NAN;
         nitf_tre<std::string> nt63("URR", opt, false);
         nt63.get_append(tres_itr, tre_str, v);
         if (!opt)
@@ -1825,7 +1826,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt63.get(tres_itr, urrs);
           ASC_double(urrs, urr);
         }
-        double ucc;
+        double ucc = NAN;
         nitf_tre<std::string> nt64("UCC", opt, false);
         nt64.get_append(tres_itr, tre_str, v);
         if (!opt)
@@ -1834,7 +1835,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt64.get(tres_itr, uccs);
           ASC_double(uccs, ucc);
         }
-        double urc;
+        double urc = NAN;
         nitf_tre<std::string> nt65("URC", opt, false);
         nt65.get_append(tres_itr, tre_str, v);
         if (!opt)
@@ -1866,7 +1867,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt67.get(tres_itr, ucorsrs);
           for (const auto & r : ucorsrs)
           {
-            double val;
+            double val = NAN;
             ASC_double(r, val);
             ucorsr.push_back(val);
           }
@@ -1880,7 +1881,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt68.get(tres_itr, utausrs);
           for (const auto & r : utausrs)
           {
-            double val;
+            double val = NAN;
             ASC_double(r, val);
             utausr.push_back(val);
           }
@@ -1901,7 +1902,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt70.get(tres_itr, ucorscs);
           for (const auto & c : ucorscs)
           {
-            double val;
+            double val = NAN;
             ASC_double(c, val);
             ucorsc.push_back(val);
           }
@@ -1915,7 +1916,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt71.get(tres_itr, utauscs);
           for (const auto & c : utauscs)
           {
-            double val;
+            double val = NAN;
             ASC_double(c, val);
             utausc.push_back(val);
           }
@@ -2005,7 +2006,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           apdata.rect_local_coordinate_system_ = (nt9.value_ == "R");
 
         // the scale offsets apply to both R and not R coordinate systems
-        double noffx, noffy, noffz, nsfx, nsfy, nsfz;
+        double noffx = NAN, noffy = NAN, noffz = NAN, nsfx = NAN, nsfy = NAN, nsfz = NAN;
         nitf_tre<std::string> nt10("NSFX", opt, false);
         nt10.get_append(tres_itr, tre_str, v);
         if (!opt)
@@ -2273,7 +2274,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           for (size_t r = 0; r < npar; ++r)
             for (size_t c = 0; c < n_basis; ++c)
             {
-              double val;
+              double val = NAN;
               ASC_double(Avals[idx], val);
               apdata.A_matrix_[r][c] = val;
               idx++;
@@ -2304,7 +2305,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
             for (size_t r = 0; r < covar_dim; ++r)
               for (size_t c = r; c < covar_dim; ++c)
               {
-                double val;
+                double val = NAN;
                 ASC_double(errcvg_svals[idx], val);
                 cvar[r][c] = val;
                 if (r != c)
@@ -2356,7 +2357,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt47.get(tres_itr, corsegs);
           for (const auto & corseg : corsegs)
           {
-            double val;
+            double val = NAN;
             ASC_double(corseg, val);
             corseg_vals.push_back(val);
           }
@@ -2371,7 +2372,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt48.get(tres_itr, tausegs);
           for (const auto & tauseg : tausegs)
           {
-            double val;
+            double val = NAN;
             ASC_double(tauseg, val);
             tauseg_vals.push_back(val);
           }
@@ -2385,7 +2386,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt49.get(tres_itr, Acs);
           for (const auto & Ac : Acs)
           {
-            double val;
+            double val = NAN;
             ASC_double(Ac, val);
             Acoef_vals.push_back(val);
           }
@@ -2399,7 +2400,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt50.get(tres_itr, alphs);
           for (const auto & alph : alphs)
           {
-            double val;
+            double val = NAN;
             ASC_double(alph, val);
             alpha_vals.push_back(val);
           }
@@ -2414,7 +2415,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt51.get(tres_itr, bets);
           for (const auto & bet : bets)
           {
-            double val;
+            double val = NAN;
             ASC_double(bet, val);
             beta_vals.push_back(val);
           }
@@ -2429,7 +2430,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt52.get(tres_itr, Tcs);
           for (const auto & Tc : Tcs)
           {
-            double val;
+            double val = NAN;
             ASC_double(Tc, val);
             T_vals.push_back(val);
           }
@@ -2471,7 +2472,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           for (size_t r = 0; r < npar; ++r)
             for (size_t c = 0; c < nparob; ++c)
             {
-              double val;
+              double val = NAN;
               ASC_double(Mvals[idx], val);
               apdata.mapping_matrix_[r][c] = val;
               idx++;
@@ -2479,7 +2480,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         }
         // Unmodeled Error
         opt = !UCreq;
-        double urr;
+        double urr = NAN;
         nitf_tre<std::string> nt54("URR", opt, false);
         nt54.get_append(tres_itr, tre_str, v);
         if (!opt)
@@ -2488,7 +2489,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt54.get(tres_itr, urrs);
           ASC_double(urrs, urr);
         }
-        double ucc;
+        double ucc = NAN;
         nitf_tre<std::string> nt55("UCC", opt, false);
         nt55.get_append(tres_itr, tre_str, v);
         if (!opt)
@@ -2497,7 +2498,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt55.get(tres_itr, uccs);
           ASC_double(uccs, ucc);
         }
-        double urc;
+        double urc = NAN;
         nitf_tre<std::string> nt56("URC", opt, false);
         nt56.get_append(tres_itr, tre_str, v);
         if (!opt)
@@ -2521,7 +2522,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         }
         if (apdata.unmodeled_analytic_)
         {
-          double uA_r;
+          double uA_r = NAN;
           nitf_tre<std::string> nt58("UACR", "vector", opt, false);
           nt58.get_append(tres_itr, tre_str, v);
           if (!opt)
@@ -2530,7 +2531,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
             nt58.get(tres_itr, uacrs);
             ASC_double(uacrs[0], uA_r);
           }
-          double alpha_r;
+          double alpha_r = NAN;
           nitf_tre<std::string> nt59("UALPCR", "vector", opt, false);
           nt59.get_append(tres_itr, tre_str, v);
           if (!opt)
@@ -2539,7 +2540,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
             nt59.get(tres_itr, ualpcrs);
             ASC_double(ualpcrs[0], alpha_r);
           }
-          double beta_r;
+          double beta_r = NAN;
           nitf_tre<std::string> nt60("UBETCR", "vector", opt, false);
           nt60.get_append(tres_itr, tre_str, v);
           if (!opt)
@@ -2548,7 +2549,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
             nt60.get(tres_itr, ubetcrs);
             ASC_double(ubetcrs[0], beta_r);
           }
-          double T_r;
+          double T_r = NAN;
           nitf_tre<std::string> nt61("UTCR", "vector", opt, false);
           nt61.get_append(tres_itr, tre_str, v);
           if (!opt)
@@ -2557,7 +2558,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
             nt61.get(tres_itr, utcrs);
             ASC_double(utcrs[0], T_r);
           }
-          double uA_c;
+          double uA_c = NAN;
           nitf_tre<std::string> nt62("UACC", "vector", opt, false);
           nt62.get_append(tres_itr, tre_str, v);
           if (!opt)
@@ -2566,7 +2567,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
             nt62.get(tres_itr, uaccs);
             ASC_double(uaccs[0], uA_c);
           }
-          double alpha_c;
+          double alpha_c = NAN;
           nitf_tre<std::string> nt63("UALPCC", "vector", opt, false);
           nt63.get_append(tres_itr, tre_str, v);
           if (!opt)
@@ -2575,7 +2576,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
             nt63.get(tres_itr, ualpccs);
             ASC_double(ualpccs[0], alpha_c);
           }
-          double beta_c;
+          double beta_c = NAN;
           nitf_tre<std::string> nt64("UBETCC", "vector", opt, false);
           nt64.get_append(tres_itr, tre_str, v);
           if (!opt)
@@ -2584,7 +2585,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
             nt64.get(tres_itr, ubetccs);
             ASC_double(ubetccs[0], beta_c);
           }
-          double T_c;
+          double T_c = NAN;
           nitf_tre<std::string> nt65("UTCC", "vector", opt, false);
           nt65.get_append(tres_itr, tre_str, v);
           if (!opt)
@@ -2618,7 +2619,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
             nt67.get(tres_itr, ucorsrs);
             for (const auto & r : ucorsrs)
             {
-              double val;
+              double val = NAN;
               ASC_double(r, val);
               ucorsr.push_back(val);
             }
@@ -2632,7 +2633,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
             nt68.get(tres_itr, utausrs);
             for (const auto & r : utausrs)
             {
-              double val;
+              double val = NAN;
               ASC_double(r, val);
               utausr.push_back(val);
             }
@@ -2655,7 +2656,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
             nt70.get(tres_itr, ucorscs);
             for (const auto & c : ucorscs)
             {
-              double val;
+              double val = NAN;
               ASC_double(c, val);
               ucorsc.push_back(val);
             }
@@ -2669,7 +2670,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
             nt71.get(tres_itr, utauscs);
             for (const auto & c : utauscs)
             {
-              double val;
+              double val = NAN;
               ASC_double(c, val);
               utausc.push_back(val);
             }
@@ -2778,14 +2779,14 @@ vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
           //  the region of validity of the RSM TRE Set representation in ground space.
           double min_lon = std::numeric_limits<double>::max(), min_lat = min_lon;
           double max_lon = -min_lon, max_lat = -min_lat;
-          double min_z, max_z;
+          double min_z = NAN, max_z = NAN;
           nitf_tre<double> nt1("V1Z", false, false);
           bool min_good = nt1.get(tres_itr, min_z);
           nitf_tre<double> nt2("V8Z", false, false);
           bool max_good = nt2.get(tres_itr, max_z);
           std::vector<std::pair<double, double>> coords;
 
-          double az, el;
+          double az = NAN, el = NAN;
           nitf_tre<double> illa("IA0", false, false);
           bool az_good = illa.get(tres_itr, az);
           rsm_meta_[image_subheader_index].sun_azimuth_radians_ = az;
@@ -2796,7 +2797,7 @@ vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
           rsm_meta_[image_subheader_index].sun_elevation_valid = el_good;
 
           // determine corners of image
-          int min_r, max_r, min_c, max_c;
+          int min_r = 0, max_r = 0, min_c = 0, max_c = 0;
           nitf_tre<int> nt3("MINR", false, false);
           bool row_good_min = nt3.get(tres_itr, min_r);
           nitf_tre<int> nt4("MAXR", false, false);
@@ -2926,7 +2927,7 @@ vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
             return false;
           nitf_tre<std::string> nt20("RNIS");
           std::string s; // convert string to int only
-          int v;
+          int v = 0;
           good = nt20.get(tres_itr, s);
           ASC_int(s, v);
           rsel.rnis_ = v;
@@ -3105,9 +3106,9 @@ vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
           std::vector<std::vector<double>> coeffs;
           std::vector<vpgl_scale_offset<double>> scale_offsets;
           bool aux_good = false;
-          double x_scale, x_off, y_scale, y_off, z_scale, z_off;
-          double u_scale, u_off, v_scale, v_off;
-          int x_pow, y_pow, z_pow, rsn, csn;
+          double x_scale = NAN, x_off = NAN, y_scale = NAN, y_off = NAN, z_scale = NAN, z_off = NAN;
+          double u_scale = NAN, u_off = NAN, v_scale = NAN, v_off = NAN;
+          int x_pow = 0, y_pow = 0, z_pow = 0, rsn = 0, csn = 0;
 
 
           nitf_tre<int> ntr("RSN");
@@ -3181,7 +3182,7 @@ vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
           scale_offsets.emplace_back(u_scale, u_off);
           scale_offsets.emplace_back(v_scale, v_off);
 
-          int rn_nterms;
+          int rn_nterms = 0;
           std::vector<int> rnpows;
 
           nitf_tre<int> nt10("RNPWRX");
@@ -3214,7 +3215,7 @@ vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
           if (!good)
             return false;
 
-          int rd_nterms;
+          int rd_nterms = 0;
           std::vector<int> rdpows;
           nitf_tre<int> nt15("RDPWRX");
           good = nt15.get(tres_itr, x_pow);
@@ -3245,7 +3246,7 @@ vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
           good = nt19.get(tres_itr, rdpcf);
           if (!good)
             return false;
-          int cn_nterms;
+          int cn_nterms = 0;
           std::vector<int> cnpows;
           nitf_tre<int> nt20("CNPWRX");
           good = nt20.get(tres_itr, x_pow);
@@ -3277,7 +3278,7 @@ vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
           if (!good)
             return false;
 
-          int cd_nterms;
+          int cd_nterms = 0;
           std::vector<int> cdpows;
           nitf_tre<int> nt25("CDPWRX");
           good = nt25.get(tres_itr, x_pow);

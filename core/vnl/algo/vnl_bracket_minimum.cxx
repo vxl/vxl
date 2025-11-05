@@ -7,6 +7,7 @@
 
 #include <cmath>
 #include <algorithm>
+#include <cmath>
 #include <vnl/algo/vnl_bracket_minimum.h>
 #include <vnl/algo/vnl_fit_parabola.h>
 
@@ -68,8 +69,8 @@ vnl_bracket_minimum(vnl_cost_function & fn, double & a, double & b, double & c, 
   while (fc < fb) // Keep stepping until we go uphill again
   {
     // Use parabolic interpolation to estimate position of centre
-    double p;
-    double q;
+    double p = NAN;
+    double q = NAN;
     vnl_fit_parabola(a, b, c, fa, fb, fc, p, q);
 
     // Ensure q not within EPSqr of zero

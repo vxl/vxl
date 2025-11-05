@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include <iostream>
 #include <cmath>
 #ifdef _MSC_VER
@@ -16,12 +18,12 @@ test_colour_space()
 
   std::cout << "r= " << r << std::endl << "g= " << g << std::endl << "b= " << b << std::endl;
 
-  double h, s, v;
+  double h = NAN, s = NAN, v = NAN;
   vil1_colour_space_RGB_to_HSV(r, g, b, &h, &s, &v);
 
   std::cout << "h= " << h << std::endl << "s= " << s << std::endl << "v= " << v << std::endl;
 
-  double nr, ng, nb;
+  double nr = NAN, ng = NAN, nb = NAN;
   vil1_colour_space_HSV_to_RGB(h, s, v, &nr, &ng, &nb);
 
   std::cout << "nr= " << nr << std::endl << "ng= " << ng << std::endl << "nb= " << nb << std::endl;

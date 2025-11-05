@@ -2,6 +2,7 @@
 //:
 // \file
 #include "vpgl/vpgl_lvcs.h"
+#include <cmath>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 
 void
@@ -15,13 +16,13 @@ vsl_b_write(vsl_b_ostream & os, const vpgl_lvcs & lvcs)
   auto cs_name = static_cast<unsigned>(lvcs.get_cs_name());
   vsl_b_write(os, cs_name);
 
-  double lat, lon, elev;
+  double lat = NAN, lon = NAN, elev = NAN;
   lvcs.get_origin(lat, lon, elev);
   vsl_b_write(os, lat);
   vsl_b_write(os, lon);
   vsl_b_write(os, elev);
 
-  double lat_scale, lon_scale;
+  double lat_scale = NAN, lon_scale = NAN;
   lvcs.get_scale(lat_scale, lon_scale);
   vsl_b_write(os, lat_scale);
   vsl_b_write(os, lon_scale);
@@ -32,7 +33,7 @@ vsl_b_write(vsl_b_ostream & os, const vpgl_lvcs & lvcs)
   auto len_unit = static_cast<unsigned>(lvcs.local_length_unit());
   vsl_b_write(os, len_unit);
 
-  double lox, loy, theta;
+  double lox = NAN, loy = NAN, theta = NAN;
   lvcs.get_transform(lox, loy, theta);
   vsl_b_write(os, lox);
   vsl_b_write(os, loy);
@@ -45,29 +46,29 @@ vsl_b_read(vsl_b_istream & is, vpgl_lvcs & lvcs)
 {
   if (!is)
     return;
-  short ver;
+  short ver = 0;
   vsl_b_read(is, ver);
   switch (ver)
   {
     case 1:
     {
-      unsigned cs_name;
+      unsigned cs_name = 0;
       vsl_b_read(is, cs_name);
 
-      double lat, lon, elev, lat_scale, lon_scale;
+      double lat = NAN, lon = NAN, elev = NAN, lat_scale = NAN, lon_scale = NAN;
       vsl_b_read(is, lat);
       vsl_b_read(is, lon);
       vsl_b_read(is, elev);
       vsl_b_read(is, lat_scale);
       vsl_b_read(is, lon_scale);
 
-      unsigned ang_unit;
+      unsigned ang_unit = 0;
       vsl_b_read(is, ang_unit);
 
-      unsigned len_unit;
+      unsigned len_unit = 0;
       vsl_b_read(is, len_unit);
 
-      double lox, loy, theta;
+      double lox = NAN, loy = NAN, theta = NAN;
       vsl_b_read(is, lox);
       vsl_b_read(is, loy);
       vsl_b_read(is, theta);

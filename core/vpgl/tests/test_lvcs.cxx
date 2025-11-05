@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include <iostream>
 #include <iomanip>
 #include <vector>
@@ -22,9 +24,9 @@ test_lvcs_force(double lat,
             << ", " << south_flag << ")\n";
 
   // results
-  double x, y, z;
-  int utm_zone_result;
-  bool south_flag_result;
+  double x = NAN, y = NAN, z = NAN;
+  int utm_zone_result = 0;
+  bool south_flag_result = false;
 
   // LVCS
   vpgl_lvcs lvcs(lat, lon, elev, vpgl_lvcs::utm, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
@@ -97,7 +99,7 @@ _test_lvcs_local_to_global_wgs84(vpgl_lvcs lvcs,
   std::cout << "\n";
 
   // local_to_global
-  double x, y, z;
+  double x = NAN, y = NAN, z = NAN;
   lvcs.local_to_global(xoff, yoff, zoff, vpgl_lvcs::wgs84, x, y, z, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   std::cout << "produced (lon, lat, elev) = (" << x << ", " << y << ", " << z << ")\n";
 
@@ -141,7 +143,7 @@ _test_lvcs_local_to_global_utm(vpgl_lvcs lvcs,
   std::cout << "\n";
 
   // local_to_global
-  double x, y, z;
+  double x = NAN, y = NAN, z = NAN;
   lvcs.local_to_global(xoff, yoff, zoff, vpgl_lvcs::utm, x, y, z, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   std::cout << "produced (easting, northing, elev) = (" << x << ", " << y << ", " << z << ")\n";
 
@@ -171,7 +173,7 @@ _test_lvcs_global_to_local_wgs84(vpgl_lvcs lvcs,
   std::cout << ")\n";
 
   // global_to_local
-  double x, y, z;
+  double x = NAN, y = NAN, z = NAN;
   lvcs.global_to_local(lon + lon_off, lat + lat_off, elev + elev_off, vpgl_lvcs::wgs84, x, y, z);
   std::cout << "produced (x, y, z) = (" << x << ", " << y << ", " << z << ")\n";
 
@@ -215,7 +217,7 @@ _test_lvcs_global_to_local_utm(vpgl_lvcs lvcs,
   std::cout << ")\n";
 
   // global_to_local
-  double x, y, z;
+  double x = NAN, y = NAN, z = NAN;
   lvcs.global_to_local(easting + easting_off, northing + northing_off, elev + elev_off, vpgl_lvcs::utm, x, y, z);
 
   // test x/y/z
@@ -229,10 +231,10 @@ void
 _test_lvcs_antimeridian(vpgl_lvcs lvcs, double lon, double lat, double elev, double meter_tol, double degree_tol)
 {
   // results
-  double x, y, z;
-  double easting, northing;
-  int utm_zone;
-  bool south_flag;
+  double x = NAN, y = NAN, z = NAN;
+  double easting = NAN, northing = NAN;
+  int utm_zone = 0;
+  bool south_flag = false;
 
   // meter offsets as (x, y, z)
   std::vector<std::vector<double>> meter_offsets = {
@@ -329,8 +331,8 @@ test_lvcs_antimeridian(double lon, double lat, double elev, double meter_tol, do
   _test_lvcs_antimeridian(lvcs_utm, lon, lat, elev, meter_tol, degree_tol);
 
   // UTM zone
-  int utm_zone;
-  bool south_flag;
+  int utm_zone = 0;
+  bool south_flag = false;
   lvcs_utm.get_utm(utm_zone, south_flag);
 
   // For UTM zone 1, also test in UTM zone 60
@@ -354,10 +356,10 @@ void
 _test_lvcs_general(vpgl_lvcs lvcs, double lon, double lat, double elev, double meter_tol, double degree_tol)
 {
   // results
-  double x, y, z;
-  double easting, northing;
-  int utm_zone;
-  bool south_flag;
+  double x = NAN, y = NAN, z = NAN;
+  double easting = NAN, northing = NAN;
+  int utm_zone = 0;
+  bool south_flag = false;
 
   // meter offsets as (x, y, z)
   std::vector<std::vector<double>> meter_offsets = {
@@ -465,9 +467,9 @@ test_lvcs()
   bool orig_south_flag = false;
 
   // results
-  double x, y, z;
-  int utm_zone;
-  bool south_flag;
+  double x = NAN, y = NAN, z = NAN;
+  int utm_zone = 0;
+  bool south_flag = false;
 
   // result tolerance
   double meter_tol = 1e-3;

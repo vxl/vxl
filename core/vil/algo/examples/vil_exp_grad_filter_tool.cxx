@@ -11,6 +11,7 @@
 #include "vil/vil_load.h"
 #include "vil/vil_save.h"
 #include "vil/vil_image_view.h"
+#include <cmath>
 #include <vil/algo/vil_exp_grad_filter_1d.h>
 #include "vil/vil_convert.h"
 
@@ -38,7 +39,7 @@ main(int argc, char ** argv)
   vil_exp_grad_filter_i(src_im, grad_x, double(k));
 
   // Stretch range to [0,255]
-  float min_v, max_v;
+  float min_v = NAN, max_v = NAN;
   vil_math_value_range(grad_x, min_v, max_v);
   double s = 255 / (max_v - min_v);
   vil_math_scale_and_offset_values(grad_x, s, -s * min_v);

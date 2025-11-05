@@ -5,6 +5,7 @@
 #include "vpgl/vpgl_generic_camera.h"
 #include "vpgl/vpgl_perspective_camera.h"
 #include "vpgl/vpgl_calibration_matrix.h"
+#include <cmath>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include "vgl/vgl_ray_3d.h"
 #include "vgl/vgl_point_3d.h"
@@ -42,13 +43,13 @@ simple_test()
   c.project(x, y, z, u, v);
   er = std::fabs(u - 1.5) + std::fabs(v - 2.5);
   x = 3.2, y = 4.1, z = 1.0;
-  double u1, v1;
+  double u1 = NAN, v1 = NAN;
   c.project(x, y, z, u1, v1);
   er += std::fabs(u1 - 3.2) + std::fabs(v1 - 4.1);
   x = 6.8;
   y = 5.2;
   z = 0.0;
-  double u2, v2;
+  double u2 = NAN, v2 = NAN;
   c.project(x, y, z, u2, v2);
   er += std::fabs(u2 - 6.8) + std::fabs(v2 - 5.2);
   TEST_NEAR("project", er, 0.0, 0.0001);
@@ -94,7 +95,7 @@ proj_test()
     // first project using perspective camera
     vgl_point_2d<double> p2d = pcam.project(test_pt);
     // project same point using generic camera
-    double u, v;
+    double u = NAN, v = NAN;
     gcam.project(test_pt.x(), test_pt.y(), test_pt.z(), u, v);
     std::stringstream testname;
     testname << "Projection of test point " << test_pt << ": u" << std::endl;

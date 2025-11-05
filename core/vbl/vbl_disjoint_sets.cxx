@@ -54,7 +54,7 @@ vbl_disjoint_sets::find_set(int element_id) const
 {
   assert(element_id < num_elements_);
 
-  node * curnode;
+  node * curnode = nullptr;
 
   // Find the root element that represents the set which `element_id` belongs to
   curnode = const_cast<node *>(nodes_.begin() + element_id);

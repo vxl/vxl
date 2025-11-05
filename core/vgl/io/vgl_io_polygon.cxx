@@ -35,12 +35,13 @@ vsl_b_read(vsl_b_istream & is, vgl_polygon<T> & p)
   if (!is)
     return;
 
-  short v;
+  short v = 0;
   vsl_b_read(is, v);
   switch (v)
   {
     case 1:
-      unsigned int num_sheets;
+    {
+      unsigned int num_sheets = 0;
       vsl_b_read(is, num_sheets);
       p.clear();
       for (unsigned int i = 0; i < num_sheets; i++)
@@ -56,7 +57,8 @@ vsl_b_read(vsl_b_istream & is, vgl_polygon<T> & p)
           p.push_back(point);
         }
       }
-      break;
+    }
+    break;
 
     default:
       std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_polygon<T>&)\n"

@@ -6,6 +6,8 @@
 //-----------------------------------------------------------------------------
 
 #include <cmath>
+
+#include <cmath>
 #include "vil1_memory_image_window.h"
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
@@ -197,10 +199,10 @@ vil1_memory_image_window::normalised_cross_correlation(const vil1_memory_image_o
   int v2 = centre2_y;
 
   // indices
-  int i, j;
+  int i = 0, j = 0;
 
-  double average_I1_uv;
-  double average_I2_uv;
+  double average_I1_uv = NAN;
+  double average_I2_uv = NAN;
 
   //////////////////////////////////////////////
   // calculate the average intensities
@@ -254,8 +256,8 @@ vil1_memory_image_window::normalised_cross_correlation(const vil1_memory_image_o
   {
     for (j = -m; j < m + 1; j++)
     {
-      double I1_uv;
-      double I2_uv;
+      double I1_uv = NAN;
+      double I2_uv = NAN;
 
       I1_uv = image1_(u1 + i, v1 + j);
       I2_uv = image2(u2 + i, v2 + j);

@@ -62,7 +62,7 @@ test_vector_fixed_ref()
   using vfr = vnl_vector_fixed_ref<double, size>;
   using vfrc = vnl_vector_fixed_ref_const<double, size>;
 
-  int i;
+  int i = 0;
   vf vec; // copy in
   for (i = 0; i < size; ++i)
   {

@@ -139,14 +139,14 @@ vil_nitf2_field_sequence::read(vil_nitf2_istream & input,
       vil_nitf2_field_definition * field_def = node->field_definition();
       // The field exists if it is required, or if it is conditional and
       // the condition is true.
-      bool field_exists;
+      bool field_exists = false;
       if (field_def->is_required())
       {
         field_exists = true;
       }
       else
       {
-        bool condition;
+        bool condition = false;
         bool conditionValid = (*(field_def->condition_functor))(this, indexes, condition);
         if (conditionValid)
         {
@@ -189,7 +189,7 @@ vil_nitf2_field_sequence::read(vil_nitf2_istream & input,
           if (indexes.empty())
           {
             // read scalar field
-            bool fieldReadError;
+            bool fieldReadError = false;
             vil_nitf2_scalar_field * field =
               vil_nitf2_scalar_field::read(input, field_def, variable_width, &fieldReadError);
             if (field)
@@ -361,7 +361,7 @@ vil_nitf2_field_sequence::write(vil_nitf2_ostream & output,
       bool expected = field_def->is_required();
       if (!expected)
       {
-        bool condition;
+        bool condition = false;
         if ((*field_def->condition_functor)(this, indexes, condition))
         {
           expected |= condition;

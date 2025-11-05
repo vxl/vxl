@@ -17,6 +17,7 @@
 #include "vgl/vgl_line_3d_2_points.h"
 #include "vgl/vgl_line_segment_3d.h"
 #include "vgl/vgl_ray_3d.h"
+#include <cmath>
 #include <vgl/algo/vgl_intersection.h>
 
 static void
@@ -165,13 +166,13 @@ test_multiple_planes()
 static void
 test_lines_intersection()
 {
-  bool is_intersection;
+  bool is_intersection = false;
   vgl_point_2d<double> point_intersection(0, 0);
   is_intersection =
     vgl_intersection(vgl_line_2d<double>(vgl_point_2d<double>(1, 1), vgl_vector_2d<double>(0.5, std::sqrt(3.0) / 2)),
                      vgl_line_2d<double>(-std::sqrt(2.0), std::sqrt(2.0), 0),
                      point_intersection);
-  double intersection_error;
+  double intersection_error = NAN;
   intersection_error = (point_intersection.x() - 1.0) * (point_intersection.x() - 1.0);
   intersection_error += (point_intersection.y() - 1.0) * (point_intersection.y() - 1.0);
   TEST("lines intersection exists", is_intersection, true);

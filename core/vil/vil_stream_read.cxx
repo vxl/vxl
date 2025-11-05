@@ -17,6 +17,8 @@
 // \endverbatim
 
 #include "vil_stream_read.h"
+#include <cmath>
+
 #include <cassert>
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
@@ -115,7 +117,7 @@ vil_stream_read_little_endian_int_32(vil_stream * s)
 static void
 swap16(char * a, unsigned n)
 {
-  char c;
+  char c = 0;
   for (unsigned i = 0; i < n * 2; i += 2)
   {
     c = a[i];
@@ -131,7 +133,7 @@ swap16(char * a, unsigned n)
 static void
 swap32(char * a, unsigned n)
 {
-  char c;
+  char c = 0;
   for (unsigned i = 0; i < n * 4; i += 4)
   {
     c = a[i];
@@ -148,7 +150,7 @@ swap32(char * a, unsigned n)
 float
 vil_stream_read_big_endian_float(vil_stream * is)
 {
-  float f;
+  float f = NAN;
   is->read((char *)&f, 4);
 #if VXL_LITTLE_ENDIAN
   swap32((char *)&f, 1);

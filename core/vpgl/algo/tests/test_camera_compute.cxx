@@ -14,6 +14,7 @@
 #include "vgl/vgl_point_3d.h"
 #include "vgl/vgl_point_2d.h"
 #include "vgl/vgl_distance.h"
+#include <cmath>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
@@ -183,7 +184,7 @@ test_perspective_compute_direct_linear_transform()
 
   // Calculate the projected points
   vpgl_perspective_camera<double> camera;
-  double err;
+  double err = NAN;
   vpgl_perspective_camera_compute::compute_dlt(image_pts, world_pts, camera, err);
 
   TEST_NEAR("Small error.", err, 0, .1);
@@ -191,7 +192,7 @@ test_perspective_compute_direct_linear_transform()
   // Check that it is close.
   for (unsigned int i = 0; i < world_pts.size(); i++)
   {
-    double x, y;
+    double x = NAN, y = NAN;
     camera.project(world_pts[i].x(), world_pts[i].y(), world_pts[i].z(), x, y);
 
     TEST_NEAR("Testing that x coord is close", x, image_pts[i].x(), .001);
@@ -454,7 +455,7 @@ test_compute_rational()
     double z = 2.0 * sz * rng.drand64() + (oz - sz);
     vgl_point_3d<double> p3d(x, y, z);
     ground_pts.push_back(p3d);
-    double u, v;
+    double u = NAN, v = NAN;
     rcam.project(x, y, z, u, v);
     image_pts.emplace_back(u, v);
   }
@@ -466,7 +467,7 @@ test_compute_rational()
     for (size_t i = 0; i < n_points; ++i)
     {
       const vgl_point_3d<double> & p3 = ground_pts[i];
-      double u, v;
+      double u = NAN, v = NAN;
       fcam.project(p3.x(), p3.y(), p3.z(), u, v);
       double sq_err = (u - image_pts[i].x()) * (u - image_pts[i].x()) + (v - image_pts[i].y()) * (v - image_pts[i].y());
       rms_er += sq_err;

@@ -69,7 +69,7 @@ vil_image_list::files()
   if (!this->vil_is_directory(directory_.c_str()))
     return temp;
   DIR * dir_handle = opendir(directory_.c_str());
-  dirent * de;
+  dirent * de = nullptr;
   de = readdir(dir_handle);
   if (de == nullptr)
     return temp;

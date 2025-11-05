@@ -212,7 +212,7 @@ ConvertHostToMSB(void * buf, int num_words)
 bool
 vil_pnm_image::read_header()
 {
-  char temp;
+  char temp = 0;
 
   // Go to start of file
   vs_->seek(0L);
@@ -329,7 +329,7 @@ vil_pnm_image::write_header()
 static bool
 operator>>(vil_stream & vs, int & a)
 {
-  char c;
+  char c = 0;
   vs.read(&c, 1L);
   SkipSpaces(&vs, c);
   if (c < '0' || c > '9')
@@ -424,7 +424,7 @@ vil_pnm_image::get_copy_view(unsigned x0, unsigned ni, unsigned y0, unsigned nj)
     {
       vil_streampos byte_start = start_of_data_ + (y0 + y) * byte_width + x0 / 8;
       vs_->seek(byte_start);
-      unsigned char a;
+      unsigned char a = 0;
       vs_->read(&a, 1L);
       for (unsigned x = 0; x < ni + x0; ++x)
       {
@@ -445,7 +445,7 @@ vil_pnm_image::get_copy_view(unsigned x0, unsigned ni, unsigned y0, unsigned nj)
     //
     for (unsigned t = 0; t < y0 * ni_ * nplanes(); ++t)
     {
-      int a;
+      int a = 0;
       (*vs_) >> a;
     }
     for (unsigned y = 0; y < nj; ++y)
@@ -453,7 +453,7 @@ vil_pnm_image::get_copy_view(unsigned x0, unsigned ni, unsigned y0, unsigned nj)
       // 1. Skip to column x0
       for (unsigned t = 0; t < x0 * nplanes(); ++t)
       {
-        int a;
+        int a = 0;
         (*vs_) >> a;
       }
       for (unsigned x = 0; x < ni; ++x)
@@ -462,28 +462,28 @@ vil_pnm_image::get_copy_view(unsigned x0, unsigned ni, unsigned y0, unsigned nj)
         if (bits_per_component_ <= 1)
           for (unsigned p = 0; p < nplanes(); ++p)
           {
-            int a;
+            int a = 0;
             (*vs_) >> a;
             *(bb++) = (a != 0);
           }
         else if (bits_per_component_ <= 8)
           for (unsigned p = 0; p < nplanes(); ++p)
           {
-            int a;
+            int a = 0;
             (*vs_) >> a;
             *(ib++) = vxl_byte(a);
           }
         else if (bits_per_component_ <= 16)
           for (unsigned p = 0; p < nplanes(); ++p)
           {
-            int a;
+            int a = 0;
             (*vs_) >> a;
             *(jb++) = vxl_uint_16(a);
           }
         else
           for (unsigned p = 0; p < nplanes(); ++p)
           {
-            int a;
+            int a = 0;
             (*vs_) >> a;
             *(kb++) = vxl_uint_32(a);
           }
@@ -491,7 +491,7 @@ vil_pnm_image::get_copy_view(unsigned x0, unsigned ni, unsigned y0, unsigned nj)
       // 5. Skip to the next line
       for (unsigned t = 0; t < (ni_ - x0 - ni) * nplanes(); ++t)
       {
-        int a;
+        int a = 0;
         (*vs_) >> a;
       }
     }
@@ -715,7 +715,7 @@ vil_pnm_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned 
         if (x0 + view.ni() < ni_)
         {
           vs_->seek(byte_start);
-          unsigned char c;
+          unsigned char c = 0;
           vs_->read(&c, 1L);
           vs_->seek(byte_start);
           c &= ((1 << (8 - s)) - 1); // clear the first s bits of c

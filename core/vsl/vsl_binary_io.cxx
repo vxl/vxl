@@ -129,7 +129,7 @@ void
 vsl_b_read(vsl_b_istream & is, std::string & str)
 {
   std::string::iterator it;
-  std::string::size_type length;
+  std::string::size_type length = 0;
 
   vsl_b_read(is, length);
   str.resize(length);
@@ -176,7 +176,7 @@ vsl_b_write(vsl_b_ostream & os, bool b)
 void
 vsl_b_read(vsl_b_istream & is, bool & b)
 {
-  signed char c;
+  signed char c = 0;
   vsl_b_read(is, c);
   b = (c != 0);
 }

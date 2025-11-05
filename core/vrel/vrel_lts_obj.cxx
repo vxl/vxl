@@ -57,7 +57,7 @@ vrel_lts_obj::fcn(vect_const_iter begin,
 
   // 2. Find the index of the "median value" if the residuals are sorted.
 
-  unsigned int index;
+  unsigned int index = 0;
   if (inlier_frac_ == 0.5)
     index = (num_residuals - num_sam_inst_) / 2 + num_sam_inst_;
   else

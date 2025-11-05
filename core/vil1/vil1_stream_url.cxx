@@ -263,7 +263,7 @@ vil1_stream_url::vil1_stream_url(const char * url)
   u_->ref();
   {
     unsigned entity_marker = 0; // count end of header CR and LFs
-    vil1_streampos n;
+    vil1_streampos n = 0;
 #if defined(_WIN32) && !defined(__CYGWIN__)
     while ((n = recv(tcp_socket, buffer, sizeof buffer, 0)) > 0L)
 #else

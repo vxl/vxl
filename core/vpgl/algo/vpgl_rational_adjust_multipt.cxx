@@ -7,6 +7,7 @@
 #include <cassert>
 #include "vgl/vgl_point_3d.h"
 #include "vnl/vnl_numeric_traits.h"
+#include <cmath>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/algo/vpgl_ray_intersect.h>
@@ -221,7 +222,7 @@ vpgl_rational_adjust_multiple_pts::adjust(
     // translate current cams
     for (unsigned int i = 0; i < current_cams.size(); ++i)
     {
-      double u_off, v_off;
+      double u_off = NAN, v_off = NAN;
       current_cams[i].image_offset(u_off, v_off);
       current_cams[i].set_image_offset(u_off + param_values[params_indices[i * 2]],
                                        v_off + param_values[params_indices[i * 2 + 1]]);
@@ -250,7 +251,7 @@ vpgl_rational_adjust_multiple_pts::adjust(
       vgl_vector_2d<double> tr(param_values[params_indices_best[i * 2]], param_values[params_indices_best[i * 2 + 1]]);
       std::cout << tr << std::endl;
       cam_translations.push_back(tr);
-      double u_off, v_off;
+      double u_off = NAN, v_off = NAN;
       current_cams[i].image_offset(u_off, v_off);
       current_cams[i].set_image_offset(u_off + param_values[params_indices_best[i * 2]],
                                        v_off + param_values[params_indices_best[i * 2 + 1]]);
@@ -289,7 +290,7 @@ vpgl_cam_trans_search_lsqr::f(const vnl_vector<double> & translation, // size is
   // translate current cams
   for (unsigned int i = 0; i < current_cams.size(); ++i)
   {
-    double u_off, v_off;
+    double u_off = NAN, v_off = NAN;
     current_cams[i].image_offset(u_off, v_off);
     current_cams[i].set_image_offset(u_off + translation[i * 2], v_off + translation[i * 2 + 1]);
   }

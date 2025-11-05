@@ -9,6 +9,7 @@
 //
 #include "vnl/vnl_fwd.h"
 #include "vnl/vnl_math.h" // for twopi
+#include <cmath>
 #include <vgl/algo/vgl_norm_trans_2d.h>
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
@@ -180,7 +181,7 @@ vpgl_fm_compute_7_point::solve_cubic(std::vector<double> v)
   if (d >= 0.0)
   {
     // Compute a cube root
-    double z;
+    double z = NAN;
     if (-r + std::sqrt(d) >= 0)
       z = std::exp(std::log(-r + std::sqrt(d)) / 3.0);
     else

@@ -7,6 +7,7 @@
 
 #include "vnl/vnl_matrix.h"
 #include "vnl/vnl_vector.h"
+#include <cmath>
 #include <vnl/algo/vnl_svd.h>
 #include "vgl/vgl_point_2d.h"
 
@@ -98,7 +99,7 @@ vpgl_affine_fm_robust_est::compute_residuals(const vnl_vector<double> & params, 
   double a = params[0], b = params[1];
   double s = sqrt(a * a + b * b);
   vnl_vector<double> scaled_params = params / s;
-  double epi_error;
+  double epi_error = NAN;
   for (unsigned int i = 0; i < num_samples_; ++i)
   {
     epi_error = scaled_params[0] * left_pts_[i][0] + scaled_params[1] * left_pts_[i][1] +

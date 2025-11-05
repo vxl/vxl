@@ -13,6 +13,7 @@
 #endif
 #include "vnl/vnl_vector.h"
 
+#include <cmath>
 #include <vrel/vrel_linear_regression.h>
 #include <vrel/vrel_lms_obj.h>
 #include <vrel/vrel_ran_sam_search.h>
@@ -37,7 +38,7 @@ main()
   //
   std::vector<vnl_vector<double>> pts;
   vnl_vector<double> p(2);
-  double x, y;
+  double x = NAN, y = NAN;
 
   while (std::cin >> x >> y)
   {

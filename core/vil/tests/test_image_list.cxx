@@ -46,7 +46,7 @@ test_image_list()
   for (unsigned i = 0; i < ni3; ++i)
     for (unsigned j = 0; j < nj3; ++j)
       image3(i, j) = (unsigned short)(i + ni3 * j);
-  bool good;
+  bool good = false;
   vil_image_resource_sptr ir3 = vil_new_image_resource_of_view(image3);
   std::string dir = "image_list_dir";
   {

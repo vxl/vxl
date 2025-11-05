@@ -37,7 +37,7 @@ test_flipud()
   vil1_image flip = vil1_flipud(m);
   p(flip);
 
-  int i;
+  int i = 0;
   for (i = 0; i < 6; i++)
   {
     unsigned char val = 0;

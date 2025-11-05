@@ -73,7 +73,7 @@ vil_nitf2_data_mask_table::parse(vil_stream * stream)
 
   // properly size and then read in our vectors
   ////do BMR_n_BND_m first
-  unsigned int i, j, b;
+  unsigned int i = 0, j = 0, b = 0;
   if (BMRLNTH != 0)
   {
     BMR_n_BND_m.resize(num_blocks_x);

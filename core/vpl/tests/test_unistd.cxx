@@ -79,7 +79,7 @@ test_unistd(int argc, char * argv[])
   }
   {
     std::ifstream f(ROOT_PATH "/vpltest/file");
-    int s;
+    int s = 0;
     f >> s;
     TEST("Create file in directory", s, 1234);
   }

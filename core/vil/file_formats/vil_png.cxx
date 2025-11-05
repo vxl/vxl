@@ -212,7 +212,7 @@ struct vil_png_structures
     if (rows == nullptr)
       return ok = problem("couldn't allocate space for image");
 
-    unsigned long linesize;
+    unsigned long linesize = 0;
     if (png_get_bit_depth(png_ptr, info_ptr) == 16)
       linesize = 2 * png_get_image_width(png_ptr, info_ptr);
     else
@@ -414,7 +414,7 @@ vil_png_image::read_header()
     png_set_swap(p_->png_ptr);
 #endif
 
-  png_color_8p sig_bit;
+  png_color_8p sig_bit = nullptr;
   if (png_get_valid(p_->png_ptr, p_->info_ptr, PNG_INFO_sBIT) && png_get_sBIT(p_->png_ptr, p_->info_ptr, &sig_bit))
   {
     png_set_shift(p_->png_ptr, sig_bit);
@@ -461,7 +461,7 @@ vil_png_image::write_header()
 
   png_set_write_fn(p_->png_ptr, vs_, user_write_data, user_flush_data);
 
-  int color_type;
+  int color_type = 0;
   if (components_ == 4)
     color_type = PNG_COLOR_TYPE_RGB_ALPHA;
   else if (components_ == 3)

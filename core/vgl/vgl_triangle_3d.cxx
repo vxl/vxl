@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include <algorithm>
 #include <limits>
 #include "vgl_triangle_3d.h"
@@ -550,9 +552,9 @@ vgl_triangle_3d_triangle_intersection(const vgl_point_3d<double> & a_p1,
   vgl_vector_3d<double> edge1, edge2;
   vgl_vector_3d<double> a_norm, b_norm, int_line;
   // vgl_vector_3d<double> int_line;
-  double a_d, b_d;
+  double a_d = NAN, b_d = NAN;
   double d_b[3], d_a[3]; // distance of corner [1,2,3] of tri b to plane of tri a, same for tri_a
-  double d_b1d_b2, d_b1d_b3, d_a1d_a2, d_a1d_a3;
+  double d_b1d_b2 = NAN, d_b1d_b3 = NAN, d_a1d_a2 = NAN, d_a1d_a3 = NAN;
 
   double p_a[3];
   double p_b[3];
@@ -879,7 +881,7 @@ vgl_triangle_3d_triangle_intersection(const vgl_point_3d<double> & a_p1,
     return None; // no intersection
   }
 
-  unsigned i_pt1, i_pt2;
+  unsigned i_pt1 = 0, i_pt2 = 0;
   // find the correct intersection line
   if (isect_b[0] < isect_a[0])
   {
@@ -980,7 +982,7 @@ vgl_triangle_3d_triangle_intersection(const vgl_point_3d<double> & a_p1,
                                       const vgl_point_3d<double> & b_p3,
                                       vgl_line_segment_3d<double> & i_line)
 {
-  unsigned iline_p1, iline_p2;
+  unsigned iline_p1 = 0, iline_p2 = 0;
   return vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3, i_line, iline_p1, iline_p2);
 }
 
@@ -1050,18 +1052,18 @@ vgl_triangle_3d_triangle_intersection(const vgl_point_3d<double> & a_p1,
   vgl_vector_3d<double> a_norm, b_norm, int_line;
   //  vgl_vector_3d<double> int_line;
 
-  double a_d, b_d;
-  double d_b1, d_b2, d_b3, d_a1, d_a2, d_a3;
+  double a_d = NAN, b_d = NAN;
+  double d_b1 = NAN, d_b2 = NAN, d_b3 = NAN, d_a1 = NAN, d_a2 = NAN, d_a3 = NAN;
   double isect1[2], isect2[2];
-  double d_b1d_b2, d_b1d_b3, d_a1d_a2, d_a1d_a3;
+  double d_b1d_b2 = NAN, d_b1d_b3 = NAN, d_a1d_a2 = NAN, d_a1d_a3 = NAN;
 
-  double p_a1, p_a2, p_a3;
-  double p_b1, p_b2, p_b3;
+  double p_a1 = NAN, p_a2 = NAN, p_a3 = NAN;
+  double p_b1 = NAN, p_b2 = NAN, p_b3 = NAN;
   bool coplanar = false;
 
   double a = 0.0, b = 0.0, c = 0.0, x0 = 0.0, x1 = 0.0; // although variables are safely initialised further down,
   double d = 0.0, e = 0.0, f = 0.0, y0 = 0.0, y1 = 0.0; // these "=0.0" silence the compiler
-  double xx, yy, xxyy, tmp;
+  double xx = NAN, yy = NAN, xxyy = NAN, tmp = NAN;
   double TRI_TRI_EPS = 100000 * std::numeric_limits<double>::epsilon();
 
   // Firstly check if each triangle intersects
@@ -1483,21 +1485,21 @@ vgl_triangle_3d_closest_point(const vgl_point_3d<double> & q,
     // Find the nearest point on the triangle's boundary by testing each edge
 
     // Edge 1
-    double cp1x, cp1y, cp1z;
+    double cp1x = NAN, cp1y = NAN, cp1z = NAN;
     vgl_closest_point_to_linesegment(
       cp1x, cp1y, cp1z, p1.x(), p1.y(), p1.z(), p2.x(), p2.y(), p2.z(), q.x(), q.y(), q.z());
     vgl_point_3d<double> cp1(cp1x, cp1y, cp1z);
     double d1 = vgl_distance(cp1, q);
 
     // Edge 2
-    double cp2x, cp2y, cp2z;
+    double cp2x = NAN, cp2y = NAN, cp2z = NAN;
     vgl_closest_point_to_linesegment(
       cp2x, cp2y, cp2z, p2.x(), p2.y(), p2.z(), p3.x(), p3.y(), p3.z(), q.x(), q.y(), q.z());
     vgl_point_3d<double> cp2(cp2x, cp2y, cp2z);
     double d2 = vgl_distance(cp2, q);
 
     // Edge 3
-    double cp3x, cp3y, cp3z;
+    double cp3x = NAN, cp3y = NAN, cp3z = NAN;
     vgl_closest_point_to_linesegment(
       cp3x, cp3y, cp3z, p1.x(), p1.y(), p1.z(), p3.x(), p3.y(), p3.z(), q.x(), q.y(), q.z());
     vgl_point_3d<double> cp3(cp3x, cp3y, cp3z);
@@ -1556,7 +1558,7 @@ vgl_triangle_3d_area(const vgl_point_3d<double> & p0, const vgl_point_3d<double>
   vgl_vector_3d<double> area_vector;
   area_vector = cross_product(edge_vector0, edge_vector1);
 
-  double area;
+  double area = NAN;
   area = area_vector.length();
   area /= 2;
 

@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include "vrel_wgted_ran_sam_search.h"
+#include <cmath>
 #include <vrel/vrel_objective.h>
 #include <vrel/vrel_estimation_problem.h>
 #include <vrel/vrel_util.h>
@@ -38,7 +39,7 @@ vrel_wgted_ran_sam_search::estimate(const vrel_estimation_problem * problem, con
 
     // build probability interval
     double current_lower = 0.0;
-    double next_lower;
+    double next_lower = NAN;
     intervals_.resize(wgts.size());
     prob_interval one;
     for (unsigned i = 0; i < wgts.size(); ++i)
@@ -79,7 +80,7 @@ vrel_wgted_ran_sam_search::next_sample(unsigned int taken,
     unsigned int k = 0, counter = 0;
     prob_interval one;
     interval_iter iter;
-    int id;
+    int id = 0;
     while (k < points_per_sample) // This might be an infinite loop!
     {
       one.upper_ = generator_->drand32();

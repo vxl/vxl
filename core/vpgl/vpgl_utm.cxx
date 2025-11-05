@@ -10,6 +10,8 @@
 // (phi, lambda, h) using a reference spheroid to define the shape of the earth (or other celestial object). where in
 // the geodetic lat_long coordinate system, coordinates phi and lambda are the values of latitude and longitude,
 // respectively.
+#include <cmath>
+
 #include <iostream>
 #include <limits>
 #include "vpgl_utm.h"
@@ -193,17 +195,17 @@ vpgl_utm::transform(int utm_zone,
   double lon_center2 = adjust_lon2(utm_central_meridian * D2R);
   double lat_center2 = 0.0;
 
-  double lambda, phi;
+  double lambda = NAN, phi = NAN;
 
   UTM_init2(lat_center2, a_, e, south_flag);
 
-  double con, temp_phi;             // temporary angles
-  double delta_phi;                 // difference between longitudes
-  long i;                           // counter variable
-  double sin_phi, cos_phi, tan_phi; // sin cos and tangent values
-  double c, cs, t, ts, n, r, d, ds; // temporary variables
-  double f, h, g, temp;             // temporary variables
-  long max_iter = 6;                // maximum number of iterations, I changed from 6 to 20
+  double con = NAN, temp_phi = NAN;                                                 // temporary angles
+  double delta_phi = NAN;                                                           // difference between longitudes
+  long i = 0;                                                                       // counter variable
+  double sin_phi = NAN, cos_phi = NAN, tan_phi = NAN;                               // sin cos and tangent values
+  double c = NAN, cs = NAN, t = NAN, ts = NAN, n = NAN, r = NAN, d = NAN, ds = NAN; // temporary variables
+  double f = NAN, h = NAN, g = NAN, temp = NAN;                                     // temporary variables
+  long max_iter = 6; // maximum number of iterations, I changed from 6 to 20
 
   if (ind2 != 0)
   {
@@ -303,7 +305,7 @@ vpgl_utm::transform(int utm_zone,
                     bool south_flag,
                     double utm_central_meridian) const
 {
-  double elev;
+  double elev = NAN;
   this->transform(utm_zone, x, y, 0.0, lat, lon, elev, south_flag, utm_central_meridian);
   if (elev)
   { /* TODO */
@@ -313,7 +315,7 @@ vpgl_utm::transform(int utm_zone,
 void
 vpgl_utm::transform(double lat, double lon, double & x, double & y, int & utm_zone) const
 {
-  bool south_flag;
+  bool south_flag = false;
   this->transform(lat, lon, x, y, utm_zone, south_flag, -1, -1);
 }
 
@@ -419,11 +421,11 @@ vpgl_utm::utm2utm(double utm_zone_in,
   }
 
   // convert from utm_in to WGS84
-  double lon, lat;
+  double lon = NAN, lat = NAN;
   this->transform(utm_zone_in, x_in, y_in, lat, lon, south_flag_in);
 
   // convert from WGS84 to utm_out
-  int uz;
-  bool sf;
+  int uz = 0;
+  bool sf = false;
   this->transform(lat, lon, x_out, y_out, uz, sf, utm_zone_out, south_flag_out);
 }

@@ -6,6 +6,7 @@
 #include "vnl/vnl_rotation_matrix.h"
 #include "vnl/vnl_double_3.h"
 #include "vnl/vnl_double_3x3.h"
+#include <cmath>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include "vgl/vgl_homg_point_2d.h"
 #if 0
@@ -219,7 +220,7 @@ vpgl_orientation_position_focal_lsqr::gradf(const vnl_vector<double> & xvec, vnl
   vnl_matrix_fixed<double, 3, 3> Rmat = R.as_matrix();
   // Quaternion gets normalized after getting passed to R
   q = R.as_quaternion();
-  double x, y, z, r;
+  double x = NAN, y = NAN, z = NAN, r = NAN;
   x = q.x();
   y = q.y();
   z = q.z();
@@ -232,14 +233,14 @@ vpgl_orientation_position_focal_lsqr::gradf(const vnl_vector<double> & xvec, vnl
   vpgl_perspective_camera<double> cam(K, R, t);
 
   // The 3 rows of [R | t] matrix
-  double A, B, C;
+  double A = NAN, B = NAN, C = NAN;
   // camera translation
-  double t1, t2, t3;
+  double t1 = NAN, t2 = NAN, t3 = NAN;
   t1 = t.x();
   t2 = t.y();
   t3 = t.z();
   // 3D point coordinates
-  double X, Y, Z, W;
+  double X = NAN, Y = NAN, Z = NAN, W = NAN;
   // Focal length
   double F = xvec[7];
 
@@ -254,8 +255,10 @@ vpgl_orientation_position_focal_lsqr::gradf(const vnl_vector<double> & xvec, vnl
     B = Rmat[1][0] * X + Rmat[1][1] * Y + Rmat[1][2] * Z + t2 * W;
     C = Rmat[2][0] * X + Rmat[2][1] * Y + Rmat[2][2] * Z + t3 * W;
 
-    double dex_dr1, dex_dr2, dex_dr3, dex_dr4, dey_dr1, dey_dr2, dey_dr3, dey_dr4;
-    double dex_dt1, dey_dt1, dex_dt2, dey_dt2, dex_dt3, dey_dt3, dex_df, dey_df;
+    double dex_dr1 = NAN, dex_dr2 = NAN, dex_dr3 = NAN, dex_dr4 = NAN, dey_dr1 = NAN, dey_dr2 = NAN, dey_dr3 = NAN,
+           dey_dr4 = NAN;
+    double dex_dt1 = NAN, dey_dt1 = NAN, dex_dt2 = NAN, dey_dt2 = NAN, dex_dt3 = NAN, dey_dt3 = NAN, dex_df = NAN,
+           dey_df = NAN;
 
     dex_dr1 = 2 * ((W * t1 * x + X * x + Y * y + Z * z) * C - (W * t3 * x + X * z + Y * r - Z * x) * A) / (C * C);
     dex_dr2 = 2 * ((W * t1 * y - X * y + Y * x + Z * r) * C - (W * t3 * y - X * r + Y * z - Z * y) * A) / (C * C);

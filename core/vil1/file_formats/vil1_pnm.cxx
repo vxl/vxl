@@ -211,7 +211,7 @@ ConvertHostToMSB(void *, int)
 bool
 vil1_pnm_generic_image::read_header()
 {
-  char temp;
+  char temp = 0;
 
   // Go to start of file
   vs_->seek(0L);
@@ -310,7 +310,7 @@ vil1_pnm_generic_image::write_header()
 bool
 operator>>(vil1_stream & vs, int & a)
 {
-  char c;
+  char c = 0;
   vs.read(&c, 1L);
   SkipSpaces(&vs, c);
   if (c < '0' || c > '9')
@@ -322,7 +322,7 @@ operator>>(vil1_stream & vs, int & a)
 bool
 operator>>(vil1_stream & vs, unsigned char & a)
 {
-  int b;
+  int b = 0;
   vs >> b;
   a = static_cast<unsigned char>(b);
   return b >= 0 && b <= 0xff;
@@ -331,7 +331,7 @@ operator>>(vil1_stream & vs, unsigned char & a)
 bool
 operator>>(vil1_stream & vs, unsigned short & a)
 {
-  int b;
+  int b = 0;
   vs >> b;
   a = static_cast<unsigned short>(b);
   return b >= 0 && b <= 0xffff;
@@ -340,7 +340,7 @@ operator>>(vil1_stream & vs, unsigned short & a)
 bool
 operator>>(vil1_stream & vs, unsigned int & a)
 {
-  int b;
+  int b = 0;
   vs >> b;
   a = static_cast<unsigned int>(b);
   return b >= 0;
@@ -385,7 +385,7 @@ vil1_pnm_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
     {
       vil1_streampos byte_start = start_of_data_ + (y0 + y) * byte_width + x0 / 8;
       vs_->seek(byte_start);
-      unsigned char a;
+      unsigned char a = 0;
       vs_->read(&a, 1L);
       int s = x0 & 7;      // = x0%8;
       unsigned char b = 0; // output
@@ -420,7 +420,7 @@ vil1_pnm_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
     //
     for (int t = 0; t < y0 * width_ * components_; ++t)
     {
-      int a;
+      int a = 0;
       (*vs_) >> a;
     }
     for (int y = 0; y < ys; ++y)
@@ -429,7 +429,7 @@ vil1_pnm_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
       //
       for (int t = 0; t < x0 * components_; ++t)
       {
-        int a;
+        int a = 0;
         (*vs_) >> a;
       }
       // 2. Read the data
@@ -441,7 +441,7 @@ vil1_pnm_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
         {
           if ((t &= 7) == 0)
             *++ib = 0;
-          int a;
+          int a = 0;
           (*vs_) >> a;
           if (a)
             *ib |= static_cast<unsigned char>(1 << (7 - t));
@@ -451,21 +451,21 @@ vil1_pnm_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
       else if (bits_per_component_ <= 8)
         for (int x = 0; x < xs * components_; ++x)
         {
-          unsigned char a;
+          unsigned char a = 0;
           (*vs_) >> a;
           *(ib++) = a;
         }
       else if (bits_per_component_ <= 16)
         for (int x = 0; x < xs * components_; ++x)
         {
-          unsigned short a;
+          unsigned short a = 0;
           (*vs_) >> a;
           *(jb++) = a;
         }
       else
         for (int x = 0; x < xs * components_; ++x)
         {
-          unsigned int a;
+          unsigned int a = 0;
           (*vs_) >> a;
           *(kb++) = a;
         }
@@ -473,7 +473,7 @@ vil1_pnm_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
       //
       for (int t = 0; t < (width_ - x0 - xs) * components_; ++t)
       {
-        int a;
+        int a = 0;
         (*vs_) >> a;
       }
     }
@@ -577,7 +577,7 @@ vil1_pnm_generic_image::put_section(const void * buf, int x0, int y0, int xs, in
         if (x0 + xs < width_)
         {
           vs_->seek(byte_start);
-          unsigned char c;
+          unsigned char c = 0;
           vs_->read(&c, 1L);
           vs_->seek(byte_start);
           c &= static_cast<unsigned char>((1 << (8 - s)) - 1); // clear the first s bits of c

@@ -1086,8 +1086,8 @@ vil_tiff_image::fill_block_from_view(unsigned bi,
   //Causes warnings. Leave here to document default values
   unsigned view_istep = 1, view_jstep = im.ni()*bytes_per_pixel, view_pstep = 1;
 #endif
-  std::ptrdiff_t view_istep, view_jstep, view_pstep;
-  vxl_byte * view_buf;
+  std::ptrdiff_t view_istep = 0, view_jstep = 0, view_pstep = 0;
+  vxl_byte * view_buf = nullptr;
   // Cast the pixel type and reinterpret upper_left_ptr as a byte array.
   switch (h_->pix_fmt)
   {

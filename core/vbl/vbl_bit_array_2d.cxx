@@ -60,8 +60,8 @@ vbl_bit_array_2d::enlarge(unsigned int num_rows, unsigned int num_cols)
     for (unsigned int i = 0; i < tempm; ++i)
     {
       // find start of new column
-      unsigned long byteindex;
-      unsigned int bitindex;
+      unsigned long byteindex = 0;
+      unsigned int bitindex = 0;
       index(i, 0, byteindex, bitindex);
 
       // find start of old column
@@ -124,8 +124,8 @@ vbl_bit_array_2d::operator==(const vbl_bit_array_2d & a) const
 bool
 vbl_bit_array_2d::operator()(unsigned int i, unsigned int j) const
 {
-  unsigned long byteindex;
-  unsigned int bitindex;
+  unsigned long byteindex = 0;
+  unsigned int bitindex = 0;
   index(i, j, byteindex, bitindex);
 
   auto mask = (unsigned char)(1 << bitindex);
@@ -136,8 +136,8 @@ vbl_bit_array_2d::operator()(unsigned int i, unsigned int j) const
 bool
 vbl_bit_array_2d::operator()(unsigned int i, unsigned int j)
 {
-  unsigned long byteindex;
-  unsigned int bitindex;
+  unsigned long byteindex = 0;
+  unsigned int bitindex = 0;
   index(i, j, byteindex, bitindex);
 
   auto mask = (unsigned char)(1 << bitindex);
@@ -148,8 +148,8 @@ vbl_bit_array_2d::operator()(unsigned int i, unsigned int j)
 void
 vbl_bit_array_2d::put(unsigned int i, unsigned int j, const bool & x)
 {
-  unsigned long byteindex;
-  unsigned int bitindex;
+  unsigned long byteindex = 0;
+  unsigned int bitindex = 0;
 
   index(i, j, byteindex, bitindex);
 

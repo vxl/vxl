@@ -8,6 +8,7 @@
 #include "vgl/vgl_point_3d.h"
 #include "vgl/vgl_distance.h"
 #include "vpgl/vpgl_rational_camera.h"
+#include <cmath>
 #include <vpgl/algo/vpgl_rational_adjust_onept.h>
 
 static void
@@ -150,7 +151,7 @@ test_rational_adjust_onept()
   // 2) Find the camera translations by intentionally adjusting the
   //    camera image offsets and determining the adjustment. Should
   //    agree.
-  double u01, v01, u02, v02;
+  double u01 = NAN, v01 = NAN, u02 = NAN, v02 = NAN;
   cams[0].image_offset(u01, v01);
   cams[1].image_offset(u02, v02);
   cams[0].set_image_offset(u01 + 10, v01 + 15);

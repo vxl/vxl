@@ -3,6 +3,7 @@
 #include <algorithm>
 #include "vpgl_backproject.h"
 #include "vpgl_backproject_dem.h"
+#include <cmath>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include "vgl/vgl_point_2d.h"
 #include "vgl/vgl_point_3d.h"
@@ -35,7 +36,7 @@ public:
     vgl_vector_3d<double> dir = ray_.direction();
     rayp = org + x[0] * dir;
     double lon = rayp.x(), lat = rayp.y(), elev = rayp.z();
-    double ud, vd;
+    double ud = NAN, vd = NAN;
     // determine the dem pixel coordinates and check bounds
     geo_cam_->project(lon, lat, elev, ud, vd);
     int u = static_cast<int>(ud + 0.5), v = static_cast<int>(vd + 0.5);
@@ -77,7 +78,7 @@ vpgl_backproject_dem::vpgl_backproject_dem(const vil_image_resource_sptr & dem, 
 
   // get the center of the dem
   unsigned nhi = ni / 2, nhj = nj / 2;
-  double lon, lat;
+  double lon = NAN, lat = NAN;
   geo_cam_->img_to_global(nhi, nhj, lon, lat);
   double elev = dem_view_(nhi, nhj);
   geo_center_.set(lon, lat, elev);
@@ -191,7 +192,7 @@ vpgl_backproject_dem::bproj_dem(const vpgl_camera<double> * cam,
   // check if guess is inside DEM - could be too conservative for very oblique cameras
   vgl_point_3d<double> guess_point = origin + t * dir;
   double lon = guess_point.x(), lat = guess_point.y(), elev = guess_point.z();
-  double ud, vd;
+  double ud = NAN, vd = NAN;
   // Note that elevation has no effect in the project function - just required to meet the interface of an abstract
   // camera
   geo_cam_->project(lon, lat, elev, ud, vd);

@@ -37,7 +37,7 @@ vil1_save(vil1_image i, const char * filename, const char * file_format)
     std::cerr << __FILE__ ": (vil1_save) Cannot save to type [" << file_format << "]\n";
     return false;
   }
-  bool top_first, bgr;
+  bool top_first = false, bgr = false;
   if (out.get_property(vil1_property_top_row_first, &top_first) && !top_first)
     i = vil1_flipud(i);
   if (i.components() == 3 && out.get_property(vil1_property_component_order_is_BGR, &bgr) && bgr)

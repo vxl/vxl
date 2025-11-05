@@ -13,6 +13,7 @@
 #endif
 #include "vnl/vnl_vector.h"
 
+#include <cmath>
 #include <vrel/vrel_homography2d_est.h>
 #include <vrel/vrel_lms_obj.h>
 #include <vrel/vrel_lts_obj.h>
@@ -35,7 +36,7 @@ main()
   std::vector<vnl_vector<double>> from_pts;
   std::vector<vnl_vector<double>> to_pts;
   vnl_vector<double> p(3);
-  double x1, x2, y1, y2, w1, w2;
+  double x1 = NAN, x2 = NAN, y1 = NAN, y2 = NAN, w1 = NAN, w2 = NAN;
 
   while (std::cin >> x1 >> y1 >> w1 >> x2 >> y2 >> w2)
   {

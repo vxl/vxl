@@ -86,7 +86,7 @@ vrel_shift2d_est::weighted_least_squares_fit(vnl_vector<double> & params,
                                              vnl_matrix<double> & /* norm_covar */,
                                              const std::vector<double> * weights) const
 {
-  const std::vector<double> * w;
+  const std::vector<double> * w = nullptr;
   if (weights)
     w = weights;
   else
