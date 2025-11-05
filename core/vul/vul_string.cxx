@@ -387,7 +387,7 @@ vul_string_to_int_list(std::string str)
   );
 
 
-  while (str.length() > 0 && range_regexp.find(str))
+  while (!str.empty() && range_regexp.find(str))
   {
     // the start/end positions (ref from 0) of the
     //    current ',' separated token.
