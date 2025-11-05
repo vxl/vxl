@@ -12,7 +12,7 @@
 static std::vector<std::vector<double>>
 mul(const std::vector<std::vector<double>> & a, const std::vector<std::vector<double>> & b)
 {
-  size_t N = a.size();
+  const size_t N = a.size();
   std::vector<std::vector<double>> out(N, std::vector<double>(N, 0.0));
   for (unsigned i = 0; i < N; ++i)
     for (unsigned j = 0; j < N; ++j)
@@ -58,23 +58,23 @@ test_quadric()
    imaginary_parallel_planes      x^2=-a^2
    real_parallel planes           x^2=a^2
  */
-  vgl_quadric_3d<double> coincident_planes(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-  vgl_quadric_3d<double> imaginary_ellipsoid(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-  vgl_quadric_3d<double> real_ellipsoid(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
-  vgl_quadric_3d<double> imaginary_elliptic_cone(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-  vgl_quadric_3d<double> real_elliptic_cone(1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-  vgl_quadric_3d<double> imaginary_elliptic_cylinder(1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-  vgl_quadric_3d<double> real_elliptic_cylinder(1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
-  vgl_quadric_3d<double> elliptic_paraboloid(1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0);
-  vgl_quadric_3d<double> hyperbolic_cylinder(1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-  vgl_quadric_3d<double> hyperbolic_paraboloid(-1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0);
-  vgl_quadric_3d<double> hyperboloid_of_one_sheet(1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
-  vgl_quadric_3d<double> hyperboloid_of_two_sheets(1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-  vgl_quadric_3d<double> imaginary_intersecting_planes(1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-  vgl_quadric_3d<double> real_intersecting_planes(1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-  vgl_quadric_3d<double> parabolic_cylinder(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-  vgl_quadric_3d<double> imaginary_parallel_planes(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-  vgl_quadric_3d<double> real_parallel_planes(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
+  const vgl_quadric_3d<double> coincident_planes(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  const vgl_quadric_3d<double> imaginary_ellipsoid(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+  const vgl_quadric_3d<double> real_ellipsoid(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
+  const vgl_quadric_3d<double> imaginary_elliptic_cone(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  const vgl_quadric_3d<double> real_elliptic_cone(1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  const vgl_quadric_3d<double> imaginary_elliptic_cylinder(1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+  const vgl_quadric_3d<double> real_elliptic_cylinder(1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
+  const vgl_quadric_3d<double> elliptic_paraboloid(1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0);
+  const vgl_quadric_3d<double> hyperbolic_cylinder(1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+  const vgl_quadric_3d<double> hyperbolic_paraboloid(-1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0);
+  const vgl_quadric_3d<double> hyperboloid_of_one_sheet(1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
+  const vgl_quadric_3d<double> hyperboloid_of_two_sheets(1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+  const vgl_quadric_3d<double> imaginary_intersecting_planes(1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  const vgl_quadric_3d<double> real_intersecting_planes(1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  const vgl_quadric_3d<double> parabolic_cylinder(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+  const vgl_quadric_3d<double> imaginary_parallel_planes(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+  const vgl_quadric_3d<double> real_parallel_planes(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
 
   bool good = coincident_planes.type() == vgl_quadric_3d<double>::coincident_planes;
   good = good && imaginary_ellipsoid.type() == vgl_quadric_3d<double>::imaginary_ellipsoid;
@@ -115,17 +115,17 @@ test_quadric()
   T[2][3] = tz;
   T[3][3] = 1.0;
   Qtrans = transform_quadric(T, Q); // Note T is actually the inverse transformation since transform_quadric == T^tQT
-  vgl_quadric_3d<double> test(Qtrans);
+  const vgl_quadric_3d<double> test(Qtrans);
   good = test.type() == vgl_quadric_3d<double>::elliptic_paraboloid;
   Q = real_elliptic_cone.coef_matrix();
   Qtrans = transform_quadric(T, Q);
-  vgl_quadric_3d<double> test2(Qtrans);
+  const vgl_quadric_3d<double> test2(Qtrans);
   good = good && test2.type() == vgl_quadric_3d<double>::real_elliptic_cone;
   TEST("Transformed quadric classification", good, true);
-  std::string name = test2.type_by_number(test2.type());
+  const std::string name = test2.type_by_number(test2.type());
   good = (name == "real_elliptic_cone");
   TEST("type_by_number", good, true);
-  vgl_quadric_3d<double>::vgl_quadric_type typ = test2.type_by_name("real_elliptic_cone");
+  const vgl_quadric_3d<double>::vgl_quadric_type typ = test2.type_by_name("real_elliptic_cone");
   good = typ == test2.type();
   TEST("type_by_name", good, true);
   good = real_elliptic_cone.on(vgl_homg_point_3d<double>(1.0, 2.0, sqrt(5)), vgl_tolerance<double>::position);
@@ -155,14 +155,14 @@ test_quadric()
   Te[3][3] = 1.0;
   // a simple sphere case
   Qet = transform_quadric(Te, Qe);
-  vgl_quadric_3d<double> tran_quad(Qet);
+  const vgl_quadric_3d<double> tran_quad(Qet);
   vgl_point_3d<double> cent, true_cent(tx, ty, tz);
   good = tran_quad.center(cent) && cent == true_cent;
   // full eccentric ellipsoid
-  vgl_quadric_3d<double> eccentric_ellipsoid(0.5, 0.25, 0.125, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
+  const vgl_quadric_3d<double> eccentric_ellipsoid(0.5, 0.25, 0.125, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
   QeE = eccentric_ellipsoid.coef_matrix();
   QeET = transform_quadric(T, QeE);
-  vgl_quadric_3d<double> tran_ecc_quad(QeET);
+  const vgl_quadric_3d<double> tran_ecc_quad(QeET);
   vgl_point_3d<double> rot_cent;
   good = good && tran_ecc_quad.center(rot_cent);
   // to prove the center is correct, translate to move the center to the origin
@@ -173,7 +173,7 @@ test_quadric()
   // note again the tranform quadric function requires the inverse of the desired translation,
   // which is just the center itself.
   QeETT = transform_quadric(Te, QeET); // should have g = h = i == 0
-  double sum_ghi = fabs(QeETT[0][3]) + fabs(QeETT[1][3]) + fabs(QeETT[2][3]);
+  const double sum_ghi = fabs(QeETT[0][3]) + fabs(QeETT[1][3]) + fabs(QeETT[2][3]);
   good = good && sum_ghi < 1.0e-8;
   TEST("center", good, true);
   Q = elliptic_paraboloid.coef_matrix();
@@ -187,10 +187,10 @@ test_quadric()
   Tq[0][3] = 1.0;
   Tq[2][3] = 2.0;
   Tq[2][3] = 3.0;
-  vgl_quadric_3d<double> tr_elliptic_para(Q, Tq);
+  const vgl_quadric_3d<double> tr_elliptic_para(Q, Tq);
   std::vector<std::vector<double>> Hg;
-  std::vector<std::vector<double>> Qg = tr_elliptic_para.canonical_quadric(Hg);
-  vgl_quadric_3d<double> pqst_q(Qg);
+  const std::vector<std::vector<double>> Qg = tr_elliptic_para.canonical_quadric(Hg);
+  const vgl_quadric_3d<double> pqst_q(Qg);
   TEST("canonical frame ", pqst_q.type() == vgl_quadric_3d<double>::elliptic_paraboloid, true);
 }
 

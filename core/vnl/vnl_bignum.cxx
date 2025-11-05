@@ -668,8 +668,8 @@ operator<<(std::ostream & os, const vnl_bignum & b)
   if (d.is_infinity())
     return os << "Inf";
   vnl_bignum q;
-  vnl_bignum r;                              // Temp quotient and remainder
-  char * cbuf = new char[5 * (b.count + 1)]; // Temp character buffer
+  vnl_bignum r;                                    // Temp quotient and remainder
+  char * const cbuf = new char[5 * (b.count + 1)]; // Temp character buffer
   Counter i = 0;
   do
   {                                  // repeat:
@@ -923,7 +923,7 @@ vnl_bignum::resize(short new_count)
   assert(new_count >= 0);
   if (new_count == this->count)
     return;
-  Data * new_data = (new_count > 0 ? new Data[new_count] : nullptr); // Allocate data if necessary
+  Data * const new_data = (new_count > 0 ? new Data[new_count] : nullptr); // Allocate data if necessary
 
   if (this->count <= new_count)
   { // Copy old data into new
@@ -957,10 +957,10 @@ vnl_bignum::trim()
     if (this->data[i - 1] != 0)
       break; //   that are zero
   if (i < this->count)
-  {                                                    // If there are some such words
-    this->count = i;                                   // Update the count
-    Data * new_data = (i > 0 ? new Data[i] : nullptr); // Allocate data if necessary
-    for (; i > 0; i--)                                 // Copy old data into new
+  {                                                          // If there are some such words
+    this->count = i;                                         // Update the count
+    Data * const new_data = (i > 0 ? new Data[i] : nullptr); // Allocate data if necessary
+    for (; i > 0; i--)                                       // Copy old data into new
       new_data[i - 1] = this->data[i - 1];
     delete[] this->data;   // Delete old data
     this->data = new_data; // Point to new data

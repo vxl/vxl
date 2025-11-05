@@ -26,10 +26,10 @@ test_stream(int argc, char * argv[])
   }
   else
   {
-    std::string root = testlib_root_dir();
+    const std::string root = testlib_root_dir();
     dir = root + "/core/vil/tests/file_read_data";
   }
-  bool exists = vul_file::is_directory(dir);
+  const bool exists = vul_file::is_directory(dir);
   if (!exists)
   {
     TEST("Path not defined", false, true);

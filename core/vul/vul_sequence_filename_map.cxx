@@ -66,21 +66,21 @@ vul_sequence_filename_map::~vul_sequence_filename_map() = default;
 std::string
 vul_sequence_filename_map::name(int frame)
 {
-  std::string index_str = vul_sprintf(index_format_.c_str(), indices_[frame]);
+  const std::string index_str = vul_sprintf(index_format_.c_str(), indices_[frame]);
   return basename_ + index_str;
 }
 
 std::string
 vul_sequence_filename_map::pair_name(int i, int j)
 {
-  std::string index_str = vul_sprintf((index_format_ + "." + index_format_).c_str(), indices_[i], indices_[j]);
+  const std::string index_str = vul_sprintf((index_format_ + "." + index_format_).c_str(), indices_[i], indices_[j]);
   return basename_ + index_str;
 }
 
 std::string
 vul_sequence_filename_map::triplet_name(int i, int j, int k)
 {
-  std::string index_str = vul_sprintf(
+  const std::string index_str = vul_sprintf(
     (index_format_ + "." + index_format_ + "." + index_format_).c_str(), indices_[i], indices_[j], indices_[k]);
   return basename_ + index_str;
 }
@@ -95,9 +95,9 @@ vul_sequence_filename_map::parse()
     vul_reg_exp re("[,;]([0-9]+)?(:[0-9]+)?:([0-9]+)?$");
     if (re.find(temp.c_str()))
     {
-      std::string match_start = re.match(1);
-      std::string match_step = re.match(2);
-      std::string match_end = re.match(3);
+      const std::string match_start = re.match(1);
+      const std::string match_step = re.match(2);
+      const std::string match_end = re.match(3);
 
       temp.erase(re.start(0));
 
@@ -135,7 +135,7 @@ vul_sequence_filename_map::parse()
       index_format_ = bt.substr(pos);
     else if ((pos = bt.find('#')) != std::string::npos)
     {
-      std::size_t last_pos = bt.rfind('#');
+      const std::size_t last_pos = bt.rfind('#');
       index_format_ = vul_sprintf("0%id", last_pos - pos + 1);
       index_format_ = "%" + index_format_;
     }
@@ -249,7 +249,7 @@ vul_sequence_filename_map::parse()
   {
     bool found_match = false;
     {
-      std::string glob(image_dir_ + "*");
+      const std::string glob(image_dir_ + "*");
       vul_file_iterator fn(glob);
       if (fn)
       {
@@ -303,7 +303,7 @@ vul_sequence_filename_map::parse()
       for (vul_file_iterator fn(image_dir_ + "*"); fn; ++fn)
         if (filter_dirent(fn.filename(), image_extension_))
         {
-          int index = extract_index(fn.filename());
+          const int index = extract_index(fn.filename());
           max = (index > max) ? index : max;
           min = (index < min) ? index : min;
         }
@@ -366,7 +366,7 @@ vul_sequence_filename_map::filter_dirent(const char * name_string, const std::st
   if (expected_length == 0L)
     expected_length = basename_.size() + (std::string(vul_sprintf(index_format_.c_str(), 0)) + extension).size();
 
-  std::string name_str(name_string);
+  const std::string name_str(name_string);
 
   return name_str.size() == expected_length && name_str.substr(0, basename_.size()) == basename_ &&
          name_str.substr(expected_length - extension.size(), std::string::npos) == extension;
@@ -375,8 +375,8 @@ vul_sequence_filename_map::filter_dirent(const char * name_string, const std::st
 int
 vul_sequence_filename_map::extract_index(const char * name_string)
 {
-  std::string name_str(name_string);
-  std::string index_str = name_str.substr(basename_.size(), name_str.size() - image_extension_.size());
+  const std::string name_str(name_string);
+  const std::string index_str = name_str.substr(basename_.size(), name_str.size() - image_extension_.size());
   return std::stoi(index_str.c_str());
 }
 

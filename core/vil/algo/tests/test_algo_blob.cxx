@@ -252,7 +252,7 @@ test_algo_blob()
 
   // Generic image
   {
-    vil_image_view<bool> c_shape_image = generate_test_image();
+    const vil_image_view<bool> c_shape_image = generate_test_image();
     vil_print_all(std::cout, c_shape_image, 1);
 
     vil_blob_labels(c_shape_image, vil_blob_8_conn, labels);

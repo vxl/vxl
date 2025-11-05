@@ -50,8 +50,8 @@ test_array_2d_io()
     test_result = false;
   else
   {
-    std::size_t array_rows = v_out.rows();
-    std::size_t array_cols = v_out.cols();
+    const std::size_t array_rows = v_out.rows();
+    const std::size_t array_cols = v_out.cols();
     for (std::size_t i = 0; i < array_rows; i++)
     {
       for (std::size_t j = 0; j < array_cols; j++)

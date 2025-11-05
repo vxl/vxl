@@ -35,8 +35,8 @@ vpgl_bundle_adjust::normalize_points(std::vector<vgl_point_2d<double>> & image_p
   nx = ny = ns = 0.0;
   for (auto & image_point : image_points)
   {
-    double x = image_point.x();
-    double y = image_point.y();
+    const double x = image_point.x();
+    const double y = image_point.y();
     nx += x;
     ny += y;
     ns += x * x + y * y;
@@ -78,8 +78,8 @@ vpgl_bundle_adjust::rotate_cameras(const vgl_vector_3d<double> & axis,
   vnl_double_3 r(axis.x(), axis.y(), axis.z());
   r.normalize();
   r *= vnl_math::pi;
-  vgl_rotation_3d<double> R(r);
-  vgl_rotation_3d<double> R2(0.0, 0.0, vnl_math::pi);
+  const vgl_rotation_3d<double> R(r);
+  const vgl_rotation_3d<double> R2(0.0, 0.0, vnl_math::pi);
   for (auto & c : cameras)
   {
     c.set_camera_center(R * c.get_camera_center());
@@ -104,7 +104,7 @@ vpgl_bundle_adjust::depth_reverse(std::vector<vpgl_perspective_camera<double>> &
     pc += vnl_double_3(point.x(), point.y(), point.z());
   }
   pc /= points.size();
-  vgl_point_3d<double> point_center(pc[0], pc[1], pc[2]);
+  const vgl_point_3d<double> point_center(pc[0], pc[1], pc[2]);
 
   // compute the mean of the camera centers
   for (auto & camera : cameras)
@@ -113,12 +113,12 @@ vpgl_bundle_adjust::depth_reverse(std::vector<vpgl_perspective_camera<double>> &
     cc += vnl_double_3(c.x(), c.y(), c.z());
   }
   cc /= cameras.size();
-  vgl_point_3d<double> camera_center(cc[0], cc[1], cc[2]);
+  const vgl_point_3d<double> camera_center(cc[0], cc[1], cc[2]);
 
   // define the plane of reflection
   vgl_vector_3d<double> axis(camera_center - point_center);
   normalize(axis);
-  vgl_plane_3d<double> reflect_plane(axis, point_center);
+  const vgl_plane_3d<double> reflect_plane(axis, point_center);
 
   reflect_points(reflect_plane, points);
   rotate_cameras(axis, cameras);
@@ -158,7 +158,7 @@ vpgl_bundle_adjust::optimize(std::vector<vpgl_perspective_camera<double>> & came
       K_vals[4] += Ki.skew();
     }
     K_vals /= cameras.size();
-    vpgl_calibration_matrix<double> K(
+    const vpgl_calibration_matrix<double> K(
       K_vals[0] / ns, vgl_point_2d<double>((K_vals[2] - nx) / ns, (K_vals[3] - ny) / ns), 1.0, K_vals[1], K_vals[4]);
     ba_func_ = new vpgl_ba_shared_k_lsqr(K, norm_image_points, mask);
   }
@@ -252,15 +252,15 @@ vpgl_bundle_adjust::write_vrml(const std::string & filename,
   os << "#VRML V2.0 utf8\n\n";
 
   // vrml views are rotated 180 degrees around the X axis
-  vgl_rotation_3d<double> rot180x(vnl_math::pi, 0.0, 0.0);
+  const vgl_rotation_3d<double> rot180x(vnl_math::pi, 0.0, 0.0);
 
   for (unsigned int i = 0; i < cameras.size(); ++i)
   {
     vnl_double_3x3 K = cameras[i].get_calibration().get_matrix();
 
-    vgl_rotation_3d<double> R = (rot180x * cameras[i].get_rotation()).inverse();
+    const vgl_rotation_3d<double> R = (rot180x * cameras[i].get_rotation()).inverse();
     vgl_point_3d<double> ctr = cameras[i].get_camera_center();
-    double fov = 2.0 * std::max(std::atan(K[1][2] / K[1][1]), std::atan(K[0][2] / K[0][0]));
+    const double fov = 2.0 * std::max(std::atan(K[1][2] / K[1][1]), std::atan(K[0][2] / K[0][0]));
     os << "Viewpoint {\n"
        << "  position    " << ctr.x() << ' ' << ctr.y() << ' ' << ctr.z() << '\n'
        << "  orientation " << R.axis() << ' ' << R.angle() << '\n'

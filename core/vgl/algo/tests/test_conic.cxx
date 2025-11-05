@@ -33,8 +33,8 @@ testlib_test_assert_near(const std::string & msg,
                          const vgl_homg_point_2d<double> & p1,
                          double tol = 1e-6)
 {
-  double expr = (p1.w() == 0 && p2.w() == 0) ? sqr(p1.x() * p2.y() - p1.y() * p2.x())
-                                             : vgl_homg_operators_2d<double>::distance_squared(p1, p2);
+  const double expr = (p1.w() == 0 && p2.w() == 0) ? sqr(p1.x() * p2.y() - p1.y() * p2.x())
+                                                   : vgl_homg_operators_2d<double>::distance_squared(p1, p2);
   testlib_test_assert_near(msg, expr, 0.0, tol);
 }
 
@@ -44,8 +44,8 @@ testlib_test_assert_near(const std::string & msg,
                          const vgl_homg_line_2d<double> & l1,
                          double tol = 1e-6)
 {
-  double expr = sqr(l1.a() / l1.b() - l2.a() / l2.b()) + sqr(l1.a() / l1.c() - l2.a() / l2.c()) +
-                sqr(l1.b() / l1.c() - l2.b() / l2.c());
+  const double expr = sqr(l1.a() / l1.b() - l2.a() / l2.b()) + sqr(l1.a() / l1.c() - l2.a() / l2.c()) +
+                      sqr(l1.b() / l1.c() - l2.b() / l2.c());
   testlib_test_assert_near(msg, expr, 0.0, tol);
 }
 
@@ -55,8 +55,8 @@ testlib_test_assert_near(const std::string & msg,
                          const vgl_box_2d<double> & b2,
                          double tol = 1e-6)
 {
-  double expr = sqr(b1.min_x() - b2.min_x()) + sqr(b1.min_y() - b2.min_y()) + sqr(b1.max_x() - b2.max_x()) +
-                sqr(b1.max_y() - b2.max_y());
+  const double expr = sqr(b1.min_x() - b2.min_x()) + sqr(b1.min_y() - b2.min_y()) + sqr(b1.max_x() - b2.max_x()) +
+                      sqr(b1.max_y() - b2.max_y());
   testlib_test_assert_near(msg, expr, 0.0, tol);
 }
 
@@ -120,7 +120,7 @@ check_points_on_conics(const vgl_conic<double> & c1,
   auto it = pts.begin();
   for (; it != pts.end(); ++it)
   {
-    vgl_homg_point_2d<double> p = *it;
+    const vgl_homg_point_2d<double> p = *it;
     double fval1 = NAN, fval2 = NAN, x = NAN, y = NAN;
     if (p.w() == 0)
     { // point at infinity
@@ -186,7 +186,7 @@ test_conic()
   is << "1.0 -2.0 3.0 -4.0 5.0 0.0";
   vgl_conic<double> c4;
   is >> c4;
-  vgl_conic<double> c5(1.0, -2.0, 3.0, -4.0, 5.0, 0.0);
+  const vgl_conic<double> c5(1.0, -2.0, 3.0, -4.0, 5.0, 0.0);
   TEST("istream", c4, c5);
 
   // 2. Test circle
@@ -238,7 +238,7 @@ test_conic()
 
   cc = vgl_conic<double>(1, 0, 1, -2, -4, 4); // idem, by equation
   double mm[] = { 1, 0, -1, 0, 1, -2, -1, -2, 4 };
-  vnl_double_3x3 m(mm);
+  const vnl_double_3x3 m(mm);
   cc = vgl_homg_operators_2d<double>::vgl_conic_from_matrix(m);
   TEST("vgl_conic_from_matrix", cc, c);
   vnl_double_3x3 m2 = vgl_homg_operators_2d<double>::matrix_from_conic(c);
@@ -308,9 +308,9 @@ test_conic()
 
   // End ellipse geometry test
 
-  vgl_homg_point_2d<double> startp(7, 10, 1); // rightmost top on the long axis
-  vgl_homg_point_2d<double> endp(5, -1, 1);   // downmost top on the short axis
-  vgl_homg_point_2d<double> top(-3, 5, 1);    // upmost top on the short axis
+  const vgl_homg_point_2d<double> startp(7, 10, 1); // rightmost top on the long axis
+  const vgl_homg_point_2d<double> endp(5, -1, 1);   // downmost top on the short axis
+  vgl_homg_point_2d<double> top(-3, 5, 1);          // upmost top on the short axis
   TEST("contains right top", c.contains(startp), true);
   TEST("contains down top", c.contains(endp), true);
   TEST("contains up top", c.contains(top), true);
@@ -392,8 +392,8 @@ test_conic()
   TEST_NEAR("hyperbola equality", cc, c, 1e-6);
 
   // Main axis is the line 3x+4y-11w=0, secondary axis is 4x-3y+2w=0
-  vgl_homg_point_2d<double> top1(5, -1, 1); // right top on the long axis
-  vgl_homg_point_2d<double> top2(-3, 5, 1); // left top on the long axis
+  const vgl_homg_point_2d<double> top1(5, -1, 1); // right top on the long axis
+  const vgl_homg_point_2d<double> top2(-3, 5, 1); // left top on the long axis
   TEST("contains right top (5,-1)", c.contains(top1), true);
   TEST("contains left top (-3,5)", c.contains(top2), true);
 

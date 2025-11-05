@@ -37,15 +37,15 @@ vpgl_affine_rectification::compute_affine_f(const vpgl_affine_camera<double> * c
                                             const vpgl_affine_camera<double> * cam2,
                                             vpgl_affine_fundamental_matrix<double> & FA)
 {
-  vnl_matrix_fixed<double, 3, 4> M1 = cam1->get_matrix();
-  vgl_homg_point_3d<double> C = cam1->camera_center();
+  const vnl_matrix_fixed<double, 3, 4> M1 = cam1->get_matrix();
+  const vgl_homg_point_3d<double> C = cam1->camera_center();
   vnl_vector_fixed<double, 4> C1;
   C1[0] = C.x();
   C1[1] = C.y();
   C1[2] = C.z();
   C1[3] = C.w();
 
-  vnl_matrix_fixed<double, 3, 4> M2 = cam2->get_matrix();
+  const vnl_matrix_fixed<double, 3, 4> M2 = cam2->get_matrix();
 
   vnl_vector_fixed<double, 3> e2 = M2 * C1;
 
@@ -61,8 +61,8 @@ vpgl_affine_rectification::compute_affine_f(const vpgl_affine_camera<double> * c
   e2M[2][2] = 0;
 
   // find pseudo inverse of the first camera
-  vnl_svd<double> temp{ (M1 * M1.transpose()).as_ref() }; // use svd to find inverse of M1*M1.transpose()
-  vnl_matrix_fixed<double, 4, 3> M1inv = M1.transpose() * temp.inverse();
+  const vnl_svd<double> temp{ (M1 * M1.transpose()).as_ref() }; // use svd to find inverse of M1*M1.transpose()
+  const vnl_matrix_fixed<double, 4, 3> M1inv = M1.transpose() * temp.inverse();
 
   vnl_matrix_fixed<double, 3, 3> FAM;
   FAM = e2M * M2 * M1inv;
@@ -101,8 +101,8 @@ vpgl_affine_rectification::compute_rectification(const vpgl_affine_fundamental_m
   e2[1] = FAM[0][2];
   e2[2] = 0;
 
-  double e1l = e1.magnitude();
-  double e2l = e2.magnitude();
+  const double e1l = e1.magnitude();
+  const double e2l = e2.magnitude();
 
   H1.set_identity();
   H2.set_identity();

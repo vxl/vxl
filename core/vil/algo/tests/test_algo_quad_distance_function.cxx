@@ -14,7 +14,7 @@ test_algo_quad_envelope_float()
     data[i] = 1.0f;
   data[2] = -10;
   std::vector<double> x, y, z;
-  double a = 0.8;
+  const double a = 0.8;
   vil_quad_envelope(&data[0], 1, data.size(), x, y, z, a);
   TEST("Only one parabola in envelope", x.size(), 1);
   TEST_NEAR("Centre", x[0], 2.0, 1e-6);

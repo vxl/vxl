@@ -16,7 +16,7 @@
 static void
 test_polar()
 {
-  vcsl_polar_sptr p = new vcsl_polar;
+  const vcsl_polar_sptr p = new vcsl_polar;
   TEST("test_polar_sptr", bool(p), true);
 }
 

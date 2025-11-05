@@ -32,8 +32,8 @@ vil1_copy(const vil1_image & in, vil1_image & out)
 #undef assert_dimension_equal
   // assert((in.components() * in.planes()) == (out.components() * out.planes()));
 
-  int height = in.height();
-  int width = in.width();
+  const int height = in.height();
+  const int width = in.width();
 
   // Simple implementation copies the whole buffer at once
   // This is only valid if planes and components are identical,

@@ -20,10 +20,10 @@ main(int argc, char ** argv)
     std::abort();
   }
 
-  double low = std::stod(argv[1]);
-  double high = std::stod(argv[2]);
+  const double low = std::stod(argv[1]);
+  const double high = std::stod(argv[2]);
 
-  vil1_image in = vil1_load(argv[3]);
+  const vil1_image in = vil1_load(argv[3]);
   if (vil1_pixel_format(in) == VIL1_BYTE)
     vil1_save(vil1_image_as_byte(vil1_clamp(in, low, high)), argv[4], "pnm");
   else if (vil1_pixel_format(in) == VIL1_RGB_BYTE)

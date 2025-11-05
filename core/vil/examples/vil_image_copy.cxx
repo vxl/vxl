@@ -22,7 +22,7 @@ main(int argc, char ** argv)
     return 0;
   }
 
-  vil_image_view<vxl_byte> src_im = vil_load(argv[1]);
+  const vil_image_view<vxl_byte> src_im = vil_load(argv[1]);
   if (src_im.size() == 0)
   {
     std::cout << "Unable to load source image from " << argv[1] << std::endl;

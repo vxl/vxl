@@ -66,12 +66,12 @@ main(int argc, char ** argv)
   vul_arg_parse(argc, argv);
 
   // Load from disk into memory "inimg"
-  vil1_image in = vil1_load(a_input_filename().c_str());
-  vil1_memory_image_of<unsigned char> inimg(in);
+  const vil1_image in = vil1_load(a_input_filename().c_str());
+  const vil1_memory_image_of<unsigned char> inimg(in);
 
   // Build kernel in "kernelimg"
   vil1_memory_image_of<float> kernelimg(0, 0);
-  std::string kernel(a_kernel());
+  const std::string kernel(a_kernel());
   for (vil1_kernel_info * kp = kernels; kp->name; ++kp)
     if (kernel == kp->name)
     {

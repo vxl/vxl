@@ -204,7 +204,7 @@ void
 test_file_iterator_dos()
 {
   // Make a directory structure
-  std::string tempdir = vul_temp_filename();
+  const std::string tempdir = vul_temp_filename();
   vpl_mkdir(tempdir.c_str(), 0777);
 
   vpl_mkdir((tempdir + "\\a").c_str(), 0777);
@@ -338,7 +338,7 @@ test_file_iterator()
 #endif
 
   std::cout << "Testing non-existent directory" << std::endl;
-  vul_file_iterator f("/some/directory/that/does/not/exist/*.blah");
+  const vul_file_iterator f("/some/directory/that/does/not/exist/*.blah");
   TEST("Iterator is empty", bool(f), false);
 }
 

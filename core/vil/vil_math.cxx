@@ -25,8 +25,8 @@ template <>
 void
 vil_math_median(vxl_byte & median, const vil_image_view<vxl_byte> & im, unsigned p)
 {
-  unsigned ni = im.ni();
-  unsigned nj = im.nj();
+  const unsigned ni = im.ni();
+  const unsigned nj = im.nj();
 
   // special case the empty image.
   if (ni * nj == 0)
@@ -44,9 +44,9 @@ vil_math_median(vxl_byte & median, const vil_image_view<vxl_byte> & im, unsigned
     }
   }
 
-  unsigned tot = ni * nj;
+  const unsigned tot = ni * nj;
   // Target is ceil(tot/2)
-  unsigned tgt = (tot + 1) / 2;
+  const unsigned tgt = (tot + 1) / 2;
   unsigned cnt = 0;
   unsigned idx = 0;
   while (cnt < tgt)
@@ -59,7 +59,7 @@ vil_math_median(vxl_byte & median, const vil_image_view<vxl_byte> & im, unsigned
   if (cnt == tgt && tot % 2 == 0)
   {
     // idx is
-    unsigned lo = idx - 1;
+    const unsigned lo = idx - 1;
     while (hist[idx] == 0)
     {
       ++idx;

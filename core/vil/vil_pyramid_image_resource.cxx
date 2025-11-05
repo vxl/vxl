@@ -33,7 +33,7 @@ vil_pyramid_image_resource::get_property(const char * tag, void * /*value*/) con
 static vil_image_view<float>
 decimate_block(const std::vector<std::vector<vil_image_view<float>>> & blocks)
 {
-  vil_image_view<float> blk = blocks[0][0];
+  const vil_image_view<float> blk = blocks[0][0];
   unsigned int sbi = blk.ni(), sbj = blk.nj();
   vil_image_view<float> dec_block;
   dec_block.set_size(sbi, sbj);
@@ -54,7 +54,7 @@ decimate_block(const std::vector<std::vector<vil_image_view<float>>> & blocks)
         i0 = 2 * di - sbi;
       }
       vil_image_view<float> blk = blocks[r][c];
-      float v = 0.25f * (blk(i0, j0) + blk(i0 + 1, j0) + blk(i0, j0 + 1) + blk(i0 + 1, j0 + 1));
+      const float v = 0.25f * (blk(i0, j0) + blk(i0 + 1, j0) + blk(i0, j0 + 1) + blk(i0 + 1, j0 + 1));
       dec_block(di, dj) = v;
     }
   }
@@ -67,9 +67,9 @@ convert_multi_plane_to_float(vil_image_view_base_sptr & blk, std::vector<vil_ima
   if (!blk)
     return false;
   fblk.clear();
-  vil_pixel_format fmt = blk->pixel_format();
+  const vil_pixel_format fmt = blk->pixel_format();
   unsigned int ni = blk->ni(), nj = blk->nj();
-  unsigned int np = blk->nplanes();
+  const unsigned int np = blk->nplanes();
   if (fmt == VIL_PIXEL_FORMAT_BYTE)
   {
     vil_image_view<unsigned char> bv = blk;
@@ -130,14 +130,14 @@ vil_pyramid_image_resource::blocked_decimate(const vil_blocked_image_resource_sp
   unsigned int nbi = brsc->n_block_i(), nbj = brsc->n_block_j();
   if (nbi == 0 || nbj == 0)
     return false;
-  unsigned int np = brsc->nplanes();
+  const unsigned int np = brsc->nplanes();
 
   // check for consistent block structure
   unsigned int sbi_src = brsc->size_block_i(), sbj_src = brsc->size_block_j();
   unsigned int sbi_dec = dec_resc->size_block_i(), sbj_dec = dec_resc->size_block_j();
   if (sbi_src != sbi_dec || sbj_src != sbj_dec)
     return false;
-  vil_pixel_format fmt = vil_pixel_format_component_format(brsc->pixel_format());
+  const vil_pixel_format fmt = vil_pixel_format_component_format(brsc->pixel_format());
 
   // Set up the block buffer, a 2xnbi set of blocks needed to support 2x2
   // pixel decimation.  The buffer is updated as the next two rows of blocks is
@@ -272,7 +272,7 @@ vil_pyramid_image_resource::blocked_decimate(const vil_blocked_image_resource_sp
                 nbrhd[r][c] = buf[r][ki][p];
               }
             // construct the block
-            vil_image_view<float> fplane = decimate_block(nbrhd);
+            const vil_image_view<float> fplane = decimate_block(nbrhd);
             dec_fblk[p] = fplane;
           }
           // convert back to original format only allow 8 bit and 16 bit
@@ -305,7 +305,7 @@ vil_pyramid_image_resource::decimate(const vil_image_resource_sptr & resc, const
 {
   if (!resc)
     return nullptr;
-  vil_pixel_format fmt = vil_pixel_format_component_format(resc->pixel_format());
+  const vil_pixel_format fmt = vil_pixel_format_component_format(resc->pixel_format());
   switch (fmt)
   {
     case VIL_PIXEL_FORMAT_BYTE:
@@ -339,7 +339,7 @@ vil_pyramid_image_resource::decimate(const vil_image_resource_sptr & resc, const
   // create the output decimated resource
   { // file scope to close resource
     unsigned int rni = resc->ni(), rnj = resc->nj();
-    unsigned int np = resc->nplanes();
+    const unsigned int np = resc->nplanes();
     // if source image has even dimensions then just divide by 2
     unsigned int dni = rni / 2, dnj = rnj / 2;
     // else if the dimension is odd, increase the output size by 1.
@@ -352,6 +352,6 @@ vil_pyramid_image_resource::decimate(const vil_image_resource_sptr & resc, const
       return nullptr;
   } // file scope to close resource
   // reopen resource for reading
-  vil_image_resource_sptr temp = vil_load_image_resource(filename);
+  const vil_image_resource_sptr temp = vil_load_image_resource(filename);
   return temp;
 }

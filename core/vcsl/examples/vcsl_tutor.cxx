@@ -34,7 +34,7 @@ main()
 
   //: Graph of defined CS
   // All CS must be added to this graph as they are created.
-  vcsl_graph_sptr graphCS = new vcsl_graph;
+  const vcsl_graph_sptr graphCS = new vcsl_graph;
 
   //: World Coordinate System
   // Equivalent to the Top view, by definition.
@@ -42,7 +42,7 @@ main()
   // A CS for which no parent is defined is absolute.  Logically,
   // there must be one absolute CS which all other directly or
   // indirectly relate to.
-  vcsl_spatial_sptr WCS = new vcsl_cartesian_3d;
+  const vcsl_spatial_sptr WCS = new vcsl_cartesian_3d;
 
   // Add WCS to the global map of coordinate systems.
   WCS->set_graph(graphCS);
@@ -76,7 +76,7 @@ main()
   rightXF.set_static(vnl_math::pi_over_2, yA.as_ref());
 
   //: WCS rotated 90 degrees about the y-axis to produce right hand view/CS
-  vcsl_spatial_sptr right = new vcsl_cartesian_3d;
+  const vcsl_spatial_sptr right = new vcsl_cartesian_3d;
   right->set_graph(graphCS);
   right->set_unique(WCS, &rightXF);
 

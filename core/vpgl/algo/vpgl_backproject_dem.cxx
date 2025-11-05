@@ -33,7 +33,7 @@ public:
   {
     // get the lon and lat values for a given parameter value
     vgl_point_3d<double> org = ray_.origin(), rayp;
-    vgl_vector_3d<double> dir = ray_.direction();
+    const vgl_vector_3d<double> dir = ray_.direction();
     rayp = org + x[0] * dir;
     double lon = rayp.x(), lat = rayp.y(), elev = rayp.z();
     double ud = NAN, vd = NAN;
@@ -48,7 +48,7 @@ public:
       return std::numeric_limits<double>::max();
     }
     // within bounds so get squared distance between dem z and ray z
-    double z = (*dview_)(u, v);
+    const double z = (*dview_)(u, v);
     return (elev - z) * (elev - z);
   }
 
@@ -112,8 +112,8 @@ vpgl_backproject_dem::vpgl_backproject_dem(const vil_image_resource_sptr & dem, 
       std::cout << "Calculating Z-range from DEM..." << std::endl;
     // get the bounds on elevation by sampling according to a fraction of the dem area
     // compute the pixel interval (stride) for sampling the fraction
-    double area = ni * nj;
-    double stride_area = area / min_samples_;
+    const double area = ni * nj;
+    const double stride_area = area / min_samples_;
     auto stride_interval = static_cast<unsigned>(std::sqrt(stride_area));
 
     // sample elevations
@@ -134,7 +134,7 @@ vpgl_backproject_dem::vpgl_backproject_dem(const vil_image_resource_sptr & dem, 
     auto band_size = static_cast<unsigned>(ns * tail_fract_);
     for (unsigned k = band_size; k < (ns - band_size); ++k)
     {
-      double z = z_samples[k];
+      const double z = z_samples[k];
       if (z < zmin_calc)
         zmin_calc = static_cast<float>(z);
       if (z > zmax_calc)
@@ -168,8 +168,8 @@ vpgl_backproject_dem::bproj_dem(const vpgl_camera<double> * cam,
     std::cout << "vpgl_backproj_dem " << image_point << " max_z " << max_z << " min_z " << min_z << " init_guess "
               << initial_guess << " error tol " << error_tol << std::endl;
   // compute the ray corresponding to the image point
-  double dz = (max_z - min_z);
-  vgl_point_2d<double> initial_xy(initial_guess.x(), initial_guess.y());
+  const double dz = (max_z - min_z);
+  const vgl_point_2d<double> initial_xy(initial_guess.x(), initial_guess.y());
   vgl_ray_3d<double> ray;
   if (!vpgl_ray::ray(cam, image_point, initial_xy, max_z, dz, ray))
   {
@@ -177,9 +177,9 @@ vpgl_backproject_dem::bproj_dem(const vpgl_camera<double> * cam,
       std::cout << " compute camera ray failed - Fatal!" << std::endl;
     return false;
   }
-  vgl_point_3d<double> origin = ray.origin();
+  const vgl_point_3d<double> origin = ray.origin();
   // find min parameter on ray
-  vgl_vector_3d<double> dir = ray.direction();
+  const vgl_vector_3d<double> dir = ray.direction();
   if (std::fabs(dir.z()) < 0.001)
   {
     if (verbose_)
@@ -187,7 +187,7 @@ vpgl_backproject_dem::bproj_dem(const vpgl_camera<double> * cam,
     return false;
   }
   // inital guess at ray parameter
-  double t = (initial_guess.z() - max_z) / dir.z();
+  const double t = (initial_guess.z() - max_z) / dir.z();
 
   // check if guess is inside DEM - could be too conservative for very oblique cameras
   vgl_point_3d<double> guess_point = origin + t * dir;
@@ -209,8 +209,8 @@ vpgl_backproject_dem::bproj_dem(const vpgl_camera<double> * cam,
   // thus the non standard call for error below
   dem_bproj_cost_function c(dem_view_, geo_cam_, ray, verbose_);
   vnl_brent_minimizer brm(c);
-  double tmin = brm.minimize(t);
-  double error = brm.f_at_last_minimum();
+  const double tmin = brm.minimize(t);
+  const double error = brm.f_at_last_minimum();
   if (error > error_tol)
     return false;
 
@@ -235,7 +235,7 @@ vpgl_backproject_dem::bproj_dem(const vpgl_camera<double> * cam,
   vgl_point_3d<double> wrld_pt;
   img_pt.set(image_point[0], image_point[1]);
   init_guess.set(initial_guess[0], initial_guess[1], initial_guess[2]);
-  bool good = this->bproj_dem(cam, img_pt, max_z, min_z, init_guess, wrld_pt, error_tol);
+  const bool good = this->bproj_dem(cam, img_pt, max_z, min_z, init_guess, wrld_pt, error_tol);
 
   if (!good)
   {

@@ -111,7 +111,7 @@ test_conic_regression()
 static void
 unit_circle(double s, double x0, double y0, double & x, double & y)
 {
-  double theta = static_cast<double>(s) * vnl_math::pi / 18;
+  const double theta = static_cast<double>(s) * vnl_math::pi / 18;
   double c = std::cos(theta), si = std::sin(theta);
   x = x0 + c;
   y = y0 + si;
@@ -120,7 +120,7 @@ unit_circle(double s, double x0, double y0, double & x, double & y)
 static void
 test_fit_simple_chain()
 {
-  std::vector<vgl_point_2d<double>> curve;
+  const std::vector<vgl_point_2d<double>> curve;
 
   // Two segments from a unit circle forming a kind of sine wave
 
@@ -130,7 +130,7 @@ test_fit_simple_chain()
   {
     double x = NAN, y = NAN;
     unit_circle(i, 1.0, 0.0, x, y);
-    vgl_point_2d<double> p(x, y);
+    const vgl_point_2d<double> p(x, y);
     fitter.add_point(p);
   }
   // Second segment below horizontal axis centered at (3,0) scan pi to 360
@@ -139,12 +139,12 @@ test_fit_simple_chain()
   {
     double x = NAN, y = NAN;
     unit_circle(i, 3.0, 0.0, x, y);
-    vgl_point_2d<double> p(x, y);
+    const vgl_point_2d<double> p(x, y);
     fitter.add_point(p);
   }
 
   fitter.fit();
-  std::vector<vgl_conic_segment_2d<double>> & segs = fitter.get_conic_segs();
+  const std::vector<vgl_conic_segment_2d<double>> & segs = fitter.get_conic_segs();
   std::cout << "\nCurve fit Produced the following conic segments\n";
   for (auto & seg : segs)
     std::cout << seg << '\n';
@@ -675,7 +675,7 @@ test_fit_simple_chain()
   f.add_point(vgl_point_2d<double>(147.354, 103.646));
   f.add_point(vgl_point_2d<double>(148.042, 103.422));
   f.fit();
-  std::vector<vgl_conic_segment_2d<double>> temp = f.get_conic_segs();
+  const std::vector<vgl_conic_segment_2d<double>> temp = f.get_conic_segs();
 
   for (auto & cit : temp)
     std::cout << cit << '\n';
@@ -1053,7 +1053,7 @@ test_fit_simple_chain()
   f1.add_point(vgl_point_2d<double>(41.3536, 139.646));
   f1.add_point(vgl_point_2d<double>(41.9457, 138.862));
   f1.fit();
-  std::vector<vgl_conic_segment_2d<double>> temp1 = f1.get_conic_segs();
+  const std::vector<vgl_conic_segment_2d<double>> temp1 = f1.get_conic_segs();
   for (auto & cit : temp1)
     std::cout << cit << '\n';
   TEST("Number of conic segments ", temp1.size(), 2);

@@ -28,7 +28,7 @@ vil1_jpeg_file_probe(vil1_stream * vs)
 {
   char magic[2];
   vs->seek(0L);
-  int n = vs->read(magic, sizeof(magic));
+  const int n = vs->read(magic, sizeof(magic));
 
   if (n != sizeof(magic))
   {
@@ -157,12 +157,12 @@ vil1_jpeg_generic_image::get_section(void * buf, int x0, int y0, int w, int h) c
 #endif
 
   // number of bytes per pixel
-  unsigned bpp = jd->jobj.output_components;
+  const unsigned bpp = jd->jobj.output_components;
 
   //
   for (int i = 0; i < h; ++i)
   {
-    JSAMPLE const * scanline = jd->read_scanline(y0 + i);
+    JSAMPLE const * const scanline = jd->read_scanline(y0 + i);
     if (!scanline)
       return false; // failed
     std::memcpy(static_cast<char *>(buf) + i * w * bpp, &scanline[x0 * bpp], w * bpp);
@@ -198,7 +198,7 @@ vil1_jpeg_generic_image::put_section(const void * buf, int x0, int y0, int w, in
   }
 
   // bytes per pixel in the section
-  unsigned bpp = jc->jobj.input_components;
+  const unsigned bpp = jc->jobj.input_components;
 
   // write each scanline
   for (int i = 0; i < h; ++i)

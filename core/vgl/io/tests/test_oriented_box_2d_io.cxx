@@ -17,10 +17,10 @@ test_oriented_box_2d_double_io()
             << " Testing vgl_oriented_box_2d<double> io\n"
             << "****************************************\n";
 
-  vgl_point_2d<double> p1(1.2, 4.2);
-  vgl_point_2d<double> p2(2.2, 3.2);
-  vgl_line_segment_2d<double> major_axis(p1, p2);
-  double height = 5.7;
+  const vgl_point_2d<double> p1(1.2, 4.2);
+  const vgl_point_2d<double> p2(2.2, 3.2);
+  const vgl_line_segment_2d<double> major_axis(p1, p2);
+  const double height = 5.7;
 
   vgl_oriented_box_2d<double> p_out(major_axis, height), p_in;
 

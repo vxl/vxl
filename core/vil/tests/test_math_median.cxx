@@ -18,7 +18,7 @@ test_math_median()
 
   vxl_byte median = 0;
   {
-    vil_image_view<vxl_byte> img(0, 0);
+    const vil_image_view<vxl_byte> img(0, 0);
     vil_math_median(median, img, 0);
     TEST_EQUAL("Median of 0x0 image", median, 0);
   }

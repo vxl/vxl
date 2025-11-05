@@ -7,7 +7,7 @@ test_algo_region_finder()
 {
   const unsigned char data[] = { 3, 3, 3, 3, 3, 4, 4, 4, 3, 3, 3, 3, 3, 4, 4, 5,
                                  3, 3, 3, 4, 4, 5, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5 };
-  vil_image_view<unsigned char> img(data, 8, 4, 1, 1, 8, 1);
+  const vil_image_view<unsigned char> img(data, 8, 4, 1, 1, 8, 1);
 
   vil_region_finder<unsigned char> find(img);
 

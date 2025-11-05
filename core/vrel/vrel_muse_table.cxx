@@ -21,7 +21,7 @@ double
 vrel_muse_table::expected_kth(unsigned int k, unsigned int n)
 {
   assert(0 < k && k <= n);
-  vrel_muse_key_type key(k, n);
+  const vrel_muse_key_type key(k, n);
   vrel_muse_table_entry & entry = table_[key];
   if (!entry.initialized_)
     calculate_all(k, n, entry);
@@ -32,7 +32,7 @@ double
 vrel_muse_table::standard_dev_kth(unsigned int k, unsigned int n)
 {
   assert(0 < k && k <= n);
-  vrel_muse_key_type key(k, n);
+  const vrel_muse_key_type key(k, n);
   vrel_muse_table_entry & entry = table_[key];
   if (!entry.initialized_)
     calculate_all(k, n, entry);
@@ -43,7 +43,7 @@ double
 vrel_muse_table::muset_divisor(unsigned int k, unsigned int n)
 {
   assert(0 < k && k <= n);
-  vrel_muse_key_type key(k, n);
+  const vrel_muse_key_type key(k, n);
   vrel_muse_table_entry & entry = table_[key];
   if (!entry.initialized_)
     calculate_all(k, n, entry);
@@ -55,7 +55,7 @@ double
 vrel_muse_table::muset_sq_divisor(unsigned int k, unsigned int n)
 {
   assert(0 < k && k <= n);
-  vrel_muse_key_type key(k, n);
+  const vrel_muse_key_type key(k, n);
   vrel_muse_table_entry & entry = table_[key];
   if (!entry.initialized_)
     calculate_all(k, n, entry);

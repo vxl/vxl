@@ -30,9 +30,9 @@ test_camera_compute_setup()
 {
   // PART 1: Test the affine camera computation
 
-  vnl_vector_fixed<double, 4> r1(1, 2, 3, 4);
-  vnl_vector_fixed<double, 4> r2(-1, 4, -2, 0);
-  vpgl_affine_camera<double> C1(r1, r2);
+  const vnl_vector_fixed<double, 4> r1(1, 2, 3, 4);
+  const vnl_vector_fixed<double, 4> r2(-1, 4, -2, 0);
+  const vpgl_affine_camera<double> C1(r1, r2);
   std::vector<vgl_point_3d<double>> world_pts;
   world_pts.emplace_back(1, 0, -1);
   world_pts.emplace_back(6, 1, 2);
@@ -66,7 +66,7 @@ test_perspective_compute()
   vnl_vector_fixed<double, 3> rv, trans;
   for (unsigned i = 0; i < 3; ++i)
     rv[i] = 0.9068996774314604; // axis along diagonal, rotation of 90 degrees
-  vgl_rotation_3d<double> rr(rv);
+  const vgl_rotation_3d<double> rr(rv);
 
   trans[0] = 10.0;
   trans[1] = 20.0;
@@ -125,12 +125,12 @@ test_perspective_compute()
   std::vector<vgl_point_3d<double>> world_pts;
   for (unsigned i = 0; i < 6; ++i)
   {
-    vgl_point_2d<double> ip(Z[0][i], Z[1][i]);
-    vgl_point_3d<double> wp(J[0][i], J[1][i], J[2][i]);
+    const vgl_point_2d<double> ip(Z[0][i], Z[1][i]);
+    const vgl_point_3d<double> wp(J[0][i], J[1][i], J[2][i]);
     image_pts.push_back(ip);
     world_pts.push_back(wp);
   }
-  vpgl_calibration_matrix<double> K;
+  const vpgl_calibration_matrix<double> K;
   vpgl_perspective_camera<double> pc;
 
   vpgl_perspective_camera_compute::compute(image_pts, world_pts, K, pc);
@@ -203,10 +203,10 @@ test_perspective_compute_direct_linear_transform()
 static void
 test_perspective_compute_ground()
 {
-  vpgl_calibration_matrix<double> trueK(1680, vgl_point_2d<double>(959.5, 539.5));
-  vgl_rotation_3d<double> trueR(vnl_vector_fixed<double, 3>(1.87379, 0.0215981, -0.0331475));
-  vgl_point_3d<double> trueC(14.5467, -6.71791, 4.79478);
-  vpgl_perspective_camera<double> trueP(trueK, trueC, trueR);
+  const vpgl_calibration_matrix<double> trueK(1680, vgl_point_2d<double>(959.5, 539.5));
+  const vgl_rotation_3d<double> trueR(vnl_vector_fixed<double, 3>(1.87379, 0.0215981, -0.0331475));
+  const vgl_point_3d<double> trueC(14.5467, -6.71791, 4.79478);
+  const vpgl_perspective_camera<double> trueP(trueK, trueC, trueR);
 
   // generate some points on the ground
   std::vector<vgl_point_2d<double>> ground_pts;
@@ -220,9 +220,9 @@ test_perspective_compute_ground()
   std::vector<vgl_point_2d<double>> image_pts;
   for (auto & ground_pt : ground_pts)
   {
-    vgl_homg_point_3d<double> world_pt(ground_pt.x(), ground_pt.y(), 0, 1);
+    const vgl_homg_point_3d<double> world_pt(ground_pt.x(), ground_pt.y(), 0, 1);
 
-    vgl_point_2d<double> img_pt = trueP.project(world_pt);
+    const vgl_point_2d<double> img_pt = trueP.project(world_pt);
     assert(img_pt.x() >= 0);
     assert(img_pt.x() <= 1920);
     assert(img_pt.y() >= 0);
@@ -234,7 +234,7 @@ test_perspective_compute_ground()
   vpgl_perspective_camera<double> P;
   P.set_calibration(trueK);
 
-  bool did_compute = vpgl_perspective_camera_compute::compute(image_pts, ground_pts, P);
+  const bool did_compute = vpgl_perspective_camera_compute::compute(image_pts, ground_pts, P);
 
   TEST("Calibrate from ground<->image correspondences", did_compute, true);
   TEST_NEAR("   C", vgl_distance(trueC, P.get_camera_center()), 0, 1e-6);
@@ -244,10 +244,10 @@ test_perspective_compute_ground()
 static void
 test_calibration_compute_natural()
 {
-  vpgl_calibration_matrix<double> trueK(1680, vgl_point_2d<double>(959.5, 539.5));
-  vgl_rotation_3d<double> trueR(vnl_vector_fixed<double, 3>(1.87379, 0.0215981, -0.0331475));
-  vgl_point_3d<double> trueC(14.5467, -6.71791, 4.79478);
-  vpgl_perspective_camera<double> trueP(trueK, trueC, trueR);
+  const vpgl_calibration_matrix<double> trueK(1680, vgl_point_2d<double>(959.5, 539.5));
+  const vgl_rotation_3d<double> trueR(vnl_vector_fixed<double, 3>(1.87379, 0.0215981, -0.0331475));
+  const vgl_point_3d<double> trueC(14.5467, -6.71791, 4.79478);
+  const vpgl_perspective_camera<double> trueP(trueK, trueC, trueR);
 
   // generate some points on the ground
   std::vector<vgl_point_2d<double>> ground_pts;
@@ -261,9 +261,9 @@ test_calibration_compute_natural()
   std::vector<vgl_point_2d<double>> image_pts;
   for (auto & ground_pt : ground_pts)
   {
-    vgl_homg_point_3d<double> world_pt(ground_pt.x(), ground_pt.y(), 0, 1);
+    const vgl_homg_point_3d<double> world_pt(ground_pt.x(), ground_pt.y(), 0, 1);
 
-    vgl_point_2d<double> img_pt = trueP.project(world_pt);
+    const vgl_point_2d<double> img_pt = trueP.project(world_pt);
     assert(img_pt.x() >= 0);
     assert(img_pt.x() <= 1920);
     assert(img_pt.y() >= 0);
@@ -273,7 +273,7 @@ test_calibration_compute_natural()
   }
 
   vpgl_calibration_matrix<double> K;
-  bool did_compute = vpgl_calibration_matrix_compute::natural(image_pts, ground_pts, trueK.principal_point(), K);
+  const bool did_compute = vpgl_calibration_matrix_compute::natural(image_pts, ground_pts, trueK.principal_point(), K);
 
   TEST("Calibrate natural intrinsics from correspondences", did_compute, true);
   TEST_NEAR("   K Discrepancy", (trueK.get_matrix() - K.get_matrix()).frobenius_norm(), 0, 1e-6);
@@ -349,7 +349,7 @@ test_compute_affine()
       m_a[row][col] = A[row][col];
 
   std::cout << "True Camera \n" << m_a << std::endl;
-  vpgl_affine_camera<double> cam_A(m_a);
+  const vpgl_affine_camera<double> cam_A(m_a);
 
   // generate test correspondences
   vnl_random rand;
@@ -360,11 +360,11 @@ test_compute_affine()
   double z_min = 0.0, z_max = 300.0;
   for (size_t i = 0; i < 100; ++i)
   {
-    double x = rand.drand32(x_min, x_max);
-    double y = rand.drand32(y_min, y_max);
-    double z = rand.drand32(z_min, z_max);
-    vgl_point_3d<double> wld_pt(x, y, z);
-    vgl_point_2d<double> img_pt = cam_A.project(wld_pt);
+    const double x = rand.drand32(x_min, x_max);
+    const double y = rand.drand32(y_min, y_max);
+    const double z = rand.drand32(z_min, z_max);
+    const vgl_point_3d<double> wld_pt(x, y, z);
+    const vgl_point_2d<double> img_pt = cam_A.project(wld_pt);
     wld_pts.push_back(wld_pt);
     img_pts.push_back(img_pt);
   }
@@ -379,11 +379,11 @@ test_compute_affine()
   {
     if (i % 3 == 0)
     { // 33% noisy
-      double u_noise = rand.drand32(-img_sd, img_sd);
-      double v_noise = rand.drand32(-img_sd, img_sd);
-      double x_noise = rand.drand32(-wld_sd, wld_sd);
-      double y_noise = rand.drand32(-wld_sd, wld_sd);
-      double z_noise = rand.drand32(-wld_sd, wld_sd);
+      const double u_noise = rand.drand32(-img_sd, img_sd);
+      const double v_noise = rand.drand32(-img_sd, img_sd);
+      const double x_noise = rand.drand32(-wld_sd, wld_sd);
+      const double y_noise = rand.drand32(-wld_sd, wld_sd);
+      const double z_noise = rand.drand32(-wld_sd, wld_sd);
       noisy_img_pts.emplace_back(img_pts[i].x() + u_noise, img_pts[i].y() + v_noise);
       noisy_wld_pts.emplace_back(wld_pts[i].x() + x_noise, wld_pts[i].y() + y_noise, wld_pts[i].z() + z_noise);
     }
@@ -443,17 +443,17 @@ test_compute_rational()
   double su = 14106, ou = 13785;
   double sv = 15402, ov = 15216;
 
-  vpgl_rational_camera<double> rcam(neu_u1, den_u1, neu_v1, den_v1, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
+  const vpgl_rational_camera<double> rcam(neu_u1, den_u1, neu_v1, den_v1, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
   std::vector<vgl_point_2d<double>> image_pts;
   std::vector<vgl_point_3d<double>> ground_pts;
-  size_t n_points = 1000;
+  const size_t n_points = 1000;
   vnl_random rng;
   for (unsigned i = 0; i < n_points; i++)
   {
-    double x = 2.0 * sx * rng.drand64() + (ox - sx);
-    double y = 2.0 * sy * rng.drand64() + (oy - sy);
-    double z = 2.0 * sz * rng.drand64() + (oz - sz);
-    vgl_point_3d<double> p3d(x, y, z);
+    const double x = 2.0 * sx * rng.drand64() + (ox - sx);
+    const double y = 2.0 * sy * rng.drand64() + (oy - sy);
+    const double z = 2.0 * sz * rng.drand64() + (oz - sz);
+    const vgl_point_3d<double> p3d(x, y, z);
     ground_pts.push_back(p3d);
     double u = NAN, v = NAN;
     rcam.project(x, y, z, u, v);
@@ -469,7 +469,8 @@ test_compute_rational()
       const vgl_point_3d<double> & p3 = ground_pts[i];
       double u = NAN, v = NAN;
       fcam.project(p3.x(), p3.y(), p3.z(), u, v);
-      double sq_err = (u - image_pts[i].x()) * (u - image_pts[i].x()) + (v - image_pts[i].y()) * (v - image_pts[i].y());
+      const double sq_err =
+        (u - image_pts[i].x()) * (u - image_pts[i].x()) + (v - image_pts[i].y()) * (v - image_pts[i].y());
       rms_er += sq_err;
     }
     rms_er /= n_points;

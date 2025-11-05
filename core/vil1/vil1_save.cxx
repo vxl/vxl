@@ -25,7 +25,7 @@
 bool
 vil1_save(vil1_image i, const char * filename, const char * file_format)
 {
-  vil1_stream * os = vil1_open(filename, "w");
+  vil1_stream * const os = vil1_open(filename, "w");
   if (!os || !os->ok())
   {
     std::cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
@@ -50,7 +50,7 @@ vil1_save(vil1_image i, const char * filename, const char * file_format)
 bool
 vil1_save_raw(const vil1_image & i, const char * filename, const char * file_format)
 {
-  vil1_stream * os = vil1_open(filename, "w");
+  vil1_stream * const os = vil1_open(filename, "w");
   return vil1_save_raw(i, os, file_format);
 }
 
@@ -79,7 +79,7 @@ guess_file_format(const char * filename)
   const char * file_format = "pnm"; // default file format
 
   // find last "."
-  const char * dot = std::strrchr(filename, '.');
+  const char * const dot = std::strrchr(filename, '.');
   if (!dot)
   {
     // filename doesn't end in ".anything"
@@ -128,7 +128,7 @@ vil1_save_rgb_template(const T * p, int w, int h, const std::string & fn)
 {
   vil1_memory_image_of<vil1_rgb<unsigned char>> out(w, h);
   auto * o = (unsigned char *)out.get_buffer();
-  const T * p_end = p + w * h * 3;
+  const T * const p_end = p + w * h * 3;
   while (p != p_end)
     // possible loss of data! (e.g. clipping)
     // agap: but it's okay because the input values are in 0..255
@@ -142,7 +142,7 @@ vil1_save_gray_template(const T * p, int w, int h, const std::string & fn)
 {
   vil1_memory_image_of<unsigned char> out(w, h);
   unsigned char * o = out.get_buffer();
-  const T * p_end = p + w * h;
+  const T * const p_end = p + w * h;
   while (p != p_end)
     // possible loss of data! (e.g. clipping)
     // agap: but it's okay because the input values are in 0..255

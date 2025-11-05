@@ -19,7 +19,7 @@ transform_points(const std::vector<vgl_point_3d<double>> & points,
   std::vector<vgl_point_3d<double>> t_pts;
   for (const auto & point : points)
   {
-    vgl_point_3d<double> p = R * point + t;
+    const vgl_point_3d<double> p = R * point + t;
     t_pts.push_back(p);
   }
   return t_pts;
@@ -31,7 +31,7 @@ add_noise(std::vector<vgl_point_3d<double>> & points, double sigma)
   vnl_random r;
   for (auto & point : points)
   {
-    vgl_vector_3d<double> e(r.normal(), r.normal(), r.normal());
+    const vgl_vector_3d<double> e(r.normal(), r.normal(), r.normal());
     point += e * sigma;
   }
 }
@@ -60,8 +60,8 @@ test_compute_rigid_3d()
   points1.emplace_back(42.3, 205.0, -325.0);
   points1.emplace_back(-5.0, 265.0, -305.0);
 
-  vgl_vector_3d<double> t(100, -200, 200);
-  vgl_rotation_3d<double> R(3.0, -1.0, 0.5);
+  const vgl_vector_3d<double> t(100, -200, 200);
+  const vgl_rotation_3d<double> R(3.0, -1.0, 0.5);
 
   std::vector<vgl_point_3d<double>> points2 = vgl_test_compute_rigid_3d::transform_points(points1, R, t);
 
@@ -77,7 +77,7 @@ test_compute_rigid_3d()
             1e-8);
 
   // add noise and try again
-  double sigma = 1e-2;
+  const double sigma = 1e-2;
   vgl_test_compute_rigid_3d::add_noise(points1, sigma);
   vgl_test_compute_rigid_3d::add_noise(points2, sigma);
 

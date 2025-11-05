@@ -27,7 +27,7 @@ test(const char * magic, int comps, int bits, int maxval)
   if (tmp_nam.empty())
     tmp_nam = "t";
   tmp_nam += ext;
-  const char * file = tmp_nam.c_str();
+  const char * const file = tmp_nam.c_str();
   {
     std::ofstream f(file, std::ios::binary);
 #ifdef LEAVE_IMAGES_BEHIND
@@ -49,7 +49,7 @@ test(const char * magic, int comps, int bits, int maxval)
         f << 5 + 7 * i + 9 * i * i << '\n';
   }
 
-  vil1_image i = vil1_load(file);
+  const vil1_image i = vil1_load(file);
 
   if (i)
   {

@@ -22,14 +22,14 @@ test_algo_exp_grad_filter_1d_byte_float()
     src[i] = 0;
   src[50] = 100;
 
-  float k = 0.25;
+  const float k = 0.25;
   std::vector<float> dest_block(n + 2);
-  float * dest = &dest_block[1];
+  float * const dest = &dest_block[1];
   dest[-1] = 9876;
   dest[n] = 9876; // Marks to check for over-runs
   vil_exp_grad_filter_1d(&src[0], 1, &dest[0], 1, n, k);
 
-  double half_sum = k / (1 - k);
+  const double half_sum = k / (1 - k);
   TEST_NEAR("Central value", dest[50], 0, 1e-6);
   TEST_NEAR("Left value", dest[49], 100 * k / half_sum, 1e-4);
   TEST_NEAR("Right value", dest[51], -100 * k / half_sum, 1e-4);

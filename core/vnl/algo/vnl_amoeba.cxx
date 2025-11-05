@@ -173,7 +173,7 @@ vnl_amoebaFit::set_up_simplex_relative(std::vector<vnl_amoeba_SimplexCorner> & s
   //  vnl_vector<double> y(n);
   for (int j = 0; j < n; ++j)
   {
-    vnl_amoeba_SimplexCorner * s = &simplex[j + 1];
+    vnl_amoeba_SimplexCorner * const s = &simplex[j + 1];
     s->v = x;
 
     // perturb s->v(j)
@@ -199,7 +199,7 @@ vnl_amoebaFit::set_up_simplex_absolute(std::vector<vnl_amoeba_SimplexCorner> & s
 
   for (int j = 0; j < n; ++j)
   {
-    vnl_amoeba_SimplexCorner * s = &simplex[j + 1];
+    vnl_amoeba_SimplexCorner * const s = &simplex[j + 1];
     s->v = x;
 
     // perturb s->v(j)

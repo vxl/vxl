@@ -20,81 +20,81 @@ vsl_b_write(vsl_b_ostream & os, const vil_image_view_base_sptr & view_base)
 #if VXL_HAS_INT_64
     case VIL_PIXEL_FORMAT_UINT_64:
     {
-      vil_image_view<vxl_uint_64> v(view_base);
+      const vil_image_view<vxl_uint_64> v(view_base);
       vsl_b_write(os, v);
       break;
     }
     case VIL_PIXEL_FORMAT_INT_64:
     {
-      vil_image_view<vxl_int_64> v(view_base);
+      const vil_image_view<vxl_int_64> v(view_base);
       vsl_b_write(os, v);
       break;
     }
 #endif
     case VIL_PIXEL_FORMAT_UINT_32:
     {
-      vil_image_view<vxl_uint_32> v(view_base);
+      const vil_image_view<vxl_uint_32> v(view_base);
       vsl_b_write(os, v);
       break;
     }
     case VIL_PIXEL_FORMAT_INT_32:
     {
-      vil_image_view<vxl_int_32> v(view_base);
+      const vil_image_view<vxl_int_32> v(view_base);
       vsl_b_write(os, v);
       break;
     }
     case VIL_PIXEL_FORMAT_UINT_16:
     {
-      vil_image_view<vxl_uint_16> v(view_base);
+      const vil_image_view<vxl_uint_16> v(view_base);
       vsl_b_write(os, v);
       break;
     }
     case VIL_PIXEL_FORMAT_INT_16:
     {
-      vil_image_view<vxl_int_16> v(view_base);
+      const vil_image_view<vxl_int_16> v(view_base);
       vsl_b_write(os, v);
       break;
     }
     case VIL_PIXEL_FORMAT_BYTE:
     {
-      vil_image_view<vxl_byte> v(view_base);
+      const vil_image_view<vxl_byte> v(view_base);
       vsl_b_write(os, v);
       break;
     }
     case VIL_PIXEL_FORMAT_SBYTE:
     {
-      vil_image_view<vxl_sbyte> v(view_base);
+      const vil_image_view<vxl_sbyte> v(view_base);
       vsl_b_write(os, v);
       break;
     }
     case VIL_PIXEL_FORMAT_FLOAT:
     {
-      vil_image_view<float> v(view_base);
+      const vil_image_view<float> v(view_base);
       vsl_b_write(os, v);
       break;
     }
     case VIL_PIXEL_FORMAT_DOUBLE:
     {
-      vil_image_view<double> v(view_base);
+      const vil_image_view<double> v(view_base);
       vsl_b_write(os, v);
       break;
     }
     case VIL_PIXEL_FORMAT_BOOL:
     {
-      vil_image_view<bool> v(view_base);
+      const vil_image_view<bool> v(view_base);
       vsl_b_write(os, v);
       break;
     }
     // No version 1 complex images were ever written. Now added. It should work. Fix if necessary
     case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
     {
-      vil_image_view<std::complex<float>> v(view_base);
+      const vil_image_view<std::complex<float>> v(view_base);
       vsl_b_write(os, v);
       break;
     }
     case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
     {
-      vil_image_view<std::complex<double>> v(view_base);
+      const vil_image_view<std::complex<double>> v(view_base);
       vsl_b_write(os, v);
       break;
     }
@@ -212,7 +212,7 @@ vsl_b_read(vsl_b_istream & is, vil_image_view_base_sptr & view_base)
       }
       case VIL_PIXEL_FORMAT_BOOL:
       {
-        const bool * data = reinterpret_cast<const bool *>(chunk->data());
+        const bool * const data = reinterpret_cast<const bool *>(chunk->data());
         view_base = new vil_image_view<bool>(chunk, data + offset, ni, nj, np, istep, jstep, pstep);
         break;
       }

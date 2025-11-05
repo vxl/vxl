@@ -28,7 +28,7 @@ test_vul_file()
     TEST("dirname 2", vul_file::dirname("/awf/fred.txt"), "/awf");
 
     // vul_file::make_directory_path
-    std::string rootdir = vul_file::get_cwd();
+    const std::string rootdir = vul_file::get_cwd();
 
     vpl_rmdir((rootdir + "/test_make_dir_path/a/b").c_str());
     vpl_rmdir((rootdir + "/test_make_dir_path/a").c_str());

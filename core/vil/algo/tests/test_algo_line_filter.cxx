@@ -54,7 +54,7 @@ test_line_filter_byte()
   vil_line_filter<unsigned char> filter;
 
   // Create test image
-  unsigned int n = 10;
+  const unsigned int n = 10;
   vil_image_view<unsigned char> image(n, n);
   image.fill(black);
   for (unsigned int i = 0; i < n; ++i)

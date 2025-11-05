@@ -124,7 +124,7 @@ vil_jpeg_decompressor::read_scanline(unsigned line)
   if (!biffer)
   {
     trace << "...allocate buffer\n";
-    unsigned row_size = jobj.output_width * jobj.output_components;
+    const unsigned row_size = jobj.output_width * jobj.output_components;
     biffer = new JSAMPLE[row_size];
   }
 
@@ -132,7 +132,7 @@ vil_jpeg_decompressor::read_scanline(unsigned line)
 #if 0
   JSAMPLE *buffer[1] = { biffer };
 #else
-  JSAMPARRAY buffer = &biffer;
+  JSAMPARRAY const buffer = &biffer;
 #endif
 
   // read till we've read the line we want :

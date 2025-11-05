@@ -96,7 +96,7 @@ RSM_ECB_adjustable_parameter_metadata::print(std::ostream & os)
   if (ground_adjustable_params_)
   {
     os << "N ground adjustable params " << n_ground_adjustable_params_ << std::endl;
-    for (size_t idx : ground_adjust_param_idx_)
+    for (const size_t idx : ground_adjust_param_idx_)
       os << idx << ' ';
     os << std::endl;
   }
@@ -112,7 +112,7 @@ RSM_ECB_adjustable_parameter_metadata::print(std::ostream & os)
   os << "Number of independent covariance subgroups " << num_independent_subgroups_ << std::endl;
   for (size_t ig = 0; ig < num_independent_subgroups_; ++ig)
   {
-    vnl_matrix<double> & cov = independent_covar_[ig];
+    const vnl_matrix<double> & cov = independent_covar_[ig];
     os << "cov[" << ig << "]\n" << cov;
     if (corr_analytic_functions_.count(ig) > 0)
     {
@@ -224,12 +224,12 @@ vpgl_nitf_RSM_camera_extractor::process_igeolo(size_t image_subheader_index)
     meta.igeolo_valid = false;
     return false;
   }
-  unsigned LON = vpgl_nitf_rational_camera::LON;
-  unsigned LAT = vpgl_nitf_rational_camera::LAT;
-  unsigned UL = vpgl_nitf_rational_camera::UL;
-  unsigned UR = vpgl_nitf_rational_camera::UR;
-  unsigned LR = vpgl_nitf_rational_camera::LR;
-  unsigned LL = vpgl_nitf_rational_camera::LL;
+  const unsigned LON = vpgl_nitf_rational_camera::LON;
+  const unsigned LAT = vpgl_nitf_rational_camera::LAT;
+  const unsigned UL = vpgl_nitf_rational_camera::UL;
+  const unsigned UR = vpgl_nitf_rational_camera::UR;
+  const unsigned LR = vpgl_nitf_rational_camera::LR;
+  const unsigned LL = vpgl_nitf_rational_camera::LL;
 
   meta.upper_left_.set(coords[UL].first, coords[UL].second);
   meta.upper_right_.set(coords[UR].first, coords[UR].second);
@@ -251,10 +251,10 @@ vpgl_nitf_RSM_camera_extractor::process_igeolo(size_t image_subheader_index)
 
 
   // footprint in counter-clockwise order from lower left
-  vgl_point_2d<double> ll(coords[LL].first, coords[LL].second);
-  vgl_point_2d<double> lr(coords[LR].first, coords[LR].second);
-  vgl_point_2d<double> ur(coords[UR].first, coords[UR].second);
-  vgl_point_2d<double> ul(coords[UL].first, coords[UL].second);
+  const vgl_point_2d<double> ll(coords[LL].first, coords[LL].second);
+  const vgl_point_2d<double> lr(coords[LR].first, coords[LR].second);
+  const vgl_point_2d<double> ur(coords[UR].first, coords[UR].second);
+  const vgl_point_2d<double> ul(coords[UL].first, coords[UL].second);
   std::vector<vgl_point_2d<double>> sheet;
   sheet.push_back(ll);
   sheet.push_back(lr);
@@ -281,8 +281,8 @@ vpgl_nitf_RSM_camera_extractor::process_polytope(size_t image_subheader_index)
     return false;
   }
   rsm_metadata & meta = rsm_meta_[image_subheader_index];
-  bool zero_to_360 = (meta.ground_domain_ == "H"); // avoid +-180 cut
-  bool local = (meta.ground_domain_ == "R");
+  const bool zero_to_360 = (meta.ground_domain_ == "H"); // avoid +-180 cut
+  const bool local = (meta.ground_domain_ == "R");
   std::map<size_t, vgl_point_3d<double>> & polyt = meta.polytope_;
 
   // convert radians to decimal degrees.
@@ -379,7 +379,7 @@ vpgl_nitf_RSM_camera_extractor::determine_header_status(vil_nitf2_image_subheade
     std::cout << "NULL header pointer" << std::endl;
     return false;
   }
-  std::string type = header_ptr->get_image_type();
+  const std::string type = header_ptr->get_image_type();
   if (!type.empty())
   {
     if (verbose_)
@@ -399,7 +399,7 @@ vpgl_nitf_RSM_camera_extractor::determine_header_status(vil_nitf2_image_subheade
       for (tres_itr = hdr_ixshd_tres_[header_idx].begin(); tres_itr != hdr_ixshd_tres_[header_idx].end() && !found;
            ++tres_itr)
       {
-        std::string tre_name = (*tres_itr)->name();
+        const std::string tre_name = (*tres_itr)->name();
         if (tre_name == "RSMPCA")
         { // looking for "RSMPCA..."
           if (verbose_)
@@ -440,7 +440,7 @@ vpgl_nitf_RSM_camera_extractor::determine_overflow_status(vil_nitf2_image * nitf
   }
   vil_nitf2_tagged_record_sequence::const_iterator tres_itr;
   // get the data extension
-  vil_nitf2_des * des = (nitf_image->get_des())[ixsofl - 1]; // should agree with subheader index
+  vil_nitf2_des * const des = (nitf_image->get_des())[ixsofl - 1]; // should agree with subheader index
   if (!des)
   {
     std::cout << "null des" << std::endl;
@@ -462,7 +462,7 @@ vpgl_nitf_RSM_camera_extractor::determine_overflow_status(vil_nitf2_image * nitf
         for (tres_itr = ovfl_ixshd_tres_[header_idx].begin(); tres_itr != ovfl_ixshd_tres_[header_idx].end() && !found;
              ++tres_itr)
         {
-          std::string type = (*tres_itr)->name();
+          const std::string type = (*tres_itr)->name();
           if (type == "RSMIDA")
           {
             if (verbose_)
@@ -505,7 +505,7 @@ bool
 vpgl_nitf_RSM_camera_extractor::init(vil_nitf2_image * nitf_image, bool verbose)
 {
   std::vector<vil_nitf2_image_subheader *> headers = nitf_image->get_image_headers();
-  int ixsofl = -1;
+  const int ixsofl = -1;
   if (headers.empty())
   {
     std::cout << "no image subheaders present" << std::endl;
@@ -514,7 +514,7 @@ vpgl_nitf_RSM_camera_extractor::init(vil_nitf2_image * nitf_image, bool verbose)
   // Determine state of nitf headers
   for (unsigned header_idx = 0; header_idx < headers.size(); ++header_idx)
   {
-    vil_nitf2_image_subheader * hdr = headers[header_idx];
+    vil_nitf2_image_subheader * const hdr = headers[header_idx];
     if (hdr == std::nullptr_t(nullptr))
       return false;
     bool header_has_tres = false, header_has_RSM = false, overflow_has_RSM = false;
@@ -553,7 +553,7 @@ vpgl_nitf_RSM_camera_extractor::init(vil_nitf2_image * nitf_image, bool verbose)
 
   for (unsigned i = 0; i < headers.size(); ++i)
   {
-    vil_nitf2_image_subheader * hdr = headers[i];
+    vil_nitf2_image_subheader * const hdr = headers[i];
     if (nitf_status_[i] == INVALID)
       continue;
     // Get standard metadata from the nitf2_image and image subheader
@@ -617,14 +617,14 @@ vpgl_nitf_RSM_camera_extractor::vpgl_nitf_RSM_camera_extractor(const std::string
   : verbose_(verbose)
 {
   // first open the nitf image
-  vil_image_resource_sptr image = vil_load_image_resource(nitf_image_path.c_str());
+  const vil_image_resource_sptr image = vil_load_image_resource(nitf_image_path.c_str());
   if (!image)
   {
     std::cout << "Image load failed in vpgl_nitf_RSM_camera_extractor_constructor\n";
     return;
   }
-  std::string format = image->file_format();
-  std::string prefix = format.substr(0, 4);
+  const std::string format = image->file_format();
+  const std::string prefix = format.substr(0, 4);
   if (prefix != "nitf")
   {
     std::cout << "not a nitf image in vpgl_nitf_RSM_camera_extractor_constructor\n";
@@ -674,13 +674,13 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
   // Now get the sub-header TRE parameters
   vil_nitf2_tagged_record_sequence::const_iterator tres_itr;
   // Check through the TREs to find ""
-  bool v = verbose;
+  const bool v = verbose;
   // first look through the header tres
   for (auto & nitf_statu : nitf_status_)
   {
     if (nitf_statu.second == IMAGE_SUBHEADER_TREs_ONLY)
       continue;
-    size_t head_idx = nitf_statu.first;
+    const size_t head_idx = nitf_statu.first;
     vil_nitf2_tagged_record_sequence & ixshd_tres = hdr_ixshd_tres_[nitf_statu.first];
     if (nitf_statu.second == IMAGE_SUBHEADER_TREs_RSM_TREs_OVRFL)
       ixshd_tres = ovfl_ixshd_tres_[nitf_statu.first];
@@ -707,13 +707,13 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
     tre_str << "======RSM DATA FOR IMAGE SUBHEADER " << nitf_statu.first << std::endl;
     for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr)
     {
-      std::string type = (*tres_itr)->name();
+      const std::string type = (*tres_itr)->name();
       if (type == "RSMIDA") // looking for "RSMIDA..."
       {
         if (!tre_str)
           std::cout << "bad stream" << std::endl;
         // Start TRE section =====================
-        nitf_tre<std::string> st("RSMIDA", tre_str);
+        const nitf_tre<std::string> st("RSMIDA", tre_str);
         //=======================================
         rsm_metadata & mdata = rsm_meta_[nitf_statu.first];
         // RSMIDA TREs
@@ -769,7 +769,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         mdata.ground_domain_valid = true;
         mdata.ground_domain_ = nt15.value_;
         bool opt = (nt15.value_ == "G") || (nt15.value_ == "H");
-        std::string s;
+        const std::string s;
         double xuor = NAN, yuor = NAN, zuor = NAN;
         vnl_matrix_fixed<double, 3, 3> & m = mdata.rotation_;
 
@@ -1078,9 +1078,9 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
       if (type == "RSMPCA")
       { // looking for "RSMPCA..."
         // =======================================
-        nitf_tre<std::string> nt82("RSMPCA", tre_str);
+        const nitf_tre<std::string> nt82("RSMPCA", tre_str);
         // =========================================
-        bool opt = false;
+        const bool opt = false;
         nitf_tre<std::string> nt83("IID", true, false);
         nt83.get_append(tres_itr, tre_str, v);
 
@@ -1193,14 +1193,14 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
     }
     for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr)
     {
-      std::string type = (*tres_itr)->name();
+      const std::string type = (*tres_itr)->name();
 
       if (type == "RSMPIA")
       { // looking for "RSMPIA..."
         // =======================================
-        nitf_tre<std::string> nt("RSMPIA", tre_str);
+        const nitf_tre<std::string> nt("RSMPIA", tre_str);
         // =========================================
-        rsm_metadata & meta = rsm_meta_[nitf_statu.first];
+        const rsm_metadata & meta = rsm_meta_[nitf_statu.first];
         nitf_tre<std::string> nt1("EDITION", false, false);
         nt1.get_append(tres_itr, tre_str, v);
         nitf_tre<double> nt2("R0", false, false);
@@ -1265,7 +1265,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
       if (type == "RSMGIA")
       { // looking for "RSMGIA..."
         // =======================================
-        nitf_tre<std::string> nt("RSMGIA", tre_str);
+        const nitf_tre<std::string> nt("RSMGIA", tre_str);
         // =========================================
         nitf_tre<std::string> nt1("EDITION", false, false);
         nt1.get_append(tres_itr, tre_str, v);
@@ -1274,7 +1274,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
       if (type == "RSMDCA")
       { // looking for "RSMDCA..."
         // =======================================
-        nitf_tre<std::string> nt("RSMDCA", tre_str);
+        const nitf_tre<std::string> nt("RSMDCA", tre_str);
         // =========================================
         nitf_tre<std::string> nt1("EDITION", false, false);
         nt1.get_append(tres_itr, tre_str, v);
@@ -1284,7 +1284,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
       if (type == "RSMDCB")
       { // looking for "RSMDCB..."
         // =======================================
-        nitf_tre<std::string> nt("RSMDCB", tre_str);
+        const nitf_tre<std::string> nt("RSMDCB", tre_str);
         // =========================================
         nitf_tre<std::string> nt1("EDITION", false, false);
         nt1.get_append(tres_itr, tre_str, v);
@@ -1293,7 +1293,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
       if (type == "RSMECA")
       { // looking for "RSMECA..."
         // =======================================
-        nitf_tre<std::string> nt("RSMECA", tre_str);
+        const nitf_tre<std::string> nt("RSMECA", tre_str);
         // =========================================
         RSM_ECA_adjustable_parameter_metadata & apdata = RSM_ECA_adj_param_data_[head_idx];
 
@@ -1312,7 +1312,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
 
         nitf_tre<std::string> nt4("INCLUC", true, false);
         nt4.get_append(tres_itr, tre_str, v);
-        bool UCreq = nt4.value_ == "Y";
+        const bool UCreq = nt4.value_ == "Y";
 
         nitf_tre<int> nt5("NPAR", opt, false);
         nt5.get_append(tres_itr, tre_str, v);
@@ -1766,10 +1766,10 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         int offset = 0, corr_offset = 0;
         for (size_t i = 0; i < n_indp; ++i)
         {
-          int n_vars = numopg[i];
+          const int n_vars = numopg[i];
           tre_str << "Ind.Group Id    Adj. Variable Size" << std::endl;
           tre_str << i << ' ' << n_vars << std::endl;
-          size_t n_upper_diag = n_vars * (n_vars + 1) / 2;
+          const size_t n_upper_diag = n_vars * (n_vars + 1) / 2;
           std::vector<double> err(n_upper_diag);
           for (size_t k = 0; k < n_upper_diag; ++k)
             err[k] = errcvg[offset + k];
@@ -1792,7 +1792,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           for (size_t t = corr_offset; t < (corr_offset + ncseg[i]); ++t)
           {
             tre_str << "corseg " << corseg[t] << " tauseg " << tauseg[t] << std::endl;
-            std::pair<double, double> pr(corseg[t], tauseg[t]);
+            const std::pair<double, double> pr(corseg[t], tauseg[t]);
             segments.push_back(pr);
           }
           corsegs[i] = segments;
@@ -1929,8 +1929,8 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           for (size_t s = 0; s < n_col_seg_u; ++s)
             temp_c.emplace_back(ucorsc[s], utausc[s]);
 
-          std::tuple<size_t, std::vector<std::pair<double, double>>> row_func(n_row_seg_u, temp_r);
-          std::tuple<size_t, std::vector<std::pair<double, double>>> col_func(n_col_seg_u, temp_c);
+          const std::tuple<size_t, std::vector<std::pair<double, double>>> row_func(n_row_seg_u, temp_r);
+          const std::tuple<size_t, std::vector<std::pair<double, double>>> col_func(n_col_seg_u, temp_c);
           apdata.unmodeled_row_correlation_ = row_func;
           apdata.unmodeled_col_correlation_ = col_func;
         }
@@ -1940,7 +1940,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
       if (type == "RSMECB")
       { // looking for "RSMDCB..."
         // =======================================
-        nitf_tre<std::string> nt("RSMECB", tre_str);
+        const nitf_tre<std::string> nt("RSMECB", tre_str);
         // =========================================
         RSM_ECB_adjustable_parameter_metadata & apdata = RSM_ECB_adj_param_data_[head_idx];
         nitf_tre<std::string> nt0("IID", false, false);
@@ -1955,12 +1955,12 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         nitf_tre<std::string> nt3("INCLIC", false, false);
         nt3.get_append(tres_itr, tre_str, v);
         // Indirect Error Covariance Values Required
-        bool ICreq = (nt3.value_ == "Y");
+        const bool ICreq = (nt3.value_ == "Y");
 
         nitf_tre<std::string> nt4("INCLUC", false, false);
         nt4.get_append(tres_itr, tre_str, v);
         // Unmodeled Indirect Error Covariance Values Required
-        bool UCreq = (nt4.value_ == "Y");
+        const bool UCreq = (nt4.value_ == "Y");
         apdata.unmodeled_error_ = UCreq;
 
         // not optional for IC required values, i.e. optional = false;
@@ -1993,8 +1993,8 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         }
         nitf_tre<std::string> nt8("APTYP", opt, false);
         nt8.get_append(tres_itr, tre_str, v);
-        bool Iadj = (nt8.value_ == "I");
-        bool Gadj = (nt8.value_ == "G");
+        const bool Iadj = (nt8.value_ == "I");
+        const bool Gadj = (nt8.value_ == "G");
         if (!opt)
         {
           apdata.image_adjustable_params_ = Iadj;
@@ -2041,7 +2041,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           apdata.xyz_norm_[1] = std::pair<double, double>(noffy, nsfy);
           apdata.xyz_norm_[2] = std::pair<double, double>(noffz, nsfz);
         }
-        bool optR = (nt9.value_ != "R");
+        const bool optR = (nt9.value_ != "R");
         opt = optR || !ICreq;
         double xuol = 0, yuol = 0, zuol = 0;
         std::string s;
@@ -2145,7 +2145,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
 
         nitf_tre<std::string> nt28("APBASE", !Iadj, false);
         nt28.get_append(tres_itr, tre_str, v);
-        bool Breq = nt28.value_ == "Y";
+        const bool Breq = nt28.value_ == "Y";
         if (Iadj)
           apdata.basis_option_ = Breq;
 
@@ -2154,7 +2154,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         nt29.get_append(tres_itr, tre_str, v);
         if (!opt)
         {
-          int nipar = nt29.value_;
+          const int nipar = nt29.value_;
           apdata.n_image_adjustable_params_ = nipar;
         }
 
@@ -2190,7 +2190,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         {
           for (size_t r = 0; r < nrowp; ++r)
           {
-            std::tuple<size_t, size_t, size_t> pows(xpr[r], ypr[r], zpr[r]);
+            const std::tuple<size_t, size_t, size_t> pows(xpr[r], ypr[r], zpr[r]);
             apdata.image_row_xyz_powers_[r] = pows;
           }
         }
@@ -2227,7 +2227,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
         {
           for (size_t c = 0; c < ncolp; ++c)
           {
-            std::tuple<size_t, size_t, size_t> pows(xpc[c], ypc[c], zpc[c]);
+            const std::tuple<size_t, size_t, size_t> pows(xpc[c], ypc[c], zpc[c]);
             apdata.image_col_xyz_powers_[c] = pows;
           }
         }
@@ -2300,7 +2300,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           size_t idx = 0;
           for (size_t ig = 0; ig < n_indpb; ++ig)
           {
-            size_t covar_dim = n_opg[ig];
+            const size_t covar_dim = n_opg[ig];
             vnl_matrix<double> cvar(covar_dim, covar_dim, 0.0);
             for (size_t r = 0; r < covar_dim; ++r)
               for (size_t c = r; c < covar_dim; ++c)
@@ -2442,22 +2442,22 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           int func_idx = 0, piecewise_idx = 0;
           if (use_function[ig])
           {
-            double Ac = Acoef_vals[func_idx];
-            double alpha = alpha_vals[func_idx];
-            double beta = beta_vals[func_idx];
-            double Tc = T_vals[func_idx];
-            std::tuple<double, double, double, double> func(Ac, alpha, beta, Tc);
+            const double Ac = Acoef_vals[func_idx];
+            const double alpha = alpha_vals[func_idx];
+            const double beta = beta_vals[func_idx];
+            const double Tc = T_vals[func_idx];
+            const std::tuple<double, double, double, double> func(Ac, alpha, beta, Tc);
             apdata.corr_analytic_functions_[ig] = func;
             func_idx++;
             continue;
           }
           // else use piecewise linear form for correlation function
-          int n_segments = ncsegb[piecewise_idx];
+          const int n_segments = ncsegb[piecewise_idx];
           std::vector<std::pair<double, double>> segments;
           for (size_t s = 0; s < n_segments; ++s)
             segments.emplace_back(corseg_vals[s], tauseg_vals[s]);
 
-          std::tuple<size_t, std::vector<std::pair<double, double>>> temp(n_segments, segments);
+          const std::tuple<size_t, std::vector<std::pair<double, double>>> temp(n_segments, segments);
           apdata.corr_piecewise_functions_[ig] = temp;
         }
 
@@ -2594,8 +2594,8 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
             nt65.get(tres_itr, utccs);
             ASC_double(utccs[0], T_c);
           }
-          std::tuple<double, double, double, double> row_func(uA_r, alpha_r, beta_r, T_r);
-          std::tuple<double, double, double, double> col_func(uA_c, alpha_c, beta_c, T_c);
+          const std::tuple<double, double, double, double> row_func(uA_r, alpha_r, beta_r, T_r);
+          const std::tuple<double, double, double, double> col_func(uA_c, alpha_c, beta_c, T_c);
           apdata.unmodeled_row_analytic_function_ = row_func;
           apdata.unmodeled_col_analytic_function_ = col_func;
         }
@@ -2681,8 +2681,8 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           for (size_t s = 0; s < n_col_seg_u; ++s)
             temp_c.emplace_back(ucorsc[s], utausc[s]);
 
-          std::tuple<size_t, std::vector<std::pair<double, double>>> row_func(n_row_seg_u, temp_r);
-          std::tuple<size_t, std::vector<std::pair<double, double>>> col_func(n_col_seg_u, temp_c);
+          const std::tuple<size_t, std::vector<std::pair<double, double>>> row_func(n_row_seg_u, temp_r);
+          const std::tuple<size_t, std::vector<std::pair<double, double>>> col_func(n_col_seg_u, temp_c);
           apdata.unmodeled_row_piecewise_function_ = row_func;
           apdata.unmodeled_row_piecewise_function_ = col_func;
         } // end piecewise correlation function
@@ -2694,7 +2694,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
       if (type == "RSMAPA")
       { // looking for "RSMAPA..."
         // =======================================
-        nitf_tre<std::string> nt("RSMAPA", tre_str);
+        const nitf_tre<std::string> nt("RSMAPA", tre_str);
         // =========================================
         nitf_tre<std::string> nt1("EDITION", false, false);
         nt1.get_append(tres_itr, tre_str, v);
@@ -2704,7 +2704,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
       if (type == "RSMAPB")
       { // looking for "RSMAPB..."
         // =======================================
-        nitf_tre<std::string> nt("RSMAPB", tre_str);
+        const nitf_tre<std::string> nt("RSMAPB", tre_str);
         // =========================================
         nitf_tre<std::string> nt1("EDITION", false, false);
         nt1.get_append(tres_itr, tre_str, v);
@@ -2714,7 +2714,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
       if (type == "RSMGGA")
       { // looking for "RSMGGA..."
         // =======================================
-        nitf_tre<std::string> nt("RSMGGA", tre_str);
+        const nitf_tre<std::string> nt("RSMGGA", tre_str);
         // =========================================
         nitf_tre<std::string> nt1("EDITION", false, false);
         nt1.get_append(tres_itr, tre_str, v);
@@ -2751,7 +2751,7 @@ vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
 {
   for (auto & RSM_cam : RSM_cams_)
   {
-    size_t image_subheader_index = RSM_cam.first;
+    const size_t image_subheader_index = RSM_cam.first;
     vil_nitf2_tagged_record_sequence & ixshd_tres = hdr_ixshd_tres_[image_subheader_index];
     if (nitf_status_[image_subheader_index] == IMAGE_SUBHEADER_TREs_RSM_TREs_OVRFL)
       ixshd_tres = ovfl_ixshd_tres_[image_subheader_index];
@@ -2763,7 +2763,7 @@ vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
       // scan for RSMPIA in case of multiple polynomial camera regions
       for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr)
       {
-        std::string type = (*tres_itr)->name();
+        const std::string type = (*tres_itr)->name();
         if (type == "RSMIDA")
         {
           nitf_tre<std::string> nt("STID", false, true);
@@ -2781,32 +2781,32 @@ vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
           double max_lon = -min_lon, max_lat = -min_lat;
           double min_z = NAN, max_z = NAN;
           nitf_tre<double> nt1("V1Z", false, false);
-          bool min_good = nt1.get(tres_itr, min_z);
+          const bool min_good = nt1.get(tres_itr, min_z);
           nitf_tre<double> nt2("V8Z", false, false);
-          bool max_good = nt2.get(tres_itr, max_z);
-          std::vector<std::pair<double, double>> coords;
+          const bool max_good = nt2.get(tres_itr, max_z);
+          const std::vector<std::pair<double, double>> coords;
 
           double az = NAN, el = NAN;
           nitf_tre<double> illa("IA0", false, false);
-          bool az_good = illa.get(tres_itr, az);
+          const bool az_good = illa.get(tres_itr, az);
           rsm_meta_[image_subheader_index].sun_azimuth_radians_ = az;
           rsm_meta_[image_subheader_index].sun_azimuth_valid = az_good;
           nitf_tre<double> ille("IE0", false, false);
-          bool el_good = ille.get(tres_itr, el);
+          const bool el_good = ille.get(tres_itr, el);
           rsm_meta_[image_subheader_index].sun_elevation_radians_ = el;
           rsm_meta_[image_subheader_index].sun_elevation_valid = el_good;
 
           // determine corners of image
           int min_r = 0, max_r = 0, min_c = 0, max_c = 0;
           nitf_tre<int> nt3("MINR", false, false);
-          bool row_good_min = nt3.get(tres_itr, min_r);
+          const bool row_good_min = nt3.get(tres_itr, min_r);
           nitf_tre<int> nt4("MAXR", false, false);
-          bool row_good_max = nt4.get(tres_itr, max_r);
+          const bool row_good_max = nt4.get(tres_itr, max_r);
           nitf_tre<int> nt5("MINC", false, false);
-          bool col_good_min = nt5.get(tres_itr, min_c);
+          const bool col_good_min = nt5.get(tres_itr, min_c);
           nitf_tre<int> nt6("MAXC", false, false);
-          bool col_good_max = nt6.get(tres_itr, max_c);
-          bool img_corners_valid = row_good_min && row_good_max && col_good_min && col_good_max;
+          const bool col_good_max = nt6.get(tres_itr, max_c);
+          const bool img_corners_valid = row_good_min && row_good_max && col_good_min && col_good_max;
           if (!img_corners_valid)
           {
             std::cout << "Extracting image corners failed" << std::endl;
@@ -2843,7 +2843,7 @@ vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
       // scan for RSMPIA in case of multiple polynomial camera regions
       for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr)
       {
-        std::string type = (*tres_itr)->name();
+        const std::string type = (*tres_itr)->name();
         if (type == "RSMPIA")
         {
 #if 1
@@ -3099,13 +3099,13 @@ vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
     {
       for (tres_itr = ixshd_tres.begin(); tres_itr != ixshd_tres.end(); ++tres_itr)
       {
-        std::string type = (*tres_itr)->name();
+        const std::string type = (*tres_itr)->name();
         if (type == "RSMPCA")
         {
           std::vector<std::vector<int>> powers;
           std::vector<std::vector<double>> coeffs;
           std::vector<vpgl_scale_offset<double>> scale_offsets;
-          bool aux_good = false;
+          const bool aux_good = false;
           double x_scale = NAN, x_off = NAN, y_scale = NAN, y_off = NAN, z_scale = NAN, z_off = NAN;
           double u_scale = NAN, u_off = NAN, v_scale = NAN, v_off = NAN;
           int x_pow = 0, y_pow = 0, z_pow = 0, rsn = 0, csn = 0;
@@ -3355,7 +3355,7 @@ vpgl_nitf_RSM_camera_extractor::set_RSM_camera_params()
 void
 vpgl_nitf_RSM_camera_extractor::print_file_header_summary()
 {
-  size_t n = nitf_status_.size();
+  const size_t n = nitf_status_.size();
   if (n == 0)
     std::cout << "NITF2.1 File has no image subheaders" << std::endl;
 
@@ -3368,7 +3368,7 @@ vpgl_nitf_RSM_camera_extractor::print_file_header_summary()
   for (auto & nitf_statu : nitf_status_)
     if (nitf_statu.second == INVALID)
       inv.push_back(nitf_statu.first);
-  int ni = inv.size();
+  const int ni = inv.size();
   if (ni > 0)
   {
     if (ni == 1)
@@ -3376,7 +3376,7 @@ vpgl_nitf_RSM_camera_extractor::print_file_header_summary()
     else
     {
       std::cout << "subheaders ";
-      for (int idx : inv)
+      for (const int idx : inv)
         std::cout << idx << ' ';
       std::cout << " could not be examined" << std::endl;
     }

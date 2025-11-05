@@ -17,18 +17,18 @@ vbl_graph_partition(vbl_disjoint_sets & ds, std::vector<vbl_edge> & edges, float
   std::sort(edges.begin(), edges.end());
 
 
-  int nv = ds.num_elements();
+  const int nv = ds.num_elements();
   // init thresholds to t
   std::vector<float> thr(nv, t);
 
-  int ne = (int)edges.size();
+  const int ne = (int)edges.size();
   for (int i = 0; i < ne; i++)
   {
-    vbl_edge & e = edges[i];
+    const vbl_edge & e = edges[i];
 
     // the roots of the partitions conected by this edge
     int v0 = ds.find_set(e.v0_);
-    int v1 = ds.find_set(e.v1_);
+    const int v1 = ds.find_set(e.v1_);
     // if not the same partition
     if (v0 != v1)
     {

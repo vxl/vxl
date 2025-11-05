@@ -37,7 +37,7 @@ operation(char op)
   vnl_polynomial<double> p = !stack.empty() ? stack.back() : 0.0;
   if (!stack.empty())
     stack.pop_back();
-  vnl_polynomial<double> p2 = !stack.empty() ? stack.back() : 0.0;
+  const vnl_polynomial<double> p2 = !stack.empty() ? stack.back() : 0.0;
   if (op == '+')
     p += p2;
   else if (op == '-')

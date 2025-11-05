@@ -286,7 +286,7 @@ test_image_view(S /*d1*/, const std::string & s_name, T /*d2*/)
   TEST("vil_convert_cast<T,S>", image5 ? true : false, true);
   vil_print_all(std::cout, image5);
 
-  vil_image_view<T> image10 = vil_convert_to_n_planes(3, vil_new_image_view_base_sptr(image7));
+  const vil_image_view<T> image10 = vil_convert_to_n_planes(3, vil_new_image_view_base_sptr(image7));
   TEST("vil_convert_round(image10<T>, sptr)", image10 ? true : false, true);
   vil_print_all(std::cout, image10);
 
@@ -296,8 +296,8 @@ test_image_view(S /*d1*/, const std::string & s_name, T /*d2*/)
   test_image_view_rgba(image2, image7);
 
   // Test vil_planes
-  vil_image_view<S> image8(11, 17, 9);
-  vil_image_view<S> image9 = vil_planes(image8, 7, -2, 3);
+  const vil_image_view<S> image8(11, 17, 9);
+  const vil_image_view<S> image9 = vil_planes(image8, 7, -2, 3);
   TEST("vil_planes",
        vil_plane(image9, 0) == vil_plane(image8, 7) && vil_plane(image9, 1) == vil_plane(image8, 5) &&
          vil_plane(image9, 2) == vil_plane(image8, 3),
@@ -307,7 +307,7 @@ test_image_view(S /*d1*/, const std::string & s_name, T /*d2*/)
 static void
 test_contiguous()
 {
-  vil_image_view<vxl_byte> im1(4, 5, 6);
+  const vil_image_view<vxl_byte> im1(4, 5, 6);
   TEST("internal memory: contiguous", im1.is_contiguous(), true);
 
   vxl_byte memory[3 * 5 * 7];
@@ -328,7 +328,7 @@ test_contiguous()
         step[d3] = 15;
         std::ostringstream str;
         str << "external memory: " << step[0] << 'x' << step[1] << 'x' << step[2] << " step contiguous";
-        vil_image_view<vxl_byte> im(memory, 3, 5, 7, step[d1], step[d2], step[d3]);
+        const vil_image_view<vxl_byte> im(memory, 3, 5, 7, step[d1], step[d2], step[d3]);
         TEST(str.str().c_str(), im.is_contiguous(), true);
       }
     }
@@ -350,12 +350,12 @@ test_contiguous()
         step[d3] = 15;
         std::ostringstream str;
         str << "external memory: " << step[0] << 'x' << step[1] << 'x' << step[2] << " step not contiguous";
-        vil_image_view<vxl_byte> im(memory, 3, 5, 7, step[d1], step[d2], step[d3]);
+        const vil_image_view<vxl_byte> im(memory, 3, 5, 7, step[d1], step[d2], step[d3]);
         TEST(str.str().c_str(), im.is_contiguous(), false);
       }
     }
   }
-  vil_image_view<float> im2 = vil_new_image_view_plane_i_j(4, 5, 6, float());
+  const vil_image_view<float> im2 = vil_new_image_view_plane_i_j(4, 5, 6, float());
   TEST("vil_new_image_view_plane_i_j is_continuous", im2.is_contiguous(), true);
 }
 
@@ -476,8 +476,8 @@ test_image_view_assignment_operator()
 
   // Construct two views with non-zero reference counts
   //
-  vil_image_view_base_sptr im1p = new byte_view(5, 5);
-  vil_image_view_base_sptr im2p = new byte_view(5, 5);
+  const vil_image_view_base_sptr im1p = new byte_view(5, 5);
+  const vil_image_view_base_sptr im2p = new byte_view(5, 5);
 
   // Assign one to the other use a temporary (which has a reference
   // count of zero).
@@ -505,7 +505,7 @@ test_image_view_assignment_operator()
   }
   TEST("Successfully caught expected exception", caught_exception, true);
 #else
-  vil_image_view<float> float_im = *im1p;
+  vil_image_view<float> const float_im = *im1p;
   TEST("Successfully detected dodgy assignment", float_im ? true : false, false);
 #endif
 }

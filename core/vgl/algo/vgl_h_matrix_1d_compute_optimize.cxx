@@ -112,7 +112,7 @@ vgl_h_matrix_1d_compute_optimize::compute_cool_homg(const std::vector<vgl_homg_p
                                                     const std::vector<vgl_homg_point_1d<double>> & p2,
                                                     vgl_h_matrix_1d<double> & M)
 {
-  unsigned N = p1.size();
+  const unsigned N = p1.size();
   assert(N == p2.size());
   if (N < 3)
     return false;
@@ -125,7 +125,7 @@ vgl_h_matrix_1d_compute_optimize::compute_cool_homg(const std::vector<vgl_homg_p
   // looking for a correction near the identity :
   for (unsigned i = 0; i < N; i++)
   {
-    vgl_homg_point_1d<double> v = M(p1[i]);
+    const vgl_homg_point_1d<double> v = M(p1[i]);
     if (v.w() == 0.0)
       return false;
     z1[i] = v.x() / v.w(); // make nonhomogeneous

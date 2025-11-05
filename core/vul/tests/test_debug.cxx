@@ -26,15 +26,15 @@ test_debug()
             << " Testing vul_debug\n"
             << "*******************\n\n";
 
-  unsigned int pid = vpl_getpid();
+  const unsigned int pid = vpl_getpid();
 
-  const char * filetemplate = "test_core%.3d.dmp";
+  const char * const filetemplate = "test_core%.3d.dmp";
   {
     std::cout << "Test simple forced coredump\n";
 
-    const char * base_filename = "test_core000.dmp";
+    const char * const base_filename = "test_core000.dmp";
     vpl_unlink(base_filename);
-    std::string long_filename = vul_sprintf("%s.%d", base_filename, pid);
+    const std::string long_filename = vul_sprintf("%s.%d", base_filename, pid);
     vpl_unlink(long_filename.c_str());
 
     if (!vul_debug_core_dump(filetemplate))
@@ -78,9 +78,9 @@ test_debug()
   {
     std::cout << "Test out-of-memory coredump\n";
 
-    const char * base_filename = "test_core001.dmp";
+    const char * const base_filename = "test_core001.dmp";
     vpl_unlink(base_filename);
-    std::string long_filename = vul_sprintf("%s.%d", base_filename, pid);
+    const std::string long_filename = vul_sprintf("%s.%d", base_filename, pid);
     vpl_unlink(long_filename.c_str());
 
     vul_debug_set_coredump_and_throw_on_out_of_memory(filetemplate);
@@ -91,14 +91,18 @@ test_debug()
       // NOTE the following line can not be a const or constexpr
       //     otherwise the warning of too large of memory becomes a compiler
       //     error instead of a warning.
-      std::size_t too_much = std::numeric_limits<std::size_t>::max();
+      std::size_t too_much = 7;
 #ifdef __GNUC__
 #  pragma GCC diagnostic push
 // disable all warnings here, we really do want to fail at allocation!
 #  pragma GCC diagnostic ignored "-Wall"
 #endif
+      if (!caught_exception)
+      {
+        too_much = std::numeric_limits<std::size_t>::max();
+      }
       /* no diagnostic for this one */
-      char * p = new char[too_much];
+      char * const p = new char[too_much];
 #ifdef __GNUC__
 #  pragma GCC diagnostic pop
 #endif

@@ -66,16 +66,16 @@ vil_nitf2_file_format::make_output_image(vil_stream * /*vs*/,
 vil_pyramid_image_resource_sptr
 vil_nitf2_file_format::make_input_pyramid_image(const char * file)
 {
-  vil_smart_ptr<vil_stream> vs = vil_open(file, "r");
+  const vil_smart_ptr<vil_stream> vs = vil_open(file, "r");
   if (!vs)
     return nullptr;
-  vil_image_resource_sptr imgr = this->make_input_image(vs.as_pointer());
+  const vil_image_resource_sptr imgr = this->make_input_image(vs.as_pointer());
   if (!imgr)
     return nullptr;
   auto * nitfr = reinterpret_cast<vil_nitf2_image *>(imgr.as_pointer());
   if (!nitfr->is_jpeg_2000_compressed())
     return nullptr;
-  vil_pyramid_image_resource_sptr pyr = new vil_j2k_nitf2_pyramid_image_resource(imgr);
+  const vil_pyramid_image_resource_sptr pyr = new vil_j2k_nitf2_pyramid_image_resource(imgr);
   return pyr;
 }
 
@@ -134,8 +134,8 @@ vil_nitf2_image::size_to(vil_nitf2_header::section_type sec, vil_nitf2_header::p
     index = num_segments;
     going_past_end = true;
   }
-  std::string sh = vil_nitf2_header::section_len_header_tag(sec);
-  std::string s = vil_nitf2_header::section_len_data_tag(sec);
+  const std::string sh = vil_nitf2_header::section_len_header_tag(sec);
+  const std::string s = vil_nitf2_header::section_len_data_tag(sec);
   int i = 0;
   for (i = 0; i < index; i++)
   {
@@ -277,7 +277,7 @@ vil_nitf2_image::get_offset_to_image_data_block_band(unsigned int image_index,
   // New version
   unsigned int nbi = n_block_i(), nbj = n_block_j();
   unsigned int sbi = size_block_i(), sbj = size_block_j();
-  unsigned int bytes_per_band = nbi * nbj * sbi * sbj * bits_per_pixel_per_band / 8;
+  const unsigned int bytes_per_band = nbi * nbj * sbi * sbj * bits_per_pixel_per_band / 8;
 
   // What we do here depends on whether we have a data_mask_table or not and
   // whether i_mode == "S".  The most complex case is i_mode != "S" and we have
@@ -290,7 +290,7 @@ vil_nitf2_image::get_offset_to_image_data_block_band(unsigned int image_index,
   //   i_mode != "S" and don't have data_mask_table: compute both band and block offset
   //      ourselves here
   // If it sounds complex, blame the NITF 2.1 spec for that
-  const vil_nitf2_data_mask_table * data_mask_table = current_image_header()->data_mask_table();
+  const vil_nitf2_data_mask_table * const data_mask_table = current_image_header()->data_mask_table();
   if (data_mask_table)
   {
     offset += data_mask_table->blocked_image_data_offset();
@@ -298,7 +298,7 @@ vil_nitf2_image::get_offset_to_image_data_block_band(unsigned int image_index,
   if (data_mask_table && data_mask_table->has_offset_table())
   {
     // have data mask table
-    int bI = i_mode == "S" ? bandIndex : -1;
+    const int bI = i_mode == "S" ? bandIndex : -1;
     if (data_mask_table->block_band_present(block_index_x, block_index_y, bI))
     {
       return 0;
@@ -307,8 +307,8 @@ vil_nitf2_image::get_offset_to_image_data_block_band(unsigned int image_index,
   }
   else
   {
-    unsigned int pixels_per_block = size_block_i() * size_block_j();
-    unsigned int bits_per_band = pixels_per_block * bits_per_pixel_per_band;
+    const unsigned int pixels_per_block = size_block_i() * size_block_j();
+    const unsigned int bits_per_band = pixels_per_block * bits_per_pixel_per_band;
     unsigned int bytes_per_block_per_band = bits_per_band / 8;
     // round up if remainder left over (this assumes that band/block boundaries
     // always lie on byte boundaries.
@@ -317,15 +317,16 @@ vil_nitf2_image::get_offset_to_image_data_block_band(unsigned int image_index,
     if (i_mode == "S")
     {
       // i_mode == "S" and not have data_mask_table
-      unsigned int offset_to_desired_band = bandIndex * bytes_per_band;
-      unsigned int offset_to_desired_block = bytes_per_block_per_band * (block_index_y * n_block_i() + block_index_x);
+      const unsigned int offset_to_desired_band = bandIndex * bytes_per_band;
+      const unsigned int offset_to_desired_block =
+        bytes_per_block_per_band * (block_index_y * n_block_i() + block_index_x);
       offset += offset_to_desired_band + offset_to_desired_block;
     }
     else
     {
       // i_mode != "S" and not have data_mask_table
-      unsigned int block_size_bytes = bytes_per_block_per_band * nplanes();
-      unsigned int offset_to_desired_block = block_size_bytes * (block_index_y * n_block_i() + block_index_x);
+      const unsigned int block_size_bytes = bytes_per_block_per_band * nplanes();
+      const unsigned int offset_to_desired_block = block_size_bytes * (block_index_y * n_block_i() + block_index_x);
       offset += offset_to_desired_block;
     }
   }
@@ -334,7 +335,7 @@ vil_nitf2_image::get_offset_to_image_data_block_band(unsigned int image_index,
     // regardless of whether we had a data_mask_table or not, we've only computed
     // the offset to the desired block so far.  Now, we add on the offset to
     // the desired band.
-    unsigned int offset_to_desired_band = bandIndex * bytes_per_band;
+    const unsigned int offset_to_desired_band = bandIndex * bytes_per_band;
     offset += offset_to_desired_band;
   }
   return offset;
@@ -356,7 +357,8 @@ vil_nitf2_image::parse_headers()
   m_image_headers.resize(nimages());
   for (unsigned int i = 0; i < nimages(); i++)
   {
-    vil_streampos offset = get_offset_to(vil_nitf2_header::enum_image_segments, vil_nitf2_header::enum_subheader, i);
+    const vil_streampos offset =
+      get_offset_to(vil_nitf2_header::enum_image_segments, vil_nitf2_header::enum_subheader, i);
     m_stream->seek(offset);
     m_image_headers[i] = new vil_nitf2_image_subheader(file_version());
     if (!m_image_headers[i]->read(m_stream))
@@ -370,7 +372,7 @@ vil_nitf2_image::parse_headers()
   m_des.resize(num_des);
   for (int j = 0; j < num_des; j++)
   {
-    vil_streampos offset =
+    const vil_streampos offset =
       get_offset_to(vil_nitf2_header::enum_data_extension_segments, vil_nitf2_header::enum_subheader, j);
     m_stream->seek(offset);
     int data_width = 0;
@@ -391,7 +393,7 @@ vil_nitf2_image::file_version() const
 const char *
 vil_nitf2_image::file_format() const
 {
-  vil_nitf2_classification::file_version v = file_version();
+  const vil_nitf2_classification::file_version v = file_version();
   switch (v)
   {
     case vil_nitf2_classification::V_UNKNOWN:
@@ -664,7 +666,7 @@ maybe_byte_align_data(vil_memory_chunk_sptr in_data,
 {
   if (in_bits_per_sample != sizeof(T) * 8)
   {
-    vil_memory_chunk_sptr new_memory = new vil_memory_chunk(num_samples * sizeof(T), in_data->pixel_format());
+    const vil_memory_chunk_sptr new_memory = new vil_memory_chunk(num_samples * sizeof(T), in_data->pixel_format());
     byte_align_data((T *)in_data->data(), num_samples, in_bits_per_sample, (T *)new_memory->data());
     return new_memory;
   }
@@ -771,12 +773,12 @@ get_block_vcl_internal(vil_pixel_format pix_format,
                        T dummy)
 {
   // may have to byte align data (only valid for integer type data)
-  unsigned int num_samples = pixels_per_block_x * pixels_per_block_y * nplanes; // all bands of image
+  const unsigned int num_samples = pixels_per_block_x * pixels_per_block_y * nplanes; // all bands of image
 
   if (data_is_all_blank)
   {
     // this entire block is blank
-    T * data_ptr = reinterpret_cast<T *>(image_memory->data());
+    T * const data_ptr = reinterpret_cast<T *>(image_memory->data());
     for (unsigned int i = 0; i < pixels_per_block_x * pixels_per_block_y * nplanes; i++)
     {
       data_ptr[i] = (T)0;
@@ -823,10 +825,10 @@ vil_nitf2_image::get_block_j2k(unsigned int blockIndexX, unsigned int blockIndex
   // if this is a bug in the file or if we need to handle it.  Anyway,
   // we handle it by using std::min.  test file named p0_11xa,ntf exhibits
   // this issue
-  unsigned int i0 = (std::min)(blockIndexX * size_block_i(), ni());
-  unsigned int num_i = (std::min)(size_block_i(), ni() - i0);
-  unsigned int j0 = (std::min)(blockIndexY * size_block_j(), nj());
-  unsigned int num_j = (std::min)(size_block_j(), nj() - j0);
+  const unsigned int i0 = (std::min)(blockIndexX * size_block_i(), ni());
+  const unsigned int num_i = (std::min)(size_block_i(), ni() - i0);
+  const unsigned int j0 = (std::min)(blockIndexY * size_block_j(), nj());
+  const unsigned int num_j = (std::min)(size_block_j(), nj() - j0);
   return get_copy_view(i0, num_i, j0, num_j);
 }
 
@@ -854,21 +856,21 @@ vil_nitf2_image::get_block(unsigned int block_index_x, unsigned int block_index_
   {
     return nullptr;
   }
-  int extra_bits = bits_per_pixel_per_band - actualBitsPerPixelPerBand;
-  bool need_to_right_justify = bitJustification == "L" && (extra_bits > 0);
+  const int extra_bits = bits_per_pixel_per_band - actualBitsPerPixelPerBand;
+  const bool need_to_right_justify = bitJustification == "L" && (extra_bits > 0);
 
   // bytes per pixel... round up to nearest byte
   // unsigned int bytesPerPixelPerBand = bits_per_pixel_per_band / 8;
   // if (bits_per_pixel_per_band % 8 != 0) bytesPerPixelPerBand++;
 
-  unsigned int pixels_per_block = size_block_i() * size_block_j();
-  unsigned int bits_per_band = pixels_per_block * bits_per_pixel_per_band;
+  const unsigned int pixels_per_block = size_block_i() * size_block_j();
+  const unsigned int bits_per_band = pixels_per_block * bits_per_pixel_per_band;
   unsigned int bytes_per_block_per_band = bits_per_band / 8;
   if (bits_per_band % 8 != 0)
     bytes_per_block_per_band++; // round up if remainder std::left over
-  unsigned int block_size_bytes = bytes_per_block_per_band * nplanes();
+  const unsigned int block_size_bytes = bytes_per_block_per_band * nplanes();
   // allocate the memory that we need
-  vil_memory_chunk_sptr image_memory = new vil_memory_chunk(block_size_bytes, pixel_format());
+  const vil_memory_chunk_sptr image_memory = new vil_memory_chunk(block_size_bytes, pixel_format());
 
 
   unsigned int i_step(0), j_step(0), plane_step(0);
@@ -882,7 +884,7 @@ vil_nitf2_image::get_block(unsigned int block_index_x, unsigned int block_index_
     // blocks are not contiguous... we'll have to do one read for each band
     for (unsigned int i = 0; i < nplanes(); i++)
     {
-      vil_streampos current_offset =
+      const vil_streampos current_offset =
         get_offset_to_image_data_block_band(m_current_image_index, block_index_x, block_index_y, i);
       if (current_offset == 0)
       {
@@ -908,7 +910,7 @@ vil_nitf2_image::get_block(unsigned int block_index_x, unsigned int block_index_
   else
   {
     // calculate the offset we need
-    vil_streampos current_offset =
+    const vil_streampos current_offset =
       get_offset_to_image_data_block_band(m_current_image_index, block_index_x, block_index_y, 0);
     if (current_offset == 0)
     {
@@ -951,7 +953,7 @@ vil_nitf2_image::get_block(unsigned int block_index_x, unsigned int block_index_
   }
 
   // create image view of the data
-  vil_image_view_base_sptr view = nullptr;
+  const vil_image_view_base_sptr view = nullptr;
   switch (vil_pixel_format_component_format(image_memory->pixel_format()))
   {
 #define GET_BLOCK_CASE(FORMAT, T)                          \

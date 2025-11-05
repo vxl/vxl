@@ -16,7 +16,7 @@
 static void
 test_degree()
 {
-  vcsl_degree_sptr r = vcsl_degree::instance();
+  const vcsl_degree_sptr r = vcsl_degree::instance();
   TEST("test_degree_sptr", bool(r), true);
 }
 

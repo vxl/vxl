@@ -18,7 +18,7 @@ test_affine_camera_io()
 
   // Some matrices for testing.
   double random_list[12] = { 10.6, 1.009, .676, .5, -13, -10, 8, 5, 0.0, 0.0, 0.0, 1.0 };
-  vnl_double_3x4 random_matrix(random_list);
+  const vnl_double_3x4 random_matrix(random_list);
 
   std::cout << "Matrix:\n" << random_matrix << std::endl;
 
@@ -41,7 +41,7 @@ test_affine_camera_io()
 
   std::cout << "Recovered Matrix:\n" << aff_cam_r.get_matrix() << std::endl;
   TEST("recovery from binary read", aff_cam.get_matrix(), random_matrix);
-  double viewing_dist_r = aff_cam_r.viewing_distance();
+  const double viewing_dist_r = aff_cam_r.viewing_distance();
   TEST("viewing distance", viewing_dist_r, 1000.0);
   // remove file:
   vpl_unlink("test_affine_camera_io.tmp");

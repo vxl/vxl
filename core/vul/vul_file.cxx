@@ -132,12 +132,12 @@ vul_file::exists(const char * fn)
 std::string
 vul_file::dirname(const char * fn)
 {
-  std::string self(fn);
+  const std::string self(fn);
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
   std::string::size_type slash_index = self.find_last_of("\\/");
 #else
-  std::string::size_type slash_index = self.rfind('/');
+  std::string::size_type const slash_index = self.rfind('/');
 #endif
   if (slash_index == std::string::npos)
     return ".";
@@ -149,9 +149,9 @@ vul_file::dirname(const char * fn)
 std::string
 vul_file::extension(const char * fn)
 {
-  std::string self(fn);
+  const std::string self(fn);
 
-  std::string::size_type dot_index = self.rfind('.');
+  const std::string::size_type dot_index = self.rfind('.');
   if (dot_index != std::string::npos)
     return self.substr(dot_index, std::string::npos);
   else
@@ -166,7 +166,7 @@ vul_file::strip_directory(const char * fn)
 #if defined(_WIN32) && !defined(__CYGWIN__)
   std::string::size_type slash_index = self.find_last_of("\\/");
 #else
-  std::string::size_type slash_index = self.rfind('/');
+  std::string::size_type const slash_index = self.rfind('/');
 #endif
   if (slash_index != std::string::npos)
     self.erase(0, slash_index + 1);
@@ -179,7 +179,7 @@ vul_file::strip_extension(const char * fn)
 {
   std::string self(fn);
 
-  std::string::size_type dot_index = self.rfind('.');
+  const std::string::size_type dot_index = self.rfind('.');
   if (dot_index != std::string::npos)
     self.erase(dot_index, std::string::npos);
 
@@ -195,7 +195,7 @@ vul_file::basename(const char * fn, const char * suffix)
 #if defined(_WIN32) && !defined(__CYGWIN__)
   std::string::size_type slash_index = self.find_last_of("\\/");
 #else
-  std::string::size_type slash_index = self.rfind('/');
+  std::string::size_type const slash_index = self.rfind('/');
 #endif
 
   if (slash_index != std::string::npos)
@@ -204,7 +204,7 @@ vul_file::basename(const char * fn, const char * suffix)
   // Now strip suffix if any
   if (suffix)
   {
-    int start = (int)(self.size() - std::strlen(suffix));
+    const int start = (int)(self.size() - std::strlen(suffix));
     if (start >= 0)
       if (std::string(self.begin() + start, self.end()) == suffix)
         self.erase(start, std::string::npos);
@@ -241,7 +241,7 @@ vul_file::delete_file_glob(const std::string & file_glob)
   replace('/', '\\', command);
   command = "del /Q " + command;
 #else
-  std::string command = "/bin/rm -f " + file_glob;
+  std::string const command = "/bin/rm -f " + file_glob;
 #endif
   return std::system(command.c_str()) == 0;
 }
@@ -266,7 +266,7 @@ vul_file::expand_tilde(const char * vul_filename)
   // 1. Strip to directory only, and remove the tilde itself
   std::string fn(vul_filename);
   std::string dir;
-  std::string::size_type first_slash = fn.find('/');
+  const std::string::size_type first_slash = fn.find('/');
   if (first_slash != std::string::npos)
   {
     dir = fn.substr(1, first_slash - 1);
@@ -293,7 +293,7 @@ vul_file::expand_tilde(const char * vul_filename)
   }
 
   // Was ~user, Check password list for match
-  vul_user_info user(dir);
+  const vul_user_info user(dir);
   if (!user.ok)
     return std::string(vul_filename);
 

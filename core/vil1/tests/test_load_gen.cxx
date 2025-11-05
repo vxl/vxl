@@ -12,7 +12,7 @@
 static void
 test_rgb(const char * name, int w, int h, unsigned r, unsigned g, unsigned b)
 {
-  vil1_image i = vil1_load(name);
+  const vil1_image i = vil1_load(name);
 
   std::cout << "vil1_image_impl: size " << i.width() << 'x' << i.height() << ", " << i.components() << " component, "
             << i.bits_per_component() << " bit\n";
@@ -43,7 +43,7 @@ test_rgb(const char * name, int w, int h, unsigned r, unsigned g, unsigned b)
 static void
 test_gray(const char * name, int w, int h, unsigned v)
 {
-  vil1_image i = vil1_load(name);
+  const vil1_image i = vil1_load(name);
 
   std::cout << "vil1_image_impl: size " << i.width() << 'x' << i.height() << ", " << i.components() << " component, "
             << i.bits_per_component() << " bit\n";
@@ -61,7 +61,7 @@ test_gray(const char * name, int w, int h, unsigned v)
 
   bool result = true;
 
-  for (unsigned char & it : image_buf)
+  for (const unsigned char & it : image_buf)
     if (it != v)
     {
       result = false;

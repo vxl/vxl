@@ -42,7 +42,7 @@ vbl_test_batch_multimap1()
   test_data.emplace_back(std::string("3"), 3);
 
 
-  vbl_batch_multimap<std::string, int> bmmap(test_data.begin(), test_data.end());
+  const vbl_batch_multimap<std::string, int> bmmap(test_data.begin(), test_data.end());
 
   TEST("batch_multimap sorted data set correctly", issorted(bmmap.begin(), bmmap.end()), true);
 
@@ -64,7 +64,7 @@ vbl_test_batch_multimap1()
   bmmap2.assign_sorted(test_data.begin(), test_data.end());
   TEST("batch_multimap::assign_sorted && operator ==", bmmap == bmmap2, true);
 
-  vbl_batch_multimap<std::string, int> bmmap3 = bmmap2;
+  const vbl_batch_multimap<std::string, int> bmmap3 = bmmap2;
   TEST("batch_multimap::operator=", bmmap, bmmap3);
 }
 
@@ -90,7 +90,7 @@ vbl_test_batch_multimap2()
     test_data.emplace_back(8, std::string("8") + c);
   }
 
-  vbl_batch_multimap<int, std::string> bmmap(test_data.begin(), test_data.end());
+  const vbl_batch_multimap<int, std::string> bmmap(test_data.begin(), test_data.end());
 
   TEST("Check ordinary default sort used by assign messed up value order",
        issorted(bmmap.lower_bound(-10), bmmap.upper_bound(10)),

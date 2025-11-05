@@ -138,13 +138,13 @@ inline bool
 check(const vnl_vector<double> & correct_params, vrel_irls * irls)
 {
   const vnl_vector<double> & res(irls->params());
-  double s = irls->scale();
-  vnl_matrix<double> covar(irls->cofactor() * s * s);
-  vnl_vector<double> err_vector(res - correct_params);
+  const double s = irls->scale();
+  const vnl_matrix<double> covar(irls->cofactor() * s * s);
+  const vnl_vector<double> err_vector(res - correct_params);
 
   //  Get standardized error
-  double err = std::sqrt(dot_product(err_vector * covar, err_vector));
-  bool success = err < 0.5 * s;
+  const double err = std::sqrt(dot_product(err_vector * covar, err_vector));
+  const bool success = err < 0.5 * s;
 #ifdef DEBUG
   bool conv = (irls->did_it_converge());
   std::cout << "Finished:\n"
@@ -163,18 +163,18 @@ static void
 test_irls()
 {
   //  Set true parameter estimate.
-  vnl_double_3 true_params(10.0, 0.02, -0.1);
+  const vnl_double_3 true_params(10.0, 0.02, -0.1);
 
   //  Create the linear regression problem and an m_estimator objective
   //  function.
   //
-  bool use_intercept = true;
+  const bool use_intercept = true;
   double sigma = 0.25;
   std::vector<vnl_vector<double>> pts;
   regression_points(true_params.as_vector(), sigma, pts);
   auto * lr = new vrel_linear_regression(pts, use_intercept);
-  int dof = lr->param_dof();
-  vrel_wls_obj * m_est = new vrel_tukey_obj(dof);
+  const int dof = lr->param_dof();
+  vrel_wls_obj * const m_est = new vrel_tukey_obj(dof);
   int max_iterations = 50;
   testlib_test_begin("ctor");
   auto * irls = new vrel_irls(max_iterations);
@@ -185,7 +185,7 @@ test_irls()
   irls->set_max_iterations(max_iterations);
 
   //  Setting scale estimation parameters.
-  int iterations_for_scale = 2;
+  const int iterations_for_scale = 2;
   bool use_weighted_scale = false;
   testlib_test_begin("scale parameters for non-weighted scale");
   irls->set_est_scale(iterations_for_scale, use_weighted_scale);
@@ -235,12 +235,12 @@ test_irls()
   testlib_test_perform(irls->iterations_used() == max_iterations);
 
   //  onto irls from matches
-  int trace_level = 0;
-  vnl_double_4 params(1.2, 0.3, 15.0, -4.0);
+  const int trace_level = 0;
+  const vnl_double_4 params(1.2, 0.3, 15.0, -4.0);
   std::vector<image_point_match> matches;
   sigma = 0.25;
   generate_similarity_matches(params.as_vector(), sigma, matches);
-  vrel_estimation_problem * match_prob = new similarity_from_matches(matches);
+  vrel_estimation_problem * const match_prob = new similarity_from_matches(matches);
 
   vrel_irls irls_m(20);
   irls_m.set_trace_level(trace_level);

@@ -14,10 +14,10 @@
 void
 _test_lvcs()
 {
-  vpgl_lvcs lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::FEET);
+  const vpgl_lvcs lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::FEET);
   double x = NAN, y = NAN, z = NAN;
   lvcs.global_to_local(-114.3085932, 33.4447732, 0.0, vpgl_lvcs::wgs84, x, y, z);
-  std::string b_path = "./test_lvcs_io.vsl";
+  const std::string b_path = "./test_lvcs_io.vsl";
   vsl_b_ofstream os(b_path);
   vsl_b_write(os, lvcs);
   os.close();
@@ -26,13 +26,13 @@ _test_lvcs()
   vsl_b_read(is, lvcs_r);
   double longitude = NAN, latitude = NAN, elevation = NAN;
   lvcs_r.get_origin(latitude, longitude, elevation);
-  vpgl_lvcs::cs_names name = lvcs_r.get_cs_name();
-  double er1 = std::fabs(longitude + 114.3085932) + std::fabs(latitude - 33.4447732) + std::fabs(elevation);
+  const vpgl_lvcs::cs_names name = lvcs_r.get_cs_name();
+  const double er1 = std::fabs(longitude + 114.3085932) + std::fabs(latitude - 33.4447732) + std::fabs(elevation);
   TEST("cs_name", name - vpgl_lvcs::wgs84, 0);
   TEST_NEAR("origin", er1, 0.0, 1e-3);
   double xr = NAN, yr = NAN, zr = NAN;
   lvcs.global_to_local(-114.3085932, 33.4447732, 0.0, vpgl_lvcs::wgs84, xr, yr, zr);
-  double er2 = std::fabs(xr) + std::fabs(yr) + std::fabs(zr);
+  const double er2 = std::fabs(xr) + std::fabs(yr) + std::fabs(zr);
   TEST_NEAR("local", er2, 0.0, 1e-3);
   vpl_unlink("./test_lvcs_io.vsl");
 }
@@ -40,7 +40,7 @@ _test_lvcs()
 void
 _test_lvcs_sptr_wgs84()
 {
-  std::string filename = "test_lvcs_sptr_wgs84_io.vsl";
+  const std::string filename = "test_lvcs_sptr_wgs84_io.vsl";
 
   auto lvcs_sptr =
     vpgl_lvcs_sptr(new vpgl_lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::FEET));
@@ -63,7 +63,7 @@ _test_lvcs_sptr_wgs84()
 void
 _test_lvcs_sptr_utm()
 {
-  std::string filename = "test_lvcs_sptr_utm_io.vsl";
+  const std::string filename = "test_lvcs_sptr_utm_io.vsl";
 
   auto lvcs_sptr =
     vpgl_lvcs_sptr(new vpgl_lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::utm, vpgl_lvcs::DEG, vpgl_lvcs::METERS));
@@ -86,7 +86,7 @@ _test_lvcs_sptr_utm()
 void
 _test_lvcs_sptr_null()
 {
-  std::string filename = "test_lvcs_sptr_null_io.vsl";
+  const std::string filename = "test_lvcs_sptr_null_io.vsl";
 
   vsl_b_ofstream os(filename);
   os.close();

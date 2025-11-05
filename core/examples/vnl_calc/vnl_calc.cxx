@@ -46,7 +46,7 @@ public:
   T
   pop()
   {
-    int n = this->size();
+    const int n = this->size();
     if (n == 0)
     {
       std::cerr << "ZOKS: Stack underflow\n";
@@ -148,7 +148,7 @@ main(int argc, char ** argv)
     }
     else if (arg == "svd")
     {
-      Matrix a = stack.pop();
+      const Matrix a = stack.pop();
       vnl_svd<double> svd(a);
       stack.push(svd.U());
       stack.push(svd.W().as_matrix());

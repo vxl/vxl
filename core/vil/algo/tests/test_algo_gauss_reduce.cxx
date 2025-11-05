@@ -50,7 +50,7 @@ test_algo_gauss_reduce_byte(unsigned nx)
 
   TEST("First element", reduced_x(0, 1), image0(0, 1));
   TEST("Next element", reduced_x(1, 1), image0(2, 1));
-  unsigned L = (nx - 1) / 2;
+  const unsigned L = (nx - 1) / 2;
   TEST("Last element", reduced_x(L, 1), image0(2 * L, 1));
 
   vil_image_view<vxl_byte> test2;
@@ -121,7 +121,7 @@ test_algo_gauss_reduce_int_32(unsigned nx)
 
   TEST("First element", reduced_x(0, 1), image0(0, 1));
   TEST("Next element", reduced_x(1, 1), image0(2, 1));
-  unsigned L = (nx - 1) / 2;
+  const unsigned L = (nx - 1) / 2;
   TEST("Last element", reduced_x(L, 1), image0(2 * L, 1));
 
   vil_image_view<vxl_int_32> test2;
@@ -195,14 +195,14 @@ test_algo_gauss_reduce_uint_16(unsigned nx)
 
   print_out(image0, "reduced_x", reduced_x);
 
-  double dfirst = 0.071 * image0(2, 1) + 0.357 * image0(1, 1) + 0.572 * image0(0, 1);
+  const double dfirst = 0.071 * image0(2, 1) + 0.357 * image0(1, 1) + 0.572 * image0(0, 1);
   auto ifirst = (vxl_uint_16)vnl_math::rnd(dfirst);
   TEST("First element", reduced_x(0, 1), ifirst);
 
   TEST("Next element", reduced_x(1, 1), image0(2, 1));
 
-  unsigned L = (nx - 1) / 2;
-  double dlast = 0.071 * image0(2 * L - 2, 1) + 0.357 * image0(2 * L - 1, 1) + 0.572 * image0(2 * L, 1);
+  const unsigned L = (nx - 1) / 2;
+  const double dlast = 0.071 * image0(2 * L - 2, 1) + 0.357 * image0(2 * L - 1, 1) + 0.572 * image0(2 * L, 1);
   auto ilast = (vxl_uint_16)vnl_math::rnd(dlast);
   TEST("Last element", reduced_x(L, 1), ilast);
 
@@ -241,13 +241,13 @@ test_algo_gauss_reduce_uint_16(unsigned nx)
 
   print_out(image1, "reduced_y", reduced_y);
 
-  double dfirsty = 0.071 * image1(1, 2) + 0.357 * image1(1, 1) + 0.572 * image1(1, 0);
+  const double dfirsty = 0.071 * image1(1, 2) + 0.357 * image1(1, 1) + 0.572 * image1(1, 0);
   auto ifirsty = (vxl_uint_16)vnl_math::rnd(dfirsty);
   TEST("First element", reduced_y(1, 0), ifirsty);
 
   TEST("Next element", reduced_y(1, 1), image1(1, 2));
 
-  double dlasty = 0.071 * image1(1, 2 * L - 2) + 0.357 * image1(1, 2 * L - 1) + 0.572 * image1(1, 2 * L);
+  const double dlasty = 0.071 * image1(1, 2 * L - 2) + 0.357 * image1(1, 2 * L - 1) + 0.572 * image1(1, 2 * L);
   auto ilasty = (vxl_uint_16)vnl_math::rnd(dlasty);
   TEST("Last element", reduced_y(1, L), ilasty);
 }
@@ -281,7 +281,7 @@ test_algo_gauss_reduce_float(unsigned int nx)
 
   TEST_NEAR("First element", reduced_x(0, 1), image0(0, 1), 0.1);
   TEST_NEAR("Next element", reduced_x(1, 1), image0(2, 1), 1e-6);
-  unsigned L = (nx - 1) / 2;
+  const unsigned L = (nx - 1) / 2;
   TEST_NEAR("Last element", reduced_x(L, 1), image0(2 * L, 1), 0.1);
 
 
@@ -328,8 +328,8 @@ test_algo_gauss_reduce_121_byte(unsigned nx, unsigned ny)
 
   TEST("First element", reduced_x(0, 1), image0(0, 2));
   TEST("Next element", reduced_x(1, 1), image0(2, 2));
-  unsigned Lx = (nx + 1) / 2;
-  unsigned Ly = (ny + 1) / 2;
+  const unsigned Lx = (nx + 1) / 2;
+  const unsigned Ly = (ny + 1) / 2;
   TEST("Last element in x", reduced_x(Lx - 1, 1), image0(2 * (Lx - 1), 2));
   TEST("Last element in y", reduced_x(1, Ly - 1), image0(2, 2 * (Ly - 1)));
 
@@ -390,8 +390,8 @@ test_algo_gauss_reduce_121_int_32(unsigned nx, unsigned ny)
 
   TEST("First element", reduced_x(0, 1), image0(0, 2));
   TEST("Next element", reduced_x(1, 1), image0(2, 2));
-  unsigned Lx = (nx + 1) / 2;
-  unsigned Ly = (ny + 1) / 2;
+  const unsigned Lx = (nx + 1) / 2;
+  const unsigned Ly = (ny + 1) / 2;
   TEST("Last element in x", reduced_x(Lx - 1, 1), image0(2 * (Lx - 1), 2));
   TEST("Last element in y", reduced_x(1, Ly - 1), image0(2, 2 * (Ly - 1)));
 
@@ -451,8 +451,8 @@ test_algo_gauss_reduce_121_uint_16(unsigned nx, unsigned ny)
 
   TEST("First element", reduced_x(0, 1), image0(0, 2));
   TEST("Next element", reduced_x(1, 1), image0(2, 2));
-  unsigned Lx = (nx + 1) / 2;
-  unsigned Ly = (ny + 1) / 2;
+  const unsigned Lx = (nx + 1) / 2;
+  const unsigned Ly = (ny + 1) / 2;
   TEST("Last element in x", reduced_x(Lx - 1, 1), image0(2 * (Lx - 1), 2));
   TEST("Last element in y", reduced_x(1, Ly - 1), image0(2, 2 * (Ly - 1)));
 
@@ -514,8 +514,8 @@ test_algo_gauss_reduce_121_float(unsigned nx, unsigned ny)
 
   TEST_NEAR("First element", reduced_x(0, 1), image0(0, 2), 1e-6);
   TEST_NEAR("Next element", reduced_x(1, 1), image0(2, 2), 1e-6);
-  unsigned Lx = (nx + 1) / 2;
-  unsigned Ly = (ny + 1) / 2;
+  const unsigned Lx = (nx + 1) / 2;
+  const unsigned Ly = (ny + 1) / 2;
   TEST_NEAR("Last element in x", reduced_x(Lx - 1, 1), image0(2 * (Lx - 1), 2), 1e-6);
   TEST_NEAR("Last element in y", reduced_x(1, Ly - 1), image0(2, 2 * (Ly - 1)), 1e-6);
 
@@ -616,7 +616,7 @@ test_algo_gauss_reduce_2_3_float(unsigned nx, unsigned ny)
   TEST_NEAR("1st element", reduced_x(0, 1), 0.75f * image0(0, 1) + 0.25 * image0(1, 1), 1e-6);
   TEST_NEAR("2nd element", reduced_x(1, 1), 0.5f * image0(1, 1) + 0.5 * image0(2, 1), 1e-6);
   TEST_NEAR("3rd element", reduced_x(2, 1), image0(3, 1), 1e-6);
-  unsigned Lx = (2 * nx + 1) / 3;
+  const unsigned Lx = (2 * nx + 1) / 3;
   TEST_NEAR("No over-run", reduced_x(Lx, 1), 2.22f, 1e-6);
 }
 
@@ -639,8 +639,8 @@ test_algo_gauss_reduce_byte_2d()
 
   print_out(image0, "reduced_x", image1);
 
-  unsigned ni2 = (ni + 1) / 2;
-  unsigned nj2 = (nj + 1) / 2;
+  const unsigned ni2 = (ni + 1) / 2;
+  const unsigned nj2 = (nj + 1) / 2;
   TEST("Level 1 size x", image1.ni(), ni2);
   TEST("Level 1 size y", image1.nj(), nj2);
   TEST_NEAR("Pixel (0,0)", image0(0, 0), image1(0, 0), 6);
@@ -668,8 +668,8 @@ test_algo_gauss_reduce_byte_3planes()
 
   print_out(image0, "reduced_x", image1);
 
-  unsigned ni2 = (ni + 1) / 2;
-  unsigned nj2 = (nj + 1) / 2;
+  const unsigned ni2 = (ni + 1) / 2;
+  const unsigned nj2 = (nj + 1) / 2;
   TEST("Level 1 size x", image1.ni(), ni2);
   TEST("Level 1 size y", image1.nj(), nj2);
   TEST("Level 1 planes", image1.nplanes(), 3);
@@ -700,8 +700,8 @@ test_algo_gauss_reduce_2_3_byte_2d()
       image0(x, y) = static_cast<vxl_byte>(x + y * 10);
 
   vil_gauss_reduce_2_3(image0, image1, work_im);
-  unsigned ni2 = (2 * ni + 1) / 3;
-  unsigned nj2 = (2 * nj + 1) / 3;
+  const unsigned ni2 = (2 * ni + 1) / 3;
+  const unsigned nj2 = (2 * nj + 1) / 3;
   TEST("Level 1 size x", image1.ni(), ni2);
   TEST("Level 1 size y", image1.nj(), nj2);
   TEST("Pixel (2,2)", image1(2, 2), image0(3, 3));

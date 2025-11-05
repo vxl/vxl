@@ -24,10 +24,10 @@ void
 test_image_view_io_with_view_transform()
 {
   {
-    vil_image_view<vil_rgb<vxl_byte>> img(10, 10);
-    vil_image_view<vxl_byte> img2(img);
+    const vil_image_view<vil_rgb<vxl_byte>> img(10, 10);
+    const vil_image_view<vxl_byte> img2(img);
 
-    vil_image_view<vxl_byte> img3(vil_plane(img, 0));
+    const vil_image_view<vxl_byte> img3(vil_plane(img, 0));
 
     std::cout << "img: " << vsl_stream_summary(img) << std::endl;
     std::cout << "vil_plane(img): " << vsl_stream_summary(img3) << std::endl;
@@ -111,7 +111,7 @@ test_image_view_io_as(T value1, T value2)
   vil_image_view<T> image1(15, 17, 3);
   image1.fill(value1);
   image1(3, 2, 1) = value2;
-  vil_image_view<T> image1p = vil_plane(image1, 1);
+  const vil_image_view<T> image1p = vil_plane(image1, 1);
 
   vsl_b_ofstream bfs_out("vil_image_view_test_io.bvl.tmp");
   TEST("Created vil_image_view_test_io.bvl.tmp for writing", (!bfs_out), false);

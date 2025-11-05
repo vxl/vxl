@@ -24,7 +24,7 @@ main(int argc, char ** argv)
   constexpr double max_p_err = 1.0; // maximum image error to introduce (pixels)
 
   // deterministic random number generator -- random but repeatable
-  long int seed = 0;
+  const long int seed = 0;
   vnl_random rnd(seed);
 
   std::vector<vgl_point_3d<double>> world;
@@ -33,8 +33,8 @@ main(int argc, char ** argv)
     world.emplace_back(rnd.drand32(-1, 1), rnd.drand32(-1, 1), rnd.drand32(-1, 1));
 
   // our known internal calibration
-  vpgl_calibration_matrix<double> K(2000.0, vgl_homg_point_2d<double>(500, 500));
-  vgl_rotation_3d<double> I; // no rotation initially
+  const vpgl_calibration_matrix<double> K(2000.0, vgl_homg_point_2d<double>(500, 500));
+  const vgl_rotation_3d<double> I; // no rotation initially
 
   std::vector<vpgl_perspective_camera<double>> cameras;
   for (int i = 0; i < a_num_points(); ++i)
@@ -46,7 +46,7 @@ main(int argc, char ** argv)
     } while (p.magnitude() <= 1.0);
     p.normalize();
     p *= 10.0;
-    vgl_homg_point_3d<double> c(p[0], p[1], p[2]);
+    const vgl_homg_point_3d<double> c(p[0], p[1], p[2]);
     cameras.emplace_back(K, c, I);
     cameras.back().look_at(vgl_homg_point_3d<double>(0.0, 0.0, 0.0));
   }
@@ -67,7 +67,7 @@ main(int argc, char ** argv)
   std::vector<vgl_point_2d<double>> noisy_image_points(image_points);
   for (auto & noisy_image_point : noisy_image_points)
   {
-    vgl_vector_2d<double> noise(rnd.drand32() - 0.5, rnd.drand32() - 0.5);
+    const vgl_vector_2d<double> noise(rnd.drand32() - 0.5, rnd.drand32() - 0.5);
     noisy_image_point += max_p_err * noise;
   }
 
@@ -101,13 +101,13 @@ main(int argc, char ** argv)
   }
 
   // create a subset of projections based on the mask
-  vnl_crs_index crs(mask);
+  const vnl_crs_index crs(mask);
   std::vector<vgl_point_2d<double>> subset_image_points(crs.num_non_zero());
   for (int i = 0; i < crs.num_rows(); ++i)
   {
     for (int j = 0; j < crs.num_cols(); ++j)
     {
-      int k = crs(i, j);
+      const int k = crs(i, j);
       if (k >= 0)
         subset_image_points[k] = noisy_image_points[i * crs.num_cols() + j];
     }

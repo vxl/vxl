@@ -23,6 +23,6 @@ vcsl_angle::standard_unit() const
 vcsl_angle_sptr
 vcsl_angle::instance()
 {
-  static vcsl_angle_sptr instance_ = new vcsl_angle;
+  static const vcsl_angle_sptr instance_ = new vcsl_angle;
   return instance_;
 }

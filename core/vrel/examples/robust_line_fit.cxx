@@ -53,25 +53,25 @@ main()
   // the data is of the form (x,y), not (1,x,y), so we set
   // use_intercept=true.
   //
-  bool use_intercept = true;
+  const bool use_intercept = true;
   auto * lr = new vrel_linear_regression(pts, use_intercept);
 
   // This controls the verbosity of the search techniques.
-  int trace_level = 0;
+  const int trace_level = 0;
 
   // These next three parameters are used in the random sampling
   // searches, not in the IRLS searches.
 
   // The maximum fraction of the data that is expected to be gross outliers.
-  double max_outlier_frac = 0.5;
+  const double max_outlier_frac = 0.5;
 
   // The desired probability of finding the correct fit.
-  double desired_prob_good = 0.99;
+  const double desired_prob_good = 0.99;
 
   // The number of different populations in the data set. For most
   // problems, the data is from one source (surface, etc.), so this
   // will be 1.
-  int max_pops = 1;
+  const int max_pops = 1;
 
   // Now we try different objective function/search technique
   // combinations to solve this linear regression problem.
@@ -99,8 +99,8 @@ main()
   //  Least Median of Squares
   //
   {
-    int num_sam_inst = lr->num_samples_to_instantiate();
-    vrel_objective * lms = new vrel_lms_obj(num_sam_inst);
+    const int num_sam_inst = lr->num_samples_to_instantiate();
+    vrel_objective * const lms = new vrel_lms_obj(num_sam_inst);
     auto * ransam = new vrel_ran_sam_search;
     ransam->set_sampling_params(max_outlier_frac, desired_prob_good, max_pops);
     ransam->set_trace_level(trace_level);
@@ -198,7 +198,7 @@ main()
   //  should provide an initial parameter estimate.
   //
   {
-    vrel_m_est_obj * m_est = new vrel_tukey_obj(4.0);
+    vrel_m_est_obj * const m_est = new vrel_tukey_obj(4.0);
 
     lr->set_no_prior_scale();
 
@@ -209,9 +209,9 @@ main()
     // the objective functions converges (either absolutely or
     // relatively).
 
-    int max_iterations = 15;
-    int iterations_for_scale = 2;
-    double conv_tolerance = 1e-4;
+    const int max_iterations = 15;
+    const int iterations_for_scale = 2;
+    const double conv_tolerance = 1e-4;
 
     auto * irls = new vrel_irls(max_iterations);
     irls->set_est_scale(iterations_for_scale);
@@ -230,7 +230,7 @@ main()
   }
 
   {
-    vrel_m_est_obj * m_est = new vrel_tukey_obj(4.0);
+    vrel_m_est_obj * const m_est = new vrel_tukey_obj(4.0);
 
     lr->set_no_prior_scale();
 

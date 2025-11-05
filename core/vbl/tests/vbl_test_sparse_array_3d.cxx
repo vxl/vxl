@@ -5,7 +5,7 @@ static void
 vbl_test_sparse_array_3d()
 {
   vbl_sparse_array_3d<double> x;
-  double d = 1.23;
+  const double d = 1.23;
   testlib_test_begin("Putting something in (1,2,3)");
   x(1, 2, 3) = d;
   testlib_test_perform(true);

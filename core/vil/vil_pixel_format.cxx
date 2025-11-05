@@ -353,7 +353,7 @@ operator<<(std::ostream & os, vil_pixel_format f)
 vil_pixel_format
 vil_pixel_format_from_string(const char * s)
 {
-  std::string str(s);
+  const std::string str(s);
   if (str == "VIL_PIXEL_FORMAT_UNKNOWN")
     return VIL_PIXEL_FORMAT_UNKNOWN;
 #if VXL_HAS_INT_64

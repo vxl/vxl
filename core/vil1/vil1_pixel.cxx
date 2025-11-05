@@ -9,9 +9,9 @@
 vil1_pixel_format_t
 vil1_pixel_format(const vil1_image & I)
 {
-  int c = I.components();
-  int b = I.bits_per_component();
-  vil1_component_format f = I.component_format();
+  const int c = I.components();
+  const int b = I.bits_per_component();
+  const vil1_component_format f = I.component_format();
 
   // assume 8 = CHAR_BIT
   if (c == 1 && b == 8 && f == VIL1_COMPONENT_FORMAT_UNSIGNED_INT)

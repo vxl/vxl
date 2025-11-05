@@ -34,7 +34,7 @@ test_algo_convolve_1d_double()
   for (int i = 0; i < n; ++i)
     src[i] = i + 1;
   // edge -888.88 values are not part of the kernel proper, but to detect misreadings
-  double kernel[5] = { -888.88, 1.0, 2.0, 3.0, -888.88 };
+  const double kernel[5] = { -888.88, 1.0, 2.0, 3.0, -888.88 };
 
   // Note: In the following dest[1]..dest[n] should be valid.
   // dest[0] and dest[n+1] should be untouched (set to 999).
@@ -102,7 +102,7 @@ test_algo_convolve_1d_double()
 
   std::cout << "Test vil_convolve_no_extend end type with 5-tap filter\n";
   // edge -888.88 values are not part of the kernel proper, but to detect misreadings
-  double kernel2[7] = { -888.88, 1.0, 5.0, 8.0, 5.0, 1.0, -888.88 };
+  const double kernel2[7] = { -888.88, 1.0, 5.0, 8.0, 5.0, 1.0, -888.88 };
   for (int i = 0; i < n + 2; ++i)
     dest[i] = 999;
   vil_convolve_1d(&src[0],
@@ -173,7 +173,7 @@ test_algo_convolve_1d_double()
   TEST_NEAR("No overrun end", dest[n + 1], 999, 1e-6);
 
   std::cout << "Test vil_convolve_zero_extend end type with 4-tap filter\n";
-  double kernel3[6] = { -888.88, 1.0, 3.0, 5.0, 1.0, -888.88 };
+  const double kernel3[6] = { -888.88, 1.0, 3.0, 5.0, 1.0, -888.88 };
   std::vector<double> src2(n, 0.0);
   src2[0] = src2[n / 2] = src2[n - 1] = 1.0;
   for (int i = 0; i < n + 2; ++i)
@@ -405,7 +405,7 @@ test_algo_convolve_1d_double()
 
   std::cout << "\n\nvil_convolve_1d(vil_image_resource_sptr&,...)\n";
 
-  vil_image_resource_sptr mem = vil_new_image_resource(n, n, 1, VIL_PIXEL_FORMAT_BYTE);
+  const vil_image_resource_sptr mem = vil_new_image_resource(n, n, 1, VIL_PIXEL_FORMAT_BYTE);
   vil_image_view<vxl_byte> v(n, n, 1), v_out(n, n, 1);
   for (int j = 0; j < n; ++j)
     for (int i = 0; i < n; ++i)
@@ -414,7 +414,7 @@ test_algo_convolve_1d_double()
   TEST("memory image.put_view()", mem->put_view(v, 0, 0), true);
 
   // set up a convolved image_resource object
-  vil_image_resource_sptr conv =
+  const vil_image_resource_sptr conv =
     vil_convolve_1d(mem, vxl_byte(), &kernel[2], -1, 1, int(), vil_convolve_constant_extend, vil_convolve_zero_extend);
 
   // set up a convolved view.

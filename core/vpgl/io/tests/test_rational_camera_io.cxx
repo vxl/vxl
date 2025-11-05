@@ -50,7 +50,7 @@ test_rational_camera_io()
   double sz = 5.0, oz = 10.0;
   double su = 1000.0, ou = 500;
   double sv = 500.0, ov = 200;
-  vpgl_rational_camera<double> rat_cam(neu_u, den_u, neu_v, den_v, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
+  const vpgl_rational_camera<double> rat_cam(neu_u, den_u, neu_v, den_v, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
 
   vsl_b_ofstream bp_out("test_rational_camera_io.tmp");
   TEST("Created test_rational_camera_io.tmp for writing", (!bp_out), false);

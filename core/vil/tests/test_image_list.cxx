@@ -30,7 +30,7 @@ test_image_list()
   for (unsigned i = 0; i < ni; ++i)
     for (unsigned j = 0; j < nj; ++j)
       image(i, j) = (unsigned short)(i + ni * j);
-  vil_image_resource_sptr ir = vil_new_image_resource_of_view(image);
+  const vil_image_resource_sptr ir = vil_new_image_resource_of_view(image);
 
   const unsigned ni2 = 36, nj2 = 21;
   vil_image_view<unsigned short> image2;
@@ -38,7 +38,7 @@ test_image_list()
   for (unsigned i = 0; i < ni2; ++i)
     for (unsigned j = 0; j < nj2; ++j)
       image2(i, j) = (unsigned short)(i + ni2 * j);
-  vil_image_resource_sptr ir2 = vil_new_image_resource_of_view(image2);
+  const vil_image_resource_sptr ir2 = vil_new_image_resource_of_view(image2);
 
   const unsigned ni3 = 18, nj3 = 10;
   vil_image_view<unsigned short> image3;
@@ -47,10 +47,10 @@ test_image_list()
     for (unsigned j = 0; j < nj3; ++j)
       image3(i, j) = (unsigned short)(i + ni3 * j);
   bool good = false;
-  vil_image_resource_sptr ir3 = vil_new_image_resource_of_view(image3);
-  std::string dir = "image_list_dir";
+  const vil_image_resource_sptr ir3 = vil_new_image_resource_of_view(image3);
+  const std::string dir = "image_list_dir";
   {
-    bool mkdir = vul_file::make_directory(dir.c_str());
+    const bool mkdir = vul_file::make_directory(dir.c_str());
     if (mkdir)
       std::cout << "vul make directory worked\n";
     else
@@ -98,7 +98,7 @@ test_image_list()
   std::cout << "Cleaning up directory " << dir << '\n';
   ;
   vpl_chdir(dir.c_str());
-  std::string s = "*.*";
+  const std::string s = "*.*";
   for (vul_file_iterator fit = s; fit; ++fit)
     vpl_unlink(fit());
   std::cout << "Removing the directory\n";

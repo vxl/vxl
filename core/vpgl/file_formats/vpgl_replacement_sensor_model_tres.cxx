@@ -29,7 +29,7 @@ public:
   bool
   operator()(vil_nitf2_field_sequence * record, const vil_nitf2_index_vector & indexes, T & value) override
   {
-    bool success = record->get_value(tag, indexes, value, true);
+    const bool success = record->get_value(tag, indexes, value, true);
     if (!success)
       return false;
     // number of elements in the upper diagonal section
@@ -193,7 +193,7 @@ void
 vpgl_replacement_sensor_model_tres::define_RSMIDA()
 {
 
-  vil_nitf2_tagged_record_definition * tri = vil_nitf2_tagged_record_definition::find("RSMIDA");
+  vil_nitf2_tagged_record_definition * const tri = vil_nitf2_tagged_record_definition::find("RSMIDA");
   if (!tri)
   {
     vil_nitf2_tagged_record_definition::define("RSMIDA", "Replacement Sensor Model Identification")
@@ -285,7 +285,7 @@ vpgl_replacement_sensor_model_tres::define_RSMIDA()
 void
 vpgl_replacement_sensor_model_tres::define_RSMPCA()
 {
-  vil_nitf2_tagged_record_definition * trp = vil_nitf2_tagged_record_definition::find("RSMPCA");
+  vil_nitf2_tagged_record_definition * const trp = vil_nitf2_tagged_record_definition::find("RSMPCA");
   if (!trp)
   {
     vil_nitf2_tagged_record_definition::define("RSMPCA", "Replacement Sensor Model Polynomial Coefficients")
@@ -336,7 +336,7 @@ void
 vpgl_replacement_sensor_model_tres::define_RSMPIA()
 {
   // check for multiple polynomials
-  vil_nitf2_tagged_record_definition * trpi = vil_nitf2_tagged_record_definition::find("RSMPIA");
+  vil_nitf2_tagged_record_definition * const trpi = vil_nitf2_tagged_record_definition::find("RSMPIA");
   if (!trpi)
   {
     vil_nitf2_tagged_record_definition::define("RSMPIA", "Multiple Section Polynomials")
@@ -378,7 +378,7 @@ vpgl_replacement_sensor_model_tres::define_RSMPIA()
 void
 vpgl_replacement_sensor_model_tres::define_RSMECA()
 {
-  vil_nitf2_tagged_record_definition * trgi = vil_nitf2_tagged_record_definition::find("RSMECA");
+  vil_nitf2_tagged_record_definition * const trgi = vil_nitf2_tagged_record_definition::find("RSMECA");
   if (!trgi)
   {
     vil_nitf2_tagged_record_definition::define("RSMECA", "Indirect Error Covariance")
@@ -490,7 +490,7 @@ vpgl_replacement_sensor_model_tres::define_RSMECA()
 void
 vpgl_replacement_sensor_model_tres::define_RSMECB()
 {
-  vil_nitf2_tagged_record_definition * trgi = vil_nitf2_tagged_record_definition::find("RSMECB");
+  vil_nitf2_tagged_record_definition * const trgi = vil_nitf2_tagged_record_definition::find("RSMECB");
   if (!trgi)
   {
 
@@ -618,7 +618,7 @@ vpgl_replacement_sensor_model_tres::define_RSMECB()
 void
 vpgl_replacement_sensor_model_tres::define_RSMDCA()
 {
-  vil_nitf2_tagged_record_definition * trgi = vil_nitf2_tagged_record_definition::find("RSMDCA");
+  vil_nitf2_tagged_record_definition * const trgi = vil_nitf2_tagged_record_definition::find("RSMDCA");
   if (!trgi)
   {
     vil_nitf2_tagged_record_definition::define("RSMDCA", "Direct Error Covariance")
@@ -629,7 +629,7 @@ vpgl_replacement_sensor_model_tres::define_RSMDCA()
 void
 vpgl_replacement_sensor_model_tres::define_RSMDCB()
 {
-  vil_nitf2_tagged_record_definition * trgi = vil_nitf2_tagged_record_definition::find("RSMDCB");
+  vil_nitf2_tagged_record_definition * const trgi = vil_nitf2_tagged_record_definition::find("RSMDCB");
   if (!trgi)
   {
     vil_nitf2_tagged_record_definition::define("RSMDCB", "Extended Direct Error Covariance")
@@ -640,7 +640,7 @@ vpgl_replacement_sensor_model_tres::define_RSMDCB()
 void
 vpgl_replacement_sensor_model_tres::define_RSMAPA()
 {
-  vil_nitf2_tagged_record_definition * trgi = vil_nitf2_tagged_record_definition::find("RSMAPA");
+  vil_nitf2_tagged_record_definition * const trgi = vil_nitf2_tagged_record_definition::find("RSMAPA");
   if (!trgi)
   {
     vil_nitf2_tagged_record_definition::define("RSMAPA", "Adjustable Parameters")
@@ -651,7 +651,7 @@ vpgl_replacement_sensor_model_tres::define_RSMAPA()
 void
 vpgl_replacement_sensor_model_tres::define_RSMAPB()
 {
-  vil_nitf2_tagged_record_definition * trgi = vil_nitf2_tagged_record_definition::find("RSMAPB");
+  vil_nitf2_tagged_record_definition * const trgi = vil_nitf2_tagged_record_definition::find("RSMAPB");
   if (!trgi)
   {
     vil_nitf2_tagged_record_definition::define("RSMAPB", "Extended Adjustable Parameters")
@@ -662,7 +662,7 @@ vpgl_replacement_sensor_model_tres::define_RSMAPB()
 void
 vpgl_replacement_sensor_model_tres::define_RSMGIA()
 {
-  vil_nitf2_tagged_record_definition * trgi = vil_nitf2_tagged_record_definition::find("RSMGIA");
+  vil_nitf2_tagged_record_definition * const trgi = vil_nitf2_tagged_record_definition::find("RSMGIA");
   if (!trgi)
   {
     vil_nitf2_tagged_record_definition::define("RSMGIA", "Multi-section Grids")
@@ -673,7 +673,7 @@ vpgl_replacement_sensor_model_tres::define_RSMGIA()
 void
 vpgl_replacement_sensor_model_tres::define_RSMGGA()
 {
-  vil_nitf2_tagged_record_definition * trgi = vil_nitf2_tagged_record_definition::find("RSMGGA");
+  vil_nitf2_tagged_record_definition * const trgi = vil_nitf2_tagged_record_definition::find("RSMGGA");
   if (!trgi)
   {
     vil_nitf2_tagged_record_definition::define("RSMGGA", "Ground to Image Grid")

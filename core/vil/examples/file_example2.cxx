@@ -27,7 +27,7 @@ main(int argc, char ** argv)
 
   // This is how we initialise an image data object.
 
-  vil_image_resource_sptr data = vil_load_image_resource(argv[1]);
+  const vil_image_resource_sptr data = vil_load_image_resource(argv[1]);
 
   if (!data)
   {
@@ -41,12 +41,12 @@ main(int argc, char ** argv)
 
   // We can apply some operation to it.
 
-  vil_image_resource_sptr cropped_data = vil_crop(data, 1, data->ni() - 2, 1, data->nj() - 2);
+  const vil_image_resource_sptr cropped_data = vil_crop(data, 1, data->ni() - 2, 1, data->nj() - 2);
 
 
   // And then get the image pixels from it.
 
-  vil_image_view<unsigned char> uc_view = cropped_data->get_view(0, cropped_data->ni(), 0, cropped_data->nj());
+  const vil_image_view<unsigned char> uc_view = cropped_data->get_view(0, cropped_data->ni(), 0, cropped_data->nj());
 
   std::cout << "Created a view of type " << uc_view.is_a() << std::endl;
 

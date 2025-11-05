@@ -73,12 +73,12 @@ vil1_stream_fstream::write(const void * buf, vil1_streampos n)
     return 0;
   }
 
-  vil1_streampos a = tell();
+  const vil1_streampos a = tell();
   xerr << "write " << n << std::endl;
   f_.write((const char *)buf, n);
   if (!f_.good())
     std::cerr << ("vil1_stream_fstream: ERROR: write failed!\n");
-  vil1_streampos b = tell();
+  const vil1_streampos b = tell();
   f_.flush();
   return b - a;
 }
@@ -92,7 +92,7 @@ vil1_stream_fstream::read(void * buf, vil1_streampos n)
   if (!(flags_ & std::ios::in))
     return 0;
 
-  vil1_streampos a = tell();
+  const vil1_streampos a = tell();
   xerr << "read " << n << std::endl;
   f_.read((char *)buf, n);
 
@@ -107,9 +107,9 @@ vil1_stream_fstream::read(void * buf, vil1_streampos n)
   if (!f_.good() && !f_.bad() && f_.eof())
     f_.clear(); // allows subsequent operations
 
-  vil1_streampos b = tell();
+  const vil1_streampos b = tell();
 
-  vil1_streampos numread = b - a;
+  const vil1_streampos numread = b - a;
   if (b < a)
   {
     xerr << "urgh!\n";
@@ -145,8 +145,8 @@ void
 vil1_stream_fstream::seek(vil1_streampos position)
 {
   assert(id > 0);
-  bool fi = (flags_ & std::ios::in) != 0;
-  bool fo = (flags_ & std::ios::out) != 0;
+  const bool fi = (flags_ & std::ios::in) != 0;
+  const bool fo = (flags_ & std::ios::out) != 0;
 
   if (fi && fo)
   {
@@ -170,7 +170,7 @@ vil1_stream_fstream::seek(vil1_streampos position)
   else if (fo)
   {
     xerr << "seekp to " << position << std::endl;
-    int at = static_cast<vil1_streampos>(f_.tellp());
+    const int at = static_cast<vil1_streampos>(f_.tellp());
     if (position != at)
     {
       xerr << "seekp to " << position << ", at " << (long)f_.tellp() << std::endl;

@@ -100,12 +100,12 @@ test_image_equal(const char * type_name,
 {
   vil_image_view<T> image2 = *pimage2;
 
-  int sizex = image.ni();
-  int sizey = image.nj();
-  int planes = image.nplanes();
-  int sizex2 = image2.ni();
-  int sizey2 = image2.nj();
-  int planes2 = image2.nplanes();
+  const int sizex = image.ni();
+  const int sizey = image.nj();
+  const int planes = image.nplanes();
+  const int sizex2 = image2.ni();
+  const int sizey2 = image2.nj();
+  const int planes2 = image2.nplanes();
 
   // make sure saved image has the same pixels as the original image
   TEST("Loaded image can be viewed as same type as saved image", !image2, false);
@@ -217,8 +217,8 @@ create_colour_gif(const char * filename)
 #  pragma warning(push)
 #  pragma warning(disable : 4305 4309)
 #endif
-  unsigned char a[] = { 253, 0, 155, 0, 247, 0, 0 };
-  unsigned char b[] = {
+  unsigned char const a[] = { 253, 0, 155, 0, 247, 0, 0 };
+  const unsigned char b[] = {
     44,  0,   0,   0,   0,   253, 0,   155, 0,   0,   8,   254, 0,   1,   164, 74,  150, 45,  87,  162, 76,  121, 14,
     80,  168, 224, 226, 5,   140, 24,  98,  198, 144, 41,  99,  230, 12,  154, 52,  202, 150, 49,  107, 230, 236, 25,
     180, 104, 210, 166, 81,  171, 102, 237, 26,  182, 108, 1,   16,  36,  176, 112, 1,   67,  6,   25,  51,  104, 212,
@@ -255,11 +255,11 @@ create_colour_gif(const char * filename)
   if (!f)
     return false;
   f << "GIF87a";
-  for (unsigned char i : a)
+  for (const unsigned char i : a)
     f << i;
   for (int i = 0; i < 256; ++i)
     f << (unsigned char)i << (unsigned char)i << (unsigned char)0;
-  for (unsigned char i : b)
+  for (const unsigned char i : b)
     f << i;
   f.close();
   return true;
@@ -273,8 +273,8 @@ create_grey_gif(const char * filename)
 #  pragma warning(push)
 #  pragma warning(disable : 4305 4309)
 #endif
-  unsigned char a[] = { 253, 0, 155, 0, 247, 0, 0 };
-  unsigned char b[] = {
+  unsigned char const a[] = { 253, 0, 155, 0, 247, 0, 0 };
+  const unsigned char b[] = {
     44,  0,   0,   0,   0,   253, 0,   155, 0,   0,   8,   254, 0,   1,   8,   28,  72,  176, 160, 193, 131, 8,   19,
     42,  92,  200, 176, 161, 195, 135, 16,  35,  74,  156, 72,  177, 162, 197, 139, 24,  51,  106, 220, 200, 177, 163,
     199, 143, 32,  67,  138, 28,  73,  178, 164, 201, 147, 40,  83,  170, 92,  201, 178, 165, 203, 151, 48,  99,  202,
@@ -298,11 +298,11 @@ create_grey_gif(const char * filename)
   if (!f)
     return false;
   f << "GIF87a";
-  for (unsigned char i : a)
+  for (const unsigned char i : a)
     f << i;
   for (int i = 0; i < 256; ++i)
     f << (unsigned char)i << (unsigned char)i << (unsigned char)i;
-  for (unsigned char i : b)
+  for (const unsigned char i : b)
     f << i;
   f.close();
   return true;
@@ -318,7 +318,7 @@ vil_test_image_type(const char * type_name,          // type for image to read a
                     unsigned max_bad_pixels = 0,     // require read back image identical
                     bool fail_save = false)          // expect fail on save if true
 {
-  int np = image.nplanes();
+  const int np = image.nplanes();
   std::cout << "=== Start testing " << type_name << " (" << sizeof(T) << " bpp, " << np << " plane"
             << (np == 1 ? "" : "s") << ") ===\n"
             << std::flush;
@@ -346,7 +346,7 @@ vil_test_image_type(const char * type_name,          // type for image to read a
   }
   else
   {
-    bool tst = vil_save(image, fname.c_str(), type_name);
+    const bool tst = vil_save(image, fname.c_str(), type_name);
     TEST("write image to disk", tst, !fail_save);
     if (!tst)
       return;
@@ -367,7 +367,7 @@ vil_test_image_type(const char * type_name,          // type for image to read a
   TEST("get_property(\"read-only\")", image3->get_property("read-only"), false);
   TEST("get_property(\"offset\")", image3->get_property("offset"), false);
   unsigned int qd = 0, depth = image2->pixel_format() == VIL_PIXEL_FORMAT_BOOL ? 1 : 8 * sizeof(T);
-  bool qdr = image3->get_property("quantisation_depth", &qd);
+  const bool qdr = image3->get_property("quantisation_depth", &qd);
   if (qdr)
     std::cout << "quantisation depth = " << qd << ", should be " << depth << '\n';
   else
@@ -394,7 +394,7 @@ vil_test_image_type(const char * type_name,          // type for image to read a
     return;
   //
   // create a 3x3 cropped image with offsets (5,5)
-  vil_image_view<T> cropped_image = vil_crop(image, 5, 3, 5, 3);
+  const vil_image_view<T> cropped_image = vil_crop(image, 5, 3, 5, 3);
 
   // Write cropped image to disk, overwriting the previous file
   if (std::strcmp(type_name, "gif") == 0 && vil_pixel_format_num_components(cropped_image.pixel_format()) == 3)
@@ -409,7 +409,7 @@ vil_test_image_type(const char * type_name,          // type for image to read a
   }
   else
   {
-    bool tst = vil_save(cropped_image, fname.c_str(), type_name);
+    const bool tst = vil_save(cropped_image, fname.c_str(), type_name);
     TEST("write cropped image to disk", tst, !fail_save);
     if (!tst)
       return;
@@ -567,11 +567,11 @@ CreateTestdoubleImage(int wd, int ht)
 static void
 test_vil_save_image_resource()
 {
-  vil_image_view<vxl_byte> view = CreateTest8bitImage(251, 153);
-  vil_image_resource_sptr mem = vil_new_image_resource_of_view(view);
-  const char * out_path = "test_save_image_resource.pgm";
+  const vil_image_view<vxl_byte> view = CreateTest8bitImage(251, 153);
+  const vil_image_resource_sptr mem = vil_new_image_resource_of_view(view);
+  const char * const out_path = "test_save_image_resource.pgm";
   TEST("Saving image resource", vil_save_image_resource(mem, out_path), true);
-  vil_image_view<vxl_byte> loaded_view = vil_load(out_path);
+  const vil_image_view<vxl_byte> loaded_view = vil_load(out_path);
   TEST("Loaded correct image", vil_image_view_deep_equality(view, loaded_view), true);
 #if !LEAVE_IMAGES_BEHIND
   vpl_unlink(out_path);
@@ -599,20 +599,20 @@ static void
 test_save_load_image()
 {
   // create test images
-  int sizex = 253;
-  int sizey = 155;
-  vil_image_view<bool> image1 = CreateTest1bitImage(sizex, sizey);
-  vil_image_view<vxl_byte> image8 = CreateTest8bitImage(sizex, sizey);
-  vil_image_view<vxl_uint_16> image16 = CreateTest16bitImage(sizex, sizey);
+  const int sizex = 253;
+  const int sizey = 155;
+  const vil_image_view<bool> image1 = CreateTest1bitImage(sizex, sizey);
+  const vil_image_view<vxl_byte> image8 = CreateTest8bitImage(sizex, sizey);
+  const vil_image_view<vxl_uint_16> image16 = CreateTest16bitImage(sizex, sizey);
 #if 0 // read back pixel type will not match: ppm is always read in as 3-plane image
   vil_image_view<vil_rgb<vxl_byte> >  image24 = CreateTest24bitImage(sizex, sizey);
 #endif
-  vil_image_view<vxl_uint_32> image32 = CreateTest32bitImage(sizex, sizey);
-  vil_image_view<vxl_byte> image3p = CreateTest3planeImage(sizex, sizey);
-  vil_image_view<vxl_byte> image3c = CreateTest3ComponentImage(sizex, sizey);
-  vil_image_view<vxl_byte> image4p = CreateTest4planeImage(sizex, sizey);
-  vil_image_view<float> imagefloat = CreateTestfloatImage(sizex, sizey);
-  vil_image_view<double> imagedouble = CreateTestdoubleImage(sizex, sizey);
+  vil_image_view<vxl_uint_32> const image32 = CreateTest32bitImage(sizex, sizey);
+  const vil_image_view<vxl_byte> image3p = CreateTest3planeImage(sizex, sizey);
+  const vil_image_view<vxl_byte> image3c = CreateTest3ComponentImage(sizex, sizey);
+  const vil_image_view<vxl_byte> image4p = CreateTest4planeImage(sizex, sizey);
+  const vil_image_view<float> imagefloat = CreateTestfloatImage(sizex, sizey);
+  const vil_image_view<double> imagedouble = CreateTestdoubleImage(sizex, sizey);
 
 
   // PNG
@@ -730,7 +730,7 @@ test_save_load_image()
 #  endif
     vil_test_image_type("jpeg", small_greyscale_image, true, vxl_byte(5));
     {
-      std::string out_path("test_save_load_jpeg.jpg");
+      const std::string out_path("test_save_load_jpeg.jpg");
       TEST("Saving JPEG", vil_save(small_greyscale_image, out_path.c_str()), true);
 
       vil_image_view<vxl_byte> new_image = vil_load(out_path.c_str());
@@ -738,7 +738,7 @@ test_save_load_image()
       double sum2 = 0;
       for (unsigned i = 0; i < ni; ++i)
       {
-        double d = double(small_greyscale_image(i, 17)) - new_image(i, 17);
+        const double d = double(small_greyscale_image(i, 17)) - new_image(i, 17);
         sum2 += d * d;
       }
       TEST_NEAR("Loaded image close to original", sum2, 0.0, 2 * ni);

@@ -234,8 +234,9 @@ vpgl_geo_camera::init_geo_camera(const std::string & img_name,
   std::string name = vul_file::strip_directory(img_name);
   name = name.substr(name.find_first_of('_') + 1, name.size());
 
-  std::string n_coords = name.substr(0, name.find_first_of('_'));
-  std::string n_scale = name.substr(name.find_first_of('_') + 1, name.find_last_of('_') - name.find_first_of('_') - 1);
+  const std::string n_coords = name.substr(0, name.find_first_of('_'));
+  const std::string n_scale =
+    name.substr(name.find_first_of('_') + 1, name.find_last_of('_') - name.find_first_of('_') - 1);
   std::cout << "will determine transformation matrix from the file name: " << name << std::endl;
 
   // determine the lat, lon, hemisphere (North or South) and direction (East or West)
@@ -347,8 +348,9 @@ vpgl_geo_camera::init_geo_camera_from_filename(const std::string & img_name,
   std::string name = vul_file::strip_directory(img_name);
   name = name.substr(name.find_first_of('_') + 1, name.size());
 
-  std::string n_coords = name.substr(0, name.find_first_of('_'));
-  std::string n_scale = name.substr(name.find_first_of('_') + 1, name.find_last_of('_') - name.find_first_of('_') - 1);
+  const std::string n_coords = name.substr(0, name.find_first_of('_'));
+  const std::string n_scale =
+    name.substr(name.find_first_of('_') + 1, name.find_last_of('_') - name.find_first_of('_') - 1);
   std::cout << "will determine transformation matrix from the file name: " << name << std::endl;
 
   // determine the lat, lon, hemisphere (North or South) and direction (East or West)
@@ -603,7 +605,7 @@ vpgl_geo_camera::backproject(const double u, const double v, double & x, double 
       }
     }
     // find the UTM values
-    vpgl_utm utm;
+    const vpgl_utm utm;
     utm.transform(utm_zone_, vec[0], vec[1], vec[2], lat, lon, elev);
   }
   else
@@ -654,9 +656,9 @@ vpgl_geo_camera::img_to_global(const double i, const double j, double & lon, dou
   v[3] = 1;
   if (is_utm_)
   {
-    vpgl_utm utm;
+    const vpgl_utm utm;
     double elev = 0.0;
-    bool south_flag = northing_ > 0;
+    const bool south_flag = northing_ > 0;
     utm.transform(utm_zone_, v[0], v[1], v[2], lat, lon, elev, south_flag);
   }
   else
@@ -676,7 +678,7 @@ vpgl_geo_camera::global_to_img(const double lon, const double lat, const double 
   double x1 = lon, y1 = lat, z1 = gz;
   if (is_utm_)
   {
-    vpgl_utm utm;
+    const vpgl_utm utm;
     int utm_zone = 0;
     utm.transform(lat, lon, x1, y1, utm_zone);
     // std::cout << "utm returned x1: " << x1 << " y1: " << y1 << std::endl;
@@ -698,7 +700,7 @@ vpgl_geo_camera::global_to_img(const double lon, const double lat, const double 
   }
   else
   {
-    vnl_matrix<double> trans_matrix_inv = vnl_inverse(tm);
+    const vnl_matrix<double> trans_matrix_inv = vnl_inverse(tm);
     res = trans_matrix_inv * vec;
     u = res[0];
     v = res[1];
@@ -730,7 +732,7 @@ vpgl_geo_camera::img_to_global_utm(const double i, const double j, double & x, d
   }
   else
   { // the trans matrix was using lat,lon coord, transform output to utm
-    vpgl_utm utm;
+    const vpgl_utm utm;
     int dummy_zone = 0;
     utm.transform(v[0], v[1], x, y, dummy_zone);
   }
@@ -750,7 +752,7 @@ vpgl_geo_camera::global_utm_to_img(const double x, const double y, int zone, dou
   }
   else
   {
-    vpgl_utm utm;
+    const vpgl_utm utm;
     double lat = NAN, lon = NAN, z = NAN;
     utm.transform(zone, x, y, elev, lat, lon, z);
     vec[0] = lat;
@@ -770,7 +772,7 @@ vpgl_geo_camera::global_utm_to_img(const double x, const double y, int zone, dou
   }
   else
   {
-    vnl_matrix<double> trans_matrix_inv = vnl_inverse(tm);
+    const vnl_matrix<double> trans_matrix_inv = vnl_inverse(tm);
     res = trans_matrix_inv * vec;
     u = res[0];
     v = res[1];
@@ -785,7 +787,7 @@ vpgl_geo_camera::local_to_utm(const double x, const double y, const double z, do
   double lat = NAN, lon = NAN, gz = NAN;
   lvcs_->local_to_global(x, y, z, vpgl_lvcs::wgs84, lon, lat, gz);
 
-  vpgl_utm utm;
+  const vpgl_utm utm;
   utm.transform(lat, lon, e, n, utm_zone);
 }
 
@@ -820,7 +822,7 @@ vpgl_geo_camera::img_four_corners_in_utm(const unsigned ni,
   }
   double lon = NAN, lat = NAN;
   this->img_to_global(0, 0, lon, lat);
-  vpgl_utm utm;
+  const vpgl_utm utm;
   int utm_zone = 0;
   utm.transform(lat, lon, e1, n1, utm_zone);
   this->img_to_global(ni, nj, lon, lat);
@@ -870,7 +872,7 @@ operator>>(std::istream & s, vpgl_geo_camera & p)
 {
   vnl_matrix_fixed<double, 4, 4> tr_matrix;
   s >> tr_matrix;
-  vpgl_lvcs_sptr lvcs = new vpgl_lvcs();
+  const vpgl_lvcs_sptr lvcs = new vpgl_lvcs();
   s >> (*lvcs);
   p = vpgl_geo_camera(tr_matrix.as_ref(), lvcs);
   return s;
@@ -888,12 +890,12 @@ vpgl_geo_camera::comp_trans_matrix(double sx1,
   // for now use the first tiepoint if there are more than one
   assert(tiepoints.size() > 0);
   assert(tiepoints[0].size() == 6);
-  double I = tiepoints[0][0];
-  double J = tiepoints[0][1];
-  double K = tiepoints[0][2];
-  double X = tiepoints[0][3];
-  double Y = tiepoints[0][4];
-  double Z = tiepoints[0][5];
+  const double I = tiepoints[0][0];
+  const double J = tiepoints[0][1];
+  const double K = tiepoints[0][2];
+  const double X = tiepoints[0][3];
+  const double Y = tiepoints[0][4];
+  const double Z = tiepoints[0][5];
 
   // Define a transformation matrix as follows:
   //
@@ -913,9 +915,9 @@ vpgl_geo_camera::comp_trans_matrix(double sx1,
     sy = sy1;
     sz = sz1;
   }
-  double Tx = X - I * sx;
-  double Ty = Y + J * sy;
-  double Tz = Z - K * sz;
+  const double Tx = X - I * sx;
+  const double Ty = Y + J * sy;
+  const double Tz = Z - K * sz;
 
   vnl_matrix<double> m(4, 4);
   m.fill(0.0);
@@ -981,7 +983,7 @@ vpgl_geo_camera::b_read(vsl_b_istream & is)
         for (unsigned j = 0; j < ncols; j++)
           vsl_b_read(is, trans_matrix_[i][j]);
 
-      vpgl_lvcs_sptr lvcs_ = new vpgl_lvcs(0, 0, 0);
+      const vpgl_lvcs_sptr lvcs_ = new vpgl_lvcs(0, 0, 0);
       lvcs_->b_read(is);
       vsl_b_read(is, is_utm_);
       vsl_b_read(is, utm_zone_);

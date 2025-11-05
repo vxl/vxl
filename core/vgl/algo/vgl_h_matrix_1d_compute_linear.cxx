@@ -17,7 +17,7 @@ vgl_h_matrix_1d_compute_linear::compute_cool_homg(const std::vector<vgl_homg_poi
                                                   const std::vector<vgl_homg_point_1d<double>> & Q,
                                                   vgl_h_matrix_1d<double> & M)
 {
-  unsigned N = P.size();
+  const unsigned N = P.size();
   assert(N == Q.size());
   vnl_matrix<double> D(N, 4);
   for (unsigned i = 0; i < N; i++)
@@ -27,7 +27,7 @@ vgl_h_matrix_1d_compute_linear::compute_cool_homg(const std::vector<vgl_homg_poi
     D(i, 2) = -P[i].x() * Q[i].x();
     D(i, 3) = -P[i].w() * Q[i].x();
   }
-  vnl_svd<double> svd(D);
+  const vnl_svd<double> svd(D);
   M.set(svd.nullvector().data_block());
   return true;
 }

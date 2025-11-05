@@ -36,7 +36,7 @@ public:
   friend std::ostream &
   operator<<(std::ostream & os, const example_sp & e)
   {
-    int p = e.get_references();
+    const int p = e.get_references();
     if (p < 1000)
       os << "example_sp, refcount=" << p;
     else
@@ -71,7 +71,7 @@ main1()
       l.push_back(sp); // refcount incremented (assignment to list entry)
       std::cout << *sp << " put on list\n";
 
-      example_sp_sptr sp2 = sp; // copy constructor: refcount incremented
+      const example_sp_sptr sp2 = sp; // copy constructor: refcount incremented
       std::cout << *sp << " copied to sp2" << *sp2 << '\n';
 
     } // sp2 goes out of scope: refcount goes down

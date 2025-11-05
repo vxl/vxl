@@ -78,7 +78,7 @@ vcsl_perspective::focal_value(double time) const
     return focal_[0];
   else
   {
-    int i = matching_interval(time);
+    const int i = matching_interval(time);
     switch (interpolator_[i])
     {
       case vcsl_linear:

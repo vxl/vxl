@@ -12,16 +12,16 @@ static void
 vbl_test_local_minima_1d()
 {
   std::cout << "\n Testing vbl_local_minima 1d\n+++++++++++++++++++++++++\n\n";
-  unsigned n = 10;
+  const unsigned n = 10;
   vbl_array_1d<double> v(n, 1.0);
-  double thresh = 0.01;
+  const double thresh = 0.01;
   // set up minima at middle and two ends
   v[0] = 0.06;
   v[n / 2] = 0.05;
   v[n - 1] = 0.04;
   vbl_array_1d<double> minima = vbl_local_minima(v, thresh);
   bool success = !minima.empty();
-  for (double i : minima)
+  for (const double i : minima)
     std::cout << i << ' ';
   std::cout << '\n';
   success = success && minima[0] > 0 && minima[n / 2] > 0 && minima[n - 1] > 0;
@@ -31,10 +31,10 @@ vbl_test_local_minima_1d()
   vi[0] = 0;
   vi[n / 2] = 0;
   vi[n - 1] = 0;
-  unsigned tu = 0;
+  const unsigned tu = 0;
   vbl_array_1d<unsigned> minun = vbl_local_minima(vi, tu);
   success = !minun.empty();
-  for (unsigned int i : minun)
+  for (const unsigned int i : minun)
     std::cout << i << ' ';
   std::cout << '\n';
   success = success && minun[0] > 0 && minun[n / 2] > 0 && minun[n - 1] > 0;
@@ -99,7 +99,7 @@ static void
 vbl_test_local_minima_3d()
 {
   std::cout << "\n Testing vbl_local_minima 3d\n+++++++++++++++++++++++++\n\n";
-  double thresh = 0.01;
+  const double thresh = 0.01;
   unsigned n1 = 5, n2 = 7, n3 = 9;
   vbl_array_3d<double> v(n1, n2, n3, 1.0);
 

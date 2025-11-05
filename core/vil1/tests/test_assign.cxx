@@ -11,7 +11,7 @@ test_assign(int argc, char * argv[])
   vil1_image image;
   for (int i = 1; i < argc; ++i)
   {
-    vil1_image tmp(vil1_load(argv[i]));
+    const vil1_image tmp(vil1_load(argv[i]));
     std::cerr << "tmp = " << tmp << std::endl;
     image = tmp;
   }

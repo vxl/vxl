@@ -93,7 +93,7 @@ void
 vil1_jpeg_term_destination(j_compress_ptr cinfo)
 {
   auto dest = (vil1_jpeg_dstptr)cinfo->dest; // cast to derived class
-  std::size_t datacount = vil1_jpeg_OUTPUT_BUF_SIZE - dest->base.free_in_buffer;
+  const std::size_t datacount = vil1_jpeg_OUTPUT_BUF_SIZE - dest->base.free_in_buffer;
 
   // Write any data remaining in the buffer
   if (datacount > 0)

@@ -21,9 +21,9 @@
 inline void
 test_non_intersecting()
 {
-  vgl_point_3d<double> a_p1(0, 0, 0);
-  vgl_point_3d<double> a_p2(0, 4, 0);
-  vgl_point_3d<double> a_p3(4, 0, 0);
+  const vgl_point_3d<double> a_p1(0, 0, 0);
+  const vgl_point_3d<double> a_p2(0, 4, 0);
+  const vgl_point_3d<double> a_p3(4, 0, 0);
 
   vgl_point_3d<double> b_p1(0, 0, 2);
   vgl_point_3d<double> b_p2(0, 4, 2);
@@ -52,13 +52,13 @@ test_non_intersecting()
 inline void
 test_intersecting1()
 {
-  vgl_point_3d<double> a_p1(0, 0, 0);
-  vgl_point_3d<double> a_p2(0, 4, 0);
-  vgl_point_3d<double> a_p3(4, 0, 0);
+  const vgl_point_3d<double> a_p1(0, 0, 0);
+  const vgl_point_3d<double> a_p2(0, 4, 0);
+  const vgl_point_3d<double> a_p3(4, 0, 0);
 
-  vgl_point_3d<double> b_p1(0, 0, 0);
-  vgl_point_3d<double> b_p2(0, 4, 0);
-  vgl_point_3d<double> b_p3(4, 4, 0);
+  const vgl_point_3d<double> b_p1(0, 0, 0);
+  const vgl_point_3d<double> b_p2(0, 4, 0);
+  const vgl_point_3d<double> b_p3(4, 4, 0);
 
   vgl_triangle_3d_intersection_t ret = vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3);
   TEST("Intersecting 1 coplanar", ret, Coplanar);
@@ -73,13 +73,13 @@ test_intersecting1()
 inline void
 test_intersecting2()
 {
-  vgl_point_3d<double> a_p1(0, 0, 0);
-  vgl_point_3d<double> a_p2(0, 4, 0);
-  vgl_point_3d<double> a_p3(4, 0, 0);
+  const vgl_point_3d<double> a_p1(0, 0, 0);
+  const vgl_point_3d<double> a_p2(0, 4, 0);
+  const vgl_point_3d<double> a_p3(4, 0, 0);
 
-  vgl_point_3d<double> b_p1(1, 1, 4);
-  vgl_point_3d<double> b_p2(1, 1, -4);
-  vgl_point_3d<double> b_p3(0, 0, 0);
+  const vgl_point_3d<double> b_p1(1, 1, 4);
+  const vgl_point_3d<double> b_p2(1, 1, -4);
+  const vgl_point_3d<double> b_p3(0, 0, 0);
 
   vgl_triangle_3d_intersection_t ret = vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3);
   TEST("Intersecting 2 Skew", ret, Skew);
@@ -88,8 +88,8 @@ test_intersecting2()
   unsigned edge_p1 = 0, edge_p2 = 0;
   ret = vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3, i_line, edge_p1, edge_p2);
   TEST("Intersecting Skew with iline", ret, Skew);
-  double p1_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(0, 0, 0));
-  double p2_err = vgl_distance(i_line.point2(), vgl_point_3d<double>(1, 1, 0));
+  const double p1_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(0, 0, 0));
+  const double p2_err = vgl_distance(i_line.point2(), vgl_point_3d<double>(1, 1, 0));
   // handle ambiguity of intersecting line segment ordering.
   if (p1_err > p2_err)
     std::swap(edge_p1, edge_p2);
@@ -104,13 +104,13 @@ test_intersecting2()
 inline void
 test_intersecting3()
 {
-  vgl_point_3d<double> a_p1(0, 0, 0);
-  vgl_point_3d<double> a_p2(0, 4, 0);
-  vgl_point_3d<double> a_p3(4, 0, 0);
+  const vgl_point_3d<double> a_p1(0, 0, 0);
+  const vgl_point_3d<double> a_p2(0, 4, 0);
+  const vgl_point_3d<double> a_p3(4, 0, 0);
 
-  vgl_point_3d<double> b_p1(0, 0, 0);
-  vgl_point_3d<double> b_p2(0, 4, 0);
-  vgl_point_3d<double> b_p3(0, 0, 4);
+  const vgl_point_3d<double> b_p1(0, 0, 0);
+  const vgl_point_3d<double> b_p2(0, 4, 0);
+  const vgl_point_3d<double> b_p3(0, 0, 4);
 
   vgl_triangle_3d_intersection_t ret = vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3);
   TEST("Intersecting 3 Skew", ret, Skew);
@@ -140,13 +140,13 @@ test_intersecting3()
 inline void
 test_intersecting4()
 {
-  vgl_point_3d<double> a_p1(0, 0, 0);
-  vgl_point_3d<double> a_p2(0, 4, 0);
-  vgl_point_3d<double> a_p3(4, 0, 0);
+  const vgl_point_3d<double> a_p1(0, 0, 0);
+  const vgl_point_3d<double> a_p2(0, 4, 0);
+  const vgl_point_3d<double> a_p3(4, 0, 0);
 
-  vgl_point_3d<double> b_p1(0, 0, 0);
-  vgl_point_3d<double> b_p2(0, 4, 0);
-  vgl_point_3d<double> b_p3(-4, 0, 0);
+  const vgl_point_3d<double> b_p1(0, 0, 0);
+  const vgl_point_3d<double> b_p2(0, 4, 0);
+  const vgl_point_3d<double> b_p3(-4, 0, 0);
 
   vgl_triangle_3d_intersection_t ret = vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3);
   TEST("Intersecting 4 coplanar", ret, Coplanar);
@@ -214,13 +214,13 @@ test_intersecting5_arrangement(const vgl_point_3d<double> & a_A,
 inline void
 test_intersecting5()
 {
-  vgl_point_3d<double> a_p1(0, 0, 0);
-  vgl_point_3d<double> a_p2(0, 4, 0);
-  vgl_point_3d<double> a_p3(4, 0, 0);
+  const vgl_point_3d<double> a_p1(0, 0, 0);
+  const vgl_point_3d<double> a_p2(0, 4, 0);
+  const vgl_point_3d<double> a_p3(4, 0, 0);
 
-  vgl_point_3d<double> b_p1(4, 4, 0);
-  vgl_point_3d<double> b_p2(1, 1, -4);
-  vgl_point_3d<double> b_p3(1, 1, 4);
+  const vgl_point_3d<double> b_p1(4, 4, 0);
+  const vgl_point_3d<double> b_p2(1, 1, -4);
+  const vgl_point_3d<double> b_p3(1, 1, 4);
 
   std::cout << "Test skew intersection with multiple arrangements.\n";
 
@@ -270,16 +270,16 @@ test_intersecting_degenerate_triangles1()
             << "----------------------------------------------\n";
 
   // the valid triangle
-  vgl_point_3d<double> valid_p1(0, 0, 0);
-  vgl_point_3d<double> valid_p2(0, 4, 0);
-  vgl_point_3d<double> valid_p3(4, 0, 0);
+  const vgl_point_3d<double> valid_p1(0, 0, 0);
+  const vgl_point_3d<double> valid_p2(0, 4, 0);
+  const vgl_point_3d<double> valid_p3(4, 0, 0);
 
   // Test on a number of different types of degenerate triangle
 
   constexpr unsigned NUM_TESTS = 7;
   constexpr unsigned NUM_VARIANTS = 3;
 
-  vgl_point_3d<double> degen[NUM_TESTS][3] = {
+  const vgl_point_3d<double> degen[NUM_TESTS][3] = {
     { vgl_point_3d<double>(-4, 5, 0),
       vgl_point_3d<double>(-3, 4, 0),
       vgl_point_3d<double>(-2, 0, 0) }, // Coplanar non-intersecting
@@ -303,15 +303,15 @@ test_intersecting_degenerate_triangles1()
       vgl_point_3d<double>(2, 1, -2) } // Non-coplanar intersecting
   };
 
-  const char * degen_desc[NUM_TESTS] = { "Coplanar non-intersecting possibly non-degenerate",
-                                         "Coplanar intersecting possibly non-degenerate",
-                                         "Coplanar intersecting degenerate",
-                                         "Coplanar non-intersecting edge collinear degenerate",
-                                         "Coplanar intersecting edge collinear degenerate",
-                                         "Non-coplanar non-intersecting degenerate",
-                                         "Non-coplanar intersecting degenerate" };
+  const char * const degen_desc[NUM_TESTS] = { "Coplanar non-intersecting possibly non-degenerate",
+                                               "Coplanar intersecting possibly non-degenerate",
+                                               "Coplanar intersecting degenerate",
+                                               "Coplanar non-intersecting edge collinear degenerate",
+                                               "Coplanar intersecting edge collinear degenerate",
+                                               "Non-coplanar non-intersecting degenerate",
+                                               "Non-coplanar intersecting degenerate" };
 
-  vgl_triangle_3d_intersection_t exp_result[NUM_TESTS][NUM_VARIANTS] = {
+  const vgl_triangle_3d_intersection_t exp_result[NUM_TESTS][NUM_VARIANTS] = {
     { None, None, None }, { None, Coplanar, Coplanar },     { Coplanar, Coplanar, Coplanar },
     { None, None, None }, { Coplanar, Coplanar, Coplanar }, { None, None, None },
     { None, Skew, Skew }
@@ -320,7 +320,7 @@ test_intersecting_degenerate_triangles1()
   // Expected edges [0-5]=>correct values.  7=>Any repreated values would be correct
   // 8=>Any repeated values from the degenerate triange would be correct
   // 9=>No expected answer( since no intersection)
-  unsigned exp_edges[NUM_TESTS][NUM_VARIANTS][2] = {
+  const unsigned exp_edges[NUM_TESTS][NUM_VARIANTS][2] = {
     { { 9, 9 }, { 9, 9 }, { 9, 9 } },                                   // unspecified if non-intersecting
     { { 9, 9 }, { 8, 8 }, { 7, 7 } },                                   // repeated edges if coplanar
     { { 3, 3 }, { 8, 8 }, { 8, 8 } },                                   // repeated edges if coplanar
@@ -330,13 +330,13 @@ test_intersecting_degenerate_triangles1()
   };
 
 
-  unsigned degen_tests[NUM_VARIANTS][3] = {
+  const unsigned degen_tests[NUM_VARIANTS][3] = {
     { 1, 1, 1 }, // all vertices the same point
     { 1, 1, 2 }, // one vertex distinct
     { 0, 1, 2 }  // all vertices distinct
   };
 
-  const char * degen_tests_desc[3] = { "point", "one vertex distinct", "all vertices distinct" };
+  const char * const degen_tests_desc[3] = { "point", "one vertex distinct", "all vertices distinct" };
 
   for (unsigned i = 0; i < NUM_TESTS; ++i)
   {
@@ -420,9 +420,9 @@ test_intersecting_degenerate_triangles2()
             << "----------------------------------------------\n";
 
   // test intersection of 2 degenerate triangles
-  vgl_point_3d<double> d1_p1(0, 0, 0);
-  vgl_point_3d<double> d1_p2(2, 0, 0);
-  vgl_point_3d<double> d1_p3(4, 0, 0);
+  const vgl_point_3d<double> d1_p1(0, 0, 0);
+  const vgl_point_3d<double> d1_p2(2, 0, 0);
+  const vgl_point_3d<double> d1_p3(4, 0, 0);
 
   vgl_point_3d<double> d2_p1(-1, 0, 0);
   vgl_point_3d<double> d2_p2(-3, 0, 0);
@@ -459,15 +459,15 @@ test_coincident_edges1()
             << " test vgl_triangle_3d_coincident_edges()\n"
             << "-----------------------------------------\n";
 
-  vgl_point_3d<double> a_p1(0, 0, 0);
-  vgl_point_3d<double> a_p2(0, 4, 0);
-  vgl_point_3d<double> a_p3(4, 0, 0);
+  const vgl_point_3d<double> a_p1(0, 0, 0);
+  const vgl_point_3d<double> a_p2(0, 4, 0);
+  const vgl_point_3d<double> a_p3(4, 0, 0);
 
-  vgl_point_3d<double> b_p1(0, 0, 0);
-  vgl_point_3d<double> b_p2(-4, 0, 0);
-  vgl_point_3d<double> b_p3(0, -4, 0);
+  const vgl_point_3d<double> b_p1(0, 0, 0);
+  const vgl_point_3d<double> b_p2(-4, 0, 0);
+  const vgl_point_3d<double> b_p3(0, -4, 0);
 
-  std::vector<std::pair<unsigned, unsigned>> coinc =
+  const std::vector<std::pair<unsigned, unsigned>> coinc =
     vgl_triangle_3d_coincident_edges(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3);
 
   TEST("Coincident_edges non-coincident", coinc.empty(), true);
@@ -478,18 +478,18 @@ test_coincident_edges1()
 inline void
 test_coincident_edges2()
 {
-  vgl_point_3d<double> a_p1(0, 0, 0);
-  vgl_point_3d<double> a_p2(0, 4, 0);
-  vgl_point_3d<double> a_p3(4, 0, 0);
+  const vgl_point_3d<double> a_p1(0, 0, 0);
+  const vgl_point_3d<double> a_p2(0, 4, 0);
+  const vgl_point_3d<double> a_p3(4, 0, 0);
 
-  vgl_point_3d<double> b_p1(1, 0, 0);
-  vgl_point_3d<double> b_p2(0, 0, 4);
-  vgl_point_3d<double> b_p3(2, 0, 0);
+  const vgl_point_3d<double> b_p1(1, 0, 0);
+  const vgl_point_3d<double> b_p2(0, 0, 4);
+  const vgl_point_3d<double> b_p3(2, 0, 0);
 
   std::vector<std::pair<unsigned, unsigned>> coinc =
     vgl_triangle_3d_coincident_edges(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3);
 
-  std::pair<unsigned, unsigned> exp_edge(2, 2);
+  const std::pair<unsigned, unsigned> exp_edge(2, 2);
 
   TEST("Coincident_edges 1 coincident edge", coinc.size() == 1 && coinc[0] == exp_edge, true);
 }
@@ -503,9 +503,9 @@ test_intersect_plane()
             << " test vgl_triangle_3d_plane_intersection()\n"
             << "-------------------------------------------\n";
 
-  vgl_point_3d<double> p1(0, 0, 0);
-  vgl_point_3d<double> p2(0, 15, 25);
-  vgl_point_3d<double> p3(0, 45, 10);
+  const vgl_point_3d<double> p1(0, 0, 0);
+  const vgl_point_3d<double> p2(0, 15, 25);
+  const vgl_point_3d<double> p3(0, 45, 10);
 
   vgl_plane_3d<double> pl(0, 0, 1, -20); // the plane z=20 ==> normal intersection
   vgl_line_segment_3d<double> l;         // the returned intersection
@@ -542,15 +542,15 @@ test_point_containment()
 
   // three arbitrary coplanar points (note that coplanarity is assumed by the two methods!)
   {
-    vgl_point_3d<double> p1(0, 0, 0);
-    vgl_point_3d<double> p2(5, 0, 3);
-    vgl_point_3d<double> p3(2, 0, 10);
-    vgl_point_3d<double> in1 = centre(p1, p2, p3); // barycentre
-    vgl_point_3d<double> in2(2.5, 0, 1.51);        // point almost on the edge p1--p2
-    vgl_point_3d<double> in3(0.01, 0, 0.01);       // almost a corner point
-    vgl_point_3d<double> out1(2, 0, 1);            // same plane, outside triangle
-    vgl_point_3d<double> out2(2, 1, 1);            // not coplanar, still outside triangle
-    vgl_point_3d<double> in4(0.01, 0.1, 0.01);     // not quite coplanar, but otherwise inside triangle
+    const vgl_point_3d<double> p1(0, 0, 0);
+    const vgl_point_3d<double> p2(5, 0, 3);
+    const vgl_point_3d<double> p3(2, 0, 10);
+    const vgl_point_3d<double> in1 = centre(p1, p2, p3); // barycentre
+    const vgl_point_3d<double> in2(2.5, 0, 1.51);        // point almost on the edge p1--p2
+    const vgl_point_3d<double> in3(0.01, 0, 0.01);       // almost a corner point
+    const vgl_point_3d<double> out1(2, 0, 1);            // same plane, outside triangle
+    const vgl_point_3d<double> out2(2, 1, 1);            // not coplanar, still outside triangle
+    const vgl_point_3d<double> in4(0.01, 0.1, 0.01);     // not quite coplanar, but otherwise inside triangle
     TEST("inside 1 - barycentric method", vgl_triangle_3d_test_inside(in1, p1, p2, p3), true);
     TEST("inside 1 - barycentric method with coplanar tol", vgl_triangle_3d_test_inside(in1, p1, p2, p3, 1e-10), true);
     TEST("inside 1 - cosine method", vgl_triangle_3d_test_inside_simple(in1, p1, p2, p3), true);
@@ -570,15 +570,15 @@ test_point_containment()
   }
   // three collinear points -- the cosine method will always fail in this case
   {
-    vgl_point_3d<double> p1(0, 0, 0);
-    vgl_point_3d<double> p2(5, 0, 3);
-    vgl_point_3d<double> p3(15, 0, 9);
-    vgl_point_3d<double> in1(2.5, 0, 1.5); // barycentre
-    vgl_point_3d<double> in2(2, 0, 1.2);
-    vgl_point_3d<double> in3(0.05, 0, 0.03);   // almost a corner point
-    vgl_point_3d<double> out1(15.05, 0, 9.03); // collinear, almost a corner point
-    vgl_point_3d<double> out2(20, 0, 12);      // collinear
-    vgl_point_3d<double> out3(2, 0, 1);        // not collinear
+    const vgl_point_3d<double> p1(0, 0, 0);
+    const vgl_point_3d<double> p2(5, 0, 3);
+    const vgl_point_3d<double> p3(15, 0, 9);
+    const vgl_point_3d<double> in1(2.5, 0, 1.5); // barycentre
+    const vgl_point_3d<double> in2(2, 0, 1.2);
+    const vgl_point_3d<double> in3(0.05, 0, 0.03);   // almost a corner point
+    const vgl_point_3d<double> out1(15.05, 0, 9.03); // collinear, almost a corner point
+    const vgl_point_3d<double> out2(20, 0, 12);      // collinear
+    const vgl_point_3d<double> out3(2, 0, 1);        // not collinear
     TEST("inside 1 (collinear points) - barycentric method", vgl_triangle_3d_test_inside(in1, p1, p2, p3), true);
     TEST("inside 2 (collinear points) - barycentric method", vgl_triangle_3d_test_inside(in2, p1, p2, p3), true);
     TEST("inside 3 (collinear points) - barycentric method", vgl_triangle_3d_test_inside(in3, p1, p2, p3), true);
@@ -588,22 +588,22 @@ test_point_containment()
   }
   // three coincident points
   {
-    vgl_point_3d<double> p1(5, 0, 3);
-    vgl_point_3d<double> p2(5, 0, 3);
-    vgl_point_3d<double> p3(5, 0, 3);
-    vgl_point_3d<double> in1(5, 0, 3);
-    vgl_point_3d<double> out1(5, 0, 2);
+    const vgl_point_3d<double> p1(5, 0, 3);
+    const vgl_point_3d<double> p2(5, 0, 3);
+    const vgl_point_3d<double> p3(5, 0, 3);
+    const vgl_point_3d<double> in1(5, 0, 3);
+    const vgl_point_3d<double> out1(5, 0, 2);
     TEST("inside (coincident points) - barycentric method", vgl_triangle_3d_test_inside(in1, p1, p2, p3), true);
     TEST("not inside (coincident points) - barycentric method", vgl_triangle_3d_test_inside(out1, p1, p2, p3), false);
   }
   // almost degenerate triangle
   {
-    vgl_point_3d<double> p1(-250.00000027628425, 307.98258024874724, 359.57738152050911);
-    vgl_point_3d<double> p2(-239.99999999497970, 314.64924710295026, 359.57738152050911);
-    vgl_point_3d<double> p3(-240.00000000000000, 314.64924709960337, 359.57738152050911);
+    const vgl_point_3d<double> p1(-250.00000027628425, 307.98258024874724, 359.57738152050911);
+    const vgl_point_3d<double> p2(-239.99999999497970, 314.64924710295026, 359.57738152050911);
+    const vgl_point_3d<double> p3(-240.00000000000000, 314.64924709960337, 359.57738152050911);
 
-    vgl_point_3d<double> in1(-245.00000013828425, 311.31591367584872, 359.57738152050911);
-    vgl_point_3d<double> out1(-245.00000013828425, 311.31591367584872, 359.575);
+    const vgl_point_3d<double> in1(-245.00000013828425, 311.31591367584872, 359.57738152050911);
+    const vgl_point_3d<double> out1(-245.00000013828425, 311.31591367584872, 359.575);
     //    TEST("inside (High AR triangle) - barycentric method", vgl_triangle_3d_test_inside(in1,p1,p2,p3), true);
     TEST("not inside (High AR triangle) - barycentric method", vgl_triangle_3d_test_inside(out1, p1, p2, p3), false);
   }
@@ -614,29 +614,29 @@ test_point_containment()
 inline void
 test_point_containment_algo_perf()
 {
-  vgl_point_3d<double> p1(0, 0, 0);
-  vgl_point_3d<double> p2(5, 0, 3);
-  vgl_point_3d<double> p3(2, 0, 10);
+  const vgl_point_3d<double> p1(0, 0, 0);
+  const vgl_point_3d<double> p2(5, 0, 3);
+  const vgl_point_3d<double> p3(2, 0, 10);
 
-  vgl_point_3d<double> test_pt = centre(p1, p2, p3);
+  const vgl_point_3d<double> test_pt = centre(p1, p2, p3);
 
-  unsigned tries = 10000000;
+  const unsigned tries = 10000000;
 
-  std::clock_t bary_st = std::clock();
+  const std::clock_t bary_st = std::clock();
   for (unsigned i = 0; i < tries; ++i)
     vgl_triangle_3d_test_inside(test_pt, p1, p2, p3);
-  std::clock_t bary_en = std::clock();
+  const std::clock_t bary_en = std::clock();
 
-  std::clock_t ang_st = std::clock();
+  const std::clock_t ang_st = std::clock();
   for (unsigned i = 0; i < tries; ++i)
     vgl_triangle_3d_test_inside_simple(test_pt, p1, p2, p3);
-  std::clock_t ang_en = std::clock();
+  const std::clock_t ang_en = std::clock();
 
-  unsigned long bary_time = bary_en - bary_st;
-  unsigned long ang_time = ang_en - ang_st;
+  const unsigned long bary_time = bary_en - bary_st;
+  const unsigned long ang_time = ang_en - ang_st;
 
-  unsigned long bary_ps = (tries * CLOCKS_PER_SEC) / bary_time;
-  unsigned long ang_ps = (tries * CLOCKS_PER_SEC) / ang_time;
+  const unsigned long bary_ps = (tries * CLOCKS_PER_SEC) / bary_time;
+  const unsigned long ang_ps = (tries * CLOCKS_PER_SEC) / ang_time;
 
   std::cout << "Barycentric method: " << bary_ps << "/sec (" << bary_time << " ticks)\n"
             << "Angles method: " << ang_ps << "/sec (" << ang_time << " ticks)\n";
@@ -660,50 +660,50 @@ test_closest_point()
 
   {
     // Consider a triangle in the XY plane.
-    vgl_point_3d<double> p1(0, 0, 0);
-    vgl_point_3d<double> p2(1, 0, 0);
-    vgl_point_3d<double> p3(0, 1, 0);
+    const vgl_point_3d<double> p1(0, 0, 0);
+    const vgl_point_3d<double> p2(1, 0, 0);
+    const vgl_point_3d<double> p3(0, 1, 0);
 
     // Test one of the actual vertices
     {
-      vgl_point_3d<double> q(0, 0, 0);
-      vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
+      const vgl_point_3d<double> q(0, 0, 0);
+      const vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
       TEST_NEAR("Vertex point", (c - p1).length(), 0.0, 1e-6);
     }
 
     // Test a point along a triangle edge
     {
-      vgl_point_3d<double> q(0.5, 0.0, 0.0);
-      vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
+      const vgl_point_3d<double> q(0.5, 0.0, 0.0);
+      const vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
       TEST_NEAR("Edge point", (c - q).length(), 0.0, 1e-6);
     }
 
     // Test a point within the triangle
     {
-      vgl_point_3d<double> q(0.1, 0.1, 0.0);
-      vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
+      const vgl_point_3d<double> q(0.1, 0.1, 0.0);
+      const vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
       TEST_NEAR("Point inside", (c - q).length(), 0.0, 1e-6);
     }
 
     // Test a point outside the triangle (but in same plane)
     {
-      vgl_point_3d<double> q(-1.0, 0.0, 0.0);
-      vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
+      const vgl_point_3d<double> q(-1.0, 0.0, 0.0);
+      const vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
       TEST_NEAR("Point outside but same plane", (c - p1).length(), 0.0, 1e-6);
     }
 
     // Test a point outside the triangle (in a different plane, but would project inside the triangle)
     {
-      vgl_point_3d<double> q(0.1, 0.1, 1.0);
-      vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
-      vgl_point_3d<double> r(0.1, 0.1, 0.0); // The expected closest point
+      const vgl_point_3d<double> q(0.1, 0.1, 1.0);
+      const vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
+      const vgl_point_3d<double> r(0.1, 0.1, 0.0); // The expected closest point
       TEST_NEAR("Point inside", (c - r).length(), 0.0, 1e-6);
     }
 
     // Test a point outside the triangle (in a different plane, and would project outside the triangle)
     {
-      vgl_point_3d<double> q(-1.0, 0.0, 1.0);
-      vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
+      const vgl_point_3d<double> q(-1.0, 0.0, 1.0);
+      const vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
       TEST_NEAR("Point outside and different plane", (c - p1).length(), 0.0, 1e-6);
     }
   }
@@ -711,13 +711,13 @@ test_closest_point()
 
   // Nearly degenerate triangle
   {
-    vgl_point_3d<double> p1(-250.00000027628425, 307.98258024874724, 359.57738152050911);
-    vgl_point_3d<double> p2(-239.99999999497970, 314.64924710295026, 359.57738152050911);
-    vgl_point_3d<double> p3(-240.00000000000000, 314.64924709960337, 359.57738152050911);
+    const vgl_point_3d<double> p1(-250.00000027628425, 307.98258024874724, 359.57738152050911);
+    const vgl_point_3d<double> p2(-239.99999999497970, 314.64924710295026, 359.57738152050911);
+    const vgl_point_3d<double> p3(-240.00000000000000, 314.64924709960337, 359.57738152050911);
     std::cout << "Nearly degenerate triangle " << p1 << p2 << p3 << std::endl;
 
-    vgl_point_3d<double> in1(-245.00000013828425, 311.31591367584872, 359.57738152050911);
-    vgl_point_3d<double> out1(-245.00000013828425, 311.31591367584872, 380);
+    const vgl_point_3d<double> in1(-245.00000013828425, 311.31591367584872, 359.57738152050911);
+    const vgl_point_3d<double> out1(-245.00000013828425, 311.31591367584872, 380);
     vgl_point_3d<double> c = vgl_triangle_3d_closest_point(in1, p1, p2, p3);
     TEST_NEAR("Point inside High AR triangle", vgl_distance(c, in1), 0, 1e-8);
     c = vgl_triangle_3d_closest_point(out1, p1, p2, p3);
@@ -738,55 +738,55 @@ test_distance()
             << "---------------------------------\n";
 
   // Consider a triangle in the XY plane.
-  vgl_point_3d<double> p1(0, 0, 0);
-  vgl_point_3d<double> p2(1, 0, 0);
-  vgl_point_3d<double> p3(0, 1, 0);
+  const vgl_point_3d<double> p1(0, 0, 0);
+  const vgl_point_3d<double> p2(1, 0, 0);
+  const vgl_point_3d<double> p3(0, 1, 0);
 
   // Test one of the actual vertices
   {
-    vgl_point_3d<double> q(0, 0, 0);
-    double d = vgl_triangle_3d_distance(q, p1, p2, p3);
-    double true_d = 0.0;
+    const vgl_point_3d<double> q(0, 0, 0);
+    const double d = vgl_triangle_3d_distance(q, p1, p2, p3);
+    const double true_d = 0.0;
     TEST_NEAR("Vertex point", d, true_d, 1e-6);
   }
 
   // Test a point along a triangle edge
   {
-    vgl_point_3d<double> q(0.5, 0.0, 0.0);
-    double d = vgl_triangle_3d_distance(q, p1, p2, p3);
-    double true_d = 0.0;
+    const vgl_point_3d<double> q(0.5, 0.0, 0.0);
+    const double d = vgl_triangle_3d_distance(q, p1, p2, p3);
+    const double true_d = 0.0;
     TEST_NEAR("Edge point", d, true_d, 1e-6);
   }
 
   // Test a point within the triangle
   {
-    vgl_point_3d<double> q(0.1, 0.1, 0.0);
-    double d = vgl_triangle_3d_distance(q, p1, p2, p3);
-    double true_d = 0.0;
+    const vgl_point_3d<double> q(0.1, 0.1, 0.0);
+    const double d = vgl_triangle_3d_distance(q, p1, p2, p3);
+    const double true_d = 0.0;
     TEST_NEAR("Point inside", d, true_d, 1e-6);
   }
 
   // Test a point outside the triangle (but in same plane)
   {
-    vgl_point_3d<double> q(-1.0, 0.0, 0.0);
-    double d = vgl_triangle_3d_distance(q, p1, p2, p3);
-    double true_d = 1.0;
+    const vgl_point_3d<double> q(-1.0, 0.0, 0.0);
+    const double d = vgl_triangle_3d_distance(q, p1, p2, p3);
+    const double true_d = 1.0;
     TEST_NEAR("Point outside but same plane", d, true_d, 1e-6);
   }
 
   // Test a point outside the triangle (in a different plane, but would project inside the triangle)
   {
-    vgl_point_3d<double> q(0.1, 0.1, 1.0);
-    double d = vgl_triangle_3d_distance(q, p1, p2, p3);
-    double true_d = 1.0;
+    const vgl_point_3d<double> q(0.1, 0.1, 1.0);
+    const double d = vgl_triangle_3d_distance(q, p1, p2, p3);
+    const double true_d = 1.0;
     TEST_NEAR("Point inside", d, true_d, 1e-6);
   }
 
   // Test a point outside the triangle (in a different plane, and would project outside the triangle)
   {
-    vgl_point_3d<double> q(-1.0, 0.0, 1.0);
-    double d = vgl_triangle_3d_distance(q, p1, p2, p3);
-    double true_d = 1.4142135623730950488; // sqrt2
+    const vgl_point_3d<double> q(-1.0, 0.0, 1.0);
+    const double d = vgl_triangle_3d_distance(q, p1, p2, p3);
+    const double true_d = 1.4142135623730950488; // sqrt2
     TEST_NEAR("Point outside and different plane", d, true_d, 1e-6);
   }
 }
@@ -803,11 +803,11 @@ test_area()
             << " test vgl_triangle_3d_area()\n"
             << "-----------------------------\n";
 
-  vgl_point_3d<double> p1(0, 0, 0);
-  vgl_point_3d<double> p2(1, 0, 0);
-  vgl_point_3d<double> p3(0, 1, 0);
+  const vgl_point_3d<double> p1(0, 0, 0);
+  const vgl_point_3d<double> p2(1, 0, 0);
+  const vgl_point_3d<double> p3(0, 1, 0);
 
-  double area = vgl_triangle_3d_area(p1, p2, p3);
+  const double area = vgl_triangle_3d_area(p1, p2, p3);
   TEST_NEAR("Triangle area", area, 0.5, 1e-6);
 }
 
@@ -823,11 +823,11 @@ test_aspect_ratio()
             << " test vgl_triangle_3d_aspect_ratio()\n"
             << "-------------------------------------\n";
 
-  vgl_point_3d<double> p1(0, 0, 0);
-  vgl_point_3d<double> p2(1, 0, 0);
-  vgl_point_3d<double> p3(0, 1, 0);
+  const vgl_point_3d<double> p1(0, 0, 0);
+  const vgl_point_3d<double> p2(1, 0, 0);
+  const vgl_point_3d<double> p3(0, 1, 0);
 
-  double ratio = vgl_triangle_3d_aspect_ratio(p1, p2, p3);
+  const double ratio = vgl_triangle_3d_aspect_ratio(p1, p2, p3);
   TEST_NEAR("Triangle area", ratio, std::sqrt(2.0), 1e-6);
 }
 

@@ -34,7 +34,7 @@ vrel_wgted_ran_sam_search::estimate(const vrel_estimation_problem * problem, con
 
     // sums up weights
     double sum_wgt = 0.0;
-    for (double wgt : wgts)
+    for (const double wgt : wgts)
       sum_wgt += wgt;
 
     // build probability interval

@@ -15,15 +15,15 @@
 int
 main()
 {
-  int x0 = 0;
-  int x1 = 10;
-  int y0 = 0;
-  int y1 = 10;
-  int d = 50;
+  const int x0 = 0;
+  const int x1 = 10;
+  const int y0 = 0;
+  const int y1 = 10;
+  const int d = 50;
 
-  double sigma = 1;
-  double outlier_sigma = 10.0;
-  double outlier_frac = 0.2;
+  const double sigma = 1;
+  const double outlier_sigma = 10.0;
+  const double outlier_frac = 0.2;
 
   vnl_matrix<double> H(3, 3);
   H(0, 0) = 1;
@@ -39,7 +39,7 @@ main()
   vnl_matrix<double> A(3, 1);
   vnl_matrix<double> B(3, 1);
 
-  int seed = 40;
+  const int seed = 40;
   vnl_random mz_random(seed);
   int inliers = 0, outliers = 0;
 

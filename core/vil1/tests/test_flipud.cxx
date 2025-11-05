@@ -29,12 +29,12 @@ test_flipud()
   vil1_memory_image m(3, 2, VIL1_BYTE);
 
   unsigned char data[] = { 1, 2, 3, 4, 5, 6 };
-  unsigned char flipped_data[] = { 4, 5, 6, 1, 2, 3 };
+  const unsigned char flipped_data[] = { 4, 5, 6, 1, 2, 3 };
 
   m.put_section(data, 0, 0, 3, 2);
   p(m);
 
-  vil1_image flip = vil1_flipud(m);
+  const vil1_image flip = vil1_flipud(m);
   p(flip);
 
   int i = 0;

@@ -17,10 +17,10 @@ test_proj_camera_io()
 
   // Some matrices for testing.
   double random_list[12] = { 10.6, 1.009, .676, .5, -13, -10, 8, 5, 88, -2, -100, 11 };
-  vnl_double_3x4 random_matrix(random_list);
+  const vnl_double_3x4 random_matrix(random_list);
 
   std::cout << "Matrix:\n" << random_matrix << std::endl;
-  vpgl_proj_camera<double> p_cam(random_matrix);
+  const vpgl_proj_camera<double> p_cam(random_matrix);
 
   vsl_b_ofstream bp_out("test_proj_camera_io.tmp");
   TEST("Created test_proj_camera_io.tmp for writing", (!bp_out), false);

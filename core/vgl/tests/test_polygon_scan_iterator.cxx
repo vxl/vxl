@@ -119,7 +119,7 @@ static void
 test_empty_polygon()
 {
   // This is an empty polygon.
-  Polygon_type poly;
+  const Polygon_type poly;
 
   Polygon_scan it(poly);
   unsigned int count = 0;

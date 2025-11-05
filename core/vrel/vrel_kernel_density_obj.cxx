@@ -50,9 +50,9 @@ vrel_kernel_density_obj::fcn(vect_const_iter res_begin,
                              double prior_scale,
                              vnl_vector<double> *) const
 {
-  double h = bandwidth(res_begin, res_end, prior_scale);
+  const double h = bandwidth(res_begin, res_end, prior_scale);
   assert(h != 0);
-  double x = best_x(res_begin, res_end, prior_scale);
+  const double x = best_x(res_begin, res_end, prior_scale);
 
   return -1 * kernel_density(res_begin, res_end, x, h);
 }
@@ -67,10 +67,10 @@ vrel_kernel_density_obj::best_x(vect_const_iter res_begin, vect_const_iter res_e
   // to find x that maximizes kernel_density.
   const double R = 0.61803399, C = 1.0 - R; // The golden ratios.
   double f1 = NAN, f2 = NAN, x0 = NAN, x1 = NAN, x2 = NAN, x3 = NAN;
-  double tol = 1.0e-9;
+  const double tol = 1.0e-9;
   double f0 = 0;
 
-  double h = bandwidth(res_begin, res_end, prior_scale);
+  const double h = bandwidth(res_begin, res_end, prior_scale);
   assert(h != 0);
 
   std::vector<double> sort_res(res_begin, res_end);
@@ -80,8 +80,8 @@ vrel_kernel_density_obj::best_x(vect_const_iter res_begin, vect_const_iter res_e
   unsigned int i = 0;
   for (; i < sort_res.size(); ++i)
   {
-    double x = sort_res[i];
-    double f = kernel_density(res_begin, res_end, x, h);
+    const double x = sort_res[i];
+    const double f = kernel_density(res_begin, res_end, x, h);
     if (f > f0)
     {
       f0 = f;
@@ -127,7 +127,7 @@ vrel_kernel_density_obj::best_x(vect_const_iter res_begin, vect_const_iter res_e
 double
 vrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter res_end, double prior_scale) const
 {
-  std::vector<double>::difference_type n = res_end - res_begin;
+  const std::vector<double>::difference_type n = res_end - res_begin;
   double scale = 1.0;
 
   switch (scale_type_)
@@ -143,7 +143,7 @@ vrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
       auto loc = residuals.begin() + n / 2;
       std::nth_element(residuals.begin(), loc, residuals.end());
 
-      double res_median = *loc;
+      const double res_median = *loc;
       std::vector<double> abs_res_median;
       abs_res_median.reserve(n);
       for (std::vector<double>::difference_type i = 0; i < n; ++i)
@@ -163,7 +163,7 @@ vrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
 
     case VREL_KERNEL_MUSE:
     {
-      vrel_muset_obj muse((int)n);
+      const vrel_muset_obj muse((int)n);
       scale = muse.fcn(res_begin, res_end);
       break;
     }
@@ -183,7 +183,7 @@ double
 vrel_kernel_density_obj::kernel_density(vect_const_iter res_begin, vect_const_iter res_end, double x, double h) const
 {
   double f = 0;
-  std::vector<double>::difference_type n = res_end - res_begin;
+  const std::vector<double>::difference_type n = res_end - res_begin;
   for (; res_begin != res_end; ++res_begin)
   {
     f += kernel_function((*res_begin - x) / h);
@@ -198,6 +198,6 @@ vrel_kernel_density_obj::kernel_function(double u) const
   if (vnl_math::abs(u) > 1)
     return 0;
 
-  double t = 1 - u * u;
+  const double t = 1 - u * u;
   return 1.09375 * t * t * t;
 }

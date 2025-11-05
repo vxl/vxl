@@ -18,22 +18,22 @@ test_binary_io()
             << "Testing vsl binary io\n"
             << "*********************\n";
 
-  bool b_out = true;
-  char c_out = 'y';
-  signed char sc_out = 'k';
-  unsigned char uc_out = 'q';
-  int i_out = 3;
-  unsigned int ui_out = 37;
-  short short_out = 56;
-  signed ushort_out = -32768;
-  long long_out = -12345678;
-  unsigned long ulong_out = 87654321;
-  float f_out = 1.7f;
-  double d_out = 3.4;
-  std::string string_out = "Hello World!";
-  const char * c_string_out = "A C string";
-  std::size_t size_t_out = 1023;
-  std::ptrdiff_t ptrdiff_t_out = 23;
+  const bool b_out = true;
+  const char c_out = 'y';
+  const signed char sc_out = 'k';
+  const unsigned char uc_out = 'q';
+  const int i_out = 3;
+  const unsigned int ui_out = 37;
+  const short short_out = 56;
+  const signed ushort_out = -32768;
+  const long long_out = -12345678;
+  const unsigned long ulong_out = 87654321;
+  const float f_out = 1.7f;
+  const double d_out = 3.4;
+  const std::string string_out = "Hello World!";
+  const char * const c_string_out = "A C string";
+  const std::size_t size_t_out = 1023;
+  const std::ptrdiff_t ptrdiff_t_out = 23;
 
   vsl_b_ofstream bfs_out("vsl_binary_io_test.bvl.tmp");
   TEST("Created vsl_binary_io_test.bvl.tmp for writing", (!bfs_out), false);
@@ -193,7 +193,7 @@ test_binary_io()
   std::size_t size_t_in2 = 99;
   std::ptrdiff_t ptrdiff_t_in2 = 99;
 
-  std::string gold_path = testlib_root_dir() + "/core/vsl/tests/golden_test_binary_io.bvl";
+  const std::string gold_path = testlib_root_dir() + "/core/vsl/tests/golden_test_binary_io.bvl";
   vsl_b_ifstream bfs_in2(gold_path.c_str());
 
   // If this test fails, it could be due to a missing golden file, or one
@@ -252,7 +252,7 @@ test_binary_io()
   std::ifstream none_if("Some_non_existant_file");
   TEST("vsl_b_stream_test on missing file fails", vsl_b_istream_test(none_if), false);
   {
-    std::ofstream f("Some_empty_file");
+    const std::ofstream f("Some_empty_file");
   }
   TEST("vsl_b_stream_test on empty file fails", vsl_b_istream_test(none_if), false);
   std::ifstream text_if("vsl_binary_io_test.txt");

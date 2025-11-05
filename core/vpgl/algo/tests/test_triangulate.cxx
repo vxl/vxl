@@ -57,7 +57,7 @@ test_triangulate()
 
   // Perform the triangulation
   vgl_point_3d<double> pt;
-  double err = vpgl_triangulate_points::triangulate(points, cameras, pt);
+  const double err = vpgl_triangulate_points::triangulate(points, cameras, pt);
 
   std::cout << "Error is " << err << "." << std::endl;
 

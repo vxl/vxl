@@ -41,9 +41,9 @@ void
 vil_distance_transform_one_way(vil_image_view<float> & image)
 {
   assert(image.nplanes() == 1);
-  unsigned ni = image.ni();
-  unsigned nj = image.nj();
-  unsigned ni1 = ni - 1;
+  const unsigned ni = image.ni();
+  const unsigned nj = image.nj();
+  const unsigned ni1 = ni - 1;
   std::ptrdiff_t istep = image.istep(), jstep = image.jstep();
   std::ptrdiff_t o1 = -istep, o2 = -jstep - istep, o3 = -jstep, o4 = istep - jstep;
   float * row0 = image.top_left_ptr();
@@ -101,9 +101,9 @@ void
 vil_distance_transform_r2_one_way(vil_image_view<float> & image)
 {
   assert(image.nplanes() == 1);
-  unsigned ni = image.ni();
-  unsigned nj = image.nj();
-  unsigned ni2 = ni - 2;
+  const unsigned ni = image.ni();
+  const unsigned nj = image.nj();
+  const unsigned ni2 = ni - 2;
   std::ptrdiff_t istep = image.istep(), jstep = image.jstep();
 
   //   Kernel defining points to consider (relative to XX)
@@ -112,10 +112,10 @@ vil_distance_transform_r2_one_way(vil_image_view<float> & image)
   //   -- o1 XX -- --
   std::ptrdiff_t o1 = -istep, o2 = -jstep - istep;
   std::ptrdiff_t o3 = -jstep, o4 = istep - jstep;
-  std::ptrdiff_t o5 = -2 * istep - jstep;
-  std::ptrdiff_t o6 = -istep - 2 * jstep;
-  std::ptrdiff_t o7 = istep - 2 * jstep;
-  std::ptrdiff_t o8 = 2 * istep - jstep;
+  const std::ptrdiff_t o5 = -2 * istep - jstep;
+  const std::ptrdiff_t o6 = -istep - 2 * jstep;
+  const std::ptrdiff_t o7 = istep - 2 * jstep;
+  const std::ptrdiff_t o8 = 2 * istep - jstep;
 
   float * row0 = image.top_left_ptr();
 

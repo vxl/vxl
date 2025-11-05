@@ -21,7 +21,7 @@ main()
     vec_data[i] = vxl_byte(i);
 
   std::cout << "Creating a view of some data in memory\n";
-  vil_image_view<vxl_byte> image(&vec_data[0], 8, 8, 1, 1, 8, 1);
+  const vil_image_view<vxl_byte> image(&vec_data[0], 8, 8, 1, 1, 8, 1);
 
   // equivalent to image.set_to_memory(&vec_data[0],8,8,1,1,8,1);
 

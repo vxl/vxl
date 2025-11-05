@@ -100,7 +100,7 @@ test_homography2d_est()
 
   // Test points to instantiate
   {
-    vrel_homography2d_est homo_est(p, p);
+    const vrel_homography2d_est homo_est(p, p);
     TEST("Points to instantiate", homo_est.num_samples_to_instantiate(), 4);
   }
   // translation only
@@ -115,12 +115,12 @@ test_homography2d_est()
     true_param /= true_param.two_norm();
     for (i = 0; i < n; i++)
       q[i] = H * p[i];
-    vrel_homography2d_est homo_est(p, q);
+    const vrel_homography2d_est homo_est(p, q);
     indices[0] = 10;
     indices[1] = 1;
     indices[2] = 2;
     indices[3] = 3;
-    bool ret = homo_est.fit_from_minimal_set(indices, param);
+    const bool ret = homo_est.fit_from_minimal_set(indices, param);
     TEST("Degeneracy Case", ret, false);
 
     indices[0] = 0;
@@ -152,7 +152,7 @@ test_homography2d_est()
     for (i = 0; i < n; i++)
       q[i] = H * p[i];
 
-    vrel_homography2d_est homo_est(p, q);
+    const vrel_homography2d_est homo_est(p, q);
     indices[0] = 0;
     indices[1] = 2;
     indices[2] = 8;
@@ -181,7 +181,7 @@ test_homography2d_est()
     for (i = 0; i < n; i++)
       q[i] = H * p[i];
 
-    vrel_homography2d_est homo_est(p, q);
+    const vrel_homography2d_est homo_est(p, q);
     indices[0] = 2;
     indices[1] = 5;
     indices[2] = 8;
@@ -210,7 +210,7 @@ test_homography2d_est()
     for (i = 0; i < n; i++)
       q[i] = H * p[i];
 
-    vrel_homography2d_est homo_est(p, q);
+    const vrel_homography2d_est homo_est(p, q);
     indices[0] = 0;
     indices[1] = 2;
     indices[2] = 8;
@@ -231,7 +231,7 @@ test_homography2d_est()
     std::vector<double> wgts(n, 0.0);
     for (i = 0; i < 5; i++)
       wgts[i] = 1.0;
-    bool ret = homo_est.weighted_least_squares_fit(param, cofact, &wgts);
+    const bool ret = homo_est.weighted_least_squares_fit(param, cofact, &wgts);
     TEST("Degeneracy of Projective Weighted Least Squares", ret, false);
   }
 }

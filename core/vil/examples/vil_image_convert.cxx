@@ -23,7 +23,7 @@ main(int argc, char ** argv)
     return 0;
   }
 
-  vil_image_resource_sptr src_im = vil_load_image_resource(argv[1]);
+  const vil_image_resource_sptr src_im = vil_load_image_resource(argv[1]);
   if (!src_im)
   {
     std::cout << "Unable to load source image from " << argv[1] << std::endl;

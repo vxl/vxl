@@ -179,7 +179,7 @@ create_region_selector()
   // RSMPIA
   size_t rnis = 2, cnis = 2, tnis = 4, rssiz = 4646, cssiz = 4561;
 
-  std::vector<double> row_coefs = {
+  const std::vector<double> row_coefs = {
     -1.37241587646741E+10, // R0
     +6.80345003035694E+09, // RX
     -2.53961725272867E+09, // RY
@@ -192,7 +192,7 @@ create_region_selector()
     +1.03024536087538E-03, // RZZ
   };
 
-  std::vector<double> col_coefs = {
+  const std::vector<double> col_coefs = {
     -1.99837981040581E+09, // C0
     +4.46286444870403E+08, // CX
     +3.61714766643827E+09, // CY
@@ -215,7 +215,7 @@ test_region_selector()
 {
   // test data: (lon_rad, lat_rad, elev_m) -> (row, col)
   // ground domain "H" using longitude on range (0, 2*pi)
-  std::vector<std::pair<std::array<double, 3>, std::array<size_t, 2>>> data = {
+  const std::vector<std::pair<std::array<double, 3>, std::array<size_t, 2>>> data = {
     { { 4.2404725993, 0.5787813715, 0 }, { 1, 1 } }, // 0, 0
     { { 4.2405416897, 0.5787811963, 0 }, { 1, 1 } }, // 1024, 0
     { { 4.2406112558, 0.5788392388, 0 }, { 1, 1 } }, // 2048, 1024
@@ -246,7 +246,7 @@ static vpgl_polycam<double>
 create_polycam_rect()
 {
   // RSMPCA
-  std::vector<vpgl_scale_offset<double>> scale_offsets = {
+  const std::vector<vpgl_scale_offset<double>> scale_offsets = {
     { +3.11793659470231E+03, +2.65571142640788E+03 }, // XNRMSF, XNRMO
     { +2.96084811268529E+03, +2.40732324869712E+03 }, // YNRMSF, YNRMO
     { +1.00233148808220E+03, -2.33161661728923E+00 }, // ZNRMSF, ZNRMO
@@ -254,7 +254,7 @@ create_polycam_rect()
     { +5.59920000000000E+03, +4.64600000000000E+03 }, // RNRMSF, RNRMO
   };
 
-  std::vector<std::vector<int>> powers = {
+  const std::vector<std::vector<int>> powers = {
     { 1, 1, 1 }, // CNPWRX, CNPWRY, CNPWRZ
     { 1, 1, 1 }, // CDPWRX, CDPWRY, CDPWRZ
     { 1, 1, 1 }, // RNPWRX, RNPWRY, RNPWRZ
@@ -285,7 +285,7 @@ create_polycam_rect()
   RDPCF[2] = -3.02226608403966E-02;
   RDPCF[4] = -4.48001662401358E-01;
 
-  std::vector<std::vector<double>> coeffs = { CNPCF, CDPCF, RNPCF, RDPCF };
+  const std::vector<std::vector<double>> coeffs = { CNPCF, CDPCF, RNPCF, RDPCF };
 
   // initialize polycam
   return vpgl_polycam<double>(1, 1, powers, coeffs, scale_offsets);
@@ -327,7 +327,7 @@ create_polycam_geodetic(std::string ground_domain_id)
   double XNRMO = ground_domain_id == "G" ? -2.04221591140939E+00 : 4.24096939577019E+00;
 
   // RSMPCA
-  std::vector<vpgl_scale_offset<double>> scale_offsets = {
+  const std::vector<vpgl_scale_offset<double>> scale_offsets = {
     { +5.83421668078010E-04, XNRMO },                 // XNRMSF, XNRMO
     { +4.66059641384187E-04, +5.79158321291012E-01 }, // YNRMSF, YNRMO
     { +1.00000000000186E+03, -6.74864824209362E+00 }, // ZNRMSF, ZNRMO
@@ -335,7 +335,7 @@ create_polycam_geodetic(std::string ground_domain_id)
     { +5.59920000000000E+03, +4.64600000000000E+03 }, // RNRMSF, RNRMO
   };
 
-  std::vector<std::vector<int>> powers = {
+  const std::vector<std::vector<int>> powers = {
     { 3, 3, 3 }, // CNPWRX, CNPWRY, CNPWRZ
     { 3, 3, 3 }, // CDPWRX, CDPWRY, CDPWRZ
     { 3, 3, 3 }, // RNPWRX, RNPWRY, RNPWRZ
@@ -430,7 +430,7 @@ create_polycam_geodetic(std::string ground_domain_id)
   RDPCF[36] = +1.40009993944189E-05;
   RDPCF[48] = +2.53076939483868E-05;
 
-  std::vector<std::vector<double>> coeffs = { CNPCF, CDPCF, RNPCF, RDPCF };
+  const std::vector<std::vector<double>> coeffs = { CNPCF, CDPCF, RNPCF, RDPCF };
 
   // initialize polycam
   return vpgl_polycam<double>(1, 1, powers, coeffs, scale_offsets);
@@ -537,7 +537,7 @@ create_camera(std::string ground_domain_id)
 {
   auto polycam = create_polycam(ground_domain_id);
 
-  std::string id = (ground_domain_id == "R") ? "R-transform" : ground_domain_id;
+  const std::string id = (ground_domain_id == "R") ? "R-transform" : ground_domain_id;
   auto gd = create_ground_domain(id);
 
   auto cam = vpgl_RSM_camera<double>(polycam);

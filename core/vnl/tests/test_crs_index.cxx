@@ -8,7 +8,7 @@ display_mask(const std::vector<std::vector<bool>> & mask)
 {
   for (const auto & i : mask)
   {
-    for (bool j : i)
+    for (const bool j : i)
     {
       std::cout << (j ? '1' : '0') << ' ';
     }

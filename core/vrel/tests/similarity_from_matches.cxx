@@ -54,10 +54,10 @@ similarity_from_matches::fit_from_minimal_set(const std::vector<int> & match_ind
     // std::cout << "i = " << i << ", match_indices[i] = " << match_indices[i] << '\n'
     //          << "from_loc_ = " << matches_[match_indices[i]].from_loc_
     //          << ", to_loc_ = " << matches_[match_indices[i]].to_loc_ << '\n';
-    double x = matches_[match_indices[i]].from_loc_[0];
-    double y = matches_[match_indices[i]].from_loc_[1];
-    double u = matches_[match_indices[i]].to_loc_[0];
-    double v = matches_[match_indices[i]].to_loc_[1];
+    const double x = matches_[match_indices[i]].from_loc_[0];
+    const double y = matches_[match_indices[i]].from_loc_[1];
+    const double u = matches_[match_indices[i]].to_loc_[0];
+    const double v = matches_[match_indices[i]].to_loc_[1];
     X(2 * i, 0) = X(2 * i + 1, 1) = x;
     X(2 * i, 1) = -y;
     X(2 * i + 1, 0) = y;
@@ -90,8 +90,8 @@ static double
 calc_residual(const vnl_vector<double> & params, const image_point_match & match)
 {
   assert(params.size() >= 4);
-  double from_x = match.from_loc_[0];
-  double from_y = match.from_loc_[1];
+  const double from_x = match.from_loc_[0];
+  const double from_y = match.from_loc_[1];
   vnl_vector_fixed<double, 2> trans;
   trans[0] = params[0] * from_x - params[1] * from_y + params[2];
   trans[1] = params[1] * from_x + params[0] * from_y + params[3];
@@ -122,7 +122,7 @@ similarity_from_matches::compute_weights(const std::vector<double> & residuals,
   unsigned int i = 0;
   while (i < matches_.size())
   {
-    int start = i;
+    const int start = i;
     double sum_weights = 0;
     for (; i < matches_.size() && matches_[start].point_id_ == matches_[i].point_id_; ++i)
       sum_weights += weights[i];
@@ -151,7 +151,7 @@ similarity_from_matches::weighted_least_squares_fit(vnl_vector<double> & params,
     Xi(0, 1) = -Xi(1, 0);
 
     // std::cout << "Xi = " << Xi << std::endl;
-    double wt = (*weights)[i];
+    const double wt = (*weights)[i];
     wXtX += wt * Xi.transpose() * Xi;
     wXtu += wt * Xi.transpose() * matches_[i].to_loc_;
   }

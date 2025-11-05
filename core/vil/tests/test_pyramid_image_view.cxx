@@ -20,7 +20,7 @@ test_pyramid_image_view()
 
   vil_image_view<float> black_img(120, 120, 1);
   black_img.fill(1.0);
-  vil_image_view_base_sptr black_img_sptr = new vil_image_view<float>(black_img);
+  const vil_image_view_base_sptr black_img_sptr = new vil_image_view<float>(black_img);
   vil_pyramid_image_view<float> v2(black_img_sptr, 3);
 
   // get the level 1 image. level 0 is the original one

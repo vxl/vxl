@@ -16,7 +16,7 @@ scale_at_level(unsigned level)
 {
   if (level == 0)
     return 1.0f;
-  float s = std::pow(2.0f, -static_cast<float>(level));
+  const float s = std::pow(2.0f, -static_cast<float>(level));
   return s;
 }
 
@@ -120,7 +120,7 @@ vil_openjpeg_pyramid_image_resource::get_copy_view(unsigned i0,
     actual_scale = 1.0f;
     return this->get_copy_view(i0, ni, j0, nj, 0);
   }
-  float f_lev = -std::log(scale) / std::log(2.0f);
+  const float f_lev = -std::log(scale) / std::log(2.0f);
   auto level = static_cast<unsigned>(f_lev);
   if (level >= this->nlevels())
     level = this->nlevels() - 1;

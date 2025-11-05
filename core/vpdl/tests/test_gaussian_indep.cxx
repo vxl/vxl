@@ -15,8 +15,8 @@ test_gaussian_indep_type(T epsilon, const std::string & type_name)
 {
   // test dimension, zero variance
   {
-    vpdl_gaussian_indep<T, 3> gauss3;
-    vpdl_gaussian_indep<T, 1> gauss1;
+    const vpdl_gaussian_indep<T, 3> gauss3;
+    const vpdl_gaussian_indep<T, 1> gauss1;
     vpdl_gaussian_indep<T> gauss_default, gauss(3), gauss_init(vnl_vector<T>(10, T(1)), vnl_vector<T>(10, T(3)));
 
     TEST(("dimension <" + type_name + "> fixed").c_str(), gauss3.dimension(), 3);
@@ -78,8 +78,8 @@ test_gaussian_indep_type(T epsilon, const std::string & type_name)
   {
     vnl_vector_fixed<T, 3> mean(T(1.0), T(2.0), T(4.0));
     vnl_vector_fixed<T, 3> var(T(2.0), T(0.5), T(1.5));
-    vpdl_gaussian_indep<T, 3> gauss3(mean, var);
-    vpdl_gaussian_indep<T, 1> gauss1(mean[0], var[0]);
+    const vpdl_gaussian_indep<T, 3> gauss3(mean, var);
+    const vpdl_gaussian_indep<T, 1> gauss1(mean[0], var[0]);
     vpdl_gaussian_indep<T> gauss(mean.as_ref(), var.as_ref());
 
     // test direct access to data member
@@ -228,7 +228,7 @@ test_gaussian_indep_type(T epsilon, const std::string & type_name)
               box_test,
               epsilon);
 
-    vpdl_distribution<T> * base = &gauss; // pointer to the base class
+    vpdl_distribution<T> * const base = &gauss; // pointer to the base class
     TEST_NEAR(("box probability (base==derived) <" + type_name + ">").c_str(),
               base->box_prob(test2.as_ref(), test1.as_ref()),
               gauss.box_prob(test2.as_ref(), test1.as_ref()),

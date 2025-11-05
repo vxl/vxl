@@ -34,7 +34,7 @@ main()
 
   // view as planes
   // this only works if the complex image has only 1 plane
-  vil_image_view<double> img_p = vil_view_as_planes(img);
+  const vil_image_view<double> img_p = vil_view_as_planes(img);
 
   // print the plane image view
   std::cout << "complex image viewed as planes\n";
@@ -42,7 +42,7 @@ main()
   std::cout << std::endl;
 
   // convert plane view back to complex view
-  vil_image_view<std::complex<double>> img_c = vil_view_as_complex(img_p);
+  const vil_image_view<std::complex<double>> img_c = vil_view_as_complex(img_p);
 
   // print the plane-complex image view
   std::cout << "plane view converted back to complex view\n";

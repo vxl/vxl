@@ -47,7 +47,7 @@ test_unistd(int argc, char * argv[])
   if (argc >= 2)
   {
     char hostname[256];
-    int retval = vpl_gethostname(hostname, 255);
+    const int retval = vpl_gethostname(hostname, 255);
     if (retval != 0)
     {
       std::cerr << "errno: " << errno
@@ -85,16 +85,16 @@ test_unistd(int argc, char * argv[])
   }
   vpl_unlink("file");
   {
-    std::ifstream f(ROOT_PATH "/vpltest/file");
+    const std::ifstream f(ROOT_PATH "/vpltest/file");
     TEST("Unlink", f.good(), false);
   }
   {
     // write data to a file
 
-    std::FILE * fp = std::fopen("file", "w");
+    std::FILE * const fp = std::fopen("file", "w");
     TEST("fopen non-NULL FILE", fp != nullptr, true);
     int data[1] = { 99 };
-    std::size_t n = std::fwrite(data, sizeof(data[0]), 1, fp);
+    const std::size_t n = std::fwrite(data, sizeof(data[0]), 1, fp);
     std::cout << "fwrite return value: " << n << std::endl;
     TEST("fwrite return value", n, 1);
     std::fclose(fp);
@@ -102,15 +102,15 @@ test_unistd(int argc, char * argv[])
   {
     // read data from file after FILE -> fd -> FILE conversion
 
-    std::FILE * fp1 = std::fopen("file", "r");
+    std::FILE * const fp1 = std::fopen("file", "r");
     TEST("fopen non-NULL FILE", fp1 != nullptr, true);
-    int fd = vpl_fileno(fp1);
+    const int fd = vpl_fileno(fp1);
     TEST("fileno positive", fd >= 0, true);
     std::cout << "file number: " << fd << std::endl;
-    std::FILE * fp2 = vpl_fdopen(fd, "r");
+    std::FILE * const fp2 = vpl_fdopen(fd, "r");
     TEST("fdopen non-NULL FILE", fp2 != nullptr, true);
     int data[1] = { 0 };
-    std::size_t n = std::fread(data, sizeof(data[0]), 1, fp2);
+    const std::size_t n = std::fread(data, sizeof(data[0]), 1, fp2);
     TEST("fread return value", n, 1);
     std::cout << "fread return value: " << n << std::endl << "data[0]: " << data[0] << std::endl;
     TEST("fileno/fdopen", data[0], 99);
@@ -123,8 +123,8 @@ test_unistd(int argc, char * argv[])
   vpl_chdir(ROOT_PATH);
   vpl_rmdir(ROOT_PATH "/vpltest");
 
-  std::string var("VPL_PUTENV_TEST");
-  std::string value("GOOD");
+  const std::string var("VPL_PUTENV_TEST");
+  const std::string value("GOOD");
 
   vpl_putenv((var + "=" + value).c_str());
   TEST("putenv", std::strcmp(std::getenv("VPL_PUTENV_TEST"), "GOOD"), 0);

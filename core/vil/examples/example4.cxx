@@ -24,8 +24,8 @@ transpose_view(const vil_image_view<vxl_byte> & v)
 int
 main()
 {
-  unsigned ni = 9;
-  unsigned nj = 8;
+  const unsigned ni = 9;
+  const unsigned nj = 8;
   vil_image_view<vxl_byte> image(ni, nj);
 
   // Slow fill
@@ -37,7 +37,7 @@ main()
   vil_print_all(std::cout, image);
 
   std::cout << "\nCreate transposed view of plane\n";
-  vil_image_view<vxl_byte> transpose = transpose_view(image);
+  const vil_image_view<vxl_byte> transpose = transpose_view(image);
   vil_print_all(std::cout, transpose);
 
   return 0;

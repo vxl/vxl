@@ -59,11 +59,11 @@ test_covar_mean(T epsilon, const std::string & type_name)
     data.push_back(vnl_vector_fixed<T, 3>(T(rnd.normal64()), T(rnd.normal64() + 3), T(rnd.normal64() + 3)));
 
   // make a gaussian for each group of data
-  vpdl_gaussian<T, 3> gauss1(fit_gaussian<T>(data.begin(), data.begin() + 10));
-  vpdl_gaussian<T, 3> gauss2(fit_gaussian<T>(data.begin() + 10, data.begin() + 25));
-  vpdl_gaussian<T, 3> gauss3(fit_gaussian<T>(data.begin() + 25, data.begin() + 35));
+  const vpdl_gaussian<T, 3> gauss1(fit_gaussian<T>(data.begin(), data.begin() + 10));
+  const vpdl_gaussian<T, 3> gauss2(fit_gaussian<T>(data.begin() + 10, data.begin() + 25));
+  const vpdl_gaussian<T, 3> gauss3(fit_gaussian<T>(data.begin() + 25, data.begin() + 35));
   // make a gaussian for all of the data together
-  vpdl_gaussian<T, 3> gaussT(fit_gaussian<T>(data.begin(), data.begin() + 35));
+  const vpdl_gaussian<T, 3> gaussT(fit_gaussian<T>(data.begin(), data.begin() + 35));
 
   vpdl_mixture<T, 3> mixture;
   mixture.insert(gauss1, T(10.0 / 35));
@@ -97,9 +97,9 @@ test_mixture_type(T epsilon, const std::string & type_name)
 
   std::cout << "=================== fixed<3> =======================" << std::endl;
   {
-    vpdl_gaussian_sphere<T, 3> gauss1(mean1, var1);
-    vpdl_gaussian_indep<T, 3> gauss2(mean2, var2);
-    vpdl_gaussian_indep<T, 3> gauss3(mean3, var3);
+    const vpdl_gaussian_sphere<T, 3> gauss1(mean1, var1);
+    const vpdl_gaussian_indep<T, 3> gauss2(mean2, var2);
+    const vpdl_gaussian_indep<T, 3> gauss3(mean3, var3);
 
     vpdl_mixture<T, 3> mixture;
     TEST(("initial num_components <" + type_name + ">").c_str(), mixture.num_components(), 0);
@@ -140,7 +140,7 @@ test_mixture_type(T epsilon, const std::string & type_name)
          mixture2.num_components() == 3 && mixture2.weight(1) == T(0.15) && gauss_indep != nullptr,
          true);
 
-    vnl_vector_fixed<T, 3> pt(T(0), T(1.5), T(1));
+    const vnl_vector_fixed<T, 3> pt(T(0), T(1.5), T(1));
     T prob = T(0.1 * gauss1.prob_density(pt) + 0.6 * gauss2.prob_density(pt) + 0.3 * gauss3.prob_density(pt));
     TEST_NEAR(("probability density <" + type_name + ">").c_str(), mixture2.prob_density(pt), prob, epsilon);
 
@@ -160,7 +160,7 @@ test_mixture_type(T epsilon, const std::string & type_name)
     prob = T(0.1 * gauss1.cumulative_prob(pt) + 0.6 * gauss2.cumulative_prob(pt) + 0.3 * gauss3.cumulative_prob(pt));
     TEST_NEAR(("cumulative probability <" + type_name + ">").c_str(), mixture2.cumulative_prob(pt), prob, epsilon);
 
-    vnl_vector_fixed<T, 3> pt2(T(10), T(5), T(8));
+    const vnl_vector_fixed<T, 3> pt2(T(10), T(5), T(8));
     prob = T(0.1 * gauss1.box_prob(pt, pt2) + 0.6 * gauss2.box_prob(pt, pt2) + 0.3 * gauss3.box_prob(pt, pt2));
     TEST_NEAR(("box probability <" + type_name + ">").c_str(), mixture2.box_prob(pt, pt2), prob, epsilon);
 
@@ -180,9 +180,9 @@ test_mixture_type(T epsilon, const std::string & type_name)
 
   std::cout << "=================== scalar =======================" << std::endl;
   {
-    vpdl_gaussian<T, 1> gauss1(mean1[0], var1);
-    vpdl_gaussian<T, 1> gauss2(mean2[0], var2[0]);
-    vpdl_gaussian<T, 1> gauss3(mean3[0], var3[0]);
+    const vpdl_gaussian<T, 1> gauss1(mean1[0], var1);
+    const vpdl_gaussian<T, 1> gauss2(mean2[0], var2[0]);
+    const vpdl_gaussian<T, 1> gauss3(mean3[0], var3[0]);
 
     vpdl_mixture<T, 1> mixture;
     TEST(("initial num_components <" + type_name + ">").c_str(), mixture.num_components(), 0);
@@ -270,9 +270,9 @@ test_mixture_type(T epsilon, const std::string & type_name)
 
   std::cout << "=================== variable =======================" << std::endl;
   {
-    vpdl_gaussian_sphere<T> gauss1(mean1.as_ref(), var1);
-    vpdl_gaussian_indep<T> gauss2(mean2.as_ref(), var2.as_ref());
-    vpdl_gaussian_indep<T> gauss3(mean3.as_ref(), var3.as_ref());
+    const vpdl_gaussian_sphere<T> gauss1(mean1.as_ref(), var1);
+    const vpdl_gaussian_indep<T> gauss2(mean2.as_ref(), var2.as_ref());
+    const vpdl_gaussian_indep<T> gauss3(mean3.as_ref(), var3.as_ref());
 
     vpdl_mixture<T> mixture;
     TEST(("initial num_components <" + type_name + ">").c_str(), mixture.num_components(), 0);

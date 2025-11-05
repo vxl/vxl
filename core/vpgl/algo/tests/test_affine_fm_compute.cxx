@@ -39,7 +39,7 @@ test_affine_fm_compute()
     }
   vpgl_affine_camera<double> cam_R(m_r), cam_L(m_l);
   // reference fundamental matrix
-  vpgl_affine_fundamental_matrix<double> F(cam_R, cam_L); // fundamental matrix xl^T F xr
+  const vpgl_affine_fundamental_matrix<double> F(cam_R, cam_L); // fundamental matrix xl^T F xr
   vnl_matrix_fixed<double, 3, 3> mf = F.get_matrix();
   // zero out upper 2x2
   mf[0][0] = 0.0;
@@ -60,18 +60,18 @@ test_affine_fm_compute()
   double z_min = 0.0, z_max = 300.0;
   for (size_t i = 0; i < 100; ++i)
   {
-    double x = rand.drand32(x_min, x_max);
-    double y = rand.drand32(y_min, y_max);
-    double z = rand.drand32(z_min, z_max);
-    vgl_point_3d<double> p3d(x, y, z);
-    vgl_point_2d<double> p2d_r = cam_R.project(p3d);
-    vgl_point_2d<double> p2d_l = cam_L.project(p3d);
+    const double x = rand.drand32(x_min, x_max);
+    const double y = rand.drand32(y_min, y_max);
+    const double z = rand.drand32(z_min, z_max);
+    const vgl_point_3d<double> p3d(x, y, z);
+    const vgl_point_2d<double> p2d_r = cam_R.project(p3d);
+    const vgl_point_2d<double> p2d_l = cam_L.project(p3d);
     r_pts.push_back(p2d_r);
     l_pts.push_back(p2d_l);
   }
   vpgl_affine_fundamental_matrix<double> fm;
   //                         normalize pts verbose
-  vpgl_affine_fm_compute_5_point fc(true, true);
+  const vpgl_affine_fm_compute_5_point fc(true, true);
   fc.compute(r_pts, l_pts, fm);
   vnl_matrix_fixed<double, 3, 3> fmm = fm.get_matrix();
   if (fmm[2][2] < 0.0)
@@ -84,7 +84,7 @@ test_affine_fm_compute()
     min_r_pts.push_back(r_pts[i]);
     min_l_pts.push_back(l_pts[i]);
   }
-  vpgl_affine_fm_compute_5_point min_fc(true, true);
+  const vpgl_affine_fm_compute_5_point min_fc(true, true);
   min_fc.compute(min_r_pts, min_l_pts, fm);
   fmm = fm.get_matrix();
   if (fmm[2][2] < 0.0)

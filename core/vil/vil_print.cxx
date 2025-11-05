@@ -241,19 +241,19 @@ template <>
 void
 vil_print_value(std::ostream & os, const vil_rgb<vxl_byte> & value, unsigned)
 {
-  int r = int(value.r);
+  const int r = int(value.r);
   if (r < 10)
     os << '0';
   if (r < 100)
     os << '0';
   os << r << '/';
-  int g = int(value.g);
+  const int g = int(value.g);
   if (g < 10)
     os << '0';
   if (g < 100)
     os << '0';
   os << g << '/';
-  int b = int(value.b);
+  const int b = int(value.b);
   if (b < 10)
     os << '0';
   if (b < 100)
@@ -396,25 +396,25 @@ template <>
 void
 vil_print_value(std::ostream & os, const vil_rgba<vxl_byte> & value, unsigned)
 {
-  int r = int(value.r);
+  const int r = int(value.r);
   if (r < 10)
     os << '0';
   if (r < 100)
     os << '0';
   os << r << '/';
-  int g = int(value.g);
+  const int g = int(value.g);
   if (g < 10)
     os << '0';
   if (g < 100)
     os << '0';
   os << g << '/';
-  int b = int(value.b);
+  const int b = int(value.b);
   if (b < 10)
     os << '0';
   if (b < 100)
     os << '0';
   os << b << '/';
-  int a = int(value.a);
+  const int a = int(value.a);
   if (a < 10)
     os << '0';
   if (a < 100)

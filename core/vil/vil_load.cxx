@@ -26,7 +26,7 @@ vil_load_image_resource_raw(vil_stream * is, bool verbose)
     std::cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
 #endif
     is->seek(0);
-    vil_image_resource_sptr im = p->make_input_image(is);
+    const vil_image_resource_sptr im = p->make_input_image(is);
     if (im)
       return im;
   }
@@ -48,7 +48,7 @@ vil_load_image_resource_raw(vil_stream * is, bool verbose)
 vil_image_resource_sptr
 vil_load_image_resource_raw(const char * filename, bool verbose)
 {
-  vil_smart_ptr<vil_stream> is = vil_open(filename, "r");
+  const vil_smart_ptr<vil_stream> is = vil_open(filename, "r");
   vil_image_resource_sptr isp = nullptr;
   if (is)
   {
@@ -85,7 +85,7 @@ vil_load_image_resource_plugin(const char * filename)
   vil_image_resource_plugin im_resource_plugin;
   if (im_resource_plugin.can_be_loaded(filename))
   {
-    vil_image_view_base * img = new vil_image_view<vxl_byte>(640, 480, 3);
+    vil_image_view_base * const img = new vil_image_view<vxl_byte>(640, 480, 3);
     vil_image_resource_sptr im;
     vil_image_view_base_sptr im_view(img);
     if (im_resource_plugin.load_the_image(im_view, filename))
@@ -110,7 +110,7 @@ vil_load_pyramid_resource(const char * directory_or_file, bool verbose)
 
     std::cerr << "make_input_pyramid_image(" << directory_or_file << ")\n";
 #endif
-    vil_pyramid_image_resource_sptr pir = p->make_input_pyramid_image(directory_or_file);
+    vil_pyramid_image_resource_sptr const pir = p->make_input_pyramid_image(directory_or_file);
     if (pir)
       return pir;
   }
@@ -131,7 +131,7 @@ vil_load_pyramid_resource(const char * directory_or_file, bool verbose)
 vil_image_view_base_sptr
 vil_load(const char * file, bool verbose)
 {
-  vil_image_resource_sptr data = vil_load_image_resource(file, verbose);
+  const vil_image_resource_sptr data = vil_load_image_resource(file, verbose);
   if (!data)
     return nullptr;
   return data->get_view();

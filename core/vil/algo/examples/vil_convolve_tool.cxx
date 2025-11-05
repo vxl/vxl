@@ -25,14 +25,14 @@ main(int argc, char ** argv)
     return 0;
   }
 
-  vil_image_view<vxl_byte> src_im = vil_load(argv[1]);
+  const vil_image_view<vxl_byte> src_im = vil_load(argv[1]);
   if (src_im.size() == 0)
   {
     std::cout << "Unable to load source image from " << argv[1] << std::endl;
     return 1;
   }
 
-  vil_image_view<vxl_byte> kernel_im_byte = vil_load(argv[2]);
+  const vil_image_view<vxl_byte> kernel_im_byte = vil_load(argv[2]);
   if (kernel_im_byte.size() == 0)
   {
     std::cout << "Unable to load kernel image from " << argv[1] << std::endl;
@@ -46,7 +46,7 @@ main(int argc, char ** argv)
   vil_convert_cast(kernel_im_byte, kernel_image);
   float mean = NAN, var = NAN;
   vil_math_mean_and_variance(mean, var, kernel_image, 0);
-  double ks = 1.0 / std::sqrt(var);
+  const double ks = 1.0 / std::sqrt(var);
   vil_math_scale_and_offset_values(kernel_image, ks, -ks * mean);
 
   vil_image_view<float> dest_image;
@@ -56,7 +56,7 @@ main(int argc, char ** argv)
   // Stretch range to [0,255]
   float min_v = NAN, max_v = NAN;
   vil_math_value_range(dest_image, min_v, max_v);
-  double s = 255 / (max_v - min_v);
+  const double s = 255 / (max_v - min_v);
   vil_math_scale_and_offset_values(dest_image, s, -s * min_v);
   std::cout << "Range of result: " << min_v << ',' << max_v << std::endl;
 

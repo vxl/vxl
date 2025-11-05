@@ -26,7 +26,7 @@ test_ios_state()
   output_guff(std::cout);
   std::cout << "MODIFIED:\n";
   {
-    vul_ios_state_saver saver(std::cout);
+    const vul_ios_state_saver saver(std::cout);
     std::cout.precision(3);
     std::cout.setf(std::ios::right | std::ios::fixed, std::ios::floatfield);
     std::cout.width(15);
@@ -38,10 +38,10 @@ test_ios_state()
 
   std::ostringstream ss;
   output_guff(ss);
-  std::string s1 = ss.str();
+  const std::string s1 = ss.str();
   std::string s2;
   {
-    vul_ios_state_saver saver(ss);
+    const vul_ios_state_saver saver(ss);
     ss.precision(3);
     ss.setf(std::ios::right | std::ios::fixed, std::ios::floatfield);
     ss.width(15);
@@ -49,7 +49,7 @@ test_ios_state()
     s2 = ss.str().substr(s1.size());
   }
   output_guff(ss);
-  std::string s3 = ss.str().substr(s1.size() + s2.size());
+  const std::string s3 = ss.str().substr(s1.size() + s2.size());
 
   TEST("Modified version is different", s1 != s2, true);
   TEST("Restored version is not different", s1 == s3, true);

@@ -29,7 +29,7 @@ newbase_impl(int k)
 {
   // This is just to prove that one can pass these things
   // around as function values
-  base_sptr q(new base_impl);
+  const base_sptr q(new base_impl);
   q->n = k;
   return q;
 }
@@ -46,7 +46,7 @@ test_base_sptr()
 
   std::cout << "operator<< gives : " << p << std::endl;
 
-  base_sptr a = new base_impl(5);
+  const base_sptr a = new base_impl(5);
   TEST("p == a", p == a, false);
   TEST("p != a", p != a, true);
   TEST("!p", !p, false);
@@ -56,7 +56,7 @@ test_base_sptr()
   base_sptr q = newbase_impl(10);
 
   // smart pointer to derived class :
-  derived_sptr qder = new derived_impl();
+  const derived_sptr qder = new derived_impl();
   q = qder.as_pointer();
 
   // These two things are effectively the same now
@@ -82,7 +82,7 @@ test_base_sptr()
     std::list<base_sptr> videos;
     for (int i = 1; i <= 10; i++)
     {
-      base_sptr newvid = new base_impl(i);
+      const base_sptr newvid = new base_impl(i);
       videos.push_back(newvid);
     }
 
@@ -98,7 +98,7 @@ test_base_sptr()
 
     for (int i = 11; i <= 15; i++)
     {
-      base_sptr newvid = new base_impl(i);
+      const base_sptr newvid = new base_impl(i);
       videos.push_back(newvid);
     }
 
@@ -113,10 +113,10 @@ static void
 test_ref_unref()
 {
   // Test protect and unref
-  int good_count = base_impl::reftotal + 2;
-  base_sptr p = new base_impl(1);
+  const int good_count = base_impl::reftotal + 2;
+  const base_sptr p = new base_impl(1);
   base_sptr q = p;
-  base_sptr r = new base_impl(1);
+  const base_sptr r = new base_impl(1);
   TEST("reference counts",
        base_impl::checkcount(good_count) && p->get_references() == 2 && r->get_references() == 1,
        true);

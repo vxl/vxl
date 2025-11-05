@@ -27,7 +27,7 @@
 
 inline void daxpy( unsigned int n, double alpha, const double * x, double * y )
 {
-  const double * xend = x+n;
+  const double * const xend = x + n;
   while ( x!=xend ) {
     *y++ += alpha * *x++;
   }
@@ -233,7 +233,7 @@ lsmrBase::D2Norm( double a, double b ) const
 void
 lsmrBase::Scale( unsigned int n, double factor, double *x ) const
 {
-  double * xend = x + n;
+  double * const xend = x + n;
   while( x != xend )
     {
       *x++ *= factor;
@@ -308,12 +308,12 @@ Solve( unsigned int m, unsigned int n, const double * b, double * x )
   this->damped = ( this->damp > zero );
 
   std::vector<double> workBuffer( m+5*n+n*localVecs );
-  double * u = &workBuffer[0];
-  double * v = u+m;
-  double * w = v+n;
-  double * h = w+n;
-  double * hbar = h+n;
-  double * localV = hbar+n;
+  double * const u = &workBuffer[0];
+  double * const v = u + m;
+  double * const w = v + n;
+  double * const h = w + n;
+  double * const hbar = h + n;
+  double * const localV = hbar + n;
 
   //-------------------------------------------------------------------
   //  Set up the first vectors u and v for the bidiagonalization.
@@ -448,7 +448,7 @@ Solve( unsigned int m, unsigned int n, const double * b, double * x )
         this->Scale( n, (- beta), v );
         this->Aprod2( m, n, v, u );    // v = A'*u
         if ( localOrtho ) {
-          unsigned int localOrthoLimit = localVQueueFull ? localVecs : localPointer+1;
+          const unsigned int localOrthoLimit = localVQueueFull ? localVecs : localPointer + 1;
 
           for( unsigned int localOrthoCount =0; localOrthoCount<localOrthoLimit;
                ++localOrthoCount) {

@@ -34,7 +34,7 @@ vil1_gen_file_format::make_input_image(vil1_stream * vs)
   }
   std::cerr << "vil1_gen_file_format: s= [" << s << "]\n";
 
-  bool ok = (s[0] == 'g' && s[1] == 'e' && s[2] == 'n' && s[3] == ':');
+  const bool ok = (s[0] == 'g' && s[1] == 'e' && s[2] == 'n' && s[3] == ':');
 
   if (!ok)
     return nullptr;
@@ -76,7 +76,7 @@ read_int(const char ** p_inout)
   const char * p = *p_inout;
   while (*p >= '0' && *p <= '9')
   {
-    int d = *p - '0';
+    const int d = *p - '0';
     val = val * 10 + d;
     ++p;
   }

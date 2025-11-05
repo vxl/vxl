@@ -16,7 +16,7 @@
 static void
 test_spherical()
 {
-  vcsl_spherical_sptr p = new vcsl_spherical;
+  const vcsl_spherical_sptr p = new vcsl_spherical;
   TEST("test_spherical_sptr", bool(p), true);
 }
 

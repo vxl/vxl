@@ -87,7 +87,7 @@ vcsl_spatial::matching_interval(double time) const
   int sup = beat_.size() - 1;
   while (sup - inf > 1)
   {
-    int mid = (inf + sup) / 2;
+    const int mid = (inf + sup) / 2;
     if (beat_[mid] > time)
       sup = mid;
     else
@@ -145,7 +145,7 @@ vcsl_spatial::recursive_path_from_local_to_cs_exists(const vcsl_spatial_sptr & o
           result = !(*child)->reached();
           if (result)
           {
-            int j = (*child)->matching_interval(time);
+            const int j = (*child)->matching_interval(time);
             result = (*child)->parent_[j].ptr() == this;
             if (result)
               result = (*child)->motion_[j]->is_invertible(time);
@@ -237,7 +237,7 @@ vcsl_spatial::recursive_path_from_local_to_cs(const vcsl_spatial_sptr & other,
           result = !(*child)->reached();
           if (result)
           {
-            int j = (*child)->matching_interval(time);
+            const int j = (*child)->matching_interval(time);
             result = (*child)->parent_[j].ptr() == this;
             if (result)
               result = (*child)->motion_[j]->is_invertible(time);
@@ -281,7 +281,7 @@ vcsl_spatial::is_absolute(double time) const
   else
   {
     // If parent at given interval is NULL, 'this' must be absolute
-    int i = matching_interval(time);
+    const int i = matching_interval(time);
     return !parent_[i];
   }
 }

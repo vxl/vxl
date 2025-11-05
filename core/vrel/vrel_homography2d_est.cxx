@@ -79,7 +79,7 @@ vrel_homography2d_est ::fit_from_minimal_set(const std::vector<int> & point_indi
 
   for (unsigned int i = 0; i < min_num_pts_; ++i)
   {
-    int loc = point_indices[i];
+    const int loc = point_indices[i];
     A(2 * i, 0) = A(2 * i + 1, 3) = from_pts_[loc][0] * to_pts_[loc][2];
     A(2 * i, 1) = A(2 * i + 1, 4) = from_pts_[loc][1] * to_pts_[loc][2];
     A(2 * i, 2) = A(2 * i + 1, 5) = from_pts_[loc][2] * to_pts_[loc][2];
@@ -91,7 +91,7 @@ vrel_homography2d_est ::fit_from_minimal_set(const std::vector<int> & point_indi
     A(2 * i + 1, 8) = -1 * from_pts_[loc][2] * to_pts_[loc][1];
   }
 
-  vnl_svd<double> svd(A, 1.0e-8);
+  const vnl_svd<double> svd(A, 1.0e-8);
 
   if (svd.rank() < homog_dof_)
   {
@@ -113,10 +113,10 @@ vrel_homography2d_est ::compute_residuals(const vnl_vector<double> & params, std
     for (c = 0; c < 3; ++c)
       H(r, c) = params[3 * r + c];
 
-  vnl_svd<double> svd_H(H);
+  const vnl_svd<double> svd_H(H);
   if (svd_H.rank() < 3)
     std::cerr << "vrel_homography2d_est :: compute_residuals  rank(H) < 3!!";
-  vnl_matrix<double> H_inv(svd_H.inverse());
+  const vnl_matrix<double> H_inv(svd_H.inverse());
 
   if (residuals.size() != from_pts_.size())
     residuals.resize(from_pts_.size());
@@ -182,7 +182,7 @@ vrel_homography2d_est ::weighted_least_squares_fit(vnl_vector<double> & params,
 
   if (result)
   {
-    vnl_svd<double> svd(A, 1.0e-8);
+    const vnl_svd<double> svd(A, 1.0e-8);
 
     if (svd.rank() < homog_dof_)
     {
@@ -190,13 +190,13 @@ vrel_homography2d_est ::weighted_least_squares_fit(vnl_vector<double> & params,
     }
     else
     {
-      vnl_vector<double> nparams = svd.nullvector();
+      const vnl_vector<double> nparams = svd.nullvector();
       vnl_matrix<double> normH(3, 3);
       params_to_homog(nparams, normH);
 
-      vnl_svd<double> svd_norm_to(norm_matrix_to);
+      const vnl_svd<double> svd_norm_to(norm_matrix_to);
       assert(svd_norm_to.rank() == 3);
-      vnl_matrix<double> H = svd_norm_to.inverse() * normH * norm_matrix_from;
+      const vnl_matrix<double> H = svd_norm_to.inverse() * normH * norm_matrix_from;
 
       params.set_size(9);
       homog_to_params(H, params);

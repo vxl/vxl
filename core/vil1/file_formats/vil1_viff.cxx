@@ -23,7 +23,7 @@ char const * vil1_viff_format_tag = "viff";
 static inline void
 swap(void * p, int length)
 {
-  char * t = (char *)p;
+  char * const t = (char *)p;
 #ifdef DEBUG
   if (length == sizeof(vxl_uint_32) && *(vxl_uint_32 *)p != 0)
   {
@@ -34,7 +34,7 @@ swap(void * p, int length)
 #endif
   for (int j = 0; 2 * j < length; ++j)
   {
-    char c = t[j];
+    const char c = t[j];
     t[j] = t[length - j - 1];
     t[length - j - 1] = c;
   }
@@ -317,18 +317,18 @@ vil1_viff_generic_image::write_header()
   }
 
   // create header
-  vil1_viff_xvimage * imagep = vil1_viff_createimage(height_,
-                                                     width_,
-                                                     type,
-                                                     1,
-                                                     planes_,
-                                                     "vil1_viff image writer output",
-                                                     0,
-                                                     0,
-                                                     VFF_MS_NONE,
-                                                     VFF_MAPTYP_NONE,
-                                                     VFF_LOC_IMPLICIT,
-                                                     0);
+  vil1_viff_xvimage * const imagep = vil1_viff_createimage(height_,
+                                                           width_,
+                                                           type,
+                                                           1,
+                                                           planes_,
+                                                           "vil1_viff image writer output",
+                                                           0,
+                                                           0,
+                                                           VFF_MS_NONE,
+                                                           VFF_MAPTYP_NONE,
+                                                           VFF_LOC_IMPLICIT,
+                                                           0);
 
   // make local copy of header
   std::memcpy(&header_, imagep, sizeof(header_));
@@ -356,8 +356,8 @@ vil1_viff_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys)
     std::cerr
       << "vil1_viff_generic_image::get_section(): Warning: x0 should be a multiple of 8 for this type of image\n";
 
-  vxl_uint_32 rowsize = (bits_per_component_ * xs + 7) / 8;
-  vxl_uint_32 tbytes = rowsize * ys * planes_;
+  const vxl_uint_32 rowsize = (bits_per_component_ * xs + 7) / 8;
+  const vxl_uint_32 tbytes = rowsize * ys * planes_;
   for (int p = 0; p < planes_; ++p)
   {
     for (int y = y0; y < y0 + ys; ++y)
@@ -392,7 +392,7 @@ vil1_viff_generic_image::put_section(const void * buf, int x0, int y0, int xs, i
     std::cerr
       << "vil1_viff_generic_image::put_section(): Warning: x0 should be a multiple of 8 for this type of image\n";
 
-  vxl_uint_32 rowsize = (bits_per_component_ * xs + 7) / 8;
+  const vxl_uint_32 rowsize = (bits_per_component_ * xs + 7) / 8;
   if (endian_consistent_)
     for (int p = 0; p < planes_; ++p)
       for (int y = y0; y < y0 + ys; ++y)
@@ -429,7 +429,7 @@ vil1_viff_generic_image::check_endian()
   // If it is between 1 and 255, the "Endian" is consistent with the system
   // if not, we swap and check again
 
-  vxl_uint_32 dst = header_.data_storage_type;
+  const vxl_uint_32 dst = header_.data_storage_type;
 
   endian_consistent_ = ((dst & 0xff) != 0);
 #ifdef DEBUG
@@ -477,7 +477,7 @@ void
 vil1_viff_generic_image::set_ispare1(vxl_uint_32 ispare1)
 {
   header_.ispare1 = ispare1;
-  int longsize = sizeof(vxl_uint_32);
+  const int longsize = sizeof(vxl_uint_32);
   auto * bytes = new unsigned char[longsize];
   std::memcpy(bytes, &ispare1, longsize);
   if (!endian_consistent_)
@@ -492,7 +492,7 @@ void
 vil1_viff_generic_image::set_ispare2(vxl_uint_32 ispare2)
 {
   header_.ispare2 = ispare2;
-  int longsize = sizeof(vxl_uint_32);
+  const int longsize = sizeof(vxl_uint_32);
   auto * bytes = new unsigned char[longsize];
   std::memcpy(bytes, &ispare2, longsize);
   if (!endian_consistent_)
@@ -507,7 +507,7 @@ void
 vil1_viff_generic_image::set_fspare1(float fspare1)
 {
   header_.fspare1 = fspare1;
-  int floatsize = sizeof(float);
+  const int floatsize = sizeof(float);
   auto * bytes = new unsigned char[floatsize];
   std::memcpy(bytes, &fspare1, floatsize);
   if (!endian_consistent_)
@@ -523,7 +523,7 @@ void
 vil1_viff_generic_image::set_fspare2(float fspare2)
 {
   header_.fspare2 = fspare2;
-  int floatsize = sizeof(float);
+  const int floatsize = sizeof(float);
   auto * bytes = new unsigned char[floatsize];
   std::memcpy(bytes, &fspare2, floatsize);
   if (!endian_consistent_)

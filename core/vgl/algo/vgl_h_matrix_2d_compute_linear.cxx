@@ -56,7 +56,7 @@ vgl_h_matrix_2d_compute_linear::solve_linear_problem(int equ_count,
 {
   // transform the point sets and fill the design matrix
   vnl_matrix<double> D(equ_count, TM_UNKNOWNS_COUNT);
-  int n = p1.size();
+  const int n = p1.size();
   int row = 0;
   for (int i = 0; i < n; i++)
   {
@@ -121,9 +121,9 @@ vgl_h_matrix_2d_compute_linear::compute_p(const std::vector<vgl_homg_point_2d<do
 {
   // number of points must be the same
   assert(points1.size() == points2.size());
-  int n = points1.size();
+  const int n = points1.size();
 
-  int equ_count = n * (allow_ideal_points_ ? 3 : 2);
+  const int equ_count = n * (allow_ideal_points_ ? 3 : 2);
   if (n * 2 < TM_UNKNOWNS_COUNT - 1)
   {
     std::cerr << "vgl_h_matrix_2d_compute_linear: Need at least 4 matches.\n";
@@ -154,7 +154,7 @@ vgl_h_matrix_2d_compute_linear::compute_p(const std::vector<vgl_homg_point_2d<do
   //  p2' = hh p1', thus
   // (tr2 p2) = hh (tr1 p1)
   //  p2 = (tr2^-1 hh tr1) p1 = H p1
-  vgl_h_matrix_2d<double> tr2_inv = tr2.get_inverse();
+  const vgl_h_matrix_2d<double> tr2_inv = tr2.get_inverse();
   H = tr2_inv * hh * tr1;
   return true;
 }
@@ -166,8 +166,8 @@ vgl_h_matrix_2d_compute_linear::compute_l(const std::vector<vgl_homg_line_2d<dou
 {
   // number of lines must be the same
   assert(lines1.size() == lines2.size());
-  int n = lines1.size();
-  int equ_count = 2 * n;
+  const int n = lines1.size();
+  const int equ_count = 2 * n;
   // compute the normalizing transforms. By convention, these are point
   // transformations.
   vgl_norm_trans_2d<double> tr1, tr2;
@@ -179,17 +179,17 @@ vgl_h_matrix_2d_compute_linear::compute_l(const std::vector<vgl_homg_line_2d<dou
   for (const auto & lit : lines1)
   {
     // transform the lines according to the normalizing transform
-    vgl_homg_line_2d<double> l = tr1(lit);
+    const vgl_homg_line_2d<double> l = tr1(lit);
     // convert the line to a point to use the same linear code
-    vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
+    const vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
     tlines1.push_back(p);
   }
   for (const auto & lit : lines2)
   {
     // transform the lines according to the normalizing transform
-    vgl_homg_line_2d<double> l = tr2(lit);
+    const vgl_homg_line_2d<double> l = tr2(lit);
     // convert the line to a point to use the same linear code
-    vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
+    const vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
     tlines2.push_back(p);
   }
 
@@ -199,7 +199,7 @@ vgl_h_matrix_2d_compute_linear::compute_l(const std::vector<vgl_homg_line_2d<dou
   // The result is a transform on lines so we need to convert it to
   // a point transform, i.e., hp = hl^-t.
   const vnl_matrix_fixed<double, 3, 3> & Ml = hl.get_matrix();
-  vnl_matrix_fixed<double, 3, 3> Mp = vnl_inverse_transpose(Ml);
+  const vnl_matrix_fixed<double, 3, 3> Mp = vnl_inverse_transpose(Ml);
   hp.set(Mp);
   //
   // Next, hp has to be transformed back to the coordinate system of
@@ -223,12 +223,12 @@ vgl_h_matrix_2d_compute_linear::compute_pl(const std::vector<vgl_homg_point_2d<d
 {
   // number of points must be the same
   assert(points1.size() == points2.size());
-  int np = points1.size();
+  const int np = points1.size();
   // number of lines must be the same
   assert(lines1.size() == lines2.size());
-  int nl = lines1.size();
+  const int nl = lines1.size();
 
-  int equ_count = np * (allow_ideal_points_ ? 3 : 2) + 2 * nl;
+  const int equ_count = np * (allow_ideal_points_ ? 3 : 2) + 2 * nl;
   if ((np + nl) * 2 + 1 < TM_UNKNOWNS_COUNT)
   {
     std::cerr << "vgl_h_matrix_2d_compute_linear: Need at least 4 matches.\n";
@@ -259,7 +259,7 @@ vgl_h_matrix_2d_compute_linear::compute_pl(const std::vector<vgl_homg_point_2d<d
   if (!solve_linear_problem(equ_count, tpoints1, tpoints2, hh))
     return false;
 
-  vgl_h_matrix_2d<double> tr2_inv = tr2.get_inverse();
+  const vgl_h_matrix_2d<double> tr2_inv = tr2.get_inverse();
   H = tr2_inv * hh * tr1;
   return true;
 }
@@ -287,7 +287,7 @@ vgl_h_matrix_2d_compute_linear::solve_weighted_least_squares(const std::vector<v
                                                              const std::vector<double> & w,
                                                              vgl_h_matrix_2d<double> & H)
 {
-  int Nc = l1.size();
+  const int Nc = l1.size();
   // Note the w has size Nc so we need to form a 2*Nc vector with
   // repeated values
   vnl_vector<double> two_w(2 * Nc);
@@ -297,7 +297,7 @@ vgl_h_matrix_2d_compute_linear::solve_weighted_least_squares(const std::vector<v
     two_w[j] = w[i];
     two_w[j + 1] = w[i];
   }
-  vnl_diag_matrix<double> W(two_w);
+  const vnl_diag_matrix<double> W(two_w);
 
   // Form the design matrix, D
   vnl_matrix<double> D(2 * Nc, TM_UNKNOWNS_COUNT);
@@ -366,13 +366,13 @@ vgl_h_matrix_2d_compute_linear::compute_l(const std::vector<vgl_homg_line_2d<dou
   for (const auto & lit : lines1)
   {
     // transform the lines according to the normalizing transform
-    vgl_homg_line_2d<double> l = tr1(lit);
+    const vgl_homg_line_2d<double> l = tr1(lit);
     tlines1.push_back(l);
   }
   for (const auto & lit : lines2)
   {
     // transform the lines according to the normalizing transform
-    vgl_homg_line_2d<double> l = tr2(lit);
+    const vgl_homg_line_2d<double> l = tr2(lit);
     tlines2.push_back(l);
   }
 
@@ -385,7 +385,7 @@ vgl_h_matrix_2d_compute_linear::compute_l(const std::vector<vgl_homg_line_2d<dou
   // make sure Ml can be inverted
   if (vnl_det(Ml) == 0.0)
     return false;
-  vnl_matrix_fixed<double, 3, 3> Mp = vnl_inverse_transpose(Ml);
+  const vnl_matrix_fixed<double, 3, 3> Mp = vnl_inverse_transpose(Ml);
   hp.set(Mp);
   //
   // Next, hp has to be transformed back to the coordinate system of

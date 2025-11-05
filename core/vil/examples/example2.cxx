@@ -18,9 +18,9 @@
 int
 main()
 {
-  unsigned ni = 8;
-  unsigned nj = 8;
-  unsigned nplanes = 2;
+  const unsigned ni = 8;
+  const unsigned nj = 8;
+  const unsigned nplanes = 2;
   vil_image_view<vxl_byte> image(ni, nj, nplanes);
 
   // Slow fill
@@ -44,19 +44,19 @@ main()
   vil_print_all(std::cout, image);
 
   std::cout << "\nView first plane of image\n";
-  vil_image_view<vxl_byte> plane = vil_plane(image, 1);
+  const vil_image_view<vxl_byte> plane = vil_plane(image, 1);
   vil_print_all(std::cout, plane);
 
   std::cout << "\nCreate transposed view of plane\n";
-  vil_image_view<vxl_byte> transpose = vil_transpose(plane);
+  const vil_image_view<vxl_byte> transpose = vil_transpose(plane);
   vil_print_all(std::cout, transpose);
 
   std::cout << "\nCreate view of plane reflected along i\n";
-  vil_image_view<vxl_byte> ref_i = vil_flip_lr(plane);
+  const vil_image_view<vxl_byte> ref_i = vil_flip_lr(plane);
   vil_print_all(std::cout, ref_i);
 
   std::cout << "\nCreate view of plane reflected along j\n";
-  vil_image_view<vxl_byte> ref_j = vil_flip_ud(plane);
+  const vil_image_view<vxl_byte> ref_j = vil_flip_ud(plane);
   vil_print_all(std::cout, ref_j);
 
   return 0;

@@ -139,9 +139,9 @@ vpgl_proj_camera_convert::convert(const vpgl_rational_camera<double> & rat_cam,
 {
   double x0 = world_center.x(), y0 = world_center.y(), z0 = world_center.z();
   // normalized world center
-  double nx0 = rat_cam.scl_off(vpgl_rational_camera<double>::X_INDX).normalize(x0);
-  double ny0 = rat_cam.scl_off(vpgl_rational_camera<double>::Y_INDX).normalize(y0);
-  double nz0 = rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX).normalize(z0);
+  const double nx0 = rat_cam.scl_off(vpgl_rational_camera<double>::X_INDX).normalize(x0);
+  const double ny0 = rat_cam.scl_off(vpgl_rational_camera<double>::Y_INDX).normalize(y0);
+  const double nz0 = rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX).normalize(z0);
 
   // get the rational coefficients
   std::vector<std::vector<double>> coeffs = rat_cam.coefficients();
@@ -180,16 +180,16 @@ vpgl_proj_camera_convert::convert(const vpgl_rational_camera<double> & rat_cam,
 
   // Convert linear approximations to each poly
   // lin_p(x, y, z)=p(0,0,0) + (dp/dx)(x-nx0) + (dp/dy)(y-ny0) + (dp/dz)(z-nz0)
-  std::vector<double> pv0 = pvector(nx0, ny0, nz0);
+  const std::vector<double> pv0 = pvector(nx0, ny0, nz0);
   double neu_u_0 = pval(pv0, neu_u), den_u_0 = pval(pv0, den_u);
   double neu_v_0 = pval(pv0, neu_v), den_v_0 = pval(pv0, den_v);
-  std::vector<double> pv_dx0 = power_vector_dx(nx0, ny0, nz0);
+  const std::vector<double> pv_dx0 = power_vector_dx(nx0, ny0, nz0);
   double neu_u_dx0 = pval(pv_dx0, neu_u), den_u_dx0 = pval(pv_dx0, den_u);
   double neu_v_dx0 = pval(pv_dx0, neu_v), den_v_dx0 = pval(pv_dx0, den_v);
-  std::vector<double> pv_dy0 = power_vector_dy(nx0, ny0, nz0);
+  const std::vector<double> pv_dy0 = power_vector_dy(nx0, ny0, nz0);
   double neu_u_dy0 = pval(pv_dy0, neu_u), den_u_dy0 = pval(pv_dy0, den_u);
   double neu_v_dy0 = pval(pv_dy0, neu_v), den_v_dy0 = pval(pv_dy0, den_v);
-  std::vector<double> pv_dz0 = power_vector_dz(nx0, ny0, nz0);
+  const std::vector<double> pv_dz0 = power_vector_dz(nx0, ny0, nz0);
   double neu_u_dz0 = pval(pv_dz0, neu_u), den_u_dz0 = pval(pv_dz0, den_u);
   double neu_v_dz0 = pval(pv_dz0, neu_v), den_v_dz0 = pval(pv_dz0, den_v);
 
@@ -212,7 +212,7 @@ vpgl_proj_camera_convert::convert(const vpgl_rational_camera<double> & rat_cam,
   C[3][2] = den_v_dz0;
   C[3][3] = den_v_0;
 
-  vnl_svd<double> svd(C);
+  const vnl_svd<double> svd(C);
   vnl_vector<double> nv = svd.nullvector();
   // assume not at infinity
   nv /= nv[3];
@@ -220,8 +220,8 @@ vpgl_proj_camera_convert::convert(const vpgl_rational_camera<double> & rat_cam,
   std::cout << "Center of projection\n" << nv << '\n' << "Residual\n" << C * nv << '\n';
 #endif
   // Normalize with respect to the principal plane normal (principal ray)
-  double ndu = std::sqrt(den_u_dx0 * den_u_dx0 + den_u_dy0 * den_u_dy0 + den_u_dz0 * den_u_dz0);
-  double ndv = std::sqrt(den_v_dx0 * den_v_dx0 + den_v_dy0 * den_v_dy0 + den_v_dz0 * den_v_dz0);
+  const double ndu = std::sqrt(den_u_dx0 * den_u_dx0 + den_u_dy0 * den_u_dy0 + den_u_dz0 * den_u_dz0);
+  const double ndv = std::sqrt(den_v_dx0 * den_v_dx0 + den_v_dy0 * den_v_dy0 + den_v_dz0 * den_v_dz0);
 
   // determine if the projection is affine
   if (ndu / std::fabs(den_u_0) < 1.0e-10 || ndv / std::fabs(den_v_0) < 1.0e-10)
@@ -244,7 +244,7 @@ vpgl_proj_camera_convert::convert(const vpgl_rational_camera<double> & rat_cam,
   for (int i = 0; i < 3; ++i)
     for (int j = 0; j < 3; ++j)
       Mf(i, j) = M(2 - j, 2 - i);
-  vnl_qr<double> QR(Mf.as_ref());
+  const vnl_qr<double> QR(Mf.as_ref());
   vnl_matrix_fixed<double, 3, 3> q, r, Qf, Rf, uq, ur;
   q = QR.Q();
   r = QR.R();
@@ -257,7 +257,7 @@ vpgl_proj_camera_convert::convert(const vpgl_rational_camera<double> & rat_cam,
     }
   }
   std::cout << "Flipped Rotation\n" << Qf << '\n' << "Flipped Upper Triangular\n" << Rf << '\n';
-  vnl_qr<double> uqr(M.as_ref());
+  const vnl_qr<double> uqr(M.as_ref());
   uq = uqr.Q();
   ur = uqr.R();
   std::cout << "UnFlipped Rotation\n"
@@ -289,10 +289,10 @@ vpgl_proj_camera_convert::convert(const vpgl_rational_camera<double> & rat_cam,
   for (unsigned r = 0; r < 3; ++r)
     pmatrix[r][3] = p3[r];
   // account for the image scale and offsets
-  double uscale = rat_cam.scale(vpgl_rational_camera<double>::U_INDX);
-  double uoff = rat_cam.offset(vpgl_rational_camera<double>::U_INDX);
-  double vscale = rat_cam.scale(vpgl_rational_camera<double>::V_INDX);
-  double voff = rat_cam.offset(vpgl_rational_camera<double>::V_INDX);
+  const double uscale = rat_cam.scale(vpgl_rational_camera<double>::U_INDX);
+  const double uoff = rat_cam.offset(vpgl_rational_camera<double>::U_INDX);
+  const double vscale = rat_cam.scale(vpgl_rational_camera<double>::V_INDX);
+  const double voff = rat_cam.offset(vpgl_rational_camera<double>::V_INDX);
   vnl_matrix_fixed<double, 3, 3> Kr;
   Kr.fill(0.0);
   Kr[0][0] = uscale;
@@ -306,7 +306,7 @@ vpgl_proj_camera_convert::convert(const vpgl_rational_camera<double> & rat_cam,
   for (int i = 0; i < 3; ++i)
     for (int j = 0; j < 3; ++j)
       KRf(i, j) = KR(2 - j, 2 - i);
-  vnl_qr<double> krQR(KRf.as_ref());
+  const vnl_qr<double> krQR(KRf.as_ref());
   vnl_matrix_fixed<double, 3, 3> krq, krr, krQf, krRf;
   krq = krQR.Q();
   krr = krQR.R();
@@ -320,10 +320,10 @@ vpgl_proj_camera_convert::convert(const vpgl_rational_camera<double> & rat_cam,
   }
   std::cout << "Flipped Rotation (KR)\n" << krQf << '\n' << "Flipped Upper Triangular (KR)\n" << krRf << '\n';
 
-  int r0pos = krRf(0, 0) > 0 ? 1 : -1;
-  int r1pos = krRf(1, 1) > 0 ? 1 : -1;
-  int r2pos = krRf(2, 2) > 0 ? 1 : -1;
-  int diag[3] = { r0pos, r1pos, r2pos };
+  const int r0pos = krRf(0, 0) > 0 ? 1 : -1;
+  const int r1pos = krRf(1, 1) > 0 ? 1 : -1;
+  const int r2pos = krRf(2, 2) > 0 ? 1 : -1;
+  const int diag[3] = { r0pos, r1pos, r2pos };
   vnl_matrix_fixed<double, 3, 3> K1, R1;
   for (int i = 0; i < 3; ++i)
   {
@@ -361,12 +361,12 @@ vpgl_proj_camera_convert::convert(const vpgl_rational_camera<double> & rat_cam,
 vgl_h_matrix_3d<double>
 vpgl_proj_camera_convert::norm_trans(const vpgl_rational_camera<double> & rat_cam)
 {
-  double xscale = rat_cam.scale(vpgl_rational_camera<double>::X_INDX);
-  double xoff = rat_cam.offset(vpgl_rational_camera<double>::X_INDX);
-  double yscale = rat_cam.scale(vpgl_rational_camera<double>::Y_INDX);
-  double yoff = rat_cam.offset(vpgl_rational_camera<double>::Y_INDX);
-  double zscale = rat_cam.scale(vpgl_rational_camera<double>::Z_INDX);
-  double zoff = rat_cam.offset(vpgl_rational_camera<double>::Z_INDX);
+  const double xscale = rat_cam.scale(vpgl_rational_camera<double>::X_INDX);
+  const double xoff = rat_cam.offset(vpgl_rational_camera<double>::X_INDX);
+  const double yscale = rat_cam.scale(vpgl_rational_camera<double>::Y_INDX);
+  const double yoff = rat_cam.offset(vpgl_rational_camera<double>::Y_INDX);
+  const double zscale = rat_cam.scale(vpgl_rational_camera<double>::Z_INDX);
+  const double zoff = rat_cam.offset(vpgl_rational_camera<double>::Z_INDX);
   vgl_h_matrix_3d<double> T;
   T.set_identity();
   T.set(0, 0, 1 / xscale);
@@ -385,11 +385,11 @@ vpgl_perspective_camera_convert::convert(const vpgl_rational_camera<double> & ra
                                          vpgl_perspective_camera<double> & camera,
                                          vgl_h_matrix_3d<double> & norm_trans)
 {
-  vpgl_scale_offset<double> sou = rat_cam.scl_off(vpgl_rational_camera<double>::U_INDX);
-  vpgl_scale_offset<double> sov = rat_cam.scl_off(vpgl_rational_camera<double>::V_INDX);
-  vpgl_scale_offset<double> sox = rat_cam.scl_off(vpgl_rational_camera<double>::X_INDX);
-  vpgl_scale_offset<double> soy = rat_cam.scl_off(vpgl_rational_camera<double>::Y_INDX);
-  vpgl_scale_offset<double> soz = rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX);
+  const vpgl_scale_offset<double> sou = rat_cam.scl_off(vpgl_rational_camera<double>::U_INDX);
+  const vpgl_scale_offset<double> sov = rat_cam.scl_off(vpgl_rational_camera<double>::V_INDX);
+  const vpgl_scale_offset<double> sox = rat_cam.scl_off(vpgl_rational_camera<double>::X_INDX);
+  const vpgl_scale_offset<double> soy = rat_cam.scl_off(vpgl_rational_camera<double>::Y_INDX);
+  const vpgl_scale_offset<double> soz = rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX);
   auto ni = static_cast<unsigned>(2 * sou.scale()); // # image columns
   auto nj = static_cast<unsigned>(2 * sov.scale()); // # image rows
   norm_trans.set_identity();
@@ -407,16 +407,16 @@ vpgl_perspective_camera_convert::convert(const vpgl_rational_camera<double> & ra
   if (xrange < 0 || yrange < 0 || zrange < 0)
     return false;
   // Randomly generate points
-  unsigned n = 100;
+  const unsigned n = 100;
   std::vector<vgl_point_3d<double>> world_pts;
   unsigned count = 0, ntrials = 0;
   while (count < n)
   {
     ntrials++;
-    double rx = xrange * (std::rand() / (RAND_MAX + 1.0));
-    double ry = yrange * (std::rand() / (RAND_MAX + 1.0));
-    double rz = zrange * (std::rand() / (RAND_MAX + 1.0));
-    vgl_point_3d<double> wp(xmin + rx, ymin + ry, zmin + rz);
+    const double rx = xrange * (std::rand() / (RAND_MAX + 1.0));
+    const double ry = yrange * (std::rand() / (RAND_MAX + 1.0));
+    const double rz = zrange * (std::rand() / (RAND_MAX + 1.0));
+    const vgl_point_3d<double> wp(xmin + rx, ymin + ry, zmin + rz);
     vgl_point_2d<double> ip = rat_cam.project(wp);
     if (ip.x() < 0 || ip.x() > ni || ip.y() < 0 || ip.y() > nj)
       continue;
@@ -434,9 +434,9 @@ vpgl_perspective_camera_convert::convert(const vpgl_rational_camera<double> & ra
     vgl_point_3d<double> wp = world_pts[i];
     vgl_point_2d<double> ip = rat_cam.project(wp);
     image_pts.push_back(ip);
-    vgl_point_2d<double> nip(sou.normalize(ip.x()), sov.normalize(ip.y()));
+    const vgl_point_2d<double> nip(sou.normalize(ip.x()), sov.normalize(ip.y()));
     norm_image_pts.push_back(nip);
-    vgl_point_3d<double> nwp(sox.normalize(wp.x()), soy.normalize(wp.y()), soz.normalize(wp.z()));
+    const vgl_point_3d<double> nwp(sox.normalize(wp.x()), soy.normalize(wp.y()), soz.normalize(wp.z()));
     norm_world_pts.push_back(nwp);
   }
   // Assume identity calibration matrix initially, since image point
@@ -448,12 +448,12 @@ vpgl_perspective_camera_convert::convert(const vpgl_rational_camera<double> & ra
   kk[2][2] = 1.0;
   // Convert solution for rotation and translation and calibration matrix of
   // the perspective camera
-  vpgl_calibration_matrix<double> K(kk);
+  const vpgl_calibration_matrix<double> K(kk);
   if (!vpgl_perspective_camera_compute::compute(norm_image_pts, norm_world_pts, K, camera))
     return false;
   std::cout << camera << '\n';
   // form the full camera by premultiplying by the image normalization
-  vpgl_calibration_matrix<double> Kmin = camera.get_calibration();
+  const vpgl_calibration_matrix<double> Kmin = camera.get_calibration();
   vnl_matrix_fixed<double, 3, 3> kk_min;
   kk_min = Kmin.get_matrix();
   kk[0][0] = sou.scale();
@@ -472,7 +472,7 @@ vpgl_perspective_camera_convert::convert(const vpgl_rational_camera<double> & ra
     double U = NAN, V = NAN;
     camera.project(nwp.x(), nwp.y(), nwp.z(), U, V);
     vgl_point_2d<double> ip = image_pts[i];
-    double error = std::sqrt((ip.x() - U) * (ip.x() - U) + (ip.y() - V) * (ip.y() - V));
+    const double error = std::sqrt((ip.x() - U) * (ip.x() - U) + (ip.y() - V) * (ip.y() - V));
     if (error > err_max)
     {
       err_max = error;
@@ -499,18 +499,18 @@ vpgl_perspective_camera_convert::convert_local(const vpgl_rational_camera<double
                                                vgl_h_matrix_3d<double> & norm_trans)
 {
   // Set up the geo converter.
-  double lon_low = approximation_volume.min_x();
-  double lat_low = approximation_volume.min_y();
+  const double lon_low = approximation_volume.min_x();
+  const double lat_low = approximation_volume.min_y();
 #ifdef DEBUG
   double lon_high = approximation_volume.max_x();
   double lat_high = approximation_volume.max_y();
   assert(lat_low < lat_high && lon_low < lon_high);
 #endif
-  vpgl_lvcs lvcs_converter(lat_low,
-                           lon_low,
-                           .5 * (approximation_volume.min_z() + approximation_volume.max_z()),
-                           vpgl_lvcs::wgs84,
-                           vpgl_lvcs::DEG);
+  vpgl_lvcs const lvcs_converter(lat_low,
+                                 lon_low,
+                                 .5 * (approximation_volume.min_z() + approximation_volume.max_z()),
+                                 vpgl_lvcs::wgs84,
+                                 vpgl_lvcs::DEG);
 
   // Get a new local bounding box.
   double min_lx = 1e99, min_ly = 1e99, min_lz = 1e99, max_lx = 0, max_ly = 0, max_lz = 0;
@@ -561,8 +561,8 @@ vpgl_perspective_camera_convert::convert_local(const vpgl_rational_camera<double
   norm_trans.set(1, 3, -1 - 2 * min_ly / dly);
   norm_trans.set(2, 3, -1 - 2 * min_lz / dlz);
 
-  vpgl_scale_offset<double> sou = rat_cam.scl_off(vpgl_rational_camera<double>::U_INDX);
-  vpgl_scale_offset<double> sov = rat_cam.scl_off(vpgl_rational_camera<double>::V_INDX);
+  const vpgl_scale_offset<double> sou = rat_cam.scl_off(vpgl_rational_camera<double>::U_INDX);
+  const vpgl_scale_offset<double> sov = rat_cam.scl_off(vpgl_rational_camera<double>::V_INDX);
 #if 0 // unused
   vpgl_scale_offset<double> sox =
     rat_cam.scl_off(vpgl_rational_camera<double>::X_INDX);
@@ -581,16 +581,16 @@ vpgl_perspective_camera_convert::convert_local(const vpgl_rational_camera<double
   if (xrange < 0 || yrange < 0 || zrange < 0)
     return false;
   // Randomly generate points
-  unsigned n = 100;
+  const unsigned n = 100;
   std::vector<vgl_point_3d<double>> world_pts;
   unsigned count = 0, ntrials = 0;
   while (count < n)
   {
     ++ntrials;
-    double rx = xrange * (std::rand() / (RAND_MAX + 1.0));
-    double ry = yrange * (std::rand() / (RAND_MAX + 1.0));
-    double rz = zrange * (std::rand() / (RAND_MAX + 1.0));
-    vgl_point_3d<double> wp(xmin + rx, ymin + ry, zmin + rz);
+    const double rx = xrange * (std::rand() / (RAND_MAX + 1.0));
+    const double ry = yrange * (std::rand() / (RAND_MAX + 1.0));
+    const double rz = zrange * (std::rand() / (RAND_MAX + 1.0));
+    const vgl_point_3d<double> wp(xmin + rx, ymin + ry, zmin + rz);
     vgl_point_2d<double> ip = rat_cam.project(wp);
     if (ip.x() < 0 || ip.x() > ni || ip.y() < 0 || ip.y() > nj)
       continue;
@@ -608,15 +608,15 @@ vpgl_perspective_camera_convert::convert_local(const vpgl_rational_camera<double
     vgl_point_3d<double> wp = world_pts[i];
     vgl_point_2d<double> ip = rat_cam.project(wp);
     image_pts.push_back(ip);
-    vgl_point_2d<double> nip(sou.normalize(ip.x()), sov.normalize(ip.y()));
+    const vgl_point_2d<double> nip(sou.normalize(ip.x()), sov.normalize(ip.y()));
     norm_image_pts.push_back(nip);
 
     // Convert to local coords.
     double lcx = NAN, lcy = NAN, lcz = NAN;
     lvcs_converter.global_to_local(wp.x(), wp.y(), wp.z(), vpgl_lvcs::wgs84, lcx, lcy, lcz);
-    vgl_homg_point_3d<double> wp_loc(lcx, lcy, lcz);
+    const vgl_homg_point_3d<double> wp_loc(lcx, lcy, lcz);
 
-    vgl_homg_point_3d<double> nwp = norm_trans * wp_loc;
+    const vgl_homg_point_3d<double> nwp = norm_trans * wp_loc;
     assert(std::fabs(nwp.x()) <= 1 && std::fabs(nwp.y()) <= 1 && std::fabs(nwp.z()) <= 1);
     norm_world_pts.emplace_back(nwp);
   }
@@ -629,12 +629,12 @@ vpgl_perspective_camera_convert::convert_local(const vpgl_rational_camera<double
   kk[2][2] = 1.0;
   // Convert solution for rotation and translation and calibration matrix of
   // the perspective camera
-  vpgl_calibration_matrix<double> K(kk);
+  const vpgl_calibration_matrix<double> K(kk);
   if (!vpgl_perspective_camera_compute::compute(norm_image_pts, norm_world_pts, K, camera))
     return false;
   std::cout << camera << '\n';
   // form the full camera by premultiplying by the image normalization
-  vpgl_calibration_matrix<double> Kmin = camera.get_calibration();
+  const vpgl_calibration_matrix<double> Kmin = camera.get_calibration();
   vnl_matrix_fixed<double, 3, 3> kk_min;
   kk_min = Kmin.get_matrix();
   kk[0][0] = sou.scale();
@@ -653,7 +653,7 @@ vpgl_perspective_camera_convert::convert_local(const vpgl_rational_camera<double
     double U = NAN, V = NAN;
     camera.project(nwp.x(), nwp.y(), nwp.z(), U, V);
     vgl_point_2d<double> ip = image_pts[i];
-    double error = std::sqrt((ip.x() - U) * (ip.x() - U) + (ip.y() - V) * (ip.y() - V));
+    const double error = std::sqrt((ip.x() - U) * (ip.x() - U) + (ip.y() - V) * (ip.y() - V));
     if (error > err_max)
     {
       err_max = error;
@@ -694,16 +694,16 @@ interp_ray(const std::vector<vgl_ray_3d<double>> & ray_nbrs, vgl_ray_3d<double> 
   vgl_vector_3d<double> dir0 = r0.direction(), dir1 = r1.direction();
   vgl_vector_3d<double> dir2 = r2.direction(), dir3 = r3.direction();
   // first order partial derivatives
-  vgl_vector_3d<double> dodu = 0.5 * (org2 - org1);
-  vgl_vector_3d<double> dodv = 0.5 * (org3 - org0);
-  vgl_vector_3d<double> dddu = 0.5 * (dir2 - dir1);
-  vgl_vector_3d<double> dddv = 0.5 * (dir3 - dir0);
+  const vgl_vector_3d<double> dodu = 0.5 * (org2 - org1);
+  const vgl_vector_3d<double> dodv = 0.5 * (org3 - org0);
+  const vgl_vector_3d<double> dddu = 0.5 * (dir2 - dir1);
+  const vgl_vector_3d<double> dddv = 0.5 * (dir3 - dir0);
   vgl_point_3d<double> temp = org1 + dodu + dodv;
-  double ox = 0.5 * (org0.x() + temp.x());
-  double oy = 0.5 * (org0.y() + temp.y());
-  double oz = 0.5 * (org0.z() + temp.z());
-  vgl_point_3d<double> iorg(ox, oy, oz);
-  vgl_vector_3d<double> idir = 0.5 * (dir1 + dddu + dir0 + dddv);
+  const double ox = 0.5 * (org0.x() + temp.x());
+  const double oy = 0.5 * (org0.y() + temp.y());
+  const double oz = 0.5 * (org0.z() + temp.z());
+  const vgl_point_3d<double> iorg(ox, oy, oz);
+  const vgl_vector_3d<double> idir = 0.5 * (dir1 + dddu + dir0 + dddv);
   intrp_ray.set(iorg, idir);
   return true;
 }
@@ -731,13 +731,13 @@ ray_tol(const vpgl_local_rational_camera<double> & rat_cam,
   if (!vpgl_backproject::bproj_plane(rat_cam, ip, low, low_pt, low_pt_pix))
     return false;
   // Ground Sampling Distance
-  double gsd = (low_pt - low_pt_pix).length();
+  const double gsd = (low_pt - low_pt_pix).length();
   // tolerance
-  double tfact = 0.001;
+  const double tfact = 0.001;
   org_tol = tfact * gsd;
-  vgl_vector_3d<double> dir0 = low_pt - high_pt;
-  vgl_vector_3d<double> dir1 = low_pt_pix - high_pt;
-  double ang = angle(dir0, dir1);
+  const vgl_vector_3d<double> dir0 = low_pt - high_pt;
+  const vgl_vector_3d<double> dir1 = low_pt_pix - high_pt;
+  const double ang = angle(dir0, dir1);
   dir_tol = tfact * ang;
   return true;
 }
@@ -797,10 +797,10 @@ vpgl_generic_camera_convert::upsample_rays(const std::vector<vgl_ray_3d<double>>
 vgl_ray_3d<double>
 vpgl_generic_camera_convert::interp_pair(const vgl_ray_3d<double> & r0, const vgl_ray_3d<double> & r1, double n_grid)
 {
-  vgl_vector_3d<double> v01 = r1.origin() - r0.origin();
-  vgl_point_3d<double> intp_org = r1.origin() + n_grid * v01;
-  vgl_vector_3d<double> d01 = r1.direction() - r0.direction();
-  vgl_vector_3d<double> intp_dir = r1.direction() + n_grid * d01;
+  const vgl_vector_3d<double> v01 = r1.origin() - r0.origin();
+  const vgl_point_3d<double> intp_org = r1.origin() + n_grid * v01;
+  const vgl_vector_3d<double> d01 = r1.direction() - r0.direction();
+  const vgl_vector_3d<double> intp_dir = r1.direction() + n_grid * d01;
   return vgl_ray_3d<double>(intp_org, intp_dir);
 }
 
@@ -822,17 +822,17 @@ vpgl_generic_camera_convert::convert(const vpgl_local_rational_camera<double> & 
                                      unsigned level)
 {
   // get z bounds
-  double zoff = rat_cam.offset(vpgl_rational_camera<double>::Z_INDX);
-  double zscl = rat_cam.scale(vpgl_rational_camera<double>::Z_INDX);
+  const double zoff = rat_cam.offset(vpgl_rational_camera<double>::Z_INDX);
+  const double zscl = rat_cam.scale(vpgl_rational_camera<double>::Z_INDX);
   // construct high and low planes
   // NOTE: z_scale seems to usually be much larger than actual dimensions of scene, which
   //       sometimes causes trouble for vpgl_backproj_plane, which causes the conversion to fail.
   //       Using half scale value for now, but maybe we should consider taking "top" and "bottom"
   //       z values as user-specified inputs.  -dec 15 Nov 2011
-  double el_low = zoff - zscl / 2;
-  double el_high = zoff + zscl / 2;
-  double lon = rat_cam.offset(vpgl_rational_camera<double>::X_INDX);
-  double lat = rat_cam.offset(vpgl_rational_camera<double>::Y_INDX);
+  const double el_low = zoff - zscl / 2;
+  const double el_high = zoff + zscl / 2;
+  const double lon = rat_cam.offset(vpgl_rational_camera<double>::X_INDX);
+  const double lat = rat_cam.offset(vpgl_rational_camera<double>::Y_INDX);
   double x = NAN, y = NAN, z_low = NAN, z_high = NAN;
   // convert high and low elevations to local z values
   rat_cam.lvcs().global_to_local(lon, lat, el_low, vpgl_lvcs::wgs84, x, y, z_low, vpgl_lvcs::DEG);
@@ -1029,8 +1029,8 @@ vpgl_generic_camera_convert::pyramid_est(vpgl_local_rational_camera<double> cons
                                          std::vector<vbl_array_2d<vgl_ray_3d<double>>> & ray_pyr)
 
 {
-  vgl_plane_3d<double> high(0.0, 0.0, 1.0, -local_z_max);
-  vgl_plane_3d<double> low(0.0, 0.0, 1.0, -local_z_min);
+  const vgl_plane_3d<double> high(0.0, 0.0, 1.0, -local_z_max);
+  const vgl_plane_3d<double> low(0.0, 0.0, 1.0, -local_z_min);
 
   // initial guess for backprojection to planes
   vgl_point_3d<double> org(0.0, 0.0, local_z_max), endpt(0.0, 0.0, local_z_min);
@@ -1049,29 +1049,29 @@ vpgl_generic_camera_convert::pyramid_est(vpgl_local_rational_camera<double> cons
     // set rays at current pyramid level
     for (int j = 0; j < nr[lev]; ++j)
     {
-      int sj = offsetj + static_cast<int>(scl[lev] * j);
+      const int sj = offsetj + static_cast<int>(scl[lev] * j);
       // sj = (j == 0)? sj : sj -1;
       // if (sj>=gnj)
       //    sj =gnj;
       for (int i = 0; i < nc[lev]; ++i)
       {
-        int si = offseti + static_cast<int>(scl[lev] * i);
+        const int si = offseti + static_cast<int>(scl[lev] * i);
         // si = (i == 0)? si : si -1;
         // if (si>=gni)
         //    si = gni;
-        vgl_point_2d<double> ip(si, sj);
+        const vgl_point_2d<double> ip(si, sj);
         vgl_point_3d<double> prev_org(0.0, 0.0, local_z_max);
         vgl_point_3d<double> prev_endpt(0.0, 0.0, local_z_min);
         // initialize guess with
         if (lev < n_levels - 1)
         {
-          double rel_scale = scl[lev] / scl[lev + 1];
-          int i_above = static_cast<int>(rel_scale * i);
-          int j_above = static_cast<int>(rel_scale * j);
+          const double rel_scale = scl[lev] / scl[lev + 1];
+          const int i_above = static_cast<int>(rel_scale * i);
+          const int j_above = static_cast<int>(rel_scale * j);
           prev_org = ray_pyr[lev + 1][j_above][i_above].origin();
-          vgl_vector_3d<double> prev_dir = ray_pyr[lev + 1][j_above][i_above].direction();
+          const vgl_vector_3d<double> prev_dir = ray_pyr[lev + 1][j_above][i_above].direction();
           // find endpoint
-          double ray_len = (local_z_min - prev_org.z()) / prev_dir.z();
+          const double ray_len = (local_z_min - prev_org.z()) / prev_dir.z();
           prev_endpt = prev_org + (prev_dir * ray_len);
         }
         constexpr double error_tol = 0.5; // allow projection error of 0.25 pixel
@@ -1079,7 +1079,7 @@ vpgl_generic_camera_convert::pyramid_est(vpgl_local_rational_camera<double> cons
           return false;
         if (!vpgl_backproject::bproj_plane(rat_cam, ip, low, prev_endpt, endpt, error_tol))
           return false;
-        vgl_vector_3d<double> dir = endpt - org;
+        const vgl_vector_3d<double> dir = endpt - org;
         ray_pyr[lev][j][i].set(org, dir);
       }
     }
@@ -1095,7 +1095,7 @@ vpgl_generic_camera_convert::pyramid_est(vpgl_local_rational_camera<double> cons
     {
       for (int i = 1; (i < nc[lev] - 1) && !need_interp; ++i)
       {
-        vgl_ray_3d<double> ray = ray_pyr[lev][j][i];
+        const vgl_ray_3d<double> ray = ray_pyr[lev][j][i];
         //
         // collect 4-neighbors of ray
         //
@@ -1111,8 +1111,8 @@ vpgl_generic_camera_convert::pyramid_est(vpgl_local_rational_camera<double> cons
         vgl_ray_3d<double> intp_ray;
         if (!interp_ray(ray_nbrs, intp_ray))
           return false;
-        double dorg = (ray.origin() - intp_ray.origin()).length();
-        double dang = angle(ray.direction(), intp_ray.direction());
+        const double dorg = (ray.origin() - intp_ray.origin()).length();
+        const double dang = angle(ray.direction(), intp_ray.direction());
         if (dorg > max_org_err)
           max_org_err = dorg;
         if (dang > max_ang_err)
@@ -1129,8 +1129,8 @@ vpgl_generic_camera_convert::pyramid_est(vpgl_local_rational_camera<double> cons
   // fill in values at lower levels
   for (++lev; lev > 0; --lev)
   {
-    unsigned int ncr = nc[lev];
-    unsigned int nrb = nr[lev];
+    const unsigned int ncr = nc[lev];
+    const unsigned int nrb = nr[lev];
     vbl_array_2d<vgl_ray_3d<double>> & clev = ray_pyr[lev];
     vbl_array_2d<vgl_ray_3d<double>> & nlev = ray_pyr[lev - 1];
     std::vector<vgl_ray_3d<double>> ray_nbrs(4);
@@ -1177,15 +1177,15 @@ vpgl_generic_camera_convert::convert(const vpgl_local_rational_camera<double> & 
                                      double local_z_max,
                                      unsigned level)
 {
-  vgl_plane_3d<double> high(0.0, 0.0, 1.0, -local_z_max);
-  vgl_plane_3d<double> low(0.0, 0.0, 1.0, -local_z_min);
+  const vgl_plane_3d<double> high(0.0, 0.0, 1.0, -local_z_max);
+  const vgl_plane_3d<double> low(0.0, 0.0, 1.0, -local_z_min);
 
   // initial guess for backprojection to planes
   vgl_point_3d<double> org(0.0, 0.0, local_z_max), endpt(0.0, 0.0, local_z_min);
   // initialize the ray pyramid
   // convert the required number of levels
 
-  unsigned int mindim = gni < gnj ? gni : gnj;
+  const unsigned int mindim = gni < gnj ? gni : gnj;
   unsigned int factor = 256;
   unsigned int n_levels = 6;
 
@@ -1196,8 +1196,8 @@ vpgl_generic_camera_convert::convert(const vpgl_local_rational_camera<double> & 
 
     std::cout << "." << std::endl;
   }
-  unsigned int numi = gni / factor;
-  unsigned int numj = gnj / factor;
+  const unsigned int numi = gni / factor;
+  const unsigned int numj = gnj / factor;
 
   // construct pyramid of ray indices
   // the row and column dimensions at each level
@@ -1219,13 +1219,13 @@ vpgl_generic_camera_convert::convert(const vpgl_local_rational_camera<double> & 
   }
   for (unsigned int bigi = 0; bigi <= numi; bigi++)
   {
-    unsigned int ni = factor;
+    const unsigned int ni = factor;
     unsigned int offseti = bigi * factor;
     if (bigi == numi)
       offseti = gni - factor;
     for (unsigned int bigj = 0; bigj <= numj; bigj++)
     {
-      unsigned int nj = factor;
+      const unsigned int nj = factor;
       unsigned int offsetj = bigj * factor;
       if (bigj == numj)
         offsetj = gnj - factor;
@@ -1263,8 +1263,8 @@ vpgl_generic_camera_convert::convert_bruteforce(vpgl_local_rational_camera<doubl
                                                 double local_z_max,
                                                 unsigned /*level*/)
 {
-  vgl_plane_3d<double> high(0.0, 0.0, 1.0, -local_z_max);
-  vgl_plane_3d<double> low(0.0, 0.0, 1.0, -local_z_min);
+  const vgl_plane_3d<double> high(0.0, 0.0, 1.0, -local_z_max);
+  const vgl_plane_3d<double> low(0.0, 0.0, 1.0, -local_z_min);
 
   // initial guess for backprojection to planes
   vgl_point_3d<double> org(0.0, 0.0, local_z_max), endpt(0.0, 0.0, local_z_min);
@@ -1275,13 +1275,13 @@ vpgl_generic_camera_convert::convert_bruteforce(vpgl_local_rational_camera<doubl
   {
     for (unsigned j = 0; j < static_cast<unsigned>(gnj); j++)
     {
-      vgl_point_2d<double> ip(i, j);
+      const vgl_point_2d<double> ip(i, j);
       constexpr double error_tol = 0.5; // allow projection error of 0.25 pixel
       if (!vpgl_backproject::bproj_plane(rat_cam, ip, high, org, org, error_tol))
         return false;
       if (!vpgl_backproject::bproj_plane(rat_cam, ip, low, endpt, endpt, error_tol))
         return false;
-      vgl_vector_3d<double> dir = endpt - org;
+      const vgl_vector_3d<double> dir = endpt - org;
       finalrays[j][i].set(org, dir);
     }
   }
@@ -1300,7 +1300,7 @@ vpgl_generic_camera_convert::convert(vpgl_proj_camera<double> const & prj_cam,
   vbl_array_2d<vgl_ray_3d<double>> rays(nj, ni);
   vgl_ray_3d<double> ray;
   vgl_homg_point_2d<double> ipt;
-  double scale = (level < 32) ? double(1L << level) : std::pow(2.0, static_cast<double>(level));
+  const double scale = (level < 32) ? double(1L << level) : std::pow(2.0, static_cast<double>(level));
   for (int j = 0; j < nj; ++j)
     for (int i = 0; i < ni; ++i)
     {
@@ -1322,7 +1322,7 @@ vpgl_generic_camera_convert::convert(const vpgl_perspective_camera<double> & per
   vbl_array_2d<vgl_ray_3d<double>> rays(nj, ni);
   vgl_ray_3d<double> ray;
   vgl_homg_point_2d<double> ipt;
-  double scale = (level < 32) ? double(1L << level) : std::pow(2.0, static_cast<double>(level));
+  const double scale = (level < 32) ? double(1L << level) : std::pow(2.0, static_cast<double>(level));
   for (int j = 0; j < nj; ++j)
     for (int i = 0; i < ni; ++i)
     {
@@ -1345,7 +1345,7 @@ vpgl_generic_camera_convert::convert_with_margin(const vpgl_perspective_camera<d
   vbl_array_2d<vgl_ray_3d<double>> rays(nj + 2 * margin, ni + 2 * margin);
   vgl_ray_3d<double> ray;
   vgl_homg_point_2d<double> ipt;
-  double scale = (level < 32) ? double(1L << level) : std::pow(2.0, static_cast<double>(level));
+  const double scale = (level < 32) ? double(1L << level) : std::pow(2.0, static_cast<double>(level));
   for (int j = -margin; j < nj + margin; ++j)
     for (int i = -margin; i < ni + margin; ++i)
     {
@@ -1369,18 +1369,18 @@ vpgl_generic_camera_convert::convert(const vpgl_affine_camera<double> & aff_cam,
                                      vpgl_generic_camera<double> & gen_cam,
                                      unsigned level)
 {
-  double scale = (level < 32) ? double(1L << level) : std::pow(2.0, static_cast<double>(level));
+  const double scale = (level < 32) ? double(1L << level) : std::pow(2.0, static_cast<double>(level));
   // The ray direction is the camera center (which is at inifnity)
-  vgl_homg_point_3d<double> cent = aff_cam.camera_center();
-  vgl_vector_3d<double> dir(cent.x(), cent.y(), cent.z());
+  const vgl_homg_point_3d<double> cent = aff_cam.camera_center();
+  const vgl_vector_3d<double> dir(cent.x(), cent.y(), cent.z());
 
   // get the principal plane, on which all ray origins will lie
-  vgl_homg_plane_3d<double> plane = aff_cam.principal_plane();
+  const vgl_homg_plane_3d<double> plane = aff_cam.principal_plane();
 
   // compute the transformation from image coordinates to X,Y,Z on the principal plane
   vnl_matrix_fixed<double, 3, 4> P = aff_cam.get_matrix();
-  double u0 = P(0, 3);
-  double v0 = P(1, 3);
+  const double u0 = P(0, 3);
+  const double v0 = P(1, 3);
 
   vnl_matrix_fixed<double, 3, 3> A;
   for (unsigned j = 0; j < 3; ++j)
@@ -1393,7 +1393,7 @@ vpgl_generic_camera_convert::convert(const vpgl_affine_camera<double> & aff_cam,
   A(2, 2) = plane.c();
 
   // invA maps (u-u0, v-v0, -d) to X,Y,Z on the principal plane
-  vnl_matrix_fixed<double, 3, 3> invA{ vnl_svd<double>(A.as_ref()).inverse() };
+  const vnl_matrix_fixed<double, 3, 3> invA{ vnl_svd<double>(A.as_ref()).inverse() };
 
   // construct the array of camera rays
   vgl_point_3d<double> org;
@@ -1403,7 +1403,7 @@ vpgl_generic_camera_convert::convert(const vpgl_affine_camera<double> & aff_cam,
   {
     for (int i = 0; i < ni; ++i)
     {
-      vnl_vector_fixed<double, 3> ipt(i * scale - u0, j * scale - v0, -plane.d());
+      const vnl_vector_fixed<double, 3> ipt(i * scale - u0, j * scale - v0, -plane.d());
       vnl_vector_fixed<double, 3> org_vnl = invA * ipt;
       // convert from vnl_vector to vgl_vector
       org.set(org_vnl[0], org_vnl[1], org_vnl[2]);
@@ -1452,10 +1452,10 @@ vpgl_generic_camera_convert::convert(vpgl_geo_camera & geocam,
                                      vpgl_generic_camera<double> & gen_cam,
                                      unsigned level)
 {
-  double scale = (level < 32) ? double(1L << level) : std::pow(2.0, static_cast<double>(level));
+  const double scale = (level < 32) ? double(1L << level) : std::pow(2.0, static_cast<double>(level));
 
   //: all rays have the same direction
-  vgl_vector_3d<double> dir(0.0, 0.0, -1.0);
+  const vgl_vector_3d<double> dir(0.0, 0.0, -1.0);
 
   vbl_array_2d<vgl_ray_3d<double>> rays(nj, ni);
   vgl_point_3d<double> org;
@@ -1484,7 +1484,7 @@ vpgl_generic_camera_convert::convert(vpgl_geo_camera & geocam,
                                      vpgl_generic_camera<double> & gen_cam,
                                      unsigned level)
 {
-  double scale = (level < 32) ? double(1L << level) : std::pow(2.0, static_cast<double>(level));
+  const double scale = (level < 32) ? double(1L << level) : std::pow(2.0, static_cast<double>(level));
 
   vbl_array_2d<vgl_ray_3d<double>> rays(nj, ni);
   vgl_point_3d<double> org;
@@ -1508,20 +1508,20 @@ vpgl_affine_camera_convert::convert(const vpgl_local_rational_camera<double> & c
                                     unsigned int num_points)
 {
   vnl_random rng;
-  double min_x = region_of_interest.min_x();
-  double min_y = region_of_interest.min_y();
-  double min_z = region_of_interest.min_z();
-  double max_x = region_of_interest.max_x();
-  double max_y = region_of_interest.max_y();
-  double max_z = region_of_interest.max_z();
+  const double min_x = region_of_interest.min_x();
+  const double min_y = region_of_interest.min_y();
+  const double min_z = region_of_interest.min_z();
+  const double max_x = region_of_interest.max_x();
+  const double max_y = region_of_interest.max_y();
+  const double max_z = region_of_interest.max_z();
 
   std::vector<vgl_point_2d<double>> image_pts;
   std::vector<vgl_point_3d<double>> world_pts;
   for (unsigned i = 0; i < num_points; ++i)
   {
-    double x = rng.drand64(min_x, max_x); // sample in local coords
-    double y = rng.drand64(min_y, max_y);
-    double z = rng.drand64(min_z, max_z);
+    const double x = rng.drand64(min_x, max_x); // sample in local coords
+    const double y = rng.drand64(min_y, max_y);
+    const double z = rng.drand64(min_z, max_z);
     world_pts.emplace_back(x, y, z);
     double u = NAN, v = NAN;
     camera_in.project(x, y, z, u, v); // local rational camera has an lvcs, so it handles, local coord to global to
@@ -1529,7 +1529,7 @@ vpgl_affine_camera_convert::convert(const vpgl_local_rational_camera<double> & c
     image_pts.emplace_back(u, v);
   }
 
-  bool success = vpgl_affine_camera_compute::compute(image_pts, world_pts, camera_out);
+  const bool success = vpgl_affine_camera_compute::compute(image_pts, world_pts, camera_out);
   // it is assumed that the camera is above the region of interest
   camera_out.set_viewing_distance(max_z + region_of_interest.depth() * 10);
   camera_out.orient_ray_direction(vgl_vector_3d<double>(0, 0, -1));
@@ -1543,20 +1543,20 @@ vpgl_affine_camera_convert::convert(const vpgl_RSM_camera<double> & camera_in,
                                     unsigned int num_points)
 {
   vnl_random rng;
-  double min_x = region_of_interest.min_x();
-  double min_y = region_of_interest.min_y();
-  double min_z = region_of_interest.min_z();
-  double max_x = region_of_interest.max_x();
-  double max_y = region_of_interest.max_y();
-  double max_z = region_of_interest.max_z();
+  const double min_x = region_of_interest.min_x();
+  const double min_y = region_of_interest.min_y();
+  const double min_z = region_of_interest.min_z();
+  const double max_x = region_of_interest.max_x();
+  const double max_y = region_of_interest.max_y();
+  const double max_z = region_of_interest.max_z();
 
   std::vector<vgl_point_2d<double>> image_pts;
   std::vector<vgl_point_3d<double>> world_pts;
   for (unsigned i = 0; i < num_points; ++i)
   {
-    double x = rng.drand64(min_x, max_x); // sample in local coords
-    double y = rng.drand64(min_y, max_y);
-    double z = rng.drand64(min_z, max_z);
+    const double x = rng.drand64(min_x, max_x); // sample in local coords
+    const double y = rng.drand64(min_y, max_y);
+    const double z = rng.drand64(min_z, max_z);
     world_pts.emplace_back(x, y, z);
     // convert to lon, lat, elev in (deg, deg, meters)
     double X = NAN, Y = NAN, Z = NAN;
@@ -1567,13 +1567,13 @@ vpgl_affine_camera_convert::convert(const vpgl_RSM_camera<double> & camera_in,
     image_pts.emplace_back(u, v);
   }
 
-  bool success = vpgl_affine_camera_compute::compute(image_pts, world_pts, camera_out);
+  const bool success = vpgl_affine_camera_compute::compute(image_pts, world_pts, camera_out);
   // it is assumed that the camera is above the region of interest
   camera_out.set_viewing_distance(max_z + region_of_interest.depth() * 10);
   // camera rays point downward
   camera_out.orient_ray_direction(vgl_vector_3d<double>(0, 0, -1));
-  double sum_er = 0.0;
-  double max_er = 0.0;
+  const double sum_er = 0.0;
+  const double max_er = 0.0;
 #  if 0 // debug test
   for (unsigned i = 0; i < num_points; ++i) {
       double uu, vv;
@@ -1616,20 +1616,20 @@ vpgl_rational_camera_convert::convert(vpgl_RSM_camera<double> const & camera_in,
 {
   // sample geodetic coordinates
   vnl_random rng;
-  double min_x = region_of_interest.min_x(); // longitude degrees
-  double min_y = region_of_interest.min_y(); // latitude degrees
-  double min_z = region_of_interest.min_z(); // elevation meters
-  double max_x = region_of_interest.max_x();
-  double max_y = region_of_interest.max_y();
-  double max_z = region_of_interest.max_z();
+  const double min_x = region_of_interest.min_x(); // longitude degrees
+  const double min_y = region_of_interest.min_y(); // latitude degrees
+  const double min_z = region_of_interest.min_z(); // elevation meters
+  const double max_x = region_of_interest.max_x();
+  const double max_y = region_of_interest.max_y();
+  const double max_z = region_of_interest.max_z();
 
   std::vector<vgl_point_2d<double>> image_pts;
   std::vector<vgl_point_3d<double>> world_pts;
   for (unsigned i = 0; i < num_points; ++i)
   {
-    double x = rng.drand64(min_x, max_x); // sample in local coords
-    double y = rng.drand64(min_y, max_y);
-    double z = rng.drand64(min_z, max_z);
+    const double x = rng.drand64(min_x, max_x); // sample in local coords
+    const double y = rng.drand64(min_y, max_y);
+    const double z = rng.drand64(min_z, max_z);
     world_pts.emplace_back(x, y, z);
     double u = NAN, v = NAN;
     camera_in.project(x, y, z, u, v);

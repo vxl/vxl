@@ -42,7 +42,7 @@ vbl_test_batch_compact_multimap1()
   test_data.emplace_back(std::string("3"), 3);
 
 
-  vbl_batch_compact_multimap<std::string, int> bcmmap(test_data.begin(), test_data.end());
+  const vbl_batch_compact_multimap<std::string, int> bcmmap(test_data.begin(), test_data.end());
 
   TEST("batch_compact_multimap sorted data set correctly", issorted(bcmmap.keys_begin(), bcmmap.keys_end()), true);
   TEST("batch_compact_multimap sorted data set correctly", issorted(bcmmap.values_begin(), bcmmap.values_end()), true);
@@ -94,7 +94,7 @@ vbl_test_batch_compact_multimap2()
     test_data.emplace_back(8, std::string("8") + c);
   }
 
-  vbl_batch_compact_multimap<int, std::string> bcmmap(test_data.begin(), test_data.end());
+  const vbl_batch_compact_multimap<int, std::string> bcmmap(test_data.begin(), test_data.end());
 
   TEST("batch_compact_multimap sorted data set correctly", issorted(bcmmap.keys_begin(), bcmmap.keys_end()), true);
   TEST("batch_compact_multimap sorted data values are scrabled by default sort",

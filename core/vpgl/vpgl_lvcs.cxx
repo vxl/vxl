@@ -134,7 +134,7 @@ vpgl_lvcs::vpgl_lvcs(double orig_lat,
   if (cs_name == vpgl_lvcs::utm)
   {
     //: the origin is still given in wgs84
-    vpgl_utm u;
+    const vpgl_utm u;
     u.transform(localCSOriginLat_ * local_to_degrees,
                 localCSOriginLon_ * local_to_degrees,
                 localUTMOrigin_X_East_,
@@ -177,7 +177,7 @@ vpgl_lvcs::vpgl_lvcs(double orig_lat,
   if (cs_name == vpgl_lvcs::utm)
   {
     //: the origin is still given in wgs84
-    vpgl_utm u;
+    const vpgl_utm u;
     u.transform(localCSOriginLat_ * local_to_degrees,
                 localCSOriginLon_ * local_to_degrees,
                 localUTMOrigin_X_East_,
@@ -212,8 +212,8 @@ vpgl_lvcs::vpgl_lvcs(double lat_low,
   , geo_angle_unit_(ang_unit)
   , localXYZUnit_(elev_unit)
 {
-  double average_lat = (lat_low + lat_high) / 2.0;
-  double average_lon = (lon_low + lon_high) / 2.0;
+  const double average_lat = (lat_low + lat_high) / 2.0;
+  const double average_lon = (lon_low + lon_high) / 2.0;
   localCSOriginLat_ = average_lat;
   localCSOriginLon_ = average_lon;
 
@@ -224,7 +224,7 @@ vpgl_lvcs::vpgl_lvcs(double lat_low,
   if (cs_name == vpgl_lvcs::utm)
   {
     //: the origin is still given in wgs84
-    vpgl_utm u;
+    const vpgl_utm u;
     u.transform(localCSOriginLat_ * local_to_degrees,
                 localCSOriginLon_ * local_to_degrees,
                 localUTMOrigin_X_East_,
@@ -258,10 +258,10 @@ vpgl_lvcs::radians_to_degrees(double & x, double & y, double & z) const
 void
 vpgl_lvcs::degrees_to_dms(double geoval, int & degrees, int & minutes, double & seconds) const
 {
-  double fmin = std::fabs(geoval - (int)geoval) * 60.0;
-  int isec = (int)((fmin - (int)fmin) * 60.0 + .5);
-  int imin = (int)((isec == 60) ? fmin + 1 : fmin);
-  int extra = (geoval > 0) ? 1 : -1;
+  const double fmin = std::fabs(geoval - (int)geoval) * 60.0;
+  const int isec = (int)((fmin - (int)fmin) * 60.0 + .5);
+  const int imin = (int)((isec == 60) ? fmin + 1 : fmin);
+  const int extra = (geoval > 0) ? 1 : -1;
   degrees = (int)((imin == 60) ? geoval + extra : geoval);
   minutes = (imin == 60 ? 0 : imin);
   seconds = (fmin - (int)fmin) * 60.0;
@@ -409,7 +409,7 @@ vpgl_lvcs::set_utm(int zone, bool south_flag)
   // to determine the easting/northing in the user-specified zone/south_flag
   // void transform(lat, lon, easting, northing, utm_zone, south_flag,
   //                force_utm_zone, force_south_flag)
-  vpgl_utm u;
+  const vpgl_utm u;
   u.transform(localCSOriginLat_ * local_to_degrees,
               localCSOriginLon_ * local_to_degrees,
               localUTMOrigin_X_East_,
@@ -472,7 +472,7 @@ vpgl_lvcs::local_to_global(const double pointin_x,
       return;
     }
 
-    vpgl_utm u;
+    const vpgl_utm u;
     u.transform(localUTMOrigin_Zone_,
                 pointin_x * local_to_meters + localUTMOrigin_X_East_,
                 pointin_y * local_to_meters + localUTMOrigin_Y_North_,
@@ -710,7 +710,7 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
     {
       nad27n_to_wgs84(global_lat, global_lon, global_elev, &local_lat, &local_lon, &local_elev);
 
-      vpgl_utm u;
+      const vpgl_utm u;
       int zone = 0;
       bool south_flag = false;
       u.transform(local_lat,
@@ -756,7 +756,7 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
     {
       wgs72_to_wgs84(global_lat, global_lon, global_elev, &local_lat, &local_lon, &local_elev);
 
-      vpgl_utm u;
+      const vpgl_utm u;
       int zone = 0;
       bool south_flag = false;
       u.transform(local_lat,
@@ -800,7 +800,7 @@ vpgl_lvcs::global_to_local(const double pointin_lon,
     }
     else if (local_cs_name_ == vpgl_lvcs::utm)
     {
-      vpgl_utm u;
+      const vpgl_utm u;
       int zone = 0;
       bool south_flag = false;
       u.transform(global_lat,
@@ -944,7 +944,7 @@ vpgl_lvcs::read(std::istream & strm)
     this->get_length_conversions(local_to_meters, local_to_feet);
 
     //: the origin is still given in wgs84
-    vpgl_utm u;
+    const vpgl_utm u;
     u.transform(localCSOriginLat_ * local_to_degrees,
                 localCSOriginLon_ * local_to_degrees,
                 localUTMOrigin_X_East_,
@@ -1002,8 +1002,8 @@ vpgl_lvcs::local_transform(double & x, double & y) const
     theta = theta_ * DEGREES_TO_RADIANS;
 
   // Offset to real origin - ie. the point whose lat/long was given.
-  double xo = x - lox_;
-  double yo = y - loy_;
+  const double xo = x - lox_;
+  const double yo = y - loy_;
 
   // Rotate about that point to align y with north.
   double ct = NAN, st = NAN;
@@ -1042,8 +1042,8 @@ vpgl_lvcs::inverse_local_transform(double & x, double & y) const
     ct = std::cos(-theta);
     st = std::sin(-theta);
   }
-  double xo = ct * x + st * y;
-  double yo = -st * x + ct * y;
+  const double xo = ct * x + st * y;
+  const double yo = -st * x + ct * y;
 
   // Offset to local co-ordinate system origin.
   x = xo + lox_;

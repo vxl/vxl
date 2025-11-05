@@ -25,14 +25,14 @@ main(int argc, char ** argv)
     return 0;
   }
 
-  vil_image_view<vxl_byte> src_im = vil_load(argv[1]);
+  const vil_image_view<vxl_byte> src_im = vil_load(argv[1]);
   if (src_im.size() == 0)
   {
     std::cout << "Unable to load source image from " << argv[1] << std::endl;
     return 1;
   }
 
-  double k = 0.80; // Kernel smoothing parameter
+  const double k = 0.80; // Kernel smoothing parameter
 
   vil_image_view<float> grad_x;
 
@@ -41,7 +41,7 @@ main(int argc, char ** argv)
   // Stretch range to [0,255]
   float min_v = NAN, max_v = NAN;
   vil_math_value_range(grad_x, min_v, max_v);
-  double s = 255 / (max_v - min_v);
+  const double s = 255 / (max_v - min_v);
   vil_math_scale_and_offset_values(grad_x, s, -s * min_v);
   std::cout << "Range of result: " << min_v << ',' << max_v << std::endl;
 

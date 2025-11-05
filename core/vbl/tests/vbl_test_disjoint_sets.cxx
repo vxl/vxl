@@ -12,7 +12,7 @@ print_element_sets(const vbl_disjoint_sets & s)
 {
   for (int i = 0; i < s.num_elements(); ++i)
   {
-    int k = s.find_set(i);
+    const int k = s.find_set(i);
     std::cout << "[" << k << "]: " << s.size(k) << "  ";
   }
   std::cout << std::endl;
@@ -38,7 +38,7 @@ vbl_test_disjoint_sets()
   TEST("disjoint set operations", good, true);
 
   // test partitioning a graph
-  int n_verts = 10;
+  const int n_verts = 10;
   std::vector<vbl_edge> edges;
   for (int i = 1; i < n_verts; ++i)
     edges.emplace_back(i - 1, i, 0.0f);

@@ -319,12 +319,12 @@ vil1_ras_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
   if (type_ == RT_BYTE_ENCODED)
     return false; // not yet implemented
 
-  int file_bytes_per_pixel = (depth_ + 7) / 8;
-  int buff_bytes_per_pixel = components_ * ((bits_per_component_ + 7) / 8);
+  const int file_bytes_per_pixel = (depth_ + 7) / 8;
+  const int buff_bytes_per_pixel = components_ * ((bits_per_component_ + 7) / 8);
   int file_byte_width = width_ * file_bytes_per_pixel;
   file_byte_width += (file_byte_width % 2); // each scan line ends on a 16bit boundary
-  int file_byte_start = start_of_data_ + y0 * file_byte_width + x0 * file_bytes_per_pixel;
-  int buff_byte_width = xs * buff_bytes_per_pixel;
+  const int file_byte_start = start_of_data_ + y0 * file_byte_width + x0 * file_bytes_per_pixel;
+  const int buff_byte_width = xs * buff_bytes_per_pixel;
 
   auto * ib = (vxl_uint_8 *)buf;
 
@@ -341,7 +341,7 @@ vil1_ras_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
   else
   {
     assert(file_bytes_per_pixel == 1 && buff_bytes_per_pixel == 3);
-    int col_len = map_length_ / 3;
+    const int col_len = map_length_ / 3;
     // Read a line, and map every index into an RGB triple
     auto * line = new vxl_uint_8[xs];
     for (int y = 0; y < ys; ++y)
@@ -386,19 +386,19 @@ vil1_ras_generic_image::put_section(const void * buf, int x0, int y0, int xs, in
 
   // With the restrictions above, writing is simple. Just dump the bytes.
 
-  int file_bytes_per_pixel = (depth_ + 7) / 8;
-  int buff_bytes_per_pixel = components_ * ((bits_per_component_ + 7) / 8);
+  const int file_bytes_per_pixel = (depth_ + 7) / 8;
+  const int buff_bytes_per_pixel = components_ * ((bits_per_component_ + 7) / 8);
   int file_byte_width = width_ * file_bytes_per_pixel;
   file_byte_width += (file_byte_width % 2); // each scan line ends on a 16bit boundary
-  int file_byte_start = start_of_data_ + y0 * file_byte_width + x0 * file_bytes_per_pixel;
-  int buff_byte_width = xs * buff_bytes_per_pixel;
+  const int file_byte_start = start_of_data_ + y0 * file_byte_width + x0 * file_bytes_per_pixel;
+  const int buff_byte_width = xs * buff_bytes_per_pixel;
 
   assert(file_bytes_per_pixel == buff_bytes_per_pixel);
   assert(file_byte_width >= buff_byte_width);
 
   // only pad if whole lines are written. Otherwise, assume the
   // previous contents are valid.
-  bool need_pad = (file_byte_width == buff_byte_width + 1);
+  const bool need_pad = (file_byte_width == buff_byte_width + 1);
   vxl_uint_8 zero = 0;
 
   const auto * ob = (const vxl_uint_8 *)buf;

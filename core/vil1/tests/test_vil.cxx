@@ -54,23 +54,23 @@ test_vil(int argc, char * argv[])
   TEST("vil1_to_vil_image_view ", vil_image_view_deep_equality(image0, image1), true);
 
 
-  vil1_image tiff_image = vil1_load((image_base + "ff_rgb8bit_uncompressed.tif").c_str());
+  const vil1_image tiff_image = vil1_load((image_base + "ff_rgb8bit_uncompressed.tif").c_str());
   // If this test fails check that you have passed the correct image_base directory as a program argument.
   TEST("vil1_load worked", tiff_image ? true : false, true);
 
-  vil_image_view<vxl_byte> ppm_image = vil_load((image_base + "ff_rgb8bit_raw.ppm").c_str());
+  const vil_image_view<vxl_byte> ppm_image = vil_load((image_base + "ff_rgb8bit_raw.ppm").c_str());
   TEST("vil_load worked", ppm_image ? true : false, true);
 
   if (bool(tiff_image) && ppm_image)
   {
-    vil_image_resource_sptr resource1 = vil1_to_vil_image_resource(tiff_image);
+    const vil_image_resource_sptr resource1 = vil1_to_vil_image_resource(tiff_image);
     image1 = resource1->get_view(0, resource1->ni(), 0, resource1->nj());
     TEST("Loaded images correctly via vil1", vil_image_view_deep_equality(image1, ppm_image), true);
   }
 
   // Check if we can create an image_view and put it into a vil1_image
   vil1_memory_image_of<double> vil_mem(10, 8);
-  vil_image_resource_sptr res1 = vil1_to_vil_image_resource(vil_mem);
+  const vil_image_resource_sptr res1 = vil1_to_vil_image_resource(vil_mem);
   vil_image_view<double> image2(10, 8);
   for (unsigned int j = 0; j < image2.nj(); ++j)
     for (unsigned int i = 0; i < image2.ni(); ++i)

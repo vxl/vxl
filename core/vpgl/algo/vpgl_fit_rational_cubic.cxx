@@ -21,33 +21,33 @@ vnl_vector_fixed<double, 20>
 vpgl_cubic_lsqr::power_vector(double x, double y, double z)
 {
   // Form the monomials in homogeneous form
-  double w = 1;
-  double xx = x * x;
-  double xy = x * y;
-  double xz = x * z;
-  double yy = y * y;
-  double yz = y * z;
-  double zz = z * z;
-  double xxx = x * xx;
-  double xxy = x * xy;
-  double xxz = x * xz;
-  double xyy = x * yy;
-  double xyz = x * yz;
-  double xzz = x * zz;
-  double yyy = y * yy;
-  double yyz = y * yz;
-  double yzz = y * zz;
-  double zzz = z * zz;
-  double xww = x * w * w;
-  double yww = y * w * w;
-  double zww = z * w * w;
-  double www = w * w * w;
-  double xxw = xx * w;
-  double xyw = xy * w;
-  double xzw = xz * w;
-  double yyw = yy * w;
-  double yzw = yz * w;
-  double zzw = zz * w;
+  const double w = 1;
+  const double xx = x * x;
+  const double xy = x * y;
+  const double xz = x * z;
+  const double yy = y * y;
+  const double yz = y * z;
+  const double zz = z * z;
+  const double xxx = x * xx;
+  const double xxy = x * xy;
+  const double xxz = x * xz;
+  const double xyy = x * yy;
+  const double xyz = x * yz;
+  const double xzz = x * zz;
+  const double yyy = y * yy;
+  const double yyz = y * yz;
+  const double yzz = y * zz;
+  const double zzz = z * zz;
+  const double xww = x * w * w;
+  const double yww = y * w * w;
+  const double zww = z * w * w;
+  const double www = w * w * w;
+  const double xxw = xx * w;
+  const double xyw = xy * w;
+  const double xzw = xz * w;
+  const double yyw = yy * w;
+  const double yzw = yz * w;
+  const double zzw = zz * w;
 
   // fill the vector
   vnl_vector_fixed<double, 20> pv;
@@ -89,10 +89,10 @@ vpgl_cubic_lsqr::f(const vnl_vector<double> & coeffs, vnl_vector<double> & resid
   for (size_t j = 0; j < 4; ++j)
     for (size_t i = 0; i < 20; ++i)
     {
-      size_t index = j * 20 + i;
+      const size_t index = j * 20 + i;
       rational_coeffs_[j][i] = coeffs[index];
     }
-  size_t n = image_pts_.size();
+  const size_t n = image_pts_.size();
   for (size_t k = 0; k < n; ++k)
   {
     double u = 0.0, v = 0.0;
@@ -107,7 +107,7 @@ vpgl_cubic_lsqr::f(const vnl_vector<double> & coeffs, vnl_vector<double> & resid
 bool
 vpgl_fit_rational_cubic::compute_initial_guess()
 {
-  size_t n = image_pts_.size();
+  const size_t n = image_pts_.size();
   vnl_matrix<double> A(2 * n, 80);
   A.fill(0.0);
   for (size_t k = 0; k < n; ++k)
@@ -132,8 +132,8 @@ vpgl_fit_rational_cubic::compute_initial_guess()
       A[2 * k + 1][i + 60] = -v * pv[i];
     }
   }
-  vnl_svd<double> svd(A);
-  size_t r = svd.rank();
+  const vnl_svd<double> svd(A);
+  const size_t r = svd.rank();
   if (r < 80)
   {
     std::cout << "insufficent rank " << r << " for linear solution of cubic coefficients" << std::endl;
@@ -151,20 +151,20 @@ vpgl_fit_rational_cubic::initial_rms_error()
   for (size_t j = 0; j < 4; ++j)
     for (size_t i = 0; i < 20; ++i)
     {
-      size_t index = j * 20 + i;
+      const size_t index = j * 20 + i;
       rational_coeffs[j][i] = initial_guess_[index];
     }
-  size_t n = image_pts_.size();
+  const size_t n = image_pts_.size();
   double err_sq = 0.0;
   for (size_t k = 0; k < n; ++k)
   {
     const vgl_point_3d<double> & p = ground_pts_[k];
     const vgl_point_2d<double> & uv = image_pts_[k];
-    vnl_vector_fixed<double, 20> pv = vpgl_cubic_lsqr::power_vector(p.x(), p.y(), p.z());
+    const vnl_vector_fixed<double, 20> pv = vpgl_cubic_lsqr::power_vector(p.x(), p.y(), p.z());
     vnl_vector_fixed<double, 4> polys = rational_coeffs * pv;
-    double u = polys[0] / polys[1];
-    double v = polys[2] / polys[3];
-    double er = (u - uv.x()) * (u - uv.x()) + (v - uv.y()) * (v - uv.y());
+    const double u = polys[0] / polys[1];
+    const double v = polys[2] / polys[3];
+    const double er = (u - uv.x()) * (u - uv.x()) + (v - uv.y()) * (v - uv.y());
     err_sq += er;
   }
   err_sq /= n;
@@ -180,11 +180,11 @@ vpgl_fit_rational_cubic::fit()
   vpgl_cubic_lsqr lsq(image_pts_, ground_pts_);
   vnl_levenberg_marquardt levmarq(lsq);
   // same as internal default settings
-  double xtol = 1e-10;
-  double maxfev = 400 * 80;     // Termination maximum number of iterations.
-  double ftol = xtol * 0.01;    // Termination tolerance on F (sum of squared residuals)
-  double gtol = 1e-5;           // Termination tolerance on Grad(F)' * F = 0
-  double epsfcn = xtol * 0.001; // Step length for FD Jacobian
+  const double xtol = 1e-10;
+  const double maxfev = 400 * 80;     // Termination maximum number of iterations.
+  const double ftol = xtol * 0.01;    // Termination tolerance on F (sum of squared residuals)
+  const double gtol = 1e-5;           // Termination tolerance on Grad(F)' * F = 0
+  const double epsfcn = xtol * 0.001; // Step length for FD Jacobian
   levmarq.set_verbose(true);
   // Set the x-tolerance.  Minimization terminates when the length of the steps taken in X (variables) are less than
   // input x-tolerance
@@ -202,14 +202,14 @@ vpgl_fit_rational_cubic::fit()
   std::stringstream ss;
   levmarq.diagnose_outcome(ss);
   std::string outcome = ss.str();
-  size_t pos = outcome.find_last_of("/");
+  const size_t pos = outcome.find_last_of("/");
   if (pos == std::string::npos)
   {
     std::cout << "unexpected Levenberg-Marquardt error message " << outcome << std::endl;
     return false;
   }
   std::stringstream ss2;
-  size_t nout = outcome.size();
+  const size_t nout = outcome.size();
   for (size_t p = pos + 1; p < nout; ++p)
     ss2 << outcome[p];
   ss2 >> levmq_err_;
@@ -227,7 +227,7 @@ vpgl_fit_rational_cubic::fit()
   double max_coeff = 0.0;
   for (size_t k = 0; k < 80; ++k)
   {
-    double mag = fabs(coeffs[k]);
+    const double mag = fabs(coeffs[k]);
     if (mag > max_coeff)
       max_coeff = mag;
   }

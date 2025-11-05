@@ -27,15 +27,15 @@ main(int argc, char **)
   }
 
   // size of original image to be created
-  unsigned ni = 16;
-  unsigned nj = 16;
-  unsigned np = 3; // 3 plane/color image
+  const unsigned ni = 16;
+  const unsigned nj = 16;
+  const unsigned np = 3; // 3 plane/color image
 
   // the original image
   vil_image_view<vxl_byte> image_orig(ni, nj, np);
 
   // orig image values will stay this far from 0 and 255
-  vxl_byte pad = 16;
+  const vxl_byte pad = 16;
 
   // fill in the original image with random values
   for (unsigned p = 0; p < np; p++)
@@ -48,7 +48,7 @@ main(int argc, char **)
   std::cout << "Original image:\n";
   vil_print_all(std::cout, image_orig);
 
-  const char * fn_orig = "example_interpolate_image_orig.png";
+  const char * const fn_orig = "example_interpolate_image_orig.png";
   vil_save(image_orig, fn_orig);
   std::cout << "Wrote original image to " << fn_orig << std::endl;
 
@@ -56,7 +56,7 @@ main(int argc, char **)
   int fact = 20;
 
   // create and save a bilinearly interpolated over-sampled image
-  const char * fn_bilin = "example_interpolate_image_bilin.png";
+  const char * const fn_bilin = "example_interpolate_image_bilin.png";
   vil_image_view<vxl_byte> image_bilin;
   vil_resample_bilin(
     image_orig, image_bilin, -1.0, -1.0, 1.0 / fact, 0.0, 0.0, 1.0 / fact, fact * (ni + 1) + 1, fact * (nj + 1) + 1);
@@ -64,7 +64,7 @@ main(int argc, char **)
   std::cout << "Wrote bilinearly interpolated over-sampled image to " << fn_bilin << std::endl;
 
   // create and save a bicubicly interpolated over-sampled image
-  const char * fn_bicub = "example_interpolate_image_bicub.png";
+  const char * const fn_bicub = "example_interpolate_image_bicub.png";
   vil_image_view<vxl_byte> image_bicub;
   vil_resample_bicub(
     image_orig, image_bicub, -1.0, -1.0, 1.0 / fact, 0.0, 0.0, 1.0 / fact, fact * (ni + 1) + 1, fact * (nj + 1) + 1);
@@ -83,24 +83,24 @@ main(int argc, char **)
   {
     std::cout << "k: " << std::setw(3) << k << "  ";
 
-    double x = double(k) / fact;
+    const double x = double(k) / fact;
     std::cout << "x: " << std::setw(5) << x << "  ";
-    double y = double(k) / fact;
+    const double y = double(k) / fact;
     std::cout << "y: " << std::setw(5) << y << "  ";
 
-    double v_bilin = vil_bilin_interp_safe(image_orig, x, y);
+    const double v_bilin = vil_bilin_interp_safe(image_orig, x, y);
     std::cout << "bilin: " << std::setw(6) << v_bilin << "  ";
 
-    double v_bicub = vil_bicub_interp_safe(image_orig, x, y);
+    const double v_bicub = vil_bicub_interp_safe(image_orig, x, y);
     std::cout << "bicub: " << std::setw(6) << v_bicub << "  ";
 
     // if we are lined up on an original pixel value, print that too
     if (0 == (k % fact))
     {
-      int ki = k / fact;
+      const int ki = k / fact;
       if (ki >= 0 && ki < int(ni) && ki < int(nj))
       {
-        double v_orig = image_orig(ki, ki);
+        const double v_orig = image_orig(ki, ki);
         std::cout << "orig: " << std::setw(3) << v_orig << "  ";
       }
     }

@@ -14,7 +14,7 @@ test_xio_box_3d()
 {
   std::stringstream s;
 
-  vgl_box_3d<double> b3;
+  const vgl_box_3d<double> b3;
   x_write(s, b3);
   TEST("XML I/O for box_3d<double>",
        s.str(),
@@ -27,7 +27,7 @@ test_xio_point_2d()
 {
   std::stringstream s;
 
-  vgl_point_2d<double> p2(0.0, 0.0);
+  const vgl_point_2d<double> p2(0.0, 0.0);
   x_write(s, p2);
   TEST("XML I/O for vgl_point_2d<double>", s.str(), "<vgl_point_2d x=\"0.000000\" y=\"0.000000\">\n</vgl_point_2d>\n");
 }
@@ -37,7 +37,7 @@ test_xio_point_3d()
 {
   std::stringstream s;
 
-  vgl_point_3d<double> p3(0.0, 0.0, 0.0);
+  const vgl_point_3d<double> p3(0.0, 0.0, 0.0);
   x_write(s, p3);
   TEST("XML I/O for vgl_point_3d<double>",
        s.str(),
@@ -49,7 +49,7 @@ test_xio_vector_3d()
 {
   std::stringstream s;
 
-  vgl_vector_3d<double> v3;
+  const vgl_vector_3d<double> v3;
   x_write(s, v3);
   TEST("XML I/O for vgl_vector_3d<double>",
        s.str(),

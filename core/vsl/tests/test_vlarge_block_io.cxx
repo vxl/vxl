@@ -26,7 +26,7 @@ test_vlarge_block(void * block, std::size_t s, T scale)
 {
   // fill one of the blocks with large numbers.
   T * const numbers = static_cast<T *>(block);
-  std::size_t n = s / sizeof(T);
+  const std::size_t n = s / sizeof(T);
 
   for (std::size_t i = 0; i < n; ++i)
     numbers[i] = static_cast<T>(std::numeric_limits<T>::max() - T(i) * scale);
@@ -108,7 +108,7 @@ test_vlarge_block_io()
 
   s /= 1024 * 4; // a sensible block size.
   s *= 1024;
-  unsigned max_blocks = std::min<std::size_t>(1024 * 1024, std::numeric_limits<std::size_t>::max() / (s / 2));
+  const unsigned max_blocks = std::min<std::size_t>(1024 * 1024, std::numeric_limits<std::size_t>::max() / (s / 2));
 
   std::cout << "Try to allocate up to " << max_blocks << " blocks of " << s / 1024 << "KiB" << std::endl;
   std::vector<void *> blocks;

@@ -12,7 +12,7 @@ vil1_scale_intensities_image(const vil1_image & base, double scale, double shift
   if (!base.get_section(buf, x0, y0, w, h))
     return false;
 
-  unsigned size = w * h;
+  const unsigned size = w * h;
   for (unsigned pos = 0; pos < size; ++pos)
     buf[pos] = T(buf[pos] * scale + shift);
 

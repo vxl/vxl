@@ -19,8 +19,8 @@ main()
 
   {
     std::cout << "Create a second image\n";
-    unsigned ni = 9;
-    unsigned nj = 6;
+    const unsigned ni = 9;
+    const unsigned nj = 6;
     vil_image_view<vxl_byte> image_view2(ni, nj);
 
     // Slow fill

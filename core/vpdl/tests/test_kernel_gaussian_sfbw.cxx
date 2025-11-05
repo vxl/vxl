@@ -38,7 +38,7 @@ test_kernel_gaussian_sfbw_type(T epsilon, const std::string & type_name)
   covar(2, 2) += bandwidth * bandwidth;
 
   // values for probability tests
-  vpdl_gaussian_sphere<T, 3> gauss3(vnl_vector_fixed<T, 3>(T(0)), bandwidth * bandwidth);
+  const vpdl_gaussian_sphere<T, 3> gauss3(vnl_vector_fixed<T, 3>(T(0)), bandwidth * bandwidth);
   vnl_vector_fixed<T, 3> pt1(1, 2, 0), pt2(10, 10, 10);
   T density = T(0);
   T cum_prob = T(0);
@@ -152,7 +152,7 @@ test_kernel_gaussian_sfbw_type(T epsilon, const std::string & type_name)
     TEST(("bandwidth <" + type_name + ">").c_str(), kernel_g1.bandwidth(), bandwidth);
 
     // values for probability tests
-    vpdl_gaussian_sphere<T, 1> gauss(T(0), bandwidth * bandwidth);
+    const vpdl_gaussian_sphere<T, 1> gauss(T(0), bandwidth * bandwidth);
     T pt1 = T(1), pt2 = T(10);
     density = T(0);
     cum_prob = T(0);

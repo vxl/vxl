@@ -21,21 +21,21 @@ simple_test()
   // construct a 5x7 image to test pyramid
   vbl_array_2d<vgl_ray_3d<double>> img(5, 7);
   // simple rays along -z
-  vgl_vector_3d<double> dir(0.0, 0.0, -1.0);
+  const vgl_vector_3d<double> dir(0.0, 0.0, -1.0);
   for (int r = 0; r < 5; ++r)
     for (int c = 0; c < 7; ++c)
     {
-      vgl_point_3d<double> p(c, r, 10.0); // 10 above the ground plane
+      const vgl_point_3d<double> p(c, r, 10.0); // 10 above the ground plane
       img[r][c] = vgl_ray_3d<double>(p, dir);
     }
-  vpgl_generic_camera<double> c(img);
+  const vpgl_generic_camera<double> c(img);
 #if 0
   for (int i = 0; i<2; ++i) {
     std::cout << "level " << i << '\n';
     c.print_orig(i);
   }
 #endif
-  vgl_ray_3d<double> interp_ray = c.ray(3.5, 2.5);
+  vgl_ray_3d<double> const interp_ray = c.ray(3.5, 2.5);
   vgl_point_3d<double> org = interp_ray.origin();
   double er = std::fabs(org.x() - 3.5) + std::fabs(org.y() - 2.5);
   TEST_NEAR("interpolated ray", er, 0.0, 0.0001);
@@ -59,13 +59,13 @@ simple_test()
 static void
 proj_test()
 {
-  unsigned ni = 640;
-  unsigned nj = 480;
+  const unsigned ni = 640;
+  const unsigned nj = 480;
   // construct a perspective camera for reference
-  vpgl_calibration_matrix<double> K(ni, vgl_point_2d<double>((double)ni / 2.0, (double)nj / 2.0));
+  const vpgl_calibration_matrix<double> K(ni, vgl_point_2d<double>((double)ni / 2.0, (double)nj / 2.0));
   vgl_point_3d<double> center(10.0, 5.0, 15.0);
-  vgl_rotation_3d<double> R;
-  vpgl_perspective_camera<double> pcam(K, center, R);
+  const vgl_rotation_3d<double> R;
+  const vpgl_perspective_camera<double> pcam(K, center, R);
 
   // set each ray in the generic camera to be same as perspective camera
   vbl_array_2d<vgl_ray_3d<double>> rays(nj, ni);
@@ -76,11 +76,11 @@ proj_test()
       rays(j, i) = pcam.backproject_ray(i, j);
     }
   }
-  vpgl_generic_camera<double> gcam(rays);
+  const vpgl_generic_camera<double> gcam(rays);
 
   // project some random 3-d points into the image
   std::vector<vgl_point_3d<double>> test_pts;
-  vgl_vector_3d<double> offset(center.x(), center.y(), center.z());
+  const vgl_vector_3d<double> offset(center.x(), center.y(), center.z());
   test_pts.push_back(vgl_point_3d<double>(-4.2, -1.0, 10.9) + offset);
   test_pts.push_back(vgl_point_3d<double>(-4.0, 3.4, 9.1) + offset);
   test_pts.push_back(vgl_point_3d<double>(4.0, 2.9, 11.3) + offset);
@@ -127,8 +127,8 @@ proj_test()
   for (auto pit : test_pts1)
   {
     double u = pit.x(), v = pit.y();
-    vgl_ray_3d<double> ray = pcam.backproject_ray(u, v);
-    vgl_ray_3d<double> r = gcam.ray(u, v);
+    const vgl_ray_3d<double> ray = pcam.backproject_ray(u, v);
+    const vgl_ray_3d<double> r = gcam.ray(u, v);
 
     std::cout << std::endl;
     std::stringstream testname;

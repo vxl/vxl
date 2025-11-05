@@ -62,8 +62,8 @@ scatter_var(const std::vector<vpgl_rational_camera<double>> & cams,
             double & ym,
             const double & relative_diameter = 1.0)
 {
-  unsigned int n = cams.size();
-  vgl_plane_3d<double> pl(0, 0, 1, -elevation);
+  const unsigned int n = cams.size();
+  const vgl_plane_3d<double> pl(0, 0, 1, -elevation);
   double xsq = 0, ysq = 0;
   xm = 0;
   ym = 0;
@@ -102,7 +102,7 @@ scatter_var(const std::vector<vpgl_rational_camera<double>> & cams,
   // xsq/=n; ysq/=n;
   xsq /= weight_sum;
   ysq /= weight_sum;
-  double var = std::sqrt(xsq * xsq + ysq * ysq);
+  const double var = std::sqrt(xsq * xsq + ysq * ysq);
   return var;
 }
 
@@ -135,7 +135,7 @@ vpgl_rational_adjust_onept::find_intersection_point(const std::vector<vpgl_ratio
                                                     const std::vector<vgl_point_2d<double>> & corrs,
                                                     vgl_point_3d<double> & p_3d)
 {
-  unsigned int n = cams.size();
+  const unsigned int n = cams.size();
   if (!n || n != corrs.size())
     return false;
   // the average view volume center
@@ -147,10 +147,10 @@ vpgl_rational_adjust_onept::find_intersection_point(const std::vector<vpgl_ratio
     x0 += cam.offset(vpgl_rational_camera<double>::X_INDX);
     y0 += cam.offset(vpgl_rational_camera<double>::Y_INDX);
 
-    double zoff = cam.offset(vpgl_rational_camera<double>::Z_INDX);
-    double zscale = cam.scale(vpgl_rational_camera<double>::Z_INDX);
-    double zplus = zoff + zscale;
-    double zminus = zoff - zscale;
+    const double zoff = cam.offset(vpgl_rational_camera<double>::Z_INDX);
+    const double zscale = cam.scale(vpgl_rational_camera<double>::Z_INDX);
+    const double zplus = zoff + zscale;
+    const double zminus = zoff - zscale;
     if (zminus > zmin)
       zmin = zminus;
     if (zplus < zmax)
@@ -167,7 +167,7 @@ vpgl_rational_adjust_onept::find_intersection_point(const std::vector<vpgl_ratio
   {
     double xm = 0, ym = 0;
     // double var = scatter_var(cams, corrs,initial_point, z, xm, ym);
-    double var = scatter_var(cams, cam_weights, corrs, initial_point, z, xm, ym);
+    const double var = scatter_var(cams, cam_weights, corrs, initial_point, z, xm, ym);
     if (var < error)
     {
       error = var;
@@ -215,7 +215,7 @@ vpgl_rational_adjust_onept::find_intersection_point(const std::vector<vpgl_ratio
   for (double z = min_z; z <= max_z; z += vpgl_trans_z_step)
   {
     double xm = 0, ym = 0;
-    double var = scatter_var(cams, cam_weights, corrs, initial_point, z, xm, ym, relative_diameter);
+    const double var = scatter_var(cams, cam_weights, corrs, initial_point, z, xm, ym, relative_diameter);
     if (var < error)
     {
       error = var;
@@ -283,7 +283,7 @@ vpgl_rational_adjust_onept::adjust(const std::vector<vpgl_rational_camera<double
 {
   cam_translations.clear();
   vgl_point_3d<double> intersection;
-  std::vector<float> cam_weights(cams.size(), 1.0f / cams.size());
+  const std::vector<float> cam_weights(cams.size(), 1.0f / cams.size());
   if (!find_intersection_point(cams, cam_weights, corrs, intersection))
     return false;
 
@@ -295,7 +295,7 @@ vpgl_rational_adjust_onept::adjust(const std::vector<vpgl_rational_camera<double
   {
     vgl_point_2d<double> uvp = (*cit).project(final);
     vgl_point_2d<double> uv = *rit;
-    vgl_vector_2d<double> t(uv.x() - uvp.x(), uv.y() - uvp.y());
+    const vgl_vector_2d<double> t(uv.x() - uvp.x(), uv.y() - uvp.y());
     cam_translations.push_back(t);
   }
   return true;
@@ -313,7 +313,7 @@ vpgl_rational_adjust_onept::adjust(const std::vector<vpgl_rational_camera<double
 {
   cam_translations.clear();
   vgl_point_3d<double> intersection;
-  std::vector<float> cam_weights(cams.size(), 1.0f / cams.size());
+  const std::vector<float> cam_weights(cams.size(), 1.0f / cams.size());
   if (!find_intersection_point(cams, cam_weights, corrs, initial_pt, zmin, zmax, intersection, relative_diameter))
     return false;
 
@@ -326,7 +326,7 @@ vpgl_rational_adjust_onept::adjust(const std::vector<vpgl_rational_camera<double
   {
     vgl_point_2d<double> uvp = (*cit).project(final);
     vgl_point_2d<double> uv = *rit;
-    vgl_vector_2d<double> t(uv.x() - uvp.x(), uv.y() - uvp.y());
+    const vgl_vector_2d<double> t(uv.x() - uvp.x(), uv.y() - uvp.y());
     cam_translations.push_back(t);
   }
   return true;
@@ -355,13 +355,13 @@ vpgl_rational_adjust_onept::adjust_with_weights(const std::vector<vpgl_rational_
     // just ignore that)
     if ((*wit) == 1.0f)
     {
-      vgl_vector_2d<double> t(0.0, 0.0);
+      const vgl_vector_2d<double> t(0.0, 0.0);
       cam_translations.push_back(t);
       continue;
     }
     vgl_point_2d<double> uvp = (*cit).project(final);
     vgl_point_2d<double> uv = *rit;
-    vgl_vector_2d<double> t(uv.x() - uvp.x(), uv.y() - uvp.y());
+    const vgl_vector_2d<double> t(uv.x() - uvp.x(), uv.y() - uvp.y());
     cam_translations.push_back(t);
   }
   return true;
@@ -393,13 +393,13 @@ vpgl_rational_adjust_onept::adjust_with_weights(const std::vector<vpgl_rational_
     // just ignore that)
     if ((*wit) == 1.0f)
     {
-      vgl_vector_2d<double> t(0.0, 0.0);
+      const vgl_vector_2d<double> t(0.0, 0.0);
       cam_translations.push_back(t);
       continue;
     }
     vgl_point_2d<double> uvp = (*cit).project(final);
     vgl_point_2d<double> uv = *rit;
-    vgl_vector_2d<double> t(uv.x() - uvp.x(), uv.y() - uvp.y());
+    const vgl_vector_2d<double> t(uv.x() - uvp.x(), uv.y() - uvp.y());
     cam_translations.push_back(t);
   }
   return true;

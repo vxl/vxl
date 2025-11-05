@@ -47,22 +47,22 @@
 bool
 test_image_equal(const char * type_name, const vil1_image & image, const vil1_image & image2, bool exact = true)
 {
-  int sizex = image.width();
-  int sizey = image.height();
-  int components = image.components();
-  int planes = image.planes();
-  int cell_bits = image.bits_per_component();
-  int num_bits = sizex * sizey * components * planes * cell_bits;
-  int row_bytes = (sizex * components * cell_bits + 7) / 8;
-  int num_bytes = sizey * row_bytes * planes;
-  int sizex2 = image2.width();
-  int sizey2 = image2.height();
-  int components2 = image2.components();
-  int planes2 = image2.planes();
-  int cell_bits2 = image2.bits_per_component();
-  int num_bits2 = sizex2 * sizey2 * components2 * planes2 * cell_bits2;
-  int row_bytes2 = (sizex2 * components2 * cell_bits2 + 7) / 8;
-  int num_bytes2 = sizey2 * row_bytes2 * planes2;
+  const int sizex = image.width();
+  const int sizey = image.height();
+  const int components = image.components();
+  const int planes = image.planes();
+  const int cell_bits = image.bits_per_component();
+  const int num_bits = sizex * sizey * components * planes * cell_bits;
+  const int row_bytes = (sizex * components * cell_bits + 7) / 8;
+  const int num_bytes = sizey * row_bytes * planes;
+  const int sizex2 = image2.width();
+  const int sizey2 = image2.height();
+  const int components2 = image2.components();
+  const int planes2 = image2.planes();
+  const int cell_bits2 = image2.bits_per_component();
+  const int num_bits2 = sizex2 * sizey2 * components2 * planes2 * cell_bits2;
+  const int row_bytes2 = (sizex2 * components2 * cell_bits2 + 7) / 8;
+  const int num_bytes2 = sizey2 * row_bytes2 * planes2;
 
   TEST("Image dimensions", sizex == sizex2 && sizey == sizey2, true);
   if (sizex != sizex2 || sizey != sizey2)
@@ -162,7 +162,7 @@ vil1_test_image_type_raw(const char * type_name,   //!< type for image to read a
                          bool exact = true)        //!< require read back image identical
 {
   assert(type_name);
-  int n = image.bits_per_component() * image.components();
+  const int n = image.bits_per_component() * image.components();
   std::cout << "=== Start testing " << type_name << " (" << n << " bpp) ===\n" << std::flush;
 
   // Step 1) Write the image out to disk
@@ -180,7 +180,7 @@ vil1_test_image_type_raw(const char * type_name,   //!< type for image to read a
     TEST("non-raw write image to disk", tst, true);
     if (!tst)
       return; // fatal error
-    vil1_image image3 = vil1_load_raw(fname.c_str());
+    const vil1_image image3 = vil1_load_raw(fname.c_str());
     TEST("non-raw load image", !image3, false);
     if (!image3)
       return; // fatal error
@@ -191,7 +191,7 @@ vil1_test_image_type_raw(const char * type_name,   //!< type for image to read a
       return; // fatal error
 
     // STEP 2) Read the image that was just saved to file
-    vil1_image image2 = vil1_load_raw(fname.c_str());
+    const vil1_image image2 = vil1_load_raw(fname.c_str());
     TEST("raw load image", !image2, false);
     if (!image2)
       return; // fatal error
@@ -223,8 +223,8 @@ create_colour_gif(const char * filename)
 #  pragma warning(push)
 #  pragma warning(disable : 4305 4309)
 #endif
-  unsigned char a[] = { 253, 0, 155, 0, 247, 0, 0 };
-  unsigned char b[] = {
+  unsigned char const a[] = { 253, 0, 155, 0, 247, 0, 0 };
+  const unsigned char b[] = {
     44,  0,   0,   0,   0,   253, 0,   155, 0,   0,   8,   254, 0,   1,   164, 74,  150, 45,  87,  162, 76,  121, 14,
     80,  168, 224, 226, 5,   140, 24,  98,  198, 144, 41,  99,  230, 12,  154, 52,  202, 150, 49,  107, 230, 236, 25,
     180, 104, 210, 166, 81,  171, 102, 237, 26,  182, 108, 1,   16,  36,  176, 112, 1,   67,  6,   25,  51,  104, 212,
@@ -261,11 +261,11 @@ create_colour_gif(const char * filename)
   if (!f)
     return false;
   f << "GIF87a";
-  for (unsigned char i : a)
+  for (const unsigned char i : a)
     f << i;
   for (int i = 0; i < 256; ++i)
     f << (unsigned char)i << (unsigned char)i << (unsigned char)0;
-  for (unsigned char i : b)
+  for (const unsigned char i : b)
     f << i;
   f.close();
   return true;
@@ -279,8 +279,8 @@ create_grey_gif(const char * filename)
 #  pragma warning(push)
 #  pragma warning(disable : 4305 4309)
 #endif
-  unsigned char a[] = { 253, 0, 155, 0, 247, 0, 0 };
-  unsigned char b[] = {
+  unsigned char const a[] = { 253, 0, 155, 0, 247, 0, 0 };
+  const unsigned char b[] = {
     44,  0,   0,   0,   0,   253, 0,   155, 0,   0,   8,   254, 0,   1,   8,   28,  72,  176, 160, 193, 131, 8,   19,
     42,  92,  200, 176, 161, 195, 135, 16,  35,  74,  156, 72,  177, 162, 197, 139, 24,  51,  106, 220, 200, 177, 163,
     199, 143, 32,  67,  138, 28,  73,  178, 164, 201, 147, 40,  83,  170, 92,  201, 178, 165, 203, 151, 48,  99,  202,
@@ -304,11 +304,11 @@ create_grey_gif(const char * filename)
   if (!f)
     return false;
   f << "GIF87a";
-  for (unsigned char i : a)
+  for (const unsigned char i : a)
     f << i;
   for (int i = 0; i < 256; ++i)
     f << (unsigned char)i << (unsigned char)i << (unsigned char)i;
-  for (unsigned char i : b)
+  for (const unsigned char i : b)
     f << i;
   f.close();
   return true;
@@ -320,7 +320,7 @@ vil1_test_image_type(const char * type_name,   // type for image to read and wri
                      bool exact = true)        // require read back image identical
 {
   assert(type_name);
-  int n = image.bits_per_component() * image.components();
+  const int n = image.bits_per_component() * image.components();
   std::cout << "=== Start testing " << type_name << " (" << n << " bpp) ===\n" << std::flush;
 
   // Step 1) Write the image out to disk
@@ -345,7 +345,7 @@ vil1_test_image_type(const char * type_name,   // type for image to read and wri
   }
   else
   {
-    bool tst = vil1_save(image, fname.c_str(), type_name);
+    const bool tst = vil1_save(image, fname.c_str(), type_name);
     TEST("write image to disk", tst, true);
     if (!tst)
       return; // fatal error
@@ -353,7 +353,7 @@ vil1_test_image_type(const char * type_name,   // type for image to read and wri
 
   // STEP 2) Read the image that was just saved to file
   {
-    vil1_image image2 = vil1_load(fname.c_str());
+    const vil1_image image2 = vil1_load(fname.c_str());
     TEST("load image", !image2, false);
     if (!image2)
     {
@@ -361,7 +361,7 @@ vil1_test_image_type(const char * type_name,   // type for image to read and wri
     }
 
     // make sure saved image has the same pixels as the original image
-    bool tst = !(std::strcmp(type_name, image2.file_format()));
+    const bool tst = !(std::strcmp(type_name, image2.file_format()));
     TEST("compare image file formats", tst, true);
     if (!tst)
       std::cout << "read back image type is " << image2.file_format() << " instead of written " << type_name
@@ -387,7 +387,7 @@ CreateTest1bitImage(int wd, int ht)
     for (int x = 0; x < (wd + 7) / 8; x++)
       data[x] = ((8 * x - wd / 2) * (y - ht / 2) / 16) & 0xff;
     // zero the last few bits, if wd is not a multiple of 8:
-    int s = wd & 7; // = wd%8;
+    const int s = wd & 7; // = wd%8;
     if (s)
       data[wd / 8] &= ((1 << s) - 1) << (8 - s);
     image.put_section(data, 0, y, wd, 1);
@@ -443,9 +443,9 @@ CreateTest24bitImage(int wd, int ht)
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++)
     {
-      unsigned char u = x % (1 << 8);
-      unsigned char v = ((x - wd / 2) * (y - ht / 2) / 16) % (1 << 8);
-      unsigned char w = ((y / 3) % (1 << 8));
+      const unsigned char u = x % (1 << 8);
+      const unsigned char v = ((x - wd / 2) * (y - ht / 2) / 16) % (1 << 8);
+      const unsigned char w = ((y / 3) % (1 << 8));
       unsigned char data[3] = { u, v, w };
       image.put_section(data, x, y, 1, 1);
     }
@@ -460,9 +460,9 @@ CreateTest3planeImage(int wd, int ht)
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++)
     {
-      unsigned char u = x % (1 << 8);
-      unsigned char v = ((x - wd / 2) * (y - ht / 2) / 16) % (1 << 8);
-      unsigned char w = ((y / 3) % (1 << 8));
+      const unsigned char u = x % (1 << 8);
+      const unsigned char v = ((x - wd / 2) * (y - ht / 2) / 16) % (1 << 8);
+      const unsigned char w = ((y / 3) % (1 << 8));
       unsigned char data[3] = { u, v, w };
       image.put_section(data, x, y, 1, 1);
     }
@@ -501,16 +501,16 @@ static void
 test_save_load_image()
 {
   // create test images
-  int sizex = 253;
-  int sizey = 155;
-  vil1_image image1 = CreateTest1bitImage(sizex, sizey);
-  vil1_image image8 = CreateTest8bitImage(sizex, sizey);
-  vil1_image image16 = CreateTest16bitImage(sizex, sizey);
-  vil1_image image24 = CreateTest24bitImage(sizex, sizey);
-  vil1_image image32 = CreateTest32bitImage(sizex, sizey);
-  vil1_image image3p = CreateTest3planeImage(sizex, sizey);
-  vil1_image imagefloat = CreateTestfloatImage(sizex, sizey);
-  vil1_image imagedouble = CreateTestdoubleImage(sizex, sizey);
+  const int sizex = 253;
+  const int sizey = 155;
+  const vil1_image image1 = CreateTest1bitImage(sizex, sizey);
+  const vil1_image image8 = CreateTest8bitImage(sizex, sizey);
+  const vil1_image image16 = CreateTest16bitImage(sizex, sizey);
+  const vil1_image image24 = CreateTest24bitImage(sizex, sizey);
+  const vil1_image image32 = CreateTest32bitImage(sizex, sizey);
+  const vil1_image image3p = CreateTest3planeImage(sizex, sizey);
+  const vil1_image imagefloat = CreateTestfloatImage(sizex, sizey);
+  const vil1_image imagedouble = CreateTestdoubleImage(sizex, sizey);
 
   // pnm ( = PGM / PPM )
 #if 1

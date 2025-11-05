@@ -47,7 +47,7 @@ test_block_rle_io()
   vsl_block_binary_write(bfs_out_uncompressed, &v_float_out.front(), n);
   vsl_block_binary_write(bfs_out_uncompressed, &v_uchar_out.front(), n);
   vsl_block_binary_write(bfs_out_uncompressed, &v_int64_out.front(), n);
-  std::streamoff uncompressed_length = bfs_out_uncompressed.os().tellp();
+  const std::streamoff uncompressed_length = bfs_out_uncompressed.os().tellp();
   bfs_out_uncompressed.close();
 
   vsl_block_binary_rle_write(bfs_out_compressed, v_bool_out, n);
@@ -55,9 +55,9 @@ test_block_rle_io()
   vsl_block_binary_rle_write(bfs_out_compressed, &v_float_out.front(), n);
   vsl_block_binary_rle_write(bfs_out_compressed, &v_uchar_out.front(), n);
   vsl_block_binary_rle_write(bfs_out_compressed, &v_int64_out.front(), n);
-  std::streamoff compressed_length = bfs_out_compressed.os().tellp();
+  const std::streamoff compressed_length = bfs_out_compressed.os().tellp();
   bfs_out_compressed.close();
-  double ratio = ((double)compressed_length) / uncompressed_length;
+  const double ratio = ((double)compressed_length) / uncompressed_length;
 
   std::cout << "Uncompressed size: " << uncompressed_length << " Compressed size: " << compressed_length
             << " Ratio: " << ratio << std::endl;
@@ -133,7 +133,7 @@ test_block_rle_io()
     std::vector<unsigned char> v_uchar_in(n);
     std::vector<vxl_int_64> v_int64_in(n);
 
-    std::string gold_path = testlib_root_dir() + "/core/vsl/tests/golden_block_rle_comp_test.bvl";
+    const std::string gold_path = testlib_root_dir() + "/core/vsl/tests/golden_block_rle_comp_test.bvl";
     vsl_b_ifstream bfs_in2(gold_path.c_str());
 
     // If this test fails, it could be due to a missing golden file, or one

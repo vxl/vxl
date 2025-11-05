@@ -49,7 +49,7 @@ test_array_1d_io()
     test_result = false;
   else
   {
-    std::size_t array_size = v_out.size();
+    const std::size_t array_size = v_out.size();
     for (std::size_t i = 0; i < array_size; i++)
     {
       if (v_out[i] != v_in[i])

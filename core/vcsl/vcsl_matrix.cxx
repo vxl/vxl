@@ -42,9 +42,9 @@ vcsl_matrix::execute(const vnl_vector<double> & v, double time) const
   assert(is_valid());
   assert(v.size() == 3);
 
-  vnl_vector_fixed<double, 4> temp(v(0), v(1), v(2), 1.0);
+  const vnl_vector_fixed<double, 4> temp(v(0), v(1), v(2), 1.0);
 
-  vnl_matrix<double> value = matrix_value(time, true);
+  const vnl_matrix<double> value = matrix_value(time, true);
   return value * temp;
 }
 
@@ -59,9 +59,9 @@ vcsl_matrix::inverse(const vnl_vector<double> & v, double time) const
   assert(is_valid());
   assert(v.size() == 3);
 
-  vnl_vector_fixed<double, 4> temp(v(0), v(1), v(2), 1.0);
+  const vnl_vector_fixed<double, 4> temp(v(0), v(1), v(2), 1.0);
 
-  vnl_matrix<double> value = matrix_value(time, false);
+  const vnl_matrix<double> value = matrix_value(time, false);
   return value * temp;
 }
 
@@ -77,7 +77,7 @@ vcsl_matrix::matrix_value(double time, bool type) const
 
   else
   {
-    int i = matching_interval(time);
+    const int i = matching_interval(time);
     switch (interpolator_[i])
     {
       case vcsl_linear:

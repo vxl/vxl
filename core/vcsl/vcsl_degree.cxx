@@ -9,7 +9,7 @@
 double
 vcsl_degree::units_per_standard_unit() const
 {
-  static double u = vnl_math::deg_per_rad; // = 57.29577951
+  static const double u = vnl_math::deg_per_rad; // = 57.29577951
   return u;
 }
 
@@ -19,6 +19,6 @@ vcsl_degree::units_per_standard_unit() const
 vcsl_degree_sptr
 vcsl_degree::instance()
 {
-  static vcsl_degree_sptr instance_ = new vcsl_degree;
+  static const vcsl_degree_sptr instance_ = new vcsl_degree;
   return instance_;
 }

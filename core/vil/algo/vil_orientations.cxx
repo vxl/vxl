@@ -76,7 +76,7 @@ vil_orientations(const vil_image_view<float> & grad_i,
   vxl_byte * o_row = &orient_im(0, 0);
   float * gm_row = &grad_mag(0, 0);
 
-  float scale = (2 * n_orientations - 1) / (6.28319f);
+  const float scale = (2 * n_orientations - 1) / (6.28319f);
 
   for (unsigned j = 0; j < nj; ++j, gi_row += gi_jstep, gj_row += gj_jstep, o_row += o_jstep, gm_row += gm_jstep)
   {
@@ -88,7 +88,7 @@ vil_orientations(const vil_image_view<float> & grad_i,
     {
       // In order to ensure bins are centred at k*2pi/n_orientation points,
       // compute position in twice angle range, then adjust.
-      int A2 = int((std::atan2(*pgj, *pgi) + 3.14159) * scale);
+      const int A2 = int((std::atan2(*pgj, *pgi) + 3.14159) * scale);
       *po = vxl_byte(((A2 + 1) / 2) % n_orientations);
       *pgm = std::sqrt(pgi[0] * pgi[0] + pgj[0] * pgj[0]);
     }
@@ -129,7 +129,7 @@ vil_orientations_at_edges(const vil_image_view<float> & grad_i,
   vxl_byte * o_row = &orient_im(0, 0);
   float * gm_row = &grad_mag(0, 0);
 
-  float scale = (2 * n_orientations - 1) / (6.28319f);
+  const float scale = (2 * n_orientations - 1) / (6.28319f);
 
   for (unsigned j = 0; j < nj; ++j, gi_row += gi_jstep, gj_row += gj_jstep, o_row += o_jstep, gm_row += gm_jstep)
   {
@@ -146,7 +146,7 @@ vil_orientations_at_edges(const vil_image_view<float> & grad_i,
       {
         // In order to ensure bins are centred at k*2pi/n_orientation points,
         // compute position in twice angle range, then adjust.
-        int A2 = int((std::atan2(*pgj, *pgi) + 3.14159) * scale);
+        const int A2 = int((std::atan2(*pgj, *pgi) + 3.14159) * scale);
         *po = vxl_byte(1 + ((A2 + 1) / 2) % n_orientations);
       }
     }

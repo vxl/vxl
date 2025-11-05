@@ -20,7 +20,7 @@ main()
       buf[3 * (x + 300 * y)] = buf[3 * (x + 300 * y) + 1] = buf[3 * (x + 300 * y) + 2] = 192; // light grey
       if (y <= 190 || y >= 210)
         continue;
-      int c = 15 + 30 * (x / 30); // centre of most nearby circle
+      const int c = 15 + 30 * (x / 30); // centre of most nearby circle
       if ((x - c) * (x - c) + (y - 200) * (y - 200) >= 100)
         continue;
       buf[3 * (x + 300 * y)] = (unsigned char)(x % 256);

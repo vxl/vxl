@@ -15,7 +15,7 @@ test_stack_io()
             << "Testing std::stack binary io\n"
             << "***************************\n";
 
-  int n = 10;
+  const int n = 10;
   std::stack<int> s_int_out;
   for (int i = 0; i < n; ++i)
     s_int_out.push(i);

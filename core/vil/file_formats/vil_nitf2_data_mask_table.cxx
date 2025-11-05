@@ -47,7 +47,7 @@ vil_nitf2_data_mask_table::parse(vil_stream * stream)
   unsigned short width = TPXCDLNTH / 8;
   if (TPXCDLNTH % 8 != 0)
     width++;
-  void * val = std::malloc(width);
+  void * const val = std::malloc(width);
   //  if ( stream->read( &val, width ) != width ) return false;
   if (stream->read(val, width) != width)
     return false;
@@ -138,7 +138,7 @@ vil_nitf2_data_mask_table::blocked_image_data_offset() const
 vxl_uint_32
 vil_nitf2_data_mask_table::block_band_offset(unsigned int block_x, unsigned int block_y, int band) const
 {
-  int band_to_use = i_mode == "S" ? band : 0;
+  const int band_to_use = i_mode == "S" ? band : 0;
   assert(block_x < BMR_n_BND_m.size() && block_y < BMR_n_BND_m[block_x].size() &&
          band_to_use < static_cast<int>(BMR_n_BND_m[block_x][band_to_use].size()));
   assert((band < 0 && i_mode != "S") || (band >= 0 && i_mode == "S"));
@@ -148,7 +148,7 @@ vil_nitf2_data_mask_table::block_band_offset(unsigned int block_x, unsigned int 
 vxl_uint_32
 vil_nitf2_data_mask_table::pad_pixel(unsigned int block_x, unsigned int block_y, int band) const
 {
-  int band_to_use = i_mode == "S" ? band : 0;
+  const int band_to_use = i_mode == "S" ? band : 0;
   assert(block_x < TMR_n_BND_m.size() && block_y < TMR_n_BND_m[block_x].size() &&
          band_to_use < static_cast<int>(TMR_n_BND_m[block_x][band_to_use].size()));
   assert((band < 0 && i_mode != "S") || (band >= 0 && i_mode == "S"));
@@ -233,7 +233,7 @@ vil_nitf2_data_mask_table::maybe_endian_swap(char * a, unsigned size_of_a_in_byt
 vxl_uint_32
 vil_nitf2_data_mask_table::block_band_present(unsigned int block_x, unsigned int block_y, int band) const
 {
-  int band_to_use = i_mode == "S" ? band : 0;
+  const int band_to_use = i_mode == "S" ? band : 0;
   assert(block_x < BMR_n_BND_m.size() && block_y < BMR_n_BND_m[block_x].size() &&
          band_to_use < static_cast<int>(BMR_n_BND_m[block_x][band_to_use].size()));
   if (band_to_use >= static_cast<int>(BMR_n_BND_m[block_x][band_to_use].size()))
@@ -244,7 +244,7 @@ vil_nitf2_data_mask_table::block_band_present(unsigned int block_x, unsigned int
 vxl_uint_32
 vil_nitf2_data_mask_table::block_band_has_pad(unsigned int block_x, unsigned int block_y, int band) const
 {
-  int band_to_use = i_mode == "S" ? band : 0;
+  const int band_to_use = i_mode == "S" ? band : 0;
   assert(block_x < TMR_n_BND_m.size() && block_y < TMR_n_BND_m[block_x].size() &&
          band_to_use < static_cast<int>(TMR_n_BND_m[block_x][band_to_use].size()));
   if (band_to_use >= static_cast<int>(TMR_n_BND_m[block_x][band_to_use].size()))

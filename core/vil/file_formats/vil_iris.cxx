@@ -56,10 +56,10 @@ vil_iris_file_format::make_input_image(vil_stream * is)
     return nullptr;
   int colormap_ = 0;
 
-  vxl_sint_16 magic_ = get_short(is);
-  int storage_ = get_char(is);
-  int bytes_per_component = get_char(is);
-  int dimension_ = get_ushort(is);
+  const vxl_sint_16 magic_ = get_short(is);
+  const int storage_ = get_char(is);
+  const int bytes_per_component = get_char(is);
+  const int dimension_ = get_ushort(is);
   /*int ni_     =*/get_ushort(is);
   /*int nj_     =*/get_ushort(is);
   /*int nplanes_=*/get_ushort(is);
@@ -189,7 +189,7 @@ vil_iris_generic_image::read_header()
     return false;
   }
 
-  int bytes_per_component = get_char(is_);
+  const int bytes_per_component = get_char(is_);
   dimension_ = get_ushort(is_);
   ni_ = get_ushort(is_);
   nj_ = get_ushort(is_);
@@ -275,7 +275,7 @@ vil_iris_generic_image::write_header()
 static inline void
 swap(void * p, int length)
 {
-  char * t = (char *)p;
+  char * const t = (char *)p;
 #ifdef DEBUG
   if (length == sizeof(vxl_uint_32) && *(vxl_uint_32 *)p != 0)
   {
@@ -286,7 +286,7 @@ swap(void * p, int length)
 #endif
   for (int j = 0; 2 * j < length; ++j)
   {
-    char c = t[j];
+    const char c = t[j];
     t[j] = t[length - j - 1];
     t[length - j - 1] = c;
   }
@@ -319,10 +319,10 @@ vil_iris_generic_image::get_copy_view(unsigned int x0, unsigned int xs, unsigned
 vil_image_view_base_sptr
 vil_iris_generic_image::get_section_verbatim(unsigned int x0, unsigned int xs, unsigned int y0, unsigned int ys) const
 {
-  unsigned int pix_size = vil_pixel_format_sizeof_components(format_);
-  unsigned int row_len = xs * pix_size;
+  const unsigned int pix_size = vil_pixel_format_sizeof_components(format_);
+  const unsigned int row_len = xs * pix_size;
 
-  vil_memory_chunk_sptr buf = new vil_memory_chunk(row_len * ys * nplanes_, format_);
+  const vil_memory_chunk_sptr buf = new vil_memory_chunk(row_len * ys * nplanes_, format_);
   auto * ib = reinterpret_cast<vxl_byte *>(buf->data());
   auto * ob = reinterpret_cast<vxl_uint_16 *>(buf->data());
   vxl_byte * cbi = ib;
@@ -354,10 +354,10 @@ vil_iris_generic_image::get_section_verbatim(unsigned int x0, unsigned int xs, u
 vil_image_view_base_sptr
 vil_iris_generic_image::get_section_rle(unsigned int x0, unsigned int xs, unsigned int y0, unsigned int ys) const
 {
-  unsigned int pix_size = vil_pixel_format_sizeof_components(format_);
-  unsigned int row_len = xs * pix_size;
+  const unsigned int pix_size = vil_pixel_format_sizeof_components(format_);
+  const unsigned int row_len = xs * pix_size;
 
-  vil_memory_chunk_sptr buf = new vil_memory_chunk(row_len * ys * nplanes_, format_);
+  const vil_memory_chunk_sptr buf = new vil_memory_chunk(row_len * ys * nplanes_, format_);
   auto * ib = reinterpret_cast<vxl_byte *>(buf->data());
   auto * ob = reinterpret_cast<vxl_uint_16 *>(buf->data());
   vxl_byte * cbi = ib;
@@ -370,8 +370,8 @@ vil_iris_generic_image::get_section_rle(unsigned int x0, unsigned int xs, unsign
     for (unsigned int rowno = nj_ - y0 - ys; rowno < nj_ - y0; ++rowno, cbi += row_len)
     {
       // find length and start position
-      unsigned long rleoffset = starttab_[rowno + channel * nj_];
-      unsigned long rlelength = lengthtab_[rowno + channel * nj_];
+      const unsigned long rleoffset = starttab_[rowno + channel * nj_];
+      const unsigned long rlelength = lengthtab_[rowno + channel * nj_];
 
       // read rle row into array
       auto * rlerow = new unsigned char[rlelength];
@@ -411,11 +411,11 @@ vil_iris_generic_image::put_view(const vil_image_view_base & buf, unsigned int x
 #endif
   const auto & buff = static_cast<vil_image_view<unsigned char> const &>(buf);
   const unsigned char * ob = buff.top_left_ptr();
-  unsigned int pix_size = vil_pixel_format_sizeof_components(format_);
+  const unsigned int pix_size = vil_pixel_format_sizeof_components(format_);
 
-  std::size_t rowsize = pix_size * buf.ni();
-  std::ptrdiff_t rowskip = pix_size * buff.jstep();
-  std::size_t planeskip = pix_size * buff.planestep();
+  const std::size_t rowsize = pix_size * buf.ni();
+  const std::ptrdiff_t rowskip = pix_size * buff.jstep();
+  const std::size_t planeskip = pix_size * buff.planestep();
 
   if (VXL_LITTLE_ENDIAN && pix_size > 1) // IRIS image data is big-endian
   {
@@ -479,7 +479,7 @@ vil_iris_generic_image::put_view(const vil_image_view_base & buf, unsigned int x
 bool
 vil_iris_generic_image::read_offset_tables()
 {
-  unsigned int tablen = nj_ * nplanes_;
+  const unsigned int tablen = nj_ * nplanes_;
 
   starttab_ = new unsigned long[tablen];
   lengthtab_ = new unsigned long[tablen];
@@ -489,7 +489,7 @@ vil_iris_generic_image::read_offset_tables()
     starttab_[i] = get_long(is_, 512 + (i * 4));
   }
 
-  unsigned int lengthtab_offset = 512 + tablen * 4;
+  const unsigned int lengthtab_offset = 512 + tablen * 4;
 
   for (unsigned int i = 0; i < tablen; ++i)
   {
@@ -552,7 +552,7 @@ get_long(vil_stream * file, int location)
     return 0;
 
   // Decode from two's complement to machine format
-  vxl_uint_32 bits =
+  const vxl_uint_32 bits =
     (vxl_uint_32(buff[0]) << 24) | (vxl_uint_32(buff[1]) << 16) | (vxl_uint_32(buff[2]) << 8) | buff[3];
 
   if ((bits & 0x80000000L) != 0)

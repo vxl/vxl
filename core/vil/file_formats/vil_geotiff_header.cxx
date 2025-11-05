@@ -147,7 +147,7 @@ vil_geotiff_header::PCS_WGS84_UTM_zone(int & zone, GTIF_HEMISPH & hemisph) // he
     int size = 0;
     int length = 0;
     tagtype_t ttype;
-    bool status = get_key_value(ProjectedCSTypeGeoKey, &value, size, length, ttype);
+    const bool status = get_key_value(ProjectedCSTypeGeoKey, &value, size, length, ttype);
     if (!status)
     {
       std::cerr << "Missing ProjectedCSTypeGeoKey (" << ProjectedCSTypeGeoKey << ") key!\n";
@@ -261,7 +261,7 @@ vil_geotiff_header::PCS_NAD83_UTM_zone(int & zone, GTIF_HEMISPH & hemisph)
     int size = 0;
     int length = 0;
     tagtype_t ttype;
-    bool status = get_key_value(ProjectedCSTypeGeoKey, &value, size, length, ttype);
+    const bool status = get_key_value(ProjectedCSTypeGeoKey, &value, size, length, ttype);
     if (!status)
     {
       std::cerr << "Missing ProjectedCSTypeGeoKey (" << ProjectedCSTypeGeoKey << ") key!\n";

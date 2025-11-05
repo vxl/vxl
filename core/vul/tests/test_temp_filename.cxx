@@ -13,7 +13,7 @@
 static void
 test_first()
 {
-  std::string filename = vul_temp_filename();
+  const std::string filename = vul_temp_filename();
   std::cout << "vul_temp_filename() returns '" << filename << "'\n";
 
   std::ofstream ostr(filename.c_str());
@@ -37,11 +37,11 @@ test_first()
 static void
 test_second()
 {
-  std::string filename1 = vul_temp_filename();
+  const std::string filename1 = vul_temp_filename();
   std::cout << "vul_temp_filename() returns '" << filename1 << "'\n";
   // file must be opened for subsequent filename to be different (Borland)
   std::ofstream ostr1(filename1.c_str());
-  std::string filename2 = vul_temp_filename();
+  const std::string filename2 = vul_temp_filename();
   ostr1.close();
   std::cout << "vul_temp_filename() returns '" << filename2 << "'\n";
 

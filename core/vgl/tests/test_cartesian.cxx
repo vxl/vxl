@@ -116,7 +116,7 @@ static void
 test_vector_3d()
 {
   // standard constructor
-  vgl_vector_3d<float> v(1.5f, 0.625f, 0.0f);
+  const vgl_vector_3d<float> v(1.5f, 0.625f, 0.0f);
   std::cout << v << std::endl;
 
   // default constructor
@@ -173,7 +173,7 @@ test_vector_3d()
   double check = 0.0;
 
   // Orthogonal vectors test case 1
-  vgl_vector_3d<double> n1(1.0, 0.0, 0.0);
+  const vgl_vector_3d<double> n1(1.0, 0.0, 0.0);
   check = 0.0;
   tr[0] = orthogonal_vectors(n1, 0.0);
   tr[1] = orthogonal_vectors(n1, 0.25);
@@ -189,7 +189,7 @@ test_vector_3d()
   TEST_NEAR("orthogonal vectors case 1", check, 0.0, 1e-8);
 
   // Orthogonal vectors test case 2
-  vgl_vector_3d<double> n2(0.0, 1.0, 0.0);
+  const vgl_vector_3d<double> n2(0.0, 1.0, 0.0);
   check = 0.0;
   tr[0] = orthogonal_vectors(n2, 0.0);
   tr[1] = orthogonal_vectors(n2, 0.25);
@@ -205,7 +205,7 @@ test_vector_3d()
   TEST_NEAR("orthogonal vectors case 2", check, 0.0, 1e-8);
 
   // Orthogonal vectors test case 3
-  vgl_vector_3d<double> n3(0.0, 0.0, 1.0);
+  const vgl_vector_3d<double> n3(0.0, 0.0, 1.0);
   check = 0.0;
   tr[0] = orthogonal_vectors(n3, 0.0);
   tr[1] = orthogonal_vectors(n3, 0.25);
@@ -221,7 +221,7 @@ test_vector_3d()
   TEST_NEAR("orthogonal vectors case 3", check, 0.0, 1e-8);
 
   // Orthogonal vectors test case 4
-  vgl_vector_3d<double> n4(0.0, 1.0, 1.0); // NB input vector not normalized
+  const vgl_vector_3d<double> n4(0.0, 1.0, 1.0); // NB input vector not normalized
   check = 0.0;
   tr[0] = orthogonal_vectors(n4, 0.0);
   tr[1] = orthogonal_vectors(n4, 0.25);
@@ -237,7 +237,7 @@ test_vector_3d()
   TEST_NEAR("orthogonal vectors case 4", check, 0.0, 1e-8);
 
   // Orthogonal vectors test case 5
-  vgl_vector_3d<double> n5(1.0, 1.0, 0.0); // NB input vector not normalized
+  const vgl_vector_3d<double> n5(1.0, 1.0, 0.0); // NB input vector not normalized
   check = 0.0;
   tr[0] = orthogonal_vectors(n5, 0.0);
   tr[1] = orthogonal_vectors(n5, 0.25);
@@ -279,7 +279,7 @@ test_point_2d()
 
   TEST("equality", (p1 == p3), true);
 
-  vgl_vector_2d<int> d1 = p1 - p2;
+  const vgl_vector_2d<int> d1 = p1 - p2;
   TEST("sum; difference", (p2 + d1), p1);
 
   TEST("+=", (p2 += d1), p1);
@@ -289,15 +289,15 @@ test_point_2d()
   p2.y() = 5;
   TEST("set individually", p2.x() == 4 && p2.y() == 5, true);
   p3.set(7, -1);
-  bool b = collinear(p1, p2, p3);
+  const bool b = collinear(p1, p2, p3);
   TEST("collinear", b, true);
   double r = ratio(p1, p2, p3);
   TEST("ratio", r, 4.0);
-  vgl_point_2d<int> m = midpoint(p1, p2, 4);
+  const vgl_point_2d<int> m = midpoint(p1, p2, 4);
   TEST("midpoint", m, p3);
 
   vgl_point_2d<int> c = centre(p1, p3);
-  vgl_point_2d<int> cc(5, 3);
+  const vgl_point_2d<int> cc(5, 3);
   TEST("centre", c, cc);
   c = centre(p1, p2, c); // assignment
   TEST("centre", c, p2);
@@ -308,13 +308,13 @@ test_point_2d()
   TEST("cross_ratio", r, 1.5);
 
   vgl_line_2d<double> l1(3, 4, 5), l2(3, 2, 1);
-  vgl_point_2d<double> pi(l1, l2); // intersection
-  vgl_point_2d<double> pp(1, -2);
+  const vgl_point_2d<double> pi(l1, l2); // intersection
+  const vgl_point_2d<double> pp(1, -2);
   TEST("intersection", pi, pp);
 
   vgl_line_2d<int> l3(1, 2, 3), l4(3, 2, 1);
-  vgl_point_2d<int> pj(l3, l4); // intersection
-  vgl_point_2d<int> pq(1, -2);
+  const vgl_point_2d<int> pj(l3, l4); // intersection
+  const vgl_point_2d<int> pq(1, -2);
   TEST("intersection", pj, pq);
 
   TEST("vgl_distance_origin", vgl_distance_origin(l1), 1);
@@ -357,7 +357,7 @@ test_point_3d()
   p3.set(3, 7, -1);
   TEST("equality", (p1 == p3), true);
 
-  vgl_vector_3d<int> d1 = p1 - p2;
+  const vgl_vector_3d<int> d1 = p1 - p2;
   TEST("sum; difference", (p2 + d1), p1);
 
   TEST("+=", (p2 += d1), p1);
@@ -369,15 +369,15 @@ test_point_3d()
   p2.z() = 2;
   TEST("set individually", p2.x() == 4 && p2.y() == 5 && p2.z() == 2, true);
   p3.set(7, -1, 11);
-  bool b = collinear(p1, p2, p3);
+  const bool b = collinear(p1, p2, p3);
   TEST("collinear", b, true);
   double r = ratio(p1, p2, p3);
   TEST("ratio", r, 4.0);
-  vgl_point_3d<int> m = midpoint(p1, p2, 4);
+  const vgl_point_3d<int> m = midpoint(p1, p2, 4);
   TEST("midpoint", m, p3);
 
   vgl_point_3d<int> c = centre(p1, p3);
-  vgl_point_3d<int> cc(5, 3, 5);
+  const vgl_point_3d<int> cc(5, 3, 5);
   TEST("centre", c, cc);
   c = centre(p1, p2, c); // assignment
   TEST("centre", c, p2);
@@ -388,8 +388,8 @@ test_point_3d()
   TEST("cross_ratio", r, 1.5);
 
   vgl_plane_3d<double> pl1(1, 0, 0, 0), pl2(0, 1, 0, 0), pl3(0, 0, 1, 0);
-  vgl_point_3d<double> pi(pl1, pl2, pl3); // intersection
-  vgl_point_3d<double> pp(0, 0, 0);
+  const vgl_point_3d<double> pi(pl1, pl2, pl3); // intersection
+  const vgl_point_3d<double> pp(0, 0, 0);
   TEST("intersection", pi, pp);
 
   std::stringstream is;
@@ -417,14 +417,14 @@ test_line_2d()
 
   l2.set(3, 4, 0);
   l3.set(7, -1, 0);
-  bool b = concurrent(l1, l2, l3); // because they share the point (0,0)
+  const bool b = concurrent(l1, l2, l3); // because they share the point (0,0)
   TEST("concurrent", b, true);
 
   vgl_point_2d<double> p00(0, 0), p01(0, 1), p02(0, 2), p03(0, 3), p10(1, 0), p11(1, 1), p12(1, 2), p13(1, 3),
     p20(2, 0), p21(2, 1), p30(3, 0), p31(3, 1);
-  vgl_line_2d<double> li(p10, p01); // line through these two points
+  const vgl_line_2d<double> li(p10, p01); // line through these two points
   std::cout << li << std::endl;
-  vgl_line_2d<double> ll(1, 1, -1);
+  const vgl_line_2d<double> ll(1, 1, -1);
   TEST("join", li, ll);
 
   l3.set(0, -1, -8);
@@ -432,17 +432,17 @@ test_line_2d()
   TEST_NEAR("vgl_distance(line,point)", vgl_distance(l2, p03), 2.4, 1e-9);
   TEST_NEAR("vgl_distance(point,line)", vgl_distance(p03, l2), 2.4, 1e-9);
 
-  vgl_line_segment_2d<double> ls(p10, p01); // line segment through these two points
+  const vgl_line_segment_2d<double> ls(p10, p01); // line segment through these two points
   TEST("line segment first end point", ls.point1(), p10);
   TEST("line segment second end point", ls.point2(), p01);
 
-  vgl_line_segment_2d<double> ls2(p01, p10); // inverse line segment through these points
+  const vgl_line_segment_2d<double> ls2(p01, p10); // inverse line segment through these points
   TEST("line segment first end point", ls2.point1(), p01);
   TEST("line segment second end point", ls2.point2(), p10);
 
   // line segment intersections:
   // 1. with points:
-  vgl_line_segment_2d<double> ls1(p12, p30); // line segment containing p21; its support line contains p03.
+  const vgl_line_segment_2d<double> ls1(p12, p30); // line segment containing p21; its support line contains p03.
   TEST("end point is coincident", vgl_lineseg_test_point(p12, ls1), true);
   TEST("mid point is coincident", vgl_lineseg_test_point(p21, ls1), true);
   TEST("point on support line is not coincident", vgl_lineseg_test_point(p03, ls1), false);
@@ -571,8 +571,8 @@ test_line_2d()
                                         326.99996948242187),
        false);
 
-  vgl_box_2d<double> bx(0, 2, 0, 3);
-  vgl_line_segment_2d<double> ls3 = vgl_clip_line_to_box(li, bx);
+  const vgl_box_2d<double> bx(0, 2, 0, 3);
+  const vgl_line_segment_2d<double> ls3 = vgl_clip_line_to_box(li, bx);
   std::cout << ls3 << '\n';
   TEST("line segment equality", ls3, ls);
   TEST("line segment equality", ls3, ls2);
@@ -634,7 +634,7 @@ test_line_3d()
   l.set(p2, p1);
   TEST("3D line: point1()", l.point1(), p2);
   TEST("3D line: point2()", l.point2(), p1);
-  vgl_vector_3d<double> dir = l.direction();
+  const vgl_vector_3d<double> dir = l.direction();
   TEST("3D line direction", dir, vgl_vector_3d<double>(1, -1, -2));
 
   TEST("line through point", collinear(l, p1), true);
@@ -650,7 +650,7 @@ test_line_3d()
   TEST("concurrent", coplanar(l, l2), true);
   p2 = vgl_intersection(l, l2);
 
-  bool intersection_ok = (p2 == p1 - dir * 0.5);
+  const bool intersection_ok = (p2 == p1 - dir * 0.5);
   TEST("intersection", intersection_ok, true);
 
   std::stringstream is;
@@ -667,16 +667,16 @@ static void
 test_plane_3d()
 {
   // Define a horizontal plane in z=10 using 3 points
-  vgl_plane_3d<double> pl1(
+  const vgl_plane_3d<double> pl1(
     vgl_point_3d<double>(0, 0, 10), vgl_point_3d<double>(10, 0, 10), vgl_point_3d<double>(0, 10, 10));
   std::cout << "plane1: " << pl1 << std::endl;
 
   // Define the same plane using the point+normal representation
-  vgl_plane_3d<double> pl2(vgl_vector_3d<double>(0, 0, 1), vgl_point_3d<double>(0, 0, 10));
+  const vgl_plane_3d<double> pl2(vgl_vector_3d<double>(0, 0, 1), vgl_point_3d<double>(0, 0, 10));
   std::cout << "plane2: " << pl2 << std::endl;
 
   // Define the same plane using other points
-  vgl_plane_3d<double> pl3(
+  const vgl_plane_3d<double> pl3(
     vgl_point_3d<double>(0, 0, 10), vgl_point_3d<double>(10, 0, 10), vgl_point_3d<double>(10, 10, 10));
   std::cout << "plane3: " << pl3 << std::endl;
 
@@ -691,31 +691,31 @@ test_plane_3d()
   vgl_point_3d<double> pt3(-3, 7, 10); // yes
   vgl_point_3d<double> pt4(5, 5, 5);   // no
 
-  double eqn11 = pl1.a() * pt1.x() + pl1.b() * pt1.y() + pl1.c() * pt1.z() + pl1.d();
+  const double eqn11 = pl1.a() * pt1.x() + pl1.b() * pt1.y() + pl1.c() * pt1.z() + pl1.d();
   TEST("pt1 on pl1", eqn11 == 0, true);
-  double eqn12 = pl1.a() * pt2.x() + pl1.b() * pt2.y() + pl1.c() * pt2.z() + pl1.d();
+  const double eqn12 = pl1.a() * pt2.x() + pl1.b() * pt2.y() + pl1.c() * pt2.z() + pl1.d();
   TEST("pt2 on pl1", eqn12 == 0, true);
-  double eqn13 = pl1.a() * pt3.x() + pl1.b() * pt3.y() + pl1.c() * pt3.z() + pl1.d();
+  const double eqn13 = pl1.a() * pt3.x() + pl1.b() * pt3.y() + pl1.c() * pt3.z() + pl1.d();
   TEST("pt3 on pl1", eqn13 == 0, true);
-  double eqn14 = pl1.a() * pt4.x() + pl1.b() * pt4.y() + pl1.c() * pt4.z() + pl1.d();
+  const double eqn14 = pl1.a() * pt4.x() + pl1.b() * pt4.y() + pl1.c() * pt4.z() + pl1.d();
   TEST("pt4 NOT on pl1", eqn14 == 0, false);
 
-  double eqn21 = pl2.a() * pt1.x() + pl2.b() * pt1.y() + pl2.c() * pt1.z() + pl2.d();
+  const double eqn21 = pl2.a() * pt1.x() + pl2.b() * pt1.y() + pl2.c() * pt1.z() + pl2.d();
   TEST("pt1 on pl2", eqn21 == 0, true);
-  double eqn22 = pl2.a() * pt2.x() + pl2.b() * pt2.y() + pl2.c() * pt2.z() + pl2.d();
+  const double eqn22 = pl2.a() * pt2.x() + pl2.b() * pt2.y() + pl2.c() * pt2.z() + pl2.d();
   TEST("pt2 on pl2", eqn22 == 0, true);
-  double eqn23 = pl2.a() * pt3.x() + pl2.b() * pt3.y() + pl2.c() * pt3.z() + pl2.d();
+  const double eqn23 = pl2.a() * pt3.x() + pl2.b() * pt3.y() + pl2.c() * pt3.z() + pl2.d();
   TEST("pt3 on pl2", eqn23 == 0, true);
-  double eqn24 = pl2.a() * pt4.x() + pl2.b() * pt4.y() + pl2.c() * pt4.z() + pl2.d();
+  const double eqn24 = pl2.a() * pt4.x() + pl2.b() * pt4.y() + pl2.c() * pt4.z() + pl2.d();
   TEST("pt4 NOT on pl2", eqn24 == 0, false);
 
-  double eqn31 = pl3.a() * pt1.x() + pl3.b() * pt1.y() + pl3.c() * pt1.z() + pl3.d();
+  const double eqn31 = pl3.a() * pt1.x() + pl3.b() * pt1.y() + pl3.c() * pt1.z() + pl3.d();
   TEST("pt1 on pl3", eqn31 == 0, true);
-  double eqn32 = pl3.a() * pt2.x() + pl3.b() * pt2.y() + pl3.c() * pt2.z() + pl3.d();
+  const double eqn32 = pl3.a() * pt2.x() + pl3.b() * pt2.y() + pl3.c() * pt2.z() + pl3.d();
   TEST("pt2 on pl3", eqn32 == 0, true);
-  double eqn33 = pl3.a() * pt3.x() + pl3.b() * pt3.y() + pl3.c() * pt3.z() + pl3.d();
+  const double eqn33 = pl3.a() * pt3.x() + pl3.b() * pt3.y() + pl3.c() * pt3.z() + pl3.d();
   TEST("pt3 on pl3", eqn33 == 0, true);
-  double eqn34 = pl3.a() * pt4.x() + pl3.b() * pt4.y() + pl3.c() * pt4.z() + pl3.d();
+  const double eqn34 = pl3.a() * pt4.x() + pl3.b() * pt4.y() + pl3.c() * pt4.z() + pl3.d();
   TEST("pt4 NOT on pl3", eqn34 == 0, false);
 
   // And some other planes:
@@ -728,15 +728,15 @@ test_plane_3d()
   plane3.set(3, 7, -1, 1);
   TEST("equality", (plane1 == plane3), true);
 
-  vgl_vector_3d<double> d1 = plane2.normal();
-  vgl_vector_3d<double> d2 = vgl_vector_3d<double>(0, 0.6, 0.8);
+  const vgl_vector_3d<double> d1 = plane2.normal();
+  const vgl_vector_3d<double> d2 = vgl_vector_3d<double>(0, 0.6, 0.8);
   std::cout << d1 << std::endl;
   TEST_NEAR("normal", (d1 - d2).sqr_length(), 0.0, 1e-12);
 
   vgl_point_3d<double> p1(1, 0, 0), p2(0, 1, 0), p3(0, 0, 1);
-  vgl_plane_3d<double> pl(p1, p2, p3); // plane through 3 points
+  const vgl_plane_3d<double> pl(p1, p2, p3); // plane through 3 points
   std::cout << pl << std::endl;
-  vgl_plane_3d<double> pp(1, 1, 1, -1);
+  const vgl_plane_3d<double> pp(1, 1, 1, -1);
   TEST("join", pl, pp);
 
   TEST_NEAR("vgl_distance(plane,point)", vgl_distance(plane2, p2), 0.8, 1e-9);
@@ -811,7 +811,7 @@ test_box_2d()
   vgl_box_2d<double> b2(p4, p5);
   TEST("box has volume 2.25", b2.volume(), 2.25);
   TEST("!contains(b2)", b.contains(b2), false);
-  vgl_box_2d<double> b3(p5, p4);
+  const vgl_box_2d<double> b3(p5, p4);
   TEST("boxes are equal", b3, b2);
   b.add(b2);
   std::cout << b << std::endl;
@@ -942,16 +942,16 @@ test_box_2d()
 
   vgl_point_2d<double> min1(10, 10), max1(20, 20), min2(40, 40), max2(50, 50), min3(45, 45), max3(55, 55);
 
-  vgl_box_2d<double> box1(min1, max1);
-  vgl_box_2d<double> box2(min2, max2);
-  vgl_box_2d<double> box3(min3, max3);
+  const vgl_box_2d<double> box1(min1, max1);
+  const vgl_box_2d<double> box2(min2, max2);
+  const vgl_box_2d<double> box3(min3, max3);
 
   // no intersection case
-  vgl_box_2d<double> i1 = vgl_intersection(box1, box2);
+  const vgl_box_2d<double> i1 = vgl_intersection(box1, box2);
   TEST("vgl_intersection(box1, box2) = false", true, i1.is_empty());
 
   // intersection case
-  vgl_box_2d<double> i2 = vgl_intersection(box2, box3);
+  const vgl_box_2d<double> i2 = vgl_intersection(box2, box3);
   TEST("vgl_intersection(box2, box3) = true", false, i2.is_empty());
   TEST("vgl_intersection(box2, box3) volume", 25.0, i2.volume());
 
@@ -1050,7 +1050,7 @@ test_box_3d()
   vgl_box_3d<double> b2(p4, p5);
   TEST("box has volume 3.375", b2.volume(), 3.375);
   TEST("!contains(b2)", b.contains(b2), false);
-  vgl_box_3d<double> b3(p5, p4);
+  const vgl_box_3d<double> b3(p5, p4);
   TEST("boxes are equal", b3, b2);
   b.add(b2);
   std::cout << b << std::endl;
@@ -1131,16 +1131,16 @@ test_box_3d()
   vgl_point_3d<double> min1(10, 10, 10), max1(20, 20, 20), min2(40, 40, 40), max2(50, 50, 50), min3(45, 45, 45),
     max3(55, 55, 55);
 
-  vgl_box_3d<double> box1(min1, max1);
-  vgl_box_3d<double> box2(min2, max2);
-  vgl_box_3d<double> box3(min3, max3);
+  const vgl_box_3d<double> box1(min1, max1);
+  const vgl_box_3d<double> box2(min2, max2);
+  const vgl_box_3d<double> box3(min3, max3);
 
   // no intersection case
-  vgl_box_3d<double> i1 = vgl_intersection(box1, box2);
+  const vgl_box_3d<double> i1 = vgl_intersection(box1, box2);
   TEST("vgl_intersection(box1, box2) = false", true, i1.is_empty());
 
   // intersection case
-  vgl_box_3d<double> i2 = vgl_intersection(box2, box3);
+  const vgl_box_3d<double> i2 = vgl_intersection(box2, box3);
   TEST("vgl_intersection(box2, box3) = true", false, i2.is_empty());
   TEST("vgl_intersection(box2, box3) volume", 125.0, i2.volume());
 
@@ -1181,10 +1181,10 @@ cross_ratio(const vgl_line_2d<int> & l1,
             const vgl_line_2d<int> & l3,
             const vgl_line_2d<int> & l4)
 {
-  vgl_point_2d<int> p1(l1.a() / l1.c(), l1.b() / l1.c());
-  vgl_point_2d<int> p2(l2.a() / l2.c(), l2.b() / l2.c());
-  vgl_point_2d<int> p3(l3.a() / l3.c(), l3.b() / l3.c());
-  vgl_point_2d<int> p4(l4.a() / l4.c(), l4.b() / l4.c());
+  const vgl_point_2d<int> p1(l1.a() / l1.c(), l1.b() / l1.c());
+  const vgl_point_2d<int> p2(l2.a() / l2.c(), l2.b() / l2.c());
+  const vgl_point_2d<int> p3(l3.a() / l3.c(), l3.b() / l3.c());
+  const vgl_point_2d<int> p4(l4.a() / l4.c(), l4.b() / l4.c());
   return cross_ratio(p1, p2, p3, p4);
 }
 

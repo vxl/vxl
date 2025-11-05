@@ -20,7 +20,7 @@ equal_image(const vil_image_view<vxl_byte> & im0, const vil_image_view<vxl_byte>
 static void
 test_deep_copy_3_plane()
 {
-  vil_memory_chunk_sptr chunk =
+  const vil_memory_chunk_sptr chunk =
     new vil_memory_chunk(4 * 4 * 3, vil_pixel_format_component_format(vil_pixel_format_of(vxl_byte())));
   vil_image_view<vxl_byte> rgbrgb_im =
     vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte *>(chunk->data()), 4, 4, 3, 3, 3 * 4, 1);

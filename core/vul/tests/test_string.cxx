@@ -99,7 +99,7 @@ test_string()
   TEST("vul_string_to_bool(Not \"onwibble\")", vul_string_to_bool("onwibble"), false);
 
   int int_list_data[] = { 1, 2, 10, 21, 24, -1, -3, -5, -7 };
-  std::vector<int> int_list(int_list_data, int_list_data + 9);
+  const std::vector<int> int_list(int_list_data, int_list_data + 9);
   TEST(
     "vul_string_to_int_list(\"1:2,10,21:3:25,-1:-2:-7\")", vul_string_to_int_list("1:2,10,21:3:25,-1:-2:-7"), int_list);
   TEST("vul_string_to_int_list(\"1:2,10, 21:3:25\")", vul_string_to_int_list("1:2,10, 21:3:25").empty(), true);
@@ -143,7 +143,7 @@ test_string()
   }
 
   {
-    std::string s("Too many \r\003\t\v\a\f\x05 control chars.\n");
+    const std::string s("Too many \r\003\t\v\a\f\x05 control chars.\n");
     TEST("vul_string_escape_dodgy_chars(\"Too many \\r\\003\\t\\v\\a\\f\\x05 control chars.\\n\")",
          vul_string_escape_ctrl_chars(s),
          "Too many \\r\\x03\\t\\v\\a\\f\\x05 control chars.\n");

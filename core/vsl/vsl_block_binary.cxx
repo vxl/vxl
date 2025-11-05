@@ -72,7 +72,7 @@ vsl_block_binary_write_float_impl(vsl_b_ostream & os, const T * begin, std::size
   vsl_b_write(os, true); // Error check that this is a specialised version
 
   const std::size_t wanted = sizeof(T) * nelems;
-  vsl_block_t block = allocate_up_to(wanted);
+  const vsl_block_t block = allocate_up_to(wanted);
 
   // multiple-block version works equally efficiently with single block
   const std::size_t items_per_block = block.size / sizeof(T);
@@ -80,8 +80,8 @@ vsl_block_binary_write_float_impl(vsl_b_ostream & os, const T * begin, std::size
   // convert and save the data from the start.
   while (nelems > 0)
   {
-    std::size_t items = std::min(items_per_block, nelems);
-    std::size_t bytes = sizeof(T) * items;
+    const std::size_t items = std::min(items_per_block, nelems);
+    const std::size_t bytes = sizeof(T) * items;
     vsl_swap_bytes_to_buffer((const char *)begin, (char *)block.ptr, sizeof(T), items);
     os.os().write(block.ptr, bytes);
     begin += items;
@@ -114,12 +114,12 @@ vsl_block_binary_write_int_impl(vsl_b_ostream & os, const T * begin, std::size_t
   vsl_b_write(os, true); // Error check that this is a specialised version
 
   const std::size_t wanted = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(T)) * nelems;
-  vsl_block_t block = allocate_up_to(wanted);
+  const vsl_block_t block = allocate_up_to(wanted);
 
   if (block.size == wanted)
   {
     // Do simple single block version
-    std::size_t nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block.ptr, nelems);
+    const std::size_t nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block.ptr, nelems);
     vsl_b_write(os, nbytes);
     os.os().write(block.ptr, nbytes);
   }
@@ -134,7 +134,7 @@ vsl_block_binary_write_int_impl(vsl_b_ostream & os, const T * begin, std::size_t
     std::size_t n_bytes = 0;
     while (n > 0)
     {
-      std::size_t items = std::min(items_per_block, n);
+      const std::size_t items = std::min(items_per_block, n);
       n_bytes += vsl_convert_to_arbitrary_length(p, (unsigned char *)block.ptr, items);
       p += items;
       n -= items;
@@ -147,8 +147,8 @@ vsl_block_binary_write_int_impl(vsl_b_ostream & os, const T * begin, std::size_t
     // Now convert and save the data from the start.
     while (n > 0)
     {
-      std::size_t items = std::min(items_per_block, n);
-      std::size_t bytes = vsl_convert_to_arbitrary_length(p, (unsigned char *)block.ptr, items);
+      const std::size_t items = std::min(items_per_block, n);
+      const std::size_t bytes = vsl_convert_to_arbitrary_length(p, (unsigned char *)block.ptr, items);
       os.os().write(block.ptr, bytes);
       p += items;
       n -= items;
@@ -173,7 +173,7 @@ vsl_block_binary_read_int_impl(vsl_b_istream & is, T * begin, std::size_t nelems
     return;
 
 
-  vsl_block_t block = allocate_up_to(nbytes);
+  const vsl_block_t block = allocate_up_to(nbytes);
 
   std::size_t n_bytes_converted = 0;
   if (block.size == nbytes)
@@ -192,7 +192,7 @@ vsl_block_binary_read_int_impl(vsl_b_istream & is, T * begin, std::size_t nelems
       assert(offset < block.size);
 
       // fill block beyond offset with as much as possible.
-      std::size_t bytes = std::min((std::size_t)nbytes - bytes_read, block.size - offset);
+      const std::size_t bytes = std::min((std::size_t)nbytes - bytes_read, block.size - offset);
       is.is().read(block.ptr + offset, bytes);
       bytes_read += bytes;
 
@@ -213,7 +213,7 @@ vsl_block_binary_read_int_impl(vsl_b_istream & is, T * begin, std::size_t nelems
       }
 
       // convert ints;
-      std::size_t bytes_converted = vsl_convert_from_arbitrary_length((unsigned char *)block.ptr, begin, elems);
+      const std::size_t bytes_converted = vsl_convert_from_arbitrary_length((unsigned char *)block.ptr, begin, elems);
       nelems -= elems;
       begin += elems;
 

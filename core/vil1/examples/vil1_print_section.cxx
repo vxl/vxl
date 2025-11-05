@@ -13,21 +13,21 @@
 std::ostream &
 to_dec(std::ostream & os, unsigned char c)
 {
-  static char dig[] = "0123456789";
+  static const char dig[] = "0123456789";
   return os << dig[(c / 100) % 10] << dig[(c / 10) % 10] << dig[c % 10];
 }
 
 std::ostream &
 to_oct(std::ostream & os, unsigned char c)
 {
-  static char dig[] = "01234567";
+  static const char dig[] = "01234567";
   return os << dig[(c >> 6) & 7] << dig[(c >> 3) & 7] << dig[c & 7];
 }
 
 std::ostream &
 to_hex(std::ostream & os, unsigned char c)
 {
-  static char dig[] = "0123456789ABCDEF";
+  static const char dig[] = "0123456789ABCDEF";
   return os << dig[(c & 0xF0) >> 4] << dig[c & 0x0F];
 }
 
@@ -37,12 +37,12 @@ main(int argc, char ** argv)
 {
   assert(argc == 6);
 
-  vil1_image I = vil1_load(argv[1]);
+  const vil1_image I = vil1_load(argv[1]);
   assert(I);
-  int x0 = std::stoi(argv[2]);
-  int y0 = std::stoi(argv[3]);
-  unsigned w = std::stoi(argv[4]);
-  unsigned h = std::stoi(argv[5]);
+  const int x0 = std::stoi(argv[2]);
+  const int y0 = std::stoi(argv[3]);
+  const unsigned w = std::stoi(argv[4]);
+  const unsigned h = std::stoi(argv[5]);
 
   std::cerr << "image is " << I.width() << 'x' << I.height() << std::endl;
   assert(0 <= x0 && 0 <= y0 && x0 + int(w) <= I.width() && y0 + int(h) <= I.height());
@@ -52,7 +52,7 @@ main(int argc, char ** argv)
   {
     std::vector<byte> buf(3 * w * h);
 
-    bool f = I.get_section(/* xxx */ &buf[0], x0, y0, w, h);
+    const bool f = I.get_section(/* xxx */ &buf[0], x0, y0, w, h);
     if (f)
     {
       std::cerr << "get_section succeeded.\n";

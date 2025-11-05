@@ -16,7 +16,7 @@ test_map_io()
             << "Testing std::map binary io\n"
             << "*************************\n";
 
-  int n = 10;
+  const int n = 10;
   std::map<int, int, std::less<int>> m_int_int_out;
   for (int i = 0; i < n; ++i)
     m_int_int_out[i] = i * i + 1;

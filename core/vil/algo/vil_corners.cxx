@@ -78,14 +78,14 @@ vil_corners(const vil_image_view<float> & grad_i,
     for (unsigned i = 2; i < ni2; ++i)
     {
       // Compute gradient in i
-      float dxdx = 0.125f * (pgi[oi3] + pgi[oi8] - (pgi[oi1] + pgi[oi6])) + 0.25f * (pgi[oi5] - pgi[oi4]);
+      const float dxdx = 0.125f * (pgi[oi3] + pgi[oi8] - (pgi[oi1] + pgi[oi6])) + 0.25f * (pgi[oi5] - pgi[oi4]);
       // Compute gradient in j
-      float dxdy = 0.125f * (pgi[oi1] + pgi[oi3] - (pgi[oi6] + pgi[oi8])) + 0.25f * (pgi[oi2] - pgi[oi7]);
+      const float dxdy = 0.125f * (pgi[oi1] + pgi[oi3] - (pgi[oi6] + pgi[oi8])) + 0.25f * (pgi[oi2] - pgi[oi7]);
       // Compute gradient in j
-      float dydy = 0.125f * (pgj[oj1] + pgj[oj3] - (pgj[oj6] + pgj[oj8])) + 0.25f * (pgj[oj2] - pgj[oj7]);
+      const float dydy = 0.125f * (pgj[oj1] + pgj[oj3] - (pgj[oj6] + pgj[oj8])) + 0.25f * (pgj[oj2] - pgj[oj7]);
 
-      float detH = dxdx * dydy - dxdy * dxdy;
-      float traceH = dxdx + dydy;
+      const float detH = dxdx * dydy - dxdy * dxdy;
+      const float traceH = dxdx + dydy;
 
       *d = detH - float(k) * traceH * traceH;
 
@@ -157,14 +157,14 @@ vil_corners(const vil_image_view<double> & grad_i,
     for (unsigned i = 2; i < ni2; ++i)
     {
       // Compute gradient in i
-      double dxdx = 0.125f * (pgi[oi3] + pgi[oi8] - (pgi[oi1] + pgi[oi6])) + 0.25f * (pgi[oi5] - pgi[oi4]);
+      const double dxdx = 0.125f * (pgi[oi3] + pgi[oi8] - (pgi[oi1] + pgi[oi6])) + 0.25f * (pgi[oi5] - pgi[oi4]);
       // Compute gradient in j
-      double dxdy = 0.125f * (pgi[oi1] + pgi[oi3] - (pgi[oi6] + pgi[oi8])) + 0.25f * (pgi[oi2] - pgi[oi7]);
+      const double dxdy = 0.125f * (pgi[oi1] + pgi[oi3] - (pgi[oi6] + pgi[oi8])) + 0.25f * (pgi[oi2] - pgi[oi7]);
       // Compute gradient in j
-      double dydy = 0.125f * (pgj[oj1] + pgj[oj3] - (pgj[oj6] + pgj[oj8])) + 0.25f * (pgj[oj2] - pgj[oj7]);
+      const double dydy = 0.125f * (pgj[oj1] + pgj[oj3] - (pgj[oj6] + pgj[oj8])) + 0.25f * (pgj[oj2] - pgj[oj7]);
 
-      double detH = dxdx * dydy - dxdy * dxdy;
-      double traceH = dxdx + dydy;
+      const double detH = dxdx * dydy - dxdy * dxdy;
+      const double traceH = dxdx + dydy;
 
       *d = detH - double(k) * traceH * traceH;
 
@@ -191,7 +191,7 @@ void
 vil_corners_rohr(const vil_image_view<float> & gx, const vil_image_view<float> & gy, vil_image_view<float> & corner_im)
 {
   vil_image_view<float> tmp_im, work_im, gx2, gy2, gxy;
-  vil_gauss_filter_5tap_params smooth_params(1.0);
+  const vil_gauss_filter_5tap_params smooth_params(1.0);
 
   // Compute smoothed products of gradients
   vil_math_image_product(gx, gx, tmp_im);

@@ -16,7 +16,7 @@ test_user_info_io()
             << "Testing vul_user_info io\n"
             << "************************\n";
   //
-  std::string name = "cjb";
+  const std::string name = "cjb";
   vul_user_info p_out(name), p_in("");
   p_out.init("cjb");
 

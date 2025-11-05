@@ -38,7 +38,7 @@ vgl_h_matrix_2d_optimize_lmq::optimize_h(const std::vector<vgl_homg_point_2d<dou
   lm.set_x_tolerance(htol_);
   lm.set_f_tolerance(ftol_);
   lm.set_g_tolerance(gtol_);
-  bool success = lm.minimize(hv);
+  const bool success = lm.minimize(hv);
   if (verbose_)
   {
     lm.diagnose_outcome(std::cout);
@@ -58,7 +58,7 @@ vgl_h_matrix_2d_optimize_lmq::optimize_p(const std::vector<vgl_homg_point_2d<dou
 {
   // number of points must be the same
   assert(points1.size() == points2.size());
-  int n = points1.size();
+  const int n = points1.size();
   assert(n > 4);
 
   // compute the normalizing transforms
@@ -81,8 +81,8 @@ vgl_h_matrix_2d_optimize_lmq::optimize_p(const std::vector<vgl_homg_point_2d<dou
   // p2' = (tr2*initial_h_*(tr1^-1))p1'
   // thus initial_h_' = tr2*initial_h_*(tr1^-1)
 
-  vgl_h_matrix_2d<double> tr1_inv = tr1.get_inverse();
-  vgl_h_matrix_2d<double> initial_h_norm = tr2 * initial_h_ * tr1_inv;
+  const vgl_h_matrix_2d<double> tr1_inv = tr1.get_inverse();
+  const vgl_h_matrix_2d<double> initial_h_norm = tr2 * initial_h_ * tr1_inv;
 
   // The Levenberg-Marquardt algorithm can now be applied
   vgl_h_matrix_2d<double> hopt;
@@ -96,7 +96,7 @@ vgl_h_matrix_2d_optimize_lmq::optimize_p(const std::vector<vgl_homg_point_2d<dou
   //  p2' = hopt p1', thus
   // (tr2 p2) = hopt (tr1 p1)
   //  p2 = (tr2^-1 hopt tr1) p1 = H p1
-  vgl_h_matrix_2d<double> tr2_inv = tr2.get_inverse();
+  const vgl_h_matrix_2d<double> tr2_inv = tr2.get_inverse();
   H = tr2_inv * hopt * tr1;
   return true;
 }
@@ -121,17 +121,17 @@ vgl_h_matrix_2d_optimize_lmq::optimize_l(const std::vector<vgl_homg_line_2d<doub
   for (const auto & lit : lines1)
   {
     // transform lines1 according to the normalizing transform
-    vgl_homg_line_2d<double> l = tr1(lit);
+    const vgl_homg_line_2d<double> l = tr1(lit);
     // convert the line to a point to use the same linear code
-    vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
+    const vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
     tlines1.push_back(p);
   }
   for (const auto & lit : lines2)
   {
     // transform lines2 according to the normalizing transform
-    vgl_homg_line_2d<double> l = tr2(lit);
+    const vgl_homg_line_2d<double> l = tr2(lit);
     // convert the line to a point to use the same linear code
-    vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
+    const vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
     tlines2.push_back(p);
   }
   // At this step, we have two line sets normalized as a set of points.
@@ -141,11 +141,11 @@ vgl_h_matrix_2d_optimize_lmq::optimize_l(const std::vector<vgl_homg_line_2d<doub
 
   // normalize the initial guess
   vgl_h_matrix_2d<double> h_initial_line, h_line_opt, initial_h_norm;
-  vgl_h_matrix_2d<double> tr1_inv = tr1.get_inverse();
+  const vgl_h_matrix_2d<double> tr1_inv = tr1.get_inverse();
   initial_h_norm = tr2 * initial_h_ * tr1_inv;
   // convert to line form
   const vnl_matrix_fixed<double, 3, 3> & Mp_init = initial_h_norm.get_matrix();
-  vnl_matrix_fixed<double, 3, 3> Ml_init = vnl_inverse_transpose(Mp_init);
+  const vnl_matrix_fixed<double, 3, 3> Ml_init = vnl_inverse_transpose(Mp_init);
   h_initial_line.set(Ml_init);
 
   // run the optimization to refine the line transform
@@ -155,7 +155,7 @@ vgl_h_matrix_2d_optimize_lmq::optimize_l(const std::vector<vgl_homg_line_2d<doub
   // Convert the optimized line transform back to point form.
   vgl_h_matrix_2d<double> h_point_opt;
   const vnl_matrix_fixed<double, 3, 3> & Ml_opt = h_line_opt.get_matrix();
-  vnl_matrix_fixed<double, 3, 3> Mp_opt = vnl_inverse_transpose(Ml_opt);
+  const vnl_matrix_fixed<double, 3, 3> Mp_opt = vnl_inverse_transpose(Ml_opt);
   h_point_opt.set(Mp_opt);
 
   // Finally, h_point_opt has to be transformed back to the coordinate
@@ -165,7 +165,7 @@ vgl_h_matrix_2d_optimize_lmq::optimize_l(const std::vector<vgl_homg_line_2d<doub
   //  l2' = h_point_opt l1', thus
   // (tr2 l2) = hh (tr1 l1)
   //  p2 = (tr2^-1 hh tr1) p1 = H p1
-  vgl_h_matrix_2d<double> tr2inv = tr2.get_inverse();
+  const vgl_h_matrix_2d<double> tr2inv = tr2.get_inverse();
   H = tr2inv * h_point_opt * tr1;
   return true;
 }
@@ -179,10 +179,10 @@ vgl_h_matrix_2d_optimize_lmq::optimize_pl(const std::vector<vgl_homg_point_2d<do
 {
   // number of points must be the same
   assert(points1.size() == points2.size());
-  int np = points1.size();
+  const int np = points1.size();
   // number of lines must be the same
   assert(lines1.size() == lines2.size());
-  int nl = lines1.size();
+  const int nl = lines1.size();
   // Must have enough equations
   assert((np + nl) > 4);
   // compute the normalizing transforms
@@ -205,8 +205,8 @@ vgl_h_matrix_2d_optimize_lmq::optimize_pl(const std::vector<vgl_homg_point_2d<do
     tpoints2.push_back(tr2(vgl_homg_point_2d<double>(-a * c, -b * c, d)));
   }
 
-  vgl_h_matrix_2d<double> tr1_inv = tr1.get_inverse();
-  vgl_h_matrix_2d<double> initial_h_norm = tr2 * initial_h_ * tr1_inv;
+  const vgl_h_matrix_2d<double> tr1_inv = tr1.get_inverse();
+  const vgl_h_matrix_2d<double> initial_h_norm = tr2 * initial_h_ * tr1_inv;
 
   // The Levenberg-Marquardt algorithm can now be applied
   vgl_h_matrix_2d<double> hopt;
@@ -221,7 +221,7 @@ vgl_h_matrix_2d_optimize_lmq::optimize_pl(const std::vector<vgl_homg_point_2d<do
   // (tr2 p2) = hopt (tr1 p1)
   //  p2 = (tr2^-1 hopt tr1) p1 = H p1
 
-  vgl_h_matrix_2d<double> tr2_inv = tr2.get_inverse();
+  const vgl_h_matrix_2d<double> tr2_inv = tr2.get_inverse();
   H = tr2_inv * hopt * tr1;
   return true;
 }

@@ -27,7 +27,7 @@ struct vil1_image_proxy_impl : public vil1_image_impl
     : filename(file)
   {
     // cache some stuff
-    vil1_image I = vil1_load(filename.c_str());
+    const vil1_image I = vil1_load(filename.c_str());
 #define macro(p) p##_ = I.p()
     macro(planes);
     macro(width);

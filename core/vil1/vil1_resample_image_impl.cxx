@@ -30,7 +30,7 @@ vil1_resample_image_impl::vil1_resample_image_impl(const vil1_image & underlying
 vil1_image
 vil1_resample_image_impl::get_plane(unsigned int p) const
 {
-  vil1_image_impl * i = new vil1_resample_image_impl(base.get_plane(p), new_width, new_height);
+  vil1_image_impl * const i = new vil1_resample_image_impl(base.get_plane(p), new_width, new_height);
   return { i };
 }
 

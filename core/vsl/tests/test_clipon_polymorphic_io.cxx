@@ -251,8 +251,8 @@ test_clipon_polymorphic_io()
   vsl_add_to_binary_loader(test2_derived_class_io());
 
   test2_derived_class d1_out(1234);
-  test2_base_class * b1_out = &d1_out;
-  test2_base_class * b2_out = nullptr;
+  test2_base_class * const b1_out = &d1_out;
+  test2_base_class * const b2_out = nullptr;
 
   vsl_b_ofstream bfs_out("vsl_clipon_polymorphic_io_test.bvl.tmp");
   TEST("Opened vsl_polymorphic_io_test.bvl.tmp for writing", (!bfs_out), false);

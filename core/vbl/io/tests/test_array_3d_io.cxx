@@ -52,9 +52,9 @@ test_array_3d_io()
     test_result = false;
   else
   {
-    std::size_t array_row1 = v_out.get_row1_count();
-    std::size_t array_row2 = v_out.get_row2_count();
-    std::size_t array_row3 = v_out.get_row3_count();
+    const std::size_t array_row1 = v_out.get_row1_count();
+    const std::size_t array_row2 = v_out.get_row2_count();
+    const std::size_t array_row3 = v_out.get_row3_count();
     for (std::size_t i = 0; i < array_row1; i++)
       for (std::size_t j = 0; j < array_row2; j++)
         for (std::size_t k = 0; k < array_row3; k++)

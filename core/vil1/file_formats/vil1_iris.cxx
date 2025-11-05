@@ -48,10 +48,10 @@ vil1_iris_file_format::make_input_image(vil1_stream * is)
 
   int colormap_ = 0;
 
-  int magic_ = get_short(is);
-  int storage_ = get_char(is);
-  int bytes_per_component_ = get_char(is);
-  int dimension_ = get_ushort(is);
+  const int magic_ = get_short(is);
+  const int storage_ = get_char(is);
+  const int bytes_per_component_ = get_char(is);
+  const int dimension_ = get_ushort(is);
   /*int width_     =*/get_ushort(is);
   /*int height_    =*/get_ushort(is);
   /*int planes_    =*/get_ushort(is);
@@ -305,7 +305,7 @@ vil1_iris_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys)
 bool
 vil1_iris_generic_image::get_section_verbatim(void * ib, int x0, int y0, int xs, int ys) const
 {
-  int row_len = xs * bytes_per_component_;
+  const int row_len = xs * bytes_per_component_;
 
   auto * dp = (unsigned char *)ib;
 
@@ -318,7 +318,7 @@ vil1_iris_generic_image::get_section_verbatim(void * ib, int x0, int y0, int xs,
     is_->seek(512L + channel * width_ * height_ + (y0 * width_) + x0);
     // actually: times cell size
 
-    int skipbytes_end = width_ - xs; // bytes to skip, across consecutive rows
+    const int skipbytes_end = width_ - xs; // bytes to skip, across consecutive rows
 
     // number of rows to read
     for (int row = 0; row < ys; ++row, cbi -= row_len)
@@ -336,7 +336,7 @@ vil1_iris_generic_image::get_section_verbatim(void * ib, int x0, int y0, int xs,
 bool
 vil1_iris_generic_image::get_section_rle(void * ib, int x0, int y0, int xs, int ys) const
 {
-  int row_len = xs * bytes_per_component_;
+  const int row_len = xs * bytes_per_component_;
 
   auto * dp = (unsigned char *)ib;
   auto * exrow = new unsigned char[width_];
@@ -352,8 +352,8 @@ vil1_iris_generic_image::get_section_rle(void * ib, int x0, int y0, int xs, int 
     for (int rowno = y0; rowno < y0 + ys; ++rowno, cbi -= row_len)
     {
       // find length and start position
-      unsigned long rleoffset = starttab_[rowno + channel * height_];
-      unsigned long rlelength = lengthtab_[rowno + channel * height_];
+      const unsigned long rleoffset = starttab_[rowno + channel * height_];
+      const unsigned long rlelength = lengthtab_[rowno + channel * height_];
 
       // read rle row into array
       auto * rlerow = new unsigned char[rlelength];
@@ -376,9 +376,9 @@ vil1_iris_generic_image::get_section_rle(void * ib, int x0, int y0, int xs, int 
 bool
 vil1_iris_generic_image::put_section(const void * buf, int x0, int y0, int xs, int ys)
 {
-  int ynul = height_ - y0 - ys;
+  const int ynul = height_ - y0 - ys;
 
-  int row_len = xs * bytes_per_component_;
+  const int row_len = xs * bytes_per_component_;
 
   // for each channel
   for (int channel = 0; channel < planes_; ++channel)
@@ -390,7 +390,7 @@ vil1_iris_generic_image::put_section(const void * buf, int x0, int y0, int xs, i
     // skip to start of section
     is_->seek(512 + channel * width_ * height_ + ynul * width_ * bytes_per_pixel() + x0 * bytes_per_pixel());
 
-    int skipbytes_end = width_ - xs;
+    const int skipbytes_end = width_ - xs;
 
     // number of rows to write
     for (int row = 0; row < ys; ++row, cbi -= row_len)
@@ -419,7 +419,7 @@ vil1_iris_generic_image::read_offset_tables()
     starttab_[i] = get_long(is_, 512 + (i * 4));
   }
 
-  int lengthtab_offset = 512 + tablen * 4;
+  const int lengthtab_offset = 512 + tablen * 4;
 
   for (i = 0; i < tablen; ++i)
   {

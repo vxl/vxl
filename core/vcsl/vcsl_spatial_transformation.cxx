@@ -32,7 +32,7 @@ vcsl_spatial_transformation::matching_interval(double time) const
   int sup = beat_.size() - 1;
   while (sup - inf > 1)
   {
-    int mid = (inf + sup) / 2;
+    const int mid = (inf + sup) / 2;
     if (beat_[mid] > time)
       sup = mid;
     else
@@ -58,8 +58,8 @@ double
 vcsl_spatial_transformation::lsi(double v0, double v1, int index, double time) const
 {
   assert(index >= 0 && (unsigned)index + 1 < beat_.size());
-  double t0 = beat_[index];
-  double t1 = beat_[index + 1];
+  const double t0 = beat_[index];
+  const double t1 = beat_[index + 1];
 
   return (v0 * (t1 - time) + v1 * (time - t0)) / (t1 - t0);
 }
@@ -73,14 +73,14 @@ vcsl_spatial_transformation::lvi(const vnl_vector<double> & v0,
                                  int index,
                                  double time) const
 {
-  int size = v0.size();
+  const int size = v0.size();
   assert(index >= 0 && (unsigned)index + 1 < beat_.size());
-  double t0 = beat_[index];
-  double t1 = beat_[index + 1];
+  const double t0 = beat_[index];
+  const double t1 = beat_[index + 1];
 
-  double denominator = 1 / (t1 - t0);
-  double dt1 = (t1 - time) * denominator;
-  double dt0 = (time - t0) * denominator;
+  const double denominator = 1 / (t1 - t0);
+  const double dt1 = (t1 - time) * denominator;
+  const double dt0 = (time - t0) * denominator;
 
   vnl_vector<double> result(size);
   for (int i = 0; i < size; ++i)
@@ -98,15 +98,15 @@ vcsl_spatial_transformation::lmi(const vnl_matrix<double> & m0,
                                  int index,
                                  double time) const
 {
-  int rows = m0.rows();
-  int cols = m0.cols();
+  const int rows = m0.rows();
+  const int cols = m0.cols();
   assert(index >= 0 && (unsigned)index + 1 < beat_.size());
-  double t0 = beat_[index];
-  double t1 = beat_[index + 1];
+  const double t0 = beat_[index];
+  const double t1 = beat_[index + 1];
 
-  double denominator = 1 / (t1 - t0);
-  double dt1 = (t1 - time) * denominator;
-  double dt0 = (time - t0) * denominator;
+  const double denominator = 1 / (t1 - t0);
+  const double dt1 = (t1 - time) * denominator;
+  const double dt0 = (time - t0) * denominator;
 
   vnl_matrix<double> result(rows, cols);
   for (int i = 0; i < rows; ++i)
@@ -126,15 +126,15 @@ vcsl_spatial_transformation::lqi(const vnl_quaternion<double> & v0,
                                  double time) const
 {
   assert(index >= 0 && (unsigned)index + 1 < beat_.size());
-  double t0 = beat_[index];
-  double t1 = beat_[index + 1];
-  double t = (time - t0) / (t1 - t0);
+  const double t0 = beat_[index];
+  const double t1 = beat_[index + 1];
+  const double t = (time - t0) / (t1 - t0);
 
-  double cosangle = dot_product(v0.as_ref(), v1.as_ref());
-  double angle = std::acos(cosangle);
-  double invsin = 1 / std::sin(angle);
-  double coef1 = std::sin((1 - t) * angle) * invsin;
-  double coef2 = std::sin(t * angle) * invsin;
+  const double cosangle = dot_product(v0.as_ref(), v1.as_ref());
+  const double angle = std::acos(cosangle);
+  const double invsin = 1 / std::sin(angle);
+  const double coef1 = std::sin((1 - t) * angle) * invsin;
+  const double coef2 = std::sin(t * angle) * invsin;
 
   return { v0.x() * coef1 + v1.x() * coef2,
            v0.y() * coef1 + v1.y() * coef2,

@@ -24,7 +24,7 @@ setup_scene(const vpgl_calibration_matrix<double> & K,
   world.emplace_back(1.0, 1.0, 0.0);
   world.emplace_back(1.0, 1.0, 1.0);
 
-  vgl_rotation_3d<double> I; // no rotation initially
+  const vgl_rotation_3d<double> I; // no rotation initially
 
   cameras.clear();
   cameras.emplace_back(K, vgl_homg_point_3d<double>(8.0, 0.0, 8.0), I);
@@ -56,9 +56,9 @@ test_ba_shared_k_lsqr()
   std::vector<vpgl_perspective_camera<double>> cameras;
   std::vector<vgl_point_2d<double>> image_points;
   // our known internal calibration
-  vpgl_calibration_matrix<double> K(2000.0, vgl_homg_point_2d<double>(512, 384), 1, 0.7, 2);
+  const vpgl_calibration_matrix<double> K(2000.0, vgl_homg_point_2d<double>(512, 384), 1, 0.7, 2);
   setup_scene(K, world, cameras, image_points);
-  std::vector<std::vector<bool>> mask(cameras.size(), std::vector<bool>(world.size(), true));
+  const std::vector<std::vector<bool>> mask(cameras.size(), std::vector<bool>(world.size(), true));
 
   vpgl_ba_shared_k_lsqr func(K, image_points, mask);
 
@@ -71,7 +71,7 @@ test_ba_shared_k_lsqr()
   bool valid = true;
   for (unsigned int i = 0; i < cameras.size(); ++i)
   {
-    vnl_double_3x4 P = func.vpgl_bundle_adjust_lsqr::param_to_cam(i, a, c).get_matrix();
+    const vnl_double_3x4 P = func.vpgl_bundle_adjust_lsqr::param_to_cam(i, a, c).get_matrix();
     valid &= (cameras[i].get_matrix() - P).absolute_value_max() < 1e-8;
   }
   TEST("camera conversion", valid, true);

@@ -48,7 +48,7 @@ vil_clamp_image_resource::get_property(const char * tag, void * property_value) 
 vil_image_view_base_sptr
 vil_clamp_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const
 {
-  vil_image_view_base_sptr vs = src_->get_copy_view(i0, ni, j0, nj);
+  const vil_image_view_base_sptr vs = src_->get_copy_view(i0, ni, j0, nj);
   if (!vs)
     return nullptr;
 

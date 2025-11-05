@@ -215,7 +215,7 @@ struct vil1_png_structures
     else if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB_ALPHA)
       linesize *= 4;
 
-    unsigned int height = png_get_image_height(png_ptr, info_ptr);
+    const unsigned int height = png_get_image_height(png_ptr, info_ptr);
     // Alloc the whole thing at once
     rows[0] = new png_byte[linesize * height];
     if (!rows[0])
@@ -440,12 +440,12 @@ vil1_png_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
     return false;
 
   // PNG lib wants everything in memory - the first get_rows reads the whole image.
-  png_byte ** rows = p->get_rows();
+  png_byte ** const rows = p->get_rows();
   if (!rows)
     return false;
 
-  int bytes_per_pixel = png_get_bit_depth(p->png_ptr, p->info_ptr) * p->channels / 8;
-  int bytes_per_row_dst = xs * bytes_per_pixel;
+  const int bytes_per_pixel = png_get_bit_depth(p->png_ptr, p->info_ptr) * p->channels / 8;
+  const int bytes_per_row_dst = xs * bytes_per_pixel;
   if ((unsigned int)xs == png_get_image_width(p->png_ptr, p->info_ptr))
   {
     assert(x0 == 0);
@@ -469,12 +469,12 @@ vil1_png_generic_image::put_section(const void * buf, int x0, int y0, int xs, in
 
   // PNG lib wants everything in memory - the writing isn't done till this image is deleted.
 
-  png_byte ** rows = p->get_rows();
+  png_byte ** const rows = p->get_rows();
   if (!rows)
     return false;
 
-  int bytes_per_pixel = png_get_bit_depth(p->png_ptr, p->info_ptr) * p->channels / 8;
-  int bytes_per_row_dst = xs * bytes_per_pixel;
+  const int bytes_per_pixel = png_get_bit_depth(p->png_ptr, p->info_ptr) * p->channels / 8;
+  const int bytes_per_row_dst = xs * bytes_per_pixel;
   if ((unsigned int)xs == png_get_image_width(p->png_ptr, p->info_ptr))
   {
     assert(x0 == 0);

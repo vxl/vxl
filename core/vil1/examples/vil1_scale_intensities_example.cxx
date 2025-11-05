@@ -21,21 +21,21 @@ main(int argc, char ** argv)
     std::abort();
   }
 
-  double scale = std::stod(argv[1]);
-  double shift = std::stod(argv[2]);
+  const double scale = std::stod(argv[1]);
+  const double shift = std::stod(argv[2]);
 
-  vil1_image in = vil1_load(argv[3]);
+  const vil1_image in = vil1_load(argv[3]);
 
   if (vil1_pixel_format(in) == VIL1_BYTE)
   {
-    vil1_image real_img = vil1_image_as_float(in);
-    vil1_image scaled_image = vil1_scale_intensities(real_img, scale, shift);
+    const vil1_image real_img = vil1_image_as_float(in);
+    const vil1_image scaled_image = vil1_scale_intensities(real_img, scale, shift);
     vil1_save(vil1_image_as_byte(vil1_clamp(scaled_image, 0, 255)), argv[4], "pnm");
   }
   else if (vil1_pixel_format(in) == VIL1_RGB_BYTE)
   {
-    vil1_image real_img = vil1_image_as_rgb_float(in);
-    vil1_image scaled_image = vil1_scale_intensities(real_img, scale, shift);
+    const vil1_image real_img = vil1_image_as_rgb_float(in);
+    const vil1_image scaled_image = vil1_scale_intensities(real_img, scale, shift);
     vil1_save(vil1_image_as_rgb_byte(vil1_clamp(scaled_image, 0, 255)), argv[4], "pnm");
   }
 

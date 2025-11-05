@@ -38,13 +38,13 @@ static void
 test_lens_warp_mapper()
 {
   {
-    unsigned int img_size = 128;
-    vgl_point_2d<double> center(img_size / 2.0, img_size / 2.0);
+    const unsigned int img_size = 128;
+    const vgl_point_2d<double> center(img_size / 2.0, img_size / 2.0);
     double k[] = { 0.001, 0.0001 };
     vpgl_poly_radial_distortion<double, 2> rd(center, k);
 
     // make the checkerboard image
-    vil_image_view<vxl_byte> cb = make_checker_board(img_size, img_size, 8);
+    const vil_image_view<vxl_byte> cb = make_checker_board(img_size, img_size, 8);
     vil_save(cb, "cb.jpg");
     std::cout << R"(<DartMeasurementFile name="Checker Board" type="image/jpeg"> )"
               << "cb.jpg </DartMeasurementFile>" << std::endl;
@@ -56,7 +56,7 @@ test_lens_warp_mapper()
               << "unwarp_cb.jpg </DartMeasurementFile>" << std::endl;
 
     // Pixel coords
-    vpgl_calibration_matrix<double> I; // identity
+    const vpgl_calibration_matrix<double> I; // identity
     vil_image_view<vxl_byte> unwarp_pixel_cb(cb.ni(), cb.nj(), 1);
     vpgl_lens_unwarp_pixel(cb, unwarp_pixel_cb, rd, I, interpolator);
 
@@ -66,12 +66,12 @@ test_lens_warp_mapper()
     std::cout << R"(<DartMeasurementFile name="Rewarped Checker Board" type="image/jpeg"> )"
               << "warp_cb.jpg </DartMeasurementFile>" << std::endl;
 
-    vil_image_view<vxl_byte> warp2_cb = vpgl_lens_warp_resize(cb, vxl_byte(), rd, interpolator);
+    const vil_image_view<vxl_byte> warp2_cb = vpgl_lens_warp_resize(cb, vxl_byte(), rd, interpolator);
     vil_save(warp2_cb, "warp2_cb.jpg");
     std::cout << "<DartMeasurementFile name=\"Lens Distorted Checker Board (resized)\" type=\"image/jpeg\"> "
               << "warp2_cb.jpg </DartMeasurementFile>" << std::endl;
 
-    vil_image_view<vxl_byte> unwarp2_cb = vpgl_lens_unwarp_resize(warp2_cb, vxl_byte(), rd, interpolator);
+    const vil_image_view<vxl_byte> unwarp2_cb = vpgl_lens_unwarp_resize(warp2_cb, vxl_byte(), rd, interpolator);
     vil_save(unwarp2_cb, "unwarp2_cb.jpg");
     std::cout << "<DartMeasurementFile name=\"Undistorted Checker Board (resized)\" type=\"image/jpeg\"> "
               << "unwarp2_cb.jpg </DartMeasurementFile>" << std::endl;
@@ -79,7 +79,7 @@ test_lens_warp_mapper()
     // TEST("warped bounds", distort2.width() == distort2.height() && distort2.width() == 99, true);
     // TEST_NEAR("warped offset x", distort2.offset_x(), 14.5431, 1e-3);
     // TEST_NEAR("warped offset y", distort2.offset_y(), 14.5431, 1e-3);
-    double rms = std::sqrt(vil_math_ssd(cb, warp_cb, double()) / (cb.ni() * cb.nj()));
+    const double rms = std::sqrt(vil_math_ssd(cb, warp_cb, double()) / (cb.ni() * cb.nj()));
     // This is sort of an arbitrary test
     TEST("compare unwarped to original", rms < 50, true);
     std::cout << "image rms error: " << rms << std::endl;
@@ -88,11 +88,11 @@ test_lens_warp_mapper()
   //===================================================
   // timing tests
   {
-    vgl_point_2d<double> center(256.0, 256.0);
+    const vgl_point_2d<double> center(256.0, 256.0);
     double k[2] = { 0.001, 0.0001 };
-    vpgl_poly_radial_distortion<double, 2> rd(center, k);
+    const vpgl_poly_radial_distortion<double, 2> rd(center, k);
 
-    vil_image_view<vxl_byte> cb = make_checker_board(512, 512, 32);
+    const vil_image_view<vxl_byte> cb = make_checker_board(512, 512, 32);
 
     vil_image_view<vxl_byte> warp_cb(cb.ni(), cb.nj(), 1);
     vul_timer t;

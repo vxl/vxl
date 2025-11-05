@@ -28,7 +28,7 @@ vpgl_ortho_procrustes::vpgl_ortho_procrustes(const vnl_matrix<double> & X, const
 void
 vpgl_ortho_procrustes::compute()
 {
-  unsigned N = X_.columns();
+  const unsigned N = X_.columns();
   // remove the centroid of both point sets
   vnl_vector_fixed<double, 3> Cx, Cy;
   Cx.fill(0);
@@ -72,20 +72,20 @@ vpgl_ortho_procrustes::compute()
   Xm /= sigma_x;
   Ym /= sigma_y;
 
-  vnl_matrix<double> Xt = Xm.transpose();
+  const vnl_matrix<double> Xt = Xm.transpose();
   vnl_matrix_fixed<double, 3, 3> M = Ym * Xt;
   vnl_svd<double> SVD(M.as_ref());
-  vnl_matrix_fixed<double, 3, 3> U = SVD.U();
-  vnl_matrix_fixed<double, 3, 3> V = SVD.V();
-  vnl_matrix_fixed<double, 3, 3> Ut = U.transpose();
+  const vnl_matrix_fixed<double, 3, 3> U = SVD.U();
+  const vnl_matrix_fixed<double, 3, 3> V = SVD.V();
+  const vnl_matrix_fixed<double, 3, 3> Ut = U.transpose();
   vnl_matrix_fixed<double, 3, 3> T, temp;
   temp = V * Ut;
   T.fill(0);
   T[0][0] = 1.0;
   T[1][1] = 1.0;
   T[2][2] = vnl_det<double>(temp);
-  vnl_matrix_fixed<double, 3, 3> rr = V * T * Ut;
-  double dt = vnl_det(rr);
+  const vnl_matrix_fixed<double, 3, 3> rr = V * T * Ut;
+  const double dt = vnl_det(rr);
   if (dt <= 0.0)
   {
     cannot_compute_ = true;

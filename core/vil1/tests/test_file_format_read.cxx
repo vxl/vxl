@@ -41,7 +41,7 @@ class CheckRGB : public CheckPixel
 public:
   CheckRGB(const char * file)
   {
-    vil1_image i = vil1_load((image_base + file).c_str());
+    const vil1_image i = vil1_load((image_base + file).c_str());
     if (!i)
       std::cout << "[ couldn't load " << file << "]\n";
     else
@@ -54,7 +54,7 @@ public:
     assert(p == 0);
     if (!img_ || pixel.size() != 3)
       return false;
-    vil1_rgb<T> imp = img_(x, y);
+    const vil1_rgb<T> imp = img_(x, y);
     if (pixel[0] != imp.r || pixel[1] != imp.g || pixel[2] != imp.b)
       std::cout << "(x,y)=(" << x << ',' << y << "): true=" << pixel[0] << ',' << pixel[1] << ',' << pixel[2]
                 << ", img=" << imp << '\n'
@@ -72,7 +72,7 @@ class CheckColourPlanes : public CheckPixel
 public:
   CheckColourPlanes(const char * file)
   {
-    vil1_image i = vil1_load((image_base + file).c_str());
+    const vil1_image i = vil1_load((image_base + file).c_str());
     if (!i)
       std::cout << "[ couldn't load " << file << "]\n";
     else
@@ -85,7 +85,7 @@ public:
     assert(p == 0 || p == 1 || p == 2);
     if (!img_ || pixel.size() != 1)
       return false;
-    TruePixelType imp = img_.get_buffer()[img_.width() * (img_.height() * p + y) + x];
+    const TruePixelType imp = img_.get_buffer()[img_.width() * (img_.height() * p + y) + x];
     if (pixel[0] != imp)
       std::cout << "(x,y,p)=(" << x << ',' << y << ',' << p << "): true=" << pixel[0] << ", img=" << imp << '\n'
                 << std::flush;
@@ -102,7 +102,7 @@ class CheckGrey : public CheckPixel
 public:
   CheckGrey(const char * file)
   {
-    vil1_image i = vil1_load((image_base + file).c_str());
+    const vil1_image i = vil1_load((image_base + file).c_str());
     if (!i)
       std::cout << "[ couldn't load " << file << "]\n";
     else
@@ -115,7 +115,7 @@ public:
     assert(p == 0);
     if (!img_ || pixel.size() != 1)
       return false;
-    TruePixelType imp = img_(x, y);
+    const TruePixelType imp = img_(x, y);
     if (pixel[0] != imp)
       std::cout << "(x,y)=(" << x << ',' << y << "): true=" << pixel[0] << ", img=" << imp << '\n' << std::flush;
     // no exact check, to allow for small rounding errors in float pixel types:
@@ -132,7 +132,7 @@ class CheckBit : public CheckPixel
 public:
   CheckBit(const char * file)
   {
-    vil1_image i = vil1_load((image_base + file).c_str());
+    const vil1_image i = vil1_load((image_base + file).c_str());
     if (!i)
       std::cout << "[ couldn't load " << file << "]\n";
     else
@@ -145,7 +145,7 @@ public:
     assert(p == 0);
     if (!img_ || pixel.size() != 1)
       return false;
-    TruePixelType imp = (img_(x / 8, y) >> (7 - (x & 7))) & 1;
+    const TruePixelType imp = (img_(x / 8, y) >> (7 - (x & 7))) & 1;
     if (pixel[0] != imp)
       std::cout << "(x,y)=(" << x << ',' << y << "): true=" << pixel[0] << ", img=" << imp << '\n' << std::flush;
     return pixel[0] == imp;

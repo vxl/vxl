@@ -19,11 +19,11 @@ main()
   // circle, centre (1,2), radius 1, orientation irrelevant.
   vgl_conic<double> c(centre, 1, 1, 0);
   std::cout << c << std::endl;
-  std::string name = c.real_type();
+  const std::string name = c.real_type();
   assert(name == "real circle");
 
   // same circle, now given by its equation
-  vgl_conic<double> cc(1, 0, 1, -2, -4, 4);
+  const vgl_conic<double> cc(1, 0, 1, -2, -4, 4);
   assert(c == cc);
 
   // Return the centre point of a central conic, or its point at infinity if a parabola:

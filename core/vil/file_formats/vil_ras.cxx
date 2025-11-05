@@ -353,14 +353,14 @@ vil_ras_image::get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj)
   if (type_ == RT_BYTE_ENCODED)
     return nullptr; // not yet implemented
 
-  unsigned file_bytes_per_pixel = (depth_ + 7) / 8;
-  unsigned buff_bytes_per_pixel = components_ * ((bits_per_component_ + 7) / 8);
+  const unsigned file_bytes_per_pixel = (depth_ + 7) / 8;
+  const unsigned buff_bytes_per_pixel = components_ * ((bits_per_component_ + 7) / 8);
   unsigned file_byte_width = width_ * file_bytes_per_pixel;
   file_byte_width += (file_byte_width % 2); // each scan line ends on a 16bit boundary
-  vil_streampos file_byte_start = start_of_data_ + j0 * file_byte_width + i0 * file_bytes_per_pixel;
-  unsigned buff_byte_width = ni * buff_bytes_per_pixel;
-  vil_pixel_format fmt = pixel_format();
-  vil_memory_chunk_sptr buf = new vil_memory_chunk(ni * nj * buff_bytes_per_pixel, fmt);
+  const vil_streampos file_byte_start = start_of_data_ + j0 * file_byte_width + i0 * file_bytes_per_pixel;
+  const unsigned buff_byte_width = ni * buff_bytes_per_pixel;
+  const vil_pixel_format fmt = pixel_format();
+  const vil_memory_chunk_sptr buf = new vil_memory_chunk(ni * nj * buff_bytes_per_pixel, fmt);
 
   auto * ib = reinterpret_cast<vxl_uint_8 *>(buf->data());
 
@@ -378,8 +378,8 @@ vil_ras_image::get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj)
         vxl_uint_8 * pixel = ib + j * buff_byte_width;
         for (unsigned i = 0; i < ni; ++i)
         {
-          vxl_uint_8 * rp = pixel + 2;
-          vxl_uint_8 t = *pixel;
+          vxl_uint_8 * const rp = pixel + 2;
+          const vxl_uint_8 t = *pixel;
           *pixel = *rp;
           *rp = t;
           pixel += 3;
@@ -390,7 +390,7 @@ vil_ras_image::get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj)
   else
   {
     assert(file_bytes_per_pixel == 1 && buff_bytes_per_pixel == 3);
-    unsigned col_len = map_length_ / 3;
+    const unsigned col_len = map_length_ / 3;
     // Read a line, and map every index into an RGB triple
     std::vector<vxl_uint_8> line(ni);
     for (unsigned j = 0; j < nj; ++j)
@@ -467,12 +467,12 @@ vil_ras_image::put_view(const vil_image_view_base & view, unsigned i0, unsigned 
 
   // With the restrictions above, writing is simple. Just dump the bytes.
 
-  unsigned file_bytes_per_pixel = (depth_ + 7) / 8;
-  unsigned buff_bytes_per_pixel = components_ * ((bits_per_component_ + 7) / 8);
+  const unsigned file_bytes_per_pixel = (depth_ + 7) / 8;
+  const unsigned buff_bytes_per_pixel = components_ * ((bits_per_component_ + 7) / 8);
   unsigned file_byte_width = width_ * file_bytes_per_pixel;
   file_byte_width += (file_byte_width % 2); // each scan line ends on a 16bit boundary
-  vil_streampos file_byte_start = start_of_data_ + j0 * file_byte_width + i0 * file_bytes_per_pixel;
-  unsigned buff_byte_width = view.ni() * buff_bytes_per_pixel;
+  const vil_streampos file_byte_start = start_of_data_ + j0 * file_byte_width + i0 * file_bytes_per_pixel;
+  const unsigned buff_byte_width = view.ni() * buff_bytes_per_pixel;
 
   assert(file_bytes_per_pixel == buff_bytes_per_pixel);
   assert(file_byte_width >= buff_byte_width);

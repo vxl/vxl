@@ -321,9 +321,9 @@ vul_expand_path_internal(std::string path)
   {
     if (i == path.size() || path[i] == '/')
     {
-      std::string sub(path.c_str(), path.c_str() + i);
+      const std::string sub(path.c_str(), path.c_str() + i);
       char buf[4096];
-      int len = readlink(sub.c_str(), buf, sizeof buf);
+      const int len = readlink(sub.c_str(), buf, sizeof buf);
       if (len != -1)
       {
         // it's a symlink. we should expand it and recurse.
@@ -345,9 +345,9 @@ vul_expand_path_internal(std::string path)
           if (j >= 0)
           {
             // found another slash :   ...foo/bar/etc... where bar is the symlink.
-            std::string a = std::string(path.c_str(), path.c_str() + j + 1);
-            std::string b = std::string(buf, buf + len);
-            std::string c = std::string(path.c_str() + i, path.c_str() + path.size());
+            const std::string a = std::string(path.c_str(), path.c_str() + j + 1);
+            const std::string b = std::string(buf, buf + len);
+            const std::string c = std::string(path.c_str() + i, path.c_str() + path.size());
 #  ifdef DEBUG
             std::cerr << "a = " << a << "\nb = " << b << "\nc = " << c << '\n';
 #  endif
@@ -386,7 +386,7 @@ vul_expand_path(std::string path)
   if (i == the_map.end())
   {
     // not in the map, so compute it :
-    std::string mapped = vul_expand_path_internal(path);
+    const std::string mapped = vul_expand_path_internal(path);
     // cache it :
     i = the_map.insert(map_t::value_type(path, mapped)).first;
   }

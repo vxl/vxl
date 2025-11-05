@@ -125,7 +125,7 @@ vrel_affine_est::fit_from_minimal_set(const std::vector<int> & point_indices, vn
   vnl_matrix<double> bs(min_num_pts_, min_num_pts_ - 1, 0.0);
   for (unsigned int i = 0; i < min_num_pts_; ++i)
   {
-    int index = point_indices[i];
+    const int index = point_indices[i];
     set_row_wise(A, i, 0, from_pts_[index]);
 
     const vnl_vector<double> & one_to = to_pts_[index];
@@ -133,7 +133,7 @@ vrel_affine_est::fit_from_minimal_set(const std::vector<int> & point_indices, vn
       bs[i][j] = one_to[j];
   }
 
-  vnl_svd<double> svd(A, 1.0e-8);
+  const vnl_svd<double> svd(A, 1.0e-8);
   if ((unsigned int)svd.rank() < min_num_pts_)
   {
     return false; // singular fit --- no error message needed
@@ -207,7 +207,7 @@ vrel_affine_est::weighted_least_squares_fit(vnl_vector<double> & params,
     for (unsigned int k = 0; k < j; k++)
       sumProds(j, k) = sumProds(k, j);
 
-  vnl_svd<double> svd(sumProds, 1.0e-8);
+  const vnl_svd<double> svd(sumProds, 1.0e-8);
   if ((unsigned int)svd.rank() < min_num_pts_)
   {
     std::cerr << "vrel_affine_est::WeightedLeastSquaresFit --- singularity!\n";
@@ -215,8 +215,8 @@ vrel_affine_est::weighted_least_squares_fit(vnl_vector<double> & params,
   }
   else
   {
-    vnl_matrix<double> sumP_inv(svd.inverse());
-    vnl_matrix<double> int_result = sumP_inv * sumDists;
+    const vnl_matrix<double> sumP_inv(svd.inverse());
+    const vnl_matrix<double> int_result = sumP_inv * sumDists;
     norm_covar = sumP_inv;
 
     params.set_size(affine_dof_);

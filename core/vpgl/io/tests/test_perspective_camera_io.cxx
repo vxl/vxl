@@ -13,7 +13,7 @@
 static double
 camera_diff_norm(const vpgl_perspective_camera<double> & C0, const vpgl_perspective_camera<double> & C1)
 {
-  vnl_matrix_fixed<double, 3, 4> dif = C0.get_matrix() - C1.get_matrix();
+  const vnl_matrix_fixed<double, 3, 4> dif = C0.get_matrix() - C1.get_matrix();
   return dif.fro_norm();
 }
 static void
@@ -24,17 +24,17 @@ test_perspective_camera_io()
   // ===========  Construct the camera
 
   double data[] = { 2000, 0, 512, 0, 2000, 384, 0, 0, 1 };
-  vpgl_calibration_matrix<double> K = vnl_double_3x3(data);
-  vgl_homg_point_3d<double> center(0, 0, -10.0);
+  const vpgl_calibration_matrix<double> K = vnl_double_3x3(data);
+  const vgl_homg_point_3d<double> center(0, 0, -10.0);
 
   // rotation angle in radians
-  double theta = vnl_math::pi_over_4; // 45 degrees
-  // y axis is the rotation axis
-  vnl_double_3 axis(0.0, 1.0, 0.0);
+  const double theta = vnl_math::pi_over_4; // 45 degrees
+                                            // y axis is the rotation axis
+  const vnl_double_3 axis(0.0, 1.0, 0.0);
   vgl_h_matrix_3d<double> R;
   R.set_identity().set_rotation_about_axis(axis, theta);
   std::cout << "Rotation Matrix\n" << R << '\n';
-  vpgl_perspective_camera<double> P(K, center, vgl_rotation_3d<double>(R));
+  const vpgl_perspective_camera<double> P(K, center, vgl_rotation_3d<double>(R));
 
   std::cout << "Camera " << P;
 
@@ -55,7 +55,7 @@ test_perspective_camera_io()
   bp_in.close();
   vpl_unlink("test_perspective_camera_io.tmp");
   std::cout << "Recovered Camera " << P_r;
-  double er = camera_diff_norm(P, P_r);
+  const double er = camera_diff_norm(P, P_r);
   TEST_NEAR("recovered camera", er, 0.0, 1e-3);
 }
 

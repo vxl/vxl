@@ -75,7 +75,7 @@ test_ran_sam_residuals()
 
   vrel_ran_sam_search search(1); // use deterministic seed
 
-  bool success = search.estimate(&est_prob, &obj_fcn);
+  const bool success = search.estimate(&est_prob, &obj_fcn);
   TEST("Found estimate", success, true);
   TEST_NEAR("Accurate estimate", search.params()[0], 0, 0.005);
   if (success)
@@ -179,10 +179,10 @@ test_ran_sam_search()
   //  Create the linear regression problem and an lms objective
   //  function.
   //
-  bool use_intercept = true;
-  vrel_estimation_problem * lr = new vrel_linear_regression(pts, use_intercept);
-  int dof = lr->num_samples_to_instantiate();
-  vrel_objective * lms = new vrel_lms_obj(dof);
+  const bool use_intercept = true;
+  vrel_estimation_problem * const lr = new vrel_linear_regression(pts, use_intercept);
+  const int dof = lr->num_samples_to_instantiate();
+  vrel_objective * const lms = new vrel_lms_obj(dof);
   auto * ransam = new vrel_ran_sam_search();
   TEST("ctor", !ransam, false);
 #if 0
@@ -265,11 +265,11 @@ test_ran_sam_search()
 
   delete lr;
 
-  double sigma = 0.1;
+  const double sigma = 0.1;
   std::vector<image_point_match> matches;
   vnl_double_4 sim_params(1.4, -0.2, 20.0, -18.0);
   generate_similarity_matches(sim_params.as_vector(), sigma, matches); // 20 matches, 13 points
-  vrel_estimation_problem * match_prob = new similarity_from_matches(matches);
+  vrel_estimation_problem * const match_prob = new similarity_from_matches(matches);
 #if 0
   ransam->set_sampling_params( 0.5, 0.999, 1 );
   ransam->calc_num_samples( match_prob->num_data_points(), match_prob->num_correspondences_all(),

@@ -78,9 +78,9 @@ _test_math_value_range(std::string type_name, bool test_nan = false)
   TEST("vil_math_value_range_percentile(): 73 %", val == 73, true);
 
   // Test several percentiles at once
-  std::vector<double> fraction = { 0.00, 0.05, 0.10, 0.31, 0.50, 0.73, 0.90, 0.95, 1.00 };
+  const std::vector<double> fraction = { 0.00, 0.05, 0.10, 0.31, 0.50, 0.73, 0.90, 0.95, 1.00 };
   std::vector<T> true_values = { 1, 5, 10, 31, 50, 73, 90, 95, 100 };
-  size_t nfrac = fraction.size();
+  const size_t nfrac = fraction.size();
 
   std::vector<T> values;
   vil_math_value_range_percentiles(img, fraction, values);
