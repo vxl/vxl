@@ -56,7 +56,7 @@ Checks: <
   -misc-use-internal-linkage,
    performance-faster-string-find,
    performance-for-range-copy,
-  -performance-noexcept-swap,
+   performance-noexcept-swap,
    readability-container-size-empty,
   -readability-inconsistent-declaration-parameter-name,
    readability-make-member-function-const,

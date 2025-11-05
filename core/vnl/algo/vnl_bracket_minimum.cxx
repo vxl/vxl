@@ -15,7 +15,7 @@ static const double GOLDEN_RATIO = 1.618033988749894848; // = 0.5*(std::sqrt(5)-
 static const double EPS = 1e-7;                          // Loose tolerance
 static const double EPSqr = 1e-14;
 inline void
-swap(double & a, double & b)
+swap(double & a, double & b) noexcept
 {
   const double x = a;
   a = b;
