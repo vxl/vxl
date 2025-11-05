@@ -144,7 +144,7 @@ public:
                   std::vector<std::pair<double, double>> & F_grid_points,
                   std::vector<std::pair<double, double>> & O_grid_points,
                   double & scale_factor,
-                  bool & anamorphic_corr);
+                  bool & anamorphic_corr) const;
 
   //: Return the elevation and azimuth angles of the sun
   //  \a sun_el --> sun elevation angle

@@ -59,7 +59,7 @@ Checks: <
   -performance-noexcept-swap,
    readability-container-size-empty,
   -readability-inconsistent-declaration-parameter-name,
-  -readability-make-member-function-const,
+   readability-make-member-function-const,
   -readability-non-const-parameter,
 WarningsAsErrors: ''
 HeaderFileExtensions:
