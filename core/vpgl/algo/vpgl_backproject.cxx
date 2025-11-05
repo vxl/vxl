@@ -21,7 +21,7 @@ vpgl_backproject::bproj_plane(const vpgl_generic_camera<double> & gcam,
 {
   vgl_ray_3d<double> ray;
   vgl_point_3d<double> ipt;
-  vgl_plane_3d<double> gplane(plane[0], plane[1], plane[2], plane[3]);
+  const vgl_plane_3d<double> gplane(plane[0], plane[1], plane[2], plane[3]);
   ray = gcam.ray(image_point[0], image_point[1]);
   if (!vgl_intersection<double>(ray, gplane, ipt))
     return false;
@@ -40,8 +40,8 @@ vpgl_backproject::bproj_plane(const vpgl_proj_camera<double> & pcam,
                               double /*error_tol*/,
                               double /*relative_diameter*/)
 {
-  vgl_ray_3d<double> ray = pcam.backproject_ray(vgl_homg_point_2d<double>(image_point[0], image_point[1]));
-  vgl_plane_3d<double> gplane(plane[0], plane[1], plane[2], plane[3]);
+  const vgl_ray_3d<double> ray = pcam.backproject_ray(vgl_homg_point_2d<double>(image_point[0], image_point[1]));
+  const vgl_plane_3d<double> gplane(plane[0], plane[1], plane[2], plane[3]);
 
   vgl_point_3d<double> ipt;
   if (!vgl_intersection<double>(ray, gplane, ipt))
@@ -86,7 +86,7 @@ vpgl_backproject::bproj_plane(const vpgl_camera<double> & cam,
   vnl_double_2 final_proj;
   final_proj[0] = u;
   final_proj[1] = v;
-  double err = (final_proj - image_point).magnitude();
+  const double err = (final_proj - image_point).magnitude();
   // was: double err = std::sqrt(cf.f(x));
   if (err > error_tol) // greater than a 20th of a pixel
   {
@@ -106,13 +106,13 @@ vpgl_backproject::bproj_point_vector(const vpgl_proj_camera<double> & cam,
                                      const vgl_vector_2d<double> & vect,
                                      vgl_plane_3d<double> & plane)
 {
-  vgl_homg_point_2d<double> hp(point);
+  const vgl_homg_point_2d<double> hp(point);
   // get a second point
-  vgl_vector_2d<double> vu = vect / vect.length();
-  vgl_point_2d<double> point_plus_vect = point + vu;
-  vgl_homg_point_2d<double> hp1(point_plus_vect);
-  vgl_homg_line_2d<double> hline(hp, hp1);
-  vgl_homg_plane_3d<double> hpl = cam.backproject(hline);
+  const vgl_vector_2d<double> vu = vect / vect.length();
+  const vgl_point_2d<double> point_plus_vect = point + vu;
+  const vgl_homg_point_2d<double> hp1(point_plus_vect);
+  const vgl_homg_line_2d<double> hline(hp, hp1);
+  const vgl_homg_plane_3d<double> hpl = cam.backproject(hline);
   plane = vgl_plane_3d<double>(hpl);
   // might add checks for ideal plane later
   return true;

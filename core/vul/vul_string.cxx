@@ -123,7 +123,7 @@ vul_string_c_right_trim(char * str, const char * rem) // Trim suffix from string
   {
     const char * r = rem;
     char t = 0;
-    char c = *s;
+    const char c = *s;
     while ((t = *r++) != END_OF_STRING && t != c)
       ;                     // Scan for match
     if (t == END_OF_STRING) // If no match found
@@ -137,7 +137,7 @@ vul_string_c_right_trim(char * str, const char * rem) // Trim suffix from string
 char *
 vul_string_c_reverse(char * c) // Reverse the order of characters
 {
-  int length = (int)std::strlen(c); // Number of characters in string
+  const int length = (int)std::strlen(c); // Number of characters in string
   char temp = 0;
 
   for (int i = 0, j = length - 1; // Counting from front and rear
@@ -157,7 +157,7 @@ vul_string_reverse(std::string & s)
 {
   for (int i = 0, j = (int)std::strlen(s.c_str()) - 1; i < j; ++i, --j)
   {
-    char c = s[i];
+    const char c = s[i];
     s[i] = s[j];
     s[j] = c;
   }
@@ -216,10 +216,10 @@ vul_string_capitalize(std::string & s)
 std::string &
 vul_string_trim(std::string & sr, const char * rem)
 {
-  int l = (int)std::strlen(rem);
+  const int l = (int)std::strlen(rem);
   for (;;)
   {
-    std::string::size_type loc = sr.find(rem);
+    const std::string::size_type loc = sr.find(rem);
     if (loc == std::string::npos)
       break;
     sr.erase(loc, l);
@@ -232,7 +232,7 @@ vul_string_trim(std::string & sr, const char * rem)
 std::string &
 vul_string_left_trim(std::string & sr, const char * rem)
 {
-  int l = (int)std::strlen(rem);
+  const int l = (int)std::strlen(rem);
   if (std::strncmp(sr.c_str(), rem, l) == 0)
     sr.erase(0, l);
   return sr;
@@ -243,8 +243,8 @@ vul_string_left_trim(std::string & sr, const char * rem)
 std::string &
 vul_string_right_trim(std::string & sr, const char * rem)
 {
-  int l = (int)std::strlen(rem);
-  int lsr = int(sr.length());
+  const int l = (int)std::strlen(rem);
+  const int lsr = int(sr.length());
   if (std::strncmp(sr.c_str() + lsr - l, rem, l) == 0)
     sr.erase(lsr - l, l);
   return sr;
@@ -357,13 +357,13 @@ myequals(IT b1, IT e1, const char * b2, const char * e2)
 bool
 vul_string_to_bool(const std::string & str)
 {
-  std::string::const_iterator begin = std::find_if(str.begin(), str.end(), NotSpace);
+  const std::string::const_iterator begin = std::find_if(str.begin(), str.end(), NotSpace);
   const std::string::const_reverse_iterator rend(begin);
-  std::string::const_iterator end = std::find_if(str.rbegin(), rend, NotSpace).base();
-  const char * syes = "YES";
-  const char * strue = "TRUE";
-  const char * s1 = "1";
-  const char * son = "ON";
+  const std::string::const_iterator end = std::find_if(str.rbegin(), rend, NotSpace).base();
+  const char * const syes = "YES";
+  const char * const strue = "TRUE";
+  const char * const s1 = "1";
+  const char * const son = "ON";
   return myequals(begin, end, syes, syes + 3) || myequals(begin, end, strue, strue + 4) ||
          myequals(begin, end, s1, s1 + 1) || myequals(begin, end, son, son + 2);
 }
@@ -391,8 +391,8 @@ vul_string_to_int_list(std::string str)
   {
     // the start/end positions (ref from 0) of the
     //    current ',' separated token.
-    std::ptrdiff_t start = range_regexp.start(0);
-    std::ptrdiff_t endp = range_regexp.end(0);
+    const std::ptrdiff_t start = range_regexp.start(0);
+    const std::ptrdiff_t endp = range_regexp.end(0);
     if (start != 0)
     {
       rv.clear();
@@ -400,9 +400,9 @@ vul_string_to_int_list(std::string str)
     }
 
 
-    std::string match1 = range_regexp.match(1);
-    std::string match2 = range_regexp.match(2);
-    std::string match3 = range_regexp.match(3);
+    const std::string match1 = range_regexp.match(1);
+    const std::string match2 = range_regexp.match(2);
+    const std::string match3 = range_regexp.match(3);
 
 
     // Remove this match from the front of string.
@@ -410,10 +410,10 @@ vul_string_to_int_list(std::string str)
     if (str.size() > 1 && str[0] == ',')
       str.erase(0, 1);
 
-    bool matched2 = !range_regexp.match(2).empty();
-    bool matched3 = !range_regexp.match(3).empty();
+    const bool matched2 = !range_regexp.match(2).empty();
+    const bool matched3 = !range_regexp.match(3).empty();
 
-    int s = vul_string_atoi(match1);
+    const int s = vul_string_atoi(match1);
     int d = 1;
     int e = s;
     if (matched3)
@@ -537,7 +537,7 @@ vul_string_expand_var(std::string & str)
         }
         else
         {
-          const char * value = std::getenv(str.substr(var_begin + 1, i - var_begin).c_str());
+          const char * const value = std::getenv(str.substr(var_begin + 1, i - var_begin).c_str());
           if (value)
           {
             str.replace(var_begin, i + 1 - var_begin, value);
@@ -560,7 +560,7 @@ vul_string_expand_var(std::string & str)
           }
           else
           {
-            const char * value = std::getenv(str.substr(var_begin + 2, i - var_begin - 2).c_str());
+            const char * const value = std::getenv(str.substr(var_begin + 2, i - var_begin - 2).c_str());
             if (value)
             {
               str.replace(var_begin, i + 1 - var_begin, value);
@@ -588,7 +588,7 @@ vul_string_replace(std::string & full_str, const std::string & find_str, const s
   bool rep = false;
   for (int i = 0; i < num_times; i++)
   {
-    int loc = int(full_str.find(find_str, 0));
+    const int loc = int(full_str.find(find_str, 0));
     if (loc >= 0)
     {
       full_str.replace(loc, find_str.length(), replace_str);
@@ -615,13 +615,13 @@ vul_string_escape_ctrl_chars(const std::string & in)
   static const std::string special("\t\v\b\r\f\a\\");
   static const std::string special_tr("tvbrfa\\");
 
-  for (char it : in)
+  for (const char it : in)
   {
     if (!std::iscntrl(it) || it == '\n')
       out += it;
     else
     {
-      std::string::size_type i = special.find(it);
+      const std::string::size_type i = special.find(it);
       if (i == std::string::npos)
         out += vul_sprintf("\\x%02x", static_cast<int>(it));
       else

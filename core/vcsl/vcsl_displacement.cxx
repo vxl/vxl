@@ -27,7 +27,7 @@ vcsl_displacement::execute(const vnl_vector<double> & v, double time) const
   assert(is_valid());
   assert((is_2d() && v.size() == 2) || (is_3d() && v.size() == 3));
 
-  vnl_vector<double> translation = vector_value(time);
+  const vnl_vector<double> translation = vector_value(time);
 
   vnl_vector_fixed<double, 3> result;
 
@@ -40,7 +40,7 @@ vcsl_displacement::execute(const vnl_vector<double> & v, double time) const
   else
     result = v - translation;
 
-  vnl_quaternion<double> q = quaternion(time);
+  const vnl_quaternion<double> q = quaternion(time);
   result = q.rotate(result);
 
   if (mode_2d_)
@@ -67,7 +67,7 @@ vcsl_displacement::inverse(const vnl_vector<double> & v, double time) const
   assert(is_invertible(time));
   assert((is_2d() && v.size() == 2) || (is_3d() && v.size() == 3));
 
-  vnl_vector<double> translation = vector_value(time);
+  const vnl_vector<double> translation = vector_value(time);
 
   vnl_vector_fixed<double, 3> result;
 
@@ -80,7 +80,7 @@ vcsl_displacement::inverse(const vnl_vector<double> & v, double time) const
   else
     result = v - translation;
 
-  vnl_quaternion<double> q = quaternion(time);
+  const vnl_quaternion<double> q = quaternion(time);
   result = q.conjugate().rotate(result);
 
   if (mode_2d_)
@@ -104,7 +104,7 @@ vcsl_displacement::vector_value(double time) const
     return point_[0];
   else
   {
-    int i = matching_interval(time);
+    const int i = matching_interval(time);
     switch (interpolator_[i])
     {
       case vcsl_linear:

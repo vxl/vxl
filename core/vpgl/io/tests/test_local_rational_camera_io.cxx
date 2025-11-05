@@ -50,10 +50,10 @@ test_local_rational_camera_io()
   double sz = 5.0, oz = 10.0;
   double su = 1000.0, ou = 500;
   double sv = 500.0, ov = 200;
-  vpgl_rational_camera<double> rat_cam(neu_u, den_u, neu_v, den_v, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
+  const vpgl_rational_camera<double> rat_cam(neu_u, den_u, neu_v, den_v, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
 
-  vpgl_lvcs lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
-  vpgl_local_rational_camera<double> lrat_cam(lvcs, rat_cam);
+  const vpgl_lvcs lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  const vpgl_local_rational_camera<double> lrat_cam(lvcs, rat_cam);
 
   vsl_b_ofstream bp_out("test_local_rational_camera_io.tmp");
   TEST("Created test_local_rational_camera_io.tmp for writing", (!bp_out), false);

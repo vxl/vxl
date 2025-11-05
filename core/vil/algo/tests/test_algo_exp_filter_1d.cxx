@@ -21,13 +21,13 @@ test_algo_exp_filter_1d_byte_float()
     src[i] = 0;
   src[50] = 100;
 
-  double k = 0.25;
+  const double k = 0.25;
   std::vector<float> dest(n);
   vil_exp_filter_1d(&src[0], 1, &dest[0], 1, n, float(k));
 
-  double r0 = 100 * (1 - k) / (1 + k);
+  const double r0 = 100 * (1 - k) / (1 + k);
   TEST_NEAR("Central value", dest[50], r0, 1e-4);
-  double r1 = k * r0;
+  const double r1 = k * r0;
   TEST_NEAR("Left value", dest[49], r1, 1e-6);
   TEST_NEAR("Right value", dest[51], r1, 1e-6);
   TEST_NEAR("Neighbours", dest[54] * k, dest[55], 1e-6);
@@ -79,19 +79,19 @@ test_algo_exp_filter_1d_float_float()
             << " Testing vil_algo_exp_filter_1d float-float\n"
             << "********************************************\n";
 
-  int n = 100;
+  const int n = 100;
   std::vector<float> src(n);
   for (int i = 0; i < n; ++i)
     src[i] = 0;
   src[50] = 100;
 
-  double k = 0.25;
+  const double k = 0.25;
   std::vector<float> dest(n);
   vil_exp_filter_1d(&src[0], 1, &dest[0], 1, n, float(k));
 
-  double r0 = 100 * (1 - k) / (1 + k);
+  const double r0 = 100 * (1 - k) / (1 + k);
   TEST_NEAR("Central value", dest[50], r0, 1e-4);
-  double r1 = k * r0;
+  const double r1 = k * r0;
   TEST_NEAR("Left value", dest[49], r1, 1e-6);
   TEST_NEAR("Right value", dest[51], r1, 1e-6);
   TEST_NEAR("Neighbours", dest[54] * k, dest[55], 1e-6);

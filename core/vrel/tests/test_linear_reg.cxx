@@ -18,7 +18,7 @@ close(double, double);
 static void
 test_linear_reg()
 {
-  vnl_double_3 true_params(10.0, 0.02, -0.1);
+  const vnl_double_3 true_params(10.0, 0.02, -0.1);
   vnl_double_3 a = true_params;
 
   constexpr unsigned int num_pts = 7;
@@ -165,10 +165,10 @@ test_linear_reg()
 
   // Ok.  This one should work.
   ok = lr3->weighted_least_squares_fit(par, cofact);
-  vnl_vector<double> diff(par - true_params);
-  double scale = 0.003; // rough hand guess
-  vnl_svd<double> svd_cof(cofact * scale * scale);
-  double err = std::sqrt(dot_product(diff * svd_cof.inverse(), diff)); // standardized error
+  const vnl_vector<double> diff(par - true_params);
+  const double scale = 0.003; // rough hand guess
+  const vnl_svd<double> svd_cof(cofact * scale * scale);
+  const double err = std::sqrt(dot_product(diff * svd_cof.inverse(), diff)); // standardized error
 #if 0
   std::cout << "estimated params: " << par
            << ";  true params: " << true_params << std::endl

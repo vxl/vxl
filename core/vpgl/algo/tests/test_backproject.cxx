@@ -52,15 +52,15 @@ test_backproject()
   double sz = 5.0, oz = 10.0;
   double su = 1000.0, ou = 500.0;
   double sv = 400.0, ov = 200.0;
-  vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
+  const vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
 
   vgl_point_3d<double> p0(150, 100, 10), p1(200, 100, 10), p2(200, 225, 15), p3(319.179226838, 295.970213457, 10),
     p4(339.087727547, 100, 16.0927455324);
-  vgl_point_2d<double> test_point0 = rcam.project(p0);
-  vgl_point_2d<double> test_point1 = rcam.project(p1);
-  vgl_point_2d<double> test_point2 = rcam.project(p2);
-  vgl_point_2d<double> test_point3 = rcam.project(p3); // equals test_point0 !!!
-  vgl_point_2d<double> test_point4 = rcam.project(p4); // equals test_point0 !!!
+  const vgl_point_2d<double> test_point0 = rcam.project(p0);
+  const vgl_point_2d<double> test_point1 = rcam.project(p1);
+  const vgl_point_2d<double> test_point2 = rcam.project(p2);
+  const vgl_point_2d<double> test_point3 = rcam.project(p3); // equals test_point0 !!!
+  const vgl_point_2d<double> test_point4 = rcam.project(p4); // equals test_point0 !!!
 
   std::cout << "Projection of " << p0 << "is " << test_point0 << '\n'
             << "Projection of " << p1 << "is " << test_point1 << '\n'
@@ -68,7 +68,7 @@ test_backproject()
             << "Projection of " << p3 << "is " << test_point3 << '\n'
             << "Projection of " << p4 << "is " << test_point4 << '\n';
 
-  vnl_double_2 image_point(1250, 332);
+  const vnl_double_2 image_point(1250, 332);
   vgl_point_2d<double> img_pt(1250, 332);
   TEST_NEAR("test projection p0", (img_pt - test_point0).length(), 0, 1e-8);
   TEST_NEAR("test projection p3", (img_pt - test_point3).length(), 0, 1e-8);
@@ -113,9 +113,9 @@ test_backproject()
   img_pt = vgl_point_2d<double>(1199.1003963, 346.589238723);
 
   // A plane through three of the known projection points
-  vgl_plane_3d<double> pl3(p0, p1, p2);
-  vgl_point_3d<double> iguess(150, 100, 10);
-  vgl_point_3d<double> correct(550.0 / 3, 425.0 / 3, 35.0 / 3);
+  const vgl_plane_3d<double> pl3(p0, p1, p2);
+  const vgl_point_3d<double> iguess(150, 100, 10);
+  const vgl_point_3d<double> correct(550.0 / 3, 425.0 / 3, 35.0 / 3);
   success = vpgl_backproject::bproj_plane(rcam, img_pt, pl3, iguess, wp);
   TEST("arbitrary plane backprojection convergence", success, true);
   TEST_NEAR("test backprojection on arbitrary plane", (wp - correct).length(), 0, 1e-8);

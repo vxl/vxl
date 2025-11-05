@@ -93,12 +93,12 @@ vil_stream_fstream::write(const void * buf, vil_streampos n)
     return 0;
   }
 
-  vil_streampos a = tell();
+  const vil_streampos a = tell();
   xerr << "write " << n << std::endl;
   f_.write((const char *)buf, (std::streamoff)n);
   if (!f_.good())
     std::cerr << ("vil_stream_fstream: ERROR: write failed!\n");
-  vil_streampos b = tell();
+  const vil_streampos b = tell();
   f_.flush();
   return b - a;
 }
@@ -114,7 +114,7 @@ vil_stream_fstream::read(void * buf, vil_streampos n)
   if (!(flags_ & std::ios::in))
     return 0;
 
-  vil_streampos a = tell();
+  const vil_streampos a = tell();
   xerr << "read " << n << std::endl;
   f_.read((char *)buf, (std::streamoff)n);
 
@@ -129,9 +129,9 @@ vil_stream_fstream::read(void * buf, vil_streampos n)
   if (!f_.good() && !f_.bad() && f_.eof())
     f_.clear(); // allows subsequent operations
 
-  vil_streampos b = tell();
+  const vil_streampos b = tell();
 
-  vil_streampos numread = b - a;
+  const vil_streampos numread = b - a;
   if (b < a)
   {
     xerr << "urgh!\n";
@@ -171,8 +171,8 @@ vil_stream_fstream::seek(vil_streampos position)
   // assures that cast (below) will be ok
   assert(position <= std::numeric_limits<std::streamoff>::max());
 
-  bool fi = (flags_ & std::ios::in) != 0;
-  bool fo = (flags_ & std::ios::out) != 0;
+  const bool fi = (flags_ & std::ios::in) != 0;
+  const bool fo = (flags_ & std::ios::out) != 0;
 
   if (fi && fo)
   {
@@ -198,7 +198,7 @@ vil_stream_fstream::seek(vil_streampos position)
   else if (fo)
   {
     xerr << "seekp to " << position << std::endl;
-    std::streamoff at = f_.tellp();
+    const std::streamoff at = f_.tellp();
     if (position != at)
     {
       xerr << "seekp to " << position << ", at " << (long)f_.tellp() << std::endl;
@@ -216,7 +216,7 @@ vil_stream_fstream::file_size() const
   // if not already computed, do so
   if (end_ == -1)
   {
-    std::streampos curr = f_.tellg();
+    const std::streampos curr = f_.tellg();
     f_.seekg(0, std::ios::end);
     end_ = f_.tellg();
     f_.seekg(curr);

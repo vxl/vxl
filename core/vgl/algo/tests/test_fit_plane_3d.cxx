@@ -14,7 +14,7 @@ static void
 test_fit_plane_z()
 {
   std::cout << "Fit Points to a plane\n";
-  std::vector<vgl_homg_point_3d<double>> points;
+  const std::vector<vgl_homg_point_3d<double>> points;
   vgl_fit_plane_3d<double> fit_plane;
 
   // add points in the z=0 plane
@@ -22,14 +22,14 @@ test_fit_plane_z()
   {
     for (unsigned j = 0; j < 10; j++)
     {
-      vgl_homg_point_3d<double> p(i, j, 0);
+      const vgl_homg_point_3d<double> p(i, j, 0);
       fit_plane.add_point(p);
     }
   }
-  double tol = 1e-3;
-  bool success = fit_plane.fit(tol, &std::cerr);
+  const double tol = 1e-3;
+  const bool success = fit_plane.fit(tol, &std::cerr);
   TEST("exact fit", success, true);
-  vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
+  const vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
 
   // test if origin is on the plane
   double d = vgl_distance_origin(plane);
@@ -50,7 +50,7 @@ static void
 test_fit_plane_xyz()
 {
   std::cout << "Fit Points to a plane\n";
-  std::vector<vgl_homg_point_3d<double>> points;
+  const std::vector<vgl_homg_point_3d<double>> points;
   vgl_fit_plane_3d<double> fit_plane;
   double a = 1, b = 3, c = 2, d = -5;
 
@@ -60,22 +60,22 @@ test_fit_plane_xyz()
       for (int y = -5; y <= 5; y++)
       {
         // compute z from the plane formula
-        double z = (-1 * d - a * x - b * y) / c;
-        vgl_homg_point_3d<double> p(x, y, z);
+        const double z = (-1 * d - a * x - b * y) / c;
+        const vgl_homg_point_3d<double> p(x, y, z);
         fit_plane.add_point(p);
       }
     }
   }
-  double tol = 1e-3;
-  bool success = fit_plane.fit(tol, &std::cerr);
+  const double tol = 1e-3;
+  const bool success = fit_plane.fit(tol, &std::cerr);
   TEST("test fit", success, true);
-  vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
+  const vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
 
   // test if origin is on the plane
   // get a point on the plane and test if it is on it
   double y = 11, z = 20;
-  double x = (-1 * d - b * y - c * z) / a;
-  double dist = vgl_distance(plane, vgl_homg_point_3d<double>(x, y, z));
+  const double x = (-1 * d - b * y - c * z) / a;
+  const double dist = vgl_distance(plane, vgl_homg_point_3d<double>(x, y, z));
   TEST_NEAR("on the plane", dist, 0, 1e-6);
 }
 
@@ -84,21 +84,21 @@ static void
 test_fit_plane_random()
 {
   std::cout << "Fit random points to a plane\n";
-  std::vector<vgl_homg_point_3d<double>> points;
+  const std::vector<vgl_homg_point_3d<double>> points;
   vgl_fit_plane_3d<double> fit_plane;
 
   for (int x = 0; x < 20; ++x)
   {
-    double r1 = std::rand() / (RAND_MAX + 1.0);
-    double r2 = std::rand() / (RAND_MAX + 1.0);
-    double r3 = std::rand() / (RAND_MAX + 1.0);
-    vgl_homg_point_3d<double> p(r1, r2, r3);
+    const double r1 = std::rand() / (RAND_MAX + 1.0);
+    const double r2 = std::rand() / (RAND_MAX + 1.0);
+    const double r3 = std::rand() / (RAND_MAX + 1.0);
+    const vgl_homg_point_3d<double> p(r1, r2, r3);
     fit_plane.add_point(p);
   }
-  double tol = 1e-3;
-  bool success = fit_plane.fit(tol, &std::cerr);
+  const double tol = 1e-3;
+  const bool success = fit_plane.fit(tol, &std::cerr);
   TEST("random fit", success, false);
-  vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
+  const vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
 
   std::cout << plane;
 }

@@ -53,7 +53,7 @@ vil1_new(vil1_stream * os,
     vil1_file_format * fmt = *p;
     if (std::strcmp(fmt->tag(), file_format) == 0)
     {
-      vil1_image_impl * outimage =
+      vil1_image_impl * const outimage =
         fmt->make_output_image(os, planes, width, height, components, bits_per_component, format);
       if (outimage == nullptr)
         std::cerr << "vil1_new: Unknown cannot new to type [" << file_format << "]\n";

@@ -14,9 +14,9 @@
 int
 main()
 {
-  int x0 = 0;
-  int xd = 90;
-  int x1 = 100;
+  const int x0 = 0;
+  const int xd = 90;
+  const int x1 = 100;
 
   // Params for line 1
   double a0 = 10, a1 = 0.2;
@@ -25,14 +25,14 @@ main()
   double b0 = 20, b1 = -0.01;
 
   // Small scale ("normal") noise
-  double sigma = 1.0;
+  const double sigma = 1.0;
 
   // Large scale ("outlier") noise
-  double outlier_sigma = 20.0;
+  const double outlier_sigma = 20.0;
 
-  double outlier_frac = 0.30;
+  const double outlier_frac = 0.30;
 
-  int seed = 40;
+  const int seed = 40;
   vnl_random mz_random(seed);
   int inliers = 0, outliers = 0;
 

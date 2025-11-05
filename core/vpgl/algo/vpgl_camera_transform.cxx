@@ -39,11 +39,11 @@ vpgl_camera_transform_f::vpgl_camera_transform_f(
   {
     const vpgl_calibration_matrix<double> & K = input_cam.get_calibration();
     Ks_.push_back(K);
-    vnl_matrix_fixed<double, 3, 3> R = input_cam.get_rotation().as_matrix();
+    const vnl_matrix_fixed<double, 3, 3> R = input_cam.get_rotation().as_matrix();
     Rs_.push_back(R);
     // vgl_vector_3d<double> tv = input_cams[i].get_translation();
     // vnl_vector_fixed<double, 3> tvv(tv.x(), tv.y(), tv.z());
-    vgl_point_3d<double> C = input_cam.get_camera_center();
+    const vgl_point_3d<double> C = input_cam.get_camera_center();
     // vnl_vector_fixed<double, 3> tvv(C.x(), C.y(), C.z());
     // ts_.push_back(tvv);
     Cs_.push_back(C);
@@ -55,7 +55,7 @@ vpgl_camera_transform_f::vpgl_camera_transform_f(
 void
 vpgl_camera_transform_f::f(const vnl_vector<double> & x, vnl_vector<double> & fx)
 {
-  unsigned dim = get_number_of_unknowns();
+  const unsigned dim = get_number_of_unknowns();
 
   // compute current cams
   std::vector<vpgl_perspective_camera<double>> current_cams;
@@ -75,15 +75,15 @@ vpgl_camera_transform_f::f(const vnl_vector<double> & x, vnl_vector<double> & fx
   {
     for (unsigned i = 0; i < cam_ids_img_pts_[j].size(); i++)
     {
-      unsigned cam_id = cam_ids_img_pts_[j][i].second;
+      const unsigned cam_id = cam_ids_img_pts_[j][i].second;
 
       vnl_vector_fixed<double, 2> img_pt = cam_ids_img_pts_[j][i].first;
 
       vnl_vector_fixed<double, 3> current_img_pt = current_cam_Ms[cam_id] * pts_3d_[j];
 
       // compute the residual
-      double dif0 = (current_img_pt[0] / current_img_pt[2]) - img_pt[0];
-      double dif1 = (current_img_pt[1] / current_img_pt[2]) - img_pt[1];
+      const double dif0 = (current_img_pt[0] / current_img_pt[2]) - img_pt[0];
+      const double dif1 = (current_img_pt[1] / current_img_pt[2]) - img_pt[1];
       // fx[cnt] = std::sqrt(dif0*dif0 + dif1*dif1);
       fx[cnt] = std::abs(dif0);
       cnt++;
@@ -108,10 +108,10 @@ vnl_matrix_fixed<double, 3, 3>
 vpgl_camera_transform_f::rod_to_matrix(double r0, double r1, double r2)
 {
   double x2 = r0 * r0, y2 = r1 * r1, z2 = r2 * r2;
-  double m = x2 + y2 + z2;
-  double theta = std::sqrt(m);
-  double s = std::sin(theta) / theta;
-  double c = (1 - std::cos(theta)) / m;
+  const double m = x2 + y2 + z2;
+  const double theta = std::sqrt(m);
+  const double s = std::sin(theta) / theta;
+  const double c = (1 - std::cos(theta)) / m;
 
   vnl_matrix_fixed<double, 3, 3> R(0.0);
   R(0, 0) = R(1, 1) = R(2, 2) = 1.0;
@@ -148,7 +148,7 @@ vpgl_camera_transform_f::compute_cams(const vnl_vector<double> & x,
   // w[0] = x[0]; w[1] = x[1]; w[2] = x[2];
   // vgl_rotation_3d <double> Rw(w);  // create from Rodriguez params
   // vnl_matrix_fixed<double,3,3> R = Rw.as_matrix();
-  vnl_matrix_fixed<double, 3, 3> R = rod_to_matrix(x[0], x[1], x[2]);
+  const vnl_matrix_fixed<double, 3, 3> R = rod_to_matrix(x[0], x[1], x[2]);
 
   // current t
   // vnl_vector_fixed<double, 3> t(x[3], x[4], x[5]);
@@ -157,14 +157,14 @@ vpgl_camera_transform_f::compute_cams(const vnl_vector<double> & x,
   for (unsigned i = 0; i < Ks_.size(); i++)
   {
     // compose rotations
-    vnl_matrix_fixed<double, 3, 3> Rt = R * Rs_[i];
-    vgl_rotation_3d<double> Rtr(Rt);
+    const vnl_matrix_fixed<double, 3, 3> Rt = R * Rs_[i];
+    const vgl_rotation_3d<double> Rtr(Rt);
 
     // compute new center
-    vgl_point_3d<double> Cg(Cs_[i].x() + x[3], Cs_[i].y() + x[4], Cs_[i].z() + x[5]);
+    const vgl_point_3d<double> Cg(Cs_[i].x() + x[3], Cs_[i].y() + x[4], Cs_[i].z() + x[5]);
 
     // construct transformed camera
-    vpgl_perspective_camera<double> camt(Ks_[i], Cg, Rtr);
+    const vpgl_perspective_camera<double> camt(Ks_[i], Cg, Rtr);
     output_cams.push_back(camt);
   }
 }
@@ -177,17 +177,17 @@ vpgl_camera_transform_f::compute_cams_selective(const vnl_vector<double> & x,
   { // minimize only R,
 
     // current rotation
-    vnl_matrix_fixed<double, 3, 3> R = rod_to_matrix(x[0], x[1], x[2]);
+    const vnl_matrix_fixed<double, 3, 3> R = rod_to_matrix(x[0], x[1], x[2]);
 
     // construct the new cameras
     for (unsigned i = 0; i < Ks_.size(); i++)
     {
       // compose rotations
-      vnl_matrix_fixed<double, 3, 3> Rt = R * Rs_[i];
-      vgl_rotation_3d<double> Rtr(Rt);
+      const vnl_matrix_fixed<double, 3, 3> Rt = R * Rs_[i];
+      const vgl_rotation_3d<double> Rtr(Rt);
 
       // construct transformed camera
-      vpgl_perspective_camera<double> camt(Ks_[i], Cs_[i], Rtr);
+      const vpgl_perspective_camera<double> camt(Ks_[i], Cs_[i], Rtr);
       output_cams.push_back(camt);
 
       /*if (i==0) {
@@ -201,16 +201,16 @@ vpgl_camera_transform_f::compute_cams_selective(const vnl_vector<double> & x,
     // construct the new cameras
     for (unsigned i = 0; i < Ks_.size(); i++)
     {
-      vgl_rotation_3d<double> Rtr(Rs_[i]);
+      const vgl_rotation_3d<double> Rtr(Rs_[i]);
 
       // compute new translation
       // vnl_vector_fixed<double, 3> tt = ts_[i] + Rs_[i]*t;
       // vgl_vector_3d<double> ttg(tt[0], tt[1], tt[2]);
-      vgl_point_3d<double> Cg(Cs_[i].x() + x[0], Cs_[i].y() + x[1], Cs_[i].z() + x[2]);
+      const vgl_point_3d<double> Cg(Cs_[i].x() + x[0], Cs_[i].y() + x[1], Cs_[i].z() + x[2]);
 
       // construct transformed camera
       // vpgl_perspective_camera<double> camt(Ks_[i], Rtr, ttg);
-      vpgl_perspective_camera<double> camt(Ks_[i], Cg, Rtr);
+      const vpgl_perspective_camera<double> camt(Ks_[i], Cg, Rtr);
       output_cams.push_back(camt);
 
       /*if (i==0) {
@@ -239,8 +239,8 @@ vpgl_camera_transform::normalize_img_pts(
   {
     for (const auto & i : cam_ids_img_pt)
     {
-      double x = i.first[0];
-      double y = i.first[1];
+      const double x = i.first[0];
+      const double y = i.first[1];
       nx += x;
       ny += y;
       ns += x * x + y * y;
@@ -258,12 +258,12 @@ vpgl_camera_transform::normalize_img_pts(
     std::vector<std::pair<vnl_vector_fixed<double, 2>, unsigned>> cam_pts;
     for (const auto & i : cam_ids_img_pt)
     {
-      double x = i.first[0];
-      double y = i.first[1];
+      const double x = i.first[0];
+      const double y = i.first[1];
       vnl_vector_fixed<double, 2> new_pt;
       new_pt[0] = (x - nx) / ns;
       new_pt[1] = (y - ny) / ns;
-      std::pair<vnl_vector_fixed<double, 2>, unsigned> pair(new_pt, i.second);
+      const std::pair<vnl_vector_fixed<double, 2>, unsigned> pair(new_pt, i.second);
       cam_pts.push_back(pair);
     }
     cam_ids_norm_img_pts.push_back(cam_pts);
@@ -281,10 +281,10 @@ vpgl_camera_transform::normalize_img_pts(
     K_vals[3] = Ki.principal_point().y();
     K_vals[4] = Ki.skew();
 
-    vpgl_calibration_matrix<double> Knew(
+    const vpgl_calibration_matrix<double> Knew(
       K_vals[0] / ns, vgl_point_2d<double>((K_vals[2] - nx) / ns, (K_vals[3] - ny) / ns), 1.0, K_vals[1], K_vals[4]);
 
-    vpgl_perspective_camera<double> cnew(Knew, input_cam.get_rotation(), input_cam.get_translation());
+    const vpgl_perspective_camera<double> cnew(Knew, input_cam.get_rotation(), input_cam.get_translation());
     input_cams_norm.push_back(cnew);
   }
 }
@@ -316,7 +316,8 @@ vpgl_camera_transform::compute_fixed_transformation(
   // setup the minimization problem
 
   // unsigned n_unknowns = 6;  // if 6, minimize both R and t params
-  unsigned n_unknowns = 3; // if 3 minimize only R or t params (depends on stepsizes, set stepsize negative to discard)
+  const unsigned n_unknowns =
+    3; // if 3 minimize only R or t params (depends on stepsizes, set stepsize negative to discard)
 
   vpgl_camera_transform_f f(cnt_residuals * 2, n_unknowns, input_cams_norm, cam_ids_norm_img_pts, pts_3d);
 
@@ -343,8 +344,8 @@ vpgl_camera_transform::compute_fixed_transformation(
   // denormalize output_cams
   for (unsigned i = 0; i < output_cams_denorm.size(); i++)
   {
-    vpgl_calibration_matrix<double> K = input_cams[i].get_calibration();
-    vpgl_perspective_camera<double> cnew(
+    const vpgl_calibration_matrix<double> K = input_cams[i].get_calibration();
+    const vpgl_perspective_camera<double> cnew(
       K, output_cams_denorm[i].get_rotation(), output_cams_denorm[i].get_translation());
 
     output_cams.push_back(cnew);
@@ -362,7 +363,7 @@ vpgl_camera_transform::sample_centers(double dim_x, double dim_y, double dim_z, 
     for (double x = -dim_x; x <= dim_x; x += step)
       for (double y = -dim_y; y <= dim_y; y += step)
       {
-        vnl_vector_fixed<double, 3> o(x, y, z);
+        const vnl_vector_fixed<double, 3> o(x, y, z);
         out.push_back(o);
       }
   return out;
@@ -394,7 +395,7 @@ vpgl_camera_transform::compute_fixed_transformation_sample(
 
   // setup the minimization problems
   double dim_x = 20.0, dim_y = 20.0, dim_z = 12.0; // offsets around the original cam center in meters
-  double step = 1.0;
+  const double step = 1.0;
   std::vector<vnl_vector_fixed<double, 3>> offsets = sample_centers(dim_x, dim_y, dim_z, step);
 
   double error_min = 1000000000.0;
@@ -411,12 +412,12 @@ vpgl_camera_transform::compute_fixed_transformation_sample(
       const vpgl_calibration_matrix<double> & K = j.get_calibration();
       const vgl_rotation_3d<double> & R = j.get_rotation();
       vgl_point_3d<double> C = j.get_camera_center();
-      vgl_point_3d<double> Cnew(C.x() + offsets[i][0], C.y() + offsets[i][1], C.z() + offsets[i][2]);
-      vpgl_perspective_camera<double> cnew(K, Cnew, R);
+      const vgl_point_3d<double> Cnew(C.x() + offsets[i][0], C.y() + offsets[i][1], C.z() + offsets[i][2]);
+      const vpgl_perspective_camera<double> cnew(K, Cnew, R);
       input_cams_norm_off.push_back(cnew);
     }
 
-    unsigned n_unknowns =
+    const unsigned n_unknowns =
       3; // if 3 minimize only R or t params (depends on stepsizes, set stepsize negative to discard)
     vpgl_camera_transform_f f(cnt_residuals * 2, n_unknowns, input_cams_norm_off, cam_ids_norm_img_pts, pts_3d);
 
@@ -428,7 +429,7 @@ vpgl_camera_transform::compute_fixed_transformation_sample(
 
     // std::cout << "initial params: " << x << std::endl;
     minimizer.minimize(x);
-    double enderror = minimizer.get_end_error();
+    const double enderror = minimizer.get_end_error();
     // std::cout << "end_error: " << enderror << " end params: " << x << std::endl;
 
     std::vector<vpgl_perspective_camera<double>> output_cams_denorm;
@@ -442,8 +443,8 @@ vpgl_camera_transform::compute_fixed_transformation_sample(
       // denormalize output_cams
       for (unsigned j = 0; j < output_cams_denorm.size(); j++)
       {
-        vpgl_calibration_matrix<double> K = input_cams[j].get_calibration();
-        vpgl_perspective_camera<double> cnew(
+        const vpgl_calibration_matrix<double> K = input_cams[j].get_calibration();
+        const vpgl_perspective_camera<double> cnew(
           K, output_cams_denorm[j].get_rotation(), output_cams_denorm[j].get_translation());
         output_cams[j] = cnew;
       }
@@ -485,8 +486,8 @@ vpgl_camera_transform::compute_initial_transformation(
   for (auto & i : input_cams_norm)
   {
     const vpgl_calibration_matrix<double> & K = i.get_calibration();
-    vnl_matrix_fixed<double, 3, 3> Km = K.get_matrix();
-    vnl_matrix_fixed<double, 3, 3> Kinv = vnl_inverse(Km);
+    const vnl_matrix_fixed<double, 3, 3> Km = K.get_matrix();
+    const vnl_matrix_fixed<double, 3, 3> Kinv = vnl_inverse(Km);
     input_cam_K_invs.push_back(Kinv);
   }
 
@@ -502,7 +503,7 @@ vpgl_camera_transform::compute_initial_transformation(
       pt[2] = 1.0;
       vnl_vector_fixed<double, 3> cam_pt;
       cam_pt = input_cam_K_invs[i.second] * pt;
-      std::pair<vnl_vector_fixed<double, 3>, unsigned> pair(cam_pt, i.second);
+      const std::pair<vnl_vector_fixed<double, 3>, unsigned> pair(cam_pt, i.second);
       cam_pts.push_back(pair);
     }
     cam_ids_norm_cam_pts.push_back(cam_pts);
@@ -513,9 +514,9 @@ vpgl_camera_transform::compute_initial_transformation(
   // setup the problem Ax = b
   ////////////////////////////////////////////////////////////////////////
   // two equations per correspondence
-  unsigned m = cnt_residuals * 2;
+  const unsigned m = cnt_residuals * 2;
   // there are 12 unknowns in R matrix and t vector
-  unsigned n = 12;
+  const unsigned n = 12;
   vnl_sparse_matrix<double> A(m, n);
   vnl_vector<double> B(m);
   // setup rows of A and b
@@ -527,17 +528,17 @@ vpgl_camera_transform::compute_initial_transformation(
     for (auto & i : cam_ids_norm_cam_pts[j])
     {
       vnl_vector_fixed<double, 3> pt = i.first;
-      double x = pt[0];
-      double y = pt[1];
-      double z = pt[2];
-      double a = x / z;
-      double b = y / z;
+      const double x = pt[0];
+      const double y = pt[1];
+      const double z = pt[2];
+      const double a = x / z;
+      const double b = y / z;
 
       vnl_matrix_fixed<double, 3, 3> R = input_cams_norm[i.second].get_rotation().as_matrix();
       double r1 = R[0][0], r2 = R[0][1], r3 = R[0][2];
       double r4 = R[1][0], r5 = R[1][1], r6 = R[1][2];
       double r7 = R[2][0], r8 = R[2][1], r9 = R[2][2];
-      vgl_vector_3d<double> t = input_cams_norm[i.second].get_translation();
+      const vgl_vector_3d<double> t = input_cams_norm[i.second].get_translation();
       double t1 = t.x(), t2 = t.y(), t3 = t.z();
 
       A(cnt, 0) = r7 * X * a - r1 * X;
@@ -601,7 +602,7 @@ vpgl_camera_transform::compute_initial_transformation(
   // std::cout << " R_fixed_norm: " << R_fixed_norm << std::endl; std::cout << " det of R_fixed_norm: " <<
   // vnl_det(R_fixed_norm) << std::endl;
 
-  vnl_vector_fixed<double, 3> t_fixed(unknowns[9], unknowns[10], unknowns[11]);
+  const vnl_vector_fixed<double, 3> t_fixed(unknowns[9], unknowns[10], unknowns[11]);
   std::cout << " t_fixed: " << t_fixed << std::endl;
   /////////////////////////////////////////////////////////////////////////
 
@@ -609,21 +610,21 @@ vpgl_camera_transform::compute_initial_transformation(
   for (const auto & input_cam : input_cams)
   {
     const vpgl_calibration_matrix<double> & K = input_cam.get_calibration();
-    vnl_matrix_fixed<double, 3, 3> R = input_cam.get_rotation().as_matrix();
-    vgl_vector_3d<double> t = input_cam.get_translation();
+    const vnl_matrix_fixed<double, 3, 3> R = input_cam.get_rotation().as_matrix();
+    const vgl_vector_3d<double> t = input_cam.get_translation();
     vnl_vector_fixed<double, 3> tv;
     tv[0] = t.x();
     tv[1] = t.y();
     tv[2] = t.z();
 
     // vnl_matrix_fixed<double, 3, 3> R_new = R*R_fixed_norm;
-    vnl_matrix_fixed<double, 3, 3> R_new = R * R_fixed;
+    const vnl_matrix_fixed<double, 3, 3> R_new = R * R_fixed;
     vnl_vector_fixed<double, 3> t_new = R * t_fixed + tv;
 
-    vgl_rotation_3d<double> R_newr(R_new);
-    vgl_vector_3d<double> t_newv(t_new[0], t_new[1], t_new[2]);
+    const vgl_rotation_3d<double> R_newr(R_new);
+    const vgl_vector_3d<double> t_newv(t_new[0], t_new[1], t_new[2]);
 
-    vpgl_perspective_camera<double> cnew(K, R_newr, t_newv);
+    const vpgl_perspective_camera<double> cnew(K, R_newr, t_newv);
     output_cams.push_back(cnew);
 
     std::cout << " old center: " << input_cam.get_camera_center() << " new center: " << cnew.get_camera_center();
@@ -664,8 +665,8 @@ vpgl_camera_transform::compute_initial_transformation_t(
   for (auto & i : input_cams_norm)
   {
     const vpgl_calibration_matrix<double> & K = i.get_calibration();
-    vnl_matrix_fixed<double, 3, 3> Km = K.get_matrix();
-    vnl_matrix_fixed<double, 3, 3> Kinv = vnl_inverse(Km);
+    const vnl_matrix_fixed<double, 3, 3> Km = K.get_matrix();
+    const vnl_matrix_fixed<double, 3, 3> Kinv = vnl_inverse(Km);
     input_cam_K_invs.push_back(Kinv);
   }
 
@@ -681,7 +682,7 @@ vpgl_camera_transform::compute_initial_transformation_t(
       pt[2] = 1.0;
       vnl_vector_fixed<double, 3> cam_pt;
       cam_pt = input_cam_K_invs[i.second] * pt;
-      std::pair<vnl_vector_fixed<double, 3>, unsigned> pair(cam_pt, i.second);
+      const std::pair<vnl_vector_fixed<double, 3>, unsigned> pair(cam_pt, i.second);
       cam_pts.push_back(pair);
     }
     cam_ids_norm_cam_pts.push_back(cam_pts);
@@ -692,9 +693,9 @@ vpgl_camera_transform::compute_initial_transformation_t(
   // setup the problem Ax = b
   ////////////////////////////////////////////////////////////////////////
   // two equations per correspondence
-  unsigned m = cnt_residuals * 2;
+  const unsigned m = cnt_residuals * 2;
   // there are 3 unknowns in t vector
-  unsigned n = 3;
+  const unsigned n = 3;
   vnl_sparse_matrix<double> A(m, n);
   vnl_vector<double> B(m);
   // setup rows of A and b
@@ -706,17 +707,17 @@ vpgl_camera_transform::compute_initial_transformation_t(
     for (auto & i : cam_ids_norm_cam_pts[j])
     {
       vnl_vector_fixed<double, 3> pt = i.first;
-      double x = pt[0];
-      double y = pt[1];
-      double z = pt[2];
-      double a = x / z;
-      double b = y / z;
+      const double x = pt[0];
+      const double y = pt[1];
+      const double z = pt[2];
+      const double a = x / z;
+      const double b = y / z;
 
       vnl_matrix_fixed<double, 3, 3> R = input_cams_norm[i.second].get_rotation().as_matrix();
       double r1 = R[0][0], r2 = R[0][1], r3 = R[0][2];
       double r4 = R[1][0], r5 = R[1][1], r6 = R[1][2];
       double r7 = R[2][0], r8 = R[2][1], r9 = R[2][2];
-      vgl_vector_3d<double> t = input_cams_norm[i.second].get_translation();
+      const vgl_vector_3d<double> t = input_cams_norm[i.second].get_translation();
       double t1 = t.x(), t2 = t.y();
 
       A(cnt, 0) = r7 * a - r1;
@@ -740,7 +741,7 @@ vpgl_camera_transform::compute_initial_transformation_t(
   lsqr.minimize(unknowns);
   std::cout << "unknowns: " << unknowns << std::endl;
 
-  vnl_vector_fixed<double, 3> t_fixed(unknowns[0], unknowns[1], unknowns[2]);
+  const vnl_vector_fixed<double, 3> t_fixed(unknowns[0], unknowns[1], unknowns[2]);
   std::cout << " t_fixed: " << t_fixed << std::endl;
   /////////////////////////////////////////////////////////////////////////
 
@@ -749,16 +750,16 @@ vpgl_camera_transform::compute_initial_transformation_t(
   {
     const vpgl_calibration_matrix<double> & K = input_cam.get_calibration();
     const vgl_rotation_3d<double> & R = input_cam.get_rotation();
-    vgl_vector_3d<double> t = input_cam.get_translation();
+    const vgl_vector_3d<double> t = input_cam.get_translation();
     vnl_vector_fixed<double, 3> tv;
     tv[0] = t.x();
     tv[1] = t.y();
     tv[2] = t.z();
 
     vnl_vector_fixed<double, 3> t_new = R * t_fixed + tv;
-    vgl_vector_3d<double> t_newv(t_new[0], t_new[1], t_new[2]);
+    const vgl_vector_3d<double> t_newv(t_new[0], t_new[1], t_new[2]);
 
-    vpgl_perspective_camera<double> cnew(K, R, t_newv);
+    const vpgl_perspective_camera<double> cnew(K, R, t_newv);
 
     std::cout << " old center: " << input_cam.get_camera_center() << " new center: " << cnew.get_camera_center();
     std::cout << " move by: " << (input_cam.get_camera_center() - cnew.get_camera_center()).length() << std::endl;
@@ -773,7 +774,7 @@ bool
 vpgl_camera_transform::normalize_to_rotation_matrix(const vnl_matrix_fixed<double, 3, 3> & R,
                                                     vnl_matrix_fixed<double, 3, 3> & R_norm)
 {
-  vnl_matrix<double> temp{ (R.transpose() * R).as_matrix() }; // this is symmetric
+  const vnl_matrix<double> temp{ (R.transpose() * R).as_matrix() }; // this is symmetric
 
   vnl_matrix<double> Dreal(3, 3, 0.0), Vreal(3, 3, 0.0);
   vnl_vector<double> D(3, 0.0);
@@ -812,9 +813,9 @@ vpgl_camera_transform::normalize_to_rotation_matrix_q(const vnl_matrix_fixed<dou
 {
   vnl_quaternion<double> q(R);
   std::cout << "initial q: " << q << std::endl;
-  vnl_quaternion<double> q_n = q.normalize();
+  const vnl_quaternion<double> q_n = q.normalize();
   std::cout << "norm q: " << q_n << std::endl;
-  vgl_rotation_3d<double> Rn(q_n);
+  const vgl_rotation_3d<double> Rn(q_n);
   R_norm = Rn.as_matrix();
   return true;
 }
@@ -849,8 +850,8 @@ vpgl_camera_transform::compute_initial_transformation_R(
   for (auto & i : input_cams_norm)
   {
     const vpgl_calibration_matrix<double> & K = i.get_calibration();
-    vnl_matrix_fixed<double, 3, 3> Km = K.get_matrix();
-    vnl_matrix_fixed<double, 3, 3> Kinv = vnl_inverse(Km);
+    const vnl_matrix_fixed<double, 3, 3> Km = K.get_matrix();
+    const vnl_matrix_fixed<double, 3, 3> Kinv = vnl_inverse(Km);
     input_cam_K_invs.push_back(Kinv);
   }
 
@@ -866,7 +867,7 @@ vpgl_camera_transform::compute_initial_transformation_R(
       pt[2] = 1.0;
       vnl_vector_fixed<double, 3> cam_pt;
       cam_pt = input_cam_K_invs[i.second] * pt;
-      std::pair<vnl_vector_fixed<double, 3>, unsigned> pair(cam_pt, i.second);
+      const std::pair<vnl_vector_fixed<double, 3>, unsigned> pair(cam_pt, i.second);
       cam_pts.push_back(pair);
     }
     cam_ids_norm_cam_pts.push_back(cam_pts);
@@ -877,9 +878,9 @@ vpgl_camera_transform::compute_initial_transformation_R(
   // setup the problem Ax = b
   ////////////////////////////////////////////////////////////////////////
   // two equations per correspondence
-  unsigned m = cnt_residuals * 2;
+  const unsigned m = cnt_residuals * 2;
   // there are 9 unknowns in R matrix
-  unsigned n = 9;
+  const unsigned n = 9;
   vnl_sparse_matrix<double> A(m, n);
   // vnl_matrix<double> A(m,n);
   vnl_vector<double> B(m);
@@ -892,17 +893,17 @@ vpgl_camera_transform::compute_initial_transformation_R(
     for (auto & i : cam_ids_norm_cam_pts[j])
     {
       vnl_vector_fixed<double, 3> pt = i.first;
-      double x = pt[0];
-      double y = pt[1];
-      double z = pt[2];
-      double a = x / z;
-      double b = y / z;
+      const double x = pt[0];
+      const double y = pt[1];
+      const double z = pt[2];
+      const double a = x / z;
+      const double b = y / z;
 
       vnl_matrix_fixed<double, 3, 3> R = input_cams_norm[i.second].get_rotation().as_matrix();
       double r1 = R[0][0], r2 = R[0][1], r3 = R[0][2];
       double r4 = R[1][0], r5 = R[1][1], r6 = R[1][2];
       double r7 = R[2][0], r8 = R[2][1], r9 = R[2][2];
-      vgl_vector_3d<double> t = input_cams_norm[i.second].get_translation();
+      const vgl_vector_3d<double> t = input_cams_norm[i.second].get_translation();
       double t1 = t.x(), t2 = t.y(), t3 = t.z();
 
       A(cnt, 0) = r7 * X * a - r1 * X;
@@ -969,20 +970,20 @@ vpgl_camera_transform::compute_initial_transformation_R(
   for (const auto & input_cam : input_cams)
   {
     const vpgl_calibration_matrix<double> & K = input_cam.get_calibration();
-    vnl_matrix_fixed<double, 3, 3> R = input_cam.get_rotation().as_matrix();
-    vgl_vector_3d<double> t = input_cam.get_translation();
+    const vnl_matrix_fixed<double, 3, 3> R = input_cam.get_rotation().as_matrix();
+    const vgl_vector_3d<double> t = input_cam.get_translation();
     vnl_vector_fixed<double, 3> tv;
     tv[0] = t.x();
     tv[1] = t.y();
     tv[2] = t.z();
 
 
-    vnl_matrix_fixed<double, 3, 3> R_new = R * R_fixed_norm;
+    const vnl_matrix_fixed<double, 3, 3> R_new = R * R_fixed_norm;
     // vnl_matrix_fixed<double, 3, 3> R_new = R*R_fixed;
 
-    vgl_rotation_3d<double> R_newr(R_new);
+    const vgl_rotation_3d<double> R_newr(R_new);
 
-    vpgl_perspective_camera<double> cnew(K, input_cam.get_camera_center(), R_newr);
+    const vpgl_perspective_camera<double> cnew(K, input_cam.get_camera_center(), R_newr);
     output_cams.push_back(cnew);
 
     std::cout << " old center: " << input_cam.get_camera_center() << " new center: " << cnew.get_camera_center();
@@ -1003,23 +1004,23 @@ vpgl_camera_transform::apply_fixed_transformation(const std::vector<vpgl_perspec
   for (const auto & input_cam : input_cams)
   {
     const vpgl_calibration_matrix<double> & K = input_cam.get_calibration();
-    vnl_matrix_fixed<double, 3, 3> R = input_cam.get_rotation().as_matrix();
-    vgl_vector_3d<double> t = input_cam.get_translation();
+    const vnl_matrix_fixed<double, 3, 3> R = input_cam.get_rotation().as_matrix();
+    const vgl_vector_3d<double> t = input_cam.get_translation();
     vnl_vector_fixed<double, 3> tv;
     tv[0] = t.x();
     tv[1] = t.y();
     tv[2] = t.z();
 
 
-    vnl_matrix_fixed<double, 3, 3> R_new = R_fixed * R;
+    const vnl_matrix_fixed<double, 3, 3> R_new = R_fixed * R;
 
-    vgl_rotation_3d<double> R_newr(R_new);
+    const vgl_rotation_3d<double> R_newr(R_new);
 
-    vgl_point_3d<double> cent(input_cam.get_camera_center().x() + t_fixed.x(),
-                              input_cam.get_camera_center().x() + t_fixed.y(),
-                              input_cam.get_camera_center().x() + t_fixed.z());
+    const vgl_point_3d<double> cent(input_cam.get_camera_center().x() + t_fixed.x(),
+                                    input_cam.get_camera_center().x() + t_fixed.y(),
+                                    input_cam.get_camera_center().x() + t_fixed.z());
 
-    vpgl_perspective_camera<double> cnew(K, cent, R_newr);
+    const vpgl_perspective_camera<double> cnew(K, cent, R_newr);
     output_cams.push_back(cnew);
 
     std::cout << " old center: " << input_cam.get_camera_center() << " new center: " << cnew.get_camera_center();
@@ -1045,8 +1046,8 @@ vpgl_camera_transform::K_normalize_img_pts(
   for (const auto & input_cam : input_cams)
   {
     const vpgl_calibration_matrix<double> & K = input_cam.get_calibration();
-    vnl_matrix_fixed<double, 3, 3> Km = K.get_matrix();
-    vnl_matrix_fixed<double, 3, 3> Kinv = vnl_inverse(Km);
+    const vnl_matrix_fixed<double, 3, 3> Km = K.get_matrix();
+    const vnl_matrix_fixed<double, 3, 3> Kinv = vnl_inverse(Km);
     input_cam_K_invs.push_back(Kinv);
   }
 
@@ -1065,12 +1066,14 @@ vpgl_camera_transform::K_normalize_img_pts(
       // std::pair<vnl_vector_fixed<double, 3>, unsigned> pair(cam_pt, cam_ids_img_pts[j][i].second);
 
       // also compute the covariance matrix of the normalized point using error propagation
-      vnl_matrix_fixed<double, 3, 3> KinvT = input_cam_K_invs[i.second].transpose();
-      vnl_matrix_fixed<double, 3, 3> temp = input_correspondence_covariance * KinvT;
-      vnl_matrix_fixed<double, 3, 3> correspondence_covariance = input_cam_K_invs[i.second] * temp;
+      const vnl_matrix_fixed<double, 3, 3> KinvT = input_cam_K_invs[i.second].transpose();
+      const vnl_matrix_fixed<double, 3, 3> temp = input_correspondence_covariance * KinvT;
+      const vnl_matrix_fixed<double, 3, 3> correspondence_covariance = input_cam_K_invs[i.second] * temp;
 
-      std::pair<vnl_vector_fixed<double, 3>, vnl_matrix_fixed<double, 3, 3>> pair(cam_pt, correspondence_covariance);
-      std::pair<std::pair<vnl_vector_fixed<double, 3>, vnl_matrix_fixed<double, 3, 3>>, unsigned> pair2(pair, i.second);
+      const std::pair<vnl_vector_fixed<double, 3>, vnl_matrix_fixed<double, 3, 3>> pair(cam_pt,
+                                                                                        correspondence_covariance);
+      const std::pair<std::pair<vnl_vector_fixed<double, 3>, vnl_matrix_fixed<double, 3, 3>>, unsigned> pair2(pair,
+                                                                                                              i.second);
 
       cam_pts.push_back(pair2);
     }
@@ -1091,9 +1094,9 @@ vpgl_camera_transform::compute_covariance(
     cam_ids_img_pts,
   vnl_matrix_fixed<double, 3, 3> & rot_variance)
 {
-  vgl_rotation_3d<double> R = vpgl_persp_cam_relative_orientation(input_cams[cam_i], input_cams[cam_j]);
-  vnl_matrix_fixed<double, 3, 3> Rm = R.as_matrix();
-  vgl_vector_3d<double> h = vpgl_persp_cam_base_line_vector(input_cams[cam_i], input_cams[cam_j]);
+  const vgl_rotation_3d<double> R = vpgl_persp_cam_relative_orientation(input_cams[cam_i], input_cams[cam_j]);
+  const vnl_matrix_fixed<double, 3, 3> Rm = R.as_matrix();
+  const vgl_vector_3d<double> h = vpgl_persp_cam_base_line_vector(input_cams[cam_i], input_cams[cam_j]);
   vnl_vector_fixed<double, 3> hv(h.x(), h.y(), h.z());
 
   std::vector<vnl_vector_fixed<double, 3>> cam_i_pts;
@@ -1130,28 +1133,28 @@ vpgl_camera_transform::compute_covariance(
     // std::cout << cam_i_pts[i] << " corresponds to " << cam_j_pts[i] << std::endl;
 
     // compute b vector for this correspondences b = (x,Rx')h - (h,Rx')x
-    vnl_vector_fixed<double, 3> temp = Rm * (cam_j_pts[i]);
-    double prod = dot_product(cam_i_pts[i], temp);
-    vnl_vector_fixed<double, 3> hv_new = prod * hv;
+    const vnl_vector_fixed<double, 3> temp = Rm * (cam_j_pts[i]);
+    const double prod = dot_product(cam_i_pts[i], temp);
+    const vnl_vector_fixed<double, 3> hv_new = prod * hv;
 
-    double prod2 = dot_product(hv, temp);
-    vnl_vector_fixed<double, 3> hv_new2 = prod2 * cam_i_pts[i];
+    const double prod2 = dot_product(hv, temp);
+    const vnl_vector_fixed<double, 3> hv_new2 = prod2 * cam_i_pts[i];
 
-    vnl_vector_fixed<double, 3> b = hv_new - hv_new2;
+    const vnl_vector_fixed<double, 3> b = hv_new - hv_new2;
     std::cout << " \t b: " << b << std::endl;
 
-    vnl_matrix_fixed<double, 3, 3> bb = outer_product(b, b);
+    const vnl_matrix_fixed<double, 3, 3> bb = outer_product(b, b);
     std::cout << " \t bb: \n" << bb << std::endl;
 
-    vnl_vector<double> term11{ vnl_cross_3d(hv, temp).as_vector() };
-    vnl_vector<double> term12 = cam_i_pts_cov[i] * term11;
-    double t1 = dot_product(term11, term12);
+    const vnl_vector<double> term11{ vnl_cross_3d(hv, temp).as_vector() };
+    const vnl_vector<double> term12 = cam_i_pts_cov[i] * term11;
+    const double t1 = dot_product(term11, term12);
 
-    vnl_vector<double> term21{ vnl_cross_3d(hv, cam_i_pts[i]).as_vector() };
-    vnl_matrix_fixed<double, 3, 3> term22_temp = cam_j_pts_cov[i] * Rm.transpose();
-    vnl_matrix_fixed<double, 3, 3> term22_m = Rm * term22_temp;
-    vnl_vector<double> term22 = term22_m * term21;
-    double t2 = dot_product(term21, term22);
+    const vnl_vector<double> term21{ vnl_cross_3d(hv, cam_i_pts[i]).as_vector() };
+    const vnl_matrix_fixed<double, 3, 3> term22_temp = cam_j_pts_cov[i] * Rm.transpose();
+    const vnl_matrix_fixed<double, 3, 3> term22_m = Rm * term22_temp;
+    const vnl_vector<double> term22 = term22_m * term21;
+    const double t2 = dot_product(term21, term22);
 
     vnl_matrix_fixed<double, 3, 3> hvM(0.0);
     hvM(0, 0) = 0.0;
@@ -1164,13 +1167,13 @@ vpgl_camera_transform::compute_covariance(
     hvM(2, 1) = hv[0];
     hvM(2, 2) = 0.0;
 
-    vnl_matrix_fixed<double, 3, 3> term31 = hvM * Rm;
-    vnl_matrix_fixed<double, 3, 3> term32 = cam_i_pts_cov[i] * term31;
-    vnl_matrix_fixed<double, 3, 3> term33 = term31 * cam_j_pts_cov[i];
-    vnl_matrix_fixed<double, 3, 3> term34 = term32.transpose() * term33;
-    double t3 = vnl_trace(term34); // term34[0][0] + term34[1][1] + term34[2][2];  // trace
+    const vnl_matrix_fixed<double, 3, 3> term31 = hvM * Rm;
+    const vnl_matrix_fixed<double, 3, 3> term32 = cam_i_pts_cov[i] * term31;
+    const vnl_matrix_fixed<double, 3, 3> term33 = term31 * cam_j_pts_cov[i];
+    const vnl_matrix_fixed<double, 3, 3> term34 = term32.transpose() * term33;
+    const double t3 = vnl_trace(term34); // term34[0][0] + term34[1][1] + term34[2][2];  // trace
 
-    double weight = 1.0 / (t1 + t2 + t3);
+    const double weight = 1.0 / (t1 + t2 + t3);
     std::cout << " t1: " << t1 << " t2: " << t2 << " t3: " << t3 << " weight: " << weight << std::endl;
 
     rot_variance += weight * bb;

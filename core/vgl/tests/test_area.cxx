@@ -7,7 +7,7 @@ static void
 test_simple1()
 {
   double cont1[] = { 0, 0, 5, 0, 5, 3, 0, 3 };
-  vgl_polygon<double> poly1(cont1, 4);
+  const vgl_polygon<double> poly1(cont1, 4);
   TEST_NEAR("rectangle (ccw) signed", vgl_area_signed(poly1), 15, 1e-6);
   TEST_NEAR("rectangle (ccw) unsigned", vgl_area(poly1), 15, 1e-6);
   vgl_point_2d<double> c = vgl_centroid(poly1);
@@ -19,7 +19,7 @@ static void
 test_simple2()
 {
   float cont1[] = { 0, 0, 0, 5, 4, 5, 4, 0 };
-  vgl_polygon<float> poly1(cont1, 4);
+  const vgl_polygon<float> poly1(cont1, 4);
   TEST_NEAR("rectangle (cw) signed", vgl_area_signed(poly1), -20, 1e-6);
   TEST_NEAR("rectangle (cw) unsigned", vgl_area(poly1), 20, 1e-6);
   vgl_point_2d<float> c = vgl_centroid(poly1);

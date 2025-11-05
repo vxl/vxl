@@ -30,13 +30,13 @@
 bool
 vil_save(const vil_image_view_base & im, const char * filename, const char * file_format)
 {
-  vil_stream * os = vil_open(filename, "w");
+  vil_stream * const os = vil_open(filename, "w");
   if (!os || !os->ok())
   {
     std::cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
     return false;
   }
-  vil_image_resource_sptr out =
+  const vil_image_resource_sptr out =
     vil_new_image_resource(os,
                            im.ni(),
                            im.nj(),
@@ -90,7 +90,7 @@ vil_save_guess_file_format(const char * filename)
   const char * file_format = "pnm"; // default file format
 
   // find last "."
-  const char * dot = std::strrchr(filename, '.');
+  const char * const dot = std::strrchr(filename, '.');
   if (!dot)
   {
     // filename doesn't end in ".anything"
@@ -141,7 +141,7 @@ vil_save(const vil_image_view_base & i, const char * filename)
 bool
 vil_save_image_resource(const vil_image_resource_sptr & ir, const char * filename, const char * file_format)
 {
-  vil_stream * os = vil_open(filename, "w");
+  vil_stream * const os = vil_open(filename, "w");
   if (!os || !os->ok())
   {
     std::cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";

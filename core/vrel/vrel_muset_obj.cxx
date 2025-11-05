@@ -94,7 +94,7 @@ vrel_muset_obj::internal_fcn(vect_const_iter begin, vect_const_iter end, double 
   }
   std::sort(abs_residuals.begin(), abs_residuals.end());
 
-  unsigned int num_residuals = abs_residuals.size();
+  const unsigned int num_residuals = abs_residuals.size();
   bool at_start = true;
   double best_sk = 0;
   double best_objective = 0;
@@ -138,8 +138,9 @@ vrel_muset_obj::internal_fcn(vect_const_iter begin, vect_const_iter end, double 
         {
           sum_residuals += abs_residuals[i];
         }
-        double sk = sum_residuals / table_->muset_divisor(k, num_residuals);
-        double objective = sk * table_->standard_dev_kth(k, num_residuals) / table_->expected_kth(k, num_residuals);
+        const double sk = sum_residuals / table_->muset_divisor(k, num_residuals);
+        const double objective =
+          sk * table_->standard_dev_kth(k, num_residuals) / table_->expected_kth(k, num_residuals);
 
 #ifdef DEBUG
         std::cout << "k = " << k << ", sk = " << sk << ", objective = " << objective << '\n';
@@ -221,8 +222,9 @@ vrel_muset_obj::internal_fcn(vect_const_iter begin, vect_const_iter end, double 
         {
           sum_sq_residuals += vnl_math::sqr(abs_residuals[i]);
         }
-        double sk = std::sqrt(sum_sq_residuals / table_->muset_sq_divisor(k, num_residuals));
-        double objective = sk * table_->standard_dev_kth(k, num_residuals) / table_->expected_kth(k, num_residuals);
+        const double sk = std::sqrt(sum_sq_residuals / table_->muset_sq_divisor(k, num_residuals));
+        const double objective =
+          sk * table_->standard_dev_kth(k, num_residuals) / table_->expected_kth(k, num_residuals);
 
 #ifdef DEBUG
         std::cout << "k = " << k << ", sk = " << sk << ", objective = " << objective << '\n';
@@ -278,7 +280,7 @@ vrel_muset_obj::internal_fcn(vect_const_iter begin, vect_const_iter end, double 
 #endif
       for (double frac = min_frac_; frac <= max_frac_ + 0.00001; frac += frac_inc_)
       {
-        int kk = vnl_math::rnd(frac * num_residuals);
+        const int kk = vnl_math::rnd(frac * num_residuals);
         unsigned int k = (kk <= 0) ? 1 : kk;
         if (k > num_residuals)
           k = num_residuals;
@@ -294,8 +296,9 @@ vrel_muset_obj::internal_fcn(vect_const_iter begin, vect_const_iter end, double 
           continue;
         }
 
-        double sk = abs_residuals[k - 1] / table_->expected_kth(k, num_residuals);
-        double objective = sk * table_->standard_dev_kth(k, num_residuals) / table_->expected_kth(k, num_residuals);
+        const double sk = abs_residuals[k - 1] / table_->expected_kth(k, num_residuals);
+        const double objective =
+          sk * table_->standard_dev_kth(k, num_residuals) / table_->expected_kth(k, num_residuals);
 
 #ifdef DEBUG
         std::cout << "k = " << k << ", sk = " << sk << ", objective = " << objective << '\n';

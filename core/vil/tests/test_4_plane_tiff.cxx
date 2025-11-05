@@ -19,21 +19,21 @@ test_4_plane_tiff()
         v(c, r, p) = (unsigned short)((r + 1) * (c + 1) * (p + 1));
 
   {
-    vil_stream * os = vil_open("four_plane.tiff", "w");
-    vil_blocked_image_resource_sptr out =
+    vil_stream * const os = vil_open("four_plane.tiff", "w");
+    const vil_blocked_image_resource_sptr out =
       vil_new_blocked_image_resource(os, 32, 32, 4, VIL_PIXEL_FORMAT_UINT_16, 16, 16, "tiff");
     out->put_view(v, 0, 0);
   }
-  vil_image_resource_sptr in = vil_load_image_resource("four_plane.tiff");
+  const vil_image_resource_sptr in = vil_load_image_resource("four_plane.tiff");
   vil_image_view<unsigned short> iv = in->get_view();
 
-  unsigned short v11 = iv(1, 1, 1);
-  unsigned short v13 = iv(1, 1, 3);
+  const unsigned short v11 = iv(1, 1, 1);
+  const unsigned short v13 = iv(1, 1, 3);
   TEST("Four plane image read/write", v11 + v13, 24);
-  vil_image_view_base_sptr vb = in->get_view();
-  vil_image_view<unsigned short> cvb = vb;
+  const vil_image_view_base_sptr vb = in->get_view();
+  const vil_image_view<unsigned short> cvb = vb;
 
-  vil_image_resource_sptr din = vil_pyramid_image_resource::decimate(in, "dec_four_plane.tiff");
+  const vil_image_resource_sptr din = vil_pyramid_image_resource::decimate(in, "dec_four_plane.tiff");
 
   vil_image_view<unsigned short> dv = din->get_view();
 #if 0
@@ -48,8 +48,8 @@ test_4_plane_tiff()
     std::cout << '\n';
   }
 #endif
-  unsigned short vp10 = dv(0, 0, 0);
-  unsigned short vp13 = dv(0, 0, 3);
+  unsigned short const vp10 = dv(0, 0, 0);
+  const unsigned short vp13 = dv(0, 0, 3);
 
   TEST("Four plane pyramid image decimate", vp10 == 2 && vp13 == 9, true);
 

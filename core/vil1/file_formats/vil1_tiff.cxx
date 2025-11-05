@@ -67,7 +67,7 @@ vil1_tiff_file_format_probe(vil1_stream * is)
     return 0;
 #else
   char hdr[4];
-  unsigned int read = is->read(hdr, sizeof hdr);
+  const unsigned int read = is->read(hdr, sizeof hdr);
   if (read < sizeof hdr)
     return false;
 
@@ -182,7 +182,7 @@ vil1_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
   auto * p = (vil1_tiff_structures *)h;
   if (n > p->filesize)
     p->filesize = n;
-  tsize_t ret = p->vs->read(buf, n);
+  const tsize_t ret = p->vs->read(buf, n);
   trace << "readproc, n = " << n << ", ret = " << ret << '\n';
   return ret;
 }
@@ -191,8 +191,8 @@ static tsize_t
 vil1_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
 {
   auto * p = (vil1_tiff_structures *)h;
-  tsize_t ret = p->vs->write(buf, n);
-  vil1_streampos s = p->vs->tell();
+  const tsize_t ret = p->vs->write(buf, n);
+  const vil1_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
   trace << "writeproc: ret=" << ret << '/' << n << " , filesize = " << p->filesize << "   " << s << std::endl;
@@ -216,7 +216,7 @@ vil1_tiff_seekproc(thandle_t h, toff_t offset, int whence)
   {
     p->vs->seek(p->filesize + offset);
   }
-  vil1_streampos s = p->vs->tell();
+  const vil1_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
   return s;
@@ -267,7 +267,7 @@ bool
 vil1_tiff_generic_image::get_property(const char * tag, void * prop) const
 {
   unsigned short orientation = 0;
-  int orientation_val_ok = TIFFGetField(p->tif, TIFFTAG_ORIENTATION, &orientation);
+  const int orientation_val_ok = TIFFGetField(p->tif, TIFFTAG_ORIENTATION, &orientation);
   if (orientation_val_ok != 1)
   {
     // kym - apparently most products ignore this orientation tag and use the default
@@ -275,10 +275,10 @@ vil1_tiff_generic_image::get_property(const char * tag, void * prop) const
     orientation = 1;
   }
 
-  bool topdown = (orientation == ORIENTATION_TOPLEFT || orientation == ORIENTATION_TOPRIGHT ||
-                  orientation == ORIENTATION_LEFTTOP || orientation == ORIENTATION_RIGHTTOP);
-  bool leftright = (orientation == ORIENTATION_TOPLEFT || orientation == ORIENTATION_BOTLEFT ||
-                    orientation == ORIENTATION_LEFTTOP || orientation == ORIENTATION_LEFTBOT);
+  const bool topdown = (orientation == ORIENTATION_TOPLEFT || orientation == ORIENTATION_TOPRIGHT ||
+                        orientation == ORIENTATION_LEFTTOP || orientation == ORIENTATION_RIGHTTOP);
+  const bool leftright = (orientation == ORIENTATION_TOPLEFT || orientation == ORIENTATION_BOTLEFT ||
+                          orientation == ORIENTATION_LEFTTOP || orientation == ORIENTATION_LEFTBOT);
 
   if (0 == std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool *)prop) = topdown, true : true;
@@ -302,10 +302,10 @@ vil1_tiff_generic_image::set_property(const char * tag, const void * prop) const
   {
     if (topdown == newprop) // no change necessary
       return true;
-    unsigned short orientation = (topdown && leftright)    ? ORIENTATION_TOPLEFT
-                                 : (!topdown && leftright) ? ORIENTATION_BOTLEFT
-                                 : (topdown && !leftright) ? ORIENTATION_TOPRIGHT
-                                                           : ORIENTATION_BOTRIGHT;
+    const unsigned short orientation = (topdown && leftright)    ? ORIENTATION_TOPLEFT
+                                       : (!topdown && leftright) ? ORIENTATION_BOTLEFT
+                                       : (topdown && !leftright) ? ORIENTATION_TOPRIGHT
+                                                                 : ORIENTATION_BOTRIGHT;
     TIFFSetField(p->tif, TIFFTAG_ORIENTATION, orientation);
     return true;
   }
@@ -314,10 +314,10 @@ vil1_tiff_generic_image::set_property(const char * tag, const void * prop) const
   {
     if (leftright == newprop) // no change necessary
       return true;
-    unsigned short orientation = (topdown && leftright)    ? ORIENTATION_TOPLEFT
-                                 : (!topdown && leftright) ? ORIENTATION_BOTLEFT
-                                 : (topdown && !leftright) ? ORIENTATION_TOPRIGHT
-                                                           : ORIENTATION_BOTRIGHT;
+    const unsigned short orientation = (topdown && leftright)    ? ORIENTATION_TOPLEFT
+                                       : (!topdown && leftright) ? ORIENTATION_BOTLEFT
+                                       : (topdown && !leftright) ? ORIENTATION_TOPRIGHT
+                                                                 : ORIENTATION_BOTRIGHT;
     TIFFSetField(p->tif, TIFFTAG_ORIENTATION, orientation);
     return true;
   }
@@ -612,10 +612,10 @@ vil1_tiff_generic_image::write_header()
   p->rows_per_strip = 1;
   TIFFSetField(p->tif, TIFFTAG_ROWSPERSTRIP, p->rows_per_strip);
 
-  int samplesperpixel = components_;
+  const int samplesperpixel = components_;
   TIFFSetField(p->tif, TIFFTAG_SAMPLESPERPIXEL, samplesperpixel);
 
-  int bitspersample = bits_per_component_;
+  const int bitspersample = bits_per_component_;
   TIFFSetField(p->tif, TIFFTAG_BITSPERSAMPLE, bitspersample);
 
   p->planar_config = PLANARCONFIG_CONTIG;
@@ -727,19 +727,19 @@ vil1_tiff_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys)
 
     // Random access only to strips.
     // Get the nearby strips...
-    int y1 = (y0 + ys - 1);
-    unsigned strip_min = y0 / p->rows_per_strip;
-    unsigned strip_max = y1 / p->rows_per_strip;
+    const int y1 = (y0 + ys - 1);
+    const unsigned strip_min = y0 / p->rows_per_strip;
+    const unsigned strip_max = y1 / p->rows_per_strip;
     assert(strip_max <= p->numberofstrips);
     // Get each strip
-    int pixel_bit_size = components_ * bits_per_component_;
+    const int pixel_bit_size = components_ * bits_per_component_;
     {
       for (unsigned long strip_id = strip_min; strip_id <= strip_max; ++strip_id)
       {
         TIFFReadEncodedStrip(p->tif, strip_id, p->buf, (tsize_t)-1);
         // Strip contains some rows...
-        unsigned long strip_min_row = strip_id * p->rows_per_strip;
-        unsigned long strip_max_row = strip_min_row + p->rows_per_strip - 1;
+        const unsigned long strip_min_row = strip_id * p->rows_per_strip;
+        const unsigned long strip_max_row = strip_min_row + p->rows_per_strip - 1;
 
         long ymin = (long)strip_min_row;
         if (ymin < y0)
@@ -751,8 +751,8 @@ vil1_tiff_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys)
         // printf("reading strip %d, y  = %d .. %d\n", strip_id, ymin, ymax);
         for (long y = ymin; y <= ymax; ++y)
         {
-          unsigned char * in_row = p->buf + (y - strip_min_row) * p->scanlinesize;
-          unsigned char * out_row = (unsigned char *)buf + ((y - y0) * xs * pixel_bit_size + 7) / 8;
+          unsigned char * const in_row = p->buf + (y - strip_min_row) * p->scanlinesize;
+          unsigned char * const out_row = (unsigned char *)buf + ((y - y0) * xs * pixel_bit_size + 7) / 8;
           std::memcpy(out_row, in_row + (x0 * pixel_bit_size + 7) / 8, (xs * pixel_bit_size + 7) / 8);
         }
       }
@@ -771,17 +771,17 @@ vil1_tiff_generic_image::put_section(const void * buf, int x0, int y0, int xs, i
 {
   // Random access only to strips.
   // Put the nearby strips...
-  int y1 = (y0 + ys - 1);
-  unsigned strip_min = y0 / p->rows_per_strip;
-  unsigned strip_max = y1 / p->rows_per_strip;
+  const int y1 = (y0 + ys - 1);
+  const unsigned strip_min = y0 / p->rows_per_strip;
+  const unsigned strip_max = y1 / p->rows_per_strip;
   assert(strip_max <= p->numberofstrips);
   // Put each strip
-  int pixel_byte_size = components_ * bits_per_component_ / 8;
+  const int pixel_byte_size = components_ * bits_per_component_ / 8;
   for (unsigned long strip_id = strip_min; strip_id <= strip_max; ++strip_id)
   {
     // Strip contains some rows...
-    unsigned long strip_min_row = strip_id * p->rows_per_strip;
-    unsigned long strip_max_row = strip_min_row + p->rows_per_strip - 1;
+    const unsigned long strip_min_row = strip_id * p->rows_per_strip;
+    const unsigned long strip_max_row = strip_min_row + p->rows_per_strip - 1;
 
     long ymin = (long)strip_min_row;
     if (ymin < y0)
@@ -793,8 +793,8 @@ vil1_tiff_generic_image::put_section(const void * buf, int x0, int y0, int xs, i
     // printf("writing strip %d, y  = %d .. %d\n", strip_id, ymin, ymax);
     for (long y = ymin; y <= ymax; ++y)
     {
-      unsigned char * file_row = p->buf + (y - strip_min_row) * p->scanlinesize;
-      const unsigned char * mem_row = (const unsigned char *)buf + (y - y0) * xs * pixel_byte_size;
+      unsigned char * const file_row = p->buf + (y - strip_min_row) * p->scanlinesize;
+      const unsigned char * const mem_row = (const unsigned char *)buf + (y - y0) * xs * pixel_byte_size;
       std::memcpy(file_row + x0 * pixel_byte_size, mem_row, xs * pixel_byte_size);
     }
 

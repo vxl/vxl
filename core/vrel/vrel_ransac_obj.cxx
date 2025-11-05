@@ -18,7 +18,7 @@ vrel_ransac_obj::fcn(vect_const_iter res_begin,
 
   for (; res_begin != res_end; ++res_begin, ++scale_begin)
   {
-    double thres = *scale_begin * scale_mult_;
+    const double thres = *scale_begin * scale_mult_;
     if (*res_begin < -thres || *res_begin > thres)
       sum += 1.0;
   }
@@ -33,7 +33,7 @@ vrel_ransac_obj::fcn(vect_const_iter begin,
                      vnl_vector<double> * /*param_vector*/) const
 {
   double sum = 0;
-  double thres = scale * scale_mult_;
+  const double thres = scale * scale_mult_;
 
   for (; begin != end; ++begin)
   {

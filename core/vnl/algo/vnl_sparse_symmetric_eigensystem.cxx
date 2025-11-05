@@ -528,7 +528,7 @@ vnl_sparse_symmetric_eigensystem::RestoreVectors(int n, int m, double * q, int b
   if (base == 0)
     read_idx = 0;
 
-  double * temp = temp_store[read_idx];
+  double * const temp = temp_store[read_idx];
   std::memcpy(q, temp, n * m * sizeof(double));
 #ifdef DEBUG
   std::cout << "Restore vectors " << base << ' ' << temp << '\n';

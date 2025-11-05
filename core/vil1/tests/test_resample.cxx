@@ -35,7 +35,7 @@ test_resample(int argc, char * argv[])
     std::cerr << "Using default input image " << filename << '\n';
   }
 
-  vil1_image a = vil1_load(filename);
+  const vil1_image a = vil1_load(filename);
   TEST("Load image", !a, false);
   if (!a)
   {
@@ -59,22 +59,22 @@ test_resample(int argc, char * argv[])
     return;
   }
 
-  int a1 = get_pixel(a, 0, 0, t);
-  int a11 = (a1 + get_pixel(a, 0, 1, t) + get_pixel(a, 1, 0, t) + get_pixel(a, 1, 1, t)) / 4;
-  int a2 = get_pixel(a, 24, 16, t);
-  int a22 = (a2 + get_pixel(a, 24, 17, t) + get_pixel(a, 25, 16, t) + get_pixel(a, 25, 17, t)) / 4;
-  int a3 = get_pixel(a, 10, 38, t);
-  int a33 = (a3 + get_pixel(a, 10, 39, t) + get_pixel(a, 11, 38, t) + get_pixel(a, 11, 39, t)) / 4;
+  const int a1 = get_pixel(a, 0, 0, t);
+  const int a11 = (a1 + get_pixel(a, 0, 1, t) + get_pixel(a, 1, 0, t) + get_pixel(a, 1, 1, t)) / 4;
+  const int a2 = get_pixel(a, 24, 16, t);
+  const int a22 = (a2 + get_pixel(a, 24, 17, t) + get_pixel(a, 25, 16, t) + get_pixel(a, 25, 17, t)) / 4;
+  const int a3 = get_pixel(a, 10, 38, t);
+  const int a33 = (a3 + get_pixel(a, 10, 39, t) + get_pixel(a, 11, 38, t) + get_pixel(a, 11, 39, t)) / 4;
 
   std::cout << "Simplest resampling: reduce the image by a factor 2 in both directions.\n";
 
-  vil1_image b = vil1_resample(a, wd / 2, ht / 2);
+  const vil1_image b = vil1_resample(a, wd / 2, ht / 2);
   TEST("width", b.width(), wd / 2);
   TEST("height", b.height(), ht / 2);
 
-  int b1 = get_pixel(b, 0, 0, t);
-  int b2 = get_pixel(b, 12, 8, t);
-  int b3 = get_pixel(b, 5, 19, t);
+  const int b1 = get_pixel(b, 0, 0, t);
+  const int b2 = get_pixel(b, 12, 8, t);
+  const int b3 = get_pixel(b, 5, 19, t);
   TEST("subsampled pixel value", b1, a11);
   if (b1 != a11)
     std::cout << b1 << "!=" << a11 << '\n';
@@ -90,7 +90,7 @@ test_resample(int argc, char * argv[])
 
   std::cout << "Now enlarge the image by a factor 2 in both directions.\n";
 
-  vil1_image c = vil1_resample(a, wd * 2, ht * 2);
+  const vil1_image c = vil1_resample(a, wd * 2, ht * 2);
   TEST("width", c.width(), wd * 2);
   TEST("height", c.height(), ht * 2);
 

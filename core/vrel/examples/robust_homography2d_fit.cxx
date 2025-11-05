@@ -57,17 +57,17 @@ main()
 
   auto * hg = new vrel_homography2d_est(from_pts, to_pts);
 
-  double max_outlier_frac = 0.5;
-  double desired_prob_good = 0.99;
-  int max_pops = 1;
-  int trace_level = 0;
+  const double max_outlier_frac = 0.5;
+  const double desired_prob_good = 0.99;
+  const int max_pops = 1;
+  const int trace_level = 0;
 
   //
   //  Least Median of Squares
   //
   {
-    int num_dep_res = hg->num_samples_to_instantiate();
-    vrel_objective * lms = new vrel_lms_obj(num_dep_res);
+    const int num_dep_res = hg->num_samples_to_instantiate();
+    vrel_objective * const lms = new vrel_lms_obj(num_dep_res);
 
     auto * ransam = new vrel_ran_sam_search;
     ransam->set_trace_level(trace_level);
@@ -137,7 +137,7 @@ main()
   //  MLESAC
   //
   {
-    int residual_dof = hg->residual_dof();
+    const int residual_dof = hg->residual_dof();
     auto * mlesac = new vrel_mlesac_obj(residual_dof);
 
     hg->set_prior_scale(1.0);

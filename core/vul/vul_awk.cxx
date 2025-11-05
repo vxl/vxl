@@ -39,7 +39,7 @@ vul_awk::~vul_awk() { delete[] split_line_; }
 void
 vul_awk::next()
 {
-  bool do_strip_comments = (((int)mode_) & ((int)strip_comments)) != 0;
+  const bool do_strip_comments = (((int)mode_) & ((int)strip_comments)) != 0;
 #if 0
   bool do_backslash_continuations = (int(mode_) & int(backslash_continuations)) != 0;
 #endif
@@ -54,7 +54,7 @@ vul_awk::next()
 
     while (true)
     {
-      int c = fd_.get();
+      const int c = fd_.get();
       if (c == EOF || fd_.eof())
       {
         done_ = true;
@@ -65,7 +65,7 @@ vul_awk::next()
       line_ += char(c);
     }
 
-    const char * linep = line_.c_str();
+    const char * const linep = line_.c_str();
 
     // copy string
     delete[] split_line_;
@@ -137,7 +137,7 @@ vul_awk::next()
 const char *
 vul_awk::line_from(int field_number) const
 {
-  const char * p = line_.c_str();
+  const char * const p = line_.c_str();
   if (field_number >= NF())
     field_number = NF() - 1;
   if (field_number < 0)

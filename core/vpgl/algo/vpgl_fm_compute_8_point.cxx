@@ -74,7 +74,7 @@ vpgl_fm_compute_8_point::compute(const std::vector<vgl_homg_point_2d<double>> & 
     S(i, 7) = pl_norm[i].w() * pr_norm[i].y();
     S(i, 8) = pl_norm[i].w() * pr_norm[i].w();
   }
-  vnl_svd<double> svdS(S);
+  const vnl_svd<double> svdS(S);
   vnl_vector<double> solution = svdS.nullvector();
   vnl_matrix_fixed<double, 3, 3> F_vnl{};
   F_vnl(0, 0) = solution(0);
@@ -90,7 +90,7 @@ vpgl_fm_compute_8_point::compute(const std::vector<vgl_homg_point_2d<double>> & 
   {
     // As specified in Harley & Zisserman book 2nd ed p282: first rank-enforce *then* denormalize
     fm.set_matrix(F_vnl); // constructor enforces rank 2
-    vnl_matrix_fixed<double, 3, 3> F_vnl_trunc(fm.get_matrix());
+    const vnl_matrix_fixed<double, 3, 3> F_vnl_trunc(fm.get_matrix());
     fm.set_matrix(plnt.get_matrix().transpose() * F_vnl_trunc * prnt.get_matrix());
   }
   else

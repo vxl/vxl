@@ -16,11 +16,11 @@ main(int argc, char ** argv)
     std::cerr << "usage: vil1_convert in out format\n";
     return -1;
   }
-  const char * input_filename = argv[1];
-  const char * output_filename = argv[2];
-  const char * output_format = argv[3];
+  const char * const input_filename = argv[1];
+  const char * const output_filename = argv[2];
+  const char * const output_format = argv[3];
 
-  vil1_image in = vil1_load(input_filename);
+  const vil1_image in = vil1_load(input_filename);
   if (!in)
     return -1;
 

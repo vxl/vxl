@@ -16,7 +16,7 @@ scale_at_level(unsigned level)
 {
   if (level == 0)
     return 1.0f;
-  float s = std::pow(2.0f, -static_cast<float>(level));
+  const float s = std::pow(2.0f, -static_cast<float>(level));
   return s;
 }
 
@@ -27,7 +27,7 @@ vil_j2k_nitf2_pyramid_image_resource::vil_j2k_nitf2_pyramid_image_resource(const
 
   if (!nitf2_sptr_)
     return;
-  std::string fmt = nitf2_sptr_->file_format();
+  const std::string fmt = nitf2_sptr_->file_format();
   if (fmt == "nitf21")
     ptr_ = static_cast<vil_nitf2_image *>(nitf2_sptr_.ptr());
 }
@@ -99,10 +99,10 @@ vil_j2k_nitf2_pyramid_image_resource::nlevels() const
   if (max_dim < 1000)
     return 1;
   // Assume top level of the pyramid has maximum dimension of 1K pixels
-  double scale = max_dim / 1000.0;
+  const double scale = max_dim / 1000.0;
   if (scale <= 1.0)
     return 1;
-  double lscale = std::log(scale);
+  const double lscale = std::log(scale);
   auto nlev = static_cast<unsigned>(lscale / std::log(2.0));
   return nlev;
 }
@@ -119,8 +119,8 @@ vil_j2k_nitf2_pyramid_image_resource::get_copy_view(unsigned i0,
     return nullptr;
   if (level > this->nlevels())
     level = this->nlevels() - 1;
-  double s = scale_at_level(level);
-  double factor = static_cast<unsigned>(1 / s);
+  const double s = scale_at_level(level);
+  const double factor = static_cast<unsigned>(1 / s);
   return ptr_->get_copy_view_decimated_j2k(i0, n_i, j0, n_j, factor, factor);
 }
 
@@ -140,7 +140,7 @@ vil_j2k_nitf2_pyramid_image_resource::get_copy_view(unsigned i0,
     actual_scale = 1.0f;
     return this->get_copy_view(i0, n_i, j0, n_j, 0);
   }
-  float f_lev = -std::log(scale) / std::log(2.0f);
+  const float f_lev = -std::log(scale) / std::log(2.0f);
   auto level = static_cast<unsigned>(f_lev);
   if (level > this->nlevels())
     level = this->nlevels() - 1;

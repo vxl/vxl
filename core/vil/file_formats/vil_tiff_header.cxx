@@ -139,7 +139,7 @@ vil_tiff_header::read_header()
   {
     vxl_uint_16 * cm[3];
     TIFFGetField(tif_, TIFFTAG_COLORMAP, &cm[0], &cm[1], &cm[2]);
-    unsigned size = 1 << bits_per_sample.val;
+    const unsigned size = 1 << bits_per_sample.val;
     color_map.resize(size);
     for (unsigned i = 0; i < size; ++i)
     {
@@ -318,8 +318,8 @@ vil_tiff_header::samples_per_line() const
 vxl_uint_32
 vil_tiff_header::bytes_per_line() const
 {
-  unsigned nsamp = this->samples_per_line();
-  unsigned bits_per_line = bits_per_sample.val * nsamp;
+  const unsigned nsamp = this->samples_per_line();
+  const unsigned bits_per_line = bits_per_sample.val * nsamp;
   return (bits_per_line + 7) / 8;
 }
 
@@ -334,7 +334,7 @@ vil_tiff_header::rows_in_strip() const
 {
   if (rows_per_strip.valid && image_length.valid)
   {
-    vxl_uint_32 rps = rows_per_strip.val;
+    const vxl_uint_32 rps = rows_per_strip.val;
     if (rps > image_length.val)
       return image_length.val;
     return rps;
@@ -842,7 +842,7 @@ vil_tiff_header::vil_tiff_header(TIFF * tif,
   {
     // extra_samples.val = 1;
     // extra_samples.valid = true;
-    vxl_uint_32 num_extra_samples = 1;
+    const vxl_uint_32 num_extra_samples = 1;
     vxl_uint_16 extra_sample_values[] = { EXTRASAMPLE_ASSOCALPHA /*1*/ }; // Indicate Associated Alpha Data
     TIFFSetField(tif_, TIFFTAG_EXTRASAMPLES, num_extra_samples, extra_sample_values);
   }

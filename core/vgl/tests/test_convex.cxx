@@ -25,7 +25,7 @@ test_convex()
     std::cout << '(' << pt.x() << ',' << pt.y() << ") ";
   std::cout << std::endl;
 
-  vgl_polygon<double> poly = vgl_convex_hull(pts);
+  const vgl_polygon<double> poly = vgl_convex_hull(pts);
   std::cout << "Outputs\n";
   poly.print(std::cout);
   std::cout << std::endl;

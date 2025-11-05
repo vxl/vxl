@@ -37,14 +37,14 @@ test_homg_point_1d()
   p3.set(-12, -6);
   TEST("equality", (p1 == p3), true);
 
-  float d1 = p1 - p2;
+  const float d1 = p1 - p2;
   TEST("sum; difference", (p2 + d1), p1);
 
   TEST("+=", (p2 += d1), p1);
   TEST("+=", p2, p1);
 
   float dd[] = { 1, 5, -3, 7 };
-  vnl_float_2x2 mm(dd);
+  const vnl_float_2x2 mm(dd);
   p2 = mm * p1; // homography
   TEST("matrix * point", p2, vgl_homg_point_1d<float>(7));
 
@@ -86,7 +86,7 @@ test_homg_point_1d()
   TEST_NEAR("unitize: x", u.x(), -0.6, 1e-12);
   TEST_NEAR("unitize: w", u.w(), 0.8, 1e-12);
 
-  vnl_vector_fixed<double, 2> v = vgl_homg_operators_1d<double>::get_vector(u);
+  const vnl_vector_fixed<double, 2> v = vgl_homg_operators_1d<double>::get_vector(u);
   TEST_NEAR("get_vector", v.two_norm(), 1.0, 1e-12);
 
   p2.set(4, 1);
@@ -96,10 +96,10 @@ test_homg_point_1d()
   r = vgl_homg_operators_1d<float>::cross(p1, p2);
   TEST("cross", r, -6);
 
-  vgl_homg_point_1d<float> cj = vgl_homg_operators_1d<float>::conjugate(p1, p2, p3);
+  const vgl_homg_point_1d<float> cj = vgl_homg_operators_1d<float>::conjugate(p1, p2, p3);
   TEST("conjugate", cj, vgl_homg_point_1d<float>(23.0f, 7.0f));
 
-  float cf = vgl_homg_operators_1d<float>::conjugate(1, 7, 4, 2);
+  const float cf = vgl_homg_operators_1d<float>::conjugate(1, 7, 4, 2);
   TEST("conjugate", cf, 3.f);
 
   r = vgl_homg_operators_1d<float>::distance(p1, p2);
@@ -132,14 +132,14 @@ test_homg_point_2d()
   TEST_NEAR("unitize: y", u.y(), -0.6, 1e-12);
   TEST_NEAR("unitize: w", u.w(), 0.8, 1e-12);
 
-  vnl_vector_fixed<double, 3> v = vgl_homg_operators_2d<double>::get_vector(u);
+  const vnl_vector_fixed<double, 3> v = vgl_homg_operators_2d<double>::get_vector(u);
   TEST_NEAR("get_vector", v.two_norm(), 1.0, 1e-12);
   double dd[] = { 1, 0, 0, 0, 2, 0, 1, 1, 3 };
-  vnl_double_3x3 mm(dd);
-  vgl_homg_point_2d<double> pt = mm * vgl_homg_point_2d<double>(3, 7, 1); // homography
+  const vnl_double_3x3 mm(dd);
+  const vgl_homg_point_2d<double> pt = mm * vgl_homg_point_2d<double>(3, 7, 1); // homography
   TEST("matrix*point", pt, vgl_homg_point_2d<double>(3, 14, 13));
 
-  vgl_vector_2d<int> d1 = p1 - p2;
+  const vgl_vector_2d<int> d1 = p1 - p2;
   TEST("sum; difference", (p2 + d1), p1);
 
   TEST("+=", (p2 += d1), p1);
@@ -147,7 +147,7 @@ test_homg_point_2d()
 
   p2.set(4, 5, 1);
   p3.set(7, -1, 1);
-  bool b = collinear(p1, p2, p3);
+  const bool b = collinear(p1, p2, p3);
   TEST("collinear", b, true);
   double r = ratio(p1, p2, p3);
   TEST("ratio", r, 4.0);
@@ -155,7 +155,7 @@ test_homg_point_2d()
   TEST("midpoint", m, p3);
 
   m = centre(p1, p3); // assignment
-  vgl_homg_point_2d<int> cc(5, 3, 1);
+  const vgl_homg_point_2d<int> cc(5, 3, 1);
   TEST("centre", m, cc);
   std::vector<vgl_homg_point_2d<int>> v1;
   v1.push_back(p1);
@@ -191,23 +191,23 @@ test_homg_point_2d()
   TEST("vgl_homg_operators_2d<double>::conjugate", q4, vgl_homg_point_2d<double>(-1, 9, 1));
 
   {
-    vgl_homg_line_2d<double> l = vgl_homg_operators_2d<double>::join_oriented(q1, q2);
+    const vgl_homg_line_2d<double> l = vgl_homg_operators_2d<double>::join_oriented(q1, q2);
     TEST("vgl_homg_operators_2d<double>::join_oriented", l, vgl_homg_line_2d<double>(1, 2, -17));
   }
 
   vgl_homg_line_2d<double> l1(0, 0, 1), l2(0, 1, 0), l3(1, 1, 1); // l1 = line at inf
   {
-    vgl_homg_point_2d<double> pi(l1, l2); // intersection
+    const vgl_homg_point_2d<double> pi(l1, l2); // intersection
     TEST("intersection", pi, vgl_homg_point_2d<double>(1, 0, 0));
     TEST("ideal", pi.ideal(), true);
-    vgl_homg_point_2d<double> pj = vgl_homg_operators_2d<double>::intersection(l1, l2);
+    const vgl_homg_point_2d<double> pj = vgl_homg_operators_2d<double>::intersection(l1, l2);
     TEST("intersection", pj, pi);
   }
   {
-    vgl_homg_point_2d<double> pi(l2, l3); // intersection
+    const vgl_homg_point_2d<double> pi(l2, l3); // intersection
     TEST("intersection", pi, vgl_homg_point_2d<double>(-1, 0, 1));
     TEST("is_ideal", is_ideal(pi), false);
-    vgl_homg_point_2d<double> pj = vgl_homg_operators_2d<double>::intersection(l2, l3);
+    const vgl_homg_point_2d<double> pj = vgl_homg_operators_2d<double>::intersection(l2, l3);
     TEST("intersection", pj, pi);
   }
 
@@ -223,7 +223,7 @@ test_homg_point_2d()
   r = vgl_homg_operators_2d<double>::perp_dist_squared(q1, l3);
   TEST_NEAR("vgl_homg_operators_2d<double>::perp_dist_squared", r, 60.5, 1e-12);
 
-  double pi_4 = 0.25 * vnl_math::pi;
+  const double pi_4 = 0.25 * vnl_math::pi;
   r = vgl_homg_operators_2d<double>::line_angle(l3);
   TEST_NEAR("vgl_homg_operators_2d<double>::line_angle", r, pi_4, 1e-12);
 
@@ -262,14 +262,14 @@ test_homg_point_3d()
   TEST_NEAR("unitize: z", u.z(), -0.4, 1e-12);
   TEST_NEAR("unitize: w", u.w(), 0.8, 1e-12);
 
-  vnl_vector_fixed<double, 4> v = vgl_homg_operators_3d<double>::get_vector(u);
+  const vnl_vector_fixed<double, 4> v = vgl_homg_operators_3d<double>::get_vector(u);
   TEST_NEAR("get_vector", v.two_norm(), 1.0, 1e-12);
   double dd[] = { 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 1, 1, 1, 3 };
-  vnl_double_4x4 mm(dd);
-  vgl_homg_point_3d<double> pt = mm * vgl_homg_point_3d<double>(3, -2, 7, 1); // homography
+  const vnl_double_4x4 mm(dd);
+  const vgl_homg_point_3d<double> pt = mm * vgl_homg_point_3d<double>(3, -2, 7, 1); // homography
   TEST("matrix*point", pt, vgl_homg_point_3d<double>(3, -4, 21, 11));
 
-  vgl_vector_3d<int> d1 = p1 - p2;
+  const vgl_vector_3d<int> d1 = p1 - p2;
   TEST("sum; difference", (p2 + d1), p1);
 
   TEST("+=", (p2 += d1), p1);
@@ -314,7 +314,7 @@ test_homg_point_3d()
   p2.set(4, 5, 2, 1);
   p3.set(7, -1, 11, 1);
   m = centre(p1, p3); // assignment
-  vgl_homg_point_3d<int> cc(5, 3, 5, 1);
+  const vgl_homg_point_3d<int> cc(5, 3, 5, 1);
   TEST("centre", m, cc);
   std::vector<vgl_homg_point_3d<int>> v1;
   v1.push_back(p1);
@@ -351,17 +351,17 @@ test_homg_point_3d()
 
   vgl_homg_plane_3d<double> pl1(0, 0, 0, 1), pl2(0, 1, 0, 0), pl3(0, 0, 1, 0), pl4(1, 1, 1, 1); // pl1 = plane at inf
   {
-    vgl_homg_point_3d<double> pi(pl1, pl2, pl3); // intersection
+    const vgl_homg_point_3d<double> pi(pl1, pl2, pl3); // intersection
     TEST("intersection", pi, vgl_homg_point_3d<double>(1, 0, 0, 0));
     TEST("ideal", pi.ideal(), true);
-    vgl_homg_point_3d<double> pj = vgl_homg_operators_3d<double>::intersection(pl1, pl2, pl3);
+    const vgl_homg_point_3d<double> pj = vgl_homg_operators_3d<double>::intersection(pl1, pl2, pl3);
     TEST("intersection", pj, pi);
   }
   {
-    vgl_homg_point_3d<double> pi(pl2, pl3, pl4); // intersection
+    const vgl_homg_point_3d<double> pi(pl2, pl3, pl4); // intersection
     TEST("intersection", pi, vgl_homg_point_3d<double>(-1, 0, 0, 1));
     TEST("is_ideal", is_ideal(pi), false);
-    vgl_homg_point_3d<double> pj = vgl_homg_operators_3d<double>::intersection(pl2, pl3, pl4);
+    const vgl_homg_point_3d<double> pj = vgl_homg_operators_3d<double>::intersection(pl2, pl3, pl4);
     TEST("intersection", pj, pi);
   }
 
@@ -394,11 +394,11 @@ test_homg_line_2d()
   TEST("equality", (l1 == l3), true);
 
   vnl_vector_fixed<double, 3> v = vgl_homg_operators_2d<double>::get_vector(l2);
-  vnl_vector_fixed<double, 3> vtrue = vnl_vector_fixed<double, 3>(d);
+  const vnl_vector_fixed<double, 3> vtrue = vnl_vector_fixed<double, 3>(d);
   TEST("get_vector", v, vtrue);
   double dd[] = { 1, 0, 0, 0, 2, 0, 1, 1, 3 };
-  vnl_double_3x3 mm(dd);
-  vgl_homg_line_2d<double> l = mm * vgl_homg_line_2d<double>(3, 7, 1); // homography
+  const vnl_double_3x3 mm(dd);
+  const vgl_homg_line_2d<double> l = mm * vgl_homg_line_2d<double>(3, 7, 1); // homography
   TEST("matrix*line", l, vgl_homg_line_2d<double>(3, 14, 13));
 
   vgl_homg_point_2d<double> p, q;
@@ -408,7 +408,7 @@ test_homg_line_2d()
 
   l2.set(3, 4, 0);
   l3.set(7, -1, 0);
-  bool b = concurrent(l1, l2, l3); // because they share the point (0,0)
+  const bool b = concurrent(l1, l2, l3); // because they share the point (0,0)
   TEST("concurrent", b, true);
 
   l2.set(5, -12, -7);
@@ -431,11 +431,11 @@ test_homg_line_2d()
   TEST("most_orthogonal_vector_svd", v[0] == 0 && v[1] == 0 && v[2] == 1, true);
 
   vgl_homg_point_2d<double> p1(1, 0), p2(0, 1);
-  vgl_homg_line_2d<double> li(p1, p2); // line through these two points
+  const vgl_homg_line_2d<double> li(p1, p2); // line through these two points
   vgl_homg_line_2d<double> ll(1, 1, -1);
   TEST("join", li, ll);
 
-  vgl_homg_point_2d<double> p3(0, 3);
+  const vgl_homg_point_2d<double> p3(0, 3);
   l3.set(0, -1, -8);
   TEST("vgl_distance(line,point)", vgl_distance(l3, p3), 11);
   TEST_NEAR("vgl_distance(line,point)", vgl_distance(l2, p3), 2.4, 1e-9);
@@ -473,8 +473,8 @@ test_homg_line_3d()
   TEST("equality", (l1 == l2), true);
 
   double dd[] = { 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 1, 1, 1, 3 };
-  vnl_double_4x4 mm(dd);
-  vgl_homg_plane_3d<double> l = mm * vgl_homg_plane_3d<double>(1, 3, 7, 1); // homography
+  const vnl_double_4x4 mm(dd);
+  const vgl_homg_plane_3d<double> l = mm * vgl_homg_plane_3d<double>(1, 3, 7, 1); // homography
   TEST("matrix*plane", l, vgl_homg_plane_3d<double>(1, 6, 21, 14));
 
   vgl_homg_point_3d<double> p4(1, 0, 3);
@@ -495,7 +495,7 @@ test_homg_line_3d()
   TEST("vgl_homg_operators_3d<double>::perp_projection", p4, vgl_homg_point_3d<double>(1, 1, 1, 2));
 
   double r = vgl_homg_operators_3d<double>::angle_between_oriented_lines(l1, l2);
-  double pi_2 = 0.5 * vnl_math::pi;
+  const double pi_2 = 0.5 * vnl_math::pi;
   TEST_NEAR("vgl_homg_operators_3d<double>::angle_between_oriented_lines", r, pi_2, 1e-9);
 
   r = vgl_homg_operators_3d<double>::perp_dist_squared(l3, p1);
@@ -517,22 +517,22 @@ test_homg_plane_3d()
   TEST("equality", (pl1 == pl3), true);
 
   vnl_vector_fixed<double, 4> v = vgl_homg_operators_3d<double>::get_vector(pl2);
-  vnl_vector_fixed<double, 4> vtrue = vnl_vector_fixed<double, 4>(d);
+  const vnl_vector_fixed<double, 4> vtrue = vnl_vector_fixed<double, 4>(d);
   TEST("get_vector", v, vtrue);
 
-  vgl_vector_3d<double> d1 = pl2.normal();
-  vgl_vector_3d<double> d2 = vgl_vector_3d<double>(0, 0.6, 0.8);
+  const vgl_vector_3d<double> d1 = pl2.normal();
+  const vgl_vector_3d<double> d2 = vgl_vector_3d<double>(0, 0.6, 0.8);
   TEST_NEAR("normal", (d1 - d2).sqr_length(), 0.0, 1e-12);
 
   pl2.set(1, 3, 4, 0);
   pl3.set(1, 7, -1, 0);
 
   vgl_homg_point_3d<double> p1(1, 0, 0), p2(0, 1, 0), p3(0, 0, 1);
-  vgl_homg_plane_3d<double> pl(p1, p2, p3); // homg_plane through 3 points
+  const vgl_homg_plane_3d<double> pl(p1, p2, p3); // homg_plane through 3 points
   vgl_homg_plane_3d<double> pp(1, 1, 1, -1);
   TEST("join", pl, pp);
 
-  vgl_homg_plane_3d<double> pln(pl.normal(), p1);
+  const vgl_homg_plane_3d<double> pln(pl.normal(), p1);
   TEST("Plane constructed with normal", pln, pl);
 
   TEST_NEAR("vgl_distance(plane,point)", vgl_distance(pl2, p2), std::sqrt(4.5 / 13), 1e-9);
@@ -542,7 +542,7 @@ test_homg_plane_3d()
   lst.push_back(pl1);
   lst.push_back(pl2);
   lst.push_back(pl3);
-  vgl_homg_point_3d<double> p = vgl_homg_operators_3d<double>::planes_to_point(lst);
+  const vgl_homg_point_3d<double> p = vgl_homg_operators_3d<double>::planes_to_point(lst);
   TEST_NEAR("planes_to_point", (p - vgl_homg_point_3d<double>(-31, 5, 4, 62)).sqr_length(), 0.0, 1e-12);
   v = vgl_homg_operators_3d<double>::most_orthogonal_vector_svd(lst);
   TEST_NEAR("most_orthogonal_vector_svd", v.two_norm(), 1.0, 1e-12);
@@ -593,10 +593,10 @@ cross_ratio(const vgl_homg_line_2d<int> & l1,
             const vgl_homg_line_2d<int> & l3,
             const vgl_homg_line_2d<int> & l4)
 {
-  vgl_homg_point_2d<int> p1(l1.a(), l1.b(), l1.c());
-  vgl_homg_point_2d<int> p2(l2.a(), l2.b(), l2.c());
-  vgl_homg_point_2d<int> p3(l3.a(), l3.b(), l3.c());
-  vgl_homg_point_2d<int> p4(l4.a(), l4.b(), l4.c());
+  const vgl_homg_point_2d<int> p1(l1.a(), l1.b(), l1.c());
+  const vgl_homg_point_2d<int> p2(l2.a(), l2.b(), l2.c());
+  const vgl_homg_point_2d<int> p3(l3.a(), l3.b(), l3.c());
+  const vgl_homg_point_2d<int> p4(l4.a(), l4.b(), l4.c());
   return cross_ratio(p1, p2, p3, p4);
 }
 

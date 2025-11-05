@@ -53,7 +53,7 @@ vrel_lms_obj::fcn(vect_const_iter begin,
     sq_res.push_back((*begin) * (*begin));
   }
 
-  unsigned int num_residuals = sq_res.size();
+  const unsigned int num_residuals = sq_res.size();
   assert(num_residuals >= num_sam_inst_);
 
   // 2. Find the index of the "median value" if the residuals are sorted.

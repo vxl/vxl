@@ -69,7 +69,7 @@ vil1_stream_section::write(const void * buf, vil1_streampos n)
   // failure to seek on underlying stream.
   assert(underlying_->tell() == current_);
 
-  vil1_streampos nb = underlying_->write(buf, n);
+  const vil1_streampos nb = underlying_->write(buf, n);
   if (nb != -1L)
     current_ += nb;
   return nb;
@@ -97,7 +97,7 @@ vil1_stream_section::read(void * buf, vil1_streampos n)
   // failure to seek on underlying stream.
   assert(underlying_->tell() == current_);
 
-  vil1_streampos nb = underlying_->read(buf, n);
+  const vil1_streampos nb = underlying_->read(buf, n);
   if (nb != -1L)
     current_ += nb;
   return nb;

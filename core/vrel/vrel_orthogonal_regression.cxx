@@ -15,7 +15,7 @@
 vrel_orthogonal_regression::vrel_orthogonal_regression(const vnl_matrix<double> & pts)
   : vars_(pts)
 {
-  unsigned int num_pts = pts.rows();
+  const unsigned int num_pts = pts.rows();
   set_param_dof(pts.cols());
   if (param_dof() > num_pts)
     std::cerr << "\nvrel_orthogonal_regression::vrel_orthogonal_regression  WARNING:\n"
@@ -28,7 +28,7 @@ vrel_orthogonal_regression::vrel_orthogonal_regression(const vnl_matrix<double> 
 vrel_orthogonal_regression::vrel_orthogonal_regression(const std::vector<vnl_vector<double>> & pts)
   : vars_(pts.size(), pts[0].size())
 {
-  unsigned int num_pts = vars_.rows();
+  const unsigned int num_pts = vars_.rows();
 
   for (unsigned int i = 0; i < num_pts; i++)
     vars_.set_row(i, pts[i]);
@@ -66,13 +66,13 @@ vrel_orthogonal_regression::fit_from_minimal_set(const std::vector<int> & point_
   vnl_matrix<double> A(param_dof(), param_dof() + 1, 1);
   for (unsigned int i = 0; i < param_dof(); ++i)
   {
-    int index = point_indices[i];
+    const int index = point_indices[i];
     for (unsigned int j = 0; j < param_dof(); ++j)
     {
       A(i, j) = vars_(index, j);
     }
   }
-  vnl_svd<double> svd(A, 1.0e-8);
+  const vnl_svd<double> svd(A, 1.0e-8);
   if ((unsigned int)svd.rank() < param_dof())
   {
     std::cerr << "vrel_orthogonal_regression:: singular fit!\n";
@@ -147,7 +147,7 @@ vrel_orthogonal_regression::weighted_least_squares_fit(vnl_vector<double> & para
 
   A = shift_vars.transpose() * shift_vars;
 
-  vnl_svd<double> svd(A, 1.0e-8);
+  const vnl_svd<double> svd(A, 1.0e-8);
   // Rank of (param_dof() -1) is an exact fit
   if ((unsigned int)svd.rank() < param_dof() - 1)
   {

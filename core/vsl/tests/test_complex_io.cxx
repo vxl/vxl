@@ -15,7 +15,7 @@ test_complex_io()
             << "Testing std::complex binary io\n"
             << "*****************************\n";
 
-  std::complex<float> c_float_out(1.23f, 4.56f);
+  const std::complex<float> c_float_out(1.23f, 4.56f);
 
   vsl_b_ofstream bfs_out("vsl_complex_io_test.bvl.tmp");
   TEST("Created vsl_complex_io_test.bvl.tmp for writing", (!bfs_out), false);

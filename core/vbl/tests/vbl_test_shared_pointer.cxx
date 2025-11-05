@@ -29,7 +29,7 @@ test_int()
 
   for (int i = 0; i < 10003; ++i)
   {
-    pi tmp = a;
+    const pi tmp = a;
     a = b;
     b = tmp;
   }
@@ -46,12 +46,12 @@ test_class()
   sp a(new some_class);
   sp b((some_class *)nullptr);
 
-  void * olda = (void *)a.as_pointer();
-  void * oldb = (void *)b.as_pointer();
+  void * const olda = (void *)a.as_pointer();
+  void * const oldb = (void *)b.as_pointer();
 
   for (int i = 0; i < 10003; ++i)
   {
-    sp tmp = a;
+    const sp tmp = a;
     a = b;
     b = tmp;
   }
@@ -120,7 +120,7 @@ test_derived_class()
   {
     std::cout << "Construct with derived smart pointer\n";
     {
-      d1p dp(new derv_class1);
+      const d1p dp(new derv_class1);
       bp p(dp);
       TEST("  Points to derived", p->who(), 1);
       TEST("  Object exists", derv_class1::cnt, 1);
@@ -133,7 +133,7 @@ test_derived_class()
     {
       bp p;
       {
-        d1p dp(new derv_class1);
+        const d1p dp(new derv_class1);
         p = dp;
       }
       TEST("  Points to derived", p->who(), 1);

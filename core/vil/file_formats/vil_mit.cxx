@@ -81,12 +81,12 @@ vil_mit_file_format::make_input_image(vil_stream * is)
   is->seek(0L);
   if (is->file_size() < 8L)
     return nullptr;
-  unsigned int type = vil_stream_read_little_endian_uint_16(is);
+  const unsigned int type = vil_stream_read_little_endian_uint_16(is);
 
   if (!(type == MIT_UNSIGNED || type == MIT_RGB || type == MIT_SIGNED || type == MIT_FLOAT))
     return nullptr;
 
-  unsigned int bpp = vil_stream_read_little_endian_uint_16(is);
+  const unsigned int bpp = vil_stream_read_little_endian_uint_16(is);
   if (bpp != 1 && bpp != 8 && bpp != 16 && bpp != 32 && bpp != 64)
     return nullptr;
 
@@ -170,7 +170,7 @@ vil_mit_image::read_header()
   is_->seek(0L);
 
   type_ = vil_stream_read_little_endian_uint_16(is_);
-  unsigned int bpp = vil_stream_read_little_endian_uint_16(is_);
+  const unsigned int bpp = vil_stream_read_little_endian_uint_16(is_);
   ni_ = vil_stream_read_little_endian_uint_16(is_);
   nj_ = vil_stream_read_little_endian_uint_16(is_);
 
@@ -270,7 +270,7 @@ vil_mit_image::write_header()
 static inline void
 swap(void * p, int length)
 {
-  char * t = (char *)p;
+  char * const t = (char *)p;
 #ifdef DEBUG
   if (length == sizeof(vxl_uint_32) && *(vxl_uint_32 *)p != 0)
   {
@@ -281,7 +281,7 @@ swap(void * p, int length)
 #endif
   for (int j = 0; 2 * j < length; ++j)
   {
-    char c = t[j];
+    const char c = t[j];
     t[j] = t[length - j - 1];
     t[length - j - 1] = c;
   }
@@ -308,8 +308,8 @@ vil_mit_image::get_copy_view(unsigned int x0, unsigned int xs, unsigned int y0, 
     std::cerr << "vil_mit_image::get_copy_view(): Warning: x0 should be a multiple of 8 for this type of image\n";
   pix_size *= components_;
 
-  vxl_uint_32 rowsize = (pix_size * xs + 7) / 8;
-  vil_memory_chunk_sptr buf = new vil_memory_chunk(rowsize * ys, format_);
+  const vxl_uint_32 rowsize = (pix_size * xs + 7) / 8;
+  const vil_memory_chunk_sptr buf = new vil_memory_chunk(rowsize * ys, format_);
   auto * ib = reinterpret_cast<vxl_byte *>(buf->data());
   for (unsigned int y = y0; y < y0 + ys; ++y)
   {
@@ -357,8 +357,8 @@ vil_mit_image::put_view(const vil_image_view_base & buf, unsigned int x0, unsign
     vil_exception_warning(vil_exception_out_of_bounds("vil_mit_image::put_view"));
     return false;
   }
-  unsigned int ni = buf.ni();
-  unsigned int nj = buf.nj();
+  const unsigned int ni = buf.ni();
+  const unsigned int nj = buf.nj();
 #ifdef DEBUG
   std::cerr << "vil_mit_image::put_view() : buf=" << ni << 'x' << nj << 'x' << buf.nplanes() << 'p' << " at (" << x0
             << ',' << y0 << ")\n";
@@ -386,13 +386,13 @@ vil_mit_image::put_view(const vil_image_view_base & buf, unsigned int x0, unsign
     std::cerr << "vil_mit_image::put_view(): Warning: x0 should be a multiple of 8 for this type of image\n";
   pix_size *= components_;
 
-  vxl_uint_32 rowsize = (pix_size * ni + 7) / 8;
+  const vxl_uint_32 rowsize = (pix_size * ni + 7) / 8;
 
   if (VXL_LITTLE_ENDIAN || bytes_per_pixel() == 1) // MIT image data is little-endian
   {
     if (buf_is_planar && components_ > 1) // have to interleave pixels
     {
-      vil_streampos sz = (pix_size / components_ + 7) / 8;
+      const vil_streampos sz = (pix_size / components_ + 7) / 8;
       for (unsigned int y = y0; y < y0 + nj; ++y)
         for (unsigned int x = x0; x < x0 + ni; ++x)
         {
@@ -426,7 +426,7 @@ vil_mit_image::put_view(const vil_image_view_base & buf, unsigned int x0, unsign
   {
     if (buf_is_planar && components_ > 1) // have to interleave pixels
     {
-      unsigned int sz = bytes_per_pixel();
+      const unsigned int sz = bytes_per_pixel();
       auto * tempbuf = new vxl_byte[components_ * sz];
       for (unsigned int y = y0; y < y0 + nj; ++y)
         for (unsigned int x = x0; x < x0 + ni; ++x)

@@ -252,11 +252,11 @@ _test_lvcs_antimeridian(vpgl_lvcs lvcs, double lon, double lat, double elev, dou
 
   // LVCS type
   auto cs_name = lvcs.get_cs_name();
-  std::string cs_str = vpgl_lvcs::cs_name_strings[cs_name];
+  const std::string cs_str = vpgl_lvcs::cs_name_strings[cs_name];
 
   // positive/negative longitude
-  double plon = (lon > 0) ? lon : lon + 360.0;
-  double nlon = (lon < 0) ? lon : lon - 360.0;
+  const double plon = (lon > 0) ? lon : lon + 360.0;
+  const double nlon = (lon < 0) ? lon : lon - 360.0;
 
   // report
   std::cout << "\nTest " << cs_str << " lvcs around antimeridian\n"
@@ -323,7 +323,7 @@ void
 test_lvcs_antimeridian(double lon, double lat, double elev, double meter_tol, double degree_tol)
 {
   // WGS84 LVCS
-  vpgl_lvcs lvcs_wgs84(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  const vpgl_lvcs lvcs_wgs84(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   _test_lvcs_antimeridian(lvcs_wgs84, lon, lat, elev, meter_tol, degree_tol);
 
   // UTM LVCS
@@ -377,7 +377,7 @@ _test_lvcs_general(vpgl_lvcs lvcs, double lon, double lat, double elev, double m
 
   // LVCS type
   auto cs_name = lvcs.get_cs_name();
-  std::string cs_str = vpgl_lvcs::cs_name_strings[cs_name];
+  const std::string cs_str = vpgl_lvcs::cs_name_strings[cs_name];
 
   // report
   std::cout << "\nTest " << cs_str << " lvcs\n"
@@ -440,7 +440,7 @@ test_lvcs_general(double lon,
                   int extra_south_flag = -1)
 {
   // WGS84 LVCS
-  vpgl_lvcs lvcs_wgs84(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  const vpgl_lvcs lvcs_wgs84(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   _test_lvcs_general(lvcs_wgs84, lon, lat, elev, meter_tol, degree_tol);
 
   // UTM LVCS
@@ -463,8 +463,8 @@ test_lvcs()
   // origin in WGS84 & UTM
   double orig_lat = 38.982859, orig_lon = -117.057278, orig_elev = 1670;
   double orig_easting = 495039.001, orig_northing = 4314875.991;
-  int orig_utm_zone = 11;
-  bool orig_south_flag = false;
+  const int orig_utm_zone = 11;
+  const bool orig_south_flag = false;
 
   // results
   double x = NAN, y = NAN, z = NAN;
@@ -472,13 +472,13 @@ test_lvcs()
   bool south_flag = false;
 
   // result tolerance
-  double meter_tol = 1e-3;
-  double degree_tol = 1e-6;
+  const double meter_tol = 1e-3;
+  const double degree_tol = 1e-6;
 
 
   // ----- WGS84 lvcs -----
   std::cout << "\nTest WGS84 LVCS\n";
-  vpgl_lvcs lvcs_wgs84(orig_lat, orig_lon, orig_elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  const vpgl_lvcs lvcs_wgs84(orig_lat, orig_lon, orig_elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
 
   // origin
   std::cout << "origin\n";
@@ -507,7 +507,7 @@ test_lvcs()
 
   // ----- UTM lvcs -----
   std::cout << "\nTest UTM LVCS\n";
-  vpgl_lvcs lvcs_utm(orig_lat, orig_lon, orig_elev, vpgl_lvcs::utm, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  const vpgl_lvcs lvcs_utm(orig_lat, orig_lon, orig_elev, vpgl_lvcs::utm, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
 
   // origin in UTM
   std::cout << "get_utm_origin(x, y, z, zone)\n";

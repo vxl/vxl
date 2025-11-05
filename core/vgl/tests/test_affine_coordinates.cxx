@@ -18,7 +18,7 @@
 static double
 rnd(double r)
 {
-  double b = (2.0 * r * double(rand()) / RAND_MAX) - r;
+  const double b = (2.0 * r * double(rand()) / RAND_MAX) - r;
   return b;
 }
 static vgl_vector_2d<double>
@@ -41,8 +41,8 @@ trans_3d(const std::vector<std::vector<double>> & T, const std::vector<double> &
 static vgl_point_2d<double>
 proj_3d(const std::vector<std::vector<double>> & C, const std::vector<double> & t, const vgl_point_3d<double> & P)
 {
-  double px = C[0][0] * P.x() + C[0][1] * P.y() + C[0][2] * P.z() + t[0];
-  double py = C[1][0] * P.x() + C[1][1] * P.y() + C[1][2] * P.z() + t[1];
+  const double px = C[0][0] * P.x() + C[0][1] * P.y() + C[0][2] * P.z() + t[0];
+  const double py = C[1][0] * P.x() + C[1][1] * P.y() + C[1][2] * P.z() + t[1];
   return { px, py };
 }
 static void
@@ -52,21 +52,21 @@ test_all()
   vgl_point_2d<double> p0(1.0, 2.0), p1(3.0, 2.0), p2(1.0, 4.0);
   vgl_point_2d<double> p(4.0, 3.0);
   double a00 = 0.5, a11 = 0.5, a10 = -0.3, a01 = 0.3, tx = 10.0, ty = 5.0;
-  double q0x = a00 * p0.x() + a01 * p0.y() + tx;
-  double q0y = a10 * p0.x() + a11 * p0.y() + ty;
-  vgl_point_2d<double> q0(q0x, q0y);
+  const double q0x = a00 * p0.x() + a01 * p0.y() + tx;
+  const double q0y = a10 * p0.x() + a11 * p0.y() + ty;
+  const vgl_point_2d<double> q0(q0x, q0y);
 
-  double q1x = a00 * p1.x() + a01 * p1.y() + tx;
-  double q1y = a10 * p1.x() + a11 * p1.y() + ty;
-  vgl_point_2d<double> q1(q1x, q1y);
+  const double q1x = a00 * p1.x() + a01 * p1.y() + tx;
+  const double q1y = a10 * p1.x() + a11 * p1.y() + ty;
+  const vgl_point_2d<double> q1(q1x, q1y);
 
-  double q2x = a00 * p2.x() + a01 * p2.y() + tx;
-  double q2y = a10 * p2.x() + a11 * p2.y() + ty;
-  vgl_point_2d<double> q2(q2x, q2y);
+  const double q2x = a00 * p2.x() + a01 * p2.y() + tx;
+  const double q2y = a10 * p2.x() + a11 * p2.y() + ty;
+  const vgl_point_2d<double> q2(q2x, q2y);
 
-  double qx = a00 * p.x() + a01 * p.y() + tx;
-  double qy = a10 * p.x() + a11 * p.y() + ty;
-  vgl_point_2d<double> q(qx, qy);
+  const double qx = a00 * p.x() + a01 * p.y() + tx;
+  const double qy = a10 * p.x() + a11 * p.y() + ty;
+  const vgl_point_2d<double> q(qx, qy);
   std::vector<vgl_point_2d<double>> p_pts, affine_p_pts;
   p_pts.push_back(p0);
   p_pts.push_back(p1);
@@ -85,7 +85,7 @@ test_all()
   for (unsigned i = 0; i < affine_p_pts.size(); ++i)
   {
     std::cout << affine_p_pts[i] << ' ' << affine_q_pts[i] << std::endl;
-    double d = (affine_p_pts[i] - affine_q_pts[i]).length();
+    const double d = (affine_p_pts[i] - affine_q_pts[i]).length();
     good = good && d < 1.0e-9;
   }
   TEST("invariance of affine 2d coords", good, true);
@@ -130,7 +130,7 @@ test_all()
   for (unsigned i = 0; i < Ppts.size(); ++i)
   {
     std::cout << affine_P_coords[i] << ' ' << affine_Q_coords[i] << std::endl;
-    double d = (affine_P_coords[i] - affine_Q_coords[i]).length();
+    const double d = (affine_P_coords[i] - affine_Q_coords[i]).length();
     good = good && d < 1.0e-9;
   }
   TEST("invariance of affine 3d coords", good, true);
@@ -139,7 +139,7 @@ test_all()
   std::vector<std::vector<double>> C1(2);
   C1[0] = std::vector<double>(3);
   C1[1] = std::vector<double>(3);
-  std::vector<double> tc(2, 0.0);
+  const std::vector<double> tc(2, 0.0);
   C1[0][0] = 0.5;
   C1[0][1] = 0.0;
   C1[0][2] = 2.0;
@@ -158,7 +158,7 @@ test_all()
     vgl_point_2d<double> p1 = proj_3d(C1, tc, Ppt);
     p1.set(p1.x(), p1.y());
     ppts1.push_back(p1);
-    vgl_point_2d<double> p2 = proj_3d(C2, tc, Ppt);
+    const vgl_point_2d<double> p2 = proj_3d(C2, tc, Ppt);
     ppts2.push_back(p2);
   }
   std::vector<vgl_point_3d<double>> recon_affine_pts;
@@ -167,7 +167,7 @@ test_all()
   for (unsigned i = 0; i < ppts1.size(); ++i)
   {
     std::cout << affine_P_coords[i] << ' ' << recon_affine_pts[i] << std::endl;
-    double d = (affine_P_coords[i] - recon_affine_pts[i]).length();
+    const double d = (affine_P_coords[i] - recon_affine_pts[i]).length();
     good = good && d < 1.0e-9;
   }
   TEST("affine 3-d coords from 2-d views", good, true);
@@ -215,12 +215,12 @@ test_all()
   std::cout << "Christina sensitivity test" << std::endl;
   // sensitivity test  3-d points from a face scan for a realistic test case
 
-  vgl_point_3d<double> c0(-33.633899688721, 23.875200271606, -31.615800857544); // right lobe
-  vgl_point_3d<double> c1(21.458400726318, 27.088699340820, 73.859703063965);   // alar tip
-  vgl_point_3d<double> c2(10.649299621582, 67.683601379395, 50.533798217773);   // right medial canthus
-  vgl_point_3d<double> c3(21.124300003052, 37.831298828125, 84.872703552246);   // nose apex
-  vgl_point_3d<double> c4(-18.988700866699, 71.193702697754, 39.596099853516);  // right lateral canthus
-  vgl_point_3d<double> c5(67.848396301270, 69.642601013184, 49.217899322510);   // left lateral canthus
+  const vgl_point_3d<double> c0(-33.633899688721, 23.875200271606, -31.615800857544); // right lobe
+  const vgl_point_3d<double> c1(21.458400726318, 27.088699340820, 73.859703063965);   // alar tip
+  const vgl_point_3d<double> c2(10.649299621582, 67.683601379395, 50.533798217773);   // right medial canthus
+  const vgl_point_3d<double> c3(21.124300003052, 37.831298828125, 84.872703552246);   // nose apex
+  const vgl_point_3d<double> c4(-18.988700866699, 71.193702697754, 39.596099853516);  // right lateral canthus
+  const vgl_point_3d<double> c5(67.848396301270, 69.642601013184, 49.217899322510);   // left lateral canthus
   std::vector<vgl_point_3d<double>> OrigCpts, Cpts;
   OrigCpts.push_back(c0);
   OrigCpts.push_back(c1);
@@ -244,7 +244,7 @@ test_all()
   std::vector<std::vector<double>> CC1(2);
   CC1[0] = std::vector<double>(3);
   CC1[1] = std::vector<double>(3);
-  std::vector<double> tcc(2, 0.0);
+  const std::vector<double> tcc(2, 0.0);
   // set up camera looking along +X
   CC1[0][0] = 0.0;
   CC1[0][1] = 0.0;
@@ -260,9 +260,9 @@ test_all()
   CC2[0][2] = 0.2588190; // CC1[0][0];
   for (const auto & Cpt : Cpts)
   {
-    vgl_point_2d<double> p1 = proj_3d(CC1, tcc, Cpt);
+    const vgl_point_2d<double> p1 = proj_3d(CC1, tcc, Cpt);
     cpts1.push_back(p1);
-    vgl_point_2d<double> p2 = proj_3d(CC2, tcc, Cpt);
+    const vgl_point_2d<double> p2 = proj_3d(CC2, tcc, Cpt);
     cpts2.push_back(p2);
   }
 
@@ -272,7 +272,7 @@ test_all()
   for (unsigned i = 0; i < cpts1.size(); ++i)
   {
     std::cout << affine_C_coords[i] << ' ' << c_affine_pts[i] << std::endl;
-    double d = (affine_C_coords[i] - c_affine_pts[i]).length();
+    const double d = (affine_C_coords[i] - c_affine_pts[i]).length();
     good = good && d < 1.0e-9;
   }
   TEST("Affine coordinates for face pts", good, true);
@@ -280,28 +280,28 @@ test_all()
   vgl_box_2d<double> box1, box2;
   for (unsigned i = 0; i < cpts1.size(); ++i)
   {
-    vgl_point_2d<double> p1 = cpts1[i];
-    vgl_point_2d<double> p2 = cpts2[i];
+    const vgl_point_2d<double> p1 = cpts1[i];
+    const vgl_point_2d<double> p2 = cpts2[i];
     box1.add(p1);
     box2.add(p2);
   }
-  vgl_point_2d<double> min_p1 = box1.min_point();
-  vgl_point_2d<double> max_p1 = box1.max_point();
-  double diag1 = (max_p1 - min_p1).length();
-  vgl_point_2d<double> min_p2 = box2.min_point();
-  vgl_point_2d<double> max_p2 = box2.max_point();
-  double diag2 = (max_p2 - min_p2).length();
+  const vgl_point_2d<double> min_p1 = box1.min_point();
+  const vgl_point_2d<double> max_p1 = box1.max_point();
+  const double diag1 = (max_p1 - min_p1).length();
+  const vgl_point_2d<double> min_p2 = box2.min_point();
+  const vgl_point_2d<double> max_p2 = box2.max_point();
+  const double diag2 = (max_p2 - min_p2).length();
   double diam = diag1;
   if (diam < diag2)
     diam = diag2;
-  unsigned nr = 1000;
-  double norm_radius = 0.02;
-  double r = norm_radius * diam;
+  const unsigned nr = 1000;
+  const double norm_radius = 0.02;
+  const double r = norm_radius * diam;
   std::cout << "diameter " << diam << " Norm radius " << norm_radius << " Abs radius " << r << std::endl;
   vgl_pointset_3d<double> pset4, pset5;
-  vgl_point_3d<double> z(0.0, 0.0, 0.0);
-  double L4 = (affine_C_coords[4] - z).length();
-  double L5 = (affine_C_coords[5] - z).length();
+  const vgl_point_3d<double> z(0.0, 0.0, 0.0);
+  const double L4 = (affine_C_coords[4] - z).length();
+  const double L5 = (affine_C_coords[5] - z).length();
   double max_diff = 0.0;
   for (unsigned k = 0; k < nr; ++k)
   {
@@ -330,8 +330,8 @@ test_all()
   }
   std::cout << "max error " << max_diff << std::endl;
   // write pset to file
-  std::string pfile4 = "D:/VisionSystems/Janus/Invariants/pt4_spread.txt";
-  std::string pfile5 = "D:/VisionSystems/Janus/Invariants/pt5_spread.txt";
+  const std::string pfile4 = "D:/VisionSystems/Janus/Invariants/pt4_spread.txt";
+  const std::string pfile5 = "D:/VisionSystems/Janus/Invariants/pt5_spread.txt";
   std::ofstream ostr4(pfile4.c_str());
   ostr4 << pset4;
   ostr4.close();
@@ -340,12 +340,12 @@ test_all()
   ostr5.close();
   //  linden face test
   std::cout << "linden test" << std::endl;
-  vgl_point_3d<double> l0(-100.140998840332, -63.093498229980, -97.007896423340); // right lobe
-  vgl_point_3d<double> l1(-35.828701019287, -45.380100250244, -8.269379615784);   // alar tip
-  vgl_point_3d<double> l2(-51.182998657227, -2.846539974213, -30.991199493408);   // right medial canthus
-  vgl_point_3d<double> l3(-32.956798553467, -32.738601684570, 5.117280006409);    // nose apex
-  vgl_point_3d<double> l4(-82.580596923828, 0.867244005203, -42.126300811768);    // right lateral canthus
-  vgl_point_3d<double> l5(15.527600288391, -4.037390232086, -39.543399810791);    // left lateral canthus
+  const vgl_point_3d<double> l0(-100.140998840332, -63.093498229980, -97.007896423340); // right lobe
+  const vgl_point_3d<double> l1(-35.828701019287, -45.380100250244, -8.269379615784);   // alar tip
+  const vgl_point_3d<double> l2(-51.182998657227, -2.846539974213, -30.991199493408);   // right medial canthus
+  const vgl_point_3d<double> l3(-32.956798553467, -32.738601684570, 5.117280006409);    // nose apex
+  const vgl_point_3d<double> l4(-82.580596923828, 0.867244005203, -42.126300811768);    // right lateral canthus
+  const vgl_point_3d<double> l5(15.527600288391, -4.037390232086, -39.543399810791);    // left lateral canthus
   std::vector<vgl_point_3d<double>> Lpts;
   Lpts.push_back(l0);
   Lpts.push_back(l1);

@@ -187,7 +187,7 @@ vil_sgi_image::get_copy_view(unsigned x0, unsigned nx, unsigned y0, unsigned ny)
   }
 
   // Number of bytes per pixel is equal to the number of channels
-  vil_memory_chunk_sptr chunk = new vil_memory_chunk(nx * ny * nplanes(), VIL_PIXEL_FORMAT_BYTE);
+  const vil_memory_chunk_sptr chunk = new vil_memory_chunk(nx * ny * nplanes(), VIL_PIXEL_FORMAT_BYTE);
 
   for (size_t i = 0; i < ny; i++)
   {

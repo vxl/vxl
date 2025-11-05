@@ -61,7 +61,7 @@ bool
 vrel_shift2d_est::fit_from_minimal_set(const std::vector<int> & point_indices, vnl_vector<double> & params) const
 {
   assert(point_indices.size() == 1);
-  int loc = point_indices[0];
+  const int loc = point_indices[0];
   params = del_pts_[loc];
   return true;
 }
@@ -75,8 +75,8 @@ vrel_shift2d_est::compute_residuals(const vnl_vector<double> & params, std::vect
 
   for (unsigned i = 0; i < from_pts_.size(); i++)
   {
-    double del_x = del_pts_[i][0] - params[0];
-    double del_y = del_pts_[i][1] - params[1];
+    const double del_x = del_pts_[i][0] - params[0];
+    const double del_y = del_pts_[i][1] - params[1];
     residuals[i] = std::sqrt(vnl_math::sqr(del_x) + vnl_math::sqr(del_y));
   }
 }

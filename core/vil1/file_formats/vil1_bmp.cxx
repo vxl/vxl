@@ -282,7 +282,7 @@ vil1_bmp_generic_image::write_header()
 
   int rowlen = width() * components() * bits_per_component() / 8;
   rowlen += (3 - (rowlen - 1) % 4); // round up to multiple of 4
-  int data_size = height() * rowlen;
+  const int data_size = height() * rowlen;
 
   if (components() == 1)
     info_hdr.colorcount = info_hdr.colormapsize = 1 << bits_per_component();
@@ -315,18 +315,18 @@ bool
 vil1_bmp_generic_image::get_section(void * ib, int x0, int y0, int w, int h) const
 {
   assert(ib != nullptr);
-  char * bp = static_cast<char *>(ib);
+  char * const bp = static_cast<char *>(ib);
 
   //
-  unsigned bytes_per_pixel = core_hdr.bitsperpixel / 8;
+  const unsigned bytes_per_pixel = core_hdr.bitsperpixel / 8;
   assert(core_hdr.bitsperpixel == 8 || core_hdr.bitsperpixel == 24);
   // FIXME - add support for 1, 4, 16 and 32 bpp
 
   // actual number of bytes per raster in file.
-  unsigned have_bytes_per_raster = ((bytes_per_pixel * core_hdr.width + 3) >> 2) << 2;
+  const unsigned have_bytes_per_raster = ((bytes_per_pixel * core_hdr.width + 3) >> 2) << 2;
 
   // number of bytes we want per raster.
-  unsigned long want_bytes_per_raster = w * bytes_per_pixel;
+  const unsigned long want_bytes_per_raster = w * bytes_per_pixel;
 
   // read each raster in turn. if the client wants the whole image, it may
   // be faster to read() it all in one chunk, so long as the number of bytes
@@ -346,7 +346,7 @@ bool
 vil1_bmp_generic_image::put_section(const void * ib, int x0, int y0, int xs, int ys)
 {
   assert(ib != nullptr);
-  int bypp = (components() * bits_per_component() + 7) / 8;
+  const int bypp = (components() * bits_per_component() + 7) / 8;
   int rowlen = width() * bypp;
   rowlen += (3 - (rowlen - 1) % 4); // round up to a multiple of 4
 

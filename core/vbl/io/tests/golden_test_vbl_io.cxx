@@ -96,7 +96,7 @@ golden_test_vbl_io(bool save_file)
 
   // Smart Pointer
   n = 50;
-  vbl_smart_ptr<impl> sp1_out(new impl(n));
+  const vbl_smart_ptr<impl> sp1_out(new impl(n));
   const vbl_smart_ptr<impl> & sp2_out(sp1_out);
   vbl_smart_ptr<impl> sp1_in, sp2_in;
 
@@ -123,7 +123,7 @@ golden_test_vbl_io(bool save_file)
 
   std::cout << "Did we get this far ?\n";
 
-  std::string gold_path = testlib_root_dir() + "/core/vbl/io/tests/golden_test_vbl_io.bvl";
+  const std::string gold_path = testlib_root_dir() + "/core/vbl/io/tests/golden_test_vbl_io.bvl";
   vsl_b_ifstream bfs_in(gold_path.c_str());
 
   TEST("Opened golden_test_vbl_io.bvl for reading ", !bfs_in, false);

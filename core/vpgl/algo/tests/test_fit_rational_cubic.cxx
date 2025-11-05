@@ -17,33 +17,33 @@ static vnl_vector_fixed<double, 20>
 power_vector(double x, double y, double z)
 {
   // Form the monomials in homogeneous form
-  double w = 1;
-  double xx = x * x;
-  double xy = x * y;
-  double xz = x * z;
-  double yy = y * y;
-  double yz = y * z;
-  double zz = z * z;
-  double xxx = x * xx;
-  double xxy = x * xy;
-  double xxz = x * xz;
-  double xyy = x * yy;
-  double xyz = x * yz;
-  double xzz = x * zz;
-  double yyy = y * yy;
-  double yyz = y * yz;
-  double yzz = y * zz;
-  double zzz = z * zz;
-  double xww = x * w * w;
-  double yww = y * w * w;
-  double zww = z * w * w;
-  double www = w * w * w;
-  double xxw = xx * w;
-  double xyw = xy * w;
-  double xzw = xz * w;
-  double yyw = yy * w;
-  double yzw = yz * w;
-  double zzw = zz * w;
+  const double w = 1;
+  const double xx = x * x;
+  const double xy = x * y;
+  const double xz = x * z;
+  const double yy = y * y;
+  const double yz = y * z;
+  const double zz = z * z;
+  const double xxx = x * xx;
+  const double xxy = x * xy;
+  const double xxz = x * xz;
+  const double xyy = x * yy;
+  const double xyz = x * yz;
+  const double xzz = x * zz;
+  const double yyy = y * yy;
+  const double yyz = y * yz;
+  const double yzz = y * zz;
+  const double zzz = z * zz;
+  const double xww = x * w * w;
+  const double yww = y * w * w;
+  const double zww = z * w * w;
+  const double www = w * w * w;
+  const double xxw = xx * w;
+  const double xyw = xy * w;
+  const double xzw = xz * w;
+  const double yyw = yy * w;
+  const double yzw = yz * w;
+  const double zzw = zz * w;
 
   // fill the vector
   vnl_vector_fixed<double, 20> pv;
@@ -139,13 +139,13 @@ test_fit_rational_cubic()
 
   std::vector<vgl_point_2d<double>> image_pts;
   std::vector<vgl_point_3d<double>> ground_pts;
-  size_t n_points = 1000;
+  const size_t n_points = 1000;
   for (unsigned i = 0; i < n_points; i++)
   {
-    double x = 2.0 * rng.drand64() - 1.0;
-    double y = 2.0 * rng.drand64() - 1.0;
-    double z = 2.0 * rng.drand64() - 1.0;
-    vgl_point_3d<double> p3d(x, y, z);
+    const double x = 2.0 * rng.drand64() - 1.0;
+    const double y = 2.0 * rng.drand64() - 1.0;
+    const double z = 2.0 * rng.drand64() - 1.0;
+    const vgl_point_3d<double> p3d(x, y, z);
     ground_pts.push_back(p3d);
     double u = NAN, v = NAN;
     project(x, y, z, u, v, neu_u, den_u, neu_v, den_v);
@@ -167,7 +167,7 @@ test_fit_rational_cubic()
   frc.fit();
   std::cout << "final rms error " << frc.final_rms_error() << std::endl;
   bool good = frc.final_rms_error() < 1.0e-6;
-  std::vector<std::vector<double>> result = frc.rational_coeffs();
+  const std::vector<std::vector<double>> result = frc.rational_coeffs();
   TEST("fit test rpc", good, true);
 
   // realistic RPC
@@ -263,10 +263,10 @@ test_fit_rational_cubic()
   ground_pts.clear();
   for (unsigned i = 0; i < n_points; i++)
   {
-    double x = 2.0 * rng.drand64() - 1.0;
-    double y = 2.0 * rng.drand64() - 1.0;
-    double z = 2.0 * rng.drand64() - 1.0;
-    vgl_point_3d<double> p3d(x, y, z);
+    const double x = 2.0 * rng.drand64() - 1.0;
+    const double y = 2.0 * rng.drand64() - 1.0;
+    const double z = 2.0 * rng.drand64() - 1.0;
+    const vgl_point_3d<double> p3d(x, y, z);
     ground_pts.push_back(p3d);
     double u = NAN, v = NAN;
     project(x, y, z, u, v, neu_u, den_u, neu_v, den_v);
@@ -278,7 +278,7 @@ test_fit_rational_cubic()
   act_frc.fit();
   std::cout << "final rms error " << act_frc.final_rms_error() << std::endl;
   good = act_frc.final_rms_error() < 1.0e-6;
-  std::vector<std::vector<double>> act_result = act_frc.rational_coeffs();
+  const std::vector<std::vector<double>> act_result = act_frc.rational_coeffs();
   TEST("fit test realistic rpc", good, true);
 }
 

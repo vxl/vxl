@@ -37,7 +37,7 @@ test_point_box()
   tr.add(p4);
 
   // test contains method
-  bool p1_in = tr.contains(p1);
+  const bool p1_in = tr.contains(p1);
   TEST("test contains", p1_in, true);
 
   // test region search
@@ -69,7 +69,7 @@ test_point_box()
   poly.push_back(pr1);
   poly.push_back(pr2);
   poly.push_back(pr3);
-  vgl_rtree_polygon_probe<V_, B_, C_> probe(poly);
+  const vgl_rtree_polygon_probe<V_, B_, C_> probe(poly);
   found.clear();
   tr.get(probe, found);
   n = found.size();
@@ -82,17 +82,17 @@ test_point_box()
   // test large numbers of point insertions
   vgl_rtree<V_, B_, C_> tr_big;
   vnl_random r;
-  unsigned ni = 1000;
+  const unsigned ni = 1000;
   for (unsigned i = 0; i < ni; ++i)
   {
     auto x = static_cast<float>(r.drand32(0.0, 1.0));
     auto y = static_cast<float>(r.drand32(0.0, 1.0));
-    vgl_point_2d<float> p(x, y);
+    const vgl_point_2d<float> p(x, y);
     tr_big.add(p);
   }
   std::cout << "Big rtree num nodes = " << tr_big.nodes() << '\n';
-  vgl_point_2d<float> plow(0.25f, 0.25f);
-  vgl_point_2d<float> phigh(0.5f, 0.5f);
+  const vgl_point_2d<float> plow(0.25f, 0.25f);
+  const vgl_point_2d<float> phigh(0.5f, 0.5f);
   vgl_box_2d<float> bbig;
   bbig.add(plow);
   bbig.add(phigh);
@@ -168,7 +168,7 @@ test_box_box()
   poly.push_back(pr2);
   poly.push_back(pr3);
 
-  vgl_rtree_polygon_probe<V_, B_, C_> probe(poly);
+  const vgl_rtree_polygon_probe<V_, B_, C_> probe(poly);
 
   box_find.clear();
   tr.get(probe, box_find);

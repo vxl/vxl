@@ -29,7 +29,7 @@ compute_projection_error(const std::vector<vpgl_rational_camera<double>> & cams,
   {
     vgl_point_2d<double> uvp = (*cit).project(intersection);
     vgl_point_2d<double> uv = *rit;
-    double err = std::sqrt(std::pow(uv.x() - uvp.x(), 2.0) + std::pow(uv.y() - uvp.y(), 2));
+    const double err = std::sqrt(std::pow(uv.x() - uvp.x(), 2.0) + std::pow(uv.y() - uvp.y(), 2));
     error += err;
   }
   return error;
@@ -84,7 +84,7 @@ re_projection_error(const std::vector<vpgl_rational_camera<double>> & cams,
                     std::vector<vgl_point_3d<double>> & finals,
                     vnl_vector<double> & errors)
 {
-  double error = 100000.0;
+  const double error = 100000.0;
   errors.fill(error);
 
   finals.clear();
@@ -112,7 +112,7 @@ re_projection_error(const std::vector<vpgl_rational_camera<double>> & cams,
 void
 print_perm(std::vector<unsigned> & params_indices)
 {
-  for (unsigned int params_indice : params_indices)
+  for (const unsigned int params_indice : params_indices)
     std::cout << params_indice << ' ';
   std::cout << std::endl;
 }
@@ -172,7 +172,7 @@ vpgl_rational_adjust_multiple_pts::adjust(
       return false;
 
   // turn the correspondences into the format that we'll need
-  std::vector<vgl_point_2d<double>> temp(cams.size());
+  const std::vector<vgl_point_2d<double>> temp(cams.size());
   std::vector<std::vector<vgl_point_2d<double>>> corrs_reformatted(cnt_corrs_for_each_cam, temp);
 
   for (unsigned int i = 0; i < cnt_corrs_for_each_cam; ++i)
@@ -192,8 +192,8 @@ vpgl_rational_adjust_multiple_pts::adjust(
   }
 
   // search the camera translation space
-  int param_cnt = 2 * (int)cams.size();
-  double increment = radius / n;
+  const int param_cnt = 2 * (int)cams.size();
+  const double increment = radius / n;
   std::vector<double> param_values;
   param_values.push_back(0.0);
   for (int i = 1; i <= n; ++i)
@@ -201,17 +201,17 @@ vpgl_rational_adjust_multiple_pts::adjust(
     param_values.push_back(i * increment);
     param_values.push_back(-i * increment);
   }
-  for (double param_value : param_values)
+  for (const double param_value : param_values)
     std::cout << param_value << ' ';
   std::cout << '\n';
 
   // now for each param go through all possible param values
   std::vector<unsigned> params_indices(param_cnt, 0);
-  int cnt = (int)std::pow((float)param_cnt, (float)param_values.size());
+  const int cnt = (int)std::pow((float)param_cnt, (float)param_values.size());
   std::cout << "will try: " << cnt << " param combinations: ";
   std::cout.flush();
   bool done = false;
-  double big_value = 10000000.0;
+  const double big_value = 10000000.0;
   double min_error = big_value;
   std::vector<unsigned> params_indices_best(params_indices);
   while (!done)
@@ -230,7 +230,7 @@ vpgl_rational_adjust_multiple_pts::adjust(
 
     // use the initial estimates to compute re-projection errors
     std::vector<vgl_point_3d<double>> finals;
-    double err = re_projection_error(current_cams, cam_weights, corrs_reformatted, intersections_initial, finals);
+    const double err = re_projection_error(current_cams, cam_weights, corrs_reformatted, intersections_initial, finals);
 
     if (err < min_error)
     {
@@ -248,7 +248,8 @@ vpgl_rational_adjust_multiple_pts::adjust(
     std::cout << "translations for each camera:" << std::endl;
     for (unsigned int i = 0; i < current_cams.size(); ++i)
     {
-      vgl_vector_2d<double> tr(param_values[params_indices_best[i * 2]], param_values[params_indices_best[i * 2 + 1]]);
+      const vgl_vector_2d<double> tr(param_values[params_indices_best[i * 2]],
+                                     param_values[params_indices_best[i * 2 + 1]]);
       std::cout << tr << std::endl;
       cam_translations.push_back(tr);
       double u_off = NAN, v_off = NAN;
@@ -327,7 +328,7 @@ vpgl_rational_adjust_multiple_pts::adjust_lev_marq(
       return false;
 
   // turn the correspondences into the format that we'll need
-  std::vector<vgl_point_2d<double>> temp(cams.size());
+  const std::vector<vgl_point_2d<double>> temp(cams.size());
   std::vector<std::vector<vgl_point_2d<double>>> corrs_reformatted(cnt_corrs_for_each_cam, temp);
 
   for (unsigned int i = 0; i < cnt_corrs_for_each_cam; ++i)
@@ -431,7 +432,7 @@ vpgl_rational_adjust_multiple_pts::adjust_lev_marq(
       return false;
 
   // reformat the correspondences array
-  std::vector<vgl_point_2d<double>> temp(cams.size());
+  const std::vector<vgl_point_2d<double>> temp(cams.size());
   std::vector<std::vector<vgl_point_2d<double>>> corrs_reformatted(cnt_corrs_for_each_cam, temp);
 
   for (unsigned int i = 0; i < cnt_corrs_for_each_cam; ++i)

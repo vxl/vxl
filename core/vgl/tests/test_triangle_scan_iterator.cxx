@@ -25,7 +25,7 @@ test_triangle_scan_iterator()
     ti.c.x = x[2];
     ti.c.y = y[2];
 
-    vgl_polygon<float> p(x, y, 3);
+    const vgl_polygon<float> p(x, y, 3);
     vgl_polygon_scan_iterator<float> pi(p, false);
 
     bool failed = false;
@@ -59,14 +59,14 @@ test_triangle_scan_iterator()
   }
 
   {
-    float x[3] = { 0.5f, 2.5f, 3.1f };
-    float y[3] = { 0.5f, 0.5f, 5.2f };
+    const float x[3] = { 0.5f, 2.5f, 3.1f };
+    const float y[3] = { 0.5f, 0.5f, 5.2f };
     // .XX.   This triangle rasterizes correctly
     // ..X.   with two connected components!
     // ..X.
     // ....  <= this scan line has no pixels
     // ...X
-    int points[5][2] = { { 1, 1 }, { 2, 1 }, { 2, 2 }, { 2, 3 }, { 3, 5 } };
+    const int points[5][2] = { { 1, 1 }, { 2, 1 }, { 2, 2 }, { 2, 3 }, { 3, 5 } };
 
     vgl_triangle_scan_iterator<float> ti;
     ti.a.x = x[0];
@@ -80,7 +80,7 @@ test_triangle_scan_iterator()
     int i = 0;
     for (ti.reset(); ti.next();)
     {
-      int y = ti.scany();
+      const int y = ti.scany();
       for (int x = ti.startx(); x <= ti.endx(); ++x, ++i)
       {
         pass = pass && (points[i][0] == x) && (points[i][1] == y);

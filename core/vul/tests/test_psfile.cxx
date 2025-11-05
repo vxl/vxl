@@ -65,7 +65,7 @@ write_geometry(vul_psfile & f)
 static void
 test_psfile_grey_portrait()
 {
-  std::string filename = vul_temp_filename() + ".ps";
+  const std::string filename = vul_temp_filename() + ".ps";
   vul_psfile f(filename.c_str(), true);
   TEST("temp file", bool(f), true);
 
@@ -93,7 +93,7 @@ test_psfile_grey_portrait()
 static void
 test_psfile_colour_portrait()
 {
-  std::string filename = vul_temp_filename() + ".ps";
+  const std::string filename = vul_temp_filename() + ".ps";
   vul_psfile f(filename.c_str(), true);
   TEST("temp file", bool(f), true);
 
@@ -119,7 +119,7 @@ test_psfile_colour_portrait()
 static void
 test_psfile_geometry_portrait()
 {
-  std::string filename = vul_temp_filename() + ".ps";
+  const std::string filename = vul_temp_filename() + ".ps";
   vul_psfile f(filename.c_str(), true);
   TEST("temp file", bool(f), true);
 
@@ -145,7 +145,7 @@ test_psfile_geometry_portrait()
 static void
 test_psfile_grey_landscape()
 {
-  std::string filename = vul_temp_filename() + ".ps";
+  const std::string filename = vul_temp_filename() + ".ps";
   vul_psfile f(filename.c_str(), true);
   TEST("temp file", bool(f), true);
 
@@ -174,7 +174,7 @@ test_psfile_grey_landscape()
 static void
 test_psfile_colour_landscape()
 {
-  std::string filename = vul_temp_filename() + ".ps";
+  const std::string filename = vul_temp_filename() + ".ps";
   vul_psfile f(filename.c_str(), true);
   TEST("temp file", bool(f), true);
 
@@ -200,7 +200,7 @@ test_psfile_colour_landscape()
 static void
 test_psfile_geometry_landscape()
 {
-  std::string filename = vul_temp_filename() + ".ps";
+  const std::string filename = vul_temp_filename() + ".ps";
   vul_psfile f(filename.c_str(), true);
   TEST("temp file", bool(f), true);
 
@@ -228,7 +228,7 @@ test_psfile_geometry_landscape()
 static void
 test_psfile_combined()
 {
-  std::string filename = vul_temp_filename() + ".ps";
+  const std::string filename = vul_temp_filename() + ".ps";
   vul_psfile f(filename.c_str(), true);
   TEST("temp file", bool(f), true);
 

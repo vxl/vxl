@@ -35,7 +35,7 @@ test_geo_camera()
   // https://gdal.org/user/raster_data_model.html#affine-geotransform
   // Xgeo = GT(0) + Xpixel*GT(1) + Yline*GT(2)
   // Ygeo = GT(3) + Xpixel*GT(4) + Yline*GT(5)
-  std::array<double, 6> geotransform = { 100.0, 1e-6, 0.0, 30.0, 0.0, -1e-6 };
+  const std::array<double, 6> geotransform = { 100.0, 1e-6, 0.0, 30.0, 0.0, -1e-6 };
   std::cout << "geotransform for testing: ";
   for (const auto & v : geotransform)
     std::cout << v << " ";

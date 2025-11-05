@@ -33,7 +33,7 @@ vil_plane_image_resource::vil_plane_image_resource(const vil_image_resource_sptr
 vil_image_view_base_sptr
 vil_plane_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const
 {
-  vil_image_view_base_sptr vs = src_->get_copy_view(i0, ni, j0, nj);
+  const vil_image_view_base_sptr vs = src_->get_copy_view(i0, ni, j0, nj);
   if (!vs)
     return nullptr;
 
@@ -61,7 +61,7 @@ vil_plane_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j0, u
 vil_image_view_base_sptr
 vil_plane_image_resource::get_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const
 {
-  vil_image_view_base_sptr vs = src_->get_view(i0, ni, j0, nj);
+  const vil_image_view_base_sptr vs = src_->get_view(i0, ni, j0, nj);
   if (!vs)
     return nullptr;
 
@@ -92,7 +92,7 @@ vil_plane_image_resource::put_view(const vil_image_view_base & im, unsigned i0, 
 {
   if (im.nplanes() != 1)
     return false;
-  vil_image_view_base_sptr vs = src_->get_view(i0, im.ni(), j0, im.nj());
+  const vil_image_view_base_sptr vs = src_->get_view(i0, im.ni(), j0, im.nj());
   if (!vs || im.pixel_format() != vs->pixel_format())
     return false;
 

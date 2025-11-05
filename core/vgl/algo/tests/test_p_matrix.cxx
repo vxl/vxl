@@ -48,13 +48,13 @@ test_constructors()
   double data[12]; // the projective c-matrix
   {
     double gold[] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0 }; // the "ground truth"
-    vgl_p_matrix<double> P;
+    const vgl_p_matrix<double> P;
     P.get(data);
     TEST("Default constructor", equals(data, gold), true);
   }
   {
     double gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 }; // the "ground truth"
-    vgl_p_matrix<double> P0(gold);
+    const vgl_p_matrix<double> P0(gold);
     const vgl_p_matrix<double> & P(P0);
     P.get(data);
     TEST("Copy constructor", equals(data, gold), true);
@@ -63,7 +63,7 @@ test_constructors()
     std::stringstream ss;
     ss << "1 2 3 4 5 6 7 8 9 10 11 12";
     double gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 }; // the "ground truth"
-    vgl_p_matrix<double> P(ss);
+    const vgl_p_matrix<double> P(ss);
     P.get(data);
     TEST("Constructor from istream", equals(data, gold), true);
   }
@@ -89,20 +89,20 @@ test_constructors()
     std::stringstream ss;
     ss << "1 2 3 4 5 6 7 8 9 10 11 12";
     double gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 }; // the "ground truth"
-    vgl_p_matrix<double> P = vgl_p_matrix<double>::read(ss);
+    const vgl_p_matrix<double> P = vgl_p_matrix<double>::read(ss);
     P.get(data);
     TEST("read() static method", equals(data, gold), true);
   }
   {
     double gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 }; // the "ground truth"
-    vnl_double_3x4 M(gold);
-    vgl_p_matrix<double> P(M);
+    const vnl_double_3x4 M(gold);
+    const vgl_p_matrix<double> P(M);
     P.get(data);
     TEST("Constructor from vnl_double_3x4", equals(data, gold), true);
   }
   {
     double gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 }; // the "ground truth"
-    vgl_p_matrix<double> P(gold);
+    const vgl_p_matrix<double> P(gold);
     P.get(data);
     TEST("Constructor from raw 3x4 data array", equals(data, gold), true);
   }
@@ -112,21 +112,21 @@ test_constructors()
     vnl_matrix<double> m = M.as_ref();
     vnl_double_3 V(30, 40, 50);
     vnl_vector<double> v = V.as_ref();
-    vgl_p_matrix<double> P(M, V);
+    const vgl_p_matrix<double> P(M, V);
     P.get(data);
     TEST("Constructor from vnl_double_3x3 and vnl_double_3", equals(data, gold), true);
     P.get(&m, &v);
-    vgl_p_matrix<double> P2(m, v);
+    const vgl_p_matrix<double> P2(m, v);
     P2.get(data);
     TEST("get(vnl_matrix*,vnl_vector*)", equals(data, gold), true);
     P.get(&M, &V);
-    vgl_p_matrix<double> P3(M, V);
+    const vgl_p_matrix<double> P3(M, V);
     P3.get(data);
     TEST("get(vnl_double_3x3*,vnl_double_3*)", equals(data, gold), true);
   }
   {
     double gold[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 }; // the "ground truth"
-    vgl_p_matrix<double> P0(gold);
+    const vgl_p_matrix<double> P0(gold);
     vgl_p_matrix<double> P;
     P = P0;
     P.get(data);
@@ -162,15 +162,15 @@ test_constructors()
     P.set(M);
     P.get(data);
     TEST("set(vnl_double_3x4)", equals(data, gold), true);
-    vnl_matrix<double> m = M.as_ref();
+    const vnl_matrix<double> m = M.as_ref();
     P.set(m);
     P.get(data);
     TEST("set(vnl_matrix)", equals(data, gold), true);
   }
   {
     double gold[] = { 7, 7, 7, 30, 7, 7, 7, 40, 7, 7, 7, 50 }; // the "ground truth"
-    vnl_double_3x3 M(7.0);
-    vnl_double_3 V(30, 40, 50);
+    const vnl_double_3x3 M(7.0);
+    const vnl_double_3 V(30, 40, 50);
     vgl_p_matrix<double> P;
     P.set(M, V);
     P.get(data);
@@ -184,7 +184,7 @@ test_accessors()
   double rotation[] = {
     1, 0, 0, 0, 0, 0.6, 0.8, 0, 0, -0.8, 0.6, 0, 0, 0, 0, 1
   }; // Euclidean rotation around (0,0,0,1)
-  vgl_p_matrix<double> P(rotation);
+  const vgl_p_matrix<double> P(rotation);
   vnl_double_3x4 M(rotation), M1;
   vnl_matrix<double> m(rotation, 3, 4), M2;
 
@@ -212,7 +212,7 @@ test_accessors()
   TEST("get_focal()", P.get_focal(), vgl_homg_point_3d<double>(0.0, 0.0, 0.0, 1.0));
   rotation[6] *= -1;
   rotation[9] *= -1;
-  vgl_h_matrix_3d<double> H(rotation);
+  const vgl_h_matrix_3d<double> H(rotation);
   TEST("get_canonical_H()", P.get_canonical_H(), H);
   TEST("is_canonical() (small tolerance)", P.is_canonical(0.75), false);
   TEST("is_canonical() (larger tolerance)", P.is_canonical(0.8), true);
@@ -236,7 +236,7 @@ test_homog_product()
   vgl_h_matrix_3d<double> H;
   H.set_identity();
 
-  vgl_p_matrix<double> P2 = P * H;
+  const vgl_p_matrix<double> P2 = P * H;
 
   TEST("Projection * homography", P2.get_matrix(), P.get_matrix());
 }
@@ -260,8 +260,8 @@ test_identity_projection()
   vgl_point_2d<double> x0a(hxa0), x1a(hxa1);
   std::cout << "x0 = " << x0 << '\n' << "x1 = " << x1 << '\n' << "x0a = " << x0a << '\n' << "x1a = " << x1a << '\n';
 
-  double distance = d(x0.x(), x1.x(), x0.y(), x1.y());
-  double distancea = d(x0.x(), x0a.x(), x0.y(), x0a.y());
+  const double distance = d(x0.x(), x1.x(), x0.y(), x1.y());
+  const double distancea = d(x0.x(), x0a.x(), x0.y(), x0a.y());
 
   TEST_NEAR("identity", distance, 0.0, 1e-06);
   TEST_NEAR("() vs *", distancea, 0.0, 1e-06);
@@ -288,17 +288,17 @@ test_general_projection()
   M.put(2, 2, -3.521127567013e-007);
   M.put(2, 3, 3.149726840200e-003);
 
-  vgl_p_matrix<double> P(M);
+  const vgl_p_matrix<double> P(M);
 
-  vgl_homg_point_3d<double> X0(4.705520e+01, -7.554442e+02, 8.766468, 1);
-  vgl_homg_point_3d<double> X1(3.170094e+01, -6.927508e+02, 8.766118, 1);
+  const vgl_homg_point_3d<double> X0(4.705520e+01, -7.554442e+02, 8.766468, 1);
+  const vgl_homg_point_3d<double> X1(3.170094e+01, -6.927508e+02, 8.766118, 1);
 
   vgl_homg_point_2d<double> hx0 = P(X0), hx1 = P(X1);
   vgl_point_2d<double> x0(hx0), x1(hx1);
   std::cout << "x0 = " << x0 << '\n' << "x1 = " << x1 << '\n';
   // comparing with measured integer pixel coordinates
-  double d0 = d(x0.x(), 701, x0.y(), 562);
-  double d1 = d(x1.x(), 722, x1.y(), 543);
+  const double d0 = d(x0.x(), 701, x0.y(), 562);
+  const double d1 = d(x1.x(), 722, x1.y(), 543);
   TEST_NEAR("general", d0 + d1, 0.0, 2.0); // possible 2 pixel error
 }
 

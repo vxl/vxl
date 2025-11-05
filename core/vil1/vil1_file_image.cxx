@@ -17,7 +17,7 @@ vil1_file_image::load(const std::string & filename, verbosity)
 bool
 vil1_file_image::load(const char * filename, verbosity v)
 {
-  vil1_image i = vil1_load(filename);
+  const vil1_image i = vil1_load(filename);
   if (v == verbose)
   {
     std::cerr << "vil1_file_image: Loaded [" << filename << "]\n";

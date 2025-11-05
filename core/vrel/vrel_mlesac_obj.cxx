@@ -38,8 +38,8 @@ vrel_mlesac_obj::fcn(vect_const_iter begin,
   double value = 0;
   double pi = NAN, p0 = NAN, zi = NAN;
   auto begin0 = begin;
-  unsigned long num_residual = end - begin;
-  double mult1 = vnl_math::one_over_sqrt2pi;
+  const unsigned long num_residual = end - begin;
+  const double mult1 = vnl_math::one_over_sqrt2pi;
 
   double inlier_frac = 1.0;
   double new_inlier_frac = 1 - outlier_frac_;
@@ -54,7 +54,7 @@ vrel_mlesac_obj::fcn(vect_const_iter begin,
     new_inlier_frac = 0;
     for (; begin != end; ++begin, ++scale)
     {
-      double const1 = std::pow(mult1 / (*scale), (int)residual_dof_);
+      const double const1 = std::pow(mult1 / (*scale), (int)residual_dof_);
       pi = inlier_frac * const1 * std::exp(-sqr(*begin) / (2.0 * sqr(*scale)));
       p0 = (1 - inlier_frac) / outlier_sigma_;
       zi = pi / (pi + p0);
@@ -67,7 +67,7 @@ vrel_mlesac_obj::fcn(vect_const_iter begin,
   // the negative log likelihood
   for (; begin != end; ++begin)
   {
-    double const1 = std::pow(mult1 / (*scale), (int)residual_dof_);
+    const double const1 = std::pow(mult1 / (*scale), (int)residual_dof_);
     pi = new_inlier_frac * const1 * std::exp(-sqr(*begin) / (2.0 * sqr(*scale)));
     p0 = (1 - new_inlier_frac) / outlier_sigma_;
     value -= std::log(pi + p0);
@@ -82,13 +82,13 @@ vrel_mlesac_obj::fcn(vect_const_iter begin, vect_const_iter end, double scale, v
   double value = 0;
   double pi = NAN, p0 = NAN, zi = NAN;
   auto begin0 = begin;
-  unsigned long num_residual = end - begin;
+  const unsigned long num_residual = end - begin;
 
   double inlier_frac = 1.0;
   double new_inlier_frac = 1 - outlier_frac_;
-  double mult1 = vnl_math::one_over_sqrt2pi / scale;
-  double const1 = std::pow(mult1, (int)residual_dof_);
-  double exp_mult2 = -1.0 / (2.0 * sqr(scale));
+  const double mult1 = vnl_math::one_over_sqrt2pi / scale;
+  const double const1 = std::pow(mult1, (int)residual_dof_);
+  const double exp_mult2 = -1.0 / (2.0 * sqr(scale));
 
   constexpr double EPS = 0.01;
 

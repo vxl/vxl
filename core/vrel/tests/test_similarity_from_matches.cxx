@@ -98,7 +98,7 @@ test_similarity_from_matches()
   matches.emplace_back(from_loc, to_loc, id); // 5 - id 2 - good (small error)
 
   testlib_test_begin("ctor");
-  similarity_from_matches sim(matches);
+  const similarity_from_matches sim(matches);
   testlib_test_perform(true);
 
   TEST("num to instantiate", sim.num_samples_to_instantiate(), 2);

@@ -187,13 +187,13 @@ vpgl_utm::transform(int utm_zone,
                     double utm_central_meridian) const
 {
   // double D2R = vnl_math::pi_over_180;
-  double e = std::sqrt((sqr(a_) - sqr(b_)) / sqr(a_));
+  const double e = std::sqrt((sqr(a_) - sqr(b_)) / sqr(a_));
 
   if (utm_zone != 0)
     utm_central_meridian = (6 * utm_zone) - 183;
 
-  double lon_center2 = adjust_lon2(utm_central_meridian * D2R);
-  double lat_center2 = 0.0;
+  const double lon_center2 = adjust_lon2(utm_central_meridian * D2R);
+  const double lat_center2 = 0.0;
 
   double lambda = NAN, phi = NAN;
 
@@ -205,7 +205,7 @@ vpgl_utm::transform(int utm_zone,
   double sin_phi = NAN, cos_phi = NAN, tan_phi = NAN;                               // sin cos and tangent values
   double c = NAN, cs = NAN, t = NAN, ts = NAN, n = NAN, r = NAN, d = NAN, ds = NAN; // temporary variables
   double f = NAN, h = NAN, g = NAN, temp = NAN;                                     // temporary variables
-  long max_iter = 6; // maximum number of iterations, I changed from 6 to 20
+  const long max_iter = 6; // maximum number of iterations, I changed from 6 to 20
 
   if (ind2 != 0)
   {
@@ -357,34 +357,34 @@ vpgl_utm::transform(double lat,
   }
 
   // double D2R = vnl_math::pi_over_180;
-  double e = std::sqrt(1.0 - b_ * b_ / (a_ * a_));
+  const double e = std::sqrt(1.0 - b_ * b_ / (a_ * a_));
 
   double utm_central_meridian = 0;
   utm_central_meridian = (6 * utm_zone) - 183;
 
-  double lon_center = adjust_lon2(utm_central_meridian * D2R);
-  double lat_center = 0.0;
+  const double lon_center = adjust_lon2(utm_central_meridian * D2R);
+  const double lat_center = 0.0;
 
-  double phi = adjust_lat2(lat * D2R);
-  double lambda = adjust_lon2(lon * D2R);
+  const double phi = adjust_lat2(lat * D2R);
+  const double lambda = adjust_lon2(lon * D2R);
 
   UTM_init2(lat_center, a_, e, south_flag);
 
   //  double bl = -1000000.0;
 
-  double delta_lon = adjust_lon2(lambda - lon_center);
+  const double delta_lon = adjust_lon2(lambda - lon_center);
 
-  double sin_phi = std::sin(phi);
-  double cos_phi = std::cos(phi);
+  const double sin_phi = std::sin(phi);
+  const double cos_phi = std::cos(phi);
 
-  double al = cos_phi * delta_lon;
-  double als = sqr(al);
-  double c = esp2 * sqr(cos_phi);
-  double tq = std::tan(phi);
-  double t = sqr(tq);
-  double con = 1.0 - es2 * sqr(sin_phi);
-  double n = a_ / std::sqrt(con);
-  double ml = a_ * mlfn2(e02, e12, e22, e32, phi);
+  const double al = cos_phi * delta_lon;
+  const double als = sqr(al);
+  const double c = esp2 * sqr(cos_phi);
+  const double tq = std::tan(phi);
+  const double t = sqr(tq);
+  const double con = 1.0 - es2 * sqr(sin_phi);
+  const double n = a_ / std::sqrt(con);
+  const double ml = a_ * mlfn2(e02, e12, e22, e32, phi);
 
   x = scale_factor2 * n * al *
         (1.0 + (als / 6.0) * (1.0 - t + c + (als / 20.0) * (5.0 - (18.0 * t) + sqr(t) + (72.0 * c) - (58.0 * esp2)))) +

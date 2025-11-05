@@ -42,10 +42,10 @@ vpgl_orientation_lsqr::vpgl_orientation_lsqr(const vpgl_calibration_matrix<doubl
 void
 vpgl_orientation_lsqr::f(const vnl_vector<double> & x, vnl_vector<double> & fx)
 {
-  vpgl_perspective_camera<double> cam(K_, c_, vgl_rotation_3d<double>(x));
+  const vpgl_perspective_camera<double> cam(K_, c_, vgl_rotation_3d<double>(x));
   for (unsigned int i = 0; i < world_points_.size(); ++i)
   {
-    vgl_homg_point_2d<double> proj = cam(world_points_[i]);
+    const vgl_homg_point_2d<double> proj = cam(world_points_[i]);
     fx[2 * i] = image_points_[i].x() - proj.x() / proj.w();
     fx[2 * i + 1] = image_points_[i].y() - proj.y() / proj.w();
   }
@@ -76,12 +76,12 @@ void
 vpgl_orientation_position_lsqr::f(const vnl_vector<double> & x, vnl_vector<double> & fx)
 {
   assert(x.size() == 6);
-  vnl_double_3 w(x[0], x[1], x[2]);
-  vgl_homg_point_3d<double> t(x[3], x[4], x[5]);
-  vpgl_perspective_camera<double> cam(K_, t, vgl_rotation_3d<double>(w));
+  const vnl_double_3 w(x[0], x[1], x[2]);
+  const vgl_homg_point_3d<double> t(x[3], x[4], x[5]);
+  const vpgl_perspective_camera<double> cam(K_, t, vgl_rotation_3d<double>(w));
   for (unsigned int i = 0; i < world_points_.size(); ++i)
   {
-    vgl_homg_point_2d<double> proj = cam(world_points_[i]);
+    const vgl_homg_point_2d<double> proj = cam(world_points_[i]);
     fx[2 * i] = image_points_[i].x() - proj.x() / proj.w();
     fx[2 * i + 1] = image_points_[i].y() - proj.y() / proj.w();
   }
@@ -128,9 +128,9 @@ void
 vpgl_orientation_position_calibration_lsqr::f(const vnl_vector<double> & x, vnl_vector<double> & fx)
 {
   assert(x.size() == 10);
-  vnl_double_3 w(x[0], x[1], x[2]);
-  vgl_rotation_3d<double> R(w);
-  vgl_homg_point_3d<double> t(x[3], x[4], x[5]);
+  const vnl_double_3 w(x[0], x[1], x[2]);
+  const vgl_rotation_3d<double> R(w);
+  const vgl_homg_point_3d<double> t(x[3], x[4], x[5]);
   vnl_double_3x3 kk;
   kk.fill(0);
   kk[0][0] = x[6];
@@ -150,11 +150,11 @@ vpgl_orientation_position_calibration_lsqr::f(const vnl_vector<double> & x, vnl_
     return;
   }
 
-  vpgl_calibration_matrix<double> K(kk);
-  vpgl_perspective_camera<double> cam(K, t, R);
+  const vpgl_calibration_matrix<double> K(kk);
+  const vpgl_perspective_camera<double> cam(K, t, R);
   for (unsigned int i = 0; i < world_points_.size(); ++i)
   {
-    vgl_homg_point_2d<double> proj = cam(world_points_[i]);
+    const vgl_homg_point_2d<double> proj = cam(world_points_[i]);
     fx[2 * i] = image_points_[i].x() - proj.x() / proj.w();
     fx[2 * i + 1] = image_points_[i].y() - proj.y() / proj.w();
   }
@@ -182,9 +182,9 @@ void
 vpgl_orientation_position_focal_lsqr::f(const vnl_vector<double> & x, vnl_vector<double> & fx)
 {
   assert(x.size() == 8);
-  vnl_quaternion<double> q(x[0], x[1], x[2], x[3]);
-  vgl_rotation_3d<double> R(q);
-  vgl_vector_3d<double> t(x[4], x[5], x[6]);
+  const vnl_quaternion<double> q(x[0], x[1], x[2], x[3]);
+  const vgl_rotation_3d<double> R(q);
+  const vgl_vector_3d<double> t(x[4], x[5], x[6]);
 
   // Check that it is a valid focal length
   if (x[7] <= 0)
@@ -199,10 +199,10 @@ vpgl_orientation_position_focal_lsqr::f(const vnl_vector<double> & x, vnl_vector
 
   vpgl_calibration_matrix<double> K(K_init_);
   K.set_focal_length(x[7]);
-  vpgl_perspective_camera<double> cam(K, R, t);
+  const vpgl_perspective_camera<double> cam(K, R, t);
   for (unsigned int i = 0; i < world_points_.size(); ++i)
   {
-    vgl_homg_point_2d<double> proj = cam(world_points_[i]);
+    const vgl_homg_point_2d<double> proj = cam(world_points_[i]);
     fx[2 * i] = image_points_[i].x() - proj.x() / proj.w();
     fx[2 * i + 1] = image_points_[i].y() - proj.y() / proj.w();
   }
@@ -214,9 +214,9 @@ void
 vpgl_orientation_position_focal_lsqr::gradf(const vnl_vector<double> & xvec, vnl_matrix<double> & jacobian)
 {
   // norm of unnormalized quaternion
-  double norm = sqrt(xvec[0] * xvec[0] + xvec[1] * xvec[1] + xvec[2] * xvec[2] + xvec[3] * xvec[3]);
+  const double norm = sqrt(xvec[0] * xvec[0] + xvec[1] * xvec[1] + xvec[2] * xvec[2] + xvec[3] * xvec[3]);
   vnl_quaternion<double> q(xvec[0], xvec[1], xvec[2], xvec[3]);
-  vgl_rotation_3d<double> R(q);
+  const vgl_rotation_3d<double> R(q);
   vnl_matrix_fixed<double, 3, 3> Rmat = R.as_matrix();
   // Quaternion gets normalized after getting passed to R
   q = R.as_quaternion();
@@ -226,11 +226,11 @@ vpgl_orientation_position_focal_lsqr::gradf(const vnl_vector<double> & xvec, vnl
   z = q.z();
   r = q.r();
 
-  vgl_vector_3d<double> t(xvec[4], xvec[5], xvec[6]);
+  const vgl_vector_3d<double> t(xvec[4], xvec[5], xvec[6]);
 
   vpgl_calibration_matrix<double> K(K_init_);
   K.set_focal_length(xvec[7]);
-  vpgl_perspective_camera<double> cam(K, R, t);
+  const vpgl_perspective_camera<double> cam(K, R, t);
 
   // The 3 rows of [R | t] matrix
   double A = NAN, B = NAN, C = NAN;
@@ -242,7 +242,7 @@ vpgl_orientation_position_focal_lsqr::gradf(const vnl_vector<double> & xvec, vnl
   // 3D point coordinates
   double X = NAN, Y = NAN, Z = NAN, W = NAN;
   // Focal length
-  double F = xvec[7];
+  const double F = xvec[7];
 
   for (unsigned int idx = 0; idx < world_points_.size(); ++idx)
   {
@@ -359,8 +359,8 @@ vpgl_optimize_camera::opt_orient_pos(const vpgl_perspective_camera<double> & cam
   params[5] = c.z();
   // lm.set_trace(true);
   lm.minimize(params);
-  vnl_double_3 w_min(params[0], params[1], params[2]);
-  vgl_homg_point_3d<double> c_min(params[3], params[4], params[5]);
+  const vnl_double_3 w_min(params[0], params[1], params[2]);
+  const vgl_homg_point_3d<double> c_min(params[3], params[4], params[5]);
 
   return vpgl_perspective_camera<double>(K, c_min, vgl_rotation_3d<double>(w_min));
 }
@@ -374,7 +374,7 @@ vpgl_optimize_camera::opt_orient_pos_f(const vpgl_perspective_camera<double> & c
                                        const unsigned nevals)
 {
   const vpgl_calibration_matrix<double> & K = camera.get_calibration();
-  vgl_vector_3d<double> t = camera.get_translation();
+  const vgl_vector_3d<double> t = camera.get_translation();
   const vgl_rotation_3d<double> & R = camera.get_rotation();
   vnl_quaternion<double> q = R.as_quaternion();
 
@@ -397,9 +397,9 @@ vpgl_optimize_camera::opt_orient_pos_f(const vpgl_perspective_camera<double> & c
   lm.set_max_function_evals(nevals);
   lm.minimize(params);
 
-  vnl_quaternion<double> q_min(params[0], params[1], params[2], params[3]);
-  vgl_vector_3d<double> t_min(params[4], params[5], params[6]);
-  double f_min = params[7];
+  const vnl_quaternion<double> q_min(params[0], params[1], params[2], params[3]);
+  const vgl_vector_3d<double> t_min(params[4], params[5], params[6]);
+  const double f_min = params[7];
   vpgl_calibration_matrix<double> K_min(K);
   K_min.set_focal_length(f_min);
   return vpgl_perspective_camera<double>(K_min, vgl_rotation_3d<double>(q_min), t_min);
@@ -436,8 +436,8 @@ vpgl_optimize_camera::opt_orient_pos_cal(const vpgl_perspective_camera<double> &
   lm.set_x_tolerance(xtol);
   lm.set_max_function_evals(nevals);
   lm.minimize(params);
-  vnl_double_3 w_min(params[0], params[1], params[2]);
-  vgl_homg_point_3d<double> c_min(params[3], params[4], params[5]);
+  const vnl_double_3 w_min(params[0], params[1], params[2]);
+  const vgl_homg_point_3d<double> c_min(params[3], params[4], params[5]);
   vnl_double_3x3 kk_min;
   kk_min.fill(0);
   kk_min[2][2] = 1.0;
@@ -445,6 +445,6 @@ vpgl_optimize_camera::opt_orient_pos_cal(const vpgl_perspective_camera<double> &
   kk_min[0][2] = params[7];
   kk_min[1][1] = params[8];
   kk_min[1][2] = params[9];
-  vpgl_calibration_matrix<double> K_min(kk_min);
+  const vpgl_calibration_matrix<double> K_min(kk_min);
   return vpgl_perspective_camera<double>(K_min, c_min, vgl_rotation_3d<double>(w_min));
 }

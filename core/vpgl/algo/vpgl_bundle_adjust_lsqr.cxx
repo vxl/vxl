@@ -69,7 +69,7 @@ vpgl_bundle_adjust_lsqr::vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
     {
       U(0, 0) = std::sqrt(S(0, 0));
       U(0, 1) = S(0, 1) / U(0, 0);
-      double U11 = S(1, 1) - S(0, 1) * S(0, 1) / S(0, 0);
+      const double U11 = S(1, 1) - S(0, 1) * S(0, 1) / S(0, 0);
       U(1, 1) = (U11 > 0.0) ? std::sqrt(U11) : 0.0;
     }
     else if (S(1, 1) > 0.0)
@@ -104,21 +104,21 @@ vpgl_bundle_adjust_lsqr::f(const vnl_vector<double> & a,
   for (unsigned int i = 0; i < number_of_a(); ++i)
   {
     //: Construct the ith camera
-    vnl_double_3x4 Pi = param_to_cam_matrix(i, a, c);
+    const vnl_double_3x4 Pi = param_to_cam_matrix(i, a, c);
 
-    vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
+    const vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
     for (auto & r_itr : row)
     {
-      unsigned int j = r_itr.second;
-      unsigned int k = r_itr.first;
+      const unsigned int j = r_itr.second;
+      const unsigned int k = r_itr.first;
 
       // Construct the jth point
-      vnl_vector_fixed<double, 4> Xj = param_to_pt_vector(j, b, c);
+      const vnl_vector_fixed<double, 4> Xj = param_to_pt_vector(j, b, c);
 
       // Project jth point with the ith camera
       vnl_vector_fixed<double, 3> xij = Pi * Xj;
 
-      double * eij = e.data_block() + index_e(k);
+      double * const eij = e.data_block() + index_e(k);
       eij[0] = xij[0] / xij[2] - image_points_[k].x();
       eij[1] = xij[1] / xij[2] - image_points_[k].y();
       if (use_covars_)
@@ -146,15 +146,15 @@ vpgl_bundle_adjust_lsqr::fij(int i,
                              vnl_vector<double> & fij)
 {
   //: Construct the ith camera
-  vnl_double_3x4 Pi = param_to_cam_matrix(i, ai.data_block(), c);
+  const vnl_double_3x4 Pi = param_to_cam_matrix(i, ai.data_block(), c);
 
   // Construct the jth point
-  vnl_vector_fixed<double, 4> Xj = param_to_pt_vector(j, bj.data_block(), c);
+  const vnl_vector_fixed<double, 4> Xj = param_to_pt_vector(j, bj.data_block(), c);
 
   // Project jth point with the ith camera
   vnl_vector_fixed<double, 3> xij = Pi * Xj;
 
-  int k = residual_indices_(i, j);
+  const int k = residual_indices_(i, j);
   fij[0] = xij[0] / xij[2] - image_points_[k].x();
   fij[1] = xij[1] / xij[2] - image_points_[k].y();
   if (use_covars_)
@@ -180,16 +180,16 @@ vpgl_bundle_adjust_lsqr::jac_blocks(const vnl_vector<double> & a,
   for (unsigned int i = 0; i < number_of_a(); ++i)
   {
     //: Construct the ith camera
-    vnl_double_3x4 Pi = param_to_cam_matrix(i, a, c);
+    const vnl_double_3x4 Pi = param_to_cam_matrix(i, a, c);
 
     // This is semi const incorrect - there is no vnl_vector_ref_const
     const vnl_vector_ref<double> ai(number_of_params_a(i), const_cast<double *>(a.data_block()) + index_a(i));
 
-    vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
+    const vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
     for (auto & r_itr : row)
     {
-      unsigned int j = r_itr.second;
-      unsigned int k = r_itr.first;
+      const unsigned int j = r_itr.second;
+      const unsigned int k = r_itr.first;
       // This is semi const incorrect - there is no vnl_vector_ref_const
       const vnl_vector_ref<double> bj(number_of_params_b(j), const_cast<double *>(b.data_block()) + index_b(j));
 
@@ -217,7 +217,7 @@ vpgl_bundle_adjust_lsqr::compute_weight_ij(int /*i*/,
                                            const vnl_vector<double> & fij,
                                            double & weight)
 {
-  double u2 = fij.squared_magnitude() / scale2_;
+  const double u2 = fij.squared_magnitude() / scale2_;
 
   // Beaton-Tukey
   weight = (u2 > 1.0) ? 0.0 : 1 - u2;
@@ -292,12 +292,12 @@ vpgl_bundle_adjust_lsqr::jac_camera_rotation(const vnl_double_3x3 & K,
   const double & y = r[1];
   const double & z = r[2];
   double x2 = x * x, y2 = y * y, z2 = z * z;
-  double m2 = x2 + y2 + z2;
+  const double m2 = x2 + y2 + z2;
 
   // special case for the identity rotation
   if (m2 == 0.0)
   {
-    double inv_tz2 = 1.0 / (t[2] * t[2]);
+    const double inv_tz2 = 1.0 / (t[2] * t[2]);
     J(0, 0) = -t[0] * t[1] * inv_tz2;
     J(1, 0) = -1 - t[1] * t[1] * inv_tz2;
     J(0, 1) = 1 + t[0] * t[0] * inv_tz2;
@@ -307,35 +307,35 @@ vpgl_bundle_adjust_lsqr::jac_camera_rotation(const vnl_double_3x3 & K,
   }
   else
   {
-    double m = std::sqrt(m2); // Rodrigues magnitude = rotation angle
-    double c = std::cos(m);
-    double s = std::sin(m);
+    const double m = std::sqrt(m2); // Rodrigues magnitude = rotation angle
+    const double c = std::cos(m);
+    const double s = std::sin(m);
 
     // common trig terms
-    double ct = (1 - c) / m2;
-    double st = s / m;
+    const double ct = (1 - c) / m2;
+    const double st = s / m;
 
     // derivative coefficients for common trig terms
     // ds = d/dx_i{st}/x_i
     // dc = d/dx_i{ct}/x_i
     double dct = s / (m * m2);
-    double dst = c / m2 - dct;
+    const double dst = c / m2 - dct;
     dct -= 2 * (1 - c) / (m2 * m2);
 
-    double utc = t[2] * x * z + t[1] * x * y - t[0] * (y2 + z2);
-    double uts = t[2] * y - t[1] * z;
-    double vtc = t[0] * x * y + t[2] * y * z - t[1] * (x2 + z2);
-    double vts = t[0] * z - t[2] * x;
-    double wtc = t[0] * x * z + t[1] * y * z - t[2] * (x2 + y2);
-    double wts = t[1] * x - t[0] * y;
+    const double utc = t[2] * x * z + t[1] * x * y - t[0] * (y2 + z2);
+    const double uts = t[2] * y - t[1] * z;
+    const double vtc = t[0] * x * y + t[2] * y * z - t[1] * (x2 + z2);
+    const double vts = t[0] * z - t[2] * x;
+    const double wtc = t[0] * x * z + t[1] * y * z - t[2] * (x2 + y2);
+    const double wts = t[1] * x - t[0] * y;
 
     // projection of the point into normalized homogeneous coordinates
     // should be equal to inv(K)*P*[pt|1]
-    double u = ct * utc + st * uts + t[0];
-    double v = ct * vtc + st * vts + t[1];
-    double w = ct * wtc + st * wts + t[2];
+    const double u = ct * utc + st * uts + t[0];
+    const double v = ct * vtc + st * vts + t[1];
+    const double w = ct * wtc + st * wts + t[2];
 
-    double w2 = w * w;
+    const double w2 = w * w;
 
     double dw = dct * x * wtc + ct * (t[0] * z - 2 * t[2] * x) + dst * x * wts + st * t[1];
     J(0, 0) = (w * (dct * x * utc + ct * (t[2] * z + t[1] * y) + dst * x * uts) - u * dw) / w2;
@@ -368,10 +368,10 @@ vnl_double_3x3
 vpgl_bundle_adjust_lsqr::rod_to_matrix(const vnl_vector<double> & r)
 {
   double x2 = r[0] * r[0], y2 = r[1] * r[1], z2 = r[2] * r[2];
-  double m = x2 + y2 + z2;
-  double theta = std::sqrt(m);
-  double s = std::sin(theta) / theta;
-  double c = (1 - std::cos(theta)) / m;
+  const double m = x2 + y2 + z2;
+  const double theta = std::sqrt(m);
+  const double s = std::sin(theta) / theta;
+  const double c = (1 - std::cos(theta)) / m;
 
   vnl_matrix_fixed<double, 3, 3> R(0.0);
   R(0, 0) = R(1, 1) = R(2, 2) = 1.0;

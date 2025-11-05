@@ -72,9 +72,9 @@ vil1_memory_image_impl::init(void * buf,
   component_format_ = component_format;
 
   bytes_per_pixel_ = (bits_per_component_ * components_ + 7) / 8;
-  int bytes_per_row = (width_ * bits_per_component_ * components_ + 7) / 8;
+  const int bytes_per_row = (width_ * bits_per_component_ * components_ + 7) / 8;
 
-  int size = planes_ * height_ * bytes_per_row;
+  const int size = planes_ * height_ * bytes_per_row;
   if (size)
   {
     // non-empty image
@@ -171,14 +171,14 @@ vil1_memory_image_impl::resize(int planes, int width, int height)
 bool
 vil1_memory_image_impl::get_section(void * obuf, int x0, int y0, int xs, int ys) const
 {
-  int bytes_per_row = (width_ * bits_per_component_ * components_ + 7) / 8;
+  const int bytes_per_row = (width_ * bits_per_component_ * components_ + 7) / 8;
   for (int p = 0; p < planes_; ++p)
   {
-    int offset = y0 * bytes_per_row + x0 * bytes_per_pixel_;
+    const int offset = y0 * bytes_per_row + x0 * bytes_per_pixel_;
     if (width_ != xs)
     {
-      int byte_out_width = bytes_per_pixel_ * xs;
-      int byte_width = bytes_per_pixel_ * width_;
+      const int byte_out_width = bytes_per_pixel_ * xs;
+      const int byte_width = bytes_per_pixel_ * width_;
 
       for (int y = 0; y < ys; ++y)
       {
@@ -198,14 +198,14 @@ vil1_memory_image_impl::get_section(void * obuf, int x0, int y0, int xs, int ys)
 bool
 vil1_memory_image_impl::put_section(const void * ibuf, int x0, int y0, int xs, int ys)
 {
-  int bytes_per_row = (width_ * bits_per_component_ * components_ + 7) / 8;
+  const int bytes_per_row = (width_ * bits_per_component_ * components_ + 7) / 8;
   for (int p = 0; p < planes_; ++p)
   {
-    int offset = y0 * bytes_per_row + x0 * bytes_per_pixel_;
+    const int offset = y0 * bytes_per_row + x0 * bytes_per_pixel_;
     if (width_ != xs)
     {
-      int byte_in_width = bytes_per_pixel_ * xs;
-      int byte_width = bytes_per_pixel_ * width_;
+      const int byte_in_width = bytes_per_pixel_ * xs;
+      const int byte_width = bytes_per_pixel_ * width_;
 
       for (int y = 0; y < ys; ++y)
       {

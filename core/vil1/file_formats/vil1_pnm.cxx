@@ -41,7 +41,7 @@ vil1_pnm_file_format::make_input_image(vil1_stream * vs)
   // Attempt to read header
   unsigned char buf[3];
   vs->read(buf, 3L);
-  bool ok = ((buf[0] == 'P') && iseol(buf[2]) && (buf[1] >= '1' && buf[2] <= '6'));
+  const bool ok = ((buf[0] == 'P') && iseol(buf[2]) && (buf[1] >= '1' && buf[2] <= '6'));
   if (!ok)
     return nullptr;
 
@@ -177,7 +177,7 @@ ConvertMSBToHost(void * buf, int num_words)
   auto * ptr = (unsigned char *)buf;
   for (int i = 0; i < num_words; ++i)
   {
-    unsigned char t = *ptr;
+    const unsigned char t = *ptr;
     *ptr = *(ptr + 1);
     *(ptr + 1) = t;
     ptr += 2;
@@ -191,7 +191,7 @@ ConvertHostToMSB(void * buf, int num_words)
   auto * ptr = (unsigned char *)buf;
   for (int i = 0; i < num_words; ++i)
   {
-    unsigned char t = *ptr;
+    const unsigned char t = *ptr;
     *ptr = *(ptr + 1);
     *(ptr + 1) = t;
     ptr += 2;
@@ -355,11 +355,11 @@ vil1_pnm_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
   //
   if (magic_ > 4) // pgm or ppm raw image
   {
-    int bytes_per_sample = (bits_per_component_ + 7) / 8;
-    int bytes_per_pixel = components_ * bytes_per_sample;
-    int byte_start = start_of_data_ + (y0 * width_ + x0) * bytes_per_pixel;
-    int byte_width = width_ * bytes_per_pixel;
-    int byte_out_width = xs * bytes_per_pixel;
+    const int bytes_per_sample = (bits_per_component_ + 7) / 8;
+    const int bytes_per_pixel = components_ * bytes_per_sample;
+    const int byte_start = start_of_data_ + (y0 * width_ + x0) * bytes_per_pixel;
+    const int byte_width = width_ * bytes_per_pixel;
+    const int byte_out_width = xs * bytes_per_pixel;
 
     for (int y = 0; y < ys; ++y)
     {
@@ -378,12 +378,12 @@ vil1_pnm_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
   }
   else if (magic_ == 4) // pbm (bitmap) raw image
   {
-    int byte_width = (width_ + 7) / 8;
-    int byte_out_width = (xs + 7) / 8;
+    const int byte_width = (width_ + 7) / 8;
+    const int byte_out_width = (xs + 7) / 8;
 
     for (int y = 0; y < ys; ++y)
     {
-      vil1_streampos byte_start = start_of_data_ + (y0 + y) * byte_width + x0 / 8;
+      const vil1_streampos byte_start = start_of_data_ + (y0 + y) * byte_width + x0 / 8;
       vs_->seek(byte_start);
       unsigned char a = 0;
       vs_->read(&a, 1L);
@@ -499,11 +499,11 @@ vil1_pnm_generic_image::put_section(const void * buf, int x0, int y0, int xs, in
 
   if (magic_ > 4) // pgm or ppm raw image
   {
-    int bytes_per_sample = (bits_per_component_ + 7) / 8;
-    int bytes_per_pixel = components_ * bytes_per_sample;
-    vil1_streampos byte_start = start_of_data_ + (y0 * width_ + x0) * bytes_per_pixel;
-    int byte_width = width_ * bytes_per_pixel;
-    int byte_out_width = xs * bytes_per_pixel;
+    const int bytes_per_sample = (bits_per_component_ + 7) / 8;
+    const int bytes_per_pixel = components_ * bytes_per_sample;
+    const vil1_streampos byte_start = start_of_data_ + (y0 * width_ + x0) * bytes_per_pixel;
+    const int byte_width = width_ * bytes_per_pixel;
+    const int byte_out_width = xs * bytes_per_pixel;
 
     if (bytes_per_sample == 1 || (bytes_per_sample == 2 && VXL_BIG_ENDIAN))
     {
@@ -535,8 +535,8 @@ vil1_pnm_generic_image::put_section(const void * buf, int x0, int y0, int xs, in
   }
   else if (magic_ == 4) // pbm (bitmap) raw image
   {
-    int byte_width = (width_ + 7) / 8;
-    int byte_out_width = (xs + 7) / 8;
+    const int byte_width = (width_ + 7) / 8;
+    const int byte_out_width = (xs + 7) / 8;
 
     for (int y = 0; y < ys; ++y)
     {

@@ -33,7 +33,7 @@ vil_jpeg_file_probe(vil_stream * vs)
 {
   char magic[2];
   vs->seek(0L);
-  vil_streampos n = vs->read(magic, sizeof(magic));
+  const vil_streampos n = vs->read(magic, sizeof(magic));
 
   if (n != sizeof(magic))
   {
@@ -158,13 +158,13 @@ vil_jpeg_image::get_copy_view(unsigned x0, unsigned nx, unsigned y0, unsigned ny
 #endif
 
   // number of bytes per pixel
-  unsigned bpp = jd->jobj.output_components;
+  const unsigned bpp = jd->jobj.output_components;
 
-  vil_memory_chunk_sptr chunk = new vil_memory_chunk(bpp * nx * ny, pixel_format());
+  const vil_memory_chunk_sptr chunk = new vil_memory_chunk(bpp * nx * ny, pixel_format());
 
   for (unsigned int i = 0; i < ny; ++i)
   {
-    JSAMPLE const * scanline = jd->read_scanline(y0 + i);
+    JSAMPLE const * const scanline = jd->read_scanline(y0 + i);
     if (!scanline)
       return nullptr; // failed
 
@@ -230,7 +230,7 @@ vil_jpeg_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned
   }
   else
   {
-    vil_memory_chunk_sptr chunk = new vil_memory_chunk(
+    const vil_memory_chunk_sptr chunk = new vil_memory_chunk(
       view2.ni() * view2.nplanes(), vil_pixel_format_component_format(vil_pixel_format_of(vxl_byte())));
     vil_image_view<vxl_byte> line = vil_image_view<vxl_byte>(chunk,
                                                              reinterpret_cast<vxl_byte *>(chunk->data()),
@@ -240,7 +240,7 @@ vil_jpeg_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned
                                                              view2.nplanes(),
                                                              view2.nplanes() * view2.ni(),
                                                              1);
-    JSAMPLE * scanline = line.top_left_ptr();
+    JSAMPLE * const scanline = line.top_left_ptr();
 
     for (unsigned int j = 0; j < view2.nj(); ++j)
     {

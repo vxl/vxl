@@ -39,7 +39,7 @@ vcsl_translation::execute(const vnl_vector<double> & v, double time) const
   // require
   assert(is_valid());
 
-  vnl_vector<double> value = vector_value(time);
+  const vnl_vector<double> value = vector_value(time);
   vnl_vector<double> result(v.size());
   for (unsigned int i = 0; i < v.size(); ++i)
     result.put(i, v.get(i) + value.get(i));
@@ -59,7 +59,7 @@ vcsl_translation::inverse(const vnl_vector<double> & v, double time) const
   assert(is_valid());
   assert(is_invertible(time));
 
-  vnl_vector<double> value = vector_value(time);
+  const vnl_vector<double> value = vector_value(time);
   vnl_vector<double> result(v.size());
   for (unsigned int i = 0; i < v.size(); ++i)
     result.put(i, v.get(i) - value.get(i));
@@ -77,7 +77,7 @@ vcsl_translation::vector_value(double time) const
     return vector_[0];
   else
   {
-    int i = matching_interval(time);
+    const int i = matching_interval(time);
     switch (interpolator_[i])
     {
       case vcsl_linear:

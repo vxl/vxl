@@ -25,7 +25,7 @@ test_update_mog_type(T epsilon, const std::string & type_name, T inf)
   using gauss3_t = vpdt_gaussian<vnl_vector_fixed<T, 3>, T>;
   using mog_t = vpdt_mixture_of<gauss3_t>;
 
-  vpdt_mog_sg_updater<mog_t> mog_updater(gauss3_t(vnl_vector_fixed<T, 3>(0.0), 1));
+  const vpdt_mog_sg_updater<mog_t> mog_updater(gauss3_t(vnl_vector_fixed<T, 3>(0.0), 1));
 
   mog_t mixture;
   mog_updater(mixture, data[0]);
@@ -38,7 +38,7 @@ test_update_mog_type(T epsilon, const std::string & type_name, T inf)
   TEST("norm_const", mixture.norm_const(), 1);
   vnl_vector_fixed<T, 3> mean;
   mixture.compute_mean(mean);
-  vnl_vector_fixed<T, 3> exact_mean(1, 1, 1);
+  const vnl_vector_fixed<T, 3> exact_mean(1, 1, 1);
   TEST("mean", mean, exact_mean);
 }
 

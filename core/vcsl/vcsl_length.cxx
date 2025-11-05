@@ -26,6 +26,6 @@ vcsl_length::standard_unit() const
 vcsl_length_sptr
 vcsl_length::instance()
 {
-  static vcsl_length_sptr instance_ = new vcsl_length;
+  static const vcsl_length_sptr instance_ = new vcsl_length;
   return instance_;
 }

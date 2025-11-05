@@ -28,9 +28,9 @@ int
 test_memory_image_main(int, char *[])
 {
   std::string tmp_nam = vul_temp_filename();
-  std::string file1 = !tmp_nam.empty() ? tmp_nam + ".pgm" : std::string("vil1_test_memory_image_1.pgm");
+  const std::string file1 = !tmp_nam.empty() ? tmp_nam + ".pgm" : std::string("vil1_test_memory_image_1.pgm");
   tmp_nam = vul_temp_filename();
-  std::string file2 = !tmp_nam.empty() ? tmp_nam + ".pgm" : std::string("vil1_test_memory_image_2.pgm");
+  const std::string file2 = !tmp_nam.empty() ? tmp_nam + ".pgm" : std::string("vil1_test_memory_image_2.pgm");
 
   {
     vil1_memory_image m(3, 2, VIL1_BYTE);
@@ -44,7 +44,7 @@ test_memory_image_main(int, char *[])
     vpl_chmod(file1, 0666); // -rw-rw-rw-
 #endif
 
-    vil1_memory_image n(data, 3, 2, VIL1_BYTE);
+    vil1_memory_image const n(data, 3, 2, VIL1_BYTE);
     p(n);
 
     vil1_save(n, file2.c_str(), "pnm");

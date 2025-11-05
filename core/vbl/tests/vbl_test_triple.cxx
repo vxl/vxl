@@ -13,7 +13,7 @@ vbl_test_triple()
             << "*****************\n"
             << " Test vbl_triple\n"
             << "*****************\n";
-  vbl_triple<double, int, int> t(7.0, 1, 2);
+  const vbl_triple<double, int, int> t(7.0, 1, 2);
   TEST("vbl_triple constructor", t.first == 7.0 && t.second == 1 && t.third == 2, true);
   vbl_triple<double, int, int> t2 = t;
   t2.first = 6.0;

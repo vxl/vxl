@@ -12,7 +12,7 @@ vbl_test_quadruple()
             << "********************\n"
             << " Test vbl_quadruple\n"
             << "********************\n";
-  vbl_quadruple<int, int, int, int> t(7, 0, 1, 2);
+  const vbl_quadruple<int, int, int, int> t(7, 0, 1, 2);
   TEST("vbl_quadruple constructor", t.first == 7 && t.second == 0 && t.third == 1 && t.fourth == 2, true);
   vbl_quadruple<int, int, int, int> t2 = t;
   t2.first = 6;

@@ -22,9 +22,9 @@ test_ransac_obj()
   //
   // Test the functions specific to the RANSAC rho function
   //
-  double ransac_cnst = 2.5;
+  const double ransac_cnst = 2.5;
 
-  vrel_objective * obj = new vrel_ransac_obj(ransac_cnst);
+  vrel_objective * const obj = new vrel_ransac_obj(ransac_cnst);
   TEST_NEAR("ransac rho 1", rho(obj, 0), 0.0, 1e-6);
   TEST_NEAR("ransac rho 2", rho(obj, 0.5), 0.0, 1e-6);
   TEST_NEAR("ransac rho 3", rho(obj, 3.0), 1.0, 1e-6);

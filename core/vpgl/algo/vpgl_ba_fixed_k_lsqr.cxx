@@ -47,7 +47,7 @@ vpgl_ba_fixed_k_lsqr::jac_Aij(unsigned int i,
 {
   // the translation part
   // --------------------
-  vnl_double_3x3 M = Pi.extract(3, 3);
+  const vnl_double_3x3 M = Pi.extract(3, 3);
   // This is semi const incorrect - there is no vnl_vector_ref_const
   const vnl_vector_ref<double> C(3, const_cast<double *>(ai.data_block()) + 3);
   vnl_matrix<double> Aij_sub(2, 3);
@@ -109,8 +109,8 @@ vpgl_ba_fixed_k_lsqr::param_to_pt_vector(int /*j*/, const double * bj, const vnl
 vpgl_perspective_camera<double>
 vpgl_ba_fixed_k_lsqr::param_to_cam(int i, const double * ai, const vnl_vector<double> & /*c*/) const
 {
-  vnl_vector<double> w(ai, 3);
-  vgl_homg_point_3d<double> t(ai[3], ai[4], ai[5]);
+  const vnl_vector<double> w(ai, 3);
+  const vgl_homg_point_3d<double> t(ai[3], ai[4], ai[5]);
   return vpgl_perspective_camera<double>(K_[i], t, vgl_rotation_3d<double>(w));
 }
 
@@ -143,7 +143,7 @@ vpgl_ba_fixed_k_lsqr::create_param_vector(const std::vector<vpgl_perspective_cam
     // compute the Rodrigues vector from the rotation
     vnl_vector_fixed<double, 3> w = R.as_rodrigues();
 
-    double * ai = a.data_block() + i * 6;
+    double * const ai = a.data_block() + i * 6;
     ai[0] = w[0];
     ai[1] = w[1];
     ai[2] = w[2];
@@ -163,7 +163,7 @@ vpgl_ba_fixed_k_lsqr::create_param_vector(const std::vector<vgl_point_3d<double>
   for (unsigned int j = 0; j < world_points.size(); ++j)
   {
     const vgl_point_3d<double> & point = world_points[j];
-    double * bj = b.data_block() + j * 3;
+    double * const bj = b.data_block() + j * 3;
     bj[0] = point.x();
     bj[1] = point.y();
     bj[2] = point.z();

@@ -17,14 +17,14 @@ main(int /*argc*/, char ** /*argv*/)
 {
   // The "normal" vil1_rgb class, with ubyte cells, is called vil1_rgb_cell;
   // its constructor takes the R, G and B values to be set:
-  vil1_rgb_cell orange(255, 140, 0);
+  const vil1_rgb_cell orange(255, 140, 0);
   // A ubyte (= grey pixel) value is automatically converted to a vil1_rgb_cell:
-  vil1_rgb_cell black = (unsigned char)0;
-  vil1_rgb_cell white = (unsigned char)255;
-  vil1_rgb_cell grey = (unsigned char)190;
+  const vil1_rgb_cell black = (unsigned char)0;
+  const vil1_rgb_cell white = (unsigned char)255;
+  const vil1_rgb_cell grey = (unsigned char)190;
 
   // Conversely, a vil1_rgb_cell can be converted to its ubyte grey equivalent:
-  unsigned char orange_grey = orange.grey();
+  const unsigned char orange_grey = orange.grey();
 
   // Write to a std::ostream: the output as the format [R G B].
   std::cout << "/* XPM */\n"
@@ -53,9 +53,9 @@ char *
 as_hex(const vil1_rgb_cell & rgb)
 {
   // The data members r, g and b of a vil1_rgb_cell are public:
-  unsigned char r = rgb.r;
-  unsigned char g = rgb.g;
-  unsigned char b = rgb.b;
+  const unsigned char r = rgb.r;
+  const unsigned char g = rgb.g;
+  const unsigned char b = rgb.b;
 
   // And now some magic char manipulations, to obtain hex values:
   static char s[] = "#000000";

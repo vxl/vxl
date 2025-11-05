@@ -59,7 +59,7 @@ vpgl_ba_shared_k_lsqr::jac_Aij(unsigned int /*i*/,
 {
   // the translation part
   // --------------------
-  vnl_double_3x3 M = Pi.extract(3, 3);
+  const vnl_double_3x3 M = Pi.extract(3, 3);
   // This is semi const incorrect - there is no vnl_vector_ref_const
   const vnl_vector_ref<double> C(3, const_cast<double *>(ai.data_block()) + 3);
   vnl_matrix<double> Aij_sub(2, 3);
@@ -101,8 +101,8 @@ vpgl_ba_shared_k_lsqr::jac_Cij(unsigned int /*i*/,
 {
   vnl_double_3 p = Pi * vnl_vector_fixed<double, 4>(bj[0], bj[1], bj[2], 1.0);
 
-  double inv_f = 1.0 / c[0];
-  double skew_term = K_.skew() * inv_f / K_.y_scale();
+  const double inv_f = 1.0 / c[0];
+  const double skew_term = K_.skew() * inv_f / K_.y_scale();
   vgl_point_2d<double> pp = K_.principal_point();
   Cij(1, 0) = inv_f * (p[1] / p[2] - pp.y());
   Cij(0, 0) = inv_f * (p[0] / p[2] - pp.x()) - skew_term * Cij(1, 0);
@@ -130,8 +130,8 @@ vpgl_perspective_camera<double>
 vpgl_ba_shared_k_lsqr::param_to_cam(int /*i*/, const double * ai, const vnl_vector<double> & c) const
 {
   K_.set_focal_length(c[0]);
-  vnl_vector<double> w(ai, 3);
-  vgl_homg_point_3d<double> t(ai[3], ai[4], ai[5]);
+  const vnl_vector<double> w(ai, 3);
+  const vgl_homg_point_3d<double> t(ai[3], ai[4], ai[5]);
   return vpgl_perspective_camera<double>(K_, t, vgl_rotation_3d<double>(w));
 }
 
@@ -174,7 +174,7 @@ vpgl_ba_shared_k_lsqr::create_param_vector(const std::vector<vpgl_perspective_ca
     // compute the Rodrigues vector from the rotation
     vnl_vector<double> w{ R.as_rodrigues().as_vector() };
 
-    double * ai = a.data_block() + i * 6;
+    double * const ai = a.data_block() + i * 6;
     ai[0] = w[0];
     ai[1] = w[1];
     ai[2] = w[2];
@@ -194,7 +194,7 @@ vpgl_ba_shared_k_lsqr::create_param_vector(const std::vector<vgl_point_3d<double
   for (unsigned int j = 0; j < world_points.size(); ++j)
   {
     const vgl_point_3d<double> & point = world_points[j];
-    double * bj = b.data_block() + j * 3;
+    double * const bj = b.data_block() + j * 3;
     bj[0] = point.x();
     bj[1] = point.y();
     bj[2] = point.z();

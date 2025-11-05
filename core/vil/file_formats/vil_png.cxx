@@ -221,7 +221,7 @@ struct vil_png_structures
     else if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB_ALPHA)
       linesize *= 4;
 
-    unsigned int height = png_get_image_height(png_ptr, info_ptr);
+    const unsigned int height = png_get_image_height(png_ptr, info_ptr);
     // Alloc the whole thing at once
     rows[0] = new png_byte[linesize * height];
     if (!rows[0])
@@ -392,7 +392,7 @@ vil_png_image::read_header()
   }
   if (png_get_valid(p_->png_ptr, p_->info_ptr, PNG_INFO_tRNS))
   {
-    int channels = png_get_channels(p_->png_ptr, p_->info_ptr);
+    const int channels = png_get_channels(p_->png_ptr, p_->info_ptr);
     assert(channels == 1 || channels == 3);
     png_set_tRNS_to_alpha(p_->png_ptr);
   }
@@ -501,15 +501,15 @@ vil_png_image::get_copy_view(unsigned x0, unsigned nx, unsigned y0, unsigned ny)
     return nullptr;
 
   // PNG lib wants everything in memory - the first get_rows reads the whole image.
-  png_byte ** rows = p_->get_rows();
+  png_byte ** const rows = p_->get_rows();
   if (!rows)
     return nullptr;
 
-  int bit_depth = bits_per_component_; // value can be 1, 8, or 16
-  int bytes_per_pixel = (bit_depth * p_->channels + 7) / 8;
-  int bytes_per_row_dst = nx * nplanes() * vil_pixel_format_sizeof_components(format_);
+  const int bit_depth = bits_per_component_; // value can be 1, 8, or 16
+  const int bytes_per_pixel = (bit_depth * p_->channels + 7) / 8;
+  const int bytes_per_row_dst = nx * nplanes() * vil_pixel_format_sizeof_components(format_);
 
-  vil_memory_chunk_sptr chunk = new vil_memory_chunk(ny * bytes_per_row_dst, format_);
+  const vil_memory_chunk_sptr chunk = new vil_memory_chunk(ny * bytes_per_row_dst, format_);
 
   if (nx == png_get_image_width(p_->png_ptr, p_->info_ptr))
   {
@@ -589,7 +589,7 @@ vil_png_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned 
 
   // PNG lib wants everything in memory - the writing isn't done till this image is deleted.
 
-  png_byte ** rows = p_->get_rows();
+  png_byte ** const rows = p_->get_rows();
   if (!rows)
     return false;
 

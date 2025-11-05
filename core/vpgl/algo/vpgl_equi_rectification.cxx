@@ -18,7 +18,7 @@ vpgl_equi_rectification::column_transform(const std::vector<vnl_vector_fixed<dou
                                           double min_scale)
 {
   double u0_avg = 0.0, u1_avg = 0.0, v1_avg = 0.0;
-  size_t n = img_pts0.size();
+  const size_t n = img_pts0.size();
   for (unsigned i = 0; i < n; i++)
   {
     vnl_vector_fixed<double, 3> p0rot = H0 * img_pts0[i];
@@ -60,7 +60,7 @@ vpgl_equi_rectification::column_transform(const std::vector<vnl_vector_fixed<dou
   AA[1][1] = Sv1v1;
   bb[0] = Su0u1;
   bb[1] = Su0v1;
-  double d = fabs(vnl_det(AA));
+  const double d = fabs(vnl_det(AA));
   if (d < 100.0 * vgl_tolerance<double>::position)
   {
     std::cout << "Singular solution for u affine transform" << std::endl;
@@ -68,10 +68,10 @@ vpgl_equi_rectification::column_transform(const std::vector<vnl_vector_fixed<dou
   }
   AAinv = vnl_inverse(AA);
   x = AAinv * bb;
-  double neg_scale = x[0] < 0.0; // determine if column scale factor is negative
+  const double neg_scale = x[0] < 0.0; // determine if column scale factor is negative
   double su = fabs(x[0]), sigma_u = x[1], sqtsu = sqrt(su), ufact = 1.0 / (1.0 + sqtsu);
   // un-normalize to get the translation term
-  double tu = u0_avg - x[0] * u1_avg - sigma_u * v1_avg;
+  const double tu = u0_avg - x[0] * u1_avg - sigma_u * v1_avg;
   std::cout << "affine column trans: " << x[0] << ' ' << sigma_u << ' ' << tu << std::endl;
   if (su < min_scale)
   {
@@ -101,7 +101,7 @@ vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<doubl
                                       vnl_matrix_fixed<double, 3, 3> & H1,
                                       double min_scale)
 {
-  double tol = 100.0 * vgl_tolerance<double>::position;
+  const double tol = 100.0 * vgl_tolerance<double>::position;
   vnl_matrix_fixed<double, 3, 3> Mf = aF.get_matrix();
 
   //  vnl_vector_fixed<double, 3> e0; e0[0] = -Mf[2][1]; e0[1] = Mf[2][0]; e0[2] = 0;
@@ -115,8 +115,8 @@ vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<doubl
   e1[0] = Mf[1][2];
   e1[1] = -Mf[0][2];
   e1[2] = 0;
-  double e0m = e0.magnitude();
-  double e1m = e1.magnitude();
+  const double e0m = e0.magnitude();
+  const double e1m = e1.magnitude();
   if (e0m < tol || e1m < tol)
   {
     std::cout << "in vpgl_equi_rectification::compute_rectification(affine), null epipoles" << std::endl;
@@ -170,8 +170,8 @@ vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<doubl
     std::cout << "row scaling problem is singular" << std::endl;
     return false;
   }
-  double sr = rSv0v1 / rSv1v1;
-  double tv = v0_avg - sr * rv1_avg;
+  const double sr = rSv0v1 / rSv1v1;
+  const double tv = v0_avg - sr * rv1_avg;
   std::cout << "affine row trans: " << sr << ' ' << tv << std::endl;
 
   // Assign the transformation equally between the left and right images
@@ -233,7 +233,7 @@ vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<doubl
   AA[1][1] = Sv1v1;
   bb[0] = Su0u1;
   bb[1] = Su0v1;
-  double d = fabs(vnl_det(AA));
+  const double d = fabs(vnl_det(AA));
   if (d < 100.0 * vgl_tolerance<double>::position)
   {
     std::cout << "Singular solution for u affine transform" << std::endl;
@@ -244,7 +244,7 @@ vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<doubl
   neg_scale = x[0] < 0.0; // determine if column scale factor is negative
   double su = fabs(x[0]), sigma_u = x[1], sqtsu = sqrt(su), ufact = 1.0 / (1.0 + sqtsu);
   // un-normalize to get the translation term
-  double tu = u0_avg - x[0] * u1_avg - sigma_u * v1_avg;
+  const double tu = u0_avg - x[0] * u1_avg - sigma_u * v1_avg;
   std::cout << "affine column trans: " << x[0] << ' ' << sigma_u << ' ' << tu << std::endl;
   if (su < min_scale)
   {
@@ -280,10 +280,10 @@ vpgl_equi_rectification::rectify_pair(const vpgl_perspective_camera<double> & P0
 {
 
   // construct the essential matrix and extract epipoles
-  vpgl_essential_matrix<double> E(P0, P1);
+  const vpgl_essential_matrix<double> E(P0, P1);
   vgl_homg_point_2d<double> hepi0, hepi1;
   E.get_epipoles(hepi0, hepi1);
-  vnl_matrix_fixed<double, 3, 3> Em = E.get_matrix();
+  const vnl_matrix_fixed<double, 3, 3> Em = E.get_matrix();
   vnl_vector_fixed<double, 3> epi0(hepi0.x(), hepi0.y(), hepi0.w());
   epi0 /= epi0.magnitude();
   vnl_vector_fixed<double, 3> epi1(hepi1.x(), hepi1.y(), hepi1.w());
@@ -291,7 +291,7 @@ vpgl_equi_rectification::rectify_pair(const vpgl_perspective_camera<double> & P0
 
   // get camera information, rotation and calibration matrices
   vnl_matrix_fixed<double, 3, 3> R0 = P0.get_rotation().as_matrix();
-  vnl_matrix_fixed<double, 3, 3> R1 = P1.get_rotation().as_matrix();
+  const vnl_matrix_fixed<double, 3, 3> R1 = P1.get_rotation().as_matrix();
   vnl_matrix_fixed<double, 3, 3> K0 = P0.get_calibration().get_matrix(), K0_inv;
   vnl_matrix_fixed<double, 3, 3> K1 = P1.get_calibration().get_matrix(), K1_inv;
   K0_inv = vnl_inverse(K0);
@@ -299,7 +299,7 @@ vpgl_equi_rectification::rectify_pair(const vpgl_perspective_camera<double> & P0
 
   // rotate about camera1 center so that both cameras have parallel focal planes
   // rotation that takes camera1 rotation, R1 to camera0 rotation, R0
-  vnl_matrix_fixed<double, 3, 3> R10 = R0 * R1.transpose();
+  const vnl_matrix_fixed<double, 3, 3> R10 = R0 * R1.transpose();
 
   // define rotation that takes right epipole of E to an ideal point
   vnl_matrix_fixed<double, 3, 3> R0r(0.0), R00, R11, ix;
@@ -333,12 +333,12 @@ vpgl_equi_rectification::rectify_pair(const vpgl_perspective_camera<double> & P0
 
   // check if ix is valid
   double sum_zeros = 0.0;
-  double tol = 1.0e-10;
+  const double tol = 1.0e-10;
   for (size_t r = 0; r < 3; ++r)
     for (size_t c = 0; c < 3; ++c)
       if (!((r == 1 && c == 2) || (r == 2 && c == 1)))
         sum_zeros += ix[r][c];
-  double row_eq = ix[1][2] + ix[2][1];
+  const double row_eq = ix[1][2] + ix[2][1];
   if (fabs(sum_zeros) > tol || fabs(row_eq / ix[1][2]) > tol)
   {
     std::cerr << "epipolar lines not horizontal and/or rows not aligned" << std::endl;
@@ -351,7 +351,7 @@ vpgl_equi_rectification::rectify_pair(const vpgl_perspective_camera<double> & P0
   H0 = K0 * R0r * K0_inv;
   H1 = K0 * R0r * R10 * K1_inv;
   // compute offset and scale transforms
-  size_t n = img_pts0.size();
+  const size_t n = img_pts0.size();
 
   //  offset for the row coordinates
   double v0_avg = 0, v1_avg = 0;
@@ -380,7 +380,7 @@ vpgl_equi_rectification::rectify_pair(const vpgl_perspective_camera<double> & P0
   H1 = Tv1 * H1;
 
   // scale columns with an affine skew transform to minimize disparity on the pointsets img_pta0 and img_pts1
-  double min_scale = 0.5;
+  const double min_scale = 0.5;
   vnl_matrix_fixed<double, 3, 3> Usqt, Usqt_inv;
   if (!column_transform(img_pts0, img_pts1, H0, H1, Usqt, Usqt_inv, min_scale))
   {

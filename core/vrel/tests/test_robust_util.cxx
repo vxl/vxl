@@ -30,17 +30,17 @@ test_robust_util()
   double test_arr[] = { -1.0, -2.0, 3.0, -4.0, -1.5, -11.0, 14.1, -56.0, -2.4, 3.1, 1.1, 2.15, -2.1, -0.8 };
   std::vector<double> test_vec(test_arr, test_arr + 14);
   const double target = 3.0 * 1.4826 * (1 + 5.0 / 11);
-  double res = vrel_util_median_abs_dev_scale(test_vec.begin(), test_vec.end(), 3);
+  const double res = vrel_util_median_abs_dev_scale(test_vec.begin(), test_vec.end(), 3);
   TEST_NEAR("vrel_util_median_abs_dev_scale", res, target, 1e-6);
 
   //
   //  vrel_util_weighted_scale
   //
-  double wgt_arr[] = { 0.5, 0.75, 0.8, 0, 0.25, 0.4, 0.6, 0.9, 0.8, 0.75 };
+  const double wgt_arr[] = { 0.5, 0.75, 0.8, 0, 0.25, 0.4, 0.6, 0.9, 0.8, 0.75 };
   std::vector<double> wgt(10);
   for (int i = 0; i < 10; ++i)
     wgt[i] = wgt_arr[i];
-  double rs_arr[] = { 2, 4, 0.5, 7, 6, 5, 3, 2, 5, 2 };
+  const double rs_arr[] = { 2, 4, 0.5, 7, 6, 5, 3, 2, 5, 2 };
   std::vector<double> rs(10);
   for (int i = 0; i < 10; ++i)
     rs[i] = rs_arr[i];
@@ -51,10 +51,10 @@ test_robust_util()
     sum_wr += wgt_arr[i] * vnl_math::sqr(rs_arr[i]);
     sum_w += wgt_arr[i];
   }
-  int num = 10;
+  const int num = 10;
   int dof = 1;
-  double est_wgted_scale = vrel_util_weighted_scale(rs.begin(), rs.end(), wgt.begin(), dof, (double *)nullptr);
-  double corr_wgted_scale = std::sqrt(sum_wr / (sum_w * (num - dof) / num));
+  const double est_wgted_scale = vrel_util_weighted_scale(rs.begin(), rs.end(), wgt.begin(), dof, (double *)nullptr);
+  const double corr_wgted_scale = std::sqrt(sum_wr / (sum_w * (num - dof) / num));
   TEST_NEAR("vrel_util_weighted_scale", est_wgted_scale, corr_wgted_scale, 1e-6);
 
   //

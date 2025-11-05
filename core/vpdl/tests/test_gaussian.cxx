@@ -16,8 +16,8 @@ test_gaussian_type(T epsilon, const std::string & type_name)
 {
   // test dimension, zero variance
   {
-    vpdl_gaussian<T, 3> gauss3;
-    vpdl_gaussian<T, 1> gauss1;
+    const vpdl_gaussian<T, 3> gauss3;
+    const vpdl_gaussian<T, 1> gauss1;
     vpdl_gaussian<T> gauss_default, gauss(3), gauss_init(vnl_vector<T>(10, T(1)), vnl_matrix<T>(10, 10, T(3)));
 
     TEST(("dimension <" + type_name + "> fixed").c_str(), gauss3.dimension(), 3);
@@ -94,9 +94,9 @@ test_gaussian_type(T epsilon, const std::string & type_name)
     covar(2, 1) = (T)0.1;
     covar(2, 2) = (T)0.4;
 
-    vpdl_gaussian<T, 3> gauss3(mean, covar);
-    vpdl_gaussian<T, 1> gauss1(mean[0], covar(0, 0));
-    vpdl_gaussian<T> gauss(mean.as_ref(), covar.as_ref());
+    const vpdl_gaussian<T, 3> gauss3(mean, covar);
+    const vpdl_gaussian<T, 1> gauss1(mean[0], covar(0, 0));
+    const vpdl_gaussian<T> gauss(mean.as_ref(), covar.as_ref());
 
     // test direct access to data member
     // there is no direct access to covariance, it is recomputed, so use TEST_NEAR

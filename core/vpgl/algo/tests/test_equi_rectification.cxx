@@ -32,7 +32,7 @@ test_equi_rectification()
   row01[1] = -2.13683;
   row01[2] = -0.229387;
   row01[3] = 648.49;
-  vpgl_affine_camera<double> acam0(row00, row01);
+  const vpgl_affine_camera<double> acam0(row00, row01);
   vnl_vector_fixed<double, 4> row10, row11;
   row10[0] = 2.8301;
   row10[1] = -0.00578537;
@@ -42,7 +42,7 @@ test_equi_rectification()
   row11[1] = -2.88516;
   row11[2] = -0.754392;
   row11[3] = 1061.18;
-  vpgl_affine_camera<double> acam1(row10, row11);
+  const vpgl_affine_camera<double> acam1(row10, row11);
   std::vector<vnl_vector_fixed<double, 3>> pts0;
   pts0.emplace_back(517.08519082044199, 405.49679591436848, 1.0);
   pts0.emplace_back(368.62656130374893, 533.20968068909804, 1.0);
@@ -87,7 +87,7 @@ test_equi_rectification()
   pts1.emplace_back(550.77860354735083, 553.39783796559527, 1.0);
   pts1.emplace_back(510.49270359363777, 901.38726023140657, 1.0);
 
-  vpgl_affine_fundamental_matrix<double> aF(acam0, acam1);
+  const vpgl_affine_fundamental_matrix<double> aF(acam0, acam1);
   vnl_matrix_fixed<double, 3, 3> H0, H1;
   bool good = vpgl_equi_rectification::rectify_pair(aF, pts0, pts1, H0, H1);
   TEST("Run on a real example", good, true);
@@ -103,7 +103,7 @@ test_equi_rectification()
     hp1 = H1 * p1;
 
     double v0 = hp0[1] / hp0[2], v1 = hp1[1] / hp1[2];
-    double dv = fabs(v1 - v0);
+    const double dv = fabs(v1 - v0);
     if (dv > 0.001)
       equal_v = false;
   }
@@ -131,7 +131,7 @@ test_equi_rectification()
   v1_avg /= n;
   vnl_matrix_fixed<double, 3, 3> fm(0.0);
   fm[1][2] = fm[2][1] = -1.0;
-  vpgl_affine_fundamental_matrix<double> syn_aF(fm);
+  const vpgl_affine_fundamental_matrix<double> syn_aF(fm);
   vnl_matrix_fixed<double, 3, 3> syn_H0, syn_H1, syn_test_H0, syn_test_H1;
   good = vpgl_equi_rectification::rectify_pair(syn_aF, syn_pts0, syn_pts1, syn_H0, syn_H1);
 
@@ -162,19 +162,19 @@ test_equi_rectification()
   //
   // camera 0
   double kd[9] = { 8829.15, 0, 1024, 0, 8829.15, 766, 0, 0, 1 };
-  vnl_matrix_fixed<double, 3, 3> Km(kd);
-  vpgl_calibration_matrix<double> K(Km);
+  const vnl_matrix_fixed<double, 3, 3> Km(kd);
+  const vpgl_calibration_matrix<double> K(Km);
   double rd[9] = { 0.640151, -0.758607, 0.121334, -0.453832, -0.500846, -0.737014, 0.619873, 0.416735, -0.664898 };
-  vnl_matrix_fixed<double, 3, 3> R0m(rd);
-  vgl_rotation_3d<double> R0(R0m);
-  vgl_vector_3d<double> t0(8.71101, 327.467, 1698.42);
-  vpgl_perspective_camera<double> P0(K, R0, t0);
+  const vnl_matrix_fixed<double, 3, 3> R0m(rd);
+  const vgl_rotation_3d<double> R0(R0m);
+  const vgl_vector_3d<double> t0(8.71101, 327.467, 1698.42);
+  const vpgl_perspective_camera<double> P0(K, R0, t0);
   // camera 1
   double rd1[9] = { 0.930967, 0.365021, 0.00776682, 0.24488, -0.608493, -0.754831, -0.270803, 0.704625, -0.655873 };
-  vnl_matrix_fixed<double, 3, 3> R1m(rd1);
-  vgl_rotation_3d<double> R1(R1m);
-  vgl_vector_3d<double> t1(-463.118, 106.98, 2043.14);
-  vpgl_perspective_camera<double> P1(K, R1, t1);
+  const vnl_matrix_fixed<double, 3, 3> R1m(rd1);
+  const vgl_rotation_3d<double> R1(R1m);
+  const vgl_vector_3d<double> t1(-463.118, 106.98, 2043.14);
+  const vpgl_perspective_camera<double> P1(K, R1, t1);
   n = 10;
   std::vector<vnl_vector_fixed<double, 3>> img_pts0(n), img_pts1(n);
   img_pts0[0] = vnl_vector_fixed<double, 3>(1776.9489999704870, 648.17236725689770, 1.0);

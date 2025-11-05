@@ -25,7 +25,7 @@ main(int argc, char ** argv)
     return 0;
   }
 
-  vil_image_view<vxl_byte> src_im = vil_load(argv[1]);
+  const vil_image_view<vxl_byte> src_im = vil_load(argv[1]);
   if (src_im.size() == 0)
   {
     std::cout << "Unable to load source image from " << argv[1] << std::endl;
@@ -35,7 +35,7 @@ main(int argc, char ** argv)
   std::cout << "Loaded image of size " << src_im.ni() << " x " << src_im.nj() << " from " << argv[1] << std::endl;
 
 
-  double theta = std::stod(argv[3]);
+  const double theta = std::stod(argv[3]);
 
   // rotate the image
   vil_image_view<vxl_byte> dest_im;

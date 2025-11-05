@@ -56,7 +56,7 @@ vpgl_triangulate_points::triangulate(const std::vector<vgl_point_2d<double>> & p
   }
 
   // Find the least squares result
-  vnl_svd<double> svd(A);
+  const vnl_svd<double> svd(A);
   vnl_double_3 x = svd.solve(b);
 
   point_3d.set(x.begin());
@@ -72,8 +72,8 @@ vpgl_triangulate_points::triangulate(const std::vector<vgl_point_2d<double>> & p
     pp[1] += cameras[i].get_translation().y();
     pp[2] += cameras[i].get_translation().z();
 
-    double dx = pp[0] / pp[2] - points[i].x();
-    double dy = pp[1] / pp[2] - points[i].y();
+    const double dx = pp[0] / pp[2] - points[i].x();
+    const double dy = pp[1] / pp[2] - points[i].y();
     error += dx * dx + dy * dy;
   }
 

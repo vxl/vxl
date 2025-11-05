@@ -110,7 +110,7 @@ vil_nitf2_tagged_record::read(vil_nitf2_istream & input)
   m_length_field->value(m_length);
 
   // See if this record is defined ...
-  vil_nitf2_tagged_record_definition * record_definition = vil_nitf2_tagged_record_definition::find(cetag);
+  vil_nitf2_tagged_record_definition * const record_definition = vil_nitf2_tagged_record_definition::find(cetag);
 
   // ... if not, skip ahead to next record ...
   if (record_definition == nullptr)
@@ -123,7 +123,7 @@ vil_nitf2_tagged_record::read(vil_nitf2_istream & input)
   }
   // ... otherwise, populate this record's fields.
   // First save the position to check later that we read entire record
-  vil_streampos record_data_start_pos = input.tell();
+  const vil_streampos record_data_start_pos = input.tell();
   m_definition = record_definition;
   m_field_sequence = new vil_nitf2_field_sequence(record_definition->field_definitions());
   m_field_sequence->read(input);
@@ -288,7 +288,7 @@ bool
 vil_nitf2_tagged_record::test()
 {
   bool error = false;
-  const char * test_tre_tag = "@TEST@";
+  const char * const test_tre_tag = "@TEST@";
   // Example Tagged Record Extension definition
   vil_nitf2_tagged_record_definition::define(test_tre_tag, "Test Definition")
     .field("MTI_DP", "Destination Point", NITF_INT(2))
@@ -384,59 +384,59 @@ vil_nitf2_tagged_record::test()
     .repeat(4, vil_nitf2_field_definitions().field("D", "Test fixed repeat", NITF_INT(1)))
     .end();
   // Create a test input std::string
-  std::string testFieldsStr = "02"                    // MTI_DP
-                              "003"                   // MTI_PACKET_ID
-                                                      //"19990908070605"         // DATIME
-                              "              "        // DATIME
-                              "+89.111111-159.222222" // ACFT_LOC
-                              "890102.33N0091122.00W" // ACFT_LOC2
-                              "-60.00"                // SQUINT_ANGLE
-                              "003"                   // NO_VALID_TARGETS
-                              " "                     // TGT_CAT
-                              "2222"
-                              "H" // TGT_1_SPEED2, TGT_1_CAT2
-                              "    "
-                              " " // TGT_2_SPEED2, TGT_2_CAT2
-                              "4444"
-                              "T"               // TGT_3_SPEED2, TGT_3_CAT2
-                              ""                // TEST_NEG_COND not present
-                              "True Condition"  // TEST_POS_COND
-                              "T"               // CLASS
-                              "RandomCodeWords" // CODEW (only present if CLASS=T)
-                              ""                // CWTEST (not present because CLASS!=U
-                              "0"               // NBANDS (0, so use XBANDS instead)
-                              "12"              // XBANDS (present because NBANDS=0)
-                              "abcdefghijkl"    // 12 BAND_LTRs (XBAND=12)
-                              "+1.234567E-8"    // Exponential format test
-                              // test nested repeats
-                              "2" // N
-                              // for i=0...N-1: i=0
-                              "1"   // A[0]
-                              "S00" // S[0,0]
-                              "S01" // S[0,1]
-                              //   for j=0...A[i]-1: j=0
-                              "B00" // B[0,0]
-                              //     for k=0..A[i]-1: k=0
-                              "C000" // C[0,0,0]
-                              // i=1:
-                              "2"   // A[1]
-                              "S10" // S[1,0]
-                              "S11" // S[1,1]
-                              //   for j=0..A[i]: j=0
-                              "B10" // B[1,0]
-                              //     for k=0..A[i]
-                              "C100" // C[1,0,0]
-                              "C101" // C[1,0,1]
-                              "B11"  // B[1,1]
-                              "C110" // C[1,1,0]
-                              "C111" // C[1,1,1]
-                              // test fixed repeat
-                              "7890";
+  const std::string testFieldsStr = "02"                    // MTI_DP
+                                    "003"                   // MTI_PACKET_ID
+                                                            //"19990908070605"         // DATIME
+                                    "              "        // DATIME
+                                    "+89.111111-159.222222" // ACFT_LOC
+                                    "890102.33N0091122.00W" // ACFT_LOC2
+                                    "-60.00"                // SQUINT_ANGLE
+                                    "003"                   // NO_VALID_TARGETS
+                                    " "                     // TGT_CAT
+                                    "2222"
+                                    "H" // TGT_1_SPEED2, TGT_1_CAT2
+                                    "    "
+                                    " " // TGT_2_SPEED2, TGT_2_CAT2
+                                    "4444"
+                                    "T"               // TGT_3_SPEED2, TGT_3_CAT2
+                                    ""                // TEST_NEG_COND not present
+                                    "True Condition"  // TEST_POS_COND
+                                    "T"               // CLASS
+                                    "RandomCodeWords" // CODEW (only present if CLASS=T)
+                                    ""                // CWTEST (not present because CLASS!=U
+                                    "0"               // NBANDS (0, so use XBANDS instead)
+                                    "12"              // XBANDS (present because NBANDS=0)
+                                    "abcdefghijkl"    // 12 BAND_LTRs (XBAND=12)
+                                    "+1.234567E-8"    // Exponential format test
+                                    // test nested repeats
+                                    "2" // N
+                                    // for i=0...N-1: i=0
+                                    "1"   // A[0]
+                                    "S00" // S[0,0]
+                                    "S01" // S[0,1]
+                                    //   for j=0...A[i]-1: j=0
+                                    "B00" // B[0,0]
+                                    //     for k=0..A[i]-1: k=0
+                                    "C000" // C[0,0,0]
+                                    // i=1:
+                                    "2"   // A[1]
+                                    "S10" // S[1,0]
+                                    "S11" // S[1,1]
+                                    //   for j=0..A[i]: j=0
+                                    "B10" // B[1,0]
+                                    //     for k=0..A[i]
+                                    "C100" // C[1,0,0]
+                                    "C101" // C[1,0,1]
+                                    "B11"  // B[1,1]
+                                    "C110" // C[1,1,0]
+                                    "C111" // C[1,1,1]
+                                    // test fixed repeat
+                                    "7890";
   std::stringstream test_stream;
   test_stream << test_tre_tag;                                                // CETAG
   test_stream << std::setw(5) << std::setfill('0') << testFieldsStr.length(); // CELENGTH
   test_stream << testFieldsStr;                                               // rest of fields
-  std::string read_string = test_stream.str();
+  const std::string read_string = test_stream.str();
   // Write the test input std::string to a vil_stream
   auto * vs = new vil_stream_core();
   vs->write(read_string.c_str(), read_string.length());
@@ -451,12 +451,12 @@ vil_nitf2_tagged_record::test()
     std::cerr << "\nOriginal string:\n" << read_string << "\nWrite() output:\n";
     auto * vs2 = new vil_stream_core();
     record->write(*(vil_stream *)vs2);
-    vil_streampos bufsize = vs2->file_size();
-    char * buf = new char[(unsigned int)bufsize + 1];
+    const vil_streampos bufsize = vs2->file_size();
+    char * const buf = new char[(unsigned int)bufsize + 1];
     vs2->seek(0);
     vs2->read(buf, bufsize);
     buf[bufsize] = '\0';
-    std::string write_string = std::string(buf);
+    const std::string write_string = std::string(buf);
     std::cerr << write_string << '\n';
     if (read_string != write_string)
     {
@@ -541,11 +541,11 @@ vil_nitf2_tagged_record::output(std::ostream & os) const
   os << "CETAG: " << name() << '\n' << "CELEN: " << length() << std::endl;
   for (auto & m_field_definition : *m_definition->m_field_definitions)
   {
-    vil_nitf2_field_definition * field_def = m_field_definition->field_definition();
+    vil_nitf2_field_definition * const field_def = m_field_definition->field_definition();
     // to do: handle other nodes
     if (!field_def)
       break;
-    vil_nitf2_field * field = get_field(field_def->tag);
+    vil_nitf2_field * const field = get_field(field_def->tag);
     os << field_def->tag << ": ";
     if (field)
     {
@@ -563,7 +563,7 @@ bool
 vil_nitf2_tagged_record::write(vil_nitf2_ostream & output)
 {
   // To track of how much is written
-  vil_streampos start = output.tell();
+  const vil_streampos start = output.tell();
   // Write tag and length fields
   if (m_tag_field && m_length_field)
   {
@@ -575,9 +575,9 @@ vil_nitf2_tagged_record::write(vil_nitf2_ostream & output)
   // Write data fields
   m_field_sequence->write(output);
   // Check whether the std::right amount was written
-  vil_streampos end = output.tell();
-  vil_streampos length_written = end - start;
-  int expected_length = s_tag_formatter().field_width + s_length_formatter().field_width + length();
+  const vil_streampos end = output.tell();
+  const vil_streampos length_written = end - start;
+  const int expected_length = s_tag_formatter().field_width + s_length_formatter().field_width + length();
   return length_written == expected_length;
 }
 
@@ -588,7 +588,7 @@ vil_nitf2_field_sequence::find_field_definition(const std::string & tag)
 {
   for (auto m_field_definition : *m_field_definitions)
   {
-    vil_nitf2_field_definition * field_def = m_field_definition->field_definition();
+    vil_nitf2_field_definition * const field_def = m_field_definition->field_definition();
     // to do: search other nodes
     if (!field_def)
       break;

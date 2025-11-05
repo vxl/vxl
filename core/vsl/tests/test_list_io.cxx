@@ -15,7 +15,7 @@ test_list_io()
             << "Testing std::list binary io\n"
             << "**************************\n";
 
-  int n = 10;
+  const int n = 10;
   std::list<int> l_int_out;
   for (int i = 0; i < n; ++i)
     l_int_out.push_back(i);

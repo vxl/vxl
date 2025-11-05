@@ -50,7 +50,7 @@ Checks: <
    cppcoreguidelines-misleading-capture-default-by-value,
   -google-explicit-constructor,
   -google-readability-casting,
-  -misc-const-correctness,
+   misc-const-correctness,
   -misc-unused-include,
   -misc-unused-parameters,
   -misc-use-internal-linkage,

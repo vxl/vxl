@@ -52,7 +52,7 @@ vil_nitf2_image_subheader::~vil_nitf2_image_subheader()
 bool
 vil_nitf2_image_subheader::read(vil_stream * stream)
 {
-  bool success = m_field_sequence.read(*stream);
+  const bool success = m_field_sequence.read(*stream);
 
   if (success)
   {
@@ -297,7 +297,7 @@ vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions * defs
     }
     case vil_nitf2_classification::V_NITF_21:
     {
-      std::vector<std::string> coors = { "U", "G", "N", "S", "D" };
+      const std::vector<std::string> coors = { "U", "G", "N", "S", "D" };
       (*defs)
         .field("ICORDS",
                "Image Coordinate Representation",
@@ -483,7 +483,7 @@ bool
 vil_nitf2_image_subheader::get_date_time(int & year, int & month, int & day, int & hour, int & min, int & sec) const
 {
   std::string date_time = "";
-  bool success = this->get_property("IDATIM", date_time);
+  const bool success = this->get_property("IDATIM", date_time);
   if (!success)
   {
     std::cout << "IDATIM Property failed in vil_nitf2_image_subheader\n";
@@ -493,7 +493,7 @@ vil_nitf2_image_subheader::get_date_time(int & year, int & month, int & day, int
   // format is ddhhnnssZmmmyy OR yyyymmddhhnnss (the NITF 2.1 Commercial format)
   std::string s_day, s_hour, s_min, s_month, s_year, s_sec;
   // try ddhhnnssZmmmyy first
-  std::string s_zulu = date_time.substr(8, 1);
+  const std::string s_zulu = date_time.substr(8, 1);
   if (s_zulu == "Z")
   {
     s_day = date_time.substr(0, 2);
@@ -502,7 +502,7 @@ vil_nitf2_image_subheader::get_date_time(int & year, int & month, int & day, int
     s_sec = date_time.substr(6, 2);
     s_month = date_time.substr(9, 3);
     s_year = date_time.substr(12, 2);
-    std::string months[] = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
+    const std::string months[] = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
     bool found = false;
     for (int i = 0; (i < 12) && (!found); ++i)
     {
@@ -685,7 +685,7 @@ vil_nitf2_image_subheader::get_lut_info(unsigned int band,
   {
     lut_d[lut_index].resize(ne_lut);
     // get the lut_index'th lut for the given image band
-    vil_nitf2_index_vector index(band, lut_index);
+    const vil_nitf2_index_vector index(band, lut_index);
     if (m_field_sequence.get_value("LUTDnm", index, raw_lut_data))
     {
       for (int el_index = 0; el_index < ne_lut; el_index++)
@@ -786,7 +786,7 @@ vil_nitf2_image_subheader::add_rpc_definitions()
 void
 vil_nitf2_image_subheader::add_USE_definitions()
 {
-  vil_nitf2_tagged_record_definition * tr = vil_nitf2_tagged_record_definition::find("USE00A");
+  vil_nitf2_tagged_record_definition * const tr = vil_nitf2_tagged_record_definition::find("USE00A");
   if (!tr)
   {
     vil_nitf2_tagged_record_definition::define("USE00A", "EXPLOITATION USABILITY EXTENSION FORMAT")
@@ -826,7 +826,7 @@ vil_nitf2_image_subheader::get_sun_params(double & sun_el, double & sun_az) cons
   // Check through the TREs to find "RPC"
   for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
   {
-    std::string type = (*tres_itr)->name();
+    const std::string type = (*tres_itr)->name();
     if (type == "USE00A")
     {
       success = (*tres_itr)->get_value("SUN_EL", sun_el);
@@ -852,7 +852,7 @@ vil_nitf2_image_subheader::get_sun_params(double & sun_el, double & sun_az) cons
 void
 vil_nitf2_image_subheader::add_ICHIPB_definitions()
 {
-  vil_nitf2_tagged_record_definition * tr = vil_nitf2_tagged_record_definition::find("ICHIPB");
+  vil_nitf2_tagged_record_definition * const tr = vil_nitf2_tagged_record_definition::find("ICHIPB");
   if (!tr)
   {
     vil_nitf2_tagged_record_definition::define("ICHIPB", "ICHIPB SUPPORT DATA EXTENSION")
@@ -914,7 +914,7 @@ vil_nitf2_image_subheader::add_ICHIPB_definitions()
 void
 vil_nitf2_image_subheader::add_STDIDC_definitions()
 {
-  vil_nitf2_tagged_record_definition * tr = vil_nitf2_tagged_record_definition::find("STDIDC");
+  vil_nitf2_tagged_record_definition * const tr = vil_nitf2_tagged_record_definition::find("STDIDC");
   if (!tr)
   {
     vil_nitf2_tagged_record_definition::define("STDIDC", "STDIDC SUPPORT DATA EXTENSION")
@@ -946,7 +946,7 @@ vil_nitf2_image_subheader::add_STDIDC_definitions()
 void
 vil_nitf2_image_subheader::add_STDIDB_definitions()
 {
-  vil_nitf2_tagged_record_definition * tr = vil_nitf2_tagged_record_definition::find("STDIDB");
+  vil_nitf2_tagged_record_definition * const tr = vil_nitf2_tagged_record_definition::find("STDIDB");
   if (!tr)
   {
     vil_nitf2_tagged_record_definition::define("STDIDB", "STDIDB SUPPORT DATA EXTENSION")
@@ -983,7 +983,7 @@ vil_nitf2_image_subheader::add_STDIDB_definitions()
 void
 vil_nitf2_image_subheader::add_MPD26A_definitions()
 {
-  vil_nitf2_tagged_record_definition * tr = vil_nitf2_tagged_record_definition::find("MPD26A");
+  vil_nitf2_tagged_record_definition * const tr = vil_nitf2_tagged_record_definition::find("MPD26A");
   if (!tr)
   {
     vil_nitf2_tagged_record_definition::define("MPD26A", "MPD26A SUPPORT DATA EXTENSION")
@@ -1052,7 +1052,7 @@ vil_nitf2_image_subheader::get_image_offset(double & u_off, double & v_off) cons
   // Check through the TREs to find "RPC"
   for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
   {
-    std::string type = (*tres_itr)->name();
+    const std::string type = (*tres_itr)->name();
     if (type == "ICHIPB")
     {
       double r_off = 1.0; // dummy initialisation
@@ -1136,7 +1136,7 @@ vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
   // Check through the TREs to find "RPC"
   for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
   {
-    std::string type = (*tres_itr)->name();
+    const std::string type = (*tres_itr)->name();
 
     if (type == "RPC00B" || type == "RPC00A") // looking for "RPC..."
     {
@@ -1307,7 +1307,7 @@ vil_nitf2_image_subheader::get_ichipb_info(std::pair<double, double> & translati
   // Check through the TREs to find "RPC"
   for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
   {
-    std::string type = (*tres_itr)->name();
+    const std::string type = (*tres_itr)->name();
     if (type == "ICHIPB")
     {
       int anacor = 0;

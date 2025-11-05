@@ -8,7 +8,7 @@ vsl_b_write(vsl_b_ostream & os, const vpgl_camera_double_sptr & cam_sptr)
 {
   if (!cam_sptr)
     return;
-  vpgl_camera<double> * cam = cam_sptr.ptr();
+  vpgl_camera<double> * const cam = cam_sptr.ptr();
   vsl_b_write(os, cam);
 }
 
@@ -18,7 +18,7 @@ vsl_b_write(vsl_b_ostream & os, const vpgl_camera_float_sptr & cam_sptr)
 {
   if (!cam_sptr)
     return;
-  vpgl_camera<float> * cam = cam_sptr.ptr();
+  vpgl_camera<float> * const cam = cam_sptr.ptr();
   vsl_b_write(os, cam);
 }
 

@@ -338,7 +338,7 @@ vil_openjpeg_decoder ::set_decode_area(unsigned int x, unsigned int y, unsigned 
 opj_image_t *
 vil_openjpeg_decoder ::take_image()
 {
-  opj_image_t * image = this->image_;
+  opj_image_t * const image = this->image_;
   this->image_ = nullptr;
   return image;
 }
@@ -367,7 +367,7 @@ vxl_uint_32
 vil_openjpeg_decoder ::opj_vil_stream_read(void * p_buffer, vxl_uint_32 p_nb_bytes, void * p_user_data)
 {
   auto * stream = reinterpret_cast<vil_stream *>(p_user_data);
-  vil_streampos b = stream->read(p_buffer, p_nb_bytes);
+  const vil_streampos b = stream->read(p_buffer, p_nb_bytes);
   if (b == 0 || !stream->ok())
   {
     return static_cast<vxl_uint_32>(-1);
@@ -384,7 +384,7 @@ vxl_uint_32
 vil_openjpeg_decoder ::opj_vil_stream_write(void * p_buffer, vxl_uint_32 p_nb_bytes, void * p_user_data)
 {
   auto * stream = reinterpret_cast<vil_stream *>(p_user_data);
-  vil_streampos b = stream->write(p_buffer, p_nb_bytes);
+  const vil_streampos b = stream->write(p_buffer, p_nb_bytes);
   if (b == 0 || !stream->ok())
   {
     return static_cast<vxl_uint_32>(-1);
@@ -401,14 +401,14 @@ vxl_uint_32
 vil_openjpeg_decoder ::opj_vil_stream_skip(vxl_uint_32 p_nb_bytes, void * p_user_data)
 {
   auto * stream = reinterpret_cast<vil_stream *>(p_user_data);
-  vil_streampos start = stream->tell();
+  const vil_streampos start = stream->tell();
   stream->seek(start + p_nb_bytes);
   if (!stream->ok())
   {
     return static_cast<vxl_uint_32>(-1);
   }
-  vil_streampos end = stream->tell();
-  vil_streampos b = end - start;
+  const vil_streampos end = stream->tell();
+  const vil_streampos b = end - start;
   if (b > static_cast<vil_streampos>(std::numeric_limits<vxl_uint_32>::max()))
   {
     throw std::runtime_error("Stream position outof range");
@@ -426,7 +426,7 @@ vil_openjpeg_decoder ::opj_vil_stream_seek(vxl_uint_32 p_nb_bytes, void * p_user
   {
     return false;
   }
-  vil_streampos pos = stream->tell();
+  const vil_streampos pos = stream->tell();
   if (pos > static_cast<vil_streampos>(std::numeric_limits<vxl_uint_32>::max()))
   {
     throw std::runtime_error("Stream position outof range");
@@ -551,7 +551,7 @@ vil_openjpeg_image ::~vil_openjpeg_image()
 bool
 vil_openjpeg_image ::validate_format()
 {
-  vil_streampos pos_start = this->impl_->vstream_->tell();
+  const vil_streampos pos_start = this->impl_->vstream_->tell();
 
   switch (this->impl_->opj_codec_format_)
   {
@@ -730,7 +730,7 @@ vil_openjpeg_image ::get_copy_view_reduced(unsigned int i0,
   if (reduction > this->impl_->header_.num_reductions_)
     return nullptr;
 
-  vil_pixel_format pixel_format = this->pixel_format();
+  const vil_pixel_format pixel_format = this->pixel_format();
   if (pixel_format == VIL_PIXEL_FORMAT_UNKNOWN)
     return nullptr;
 
@@ -741,7 +741,7 @@ vil_openjpeg_image ::get_copy_view_reduced(unsigned int i0,
     return nullptr;
 
   // Configure the ROI
-  int adj_mask = ~((1 << reduction) - 1);
+  const int adj_mask = ~((1 << reduction) - 1);
   i0 &= adj_mask;
   j0 &= adj_mask;
   ni &= adj_mask;
@@ -750,7 +750,7 @@ vil_openjpeg_image ::get_copy_view_reduced(unsigned int i0,
     return nullptr;
 
   // Decode the JPEG2000 data
-  opj_image_t * opj_view = decoder.decode();
+  opj_image_t * const opj_view = decoder.decode();
   if (!opj_view || decoder.error())
     return nullptr;
 
@@ -780,9 +780,9 @@ vil_image_view_base_sptr
 vil_openjpeg_image ::opj2vil(void * opj_view, unsigned int i0, unsigned int ni, unsigned int j0, unsigned int nj) const
 {
   auto * opj_view_t = reinterpret_cast<opj_image_t *>(opj_view);
-  unsigned int np = opj_view_t->numcomps;
+  const unsigned int np = opj_view_t->numcomps;
 
-  vil_memory_chunk_sptr chunk = new vil_memory_chunk(ni * nj * np * sizeof(T_PIXEL), this->pixel_format());
+  const vil_memory_chunk_sptr chunk = new vil_memory_chunk(ni * nj * np * sizeof(T_PIXEL), this->pixel_format());
 
   auto * vil_view_t =
     new vil_image_view<T_PIXEL>(chunk, reinterpret_cast<T_PIXEL *>(chunk->data()), ni, nj, np, 1, ni, ni * nj);
@@ -791,13 +791,13 @@ vil_openjpeg_image ::opj2vil(void * opj_view, unsigned int i0, unsigned int ni, 
   {
     T_PIXEL sign = opj_view_t->comps[p].sgnd ? 1 << (opj_view_t->comps[p].prec - 1) : 0;
 
-    int * src_plane = opj_view_t->comps[p].data;
-    T_PIXEL * dst_plane = vil_view_t->begin() + p * vil_view_t->planestep();
+    int * const src_plane = opj_view_t->comps[p].data;
+    T_PIXEL * const dst_plane = vil_view_t->begin() + p * vil_view_t->planestep();
 
     for (unsigned int j = 0; j < nj; ++j)
     {
-      int * src_row = src_plane + (j0 + j) * opj_view_t->comps[p].w + i0;
-      T_PIXEL * dst_row = dst_plane + j * vil_view_t->jstep();
+      int * const src_row = src_plane + (j0 + j) * opj_view_t->comps[p].w + i0;
+      T_PIXEL * const dst_row = dst_plane + j * vil_view_t->jstep();
 
       for (unsigned int i = 0; i < ni; ++i)
       {
@@ -839,8 +839,8 @@ vil_openjpeg_image::s_decode_jpeg_2000(vil_stream * vs,
   double max_factor = i_factor;
   if (j_factor > i_factor)
     max_factor = j_factor;
-  int reduction = int(log2(max_factor));
-  vil_image_view_base_sptr view = jp2_image->get_copy_view_reduced(i0, ni, j0, nj, reduction);
+  const int reduction = int(log2(max_factor));
+  const vil_image_view_base_sptr view = jp2_image->get_copy_view_reduced(i0, ni, j0, nj, reduction);
   delete jp2_image;
   return view;
 }

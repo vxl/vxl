@@ -70,7 +70,7 @@ test_ray_intersect()
   vpgl_rational_camera<double> rcam2(neu_u2, den_u2, neu_v2, den_v2, sx2, ox2, sy2, oy2, sz2, oz2, su2, ou2, sv2, ov2);
   // project a point from the center of the valid region of camera 1
   vgl_point_2d<double> p1, p2;
-  vgl_point_3d<double> p3d(44.255196, 33.284970, 32);
+  const vgl_point_3d<double> p3d(44.255196, 33.284970, 32);
   p1 = rcam1.project(p3d);
   p2 = rcam2.project(p3d);
   std::cout << "Projected point from rcam 1 " << p1 << '\n' << "Projected point from rcam 2 " << p2 << '\n';
@@ -82,7 +82,7 @@ test_ray_intersect()
   image_pts.push_back(p2);
   vpgl_ray_intersect<double> ri(2);
   vgl_point_3d<double> intersection;
-  vgl_point_3d<double> initial_point(44.3542, 33.1855, 32);
+  const vgl_point_3d<double> initial_point(44.3542, 33.1855, 32);
   /*bool success =*/ri.intersect(cams, image_pts, initial_point, intersection);
   std::cout << "Result " << intersection << '\n';
   TEST_NEAR("test ray_intersection",

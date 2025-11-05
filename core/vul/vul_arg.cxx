@@ -250,17 +250,17 @@ vul_arg_info_list::display_help(const char * progname)
     {
       if (!arg->option_.empty())
       {
-        std::size_t l = std::strlen(arg->option());
+        const std::size_t l = std::strlen(arg->option());
         if (l > maxl_option)
           maxl_option = l;
       }
-      std::size_t l = std::strlen(arg->type_);
+      const std::size_t l = std::strlen(arg->type_);
       if (l > maxl_type)
         maxl_type = l;
     }
 
   // Print long form of args
-  std::string fmtbuf = vul_sprintf("%%%ds %%-%ds %%s ", maxl_option, maxl_type);
+  const std::string fmtbuf = vul_sprintf("%%%ds %%-%ds %%s ", maxl_option, maxl_type);
 
   // Do required args first
   vul_printf(std::cerr, "REQUIRED:\n");
@@ -334,7 +334,7 @@ vul_arg_info_list::parse(int & argc, char **& argv, bool warn_about_unrecognized
   char ** my_argv = argv + 1; // Skip program name
   while (*my_argv)
   {
-    char * argmt = *my_argv;
+    char * const argmt = *my_argv;
     bool eaten = false;
     for (unsigned int i = 0; i < args_.size(); ++i)
     {
@@ -349,7 +349,7 @@ vul_arg_info_list::parse(int & argc, char **& argv, bool warn_about_unrecognized
         if (args_[i]->option_ == argmt)
         {
           done_once[i] = true;
-          int advance = args_[i]->parse(my_argv + 1);
+          const int advance = args_[i]->parse(my_argv + 1);
           args_[i]->set_ = true;
           if (advance >= 0)
           {
@@ -385,7 +385,7 @@ vul_arg_info_list::parse(int & argc, char **& argv, bool warn_about_unrecognized
       if (*my_argv)
       {
         done_once[i] = true;
-        int advance = args_[i]->parse(my_argv);
+        const int advance = args_[i]->parse(my_argv);
         args_[i]->set_ = true;
         my_argv += advance;
         ++num_satisfied;
@@ -506,8 +506,8 @@ list_parse(std::list<int> & out, char ** argv)
   {
     // the start/end positions (ref from 0) of the
     //    current ',' separated token.
-    std::ptrdiff_t start = range_regexp.start(0);
-    std::ptrdiff_t endp = range_regexp.end(0);
+    const std::ptrdiff_t start = range_regexp.start(0);
+    const std::ptrdiff_t endp = range_regexp.end(0);
     if (start != 0)
     {
       std::cerr << "vul_arg<std::list<int> >: Bad argument [" << argv[0] << "]\n";
@@ -519,15 +519,15 @@ list_parse(std::list<int> & out, char ** argv)
     std::string token = str.substr(start, endp);
     std::cerr << "token = " << token << '\n';
 #endif
-    std::string match1 = range_regexp.match(1);
+    std::string const match1 = range_regexp.match(1);
 #ifdef DEBUG
     std::cerr << "match1 = " << match1 << '\n';
 #endif
-    std::string match2 = range_regexp.match(2);
+    std::string const match2 = range_regexp.match(2);
 #ifdef DEBUG
     std::cerr << "match2 = " << match2 << '\n';
 #endif
-    std::string match3 = range_regexp.match(3);
+    std::string const match3 = range_regexp.match(3);
 #ifdef DEBUG
     std::cerr << "match3 = " << match3 << '\n';
 #endif
@@ -543,10 +543,10 @@ list_parse(std::list<int> & out, char ** argv)
              << "  str->[" << str << "]\n";
 #endif
 
-    bool matched2 = !range_regexp.match(2).empty();
-    bool matched3 = !range_regexp.match(3).empty();
+    bool const matched2 = !range_regexp.match(2).empty();
+    const bool matched3 = !range_regexp.match(3).empty();
 
-    int s = vul_string_atoi(match1);
+    const int s = vul_string_atoi(match1);
     int d = 1;
     int e = s;
     if (matched3)
@@ -648,7 +648,7 @@ parse(vul_arg<int> * argmt, char ** argv)
   }
 
   char * endptr = nullptr;
-  double v = std::strtod(argv[0], &endptr);
+  const double v = std::strtod(argv[0], &endptr);
   if (*endptr != '\0')
   {
     // There is junk after the number, or no number was found
@@ -694,7 +694,7 @@ parse(vul_arg<vxl_int_64> * argmt, char ** argv)
   auto len = (unsigned long)std::strlen(argv[0]);
   for (unsigned long i = 0; i < len; ++i)
   {
-    char tmp = argv[0][i];
+    const char tmp = argv[0][i];
     if (tmp < '0' || tmp > '9' ||                       // Make sure the number only contains valid digits
         ((tmp == 'l' || tmp == 'L') && i + 1 != len) || // Or the trailing l or L suffix
         (tmp == '-' && i != 0L && len <= 2L))           // Or a leading minus sign
@@ -738,7 +738,7 @@ parse(vul_arg<unsigned> * argmt, char ** argv)
   }
 
   char * endptr = nullptr;
-  double v = std::strtod(argv[0], &endptr);
+  const double v = std::strtod(argv[0], &endptr);
   if (*endptr != '\0')
   {
     // There is junk after the number, or no number was found
@@ -952,7 +952,7 @@ settype(vul_arg<std::vector<int>> & argmt)
 VDS void
 print_value(std::ostream & s, const vul_arg<std::vector<int>> & argmt)
 {
-  for (int i : argmt())
+  for (const int i : argmt())
     s << ' ' << i;
 }
 
@@ -960,7 +960,7 @@ VDS int
 parse(vul_arg<std::vector<int>> * argmt, char ** argv)
 {
   std::list<int> tmp;
-  int retval = list_parse(tmp, argv);
+  const int retval = list_parse(tmp, argv);
   // Defaults should be cleared when the user supplies a value
   argmt->value_.clear();
   for (const auto & i : tmp)
@@ -980,7 +980,7 @@ settype(vul_arg<std::vector<unsigned>> & argmt)
 VDS void
 print_value(std::ostream & s, const vul_arg<std::vector<unsigned>> & argmt)
 {
-  for (unsigned int i : argmt())
+  for (const unsigned int i : argmt())
     s << ' ' << i;
 }
 
@@ -988,7 +988,7 @@ VDS int
 parse(vul_arg<std::vector<unsigned>> * argmt, char ** argv)
 {
   std::list<int> tmp;
-  int retval = list_parse(tmp, argv);
+  const int retval = list_parse(tmp, argv);
   // Defaults should be cleared when the user supplies a value
   argmt->value_.clear();
   for (const auto & i : tmp)
@@ -1008,7 +1008,7 @@ settype(vul_arg<std::vector<double>> & argmt)
 VDS void
 print_value(std::ostream & s, const vul_arg<std::vector<double>> & argmt)
 {
-  for (double i : argmt())
+  for (const double i : argmt())
     s << ' ' << i;
 }
 
@@ -1032,7 +1032,7 @@ parse(vul_arg<std::vector<double>> * argmt, char ** argv)
   while (current)
   {
     char * endptr = nullptr;
-    double tmp = std::strtod(current, &endptr);
+    const double tmp = std::strtod(current, &endptr);
     // argmt->value_
     if (*endptr == '\0')
     {

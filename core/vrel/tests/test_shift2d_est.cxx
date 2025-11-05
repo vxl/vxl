@@ -83,12 +83,12 @@ test_shift2d_est()
   p.push_back(t.as_ref());
 
   // ----------------------------------------------------------------
-  int n = p.size();
+  const int n = p.size();
   std::vector<vnl_vector<double>> q(n);
 
   // Test points to instantiate
   {
-    vrel_shift2d_est shift_est(p, p);
+    const vrel_shift2d_est shift_est(p, p);
     TEST("Points to instantiate", shift_est.num_samples_to_instantiate(), 1);
   }
   // translation only
@@ -104,7 +104,7 @@ test_shift2d_est()
     true_param /= true_param.two_norm();
     for (int i = 0; i < n; i++)
       q[i] = H * p[i];
-    vrel_shift2d_est shift_est(p, q);
+    const vrel_shift2d_est shift_est(p, q);
 
     std::vector<int> indices(1);
     indices[0] = 1;

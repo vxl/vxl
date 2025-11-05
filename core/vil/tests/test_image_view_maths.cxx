@@ -206,7 +206,7 @@ test_image_view_maths_byte()
   vil_math_image_abs_difference(imA, im_sum, im_abs_diff);
   TEST_NEAR("im_abs_diff(3,7)", im_abs_diff(3, 7), std::fabs(float(imA(3, 7)) - float(im_sum(3, 7))), test_tolerance);
 
-  float is45 = im_sum(4, 5);
+  const float is45 = im_sum(4, 5);
   vil_math_add_image_fraction(im_sum, 0.77, imA, 0.23);
   TEST_NEAR("add_fraction", im_sum(4, 5), 0.77 * is45 + 0.23 * imA(4, 5), 1e-5);
 
@@ -248,8 +248,8 @@ test_image_view_maths_byte()
 
   // extra test for normalisation
 
-  int nx = 5;
-  int ny = 5;
+  const int nx = 5;
+  const int ny = 5;
   vil_image_view<float> orig_image(nx, ny), var_norm_image, correct_var_norm_image(nx, ny);
 
   // Create original image

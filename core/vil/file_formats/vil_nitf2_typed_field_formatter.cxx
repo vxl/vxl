@@ -51,7 +51,7 @@ vil_nitf2_location_formatter::copy() const
 bool
 vil_nitf2_location_formatter::read_vcl_stream(std::istream & input, vil_nitf2_location *& out_value, bool & out_blank)
 {
-  std::streampos tag_start_pos = input.tellg();
+  const std::streampos tag_start_pos = input.tellg();
   vil_nitf2_location * location = new vil_nitf2_location_degrees(deg_precision(field_width));
   if (location->read(input, field_width, out_blank))
   {
@@ -113,10 +113,10 @@ vil_nitf2_integer_formatter::read_vcl_stream(std::istream & input, int & out_val
   char * endp = nullptr;
   errno = 0;
   out_value = (int)strtol(cstr, &endp, 10);
-  bool sign_ok = check_sign(cstr, show_sign);
-  bool retVal = (endp - cstr) == field_width // processed all chars
-                && errno == 0                // with no errors
-                && sign_ok;                  // sign shown as expected
+  const bool sign_ok = check_sign(cstr, show_sign);
+  const bool retVal = (endp - cstr) == field_width // processed all chars
+                      && errno == 0                // with no errors
+                      && sign_ok;                  // sign shown as expected
   delete[] cstr;
   return retVal;
 }
@@ -179,7 +179,7 @@ vil_nitf2_long_long_formatter::read_vcl_stream(std::istream & input, vil_nitf2_l
   conversion_ok = (endp - cstr) == field_width; // processed all chars
 #endif // VXL_HAS_INT_64
 
-  bool sign_ok = check_sign(cstr, show_sign);
+  bool const sign_ok = check_sign(cstr, show_sign);
   delete[] cstr;
   return conversion_ok && errno == 0 // with no errors
          && sign_ok;                 // sign shown as expected
@@ -228,12 +228,12 @@ vil_nitf2_double_formatter::read_vcl_stream(std::istream & input, double & out_v
   char * endp = nullptr;
   errno = 0;
   out_value = strtod(cstr, &endp);
-  bool sign_ok = check_sign(cstr, show_sign);
-  bool decimal_ok = cstr[(field_width - precision) - 1] == '.';
-  bool retVal = (endp - cstr) == field_width // processed all chars
-                && errno == 0                // with no errors
-                && decimal_ok                // decimal point in right place
-                && sign_ok;                  // sign shown as expected
+  const bool sign_ok = check_sign(cstr, show_sign);
+  const bool decimal_ok = cstr[(field_width - precision) - 1] == '.';
+  const bool retVal = (endp - cstr) == field_width // processed all chars
+                      && errno == 0                // with no errors
+                      && decimal_ok                // decimal point in right place
+                      && sign_ok;                  // sign shown as expected
   delete[] cstr;
   return retVal;
 }
@@ -288,12 +288,12 @@ vil_nitf2_exponential_formatter::read_vcl_stream(std::istream & input, double & 
   const char e_ok = cstr[3 + mantissa_width] == 'E';
   const char exp_sign = cstr[4 + mantissa_width];
   const bool exp_sign_ok = exp_sign == '+' || exp_sign == '-';
-  bool retVal = (endp - cstr) == field_width // processed all chars
-                && errno == 0                // read a number with no errors
-                && base_sign_ok              // base sign in right place
-                && decimal_ok                // decimal point in right place
-                && e_ok                      // 'E' in right place
-                && exp_sign_ok;              // exponent sign in right place
+  const bool retVal = (endp - cstr) == field_width // processed all chars
+                      && errno == 0                // read a number with no errors
+                      && base_sign_ok              // base sign in right place
+                      && decimal_ok                // decimal point in right place
+                      && e_ok                      // 'E' in right place
+                      && exp_sign_ok;              // exponent sign in right place
   delete[] cstr;
   return retVal;
 }
@@ -305,7 +305,7 @@ vil_nitf2_exponential_formatter::write_vcl_stream(std::ostream & output, const d
   std::ostringstream buffer;
   buffer << std::setw(field_width) << std::scientific << std::showpos << std::uppercase << std::internal
          << std::setfill('0') << std::setprecision(mantissa_width) << value;
-  std::string buffer_string = buffer.str();
+  const std::string buffer_string = buffer.str();
   auto length = (unsigned int)(buffer_string.length());
   // Write everything up to the exponent sign
   output << buffer_string.substr(0, length - 3);
@@ -395,9 +395,9 @@ vil_nitf2_string_formatter::read_vcl_stream(std::istream & input, std::string & 
     delete[] cstr;
     return false;
   }
-  std::string str = std::string(cstr);
+  const std::string str = std::string(cstr);
   delete[] cstr;
-  std::string::size_type end_pos = str.find_last_not_of(' ') + 1;
+  const std::string::size_type end_pos = str.find_last_not_of(' ') + 1;
   if (end_pos == std::string::npos)
   {
     out_value = str;
@@ -445,7 +445,7 @@ vil_nitf2_enum_string_formatter::validate_value_map()
 {
   for (auto & entry : value_map)
   {
-    std::string token = entry.first;
+    const std::string token = entry.first;
 #if 0 // disable the err message
     if (int(token.length()) > field_width) {
       //std::cerr << "vil_nitf2_enum_values: WARNING: Ignoring token "
@@ -501,13 +501,13 @@ vil_nitf2_tagged_record_sequence_formatter::read(vil_nitf2_istream & input,
 {
   if (field_width <= 0)
     return false;
-  vil_streampos current = input.tell();
-  vil_streampos end = current + field_width;
+  const vil_streampos current = input.tell();
+  const vil_streampos end = current + field_width;
   bool error_reading_tre = false;
   out_value.clear();
   while (input.tell() < end && !error_reading_tre)
   {
-    vil_nitf2_tagged_record * record = vil_nitf2_tagged_record::create(input);
+    vil_nitf2_tagged_record * const record = vil_nitf2_tagged_record::create(input);
     if (record)
     {
       out_value.push_back(record); // out_value assumes ownership of record

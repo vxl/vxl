@@ -16,7 +16,7 @@
 static void
 test_meter()
 {
-  vcsl_meter_sptr m = vcsl_meter::instance();
+  const vcsl_meter_sptr m = vcsl_meter::instance();
   TEST("test_meter_sptr", bool(m), true);
 }
 

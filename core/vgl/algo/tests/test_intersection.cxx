@@ -23,49 +23,49 @@
 static void
 test_plane_intersection()
 {
-  vgl_plane_3d<double> pl1(vgl_vector_3d<double>(10, 10, 10), vgl_point_3d<double>(10, 0, -10));
-  vgl_line_3d_2_points<double> l1(vgl_point_3d<double>(1, 4, 1), vgl_point_3d<double>(-1, -4, -1));
-  vgl_point_3d<double> pt1 = vgl_intersection(l1, pl1);
+  const vgl_plane_3d<double> pl1(vgl_vector_3d<double>(10, 10, 10), vgl_point_3d<double>(10, 0, -10));
+  const vgl_line_3d_2_points<double> l1(vgl_point_3d<double>(1, 4, 1), vgl_point_3d<double>(-1, -4, -1));
+  const vgl_point_3d<double> pt1 = vgl_intersection(l1, pl1);
   TEST_NEAR("vgl_intersection(l1,pl1) = O", vgl_distance(pt1, vgl_point_3d<double>(0, 0, 0)), 0.0, 1e-8);
 
-  vgl_line_3d_2_points<double> l2(vgl_point_3d<double>(0, 0, 0), vgl_point_3d<double>(10, 0, -10));
-  vgl_point_3d<double> pt2 = vgl_intersection(l2, pl1);
+  const vgl_line_3d_2_points<double> l2(vgl_point_3d<double>(0, 0, 0), vgl_point_3d<double>(10, 0, -10));
+  const vgl_point_3d<double> pt2 = vgl_intersection(l2, pl1);
 
   const double inf = std::numeric_limits<double>::infinity();
   TEST("vgl_intersection(l2,pl1) = (inf,inf,inf)", pt2, vgl_point_3d<double>(inf, inf, inf));
 
-  vgl_line_3d_2_points<double> l3(vgl_point_3d<double>(0, 10, 0), vgl_point_3d<double>(10, 10, -10));
-  vgl_point_3d<double> pt3 = vgl_intersection(l3, pl1);
+  const vgl_line_3d_2_points<double> l3(vgl_point_3d<double>(0, 10, 0), vgl_point_3d<double>(10, 10, -10));
+  const vgl_point_3d<double> pt3 = vgl_intersection(l3, pl1);
   TEST("vgl_intersection(l2,p1) = (inf,0,0)", pt3, vgl_point_3d<double>(inf, 0, 0));
 
-  vgl_line_segment_3d<double> l4(vgl_point_3d<double>(1, 4, 1), vgl_point_3d<double>(-1, -4, -1));
+  const vgl_line_segment_3d<double> l4(vgl_point_3d<double>(1, 4, 1), vgl_point_3d<double>(-1, -4, -1));
   vgl_point_3d<double> pt4;
-  bool rv4 = vgl_intersection(l4, pl1, pt4);
+  const bool rv4 = vgl_intersection(l4, pl1, pt4);
   TEST("Found intersection(l4,pl1)", rv4, true);
   TEST_NEAR("vgl_intersection(l4,pl1) = O", vgl_distance(pt4, vgl_point_3d<double>(0, 0, 0)), 0.0, 1e-8);
 
-  vgl_line_segment_3d<double> l5(vgl_point_3d<double>(0, 0, 0), vgl_point_3d<double>(10, 0, -10));
+  const vgl_line_segment_3d<double> l5(vgl_point_3d<double>(0, 0, 0), vgl_point_3d<double>(10, 0, -10));
   vgl_point_3d<double> pt5;
-  bool rv5 = vgl_intersection(l5, pl1, pt5);
+  const bool rv5 = vgl_intersection(l5, pl1, pt5);
 
   TEST("Found intersection(l5,pl1)", rv5, true);
   TEST("vgl_intersection(l5,pl1) = (inf,inf,inf)", pt5, vgl_point_3d<double>(inf, inf, inf));
 
-  vgl_line_segment_3d<double> l6(vgl_point_3d<double>(0, 10, 0), vgl_point_3d<double>(10, 10, -10));
+  const vgl_line_segment_3d<double> l6(vgl_point_3d<double>(0, 10, 0), vgl_point_3d<double>(10, 10, -10));
   vgl_point_3d<double> pt6;
-  bool rv6 = vgl_intersection(l6, pl1, pt6);
+  const bool rv6 = vgl_intersection(l6, pl1, pt6);
   TEST("Found no intersection(l6,pl1)", rv6, false);
 
-  vgl_line_segment_3d<double> l7(vgl_point_3d<double>(1, 4, 1), vgl_point_3d<double>(0, 0, 0));
+  const vgl_line_segment_3d<double> l7(vgl_point_3d<double>(1, 4, 1), vgl_point_3d<double>(0, 0, 0));
   vgl_point_3d<double> pt7;
-  bool rv7 = vgl_intersection(l7, pl1, pt7);
+  const bool rv7 = vgl_intersection(l7, pl1, pt7);
   TEST("Found intersection(l7,pl1)", rv7, true);
   TEST_NEAR("vgl_intersection(l4,pl1) = O", vgl_distance(pt7, vgl_point_3d<double>(0, 0, 0)), 0.0, 1e-8);
 
 
-  vgl_line_segment_3d<double> l8(vgl_point_3d<double>(1, 4, 1), vgl_point_3d<double>(1e-5, 1e-5, 1e-5));
+  const vgl_line_segment_3d<double> l8(vgl_point_3d<double>(1, 4, 1), vgl_point_3d<double>(1e-5, 1e-5, 1e-5));
   vgl_point_3d<double> pt8;
-  bool rv8 = vgl_intersection(l8, pl1, pt8);
+  const bool rv8 = vgl_intersection(l8, pl1, pt8);
   TEST("Found no intersection(l8,pl1)", rv8, false);
 }
 
@@ -74,10 +74,10 @@ test_three_planes()
 {
   vgl_plane_3d<double> pl4(1, 0, 0, -3), pl5(0, 1, 0, 8), pl6(0, 0, 1, -12);
   {
-    vgl_point_3d<double> pi(pl4, pl5, pl6); // intersection
+    const vgl_point_3d<double> pi(pl4, pl5, pl6); // intersection
     TEST("intersection", pi, vgl_point_3d<double>(3, -8, 12));
     TEST("is_ideal", is_ideal(pi), false);
-    vgl_point_3d<double> pj = vgl_intersection(pl4, pl5, pl6);
+    const vgl_point_3d<double> pj = vgl_intersection(pl4, pl5, pl6);
     TEST("three planes intersecting", pj, pi);
   }
 }
@@ -127,25 +127,25 @@ static void
 test_multiple_planes()
 {
   // The line passes through (2,1,1), with direction (0.577, 0.577, 0.577)
-  double s3 = 0.577350269;
-  vgl_plane_3d<double> pl0(0, s3, -s3, 0.0);
+  const double s3 = 0.577350269;
+  const vgl_plane_3d<double> pl0(0, s3, -s3, 0.0);
 
-  vgl_plane_3d<double> pl1(-s3, 0, s3, s3);
+  const vgl_plane_3d<double> pl1(-s3, 0, s3, s3);
 
-  vgl_plane_3d<double> pl2(s3, -s3, 0, -s3);
+  const vgl_plane_3d<double> pl2(s3, -s3, 0, -s3);
 
   std::list<vgl_plane_3d<double>> planes;
   planes.push_back(pl0);
   planes.push_back(pl1);
   planes.push_back(pl2);
-  vgl_infinite_line_3d<double> line = vgl_intersection(planes);
-  vgl_point_3d<double> p0(2, 1, 1);
+  const vgl_infinite_line_3d<double> line = vgl_intersection(planes);
+  const vgl_point_3d<double> p0(2, 1, 1);
   bool is_on = line.contains(p0);
   TEST("intersection of multiple planes -> line", is_on, true);
 
-  vgl_plane_3d<double> wpl0(0, 1, 0, 0.0);
-  vgl_plane_3d<double> wpl1(1, 0, 0, 0.0);
-  vgl_plane_3d<double> wpl2(0.707, 0.707, 0.0, 1);
+  const vgl_plane_3d<double> wpl0(0, 1, 0, 0.0);
+  const vgl_plane_3d<double> wpl1(1, 0, 0, 0.0);
+  const vgl_plane_3d<double> wpl2(0.707, 0.707, 0.0, 1);
   std::list<vgl_plane_3d<double>> wplanes;
   wplanes.push_back(wpl0);
   wplanes.push_back(wpl1);
@@ -157,8 +157,8 @@ test_multiple_planes()
   ws.push_back(1.0);
   double residual = 0.0;
   vgl_infinite_line_3d<double> weightedline;
-  bool intersect = vgl_intersection(wplanes, ws, weightedline, residual);
-  vgl_point_3d<double> wp0(weightedline.x0().x(), weightedline.x0().y(), 0);
+  const bool intersect = vgl_intersection(wplanes, ws, weightedline, residual);
+  const vgl_point_3d<double> wp0(weightedline.x0().x(), weightedline.x0().y(), 0);
   is_on = is_on && intersect && weightedline.contains(wp0);
   TEST("intersection of multiple planes -> line", is_on, true);
 }
@@ -241,8 +241,8 @@ test_lines_intersect_in_tol()
   // Test 3-d line intersection
   vgl_point_3d<double> pl00(0, 0, 0), pl01(1, 1, 1);
   vgl_point_3d<double> pl10(1, 1, 1), pl11(1, 1, 2), pint;
-  vgl_ray_3d<double> r0(pl00, pl01);
-  vgl_ray_3d<double> r1(pl10, pl11);
+  const vgl_ray_3d<double> r0(pl00, pl01);
+  const vgl_ray_3d<double> r1(pl10, pl11);
   TEST("3-d Ray Intersection", vgl_intersection(r0, r1, pint), true);
   TEST("3-d Ray Intersection Point", pint == pl01, true);
 }
@@ -326,13 +326,13 @@ test_box_3d_intersection()
   bd0.add(pd0);
   bd0.add(pd1);
   // x-y plane at z=2
-  vgl_plane_3d<double> plane2(0.0, 0.0, 1.0, -2.0);
+  const vgl_plane_3d<double> plane2(0.0, 0.0, 1.0, -2.0);
   TEST("x-y plane intersect box z=2", vgl_intersection<double>(bd0, plane2), false);
   // x-y plane at z=0.5
-  vgl_plane_3d<double> plane_5(0.0, 0.0, 1.0, -0.5);
+  const vgl_plane_3d<double> plane_5(0.0, 0.0, 1.0, -0.5);
   TEST("x-y plane intersect box z=0.5", vgl_intersection<double>(bd0, plane_5), true);
   // Test intersection of infinite line with box_3d.
-  vgl_infinite_line_3d<double> l3da(vgl_point_3d<double>(-1, 0.5, 0.5), vgl_vector_3d<double>(1, 0, 0));
+  const vgl_infinite_line_3d<double> l3da(vgl_point_3d<double>(-1, 0.5, 0.5), vgl_vector_3d<double>(1, 0, 0));
   vgl_point_3d<double> ip0, ip1;
   bool good = vgl_intersection<double>(bd0, l3da, ip0, ip1);
   TEST("box_inf_line_xdir", good, true);
@@ -340,14 +340,14 @@ test_box_3d_intersection()
   {
     TEST_NEAR("box_inf_line_xdir points", ip0.x() + ip1.x(), 1.0, 1.0e-7);
   }
-  vgl_infinite_line_3d<double> l3db(vgl_point_3d<double>(0.5, -1.0, 0.5), vgl_vector_3d<double>(0, 1.0, 0));
+  const vgl_infinite_line_3d<double> l3db(vgl_point_3d<double>(0.5, -1.0, 0.5), vgl_vector_3d<double>(0, 1.0, 0));
   good = vgl_intersection<double>(bd0, l3db, ip0, ip1);
   TEST("box_inf_line_ydir", good, true);
   if (good)
   {
     TEST_NEAR("box_inf_line_ydir points", ip0.y() + ip1.y(), 1.0, 1.0e-7);
   }
-  vgl_infinite_line_3d<double> l3dc(vgl_point_3d<double>(0.5, 0.5, -1.0), vgl_vector_3d<double>(0, 0, 1.0));
+  const vgl_infinite_line_3d<double> l3dc(vgl_point_3d<double>(0.5, 0.5, -1.0), vgl_vector_3d<double>(0, 0, 1.0));
   good = vgl_intersection<double>(bd0, l3dc, ip0, ip1);
   TEST("box_inf_line_zdir", good, true);
   if (good)
@@ -360,8 +360,9 @@ test_box_3d_intersection()
   vgl_box_3d<double> bg0;
   bg0.add(pg0);
   bg0.add(pg1);
-  vgl_infinite_line_3d<double> l3g(vgl_point_3d<double>(0.0, 0.0, 0.0),
-                                   vgl_vector_3d<double>(0.5773502691896257, 0.5773502691896257, 0.5773502691896257));
+  const vgl_infinite_line_3d<double> l3g(
+    vgl_point_3d<double>(0.0, 0.0, 0.0),
+    vgl_vector_3d<double>(0.5773502691896257, 0.5773502691896257, 0.5773502691896257));
   good = vgl_intersection<double>(bg0, l3g, ip0, ip1);
   TEST("generic line intersect box", good, true);
   if (good)
@@ -370,11 +371,11 @@ test_box_3d_intersection()
   }
   // Test intersection of ray with box_3d.
   vgl_point_3d<double> pr0(-1, -1, -1), pr1(2, 2, 2);
-  vgl_ray_3d<double> ry(pr0, pr1);
+  const vgl_ray_3d<double> ry(pr0, pr1);
   good = vgl_intersection<double>(bd0, ry, ip0, ip1);
   TEST("ray intersect box from outside", good, true);
-  vgl_point_3d<double> pr2(0.5, 0.5, 0.5);
-  vgl_ray_3d<double> ry1(pr2, pr1);
+  const vgl_point_3d<double> pr2(0.5, 0.5, 0.5);
+  const vgl_ray_3d<double> ry1(pr2, pr1);
   good = vgl_intersection<double>(bd0, ry1, ip0, ip1) && ip0 == ip1;
   TEST("ray intersect box from inside", good, true);
 }
@@ -404,7 +405,7 @@ test_box_poly_intersection()
   b2.add(bp3);
   TEST("poly entirely inside box", vgl_intersection(b2, poly), true);
   // Case III: poly and box touch at a vertex
-  vgl_point_2d<float> bp4(0.5f, 0.5f);
+  const vgl_point_2d<float> bp4(0.5f, 0.5f);
   vgl_box_2d<float> b3;
   b3.add(bp2);
   b3.add(bp4);
@@ -431,7 +432,7 @@ test_box_poly_intersection()
   b6.add(bp2);
   TEST("no intersection", vgl_intersection(b6, poly), false);
   // Case VII: box with a single point
-  vgl_point_2d<float> ps(1.0f, 0.0f);
+  const vgl_point_2d<float> ps(1.0f, 0.0f);
   vgl_box_2d<float> b7;
   b7.add(ps);
   TEST("box with a single point", vgl_intersection(b7, poly), false);
@@ -459,7 +460,7 @@ test_poly_line_intersection()
   poly.push_back(sh1);
   // test line with all line-edge intersections
   vgl_point_2d<double> p0(-20.0, 0.0), p1(20.0, 0.0);
-  vgl_line_2d<double> line_a(p0, p1);
+  const vgl_line_2d<double> line_a(p0, p1);
   std::vector<vgl_point_2d<double>> inters = vgl_intersection<double>(poly, line_a);
   TEST("number of intersections, interior case", inters.size(), 4);
   double corrs = 0.0;
@@ -471,24 +472,24 @@ test_poly_line_intersection()
   TEST_NEAR("intersection locations", corrs, 0.0, 0.001);
   // check grazing intersection
   vgl_point_2d<double> pg0(-20.0, 1.0), pg1(20.0, 1.0);
-  vgl_line_2d<double> line_g(pg0, pg1);
+  const vgl_line_2d<double> line_g(pg0, pg1);
   std::vector<vgl_point_2d<double>> ginter = vgl_intersection<double>(line_g, poly);
   TEST("number of intersections, vertex case", ginter.size(), 4);
-  double t = -ginter[2].x() + ginter[3].x() + ginter[2].y() + ginter[3].y();
+  const double t = -ginter[2].x() + ginter[3].x() + ginter[2].y() + ginter[3].y();
   TEST_NEAR("vertex intersection", t, 4.0, 0.001);
 }
 
 static void
 test_ray_intersection()
 {
-  vgl_vector_3d<double> dir0(-1.0, 0.0, 0.0);
-  vgl_point_3d<double> org0(1001.0, 2.0, 3.0);
-  vgl_vector_3d<double> dir1(0.0, -1.0, 0.0);
-  vgl_point_3d<double> org1(1.0, 1002.0, 3.0);
-  vgl_vector_3d<double> dir2(0.0, 0.0, -1.0);
-  vgl_point_3d<double> org2(1.0, 2.0, 1003.0);
-  vgl_vector_3d<double> dir3(-0.57735027, -0.57735027, -0.57735027);
-  vgl_point_3d<double> org3(578.35027, 579.35027, 580.35027);
+  const vgl_vector_3d<double> dir0(-1.0, 0.0, 0.0);
+  const vgl_point_3d<double> org0(1001.0, 2.0, 3.0);
+  const vgl_vector_3d<double> dir1(0.0, -1.0, 0.0);
+  const vgl_point_3d<double> org1(1.0, 1002.0, 3.0);
+  const vgl_vector_3d<double> dir2(0.0, 0.0, -1.0);
+  const vgl_point_3d<double> org2(1.0, 2.0, 1003.0);
+  const vgl_vector_3d<double> dir3(-0.57735027, -0.57735027, -0.57735027);
+  const vgl_point_3d<double> org3(578.35027, 579.35027, 580.35027);
   vgl_ray_3d<double> r0(org0, dir0), r1(org1, dir1), r2(org2, dir2), r3(org3, dir3);
   std::vector<vgl_ray_3d<double>> rays;
   rays.push_back(r0);
@@ -496,11 +497,11 @@ test_ray_intersection()
   rays.push_back(r2);
   rays.push_back(r3);
   vgl_point_3d<double> inter_pt;
-  bool good = vgl_intersection(rays, inter_pt);
+  const bool good = vgl_intersection(rays, inter_pt);
   if (good)
   {
-    vgl_point_3d<double> origin(1.0, 2.0, 3.0);
-    double er = (inter_pt - origin).length();
+    const vgl_point_3d<double> origin(1.0, 2.0, 3.0);
+    const double er = (inter_pt - origin).length();
     TEST_NEAR("ray_intersection", er, 0.0, 0.001);
   }
   else
@@ -512,14 +513,14 @@ static void
 test_ray_intersection_with_covariance()
 {
   // repeat the test above by specifying an identity covariance matrix
-  vgl_vector_3d<double> dir0(-1.0, 0.0, 0.0);
-  vgl_point_3d<double> org0(1001.0, 2.0, 3.0);
-  vgl_vector_3d<double> dir1(0.0, -1.0, 0.0);
-  vgl_point_3d<double> org1(1.0, 1002.0, 3.0);
-  vgl_vector_3d<double> dir2(0.0, 0.0, -1.0);
-  vgl_point_3d<double> org2(1.0, 2.0, 1003.0);
-  vgl_vector_3d<double> dir3(-0.57735027, -0.57735027, -0.57735027);
-  vgl_point_3d<double> org3(578.35027, 579.35027, 580.35027);
+  const vgl_vector_3d<double> dir0(-1.0, 0.0, 0.0);
+  const vgl_point_3d<double> org0(1001.0, 2.0, 3.0);
+  const vgl_vector_3d<double> dir1(0.0, -1.0, 0.0);
+  const vgl_point_3d<double> org1(1.0, 1002.0, 3.0);
+  const vgl_vector_3d<double> dir2(0.0, 0.0, -1.0);
+  const vgl_point_3d<double> org2(1.0, 2.0, 1003.0);
+  const vgl_vector_3d<double> dir3(-0.57735027, -0.57735027, -0.57735027);
+  const vgl_point_3d<double> org3(578.35027, 579.35027, 580.35027);
   vgl_ray_3d<double> r0(org0, dir0), r1(org1, dir1), r2(org2, dir2), r3(org3, dir3);
   vnl_matrix<double> cov(8, 8);
   cov.set_identity();
@@ -532,8 +533,8 @@ test_ray_intersection_with_covariance()
   bool good = vgl_intersection(rays, cov, inter_pt);
   if (good)
   {
-    vgl_point_3d<double> origin(1.0, 2.0, 3.0);
-    double er = (inter_pt - origin).length();
+    const vgl_point_3d<double> origin(1.0, 2.0, 3.0);
+    const double er = (inter_pt - origin).length();
     TEST_NEAR("ray_intersection with identity covariance", er, 0.0, 0.001);
   }
   else
@@ -564,8 +565,8 @@ test_ray_intersection_with_covariance()
   good = vgl_intersection(rays2, cov2, inter_pt);
   if (good)
   {
-    vgl_point_3d<double> gt(0.48780487804878114, -0.6097560975609748, -0.9857199717871661);
-    double er = (inter_pt - gt).length();
+    const vgl_point_3d<double> gt(0.48780487804878114, -0.6097560975609748, -0.9857199717871661);
+    const double er = (inter_pt - gt).length();
     TEST_NEAR("ray_intersection with full covariance", er, 0.0, 0.00001);
   }
   else
@@ -573,18 +574,18 @@ test_ray_intersection_with_covariance()
     TEST("ray_intersection with full covariance", true, false);
   }
   // actual rays and covariance
-  vgl_ray_3d<double> ar0(vgl_point_3d<double>(-257.819382104, 873.182301258, 3192.74816333),
-                         vgl_vector_3d<double>(0.149555632286, -0.273530553472, -0.950165327282));
-  vgl_ray_3d<double> ar1(vgl_point_3d<double>(189.919618516, 595.171579671, 3260.55333727),
-                         vgl_vector_3d<double>(0.0146376283173, -0.191729316172, -0.981338682188));
-  vgl_ray_3d<double> ar2(vgl_point_3d<double>(733.466946568, 1284.42529721, 2971.69358392),
-                         vgl_vector_3d<double>(-0.152573220502, -0.405632760701, -0.901212225745));
-  vgl_ray_3d<double> ar3(vgl_point_3d<double>(878.867145282, -326.953654639, 3183.48678489),
-                         vgl_vector_3d<double>(-0.199206937573, 0.0912745855339, -0.975697466461));
-  vgl_ray_3d<double> ar4(vgl_point_3d<double>(-312.591711271, -995.439305149, 3151.80159156),
-                         vgl_vector_3d<double>(0.166824924534, 0.291616277185, -0.941875464929));
-  vgl_ray_3d<double> ar5(vgl_point_3d<double>(513.063046691, -1371.38204909, 2978.79327645),
-                         vgl_vector_3d<double>(-0.0850201277225, 0.413373253218, -0.906583769657));
+  const vgl_ray_3d<double> ar0(vgl_point_3d<double>(-257.819382104, 873.182301258, 3192.74816333),
+                               vgl_vector_3d<double>(0.149555632286, -0.273530553472, -0.950165327282));
+  const vgl_ray_3d<double> ar1(vgl_point_3d<double>(189.919618516, 595.171579671, 3260.55333727),
+                               vgl_vector_3d<double>(0.0146376283173, -0.191729316172, -0.981338682188));
+  const vgl_ray_3d<double> ar2(vgl_point_3d<double>(733.466946568, 1284.42529721, 2971.69358392),
+                               vgl_vector_3d<double>(-0.152573220502, -0.405632760701, -0.901212225745));
+  const vgl_ray_3d<double> ar3(vgl_point_3d<double>(878.867145282, -326.953654639, 3183.48678489),
+                               vgl_vector_3d<double>(-0.199206937573, 0.0912745855339, -0.975697466461));
+  const vgl_ray_3d<double> ar4(vgl_point_3d<double>(-312.591711271, -995.439305149, 3151.80159156),
+                               vgl_vector_3d<double>(0.166824924534, 0.291616277185, -0.941875464929));
+  const vgl_ray_3d<double> ar5(vgl_point_3d<double>(513.063046691, -1371.38204909, 2978.79327645),
+                               vgl_vector_3d<double>(-0.0850201277225, 0.413373253218, -0.906583769657));
   std::vector<vgl_ray_3d<double>> rays3;
   rays3.push_back(ar0);
   rays3.push_back(ar1);
@@ -607,8 +608,8 @@ test_ray_intersection_with_covariance()
   S[10][10] = 2.53017333169;
   S[11][11] = 2.53017333169;
   good = vgl_intersection(rays3, S, inter_pt);
-  vgl_point_3d<double> agt(237.849, -33.2573, 44.0717);
-  double dif = (inter_pt - agt).length();
+  const vgl_point_3d<double> agt(237.849, -33.2573, 44.0717);
+  const double dif = (inter_pt - agt).length();
   std::cout << "Actual cast inter pt " << inter_pt << std::endl;
   TEST_NEAR("actual rays from a test site", dif, 0.0, 0.05);
 }

@@ -33,16 +33,16 @@ test_blocked_image_resource()
       image(i, j) = (unsigned short)(i + ni * j);
   vil_image_resource_sptr ir = vil_new_image_resource_of_view(image);
 
-  std::string path("test_blocked_tiff.tif");
+  const std::string path("test_blocked_tiff.tif");
   unsigned sbi = 16, sbj = 32;
   unsigned nbi = (ni + sbi - 1) / sbi, nbj = (nj + sbj - 1) / sbj;
   std::cout << "Creating new blocked resource " << path << '\n';
   { // scope for resource
-    vil_blocked_image_resource_sptr bir = vil_new_blocked_image_resource(
+    const vil_blocked_image_resource_sptr bir = vil_new_blocked_image_resource(
       path.c_str(), ir->ni(), ir->nj(), ir->nplanes(), ir->pixel_format(), sbi, sbj, "tiff");
     if (bir)
     {
-      bool put_view_worked = bir->vil_image_resource::put_view(image);
+      const bool put_view_worked = bir->vil_image_resource::put_view(image);
       TEST("Put view to tiff blocked resource", put_view_worked, true);
     }
     else
@@ -78,7 +78,7 @@ test_blocked_image_resource()
     std::cout << '\n';
 #endif
     // value in upper left corner of last block
-    unsigned last_block_val = ni * (nbj - 1) * sbj + (nbi - 1) * sbi;
+    const unsigned last_block_val = ni * (nbj - 1) * sbj + (nbi - 1) * sbi;
     TEST("Last Block Value", lview(0, 0) == last_block_val, true);
   }
   else
@@ -88,23 +88,23 @@ test_blocked_image_resource()
 
   ///////-------- ----- Test Copying Blocks -------------------------///////
   std::cout << "Start test for copying blocks\n";
-  std::string path2("test_blocked_tiff2.tif");
+  const std::string path2("test_blocked_tiff2.tif");
   bool good_copy = true;
   { // scope to close bir2
-    vil_blocked_image_resource_sptr bir2 = vil_new_blocked_image_resource(path2.c_str(),
-                                                                          bir->ni(),
-                                                                          bir->nj(),
-                                                                          bir->nplanes(),
-                                                                          bir->pixel_format(),
-                                                                          bir->size_block_i(),
-                                                                          bir->size_block_j(),
-                                                                          "tiff"); //
+    const vil_blocked_image_resource_sptr bir2 = vil_new_blocked_image_resource(path2.c_str(),
+                                                                                bir->ni(),
+                                                                                bir->nj(),
+                                                                                bir->nplanes(),
+                                                                                bir->pixel_format(),
+                                                                                bir->size_block_i(),
+                                                                                bir->size_block_j(),
+                                                                                "tiff"); //
     if (bir2)
     {
       for (unsigned j = 0; j < bir2->n_block_j() && good_copy; ++j)
         for (unsigned i = 0; i < bir2->n_block_i() && good_copy; ++i)
         {
-          vil_image_view_base_sptr blk = bir->get_block(i, j);
+          const vil_image_view_base_sptr blk = bir->get_block(i, j);
           if (!blk)
             good_copy = false;
 #if 0
@@ -183,7 +183,7 @@ test_blocked_image_resource()
     TEST("Test lower right corner block", good, true);
   }
   std::cout << "Test copying from one facade to another\n";
-  vil_image_view<unsigned short> dest;
+  const vil_image_view<unsigned short> dest;
   image.set_size(ni, nj);
   unsigned dsbi = 3, dsbj = 7;
   vil_image_resource_sptr dir = vil_new_image_resource_of_view(image);
@@ -194,14 +194,14 @@ test_blocked_image_resource()
               << "size_block_i = " << dbif->size_block_i() << "   size_block_j = " << dbif->size_block_j()
               << "   n_block_i = " << dbif->n_block_i() << "   n_block_j = " << dbif->n_block_j() << '\n';
 
-    vil_blocked_image_resource_sptr sbif = vil_new_blocked_image_facade(ir, dsbi, dsbj);
+    const vil_blocked_image_resource_sptr sbif = vil_new_blocked_image_facade(ir, dsbi, dsbj);
 
     if (sbif)
     {
       for (unsigned bi = 0; bi < dbif->n_block_i(); ++bi)
         for (unsigned bj = 0; bj < dbif->n_block_j(); ++bj)
         {
-          vil_image_view_base_sptr v = sbif->get_block(bi, bj);
+          const vil_image_view_base_sptr v = sbif->get_block(bi, bj);
           dbif->put_block(bi, bj, *v);
         }
       bool valid = true;
@@ -242,17 +242,17 @@ test_blocked_image_resource()
   vil_image_view_base_sptr blk1;
   for (unsigned bi = 0; bi < 3; ++bi)
   {
-    vil_image_view_base_sptr blk = ir->get_view(bi * sbi, sbi, 0, sbj);
+    const vil_image_view_base_sptr blk = ir->get_view(bi * sbi, sbi, 0, sbj);
     if (bi == 1)
       blk1 = blk;
     cache.add_block(bi, 0, blk);
   }
   // get block 1
   vil_image_view_base_sptr old_blk;
-  bool got_b1 = cache.get_block(1, 0, old_blk);
-  bool the_same = old_blk == blk1;
+  const bool got_b1 = cache.get_block(1, 0, old_blk);
+  const bool the_same = old_blk == blk1;
   // get block 0 -- should not be in the queue
-  bool got_b0 = cache.get_block(0, 0, old_blk);
+  const bool got_b0 = cache.get_block(0, 0, old_blk);
   TEST("test store and retrieve", got_b1 && the_same && !got_b0, true);
 
   //
@@ -301,8 +301,8 @@ test_blocked_image_resource()
   ///////--------------------- Test NITF Blocked Resource ---------------////
   if (exists)
   {
-    std::string nitf_path = image_file + "ff_nitf_16bit.nitf";
-    vil_image_resource_sptr imgr = vil_load_image_resource(nitf_path.c_str());
+    const std::string nitf_path = image_file + "ff_nitf_16bit.nitf";
+    const vil_image_resource_sptr imgr = vil_load_image_resource(nitf_path.c_str());
     if (imgr)
     {
       TEST("NITF blocked resource",
@@ -313,7 +313,7 @@ test_blocked_image_resource()
     {
       TEST("NITF resource ", false, true);
     }
-    vil_blocked_image_resource_sptr bimgr = blocked_image_resource(imgr);
+    const vil_blocked_image_resource_sptr bimgr = blocked_image_resource(imgr);
     if (bimgr)
     {
       vil_image_view<unsigned short> view = bimgr->get_block(0, 0);
@@ -346,7 +346,7 @@ test_blocked_image_resource_main(int argc, char * argv[])
   }
   else
   {
-    std::string root = testlib_root_dir();
+    const std::string root = testlib_root_dir();
     image_file = root + "/core/vil/tests/file_read_data";
   }
   exists = vul_file::is_directory(image_file);

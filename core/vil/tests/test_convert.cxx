@@ -24,13 +24,13 @@ test_convert1(const char * golden_data_dir)
   std::string datadir = golden_data_dir;
   if (*golden_data_dir)
     datadir += "/";
-  vil_image_view<vxl_byte> image1 =
+  const vil_image_view<vxl_byte> image1 =
     vil_convert_to_grey_using_rgb_weighting(vil_load((datadir + "ff_grey8bit_raw.pgm").c_str()));
   TEST("vil_convert_to_grey_using_rgb_weighting(vil_load(grey_image))", image1 ? true : false, true);
 
   vil_print_all(std::cout, image1);
 
-  vil_image_view<vxl_byte> image2 =
+  const vil_image_view<vxl_byte> image2 =
     vil_convert_to_grey_using_average(vil_load((datadir + "ff_rgb8bit_ascii.ppm").c_str()));
   TEST("vil_convert_to_grey_using_average(vil_load(rgb_image))", image2 ? true : false, true);
 
@@ -49,10 +49,10 @@ test_convert_diff_types(const char * golden_data_dir)
     datadir += "/";
 
   vil_image_view<vxl_byte> image1 = vil_load((datadir + "ff_grey8bit_raw.pgm").c_str());
-  vil_image_view_base_sptr image_base1 = vil_load((datadir + "ff_grey8bit_raw.pgm").c_str());
-  vil_image_view_base_sptr image2 = vil_load((datadir + "ff_grey16bit_raw.pgm").c_str());
-  vil_image_view_base_sptr image3 = vil_load((datadir + "ff_rgb8bit_raw.ppm").c_str());
-  vil_image_view_base_sptr image4 = vil_load((datadir + "ff_rgb16bit_raw.ppm").c_str());
+  const vil_image_view_base_sptr image_base1 = vil_load((datadir + "ff_grey8bit_raw.pgm").c_str());
+  const vil_image_view_base_sptr image2 = vil_load((datadir + "ff_grey16bit_raw.pgm").c_str());
+  const vil_image_view_base_sptr image3 = vil_load((datadir + "ff_rgb8bit_raw.ppm").c_str());
+  const vil_image_view_base_sptr image4 = vil_load((datadir + "ff_rgb16bit_raw.ppm").c_str());
   TEST("Loading images", image1 && image_base1, true);
 
   vil_image_view<vxl_uint_16> image_16_1;
@@ -159,7 +159,7 @@ test_convert_stretch_range_limited()
   vil_print_all(std::cout, b_image);
 #endif // DEBUG
 
-  float f55 = f_image(5, 5);
+  float const f55 = f_image(5, 5);
   auto b55 = vxl_byte(dlo + (f55 - slo) * (dhi - dlo) / (shi - slo) + 0.5);
 #if 0
   std::cout << "f55= " << f55 << '\n'
@@ -194,21 +194,21 @@ test_convert_to_n_planes()
   vil_print_all(std::cout, f_image);
 #endif // DEBUG
 
-  vil_image_view_base_sptr f_image_ref = new vil_image_view<float>(f_image);
+  vil_image_view_base_sptr const f_image_ref = new vil_image_view<float>(f_image);
 
-  vil_image_view<float> f_image_dest = vil_convert_to_n_planes(3, f_image_ref);
+  const vil_image_view<float> f_image_dest = vil_convert_to_n_planes(3, f_image_ref);
 
   TEST("Image as expected", vil_image_view_deep_equality(f_image_dest, f_image_expected), true);
 
   vil_math_scale_and_offset_values(f_image, 1.0f, 0.499f);
 
-  vil_image_view_base_sptr f_image_dest_sptr(new vil_image_view<float>(f_image_dest));
-  vil_image_view<vxl_uint_16> image_16_3 = vil_convert_round(vxl_uint_16(), f_image_dest_sptr);
+  const vil_image_view_base_sptr f_image_dest_sptr(new vil_image_view<float>(f_image_dest));
+  const vil_image_view<vxl_uint_16> image_16_3 = vil_convert_round(vxl_uint_16(), f_image_dest_sptr);
   TEST("implicit vil_convert_round float to 16bit with rounding",
        vil_image_view_deep_equality(image_16_3, u16_image_expected),
        true);
 
-  vil_image_view<vxl_uint_16> image_16_3_stretched = vil_convert_stretch_range(vxl_uint_16(), f_image_ref);
+  const vil_image_view<vxl_uint_16> image_16_3_stretched = vil_convert_stretch_range(vxl_uint_16(), f_image_ref);
   vxl_uint_16 minp = 0, maxp = 0;
   vil_math_value_range(image_16_3_stretched, minp, maxp);
   TEST("implicit vil_convert_stretch_range float to 16bit with rounding", minp == 0 && maxp == 65535, true);
@@ -241,7 +241,7 @@ test_convert_to_n_planes()
   TEST("Plane image cannot be directly converted to components",
        vil_image_view<vil_rgb<float>>(f_image_dest_sptr) ? true : false,
        false);
-  vil_image_view<vil_rgb<float>> rgb_image = vil_convert_to_component_order(f_image_dest_sptr);
+  const vil_image_view<vil_rgb<float>> rgb_image = vil_convert_to_component_order(f_image_dest_sptr);
   TEST("implict vil_convert_to_component_order API", rgb_image ? true : false, true);
 #endif
 
@@ -259,7 +259,7 @@ static void
 test_simple_pixel_conversions()
 {
   {
-    vil_convert_round_pixel<float, int> op;
+    const vil_convert_round_pixel<float, int> op;
     int out = 0;
     op(5.5f, out);
     std::cout << out << std::endl;
@@ -269,7 +269,7 @@ test_simple_pixel_conversions()
     TEST("round_pixel float->int", out, 5);
   }
   {
-    vil_convert_round_pixel<double, unsigned short> op;
+    const vil_convert_round_pixel<double, unsigned short> op;
     unsigned short out = 0;
     op(5.5f, out);
     std::cout << out << std::endl;
@@ -291,10 +291,10 @@ test_convert(int argc, char * argv[])
   }
   else
   {
-    std::string root = testlib_root_dir();
+    const std::string root = testlib_root_dir();
     path = root + "/core/vil/tests/file_read_data";
   }
-  bool exists = vul_file::is_directory(path);
+  const bool exists = vul_file::is_directory(path);
   if (exists)
   {
     path += "/";

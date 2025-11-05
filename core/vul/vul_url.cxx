@@ -111,10 +111,10 @@ vul_http_open(const char * url)
 #endif
 
   // create socket endpoint.
-  SOCKET tcp_socket = socket(PF_INET,     // IPv4 protocols.
-                             SOCK_STREAM, // two-way, reliable,
-                                          // connection-based stream socket.
-                             PF_UNSPEC);  // protocol number.
+  SOCKET const tcp_socket = socket(PF_INET,     // IPv4 protocols.
+                                   SOCK_STREAM, // two-way, reliable,
+                                                // connection-based stream socket.
+                                   PF_UNSPEC);  // protocol number.
 #if defined(_WIN32) && !defined(__CYGWIN__)
   if (tcp_socket == INVALID_SOCKET)
   {
@@ -134,7 +134,7 @@ vul_http_open(const char * url)
 #endif
 
   // get network address of server.
-  hostent * hp = gethostbyname(host.c_str());
+  hostent * const hp = gethostbyname(host.c_str());
   if (!hp)
   {
     std::cerr << __FILE__ ": failed to lookup host\n";
@@ -243,7 +243,7 @@ vul_http_open(const char * url)
   {
     return nullptr;
   }
-  std::string::size_type n = contents.find("\r\n\r\n");
+  const std::string::size_type n = contents.find("\r\n\r\n");
   if (n == contents.npos)
   {
     return nullptr;
@@ -329,10 +329,10 @@ vul_http_exists(const char * url)
 #endif
 
   // create socket endpoint.
-  SOCKET tcp_socket = socket(PF_INET,     // IPv4 protocols.
-                             SOCK_STREAM, // two-way, reliable,
-                                          // connection-based stream socket.
-                             PF_UNSPEC);  // protocol number.
+  SOCKET const tcp_socket = socket(PF_INET,     // IPv4 protocols.
+                                   SOCK_STREAM, // two-way, reliable,
+                                                // connection-based stream socket.
+                                   PF_UNSPEC);  // protocol number.
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
   if (tcp_socket == INVALID_SOCKET)
@@ -353,7 +353,7 @@ vul_http_exists(const char * url)
 #endif
 
   // get network address of server.
-  hostent * hp = gethostbyname(host.c_str());
+  hostent * const hp = gethostbyname(host.c_str());
   if (!hp)
   {
     std::cerr << __FILE__ ": failed to lookup host\n";

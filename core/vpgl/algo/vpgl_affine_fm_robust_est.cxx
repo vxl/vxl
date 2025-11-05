@@ -72,14 +72,14 @@ vpgl_affine_fm_robust_est::fit_from_minimal_set(const std::vector<int> & point_i
   vnl_matrix<double> A(5, 5, 0.0);
   for (unsigned int i = 0; i < min_num_pts_; ++i)
   {
-    unsigned int indx = point_indices[i];
+    const unsigned int indx = point_indices[i];
     A[i][0] = left_pts_[indx][0];
     A[i][1] = left_pts_[indx][1];
     A[i][2] = right_pts_[indx][0];
     A[i][3] = right_pts_[indx][1];
     A[i][4] = 1.0;
   }
-  vnl_svd<double> svd(A, 1.0e-8);
+  const vnl_svd<double> svd(A, 1.0e-8);
   // std::cout << svd.W() << std::endl;
   if ((unsigned int)svd.rank() < min_num_pts_ - 1)
   {
@@ -97,7 +97,7 @@ vpgl_affine_fm_robust_est::compute_residuals(const vnl_vector<double> & params, 
 {
   assert(residuals.size() == num_samples_);
   double a = params[0], b = params[1];
-  double s = sqrt(a * a + b * b);
+  const double s = sqrt(a * a + b * b);
   vnl_vector<double> scaled_params = params / s;
   double epi_error = NAN;
   for (unsigned int i = 0; i < num_samples_; ++i)
@@ -133,7 +133,7 @@ vpgl_affine_fm_robust_est::weighted_least_squares_fit(vnl_vector<double> & param
     A[i][4] = 1.0;
   }
 
-  vnl_svd<double> svd(A, 1.0e-8);
+  const vnl_svd<double> svd(A, 1.0e-8);
   if ((unsigned int)svd.rank() < min_num_pts_)
   {
     return false; // singular fit --- no error message needed

@@ -19,7 +19,7 @@ vil1_clamp_image(const vil1_image & base, double low, double high, T * buf, int 
   if (!base.get_section(buf, x0, y0, w, h))
     return false;
 
-  unsigned size = w * h;
+  const unsigned size = w * h;
   auto low_thresh = T(low);
   auto high_thresh = T(high);
   for (unsigned pos = 0; pos < size; ++pos)

@@ -27,12 +27,12 @@ test_rational_camera()
   TEST("test identity camera", u == 1 && v == 2, true);
   // Test a populated rational camera
   // Actual world values
-  double act_x[8] = { 150.0, 150.0, 150.0, 150.0, 200.0, 200.0, 200.0, 200.0 };
-  double act_y[8] = { 100.0, 100.0, 225.0, 225.0, 100.0, 100.0, 225.0, 225.0 };
-  double act_z[8] = { 10.0, 15.0, 10.0, 15.0, 10.0, 15.0, 10.0, 15.0 };
+  const double act_x[8] = { 150.0, 150.0, 150.0, 150.0, 200.0, 200.0, 200.0, 200.0 };
+  const double act_y[8] = { 100.0, 100.0, 225.0, 225.0, 100.0, 100.0, 225.0, 225.0 };
+  const double act_z[8] = { 10.0, 15.0, 10.0, 15.0, 10.0, 15.0, 10.0, 15.0 };
   // Actual projection values
-  double act_u[8] = { 1250., 1370.65, 1388.29, 1421.9, 1047.62, 1194.53, 1205.08, 1276.68 };
-  double act_v[8] = { 365., 327.82, 405.854, 379.412, 378.572, 376.955, 400.635, 397.414 };
+  const double act_u[8] = { 1250., 1370.65, 1388.29, 1421.9, 1047.62, 1194.53, 1205.08, 1276.68 };
+  const double act_v[8] = { 365., 327.82, 405.854, 379.412, 378.572, 376.955, 400.635, 397.414 };
 
   // Rational polynomial coefficients
   std::vector<double> neu_u(20, 0.0), den_u(20, 0.0), neu_v(20, 0.0), den_v(20, 0.0);
@@ -72,7 +72,7 @@ test_rational_camera()
   double sz = 5.0, oz = 10.0;
   double su = 1000.0, ou = 500;
   double sv = 500.0, ov = 200;
-  vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
+  const vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
 
   good = true;
   for (unsigned i = 0; i < 8; ++i)
@@ -90,7 +90,7 @@ test_rational_camera()
   good = true;
   for (unsigned i = 0; i < 8; ++i)
   {
-    vnl_vector_fixed<double, 3> world_point_vnl(act_x[i], act_y[i], act_z[i]);
+    const vnl_vector_fixed<double, 3> world_point_vnl(act_x[i], act_y[i], act_z[i]);
     auto image_point_vnl = rcam.project(world_point_vnl);
 
     rcam.project(act_x[i], act_y[i], act_z[i], u, v);
@@ -106,7 +106,7 @@ test_rational_camera()
   good = true;
   for (unsigned i = 0; i < 8; ++i)
   {
-    vgl_point_3d<double> world_point_vgl(act_x[i], act_y[i], act_z[i]);
+    const vgl_point_3d<double> world_point_vgl(act_x[i], act_y[i], act_z[i]);
     auto image_point_vgl = rcam.project(world_point_vgl);
 
     rcam.project(act_x[i], act_y[i], act_z[i], u, v);
@@ -147,18 +147,18 @@ test_rational_camera()
     good = good && eu < 0.01 && ev < 0.01;
   }
   TEST("test default constructor with member setting", good, true);
-  vpgl_scale_offset<double> sox(sx, ox);
-  vpgl_scale_offset<double> soy(sy, oy);
-  vpgl_scale_offset<double> soz(sz, oz);
-  vpgl_scale_offset<double> sou(su, ou);
-  vpgl_scale_offset<double> sov(sv, ov);
+  const vpgl_scale_offset<double> sox(sx, ox);
+  const vpgl_scale_offset<double> soy(sy, oy);
+  const vpgl_scale_offset<double> soz(sz, oz);
+  const vpgl_scale_offset<double> sou(su, ou);
+  const vpgl_scale_offset<double> sov(sv, ov);
   std::vector<vpgl_scale_offset<double>> soffs;
   soffs.push_back(sox);
   soffs.push_back(soy);
   soffs.push_back(soz);
   soffs.push_back(sou);
   soffs.push_back(sov);
-  vpgl_rational_camera<double> rcam1(coeff_array, soffs);
+  const vpgl_rational_camera<double> rcam1(coeff_array, soffs);
   good = true;
   for (unsigned i = 0; i < 8; ++i)
   {
@@ -177,7 +177,7 @@ test_rational_camera()
     coeff_matrix[2][i] = neu_v[i];
     coeff_matrix[3][i] = den_v[i];
   }
-  vpgl_rational_camera<double> rcam2(coeff_matrix, soffs);
+  const vpgl_rational_camera<double> rcam2(coeff_matrix, soffs);
   good = true;
   for (unsigned i = 0; i < 8; ++i)
   {

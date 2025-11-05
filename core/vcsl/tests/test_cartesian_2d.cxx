@@ -16,7 +16,7 @@
 static void
 test_cartesian_2d()
 {
-  vcsl_cartesian_2d_sptr c = new vcsl_cartesian_2d;
+  const vcsl_cartesian_2d_sptr c = new vcsl_cartesian_2d;
   TEST("vcsl_cartesian_2d_sptr", bool(c), true);
 }
 

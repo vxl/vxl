@@ -23,10 +23,10 @@
 static void
 test_displacement()
 {
-  vcsl_graph_sptr graph = new vcsl_graph;
-  vcsl_spatial_sptr csa = new vcsl_cartesian_3d;
+  const vcsl_graph_sptr graph = new vcsl_graph;
+  const vcsl_spatial_sptr csa = new vcsl_cartesian_3d;
   csa->set_graph(graph);
-  vcsl_spatial_sptr cs0 = new vcsl_cartesian_3d;
+  const vcsl_spatial_sptr cs0 = new vcsl_cartesian_3d;
   cs0->set_graph(graph);
 
   std::vector<vcsl_spatial_sptr> parent;
@@ -39,7 +39,7 @@ test_displacement()
   cs0_beat.push_back(1);
   cs0->set_beat(cs0_beat);
 
-  vcsl_displacement_sptr dis = new vcsl_displacement;
+  const vcsl_displacement_sptr dis = new vcsl_displacement;
   std::vector<double> dis_beat;
   dis_beat.reserve(3);
   dis_beat.push_back(0);

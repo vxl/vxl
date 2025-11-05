@@ -7,6 +7,6 @@
 vcsl_micron_sptr
 vcsl_micron::instance()
 {
-  static vcsl_micron_sptr instance_ = new vcsl_micron;
+  static const vcsl_micron_sptr instance_ = new vcsl_micron;
   return instance_;
 }

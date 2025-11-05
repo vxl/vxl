@@ -15,7 +15,7 @@ test_string_io()
             << "Testing std::string binary io\n"
             << "****************************\n";
 
-  std::string outstring("This is a test");
+  const std::string outstring("This is a test");
 
   vsl_b_ofstream bfs_out("vsl_string_io_test.bvl.tmp");
   TEST("Created vsl_string_io_test.bvl.tmp for writing", (!bfs_out), false);

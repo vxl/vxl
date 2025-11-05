@@ -33,7 +33,7 @@ vbl_disjoint_sets::vbl_disjoint_sets(const vbl_disjoint_sets & s)
 
 
   // Copy nodes
-  node nd;
+  const node nd;
   nodes_ = vbl_array_1d<node>(num_elements_, nd);
   for (int i = 0; i < num_elements_; ++i)
     nodes_[i] = node(s.nodes_[i]);
@@ -62,14 +62,14 @@ vbl_disjoint_sets::find_set(int element_id) const
   curnode = const_cast<node *>(nodes_.begin() + element_id);
   while (curnode->parent != nullptr)
     curnode = curnode->parent;
-  node * root = curnode;
+  node * const root = curnode;
 
   // Walk to the root, updating the parents of `element_id`. Make those elements the direct
   // children of `root`. This optimizes the tree for future find_set invokations.
   curnode = const_cast<node *>(nodes_.begin() + element_id);
   while (curnode != root)
   {
-    node * next = curnode->parent;
+    node * const next = curnode->parent;
     curnode->parent = root;
     curnode = next;
   }
@@ -86,8 +86,8 @@ vbl_disjoint_sets::set_union(int setId1, int setId2)
   if (setId1 == setId2)
     return; // already unioned
 
-  node * set1 = const_cast<node *>(nodes_.begin() + setId1);
-  node * set2 = const_cast<node *>(nodes_.begin() + setId2);
+  node * const set1 = const_cast<node *>(nodes_.begin() + setId1);
+  node * const set2 = const_cast<node *>(nodes_.begin() + setId2);
 
   // Determine which node representing a set has a higher rank. The node with the higher rank is
   // likely to have a bigger subtree so in order to better balance the tree representing the
@@ -120,7 +120,7 @@ vbl_disjoint_sets::add_elements(int num_to_add)
   assert(num_to_add >= 0);
 
   // insert and initialize the specified number of element nodes to the end of the `nodes_` array
-  int n = nodes_.size();
+  const int n = nodes_.size();
   for (int i = n; i < num_to_add + n; ++i)
   {
     node nd;

@@ -15,7 +15,7 @@ test_poly_radial_distortion_constructors()
   bool did_construct = false;
   try
   {
-    vpgl_poly_radial_distortion<double, 3> lens(vgl_point_2d<double>(100.0, 100.0), nullptr);
+    const vpgl_poly_radial_distortion<double, 3> lens(vgl_point_2d<double>(100.0, 100.0), nullptr);
     did_construct = true;
   }
   catch (std::exception & exception)
@@ -31,10 +31,10 @@ test_poly_radial_distortion()
   test_poly_radial_distortion_constructors();
 
   double k[3] = { 0.5, 2.0, 3.0 };
-  vpgl_poly_radial_distortion<double, 3> rd(vgl_point_2d<double>(100.0, 100.0), k);
+  const vpgl_poly_radial_distortion<double, 3> rd(vgl_point_2d<double>(100.0, 100.0), k);
   TEST("distort r=0", rd.distort_radius(0), 1);
-  double r1 = rd.distort_radius(1) * 1;
-  double r2 = rd.distort_radius(2) * 2;
+  const double r1 = rd.distort_radius(1) * 1;
+  const double r2 = rd.distort_radius(2) * 2;
   TEST("distort r=1", r1, 6.5);
   TEST("distort r=2", r2, 68.0);
 
@@ -43,7 +43,7 @@ test_poly_radial_distortion()
   TEST_NEAR("undistort r=2", rd.undistort_radius(r2) * r2, 2.0, 1e-8);
 
 
-  vgl_homg_point_2d<double> pt(101.0, 101.0);
+  const vgl_homg_point_2d<double> pt(101.0, 101.0);
   std::cout << "distort point " << rd.distort(pt) << std::endl;
   std::cout << "undistort point " << rd.undistort(pt) << std::endl;
 }

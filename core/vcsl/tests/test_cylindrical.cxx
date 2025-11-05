@@ -16,7 +16,7 @@
 static void
 test_cylindrical()
 {
-  vcsl_cylindrical_sptr p = new vcsl_cylindrical;
+  const vcsl_cylindrical_sptr p = new vcsl_cylindrical;
   TEST("test_cylindrical_sptr", bool(p), true);
 }
 

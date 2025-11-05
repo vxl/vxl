@@ -24,7 +24,7 @@ main(int argc, char ** argv)
 
   // This is how we initialise an image resource object.
 
-  vil_image_resource_sptr data = vil_load_image_resource(argv[1]);
+  const vil_image_resource_sptr data = vil_load_image_resource(argv[1]);
 
   if (!data)
   {

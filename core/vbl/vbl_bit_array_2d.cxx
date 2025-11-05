@@ -48,9 +48,9 @@ vbl_bit_array_2d::enlarge(unsigned int num_rows, unsigned int num_cols)
 {
   assert(num_rows >= num_rows_ && num_cols >= num_cols_);
 
-  unsigned char * tempdata = data_;
-  unsigned int tempm = num_rows_;
-  unsigned int tempn = num_cols_;
+  unsigned char * const tempdata = data_;
+  const unsigned int tempm = num_rows_;
+  const unsigned int tempn = num_cols_;
 
   construct(num_rows, num_cols);
   fill(false); // fill with zeros
@@ -78,7 +78,7 @@ vbl_bit_array_2d::enlarge(unsigned int num_rows, unsigned int num_cols)
 void
 vbl_bit_array_2d::fill(bool value)
 {
-  unsigned char v = value ? ~(unsigned char)0 : 0;
+  const unsigned char v = value ? ~(unsigned char)0 : 0;
   std::memset(data_, v, this->size());
 }
 
@@ -107,7 +107,7 @@ vbl_bit_array_2d::construct(unsigned int num_rows, unsigned int num_cols)
 void
 vbl_bit_array_2d::index(unsigned int x, unsigned int y, unsigned long & byteindex, unsigned int & bitindex) const
 {
-  unsigned long idx = x * num_cols_ + y;
+  const unsigned long idx = x * num_cols_ + y;
 
   byteindex = (unsigned long)(double(idx) / CHAR_BIT);
   bitindex = idx % CHAR_BIT;

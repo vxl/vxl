@@ -22,7 +22,7 @@ vil_pyramid_image_resource_sptr
 vil_pyramid_image_list_format::make_input_pyramid_image(const char * directory)
 {
   vil_image_list il(directory);
-  std::vector<vil_image_resource_sptr> rescs = il.resources();
+  const std::vector<vil_image_resource_sptr> rescs = il.resources();
   if (rescs.size() < 2L)
     return nullptr;
   auto * pil = new vil_pyramid_image_list(rescs);
@@ -51,21 +51,21 @@ copy_base_resc(const vil_image_resource_sptr & base_image,
     if (!brsc || brsc->size_block_i() % 2 != 0 || brsc->size_block_i() % 2 != 0)
       brsc = new vil_blocked_image_facade(base_image);
     // handle case of RGBA as four planes
-    vil_pixel_format fmt = vil_pixel_format_component_format(brsc->pixel_format());
-    vil_blocked_image_resource_sptr out_resc = vil_new_blocked_image_resource(full_filename.c_str(),
-                                                                              brsc->ni(),
-                                                                              brsc->nj(),
-                                                                              brsc->nplanes(),
-                                                                              fmt,
-                                                                              brsc->size_block_i(),
-                                                                              brsc->size_block_j(),
-                                                                              file_format);
+    const vil_pixel_format fmt = vil_pixel_format_component_format(brsc->pixel_format());
+    const vil_blocked_image_resource_sptr out_resc = vil_new_blocked_image_resource(full_filename.c_str(),
+                                                                                    brsc->ni(),
+                                                                                    brsc->nj(),
+                                                                                    brsc->nplanes(),
+                                                                                    fmt,
+                                                                                    brsc->size_block_i(),
+                                                                                    brsc->size_block_j(),
+                                                                                    file_format);
     if (!out_resc)
       return false;
     for (unsigned int j = 0; j < brsc->n_block_j(); ++j)
       for (unsigned int i = 0; i < brsc->n_block_i(); ++i)
       {
-        vil_image_view_base_sptr blk = brsc->get_block(i, j);
+        const vil_image_view_base_sptr blk = brsc->get_block(i, j);
         if (!blk)
           return false;
         if (!out_resc->put_block(i, j, *blk))
@@ -74,7 +74,7 @@ copy_base_resc(const vil_image_resource_sptr & base_image,
   } // end scope for out resource
   //
   // reopen the resource for reading.
-  vil_image_resource_sptr temp = vil_load_image_resource(full_filename.c_str());
+  const vil_image_resource_sptr temp = vil_load_image_resource(full_filename.c_str());
   copy = blocked_image_resource(temp);
   return (bool)copy;
 }
@@ -133,7 +133,7 @@ vil_pyramid_image_list_format::make_pyramid_image_from_base(const char * directo
     }
   } // end program scope to close resource files
   vil_image_list il(directory);
-  std::vector<vil_image_resource_sptr> rescs = il.resources();
+  const std::vector<vil_image_resource_sptr> rescs = il.resources();
   return new vil_pyramid_image_list(rescs);
 }
 
@@ -165,7 +165,7 @@ vil_pyramid_image_list::vil_pyramid_image_list(const std::vector<vil_image_resou
     if (!brsc)
       brsc = new vil_blocked_image_facade(image);
     auto * cimr = new vil_cached_image_resource(brsc, 100);
-    vil_image_resource_sptr ir = (vil_image_resource *)cimr;
+    const vil_image_resource_sptr ir = (vil_image_resource *)cimr;
     auto * level = new pyramid_level(ir);
     levels_.push_back(level);
   }
@@ -231,7 +231,7 @@ vil_pyramid_image_list::add_resource(const vil_image_resource_sptr & image)
 float
 vil_pyramid_image_list::find_next_level(const vil_image_resource_sptr & image)
 {
-  unsigned int nlevels = this->nlevels();
+  const unsigned int nlevels = this->nlevels();
   if (nlevels == 0)
     return 0.0f;
   auto base_ni = static_cast<float>(levels_[0]->image_->ni());
@@ -245,7 +245,7 @@ vil_pyramid_image_list::put_resource(const vil_image_resource_sptr & image)
 {
   if (this->is_same_size(image))
     return false;
-  float level = this->find_next_level(image);
+  const float level = this->find_next_level(image);
   std::string copy_name = "copyR";
   std::string file = level_filename(directory_, copy_name, level);
   std::string ffmt = "pgm";
@@ -253,7 +253,7 @@ vil_pyramid_image_list::put_resource(const vil_image_resource_sptr & image)
     ffmt = image->file_format();
   file = file + '.' + ffmt;
   unsigned int sbi = 0, sbj = 0;
-  vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
+  const vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
   if (bir)
   {
     sbi = bir->size_block_i();
@@ -292,14 +292,14 @@ vil_pyramid_image_list::closest(const float scale) const
   unsigned int lmin = 0;
   for (unsigned int i = 0; i < nlevels; ++i)
   {
-    float ds = std::fabs(std::log(levels_[i]->scale_ / scale));
+    const float ds = std::fabs(std::log(levels_[i]->scale_ / scale));
     if (ds < mind)
     {
       mind = ds;
       lmin = i;
     }
   }
-  pyramid_level * pl = levels_[lmin];
+  pyramid_level * const pl = levels_[lmin];
   if (pl)
     pl->cur_level_ = lmin;
   return pl;
@@ -318,8 +318,8 @@ vil_pyramid_image_list::get_copy_view(unsigned int i0,
               << '\n';
     return nullptr;
   }
-  pyramid_level * pl = levels_[level];
-  float actual_scale = pl->scale_;
+  pyramid_level * const pl = levels_[level];
+  const float actual_scale = pl->scale_;
 
   float fi0 = actual_scale * i0, fni = actual_scale * n_i, fj0 = actual_scale * j0, fnj = actual_scale * n_j;
   // transform image coordinates by actual scale
@@ -331,7 +331,7 @@ vil_pyramid_image_list::get_copy_view(unsigned int i0,
   auto snj = static_cast<unsigned int>(fnj);
   if (snj == 0)
     snj = 1; // can't have less than one pixel
-  vil_image_view_base_sptr v = pl->image_->get_copy_view(si0, sni, sj0, snj);
+  const vil_image_view_base_sptr v = pl->image_->get_copy_view(si0, sni, sj0, snj);
   if (!v)
   {
     std::cerr << "pyramid_image_list::get_copy_view(.) level = " << level << "(i0,j0):(" << i0 << ' ' << j0
@@ -352,13 +352,13 @@ vil_pyramid_image_list::get_copy_view(unsigned int i0,
                                       float & actual_scale) const
 {
   // find the resource that is closest to the specified scale
-  pyramid_level * pl = this->closest(scale);
+  pyramid_level * const pl = this->closest(scale);
   if (!pl)
   {
     actual_scale = 0;
     return nullptr;
   }
   actual_scale = pl->scale_;
-  unsigned int level = pl->cur_level_;
+  const unsigned int level = pl->cur_level_;
   return this->get_copy_view(i0, n_i, j0, n_j, level);
 }

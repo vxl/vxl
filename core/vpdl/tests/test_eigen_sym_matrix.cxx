@@ -44,7 +44,7 @@ test_matrix_type(T epsilon, const std::string & type_name)
 
   {
     std::cout << "=======================================\n";
-    vpdt_eigen_sym_matrix<T, 3> sym(M);
+    const vpdt_eigen_sym_matrix<T, 3> sym(M);
     vnl_matrix_fixed<T, 3, 3> M2;
     sym.form_matrix(M2);
     TEST_NEAR(("reform matrix <" + type_name + "> fixed").c_str(), (M - M2).array_inf_norm(), 0, epsilon);
@@ -69,7 +69,7 @@ test_matrix_type(T epsilon, const std::string & type_name)
 
   {
     std::cout << "=======================================\n";
-    vpdt_eigen_sym_matrix<T> sym(M.as_ref()); // size 3x3
+    const vpdt_eigen_sym_matrix<T> sym(M.as_ref()); // size 3x3
     vnl_matrix<T> M2;
     sym.form_matrix(M2);
     TEST_NEAR(("reform matrix <" + type_name + "> variable").c_str(), (M - M2).array_inf_norm(), 0, epsilon);

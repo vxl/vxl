@@ -87,8 +87,8 @@ vrel_ran_sam_search::estimate(const vrel_estimation_problem * problem, const vre
     return false;
   }
 
-  unsigned int points_per = problem->num_samples_to_instantiate();
-  unsigned int num_points = problem->num_samples();
+  const unsigned int points_per = problem->num_samples_to_instantiate();
+  const unsigned int num_points = problem->num_samples();
   std::vector<int> point_indices(points_per);
   vnl_vector<double> new_params;
   std::vector<double> residuals(num_points);
@@ -209,9 +209,10 @@ vrel_ran_sam_search::calc_num_samples(const vrel_estimation_problem * problem)
     //  Calculate the probability that a sample is good.  Then, use this
     //  to determine the minimum number of samples required.
     //
-    double prob_pt_inlier = (1 - max_outlier_frac_) * problem->num_unique_samples() / double(problem->num_samples());
-    double prob_pt_good = max_populations_expected_ * std::pow(prob_pt_inlier / max_populations_expected_,
-                                                               (int)problem->num_samples_to_instantiate());
+    const double prob_pt_inlier =
+      (1 - max_outlier_frac_) * problem->num_unique_samples() / double(problem->num_samples());
+    const double prob_pt_good = max_populations_expected_ * std::pow(prob_pt_inlier / max_populations_expected_,
+                                                                     (int)problem->num_samples_to_instantiate());
     samples_to_take_ = int(std::ceil(std::log(1.0 - desired_prob_good_) / std::log(1.0 - prob_pt_good)));
     if (samples_to_take_ < min_samples_)
       samples_to_take_ = min_samples_;
@@ -265,7 +266,7 @@ vrel_ran_sam_search::next_sample(unsigned int taken,
       unsigned int k = 0, counter = 0;
       while (k < points_per_sample) // This might be an infinite loop!
       {
-        int id = generator_->lrand32(0, num_points - 1);
+        const int id = generator_->lrand32(0, num_points - 1);
         if (id >= int(num_points))
         { //  safety check
           std::cerr << "vrel_ran_sam_search::next_sample --- "
@@ -309,7 +310,7 @@ void
 vrel_ran_sam_search::trace_sample(const std::vector<int> & indices) const
 {
   std::cout << "\nNew sample: ";
-  for (int index : indices)
+  for (const int index : indices)
     std::cout << ' ' << index;
   std::cout << std::endl;
 }

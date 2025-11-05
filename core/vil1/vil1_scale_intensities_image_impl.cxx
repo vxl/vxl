@@ -11,7 +11,7 @@
 vil1_image
 vil1_scale_intensities_image_impl::get_plane(unsigned int p) const
 {
-  vil1_image_impl * i = new vil1_scale_intensities_image_impl(base.get_plane(p), scale_, shift_);
+  vil1_image_impl * const i = new vil1_scale_intensities_image_impl(base.get_plane(p), scale_, shift_);
   return i;
 }
 

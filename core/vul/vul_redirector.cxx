@@ -48,14 +48,14 @@ struct vul_redirector_data
 int
 vul_redirector_streambuf::sync()
 {
-  std::ptrdiff_t n = pptr() - pbase();
+  const std::ptrdiff_t n = pptr() - pbase();
   return (n && p->owner->putchunk(pbase(), n) != n) ? EOF : 0;
 }
 
 int
 vul_redirector_streambuf::overflow(int ch)
 {
-  int n = static_cast<int>(pptr() - pbase());
+  const int n = static_cast<int>(pptr() - pbase());
   if (n && sync())
     return EOF;
   if (ch != EOF)

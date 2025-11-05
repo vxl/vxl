@@ -15,9 +15,9 @@
 int
 main()
 {
-  unsigned ni = 8;
-  unsigned nj = 15;
-  unsigned nplanes = 1;
+  const unsigned ni = 8;
+  const unsigned nj = 15;
+  const unsigned nplanes = 1;
   vil_image_view<vxl_byte> image(ni, nj, nplanes);
 
   for (unsigned p = 0; p < nplanes; ++p)

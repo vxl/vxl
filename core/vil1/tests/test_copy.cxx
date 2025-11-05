@@ -23,7 +23,7 @@ test_copy(int argc, char * argv[])
     std::cerr << "Using default input image " << filename << std::endl;
   }
 
-  vil1_image img = vil1_load(filename);
+  const vil1_image img = vil1_load(filename);
   TEST("Load image square.pgm", !img, false);
   if (!img)
     return;

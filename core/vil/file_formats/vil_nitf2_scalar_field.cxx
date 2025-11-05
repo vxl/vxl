@@ -33,7 +33,7 @@ vil_nitf2_scalar_field::read(vil_nitf2_istream & input,
   // Parse string
   VIL_NITF2_LOG(log_debug) << "Reading tag " << definition->tag << ": ";
   bool is_blank = false;
-  vil_nitf2_scalar_field * result = formatter->read_field(input, is_blank);
+  vil_nitf2_scalar_field * const result = formatter->read_field(input, is_blank);
 
   // Set result definition, if found, and output (for debugging):
   //   value if computed
@@ -86,11 +86,11 @@ vil_nitf2_field::field_tree *
 vil_nitf2_scalar_field::get_tree() const
 {
   // put the normal stuff in there
-  field_tree * tr = vil_nitf2_field::get_tree();
+  field_tree * const tr = vil_nitf2_field::get_tree();
   // now grab my value and put that in there
   auto * str = new vil_stream_core;
   write(*str);
-  vil_streampos num_to_read = str->tell();
+  const vil_streampos num_to_read = str->tell();
   str->seek(0);
   char * buffer = nullptr;
   buffer = (char *)std::malloc((std::size_t)num_to_read + 1);

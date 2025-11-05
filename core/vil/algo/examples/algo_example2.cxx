@@ -19,11 +19,11 @@ int
 main(int argc, char * argv[])
 {
   // get file name
-  const char * inputFilename = argc > 1 ? argv[1] : "input file: please specify 2 command line arguments";
-  const char * outputFilename = argc > 2 ? argv[2] : "output_file.pnm";
+  const char * const inputFilename = argc > 1 ? argv[1] : "input file: please specify 2 command line arguments";
+  const char * const outputFilename = argc > 2 ? argv[2] : "output_file.pnm";
 
   // load image --> input image
-  vil_image_view<vxl_byte> imageIn = vil_load(inputFilename);
+  const vil_image_view<vxl_byte> imageIn = vil_load(inputFilename);
   if (!imageIn)
   {
     std::cout << "Unable to correctly load " << inputFilename << std::endl;
@@ -37,8 +37,8 @@ main(int argc, char * argv[])
 
   // create a normalized Gaussian kernel with standard deviation sigma=2.0
   std::cout << "Creating kernel...\n";
-  float sigma = 2.f;
-  float scaleFactor = 1.f / (2.f * sigma * sigma);
+  const float sigma = 2.f;
+  const float scaleFactor = 1.f / (2.f * sigma * sigma);
   constexpr int halfSupport = 1;
 
   // build kernel

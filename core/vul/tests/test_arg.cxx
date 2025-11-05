@@ -63,7 +63,7 @@ test_arg()
   TEST("filename == f", std::strcmp(filename1(), "f"), 0);
 
   {
-    unsigned true_list_length = sizeof list1_contents / sizeof list1_contents[0];
+    const unsigned true_list_length = sizeof list1_contents / sizeof list1_contents[0];
     std::list<int> l = list1();
     TEST("list1 length", l.size(), true_list_length);
     bool ok = true;
@@ -78,7 +78,7 @@ test_arg()
     TEST("list1 contents", ok, true);
   }
   {
-    unsigned true_list_length = sizeof list2_contents / sizeof list2_contents[0];
+    const unsigned true_list_length = sizeof list2_contents / sizeof list2_contents[0];
     std::vector<double> l = list2();
     TEST("list2 length", l.size(), true_list_length);
     bool ok = true;

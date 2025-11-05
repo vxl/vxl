@@ -23,7 +23,7 @@ main()
     {
       for (unsigned int i = 0; i < cimg.ni(); i++)
       {
-        int color_index = int(i * 0.1 + 0.5);
+        const int color_index = int(i * 0.1 + 0.5);
         cimg(i, j) = color_value(c, color_index);
       }
     }

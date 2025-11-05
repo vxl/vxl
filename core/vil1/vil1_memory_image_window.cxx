@@ -58,8 +58,8 @@ vil1_memory_image_window::sum_abs_diff(const vil1_memory_image_of<vxl_byte> & im
                                        int centre2_y,
                                        int early_exit_level)
 {
-  int mask2_col_index = centre2_x - mask_size_ / 2;
-  int mask2_row_index = centre2_y - mask_size_ / 2;
+  const int mask2_col_index = centre2_x - mask_size_ / 2;
+  const int mask2_row_index = centre2_y - mask_size_ / 2;
 
   // make sure that we don't ask for pixels outside the image - PVr, 1 dec. 1997
   int row_start = 0;
@@ -87,8 +87,8 @@ vil1_memory_image_window::sum_abs_diff(const vil1_memory_image_of<vxl_byte> & im
   for (int row_index = row_start; row_index < row_end; row_index++)
     for (int col_index = col_start; col_index < col_end; col_index++)
     {
-      int p1 = image1_(mask1_col_index_ + col_index, mask1_row_index_ + row_index);
-      int p2 = image2(mask2_col_index + col_index, mask2_row_index + row_index);
+      const int p1 = image1_(mask1_col_index_ + col_index, mask1_row_index_ + row_index);
+      const int p2 = image2(mask2_col_index + col_index, mask2_row_index + row_index);
 
       difference_total += p1 > p2 ? p1 - p2 : p2 - p1; // avoid vnl dependency - PVr
 
@@ -110,8 +110,8 @@ vil1_memory_image_window::sum_sqr_diff(const vil1_memory_image_of<vxl_byte> & im
                                        int centre2_y,
                                        int early_exit_level)
 {
-  int mask2_col_index = centre2_x - mask_size_ / 2;
-  int mask2_row_index = centre2_y - mask_size_ / 2;
+  const int mask2_col_index = centre2_x - mask_size_ / 2;
+  const int mask2_row_index = centre2_y - mask_size_ / 2;
 
   // make sure that we don't ask for pixels outside the image - PVr, 1 dec. 1997
   int row_start = 0;
@@ -139,8 +139,8 @@ vil1_memory_image_window::sum_sqr_diff(const vil1_memory_image_of<vxl_byte> & im
   for (int row_index = row_start; row_index < row_end; row_index++)
     for (int col_index = col_start; col_index < col_end; col_index++)
     {
-      int p1 = image1_(mask1_col_index_ + col_index, mask1_row_index_ + row_index);
-      int p2 = image2(mask2_col_index + col_index, mask2_row_index + row_index);
+      const int p1 = image1_(mask1_col_index_ + col_index, mask1_row_index_ + row_index);
+      const int p2 = image2(mask2_col_index + col_index, mask2_row_index + row_index);
 
       difference_total += (p1 - p2) * (p1 - p2);
 
@@ -160,15 +160,15 @@ vil1_memory_image_window::normalised_sum_abs_diff(const vil1_memory_image_of<vxl
                                                   double normalise_ratio,
                                                   int early_exit_level)
 {
-  int mask2_col_index = centre2_x - mask_size_ / 2;
-  int mask2_row_index = centre2_y - mask_size_ / 2;
+  const int mask2_col_index = centre2_x - mask_size_ / 2;
+  const int mask2_row_index = centre2_y - mask_size_ / 2;
 
   int difference_total = 0;
   for (int row_index = 0; row_index < mask_size_; row_index++)
     for (int col_index = 0; col_index < mask_size_; col_index++)
     {
-      int p1 = image1_(mask1_col_index_ + col_index, mask1_row_index_ + row_index);
-      int p2 = image2(mask2_col_index + col_index, mask2_row_index + row_index);
+      const int p1 = image1_(mask1_col_index_ + col_index, mask1_row_index_ + row_index);
+      const int p2 = image2(mask2_col_index + col_index, mask2_row_index + row_index);
       difference_total += labs(p1 - (int)(normalise_ratio * (float)p2));
 
       if (difference_total > early_exit_level)
@@ -185,18 +185,18 @@ vil1_memory_image_window::normalised_cross_correlation(const vil1_memory_image_o
                                                        int centre2_y)
 {
   // set mask size
-  int n = (int)mask_size_ / 2;
-  int m = (int)mask_size_ / 2;
+  const int n = (int)mask_size_ / 2;
+  const int m = (int)mask_size_ / 2;
 
 
   //////////////////////////////////////////////
   // setup the integer locations of the
   // points
   //
-  int u1 = centre1_x_;
-  int v1 = centre1_y_;
-  int u2 = centre2_x;
-  int v2 = centre2_y;
+  const int u1 = centre1_x_;
+  const int v1 = centre1_y_;
+  const int u2 = centre2_x;
+  const int v2 = centre2_y;
 
   // indices
   int i = 0, j = 0;
@@ -234,16 +234,16 @@ vil1_memory_image_window::normalised_cross_correlation(const vil1_memory_image_o
   {
     for (j = -m; j < m + 1; j++)
     {
-      double I1_uv = image1_(u1 + i, v1 + j);
+      const double I1_uv = image1_(u1 + i, v1 + j);
       result_I1 += (I1_uv - average_I1_uv) * (I1_uv - average_I1_uv);
 
-      double I2_uv = image2(u2 + i, v2 + j);
+      const double I2_uv = image2(u2 + i, v2 + j);
       result_I2 += (I2_uv - average_I2_uv) * (I2_uv - average_I2_uv);
     }
   }
 
-  double std_dev_I1_uv = std::sqrt(result_I1);
-  double std_dev_I2_uv = std::sqrt(result_I2);
+  const double std_dev_I1_uv = std::sqrt(result_I1);
+  const double std_dev_I2_uv = std::sqrt(result_I2);
 
   ///////////////////////////////////////
   // calculate the correlation score

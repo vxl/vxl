@@ -14,7 +14,7 @@ test_lms_lts()
   //
   int dof = 3;
   double frac = 0.5;
-  vrel_objective * lms1 = new vrel_lms_obj(dof, frac);
+  vrel_objective * const lms1 = new vrel_lms_obj(dof, frac);
 
   std::vector<double> test_lms;
   test_lms.push_back(-1.0);
@@ -38,7 +38,7 @@ test_lms_lts()
   TEST_NEAR("LMS with 0.5 inlier fraction:", obj, corr_obj, 1e-6);
 
   frac = 0.7;
-  vrel_objective * lms2 = new vrel_lms_obj(dof, frac);
+  vrel_objective * const lms2 = new vrel_lms_obj(dof, frac);
   corr_obj = 4.0 * 4.0;
   obj = lms2->fcn(test_lms.begin(), test_lms.end(), 0.0, nullptr);
   TEST_NEAR("LMS with 0.7 inlier fraction:", obj, corr_obj, 1e-6);
@@ -48,7 +48,7 @@ test_lms_lts()
   //
   dof = 3;
   frac = 0.5;
-  vrel_objective * lts1 = new vrel_lts_obj(dof, frac);
+  vrel_objective * const lts1 = new vrel_lts_obj(dof, frac);
   std::vector<double> test_lts;
   test_lts.push_back(-1.0);
   test_lts.push_back(-2.0);
@@ -72,7 +72,7 @@ test_lms_lts()
   TEST_NEAR("LTS with 0.5 inlier fraction:", obj, corr_obj, 1e-6);
 
   frac = 0.7;
-  vrel_objective * lts2 = new vrel_lts_obj(dof, frac);
+  vrel_objective * const lts2 = new vrel_lts_obj(dof, frac);
   corr_obj += vnl_math::sqr(-4.0) + vnl_math::sqr(-2.4) + vnl_math::sqr(3.1);
   obj = lts2->fcn(test_lts.begin(), test_lts.end(), 0.0, nullptr);
   TEST_NEAR("LTS with 0.7 inlier fraction:", obj, corr_obj, 1e-6);

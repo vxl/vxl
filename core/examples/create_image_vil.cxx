@@ -23,10 +23,10 @@ main(int argc, char ** argv)
   vul_arg<std::string> output_filename(nullptr, "output filename");
   vul_arg_parse(argc, argv);
 
-  int sizex = 253;
-  int sizey = 155;
+  const int sizex = 253;
+  const int sizey = 155;
 
-  vil_image_view<unsigned char> image = make_image(sizex, sizey);
+  const vil_image_view<unsigned char> image = make_image(sizex, sizey);
 
   vil_save(image, output_filename().c_str());
 

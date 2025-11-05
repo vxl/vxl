@@ -54,7 +54,8 @@ test_rational_adjust_onept()
   double su1 = 14106, ou1 = 13785;
   double sv1 = 15402, ov1 = 15216;
 
-  vpgl_rational_camera<double> rcam1(neu_u1, den_u1, neu_v1, den_v1, sx1, ox1, sy1, oy1, sz1, oz1, su1, ou1, sv1, ov1);
+  const vpgl_rational_camera<double> rcam1(
+    neu_u1, den_u1, neu_v1, den_v1, sx1, ox1, sy1, oy1, sz1, oz1, su1, ou1, sv1, ov1);
 
   double neu_u2[20] = { -1.45002e-005,
                         8.88441e-005,
@@ -113,7 +114,8 @@ test_rational_adjust_onept()
   double su2 = 13827, ou2 = 13793;
   double sv2 = 15657, ov2 = 15296;
 
-  vpgl_rational_camera<double> rcam2(neu_u2, den_u2, neu_v2, den_v2, sx2, ox2, sy2, oy2, sz2, oz2, su2, ou2, sv2, ov2);
+  const vpgl_rational_camera<double> rcam2(
+    neu_u2, den_u2, neu_v2, den_v2, sx2, ox2, sy2, oy2, sz2, oz2, su2, ou2, sv2, ov2);
 
   // single image correspondence to correct cameras
   vgl_point_2d<double> p1(25479.9, 409.113), p2(17528.2, 14638);
@@ -134,11 +136,11 @@ test_rational_adjust_onept()
   for (unsigned i = 0; i < 2; ++i)
     std::cout << "T[" << i << "] " << cam_trans[i] << '\n';
 
-  double elevation = 34.5121;
-  vgl_point_2d<double> ap0(1.14572, 1.67109);
-  vgl_point_2d<double> ap1(-1.31294, -1.66164);
-  vgl_point_2d<double> t0(cam_trans[0].x(), cam_trans[0].y());
-  vgl_point_2d<double> t1(cam_trans[1].x(), cam_trans[1].y());
+  const double elevation = 34.5121;
+  const vgl_point_2d<double> ap0(1.14572, 1.67109);
+  const vgl_point_2d<double> ap1(-1.31294, -1.66164);
+  const vgl_point_2d<double> t0(cam_trans[0].x(), cam_trans[0].y());
+  const vgl_point_2d<double> t1(cam_trans[1].x(), cam_trans[1].y());
   double d = vgl_distance<double>(ap0, t0) + vgl_distance<double>(ap1, t1);
 
   TEST_NEAR("test 3-d elevation", intersection.z(), elevation, 0.1);
@@ -167,8 +169,8 @@ test_rational_adjust_onept()
   cams[1].image_offset(u02, v02);
   cams[0].set_image_offset(u01 + cam_trans[0].x(), v01 + cam_trans[0].y());
   cams[1].set_image_offset(u02 + cam_trans[1].x(), v02 + cam_trans[1].y());
-  vgl_point_2d<double> q0 = cams[0].project(intersection);
-  vgl_point_2d<double> q1 = cams[1].project(intersection);
+  const vgl_point_2d<double> q0 = cams[0].project(intersection);
+  const vgl_point_2d<double> q1 = cams[1].project(intersection);
   d = vgl_distance<double>(corrs[0], q0) + vgl_distance<double>(corrs[1], q1);
   TEST_NEAR("test shifted cams, reprojection", d, 0, 0.1);
 }

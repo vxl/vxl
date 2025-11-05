@@ -71,19 +71,19 @@ test_rational_adjust()
   double su = 13827, ou = 13793;
   double sv = 15657, ov = 15296;
 
-  vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, sx1, ox1, sy1, oy1, sz1, oz1, su, ou, sv, ov);
+  const vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, sx1, ox1, sy1, oy1, sz1, oz1, su, ou, sv, ov);
   //
   // test 3-d registration
   // world points
-  vgl_point_3d<double> c0(44.363757, 33.289254, 31.000366);
-  vgl_point_3d<double> c1(44.369636, 33.293019, 35.749939);
-  vgl_point_3d<double> c2(44.373331, 33.292956, 32.587067);
-  vgl_point_3d<double> c3(44.395048, 33.292964, 41.883163);
-  vgl_point_3d<double> c4(44.395221, 33.289763, 38.543938);
-  vgl_point_3d<double> c5(44.384865, 33.290064, 39.703369);
-  vgl_point_3d<double> c6(44.351024, 33.290036, 36.203430);
-  vgl_point_3d<double> c7(44.341150, 33.293502, 38.745071);
-  vgl_point_3d<double> c8(44.352379, 33.294193, 44.503021);
+  const vgl_point_3d<double> c0(44.363757, 33.289254, 31.000366);
+  const vgl_point_3d<double> c1(44.369636, 33.293019, 35.749939);
+  const vgl_point_3d<double> c2(44.373331, 33.292956, 32.587067);
+  const vgl_point_3d<double> c3(44.395048, 33.292964, 41.883163);
+  const vgl_point_3d<double> c4(44.395221, 33.289763, 38.543938);
+  const vgl_point_3d<double> c5(44.384865, 33.290064, 39.703369);
+  const vgl_point_3d<double> c6(44.351024, 33.290036, 36.203430);
+  const vgl_point_3d<double> c7(44.341150, 33.293502, 38.745071);
+  const vgl_point_3d<double> c8(44.352379, 33.294193, 44.503021);
   std::vector<vgl_point_3d<double>> geo_points;
   geo_points.push_back(c0);
   geo_points.push_back(c1);
@@ -95,15 +95,15 @@ test_rational_adjust()
   geo_points.push_back(c7);
   geo_points.push_back(c8);
   // corresponding image points for rcam
-  vgl_point_2d<double> p0(14960.3, 22724.9);
-  vgl_point_2d<double> p1(15754.8, 22182.7);
-  vgl_point_2d<double> p2(16247.6, 22177.6);
-  vgl_point_2d<double> p3(19160.2, 22103.7);
-  vgl_point_2d<double> p4(19179.8, 22544.4);
-  vgl_point_2d<double> p5(17791.3, 22541.2);
-  vgl_point_2d<double> p6(13253.2, 22665.5);
-  vgl_point_2d<double> p7(11932.3, 22221.1);
-  vgl_point_2d<double> p8(13441.2, 22089.2);
+  const vgl_point_2d<double> p0(14960.3, 22724.9);
+  const vgl_point_2d<double> p1(15754.8, 22182.7);
+  const vgl_point_2d<double> p2(16247.6, 22177.6);
+  const vgl_point_2d<double> p3(19160.2, 22103.7);
+  const vgl_point_2d<double> p4(19179.8, 22544.4);
+  const vgl_point_2d<double> p5(17791.3, 22541.2);
+  const vgl_point_2d<double> p6(13253.2, 22665.5);
+  const vgl_point_2d<double> p7(11932.3, 22221.1);
+  const vgl_point_2d<double> p8(13441.2, 22089.2);
 
   std::vector<vgl_point_2d<double>> img_points;
   img_points.push_back(p0);
@@ -120,7 +120,7 @@ test_rational_adjust()
   vpgl_rational_camera<double> adj_rcam;
   vpgl_rational_adjust::adjust(rcam, img_points, geo_points, adj_rcam);
   std::cout << "\nInitial Cam\n" << rcam << '\n' << "\nAdjusted Cam\n" << adj_rcam << '\n';
-  double zoff = adj_rcam.offset(vpgl_rational_camera<double>::Z_INDX);
+  const double zoff = adj_rcam.offset(vpgl_rational_camera<double>::Z_INDX);
   TEST_NEAR("test adjust_geo", zoff, 35.1515, 0.001);
 }
 

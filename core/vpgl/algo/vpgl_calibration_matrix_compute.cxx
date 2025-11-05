@@ -40,25 +40,25 @@ vpgl_calibration_matrix_compute::natural(const vgl_h_matrix_2d<double> & homogra
   }
 
   // Set-up the system of equations Ax = b, where 'x' is 'w[2][2]'.
-  double a = -H[2][0] * H[2][1] + H[2][1] * H[2][1] - H[2][0] * H[2][0];
+  const double a = -H[2][0] * H[2][1] + H[2][1] * H[2][1] - H[2][0] * H[2][0];
 
-  double b =
+  const double b =
     H[0][0] * (H[0][1] - u0 * H[2][1]) + H[1][0] * (H[1][1] - v0 * H[2][1]) + H[2][0] * (-u0 * H[0][1] - v0 * H[1][1]) +
     H[0][0] * (H[0][0] - u0 * H[2][0]) + H[1][0] * (H[1][0] - v0 * H[2][0]) + H[2][0] * (-u0 * H[0][0] - v0 * H[1][0]) -
     H[0][1] * (H[0][1] - u0 * H[2][1]) - H[1][1] * (H[1][1] - v0 * H[2][1]) - H[2][1] * (-u0 * H[0][1] - v0 * H[1][1]);
 
   // solve
-  double x = b / a;
+  const double x = b / a;
 
   // re-arrange w[2][2] to get f^2
-  double f2 = x - u0 * u0 - v0 * v0;
+  const double f2 = x - u0 * u0 - v0 * v0;
   if (f2 < 0)
   {
     std::cout << "suspicious square focal length: " << f2 << std::endl;
     return false;
   }
 
-  double f = std::sqrt(f2);
+  const double f = std::sqrt(f2);
 
   // Done
   K = vpgl_calibration_matrix<double>(f, principal_point);

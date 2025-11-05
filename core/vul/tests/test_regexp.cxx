@@ -34,7 +34,7 @@ test_regexp()
   vul_reg_exp r1("Test string\tto match");
   TEST("vul_reg_exp r1(Test string\tto match)", 0, 0);
   TEST("r1.find(\"It is not here\")", r1.find("It is not here"), false);
-  const char * strng = "garbage\n49r*%Test string\tto matchAnd more Garbage";
+  const char * const strng = "garbage\n49r*%Test string\tto matchAnd more Garbage";
   TEST("r1.find(strng)", r1.find(strng), true);
   TEST("r1.start() == 13", r1.start(), 13);
   TEST("r1.end() == 33", r1.end(), 33);
@@ -72,14 +72,14 @@ test_regexp()
   TEST("vul_reg_exp r3;", 0, 0);
   r3.compile("hELl");
   TEST("r3.compile(\"hELl\")", 0, 0);
-  const char * strng2 = "o, hELlo";
+  const char * const strng2 = "o, hELlo";
   TEST("r3.find(strng2)", r3.find(strng2), true);
   TEST("r1==r3", r1 == r3, false);
   TEST("r1.deep_equal(r3)", r1.deep_equal(r3), false);
   TEST("r3.start()", r3.start(), 3);
   TEST("r3.end()", r3.end(), 7);
-  vul_reg_exp r4(r3);
-  const char * strng3 = "I don't think it's here";
+  const vul_reg_exp r4(r3);
+  const char * const strng3 = "I don't think it's here";
   TEST("r3.find(strng3)", r3.find(strng3), false);
   TEST("r4==r3", r4, r3);
   TEST("r4.deep_equal(r3)", r4.deep_equal(r3), false);

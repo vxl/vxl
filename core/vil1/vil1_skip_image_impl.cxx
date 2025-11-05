@@ -28,7 +28,7 @@ vil1_skip_image_impl::vil1_skip_image_impl(const vil1_image & underlying, unsign
 vil1_image
 vil1_skip_image_impl::get_plane(unsigned int p) const
 {
-  vil1_image_impl * i = new vil1_skip_image_impl(base.get_plane(p), skipx, skipy);
+  vil1_image_impl * const i = new vil1_skip_image_impl(base.get_plane(p), skipx, skipy);
   return i;
 }
 
@@ -58,7 +58,7 @@ vil1_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h) cons
   // make a buffer for (skipx*w) x 1 sections of base :
   unsigned cell_size = base.planes() * base.components() * base.bits_per_component();
   cell_size /= CHAR_BIT;
-  unsigned buffer_size = (skipx * w * cell_size);
+  const unsigned buffer_size = (skipx * w * cell_size);
   std::vector<unsigned char> buffer(buffer_size);
 
   // destination, as a unsigned char*
@@ -68,7 +68,7 @@ vil1_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h) cons
   for (int j = 0; j < h; ++j)
   {
     // get from underlying :
-    bool v = base.get_section(/* xxx */ &buffer[0], skipx * x0, skipy * (y0 + j), skipx * w, 1);
+    const bool v = base.get_section(/* xxx */ &buffer[0], skipx * x0, skipy * (y0 + j), skipx * w, 1);
     if (!v)
       return false; // failed
 

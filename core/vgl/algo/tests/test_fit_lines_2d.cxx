@@ -21,11 +21,11 @@ static void
 test_line_segment_methods()
 {
   vgl_point_2d<double> p0(0.0, 0.0), p1(1.0, 2.0);
-  vgl_line_2d<double> l(1.0, -1.0, 0.0);
+  const vgl_line_2d<double> l(1.0, -1.0, 0.0);
   std::cout << "line angle " << l.slope_degrees() << '\n';
   TEST_NEAR("line angle", l.slope_degrees(), 45, 1e-04);
-  vgl_line_segment_2d<double> seg(p0, p1);
-  double angle = seg.slope_degrees();
+  const vgl_line_segment_2d<double> seg(p0, p1);
+  const double angle = seg.slope_degrees();
   TEST_NEAR("line angle", seg.slope_degrees(), 63.43495, 1e-04);
   vgl_vector_2d<double> dir = seg.direction(), norm = seg.normal();
   std::cout << "segment angle = " << angle << '\n' << "direction " << dir << '\n' << "normal " << norm << '\n';
@@ -42,34 +42,34 @@ test_line_2d_regression()
   reg.increment_partial_sums(p2.x(), p2.y());
   reg.fit();
   std::cout << "fitting error " << reg.get_rms_error() << '\n' << "fitted line " << reg.get_line() << '\n';
-  double dist = std::fabs(0.1 - reg.get_rms_error());
+  const double dist = std::fabs(0.1 - reg.get_rms_error());
   TEST_NEAR("identity", dist, 0.0, 1e-04);
 }
 
 static void
 test_fit_simple_chain()
 {
-  std::vector<vgl_point_2d<double>> curve;
-  int npts = 15;
+  const std::vector<vgl_point_2d<double>> curve;
+  const int npts = 15;
   vgl_fit_lines_2d<double> fitter;
   // A segment with a slope of 2
   for (int i = 0; i < npts; i++)
   {
-    vgl_point_2d<double> p(i, 2 * i);
+    const vgl_point_2d<double> p(i, 2 * i);
     fitter.add_point(p);
   }
   // A segment with a slope of -1
   for (int i = 0; i < npts; i++)
   {
-    vgl_point_2d<double> p(i + npts, (2 * (npts - 1) - i));
+    const vgl_point_2d<double> p(i + npts, (2 * (npts - 1) - i));
     fitter.add_point(p);
   }
   // Add a segment with a slope of +1 but too short
-  vgl_point_2d<double> p0(2 * npts, npts);
-  vgl_point_2d<double> p1(2 * npts + 1, npts + 1);
+  const vgl_point_2d<double> p0(2 * npts, npts);
+  const vgl_point_2d<double> p1(2 * npts + 1, npts + 1);
   fitter.add_point(p0);
   fitter.add_point(p1);
-  std::vector<vgl_point_2d<double>> & c = fitter.get_points();
+  const std::vector<vgl_point_2d<double>> & c = fitter.get_points();
   for (auto & pit : c)
     std::cout << pit << '\n';
   fitter.fit();

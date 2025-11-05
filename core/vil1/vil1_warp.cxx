@@ -22,26 +22,26 @@ vil1_warp(const vil1_image & in,
           int out_width,
           int out_height)
 {
-  int ow = out_width < 0 ? in.width() : out_width;
-  int oh = out_height < 0 ? in.height() : out_height;
+  const int ow = out_width < 0 ? in.width() : out_width;
+  const int oh = out_height < 0 ? in.height() : out_height;
 
   if (vil1_pixel_format(in) == VIL1_BYTE)
   {
-    vil1_memory_image_of<unsigned char> inimg(in);
+    const vil1_memory_image_of<unsigned char> inimg(in);
     vil1_memory_image_of<unsigned char> outimg(ow, oh);
     vil1_warp_output_driven(inimg, outimg, mapper, i);
     return outimg;
   }
   else if (vil1_pixel_format(in) == VIL1_RGB_BYTE)
   {
-    vil1_memory_image_of<vil1_rgb<unsigned char>> inimg(in);
+    const vil1_memory_image_of<vil1_rgb<unsigned char>> inimg(in);
     vil1_memory_image_of<vil1_rgb<unsigned char>> outimg(ow, oh);
     vil1_warp_output_driven(inimg, outimg, mapper, i);
     return outimg;
   }
   else if (vil1_pixel_format(in) == VIL1_DOUBLE)
   {
-    vil1_memory_image_of<double> inimg(in);
+    const vil1_memory_image_of<double> inimg(in);
     vil1_memory_image_of<double> outimg(ow, oh);
     vil1_warp_output_driven(inimg, outimg, mapper, i);
     return outimg;

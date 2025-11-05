@@ -1599,23 +1599,23 @@ color_value(int theme, int color_index)
                           47,  49,  52,  54,  57,  60,  62,  65,  68,  70,  73,  76,  79,  82,  85,  88,  91,  94,  97,
                           100, 103, 106, 109, 112, 115, 118, 121, 121 };
 
-  static int * RedArrays[] = { RED0,  RED1,  RED2,  RED3,  RED4,  RED5,  RED6,  RED7,  RED8,  RED9,
-                               RED10, RED11, RED12, RED13, RED14, RED15, RED16, RED17, RED18, RED19,
-                               RED20, RED21, RED22, RED23, RED24, RED25, RED26, RED27, RED28, RED29,
-                               RED30, RED31, RED32, RED33, RED34, RED35, RED36, RED37 };
-  static int * GreenArrays[] = { GREEN0,  GREEN1,  GREEN2,  GREEN3,  GREEN4,  GREEN5,  GREEN6,  GREEN7,
-                                 GREEN8,  GREEN9,  GREEN10, GREEN11, GREEN12, GREEN13, GREEN14, GREEN15,
-                                 GREEN16, GREEN17, GREEN18, GREEN19, GREEN20, GREEN21, GREEN22, GREEN23,
-                                 GREEN24, GREEN25, GREEN26, GREEN27, GREEN28, GREEN29, GREEN30, GREEN31,
-                                 GREEN32, GREEN33, GREEN34, GREEN35, GREEN36, GREEN37 };
-  static int * BlueArrays[] = { BLUE0,  BLUE1,  BLUE2,  BLUE3,  BLUE4,  BLUE5,  BLUE6,  BLUE7,  BLUE8,  BLUE9,
-                                BLUE10, BLUE11, BLUE12, BLUE13, BLUE14, BLUE15, BLUE16, BLUE17, BLUE18, BLUE19,
-                                BLUE20, BLUE21, BLUE22, BLUE23, BLUE24, BLUE25, BLUE26, BLUE27, BLUE28, BLUE29,
-                                BLUE30, BLUE31, BLUE32, BLUE33, BLUE34, BLUE35, BLUE36, BLUE37 };
+  static int * const RedArrays[] = { RED0,  RED1,  RED2,  RED3,  RED4,  RED5,  RED6,  RED7,  RED8,  RED9,
+                                     RED10, RED11, RED12, RED13, RED14, RED15, RED16, RED17, RED18, RED19,
+                                     RED20, RED21, RED22, RED23, RED24, RED25, RED26, RED27, RED28, RED29,
+                                     RED30, RED31, RED32, RED33, RED34, RED35, RED36, RED37 };
+  static int * const GreenArrays[] = { GREEN0,  GREEN1,  GREEN2,  GREEN3,  GREEN4,  GREEN5,  GREEN6,  GREEN7,
+                                       GREEN8,  GREEN9,  GREEN10, GREEN11, GREEN12, GREEN13, GREEN14, GREEN15,
+                                       GREEN16, GREEN17, GREEN18, GREEN19, GREEN20, GREEN21, GREEN22, GREEN23,
+                                       GREEN24, GREEN25, GREEN26, GREEN27, GREEN28, GREEN29, GREEN30, GREEN31,
+                                       GREEN32, GREEN33, GREEN34, GREEN35, GREEN36, GREEN37 };
+  static int * const BlueArrays[] = { BLUE0,  BLUE1,  BLUE2,  BLUE3,  BLUE4,  BLUE5,  BLUE6,  BLUE7,  BLUE8,  BLUE9,
+                                      BLUE10, BLUE11, BLUE12, BLUE13, BLUE14, BLUE15, BLUE16, BLUE17, BLUE18, BLUE19,
+                                      BLUE20, BLUE21, BLUE22, BLUE23, BLUE24, BLUE25, BLUE26, BLUE27, BLUE28, BLUE29,
+                                      BLUE30, BLUE31, BLUE32, BLUE33, BLUE34, BLUE35, BLUE36, BLUE37 };
 
-  int r_val = RedArrays[theme][color_index];
-  int g_val = GreenArrays[theme][color_index];
-  int b_val = BlueArrays[theme][color_index];
+  const int r_val = RedArrays[theme][color_index];
+  const int g_val = GreenArrays[theme][color_index];
+  const int b_val = BlueArrays[theme][color_index];
   vil_rgb<vxl_byte> val((vxl_byte)r_val, (vxl_byte)g_val, (vxl_byte)b_val);
   return val;
 }

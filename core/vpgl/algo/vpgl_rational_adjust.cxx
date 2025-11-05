@@ -88,12 +88,12 @@ initial_offsets(const vpgl_rational_camera<double> & initial_rcam,
     zoff += geo_pts[i].z();
   zoff /= npts;
   // construct a x-y plane with this elevation
-  vgl_plane_3d<double> pl(0, 0, 1, -zoff);
+  const vgl_plane_3d<double> pl(0, 0, 1, -zoff);
 
   // an initial point for the backprojection
-  double xo = initial_rcam.offset(vpgl_rational_camera<double>::X_INDX);
-  double yo = initial_rcam.offset(vpgl_rational_camera<double>::Y_INDX);
-  vgl_point_3d<double> initial_pt(xo, yo, zoff);
+  const double xo = initial_rcam.offset(vpgl_rational_camera<double>::X_INDX);
+  const double yo = initial_rcam.offset(vpgl_rational_camera<double>::Y_INDX);
+  const vgl_point_3d<double> initial_pt(xo, yo, zoff);
 
   double xshift = 0, yshift = 0;
   // backproject the image points onto this plane
@@ -123,8 +123,8 @@ vpgl_rational_adjust::adjust(const vpgl_rational_camera<double> & initial_rcam,
   if (!initial_offsets(initial_rcam, img_pts, geo_pts, xoff, yoff, zoff))
     return false;
   auto num_corrs = static_cast<unsigned>(img_pts.size());
-  unsigned num_unknowns = 3;
-  unsigned num_residuals = num_corrs * 2;
+  const unsigned num_unknowns = 3;
+  const unsigned num_residuals = num_corrs * 2;
   // Initialize the least squares function
   vpgl_adjust_lsqr lsf(initial_rcam, img_pts, geo_pts, num_unknowns, num_residuals);
 
@@ -185,7 +185,7 @@ vpgl_rational_adjust::adjust(const vpgl_rational_camera<double> & initial_rcam,
   {
     vgl_point_2d<double> pp = adj_rcam.project(geo_pts[i]);
     vgl_point_2d<double> c = img_pts[i];
-    double d = vgl_distance<double>(c, pp);
+    const double d = vgl_distance<double>(c, pp);
     std::cout << "p[" << i << "]->(" << pp.x() << ' ' << pp.y() << ")\n"
               << "c(" << c.x() << ' ' << c.y() << "): " << d << '\n';
   }

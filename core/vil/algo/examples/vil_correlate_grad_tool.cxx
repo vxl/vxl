@@ -41,7 +41,7 @@ main(int argc, char ** argv)
     vul_arg_display_usage_and_exit();
   }
 
-  vil_image_view<vxl_byte> src_im = vil_load(in_path().c_str());
+  const vil_image_view<vxl_byte> src_im = vil_load(in_path().c_str());
   if (src_im.size() == 0)
   {
     std::cout << "Unable to load source image from " << in_path() << '\n';
@@ -53,7 +53,7 @@ main(int argc, char ** argv)
   vil_convert_cast(src_im, src_im_f);
   vil_sobel_3x3(src_im_f, s_grad_x, s_grad_y);
 
-  vil_image_view<vxl_byte> kernel_im_byte = vil_load(kernel_path().c_str());
+  const vil_image_view<vxl_byte> kernel_im_byte = vil_load(kernel_path().c_str());
   if (kernel_im_byte.size() == 0)
   {
     std::cout << "Unable to load kernel image from " << kernel_path() << '\n';
@@ -87,7 +87,7 @@ main(int argc, char ** argv)
   // Stretch range to [0,255]
   float min_v = NAN, max_v = NAN;
   vil_math_value_range(dest_image, min_v, max_v);
-  double s = 255 / (max_v - min_v);
+  const double s = 255 / (max_v - min_v);
   vil_math_scale_and_offset_values(dest_image, s, -s * min_v);
   std::cout << "Range of result: " << min_v << "," << max_v << '\n';
 

@@ -84,7 +84,7 @@ vpgl_affine_camera_robust_est::fit_from_minimal_set(const std::vector<int> & poi
   vnl_vector<double> b(8);
   for (unsigned int i = 0; i < min_num_pts_; ++i)
   {
-    unsigned int indx = point_indices[i];
+    const unsigned int indx = point_indices[i];
     A[2 * i][0] = from_pts_[indx][0];
     A[2 * i][1] = from_pts_[indx][1];
     A[2 * i][2] = from_pts_[indx][2];
@@ -96,7 +96,7 @@ vpgl_affine_camera_robust_est::fit_from_minimal_set(const std::vector<int> & poi
     A[2 * i][7] = 1;
     b[2 * i + 1] = to_pts_[indx][1];
   }
-  vnl_svd<double> svd(A, 1.0e-8);
+  const vnl_svd<double> svd(A, 1.0e-8);
   if ((unsigned int)svd.rank() < min_num_pts_)
   {
     return false; // singular fit --- no error message needed
@@ -115,8 +115,10 @@ vpgl_affine_camera_robust_est::compute_residuals(const vnl_vector<double> & para
   assert(residuals.size() == num_samples_);
   for (unsigned int i = 0; i < num_samples_; ++i)
   {
-    double u = params[0] * from_pts_[i][0] + params[1] * from_pts_[i][1] + params[2] * from_pts_[i][2] + params[3];
-    double v = params[4] * from_pts_[i][0] + params[5] * from_pts_[i][1] + params[6] * from_pts_[i][2] + params[7];
+    const double u =
+      params[0] * from_pts_[i][0] + params[1] * from_pts_[i][1] + params[2] * from_pts_[i][2] + params[3];
+    const double v =
+      params[4] * from_pts_[i][0] + params[5] * from_pts_[i][1] + params[6] * from_pts_[i][2] + params[7];
     double ut = to_pts_[i][0], vt = to_pts_[i][1];
     residuals[i] = sqrt((ut - u) * (ut - u) + (vt - v) * (vt - v));
   }
@@ -153,7 +155,7 @@ vpgl_affine_camera_robust_est::weighted_least_squares_fit(vnl_vector<double> & p
     b[2 * i + 1] = to_pts_[i][1];
   }
 
-  vnl_svd<double> svd(A, 1.0e-8);
+  const vnl_svd<double> svd(A, 1.0e-8);
   if ((unsigned int)svd.rank() < params.size())
   {
     return false; // singular fit --- no error message needed

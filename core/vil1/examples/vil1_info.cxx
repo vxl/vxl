@@ -14,7 +14,7 @@ main(int argc, char ** argv)
   for (int i = 1; i < argc; ++i)
   {
     std::cerr << argv[i] << " :\n";
-    vil1_image I = vil1_load(argv[i]);
+    const vil1_image I = vil1_load(argv[i]);
     std::cerr << "  planes             : " << I.planes() << std::endl
               << "  width              : " << I.width() << std::endl
               << "  height             : " << I.height() << std::endl

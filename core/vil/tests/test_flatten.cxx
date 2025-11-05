@@ -73,8 +73,9 @@ _test_flatten(std::string type_name)
 
   // test row-major flattening
   // [ (plane0, row0, col0), (p0, r0, c1), (p0, r0, c2) ... ]
-  std::vector<T> row_truth = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 };
-  std::vector<T> row = vil_flatten_row_major(img);
+  const std::vector<T> row_truth = { 0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11,
+                                     12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 };
+  const std::vector<T> row = vil_flatten_row_major(img);
 
   vector_cout("flattened...", row);
   vector_cout("expected....", row_truth);
@@ -82,8 +83,9 @@ _test_flatten(std::string type_name)
 
   // test column-major flattening
   // [ (plane0, row0, col0), (p0, r1, c0), (p0, r2, c0) ... ]
-  std::vector<T> col_truth = { 0, 4, 1, 5, 2, 6, 3, 7, 8, 12, 9, 13, 10, 14, 11, 15, 16, 20, 17, 21, 18, 22, 19, 23 };
-  std::vector<T> col = vil_flatten_column_major(img);
+  const std::vector<T> col_truth = { 0,  4,  1,  5,  2,  6,  3,  7,  8,  12, 9,  13,
+                                     10, 14, 11, 15, 16, 20, 17, 21, 18, 22, 19, 23 };
+  const std::vector<T> col = vil_flatten_column_major(img);
 
   vector_cout("flattened...", col);
   vector_cout("expected....", col_truth);

@@ -23,7 +23,7 @@ test_arbitrary_length_int_conversion_int()
   for (i = 0; i < 25000000; ++i)
     a[i] = ((i - 12500000) * 160);
 
-  unsigned maxbuf = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed int)) * 25000000;
+  const unsigned maxbuf = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed int)) * 25000000;
 
   auto * buf = new unsigned char[maxbuf];
 
@@ -32,7 +32,7 @@ test_arbitrary_length_int_conversion_int()
   std::cout << " Starting encode\n";
 
   t1 = std::clock();
-  unsigned long len = vsl_convert_to_arbitrary_length(a, buf, 25000000);
+  const unsigned long len = vsl_convert_to_arbitrary_length(a, buf, 25000000);
   t2 = std::clock();
 
   std::cout << " Required " << (double)(t2 - t1) / CLOCKS_PER_SEC << " seconds to encode 25M ints.\n"
@@ -43,7 +43,7 @@ test_arbitrary_length_int_conversion_int()
 
   std::cout << " Starting decode\n";
   t1 = std::clock();
-  unsigned long len2 = vsl_convert_from_arbitrary_length(buf, b, 25000000);
+  const unsigned long len2 = vsl_convert_from_arbitrary_length(buf, b, 25000000);
   t2 = std::clock();
   std::cout << " Required " << (double)(t2 - t1) / CLOCKS_PER_SEC << " seconds to decode and test 25M ints.\n";
 
@@ -71,7 +71,7 @@ test_arbitrary_length_int_conversion_short()
 
   signed short a[65538];
   signed short b[65540];
-  signed short * c = &b[1];
+  signed short * const c = &b[1];
 
   int i = 0;
   for (signed short j = -32768; i < 65536; ++i, ++j)
@@ -79,17 +79,17 @@ test_arbitrary_length_int_conversion_short()
   a[65536] = 0;
   a[65537] = 1;
 
-  unsigned maxbuf = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * 65538;
+  const unsigned maxbuf = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * 65538;
 
   auto * buf = new unsigned char[maxbuf];
-  unsigned long len = vsl_convert_to_arbitrary_length(a, buf, 65538);
+  const unsigned long len = vsl_convert_to_arbitrary_length(a, buf, 65538);
   std::cout << " Max required buffer size is " << maxbuf << ". Used " << len << std::endl;
 
   TEST("Checking that the buffer didn't overflow", len < maxbuf, true);
 
   b[0] = (short)(0xc5c5);
   b[65539] = 0x5c5c;
-  unsigned long len2 = vsl_convert_from_arbitrary_length(buf, c, 65538);
+  const unsigned long len2 = vsl_convert_from_arbitrary_length(buf, c, 65538);
 
   TEST("Checking that the result buffer didn't overflow", (b[0] == (short)0xc5c5) && (b[65539] == 0x5c5c), true);
 
@@ -117,7 +117,7 @@ test_arbitrary_length_int_conversion_ushort()
 
   unsigned short a[65538];
   unsigned short b[65540];
-  unsigned short * c = &b[1];
+  unsigned short * const c = &b[1];
 
   int i = 0;
   for (unsigned short j = 0; i < 65536; ++i, ++j)
@@ -125,17 +125,17 @@ test_arbitrary_length_int_conversion_ushort()
   a[65536] = 0;
   a[65537] = 1;
 
-  unsigned maxbuf = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * 65538;
+  const unsigned maxbuf = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * 65538;
 
   auto * buf = new unsigned char[maxbuf];
-  unsigned long len = vsl_convert_to_arbitrary_length(a, buf, 65538);
+  const unsigned long len = vsl_convert_to_arbitrary_length(a, buf, 65538);
   std::cout << " Max required buffer size is " << maxbuf << ". Used " << len << std::endl;
 
   TEST("Checking that the buffer didn't overflow", len < maxbuf, true);
 
   b[0] = 0xc5c5;
   b[65539] = 0x5c5c;
-  unsigned len2 = vsl_convert_from_arbitrary_length(buf, c, 65538);
+  const unsigned len2 = vsl_convert_from_arbitrary_length(buf, c, 65538);
 
   TEST("Checking that the result buffer didn't overflow", (b[0] == 0xc5c5) && (b[65539] == 0x5c5c), true);
   TEST("Checking len == len2", len, len2);
@@ -210,9 +210,9 @@ test_extreme_int_io()
 
   // Some fudges to get the max values
   // std::numeric_limits doesn't seem to work yet
-  long min_long = 1L << (8 * sizeof(long) - 1);
-  long max_long = ~min_long;
-  unsigned long max_ulong = ~0;
+  const long min_long = 1L << (8 * sizeof(long) - 1);
+  const long max_long = ~min_long;
+  const unsigned long max_ulong = ~0;
 
   vsl_b_ofstream bfs_out("vsl_extreme_int_io_test.bvl.tmp");
   TEST("Created vsl_extreme_int_io_test.bvl.tmp for writing", (!bfs_out), false);

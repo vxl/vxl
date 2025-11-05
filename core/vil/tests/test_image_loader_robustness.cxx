@@ -18,7 +18,7 @@ void
 test_at_file_size(const std::size_t n)
 {
   auto * fs_core_p = new vil_stream_core();
-  vil_stream_sptr fs_core = fs_core_p;
+  const vil_stream_sptr fs_core = fs_core_p;
 
   auto * data = new unsigned char[n];
   // Use dodgy ANSI-C suggested rand() for repeatability.
@@ -30,8 +30,8 @@ test_at_file_size(const std::size_t n)
 
   fs_core_p->m_transfer((char *)data, 0, n, false);
 
-  vil_stream_sptr fs_section = new vil_stream_section(fs_core.ptr(), 0, int(n));
-  vil_image_resource_sptr ir = vil_load_image_resource_raw(fs_section.ptr());
+  const vil_stream_sptr fs_section = new vil_stream_section(fs_core.ptr(), 0, int(n));
+  const vil_image_resource_sptr ir = vil_load_image_resource_raw(fs_section.ptr());
   std::cout << "Trying file of size " << n << std::endl;
   TEST("Should fail to load", static_cast<bool>(ir), false);
   delete[] data;

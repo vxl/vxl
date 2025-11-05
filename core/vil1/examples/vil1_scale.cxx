@@ -23,17 +23,17 @@ main(int argc, char ** argv)
     std::cerr << "usage: vil1_scale w h in out format\n";
     return -1;
   }
-  int w = std::stoi(argv[1]);
-  int h = std::stoi(argv[2]);
-  const char * input_filename = argv[3];
-  const char * output_filename = argv[4];
-  const char * output_format = argv[5];
+  const int w = std::stoi(argv[1]);
+  const int h = std::stoi(argv[2]);
+  const char * const input_filename = argv[3];
+  const char * const output_filename = argv[4];
+  const char * const output_format = argv[5];
 
-  vil1_image in = vil1_load(input_filename);
+  const vil1_image in = vil1_load(input_filename);
   if (!in)
     return -1;
 
-  vil1_image out = vil1_new(output_filename, w, h, in, output_format);
+  const vil1_image out = vil1_new(output_filename, w, h, in, output_format);
 
   vil1_scale(in, w, h, out);
   return 0;

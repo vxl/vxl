@@ -25,14 +25,14 @@ test_tuple_io()
             << "Testing std::tuple binary io\n"
             << "****************************\n";
 
-  int x1 = 7;
-  std::tuple<int> t_int_out(x1);
+  const int x1 = 7;
+  const std::tuple<int> t_int_out(x1);
 
-  double x2 = 2.5;
-  std::string x3 = "test";
-  std::tuple<int, double, std::string> t_int_double_string_out(x1, x2, x3);
+  const double x2 = 2.5;
+  const std::string x3 = "test";
+  const std::tuple<int, double, std::string> t_int_double_string_out(x1, x2, x3);
 
-  std::tuple<std::tuple<int>> t_t_int_out(t_int_out);
+  const std::tuple<std::tuple<int>> t_t_int_out(t_int_out);
 
   vsl_b_ofstream bfs_out("vsl_tuple_io_test.bvl.tmp");
   TEST("Created vsl_tuple_io_test.bvl.tmp for writing", (!bfs_out), false);

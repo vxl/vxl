@@ -39,7 +39,7 @@ void
 vul_user_info::init(const char * name_)
 {
 #if !defined(_WIN32) || defined(__CYGWIN__)
-  struct passwd * pw = getpwnam(name_);
+  struct passwd * const pw = getpwnam(name_);
   if (!pw)
   {
 #endif

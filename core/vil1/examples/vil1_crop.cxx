@@ -19,18 +19,18 @@ main(int argc, char ** argv)
     std::cerr << "usage: vil1_crop in out x0 y0 width height\n";
     return -1;
   }
-  const char * input_filename = argv[1];
-  const char * output_filename = argv[2];
-  int x0 = std::stoi(argv[3]);
-  int y0 = std::stoi(argv[4]);
-  int w = std::stoi(argv[5]);
-  int h = std::stoi(argv[6]);
+  const char * const input_filename = argv[1];
+  const char * const output_filename = argv[2];
+  const int x0 = std::stoi(argv[3]);
+  const int y0 = std::stoi(argv[4]);
+  const int w = std::stoi(argv[5]);
+  const int h = std::stoi(argv[6]);
 
-  vil1_image in = vil1_load(input_filename);
+  const vil1_image in = vil1_load(input_filename);
 
   // crop is a generic image whose get_section performs the crop.
   // so vil1_crop has size wxh rather than the size of the input image
-  vil1_image crop = vil1_crop(in, x0, y0, w, h);
+  const vil1_image crop = vil1_crop(in, x0, y0, w, h);
 
   vil1_save(crop, output_filename, in.file_format());
   return 0;

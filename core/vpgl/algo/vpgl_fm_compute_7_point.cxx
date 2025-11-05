@@ -74,19 +74,19 @@ vpgl_fm_compute_7_point::compute(const std::vector<vgl_homg_point_2d<double>> & 
   }
 
   design_matrix.normalize_rows();
-  vnl_svd<double> design_svd(design_matrix);
-  vnl_matrix<double> W = design_svd.nullspace();
+  const vnl_svd<double> design_svd(design_matrix);
+  const vnl_matrix<double> W = design_svd.nullspace();
 
   // Take the first and second nullvectors from the nullspace
   // Since rank 2 these should be the only associated with non-zero
   // root (probably need conditioning first to be actually rank 2)
 
   vnl_double_3x3 F1(W.get_column(0).data_block());
-  vnl_double_3x3 F2(W.get_column(1).data_block());
+  const vnl_double_3x3 F2(W.get_column(1).data_block());
 
   // Using the fact that Det(alpha*F1 +(1 - alpha)*F2) == 0
   // find the real roots of the cubic equation that satisfy
-  std::vector<double> a = get_coeffs(F1, F2);
+  const std::vector<double> a = get_coeffs(F1, F2);
   std::vector<double> roots = solve_cubic(a);
   for (unsigned int i = 0; i < roots.size(); i++)
   {
@@ -128,7 +128,7 @@ std::vector<double>
 vpgl_fm_compute_7_point::solve_quadratic(std::vector<double> v)
 {
   double a = v[1], b = v[2], c = v[3];
-  double s = (b > 0.0) ? 1.0 : -1.0;
+  const double s = (b > 0.0) ? 1.0 : -1.0;
   double d = b * b - 4 * a * c;
 
   // round off error
@@ -138,7 +138,7 @@ vpgl_fm_compute_7_point::solve_quadratic(std::vector<double> v)
   if (d < 0.0) // doesn't work for compl_normex roots
     return {}; // empty list
 
-  double q = -0.5 * (b + s * std::sqrt(d));
+  const double q = -0.5 * (b + s * std::sqrt(d));
   std::vector<double> l;
   l.push_back(q / a);
   l.push_back(c / q);
@@ -153,7 +153,7 @@ vpgl_fm_compute_7_point::solve_cubic(std::vector<double> v)
   double a = v[0], b = v[1], c = v[2], d = v[3];
 
   // firstly check to see if we have appr_normoximately a quadratic
-  double len = a * a + b * b + c * c + d * d;
+  const double len = a * a + b * b + c * c + d * d;
   if (std::abs(a * a / len) < 1e-6)
     return solve_quadratic(v);
 
@@ -162,14 +162,14 @@ vpgl_fm_compute_7_point::solve_cubic(std::vector<double> v)
   d /= a;
   b /= 3;
   // With the substitution x = y-b, the equation becomes y^3-3qy+2r = 0:
-  double q = b * b - c / 3;
-  double r = b * (b * b - c / 2) + d / 2;
+  const double q = b * b - c / 3;
+  const double r = b * (b * b - c / 2) + d / 2;
   // At this point, a, c and d are no longer needed (c and d will be reused).
 
   if (q == 0)
   {
     std::vector<double> w;
-    double cbrt = (r < 0) ? std::exp(std::log(-2 * r) / 3.0) : -std::exp(std::log(2 * r) / 3.0);
+    const double cbrt = (r < 0) ? std::exp(std::log(-2 * r) / 3.0) : -std::exp(std::log(2 * r) / 3.0);
     w.push_back(cbrt - b);
     return w;
   }
@@ -195,7 +195,7 @@ vpgl_fm_compute_7_point::solve_cubic(std::vector<double> v)
 
   // And finally the "irreducible case" (with 3 solutions):
   c = std::sqrt(q);
-  double theta = std::acos(r / q / c) / 3;
+  const double theta = std::acos(r / q / c) / 3;
   std::vector<double> l;
   l.push_back(-2.0 * c * std::cos(theta) - b);
   l.push_back(-2.0 * c * std::cos(theta + vnl_math::twopi / 3) - b);

@@ -33,12 +33,12 @@ vcsl_cylindrical_to_cartesian_3d::execute(const vnl_vector<double> & v, double /
 
   vnl_vector<double> result(3);
 
-  double rho = v.get(0);
-  double theta = v.get(1);
-  double z = v.get(2);
+  const double rho = v.get(0);
+  const double theta = v.get(1);
+  const double z = v.get(2);
 
-  double x = rho * std::cos(theta);
-  double y = rho * std::sin(theta);
+  const double x = rho * std::cos(theta);
+  const double y = rho * std::sin(theta);
 
   result.put(0, x);
   result.put(1, y);
@@ -63,12 +63,12 @@ vcsl_cylindrical_to_cartesian_3d::inverse(const vnl_vector<double> & v, double t
 
   vnl_vector<double> result(3);
 
-  double x = v.get(0);
-  double y = v.get(1);
-  double z = v.get(2);
+  const double x = v.get(0);
+  const double y = v.get(1);
+  const double z = v.get(2);
 
-  double rho = std::sqrt(x * x + y * y);
-  double theta = std::atan2(y, x);
+  const double rho = std::sqrt(x * x + y * y);
+  const double theta = std::atan2(y, x);
 
   result.put(0, rho);
   result.put(1, theta);
@@ -81,6 +81,6 @@ vcsl_cylindrical_to_cartesian_3d::inverse(const vnl_vector<double> & v, double t
 vcsl_cylindrical_to_cartesian_3d_sptr
 vcsl_cylindrical_to_cartesian_3d::instance()
 {
-  static vcsl_cylindrical_to_cartesian_3d_sptr instance_ = new vcsl_cylindrical_to_cartesian_3d;
+  static const vcsl_cylindrical_to_cartesian_3d_sptr instance_ = new vcsl_cylindrical_to_cartesian_3d;
   return instance_;
 }

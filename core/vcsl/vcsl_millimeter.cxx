@@ -7,6 +7,6 @@
 vcsl_millimeter_sptr
 vcsl_millimeter::instance()
 {
-  static vcsl_millimeter_sptr instance_ = new vcsl_millimeter;
+  static const vcsl_millimeter_sptr instance_ = new vcsl_millimeter;
   return instance_;
 }

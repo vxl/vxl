@@ -138,7 +138,7 @@ vrel_quad_est::fit_from_minimal_set(const std::vector<int> & point_indices, vnl_
   vnl_vector<double> expanded(min_num_pts_);
   for (unsigned int i = 0; i < min_num_pts_; ++i)
   {
-    int index = point_indices[i];
+    const int index = point_indices[i];
     expand_quad(from_pts_[index], expanded);
     A.set_row(i, expanded);
 
@@ -147,7 +147,7 @@ vrel_quad_est::fit_from_minimal_set(const std::vector<int> & point_indices, vnl_
       bs[i][j] = one_to[j];
   }
 
-  vnl_svd<double> svd(A, 1.0e-8);
+  const vnl_svd<double> svd(A, 1.0e-8);
   if ((unsigned int)svd.rank() < min_num_pts_)
   {
     return false; // singular fit --- no error message needed
@@ -224,7 +224,7 @@ vrel_quad_est::weighted_least_squares_fit(vnl_vector<double> & params,
     for (unsigned int k = 0; k < j; k++)
       sumProds(j, k) = sumProds(k, j);
 
-  vnl_svd<double> svd(sumProds, 1.0e-8);
+  const vnl_svd<double> svd(sumProds, 1.0e-8);
   if ((unsigned int)svd.rank() < min_num_pts_)
   {
     std::cerr << "vrel_quad_est::WeightedLeastSquaresFit --- singularity!\n";
@@ -232,8 +232,8 @@ vrel_quad_est::weighted_least_squares_fit(vnl_vector<double> & params,
   }
   else
   {
-    vnl_matrix<double> sumP_inv(svd.inverse());
-    vnl_matrix<double> int_result = sumP_inv * sumDists;
+    const vnl_matrix<double> sumP_inv(svd.inverse());
+    const vnl_matrix<double> int_result = sumP_inv * sumDists;
     norm_covar = sumP_inv;
 
     params.set_size(quad_dof_);

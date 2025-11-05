@@ -40,26 +40,26 @@ main(int argc, char ** argv)
   for (int i = -N; i <= N; ++i)
     std::cerr << kernel[i + N] << std::endl;
 
-  vil1_convolve_boundary_option option[] = { vil1_convolve_no_extend,       vil1_convolve_zero_extend,
-                                             vil1_convolve_constant_extend, vil1_convolve_periodic_extend,
-                                             vil1_convolve_reflect_extend,  vil1_convolve_trim };
+  const vil1_convolve_boundary_option option[] = { vil1_convolve_no_extend,       vil1_convolve_zero_extend,
+                                                   vil1_convolve_constant_extend, vil1_convolve_periodic_extend,
+                                                   vil1_convolve_reflect_extend,  vil1_convolve_trim };
 
   for (int i = 1; i < argc; ++i)
   {
     std::cerr << "loading image \'" << argv[i] << "\'\n";
-    vil1_image I = vil1_load(argv[i]);
+    const vil1_image I = vil1_load(argv[i]);
     if (!I)
     {
       std::cerr << "load failed\n";
       continue;
     }
 
-    vil1_memory_image_of<vxl_byte> bytes(vil1_image_as_byte(I));
-    unsigned w = bytes.width();
-    unsigned h = bytes.height();
+    const vil1_memory_image_of<vxl_byte> bytes(vil1_image_as_byte(I));
+    const unsigned w = bytes.width();
+    const unsigned h = bytes.height();
     vil1_memory_image_of<double> tmp(w, h);
     vil1_memory_image_of<float> smooth(w, h);
-    vil1_convolve_signal_1d<const double> K(kernel, 0, N, 2 * N + 1);
+    const vil1_convolve_signal_1d<const double> K(kernel, 0, N, 2 * N + 1);
     const vil1_memory_image_of<double> & tmpc = tmp;
     const vil1_memory_image_of<vxl_byte> & bytesc = bytes;
 

@@ -48,7 +48,7 @@ vil_pnm_file_format::make_input_image(vil_stream * vs)
   unsigned char buf[3];
   if (vs->read(buf, 3L) != 3L)
     return nullptr;
-  bool ok = ((buf[0] == 'P') && isws(buf[2]) && (buf[1] >= '1' && buf[2] <= '6'));
+  const bool ok = ((buf[0] == 'P') && isws(buf[2]) && (buf[1] >= '1' && buf[2] <= '6'));
   if (!ok)
     return nullptr;
 
@@ -185,7 +185,7 @@ ConvertMSBToHost(void * buf, int num_words)
   auto * ptr = static_cast<unsigned char *>(buf);
   for (int i = 0; i < num_words; ++i)
   {
-    unsigned char t = *ptr;
+    const unsigned char t = *ptr;
     *ptr = *(ptr + 1);
     *(ptr + 1) = t;
     ptr += 2;
@@ -199,7 +199,7 @@ ConvertHostToMSB(void * buf, int num_words)
   auto * ptr = static_cast<unsigned char *>(buf);
   for (int i = 0; i < num_words; ++i)
   {
-    unsigned char t = *ptr;
+    const unsigned char t = *ptr;
     *ptr = *(ptr + 1);
     *(ptr + 1) = t;
     ptr += 2;
@@ -372,11 +372,11 @@ vil_pnm_image::get_copy_view(unsigned x0, unsigned ni, unsigned y0, unsigned nj)
 
   if (magic_ > 4) // pgm or ppm raw image
   {
-    unsigned bytes_per_sample = (bits_per_component_ + 7) / 8;
-    unsigned bytes_per_pixel = nplanes() * bytes_per_sample;
+    const unsigned bytes_per_sample = (bits_per_component_ + 7) / 8;
+    const unsigned bytes_per_pixel = nplanes() * bytes_per_sample;
     vil_streampos byte_start = start_of_data_ + (y0 * ni_ + x0) * bytes_per_pixel;
-    unsigned byte_width = ni_ * bytes_per_pixel;
-    unsigned byte_out_width = ni * bytes_per_pixel;
+    const unsigned byte_width = ni_ * bytes_per_pixel;
+    const unsigned byte_out_width = ni * bytes_per_pixel;
 
     for (unsigned y = 0; y < nj; ++y)
     {
@@ -419,11 +419,11 @@ vil_pnm_image::get_copy_view(unsigned x0, unsigned ni, unsigned y0, unsigned nj)
   }
   else if (magic_ == 4) // pbm (bitmap) raw image
   {
-    unsigned byte_width = (ni_ + 7) / 8;
+    const unsigned byte_width = (ni_ + 7) / 8;
 
     for (unsigned y = 0; y < nj; ++y)
     {
-      vil_streampos byte_start = start_of_data_ + (y0 + y) * byte_width + x0 / 8;
+      const vil_streampos byte_start = start_of_data_ + (y0 + y) * byte_width + x0 / 8;
       vs_->seek(byte_start);
       unsigned char a = 0;
       vs_->read(&a, 1L);
@@ -581,11 +581,11 @@ vil_pnm_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned 
 
   if (magic_ == 5) // pgm raw image ==> nplanes() == 1
   {
-    unsigned bytes_per_sample = (bits_per_component_ + 7) / 8;
-    unsigned bytes_per_pixel = bytes_per_sample;
+    const unsigned bytes_per_sample = (bits_per_component_ + 7) / 8;
+    const unsigned bytes_per_pixel = bytes_per_sample;
     vil_streampos byte_start = start_of_data_ + (y0 * ni_ + x0) * bytes_per_pixel;
-    unsigned byte_width = ni_ * bytes_per_pixel;
-    unsigned byte_out_width = view.ni() * bytes_per_pixel;
+    const unsigned byte_width = ni_ * bytes_per_pixel;
+    const unsigned byte_out_width = view.ni() * bytes_per_pixel;
 
     if (bytes_per_sample == 1)
     {
@@ -633,10 +633,10 @@ vil_pnm_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned 
   }
   else if (magic_ == 6) // ppm raw image; cannot be written as efficiently as pgm
   {
-    unsigned bytes_per_sample = (bits_per_component_ + 7) / 8;
-    unsigned bytes_per_pixel = nplanes() * bytes_per_sample;
+    const unsigned bytes_per_sample = (bits_per_component_ + 7) / 8;
+    const unsigned bytes_per_pixel = nplanes() * bytes_per_sample;
     vil_streampos byte_start = start_of_data_ + (y0 * ni_ + x0) * bytes_per_pixel;
-    unsigned byte_width = ni_ * bytes_per_pixel;
+    const unsigned byte_width = ni_ * bytes_per_pixel;
 
     if (bytes_per_sample == 1)
     {
@@ -683,7 +683,7 @@ vil_pnm_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned 
   }
   else if (magic_ == 4) // pbm (bitmap) raw image
   {
-    int byte_width = (ni_ + 7) / 8;
+    const int byte_width = (ni_ + 7) / 8;
 
     assert(bb != nullptr);
     for (unsigned y = 0; y < view.nj(); ++y)

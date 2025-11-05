@@ -121,7 +121,7 @@ vil1_gif_loader_saver::vil1_gif_loader_saver(vil1_stream * s_)
       assert(!"bit 3 should be zero");
     }
 
-    int bits_per_pixel = 1 + (b & 0x07);
+    const int bits_per_pixel = 1 + (b & 0x07);
 #if VERBOSE
     std::cerr << "screen has " << bits_per_pixel << " bits per pixel\n";
 #endif
@@ -186,7 +186,7 @@ vil1_gif_loader_saver::vil1_gif_loader_saver(vil1_stream * s_)
 
   while (true)
   {
-    vil1_streampos offset = s->tell();
+    const vil1_streampos offset = s->tell();
 #if VERBOSE
     std::cerr << "position is 0x" << std::hex << offset << std::dec << std::endl;
 #endif
@@ -231,7 +231,7 @@ vil1_gif_loader_saver::vil1_gif_loader_saver(vil1_stream * s_)
 #endif
     if (b & 0x80)
     { // local colour map?
-      int bits = 1 + (b & 0x07);
+      const int bits = 1 + (b & 0x07);
 #if VERBOSE
       std::cerr << "image has local colour map\n"
                 << "read local colour map (" << bits << " bits per pixel)\n";

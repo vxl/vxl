@@ -23,7 +23,7 @@ do_swap(char * buf, int nr_bytes, int nr_swaps)
   {
     for (int i = 0; i < nr_bytes; ++i)
     {
-      char t = buf[i];
+      const char t = buf[i];
       buf[i] = buf[i + 2 * nr_bytes];
       buf[i + 2 * nr_bytes] = t;
     }
@@ -38,7 +38,7 @@ vil1_flip_components_impl::get_section(void * buf, int x0, int y0, int w, int h)
     return false;
   if (base.components() != 3) // no swapping necessary since not 3 colour cells
     return true;
-  int bpc = base.bits_per_component();
+  const int bpc = base.bits_per_component();
   if (bpc & 7)
     return false; // TODO: currently this flipping only works when bpc is a multiple of 8
   do_swap(static_cast<char *>(buf), bpc / 8, w * h);
@@ -50,13 +50,13 @@ vil1_flip_components_impl::put_section(const void * buf, int x0, int y0, int w, 
 {
   if (base.components() != 3) // no swapping necessary since not 3 colour cells
     return base.put_section(buf, x0, y0, w, h);
-  int bpc = base.bits_per_component();
+  const int bpc = base.bits_per_component();
   if (bpc & 7)
     return false; // TODO: currently this flipping only works when bpc is a multiple of 8
-  char * b = new char[bpc / 8 * w * h * 3];
+  char * const b = new char[bpc / 8 * w * h * 3];
   std::memcpy(b, buf, bpc / 8 * w * h * 3);
   do_swap(b, bpc / 8, w * h);
-  bool r = base.put_section(b, x0, y0, w, h);
+  const bool r = base.put_section(b, x0, y0, w, h);
   delete[] b;
   return r;
 }

@@ -24,12 +24,12 @@ static bool
 copy_resource_by_blocks(const vil_image_resource_sptr & src, vil_image_resource_sptr & det)
 {
   // cast to blocked image resource
-  vil_blocked_image_resource_sptr bsrc = blocked_image_resource(src);
-  vil_blocked_image_resource_sptr bdet = blocked_image_resource(det);
+  const vil_blocked_image_resource_sptr bsrc = blocked_image_resource(src);
+  const vil_blocked_image_resource_sptr bdet = blocked_image_resource(det);
   for (unsigned bi = 0; bi < bsrc->n_block_i(); ++bi)
     for (unsigned bj = 0; bj < bsrc->n_block_j(); ++bj)
     {
-      vil_image_view_base_sptr blk = bsrc->get_block(bi, bj);
+      const vil_image_view_base_sptr blk = bsrc->get_block(bi, bj);
       if (!blk)
         return false;
       if (!bdet->put_block(bi, bj, *blk))
@@ -69,7 +69,7 @@ vil_copy_deep(const vil_image_resource_sptr & src, vil_image_resource_sptr & des
 
   if (src->ni() * src->nj() * src->nplanes() < large_image_limit_)
   {
-    vil_image_view_base_sptr view_ref = src->get_view();
+    const vil_image_view_base_sptr view_ref = src->get_view();
     if (!view_ref)
       return false;
     return dest->put_view(*view_ref);
@@ -77,11 +77,11 @@ vil_copy_deep(const vil_image_resource_sptr & src, vil_image_resource_sptr & des
   else
   {
     unsigned got_to_line = 0;
-    unsigned block_size = std::max(static_cast<unsigned>(large_image_limit_ / src->ni()), 1u);
+    const unsigned block_size = std::max(static_cast<unsigned>(large_image_limit_ / src->ni()), 1u);
 
     while (got_to_line < src->nj())
     {
-      vil_image_view_base_sptr view_ref =
+      const vil_image_view_base_sptr view_ref =
         src->get_view(0, src->ni(), got_to_line, std::min(block_size, src->nj() - got_to_line));
       if (!view_ref)
         return false;
@@ -99,7 +99,7 @@ vil_copy_deep(const vil_image_resource_sptr & src)
   if (src == nullptr)
     return nullptr;
   vil_image_resource_sptr result = vil_new_image_resource(src->ni(), src->nj(), src);
-  bool copy_r = vil_copy_deep(src, result);
+  const bool copy_r = vil_copy_deep(src, result);
   if (!copy_r)
   {
     return nullptr;

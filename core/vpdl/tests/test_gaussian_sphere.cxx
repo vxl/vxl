@@ -15,8 +15,8 @@ test_gaussian_sphere_type(T epsilon, const std::string & type_name)
 {
   // test dimension, zero variance
   {
-    vpdl_gaussian_sphere<T, 3> gauss3;
-    vpdl_gaussian_sphere<T, 1> gauss1;
+    const vpdl_gaussian_sphere<T, 3> gauss3;
+    const vpdl_gaussian_sphere<T, 1> gauss1;
     vpdl_gaussian_sphere<T> gauss_default, gauss(3), gauss_init(vnl_vector<T>(10, T(1)), T(3));
 
     TEST(("dimension <" + type_name + "> fixed").c_str(), gauss3.dimension(), 3);
@@ -30,7 +30,7 @@ test_gaussian_sphere_type(T epsilon, const std::string & type_name)
     TEST(("mean size <" + type_name + "> variable").c_str(), gauss_init.mean().size(), 10);
 
     // test initialization to zero mean, zero variance
-    vnl_vector_fixed<T, 3> zero_vector(T(0));
+    const vnl_vector_fixed<T, 3> zero_vector(T(0));
     TEST(("zero default mean <" + type_name + "> fixed").c_str(), gauss3.mean(), zero_vector);
     TEST(("zero default mean <" + type_name + "> scalar").c_str(), gauss1.mean(), T(0));
     TEST(("zero default mean <" + type_name + "> variable").c_str(), gauss.mean(), zero_vector);
@@ -74,8 +74,8 @@ test_gaussian_sphere_type(T epsilon, const std::string & type_name)
   {
     vnl_vector_fixed<T, 3> mean(T(1.0), T(2.0), T(4.0));
     T var = T(0.5);
-    vpdl_gaussian_sphere<T, 3> gauss3(mean, var);
-    vpdl_gaussian_sphere<T, 1> gauss1(mean[0], var);
+    const vpdl_gaussian_sphere<T, 3> gauss3(mean, var);
+    const vpdl_gaussian_sphere<T, 1> gauss1(mean[0], var);
     vpdl_gaussian_sphere<T> gauss(mean.as_ref(), var);
 
     // test direct access to data member
@@ -221,7 +221,7 @@ test_gaussian_sphere_type(T epsilon, const std::string & type_name)
               box_test,
               epsilon);
 
-    vpdl_distribution<T> * base = &gauss; // pointer to the base class
+    vpdl_distribution<T> * const base = &gauss; // pointer to the base class
     TEST_NEAR(("box probability (base==derived) <" + type_name + ">").c_str(),
               base->box_prob(test2.as_ref(), test1.as_ref()),
               gauss.box_prob(test2.as_ref(), test1.as_ref()),
@@ -229,8 +229,8 @@ test_gaussian_sphere_type(T epsilon, const std::string & type_name)
 
     // This is really a test of the base class box_prob function
     // An even dimension can have a create a sign error not seen in an odd one
-    vnl_vector_fixed<T, 2> mean2(mean[0], mean[1]);
-    vpdl_gaussian_sphere<T, 2> gauss2(mean2, var);
+    const vnl_vector_fixed<T, 2> mean2(mean[0], mean[1]);
+    const vpdl_gaussian_sphere<T, 2> gauss2(mean2, var);
     vnl_vector_fixed<T, 2> test1_2(T(3), T(3)), test2_2(T(-1), T(1));
     using base2 = vpdl_distribution<T, 2>;
     TEST_NEAR(("box probability (base==derived) <" + type_name + "> even dim").c_str(),

@@ -23,13 +23,13 @@ main(int argc, char ** argv)
   {
     // Capes' examples
     {
-      vul_sequence_filename_map map("images/img.%03d.pgm,0:2:100");
+      const vul_sequence_filename_map map("images/img.%03d.pgm,0:2:100");
     }
     {
-      vul_sequence_filename_map map("plop/plip/img_####.tiff", 5, 10, 200);
+      const vul_sequence_filename_map map("plop/plip/img_####.tiff", 5, 10, 200);
     }
     {
-      vul_sequence_filename_map map("pop.pop/poo_poo/img.###.ppm;1:2:10");
+      const vul_sequence_filename_map map("pop.pop/poo_poo/img.###.ppm;1:2:10");
     }
     {
       vul_sequence_filename_map map("im.###,:5:");

@@ -12,9 +12,9 @@
 static void
 test_colour_space()
 {
-  double r = 10;
-  double g = 120;
-  double b = 240;
+  const double r = 10;
+  const double g = 120;
+  const double b = 240;
 
   std::cout << "r= " << r << std::endl << "g= " << g << std::endl << "b= " << b << std::endl;
 
@@ -28,7 +28,7 @@ test_colour_space()
 
   std::cout << "nr= " << nr << std::endl << "ng= " << ng << std::endl << "nb= " << nb << std::endl;
 
-  double d = std::fabs(r - nr) + std::fabs(g - ng) + std::fabs(b - nb);
+  const double d = std::fabs(r - nr) + std::fabs(g - ng) + std::fabs(b - nb);
 
   std::cout << "d= " << d << std::endl;
 

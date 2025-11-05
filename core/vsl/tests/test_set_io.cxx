@@ -16,7 +16,7 @@ test_set_io()
             << "Testing std::set binary io\n"
             << "*************************\n";
 
-  int n = 10;
+  const int n = 10;
   std::set<int> s_int_out;
   for (int i = 0; i < n; ++i)
     s_int_out.insert(i);

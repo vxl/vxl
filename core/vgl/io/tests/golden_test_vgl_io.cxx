@@ -90,7 +90,7 @@ almost_equal_helper(const T & real1, const T & real2)
     max = real1;
   }
   T factor = epsilon(min);
-  bool result = ((max - min) <= factor * (max > 0 ? max : -max));
+  const bool result = ((max - min) <= factor * (max > 0 ? max : -max));
   if (!result)
   {
     std::cout << factor << " : " << min << " -- " << max << " -- " << (max > 0 ? max : -max) << " -- " << max - min
@@ -260,14 +260,14 @@ golden_test_vgl_io(bool save_file)
   double double_homg_pos[3] = { 2.3, 4.7, 6.7 };
   float float_homg_pos[3] = { 2.3f, 4.7f, 5.6f };
 
-  vgl_homg_point_2d<double> double_homg_point_2d_out(double_homg_pos);
+  const vgl_homg_point_2d<double> double_homg_point_2d_out(double_homg_pos);
   vgl_homg_point_2d<double> double_homg_point_2d_in;
-  vgl_homg_point_2d<double> double_homg_point_2d_out2(4.6, 7.8, 9.1);
+  const vgl_homg_point_2d<double> double_homg_point_2d_out2(4.6, 7.8, 9.1);
   vgl_homg_point_2d<double> double_homg_point_2d_in2;
 
-  vgl_homg_point_2d<float> float_homg_point_2d_out(float_homg_pos);
+  const vgl_homg_point_2d<float> float_homg_point_2d_out(float_homg_pos);
   vgl_homg_point_2d<float> float_homg_point_2d_in;
-  vgl_homg_point_2d<float> float_homg_point_2d_out2(4.6f, 7.8f, 9.1f);
+  const vgl_homg_point_2d<float> float_homg_point_2d_out2(4.6f, 7.8f, 9.1f);
   vgl_homg_point_2d<float> float_homg_point_2d_in2;
 
   // vgl_homg_point_3d
@@ -331,8 +331,8 @@ golden_test_vgl_io(bool save_file)
 
   // vgl_homg_plane_3d
 
-  vgl_vector_3d<double> double_homg_normal(2.3, 4.7, 6.7);
-  vgl_vector_3d<float> float_homg_normal(2.3f, 4.7f, 5.6f);
+  const vgl_vector_3d<double> double_homg_normal(2.3, 4.7, 6.7);
+  const vgl_vector_3d<float> float_homg_normal(2.3f, 4.7f, 5.6f);
 
   vgl_homg_plane_3d<double> double_homg_plane_3d_out(double_homg_normal, double_homg_point_3d_out),
     double_homg_plane_3d_in;
@@ -393,7 +393,7 @@ golden_test_vgl_io(bool save_file)
   }
 
   // Read in file to each class in turn
-  std::string gold_path = testlib_root_dir() + "/core/vgl/io/tests/golden_vgl_io_test.bvl";
+  const std::string gold_path = testlib_root_dir() + "/core/vgl/io/tests/golden_vgl_io_test.bvl";
   vsl_b_ifstream bfs_in(gold_path.c_str());
   TEST("Opened golden_vgl_io_test.bvl for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, double_point_2d_in);

@@ -56,7 +56,7 @@ vil_open(const char * what, const char * how)
   if (!is)
   {
     // hacked check for filenames beginning "gen:".
-    int l = (int)std::strlen(what);
+    const int l = (int)std::strlen(what);
     if (l > 4 && std::strncmp(what, "gen:", 4) == 0)
     {
       if (std::strcmp(how, "r") == 0)
@@ -83,7 +83,7 @@ vil_open(const char * what, const char * how)
   if (!is)
   {
     // maybe it's a URL?
-    int l = (int)std::strlen(what);
+    const int l = (int)std::strlen(what);
     if (l > 4 && std::strncmp(what, "http://", 7) == 0)
     {
       if (std::strcmp(how, "r") == 0)

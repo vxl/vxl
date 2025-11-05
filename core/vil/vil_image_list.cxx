@@ -68,7 +68,7 @@ vil_image_list::files()
   std::vector<std::string> temp;
   if (!this->vil_is_directory(directory_.c_str()))
     return temp;
-  DIR * dir_handle = opendir(directory_.c_str());
+  DIR * const dir_handle = opendir(directory_.c_str());
   dirent * de = nullptr;
   de = readdir(dir_handle);
   if (de == nullptr)
@@ -108,10 +108,10 @@ std::vector<vil_image_resource_sptr>
 vil_image_list::resources()
 {
   std::vector<vil_image_resource_sptr> temp;
-  std::vector<std::string> fs = this->files();
+  const std::vector<std::string> fs = this->files();
   for (auto & f : fs)
   {
-    vil_image_resource_sptr resc = vil_load_image_resource(f.c_str(), il_verbose);
+    const vil_image_resource_sptr resc = vil_load_image_resource(f.c_str(), il_verbose);
     if (resc)
       temp.push_back(resc);
   }
@@ -122,11 +122,11 @@ std::vector<vil_image_resource_sptr>
 vil_image_list::blocked_resources()
 {
   std::vector<vil_image_resource_sptr> temp;
-  std::vector<std::string> fs = this->files();
+  const std::vector<std::string> fs = this->files();
   for (auto & f : fs)
   {
-    vil_image_resource_sptr resc = vil_load_image_resource(f.c_str(), il_verbose);
-    vil_image_resource_sptr bir = blocked_image_resource(resc).ptr();
+    const vil_image_resource_sptr resc = vil_load_image_resource(f.c_str(), il_verbose);
+    const vil_image_resource_sptr bir = blocked_image_resource(resc).ptr();
     if (bir)
       temp.push_back(bir);
   }
@@ -137,10 +137,10 @@ std::vector<vil_image_resource_sptr>
 vil_image_list::pyramids()
 {
   std::vector<vil_image_resource_sptr> temp;
-  std::vector<std::string> fs = this->files();
+  const std::vector<std::string> fs = this->files();
   for (auto & f : fs)
   {
-    vil_pyramid_image_resource_sptr pyr = vil_load_pyramid_resource(f.c_str(), il_verbose);
+    const vil_pyramid_image_resource_sptr pyr = vil_load_pyramid_resource(f.c_str(), il_verbose);
     if (pyr)
       temp.emplace_back(pyr.ptr());
   }
@@ -153,7 +153,7 @@ vil_image_list::remove_file(std::string & filename)
 #if defined(_WIN32) && !defined(__CYGWIN__)
   std::string command = "del " + filename;
 #else
-  std::string command = "rm " + filename;
+  std::string const command = "rm " + filename;
 #endif
   return std::system(command.c_str()) == 0;
 }

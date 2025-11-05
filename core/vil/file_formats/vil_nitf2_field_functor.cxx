@@ -17,11 +17,11 @@ vil_nitf2_field_specified::operator()(vil_nitf2_field_sequence * record,
     // Invalid tag
     return false;
   }
-  vil_nitf2_field * field = record->get_field(tag);
+  vil_nitf2_field * const field = record->get_field(tag);
   if (field != nullptr)
   {
     std::string value;
-    bool is_string_value = record->get_value(tag, indexes, value, true);
+    const bool is_string_value = record->get_value(tag, indexes, value, true);
     if (is_string_value)
     {
       // a blank std::string field actually yields a valid field value (an empty
@@ -49,7 +49,7 @@ vil_nitf2_max_field_value_plus_offset_and_threshold::operator()(vil_nitf2_field_
                                                                 int & value)
 {
   int value1 = 0;
-  bool found = record->get_value(tag, indexes, value1, true);
+  const bool found = record->get_value(tag, indexes, value1, true);
   value1 *= tag_factor;
   value1 += offset;
   value = (value1 < min_threshold) ? min_threshold : value1;

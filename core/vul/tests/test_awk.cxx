@@ -22,7 +22,7 @@ test_awk()
     std::stringstream tmp;
     tmp << "";
     std::stringstream in(tmp.str().c_str());
-    vul_awk awk(in);
+    const vul_awk awk(in);
     TEST("empty:awk on empty file is invalid", !awk, true);
     TEST("empty:awk on creation has line 1", awk.NR(), 1);
   }
@@ -37,7 +37,7 @@ test_awk()
     vul_awk awk(in);
     TEST("easy:awk on non-empty file is valid", (bool)awk, true);
     TEST("easy:awk on creation has line 1", awk.NR(), 1);
-    char letter[] = "abc";
+    const char letter[] = "abc";
     for (int line = 0; line < 3; ++line)
     {
       {
@@ -77,15 +77,15 @@ test_awk()
     vul_awk awk(in, vul_awk::strip_comments);
     TEST("comment:awk on non-empty file is valid", (bool)awk, true);
     TEST("comment:awk on creation has line 2", awk.NR(), 2);
-    char letter[] = "abcdef";
+    const char letter[] = "abcdef";
     // lineNum[numIncrements] has the expected line in the file number
     // after that number of increments have occurred
-    int lineNum[] = { 2, 3, 5, 6, 8 };
+    const int lineNum[] = { 2, 3, 5, 6, 8 };
     // numFields[line] as the number of fields in that line
-    int numFields[] = { -1, -1, 3, 5, -1, 1, 1, -1 };
+    const int numFields[] = { -1, -1, 3, 5, -1, 1, 1, -1 };
     for (int numIncrements = 0; numIncrements < 4; ++numIncrements)
     {
-      int line = lineNum[numIncrements];
+      const int line = lineNum[numIncrements];
       {
         std::stringstream msg;
         msg << "comment:awk has correct # of fields for line:" << line;

@@ -63,8 +63,8 @@ actual_e_matrix()
   m[2][0] = -0.00208351;
   m[2][1] = 0.0020394;
   m[2][2] = 0.000597002;
-  vnl_double_3x3 K = actual_K().get_matrix();
-  vnl_double_3x3 mE = K.transpose() * m * K;
+  const vnl_double_3x3 K = actual_K().get_matrix();
+  const vnl_double_3x3 mE = K.transpose() * m * K;
   return vpgl_essential_matrix<double>(mE);
 }
 
@@ -72,14 +72,14 @@ static void
 test_essential_matrix()
 {
   double cx = 10, cy = 0, cz = 0;
-  vnl_double_3x3 T = skew_symmetric(-cx, -cy, -cz);
+  const vnl_double_3x3 T = skew_symmetric(-cx, -cy, -cz);
   // create an essential matrix for translation only
-  vpgl_essential_matrix<double> E(T);
+  const vpgl_essential_matrix<double> E(T);
   // Test the camera construction
   // Image Point in the left camera (left side of E)
-  vgl_point_2d<double> pl(-1, 0);
+  const vgl_point_2d<double> pl(-1, 0);
   // Image Point in the right camera (right side of E)
-  vgl_point_2d<double> pr(0, 0);
+  const vgl_point_2d<double> pr(0, 0);
   // This point in 3-d is (0,0,10);
   vpgl_perspective_camera<double> pc;
   bool success = extract_left_camera<double>(E, pl, pr, pc);
@@ -91,21 +91,21 @@ test_essential_matrix()
   vgl_h_matrix_3d<double> Rh;
   Rh.set_identity();
   vnl_vector_fixed<double, 3> ax(0, 1, 0), cv(10, 0, 0), t;
-  vgl_point_3d<double> c(10, 0, 0);       // Camera center
+  const vgl_point_3d<double> c(10, 0, 0); // Camera center
   Rh.set_rotation_about_axis(ax, 0.5236); // Rotation matrix
-  vnl_double_3x3 R = Rh.get_upper_3x3_matrix();
+  const vnl_double_3x3 R = Rh.get_upper_3x3_matrix();
   t = -R * cv;
-  vpgl_essential_matrix<double> Ei(skew_symmetric(t[0], t[1], t[2]) * R);
+  const vpgl_essential_matrix<double> Ei(skew_symmetric(t[0], t[1], t[2]) * R);
   std::cout << "\nIdeal Essential Matrix\n" << Ei << '\n';
   vpgl_perspective_camera<double> pcl, pcr;
   pcl.set_rotation(vgl_rotation_3d<double>(Rh));
   pcl.set_camera_center(c);
   std::cout << "Ideal Left Perspective Camera  " << pcl << '\n';
-  vgl_point_3d<double> X(0, 0, 10);
+  const vgl_point_3d<double> X(0, 0, 10);
   vgl_point_2d<double> xl = pcl.project(X), xr(0, 0);
-  vpgl_essential_matrix<double> Er(pcr, pcl);
+  const vpgl_essential_matrix<double> Er(pcr, pcl);
   std::cout << "Essential Matrix with rotation\n" << Er << '\n';
-  vnl_double_3x3 error = Ei.get_matrix() - Er.get_matrix();
+  const vnl_double_3x3 error = Ei.get_matrix() - Er.get_matrix();
   TEST_NEAR("Construct essential matrix from cameras", error.frobenius_norm(), 0, 1);
   vpgl_perspective_camera<double> pclr; // reconstructed camera
   success = extract_left_camera<double>(Er, xl, xr, pclr);
@@ -114,7 +114,7 @@ test_essential_matrix()
   vgl_point_3d<double> rc = pclr.get_camera_center();
   TEST_NEAR("Extract Left Camera", (rc.x() - 1) * (rc.x() - 1), 0, 1e-3);
   // test using actual essential matrix
-  vpgl_essential_matrix<double> Ea = actual_e_matrix();
+  const vpgl_essential_matrix<double> Ea = actual_e_matrix();
   std::cout << "Actual E Matrix\n" << Ea << '\n';
   vgl_point_2d<double> xal(0.207847, 0.2126), xar(-0.1289, -0.0683432);
   vpgl_perspective_camera<double> palr; // reconstructed actual camera
@@ -122,7 +122,7 @@ test_essential_matrix()
   TEST("test extract_left_camera", success, true);
   std::cout << "Actual Left Camera\n" << palr << '\n';
   rc = palr.get_camera_center();
-  vgl_point_3d<double> ac(-1.62446, -1.03223, 5.94627);
+  const vgl_point_3d<double> ac(-1.62446, -1.03223, 5.94627);
   TEST_NEAR("Test on actual E matrix", vgl_distance<double>(rc, ac), 0, 1e-3);
 }
 

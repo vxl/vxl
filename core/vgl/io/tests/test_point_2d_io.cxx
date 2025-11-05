@@ -18,9 +18,9 @@ test_point_2d_double_io()
             << "*******************************\n";
 
   // Test reading in a space delimited point.
-  std::string point_with_spaces = "vgl_point_2d_test_spaces.tmp";
+  const std::string point_with_spaces = "vgl_point_2d_test_spaces.tmp";
   std::ofstream t_out(point_with_spaces.c_str());
-  vgl_point_2d<double> truth(1.2, 3.4);
+  const vgl_point_2d<double> truth(1.2, 3.4);
   t_out << "1.2 3.4";
   t_out.close();
   std::ifstream t_in(point_with_spaces.c_str());

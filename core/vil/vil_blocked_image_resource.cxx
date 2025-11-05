@@ -18,7 +18,7 @@ vil_blocked_image_resource::~vil_blocked_image_resource() = default;
 unsigned int
 vil_blocked_image_resource::n_block_i() const
 {
-  unsigned int sbi = size_block_i();
+  const unsigned int sbi = size_block_i();
   if (sbi == 0)
     return 0;
   return (ni() + sbi - 1) / sbi;
@@ -27,7 +27,7 @@ vil_blocked_image_resource::n_block_i() const
 unsigned int
 vil_blocked_image_resource::n_block_j() const
 {
-  unsigned int sbj = size_block_j();
+  const unsigned int sbj = size_block_j();
   if (sbj == 0)
     return 0;
   return (nj() + sbj - 1) / sbj;
@@ -46,7 +46,7 @@ vil_blocked_image_resource::get_blocks(unsigned int start_block_i,
 
     for (unsigned int bj = start_block_j; bj <= end_block_j; ++bj)
     {
-      vil_image_view_base_sptr view = this->get_block(bi, bj);
+      const vil_image_view_base_sptr view = this->get_block(bi, bj);
       if (view)
         jblocks.push_back(view);
       else
@@ -96,7 +96,7 @@ vil_blocked_image_resource::glue_blocks_together(
   // now paste all the image blocks into their proper location in outImage
   unsigned int curr_i = 0;
   unsigned int curr_j = 0;
-  vil_pixel_format fmt = vil_pixel_format_component_format(this->pixel_format());
+  const vil_pixel_format fmt = vil_pixel_format_component_format(this->pixel_format());
   switch (fmt)
   {
 #define GLUE_BLOCK_CASE(FORMAT, T)                                                                            \
@@ -143,10 +143,10 @@ bool
 vil_blocked_image_resource::block_i_offset(unsigned int block_i, unsigned int i, unsigned int & i_offset) const
 {
   i_offset = 0;
-  unsigned int tw = size_block_i();
+  const unsigned int tw = size_block_i();
   if (tw == 0)
     return false;
-  unsigned int bstrt = tw * block_i;
+  const unsigned int bstrt = tw * block_i;
   if (i < bstrt)
     return false;
   i_offset = i - bstrt;
@@ -158,10 +158,10 @@ bool
 vil_blocked_image_resource::block_j_offset(unsigned int block_j, unsigned int j, unsigned int & j_offset) const
 {
   j_offset = 0;
-  unsigned int tl = size_block_j();
+  const unsigned int tl = size_block_j();
   if (tl == 0)
     return false;
-  unsigned int bstrt = tl * block_j;
+  const unsigned int bstrt = tl * block_j;
   if (j < bstrt)
     return false;
   j_offset = j - bstrt;
@@ -190,10 +190,10 @@ vil_blocked_image_resource::trim_border_blocks(unsigned int i0,
       auto last_col_index = (unsigned int)(blocks.size() - 1);
       auto last_row_index = (unsigned int)(blocks[bi].size() - 1);
       // booleans that tell me whether this box is some sort of border box
-      bool first_block_in_row = bi == 0;
-      bool first_block_in_col = bj == 0;
-      bool last_block_in_row = bi == last_col_index;
-      bool last_block_in_col = bj == last_row_index;
+      const bool first_block_in_row = bi == 0;
+      const bool first_block_in_col = bj == 0;
+      const bool last_block_in_row = bi == last_col_index;
+      const bool last_block_in_col = bj == last_row_index;
 
       // nothing to do if this isn't a border box
       if (!first_block_in_row && !first_block_in_col && !last_block_in_row && !last_block_in_col)

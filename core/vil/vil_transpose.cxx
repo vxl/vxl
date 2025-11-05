@@ -25,7 +25,7 @@ vil_transpose_image_resource::vil_transpose_image_resource(const vil_image_resou
 vil_image_view_base_sptr
 vil_transpose_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const
 {
-  vil_image_view_base_sptr vs = src_->get_copy_view(j0, nj, i0, ni);
+  const vil_image_view_base_sptr vs = src_->get_copy_view(j0, nj, i0, ni);
   if (!vs)
     return nullptr;
 
@@ -52,7 +52,7 @@ vil_transpose_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j
 vil_image_view_base_sptr
 vil_transpose_image_resource::get_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const
 {
-  vil_image_view_base_sptr vs = src_->get_view(j0, nj, i0, ni);
+  const vil_image_view_base_sptr vs = src_->get_view(j0, nj, i0, ni);
   if (!vs)
     return nullptr;
 

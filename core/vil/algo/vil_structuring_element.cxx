@@ -42,8 +42,8 @@ void
 vil_structuring_element::set_to_disk(double r)
 {
   std::vector<int> px, py;
-  double r2 = r * r;
-  int r0 = int(r + 1);
+  const double r2 = r * r;
+  const int r0 = int(r + 1);
   for (int j = -r0; j <= r0; ++j)
     for (int i = -r0; i <= r0; ++i)
       if (i * i + j * j < r2)
@@ -109,7 +109,7 @@ vil_compute_offsets(std::vector<std::ptrdiff_t> & offset,
                     std::ptrdiff_t istep,
                     std::ptrdiff_t jstep)
 {
-  unsigned n = element.p_i().size();
+  const unsigned n = element.p_i().size();
   offset.resize(n);
   for (unsigned int k = 0; k < n; ++k)
     offset[k] = static_cast<std::ptrdiff_t>(element.p_i()[k] * istep + element.p_j()[k] * jstep);

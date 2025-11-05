@@ -10,7 +10,7 @@ vsl_b_write(vsl_b_ostream & os, const vpgl_lvcs & lvcs)
 {
   if (!os)
     return;
-  unsigned version = 1;
+  const unsigned version = 1;
   vsl_b_write(os, version);
 
   auto cs_name = static_cast<unsigned>(lvcs.get_cs_name());
@@ -73,17 +73,17 @@ vsl_b_read(vsl_b_istream & is, vpgl_lvcs & lvcs)
       vsl_b_read(is, loy);
       vsl_b_read(is, theta);
 
-      vpgl_lvcs temp(lat,
-                     lon,
-                     elev,
-                     static_cast<vpgl_lvcs::cs_names>(cs_name),
-                     lat_scale,
-                     lon_scale,
-                     static_cast<vpgl_lvcs::AngUnits>(ang_unit),
-                     static_cast<vpgl_lvcs::LenUnits>(len_unit),
-                     lox,
-                     loy,
-                     theta);
+      const vpgl_lvcs temp(lat,
+                           lon,
+                           elev,
+                           static_cast<vpgl_lvcs::cs_names>(cs_name),
+                           lat_scale,
+                           lon_scale,
+                           static_cast<vpgl_lvcs::AngUnits>(ang_unit),
+                           static_cast<vpgl_lvcs::LenUnits>(len_unit),
+                           lox,
+                           loy,
+                           theta);
       lvcs = temp;
       break;
     }
@@ -108,7 +108,7 @@ vsl_b_write(vsl_b_ostream & os, const vpgl_lvcs_sptr & lvcs_sptr)
 {
   if (!lvcs_sptr)
     return;
-  vpgl_lvcs * lvcs = lvcs_sptr.ptr();
+  vpgl_lvcs * const lvcs = lvcs_sptr.ptr();
   vsl_b_write(os, *lvcs);
 }
 

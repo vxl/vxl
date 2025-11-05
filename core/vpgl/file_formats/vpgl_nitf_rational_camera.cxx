@@ -36,7 +36,7 @@ geostr_to_double(const char * in_string, double * val, vpgl_nitf_rational_camera
   int length = 0;
   int deg = 0, min = 0;
   float fsec = NAN;
-  const char * orig = in_string;
+  const char * const orig = in_string;
 
   // here are lat/lon dependent variables
   char sposdir = 0, cposdir = 0, snegdir = 0, cnegdir = 0;
@@ -84,7 +84,7 @@ geostr_to_double(const char * in_string, double * val, vpgl_nitf_rational_camera
 
     // get the seconds (float)
     in_string -= 2;
-    char * temp = new char[2];
+    char * const temp = new char[2];
     for (length = 0; (*in_string == '.' || std::isdigit(*in_string)) && length < 15; ++length)
       ++in_string;
     if (length > 14)
@@ -149,7 +149,7 @@ geostr_to_double(const char * in_string, double * val, vpgl_nitf_rational_camera
         ++in_string;
 
       // get the seconds (float)
-      char * temp = new char[2];
+      char * const temp = new char[2];
       for (length = 0; (*in_string == '.' || std::isdigit(*in_string)) && length < 15; ++length)
         ++in_string;
       if (length > 14)
@@ -188,7 +188,7 @@ geostr_to_double(const char * in_string, double * val, vpgl_nitf_rational_camera
     else // DDD.DDDD
       if (*in_string == ' ' || *in_string == '-' || *in_string == '+' || *in_string == '.' || *in_string == '\0')
       {
-        char * temp = new char[2];
+        char * const temp = new char[2];
         in_string = orig;
 
         // go past any spaces
@@ -222,11 +222,11 @@ geostr_to_double(const char * in_string, double * val, vpgl_nitf_rational_camera
 int
 vpgl_nitf_rational_camera::geostr_to_latlon(const char * str, double * lat, double * lon)
 {
-  int latstrlen = geostr_to_double(str, lat, vpgl_nitf_rational_camera::LAT);
+  const int latstrlen = geostr_to_double(str, lat, vpgl_nitf_rational_camera::LAT);
   if (latstrlen == 0)
     return 0;
   str += latstrlen;
-  int lonstrlen = geostr_to_double(str, lon, vpgl_nitf_rational_camera::LON);
+  const int lonstrlen = geostr_to_double(str, lon, vpgl_nitf_rational_camera::LON);
   if (lonstrlen == 0)
     return 0;
 
@@ -239,8 +239,8 @@ vpgl_nitf_rational_camera::geostr_to_latlon_v2(const std::string & str, std::vec
   std::string::const_iterator sit = str.begin();
   std::vector<double> latlons;
   size_t inc_lat = 7, inc_lon = 8, inc = 0;
-  geopt_coord lat_code = vpgl_nitf_rational_camera::LAT;
-  geopt_coord lon_code = vpgl_nitf_rational_camera::LON;
+  const geopt_coord lat_code = vpgl_nitf_rational_camera::LAT;
+  const geopt_coord lon_code = vpgl_nitf_rational_camera::LON;
   // initial condition
   size_t start = 0;
   inc = inc_lat;
@@ -276,7 +276,7 @@ bool
 vpgl_nitf_rational_camera::read(vil_nitf2_image * nitf_image, bool verbose)
 {
   std::vector<vil_nitf2_image_subheader *> headers = nitf_image->get_image_headers();
-  vil_nitf2_image_subheader * hdr = headers[0];
+  vil_nitf2_image_subheader * const hdr = headers[0];
 
   // initialize the array
   double tre_data[90];
@@ -361,14 +361,14 @@ bool
 vpgl_nitf_rational_camera::read(const std::string & nitf_image_path, bool verbose)
 {
   // first open the nitf image
-  vil_image_resource_sptr image = vil_load_image_resource(nitf_image_path.c_str());
+  const vil_image_resource_sptr image = vil_load_image_resource(nitf_image_path.c_str());
   if (!image)
   {
     std::cerr << "Image load failed in vpgl_nitf_rational_camera_constructor\n";
     return false;
   }
-  std::string format = image->file_format();
-  std::string prefix = format.substr(0, 4);
+  const std::string format = image->file_format();
+  const std::string prefix = format.substr(0, 4);
   if (prefix != "nitf")
   {
     std::cerr << "not a nitf image in vpgl_nitf_rational_camera_constructor\n";
@@ -404,7 +404,7 @@ vpgl_nitf_rational_camera::print(std::ostream & ostr, vpgl_rational_order output
   this->write_pvl(ostr, output_order);
 
   // print corners & projections
-  double z_off = this->offset(Z_INDX);
+  const double z_off = this->offset(Z_INDX);
   double u = NAN, v = NAN;
 
   this->project(ul_[LON], ul_[LAT], z_off, u, v);

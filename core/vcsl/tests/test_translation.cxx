@@ -23,10 +23,10 @@
 static void
 test_translation()
 {
-  vcsl_graph_sptr graph = new vcsl_graph;
-  vcsl_spatial_sptr csa = new vcsl_cartesian_3d;
+  const vcsl_graph_sptr graph = new vcsl_graph;
+  const vcsl_spatial_sptr csa = new vcsl_cartesian_3d;
   csa->set_graph(graph);
-  vcsl_spatial_sptr cs0 = new vcsl_cartesian_3d;
+  const vcsl_spatial_sptr cs0 = new vcsl_cartesian_3d;
   cs0->set_graph(graph);
 
   std::vector<vcsl_spatial_sptr> parent;
@@ -41,7 +41,7 @@ test_translation()
 
   std::vector<vcsl_spatial_transformation_sptr> motion;
 
-  vcsl_translation_sptr tr = new vcsl_translation;
+  const vcsl_translation_sptr tr = new vcsl_translation;
   std::vector<double> tr_beat;
   tr_beat.reserve(3);
   tr_beat.push_back(0);

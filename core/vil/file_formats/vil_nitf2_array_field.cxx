@@ -66,8 +66,8 @@ vil_nitf2_array_field::check_index(const vil_nitf2_index_vector & indexes) const
   {
     dimension_index.push_back(indexes[dim]);
   }
-  int dimension_bound = next_dimension(dimension_index);
-  int last_index = indexes[indexes.size() - 1];
+  const int dimension_bound = next_dimension(dimension_index);
+  const int last_index = indexes[indexes.size() - 1];
   if (last_index < dimension_bound)
   {
     return true;
@@ -91,7 +91,7 @@ std::string
 index_string(const vil_nitf2_index_vector & indices)
 {
   std::string ret_val = "";
-  for (int indice : indices)
+  for (const int indice : indices)
   {
     ret_val += "[" + int_to_string(indice) + "]";
   }
@@ -103,7 +103,7 @@ vil_nitf2_array_field::get_value_string(const vil_nitf2_index_vector & in_indice
 {
   auto * str = new vil_stream_core;
   write_vector_element(*str, in_indices, -1);
-  vil_streampos num_to_read = str->tell();
+  const vil_streampos num_to_read = str->tell();
   str->seek(0);
   char * buffer = nullptr;
   buffer = (char *)std::malloc((std::size_t)num_to_read + 1);
@@ -116,7 +116,7 @@ void
 vil_nitf2_array_field::do_dimension(const vil_nitf2_index_vector & in_indices,
                                     vil_nitf2_field::field_tree * inTree) const
 {
-  int dim = next_dimension(in_indices);
+  const int dim = next_dimension(in_indices);
   for (int i = 0; i < dim; i++)
   {
     // this is the index list we're dealing with in this loop
@@ -124,8 +124,8 @@ vil_nitf2_array_field::do_dimension(const vil_nitf2_index_vector & in_indices,
     curr_indices.push_back(i);
     // create our tree node and add it to inTree's child list
     auto * tr = new vil_nitf2_field::field_tree;
-    std::string tag_str = tag();
-    std::string index_str = index_string(curr_indices);
+    const std::string tag_str = tag();
+    const std::string index_str = index_string(curr_indices);
     std::string p_name;
     if (index_str.empty())
       p_name = pretty_name();
@@ -146,7 +146,7 @@ vil_nitf2_array_field::do_dimension(const vil_nitf2_index_vector & in_indices,
 vil_nitf2_field::field_tree *
 vil_nitf2_array_field::get_tree() const
 {
-  field_tree * tr = vil_nitf2_field::get_tree();
+  field_tree * const tr = vil_nitf2_field::get_tree();
   do_dimension(vil_nitf2_index_vector(), tr);
   return tr;
 }

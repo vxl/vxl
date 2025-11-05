@@ -27,7 +27,7 @@ bool
 is_okay(const std::string & name)
 {
   bool okay = true;
-  int fd = open(name.c_str(), O_CREAT | O_EXCL, 0600);
+  const int fd = open(name.c_str(), O_CREAT | O_EXCL, 0600);
   if (fd == -1)
   {
     okay = false;
@@ -56,7 +56,7 @@ char
 random_letter()
 {
   // Make sure the random character is a letter.
-  int r = std::rand() % (26 + 26); // 26 uppercase and 26 lowercase letters
+  const int r = std::rand() % (26 + 26); // 26 uppercase and 26 lowercase letters
   return (r < 26) ? char('A' + r) : char('a' + r - 26);
 }
 
@@ -64,7 +64,7 @@ char
 random_char()
 {
   // Make sure the random character is a letter or number.
-  int r = std::rand() % (26 + 26 + 10); // 2x26 letters, 10 digits
+  const int r = std::rand() % (26 + 26 + 10); // 2x26 letters, 10 digits
   return (r < 26) ? char('A' + r) : (r < 52) ? char('a' + r - 26) : char('0' + r - 52);
 }
 } // namespace
@@ -108,7 +108,7 @@ vul_temp_filename()
   {
     tempdir = P_tmpdir; // defined in stdio.h
   }
-  char lastchar = (!tempdir.empty()) ? tempdir[tempdir.size() - 1] : ' ';
+  const char lastchar = (!tempdir.empty()) ? tempdir[tempdir.size() - 1] : ' ';
   if (lastchar != '/' && lastchar != '\\')
     tempdir += "/";
 

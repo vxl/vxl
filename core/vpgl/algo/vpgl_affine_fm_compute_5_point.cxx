@@ -56,8 +56,8 @@ vpgl_affine_fm_compute_5_point::compute(const std::vector<vgl_point_2d<double>> 
     plnt.compute_from_points(pl_h);
     for (unsigned int i = 0; i < pl.size(); i++)
     {
-      vgl_homg_point_2d<double> pr_hn = prnt * pr_h[i];
-      vgl_homg_point_2d<double> pl_hn = plnt * pl_h[i];
+      const vgl_homg_point_2d<double> pr_hn = prnt * pr_h[i];
+      const vgl_homg_point_2d<double> pl_hn = plnt * pl_h[i];
       pr_norm.emplace_back(pr_hn.x(), pr_hn.y());
       pl_norm.emplace_back(pl_hn.x(), pl_hn.y());
     }
@@ -72,7 +72,7 @@ vpgl_affine_fm_compute_5_point::compute(const std::vector<vgl_point_2d<double>> 
   }
   vpgl_affine_fm_robust_est fg(pr_norm, pl_norm);
   // check if minimum number of points then skip ransac
-  int min_n = fg.min_num_points();
+  const int min_n = fg.min_num_points();
   vnl_vector<double> params;
   if (pr_norm.size() == min_n)
   {
@@ -84,10 +84,10 @@ vpgl_affine_fm_compute_5_point::compute(const std::vector<vgl_point_2d<double>> 
   else
   {
     // execute robust ransac (MUSE)
-    double max_outlier_frac = 0.5;
-    double desired_prob_good = 0.99;
-    int max_pops = 1;
-    int trace_level = 0;
+    const double max_outlier_frac = 0.5;
+    const double desired_prob_good = 0.99;
+    const int max_pops = 1;
+    const int trace_level = 0;
     fg.set_no_prior_scale();
 
     vrel_muset_obj muset(pr_norm.size() + 1);
@@ -120,7 +120,7 @@ vpgl_affine_fm_compute_5_point::compute(const std::vector<vgl_point_2d<double>> 
   Fu[1][1] = 0.0;
   // normalize line coef
   double a = Fu[0][2], b = Fu[1][2];
-  double s = sqrt(a * a + b * b);
+  const double s = sqrt(a * a + b * b);
   Fu /= s;
   fm.set_matrix(Fu);
   return true;

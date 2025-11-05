@@ -51,8 +51,8 @@ view_as_rgb(const vil_image_view<vxl_byte> & v)
 int
 main()
 {
-  unsigned ni = 6;
-  unsigned nj = 6;
+  const unsigned ni = 6;
+  const unsigned nj = 6;
   vil_image_view<vil_rgb<vxl_byte>> rgb_image(ni, nj);
 
   std::cout << "Create an image of type vil_image_view<vil_rgb<vxl_byte> >\n";
@@ -65,11 +65,11 @@ main()
   vil_print_all(std::cout, rgb_image);
 
   std::cout << "\nCreate a view of it as a set of planes:\n";
-  vil_image_view<vxl_byte> plane_view = view_as_planes(rgb_image);
+  const vil_image_view<vxl_byte> plane_view = view_as_planes(rgb_image);
   vil_print_all(std::cout, plane_view);
 
   std::cout << "\nCreate a view of this plane view as rgb:\n";
-  vil_image_view<vil_rgb<vxl_byte>> rgb_image2 = view_as_rgb(plane_view);
+  const vil_image_view<vil_rgb<vxl_byte>> rgb_image2 = view_as_rgb(plane_view);
   vil_print_all(std::cout, rgb_image2);
 
   return 0;

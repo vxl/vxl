@@ -16,8 +16,8 @@ vrel_linear_regression::vrel_linear_regression(const std::vector<vnl_vector<doub
   : rand_vars_(pts.size())
   , ind_vars_(pts.size())
 {
-  unsigned int num_pts = pts.size();
-  unsigned int vect_size = pts[0].size();
+  const unsigned int num_pts = pts.size();
+  const unsigned int vect_size = pts[0].size();
   for (unsigned int i = 0; i < num_pts; ++i)
   {
     rand_vars_[i] = pts[i][vect_size - 1];
@@ -106,7 +106,7 @@ vrel_linear_regression::fit_from_minimal_set(const std::vector<int> & point_indi
   vnl_vector<double> b(param_dof());
   for (unsigned int i = 0; i < param_dof(); ++i)
   {
-    int index = point_indices[i];
+    const int index = point_indices[i];
     for (unsigned int j = 0; j < param_dof(); ++j)
     {
       A(j, i) = ind_vars_[index][j];
@@ -114,7 +114,7 @@ vrel_linear_regression::fit_from_minimal_set(const std::vector<int> & point_indi
     b[i] = rand_vars_[index];
   }
 
-  vnl_svd<double> svd(A, 1.0e-8);
+  const vnl_svd<double> svd(A, 1.0e-8);
   if ((unsigned int)svd.rank() < param_dof())
   {
     return false; // singular fit --- no error message needed
@@ -185,7 +185,7 @@ vrel_linear_regression::weighted_least_squares_fit(vnl_vector<double> & params,
     for (unsigned int k = 0; k < j; k++)
       sumProds(j, k) = sumProds(k, j);
 
-  vnl_svd<double> svd(sumProds, 1.0e-8);
+  const vnl_svd<double> svd(sumProds, 1.0e-8);
   if ((unsigned int)svd.rank() < param_dof())
   {
     std::cerr << "vrel_linear_regression::WeightedLeastSquaresFit --- singularity!\n";
@@ -193,8 +193,8 @@ vrel_linear_regression::weighted_least_squares_fit(vnl_vector<double> & params,
   }
   else
   {
-    vnl_matrix<double> sumP_inv(svd.inverse());
-    vnl_matrix<double> int_result = sumP_inv * sumDists;
+    const vnl_matrix<double> sumP_inv(svd.inverse());
+    const vnl_matrix<double> int_result = sumP_inv * sumDists;
     params = int_result.get_column(0);
     norm_covar = sumP_inv;
     return true;

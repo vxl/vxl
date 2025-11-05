@@ -15,8 +15,8 @@ vil1_flipud_impl::get_plane(unsigned int p) const
 bool
 vil1_flipud_impl::get_section(void * buf, int x0, int y0, int w, int h) const
 {
-  int bs = base.components() * base.bits_per_component() / CHAR_BIT;
-  int last_row = base.height() - 1;
+  const int bs = base.components() * base.bits_per_component() / CHAR_BIT;
+  const int last_row = base.height() - 1;
   for (int j = h - 1; j >= 0; --j)
     if (!base.get_section(static_cast<char *>(buf) + bs * w * j, x0, last_row - y0 - j, w, 1))
       return false;
@@ -26,7 +26,7 @@ vil1_flipud_impl::get_section(void * buf, int x0, int y0, int w, int h) const
 bool
 vil1_flipud_impl::put_section(const void * buf, int x0, int y0, int w, int h)
 {
-  int bs = base.components() * base.bits_per_component() / CHAR_BIT;
+  const int bs = base.components() * base.bits_per_component() / CHAR_BIT;
   for (int j = 0; j < h; ++j)
     if (!base.put_section(static_cast<const char *>(buf) + bs * w * (h - 1 - j), x0, y0 + j, w, 1))
       return false;

@@ -26,26 +26,26 @@ vil_binary_dilate(const vil_image_view<bool> & src_image,
                   const vil_border<vil_image_view<bool>> & border)
 {
   assert(src_image.nplanes() == 1);
-  unsigned ni = src_image.ni();
-  unsigned nj = src_image.nj();
+  const unsigned ni = src_image.ni();
+  const unsigned nj = src_image.nj();
   dest_image.set_size(ni, nj, 1);
 
   std::ptrdiff_t s_istep = src_image.istep(), s_jstep = src_image.jstep();
   std::ptrdiff_t d_istep = dest_image.istep(), d_jstep = dest_image.jstep();
 
-  const bool * src_row0 = src_image.top_left_ptr();
-  bool * dest_row0 = dest_image.top_left_ptr();
+  const bool * const src_row0 = src_image.top_left_ptr();
+  bool * const dest_row0 = dest_image.top_left_ptr();
 
   std::vector<std::ptrdiff_t> offset;
   vil_compute_offsets(offset, element, s_istep, s_jstep);
 
   // Define box in which all elements will be valid
-  int ilo = -element.min_i();
-  int ihi = ni - 1 - element.max_i();
-  int jlo = -element.min_j();
-  int jhi = nj - 1 - element.max_j();
+  const int ilo = -element.min_i();
+  const int ihi = ni - 1 - element.max_i();
+  const int jlo = -element.min_j();
+  const int jhi = nj - 1 - element.max_j();
 
-  vil_border_accessor<vil_image_view<bool>> border_accessor = vil_border_create_accessor(src_image, border);
+  const vil_border_accessor<vil_image_view<bool>> border_accessor = vil_border_create_accessor(src_image, border);
 
   // Deal with left edge
   for (int i = 0; i < ilo; ++i)

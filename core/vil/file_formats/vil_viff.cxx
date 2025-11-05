@@ -19,7 +19,7 @@ static const char * vil_viff_format_tag = "viff";
 static inline void
 swap(void * p, int length)
 {
-  char * t = (char *)p;
+  char * const t = (char *)p;
 #ifdef DEBUG
   if (length == sizeof(vxl_uint_32) && *(vxl_uint_32 *)p != 0)
   {
@@ -30,7 +30,7 @@ swap(void * p, int length)
 #endif
   for (int j = 0; 2 * j < length; ++j)
   {
-    char c = t[j];
+    const char c = t[j];
     t[j] = t[length - j - 1];
     t[length - j - 1] = c;
   }
@@ -262,9 +262,9 @@ vil_viff_image::get_copy_view(unsigned int x0, unsigned int xs, unsigned int y0,
   if (format_ == VIL_PIXEL_FORMAT_BOOL && x0 % 8 != 0)
     std::cerr << "vil_viff_image::get_copy_view(): Warning: x0 should be a multiple of 8 for this type of image\n";
 
-  vxl_uint_32 rowsize = (pix_size * xs + 7) / 8;
-  vxl_uint_32 tbytes = rowsize * ys * nplanes_;
-  vil_memory_chunk_sptr buf = new vil_memory_chunk(tbytes, format_);
+  const vxl_uint_32 rowsize = (pix_size * xs + 7) / 8;
+  const vxl_uint_32 tbytes = rowsize * ys * nplanes_;
+  const vil_memory_chunk_sptr buf = new vil_memory_chunk(tbytes, format_);
   auto * ib = reinterpret_cast<vxl_byte *>(buf->data());
   for (unsigned int p = 0; p < nplanes_; ++p)
   {
@@ -314,8 +314,8 @@ vil_viff_image::put_view(const vil_image_view_base & buf, unsigned int x0, unsig
     vil_exception_warning(vil_exception_out_of_bounds("vil_viff_image::put_view"));
     return false;
   }
-  unsigned int ni = buf.ni();
-  unsigned int nj = buf.nj();
+  const unsigned int ni = buf.ni();
+  const unsigned int nj = buf.nj();
 #ifdef DEBUG
   std::cerr << "vil_viff_image::put_view() : buf=" << ni << 'x' << nj << 'x' << buf.nplanes() << 'p' << " at (" << x0
             << ',' << y0 << ")\n";
@@ -337,7 +337,7 @@ vil_viff_image::put_view(const vil_image_view_base & buf, unsigned int x0, unsig
   if (format_ == VIL_PIXEL_FORMAT_BOOL && x0 % 8 != 0)
     std::cerr << "vil_viff_image::put_view(): Warning: x0 should be a multiple of 8 for this type of image\n";
 
-  vxl_uint_32 rowsize = (pix_size * ni + 7) / 8;
+  const vxl_uint_32 rowsize = (pix_size * ni + 7) / 8;
   if (endian_consistent_ || pix_size <= 8)
     for (unsigned int p = 0; p < nplanes_; ++p)
       for (unsigned int y = y0; y < y0 + nj; ++y)
@@ -387,7 +387,7 @@ vil_viff_image::check_endian()
   // If it is between 1 and 255, the "Endian" is consistent with the system
   // if not, we swap and check again
 
-  vxl_uint_32 dst = header_.data_storage_type;
+  const vxl_uint_32 dst = header_.data_storage_type;
 
   endian_consistent_ = ((dst & 0xff) != 0);
 #ifdef DEBUG
@@ -403,7 +403,7 @@ void
 vil_viff_image::set_ispare1(vxl_uint_32 ispare1)
 {
   header_.ispare1 = ispare1;
-  int longsize = sizeof(vxl_uint_32);
+  const int longsize = sizeof(vxl_uint_32);
   auto * bytes = new vxl_byte[longsize];
   std::memcpy(bytes, &ispare1, longsize);
   if (!endian_consistent_)
@@ -418,7 +418,7 @@ void
 vil_viff_image::set_ispare2(vxl_uint_32 ispare2)
 {
   header_.ispare2 = ispare2;
-  int longsize = sizeof(vxl_uint_32);
+  const int longsize = sizeof(vxl_uint_32);
   auto * bytes = new vxl_byte[longsize];
   std::memcpy(bytes, &ispare2, longsize);
   if (!endian_consistent_)
@@ -433,7 +433,7 @@ void
 vil_viff_image::set_fspare1(float fspare1)
 {
   header_.fspare1 = fspare1;
-  int floatsize = sizeof(float);
+  const int floatsize = sizeof(float);
   auto * bytes = new vxl_byte[floatsize];
   std::memcpy(bytes, &fspare1, floatsize);
   if (!endian_consistent_)
@@ -449,7 +449,7 @@ void
 vil_viff_image::set_fspare2(float fspare2)
 {
   header_.fspare2 = fspare2;
-  int floatsize = sizeof(float);
+  const int floatsize = sizeof(float);
   auto * bytes = new vxl_byte[floatsize];
   std::memcpy(bytes, &fspare2, floatsize);
   if (!endian_consistent_)

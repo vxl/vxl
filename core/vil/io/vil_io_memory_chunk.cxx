@@ -284,7 +284,7 @@ vsl_b_read(vsl_b_istream & is, vil_memory_chunk & chunk)
 void
 vsl_b_write(vsl_b_ostream & os, const vil_memory_chunk * chunk_ptr)
 {
-  bool not_null_ptr = (chunk_ptr != nullptr);
+  const bool not_null_ptr = (chunk_ptr != nullptr);
   vsl_b_write(os, not_null_ptr);
   if (not_null_ptr)
     vsl_b_write(os, *chunk_ptr);

@@ -27,7 +27,7 @@ vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double val_sigma)
   filt1_ = vnl_erf(1.5 * z) - vnl_erf(0.5 * z);
   filt2_ = vnl_erf(2.5 * z) - vnl_erf(1.5 * z);
 
-  double five_tap_total = 2 * (filt2_ + filt1_) + filt0_;
+  const double five_tap_total = 2 * (filt2_ + filt1_) + filt0_;
   //  double four_tap_total = filt2_ + 2*(filt1_) + filt0_;
   //  double three_tap_total = filt2_ + filt1_ + filt0_;
 
@@ -71,9 +71,9 @@ vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double val_sigma)
 void
 vil_gauss_filter_gen_ntap(double sd, unsigned diff, std::vector<double> & filter)
 {
-  std::size_t centre = filter.size() / 2; // or just past centre if even length
-  double sum = 0.0;                       // area under sampled curve.
-  double tap = NAN;                       // workspace
+  const std::size_t centre = filter.size() / 2; // or just past centre if even length
+  double sum = 0.0;                             // area under sampled curve.
+  double tap = NAN;                             // workspace
 
   if (diff == 0)
   {

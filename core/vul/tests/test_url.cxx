@@ -40,7 +40,7 @@ test_url()
   {
     data += (char)(i % 255);
 
-    std::string encoded = vul_url::encode_base64(data);
+    const std::string encoded = vul_url::encode_base64(data);
     if (!(encoded.size() >= i * 4 / 3 && encoded.size() <= 4 + i * 5 / 3))
       correct_size = false;
     std::string decoded = vul_url::decode_base64(encoded);
@@ -69,7 +69,7 @@ test_url()
 
   std::cout << "======== http downloading ===========\n";
 
-  bool no_download = !vul_url::exists("https://vxl.github.io/index.html");
+  const bool no_download = !vul_url::exists("https://vxl.github.io/index.html");
   if (no_download)
     std::cout << "vul_url::exists() and vil_url::open() tests disabled: probably behind firewall\n";
   else
@@ -89,7 +89,7 @@ test_url()
                "<html>\n  <head>\n    <title>VXL - C++ Libraries for Computer Vision</title>";
     if (i)
     {
-      int l = std::strlen(b);
+      const int l = std::strlen(b);
       char a[256];
       i->read(a, 1 + l);
       a[1 + l] = '\0';

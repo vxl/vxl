@@ -48,7 +48,7 @@ vbl_bit_array_3d::flip(unsigned int i1, unsigned int i2, unsigned int i3)
 void
 vbl_bit_array_3d::fill(bool v)
 {
-  unsigned char temp = v ? ~(unsigned char)0 : 0;
+  const unsigned char temp = v ? ~(unsigned char)0 : 0;
   std::memset(data_, temp, this->size());
 }
 
@@ -68,7 +68,7 @@ void
 vbl_bit_array_3d::index(unsigned x, unsigned y, unsigned z, unsigned long & byteindex, unsigned char & bitindex) const
 {
   assert(x < row1_count_ && y < row2_count_ && z < row3_count_);
-  unsigned long i = (z * row2_count() + y) * row1_count() + x;
+  const unsigned long i = (z * row2_count() + y) * row1_count() + x;
 
   byteindex = i / CHAR_BIT;
   bitindex = (unsigned char)(i % CHAR_BIT);

@@ -323,7 +323,7 @@ vil_bmp_image::write_header()
 
   int rowlen = ni() * nplanes() * vil_pixel_format_sizeof_components(pixel_format());
   rowlen += (3 - (rowlen + 3) % 4); // round up to a multiple of 4
-  int data_size = nj() * rowlen;
+  const int data_size = nj() * rowlen;
 
   if (nplanes() == 1)
     info_hdr.colorcount = info_hdr.colormapsize = 1 << vil_pixel_format_sizeof_components(pixel_format()) * 8;
@@ -385,12 +385,12 @@ vil_bmp_image::get_copy_view(unsigned x0, unsigned nx, unsigned y0, unsigned ny)
   const unsigned have_bytes_per_raster = ((bytes_per_pixel * core_hdr.width + 3) / 4) * 4;
 
   // number of bytes we want per raster.
-  unsigned long want_bytes_per_raster = nx * bytes_per_pixel;
+  const unsigned long want_bytes_per_raster = nx * bytes_per_pixel;
 
   // The following line results in non-contiguous image view and waste a bit memory
   // if (nx == ni()) want_bytes_per_raster =  have_bytes_per_raster;
 
-  vil_memory_chunk_sptr buf = new vil_memory_chunk(want_bytes_per_raster * ny, VIL_PIXEL_FORMAT_BYTE);
+  const vil_memory_chunk_sptr buf = new vil_memory_chunk(want_bytes_per_raster * ny, VIL_PIXEL_FORMAT_BYTE);
 
   std::ptrdiff_t top_left_y0_in_mem = 0;
   std::ptrdiff_t ystep = want_bytes_per_raster;

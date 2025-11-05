@@ -266,7 +266,7 @@ vsl_b_ostream::add_serialisation_record(void * pointer, int other_data /*= 0*/)
 {
   assert(pointer != nullptr);
   assert(serialisation_records_.find(pointer) == serialisation_records_.end());
-  unsigned long id = (unsigned long)serialisation_records_.size() + 1;
+  const unsigned long id = (unsigned long)serialisation_records_.size() + 1;
   serialisation_records_[pointer] = std::make_pair(id, other_data);
   return id;
 }
@@ -459,7 +459,7 @@ vsl_b_istream::get_serialisation_other_data(unsigned long serial_number) const
 int
 vsl_b_istream::set_serialisation_other_data(unsigned long serial_number, int /*other_data*/)
 {
-  serialisation_records_type::const_iterator entry = serialisation_records_.find(serial_number);
+  const serialisation_records_type::const_iterator entry = serialisation_records_.find(serial_number);
   if (entry == serialisation_records_.end())
   {
     std::cerr << "vsl_b_istream::set_serialisation_other_data():\n"

@@ -43,19 +43,19 @@ test_ray()
   double su = 13834, ou = 13792;
   double sv = 15787, ov = 15430;
 
-  vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
-  vgl_point_3d<double> p3d(ox, oy, oz);
+  const vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, sx, ox, sy, oy, sz, oz, su, ou, sv, ov);
+  const vgl_point_3d<double> p3d(ox, oy, oz);
   vgl_vector_3d<double> v;
   vpgl_ray::ray(rcam, p3d, v);
   std::cout << "Ray Direction " << v << '\n';
-  double x_y = v.x() / v.y();
+  const double x_y = v.x() / v.y();
 
   TEST_NEAR("test ray_direction", x_y, -0.16767109029721888, 0.002);
 
   // test ray for local rational camera
-  vpgl_lvcs lvcs(33.1855, 44.3542, 32, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  const vpgl_lvcs lvcs(33.1855, 44.3542, 32, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
 
-  vpgl_local_rational_camera<double> lrcam(lvcs, rcam);
+  const vpgl_local_rational_camera<double> lrcam(lvcs, rcam);
 
   vgl_point_3d<double> orig;
   vgl_vector_3d<double> dir;
@@ -63,12 +63,12 @@ test_ray()
   bool good = vpgl_ray::ray(lrcam, ou, ov, orig, dir);
   TEST("ray()", good, true);
   std::cout << "Orig: " << orig << "\n Dir: " << dir << '\n';
-  vgl_vector_3d<double> tdir(0.0689725, -0.487625, -0.870325);
+  const vgl_vector_3d<double> tdir(0.0689725, -0.487625, -0.870325);
   double err = (tdir - dir).length();
   TEST_NEAR("test local rational ray_direction", err, 0.0, 1e-6);
 
-  vgl_point_2d<double> impt1(ou, ov);
-  vgl_point_2d<double> impt2(ou + 1, ov);
+  const vgl_point_2d<double> impt1(ou, ov);
+  const vgl_point_2d<double> impt2(ou + 1, ov);
 
   vgl_plane_3d<double> outp;
 
@@ -88,14 +88,14 @@ test_ray()
   row2[3] = 538.93376518200034;
   vpgl_affine_camera<double> row_cam(row1, row2);
   row_cam.set_viewing_distance(9325.6025071654913);
-  vgl_point_3d<double> wrld_pt(274.30804459155252, 85.614875071463018, -35.273309156122778);
+  const vgl_point_3d<double> wrld_pt(274.30804459155252, 85.614875071463018, -35.273309156122778);
   vgl_ray_3d<double> affine_ray;
   good = vpgl_ray::ray(row_cam, wrld_pt, affine_ray);
-  vgl_homg_point_2d<double> img_pt(369.28342202880049, 554.72813713086771);
-  vgl_ray_3d<double> gt_ray = row_cam.backproject_ray(img_pt);
-  double dir_dist = (affine_ray.direction() - gt_ray.direction()).length();
-  vgl_point_3d<double> cp = vgl_closest_point(affine_ray, wrld_pt);
-  double gnd_pt_dist = (cp - wrld_pt).length();
+  const vgl_homg_point_2d<double> img_pt(369.28342202880049, 554.72813713086771);
+  const vgl_ray_3d<double> gt_ray = row_cam.backproject_ray(img_pt);
+  const double dir_dist = (affine_ray.direction() - gt_ray.direction()).length();
+  const vgl_point_3d<double> cp = vgl_closest_point(affine_ray, wrld_pt);
+  const double gnd_pt_dist = (cp - wrld_pt).length();
   TEST_NEAR("affine ray ", dir_dist + gnd_pt_dist, 0.0, 1e-5);
 }
 

@@ -28,7 +28,7 @@ main(int argc, char ** argv)
 
   // This is how we quickly load an image view.
 
-  vil_image_view<vxl_byte> b_im = vil_load(argv[1]);
+  const vil_image_view<vxl_byte> b_im = vil_load(argv[1]);
 
   if (!b_im)
   {

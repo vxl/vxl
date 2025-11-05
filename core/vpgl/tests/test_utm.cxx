@@ -26,11 +26,11 @@ test_utm_convert(double lat,
             << "force_south_flag = " << force_south_flag << "\n\n";
 
   // UTM conversion object
-  vpgl_utm u;
+  const vpgl_utm u;
 
 
   // UTM result tolerance in meters
-  double utm_tol = 5e-3; // 0.5 cm
+  const double utm_tol = 5e-3; // 0.5 cm
 
   // WGS84 to UTM
   double easting_result = NAN, northing_result = NAN;
@@ -48,7 +48,7 @@ test_utm_convert(double lat,
 
 
   // WGS84 result tolerance in degrees
-  double wgs84_tol = 1e-6;
+  const double wgs84_tol = 1e-6;
 
   // UTM to WGS84
   double lat_result = NAN, lon_result = NAN;
@@ -82,10 +82,10 @@ test_utm2utm(int utm_zone_a,
             << "B = (" << easting_b << ", " << northing_b << ", " << utm_zone_b << ", " << south_flag_b << ")\n";
 
   // UTM conversion object
-  vpgl_utm u;
+  const vpgl_utm u;
 
   // UTM result tolerance in meters
-  double utm_tol = 5e-3; // 0.5 cm
+  const double utm_tol = 5e-3; // 0.5 cm
 
   // results
   double easting_result = NAN, northing_result = NAN;

@@ -18,7 +18,7 @@
 static double
 camera_diff_norm(const vpgl_perspective_camera<double> & C0, const vpgl_perspective_camera<double> & C1)
 {
-  vnl_matrix_fixed<double, 3, 4> dif = C0.get_matrix() - C1.get_matrix();
+  const vnl_matrix_fixed<double, 3, 4> dif = C0.get_matrix() - C1.get_matrix();
   return dif.fro_norm();
 }
 
@@ -30,7 +30,7 @@ test_camera_io()
   //===========   proj_camera ==================
   // Some matrices for testing.
   double random_list[12] = { 10.6, 1.009, .676, .5, -13, -10, 8, 5, 88, -2, -100, 11 };
-  vnl_double_3x4 random_matrix(random_list);
+  const vnl_double_3x4 random_matrix(random_list);
   cam = new vpgl_proj_camera<double>(random_matrix);
   vsl_b_ofstream bp_outp("test_proj_camera_io.tmp");
   vsl_b_write(bp_outp, cam);
@@ -78,12 +78,12 @@ test_camera_io()
   // delete cam; cam = 0;
   //===========   perspective_camera ==================
   double data[] = { 2000, 0, 512, 0, 2000, 384, 0, 0, 1 };
-  vpgl_calibration_matrix<double> K = vnl_double_3x3(data);
-  vgl_homg_point_3d<double> center(0, 0, -10.0);
+  const vpgl_calibration_matrix<double> K = vnl_double_3x3(data);
+  const vgl_homg_point_3d<double> center(0, 0, -10.0);
 
   // rotation angle in radians
-  double theta = vnl_math::pi_over_4; // 45 degrees
-  vnl_double_3 axis(0.0, 1.0, 0.0);
+  const double theta = vnl_math::pi_over_4; // 45 degrees
+  const vnl_double_3 axis(0.0, 1.0, 0.0);
   vgl_h_matrix_3d<double> R;
   R.set_identity().set_rotation_about_axis(axis, theta);
   auto * percam = new vpgl_perspective_camera<double>(K, center, vgl_rotation_3d<double>(R));
@@ -104,7 +104,7 @@ test_camera_io()
   }
   else
   {
-    double er = camera_diff_norm(*percam, *percam_r);
+    const double er = camera_diff_norm(*percam, *percam_r);
     TEST_NEAR("recovered perspective_camera", er, 0.0, 1e-3);
   }
   //  delete cam; cam = 0; delete cam_r; cam_r = 0;
@@ -200,7 +200,7 @@ test_camera_io()
   //  delete cam_r; cam_r = 0;
   //===========   local_rational_camera ==================
 
-  vpgl_lvcs lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  const vpgl_lvcs lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   auto * lrcam = new vpgl_local_rational_camera<double>(lvcs, *rcam);
   delete cam;
   cam = lrcam;

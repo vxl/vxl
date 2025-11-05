@@ -169,8 +169,8 @@ vul_psfile::compute_bounding_box()
 
   if (printer_paper_layout == vul_psfile::CENTER)
   {
-    double hsx = box_width / PIX2INCH * scale_x * .5;
-    double hsy = box_height / PIX2INCH * scale_y * .5;
+    const double hsx = box_width / PIX2INCH * scale_x * .5;
+    const double hsy = box_height / PIX2INCH * scale_y * .5;
 
     // from xv xvps.c subroutine: centerimage
     pos_inx = psizex * .5 - hsx;
@@ -186,8 +186,8 @@ vul_psfile::compute_bounding_box()
   }
   else if (printer_paper_layout == vul_psfile::MAX)
   {
-    double hsx = psizex - margins[printer_paper_type][0];
-    double hsy = psizey - margins[printer_paper_type][1];
+    const double hsx = psizex - margins[printer_paper_type][0];
+    const double hsy = psizey - margins[printer_paper_type][1];
 
     // avoid division by 0:
     if (box_width == 0)
@@ -238,8 +238,8 @@ vul_psfile::compute_bounding_box()
 void
 vul_psfile::set_min_max_xy(float xx, float yy)
 {
-  int x = int(xx + 0.5);
-  int y = int(yy + 0.5);
+  const int x = int(xx + 0.5);
+  const int y = int(yy + 0.5);
   if (x < min_x)
     min_x = x;
   if (y < min_y)
@@ -286,8 +286,8 @@ vul_psfile::print_greyscale_image(const unsigned char * buffer, int sizex, int s
   if (reduction_factor < 1)
     reduction_factor = 1;
 
-  int new_width = (int)std::ceil(sizex / (double)reduction_factor); // round up
-  int new_height = (int)std::ceil(sizey / (double)reduction_factor);
+  const int new_width = (int)std::ceil(sizex / (double)reduction_factor); // round up
+  const int new_height = (int)std::ceil(sizey / (double)reduction_factor);
 
   output_filestream << "\n%%Page: 1 1\n\n% remember original state\n/origstate save def\n"
                     << "\n% build a temporary dictionary\n20 dict begin\n\n"
@@ -317,7 +317,7 @@ vul_psfile::print_greyscale_image(const unsigned char * buffer, int sizex, int s
         index = int(*(buffer + width * j + i));
       else // Reduce resolution of image if necessary
       {
-        int pixel_number = (width * j + i) * reduction_factor;
+        const int pixel_number = (width * j + i) * reduction_factor;
         index = 0;
         int number_of_pixels_sampled = 0;
         for (int m = 0; m < reduction_factor; m++)
@@ -383,8 +383,8 @@ vul_psfile::print_color_image(const unsigned char * data, int sizex, int sizey)
   if (reduction_factor < 1)
     reduction_factor = 1;
 
-  int new_width = (int)std::ceil(sizex / (double)reduction_factor); // round up
-  int new_height = (int)std::ceil(sizey / (double)reduction_factor);
+  const int new_width = (int)std::ceil(sizex / (double)reduction_factor); // round up
+  const int new_height = (int)std::ceil(sizey / (double)reduction_factor);
 
   // This part uses xv outfile as a reference:
   output_filestream << "\n%%Page: 1 1\n\n"
@@ -476,7 +476,7 @@ vul_psfile::print_color_image(const unsigned char * data, int sizex, int sizey)
           index = int(*(data + (sizex * j + i) * bytes_per_pixel + c));
         else // Reduce image if necessary
         {
-          int pixel_number = (sizex * j + i) * bytes_per_pixel * reduction_factor + c;
+          const int pixel_number = (sizex * j + i) * bytes_per_pixel * reduction_factor + c;
           index = 0;
           int number_of_pixels_sampled = 0;
           for (int m = 0; m < reduction_factor; m++)
@@ -545,9 +545,9 @@ vul_psfile::graphic_header()
 void
 vul_psfile::image_translate_and_scale()
 {
-  int scale_height = int(height * scale_y);
-  int scale_min_x = int(min_x * scale_x);
-  int scale_max_y = int(max_y * scale_y);
+  const int scale_height = int(height * scale_y);
+  const int scale_min_x = int(min_x * scale_x);
+  const int scale_max_y = int(max_y * scale_y);
 
   if (debug)
     std::cout << "vul_psfile::image_translate_and_scale, scale_height= " << scale_height
@@ -565,9 +565,9 @@ vul_psfile::image_translate_and_scale()
 void
 vul_psfile::object_translate_and_scale()
 {
-  int scale_height = int(box_height * scale_y);
-  int scale_min_x = int(min_x * scale_x);
-  int scale_min_y = int(min_y * scale_y);
+  const int scale_height = int(box_height * scale_y);
+  const int scale_min_x = int(min_x * scale_x);
+  const int scale_min_y = int(min_y * scale_y);
   // round to integer .01ths
   scale_x = std::floor(scale_x * 100.0f + 0.5f) * .01f;
   scale_y = std::floor(scale_y * 100.0f + 0.5f) * .01f;

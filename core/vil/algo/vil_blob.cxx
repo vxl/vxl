@@ -52,8 +52,8 @@ public:
   void
   merge_labels(LABEL left_label, LABEL right_label)
   {
-    LABEL left_root = root(left_label);
-    LABEL right_root = root(right_label);
+    LABEL const left_root = root(left_label);
+    LABEL const right_root = root(right_label);
     if (left_root == right_root)
       return; // already merged.
     node & left_root_node = store_[left_root];
@@ -74,7 +74,7 @@ public:
   LABEL
   new_label()
   {
-    node n = { (LABEL)store_.size(), 0 };
+    const node n = { (LABEL)store_.size(), 0 };
     store_.push_back(n);
     return n.parent;
   }
@@ -93,8 +93,8 @@ vil_blob_labels(const vil_image_view<bool> & src_binary,
                 vil_blob_connectivity conn,
                 vil_image_view<unsigned> & dest_label)
 {
-  unsigned ni = src_binary.ni();
-  unsigned nj = src_binary.nj();
+  const unsigned ni = src_binary.ni();
+  const unsigned nj = src_binary.nj();
   dest_label.set_size(ni, nj);
   dest_label.fill(0);
 
@@ -117,8 +117,8 @@ vil_blob_labels(const vil_image_view<bool> & src_binary,
 
   // The 2-prev-(of 6)-neighbourhood are the first two entries.
   // The 4-prev-(of 8)-neighbourhood are those two plus the rest.
-  int neighbourhood_ii[] = { -1, 0, -1, +1 };
-  int neighbourhood_jj[] = { 0, -1, -1, -1 };
+  const int neighbourhood_ii[] = { -1, 0, -1, +1 };
+  const int neighbourhood_jj[] = { 0, -1, -1, -1 };
 
 
   for (unsigned j = 0; j < nj; ++j)
@@ -129,19 +129,19 @@ vil_blob_labels(const vil_image_view<bool> & src_binary,
       neighbouring_labels.clear();
       for (unsigned l = 0; l < n_prev_neighbours; ++l)
       {
-        unsigned ii = i + neighbourhood_ii[l];
+        const unsigned ii = i + neighbourhood_ii[l];
         if (ii >= ni)
           continue; // rely on wraparound to find -ne overruns.
-        unsigned jj = j + neighbourhood_jj[l];
+        const unsigned jj = j + neighbourhood_jj[l];
         if (jj >= nj)
           continue;
-        unsigned d = dest_label(ii, jj);
+        const unsigned d = dest_label(ii, jj);
         if (d != 0)
           neighbouring_labels.push_back(d);
       }
       if (neighbouring_labels.empty())
       {
-        unsigned new_label = merge_list.new_label();
+        const unsigned new_label = merge_list.new_label();
         dest_label(i, j) = new_label;
       }
       else
@@ -152,7 +152,7 @@ vil_blob_labels(const vil_image_view<bool> & src_binary,
         // don't bother erasing unique's suffix, just keeping the end iterator
         // will be enough.
         auto it = neighbouring_labels.begin();
-        unsigned label = *it++;
+        const unsigned label = *it++;
         dest_label(i, j) = label;
 
         // If we have neighbours with multiple labels.
@@ -163,7 +163,7 @@ vil_blob_labels(const vil_image_view<bool> & src_binary,
           merge_list.merge_labels(*it, label);
       }
     }
-  unsigned n_merge = merge_list.size();
+  const unsigned n_merge = merge_list.size();
   std::vector<unsigned> renumbering(n_merge, 0u);
   // Convert the merge lsit into a simple renumbering array,
   // and change to root of each disjoint set to its lowest member.
@@ -172,8 +172,8 @@ vil_blob_labels(const vil_image_view<bool> & src_binary,
   {
     if (renumbering[l] != 0)
       continue;
-    unsigned root_label = merge_list.root(l);
-    unsigned root_label_renumber = renumbering[root_label];
+    const unsigned root_label = merge_list.root(l);
+    const unsigned root_label_renumber = renumbering[root_label];
     if (root_label_renumber == 0)
     {
       renumbering[root_label] = l;
@@ -214,8 +214,8 @@ vil_blob_labels_to_edge_labels(const vil_image_view<unsigned> & src_label,
                                vil_blob_connectivity conn,
                                vil_image_view<unsigned> & dest_label)
 {
-  unsigned ni = src_label.ni();
-  unsigned nj = src_label.nj();
+  const unsigned ni = src_label.ni();
+  const unsigned nj = src_label.nj();
   dest_label.set_size(ni, nj);
   dest_label.fill(0);
 
@@ -235,21 +235,21 @@ vil_blob_labels_to_edge_labels(const vil_image_view<unsigned> & src_label,
 
   // A  4-conn blob pixel is on the edge if any of its 8-conn neighbours has different value.
   // An 8-conn blob pixel is on the edge if any of its 4-conn neighbours has different value.
-  int neighbourhood_ii[] = { 0, -1, 1, 0, -1, 1, -1, 1 };
-  int neighbourhood_jj[] = { -1, 0, 0, 1, -1, -1, 1, 1 };
+  const int neighbourhood_ii[] = { 0, -1, 1, 0, -1, 1, -1, 1 };
+  const int neighbourhood_jj[] = { -1, 0, 0, 1, -1, -1, 1, 1 };
 
   for (unsigned j = 0; j < nj; ++j)
     for (unsigned i = 0; i < ni; ++i)
     {
-      unsigned v = src_label(i, j);
+      const unsigned v = src_label(i, j);
       if (!v)
         continue;
       for (unsigned l = 0; l < n_edge_neighbours; ++l)
       {
-        unsigned ii = i + neighbourhood_ii[l];
+        const unsigned ii = i + neighbourhood_ii[l];
         if (ii >= ni)
           continue; // rely on wraparound to find -ne overruns.
-        unsigned jj = j + neighbourhood_jj[l];
+        const unsigned jj = j + neighbourhood_jj[l];
         if (jj >= nj)
           continue;
         if (v != src_label(ii, jj)) // Only pixels that have neighbours with different values are edge pixels.
@@ -268,13 +268,13 @@ void
 vil_blob_labels_to_regions(const vil_image_view<unsigned> & src_label, std::vector<vil_blob_region> & dest_regions)
 {
   dest_regions.clear();
-  unsigned ni = src_label.ni();
-  unsigned nj = src_label.nj();
+  const unsigned ni = src_label.ni();
+  const unsigned nj = src_label.nj();
 
   for (unsigned j = 0; j < nj; ++j)
     for (unsigned i = 0; i < ni;) // don't auto increment i, since the loop body does it.
     {
-      unsigned label = src_label(i, j);
+      const unsigned label = src_label(i, j);
       if (!label)
       { // if not a label - go to next pixel.
         ++i;
@@ -283,7 +283,7 @@ vil_blob_labels_to_regions(const vil_image_view<unsigned> & src_label, std::vect
       // Make sure there is a region for this label.
       if (label > dest_regions.size())
         dest_regions.resize(label);
-      unsigned i_start = i;
+      const unsigned i_start = i;
       // Find end of chord.
       while (++i < ni && src_label(i, j) == label)
         ;
@@ -299,13 +299,13 @@ vil_blob_labels_to_pixel_lists(const vil_image_view<unsigned> & src_label,
                                std::vector<vil_blob_pixel_list> & dest_pixel_lists)
 {
   dest_pixel_lists.clear();
-  unsigned ni = src_label.ni();
-  unsigned nj = src_label.nj();
+  const unsigned ni = src_label.ni();
+  const unsigned nj = src_label.nj();
 
   for (unsigned j = 0; j < nj; ++j)
     for (unsigned i = 0; i < ni; ++i)
     {
-      unsigned label = src_label(i, j);
+      const unsigned label = src_label(i, j);
       if (!label)
         continue;
       // Make sure there is a pixel list for this label.

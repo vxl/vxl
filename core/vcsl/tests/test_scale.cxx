@@ -24,11 +24,11 @@ static void
 test_scale()
 {
   std::cout << "Creation of graph..." << std::flush;
-  vcsl_graph_sptr graph = new vcsl_graph();
+  const vcsl_graph_sptr graph = new vcsl_graph();
   std::cout << "done" << std::endl;
 
   std::cout << "Creation of csa..." << std::flush;
-  vcsl_spatial_sptr csa = new vcsl_cartesian_3d();
+  const vcsl_spatial_sptr csa = new vcsl_cartesian_3d();
   std::cout << "done" << std::endl;
   TEST("vcsl_cartesian_3d as vcsl_spatial_sptr", bool(csa), true);
   std::cout << "Adding csa to graph..." << std::flush;
@@ -36,7 +36,7 @@ test_scale()
   std::cout << "done" << std::endl;
 
   std::cout << "Creation of cs0..." << std::flush;
-  vcsl_spatial_sptr cs0 = new vcsl_cartesian_3d();
+  const vcsl_spatial_sptr cs0 = new vcsl_cartesian_3d();
   std::cout << "done" << std::endl;
   TEST("vcsl_cartesian_3d as vcsl_spatial_sptr", bool(cs0), true);
   std::cout << "Adding cs0 to graph..." << std::flush;
@@ -44,7 +44,7 @@ test_scale()
   std::cout << "done" << std::endl;
 
   std::cout << "Creation of cs1..." << std::flush;
-  vcsl_spatial_sptr cs1 = new vcsl_cartesian_3d();
+  const vcsl_spatial_sptr cs1 = new vcsl_cartesian_3d();
   std::cout << "done" << std::endl;
   TEST("vcsl_cartesian_3d as vcsl_spatial_sptr", bool(cs1), true);
   std::cout << "Adding cs1 to graph..." << std::flush;
@@ -78,11 +78,11 @@ test_scale()
   std::cout << "done" << std::endl;
 
   std::cout << "Creation of scale..." << std::flush;
-  vcsl_scale_sptr scale = new vcsl_scale;
+  const vcsl_scale_sptr scale = new vcsl_scale;
   std::cout << "done" << std::endl;
   TEST("vcsl_scale_sptr", bool(scale), true);
 
-  std::vector<double> & tr0_beat = beat;
+  const std::vector<double> & tr0_beat = beat;
 
   std::cout << "Attaching tr0_beat to scale..." << std::flush;
   scale->set_beat(tr0_beat);

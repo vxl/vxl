@@ -44,7 +44,8 @@ vil_decimate_image_resource::get_copy_view(unsigned i0, unsigned ni, unsigned j0
 {
   if ((unsigned long)i_factor_ * (unsigned long)ni * (unsigned long)j_factor_ * (unsigned long)nj < large_image_limit)
   {
-    vil_image_view_base_sptr vs = src_->get_copy_view(i0 * i_factor_, ni * i_factor_, j0 * j_factor_, nj * j_factor_);
+    const vil_image_view_base_sptr vs =
+      src_->get_copy_view(i0 * i_factor_, ni * i_factor_, j0 * j_factor_, nj * j_factor_);
     if (!vs)
       return nullptr;
 
@@ -97,7 +98,7 @@ vil_decimate_image_resource::get_view(unsigned i0, unsigned ni, unsigned j0, uns
 {
   if ((unsigned long)i_factor_ * (unsigned long)ni * (unsigned long)j_factor_ * (unsigned long)nj < large_image_limit)
   {
-    vil_image_view_base_sptr vs = src_->get_view(i0 * i_factor_, ni * i_factor_, j0 * j_factor_, nj * j_factor_);
+    const vil_image_view_base_sptr vs = src_->get_view(i0 * i_factor_, ni * i_factor_, j0 * j_factor_, nj * j_factor_);
     if (!vs)
       return nullptr;
 

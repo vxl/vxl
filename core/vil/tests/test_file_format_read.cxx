@@ -199,7 +199,7 @@ read_value(std::istream & fin, char & pix)
 {
   int x = 0;
   // use operator! to test the stream to avoid compiler warnings
-  bool bad = !(fin >> x);
+  const bool bad = !(fin >> x);
   if (!bad)
     pix = char(x);
   return bad;
@@ -214,7 +214,7 @@ read_value(std::istream & fin, unsigned char & pix)
 {
   int x = 0;
   // use operator! to test the stream to avoid compiler warnings
-  bool bad = !(fin >> x);
+  const bool bad = !(fin >> x);
   if (!bad)
     pix = static_cast<unsigned char>(x);
   return bad;
@@ -229,7 +229,7 @@ read_value(std::istream & fin, signed char & pix)
 {
   int x = 0;
   // use operator! to test the stream to avoid compiler warnings
-  bool bad = !(fin >> x);
+  const bool bad = !(fin >> x);
   if (!bad)
     pix = static_cast<signed char>(x);
   return bad;
@@ -243,7 +243,7 @@ read_value(std::istream & fin, bool & pix)
 {
   int x = 0;
   // use operator! to test the stream to avoid compiler warnings
-  bool bad = !(fin >> x);
+  const bool bad = !(fin >> x);
   if (!bad)
     pix = (x != 0);
   return bad;
@@ -299,7 +299,7 @@ CheckPixels(const Compare<TruePixelType, ImgPixelType> & check,
         {
           if (dl + dr < ir->ni() && dt + db < ir->nj())
           {
-            vil_image_view_base_sptr im = ir->get_copy_view(dl, ir->ni() - dl - dr, dt, ir->nj() - dt - db);
+            const vil_image_view_base_sptr im = ir->get_copy_view(dl, ir->ni() - dl - dr, dt, ir->nj() - dt - db);
             if (!im)
             {
               std::cout << "[ couldn't read (sub)image data from " << ir << "]\n"
@@ -307,7 +307,7 @@ CheckPixels(const Compare<TruePixelType, ImgPixelType> & check,
                         << " ]" << std::endl;
               return false;
             }
-            vil_image_view<ImgPixelType> img = im;
+            const vil_image_view<ImgPixelType> img = im;
             if (!img)
             {
               std::cout << "[ couldn't read (sub)image data of the expected format from " << im << " at offset " << dl
@@ -406,7 +406,7 @@ template <class TruePixelType, class ImgPixelType>
 bool
 CheckFile(const Compare<TruePixelType, ImgPixelType> & check, const char * true_data_file, const char * img_data_file)
 {
-  vil_image_resource_sptr ir = vil_load_image_resource((image_base + img_data_file).c_str());
+  const vil_image_resource_sptr ir = vil_load_image_resource((image_base + img_data_file).c_str());
   if (!ir)
   {
     std::cout << "[ couldn't load image file " << img_data_file << " ]" << std::endl;
@@ -465,13 +465,13 @@ template <typename T_PIXEL>
 bool
 image_equals(const std::string & test_file, const std::string & ref_file)
 {
-  vil_image_view_base_sptr view_test_ptr = vil_load((image_base + test_file).c_str());
+  const vil_image_view_base_sptr view_test_ptr = vil_load((image_base + test_file).c_str());
   if (!view_test_ptr)
   {
     std::cout << "[ couldn't open or decode file " << test_file << " ]\n";
     return false;
   }
-  vil_image_view_base_sptr view_ref_ptr = vil_load((image_base + ref_file).c_str());
+  const vil_image_view_base_sptr view_ref_ptr = vil_load((image_base + ref_file).c_str());
   if (!view_ref_ptr)
   {
     std::cout << "[ couldn't open or decode file " << ref_file << " ]\n";
@@ -496,7 +496,7 @@ test_file_format_read(int argc, char * argv[])
   }
   else
   {
-    std::string root = testlib_root_dir();
+    const std::string root = testlib_root_dir();
     image_base = root + "/core/vil/tests/file_read_data";
   }
   exists = vul_file::is_directory(image_base);

@@ -26,7 +26,7 @@ vil1_load_raw(vil1_stream * is)
     std::cout << " \'" << (*p)->tag() << "\'" << std::flush;
 #endif
     is->seek(0);
-    vil1_image i = (*p)->make_input_image(is);
+    const vil1_image i = (*p)->make_input_image(is);
     if (i && i.width() >= 0 && i.height() >= 0 && i.planes() > 0 && i.components() > 0 && i.bits_per_component() > 0)
     {
 #ifdef DEBUG
@@ -51,7 +51,7 @@ vil1_load_raw(const char * filename)
   vil1_stream * is = vil1_open(filename, "r");
   if (is)
   {
-    vil1_image im = vil1_load_raw(is);
+    const vil1_image im = vil1_load_raw(is);
     // this will delete the stream object in case the loader has failed;
     // otherwise the specific image file format will have ref()ed "is"
     // in which case this does not harm.

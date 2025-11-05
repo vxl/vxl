@@ -27,7 +27,7 @@ vgl_h_matrix_3d_compute_affine::solve_linear_problem(const std::vector<vgl_homg_
                                                      const std::vector<vgl_homg_point_3d<double>> & p2,
                                                      vnl_matrix<double> & M)
 {
-  int n = static_cast<int>(p1.size());
+  const int n = static_cast<int>(p1.size());
   // fill the design matrix
   vnl_matrix<double> D(n * 3, TM_UNKNOWNS_COUNT, 0.0);
   vnl_matrix<double> b(n * 3, 1);
@@ -91,7 +91,7 @@ vgl_h_matrix_3d_compute_affine::compute_p(const std::vector<vgl_homg_point_3d<do
 {
   // number of points must be the same
   assert(points1.size() == points2.size());
-  int n = static_cast<int>(points1.size());
+  const int n = static_cast<int>(points1.size());
 
   if (n * 3 < TM_UNKNOWNS_COUNT + 3)
   {
@@ -133,7 +133,7 @@ vgl_h_matrix_3d_compute_affine::compute_p(const std::vector<vgl_homg_point_3d<do
     std::cout << std::setprecision(2) << m[r][0] << ' ' << m[r][1] << ' '<< m[r][2] << ' '<< m[r][3] << '\n';
   std::cout << '\n';
 #endif
-  vgl_h_matrix_3d<double> hh(m);
+  vgl_h_matrix_3d<double> const hh(m);
   //
   // Next, hh has to be transformed back to the coordinate system of
   // the original point sets, i.e.,
@@ -142,7 +142,7 @@ vgl_h_matrix_3d_compute_affine::compute_p(const std::vector<vgl_homg_point_3d<do
   //  p2' = hh p1', thus
   // (tr2 p2) = hh (tr1 p1)
   //  p2 = (tr2^-1 hh tr1) p1 = H p1
-  vgl_h_matrix_3d<double> tr2_inv = tr2.get_inverse();
+  const vgl_h_matrix_3d<double> tr2_inv = tr2.get_inverse();
   H = tr2_inv * hh * tr1;
   return true;
 }

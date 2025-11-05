@@ -25,7 +25,7 @@ main(int argc, char ** argv)
 
   // This is how we initialise an image data object.
 
-  vil_image_resource_sptr data = vil_load_image_resource(argv[1]);
+  const vil_image_resource_sptr data = vil_load_image_resource(argv[1]);
 
   if (!data)
   {
@@ -35,7 +35,7 @@ main(int argc, char ** argv)
 
   // This is how we get some image pixels from it.
 
-  vil_image_view<unsigned char> uc_view = data->get_view(0, data->ni(), 0, data->nj());
+  const vil_image_view<unsigned char> uc_view = data->get_view(0, data->ni(), 0, data->nj());
 
   vil_print_all(std::cout, uc_view);
 

@@ -111,7 +111,7 @@ test_algo_correlate_1d_double()
   TEST_NEAR("No overrun end", dest[n + 1], 999, 1e-6);
 
   std::cout << "Test vil_correlate_zero_extend end type with 5-tap filter\n";
-  double kernel2[5] = { 1.0, 5.0, 8.0, 5.0, -1.0 };
+  const double kernel2[5] = { 1.0, 5.0, 8.0, 5.0, -1.0 };
   for (int i = 0; i < n + 2; ++i)
     dest[i] = 999;
   vil_correlate_1d(&src[0],
@@ -203,7 +203,7 @@ test_algo_correlate_1d_double()
 
   std::cout << "\n\nvil_correlate_1d(vil_image_resource_sptr&,...)\n";
 
-  vil_image_resource_sptr mem = vil_new_image_resource(n, n, 1, VIL_PIXEL_FORMAT_BYTE);
+  const vil_image_resource_sptr mem = vil_new_image_resource(n, n, 1, VIL_PIXEL_FORMAT_BYTE);
   vil_image_view<vxl_byte> v(n, n, 1), v_out(n, n, 1);
   for (int j = 0; j < n; ++j)
     for (int i = 0; i < n; ++i)
@@ -212,7 +212,7 @@ test_algo_correlate_1d_double()
   TEST("memory image.put_view()", mem->put_view(v, 0, 0), true);
 
   // set up a correlated image_resource object
-  vil_image_resource_sptr conv =
+  const vil_image_resource_sptr conv =
     vil_correlate_1d(mem, vxl_byte(), &kernel[1], -1, 1, int(), vil_convolve_constant_extend, vil_convolve_zero_extend);
 
   // set up a correlated view.

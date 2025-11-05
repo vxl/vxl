@@ -23,7 +23,7 @@ test_affine_rect()
   M1[2][2] = 0;
   M1[2][3] = 1;
 
-  vpgl_affine_camera<double> cam1(M1);
+  const vpgl_affine_camera<double> cam1(M1);
 
   vnl_matrix_fixed<double, 3, 4> M2;
   M2[0][0] = -0.00389854;
@@ -39,7 +39,7 @@ test_affine_rect()
   M2[2][2] = 0;
   M2[2][3] = 1;
 
-  vpgl_affine_camera<double> cam2(M2);
+  const vpgl_affine_camera<double> cam2(M2);
 
   vpgl_affine_fundamental_matrix<double> FA;
   TEST("compute affine f", vpgl_affine_rectification::compute_affine_f(&cam1, &cam2, FA), true);
@@ -56,7 +56,7 @@ test_affine_rect()
   P2[1][0] = 1253.801758;
   P2[2][0] = 1;
 
-  vnl_matrix_fixed<double, 3, 3> FAM = FA.get_matrix();
+  const vnl_matrix_fixed<double, 3, 3> FAM = FA.get_matrix();
   vgl_homg_point_2d<double> er, el;
   FA.get_epipoles(er, el);
   std::cout << "er: " << er << " el: " << el << std::endl;

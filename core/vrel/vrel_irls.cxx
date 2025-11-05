@@ -112,7 +112,7 @@ vrel_irls::estimate(const vrel_estimation_problem * problem, const vrel_wls_obj 
 {
   iteration_ = 0;
   obj_fcn_ = 1e256;
-  unsigned int num_for_fit = problem->num_samples_to_instantiate();
+  const unsigned int num_for_fit = problem->num_samples_to_instantiate();
   bool allow_convergence_test = true;
   std::vector<double> residuals(problem->num_samples());
   std::vector<double> weights(problem->num_samples());
@@ -149,7 +149,7 @@ vrel_irls::estimate(const vrel_estimation_problem * problem, const vrel_wls_obj 
   assert(params_initialized_ && scale_initialized_);
   if (scale_ <= 1e-8)
   {
-    unsigned int dof = problem->param_dof();
+    const unsigned int dof = problem->param_dof();
     cofact_ = 1e-16 * vnl_matrix<double>(dof, dof, vnl_matrix_identity);
     scale_ = 0.0;
     converged_ = true;
@@ -216,7 +216,7 @@ vrel_irls::estimate(const vrel_estimation_problem * problem, const vrel_wls_obj 
         std::cout << "Scale estimated: " << scale_ << std::endl;
       if (scale_ <= 1e-8)
       { //  fit exact enough to yield 0 scale estimate
-        unsigned int dof = problem->param_dof();
+        const unsigned int dof = problem->param_dof();
         cofact_ = 1e-16 * vnl_matrix<double>(dof, dof, vnl_matrix_identity);
         scale_ = 0.0;
         converged_ = true;
@@ -235,7 +235,7 @@ vrel_irls::estimate(const vrel_estimation_problem * problem, const vrel_wls_obj 
     // Test to see if the sum of the weights is less or equal to zero.
     double sum_wgt = 0;
 
-    for (double weight : weights)
+    for (const double weight : weights)
     {
       sum_wgt += weight;
     }

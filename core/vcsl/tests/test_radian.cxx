@@ -16,7 +16,7 @@
 static void
 test_radian()
 {
-  vcsl_radian_sptr r = vcsl_radian::instance();
+  const vcsl_radian_sptr r = vcsl_radian::instance();
   TEST("test_radian_sptr", bool(r), true);
 }
 

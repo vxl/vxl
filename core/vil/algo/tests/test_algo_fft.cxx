@@ -35,7 +35,7 @@ test_algo_fft()
   TEST_NEAR("FFT and inverse FFT recovers image", d, 0.0, 1e-9);
 
   // FFT of constant image
-  std::complex<double> v = std::complex<double>(1.1, 2.2);
+  const std::complex<double> v = std::complex<double>(1.1, 2.2);
   img0.fill(v);
   vil_fft_2d_fwd(img0);
   TEST_NEAR("FFT coeff. 0,0 is mean", img0(0, 0, 0), v, 1e-9);
@@ -44,9 +44,9 @@ test_algo_fft()
   {
     unsigned int i = seed % img0.ni();
     seed *= 16807;
-    unsigned int j = seed % img0.nj();
+    const unsigned int j = seed % img0.nj();
     seed *= 16807;
-    unsigned int p = seed % img0.nplanes();
+    const unsigned int p = seed % img0.nplanes();
     if (i == 0 && j == 0)
       i = 1;
     TEST_NEAR("any other FFT coeff. is 0", img0(i, j, p), 0.0, 1e-9);
