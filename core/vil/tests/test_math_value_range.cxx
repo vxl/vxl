@@ -29,7 +29,7 @@ view_cout(const vil_image_view<T> & view)
 
 template <class T>
 static void
-_test_math_value_range(std::string type_name, bool test_nan = false)
+_test_math_value_range(const std::string & type_name, bool test_nan = false)
 {
   std::cout << "************************************************\n"
             << "test math_value_range vil_image_view<" << type_name << ">\n"

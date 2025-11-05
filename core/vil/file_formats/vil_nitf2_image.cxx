@@ -659,7 +659,7 @@ vil_nitf2_image::get_copy_view_uncompressed(unsigned start_i, unsigned num_i, un
 
 template <class T>
 vil_memory_chunk_sptr
-maybe_byte_align_data(vil_memory_chunk_sptr in_data,
+maybe_byte_align_data(const vil_memory_chunk_sptr & in_data,
                       unsigned int num_samples,
                       unsigned int in_bits_per_sample,
                       T /*dummy*/)
@@ -676,7 +676,7 @@ maybe_byte_align_data(vil_memory_chunk_sptr in_data,
 // don't do anything for float and double (bit shifting isn't allowed)
 template <>
 vil_memory_chunk_sptr
-maybe_byte_align_data<float>(vil_memory_chunk_sptr in_data,
+maybe_byte_align_data<float>(const vil_memory_chunk_sptr & in_data,
                              unsigned int /* num_samples */,
                              unsigned int /* in_bits_per_sample */,
                              float /*dummy*/)
@@ -686,7 +686,7 @@ maybe_byte_align_data<float>(vil_memory_chunk_sptr in_data,
 
 template <>
 vil_memory_chunk_sptr
-maybe_byte_align_data<double>(vil_memory_chunk_sptr in_data,
+maybe_byte_align_data<double>(const vil_memory_chunk_sptr & in_data,
                               unsigned int /* num_samples */,
                               unsigned int /* in_bits_per_sample */,
                               double /*dummy*/)
@@ -696,7 +696,7 @@ maybe_byte_align_data<double>(vil_memory_chunk_sptr in_data,
 
 template <>
 vil_memory_chunk_sptr
-maybe_byte_align_data<std::complex<float>>(vil_memory_chunk_sptr in_data,
+maybe_byte_align_data<std::complex<float>>(const vil_memory_chunk_sptr & in_data,
                                            unsigned int /*num_samples*/,
                                            unsigned int /*in_bits_per_sample*/,
                                            std::complex<float> /*dummy*/)

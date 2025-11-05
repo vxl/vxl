@@ -67,7 +67,7 @@ public:
   // Call this function to register a DES with this class.  Once you've
   // done this, then this class will be able to parse your custom DES.
   static vil_nitf2_field_definitions &
-  define(std::string desId);
+  define(const std::string & desId);
 
 protected:
   typedef std::map<std::string, vil_nitf2_field_definitions *> field_definition_map;

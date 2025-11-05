@@ -34,8 +34,8 @@ vil_nitf2_classification::s_field_definitions()
 
 const vil_nitf2_field_definitions *
 vil_nitf2_classification::get_field_definitions(const file_version & version,
-                                                std::string tag_prefix,
-                                                std::string pretty_name_prefix)
+                                                const std::string & tag_prefix,
+                                                const std::string & pretty_name_prefix)
 {
   vil_nitf2_field_definitions * field_defs = nullptr;
   if (version == V_NITF_20 || version == V_NITF_21)
@@ -61,7 +61,7 @@ vil_nitf2_classification::get_field_definitions(const file_version & version,
 void
 vil_nitf2_classification::add_field_defs(vil_nitf2_field_definitions * defs,
                                          const file_version & version,
-                                         std::string tag_prefix,
+                                         const std::string & tag_prefix,
                                          const std::string & pretty_name_prefix)
 {
   const std::string & tp = tag_prefix;

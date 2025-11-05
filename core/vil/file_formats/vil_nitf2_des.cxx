@@ -31,7 +31,7 @@ vil_nitf2_des::all_definitions()
 
 
 vil_nitf2_field_definitions &
-vil_nitf2_des::define(std::string desId)
+vil_nitf2_des::define(const std::string & desId)
 {
   if (all_definitions().find(desId) != all_definitions().end())
   {

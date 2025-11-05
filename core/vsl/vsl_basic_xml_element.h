@@ -45,16 +45,16 @@ public:
 
   //: overloaded methods to add attribute values
   void
-  add_attribute(std::string attr_name, std::string value);
+  add_attribute(const std::string & attr_name, const std::string & value);
   void
-  add_attribute(std::string attr_name, double value);
+  add_attribute(const std::string & attr_name, double value);
   void
   add_attribute(std::string attr_name, float value)
   {
     add_attribute(attr_name, (double)value);
   }
   void
-  add_attribute(std::string attr_name, long value);
+  add_attribute(const std::string & attr_name, long value);
   void
   add_attribute(std::string attr_name, int value)
   {
@@ -74,7 +74,7 @@ public:
   }
 #endif
   void
-  add_attribute_list(std::vector<std::pair<std::string, std::string>> attrs);
+  add_attribute_list(const std::vector<std::pair<std::string, std::string>> & attrs);
 #if 0
   bool delete_attribute(std::string attr_name);
 #endif

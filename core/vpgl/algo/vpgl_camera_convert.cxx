@@ -1537,7 +1537,7 @@ vpgl_affine_camera_convert::convert(const vpgl_local_rational_camera<double> & c
 }
 bool
 vpgl_affine_camera_convert::convert(const vpgl_RSM_camera<double> & camera_in,
-                                    vpgl_lvcs lvcs,
+                                    const vpgl_lvcs & lvcs,
                                     const vgl_box_3d<double> & region_of_interest,
                                     vpgl_affine_camera<double> & camera_out,
                                     unsigned int num_points)

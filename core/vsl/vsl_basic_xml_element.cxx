@@ -4,7 +4,7 @@
 // \file
 
 void
-vsl_basic_xml_element::add_attribute_list(std::vector<std::pair<std::string, std::string>> attrs)
+vsl_basic_xml_element::add_attribute_list(const std::vector<std::pair<std::string, std::string>> & attrs)
 {
   for (const auto & attr : attrs)
   {
@@ -13,14 +13,14 @@ vsl_basic_xml_element::add_attribute_list(std::vector<std::pair<std::string, std
 }
 
 void
-vsl_basic_xml_element::add_attribute(std::string attr_name, std::string value)
+vsl_basic_xml_element::add_attribute(const std::string & attr_name, const std::string & value)
 {
   const std::pair<std::string, std::string> attr(attr_name, value);
   attrs_.push_back(attr);
 }
 
 void
-vsl_basic_xml_element::add_attribute(std::string attr_name, double value)
+vsl_basic_xml_element::add_attribute(const std::string & attr_name, double value)
 {
   const std::string value_str = toString(value);
   const std::pair<std::string, std::string> attr(attr_name, value_str.data());
@@ -28,7 +28,7 @@ vsl_basic_xml_element::add_attribute(std::string attr_name, double value)
 }
 
 void
-vsl_basic_xml_element::add_attribute(std::string attr_name, long value)
+vsl_basic_xml_element::add_attribute(const std::string & attr_name, long value)
 {
   const std::string value_str = toString(value);
   const std::pair<std::string, std::string> attr(attr_name, value_str);

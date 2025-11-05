@@ -42,7 +42,7 @@ vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition(std::stri
 {}
 
 vil_nitf2_tagged_record_definition &
-vil_nitf2_tagged_record_definition::define(std::string name, std::string pretty_name)
+vil_nitf2_tagged_record_definition::define(const std::string & name, std::string pretty_name)
 {
   auto * definition = new vil_nitf2_tagged_record_definition(name, std::move(pretty_name));
   if (all_definitions().find(name) != all_definitions().end())

@@ -40,7 +40,7 @@ class vil_nitf2_tagged_record_definition
 public:
   //: Factory method. Assumes ownership of optional pointer argument.
   static vil_nitf2_tagged_record_definition &
-  define(std::string name, std::string pretty_name);
+  define(const std::string & name, std::string pretty_name);
 
   //: Define a field. Assumes ownership of pointer arguments.
   vil_nitf2_tagged_record_definition &
