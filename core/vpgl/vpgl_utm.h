@@ -26,7 +26,7 @@ class vpgl_utm
 public:
   vpgl_utm();
   vpgl_utm(const vpgl_utm & t);
-  ~vpgl_utm();
+  ~vpgl_utm() = default;
   void
   SetSpheroidA(double a)
   {

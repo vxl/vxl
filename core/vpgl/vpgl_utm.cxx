@@ -170,7 +170,6 @@ vpgl_utm::vpgl_utm()
 
 vpgl_utm::vpgl_utm(const vpgl_utm & t) = default;
 
-vpgl_utm::~vpgl_utm() = default;
 
 // Applies the transform to the instance of 3d point representing a location in the from_coordinate_system
 // (UTM_coordinate_system) and creates a point represented the transformed location in the
