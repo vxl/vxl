@@ -22,8 +22,9 @@ scale_at_level(unsigned level)
 
 vil_openjpeg_pyramid_image_resource::vil_openjpeg_pyramid_image_resource(const vil_image_resource_sptr & openjpeg)
   : openjpeg_sptr_(openjpeg)
+  , ptr_(nullptr)
 {
-  ptr_ = nullptr;
+
   if (!openjpeg_sptr_)
     return;
   ptr_ = dynamic_cast<vil_openjpeg_image *>(openjpeg_sptr_.ptr());

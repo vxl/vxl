@@ -651,7 +651,7 @@ vpgl_nitf_RSM_camera_extractor::vpgl_nitf_RSM_camera_extractor(const std::string
 vpgl_nitf_RSM_camera_extractor::vpgl_nitf_RSM_camera_extractor(vil_nitf2_image * nitf_image, bool verbose)
   : verbose_(verbose)
 {
-  RSM_defined_ = false;
+
   if (!this->init(nitf_image, verbose_))
     throw std::runtime_error("NITF HEADER EXTRACTION FAILED");
   if (this->nitf_header_contains_RSM_tres().size() > 0)

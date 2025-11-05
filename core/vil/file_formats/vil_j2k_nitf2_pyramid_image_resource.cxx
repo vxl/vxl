@@ -22,8 +22,9 @@ scale_at_level(unsigned level)
 
 vil_j2k_nitf2_pyramid_image_resource::vil_j2k_nitf2_pyramid_image_resource(const vil_image_resource_sptr & nitf2)
   : nitf2_sptr_(nitf2)
+  , ptr_(nullptr)
 {
-  ptr_ = nullptr;
+
   if (!nitf2_sptr_)
     return;
   std::string fmt = nitf2_sptr_->file_format();

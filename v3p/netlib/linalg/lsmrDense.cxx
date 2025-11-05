@@ -18,8 +18,9 @@
 #include "lsmrDense.h"
 
 lsmrDense::lsmrDense()
+  : A(nullptr)
 {
-  this->A = nullptr;
+  
 }
 
 

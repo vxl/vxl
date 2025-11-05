@@ -19,8 +19,9 @@
 #include "vnl/vnl_real_polynomial.h"
 
 vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double val_sigma)
+  : sigma_(val_sigma)
 {
-  sigma_ = val_sigma;
+
   const double z = 1 / (std::sqrt(2.0) * val_sigma);
   filt0_ = vnl_erf(0.5 * z) - vnl_erf(-0.5 * z);
   filt1_ = vnl_erf(1.5 * z) - vnl_erf(0.5 * z);

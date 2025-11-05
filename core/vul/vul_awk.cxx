@@ -25,10 +25,11 @@
 vul_awk::vul_awk(std::istream & s, ModeFlags mode)
   : fd_(s)
   , mode_(mode)
+  , done_(false)
+  , line_number_(0)
+  , split_line_(nullptr)
 {
-  done_ = false;
-  line_number_ = 0;
-  split_line_ = nullptr;
+
 
   next();
 }

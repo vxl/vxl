@@ -36,26 +36,28 @@ inline void daxpy( unsigned int n, double alpha, const double * x, double * y )
 #define Sqr(x) ((x)*(x))
 
 lsmrBase::lsmrBase()
+  : eps(1e-16)
+  , atol(1e-6)
+  , btol(1e-6)
+  , itnlim(10)
+  , nout(nullptr)
+  , istop(0)
+  , itn(0)
+  , normA(0.0)
+  , condA(0.0)
+  , normr(0.0)
+  , normAr(0.0)
+  , normx(0.0)
+  , normb(0.0)
+  , dxmax(0.0)
+  , maxdx(0)
+  , damp(0.0)
+  , damped(false)
+  , localSize(0)
 {
-  this->eps = 1e-16;
-  this->atol = 1e-6;
-  this->btol = 1e-6;
+
+
   this->conlim = 1.0 / ( 10 * sqrt( this->eps ) );
-  this->itnlim = 10;
-  this->nout = nullptr;
-  this->istop = 0;
-  this->itn = 0;
-  this->normA = 0.0;
-  this->condA = 0.0;
-  this->normr = 0.0;
-  this->normAr = 0.0;
-  this->normx = 0.0;
-  this->normb = 0.0;
-  this->dxmax = 0.0;
-  this->maxdx = 0;
-  this->damp = 0.0;
-  this->damped = false;
-  this->localSize = 0;
 }
 
 

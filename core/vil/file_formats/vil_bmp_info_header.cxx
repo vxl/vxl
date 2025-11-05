@@ -15,14 +15,13 @@
 #include "vil/vil_stream_write.h"
 
 vil_bmp_info_header::vil_bmp_info_header()
-{
-  compression = 0;
-  bitmap_size = 0;
-  horiz_res = 0;
-  verti_res = 0;
-  colormapsize = 0;
-  colorcount = 0;
-}
+  : compression(0)
+  , bitmap_size(0)
+  , horiz_res(0)
+  , verti_res(0)
+  , colormapsize(0)
+  , colorcount(0)
+{}
 
 void
 vil_bmp_info_header::read(vil_stream * s)

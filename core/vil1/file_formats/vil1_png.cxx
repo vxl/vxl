@@ -157,20 +157,16 @@ pngtopnm_error_handler(png_structp png_ptr, png_const_charp msg)
 struct vil1_png_structures
 {
   bool reading_;
-  png_struct * png_ptr;
-  png_info * info_ptr;
-  png_byte ** rows;
-  int channels;
-  bool ok;
+  png_struct * png_ptr{ nullptr };
+  png_info * info_ptr{ nullptr };
+  png_byte ** rows{ nullptr };
+  int channels{ 0 };
+  bool ok{ false };
 
   vil1_png_structures(bool reading)
+    : reading_(reading)
   {
-    reading_ = reading;
-    png_ptr = nullptr;
-    info_ptr = nullptr;
-    rows = nullptr;
-    channels = 0;
-    ok = false;
+
 
     png_setjmp_on(return);
 

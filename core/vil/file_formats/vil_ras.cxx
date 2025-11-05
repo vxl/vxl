@@ -156,13 +156,15 @@ vil_ras_image::file_format() const
 
 
 vil_ras_image::vil_ras_image(vil_stream * vs, unsigned ni, unsigned nj, unsigned nplanes, vil_pixel_format format)
+  : vs_(vs)
+  , width_(ni)
+  , height_(nj)
+  , components_(nplanes * vil_pixel_format_num_components(format))
 {
-  vs_ = vs;
-  vs_->ref();
-  width_ = ni;
-  height_ = nj;
 
-  components_ = nplanes * vil_pixel_format_num_components(format);
+  vs_->ref();
+
+
   if (components_ != 1 && components_ != 3)
   {
     std::cerr << __FILE__ << ": can't handle " << nplanes << " x " << vil_pixel_format_num_components(format)

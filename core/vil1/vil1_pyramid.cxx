@@ -13,8 +13,9 @@
 #include "vil1/vil1_memory_image.h"
 
 vil1_pyramid::vil1_pyramid(const vil1_image & I, cache_strategy cs_)
+  : cs(cs_)
 {
-  cs = cs_;
+
   levels.push_back(I);
 }
 

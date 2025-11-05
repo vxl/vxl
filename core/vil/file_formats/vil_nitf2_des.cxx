@@ -43,11 +43,9 @@ vil_nitf2_des::define(std::string desId)
 }
 
 vil_nitf2_des::vil_nitf2_des(vil_nitf2_classification::file_version version, int data_width)
-  : m_field_sequence1(nullptr)
+  : m_field_sequence1(new vil_nitf2_field_sequence(*create_field_definitions(version, data_width)))
   , m_field_sequence2(nullptr)
-{
-  m_field_sequence1 = new vil_nitf2_field_sequence(*create_field_definitions(version, data_width));
-}
+{}
 
 bool
 vil_nitf2_des::read(vil_stream * stream)

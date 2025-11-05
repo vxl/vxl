@@ -101,13 +101,14 @@ vil_pnm_image::file_format() const
 
 vil_pnm_image::vil_pnm_image(vil_stream * vs, unsigned ni, unsigned nj, unsigned nplanes, vil_pixel_format format)
   : vs_(vs)
+  , ni_(ni)
+  , nj_(nj)
+  , ncomponents_(nplanes)
+  , format_(vil_pixel_format_component_format(format))
 {
   vs_->ref();
-  ni_ = ni;
-  nj_ = nj;
 
-  ncomponents_ = nplanes;
-  format_ = vil_pixel_format_component_format(format);
+
   if (nplanes == 1 && (format == VIL_PIXEL_FORMAT_RGB_BYTE || format == VIL_PIXEL_FORMAT_RGB_SBYTE ||
                        format == VIL_PIXEL_FORMAT_RGB_INT_16 || format == VIL_PIXEL_FORMAT_RGB_INT_16 ||
                        format == VIL_PIXEL_FORMAT_RGB_INT_32 || format == VIL_PIXEL_FORMAT_RGB_INT_32 ||

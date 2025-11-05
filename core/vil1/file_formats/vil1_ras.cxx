@@ -155,10 +155,11 @@ vil1_ras_generic_image::vil1_ras_generic_image(vil1_stream * vs,
                                                int bits_per_component,
                                                vil1_component_format /*format*/)
   : vs_(vs)
+  , width_(width)
+  , height_(height)
 {
   vs_->ref();
-  width_ = width;
-  height_ = height;
+
 
   if (planes != 1)
   {

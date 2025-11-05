@@ -17,7 +17,7 @@
 class lsqrVNL : public lsqrBase
 {
 public:
-  lsqrVNL() { this->ls_ = nullptr; }
+  lsqrVNL() {}
 
   ~lsqrVNL() override = default;
 
@@ -70,7 +70,7 @@ public:
   }
 
 private:
-  vnl_linear_system * ls_;
+  vnl_linear_system * ls_{ nullptr };
 
   double * rw;
 };

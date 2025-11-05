@@ -45,7 +45,7 @@ Checks: <
   modernize-use-using,
    bugprone-incorrect-roundings,
    cppcoreguidelines-init-variables,
-  -cppcoreguidelines-prefer-member-initializer,
+   cppcoreguidelines-prefer-member-initializer,
   -cppcoreguidelines-pro-bounds-constant-array-index,
   -google-explicit-constructor,
   -google-readability-casting,

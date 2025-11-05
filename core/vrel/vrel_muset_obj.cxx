@@ -17,8 +17,9 @@ vrel_muset_obj::vrel_muset_obj(int max_n, bool use_sk_refine)
   : use_sk_refine_(use_sk_refine)
   , muse_type_(VREL_MUSE_TRIMMED)
   , table_owned_(true)
+  , table_(new vrel_muse_table(max_n))
 {
-  table_ = new vrel_muse_table(max_n);
+
 
   // Set the parameters to their default values.
   set_min_inlier_fraction();

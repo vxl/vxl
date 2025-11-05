@@ -24,27 +24,29 @@
 #include <iostream>
 
 lsqrBase::lsqrBase()
+  : eps(1e-16)
+  , atol(1e-6)
+  , btol(1e-6)
+  , itnlim(10)
+  , nout(nullptr)
+  , istop(0)
+  , itn(0)
+  , Anorm(0.0)
+  , Acond(0.0)
+  , rnorm(0.0)
+  , Arnorm(0.0)
+  , xnorm(0.0)
+  , bnorm(0.0)
+  , dxmax(0.0)
+  , maxdx(0)
+  , wantse(false)
+  , se(nullptr)
+  , damp(0.0)
+  , damped(false)
 {
-  this->eps = 1e-16;
-  this->atol = 1e-6;
-  this->btol = 1e-6;
+
+
   this->conlim = 1.0 / ( 10 * sqrt( this->eps ) );
-  this->itnlim = 10;
-  this->nout = nullptr;
-  this->istop = 0;
-  this->itn = 0;
-  this->Anorm = 0.0;
-  this->Acond = 0.0;
-  this->rnorm = 0.0;
-  this->Arnorm = 0.0;
-  this->xnorm = 0.0;
-  this->bnorm = 0.0;
-  this->dxmax = 0.0;
-  this->maxdx = 0;
-  this->wantse = false;
-  this->se = nullptr;
-  this->damp = 0.0;
-  this->damped = false;
 }
 
 
