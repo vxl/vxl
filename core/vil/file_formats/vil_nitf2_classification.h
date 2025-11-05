@@ -53,14 +53,16 @@ public:
   // appropriate to the context, e.g., "F" and "File", respectively,
   // in the case of a file header.
   static const vil_nitf2_field_definitions *
-  get_field_definitions(const file_version & version, std::string tag_prefix, std::string pretty_name_prefix);
+  get_field_definitions(const file_version & version,
+                        const std::string & tag_prefix,
+                        const std::string & pretty_name_prefix);
 
   // Like get_field_defintions(), but appends fields to defs instead
   // of returning them.
   static void
   add_field_defs(vil_nitf2_field_definitions * defs,
                  const file_version & version,
-                 std::string prefix,
+                 const std::string & prefix,
                  const std::string & pretty_name_prefix);
 
 private:

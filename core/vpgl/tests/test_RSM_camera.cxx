@@ -19,7 +19,7 @@
 // - "R-identity" rectangular ground domain with identity transform
 // - "R" rectangular ground domain
 vpgl_ground_domain<double>
-create_ground_domain(std::string ground_domain_id)
+create_ground_domain(const std::string & ground_domain_id)
 {
   if (ground_domain_id == "R-transform")
   {
@@ -115,7 +115,7 @@ _test_ground_domain(vpgl_ground_domain<double> gd,
 
 // test ground domain
 static void
-test_ground_domain(std::string ground_domain_id)
+test_ground_domain(const std::string & ground_domain_id)
 {
   // tolerance
   double rtol = 1e-8, mtol = 1e-4;
@@ -153,7 +153,9 @@ test_ground_domain(std::string ground_domain_id)
 
 // test region selector "select"
 static void
-_test_region_selector(vpgl_region_selector<double> selector, std::array<double, 3> xyz, std::array<size_t, 2> rc)
+_test_region_selector(const vpgl_region_selector<double> & selector,
+                      std::array<double, 3> xyz,
+                      std::array<size_t, 2> rc)
 {
   double x = xyz[0], y = xyz[1], z = xyz[2];
   size_t r = rc[0], c = rc[1];
@@ -321,7 +323,7 @@ create_coords_rect()
 
 // create polycam in geodetic ground domain
 static vpgl_polycam<double>
-create_polycam_geodetic(std::string ground_domain_id)
+create_polycam_geodetic(const std::string & ground_domain_id)
 {
   // longitude offset for "G" vs "H" ground domain
   double XNRMO = ground_domain_id == "G" ? -2.04221591140939E+00 : 4.24096939577019E+00;
@@ -439,7 +441,7 @@ create_polycam_geodetic(std::string ground_domain_id)
 // test coordinates in geodetic ground domain
 // {lon_deg, lat_deg, elev_m}, {lon_rad, lat_rad, elev_m}, {u, v}
 static std::vector<std::vector<std::vector<double>>>
-create_coords_geodetic(std::string ground_domain_id)
+create_coords_geodetic(const std::string & ground_domain_id)
 {
   std::vector<std::vector<std::vector<double>>> coords{
     { { -117.02206729, 33.17258376, 0 }, { -2.0424203717, 0.5789708080, 0.0 }, { 3329, 4294 } },
@@ -479,7 +481,7 @@ create_coords_geodetic(std::string ground_domain_id)
 
 // polycam selector
 static vpgl_polycam<double>
-create_polycam(std::string ground_domain_id)
+create_polycam(const std::string & ground_domain_id)
 {
   if (ground_domain_id == "R")
     return create_polycam_rect();
@@ -489,7 +491,7 @@ create_polycam(std::string ground_domain_id)
 
 // coords selector
 static std::vector<std::vector<std::vector<double>>>
-create_coords(std::string ground_domain_id)
+create_coords(const std::string & ground_domain_id)
 {
   if (ground_domain_id == "R")
     return create_coords_rect();
@@ -499,7 +501,7 @@ create_coords(std::string ground_domain_id)
 
 // test projection of single coordinate via polycam
 static void
-_test_polycam(vpgl_polycam<double> cam, std::vector<double> xyz, std::vector<double> uv, double tol = 0.002)
+_test_polycam(const vpgl_polycam<double> & cam, std::vector<double> xyz, std::vector<double> uv, double tol = 0.002)
 {
   double x = xyz[0], y = xyz[1], z = xyz[2];
   size_t u = uv[0], v = uv[1];
@@ -517,7 +519,7 @@ _test_polycam(vpgl_polycam<double> cam, std::vector<double> xyz, std::vector<dou
 
 // test polycam
 static void
-test_polycam(std::string ground_domain_id)
+test_polycam(const std::string & ground_domain_id)
 {
   std::cout << "\n===== Polycam " << ground_domain_id << " =====\n";
   auto cam = create_polycam(ground_domain_id);
@@ -533,7 +535,7 @@ test_polycam(std::string ground_domain_id)
 
 // create RSM camera with single polycam
 static vpgl_RSM_camera<double>
-create_camera(std::string ground_domain_id)
+create_camera(const std::string & ground_domain_id)
 {
   auto polycam = create_polycam(ground_domain_id);
 
@@ -548,7 +550,10 @@ create_camera(std::string ground_domain_id)
 
 // test single coordinate projection via RSM camera
 static void
-_test_camera(vpgl_RSM_camera<double> cam, std::vector<double> lon_lat_elev, std::vector<double> uv, double tol = 0.002)
+_test_camera(const vpgl_RSM_camera<double> & cam,
+             std::vector<double> lon_lat_elev,
+             std::vector<double> uv,
+             double tol = 0.002)
 {
   double lon = lon_lat_elev[0], lat = lon_lat_elev[1], elev = lon_lat_elev[2];
   size_t u = uv[0], v = uv[1];
@@ -566,7 +571,7 @@ _test_camera(vpgl_RSM_camera<double> cam, std::vector<double> lon_lat_elev, std:
 
 // test RSM camera
 static void
-test_camera(std::string ground_domain_id)
+test_camera(const std::string & ground_domain_id)
 {
   std::cout << "\n===== RSM Camera " << ground_domain_id << " =====\n";
   auto cam = create_camera(ground_domain_id);

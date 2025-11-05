@@ -29,7 +29,7 @@ view_cout(const vil_image_view<T> & view)
 
 template <class T>
 void
-vector_cout(std::string name, const std::vector<T> & vec)
+vector_cout(const std::string & name, const std::vector<T> & vec)
 {
   std::cout << name << "\n";
   for (auto item : vec)
@@ -40,7 +40,7 @@ vector_cout(std::string name, const std::vector<T> & vec)
 
 template <class T>
 static void
-_test_flatten(std::string type_name)
+_test_flatten(const std::string & type_name)
 {
   std::cout << "************************************************\n"
             << " test_flatten vil_image_view<" << type_name << ">\n"

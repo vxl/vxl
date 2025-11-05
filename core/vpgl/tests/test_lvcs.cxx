@@ -81,7 +81,7 @@ test_lvcs_force(double lat,
 
 // test LVCS local->global, offset local input, WGS84 output
 void
-_test_lvcs_local_to_global_wgs84(vpgl_lvcs lvcs,
+_test_lvcs_local_to_global_wgs84(const vpgl_lvcs & lvcs,
                                  double lon,
                                  double lat,
                                  double elev,
@@ -90,7 +90,7 @@ _test_lvcs_local_to_global_wgs84(vpgl_lvcs lvcs,
                                  double zoff,
                                  double meter_tol,
                                  double degree_tol,
-                                 std::string message = "")
+                                 const std::string & message = "")
 {
   // report
   std::cout << "local_to_global(offset [" << xoff << ", " << yoff << ", " << zoff << "]) -> WGS84";
@@ -126,7 +126,7 @@ _test_lvcs_local_to_global_wgs84(vpgl_lvcs lvcs,
 
 // test LVCS local->global, offset local input, UTM output
 void
-_test_lvcs_local_to_global_utm(vpgl_lvcs lvcs,
+_test_lvcs_local_to_global_utm(const vpgl_lvcs & lvcs,
                                double easting,
                                double northing,
                                double elev,
@@ -134,7 +134,7 @@ _test_lvcs_local_to_global_utm(vpgl_lvcs lvcs,
                                double yoff,
                                double zoff,
                                double meter_tol,
-                               std::string message = "")
+                               const std::string & message = "")
 {
   // report
   std::cout << "local_to_global(offset [" << xoff << ", " << yoff << ", " << zoff << "]) -> UTM";
@@ -156,7 +156,7 @@ _test_lvcs_local_to_global_utm(vpgl_lvcs lvcs,
 
 // test LVCS global->local, offset WGS84 input, local output
 void
-_test_lvcs_global_to_local_wgs84(vpgl_lvcs lvcs,
+_test_lvcs_global_to_local_wgs84(const vpgl_lvcs & lvcs,
                                  double lon,
                                  double lat,
                                  double elev,
@@ -164,7 +164,7 @@ _test_lvcs_global_to_local_wgs84(vpgl_lvcs lvcs,
                                  double lat_off,
                                  double elev_off,
                                  double meter_tol,
-                                 std::string message = "")
+                                 const std::string & message = "")
 {
   // report
   std::cout << "global_to_local(WGS84 offset [" << lon_off << ", " << lat_off << ", " << elev_off << "]";
@@ -200,7 +200,7 @@ _test_lvcs_global_to_local_wgs84(vpgl_lvcs lvcs,
 
 // test LVCS global->local, offset UTM input, local output
 void
-_test_lvcs_global_to_local_utm(vpgl_lvcs lvcs,
+_test_lvcs_global_to_local_utm(const vpgl_lvcs & lvcs,
                                double easting,
                                double northing,
                                double elev,
@@ -208,7 +208,7 @@ _test_lvcs_global_to_local_utm(vpgl_lvcs lvcs,
                                double northing_off,
                                double elev_off,
                                double meter_tol,
-                               std::string message = "")
+                               const std::string & message = "")
 {
   // report
   std::cout << "global_to_local(UTM offset [" << easting_off << ", " << northing_off << ", " << elev_off << "]";
@@ -228,7 +228,12 @@ _test_lvcs_global_to_local_utm(vpgl_lvcs lvcs,
 
 
 void
-_test_lvcs_antimeridian(vpgl_lvcs lvcs, double lon, double lat, double elev, double meter_tol, double degree_tol)
+_test_lvcs_antimeridian(const vpgl_lvcs & lvcs,
+                        double lon,
+                        double lat,
+                        double elev,
+                        double meter_tol,
+                        double degree_tol)
 {
   // results
   double x = NAN, y = NAN, z = NAN;
@@ -353,7 +358,7 @@ test_lvcs_antimeridian(double lon, double lat, double elev, double meter_tol, do
 
 
 void
-_test_lvcs_general(vpgl_lvcs lvcs, double lon, double lat, double elev, double meter_tol, double degree_tol)
+_test_lvcs_general(const vpgl_lvcs & lvcs, double lon, double lat, double elev, double meter_tol, double degree_tol)
 {
   // results
   double x = NAN, y = NAN, z = NAN;

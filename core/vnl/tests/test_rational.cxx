@@ -14,7 +14,7 @@
 #include "vnl/vnl_det.h"
 
 inline vnl_rational
-vnl_sqrt(vnl_rational x)
+vnl_sqrt(const vnl_rational & x)
 {
   return { std::sqrt(double(x)) };
 }

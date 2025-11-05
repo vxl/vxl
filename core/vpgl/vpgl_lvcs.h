@@ -189,7 +189,7 @@ public:
   void
   print(std::ostream &) const;
   bool
-  save(std::string fname) const;
+  save(const std::string & fname) const;
 
   void
   read(std::istream & strm);

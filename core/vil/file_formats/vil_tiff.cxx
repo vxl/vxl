@@ -573,7 +573,7 @@ integral_type(unsigned bits_per_sample)
 
 template <class T>
 vil_memory_chunk_sptr
-tiff_maybe_byte_align_data(vil_memory_chunk_sptr in_data,
+tiff_maybe_byte_align_data(const vil_memory_chunk_sptr & in_data,
                            unsigned num_samples,
                            unsigned in_bits_per_sample,
                            unsigned bytes_per_block)
@@ -602,7 +602,7 @@ tiff_maybe_byte_align_data(vil_memory_chunk_sptr in_data,
 // don't do anything for float and double (bit shifting isn't allowed)
 template <>
 vil_memory_chunk_sptr
-tiff_maybe_byte_align_data<float>(vil_memory_chunk_sptr in_data,
+tiff_maybe_byte_align_data<float>(const vil_memory_chunk_sptr & in_data,
                                   unsigned /* num_samples */,
                                   unsigned /* in_bits_per_sample */,
                                   unsigned /* bytes per block */)
@@ -612,7 +612,7 @@ tiff_maybe_byte_align_data<float>(vil_memory_chunk_sptr in_data,
 
 template <>
 vil_memory_chunk_sptr
-tiff_maybe_byte_align_data<double>(vil_memory_chunk_sptr in_data,
+tiff_maybe_byte_align_data<double>(const vil_memory_chunk_sptr & in_data,
                                    unsigned /* num_samples */,
                                    unsigned /* in_bits_per_sample */,
                                    unsigned /* bytes per block */)

@@ -332,7 +332,7 @@ class vil_nitf2_enum_values : public std::map<std::string, std::string>
 {
 public:
   vil_nitf2_enum_values &
-  value(std::string token, std::string pretty_name = "");
+  value(const std::string & token, const std::string & pretty_name = "");
 };
 
 // Reads and writes an enumerated std::string field.

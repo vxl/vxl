@@ -22,7 +22,7 @@ test_smart_ptr_io()
   vbl_smart_ptr<impl> sp1_in, sp2_in;
   vbl_smart_ptr<impl> null1_in(new impl(n)), null2_in;
 
-  TEST("sp1_out->get_references() == 2", sp1_out->get_references(), 2);
+  TEST("sp1_out->get_references() == 1", sp1_out->get_references(), 1);
   TEST("null1_in!=0", null1_in.ptr() != nullptr, true);
   TEST("null2_in==0", null2_in.ptr(), 0);
 

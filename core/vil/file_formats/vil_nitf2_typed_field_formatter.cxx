@@ -468,7 +468,7 @@ vil_nitf2_enum_string_formatter::is_valid_value(const std::string & token) const
 // Class vil_nitf2_enum_values
 
 vil_nitf2_enum_values &
-vil_nitf2_enum_values::value(std::string token, std::string pretty_name)
+vil_nitf2_enum_values::value(const std::string & token, const std::string & pretty_name)
 {
   if (!insert(std::make_pair(token, pretty_name)).second)
   {

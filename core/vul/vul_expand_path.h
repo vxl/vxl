@@ -31,7 +31,7 @@
 #include <vxl_config.h>
 
 //: Expand given path.
-std::string vul_expand_path /*cached*/ (std::string path);
+std::string vul_expand_path /*cached*/ (const std::string & path);
 
 //: Expand given path.
 std::string

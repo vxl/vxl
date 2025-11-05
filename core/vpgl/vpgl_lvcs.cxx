@@ -888,7 +888,7 @@ vpgl_lvcs::print(std::ostream & strm) const
 
 //: Save internals to strm
 bool
-vpgl_lvcs::save(std::string fname) const
+vpgl_lvcs::save(const std::string & fname) const
 {
   std::ofstream of(fname.c_str());
   if (of)

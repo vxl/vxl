@@ -375,7 +375,7 @@ vul_expand_path_internal(std::string path)
 using map_t = std::map<std::string, std::string, std::less<std::string>>;
 
 std::string
-vul_expand_path(std::string path)
+vul_expand_path(const std::string & path)
 {
   // create the cache.
   static map_t the_map;
