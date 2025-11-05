@@ -51,6 +51,7 @@ test_covar_mean(T epsilon, const std::string & type_name)
   // an arbitrary collection of data points
   std::vector<vnl_vector_fixed<T, 3>> data;
   vnl_random rnd;
+  data.reserve(10);
   for (unsigned int i = 0; i < 10; ++i)
     data.push_back(vnl_vector_fixed<T, 3>(T(rnd.normal64() + 1), T(2 * rnd.normal64()), T(rnd.normal64())));
   for (unsigned int i = 0; i < 15; ++i)

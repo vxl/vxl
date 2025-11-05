@@ -171,6 +171,7 @@ vpgl_affine_camera_compute::compute_robust_ransac(const std::vector<vgl_point_2d
   // use standard vgl homg normalization code
   std::vector<vgl_homg_point_2d<double>> pimg_h;
   std::vector<vgl_homg_point_3d<double>> pwld_h;
+  pimg_h.reserve(image_pts.size());
   for (auto p : image_pts)
     pimg_h.emplace_back(p.x(), p.y(), 1.0);
 
@@ -377,6 +378,7 @@ vpgl_perspective_camera_compute::compute(const std::vector<vgl_point_2d<double>>
 
   // perform a final non-linear optimization
   std::vector<vgl_homg_point_3d<double>> h_world_pts;
+  h_world_pts.reserve(N);
   for (unsigned i = 0; i < N; ++i)
     h_world_pts.emplace_back(world_pts[i]);
   camera = vpgl_optimize_camera::opt_orient_pos_cal(tcam, h_world_pts, image_pts, 0.00005, 20000);

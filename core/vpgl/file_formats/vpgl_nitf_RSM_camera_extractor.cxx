@@ -2454,6 +2454,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           // else use piecewise linear form for correlation function
           const int n_segments = ncsegb[piecewise_idx];
           std::vector<std::pair<double, double>> segments;
+          segments.reserve(n_segments);
           for (size_t s = 0; s < n_segments; ++s)
             segments.emplace_back(corseg_vals[s], tauseg_vals[s]);
 

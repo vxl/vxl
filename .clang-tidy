@@ -60,7 +60,7 @@ Checks: <
    performance-implicit-conversion-in-loop,
    performance-inefficient-algorithm,
    performance-inefficient-string-concatenation,
-  -performance-inefficient-vector-operation,
+   performance-inefficient-vector-operation,
   -performance-move-const-arg,
   -performance-noexcept-destructor,
   -performance-noexcept-move-constructor,
