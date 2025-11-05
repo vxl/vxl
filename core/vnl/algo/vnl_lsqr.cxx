@@ -17,7 +17,7 @@
 class lsqrVNL : public lsqrBase
 {
 public:
-  lsqrVNL() {}
+  lsqrVNL() = default;
 
   ~lsqrVNL() override = default;
 
