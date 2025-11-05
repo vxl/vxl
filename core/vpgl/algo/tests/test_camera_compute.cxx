@@ -318,6 +318,7 @@ test_compute_affine()
   row01[3] = 648.49;
   vpgl_affine_camera<double> acam(row00, row01), fitted_acam;
   std::vector<vgl_point_2d<double>> pts_2d;
+  pts_2d.reserve(pts_3d.size());
   for (const auto & i : pts_3d)
   {
     pts_2d.emplace_back(acam.project(i));
