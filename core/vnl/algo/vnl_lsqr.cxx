@@ -76,8 +76,6 @@ private:
 };
 
 
-vnl_lsqr::~vnl_lsqr() = default;
-
 // Requires number_of_residuals() of workspace in rw.
 int
 vnl_lsqr::aprod_(const long * mode,
