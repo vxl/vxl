@@ -67,11 +67,11 @@ test_arg()
     std::list<int> l = list1();
     TEST("list1 length", l.size(), true_list_length);
     bool ok = true;
-    for (unsigned int i = 0; i < true_list_length; ++i)
+    for (int list1_content : list1_contents)
     {
-      if (std::find(l.begin(), l.end(), list1_contents[i]) == l.end())
+      if (std::find(l.begin(), l.end(), list1_content) == l.end())
       {
-        std::cout << "Integer [" << list1_contents[i] << "] not found in list\n";
+        std::cout << "Integer [" << list1_content << "] not found in list\n";
         ok = false;
       }
     }
@@ -82,11 +82,11 @@ test_arg()
     std::vector<double> l = list2();
     TEST("list2 length", l.size(), true_list_length);
     bool ok = true;
-    for (unsigned int i = 0; i < true_list_length; ++i)
+    for (double list2_content : list2_contents)
     {
-      if (std::find(l.begin(), l.end(), list2_contents[i]) == l.end())
+      if (std::find(l.begin(), l.end(), list2_content) == l.end())
       {
-        std::cout << "Value [" << list2_contents[i] << "] not found in list\n";
+        std::cout << "Value [" << list2_content << "] not found in list\n";
         ok = false;
       }
     }

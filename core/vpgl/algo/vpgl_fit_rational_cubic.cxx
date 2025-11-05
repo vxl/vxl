@@ -202,7 +202,7 @@ vpgl_fit_rational_cubic::fit()
   std::stringstream ss;
   levmarq.diagnose_outcome(ss);
   std::string outcome = ss.str();
-  const size_t pos = outcome.find_last_of("/");
+  const size_t pos = outcome.find_last_of('/');
   if (pos == std::string::npos)
   {
     std::cout << "unexpected Levenberg-Marquardt error message " << outcome << std::endl;

@@ -54,7 +54,7 @@ Checks: <
   -misc-unused-include,
   -misc-unused-parameters,
   -misc-use-internal-linkage,
-  -performance-faster-string-find,
+   performance-faster-string-find,
   -performance-for-range-copy,
   -performance-noexcept-swap,
    readability-container-size-empty,
