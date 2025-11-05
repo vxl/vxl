@@ -67,7 +67,7 @@ test_arg()
     std::list<int> l = list1();
     TEST("list1 length", l.size(), true_list_length);
     bool ok = true;
-    for (int list1_content : list1_contents)
+    for (const int list1_content : list1_contents)
     {
       if (std::find(l.begin(), l.end(), list1_content) == l.end())
       {
@@ -82,7 +82,7 @@ test_arg()
     std::vector<double> l = list2();
     TEST("list2 length", l.size(), true_list_length);
     bool ok = true;
-    for (double list2_content : list2_contents)
+    for (const double list2_content : list2_contents)
     {
       if (std::find(l.begin(), l.end(), list2_content) == l.end())
       {
