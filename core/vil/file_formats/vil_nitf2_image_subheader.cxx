@@ -1298,7 +1298,7 @@ vil_nitf2_image_subheader::get_ichipb_info(std::pair<double, double> & translati
                                            std::vector<std::pair<double, double>> & F_grid_points,
                                            std::vector<std::pair<double, double>> & O_grid_points,
                                            double & scale_factor,
-                                           bool & anamorphic_corr)
+                                           bool & anamorphic_corr) const
 {
   vil_nitf2_tagged_record_sequence isxhd_tres;
   vil_nitf2_tagged_record_sequence::iterator tres_itr;
