@@ -17,7 +17,7 @@ test_smart_ptr_io()
   constexpr int n = 50;
 
   const vbl_smart_ptr<impl> sp1_out(new impl(n));
-  const vbl_smart_ptr<impl> sp2_out(sp1_out);
+  const vbl_smart_ptr<impl> & sp2_out(sp1_out);
   vbl_smart_ptr<impl> null1_out, null2_out;
   vbl_smart_ptr<impl> sp1_in, sp2_in;
   vbl_smart_ptr<impl> null1_in(new impl(n)), null2_in;

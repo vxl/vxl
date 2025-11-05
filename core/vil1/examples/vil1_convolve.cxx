@@ -71,7 +71,7 @@ main(int argc, char ** argv)
 
   // Build kernel in "kernelimg"
   vil1_memory_image_of<float> kernelimg(0, 0);
-  const std::string kernel(a_kernel());
+  const std::string & kernel(a_kernel());
   for (vil1_kernel_info * kp = kernels; kp->name; ++kp)
     if (kernel == kp->name)
     {

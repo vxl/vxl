@@ -79,7 +79,7 @@ vnl_vector_test_int()
   TEST("vnl_vector<int> vb(int[],2)", (vb(0) == 1 && vb(1) == 0), true);
 
   //  vnl_vector(vnl_vector<T> const&);
-  vnl_vector<int> v_copy(vb);
+  const vnl_vector<int> & v_copy(vb);
   TEST("vnl_vector<int> v_copy(vb)", (v_copy(0) == 1 && v_copy(1) == 0), true);
 
   ///////////////

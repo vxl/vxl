@@ -275,7 +275,7 @@ vpgl_nitf_rational_camera::geostr_to_latlon_v2(const std::string & str, std::vec
 bool
 vpgl_nitf_rational_camera::read(vil_nitf2_image * nitf_image, bool verbose)
 {
-  std::vector<vil_nitf2_image_subheader *> headers = nitf_image->get_image_headers();
+  const std::vector<vil_nitf2_image_subheader *> & headers = nitf_image->get_image_headers();
   vil_nitf2_image_subheader * const hdr = headers[0];
 
   // initialize the array

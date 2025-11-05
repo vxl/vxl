@@ -135,7 +135,7 @@ test_obox_large_hull()
   pts.push_back(p26);
   vgl_convex_hull_2d<double> ch(pts);
   vgl_polygon<double> poly = ch.hull();
-  std::vector<vgl_point_2d<double>> hverts = poly[0];
+  const std::vector<vgl_point_2d<double>> & hverts = poly[0];
   const size_t n = hverts.size();
   bool good = (n == pts.size());
   if (good)
