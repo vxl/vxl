@@ -101,13 +101,13 @@ vul_sequence_filename_map::parse()
 
       temp.erase(re.start(0));
 
-      if (match_start.length() > 0)
+      if (!match_start.empty())
         start_ = std::stoi(match_start.c_str());
 
-      if (match_step.length() > 0)
+      if (!match_step.empty())
         step_ = std::stoi(match_step.c_str() + 1);
 
-      if (match_end.length() > 0)
+      if (!match_end.empty())
         end_ = std::stoi(match_end.c_str());
     }
   }

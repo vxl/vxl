@@ -380,7 +380,7 @@ vpgl_nitf_RSM_camera_extractor::determine_header_status(vil_nitf2_image_subheade
     return false;
   }
   std::string type = header_ptr->get_image_type();
-  if (type != "")
+  if (!type.empty())
   {
     if (verbose_)
       std::cout << "Image " << header_idx << " is of type " << type << std::endl;
@@ -455,7 +455,7 @@ vpgl_nitf_RSM_camera_extractor::determine_overflow_status(vil_nitf2_image * nitf
     { // is IXSHD in overflow?
       // extract the ISXHD data
       des->get_property("DESDATA", ovfl_ixshd_tres_[header_idx]);
-      if (ovfl_ixshd_tres_[header_idx].size() > 0)
+      if (!ovfl_ixshd_tres_[header_idx].empty())
       { // is there a finite amount of data?
         // iterate through the tres looking for RSM entries
         bool found = false;
@@ -506,7 +506,7 @@ vpgl_nitf_RSM_camera_extractor::init(vil_nitf2_image * nitf_image, bool verbose)
 {
   std::vector<vil_nitf2_image_subheader *> headers = nitf_image->get_image_headers();
   int ixsofl = -1;
-  if (headers.size() == 0)
+  if (headers.empty())
   {
     std::cout << "no image subheaders present" << std::endl;
     return false;
@@ -636,7 +636,7 @@ vpgl_nitf_RSM_camera_extractor::vpgl_nitf_RSM_camera_extractor(const std::string
   // read information
   if (!this->init(nitf_image, verbose_))
     throw std::runtime_error("NITF HEADER EXTRACTION FAILED");
-  if (this->nitf_header_contains_RSM_tres().size() > 0)
+  if (!this->nitf_header_contains_RSM_tres().empty())
     RSM_defined_ = true;
   if (RSM_defined_)
   {
@@ -654,7 +654,7 @@ vpgl_nitf_RSM_camera_extractor::vpgl_nitf_RSM_camera_extractor(vil_nitf2_image *
 
   if (!this->init(nitf_image, verbose_))
     throw std::runtime_error("NITF HEADER EXTRACTION FAILED");
-  if (this->nitf_header_contains_RSM_tres().size() > 0)
+  if (!this->nitf_header_contains_RSM_tres().empty())
     RSM_defined_ = true;
   if (RSM_defined_)
   {

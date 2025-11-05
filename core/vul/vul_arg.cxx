@@ -502,7 +502,7 @@ list_parse(std::list<int> & out, char ** argv)
                            "([:-]" REGEXP_INTEGER ")?" // :int [optional]
   );
 
-  while (str.length() > 0 && range_regexp.find(str))
+  while (!str.empty() && range_regexp.find(str))
   {
     // the start/end positions (ref from 0) of the
     //    current ',' separated token.
