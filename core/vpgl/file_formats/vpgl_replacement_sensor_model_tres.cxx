@@ -113,7 +113,7 @@ class vil_nitf2_conditional_repeat : public vil_nitf2_field_functor<int>
 public:
   vil_nitf2_conditional_repeat(std::string tag, bool negation)
     : tag(std::move(tag))
-    , negation(std::move(negation))
+    , negation(negation)
   {}
 
   vil_nitf2_field_functor<int> *
