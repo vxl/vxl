@@ -63,7 +63,7 @@ Checks: <
    performance-inefficient-vector-operation,
    performance-move-const-arg,
    performance-noexcept-destructor,
-  -performance-noexcept-move-constructor,
+   performance-noexcept-move-constructor,
    performance-noexcept-swap,
   -performance-trivially-destructible,
   -performance-type-promotion-in-math-fn,
