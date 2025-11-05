@@ -189,12 +189,13 @@ vil_nitf2_image::vil_nitf2_image(vil_stream * is)
 }
 
 vil_nitf2_image::vil_nitf2_image(const std::string & filePath, const char * mode)
-  : m_current_image_index(0)
+  : m_stream(new vil_stream_fstream(filePath.c_str(), mode))
+  , m_current_image_index(0)
 {
 #ifdef VIL_USE_FSTREAM64
   m_stream = new vil_stream_fstream64(filePath.c_str(), mode);
-#else  // VIL_USE_FSTREAM64
-  m_stream = new vil_stream_fstream(filePath.c_str(), mode);
+#else // VIL_USE_FSTREAM64
+
 #endif // VIL_USE_FSTREAM64
   m_stream->ref();
 }

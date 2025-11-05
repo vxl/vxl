@@ -127,9 +127,10 @@
 //: Copies the given regular expression.
 
 vul_reg_exp::vul_reg_exp(const vul_reg_exp & rxp)
+  : progsize(rxp.progsize)
 {
   int ind = 0;
-  this->progsize = rxp.progsize;            // Copy regular expression size
+  // Copy regular expression size
   this->program = new char[this->progsize]; // Allocate storage
   for (ind = this->progsize; ind-- != 0;)   // Copy regular expression
     this->program[ind] = rxp.program[ind];

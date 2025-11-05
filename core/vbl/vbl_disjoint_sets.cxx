@@ -13,22 +13,24 @@
 
 
 vbl_disjoint_sets::vbl_disjoint_sets()
-{
-  num_elements_ = 0;
-  num_sets_ = 0;
-}
+  : num_elements_(0)
+  , num_sets_(0)
+{}
 
 vbl_disjoint_sets::vbl_disjoint_sets(int count)
+  : num_elements_(0)
+  , num_sets_(0)
 {
-  num_elements_ = 0;
-  num_sets_ = 0;
+
+
   add_elements(count);
 }
 
 vbl_disjoint_sets::vbl_disjoint_sets(const vbl_disjoint_sets & s)
+  : num_elements_(s.num_elements_)
+  , num_sets_(s.num_sets_)
 {
-  this->num_elements_ = s.num_elements_;
-  this->num_sets_ = s.num_sets_;
+
 
   // Copy nodes
   node nd;

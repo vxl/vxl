@@ -334,11 +334,12 @@ vil1_tiff_generic_image::vil1_tiff_generic_image(vil1_stream * is,
                                                  int bits_per_component,
                                                  vil1_component_format /*format*/)
   : p(new vil1_tiff_structures(is))
+  , width_(width)
+  , height_(height)
+  , components_(components)
+  , bits_per_component_(bits_per_component)
 {
-  width_ = width;
-  height_ = height;
-  components_ = components;
-  bits_per_component_ = bits_per_component;
+
 
   write_header();
 }

@@ -13,8 +13,9 @@
 #endif
 
 vil1_stream::vil1_stream()
+  : refcount_(0)
 {
-  refcount_ = 0;
+
 #if log_xtor
   std::cerr << __FILE__ ", vil1_stream ctor : this = " << (void *)this << std::endl;
 #endif

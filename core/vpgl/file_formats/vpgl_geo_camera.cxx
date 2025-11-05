@@ -33,8 +33,6 @@ vpgl_geo_camera::vpgl_geo_camera()
   trans_matrix_.set_size(4, 4);
   trans_matrix_.fill(0);
   trans_matrix_.fill_diagonal(1);
-  is_utm_ = false;
-  scale_tag_ = false;
 }
 
 vpgl_geo_camera::vpgl_geo_camera(const vpgl_geo_camera & rhs)

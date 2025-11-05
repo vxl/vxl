@@ -21,12 +21,11 @@ vpgl_adjust_lsqr::vpgl_adjust_lsqr(const vpgl_rational_camera<double> & rcam,
                                    unsigned num_unknowns,
                                    unsigned num_residuals)
   : vnl_least_squares_function(num_unknowns, num_residuals, vnl_least_squares_function::no_gradient)
+  , num_corrs_(static_cast<unsigned>(img_pts.size()))
   , rcam_(rcam)
   , img_pts_(img_pts)
   , geo_pts_(std::move(geo_pts))
-{
-  num_corrs_ = static_cast<unsigned>(img_pts.size());
-}
+{}
 // The virtual least-squares cost function.
 // The unknowns are [xscale, xoff, yscale, yoff, zscale, zoff]
 // The error residual vector elements are image errors for each point

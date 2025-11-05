@@ -43,9 +43,10 @@ static int id = 0;
 
 vil1_stream_fstream::vil1_stream_fstream(const char * fn, const char * mode)
   : flags_(modeflags(mode))
-  , f_(fn, flags_ | std::ios::binary) // need ios::binary on windows.
+  , f_(fn, flags_ | std::ios::binary)
+  , id_(++id) // need ios::binary on windows.
 {
-  id_ = ++id;
+
   xerr << "vil1_stream_fstream(\"" << fn << "\", \"" << mode << "\") = " << id_ << '\n';
 #if 0
   if (!f_)

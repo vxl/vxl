@@ -279,17 +279,9 @@ vul_file_iterator_data::vul_file_iterator_data(const char * glob)
 
 // -----------------------------------------------------------------------------
 
-vul_file_iterator::vul_file_iterator(const char * glob)
-{
-  p = nullptr;
-  reset(glob);
-}
+vul_file_iterator::vul_file_iterator(const char * glob) { reset(glob); }
 
-vul_file_iterator::vul_file_iterator(const std::string & glob)
-{
-  p = nullptr;
-  reset(glob.c_str());
-}
+vul_file_iterator::vul_file_iterator(const std::string & glob) { reset(glob.c_str()); }
 
 vul_file_iterator::~vul_file_iterator() { delete p; }
 

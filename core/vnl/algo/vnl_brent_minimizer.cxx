@@ -21,8 +21,9 @@ class vnl_brent_minimizer_func
 
 public:
   vnl_brent_minimizer_func(vnl_cost_function & fn)
+    : f(&fn)
   {
-    f = &fn;
+
     v.set_size(1);
   }
 
@@ -35,8 +36,9 @@ public:
 };
 
 vnl_brent_minimizer::vnl_brent_minimizer(vnl_cost_function & functor)
+  : f_(&functor)
 {
-  f_ = &functor;
+
   set_x_tolerance(1e-6);
 }
 

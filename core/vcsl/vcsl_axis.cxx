@@ -23,8 +23,9 @@ vcsl_axis::vcsl_axis()
 // Constructor from dimension. Unit is the standard one. Label is empty
 //---------------------------------------------------------------------------
 vcsl_axis::vcsl_axis(const vcsl_dimension_sptr & new_dimension)
+  : dimension_(new_dimension)
 {
-  dimension_ = new_dimension;
+
   unit_ = dimension_->standard_unit();
 }
 

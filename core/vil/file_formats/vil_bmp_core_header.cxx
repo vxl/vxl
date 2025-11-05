@@ -15,13 +15,12 @@
 #include "vil/vil_stream_write.h"
 
 vil_bmp_core_header::vil_bmp_core_header()
-{
-  header_size = disk_size;
-  width = 0;
-  height = 0;
-  planes = 1;
-  bitsperpixel = 8;
-}
+  : header_size(disk_size)
+  , width(0)
+  , height(0)
+  , planes(1)
+  , bitsperpixel(8)
+{}
 
 void
 vil_bmp_core_header::read(vil_stream * s)

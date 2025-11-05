@@ -29,8 +29,9 @@ class vnl_bm_func
 
 public:
   vnl_bm_func(vnl_cost_function & fn)
+    : f(&fn)
   {
-    f = &fn;
+
     v.set_size(1);
   }
   double

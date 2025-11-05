@@ -19,8 +19,9 @@
 #include "lsqrDense.h"
 
 lsqrDense::lsqrDense()
+  : A(nullptr)
 {
-  this->A = nullptr;
+  
 }
 
 

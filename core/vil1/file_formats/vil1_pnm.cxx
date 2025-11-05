@@ -101,13 +101,13 @@ vil1_pnm_generic_image::vil1_pnm_generic_image(vil1_stream * vs,
                                                int bits_per_component,
                                                vil1_component_format)
   : vs_(vs)
+  , width_(width)
+  , height_(height)
+  , components_(components * planes)
+  , bits_per_component_(bits_per_component)
 {
   vs_->ref();
-  width_ = width;
-  height_ = height;
 
-  components_ = components * planes;
-  bits_per_component_ = bits_per_component;
 
   if (components_ == 3)
   {

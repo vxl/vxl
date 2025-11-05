@@ -19,21 +19,21 @@ enum
 };
 
 vil_sgi_file_header::vil_sgi_file_header()
+  : storage(0)
+  , bpc(1)
+  , dimension(0)
+  , xsize(0)
+  , ysize(0)
+  , zsize(0)
+  , pixmin(0)
+  , pixmax(255)
+  , colormap(0)
 {
 
   // Fill in all the numberical fields
   // Don't worry about the dummy values or image name, which are ignored
   magic[0] = SGI_SIGNATURE_BYTE_0;
   magic[1] = SGI_SIGNATURE_BYTE_1;
-  storage = 0;
-  bpc = 1;
-  dimension = 0;
-  xsize = 0;
-  ysize = 0;
-  zsize = 0;
-  pixmin = 0;
-  pixmax = 255;
-  colormap = 0;
 }
 
 void

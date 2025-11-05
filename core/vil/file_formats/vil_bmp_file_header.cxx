@@ -22,13 +22,13 @@ enum
 };
 
 vil_bmp_file_header::vil_bmp_file_header()
+  : file_size(0)
+  , reserved1(0)
+  , reserved2(0)
+  , bitmap_offset(0)
 {
   magic[0] = BMP_SIGNATURE_BYTE_0;
   magic[1] = BMP_SIGNATURE_BYTE_1;
-  file_size = 0;
-  reserved1 = 0;
-  reserved2 = 0;
-  bitmap_offset = 0;
 }
 
 void
