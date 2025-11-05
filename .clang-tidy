@@ -67,7 +67,7 @@ Checks: <
    performance-noexcept-swap,
    performance-trivially-destructible,
    performance-type-promotion-in-math-fn,
-  -performance-unnecessary-copy-initialization,
+   performance-unnecessary-copy-initialization,
   -performance-unnecessary-value-param,
    readability-container-size-empty,
   -readability-inconsistent-declaration-parameter-name,

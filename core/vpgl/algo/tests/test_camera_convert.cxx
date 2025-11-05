@@ -198,10 +198,10 @@ construct_replacement_sensor_model()
     +0.00000000000000e+00, +0.00000000000000e+00, +0.00000000000000e+00, +0.00000000000000e+00, +0.00000000000000e+00,
     +0.00000000000000e+00, +0.00000000000000e+00, +0.00000000000000e+00, +0.00000000000000e+00
   };
-  const std::vector<double> num_u_coeff = CNC;
-  const std::vector<double> den_u_coeff = CDC;
-  const std::vector<double> num_v_coeff = RNC;
-  const std::vector<double> den_v_coeff = RDC;
+  const std::vector<double> & num_u_coeff = CNC;
+  const std::vector<double> & den_u_coeff = CDC;
+  const std::vector<double> & num_v_coeff = RNC;
+  const std::vector<double> & den_v_coeff = RDC;
   std::vector<std::vector<double>> coeffs;
   coeffs.push_back(num_u_coeff);
   coeffs.push_back(den_u_coeff);
